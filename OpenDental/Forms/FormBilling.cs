@@ -3,6 +3,7 @@ using System.Drawing;
 using System.Collections;
 using System.ComponentModel;
 using System.Windows.Forms;
+using OpenDental.UI;
 
 namespace OpenDental{
 ///<summary></summary>
@@ -196,6 +197,17 @@ namespace OpenDental{
 
 		private void FillTable(){
 			gridBill.BeginUpdate();
+			gridBill.Columns.Clear();
+			ODGridColumn col=new ODGridColumn(Lan.g("TableBilling","Name"),180);
+			gridBill.Columns.Add(col);
+			col=new ODGridColumn(Lan.g("TableBilling","Total"),100,HorizontalAlignment.Right);
+			gridBill.Columns.Add(col);
+			col=new ODGridColumn(Lan.g("TableBilling","-InsuranceEst"),100,HorizontalAlignment.Right);
+			gridBill.Columns.Add(col);
+			col=new ODGridColumn(Lan.g("TableBilling","=Amount"),100,HorizontalAlignment.Right);
+			gridBill.Columns.Add(col);
+			col=new ODGridColumn(Lan.g("TableBilling","LastStatement"),111);
+			gridBill.Columns.Add(col);
 			gridBill.Rows.Clear();
 			OpenDental.UI.ODGridRow row;
 			for(int i=0;i<AgingList.Length;i++){

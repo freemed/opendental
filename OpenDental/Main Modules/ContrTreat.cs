@@ -1603,6 +1603,7 @@ namespace OpenDental{
 				//panelHide.SendToBack();
 				//this.Controls.Add(panelHide);
 				toothChart=new GraphicalToothChart();
+				toothChart.SimpleMode=PrefB.GetBool("ToothChartLowerQuality");
 				toothChart.UseInternational=PrefB.GetBool("UseInternationalToothNumbers");
 				toothChart.ColorBackground=DefB.Long[(int)DefCat.ChartGraphicColors][14].ItemColor;
 				toothChart.ColorText=DefB.Long[(int)DefCat.ChartGraphicColors][15].ItemColor;
@@ -1613,6 +1614,7 @@ namespace OpenDental{
 				//toothChart.SendToBack();
 				this.Controls.Add(toothChart);
 				toothChart.BringToFront();
+				toothChart.ResetTeeth();
 				ToothInitialList=ToothInitials.Refresh(PatCur.PatNum);
 				//first, primary.  That way, you can still set a primary tooth missing afterwards.
 				for(int i=0;i<ToothInitialList.Length;i++) {
