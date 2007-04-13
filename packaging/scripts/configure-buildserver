@@ -1,0 +1,23 @@
+#!/bin/bash
+
+wget https://70.90.133.65:23793/svn/opendental/opendental4.7/packaging/scripts/packages
+
+for package in $(cat packages)
+do
+    packages="$packages $package";
+done
+apt-get -y install $packages
+echo "opendental ALL=(ALL) ALL" > /etc/sudoers
+
+# Install Mono
+wget http://mono.ximian.com/monobuild/rtl/archive/1.2.3.50/linux-installer/rtl1/mono-1.2.3.50_rtl1-installer.bin
+chmod +x mono-1.2.3.50_rtl1-installer.bin
+./mono-1.2.3.50_rtl1-installer.bin --mode text
+export PATH="/opt/mono-1.2.3.50/bin:$PATH"
+export PKG_CONFIG_PATH="/opt/mono-1.2.3.50/lib/pkgconfig$PKG_CONFIG_PATH"
+
+# Install NAnt
+cvs -d:pserver:anonymous@nant.cvs.sourceforge.net:/cvsroot/nant login 
+cvs -z3 -d:pserver:anonymous@nant.cvs.sourceforge.net:/cvsroot/nant co -P nant 
+cd nant
+make install

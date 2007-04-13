@@ -1,0 +1,13 @@
+#!/bin/bash
+cat /opt/mono-1.2.3.50/bin/setup.sh >> .bashrc
+
+# Set up the GPG key
+gpg --gen-key
+
+# Set up the repository
+mkdir -p ~/repository
+mkdir -p ~/repository/conf
+cp distributions ~/repository/conf
+
+# Configure apache
+cat default > /etc/apache2/sites-available/default

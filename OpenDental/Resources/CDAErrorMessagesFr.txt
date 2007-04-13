@@ -1,0 +1,156 @@
+   1 Préfixe de la transaction absent ou invalide
+   2 Numéro de demande de prestations ou de transaction du cabinet absent ou invalide
+   3 Numéro de version absent ou invalide
+   4 Code de la transaction absent ou invalide
+   5 Numéro de l'assureur absent ou invalide
+   6 Numéro du logiciel dentaire absent ou invalide
+   7 Numéro du dentiste attribué par l'ADC absent ou invalide
+   8 Numéro du cabinet attribué par l'ADC absent ou invalide
+   9 Numéro de police ou régime (premier assureur) absent ou invalide
+  10 Numéro de police ou régime (premier assureur) absent ou invalide
+  11 Numéro du titulaire de l'assurance absent ou invalide
+  12 Code indiquant lien de parenté patient-titulaire absent ou invalide
+  13 Sexe du patient absent ou invalide
+  14 Date de naissance du patient absente ou invalide
+  15 Nom de famille du patient absent ou invalide
+  16 Prénom du patient absent ou invalide
+  17 Code indiquant exception quant à l'admissibilité absent ou invalide
+  18 Nom de l'établissement scolaire absent
+  19 Nom de famille du titulaire de l'assurance absent ou non conforme au dossier
+  20 Prénom du titulaire de l'assurance absent ou non conforme au dossier
+  21 Adresse du titulaire de l'assurance absente
+  22 Ville du titulaire de l'assurance absente
+  23 Code postal du titulaire de l'assurance absent ou invalide
+  24 Langue première du titulaire de l'assurance invalide
+  25 Date de naissance du titulaire de l'assurance absente ou invalide
+  26 Numéro du second assureur invalide
+  27 Numéro de police ou régime (second assureur) absent ou invalide
+  28 Numéro de division ou section (second assureur) absent ou invalide
+  29 Numéro du titulaire (second assureur) absent ou invalide
+  30 Date de naissance du titulaire (second assureur) absente ou invalide
+  31 Demande doit d'abord être soumise au second assureur (second assureur = premier assureur)
+  32 Destinataire du paiement absent ou invalide
+  33 Date de l'accident invalide
+  34 Nombre d'actes exécutés absent ou invalide
+  35 Code de l'acte absent ou invalide
+  36 Date à laquelle l'acte a été exécuté absente ou invalide
+  37 Numéro de dent international, sextant, quadrant ou site absent ou invalide
+  38 Surface de la dent absente ou invalide
+  39 Date de la mise en bouche initiale au maxillaire invalide
+  40 Réponse absente ou invalide : Le traitement est-il requis en vue de soins d'orthodontie ?
+  41 Honoraires demandés par le dentiste absents ou invalides
+  42 Frais de laboratoire absents ou invalides
+  43 Unité de temps absente ou invalide
+  44 Longueur du message indiquée non identique à longueur du message reçu
+  45 Indicateur de courrier électronique ou d'informations supplémentaires absent ou invalide
+  46 Numéro de référence de la demande de prestations absent ou invalide
+  47 Dentiste n'a pas accès au réseau CDAnet
+  48 Veuillez soumettre demande manuellement
+  49 Pas de réponse en suspens provenant du réseau demandée
+  50 Numéro de ligne de l'acte absent ou invalide
+  51 Numéro du plan de traitement introuvable
+  52 Demande de prestations ou plan de traitement doit contenir au moins un acte
+  53 Province du titulaire de l'assurance absente ou invalide
+  54 Numéro du titulaire sur Refus non conforme à demande originale
+  55 Annulation ne concerne pas transaction du jour
+  56 Code de spécialité du dentiste non conforme au dossier
+  57 Réponse absente ou invalide : S'agit-il de la mise en bouche initiale au maxillaire ?
+  58 Nombre d'actes non conforme au nombre indiqué
+  59 Logiciel dentaire du cabinet non autorisé à transmettre transactions au CDAnet
+  60 Annulation ne peut être acceptée maintenant - Réessayer plus tard aujourd'hui
+  61 Erreur du réseau - Veuillez recommencer
+  62 Numéro du dentiste destinataire du paiement absent ou invalide
+  63 Numéro du cabinet destinataire du paiement absent ou invalide
+  64 Dentiste ayant adressé (référé) patient absent ou invalide
+  65 Code indiquant motif de la recommandation absent ou invalide
+  66 Indicateur d'un régime de soins absent ou invalide
+  67 Champs se rapportant au régime NNSA absents
+  68 Numéro de la bande absent ou invalide
+  69 Numéro de la famille absent ou invalide
+  70 Odontogramme des dents manquantes absent ou invalide
+  71 Code indiquant parenté patient-titulaire (second assureur) absent ou invalide
+  72 Code indiquant type d'acte absent ou invalide
+  73 Série de dents absente ou invalide
+  74 Date à laquelle l'acte a été exécuté est une date ultérieure
+  75 Date à laquelle l'acte a été exécuté est au-delà d'un an
+  76 Groupe non accepté par l'EDI
+  77 Type d'acte non couvert par l'assureur
+  78 Veuillez soumettre plan de traitement manuellement
+  79 Duplicata d'une demande de prestations
+  80 Compteur des transactions par assureur absent ou invalide
+  81 Date d'admissibilité invalide
+  82 Numéro de séquence ou version de la carte invalide
+  83 Nom de famille du titulaire (second assureur) absent ou invalide
+  84 Prénom du titulaire (second assureur) absent ou invalide
+  85 Lettre initiale du second prénom du titulaire (second assureur) invalide
+  86 Première ligne de l'adresse du titulaire (second assureur) absente
+  87 Ville du titulaire (second assureur) absente
+  88 Province ou État du titulaire (second assureur) absent
+  89 Code postal ou zip du titulaire (second assureur) invalide
+  90 Réponse absente ou invalide : S'agit-il de la mise en bouche initiale à la mandibule ?
+  91 Date de la mise en bouche initiale à la mandibule absente ou invalide
+  92 Matériau de la prothèse au maxillaire absent ou invalide
+  93 Matériau de la prothèse à la mandibule absent ou invalide
+  94 Nombre de dents extraites absent ou invalide
+  95 Numéro de la dent extraite absent ou invalide
+  96 Date de l'extraction absente ou invalide
+  97 Décalage du rapprochement invalide
+  98 Code pour frais de laboratoire absent ou invalide
+  99 Code pour chiffrement invalide
+ 100 Chiffrement invalide
+ 101 Initiale du second prénom du titulaire invalide
+ 102 Initiale du second prénom du patient invalide
+ 103 Code de la personne à charge (première assurance) absent ou invalide
+ 104 Code de la personne à charge (seconde assurance) absent ou invalide
+ 105 Numéro de séquence/version de la carte (seconde assurance) absent ou invalide
+ 106 Langue de titulaire (seconde assurance) absente ou invalide
+ 107 Indicateur de régime (seconde assurance) absente ou invalide
+ 108 Champs portant sur la seconde assurance absents
+ 109 Numéro de séquence (seconde assurance) absent ou invalide
+ 110 Indicateur de Plan de traitement d’orthodontie absent ou invalide
+ 111 Tarif du premier examen absent ou invalide
+ 112 Tarif de la phase diagnostique absent ou invalide
+ 113 Paiement initial absent ou invalide
+ 114 Mode de paiement absent ou invalide
+ 115 Durée du traitement absente ou invalide
+ 116 Nombre prévu de paiements absent ou invalide
+ 117 Montant prévue du paiement absent ou invalide
+ 118 Code des frais de laboratoire #2 absent ou invalide
+ 119 Frais de laboratoire #2 absents ou invalide
+ 120 Début prévue de traitement
+ 121 Détail des prestations (première assurance) modifié, différent de l’original
+ 122 Date plus disponible
+ 123 Numéro de page du rapprochement absent ou invalide
+ 124 Transaction non acceptée par l’assureur
+ 125 Version de transaction non acceptée
+ 126 Code diagnostique absent ou invalide
+ 127 Code institutionnelle absent ou invalide
+ 128 Numéro de page du plan de traitement courant absent ou invalide
+ 129 Numéro de page du dernier plan de traitement absent ou invalide
+ 130 Nombre du plan du dossier gouvernemental absent ou invalide
+ 131 Plan du dossier gouvernemental absent ou invalide
+ 132 Nombre du dossier secondaire absent ou invalide
+ 133 Longueur de la transaction intégrée manquante/invalide
+ 134 Ligne # 2 de l'adresse secondaire invalide
+ 135 Numéro manquant/invalide du fournisseur destinataire
+ 136 Numéro manquant/invalide du cabinet destinataire
+ 137 Numéro de séquence manquant/invalide du cabinet d’origine
+ 138 Numéro de référence manquant/invalide de la transaction d’origine
+ 139 Source de la pièce jointe manquante/invalide
+ 140 Compte des pièces jointes manquant/invalide
+ 141 Type de la pièce jointe manquant/invalide
+ 142 Longueur de la pièce jointe manquante/invalide
+ 143 Pièce jointe manquante/invalide
+ 144 Date du fichier de la pièce jointe manquante/invalide
+ 145 Le nombre de la prédétermination de la réclamation soumise indique que la réclamation doit être faite manuellement
+ 146 Le numéro de prédétermination de la demande d’indemnisation soumise a expiré
+ 147 Le dépendant ayant dépassé la limite d’âge n’est ni étudiant ni handicapé
+ 148 L ’abonné n’est pas couvert par un régime de soins dentaires
+ 149 Le patient n’est pas admissible
+ 150 Il n’est pas permis de soumettre la facture du laboratoire
+ 151 Le nom et/ou la date de naissance du patient ne correspondent pas à nos dossiers
+ 152 La facture de laboratoire doit être soumise sur la même ligne que le honoraire professionnel associé
+ 153 Nos dossiers indiquent qu’un autre assureur devrait être le payeur principal
+ 997 Dernière transaction illisible
+ 998 Pour usage futur par l'ADC
+ 999 Erreur du système central - Veuillez recommencer manuellement

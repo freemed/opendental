@@ -1,0 +1,79 @@
+<?xml version="1.0" ?>
+<!-- 
+
+    This program is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+     the Free Software Foundation; either version 2 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program; if not, write to the Free Software
+    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+    Copyright (c) 2007 Frederik Carlier
+
+    Authors:
+        Frederik Carlier <frederik.carlier@carlier-online.be>
+
+-->
+<project name="SparksToothChart" default="build">
+	<!--
+	Required properties:
+	        * build.dir             - (path) root level to build to, assemblies will go in ${build.dir}/bin
+	        * build.debug           - (true|false) debug build?
+	        * current.build.defines - framework-specific build defines
+	-->
+	<target name="build">
+		<!-- Workaround (?) for issue with file names containing "/" in Linux. See, for example,
+		     http://bugzilla.ximian.com/show_bug.cgi?id=80737
+		     http://bugzilla.ximian.com/show_bug.cgi?id=80732 -->
+		<setenv name="MONO_IOMAP" value="all"/>
+        <resgen usesourcepath="true">
+            <resources>
+				<include name="**/*.resx"/>              
+            </resources>
+        </resgen>
+       <csc target="library" define="${current.build.defines}" debug="${build.debug}" output="${build.dir}/bin/${project::get-name()}.dll" doc="${build.dir}/bin/${project::get-name()}.xml">
+            <nowarn>
+                <!-- do not report warnings for missing XML comments -->
+                <warning number="1591" />
+			</nowarn>
+			<sources>
+				<include name="**/*.cs"/>
+                <exclude name="TestForm/**/*.cs"/>
+			</sources>
+      			<resources dynamicprefix="true" prefix="SparksToothChart">
+				<include name="**/*.resources"/>
+			</resources>
+			<references>
+				<include name="System.dll"/>
+				<include name="System.Data.dll"/>
+				<include name="System.Deployment.dll"/>
+				<include name="System.Drawing.dll"/>
+				<include name="System.Windows.Forms.dll"/>
+				<include name="System.Xml.dll"/>
+                <!-- Building on Linux requires the Linux equivalent, of course -->
+                <include name="../Required dlls/Tao.FreeGlut.dll"/>
+                <include name="../Required dlls/Tao.OpenGl.dll"/>
+                <include name="../Required dlls/Tao.Platform.Windows.dll"/>
+                <include name="${build.dir}/bin/CodeBase.dll"/>
+                <include name="${build.dir}/bin/OpenDentBusiness.dll"/>
+			</references>
+		</csc>
+        <copy todir="${build.dir}/bin/" verbose="true">
+            <fileset basedir="../Required dlls">
+                <include name="Tao.*.dll"/>
+                <include name="Tao.*.dll.config"/>
+            </fileset>
+        </copy>
+	</target>
+	<target name="clean">
+		<delete dir="bin"/>
+		<delete dir="obj"/>
+	</target>
+</project>

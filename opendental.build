@@ -1,0 +1,136 @@
+<?xml version="1.0" ?>
+<!-- 
+
+    This program is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+     the Free Software Foundation; either version 2 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program; if not, write to the Free Software
+    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+    Copyright (c) 2007 Frederik Carlier
+
+    Authors:
+        Frederik Carlier <frederik.carlier@carlier-online.be>
+        (Based on the NAnt build file)
+
+-->
+<project name="opendental" default="build">
+	<!-- set build.date property to current date in format yyyy-MM-dd -->
+	<tstamp property="build.date" pattern="yyyy-MM-dd" />
+
+	<!-- global project settings -->
+	<property name="project.name" value="opendental" />
+	<property name="project.version" value="4.7" unless="${property::exists('project.version')}" />
+	<property name="project.release.type" value="dev" unless="${property::exists('project.release.type')}" /> <!-- nightly / dev / alpha / beta# / rc# / release -->
+
+	<!-- global build settings -->
+	<property name="lib.dir" value="${path::combine(build.dir, 'bin/lib')}" dynamic="true" />
+	<property name="lib.family.dir" value="${path::combine(lib.dir, framework::get-family(framework::get-target-framework()))}" dynamic="true" />
+	<property name="lib.framework.dir" value="${path::combine(lib.family.dir, version::to-string(framework::get-version(framework::get-target-framework())))}" dynamic="true" />
+
+	<!-- default configuration -->
+	<property name="project.config" value="debug" /> <!-- debug|release -->
+	<property name="build.defines" value="LINUX" />
+	<property name="build.number" value="${math::abs(math::floor(timespan::get-total-days(datetime::now() - datetime::parse('01/01/2000'))))}" />
+
+	<fileset id="ext.core">
+        <include name="CodeBase/CodeBase.build"/>
+		<include name="OpenDentBusiness/OpenDentBusiness.build" />
+		<include name="OpenDentServer/OpenDentServer.build" />
+        <include name="RdlEngine/RdlEngine.build"/>
+        <include name="RdlViewer/RdlViewer.build"/>
+        <include name="SparksToothChart/SparksToothChart.build"/>
+        <include name="OpenDental/OpenDental.build"/>
+	</fileset>
+
+	<target name="debug" description="Perform a 'debug' build">
+		<property name="project.config" value="debug" />
+		<property name="build.debug" value="true" />
+		<property name="build.dir" value="${project::get-base-directory()}/build/${framework::get-target-framework()}.${platform::get-name()}/${project.name}-${project.version}-${project.config}" />
+	</target>
+
+	<target name="release" description="Perform a 'release' build">
+		<property name="project.config" value="release" />
+		<property name="build.debug" value="false" />
+		<property name="build.dir" value="${project::get-base-directory()}/build/${project.name}-${project.version.full}" />
+	</target>
+
+	<!-- build tasks -->
+	<target name="init" description="Initializes build properties">
+		<call target="${project.config}" />
+		<call target="set-framework-configuration" />
+	</target>
+
+	<target name="build" depends="init, set-framework-configuration" description="Builds current configuration">
+		<echo message="Build Directory is ${build.dir}" />
+		<!-- ensure bin directory exists -->
+		<mkdir dir="${build.dir}/bin" />
+
+		<!-- ensure lib directory exists -->
+		<mkdir dir="${build.dir}/bin/lib" />
+
+		<nant target="build">
+		        <buildfiles refid="ext.core" />
+		</nant>
+	</target>
+
+    <target name="install" depends="build" if="${platform::is-unix()}">
+        <property name="install.realprefix" value="/usr/local" />
+        <if test="${property::exists('install.prefix') and string::get-length(install.prefix) != 0}">
+            <property name="install.realprefix" value="${install.prefix}" />
+        </if>
+        <property name="install.bindir" value="${path::combine(install.realprefix, 'bin')}"/>
+        <property name="install.share" value="${path::combine(install.realprefix, 'share')}"/>
+        <property name="install.copylocation" value="${path::combine (install.share, 'opendental')}"/>
+        <property name="prefix" value="${pkg-config::get-variable('mono', 'prefix')}"/>
+        <echo message="Installing Open Dental to '${install.copylocation}' ..." />
+        
+        <copy todir="${install.copylocation}" overwrite="true">
+            <fileset basedir="${build.dir}">
+                <include name="bin/**/*" />
+                <include name="doc/**/*" />
+            </fileset>
+        </copy>
+        <echo message="Installing Open Dental wrapper script to '${install.bindir}' ..." />
+        <!-- store filename of wrapper script in property -->
+        <property name="wrapper" value="${path::combine(install.bindir, 'opendental')}" />
+        <!-- 
+            create wrapper file using separate echo tasks for each line to ensure
+            the line endings of the generated file match the platform on which 
+            the wrapper is created
+        -->
+        <echo file="${wrapper}" append="false">#!/bin/sh</echo>
+        <echo file="${wrapper}" append="true">exec ${path::combine(prefix, 'bin')}/mono ${path::combine(install.copylocation, 'bin')}/OpenDental.exe "$@"</echo>
+        <exec program="chmod" commandline="a+x ${path::combine(install.bindir, 'opendental')}"/>
+    </target>
+
+	<target name="clean">
+		<delete dir="${project::get-base-directory()}/build"/>
+		<nant target="clean">
+			<buildfiles refid="ext.core" />
+		</nant>
+	</target>
+
+	<target name="set-framework-configuration">
+		<if test="${not(target::exists('set-'+framework::get-target-framework()+'-framework-configuration'))}">
+		        <fail message="The '${framework::get-target-framework()}' framework is not supported by this version of Open Dental." />
+		</if>
+		<call target="set-${framework::get-target-framework()}-framework-configuration" />
+	</target>
+	<target name="set-net-2.0-framework-configuration">
+		<property name="nant.settings.currentframework" value="net-2.0" />
+		<property name="current.build.defines" value="${build.defines},NET,NET_1_0,NET_1_1,NET_2_0,ONLY_NET_2_0" dynamic="true" />
+	</target>
+	<target name="set-mono-2.0-framework-configuration">
+		<property name="nant.settings.currentframework" value="mono-2.0" />
+		<property name="current.build.defines" value="${build.defines},MONO,NET_1_0,NET_1_1,NET_2_0,ONLY_NET_2_0" dynamic="true" />
+	</target>
+</project>

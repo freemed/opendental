@@ -1,0 +1,23 @@
+#!/bin/bash
+
+for package in `ls *.deb`
+do
+	echo Publishing package $package
+        for dist in dapper edgy feisty sarge etch sid
+        do
+                reprepro -Vb ~/repository includedeb $dist $package
+        done
+
+	mv $package published/
+done
+
+for package in `ls *.dsc`
+do
+	echo Publishing package $package
+        for dist in dapper edgy feisty sarge etch sid
+        do
+                reprepro -Vb ~/repository includedsc $dist $package
+        done
+
+	mv $package published/
+done

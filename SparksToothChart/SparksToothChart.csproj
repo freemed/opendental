@@ -1,0 +1,150 @@
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.50727</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{033B77F4-2E98-49A7-901F-5F388DEDF83E}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>SparksToothChart</RootNamespace>
+    <AssemblyName>SparksToothChart</AssemblyName>
+    <StartupObject>
+    </StartupObject>
+    <SignAssembly>false</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'LinuxRelease|AnyCPU' ">
+    <OutputPath>bin\LinuxRelease\</OutputPath>
+    <DefineConstants>TRACE;LINUX</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+    <Reference Include="Tao.FreeGlut, Version=2.4.0.0, Culture=neutral, PublicKeyToken=6e602a6ad6c0d06d">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Required dlls\Tao.FreeGlut.dll</HintPath>
+    </Reference>
+    <Reference Include="Tao.OpenGl, Version=0.0.0.0, Culture=neutral, PublicKeyToken=1ca010269a4501ef">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Required dlls\Tao.OpenGl.dll</HintPath>
+    </Reference>
+    <Reference Include="Tao.Platform.Windows, Version=1.0.0.3, Culture=neutral, PublicKeyToken=701104b2da67a104">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Required dlls\Tao.Platform.Windows.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="GraphicalToothChart.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="GraphicalToothChart.Designer.cs">
+      <DependentUpon>GraphicalToothChart.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="GraphicalToothChart.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>GraphicalToothChart.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GraphicalToothChartControl.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>GraphicalToothChartControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <None Include="Resources\implant.obj" />
+    <None Include="Resources\tooth1.obj" />
+    <None Include="Resources\tooth2.obj" />
+    <None Include="Resources\tooth25.obj" />
+    <None Include="Resources\tooth27.obj" />
+    <None Include="Resources\tooth28.obj" />
+    <None Include="Resources\tooth29.obj" />
+    <None Include="Resources\tooth3.obj" />
+    <None Include="Resources\tooth30.obj" />
+    <None Include="Resources\tooth31.obj" />
+    <None Include="Resources\tooth32.obj" />
+    <None Include="Resources\tooth4.obj" />
+    <None Include="Resources\tooth5.obj" />
+    <None Include="Resources\tooth6.obj" />
+    <None Include="Resources\tooth7.obj" />
+    <None Include="Resources\tooth8.obj" />
+    <None Include="Resources\toothA.obj" />
+    <None Include="Resources\toothB.obj" />
+    <None Include="Resources\toothC.obj" />
+    <None Include="Resources\toothD.obj" />
+    <None Include="Resources\toothE.obj" />
+    <None Include="Resources\toothP.obj" />
+    <None Include="Resources\toothR.obj" />
+    <None Include="Resources\toothS.obj" />
+    <None Include="Resources\toothT.obj" />
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <Compile Include="GraphicalToothChartControl.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="GraphicalToothChartControl.Designer.cs">
+      <DependentUpon>GraphicalToothChartControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ToothGraphic.cs" />
+    <Compile Include="ToothGraphicCollection.cs" />
+    <Compile Include="ToothGroup.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\CodeBase\xCodeBase.csproj">
+      <Project>{18F7BC78-4B99-48D3-A1F1-0D13A63E3CF9}</Project>
+      <Name>xCodeBase</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\OpenDentBusiness\OpenDentBusiness.csproj">
+      <Project>{3D0FC76E-803C-4DE2-BDB1-47D63A4E2357}</Project>
+      <Name>OpenDentBusiness</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

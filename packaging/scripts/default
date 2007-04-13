@@ -1,0 +1,63 @@
+NameVirtualHost *
+<VirtualHost *>
+	ServerAdmin webmaster@localhost
+	DocumentRoot /home/opendental/downloads
+
+	Alias /apt /home/opendental/repository
+
+	<Directory />
+		Options FollowSymLinks
+		AllowOverride None
+	</Directory>
+
+	<Directory "/home/opendental/repository">
+		Options Indexes FollowSymLinks MultiViews
+		DirectoryIndex index.html
+		AllowOverride Options
+		Order allow,deny
+		allow from all
+	</Directory>
+
+	<Directory "/home/opendental/repository/*/conf">
+		Order allow,deny
+		Deny from all
+		Satisfy all
+	</Directory>
+
+	<Directory "/home/opendental/repository/conf">
+		Order allow,deny
+		Deny from all
+		Satisfy all
+	</Directory>
+
+	<Directory "/home/opendental/repository/*/db">
+		Order allow,deny
+		Deny from all
+		Satisfy all
+	</Directory>
+
+	<Directory "/home/opendental/repository/db">
+		Order allow,deny
+		Deny from all
+		Satisfy all
+	</Directory>
+
+	ErrorLog /var/log/apache2/error.log
+
+	# Possible values include: debug, info, notice, warn, error, crit,
+	# alert, emerg.
+	LogLevel warn
+
+	CustomLog /var/log/apache2/access.log combined
+	ServerSignature On
+
+    Alias /doc/ "/usr/share/doc/"
+    <Directory "/usr/share/doc/">
+        Options Indexes MultiViews FollowSymLinks
+        AllowOverride None
+        Order deny,allow
+        Deny from all
+        Allow from 127.0.0.0/255.0.0.0 ::1/128
+    </Directory>
+
+</VirtualHost>

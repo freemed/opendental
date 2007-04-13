@@ -1,0 +1,8 @@
+#!/bin/bash
+
+# Script that makes a repository cd containing the packages
+# required to install Open Dental.
+# The output is an .iso file
+
+cd ~/repository
+mkisofs -J -r -pad -v -V "Open Dental repository CD" -o ../download/opendental-repository.iso .

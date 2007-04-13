@@ -1,0 +1,5 @@
+2007-03-31  Frederik Carlier <frederik.carlier@carlier-online.be>
+
+    * FormConvertLang39.cs: 
+        - Use BeginUpdate and EndUpdate to speed up drawing of the control;
+        - Sort the items in the list;
