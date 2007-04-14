@@ -28,7 +28,7 @@ using OpenDental.UI;
 using OpenDentBusiness;
 using Tao.OpenGl;
 using CodeBase;
-//using xImageDeviceManager;
+using xImageDeviceManager;
 
 namespace OpenDental{
 
@@ -108,7 +108,9 @@ namespace OpenDental{
 		Bitmap renderImage=null;
 		Rectangle cropTangle=new Rectangle(0,0,-1,-1);
 		const int thumbSize=100;
-		//DeviceControl xRayImageController=null;
+		///<summary>Used for performing an xRay image capture on an imaging device.</summary>
+		DeviceControl xRayImageController=null;
+		///<summary>Thread to handle updating the graphical image to the screen when the current document is an image.</summary>
 		Thread myThread=null;
 		///<summary>Used to prevent concurrent access to the current image by multiple threads.</summary>
 		int curImageWidth=0;
@@ -127,6 +129,8 @@ namespace OpenDental{
 		string oldSelectDocNum="";
 		///<summary>Used for Invoke() calls in RenderCurrentImage() to safely handle multi-thread access to the picture box.</summary>
 		delegate void RenderImageCallback(Document doc);
+		///<summary>Used to safe-guard against multi-threading issues when an image capture is completed.</summary>
+		delegate void CaptureCompleteCallback(object sender,EventArgs e);
 
 		///<summary></summary>
 		public ContrDocs(){
@@ -148,9 +152,9 @@ namespace OpenDental{
 			//We always capture with a Suni device for now.
 			//TODO: In the future use a device locator in the xImagingDeviceManager
 			//project to return the appropriate general device control.
-			//xRayImageController=new SuniDeviceControl();
-			//this.xRayImageController.OnCaptureComplete+=new System.EventHandler(this.OnCaptureComplete);
-			//this.xRayImageController.OnCaptureAbort+=new System.EventHandler(this.OnCaptureAborted);
+			xRayImageController=new SuniDeviceControl();
+			this.xRayImageController.OnCaptureComplete+=new System.EventHandler(this.OnCaptureComplete);
+			this.xRayImageController.OnCaptureAbort+=new System.EventHandler(this.OnCaptureAborted);
 		}
 
 		///<summary></summary>
@@ -531,9 +535,9 @@ namespace OpenDental{
 			}
 			button.DropDownMenu=menuForms;
 			ToolBarMain.Buttons.Add(button);
-			/*button=new ODToolBarButton(Lan.g(this,"Capture"),-1,"Capture Image From Device","Capture");
+			button=new ODToolBarButton(Lan.g(this,"Capture"),-1,"Capture Image From Device","Capture");
 			button.Style=ODToolBarButtonStyle.ToggleButton;
-			ToolBarMain.Buttons.Add(button);*/
+			ToolBarMain.Buttons.Add(button);
 			button=new ODToolBarButton("",7,Lan.g(this,"Crop Tool"),"Crop");
 			button.Style=ODToolBarButtonStyle.ToggleButton;
 			if(IsCropMode){
@@ -584,8 +588,8 @@ namespace OpenDental{
 			FamCur=null;
 			PatCur=null;
 			//Cancel current image capture by manually untoggling the capture button.
-			//ToolBarMain.Buttons["Capture"].Pushed=false;//TODO: uncomment this line when XRay captures are supported.
-			//OnCapture_Click();//TODO: uncomment when XRay capture is supported.
+			ToolBarMain.Buttons["Capture"].Pushed=false;
+			OnCapture_Click();
 		}
 
 		///<summary>This is public for NewPatientForm functionality.</summary>
@@ -682,7 +686,7 @@ namespace OpenDental{
 				ToolBarMain.Buttons["Copy"].Enabled=true;
 				ToolBarMain.Buttons["Paste"].Enabled=true;
 				ToolBarMain.Buttons["Forms"].Enabled=true;
-				//ToolBarMain.Buttons["Capture"].Enabled=true;//TODO: uncomment this line when XRay captures are supported.
+				ToolBarMain.Buttons["Capture"].Enabled=true;
 				paintTools.Buttons["Crop"].Enabled=true;
 				paintTools.Buttons["Hand"].Enabled=true;
 				paintTools.Buttons["ZoomIn"].Enabled=true;
@@ -704,7 +708,7 @@ namespace OpenDental{
 				ToolBarMain.Buttons["Copy"].Enabled=false;
 				ToolBarMain.Buttons["Paste"].Enabled=false;
 				ToolBarMain.Buttons["Forms"].Enabled=false;
-				//ToolBarMain.Buttons["Capture"].Enabled=false;//TODO: uncomment this line when XRay captures are supported.
+				ToolBarMain.Buttons["Capture"].Enabled=false;
 				paintTools.Buttons["Crop"].Enabled=false;
 				paintTools.Buttons["Hand"].Enabled=false;
 				paintTools.Buttons["ZoomIn"].Enabled=false;
@@ -908,13 +912,8 @@ namespace OpenDental{
 
 		///<summary>Sets the panelnote visibility based on the given document's signature data and the current operating system.</summary>
 		private void SetPanelNoteVisibility(Document doc){
-			//Logger.openlog.Log("note="+doc.Note,Logger.Severity.DEBUG);
-			//Logger.openlog.Log("signature="+doc.Signature,Logger.Severity.DEBUG);
-			//Logger.openlog.Log("OS UNIX? "+(Environment.OSVersion.Platform==PlatformID.Unix?"YES":"NO"),Logger.Severity.DEBUG);
-			//Logger.openlog.Log("is topaz? "+(doc.SigIsTopaz?"YES":"NO"),Logger.Severity.DEBUG);
 			panelNote.Visible=(((doc.Note!=null && doc.Note!="") || (doc.Signature!=null && doc.Signature!="")) && 
 				(Environment.OSVersion.Platform!=PlatformID.Unix || !doc.SigIsTopaz));
-			//Logger.openlog.Log("Panel note is visible? "+(panelNote.Visible?"YES":"NO"),Logger.Severity.DEBUG);
 		}
 
 		/// <summary>Refreshes list from db, then fills the treeview.  Set to an existing document number (as a string) to keep the current doc displayed, or set to "" to clear the current document.</summary>
@@ -1002,7 +1001,7 @@ namespace OpenDental{
 						MsgBox.Show(this,"Use the dropdown list.  Add forms to the list by copying image files into your A-Z folder, Forms.  Restart the program to see newly added forms.");
 						break;
 					case "Capture":
-						//OnCapture_Click();//TODO: uncomment when XRay capture is supported.
+						OnCapture_Click();
 						break;
 				}
 			}
@@ -1351,7 +1350,7 @@ namespace OpenDental{
 		}
 
 		private void OnCopy_Click(){
-			//Crop and color function have already been applied to the render image.
+			//Crop and color function has already been applied to the render image.
 			Bitmap copyImage=ApplyDocumentSettingsToImage(GetDocumentFromNode(TreeDocuments.SelectedNode),
 				renderImage,ApplySettings.FLIP|ApplySettings.ROTATE);
 			if(copyImage!=null){
@@ -1970,10 +1969,9 @@ namespace OpenDental{
 			InvalidateSettings(ApplySettings.COLORFUNCTION,false);
 		}
 
-		/*
+		///<summary>Handles a change in selection of the xRay capture button.</summary>
 		private void OnCapture_Click() {
-			//bool capture=ToolBarMain.Buttons["Capture"].Pushed;//TODO: uncomment when XRay capture is supported.
-			bool capture=false;
+			bool capture=ToolBarMain.Buttons["Capture"].Pushed;
 			if(capture){
 				xRayImageController.CaptureXRay();
 			}else{//The user unselected the image capture button, so cancel the current image capture.
@@ -1983,6 +1981,11 @@ namespace OpenDental{
 
 		///<summary>Called on successful capture of image.</summary>
 		private void OnCaptureComplete(object sender,EventArgs e) {
+			if(TreeDocuments.InvokeRequired || ToolBarMain.InvokeRequired){
+				CaptureCompleteCallback c=new CaptureCompleteCallback(OnCaptureComplete);
+				Invoke(c,new object[] {sender,e});
+				return;
+			}
 			Bitmap capturedImage=xRayImageController.capturedImage;
 			Document doc=new Document();
 			doc.ImgType=ImageType.Radiograph;
@@ -1992,7 +1995,7 @@ namespace OpenDental{
 			Documents.Insert(doc,PatCur);//creates filename and saves to db
 			bool saved=true;
 			try{				
-				capturedImage.Save(patFolder+doc.FileName);//TODO: Use ODFileUtils.CombinePaths()!
+				capturedImage.Save(ODFileUtils.CombinePaths(patFolder,doc.FileName));
 			}catch{
 				MessageBox.Show(Lan.g(this,"Unable to save captured XRay image as document."));
 				saved=false;
@@ -2001,16 +2004,18 @@ namespace OpenDental{
 			if(saved){
 				DataRow tag=Documents.GetDocumentRow(doc.DocNum.ToString());
 				doc.DocCategory=DefB.GetByExactName(DefCat.ImageCats,GetCurrentFolderName(TreeDocuments.SelectedNode));
-				AddTreeDocumentNode(doc,tag,true);
+				AddTreeDocumentNode(ref doc,tag,true);
 			}
-			OnCapture_Click();//Prepare to capture another XRay, even if the last XRay failed to save.
+			//OnCapture_Click();//TODO: Prepare to capture another XRay, even if the last XRay failed to save.
+			ToolBarMain.Buttons["Capture"].Pushed=false;	//TODO: remove this line, since the capture must stay enabled
+																										//for an entire capture sequence.
 		}
 
 		///<summary>Called under any error circumstance resulting from the image capture process.</summary>
 		private void OnCaptureAborted(object sender,EventArgs e) {
-			//ToolBarMain.Buttons["Capture"].Pushed=false;//TODO: uncomment when XRay capture is supported.
+			ToolBarMain.Buttons["Capture"].Pushed=false;
 			ToolBarMain.Invalidate();
-		}*/
+		}
 
 		///<summary>Kills ImageApplicationThread.  Disposes of both ImageCurrent and renderImage.  Does not actually trigger a refresh of the Picturebox, though.</summary>
 		private void EraseCurrentImage(){
