@@ -59,6 +59,7 @@
                 <include name="../Required dlls/Tao.OpenGl.dll"/>
                 <include name="../Required dlls/Tao.Platform.Windows.dll"/>
                 <include name="../Required dlls/VBbridges.dll"/>
+                <include name="../Required dlls/xImageDeviceManager.dll"/>
                 <include name="${build.dir}/bin/OpenDentBusiness.dll"/>
                 <include name="${build.dir}/bin/RdlEngine.dll"/>
                 <include name="${build.dir}/bin/RdlViewer.dll"/>
