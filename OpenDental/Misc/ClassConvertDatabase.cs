@@ -4103,6 +4103,18 @@ namespace OpenDental{
 				command="UPDATE preference SET ValueString = '4.7.1.0' WHERE PrefName = 'DataBaseVersion'";
 				General.NonQEx(command);
 			}
+			To4_7_4();
+		}
+
+		///<summary></summary>
+		private void To4_7_4() {
+			if(FromVersion<new Version("4.7.4.0")) {
+				string command="";
+				command="UPDATE clearinghouse SET ReceiverID='113504607' WHERE ReceiverID='Tesia'";
+				General.NonQEx(command);
+				command="UPDATE preference SET ValueString = '4.7.4.0' WHERE PrefName = 'DataBaseVersion'";
+				General.NonQEx(command);
+			}
 			To4_8_0();
 		}
 
@@ -4110,7 +4122,60 @@ namespace OpenDental{
 		private void To4_8_0() {
 			if(FromVersion<new Version("4.8.0.0")) {
 				string command="";
-
+				//Turn all hardcoded clearinghouse fields into dynamic fields---------------------------------------------------------
+				command="ALTER TABLE clearinghouse ADD ISA05 varchar(255) AFTER Eformat";
+				General.NonQEx(command);
+				command="UPDATE clearinghouse SET ISA05='30' WHERE ReceiverID='660610220' OR ReceiverID='AOS'";
+				General.NonQEx(command);
+				command="UPDATE clearinghouse SET ISA05='ZZ' WHERE ReceiverID!='660610220' AND ReceiverID!='AOS'";
+				General.NonQEx(command);
+				command="ALTER TABLE clearinghouse ADD SenderTIN varchar(255) AFTER ISA05";
+				General.NonQEx(command);
+				int practiceDefaultProv=PrefB.GetInt("PracticeDefaultProv");
+				command="SELECT SSN FROM provider WHERE ProvNum="+POut.PInt(practiceDefaultProv);
+				string defProvSSN=General.GetTableEx(command).Rows[0][0].ToString().Replace("-","");
+				command="UPDATE clearinghouse SET SenderTIN='"+POut.PString(defProvSSN)+"' "
+					+"WHERE ReceiverID='660610220' OR ReceiverID='AOS' OR ReceiverID='113504607'";//Inmediata,AOS, or Tesia
+				General.NonQEx(command);
+				command="ALTER TABLE clearinghouse ADD ISA07 varchar(255) AFTER SenderTIN";
+				General.NonQEx(command);
+				command="UPDATE clearinghouse SET ISA07='30' WHERE ReceiverID='330989922' OR ReceiverID='660610220' OR ReceiverID='AOS'";
+				General.NonQEx(command);
+				command="UPDATE clearinghouse SET ISA07='ZZ' WHERE ReceiverID!='330989922' AND ReceiverID!='660610220' AND ReceiverID!='AOS'";
+				General.NonQEx(command);
+				if(FormChooseDatabase.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE clearinghouse CHANGE ReceiverID ISA08 varchar(255)";
+					General.NonQEx(command);
+				}
+				else{//oracle.  Is this valid?:
+					command="ALTER TABLE clearinghouse RENAME ReceiverID ISA08";
+					General.NonQEx(command);
+				}
+				command="ALTER TABLE clearinghouse ADD ISA15 varchar(255) AFTER ISA08";
+				General.NonQEx(command);
+				command="UPDATE clearinghouse SET ISA15='P'";
+				General.NonQEx(command);
+				//Is this valid for Oracle?:
+				command="ALTER TABLE clearinghouse DROP SenderID";
+				General.NonQEx(command);
+				command="ALTER TABLE clearinghouse ADD SenderName varchar(255)";
+				General.NonQEx(command);
+				command="ALTER TABLE clearinghouse ADD SenderTelephone varchar(255)";
+				General.NonQEx(command);
+				command="ALTER TABLE clearinghouse ADD GS03 varchar(255)";
+				General.NonQEx(command);
+				command="SELECT Abbr FROM provider WHERE ProvNum="+POut.PInt(practiceDefaultProv);
+				string AOSnumber=General.GetTableEx(command).Rows[0][0].ToString();
+				command="UPDATE clearinghouse SET SenderName='"+POut.PString(AOSnumber)+"' WHERE ISA08='AOS'";
+				General.NonQEx(command);
+				command="UPDATE clearinghouse SET SenderName='"+POut.PString(PrefB.GetString("PracticeTitle"))+"' "
+					+"WHERE ISA08='660610220' OR ISA08='113504607'";//Inmediata or Tesia
+				General.NonQEx(command);
+				command="UPDATE clearinghouse SET SenderTelephone='"+POut.PString(PrefB.GetString("PracticePhone"))+"' "
+					+"WHERE ISA08='660610220' OR ISA08='113504607' OR ISA08='AOS'";//Inmediata or Tesia or AOS
+				General.NonQEx(command);
+				command="UPDATE clearinghouse SET GS03=ISA08";
+				General.NonQEx(command);
 
 
 

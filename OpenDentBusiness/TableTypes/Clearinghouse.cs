@@ -18,10 +18,16 @@ namespace OpenDentBusiness{
 		public string Payors;
 		///<summary>Enum:ElectronicClaimFormat The format of the file that gets sent electronically.</summary>
 		public ElectronicClaimFormat Eformat;
-		///<summary>The ID of the clearinghouse. Provided by them. Usually goes on ISA08. Examples: BCBSGA or 0135WCH00(webMD)</summary>
-		public string ReceiverID;
-		///<summary>Not used anymore since Open Dental is always the sender.  The dental office will be identified by provider rather than by sender.</summary>
-		public string SenderIDold;
+		///<summary>Sender ID Qualifier. Usually ZZ, sometimes 30. Seven other values are allowed as specified in X12 document, but probably never used.</summary>
+		public string ISA05;
+		///<summary>Used in ISA06, GS02, 1000A NM1, and 1000A PER.  If blank, then 810624427 is used to indicate Open Dental.</summary>
+		public string SenderTIN;
+		///<summary>Receiver ID Qualifier.  Usually ZZ, sometimes 30. Seven other values are allowed as specified in X12 document, but probably never used.</summary>
+		public string ISA07;
+		///<summary>Receiver ID. Also used in GS03. Provided by clearinghouse. Examples: BCBSGA or 0135WCH00(webMD)</summary>
+		public string ISA08;
+		///<summary>"P" for Production or "T" for Test.</summary>
+		public string ISA15;
 		///<summary>Password is usually combined with the login ID for user validation.</summary>
 		public string Password;
 		///<summary>The path that all incoming response files will be saved to. Includes \.</summary>
@@ -36,6 +42,12 @@ namespace OpenDentBusiness{
 		public int ModemPort;
 		///<summary>A clearinghouse usually has a login ID that is used with the password in order to access the remote server.  This value is not usualy used within the actual claim.</summary>
 		public string LoginID;
+		///<summary>Used in 1000A NM1 and 1000A PER.  But if SenderTIN is blank, then OPEN DENTAL SOFTWARE is used instead.</summary>
+		public string SenderName;
+		///<summary>Used in 1000A PER.  But if SenderTIN is blank, then 8776861248 is used instead.  10 digit phone is required by WebMD and is universally assumed, so for now, this must be either blank or 10 digits.</summary>
+		public string SenderTelephone;
+		///<summary>Usually the same as ISA08, but at least one clearinghouse uses a different number here.</summary>
+		public string GS03;
 
 		/*//<summary>Returns a copy of the clearinghouse.</summary>
     public ClaimForm Copy(){

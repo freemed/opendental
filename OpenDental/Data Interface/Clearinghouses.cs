@@ -28,15 +28,21 @@ namespace OpenDental{
 				List[i].IsDefault       = PIn.PBool(table.Rows[i][3].ToString());
 				List[i].Payors          = PIn.PString(table.Rows[i][4].ToString());
 				List[i].Eformat         = (ElectronicClaimFormat)PIn.PInt(table.Rows[i][5].ToString());
-				List[i].ReceiverID      = PIn.PString(table.Rows[i][6].ToString());
-				//List[i].SenderID        = PIn.PString(table.Rows[i][7].ToString());
-				List[i].Password        = PIn.PString(table.Rows[i][8].ToString());
-				List[i].ResponsePath    = PIn.PString(table.Rows[i][9].ToString());
-				List[i].CommBridge      = (EclaimsCommBridge)PIn.PInt(table.Rows[i][10].ToString());
-				List[i].ClientProgram   = PIn.PString(table.Rows[i][11].ToString());
-				//12: LastBatchNumber
-				List[i].ModemPort       = PIn.PInt(table.Rows[i][13].ToString());
-				List[i].LoginID         = PIn.PString(table.Rows[i][14].ToString());
+				List[i].ISA05           = PIn.PString(table.Rows[i][6].ToString());
+				List[i].SenderTIN       = PIn.PString(table.Rows[i][7].ToString());
+				List[i].ISA07           = PIn.PString(table.Rows[i][8].ToString());
+				List[i].ISA08           = PIn.PString(table.Rows[i][9].ToString());
+				List[i].ISA15           = PIn.PString(table.Rows[i][10].ToString());
+				List[i].Password        = PIn.PString(table.Rows[i][11].ToString());
+				List[i].ResponsePath    = PIn.PString(table.Rows[i][12].ToString());
+				List[i].CommBridge      = (EclaimsCommBridge)PIn.PInt(table.Rows[i][13].ToString());
+				List[i].ClientProgram   = PIn.PString(table.Rows[i][14].ToString());
+				//15: LastBatchNumber
+				List[i].ModemPort       = PIn.PInt(table.Rows[i][16].ToString());
+				List[i].LoginID         = PIn.PString(table.Rows[i][17].ToString());
+				List[i].SenderName      = PIn.PString(table.Rows[i][18].ToString());
+				List[i].SenderTelephone = PIn.PString(table.Rows[i][19].ToString());
+				List[i].GS03            = PIn.PString(table.Rows[i][20].ToString());
 				payors=List[i].Payors.Split(',');
 				for(int j=0;j<payors.Length;j++) {
 					if(!HList.ContainsKey(payors[j])) {
@@ -49,22 +55,28 @@ namespace OpenDental{
 		///<summary>Inserts this clearinghouse into database.</summary>
 		public static void Insert(Clearinghouse clearhouse){
 			string command="INSERT INTO clearinghouse (Description,ExportPath,IsDefault,Payors"
-				+",Eformat,ReceiverID,SenderID,Password,ResponsePath,CommBridge,ClientProgram,"
-				+"LastBatchNumber,ModemPort,LoginID) VALUES("
+				+",Eformat,ISA05,SenderTIN,ISA07,ISA08,ISA15,Password,ResponsePath,CommBridge,ClientProgram,"
+				+"LastBatchNumber,ModemPort,LoginID,SenderName,SenderTelephone,GS03) VALUES("
 				+"'"+POut.PString(clearhouse.Description)+"', "
 				+"'"+POut.PString(clearhouse.ExportPath)+"', "
 				+"'"+POut.PBool  (clearhouse.IsDefault)+"', "
 				+"'"+POut.PString(clearhouse.Payors)+"', "
 				+"'"+POut.PInt   ((int)clearhouse.Eformat)+"', "
-				+"'"+POut.PString(clearhouse.ReceiverID)+"', "
-				+"'', " //SenderID
+				+"'"+POut.PString(clearhouse.ISA05)+"', "
+				+"'"+POut.PString(clearhouse.SenderTIN)+"', "
+				+"'"+POut.PString(clearhouse.ISA07)+"', "
+				+"'"+POut.PString(clearhouse.ISA08)+"', "
+				+"'"+POut.PString(clearhouse.ISA15)+"', "
 				+"'"+POut.PString(clearhouse.Password)+"', "
 				+"'"+POut.PString(clearhouse.ResponsePath)+"', "
 				+"'"+POut.PInt   ((int)clearhouse.CommBridge)+"', "
 				+"'"+POut.PString(clearhouse.ClientProgram)+"', "
 				+"'0', "//LastBatchNumber
 				+"'"+POut.PInt   (clearhouse.ModemPort)+"', "
-				+"'"+POut.PString(clearhouse.LoginID)+"')";
+				+"'"+POut.PString(clearhouse.LoginID)+"', "
+				+"'"+POut.PString(clearhouse.SenderName)+"', "
+				+"'"+POut.PString(clearhouse.SenderTelephone)+"', "
+				+"'"+POut.PString(clearhouse.GS03)+"')";
  			General.NonQ(command);
 		}
 
@@ -76,8 +88,11 @@ namespace OpenDental{
 				+",IsDefault = '"   +POut.PBool  (clearhouse.IsDefault)+"' "
 				+",Payors = '"      +POut.PString(clearhouse.Payors)+"' "
 				+",Eformat = '"     +POut.PInt   ((int)clearhouse.Eformat)+"' "
-				+",ReceiverID = '"  +POut.PString(clearhouse.ReceiverID)+"' "
-				//+",SenderID = '"    +POut.PString(SenderID)+"' "
+				+",ISA05 = '"       +POut.PString(clearhouse.ISA05)+"' "
+				+",SenderTIN = '"   +POut.PString(clearhouse.SenderTIN)+"' "
+				+",ISA07 = '"       +POut.PString(clearhouse.ISA07)+"' "
+				+",ISA08 = '"       +POut.PString(clearhouse.ISA08)+"' "
+				+",ISA15 = '"       +POut.PString(clearhouse.ISA15)+"' "
 				+",Password = '"    +POut.PString(clearhouse.Password)+"' "
 				+",ResponsePath = '"+POut.PString(clearhouse.ResponsePath)+"' "
 				+",CommBridge = '"  +POut.PInt   ((int)clearhouse.CommBridge)+"' "
@@ -85,6 +100,9 @@ namespace OpenDental{
 				//LastBatchNumber
 				+",ModemPort ='"    +POut.PInt   (clearhouse.ModemPort)+"' "
 				+",LoginID ='"      +POut.PString(clearhouse.LoginID)+"' "
+				+",SenderName = '"  +POut.PString(clearhouse.SenderName)+"' "
+				+",SenderTelephone='"+POut.PString(clearhouse.SenderTelephone)+"' "
+				+",GS03 = '"         +POut.PString(clearhouse.GS03)+"' "
 				+"WHERE ClearinghouseNum = '"+POut.PInt   (clearhouse.ClearinghouseNum)+"'";
  			General.NonQ(command);
 		}

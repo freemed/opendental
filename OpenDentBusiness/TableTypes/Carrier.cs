@@ -22,7 +22,7 @@ namespace OpenDentBusiness{
 		public string Zip;
 		///<summary>Includes any punctuation.</summary>
 		public string Phone;
-		///<summary>E-claims electronic payer id.  5 char in USA.  6 digits in Canada.</summary>
+		///<summary>E-claims electronic payer id.  5 char in USA.  6 digits in Canada.  I've seen an ID this long before: "LA-DHH-MEDICAID".  The user interface currently limits length to 20, although db limits length to 255.  X12 requires length between 2 and 80.</summary>
 		public string ElectID;
 		///<summary>Do not send electronically.  It's just a default; you can still send electronically.</summary>
 		public bool NoSendElect;
