@@ -4,7 +4,7 @@ using System.Collections;
 
 namespace OpenDentBusiness{
 
-	/// <summary>These are always attached to mountdefs.  Can be deleted without any problems.</summary>
+	/// <summary>THIS TABLE IS NOT BEING USED.  These are always attached to mountdefs.  Can be deleted without any problems.</summary>
 	public class MountItemDef{
 		///<summary>Primary key.</summary>
 		public int MountItemDefNum;

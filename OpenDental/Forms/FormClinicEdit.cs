@@ -356,15 +356,17 @@ namespace OpenDental{
 		private void butDelete_Click(object sender, System.EventArgs e) {
 			if(IsNew){
 				DialogResult=DialogResult.Cancel;
+				return;
 			}
-			else{
-				try{
-					Clinics.Delete(ClinicCur);
-					DialogResult=DialogResult.OK;
-				}
-				catch(Exception ex){
-					MessageBox.Show(ex.Message);
-				}
+			if(!MsgBox.Show(this,true,"Delete Lab?")) {
+				return;
+			}
+			try{
+				Clinics.Delete(ClinicCur);
+				DialogResult=DialogResult.OK;
+			}
+			catch(Exception ex){
+				MessageBox.Show(ex.Message);
 			}
 		}
 

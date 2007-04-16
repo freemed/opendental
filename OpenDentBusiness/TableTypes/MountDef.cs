@@ -4,7 +4,7 @@ using System.Collections;
 
 namespace OpenDentBusiness{
 
-	/// <summary>These can be freely deleted, renamed, moved, etc. without affecting any patient info.  mountitemdef</summary>
+	/// <summary>THIS TABLE IS NOT BEING USED.  These can be freely deleted, renamed, moved, etc. without affecting any patient info.  mountitemdef</summary>
 	public class MountDef{
 		///<summary>Primary key.</summary>
 		public int MountDefNum;

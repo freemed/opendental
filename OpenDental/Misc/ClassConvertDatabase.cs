@@ -4176,6 +4176,30 @@ namespace OpenDental{
 				General.NonQEx(command);
 				command="UPDATE clearinghouse SET GS03=ISA08";
 				General.NonQEx(command);
+				//added after r167:
+				if(FormChooseDatabase.DBtype==DatabaseType.MySql) {
+					command="DROP TABLE IF EXISTS laboratory";
+					General.NonQEx(command);
+					command=@"CREATE TABLE laboratory(
+						LaboratoryNum mediumint NOT NULL auto_increment,
+						Description varchar(255),
+						Phone varchar(255),
+						Notes text,
+						LabSlip mediumtext,
+						PRIMARY KEY (LaboratoryNum)
+						) DEFAULT CHARSET=utf8";
+				}
+				else {
+					command=@"CREATE TABLE laboratory(
+						LaboratoryNum int NOT NULL,
+						Description varchar(255),
+						Phone varchar(255),
+						Notes text,
+						LabSlip text,
+						PRIMARY KEY (LaboratoryNum)
+						)";
+				}
+				General.NonQEx(command);
 
 
 

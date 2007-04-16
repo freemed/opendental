@@ -100,6 +100,7 @@
     <Compile Include="TableTypes\CanadianClaim.cs" />
     <Compile Include="TableTypes\CanadianExtract.cs" />
     <Compile Include="TableTypes\CanadianNetwork.cs" />
+    <Compile Include="TableTypes\Laboratory.cs" />
     <Compile Include="TableTypes\MountItemDef.cs" />
     <Compile Include="TableTypes\MountDef.cs" />
     <Compile Include="TableTypes\Ebatch.cs" />
