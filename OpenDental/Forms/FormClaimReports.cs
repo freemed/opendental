@@ -271,7 +271,7 @@ namespace OpenDental{
 			if(!MsgBox.Show(this,true,"Move selected reports to the archive folder?")){
 				return;
 			}
-			string respPath=Clearinghouses.List[comboClearhouse.SelectedIndex].ResponsePath;
+			//string respPath=Clearinghouses.List[comboClearhouse.SelectedIndex].ResponsePath;
 			for(int i=0;i<listMain.SelectedIndices.Count;i++){
 				ArchiveFile((string)listMain.Items[listMain.SelectedIndices[i]]);
 			}

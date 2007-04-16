@@ -6,7 +6,7 @@ using System.IO;
 namespace CodeBase {
 	public class ODFileUtils {
 
-		///<summary>Removes a trailing path separator from the given string is one exists.</summary>
+		///<summary>Removes a trailing path separator from the given string if one exists.</summary>
 		public static string RemoveTrailingSeparators(string path){
 			while(path!=null && path.Length>0 && (path[path.Length-1]=='\\' || path[path.Length-1]=='/')) {
 				path=path.Substring(0,path.Length-1);

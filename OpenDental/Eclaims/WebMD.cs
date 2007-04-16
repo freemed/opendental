@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Windows.Forms;
 using OpenDentBusiness;
+using CodeBase;
 
 namespace OpenDental.Eclaims
 {
@@ -29,8 +30,8 @@ namespace OpenDental.Eclaims
 				if(!File.Exists(clearhouse.ClientProgram)) {
 					throw new Exception("Client program not installed properly.");
 				}
-				arguments=clearhouse.ExportPath+"*.* "//upload claims path
-					+clearhouse.ResponsePath+" "//Mail path
+				arguments=ODFileUtils.RemoveTrailingSeparators(clearhouse.ExportPath)+"\\"+"*.* "//upload claims path
+					+ODFileUtils.RemoveTrailingSeparators(clearhouse.ResponsePath)+" "//Mail path
 					+"316 "//vendor number.  
 					+clearhouse.LoginID+" "//Client number. Assigned by us, and we have to coordinate for all other 'vendors' of Open Dental, because there is only one vendor number for OD for now.
 					+clearhouse.Password;

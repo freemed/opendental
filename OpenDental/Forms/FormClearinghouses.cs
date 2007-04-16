@@ -71,7 +71,7 @@ namespace OpenDental{
 			this.butClose.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butClose.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butClose.CornerRadius = 4F;
-			this.butClose.Location = new System.Drawing.Point(807,389);
+			this.butClose.Location = new System.Drawing.Point(807,465);
 			this.butClose.Name = "butClose";
 			this.butClose.Size = new System.Drawing.Size(75,26);
 			this.butClose.TabIndex = 0;
@@ -86,7 +86,7 @@ namespace OpenDental{
 			this.gridMain.ScrollValue = 1;
 			this.gridMain.SelectedIndices = new int[0];
 			this.gridMain.SelectionMode = System.Windows.Forms.SelectionMode.None;
-			this.gridMain.Size = new System.Drawing.Size(879,219);
+			this.gridMain.Size = new System.Drawing.Size(879,318);
 			this.gridMain.TabIndex = 2;
 			this.gridMain.CellDoubleClicked += new OpenDental.ContrTable.CellEventHandler(this.gridMain_CellDoubleClicked);
 			// 
@@ -111,7 +111,7 @@ namespace OpenDental{
 			this.butAdd.CornerRadius = 4F;
 			this.butAdd.Image = global::OpenDental.Properties.Resources.Add;
 			this.butAdd.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butAdd.Location = new System.Drawing.Point(806,291);
+			this.butAdd.Location = new System.Drawing.Point(805,385);
 			this.butAdd.Name = "butAdd";
 			this.butAdd.Size = new System.Drawing.Size(80,26);
 			this.butAdd.TabIndex = 8;
@@ -121,7 +121,7 @@ namespace OpenDental{
 			// FormClearinghouses
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
-			this.ClientSize = new System.Drawing.Size(891,427);
+			this.ClientSize = new System.Drawing.Size(891,503);
 			this.Controls.Add(this.butAdd);
 			this.Controls.Add(this.textBox1);
 			this.Controls.Add(this.gridMain);
@@ -188,16 +188,20 @@ namespace OpenDental{
 		}
 
 		private void FormClearinghouses_Closing(object sender, System.ComponentModel.CancelEventArgs e) {
-			bool defaultSelected=false;
+			int defaultsSelected=0;
 			for(int i=0;i<Clearinghouses.List.Length;i++){
 				if(Clearinghouses.List[i].IsDefault){
-					defaultSelected=true;
+					defaultsSelected++;
 				}
 			}
-			if(!defaultSelected && Clearinghouses.List.Length>0){
-				if(MessageBox.Show(Lan.g(this,"At least one clearinghouse should be selected as the default. Continue anyway?"),"",MessageBoxButtons.OKCancel)
-					!=DialogResult.OK)
-				{
+			if(defaultsSelected==0 && Clearinghouses.List.Length>0){
+				if(!MsgBox.Show(this,true,"At least one clearinghouse should be selected as the default. Continue anyway?")){
+					e.Cancel=true;
+					return;
+				}
+			}
+			if(defaultsSelected>1){
+				if(!MsgBox.Show(this,true,"Only one clearinghouse should be selected as the default. Continue anyway?")) {
 					e.Cancel=true;
 					return;
 				}

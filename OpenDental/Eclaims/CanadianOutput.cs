@@ -23,6 +23,7 @@ namespace OpenDental.Eclaims {
 			if(clearhouse==null){
 				throw new ApplicationException("Canadian clearinghouse not found.");
 			}
+//warning, might not work if trailing slash is missing.
 			string saveFolder=clearhouse.ExportPath;
 			if(!Directory.Exists(saveFolder)) {
 				throw new ApplicationException(saveFolder+" not found.");

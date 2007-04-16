@@ -47,7 +47,7 @@ namespace OpenDental.Eclaims
 			}
 			else{
 				//This is a Windows extension, so we do not need to worry about Unix path separator characters.
-				File.Delete(clearhouse.ExportPath+"claims"+interchangeNum.ToString()+".txt");
+				File.Delete(ODFileUtils.CombinePaths(clearhouse.ExportPath,"claims"+interchangeNum.ToString()+".txt"));
 			}
 		}
 
@@ -76,7 +76,6 @@ namespace OpenDental.Eclaims
 					+"00*          *"//ISA03,ISA04: 00 + 10 spaces
 					+clearhouse.ISA05+"*"//ISA05: Sender ID type: ZZ=mutually defined. 30=TIN. Validated
 					+GetISA06(clearhouse)+"*"//ISA06: Sender ID(TIN). Or might be TIN of Open Dental
-					//Sout(clearhouse.ISA06,15,15)+"*"//ISA06: Sender ID(TIN). Validated to make sure it's not blank.
 					+clearhouse.ISA07+"*"//ISA07: Receiver ID type: ZZ=mutually defined. 30=TIN. Validated
 					+Sout(clearhouse.ISA08,15,15)+"*"//ISA08: Receiver ID. Validated to make sure length is at least 2.
 					+DateTime.Today.ToString("yyMMdd")+"*"//ISA09: today's date
@@ -123,8 +122,8 @@ namespace OpenDental.Eclaims
 			if(isMedical){
 				groupControlNumber="2";//this works for now because only two groups
 				sw.WriteLine("GS*HC*"//GS01: Health Care Claim
-					+GetGS02(clearhouse)+"*"//GS02: Application Senders Code. Sometimes Jordan Sparks.  Sometimes the sending clinic.
-					+GetGS03(clearhouse)+"*"//GS03: Application Receiver's Code
+					+GetGS02(clearhouse)+"*"//GS02: Senders Code. Sometimes OpenDental.  Sometimes the sending clinic. Validated
+					+Sout(clearhouse.GS03,15,2)+"*"//GS03: Application Receiver's Code
 					+DateTime.Today.ToString("yyyyMMdd")+"*"//GS04: today's date
 					+DateTime.Now.ToString("HHmm")+"*"//GS05: current time
 					+groupControlNumber+"*"//GS06: Group control number. Max length 9. No padding necessary. 
@@ -134,8 +133,8 @@ namespace OpenDental.Eclaims
 			else{//dental
 				groupControlNumber="1";
 				sw.WriteLine("GS*HC*"//GS01: Health Care Claim
-					+GetGS02(clearhouse)+"*"//GS02: Application Senders Code. Sometimes Jordan Sparks.  Sometimes the sending clinic.
-					+GetGS03(clearhouse)+"*"//GS03: Application Receiver's Code
+					+GetGS02(clearhouse)+"*"//GS02: Senders Code. Sometimes Jordan Sparks.  Sometimes the sending clinic.
+					+Sout(clearhouse.GS03,15,2)+"*"//GS03: Application Receiver's Code
 					+DateTime.Today.ToString("yyyyMMdd")+"*"//GS04: today's date
 					+DateTime.Now.ToString("HHmm")+"*"//GS05: current time
 					+groupControlNumber+"*"//GS06: Group control number. Max length 9. No padding necessary.
@@ -206,7 +205,7 @@ namespace OpenDental.Eclaims
 							sw.WriteLine("REF*87*004010X097A1~");
 						}
 					}
-					//1000A Submitter is usually OPEN DENTAL, but for inmediata it's the practice
+					//1000A Submitter is OPEN DENTAL and sometimes it's the practice
 						//(depends on clearinghouse and Partnership agreements)
 						//See 2010AA PER (after REF) for the new billing provider contact phone number
 					//1000A NM1: required
@@ -311,7 +310,7 @@ namespace OpenDental.Eclaims
 							+Sout(clinic.Zip.Replace("-",""),15)+"~");//N403: Zip
 					}
 					if(!isMedical){
-						//2010AA REF: Office phone number. Required by WebMD.  Needs to be removed later if using NPI (huh?)
+						//2010AA REF: Office phone number. Required by WebMD.  Can possibly be removed now that we're using NPI.
 						if(clearhouse.ISA08=="0135WCH00"){//if WebMD
 							seg++;
 							if(clinic==null){
@@ -329,8 +328,7 @@ namespace OpenDental.Eclaims
 						sw.WriteLine("REF*0B*"//REF01: 0B=state license #.
 							+Sout(billProv.StateLicense,30)+"~");
 						//2010AA REF: Secondary ID number(s). Only required by some carriers.
-						//Eliminated with introduction of NPI.
-						//seg+=WriteProv_REF(sw,billProv,(string)claimAr[0,i]);
+						seg+=WriteProv_REF(sw,billProv,(string)claimAr[0,i]);
 					}
 					//It's after the NPI date, now.  So either TIN or SSN (EI or SY) is required here.
 					seg++;
@@ -848,7 +846,7 @@ namespace OpenDental.Eclaims
 					else{
 						sw.Write("34*");
 					}
-					sw.WriteLine(Sout(provFac.SSN,80)+"~");//NM109: ID
+					sw.WriteLine(Sout(provFac.SSN,80)+"~");//NM109: ID. Not validated.
 				}
 				//2310E (medical)NM1,REF Supervising Provider. Not supported.
 				//2310F (medical)NM1,N3,N4 Ambulance Pickup location. Not supported.
@@ -1186,98 +1184,56 @@ namespace OpenDental.Eclaims
 		///<summary>If clearhouse.SenderTIN is blank, then 810624427 will be used to indicate Open Dental.</summary>
 		private static string GetISA06(Clearinghouse clearhouse){
 			if(clearhouse.SenderTIN==""){
-				return Sout("810624427",15,15);
+				return Sout("810624427",15,15);//TIN of OD.
 			}
 			else{
 				return Sout(clearhouse.SenderTIN,15,15);//already validated to be length at least 2.
 			}
 		}
 
-		/// <summary>Usually Jordan Sparks's TIN, but sometimes the clinic's TIN.</summary>
+		/// <summary>Sometimes SenderTIN, sometimes OD's TIN.</summary>
 		private static string GetGS02(Clearinghouse clearhouse){
-			if(clearhouse.ISA08=="660610220" || clearhouse.ISA08=="AOS"){//Inmediata or AOS
-				Provider defProv=Providers.ListLong[Providers.GetIndexLong(PrefB.GetInt("PracticeDefaultProv"))];
-				return Sout(defProv.SSN,15,2);//TIN or SSN of default provider.  This field should be later added to clearhouse
+			if(clearhouse.SenderTIN=="") {
+				return Sout("810624427",15,2);
 			}
-			else{
-				return "810624427";//TIN of Jordan Sparks.
+			else {
+				return Sout(clearhouse.SenderTIN,15,2);//already validated to be length at least 2.
 			}
 		}
 
-		/// <summary>Usually just returns the clearhouse.ReceiverID, except Georgia Medicaid returns payorID.</summary>
-		private static string GetGS03(Clearinghouse clearhouse){
-			switch(clearhouse.ISA08){
-				case "100000"://Georgia Medicaid
-					return "77034";
-			}
-			return clearhouse.ISA08;
-		}
-
-		///<summary>Usually writes the name information for Open Dental. But for inmediata/AOS clearinghouses, it writes practice info.</summary>
+		///<summary>Sometimes writes the name information for Open Dental. Sometimes it writes practice info.</summary>
 		private static void Write1000A_NM1(StreamWriter sw,Clearinghouse clearhouse){
-			if(clearhouse.ISA08=="660610220"){//Inmediata
-				Provider defProv=Providers.ListLong[Providers.GetIndexLong(PrefB.GetInt("PracticeDefaultProv"))];
-				//TIN or SSN of default provider.  This field should be later added to clearhouse
-				sw.WriteLine("NM1*41*"//NM101: 41=submitter
-					+"2*"//NM102: 2=nonperson??
-					+Sout(PrefB.GetString("PracticeTitle"),35,1)+"*"//NM103:Submitter Name
-					+"****46*"//NM108: 46 indicates ETIN
-					+Sout(defProv.SSN,80,2)+"~");//NM109: ID Code. aka ETIN#.
-			}
-			else if(clearhouse.ISA08=="AOS"){ // AOS added SPK 7/13/05
-				Provider defProv=Providers.ListLong[Providers.GetIndexLong(PrefB.GetInt("PracticeDefaultProv"))];
-				//TIN or SSN of default provider.  This field should be later added to clearhouse
-				sw.WriteLine("NM1*41*"//NM101: 41=submitter
-					+"1*"//NM102: 1=person
-					+Sout(defProv.Abbr,6,1)+"*"//NM103:Submitter AOS Number, SPK
-					+"****46*"//NM108: 46 indicates ETIN
-					+Sout(defProv.SSN,80,2)+"~");//NM109: ID Code. aka ETIN#.
-			}
-			else{
+			if(clearhouse.SenderTIN==""){//use OD
 				sw.WriteLine("NM1*41*"//NM101: 41=submitter
 					+"2*"//NM102: 2=nonperson
 					+"OPEN DENTAL SOFTWARE*"//NM103:Submitter Name
 					+"****46*"//NM108: 46 indicates ETIN
-					+"810624427~");//aka ETIN#.
+					+"810624427~");//NM109: ID Code. aka ETIN#.
+			}
+			else{
+				sw.WriteLine("NM1*41*"//NM101: 41=submitter
+					+"1*"//NM102: 1=person
+					+Sout(clearhouse.SenderName,35,1)+"*"//NM103:Submitter Name. Validated.
+					+"****46*"//NM108: 46 indicates ETIN
+					+Sout(clearhouse.SenderTIN,80,2)+"~");//NM109: ID Code. aka ETIN#. Validated to be at least 2.
 			}
 		}
 
 		///<summary>Usually writes the contact information for Open Dental. But for inmediata and AOS clearinghouses, it writes practice contact info.</summary>
 		private static void Write1000A_PER(StreamWriter sw,Clearinghouse clearhouse){
-			//if this is used, MUST ++ seg:
-			/*if(clearhouse.ReceiverID=="BCBSGA"){
-				sw.WriteLine("PER*IC*"//PER01:Function code: IC=Information Contact
-					+"JORDAN SPARKS*"//PER02:Name
-					+"ED*"//PER03:Comm Number Qualifier: ED=Electronic Data
-					//this is probably wrong:
-					+"810624427~");//PER04:Comm Number
-			}*/
-			if(clearhouse.ISA08=="660610220"//Inmediata
-				|| clearhouse.ISA08=="AOS")//AOS added SPK 7/13/05
-			{
-				sw.WriteLine("PER*IC*"//PER01:Function code: IC=Information Contact
-					+Sout(PrefB.GetString("PracticeTitle"),60,1)+"*"//PER02:Name. Practice title
-					+"TE*"//PER03:Comm Number Qualifier: TE=Telephone
-					+Sout(PrefB.GetString("PracticePhone"),80,1)+"~");//PER04:Comm Number. aka telephone number
-			}
-			else{
+			if(clearhouse.SenderTIN=="") {//use OD
 				sw.WriteLine("PER*IC*"//PER01:Function code: IC=Information Contact
 					+"JORDAN SPARKS*"//PER02:Name
 					+"TE*"//PER03:Comm Number Qualifier: TE=Telephone
 					+"8776861248~");//PER04:Comm Number. aka telephone number
 			}
-		}
-
-		//I believe this will always be the payorID, so no special function required
-		/*private static string Get1000B_NM109(Clearinghouse clearhouse,object payorID){
-			switch(clearhouse.ReceiverID){
-				case "BCBSGA":
-					return "SB601";//this is also their Electronic PayorID
-				case "100000"://Georgia Medicaid
-					return "77034";
+			else {
+				sw.WriteLine("PER*IC*"//PER01:Function code: IC=Information Contact
+					+Sout(clearhouse.SenderName,60,1)+"*"//PER02:Name. Validated.
+					+"TE*"//PER03:Comm Number Qualifier: TE=Telephone
+					+clearhouse.SenderTelephone+"~");//PER04:Comm Number. aka telephone number. Validated to be exactly 10 digits.
 			}
-			return "";
-		}*/
+		}
 
 		///<summary>Returns the Provider Taxonomy code for the given specialty.</summary>
 		public static string GetTaxonomy(DentalSpecialty specialty){
@@ -1302,7 +1258,6 @@ namespace OpenDental.Eclaims
 			return spec;
 		}
 
-		/*
 		///<summary>This is depedent only on the electronic payor id # rather than the clearinghouse.  Used for billing prov and also for treating prov. Returns the number of segments written</summary>
 		private static int WriteProv_REF(StreamWriter sw,Provider prov,string payorID){
 			int retVal=0;
@@ -1326,7 +1281,7 @@ namespace OpenDental.Eclaims
 					+provIdents[i].IDNumber+"~");//REF02. ID number
 			}
 			return retVal;
-		}*/
+		}
 
 		private static string GetProvTypeQualifier(ProviderSupplementalID provType){
 			switch(provType){
@@ -1586,38 +1541,20 @@ namespace OpenDental.Eclaims
 				retVal+="Clearinghouse ISA05";
 			}
 			if(clearhouse.SenderTIN!=""){//if it IS blank, then we'll be using OD's info as the sender, so no need to validate the rest
-//todo: make sure that none of these fields are in use anywhere else.
 				if(clearhouse.SenderTIN.Length<2) {
 					if(retVal!="")
 						retVal+=",";
 					retVal+="Clearinghouse SenderTIN";
 				}
-				if(PrefB.GetString("PracticeTitle")=="") {//1000A NM103 min length=1
+				if(clearhouse.SenderName=="") {//1000A NM103 min length=1
 					if(retVal!="")
 						retVal+=",";
-					retVal+="Practice Title";
+					retVal+="Clearinghouse Sender Name";
 				}
-				//1000A NM109 min length=2
-				if(Providers.ListLong[Providers.GetIndexLong(PrefB.GetInt("PracticeDefaultProv"))].SSN.Length<2) {
+				if(!Regex.IsMatch(clearhouse.SenderTelephone,@"^\d{10}$")) {//1000A PER04 min length=1
 					if(retVal!="")
 						retVal+=",";
-					retVal+="Default Prov SSN/TIN";
-				}
-				if(clinic==null) {
-					if(PrefB.GetString("PracticePhone").Length!=10) {//1000A PER04 min length=1.
-						//But 10 digit phone is required by WebMD and is universally assumed 
-						if(retVal!="")
-							retVal+=",";
-						retVal+="Practice Phone";
-					}
-				}
-				else {
-					if(clinic.Phone.Length!=10) {//1000A PER04 min length=1.
-						//But 10 digit phone is required by WebMD and is universally assumed 
-						if(retVal!="")
-							retVal+=",";
-						retVal+="Clinic Phone";
-					}
+					retVal+="Clearinghouse Sender Phone";
 				}
 			}
 			if(clearhouse.ISA07!="01" && clearhouse.ISA07!="14" && clearhouse.ISA07!="20" && clearhouse.ISA07!="27" 
@@ -1638,14 +1575,11 @@ namespace OpenDental.Eclaims
 					retVal+=",";
 				retVal+="Clearinghouse ISA15";
 			}
-			
-			
-			//1000B NM109: Receiver ID Code. aka ETIN#. Min length=2
-			/*if(clearhouse.IDCode.Length<2){
+			if(clearhouse.GS03.Length<2) {
 				if(retVal!="")
 					retVal+=",";
-				retVal+="Clearinghouse IDCode";
-			}*/
+				retVal+="Clearinghouse GS03";
+			}
 			ArrayList queueItems=new ArrayList();
 			queueItems.Add(queueItem);
 			object[,] claimAr=Claims.GetX12TransactionInfo(queueItems);//just to get prov. Needs work.
@@ -1714,7 +1648,18 @@ namespace OpenDental.Eclaims
 					retVal+="Treating Prov NPI";
 				}
 			}
+			if(PrefB.GetString("PracticeTitle")=="") {
+				if(retVal!="")
+					retVal+=",";
+				retVal+="Practice Title";
+			}
 			if(clinic==null){
+				if(PrefB.GetString("PracticePhone").Length!=10) {
+					//10 digit phone is required by WebMD and is universally assumed 
+					if(retVal!="")
+						retVal+=",";
+					retVal+="Practice Phone";
+				}
 				if(PrefB.GetString("PracticeAddress")==""){
 					if(retVal!="")
 						retVal+=",";
@@ -1737,6 +1682,12 @@ namespace OpenDental.Eclaims
 				}
 			}
 			else{
+				if(clinic.Phone.Length!=10) {//1000A PER04 min length=1.
+					//But 10 digit phone is required by WebMD and is universally assumed 
+					if(retVal!="")
+						retVal+=",";
+					retVal+="Clinic Phone";
+				}
 				if(clinic.Address==""){
 					if(retVal!="")
 						retVal+=",";

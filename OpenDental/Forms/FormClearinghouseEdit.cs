@@ -4,6 +4,7 @@ using System.Collections;
 using System.ComponentModel;
 using System.Globalization;
 using System.IO;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using OpenDentBusiness;
 
@@ -72,6 +73,8 @@ namespace OpenDental{
 		private Label label18;
 		private TextBox textGS03;
 		private Label label24;
+		private Label label29;
+		private Label label28;
 		///<summary>Set this externally before opening the form</summary>
 		public Clearinghouse ClearinghouseCur;
 
@@ -140,29 +143,31 @@ namespace OpenDental{
 			this.textLoginID = new System.Windows.Forms.TextBox();
 			this.label15 = new System.Windows.Forms.Label();
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
-			this.label9 = new System.Windows.Forms.Label();
-			this.textISA05 = new System.Windows.Forms.TextBox();
-			this.label16 = new System.Windows.Forms.Label();
-			this.textSenderTIN = new System.Windows.Forms.TextBox();
-			this.label19 = new System.Windows.Forms.Label();
-			this.textISA07 = new System.Windows.Forms.TextBox();
-			this.label20 = new System.Windows.Forms.Label();
-			this.label21 = new System.Windows.Forms.Label();
-			this.label22 = new System.Windows.Forms.Label();
-			this.textISA15 = new System.Windows.Forms.TextBox();
-			this.label23 = new System.Windows.Forms.Label();
-			this.groupBox2 = new System.Windows.Forms.GroupBox();
-			this.label25 = new System.Windows.Forms.Label();
-			this.label26 = new System.Windows.Forms.Label();
-			this.label27 = new System.Windows.Forms.Label();
-			this.radioSenderOD = new System.Windows.Forms.RadioButton();
-			this.radioSenderBelow = new System.Windows.Forms.RadioButton();
-			this.textSenderName = new System.Windows.Forms.TextBox();
-			this.textSenderTelephone = new System.Windows.Forms.TextBox();
-			this.label17 = new System.Windows.Forms.Label();
 			this.label18 = new System.Windows.Forms.Label();
 			this.textGS03 = new System.Windows.Forms.TextBox();
 			this.label24 = new System.Windows.Forms.Label();
+			this.groupBox2 = new System.Windows.Forms.GroupBox();
+			this.label29 = new System.Windows.Forms.Label();
+			this.label28 = new System.Windows.Forms.Label();
+			this.textSenderTelephone = new System.Windows.Forms.TextBox();
+			this.textSenderName = new System.Windows.Forms.TextBox();
+			this.radioSenderBelow = new System.Windows.Forms.RadioButton();
+			this.radioSenderOD = new System.Windows.Forms.RadioButton();
+			this.label27 = new System.Windows.Forms.Label();
+			this.label26 = new System.Windows.Forms.Label();
+			this.label25 = new System.Windows.Forms.Label();
+			this.textSenderTIN = new System.Windows.Forms.TextBox();
+			this.label22 = new System.Windows.Forms.Label();
+			this.textISA15 = new System.Windows.Forms.TextBox();
+			this.label23 = new System.Windows.Forms.Label();
+			this.label21 = new System.Windows.Forms.Label();
+			this.label19 = new System.Windows.Forms.Label();
+			this.textISA07 = new System.Windows.Forms.TextBox();
+			this.label20 = new System.Windows.Forms.Label();
+			this.label16 = new System.Windows.Forms.Label();
+			this.textISA05 = new System.Windows.Forms.TextBox();
+			this.label9 = new System.Windows.Forms.Label();
+			this.label17 = new System.Windows.Forms.Label();
 			this.butDelete = new OpenDental.UI.Button();
 			this.butOK = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
@@ -180,7 +185,7 @@ namespace OpenDental{
 			// 
 			// label2
 			// 
-			this.label2.Location = new System.Drawing.Point(78,524);
+			this.label2.Location = new System.Drawing.Point(78,394);
 			this.label2.Name = "label2";
 			this.label2.Size = new System.Drawing.Size(172,17);
 			this.label2.TabIndex = 6;
@@ -189,7 +194,7 @@ namespace OpenDental{
 			// 
 			// textExportPath
 			// 
-			this.textExportPath.Location = new System.Drawing.Point(251,521);
+			this.textExportPath.Location = new System.Drawing.Point(251,391);
 			this.textExportPath.MaxLength = 255;
 			this.textExportPath.Name = "textExportPath";
 			this.textExportPath.Size = new System.Drawing.Size(317,20);
@@ -208,7 +213,7 @@ namespace OpenDental{
 			// 
 			this.checkIsDefault.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.checkIsDefault.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkIsDefault.Location = new System.Drawing.Point(101,656);
+			this.checkIsDefault.Location = new System.Drawing.Point(101,526);
 			this.checkIsDefault.Name = "checkIsDefault";
 			this.checkIsDefault.Size = new System.Drawing.Size(163,17);
 			this.checkIsDefault.TabIndex = 10;
@@ -217,7 +222,7 @@ namespace OpenDental{
 			// 
 			// textPayors
 			// 
-			this.textPayors.Location = new System.Drawing.Point(251,675);
+			this.textPayors.Location = new System.Drawing.Point(251,545);
 			this.textPayors.MaxLength = 255;
 			this.textPayors.Multiline = true;
 			this.textPayors.Name = "textPayors";
@@ -226,7 +231,7 @@ namespace OpenDental{
 			// 
 			// label1
 			// 
-			this.label1.Location = new System.Drawing.Point(99,678);
+			this.label1.Location = new System.Drawing.Point(99,548);
 			this.label1.Name = "label1";
 			this.label1.Size = new System.Drawing.Size(151,17);
 			this.label1.TabIndex = 95;
@@ -236,7 +241,7 @@ namespace OpenDental{
 			// textBox2
 			// 
 			this.textBox2.BorderStyle = System.Windows.Forms.BorderStyle.None;
-			this.textBox2.Location = new System.Drawing.Point(251,739);
+			this.textBox2.Location = new System.Drawing.Point(251,609);
 			this.textBox2.MaxLength = 255;
 			this.textBox2.Multiline = true;
 			this.textBox2.Name = "textBox2";
@@ -249,7 +254,7 @@ namespace OpenDental{
 			// 
 			// label3
 			// 
-			this.label3.Location = new System.Drawing.Point(270,657);
+			this.label3.Location = new System.Drawing.Point(270,527);
 			this.label3.Name = "label3";
 			this.label3.Size = new System.Drawing.Size(366,15);
 			this.label3.TabIndex = 97;
@@ -258,7 +263,7 @@ namespace OpenDental{
 			// 
 			// label4
 			// 
-			this.label4.Location = new System.Drawing.Point(99,567);
+			this.label4.Location = new System.Drawing.Point(99,437);
 			this.label4.Name = "label4";
 			this.label4.Size = new System.Drawing.Size(151,17);
 			this.label4.TabIndex = 98;
@@ -284,7 +289,7 @@ namespace OpenDental{
 			// 
 			// textResponsePath
 			// 
-			this.textResponsePath.Location = new System.Drawing.Point(251,543);
+			this.textResponsePath.Location = new System.Drawing.Point(251,413);
 			this.textResponsePath.MaxLength = 255;
 			this.textResponsePath.Name = "textResponsePath";
 			this.textResponsePath.Size = new System.Drawing.Size(317,20);
@@ -292,7 +297,7 @@ namespace OpenDental{
 			// 
 			// label10
 			// 
-			this.label10.Location = new System.Drawing.Point(78,546);
+			this.label10.Location = new System.Drawing.Point(78,416);
 			this.label10.Name = "label10";
 			this.label10.Size = new System.Drawing.Size(172,17);
 			this.label10.TabIndex = 107;
@@ -301,7 +306,7 @@ namespace OpenDental{
 			// 
 			// textPassword
 			// 
-			this.textPassword.Location = new System.Drawing.Point(251,499);
+			this.textPassword.Location = new System.Drawing.Point(251,369);
 			this.textPassword.MaxLength = 255;
 			this.textPassword.Name = "textPassword";
 			this.textPassword.Size = new System.Drawing.Size(96,20);
@@ -309,7 +314,7 @@ namespace OpenDental{
 			// 
 			// label11
 			// 
-			this.label11.Location = new System.Drawing.Point(98,502);
+			this.label11.Location = new System.Drawing.Point(98,372);
 			this.label11.Name = "label11";
 			this.label11.Size = new System.Drawing.Size(151,17);
 			this.label11.TabIndex = 109;
@@ -319,7 +324,7 @@ namespace OpenDental{
 			// comboFormat
 			// 
 			this.comboFormat.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboFormat.Location = new System.Drawing.Point(251,565);
+			this.comboFormat.Location = new System.Drawing.Point(251,435);
 			this.comboFormat.Name = "comboFormat";
 			this.comboFormat.Size = new System.Drawing.Size(145,21);
 			this.comboFormat.TabIndex = 6;
@@ -327,7 +332,7 @@ namespace OpenDental{
 			// comboCommBridge
 			// 
 			this.comboCommBridge.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboCommBridge.Location = new System.Drawing.Point(251,588);
+			this.comboCommBridge.Location = new System.Drawing.Point(251,458);
 			this.comboCommBridge.MaxDropDownItems = 20;
 			this.comboCommBridge.Name = "comboCommBridge";
 			this.comboCommBridge.Size = new System.Drawing.Size(145,21);
@@ -335,7 +340,7 @@ namespace OpenDental{
 			// 
 			// label7
 			// 
-			this.label7.Location = new System.Drawing.Point(98,591);
+			this.label7.Location = new System.Drawing.Point(98,461);
 			this.label7.Name = "label7";
 			this.label7.Size = new System.Drawing.Size(151,17);
 			this.label7.TabIndex = 111;
@@ -344,7 +349,7 @@ namespace OpenDental{
 			// 
 			// textClientProgram
 			// 
-			this.textClientProgram.Location = new System.Drawing.Point(251,633);
+			this.textClientProgram.Location = new System.Drawing.Point(251,503);
 			this.textClientProgram.MaxLength = 255;
 			this.textClientProgram.Name = "textClientProgram";
 			this.textClientProgram.Size = new System.Drawing.Size(317,20);
@@ -352,7 +357,7 @@ namespace OpenDental{
 			// 
 			// label8
 			// 
-			this.label8.Location = new System.Drawing.Point(78,636);
+			this.label8.Location = new System.Drawing.Point(78,506);
 			this.label8.Name = "label8";
 			this.label8.Size = new System.Drawing.Size(172,17);
 			this.label8.TabIndex = 114;
@@ -361,7 +366,7 @@ namespace OpenDental{
 			// 
 			// label12
 			// 
-			this.label12.Location = new System.Drawing.Point(248,454);
+			this.label12.Location = new System.Drawing.Point(248,324);
 			this.label12.Name = "label12";
 			this.label12.Size = new System.Drawing.Size(358,20);
 			this.label12.TabIndex = 115;
@@ -369,7 +374,7 @@ namespace OpenDental{
 			// 
 			// textModemPort
 			// 
-			this.textModemPort.Location = new System.Drawing.Point(251,611);
+			this.textModemPort.Location = new System.Drawing.Point(251,481);
 			this.textModemPort.MaxLength = 255;
 			this.textModemPort.Name = "textModemPort";
 			this.textModemPort.Size = new System.Drawing.Size(32,20);
@@ -378,7 +383,7 @@ namespace OpenDental{
 			// 
 			// label13
 			// 
-			this.label13.Location = new System.Drawing.Point(78,614);
+			this.label13.Location = new System.Drawing.Point(78,484);
 			this.label13.Name = "label13";
 			this.label13.Size = new System.Drawing.Size(172,17);
 			this.label13.TabIndex = 117;
@@ -388,7 +393,7 @@ namespace OpenDental{
 			// 
 			// label14
 			// 
-			this.label14.Location = new System.Drawing.Point(287,615);
+			this.label14.Location = new System.Drawing.Point(287,485);
 			this.label14.Name = "label14";
 			this.label14.Size = new System.Drawing.Size(267,17);
 			this.label14.TabIndex = 118;
@@ -397,7 +402,7 @@ namespace OpenDental{
 			// 
 			// textLoginID
 			// 
-			this.textLoginID.Location = new System.Drawing.Point(251,477);
+			this.textLoginID.Location = new System.Drawing.Point(251,347);
 			this.textLoginID.MaxLength = 255;
 			this.textLoginID.Name = "textLoginID";
 			this.textLoginID.Size = new System.Drawing.Size(96,20);
@@ -405,7 +410,7 @@ namespace OpenDental{
 			// 
 			// label15
 			// 
-			this.label15.Location = new System.Drawing.Point(98,480);
+			this.label15.Location = new System.Drawing.Point(98,350);
 			this.label15.Name = "label15";
 			this.label15.Size = new System.Drawing.Size(151,17);
 			this.label15.TabIndex = 120;
@@ -437,31 +442,136 @@ namespace OpenDental{
 			this.groupBox1.TabStop = false;
 			this.groupBox1.Text = "X12 Required Fields - Provided by Clearinghouse or Carrier";
 			// 
-			// label9
+			// label18
 			// 
-			this.label9.Location = new System.Drawing.Point(6,20);
-			this.label9.Name = "label9";
-			this.label9.Size = new System.Drawing.Size(235,17);
-			this.label9.TabIndex = 102;
-			this.label9.Text = "Sender ID Qualifier (ISA05)";
-			this.label9.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.label18.Location = new System.Drawing.Point(339,231);
+			this.label18.Name = "label18";
+			this.label18.Size = new System.Drawing.Size(231,15);
+			this.label18.TabIndex = 118;
+			this.label18.Text = "Usually the same as ISA08";
+			this.label18.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
-			// textISA05
+			// textGS03
 			// 
-			this.textISA05.Location = new System.Drawing.Point(242,19);
-			this.textISA05.MaxLength = 255;
-			this.textISA05.Name = "textISA05";
-			this.textISA05.Size = new System.Drawing.Size(96,20);
-			this.textISA05.TabIndex = 103;
+			this.textGS03.Location = new System.Drawing.Point(242,229);
+			this.textGS03.MaxLength = 255;
+			this.textGS03.Name = "textGS03";
+			this.textGS03.Size = new System.Drawing.Size(96,20);
+			this.textGS03.TabIndex = 116;
 			// 
-			// label16
+			// label24
 			// 
-			this.label16.Location = new System.Drawing.Point(339,21);
-			this.label16.Name = "label16";
-			this.label16.Size = new System.Drawing.Size(231,15);
-			this.label16.TabIndex = 104;
-			this.label16.Text = "Usually \"ZZ\", sometimes \"30\"";
-			this.label16.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.label24.Location = new System.Drawing.Point(9,230);
+			this.label24.Name = "label24";
+			this.label24.Size = new System.Drawing.Size(232,17);
+			this.label24.TabIndex = 117;
+			this.label24.Text = "GS03";
+			this.label24.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// groupBox2
+			// 
+			this.groupBox2.Controls.Add(this.label29);
+			this.groupBox2.Controls.Add(this.label28);
+			this.groupBox2.Controls.Add(this.textSenderTelephone);
+			this.groupBox2.Controls.Add(this.textSenderName);
+			this.groupBox2.Controls.Add(this.radioSenderBelow);
+			this.groupBox2.Controls.Add(this.radioSenderOD);
+			this.groupBox2.Controls.Add(this.label27);
+			this.groupBox2.Controls.Add(this.label26);
+			this.groupBox2.Controls.Add(this.label25);
+			this.groupBox2.Controls.Add(this.textSenderTIN);
+			this.groupBox2.Location = new System.Drawing.Point(12,47);
+			this.groupBox2.Name = "groupBox2";
+			this.groupBox2.Size = new System.Drawing.Size(547,132);
+			this.groupBox2.TabIndex = 115;
+			this.groupBox2.TabStop = false;
+			this.groupBox2.Text = "Sender ID - Used in ISA06, GS02, 1000A NM1, and 1000A PER";
+			// 
+			// label29
+			// 
+			this.label29.Location = new System.Drawing.Point(248,37);
+			this.label29.Name = "label29";
+			this.label29.Size = new System.Drawing.Size(231,15);
+			this.label29.TabIndex = 117;
+			this.label29.Text = "(much more common)";
+			this.label29.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// label28
+			// 
+			this.label28.Location = new System.Drawing.Point(248,18);
+			this.label28.Name = "label28";
+			this.label28.Size = new System.Drawing.Size(231,15);
+			this.label28.TabIndex = 116;
+			this.label28.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// textSenderTelephone
+			// 
+			this.textSenderTelephone.Location = new System.Drawing.Point(230,104);
+			this.textSenderTelephone.MaxLength = 255;
+			this.textSenderTelephone.Name = "textSenderTelephone";
+			this.textSenderTelephone.Size = new System.Drawing.Size(96,20);
+			this.textSenderTelephone.TabIndex = 115;
+			// 
+			// textSenderName
+			// 
+			this.textSenderName.Location = new System.Drawing.Point(230,82);
+			this.textSenderName.MaxLength = 255;
+			this.textSenderName.Name = "textSenderName";
+			this.textSenderName.Size = new System.Drawing.Size(226,20);
+			this.textSenderName.TabIndex = 114;
+			// 
+			// radioSenderBelow
+			// 
+			this.radioSenderBelow.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.radioSenderBelow.Checked = true;
+			this.radioSenderBelow.Location = new System.Drawing.Point(1,36);
+			this.radioSenderBelow.Name = "radioSenderBelow";
+			this.radioSenderBelow.Size = new System.Drawing.Size(242,18);
+			this.radioSenderBelow.TabIndex = 113;
+			this.radioSenderBelow.TabStop = true;
+			this.radioSenderBelow.Text = "The information below identifies the sender";
+			this.radioSenderBelow.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.radioSenderBelow.UseVisualStyleBackColor = true;
+			this.radioSenderBelow.Click += new System.EventHandler(this.radio_Click);
+			// 
+			// radioSenderOD
+			// 
+			this.radioSenderOD.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.radioSenderOD.Location = new System.Drawing.Point(22,17);
+			this.radioSenderOD.Name = "radioSenderOD";
+			this.radioSenderOD.Size = new System.Drawing.Size(221,18);
+			this.radioSenderOD.TabIndex = 112;
+			this.radioSenderOD.Text = "This software is the \"sender\"";
+			this.radioSenderOD.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.radioSenderOD.UseVisualStyleBackColor = true;
+			this.radioSenderOD.Click += new System.EventHandler(this.radio_Click);
+			// 
+			// label27
+			// 
+			this.label27.Location = new System.Drawing.Point(37,105);
+			this.label27.Name = "label27";
+			this.label27.Size = new System.Drawing.Size(191,17);
+			this.label27.TabIndex = 111;
+			this.label27.Text = "Telephone Number";
+			this.label27.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// label26
+			// 
+			this.label26.Location = new System.Drawing.Point(37,83);
+			this.label26.Name = "label26";
+			this.label26.Size = new System.Drawing.Size(191,17);
+			this.label26.TabIndex = 110;
+			this.label26.Text = "Name";
+			this.label26.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// label25
+			// 
+			this.label25.Location = new System.Drawing.Point(37,61);
+			this.label25.Name = "label25";
+			this.label25.Size = new System.Drawing.Size(191,17);
+			this.label25.TabIndex = 109;
+			this.label25.Text = "Tax ID Number";
+			this.label25.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// textSenderTIN
 			// 
@@ -470,6 +580,41 @@ namespace OpenDental{
 			this.textSenderTIN.Name = "textSenderTIN";
 			this.textSenderTIN.Size = new System.Drawing.Size(96,20);
 			this.textSenderTIN.TabIndex = 106;
+			// 
+			// label22
+			// 
+			this.label22.Location = new System.Drawing.Point(290,253);
+			this.label22.Name = "label22";
+			this.label22.Size = new System.Drawing.Size(280,15);
+			this.label22.TabIndex = 114;
+			this.label22.Text = "\"P\" for Production.  \"T\" for Test.";
+			this.label22.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// textISA15
+			// 
+			this.textISA15.Location = new System.Drawing.Point(242,251);
+			this.textISA15.MaxLength = 255;
+			this.textISA15.Name = "textISA15";
+			this.textISA15.Size = new System.Drawing.Size(42,20);
+			this.textISA15.TabIndex = 112;
+			// 
+			// label23
+			// 
+			this.label23.Location = new System.Drawing.Point(9,252);
+			this.label23.Name = "label23";
+			this.label23.Size = new System.Drawing.Size(232,17);
+			this.label23.TabIndex = 113;
+			this.label23.Text = "Test or Production (ISA15)";
+			this.label23.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// label21
+			// 
+			this.label21.Location = new System.Drawing.Point(339,209);
+			this.label21.Name = "label21";
+			this.label21.Size = new System.Drawing.Size(231,15);
+			this.label21.TabIndex = 111;
+			this.label21.Text = "Also used in 1000B NM109. ";
+			this.label21.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// label19
 			// 
@@ -497,124 +642,31 @@ namespace OpenDental{
 			this.label20.Text = "Receiver ID Qualifier (ISA07)";
 			this.label20.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
-			// label21
+			// label16
 			// 
-			this.label21.Location = new System.Drawing.Point(339,209);
-			this.label21.Name = "label21";
-			this.label21.Size = new System.Drawing.Size(231,15);
-			this.label21.TabIndex = 111;
-			this.label21.Text = "Also used in 1000B NM109. ";
-			this.label21.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.label16.Location = new System.Drawing.Point(339,21);
+			this.label16.Name = "label16";
+			this.label16.Size = new System.Drawing.Size(231,15);
+			this.label16.TabIndex = 104;
+			this.label16.Text = "Usually \"ZZ\", sometimes \"30\"";
+			this.label16.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
-			// label22
+			// textISA05
 			// 
-			this.label22.Location = new System.Drawing.Point(290,231);
-			this.label22.Name = "label22";
-			this.label22.Size = new System.Drawing.Size(280,15);
-			this.label22.TabIndex = 114;
-			this.label22.Text = "\"P\" for Production.  \"T\" for Test.";
-			this.label22.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.textISA05.Location = new System.Drawing.Point(242,19);
+			this.textISA05.MaxLength = 255;
+			this.textISA05.Name = "textISA05";
+			this.textISA05.Size = new System.Drawing.Size(96,20);
+			this.textISA05.TabIndex = 103;
 			// 
-			// textISA15
+			// label9
 			// 
-			this.textISA15.Location = new System.Drawing.Point(242,229);
-			this.textISA15.MaxLength = 255;
-			this.textISA15.Name = "textISA15";
-			this.textISA15.Size = new System.Drawing.Size(42,20);
-			this.textISA15.TabIndex = 112;
-			// 
-			// label23
-			// 
-			this.label23.Location = new System.Drawing.Point(9,230);
-			this.label23.Name = "label23";
-			this.label23.Size = new System.Drawing.Size(232,17);
-			this.label23.TabIndex = 113;
-			this.label23.Text = "Test or Production (ISA15)";
-			this.label23.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// groupBox2
-			// 
-			this.groupBox2.Controls.Add(this.textSenderTelephone);
-			this.groupBox2.Controls.Add(this.textSenderName);
-			this.groupBox2.Controls.Add(this.radioSenderBelow);
-			this.groupBox2.Controls.Add(this.radioSenderOD);
-			this.groupBox2.Controls.Add(this.label27);
-			this.groupBox2.Controls.Add(this.label26);
-			this.groupBox2.Controls.Add(this.label25);
-			this.groupBox2.Controls.Add(this.textSenderTIN);
-			this.groupBox2.Location = new System.Drawing.Point(12,47);
-			this.groupBox2.Name = "groupBox2";
-			this.groupBox2.Size = new System.Drawing.Size(547,132);
-			this.groupBox2.TabIndex = 115;
-			this.groupBox2.TabStop = false;
-			this.groupBox2.Text = "Sender ID - Used in ISA06, GS02, 1000A NM1, and 1000A PER";
-			// 
-			// label25
-			// 
-			this.label25.Location = new System.Drawing.Point(37,61);
-			this.label25.Name = "label25";
-			this.label25.Size = new System.Drawing.Size(191,17);
-			this.label25.TabIndex = 109;
-			this.label25.Text = "Tax ID Number";
-			this.label25.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// label26
-			// 
-			this.label26.Location = new System.Drawing.Point(37,83);
-			this.label26.Name = "label26";
-			this.label26.Size = new System.Drawing.Size(191,17);
-			this.label26.TabIndex = 110;
-			this.label26.Text = "Name";
-			this.label26.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// label27
-			// 
-			this.label27.Location = new System.Drawing.Point(37,105);
-			this.label27.Name = "label27";
-			this.label27.Size = new System.Drawing.Size(191,17);
-			this.label27.TabIndex = 111;
-			this.label27.Text = "Telephone Number";
-			this.label27.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// radioSenderOD
-			// 
-			this.radioSenderOD.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.radioSenderOD.Location = new System.Drawing.Point(22,17);
-			this.radioSenderOD.Name = "radioSenderOD";
-			this.radioSenderOD.Size = new System.Drawing.Size(221,18);
-			this.radioSenderOD.TabIndex = 112;
-			this.radioSenderOD.Text = "This software is the \"sender\"";
-			this.radioSenderOD.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.radioSenderOD.UseVisualStyleBackColor = true;
-			// 
-			// radioSenderBelow
-			// 
-			this.radioSenderBelow.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.radioSenderBelow.Checked = true;
-			this.radioSenderBelow.Location = new System.Drawing.Point(14,36);
-			this.radioSenderBelow.Name = "radioSenderBelow";
-			this.radioSenderBelow.Size = new System.Drawing.Size(229,18);
-			this.radioSenderBelow.TabIndex = 113;
-			this.radioSenderBelow.TabStop = true;
-			this.radioSenderBelow.Text = "The information below identifies the sender";
-			this.radioSenderBelow.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.radioSenderBelow.UseVisualStyleBackColor = true;
-			// 
-			// textSenderName
-			// 
-			this.textSenderName.Location = new System.Drawing.Point(230,82);
-			this.textSenderName.MaxLength = 255;
-			this.textSenderName.Name = "textSenderName";
-			this.textSenderName.Size = new System.Drawing.Size(226,20);
-			this.textSenderName.TabIndex = 114;
-			// 
-			// textSenderTelephone
-			// 
-			this.textSenderTelephone.Location = new System.Drawing.Point(230,104);
-			this.textSenderTelephone.MaxLength = 255;
-			this.textSenderTelephone.Name = "textSenderTelephone";
-			this.textSenderTelephone.Size = new System.Drawing.Size(96,20);
-			this.textSenderTelephone.TabIndex = 115;
+			this.label9.Location = new System.Drawing.Point(6,20);
+			this.label9.Name = "label9";
+			this.label9.Size = new System.Drawing.Size(235,17);
+			this.label9.TabIndex = 102;
+			this.label9.Text = "Sender ID Qualifier (ISA05)";
+			this.label9.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// label17
 			// 
@@ -624,32 +676,6 @@ namespace OpenDental{
 			this.label17.TabIndex = 122;
 			this.label17.Text = "Also used in X12 1000B NM103";
 			this.label17.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			// 
-			// label18
-			// 
-			this.label18.Location = new System.Drawing.Point(339,253);
-			this.label18.Name = "label18";
-			this.label18.Size = new System.Drawing.Size(231,15);
-			this.label18.TabIndex = 118;
-			this.label18.Text = "Usually the same as ISA08";
-			this.label18.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			// 
-			// textGS03
-			// 
-			this.textGS03.Location = new System.Drawing.Point(242,251);
-			this.textGS03.MaxLength = 255;
-			this.textGS03.Name = "textGS03";
-			this.textGS03.Size = new System.Drawing.Size(96,20);
-			this.textGS03.TabIndex = 116;
-			// 
-			// label24
-			// 
-			this.label24.Location = new System.Drawing.Point(9,252);
-			this.label24.Name = "label24";
-			this.label24.Size = new System.Drawing.Size(232,17);
-			this.label24.TabIndex = 117;
-			this.label24.Text = "GS03";
-			this.label24.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// butDelete
 			// 
@@ -661,7 +687,7 @@ namespace OpenDental{
 			this.butDelete.CornerRadius = 4F;
 			this.butDelete.Image = global::OpenDental.Properties.Resources.deleteX;
 			this.butDelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butDelete.Location = new System.Drawing.Point(35,788);
+			this.butDelete.Location = new System.Drawing.Point(35,621);
 			this.butDelete.Name = "butDelete";
 			this.butDelete.Size = new System.Drawing.Size(90,26);
 			this.butDelete.TabIndex = 24;
@@ -676,7 +702,7 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(797,788);
+			this.butOK.Location = new System.Drawing.Point(713,578);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(78,26);
 			this.butOK.TabIndex = 12;
@@ -692,7 +718,7 @@ namespace OpenDental{
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
 			this.butCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.butCancel.Location = new System.Drawing.Point(896,788);
+			this.butCancel.Location = new System.Drawing.Point(713,621);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(78,26);
 			this.butCancel.TabIndex = 13;
@@ -702,7 +728,7 @@ namespace OpenDental{
 			// FormClearinghouseEdit
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
-			this.ClientSize = new System.Drawing.Size(1029,834);
+			this.ClientSize = new System.Drawing.Size(816,667);
 			this.Controls.Add(this.label17);
 			this.Controls.Add(this.groupBox1);
 			this.Controls.Add(this.textLoginID);
@@ -754,11 +780,24 @@ namespace OpenDental{
 		private void FormClearinghouseEdit_Load(object sender, System.EventArgs e) {
 			textDescription.Text=ClearinghouseCur.Description;
 			textISA05.Text=ClearinghouseCur.ISA05;
-			textSenderTIN.Text=ClearinghouseCur.SenderTIN;
+			if(ClearinghouseCur.SenderTIN==""){
+				radioSenderOD.Checked=true;
+				radioSenderBelow.Checked=false;
+				textSenderTIN.Text="";
+				textSenderName.Text="";
+				textSenderTelephone.Text="";
+			}
+			else{
+				radioSenderOD.Checked=false;
+				radioSenderBelow.Checked=true;
+				textSenderTIN.Text=ClearinghouseCur.SenderTIN;
+				textSenderName.Text=ClearinghouseCur.SenderName;
+				textSenderTelephone.Text=ClearinghouseCur.SenderTelephone;
+			}
 			textISA07.Text=ClearinghouseCur.ISA07;
 			textISA08.Text=ClearinghouseCur.ISA08;
 			textISA15.Text=ClearinghouseCur.ISA15;
-			//textSenderID.Text=ClearinghouseCur.SenderID;
+			textGS03.Text=ClearinghouseCur.GS03;
 			textLoginID.Text=ClearinghouseCur.LoginID;
 			textPassword.Text=ClearinghouseCur.Password;
 			textExportPath.Text=ClearinghouseCur.ExportPath;
@@ -777,6 +816,19 @@ namespace OpenDental{
 			textPayors.Text=ClearinghouseCur.Payors;
 		}
 
+		private void radio_Click(object sender,EventArgs e) {
+			if(radioSenderOD.Checked) {
+				textSenderTIN.Text="";
+				textSenderName.Text="";
+				textSenderTelephone.Text="";
+			}
+			else {
+				textSenderTIN.Text=ClearinghouseCur.SenderTIN;
+				textSenderName.Text=ClearinghouseCur.SenderName;
+				textSenderTelephone.Text=ClearinghouseCur.SenderTelephone;
+			}
+		}
+
 		private void butDelete_Click(object sender, System.EventArgs e) {
 			if(!MsgBox.Show(this,true,"Delete this Clearinghouse?")){
 				return;
@@ -792,21 +844,31 @@ namespace OpenDental{
 			}
 			if(comboFormat.SelectedIndex==(int)ElectronicClaimFormat.X12) {
 				if(textISA05.Text==""){
-					MsgBox.Show(this,"ISA05 required.");
+					MsgBox.Show(this,"ISA05 is required.");
 					return;
 				}
 				if(textISA05.Text!="01" && textISA05.Text!="14" && textISA05.Text!="20" && textISA05.Text!="27" && textISA05.Text!="28"
 					&& textISA05.Text!="29" && textISA05.Text!="30" && textISA05.Text!="33" && textISA05.Text!="ZZ")
 				{
-					MsgBox.Show(this,"ISA05 not valid.");
+					MsgBox.Show(this,"ISA05 is not valid.");
 					return;
 				}
-				//if(textISA06.Text=="") {
-				//	MsgBox.Show(this,"ISA06 required.");
-				//	return;
-				//}
+				if(radioSenderBelow.Checked) {
+					if(textSenderTIN.Text.Length<2) {
+						MsgBox.Show(this,"Sender TIN is required.");
+						return;
+					}
+					if(textSenderName.Text=="") {
+						MsgBox.Show(this,"Sender Name is required.");
+						return;
+					}
+					if(!Regex.IsMatch(textSenderTelephone.Text,@"^\d{10}$")) {
+						MsgBox.Show(this,"Sender telephone must be 10 digits with no punctuation.");
+						return;
+					}
+				}
 				if(textISA07.Text=="") {
-					MsgBox.Show(this,"ISA07 required.");
+					MsgBox.Show(this,"ISA07 is required.");
 					return;
 				}
 				if(textISA07.Text!="01" && textISA07.Text!="14" && textISA07.Text!="20" && textISA07.Text!="27" && textISA07.Text!="28"
@@ -821,6 +883,10 @@ namespace OpenDental{
 				}
 				if(textISA15.Text!="T" && textISA15.Text!="P") {
 					MsgBox.Show(this,"ISA15 not valid.");
+					return;
+				}
+				if(textGS03.Text.Length<2) {
+					MsgBox.Show(this,"GS03 is required.");
 					return;
 				}
 			}
@@ -853,10 +919,12 @@ namespace OpenDental{
 			ClearinghouseCur.Description=textDescription.Text;
 			ClearinghouseCur.ISA05=textISA05.Text;
 			ClearinghouseCur.SenderTIN=textSenderTIN.Text;
+			ClearinghouseCur.SenderName=textSenderName.Text;
+			ClearinghouseCur.SenderTelephone=textSenderTelephone.Text;
 			ClearinghouseCur.ISA07=textISA07.Text;
 			ClearinghouseCur.ISA08=textISA08.Text;
 			ClearinghouseCur.ISA15=textISA15.Text;
-			//ClearinghouseCur.SenderID=textSenderID.Text;
+			ClearinghouseCur.GS03=textGS03.Text;
 			ClearinghouseCur.LoginID=textLoginID.Text;
 			ClearinghouseCur.Password=textPassword.Text;
 			ClearinghouseCur.ExportPath=textExportPath.Text;
@@ -879,6 +947,8 @@ namespace OpenDental{
 		private void butCancel_Click(object sender, System.EventArgs e) {
 			DialogResult=DialogResult.Cancel;
 		}
+
+		
 
 		
 

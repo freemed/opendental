@@ -10,7 +10,7 @@ namespace OpenDentBusiness{
 		public int ClearinghouseNum;
 		///<summary>Description of this clearinghouse</summary>
 		public string Description;
-		///<summary>The path to export the X12 file to. Includes \.</summary>
+		///<summary>The path to export the X12 file to. \ is now optional.</summary>
 		public string ExportPath;
 		///<summary>Set to true if this is the default clearinghouse to which you want most of your e-claims sent.</summary>
 		public bool IsDefault;
@@ -30,7 +30,7 @@ namespace OpenDentBusiness{
 		public string ISA15;
 		///<summary>Password is usually combined with the login ID for user validation.</summary>
 		public string Password;
-		///<summary>The path that all incoming response files will be saved to. Includes \.</summary>
+		///<summary>The path that all incoming response files will be saved to. \ is now optional.</summary>
 		public string ResponsePath;
 		///<summary>Enum:EclaimsCommBridge  One of the included hard-coded communications briges.  Or none to just create the claim files without uploading.</summary>
 		public EclaimsCommBridge CommBridge;

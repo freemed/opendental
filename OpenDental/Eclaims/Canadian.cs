@@ -21,6 +21,7 @@ namespace OpenDental.Eclaims {
 		public static bool SendBatch(ArrayList queueItems,int interchangeNum){
 			Clearinghouse clearhouse=GetClearinghouse();//clearinghouse must be valid to get to this point.
 				//Clearinghouses.GetClearinghouse(((ClaimSendQueueItem)queueItems[0]).ClearinghouseNum);
+//Warning: this path is not handled properly if trailing slash is missing:
 			string saveFolder=clearhouse.ExportPath;
 			if(!Directory.Exists(saveFolder)) {
 				MessageBox.Show(saveFolder+" not found.");
@@ -386,6 +387,7 @@ namespace OpenDental.Eclaims {
 			if(clearhouse==null){
 				throw new ApplicationException(Lan.g("Canadian","CDAnet Clearinghouse could not be found."));
 			}
+//warning: folder will not work unless trailing slash is included.
 			string saveFolder=clearhouse.ExportPath;
 			if(!Directory.Exists(saveFolder)) {
 				throw new ApplicationException(saveFolder+" not found.");

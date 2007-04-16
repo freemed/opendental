@@ -104,7 +104,7 @@ namespace OpenDental{
 			// 
 			// textDocPath
 			// 
-			this.textDocPath.Location = new System.Drawing.Point(9,132);
+			this.textDocPath.Location = new System.Drawing.Point(9,61);
 			this.textDocPath.Name = "textDocPath";
 			this.textDocPath.Size = new System.Drawing.Size(515,20);
 			this.textDocPath.TabIndex = 0;
@@ -137,7 +137,7 @@ namespace OpenDental{
 			this.butBrowseDoc.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butBrowseDoc.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butBrowseDoc.CornerRadius = 4F;
-			this.butBrowseDoc.Location = new System.Drawing.Point(529,129);
+			this.butBrowseDoc.Location = new System.Drawing.Point(529,58);
 			this.butBrowseDoc.Name = "butBrowseDoc";
 			this.butBrowseDoc.Size = new System.Drawing.Size(76,25);
 			this.butBrowseDoc.TabIndex = 90;
@@ -159,7 +159,7 @@ namespace OpenDental{
 			// 
 			// label2
 			// 
-			this.label2.Location = new System.Drawing.Point(9,87);
+			this.label2.Location = new System.Drawing.Point(9,16);
 			this.label2.Name = "label2";
 			this.label2.Size = new System.Drawing.Size(595,41);
 			this.label2.TabIndex = 93;
@@ -198,7 +198,7 @@ namespace OpenDental{
 			// 
 			// checkDontUsePath
 			// 
-			this.checkDontUsePath.Location = new System.Drawing.Point(9,19);
+			this.checkDontUsePath.Location = new System.Drawing.Point(9,87);
 			this.checkDontUsePath.Name = "checkDontUsePath";
 			this.checkDontUsePath.Size = new System.Drawing.Size(493,17);
 			this.checkDontUsePath.TabIndex = 97;
@@ -209,7 +209,7 @@ namespace OpenDental{
 			// checkMultiplePaths
 			// 
 			this.checkMultiplePaths.CheckAlign = System.Drawing.ContentAlignment.TopLeft;
-			this.checkMultiplePaths.Location = new System.Drawing.Point(9,39);
+			this.checkMultiplePaths.Location = new System.Drawing.Point(9,107);
 			this.checkMultiplePaths.Name = "checkMultiplePaths";
 			this.checkMultiplePaths.Size = new System.Drawing.Size(612,44);
 			this.checkMultiplePaths.TabIndex = 98;

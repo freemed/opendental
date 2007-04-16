@@ -59,6 +59,7 @@ namespace OpenDental.Eclaims
 					throw new Exception(FormT.Receive(5000));
 				}
 				//7. Send file using X-modem or Z-modem
+//slash not handled properly if missing:
 				FormT.UploadXmodem(clearhouse.ExportPath+"claims"+batchNum.ToString()+".txt");
 				//8. After transmitting, pause for 1 second.
 				FormT.Pause(1000);
@@ -142,6 +143,7 @@ namespace OpenDental.Eclaims
 					//6. Pause for 1 second. (already mostly handled);
 					FormT.Pause(200);
 					//7. Receive file using Xmodem
+	//path must include trailing slash for now.
 					FormT.DownloadXmodem(clearhouse.ResponsePath+retrieveFile);
 					//8. Pause for 5 seconds.
 					FormT.Pause(5000);
