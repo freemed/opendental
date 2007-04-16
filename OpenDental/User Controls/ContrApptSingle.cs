@@ -289,15 +289,15 @@ namespace OpenDental{
 					return 1;
 				case "Lab":
 					switch(Info.MyApt.Lab){
-						case LabCase.None:
+						case LabCaseOld.None:
 							return 0;
-						case LabCase.Sent:
+						case LabCaseOld.Sent:
 							g.DrawString("LAB SENT",baseFont,brush,xPos,yPos);
 							return 1;
-						case LabCase.Received:
+						case LabCaseOld.Received:
 							g.DrawString("LAB RECEIVED",baseFont,brush,xPos,yPos);
 							return 1;
-						case LabCase.QualityChecked:
+						case LabCaseOld.QualityChecked:
 							g.DrawString("LAB QUALITY CHECKED",baseFont,brush,xPos,yPos);
 							return 1;
 					}

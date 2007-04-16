@@ -4200,6 +4200,40 @@ namespace OpenDental{
 						)";
 				}
 				General.NonQEx(command);
+				//added after r168:
+				if(FormChooseDatabase.DBtype==DatabaseType.MySql) {
+					command="DROP TABLE IF EXISTS labcase";
+					General.NonQEx(command);
+					command=@"CREATE TABLE labcase(
+						LabCaseNum mediumint NOT NULL auto_increment,
+						PatNum mediumint NOT NULL,
+						LaboratoryNum mediumint NOT NULL,
+						AptNum mediumint NOT NULL,
+						PlannedAptNum mediumint NOT NULL,
+						DateTimeDue datetime NOT NULL default '0001-01-01',
+						DateTimeCreated datetime NOT NULL default '0001-01-01',
+						DateTimeSent datetime NOT NULL default '0001-01-01',
+						DateTimeRecd datetime NOT NULL default '0001-01-01',
+						DateTimeChecked datetime NOT NULL default '0001-01-01',
+						PRIMARY KEY (LabCaseNum)
+						) DEFAULT CHARSET=utf8";
+				}
+				else {
+					command=@"CREATE TABLE labcase(
+						LabCaseNum int NOT NULL,
+						PatNum int NOT NULL,
+						LaboratoryNum int NOT NULL,
+						AptNum int NOT NULL,
+						PlannedAptNum int NOT NULL,
+						DateTimeDue date NOT NULL default '0001-01-01',
+						DateTimeCreated date NOT NULL default '0001-01-01',
+						DateTimeSent date NOT NULL default '0001-01-01',
+						DateTimeRecd date NOT NULL default '0001-01-01',
+						DateTimeChecked date NOT NULL default '0001-01-01',
+						PRIMARY KEY (LabCaseNum)
+						)";
+				}
+				General.NonQEx(command);
 
 
 

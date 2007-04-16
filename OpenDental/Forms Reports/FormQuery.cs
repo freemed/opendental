@@ -904,7 +904,7 @@ namespace OpenDental{
 							break;
 						case "lab":
 							tableOut.Rows[i][j]
-								=((LabCase)PIn.PInt(tableOut.Rows[i][j].ToString())).ToString();
+								=((LabCaseOld)PIn.PInt(tableOut.Rows[i][j].ToString())).ToString();
 						  break;
 						case "position":
 							tableOut.Rows[i][j]

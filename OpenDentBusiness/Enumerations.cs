@@ -364,7 +364,7 @@ namespace OpenDentBusiness{
 		///<summary>2</summary>
 		Blockout}
 	///<summary>Used in the appointment edit window.</summary>
-	public enum LabCase{
+	public enum LabCaseOld{
 		///<summary>0</summary>
 		None,
 		///<summary>1</summary>

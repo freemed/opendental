@@ -1603,7 +1603,7 @@ namespace OpenDental{
 		private void FillLab(){
 			int notRec=0;
 			for(int i=0;i<ListDay.Length;i++){
-				if(ListDay[i].Lab==LabCase.Sent){
+				if(ListDay[i].Lab==LabCaseOld.Sent){
 					notRec++;
 				}
 			}

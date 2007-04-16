@@ -105,7 +105,7 @@ namespace OpenDental{
 				list[i].AptDateTime    =PIn.PDateT (table.Rows[i][10].ToString());
 				list[i].NextAptNum     =PIn.PInt   (table.Rows[i][11].ToString());
 				list[i].UnschedStatus  =PIn.PInt   (table.Rows[i][12].ToString());
-				list[i].Lab            =(LabCase)PIn.PInt(table.Rows[i][13].ToString());
+				list[i].Lab            =(LabCaseOld)PIn.PInt(table.Rows[i][13].ToString());
 				list[i].IsNewPatient   =PIn.PBool  (table.Rows[i][14].ToString());
 				list[i].ProcDescript   =PIn.PString(table.Rows[i][15].ToString());
 				list[i].Assistant      =PIn.PInt   (table.Rows[i][16].ToString());

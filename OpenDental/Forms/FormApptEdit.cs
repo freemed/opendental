@@ -1087,7 +1087,7 @@ namespace OpenDental{
 				if(Employees.ListShort[i].EmployeeNum==AptCur.Assistant)
 					comboAssistant.SelectedIndex=i+1;
 			}
-			string[] enumLab=Enum.GetNames(typeof(LabCase));
+			string[] enumLab=Enum.GetNames(typeof(LabCaseOld));
 			for(int i=0;i<enumLab.Length;i++){
 				comboLab.Items.Add(Lan.g("enumLab",enumLab[i]));
 			}
@@ -1698,7 +1698,7 @@ namespace OpenDental{
 			else
 				AptCur.SchoolCourseNum=SchoolCourses.List[comboSchoolCourse.SelectedIndex-1].SchoolCourseNum;
 			//AptCur.GradePoint //already done at top of this function
-			AptCur.Lab=(LabCase)comboLab.SelectedIndex;
+			AptCur.Lab=(LabCaseOld)comboLab.SelectedIndex;
 			AptCur.IsNewPatient=checkIsNewPatient.Checked;
 			AptCur.ProcDescript="";
 			if(AptCur.AptStatus==ApptStatus.Planned){
