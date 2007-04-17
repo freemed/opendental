@@ -210,7 +210,12 @@ namespace OpenDentServer {
 				XmlSerializer serializer;
 				memStream=new MemoryStream();
 				try {
-					if(dto.GetType().BaseType==typeof(DtoCommandBase)) {
+					if(dto.GetType()==typeof(DtoGetDS)){
+						DataSet ds=GeneralB.GetDS(((DtoGetDS)dto).MethodName,((DtoGetDS)dto).Parameters);
+						serializer=new XmlSerializer(typeof(DataSet));
+						serializer.Serialize(memStream,ds);
+					}
+					else if(dto.GetType().BaseType==typeof(DtoCommandBase)) {
 						int result=BusinessLayer.ProcessCommand((DtoCommandBase)dto);
 						DtoServerAck ack=new DtoServerAck();
 						ack.IDorRows=result;

@@ -82,6 +82,37 @@ namespace OpenDental {
 			}
 		}
 
+		public static DataSet GetDS(string methodName, string parameter1) {
+			return GetDS(methodName,new string[] {parameter1});
+		}
+
+		public static DataSet GetDS(string methodName,string parameter1,string parameter2) {
+			return GetDS(methodName,new string[] { parameter1,parameter2 });
+		}
+
+		public static DataSet GetDS(string methodName,string parameter1,string parameter2,string parameter3) {
+			return GetDS(methodName,new string[] { parameter1,parameter2,parameter3 });
+		}
+
+		///<summary>This is the new way.  If there are more than about 3 parameters, then we'll have to create a different DTO to pass them.  This has not been done yet.  A dataset would be used to pass the parameters up because the information can be better organized, and properly keyed.  But for typical cases with just one or a few parameters, this works great.</summary>
+		public static DataSet GetDS(string methodName, string[] parameters) {
+			try {
+				if(RemotingClient.OpenDentBusinessIsLocal) {
+					return GeneralB.GetDS(methodName,parameters);
+				}
+				else {
+					DtoGetDS dto=new DtoGetDS();
+					dto.MethodName=methodName;
+					dto.Parameters=parameters;
+					return RemotingClient.ProcessGetDS(dto);
+				}
+			}
+			catch(Exception e) {
+				MessageBox.Show(e.Message);
+				return new DataSet();
+			}
+		}
+
 		///<summary>Same as GetDataSet, but will throw exception if query fails instead of displaying message.</summary>
 		public static DataSet GetDataSetEx(string commands) {
 			if(RemotingClient.OpenDentBusinessIsLocal) {

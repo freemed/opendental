@@ -37,6 +37,26 @@ namespace OpenDental {
 			}
 		}
 
+		///<Summary>This is the new way. It will be replacing the many different types of DTOs that we currently have.</Summary>
+		public static DataSet ProcessGetDS(DtoGetDS dto){
+			byte[] buffer=SendAndReceive(dto);//this might throw an exception if server unavailable
+			MemoryStream memStream=new MemoryStream(buffer);
+			XmlSerializer serializer;
+			try {
+				serializer = new XmlSerializer(typeof(DataSet));
+				DataSet retVal=(DataSet)serializer.Deserialize(memStream);
+				memStream.Close();
+				return retVal;
+			}
+			catch {
+				memStream=new MemoryStream(buffer);//just in case stream is in wrong position.
+				serializer = new XmlSerializer(typeof(DtoException));
+				DtoException exception=(DtoException)serializer.Deserialize(memStream);
+				memStream.Close();
+				throw new Exception(exception.Message);
+			}
+		}
+
 		///<summary>InsertID will be returned for Insert commands.  Other commands return the number of rows affected which is usually just ignored.</summary>
 		public static int ProcessCommand(DtoCommandBase dto){
 			byte[] buffer=SendAndReceive(dto);//this might throw an exception if server unavailable
@@ -55,7 +75,7 @@ namespace OpenDental {
 				memStream.Close();
 				throw new Exception(exception.Message);
 			}
-		}
+		}		
 
 		private static byte[] SendAndReceive(DataTransferObject dto){
 			byte[] data=dto.Serialize();

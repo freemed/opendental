@@ -60,8 +60,16 @@ namespace OpenDentBusiness {
 			return retVal;
 		}
 
+		public static DataSet GetDS(string methodName, string[] parameters) {
+			switch (methodName){
+				default:
+					throw new ApplicationException("MethodName not found");
+					break;
+				case "Appointment.GetApptEdit":
+					return AppointmentB.GetApptEdit(parameters);
+			}
 
-
+		}
 		
 
 

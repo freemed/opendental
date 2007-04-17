@@ -78,6 +78,7 @@ namespace OpenDental{
 			//
 			InitializeComponent();
 			Lan.F(this);
+			DS=Appointments.GetApptEdit(aptNum);
 		}
 
 		/// <summary>
@@ -754,7 +755,6 @@ namespace OpenDental{
 					listQuickAdd.Enabled=false;
 				}
 			}
-			//DS=Appointments.Get
 			if(PrefB.GetBool("EasyHideDentalSchools")) {
 				groupDentalSchools.Visible=false;
 			}
@@ -765,7 +765,7 @@ namespace OpenDental{
 			if(!PinIsVisible){
 				butPin.Visible=false;
 			}
-
+			checkIsNewPatient.Checked=PIn.PBool(DS.Tables[0].Rows[0]["IsNewPatient"].ToString());
 
 		}
 		

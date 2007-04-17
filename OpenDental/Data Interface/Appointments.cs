@@ -120,7 +120,7 @@ namespace OpenDental{
 		}
 
 		public static DataSet GetApptEdit(int aptNum){
-			return null;
+			return General.GetDS("Appointment.GetApptEdit",aptNum.ToString());
 		}
 
 		///<summary>If IsNew, just supply null for oldApt.</summary>

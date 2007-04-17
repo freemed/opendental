@@ -49,13 +49,17 @@ namespace OpenDentBusiness {
 	public class DtoQueryBase:DataTransferObject {
 	}
 
+	///<Summary>This DTO is planned to replace all the DtoQueryBase types.  Having multiple DTO types takes too long to program, so there should only be one type which is used for everything.  We will also eventually move to simpler XML representation of the datasets instead of using the dotNet serialization.</Summary>
+	public class DtoGetDS:DataTransferObject{
+		///<Summary>This is the name of the method that we need to call.  "Class.Method" format.</Summary>
+		public string MethodName;
+		///<Summary>This is a list of parameters that we are passing.  They are always strings.</Summary>
+		public string[] Parameters;
+	}
+
 	public class DtoGeneralGetTable:DtoQueryBase {
 		public string Command;
 	}
-
-	//public class DtoGeneralGetTableBinary:DtoQueryBase {
-	//	public string Command;
-	//}
 
 	public class DtoGeneralGetTableLow:DtoQueryBase {
 		public string Command;
@@ -75,7 +79,7 @@ namespace OpenDentBusiness {
 		public int IDorRows;
 	}
 
-	///<summary>OpenDentBusiness and all the DA classes are designed to throw an exception if something goes wrong.  If useing OpenDentBusiness through the remote server, then the server catches the exception and passes it back to the main program using this DTO.  The client then turns it back into an exception so that it behaves just like if OpenDentBusiness was getting called locally.</summary>
+	///<summary>OpenDentBusiness and all the DA classes are designed to throw an exception if something goes wrong.  If using OpenDentBusiness through the remote server, then the server catches the exception and passes it back to the main program using this DTO.  The client then turns it back into an exception so that it behaves just like if OpenDentBusiness was getting called locally.</summary>
 	public class DtoException{
 		public string Message;
 	}

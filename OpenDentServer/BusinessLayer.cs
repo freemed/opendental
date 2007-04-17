@@ -6,14 +6,12 @@ using OpenDentBusiness;
 
 namespace OpenDentServer {
 	public class BusinessLayer {
+
 		///<summary>DataSet cannot be null.</summary>
 		public static DataSet ProcessQuery(DtoQueryBase dto) {
 			if(dto.GetType()==typeof(DtoGeneralGetTable)) {
 				return GeneralB.GetTable(((DtoGeneralGetTable)dto).Command);
 			}
-			//else if(dto.GetType()==typeof(DtoGeneralGetTableBinary)) {
-			//	return GeneralB.GetTableBinary(((DtoGeneralGetTableBinary)dto).Command);
-			//}
 			else if(dto.GetType()==typeof(DtoGeneralGetTableLow)) {
 				return GeneralB.GetTableLow(((DtoGeneralGetTableLow)dto).Command);
 			}
