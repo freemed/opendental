@@ -4316,7 +4316,7 @@ namespace OpenDental{
 			AptCur.AptDateTime=DateTime.Today;
 			AptCur.Pattern="/X/";
 			Appointments.InsertOrUpdate(AptCur,null,true);
-			FormApptEdit FormApptEdit2=new FormApptEdit(AptCur);
+			FormApptEdit FormApptEdit2=new FormApptEdit(AptCur.AptNum);
 			FormApptEdit2.IsNew=true;
 			FormApptEdit2.ShowDialog();
 			if(FormApptEdit2.DialogResult!=DialogResult.OK){
@@ -4365,7 +4365,7 @@ namespace OpenDental{
 		}
 
 		private void ApptPlanned_DoubleClick(object sender, System.EventArgs e){
-			FormApptEdit FormAE=new FormApptEdit(ApptPlanned.Info.MyApt);
+			FormApptEdit FormAE=new FormApptEdit(ApptPlanned.Info.MyApt.AptNum);
 			FormAE.ShowDialog();
 			ModuleSelected(PatCur.PatNum);//if procs were added in appt, then this will display them
 		}

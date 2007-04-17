@@ -377,7 +377,7 @@
     <Compile Include="Forms\BasicTemplate.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\FormApptEditNew.cs">
+    <Compile Include="Forms\FormApptEdit.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\FormApptProcs.cs">
@@ -437,7 +437,7 @@
     <Compile Include="Forms\FormAging.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\FormApptEdit.cs">
+    <Compile Include="Forms\FormApptEditOld.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\FormApptLists.cs">
@@ -1251,8 +1251,8 @@
       <DependentUpon>BasicTemplate.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\FormApptEditNew.resx">
-      <DependentUpon>FormApptEditNew.cs</DependentUpon>
+    <EmbeddedResource Include="Forms\FormApptEdit.resx">
+      <DependentUpon>FormApptEdit.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormApptProcs.resx">
@@ -1327,8 +1327,8 @@
       <DependentUpon>FormAging.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\FormApptEdit.resx">
-      <DependentUpon>FormApptEdit.cs</DependentUpon>
+    <EmbeddedResource Include="Forms\FormApptEditOld.resx">
+      <DependentUpon>FormApptEditOld.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormApptLists.resx">

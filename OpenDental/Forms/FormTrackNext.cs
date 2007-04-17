@@ -126,7 +126,7 @@ namespace OpenDental{
 		private void tbApts_CellDoubleClicked(object sender, CellEventArgs e){
 			int currentSelection=tbApts.SelectedRow;
 			int currentScroll=tbApts.ScrollValue;
-			FormApptEdit FormAE=new FormApptEdit(ListUn[e.Row]);
+			FormApptEdit FormAE=new FormApptEdit(ListUn[e.Row].AptNum);
 			FormAE.PinIsVisible=true;
 			FormAE.ShowDialog();
 			if(FormAE.DialogResult!=DialogResult.OK)

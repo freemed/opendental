@@ -535,7 +535,7 @@ namespace OpenDental{
 				MessageBox.Show(ex.Message);
 				return;
 			}
-			FormApptEdit FormApptEdit2=new FormApptEdit(AptCur);
+			FormApptEdit FormApptEdit2=new FormApptEdit(AptCur.AptNum);
 			FormApptEdit2.IsNew=true;
 			FormApptEdit2.ShowDialog();
 			if(FormApptEdit2.DialogResult!=DialogResult.OK){
@@ -603,7 +603,7 @@ namespace OpenDental{
 		private void tbApts_CellDoubleClicked(object sender, CellEventArgs e){
 			int currentSelection=tbApts.SelectedRow;
 			int currentScroll=tbApts.ScrollValue;
-			FormApptEdit FormAE=new FormApptEdit(ListOth[e.Row]);
+			FormApptEdit FormAE=new FormApptEdit(ListOth[e.Row].AptNum);
 			FormAE.PinIsVisible=true;
 			FormAE.ShowDialog();
 			if(FormAE.DialogResult!=DialogResult.OK)

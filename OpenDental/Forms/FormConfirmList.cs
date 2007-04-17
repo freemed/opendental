@@ -414,8 +414,8 @@ namespace OpenDental{
 		private void grid_CellDoubleClick(object sender, OpenDental.UI.ODGridClickEventArgs e) {
 			Cursor=Cursors.WaitCursor;
 			int selectedApt=PIn.PInt(table.Rows[e.Row]["AptNum"].ToString());
-			Appointment apt=Appointments.GetOneApt(selectedApt);
-			FormApptEdit FormA=new FormApptEdit(apt);
+			//Appointment apt=Appointments.GetOneApt(selectedApt);
+			FormApptEdit FormA=new FormApptEdit(selectedApt);
 			FormA.ShowDialog();
 			//if(FormA.DialogResult==DialogResult.Cancel){
 			//	Cursor=Cursors.Default;

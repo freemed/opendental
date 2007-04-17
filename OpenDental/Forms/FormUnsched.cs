@@ -169,7 +169,7 @@ namespace OpenDental{
 		private void grid_CellDoubleClick(object sender,ODGridClickEventArgs e) {
 			int currentSelection=e.Row;//tbApts.SelectedRow;
 			int currentScroll=grid.ScrollValue;//tbApts.ScrollValue;
-			FormApptEdit FormAE=new FormApptEdit(ListUn[e.Row]);
+			FormApptEdit FormAE=new FormApptEdit(ListUn[e.Row].AptNum);
 			FormAE.PinIsVisible=true;
 			FormAE.ShowDialog();
 			if(FormAE.DialogResult!=DialogResult.OK)

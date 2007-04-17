@@ -2458,7 +2458,7 @@ namespace OpenDental{
 				TempApptSingle.Dispose();
 				//security handled inside the form
 				//FormApptEdit FormAE=new FormApptEdit(AptCur);
-				FormApptEditNew FormAE=new FormApptEditNew();
+				FormApptEdit FormAE=new FormApptEdit(AptCur.AptNum);
 				FormAE.ShowDialog();
 				if(FormAE.DialogResult==DialogResult.OK){
 					//Caution.  AptCur is not properly updated, so:
@@ -2524,7 +2524,7 @@ namespace OpenDental{
 					catch(ApplicationException ex){
 						MessageBox.Show(ex.Message);
 					}
-					FormApptEdit FormAE=new FormApptEdit(apt);//this is where security log entry is made
+					FormApptEdit FormAE=new FormApptEdit(apt.AptNum);//this is where security log entry is made
 					FormAE.IsNew=true;
 					FormAE.ShowDialog();
 					if(FormAE.DialogResult==DialogResult.OK){
