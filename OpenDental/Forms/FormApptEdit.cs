@@ -211,9 +211,9 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(893,620);
+			this.butOK.Location = new System.Drawing.Point(877,618);
 			this.butOK.Name = "butOK";
-			this.butOK.Size = new System.Drawing.Size(75,26);
+			this.butOK.Size = new System.Drawing.Size(92,26);
 			this.butOK.TabIndex = 7;
 			this.butOK.Text = "&OK";
 			this.butOK.Click += new System.EventHandler(this.butOK_Click);
@@ -227,9 +227,9 @@ namespace OpenDental{
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
 			this.butCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.butCancel.Location = new System.Drawing.Point(893,661);
+			this.butCancel.Location = new System.Drawing.Point(877,651);
 			this.butCancel.Name = "butCancel";
-			this.butCancel.Size = new System.Drawing.Size(75,26);
+			this.butCancel.Size = new System.Drawing.Size(92,26);
 			this.butCancel.TabIndex = 8;
 			this.butCancel.Text = "&Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
@@ -256,7 +256,7 @@ namespace OpenDental{
 			// textTime
 			// 
 			this.textTime.BackColor = System.Drawing.Color.White;
-			this.textTime.Location = new System.Drawing.Point(23,550);
+			this.textTime.Location = new System.Drawing.Point(1,569);
 			this.textTime.Name = "textTime";
 			this.textTime.ReadOnly = true;
 			this.textTime.Size = new System.Drawing.Size(66,20);
@@ -269,16 +269,16 @@ namespace OpenDental{
 			this.butCalcTime.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butCalcTime.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCalcTime.CornerRadius = 4F;
-			this.butCalcTime.Location = new System.Drawing.Point(3,574);
+			this.butCalcTime.Location = new System.Drawing.Point(3,591);
 			this.butCalcTime.Name = "butCalcTime";
-			this.butCalcTime.Size = new System.Drawing.Size(87,26);
+			this.butCalcTime.Size = new System.Drawing.Size(31,20);
 			this.butCalcTime.TabIndex = 6;
-			this.butCalcTime.Text = "Calc &Time";
+			this.butCalcTime.Text = "Calc";
 			this.butCalcTime.Click += new System.EventHandler(this.butCalcTime_Click);
 			// 
 			// label1
 			// 
-			this.label1.Location = new System.Drawing.Point(4,605);
+			this.label1.Location = new System.Drawing.Point(4,616);
 			this.label1.Name = "label1";
 			this.label1.Size = new System.Drawing.Size(84,14);
 			this.label1.TabIndex = 7;
@@ -401,7 +401,7 @@ namespace OpenDental{
 			// 
 			// textAddTime
 			// 
-			this.textAddTime.Location = new System.Drawing.Point(4,622);
+			this.textAddTime.Location = new System.Drawing.Point(4,633);
 			this.textAddTime.MaxVal = 255;
 			this.textAddTime.MinVal = 0;
 			this.textAddTime.Name = "textAddTime";
@@ -593,9 +593,9 @@ namespace OpenDental{
 			this.butAddComm.CornerRadius = 4F;
 			this.butAddComm.Image = global::OpenDental.Properties.Resources.Add;
 			this.butAddComm.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butAddComm.Location = new System.Drawing.Point(883,379);
+			this.butAddComm.Location = new System.Drawing.Point(877,379);
 			this.butAddComm.Name = "butAddComm";
-			this.butAddComm.Size = new System.Drawing.Size(85,26);
+			this.butAddComm.Size = new System.Drawing.Size(92,26);
 			this.butAddComm.TabIndex = 66;
 			this.butAddComm.Text = "Co&mm";
 			this.butAddComm.Click += new System.EventHandler(this.butAddComm_Click);
@@ -647,9 +647,9 @@ namespace OpenDental{
 			this.butPin.CornerRadius = 4F;
 			this.butPin.Image = ((System.Drawing.Image)(resources.GetObject("butPin.Image")));
 			this.butPin.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butPin.Location = new System.Drawing.Point(877,585);
+			this.butPin.Location = new System.Drawing.Point(877,552);
 			this.butPin.Name = "butPin";
-			this.butPin.Size = new System.Drawing.Size(91,26);
+			this.butPin.Size = new System.Drawing.Size(92,26);
 			this.butPin.TabIndex = 71;
 			this.butPin.Text = "&Pinboard";
 			this.butPin.Click += new System.EventHandler(this.butPin_Click);
@@ -663,9 +663,9 @@ namespace OpenDental{
 			this.butDelete.CornerRadius = 4F;
 			this.butDelete.Image = global::OpenDental.Properties.Resources.deleteX;
 			this.butDelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butDelete.Location = new System.Drawing.Point(3,662);
+			this.butDelete.Location = new System.Drawing.Point(877,585);
 			this.butDelete.Name = "butDelete";
-			this.butDelete.Size = new System.Drawing.Size(84,26);
+			this.butDelete.Size = new System.Drawing.Size(92,26);
 			this.butDelete.TabIndex = 72;
 			this.butDelete.Text = "&Delete";
 			this.butDelete.Click += new System.EventHandler(this.butDelete_Click);
@@ -753,7 +753,7 @@ namespace OpenDental{
 			this.butTask.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butTask.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butTask.CornerRadius = 4F;
-			this.butTask.Location = new System.Drawing.Point(876,550);
+			this.butTask.Location = new System.Drawing.Point(877,519);
 			this.butTask.Name = "butTask";
 			this.butTask.Size = new System.Drawing.Size(92,26);
 			this.butTask.TabIndex = 83;
@@ -893,7 +893,7 @@ namespace OpenDental{
 			this.butAudit.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butAudit.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butAudit.CornerRadius = 4F;
-			this.butAudit.Location = new System.Drawing.Point(124,662);
+			this.butAudit.Location = new System.Drawing.Point(877,486);
 			this.butAudit.Name = "butAudit";
 			this.butAudit.Size = new System.Drawing.Size(92,26);
 			this.butAudit.TabIndex = 119;

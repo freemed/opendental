@@ -154,6 +154,7 @@
     <Compile Include="Data Interface\CanadianExtracts.cs" />
     <Compile Include="Data Interface\ChartModule.cs" />
     <Compile Include="Data Interface\CanadianNetworks.cs" />
+    <Compile Include="Data Interface\LabCases.cs" />
     <Compile Include="Data Interface\Laboratories.cs" />
     <Compile Include="Data Interface\MountItemDefs.cs" />
     <Compile Include="Data Interface\MountDefs.cs" />
@@ -374,6 +375,12 @@
     </Compile>
     <Compile Include="Forms Reports\Queries.cs" />
     <Compile Include="Forms\BasicTemplate.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormApptEditNew.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormApptProcs.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\FormLaboratoryEdit.cs">
@@ -1242,6 +1249,14 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\BasicTemplate.resx">
       <DependentUpon>BasicTemplate.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormApptEditNew.resx">
+      <DependentUpon>FormApptEditNew.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormApptProcs.resx">
+      <DependentUpon>FormApptProcs.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormLaboratoryEdit.resx">
@@ -2647,6 +2662,12 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="UI\ODToolBarButtonCollection.cs" />
+    <Compile Include="UI\PanelOD.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="UI\PanelOD.Designer.cs">
+      <DependentUpon>PanelOD.cs</DependentUpon>
+    </Compile>
     <Compile Include="UI\PictureBox.cs">
       <SubType>Component</SubType>
     </Compile>

@@ -2457,7 +2457,8 @@ namespace OpenDental{
 			if(ContrApptSingle.ClickedAptNum!=0){//on appt	
 				TempApptSingle.Dispose();
 				//security handled inside the form
-				FormApptEdit FormAE=new FormApptEdit(AptCur);
+				//FormApptEdit FormAE=new FormApptEdit(AptCur);
+				FormApptEditNew FormAE=new FormApptEditNew();
 				FormAE.ShowDialog();
 				if(FormAE.DialogResult==DialogResult.OK){
 					//Caution.  AptCur is not properly updated, so:
