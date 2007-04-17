@@ -4,6 +4,7 @@ using System.Collections;
 using System.ComponentModel;
 using System.Windows.Forms;
 using OpenDentBusiness;
+using System.Data;
 
 namespace OpenDental{
 	/// <summary>
@@ -32,7 +33,6 @@ namespace OpenDental{
 		private CheckBox checkIsHygiene;
 		private ComboBox comboClinic;
 		private Label labelClinic;
-		private ComboBox comboLab;
 		private ComboBox comboAssistant;
 		private ComboBox comboProvHyg;
 		private ComboBox comboProvNum;
@@ -66,7 +66,9 @@ namespace OpenDental{
 		private Label label21;
 		private Label label22;
 		private Label label23;
+		private TextBox textLab;
 		public bool IsNew;
+		private DataSet DS;
 
 		///<summary></summary>
 		public FormApptEdit(int aptNum)
@@ -111,7 +113,6 @@ namespace OpenDental{
 			this.checkIsHygiene = new System.Windows.Forms.CheckBox();
 			this.comboClinic = new System.Windows.Forms.ComboBox();
 			this.labelClinic = new System.Windows.Forms.Label();
-			this.comboLab = new System.Windows.Forms.ComboBox();
 			this.comboAssistant = new System.Windows.Forms.ComboBox();
 			this.comboProvHyg = new System.Windows.Forms.ComboBox();
 			this.comboProvNum = new System.Windows.Forms.ComboBox();
@@ -151,6 +152,7 @@ namespace OpenDental{
 			this.butPin = new OpenDental.UI.Button();
 			this.butOK = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
+			this.textLab = new System.Windows.Forms.TextBox();
 			this.panel1.SuspendLayout();
 			this.groupDentalSchools.SuspendLayout();
 			this.SuspendLayout();
@@ -246,15 +248,6 @@ namespace OpenDental{
 			this.labelClinic.Text = "Clinic";
 			this.labelClinic.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
-			// comboLab
-			// 
-			this.comboLab.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboLab.Location = new System.Drawing.Point(118,183);
-			this.comboLab.MaxDropDownItems = 30;
-			this.comboLab.Name = "comboLab";
-			this.comboLab.Size = new System.Drawing.Size(126,21);
-			this.comboLab.TabIndex = 134;
-			// 
 			// comboAssistant
 			// 
 			this.comboAssistant.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
@@ -284,7 +277,7 @@ namespace OpenDental{
 			// 
 			// label13
 			// 
-			this.label13.Location = new System.Drawing.Point(17,186);
+			this.label13.Location = new System.Drawing.Point(17,185);
 			this.label13.Name = "label13";
 			this.label13.Size = new System.Drawing.Size(98,16);
 			this.label13.TabIndex = 130;
@@ -394,8 +387,8 @@ namespace OpenDental{
 			// 
 			this.panel1.AutoScroll = true;
 			this.panel1.AutoScrollMargin = new System.Drawing.Size(0,3);
+			this.panel1.Controls.Add(this.textLab);
 			this.panel1.Controls.Add(this.groupDentalSchools);
-			this.panel1.Controls.Add(this.comboLab);
 			this.panel1.Controls.Add(this.labelStatus);
 			this.panel1.Controls.Add(this.label5);
 			this.panel1.Controls.Add(this.comboStatus);
@@ -692,6 +685,14 @@ namespace OpenDental{
 			this.butCancel.Text = "&Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
 			// 
+			// textLab
+			// 
+			this.textLab.Location = new System.Drawing.Point(118,184);
+			this.textLab.Name = "textLab";
+			this.textLab.ReadOnly = true;
+			this.textLab.Size = new System.Drawing.Size(126,20);
+			this.textLab.TabIndex = 140;
+			// 
 			// FormApptEdit
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
@@ -727,6 +728,7 @@ namespace OpenDental{
 			this.Text = "Edit Appointment";
 			this.Load += new System.EventHandler(this.FormApptEdit_Load);
 			this.panel1.ResumeLayout(false);
+			this.panel1.PerformLayout();
 			this.groupDentalSchools.ResumeLayout(false);
 			this.groupDentalSchools.PerformLayout();
 			this.ResumeLayout(false);
@@ -752,6 +754,7 @@ namespace OpenDental{
 					listQuickAdd.Enabled=false;
 				}
 			}
+			//DS=Appointments.Get
 			if(PrefB.GetBool("EasyHideDentalSchools")) {
 				groupDentalSchools.Visible=false;
 			}

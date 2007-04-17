@@ -119,6 +119,10 @@ namespace OpenDental{
 			return list;
 		}
 
+		public static DataSet GetApptEdit(int aptNum){
+			return null;
+		}
+
 		///<summary>If IsNew, just supply null for oldApt.</summary>
 		public static void InsertOrUpdate(Appointment appt, Appointment oldApt,bool IsNew){
 			//if(){
