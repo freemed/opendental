@@ -153,6 +153,7 @@ namespace OpenDental{
 			//TODO: In the future use a device locator in the xImagingDeviceManager
 			//project to return the appropriate general device control.
 			xRayImageController=new SuniDeviceControl();
+			this.xRayImageController.OnCaptureBegin+=new System.EventHandler(this.OnCaptureBegin);
 			this.xRayImageController.OnCaptureComplete+=new System.EventHandler(this.OnCaptureComplete);
 			this.xRayImageController.OnCaptureAbort+=new System.EventHandler(this.OnCaptureAborted);
 		}
@@ -1319,6 +1320,7 @@ namespace OpenDental{
 				doc.DateCreated=DateTime.Today;
 				doc.WithPat=PatCur.PatNum;
 				doc.ImgType=HasImageExtension(doc.FileName)?ImageType.Photo:ImageType.Document;
+				doc.DocCategory=DefB.GetByExactName(DefCat.ImageCats,GetCurrentFolderName(TreeDocuments.SelectedNode));
 				Documents.Insert(doc,PatCur);//this assigns a filename and saves to db
 				bool copied=true;
 				try{
@@ -1330,7 +1332,6 @@ namespace OpenDental{
 				}
 				if(copied){
 					DataRow tag=Documents.GetDocumentRow(doc.DocNum.ToString());
-					doc.DocCategory=DefB.GetByExactName(DefCat.ImageCats,GetCurrentFolderName(TreeDocuments.SelectedNode));
 					AddTreeDocumentNode(ref doc,tag,true);
 					int startCateogory=doc.DocCategory;
 					FormDocInfo FormD=new FormDocInfo(PatCur,doc,GetCurrentFolderName(TreeDocuments.SelectedNode));
@@ -1618,7 +1619,7 @@ namespace OpenDental{
 			if(reloadZoomTransCrop){
 				//Reloading the image settings only happens when a new image is selected, pasted, scanned, etc...
 				//Therefore, the is no need for any current image processing anymore (it would be on a stail image).
-				KillMyThread();
+				KillMyImageThreads();
 				ReloadZoomTransCrop(curImageWidth,curImageHeight,curDoc);
 			}
 			//curDoc is an individual document instance. Assigning a new document to settingDoc here does not 
@@ -1694,16 +1695,17 @@ namespace OpenDental{
 		}
 
     ///<summary>Kills the image processing thread if it is currently running.</summary>
-    private void KillMyThread(){
-        if(myThread!=null){//Clear any previous image processing.
-            if(myThread.IsAlive){
-                myThread.Abort();//this is not recommended because it results in an exception.  But it seems to work.
-                while(myThread.IsAlive){
-                    //Wait for the thread to stop execution.
-                }
-            }
-            myThread=null;
+    private void KillMyImageThreads(){
+			xRayImageController.KillXRayThread();//Stop the current xRay image thread if it is running.
+      if(myThread!=null){//Clear any previous image processing.
+        if(myThread.IsAlive){
+          myThread.Abort();//this is not recommended because it results in an exception.  But it seems to work.
+          while(myThread.IsAlive){
+            //Wait for the thread to stop execution.
+          }
         }
+        myThread=null;
+      }
     }
 
 		///<summary>Handles rendering to the PictureBox of the image in its current state. The image calculations are not performed here, only rendering of the image is performed here, so that we can guarantee a fast display.</summary>
@@ -1979,9 +1981,20 @@ namespace OpenDental{
 			}
 		}
 
+		///<summary>Called when an xray capture begins, but after any previous image capture threads are killed.</summary>
+		private void OnCaptureBegin(object sender,EventArgs e){
+			if(ToolBarMain.InvokeRequired) {
+				CaptureCompleteCallback c=new CaptureCompleteCallback(OnCaptureBegin);
+				Invoke(c,new object[] { sender,e });
+				return;
+			}
+			ToolBarMain.Buttons["Capture"].Pushed=true;
+			ToolBarMain.Invalidate();
+		}
+
 		///<summary>Called on successful capture of image.</summary>
 		private void OnCaptureComplete(object sender,EventArgs e) {
-			if(TreeDocuments.InvokeRequired || ToolBarMain.InvokeRequired){
+			if(this.InvokeRequired){
 				CaptureCompleteCallback c=new CaptureCompleteCallback(OnCaptureComplete);
 				Invoke(c,new object[] {sender,e});
 				return;
@@ -1989,9 +2002,10 @@ namespace OpenDental{
 			Bitmap capturedImage=xRayImageController.capturedImage;
 			Document doc=new Document();
 			doc.ImgType=ImageType.Radiograph;
-			doc.FileName=".jpg";
+			doc.FileName=".tif";
 			doc.DateCreated=DateTime.Today;
 			doc.WithPat=PatCur.PatNum;
+			doc.DocCategory=DefB.GetByExactName(DefCat.ImageCats,GetCurrentFolderName(TreeDocuments.SelectedNode));
 			Documents.Insert(doc,PatCur);//creates filename and saves to db
 			bool saved=true;
 			try{				
@@ -2006,20 +2020,25 @@ namespace OpenDental{
 				doc.DocCategory=DefB.GetByExactName(DefCat.ImageCats,GetCurrentFolderName(TreeDocuments.SelectedNode));
 				AddTreeDocumentNode(ref doc,tag,true);
 			}
-			//OnCapture_Click();//TODO: Prepare to capture another XRay, even if the last XRay failed to save.
-			ToolBarMain.Buttons["Capture"].Pushed=false;	//TODO: remove this line, since the capture must stay enabled
-																										//for an entire capture sequence.
+			//This capture was successful. Keep capturing more images until the capture is manually aborted.
+			//This will cause calls to OnCaptureAborted(), then OnCaptureBegin().
+			xRayImageController.CaptureXRay();
 		}
 
-		///<summary>Called under any error circumstance resulting from the image capture process.</summary>
+		///<summary>Called under any error circumstance resulting from the image capture process, or when one image capture is finishing and launching the next image capture.</summary>
 		private void OnCaptureAborted(object sender,EventArgs e) {
+			if(ToolBarMain.InvokeRequired) {
+				CaptureCompleteCallback c=new CaptureCompleteCallback(OnCaptureAborted);
+				Invoke(c,new object[] { sender,e });
+				return;
+			}
 			ToolBarMain.Buttons["Capture"].Pushed=false;
 			ToolBarMain.Invalidate();
 		}
 
 		///<summary>Kills ImageApplicationThread.  Disposes of both ImageCurrent and renderImage.  Does not actually trigger a refresh of the Picturebox, though.</summary>
 		private void EraseCurrentImage(){
-			KillMyThread();//Stop any current access to the current image and render image so we can dispose them.
+			KillMyImageThreads();//Stop any current access to the current image and render image so we can dispose them.
 			PictureBox1.Image=null;
 			InvalidatedSettingsFlag=ApplySettings.NONE;
 			if(ImageCurrent!=null){
