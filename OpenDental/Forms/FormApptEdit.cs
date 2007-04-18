@@ -1,10 +1,13 @@
 using System;
+using System.Data;
 using System.Drawing;
 using System.Collections;
 using System.ComponentModel;
+using System.Text;
 using System.Windows.Forms;
 using OpenDentBusiness;
-using System.Data;
+using OpenDental.UI;
+
 
 namespace OpenDental{
 	/// <summary>
@@ -42,7 +45,7 @@ namespace OpenDental{
 		private Label label3;
 		private Label label2;
 		private OpenDental.UI.ODGrid gridProc;
-		private Button butSlider;
+		private System.Windows.Forms.Button butSlider;
 		private TableTimeBar tbTime;
 		private Label label6;
 		private ValidNum textAddTime;
@@ -69,6 +72,10 @@ namespace OpenDental{
 		private TextBox textLab;
 		public bool IsNew;
 		private DataSet DS;
+		private Appointment AptCur;
+		private Appointment AptOld;
+		///<summary>The string time pattern in the current increment. Not in the 5 minute increment.</summary>
+		private StringBuilder strBTime;
 
 		///<summary></summary>
 		public FormApptEdit(int aptNum)
@@ -79,6 +86,8 @@ namespace OpenDental{
 			InitializeComponent();
 			Lan.F(this);
 			DS=Appointments.GetApptEdit(aptNum);
+			AptCur=AppointmentB.TableToObject(DS.Tables["Appointment"]);
+			AptOld=AptCur.Copy();
 		}
 
 		/// <summary>
@@ -130,6 +139,7 @@ namespace OpenDental{
 			this.label1 = new System.Windows.Forms.Label();
 			this.butSlider = new System.Windows.Forms.Button();
 			this.panel1 = new System.Windows.Forms.Panel();
+			this.textLab = new System.Windows.Forms.TextBox();
 			this.groupDentalSchools = new System.Windows.Forms.GroupBox();
 			this.textGradePoint = new System.Windows.Forms.TextBox();
 			this.comboSchoolCourse = new System.Windows.Forms.ComboBox();
@@ -153,7 +163,6 @@ namespace OpenDental{
 			this.butPin = new OpenDental.UI.Button();
 			this.butOK = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
-			this.textLab = new System.Windows.Forms.TextBox();
 			this.panel1.SuspendLayout();
 			this.groupDentalSchools.SuspendLayout();
 			this.SuspendLayout();
@@ -413,6 +422,14 @@ namespace OpenDental{
 			this.panel1.Size = new System.Drawing.Size(265,247);
 			this.panel1.TabIndex = 147;
 			// 
+			// textLab
+			// 
+			this.textLab.Location = new System.Drawing.Point(118,184);
+			this.textLab.Name = "textLab";
+			this.textLab.ReadOnly = true;
+			this.textLab.Size = new System.Drawing.Size(126,20);
+			this.textLab.TabIndex = 140;
+			// 
 			// groupDentalSchools
 			// 
 			this.groupDentalSchools.Controls.Add(this.textGradePoint);
@@ -591,6 +608,7 @@ namespace OpenDental{
 			this.gridProc.Location = new System.Drawing.Point(485,3);
 			this.gridProc.Name = "gridProc";
 			this.gridProc.ScrollValue = 0;
+			this.gridProc.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
 			this.gridProc.Size = new System.Drawing.Size(488,345);
 			this.gridProc.TabIndex = 139;
 			this.gridProc.Title = "Procedures - highlight to attach";
@@ -686,14 +704,6 @@ namespace OpenDental{
 			this.butCancel.Text = "&Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
 			// 
-			// textLab
-			// 
-			this.textLab.Location = new System.Drawing.Point(118,184);
-			this.textLab.Name = "textLab";
-			this.textLab.ReadOnly = true;
-			this.textLab.Size = new System.Drawing.Size(126,20);
-			this.textLab.TabIndex = 140;
-			// 
 			// FormApptEdit
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
@@ -765,8 +775,181 @@ namespace OpenDental{
 			if(!PinIsVisible){
 				butPin.Visible=false;
 			}
-			checkIsNewPatient.Checked=PIn.PBool(DS.Tables[0].Rows[0]["IsNewPatient"].ToString());
+			if(AptCur.AptStatus==ApptStatus.Planned) {
+				Text=Lan.g(this,"Edit Planned Appointment")+" - "+DS.Tables["Patient"].Rows[0]["nameLF"].ToString();
+				labelStatus.Visible=false;
+				comboStatus.Visible=false;
+				butDelete.Visible=false;
+			}
+			else {
+				Text=Lan.g(this,"Edit Appointment")+" - "+DS.Tables["Patient"].Rows[0]["nameLF"].ToString();
+				comboStatus.Items.Add(Lan.g("enumApptStatus","Scheduled"));
+				comboStatus.Items.Add(Lan.g("enumApptStatus","Complete"));
+				comboStatus.Items.Add(Lan.g("enumApptStatus","UnschedList"));
+				comboStatus.Items.Add(Lan.g("enumApptStatus","ASAP"));
+				comboStatus.Items.Add(Lan.g("enumApptStatus","Broken"));
+				comboStatus.SelectedIndex=(int)AptCur.AptStatus-1;
+			}
+			//convert time pattern from 5 to current increment.
+			strBTime=new StringBuilder();
+			for(int i=0;i<AptCur.Pattern.Length;i++) {
+				strBTime.Append(AptCur.Pattern.Substring(i,1));
+				if(PrefB.GetInt("AppointmentTimeIncrement")==10) {
+					i++;
+				}
+				if(PrefB.GetInt("AppointmentTimeIncrement")==15) {
+					i++;
+					i++;
+				}
+			}
+			comboUnschedStatus.Items.Add(Lan.g(this,"none"));
+			comboUnschedStatus.SelectedIndex=0;
+			for(int i=0;i<DefB.Short[(int)DefCat.RecallUnschedStatus].Length;i++) {
+				comboUnschedStatus.Items.Add(DefB.Short[(int)DefCat.RecallUnschedStatus][i].ItemName);
+				if(DefB.Short[(int)DefCat.RecallUnschedStatus][i].DefNum==AptCur.UnschedStatus)
+					comboUnschedStatus.SelectedIndex=i+1;
+			}
+			for(int i=0;i<DefB.Short[(int)DefCat.ApptConfirmed].Length;i++) {
+				comboConfirmed.Items.Add(DefB.Short[(int)DefCat.ApptConfirmed][i].ItemName);
+				if(DefB.Short[(int)DefCat.ApptConfirmed][i].DefNum==AptCur.Confirmed)
+					comboConfirmed.SelectedIndex=i;
+			}
+			textAddTime.MinVal=-1200;
+			textAddTime.MaxVal=1200;
+			textAddTime.Text=POut.PInt(AptCur.AddTime*PIn.PInt(((Pref)PrefB.HList["AppointmentTimeIncrement"]).ValueString));
+			textNote.Text=AptCur.Note;
+			for(int i=0;i<DefB.Short[(int)DefCat.ApptProcsQuickAdd].Length;i++) {
+				listQuickAdd.Items.Add(DefB.Short[(int)DefCat.ApptProcsQuickAdd][i].ItemName);
+			}
+			//SchoolClassNum must be filled before provider
+			comboSchoolClass.Items.Add(Lan.g(this,"none"));
+			for(int i=0;i<SchoolClasses.List.Length;i++) {
+				comboSchoolClass.Items.Add(SchoolClasses.List[i].GradYear.ToString()+"-"+SchoolClasses.List[i].Descript);
+			}
+			comboClinic.Items.Add(Lan.g(this,"none"));
+			comboClinic.SelectedIndex=0;
+			for(int i=0;i<Clinics.List.Length;i++) {
+				comboClinic.Items.Add(Clinics.List[i].Description);
+				if(Clinics.List[i].ClinicNum==AptCur.ClinicNum)
+					comboClinic.SelectedIndex=i+1;
+			}
+			for(int i=0;i<Providers.List.Length;i++) {
+				comboProvNum.Items.Add(Providers.List[i].Abbr);
+				if(Providers.List[i].ProvNum==AptCur.ProvNum)
+					comboProvNum.SelectedIndex=i;
+			}
+			comboProvHyg.Items.Add(Lan.g(this,"none"));
+			comboProvHyg.SelectedIndex=0;
+			for(int i=0;i<Providers.List.Length;i++) {
+				comboProvHyg.Items.Add(Providers.List[i].Abbr);
+				if(Providers.List[i].ProvNum==AptCur.ProvHyg)
+					comboProvHyg.SelectedIndex=i+1;
+			}
+			checkIsHygiene.Checked=AptCur.IsHygiene;
+			comboAssistant.Items.Add(Lan.g(this,"none"));
+			comboAssistant.SelectedIndex=0;
+			for(int i=0;i<Employees.ListShort.Length;i++) {
+				comboAssistant.Items.Add(Employees.ListShort[i].FName);
+				if(Employees.ListShort[i].EmployeeNum==AptCur.Assistant)
+					comboAssistant.SelectedIndex=i+1;
+			}
+			/*string[] enumLab=Enum.GetNames(typeof(LabCaseOld));
+			for(int i=0;i<enumLab.Length;i++) {
+				comboLab.Items.Add(Lan.g("enumLab",enumLab[i]));
+			}
+			comboLab.SelectedIndex=(int)AptCur.Lab;*/
+			comboInstructor.Items.Add(Lan.g(this,"none"));
+			comboInstructor.SelectedIndex=0;
+			for(int i=0;i<Instructors.List.Length;i++) {
+				comboInstructor.Items.Add(Instructors.List[i].LName+", "+Instructors.List[i].FName+", "+Instructors.List[i].Suffix);
+				if(Instructors.List[i].InstructorNum==AptCur.InstructorNum)
+					comboInstructor.SelectedIndex=i+1;
+			}
+			//SchoolClassNum was filled earlier.  Now selected:
+			comboSchoolClass.SelectedIndex=0;
+			for(int i=0;i<SchoolClasses.List.Length;i++) {
+				if(SchoolClasses.List[i].SchoolClassNum==AptCur.SchoolClassNum)
+					comboSchoolClass.SelectedIndex=i+1;
+			}
+			comboSchoolCourse.Items.Add(Lan.g(this,"none"));
+			comboSchoolCourse.SelectedIndex=0;
+			for(int i=0;i<SchoolCourses.List.Length;i++) {
+				comboSchoolCourse.Items.Add(SchoolCourses.List[i].CourseID+"  "+SchoolCourses.List[i].Descript);
+				if(SchoolCourses.List[i].SchoolCourseNum==AptCur.SchoolCourseNum)
+					comboSchoolCourse.SelectedIndex=i+1;
+			}
+			textGradePoint.Text=AptCur.GradePoint.ToString();
+			//IsNewPatient is set well before opening this form.
+			checkIsNewPatient.Checked=AptCur.IsNewPatient;
+			if(ContrApptSheet.MinPerIncr==10) {
+				tbTime.TopBorder[0,6]=Color.Black;
+				tbTime.TopBorder[0,12]=Color.Black;
+				tbTime.TopBorder[0,18]=Color.Black;
+				tbTime.TopBorder[0,24]=Color.Black;
+				tbTime.TopBorder[0,30]=Color.Black;
+				tbTime.TopBorder[0,36]=Color.Black;
+			}
+			else {
+				tbTime.TopBorder[0,4]=Color.Black;
+				tbTime.TopBorder[0,8]=Color.Black;
+				tbTime.TopBorder[0,12]=Color.Black;
+				tbTime.TopBorder[0,16]=Color.Black;
+				tbTime.TopBorder[0,20]=Color.Black;
+				tbTime.TopBorder[0,24]=Color.Black;
+				tbTime.TopBorder[0,28]=Color.Black;
+				tbTime.TopBorder[0,32]=Color.Black;
+				tbTime.TopBorder[0,36]=Color.Black;
+			}
+			FillPatient();
+			FillProcedures();
+			//FillTime();
+			//FillComm();
+		}
 
+		private void FillPatient(){
+			/*textHmPhone.Text=pat.HmPhone;
+			textWkPhone.Text=pat.WkPhone;
+			textWirelessPhone.Text=pat.WirelessPhone;
+			textAddrNote.Text=pat.AddrNote;
+			textCreditType.Text=pat.CreditType;
+			textBillingType.Text=DefB.GetName(DefCat.BillingTypes,pat.BillingType);
+			textBalance.Text=pat.EstBalance.ToString("F");
+			textFamilyBal.Text=fam.List[0].BalTotal.ToString("F");*/
+		}
+
+		private void FillProcedures(){
+			gridProc.BeginUpdate();
+			gridProc.Columns.Clear();
+			ODGridColumn col=new ODGridColumn(Lan.g("TableApptProcs","Stat"),40);
+			gridProc.Columns.Add(col);
+			col=new ODGridColumn(Lan.g("TableApptProcs","Priority"),55);
+			gridProc.Columns.Add(col);
+			col=new ODGridColumn(Lan.g("TableApptProcs","Tth"),30);
+			gridProc.Columns.Add(col);
+			col=new ODGridColumn(Lan.g("TableApptProcs","Surf"),40);
+			gridProc.Columns.Add(col);
+			col=new ODGridColumn(Lan.g("TableApptProcs","Description"),175);
+			gridProc.Columns.Add(col);
+			col=new ODGridColumn(Lan.g("TableApptProcs","Fee"),60,HorizontalAlignment.Right);
+			gridProc.Columns.Add(col);
+			gridProc.Rows.Clear();
+			ODGridRow row;
+			for(int i=0;i<DS.Tables["Procedure"].Rows.Count;i++){
+				row=new ODGridRow();
+				row.Cells.Add(DS.Tables["Procedure"].Rows[i]["status"].ToString());
+				row.Cells.Add(DS.Tables["Procedure"].Rows[i]["priority"].ToString());
+				row.Cells.Add(DS.Tables["Procedure"].Rows[i]["toothNum"].ToString());
+				row.Cells.Add(DS.Tables["Procedure"].Rows[i]["Surf"].ToString());
+				row.Cells.Add(DS.Tables["Procedure"].Rows[i]["descript"].ToString());
+				row.Cells.Add(DS.Tables["Procedure"].Rows[i]["fee"].ToString());
+				gridProc.Rows.Add(row);
+			}
+			gridProc.EndUpdate();
+			for(int i=0;i<DS.Tables["Procedure"].Rows.Count;i++){
+				if(DS.Tables["Procedure"].Rows[i]["attached"].ToString()=="1") {
+					gridProc.SetSelected(i,true);
+				}
+			}
 		}
 		
 		private void gridComm_MouseMove(object sender,MouseEventArgs e) {
@@ -788,12 +971,28 @@ namespace OpenDental{
 			int commright=gridComm.Right;
 			this.SuspendLayout();
 			gridPatient.Width=400;
+			gridComm.Width=commright-gridPatient.Right-2;//doing this before location prevents flicker
 			gridComm.Location=new Point(gridPatient.Right+2,gridComm.Top);
-			gridComm.Width=commright-gridComm.Left;
 			this.ResumeLayout();
 		}
 
+		///<summary>Called from butOK_Click and butPin_Click</summary>
+		private bool UpdateToDB(){
+			AptCur.IsNewPatient=checkIsNewPatient.Checked;
+			try {
+				Appointments.Update(AptCur,AptOld);
+			}
+			catch(ApplicationException ex) {
+				MessageBox.Show(ex.Message);
+				return false;
+			}
+			return true;
+		}
+
 		private void butOK_Click(object sender, System.EventArgs e) {
+			if(!UpdateToDB()){
+				return;
+			}
 			DialogResult=DialogResult.OK;
 		}
 

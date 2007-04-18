@@ -89,34 +89,7 @@ namespace OpenDental{
 		///<summary>Fills the specified array of Appointments using the supplied SQL command.</summary>
 		private static Appointment[] FillList(string command) {
 			DataTable table=General.GetTable(command);
-			Appointment[] list=new Appointment[table.Rows.Count];
-			for(int i=0;i<table.Rows.Count;i++) {
-				list[i]=new Appointment();
-				list[i].AptNum         =PIn.PInt   (table.Rows[i][0].ToString());
-				list[i].PatNum         =PIn.PInt   (table.Rows[i][1].ToString());
-				list[i].AptStatus      =(ApptStatus)PIn.PInt(table.Rows[i][2].ToString());
-				list[i].Pattern        =PIn.PString(table.Rows[i][3].ToString());
-				list[i].Confirmed      =PIn.PInt   (table.Rows[i][4].ToString());
-				list[i].AddTime        =PIn.PInt   (table.Rows[i][5].ToString());
-				list[i].Op             =PIn.PInt   (table.Rows[i][6].ToString());
-				list[i].Note           =PIn.PString(table.Rows[i][7].ToString());
-				list[i].ProvNum        =PIn.PInt   (table.Rows[i][8].ToString());
-				list[i].ProvHyg        =PIn.PInt   (table.Rows[i][9].ToString());
-				list[i].AptDateTime    =PIn.PDateT (table.Rows[i][10].ToString());
-				list[i].NextAptNum     =PIn.PInt   (table.Rows[i][11].ToString());
-				list[i].UnschedStatus  =PIn.PInt   (table.Rows[i][12].ToString());
-				list[i].Lab            =(LabCaseOld)PIn.PInt(table.Rows[i][13].ToString());
-				list[i].IsNewPatient   =PIn.PBool  (table.Rows[i][14].ToString());
-				list[i].ProcDescript   =PIn.PString(table.Rows[i][15].ToString());
-				list[i].Assistant      =PIn.PInt   (table.Rows[i][16].ToString());
-				list[i].InstructorNum  =PIn.PInt   (table.Rows[i][17].ToString());
-				list[i].SchoolClassNum =PIn.PInt   (table.Rows[i][18].ToString());
-				list[i].SchoolCourseNum=PIn.PInt   (table.Rows[i][19].ToString());
-				list[i].GradePoint     =PIn.PFloat (table.Rows[i][20].ToString());
-				list[i].ClinicNum      =PIn.PInt   (table.Rows[i][21].ToString());
-				list[i].IsHygiene      =PIn.PBool  (table.Rows[i][22].ToString());
-			}
-			return list;
+			return AppointmentB.TableToObjects(table);
 		}
 
 		public static DataSet GetApptEdit(int aptNum){
@@ -141,6 +114,14 @@ namespace OpenDental{
 
 		///<summary></summary>
 		private static void Insert(Appointment appt){
+			//make sure all fields are properly filled:
+			if(appt.Confirmed==0){
+				appt.Confirmed=DefB.Short[(int)DefCat.ApptConfirmed][0].DefNum;
+			}
+			if(appt.ProvNum==0){
+				appt.ProvNum=Providers.List[0].ProvNum;
+			}
+			//now, save to db----------------------------------------------------------------------------------------
 			if(PrefB.RandomKeys){
 				appt.AptNum=MiscData.GetKey("appointment","AptNum");
 			}
@@ -186,8 +167,12 @@ namespace OpenDental{
 			}
 		}
 
+		//public static void SaveData(Appointment apt) {
+
+		//}
+
 		///<summary>Updates only the changed columns and returns the number of rows affected.  Supply an oldApt for comparison.</summary>
-		private static int Update(Appointment appt, Appointment oldApt){
+		public static int Update(Appointment appt, Appointment oldApt){
 			bool comma=false;
 			string c = "UPDATE appointment SET ";
 			if(appt.PatNum!=oldApt.PatNum){

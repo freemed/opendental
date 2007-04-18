@@ -53,6 +53,7 @@
     <Compile Include="Business\AppointmentB.cs" />
     <Compile Include="Business\ChartModuleB.cs" />
     <Compile Include="Business\BenefitB.cs" />
+    <Compile Include="Business\PatientB.cs" />
     <Compile Include="Business\CovCatB.cs" />
     <Compile Include="Business\DefB.cs" />
     <Compile Include="Business\DocAttachB.cs" />

@@ -876,13 +876,15 @@ namespace OpenDental.Eclaims
 							//After mandated National Plan ID, then not used anymore.
 				//2320 CAS: Claim Level Adjustments. Not supported.
 				//2320 AMT: COB Payer paid amount
-					double paidOtherIns=0;
-					for(int j=0;j<claimProcs.Length;j++){
-						paidOtherIns+=ClaimProcs.ProcInsPayPri(claimProcList,claimProcs[j].ProcNum,claimProcs[j].PlanNum);
+					if(claim.ClaimType!="P"){
+						double paidOtherIns=0;
+						for(int j=0;j<claimProcs.Length;j++){
+							paidOtherIns+=ClaimProcs.ProcInsPayPri(claimProcList,claimProcs[j].ProcNum,claimProcs[j].PlanNum);
+						}
+						seg++;
+						sw.WriteLine("AMT*D*"//AMT01: D=Payor amount paid
+							+paidOtherIns.ToString("F")+"~");//AMT02: Amount
 					}
-					seg++;
-					sw.WriteLine("AMT*D*"//AMT01: D=Payor amount paid
-						+paidOtherIns.ToString("F")+"~");//AMT02: Amount
 				//2320 AMT: (medical) COB Total Non-Covered Amt (A8)
 				//2320 AMT: (medical) Remaining Patient liability (EAF)
 				//2320 AMT: COB Approved Amt (AAE)

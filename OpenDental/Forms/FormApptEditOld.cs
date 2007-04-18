@@ -1049,8 +1049,7 @@ namespace OpenDental{
 			}
 			textAddTime.MinVal=-1200;
 			textAddTime.MaxVal=1200;
-			textAddTime.Text=POut.PInt(AptCur.AddTime*
-				PIn.PInt(((Pref)PrefB.HList["AppointmentTimeIncrement"]).ValueString));
+			textAddTime.Text=POut.PInt(AptCur.AddTime*PIn.PInt(((Pref)PrefB.HList["AppointmentTimeIncrement"]).ValueString));
 			textNote.Text=AptCur.Note;
 			for(int i=0;i<DefB.Short[(int)DefCat.ApptProcsQuickAdd].Length;i++){
 				listQuickAdd.Items.Add(DefB.Short[(int)DefCat.ApptProcsQuickAdd][i].ItemName);
