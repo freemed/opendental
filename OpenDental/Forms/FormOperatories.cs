@@ -4,6 +4,7 @@ using System.Collections;
 using System.ComponentModel;
 using System.Windows.Forms;
 using OpenDentBusiness;
+using OpenDental.UI;
 
 namespace OpenDental{
 	/// <summary>
@@ -181,6 +182,21 @@ namespace OpenDental{
 		private void FillGrid(){
 			Operatories.Refresh();
 			gridMain.BeginUpdate();
+			gridMain.Columns.Clear();
+			ODGridColumn col=new ODGridColumn(Lan.g("TableOperatories","Op Name"),150);
+			gridMain.Columns.Add(col);
+			col=new ODGridColumn(Lan.g("TableOperatories","Abbrev"),70);
+			gridMain.Columns.Add(col);
+			col=new ODGridColumn(Lan.g("TableOperatories","IsHidden"),64,HorizontalAlignment.Center);
+			gridMain.Columns.Add(col);
+			col=new ODGridColumn(Lan.g("TableOperatories","Clinic"),80);
+			gridMain.Columns.Add(col);
+			col=new ODGridColumn(Lan.g("TableOperatories","Dentist"),70);
+			gridMain.Columns.Add(col);
+			col=new ODGridColumn(Lan.g("TableOperatories","Hygienist"),70);
+			gridMain.Columns.Add(col);
+			col=new ODGridColumn(Lan.g("TableOperatories","IsHygiene"),72,HorizontalAlignment.Center);
+			gridMain.Columns.Add(col);
 			gridMain.Rows.Clear();
 			UI.ODGridRow row;
 			for(int i=0;i<Operatories.List.Length;i++){
