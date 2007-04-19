@@ -401,6 +401,8 @@ namespace OpenDental {
 				"journalentry","JournalEntryNum",
 				//language: has no auto-inc col.
 				//languageforeign: has no auto-inc col.
+				"labcase","LabCaseNum",
+				"laboratory","LaboratoryNum",
 				"letter","LetterNum",
 				"lettermerge","LetterMergeNum",
 				"lettermergefield","FieldNum",

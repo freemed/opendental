@@ -62,6 +62,7 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Controls\ODErrorProvider.cs" />
+    <Compile Include="Utilities\ODImaging.cs" />
     <Compile Include="Utilities\ODFileUtils.cs" />
     <Compile Include="Utilities\ODMathLib.cs" />
     <Compile Include="Utilities\Logger.cs" />

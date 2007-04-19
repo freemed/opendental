@@ -3890,7 +3890,7 @@ namespace OpenDental{
 			To4_6_19();
 		}
 
-		///<summary></summary>
+		///<summary>Support for Oracle began with this version.</summary>
 		private void To4_6_19() {
 			if(FromVersion<new Version("4.6.19.0")) {
 				//Owandy X-ray Bridge created by SPK 10/06, added 2/22/07-----------------------------------------------------------
@@ -4234,8 +4234,56 @@ namespace OpenDental{
 						)";
 				}
 				General.NonQEx(command);
+				//Added after r177
+				/*if(FormChooseDatabase.DBtype==DatabaseType.MySql){
+					command="ALTER TABLE document ADD MountItemNum int NOT NULL";
+					General.NonQEx(command);
 
+					command="ALTER TABLE mount ADD MountNum int NOT NULL";
+					General.NonQEx(command);
+					command="ALTER TABLE mount ADD PatNum mediumint NOT NULL";
+					General.NonQEx(command);
+					command="ALTER TABLE mount ADD DocCategory smallint(5) NOT NULL";
+					General.NonQEx(command);
+					command="ALTER TABLE mount ADD DateCreated date NOT NULL default '0001-01-01'";
+					General.NonQEx(command);
+					command="ALTER TABLE mount ADD Description varchar(255) default ''";
+					General.NonQEx(command);
 
+					command="ALTER TABLE mountitem ADD MountItemNum int NOT NULL";
+					General.NonQEx(command);
+					command="ALTER TABLE mountitem ADD MountNum int NOT NULL";
+					General.NonQEx(command);
+					command="ALTER TABLE mountitem ADD Xpos mediumint(9) NOT NULL";
+					General.NonQEx(command);
+					command="ALTER TABLE mountitem ADD Ypos mediumint(9) NOT NULL";
+					General.NonQEx(command);
+
+				}else{//Oracle
+					command="ALTER TABLE document ADD MountItemNum int";
+					General.NonQEx(command);
+
+					command="ALTER TABLE mount ADD MountNum int";
+					General.NonQEx(command);
+					command="ALTER TABLE mount ADD PatNum int";
+					General.NonQEx(command);
+					command="ALTER TABLE mount ADD DocCategory int";
+					General.NonQEx(command);
+					command="ALTER TABLE mount ADD DateCreated date default '0001-01-01'";
+					General.NonQEx(command);
+					command="ALTER TABLE mount ADD Description varchar(255) default ''";
+					General.NonQEx(command);
+
+					command="ALTER TABLE mountitem ADD MountItemNum int";
+					General.NonQEx(command);
+					command="ALTER TABLE mountitem ADD MountNum int";
+					General.NonQEx(command);
+					command="ALTER TABLE mountitem ADD Xpos int";
+					General.NonQEx(command);
+					command="ALTER TABLE mountitem ADD Ypos int";
+					General.NonQEx(command);
+
+				}*/
 
 				command="UPDATE preference SET ValueString = '4.8.0.0' WHERE PrefName = 'DataBaseVersion'";
 				General.NonQEx(command);

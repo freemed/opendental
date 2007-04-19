@@ -1999,27 +1999,42 @@ namespace OpenDental{
 				Invoke(c,new object[] {sender,e});
 				return;
 			}
+			string fileExtention=".bmp";//The file extention to save the greyscale image as.
 			Bitmap capturedImage=xRayImageController.capturedImage;
 			Document doc=new Document();
 			doc.ImgType=ImageType.Radiograph;
-			doc.FileName=".tif";
+			doc.FileName=fileExtention;
 			doc.DateCreated=DateTime.Today;
 			doc.WithPat=PatCur.PatNum;
 			doc.DocCategory=DefB.GetByExactName(DefCat.ImageCats,GetCurrentFolderName(TreeDocuments.SelectedNode));
 			Documents.Insert(doc,PatCur);//creates filename and saves to db
-			bool saved=true;
-			try{				
-				capturedImage.Save(ODFileUtils.CombinePaths(patFolder,doc.FileName));
-			}catch{
-				MessageBox.Show(Lan.g(this,"Unable to save captured XRay image as document."));
-				saved=false;
+			try{
+				/*ImageCodecInfo[] codecs=ImageCodecInfo.GetImageEncoders();
+				int codec;
+				int codecFound=-1;
+				for(codec=0;codec<codecs.Length && codecFound==-1;codec++){
+					string[] extentions=codecs[codec].FilenameExtension.Split(new char[] {';'});
+					for(int i=0;i<extentions.Length && codecFound==-1;i++){
+						if(extentions[i].ToUpper()=="*"+fileExtention.ToUpper()){
+							codecFound=codec;
+						}
+					}
+				}
+				if(codecFound==-1){
+					throw new Exception("Could not find suitable codec for image file extention "+fileExtention);
+				}
+				EncoderParameters ep=new EncoderParameters(1);
+				capturedImage.Save(ODFileUtils.CombinePaths(patFolder,doc.FileName),codecs[codecFound],ep);*/
+				capturedImage.Save(ODFileUtils.CombinePaths(patFolder,doc.FileName),ImageFormat.Bmp);
+			}
+			catch(Exception ex){
 				Documents.Delete(doc);
+				//Raise an exception in the capture thread.
+				throw new Exception(Lan.g(this,"Unable to save captured XRay image as document")+": "+ex.Message);
 			}
-			if(saved){
-				DataRow tag=Documents.GetDocumentRow(doc.DocNum.ToString());
-				doc.DocCategory=DefB.GetByExactName(DefCat.ImageCats,GetCurrentFolderName(TreeDocuments.SelectedNode));
-				AddTreeDocumentNode(ref doc,tag,true);
-			}
+			DataRow tag=Documents.GetDocumentRow(doc.DocNum.ToString());
+			doc.DocCategory=DefB.GetByExactName(DefCat.ImageCats,GetCurrentFolderName(TreeDocuments.SelectedNode));
+			AddTreeDocumentNode(ref doc,tag,true);
 			//This capture was successful. Keep capturing more images until the capture is manually aborted.
 			//This will cause calls to OnCaptureAborted(), then OnCaptureBegin().
 			xRayImageController.CaptureXRay();
@@ -2311,7 +2326,7 @@ namespace OpenDental{
 			}
 			g.Dispose();
 			return retVal;
-		}		
+		}
 		
 		///<summary>Takes in a mount object and finds all the images pertaining to the mount, then concatonates them together into one large, unscaled image and returns that image.</summary>
 		//public static Image CreateMountImage(Mount mount){

@@ -64,7 +64,6 @@ namespace OpenDentBusiness {
 			switch (methodName){
 				default:
 					throw new ApplicationException("MethodName not found");
-					break;
 				case "Appointment.GetApptEdit":
 					return AppointmentB.GetApptEdit(parameters);
 			}
