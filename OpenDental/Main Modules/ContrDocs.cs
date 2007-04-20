@@ -23,6 +23,7 @@ using System.Security.Cryptography;
 using System.Text; 
 using System.Threading;
 using System.Windows.Forms;
+using System.Data;
 //using WIALib;
 using OpenDental.UI;
 using OpenDentBusiness;
@@ -661,7 +662,7 @@ namespace OpenDental{
 					doc.Description=fiList[i].Name;
 					doc.DocCategory=DefB.Short[(int)DefCat.ImageCats][0].DefNum;
 					doc.FileName=fiList[i].Name;
-					doc.WithPat=PatCur.PatNum;
+					doc.PatNum=PatCur.PatNum;
 					Documents.Insert(doc,PatCur);
 					countAdded++;
 				}
@@ -944,20 +945,34 @@ namespace OpenDental{
 				TreeDocuments.Nodes[i].SelectedImageIndex=1;
 				TreeDocuments.Nodes[i].ImageIndex=1;
 			}
-			int hiddenDocCount=0;
-			//Add all documents as stored in the database to the tree.
+			int hiddenObjectCount=0;
+			//Add all relevant documents as stored in the database to the tree for the current patient.
 			for(int i=0;i<DocumentList.Length;i++){
-				if(DefB.GetOrder(DefCat.ImageCats,DocumentList[i].DocCategory)!=-1) {//Don't add hidden documents.
-					AddTreeDocumentNode(ref DocumentList[i],documentTable.Rows[i],false);
+				if(DefB.GetOrder(DefCat.ImageCats,DocumentList[i].DocCategory)!=-1) {//Don't add hidden objects.
+					if(DocumentList[i].MountItemNum==0){//Do not add individual documents which are part of a mount object.
+						AddTreeDocumentNode(ref DocumentList[i],documentTable.Rows[i],false);
+					}
 				}else{
-					hiddenDocCount++;
+					hiddenObjectCount++;
 				}
 			}
+			//Add all mounts for the current patient to the tree-view.
+			Mount[] mounts=Mounts.Refresh(PatCur.PatNum);
+			for(int i=0;i<mounts.Length;i++){
+				if(DefB.GetOrder(DefCat.ImageCats,mounts[i].DocCategory)!=-1) {//Don't add hidden objects.
+					
+				}else{
+					hiddenObjectCount++;
+				}
+			}
+
+
 			TreeDocuments.ExpandAll();
 			SelectTreeDocumentNode(GetTreeDocumentNode(docNum));
 			if(verbose){
-				if(hiddenDocCount>0){
-					MessageBox.Show("There are currently "+hiddenDocCount+" hidden documents for this patient that are not visible in the file list.");
+				if(hiddenObjectCount>0){
+					MessageBox.Show("There are currently "+hiddenObjectCount+
+						" hidden objects for this patient that are not visible in the file list.");
 				}
 			}
 		}
@@ -1243,7 +1258,7 @@ namespace OpenDental{
 			}
 			doc.FileName=".jpg";
 			doc.DateCreated=DateTime.Today;
-			doc.WithPat=PatCur.PatNum;
+			doc.PatNum=PatCur.PatNum;
 			Documents.Insert(doc,PatCur);//creates filename and saves to db
 			bool saved=true;
 			try{//Create corresponding file.
@@ -1283,7 +1298,7 @@ namespace OpenDental{
 			}
 			if(saved){
 				DataRow tag=Documents.GetDocumentRow(doc.DocNum.ToString());
-				doc.DocCategory=DefB.GetByExactName(DefCat.ImageCats,GetCurrentFolderName(TreeDocuments.SelectedNode));
+				doc.DocCategory=GetCurrentCategory();
 				AddTreeDocumentNode(ref doc,tag,true);
 				FormDocInfo formDocInfo=new FormDocInfo(PatCur,doc,GetCurrentFolderName(TreeDocuments.SelectedNode));
 				formDocInfo.ShowDialog();
@@ -1318,9 +1333,9 @@ namespace OpenDental{
 				//Document.Insert will use this extension when naming:
 				doc.FileName=Path.GetExtension(openFileDialog.FileName);
 				doc.DateCreated=DateTime.Today;
-				doc.WithPat=PatCur.PatNum;
+				doc.PatNum=PatCur.PatNum;
 				doc.ImgType=HasImageExtension(doc.FileName)?ImageType.Photo:ImageType.Document;
-				doc.DocCategory=DefB.GetByExactName(DefCat.ImageCats,GetCurrentFolderName(TreeDocuments.SelectedNode));
+				doc.DocCategory=GetCurrentCategory();
 				Documents.Insert(doc,PatCur);//this assigns a filename and saves to db
 				bool copied=true;
 				try{
@@ -1368,7 +1383,7 @@ namespace OpenDental{
 			Document doc=new Document();
 			doc.FileName=".jpg";
 			doc.DateCreated=DateTime.Today;
-			doc.WithPat=PatCur.PatNum;
+			doc.PatNum=PatCur.PatNum;
 			doc.ImgType=ImageType.Photo;
 			Documents.Insert(doc,PatCur);//this assigns a filename and saves to db
 			string srcFile=ODFileUtils.CombinePaths(patFolder,doc.FileName);
@@ -1381,7 +1396,7 @@ namespace OpenDental{
 				return;
 			}
 			DataRow tag=Documents.GetDocumentRow(doc.DocNum.ToString());
-			doc.DocCategory=DefB.GetByExactName(DefCat.ImageCats,GetCurrentFolderName(TreeDocuments.SelectedNode));
+			doc.DocCategory=GetCurrentCategory();
 			AddTreeDocumentNode(ref doc,tag,true);
 			FormDocInfo formD=new FormDocInfo(PatCur,doc,GetCurrentFolderName(TreeDocuments.SelectedNode));
 			formD.ShowDialog();
@@ -1468,7 +1483,7 @@ namespace OpenDental{
 			//Document.Insert will use this extension when naming:
 			doc.FileName=Path.GetExtension(fileName);
 			doc.DateCreated=DateTime.Today;
-			doc.WithPat=PatCur.PatNum;
+			doc.PatNum=PatCur.PatNum;
 			doc.ImgType=ImageType.Document;
 			Documents.Insert(doc,PatCur);//this assigns a filename and saves to db
 			bool copied=true;
@@ -1481,7 +1496,7 @@ namespace OpenDental{
 			}
 			if(copied){
 				DataRow tag=Documents.GetDocumentRow(doc.DocNum.ToString());
-				doc.DocCategory=DefB.GetByExactName(DefCat.ImageCats,GetCurrentFolderName(TreeDocuments.SelectedNode));
+				doc.DocCategory=GetCurrentCategory();
 				AddTreeDocumentNode(ref doc,tag,true);
 				FormDocInfo FormD=new FormDocInfo(PatCur,doc,GetCurrentFolderName(TreeDocuments.SelectedNode));
 				FormD.ShowDialog();//some of the fields might get changed, but not the filename
@@ -1534,6 +1549,11 @@ namespace OpenDental{
 				return node.Text;
 			}
 			return"";
+		}
+
+		///<summary>Gets the document category of the current selection. The current selection can be a folder itself, or a document within a folder.</summary>
+		private int GetCurrentCategory(){
+			return DefB.GetByExactName(DefCat.ImageCats,GetCurrentFolderName(TreeDocuments.SelectedNode));
 		}
 
 		///<summary>A dataRow is stored as the tag for each node.  This Extracts the document object from any given node.</summary>
@@ -2005,26 +2025,10 @@ namespace OpenDental{
 			doc.ImgType=ImageType.Radiograph;
 			doc.FileName=fileExtention;
 			doc.DateCreated=DateTime.Today;
-			doc.WithPat=PatCur.PatNum;
-			doc.DocCategory=DefB.GetByExactName(DefCat.ImageCats,GetCurrentFolderName(TreeDocuments.SelectedNode));
+			doc.PatNum=PatCur.PatNum;
+			doc.DocCategory=GetCurrentCategory();
 			Documents.Insert(doc,PatCur);//creates filename and saves to db
 			try{
-				/*ImageCodecInfo[] codecs=ImageCodecInfo.GetImageEncoders();
-				int codec;
-				int codecFound=-1;
-				for(codec=0;codec<codecs.Length && codecFound==-1;codec++){
-					string[] extentions=codecs[codec].FilenameExtension.Split(new char[] {';'});
-					for(int i=0;i<extentions.Length && codecFound==-1;i++){
-						if(extentions[i].ToUpper()=="*"+fileExtention.ToUpper()){
-							codecFound=codec;
-						}
-					}
-				}
-				if(codecFound==-1){
-					throw new Exception("Could not find suitable codec for image file extention "+fileExtention);
-				}
-				EncoderParameters ep=new EncoderParameters(1);
-				capturedImage.Save(ODFileUtils.CombinePaths(patFolder,doc.FileName),codecs[codecFound],ep);*/
 				capturedImage.Save(ODFileUtils.CombinePaths(patFolder,doc.FileName),ImageFormat.Bmp);
 			}
 			catch(Exception ex){
@@ -2033,7 +2037,7 @@ namespace OpenDental{
 				throw new Exception(Lan.g(this,"Unable to save captured XRay image as document")+": "+ex.Message);
 			}
 			DataRow tag=Documents.GetDocumentRow(doc.DocNum.ToString());
-			doc.DocCategory=DefB.GetByExactName(DefCat.ImageCats,GetCurrentFolderName(TreeDocuments.SelectedNode));
+			doc.DocCategory=GetCurrentCategory();
 			AddTreeDocumentNode(ref doc,tag,true);
 			//This capture was successful. Keep capturing more images until the capture is manually aborted.
 			//This will cause calls to OnCaptureAborted(), then OnCaptureBegin().

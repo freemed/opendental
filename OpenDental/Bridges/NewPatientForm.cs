@@ -148,7 +148,7 @@ namespace OpenDental.Bridges
                         DocCur.DocCategory = iCategory;
                         DocCur.ImgType = ImageType.Document;
                         DocCur.Description = "New Patient Form";
-                        DocCur.WithPat = cd.PatCur.PatNum;
+                        DocCur.PatNum = cd.PatCur.PatNum;
                         Documents.Insert(DocCur,cd.PatCur);//this assigns a filename and saves to db
 
 

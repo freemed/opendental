@@ -14,7 +14,7 @@ namespace OpenDentBusiness{
 		///<summary>FK to definition.DefNum. Cateories for documents.</summary>
 		public int DocCategory;
 		///<summary>FK to patient.PatNum.  Patient folder that document is in.(for sharing situations later)</summary>
-		public int WithPat;
+		public int PatNum;
 		///<summary>The name of the file. Does not include any directory info.</summary>
 		public string FileName;
 		///<summary>Enum:ImageType eg. document, radiograph, photo, file</summary>
@@ -43,6 +43,8 @@ namespace OpenDentBusiness{
 		public int WindowingMin;
 		///<summary>The upper value of the "windowing" (contrast/brightness) for radiographs.  Default is 0(no windowing).  Max is 255.</summary>
 		public int WindowingMax;
+		///<summary>FK to mountitem.MountItemNum. If set to 0, then no mount item is associated with this document.</summary>
+		public int MountItemNum;
 
 		///<summary>Returns a copy of this Document.</summary>
 		public Document Copy() {
@@ -51,7 +53,7 @@ namespace OpenDentBusiness{
 			d.Description=Description;
 			d.DateCreated=DateCreated;
 			d.DocCategory=DocCategory;
-			d.WithPat=WithPat;
+			d.PatNum=PatNum;
 			d.FileName=FileName;
 			d.ImgType=ImgType;
 			d.IsFlipped=IsFlipped;

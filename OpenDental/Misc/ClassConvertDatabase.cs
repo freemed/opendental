@@ -3878,7 +3878,7 @@ namespace OpenDental{
 			To4_6_13();
 		}
 
-		///<summary></summary>
+		///<summary>Support for Oracle began with this version.</summary>
 		private void To4_6_13() {
 			if(FromVersion<new Version("4.6.13.0")) {
 				string command="";
@@ -3890,7 +3890,7 @@ namespace OpenDental{
 			To4_6_19();
 		}
 
-		///<summary>Support for Oracle began with this version.</summary>
+		///<summary></summary>
 		private void To4_6_19() {
 			if(FromVersion<new Version("4.6.19.0")) {
 				//Owandy X-ray Bridge created by SPK 10/06, added 2/22/07-----------------------------------------------------------
@@ -4096,9 +4096,9 @@ namespace OpenDental{
 				//Added after r146:
 				//Tesia clearinghouse------------------------------------
 				command=@"INSERT INTO clearinghouse(Description,ExportPath,IsDefault,Payors,Eformat,ReceiverID,
-					SenderID,Password,ResponsePath,CommBridge,ClientProgram) 
+					SenderID,Password,ResponsePath,CommBridge,ClientProgram,LastBatchNumber,ModemPort) 
 					VALUES('Tesia','C:\\Tesia\\Exports\\','0','','1','Tesia','','',
-					'','0','')";
+					'','0','','0','0')";//Valid for Oracle too.
 				General.NonQEx(command);
 				command="UPDATE preference SET ValueString = '4.7.1.0' WHERE PrefName = 'DataBaseVersion'";
 				General.NonQEx(command);
@@ -4118,7 +4118,7 @@ namespace OpenDental{
 			To4_8_0();
 		}
 
-		///<summary></summary>
+		///<summary>Oracle convertions work now up to this point, but fail in at least one and probably more places within this function.</summary>
 		private void To4_8_0() {
 			if(FromVersion<new Version("4.8.0.0")) {
 				string command="";
@@ -4234,56 +4234,57 @@ namespace OpenDental{
 						)";
 				}
 				General.NonQEx(command);
-				//Added after r177
-				/*if(FormChooseDatabase.DBtype==DatabaseType.MySql){
+				//Added after r180
+				if(FormChooseDatabase.DBtype==DatabaseType.MySql){
+					command="ALTER TABLE document CHANGE WithPat PatNum mediumint(8) unsigned NOT NULL default '0'";
+					General.NonQEx(command);
 					command="ALTER TABLE document ADD MountItemNum int NOT NULL";
 					General.NonQEx(command);
-
-					command="ALTER TABLE mount ADD MountNum int NOT NULL";
+					command=@"CREATE TABLE mount(
+						MountNum int NOT NULL auto_increment,
+						PatNum mediumint NOT NULL,
+						DocCategory smallint(5) NOT NULL,
+						DateCreated date NOT NULL default '0001-01-01',
+						Description varchar(255) default '',
+						ImgType tinyint(3) unsigned NOT NULL default '0',
+						PRIMARY KEY (MountNum)
+						) DEFAULT CHARSET=utf8";
 					General.NonQEx(command);
-					command="ALTER TABLE mount ADD PatNum mediumint NOT NULL";
+					command=@"CREATE TABLE mountitem(
+						MountItemNum int NOT NULL auto_increment,
+						MountNum int NOT NULL,
+						Xpos mediumint(9) NOT NULL,
+						Ypos mediumint(9) NOT NULL,
+						PRIMARY KEY (MountItemNum)
+						) DEFAULT CHARSET=utf8";
 					General.NonQEx(command);
-					command="ALTER TABLE mount ADD DocCategory smallint(5) NOT NULL";
-					General.NonQEx(command);
-					command="ALTER TABLE mount ADD DateCreated date NOT NULL default '0001-01-01'";
-					General.NonQEx(command);
-					command="ALTER TABLE mount ADD Description varchar(255) default ''";
-					General.NonQEx(command);
-
-					command="ALTER TABLE mountitem ADD MountItemNum int NOT NULL";
-					General.NonQEx(command);
-					command="ALTER TABLE mountitem ADD MountNum int NOT NULL";
-					General.NonQEx(command);
-					command="ALTER TABLE mountitem ADD Xpos mediumint(9) NOT NULL";
-					General.NonQEx(command);
-					command="ALTER TABLE mountitem ADD Ypos mediumint(9) NOT NULL";
-					General.NonQEx(command);
-
 				}else{//Oracle
+					command="ALTER TABLE document RENAME WithPat PatNum";
+					General.NonQEx(command);
 					command="ALTER TABLE document ADD MountItemNum int";
 					General.NonQEx(command);
+					command=@"CREATE TABLE mount(
+						MountNum int,
+						PatNum int,
+						DocCategory int,
+						DateCreated date default '0001-01-01',
+						Description varchar(255) default '',
+						ImgType int unsigned NOT NULL default '0',
+						PRIMARY KEY (MountNum)
+						)";
+					General.NonQEx(command);
+					command=@"CREATE TABLE mountitem(
+						MountItemNum int,
+						MountNum int,
+						Xpos int,
+						Ypos int,
+						PRIMARY KEY (MountItemNum)
+						)";
+					General.NonQEx(command);
+				}
 
-					command="ALTER TABLE mount ADD MountNum int";
-					General.NonQEx(command);
-					command="ALTER TABLE mount ADD PatNum int";
-					General.NonQEx(command);
-					command="ALTER TABLE mount ADD DocCategory int";
-					General.NonQEx(command);
-					command="ALTER TABLE mount ADD DateCreated date default '0001-01-01'";
-					General.NonQEx(command);
-					command="ALTER TABLE mount ADD Description varchar(255) default ''";
-					General.NonQEx(command);
 
-					command="ALTER TABLE mountitem ADD MountItemNum int";
-					General.NonQEx(command);
-					command="ALTER TABLE mountitem ADD MountNum int";
-					General.NonQEx(command);
-					command="ALTER TABLE mountitem ADD Xpos int";
-					General.NonQEx(command);
-					command="ALTER TABLE mountitem ADD Ypos int";
-					General.NonQEx(command);
 
-				}*/
 
 				command="UPDATE preference SET ValueString = '4.8.0.0' WHERE PrefName = 'DataBaseVersion'";
 				General.NonQEx(command);

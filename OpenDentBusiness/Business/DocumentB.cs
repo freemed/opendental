@@ -15,9 +15,9 @@ namespace OpenDentBusiness {
 			if(PrefB.RandomKeys) {
 				command+="DocNum,";
 			}
-			command+="Description,DateCreated,DocCategory,WithPat,FileName,ImgType,"
+			command+="Description,DateCreated,DocCategory,PatNum,FileName,ImgType,"
 				+"IsFlipped,DegreesRotated,ToothNumbers,Note,SigIsTopaz,Signature,CropX,CropY,CropW,CropH,"
-				+"WindowingMin,WindowingMax) VALUES(";
+				+"WindowingMin,WindowingMax,MountItemNum) VALUES(";
 			if(PrefB.RandomKeys) {
 				command+="'"+POut.PInt(doc.DocNum)+"', ";
 			}
@@ -25,7 +25,7 @@ namespace OpenDentBusiness {
 				 "'"+POut.PString(doc.Description)+"', "
 				+POut.PDate  (doc.DateCreated)+", "
 				+"'"+POut.PInt    (doc.DocCategory)+"', "
-				+"'"+POut.PInt    (doc.WithPat)+"', "
+				+"'"+POut.PInt    (doc.PatNum)+"', "
 				+"'"+POut.PString(doc.FileName)+"', "//this may simply be the extension at this point, or it may be the full filename.
 				+"'"+POut.PInt    ((int)doc.ImgType)+"', "
 				+"'"+POut.PBool  (doc.IsFlipped)+"', "
@@ -39,7 +39,8 @@ namespace OpenDentBusiness {
 				+"'"+POut.PInt(doc.CropW)+"',"
 				+"'"+POut.PInt(doc.CropH)+"',"
 				+"'"+POut.PInt(doc.WindowingMin)+"',"
-				+"'"+POut.PInt(doc.WindowingMax)+"')";
+				+"'"+POut.PInt(doc.WindowingMax)+"',"
+				+"'"+POut.PInt(doc.MountItemNum)+"')";
 			/*+"'"+POut.PDate  (LastAltered)+"', "//will later be used in backups
 					+"'"+POut.PBool  (IsDeleted)+"')";//ditto*/
 			//MessageBox.Show(cmd.CommandText);
@@ -63,7 +64,7 @@ namespace OpenDentBusiness {
 				}
 				doc.FileName+=doc.DocNum.ToString()+extension;//ensures unique name
 				//there is still a slight chance that someone manually added a file with this name, so quick fix:
-				command="SELECT FileName FROM document WHERE WithPat="+POut.PInt(doc.WithPat);
+				command="SELECT FileName FROM document WHERE PatNum="+POut.PInt(doc.PatNum);
 				DataTable table=dcon.GetTable(command);
 				string[] usedNames=new string[table.Rows.Count];
 				for(int i=0;i<table.Rows.Count;i++){
@@ -72,7 +73,7 @@ namespace OpenDentBusiness {
 				while(IsFileNameInList(doc.FileName,usedNames)) {
 					doc.FileName="x"+doc.FileName;
 				}
-				/*Document[] docList=GetAllWithPat(doc.WithPat);
+				/*Document[] docList=GetAllWithPat(doc.PatNum);
 				while(IsFileNameInList(doc.FileName,docList)) {
 					doc.FileName="x"+doc.FileName;
 				}*/
@@ -100,7 +101,7 @@ namespace OpenDentBusiness {
 				+ "Description = '"      +POut.PString(doc.Description)+"'"
 				+ ",DateCreated = "     +POut.PDate  (doc.DateCreated)
 				+ ",DocCategory = '"     +POut.PInt    (doc.DocCategory)+"'"
-				+ ",WithPat = '"         +POut.PInt    (doc.WithPat)+"'"
+				+ ",PatNum = '"         +POut.PInt    (doc.PatNum)+"'"
 				+ ",FileName    = '"     +POut.PString(doc.FileName)+"'"
 				+ ",ImgType    = '"      +POut.PInt    ((int)doc.ImgType)+"'"
 				+ ",IsFlipped   = '"     +POut.PBool  (doc.IsFlipped)+"'"
@@ -115,6 +116,7 @@ namespace OpenDentBusiness {
 				+ ",CropH       ='"			 +POut.PInt(doc.CropH)+"'"
 				+ ",WindowingMin ='"		 +POut.PInt(doc.WindowingMin)+"'"
 				+ ",WindowingMax ='"		 +POut.PInt(doc.WindowingMax)+"'"
+				+ ",MountItemNum ='"		 +POut.PInt(doc.MountItemNum)+"'"
 				+" WHERE DocNum = '"     +POut.PInt    (doc.DocNum)+"'";
 			//MessageBox.Show(cmd.CommandText);
 			DataConnection dcon=new DataConnection();

@@ -15,6 +15,8 @@ namespace OpenDentBusiness {
 		public DateTime DateCreated;
 		///<summary>Used to provide a document description in the image module tree-view.</summary>
 		public string Description;
+		///<summary>Enum:ImageType This is so that an image can be properly associated with the mount in the image module tree-view.</summary>
+		public ImageType ImgType;
 
 		///<summary></summary>
 		public Mount Copy() {

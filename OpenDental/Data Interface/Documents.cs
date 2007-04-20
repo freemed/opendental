@@ -39,7 +39,7 @@ namespace OpenDental{
 		/*
 		///<summary></summary>
 		public static Document[] GetAllWithPat(int patNum) {
-			string command="SELECT * FROM document WHERE WithPat="+POut.PInt(patNum);
+			string command="SELECT * FROM document WHERE PatNum="+POut.PInt(patNum);
 			return RefreshAndFill(command);
 		}*/
 
@@ -53,7 +53,7 @@ namespace OpenDental{
 			doc.Description   =PIn.PString(document[1].ToString());
 			doc.DateCreated   =PIn.PDate(document[2].ToString());
 			doc.DocCategory   =PIn.PInt(document[3].ToString());
-			doc.WithPat       =PIn.PInt(document[4].ToString());
+			doc.PatNum       =PIn.PInt(document[4].ToString());
 			doc.FileName      =PIn.PString(document[5].ToString());
 			doc.ImgType       =(ImageType)PIn.PInt(document[6].ToString());
 			doc.IsFlipped     =PIn.PBool(document[7].ToString());
@@ -68,6 +68,7 @@ namespace OpenDental{
 			doc.CropH         =PIn.PInt(document[16].ToString());
 			doc.WindowingMin  =PIn.PInt(document[17].ToString());
 			doc.WindowingMax  =PIn.PInt(document[18].ToString());
+			doc.MountItemNum  =PIn.PInt(document[19].ToString());
 			return doc;
 		}
 
@@ -169,7 +170,7 @@ namespace OpenDental{
 			}
 			string command="SELECT document.DocNum,document.FileName,patient.ImageFolder "
 				+"FROM document "
-				+"LEFT JOIN patient ON patient.PatNum=document.WithPat "
+				+"LEFT JOIN patient ON patient.PatNum=document.PatNum "
 				+"WHERE document.DocNum = '"+docNums[0].ToString()+"'";
 			for(int i=1;i<docNums.Count;i++){
 				command+=" OR document.DocNum = '"+docNums[i].ToString()+"'";
@@ -238,13 +239,19 @@ namespace OpenDental{
 				ContrDocs.ApplySettings.ALL);
 			return true;
 		}
+
+		///<summary>Returns the document which corresponds to the given mountitem.</summary>
+		public static Document GetDocumentForMountItem(int mountItem) {
+			string command="SELECT * FROM document WHERE MountItemNum='"+mountItem+"'";
+			DataTable result=General.GetTable(command);
+			if(result.Rows.Count!=1) {
+				Logger.openlog.Log("Documents.GetDocumentForMountItem: There are "+result.Rows.Count+
+					" documents associated with mount item "+mountItem+" when exactly 1 "+
+					"document was expected.",Logger.Severity.ERROR);
+			}
+			return Fill(result.Rows[0]);
+		}
+
 	}	
   
-	/*public struct DocBackup{
-		public string FileName;
-		public DateTime LastAltered;
-		public bool IsDeleted;
-		public string PatFolder;
-	}*/
-
 }
