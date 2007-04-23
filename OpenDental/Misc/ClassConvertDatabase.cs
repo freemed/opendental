@@ -4147,6 +4147,8 @@ namespace OpenDental{
 					General.NonQEx(command);
 					command="UPDATE clearinghouse SET ISA07='ZZ' WHERE ReceiverID!='330989922' AND ReceiverID!='660610220' AND ReceiverID!='AOS'";
 					General.NonQEx(command);
+				}else{
+					//TODO:
 				}
 				if(FormChooseDatabase.DBtype==DatabaseType.MySql) {
 					command="ALTER TABLE clearinghouse CHANGE ReceiverID ISA08 varchar(255)";
@@ -4317,6 +4319,20 @@ namespace OpenDental{
 						)";
 					General.NonQEx(command);
 				}
+				//Added after r184
+				if(FormChooseDatabase.DBtype==DatabaseType.MySql){
+					command="ALTER TABLE procedurecode ADD PreExisting tinyint(1) NOT NULL default '1'";
+				}else{
+					command="ALTER TABLE procedurecode ADD PreExisting int(1) NOT NULL default '1'";
+				}
+				General.NonQEx(command);
+				command=@"CREATE TABLE proclicense(
+						ProcLicenseNum int(5) NOT NULL default '0',
+						ADACode varchar(15) default '',
+						Descript varchar(255) default '',
+						PRIMARY KEY (ProcLicenseNum)
+						)";
+				General.NonQEx(command);
 
 
 				command="UPDATE preference SET ValueString = '4.8.0.0' WHERE PrefName = 'DataBaseVersion'";

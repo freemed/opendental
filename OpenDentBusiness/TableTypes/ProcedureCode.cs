@@ -59,6 +59,8 @@ namespace OpenDentBusiness{
 		public bool IsCanadianLab;
 		///<Summary>Not a database column.  Only used for xml import function.</Summary>
 		private string procCatDescript;
+		///<summary>Set to true if this procedure code existed before ADA code distribution changed, false otherwise.</summary>
+		public bool PreExisting;
 
 		public ProcedureCode(){
 			ProcTime="/X/";
@@ -102,6 +104,7 @@ namespace OpenDentBusiness{
 			p.GraphicColor=GraphicColor;
 			p.LaymanTerm=LaymanTerm;
 			p.IsCanadianLab=IsCanadianLab;
+			p.PreExisting=PreExisting;
 			return p;
 		}
 
