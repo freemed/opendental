@@ -87,6 +87,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Required dlls\VBbridges.dll</HintPath>
     </Reference>
+    <Reference Include="xImageDeviceManager, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Required dlls\xImageDeviceManager.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Bridges\Apteryx.cs" />
@@ -2781,10 +2785,6 @@
     <ProjectReference Include="..\UnitTests\UnitTests.csproj">
       <Project>{7069E361-5105-4A13-8D66-5D528B582BA6}</Project>
       <Name>UnitTests</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\xImageDeviceManager\xImageDeviceManager\xImageDeviceManager.csproj">
-      <Project>{62F6365F-F372-4637-A6C6-699574F89533}</Project>
-      <Name>xImageDeviceManager</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
