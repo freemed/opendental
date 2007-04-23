@@ -4122,60 +4122,68 @@ namespace OpenDental{
 		private void To4_8_0() {
 			if(FromVersion<new Version("4.8.0.0")) {
 				string command="";
-				//Turn all hardcoded clearinghouse fields into dynamic fields---------------------------------------------------------
-				command="ALTER TABLE clearinghouse ADD ISA05 varchar(255) AFTER Eformat";
-				General.NonQEx(command);
-				command="UPDATE clearinghouse SET ISA05='30' WHERE ReceiverID='660610220' OR ReceiverID='AOS'";
-				General.NonQEx(command);
-				command="UPDATE clearinghouse SET ISA05='ZZ' WHERE ReceiverID!='660610220' AND ReceiverID!='AOS'";
-				General.NonQEx(command);
-				command="ALTER TABLE clearinghouse ADD SenderTIN varchar(255) AFTER ISA05";
-				General.NonQEx(command);
+				//To eliminate problems for Oracle upgrade:
 				int practiceDefaultProv=PrefB.GetInt("PracticeDefaultProv");
-				command="SELECT SSN FROM provider WHERE ProvNum="+POut.PInt(practiceDefaultProv);
-				string defProvSSN=General.GetTableEx(command).Rows[0][0].ToString().Replace("-","");
-				command="UPDATE clearinghouse SET SenderTIN='"+POut.PString(defProvSSN)+"' "
-					+"WHERE ReceiverID='660610220' OR ReceiverID='AOS' OR ReceiverID='113504607'";//Inmediata,AOS, or Tesia
-				General.NonQEx(command);
-				command="ALTER TABLE clearinghouse ADD ISA07 varchar(255) AFTER SenderTIN";
-				General.NonQEx(command);
-				command="UPDATE clearinghouse SET ISA07='30' WHERE ReceiverID='330989922' OR ReceiverID='660610220' OR ReceiverID='AOS'";
-				General.NonQEx(command);
-				command="UPDATE clearinghouse SET ISA07='ZZ' WHERE ReceiverID!='330989922' AND ReceiverID!='660610220' AND ReceiverID!='AOS'";
-				General.NonQEx(command);
+				if(FormChooseDatabase.DBtype==DatabaseType.MySql) {
+					//Turn all hardcoded clearinghouse fields into dynamic fields---------------------------------------------------------
+					command="ALTER TABLE clearinghouse ADD ISA05 varchar(255) AFTER Eformat";
+					General.NonQEx(command);
+					command="UPDATE clearinghouse SET ISA05='30' WHERE ReceiverID='660610220' OR ReceiverID='AOS'";
+					General.NonQEx(command);
+					command="UPDATE clearinghouse SET ISA05='ZZ' WHERE ReceiverID!='660610220' AND ReceiverID!='AOS'";
+					General.NonQEx(command);
+					command="ALTER TABLE clearinghouse ADD SenderTIN varchar(255) AFTER ISA05";
+					General.NonQEx(command);
+					//Moved the following line up, out of the if statement, for a clean build.
+					//int practiceDefaultProv=PrefB.GetInt("PracticeDefaultProv");
+					command="SELECT SSN FROM provider WHERE ProvNum="+POut.PInt(practiceDefaultProv);
+					string defProvSSN=General.GetTableEx(command).Rows[0][0].ToString().Replace("-","");
+					command="UPDATE clearinghouse SET SenderTIN='"+POut.PString(defProvSSN)+"' "
+						+"WHERE ReceiverID='660610220' OR ReceiverID='AOS' OR ReceiverID='113504607'";//Inmediata,AOS, or Tesia
+					General.NonQEx(command);
+					command="ALTER TABLE clearinghouse ADD ISA07 varchar(255) AFTER SenderTIN";
+					General.NonQEx(command);
+					command="UPDATE clearinghouse SET ISA07='30' WHERE ReceiverID='330989922' OR ReceiverID='660610220' OR ReceiverID='AOS'";
+					General.NonQEx(command);
+					command="UPDATE clearinghouse SET ISA07='ZZ' WHERE ReceiverID!='330989922' AND ReceiverID!='660610220' AND ReceiverID!='AOS'";
+					General.NonQEx(command);
+				}
 				if(FormChooseDatabase.DBtype==DatabaseType.MySql) {
 					command="ALTER TABLE clearinghouse CHANGE ReceiverID ISA08 varchar(255)";
 					General.NonQEx(command);
-				}
-				else{//oracle.  Is this valid?:
-					command="ALTER TABLE clearinghouse RENAME ReceiverID ISA08";
+				//}
+				//else{//oracle.  Is this valid?:
+				//    //command="ALTER TABLE clearinghouse RENAME ReceiverID ISA08";
+				//    //This should work but, because of other syntax errors, the table must be dropped and recreated.
+				//    command="ALTER TABLE clearinghouse RENAME COLUMN ReceiverID TO ISA08";
+				//    General.NonQEx(command);
+				//}
+					command="ALTER TABLE clearinghouse ADD ISA15 varchar(255) AFTER ISA08";
+					General.NonQEx(command);
+					command="UPDATE clearinghouse SET ISA15='P'";
+					General.NonQEx(command);
+					//Is this valid for Oracle?:
+					command="ALTER TABLE clearinghouse DROP SenderID";
+					General.NonQEx(command);
+					command="ALTER TABLE clearinghouse ADD SenderName varchar(255)";
+					General.NonQEx(command);
+					command="ALTER TABLE clearinghouse ADD SenderTelephone varchar(255)";
+					General.NonQEx(command);
+					command="ALTER TABLE clearinghouse ADD GS03 varchar(255)";
+					General.NonQEx(command);
+					command="SELECT Abbr FROM provider WHERE ProvNum="+POut.PInt(practiceDefaultProv);
+					string AOSnumber=General.GetTableEx(command).Rows[0][0].ToString();
+					command="UPDATE clearinghouse SET SenderName='"+POut.PString(AOSnumber)+"' WHERE ISA08='AOS'";
+					General.NonQEx(command);
+					command="UPDATE clearinghouse SET SenderName='"+POut.PString(PrefB.GetString("PracticeTitle"))+"' "
+						+"WHERE ISA08='660610220' OR ISA08='113504607'";//Inmediata or Tesia
+					General.NonQEx(command);
+					command="UPDATE clearinghouse SET SenderTelephone='"+POut.PString(PrefB.GetString("PracticePhone"))+"' "
+						+"WHERE ISA08='660610220' OR ISA08='113504607' OR ISA08='AOS'";//Inmediata or Tesia or AOS
+					General.NonQEx(command);
+					command="UPDATE clearinghouse SET GS03=ISA08";
 					General.NonQEx(command);
 				}
-				command="ALTER TABLE clearinghouse ADD ISA15 varchar(255) AFTER ISA08";
-				General.NonQEx(command);
-				command="UPDATE clearinghouse SET ISA15='P'";
-				General.NonQEx(command);
-				//Is this valid for Oracle?:
-				command="ALTER TABLE clearinghouse DROP SenderID";
-				General.NonQEx(command);
-				command="ALTER TABLE clearinghouse ADD SenderName varchar(255)";
-				General.NonQEx(command);
-				command="ALTER TABLE clearinghouse ADD SenderTelephone varchar(255)";
-				General.NonQEx(command);
-				command="ALTER TABLE clearinghouse ADD GS03 varchar(255)";
-				General.NonQEx(command);
-				command="SELECT Abbr FROM provider WHERE ProvNum="+POut.PInt(practiceDefaultProv);
-				string AOSnumber=General.GetTableEx(command).Rows[0][0].ToString();
-				command="UPDATE clearinghouse SET SenderName='"+POut.PString(AOSnumber)+"' WHERE ISA08='AOS'";
-				General.NonQEx(command);
-				command="UPDATE clearinghouse SET SenderName='"+POut.PString(PrefB.GetString("PracticeTitle"))+"' "
-					+"WHERE ISA08='660610220' OR ISA08='113504607'";//Inmediata or Tesia
-				General.NonQEx(command);
-				command="UPDATE clearinghouse SET SenderTelephone='"+POut.PString(PrefB.GetString("PracticePhone"))+"' "
-					+"WHERE ISA08='660610220' OR ISA08='113504607' OR ISA08='AOS'";//Inmediata or Tesia or AOS
-				General.NonQEx(command);
-				command="UPDATE clearinghouse SET GS03=ISA08";
-				General.NonQEx(command);
 				//added after r167:
 				if(FormChooseDatabase.DBtype==DatabaseType.MySql) {
 					command="DROP TABLE IF EXISTS laboratory";
@@ -4190,14 +4198,23 @@ namespace OpenDental{
 						) DEFAULT CHARSET=utf8";
 				}
 				else {
+//                    command=@"CREATE TABLE laboratory(
+//						LaboratoryNum int NOT NULL,
+//						Description varchar(255),
+//						Phone varchar(255),
+//						Notes text,
+//						LabSlip text,
+//						PRIMARY KEY (LaboratoryNum)
+//						)";
 					command=@"CREATE TABLE laboratory(
-						LaboratoryNum int NOT NULL,
+						LaboratoryNum number(8,0) NOT NULL,
 						Description varchar(255),
 						Phone varchar(255),
-						Notes text,
-						LabSlip text,
-						PRIMARY KEY (LaboratoryNum)
-						)";
+						Notes varchar2(4000),
+						LabSlip varchar2(4000)
+						);
+						ALTER TABLE laboratory
+						ADD CONSTRAINT pk_laboratory PRIMARY KEY (LaboratoryNum);";
 				}
 				General.NonQEx(command);
 				//added after r168:
@@ -4219,19 +4236,37 @@ namespace OpenDental{
 						) DEFAULT CHARSET=utf8";
 				}
 				else {
+//                    command=@"CREATE TABLE labcase(
+//						LabCaseNum int NOT NULL,
+//						PatNum int NOT NULL,
+//						LaboratoryNum int NOT NULL,
+//						AptNum int NOT NULL,
+//						PlannedAptNum int NOT NULL,
+//						DateTimeDue date NOT NULL default '0001-01-01',
+//						DateTimeCreated date NOT NULL default '0001-01-01',
+//						DateTimeSent date NOT NULL default '0001-01-01',
+//						DateTimeRecd date NOT NULL default '0001-01-01',
+//						DateTimeChecked date NOT NULL default '0001-01-01',
+//						PRIMARY KEY (LabCaseNum)
+//						)";
 					command=@"CREATE TABLE labcase(
-						LabCaseNum int NOT NULL,
-						PatNum int NOT NULL,
-						LaboratoryNum int NOT NULL,
-						AptNum int NOT NULL,
-						PlannedAptNum int NOT NULL,
-						DateTimeDue date NOT NULL default '0001-01-01',
-						DateTimeCreated date NOT NULL default '0001-01-01',
-						DateTimeSent date NOT NULL default '0001-01-01',
-						DateTimeRecd date NOT NULL default '0001-01-01',
-						DateTimeChecked date NOT NULL default '0001-01-01',
-						PRIMARY KEY (LabCaseNum)
-						)";
+						LabCaseNum number(8,0) NOT NULL,
+						PatNum number(8,0) NOT NULL,
+						LaboratoryNum number(8,0) NOT NULL,
+						AptNum number(8,0) NOT NULL,
+						PlannedAptNum number(8,0) NOT NULL,
+						DateTimeDue date NOT NULL,
+						DateTimeCreated date NOT NULL,
+						DateTimeSent date NOT NULL,
+						DateTimeRecd date NOT NULL,
+						DateTimeChecked date NOT NULL);
+						ALTER TABLE labcase
+						ADD CONSTRAINT pk_labcase PRIMARY KEY (LabCaseNum);
+						alter table labcase modify DateTimeDue default '01-JAN-0001';
+						alter table labcase modify DateTimeCreated default '01-JAN-0001';
+						alter table labcase modify DateTimeSent default '01-JAN-0001';
+						alter table labcase modify DateTimeRecd default '01-JAN-0001';
+						alter table labcase modify DateTimeChecked default '01-JAN-0001';";
 				}
 				General.NonQEx(command);
 				//Added after r180
@@ -4282,8 +4317,6 @@ namespace OpenDental{
 						)";
 					General.NonQEx(command);
 				}
-
-
 
 
 				command="UPDATE preference SET ValueString = '4.8.0.0' WHERE PrefName = 'DataBaseVersion'";
