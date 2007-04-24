@@ -431,6 +431,7 @@ namespace OpenDental {
 				"procbuttonitem","ProcButtonItemNum",
 				//procedurecode: has no auto-inc col.
 				"procedurelog","ProcNum",
+				"proclicense","ProcLicenseNum",
 				"procnote","ProcNoteNum",
 				"proctp","ProcTPNum",
 				"program","ProgramNum",

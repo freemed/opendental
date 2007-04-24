@@ -4,6 +4,7 @@ using System.Data;
 using System.Drawing;
 using System.Windows.Forms;
 using OpenDentBusiness;
+using System.Text.RegularExpressions;
 
 namespace OpenDental{
 	///<summary></summary>
@@ -292,7 +293,61 @@ namespace OpenDental{
 			General.NonQ(command);
 		}
 
-		
+		///<summary>Checks other tables which use ADACodes elsewhere in the database and deletes codes from the procedurecode table which are not references in any of the other tables.</summary>
+		public static void DeleteUnusedADACodes(){
+			//First collect the individual ADA codes currently in use from the various different tables.
+			const string ADACodePattern=".*D([0-9]{4}).*";
+			bool[] ADACodesUsed=new bool[10000];//All elements start out as false automatically (C# feature).
+			string command="SELECT ADACodeStart,ADACodeEnd from appointmentrule";
+			DataTable dt=General.GetTableEx(command);
+			for(int i=0;i<dt.Rows.Count;i++){
+				Match mStart=(new Regex(ADACodePattern,RegexOptions.IgnoreCase)).Match(
+					PIn.PString(dt.Rows[i]["ADACodeStart"].ToString()));
+				Match mEnd=(new Regex(ADACodePattern,RegexOptions.IgnoreCase)).Match(
+					PIn.PString(dt.Rows[i]["ADACodeEnd"].ToString()));
+				if(mStart.Success && mEnd.Success){
+					int startNum=Convert.ToInt32(mStart.Result("$1"));
+					int endNum=Convert.ToInt32(mEnd.Result("$1"));
+					for(int j=startNum;j<=endNum;j++){
+						ADACodesUsed[j]=true;
+					}
+				}
+			}
+			//References to ADACodes which should be directly kept (as opposed to ranges shown above).
+			string[] simpleADACodeReferenceTables=new string[] {
+				"autocodeitem",
+				"benefit",
+				"fee",
+				"procbuttonitem",
+				"procedurelog",
+				"proctp",
+				"repeatcharge",
+			};
+			for(int i=0;i<simpleADACodeReferenceTables.Length;i++){
+				command="SELECT ADACode FROM "+simpleADACodeReferenceTables[i];
+				dt=General.GetTableEx(command);
+				for(int j=0;j<dt.Rows.Count;j++){
+					Match m=(new Regex(ADACodePattern,RegexOptions.IgnoreCase)).Match(
+						PIn.PString(dt.Rows[j]["ADACode"].ToString()));
+					if(m.Success){
+						int adanum=Convert.ToInt32(m.Result("$1"));
+						ADACodesUsed[adanum]=true;
+					}
+				}
+			}
+			//Now remove unused ADA codes (those marked false in the ADACodesUsed array).
+			command="";
+			for(int i=0;i<ADACodesUsed.Length;i++){
+				if(!ADACodesUsed[i]){
+					if(command==""){//We only construct the command if there are codes to be deleted.
+						command="DELETE FROM procedurecode WHERE ADACode='D"+i.ToString().PadLeft(4,'0')+"'";
+					}else{
+						command+=" OR ADACode='D"+i.ToString().PadLeft(4,'0')+"'";
+					}
+				}
+			}
+			General.NonQEx(command);
+		}
 
 	}
 

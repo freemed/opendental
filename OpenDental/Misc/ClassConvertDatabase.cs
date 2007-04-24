@@ -4319,20 +4319,27 @@ namespace OpenDental{
 						)";
 					General.NonQEx(command);
 				}
-				//Added after r184
+				//Added after r186
 				if(FormChooseDatabase.DBtype==DatabaseType.MySql){
-					command="ALTER TABLE procedurecode ADD PreExisting tinyint(1) NOT NULL default '1'";
-				}else{
-					command="ALTER TABLE procedurecode ADD PreExisting int(1) NOT NULL default '1'";
-				}
-				General.NonQEx(command);
-				command=@"CREATE TABLE proclicense(
-						ProcLicenseNum int(5) NOT NULL default '0',
+					command="ALTER TABLE procedurecode ADD PreExisting tinyint(1) NOT NULL default '0'";
+					General.NonQEx(command);
+					command=@"CREATE TABLE proclicense(
+						ProcLicenseNum mediumint(5) NOT NULL auto_increment,
 						ADACode varchar(15) default '',
 						Descript varchar(255) default '',
 						PRIMARY KEY (ProcLicenseNum)
 						)";
-				General.NonQEx(command);
+					General.NonQEx(command);
+				}else{
+					command="ALTER TABLE procedurecode ADD PreExisting int(1) NOT NULL default '0'";
+					command=@"CREATE TABLE proclicense(
+						ProcLicenseNum int(5) NOT NULL,
+						ADACode varchar(15) default '',
+						Descript varchar(255) default '',
+						PRIMARY KEY (ProcLicenseNum)
+						)";
+					General.NonQEx(command);
+				}
 
 
 				command="UPDATE preference SET ValueString = '4.8.0.0' WHERE PrefName = 'DataBaseVersion'";
