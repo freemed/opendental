@@ -293,7 +293,7 @@ namespace OpenDental{
 			General.NonQ(command);
 		}
 
-		///<summary>Checks other tables which use ADACodes elsewhere in the database and deletes codes from the procedurecode table which are not references in any of the other tables.</summary>
+		///<summary>Checks other tables which use ADACodes elsewhere in the database and deletes codes from the procedurecode table which are not referenced in any of the other tables. This is used in FormLicenseMissing.cs.</summary>
 		public static void DeleteUnusedADACodes(){
 			//First collect the individual ADA codes currently in use from the various different tables.
 			const string ADACodePattern=".*D([0-9]{4}).*";
@@ -339,14 +339,33 @@ namespace OpenDental{
 			command="";
 			for(int i=0;i<ADACodesUsed.Length;i++){
 				if(!ADACodesUsed[i]){
+					string ADACode="D"+i.ToString().PadLeft(4,'0');
 					if(command==""){//We only construct the command if there are codes to be deleted.
-						command="DELETE FROM procedurecode WHERE ADACode='D"+i.ToString().PadLeft(4,'0')+"'";
+						command="DELETE FROM procedurecode WHERE ADACode='"+ADACode+"'";
 					}else{
-						command+=" OR ADACode='D"+i.ToString().PadLeft(4,'0')+"'";
+						command+=" OR ADACode='"+ADACode+"'";
 					}
 				}
 			}
 			General.NonQEx(command);
+		}
+
+		///<summary>Returns the list of all ADACodes which are in the form D####.</summary>
+		public static string[] GetAllStandardADACodes(){
+			//Get all values currently in the ADACocde column.
+			string command="SELECT ADACode from procedurecode";
+			DataTable dt=General.GetTableEx(command);
+			//Now weed-out values not in the actual ADA code form (D####).
+			ArrayList resultList=new ArrayList();
+			for(int i=0;i<dt.Rows.Count;i++){
+				string ADACode=PIn.PString(dt.Rows[i]["ADACode"].ToString());
+				Match m=(new Regex("^D[0-9]{4}$",RegexOptions.IgnoreCase)).Match(ADACode);
+				if(m.Success){
+					resultList.Add(ADACode);
+				}
+			}
+			//Finally, convert the list into an array.
+			return (string[])resultList.ToArray(typeof(string));
 		}
 
 	}
@@ -357,13 +376,3 @@ namespace OpenDental{
 
 
 }
-
-
-
-
-
-
-
-
-
-

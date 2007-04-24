@@ -30,7 +30,7 @@ namespace OpenDental {
 			for(int i=0;i<procLicenses.Length;i++) {
 				ODGridRow row=new ODGridRow();
 				row.Cells.Add(procLicenses[i].ADACode);
-				row.Cells.Add(procLicenses[i].Description);
+				row.Cells.Add(procLicenses[i].Descript);
 				codeGrid.Rows.Add(row);
 			}
 			codeGrid.EndUpdate();
@@ -55,7 +55,7 @@ namespace OpenDental {
 			if(!Regex.IsMatch(procLicense.ADACode,"^D[0-9]{4}$")) {
 				return Lan.g("FormLicenseTool","ADA code must be in the form D####");
 			}
-			if(procLicense.Description.Length<1) {
+			if(procLicense.Descript.Length<1) {
 				return Lan.g("FormLicenseTool","Description must be specified");
 			}
 			if(!ProcLicenses.Unique(procLicense)){
@@ -68,7 +68,7 @@ namespace OpenDental {
 			//Check the provided input to be sure it is kosher before it is added to the db.
 			ProcLicense procLicense=new ProcLicense();
 			procLicense.ADACode=adacode.Text;
-			procLicense.Description=description.Text;
+			procLicense.Descript=description.Text;
 			string errors=IsValidCode(procLicense);
 			if(errors!=""){
 				MessageBox.Show(errors);
@@ -93,6 +93,7 @@ namespace OpenDental {
 		private void checkcompliancebutton_Click(object sender,EventArgs e) {
 			FormLicenseMissing flm=new FormLicenseMissing();
 			flm.ShowDialog();
+			RefreshGrid();//In case the user merged codes into the proclicense table.
 		}
 
 		private void codeGrid_CellDoubleClick(object sender,ODGridClickEventArgs e) {
@@ -101,6 +102,11 @@ namespace OpenDental {
 			if(flte.ShowDialog()==DialogResult.OK){
 				RefreshGrid();
 			}
+		}
+
+		///<summary>Updates ADA codes from the proclicense table into the procedurecode table.</summary>
+		private void mergecodesbutton_Click(object sender,EventArgs e){
+			ProcLicenses.MigrateToProcedureCodes();
 		}
 
 	}

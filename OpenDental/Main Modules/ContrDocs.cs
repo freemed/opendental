@@ -23,7 +23,6 @@ using System.Security.Cryptography;
 using System.Text; 
 using System.Threading;
 using System.Windows.Forms;
-using System.Data;
 //using WIALib;
 using OpenDental.UI;
 using OpenDentBusiness;

@@ -10,13 +10,13 @@ namespace OpenDentBusiness {
 		///<summary>The ADA code used to identify procedures.</summary>
 		public string ADACode;
 		///<summary>The description of the ADA code.</summary>
-		public string Description;
+		public string Descript;
 
 		public ProcLicense Copy(){
 			ProcLicense pl=new ProcLicense();
 			pl.ProcLicenseNum=ProcLicenseNum;
 			pl.ADACode=ADACode;
-			pl.Description=Description;
+			pl.Descript=Descript;
 			return pl;
 		}
 

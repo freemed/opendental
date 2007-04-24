@@ -10,13 +10,13 @@ using OpenDentBusiness;
 namespace OpenDental {
 	public partial class FormLicenseToolEdit:Form {
 
-		ProcLicense originalProcLicense;
+		ProcLicense procLicense;
 
-		public FormLicenseToolEdit(ProcLicense procLicense) {
-			originalProcLicense=procLicense.Copy();
+		public FormLicenseToolEdit(ProcLicense pProcLicense) {
+			procLicense=pProcLicense.Copy();
 			InitializeComponent();
-			adacode.Text=procLicense.ADACode;
-			description.Text=procLicense.Description;
+			adacode.Text=pProcLicense.ADACode;
+			description.Text=pProcLicense.Descript;
 		}
 
 		private void adacode_KeyPress(object sender,KeyPressEventArgs e) {
@@ -34,16 +34,16 @@ namespace OpenDental {
 		}
 
 		private void okbutton_Enter(object sender,EventArgs e) {
-			originalProcLicense.ADACode=adacode.Text;
-			originalProcLicense.Description=description.Text;
-			string errors=FormLicenseTool.IsValidCode(originalProcLicense);
+			procLicense.ADACode=adacode.Text;
+			procLicense.Descript=description.Text;
+			string errors=FormLicenseTool.IsValidCode(procLicense);
 			if(errors!="") {
 				MessageBox.Show(errors);
 				return;
 			}
-			//Update edited code to db.
+			//Update edited ADA code to db.
 			try{
-				ProcLicenses.Update(originalProcLicense);
+				ProcLicenses.Update(procLicense);
 			}catch(Exception ex){
 				MessageBox.Show(ex.Message);
 				adacode.Focus();
@@ -59,7 +59,7 @@ namespace OpenDental {
 		}
 
 		private void deletebutton_Click(object sender,EventArgs e) {
-			ProcLicenses.Delete(originalProcLicense);
+			ProcLicenses.Delete(procLicense);
 			this.DialogResult=DialogResult.OK;
 			Close();
 		}

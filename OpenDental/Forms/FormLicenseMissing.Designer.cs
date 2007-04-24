@@ -27,14 +27,13 @@ namespace OpenDental {
 			this.printbutton = new System.Windows.Forms.Button();
 			this.okbutton = new System.Windows.Forms.Button();
 			this.codeGrid = new OpenDental.UI.ODGrid();
-			this.mergecodesbutton = new System.Windows.Forms.Button();
 			this.SuspendLayout();
 			// 
 			// printbutton
 			// 
 			this.printbutton.Image = global::OpenDental.Properties.Resources.butPrintSmall;
 			this.printbutton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.printbutton.Location = new System.Drawing.Point(164,456);
+			this.printbutton.Location = new System.Drawing.Point(147,456);
 			this.printbutton.Name = "printbutton";
 			this.printbutton.Size = new System.Drawing.Size(75,23);
 			this.printbutton.TabIndex = 1;
@@ -44,7 +43,7 @@ namespace OpenDental {
 			// 
 			// okbutton
 			// 
-			this.okbutton.Location = new System.Drawing.Point(377,456);
+			this.okbutton.Location = new System.Drawing.Point(228,456);
 			this.okbutton.Name = "okbutton";
 			this.okbutton.Size = new System.Drawing.Size(75,23);
 			this.okbutton.TabIndex = 2;
@@ -63,21 +62,11 @@ namespace OpenDental {
 			this.codeGrid.Title = null;
 			this.codeGrid.TranslationName = null;
 			// 
-			// mergecodesbutton
-			// 
-			this.mergecodesbutton.Location = new System.Drawing.Point(245,456);
-			this.mergecodesbutton.Name = "mergecodesbutton";
-			this.mergecodesbutton.Size = new System.Drawing.Size(126,23);
-			this.mergecodesbutton.TabIndex = 8;
-			this.mergecodesbutton.Text = "Merge Codes";
-			this.mergecodesbutton.UseVisualStyleBackColor = true;
-			// 
 			// FormLicenseMissing
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F,13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(464,501);
-			this.Controls.Add(this.mergecodesbutton);
 			this.Controls.Add(this.okbutton);
 			this.Controls.Add(this.printbutton);
 			this.Controls.Add(this.codeGrid);
@@ -93,6 +82,5 @@ namespace OpenDental {
 		private OpenDental.UI.ODGrid codeGrid;
 		private System.Windows.Forms.Button printbutton;
 		private System.Windows.Forms.Button okbutton;
-		private System.Windows.Forms.Button mergecodesbutton;
 	}
 }

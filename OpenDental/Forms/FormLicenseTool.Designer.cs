@@ -29,8 +29,10 @@ namespace OpenDental {
 			this.label1 = new System.Windows.Forms.Label();
 			this.label2 = new System.Windows.Forms.Label();
 			this.adacode = new System.Windows.Forms.TextBox();
-			this.codeGrid = new OpenDental.UI.ODGrid();
 			this.checkcompliancebutton = new System.Windows.Forms.Button();
+			this.printbutton = new System.Windows.Forms.Button();
+			this.codeGrid = new OpenDental.UI.ODGrid();
+			this.mergecodesbutton = new System.Windows.Forms.Button();
 			this.SuspendLayout();
 			// 
 			// description
@@ -79,6 +81,27 @@ namespace OpenDental {
 			this.adacode.TabIndex = 1;
 			this.adacode.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.adacode_KeyPress);
 			// 
+			// checkcompliancebutton
+			// 
+			this.checkcompliancebutton.Location = new System.Drawing.Point(296,545);
+			this.checkcompliancebutton.Name = "checkcompliancebutton";
+			this.checkcompliancebutton.Size = new System.Drawing.Size(129,23);
+			this.checkcompliancebutton.TabIndex = 6;
+			this.checkcompliancebutton.Text = "Check Compliance";
+			this.checkcompliancebutton.UseVisualStyleBackColor = true;
+			this.checkcompliancebutton.Click += new System.EventHandler(this.checkcompliancebutton_Click);
+			// 
+			// printbutton
+			// 
+			this.printbutton.Image = global::OpenDental.Properties.Resources.butPrintSmall;
+			this.printbutton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.printbutton.Location = new System.Drawing.Point(83,545);
+			this.printbutton.Name = "printbutton";
+			this.printbutton.Size = new System.Drawing.Size(75,23);
+			this.printbutton.TabIndex = 7;
+			this.printbutton.Text = "Print";
+			this.printbutton.UseVisualStyleBackColor = true;
+			// 
 			// codeGrid
 			// 
 			this.codeGrid.HScrollVisible = false;
@@ -92,21 +115,23 @@ namespace OpenDental {
 			this.codeGrid.TranslationName = null;
 			this.codeGrid.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.codeGrid_CellDoubleClick);
 			// 
-			// checkcompliancebutton
+			// mergecodesbutton
 			// 
-			this.checkcompliancebutton.Location = new System.Drawing.Point(190,545);
-			this.checkcompliancebutton.Name = "checkcompliancebutton";
-			this.checkcompliancebutton.Size = new System.Drawing.Size(129,29);
-			this.checkcompliancebutton.TabIndex = 6;
-			this.checkcompliancebutton.Text = "Check Compliance";
-			this.checkcompliancebutton.UseVisualStyleBackColor = true;
-			this.checkcompliancebutton.Click += new System.EventHandler(this.checkcompliancebutton_Click);
+			this.mergecodesbutton.Location = new System.Drawing.Point(164,545);
+			this.mergecodesbutton.Name = "mergecodesbutton";
+			this.mergecodesbutton.Size = new System.Drawing.Size(126,23);
+			this.mergecodesbutton.TabIndex = 9;
+			this.mergecodesbutton.Text = "Merge Codes";
+			this.mergecodesbutton.UseVisualStyleBackColor = true;
+			this.mergecodesbutton.Click += new System.EventHandler(this.mergecodesbutton_Click);
 			// 
 			// FormLicenseTool
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F,13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(520,605);
+			this.Controls.Add(this.mergecodesbutton);
+			this.Controls.Add(this.printbutton);
 			this.Controls.Add(this.checkcompliancebutton);
 			this.Controls.Add(this.adacode);
 			this.Controls.Add(this.label2);
@@ -131,5 +156,7 @@ namespace OpenDental {
 		private System.Windows.Forms.Label label2;
 		private System.Windows.Forms.TextBox adacode;
 		private System.Windows.Forms.Button checkcompliancebutton;
+		private System.Windows.Forms.Button printbutton;
+		private System.Windows.Forms.Button mergecodesbutton;
 	}
 }
