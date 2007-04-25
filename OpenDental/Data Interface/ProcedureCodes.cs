@@ -296,7 +296,7 @@ namespace OpenDental{
 		///<summary>Checks other tables which use ADACodes elsewhere in the database and deletes codes from the procedurecode table which are not referenced in any of the other tables. This is used in FormLicenseMissing.cs.</summary>
 		public static void DeleteUnusedADACodes(){
 			//First collect the individual ADA codes currently in use from the various different tables.
-			const string ADACodePattern=".*D([0-9]{4}).*";
+			const string ADACodePattern="^D([0-9]{4})$";
 			bool[] ADACodesUsed=new bool[10000];//All elements start out as false automatically (C# feature).
 			string command="SELECT ADACodeStart,ADACodeEnd from appointmentrule";
 			DataTable dt=General.GetTableEx(command);
