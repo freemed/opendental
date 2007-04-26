@@ -41,6 +41,7 @@ using CodeBase;
 using System.Security.AccessControl;
 using System.Xml;
 using System.Xml.XPath;
+using SparksToothChart;
 
 #if(ORA_DB)
 using OD_CRYPTO;
@@ -202,6 +203,7 @@ namespace OpenDental{
 		private string connStr;
 		private string key;
 		private MenuItem menuLicenseCompliance;
+		private MenuItem menuItemGraphics;
 		private string dconnStr;
 
 		///<summary></summary>
@@ -241,6 +243,7 @@ namespace OpenDental{
 			this.menuItemLogOff = new System.Windows.Forms.MenuItem();
 			this.menuItemFile = new System.Windows.Forms.MenuItem();
 			this.menuItemPrinter = new System.Windows.Forms.MenuItem();
+			this.menuItemGraphics = new System.Windows.Forms.MenuItem();
 			this.menuItem6 = new System.Windows.Forms.MenuItem();
 			this.menuItemConfig = new System.Windows.Forms.MenuItem();
 			this.menuItem7 = new System.Windows.Forms.MenuItem();
@@ -401,6 +404,7 @@ namespace OpenDental{
 			this.menuItemFile.Index = 1;
 			this.menuItemFile.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
             this.menuItemPrinter,
+            this.menuItemGraphics,
             this.menuItem6,
             this.menuItemConfig,
             this.menuItem7,
@@ -414,25 +418,31 @@ namespace OpenDental{
 			this.menuItemPrinter.Text = "&Printers";
 			this.menuItemPrinter.Click += new System.EventHandler(this.menuItemPrinter_Click);
 			// 
+			// menuItemGraphics
+			// 
+			this.menuItemGraphics.Index = 1;
+			this.menuItemGraphics.Text = "Graphics";
+			this.menuItemGraphics.Click += new System.EventHandler(this.menuItemGraphics_Click);
+			// 
 			// menuItem6
 			// 
-			this.menuItem6.Index = 1;
+			this.menuItem6.Index = 2;
 			this.menuItem6.Text = "-";
 			// 
 			// menuItemConfig
 			// 
-			this.menuItemConfig.Index = 2;
+			this.menuItemConfig.Index = 3;
 			this.menuItemConfig.Text = "&Choose Database";
 			this.menuItemConfig.Click += new System.EventHandler(this.menuItemConfig_Click);
 			// 
 			// menuItem7
 			// 
-			this.menuItem7.Index = 3;
+			this.menuItem7.Index = 4;
 			this.menuItem7.Text = "-";
 			// 
 			// menuItemExit
 			// 
-			this.menuItemExit.Index = 4;
+			this.menuItemExit.Index = 5;
 			this.menuItemExit.ShowShortcut = false;
 			this.menuItemExit.Text = "E&xit";
 			this.menuItemExit.Click += new System.EventHandler(this.menuItemExit_Click);
@@ -1314,14 +1324,14 @@ namespace OpenDental{
 			this.myOutlookBar.ImageList = this.imageList32;
 			this.myOutlookBar.Location = new System.Drawing.Point(0,0);
 			this.myOutlookBar.Name = "myOutlookBar";
-			this.myOutlookBar.Size = new System.Drawing.Size(51,411);
+			this.myOutlookBar.Size = new System.Drawing.Size(51,369);
 			this.myOutlookBar.TabIndex = 18;
 			this.myOutlookBar.Text = "outlookBar1";
 			this.myOutlookBar.ButtonClicked += new OpenDental.ButtonClickedEventHandler(this.myOutlookBar_ButtonClicked);
 			// 
 			// FormOpenDental
 			// 
-			this.ClientSize = new System.Drawing.Size(982,411);
+			this.ClientSize = new System.Drawing.Size(982,369);
 			this.Controls.Add(this.ContrManage2);
 			this.Controls.Add(this.ContrChart2);
 			this.Controls.Add(this.ContrDocs2);
@@ -2296,6 +2306,13 @@ namespace OpenDental{
 			FormEmailSetup FormE=new FormEmailSetup();
 			FormE.ShowDialog();
 			SecurityLogs.MakeLogEntry(Permissions.Setup,0,"Email");
+		}
+
+		private void menuItemGraphics_Click(object sender,EventArgs e) {
+			FormGraphics fg=new FormGraphics();
+			if(fg.ShowDialog()==DialogResult.OK){
+				ContrChart2.InitializeLocalData();
+			}
 		}
 
 		private void menuItemImaging_Click(object sender,System.EventArgs e) {

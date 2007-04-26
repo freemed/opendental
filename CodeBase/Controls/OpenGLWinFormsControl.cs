@@ -180,9 +180,12 @@ namespace CodeBase {
 					long bpp=pfd.cColorBits;
 					long depth=pfd.cDepthBits;
 					bool pal=(pfd.iPixelType==Gdi.PFD_TYPE_COLORINDEX);
-					bool mcd=(pfd.dwFlags & Gdi.PFD_GENERIC_FORMAT)!=0 && (pfd.dwFlags & Gdi.PFD_GENERIC_ACCELERATED)!=0;//hard or soft
-					bool soft=(pfd.dwFlags & Gdi.PFD_GENERIC_FORMAT)!=0 && (pfd.dwFlags & Gdi.PFD_GENERIC_ACCELERATED)==0;//soft only
-					bool icd=(pfd.dwFlags & Gdi.PFD_GENERIC_FORMAT)==0 && (pfd.dwFlags & Gdi.PFD_GENERIC_ACCELERATED)==0;
+					bool icd=(pfd.dwFlags & Gdi.PFD_GENERIC_FORMAT)==0 && 
+						(pfd.dwFlags & Gdi.PFD_GENERIC_ACCELERATED)==0;//full hardware accel.
+					bool mcd=(pfd.dwFlags & Gdi.PFD_GENERIC_FORMAT)!=0 && 
+						(pfd.dwFlags & Gdi.PFD_GENERIC_ACCELERATED)!=0;//general/partial hardware accel.
+					bool soft=(pfd.dwFlags & Gdi.PFD_GENERIC_FORMAT)!=0 && 
+						(pfd.dwFlags & Gdi.PFD_GENERIC_ACCELERATED)==0;//software only
 					bool opengl=(pfd.dwFlags & Gdi.PFD_SUPPORT_OPENGL)!=0;
 					bool window=(pfd.dwFlags & Gdi.PFD_DRAW_TO_WINDOW)!=0;
 					bool bitmap=(pfd.dwFlags & Gdi.PFD_DRAW_TO_BITMAP)!=0;
@@ -192,17 +195,23 @@ namespace CodeBase {
 						q-=100000000;
 						goodEnough=false;
 					}
-					//THE NET EFFECT OF THE NEXT TWO CONDITIONAL STATEMENTS IS TO PERFER SOFTWARE RENDERING OVER ALL ELSE.
-					//We prefer pixel formats which are not fully accelerated, since fully accelerated formats more
-					//commonly lead to graphic failures.
+					//Is this format a format with full hardware acceleration?
 					if(icd){
-						q-=100000;
-						goodEnough=false;
+						if(p_acc==1 && (mcd || icd)){
+							q+=10000;
+						}else{
+							q-=100000;
+							goodEnough=false;
+						}
 					}
-					//Also avoid partial acceleration, but perfer it more than full acceleration.
+					//This is a format with partial hardware acceleration?
 					if(mcd){
-						q-=10000;
-						goodEnough=false;
+						if(p_acc==1 && (mcd || icd)) {
+							q+=1000;
+						}else{
+							q-=10000;
+							goodEnough=false;
+						}
 					}
 					if(opengl && window){
 						q+=0x8000;
@@ -242,7 +251,7 @@ namespace CodeBase {
 						goodEnough=false;
 					}
 					if(bitmap){
-						q+=0x0001;
+						q-=0x0001;
 					}
 					if(mcd) {
 						q+=0x0040;
@@ -253,8 +262,13 @@ namespace CodeBase {
 					if(q>maxqual || goodEnough){//Take the smallest index (the smallest options) that meet the requirements.
 						maxqual=q; 
 						maxindex=i;
+						autoSwapBuffers=dbuff;
+						usehardware=(icd || mcd);
+						colorBits=(byte)bpp;
+						depthBits=(byte)depth;
 					}
-					Logger.openlog.Log(this,"ChoosePixelFormatEx",(i==maxindex?"*":"")+"Evaluated format with index="+i+"  qval="+q+":",Logger.Severity.INFO);
+					Logger.openlog.Log(this,"ChoosePixelFormatEx",(i==maxindex?"*":"")
+						+"Evaluated format with index="+i+"  qval="+q+":",Logger.Severity.INFO);
 					Logger.openlog.Log(this,"ChoosePixelFormatEx","color depth="+bpp,Logger.Severity.INFO);
 					Logger.openlog.Log(this,"ChoosePixelFormatEx","z-depth="+depth,Logger.Severity.INFO);
 					Logger.openlog.Log(this,"ChoosePixelFormatEx","palette="+(pal?"Yes":"No"),Logger.Severity.INFO);

@@ -15,6 +15,8 @@ namespace SparksToothChart {
 		private Color colorBackground;
 		private Color colorBackSimple=Color.FromArgb(150,145,153);//constant
 		private bool simpleMode=true;
+		///<summary>True for hardware graphics, false for software graphics.</summary>
+		private bool hardwareMode=false;
 		private GraphicalToothChartControl toothChart;
 		private Color colorText;
 		private Color colorTextHighlight;
@@ -141,6 +143,16 @@ namespace SparksToothChart {
 			}
 		}
 
+		///<summary>Set to true when using hardware rendering in OpenGL, and false otherwise. This will have no effect when in simple 2D graphics mode.</summary>
+		public bool UseHardware{
+			get{
+				return hardwareMode;
+			}
+			set{
+				hardwareMode=value;
+			}
+		}
+
 		#endregion Properties
 
 		private void ResetControls(){
@@ -151,7 +163,7 @@ namespace SparksToothChart {
 			}
 			else{
 				//pictBox.Visible=false;
-				toothChart=new GraphicalToothChartControl();
+				toothChart=new GraphicalToothChartControl(hardwareMode);
 				toothChart.ColorBackground = colorBackground;
 				toothChart.Dock = System.Windows.Forms.DockStyle.Fill;
 				toothChart.Location = new System.Drawing.Point(0,0);

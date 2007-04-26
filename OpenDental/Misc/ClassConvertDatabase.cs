@@ -49,7 +49,7 @@ namespace OpenDental{
 				MsgBox.Show(this,"Cannot convert this database version which was only for development purposes.");
 				return false;
 			}
-			if(FromVersion < new Version("4.8.1.0")){
+			if(FromVersion < new Version("4.8.3.0")){
 				if(MessageBox.Show(Lan.g(this,"Your database will now be converted")+"\r"
 					+Lan.g(this,"from version")+" "+FromVersion.ToString()+"\r"
 					+Lan.g(this,"to version")+" "+ToVersion.ToString()+"\r"
@@ -4346,6 +4346,37 @@ namespace OpenDental{
 				command="INSERT INTO preference VALUES ('ADAComplianceDateTime','')";
 				General.NonQEx(command);
 				command="UPDATE preference SET ValueString = '4.8.1.0' WHERE PrefName = 'DataBaseVersion'";
+				General.NonQEx(command);
+			}
+			To4_8_3();
+		}
+
+		///<summary>First version where individual computer preferences were introduced.</summary>
+		private void To4_8_3() {
+			if(FromVersion<new Version("4.8.3.0")) {
+				string command="";
+				if(FormChooseDatabase.DBtype==DatabaseType.MySql){
+					command=@"CREATE TABLE computerpref(
+						ComputerPrefNum int NOT NULL auto_increment,
+						ComputerName varchar(64) NOT NULL,
+						GraphicsUseHardware tinyint(1) NOT NULL default '0',
+						GraphicsSimple tinyint(1) NOT NULL default '0',
+						PRIMARY KEY (ComputerPrefNum)
+						) DEFAULT CHARSET=utf8";
+				}else{//Assume Oracle
+					command=@"CREATE TABLE computerpref(
+						ComputerPrefNum int NOT NULL,
+						ComputerName varchar(64) NOT NULL,
+						GraphicsUseHardware int(1) NOT NULL default '0',
+						GraphicsSimple int(1) NOT NULL default '0',
+						PRIMARY KEY (ComputerPrefNum)
+						)";
+				}
+				General.NonQEx(command);
+
+
+
+				command="UPDATE preference SET ValueString = '4.8.3.0' WHERE PrefName = 'DataBaseVersion'";
 				General.NonQEx(command);
 			}
 			//To4_8_?();

@@ -62,7 +62,9 @@ namespace SparksToothChart {
 		///<summary>This gets set to true during certain operations where we do not need to redraw all the teeth.  Specifically, during tooth selection where only the color of the tooth number text needs to change.  In this case, the rest of the scene will not be rendered again.</summary>
 		private bool suspendRendering;
 
-		public GraphicalToothChartControl() {
+		///<summary>Specify the hardware mode to create the tooth chart with. Set hardwareMode=true to try for hardware accelerated graphics, and set hardwareMode=false to try and get software graphics.</summary>
+		public GraphicalToothChartControl(bool hardwareMode) {
+			usehardware=hardwareMode;
 			InitializeComponent();
 			this.TaoSetupContext += new System.EventHandler(ToothChart_TaoSetupContext);
 			this.TaoRenderScene += new System.EventHandler(ToothChart_TaoRenderScene);
@@ -77,8 +79,8 @@ namespace SparksToothChart {
 			ColorTextHighlight=Color.Black;//.Purple;
 			ColorBackHighlight=Color.White;//.Orange;
 			Gl.glDisable(Gl.GL_TEXTURE);//Disable texturing, since we don't use it.
-																												//This should prevent a glCopyPixels() problem in
-																												//Gdi.SwapBuffersFast() on ATI graphics cards.
+																	//This should prevent a glCopyPixels() problem in
+																	//Gdi.SwapBuffersFast() on ATI graphics cards.
 			ResetTeeth();
 		}
 

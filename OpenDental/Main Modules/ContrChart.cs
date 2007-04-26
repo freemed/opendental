@@ -1219,7 +1219,6 @@ namespace OpenDental{
 			this.toothChart.ColorBackground = System.Drawing.Color.Empty;
 			this.toothChart.Location = new System.Drawing.Point(0,146);
 			this.toothChart.Name = "toothChart";
-			this.toothChart.SimpleMode = true;
 			this.toothChart.Size = new System.Drawing.Size(410,307);
 			this.toothChart.TabIndex = 194;
 			this.toothChart.UseInternational = false;
@@ -2262,15 +2261,15 @@ namespace OpenDental{
 
 		///<summary>Called every time prefs are changed from any workstation.</summary>
 		public void InitializeLocalData(){
-			if(PrefB.GetBool("ToothChartLowerQuality")){
-				toothChart.SimpleMode=true;
-				butBig.Visible=false;
-			}
-			else{
-				toothChart.SimpleMode=false;
+			ComputerPref computerPrefs=ComputerPrefs.GetForLocalComputer();
+			toothChart.UseHardware=computerPrefs.GraphicsUseHardware;
+			toothChart.SimpleMode=computerPrefs.GraphicsSimple;	//Must be last preference set here, because this causes the 
+																													//pixel format to be recreated.
+			if(computerPrefs.GraphicsSimple){
+				butBig.Visible=false;				
+			}else{
 				butBig.Visible=true;
 			}
-			butBig.Visible=false;
 			if(PatCur!=null){
 				FillToothChart(true);
 			}

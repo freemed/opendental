@@ -98,6 +98,7 @@
     <Compile Include="TableTypes\ClockEvent.cs" />
     <Compile Include="TableTypes\Commlog.cs" />
     <Compile Include="TableTypes\Computer.cs" />
+    <Compile Include="TableTypes\ComputerPref.cs" />
     <Compile Include="TableTypes\Contact.cs" />
     <Compile Include="TableTypes\CanadianClaim.cs" />
     <Compile Include="TableTypes\CanadianExtract.cs" />

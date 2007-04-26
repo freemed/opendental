@@ -370,6 +370,7 @@ namespace OpenDental {
 				"clockevent","ClockEventNum",
 				"commlog","CommlogNum",
 				"computer","ComputerNum",
+				"computerpref","ComputerPrefNum",
 				"contact","ContactNum",
 				//county: has no auto-inc cols.
 				"covcat","CovCatNum",

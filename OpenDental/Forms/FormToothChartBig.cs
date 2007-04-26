@@ -69,7 +69,6 @@ namespace OpenDental{
 			this.toothChart.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.toothChart.Location = new System.Drawing.Point(0,0);
 			this.toothChart.Name = "toothChart";
-			this.toothChart.SimpleMode = false;
 			this.toothChart.Size = new System.Drawing.Size(926,858);
 			this.toothChart.TabIndex = 0;
 			this.toothChart.UseInternational = false;
@@ -90,12 +89,6 @@ namespace OpenDental{
 		#endregion
 
 		private void FormToothChartingBig_Load(object sender,EventArgs e) {
-			if(PrefB.GetBool("ToothChartLowerQuality")) {
-				toothChart.SimpleMode=true;
-			}
-			else {
-				toothChart.SimpleMode=false;
-			}
 			FillToothChart();
 			//toothChart.Refresh();
 		}
