@@ -40,7 +40,6 @@ namespace OpenDental{
 		private RadioButton radioShowIDnone;
 		private OpenDental.UI.Button butLanguages;
 		private Label label4;
-		private CheckBox checkToothChartLowerQuality;
         private CheckBox checkSolidBlockouts;
 		private CheckBox checkAgingMonthly;
 		private System.Windows.Forms.Label label1;// Required designer variable.
@@ -76,6 +75,7 @@ namespace OpenDental{
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
 			this.checkTreatPlanShowIns = new System.Windows.Forms.CheckBox();
 			this.groupBox5 = new System.Windows.Forms.GroupBox();
+			this.checkAgingMonthly = new System.Windows.Forms.CheckBox();
 			this.checkStatementShowReturnAddress = new System.Windows.Forms.CheckBox();
 			this.checkBalancesDontSubtractIns = new System.Windows.Forms.CheckBox();
 			this.textStatementsCalcDueDate = new OpenDental.ValidNumber();
@@ -97,9 +97,7 @@ namespace OpenDental{
 			this.radioShowIDchartNum = new System.Windows.Forms.RadioButton();
 			this.butLanguages = new OpenDental.UI.Button();
 			this.label4 = new System.Windows.Forms.Label();
-			this.checkToothChartLowerQuality = new System.Windows.Forms.CheckBox();
 			this.checkSolidBlockouts = new System.Windows.Forms.CheckBox();
-			this.checkAgingMonthly = new System.Windows.Forms.CheckBox();
 			this.groupBox1.SuspendLayout();
 			this.groupBox5.SuspendLayout();
 			this.groupBox2.SuspendLayout();
@@ -216,6 +214,15 @@ namespace OpenDental{
 			this.groupBox5.TabIndex = 52;
 			this.groupBox5.TabStop = false;
 			this.groupBox5.Text = "Statements";
+			// 
+			// checkAgingMonthly
+			// 
+			this.checkAgingMonthly.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.checkAgingMonthly.Location = new System.Drawing.Point(19,194);
+			this.checkAgingMonthly.Name = "checkAgingMonthly";
+			this.checkAgingMonthly.Size = new System.Drawing.Size(288,17);
+			this.checkAgingMonthly.TabIndex = 57;
+			this.checkAgingMonthly.Text = "Aging calculated monthly instead of daily";
 			// 
 			// checkStatementShowReturnAddress
 			// 
@@ -355,7 +362,7 @@ namespace OpenDental{
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
 			this.butCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.butCancel.Location = new System.Drawing.Point(676,518);
+			this.butCancel.Location = new System.Drawing.Point(676,476);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75,26);
 			this.butCancel.TabIndex = 8;
@@ -370,7 +377,7 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(676,480);
+			this.butOK.Location = new System.Drawing.Point(676,438);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75,26);
 			this.butOK.TabIndex = 7;
@@ -426,7 +433,7 @@ namespace OpenDental{
 			this.butLanguages.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butLanguages.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butLanguages.CornerRadius = 4F;
-			this.butLanguages.Location = new System.Drawing.Point(49,492);
+			this.butLanguages.Location = new System.Drawing.Point(48,476);
 			this.butLanguages.Name = "butLanguages";
 			this.butLanguages.Size = new System.Drawing.Size(88,26);
 			this.butLanguages.TabIndex = 63;
@@ -435,48 +442,27 @@ namespace OpenDental{
 			// 
 			// label4
 			// 
-			this.label4.Location = new System.Drawing.Point(143,499);
+			this.label4.Location = new System.Drawing.Point(142,483);
 			this.label4.Name = "label4";
 			this.label4.Size = new System.Drawing.Size(298,17);
 			this.label4.TabIndex = 64;
 			this.label4.Text = "Languages used by patients.";
 			// 
-			// checkToothChartLowerQuality
-			// 
-			this.checkToothChartLowerQuality.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkToothChartLowerQuality.Location = new System.Drawing.Point(48,448);
-			this.checkToothChartLowerQuality.Name = "checkToothChartLowerQuality";
-			this.checkToothChartLowerQuality.Size = new System.Drawing.Size(495,18);
-			this.checkToothChartLowerQuality.TabIndex = 65;
-			this.checkToothChartLowerQuality.Text = "Use lower quality graphics on 3D tooth chart (better sometimes for remote access)" +
-    "";
-			this.checkToothChartLowerQuality.UseVisualStyleBackColor = true;
-			// 
 			// checkSolidBlockouts
 			// 
 			this.checkSolidBlockouts.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkSolidBlockouts.Location = new System.Drawing.Point(48,468);
+			this.checkSolidBlockouts.Location = new System.Drawing.Point(47,452);
 			this.checkSolidBlockouts.Name = "checkSolidBlockouts";
 			this.checkSolidBlockouts.Size = new System.Drawing.Size(433,18);
 			this.checkSolidBlockouts.TabIndex = 66;
 			this.checkSolidBlockouts.Text = "Use solid blockouts instead of outlines on the appointment book";
 			this.checkSolidBlockouts.UseVisualStyleBackColor = true;
 			// 
-			// checkAgingMonthly
-			// 
-			this.checkAgingMonthly.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkAgingMonthly.Location = new System.Drawing.Point(19,194);
-			this.checkAgingMonthly.Name = "checkAgingMonthly";
-			this.checkAgingMonthly.Size = new System.Drawing.Size(288,17);
-			this.checkAgingMonthly.TabIndex = 57;
-			this.checkAgingMonthly.Text = "Aging calculated monthly instead of daily";
-			// 
 			// FormMisc
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
-			this.ClientSize = new System.Drawing.Size(797,564);
+			this.ClientSize = new System.Drawing.Size(797,522);
 			this.Controls.Add(this.checkSolidBlockouts);
-			this.Controls.Add(this.checkToothChartLowerQuality);
 			this.Controls.Add(this.label4);
 			this.Controls.Add(this.butLanguages);
 			this.Controls.Add(this.groupBox3);
@@ -556,7 +542,6 @@ namespace OpenDental{
 			checkMedicalEclaimsEnabled.Checked=PrefB.GetBool("MedicalEclaimsEnabled");
 			checkITooth.Checked=PrefB.GetBool("UseInternationalToothNumbers");
 			checkInsurancePlansShared.Checked=PrefB.GetBool("InsurancePlansShared");
-			checkToothChartLowerQuality.Checked=PrefB.GetBool("ToothChartLowerQuality");
 			checkSolidBlockouts.Checked=PrefB.GetBool("SolidBlockouts");
 		}
 
@@ -605,7 +590,6 @@ namespace OpenDental{
 				| Prefs.UpdateBool("MedicalEclaimsEnabled",checkMedicalEclaimsEnabled.Checked)
 				| Prefs.UpdateBool("UseInternationalToothNumbers",checkITooth.Checked)
 				| Prefs.UpdateBool("InsurancePlansShared",checkInsurancePlansShared.Checked)
-				| Prefs.UpdateBool("ToothChartLowerQuality",checkToothChartLowerQuality.Checked)
 				| Prefs.UpdateBool("SolidBlockouts", checkSolidBlockouts.Checked))
 			{
 				changed=true;

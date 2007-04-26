@@ -4354,7 +4354,8 @@ namespace OpenDental{
 		///<summary>First version where individual computer preferences were introduced.</summary>
 		private void To4_8_3() {
 			if(FromVersion<new Version("4.8.3.0")) {
-				string command="";
+				string command="DELETE FROM preference WHERE PrefName='ToothChartLowerQuality'";
+				General.NonQEx(command);
 				if(FormChooseDatabase.DBtype==DatabaseType.MySql){
 					command=@"CREATE TABLE computerpref(
 						ComputerPrefNum int NOT NULL auto_increment,
