@@ -70,7 +70,10 @@ namespace CodeBase {
 
 		protected IntPtr deviceContext = IntPtr.Zero,renderContext = IntPtr.Zero;
 		protected bool renderEnabled = false;
-		protected bool autoMakeCurrent = true,autoSwapBuffers = false,autoFinish = false;
+
+		protected bool autoMakeCurrent = true,autoSwapBuffers = false,autoFinish = false,usehardware=true;
+
+		protected byte accumBits = 0,colorBits = 32,depthBits = 16,stencilBits = 0;
 		protected int lastErrorCode = Gl.GL_NO_ERROR;
 
 		#endregion
@@ -145,96 +148,6 @@ namespace CodeBase {
 		public static extern int _DescribePixelFormat(System.IntPtr hdc,int iPixelFormat,uint nBytes,ref Gdi.PIXELFORMATDESCRIPTOR ppfd);
 		#endregion int _DescribePixelFormat(System.IntPtr hdc,int iPixelFormat,uint nBytes,ref Gdi.PIXELFORMATDESCRIPTOR ppfd)
 
-		///<summary>This function is used to choose an acceptable pixel format for the inheriting OpenGL control.
-		///Returns the desireability of the given pixel format pfd. A return value less than zero signifies that the
-		///given format is entirely unacceptable. A return value of greater than or equal to one-million signifies that
-		///the given format should be used regaurdless of other (possibly better) pixel formats available. After a
-		///series of calls to this function with available system pixel formats, the ChoosePixelFormatEx() function 
-		///will choose the pixel format which causes this function to return the largest value. However, if all 
-		///returned values are negative, then no formats are acceptable, but the system will try to continue with 
-		///the first format available in the system (after logging an error).</summary>
-		protected virtual int PixelFormatDesire(Gdi.PIXELFORMATDESCRIPTOR pfd){
-			long bpp=pfd.cColorBits;
-			long depth=pfd.cDepthBits;
-			//Uses a palette (older hardware)?
-			bool pal=(pfd.iPixelType==Gdi.PFD_TYPE_COLORINDEX);
-			//Generic graphics hardware acceleration.
-			bool mcd=(pfd.dwFlags & Gdi.PFD_GENERIC_FORMAT)!=0 && (pfd.dwFlags & Gdi.PFD_GENERIC_ACCELERATED)!=0;
-			//Full graphics hardware acceleration.
-			bool icd=(pfd.dwFlags & Gdi.PFD_GENERIC_FORMAT)==0 && (pfd.dwFlags & Gdi.PFD_GENERIC_ACCELERATED)==0;
-			//Software graphics only.
-			bool soft=(pfd.dwFlags & Gdi.PFD_GENERIC_FORMAT)!=0 && (pfd.dwFlags & Gdi.PFD_GENERIC_ACCELERATED)==0;
-			bool opengl=(pfd.dwFlags & Gdi.PFD_SUPPORT_OPENGL)!=0;
-			bool window=(pfd.dwFlags & Gdi.PFD_DRAW_TO_WINDOW)!=0;
-			bool bitmap=(pfd.dwFlags & Gdi.PFD_DRAW_TO_BITMAP)!=0;
-			bool dbuff=(pfd.dwFlags & Gdi.PFD_DOUBLEBUFFER)!=0;
-			Logger.openlog.Log("Evaluating pixel format:",Logger.Severity.INFO);
-			Logger.openlog.Log("Color depth bits="+bpp,Logger.Severity.INFO);
-			Logger.openlog.Log("Z-depth bits="+depth,Logger.Severity.INFO);
-			Logger.openlog.Log("Using palette="+(pal?"Yes":"No"),Logger.Severity.INFO);
-			Logger.openlog.Log("Generic graphics hardware acceleration="+(mcd?"Yes":"No"),Logger.Severity.INFO);
-			Logger.openlog.Log("Software only graphics="+(soft?"Yes":"No"),Logger.Severity.INFO);
-			Logger.openlog.Log("Full graphics hardware acceleration="+(icd?"Yes":"No"),Logger.Severity.INFO);
-			Logger.openlog.Log("Supports OpenGL="+(opengl?"Yes":"No"),Logger.Severity.INFO);
-			Logger.openlog.Log("Windowed rendering="+(window?"Yes":"No"),Logger.Severity.INFO);
-			Logger.openlog.Log("Bitmap rendering="+(bitmap?"Yes":"No"),Logger.Severity.INFO);
-			Logger.openlog.Log("Double buffering="+(dbuff?"Yes":"No"),Logger.Severity.INFO);
-			//Check for completely unacceptable formats first.
-			if(	bpp<8 ||			//Need at least 256 colors.
-					depth<8 ||		//Need at least 256 depth values.
-					!opengl ||		//MUST support OpenGL.
-					!window || 		//MUST support windowed rendering (as opposed to bitmapped rendering, i.e to an image).
-					!(mcd || icd || soft)){	//Must support at least software or hardware rendering.
-				Logger.openlog.Log("The given format is unacceptable.",Logger.Severity.INFO);
-				return -1;
-			}
-			//Now add values up to encourage certain formats over others.
-			int desire=0;
-			bool acceptable=true;
-			//Prefer software rendering over both partial and full hardware acceleration.
-			if(soft){
-				desire+=1000;
-			}else{
-				acceptable=false;
-			}
-			//We like at least 16-bit color depths.
-			if(bpp>=16){
-				desire+=1000;
-			}else{
-				acceptable=false;
-			}
-			//We like at least 16-bit depth buffering.
-			if(depth>=16){
-				desire+=500;
-			}else{
-				acceptable=false;
-			}
-			//We do not like palettes.
-			if(!pal){
-				desire+=10;
-			}else{
-				acceptable=false;
-			}
-			//We do not want image-based rendering, but instead prefer window-only based rendering.
-			if(!bitmap){
-				desire+=100;
-			}
-			//We prefer single buffering, both to save memory and to avoid hardware pbuffer issues.
-			if(!dbuff){
-				desire+=1000;
-			}else{
-				acceptable=false;
-			}
-			//Is this format sufficient for the purposes of this particular OpenGL control?
-			if(acceptable){
-				desire=2000000;//Chose this exact format not matter what.
-				Logger.openlog.Log("The format is acceptable.",Logger.Severity.INFO);
-			}else{
-				Logger.openlog.Log("Format desireability factor: "+desire,Logger.Severity.INFO);
-			}
-			return desire;
-		}
-
 		///<summary> 
 		///hdc: A pointer to the Windows device context to which the setting will apply.
 		///bpp: Desired color depth in bits-per-pixel. -1 means "don't care", positive otherwise (8,16,24,32).
@@ -245,48 +158,123 @@ namespace CodeBase {
 		///selection is returned in this reference variable, which corresponds to the returned Gdi.PIXELFORMATDESCRIPTOR. Specify a
 		///non-positive number for "don't care".
 		///</summary>
-		Gdi.PIXELFORMATDESCRIPTOR ChoosePixelFormatEx(System.IntPtr hdc,ref int formatRef){
-			Logger.openlog.Log("Choosing OpenGL pixel format...",Logger.Severity.DEBUG);
-			Gdi.PIXELFORMATDESCRIPTOR pfd=new Gdi.PIXELFORMATDESCRIPTOR();
-			pfd.nSize=(short)Marshal.SizeOf(pfd);
-			pfd.nVersion=1;
+		Gdi.PIXELFORMATDESCRIPTOR ChoosePixelFormatEx(System.IntPtr hdc,int p_bpp,int p_depth,int p_dbl,int p_acc,ref int formatRef){
+			Logger.openlog.curSev=Logger.Severity.DEBUG;
+			Logger.openlog.Log(this,"ChoosePixelFormatEx","Beginning",false);
+			Gdi.PIXELFORMATDESCRIPTOR pfd = new Gdi.PIXELFORMATDESCRIPTOR();
+			pfd.nSize = (short)Marshal.SizeOf(pfd);
+			pfd.nVersion = 1;
 			int num=_DescribePixelFormat(hdc,1,(uint)pfd.nSize,ref pfd);
-			Logger.openlog.Log("There are "+num+" available formats.",Logger.Severity.DEBUG);
+			Logger.openlog.Log(this,"ChoosePixelFormatEx","There are "+num+" available formats.",false);
 			num=(formatRef<1?num:Math.Min(num,formatRef));
-			Logger.openlog.Log("Maximum number of formats to choose from is "+num,Logger.Severity.INFO);
-			long maxqual=-1;
-			int maxindex=1;
+			Logger.openlog.curSev=Logger.Severity.INFO;
+			Logger.openlog.Log(this,"ChoosePixelFormatEx","Maximum number of formats to choose from is "+num,false);
+			long maxqual=-0xEFFFFFFF;
+			int maxindex=0;
 			bool goodEnough=false;
-			bool oneValidFormat=false;
 			if(num>0){
 				for(int i=1;i<=num && !goodEnough;i++){
+					goodEnough=true;//This format is assumed to be good enough until proven otherwise.
 					pfd=new Gdi.PIXELFORMATDESCRIPTOR();
 					pfd.nSize=(short)Marshal.SizeOf(pfd);
 					pfd.nVersion=1;
 					_DescribePixelFormat(hdc,i,(uint)pfd.nSize,ref pfd);
-					Logger.openlog.Log("Evaluating format with index# "+i,Logger.Severity.INFO);
-					int q=PixelFormatDesire(pfd);
-					goodEnough=(q>=1000000);
+					long bpp=pfd.cColorBits;
+					long depth=pfd.cDepthBits;
+					bool pal=(pfd.iPixelType==Gdi.PFD_TYPE_COLORINDEX);
+					bool mcd=(pfd.dwFlags & Gdi.PFD_GENERIC_FORMAT)!=0 && (pfd.dwFlags & Gdi.PFD_GENERIC_ACCELERATED)!=0;//hard or soft
+					bool soft=(pfd.dwFlags & Gdi.PFD_GENERIC_FORMAT)!=0 && (pfd.dwFlags & Gdi.PFD_GENERIC_ACCELERATED)==0;//soft only
+					bool icd=(pfd.dwFlags & Gdi.PFD_GENERIC_FORMAT)==0 && (pfd.dwFlags & Gdi.PFD_GENERIC_ACCELERATED)==0;
+					bool opengl=(pfd.dwFlags & Gdi.PFD_SUPPORT_OPENGL)!=0;
+					bool window=(pfd.dwFlags & Gdi.PFD_DRAW_TO_WINDOW)!=0;
+					bool bitmap=(pfd.dwFlags & Gdi.PFD_DRAW_TO_BITMAP)!=0;
+					bool dbuff=(pfd.dwFlags & Gdi.PFD_DOUBLEBUFFER)!=0;
+					long q=0;
+					if(!opengl || !window || bpp<8 || depth<8){
+						q-=100000000;
+						goodEnough=false;
+					}
+					//THE NET EFFECT OF THE NEXT TWO CONDITIONAL STATEMENTS IS TO PERFER SOFTWARE RENDERING OVER ALL ELSE.
+					//We prefer pixel formats which are not fully accelerated, since fully accelerated formats more
+					//commonly lead to graphic failures.
+					if(icd){
+						q-=100000;
+						goodEnough=false;
+					}
+					//Also avoid partial acceleration, but perfer it more than full acceleration.
+					if(mcd){
+						q-=10000;
+						goodEnough=false;
+					}
+					if(opengl && window){
+						q+=0x8000;
+					}else{
+						goodEnough=false;
+					}
+					if(depth>0 && bpp>0){
+						q+=0x4000;
+					}else{
+						goodEnough=false;
+					}
+					if((p_dbl==0 && !dbuff) || (p_dbl==1 && dbuff)){
+						q+=0x2000;
+					}else{
+						goodEnough=false;
+					}
+					if((p_acc==0 && soft) || (p_acc==1 && (mcd || icd))){
+						q+=0x1000;
+					}else{
+						goodEnough=false;
+					}
+					if(!pal){
+						q+=0x0080;
+					}else{
+						goodEnough=false;
+					}
+					if(bpp>=p_bpp){
+						q+=0x0800;
+					}else{
+						q-=0x0800*(p_bpp-bpp);//Penalty for color-depths which are less than the desired.
+						goodEnough=false;
+					}
+					if(depth>=p_depth){
+						q+=0x0400;
+					}else{
+						q-=0x0400*(p_depth-depth);//Penalty for z-depths which are less than the desired.
+						goodEnough=false;
+					}
+					if(bitmap){
+						q+=0x0001;
+					}
+					if(mcd) {
+						q+=0x0040;
+					}
+					if(icd) {
+						q+=0x0042;
+					}
 					if(q>maxqual || goodEnough){//Take the smallest index (the smallest options) that meet the requirements.
 						maxqual=q; 
 						maxindex=i;
-						autoSwapBuffers=((pfd.dwFlags & Gdi.PFD_DOUBLEBUFFER)!=0);
-						oneValidFormat=true;
 					}
+					Logger.openlog.Log(this,"ChoosePixelFormatEx",(i==maxindex?"*":"")+"Evaluated format with index="+i+"  qval="+q+":");
+					Logger.openlog.Log(this,"ChoosePixelFormatEx","color depth="+bpp);
+					Logger.openlog.Log(this,"ChoosePixelFormatEx","z-depth="+depth);
+					Logger.openlog.Log(this,"ChoosePixelFormatEx","palette="+(pal?"Yes":"No"));
+					Logger.openlog.Log(this,"ChoosePixelFormatEx","mcd="+(mcd?"Yes":"No"));
+					Logger.openlog.Log(this,"ChoosePixelFormatEx","software graphics="+(soft?"Yes":"No"));
+					Logger.openlog.Log(this,"ChoosePixelFormatEx","icd="+(icd?"Yes":"No"));
+					Logger.openlog.Log(this,"ChoosePixelFormatEx","supports OpenGL="+(opengl?"Yes":"No"));
+					Logger.openlog.Log(this,"ChoosePixelFormatEx","windowed="+(window?"Yes":"No"));
+					Logger.openlog.Log(this,"ChoosePixelFormatEx","bitmap="+(bitmap?"Yes":"No"));
+					Logger.openlog.Log(this,"ChoosePixelFormatEx","double buffering="+(dbuff?"Yes":"No"));
 				}
-			}else{
-				Logger.openlog.Log("FAILED TO CHOOSE A PIXEL FORMAT BECAUSE THERE ARE NONE AVAILABLE!",Logger.Severity.FATAL_ERROR);
 			}
-			if(!oneValidFormat){
-				Logger.openlog.Log("UNABLE TO LOCATE AN ACCEPTABLE PIXEL FORMAT.",Logger.Severity.FATAL_ERROR);
-			}
-			maxindex=(maxindex>0?maxindex:1);//Ensure that maxindex is positive as required, even in algorithmic failure.
 			pfd=new Gdi.PIXELFORMATDESCRIPTOR();
 			pfd.nSize=(short)Marshal.SizeOf(pfd);
 			pfd.nVersion=1;
 			_DescribePixelFormat(hdc,maxindex,(uint)pfd.nSize,ref pfd);
 			formatRef=maxindex;
-			Logger.openlog.Log("Chosen format number="+maxindex,Logger.Severity.INFO);
+			Logger.openlog.Log(this,"ChoosePixelFormatEx","Done. Chosen format="+maxindex);
 			return pfd;
 		}
 		/// <summary>
@@ -306,7 +294,12 @@ namespace CodeBase {
 				throw new Exception("CreateContexts: Unable to create an OpenGL device context");
 			}
 			int selectedFormat=100;//Don't try more than 100 formats (too time consuming).
-			Gdi.PIXELFORMATDESCRIPTOR pixelFormat=ChoosePixelFormatEx(deviceContext,ref selectedFormat);
+			Gdi.PIXELFORMATDESCRIPTOR pixelFormat=ChoosePixelFormatEx(deviceContext,//The window context.
+																																colorBits,//Bits-per-pixel of color
+																																depthBits,//Z-depth
+																																autoSwapBuffers?1:0,//Don't use double buffering.
+																																usehardware?1:0,
+																																ref selectedFormat);
 			//Make sure the requested pixel format is available
 			if(selectedFormat == 0) {
 				throw new Exception("CreateContexts: Unable to find a suitable pixel format");
@@ -395,11 +388,8 @@ namespace CodeBase {
 		/// </summary>
 		public void TaoInitializeContexts() {
 			if(!ContextsReady) {
-				try{
-					CreateContexts();
-				}catch(Exception e){
-					Logger.openlog.Log(this,"TaoInitializeContexts",e.ToString(),Logger.Severity.ERROR);
-				}
+				CreateContexts();
+
 				//Fire the user-defined TaoSetupContext event
 				if(TaoSetupContext != null) {
 					TaoSetupContext(this,null);
