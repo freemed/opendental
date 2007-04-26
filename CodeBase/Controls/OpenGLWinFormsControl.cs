@@ -159,16 +159,14 @@ namespace CodeBase {
 		///non-positive number for "don't care".
 		///</summary>
 		Gdi.PIXELFORMATDESCRIPTOR ChoosePixelFormatEx(System.IntPtr hdc,int p_bpp,int p_depth,int p_dbl,int p_acc,ref int formatRef){
-			Logger.openlog.curSev=Logger.Severity.DEBUG;
-			Logger.openlog.Log(this,"ChoosePixelFormatEx","Beginning",false);
+			Logger.openlog.Log(this,"ChoosePixelFormatEx","Beginning",false,Logger.Severity.DEBUG);
 			Gdi.PIXELFORMATDESCRIPTOR pfd = new Gdi.PIXELFORMATDESCRIPTOR();
 			pfd.nSize = (short)Marshal.SizeOf(pfd);
 			pfd.nVersion = 1;
 			int num=_DescribePixelFormat(hdc,1,(uint)pfd.nSize,ref pfd);
-			Logger.openlog.Log(this,"ChoosePixelFormatEx","There are "+num+" available formats.",false);
+			Logger.openlog.Log(this,"ChoosePixelFormatEx","There are "+num+" available formats.",false,Logger.Severity.DEBUG);
 			num=(formatRef<1?num:Math.Min(num,formatRef));
-			Logger.openlog.curSev=Logger.Severity.INFO;
-			Logger.openlog.Log(this,"ChoosePixelFormatEx","Maximum number of formats to choose from is "+num,false);
+			Logger.openlog.Log(this,"ChoosePixelFormatEx","Maximum number of formats to choose from is "+num,false,Logger.Severity.INFO);
 			long maxqual=-0xEFFFFFFF;
 			int maxindex=0;
 			bool goodEnough=false;
@@ -256,17 +254,17 @@ namespace CodeBase {
 						maxqual=q; 
 						maxindex=i;
 					}
-					Logger.openlog.Log(this,"ChoosePixelFormatEx",(i==maxindex?"*":"")+"Evaluated format with index="+i+"  qval="+q+":");
-					Logger.openlog.Log(this,"ChoosePixelFormatEx","color depth="+bpp);
-					Logger.openlog.Log(this,"ChoosePixelFormatEx","z-depth="+depth);
-					Logger.openlog.Log(this,"ChoosePixelFormatEx","palette="+(pal?"Yes":"No"));
-					Logger.openlog.Log(this,"ChoosePixelFormatEx","mcd="+(mcd?"Yes":"No"));
-					Logger.openlog.Log(this,"ChoosePixelFormatEx","software graphics="+(soft?"Yes":"No"));
-					Logger.openlog.Log(this,"ChoosePixelFormatEx","icd="+(icd?"Yes":"No"));
-					Logger.openlog.Log(this,"ChoosePixelFormatEx","supports OpenGL="+(opengl?"Yes":"No"));
-					Logger.openlog.Log(this,"ChoosePixelFormatEx","windowed="+(window?"Yes":"No"));
-					Logger.openlog.Log(this,"ChoosePixelFormatEx","bitmap="+(bitmap?"Yes":"No"));
-					Logger.openlog.Log(this,"ChoosePixelFormatEx","double buffering="+(dbuff?"Yes":"No"));
+					Logger.openlog.Log(this,"ChoosePixelFormatEx",(i==maxindex?"*":"")+"Evaluated format with index="+i+"  qval="+q+":",Logger.Severity.INFO);
+					Logger.openlog.Log(this,"ChoosePixelFormatEx","color depth="+bpp,Logger.Severity.INFO);
+					Logger.openlog.Log(this,"ChoosePixelFormatEx","z-depth="+depth,Logger.Severity.INFO);
+					Logger.openlog.Log(this,"ChoosePixelFormatEx","palette="+(pal?"Yes":"No"),Logger.Severity.INFO);
+					Logger.openlog.Log(this,"ChoosePixelFormatEx","mcd="+(mcd?"Yes":"No"),Logger.Severity.INFO);
+					Logger.openlog.Log(this,"ChoosePixelFormatEx","software graphics="+(soft?"Yes":"No"),Logger.Severity.INFO);
+					Logger.openlog.Log(this,"ChoosePixelFormatEx","icd="+(icd?"Yes":"No"),Logger.Severity.INFO);
+					Logger.openlog.Log(this,"ChoosePixelFormatEx","supports OpenGL="+(opengl?"Yes":"No"),Logger.Severity.INFO);
+					Logger.openlog.Log(this,"ChoosePixelFormatEx","windowed="+(window?"Yes":"No"),Logger.Severity.INFO);
+					Logger.openlog.Log(this,"ChoosePixelFormatEx","bitmap="+(bitmap?"Yes":"No"),Logger.Severity.INFO);
+					Logger.openlog.Log(this,"ChoosePixelFormatEx","double buffering="+(dbuff?"Yes":"No"),Logger.Severity.INFO);
 				}
 			}
 			pfd=new Gdi.PIXELFORMATDESCRIPTOR();
@@ -274,7 +272,7 @@ namespace CodeBase {
 			pfd.nVersion=1;
 			_DescribePixelFormat(hdc,maxindex,(uint)pfd.nSize,ref pfd);
 			formatRef=maxindex;
-			Logger.openlog.Log(this,"ChoosePixelFormatEx","Done. Chosen format="+maxindex);
+			Logger.openlog.Log(this,"ChoosePixelFormatEx","Done. Chosen format="+maxindex,Logger.Severity.INFO);
 			return pfd;
 		}
 		/// <summary>
