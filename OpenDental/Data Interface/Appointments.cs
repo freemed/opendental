@@ -101,6 +101,10 @@ namespace OpenDental{
 			return General.GetDS("Appointment.GetApptEdit",aptNum.ToString()).Tables["Procedure"].Copy();
 		}
 
+		public static DataTable GetApptEditComm(int aptNum) {
+			return General.GetDS("Appointment.GetApptEdit",aptNum.ToString()).Tables["Comm"].Copy();
+		}
+
 		///<summary>Called when closing FormApptEdit with an OK in order to reattach the procedures to the appointment.</summary>
 		public static void UpdateAttached(int aptNum,int[] procNums,bool isPlanned){
 			//detach all procs from this appt.

@@ -50,6 +50,7 @@ namespace OpenDentBusiness{
 			retVal.Tables.Add(GetPatTable(retVal.Tables["Appointment"].Rows[0]["PatNum"].ToString()));
 			retVal.Tables.Add(GetProcTable(retVal.Tables["Appointment"].Rows[0]["PatNum"].ToString(),parameters[0],
 				retVal.Tables["Appointment"].Rows[0]["AptStatus"].ToString()));
+			retVal.Tables.Add(GetCommTable(retVal.Tables["Appointment"].Rows[0]["PatNum"].ToString()));
 			return retVal;
 		}
 
@@ -130,6 +131,28 @@ namespace OpenDentBusiness{
 				row["status"]=((ProcStat)PIn.PInt(rawProc.Rows[i]["ProcStatus"].ToString())).ToString();
 				row["toothNum"]=Tooth.ToInternat(rawProc.Rows[i]["ToothNum"].ToString());
 				row["Surf"]=rawProc.Rows[i]["Surf"].ToString();
+				table.Rows.Add(row);
+			}
+			return table;
+		}
+
+		private static DataTable GetCommTable(string patNum) {
+			DataConnection dcon=new DataConnection();
+			DataTable table=new DataTable("Comm");
+			DataRow row;
+			//columns that start with lowercase are altered for display rather than being raw data.
+			table.Columns.Add("commDateTime");
+			table.Columns.Add("CommlogNum");
+			table.Columns.Add("CommType");
+			table.Columns.Add("Note");
+			string command="SELECT * FROM commlog WHERE PatNum="+patNum+" AND CommType !=1";//don't include StatementSent
+			DataTable rawComm=dcon.GetTable(command);
+			for(int i=0;i<rawComm.Rows.Count;i++) {
+				row=table.NewRow();
+				row["commDateTime"]=PIn.PDateT(rawComm.Rows[i]["commDateTime"].ToString()).ToShortDateString();
+				row["CommlogNum"]=rawComm.Rows[i]["CommlogNum"].ToString();
+				row["CommType"]=rawComm.Rows[i]["CommType"].ToString();
+				row["Note"]=rawComm.Rows[i]["Note"].ToString();
 				table.Rows.Add(row);
 			}
 			return table;

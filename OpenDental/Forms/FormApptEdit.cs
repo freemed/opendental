@@ -2,6 +2,7 @@ using System;
 using System.Data;
 using System.Drawing;
 using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Text;
 using System.Windows.Forms;
@@ -84,6 +85,7 @@ namespace OpenDental{
 		private Patient pat;
 		private Family fam;
 		private PatPlan[] PatPlanList;
+		//private List<Commlog> CommlogList;
 
 		///<summary></summary>
 		public FormApptEdit(int aptNum)
@@ -568,6 +570,7 @@ namespace OpenDental{
 			this.butAddComm.Size = new System.Drawing.Size(92,26);
 			this.butAddComm.TabIndex = 143;
 			this.butAddComm.Text = "Co&mm";
+			this.butAddComm.Click += new System.EventHandler(this.butAddComm_Click);
 			// 
 			// textNote
 			// 
@@ -614,6 +617,7 @@ namespace OpenDental{
 			this.gridComm.Title = "Communications Log - Appointment Scheduling";
 			this.gridComm.TranslationName = "TableCommLog";
 			this.gridComm.MouseMove += new System.Windows.Forms.MouseEventHandler(this.gridComm_MouseMove);
+			this.gridComm.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridComm_CellDoubleClick);
 			// 
 			// gridProc
 			// 
@@ -764,6 +768,7 @@ namespace OpenDental{
 		#endregion
 
 		private void FormApptEdit_Load(object sender, System.EventArgs e){
+			tbTime.CellClicked += new OpenDental.ContrTable.CellEventHandler(tbTime_CellClicked);
 			if(IsNew){
 				if(!Security.IsAuthorized(Permissions.AppointmentCreate)){
 					DialogResult=DialogResult.Cancel;
@@ -937,7 +942,47 @@ namespace OpenDental{
 		}
 
 		private void FillComm(){
+			gridComm.BeginUpdate();
+			gridComm.Columns.Clear();
+			ODGridColumn col=new ODGridColumn(Lan.g("TableCommLog","DateTime"),80);
+			gridComm.Columns.Add(col);
+			col=new ODGridColumn(Lan.g("TableCommLog","Description"),80);
+			gridComm.Columns.Add(col);
+			gridComm.Rows.Clear();
+			ODGridRow row;
+			for(int i=0;i<DS.Tables["Comm"].Rows.Count;i++) {
+				row=new ODGridRow();
+				row.Cells.Add(DS.Tables["Comm"].Rows[i]["commDateTime"].ToString());
+				row.Cells.Add(DS.Tables["Comm"].Rows[i]["Note"].ToString());
+				if(DS.Tables["Comm"].Rows[i]["CommType"].ToString()=="2"){//AppointmentRelated
+					row.ColorBackG=DefB.Long[(int)DefCat.MiscColors][7].ItemColor;
+				}
+				gridComm.Rows.Add(row);
+			}
+			gridComm.EndUpdate();
+			gridComm.ScrollToEnd();
+		}
 
+		private void gridComm_CellDoubleClick(object sender,ODGridClickEventArgs e) {
+			Commlog item=Commlogs.GetOne(PIn.PInt(DS.Tables["Comm"].Rows[e.Row]["CommlogNum"].ToString()));
+			FormCommItem FormCI=new FormCommItem(item);
+			FormCI.ShowDialog();
+			DS.Tables.Remove("Comm");
+			DS.Tables.Add(Appointments.GetApptEditComm(AptCur.AptNum));
+			FillComm();
+		}
+
+		private void butAddComm_Click(object sender,EventArgs e) {
+			Commlog CommlogCur=new Commlog();
+			CommlogCur.PatNum=pat.PatNum;
+			CommlogCur.CommDateTime=DateTime.Now;
+			CommlogCur.CommType=CommItemType.ApptRelated;
+			FormCommItem FormCI=new FormCommItem(CommlogCur);
+			FormCI.IsNew=true;
+			FormCI.ShowDialog();
+			DS.Tables.Remove("Comm");
+			DS.Tables.Add(Appointments.GetApptEditComm(AptCur.AptNum));
+			FillComm();
 		}
 
 		private void FillProcedures(){
@@ -1441,6 +1486,10 @@ namespace OpenDental{
 		private void butCancel_Click(object sender, System.EventArgs e) {
 			DialogResult=DialogResult.Cancel;
 		}
+
+		
+
+		
 
 		
 
