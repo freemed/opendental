@@ -293,18 +293,19 @@ namespace OpenDental{
 			General.NonQ(command);
 		}
 
+/*
 		///<summary>Checks other tables which use ADACodes elsewhere in the database and deletes codes from the procedurecode table which are not referenced in any of the other tables. This is used in FormLicenseMissing.cs.</summary>
 		public static void DeleteUnusedADACodes(){
 			//First collect the individual ADA codes currently in use from the various different tables.
 			const string ADACodePattern="^D([0-9]{4})$";
 			bool[] ADACodesUsed=new bool[10000];//All elements start out as false automatically (C# feature).
 			string command="SELECT ADACodeStart,ADACodeEnd from appointmentrule";
-			DataTable dt=General.GetTableEx(command);
-			for(int i=0;i<dt.Rows.Count;i++){
+			DataTable table=General.GetTable(command);
+			for(int i=0;i<table.Rows.Count;i++){
 				Match mStart=(new Regex(ADACodePattern,RegexOptions.IgnoreCase)).Match(
-					PIn.PString(dt.Rows[i]["ADACodeStart"].ToString()));
+					PIn.PString(table.Rows[i]["ADACodeStart"].ToString()));
 				Match mEnd=(new Regex(ADACodePattern,RegexOptions.IgnoreCase)).Match(
-					PIn.PString(dt.Rows[i]["ADACodeEnd"].ToString()));
+					PIn.PString(table.Rows[i]["ADACodeEnd"].ToString()));
 				if(mStart.Success && mEnd.Success){
 					int startNum=Convert.ToInt32(mStart.Result("$1"));
 					int endNum=Convert.ToInt32(mEnd.Result("$1"));
@@ -320,20 +321,23 @@ namespace OpenDental{
 				"fee",
 				"procbuttonitem",
 				"procedurelog",
-				"proctp",
-				"repeatcharge",
+				//"proctp",
+				//"repeatcharge",
 			};
 			for(int i=0;i<simpleADACodeReferenceTables.Length;i++){
-				command="SELECT ADACode FROM "+simpleADACodeReferenceTables[i];
-				dt=General.GetTableEx(command);
-				for(int j=0;j<dt.Rows.Count;j++){
-					Match m=(new Regex(ADACodePattern,RegexOptions.IgnoreCase)).Match(
-						PIn.PString(dt.Rows[j]["ADACode"].ToString()));
-					if(m.Success){
-						int adanum=Convert.ToInt32(m.Result("$1"));
-						ADACodesUsed[adanum]=true;
-					}
+			string command="SELECT DISTINCT ADACode FROM procedurelog";
+			DataTable table=General.GetTable(command);
+			for(int j=0;j<table.Rows.Count;j++){
+				if(!Regex.IsMatch(PIn.PString(table.Rows[j][0].ToString()),"^D([0-9]{4})$")){
+					continue;
 				}
+					//Match m=(new Regex(ADACodePattern,RegexOptions.IgnoreCase)).Match(
+					//	PIn.PString(table.Rows[j]["ADACode"].ToString()));
+					//if(m.Success){
+				int adanum=Convert.ToInt32(m.Result("$1"));
+				ADACodesUsed[adanum]=true;
+					//}
+				//}
 			}
 			//Now remove unused ADA codes (those marked false in the ADACodesUsed array).
 			command="";
@@ -354,11 +358,11 @@ namespace OpenDental{
 		public static string[] GetAllStandardADACodes(){
 			//Get all values currently in the ADACocde column.
 			string command="SELECT ADACode from procedurecode";
-			DataTable dt=General.GetTableEx(command);
+			DataTable table=General.GetTableEx(command);
 			//Now weed-out values not in the actual ADA code form (D####).
 			ArrayList resultList=new ArrayList();
-			for(int i=0;i<dt.Rows.Count;i++){
-				string ADACode=PIn.PString(dt.Rows[i]["ADACode"].ToString());
+			for(int i=0;i<table.Rows.Count;i++){
+				string ADACode=PIn.PString(table.Rows[i]["ADACode"].ToString());
 				Match m=(new Regex("^D[0-9]{4}$",RegexOptions.IgnoreCase)).Match(ADACode);
 				if(m.Success){
 					resultList.Add(ADACode);
@@ -366,7 +370,7 @@ namespace OpenDental{
 			}
 			//Finally, convert the list into an array.
 			return (string[])resultList.ToArray(typeof(string));
-		}
+		}*/
 
 	}
 

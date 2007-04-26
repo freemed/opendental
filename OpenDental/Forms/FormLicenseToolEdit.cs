@@ -4,65 +4,52 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using OpenDentBusiness;
 
 namespace OpenDental {
 	public partial class FormLicenseToolEdit:Form {
+		public ProcLicense ProcLic;
 
-		ProcLicense procLicense;
-
-		public FormLicenseToolEdit(ProcLicense pProcLicense) {
-			procLicense=pProcLicense.Copy();
+		public FormLicenseToolEdit() {
 			InitializeComponent();
-			adacode.Text=pProcLicense.ADACode;
-			description.Text=pProcLicense.Descript;
 		}
 
-		private void adacode_KeyPress(object sender,KeyPressEventArgs e) {
-			if(e.KeyChar=='\r'){
-				e.Handled=true;
-				description.Focus();
-			}
-		}
-
-		private void description_KeyPress(object sender,KeyPressEventArgs e) {
-			if(e.KeyChar=='\r') {
-				e.Handled=true;
-				okbutton.Focus();
-			}
-		}
-
-		private void okbutton_Enter(object sender,EventArgs e) {
-			procLicense.ADACode=adacode.Text;
-			procLicense.Descript=description.Text;
-			string errors=FormLicenseTool.IsValidCode(procLicense);
-			if(errors!="") {
-				MessageBox.Show(errors);
-				return;
-			}
-			//Update edited ADA code to db.
-			try{
-				ProcLicenses.Update(procLicense);
-			}catch(Exception ex){
-				MessageBox.Show(ex.Message);
-				adacode.Focus();
-				return;
-			}
-			this.DialogResult=DialogResult.OK;
-			Close();
-		}
-
-		private void cancelbutton_Click(object sender,EventArgs e) {
-			this.DialogResult=DialogResult.Cancel;
-			Close();
+		private void FormLicenseToolEdit_Load(object sender,EventArgs e) {
+			textCode.Text=ProcLic.ADACode;
+			textDescription.Text=ProcLic.Descript;
 		}
 
 		private void deletebutton_Click(object sender,EventArgs e) {
-			ProcLicenses.Delete(procLicense);
-			this.DialogResult=DialogResult.OK;
-			Close();
+			ProcLicenses.Delete(ProcLic);
+			DialogResult=DialogResult.OK;
 		}
+
+		private void okbutton_Click(object sender,EventArgs e) {
+			if(!Regex.IsMatch(textCode.Text,"^D[0-9]{4}$")) {
+				MessageBox.Show("Code must be in the form D####.");
+				return;
+			}
+			if(textDescription.Text.Length<1) {
+				MessageBox.Show("Description must be specified.");
+				return;
+			}
+			if(!ProcLicenses.IsUniqueCode(textCode.Text)) {
+				MessageBox.Show("That code already exists.");
+				return;
+			}
+			ProcLic.ADACode=textCode.Text;
+			ProcLic.Descript=textDescription.Text;
+			ProcLicenses.Update(ProcLic);
+			DialogResult=DialogResult.OK;
+		}
+
+		private void cancelbutton_Click(object sender,EventArgs e) {
+			DialogResult=DialogResult.Cancel;
+		}
+
+		
 
 	}
 }

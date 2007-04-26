@@ -96,6 +96,34 @@ namespace OpenDental{
 			return General.GetDS("Appointment.GetApptEdit",aptNum.ToString());
 		}
 
+		public static DataTable GetApptEditProcs(int aptNum) {
+			//this is quick and dirty. Get all the tables, but only use the one we are interested in.
+			return General.GetDS("Appointment.GetApptEdit",aptNum.ToString()).Tables["Procedure"].Copy();
+		}
+
+		///<summary>Called when closing FormApptEdit with an OK in order to reattach the procedures to the appointment.</summary>
+		public static void UpdateAttached(int aptNum,int[] procNums,bool isPlanned){
+			//detach all procs from this appt.
+			string command;
+			if(isPlanned){
+				command="UPDATE procedurelog SET PlannedAptNum=0 WHERE PlannedAptNum="+POut.PInt(aptNum);
+			}
+			else{
+				command="UPDATE procedurelog SET AptNum=0 WHERE AptNum="+POut.PInt(aptNum);
+			}
+			General.NonQ(command);
+			//now, attach all
+			for(int i=0;i<procNums.Length;i++){
+				if(isPlanned) {
+					command="UPDATE procedurelog SET PlannedAptNum="+POut.PInt(aptNum)+" WHERE ProcNum="+POut.PInt(procNums[i]);
+				}
+				else {
+					command="UPDATE procedurelog SET AptNum="+POut.PInt(aptNum)+" WHERE ProcNum="+POut.PInt(procNums[i]);
+				}
+				General.NonQ(command);
+			}
+		}
+
 		///<summary>If IsNew, just supply null for oldApt.</summary>
 		public static void InsertOrUpdate(Appointment appt, Appointment oldApt,bool IsNew){
 			//if(){

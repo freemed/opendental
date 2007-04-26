@@ -201,7 +201,7 @@ namespace OpenDental{
 		/// <summary>Added these 3 fields for Oracle encrypted connection string</summary>
 		private string connStr;
 		private string key;
-		private MenuItem menuItem4;
+		private MenuItem menuLicenseCompliance;
 		private string dconnStr;
 
 		///<summary></summary>
@@ -345,6 +345,7 @@ namespace OpenDental{
 			this.menuItem9 = new System.Windows.Forms.MenuItem();
 			this.menuItemAuditTrail = new System.Windows.Forms.MenuItem();
 			this.menuItemDatabaseMaintenance = new System.Windows.Forms.MenuItem();
+			this.menuLicenseCompliance = new System.Windows.Forms.MenuItem();
 			this.menuItemImportXML = new System.Windows.Forms.MenuItem();
 			this.menuItemAging = new System.Windows.Forms.MenuItem();
 			this.menuItemFinanceCharge = new System.Windows.Forms.MenuItem();
@@ -361,7 +362,6 @@ namespace OpenDental{
 			this.menuItemUpdate = new System.Windows.Forms.MenuItem();
 			this.imageList32 = new System.Windows.Forms.ImageList(this.components);
 			this.timerSignals = new System.Windows.Forms.Timer(this.components);
-			this.menuItem4 = new System.Windows.Forms.MenuItem();
 			this.ContrManage2 = new OpenDental.ContrStaff();
 			this.ContrChart2 = new OpenDental.ContrChart();
 			this.ContrDocs2 = new OpenDental.ContrDocs();
@@ -1075,7 +1075,7 @@ namespace OpenDental{
             this.menuItem9,
             this.menuItemAuditTrail,
             this.menuItemDatabaseMaintenance,
-            this.menuItem4,
+            this.menuLicenseCompliance,
             this.menuItemImportXML,
             this.menuItemAging,
             this.menuItemFinanceCharge,
@@ -1136,6 +1136,12 @@ namespace OpenDental{
 			this.menuItemDatabaseMaintenance.Index = 4;
 			this.menuItemDatabaseMaintenance.Text = "Database Maintenance";
 			this.menuItemDatabaseMaintenance.Click += new System.EventHandler(this.menuItemDatabaseMaintenance_Click);
+			// 
+			// menuLicenseCompliance
+			// 
+			this.menuLicenseCompliance.Index = 5;
+			this.menuLicenseCompliance.Text = "License Compliance Tool";
+			this.menuLicenseCompliance.Click += new System.EventHandler(this.menuLicenseCompliance_Click);
 			// 
 			// menuItemImportXML
 			// 
@@ -1242,12 +1248,6 @@ namespace OpenDental{
 			// timerSignals
 			// 
 			this.timerSignals.Tick += new System.EventHandler(this.timerSignals_Tick);
-			// 
-			// menuItem4
-			// 
-			this.menuItem4.Index = 5;
-			this.menuItem4.Text = "License Tool";
-			this.menuItem4.Click += new System.EventHandler(this.menuItem4_Click);
 			// 
 			// ContrManage2
 			// 
@@ -2904,6 +2904,15 @@ namespace OpenDental{
 			SecurityLogs.MakeLogEntry(Permissions.Setup,0,"Database Maintenance");
 		}
 
+		private void menuLicenseCompliance_Click(object sender,EventArgs e) {
+			if(!Security.IsAuthorized(Permissions.Setup)) {
+				return;
+			}
+			FormLicenseTool flt=new FormLicenseTool();
+			flt.ShowDialog();
+			SecurityLogs.MakeLogEntry(Permissions.Setup,0,"License Compliance Tool");
+		}
+
 		private void menuTelephone_Click(object sender, System.EventArgs e) {
 			if(!Security.IsAuthorized(Permissions.Setup)){
 				return;
@@ -3168,10 +3177,7 @@ namespace OpenDental{
 			}
 		}
 
-		private void menuItem4_Click(object sender,EventArgs e) {
-			FormLicenseTool flt=new FormLicenseTool();
-			flt.ShowDialog();
-		}
+		
 		
 
 		

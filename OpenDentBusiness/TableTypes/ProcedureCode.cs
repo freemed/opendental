@@ -13,7 +13,7 @@ namespace OpenDentBusiness{
 		public string Descript;
 		///<summary>Abbreviated description.</summary>
 		public string AbbrDesc;
-		///<summary>X's and /'s describe Dr's time and assistant's time in 10 minute increments.</summary>
+		///<summary>X's and /'s describe Dr's time and assistant's time in the same increments as the user has set.</summary>
 		public string ProcTime;
 		///<summary>FK to definition.DefNum.  The category that this code will be found under in the search window.  Has nothing to do with insurance categories.</summary>
 		[XmlIgnore]
@@ -57,10 +57,11 @@ namespace OpenDentBusiness{
 		///<summary>Only used in Canada.  Set to true if this procedure code is only used as an adjunct to track the lab fee.</summary>
 		[XmlIgnore]
 		public bool IsCanadianLab;
+		///<summary>This is true if this procedure code existed before ADA code distribution changed at version 4.8, false otherwise.</summary>
+		[XmlIgnore]
+		public bool PreExisting;
 		///<Summary>Not a database column.  Only used for xml import function.</Summary>
 		private string procCatDescript;
-		///<summary>Set to true if this procedure code existed before ADA code distribution changed, false otherwise.</summary>
-		public bool PreExisting;
 
 		public ProcedureCode(){
 			ProcTime="/X/";

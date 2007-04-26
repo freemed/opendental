@@ -43,12 +43,13 @@ namespace OpenDental{
 			}
 			if(FromVersion.ToString()=="2.9.0.0"
 				|| FromVersion.ToString()=="3.0.0.0"
-				|| FromVersion.ToString()=="4.7.0.0")
+				|| FromVersion.ToString()=="4.7.0.0"
+				|| FromVersion.ToString()=="4.8.0.0")
 			{
 				MsgBox.Show(this,"Cannot convert this database version which was only for development purposes.");
 				return false;
 			}
-			if(FromVersion < new Version("4.8.0.0")){
+			if(FromVersion < new Version("4.8.1.0")){
 				if(MessageBox.Show(Lan.g(this,"Your database will now be converted")+"\r"
 					+Lan.g(this,"from version")+" "+FromVersion.ToString()+"\r"
 					+Lan.g(this,"to version")+" "+ToVersion.ToString()+"\r"
@@ -4115,12 +4116,12 @@ namespace OpenDental{
 				command="UPDATE preference SET ValueString = '4.7.4.0' WHERE PrefName = 'DataBaseVersion'";
 				General.NonQEx(command);
 			}
-			To4_8_0();
+			To4_8_1();
 		}
 
 		///<summary>Oracle convertions work now up to this point, but fail in at least one and probably more places within this function.</summary>
-		private void To4_8_0() {
-			if(FromVersion<new Version("4.8.0.0")) {
+		private void To4_8_1() {
+			if(FromVersion<new Version("4.8.1.0")) {
 				string command="";
 				//To eliminate problems for Oracle upgrade:
 				int practiceDefaultProv=PrefB.GetInt("PracticeDefaultProv");
@@ -4340,9 +4341,11 @@ namespace OpenDental{
 						)";
 					General.NonQEx(command);
 				}
-
-
-				command="UPDATE preference SET ValueString = '4.8.0.0' WHERE PrefName = 'DataBaseVersion'";
+				command="UPDATE procedurecode SET PreExisting =1";//to indicate which procedurecodes existed before this version.
+				General.NonQEx(command);
+				command="INSERT INTO preference VALUES ('ADAComplianceDateTime','')";
+				General.NonQEx(command);
+				command="UPDATE preference SET ValueString = '4.8.1.0' WHERE PrefName = 'DataBaseVersion'";
 				General.NonQEx(command);
 			}
 			//To4_8_?();

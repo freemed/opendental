@@ -200,8 +200,7 @@ namespace OpenDental{
 			Insert(fee);
 		}
 
-
-
+	
 
 	}
 
