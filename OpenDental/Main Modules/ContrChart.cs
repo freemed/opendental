@@ -4207,7 +4207,7 @@ namespace OpenDental{
 
 		#region MissingTeeth
 		private void butMissing_Click(object sender,EventArgs e) {
-/*			if(toothChart.SelectedTeeth.Length==0){
+			if(toothChart.SelectedTeeth.Length==0){
 				MsgBox.Show(this,"Please select teeth first.");
 				return;
 			}
@@ -4215,7 +4215,7 @@ namespace OpenDental{
 				ToothInitials.SetValue(PatCur.PatNum,toothChart.SelectedTeeth[i],ToothInitialType.Missing);
 			}
 			ToothInitialList=ToothInitials.Refresh(PatCur.PatNum);
-			FillToothChart(false);*/
+			FillToothChart(false);
 		}
 
 		private void butNotMissing_Click(object sender,EventArgs e) {

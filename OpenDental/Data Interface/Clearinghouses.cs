@@ -147,6 +147,9 @@ namespace OpenDental{
 			//if(payorID==""){
 			//	return ElectronicClaimFormat.None;
 			//}
+			if(HList==null) {
+				Refresh();
+			}
 			if(payorID!="" && HList.ContainsKey(payorID)){
 				return (int)HList[payorID];
 			}
