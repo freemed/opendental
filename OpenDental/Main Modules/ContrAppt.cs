@@ -2248,6 +2248,12 @@ namespace OpenDental{
 			int thisIndex=GetIndex(ContrApptSingle.SelectedAptNum);
 			Appointment aptOld;
 			if(ResizingAppt){
+				if(!TempApptSingle.Visible) {//click with no drag
+					ResizingAppt=false;
+					mouseIsDown=false;
+					TempApptSingle.Dispose();
+					return;
+				}
 				//convert Bottom to a time
 				int hr=ContrApptSheet2.ConvertToHour
 					(TempApptSingle.Bottom-ContrApptSheet2.Location.Y-panelSheet.Location.Y);

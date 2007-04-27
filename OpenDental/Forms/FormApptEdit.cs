@@ -661,6 +661,7 @@ namespace OpenDental{
 			this.butTask.Size = new System.Drawing.Size(92,26);
 			this.butTask.TabIndex = 124;
 			this.butTask.Text = "To Task List";
+			this.butTask.Click += new System.EventHandler(this.butTask_Click);
 			// 
 			// butDelete
 			// 
@@ -1452,6 +1453,27 @@ namespace OpenDental{
 			return true;
 		}
 
+		private void butAudit_Click(object sender,EventArgs e) {
+			FormAuditOneType FormA=new FormAuditOneType(pat.PatNum,
+				new Permissions[] { Permissions.AppointmentCreate,Permissions.AppointmentEdit,Permissions.AppointmentMove },
+				Lan.g(this,"All Appointments for")+pat.GetNameFL());
+			FormA.ShowDialog();
+		}
+
+		private void butTask_Click(object sender,EventArgs e) {
+			if(!UpdateToDB())
+				return;
+			FormTaskListSelect FormT=new FormTaskListSelect(TaskObjectType.Appointment,AptCur.AptNum);
+			FormT.ShowDialog();
+		}
+
+		private void butPin_Click(object sender,System.EventArgs e) {
+			if(!UpdateToDB())
+				return;
+			PinClicked=true;
+			DialogResult=DialogResult.OK;
+		}
+
 		private void butDelete_Click(object sender,EventArgs e) {
 			if(MessageBox.Show(Lan.g(this,"Delete appointment?"),"",MessageBoxButtons.OKCancel)!=DialogResult.OK) {
 				return;
@@ -1477,23 +1499,13 @@ namespace OpenDental{
 			DialogResult=DialogResult.OK;
 		}
 
-		private void butPin_Click(object sender,System.EventArgs e) {
-			if(!UpdateToDB())
-				return;
-			PinClicked=true;
-			DialogResult=DialogResult.OK;
-		}
-
 		private void butCancel_Click(object sender, System.EventArgs e) {
 			DialogResult=DialogResult.Cancel;
 		}
 
-		private void butAudit_Click(object sender,EventArgs e) {
-			FormAuditOneType FormA=new FormAuditOneType(pat.PatNum,
-				new Permissions[] { Permissions.AppointmentCreate,Permissions.AppointmentEdit,Permissions.AppointmentMove },
-				Lan.g(this,"All Appointments for")+pat.GetNameFL());
-			FormA.ShowDialog();
-		}
+		
+
+		
 
 		
 
