@@ -646,6 +646,7 @@ namespace OpenDental{
 			this.butAudit.Size = new System.Drawing.Size(92,26);
 			this.butAudit.TabIndex = 125;
 			this.butAudit.Text = "Audit Trail";
+			this.butAudit.Click += new System.EventHandler(this.butAudit_Click);
 			// 
 			// butTask
 			// 
@@ -1485,6 +1486,13 @@ namespace OpenDental{
 
 		private void butCancel_Click(object sender, System.EventArgs e) {
 			DialogResult=DialogResult.Cancel;
+		}
+
+		private void butAudit_Click(object sender,EventArgs e) {
+			FormAuditOneType FormA=new FormAuditOneType(pat.PatNum,
+				new Permissions[] { Permissions.AppointmentCreate,Permissions.AppointmentEdit,Permissions.AppointmentMove },
+				Lan.g(this,"All Appointments for")+pat.GetNameFL());
+			FormA.ShowDialog();
 		}
 
 		

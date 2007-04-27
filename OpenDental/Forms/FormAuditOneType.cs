@@ -41,6 +41,10 @@ namespace OpenDental{
 			// 
 			// grid
 			// 
+			this.grid.Columns.Add(new OpenDental.UI.ODGridColumn("Date Time",120,System.Windows.Forms.HorizontalAlignment.Left));
+			this.grid.Columns.Add(new OpenDental.UI.ODGridColumn("User",70,System.Windows.Forms.HorizontalAlignment.Left));
+			this.grid.Columns.Add(new OpenDental.UI.ODGridColumn("Permission",110,System.Windows.Forms.HorizontalAlignment.Left));
+			this.grid.Columns.Add(new OpenDental.UI.ODGridColumn("Log Text",569,System.Windows.Forms.HorizontalAlignment.Left));
 			this.grid.HScrollVisible = false;
 			this.grid.Location = new System.Drawing.Point(8,12);
 			this.grid.Name = "grid";
