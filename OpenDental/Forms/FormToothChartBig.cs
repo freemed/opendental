@@ -34,8 +34,6 @@ namespace OpenDental{
 			ShowBySelectedTeeth=showBySelectedTeeth;
 			ToothInitialList=toothInitialList;
 			ProcList=procList;
-			//toothChart.TaoRenderEnabled=true;
-			//toothChart.TaoInitializeContexts();
 		}
 
 		/// <summary>
@@ -69,8 +67,10 @@ namespace OpenDental{
 			this.toothChart.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.toothChart.Location = new System.Drawing.Point(0,0);
 			this.toothChart.Name = "toothChart";
+			this.toothChart.SimpleMode = false;
 			this.toothChart.Size = new System.Drawing.Size(926,858);
 			this.toothChart.TabIndex = 0;
+			this.toothChart.UseHardware = false;
 			this.toothChart.UseInternational = false;
 			// 
 			// FormToothChartingBig
@@ -89,6 +89,11 @@ namespace OpenDental{
 		#endregion
 
 		private void FormToothChartingBig_Load(object sender,EventArgs e) {
+			ComputerPref computerPref=ComputerPrefs.GetForLocalComputer();
+			toothChart.UseHardware=computerPref.GraphicsUseHardware;
+			toothChart.SimpleMode=computerPref.GraphicsSimple;//Must be last preference set, last so that all
+																												//settings are caried through in the reinitialization
+																												//this line triggers.
 			FillToothChart();
 			//toothChart.Refresh();
 		}

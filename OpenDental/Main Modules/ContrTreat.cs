@@ -1611,6 +1611,11 @@ namespace OpenDental{
 				toothChart.Size=new Size(500,370);
 				//toothChart.Location=new Point(-600,-500);//off the visible screen
 				//toothChart.SendToBack();
+				ComputerPref computerPrefs=ComputerPrefs.GetForLocalComputer();
+				toothChart.UseHardware=computerPrefs.GraphicsUseHardware;
+				toothChart.SimpleMode=computerPrefs.GraphicsSimple;	//Must be last setting set for preferences, because
+																														//this is the line where the device pixel format is
+																														//recreated.
 				this.Controls.Add(toothChart);
 				toothChart.BringToFront();
 				toothChart.ResetTeeth();
