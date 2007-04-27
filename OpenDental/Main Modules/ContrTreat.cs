@@ -1571,6 +1571,7 @@ namespace OpenDental{
 			pd2.OriginAtMargins=true;
 			try{
 				if(justPreview){
+					pd2.DefaultPageSettings.PaperSize=new PaperSize("default",850,1100);
 					pView = new FormRpPrintPreview();
 					pView.printPreviewControl2.Document=pd2;
 					pView.ShowDialog();				

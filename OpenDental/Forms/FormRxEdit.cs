@@ -367,6 +367,7 @@ namespace OpenDental{
 				pd2.DefaultPageSettings.Landscape=true;
 			}
 			#if DEBUG
+				pd2.DefaultPageSettings.PaperSize=new PaperSize("default",850,1100);
 				pView.printPreviewControl2.Document=pd2;
 				pView.ShowDialog();
 			#else

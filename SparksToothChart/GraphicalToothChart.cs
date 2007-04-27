@@ -418,7 +418,7 @@ namespace SparksToothChart {
 				return;
 			}
 			Graphics g=e.Graphics;
-			g.DrawImage(pictBox.Image,0,0);
+			g.DrawImage(pictBox.Image,new Rectangle(0,0,this.Width,this.Height));
 			g.SmoothingMode=SmoothingMode.HighQuality;
 			for(int t=0;t<ListToothGraphics.Count;t++) {//loop through each tooth
 				if(ListToothGraphics[t].ToothID=="implant") {//this is not an actual tooth.
