@@ -111,7 +111,7 @@ namespace OpenDental {
 			ArrayList AL=ProcLicenses.CheckCompliance();
 			Cursor=Cursors.Default;
 			if(AL.Count==0){
-				MessageBox.Show("All necessary codes have been entered.  You may now Merge Codes.");
+				MessageBox.Show("All necessary codes have been entered.  You may now Run Tool.");
 				butMerge.Enabled=true;
 				return;
 			}
@@ -175,7 +175,7 @@ namespace OpenDental {
 			SolidBrush brush=new SolidBrush(Color.Black);
 			Pen pen=new Pen(brush);
 			Font bigFont=new Font(FontFamily.GenericSansSerif,12,FontStyle.Bold);
-			g.DrawString("ADA License Compliance Tool",bigFont,brush,100,100);
+			g.DrawString("ADA Code Update Tool",bigFont,brush,100,100);
 			g.DrawString("Completed "+PIn.PDateT(PrefB.GetString("ADAComplianceDateTime")).ToString(),Font,brush,100,140);
 			g.DrawString("By signing this form, I certify that I used a licensed CDT codebook to obtain the codes and descriptions "
 				+"that I entered.  I also certify that all copies of claimform background images have been permanently deleted.",

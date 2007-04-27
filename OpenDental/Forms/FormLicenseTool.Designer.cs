@@ -88,7 +88,7 @@ namespace OpenDental {
 			this.checkcompliancebutton.Name = "checkcompliancebutton";
 			this.checkcompliancebutton.Size = new System.Drawing.Size(129,26);
 			this.checkcompliancebutton.TabIndex = 6;
-			this.checkcompliancebutton.Text = "Check Compliance";
+			this.checkcompliancebutton.Text = "Check Completeness";
 			this.checkcompliancebutton.UseVisualStyleBackColor = true;
 			this.checkcompliancebutton.Click += new System.EventHandler(this.checkcompliancebutton_Click);
 			// 
@@ -112,7 +112,7 @@ namespace OpenDental {
 			this.butMerge.Name = "butMerge";
 			this.butMerge.Size = new System.Drawing.Size(92,26);
 			this.butMerge.TabIndex = 9;
-			this.butMerge.Text = "Merge Codes";
+			this.butMerge.Text = "Run Tool";
 			this.butMerge.UseVisualStyleBackColor = true;
 			this.butMerge.Click += new System.EventHandler(this.butMerge_Click);
 			// 
@@ -155,7 +155,7 @@ namespace OpenDental {
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.Name = "FormLicenseTool";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-			this.Text = "License Compliance Tool";
+			this.Text = "ADA Code Update Tool";
 			this.Load += new System.EventHandler(this.FormLicenseTool_Load);
 			this.ResumeLayout(false);
 			this.PerformLayout();

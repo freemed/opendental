@@ -1150,7 +1150,7 @@ namespace OpenDental{
 			// menuLicenseCompliance
 			// 
 			this.menuLicenseCompliance.Index = 5;
-			this.menuLicenseCompliance.Text = "License Compliance Tool";
+			this.menuLicenseCompliance.Text = "ADA Code Update Tool";
 			this.menuLicenseCompliance.Click += new System.EventHandler(this.menuLicenseCompliance_Click);
 			// 
 			// menuItemImportXML
@@ -1324,14 +1324,14 @@ namespace OpenDental{
 			this.myOutlookBar.ImageList = this.imageList32;
 			this.myOutlookBar.Location = new System.Drawing.Point(0,0);
 			this.myOutlookBar.Name = "myOutlookBar";
-			this.myOutlookBar.Size = new System.Drawing.Size(51,369);
+			this.myOutlookBar.Size = new System.Drawing.Size(51,710);
 			this.myOutlookBar.TabIndex = 18;
 			this.myOutlookBar.Text = "outlookBar1";
 			this.myOutlookBar.ButtonClicked += new OpenDental.ButtonClickedEventHandler(this.myOutlookBar_ButtonClicked);
 			// 
 			// FormOpenDental
 			// 
-			this.ClientSize = new System.Drawing.Size(982,369);
+			this.ClientSize = new System.Drawing.Size(982,710);
 			this.Controls.Add(this.ContrManage2);
 			this.Controls.Add(this.ContrChart2);
 			this.Controls.Add(this.ContrDocs2);
