@@ -14,7 +14,7 @@ namespace OpenDental{
 		private System.Windows.Forms.ListBox listFeeSched;
 		private System.Windows.Forms.Panel panel1;
 		private System.Windows.Forms.RadioButton radioCategories;
-		private System.Windows.Forms.RadioButton radioADA;
+		private System.Windows.Forms.RadioButton radioCode;
 		private System.ComponentModel.Container components = null;
 		private Label label1;
 		private FormQuery FormQuery2;
@@ -47,7 +47,7 @@ namespace OpenDental{
 			this.listFeeSched = new System.Windows.Forms.ListBox();
 			this.panel1 = new System.Windows.Forms.Panel();
 			this.radioCategories = new System.Windows.Forms.RadioButton();
-			this.radioADA = new System.Windows.Forms.RadioButton();
+			this.radioCode = new System.Windows.Forms.RadioButton();
 			this.label1 = new System.Windows.Forms.Label();
 			this.panel1.SuspendLayout();
 			this.SuspendLayout();
@@ -93,7 +93,7 @@ namespace OpenDental{
 			// panel1
 			// 
 			this.panel1.Controls.Add(this.radioCategories);
-			this.panel1.Controls.Add(this.radioADA);
+			this.panel1.Controls.Add(this.radioCode);
 			this.panel1.Location = new System.Drawing.Point(206,25);
 			this.panel1.Name = "panel1";
 			this.panel1.Size = new System.Drawing.Size(104,60);
@@ -108,16 +108,16 @@ namespace OpenDental{
 			this.radioCategories.TabIndex = 1;
 			this.radioCategories.Text = "Categories";
 			// 
-			// radioADA
+			// radioCode
 			// 
-			this.radioADA.Checked = true;
-			this.radioADA.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.radioADA.Location = new System.Drawing.Point(8,8);
-			this.radioADA.Name = "radioADA";
-			this.radioADA.Size = new System.Drawing.Size(88,24);
-			this.radioADA.TabIndex = 0;
-			this.radioADA.TabStop = true;
-			this.radioADA.Text = "ADA Code";
+			this.radioCode.Checked = true;
+			this.radioCode.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.radioCode.Location = new System.Drawing.Point(8,8);
+			this.radioCode.Name = "radioCode";
+			this.radioCode.Size = new System.Drawing.Size(88,24);
+			this.radioCode.TabIndex = 0;
+			this.radioCode.TabStop = true;
+			this.radioCode.Text = "Code";
 			// 
 			// label1
 			// 
@@ -165,14 +165,14 @@ namespace OpenDental{
 			Fees fee=new Fees();
 			Queries.CurReport=new ReportOld();
 			
-			Queries.CurReport.Query= "SELECT procedurecode.adacode,fee.amount,'     ',procedurecode.descript,"
+			Queries.CurReport.Query= "SELECT procedurecode.ProcCode,fee.amount,'     ',procedurecode.descript,"
 			  +"procedurecode.abbrdesc FROM procedurecode,fee "
-				+"WHERE procedurecode.adacode=fee.adacode AND fee.feesched='"+feeSched.ToString()
-         +"' ORDER BY procedurecode.adacode";
+				+"WHERE procedurecode.ProcCode=fee.adacode AND fee.feesched='"+feeSched.ToString()
+         +"' ORDER BY procedurecode.ProcCode";
 			FormQuery2=new FormQuery();
 			FormQuery2.IsReport=true;
 
-      if (radioADA.Checked==true)  {
+      if (radioCode.Checked==true)  {
 			  FormQuery2.SubmitReportQuery();			      
 				Queries.CurReport.Title="Procedure Codes";
 				Queries.CurReport.SubTitle=new string[2];
@@ -187,7 +187,7 @@ namespace OpenDental{
 				Queries.CurReport.ColPos[3]=220;
 				Queries.CurReport.ColPos[4]=420;
 				Queries.CurReport.ColPos[5]=620;
-				Queries.CurReport.ColCaption[0]="ADA Code";
+				Queries.CurReport.ColCaption[0]="Code";
 				Queries.CurReport.ColCaption[1]="Fee Amount";
 				Queries.CurReport.ColCaption[2]=" ";//otherwise, the amount gets bunched up next to the description.
 				Queries.CurReport.ColCaption[3]="Description";
@@ -209,10 +209,10 @@ namespace OpenDental{
         DataRow row=Queries.TableQ.NewRow();//add first row by hand to get value for temp
 				row[0]=DefB.GetName(DefCat.ProcCodeCats,ProcList[0].ProcCat);
 				catName=row[0].ToString();
-				row[1]=ProcList[0].ADACode;
+				row[1]=ProcList[0].ProcCode;
 				row[2]=ProcList[0].Descript;
 				row[3]=ProcList[0].AbbrDesc;
-			  row[4]=((double)Fees.GetAmount0(ProcList[0].ADACode,feeSched)).ToString("F");
+			  row[4]=((double)Fees.GetAmount0(ProcList[0].ProcCode,feeSched)).ToString("F");
 				Queries.CurReport.ColTotal[4]+=PIn.PDouble(row[4].ToString());
 				Queries.TableQ.Rows.Add(row);
 				for(int i=1;i<ProcList.Length;i++){//loop through data rows
@@ -224,10 +224,10 @@ namespace OpenDental{
 					else  {
 						catName=row[0].ToString();
           }
-					row[1]=ProcList[i].ADACode.ToString();
+					row[1]=ProcList[i].ProcCode.ToString();
 					row[2]=ProcList[i].Descript;
 					row[3]=ProcList[i].AbbrDesc.ToString();
-					row[4]=((double)Fees.GetAmount0(ProcList[i].ADACode,feeSched)).ToString("F");
+					row[4]=((double)Fees.GetAmount0(ProcList[i].ProcCode,feeSched)).ToString("F");
   				//Queries.CurReport.ColTotal[4]+=PIn.PDouble(row[4].ToString());
 					Queries.TableQ.Rows.Add(row);
 				}
@@ -249,7 +249,7 @@ namespace OpenDental{
 				Queries.CurReport.ColPos[4]=620;
 				Queries.CurReport.ColPos[5]=770;
 				Queries.CurReport.ColCaption[0]="Category";
-				Queries.CurReport.ColCaption[1]="ADA Code";
+				Queries.CurReport.ColCaption[1]="Code";
 				Queries.CurReport.ColCaption[2]="Description";
 				Queries.CurReport.ColCaption[3]="Abbr Description";
 				Queries.CurReport.ColCaption[4]="Fee Amount";

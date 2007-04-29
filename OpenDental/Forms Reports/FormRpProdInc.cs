@@ -476,7 +476,7 @@ namespace OpenDental{
 				+"AND claimproc.Status='7' "//only CapComplete writeoffs are subtracted here.
 				+"WHERE procedurelog.ProcStatus = '2' "
 				+"AND patient.PatNum=procedurelog.PatNum "
-				+"AND procedurelog.ADACode=procedurecode.ADACode "
+				+"AND procedurelog.CodeNum=procedurecode.CodeNum "
 				+"AND provider.ProvNum=procedurelog.ProvNum "
 				+"AND "+whereProv+" "
 				+"AND procedurelog.ProcDate >= " +POut.PDate(dateFrom)+" "

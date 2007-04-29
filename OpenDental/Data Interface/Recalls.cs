@@ -77,7 +77,7 @@ namespace OpenDental{
 				+"SELECT * FROM appointment,procedurelog,procedurecode "
 				+"WHERE procedurelog.PatNum = recall.PatNum "
 				+"AND appointment.PatNum = recall.PatNum "
-				+"AND procedurelog.ADACode = procedurecode.ADACode "
+				+"AND procedurelog.CodeNum = procedurecode.CodeNum "
 				+"AND procedurelog.AptNum = appointment.AptNum "
 				+"AND appointment.AptDateTime >= ";//'"+DateTime.Today.ToString("yyyy-MM-dd")+"' "
 				if(FormChooseDatabase.DBtype==DatabaseType.Oracle){
@@ -280,7 +280,7 @@ namespace OpenDental{
 				"SELECT MAX(procedurelog.procdate) "
 				+"FROM procedurelog,procedurecode "
 				+"WHERE procedurelog.PatNum="+patNum.ToString()
-				+" AND procedurecode.ADACode = procedurelog.ADACode "
+				+" AND procedurecode.CodeNum = procedurelog.CodeNum "
 				+"AND procedurecode.SetRecall = 1 "
 				+"AND (procedurelog.ProcStatus = 2 "
 				+"OR procedurelog.ProcStatus = 3 "

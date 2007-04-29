@@ -135,7 +135,7 @@ namespace OpenDental{
 				+"FROM patient,procedurecode,procedurelog,claimproc "
 				+"WHERE claimproc.procnum=procedurelog.procnum "
 				+"AND patient.PatNum=procedurelog.PatNum "
-				+"AND procedurelog.ADACode=procedurecode.ADACode "
+				+"AND procedurelog.CodeNum=procedurecode.CodeNum "
 				+"AND claimproc.NoBillIns=0 "
 				+"AND procedurelog.ProcFee>0 "
 				+"AND claimproc.Status=6 "//estimate
@@ -149,7 +149,7 @@ namespace OpenDental{
 					+"procedurelog.ProcDate,procedurecode.Descript,procedurelog.ProcFee FROM patient,procedurecode,"
 					+"procedurelog LEFT JOIN claimproc ON claimproc.procnum = procedurelog.procnum "
 					+"WHERE claimproc.procnum IS NULL "
-					+"&& patient.patnum=procedurelog.patnum && procedurelog.adacode=procedurecode.adacode "
+					+"&& patient.patnum=procedurelog.patnum && procedurelog.codenum=procedurecode.codenum "
 					+"&& patient.priplannum > 0 "
 					+"&& procedurelog.nobillins = 0 && procedurelog.procstatus = 2 "
 					+"&& procedurelog.ProcDate = '" + date1.SelectionStart.ToString("yyyy-MM-dd")+"'";

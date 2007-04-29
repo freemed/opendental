@@ -1626,7 +1626,7 @@ namespace OpenDental.Eclaims {
 					proc=Procedures.GetOneProc(claimproc.ProcNum,true);
 					text=claimproc.CodeSent.PadLeft(5,'0');//Field F08 - TODO check padding needed
 					doc.DrawString(g,text,procedureCodeCol,0);
-					text=ProcedureCodes.GetProcCode(proc.ADACode).Descript;
+					text=ProcedureCodes.GetProcCode(proc.CodeNum).Descript;
 					//TODO: clip description when too long.
 					doc.DrawString(g,text,procedureDescriptionCol,0);
 					text=Tooth.ToInternat(proc.ToothNum);//Field F10
@@ -1804,7 +1804,7 @@ namespace OpenDental.Eclaims {
 					proc=Procedures.GetOneProc(claimproc.ProcNum,true);
 					text=claimproc.CodeSent.PadLeft(5,'0');//Field F08 - TODO check padding needed
 					doc.DrawString(g,text,procedureCodeCol,0);
-					text=ProcedureCodes.GetProcCode(proc.ADACode).Descript;
+					text=ProcedureCodes.GetProcCode(proc.CodeNum).Descript;
 					//TODO: clip description when too long.
 					doc.DrawString(g,text,procedureDescriptionCol,0);
 					text=Tooth.ToInternat(proc.ToothNum);//Field F10

@@ -25,7 +25,7 @@ namespace OpenDental{
 		private System.ComponentModel.Container components = null;// Required designer variable.
 		///<summary></summary>
 		public bool IsNew;
-		private System.Windows.Forms.TextBox textADACode;
+		private System.Windows.Forms.TextBox textProcCode;
 		private System.Windows.Forms.TextBox textAbbrev;
 		private System.Windows.Forms.TextBox textDescription;
 		private System.Windows.Forms.CheckBox checkSetRecall;
@@ -92,7 +92,7 @@ namespace OpenDental{
 			this.label10 = new System.Windows.Forms.Label();
 			this.butOK = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
-			this.textADACode = new System.Windows.Forms.TextBox();
+			this.textProcCode = new System.Windows.Forms.TextBox();
 			this.textAbbrev = new System.Windows.Forms.TextBox();
 			this.textDescription = new System.Windows.Forms.TextBox();
 			this.listTreatArea = new System.Windows.Forms.ListBox();
@@ -130,7 +130,7 @@ namespace OpenDental{
 			this.label1.Name = "label1";
 			this.label1.Size = new System.Drawing.Size(82,14);
 			this.label1.TabIndex = 0;
-			this.label1.Text = "ADA Code";
+			this.label1.Text = "Proc Code";
 			this.label1.TextAlign = System.Drawing.ContentAlignment.TopRight;
 			// 
 			// label4
@@ -218,13 +218,13 @@ namespace OpenDental{
 			this.butCancel.Text = "&Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
 			// 
-			// textADACode
+			// textProcCode
 			// 
-			this.textADACode.Location = new System.Drawing.Point(162,12);
-			this.textADACode.Name = "textADACode";
-			this.textADACode.ReadOnly = true;
-			this.textADACode.Size = new System.Drawing.Size(100,20);
-			this.textADACode.TabIndex = 14;
+			this.textProcCode.Location = new System.Drawing.Point(162,12);
+			this.textProcCode.Name = "textProcCode";
+			this.textProcCode.ReadOnly = true;
+			this.textProcCode.Size = new System.Drawing.Size(100,20);
+			this.textProcCode.TabIndex = 14;
 			// 
 			// textAbbrev
 			// 
@@ -523,7 +523,7 @@ namespace OpenDental{
 			this.Controls.Add(this.textTime2);
 			this.Controls.Add(this.textDescription);
 			this.Controls.Add(this.textAbbrev);
-			this.Controls.Add(this.textADACode);
+			this.Controls.Add(this.textProcCode);
 			this.Controls.Add(this.butSlider);
 			this.Controls.Add(this.tbTime);
 			this.Controls.Add(this.label9);
@@ -557,7 +557,7 @@ namespace OpenDental{
 		#endregion
 
 		private void FormProcCodeEdit_Load(object sender, System.EventArgs e) {
-			textADACode.Text=ProcCode.ADACode;
+			textProcCode.Text=ProcCode.ProcCode;
 			textAlternateCode1.Text=ProcCode.AlternateCode1;
 			textMedicalCode.Text=ProcCode.MedicalCode;
 			textDescription.Text=ProcCode.Descript;
@@ -625,7 +625,7 @@ namespace OpenDental{
 			ODGridRow row;
 			Fee fee;
 			for(int i=0;i<DefB.Short[(int)DefCat.FeeSchedNames].Length;i++){
-				fee=Fees.GetFeeByOrder(ProcCode.ADACode,i);
+				fee=Fees.GetFeeByOrder(ProcCode.ProcCode,i);
 				row=new ODGridRow();
 				row.Cells.Add(DefB.Short[(int)DefCat.FeeSchedNames][i].ItemName);
 				if(fee==null){
@@ -640,13 +640,13 @@ namespace OpenDental{
 		}
 
 		private void gridFees_CellDoubleClick(object sender,OpenDental.UI.ODGridClickEventArgs e) {
-			Fee FeeCur=Fees.GetFeeByOrder(ProcCode.ADACode,e.Row);
+			Fee FeeCur=Fees.GetFeeByOrder(ProcCode.ProcCode,e.Row);
 			//tbFees.SelectedRow=e.Row;
 			//tbFees.ColorRow(e.Row,Color.LightGray);
 			FormFeeEdit FormFE=new FormFeeEdit();
 			if(FeeCur==null) {
 				FeeCur=new Fee();
-				FeeCur.ADACode=ProcCode.ADACode;
+				FeeCur.ADACode=ProcCode.ProcCode;
 				FeeCur.FeeSched=DefB.Short[(int)DefCat.FeeSchedNames][e.Row].DefNum;
 				Fees.Insert(FeeCur);
 				FormFE.IsNew=true;

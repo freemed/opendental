@@ -24,7 +24,7 @@ namespace OpenDentBusiness{
 		public int PatPlanNum;
 		///<summary>FK to covcat.CovCatNum.  Corresponds to X12 EB03- Service Type code.  Can never be blank.  There will be very specific categories covered by X12. Users should set their InsCovCats to the defaults we will provide.</summary>
 		public int CovCatNum;
-		///<summary>FK to procedurecode.ADACode.  Typical uses include fluoride, sealants, etc.  If a specific code is used here, then the CovCat is completely ignored.</summary>
+		///<summary>FK to procedurecode.ProcCode.  Typical uses include fluoride, sealants, etc.  If a specific code is used here, then the CovCat is completely ignored.</summary>
 		public string ADACode;
 		///<summary>Enum:InsBenefitType Corresponds to X12 EB01. Examples: 1=Percentage, 2=Deductible, 3=CoPayment, 4=Exclusions, 5=Limitations. There's not really any difference between limitations and exclusions as far as the logic is concerned.</summary>
 		public InsBenefitType BenefitType;

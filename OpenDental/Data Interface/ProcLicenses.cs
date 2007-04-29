@@ -136,7 +136,7 @@ namespace OpenDental {
 				adacode=PIn.PString(table.Rows[i]["ADACode"].ToString());
 				newdescript=PIn.PString(table.Rows[i]["Descript"].ToString());
 				command="UPDATE procedurecode SET Descript='"+POut.PString(newdescript)
-						+"' WHERE ADACode='"+POut.PString(adacode)+"'";
+						+"' WHERE ProcCode='"+POut.PString(adacode)+"'";
 				rowsaffected+=General.NonQ(command);
 			}
 			return rowsaffected;
@@ -144,15 +144,15 @@ namespace OpenDental {
 
 		///<summary>Deletes unused codes.  Returns the number of rows affected.</summary>
 		public static int PurgeUnused() {
-			string command=@"SELECT DISTINCT procedurecode.ADACode FROM procedurecode
-				LEFT JOIN procedurelog ON procedurelog.ADACode=procedurecode.ADACode
-				WHERE procedurelog.ADACode IS NULL";
+			string command=@"SELECT DISTINCT procedurecode.ProcCode FROM procedurecode
+				LEFT JOIN procedurelog ON procedurelog.CodeNum=procedurecode.CodeNum
+				WHERE procedurelog.ProcCode IS NULL";
 			DataTable table=General.GetTable(command);
 			string adacode;
 			int rowsaffected=0;
 			ProcLicense[] listProcLics=Refresh();
 			for(int i=0;i<table.Rows.Count;i++) {
-				adacode=PIn.PString(table.Rows[i]["ADACode"].ToString());
+				adacode=PIn.PString(table.Rows[i]["ProcCode"].ToString());
 				if(!Regex.IsMatch(adacode,"^D([0-9]{4})$")) {
 					continue;//ignore anything but D####
 				}

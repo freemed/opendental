@@ -11,7 +11,7 @@ namespace OpenDentBusiness {
 			//if(!includeDeletedAndNotes){
 				command+=" AND ProcStatus !=6";//don't include deleted
 			//}
-			command+=" ORDER BY ProcDate,ADACode";
+			command+=" ORDER BY ProcDate";//,OldCode
 				//notes:
 			/*	+";SELECT * FROM procnote WHERE PatNum="+POut.PInt(patNum)
 				+" ORDER BY EntryDateTime";*/
@@ -48,18 +48,18 @@ namespace OpenDentBusiness {
 			if(PrefB.RandomKeys) {
 				command+="ProcNum,";
 			}
-			command+="PatNum, AptNum, ADACode, ProcDate,ProcFee,Surf,"
+			command+="PatNum, AptNum, OldCode, ProcDate,ProcFee,Surf,"
 				+"ToothNum,ToothRange,Priority,ProcStatus,ProvNum,"
 				+"Dx,PlannedAptNum,PlaceService,Prosthesis,DateOriginalProsth,ClaimNote,"
 				+"DateEntryC,ClinicNum,MedicalCode,DiagnosticCode,IsPrincDiag,ProcNumLab,CPTModifier,RevenueCode,"
-				+"BillingTypeOne,BillingTypeTwo) VALUES(";
+				+"BillingTypeOne,BillingTypeTwo,CodeNum) VALUES(";
 			if(PrefB.RandomKeys) {
 				command+="'"+POut.PInt(proc.ProcNum)+"', ";
 			}
 			command+=
 				 "'"+POut.PInt   (proc.PatNum)+"', "
 				+"'"+POut.PInt   (proc.AptNum)+"', "
-				+"'"+POut.PString(proc.ADACode)+"', "
+				+"'"+POut.PString(proc.OldCode)+"', "
 				+POut.PDate  (proc.ProcDate)+", "
 				+"'"+POut.PDouble(proc.ProcFee)+"', "
 				+"'"+POut.PString(proc.Surf)+"', "
@@ -88,7 +88,8 @@ namespace OpenDentBusiness {
 				+"'"+POut.PString(proc.CPTModifier)+"', "
 				+"'"+POut.PString(proc.RevenueCode)+"', "
 				+"'"+POut.PInt   (proc.BillingTypeOne)+"', "
-				+"'"+POut.PInt   (proc.BillingTypeTwo)+"')";
+				+"'"+POut.PInt   (proc.BillingTypeTwo)+"', "
+				+"'"+POut.PInt   (proc.CodeNum)+"')";
 			//MessageBox.Show(cmd.CommandText);
 			DataConnection dcon=new DataConnection();
 			if(PrefB.RandomKeys) {
@@ -122,9 +123,9 @@ namespace OpenDentBusiness {
 				c+="AptNum = '"		+POut.PInt   (proc.AptNum)+"'";
 				comma=true;
 			}
-			if(proc.ADACode!=oldProc.ADACode){
+			if(proc.OldCode!=oldProc.OldCode){
 				if(comma) c+=",";
-				c+="ADACode = '"		+POut.PString(proc.ADACode)+"'";
+				c+="OldCode = '"		+POut.PString(proc.OldCode)+"'";
 				comma=true;
 			}
 			if(proc.ProcDate!=oldProc.ProcDate){
@@ -255,6 +256,12 @@ namespace OpenDentBusiness {
 				c+="BillingTypeTwo = '"+POut.PInt(proc.BillingTypeTwo)+"'";
 				comma=true;
 			}
+			if(proc.CodeNum!=oldProc.CodeNum) {
+				if(comma)
+					c+=",";
+				c+="CodeNum = '"+POut.PInt(proc.CodeNum)+"'";
+				comma=true;
+			}
 			int rowsChanged=0;
 			if(comma){
 				c+=" WHERE ProcNum = '"+POut.PInt(proc.ProcNum)+"'";
@@ -366,7 +373,7 @@ namespace OpenDentBusiness {
 				return Tooth.ToInt(x["ToothNum"].ToString()).CompareTo(Tooth.ToInt(y["ToothNum"].ToString()));
 			}
 			//priority and toothnums are the same, so sort by adacode.
-			return x["ADACode"].ToString().CompareTo(y["ADACode"].ToString());
+			return x["ProcCode"].ToString().CompareTo(y["ProcCode"].ToString());
 			//return 0;//priority, tooth number, and adacode are all the same
 		}
 

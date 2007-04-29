@@ -184,14 +184,14 @@ namespace OpenDental{
 				if(PIn.PInt(ProcList[i]["ProcStatus"].ToString())!=(int)procStat) {
 					continue;
 				}
-				if(ProcedureCodes.GetProcCode(ProcList[i]["ADACode"].ToString()).PaintType==ToothPaintingType.Extraction && (
+				if(ProcedureCodes.GetProcCode(ProcList[i]["ProcCode"].ToString()).PaintType==ToothPaintingType.Extraction && (
 					PIn.PInt(ProcList[i]["ProcStatus"].ToString())==(int)ProcStat.C
 					|| PIn.PInt(ProcList[i]["ProcStatus"].ToString())==(int)ProcStat.EC
 					|| PIn.PInt(ProcList[i]["ProcStatus"].ToString())==(int)ProcStat.EO
 					)) {
 					continue;//prevents the red X. Missing teeth already handled.
 				}
-				if(ProcedureCodes.GetProcCode(ProcList[i]["ADACode"].ToString()).GraphicColor==Color.FromArgb(0)) {
+				if(ProcedureCodes.GetProcCode(ProcList[i]["ProcCode"].ToString()).GraphicColor==Color.FromArgb(0)) {
 					switch((ProcStat)PIn.PInt(ProcList[i]["ProcStatus"].ToString())) {
 						case ProcStat.C:
 							cDark=DefB.Short[(int)DefCat.ChartGraphicColors][1].ItemColor;
@@ -216,10 +216,10 @@ namespace OpenDental{
 					}
 				}
 				else {
-					cDark=ProcedureCodes.GetProcCode(ProcList[i]["ADACode"].ToString()).GraphicColor;
-					cLight=ProcedureCodes.GetProcCode(ProcList[i]["ADACode"].ToString()).GraphicColor;
+					cDark=ProcedureCodes.GetProcCode(ProcList[i]["ProcCode"].ToString()).GraphicColor;
+					cLight=ProcedureCodes.GetProcCode(ProcList[i]["ProcCode"].ToString()).GraphicColor;
 				}
-				switch(ProcedureCodes.GetProcCode(ProcList[i]["ADACode"].ToString()).PaintType) {
+				switch(ProcedureCodes.GetProcCode(ProcList[i]["ProcCode"].ToString()).PaintType) {
 					case ToothPaintingType.BridgeDark:
 						if(ToothInitials.ToothIsMissingOrHidden(ToothInitialList,ProcList[i]["ToothNum"].ToString())) {
 							toothChart.SetPontic(ProcList[i]["ToothNum"].ToString(),cDark);

@@ -9,7 +9,7 @@ namespace OpenDentBusiness{
 		public int RepeatChargeNum;
 		/// <summary>FK to patient.PatNum.</summary>
 		public int PatNum;
-		///<summary>FK to procedurecode.ADACode.  The code that will be added to the account as a completed procedure.</summary>
+		///<summary>FK to procedurecode.ProcCode.  The code that will be added to the account as a completed procedure.</summary>
 		public string ADACode;
 		///<summary>The amount that will be charged.  The amount from the procedurecode will not be used.  This way, a repeating charge cannot be accidentally altered.</summary>
 		public double ChargeAmt;

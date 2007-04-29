@@ -451,7 +451,7 @@ namespace OpenDental{
 				//if the missing tooth is missing because of an extraction being billed here, then exclude it
 				for(int p=0;p<claimprocs.Count;p++) {
 					proc=Procedures.GetProc(ProcList,claimprocs[p].ProcNum);
-					procCode=ProcedureCodes.GetProcCode(proc.ADACode);
+					procCode=ProcedureCodes.GetProcCode(proc.CodeNum);
 					if(procCode.PaintType==ToothPaintingType.Extraction && proc.ToothNum==(string)missingTeeth[j]) {
 						missingTeeth.RemoveAt(j);
 						break;
@@ -1916,7 +1916,7 @@ namespace OpenDental{
 				return claimprocs[procIndex].FeeBilled.ToString("F");
 			}
 			Procedure ProcCur=Procedures.GetProc(ProcList,claimprocs[procIndex].ProcNum);
-			ProcedureCode procCode=ProcedureCodes.GetProcCode(ProcCur.ADACode);
+			ProcedureCode procCode=ProcedureCodes.GetProcCode(ProcCur.CodeNum);
 			if(field=="Desc")
 				if(procCode.TreatArea==TreatmentArea.Quad){
 					return ProcCur.Surf+" "+procCode.Descript;
@@ -1970,7 +1970,7 @@ namespace OpenDental{
 			string area="";
 			string toothNum="";
 			string surf="";
-			switch(((ProcedureCode)ProcedureCodes.HList[ProcCur.ADACode]).TreatArea){
+			switch(ProcedureCodes.GetProcCode(ProcCur.CodeNum).TreatArea){
 				case TreatmentArea.Surf:
 					//area blank
 					toothNum=Tooth.ToInternat(ProcCur.ToothNum);

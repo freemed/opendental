@@ -924,10 +924,10 @@ namespace OpenDental{
 					row.Cells.Add(DefB.GetName(DefCat.TxPriorities,ProcListTP[i].Priority));
 					row.Cells.Add(Tooth.ToInternat(ProcListTP[i].ToothNum));
 					row.Cells.Add(ProcListTP[i].Surf);
-					row.Cells.Add(ProcListTP[i].ADACode);
-					row.Cells.Add(ProcedureCodes.GetLaymanTerm(ProcListTP[i].ADACode));
+					row.Cells.Add(ProcedureCodes.GetProcCode(ProcListTP[i].CodeNum).ProcCode);
+					row.Cells.Add(ProcedureCodes.GetLaymanTerm(ProcListTP[i].CodeNum));
 					if(checkShowStandard.Checked){
-						standard=Fees.GetAmount0(ProcListTP[i].ADACode,feeSched);
+						standard=Fees.GetAmount0(ProcedureCodes.GetProcCode(ProcListTP[i].CodeNum).ProcCode,feeSched);
 						substandard+=standard;
 						totStandard+=standard;
 						row.Cells.Add(standard.ToString("F"));//standard
@@ -947,7 +947,7 @@ namespace OpenDental{
 							else{
 								//deduct:
 								dedRem=InsPlans.GetDedRem(ClaimProcList,DateTime.Today,PriPlanCur.PlanNum,PatPlanList[0].PatPlanNum,
-									-1,InsPlanList,BenefitList,ProcListTP[i].ADACode)
+									-1,InsPlanList,BenefitList,ProcedureCodes.GetProcCode(ProcListTP[i].CodeNum).ProcCode)
 									-dedAppliedPri;//subtracts deductible amounts already applied on this TP
 								if(dedRem<0) {
 									dedRem=0;
@@ -1008,7 +1008,7 @@ namespace OpenDental{
 							else{
 								//deduct:
 								dedRem=InsPlans.GetDedRem(ClaimProcList,DateTime.Today,SecPlanCur.PlanNum,PatPlanList[1].PatPlanNum,
-									-1,InsPlanList,BenefitList,ProcListTP[i].ADACode)
+									-1,InsPlanList,BenefitList,ProcedureCodes.GetProcCode(ProcListTP[i].CodeNum).ProcCode)
 									-dedAppliedSec;//subtracts deductible amounts already applied on this TP
 								if(dedRem<0){
 									dedRem=0;
@@ -1933,7 +1933,7 @@ namespace OpenDental{
 					procDummy.Surf=ProcTPSelectList[i].Surf;
 					//procDummy.HideGraphical??
 					procDummy.ProcStatus=ProcStat.TP;
-					procDummy.ADACode=ProcTPSelectList[i].ADACode;
+					procDummy.CodeNum=ProcedureCodes.GetProcCode(ProcTPSelectList[i].ADACode).CodeNum;
 					ProcAL.Add(procDummy);
 				}
 			}
@@ -1953,14 +1953,14 @@ namespace OpenDental{
 					//We don't care about HideGraphical anymore.  It will be enhanced later to a 3-state.
 					//continue;
 				//}
-				if(ProcedureCodes.GetProcCode(proc.ADACode).PaintType==ToothPaintingType.Extraction && (
+				if(ProcedureCodes.GetProcCode(proc.CodeNum).PaintType==ToothPaintingType.Extraction && (
 					proc.ProcStatus==ProcStat.C
 					|| proc.ProcStatus==ProcStat.EC
 					|| proc.ProcStatus==ProcStat.EO
 					)) {
 					continue;//prevents the red X. Missing teeth already handled.
 				}
-				if(ProcedureCodes.GetProcCode(proc.ADACode).GraphicColor==Color.FromArgb(0)) {
+				if(ProcedureCodes.GetProcCode(proc.CodeNum).GraphicColor==Color.FromArgb(0)) {
 					switch(proc.ProcStatus) {
 						case ProcStat.C:
 							cDark=DefB.Short[(int)DefCat.ChartGraphicColors][1].ItemColor;
@@ -1985,10 +1985,10 @@ namespace OpenDental{
 					}
 				}
 				else {
-					cDark=ProcedureCodes.GetProcCode(proc.ADACode).GraphicColor;
-					cLight=ProcedureCodes.GetProcCode(proc.ADACode).GraphicColor;
+					cDark=ProcedureCodes.GetProcCode(proc.CodeNum).GraphicColor;
+					cLight=ProcedureCodes.GetProcCode(proc.CodeNum).GraphicColor;
 				}
-				switch(ProcedureCodes.GetProcCode(proc.ADACode).PaintType) {
+				switch(ProcedureCodes.GetProcCode(proc.CodeNum).PaintType) {
 					case ToothPaintingType.BridgeDark:
 						if(ToothInitials.ToothIsMissingOrHidden(ToothInitialList,proc.ToothNum)) {
 							toothChart.SetPontic(proc.ToothNum,cDark);
@@ -2100,7 +2100,7 @@ namespace OpenDental{
 				procCur=ProcListTP[i];
 				//procOld=procCur.Copy();
 				//first the fees
-				procCur.ProcFee=Fees.GetAmount0(procCur.ADACode,Fees.GetFeeSched(PatCur,InsPlanList,PatPlanList));
+				procCur.ProcFee=Fees.GetAmount0(ProcedureCodes.GetStringProcCode(procCur.CodeNum),Fees.GetFeeSched(PatCur,InsPlanList,PatPlanList));
 				Procedures.ComputeEstimates(procCur,PatCur.PatNum,ClaimProcList,false,InsPlanList,PatPlanList,BenefitList);
 				Procedures.UpdateFee(procCur.ProcNum,procCur.ProcFee);
 				//Procedures.Update(procCur,procOld);//no recall synch required 
@@ -2139,7 +2139,7 @@ namespace OpenDental{
 				procTP.Priority=proc.Priority;
 				procTP.ToothNumTP=Tooth.ToInternat(proc.ToothNum);
 				procTP.Surf=proc.Surf;
-				procTP.ADACode=proc.ADACode;
+				procTP.ADACode=ProcedureCodes.GetStringProcCode(proc.CodeNum);
 				procTP.Descript=gridMain.Rows[gridMain.SelectedIndices[i]]
 					.Cells[gridMain.Columns.GetIndex(Lan.g("TableTP","Description"))].Text;
 				if(checkShowFees.Checked){
@@ -2273,9 +2273,9 @@ namespace OpenDental{
 				ClaimProcCur.FeeBilled=ProcCur.ProcFee;
 				ClaimProcCur.PlanNum=FormIPS.SelectedPlan.PlanNum;
 				if(FormIPS.SelectedPlan.UseAltCode)
-					ClaimProcCur.CodeSent=((ProcedureCode)ProcedureCodes.HList[ProcCur.ADACode]).AlternateCode1;
+					ClaimProcCur.CodeSent=ProcedureCodes.GetProcCode(ProcCur.CodeNum).AlternateCode1;
 				else{
-					ClaimProcCur.CodeSent=ProcCur.ADACode;
+					ClaimProcCur.CodeSent=ProcedureCodes.GetStringProcCode(ProcCur.CodeNum);
 					if(ClaimProcCur.CodeSent.Length>5 && ClaimProcCur.CodeSent.Substring(0,1)=="D"){
 						ClaimProcCur.CodeSent=ClaimProcCur.CodeSent.Substring(0,5);
 					}

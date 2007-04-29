@@ -130,11 +130,11 @@ namespace OpenDental{
 			report.AddSubTitle(((Pref)PrefB.HList["PracticeTitle"]).ValueString);
 			report.Query=@"SELECT procedurelog.ProcDate,
 				CONCAT(CONCAT(patient.LName,', '),patient.FName),
-				procedurelog.ADACode,procedurecode.Descript,
+				procedurecode.ProcCode,procedurecode.Descript,
 				procedurelog.ToothNum,procedurelog.Surf
 				FROM procedurelog,patient,procedurecode,procnote n1
 				WHERE procedurelog.PatNum = patient.PatNum
-				AND procedurelog.ADACode = procedurecode.ADACode
+				AND procedurelog.CodeNum = procedurecode.CodeNum
 				AND procedurelog.ProcStatus = 2
 				AND procedurelog.ProcNum=n1.ProcNum "
 				+"AND n1.Note LIKE '%\"\"%' "//looks for ""

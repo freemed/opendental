@@ -9,7 +9,7 @@ namespace OpenDentBusiness{
 		public int AutoCodeItemNum;
 		///<summary>FK to autocode.AutoCodeNum</summary>
 		public int AutoCodeNum;
-		///<summary>FK to procedurecode.ADACode</summary>
+		///<summary>FK to procedurecode.ProcCode</summary>
 		public string ADACode;
 	}
 

@@ -49,7 +49,7 @@ namespace OpenDental{
 				MsgBox.Show(this,"Cannot convert this database version which was only for development purposes.");
 				return false;
 			}
-			if(FromVersion < new Version("4.8.3.0")){
+			if(FromVersion < new Version("4.8.7.0")){
 				if(MessageBox.Show(Lan.g(this,"Your database will now be converted")+"\r"
 					+Lan.g(this,"from version")+" "+FromVersion.ToString()+"\r"
 					+Lan.g(this,"to version")+" "+ToVersion.ToString()+"\r"
@@ -4374,10 +4374,39 @@ namespace OpenDental{
 						)";
 				}
 				General.NonQEx(command);
-
-
-
 				command="UPDATE preference SET ValueString = '4.8.3.0' WHERE PrefName = 'DataBaseVersion'";
+				General.NonQEx(command);
+			}
+			To4_8_7();
+		}
+
+		///<summary></summary>
+		private void To4_8_7() {
+			if(FromVersion<new Version("4.8.7.0")) {
+				string command;
+				if(FormChooseDatabase.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE procedurecode ADD CodeNum mediumint NOT NULL";//this column will be the new primary key
+					General.NonQEx(command);
+					command="ALTER TABLE procedurecode DROP PRIMARY KEY";
+					General.NonQEx(command);
+					command="ALTER TABLE procedurecode ADD PRIMARY KEY (CodeNum), CHANGE CodeNum CodeNum mediumint unsigned NOT NULL auto_increment";
+					General.NonQEx(command);
+					command="ALTER TABLE procedurecode CHANGE ADACode ProcCode varchar(15) character set utf8 collate utf8_bin NOT NULL default ''";
+					General.NonQEx(command);
+					command="ALTER TABLE procedurecode ADD INDEX (ProcCode)";
+					General.NonQEx(command);
+					command="ALTER TABLE procedurelog ADD CodeNum mediumint NOT NULL";
+					General.NonQEx(command);
+					//this is written in such a way as to be compatible with Oracle.
+					command="UPDATE procedurelog SET procedurelog.CodeNum= (SELECT procedurecode.CodeNum FROM procedurecode WHERE procedurecode.ProcCode=procedurelog.ADACode)";
+					General.NonQEx(command);
+					command="ALTER TABLE procedurelog CHANGE ADACode OldCode varchar(15)";
+					General.NonQEx(command);
+				}
+				else{
+
+				}
+				command="UPDATE preference SET ValueString = '4.8.7.0' WHERE PrefName = 'DataBaseVersion'";
 				General.NonQEx(command);
 			}
 			//To4_8_?();

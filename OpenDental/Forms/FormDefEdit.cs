@@ -254,7 +254,7 @@ namespace OpenDental{
 				case DefCat.ApptProcsQuickAdd:
 					string[] procs=textValue.Text.Split(',');
 					for(int i=0;i<procs.Length;i++){
-						if(ProcedureCodes.GetProcCode(procs[i]).ADACode==null){
+						if(ProcedureCodes.GetProcCode(procs[i]).ProcCode==null){
 							MessageBox.Show(Lan.g(this,"Invalid procedure code or formatting. Valid format example: D1234,D2345,D3456"));
 							return;
 						}

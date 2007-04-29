@@ -1380,9 +1380,9 @@ namespace OpenDental {
 					tempAcctLine.Index=tempCountProc;
 					tempAcctLine.Date=arrayProc[tempCountProc].ProcDate.ToString("d");
 					tempAcctLine.Provider=Providers.GetAbbr(arrayProc[tempCountProc].ProvNum);
-					tempAcctLine.Code=arrayProc[tempCountProc].ADACode;
+					tempAcctLine.Code=ProcedureCodes.GetProcCode(arrayProc[tempCountProc].CodeNum).ProcCode;
 					tempAcctLine.Tooth=Tooth.ToInternat(arrayProc[tempCountProc].ToothNum);
-					tempAcctLine.Description=ProcedureCodes.GetProcCode(arrayProc[tempCountProc].ADACode).Descript;
+					tempAcctLine.Description=ProcedureCodes.GetProcCode(arrayProc[tempCountProc].CodeNum).Descript;
 					if(arrayProc[tempCountProc].MedicalCode!=""){
 						tempAcctLine.Description=Lan.g(this,"(medical)")+" "+tempAcctLine.Description;
 					}
@@ -2284,14 +2284,14 @@ namespace OpenDental {
 				//ClaimProcCur.PlanNum=Claims.Cur.PlanNum;
 				//ClaimProcCur.DateCP=ProcCur.ProcDate;
 				//writeoff
-				if(PlanCur.UseAltCode && ((ProcedureCode)ProcedureCodes.HList[ProcCur.ADACode]).AlternateCode1!=""){
-					claimProcs[i].CodeSent=((ProcedureCode)ProcedureCodes.HList[ProcCur.ADACode]).AlternateCode1;
+				if(PlanCur.UseAltCode && (ProcedureCodes.GetProcCode(ProcCur.CodeNum).AlternateCode1!="")){
+					claimProcs[i].CodeSent=ProcedureCodes.GetProcCode(ProcCur.CodeNum).AlternateCode1;
 				}
 				else if(PlanCur.IsMedical && ProcCur.MedicalCode!=""){
 					claimProcs[i].CodeSent=ProcCur.MedicalCode;
 				}
 				else{
-					claimProcs[i].CodeSent=ProcCur.ADACode;
+					claimProcs[i].CodeSent=ProcedureCodes.GetProcCode(ProcCur.CodeNum).ProcCode;
 					if(claimProcs[i].CodeSent.Length>5 && claimProcs[i].CodeSent.Substring(0,1)=="D"){
 						claimProcs[i].CodeSent=claimProcs[i].CodeSent.Substring(0,5);
 					}

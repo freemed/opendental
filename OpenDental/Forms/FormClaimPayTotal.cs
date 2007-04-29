@@ -296,9 +296,9 @@ namespace OpenDental
 				else{
 					ProcCur=Procedures.GetProc(ProcList,ClaimProcsToEdit[i].ProcNum);
 					//Procedures.CurOld=Procedures.Cur;//may not be necessary
-					tbProc.Cell[2,i]=ProcCur.ADACode;
+					tbProc.Cell[2,i]=ProcedureCodes.GetProcCode(ProcCur.CodeNum).ProcCode;
 					tbProc.Cell[3,i]=ProcCur.ToothNum;
-					tbProc.Cell[4,i]=ProcedureCodes.GetProcCode(ProcCur.ADACode).Descript;
+					tbProc.Cell[4,i]=ProcedureCodes.GetProcCode(ProcCur.CodeNum).Descript;
 				}
 				tbProc.Cell[0,i]=ClaimProcsToEdit[i].ProcDate.ToShortDateString();
 				tbProc.Cell[1,i]=Providers.GetAbbr(ClaimProcsToEdit[i].ProvNum);

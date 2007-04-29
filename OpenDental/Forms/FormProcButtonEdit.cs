@@ -140,7 +140,7 @@ namespace OpenDental{
 			this.label2.Name = "label2";
 			this.label2.Size = new System.Drawing.Size(188,14);
 			this.label2.TabIndex = 29;
-			this.label2.Text = "Add ADA Codes";
+			this.label2.Text = "Add Procedure Codes";
 			this.label2.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
 			// 
 			// label3
@@ -162,11 +162,11 @@ namespace OpenDental{
 			// label4
 			// 
 			this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif",8.25F,System.Drawing.FontStyle.Underline,System.Drawing.GraphicsUnit.Point,((byte)(0)));
-			this.label4.Location = new System.Drawing.Point(36,106);
+			this.label4.Location = new System.Drawing.Point(41,106);
 			this.label4.Name = "label4";
 			this.label4.Size = new System.Drawing.Size(358,23);
 			this.label4.TabIndex = 35;
-			this.label4.Text = "Add any number of ADA codes and Auto Codes";
+			this.label4.Text = "Add any number of procedure codes and Auto Codes";
 			this.label4.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
 			// 
 			// butAdd
@@ -415,7 +415,7 @@ namespace OpenDental{
       FormP.IsSelectionMode=true;
       FormP.ShowDialog();
       if(FormP.DialogResult!=DialogResult.Cancel){
-        listADA.Items.Add(FormP.SelectedADA);  
+        listADA.Items.Add(ProcedureCodes.GetStringProcCode(FormP.SelectedCodeNum));  
       } 
 		}
 

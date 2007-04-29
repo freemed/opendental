@@ -149,9 +149,9 @@ namespace OpenDental{
 			for(int i=0;i<ProcedureList.Length;i++){
 				tbProcs.Cell[0,i]=ProcedureList[i].ProcDate.ToShortDateString();
 				tbProcs.Cell[1,i]=Providers.GetAbbr(ProcedureList[i].ProvNum);
-				tbProcs.Cell[2,i]=ProcedureList[i].ADACode;
+				tbProcs.Cell[2,i]=ProcedureCodes.GetStringProcCode(ProcedureList[i].CodeNum);
 				tbProcs.Cell[3,i]=Tooth.ToInternat(ProcedureList[i].ToothNum);
-				tbProcs.Cell[4,i]=ProcedureCodes.GetProcCode(ProcedureList[i].ADACode).Descript;
+				tbProcs.Cell[4,i]=ProcedureCodes.GetProcCode(ProcedureList[i].CodeNum).Descript;
 				tbProcs.Cell[5,i]=ProcedureList[i].ProcFee.ToString("F");
 			}
 			tbProcs.LayoutTables();

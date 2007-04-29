@@ -208,7 +208,6 @@ namespace OpenDental{
 		///<summary>A subset of DataSetMain.  The procedures that need to be drawn in the graphical tooth chart.</summary>
 		List<DataRow> ProcList;
 		private int lastPatNum;
-        private bool quickbutton;
 		private OpenDental.UI.Button butCMDL;
 		private Label label1;
         private MenuItem menuItemDeleteSelected;
@@ -651,7 +650,7 @@ namespace OpenDental{
 			// 
 			// label14
 			// 
-			this.label14.Location = new System.Drawing.Point(283,6);
+			this.label14.Location = new System.Drawing.Point(282,5);
 			this.label14.Name = "label14";
 			this.label14.Size = new System.Drawing.Size(47,17);
 			this.label14.TabIndex = 51;
@@ -1021,11 +1020,10 @@ namespace OpenDental{
 			// 
 			// labelQuickBut
 			// 
-			this.labelQuickBut.AutoSize = true;
 			this.labelQuickBut.BackColor = System.Drawing.Color.Transparent;
 			this.labelQuickBut.Font = new System.Drawing.Font("Microsoft Sans Serif",6.75F,System.Drawing.FontStyle.Regular,System.Drawing.GraphicsUnit.Point,((byte)(0)));
 			this.labelQuickBut.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))),((int)(((byte)(0)))),((int)(((byte)(0)))));
-			this.labelQuickBut.Location = new System.Drawing.Point(188,24);
+			this.labelQuickBut.Location = new System.Drawing.Point(191,26);
 			this.labelQuickBut.Name = "labelQuickBut";
 			this.labelQuickBut.Size = new System.Drawing.Size(89,12);
 			this.labelQuickBut.TabIndex = 210;
@@ -1151,7 +1149,6 @@ namespace OpenDental{
 			// 
 			// label25
 			// 
-			this.label25.AutoSize = true;
 			this.label25.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
 			this.label25.Font = new System.Drawing.Font("Microsoft Sans Serif",6.75F,System.Drawing.FontStyle.Regular,System.Drawing.GraphicsUnit.Point,((byte)(0)));
 			this.label25.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))),((int)(((byte)(0)))),((int)(((byte)(0)))));
@@ -2958,7 +2955,7 @@ namespace OpenDental{
 				row.Cells.Add(table.Rows[i]["procStatus"].ToString());
 				row.Cells.Add(table.Rows[i]["prov"].ToString());
 				row.Cells.Add(table.Rows[i]["procFee"].ToString());
-				row.Cells.Add(table.Rows[i]["ADACode"].ToString());
+				row.Cells.Add(table.Rows[i]["ProcCode"].ToString());
 				row.Cells.Add(table.Rows[i]["user"].ToString());
 				row.Cells.Add(table.Rows[i]["signature"].ToString());
 				if(checkNotes.Checked){
@@ -3067,14 +3064,14 @@ namespace OpenDental{
 				if(PIn.PInt(ProcList[i]["ProcStatus"].ToString())!=(int)procStat) {
 					continue;
 				}
-				if(ProcedureCodes.GetProcCode(ProcList[i]["ADACode"].ToString()).PaintType==ToothPaintingType.Extraction && (
+				if(ProcedureCodes.GetProcCode(ProcList[i]["ProcCode"].ToString()).PaintType==ToothPaintingType.Extraction && (
 					PIn.PInt(ProcList[i]["ProcStatus"].ToString())==(int)ProcStat.C
 					|| PIn.PInt(ProcList[i]["ProcStatus"].ToString())==(int)ProcStat.EC
 					|| PIn.PInt(ProcList[i]["ProcStatus"].ToString())==(int)ProcStat.EO
 					)) {
 					continue;//prevents the red X. Missing teeth already handled.
 				}
-				if(ProcedureCodes.GetProcCode(ProcList[i]["ADACode"].ToString()).GraphicColor==Color.FromArgb(0)){
+				if(ProcedureCodes.GetProcCode(ProcList[i]["ProcCode"].ToString()).GraphicColor==Color.FromArgb(0)){
 					switch((ProcStat)PIn.PInt(ProcList[i]["ProcStatus"].ToString())) {
 						case ProcStat.C:
 							cDark=DefB.Short[(int)DefCat.ChartGraphicColors][1].ItemColor;
@@ -3099,10 +3096,10 @@ namespace OpenDental{
 					}
 				}
 				else{
-					cDark=ProcedureCodes.GetProcCode(ProcList[i]["ADACode"].ToString()).GraphicColor;
-					cLight=ProcedureCodes.GetProcCode(ProcList[i]["ADACode"].ToString()).GraphicColor;
+					cDark=ProcedureCodes.GetProcCode(ProcList[i]["ProcCode"].ToString()).GraphicColor;
+					cLight=ProcedureCodes.GetProcCode(ProcList[i]["ProcCode"].ToString()).GraphicColor;
 				}
-				switch(ProcedureCodes.GetProcCode(ProcList[i]["ADACode"].ToString()).PaintType){
+				switch(ProcedureCodes.GetProcCode(ProcList[i]["ProcCode"].ToString()).PaintType){
 					case ToothPaintingType.BridgeDark:
 						if(ToothInitials.ToothIsMissingOrHidden(ToothInitialList,ProcList[i]["ToothNum"].ToString())){
 							toothChart.SetPontic(ProcList[i]["ToothNum"].ToString(),cDark);
@@ -3525,6 +3522,7 @@ namespace OpenDental{
 			ProcCur.PatNum=PatCur.PatNum;
 			//aptnum
 			//adacode
+			//ProcCur.CodeNum=ProcedureCodes.GetProcCode(ProcCur.OldCode).CodeNum;//already set
 			if(newStatus==ProcStat.EO){
 				ProcCur.ProcDate=DateTime.MinValue;
 			}
@@ -3537,7 +3535,7 @@ namespace OpenDental{
 			if(newStatus==ProcStat.R || newStatus==ProcStat.EO || newStatus==ProcStat.EC)
 				ProcCur.ProcFee=0;
 			else
-				ProcCur.ProcFee=Fees.GetAmount0(ProcCur.ADACode,Fees.GetFeeSched(PatCur,PlanList,PatPlanList));
+				ProcCur.ProcFee=Fees.GetAmount0(ProcedureCodes.GetProcCode(ProcCur.CodeNum).ProcCode,Fees.GetFeeSched(PatCur,PlanList,PatPlanList));
 			//ProcCur.OverridePri=-1;
 			//ProcCur.OverrideSec=-1;
 			//surf
@@ -3550,12 +3548,12 @@ namespace OpenDental{
 				ProcCur.Priority=DefB.Short[(int)DefCat.TxPriorities][comboPriority.SelectedIndex-1].DefNum;
 			ProcCur.ProcStatus=newStatus;
 			if(newStatus==ProcStat.C){
-				ProcCur.Note=ProcedureCodes.GetProcCode(ProcCur.ADACode).DefaultNote;
+				ProcCur.Note=ProcedureCodes.GetProcCode(ProcCur.CodeNum).DefaultNote;
 			}
 			else{
 				ProcCur.Note="";
 			}
-			if(ProcedureCodes.GetProcCode(ProcCur.ADACode).IsHygiene
+			if(ProcedureCodes.GetProcCode(ProcCur.CodeNum).IsHygiene
 				&& PatCur.SecProv != 0){
 				ProcCur.ProvNum=PatCur.SecProv;
 			}
@@ -3567,10 +3565,10 @@ namespace OpenDental{
 				ProcCur.Dx=DefB.Short[(int)DefCat.Diagnosis][listDx.SelectedIndex].DefNum;
 			//nextaptnum
 			ProcCur.DateEntryC=DateTime.Now;
-			ProcCur.MedicalCode=ProcedureCodes.GetProcCode(ProcCur.ADACode).MedicalCode;
+			ProcCur.MedicalCode=ProcedureCodes.GetProcCode(ProcCur.CodeNum).MedicalCode;
 			Procedures.Insert(ProcCur);
 			if((ProcCur.ProcStatus==ProcStat.C || ProcCur.ProcStatus==ProcStat.EC || ProcCur.ProcStatus==ProcStat.EO)
-				&& ProcedureCodes.GetProcCode(ProcCur.ADACode).PaintType==ToothPaintingType.Extraction) {
+				&& ProcedureCodes.GetProcCode(ProcCur.CodeNum).PaintType==ToothPaintingType.Extraction) {
 				//if an extraction, then mark previous procs hidden
 				//Procedures.SetHideGraphical(ProcCur);//might not matter anymore
 				ToothInitials.SetValue(PatCur.PatNum,ProcCur.ToothNum,ToothInitialType.Missing);
@@ -3593,6 +3591,7 @@ namespace OpenDental{
 			ProcCur.PatNum=PatCur.PatNum;
 			//aptnum
 			//adacode
+			//ProcCur.CodeNum=ProcedureCodes.GetProcCode(ProcCur.OldCode).CodeNum;//already set
 			if(newStatus==ProcStat.EO){
 				ProcCur.ProcDate=DateTime.MinValue;
 			}
@@ -3605,7 +3604,7 @@ namespace OpenDental{
 			if(newStatus==ProcStat.R || newStatus==ProcStat.EO || newStatus==ProcStat.EC)
 				ProcCur.ProcFee=0;
 			else
-				ProcCur.ProcFee=Fees.GetAmount0(ProcCur.ADACode,Fees.GetFeeSched(PatCur,PlanList,PatPlanList));
+				ProcCur.ProcFee=Fees.GetAmount0(ProcedureCodes.GetProcCode(ProcCur.CodeNum).ProcCode,Fees.GetFeeSched(PatCur,PlanList,PatPlanList));
 			//ProcCur.OverridePri=-1;
 			//ProcCur.OverrideSec=-1;
 			//surf
@@ -3618,12 +3617,12 @@ namespace OpenDental{
 				ProcCur.Priority=DefB.Short[(int)DefCat.TxPriorities][comboPriority.SelectedIndex-1].DefNum;
 			ProcCur.ProcStatus=newStatus;
 			if(newStatus==ProcStat.C) {
-				ProcCur.Note=ProcedureCodes.GetProcCode(ProcCur.ADACode).DefaultNote;
+				ProcCur.Note=ProcedureCodes.GetProcCode(ProcCur.CodeNum).DefaultNote;
 			}
 			else {
 				ProcCur.Note="";
 			}
-			if(ProcedureCodes.GetProcCode(ProcCur.ADACode).IsHygiene
+			if(ProcedureCodes.GetProcCode(ProcCur.CodeNum).IsHygiene
 				&& PatCur.SecProv != 0){
 				ProcCur.ProvNum=PatCur.SecProv;
 			}
@@ -3633,7 +3632,7 @@ namespace OpenDental{
 			ProcCur.ClinicNum=PatCur.ClinicNum;
 			if(listDx.SelectedIndex!=-1)
 				ProcCur.Dx=DefB.Short[(int)DefCat.Diagnosis][listDx.SelectedIndex].DefNum;
-			ProcCur.MedicalCode=ProcedureCodes.GetProcCode(ProcCur.ADACode).MedicalCode;
+			ProcCur.MedicalCode=ProcedureCodes.GetProcCode(ProcCur.CodeNum).MedicalCode;
 			//nextaptnum
 			//ProcCur.CapCoPay=-1;
 			//if(Patients.Cur.PriPlanNum!=0){//if patient has insurance
@@ -3651,7 +3650,7 @@ namespace OpenDental{
 			//}
 			Procedures.Insert(ProcCur);
 			if((ProcCur.ProcStatus==ProcStat.C || ProcCur.ProcStatus==ProcStat.EC || ProcCur.ProcStatus==ProcStat.EO)
-				&& ProcedureCodes.GetProcCode(ProcCur.ADACode).PaintType==ToothPaintingType.Extraction) {
+				&& ProcedureCodes.GetProcCode(ProcCur.CodeNum).PaintType==ToothPaintingType.Extraction) {
 				//if an extraction, then mark previous procs hidden
 				//Procedures.SetHideGraphical(ProcCur);//might not matter anymore
 				ToothInitials.SetValue(PatCur.PatNum,ProcCur.ToothNum,ToothInitialType.Missing);
@@ -3678,9 +3677,9 @@ namespace OpenDental{
 				isValid=true;
 				ProcCur=new Procedure();//going to be an insert, so no need to set Procedures.CurOld
 				//Procedure
-				ProcCur.ADACode = FormP.SelectedADA;
+				ProcCur.CodeNum = FormP.SelectedCodeNum;
 				//Procedures.Cur.ADACode=ProcButtonItems.adaCodeList[i];
-				tArea=ProcedureCodes.GetProcCode(ProcCur.ADACode).TreatArea;
+				tArea=ProcedureCodes.GetProcCode(ProcCur.CodeNum).TreatArea;
 				if((tArea==TreatmentArea.Arch
 					|| tArea==TreatmentArea.Mouth
 					|| tArea==TreatmentArea.Quad
@@ -3860,40 +3859,34 @@ namespace OpenDental{
 				return;
 			}
 			ProcButton ProcButtonCur=ProcButtonList[listViewButtons.SelectedIndices[0]];
-			ProcButtonClicked(ProcButtonCur.ProcButtonNum);
+			ProcButtonClicked(ProcButtonCur.ProcButtonNum,"");
 		}
 
-		private void ProcButtonClicked(int procButtonNum){
+		///<summary>If quickbutton, then pass the code in and set procButtonNum to 0.</summary>
+		private void ProcButtonClicked(int procButtonNum,string quickcode){
 			Procedures.SetDateFirstVisit(DateTime.Today,1,PatCur);
 			bool isValid;
 			TreatmentArea tArea;
 			int quadCount=0;//automates quadrant codes.
 			string[] adaCodeList;
-            int[] autoCodeList;
-			if (quickbutton){
-				ArrayList ALautoCodes=new ArrayList(procButtonNum);
+			int[] autoCodeList;
+			if(procButtonNum==0){
 				adaCodeList=new string[1];
+				adaCodeList[0]=quickcode;
 				autoCodeList=new int[0];
-				ALautoCodes.CopyTo(adaCodeList);
 			}
 			else{
 				adaCodeList=ProcButtonItems.GetADAListForButton(procButtonNum);
 				autoCodeList=ProcButtonItems.GetAutoListForButton(procButtonNum);
 			}
-
 			Procedure ProcCur;
 			for(int i=0;i<adaCodeList.Length;i++){
 				//needs to loop at least once, regardless of whether any teeth are selected.	
 				for(int n=0;n==0 || n<toothChart.SelectedTeeth.Length;n++){
 					isValid=true;
 					ProcCur=new Procedure();//insert, so no need to set CurOld
-					if (quickbutton){
-						ProcCur.ADACode = ("D" + procButtonNum);
-					}
-					else{
-						ProcCur.ADACode = adaCodeList[i];
-					}
-					tArea=ProcedureCodes.GetProcCode(ProcCur.ADACode).TreatArea;
+					ProcCur.CodeNum=ProcedureCodes.GetProcCode(adaCodeList[i]).CodeNum;
+					tArea=ProcedureCodes.GetProcCode(ProcCur.CodeNum).TreatArea;
 					if((tArea==TreatmentArea.Arch
 						|| tArea==TreatmentArea.Mouth
 						|| tArea==TreatmentArea.Quad
@@ -3983,8 +3976,9 @@ namespace OpenDental{
 					surf=textSurf.Text;
 					isAdditional= n!=0;
 					ProcCur=new Procedure();//this will be an insert, so no need to set CurOld
-					ProcCur.ADACode=AutoCodeItems.GetADA(autoCodeList[i],toothNum,surf,isAdditional,PatCur.PatNum,PatCur.Age);
-					tArea=ProcedureCodes.GetProcCode(ProcCur.ADACode).TreatArea;
+					ProcCur.CodeNum=ProcedureCodes.GetProcCode
+						(AutoCodeItems.GetADA(autoCodeList[i],toothNum,surf,isAdditional,PatCur.PatNum,PatCur.Age)).CodeNum;
+					tArea=ProcedureCodes.GetProcCode(ProcCur.CodeNum).TreatArea;
 					if((tArea==TreatmentArea.Arch
 						|| tArea==TreatmentArea.Mouth
 						|| tArea==TreatmentArea.Quad
@@ -4116,9 +4110,9 @@ namespace OpenDental{
 			int quadCount=0;//automates quadrant codes.
 			for(int n=0;n==0 || n<toothChart.SelectedTeeth.Length;n++) {//always loops at least once.
 				ProcCur=new Procedure();//this will be an insert, so no need to set CurOld
-				ProcCur.ADACode=textADACode.Text;
+				ProcCur.CodeNum=ProcedureCodes.GetProcCode(textADACode.Text).CodeNum;
 				bool isValid=true;
-				tArea=ProcedureCodes.GetProcCode(ProcCur.ADACode).TreatArea;
+				tArea=ProcedureCodes.GetProcCode(ProcCur.CodeNum).TreatArea;
 				if((tArea==TreatmentArea.Arch
 					|| tArea==TreatmentArea.Mouth
 					|| tArea==TreatmentArea.Quad
@@ -4700,7 +4694,7 @@ namespace OpenDental{
 			for(int i=0;i<myProcList.Length;i++){
 				if(myProcList[i].PlannedAptNum!=AptCur.AptNum)
 					continue;//only concerned with procs on this nextApt
-				if(!ProcedureCodes.GetProcCode(myProcList[i].ADACode).IsHygiene){
+				if(!ProcedureCodes.GetProcCode(myProcList[i].CodeNum).IsHygiene){
 					allProcsHyg=false;
 					break;
 				}
@@ -4874,7 +4868,7 @@ namespace OpenDental{
 				//	continue;//don't allow setting a procedure complete again.
 				//}
 				procOld=procCur.Copy();
-				procCode=ProcedureCodes.GetProcCode(procCur.ADACode);
+				procCode=ProcedureCodes.GetProcCode(procCur.CodeNum);
 				if(procOld.ProcStatus!=ProcStat.C) {
 					//if procedure was already complete, then don't add more notes.
 					procCur.Note+=procCode.DefaultNote;//note wasn't complete, so add notes
@@ -5292,112 +5286,80 @@ namespace OpenDental{
 
 		private void buttonCDO_Click(object sender,EventArgs e) {
 			textSurf.Text = "DO";
-			quickbutton = true;
-			ProcButtonClicked(2392);
-			quickbutton = false;
-
+			ProcButtonClicked(0,"D2392");
 		}
 
 		private void buttonCMOD_Click(object sender,EventArgs e) {
 			textSurf.Text = "MOD";
-			quickbutton = true;
-			ProcButtonClicked(2393);
-			quickbutton = false;
-
+			ProcButtonClicked(0,"D2393");
 		}
 
 		private void buttonCO_Click(object sender,EventArgs e) {
 			textSurf.Text = "O";
-			quickbutton = true;
-			ProcButtonClicked(2391);
-			quickbutton = false;
+			ProcButtonClicked(0,"D2391");
 		}
 
 		private void buttonCMO_Click(object sender,EventArgs e) {
 			textSurf.Text = "MO";
-			quickbutton = true;
-			ProcButtonClicked(2392);
-			quickbutton = false;
+			ProcButtonClicked(0,"D2392");
 		}
 
 		private void butCOL_Click(object sender,EventArgs e) {
 			textSurf.Text = "OL";
-			quickbutton = true;
-			ProcButtonClicked(2392);
-			quickbutton = false;
+			ProcButtonClicked(0,"D2392");
 		}
 
 		private void butCOB_Click(object sender,EventArgs e) {
 			textSurf.Text = "OB";
-			quickbutton = true;
-			ProcButtonClicked(2392);
-			quickbutton = false;
+			ProcButtonClicked(0,"D2392");
 		}
 
 		private void butDL_Click(object sender,EventArgs e) {
 			textSurf.Text = "DL";
-			quickbutton = true;
-			ProcButtonClicked(2331);
-			quickbutton = false;
+			ProcButtonClicked(0,"D2331");
 
 		}
 
 		private void butML_Click(object sender,EventArgs e) {
 			textSurf.Text = "ML";
-			quickbutton = true;
-			ProcButtonClicked(2331);
-			quickbutton = false;
+			ProcButtonClicked(0,"D2331");
 
 		}
 
 		private void buttonCSeal_Click(object sender,EventArgs e) {
 			textSurf.Text = "";
-			quickbutton = true;
-			ProcButtonClicked(1351);
-			quickbutton = false;
+			ProcButtonClicked(0,"D1351");
 		}
 
 		private void buttonADO_Click(object sender,EventArgs e) {
 			textSurf.Text = "DO";
-			quickbutton = true;
-			ProcButtonClicked(2150);
-			quickbutton = false;
+			ProcButtonClicked(0,"D2150");
 		}
 
 		private void buttonAMOD_Click(object sender,EventArgs e) {
 			textSurf.Text = "MOD";
-			quickbutton = true;
-			ProcButtonClicked(2160);
-			quickbutton = false;
+			ProcButtonClicked(0,"D2160");
 		}
 
 		private void buttonAO_Click(object sender,EventArgs e) {
 			textSurf.Text = "O";
-			quickbutton = true;
-			ProcButtonClicked(2140);
-			quickbutton = false;
+			ProcButtonClicked(0,"D2140");
 		}
 
 		private void buttonAMO_Click(object sender,EventArgs e) {
 			textSurf.Text = "MO";
-			quickbutton = true;
-			ProcButtonClicked(2150);
-			quickbutton = false;
+			ProcButtonClicked(0,"D2150");
 
 		}
 
 		private void label25_Click(object sender,EventArgs e) {
-				panelQuickButtons.Visible = false;
-				labelQuickBut.Text="Show Quick Buttons";
-
+			panelQuickButtons.Visible = false;
+			labelQuickBut.Text="Show Quick Buttons";
 		}
 
 		private void butCMDL_Click(object sender,EventArgs e) {
 			textSurf.Text = "MDL";
-			quickbutton = true;
-			ProcButtonClicked(2332);
-			quickbutton = false;
-
+			ProcButtonClicked(0,"D2332");
 		}
 
 

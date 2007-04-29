@@ -931,34 +931,8 @@ namespace OpenDental {
 		}
 
 		private void ProcedureCodesAddMissing() {
-			command=@"SELECT DISTINCT procedurelog.ADACode
-				FROM procedurelog
-				LEFT JOIN procedurecode ON procedurelog.ADACode=procedurecode.ADACode
-				WHERE procedurecode.ADACode IS NULL
-				AND procedurelog.ADACode !=''";
-			table=General.GetTable(command);
-			if(table.Rows.Count==0) {
-				if(checkShow.Checked) {
-					textLog.Text+=Lan.g(this,"No procedure codes need to be added.")+"\r\n";
-				}
-				return;
-			}
-			string myADA;
-			ProcedureCode procCode;
-			for(int i=0;i<table.Rows.Count;i++) {
-				myADA=PIn.PString(table.Rows[i][0].ToString());
-				procCode=new ProcedureCode();
-				procCode.ADACode=myADA;
-				procCode.Descript=myADA;
-				procCode.AbbrDesc=myADA;
-				procCode.ProcTime="/X/";
-				procCode.ProcCat=DefB.Short[(int)DefCat.ProcCodeCats][0].DefNum;
-				procCode.TreatArea=TreatmentArea.Mouth;
-				ProcedureCodes.Insert(procCode);
-				textLog.Text+=Lan.g(this,"Procedure code added: ")+myADA+"\r\n";
-			}
-			textLog.Text+=Lan.g(this,"Total procedure codes added: ")+table.Rows.Count.ToString()+"\r\n";
-			DataValid.SetInvalid(InvalidTypes.ProcCodes);
+			//this no longer makes sense.  We could, however, validate all the keys and make sure every procedurelog
+			//has a non-zero key.  Maybe later.
 		}
 
 		private void ProcedurelogAttachedToWrongAppts() {

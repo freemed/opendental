@@ -9,7 +9,7 @@ namespace OpenDentBusiness{
 		public int ProcButtonItemNum;
 		///<summary>FK to procbutton.ProcButtonNum.</summary>
 		public int ProcButtonNum;
-		///<summary>FK to procedurecode.ADACode.  0 if this is an autocode.</summary>
+		///<summary>FK to procedurecode.ProcCode.  0 if this is an autocode.</summary>
 		public string ADACode;
 		///<summary>FK to autocode.AutoCodeNum.  0 if this is a procedure code.</summary>
 		public int AutoCodeNum;

@@ -371,8 +371,8 @@ namespace OpenDental{
 					if(provNum==0){//if no prov set, then use practice default.
 						provNum=PrefB.GetInt("PracticeDefaultProv");
 					}
-					ClaimProcsForClaim[i].FeeBilled=Fees.GetAmount0(//get the fee based on ada and prov fee sched
-						ProcCur.ADACode
+					ClaimProcsForClaim[i].FeeBilled=Fees.GetAmount0(//get the fee based on code and prov fee sched
+						ProcedureCodes.GetStringProcCode(ProcCur.CodeNum)
 						,Providers.ListLong[Providers.GetIndexLong(provNum)].FeeSched);
 				}
 				else{//don't use ucr.  Use the procedure fee instead.
@@ -390,7 +390,7 @@ namespace OpenDental{
 				}
 				else{
 					dedRem=InsPlans.GetDedRem(ClaimProcList,ClaimProcsForClaim[i].ProcDate,ClaimCur.PlanNum,patPlanNum,
-						ClaimCur.ClaimNum,PlanList,benefitList,ProcCur.ADACode)
+						ClaimCur.ClaimNum,PlanList,benefitList,ProcedureCodes.GetStringProcCode(ProcCur.CodeNum))
 						-dedApplied;//subtracts deductible amounts already applied on this claim
 					if(dedRem<0) {
 						dedRem=0;

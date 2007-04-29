@@ -143,7 +143,7 @@ namespace OpenDental{
 				,"procedurelog.ProcDate <= '?'");		// added carrierNum, SPK
 			report.Query=@"SELECT carrier.CarrierName,CONCAT(CONCAT(patSub.LName,', '),patSub.FName) 
 				,patSub.SSN,CONCAT(CONCAT(patPat.LName,', '),patPat.FName)
-				,patPat.Birthdate,procedurelog.ADACode,procedurecode.Descript
+				,patPat.Birthdate,procedurecode.ProcCode,procedurecode.Descript
 				,procedurelog.ToothNum,procedurelog.Surf,procedurelog.ProcDate
 				,procedurelog.ProcFee,procedurelog.ProcFee-claimproc.WriteOff
 				FROM procedurelog,patient AS patSub,patient AS patPat
@@ -155,7 +155,7 @@ namespace OpenDental{
 				AND claimproc.NoBillIns = 0 
 				AND insplan.Subscriber = patSub.PatNum
 				AND insplan.CarrierNum = carrier.CarrierNum	
-				AND procedurelog.ADACode = procedurecode.ADACode
+				AND procedurelog.CodeNum = procedurecode.CodeNum
 				AND ?carrier
 				AND ?date1
 				AND ?date2

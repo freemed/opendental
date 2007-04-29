@@ -13,12 +13,12 @@ namespace OpenDental{
 		public static AutoCodeItem[] List;//all
 		///<summary></summary>
 		public static AutoCodeItem[] ListForCode;//all items for a specific AutoCode
-		///<summary>key=ADACode,value=AutoCodeNum</summary>
+		///<summary>key=ProcCode,value=AutoCodeNum</summary>
 		public static Hashtable HList;
 
 		///<summary></summary>
 		public static void Refresh(){
-			string command="SELECT * from autocodeitem";
+			string command="SELECT * FROM autocodeitem";
 			DataTable table=General.GetTable(command);
 			HList=new Hashtable();
 			List=new AutoCodeItem[table.Rows.Count];

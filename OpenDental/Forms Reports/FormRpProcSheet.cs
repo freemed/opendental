@@ -270,11 +270,9 @@ namespace OpenDental{
 		}
 
 		private void CreateIndividual(){
-			//added plfname for ordering purposes, spk 3/13/04
-			// added CapCoPay for Capitation, SPK 7/15/04 (js rewrote it on 10/4/04 due to db change)
-			// changed procedurecode.adacode to procedurelog.adacode & added Procnum to retrieve all codes
+			//added Procnum to retrieve all codes
 			Queries.CurReport.Query="SELECT procedurelog.ProcDate,CONCAT(CONCAT(CONCAT(CONCAT"
-				+"(patient.LName,', '),patient.FName),' '),patient.MiddleI) AS plfname, procedurelog.ADACode,"
+				+"(patient.LName,', '),patient.FName),' '),patient.MiddleI) AS plfname, procedurecode.ProcCode,"
 				+"procedurelog.ToothNum,procedurecode.Descript,provider.Abbr,"
 				+"procedurelog.ProcFee-IFNULL(SUM(claimproc.WriteOff),0) $fee "//if no writeoff, then subtract 0
 				+"FROM patient,procedurecode,provider,procedurelog "
@@ -282,10 +280,10 @@ namespace OpenDental{
 				+"AND claimproc.Status='7' "//only CapComplete writeoffs are subtracted here.
 				+"WHERE procedurelog.ProcStatus = '2' "
 				+"AND patient.PatNum=procedurelog.PatNum "
-				+"AND procedurelog.ADACode=procedurecode.ADACode "
+				+"AND procedurelog.CodeNum=procedurecode.CodeNum "
 				+"AND provider.ProvNum=procedurelog.ProvNum "
 				+"AND "+whereProv+" "
-				+"AND procedurelog.ADACode LIKE '%"+POut.PString(textADACode.Text)+"%' "
+				+"AND procedurecodc.ProcCode LIKE '%"+POut.PString(textADACode.Text)+"%' "
 				+"AND procedurelog.ProcDate >= " +POut.PDate(date1.SelectionStart)+" "
 				+"AND procedurelog.ProcDate <= " +POut.PDate(date2.SelectionStart)+" "
 				+"GROUP BY procedurelog.ProcNum "
@@ -327,18 +325,18 @@ namespace OpenDental{
 
 		private void CreateGrouped(){
 			//this would require a temporary table to be able to handle capitation.
-			Queries.CurReport.Query="SELECT definition.ItemName,procedurelog.ADACode,procedurecode.Descript,"
+			Queries.CurReport.Query="SELECT definition.ItemName,procedurecode.ProcCode,procedurecode.Descript,"
         +"Count(*),AVG(procedurelog.ProcFee) $AvgFee,SUM(procedurelog.ProcFee) AS $TotFee "
 				+"FROM procedurelog,procedurecode,definition "
 				+"WHERE procedurelog.ProcStatus = '2' "
-				+"AND procedurelog.ADACode=procedurecode.ADACode "
+				+"AND procedurelog.CodeNum=procedurecode.CodeNum "
 				+"AND definition.DefNum=procedurecode.ProcCat "
 				+"AND "+whereProv+" "
-				+"AND procedurelog.ADACode LIKE '%"+POut.PString(textADACode.Text)+"%' "
+				+"AND procedurecode.ProcCode LIKE '%"+POut.PString(textADACode.Text)+"%' "
 				+"AND procedurelog.ProcDate >= '" + date1.SelectionStart.ToString("yyyy-MM-dd")+"' "
 				+"AND procedurelog.ProcDate <= '" + date2.SelectionStart.ToString("yyyy-MM-dd")+"' "
-				+"GROUP BY procedurelog.ADACode "
-				+"ORDER BY definition.ItemOrder,procedurelog.ADACode";
+				+"GROUP BY procedurecode.ProcCode "
+				+"ORDER BY definition.ItemOrder,procedurecode.ProcCode";
 			FormQuery2=new FormQuery();
 			FormQuery2.IsReport=true;
 			FormQuery2.SubmitReportQuery();			
@@ -358,7 +356,7 @@ namespace OpenDental{
 			Queries.CurReport.ColPos[5]=600;
 			Queries.CurReport.ColPos[6]=700;
 			Queries.CurReport.ColCaption[0]="Category";
-			Queries.CurReport.ColCaption[1]="ADA Code";			
+			Queries.CurReport.ColCaption[1]="Code";			
 			Queries.CurReport.ColCaption[2]="Description";
 			Queries.CurReport.ColCaption[3]="Quantity";
 			Queries.CurReport.ColCaption[4]="Average Fee";

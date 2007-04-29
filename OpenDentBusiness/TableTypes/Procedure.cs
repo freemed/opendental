@@ -11,8 +11,8 @@ namespace OpenDentBusiness {
 		public int PatNum;
 		///<summary>FK to appointment.AptNum.  Only allowed to attach proc to one appt(not counting planned appt)</summary>
 		public int AptNum;
-		///<summary>FK to procedurecode.ADACode</summary>
-		public string ADACode;
+		///<summary>No longer used.</summary>
+		public string OldCode;
 		///<summary>Procedure date/time that will show in the account as the date performed.  If just treatment planned, the date can be the date it was tp'd, or the date can be min val if we don't care.</summary>
 		public DateTime ProcDate;
 		///<summary>Procedure fee.</summary>
@@ -45,7 +45,7 @@ namespace OpenDentBusiness {
 		public DateTime DateEntryC;
 		///<summary>FK to clinic.ClinicNum.  0 if no clinic.</summary>
 		public int ClinicNum;
-		///<summary>FK to procedurecode.ADACode. Optional.</summary>
+		///<summary>FK to procedurecode.ProcCode. Optional.</summary>
 		public string MedicalCode;
 		///<summary>Simple text for ICD-9 code. Gets sent with medical claims.</summary>
 		public string DiagnosticCode;
@@ -53,7 +53,7 @@ namespace OpenDentBusiness {
 		public bool IsPrincDiag;
 		//<summary>This is only used in Canada because their insurance companies require this number.</summary>
 		//public double LabFee;//need to delete.
-		//<summary>FK to procedurecode.ADACode.  Only used in Canada.</summary>
+		//<summary>FK to procedurecode.ProcCode.  Only used in Canada.</summary>
 		//public string LabProcCode;//need to delete.
 		///<summary>FK to procedurelog.ProcNum. Only used in Canada. If not zero, then this proc is a lab fee and this indicates to which actual procedure the lab fee is attached.  For ordinary use, they are treated like two separate procedures.  It's only for insurance claims that we need to know which lab fee belongs to which procedure.  For now, we limit one fee attached to one procedure.</summary>
 		public int ProcNumLab;
@@ -65,6 +65,8 @@ namespace OpenDentBusiness {
 		public int BillingTypeOne;
 		///<summary>FK to definition.DefNum.  Same as BillingTypeOne, but used when there is a secondary billing type to account for.</summary>
 		public int BillingTypeTwo;
+		///<summary>FK to procedurecode.CodeNum</summary>
+		public int CodeNum;
 
 		///<summary>Not a database column.  Saved in database in the procnote table.  This note is only the most recent note from that table.  If user changes it, then the business layer handles adding another procnote to that table.</summary>
 		public string Note;
@@ -81,7 +83,7 @@ namespace OpenDentBusiness {
 			proc.ProcNum=ProcNum;
 			proc.PatNum=PatNum;
 			proc.AptNum=AptNum;
-			proc.ADACode=ADACode;
+			proc.OldCode=OldCode;
 			proc.ProcDate=ProcDate;
 			proc.ProcFee=ProcFee;
 			proc.Surf=Surf;
@@ -106,6 +108,7 @@ namespace OpenDentBusiness {
 			proc.RevenueCode = RevenueCode;
 			proc.BillingTypeOne=BillingTypeOne;
 			proc.BillingTypeTwo=BillingTypeTwo;
+			proc.CodeNum=CodeNum;
 			//not database fields:
 			proc.Note=Note;
 			proc.UserNum=UserNum;

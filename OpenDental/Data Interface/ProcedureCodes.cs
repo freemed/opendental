@@ -13,7 +13,7 @@ namespace OpenDental{
 		private static DataTable tableStat;
 		///<summary></summary>
 		public static ArrayList RecallAL;
-		///<summary>key:AdaCode, value:ProcedureCode</summary>
+		///<summary>key:ProcCode, value:ProcedureCode</summary>
 		public static Hashtable HList;//
 		///<summary></summary>
 		public static ProcedureCode[] List;
@@ -22,14 +22,14 @@ namespace OpenDental{
 		public static void Refresh() {
 			HList=new Hashtable();
 			ProcedureCode tempCode=new ProcedureCode();
-			string command="SELECT * from procedurecode ORDER BY ProcCat,ADACode";
+			string command="SELECT * FROM procedurecode ORDER BY ProcCat,ProcCode";
 			DataTable table=General.GetTable(command);
 			tableStat=table.Copy();
 			RecallAL=new ArrayList();
 			List=new ProcedureCode[tableStat.Rows.Count];
 			for(int i=0;i<tableStat.Rows.Count;i++) {
 				tempCode=new ProcedureCode();
-				tempCode.ADACode       =PIn.PString(tableStat.Rows[i][0].ToString());
+				tempCode.ProcCode      =PIn.PString(tableStat.Rows[i][0].ToString());
 				tempCode.Descript      =PIn.PString(tableStat.Rows[i][1].ToString());
 				tempCode.AbbrDesc      =PIn.PString(tableStat.Rows[i][2].ToString());
 				tempCode.ProcTime      =PIn.PString(tableStat.Rows[i][3].ToString());
@@ -49,8 +49,9 @@ namespace OpenDental{
 				tempCode.GraphicColor  =Color.FromArgb(PIn.PInt(tableStat.Rows[i][17].ToString()));
 				tempCode.LaymanTerm    =PIn.PString(tableStat.Rows[i][18].ToString());
 				tempCode.IsCanadianLab =PIn.PBool  (tableStat.Rows[i][19].ToString());
-				tempCode.PreExisting	 =PIn.PBool(tableStat.Rows[i][20].ToString());
-				HList.Add(tempCode.ADACode,tempCode.Copy());
+				tempCode.PreExisting	 =PIn.PBool  (tableStat.Rows[i][20].ToString());
+				tempCode.CodeNum    	 =PIn.PInt   (tableStat.Rows[i][21].ToString());
+				HList.Add(tempCode.ProcCode,tempCode.Copy());
 				List[i]=tempCode.Copy();
 				if(tempCode.SetRecall) {
 					RecallAL.Add(tempCode);
@@ -61,11 +62,11 @@ namespace OpenDental{
 		///<summary></summary>
 		public static void Insert(ProcedureCode code){
 			//must have already checked ADACode for nonduplicate.
-			string command="INSERT INTO procedurecode (adacode,descript,abbrdesc,"
+			string command="INSERT INTO procedurecode (ProcCode,descript,abbrdesc,"
 				+"proctime,proccat,treatarea,RemoveTooth,setrecall,"
 				+"nobillins,isprosth,defaultnote,ishygiene,gtypenum,alternatecode1,MedicalCode,IsTaxed,"
-				+"PaintType,GraphicColor,LaymanTerm,IsCanadianLab,PreExisting) VALUES("
-				+"'"+POut.PString(code.ADACode)+"', "
+				+"PaintType,GraphicColor,LaymanTerm,IsCanadianLab,PreExisting,CodeNum) VALUES("
+				+"'"+POut.PString(code.ProcCode)+"', "
 				+"'"+POut.PString(code.Descript)+"', "
 				+"'"+POut.PString(code.AbbrDesc)+"', "
 				+"'"+POut.PString(code.ProcTime)+"', "
@@ -86,8 +87,9 @@ namespace OpenDental{
 				+"'"+POut.PInt   (code.GraphicColor.ToArgb())+"', "
 				+"'"+POut.PString(code.LaymanTerm)+"', "
 				+"'"+POut.PBool  (code.IsCanadianLab)+"', "
-				+"'"+POut.PBool  (code.PreExisting)+"')";
-			General.NonQ(command);
+				+"'"+POut.PBool  (code.PreExisting)+"', "
+				+"'"+POut.PInt   (code.CodeNum)+"')";
+			code.CodeNum=General.NonQ(command,true);
 			ProcedureCodes.Refresh();
 			//Cur already set
 			//MessageBox.Show(Cur.PayNum.ToString());
@@ -97,6 +99,7 @@ namespace OpenDental{
 		public static void Update(ProcedureCode code){
 			//MessageBox.Show("Updating");
 			string command="UPDATE procedurecode SET " 
+				//+ "ProcCode = '"       +POut.PString(code.ProcCode)+"'"
 				+ "descript = '"       +POut.PString(code.Descript)+"'"
 				+ ",abbrdesc = '"      +POut.PString(code.AbbrDesc)+"'"
 				+ ",proctime = '"      +POut.PString(code.ProcTime)+"'"
@@ -116,31 +119,69 @@ namespace OpenDental{
 				+ ",GraphicColor = '"  +POut.PInt   (code.GraphicColor.ToArgb())+"'"
 				+ ",LaymanTerm = '"    +POut.PString(code.LaymanTerm)+"'"
 				+ ",IsCanadianLab = '" +POut.PBool  (code.IsCanadianLab)+"'"
-				+ ",PreExisting = '"	 +POut.PBool	(code.PreExisting)+"'"
-				+" WHERE adacode = '"+POut.PString(code.ADACode)+"'";
+				+ ",PreExisting = '"	 +POut.PBool(code.PreExisting)+"'"
+				+" WHERE CodeNum = '"+POut.PInt(code.CodeNum)+"'";
 			General.NonQ(command);
 		}
 
 		///<summary>Returns the ProcedureCode for the supplied adaCode.</summary>
-		public static ProcedureCode GetProcCode(string myADA){
-			if(myADA==null){
+		public static ProcedureCode GetProcCode(string myCode){
+			if(myCode==null){
 				MessageBox.Show(Lan.g("ProcCodes","Error. Invalid procedure code."));
 				return new ProcedureCode();
 			}
-			if(HList.Contains(myADA)){
-				return (ProcedureCode)HList[myADA];
+			if(HList.Contains(myCode)){
+				return (ProcedureCode)HList[myCode];
 			}
 			else{
 				return new ProcedureCode();
 			}
 		}
 
+		///<summary>The new way of getting a procCode. Uses the primary key instead of string code.</summary>
+		public static ProcedureCode GetProcCode(int codeNum) {
+			if(codeNum==0) {
+				MessageBox.Show(Lan.g("ProcCodes","Error. Invalid procedure code."));
+				return new ProcedureCode();
+			}
+			for(int i=0;i<List.Length;i++){
+				if(List[i].CodeNum==codeNum){
+					return List[i];
+				}
+			}
+			return new ProcedureCode();
+		}
+
+		public static int GetCodeNum(string myCode){
+			if(myCode==null || myCode=="") {
+				throw new ApplicationException("Blank code");
+			}
+			if(HList.Contains(myCode)) {
+				return ((ProcedureCode)HList[myCode]).CodeNum;
+			}
+			else {
+				throw new ApplicationException("Missing code");
+			}
+		}
+
+		public static string GetStringProcCode(int codeNum) {
+			if(codeNum==0) {
+				throw new ApplicationException("CodeNum cannot be zero.");
+			}
+			for(int i=0;i<List.Length;i++) {
+				if(List[i].CodeNum==codeNum) {
+					return List[i].ProcCode;
+				}
+			}
+			throw new ApplicationException("Missing codenum");
+		}
+
 		///<summary></summary>
-		public static bool IsValidCode(string adaCode){
-			if(adaCode==null || adaCode=="") {
+		public static bool IsValidCode(string myCode){
+			if(myCode==null || myCode=="") {
 				return false;
 			}
-			if(HList.Contains(adaCode)) {
+			if(HList.Contains(myCode)) {
 				return true;
 			}
 			else {
@@ -158,10 +199,11 @@ namespace OpenDental{
 				for(int k=0;k<tableStat.Rows.Count;k++){
 					if(DefB.Short[(int)DefCat.ProcCodeCats][j].DefNum==PIn.PInt(tableStat.Rows[k][4].ToString())){
 						procCode=new ProcedureCode();
-						procCode.ADACode = PIn.PString(tableStat.Rows[k][0].ToString());
+						procCode.ProcCode = PIn.PString(tableStat.Rows[k][0].ToString());
 						procCode.Descript= PIn.PString(tableStat.Rows[k][1].ToString());
 						procCode.AbbrDesc= PIn.PString(tableStat.Rows[k][2].ToString());
 						procCode.ProcCat = PIn.PInt   (tableStat.Rows[k][4].ToString());
+						procCode.CodeNum=PIn.PInt   (tableStat.Rows[k][21].ToString());
 						AL.Add(procCode);
 						//i++;
 					}
@@ -183,7 +225,7 @@ namespace OpenDental{
 			//return ProcList;
 		}
 
-		///<summary>Gets a list of procedure codes directly fromt the database.  If categories.length==0, then we will get for all categories.  Categories are defnums.  FeeScheds are, for now, defnums.</summary>
+		///<summary>Gets a list of procedure codes directly from the database.  If categories.length==0, then we will get for all categories.  Categories are defnums.  FeeScheds are, for now, defnums.</summary>
 		public static DataTable GetProcTable(string abbr,string desc,string code,int[] categories,int feeSched,
 			int feeSchedComp1,int feeSchedComp2){
 			string whereCat;
@@ -200,66 +242,67 @@ namespace OpenDental{
 				}
 				whereCat+=")";
 			}
-/*			string command="SELECT ProcCat,Descript,AbbrDesc,procedurecode.ADACode,"
+/*			string command="SELECT ProcCat,Descript,AbbrDesc,procedurecode.ProcCode,"
 				+"IFNULL(fee1.Amount,'-1') AS FeeAmt1, "
 				+"IFNULL(fee2.Amount,'-1') AS FeeAmt2, "
 				+"IFNULL(fee3.Amount,'-1') AS FeeAmt3 "
 				+"FROM procedurecode "
-				+"LEFT JOIN fee AS fee1 ON fee1.ADACode=procedurecode.ADACode "
+				+"LEFT JOIN fee AS fee1 ON fee1.ADACode=procedurecode.ProcCode "
 				+"AND fee1.FeeSched="+POut.PInt(feeSched)
-				+" LEFT JOIN fee AS fee2 ON fee2.ADACode=procedurecode.ADACode "
+				+" LEFT JOIN fee AS fee2 ON fee2.ADACode=procedurecode.ProcCode "
 				+"AND fee2.FeeSched="+POut.PInt(feeSchedComp1)
-				+" LEFT JOIN fee AS fee3 ON fee3.ADACode=procedurecode.ADACode "
+				+" LEFT JOIN fee AS fee3 ON fee3.ADACode=procedurecode.ProcCode "
 				+"AND fee3.FeeSched="+POut.PInt(feeSchedComp2)
 				+" WHERE "+whereCat
 				+" AND Descript LIKE '%"+POut.PString(desc)+"%' "
 				+"AND AbbrDesc LIKE '%"+POut.PString(abbr)+"%' "
-				+"AND procedurecode.ADACode LIKE '%"+POut.PString(code)+"%' "
-				+"ORDER BY ProcCat,procedurecode.ADACode";*/
+				+"AND procedurecode.ProcCode LIKE '%"+POut.PString(code)+"%' "
+				+"ORDER BY ProcCat,procedurecode.ProcCode";*/
 
 			//Query changed to be compatible with both MySQL and Oracle.
-			string command="SELECT ProcCat,Descript,AbbrDesc,procedurecode.ADACode,"
+			string command="SELECT ProcCat,Descript,AbbrDesc,procedurecode.ProcCode,"
 				+"CASE WHEN (fee1.Amount IS NULL) THEN -1 ELSE fee1.Amount END AS FeeAmt1,"
 				+"CASE WHEN (fee2.Amount IS NULL) THEN -1 ELSE fee2.Amount END AS FeeAmt2,"
-				+"CASE WHEN (fee3.Amount IS NULL) THEN -1 ELSE fee3.Amount END AS FeeAmt3 "
+				+"CASE WHEN (fee3.Amount IS NULL) THEN -1 ELSE fee3.Amount END AS FeeAmt3, "
+				+"procedurecode.CodeNum "
 				+"FROM procedurecode "
-				+"LEFT JOIN fee fee1 ON fee1.ADACode=procedurecode.ADACode "
+				+"LEFT JOIN fee fee1 ON fee1.ADACode=procedurecode.ProcCode "
 				+"AND fee1.FeeSched="+POut.PInt(feeSched)
-				+" LEFT JOIN fee fee2 ON fee2.ADACode=procedurecode.ADACode "
+				+" LEFT JOIN fee fee2 ON fee2.ADACode=procedurecode.ProcCode "
 				+"AND fee2.FeeSched="+POut.PInt(feeSchedComp1)
-				+" LEFT JOIN fee fee3 ON fee3.ADACode=procedurecode.ADACode "
+				+" LEFT JOIN fee fee3 ON fee3.ADACode=procedurecode.ProcCode "
 				+"AND fee3.FeeSched="+POut.PInt(feeSchedComp2)
 				+" WHERE "+whereCat
 				+" AND Descript LIKE '%"+POut.PString(desc)+"%' "
 				+"AND AbbrDesc LIKE '%"+POut.PString(abbr)+"%' "
-				+"AND procedurecode.ADACode LIKE '%"+POut.PString(code)+"%' "
-				+"ORDER BY ProcCat,procedurecode.ADACode";
+				+"AND procedurecode.ProcCode LIKE '%"+POut.PString(code)+"%' "
+				+"ORDER BY ProcCat,procedurecode.ProcCode";
 			//MsgBoxCopyPaste msg=new MsgBoxCopyPaste(command);
 			//msg.ShowDialog();
 			return General.GetTable(command);
 		}
 
-		///<summary>Returns the LaymanTerm for the supplied adaCode, or the description if none present.</summary>
-		public static string GetLaymanTerm(string myADA) {
-			if(myADA==null) {
-				MessageBox.Show(Lan.g("ProcCodes","Error. Invalid procedure code."));
-				return "";
-			}
-			if(HList.Contains(myADA)) {
-				if(((ProcedureCode)HList[myADA]).LaymanTerm !=""){
-					return ((ProcedureCode)HList[myADA]).LaymanTerm;
+		///<summary>Returns the LaymanTerm for the supplied codeNum, or the description if none present.</summary>
+		public static string GetLaymanTerm(int codeNum) {
+			//if(myADA==null) {
+			//	MessageBox.Show(Lan.g("ProcCodes","Error. Invalid procedure code."));
+			//	return "";
+			//}
+			for(int i=0;i<List.Length;i++){
+				if(List[i].CodeNum==codeNum){
+					if(List[i].LaymanTerm !=""){
+						return List[i].LaymanTerm;
+					}
+					return List[i].Descript;
 				}
-				return ((ProcedureCode)HList[myADA]).Descript;
 			}
-			else {
-				return "";
-			}
+			return "";
 		}
 
 		///<summary>Used by FormUpdate to check whether codes starting with T exist and are in a visible category.  If so, it moves them to the Obsolete category.</summary>
 		public static void TcodesMove(){
 			string command=@"SELECT DISTINCT ProcCat FROM procedurecode,definition 
-				WHERE procedurecode.ADACode LIKE 'T%'
+				WHERE procedurecode.ProcCode LIKE 'T%'
 				AND definition.IsHidden=0
 				AND procedurecode.ProcCat=definition.DefNum";
 			DataTable table=General.GetTable(command);

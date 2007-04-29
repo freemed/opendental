@@ -215,7 +215,7 @@ namespace OpenDental{
 				List[i].ProcNum					= PIn.PInt   (table.Rows[i][0].ToString());
 				List[i].PatNum					= PIn.PInt   (table.Rows[i][1].ToString());
 				List[i].AptNum					= PIn.PInt   (table.Rows[i][2].ToString());
-				List[i].ADACode					= PIn.PString(table.Rows[i][3].ToString());
+				List[i].OldCode					= PIn.PString(table.Rows[i][3].ToString());
 				List[i].ProcDate				= PIn.PDate  (table.Rows[i][4].ToString());
 				List[i].ProcFee					= PIn.PDouble(table.Rows[i][5].ToString());
 				List[i].Surf						= PIn.PString(table.Rows[i][6].ToString());
@@ -240,6 +240,7 @@ namespace OpenDental{
 				List[i].RevenueCode     = PIn.PString(table.Rows[i][25].ToString());
 				List[i].BillingTypeOne  = PIn.PInt   (table.Rows[i][26].ToString());
 				List[i].BillingTypeTwo  = PIn.PInt   (table.Rows[i][27].ToString());
+				List[i].CodeNum         = PIn.PInt   (table.Rows[i][28].ToString());
 				//only used sometimes:
 				/*if(table.Columns.Count>24){
 					List[i].UserNum       = PIn.PInt   (table.Rows[i][24].ToString());
@@ -320,7 +321,7 @@ namespace OpenDental{
 
 		///<summary>Used do display procedure descriptions on appointments. The returned string also includes surf and toothNum.</summary>
 		public static string GetDescription(Procedure proc){
-			return ConvertProcToString(proc.ADACode,proc.Surf,proc.ToothNum);
+			return ConvertProcToString(ProcedureCodes.GetStringProcCode(proc.CodeNum),proc.Surf,proc.ToothNum);
 		}
 
 		///<summary>Gets procedures for one appointment by looping through the procsMultApts which was filled previously from GetProcsMultApts.</summary>
@@ -429,7 +430,7 @@ namespace OpenDental{
 					break;//out of note loop.
 				}
 				oldProc=ProcList[i].Copy();
-				procCode=ProcedureCodes.GetProcCode(ProcList[i].ADACode);
+				procCode=ProcedureCodes.GetProcCode(ProcList[i].CodeNum);
 				if(procCode.PaintType==ToothPaintingType.Extraction){//if an extraction, then mark previous procs hidden
 					//SetHideGraphical(ProcList[i]);//might not matter anymore
 					ToothInitials.SetValue(apt.PatNum,ProcList[i].ToothNum,ToothInitialType.Missing);
@@ -539,8 +540,8 @@ namespace OpenDental{
 		}
 
 		///<summary>Used in FormClaimProc to get the ADAcode for a procedure. Do not use this if accessing FormClaimProc from the ProcEdit window, because proc might not be updated to db yet.</summary>
-		public static string GetADA(int procNum){
-			string command="SELECT ADACode FROM procedurelog WHERE ProcNum='"+procNum.ToString()+"'";
+		public static int GetCodeNum(int procNum){
+			string command="SELECT CodeNum FROM procedurelog WHERE ProcNum='"+procNum.ToString()+"'";
 			DataSet ds=null;
 			try {
 				if(RemotingClient.OpenDentBusinessIsLocal) {
@@ -557,9 +558,9 @@ namespace OpenDental{
 			}
 			DataTable table=ds.Tables[0];
 			if(table.Rows.Count==0){
-				return "";
+				return 0;
 			}
-			return PIn.PString(table.Rows[0][0].ToString());
+			return PIn.PInt(table.Rows[0][0].ToString());
 		}
 
 		///<summary>Used in FormClaimProc to get the fee for a procedure directly from the db.  Do not use this if accessing FormClaimProc from the ProcEdit window, because proc might not be updated to db yet.</summary>
@@ -647,7 +648,7 @@ namespace OpenDental{
 			}
 			//then, check for a planned extraction
 			command="SELECT COUNT(*) FROM procedurelog,procedurecode "
-				+"WHERE procedurelog.ADACode=procedurecode.ADACode "
+				+"WHERE procedurelog.CodeNum=procedurecode.CodeNum "
 				+"AND procedurelog.ToothNum='"+toothNum+"' "
 				+"AND procedurelog.PatNum="+patNum.ToString()
 				+" AND procedurecode.PaintType=1";//extraction
@@ -706,7 +707,7 @@ namespace OpenDental{
 				if(procList[i].ProcDate.Year<1880 || procList[i].ProcDate>DateTime.Today){
 					continue;
 				}
-				procCode=ProcedureCodes.GetProcCode(procList[i].ADACode);
+				procCode=ProcedureCodes.GetProcCode(procList[i].CodeNum);
 				if(procCode.TreatArea!=TreatmentArea.Tooth){
 					continue;
 				}
@@ -908,7 +909,7 @@ namespace OpenDental{
 				cp.AllowedAmt=-1;
 				cp.PercentOverride=-1;
 				cp.OverrideInsEst=-1;
-				cp.NoBillIns=ProcedureCodes.GetProcCode(proc.ADACode).NoBillIns;
+				cp.NoBillIns=ProcedureCodes.GetProcCode(proc.CodeNum).NoBillIns;
 				cp.OverAnnualMax=-1;
 				cp.PaidOtherIns=-1;
 				cp.CopayOverride=-1;
@@ -1081,16 +1082,17 @@ namespace OpenDental{
 
 		///<summary>Only fees, not estimates.  Returns number of fees changed.</summary>
 		public static int GlobalUpdateFees(){
-			string command=@"SELECT procedurelog.ADACode,ProcNum,patient.PatNum,procedurelog.PatNum,
+			string command=@"SELECT procedurecode.ProcCode,ProcNum,patient.PatNum,procedurelog.PatNum,
 				insplan.FeeSched AS PlanFeeSched,patient.FeeSched AS PatFeeSched,patient.PriProv,
 				procedurelog.ProcFee
 				FROM procedurelog
 				LEFT JOIN patient ON patient.PatNum=procedurelog.PatNum
 				LEFT JOIN patplan ON patplan.PatNum=procedurelog.PatNum
+				LEFT JOIN procedurecode ON procedurecode.CodeNum=procedurelog.CodeNum
 				AND patplan.Ordinal=1
 				LEFT JOIN insplan ON insplan.PlanNum=patplan.PlanNum
 				WHERE procedurelog.ProcStatus=1";
-/*@"SELECT procedurelog.ADACode,insplan.FeeSched AS PlanFeeSched,patient.FeeSched AS PatFeeSched,
+/*@"SELECT procedurelog.ProcCode,insplan.FeeSched AS PlanFeeSched,patient.FeeSched AS PatFeeSched,
 				patient.PriProv,ProcNum
 				FROM procedurelog,patient
 				LEFT JOIN patplan ON patplan.PatNum=procedurelog.PatNum
@@ -1112,7 +1114,7 @@ namespace OpenDental{
 				patFeeSched=PIn.PInt(table.Rows[i]["PatFeeSched"].ToString());
 				patProv=PIn.PInt(table.Rows[i]["PriProv"].ToString());
 				feeSchedNum=Fees.GetFeeSched(priPlanFeeSched,patFeeSched,patProv);
-				newFee=Fees.GetAmount0(PIn.PString(table.Rows[i]["ADACode"].ToString()),feeSchedNum);
+				newFee=Fees.GetAmount0(PIn.PString(table.Rows[i]["ProcCode"].ToString()),feeSchedNum);
 				oldFee=PIn.PDouble(table.Rows[i]["ProcFee"].ToString());
 				if(newFee==oldFee){
 					continue;
@@ -1132,7 +1134,7 @@ namespace OpenDental{
 	/*================================================================================================================
 	=========================================== class ProcedureComparer =============================================*/
 
-	///<summary>This sorts procedures based on priority, then tooth number, then adaCode (but if Canadian lab code, uses proc adaCode here instead of lab adaCode).  Finally, if comparing a proc and its Canadian lab code, it puts the lab code after the proc.  It does not care about dates or status.  Currently used in TP module and Chart module sorting.</summary>
+	///<summary>This sorts procedures based on priority, then tooth number, then code (but if Canadian lab code, uses proc code here instead of lab code).  Finally, if comparing a proc and its Canadian lab code, it puts the lab code after the proc.  It does not care about dates or status.  Currently used in TP module and Chart module sorting.</summary>
 	public class ProcedureComparer:IComparer {
 		///<summary>This sorts procedures based on priority, then tooth number.  It does not care about dates or status.  Currently used in TP module and Chart module sorting.</summary>
 		int IComparer.Compare(Object objx,Object objy) {
@@ -1165,7 +1167,8 @@ namespace OpenDental{
 				adaX=Procedures.GetOneProc(
 			}
 			string adaY=y.ADACode;*/
-			return x.ADACode.CompareTo(y.ADACode);
+			return ProcedureCodes.GetStringProcCode(x.CodeNum).CompareTo(ProcedureCodes.GetStringProcCode(y.CodeNum));
+			//return x.ADACode.CompareTo(y.ADACode);
 			//return 0;//priority, tooth number, and adacode are all the same
 		}
 

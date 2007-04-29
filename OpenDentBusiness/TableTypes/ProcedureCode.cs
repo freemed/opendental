@@ -7,8 +7,8 @@ namespace OpenDentBusiness{
 	
 	///<summary>A list setup ahead of time with all the procedure codes used by the office.  Every procedurelog entry which is attached to a patient is also linked to this table.</summary>
 	public class ProcedureCode{
-		///<summary>Primary key.  Does not have to be a valid 'ADACode'. Can also include ADACodes with suffixes which get automatically trimmed when sending claims.  In foreign countries, the codes may look very much unlike adacodes, and that's ok.  Can also hold medical codes.</summary>
-		public string ADACode;
+		///<summary>Was Primary key, but now CodeNum is primary key.  Can hold dental codes, medical codes, custom codes, etc.</summary>
+		public string ProcCode;
 		///<summary>The main description.</summary>
 		public string Descript;
 		///<summary>Abbreviated description.</summary>
@@ -40,7 +40,7 @@ namespace OpenDentBusiness{
 		///<summary>For Medicaid.  There may be more later.</summary>
 		[XmlIgnore]
 		public string AlternateCode1;
-		///<summary>FK to procedurecode.ADACode.  The actual medical code that is being referenced must be setup first.  Anytime a procedure it added, this medical code will also be added to that procedure.  The user can change it in procedurelog.</summary>
+		///<summary>FK to procedurecode.ProcCode.  The actual medical code that is being referenced must be setup first.  Anytime a procedure it added, this medical code will also be added to that procedure.  The user can change it in procedurelog.</summary>
 		[XmlIgnore]
 		public string MedicalCode;
 		///<summary>Used by some offices even though no user interface built yet.  SalesTaxPercentage has been added to the preference table to store the amount of sales tax to apply as an adjustment attached to a procedurelog entry.</summary>
@@ -60,6 +60,9 @@ namespace OpenDentBusiness{
 		///<summary>This is true if this procedure code existed before ADA code distribution changed at version 4.8, false otherwise.</summary>
 		[XmlIgnore]
 		public bool PreExisting;
+		///<summary>Primary Key.  This happened in version 4.8.7.</summary>
+		[XmlIgnore]
+		public int CodeNum;
 		///<Summary>Not a database column.  Only used for xml import function.</Summary>
 		private string procCatDescript;
 
@@ -85,7 +88,7 @@ namespace OpenDentBusiness{
 		///<summary>Returns a copy of this Procedurecode.</summary>
 		public ProcedureCode Copy(){
 			ProcedureCode p=new ProcedureCode();
-			p.ADACode=ADACode;
+			p.ProcCode=ProcCode;
 			p.Descript=Descript;
 			p.AbbrDesc=AbbrDesc;
 			p.ProcTime=ProcTime;
@@ -106,6 +109,7 @@ namespace OpenDentBusiness{
 			p.LaymanTerm=LaymanTerm;
 			p.IsCanadianLab=IsCanadianLab;
 			p.PreExisting=PreExisting;
+			p.CodeNum=CodeNum;
 			return p;
 		}
 

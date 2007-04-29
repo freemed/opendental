@@ -656,7 +656,7 @@ namespace OpenDental{
 				if(((PaySplit)SplitList[i]).ProcNum>0){
 					proc=Procedures.GetOneProc(((PaySplit)SplitList[i]).ProcNum,false);
 					row.Cells.Add(Tooth.ToInternat(proc.ToothNum));
-					row.Cells.Add(ProcedureCodes.GetProcCode(proc.ADACode).Descript);
+					row.Cells.Add(ProcedureCodes.GetProcCode(proc.CodeNum).Descript);
 				}
 				else{
 					row.Cells.Add("");

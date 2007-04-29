@@ -696,7 +696,7 @@ namespace OpenDental{
 				//DateTime dueDate=PIn.PDate(listFamily.Items[
 				for(int i=0;i<procList.Length;i++){//loop through all procedures for this pt.
 					//if any BW found within last year, then dueBW=false.
-					if(PrefB.GetString("RecallBW")==procList[i].ADACode
+					if(PrefB.GetString("RecallBW")==ProcedureCodes.GetStringProcCode(procList[i].CodeNum)
 						&& recallCur.DateDue.Year>1880
 						&& procList[i].ProcDate > recallCur.DateDue.AddYears(-1)){
 						dueBW=false;
@@ -727,9 +727,9 @@ namespace OpenDental{
 				//procnum
 				ProcCur.PatNum=patCur.PatNum;
 				ProcCur.AptNum=AptCur.AptNum;
-				ProcCur.ADACode=procs[i];
+				ProcCur.CodeNum=ProcedureCodes.GetCodeNum(procs[i]);
 				ProcCur.ProcDate=DateTime.Now;
-				ProcCur.ProcFee=Fees.GetAmount0(ProcCur.ADACode,Fees.GetFeeSched(patCur,planList,patPlanList));
+				ProcCur.ProcFee=Fees.GetAmount0(ProcedureCodes.GetStringProcCode(ProcCur.CodeNum),Fees.GetFeeSched(patCur,planList,patPlanList));
 				//ProcCur.OverridePri=-1;
 				//ProcCur.OverrideSec=-1;
 				//surf
@@ -746,16 +746,16 @@ namespace OpenDental{
 				//Procedures.Cur.Dx=
 				ProcCur.ClinicNum=patCur.ClinicNum;
 				//nextaptnum
-				ProcCur.MedicalCode=ProcedureCodes.GetProcCode(ProcCur.ADACode).MedicalCode;
+				ProcCur.MedicalCode=ProcedureCodes.GetProcCode(ProcCur.CodeNum).MedicalCode;
 				Procedures.Insert(ProcCur);//no recall synch required
 				Procedures.ComputeEstimates(ProcCur,patCur.PatNum,new ClaimProc[0],false,planList,patPlanList,benefitList);
 			}
 			return AptCur;
 		}
 
-		///<summary>Tests to see if this appointment will create a double booking. Returns arrayList with no items in it if no double bookings for this appt.  But if double booking, then it returns an arrayList of adacodes which would be double booked.  You must supply the appointment being scheduled as well as a list of all appointments for that day.  The list can include the appointment being tested if user is moving it to a different time on the same day.  The ProcsForOne list of procedures needs to contain the procedures for the apt becauese procsMultApts won't necessarily, especially if it's a planned appt on the pinboard.</summary>
+		///<summary>Tests to see if this appointment will create a double booking. Returns arrayList with no items in it if no double bookings for this appt.  But if double booking, then it returns an arrayList of codes which would be double booked.  You must supply the appointment being scheduled as well as a list of all appointments for that day.  The list can include the appointment being tested if user is moving it to a different time on the same day.  The ProcsForOne list of procedures needs to contain the procedures for the apt becauese procsMultApts won't necessarily, especially if it's a planned appt on the pinboard.</summary>
 		public static ArrayList GetDoubleBookedCodes(Appointment apt,Appointment[] dayList,Procedure[] procsMultApts,Procedure[] procsForOne) {
-			ArrayList retVal=new ArrayList();//ADAcodes
+			ArrayList retVal=new ArrayList();//codes
 			//figure out which provider we are testing for
 			int provNum;
 			if(apt.IsHygiene){
@@ -817,10 +817,10 @@ namespace OpenDental{
 					}
 				}
 				if(overlaps){
-					//we need to add all ADACodes for this appt to retVal
+					//we need to add all codes for this appt to retVal
 					procs=Procedures.GetProcsOneApt(dayList[i].AptNum,procsMultApts);
 					for(int j=0;j<procs.Length;j++){
-						retVal.Add(procs[j].ADACode);
+						retVal.Add(ProcedureCodes.GetStringProcCode(procs[j].CodeNum));
 					}
 				}
 			}
@@ -828,7 +828,7 @@ namespace OpenDental{
 			//need to all procs for this appt.
 			if(doubleBooked){
 				for(int j=0;j<procsForOne.Length;j++) {
-					retVal.Add(procsForOne[j].ADACode);
+					retVal.Add(ProcedureCodes.GetStringProcCode(procsForOne[j].CodeNum));
 				}
 			}
 			return retVal;

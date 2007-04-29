@@ -189,7 +189,7 @@ namespace OpenDental{
 			//Best to set it at the same time as the fee.
 			//}
 			if(cp.AllowedAmt==-1) {//If allowedAmt is blank, try to find an allowed amount.
-				cp.AllowedAmt=InsPlans.GetAllowed(proc.ADACode,cp.PlanNum,PlanList);
+				cp.AllowedAmt=InsPlans.GetAllowed(ProcedureCodes.GetProcCode(proc.CodeNum).ProcCode,cp.PlanNum,PlanList);
 				//later add posterior composite functionality. Needs to go here because the substitute fee changes.
 			}
 			if(cp.AllowedAmt!=-1) {
@@ -212,10 +212,10 @@ namespace OpenDental{
 			}
 			if(resetAll) {
 				if(pst==PriSecTot.Pri) {
-					cp.CopayAmt=InsPlans.GetCopay(proc.ADACode,plan);
+					cp.CopayAmt=InsPlans.GetCopay(ProcedureCodes.GetProcCode(proc.CodeNum).ProcCode,plan);
 				}
 				else if(pst==PriSecTot.Sec) {
-					cp.CopayAmt=InsPlans.GetCopay(proc.ADACode,plan);
+					cp.CopayAmt=InsPlans.GetCopay(ProcedureCodes.GetProcCode(proc.CodeNum).ProcCode,plan);
 				}
 				else {//pst.Other
 					cp.CopayAmt=-1;
@@ -255,10 +255,10 @@ namespace OpenDental{
 			//percentage
 			//percentoverride never recalculated
 			if(pst==PriSecTot.Pri) {
-				cp.Percentage=Benefits.GetPercent(proc.ADACode,plan,patPlans[0],benList);//will never =-1
+				cp.Percentage=Benefits.GetPercent(ProcedureCodes.GetProcCode(proc.CodeNum).ProcCode,plan,patPlans[0],benList);//will never =-1
 			}
 			else if(pst==PriSecTot.Sec) {
-				cp.Percentage=Benefits.GetPercent(proc.ADACode,plan,patPlans[1],benList);
+				cp.Percentage=Benefits.GetPercent(ProcedureCodes.GetProcCode(proc.CodeNum).ProcCode,plan,patPlans[1],benList);
 			}
 			if(cp.PercentOverride==-1) {//no override, so use calculated Percentage
 				cp.BaseEst=cp.BaseEst*(double)cp.Percentage/100;

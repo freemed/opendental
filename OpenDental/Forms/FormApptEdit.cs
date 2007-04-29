@@ -1103,15 +1103,16 @@ namespace OpenDental{
 			int adjTimeU=PIn.PInt(textAddTime.Text)/PrefB.GetInt("AppointmentTimeIncrement");
 			strBTime=new StringBuilder("");
 			string procTime="";
+			int codeNum;
 			if(gridProc.SelectedIndices.Length==1) {
-				procTime=ProcedureCodes.GetProcCode(DS.Tables["Procedure"]
-					.Rows[gridProc.SelectedIndices[0]]["ADACode"].ToString()).ProcTime;
+				codeNum=PIn.PInt(DS.Tables["Procedure"].Rows[gridProc.SelectedIndices[0]]["CodeNum"].ToString());
+				procTime=ProcedureCodes.GetProcCode(codeNum).ProcTime;
 				strBTime.Append(procTime);
 			}
 			else {//multiple procs or no procs
 				for(int i=0;i<gridProc.SelectedIndices.Length;i++) {
-					procTime=ProcedureCodes.GetProcCode(DS.Tables["Procedure"]
-						.Rows[gridProc.SelectedIndices[i]]["ADACode"].ToString()).ProcTime;
+					codeNum=PIn.PInt(DS.Tables["Procedure"].Rows[gridProc.SelectedIndices[i]]["CodeNum"].ToString());
+					procTime=ProcedureCodes.GetProcCode(codeNum).ProcTime;
 					if(procTime.Length<2){
 						continue;
 					}
@@ -1276,15 +1277,21 @@ namespace OpenDental{
 			ClaimProc[] ClaimProcList=ClaimProcs.Refresh(pat.PatNum);
 			string[] codes=DefB.Short[(int)DefCat.ApptProcsQuickAdd][listQuickAdd.IndexFromPoint(e.X,e.Y)].ItemValue.Split(',');
 			for(int i=0;i<codes.Length;i++) {
+				if(!ProcedureCodes.HList.ContainsKey(codes[i])){
+					MsgBox.Show(this,"Definition contains invalid code.");
+					return;
+				}
+			}
+			for(int i=0;i<codes.Length;i++) {
 				Procedure ProcCur=new Procedure();
 				//maybe test codes in defs before allowing them in the first place(no tooth num)
 				//if(ProcCodes.GetProcCode(Procedures.Cur.ADACode). 
 				ProcCur.PatNum=AptCur.PatNum;
 				if(AptCur.AptStatus!=ApptStatus.Planned)
 					ProcCur.AptNum=AptCur.AptNum;
-				ProcCur.ADACode=codes[i];
+				ProcCur.CodeNum=ProcedureCodes.GetProcCode(codes[i]).CodeNum;
 				ProcCur.ProcDate=AptCur.AptDateTime.Date;
-				ProcCur.ProcFee=Fees.GetAmount0(ProcCur.ADACode,Fees.GetFeeSched(pat,PlanList,PatPlanList));
+				ProcCur.ProcFee=Fees.GetAmount0(ProcedureCodes.GetProcCode(ProcCur.CodeNum).ProcCode,Fees.GetFeeSched(pat,PlanList,PatPlanList));
 				//surf
 				//toothnum
 				//toothrange
@@ -1296,7 +1303,7 @@ namespace OpenDental{
 				ProcCur.ClinicNum=AptCur.ClinicNum;
 				if(AptCur.AptStatus==ApptStatus.Planned)
 					ProcCur.PlannedAptNum=AptCur.AptNum;
-				ProcCur.MedicalCode=ProcedureCodes.GetProcCode(ProcCur.ADACode).MedicalCode;
+				ProcCur.MedicalCode=ProcedureCodes.GetProcCode(ProcCur.CodeNum).MedicalCode;
 				Procedures.Insert(ProcCur);//recall synch not required
 				Procedures.ComputeEstimates(ProcCur,pat.PatNum,ClaimProcList,false,PlanList,PatPlanList,benefitList);
 			}
@@ -1411,7 +1418,7 @@ namespace OpenDental{
 			AptCur.ProcDescript="";
 			for(int i=0;i<gridProc.SelectedIndices.Length;i++) {
 				AptCur.ProcDescript+=ProcedureCodes.GetProcCode(
-					DS.Tables["Procedure"].Rows[gridProc.SelectedIndices[i]]["ADACode"].ToString()).AbbrDesc+", ";
+					DS.Tables["Procedure"].Rows[gridProc.SelectedIndices[i]]["CodeNum"].ToString()).AbbrDesc+", ";
 			}
 			if(AptCur.ProcDescript.Length>1) {
 				//trims the last space and comma

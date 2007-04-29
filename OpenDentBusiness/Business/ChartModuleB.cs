@@ -17,8 +17,8 @@ namespace OpenDentBusiness {
 			DataTable table=new DataTable("ProgNotes");
 			DataRow row;
 			//columns that start with lowercase are altered for display rather than being raw data.
-			table.Columns.Add("ADACode");
 			table.Columns.Add("aptDateTime",typeof(DateTime));
+			table.Columns.Add("CodeNum");
 			table.Columns.Add("colorBackG");
 			table.Columns.Add("colorText");
 			table.Columns.Add("CommlogNum");
@@ -27,6 +27,7 @@ namespace OpenDentBusiness {
 			table.Columns.Add("Dx");
 			table.Columns.Add("note");
 			table.Columns.Add("Priority");
+			table.Columns.Add("ProcCode");
 			table.Columns.Add("procDate");
 			table.Columns.Add("ProcDate",typeof(DateTime));
 			table.Columns.Add("procFee");
@@ -46,10 +47,10 @@ namespace OpenDentBusiness {
 			//but we won't actually fill this table with rows until the very end.  It's more useful to use a List<> for now.
 			List<DataRow> rows=new List<DataRow>();
 			//Procedures-----------------------------------------------------------------------------------------------------
-			string command="SELECT ProcDate,ProcStatus,ToothNum,Surf,Dx,procedurelog.ADACode,ProcNum,procedurecode.Descript,"
-				+"provider.Abbr,ProcFee,ProcNumLab,appointment.AptDateTime,Priority,ToothRange "
+			string command="SELECT ProcDate,ProcStatus,ToothNum,Surf,Dx,procedurecode.ProcCode,ProcNum,procedurecode.Descript,"
+				+"provider.Abbr,ProcFee,ProcNumLab,appointment.AptDateTime,Priority,ToothRange,procedurelog.CodeNum "
 				+"FROM procedurelog "
-				+"LEFT JOIN procedurecode ON procedurecode.ADACode=procedurelog.ADACode "
+				+"LEFT JOIN procedurecode ON procedurecode.CodeNum=procedurelog.CodeNum "
 				+"LEFT JOIN provider ON provider.ProvNum=procedurelog.ProvNum "
 				+"LEFT JOIN appointment ON appointment.AptNum=procedurelog.AptNum "
 				+"AND (appointment.AptStatus="+POut.PInt((int)ApptStatus.Scheduled)
@@ -71,8 +72,8 @@ namespace OpenDentBusiness {
 			List<DataRow> labRows=new List<DataRow>();//Canadian lab procs, which must be added in a loop at the very end.
 			for(int i=0;i<rawProcs.Rows.Count;i++) {
 				row=table.NewRow();
-				row["ADACode"]=rawProcs.Rows[i]["ADACode"].ToString();
 				row["aptDateTime"]=PIn.PDateT(rawProcs.Rows[i]["AptDateTime"].ToString());
+				row["CodeNum"]=rawProcs.Rows[i]["CodeNum"].ToString();
 				row["colorBackG"]=Color.White.ToArgb();
 				if(((DateTime)row["aptDateTime"]).Date==DateTime.Today){
 					row["colorBackG"]=DefB.Long[(int)DefCat.MiscColors][6].ItemColor.ToArgb().ToString();
@@ -135,6 +136,7 @@ namespace OpenDentBusiness {
 					}
 				}
 				row["Priority"]=rawProcs.Rows[i]["Priority"].ToString();
+				row["ProcCode"]=rawProcs.Rows[i]["ProcCode"].ToString();
 				dateT=PIn.PDateT(rawProcs.Rows[i]["ProcDate"].ToString());
 				if(dateT.Year<1880){
 					row["procDate"]="";

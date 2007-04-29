@@ -212,21 +212,21 @@ namespace OpenDental{
         textADA.Text=AutoCodeItemCur.ADACode; 
       }
       else{
-				if(AutoCodeItems.HList.ContainsKey(FormP.SelectedADA)
-					&& (int)AutoCodeItems.HList[FormP.SelectedADA] != AutoCodeItemCur.AutoCodeNum)
+				if(AutoCodeItems.HList.ContainsKey(ProcedureCodes.GetStringProcCode(FormP.SelectedCodeNum))
+					&& (int)AutoCodeItems.HList[ProcedureCodes.GetStringProcCode(FormP.SelectedCodeNum)] != AutoCodeItemCur.AutoCodeNum)
 				{
 					//This section is a fix for an old bug that did not cause items to get deleted properly
-					if(!AutoCodes.HList.ContainsKey((int)AutoCodeItems.HList[FormP.SelectedADA])){
-						AutoCodeItems.Delete((int)AutoCodeItems.HList[FormP.SelectedADA]);
-						textADA.Text=FormP.SelectedADA;
+					if(!AutoCodes.HList.ContainsKey((int)AutoCodeItems.HList[ProcedureCodes.GetStringProcCode(FormP.SelectedCodeNum)])){
+						AutoCodeItems.Delete((int)AutoCodeItems.HList[ProcedureCodes.GetStringProcCode(FormP.SelectedCodeNum)]);
+						textADA.Text=ProcedureCodes.GetStringProcCode(FormP.SelectedCodeNum);
 					}
 					else{
-						MessageBox.Show(Lan.g(this,"That ADA code is already in use in a different Auto Code.  Not allowed to use it here."));
+						MessageBox.Show(Lan.g(this,"That procedure code is already in use in a different Auto Code.  Not allowed to use it here."));
 						textADA.Text=AutoCodeItemCur.ADACode;
 					}
 				}
 				else{
-					textADA.Text=FormP.SelectedADA;
+					textADA.Text=ProcedureCodes.GetStringProcCode(FormP.SelectedCodeNum);
 				}
       }
 		}

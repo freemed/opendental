@@ -152,14 +152,14 @@ namespace OpenDental{
 					}
 					//otherwise, insert a procedure to db
 					proc=new Procedure();
-					proc.ADACode=chargeList[i].ADACode;
+					proc.CodeNum=ProcedureCodes.GetProcCode(chargeList[i].ADACode).CodeNum;
 					proc.DateEntryC=DateTime.Today;
 					proc.PatNum=chargeList[i].PatNum;
 					proc.ProcDate=possibleDate;
 					proc.ProcFee=chargeList[i].ChargeAmt;
 					proc.ProcStatus=ProcStat.C;
 					proc.ProvNum=PrefB.GetInt("PracticeDefaultProv");
-					proc.MedicalCode=ProcedureCodes.GetProcCode(proc.ADACode).MedicalCode;
+					proc.MedicalCode=ProcedureCodes.GetProcCode(proc.CodeNum).MedicalCode;
 					Procedures.Insert(proc);//no recall synch needed because dental offices don't use this feature
 					countAdded++;
 					possibleDate=possibleDate.AddMonths(1);

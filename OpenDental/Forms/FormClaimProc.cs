@@ -109,14 +109,14 @@ namespace OpenDental
 		private System.Windows.Forms.Label labelCopayOverride;
 		private System.Windows.Forms.Panel panelClaimExtras;
 		///<summary>The procedure to which this claimproc is attached.</summary>
-		public Procedure proc;
+		private Procedure proc;
 		private System.Windows.Forms.GroupBox groupClaim;
 		private OpenDental.ValidDate textProcDate;
 		private System.Windows.Forms.Label labelProcDate;
 		///<summary>This is used when we don't have access to proc.</summary>
 		private double ProcFee;
 		///<summary>This is used when we don't have access to proc.</summary>
-		private string ProcADACode;
+		private int ProcCodeNum;
 		private Family FamCur;
 		private InsPlan[] PlanList;
 		private System.Windows.Forms.Label labelCarrierAllowedAmt;
@@ -1270,13 +1270,13 @@ namespace OpenDental
 				IsProc=true;
 				if(proc==null){
 					ProcFee=Procedures.GetProcFee(ClaimProcCur.ProcNum);
-					ProcADACode=Procedures.GetADA(ClaimProcCur.ProcNum);
+					ProcCodeNum=Procedures.GetCodeNum(ClaimProcCur.ProcNum);
 				}
 				else{
 					ProcFee=proc.ProcFee;
-					ProcADACode=proc.ADACode;
+					ProcCodeNum=proc.CodeNum;
 				}
-				textDescription.Text=ProcedureCodes.GetProcCode(ProcADACode).Descript;
+				textDescription.Text=ProcedureCodes.GetProcCode(ProcCodeNum).Descript;
 				textProcDate.ReadOnly=true;//user not allowed to edit ProcDate unless it's for a total payment
 			}
 			if(ClaimProcCur.ClaimNum>0){//attached to claim
@@ -1515,7 +1515,7 @@ namespace OpenDental
 		///<summary>Fills the carrier allowed amount.  Called from FillInitialAmounts and from butUpdateAllowed_Click</summary>
 		private void FillAllowed(){
 			if(IsProc){
-				CarrierAllowedAmt=InsPlans.GetAllowed(ProcADACode,ClaimProcCur.PlanNum,PlanList);
+				CarrierAllowedAmt=InsPlans.GetAllowed(ProcedureCodes.GetStringProcCode(ProcCodeNum),ClaimProcCur.PlanNum,PlanList);
 				if(CarrierAllowedAmt==-1){
 					textCarrierAllowedAmt.Text="";
 				}
@@ -1542,11 +1542,11 @@ namespace OpenDental
 				MsgBox.Show(this,"Allowed fee schedule is hidden, so no changes can be made.");
 				return;
 			}
-			Fee FeeCur=Fees.GetFeeByOrder(ProcADACode,feeOrder);
+			Fee FeeCur=Fees.GetFeeByOrder(ProcedureCodes.GetStringProcCode(ProcCodeNum),feeOrder);
 			FormFeeEdit FormFE=new FormFeeEdit();
 			if(FeeCur==null){
 				FeeCur=new Fee();
-				FeeCur.ADACode=ProcADACode;
+				FeeCur.ADACode=ProcedureCodes.GetStringProcCode(ProcCodeNum);
 				FeeCur.FeeSched=plan.AllowedFeeSched;
 				Fees.Insert(FeeCur);
 				FormFE.IsNew=true;

@@ -765,7 +765,7 @@ namespace OpenDental
 			textProcDate2.Text=ProcCur.ProcDate.ToShortDateString();
 			textProcProv.Text=Providers.GetAbbr(ProcCur.ProvNum);
 			textProcTooth.Text=Tooth.ToInternat(ProcCur.ToothNum);
-			textProcDescription.Text=ProcedureCodes.GetProcCode(ProcCur.ADACode).Descript;
+			textProcDescription.Text=ProcedureCodes.GetProcCode(ProcCur.CodeNum).Descript;
 			ProcFee=ProcCur.ProcFee;
 			ProcInsPaid=-ClaimProcs.ProcInsPay(ClaimProcList,ProcCur.ProcNum);
 			ProcInsEst=-ClaimProcs.ProcEstNotReceived(ClaimProcList,ProcCur.ProcNum);

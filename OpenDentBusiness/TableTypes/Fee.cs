@@ -9,7 +9,7 @@ namespace OpenDentBusiness{
 		public int FeeNum;
 		///<summary>The amount usually charged.  If an amount is unknown, then the entire Fee entry is deleted from the database.  The absence of a fee is sometimes shown in the user interface as a blank entry, and sometimes as 0.00.</summary>
 		public double Amount;
-		///<summary>FK to procedurelog.ADACode.</summary>
+		///<summary>FK to procedurecode.ProcCode.</summary>
 		public string ADACode;
 		///<summary>FK to definition.DefNum.</summary>
 		public int FeeSched;

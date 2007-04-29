@@ -21,8 +21,9 @@ namespace OpenDental{
 		private System.ComponentModel.Container components = null;
 		private OpenDental.UI.Button butOK;
 		private OpenDental.UI.Button butCancel;
-		///<summary>If IsSelectionMode=true and DialogResult=OK, then this will contain the selected ADACode.</summary>
-		public string SelectedADA;	
+		///<summary>If IsSelectionMode=true and DialogResult=OK, then this will contain the selected CodeNum.</summary>
+		public int SelectedCodeNum;
+		//public string SelectedADA;	
 		private System.Windows.Forms.ListBox listFeeSched;
 		private System.Windows.Forms.Label labelFeeSched;
 		private OpenDental.UI.Button butNew;
@@ -583,7 +584,7 @@ namespace OpenDental{
 				}
 				row.Cells.Add(ProcTable.Rows[i]["Descript"].ToString());
 				row.Cells.Add(ProcTable.Rows[i]["AbbrDesc"].ToString());
-				row.Cells.Add(ProcTable.Rows[i]["ADACode"].ToString());
+				row.Cells.Add(ProcTable.Rows[i]["ProcCode"].ToString());
 				if(ProcTable.Rows[i]["FeeAmt1"].ToString()=="-1") {
 					row.Cells.Add("");
 				}
@@ -724,10 +725,10 @@ namespace OpenDental{
 			}
 			List<ProcedureCode> listCodes=new List<ProcedureCode>();
 			for(int i=0;i<ProcTable.Rows.Count;i++){
-				if(ProcTable.Rows[i]["ADACode"].ToString()==""){
+				if(ProcTable.Rows[i]["ProcCode"].ToString()==""){
 					continue;
 				}
-				listCodes.Add(ProcedureCodes.GetProcCode(ProcTable.Rows[i]["ADACode"].ToString()));
+				listCodes.Add(ProcedureCodes.GetProcCode(ProcTable.Rows[i]["ProcCode"].ToString()));
 			}
 			//ClaimForm ClaimFormCur=ClaimForms.ListLong[listClaimForms.SelectedIndex];
 			SaveFileDialog saveDlg=new SaveFileDialog();
@@ -786,7 +787,7 @@ namespace OpenDental{
 			}
 			int retVal=0;
 			for(int i=0;i<listCodes.Count;i++){
-				if(ProcedureCodes.HList.ContainsKey(listCodes[i].ADACode)){
+				if(ProcedureCodes.HList.ContainsKey(listCodes[i].ProcCode)){
 					continue;//don't import duplicates.
 				}
 				listCodes[i].ProcCat=DefB.GetByExactName(DefCat.ProcCodeCats,listCodes[i].ProcCatDescript);
@@ -809,9 +810,11 @@ namespace OpenDental{
 			//won't be visible if no permission
 			FormProcCodeNew FormPCN=new FormProcCodeNew();
 			FormPCN.ShowDialog();
-			if(FormPCN.DialogResult!=DialogResult.OK){
-				return;
+			if(FormPCN.Changed){
+				changed=true;
+				FillGrid();
 			}
+			/*
 			if(FormPCN.textNewCode.Text=="") {
 				return;
 			}
@@ -850,12 +853,12 @@ namespace OpenDental{
 				changed=true;
 				FillGrid();
 			}
-			SecurityLogs.MakeLogEntry(Permissions.Setup,0,"Added Procedure Code: "+procCode.ADACode);
+			SecurityLogs.MakeLogEntry(Permissions.Setup,0,"Added Procedure Code: "+procCode.ADACode);*/
 		}
 
 		private void gridMain_CellDoubleClick(object sender,ODGridClickEventArgs e) {
 			if(IsSelectionMode){
-				SelectedADA=ProcTable.Rows[e.Row]["ADACode"].ToString();
+				SelectedCodeNum=PIn.PInt(ProcTable.Rows[e.Row]["CodeNum"].ToString());
 				DialogResult=DialogResult.OK;
 				return;
 			}
@@ -863,7 +866,7 @@ namespace OpenDental{
 			if(!Security.IsAuthorized(Permissions.Setup,DateTime.MinValue,true)){
 				return;
 			}
-			string ada=ProcTable.Rows[e.Row]["ADACode"].ToString();
+			string ada=ProcTable.Rows[e.Row]["ProcCode"].ToString();
 			if(e.Col>3){//if double clicked on a fee
 				Fee FeeCur=null;
 				int feesched=0;
@@ -920,7 +923,7 @@ namespace OpenDental{
 				MsgBox.Show(this,"Please select a procedure code first.");
 				return;
 			}
-			SelectedADA=ProcTable.Rows[gridMain.GetSelectedIndex()][3].ToString();
+			SelectedCodeNum=PIn.PInt(ProcTable.Rows[gridMain.GetSelectedIndex()]["CodeNum"].ToString());
 			DialogResult=DialogResult.OK;
 		}
 

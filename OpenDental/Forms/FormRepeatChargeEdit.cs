@@ -287,13 +287,13 @@ namespace OpenDental{
 					DialogResult=DialogResult.Cancel;
 					return;
 				}
-				ProcedureCode procCode=ProcedureCodes.GetProcCode(FormP.SelectedADA);
+				ProcedureCode procCode=ProcedureCodes.GetProcCode(FormP.SelectedCodeNum);
 				if(procCode.TreatArea!=TreatmentArea.Mouth){
 					MsgBox.Show(this,"Procedure codes that require tooth numbers are not allowed.");
 					DialogResult=DialogResult.Cancel;
 					return;
 				}
-				RepeatCur.ADACode=FormP.SelectedADA;
+				RepeatCur.ADACode=ProcedureCodes.GetStringProcCode(FormP.SelectedCodeNum);
 			}
 			textADACode.Text=RepeatCur.ADACode;
 			textDesc.Text=ProcedureCodes.GetProcCode(RepeatCur.ADACode).Descript;

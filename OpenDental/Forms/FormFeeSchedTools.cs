@@ -527,7 +527,7 @@ namespace OpenDental{
 			double fee;
 			using(StreamWriter sr=File.CreateText(Dlg.FileName)){
 				for(int i=0;i<table.Rows.Count;i++){
-					sr.Write(PIn.PString(table.Rows[i]["ADACode"].ToString())+"\t");
+					sr.Write(PIn.PString(table.Rows[i]["ProcCode"].ToString())+"\t");
 					fee=PIn.PDouble(table.Rows[i]["FeeAmt1"].ToString());
 					if(fee!=-1) {
 						sr.Write(fee.ToString("n"));
