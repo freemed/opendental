@@ -3976,8 +3976,7 @@ namespace OpenDental{
 					surf=textSurf.Text;
 					isAdditional= n!=0;
 					ProcCur=new Procedure();//this will be an insert, so no need to set CurOld
-					ProcCur.CodeNum=ProcedureCodes.GetProcCode
-						(AutoCodeItems.GetADA(autoCodeList[i],toothNum,surf,isAdditional,PatCur.PatNum,PatCur.Age)).CodeNum;
+					ProcCur.CodeNum=AutoCodeItems.GetCodeNum(autoCodeList[i],toothNum,surf,isAdditional,PatCur.PatNum,PatCur.Age);
 					tArea=ProcedureCodes.GetProcCode(ProcCur.CodeNum).TreatArea;
 					if((tArea==TreatmentArea.Arch
 						|| tArea==TreatmentArea.Mouth

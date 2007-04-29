@@ -4418,6 +4418,15 @@ namespace OpenDental{
 					General.NonQEx(command);
 					command="ALTER TABLE appointmentrule CHANGE ADACodeEnd CodeEnd varchar(15)";
 					General.NonQEx(command);
+					//added after r217
+					command="ALTER TABLE autocodeitem CHANGE ADACode OldCode varchar(15)";
+					General.NonQEx(command);
+					command="ALTER TABLE autocodeitem ADD CodeNum mediumint NOT NULL";
+					General.NonQEx(command);
+					command="UPDATE autocodeitem SET autocodeitem.CodeNum= (SELECT procedurecode.CodeNum FROM procedurecode WHERE procedurecode.ProcCode=autocodeitem.OldCode)";
+					General.NonQEx(command);
+					command="UPDATE autocodeitem SET OldCode=''";
+					General.NonQEx(command);
 				}
 				else{
 

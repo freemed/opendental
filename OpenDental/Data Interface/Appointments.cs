@@ -735,7 +735,7 @@ namespace OpenDental{
 				//surf
 				//toothnum
 				//Procedures.Cur.ToothRange="";
-				//ProcCur.NoBillIns=ProcedureCodes.GetProcCode(ProcCur.ADACode).NoBillIns;
+				//ProcCur.NoBillIns=ProcedureCodes.GetProcCode(ProcCur.CodeNum).NoBillIns;
 				//priority
 				ProcCur.ProcStatus=ProcStat.TP;
 				ProcCur.Note="";

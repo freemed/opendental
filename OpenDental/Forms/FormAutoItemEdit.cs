@@ -64,7 +64,7 @@ namespace OpenDental{
 			this.label1.Name = "label1";
 			this.label1.Size = new System.Drawing.Size(96,12);
 			this.label1.TabIndex = 1;
-			this.label1.Text = "ADA Code";
+			this.label1.Text = "Code";
 			this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// listConditions
@@ -163,7 +163,7 @@ namespace OpenDental{
 			}
 			else{ 
 				this.Text=Lan.g(this,"Edit Auto Code Item");
-				textADA.Text=AutoCodeItemCur.ADACode;    
+				textADA.Text=ProcedureCodes.GetStringProcCode(AutoCodeItemCur.CodeNum);    
 			}
 			FillList();
 		}
@@ -182,12 +182,12 @@ namespace OpenDental{
 
 		private void butOK_Click(object sender, System.EventArgs e) {
 			if(textADA.Text==""){
-			  MessageBox.Show(Lan.g(this,"ADA Code cannot be left blank."));
+			  MessageBox.Show(Lan.g(this,"Code cannot be left blank."));
         listConditions.SelectedIndex=-1;
 				FillList();
 				return;
       }
-      AutoCodeItemCur.ADACode=textADA.Text;
+      AutoCodeItemCur.CodeNum=ProcedureCodes.GetCodeNum(textADA.Text);
       if(IsNew){
         AutoCodeItems.Insert(AutoCodeItemCur);
       }
@@ -209,26 +209,25 @@ namespace OpenDental{
       FormP.IsSelectionMode=true;
       FormP.ShowDialog();
       if(FormP.DialogResult==DialogResult.Cancel){
-        textADA.Text=AutoCodeItemCur.ADACode; 
+        textADA.Text=ProcedureCodes.GetStringProcCode(AutoCodeItemCur.CodeNum);
+				return;
       }
-      else{
-				if(AutoCodeItems.HList.ContainsKey(ProcedureCodes.GetStringProcCode(FormP.SelectedCodeNum))
-					&& (int)AutoCodeItems.HList[ProcedureCodes.GetStringProcCode(FormP.SelectedCodeNum)] != AutoCodeItemCur.AutoCodeNum)
-				{
-					//This section is a fix for an old bug that did not cause items to get deleted properly
-					if(!AutoCodes.HList.ContainsKey((int)AutoCodeItems.HList[ProcedureCodes.GetStringProcCode(FormP.SelectedCodeNum)])){
-						AutoCodeItems.Delete((int)AutoCodeItems.HList[ProcedureCodes.GetStringProcCode(FormP.SelectedCodeNum)]);
-						textADA.Text=ProcedureCodes.GetStringProcCode(FormP.SelectedCodeNum);
-					}
-					else{
-						MessageBox.Show(Lan.g(this,"That procedure code is already in use in a different Auto Code.  Not allowed to use it here."));
-						textADA.Text=AutoCodeItemCur.ADACode;
-					}
-				}
-				else{
+			if(AutoCodeItems.HList.ContainsKey(FormP.SelectedCodeNum)
+				&& (int)AutoCodeItems.HList[FormP.SelectedCodeNum] != AutoCodeItemCur.AutoCodeNum)
+			{
+				//This section is a fix for an old bug that did not cause items to get deleted properly
+				if(!AutoCodes.HList.ContainsKey((int)AutoCodeItems.HList[FormP.SelectedCodeNum])){
+					AutoCodeItems.Delete((int)AutoCodeItems.HList[FormP.SelectedCodeNum]);
 					textADA.Text=ProcedureCodes.GetStringProcCode(FormP.SelectedCodeNum);
 				}
-      }
+				else{
+					MessageBox.Show(Lan.g(this,"That procedure code is already in use in a different Auto Code.  Not allowed to use it here."));
+					textADA.Text=ProcedureCodes.GetStringProcCode(AutoCodeItemCur.CodeNum);
+				}
+			}
+			else{
+				textADA.Text=ProcedureCodes.GetStringProcCode(FormP.SelectedCodeNum);
+			}
 		}
 
 	}

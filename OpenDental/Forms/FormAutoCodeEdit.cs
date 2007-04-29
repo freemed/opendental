@@ -142,7 +142,7 @@ namespace OpenDental{
 			this.label3.Name = "label3";
 			this.label3.Size = new System.Drawing.Size(436,18);
 			this.label3.TabIndex = 27;
-			this.label3.Text = "You may have duplicate ADA codes  in the following list.";
+			this.label3.Text = "You may have duplicate codes  in the following list.";
 			// 
 			// butDelete
 			// 
@@ -242,8 +242,8 @@ namespace OpenDental{
 			tbAutoItem.SetGridColor(Color.Gray);
 			tbAutoItem.SetBackGColor(Color.White);      
 			for(int i=0;i<AutoCodeItems.ListForCode.Length;i++){
-        tbAutoItem.Cell[0,i]=AutoCodeItems.ListForCode[i].ADACode;
-				tbAutoItem.Cell[1,i]=ProcedureCodes.GetProcCode(AutoCodeItems.ListForCode[i].ADACode).Descript;
+        tbAutoItem.Cell[0,i]=ProcedureCodes.GetProcCode(AutoCodeItems.ListForCode[i].CodeNum).ProcCode;
+				tbAutoItem.Cell[1,i]=ProcedureCodes.GetProcCode(AutoCodeItems.ListForCode[i].CodeNum).Descript;
         count=0;
         for(int j=0;j<AutoCodeConds.List.Length;j++){
           if(AutoCodeConds.List[j].AutoCodeItemNum==AutoCodeItems.ListForCode[i].AutoCodeItemNum){

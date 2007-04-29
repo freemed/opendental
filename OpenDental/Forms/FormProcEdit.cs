@@ -2426,7 +2426,7 @@ namespace OpenDental{
 				return;
 			}
 			//this represents the suggested ADAcode based on the autocodes set up.
-			string verifyADA;
+			int verifyCode;
 			AutoCode AutoCodeCur=null;
 			if(ProcedureCode2.TreatArea==TreatmentArea.Arch){
 				if(ProcCur.Surf==""){
@@ -2434,31 +2434,32 @@ namespace OpenDental{
 					return;
 				}
 				if(ProcCur.Surf=="U"){
-					verifyADA=AutoCodeItems.VerifyCode
-						(ProcedureCode2.ProcCode,"1","",false,PatCur.PatNum,PatCur.Age,out AutoCodeCur);//max
+					verifyCode=AutoCodeItems.VerifyCode
+						(ProcedureCode2.CodeNum,"1","",false,PatCur.PatNum,PatCur.Age,out AutoCodeCur);//max
 				}
 				else{
-					verifyADA=AutoCodeItems.VerifyCode
-						(ProcedureCode2.ProcCode,"32","",false,PatCur.PatNum,PatCur.Age,out AutoCodeCur);//mand
+					verifyCode=AutoCodeItems.VerifyCode
+						(ProcedureCode2.CodeNum,"32","",false,PatCur.PatNum,PatCur.Age,out AutoCodeCur);//mand
 				}
 			}
 			else if(ProcedureCode2.TreatArea==TreatmentArea.ToothRange){
 				//test for max or mand.
 				if(listBoxTeeth.SelectedItems.Count<1)
-					verifyADA=AutoCodeItems.VerifyCode
-						(ProcedureCode2.ProcCode,"32","",false,PatCur.PatNum,PatCur.Age,out AutoCodeCur);//mand
+					verifyCode=AutoCodeItems.VerifyCode
+						(ProcedureCode2.CodeNum,"32","",false,PatCur.PatNum,PatCur.Age,out AutoCodeCur);//mand
 				else
-					verifyADA=AutoCodeItems.VerifyCode
-						(ProcedureCode2.ProcCode,"1","",false,PatCur.PatNum,PatCur.Age,out AutoCodeCur);//max
+					verifyCode=AutoCodeItems.VerifyCode
+						(ProcedureCode2.CodeNum,"1","",false,PatCur.PatNum,PatCur.Age,out AutoCodeCur);//max
 			}
 			else{//surf or tooth
-				verifyADA=AutoCodeItems.VerifyCode
-					(ProcedureCode2.ProcCode,ProcCur.ToothNum,ProcCur.Surf,false,PatCur.PatNum,PatCur.Age,out AutoCodeCur);
+				verifyCode=AutoCodeItems.VerifyCode
+					(ProcedureCode2.CodeNum,ProcCur.ToothNum,ProcCur.Surf,false,PatCur.PatNum,PatCur.Age,out AutoCodeCur);
 			}
-			if(ProcedureCode2.ProcCode!=verifyADA){
-				string desc=ProcedureCodes.GetProcCode(verifyADA).Descript;
+			if(ProcedureCode2.CodeNum!=verifyCode){
+				string desc=ProcedureCodes.GetProcCode(verifyCode).Descript;
 				FormAutoCodeLessIntrusive FormA=new FormAutoCodeLessIntrusive();
-				FormA.mainText=verifyADA+" ("+desc+") "+Lan.g(this,"is the recommended procedure code for this procedure.  Change procedure code and fee?");
+				FormA.mainText=ProcedureCodes.GetProcCode(verifyCode).ProcCode
+					+" ("+desc+") "+Lan.g(this,"is the recommended procedure code for this procedure.  Change procedure code and fee?");
 				FormA.ShowDialog();
 				if(FormA.DialogResult!=DialogResult.OK){
 					DialogResult=DialogResult.OK;
@@ -2469,7 +2470,7 @@ namespace OpenDental{
 					AutoCodes.Update(AutoCodeCur);
 					DataValid.SetInvalid(InvalidTypes.AutoCodes);
 				}
-				ProcCur.CodeNum=ProcedureCodes.GetProcCode(verifyADA).CodeNum;
+				ProcCur.CodeNum=verifyCode;
 				ProcedureCode2=ProcedureCodes.GetProcCode(ProcCur.CodeNum);
 				//ProcCur.ADACode=verifyADA;
 				ProcCur.ProcFee=Fees.GetAmount0(ProcedureCode2.CodeNum,Fees.GetFeeSched(PatCur,PlanList,PatPlanList));
