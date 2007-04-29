@@ -49,7 +49,7 @@ namespace OpenDental{
 				MsgBox.Show(this,"Cannot convert this database version which was only for development purposes.");
 				return false;
 			}
-			if(FromVersion < new Version("4.8.7.0")){
+			if(FromVersion < new Version("4.9.0.0")){
 				if(MessageBox.Show(Lan.g(this,"Your database will now be converted")+"\r"
 					+Lan.g(this,"from version")+" "+FromVersion.ToString()+"\r"
 					+Lan.g(this,"to version")+" "+ToVersion.ToString()+"\r"
@@ -4377,12 +4377,12 @@ namespace OpenDental{
 				command="UPDATE preference SET ValueString = '4.8.3.0' WHERE PrefName = 'DataBaseVersion'";
 				General.NonQEx(command);
 			}
-			To4_8_7();
+			To4_9_0();
 		}
 
 		///<summary></summary>
-		private void To4_8_7() {
-			if(FromVersion<new Version("4.8.7.0")) {
+		private void To4_9_0() {
+			if(FromVersion<new Version("4.9.0.0")) {
 				string command;
 				if(FormChooseDatabase.DBtype==DatabaseType.MySql) {
 					command="ALTER TABLE procedurecode ADD CodeNum mediumint NOT NULL";//this column will be the new primary key
@@ -4406,10 +4406,10 @@ namespace OpenDental{
 				else{
 
 				}
-				command="UPDATE preference SET ValueString = '4.8.7.0' WHERE PrefName = 'DataBaseVersion'";
+				command="UPDATE preference SET ValueString = '4.9.0.0' WHERE PrefName = 'DataBaseVersion'";
 				General.NonQEx(command);
 			}
-			//To4_8_?();
+			//To4_9_?();
 		}
 
 
