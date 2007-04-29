@@ -4413,6 +4413,11 @@ namespace OpenDental{
 					General.NonQEx(command);
 					command="UPDATE fee SET OldCode=''";
 					General.NonQEx(command);
+					//added after r216
+					command="ALTER TABLE appointmentrule CHANGE ADACodeStart CodeStart varchar(15)";
+					General.NonQEx(command);
+					command="ALTER TABLE appointmentrule CHANGE ADACodeEnd CodeEnd varchar(15)";
+					General.NonQEx(command);
 				}
 				else{
 

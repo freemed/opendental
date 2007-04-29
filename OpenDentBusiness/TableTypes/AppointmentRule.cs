@@ -10,9 +10,9 @@ namespace OpenDentBusiness{
 		///<summary>The description of the rule which will be displayed to the user.</summary>
 		public string RuleDesc;
 		///<summary>The procedure code of the start of the range.</summary>
-		public string ADACodeStart;
+		public string CodeStart;
 		///<summary>The procedure code of the end of the range.</summary>
-		public string ADACodeEnd;
+		public string CodeEnd;
 		///<summary>Usually true.  But this does allow you to turn off a rule temporarily without losing the settings.</summary>
 		public bool IsEnabled;
 
@@ -21,8 +21,8 @@ namespace OpenDentBusiness{
 			AppointmentRule a=new AppointmentRule();
 			a.AppointmentRuleNum=AppointmentRuleNum;
 			a.RuleDesc=RuleDesc;
-			a.ADACodeStart=ADACodeStart;
-			a.ADACodeEnd=ADACodeEnd;
+			a.CodeStart=CodeStart;
+			a.CodeEnd=CodeEnd;
 			a.IsEnabled=IsEnabled;
 			return a;
 		}

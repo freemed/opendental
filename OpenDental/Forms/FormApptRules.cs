@@ -156,8 +156,8 @@ namespace OpenDental{
 			for(int i=0;i<AppointmentRules.List.Length;i++){
 				row=new OpenDental.UI.ODGridRow();
 				row.Cells.Add(AppointmentRules.List[i].RuleDesc);
-				row.Cells.Add(AppointmentRules.List[i].ADACodeStart);
-				row.Cells.Add(AppointmentRules.List[i].ADACodeEnd);
+				row.Cells.Add(AppointmentRules.List[i].CodeStart);
+				row.Cells.Add(AppointmentRules.List[i].CodeEnd);
 				if(AppointmentRules.List[i].IsEnabled){
 					row.Cells.Add("X");
 				}

@@ -120,7 +120,7 @@ namespace OpenDental{
 			this.label2.Name = "label2";
 			this.label2.Size = new System.Drawing.Size(111,20);
 			this.label2.TabIndex = 18;
-			this.label2.Text = "ADA Code Start";
+			this.label2.Text = "Code Start";
 			this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// textADACodeEnd
@@ -136,7 +136,7 @@ namespace OpenDental{
 			this.label3.Name = "label3";
 			this.label3.Size = new System.Drawing.Size(111,20);
 			this.label3.TabIndex = 20;
-			this.label3.Text = "ADA Code End";
+			this.label3.Text = "Code End";
 			this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// checkIsEnabled
@@ -210,8 +210,8 @@ namespace OpenDental{
 
 		private void FormApptRuleEdit_Load(object sender, System.EventArgs e) {
 			textRuleDesc.Text=ApptRuleCur.RuleDesc;
-			textADACodeStart.Text=ApptRuleCur.ADACodeStart;
-			textADACodeEnd.Text=ApptRuleCur.ADACodeEnd;
+			textADACodeStart.Text=ApptRuleCur.CodeStart;
+			textADACodeEnd.Text=ApptRuleCur.CodeEnd;
 			checkIsEnabled.Checked=ApptRuleCur.IsEnabled;
 		}
 
@@ -236,8 +236,8 @@ namespace OpenDental{
 				return;
 			}
 			ApptRuleCur.RuleDesc=textRuleDesc.Text;
-			ApptRuleCur.ADACodeStart=textADACodeStart.Text;
-			ApptRuleCur.ADACodeEnd=textADACodeEnd.Text;
+			ApptRuleCur.CodeStart=textADACodeStart.Text;
+			ApptRuleCur.CodeEnd=textADACodeEnd.Text;
 			ApptRuleCur.IsEnabled=checkIsEnabled.Checked;
 			if(IsNew){
 				AppointmentRules.Insert(ApptRuleCur);
