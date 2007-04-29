@@ -1952,7 +1952,7 @@ namespace OpenDental{
       ProcCur.CodeNum=FormP.SelectedCodeNum;
       ProcedureCode2=ProcedureCodes.GetProcCode(FormP.SelectedCodeNum);
       textDesc.Text=ProcedureCode2.Descript;
-      ProcCur.ProcFee=Fees.GetAmount0(ProcedureCode2.ProcCode,Fees.GetFeeSched(PatCur,PlanList,PatPlanList));
+      ProcCur.ProcFee=Fees.GetAmount0(ProcedureCode2.CodeNum,Fees.GetFeeSched(PatCur,PlanList,PatPlanList));
 			switch(ProcedureCode2.TreatArea){ 
 				case TreatmentArea.Quad:
 					ProcCur.Surf="UR";
@@ -1986,7 +1986,7 @@ namespace OpenDental{
 				ProcCur.ProcStatus=ProcStat.TP;
 				//fee starts out 0 if EO, EC, etc.  This updates fee if changing to TP so it won't stay 0.
 				if(ProcCur.ProcFee==0) {
-					ProcCur.ProcFee=Fees.GetAmount0(ProcedureCodes.GetProcCode(ProcCur.CodeNum).ProcCode,Fees.GetFeeSched(PatCur,PlanList,PatPlanList));
+					ProcCur.ProcFee=Fees.GetAmount0(ProcCur.CodeNum,Fees.GetFeeSched(PatCur,PlanList,PatPlanList));
 					textProcFee.Text=ProcCur.ProcFee.ToString("f");
 				}
 			}
@@ -2472,7 +2472,7 @@ namespace OpenDental{
 				ProcCur.CodeNum=ProcedureCodes.GetProcCode(verifyADA).CodeNum;
 				ProcedureCode2=ProcedureCodes.GetProcCode(ProcCur.CodeNum);
 				//ProcCur.ADACode=verifyADA;
-				ProcCur.ProcFee=Fees.GetAmount0(ProcedureCode2.ProcCode,Fees.GetFeeSched(PatCur,PlanList,PatPlanList));
+				ProcCur.ProcFee=Fees.GetAmount0(ProcedureCode2.CodeNum,Fees.GetFeeSched(PatCur,PlanList,PatPlanList));
 				Procedures.Update(ProcCur,ProcOld);
 				Recalls.Synch(ProcCur.PatNum);
 				if(ProcCur.ProcStatus==ProcStat.C){

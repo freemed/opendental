@@ -7,7 +7,7 @@ using OpenDentBusiness;
 namespace OpenDental{
 	///<summary></summary>
 	public class Fees {
-		///<summary>An array of hashtables, one for each non-hidden fee schedule.  For each hashtable, key is adacode, value is Fee object.</summary>
+		///<summary>An array of hashtables, one for each non-hidden fee schedule.  For each hashtable, key is CodeNum, value is Fee object.</summary>
 		private static Hashtable[] HList;
 
 		///<summary>Refreshes all fees and loads them into HList array.  </summary>
@@ -17,25 +17,25 @@ namespace OpenDental{
 				HList[i]=new Hashtable();
 			}
 			Fee fee;
-			string command= 
-				"SELECT * from fee";
+			string command="SELECT * FROM fee";
 			DataTable table=General.GetTable(command);
 			for(int i=0;i<table.Rows.Count;i++) {
 				fee=new Fee();
 				fee.FeeNum       =PIn.PInt(table.Rows[i][0].ToString());
 				fee.Amount       =PIn.PDouble(table.Rows[i][1].ToString());
-				fee.ADACode      =PIn.PString(table.Rows[i][2].ToString());
+				//fee.OldCode      =PIn.PString(table.Rows[i][2].ToString());
 				fee.FeeSched     =PIn.PInt(table.Rows[i][3].ToString());
-				fee.UseDefaultFee=PIn.PBool(table.Rows[i][4].ToString());
-				fee.UseDefaultCov=PIn.PBool(table.Rows[i][5].ToString());
+				//fee.UseDefaultFee=PIn.PBool(table.Rows[i][4].ToString());
+				//fee.UseDefaultCov=PIn.PBool(table.Rows[i][5].ToString());
+				fee.CodeNum      =PIn.PInt(table.Rows[i][6].ToString());
 				if(DefB.GetOrder(DefCat.FeeSchedNames,fee.FeeSched)!=-1) {//if fee sched is visible
-					if(HList[DefB.GetOrder(DefCat.FeeSchedNames,fee.FeeSched)].ContainsKey(fee.ADACode)) {
-						//if fee was already loaded for this adacode, delete this duplicate.
+					if(HList[DefB.GetOrder(DefCat.FeeSchedNames,fee.FeeSched)].ContainsKey(fee.CodeNum)) {
+						//if fee was already loaded for this code, delete this duplicate.
 						command="DELETE FROM fee WHERE feenum = '"+fee.FeeNum+"'";
 						General.NonQ(command);
 					}
 					else {
-						HList[DefB.GetOrder(DefCat.FeeSchedNames,fee.FeeSched)].Add(fee.ADACode,fee);
+						HList[DefB.GetOrder(DefCat.FeeSchedNames,fee.FeeSched)].Add(fee.CodeNum,fee);
 					}
 				}
 			}
@@ -44,24 +44,26 @@ namespace OpenDental{
 		///<summary></summary>
 		public static void Update(Fee fee){
 			string command= "UPDATE fee SET " 
-				+ "amount = '"        +POut.PDouble(fee.Amount)+"'"
-				+ ",adacode = '"      +POut.PString(fee.ADACode)+"'"
-				+ ",feesched = '"     +POut.PInt   (fee.FeeSched)+"'"
-				+ ",usedefaultfee = '"+POut.PBool  (fee.UseDefaultFee)+"'"
-				+ ",usedefaultcov = '"+POut.PBool  (fee.UseDefaultCov)+"'"
-				+" WHERE feenum = '"  +POut.PInt   (fee.FeeNum)+"'";
+				+ "Amount = '"        +POut.PDouble(fee.Amount)+"'"
+				//+ ",oldcode = '"      +POut.PString(fee.OldCode)+"'"
+				+ ",FeeSched = '"     +POut.PInt   (fee.FeeSched)+"'"
+				//+ ",usedefaultfee = '"+POut.PBool  (fee.UseDefaultFee)+"'"
+				//+ ",usedefaultcov = '"+POut.PBool  (fee.UseDefaultCov)+"'"
+				+ ",CodeNum = '"      +POut.PInt   (fee.CodeNum)+"'"
+				+" WHERE FeeNum = '"  +POut.PInt   (fee.FeeNum)+"'";
  			General.NonQ(command);
 		}
 
 		///<summary></summary>
 		public static void Insert(Fee fee){
-			string command= "INSERT INTO fee (amount,adacode,"
-				+"feesched,usedefaultfee,usedefaultcov) VALUES("
+			string command= "INSERT INTO fee (amount,OldCode,"
+				+"feesched,usedefaultfee,usedefaultcov,CodeNum) VALUES("
 				+"'"+POut.PDouble(fee.Amount)+"', "
-				+"'"+POut.PString(fee.ADACode)+"', "
+				+"'"+POut.PString(fee.OldCode)+"', "//this must be included for Oracle compatibility
 				+"'"+POut.PInt   (fee.FeeSched)+"', "
 				+"'"+POut.PBool  (fee.UseDefaultFee)+"', "
-				+"'"+POut.PBool  (fee.UseDefaultCov)+"')";
+				+"'"+POut.PBool  (fee.UseDefaultCov)+"', "
+				+"'"+POut.PInt   (fee.CodeNum)+"')";
  			fee.FeeNum=General.NonQ(command,true);
 		}
 
@@ -72,22 +74,18 @@ namespace OpenDental{
 		}
 
 		///<summary>Used in FormProcCodeEdit,FormProcedures, and FormClaimProc to get Fees for display and for editing. Returns null if no matching fee found.</summary>
-		public static Fee GetFeeByOrder(string adacode, int order){
-			if(adacode==null)
+		public static Fee GetFeeByOrder(int codeNum, int order){
+			if(codeNum==0)
 				return null;
-			if(HList[order].Contains(adacode)){
-				return (Fee)HList[order][adacode];
+			if(HList[order].Contains(codeNum)){
+				return (Fee)HList[order][codeNum];
 			}
 			return null;
-			//else{
-				//MessageBox.Show("code not found: "+myADA);
-			//	return new Fee();
-			//}
 		}
 
 		///<summary>Returns an amount if a fee has been entered.  Otherwise returns -1.  Not usually used directly.</summary>
-		public static double GetAmount(string adacode, int feeSched){
-			if(adacode==null)
+		public static double GetAmount(int codeNum, int feeSched){
+			if(codeNum==0)
 				return -1;
 			if(feeSched==0)
 				return -1;
@@ -95,15 +93,15 @@ namespace OpenDental{
 			if(i==-1){
 				return -1;//you cannot obtain fees for hidden fee schedules
 			}
-			if(HList[i].Contains(adacode)){
-				return ((Fee)HList[i][adacode]).Amount;
+			if(HList[i].Contains(codeNum)){
+				return ((Fee)HList[i][codeNum]).Amount;
 			}
 			return -1;//code not found
 		}
 
 		///<summary>Almost the same as GetAmount.  But never returns -1;  Returns an amount if a fee has been entered.  Returns 0 if code can't be found.</summary>
-		public static double GetAmount0(string adacode, int feeSched){
-			double retVal=GetAmount(adacode,feeSched);
+		public static double GetAmount0(int codeNum, int feeSched){
+			double retVal=GetAmount(codeNum,feeSched);
 			if(retVal==-1){
 				return 0;
 			}
@@ -185,18 +183,18 @@ namespace OpenDental{
 		}
 
 		///<summary>schedI is the currently displayed index of the fee schedule to save to.  Empty fees never even make it this far and should be skipped earlier in the process.</summary>
-		public static void Import(string adaCode,double amt,int schedI){
-			if(!ProcedureCodes.IsValidCode(adaCode)){
+		public static void Import(string codeText,double amt,int schedI){
+			if(!ProcedureCodes.IsValidCode(codeText)){
 				return;//skip for now. Possibly insert adaCode in a future version.
 			}
-			Fee fee=GetFeeByOrder(adaCode,schedI);
+			Fee fee=GetFeeByOrder(ProcedureCodes.GetCodeNum(codeText),schedI);
 			if(fee!=null){
 				Delete(fee);
 			}
 			fee=new Fee();
-			fee.ADACode=adaCode;
 			fee.Amount=amt;
 			fee.FeeSched=DefB.Short[(int)DefCat.FeeSchedNames][schedI].DefNum;
+			fee.CodeNum=ProcedureCodes.GetCodeNum(codeText);
 			Insert(fee);
 		}
 

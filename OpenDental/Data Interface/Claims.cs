@@ -372,8 +372,7 @@ namespace OpenDental{
 						provNum=PrefB.GetInt("PracticeDefaultProv");
 					}
 					ClaimProcsForClaim[i].FeeBilled=Fees.GetAmount0(//get the fee based on code and prov fee sched
-						ProcedureCodes.GetStringProcCode(ProcCur.CodeNum)
-						,Providers.ListLong[Providers.GetIndexLong(provNum)].FeeSched);
+						ProcCur.CodeNum,Providers.ListLong[Providers.GetIndexLong(provNum)].FeeSched);
 				}
 				else{//don't use ucr.  Use the procedure fee instead.
 					ClaimProcsForClaim[i].FeeBilled=ProcCur.ProcFee;

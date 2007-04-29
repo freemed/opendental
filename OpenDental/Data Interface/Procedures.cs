@@ -1082,7 +1082,7 @@ namespace OpenDental{
 
 		///<summary>Only fees, not estimates.  Returns number of fees changed.</summary>
 		public static int GlobalUpdateFees(){
-			string command=@"SELECT procedurecode.ProcCode,ProcNum,patient.PatNum,procedurelog.PatNum,
+			string command=@"SELECT procedurecode.CodeNum,ProcNum,patient.PatNum,procedurelog.PatNum,
 				insplan.FeeSched AS PlanFeeSched,patient.FeeSched AS PatFeeSched,patient.PriProv,
 				procedurelog.ProcFee
 				FROM procedurelog
@@ -1114,7 +1114,7 @@ namespace OpenDental{
 				patFeeSched=PIn.PInt(table.Rows[i]["PatFeeSched"].ToString());
 				patProv=PIn.PInt(table.Rows[i]["PriProv"].ToString());
 				feeSchedNum=Fees.GetFeeSched(priPlanFeeSched,patFeeSched,patProv);
-				newFee=Fees.GetAmount0(PIn.PString(table.Rows[i]["ProcCode"].ToString()),feeSchedNum);
+				newFee=Fees.GetAmount0(PIn.PInt(table.Rows[i]["CodeNum"].ToString()),feeSchedNum);
 				oldFee=PIn.PDouble(table.Rows[i]["ProcFee"].ToString());
 				if(newFee==oldFee){
 					continue;

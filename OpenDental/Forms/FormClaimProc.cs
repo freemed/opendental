@@ -1542,12 +1542,12 @@ namespace OpenDental
 				MsgBox.Show(this,"Allowed fee schedule is hidden, so no changes can be made.");
 				return;
 			}
-			Fee FeeCur=Fees.GetFeeByOrder(ProcedureCodes.GetStringProcCode(ProcCodeNum),feeOrder);
+			Fee FeeCur=Fees.GetFeeByOrder(ProcCodeNum,feeOrder);
 			FormFeeEdit FormFE=new FormFeeEdit();
 			if(FeeCur==null){
 				FeeCur=new Fee();
-				FeeCur.ADACode=ProcedureCodes.GetStringProcCode(ProcCodeNum);
 				FeeCur.FeeSched=plan.AllowedFeeSched;
+				FeeCur.CodeNum=ProcCodeNum;
 				Fees.Insert(FeeCur);
 				FormFE.IsNew=true;
 			}

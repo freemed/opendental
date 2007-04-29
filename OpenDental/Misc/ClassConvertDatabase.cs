@@ -4402,6 +4402,17 @@ namespace OpenDental{
 					General.NonQEx(command);
 					command="ALTER TABLE procedurelog CHANGE ADACode OldCode varchar(15)";
 					General.NonQEx(command);
+					//added after r215
+					command="UPDATE procedurelog SET OldCode=''";
+					General.NonQEx(command);
+					command="ALTER TABLE fee CHANGE ADACode OldCode varchar(15)";
+					General.NonQEx(command);
+					command="ALTER TABLE fee ADD CodeNum mediumint NOT NULL";
+					General.NonQEx(command);
+					command="UPDATE fee SET fee.CodeNum= (SELECT procedurecode.CodeNum FROM procedurecode WHERE procedurecode.ProcCode=fee.OldCode)";
+					General.NonQEx(command);
+					command="UPDATE fee SET OldCode=''";
+					General.NonQEx(command);
 				}
 				else{
 

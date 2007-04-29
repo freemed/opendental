@@ -625,7 +625,7 @@ namespace OpenDental{
 			ODGridRow row;
 			Fee fee;
 			for(int i=0;i<DefB.Short[(int)DefCat.FeeSchedNames].Length;i++){
-				fee=Fees.GetFeeByOrder(ProcCode.ProcCode,i);
+				fee=Fees.GetFeeByOrder(ProcCode.CodeNum,i);
 				row=new ODGridRow();
 				row.Cells.Add(DefB.Short[(int)DefCat.FeeSchedNames][i].ItemName);
 				if(fee==null){
@@ -640,14 +640,14 @@ namespace OpenDental{
 		}
 
 		private void gridFees_CellDoubleClick(object sender,OpenDental.UI.ODGridClickEventArgs e) {
-			Fee FeeCur=Fees.GetFeeByOrder(ProcCode.ProcCode,e.Row);
+			Fee FeeCur=Fees.GetFeeByOrder(ProcCode.CodeNum,e.Row);
 			//tbFees.SelectedRow=e.Row;
 			//tbFees.ColorRow(e.Row,Color.LightGray);
 			FormFeeEdit FormFE=new FormFeeEdit();
 			if(FeeCur==null) {
 				FeeCur=new Fee();
-				FeeCur.ADACode=ProcCode.ProcCode;
 				FeeCur.FeeSched=DefB.Short[(int)DefCat.FeeSchedNames][e.Row].DefNum;
+				FeeCur.CodeNum=ProcCode.CodeNum;
 				Fees.Insert(FeeCur);
 				FormFE.IsNew=true;
 			}

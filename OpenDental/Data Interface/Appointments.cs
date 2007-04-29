@@ -729,7 +729,7 @@ namespace OpenDental{
 				ProcCur.AptNum=AptCur.AptNum;
 				ProcCur.CodeNum=ProcedureCodes.GetCodeNum(procs[i]);
 				ProcCur.ProcDate=DateTime.Now;
-				ProcCur.ProcFee=Fees.GetAmount0(ProcedureCodes.GetStringProcCode(ProcCur.CodeNum),Fees.GetFeeSched(patCur,planList,patPlanList));
+				ProcCur.ProcFee=Fees.GetAmount0(ProcCur.CodeNum,Fees.GetFeeSched(patCur,planList,patPlanList));
 				//ProcCur.OverridePri=-1;
 				//ProcCur.OverrideSec=-1;
 				//surf

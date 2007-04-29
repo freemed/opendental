@@ -171,7 +171,6 @@ namespace OpenDental{
          +"' ORDER BY procedurecode.ProcCode";
 			FormQuery2=new FormQuery();
 			FormQuery2.IsReport=true;
-
       if (radioCode.Checked==true)  {
 			  FormQuery2.SubmitReportQuery();			      
 				Queries.CurReport.Title="Procedure Codes";
@@ -198,7 +197,7 @@ namespace OpenDental{
 				FormQuery2.ShowDialog();
 				DialogResult=DialogResult.OK;		
       }
-			else {
+			else {//categories
 			  Queries.SubmitTemp();//create TableTemp which is not actually used
 	      ProcedureCode[] ProcList=ProcedureCodes.GetProcList();
 				Queries.TableQ=new DataTable(null);
@@ -212,7 +211,7 @@ namespace OpenDental{
 				row[1]=ProcList[0].ProcCode;
 				row[2]=ProcList[0].Descript;
 				row[3]=ProcList[0].AbbrDesc;
-			  row[4]=((double)Fees.GetAmount0(ProcList[0].ProcCode,feeSched)).ToString("F");
+			  row[4]=((double)Fees.GetAmount0(ProcList[0].CodeNum,feeSched)).ToString("F");
 				Queries.CurReport.ColTotal[4]+=PIn.PDouble(row[4].ToString());
 				Queries.TableQ.Rows.Add(row);
 				for(int i=1;i<ProcList.Length;i++){//loop through data rows
@@ -227,7 +226,7 @@ namespace OpenDental{
 					row[1]=ProcList[i].ProcCode.ToString();
 					row[2]=ProcList[i].Descript;
 					row[3]=ProcList[i].AbbrDesc.ToString();
-					row[4]=((double)Fees.GetAmount0(ProcList[i].ProcCode,feeSched)).ToString("F");
+					row[4]=((double)Fees.GetAmount0(ProcList[i].CodeNum,feeSched)).ToString("F");
   				//Queries.CurReport.ColTotal[4]+=PIn.PDouble(row[4].ToString());
 					Queries.TableQ.Rows.Add(row);
 				}

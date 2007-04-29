@@ -866,33 +866,34 @@ namespace OpenDental{
 			if(!Security.IsAuthorized(Permissions.Setup,DateTime.MinValue,true)){
 				return;
 			}
-			string ada=ProcTable.Rows[e.Row]["ProcCode"].ToString();
+			int codeNum=PIn.PInt(ProcTable.Rows[e.Row]["CodeNum"].ToString());
+			//string =ProcTable.Rows[e.Row]["ProcCode"].ToString();
 			if(e.Col>3){//if double clicked on a fee
 				Fee FeeCur=null;
 				int feesched=0;
 				if(e.Col==4){
-					FeeCur=Fees.GetFeeByOrder(ada,listFeeSched.SelectedIndex);
+					FeeCur=Fees.GetFeeByOrder(codeNum,listFeeSched.SelectedIndex);
 					feesched=DefB.Short[(int)DefCat.FeeSchedNames][listFeeSched.SelectedIndex].DefNum;
 				}
 				if(e.Col==5) {
 					if(comboCompare1.SelectedIndex==0){
 						return;
 					}
-					FeeCur=Fees.GetFeeByOrder(ada,comboCompare1.SelectedIndex-1);
+					FeeCur=Fees.GetFeeByOrder(codeNum,comboCompare1.SelectedIndex-1);
 					feesched=DefB.Short[(int)DefCat.FeeSchedNames][comboCompare1.SelectedIndex-1].DefNum;
 				}
 				if(e.Col==6) {
 					if(comboCompare2.SelectedIndex==0) {
 						return;
 					}
-					FeeCur=Fees.GetFeeByOrder(ada,comboCompare2.SelectedIndex-1);
+					FeeCur=Fees.GetFeeByOrder(codeNum,comboCompare2.SelectedIndex-1);
 					feesched=DefB.Short[(int)DefCat.FeeSchedNames][comboCompare2.SelectedIndex-1].DefNum;
 				}
 				FormFeeEdit FormFE=new FormFeeEdit();
 				if(FeeCur==null) {
 					FeeCur=new Fee();
-					FeeCur.ADACode=ada;
 					FeeCur.FeeSched=feesched;
+					FeeCur.CodeNum=codeNum;
 					Fees.Insert(FeeCur);
 					FormFE.IsNew=true;
 				}
@@ -905,7 +906,7 @@ namespace OpenDental{
 				}
 			}
 			else {//not on a fee: Edit code instead
-				FormProcCodeEdit FormPCE=new FormProcCodeEdit(ProcedureCodes.GetProcCode(ada));
+				FormProcCodeEdit FormPCE=new FormProcCodeEdit(ProcedureCodes.GetProcCode(codeNum));
 				FormPCE.IsNew=false;
 				FormPCE.ShowDialog();
 				if(FormPCE.DialogResult==DialogResult.OK) {

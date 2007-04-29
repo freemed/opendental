@@ -464,19 +464,19 @@ namespace OpenDental {
 			return dedTot-dedUsed;
 		}
 
-		///<summary>Returns -1 if no copay feeschedule or fee unknown for this adaCode. Otherwise, returns 0 or more for a patient copay. Can handle a planNum of 0.</summary>
-		public static double GetCopay(string adaCode,InsPlan plan){
+		///<summary>Returns -1 if no copay feeschedule or fee unknown for this code. Otherwise, returns 0 or more for a patient copay. Can handle a planNum of 0.</summary>
+		public static double GetCopay(string myCode,InsPlan plan){
 			if(plan==null){
 				return -1;
 			}
 			if(plan.CopayFeeSched==0){
 				return -1;
 			}
-			return Fees.GetAmount(adaCode,plan.CopayFeeSched);
+			return Fees.GetAmount(ProcedureCodes.GetCodeNum(myCode),plan.CopayFeeSched);
 		}
 
 		///<summary>Returns -1 if no allowed feeschedule or fee unknown for this adaCode. Otherwise, returns the allowed fee including 0. Can handle a planNum of 0.</summary>
-		public static double GetAllowed(string adaCode,int planNum,InsPlan[] PlanList){
+		public static double GetAllowed(string myCode,int planNum,InsPlan[] PlanList){
 			if(planNum==0){
 				return -1;
 			}
@@ -487,7 +487,7 @@ namespace OpenDental {
 			if(plan.AllowedFeeSched==0){
 				return -1;
 			}
-			return Fees.GetAmount(adaCode,plan.AllowedFeeSched);
+			return Fees.GetAmount(ProcedureCodes.GetCodeNum(myCode),plan.AllowedFeeSched);
 		}
 
 		///<summary>This is used in FormQuery.SubmitQuery to allow display of carrier names.</summary>

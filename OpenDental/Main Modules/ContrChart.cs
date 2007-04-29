@@ -3535,7 +3535,7 @@ namespace OpenDental{
 			if(newStatus==ProcStat.R || newStatus==ProcStat.EO || newStatus==ProcStat.EC)
 				ProcCur.ProcFee=0;
 			else
-				ProcCur.ProcFee=Fees.GetAmount0(ProcedureCodes.GetProcCode(ProcCur.CodeNum).ProcCode,Fees.GetFeeSched(PatCur,PlanList,PatPlanList));
+				ProcCur.ProcFee=Fees.GetAmount0(ProcCur.CodeNum,Fees.GetFeeSched(PatCur,PlanList,PatPlanList));
 			//ProcCur.OverridePri=-1;
 			//ProcCur.OverrideSec=-1;
 			//surf
@@ -3604,7 +3604,7 @@ namespace OpenDental{
 			if(newStatus==ProcStat.R || newStatus==ProcStat.EO || newStatus==ProcStat.EC)
 				ProcCur.ProcFee=0;
 			else
-				ProcCur.ProcFee=Fees.GetAmount0(ProcedureCodes.GetProcCode(ProcCur.CodeNum).ProcCode,Fees.GetFeeSched(PatCur,PlanList,PatPlanList));
+				ProcCur.ProcFee=Fees.GetAmount0(ProcCur.CodeNum,Fees.GetFeeSched(PatCur,PlanList,PatPlanList));
 			//ProcCur.OverridePri=-1;
 			//ProcCur.OverrideSec=-1;
 			//surf

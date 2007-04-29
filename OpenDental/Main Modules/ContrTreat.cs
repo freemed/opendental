@@ -927,7 +927,7 @@ namespace OpenDental{
 					row.Cells.Add(ProcedureCodes.GetProcCode(ProcListTP[i].CodeNum).ProcCode);
 					row.Cells.Add(ProcedureCodes.GetLaymanTerm(ProcListTP[i].CodeNum));
 					if(checkShowStandard.Checked){
-						standard=Fees.GetAmount0(ProcedureCodes.GetProcCode(ProcListTP[i].CodeNum).ProcCode,feeSched);
+						standard=Fees.GetAmount0(ProcListTP[i].CodeNum,feeSched);
 						substandard+=standard;
 						totStandard+=standard;
 						row.Cells.Add(standard.ToString("F"));//standard
@@ -1196,7 +1196,7 @@ namespace OpenDental{
 					row.Cells.Add(ProcTPSelectList[i].ADACode);
 					row.Cells.Add(ProcTPSelectList[i].Descript);
 					if(checkShowStandard.Checked) {
-						standard=Fees.GetAmount0(ProcTPSelectList[i].ADACode,feeSched);
+						standard=Fees.GetAmount0(ProcedureCodes.GetCodeNum(ProcTPSelectList[i].ADACode),feeSched);
 						row.Cells.Add(standard.ToString("F"));//standard
 						substandard+=standard;
 						totStandard+=standard;
@@ -2100,7 +2100,7 @@ namespace OpenDental{
 				procCur=ProcListTP[i];
 				//procOld=procCur.Copy();
 				//first the fees
-				procCur.ProcFee=Fees.GetAmount0(ProcedureCodes.GetStringProcCode(procCur.CodeNum),Fees.GetFeeSched(PatCur,InsPlanList,PatPlanList));
+				procCur.ProcFee=Fees.GetAmount0(procCur.CodeNum,Fees.GetFeeSched(PatCur,InsPlanList,PatPlanList));
 				Procedures.ComputeEstimates(procCur,PatCur.PatNum,ClaimProcList,false,InsPlanList,PatPlanList,BenefitList);
 				Procedures.UpdateFee(procCur.ProcNum,procCur.ProcFee);
 				//Procedures.Update(procCur,procOld);//no recall synch required 
