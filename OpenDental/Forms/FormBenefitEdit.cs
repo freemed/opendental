@@ -27,7 +27,7 @@ namespace OpenDental{
 		private ArrayList NegIndex=new ArrayList();
 		///<summary></summary>
 		public Benefit BenCur;
-		private TextBox textADACode;
+		private TextBox textProcCode;
 		private ListBox listType;
 		private Label labelType;
 		private Label labelPercent;
@@ -70,7 +70,7 @@ namespace OpenDental{
 			this.label2 = new System.Windows.Forms.Label();
 			this.listCategory = new System.Windows.Forms.ListBox();
 			this.checkPat = new System.Windows.Forms.CheckBox();
-			this.textADACode = new System.Windows.Forms.TextBox();
+			this.textProcCode = new System.Windows.Forms.TextBox();
 			this.listType = new System.Windows.Forms.ListBox();
 			this.labelType = new System.Windows.Forms.Label();
 			this.labelPercent = new System.Windows.Forms.Label();
@@ -94,7 +94,7 @@ namespace OpenDental{
 			this.labelADACode.Name = "labelADACode";
 			this.labelADACode.Size = new System.Drawing.Size(104,16);
 			this.labelADACode.TabIndex = 0;
-			this.labelADACode.Text = "or ADA Code";
+			this.labelADACode.Text = "or Code";
 			this.labelADACode.TextAlign = System.Drawing.ContentAlignment.TopRight;
 			// 
 			// labelAmount
@@ -134,12 +134,12 @@ namespace OpenDental{
 			this.checkPat.TextAlign = System.Drawing.ContentAlignment.TopRight;
 			this.checkPat.UseVisualStyleBackColor = true;
 			// 
-			// textADACode
+			// textProcCode
 			// 
-			this.textADACode.Location = new System.Drawing.Point(126,192);
-			this.textADACode.Name = "textADACode";
-			this.textADACode.Size = new System.Drawing.Size(100,20);
-			this.textADACode.TabIndex = 6;
+			this.textProcCode.Location = new System.Drawing.Point(126,192);
+			this.textProcCode.Name = "textProcCode";
+			this.textProcCode.Size = new System.Drawing.Size(100,20);
+			this.textProcCode.TabIndex = 6;
 			// 
 			// listType
 			// 
@@ -295,7 +295,7 @@ namespace OpenDental{
 			this.Controls.Add(this.labelPercent);
 			this.Controls.Add(this.listType);
 			this.Controls.Add(this.labelType);
-			this.Controls.Add(this.textADACode);
+			this.Controls.Add(this.textProcCode);
 			this.Controls.Add(this.checkPat);
 			this.Controls.Add(this.listCategory);
 			this.Controls.Add(this.textAmount);
@@ -341,7 +341,7 @@ namespace OpenDental{
 			if(listCategory.SelectedIndex==-1 && CovCatB.ListShort.Length>0){
 				listCategory.SelectedIndex=0;
 			}
-			textADACode.Text=BenCur.ADACode;
+			textProcCode.Text=ProcedureCodes.GetStringProcCode(BenCur.CodeNum);
 			listType.Items.Clear();
 			for(int i=0;i<Enum.GetNames(typeof(InsBenefitType)).Length;i++){
 				listType.Items.Add(Lan.g("enumInsBenefitType",Enum.GetNames(typeof(InsBenefitType))[i]));
@@ -466,7 +466,7 @@ namespace OpenDental{
 				BenCur.PlanNum=PlanNum;
 			}
 			BenCur.CovCatNum=CovCatB.ListShort[listCategory.SelectedIndex].CovCatNum;
-			BenCur.ADACode=textADACode.Text;
+			BenCur.CodeNum=ProcedureCodes.GetCodeNum(textProcCode.Text);
 			BenCur.BenefitType=(InsBenefitType)listType.SelectedIndex;
 			BenCur.Percent=PIn.PInt(textPercent.Text);
 			BenCur.MonetaryAmt=PIn.PDouble(textAmount.Text);

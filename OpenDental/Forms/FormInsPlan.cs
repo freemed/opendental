@@ -2931,11 +2931,11 @@ namespace OpenDental{
 				else {
 					row.Cells.Add(Lan.g("enumInsBenefitType",((Benefit)benefitList[i]).BenefitType.ToString()));
 				}
-				if(((Benefit)benefitList[i]).ADACode==null || ((Benefit)benefitList[i]).ADACode=="") {
+				if(((Benefit)benefitList[i]).CodeNum==0) {
 					row.Cells.Add(CovCats.GetDesc(((Benefit)benefitList[i]).CovCatNum));
 				}
 				else {
-					row.Cells.Add(ProcedureCodes.GetProcCode(((Benefit)benefitList[i]).ADACode).AbbrDesc);
+					row.Cells.Add(ProcedureCodes.GetProcCode(((Benefit)benefitList[i]).CodeNum).AbbrDesc);
 				}
 				if(((Benefit)benefitList[i]).BenefitType==InsBenefitType.Percentage) {
 					row.Cells.Add(((Benefit)benefitList[i]).Percent.ToString());

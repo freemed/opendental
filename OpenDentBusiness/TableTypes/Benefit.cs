@@ -24,8 +24,8 @@ namespace OpenDentBusiness{
 		public int PatPlanNum;
 		///<summary>FK to covcat.CovCatNum.  Corresponds to X12 EB03- Service Type code.  Can never be blank.  There will be very specific categories covered by X12. Users should set their InsCovCats to the defaults we will provide.</summary>
 		public int CovCatNum;
-		///<summary>FK to procedurecode.ProcCode.  Typical uses include fluoride, sealants, etc.  If a specific code is used here, then the CovCat is completely ignored.</summary>
-		public string ADACode;
+		///<summary>Do not use</summary>
+		public string OldCode;
 		///<summary>Enum:InsBenefitType Corresponds to X12 EB01. Examples: 1=Percentage, 2=Deductible, 3=CoPayment, 4=Exclusions, 5=Limitations. There's not really any difference between limitations and exclusions as far as the logic is concerned.</summary>
 		public InsBenefitType BenefitType;
 		///<summary>Only used if BenefitType=Percentage.  Valid values are 0 to 100.</summary>
@@ -38,6 +38,8 @@ namespace OpenDentBusiness{
 		public BenefitQuantity QuantityQualifier;
 		///<summary>Corresponds to X12 EB10. Qualify the quantity</summary>
 		public int Quantity;
+		///<summary>FK to procedurecode.CodeNum.  Typical uses include fluoride, sealants, etc.  If a specific code is used here, then the CovCat is completely ignored.</summary>
+		public int CodeNum;
 
 		///<summary>IComparable.CompareTo implementation.  This is used to order benefit lists as well as to group benefits if the type is essentially equal.  It doesn't compare values such as percentages or amounts.  It only compares types.</summary>
 		public int CompareTo(object obj) {
@@ -56,9 +58,10 @@ namespace OpenDentBusiness{
 				//this line was changed because we really do need to know if they have different covcats.
 				return CovCatB.GetOrderLong(CovCatNum).CompareTo(CovCatB.GetOrderLong(ben.CovCatNum));
 			}
-			//ADACode
-			if(ADACode!=ben.ADACode) {
-				return ADACode.CompareTo(ben.ADACode);
+			//ProcCode
+//THIS IS WRONG! NEED TO COMPARE THE PROCCODES, NOT THE CODENUMS.
+			if(CodeNum!=ben.CodeNum) {
+				return CodeNum.CompareTo(ben.CodeNum);
 			}
 			//TimePeriod-ServiceYear and CalendarYear are treated as the same.
 			//if either are not serviceYear or CalendarYear
@@ -88,13 +91,14 @@ namespace OpenDentBusiness{
 			b.PlanNum=PlanNum;
 			b.PatPlanNum=PatPlanNum;
 			b.CovCatNum=CovCatNum;
-			b.ADACode=ADACode;
+			b.OldCode=OldCode;
 			b.BenefitType=BenefitType;
 			b.Percent=Percent;
 			b.MonetaryAmt=MonetaryAmt;
 			b.TimePeriod=TimePeriod;
 			b.QuantityQualifier=QuantityQualifier;
 			b.Quantity=Quantity;
+			b.CodeNum=CodeNum;
 			return b;
 		}
 

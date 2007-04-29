@@ -4427,6 +4427,24 @@ namespace OpenDental{
 					General.NonQEx(command);
 					command="UPDATE autocodeitem SET OldCode=''";
 					General.NonQEx(command);
+					//added after r218
+					command="ALTER TABLE benefit CHANGE ADACode OldCode varchar(15)";
+					General.NonQEx(command);
+					command="ALTER TABLE benefit ADD CodeNum mediumint NOT NULL";
+					General.NonQEx(command);
+					command="UPDATE benefit SET benefit.CodeNum= (SELECT procedurecode.CodeNum FROM procedurecode WHERE procedurecode.ProcCode=benefit.OldCode)";
+					General.NonQEx(command);
+					command="UPDATE benefit SET OldCode=''";
+					General.NonQEx(command);
+					command="DELETE FROM procedurecode WHERE ProcCode=''";
+					General.NonQEx(command);
+					command="UPDATE benefit SET CodeNum=0 WHERE NOT EXISTS(SELECT * FROM procedurecode WHERE "
+						+"benefit.CodeNum=procedurecode.CodeNum)";
+					General.NonQEx(command);
+					command="DELETE FROM procedurelog WHERE NOT EXISTS(SELECT * FROM procedurecode WHERE "
+						+"procedurelog.CodeNum=procedurecode.CodeNum)";
+					General.NonQEx(command);
+
 				}
 				else{
 

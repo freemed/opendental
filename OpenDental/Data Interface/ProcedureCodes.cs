@@ -141,7 +141,7 @@ namespace OpenDental{
 		///<summary>The new way of getting a procCode. Uses the primary key instead of string code.</summary>
 		public static ProcedureCode GetProcCode(int codeNum) {
 			if(codeNum==0) {
-				MessageBox.Show(Lan.g("ProcCodes","Error. Invalid procedure code."));
+				//MessageBox.Show(Lan.g("ProcCodes","Error. Invalid procedure code."));
 				return new ProcedureCode();
 			}
 			for(int i=0;i<List.Length;i++){
@@ -154,7 +154,7 @@ namespace OpenDental{
 
 		public static int GetCodeNum(string myCode){
 			if(myCode==null || myCode=="") {
-				throw new ApplicationException("Blank code");
+				return 0;
 			}
 			if(HList.Contains(myCode)) {
 				return ((ProcedureCode)HList[myCode]).CodeNum;
@@ -166,7 +166,8 @@ namespace OpenDental{
 
 		public static string GetStringProcCode(int codeNum) {
 			if(codeNum==0) {
-				throw new ApplicationException("CodeNum cannot be zero.");
+				return "";
+				//throw new ApplicationException("CodeNum cannot be zero.");
 			}
 			for(int i=0;i<List.Length;i++) {
 				if(List[i].CodeNum==codeNum) {

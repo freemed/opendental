@@ -34,13 +34,14 @@ namespace OpenDental {
 				List[i].PlanNum          = PIn.PInt(table.Rows[i][1].ToString());
 				List[i].PatPlanNum       = PIn.PInt(table.Rows[i][2].ToString());
 				List[i].CovCatNum        = PIn.PInt(table.Rows[i][3].ToString());
-				List[i].ADACode          = PIn.PString(table.Rows[i][4].ToString());
+				List[i].OldCode          = PIn.PString(table.Rows[i][4].ToString());
 				List[i].BenefitType      = (InsBenefitType)PIn.PInt(table.Rows[i][5].ToString());
 				List[i].Percent          = PIn.PInt(table.Rows[i][6].ToString());
 				List[i].MonetaryAmt      = PIn.PDouble(table.Rows[i][7].ToString());
 				List[i].TimePeriod       = (BenefitTimePeriod)PIn.PInt(table.Rows[i][8].ToString());
 				List[i].QuantityQualifier= (BenefitQuantity)PIn.PInt(table.Rows[i][9].ToString());
 				List[i].Quantity         = PIn.PInt(table.Rows[i][10].ToString());
+				List[i].CodeNum          = PIn.PInt(table.Rows[i][11].ToString());
 			}
 			Array.Sort(List);
 			return List;
@@ -64,13 +65,14 @@ namespace OpenDental {
 				ben.PlanNum          = PIn.PInt(table.Rows[i][1].ToString());
 				ben.PatPlanNum       = PIn.PInt(table.Rows[i][2].ToString());
 				ben.CovCatNum        = PIn.PInt(table.Rows[i][3].ToString());
-				ben.ADACode          = PIn.PString(table.Rows[i][4].ToString());
+				ben.OldCode          = PIn.PString(table.Rows[i][4].ToString());
 				ben.BenefitType      = (InsBenefitType)PIn.PInt(table.Rows[i][5].ToString());
 				ben.Percent          = PIn.PInt(table.Rows[i][6].ToString());
 				ben.MonetaryAmt      = PIn.PDouble(table.Rows[i][7].ToString());
 				ben.TimePeriod       = (BenefitTimePeriod)PIn.PInt(table.Rows[i][8].ToString());
 				ben.QuantityQualifier= (BenefitQuantity)PIn.PInt(table.Rows[i][9].ToString());
 				ben.Quantity         = PIn.PInt(table.Rows[i][10].ToString());
+				ben.CodeNum          = PIn.PInt(table.Rows[i][11].ToString());
 				retVal.Add(ben);
 			}
 			return retVal;
@@ -111,13 +113,14 @@ namespace OpenDental {
 					benList[i].PlanNum          = PIn.PInt(table.Rows[i][1].ToString());
 					benList[i].PatPlanNum       = PIn.PInt(table.Rows[i][2].ToString());
 					benList[i].CovCatNum        = PIn.PInt(table.Rows[i][3].ToString());
-					benList[i].ADACode          = PIn.PString(table.Rows[i][4].ToString());
+					benList[i].OldCode          = PIn.PString(table.Rows[i][4].ToString());
 					benList[i].BenefitType      = (InsBenefitType)PIn.PInt(table.Rows[i][5].ToString());
 					benList[i].Percent          = PIn.PInt(table.Rows[i][6].ToString());
 					benList[i].MonetaryAmt      = PIn.PDouble(table.Rows[i][7].ToString());
 					benList[i].TimePeriod       = (BenefitTimePeriod)PIn.PInt(table.Rows[i][8].ToString());
 					benList[i].QuantityQualifier= (BenefitQuantity)PIn.PInt(table.Rows[i][9].ToString());
 					benList[i].Quantity         = PIn.PInt(table.Rows[i][10].ToString());
+					benList[i].CodeNum          = PIn.PInt(table.Rows[i][11].ToString());
 				}
 			}
 			List<Benefit> retVal=new List<Benefit>();
@@ -152,13 +155,14 @@ namespace OpenDental {
 				+"PlanNum = '"          +POut.PInt   (ben.PlanNum)+"'"
 				+",PatPlanNum = '"      +POut.PInt   (ben.PatPlanNum)+"'"
 				+",CovCatNum = '"       +POut.PInt   (ben.CovCatNum)+"'"
-				+",ADACode = '"         +POut.PString(ben.ADACode)+"'"
+				+",OldCode = '"         +POut.PString(ben.OldCode)+"'"
 				+",BenefitType = '"     +POut.PInt   ((int)ben.BenefitType)+"'"
 				+",Percent = '"         +POut.PInt   (ben.Percent)+"'"
 				+",MonetaryAmt = '"     +POut.PDouble(ben.MonetaryAmt)+"'"
 				+",TimePeriod = '"      +POut.PInt   ((int)ben.TimePeriod)+"'"
 				+",QuantityQualifier ='"+POut.PInt   ((int)ben.QuantityQualifier)+"'"
 				+",Quantity = '"        +POut.PInt   (ben.Quantity)+"'"
+				+",CodeNum = '"         +POut.PInt   (ben.CodeNum)+"'"
 				+" WHERE BenefitNum  ='"+POut.PInt   (ben.BenefitNum)+"'";
 			General.NonQ(command);
 		}
@@ -172,8 +176,8 @@ namespace OpenDental {
 			if(PrefB.RandomKeys) {
 				command+="BenefitNum,";
 			}
-			command+="PlanNum,PatPlanNum,CovCatNum,ADACode,BenefitType,Percent,MonetaryAmt,TimePeriod,"
-				+"QuantityQualifier,Quantity) VALUES(";
+			command+="PlanNum,PatPlanNum,CovCatNum,OldCode,BenefitType,Percent,MonetaryAmt,TimePeriod,"
+				+"QuantityQualifier,Quantity,CodeNum) VALUES(";
 			if(PrefB.RandomKeys) {
 				command+="'"+POut.PInt(ben.BenefitNum)+"', ";
 			}
@@ -181,13 +185,14 @@ namespace OpenDental {
 				 "'"+POut.PInt(ben.PlanNum)+"', "
 				+"'"+POut.PInt(ben.PatPlanNum)+"', "
 				+"'"+POut.PInt(ben.CovCatNum)+"', "
-				+"'"+POut.PString(ben.ADACode)+"', "
+				+"'"+POut.PString(ben.OldCode)+"', "
 				+"'"+POut.PInt((int)ben.BenefitType)+"', "
 				+"'"+POut.PInt(ben.Percent)+"', "
 				+"'"+POut.PDouble(ben.MonetaryAmt)+"', "
 				+"'"+POut.PInt((int)ben.TimePeriod)+"', "
 				+"'"+POut.PInt((int)ben.QuantityQualifier)+"', "
-				+"'"+POut.PInt(ben.Quantity)+"')";
+				+"'"+POut.PInt(ben.Quantity)+"', "
+				+"'"+POut.PInt(ben.CodeNum)+"')";
 			if(PrefB.RandomKeys) {
 				General.NonQ(command);
 			}
@@ -249,7 +254,7 @@ namespace OpenDental {
 		}
 
 		///<summary>Gets a deductible from the supplied list of benefits.  Ignores benefits that do not match either the planNum or the patPlanNum.  Because it starts at the bottom of the benefit list, it will get the most specific matching deductible first.</summary>
-		public static double GetDeductibleByCode(Benefit[] benList,int planNum,int patPlanNum,string adaCode) {
+		public static double GetDeductibleByCode(Benefit[] benList,int planNum,int patPlanNum,string code) {
 			CovSpan[] spansForCat;
 			for(int i=benList.Length-1;i>=0;i--) {
 				if(benList[i].PlanNum==0 && benList[i].PatPlanNum!=patPlanNum) {
@@ -269,8 +274,8 @@ namespace OpenDental {
 				}
 				spansForCat=CovSpans.GetForCat(benList[i].CovCatNum);
 				for(int j=0;j<spansForCat.Length;j++){
-					if(String.Compare(adaCode,spansForCat[j].FromCode)>=0
-						&& String.Compare(adaCode,spansForCat[j].ToCode)<=0)
+					if(String.Compare(code,spansForCat[j].FromCode)>=0
+						&& String.Compare(code,spansForCat[j].ToCode)<=0)
 					{
 						return benList[i].MonetaryAmt;
 					}
@@ -369,13 +374,14 @@ namespace OpenDental {
 				if(  newBenefit.PlanNum != oldBenefitList[i].PlanNum
 					|| newBenefit.PatPlanNum != oldBenefitList[i].PatPlanNum
 					|| newBenefit.CovCatNum != oldBenefitList[i].CovCatNum
-					|| newBenefit.ADACode != oldBenefitList[i].ADACode
+					//|| newBenefit.ADACode != oldBenefitList[i].ADACode
 					|| newBenefit.BenefitType != oldBenefitList[i].BenefitType
 					|| newBenefit.Percent != oldBenefitList[i].Percent
 					|| newBenefit.MonetaryAmt != oldBenefitList[i].MonetaryAmt
 					|| newBenefit.TimePeriod != oldBenefitList[i].TimePeriod
 					|| newBenefit.QuantityQualifier != oldBenefitList[i].QuantityQualifier
-					|| newBenefit.Quantity != oldBenefitList[i].Quantity)
+					|| newBenefit.Quantity != oldBenefitList[i].Quantity
+					|| newBenefit.CodeNum != oldBenefitList[i].CodeNum)
 				{
 					Benefits.Update(newBenefit);
 				}
@@ -424,13 +430,14 @@ namespace OpenDental {
 					if(newBenefit.PlanNum             != oldBenefitList[i].PlanNum
 						|| newBenefit.PatPlanNum        != oldBenefitList[i].PatPlanNum
 						|| newBenefit.CovCatNum         != oldBenefitList[i].CovCatNum
-						|| newBenefit.ADACode           != oldBenefitList[i].ADACode
+						//|| newBenefit.ADACode           != oldBenefitList[i].ADACode
 						|| newBenefit.BenefitType       != oldBenefitList[i].BenefitType
 						|| newBenefit.Percent           != oldBenefitList[i].Percent
 						|| newBenefit.MonetaryAmt       != oldBenefitList[i].MonetaryAmt
 						|| newBenefit.TimePeriod        != oldBenefitList[i].TimePeriod
 						|| newBenefit.QuantityQualifier != oldBenefitList[i].QuantityQualifier
-						|| newBenefit.Quantity          != oldBenefitList[i].Quantity) 
+						|| newBenefit.Quantity          != oldBenefitList[i].Quantity
+						|| newBenefit.CodeNum           != oldBenefitList[i].CodeNum) 
 					{
 						changed=true;
 						break;

@@ -49,7 +49,7 @@ namespace OpenDental{
 		public static void Update(AutoCodeItem Cur){
 			string command= "UPDATE autocodeitem SET "
 				+"AutoCodeNum='"+POut.PInt   (Cur.AutoCodeNum)+"'"
-				//+",Oldcode ='"  +POut.PString(Cur.ADACode)+"'"
+				//+",Oldcode ='"  +POut.PString(Cur.OldCode)+"'"
 				+",CodeNum ='"  +POut.PInt   (Cur.CodeNum)+"'"
 				+" WHERE AutoCodeItemNum = '"+POut.PInt(Cur.AutoCodeItemNum)+"'";
 			General.NonQ(command);

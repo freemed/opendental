@@ -1044,7 +1044,7 @@ namespace OpenDental{
 					ben.PlanNum=plan.PlanNum;
 					ben.Percent=CovCatB.ListShort[i].DefaultPercent;
 					ben.TimePeriod=BenefitTimePeriod.CalendarYear;
-					ben.ADACode="";
+					ben.CodeNum=0;
 					Benefits.Insert(ben);
 				}
 			}
@@ -1207,19 +1207,19 @@ namespace OpenDental{
 						desc+="Exam frequency ";
 					}
 					else if(benMatrix[x,y].BenefitType==InsBenefitType.Limitations
-						&& benMatrix[x,y].ADACode=="D0274"//4BW
+						&& benMatrix[x,y].CodeNum==ProcedureCodes.GetCodeNum("D0274")//4BW
 						&& benMatrix[x,y].Quantity !=0)
 					{
 						desc+="BW frequency ";
 					}
 					else if(benMatrix[x,y].BenefitType==InsBenefitType.Limitations
-						&& benMatrix[x,y].ADACode=="D0330"//Pano
+						&& benMatrix[x,y].CodeNum==ProcedureCodes.GetCodeNum("D0330")//Pano
 						&& benMatrix[x,y].Quantity !=0)
 					{
 						desc+="Pano/FMX frequency ";
 					}
-					else if(benMatrix[x,y].ADACode!=""){//e.g. flo
-						desc+=ProcedureCodes.GetProcCode(benMatrix[x,y].ADACode).AbbrDesc+" ";
+					else if(benMatrix[x,y].CodeNum==0){//e.g. flo
+						desc+=ProcedureCodes.GetProcCode(benMatrix[x,y].CodeNum).AbbrDesc+" ";
 					}
 					else{
 						desc+=Lan.g("enumInsBenefitType",benMatrix[x,y].BenefitType.ToString())+" ";
