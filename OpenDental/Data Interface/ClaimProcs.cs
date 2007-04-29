@@ -168,7 +168,7 @@ namespace OpenDental{
 				resetAll=true;
 			}
 			//NoBillIns is only calculated when creating the claimproc, even if resetAll is true.
-			//If user then changes a procCode, it does not cause an update of all procedures with that ADACode.
+			//If user then changes a procCode, it does not cause an update of all procedures with that code.
 			if(cp.NoBillIns) {
 				cp.AllowedAmt=-1;
 				cp.CopayAmt=0;

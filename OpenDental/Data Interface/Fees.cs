@@ -185,7 +185,7 @@ namespace OpenDental{
 		///<summary>schedI is the currently displayed index of the fee schedule to save to.  Empty fees never even make it this far and should be skipped earlier in the process.</summary>
 		public static void Import(string codeText,double amt,int schedI){
 			if(!ProcedureCodes.IsValidCode(codeText)){
-				return;//skip for now. Possibly insert adaCode in a future version.
+				return;//skip for now. Possibly insert a code in a future version.
 			}
 			Fee fee=GetFeeByOrder(ProcedureCodes.GetCodeNum(codeText),schedI);
 			if(fee!=null){

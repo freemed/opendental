@@ -9,18 +9,21 @@ namespace OpenDentBusiness{
 		public int ProcButtonItemNum;
 		///<summary>FK to procbutton.ProcButtonNum.</summary>
 		public int ProcButtonNum;
-		///<summary>FK to procedurecode.ProcCode.  0 if this is an autocode.</summary>
-		public string ADACode;
+		///<summary>Do not use.</summary>
+		public string OldCode;
 		///<summary>FK to autocode.AutoCodeNum.  0 if this is a procedure code.</summary>
 		public int AutoCodeNum;
+		///<summary>FK to procedurecode.CodeNum.  0 if this is an autocode.</summary>
+		public int CodeNum;
 
 		///<summary></summary>
 		public ProcButtonItem Copy() {
 			ProcButtonItem p=new ProcButtonItem();
 			p.ProcButtonItemNum=ProcButtonItemNum;
 			p.ProcButtonNum=ProcButtonNum;
-			p.ADACode=ADACode;
+			//p.ADACode=ADACode;
 			p.AutoCodeNum=AutoCodeNum;
+			p.CodeNum=CodeNum;
 			return p;
 		}
 

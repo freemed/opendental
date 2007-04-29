@@ -80,11 +80,6 @@ namespace OpenDental {
 		}
 
 		///<summary></summary>
-		public static int GetCatNum(string myADACode){
-			return 0;
-		}
-
-		///<summary></summary>
 		public static CovCat GetCovCat(int covCatNum){
 			for(int i=0;i<CovCatB.Listt.Length;i++) {
 				if(covCatNum==CovCatB.Listt[i].CovCatNum) {

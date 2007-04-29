@@ -4444,6 +4444,15 @@ namespace OpenDental{
 					command="DELETE FROM procedurelog WHERE NOT EXISTS(SELECT * FROM procedurecode WHERE "
 						+"procedurelog.CodeNum=procedurecode.CodeNum)";
 					General.NonQEx(command);
+					//added after r219
+					command="ALTER TABLE procbuttonitem CHANGE ADACode OldCode varchar(15)";
+					General.NonQEx(command);
+					command="ALTER TABLE procbuttonitem ADD CodeNum mediumint NOT NULL";
+					General.NonQEx(command);
+					command="UPDATE procbuttonitem SET procbuttonitem.CodeNum= (SELECT procedurecode.CodeNum FROM procedurecode WHERE procedurecode.ProcCode=procbuttonitem.OldCode)";
+					General.NonQEx(command);
+					command="UPDATE procbuttonitem SET OldCode=''";
+					General.NonQEx(command);
 
 				}
 				else{

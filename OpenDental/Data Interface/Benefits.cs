@@ -323,7 +323,7 @@ namespace OpenDental {
 		}
 
 		///<summary>Only use pri or sec, not tot.  Used from ClaimProc.ComputeBaseEst. This is a low level function to get the percent to store in a claimproc.  It does not consider any percentOverride.  Always returns a number between 0 and 100.  The supplied benefit list should be sorted frirst.</summary>
-		public static int GetPercent(string myADACode,InsPlan insPlan,PatPlan patPlan,Benefit[] benList){
+		public static int GetPercent(string myCode,InsPlan insPlan,PatPlan patPlan,Benefit[] benList){
 			if(insPlan.PlanType=="f" || insPlan.PlanType=="c"){
 				return 100;//flat and cap are always covered 100%
 			}
@@ -343,7 +343,7 @@ namespace OpenDental {
 				}
 				spansForCat=CovSpans.GetForCat(benList[i].CovCatNum);
 				for(int j=0;j<spansForCat.Length;j++){
-					if(String.Compare(myADACode,spansForCat[j].FromCode)>=0 && String.Compare(myADACode,spansForCat[j].ToCode)<=0){
+					if(String.Compare(myCode,spansForCat[j].FromCode)>=0 && String.Compare(myCode,spansForCat[j].ToCode)<=0){
 						return benList[i].Percent;
 					}
 				}
@@ -374,7 +374,7 @@ namespace OpenDental {
 				if(  newBenefit.PlanNum != oldBenefitList[i].PlanNum
 					|| newBenefit.PatPlanNum != oldBenefitList[i].PatPlanNum
 					|| newBenefit.CovCatNum != oldBenefitList[i].CovCatNum
-					//|| newBenefit.ADACode != oldBenefitList[i].ADACode
+					//|| newBenefit.OldCode != oldBenefitList[i].OldCode
 					|| newBenefit.BenefitType != oldBenefitList[i].BenefitType
 					|| newBenefit.Percent != oldBenefitList[i].Percent
 					|| newBenefit.MonetaryAmt != oldBenefitList[i].MonetaryAmt
@@ -430,7 +430,7 @@ namespace OpenDental {
 					if(newBenefit.PlanNum             != oldBenefitList[i].PlanNum
 						|| newBenefit.PatPlanNum        != oldBenefitList[i].PatPlanNum
 						|| newBenefit.CovCatNum         != oldBenefitList[i].CovCatNum
-						//|| newBenefit.ADACode           != oldBenefitList[i].ADACode
+						//|| newBenefit.OldCode           != oldBenefitList[i].OldCode
 						|| newBenefit.BenefitType       != oldBenefitList[i].BenefitType
 						|| newBenefit.Percent           != oldBenefitList[i].Percent
 						|| newBenefit.MonetaryAmt       != oldBenefitList[i].MonetaryAmt

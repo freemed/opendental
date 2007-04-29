@@ -3868,24 +3868,24 @@ namespace OpenDental{
 			bool isValid;
 			TreatmentArea tArea;
 			int quadCount=0;//automates quadrant codes.
-			string[] adaCodeList;
+			int[] codeList;
 			int[] autoCodeList;
 			if(procButtonNum==0){
-				adaCodeList=new string[1];
-				adaCodeList[0]=quickcode;
+				codeList=new int[1];
+				codeList[0]=ProcedureCodes.GetCodeNum(quickcode);
 				autoCodeList=new int[0];
 			}
 			else{
-				adaCodeList=ProcButtonItems.GetADAListForButton(procButtonNum);
+				codeList=ProcButtonItems.GetCodeNumListForButton(procButtonNum);
 				autoCodeList=ProcButtonItems.GetAutoListForButton(procButtonNum);
 			}
 			Procedure ProcCur;
-			for(int i=0;i<adaCodeList.Length;i++){
+			for(int i=0;i<codeList.Length;i++){
 				//needs to loop at least once, regardless of whether any teeth are selected.	
 				for(int n=0;n==0 || n<toothChart.SelectedTeeth.Length;n++){
 					isValid=true;
 					ProcCur=new Procedure();//insert, so no need to set CurOld
-					ProcCur.CodeNum=ProcedureCodes.GetProcCode(adaCodeList[i]).CodeNum;
+					ProcCur.CodeNum=ProcedureCodes.GetProcCode(codeList[i]).CodeNum;
 					tArea=ProcedureCodes.GetProcCode(ProcCur.CodeNum).TreatArea;
 					if((tArea==TreatmentArea.Arch
 						|| tArea==TreatmentArea.Mouth

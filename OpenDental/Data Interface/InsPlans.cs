@@ -454,9 +454,9 @@ namespace OpenDental {
 			return retVal;
 		}
 
-		///<summary>Used once from Claims and also in ContrTreat.  Gets insurance deductible remaining for one benefit year which includes the given date.  Must supply all claimprocs for the patient.  Must supply all benefits for patient so that we know if it's a service year or a calendar year.  Date used to determine which benefit year to calc.  Usually today's date.  The insplan.PlanNum is the plan to get value for.  ExcludeClaim is the ClaimNum to exclude, or enter -1 to include all.  The supplied adaCode is needed because some deductibles, for instance, do not apply to preventive.</summary>
-		public static double GetDedRem(ClaimProc[] ClaimProcList,DateTime date,int planNum,int patPlanNum,int excludeClaim,InsPlan[] PlanList,Benefit[] benList,string adaCode){
-			double dedTot=Benefits.GetDeductibleByCode(benList,planNum,patPlanNum,adaCode);
+		///<summary>Used once from Claims and also in ContrTreat.  Gets insurance deductible remaining for one benefit year which includes the given date.  Must supply all claimprocs for the patient.  Must supply all benefits for patient so that we know if it's a service year or a calendar year.  Date used to determine which benefit year to calc.  Usually today's date.  The insplan.PlanNum is the plan to get value for.  ExcludeClaim is the ClaimNum to exclude, or enter -1 to include all.  The supplied procCode is needed because some deductibles, for instance, do not apply to preventive.</summary>
+		public static double GetDedRem(ClaimProc[] ClaimProcList,DateTime date,int planNum,int patPlanNum,int excludeClaim,InsPlan[] PlanList,Benefit[] benList,string procCode){
+			double dedTot=Benefits.GetDeductibleByCode(benList,planNum,patPlanNum,procCode);
 			double dedUsed=GetDedUsed(ClaimProcList,date,planNum,patPlanNum,excludeClaim,PlanList,benList);
 			if(dedTot-dedUsed<0){
 				return 0;
@@ -475,7 +475,7 @@ namespace OpenDental {
 			return Fees.GetAmount(ProcedureCodes.GetCodeNum(myCode),plan.CopayFeeSched);
 		}
 
-		///<summary>Returns -1 if no allowed feeschedule or fee unknown for this adaCode. Otherwise, returns the allowed fee including 0. Can handle a planNum of 0.</summary>
+		///<summary>Returns -1 if no allowed feeschedule or fee unknown for this procCode. Otherwise, returns the allowed fee including 0. Can handle a planNum of 0.</summary>
 		public static double GetAllowed(string myCode,int planNum,InsPlan[] PlanList){
 			if(planNum==0){
 				return -1;

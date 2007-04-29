@@ -363,11 +363,11 @@ namespace OpenDental{
 				comboCategory.SelectedIndex=0;//we know that there will always be at least one cat. Validated in FormProcButtons
 			}
 			pictureBox.Image=ProcButtonCur.ButtonImage;
-			string[] ada=ProcButtonItems.GetADAListForButton(ProcButtonCur.ProcButtonNum);
+			int[] codeNumList=ProcButtonItems.GetCodeNumListForButton(ProcButtonCur.ProcButtonNum);
 			int[] auto=ProcButtonItems.GetAutoListForButton(ProcButtonCur.ProcButtonNum);
 			listADA.Items.Clear();
-			for(int i=0;i<ada.Length;i++) {
-				listADA.Items.Add(ada[i]);
+			for(int i=0;i<codeNumList.Length;i++) {
+				listADA.Items.Add(ProcedureCodes.GetStringProcCode(codeNumList[i]));
 			}
 			listAutoCodes.Items.Clear();
       for(int i=0;i<AutoCodes.ListShort.Length;i++){
@@ -433,7 +433,7 @@ namespace OpenDental{
 				return; 
       }
 			if(listADA.Items.Count==0  && listAutoCodes.SelectedIndices.Count==0){
-        MessageBox.Show(Lan.g(this,"You must pick at least one Auto Code or ADA Code."));
+        MessageBox.Show(Lan.g(this,"You must pick at least one Auto Code or Procedure Code."));
         return;
       }
       ProcButtonCur.Description=textDescript.Text;
@@ -456,7 +456,7 @@ namespace OpenDental{
       for(int i=0;i<listADA.Items.Count;i++){
         item=new ProcButtonItem();
         item.ProcButtonNum=ProcButtonCur.ProcButtonNum;
-        item.ADACode=listADA.Items[i].ToString();    
+        item.CodeNum=ProcedureCodes.GetCodeNum(listADA.Items[i].ToString());    
         ProcButtonItems.Insert(item);
       }
       for(int i=0;i<listAutoCodes.SelectedIndices.Count;i++){

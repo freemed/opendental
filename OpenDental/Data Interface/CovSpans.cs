@@ -71,11 +71,11 @@ namespace OpenDental {
 		}
 
 		///<summary></summary>
-		public static int GetCat(string myADACode){
+		public static int GetCat(string myCode){
 			int retVal=0;
 			for(int i=0;i<List.Length;i++){
-				if(String.Compare(myADACode,List[i].FromCode)>=0
-					&& String.Compare(myADACode,List[i].ToCode)<=0){
+				if(String.Compare(myCode,List[i].FromCode)>=0
+					&& String.Compare(myCode,List[i].ToCode)<=0){
 					retVal=List[i].CovCatNum;
 				}
 			}
