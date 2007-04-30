@@ -1359,9 +1359,33 @@ namespace OpenDental{
 	
 		[STAThread]
 		static void Main() {
+			//Register an EventHandler which handles unhandeled exceptions.
+			AppDomain.CurrentDomain.UnhandledException+=new UnhandledExceptionEventHandler(OnUnhandeledExceptionPolicy);
 			Application.EnableVisualStyles();//changes appearance to XP
 			Application.DoEvents();//workaround for a known MS bug in the line above
 			Application.Run(new FormOpenDental());
+		}
+
+		///<summary>Overrides the default Windows unhandled exception functionality.</summary>
+		static void OnUnhandeledExceptionPolicy(Object Sender,UnhandledExceptionEventArgs e) {
+			Exception ex=e.ExceptionObject as Exception;
+			string message="Unhandled Exception: ";
+			if(ex!=null) {//The unhandeled Exception is CLS compliant.
+				message+=ex.ToString();
+			}else{//The unhandeled Exception is not CLS compliant.				
+				//You can only handle this Exception as Object
+				message+="Object Type: "+e.ExceptionObject.GetType()+", Object String: "+e.ExceptionObject.ToString();
+			}
+			if(!e.IsTerminating){
+				//Exception occurred in a thread pool or finalizer thread. Debugger launches only explicitly.
+				Logger.openlog.LogMB(message,Logger.Severity.ERROR);
+#if(DEBUG)
+				Debugger.Launch();
+#endif
+			}else{
+				//Exception occurred in managed thread. Debugger will automatically launch in visual studio.
+				Logger.openlog.LogMB(message,Logger.Severity.FATAL_ERROR);
+			}
 		}
 
 		private void FormOpenDental_Load(object sender, System.EventArgs e){
