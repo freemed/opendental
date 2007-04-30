@@ -65,25 +65,79 @@ namespace OpenDentBusiness{
 		private static DataTable GetPatTable(string patNum) {
 			DataConnection dcon=new DataConnection();
 			DataTable table=new DataTable("Patient");
-			DataRow row;
 			//columns that start with lowercase are altered for display rather than being raw data.
-			table.Columns.Add("FName");
-			table.Columns.Add("LName");
-			table.Columns.Add("MiddleI");
-			table.Columns.Add("nameLF");
-			table.Columns.Add("Preferred");
+			table.Columns.Add("Field");
+			table.Columns.Add("Value");
 			string command="SELECT * FROM patient WHERE PatNum="+patNum;
 			DataTable rawPat=dcon.GetTable(command);
-			for(int i=0;i<rawPat.Rows.Count;i++) {//there's just one row
-				row=table.NewRow();
-				row["FName"]=rawPat.Rows[i]["FName"].ToString();
-				row["LName"]=rawPat.Rows[i]["LName"].ToString();
-				row["MiddleI"]=rawPat.Rows[i]["MiddleI"].ToString();
-				row["nameLF"]=PatientB.GetNameLF(rawPat.Rows[i]["LName"].ToString(),rawPat.Rows[i]["FName"].ToString(),
-									rawPat.Rows[i]["Preferred"].ToString(),rawPat.Rows[i]["MiddleI"].ToString());
-				row["Preferred"]=rawPat.Rows[i]["Preferred"].ToString();
-				table.Rows.Add(row);
-			}
+			DataRow row;
+			//Patient Name--------------------------------------------------------------------------
+			row=table.NewRow();
+			row["Field"]=Lan.g("FormApptEdit","Name");
+			row["Value"]=PatientB.GetNameLF(rawPat.Rows[0]["LName"].ToString(),rawPat.Rows[0]["FName"].ToString(),
+				rawPat.Rows[0]["Preferred"].ToString(),rawPat.Rows[0]["MiddleI"].ToString());
+			table.Rows.Add(row);
+			//Patient First Name--------------------------------------------------------------------
+			row=table.NewRow();
+			row["Field"]=Lan.g("FormAppEdit","First Name");
+			row["Value"]=rawPat.Rows[0]["FName"];
+			table.Rows.Add(row);
+			//Patient Last name---------------------------------------------------------------------
+			row=table.NewRow();
+			row["Field"]=Lan.g("FormAppEdit","Last Name");
+			row["Value"]=rawPat.Rows[0]["LName"];
+			table.Rows.Add(row);
+			//Patient middle initial----------------------------------------------------------------
+			row=table.NewRow();
+			row["Field"]=Lan.g("FormAppEdit","Middle Initial");
+			row["Value"]=rawPat.Rows[0]["MiddleI"];
+			table.Rows.Add(row);
+			//Patient home phone--------------------------------------------------------------------
+			row=table.NewRow();
+			row["Field"]=Lan.g("FormAppEdit","Home Phone");
+			row["Value"]=rawPat.Rows[0]["HmPhone"];
+			table.Rows.Add(row);
+			//Patient work phone--------------------------------------------------------------------
+			row=table.NewRow();
+			row["Field"]=Lan.g("FormAppEdit","Work Phone");
+			row["Value"]=rawPat.Rows[0]["WkPhone"];
+			table.Rows.Add(row);
+			//Patient wireless phone----------------------------------------------------------------
+			row=table.NewRow();
+			row["Field"]=Lan.g("FormAppEdit","Wireless Phone");
+			row["Value"]=rawPat.Rows[0]["WirelessPhone"];
+			table.Rows.Add(row);
+			//Patient credit type-------------------------------------------------------------------
+			row=table.NewRow();
+			row["Field"]=Lan.g("FormAppEdit","Credit Type");
+			row["Value"]=rawPat.Rows[0]["CreditType"];
+			table.Rows.Add(row);
+			//Patient billing type------------------------------------------------------------------
+			row=table.NewRow();
+			row["Field"]=Lan.g("FormAppEdit","Billing Type");
+			row["Value"]=DefB.GetName(DefCat.BillingTypes,PIn.PInt(rawPat.Rows[0]["BillingType"].ToString()));
+			table.Rows.Add(row);
+			//Patient total balance-----------------------------------------------------------------
+			row=table.NewRow();
+			row["Field"]=Lan.g("FormAppEdit","Total Balance");
+			double totalBalance=PIn.PDouble(rawPat.Rows[0]["EstBalance"].ToString());
+			row["Value"]=totalBalance.ToString("F");
+			table.Rows.Add(row);
+			//Patient address and phone notes-------------------------------------------------------
+			row=table.NewRow();
+			row["Field"]=Lan.g("FormAppEdit","Address and Phone Notes");
+			row["Value"]=rawPat.Rows[0]["AddrNote"];
+			table.Rows.Add(row);
+			//Patient family balance----------------------------------------------------------------
+			command="SELECT BalTotal,InsEst FROM patient WHERE Guarantor='"
+				+rawPat.Rows[0]["Guarantor"].ToString()+"'";
+			DataTable familyBalance=dcon.GetTable(command);
+			row=table.NewRow();
+			row["Field"]=Lan.g("FormAppEdit","Family Balance");
+			double balance=PIn.PDouble(familyBalance.Rows[0]["BalTotal"].ToString())
+				-PIn.PDouble(familyBalance.Rows[0]["InsEst"].ToString());
+			row["Value"]=balance.ToString("F");
+			table.Rows.Add(row);
 			return table;
 		}
 

@@ -802,13 +802,13 @@ namespace OpenDental{
 				butPin.Visible=false;
 			}
 			if(AptCur.AptStatus==ApptStatus.Planned) {
-				Text=Lan.g(this,"Edit Planned Appointment")+" - "+DS.Tables["Patient"].Rows[0]["nameLF"].ToString();
+				Text=Lan.g(this,"Edit Planned Appointment")+" - "+DS.Tables["Patient"].Rows[0]["Value"].ToString();
 				labelStatus.Visible=false;
 				comboStatus.Visible=false;
 				butDelete.Visible=false;
 			}
 			else {
-				Text=Lan.g(this,"Edit Appointment")+" - "+DS.Tables["Patient"].Rows[0]["nameLF"].ToString();
+				Text=Lan.g(this,"Edit Appointment")+" - "+DS.Tables["Patient"].Rows[0]["Value"].ToString();
 				comboStatus.Items.Add(Lan.g("enumApptStatus","Scheduled"));
 				comboStatus.Items.Add(Lan.g("enumApptStatus","Complete"));
 				comboStatus.Items.Add(Lan.g("enumApptStatus","UnschedList"));
@@ -926,21 +926,46 @@ namespace OpenDental{
 				tbTime.TopBorder[0,32]=Color.Black;
 				tbTime.TopBorder[0,36]=Color.Black;
 			}
-			FillPatient();
 			FillProcedures();
+			FillPatient();//Must be after FillProcedures(), so that the initial amount for the appointment can be calculated.
 			FillTime();
 			FillComm();
 		}
 
 		private void FillPatient(){
-			/*textHmPhone.Text=pat.HmPhone;
-			textWkPhone.Text=pat.WkPhone;
-			textWirelessPhone.Text=pat.WirelessPhone;
-			textAddrNote.Text=pat.AddrNote;
-			textCreditType.Text=pat.CreditType;
-			textBillingType.Text=DefB.GetName(DefCat.BillingTypes,pat.BillingType);
-			textBalance.Text=pat.EstBalance.ToString("F");
-			textFamilyBal.Text=fam.List[0].BalTotal.ToString("F");*/
+			DataTable table=DS.Tables["Patient"];
+			gridPatient.BeginUpdate();
+			gridPatient.Columns.Clear();
+			for(int i=0;i<table.Columns.Count;i++) {
+				ODGridColumn col=new ODGridColumn(Lan.g("TableCommLog",""),120);//Add blank columns
+				gridPatient.Columns.Add(col);
+			}
+			gridPatient.Rows.Clear();
+			ODGridRow row;
+			for(int i=0;i<table.Rows.Count;i++) {
+				row=new ODGridRow();
+				row.Cells.Add(table.Rows[i]["Field"].ToString());
+				row.Cells.Add(table.Rows[i]["Value"].ToString());
+				gridPatient.Rows.Add(row);
+			}
+			//Add a UI managed row to display the total fee for the selected procedures in this appointment.
+			row=new ODGridRow();
+			row.Cells.Add("Fee This Appt");
+			row.Cells.Add("");//Calculated below
+			gridPatient.Rows.Add(row);
+			CalcPatientFeeThisAppt();
+			gridPatient.EndUpdate();
+			gridPatient.ScrollToEnd();
+		}
+
+		///<summary>Calculates the fee for this appointment using the highlighted procedures in the procedure list.</summary>
+		private void CalcPatientFeeThisAppt() {
+			double feeThisAppt=0;
+			for(int i=0;i<gridProc.SelectedIndices.Length;i++) {
+				feeThisAppt+=PIn.PDouble(gridProc.Rows[gridProc.SelectedIndices[i]].Cells[5].Text);
+			}
+			gridPatient.Rows[gridPatient.Rows.Count-1].Cells[1].Text=POut.PDouble(feeThisAppt);
+			gridPatient.Invalidate();
 		}
 
 		private void FillComm(){
@@ -1076,6 +1101,7 @@ namespace OpenDental{
 			tbProc.ScrollValue=scroll;*/
 			CalculateTime();
 			FillTime();
+			CalcPatientFeeThisAppt();
 		}
 
 		private void FillTime() {
@@ -1324,6 +1350,7 @@ namespace OpenDental{
 			}
 			CalculateTime();
 			FillTime();
+			CalcPatientFeeThisAppt();
 		}
 
 		///<summary>Called from butOK_Click and butPin_Click</summary>
