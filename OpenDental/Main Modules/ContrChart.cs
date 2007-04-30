@@ -58,7 +58,7 @@ namespace OpenDental{
 		private System.Windows.Forms.CheckBox checkRx;
 		private System.Windows.Forms.GroupBox groupShow;
 		private System.Windows.Forms.ImageList imageListMain;
-		private System.Windows.Forms.TextBox textADACode;
+		private System.Windows.Forms.TextBox textProcCode;
 		private System.Windows.Forms.Label label14;
 		private OpenDental.UI.Button butOK;
 		private OpenDental.UI.Button butNew;
@@ -264,7 +264,7 @@ namespace OpenDental{
 			this.comboPriority = new System.Windows.Forms.ComboBox();
 			this.checkToday = new System.Windows.Forms.CheckBox();
 			this.label6 = new System.Windows.Forms.Label();
-			this.textADACode = new System.Windows.Forms.TextBox();
+			this.textProcCode = new System.Windows.Forms.TextBox();
 			this.label14 = new System.Windows.Forms.Label();
 			this.label13 = new System.Windows.Forms.Label();
 			this.groupShow = new System.Windows.Forms.GroupBox();
@@ -637,16 +637,16 @@ namespace OpenDental{
 			this.label6.Text = "Priority";
 			this.label6.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
 			// 
-			// textADACode
+			// textProcCode
 			// 
-			this.textADACode.Location = new System.Drawing.Point(330,3);
-			this.textADACode.Name = "textADACode";
-			this.textADACode.Size = new System.Drawing.Size(108,20);
-			this.textADACode.TabIndex = 50;
-			this.textADACode.Text = "Type ADA Code";
-			this.textADACode.Enter += new System.EventHandler(this.textADACode_Enter);
-			this.textADACode.TextChanged += new System.EventHandler(this.textADACode_TextChanged);
-			this.textADACode.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textADACode_KeyDown);
+			this.textProcCode.Location = new System.Drawing.Point(330,3);
+			this.textProcCode.Name = "textProcCode";
+			this.textProcCode.Size = new System.Drawing.Size(108,20);
+			this.textProcCode.TabIndex = 50;
+			this.textProcCode.Text = "Type Proc Code";
+			this.textProcCode.Enter += new System.EventHandler(this.textProcCode_Enter);
+			this.textProcCode.TextChanged += new System.EventHandler(this.textProcCode_TextChanged);
+			this.textProcCode.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textProcCode_KeyDown);
 			// 
 			// label14
 			// 
@@ -1005,7 +1005,7 @@ namespace OpenDental{
 			this.tabEnterTx.Controls.Add(this.butOK);
 			this.tabEnterTx.Controls.Add(this.butAddProc);
 			this.tabEnterTx.Controls.Add(this.butV);
-			this.tabEnterTx.Controls.Add(this.textADACode);
+			this.tabEnterTx.Controls.Add(this.textProcCode);
 			this.tabEnterTx.Controls.Add(this.butOI);
 			this.tabEnterTx.Controls.Add(this.label14);
 			this.tabEnterTx.Controls.Add(this.labelDx);
@@ -2247,7 +2247,7 @@ namespace OpenDental{
 				label6,
 				butAddProc,
 				label14,
-				//textADACode is handled in ClearButtons()
+				//textProcCode is handled in ClearButtons()
 				butOK,
 				label13,
 				label4
@@ -2772,7 +2772,7 @@ namespace OpenDental{
 			}
 		}
 
-		///<summary>The supplied procedure row must include these columns: ProcDate,ProcStatus,ADACode,Surf,ToothNum, and ToothRange, all in raw database format.</summary>
+		///<summary>The supplied procedure row must include these columns: ProcDate,ProcStatus,ProcCode,Surf,ToothNum, and ToothRange, all in raw database format.</summary>
 		private bool ShouldDisplayProc(DataRow row){
 			//if printing for hospital
 			if(hospitalDate.Year>1880) {
@@ -2789,7 +2789,7 @@ namespace OpenDental{
 				for(int i=0;i<toothChart.SelectedTeeth.Length;i++) {
 					selectedTeeth.Add(Tooth.ToInt(toothChart.SelectedTeeth[i]));
 				}
-				switch(ProcedureCodes.GetProcCode(row["ADACode"].ToString()).TreatArea) {
+				switch(ProcedureCodes.GetProcCode(row["ProcCode"].ToString()).TreatArea) {
 					case TreatmentArea.Arch:
 						for(int s=0;s<selectedTeeth.Count;s++) {
 							if(row["Surf"].ToString()=="U" && (int)selectedTeeth[s]<17) {
@@ -3056,7 +3056,7 @@ namespace OpenDental{
 		}
 
 		private void DrawProcsOfStatus(ProcStat procStat){
-			//this requires: ProcStatus, ADACode, ToothNum, Surf, and ToothRange.  All need to be raw database values.
+			//this requires: ProcStatus, ProcCode, ToothNum, Surf, and ToothRange.  All need to be raw database values.
 			string[] teeth;
 			Color cLight=Color.White;
 			Color cDark=Color.White;
@@ -3385,7 +3385,7 @@ namespace OpenDental{
 			listDx.SelectedIndex=-1;
 			//listProcButtons.SelectedIndex=-1;
 			listViewButtons.SelectedIndices.Clear();
-			textADACode.Text=Lan.g(this,"Type ADA Code");
+			textProcCode.Text=Lan.g(this,"Type Proc Code");
 		}
 
 		private void UpdateSurf (){
@@ -3521,7 +3521,7 @@ namespace OpenDental{
 			//procnum
 			ProcCur.PatNum=PatCur.PatNum;
 			//aptnum
-			//adacode
+			//proccode
 			//ProcCur.CodeNum=ProcedureCodes.GetProcCode(ProcCur.OldCode).CodeNum;//already set
 			if(newStatus==ProcStat.EO){
 				ProcCur.ProcDate=DateTime.MinValue;
@@ -3541,7 +3541,7 @@ namespace OpenDental{
 			//surf
 			//ToothNum
 			//Procedures.Cur.ToothRange
-			//ProcCur.NoBillIns=ProcedureCodes.GetProcCode(ProcCur.ADACode).NoBillIns;
+			//ProcCur.NoBillIns=ProcedureCodes.GetProcCode(ProcCur.ProcCode).NoBillIns;
 			if(comboPriority.SelectedIndex==0)
 				ProcCur.Priority=0;
 			else
@@ -3590,7 +3590,7 @@ namespace OpenDental{
 			//procnum
 			ProcCur.PatNum=PatCur.PatNum;
 			//aptnum
-			//adacode
+			//proccode
 			//ProcCur.CodeNum=ProcedureCodes.GetProcCode(ProcCur.OldCode).CodeNum;//already set
 			if(newStatus==ProcStat.EO){
 				ProcCur.ProcDate=DateTime.MinValue;
@@ -3610,7 +3610,7 @@ namespace OpenDental{
 			//surf
 			//toothnum
 			//ToothRange
-			//ProcCur.NoBillIns=ProcedureCodes.GetProcCode(ProcCur.ADACode).NoBillIns;
+			//ProcCur.NoBillIns=ProcedureCodes.GetProcCode(ProcCur.ProcCode).NoBillIns;
 			if(comboPriority.SelectedIndex==0)
 				ProcCur.Priority=0;
 			else
@@ -3640,7 +3640,7 @@ namespace OpenDental{
 				//InsPlans.GetCur(Patients.Cur.PriPlanNum);
 				//if(InsPlans.Cur.PlanType=="c"){
 					//also handles fine if copayfeesched=0:
-				//ProcCur.CapCoPay=Fees.GetAmount(ProcCur.ADACode,InsPlans.Cur.CopayFeeSched);
+				//ProcCur.CapCoPay=Fees.GetAmount(ProcCur.ProcCode,InsPlans.Cur.CopayFeeSched);
 				//}
 			//}
 			//MessageBox.Show(Procedures.NewProcedure.ProcFee.ToString());
@@ -3678,7 +3678,7 @@ namespace OpenDental{
 				ProcCur=new Procedure();//going to be an insert, so no need to set Procedures.CurOld
 				//Procedure
 				ProcCur.CodeNum = FormP.SelectedCodeNum;
-				//Procedures.Cur.ADACode=ProcButtonItems.adaCodeList[i];
+				//Procedures.Cur.ProcCode=ProcButtonItems.CodeList[i];
 				tArea=ProcedureCodes.GetProcCode(ProcCur.CodeNum).TreatArea;
 				if((tArea==TreatmentArea.Arch
 					|| tArea==TreatmentArea.Mouth
@@ -3962,7 +3962,7 @@ namespace OpenDental{
 						AddQuick(ProcCur);
 					}
 				}//n selected teeth
-			}//end Part 1 checking for AdaCodes, now will check for AutoCodes
+			}//end Part 1 checking for ProcCodes, now will check for AutoCodes
 			string toothNum;
 			string surf;
 			bool isAdditional;
@@ -4061,23 +4061,23 @@ namespace OpenDental{
 					+DateTime.Today.ToShortDateString());
 			}
 		}
-		
-		private void textADACode_Enter(object sender,System.EventArgs e) {
-			if(textADACode.Text==Lan.g(this,"Type ADA Code")) {
-				textADACode.Text="";
+
+		private void textProcCode_TextChanged(object sender,EventArgs e) {
+			if(textProcCode.Text=="d") {
+				textProcCode.Text="D";
+				textProcCode.SelectionStart=1;
 			}
 		}
 
-		private void textADACode_KeyDown(object sender,System.Windows.Forms.KeyEventArgs e) {
+		private void textProcCode_KeyDown(object sender,KeyEventArgs e) {
 			if(e.KeyCode==Keys.Return) {
 				EnterTypedCode();
 			}
 		}
 
-		private void textADACode_TextChanged(object sender,System.EventArgs e) {
-			if(textADACode.Text=="d") {
-				textADACode.Text="D";
-				textADACode.SelectionStart=1;
+		private void textProcCode_Enter(object sender,EventArgs e) {
+			if(textProcCode.Text==Lan.g(this,"Type Proc Code")) {
+				textProcCode.Text="";
 			}
 		}
 
@@ -4092,15 +4092,15 @@ namespace OpenDental{
 				}
 			}
 			if(CultureInfo.CurrentCulture.Name=="en-US"
-				&& Regex.IsMatch(textADACode.Text,@"^\d{4}$")//if exactly 4 digits
-				&& !ProcedureCodes.HList.ContainsKey(textADACode.Text))//and the 4 digit code is not found
+				&& Regex.IsMatch(textProcCode.Text,@"^\d{4}$")//if exactly 4 digits
+				&& !ProcedureCodes.HList.ContainsKey(textProcCode.Text))//and the 4 digit code is not found
 			{
-				textADACode.Text="D"+textADACode.Text;
+				textProcCode.Text="D"+textProcCode.Text;
 			}
-			if(!ProcedureCodes.HList.ContainsKey(textADACode.Text)) {
+			if(!ProcedureCodes.HList.ContainsKey(textProcCode.Text)) {
 				MessageBox.Show(Lan.g(this,"Invalid code."));
-				//textADACode.Text="";
-				textADACode.SelectionStart=textADACode.Text.Length;
+				//textProcCode.Text="";
+				textProcCode.SelectionStart=textProcCode.Text.Length;
 				return;
 			}
 			Procedures.SetDateFirstVisit(DateTime.Today,1,PatCur);
@@ -4109,7 +4109,7 @@ namespace OpenDental{
 			int quadCount=0;//automates quadrant codes.
 			for(int n=0;n==0 || n<toothChart.SelectedTeeth.Length;n++) {//always loops at least once.
 				ProcCur=new Procedure();//this will be an insert, so no need to set CurOld
-				ProcCur.CodeNum=ProcedureCodes.GetProcCode(textADACode.Text).CodeNum;
+				ProcCur.CodeNum=ProcedureCodes.GetCodeNum(textProcCode.Text);
 				bool isValid=true;
 				tArea=ProcedureCodes.GetProcCode(ProcCur.CodeNum).TreatArea;
 				if((tArea==TreatmentArea.Arch
@@ -4188,8 +4188,8 @@ namespace OpenDental{
 				}
 			}//n selected teeth
 			ModuleSelected(PatCur.PatNum);
-			textADACode.Text="";
-			textADACode.Select();
+			textProcCode.Text="";
+			textProcCode.Select();
 			if(newStatus==ProcStat.C) {
 				SecurityLogs.MakeLogEntry(Permissions.ProcComplCreate,PatCur.PatNum,
 					PatCur.GetNameLF()+", "
@@ -4918,8 +4918,8 @@ namespace OpenDental{
 				MsgBox.Show(this,"Both selected items must be procedures.");
 				return;
 			}
-			bool isLab1=ProcedureCodes.GetProcCode(row1["ADACode"].ToString()).IsCanadianLab;
-			bool isLab2=ProcedureCodes.GetProcCode(row2["ADACode"].ToString()).IsCanadianLab;
+			bool isLab1=ProcedureCodes.GetProcCode(row1["ProcCode"].ToString()).IsCanadianLab;
+			bool isLab2=ProcedureCodes.GetProcCode(row2["ProcCode"].ToString()).IsCanadianLab;
 			if((isLab1 && isLab2) || (!isLab1 && !isLab2)) {
 				MsgBox.Show(this,"One of the procedures must be a lab procedure as defined in Procedure Codes.");
 				return;
@@ -5360,6 +5360,8 @@ namespace OpenDental{
 			textSurf.Text = "MDL";
 			ProcButtonClicked(0,"D2332");
 		}
+
+		
 
 
 

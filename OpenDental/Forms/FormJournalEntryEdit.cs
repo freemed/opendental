@@ -12,7 +12,7 @@ using OpenDentBusiness;
 namespace OpenDental{
 	///<summary></summary>
 	public class FormJournalEntryEdit : System.Windows.Forms.Form{
-		private System.Windows.Forms.Label labelADACode;
+		private System.Windows.Forms.Label labelMemo;
 		private System.Windows.Forms.Label labelDebit;
 		private System.ComponentModel.Container components = null;// Required designer variable.
 		///<summary></summary>
@@ -57,7 +57,7 @@ namespace OpenDental{
 
 		private void InitializeComponent(){
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormJournalEntryEdit));
-			this.labelADACode = new System.Windows.Forms.Label();
+			this.labelMemo = new System.Windows.Forms.Label();
 			this.labelDebit = new System.Windows.Forms.Label();
 			this.textMemo = new System.Windows.Forms.TextBox();
 			this.labelCredit = new System.Windows.Forms.Label();
@@ -75,14 +75,14 @@ namespace OpenDental{
 			this.textReconcile = new System.Windows.Forms.TextBox();
 			this.SuspendLayout();
 			// 
-			// labelADACode
+			// labelMemo
 			// 
-			this.labelADACode.Location = new System.Drawing.Point(16,94);
-			this.labelADACode.Name = "labelADACode";
-			this.labelADACode.Size = new System.Drawing.Size(93,16);
-			this.labelADACode.TabIndex = 0;
-			this.labelADACode.Text = "Memo";
-			this.labelADACode.TextAlign = System.Drawing.ContentAlignment.TopRight;
+			this.labelMemo.Location = new System.Drawing.Point(16,94);
+			this.labelMemo.Name = "labelMemo";
+			this.labelMemo.Size = new System.Drawing.Size(93,16);
+			this.labelMemo.TabIndex = 0;
+			this.labelMemo.Text = "Memo";
+			this.labelMemo.TextAlign = System.Drawing.ContentAlignment.TopRight;
 			// 
 			// labelDebit
 			// 
@@ -255,7 +255,7 @@ namespace OpenDental{
 			this.Controls.Add(this.butCancel);
 			this.Controls.Add(this.butOK);
 			this.Controls.Add(this.labelDebit);
-			this.Controls.Add(this.labelADACode);
+			this.Controls.Add(this.labelMemo);
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.MaximizeBox = false;
 			this.MinimizeBox = false;

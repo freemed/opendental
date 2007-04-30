@@ -1033,7 +1033,7 @@ namespace OpenDental {
 			ProcedureCode procCode;
 			for(int i=0;i<RepeatChargeList.Length;i++) {
 				row=new ODGridRow();
-				procCode=ProcedureCodes.GetProcCode(RepeatChargeList[i].ADACode);
+				procCode=ProcedureCodes.GetProcCode(RepeatChargeList[i].ProcCode);
 				row.Cells.Add(procCode.Descript);
 				row.Cells.Add(RepeatChargeList[i].ChargeAmt.ToString("F"));
 				if(RepeatChargeList[i].DateStart.Year>1880) {
@@ -2505,14 +2505,14 @@ namespace OpenDental {
 			}
 			RepeatCharge repeat=new RepeatCharge();
 			repeat.PatNum=PatCur.PatNum;
-			repeat.ADACode="001";
+			repeat.ProcCode="001";
 			repeat.ChargeAmt=139;
 			repeat.DateStart=DateTime.Today;
 			repeat.DateStop=DateTime.Today.AddMonths(11);
 			RepeatCharges.Insert(repeat);
 			repeat=new RepeatCharge();
 			repeat.PatNum=PatCur.PatNum;
-			repeat.ADACode="001";
+			repeat.ProcCode="001";
 			repeat.ChargeAmt=99;
 			repeat.DateStart=DateTime.Today.AddYears(1);
 			RepeatCharges.Insert(repeat);
@@ -2525,7 +2525,7 @@ namespace OpenDental {
 			}
 			RepeatCharge repeat=new RepeatCharge();
 			repeat.PatNum=PatCur.PatNum;
-			repeat.ADACode="008";
+			repeat.ProcCode="008";
 			repeat.ChargeAmt=89;
 			repeat.DateStart=DateTime.Today;
 			RepeatCharges.Insert(repeat);

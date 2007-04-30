@@ -136,8 +136,8 @@ namespace OpenDental{
 				{
 					continue;
 				}
-				//get a list dates of all completed procedures with this ADACode and patNum
-				ArrayList ALdates=RepeatCharges.GetDates(chargeList[i].ADACode,chargeList[i].PatNum);
+				//get a list dates of all completed procedures with this Code and patNum
+				ArrayList ALdates=RepeatCharges.GetDates(chargeList[i].ProcCode,chargeList[i].PatNum);
 				possibleDate=chargeList[i].DateStart;
 				//start looping through possible dates, beginning with the start date of the repeating charge
 				while(possibleDate<=DateTime.Today){
@@ -152,7 +152,7 @@ namespace OpenDental{
 					}
 					//otherwise, insert a procedure to db
 					proc=new Procedure();
-					proc.CodeNum=ProcedureCodes.GetProcCode(chargeList[i].ADACode).CodeNum;
+					proc.CodeNum=ProcedureCodes.GetCodeNum(chargeList[i].ProcCode);
 					proc.DateEntryC=DateTime.Today;
 					proc.PatNum=chargeList[i].PatNum;
 					proc.ProcDate=possibleDate;

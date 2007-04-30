@@ -228,14 +228,14 @@ namespace OpenDentBusiness {
 			return table;
 		}
 
-		///<summary>The supplied DataRows must include the following columns: ProcNum,ProcDate,Priority,ToothRange,ToothNum,ADACode.
+		///<summary>The supplied DataRows must include the following columns: ProcNum,ProcDate,Priority,ToothRange,ToothNum,ProcCode.
 		///This sorts all objects in Chart module based on their dates, times, priority, and toothnum.</summary>
 		public static int CompareChartRows(DataRow x,DataRow y){
 			if(x["ProcNum"].ToString()!="0" && y["ProcNum"].ToString()!="0") {//if both are procedures
 				if(((DateTime)x["ProcDate"]).Date==((DateTime)y["ProcDate"]).Date) {//and the dates are the same
 					return ProcedureB.CompareProcedures(x,y);
 					//IComparer procComparer=new ProcedureComparer();
-					//return procComparer.Compare(x,y);//sort by priority, toothnum, adaCode
+					//return procComparer.Compare(x,y);//sort by priority, toothnum, procCode
 					//return 0;
 				}
 			}

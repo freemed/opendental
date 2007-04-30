@@ -3,7 +3,7 @@ using System.Collections;
 
 namespace OpenDentBusiness{
 	
-	///<summary>Attached to procbuttons.  These tell the program what to do when a user clicks on a button.  There are two types: adacodes or autocodes.</summary>
+	///<summary>Attached to procbuttons.  These tell the program what to do when a user clicks on a button.  There are two types: proccodes or autocodes.</summary>
 	public class ProcButtonItem{
 		///<summary>Primary key.</summary>
 		public int ProcButtonItemNum;
@@ -21,7 +21,7 @@ namespace OpenDentBusiness{
 			ProcButtonItem p=new ProcButtonItem();
 			p.ProcButtonItemNum=ProcButtonItemNum;
 			p.ProcButtonNum=ProcButtonNum;
-			//p.ADACode=ADACode;
+			//p.OldCode=OldCode;
 			p.AutoCodeNum=AutoCodeNum;
 			p.CodeNum=CodeNum;
 			return p;

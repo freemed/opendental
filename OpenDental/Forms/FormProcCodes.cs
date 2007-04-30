@@ -814,46 +814,6 @@ namespace OpenDental{
 				changed=true;
 				FillGrid();
 			}
-			/*
-			if(FormPCN.textNewCode.Text=="") {
-				return;
-			}
-			ProcedureCode procCode;
-			if(ProcedureCodes.HList.ContainsKey(FormPCN.textNewCode.Text)){
-				procCode=(ProcedureCode)ProcedureCodes.HList[FormPCN.textNewCode.Text];
-				textAbbreviation.Text="";
-				textDescription.Text="";
-				textCode.Text=FormPCN.textNewCode.Text;
-				if(DefB.GetHidden(DefCat.ProcCodeCats,procCode.ProcCat)){
-					checkShowHidden.Checked=true;
-					FillCats();
-				}
-				for(int i=0;i<CatList.Length;i++) {
-					if(CatList[i].DefNum==procCode.ProcCat){
-						listCategories.SetSelected(i,true);
-					}
-					else{
-						listCategories.SetSelected(i,false);
-					}
-				}
-				FillGrid();
-				MessageBox.Show(Lan.g(this,"That code already exists."));
-				return;
-			}
-			procCode=new ProcedureCode();
-			procCode.ADACode=FormPCN.textNewCode.Text;
-			//procCode.ProcTime="/X/";//moved to contructor.
-			procCode.ProcCat=DefB.Short[(int)DefCat.ProcCodeCats][0].DefNum;
-			//procCode.GraphicColor=Color.FromArgb(0);//moved to contructor.
-			ProcedureCodes.Insert(procCode);
-			FormProcCodeEdit FormP=new FormProcCodeEdit(procCode);
-			FormP.IsNew=true;
-			FormP.ShowDialog();
-			if(FormP.DialogResult==DialogResult.OK){
-				changed=true;
-				FillGrid();
-			}
-			SecurityLogs.MakeLogEntry(Permissions.Setup,0,"Added Procedure Code: "+procCode.ADACode);*/
 		}
 
 		private void gridMain_CellDoubleClick(object sender,ODGridClickEventArgs e) {

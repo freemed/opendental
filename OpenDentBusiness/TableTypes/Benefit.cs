@@ -5,7 +5,7 @@ namespace OpenDentBusiness{
 	/// <summary>Corresponds to the benefit table in the database which replaces the old covpat table.  A benefit is usually a percentage, deductible, limitation, max, or similar. Each row represents a single benefit.  A benefit can have a value in EITHER PlanNum OR PatPlanNum.  If it is for a PlanNum, the most common, then the benefit is attached to an insurance plan.  If it is for a PatPlanNum, then it overrides the plan benefit, usually a percentage, for a single patient.  Benefits we can't handle yet include posterior composites, COB duplication, amounts used, in/out of plan network, authorization required, missing tooth exclusion, and any date related limitations like waiting periods.  We also cannot yet handle family level benefits.  All benefits are at the individual patient level.<br/>
 	/// Here are examples of typical usage which parallel X12 usage.<br/>
 	/// Example fields shown in this order:<br/>
-	/// CovCat, ADACode(- indicates blank), BenefitType, Percent, MonetaryAmt, TimePeriod, QuantityQualifier, Quantity<br/>
+	/// CovCat, ProcCode(- indicates blank), BenefitType, Percent, MonetaryAmt, TimePeriod, QuantityQualifier, Quantity<br/>
 	/// Annual Max $1000: General,-,Limitations,0,1000,CalendarYear,None,0<br/>
 	/// Restorative 80%: Restorative,-,Percentage,80,0,CalendarYear,None,0<br/>
 	/// $50 deductible: General,-,Deductible,0,50,CalendarYear,None,0<br/>

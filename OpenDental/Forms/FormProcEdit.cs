@@ -2279,7 +2279,7 @@ namespace OpenDental{
 				textProcFee.Text="0";
 			}
 			ProcCur.PatNum=PatCur.PatNum;
-			//ProcCur.ADACode=this.textProc.Text;
+			//ProcCur.Code=this.textProc.Text;
 			ProcedureCode2=ProcedureCodes.GetProcCode(textProc.Text);
 			ProcCur.CodeNum=ProcedureCode2.CodeNum;
 			ProcCur.MedicalCode=textMedicalCode.Text;
@@ -2425,7 +2425,7 @@ namespace OpenDental{
 				DialogResult=DialogResult.OK;
 				return;
 			}
-			//this represents the suggested ADAcode based on the autocodes set up.
+			//this represents the suggested code based on the autocodes set up.
 			int verifyCode;
 			AutoCode AutoCodeCur=null;
 			if(ProcedureCode2.TreatArea==TreatmentArea.Arch){
@@ -2472,7 +2472,7 @@ namespace OpenDental{
 				}
 				ProcCur.CodeNum=verifyCode;
 				ProcedureCode2=ProcedureCodes.GetProcCode(ProcCur.CodeNum);
-				//ProcCur.ADACode=verifyADA;
+				//ProcCur.Code=verifyCode;
 				ProcCur.ProcFee=Fees.GetAmount0(ProcedureCode2.CodeNum,Fees.GetFeeSched(PatCur,PlanList,PatPlanList));
 				Procedures.Update(ProcCur,ProcOld);
 				Recalls.Synch(ProcCur.PatNum);

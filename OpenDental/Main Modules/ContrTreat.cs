@@ -1101,7 +1101,7 @@ namespace OpenDental{
 						row.Cells.Add(DefB.GetName(DefCat.TxPriorities,ProcListTP[i].Priority));//priority
 						row.Cells.Add(Tooth.ToInternat(ProcListTP[i].ToothNum));//toothnum
 						row.Cells.Add("");//surf
-						row.Cells.Add(ProcListTP[i].LabProcCode);//adacode
+						row.Cells.Add(ProcListTP[i].LabProcCode);//proccode
 						row.Cells.Add("    "+ProcedureCodes.GetLaymanTerm(ProcListTP[i].LabProcCode));//descript (indented)
 						if(checkShowStandard.Checked) {
 							row.Cells.Add("");//standard
@@ -1141,7 +1141,7 @@ namespace OpenDental{
 						row.Cells.Add("");//priority
 						row.Cells.Add("");//toothnum
 						row.Cells.Add("");//surf
-						row.Cells.Add("");//adacode
+						row.Cells.Add("");//proccode
 						row.Cells.Add(Lan.g(this,"Subtotal"));//descript
 						if(checkShowStandard.Checked){
 							row.Cells.Add(substandard.ToString("F"));//standard
@@ -1193,10 +1193,10 @@ namespace OpenDental{
 					row.Cells.Add(DefB.GetName(DefCat.TxPriorities,ProcTPSelectList[i].Priority));
 					row.Cells.Add(ProcTPSelectList[i].ToothNumTP);
 					row.Cells.Add(ProcTPSelectList[i].Surf);
-					row.Cells.Add(ProcTPSelectList[i].ADACode);
+					row.Cells.Add(ProcTPSelectList[i].ProcCode);
 					row.Cells.Add(ProcTPSelectList[i].Descript);
 					if(checkShowStandard.Checked) {
-						standard=Fees.GetAmount0(ProcedureCodes.GetCodeNum(ProcTPSelectList[i].ADACode),feeSched);
+						standard=Fees.GetAmount0(ProcedureCodes.GetCodeNum(ProcTPSelectList[i].ProcCode),feeSched);
 						row.Cells.Add(standard.ToString("F"));//standard
 						substandard+=standard;
 						totStandard+=standard;
@@ -1231,7 +1231,7 @@ namespace OpenDental{
 						row.Cells.Add("");//priority
 						row.Cells.Add("");//toothnum
 						row.Cells.Add("");//surf
-						row.Cells.Add("");//adacode
+						row.Cells.Add("");//proccode
 						row.Cells.Add(Lan.g(this,"Subtotal"));//descript
 						if(checkShowStandard.Checked) {
 							row.Cells.Add(substandard.ToString("F"));//standard
@@ -1269,7 +1269,7 @@ namespace OpenDental{
 				row.Cells.Add("");//priority
 				row.Cells.Add("");//toothnum
 				row.Cells.Add("");//surf
-				row.Cells.Add("");//adacode
+				row.Cells.Add("");//proccode
 				row.Cells.Add(Lan.g(this,"Total"));//descript
 				if(checkShowStandard.Checked) {
 					row.Cells.Add(totStandard.ToString("F"));//standard
@@ -1933,7 +1933,7 @@ namespace OpenDental{
 					procDummy.Surf=ProcTPSelectList[i].Surf;
 					//procDummy.HideGraphical??
 					procDummy.ProcStatus=ProcStat.TP;
-					procDummy.CodeNum=ProcedureCodes.GetProcCode(ProcTPSelectList[i].ADACode).CodeNum;
+					procDummy.CodeNum=ProcedureCodes.GetProcCode(ProcTPSelectList[i].ProcCode).CodeNum;
 					ProcAL.Add(procDummy);
 				}
 			}
@@ -2139,7 +2139,7 @@ namespace OpenDental{
 				procTP.Priority=proc.Priority;
 				procTP.ToothNumTP=Tooth.ToInternat(proc.ToothNum);
 				procTP.Surf=proc.Surf;
-				procTP.ADACode=ProcedureCodes.GetStringProcCode(proc.CodeNum);
+				procTP.ProcCode=ProcedureCodes.GetStringProcCode(proc.CodeNum);
 				procTP.Descript=gridMain.Rows[gridMain.SelectedIndices[i]]
 					.Cells[gridMain.Columns.GetIndex(Lan.g("TableTP","Description"))].Text;
 				if(checkShowFees.Checked){
@@ -2167,7 +2167,7 @@ namespace OpenDental{
 				procTP.Priority=proc.Priority;
 				procTP.ToothNumTP="";
 				procTP.Surf="";
-				procTP.ADACode=proc.LabProcCode;
+				procTP.Code=proc.LabProcCode;
 				procTP.Descript=gridMain.Rows[gridMain.SelectedIndices[i]]
 					.Cells[gridMain.Columns.GetIndex(Lan.g("TableTP","Description"))].Text;
 				if(checkShowFees.Checked) {

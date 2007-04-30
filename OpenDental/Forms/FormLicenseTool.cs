@@ -44,14 +44,14 @@ namespace OpenDental {
 			listProcLicenses=ProcLicenses.Refresh();
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
-			ODGridColumn col=new ODGridColumn("ADA Code",80);
+			ODGridColumn col=new ODGridColumn("Code",80);
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn("Description",80);
 			gridMain.Columns.Add(col);
 			gridMain.Rows.Clear();
 			for(int i=0;i<listProcLicenses.Length;i++) {
 				ODGridRow row=new ODGridRow();
-				row.Cells.Add(listProcLicenses[i].ADACode);
+				row.Cells.Add(listProcLicenses[i].ProcCode);
 				row.Cells.Add(listProcLicenses[i].Descript);
 				gridMain.Rows.Add(row);
 			}
@@ -59,8 +59,8 @@ namespace OpenDental {
 			gridMain.ScrollToEnd();
 		}
 
-		private void adacode_KeyPress(object sender,KeyPressEventArgs e) {
-			if(e.KeyChar=='\r'){
+		private void textCode_KeyPress(object sender,KeyPressEventArgs e) {
+			if(e.KeyChar=='\r') {
 				e.Handled=true;
 				textDescription.Focus();
 			}
@@ -87,7 +87,7 @@ namespace OpenDental {
 				return;
 			}
 			ProcLicense procLicense=new ProcLicense();
-			procLicense.ADACode=textCode.Text;
+			procLicense.ProcCode=textCode.Text;
 			procLicense.Descript=textDescription.Text;
 			ProcLicenses.Insert(procLicense);
 			RefreshGrid();
@@ -189,6 +189,8 @@ namespace OpenDental {
 			g.DrawString("Phone",Font,brush,100,470);
 			g.DrawLine(pen,136,482,400,482);
 		}
+
+		
 
 		
 

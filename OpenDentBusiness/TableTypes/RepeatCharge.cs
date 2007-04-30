@@ -10,7 +10,7 @@ namespace OpenDentBusiness{
 		/// <summary>FK to patient.PatNum.</summary>
 		public int PatNum;
 		///<summary>FK to procedurecode.ProcCode.  The code that will be added to the account as a completed procedure.</summary>
-		public string ADACode;
+		public string ProcCode;
 		///<summary>The amount that will be charged.  The amount from the procedurecode will not be used.  This way, a repeating charge cannot be accidentally altered.</summary>
 		public double ChargeAmt;
 		///<summary>The date of the first charge.  Charges will always be added on the same day of the month as the start date.  If more than one month goes by, then multiple charges will be added.</summary>
@@ -25,7 +25,7 @@ namespace OpenDentBusiness{
 			RepeatCharge r=new RepeatCharge();
 			r.RepeatChargeNum=RepeatChargeNum;
 			r.PatNum=PatNum;
-			r.ADACode=ADACode;
+			r.ProcCode=ProcCode;
 			r.ChargeAmt=ChargeAmt;
 			r.DateStart=DateStart;
 			r.DateStop=DateStop;

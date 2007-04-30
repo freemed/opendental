@@ -176,7 +176,7 @@ namespace OpenDental{
 		}
 
 		private void DrawProcsOfStatus(ProcStat procStat) {
-			//this requires: ProcStatus, ADACode, ToothNum, Surf, and ToothRange.  All need to be raw database values.
+			//this requires: ProcStatus, ProcCode, ToothNum, Surf, and ToothRange.  All need to be raw database values.
 			string[] teeth;
 			Color cLight=Color.White;
 			Color cDark=Color.White;

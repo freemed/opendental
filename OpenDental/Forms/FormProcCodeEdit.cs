@@ -614,7 +614,7 @@ namespace OpenDental{
 
 		private void FillFees(){
 			//This line will be added later for speed:
-			//DataTable feeList=Fees.GetListForCode(ProcCode.ADACode);
+			//DataTable feeList=Fees.GetListForCode(ProcCode.Code);
 			gridFees.BeginUpdate();
 			gridFees.Columns.Clear();
 			ODGridColumn col=new ODGridColumn(Lan.g("TableProcFee","Sched"),120);

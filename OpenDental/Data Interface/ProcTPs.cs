@@ -24,7 +24,7 @@ namespace OpenDental{
 				List[i].Priority    = PIn.PInt(table.Rows[i][5].ToString());
 				List[i].ToothNumTP  = PIn.PString(table.Rows[i][6].ToString());
 				List[i].Surf        = PIn.PString(table.Rows[i][7].ToString());
-				List[i].ADACode     = PIn.PString(table.Rows[i][8].ToString());
+				List[i].ProcCode    = PIn.PString(table.Rows[i][8].ToString());
 				List[i].Descript    = PIn.PString(table.Rows[i][9].ToString());
 				List[i].FeeAmt      = PIn.PDouble(table.Rows[i][10].ToString());
 				List[i].PriInsAmt   = PIn.PDouble(table.Rows[i][11].ToString());
@@ -44,7 +44,7 @@ namespace OpenDental{
 				+",Priority = '"   +POut.PInt   (proc.Priority)+"'"
 				+",ToothNumTP = '" +POut.PString(proc.ToothNumTP)+"'"
 				+",Surf = '"       +POut.PString(proc.Surf)+"'"
-				+",ADACode = '"    +POut.PString(proc.ADACode)+"'"
+				+",ProcCode = '"   +POut.PString(proc.ProcCode)+"'"
 				+",Descript = '"   +POut.PString(proc.Descript)+"'"
 				+",FeeAmt = '"     +POut.PDouble(proc.FeeAmt)+"'"
 				+",PriInsAmt = '"  +POut.PDouble(proc.PriInsAmt)+"'"
@@ -63,7 +63,7 @@ namespace OpenDental{
 			if(PrefB.RandomKeys){
 				command+="ProcTPNum,";
 			}
-			command+="TreatPlanNum,PatNum,ProcNumOrig,ItemOrder,Priority,ToothNumTP,Surf,ADACode,Descript,FeeAmt,"
+			command+="TreatPlanNum,PatNum,ProcNumOrig,ItemOrder,Priority,ToothNumTP,Surf,ProcCode,Descript,FeeAmt,"
 				+"PriInsAmt,SecInsAmt,PatAmt) VALUES(";
 			if(PrefB.RandomKeys){
 				command+="'"+POut.PInt(proc.ProcTPNum)+"', ";
@@ -76,7 +76,7 @@ namespace OpenDental{
 				+"'"+POut.PInt   (proc.Priority)+"', "
 				+"'"+POut.PString(proc.ToothNumTP)+"', "
 				+"'"+POut.PString(proc.Surf)+"', "
-				+"'"+POut.PString(proc.ADACode)+"', "
+				+"'"+POut.PString(proc.ProcCode)+"', "
 				+"'"+POut.PString(proc.Descript)+"', "
 				+"'"+POut.PDouble(proc.FeeAmt)+"', "
 				+"'"+POut.PDouble(proc.PriInsAmt)+"', "

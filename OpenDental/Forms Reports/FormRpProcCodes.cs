@@ -165,9 +165,9 @@ namespace OpenDental{
 			Fees fee=new Fees();
 			Queries.CurReport=new ReportOld();
 			
-			Queries.CurReport.Query= "SELECT procedurecode.ProcCode,fee.amount,'     ',procedurecode.descript,"
-			  +"procedurecode.abbrdesc FROM procedurecode,fee "
-				+"WHERE procedurecode.ProcCode=fee.adacode AND fee.feesched='"+feeSched.ToString()
+			Queries.CurReport.Query= "SELECT procedurecode.ProcCode,fee.Amount,'     ',procedurecode.Descript,"
+			  +"procedurecode.AbbrDesc FROM procedurecode,fee "
+				+"WHERE procedurecode.CodeNum=fee.CodeNum AND fee.FeeSched='"+feeSched.ToString()
          +"' ORDER BY procedurecode.ProcCode";
 			FormQuery2=new FormQuery();
 			FormQuery2.IsReport=true;

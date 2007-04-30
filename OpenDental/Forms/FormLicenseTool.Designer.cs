@@ -62,7 +62,7 @@ namespace OpenDental {
 			this.label1.Name = "label1";
 			this.label1.Size = new System.Drawing.Size(94,16);
 			this.label1.TabIndex = 4;
-			this.label1.Text = "ADA Code";
+			this.label1.Text = "Code";
 			this.label1.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
 			// 
 			// label2
@@ -80,7 +80,7 @@ namespace OpenDental {
 			this.textCode.Name = "textCode";
 			this.textCode.Size = new System.Drawing.Size(92,20);
 			this.textCode.TabIndex = 1;
-			this.textCode.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.adacode_KeyPress);
+			this.textCode.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textCode_KeyPress);
 			// 
 			// checkcompliancebutton
 			// 
@@ -155,7 +155,7 @@ namespace OpenDental {
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.Name = "FormLicenseTool";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-			this.Text = "ADA Code Update Tool";
+			this.Text = "Code Update Tool";
 			this.Load += new System.EventHandler(this.FormLicenseTool_Load);
 			this.ResumeLayout(false);
 			this.PerformLayout();

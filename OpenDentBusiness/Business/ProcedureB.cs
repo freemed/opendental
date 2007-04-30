@@ -349,7 +349,7 @@ namespace OpenDentBusiness {
 			return rowsChanged;
 		}
 
-		///<summary>The supplied DataRows must include the following columns: Priority,ToothRange,ToothNum,ADACode.  This sorts procedures based on priority, then tooth number, then adaCode.  It does not care about dates or status.  Currently used in TP module and Chart module sorting.</summary>
+		///<summary>The supplied DataRows must include the following columns: Priority,ToothRange,ToothNum,ProcCode.  This sorts procedures based on priority, then tooth number, then procCode.  It does not care about dates or status.  Currently used in TP module and Chart module sorting.</summary>
 		public static int CompareProcedures(DataRow x,DataRow y) {
 			//first, by priority
 			if(x["Priority"].ToString()!=y["Priority"].ToString()) {//if priorities are different
@@ -372,9 +372,9 @@ namespace OpenDentBusiness {
 				//this also puts invalid or empty toothnumbers before the others.
 				return Tooth.ToInt(x["ToothNum"].ToString()).CompareTo(Tooth.ToInt(y["ToothNum"].ToString()));
 			}
-			//priority and toothnums are the same, so sort by adacode.
+			//priority and toothnums are the same, so sort by proccode.
 			return x["ProcCode"].ToString().CompareTo(y["ProcCode"].ToString());
-			//return 0;//priority, tooth number, and adacode are all the same
+			//return 0;//priority, tooth number, and proccode are all the same
 		}
 
 

@@ -265,9 +265,10 @@ namespace OpenDental{
 		}
 
 		/// <summary>Used by GetProcsForSingle and GetProcsMultApts to generate a short string description of a procedure.</summary>
-		public static string ConvertProcToString(string aDACode,string surf,string toothNum){
+		public static string ConvertProcToString(int codeNum,string surf,string toothNum){
 			string strLine="";
-			switch (ProcedureCodes.GetProcCode(aDACode).TreatArea){
+			ProcedureCode code=ProcedureCodes.GetProcCode(codeNum);
+			switch (code.TreatArea){
 				case TreatmentArea.Surf :
 					strLine+="#"+Tooth.ToInternat(toothNum)+"-"+surf+"-";//""#12-MOD-"
 					break;
@@ -289,7 +290,7 @@ namespace OpenDental{
 					//strLine+=table.Rows[j][13].ToString()+" ";//don't show range
 					break;
 			}//end switch
-			strLine+=ProcedureCodes.GetProcCode(aDACode).AbbrDesc;
+			strLine+=code.AbbrDesc;
 			return strLine;
 		}
 
@@ -321,7 +322,7 @@ namespace OpenDental{
 
 		///<summary>Used do display procedure descriptions on appointments. The returned string also includes surf and toothNum.</summary>
 		public static string GetDescription(Procedure proc){
-			return ConvertProcToString(ProcedureCodes.GetStringProcCode(proc.CodeNum),proc.Surf,proc.ToothNum);
+			return ConvertProcToString(proc.CodeNum,proc.Surf,proc.ToothNum);
 		}
 
 		///<summary>Gets procedures for one appointment by looping through the procsMultApts which was filled previously from GetProcsMultApts.</summary>
@@ -539,7 +540,7 @@ namespace OpenDental{
 			}
 		}
 
-		///<summary>Used in FormClaimProc to get the ADAcode for a procedure. Do not use this if accessing FormClaimProc from the ProcEdit window, because proc might not be updated to db yet.</summary>
+		///<summary>Used in FormClaimProc to get the codeNum for a procedure. Do not use this if accessing FormClaimProc from the ProcEdit window, because proc might not be updated to db yet.</summary>
 		public static int GetCodeNum(int procNum){
 			string command="SELECT CodeNum FROM procedurelog WHERE ProcNum='"+procNum.ToString()+"'";
 			DataSet ds=null;
@@ -1160,16 +1161,16 @@ namespace OpenDental{
 				//this also puts invalid or empty toothnumbers before the others.
 				return Tooth.ToInt(x.ToothNum).CompareTo(Tooth.ToInt(y.ToothNum));
 			}
-			//priority and toothnums are the same, so sort by adacode.
-			/*string adaX=x.ADACode;
+			//priority and toothnums are the same, so sort by code.
+			/*string adaX=x.Code;
 			if(x.ProcNumLab !=0){//if x is a Canadian lab proc
-				//then use the adaCode of the procedure instead of the lab code
+				//then use the Code of the procedure instead of the lab code
 				adaX=Procedures.GetOneProc(
 			}
-			string adaY=y.ADACode;*/
+			string adaY=y.Code;*/
 			return ProcedureCodes.GetStringProcCode(x.CodeNum).CompareTo(ProcedureCodes.GetStringProcCode(y.CodeNum));
-			//return x.ADACode.CompareTo(y.ADACode);
-			//return 0;//priority, tooth number, and adacode are all the same
+			//return x.Code.CompareTo(y.Code);
+			//return 0;//priority, tooth number, and code are all the same
 		}
 
 	}

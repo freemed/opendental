@@ -17,7 +17,7 @@ namespace OpenDental {
 		}
 
 		private void FormLicenseToolEdit_Load(object sender,EventArgs e) {
-			textCode.Text=ProcLic.ADACode;
+			textCode.Text=ProcLic.ProcCode;
 			textDescription.Text=ProcLic.Descript;
 		}
 
@@ -39,7 +39,7 @@ namespace OpenDental {
 				MessageBox.Show("That code already exists.");
 				return;
 			}
-			ProcLic.ADACode=textCode.Text;
+			ProcLic.ProcCode=textCode.Text;
 			ProcLic.Descript=textDescription.Text;
 			ProcLicenses.Update(ProcLic);
 			DialogResult=DialogResult.OK;

@@ -19,7 +19,7 @@ namespace OpenDental{
 		///<summary></summary>
 		public bool IsNew;
 		private System.Windows.Forms.Label label1;
-		private System.Windows.Forms.TextBox textADACode;
+		private System.Windows.Forms.TextBox textCode;
 		private System.Windows.Forms.Label label2;
 		private OpenDental.ValidDouble textChargeAmt;
 		private OpenDental.ValidDate textDateStart;
@@ -71,7 +71,7 @@ namespace OpenDental{
 			this.butCancel = new OpenDental.UI.Button();
 			this.butOK = new OpenDental.UI.Button();
 			this.label1 = new System.Windows.Forms.Label();
-			this.textADACode = new System.Windows.Forms.TextBox();
+			this.textCode = new System.Windows.Forms.TextBox();
 			this.label2 = new System.Windows.Forms.Label();
 			this.textChargeAmt = new OpenDental.ValidDouble();
 			this.textDateStart = new OpenDental.ValidDate();
@@ -122,17 +122,17 @@ namespace OpenDental{
 			this.label1.Name = "label1";
 			this.label1.Size = new System.Drawing.Size(156,16);
 			this.label1.TabIndex = 2;
-			this.label1.Text = "ADA Code";
+			this.label1.Text = "Code";
 			this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
-			// textADACode
+			// textCode
 			// 
-			this.textADACode.Location = new System.Drawing.Point(162,17);
-			this.textADACode.MaxLength = 15;
-			this.textADACode.Name = "textADACode";
-			this.textADACode.ReadOnly = true;
-			this.textADACode.Size = new System.Drawing.Size(100,20);
-			this.textADACode.TabIndex = 3;
+			this.textCode.Location = new System.Drawing.Point(162,17);
+			this.textCode.MaxLength = 15;
+			this.textCode.Name = "textCode";
+			this.textCode.ReadOnly = true;
+			this.textCode.Size = new System.Drawing.Size(100,20);
+			this.textCode.TabIndex = 3;
 			// 
 			// label2
 			// 
@@ -260,7 +260,7 @@ namespace OpenDental{
 			this.Controls.Add(this.textDateStart);
 			this.Controls.Add(this.textChargeAmt);
 			this.Controls.Add(this.label2);
-			this.Controls.Add(this.textADACode);
+			this.Controls.Add(this.textCode);
 			this.Controls.Add(this.label1);
 			this.Controls.Add(this.butOK);
 			this.Controls.Add(this.butCancel);
@@ -293,10 +293,10 @@ namespace OpenDental{
 					DialogResult=DialogResult.Cancel;
 					return;
 				}
-				RepeatCur.ADACode=ProcedureCodes.GetStringProcCode(FormP.SelectedCodeNum);
+				RepeatCur.ProcCode=ProcedureCodes.GetStringProcCode(FormP.SelectedCodeNum);
 			}
-			textADACode.Text=RepeatCur.ADACode;
-			textDesc.Text=ProcedureCodes.GetProcCode(RepeatCur.ADACode).Descript;
+			textCode.Text=RepeatCur.ProcCode;
+			textDesc.Text=ProcedureCodes.GetProcCode(RepeatCur.ProcCode).Descript;
 			textChargeAmt.Text=RepeatCur.ChargeAmt.ToString("F");
 			if(RepeatCur.DateStart.Year>1880){
 				textDateStart.Text=RepeatCur.DateStart.ToShortDateString();
@@ -329,7 +329,7 @@ namespace OpenDental{
 				MsgBox.Show(this,"Start date cannot be more than a month in the past.  But you can still enter previous charges manually in the account.");
 				return;
 			}
-			RepeatCur.ADACode=textADACode.Text;
+			RepeatCur.ProcCode=textCode.Text;
 			RepeatCur.ChargeAmt=PIn.PDouble(textChargeAmt.Text);
 			RepeatCur.DateStart=PIn.PDate(textDateStart.Text);
 			RepeatCur.DateStop=PIn.PDate(textDateStop.Text);

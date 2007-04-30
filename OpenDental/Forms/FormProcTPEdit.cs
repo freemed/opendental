@@ -30,7 +30,7 @@ namespace OpenDental{
 		private System.Windows.Forms.TextBox textToothNumTP;
 		private System.Windows.Forms.ComboBox comboPriority;
 		private System.Windows.Forms.TextBox textSurf;
-		private System.Windows.Forms.TextBox textADACode;
+		private System.Windows.Forms.TextBox textCode;
 		private System.Windows.Forms.TextBox textDescript;
 		private OpenDental.ValidDouble textFeeAmt;
 		private OpenDental.ValidDouble textPriInsAmt;
@@ -86,7 +86,7 @@ namespace OpenDental{
 			this.label11 = new System.Windows.Forms.Label();
 			this.comboPriority = new System.Windows.Forms.ComboBox();
 			this.textSurf = new System.Windows.Forms.TextBox();
-			this.textADACode = new System.Windows.Forms.TextBox();
+			this.textCode = new System.Windows.Forms.TextBox();
 			this.textDescript = new System.Windows.Forms.TextBox();
 			this.textFeeAmt = new OpenDental.ValidDouble();
 			this.textPriInsAmt = new OpenDental.ValidDouble();
@@ -181,7 +181,7 @@ namespace OpenDental{
 			this.label6.Name = "label6";
 			this.label6.Size = new System.Drawing.Size(89,16);
 			this.label6.TabIndex = 12;
-			this.label6.Text = "ADA Code";
+			this.label6.Text = "Code";
 			this.label6.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// label7
@@ -244,12 +244,12 @@ namespace OpenDental{
 			this.textSurf.Size = new System.Drawing.Size(50,20);
 			this.textSurf.TabIndex = 60;
 			// 
-			// textADACode
+			// textCode
 			// 
-			this.textADACode.Location = new System.Drawing.Point(175,111);
-			this.textADACode.Name = "textADACode";
-			this.textADACode.Size = new System.Drawing.Size(77,20);
-			this.textADACode.TabIndex = 61;
+			this.textCode.Location = new System.Drawing.Point(175,111);
+			this.textCode.Name = "textCode";
+			this.textCode.Size = new System.Drawing.Size(77,20);
+			this.textCode.TabIndex = 61;
 			// 
 			// textDescript
 			// 
@@ -298,7 +298,7 @@ namespace OpenDental{
 			this.Controls.Add(this.textPriInsAmt);
 			this.Controls.Add(this.textFeeAmt);
 			this.Controls.Add(this.textDescript);
-			this.Controls.Add(this.textADACode);
+			this.Controls.Add(this.textCode);
 			this.Controls.Add(this.textSurf);
 			this.Controls.Add(this.comboPriority);
 			this.Controls.Add(this.label11);
@@ -339,7 +339,7 @@ namespace OpenDental{
 			}
 			textToothNumTP.Text=ProcCur.ToothNumTP;
 			textSurf.Text=ProcCur.Surf;
-			textADACode.Text=ProcCur.ADACode;
+			textCode.Text=ProcCur.ProcCode;
 			textDescript.Text=ProcCur.Descript;
 			textFeeAmt.Text=ProcCur.FeeAmt.ToString("F");
 			textPriInsAmt.Text=ProcCur.PriInsAmt.ToString("F");
@@ -369,7 +369,7 @@ namespace OpenDental{
 			}
 			ProcCur.ToothNumTP=textToothNumTP.Text;
 			ProcCur.Surf=textSurf.Text;
-			ProcCur.ADACode=textADACode.Text;
+			ProcCur.ProcCode=textCode.Text;
 			ProcCur.Descript=textDescript.Text;
 			ProcCur.FeeAmt=PIn.PDouble(textFeeAmt.Text);
 			ProcCur.PriInsAmt=PIn.PDouble(textPriInsAmt.Text);

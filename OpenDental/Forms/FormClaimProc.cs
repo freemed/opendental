@@ -1957,8 +1957,8 @@ namespace OpenDental
 			textWriteOff.Text=ClaimProcCur.WriteOff.ToString("n");
 			textRemarks.Text=ClaimProcCur.Remarks;
 			double amt=PIn.PDouble(textAmount.Text.ToString());
-			double priPercent=CovPats.GetPercent(Procedures.Cur.ADACode,PriSecTot.Pri);
-			double secPercent=CovPats.GetPercent(Procedures.Cur.ADACode,PriSecTot.Sec);
+			double priPercent=CovPats.GetPercent(Procedures.Cur.Code,PriSecTot.Pri);
+			double secPercent=CovPats.GetPercent(Procedures.Cur.Code,PriSecTot.Sec);
 			textPriPercent.Text=(priPercent*100).ToString();
 			textSecPercent.Text=(secPercent*100).ToString();
 			double priEst=Procedures.Cur.ProcFee*priPercent;

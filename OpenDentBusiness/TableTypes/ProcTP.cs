@@ -22,7 +22,7 @@ namespace OpenDentBusiness{
 		///<summary>Tooth surfaces or area.</summary>
 		public string Surf;
 		///<summary>Not a foreign key.  Simply display text.  Can be changed by user at any time.</summary>
-		public string ADACode;
+		public string ProcCode;
 		///<summary>Description is originally copied from procedurecode.Descript, but user can change it.</summary>
 		public string Descript;
 		///<summary>The fee charged to the patient. Never gets automatically updated.</summary>
@@ -45,7 +45,7 @@ namespace OpenDentBusiness{
 			t.Priority=Priority;
 			t.ToothNumTP=ToothNumTP;
 			t.Surf=Surf;
-			t.ADACode=ADACode;
+			t.ProcCode=ProcCode;
 			t.Descript=Descript;
 			t.FeeAmt=FeeAmt;
 			t.PriInsAmt=PriInsAmt;

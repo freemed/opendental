@@ -26,7 +26,7 @@ namespace OpenDental{
 			}
 		}
 
-		///<summary>must have already checked ADACode for nonduplicate.</summary>
+		///<summary>must have already checked procCode for nonduplicate.</summary>
 		public static void Insert(ProcButton but) {
 			string command= "INSERT INTO procbutton (Description,ItemOrder,Category,ButtonImage) VALUES("
 				+"'"+POut.PString(but.Description)+"', "

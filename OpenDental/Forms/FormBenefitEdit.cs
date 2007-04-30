@@ -12,7 +12,7 @@ using OpenDentBusiness;
 namespace OpenDental{
 	///<summary></summary>
 	public class FormBenefitEdit : System.Windows.Forms.Form{
-		private System.Windows.Forms.Label labelADACode;
+		private System.Windows.Forms.Label labelCode;
 		private System.Windows.Forms.Label labelAmount;
 		private System.Windows.Forms.Label label2;
 		private System.ComponentModel.Container components = null;// Required designer variable.
@@ -65,7 +65,7 @@ namespace OpenDental{
 
 		private void InitializeComponent(){
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormBenefitEdit));
-			this.labelADACode = new System.Windows.Forms.Label();
+			this.labelCode = new System.Windows.Forms.Label();
 			this.labelAmount = new System.Windows.Forms.Label();
 			this.label2 = new System.Windows.Forms.Label();
 			this.listCategory = new System.Windows.Forms.ListBox();
@@ -88,14 +88,14 @@ namespace OpenDental{
 			this.groupQuantity.SuspendLayout();
 			this.SuspendLayout();
 			// 
-			// labelADACode
+			// labelCode
 			// 
-			this.labelADACode.Location = new System.Drawing.Point(21,196);
-			this.labelADACode.Name = "labelADACode";
-			this.labelADACode.Size = new System.Drawing.Size(104,16);
-			this.labelADACode.TabIndex = 0;
-			this.labelADACode.Text = "or Code";
-			this.labelADACode.TextAlign = System.Drawing.ContentAlignment.TopRight;
+			this.labelCode.Location = new System.Drawing.Point(21,196);
+			this.labelCode.Name = "labelCode";
+			this.labelCode.Size = new System.Drawing.Size(104,16);
+			this.labelCode.TabIndex = 0;
+			this.labelCode.Text = "or Code";
+			this.labelCode.TextAlign = System.Drawing.ContentAlignment.TopRight;
 			// 
 			// labelAmount
 			// 
@@ -304,7 +304,7 @@ namespace OpenDental{
 			this.Controls.Add(this.butOK);
 			this.Controls.Add(this.label2);
 			this.Controls.Add(this.labelAmount);
-			this.Controls.Add(this.labelADACode);
+			this.Controls.Add(this.labelCode);
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.MaximizeBox = false;
 			this.MinimizeBox = false;
@@ -367,7 +367,7 @@ namespace OpenDental{
 				}
 			}
 			//determine if this is an annual max
-			/*if(textADACode.Text==""
+			/*if(textCode.Text==""
 				&& listType.SelectedIndex==(int)InsBenefitType.Limitations
 				&& (listTimePeriod.SelectedIndex==(int)BenefitTimePeriod.CalendarYear
 				|| listTimePeriod.SelectedIndex==(int)BenefitTimePeriod.ServiceYear)
@@ -384,8 +384,8 @@ namespace OpenDental{
 				Text=Lan.g(this,"Edit Annual Max");
 				listType.Visible=false;
 				labelType.Visible=false;
-				labelADACode.Visible=false;
-				textADACode.Visible=false;
+				labelCode.Visible=false;
+				textCode.Visible=false;
 				labelPercent.Visible=false;
 				textPercent.Visible=false;
 				groupQuantity.Visible=false;

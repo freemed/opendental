@@ -342,12 +342,12 @@ namespace OpenDental{
 		}
 
 		///<summary>Used by To3_0_1. IMPORTANT: remember that this method alters TableQ.</summary>
-		private int GetPercent(int patNum,int priPlanNum,int secPlanNum,string adaCode,string priORsec) {
+		private int GetPercent(int patNum,int priPlanNum,int secPlanNum,string procCode,string priORsec) {
 			//command="SELECT 
-			//get the covCatNum for this adaCode
+			//get the covCatNum for this Code
 			string command="SELECT CovCatNum FROM covspan "
-				+"WHERE '"+POut.PString(adaCode)+"' > FromCode "
-				+"AND '"+POut.PString(adaCode)+"' < ToCode";
+				+"WHERE '"+POut.PString(procCode)+"' > FromCode "
+				+"AND '"+POut.PString(procCode)+"' < ToCode";
 			DataTable table=General.GetTableEx(command);
 			if(table.Rows.Count==0) {
 				return 0;//this code is not in any category, so coverage=0
@@ -4453,7 +4453,13 @@ namespace OpenDental{
 					General.NonQEx(command);
 					command="UPDATE procbuttonitem SET OldCode=''";
 					General.NonQEx(command);
-
+					//added after r220
+					command="ALTER TABLE proclicense CHANGE ADACode ProcCode varchar(15)";
+					General.NonQEx(command);
+					command="ALTER TABLE proctp CHANGE ADACode ProcCode varchar(15)";
+					General.NonQEx(command);
+					command="ALTER TABLE repeatcharge CHANGE ADACode ProcCode varchar(15)";
+					General.NonQEx(command);
 				}
 				else{
 

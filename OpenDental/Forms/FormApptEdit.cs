@@ -1285,7 +1285,7 @@ namespace OpenDental{
 			for(int i=0;i<codes.Length;i++) {
 				Procedure ProcCur=new Procedure();
 				//maybe test codes in defs before allowing them in the first place(no tooth num)
-				//if(ProcCodes.GetProcCode(Procedures.Cur.ADACode). 
+				//if(ProcCodes.GetProcCode(Procedures.Cur.ProcCode). 
 				ProcCur.PatNum=AptCur.PatNum;
 				if(AptCur.AptStatus!=ApptStatus.Planned)
 					ProcCur.AptNum=AptCur.AptNum;

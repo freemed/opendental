@@ -9,7 +9,7 @@ namespace OpenDental{
 	public class RepeatCharges {
 		///<summary>Gets a list of all RepeatCharges for a given patient.  Supply 0 to get a list for all patients.</summary>
 		public static RepeatCharge[] Refresh(int patNum) {
-			string command="SELECT * from repeatcharge";
+			string command="SELECT * FROM repeatcharge";
 			if(patNum!=0) {
 				command+=" WHERE PatNum = "+POut.PInt(patNum);
 			}
@@ -20,7 +20,7 @@ namespace OpenDental{
 				List[i]=new RepeatCharge();
 				List[i].RepeatChargeNum= PIn.PInt(table.Rows[i][0].ToString());
 				List[i].PatNum         = PIn.PInt(table.Rows[i][1].ToString());
-				List[i].ADACode        = PIn.PString(table.Rows[i][2].ToString());
+				List[i].ProcCode       = PIn.PString(table.Rows[i][2].ToString());
 				List[i].ChargeAmt      = PIn.PDouble(table.Rows[i][3].ToString());
 				List[i].DateStart      = PIn.PDate(table.Rows[i][4].ToString());
 				List[i].DateStop       = PIn.PDate(table.Rows[i][5].ToString());
@@ -33,7 +33,7 @@ namespace OpenDental{
 		public static void Update(RepeatCharge charge){
 			string command="UPDATE repeatcharge SET " 
 				+"PatNum = '"    +POut.PInt   (charge.PatNum)+"'"
-				+",ADACode = '"  +POut.PString(charge.ADACode)+"'"
+				+",ProcCode = '" +POut.PString(charge.ProcCode)+"'"
 				+",ChargeAmt = '"+POut.PDouble(charge.ChargeAmt)+"'"
 				+",DateStart = "+POut.PDate  (charge.DateStart)
 				+",DateStop = " +POut.PDate  (charge.DateStop)
@@ -51,13 +51,13 @@ namespace OpenDental{
 			if(PrefB.RandomKeys){
 				command+="RepeatChargeNum,";
 			}
-			command+="PatNum,ADACode,ChargeAmt,DateStart,DateStop,Note) VALUES(";
+			command+="PatNum,ProcCode,ChargeAmt,DateStart,DateStop,Note) VALUES(";
 			if(PrefB.RandomKeys){
 				command+="'"+POut.PInt(charge.RepeatChargeNum)+"', ";
 			}
 			command+=
 				 "'"+POut.PInt   (charge.PatNum)+"', "
-				+"'"+POut.PString(charge.ADACode)+"', "
+				+"'"+POut.PString(charge.ProcCode)+"', "
 				+"'"+POut.PDouble(charge.ChargeAmt)+"', "
 				+POut.PDate  (charge.DateStart)+", "
 				+POut.PDate  (charge.DateStop)+", "
@@ -80,12 +80,12 @@ namespace OpenDental{
 
 	
 
-		///<summary>Used in FormRepeatChargesUpdate to get a list of the dates of procedures that have the adacode and patnum specified.</summary>
-		public static ArrayList GetDates(string aDACode,int patNum){
+		///<summary>Used in FormRepeatChargesUpdate to get a list of the dates of procedures that have the proccode and patnum specified.</summary>
+		public static ArrayList GetDates(string procCode,int patNum){
 			ArrayList retVal=new ArrayList();
 			string command="SELECT ProcDate FROM procedurelog "
 				+"WHERE PatNum="+POut.PInt(patNum)
-				+" AND ADACode='"+POut.PString(aDACode)
+				+" AND ProcCode='"+POut.PString(procCode)
 				+"' AND ProcStatus=2";//complete
 			DataTable table=General.GetTable(command);
 			for(int i=0;i<table.Rows.Count;i++){

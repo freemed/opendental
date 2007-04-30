@@ -23,7 +23,7 @@ namespace OpenDental{
 		private System.Windows.Forms.RadioButton radioGrouped;
 	  private FormQuery FormQuery2;
 		private Label label2;
-		private TextBox textADACode;
+		private TextBox textCode;
 		///<summary>The where clause for the providers.</summary>
 		private string whereProv;
 
@@ -63,7 +63,7 @@ namespace OpenDental{
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
 			this.radioGrouped = new System.Windows.Forms.RadioButton();
 			this.label2 = new System.Windows.Forms.Label();
-			this.textADACode = new System.Windows.Forms.TextBox();
+			this.textCode = new System.Windows.Forms.TextBox();
 			this.groupBox1.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -189,12 +189,12 @@ namespace OpenDental{
 			this.label2.Text = "Only for procedure codes simiilar to:";
 			this.label2.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
 			// 
-			// textADACode
+			// textCode
 			// 
-			this.textADACode.Location = new System.Drawing.Point(28,348);
-			this.textADACode.Name = "textADACode";
-			this.textADACode.Size = new System.Drawing.Size(100,20);
-			this.textADACode.TabIndex = 38;
+			this.textCode.Location = new System.Drawing.Point(28,348);
+			this.textCode.Name = "textCode";
+			this.textCode.Size = new System.Drawing.Size(100,20);
+			this.textCode.TabIndex = 38;
 			// 
 			// FormRpProcSheet
 			// 
@@ -202,7 +202,7 @@ namespace OpenDental{
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.CancelButton = this.butCancel;
 			this.ClientSize = new System.Drawing.Size(724,437);
-			this.Controls.Add(this.textADACode);
+			this.Controls.Add(this.textCode);
 			this.Controls.Add(this.label2);
 			this.Controls.Add(this.groupBox1);
 			this.Controls.Add(this.butAll);
@@ -283,7 +283,7 @@ namespace OpenDental{
 				+"AND procedurelog.CodeNum=procedurecode.CodeNum "
 				+"AND provider.ProvNum=procedurelog.ProvNum "
 				+"AND "+whereProv+" "
-				+"AND procedurecodc.ProcCode LIKE '%"+POut.PString(textADACode.Text)+"%' "
+				+"AND procedurecode.ProcCode LIKE '%"+POut.PString(textCode.Text)+"%' "
 				+"AND procedurelog.ProcDate >= " +POut.PDate(date1.SelectionStart)+" "
 				+"AND procedurelog.ProcDate <= " +POut.PDate(date2.SelectionStart)+" "
 				+"GROUP BY procedurelog.ProcNum "
@@ -332,7 +332,7 @@ namespace OpenDental{
 				+"AND procedurelog.CodeNum=procedurecode.CodeNum "
 				+"AND definition.DefNum=procedurecode.ProcCat "
 				+"AND "+whereProv+" "
-				+"AND procedurecode.ProcCode LIKE '%"+POut.PString(textADACode.Text)+"%' "
+				+"AND procedurecode.ProcCode LIKE '%"+POut.PString(textCode.Text)+"%' "
 				+"AND procedurelog.ProcDate >= '" + date1.SelectionStart.ToString("yyyy-MM-dd")+"' "
 				+"AND procedurelog.ProcDate <= '" + date2.SelectionStart.ToString("yyyy-MM-dd")+"' "
 				+"GROUP BY procedurecode.ProcCode "

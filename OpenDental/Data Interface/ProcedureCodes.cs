@@ -61,7 +61,7 @@ namespace OpenDental{
 
 		///<summary></summary>
 		public static void Insert(ProcedureCode code){
-			//must have already checked ADACode for nonduplicate.
+			//must have already checked procCode for nonduplicate.
 			string command="INSERT INTO procedurecode (ProcCode,descript,abbrdesc,"
 				+"proctime,proccat,treatarea,RemoveTooth,setrecall,"
 				+"nobillins,isprosth,defaultnote,ishygiene,gtypenum,alternatecode1,MedicalCode,IsTaxed,"
@@ -124,7 +124,7 @@ namespace OpenDental{
 			General.NonQ(command);
 		}
 
-		///<summary>Returns the ProcedureCode for the supplied adaCode.</summary>
+		///<summary>Returns the ProcedureCode for the supplied procCode.</summary>
 		public static ProcedureCode GetProcCode(string myCode){
 			if(myCode==null){
 				MessageBox.Show(Lan.g("ProcCodes","Error. Invalid procedure code."));
@@ -213,7 +213,7 @@ namespace OpenDental{
 			/*for(int k=0;k<tableStat.Rows.Count;k++){
 				if(PIn.PInt(tableStat.Rows[k][4].ToString())==255){
 					ProcList[i]=new ProcedureCode();
-					ProcList[i].ADACode = PIn.PString(tableStat.Rows[k][0].ToString());
+					ProcList[i].ProcCode = PIn.PString(tableStat.Rows[k][0].ToString());
 					ProcList[i].Descript= PIn.PString(tableStat.Rows[k][1].ToString());
 					ProcList[i].AbbrDesc= PIn.PString(tableStat.Rows[k][2].ToString());
 					ProcList[i].ProcCat = 255;
@@ -248,11 +248,11 @@ namespace OpenDental{
 				+"IFNULL(fee2.Amount,'-1') AS FeeAmt2, "
 				+"IFNULL(fee3.Amount,'-1') AS FeeAmt3 "
 				+"FROM procedurecode "
-				+"LEFT JOIN fee AS fee1 ON fee1.ADACode=procedurecode.ProcCode "
+				+"LEFT JOIN fee AS fee1 ON fee1.CodeNum=procedurecode.CodeNum "
 				+"AND fee1.FeeSched="+POut.PInt(feeSched)
-				+" LEFT JOIN fee AS fee2 ON fee2.ADACode=procedurecode.ProcCode "
+				+" LEFT JOIN fee AS fee2 ON fee2.CodeNum=procedurecode.CodeNum "
 				+"AND fee2.FeeSched="+POut.PInt(feeSchedComp1)
-				+" LEFT JOIN fee AS fee3 ON fee3.ADACode=procedurecode.ProcCode "
+				+" LEFT JOIN fee AS fee3 ON fee3.CodeNum=procedurecode.CodeNum "
 				+"AND fee3.FeeSched="+POut.PInt(feeSchedComp2)
 				+" WHERE "+whereCat
 				+" AND Descript LIKE '%"+POut.PString(desc)+"%' "
@@ -267,11 +267,11 @@ namespace OpenDental{
 				+"CASE WHEN (fee3.Amount IS NULL) THEN -1 ELSE fee3.Amount END AS FeeAmt3, "
 				+"procedurecode.CodeNum "
 				+"FROM procedurecode "
-				+"LEFT JOIN fee fee1 ON fee1.ADACode=procedurecode.ProcCode "
+				+"LEFT JOIN fee fee1 ON fee1.CodeNum=procedurecode.CodeNum "
 				+"AND fee1.FeeSched="+POut.PInt(feeSched)
-				+" LEFT JOIN fee fee2 ON fee2.ADACode=procedurecode.ProcCode "
+				+" LEFT JOIN fee fee2 ON fee2.CodeNum=procedurecode.CodeNum "
 				+"AND fee2.FeeSched="+POut.PInt(feeSchedComp1)
-				+" LEFT JOIN fee fee3 ON fee3.ADACode=procedurecode.ProcCode "
+				+" LEFT JOIN fee fee3 ON fee3.CodeNum=procedurecode.CodeNum "
 				+"AND fee3.FeeSched="+POut.PInt(feeSchedComp2)
 				+" WHERE "+whereCat
 				+" AND Descript LIKE '%"+POut.PString(desc)+"%' "
@@ -328,38 +328,38 @@ namespace OpenDental{
 
 		///<summary>Used by FormUpdate when converting from T codes to D codes.  It's not converting the actual codes.  It's converting the autocodes and procbuttons from T to D.</summary>
 		public static void TcodesAlter(){
-			string command="UPDATE autocodeitem SET ADACode = REPLACE(ADACode,'T','D') WHERE ADACode LIKE 'T%'";
-			General.NonQ(command);
-			command="UPDATE preference SET ValueString = REPLACE(ValueString,'T','D') "
+			//string command="UPDATE autocodeitem SET Code = REPLACE(Code,'T','D') WHERE Code LIKE 'T%'";
+			//General.NonQ(command);
+			string command="UPDATE preference SET ValueString = REPLACE(ValueString,'T','D') "
 				+"WHERE PrefName ='RecallProcedures' OR PrefName='RecallBW'";
 			General.NonQ(command);
-			command="UPDATE procbuttonitem SET ADACode = REPLACE(ADACode,'T','D') WHERE ADACode LIKE 'T%'";
-			General.NonQ(command);
+			//command="UPDATE procbuttonitem SET Code = REPLACE(Code,'T','D') WHERE Code LIKE 'T%'";
+			//General.NonQ(command);
 		}
 
 /*
-		///<summary>Checks other tables which use ADACodes elsewhere in the database and deletes codes from the procedurecode table which are not referenced in any of the other tables. This is used in FormLicenseMissing.cs.</summary>
-		public static void DeleteUnusedADACodes(){
-			//First collect the individual ADA codes currently in use from the various different tables.
-			const string ADACodePattern="^D([0-9]{4})$";
-			bool[] ADACodesUsed=new bool[10000];//All elements start out as false automatically (C# feature).
-			string command="SELECT ADACodeStart,ADACodeEnd from appointmentrule";
+		///<summary>Checks other tables which use ProcCodes elsewhere in the database and deletes codes from the procedurecode table which are not referenced in any of the other tables. This is used in FormLicenseMissing.cs.</summary>
+		public static void DeleteUnusedProcCodes(){
+			//First collect the individual proc codes currently in use from the various different tables.
+			const string CodePattern="^D([0-9]{4})$";
+			bool[] ProcCodesUsed=new bool[10000];//All elements start out as false automatically (C# feature).
+			string command="SELECT CodeStart,CodeEnd from appointmentrule";
 			DataTable table=General.GetTable(command);
 			for(int i=0;i<table.Rows.Count;i++){
-				Match mStart=(new Regex(ADACodePattern,RegexOptions.IgnoreCase)).Match(
-					PIn.PString(table.Rows[i]["ADACodeStart"].ToString()));
-				Match mEnd=(new Regex(ADACodePattern,RegexOptions.IgnoreCase)).Match(
-					PIn.PString(table.Rows[i]["ADACodeEnd"].ToString()));
+				Match mStart=(new Regex(procCodePattern,RegexOptions.IgnoreCase)).Match(
+					PIn.PString(table.Rows[i]["CodeStart"].ToString()));
+				Match mEnd=(new Regex(CodePattern,RegexOptions.IgnoreCase)).Match(
+					PIn.PString(table.Rows[i]["CodeEnd"].ToString()));
 				if(mStart.Success && mEnd.Success){
 					int startNum=Convert.ToInt32(mStart.Result("$1"));
 					int endNum=Convert.ToInt32(mEnd.Result("$1"));
 					for(int j=startNum;j<=endNum;j++){
-						ADACodesUsed[j]=true;
+						CodesUsed[j]=true;
 					}
 				}
 			}
-			//References to ADACodes which should be directly kept (as opposed to ranges shown above).
-			string[] simpleADACodeReferenceTables=new string[] {
+			//References to Codes which should be directly kept (as opposed to ranges shown above).
+			string[] simpleCodeReferenceTables=new string[] {
 				"autocodeitem",
 				"benefit",
 				"fee",
@@ -368,48 +368,48 @@ namespace OpenDental{
 				//"proctp",
 				//"repeatcharge",
 			};
-			for(int i=0;i<simpleADACodeReferenceTables.Length;i++){
-			string command="SELECT DISTINCT ADACode FROM procedurelog";
+			for(int i=0;i<simpleCodeReferenceTables.Length;i++){
+			string command="SELECT DISTINCT Code FROM procedurelog";
 			DataTable table=General.GetTable(command);
 			for(int j=0;j<table.Rows.Count;j++){
 				if(!Regex.IsMatch(PIn.PString(table.Rows[j][0].ToString()),"^D([0-9]{4})$")){
 					continue;
 				}
-					//Match m=(new Regex(ADACodePattern,RegexOptions.IgnoreCase)).Match(
-					//	PIn.PString(table.Rows[j]["ADACode"].ToString()));
+					//Match m=(new Regex(CodePattern,RegexOptions.IgnoreCase)).Match(
+					//	PIn.PString(table.Rows[j]["Code"].ToString()));
 					//if(m.Success){
-				int adanum=Convert.ToInt32(m.Result("$1"));
-				ADACodesUsed[adanum]=true;
+				int codenum=Convert.ToInt32(m.Result("$1"));
+				CodesUsed[adanum]=true;
 					//}
 				//}
 			}
-			//Now remove unused ADA codes (those marked false in the ADACodesUsed array).
+			//Now remove unused codes (those marked false in the CodesUsed array).
 			command="";
-			for(int i=0;i<ADACodesUsed.Length;i++){
-				if(!ADACodesUsed[i]){
-					string ADACode="D"+i.ToString().PadLeft(4,'0');
+			for(int i=0;i<CodesUsed.Length;i++){
+				if(!CodesUsed[i]){
+					string Code="D"+i.ToString().PadLeft(4,'0');
 					if(command==""){//We only construct the command if there are codes to be deleted.
-						command="DELETE FROM procedurecode WHERE ADACode='"+ADACode+"'";
+						command="DELETE FROM procedurecode WHERE Code='"+Code+"'";
 					}else{
-						command+=" OR ADACode='"+ADACode+"'";
+						command+=" OR Code='"+Code+"'";
 					}
 				}
 			}
 			General.NonQEx(command);
 		}
 
-		///<summary>Returns the list of all ADACodes which are in the form D####.</summary>
-		public static string[] GetAllStandardADACodes(){
-			//Get all values currently in the ADACocde column.
-			string command="SELECT ADACode from procedurecode";
+		///<summary>Returns the list of all Codes which are in the form D####.</summary>
+		public static string[] GetAllStandardCodes(){
+			//Get all values currently in the Cocde column.
+			string command="SELECT Code from procedurecode";
 			DataTable table=General.GetTableEx(command);
-			//Now weed-out values not in the actual ADA code form (D####).
+			//Now weed-out values not in the actual code form (D####).
 			ArrayList resultList=new ArrayList();
 			for(int i=0;i<table.Rows.Count;i++){
-				string ADACode=PIn.PString(table.Rows[i]["ADACode"].ToString());
-				Match m=(new Regex("^D[0-9]{4}$",RegexOptions.IgnoreCase)).Match(ADACode);
+				string Code=PIn.PString(table.Rows[i]["Code"].ToString());
+				Match m=(new Regex("^D[0-9]{4}$",RegexOptions.IgnoreCase)).Match(Code);
 				if(m.Success){
-					resultList.Add(ADACode);
+					resultList.Add(Code);
 				}
 			}
 			//Finally, convert the list into an array.

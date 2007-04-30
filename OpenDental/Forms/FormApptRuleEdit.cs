@@ -20,9 +20,9 @@ namespace OpenDental{
 		public bool IsNew;
 		private Label label1;
 		private TextBox textRuleDesc;
-		private TextBox textADACodeStart;
+		private TextBox textCodeStart;
 		private Label label2;
-		private TextBox textADACodeEnd;
+		private TextBox textCodeEnd;
 		private Label label3;
 		private CheckBox checkIsEnabled;
 		private AppointmentRule ApptRuleCur;
@@ -64,9 +64,9 @@ namespace OpenDental{
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormApptRuleEdit));
 			this.label1 = new System.Windows.Forms.Label();
 			this.textRuleDesc = new System.Windows.Forms.TextBox();
-			this.textADACodeStart = new System.Windows.Forms.TextBox();
+			this.textCodeStart = new System.Windows.Forms.TextBox();
 			this.label2 = new System.Windows.Forms.Label();
-			this.textADACodeEnd = new System.Windows.Forms.TextBox();
+			this.textCodeEnd = new System.Windows.Forms.TextBox();
 			this.label3 = new System.Windows.Forms.Label();
 			this.checkIsEnabled = new System.Windows.Forms.CheckBox();
 			this.butOK = new OpenDental.UI.Button();
@@ -107,12 +107,12 @@ namespace OpenDental{
 			this.textRuleDesc.Size = new System.Drawing.Size(297,20);
 			this.textRuleDesc.TabIndex = 0;
 			// 
-			// textADACodeStart
+			// textCodeStart
 			// 
-			this.textADACodeStart.Location = new System.Drawing.Point(125,51);
-			this.textADACodeStart.Name = "textADACodeStart";
-			this.textADACodeStart.Size = new System.Drawing.Size(113,20);
-			this.textADACodeStart.TabIndex = 1;
+			this.textCodeStart.Location = new System.Drawing.Point(125,51);
+			this.textCodeStart.Name = "textCodeStart";
+			this.textCodeStart.Size = new System.Drawing.Size(113,20);
+			this.textCodeStart.TabIndex = 1;
 			// 
 			// label2
 			// 
@@ -123,12 +123,12 @@ namespace OpenDental{
 			this.label2.Text = "Code Start";
 			this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
-			// textADACodeEnd
+			// textCodeEnd
 			// 
-			this.textADACodeEnd.Location = new System.Drawing.Point(125,77);
-			this.textADACodeEnd.Name = "textADACodeEnd";
-			this.textADACodeEnd.Size = new System.Drawing.Size(113,20);
-			this.textADACodeEnd.TabIndex = 2;
+			this.textCodeEnd.Location = new System.Drawing.Point(125,77);
+			this.textCodeEnd.Name = "textCodeEnd";
+			this.textCodeEnd.Size = new System.Drawing.Size(113,20);
+			this.textCodeEnd.TabIndex = 2;
 			// 
 			// label3
 			// 
@@ -185,9 +185,9 @@ namespace OpenDental{
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.ClientSize = new System.Drawing.Size(448,222);
 			this.Controls.Add(this.checkIsEnabled);
-			this.Controls.Add(this.textADACodeEnd);
+			this.Controls.Add(this.textCodeEnd);
 			this.Controls.Add(this.label3);
-			this.Controls.Add(this.textADACodeStart);
+			this.Controls.Add(this.textCodeStart);
 			this.Controls.Add(this.label2);
 			this.Controls.Add(this.textRuleDesc);
 			this.Controls.Add(butDelete);
@@ -210,8 +210,8 @@ namespace OpenDental{
 
 		private void FormApptRuleEdit_Load(object sender, System.EventArgs e) {
 			textRuleDesc.Text=ApptRuleCur.RuleDesc;
-			textADACodeStart.Text=ApptRuleCur.CodeStart;
-			textADACodeEnd.Text=ApptRuleCur.CodeEnd;
+			textCodeStart.Text=ApptRuleCur.CodeStart;
+			textCodeEnd.Text=ApptRuleCur.CodeEnd;
 			checkIsEnabled.Checked=ApptRuleCur.IsEnabled;
 		}
 
@@ -229,15 +229,15 @@ namespace OpenDental{
 				MsgBox.Show(this,"Description not allowed to be blank.");
 				return;
 			}
-			if(!ProcedureCodes.IsValidCode(textADACodeStart.Text)
-				|| !ProcedureCodes.IsValidCode(textADACodeEnd.Text))
+			if(!ProcedureCodes.IsValidCode(textCodeStart.Text)
+				|| !ProcedureCodes.IsValidCode(textCodeEnd.Text))
 			{
 				MsgBox.Show(this,"Start and end codes must be valid procedure codes.");
 				return;
 			}
 			ApptRuleCur.RuleDesc=textRuleDesc.Text;
-			ApptRuleCur.CodeStart=textADACodeStart.Text;
-			ApptRuleCur.CodeEnd=textADACodeEnd.Text;
+			ApptRuleCur.CodeStart=textCodeStart.Text;
+			ApptRuleCur.CodeEnd=textCodeEnd.Text;
 			ApptRuleCur.IsEnabled=checkIsEnabled.Checked;
 			if(IsNew){
 				AppointmentRules.Insert(ApptRuleCur);
