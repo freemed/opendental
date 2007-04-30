@@ -830,8 +830,10 @@ namespace OpenDental{
 			//Only physically move the node in the tree if it is changing parent folders.
 			if(curFolder!=destFolder){
 				moveDoc.DocCategory=newCategory;
+				tag["DocCategory"]=newCategory;
 				DeleteTreeDocumentNode(moveNode);
 				AddTreeDocumentNode(ref moveDoc,tag,selectMovedNode);
+				Documents.Update(moveDoc);
 			}else{//Otherwise, simply update the document in the tree.
 				moveNode.Tag=Documents.GetDocumentRow(moveDoc.DocNum.ToString());
 				moveDoc=Documents.Fill((DataRow)moveNode.Tag);
