@@ -4121,7 +4121,7 @@ namespace OpenDental{
 			To4_8_1();
 		}
 
-		///<summary>Oracle convertions work now up to this point, but fail in at least one and probably more places within this function.</summary>
+		///<summary></summary>
 		private void To4_8_1() {
 			if(FromVersion<new Version("4.8.1.0")) {
 				string command="";
@@ -4265,7 +4265,7 @@ namespace OpenDental{
 				}
 				General.NonQEx(command);
 				//Added after r180
-				if(FormChooseDatabase.DBtype==DatabaseType.MySql){
+				if(FormChooseDatabase.DBtype==DatabaseType.MySql) {
 					command="ALTER TABLE document CHANGE WithPat PatNum mediumint(8) unsigned NOT NULL default '0'";
 					General.NonQEx(command);
 					command="ALTER TABLE document ADD MountItemNum int NOT NULL";
@@ -4288,32 +4288,33 @@ namespace OpenDental{
 						PRIMARY KEY (MountItemNum)
 						) DEFAULT CHARSET=utf8";
 					General.NonQEx(command);
-				}else{//Oracle
-					command="ALTER TABLE document RENAME WithPat PatNum";
+				}
+				else {//Oracle
+					command="ALTER TABLE document RENAME COLUMN WithPat TO PatNum";//Oracle fails here.
 					General.NonQEx(command);
-					command="ALTER TABLE document ADD MountItemNum int";
+					command="ALTER TABLE document ADD (MountItemNum int NOT NULL)";
 					General.NonQEx(command);
 					command=@"CREATE TABLE mount(
-						MountNum int,
-						PatNum int,
-						DocCategory int,
-						DateCreated date default '0001-01-01',
+						MountNum int NOT NULL,
+						PatNum number(5,0) NOT NULL,
+						DocCategory number(5,0) NOT NULL,
+						DateCreated date default '0001-01-01' NOT NULL,
 						Description varchar(255) default '',
-						ImgType int unsigned NOT NULL default '0',
+						ImgType number(3,0) default '0' NOT NULL,
 						PRIMARY KEY (MountNum)
 						)";
 					General.NonQEx(command);
 					command=@"CREATE TABLE mountitem(
-						MountItemNum int,
-						MountNum int,
-						Xpos int,
-						Ypos int,
+						MountItemNum int NOT NULL,
+						MountNum int NOT NULL,
+						Xpos number(9,0) NOT NULL,
+						Ypos number(9,0) NOT NULL,
 						PRIMARY KEY (MountItemNum)
 						)";
 					General.NonQEx(command);
 				}
 				//Added after r186
-				if(FormChooseDatabase.DBtype==DatabaseType.MySql){
+				if(FormChooseDatabase.DBtype==DatabaseType.MySql) {
 					command="ALTER TABLE procedurecode ADD PreExisting tinyint(1) NOT NULL default '0'";
 					General.NonQEx(command);
 					command=@"CREATE TABLE proclicense(
@@ -4323,10 +4324,12 @@ namespace OpenDental{
 						PRIMARY KEY (ProcLicenseNum)
 						)";
 					General.NonQEx(command);
-				}else{
-					command="ALTER TABLE procedurecode ADD PreExisting int(1) NOT NULL default '0'";
+				}
+				else {//Oracle
+					command="ALTER TABLE procedurecode ADD (PreExisting number(1,0) default '0' NOT NULL)";
+					General.NonQEx(command);
 					command=@"CREATE TABLE proclicense(
-						ProcLicenseNum int(5) NOT NULL,
+						ProcLicenseNum number(5,0) NOT NULL,
 						ADACode varchar(15) default '',
 						Descript varchar(255) default '',
 						PRIMARY KEY (ProcLicenseNum)
@@ -4348,7 +4351,7 @@ namespace OpenDental{
 			if(FromVersion<new Version("4.8.3.0")) {
 				string command="DELETE FROM preference WHERE PrefName='ToothChartLowerQuality'";
 				General.NonQEx(command);
-				if(FormChooseDatabase.DBtype==DatabaseType.MySql){
+				if(FormChooseDatabase.DBtype==DatabaseType.MySql) {
 					command=@"CREATE TABLE computerpref(
 						ComputerPrefNum int NOT NULL auto_increment,
 						ComputerName varchar(64) NOT NULL,
@@ -4356,12 +4359,13 @@ namespace OpenDental{
 						GraphicsSimple tinyint(1) NOT NULL default '0',
 						PRIMARY KEY (ComputerPrefNum)
 						) DEFAULT CHARSET=utf8";
-				}else{//Assume Oracle
+				}
+				else {//Assume Oracle
 					command=@"CREATE TABLE computerpref(
 						ComputerPrefNum int NOT NULL,
 						ComputerName varchar(64) NOT NULL,
-						GraphicsUseHardware int(1) NOT NULL default '0',
-						GraphicsSimple int(1) NOT NULL default '0',
+						GraphicsUseHardware number(1,0) default '0' NOT NULL,
+						GraphicsSimple number(1,0) default '0' NOT NULL,
 						PRIMARY KEY (ComputerPrefNum)
 						)";
 				}
@@ -4369,10 +4373,30 @@ namespace OpenDental{
 				command="UPDATE preference SET ValueString = '4.8.3.0' WHERE PrefName = 'DataBaseVersion'";
 				General.NonQEx(command);
 			}
-			To4_9_0();
+			To4_8_8();
 		}
 
 		///<summary></summary>
+		private void To4_8_8() {
+			if(FromVersion<new Version("4.8.8.0")) {
+				string command;
+				if(FormChooseDatabase.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE quickpastenote CHANGE QuickPasteCatNum QuickPasteCatNum mediumint NOT NULL";
+					General.NonQEx(command);
+				}
+				else {//Oracle
+					//Cannot specify 'NOT NULL' when already not null. Additionally, not specifying 'NOT NULL' leaves
+					//the column as not null, so the following Oracle statement is equivalent the the above MySQL.
+					command="ALTER TABLE quickpastenote MODIFY (QuickPasteCatNum number(5,0))";
+					General.NonQEx(command);
+				}
+				command="UPDATE preference SET ValueString = '4.8.8.0' WHERE PrefName = 'DataBaseVersion'";
+				General.NonQEx(command);
+			}
+			To4_9_0();
+		}
+
+		///<summary>Oracle conversions work up to this point.</summary>
 		private void To4_9_0() {
 			if(FromVersion<new Version("4.9.0.0")) {
 				string command;

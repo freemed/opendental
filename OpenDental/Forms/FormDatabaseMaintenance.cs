@@ -645,6 +645,9 @@ namespace OpenDental {
 
 		private void ClaimWriteoffSum() {
 			//Sums for each claim---------------------------------------------------------------------
+			if(FormChooseDatabase.DBtype==DatabaseType.Oracle) {
+				return;
+			}
 			command=@"SELECT claim.ClaimNum,SUM(claimproc.WriteOff) sumwo,claim.WriteOff
 				FROM claim,claimproc
 				WHERE claim.ClaimNum=claimproc.ClaimNum
