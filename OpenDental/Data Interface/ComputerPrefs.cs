@@ -43,7 +43,7 @@ namespace OpenDental {
 		///<summary>Inserts the given preference and ensures that the primary key is properly set.</summary>
 		public static void Insert(ComputerPref computerPref){
 			if(PrefB.RandomKeys) {
-				computerPref.ComputerPrefNum=MiscData.GetKey("computerprefs","ComputerPrefNum");
+				computerPref.ComputerPrefNum=MiscData.GetKey("computerpref","ComputerPrefNum");
 			}
 			string command="INSERT INTO computerpref (";
 			if(PrefB.RandomKeys){

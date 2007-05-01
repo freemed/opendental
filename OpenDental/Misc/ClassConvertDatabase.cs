@@ -70,7 +70,9 @@ namespace OpenDental{
 				return false;
 			}
 			try{
-				MiscData.MakeABackup();
+				if(FormChooseDatabase.DBtype==DatabaseType.MySql){
+					MiscData.MakeABackup();//Does not work for Oracle, due to some MySQL specific commands inside.
+				}
 			}
 			catch(Exception e){
 				if(e.Message!=""){
@@ -4123,7 +4125,6 @@ namespace OpenDental{
 		private void To4_8_1() {
 			if(FromVersion<new Version("4.8.1.0")) {
 				string command="";
-				//To eliminate problems for Oracle upgrade:
 				int practiceDefaultProv=PrefB.GetInt("PracticeDefaultProv");
 				if(FormChooseDatabase.DBtype==DatabaseType.MySql) {
 					//Turn all hardcoded clearinghouse fields into dynamic fields---------------------------------------------------------
@@ -4135,8 +4136,6 @@ namespace OpenDental{
 					General.NonQEx(command);
 					command="ALTER TABLE clearinghouse ADD SenderTIN varchar(255) AFTER ISA05";
 					General.NonQEx(command);
-					//Moved the following line up, out of the if statement, for a clean build.
-					//int practiceDefaultProv=PrefB.GetInt("PracticeDefaultProv");
 					command="SELECT SSN FROM provider WHERE ProvNum="+POut.PInt(practiceDefaultProv);
 					string defProvSSN=General.GetTableEx(command).Rows[0][0].ToString().Replace("-","");
 					command="UPDATE clearinghouse SET SenderTIN='"+POut.PString(defProvSSN)+"' "
@@ -4148,24 +4147,12 @@ namespace OpenDental{
 					General.NonQEx(command);
 					command="UPDATE clearinghouse SET ISA07='ZZ' WHERE ReceiverID!='330989922' AND ReceiverID!='660610220' AND ReceiverID!='AOS'";
 					General.NonQEx(command);
-				}else{
-					//TODO:
-				}
-				if(FormChooseDatabase.DBtype==DatabaseType.MySql) {
 					command="ALTER TABLE clearinghouse CHANGE ReceiverID ISA08 varchar(255)";
 					General.NonQEx(command);
-				//}
-				//else{//oracle.  Is this valid?:
-				//    //command="ALTER TABLE clearinghouse RENAME ReceiverID ISA08";
-				//    //This should work but, because of other syntax errors, the table must be dropped and recreated.
-				//    command="ALTER TABLE clearinghouse RENAME COLUMN ReceiverID TO ISA08";
-				//    General.NonQEx(command);
-				//}
 					command="ALTER TABLE clearinghouse ADD ISA15 varchar(255) AFTER ISA08";
 					General.NonQEx(command);
 					command="UPDATE clearinghouse SET ISA15='P'";
 					General.NonQEx(command);
-					//Is this valid for Oracle?:
 					command="ALTER TABLE clearinghouse DROP SenderID";
 					General.NonQEx(command);
 					command="ALTER TABLE clearinghouse ADD SenderName varchar(255)";
@@ -4187,6 +4174,38 @@ namespace OpenDental{
 					command="UPDATE clearinghouse SET GS03=ISA08";
 					General.NonQEx(command);
 				}
+				else {//Oracle
+					//Recreate clearinghouse table from scratch. The data in this table is not likely to be important, and 
+					//can always be added again through the program. Recreating the table is easier than trying to mimic the
+					//above dozen or so mysql statements.
+					command="DROP TABLE clearinghouse PURGE";
+					General.NonQEx(command);
+					command="CREATE TABLE clearinghouse("
+						+"ClearinghouseNum number(8,0) NOT NULL,"
+						+"Description varchar(255) default '',"
+						+"ExportPath varchar2(4000),"
+						+"IsDefault number(1,0) default '0' NOT NULL,"
+						+"Payors varchar2(4000),"
+						+"Eformat number(3,0) default '0' NOT NULL,"
+						+"ISA05 varchar(255) default NULL,"
+						+"SenderTIN varchar(255) default NULL,"
+						+"ISA07 varchar(255) default NULL,"
+						+"ISA08 varchar(255) default NULL,"
+						+"ISA15 varchar(255) default NULL,"
+						+"Password varchar(255) default '',"
+						+"ResponsePath varchar(255) default '',"
+						+"CommBridge number(3,0) default '0' NOT NULL,"
+						+"ClientProgram varchar(255) default '',"
+						+"LastBatchNumber number(5,0) default '0' NOT NULL,"
+						+"ModemPort number(3,0) default '0' NOT NULL,"
+						+"LoginID varchar(255) default '',"
+						+"SenderName varchar(255) default NULL,"
+						+"SenderTelephone varchar(255) default NULL,"
+						+"GS03 varchar(255) default NULL"
+						+",PRIMARY KEY (ClearinghouseNum)"
+						+");";
+					General.NonQEx(command);
+				}
 				//added after r167:
 				if(FormChooseDatabase.DBtype==DatabaseType.MySql) {
 					command="DROP TABLE IF EXISTS laboratory";
@@ -4200,24 +4219,15 @@ namespace OpenDental{
 						PRIMARY KEY (LaboratoryNum)
 						) DEFAULT CHARSET=utf8";
 				}
-				else {
-//                    command=@"CREATE TABLE laboratory(
-//						LaboratoryNum int NOT NULL,
-//						Description varchar(255),
-//						Phone varchar(255),
-//						Notes text,
-//						LabSlip text,
-//						PRIMARY KEY (LaboratoryNum)
-//						)";
+				else {//Oracle.
 					command=@"CREATE TABLE laboratory(
 						LaboratoryNum number(8,0) NOT NULL,
 						Description varchar(255),
 						Phone varchar(255),
 						Notes varchar2(4000),
-						LabSlip varchar2(4000)
-						);
-						ALTER TABLE laboratory
-						ADD CONSTRAINT pk_laboratory PRIMARY KEY (LaboratoryNum);";
+						LabSlip varchar2(4000),
+						PRIMARY KEY(LaboratoryNum)
+						)";
 				}
 				General.NonQEx(command);
 				//added after r168:
@@ -4238,38 +4248,20 @@ namespace OpenDental{
 						PRIMARY KEY (LabCaseNum)
 						) DEFAULT CHARSET=utf8";
 				}
-				else {
-//                    command=@"CREATE TABLE labcase(
-//						LabCaseNum int NOT NULL,
-//						PatNum int NOT NULL,
-//						LaboratoryNum int NOT NULL,
-//						AptNum int NOT NULL,
-//						PlannedAptNum int NOT NULL,
-//						DateTimeDue date NOT NULL default '0001-01-01',
-//						DateTimeCreated date NOT NULL default '0001-01-01',
-//						DateTimeSent date NOT NULL default '0001-01-01',
-//						DateTimeRecd date NOT NULL default '0001-01-01',
-//						DateTimeChecked date NOT NULL default '0001-01-01',
-//						PRIMARY KEY (LabCaseNum)
-//						)";
+				else {//Oracle.
 					command=@"CREATE TABLE labcase(
 						LabCaseNum number(8,0) NOT NULL,
 						PatNum number(8,0) NOT NULL,
 						LaboratoryNum number(8,0) NOT NULL,
 						AptNum number(8,0) NOT NULL,
 						PlannedAptNum number(8,0) NOT NULL,
-						DateTimeDue date NOT NULL,
-						DateTimeCreated date NOT NULL,
-						DateTimeSent date NOT NULL,
-						DateTimeRecd date NOT NULL,
-						DateTimeChecked date NOT NULL);
-						ALTER TABLE labcase
-						ADD CONSTRAINT pk_labcase PRIMARY KEY (LabCaseNum);
-						alter table labcase modify DateTimeDue default '01-JAN-0001';
-						alter table labcase modify DateTimeCreated default '01-JAN-0001';
-						alter table labcase modify DateTimeSent default '01-JAN-0001';
-						alter table labcase modify DateTimeRecd default '01-JAN-0001';
-						alter table labcase modify DateTimeChecked default '01-JAN-0001';";
+						DateTimeDue date default '0001-01-01' NOT NULL,
+						DateTimeCreated date default '0001-01-01' NOT NULL,
+						DateTimeSent date default '0001-01-01' NOT NULL,
+						DateTimeRecd date default '0001-01-01' NOT NULL,
+						DateTimeChecked date default '0001-01-01' NOT NULL,
+						PRIMARY KEY(LabCaseNum)
+						)";
 				}
 				General.NonQEx(command);
 				//Added after r180
