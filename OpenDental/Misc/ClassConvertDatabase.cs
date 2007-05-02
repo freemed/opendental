@@ -4478,7 +4478,93 @@ namespace OpenDental{
 					General.NonQEx(command);
 				}
 				else{
+					//this column will be the new primary key
+					/*command="ALTER TABLE procedurecode ADD CodeNum number(5,0) default '0' NOT NULL";
+					General.NonQEx(command);
+					command="ALTER TABLE procedurecode DROP PRIMARY KEY";
+					General.NonQEx(command);
+					command="ALTER TABLE procedurecode ADD PRIMARY KEY (CodeNum)";
+					General.NonQEx(command);
+					command="ALTER TABLE procedurecode MODIFY (CodeNum number(5,0) NOT NULL)";
+					General.NonQEx(command);
+					command="ALTER TABLE procedurecode RENAME ADACode TO ProcCode";
+					General.NonQEx(command);
+					command="ALTER TABLE procedurecode MODIFY (ProcCode varchar(15) character set utf8 collate utf8_bin default ''";
+					General.NonQEx(command);
+					command="ALTER TABLE procedurecode ADD INDEX (ProcCode)";
+					General.NonQEx(command);
+					command="ALTER TABLE procedurelog ADD CodeNum number(5,0) NOT NULL";
+					General.NonQEx(command);
+					//this is written in such a way as to be compatible with Oracle.
+					command="UPDATE procedurelog SET procedurelog.CodeNum= (SELECT procedurecode.CodeNum FROM procedurecode WHERE procedurecode.ProcCode=procedurelog.ADACode)";
+					General.NonQEx(command);
 
+
+
+
+
+
+
+					command="ALTER TABLE procedurelog CHANGE ADACode OldCode varchar(15)";
+					General.NonQEx(command);
+					//added after r215
+					command="UPDATE procedurelog SET OldCode=''";
+					General.NonQEx(command);
+					command="ALTER TABLE fee CHANGE ADACode OldCode varchar(15)";
+					General.NonQEx(command);
+					command="ALTER TABLE fee ADD CodeNum mediumint NOT NULL";
+					General.NonQEx(command);
+					command="UPDATE fee SET fee.CodeNum= (SELECT procedurecode.CodeNum FROM procedurecode WHERE procedurecode.ProcCode=fee.OldCode)";
+					General.NonQEx(command);
+					command="UPDATE fee SET OldCode=''";
+					General.NonQEx(command);
+					//added after r216
+					command="ALTER TABLE appointmentrule CHANGE ADACodeStart CodeStart varchar(15)";
+					General.NonQEx(command);
+					command="ALTER TABLE appointmentrule CHANGE ADACodeEnd CodeEnd varchar(15)";
+					General.NonQEx(command);
+					//added after r217
+					command="ALTER TABLE autocodeitem CHANGE ADACode OldCode varchar(15)";
+					General.NonQEx(command);
+					command="ALTER TABLE autocodeitem ADD CodeNum mediumint NOT NULL";
+					General.NonQEx(command);
+					command="UPDATE autocodeitem SET autocodeitem.CodeNum= (SELECT procedurecode.CodeNum FROM procedurecode WHERE procedurecode.ProcCode=autocodeitem.OldCode)";
+					General.NonQEx(command);
+					command="UPDATE autocodeitem SET OldCode=''";
+					General.NonQEx(command);
+					//added after r218
+					command="ALTER TABLE benefit CHANGE ADACode OldCode varchar(15)";
+					General.NonQEx(command);
+					command="ALTER TABLE benefit ADD CodeNum mediumint NOT NULL";
+					General.NonQEx(command);
+					command="UPDATE benefit SET benefit.CodeNum= (SELECT procedurecode.CodeNum FROM procedurecode WHERE procedurecode.ProcCode=benefit.OldCode)";
+					General.NonQEx(command);
+					command="UPDATE benefit SET OldCode=''";
+					General.NonQEx(command);
+					command="DELETE FROM procedurecode WHERE ProcCode=''";
+					General.NonQEx(command);
+					command="UPDATE benefit SET CodeNum=0 WHERE NOT EXISTS(SELECT * FROM procedurecode WHERE "
+						+"benefit.CodeNum=procedurecode.CodeNum)";
+					General.NonQEx(command);
+					command="DELETE FROM procedurelog WHERE NOT EXISTS(SELECT * FROM procedurecode WHERE "
+						+"procedurelog.CodeNum=procedurecode.CodeNum)";
+					General.NonQEx(command);
+					//added after r219
+					command="ALTER TABLE procbuttonitem CHANGE ADACode OldCode varchar(15)";
+					General.NonQEx(command);
+					command="ALTER TABLE procbuttonitem ADD CodeNum mediumint NOT NULL";
+					General.NonQEx(command);
+					command="UPDATE procbuttonitem SET procbuttonitem.CodeNum= (SELECT procedurecode.CodeNum FROM procedurecode WHERE procedurecode.ProcCode=procbuttonitem.OldCode)";
+					General.NonQEx(command);
+					command="UPDATE procbuttonitem SET OldCode=''";
+					General.NonQEx(command);
+					//added after r220
+					command="ALTER TABLE proclicense CHANGE ADACode ProcCode varchar(15)";
+					General.NonQEx(command);
+					command="ALTER TABLE proctp CHANGE ADACode ProcCode varchar(15)";
+					General.NonQEx(command);
+					command="ALTER TABLE repeatcharge CHANGE ADACode ProcCode varchar(15)";
+					General.NonQEx(command);*/
 				}
 				command="UPDATE preference SET ValueString = '4.9.0.0' WHERE PrefName = 'DataBaseVersion'";
 				General.NonQEx(command);

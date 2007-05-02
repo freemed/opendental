@@ -430,7 +430,7 @@ namespace OpenDental {
 				"printer","PrinterNum",
 				"procbutton","ProcButtonNum",
 				"procbuttonitem","ProcButtonItemNum",
-				//procedurecode: has no auto-inc col.
+				"procedurecode","CodeNum",
 				"procedurelog","ProcNum",
 				"proclicense","ProcLicenseNum",
 				"procnote","ProcNoteNum",
