@@ -858,6 +858,9 @@
     <Compile Include="Forms\FormProcSelect.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Forms\FormProcTools.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Forms\FormProcTPEdit.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -1891,6 +1894,10 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormProcSelect.resx">
       <DependentUpon>FormProcSelect.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormProcTools.resx">
+      <DependentUpon>FormProcTools.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormProcTPEdit.resx">

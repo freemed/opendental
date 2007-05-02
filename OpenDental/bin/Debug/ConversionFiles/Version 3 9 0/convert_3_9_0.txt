@@ -15,7 +15,7 @@ CREATE TABLE repeatcharge(
 
 CREATE TABLE patplan(
   PatPlanNum mediumint unsigned NOT NULL auto_increment,
-  PatNum mediumint unsigned NOT NULL,
+  PatNum int NOT NULL,
   PlanNum mediumint unsigned NOT NULL,
   Ordinal tinyint unsigned NOT NULL,
   IsPending tinyint unsigned NOT NULL,

@@ -52,6 +52,8 @@ namespace OpenDental{
 		private ComboBox comboCompare2;
 		private OpenDental.UI.Button butImport;
 		private OpenDental.UI.Button butExport;
+		private GroupBox groupProcCodeSetup;
+		private OpenDental.UI.Button butProcTools;
 		///<summary>The list of definitions that is currently showing in the category list.</summary>
 		private Def[] CatList;
 
@@ -101,8 +103,11 @@ namespace OpenDental{
 			this.butOK = new OpenDental.UI.Button();
 			this.butImport = new OpenDental.UI.Button();
 			this.butExport = new OpenDental.UI.Button();
+			this.groupProcCodeSetup = new System.Windows.Forms.GroupBox();
+			this.butProcTools = new OpenDental.UI.Button();
 			this.groupFeeScheds.SuspendLayout();
 			this.groupBox1.SuspendLayout();
+			this.groupProcCodeSetup.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// listFeeSched
@@ -348,11 +353,11 @@ namespace OpenDental{
 			this.butNew.CornerRadius = 4F;
 			this.butNew.Image = global::OpenDental.Properties.Resources.Add;
 			this.butNew.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butNew.Location = new System.Drawing.Point(79,656);
+			this.butNew.Location = new System.Drawing.Point(90,57);
 			this.butNew.Name = "butNew";
-			this.butNew.Size = new System.Drawing.Size(102,26);
+			this.butNew.Size = new System.Drawing.Size(80,26);
 			this.butNew.TabIndex = 0;
-			this.butNew.Text = "&New Code";
+			this.butNew.Text = "&New";
 			this.butNew.Click += new System.EventHandler(this.butNew_Click);
 			// 
 			// butCancel
@@ -394,9 +399,9 @@ namespace OpenDental{
 			this.butImport.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butImport.CornerRadius = 4F;
 			this.butImport.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butImport.Location = new System.Drawing.Point(98,624);
+			this.butImport.Location = new System.Drawing.Point(6,19);
 			this.butImport.Name = "butImport";
-			this.butImport.Size = new System.Drawing.Size(83,26);
+			this.butImport.Size = new System.Drawing.Size(80,26);
 			this.butImport.TabIndex = 23;
 			this.butImport.Text = "Import";
 			this.butImport.Click += new System.EventHandler(this.butImport_Click);
@@ -410,19 +415,46 @@ namespace OpenDental{
 			this.butExport.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butExport.CornerRadius = 4F;
 			this.butExport.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butExport.Location = new System.Drawing.Point(98,592);
+			this.butExport.Location = new System.Drawing.Point(90,19);
 			this.butExport.Name = "butExport";
-			this.butExport.Size = new System.Drawing.Size(83,26);
+			this.butExport.Size = new System.Drawing.Size(80,26);
 			this.butExport.TabIndex = 24;
 			this.butExport.Text = "Export";
 			this.butExport.Click += new System.EventHandler(this.butExport_Click);
+			// 
+			// groupProcCodeSetup
+			// 
+			this.groupProcCodeSetup.Controls.Add(this.butProcTools);
+			this.groupProcCodeSetup.Controls.Add(this.butImport);
+			this.groupProcCodeSetup.Controls.Add(this.butExport);
+			this.groupProcCodeSetup.Controls.Add(this.butNew);
+			this.groupProcCodeSetup.Location = new System.Drawing.Point(6,591);
+			this.groupProcCodeSetup.Name = "groupProcCodeSetup";
+			this.groupProcCodeSetup.Size = new System.Drawing.Size(175,91);
+			this.groupProcCodeSetup.TabIndex = 26;
+			this.groupProcCodeSetup.TabStop = false;
+			this.groupProcCodeSetup.Text = "Procedure Codes";
+			// 
+			// butProcTools
+			// 
+			this.butProcTools.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butProcTools.Autosize = true;
+			this.butProcTools.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butProcTools.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butProcTools.CornerRadius = 4F;
+			this.butProcTools.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butProcTools.Location = new System.Drawing.Point(6,57);
+			this.butProcTools.Name = "butProcTools";
+			this.butProcTools.Size = new System.Drawing.Size(80,26);
+			this.butProcTools.TabIndex = 25;
+			this.butProcTools.Text = "Tools";
+			this.butProcTools.Click += new System.EventHandler(this.butProcTools_Click);
 			// 
 			// FormProcCodes
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.ClientSize = new System.Drawing.Size(956,695);
-			this.Controls.Add(this.butExport);
-			this.Controls.Add(this.butImport);
+			this.Controls.Add(this.groupProcCodeSetup);
 			this.Controls.Add(this.listFeeSched);
 			this.Controls.Add(this.comboCompare2);
 			this.Controls.Add(this.label5);
@@ -430,7 +462,6 @@ namespace OpenDental{
 			this.Controls.Add(this.gridMain);
 			this.Controls.Add(this.groupBox1);
 			this.Controls.Add(this.groupFeeScheds);
-			this.Controls.Add(this.butNew);
 			this.Controls.Add(this.labelFeeSched);
 			this.Controls.Add(this.butCancel);
 			this.Controls.Add(this.butOK);
@@ -444,6 +475,7 @@ namespace OpenDental{
 			this.groupFeeScheds.ResumeLayout(false);
 			this.groupBox1.ResumeLayout(false);
 			this.groupBox1.PerformLayout();
+			this.groupProcCodeSetup.ResumeLayout(false);
 			this.ResumeLayout(false);
 
 		}
@@ -805,6 +837,14 @@ namespace OpenDental{
 			return retVal;
 		}
 
+		private void butProcTools_Click(object sender,EventArgs e) {
+			FormProcTools FormP=new FormProcTools();
+			FormP.ShowDialog();
+			if(FormP.Changed) {
+				changed=true;
+				FillGrid();
+			}
+		}
 
 		private void butNew_Click(object sender, System.EventArgs e) {
 			//won't be visible if no permission
@@ -897,6 +937,8 @@ namespace OpenDental{
 				DataValid.SetInvalid(InvalidTypes.ProcCodes | InvalidTypes.Fees);
 			}
 		}
+
+		
 
 		
 

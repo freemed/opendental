@@ -222,7 +222,7 @@ namespace OpenDental.Eclaims
 						+Sout(clearhouse.Description,35,1)+"*"//NM103:Receiver Name
 						+"****"//NM104-NM107 not used since not a person
 						+"46*"//NM108: 46 indicates ETIN
-						+Sout(clearhouse.ISA08,2,80)+"~");//NM109: Receiver ID Code. aka ETIN#.
+						+Sout(clearhouse.ISA08,80,2)+"~");//NM109: Receiver ID Code. aka ETIN#.
 					HLcount=1;
 					parentProv=0;//the HL sequence # of the current provider.
 					parentSubsc=0;//the HL sequence # of the current subscriber.

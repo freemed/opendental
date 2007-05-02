@@ -82,12 +82,12 @@ namespace OpenDental {
 				if(alreadyAdded){
 					continue;
 				}
-				if(ProcedureCodes.GetProcCode(proccode).AbbrDesc==""){
-					comment=proccode;
-				}
-				else{
-					comment=ProcedureCodes.GetProcCode(proccode).AbbrDesc;
-				}
+				//if(ProcedureCodes.GetProcCode(proccode).AbbrDesc==""){
+					comment=proccode+" ";
+				//}
+				//else{
+					comment+=ProcedureCodes.GetProcCode(proccode).AbbrDesc;
+				//}
 				comment+=" used by "
 					+Patients.GetLim(PIn.PInt(table.Rows[i][1].ToString())).GetNameLF()+" on "
 					+PIn.PDate(table.Rows[i][2].ToString()).ToShortDateString();
@@ -113,12 +113,12 @@ namespace OpenDental {
 				if(alreadyAdded) {
 					continue;
 				}
-				if(ProcedureCodes.GetProcCode(proccode).AbbrDesc==""){
-					comment=proccode;
-				}
-				else{
-					comment=ProcedureCodes.GetProcCode(proccode).AbbrDesc;
-				}
+				//if(ProcedureCodes.GetProcCode(proccode).AbbrDesc==""){
+					comment=proccode+" ";
+				//}
+				//else{
+					comment+=ProcedureCodes.GetProcCode(proccode).AbbrDesc;
+				//}
 				comment+=" used in a fee schedule.";
 				retVal.Add(comment);
 			}

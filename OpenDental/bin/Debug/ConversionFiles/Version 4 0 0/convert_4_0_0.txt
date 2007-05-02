@@ -1,6 +1,6 @@
 CREATE TABLE benefit(
   BenefitNum mediumint unsigned NOT NULL auto_increment,
-  PlanNum mediumint unsigned NOT NULL,
+  PlanNum int NOT NULL,
   PatPlanNum mediumint unsigned NOT NULL,
   CovCatNum mediumint unsigned NOT NULL,
   ADACode varchar(15) character set utf8 collate utf8_bin NOT NULL default '',

@@ -27,18 +27,18 @@ namespace OpenDental {
 		}
 
 		private void okbutton_Click(object sender,EventArgs e) {
-			if(!Regex.IsMatch(textCode.Text,"^D[0-9]{4}$")) {
-				MessageBox.Show("Code must be in the form D####.");
-				return;
-			}
+			//if(!Regex.IsMatch(textCode.Text,"^D[0-9]{4}$")) {
+			//	MessageBox.Show("Code must be in the form D####.");
+			//	return;
+			//}
 			if(textDescription.Text.Length<1) {
 				MessageBox.Show("Description must be specified.");
 				return;
 			}
-			if(!ProcLicenses.IsUniqueCode(textCode.Text)) {
-				MessageBox.Show("That code already exists.");
-				return;
-			}
+			//if(!ProcLicenses.IsUniqueCode(textCode.Text)) {
+			//	MessageBox.Show("That code already exists.");
+			//	return;
+			//}
 			ProcLic.ProcCode=textCode.Text;
 			ProcLic.Descript=textDescription.Text;
 			ProcLicenses.Update(ProcLic);

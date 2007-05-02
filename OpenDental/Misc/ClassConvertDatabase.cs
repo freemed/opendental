@@ -2056,9 +2056,9 @@ namespace OpenDental{
 
 		private void To3_9_6() {
 			if(FromVersion < new Version("3.9.6.0")) {
-				string command="ALTER TABLE referral CHANGE PatNum PatNum mediumint unsigned NOT NULL";
+				string command="ALTER TABLE referral CHANGE PatNum PatNum int NOT NULL";
 				General.NonQEx(command);
-				command="ALTER TABLE refattach CHANGE PatNum PatNum mediumint unsigned NOT NULL";
+				command="ALTER TABLE refattach CHANGE PatNum PatNum int NOT NULL";
 				General.NonQEx(command);
 				command="UPDATE preference SET ValueString = '3.9.6.0' WHERE PrefName = 'DataBaseVersion'";
 				General.NonQEx(command);

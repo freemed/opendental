@@ -324,7 +324,7 @@ namespace OpenDental{
 					+" WHERE ProcCat="+table.Rows[i][0].ToString();
 				General.NonQ(command);
 			}			
-		}	
+		}
 
 		///<summary>Used by FormUpdate when converting from T codes to D codes.  It's not converting the actual codes.  It's converting the autocodes and procbuttons from T to D.</summary>
 		public static void TcodesAlter(){
@@ -337,6 +337,29 @@ namespace OpenDental{
 			//General.NonQ(command);
 		}
 
+		///<summary>Deletes unused codes.  Returns the number of rows affected.</summary>
+		public static int DeleteUnusedCodes() {
+			string command=@"SELECT DISTINCT procedurecode.ADACode FROM procedurecode
+				LEFT JOIN procedurelog ON procedurelog.ADACode=procedurecode.ADACode
+				WHERE procedurelog.ADACode IS NULL";
+			DataTable table=General.GetTable(command);
+			string adacode;
+			int rowsaffected=0;
+			for(int i=0;i<table.Rows.Count;i++) {
+				adacode=PIn.PString(table.Rows[i]["ADACode"].ToString());
+				if(!Regex.IsMatch(adacode,"^D([0-9]{4})$")) {
+					continue;//ignore anything but D####
+				}
+				//make sure it's not used in fees
+				command="SELECT COUNT(*) FROM fee WHERE ADACode='"+POut.PString(adacode)+"'";
+				if(General.GetCount(command)!="0") {
+					continue;
+				}
+				command="DELETE FROM procedurecode WHERE ADACode='"+POut.PString(adacode)+"'";
+				rowsaffected+=General.NonQ(command);
+			}
+			return rowsaffected;
+		}
 /*
 		///<summary>Checks other tables which use ProcCodes elsewhere in the database and deletes codes from the procedurecode table which are not referenced in any of the other tables. This is used in FormLicenseMissing.cs.</summary>
 		public static void DeleteUnusedProcCodes(){
