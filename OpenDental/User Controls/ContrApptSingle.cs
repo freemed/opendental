@@ -33,6 +33,7 @@ namespace OpenDental{
 		public Bitmap Shadow;
 		private Font baseFont=new Font("Arial",8);
 		private string patternShowing;
+		public bool isWeeklyView;
 
 		///<summary></summary>
 		public ContrApptSingle(){
@@ -102,8 +103,14 @@ namespace OpenDental{
 		
 		///<summary>Called from SetLocation to establish X position of control.</summary>
 		private int ConvertToX(){
-			return ContrApptSheet.TimeWidth+ContrApptSheet.ProvWidth*ContrApptSheet.ProvCount
-				+ContrApptSheet.ColWidth*(ApptViewItems.GetIndexOp(Info.MyApt.Op))+1;
+			if(isWeeklyView) {
+				return ContrApptSheet.TimeWidth+ContrApptSheet.ProvWidth*ContrApptSheet.ProvCount
+					+ContrApptSheet.ColWidth*((int)Info.MyApt.AptDateTime.DayOfWeek-1)+1;
+			}
+			else {
+				return ContrApptSheet.TimeWidth+ContrApptSheet.ProvWidth*ContrApptSheet.ProvCount
+					+ContrApptSheet.ColWidth*(ApptViewItems.GetIndexOp(Info.MyApt.Op))+1;
+			}
 		}
 
 		///<summary>Called from SetLocation to establish Y position of control.  Also called from ContrAppt.RefreshDay when determining provBar markings. Does not round to the nearest row.</summary>
@@ -140,6 +147,14 @@ namespace OpenDental{
 
 		///<summary>It is planned to move some of this logic to OnPaint and use a true double buffer.</summary>
 		public void CreateShadow(){
+			if(this.Parent is ContrApptSheet) {
+				bool isVisible=false;
+				for(int j=0;j<ApptViewItems.VisOps.Length;j++)
+					if(this.Info.MyApt.Op==Operatories.ListShort[ApptViewItems.VisOps[j]].OperatoryNum)
+						isVisible=true;
+				if(!isVisible)
+					return;
+			}
 			if(Shadow!=null){
 				Shadow=null;
 			}

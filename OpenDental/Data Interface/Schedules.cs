@@ -38,6 +38,14 @@ namespace OpenDental{
 			return RefreshAndFill(command);
 		}
 
+		///<summary>Called every time the period is refreshed or changed in Appointments module.  Gets the data directly from the database.</summary>
+		public static Schedule[] RefreshPeriod(DateTime startDate,DateTime endDate) {
+			string command="SELECT * FROM schedule WHERE SchedDate BETWEEN '"
+				+POut.PDate(startDate,false)+"' AND '"+POut.PDate(endDate.AddDays(1),false)+"'"
+				+" ORDER BY starttime";
+			return RefreshAndFill(command);
+		}
+
 		///<summary>Used in the check database integrity tool.</summary>
 		public static Schedule[] RefreshAll() {
 			string command="SELECT * FROM schedule";

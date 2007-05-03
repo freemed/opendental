@@ -15,12 +15,12 @@ namespace OpenDental{
 		///<summary>The date currently selected in the appointment module.</summary>
 		public static DateTime DateSelected;
 
-		///<summary>Gets a list of appointments for one day in the schedule, whether hidden or not.</summary>
-		public static Appointment[] Refresh(DateTime thisDay) {
-			DateSelected = thisDay;
+		///<summary>Gets a list of appointments for a period of time in the schedule, whether hidden or not.</summary>
+		public static Appointment[] GetForPeriod(DateTime startDate,DateTime endDate){
+			//DateSelected = thisDay;
 			string command=
 				"SELECT * from appointment "
-				+"WHERE AptDateTime LIKE '"+POut.PDate(thisDay,false)+"%' "
+				+"WHERE AptDateTime BETWEEN '"+POut.PDate(startDate,false)+"' AND '"+POut.PDate(endDate.AddDays(1),false)+"'"
 				+"AND aptstatus != '"+(int)ApptStatus.UnschedList+"' "
 				+"AND aptstatus != '"+(int)ApptStatus.Planned+"'";
 			return FillList(command);
@@ -491,7 +491,7 @@ namespace OpenDental{
 					provBarSched[i]=new bool[24*ContrApptSheet.RowsPerHr];
 				}
 				//get appointments for one day
-				aptList=Refresh(dayEvaluating);
+				aptList=GetForPeriod(dayEvaluating,dayEvaluating);
 				//fill provBar
 				for(int i=0;i<aptList.Length;i++){
 					if(aptList[i].IsHygiene){

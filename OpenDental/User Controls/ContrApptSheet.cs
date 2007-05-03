@@ -48,6 +48,7 @@ namespace OpenDental{
     private SolidBrush holidayBrush;
 		///<summary>This gets set externally each time the module is selected.  It is the background schedule for the entire day.  Includes all types.</summary>
 		public Schedule[] SchedListDay;
+		public bool isWeeklyView;
 
 		///<summary></summary>
 		public ContrApptSheet(){
@@ -222,8 +223,10 @@ namespace OpenDental{
 			}
 			DrawMainBackground(g);
 			DrawBlockouts(g);
-			DrawProvSchedInTimebar(g);
-			DrawProvTimebar(g);
+			if(!isWeeklyView){
+				DrawProvSchedInTimebar(g);
+				DrawProvTimebar(g);
+			}
 			DrawGridLines(g);
 			DrawRedTimeIndicator(g);
 			DrawMinutes(g);
@@ -239,25 +242,36 @@ namespace OpenDental{
 			//then, loop through each operatory
 			Operatory curOp;
 			for(int j=0;j<ColCount;j++){
-				curOp=Operatories.ListShort[ApptViewItems.VisOps[j]];
-				if(curOp.ProvDentist!=0 && !curOp.IsHygiene){//dentist
-					schedForType=Schedules.GetForType(SchedListDay,ScheduleType.Provider,curOp.ProvDentist);
-				}
-				else if(curOp.ProvHygienist!=0 && curOp.IsHygiene){//hygienist
-					schedForType=Schedules.GetForType(SchedListDay,ScheduleType.Provider,curOp.ProvHygienist);
-				}
-				else{//practice
+				if(isWeeklyView){
 					schedForType=Schedules.GetForType(SchedListDay,ScheduleType.Practice,0);
 				}
-				if(schedForType.Length==0){//use default sched
+				else{
+					curOp=Operatories.ListShort[ApptViewItems.VisOps[j]];
 					if(curOp.ProvDentist!=0 && !curOp.IsHygiene){//dentist
-						schedDefs=SchedDefaults.GetForType(ScheduleType.Provider,curOp.ProvDentist);
+						schedForType=Schedules.GetForType(SchedListDay,ScheduleType.Provider,curOp.ProvDentist);
 					}
 					else if(curOp.ProvHygienist!=0 && curOp.IsHygiene){//hygienist
-						schedDefs=SchedDefaults.GetForType(ScheduleType.Provider,curOp.ProvHygienist);
+						schedForType=Schedules.GetForType(SchedListDay,ScheduleType.Provider,curOp.ProvHygienist);
 					}
 					else{//practice
+						schedForType=Schedules.GetForType(SchedListDay,ScheduleType.Practice,0);
+					}
+				}
+				if(schedForType.Length==0){//use default sched
+					if(isWeeklyView){
 						schedDefs=SchedDefaults.GetForType(ScheduleType.Practice,0);
+					}
+					else{
+						curOp=Operatories.ListShort[ApptViewItems.VisOps[j]];
+						if(curOp.ProvDentist!=0 && !curOp.IsHygiene){//dentist
+							schedDefs=SchedDefaults.GetForType(ScheduleType.Provider,curOp.ProvDentist);
+						}
+						else if(curOp.ProvHygienist!=0 && curOp.IsHygiene){//hygienist
+							schedDefs=SchedDefaults.GetForType(ScheduleType.Provider,curOp.ProvHygienist);
+						}
+						else{//practice
+							schedDefs=SchedDefaults.GetForType(ScheduleType.Practice,0);
+						}
 					}
 					for(int i=0;i<schedDefs.Length;i++){
 						if(schedDefs[i].DayOfWeek==(int)Appointments.DateSelected.DayOfWeek){
@@ -577,8 +591,14 @@ namespace OpenDental{
 			try{
 				if(RowsPerIncr==0)
 					RowsPerIncr=1;
-				ColCount=ApptViewItems.VisOps.Length;
-				ProvCount=ApptViewItems.VisProvs.Length;
+				if(isWeeklyView){
+					ColCount=ContrAppt.numOfWeekDaysToDisplay;
+					ProvCount=0;
+				}
+				else{
+					ColCount=ApptViewItems.VisOps.Length;
+					ProvCount=ApptViewItems.VisProvs.Length;
+				}
 				if(ColCount==0) {
 					ColWidth=0;
 				}

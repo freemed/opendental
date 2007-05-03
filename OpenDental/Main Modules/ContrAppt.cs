@@ -101,6 +101,7 @@ namespace OpenDental{
 		private Family FamCur;
 		private System.Windows.Forms.ContextMenu menuApt;
 		private System.Windows.Forms.ContextMenu menuBlockout;
+		private System.Windows.Forms.ContextMenu menuWeeklyApt;
 		private InsPlan[] PlanList;
 		private Schedule[] SchedListDay;
 		///<summary></summary>
@@ -137,11 +138,17 @@ namespace OpenDental{
 		private Procedure[] procsMultApts;
 		private bool ResizingAppt;
 		private int ResizingOrigH;
+		private bool isWeeklyView;
+		private DateTime WeekStartDate;
+		private DateTime WeekEndDate;
+		public static int numOfWeekDaysToDisplay=5;
+		public static int SheetClickedonDay;
 
 		///<summary></summary>
 		public ContrAppt(){
 			Logger.openlog.Log("Initializing appointment module...",Logger.Severity.INFO);
-			InitializeComponent();// This call is required by the Windows.Forms Form Designer.			
+			InitializeComponent();// This call is required by the Windows.Forms Form Designer.
+			menuWeeklyApt=new System.Windows.Forms.ContextMenu();
 		}
 
 		///<summary></summary>
@@ -1139,13 +1146,17 @@ namespace OpenDental{
 			for(int i=0;i<ContrApptSheet.ColCount;i++){
 				Panel panOpName=new Panel();
 				Label labOpName=new Label();
-				curOp=Operatories.ListShort[ApptViewItems.VisOps[i]];
-				labOpName.Text=curOp.OpName;
-				if(curOp.ProvDentist!=0 && !curOp.IsHygiene){
-					panOpName.BackColor=Providers.GetColor(curOp.ProvDentist);
-				}
-				else if(curOp.ProvHygienist!=0 && curOp.IsHygiene){
-					panOpName.BackColor=Providers.GetColor(curOp.ProvHygienist);
+				if(isWeeklyView) //TODO changed>
+					labOpName.Text=WeekStartDate.AddDays(i).ToString("dddd");
+				else{
+					curOp=Operatories.ListShort[ApptViewItems.VisOps[i]];
+					labOpName.Text=curOp.OpName;
+					if(curOp.ProvDentist!=0 && !curOp.IsHygiene){
+						panOpName.BackColor=Providers.GetColor(curOp.ProvDentist);
+					}
+					else if(curOp.ProvHygienist!=0 && curOp.IsHygiene){
+						panOpName.BackColor=Providers.GetColor(curOp.ProvHygienist);
+					}
 				}
 				panOpName.Location=new Point
 					(2+ContrApptSheet.TimeWidth+ContrApptSheet.ProvWidth*ContrApptSheet.ProvCount+i*ContrApptSheet.ColWidth,0);
@@ -1214,7 +1225,13 @@ namespace OpenDental{
 		public void RefreshModuleScreen(){
 			//MessageBox.Show("Refreshed");
 			ParentForm.Text=Patients.GetMainTitle(PatCur);
-			RefreshDay(Appointments.DateSelected);
+			//RefreshDay(Appointments.DateSelected);
+			if(isWeeklyView){
+				RefreshPeriod(WeekStartDate,WeekEndDate);
+			}
+			else{
+				RefreshPeriod(Appointments.DateSelected,Appointments.DateSelected);
+			}
 		}
 
 		///<summary>Should be called anytime a new patient is loaded.  This is not done quite the same as in the other modules.</summary>
@@ -1284,6 +1301,8 @@ namespace OpenDental{
 			if(ApptViews.List.Length>0){//if any views
 				SetView(1);//default to first view
 			}
+			menuWeeklyApt.MenuItems.Clear();
+			menuWeeklyApt.MenuItems.Add(Lan.g(this,"Copy to Pinboard"),new EventHandler(menuWeekly_Click));
 			menuApt.MenuItems.Clear();
 			menuApt.MenuItems.Add(Lan.g(this,"Copy to Pinboard"),new EventHandler(menuApt_Click));
 			menuApt.MenuItems.Add("-");
@@ -1505,8 +1524,8 @@ namespace OpenDental{
 		}
 
 		///<summary>Important.  Gets all new day info from db and redraws screen</summary>
-		private void RefreshDay(DateTime myDate){
-			if(myDate.Year<1880){
+		private void RefreshPeriod(DateTime startDate, DateTime endDate){
+			if(startDate.Year<1880 || endDate.Year<1880) {
 				return;
 			}
 			if(PatCur==null){
@@ -1529,11 +1548,19 @@ namespace OpenDental{
 				}
 				ContrApptSingle3=null;
 			}
-			ListDay=Appointments.Refresh(myDate);
-			SchedListDay=Schedules.RefreshDay(myDate);
-			labelDate.Text=myDate.ToString("ddd");
-			labelDate2.Text=myDate.ToString("-  MMM d");
-			Calendar2.SetDate(myDate);
+			if(isWeeklyView) {
+				ListDay=Appointments.GetForPeriod(startDate,endDate);
+				SchedListDay=Schedules.RefreshPeriod(startDate,endDate);
+			}
+			else {
+				//ListDay=Appointments.Refresh(myDate);
+				//SchedListDay=Schedules.RefreshDay(myDate);
+				ListDay=Appointments.GetForPeriod(startDate,endDate);
+				SchedListDay=Schedules.RefreshDay(startDate);
+			}
+			labelDate.Text=startDate.ToString("ddd");
+			labelDate2.Text=startDate.ToString("-  MMM d");
+			Calendar2.SetDate(startDate);
 			ContrApptSheet2.Controls.Clear();
 			ContrApptSingle3=new ContrApptSingle[ListDay.Length];
 			int[] aptNums=new int[ListDay.Length];
@@ -1584,7 +1611,7 @@ namespace OpenDental{
 						}
 					}
 				}
-
+				ContrApptSingle3[i].isWeeklyView=isWeeklyView;
 				ContrApptSingle3[i].SetLocation();
 				ContrApptSheet2.Controls.Add(ContrApptSingle3[i]);
 			}//end for
@@ -1962,52 +1989,46 @@ namespace OpenDental{
 
 		///<summary>Clicked today.</summary>
 		private void butToday_Click(object sender, System.EventArgs e) {
-			//ContrApptSingle.ApptIsSelected=false;
 			Appointments.DateSelected=DateTime.Now;
-			RefreshModuleScreen();
+			SetWeeklyView(false);
 		}
 
 		///<summary>Clicked back one day.</summary>
 		private void butBack_Click(object sender, System.EventArgs e) {
-			//ContrApptSingle.ApptIsSelected=false;
 			Appointments.DateSelected=Appointments.DateSelected.AddDays(-1);
-			RefreshModuleScreen();
+			SetWeeklyView(false);
 		}
 
 		///<summary>Clicked forward one day.</summary>
 		private void butFwd_Click(object sender, System.EventArgs e) {
-			//ContrApptSingle.ApptIsSelected=false;
 			Appointments.DateSelected=Appointments.DateSelected.AddDays(1);
-			RefreshModuleScreen();
+			SetWeeklyView(false);
 		}
 
-		///<summary>Clicked week button, setting the date to the current week, but not necessarily to today.</summary>
+		///<summary>Now clicking the button turns on the weekly view based on selected date.
+		///Old behavior: Clicked week button, setting the date to the current week, but not necessarily to today.</summary>
 		private void butTodayWk_Click(object sender, System.EventArgs e) {
-			//ContrApptSingle.ApptIsSelected=false;
-			int dayChange = Appointments.DateSelected.DayOfWeek-DateTime.Now.DayOfWeek;
-			Appointments.DateSelected=DateTime.Now.AddDays(dayChange);
-			RefreshModuleScreen();
+			//int dayChange = Appointments.DateSelected.DayOfWeek-DateTime.Now.DayOfWeek;
+			//Appointments.DateSelected=DateTime.Now.AddDays(dayChange);
+			SetWeeklyView(true);
 		}
 
 		///<summary>Clicked back one week.</summary>
 		private void butBackWk_Click(object sender, System.EventArgs e) {
-			//ContrApptSingle.ApptIsSelected=false;
 			Appointments.DateSelected=Appointments.DateSelected.AddDays(-7);
-			RefreshModuleScreen();
+			SetWeeklyView(true);
 		}
 
 		///<summary>Clicked forward one week.</summary>
 		private void butFwdWk_Click(object sender, System.EventArgs e) {
-			//ContrApptSingle.ApptIsSelected=false;
 			Appointments.DateSelected=Appointments.DateSelected.AddDays(7);
-			RefreshModuleScreen();
+			SetWeeklyView(true);
 		}
 
 		///<summary>Clicked a date on the calendar.</summary>
 		private void Calendar2_DateSelected(object sender, System.Windows.Forms.DateRangeEventArgs e) {
-			//ContrApptSingle.ApptIsSelected=false;
 			Appointments.DateSelected=Calendar2.SelectionStart;
-			RefreshModuleScreen();
+			SetWeeklyView(false);
 		}
 
 		///<summary>Returns the apptNum of the appointment at these coordinates, or 0 if none.  This is new code which is going to replace some of the outdated code on this page.</summary>
@@ -2057,20 +2078,25 @@ namespace OpenDental{
 				return;
 			}
 			//some of this is a little redundant, but still necessary until the rewrite is finished.
-			SheetClickedonOp=Operatories.ListShort[ApptViewItems.VisOps[ContrApptSheet.XPosToOp(e.X)]].OperatoryNum;
 			SheetClickedonHour=ContrApptSheet.YPosToHour(e.Y);
 			SheetClickedonMin=ContrApptSheet.YPosToMin(e.Y);
 			TimeSpan sheetClickedOnTime=new TimeSpan(SheetClickedonHour,SheetClickedonMin,0);
-			ContrApptSingle.ClickedAptNum=HitTestAppt(e.Location);//0;
-			/*for(int i=0;i<ListDay.Length;i++){
-				if(SheetClickedonOp==ListDay[i].Op
-					&& ListDay[i].AptDateTime.TimeOfDay <= sheetClickedOnTime
-					&& sheetClickedOnTime < ListDay[i].AptDateTime.TimeOfDay
-					+TimeSpan.FromMinutes(ListDay[i].Pattern.Length*5))
-				{
-					ContrApptSingle.ClickedAptNum=ListDay[i].AptNum;
+			if(isWeeklyView){
+				SheetClickedonDay=ContrApptSheet2.ConvertToOp(e.X)+1;
+				for(int i=0;i<ListDay.Length;i++) {
+					if(SheetClickedonDay==(int)ListDay[i].AptDateTime.DayOfWeek
+						&& ListDay[i].AptDateTime.TimeOfDay<=sheetClickedOnTime
+						&& sheetClickedOnTime<ListDay[i].AptDateTime.TimeOfDay+TimeSpan.FromMinutes(ListDay[i].Pattern.Length*5))
+					{
+						ContrApptSingle.ClickedAptNum=ListDay[i].AptNum;
+						SheetClickedonOp=ListDay[i].Op;
+					}
 				}
-			}*/
+			}
+			else {//daily view
+				ContrApptSingle.ClickedAptNum=HitTestAppt(e.Location);//0;
+				SheetClickedonOp=Operatories.ListShort[ApptViewItems.VisOps[ContrApptSheet.XPosToOp(e.X)]].OperatoryNum;
+			}
 			Graphics grfx=ContrApptSheet2.CreateGraphics();
 			if(ContrApptSingle.ClickedAptNum!=0){//if clicked on an appt
 				int thisIndex=GetIndex(ContrApptSingle.ClickedAptNum);
@@ -2103,7 +2129,12 @@ namespace OpenDental{
 					,ContrApptSingle3[thisIndex].Location.Y);
 				FillPanelPatient();
 				if(e.Button==MouseButtons.Right){
-					menuApt.Show(ContrApptSheet2,new Point(e.X,e.Y));
+					if(isWeeklyView){
+						menuWeeklyApt.Show(ContrApptSheet2,new Point(e.X,e.Y));
+					}
+					else{
+						menuApt.Show(ContrApptSheet2,new Point(e.X,e.Y));
+					}
 				}
 				else{
 					mouseIsDown = true;
@@ -2126,19 +2157,8 @@ namespace OpenDental{
 				}
 			}
 			else{//not on appt. This was disabled so you can double click on empty area to sched
-				/*ContrApptSingle.PinBoardIsSelected=false;
-				Patients.PatIsLoaded=false;
-				ParentForm.Text=((Pref)PrefB.HList["MainWindowTitle"]).ValueString;
-				if(ContrApptSingle.SelectedAptNum!=-1){
-					int prev=GetIndex(ContrApptSingle.SelectedAptNum);
-					ContrApptSingle.SelectedAptNum=-1;
-					if(prev!=-1){
-						ContrApptSingle3[prev].CreateShadow();
-						grfx.DrawImage(ContrApptSingle3[prev].Shadow,ContrApptSingle3[prev].Location.X
-							,ContrApptSingle3[prev].Location.Y);
-					}
-				}
-				FillPanelPatient();*/
+				if(isWeeklyView)
+					return;
 				if(e.Button==MouseButtons.Right){
 					bool clickedOnBlock=false;
 					Schedule[] ListForType=Schedules.GetForType(SchedListDay,ScheduleType.Blockout,0);
@@ -2220,22 +2240,15 @@ namespace OpenDental{
 				return;
 			}
 			//dragging an appointment
+			if(isWeeklyView)
+				return;
 			int thisIndex=GetIndex(ContrApptSingle.SelectedAptNum);
-			//if ((Math.Abs(e.X+ContrApptSingle3[thisIndex].Location.X-mouseOrigin.X)<3)//enhances double clicking
-			//	&(Math.Abs(e.Y+ContrApptSingle3[thisIndex].Location.Y-mouseOrigin.Y)<3)){
 			if ((Math.Abs(e.X-mouseOrigin.X)<3)//enhances double clicking
 				&(Math.Abs(e.Y-mouseOrigin.Y)<3)){
 				boolAptMoved=false;
 				return;
 			}
 			boolAptMoved=true;
-			//Point tempPoint=new Point();
-			//tempPoint.X=contOrigin.X+(e.X+ContrApptSingle3[thisIndex].Location.X)
-			//	-mouseOrigin.X+ContrApptSheet2.Location.X+panelSheet.Location.X;
-			//tempPoint.Y=contOrigin.Y+(e.Y+ContrApptSingle3[thisIndex].Location.Y)
-			//	-mouseOrigin.Y+ContrApptSheet2.Location.Y+panelSheet.Location.Y;
-			//tempPoint.X=contOrigin.X+e.X-mouseOrigin.X+ContrApptSheet2.Location.X+panelSheet.Location.X;
-			//tempPoint.Y=contOrigin.Y+e.Y-mouseOrigin.Y+ContrApptSheet2.Location.Y+panelSheet.Location.Y;
 			TempApptSingle.Location=new Point(
 				contOrigin.X+e.X-mouseOrigin.X+ContrApptSheet2.Location.X+panelSheet.Location.X,
 				contOrigin.Y+e.Y-mouseOrigin.Y+ContrApptSheet2.Location.Y+panelSheet.Location.Y);
@@ -2244,6 +2257,7 @@ namespace OpenDental{
 
 		///<summary>Usually dropping an appointment to a new location.</summary>
 		private void ContrApptSheet2_MouseUp(object sender, System.Windows.Forms.MouseEventArgs e) {
+			if(isWeeklyView) return;//Because an operatory num is required
 			if(!mouseIsDown) return;
 			int thisIndex=GetIndex(ContrApptSingle.SelectedAptNum);
 			Appointment aptOld;
@@ -2458,6 +2472,11 @@ namespace OpenDental{
 		///<summary>Double click on appt sheet or on a single appointment.</summary>
 		private void ContrApptSheet2_DoubleClick(object sender, System.EventArgs e) {
 			mouseIsDown=false;
+			if(isWeeklyView){//Temporary solution - double clicking opens the day in the daily view mode
+				Appointments.DateSelected=WeekStartDate.AddDays(SheetClickedonDay-1);
+				SetWeeklyView(false);
+				return;
+			}
 			//this logic is a little different than mouse down for now because on the first click of a 
 			//double click, an appointment control is created under the mouse.
 			if(ContrApptSingle.ClickedAptNum!=0){//on appt	
@@ -2708,6 +2727,18 @@ namespace OpenDental{
 			}
 		}
 
+		///<summary>Switches weekly view</summary>
+		private void SetWeeklyView(bool isWeeklyView){
+			if(isWeeklyView) {
+				WeekStartDate=Appointments.DateSelected.AddDays(1-(int)Appointments.DateSelected.DayOfWeek);
+				WeekEndDate=WeekStartDate.AddDays(numOfWeekDaysToDisplay-1);
+				//Appointments.DateSelected = WeekStartDate;
+			}
+			this.isWeeklyView=isWeeklyView;
+			ContrApptSheet2.isWeeklyView=isWeeklyView;
+			comboView_SelectedIndexChanged(this,null);
+		}
+
 		///<summary></summary>
 		public void PrintReport(){
 			pd2=new PrintDocument();
@@ -2734,13 +2765,24 @@ namespace OpenDental{
       int xPos=0;//starting pos
 			int yPos=(int)27.5;//starting pos
       //Print Title
- 			string title = "Daily Appointments";
+		
+			string title;
+			string date;
+			if(isWeeklyView) {
+				title=Lan.g(this,"Weekly Appointments");
+				date=WeekStartDate.DayOfWeek.ToString()+" "+WeekStartDate.ToShortDateString()
+					+" - "+WeekEndDate.DayOfWeek.ToString()+" "+WeekEndDate.ToShortDateString();
+			}
+			else {
+				title=Lan.g(this,"Daily Appointments");
+				date=Appointments.DateSelected.DayOfWeek.ToString()+"   "+Appointments.DateSelected.ToShortDateString();
+			}
 			Font titleFont=new Font("Arial",14,FontStyle.Bold);
 			float xTitle = (float)(400-((e.Graphics.MeasureString(title,titleFont).Width/2)));
 			e.Graphics.DrawString(title,titleFont,Brushes.Black,xTitle,yPos);//centered
 			//Print Date
- 			string date = Appointments.DateSelected.DayOfWeek.ToString()+"   "
-				+Appointments.DateSelected.ToShortDateString();
+ 			//string date = Appointments.DateSelected.DayOfWeek.ToString()+"   "
+			//	+Appointments.DateSelected.ToShortDateString();
 			Font dateFont=new Font("Arial",10,FontStyle.Regular);
 			float xDate = (float)(400-((e.Graphics.MeasureString(date,dateFont).Width/2)));
 			yPos+=25;
@@ -2756,8 +2798,15 @@ namespace OpenDental{
       DateTime StopTime;  
       Rectangle imageRect;  //holds new dimensions for temp image
 		  Bitmap imageTemp;  //clone of shadow image with correct dimensions depending on day of week. Needs to be rewritten.
-      bool IsDefault=true; 	
-			Schedule[] SchedListDay=Schedules.RefreshDay(Appointments.DateSelected);
+      bool IsDefault=true;
+			
+			Schedule[] SchedListDay;
+			if(isWeeklyView) {
+				SchedListDay = Schedules.RefreshPeriod(WeekStartDate,WeekEndDate);
+			}
+			else {
+				SchedListDay=Schedules.RefreshDay(Appointments.DateSelected);
+			}
       if(SchedListDay.Length > 0){
         for(int i=0;i<SchedListDay.Length;i++){
 					if(SchedListDay[i].SchedType!=ScheduleType.Practice){
@@ -2907,6 +2956,14 @@ namespace OpenDental{
 		///<summary>Occurs whenever the panel holding the appt sheet is resized.</summary>
 		private void panelSheet_Resize(object sender, System.EventArgs e) {
 			vScrollBar1.Maximum=ContrApptSheet2.Height-panelSheet.Height+vScrollBar1.LargeChange;
+		}
+
+		private void menuWeekly_Click(object sender,System.EventArgs e) {
+			switch(((MenuItem)sender).Index) {
+				case 0:
+					OnCopyToPin_Click();
+					break;
+			}
 		}
 
 		private void menuApt_Click(object sender, System.EventArgs e) {
@@ -3356,7 +3413,8 @@ namespace OpenDental{
 					SearchResults[i].ToString("ddd")+"\t"+SearchResults[i].ToShortDateString()+"     "+SearchResults[i].ToShortTimeString());
 			}
 			listSearchResults.SetSelected(0,true);
-			RefreshDay(SearchResults[0]);//jump to that day.
+			RefreshPeriod(SearchResults[0],SearchResults[0]);//jump to that day.
+			//RefreshDay(SearchResults[0]);//jump to that day.
 			Cursor=Cursors.Default;
 			//scroll to make visible?
 			//highlight schedule?
@@ -3372,7 +3430,8 @@ namespace OpenDental{
 			if(clickedI==-1){
 				return;
 			}
-			RefreshDay(SearchResults[clickedI]);
+			RefreshPeriod(SearchResults[clickedI],SearchResults[clickedI]);
+			//RefreshDay(SearchResults[clickedI]);
 		}
 
 		private void butRefresh_Click(object sender,EventArgs e) {
