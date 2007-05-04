@@ -164,6 +164,7 @@ namespace SparksToothChart {
 			else{
 				//pictBox.Visible=false;
 				toothChart=new GraphicalToothChartControl(hardwareMode);
+				toothChart.ColorText=colorText;
 				toothChart.ColorBackground = colorBackground;
 				toothChart.Dock = System.Windows.Forms.DockStyle.Fill;
 				toothChart.Location = new System.Drawing.Point(0,0);
