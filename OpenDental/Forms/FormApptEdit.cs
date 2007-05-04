@@ -818,13 +818,13 @@ namespace OpenDental{
 				butPin.Visible=false;
 			}
 			if(AptCur.AptStatus==ApptStatus.Planned) {
-				Text=Lan.g(this,"Edit Planned Appointment")+" - "+DS.Tables["Patient"].Rows[0]["Value"].ToString();
+				Text=Lan.g(this,"Edit Planned Appointment")+" - "+DS.Tables["Patient"].Rows[0]["value"].ToString();
 				labelStatus.Visible=false;
 				comboStatus.Visible=false;
 				butDelete.Visible=false;
 			}
 			else {
-				Text=Lan.g(this,"Edit Appointment")+" - "+DS.Tables["Patient"].Rows[0]["Value"].ToString();
+				Text=Lan.g(this,"Edit Appointment")+" - "+DS.Tables["Patient"].Rows[0]["value"].ToString();
 				comboStatus.Items.Add(Lan.g("enumApptStatus","Scheduled"));
 				comboStatus.Items.Add(Lan.g("enumApptStatus","Complete"));
 				comboStatus.Items.Add(Lan.g("enumApptStatus","UnschedList"));
@@ -960,8 +960,8 @@ namespace OpenDental{
 			ODGridRow row;
 			for(int i=0;i<table.Rows.Count;i++) {
 				row=new ODGridRow();
-				row.Cells.Add(table.Rows[i]["Field"].ToString());
-				row.Cells.Add(table.Rows[i]["Value"].ToString());
+				row.Cells.Add(table.Rows[i]["field"].ToString());
+				row.Cells.Add(table.Rows[i]["value"].ToString());
 				gridPatient.Rows.Add(row);
 			}
 			//Add a UI managed row to display the total fee for the selected procedures in this appointment.

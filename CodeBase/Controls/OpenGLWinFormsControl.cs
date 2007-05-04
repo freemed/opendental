@@ -191,73 +191,65 @@ namespace CodeBase {
 					bool bitmap=(pfd.dwFlags & Gdi.PFD_DRAW_TO_BITMAP)!=0;
 					bool dbuff=(pfd.dwFlags & Gdi.PFD_DOUBLEBUFFER)!=0;
 					long q=0;
+					//Recognize formats which do not meet minimum requirements first and foremost.
 					if(!opengl || !window || bpp<8 || depth<8){
 						q-=100000000;
 						goodEnough=false;
 					}
-					//Is this format a format with full hardware acceleration?
-					if(icd){
-						if(p_acc==1 && (mcd || icd)){
-							q+=10000;
-						}else{
-							q-=100000;
-							goodEnough=false;
-						}
-					}
-					//This is a format with partial hardware acceleration?
-					if(mcd){
-						if(p_acc==1 && (mcd || icd)) {
-							q+=1000;
-						}else{
-							q-=10000;
-							goodEnough=false;
-						}
-					}
-					if(opengl && window){
-						q+=0x8000;
-					}else{
-						goodEnough=false;
-					}
-					if(depth>0 && bpp>0){
-						q+=0x4000;
-					}else{
-						goodEnough=false;
-					}
+					//Encourage formats where the buffering method is equivalent to the requested buffering method.
 					if((p_dbl==0 && !dbuff) || (p_dbl==1 && dbuff)){
 						q+=0x2000;
 					}else{
 						goodEnough=false;
 					}
-					if((p_acc==0 && soft) || (p_acc==1 && (mcd || icd))){
-						q+=0x1000;
-					}else{
-						goodEnough=false;
-					}
+					//We always prefer formats which do not use palettes. Palette technology is depricated
+					//with today's computer graphics hardware.
 					if(!pal){
 						q+=0x0080;
 					}else{
 						goodEnough=false;
 					}
+					//Check that color depth meets requested depth or better. Penalty for color-depths which are less than the requested.
 					if(bpp>=p_bpp){
 						q+=0x0800;
 					}else{
-						q-=0x0800*(p_bpp-bpp);//Penalty for color-depths which are less than the desired.
+						q-=0x0800*(p_bpp-bpp);
 						goodEnough=false;
 					}
+					//Check that z-depth meets requested z-depth or better. Penalty for z-depths which are less than the requested.
 					if(depth>=p_depth){
 						q+=0x0400;
 					}else{
-						q-=0x0400*(p_depth-depth);//Penalty for z-depths which are less than the desired.
+						q-=0x0400*(p_depth-depth);
 						goodEnough=false;
 					}
+					//We are pretty much neutral with bitmapped formats, as long as the format supports windowed rendering.
+					//Formats which are bitmapped only are not valid for our uses and lead to blank OpenGL displays. For this
+					//reason, there is a slight penalty for bitmapped formats (which really only will make a difference if
+					//this format is windowed).
 					if(bitmap){
 						q-=0x0001;
 					}
-					if(mcd) {
-						q+=0x0040;
-					}
-					if(icd) {
-						q+=0x0042;
+					//Check that the given pixel format meets the requested hardware acceleration mode.
+					if(p_acc==0){//software graphics requested
+						if(soft){//This format supports software graphics.
+							q+=1000;
+						}else{
+							q-=1000;
+							goodEnough=false;
+						}
+					}else{//hardware graphics acceleration requested
+						if(mcd || icd) {//This format supports some level of hardware rendering.
+							if(mcd){
+								q+=1000;//encourage partial hardware accleration less than full hardware acceleration.
+							}
+							if(icd){
+								q+=1200;//encourage full hardware acceleration more than partial hardware accleration.
+							}
+						}else{
+							q-=1000;
+							goodEnough=false;
+						}
 					}
 					if(q>maxqual || goodEnough){//Take the smallest index (the smallest options) that meet the requirements.
 						maxqual=q; 
