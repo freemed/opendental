@@ -2931,8 +2931,8 @@ namespace OpenDental{
 				}
 				else{//for normal appt:
 					//this gets rid of new appointments that never made it off the pinboard
-					Procedures.UnattachProcsInAppt(AptCur.AptNum);
-					Appointments.Delete(AptCur);
+					//Procedures.UnattachProcsInAppt(AptCur.AptNum);
+					Appointments.Delete(AptCur.AptNum);
 				}
 			}
 			PatCur=null;
@@ -3141,12 +3141,11 @@ namespace OpenDental{
 			if(!Security.IsAuthorized(Permissions.AppointmentEdit)){
 				return;
 			}
-			if(MessageBox.Show(Lan.g(this,"Delete Appointment?"),"",MessageBoxButtons.OKCancel)
-				!=DialogResult.OK){
+			if(!MsgBox.Show(this,true,"Delete Appointment?")){
 				return;
 			}
-			Procedures.UnattachProcsInAppt(AptCur.AptNum);
-			Appointments.Delete(AptCur);
+			//Procedures.UnattachProcsInAppt(AptCur.AptNum);
+			Appointments.Delete(AptCur.AptNum);
 			SecurityLogs.MakeLogEntry(Permissions.AppointmentEdit,AptCur.PatNum,
 				PatCur.GetNameLF()+", "
 				+AptCur.ProcDescript+", "

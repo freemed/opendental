@@ -28,6 +28,8 @@ namespace OpenDentBusiness{
 		public DateTime DateTimeChecked;
 		///<Summary>FK to provider.ProvNum.</Summary>
 		public int ProvNum;
+		///<Summary>The Rx for this labcase.</Summary>
+		public string Instructions;
 
 		public LabCase Copy(){
 			LabCase l=new LabCase();
@@ -42,6 +44,7 @@ namespace OpenDentBusiness{
 			l.DateTimeRecd=DateTimeRecd;
 			l.DateTimeChecked=DateTimeChecked;
 			l.ProvNum=ProvNum;
+			l.Instructions=Instructions;
 			return l;
 		}
 		

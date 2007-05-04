@@ -4747,6 +4747,9 @@ namespace OpenDental{
 					//added after r238
 					command="ALTER TABLE labcase ADD ProvNum int NOT NULL";
 					General.NonQEx(command);
+					//added after r240
+					command="ALTER TABLE labcase ADD Instructions text";
+					General.NonQEx(command);
 				}
 				else{
 					//this column will be the new primary key

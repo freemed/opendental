@@ -2285,7 +2285,7 @@ namespace OpenDental{
 			ToolBarMain.Buttons.Add(new ODToolBarButton(ODToolBarButtonStyle.Separator));
 			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"New Rx"),1,"","Rx"));
 			ToolBarMain.Buttons.Add(new ODToolBarButton(ODToolBarButtonStyle.Separator));
-			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"LabCase"),1,"","LabCase"));
+			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"LabCase"),-1,"","LabCase"));
 			ToolBarMain.Buttons.Add(new ODToolBarButton(ODToolBarButtonStyle.Separator));
 			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Perio Chart"),2,"","Perio"));
 			ArrayList toolButItems=ToolButItems.GetForToolBar(ToolBarsAvail.ChartModule);
@@ -2409,6 +2409,7 @@ namespace OpenDental{
 				gridProg.Enabled=false;
 				butBig.Enabled=false;
 				ToolBarMain.Buttons["Rx"].Enabled=false;
+				ToolBarMain.Buttons["LabCase"].Enabled=false;
 				ToolBarMain.Buttons["Perio"].Enabled=false;
 				tabProc.Enabled=false;
 			}
@@ -2420,6 +2421,7 @@ namespace OpenDental{
 				gridProg.Enabled=true;
 				butBig.Enabled=true;
 				ToolBarMain.Buttons["Rx"].Enabled=true;
+				ToolBarMain.Buttons["LabCase"].Enabled=true;
 				ToolBarMain.Buttons["Perio"].Enabled=true;
 				tabProc.Enabled=true;
 			}
@@ -4661,12 +4663,12 @@ namespace OpenDental{
 			Patient oldPat=PatCur.Copy();
 			if(checkDone.Checked){
 				if(ApptPlanned.Visible){
-					if(!MsgBox.Show(this,true,"Existing planned appointment will be deleted")){
+					if(!MsgBox.Show(this,true,"Existing planned appointment will be deleted. Continue?")){
 						checkDone.Checked=false;
 						return; 
 					}
-					Procedures.UnattachProcsInPlannedAppt(ApptPlanned.Info.MyApt.AptNum);
-					Appointments.Delete(ApptPlanned.Info.MyApt);
+					//Procedures.UnattachProcsInPlannedAppt(ApptPlanned.Info.MyApt.AptNum);
+					Appointments.Delete(ApptPlanned.Info.MyApt.AptNum);
 				}
 				PatCur.NextAptNum=0;//-1;
 				PatCur.PlannedIsDone=true;
@@ -4685,8 +4687,8 @@ namespace OpenDental{
 				if(MessageBox.Show(Lan.g(this,"Replace existing planned appointment?")
 					,"",MessageBoxButtons.OKCancel)!=DialogResult.OK)
 					return;
-				Procedures.UnattachProcsInPlannedAppt(ApptPlanned.Info.MyApt.AptNum);
-				Appointments.Delete(ApptPlanned.Info.MyApt);
+				//Procedures.UnattachProcsInPlannedAppt(ApptPlanned.Info.MyApt.AptNum);
+				Appointments.Delete(ApptPlanned.Info.MyApt.AptNum);
 			}
 			Appointment AptCur=new Appointment();
 			AptCur.PatNum=PatCur.PatNum;
@@ -4731,8 +4733,8 @@ namespace OpenDental{
 		private void butClear_Click(object sender, System.EventArgs e) {
 			if(MessageBox.Show(Lan.g(this,"Delete planned appointment?"),"",MessageBoxButtons.OKCancel)!=DialogResult.OK)
 				return;
-			Procedures.UnattachProcsInPlannedAppt(ApptPlanned.Info.MyApt.AptNum);
-			Appointments.Delete(ApptPlanned.Info.MyApt);
+			//Procedures.UnattachProcsInPlannedAppt(ApptPlanned.Info.MyApt.AptNum);
+			Appointments.Delete(ApptPlanned.Info.MyApt.AptNum);
 			Patient patOld=PatCur.Copy();
 			PatCur.NextAptNum=0;
 			Patients.Update(PatCur,patOld);

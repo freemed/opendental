@@ -1528,13 +1528,13 @@ namespace OpenDental{
 			if(MessageBox.Show(Lan.g(this,"Delete appointment?"),"",MessageBoxButtons.OKCancel)!=DialogResult.OK) {
 				return;
 			}
-			if(AptCur.AptStatus==ApptStatus.Planned) {
+			/*if(AptCur.AptStatus==ApptStatus.Planned) {
 				Procedures.UnattachProcsInPlannedAppt(AptCur.AptNum);
 			}
 			else {
 				Procedures.UnattachProcsInAppt(AptCur.AptNum);
-			}
-			Appointments.Delete(AptCur);
+			}*/
+			Appointments.Delete(AptCur.AptNum);
 			SecurityLogs.MakeLogEntry(Permissions.AppointmentEdit,pat.PatNum,
 				"Delete for patient: "
 				+pat.GetNameLF()+", "

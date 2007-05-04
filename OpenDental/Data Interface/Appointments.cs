@@ -325,13 +325,31 @@ namespace OpenDental{
 		}
 
 		///<summary></summary>
-		public static void Delete(Appointment appt){
-			Patient pat=Patients.GetPat(appt.PatNum);
-			if(appt.IsNewPatient){
+		public static void Delete(int aptNum){
+			string command;
+			command="SELECT PatNum,IsNewPatient,AptStatus FROM appointment WHERE AptNum="+POut.PInt(aptNum);
+			DataTable table=General.GetTable(command);
+			Patient pat=Patients.GetPat(PIn.PInt(table.Rows[0]["PatNum"].ToString()));
+			if(table.Rows[0]["IsNewPatient"].ToString()=="1"){
 				Procedures.SetDateFirstVisit(DateTime.MinValue,3,pat);
 			}
-			string command="DELETE from appointment WHERE "
-				+"AptNum = '"+POut.PInt(appt.AptNum)+"'";
+			//procs
+			if(table.Rows[0]["AptStatus"].ToString()=="6"){//planned
+				command="UPDATE procedurelog SET PlannedAptNum =0 WHERE PlannedAptNum = "+POut.PInt(aptNum);
+			}
+			else{
+				command="UPDATE procedurelog SET AptNum =0 WHERE AptNum = "+POut.PInt(aptNum);
+			}
+			General.NonQ(command);
+			//labcases
+			if(table.Rows[0]["AptStatus"].ToString()=="6") {//planned
+				command="UPDATE labcase SET PlannedAptNum =0 WHERE PlannedAptNum = "+POut.PInt(aptNum);
+			}
+			else {
+				command="UPDATE labcase SET AptNum =0 WHERE AptNum = "+POut.PInt(aptNum);
+			}
+			General.NonQ(command);
+			command="DELETE FROM appointment WHERE AptNum = "+POut.PInt(aptNum);
  			General.NonQ(command);
 		}
 

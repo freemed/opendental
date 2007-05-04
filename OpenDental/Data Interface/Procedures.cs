@@ -363,46 +363,6 @@ namespace OpenDental{
 			return new Procedure();
 		}
 
-		///<summary></summary>
-		public static void UnattachProcsInAppt(int myAptNum){
-			string command="UPDATE procedurelog SET "
-				+"AptNum = '0' "
-				+"WHERE AptNum = '"+myAptNum+"'";
-			try {
-				if(RemotingClient.OpenDentBusinessIsLocal) {
-					GeneralB.NonQ(command);
-				}
-				else {
-					DtoGeneralNonQ dto=new DtoGeneralNonQ();
-					dto.Command=command;
-					RemotingClient.ProcessCommand(dto);
-				}
-			}
-			catch(Exception e) {
-				MessageBox.Show(e.Message);
-			}
-		}
-
-		///<summary></summary>
-		public static void UnattachProcsInPlannedAppt(int myAptNum){
-			string command="UPDATE procedurelog SET "
-				+"PlannedAptNum = '0' "
-				+"WHERE PlannedAptNum = '"+myAptNum+"'";
-			try {
-				if(RemotingClient.OpenDentBusinessIsLocal) {
-					GeneralB.NonQ(command);
-				}
-				else {
-					DtoGeneralNonQ dto=new DtoGeneralNonQ();
-					dto.Command=command;
-					RemotingClient.ProcessCommand(dto);
-				}
-			}
-			catch(Exception e) {
-				MessageBox.Show(e.Message);
-			}
-		}
-
 		///<summary>Loops through each proc. Does not add notes to a procedure that already has notes. Used twice, security checked in both places before calling this.</summary>
 		public static void SetCompleteInAppt(Appointment apt,InsPlan[] PlanList,PatPlan[] patPlans){
 			Procedure[] ProcList=Procedures.Refresh(apt.PatNum);
