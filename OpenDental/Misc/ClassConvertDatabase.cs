@@ -4669,17 +4669,17 @@ namespace OpenDental{
 			if(FromVersion<new Version("4.9.0.0")) {
 				string command;
 				if(FormChooseDatabase.DBtype==DatabaseType.MySql) {
-					command="ALTER TABLE procedurecode ADD CodeNum mediumint NOT NULL";//this column will be the new primary key
+					command="ALTER TABLE procedurecode ADD CodeNum int NOT NULL";//this column will be the new primary key
 					General.NonQEx(command);
 					command="ALTER TABLE procedurecode DROP PRIMARY KEY";
 					General.NonQEx(command);
-					command="ALTER TABLE procedurecode ADD PRIMARY KEY (CodeNum), CHANGE CodeNum CodeNum mediumint unsigned NOT NULL auto_increment";
+					command="ALTER TABLE procedurecode ADD PRIMARY KEY (CodeNum), CHANGE CodeNum CodeNum int NOT NULL auto_increment";
 					General.NonQEx(command);
 					command="ALTER TABLE procedurecode CHANGE ADACode ProcCode varchar(15) character set utf8 collate utf8_bin NOT NULL default ''";
 					General.NonQEx(command);
 					command="ALTER TABLE procedurecode ADD INDEX (ProcCode)";
 					General.NonQEx(command);
-					command="ALTER TABLE procedurelog ADD CodeNum mediumint NOT NULL";
+					command="ALTER TABLE procedurelog ADD CodeNum int NOT NULL";
 					General.NonQEx(command);
 					//this is written in such a way as to be compatible with Oracle.
 					command="UPDATE procedurelog SET procedurelog.CodeNum= (SELECT procedurecode.CodeNum FROM procedurecode WHERE procedurecode.ProcCode=procedurelog.ADACode)";
@@ -4691,7 +4691,7 @@ namespace OpenDental{
 					General.NonQEx(command);
 					command="ALTER TABLE fee CHANGE ADACode OldCode varchar(15)";
 					General.NonQEx(command);
-					command="ALTER TABLE fee ADD CodeNum mediumint NOT NULL";
+					command="ALTER TABLE fee ADD CodeNum int NOT NULL";
 					General.NonQEx(command);
 					command="UPDATE fee SET fee.CodeNum= (SELECT procedurecode.CodeNum FROM procedurecode WHERE procedurecode.ProcCode=fee.OldCode)";
 					General.NonQEx(command);
@@ -4705,7 +4705,7 @@ namespace OpenDental{
 					//added after r217
 					command="ALTER TABLE autocodeitem CHANGE ADACode OldCode varchar(15)";
 					General.NonQEx(command);
-					command="ALTER TABLE autocodeitem ADD CodeNum mediumint NOT NULL";
+					command="ALTER TABLE autocodeitem ADD CodeNum int NOT NULL";
 					General.NonQEx(command);
 					command="UPDATE autocodeitem SET autocodeitem.CodeNum= (SELECT procedurecode.CodeNum FROM procedurecode WHERE procedurecode.ProcCode=autocodeitem.OldCode)";
 					General.NonQEx(command);
@@ -4714,7 +4714,7 @@ namespace OpenDental{
 					//added after r218
 					command="ALTER TABLE benefit CHANGE ADACode OldCode varchar(15)";
 					General.NonQEx(command);
-					command="ALTER TABLE benefit ADD CodeNum mediumint NOT NULL";
+					command="ALTER TABLE benefit ADD CodeNum int NOT NULL";
 					General.NonQEx(command);
 					command="UPDATE benefit SET benefit.CodeNum= (SELECT procedurecode.CodeNum FROM procedurecode WHERE procedurecode.ProcCode=benefit.OldCode)";
 					General.NonQEx(command);
@@ -4731,7 +4731,7 @@ namespace OpenDental{
 					//added after r219
 					command="ALTER TABLE procbuttonitem CHANGE ADACode OldCode varchar(15)";
 					General.NonQEx(command);
-					command="ALTER TABLE procbuttonitem ADD CodeNum mediumint NOT NULL";
+					command="ALTER TABLE procbuttonitem ADD CodeNum int NOT NULL";
 					General.NonQEx(command);
 					command="UPDATE procbuttonitem SET procbuttonitem.CodeNum= (SELECT procedurecode.CodeNum FROM procedurecode WHERE procedurecode.ProcCode=procbuttonitem.OldCode)";
 					General.NonQEx(command);
@@ -4743,6 +4743,9 @@ namespace OpenDental{
 					command="ALTER TABLE proctp CHANGE ADACode ProcCode varchar(15)";
 					General.NonQEx(command);
 					command="ALTER TABLE repeatcharge CHANGE ADACode ProcCode varchar(15)";
+					General.NonQEx(command);
+					//added after r238
+					command="ALTER TABLE labcase ADD ProvNum int NOT NULL";
 					General.NonQEx(command);
 				}
 				else{

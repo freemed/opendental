@@ -1,4 +1,5 @@
 using System;
+using System.Data;
 using System.Drawing;
 using System.Collections;
 using System.Collections.Generic;
@@ -11,16 +12,15 @@ namespace OpenDental{
 	/// <summary>
 	/// Summary description for FormBasicTemplate.
 	/// </summary>
-	public class FormLaboratories : System.Windows.Forms.Form{
+	public class FormLabCases : System.Windows.Forms.Form{
 		private OpenDental.UI.Button butClose;
 		private System.ComponentModel.Container components = null;
 		private ODGrid gridMain;
 		private OpenDental.UI.Button butAdd;// Required designer variable.
-		//private bool changed;
-		private List<Laboratory> ListLabs;
+		private DataTable table;
 
 		///<summary></summary>
-		public FormLaboratories()
+		public FormLabCases()
 		{
 			//
 			// Required for Windows Form Designer support
@@ -51,7 +51,7 @@ namespace OpenDental{
 		/// </summary>
 		private void InitializeComponent()
 		{
-			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormLaboratories));
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormLabCases));
 			this.butClose = new OpenDental.UI.Button();
 			this.gridMain = new OpenDental.UI.ODGrid();
 			this.butAdd = new OpenDental.UI.Button();
@@ -80,8 +80,8 @@ namespace OpenDental{
 			this.gridMain.ScrollValue = 0;
 			this.gridMain.Size = new System.Drawing.Size(634,334);
 			this.gridMain.TabIndex = 1;
-			this.gridMain.Title = "Dental Labs";
-			this.gridMain.TranslationName = "TableLabs";
+			this.gridMain.Title = "Lab Cases";
+			this.gridMain.TranslationName = "TableLabCases";
 			this.gridMain.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellDoubleClick);
 			// 
 			// butAdd
@@ -100,7 +100,7 @@ namespace OpenDental{
 			this.butAdd.Text = "&Add";
 			this.butAdd.Click += new System.EventHandler(this.butAdd_Click);
 			// 
-			// FormLaboratories
+			// FormLabCases
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.ClientSize = new System.Drawing.Size(719,520);
@@ -110,66 +110,65 @@ namespace OpenDental{
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.MaximizeBox = false;
 			this.MinimizeBox = false;
-			this.Name = "FormLaboratories";
+			this.Name = "FormLabCases";
 			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-			this.Text = "Laboratories";
-			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormLaboratories_FormClosing);
-			this.Load += new System.EventHandler(this.FormLaboratories_Load);
+			this.Text = "Lab Cases";
+			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormLabCases_FormClosing);
+			this.Load += new System.EventHandler(this.FormLabCases_Load);
 			this.ResumeLayout(false);
 
 		}
 		#endregion
 
-		private void FormLaboratories_Load(object sender,EventArgs e) {
+		private void FormLabCases_Load(object sender,EventArgs e) {
 			FillGrid();
 		}
 
 		private void FillGrid(){
-			ListLabs=Laboratories.Refresh();
+			table=LabCases.Refresh();
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
-			ODGridColumn col=new ODGridColumn(Lan.g("TableLabs","Description"),100);
+			ODGridColumn col=new ODGridColumn(Lan.g("TableLabCases","Description"),100);
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TableLabs","Phone"),100);
+			col=new ODGridColumn(Lan.g("TableLabCases","Phone"),100);
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TableLabs","Notes"),200);
+			col=new ODGridColumn(Lan.g("TableLabCases","Notes"),200);
 			gridMain.Columns.Add(col);
 			gridMain.Rows.Clear();
 			ODGridRow row;
-			for(int i=0;i<ListLabs.Count;i++){
+			/*for(int i=0;i<ListLabs.Count;i++){
 				row=new ODGridRow();
 				row.Cells.Add(ListLabs[i].Description);
 				row.Cells.Add(ListLabs[i].Phone);
 				row.Cells.Add(ListLabs[i].Notes);
 				gridMain.Rows.Add(row);
-			}
+			}*/
 			gridMain.EndUpdate();
 		}
 
 		private void gridMain_CellDoubleClick(object sender,ODGridClickEventArgs e) {
-			FormLaboratoryEdit FormL=new FormLaboratoryEdit();
+			/*FormLaboratoryEdit FormL=new FormLaboratoryEdit();
 			FormL.LabCur=ListLabs[e.Row];
 			FormL.ShowDialog();
 			//if(FormL.DialogResult==DialogResult.OK){
 				//changed=true;
-			FillGrid();
-			//}
+			FillGrid();*/
 		}
 
 		private void butAdd_Click(object sender,EventArgs e) {
-			FormLaboratoryEdit FormL=new FormLaboratoryEdit();
+			/*FormLaboratoryEdit FormL=new FormLaboratoryEdit();
 			FormL.LabCur=new Laboratory();
 			FormL.IsNew=true;
 			FormL.ShowDialog();
-			FillGrid();
+			FillGrid();*/
 		}
 
 		private void butClose_Click(object sender, System.EventArgs e) {
 			Close();
 		}
 
-		private void FormLaboratories_FormClosing(object sender,FormClosingEventArgs e) {
+		private void FormLabCases_FormClosing(object sender,FormClosingEventArgs e) {
 			//if(changed){
 				//Labs are not global.
 				//DataValid.SetInvalid(InvalidTypes.Providers);

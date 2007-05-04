@@ -204,6 +204,7 @@ namespace OpenDental{
 		private string key;
 		private MenuItem menuLicenseCompliance;
 		private MenuItem menuItemGraphics;
+		private MenuItem menuItemLabCases;
 		private string dconnStr;
 
 		///<summary></summary>
@@ -374,6 +375,7 @@ namespace OpenDental{
 			this.ContrAppt2 = new OpenDental.ContrAppt();
 			this.lightSignalGrid1 = new OpenDental.UI.LightSignalGrid();
 			this.myOutlookBar = new OpenDental.OutlookBar();
+			this.menuItemLabCases = new System.Windows.Forms.MenuItem();
 			this.SuspendLayout();
 			// 
 			// timerTimeIndic
@@ -699,6 +701,7 @@ namespace OpenDental{
             this.menuItemInstructors,
             this.menuItemCarriers,
             this.menuItemInsPlans,
+            this.menuItemLabCases,
             this.menuItemMedications,
             this.menuItemProviders,
             this.menuItemPrescriptions,
@@ -783,37 +786,37 @@ namespace OpenDental{
 			// 
 			// menuItemMedications
 			// 
-			this.menuItemMedications.Index = 12;
+			this.menuItemMedications.Index = 13;
 			this.menuItemMedications.Text = "&Medications";
 			this.menuItemMedications.Click += new System.EventHandler(this.menuItemMedications_Click);
 			// 
 			// menuItemProviders
 			// 
-			this.menuItemProviders.Index = 13;
+			this.menuItemProviders.Index = 14;
 			this.menuItemProviders.Text = "Providers";
 			this.menuItemProviders.Click += new System.EventHandler(this.menuItemProviders_Click);
 			// 
 			// menuItemPrescriptions
 			// 
-			this.menuItemPrescriptions.Index = 14;
+			this.menuItemPrescriptions.Index = 15;
 			this.menuItemPrescriptions.Text = "Pre&scriptions";
 			this.menuItemPrescriptions.Click += new System.EventHandler(this.menuItemPrescriptions_Click);
 			// 
 			// menuItemReferrals
 			// 
-			this.menuItemReferrals.Index = 15;
+			this.menuItemReferrals.Index = 16;
 			this.menuItemReferrals.Text = "&Referrals";
 			this.menuItemReferrals.Click += new System.EventHandler(this.menuItemReferrals_Click);
 			// 
 			// menuItemSchools
 			// 
-			this.menuItemSchools.Index = 16;
+			this.menuItemSchools.Index = 17;
 			this.menuItemSchools.Text = "Sites";
 			this.menuItemSchools.Click += new System.EventHandler(this.menuItemSchools_Click);
 			// 
 			// menuItemZipCodes
 			// 
-			this.menuItemZipCodes.Index = 17;
+			this.menuItemZipCodes.Index = 18;
 			this.menuItemZipCodes.Text = "&Zip Codes";
 			this.menuItemZipCodes.Click += new System.EventHandler(this.menuItemZipCodes_Click);
 			// 
@@ -1328,6 +1331,12 @@ namespace OpenDental{
 			this.myOutlookBar.TabIndex = 18;
 			this.myOutlookBar.Text = "outlookBar1";
 			this.myOutlookBar.ButtonClicked += new OpenDental.ButtonClickedEventHandler(this.myOutlookBar_ButtonClicked);
+			// 
+			// menuItemLabCases
+			// 
+			this.menuItemLabCases.Index = 12;
+			this.menuItemLabCases.Text = "Lab Cases";
+			this.menuItemLabCases.Click += new System.EventHandler(this.menuItemLabCases_Click);
 			// 
 			// FormOpenDental
 			// 
@@ -2613,6 +2622,11 @@ namespace OpenDental{
 			RefreshCurrentModule();
 		}
 
+		private void menuItemLabCases_Click(object sender,EventArgs e) {
+			FormLabCases FormL=new FormLabCases();
+			FormL.ShowDialog();
+		}
+
 		private void menuItemMedications_Click(object sender, System.EventArgs e) {
 			FormMedications FormM=new FormMedications();
 			FormM.ShowDialog();
@@ -3217,6 +3231,8 @@ namespace OpenDental{
 				return false;
 			}
 		}
+
+		
 
 		
 		

@@ -84,6 +84,7 @@ namespace OpenDental{
 		private InsPlan[] PlanList;
 		private Patient pat;
 		private Family fam;
+		private OpenDental.UI.Button button1;
 		private PatPlan[] PatPlanList;
 		//private List<Commlog> CommlogList;
 
@@ -173,6 +174,7 @@ namespace OpenDental{
 			this.butPin = new OpenDental.UI.Button();
 			this.butOK = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
+			this.button1 = new OpenDental.UI.Button();
 			this.panel1.SuspendLayout();
 			this.groupDentalSchools.SuspendLayout();
 			this.SuspendLayout();
@@ -379,7 +381,6 @@ namespace OpenDental{
 			// 
 			// textTime
 			// 
-			this.textTime.BackColor = System.Drawing.Color.White;
 			this.textTime.Location = new System.Drawing.Point(3,18);
 			this.textTime.Name = "textTime";
 			this.textTime.ReadOnly = true;
@@ -411,6 +412,7 @@ namespace OpenDental{
 			// 
 			this.panel1.AutoScroll = true;
 			this.panel1.AutoScrollMargin = new System.Drawing.Size(0,3);
+			this.panel1.Controls.Add(this.button1);
 			this.panel1.Controls.Add(this.comboLab);
 			this.panel1.Controls.Add(this.groupDentalSchools);
 			this.panel1.Controls.Add(this.labelStatus);
@@ -554,6 +556,7 @@ namespace OpenDental{
 			this.butCalcTime.Size = new System.Drawing.Size(46,20);
 			this.butCalcTime.TabIndex = 63;
 			this.butCalcTime.Text = "Calc";
+			this.butCalcTime.Click += new System.EventHandler(this.butCalcTime_Click);
 			// 
 			// butAddComm
 			// 
@@ -725,6 +728,19 @@ namespace OpenDental{
 			this.butCancel.TabIndex = 0;
 			this.butCancel.Text = "&Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
+			// 
+			// button1
+			// 
+			this.button1.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.button1.Autosize = true;
+			this.button1.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.button1.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.button1.CornerRadius = 4F;
+			this.button1.Location = new System.Drawing.Point(3,185);
+			this.button1.Name = "button1";
+			this.button1.Size = new System.Drawing.Size(46,20);
+			this.button1.TabIndex = 141;
+			this.button1.Text = "Lab";
 			// 
 			// FormApptEdit
 			// 

@@ -542,6 +542,7 @@ namespace OpenDental{
 				+"AND carrier.CarrierNum = insplan.CarrierNum "
 				+"AND "+whereProv+" "
 				+"AND (claimproc.Status=1 OR claimproc.Status=4) "//received or supplemental
+				+"AND claimproc.WriteOff > '.0001' "
 				+"AND claimproc.DateCP >= "+POut.PDate(dateFrom)+" "
 				+"AND claimproc.DateCP <= "+POut.PDate(dateTo)+" "
 				+"GROUP BY claimproc.ClaimNum"

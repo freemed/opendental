@@ -2285,6 +2285,8 @@ namespace OpenDental{
 			ToolBarMain.Buttons.Add(new ODToolBarButton(ODToolBarButtonStyle.Separator));
 			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"New Rx"),1,"","Rx"));
 			ToolBarMain.Buttons.Add(new ODToolBarButton(ODToolBarButtonStyle.Separator));
+			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"LabCase"),1,"","LabCase"));
+			ToolBarMain.Buttons.Add(new ODToolBarButton(ODToolBarButtonStyle.Separator));
 			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Perio Chart"),2,"","Perio"));
 			ArrayList toolButItems=ToolButItems.GetForToolBar(ToolBarsAvail.ChartModule);
 			for(int i=0;i<toolButItems.Count;i++){
@@ -2485,6 +2487,9 @@ namespace OpenDental{
 					case "Rx":
 						OnRx_Click();
 						break;
+					case "LabCase":
+						OnLabCase_Click();
+						break;
 					case "Perio":
 						OnPerio_Click();
 						break;
@@ -2520,6 +2525,18 @@ namespace OpenDental{
 			if(FormRS.DialogResult!=DialogResult.OK) return;
 			ModuleSelected(PatCur.PatNum);
 			SecurityLogs.MakeLogEntry(Permissions.RxCreate,PatCur.PatNum,PatCur.GetNameLF());
+		}
+
+		private void OnLabCase_Click() {
+			LabCase lab=new LabCase();
+			lab.PatNum=PatCur.PatNum;
+			lab.ProvNum=Patients.GetProvNum(PatCur);
+			lab.DateTimeCreated=DateTime.Now;
+			FormLabCaseEdit FormL=new FormLabCaseEdit();
+			FormL.ShowDialog();
+			if(FormL.DialogResult!=DialogResult.OK)
+				return;
+			ModuleSelected(PatCur.PatNum);
 		}
 
 		private void OnPerio_Click(){

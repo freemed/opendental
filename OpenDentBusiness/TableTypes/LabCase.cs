@@ -12,7 +12,7 @@ namespace OpenDentBusiness{
 		public int PatNum;
 		///<Summary>FK to laboratory.LaboratoryNum. The lab that the case gets sent to.</Summary>
 		public int LaboratoryNum;
-		///<Summary>FK to appointment.AptNum.  This is how a lab case is attached to a scheduled appointment.</Summary>
+		///<Summary>FK to appointment.AptNum.  This is how a lab case is attached to a scheduled appointment. 1:1 relationship for now.  Only one labcase per appointment, and (obviously) only one appointment per labcase.  Labcase can exist without being attached to any appointments at all, making this zero.</Summary>
 		public int AptNum;
 		///<Summary>FK to appointment.AptNum.  This is how a lab case is attached to a planned appointment in addition to the scheduled appointment.</Summary>
 		public int PlannedAptNum;
@@ -26,6 +26,8 @@ namespace OpenDentBusiness{
 		public DateTime DateTimeRecd;
 		///<Summary>Date/time that quality was checked.  It is now completely ready for the patient.</Summary>
 		public DateTime DateTimeChecked;
+		///<Summary>FK to provider.ProvNum.</Summary>
+		public int ProvNum;
 
 		public LabCase Copy(){
 			LabCase l=new LabCase();
@@ -39,6 +41,7 @@ namespace OpenDentBusiness{
 			l.DateTimeSent=DateTimeSent;
 			l.DateTimeRecd=DateTimeRecd;
 			l.DateTimeChecked=DateTimeChecked;
+			l.ProvNum=ProvNum;
 			return l;
 		}
 		

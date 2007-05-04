@@ -29,12 +29,28 @@ namespace OpenDental{
 
 		///<summary></summary>
 		public static void Insert(Laboratory lab){
-			string command= "INSERT INTO laboratory (Description,Phone,Notes,LabSlip) VALUES("
-				+"'"+POut.PString(lab.Description)+"', "
+			if(PrefB.RandomKeys) {
+				lab.LaboratoryNum=MiscData.GetKey("laboratory","LaboratoryNum");
+			}
+			string command="INSERT INTO laboratory (";
+			if(PrefB.RandomKeys) {
+				command+="LaboratoryNum,";
+			}
+			command+="Description,Phone,Notes,LabSlip) VALUES(";
+			if(PrefB.RandomKeys) {
+				command+="'"+POut.PInt(lab.LaboratoryNum)+"', ";
+			}
+			command+=
+				 "'"+POut.PString(lab.Description)+"', "
 				+"'"+POut.PString(lab.Phone)+"', "
 				+"'"+POut.PString(lab.Notes)+"', "
 				+"'"+POut.PString(lab.LabSlip)+"')";
- 			lab.LaboratoryNum=General.NonQ(command,true);
+			if(PrefB.RandomKeys) {
+				General.NonQ(command);
+			}
+			else {
+				lab.LaboratoryNum=General.NonQ(command,true);
+			}
 		}
 
 		///<summary></summary>
