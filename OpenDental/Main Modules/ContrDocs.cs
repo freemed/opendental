@@ -1140,8 +1140,9 @@ namespace OpenDental{
 			ResizeAll();
 			//Display the document signature form.
 			FormDocSign docSignForm=new FormDocSign(curDoc,patFolder);
-			docSignForm.Location=PointToScreen(new Point(PictureBox1.Left,this.ClientRectangle.Bottom-docSignForm.Height));
-			docSignForm.Width=PictureBox1.Width;
+			int signLeft=TreeDocuments.Left+10;
+			docSignForm.Location=PointToScreen(new Point(signLeft,this.ClientRectangle.Bottom-docSignForm.Height));
+			docSignForm.Width=Math.Max(0,Math.Min(958,PictureBox1.Right-signLeft));
 			docSignForm.ShowDialog();
 			//Reload the document into the tree (since the tag/datarow may have had a signature or note change).
 			MoveTreeDocumentNode(ref curDoc,curDoc.DocCategory,true);

@@ -201,14 +201,14 @@ namespace OpenDental{
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.BackColor = System.Drawing.SystemColors.Control;
 			this.ClientSize = new System.Drawing.Size(952,90);
+			this.Controls.Add(this.butCancel);
+			this.Controls.Add(this.butOK);
 			this.Controls.Add(this.labelInvalidSig);
 			this.Controls.Add(this.sigBox);
 			this.Controls.Add(this.butClearSig);
 			this.Controls.Add(this.label15);
 			this.Controls.Add(this.textNote);
 			this.Controls.Add(this.label8);
-			this.Controls.Add(this.butCancel);
-			this.Controls.Add(this.butOK);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
 			this.MaximizeBox = false;
 			this.MinimizeBox = false;
