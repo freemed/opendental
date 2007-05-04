@@ -877,25 +877,18 @@ namespace OpenDental{
 				string srcFileName=ODFileUtils.CombinePaths(patFolder,selectDoc.FileName);
 				if(File.Exists(srcFileName)) {
 					if(HasImageExtension(srcFileName)) {
-						paintTools.Enabled=true;//Only allow painting tools to be used when a valid image has been loaded.
+						if(selectDoc.WindowingMax==0) {
+							//The document brightness/contrast settings have never been set. By default, we use settings
+							//which do not alter the original image.
+							brightnessContrastSlider.MinVal=0;
+							brightnessContrastSlider.MaxVal=255;
+						}else{
+							brightnessContrastSlider.MinVal=selectDoc.WindowingMin;
+							brightnessContrastSlider.MaxVal=selectDoc.WindowingMax;
+						}
+						paintTools.Enabled=true;								//Only allow painting tools to be used when a valid image has been loaded.
 						brightnessContrastSlider.Enabled=true;	//The brightnessContrastSlider is not actually part of the paintTools
 																										//toolbar, and so it must be enabled or disabled seperately.
-						if(selectDoc.WindowingMax<=selectDoc.WindowingMin) {//Contrast/brightness have never been set yet or are invalid?
-							if(selectDoc.ImgType==ImageType.Radiograph) {
-								//When this image is a radiograph, and the brightness and contrast values have not been set,
-								//we read the default values from the default settings as defined by the user in the image setup.
-								selectDoc.WindowingMin=PrefB.GetInt("ImageWindowingMin");
-								selectDoc.WindowingMax=PrefB.GetInt("ImageWindowingMax");
-							}else{
-								//Otherwise, we default to normal brightness and contrst.
-								selectDoc.WindowingMin=0;
-								selectDoc.WindowingMax=255;
-							}
-							Documents.Update(selectDoc);
-							MoveTreeDocumentNode(ref selectDoc,selectDoc.DocCategory,true);//Update the tree list.
-						}
-						brightnessContrastSlider.MinVal=selectDoc.WindowingMin;
-						brightnessContrastSlider.MaxVal=selectDoc.WindowingMax;
 						ImageCurrent=new Bitmap(srcFileName);
 						curImageWidth=ImageCurrent.Width;
 						curImageHeight=ImageCurrent.Height;
@@ -1140,9 +1133,9 @@ namespace OpenDental{
 			ResizeAll();
 			//Display the document signature form.
 			FormDocSign docSignForm=new FormDocSign(curDoc,patFolder);
-			int signLeft=TreeDocuments.Left+10;
+			int signLeft=TreeDocuments.Left;
 			docSignForm.Location=PointToScreen(new Point(signLeft,this.ClientRectangle.Bottom-docSignForm.Height));
-			docSignForm.Width=Math.Max(0,Math.Min(958,PictureBox1.Right-signLeft));
+			docSignForm.Width=Math.Max(0,Math.Min(docSignForm.Width,PictureBox1.Right-signLeft));
 			docSignForm.ShowDialog();
 			//Reload the document into the tree (since the tag/datarow may have had a signature or note change).
 			MoveTreeDocumentNode(ref curDoc,curDoc.DocCategory,true);
@@ -1232,39 +1225,44 @@ namespace OpenDental{
 
 		///<summary>Valid values for scanType are "doc","xray",and "photo"</summary>
 		private void OnScan_Click(string scanType) {
-			//A user may have more than one scanning device. 
-			//The code below will allow the user to select one.
-			long wPIXTypes;
-			IDataObject oDataObject;
+			Bitmap scannedImage=null;
+			//Try catch here prevents a crash when a customer who has no scanner installed tries to scan.
 			try{
-				wPIXTypes=TWAIN_SelectImageSource(this.Handle);
+				//A user may have more than one scanning device. 
+				//The code below will allow the user to select one.
+				long wPIXTypes=TWAIN_SelectImageSource(this.Handle);
 				if(wPIXTypes==0) {//user clicked Cancel
 					return;
 				}
 				TWAIN_AcquireToClipboard(this.Handle,wPIXTypes);
-				oDataObject=Clipboard.GetDataObject();
-				if(!oDataObject.GetDataPresent(DataFormats.Bitmap,true) || !oDataObject.GetDataPresent(DataFormats.Dib,true)) {
+				IDataObject oDataObject=Clipboard.GetDataObject();
+				if(oDataObject.GetDataPresent(DataFormats.Bitmap,true)) {
+					scannedImage=(Bitmap)oDataObject.GetData(DataFormats.Bitmap);
+				}else if(oDataObject.GetDataPresent(DataFormats.Dib,true)) {
+					scannedImage=(Bitmap)oDataObject.GetData(DataFormats.Dib);
+				}else{
 					throw new Exception("Unknown image data format.");
 				}
 			}catch(Exception ex){
-				MessageBox.Show("The image could not be acquired from the device. "+
-					"Please check to see that the device is properly connected to the computer. Specific error: "+ex.Message);
+				MessageBox.Show("The image could not be acquired from the scanner. "+
+					"Please check to see that the scanner is properly connected to the computer. Specific error: "+ex.Message);
 				return;
 			}
 			Document doc=new Document();
-			if(scanType=="doc") {
-				doc.ImgType=ImageType.Document;
-			}else if(scanType=="xray"){
+			if(scanType=="xray"){
 				doc.ImgType=ImageType.Radiograph;
 			}else if(scanType=="photo"){
 				doc.ImgType=ImageType.Photo;
+			}else{//Assume document
+				doc.ImgType=ImageType.Document;
 			}
 			doc.FileName=".jpg";
 			doc.DateCreated=DateTime.Today;
-			doc.PatNum=PatCur.PatNum;
+			doc.PatNum=PatCur.PatNum;		
+			doc.DocCategory=GetCurrentCategory();
 			Documents.Insert(doc,PatCur);//creates filename and saves to db
 			bool saved=true;
-			try{//Create corresponding file.
+			try{//Create corresponding image file.
 				ImageCodecInfo myImageCodecInfo;
 				ImageCodecInfo[] encoders;
 				encoders=ImageCodecInfo.GetImageEncoders();
@@ -1276,22 +1274,16 @@ namespace OpenDental{
 				System.Drawing.Imaging.Encoder myEncoder=System.Drawing.Imaging.Encoder.Quality;
 				EncoderParameters myEncoderParameters=new EncoderParameters(1);
 				long qualityL=0;
-				if(scanType=="doc"){
-					//Possible values 0-100?
-					qualityL=(long)Convert.ToInt32(((Pref)PrefB.HList["ScannerCompression"]).ValueString);
-				}else if(scanType=="xray"){
+				if(scanType=="xray"){
 					qualityL=Convert.ToInt64(((Pref)PrefB.HList["ScannerCompressionRadiographs"]).ValueString);
 				}else if(scanType=="photo"){
 					qualityL=Convert.ToInt64(((Pref)PrefB.HList["ScannerCompressionPhotos"]).ValueString);
+				}else{//Assume document
+					//Possible values 0-100?
+					qualityL=(long)Convert.ToInt32(((Pref)PrefB.HList["ScannerCompression"]).ValueString);
 				}
 				EncoderParameter myEncoderParameter=new EncoderParameter(myEncoder,qualityL);
 				myEncoderParameters.Param[0]=myEncoderParameter;
-				Bitmap scannedImage=null;
-				if(oDataObject.GetDataPresent(DataFormats.Bitmap,true)) {
-					scannedImage=(Bitmap)oDataObject.GetData(DataFormats.Bitmap);
-				}else{// if(oDataObject.GetDataPresent(DataFormats.Dib,true)) {
-					scannedImage=(Bitmap)oDataObject.GetData(DataFormats.Dib);
-				}
 				//AutoCrop()?
 				scannedImage.Save(ODFileUtils.CombinePaths(patFolder,doc.FileName),myImageCodecInfo,myEncoderParameters);
 			}catch{
@@ -1301,20 +1293,17 @@ namespace OpenDental{
 			}
 			if(saved){
 				DataRow tag=Documents.GetDocumentRow(doc.DocNum.ToString());
-				doc.DocCategory=GetCurrentCategory();
-				AddTreeDocumentNode(ref doc,tag,true);
+				AddTreeDocumentNode(ref doc,tag,true);//Selects the document and displays it as well.
 				FormDocInfo formDocInfo=new FormDocInfo(PatCur,doc,GetCurrentFolderName(TreeDocuments.SelectedNode));
 				formDocInfo.ShowDialog();
 				if(formDocInfo.DialogResult!=DialogResult.OK){
+					File.Delete(doc.FileName);
 					DeleteDocument(doc,false);
-					paintTools.Enabled=false;//Forces image to clear from screen
-					brightnessContrastSlider.Enabled=false;
+					SelectTreeDocumentNode(null);//Forces image to clear from screen and disables toolbars.
 				}else{
-					MoveTreeDocumentNode(ref doc,doc.DocCategory,true);
-					paintTools.Enabled=true;//Allows image to stay on screen properly.
-					brightnessContrastSlider.Enabled=true;
+					MoveTreeDocumentNode(ref doc,doc.DocCategory,true);	//Reloads tree document data
+																															//(since it may have changed in FormDocInfo above).
 				}
-				InvalidateSettings(ApplySettings.ALL,true);
 			}
 		}
 
@@ -1779,14 +1768,19 @@ namespace OpenDental{
 				return;
 			}
 			string srcFileName=ODFileUtils.CombinePaths(patFolder,nodeDoc.FileName);
-			if(!HasImageExtension(srcFileName)) {//Only launch files which cannot be handled by Open Dental.
-				try {
-					Process.Start(srcFileName);
-				}
-				catch(Exception ex) {
-					MessageBox.Show(ex.Message);
-				}
+			string ext=Path.GetExtension(srcFileName).ToLower();
+			if(ext==".jpg" || ext==".jpeg" || ext==".gif") {
+				return;
 			}
+			//We allow anything which ends with a different extention to be viewed in the windows fax viewer.
+			//Specifically, multi-page faxes can be viewed more easily by one of our customers using the fax
+			//viewer. On Unix systems, it is imagined that an equivalent viewer will launch to allow the image
+			//to be viewed.
+			try{
+				Process.Start(srcFileName);
+			}catch(Exception ex){
+				MessageBox.Show(ex.Message);
+			}			
 		}
 
 		private void OnInfo_Click(){//TreeNode infoNode) {
@@ -2030,6 +2024,8 @@ namespace OpenDental{
 			doc.DateCreated=DateTime.Today;
 			doc.PatNum=PatCur.PatNum;
 			doc.DocCategory=GetCurrentCategory();
+			doc.WindowingMin=PrefB.GetInt("ImageWindowingMin");
+			doc.WindowingMax=PrefB.GetInt("ImageWindowingMax");
 			Documents.Insert(doc,PatCur);//creates filename and saves to db
 			try{
 				capturedImage.Save(ODFileUtils.CombinePaths(patFolder,doc.FileName),ImageFormat.Bmp);
@@ -2040,7 +2036,6 @@ namespace OpenDental{
 				throw new Exception(Lan.g(this,"Unable to save captured XRay image as document")+": "+ex.Message);
 			}
 			DataRow tag=Documents.GetDocumentRow(doc.DocNum.ToString());
-			doc.DocCategory=GetCurrentCategory();
 			AddTreeDocumentNode(ref doc,tag,true);
 			//This capture was successful. Keep capturing more images until the capture is manually aborted.
 			//This will cause calls to OnCaptureAborted(), then OnCaptureBegin().
@@ -2264,7 +2259,9 @@ namespace OpenDental{
 			//APPLY BRIGHTNESS AND CONTRAST - 
 			//TODO: should be updated later for more general functions 
 			//(create inputValues and outputValues from stored db function/table).
-			if((settings&ApplySettings.COLORFUNCTION)!=0){
+			if((settings&ApplySettings.COLORFUNCTION)!=0 &&
+				doc.WindowingMax!=0 && //Do not apply color function if brightness/contrast have never been set (assume normal settings).
+				!(doc.WindowingMax==255 && doc.WindowingMin==0)){//Don't apply if brightness/contrast settings are normal.
 				float[] inputValues=new float[] {
 					doc.WindowingMin/255f,
 					doc.WindowingMax/255f,
@@ -2298,7 +2295,8 @@ namespace OpenDental{
 								while(!(inputValues[j]<=colorComponent && colorComponent<inputValues[j+1])) {
 									j++;
 								}
-								rangedOutput=((colorComponent-inputValues[j])*(outputValues[j+1]-outputValues[j]))/(inputValues[j+1]-inputValues[j]);
+								rangedOutput=((colorComponent-inputValues[j])*(outputValues[j+1]-outputValues[j]))
+									/(inputValues[j+1]-inputValues[j]);
 							}
 							pBits[i]=(byte)Math.Round(255*rangedOutput);
 						}

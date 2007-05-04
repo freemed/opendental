@@ -125,9 +125,9 @@ namespace OpenDental{
 			// 
 			// label15
 			// 
-			this.label15.Location = new System.Drawing.Point(396,2);
+			this.label15.Location = new System.Drawing.Point(370,2);
 			this.label15.Name = "label15";
-			this.label15.Size = new System.Drawing.Size(59,25);
+			this.label15.Size = new System.Drawing.Size(85,25);
 			this.label15.TabIndex = 88;
 			this.label15.Text = "Signature";
 			this.label15.TextAlign = System.Drawing.ContentAlignment.TopRight;
@@ -174,7 +174,7 @@ namespace OpenDental{
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
 			this.butCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.butCancel.Location = new System.Drawing.Point(869,56);
+			this.butCancel.Location = new System.Drawing.Point(853,56);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75,25);
 			this.butCancel.TabIndex = 4;
@@ -189,7 +189,7 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(869,25);
+			this.butOK.Location = new System.Drawing.Point(853,25);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75,25);
 			this.butOK.TabIndex = 3;
@@ -200,7 +200,7 @@ namespace OpenDental{
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.BackColor = System.Drawing.SystemColors.Control;
-			this.ClientSize = new System.Drawing.Size(952,90);
+			this.ClientSize = new System.Drawing.Size(929,90);
 			this.Controls.Add(this.butCancel);
 			this.Controls.Add(this.butOK);
 			this.Controls.Add(this.labelInvalidSig);
