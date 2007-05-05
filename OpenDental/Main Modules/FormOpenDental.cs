@@ -1369,7 +1369,7 @@ namespace OpenDental{
 		[STAThread]
 		static void Main() {
 			//Register an EventHandler which handles unhandeled exceptions.
-			AppDomain.CurrentDomain.UnhandledException+=new UnhandledExceptionEventHandler(OnUnhandeledExceptionPolicy);
+			//AppDomain.CurrentDomain.UnhandledException+=new UnhandledExceptionEventHandler(OnUnhandeledExceptionPolicy);
 			Application.EnableVisualStyles();//changes appearance to XP
 			Application.DoEvents();//workaround for a known MS bug in the line above
 			Application.Run(new FormOpenDental());

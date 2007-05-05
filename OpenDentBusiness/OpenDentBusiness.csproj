@@ -103,6 +103,7 @@
     <Compile Include="TableTypes\CanadianClaim.cs" />
     <Compile Include="TableTypes\CanadianExtract.cs" />
     <Compile Include="TableTypes\CanadianNetwork.cs" />
+    <Compile Include="TableTypes\LabTurnaround.cs" />
     <Compile Include="TableTypes\LabCase.cs" />
     <Compile Include="TableTypes\Laboratory.cs" />
     <Compile Include="TableTypes\Mount.cs" />

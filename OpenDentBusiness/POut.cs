@@ -28,19 +28,30 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Always encapsulates the result, depending on the current database connection.</summary>
-		public static string PDateT(DateTime myDateT){
+		public static string PDateT(DateTime myDateT) {
+			return PDateT(myDateT,true);
+		}
+
+		///<summary></summary>
+		public static string PDateT(DateTime myDateT,bool encapsulate){
 			if(myDateT.Year<1880) {
 				myDateT=DateTime.MinValue;
 			}
 			try{
 				string outDate=myDateT.ToString("yyyy-MM-dd HH:mm:ss",CultureInfo.InvariantCulture);//new DateTimeFormatInfo());
+				string frontCap="'";
+				string backCap="'";
 				if(DataConnection.DBtype==DatabaseType.Oracle) {
-					return "TO_DATE('"+outDate+"','YYYY-MM-DD HH24:MI:SS')";
+					frontCap="TO_DATE('";
+					backCap="','YYYY-MM-DD HH24:MI:SS')";
 				}
-				return "'"+outDate+"'";
+				if(encapsulate) {
+					outDate=frontCap+outDate+backCap;
+				}
+				return outDate;
 			}
 			catch{
-				return "";//this actually saves zero's to the database
+				return "";//this saves zero's to the database
 			}
 		}
 

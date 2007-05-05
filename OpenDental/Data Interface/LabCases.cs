@@ -46,6 +46,7 @@ namespace OpenDental{
 			lab.DateTimeRecd   = PIn.PDateT (table.Rows[0][8].ToString());
 			lab.DateTimeChecked= PIn.PDateT (table.Rows[0][9].ToString());
 			lab.ProvNum        = PIn.PInt   (table.Rows[0][10].ToString());
+			lab.Instructions   = PIn.PString(table.Rows[0][11].ToString());
 			return lab;
 		}
 
@@ -59,7 +60,7 @@ namespace OpenDental{
 				command+="LabCaseNum,";
 			}
 			command+="PatNum,LaboratoryNum,AptNum,PlannedAptNum,DateTimeDue,DateTimeCreated,"
-				+"DateTimeSent,DateTimeRecd,DateTimeChecked,ProvNum) VALUES(";
+				+"DateTimeSent,DateTimeRecd,DateTimeChecked,ProvNum,Instructions) VALUES(";
 			if(PrefB.RandomKeys) {
 				command+="'"+POut.PInt(lab.LabCaseNum)+"', ";
 			}
@@ -68,12 +69,13 @@ namespace OpenDental{
 				+"'"+POut.PInt   (lab.LaboratoryNum)+"', "
 				+"'"+POut.PInt   (lab.AptNum)+"', "
 				+"'"+POut.PInt   (lab.PlannedAptNum)+"', "
-				+"'"+POut.PDateT (lab.DateTimeDue)+"', "
-				+"'"+POut.PDateT (lab.DateTimeCreated)+"', "
-				+"'"+POut.PDateT (lab.DateTimeSent)+"', "
-				+"'"+POut.PDateT (lab.DateTimeRecd)+"', "
-				+"'"+POut.PDateT (lab.DateTimeChecked)+"', "
-				+"'"+POut.PInt   (lab.ProvNum)+"')";
+				    +POut.PDateT (lab.DateTimeDue)+", "
+				    +POut.PDateT (lab.DateTimeCreated)+", "
+				    +POut.PDateT (lab.DateTimeSent)+", "
+				    +POut.PDateT (lab.DateTimeRecd)+", "
+				    +POut.PDateT (lab.DateTimeChecked)+", "
+				+"'"+POut.PInt   (lab.ProvNum)+"', "
+				+"'"+POut.PString(lab.Instructions)+"')";
 			if(PrefB.RandomKeys) {
 				General.NonQ(command);
 			}
@@ -89,12 +91,13 @@ namespace OpenDental{
 				+ ",LaboratoryNum = '"  +POut.PInt   (lab.LaboratoryNum)+"'"
 				+ ",AptNum = '"         +POut.PInt   (lab.AptNum)+"'"
 				+ ",PlannedAptNum = '"  +POut.PInt   (lab.PlannedAptNum)+"'"
-				+ ",DateTimeDue = '"    +POut.PDateT (lab.DateTimeDue)+"'"
-				+ ",DateTimeCreated = '"+POut.PDateT (lab.DateTimeCreated)+"'"
-				+ ",DateTimeSent = '"   +POut.PDateT (lab.DateTimeSent)+"'"
-				+ ",DateTimeRecd = '"   +POut.PDateT (lab.DateTimeRecd)+"'"
-				+ ",DateTimeChecked = '"+POut.PDateT (lab.DateTimeChecked)+"'"
+				+ ",DateTimeDue = "     +POut.PDateT (lab.DateTimeDue)
+				+ ",DateTimeCreated = " +POut.PDateT (lab.DateTimeCreated)
+				+ ",DateTimeSent = "    +POut.PDateT (lab.DateTimeSent)
+				+ ",DateTimeRecd = "    +POut.PDateT (lab.DateTimeRecd)
+				+ ",DateTimeChecked = " +POut.PDateT (lab.DateTimeChecked)
 				+ ",ProvNum = '"        +POut.PInt   (lab.ProvNum)+"'"
+				+ ",Instructions = '"   +POut.PString(lab.Instructions)+"'"
 				+" WHERE LabCaseNum = '"+POut.PInt(lab.LabCaseNum)+"'";
  			General.NonQ(command);
 		}
@@ -117,8 +120,7 @@ namespace OpenDental{
 				throw new Exception(Lan.g("LabCases","Cannot delete LabCase because ")+pats);
 			}*/
 			//delete
-			command= "DELETE FROM labcase" 
-				+" WHERE LabCaseNum = "+POut.PInt(labCaseNum);
+			command= "DELETE FROM labcase WHERE LabCaseNum = "+POut.PInt(labCaseNum);
  			General.NonQ(command);
 		}
 
