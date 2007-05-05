@@ -159,6 +159,7 @@
     <Compile Include="Data Interface\CanadianExtracts.cs" />
     <Compile Include="Data Interface\ChartModule.cs" />
     <Compile Include="Data Interface\CanadianNetworks.cs" />
+    <Compile Include="Data Interface\LabTurnarounds.cs" />
     <Compile Include="Data Interface\LabCases.cs" />
     <Compile Include="Data Interface\Laboratories.cs" />
     <Compile Include="Data Interface\Mounts.cs" />

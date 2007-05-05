@@ -50,8 +50,10 @@ namespace OpenDental{
 		private OpenDental.UI.Button butRecdNow;
 		private OpenDental.UI.Button butSentNow;
 		private OpenDental.UI.Button butCreatedNow;
-		private OpenDental.UI.Button butTwoWeeks;
+		private ListBox listTurnaround;
+		private Label label12;
 		private List<Laboratory> ListLabs;
+		private List<LabTurnaround> turnaroundList;
 
 		///<summary></summary>
 		public FormLabCaseEdit()
@@ -108,101 +110,102 @@ namespace OpenDental{
 			this.comboProv = new System.Windows.Forms.ComboBox();
 			this.label11 = new System.Windows.Forms.Label();
 			this.listLab = new System.Windows.Forms.ListBox();
+			this.groupBox1 = new System.Windows.Forms.GroupBox();
+			this.butCheckedNow = new OpenDental.UI.Button();
+			this.butRecdNow = new OpenDental.UI.Button();
+			this.butSentNow = new OpenDental.UI.Button();
+			this.butCreatedNow = new OpenDental.UI.Button();
 			this.butDetachPlanned = new OpenDental.UI.Button();
 			this.butDetach = new OpenDental.UI.Button();
 			this.butDelete = new OpenDental.UI.Button();
 			this.butOK = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
-			this.groupBox1 = new System.Windows.Forms.GroupBox();
-			this.butCreatedNow = new OpenDental.UI.Button();
-			this.butSentNow = new OpenDental.UI.Button();
-			this.butRecdNow = new OpenDental.UI.Button();
-			this.butCheckedNow = new OpenDental.UI.Button();
-			this.butTwoWeeks = new OpenDental.UI.Button();
+			this.listTurnaround = new System.Windows.Forms.ListBox();
+			this.label12 = new System.Windows.Forms.Label();
 			this.groupBox1.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// label1
 			// 
-			this.label1.Location = new System.Drawing.Point(4,16);
+			this.label1.Location = new System.Drawing.Point(5,16);
 			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(130,17);
+			this.label1.Size = new System.Drawing.Size(89,17);
 			this.label1.TabIndex = 2;
 			this.label1.Text = "Patient";
 			this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// textPatient
 			// 
-			this.textPatient.Location = new System.Drawing.Point(137,15);
+			this.textPatient.Location = new System.Drawing.Point(94,15);
 			this.textPatient.Name = "textPatient";
 			this.textPatient.ReadOnly = true;
-			this.textPatient.Size = new System.Drawing.Size(276,20);
+			this.textPatient.Size = new System.Drawing.Size(319,20);
 			this.textPatient.TabIndex = 0;
 			// 
 			// textInstructions
 			// 
-			this.textInstructions.Location = new System.Drawing.Point(137,260);
+			this.textInstructions.Location = new System.Drawing.Point(94,285);
 			this.textInstructions.MaxLength = 10000;
 			this.textInstructions.Multiline = true;
 			this.textInstructions.Name = "textInstructions";
-			this.textInstructions.Size = new System.Drawing.Size(357,127);
+			this.textInstructions.Size = new System.Drawing.Size(400,127);
 			this.textInstructions.TabIndex = 1;
 			// 
 			// label3
 			// 
-			this.label3.Location = new System.Drawing.Point(2,262);
+			this.label3.Location = new System.Drawing.Point(5,287);
 			this.label3.Name = "label3";
-			this.label3.Size = new System.Drawing.Size(133,17);
+			this.label3.Size = new System.Drawing.Size(89,17);
 			this.label3.TabIndex = 101;
 			this.label3.Text = "Instructions";
 			this.label3.TextAlign = System.Drawing.ContentAlignment.TopRight;
 			// 
 			// label2
 			// 
-			this.label2.Location = new System.Drawing.Point(4,93);
+			this.label2.Location = new System.Drawing.Point(91,116);
 			this.label2.Name = "label2";
-			this.label2.Size = new System.Drawing.Size(133,17);
+			this.label2.Size = new System.Drawing.Size(89,17);
 			this.label2.TabIndex = 99;
 			this.label2.Text = "Lab";
-			this.label2.TextAlign = System.Drawing.ContentAlignment.TopRight;
+			this.label2.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
 			// 
 			// textAppointment
 			// 
-			this.textAppointment.Location = new System.Drawing.Point(137,40);
+			this.textAppointment.Location = new System.Drawing.Point(94,40);
 			this.textAppointment.Name = "textAppointment";
 			this.textAppointment.ReadOnly = true;
-			this.textAppointment.Size = new System.Drawing.Size(276,20);
+			this.textAppointment.Size = new System.Drawing.Size(319,20);
 			this.textAppointment.TabIndex = 103;
 			// 
 			// label4
 			// 
-			this.label4.Location = new System.Drawing.Point(4,41);
+			this.label4.Location = new System.Drawing.Point(5,41);
 			this.label4.Name = "label4";
-			this.label4.Size = new System.Drawing.Size(130,17);
+			this.label4.Size = new System.Drawing.Size(89,17);
 			this.label4.TabIndex = 104;
 			this.label4.Text = "Appointment";
 			this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// textPlanned
 			// 
-			this.textPlanned.Location = new System.Drawing.Point(137,65);
+			this.textPlanned.Location = new System.Drawing.Point(94,65);
 			this.textPlanned.Name = "textPlanned";
 			this.textPlanned.ReadOnly = true;
-			this.textPlanned.Size = new System.Drawing.Size(276,20);
+			this.textPlanned.Size = new System.Drawing.Size(319,20);
 			this.textPlanned.TabIndex = 106;
 			// 
 			// label5
 			// 
-			this.label5.Location = new System.Drawing.Point(4,66);
+			this.label5.Location = new System.Drawing.Point(5,66);
 			this.label5.Name = "label5";
-			this.label5.Size = new System.Drawing.Size(130,17);
+			this.label5.Size = new System.Drawing.Size(89,17);
 			this.label5.TabIndex = 107;
-			this.label5.Text = "Planned Appointment";
+			this.label5.Text = "Planned Appt";
 			this.label5.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// label6
 			// 
-			this.label6.Location = new System.Drawing.Point(6,20);
+			this.label6.Location = new System.Drawing.Point(17,20);
 			this.label6.Name = "label6";
 			this.label6.Size = new System.Drawing.Size(81,17);
 			this.label6.TabIndex = 110;
@@ -211,21 +214,21 @@ namespace OpenDental{
 			// 
 			// textDateCreated
 			// 
-			this.textDateCreated.Location = new System.Drawing.Point(89,19);
+			this.textDateCreated.Location = new System.Drawing.Point(100,19);
 			this.textDateCreated.Name = "textDateCreated";
-			this.textDateCreated.Size = new System.Drawing.Size(158,20);
+			this.textDateCreated.Size = new System.Drawing.Size(147,20);
 			this.textDateCreated.TabIndex = 111;
 			// 
 			// textDateSent
 			// 
-			this.textDateSent.Location = new System.Drawing.Point(89,44);
+			this.textDateSent.Location = new System.Drawing.Point(100,44);
 			this.textDateSent.Name = "textDateSent";
-			this.textDateSent.Size = new System.Drawing.Size(158,20);
+			this.textDateSent.Size = new System.Drawing.Size(147,20);
 			this.textDateSent.TabIndex = 113;
 			// 
 			// label7
 			// 
-			this.label7.Location = new System.Drawing.Point(6,45);
+			this.label7.Location = new System.Drawing.Point(17,45);
 			this.label7.Name = "label7";
 			this.label7.Size = new System.Drawing.Size(81,17);
 			this.label7.TabIndex = 112;
@@ -234,14 +237,14 @@ namespace OpenDental{
 			// 
 			// textDateRecd
 			// 
-			this.textDateRecd.Location = new System.Drawing.Point(89,69);
+			this.textDateRecd.Location = new System.Drawing.Point(100,69);
 			this.textDateRecd.Name = "textDateRecd";
-			this.textDateRecd.Size = new System.Drawing.Size(158,20);
+			this.textDateRecd.Size = new System.Drawing.Size(147,20);
 			this.textDateRecd.TabIndex = 115;
 			// 
 			// label8
 			// 
-			this.label8.Location = new System.Drawing.Point(6,70);
+			this.label8.Location = new System.Drawing.Point(17,70);
 			this.label8.Name = "label8";
 			this.label8.Size = new System.Drawing.Size(81,17);
 			this.label8.TabIndex = 114;
@@ -250,32 +253,32 @@ namespace OpenDental{
 			// 
 			// textDateChecked
 			// 
-			this.textDateChecked.Location = new System.Drawing.Point(89,94);
+			this.textDateChecked.Location = new System.Drawing.Point(100,94);
 			this.textDateChecked.Name = "textDateChecked";
-			this.textDateChecked.Size = new System.Drawing.Size(158,20);
+			this.textDateChecked.Size = new System.Drawing.Size(147,20);
 			this.textDateChecked.TabIndex = 117;
 			// 
 			// label9
 			// 
-			this.label9.Location = new System.Drawing.Point(6,95);
+			this.label9.Location = new System.Drawing.Point(2,95);
 			this.label9.Name = "label9";
-			this.label9.Size = new System.Drawing.Size(81,17);
+			this.label9.Size = new System.Drawing.Size(96,17);
 			this.label9.TabIndex = 116;
-			this.label9.Text = "Checked";
+			this.label9.Text = "Quality Checked";
 			this.label9.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// textDateDue
 			// 
-			this.textDateDue.Location = new System.Drawing.Point(137,237);
+			this.textDateDue.Location = new System.Drawing.Point(296,261);
 			this.textDateDue.Name = "textDateDue";
-			this.textDateDue.Size = new System.Drawing.Size(158,20);
+			this.textDateDue.Size = new System.Drawing.Size(198,20);
 			this.textDateDue.TabIndex = 119;
 			// 
 			// label10
 			// 
-			this.label10.Location = new System.Drawing.Point(5,238);
+			this.label10.Location = new System.Drawing.Point(207,262);
 			this.label10.Name = "label10";
-			this.label10.Size = new System.Drawing.Size(130,17);
+			this.label10.Size = new System.Drawing.Size(89,17);
 			this.label10.TabIndex = 118;
 			this.label10.Text = "Date Time Due";
 			this.label10.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -284,7 +287,7 @@ namespace OpenDental{
 			// 
 			this.comboProv.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.comboProv.FormattingEnabled = true;
-			this.comboProv.Location = new System.Drawing.Point(137,213);
+			this.comboProv.Location = new System.Drawing.Point(94,90);
 			this.comboProv.MaxDropDownItems = 25;
 			this.comboProv.Name = "comboProv";
 			this.comboProv.Size = new System.Drawing.Size(158,21);
@@ -292,9 +295,9 @@ namespace OpenDental{
 			// 
 			// label11
 			// 
-			this.label11.Location = new System.Drawing.Point(4,216);
+			this.label11.Location = new System.Drawing.Point(5,93);
 			this.label11.Name = "label11";
-			this.label11.Size = new System.Drawing.Size(133,17);
+			this.label11.Size = new System.Drawing.Size(89,17);
 			this.label11.TabIndex = 120;
 			this.label11.Text = "Provider";
 			this.label11.TextAlign = System.Drawing.ContentAlignment.TopRight;
@@ -302,10 +305,88 @@ namespace OpenDental{
 			// listLab
 			// 
 			this.listLab.FormattingEnabled = true;
-			this.listLab.Location = new System.Drawing.Point(137,89);
+			this.listLab.Location = new System.Drawing.Point(94,136);
 			this.listLab.Name = "listLab";
-			this.listLab.Size = new System.Drawing.Size(216,121);
+			this.listLab.Size = new System.Drawing.Size(198,121);
 			this.listLab.TabIndex = 0;
+			this.listLab.SelectedIndexChanged += new System.EventHandler(this.listLab_SelectedIndexChanged);
+			// 
+			// groupBox1
+			// 
+			this.groupBox1.Controls.Add(this.butCheckedNow);
+			this.groupBox1.Controls.Add(this.butRecdNow);
+			this.groupBox1.Controls.Add(this.butSentNow);
+			this.groupBox1.Controls.Add(this.butCreatedNow);
+			this.groupBox1.Controls.Add(this.textDateCreated);
+			this.groupBox1.Controls.Add(this.label6);
+			this.groupBox1.Controls.Add(this.label7);
+			this.groupBox1.Controls.Add(this.textDateSent);
+			this.groupBox1.Controls.Add(this.label8);
+			this.groupBox1.Controls.Add(this.textDateRecd);
+			this.groupBox1.Controls.Add(this.textDateChecked);
+			this.groupBox1.Controls.Add(this.label9);
+			this.groupBox1.Location = new System.Drawing.Point(523,10);
+			this.groupBox1.Name = "groupBox1";
+			this.groupBox1.Size = new System.Drawing.Size(329,123);
+			this.groupBox1.TabIndex = 122;
+			this.groupBox1.TabStop = false;
+			this.groupBox1.Text = "Tracking";
+			// 
+			// butCheckedNow
+			// 
+			this.butCheckedNow.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butCheckedNow.Autosize = true;
+			this.butCheckedNow.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butCheckedNow.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butCheckedNow.CornerRadius = 4F;
+			this.butCheckedNow.Location = new System.Drawing.Point(248,92);
+			this.butCheckedNow.Name = "butCheckedNow";
+			this.butCheckedNow.Size = new System.Drawing.Size(75,24);
+			this.butCheckedNow.TabIndex = 121;
+			this.butCheckedNow.Text = "Now";
+			this.butCheckedNow.Click += new System.EventHandler(this.butCheckedNow_Click);
+			// 
+			// butRecdNow
+			// 
+			this.butRecdNow.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butRecdNow.Autosize = true;
+			this.butRecdNow.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butRecdNow.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butRecdNow.CornerRadius = 4F;
+			this.butRecdNow.Location = new System.Drawing.Point(248,67);
+			this.butRecdNow.Name = "butRecdNow";
+			this.butRecdNow.Size = new System.Drawing.Size(75,24);
+			this.butRecdNow.TabIndex = 120;
+			this.butRecdNow.Text = "Now";
+			this.butRecdNow.Click += new System.EventHandler(this.butRecdNow_Click);
+			// 
+			// butSentNow
+			// 
+			this.butSentNow.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butSentNow.Autosize = true;
+			this.butSentNow.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butSentNow.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butSentNow.CornerRadius = 4F;
+			this.butSentNow.Location = new System.Drawing.Point(248,42);
+			this.butSentNow.Name = "butSentNow";
+			this.butSentNow.Size = new System.Drawing.Size(75,24);
+			this.butSentNow.TabIndex = 119;
+			this.butSentNow.Text = "Now";
+			this.butSentNow.Click += new System.EventHandler(this.butSentNow_Click);
+			// 
+			// butCreatedNow
+			// 
+			this.butCreatedNow.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butCreatedNow.Autosize = true;
+			this.butCreatedNow.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butCreatedNow.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butCreatedNow.CornerRadius = 4F;
+			this.butCreatedNow.Location = new System.Drawing.Point(248,17);
+			this.butCreatedNow.Name = "butCreatedNow";
+			this.butCreatedNow.Size = new System.Drawing.Size(75,24);
+			this.butCreatedNow.TabIndex = 118;
+			this.butCreatedNow.Text = "Now";
+			this.butCreatedNow.Click += new System.EventHandler(this.butCreatedNow_Click);
 			// 
 			// butDetachPlanned
 			// 
@@ -382,102 +463,30 @@ namespace OpenDental{
 			this.butCancel.Text = "&Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
 			// 
-			// groupBox1
+			// listTurnaround
 			// 
-			this.groupBox1.Controls.Add(this.butCheckedNow);
-			this.groupBox1.Controls.Add(this.butRecdNow);
-			this.groupBox1.Controls.Add(this.butSentNow);
-			this.groupBox1.Controls.Add(this.butCreatedNow);
-			this.groupBox1.Controls.Add(this.textDateCreated);
-			this.groupBox1.Controls.Add(this.label6);
-			this.groupBox1.Controls.Add(this.label7);
-			this.groupBox1.Controls.Add(this.textDateSent);
-			this.groupBox1.Controls.Add(this.label8);
-			this.groupBox1.Controls.Add(this.textDateRecd);
-			this.groupBox1.Controls.Add(this.textDateChecked);
-			this.groupBox1.Controls.Add(this.label9);
-			this.groupBox1.Location = new System.Drawing.Point(526,8);
-			this.groupBox1.Name = "groupBox1";
-			this.groupBox1.Size = new System.Drawing.Size(332,123);
-			this.groupBox1.TabIndex = 122;
-			this.groupBox1.TabStop = false;
-			this.groupBox1.Text = "Tracking";
+			this.listTurnaround.FormattingEnabled = true;
+			this.listTurnaround.Location = new System.Drawing.Point(296,136);
+			this.listTurnaround.Name = "listTurnaround";
+			this.listTurnaround.Size = new System.Drawing.Size(198,121);
+			this.listTurnaround.TabIndex = 124;
+			this.listTurnaround.Click += new System.EventHandler(this.listTurnaround_Click);
 			// 
-			// butCreatedNow
+			// label12
 			// 
-			this.butCreatedNow.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butCreatedNow.Autosize = true;
-			this.butCreatedNow.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butCreatedNow.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butCreatedNow.CornerRadius = 4F;
-			this.butCreatedNow.Location = new System.Drawing.Point(251,17);
-			this.butCreatedNow.Name = "butCreatedNow";
-			this.butCreatedNow.Size = new System.Drawing.Size(75,24);
-			this.butCreatedNow.TabIndex = 118;
-			this.butCreatedNow.Text = "Now";
-			this.butCreatedNow.Click += new System.EventHandler(this.butCreatedNow_Click);
-			// 
-			// butSentNow
-			// 
-			this.butSentNow.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butSentNow.Autosize = true;
-			this.butSentNow.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butSentNow.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butSentNow.CornerRadius = 4F;
-			this.butSentNow.Location = new System.Drawing.Point(251,42);
-			this.butSentNow.Name = "butSentNow";
-			this.butSentNow.Size = new System.Drawing.Size(75,24);
-			this.butSentNow.TabIndex = 119;
-			this.butSentNow.Text = "Now";
-			this.butSentNow.Click += new System.EventHandler(this.butSentNow_Click);
-			// 
-			// butRecdNow
-			// 
-			this.butRecdNow.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butRecdNow.Autosize = true;
-			this.butRecdNow.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butRecdNow.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butRecdNow.CornerRadius = 4F;
-			this.butRecdNow.Location = new System.Drawing.Point(251,67);
-			this.butRecdNow.Name = "butRecdNow";
-			this.butRecdNow.Size = new System.Drawing.Size(75,24);
-			this.butRecdNow.TabIndex = 120;
-			this.butRecdNow.Text = "Now";
-			this.butRecdNow.Click += new System.EventHandler(this.butRecdNow_Click);
-			// 
-			// butCheckedNow
-			// 
-			this.butCheckedNow.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butCheckedNow.Autosize = true;
-			this.butCheckedNow.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butCheckedNow.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butCheckedNow.CornerRadius = 4F;
-			this.butCheckedNow.Location = new System.Drawing.Point(251,92);
-			this.butCheckedNow.Name = "butCheckedNow";
-			this.butCheckedNow.Size = new System.Drawing.Size(75,24);
-			this.butCheckedNow.TabIndex = 121;
-			this.butCheckedNow.Text = "Now";
-			this.butCheckedNow.Click += new System.EventHandler(this.butCheckedNow_Click);
-			// 
-			// butTwoWeeks
-			// 
-			this.butTwoWeeks.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butTwoWeeks.Autosize = true;
-			this.butTwoWeeks.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butTwoWeeks.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butTwoWeeks.CornerRadius = 4F;
-			this.butTwoWeeks.Location = new System.Drawing.Point(301,235);
-			this.butTwoWeeks.Name = "butTwoWeeks";
-			this.butTwoWeeks.Size = new System.Drawing.Size(75,24);
-			this.butTwoWeeks.TabIndex = 123;
-			this.butTwoWeeks.Text = "2 Weeks";
-			this.butTwoWeeks.Click += new System.EventHandler(this.butTwoWeeks_Click);
+			this.label12.Location = new System.Drawing.Point(293,116);
+			this.label12.Name = "label12";
+			this.label12.Size = new System.Drawing.Size(89,17);
+			this.label12.TabIndex = 125;
+			this.label12.Text = "Set Due Date";
+			this.label12.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
 			// 
 			// FormLabCaseEdit
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.ClientSize = new System.Drawing.Size(878,487);
-			this.Controls.Add(this.butTwoWeeks);
+			this.Controls.Add(this.listTurnaround);
+			this.Controls.Add(this.label12);
 			this.Controls.Add(this.groupBox1);
 			this.Controls.Add(this.listLab);
 			this.Controls.Add(this.comboProv);
@@ -569,6 +578,14 @@ namespace OpenDental{
 			CaseCur.PlannedAptNum=0;
 		}
 
+		private void listLab_SelectedIndexChanged(object sender,EventArgs e) {
+			//turnaroundList=LabTurnarounds.
+		}
+
+		private void listTurnaround_Click(object sender,EventArgs e) {
+
+		}
+
 		private void butCreatedNow_Click(object sender,EventArgs e) {
 			textDateCreated.Text=MiscData.GetNowDateTime().ToString();
 		}
@@ -583,10 +600,6 @@ namespace OpenDental{
 
 		private void butCheckedNow_Click(object sender,EventArgs e) {
 			textDateChecked.Text=MiscData.GetNowDateTime().ToString();
-		}
-
-		private void butTwoWeeks_Click(object sender,EventArgs e) {
-			textDateDue.Text=(MiscData.GetNowDateTime().Date.AddDays(14)+TimeSpan.FromHours(17)).ToString();
 		}
 
 		private void butDelete_Click(object sender, System.EventArgs e) {
@@ -712,6 +725,10 @@ namespace OpenDental{
 		private void butCancel_Click(object sender, System.EventArgs e) {
 			DialogResult=DialogResult.Cancel;
 		}
+
+		
+
+		
 
 		
 

@@ -4750,6 +4750,13 @@ namespace OpenDental{
 					//added after r240
 					command="ALTER TABLE labcase ADD Instructions text";
 					General.NonQEx(command);
+					//added after r243
+					command="INSERT INTO definition (Category,ItemOrder,ItemName,ItemColor) VALUES(12,7,"
+						+"'LabCase',-65536)";
+					General.NonQEx(command);
+					command="INSERT INTO definition (Category,ItemOrder,ItemName,ItemColor) VALUES(12,8,"
+						+"'Appointment',-8388480)";
+					General.NonQEx(command);
 				}
 				else{
 					//this column will be the new primary key

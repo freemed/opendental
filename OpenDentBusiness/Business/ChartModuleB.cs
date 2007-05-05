@@ -18,6 +18,7 @@ namespace OpenDentBusiness {
 			DataRow row;
 			//columns that start with lowercase are altered for display rather than being raw data.
 			table.Columns.Add("aptDateTime",typeof(DateTime));
+			table.Columns.Add("AptNum");
 			table.Columns.Add("CodeNum");
 			table.Columns.Add("colorBackG");
 			table.Columns.Add("colorText");
@@ -25,6 +26,7 @@ namespace OpenDentBusiness {
 			table.Columns.Add("description");
 			table.Columns.Add("dx");
 			table.Columns.Add("Dx");
+			table.Columns.Add("LabCaseNum");
 			table.Columns.Add("note");
 			table.Columns.Add("Priority");
 			table.Columns.Add("ProcCode");
@@ -73,6 +75,7 @@ namespace OpenDentBusiness {
 			for(int i=0;i<rawProcs.Rows.Count;i++) {
 				row=table.NewRow();
 				row["aptDateTime"]=PIn.PDateT(rawProcs.Rows[i]["AptDateTime"].ToString());
+				row["AptNum"]=0;
 				row["CodeNum"]=rawProcs.Rows[i]["CodeNum"].ToString();
 				row["colorBackG"]=Color.White.ToArgb();
 				if(((DateTime)row["aptDateTime"]).Date==DateTime.Today){
@@ -102,6 +105,7 @@ namespace OpenDentBusiness {
 				row["description"]=rawProcs.Rows[i]["Descript"].ToString();
 				row["dx"]=DefB.GetValue(DefCat.Diagnosis,PIn.PInt(rawProcs.Rows[i]["Dx"].ToString()));
 				row["Dx"]=rawProcs.Rows[i]["Dx"].ToString();
+				row["LabCaseNum"]=0;
 				//note-----------------------------------------------------------------------------------------------------------
 				if(isAuditMode){//we will include all notes for each proc.  We will concat and make readable.
 					for(int n=0;n<rawNotes.Rows.Count;n++) {//loop through each note
@@ -170,11 +174,13 @@ namespace OpenDentBusiness {
 			DataTable rawComm=dcon.GetTable(command);
 			for(int i=0;i<rawComm.Rows.Count;i++) {
 				row=table.NewRow();
+				row["AptNum"]=0;
 				row["colorBackG"]=Color.White.ToArgb();
 				row["colorText"]=DefB.Long[(int)DefCat.ProgNoteColors][6].ItemColor.ToArgb().ToString();
 				row["CommlogNum"]=rawComm.Rows[i]["CommlogNum"].ToString();
 				row["description"]=Lan.g("ChartModule","Comm - ")
 					+Lan.g("enumCommItemType",((CommItemType)PIn.PInt(rawComm.Rows[i]["CommType"].ToString())).ToString());
+				row["LabCaseNum"]=0;
 				row["note"]=rawComm.Rows[i]["Note"].ToString();
 				dateT=PIn.PDateT(rawComm.Rows[i]["CommDateTime"].ToString());
 				if(dateT.Year<1880){
@@ -194,10 +200,12 @@ namespace OpenDentBusiness {
 			DataTable rawRx=dcon.GetTable(command);
 			for(int i=0;i<rawRx.Rows.Count;i++) {
 				row=table.NewRow();
+				row["AptNum"]=0;
 				row["colorBackG"]=Color.White.ToArgb();
 				row["colorText"]=DefB.Long[(int)DefCat.ProgNoteColors][5].ItemColor.ToArgb().ToString();
 				row["CommlogNum"]=0;
 				row["description"]=Lan.g("ChartModule","Rx - ")+rawRx.Rows[i]["Drug"].ToString()+" - #"+rawRx.Rows[i]["Disp"].ToString();
+				row["LabCaseNum"]=0;
 				row["note"]=rawRx.Rows[i]["Notes"].ToString();
 				dateT=PIn.PDate(rawRx.Rows[i]["RxDate"].ToString());
 				if(dateT.Year<1880) {
@@ -209,6 +217,73 @@ namespace OpenDentBusiness {
 				row["ProcDate"]=dateT;
 				row["ProcNum"]=0;
 				row["RxNum"]=rawRx.Rows[i]["RxNum"].ToString();
+				rows.Add(row);
+			}
+			//LabCase------------------------------------------------------------------------------------------------------------------
+			command="SELECT labcase.*,Description,Phone FROM labcase,laboratory "
+				+"WHERE labcase.LaboratoryNum=laboratory.LaboratoryNum "
+				+"AND PatNum="+POut.PInt(patNum)
+				+" ORDER BY DateTimeCreated";
+			DataTable rawLab=dcon.GetTable(command);
+			for(int i=0;i<rawLab.Rows.Count;i++) {
+				row=table.NewRow();
+				row["AptNum"]=0;
+				row["colorBackG"]=Color.White.ToArgb();
+				row["colorText"]=DefB.Long[(int)DefCat.ProgNoteColors][7].ItemColor.ToArgb().ToString();
+				row["CommlogNum"]=0;
+				row["description"]=Lan.g("ChartModule","LabCase - ")+rawLab.Rows[i]["Description"].ToString()+" "
+					+rawLab.Rows[i]["Phone"].ToString();
+				if(PIn.PDate(rawLab.Rows[i]["DateTimeChecked"].ToString()).Year>1880){
+					row["description"]+="\r\n"+Lan.g("ChartModule","Quality Checked");
+				}
+				else if(PIn.PDate(rawLab.Rows[i]["DateTimeRecd"].ToString()).Year>1880) {
+					row["description"]+="\r\n"+Lan.g("ChartModule","Received");
+				}
+				else if(PIn.PDate(rawLab.Rows[i]["DateTimeSent"].ToString()).Year>1880) {
+					row["description"]+="\r\n"+Lan.g("ChartModule","Sent");
+				}
+				row["LabCaseNum"]=rawLab.Rows[i]["LabCaseNum"].ToString();
+				row["note"]=rawLab.Rows[i]["Instructions"].ToString();
+				dateT=PIn.PDateT(rawLab.Rows[i]["DateTimeCreated"].ToString());
+				if(dateT.Year<1880) {
+					row["procDate"]="";
+				}
+				else {
+					row["procDate"]=dateT.ToShortDateString();
+				}
+				row["ProcDate"]=dateT;
+				row["ProcNum"]=0;
+				row["RxNum"]=0;
+				rows.Add(row);
+			}
+			//Appointments---------------------------------------------------------------------------------------------------------
+			command="SELECT * FROM appointment WHERE PatNum="+POut.PInt(patNum)
+				+" AND AptStatus != 6 "//do not include planned appts.
+				+"ORDER BY AptDateTime";
+			DataTable rawApt=dcon.GetTable(command);
+			for(int i=0;i<rawApt.Rows.Count;i++) {
+				row=table.NewRow();
+				row["AptNum"]=rawApt.Rows[i]["AptNum"].ToString();
+				row["colorBackG"]=Color.White.ToArgb();
+				dateT=PIn.PDateT(rawApt.Rows[i]["AptDateTime"].ToString());
+				if(dateT.Date==DateTime.Today) {
+					row["colorBackG"]=DefB.Long[(int)DefCat.MiscColors][6].ItemColor.ToArgb().ToString();
+				}
+				row["colorText"]=DefB.Long[(int)DefCat.ProgNoteColors][8].ItemColor.ToArgb().ToString();
+				row["CommlogNum"]=0;
+				row["description"]=Lan.g("ChartModule","Appointment - ")+dateT.ToShortTimeString()+"\r\n"
+					+rawApt.Rows[i]["ProcDescript"].ToString();
+				row["LabCaseNum"]=0;
+				row["note"]=rawApt.Rows[i]["Note"].ToString();
+				if(dateT.Year<1880) {
+					row["procDate"]="";
+				}
+				else {
+					row["procDate"]=dateT.ToShortDateString();
+				}
+				row["ProcDate"]=dateT;
+				row["ProcNum"]=0;
+				row["RxNum"]=0;
 				rows.Add(row);
 			}
 			//Sorting
