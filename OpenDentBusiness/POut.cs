@@ -55,11 +55,11 @@ namespace OpenDentBusiness{
 			}
 		}
 
+		///<summary>Converts a date to yyyy-MM-dd format which is the format required by MySQL. myDate is the date you want to convert. encapsulate is true for the first overload, making the result look like this: 'yyyy-MM-dd' for MySQL.</summary>
 		public static string PDate(DateTime myDate){
 			return PDate(myDate,true);
 		}
 
-		///<summary>Converts a date to yyyy-MM-dd format which is the format required by MySQL. myDate is the date you want to convert. preText is text that should be placed prior to the date output text but after the leading encapsulating character (if any). postText is text that should be placed after the date output text but before the ending encapsulating character (if any).</summary>
 		public static string PDate(DateTime myDate,bool encapsulate){
 			if(myDate.Year<1880) {
 				myDate=DateTime.MinValue;

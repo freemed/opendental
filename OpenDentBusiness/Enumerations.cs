@@ -452,13 +452,13 @@ namespace OpenDentBusiness{
 		RetainerOutline,
 		///<summary>15</summary>
 		RetainerHatch}
-	///<summary>Schedule status.  Open,Closed,Holiday.</summary>
+	///<summary>Schedule status.  Open=0,Closed=1,Holiday=2.</summary>
   public enum SchedStatus{
-		///<summary></summary>
+		///<summary>0</summary>
 		Open,
-		///<summary></summary>
+		///<summary>1</summary>
 		Closed,
-		///<summary></summary>
+		///<summary>2</summary>
 		Holiday}
 	//<summary></summary>
   /*public enum BackupType{

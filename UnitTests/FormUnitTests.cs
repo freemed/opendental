@@ -7,6 +7,7 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 using OpenDentBusiness;
+using OpenDental;
 
 namespace UnitTests {
 	public partial class FormUnitTests:Form {
@@ -17,6 +18,7 @@ namespace UnitTests {
 		private void FormUnitTests_Load(object sender,EventArgs e) {
 			BenefitComputeRenewDate();
 			ToothFormatRanges();
+			//LabDueDate();
 			textResults.Text+="Done.";
 			textResults.SelectionStart=textResults.Text.Length;
 		}
@@ -106,7 +108,30 @@ namespace UnitTests {
 			//we still haven't tested really bad input.
 		}
 
-		
+		/*
+		private void LabDueDate(){
+			DateTime startdate=new DateTime(2007,5,3);//this is a Thursday
+			DateTime result=LabTurnarounds.ComputeDueDate(startdate,1);
+			DateTime desired=new DateTime(2007,5,4,17,0,0);//Friday, 5pm
+			if(result!=desired) {
+				textResults.Text+="LabDueDate failed.  Desired: "+desired.ToString()+" Result: "+result.ToString()+"\r\n";
+			}
+			result=LabTurnarounds.ComputeDueDate(startdate,2);
+			desired=new DateTime(2007,5,7,17,0,0);//Monday, 5pm
+			if(result!=desired) {
+				textResults.Text+="LabDueDate failed.  Desired: "+desired.ToString()+" Result: "+result.ToString()+"\r\n";
+			}
+			result=LabTurnarounds.ComputeDueDate(startdate,5);
+			desired=new DateTime(2007,5,10,17,0,0);//Thurs, 5pm
+			if(result!=desired) {
+				textResults.Text+="LabDueDate failed.  Desired: "+desired.ToString()+" Result: "+result.ToString()+"\r\n";
+			}
+			result=LabTurnarounds.ComputeDueDate(startdate,10);
+			desired=new DateTime(2007,5,17,17,0,0);//Thurs, 5pm
+			if(result!=desired) {
+				textResults.Text+="LabDueDate failed.  Desired: "+desired.ToString()+" Result: "+result.ToString()+"\r\n";
+			}
+		}*/
 
 
 	}

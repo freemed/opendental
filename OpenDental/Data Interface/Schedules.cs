@@ -258,6 +258,18 @@ namespace OpenDental{
 			}
 		}
 
+		public static bool DateIsHoliday(DateTime date){
+			string command="SELECT COUNT(*) FROM schedule WHERE Status=2 "//holiday
+				+"AND SchedDate= "+POut.PDate(date);
+			string result=General.GetCount(command);
+			if(result=="0"){
+				return false;
+			}
+			return true;
+		}
+
+
+
 		
 	}
 

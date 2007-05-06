@@ -565,7 +565,8 @@ namespace OpenDental{
 				textDateChecked.Text=CaseCur.DateTimeChecked.ToString();
 			}
 			if(CaseCur.DateTimeDue.Year>1880) {
-				textDateDue.Text=CaseCur.DateTimeDue.ToString();
+				textDateDue.Text=CaseCur.DateTimeDue.ToString("ddd")+" "+CaseCur.DateTimeDue.ToShortDateString()+" "
+					+CaseCur.DateTimeDue.ToShortTimeString();
 			}
 			textInstructions.Text=CaseCur.Instructions;
 		}
@@ -579,11 +580,24 @@ namespace OpenDental{
 		}
 
 		private void listLab_SelectedIndexChanged(object sender,EventArgs e) {
-			//turnaroundList=LabTurnarounds.
+			if(listLab.SelectedIndex==-1){
+				return;
+			}
+			turnaroundList=LabTurnarounds.GetForLab(ListLabs[listLab.SelectedIndex].LaboratoryNum);
+			listTurnaround.Items.Clear();
+			for(int i=0;i<turnaroundList.Count;i++){
+				listTurnaround.Items.Add(turnaroundList[i].Description+", "+turnaroundList[i].DaysActual.ToString());
+			}
 		}
 
 		private void listTurnaround_Click(object sender,EventArgs e) {
-
+			if(listTurnaround.SelectedIndex==-1){
+				return;
+			}
+			DateTime duedate=LabTurnarounds.ComputeDueDate
+				(MiscData.GetNowDateTime().Date,turnaroundList[listTurnaround.SelectedIndex].DaysActual);
+			textDateDue.Text=duedate.ToString("ddd")+" "+duedate.ToShortDateString()+" "+duedate.ToShortTimeString();
+			listTurnaround.SelectedIndex=-1;
 		}
 
 		private void butCreatedNow_Click(object sender,EventArgs e) {
@@ -676,6 +690,7 @@ namespace OpenDental{
 			CaseCur.LaboratoryNum=ListLabs[listLab.SelectedIndex].LaboratoryNum;
 			//AptNum
 			//PlannedAptNum
+			CaseCur.ProvNum=Providers.List[comboProv.SelectedIndex].ProvNum;
 			if(textDateCreated.Text==""){
 				CaseCur.DateTimeCreated=DateTime.MinValue;
 			}

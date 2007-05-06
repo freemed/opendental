@@ -216,6 +216,7 @@ namespace OpenDentBusiness {
 				}
 				row["ProcDate"]=dateT;
 				row["ProcNum"]=0;
+				//row["prov"]=ProviderB. PIn.PInt(rawRx.Rows[i]["ProvNum"].ToString());
 				row["RxNum"]=rawRx.Rows[i]["RxNum"].ToString();
 				rows.Add(row);
 			}
@@ -225,6 +226,7 @@ namespace OpenDentBusiness {
 				+"AND PatNum="+POut.PInt(patNum)
 				+" ORDER BY DateTimeCreated";
 			DataTable rawLab=dcon.GetTable(command);
+			DateTime duedate;
 			for(int i=0;i<rawLab.Rows.Count;i++) {
 				row=table.NewRow();
 				row["AptNum"]=0;
@@ -233,6 +235,11 @@ namespace OpenDentBusiness {
 				row["CommlogNum"]=0;
 				row["description"]=Lan.g("ChartModule","LabCase - ")+rawLab.Rows[i]["Description"].ToString()+" "
 					+rawLab.Rows[i]["Phone"].ToString();
+				if(PIn.PDate(rawLab.Rows[i]["DateTimeDue"].ToString()).Year>1880) {
+					duedate=PIn.PDateT(rawLab.Rows[i]["DateTimeDue"].ToString());
+					row["description"]+="\r\n"+Lan.g("ChartModule","Due")+" "+duedate.ToString("ddd")+" "
+						+duedate.ToShortDateString()+" "+duedate.ToShortTimeString();;
+				}
 				if(PIn.PDate(rawLab.Rows[i]["DateTimeChecked"].ToString()).Year>1880){
 					row["description"]+="\r\n"+Lan.g("ChartModule","Quality Checked");
 				}

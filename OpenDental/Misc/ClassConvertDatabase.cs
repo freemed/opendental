@@ -4757,6 +4757,16 @@ namespace OpenDental{
 					command="INSERT INTO definition (Category,ItemOrder,ItemName,ItemColor) VALUES(12,8,"
 						+"'Appointment',-8388480)";
 					General.NonQEx(command);
+					//Added after r244
+					command=@"CREATE TABLE labturnaround(
+						LabTurnaroundNum int NOT NULL auto_increment,
+						LaboratoryNum int NOT NULL,
+						Description varchar(255),
+						DaysPublished smallint NOT NULL,
+						DaysActual smallint NOT NULL,
+						PRIMARY KEY (LabTurnaroundNum)
+						) DEFAULT CHARSET=utf8";
+					General.NonQEx(command);
 				}
 				else{
 					//this column will be the new primary key
