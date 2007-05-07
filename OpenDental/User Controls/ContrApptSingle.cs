@@ -303,18 +303,24 @@ namespace OpenDental{
 					g.DrawString("Hm:"+Info.MyPatient.HmPhone,baseFont,brush,xPos,yPos);
 					return 1;
 				case "Lab":
-					switch(Info.MyApt.Lab){
-						case LabCaseOld.None:
-							return 0;
-						case LabCaseOld.Sent:
-							g.DrawString("LAB SENT",baseFont,brush,xPos,yPos);
-							return 1;
-						case LabCaseOld.Received:
-							g.DrawString("LAB RECEIVED",baseFont,brush,xPos,yPos);
-							return 1;
-						case LabCaseOld.QualityChecked:
-							g.DrawString("LAB QUALITY CHECKED",baseFont,brush,xPos,yPos);
-							return 1;
+					if(Info.MyLabCase==null){
+						return 0;
+					}
+					else if(Info.MyLabCase.DateTimeChecked.Year>1880){
+						g.DrawString(Lan.g(this,"LAB QUALITY CHECKED"),baseFont,brush,xPos,yPos);
+						return 1;
+					}
+					else if(Info.MyLabCase.DateTimeRecd.Year>1880) {
+						g.DrawString(Lan.g(this,"LAB RECEIVED"),baseFont,brush,xPos,yPos);
+						return 1;
+					}
+					else if(Info.MyLabCase.DateTimeSent.Year>1880) {//sent, but not recd
+						g.DrawString(Lan.g(this,"LAB SENT"),baseFont,brush,xPos,yPos);
+						return 1;
+					}
+					else{//not even sent
+						g.DrawString(Lan.g(this,"LAB NOT SENT"),baseFont,brush,xPos,yPos);
+						return 1;
 					}
 					break;
 				case "MedUrgNote":

@@ -4,6 +4,7 @@ See header in FormOpenDental.cs for complete text.  Redistributions must retain 
 ===============================================================================================================*/
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
@@ -1376,9 +1377,7 @@ namespace OpenDental{
 			//ContrApptInfo2.DataChanged += new EventHandler(ReactionDataChanged);
 		}
 
-		/// <summary>
-		/// Can be triggered by user or in FunctionKeyPress, SetView, or  FillViews
-		/// </summary>
+		///<summary>Can be triggered by user or in FunctionKeyPress, SetView, or  FillViews</summary>
 		private void comboView_SelectedIndexChanged(object sender, System.EventArgs e) {
 			//first two lines might be redundant:
 			//ApptViews.SetCur(comboView.SelectedIndex-1);//also works for none (0-1);
@@ -1392,10 +1391,7 @@ namespace OpenDental{
 			}
 		}
 
-		/// <summary>
-		/// The key press from the main form is passed down to this module.
-		/// </summary>
-		/// <param name="keys"></param>
+		///<summary>The key press from the main form is passed down to this module.</summary>
 		public void FunctionKeyPress(Keys keys){
 			//MessageBox.Show("keydown");
 			switch(keys){
@@ -1571,6 +1567,7 @@ namespace OpenDental{
 			}
 			procsMultApts=Procedures.GetProcsMultApts(aptNums);
 			Patient[] multPats=Patients.GetMultPats(patNums);
+			List<LabCase> labCaseList=LabCases.GetForPeriod(startDate,endDate);
 			Procedure[] procsOneApt;
 			int indexProv;
 			for(int i=0;i<ListDay.Length;i++){
@@ -1588,6 +1585,7 @@ namespace OpenDental{
 				ContrApptSingle3[i].Info.Procs=procsOneApt;
 				ContrApptSingle3[i].Info.Production=Procedures.GetProductionOneApt(ListDay[i].AptNum,procsMultApts,false);
 				ContrApptSingle3[i].Info.MyPatient=Patients.GetOnePat(multPats,ListDay[i].PatNum);
+				ContrApptSingle3[i].Info.MyLabCase=LabCases.GetOneFromList(labCaseList,ListDay[i].AptNum);
 				//copy time pattern to provBar[]:
 				indexProv=-1;
 				if(ListDay[i].IsHygiene){
@@ -1622,17 +1620,21 @@ namespace OpenDental{
 			CreateAptShadows();
 			ContrApptSheet2.DrawShadow();
 			FillPanelPatient();
-			FillLab();
+			FillLab(labCaseList);
 			FillProduction();
 		}
 
 		///<summary>Fills the lab summary for the day.</summary>
-		private void FillLab(){
+		private void FillLab(List<LabCase> labCaseList){
 			int notRec=0;
-			for(int i=0;i<ListDay.Length;i++){
-				if(ListDay[i].Lab==LabCaseOld.Sent){
-					notRec++;
+			for(int i=0;i<labCaseList.Count;i++){
+				if(labCaseList[i].DateTimeChecked.Year>1880){
+					continue;
 				}
+				if(labCaseList[i].DateTimeRecd.Year>1880) {
+					continue;
+				}
+				notRec++;
 			}
 			if(notRec==0){
 				textLab.Font=new Font(FontFamily.GenericSansSerif,8,FontStyle.Regular);
@@ -3562,9 +3564,9 @@ namespace OpenDental{
 
 		
 
-	}//end class
+	}
 
-	///<summary>This is the info to display on an appointment. This will gradually become more complex as the user gains more control over what shows on each appt.</summary>
+	///<summary>This is the info to display on an appointment. This will be eliminated when we move to datasets.</summary>
 	public class InfoApt{
 		///<summary>Set to true if this appointment is simply being displayed in the Chart module Next apt section rather than int the Appointments module.</summary>
 		public bool IsNext;
@@ -3576,10 +3578,12 @@ namespace OpenDental{
 		public Patient MyPatient;
 		///<summary>The amount of money generated from this appointment.</summary>
 		public double Production;
+		///<Summary>Could be null.</Summary>
+		public LabCase MyLabCase;
 	}
 
 
-}//end namespace
+}
 
 
 

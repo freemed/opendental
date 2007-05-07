@@ -25,6 +25,16 @@ namespace OpenDental{
 			return table;
 		}
 
+		///<Summary>Used when drawing the appointments for a day.</Summary>
+		public static List<LabCase> GetForPeriod(DateTime startDate,DateTime endDate) {
+			string command="SELECT labcase.* FROM labcase,appointment "
+				+"WHERE labcase.AptNum=appointment.AptNum "
+				+"AND (appointment.AptStatus=1 || appointment.AptStatus=2 || appointment.AptStatus=4) "//scheduled,complete,or ASAP
+				+"AND AptDateTime >= "+POut.PDate(startDate)
+				+"AND AptDateTime < "+POut.PDate(endDate.AddDays(1));//midnight of the next morning.
+			return FillFromCommand(command);
+		}
+
 		///<Summary>Gets one labcase from database.</Summary>
 		public static LabCase GetOne(int labCaseNum){
 			string command="SELECT * FROM labcase WHERE LabCaseNum="+POut.PInt(labCaseNum);
@@ -150,6 +160,16 @@ namespace OpenDental{
 		public static void AttachToPlannedAppt(int labCaseNum,int plannedAptNum) {
 			string command="UPDATE labcase SET PlannedAptNum="+POut.PInt(plannedAptNum)+" WHERE LabCaseNum="+POut.PInt(labCaseNum);
 			General.NonQ(command);
+		}
+
+		///<Summary>Frequently returns null.</Summary>
+		public static LabCase GetOneFromList(List<LabCase> labCaseList,int aptNum){
+			for(int i=0;i<labCaseList.Count;i++){
+				if(labCaseList[i].AptNum==aptNum){
+					return labCaseList[i];
+				}
+			}
+			return null;
 		}
 
 	}

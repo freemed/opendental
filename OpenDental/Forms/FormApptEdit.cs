@@ -149,7 +149,6 @@ namespace OpenDental{
 			this.butSlider = new System.Windows.Forms.Button();
 			this.panel1 = new System.Windows.Forms.Panel();
 			this.textLabCase = new System.Windows.Forms.TextBox();
-			this.butLab = new OpenDental.UI.Button();
 			this.comboLab = new System.Windows.Forms.ComboBox();
 			this.groupDentalSchools = new System.Windows.Forms.GroupBox();
 			this.textGradePoint = new System.Windows.Forms.TextBox();
@@ -160,6 +159,7 @@ namespace OpenDental{
 			this.label21 = new System.Windows.Forms.Label();
 			this.label22 = new System.Windows.Forms.Label();
 			this.label23 = new System.Windows.Forms.Label();
+			this.butLab = new OpenDental.UI.Button();
 			this.textAddTime = new OpenDental.ValidNum();
 			this.butCalcTime = new OpenDental.UI.Button();
 			this.butAddComm = new OpenDental.UI.Button();
@@ -402,9 +402,9 @@ namespace OpenDental{
 			// 
 			this.panel1.AutoScroll = true;
 			this.panel1.AutoScrollMargin = new System.Drawing.Size(0,3);
+			this.panel1.Controls.Add(this.comboLab);
 			this.panel1.Controls.Add(this.textLabCase);
 			this.panel1.Controls.Add(this.butLab);
-			this.panel1.Controls.Add(this.comboLab);
 			this.panel1.Controls.Add(this.groupDentalSchools);
 			this.panel1.Controls.Add(this.labelStatus);
 			this.panel1.Controls.Add(this.label5);
@@ -434,30 +434,16 @@ namespace OpenDental{
 			this.textLabCase.Multiline = true;
 			this.textLabCase.Name = "textLabCase";
 			this.textLabCase.ReadOnly = true;
-			this.textLabCase.Size = new System.Drawing.Size(188,38);
+			this.textLabCase.Size = new System.Drawing.Size(188,34);
 			this.textLabCase.TabIndex = 142;
-			// 
-			// butLab
-			// 
-			this.butLab.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butLab.Autosize = true;
-			this.butLab.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butLab.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butLab.CornerRadius = 4F;
-			this.butLab.Location = new System.Drawing.Point(4,182);
-			this.butLab.Name = "butLab";
-			this.butLab.Size = new System.Drawing.Size(46,20);
-			this.butLab.TabIndex = 141;
-			this.butLab.Text = "Lab";
-			this.butLab.Click += new System.EventHandler(this.butLab_Click);
 			// 
 			// comboLab
 			// 
 			this.comboLab.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboLab.Location = new System.Drawing.Point(3,101);
+			this.comboLab.Location = new System.Drawing.Point(8,216);
 			this.comboLab.MaxDropDownItems = 30;
 			this.comboLab.Name = "comboLab";
-			this.comboLab.Size = new System.Drawing.Size(64,21);
+			this.comboLab.Size = new System.Drawing.Size(112,21);
 			this.comboLab.TabIndex = 140;
 			// 
 			// groupDentalSchools
@@ -471,7 +457,7 @@ namespace OpenDental{
 			this.groupDentalSchools.Controls.Add(this.label22);
 			this.groupDentalSchools.Controls.Add(this.label23);
 			this.groupDentalSchools.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.groupDentalSchools.Location = new System.Drawing.Point(17,228);
+			this.groupDentalSchools.Location = new System.Drawing.Point(17,224);
 			this.groupDentalSchools.Name = "groupDentalSchools";
 			this.groupDentalSchools.Size = new System.Drawing.Size(228,101);
 			this.groupDentalSchools.TabIndex = 139;
@@ -547,6 +533,20 @@ namespace OpenDental{
 			this.label23.TabIndex = 83;
 			this.label23.Text = "Instructor";
 			this.label23.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// butLab
+			// 
+			this.butLab.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butLab.Autosize = true;
+			this.butLab.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butLab.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butLab.CornerRadius = 4F;
+			this.butLab.Location = new System.Drawing.Point(4,182);
+			this.butLab.Name = "butLab";
+			this.butLab.Size = new System.Drawing.Size(46,20);
+			this.butLab.TabIndex = 141;
+			this.butLab.Text = "Lab";
+			this.butLab.Click += new System.EventHandler(this.butLab_Click);
 			// 
 			// textAddTime
 			// 
@@ -897,11 +897,11 @@ namespace OpenDental{
 				if(Employees.ListShort[i].EmployeeNum==AptCur.Assistant)
 					comboAssistant.SelectedIndex=i+1;
 			}
-			//string[] enumLab=Enum.GetNames(typeof(LabCaseOld));
-			//for(int i=0;i<enumLab.Length;i++) {
-			//	comboLab.Items.Add(Lan.g("enumLab",enumLab[i]));
-			//}
-			//comboLab.SelectedIndex=(int)AptCur.Lab;
+			string[] enumLab=Enum.GetNames(typeof(LabCaseOld));
+			for(int i=0;i<enumLab.Length;i++) {
+				comboLab.Items.Add(Lan.g("enumLab",enumLab[i]));
+			}
+			comboLab.SelectedIndex=(int)AptCur.Lab;
 			textLabCase.Text=DS.Tables["Misc"].Rows[0]["labDescript"].ToString();
 			comboInstructor.Items.Add(Lan.g(this,"none"));
 			comboInstructor.SelectedIndex=0;

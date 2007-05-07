@@ -222,7 +222,8 @@ namespace OpenDentBusiness{
 			DataRow row;
 			table.Columns.Add("LabCaseNum");
 			table.Columns.Add("labDescript");
-			string command="SELECT LabCaseNum,DateTimeDue,laboratory.Description FROM labcase,laboratory "
+			string command="SELECT LabCaseNum,DateTimeDue,DateTimeChecked,DateTimeRecd,DateTimeSent,"
+				+"laboratory.Description FROM labcase,laboratory "
 				+"WHERE labcase.LaboratoryNum=laboratory.LaboratoryNum AND ";
 			if(apptStatus=="6") {//planned
 				command+="labcase.PlannedAptNum="+aptNum;
@@ -238,10 +239,29 @@ namespace OpenDentBusiness{
 			if(raw.Rows.Count>0){
 				row["LabCaseNum"]=raw.Rows[0]["LabCaseNum"].ToString();
 				row["labDescript"]=raw.Rows[0]["Description"].ToString();
-				DateTime date=PIn.PDateT(raw.Rows[0]["DateTimeDue"].ToString());
-				if(date.Year>1880) {
-					row["labDescript"]+="\r\n"+Lan.g("FormAppEdit","Due: ")+date.ToString("ddd")+" "
-					+date.ToShortDateString()+" "+date.ToShortTimeString();
+				//DateTime date=PIn.PDateT(raw.Rows[0]["DateTimeDue"].ToString());
+				//if(date.Year>1880) {
+				//	row["labDescript"]+="\r\n"+Lan.g("FormAppEdit","Due: ")+date.ToString("ddd")+" "
+				//	+date.ToShortDateString()+" "+date.ToShortTimeString();
+				//}
+				DateTime date=PIn.PDateT(raw.Rows[0]["DateTimeChecked"].ToString());
+				if(date.Year>1880){
+					row["labDescript"]+="\r\n"+Lan.g("FormAppEdit","Quality Checked");
+				}
+				else{
+					date=PIn.PDateT(raw.Rows[0]["DateTimeRecd"].ToString());
+					if(date.Year>1880){
+						row["labDescript"]+="\r\n"+Lan.g("FormAppEdit","Received");
+					}
+					else{
+						date=PIn.PDateT(raw.Rows[0]["DateTimeSent"].ToString());
+						if(date.Year>1880){
+							row["labDescript"]+="\r\n"+Lan.g("FormAppEdit","Sent");//sent but not received
+						}
+						else{
+							row["labDescript"]+="\r\n"+Lan.g("FormAppEdit","Not Sent");
+						}
+					}
 				}
 			}
 			table.Rows.Add(row);
