@@ -573,10 +573,12 @@ namespace OpenDental{
 
 		private void butDetach_Click(object sender,EventArgs e) {
 			CaseCur.AptNum=0;
+			textAppointment.Text="";
 		}
 
 		private void butDetachPlanned_Click(object sender,EventArgs e) {
 			CaseCur.PlannedAptNum=0;
+			textPlanned.Text="";
 		}
 
 		private void listLab_SelectedIndexChanged(object sender,EventArgs e) {

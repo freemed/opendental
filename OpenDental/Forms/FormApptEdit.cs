@@ -40,7 +40,6 @@ namespace OpenDental{
 		private ComboBox comboAssistant;
 		private ComboBox comboProvHyg;
 		private ComboBox comboProvNum;
-		private Label label13;
 		private Label label12;
 		private CheckBox checkIsNewPatient;
 		private Label label3;
@@ -80,13 +79,13 @@ namespace OpenDental{
 		private bool mouseIsDown;
 		private Point mouseOrigin;
 		private Point sliderOrigin;
-		private bool procsHaveChanged;
+		//private bool procsHaveChanged;
 		private InsPlan[] PlanList;
 		private Patient pat;
 		private Family fam;
-		private OpenDental.UI.Button button1;
+		private OpenDental.UI.Button butLab;
+		private TextBox textLabCase;
 		private PatPlan[] PatPlanList;
-		//private List<Commlog> CommlogList;
 
 		///<summary></summary>
 		public FormApptEdit(int aptNum)
@@ -137,7 +136,6 @@ namespace OpenDental{
 			this.comboAssistant = new System.Windows.Forms.ComboBox();
 			this.comboProvHyg = new System.Windows.Forms.ComboBox();
 			this.comboProvNum = new System.Windows.Forms.ComboBox();
-			this.label13 = new System.Windows.Forms.Label();
 			this.label12 = new System.Windows.Forms.Label();
 			this.checkIsNewPatient = new System.Windows.Forms.CheckBox();
 			this.label3 = new System.Windows.Forms.Label();
@@ -150,6 +148,8 @@ namespace OpenDental{
 			this.label1 = new System.Windows.Forms.Label();
 			this.butSlider = new System.Windows.Forms.Button();
 			this.panel1 = new System.Windows.Forms.Panel();
+			this.textLabCase = new System.Windows.Forms.TextBox();
+			this.butLab = new OpenDental.UI.Button();
 			this.comboLab = new System.Windows.Forms.ComboBox();
 			this.groupDentalSchools = new System.Windows.Forms.GroupBox();
 			this.textGradePoint = new System.Windows.Forms.TextBox();
@@ -174,7 +174,6 @@ namespace OpenDental{
 			this.butPin = new OpenDental.UI.Button();
 			this.butOK = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
-			this.button1 = new OpenDental.UI.Button();
 			this.panel1.SuspendLayout();
 			this.groupDentalSchools.SuspendLayout();
 			this.SuspendLayout();
@@ -297,15 +296,6 @@ namespace OpenDental{
 			this.comboProvNum.Size = new System.Drawing.Size(126,21);
 			this.comboProvNum.TabIndex = 131;
 			// 
-			// label13
-			// 
-			this.label13.Location = new System.Drawing.Point(17,185);
-			this.label13.Name = "label13";
-			this.label13.Size = new System.Drawing.Size(98,16);
-			this.label13.TabIndex = 130;
-			this.label13.Text = "Lab Case";
-			this.label13.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
 			// label12
 			// 
 			this.label12.Location = new System.Drawing.Point(17,165);
@@ -412,7 +402,8 @@ namespace OpenDental{
 			// 
 			this.panel1.AutoScroll = true;
 			this.panel1.AutoScrollMargin = new System.Drawing.Size(0,3);
-			this.panel1.Controls.Add(this.button1);
+			this.panel1.Controls.Add(this.textLabCase);
+			this.panel1.Controls.Add(this.butLab);
 			this.panel1.Controls.Add(this.comboLab);
 			this.panel1.Controls.Add(this.groupDentalSchools);
 			this.panel1.Controls.Add(this.labelStatus);
@@ -425,7 +416,6 @@ namespace OpenDental{
 			this.panel1.Controls.Add(this.label3);
 			this.panel1.Controls.Add(this.checkIsNewPatient);
 			this.panel1.Controls.Add(this.label12);
-			this.panel1.Controls.Add(this.label13);
 			this.panel1.Controls.Add(this.comboProvNum);
 			this.panel1.Controls.Add(this.comboProvHyg);
 			this.panel1.Controls.Add(this.comboAssistant);
@@ -438,13 +428,36 @@ namespace OpenDental{
 			this.panel1.Size = new System.Drawing.Size(265,247);
 			this.panel1.TabIndex = 147;
 			// 
+			// textLabCase
+			// 
+			this.textLabCase.Location = new System.Drawing.Point(56,183);
+			this.textLabCase.Multiline = true;
+			this.textLabCase.Name = "textLabCase";
+			this.textLabCase.ReadOnly = true;
+			this.textLabCase.Size = new System.Drawing.Size(188,38);
+			this.textLabCase.TabIndex = 142;
+			// 
+			// butLab
+			// 
+			this.butLab.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butLab.Autosize = true;
+			this.butLab.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butLab.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butLab.CornerRadius = 4F;
+			this.butLab.Location = new System.Drawing.Point(4,182);
+			this.butLab.Name = "butLab";
+			this.butLab.Size = new System.Drawing.Size(46,20);
+			this.butLab.TabIndex = 141;
+			this.butLab.Text = "Lab";
+			this.butLab.Click += new System.EventHandler(this.butLab_Click);
+			// 
 			// comboLab
 			// 
 			this.comboLab.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboLab.Location = new System.Drawing.Point(118,183);
+			this.comboLab.Location = new System.Drawing.Point(3,101);
 			this.comboLab.MaxDropDownItems = 30;
 			this.comboLab.Name = "comboLab";
-			this.comboLab.Size = new System.Drawing.Size(126,21);
+			this.comboLab.Size = new System.Drawing.Size(64,21);
 			this.comboLab.TabIndex = 140;
 			// 
 			// groupDentalSchools
@@ -458,7 +471,7 @@ namespace OpenDental{
 			this.groupDentalSchools.Controls.Add(this.label22);
 			this.groupDentalSchools.Controls.Add(this.label23);
 			this.groupDentalSchools.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.groupDentalSchools.Location = new System.Drawing.Point(17,204);
+			this.groupDentalSchools.Location = new System.Drawing.Point(17,228);
 			this.groupDentalSchools.Name = "groupDentalSchools";
 			this.groupDentalSchools.Size = new System.Drawing.Size(228,101);
 			this.groupDentalSchools.TabIndex = 139;
@@ -729,19 +742,6 @@ namespace OpenDental{
 			this.butCancel.Text = "&Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
 			// 
-			// button1
-			// 
-			this.button1.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.button1.Autosize = true;
-			this.button1.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.button1.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.button1.CornerRadius = 4F;
-			this.button1.Location = new System.Drawing.Point(3,185);
-			this.button1.Name = "button1";
-			this.button1.Size = new System.Drawing.Size(46,20);
-			this.button1.TabIndex = 141;
-			this.button1.Text = "Lab";
-			// 
 			// FormApptEdit
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
@@ -777,6 +777,7 @@ namespace OpenDental{
 			this.Text = "Edit Appointment";
 			this.Load += new System.EventHandler(this.FormApptEdit_Load);
 			this.panel1.ResumeLayout(false);
+			this.panel1.PerformLayout();
 			this.groupDentalSchools.ResumeLayout(false);
 			this.groupDentalSchools.PerformLayout();
 			this.ResumeLayout(false);
@@ -803,6 +804,7 @@ namespace OpenDental{
 					listQuickAdd.Enabled=false;
 				}
 			}
+			//The four objects below are needed when adding procs to this appt.
 			fam=Patients.GetFamily(AptCur.PatNum);
 			pat=fam.GetPatient(AptCur.PatNum);
 			PlanList=InsPlans.Refresh(fam);
@@ -895,11 +897,12 @@ namespace OpenDental{
 				if(Employees.ListShort[i].EmployeeNum==AptCur.Assistant)
 					comboAssistant.SelectedIndex=i+1;
 			}
-			string[] enumLab=Enum.GetNames(typeof(LabCaseOld));
-			for(int i=0;i<enumLab.Length;i++) {
-				comboLab.Items.Add(Lan.g("enumLab",enumLab[i]));
-			}
-			comboLab.SelectedIndex=(int)AptCur.Lab;
+			//string[] enumLab=Enum.GetNames(typeof(LabCaseOld));
+			//for(int i=0;i<enumLab.Length;i++) {
+			//	comboLab.Items.Add(Lan.g("enumLab",enumLab[i]));
+			//}
+			//comboLab.SelectedIndex=(int)AptCur.Lab;
+			textLabCase.Text=DS.Tables["Misc"].Rows[0]["labDescript"].ToString();
 			comboInstructor.Items.Add(Lan.g(this,"none"));
 			comboInstructor.SelectedIndex=0;
 			for(int i=0;i<Instructors.List.Length;i++) {
@@ -1017,7 +1020,7 @@ namespace OpenDental{
 
 		private void butAddComm_Click(object sender,EventArgs e) {
 			Commlog CommlogCur=new Commlog();
-			CommlogCur.PatNum=pat.PatNum;
+			CommlogCur.PatNum=AptCur.PatNum;
 			CommlogCur.CommDateTime=DateTime.Now;
 			CommlogCur.CommType=CommItemType.ApptRelated;
 			FormCommItem FormCI=new FormCommItem(CommlogCur);
@@ -1076,7 +1079,7 @@ namespace OpenDental{
 					return;
 				}
 			}*/
-			procsHaveChanged=true;
+			//procsHaveChanged=true;
 			bool isSelected=false;
 			for(int i=0;i<gridProc.SelectedIndices.Length;i++){
 				if(gridProc.SelectedIndices[i]==e.Row){
@@ -1316,7 +1319,7 @@ namespace OpenDental{
 			}
 			Procedures.SetDateFirstVisit(AptCur.AptDateTime.Date,1,pat);
 			Benefit[] benefitList=Benefits.Refresh(PatPlanList);
-			ClaimProc[] ClaimProcList=ClaimProcs.Refresh(pat.PatNum);
+			ClaimProc[] ClaimProcList=ClaimProcs.Refresh(AptCur.PatNum);
 			string[] codes=DefB.Short[(int)DefCat.ApptProcsQuickAdd][listQuickAdd.IndexFromPoint(e.X,e.Y)].ItemValue.Split(',');
 			for(int i=0;i<codes.Length;i++) {
 				if(!ProcedureCodes.HList.ContainsKey(codes[i])){
@@ -1367,6 +1370,36 @@ namespace OpenDental{
 			CalculateTime();
 			FillTime();
 			CalcPatientFeeThisAppt();
+		}
+
+		private void butLab_Click(object sender,EventArgs e) {
+			if(DS.Tables["Misc"].Rows[0]["LabCaseNum"].ToString()=="0"){//no labcase
+				//so let user pick one to add
+				FormLabCaseSelect FormL=new FormLabCaseSelect();
+				FormL.PatNum=AptCur.PatNum;
+				FormL.ShowDialog();
+				if(FormL.DialogResult!=DialogResult.OK){
+					return;
+				}
+				if(AptCur.AptStatus==ApptStatus.Planned){
+					LabCases.AttachToPlannedAppt(FormL.SelectedLabCaseNum,AptCur.AptNum);
+				}
+				else{
+					LabCases.AttachToAppt(FormL.SelectedLabCaseNum,AptCur.AptNum);
+				}
+			}
+			else{//already a labcase attached
+				FormLabCaseEdit FormLCE=new FormLabCaseEdit();
+				FormLCE.CaseCur=LabCases.GetOne(PIn.PInt(DS.Tables["Misc"].Rows[0]["LabCaseNum"].ToString()));
+				FormLCE.ShowDialog();
+				if(FormLCE.DialogResult!=DialogResult.OK){
+					return;
+				}
+				//Deleting or detaching labcase would have been done from in that window
+			}
+			DS.Tables.Remove("Misc");
+			DS.Tables.Add(Appointments.GetApptEditMisc(AptCur.AptNum));
+			textLabCase.Text=DS.Tables["Misc"].Rows[0]["labDescript"].ToString();
 		}
 
 		///<summary>Called from butOK_Click and butPin_Click</summary>
@@ -1552,6 +1585,8 @@ namespace OpenDental{
 		private void butCancel_Click(object sender, System.EventArgs e) {
 			DialogResult=DialogResult.Cancel;
 		}
+
+		
 
 		
 

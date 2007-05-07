@@ -12,6 +12,16 @@ namespace OpenDental{
 		///<summary>Refresh all Laboratories</summary>
 		public static List<Laboratory> Refresh() {
 			string command="SELECT * FROM laboratory ORDER BY Description";
+			return FillFromCommand(command);
+		}
+
+		///<summary>Gets one laboratory from database</summary>
+		public static Laboratory GetOne(int laboratoryNum) {
+			string command="SELECT * FROM laboratory WHERE LaboratoryNum="+POut.PInt(laboratoryNum);
+			return FillFromCommand(command)[0];
+		}
+
+		private static List<Laboratory> FillFromCommand(string command){
 			DataTable table=General.GetTable(command);
 			List<Laboratory> ListLabs=new List<Laboratory>();
 			Laboratory lab;

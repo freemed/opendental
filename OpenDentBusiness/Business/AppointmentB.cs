@@ -51,6 +51,7 @@ namespace OpenDentBusiness{
 			retVal.Tables.Add(GetProcTable(retVal.Tables["Appointment"].Rows[0]["PatNum"].ToString(),parameters[0],
 				retVal.Tables["Appointment"].Rows[0]["AptStatus"].ToString()));
 			retVal.Tables.Add(GetCommTable(retVal.Tables["Appointment"].Rows[0]["PatNum"].ToString()));
+			retVal.Tables.Add(GetMiscTable(parameters[0],retVal.Tables["Appointment"].Rows[0]["AptStatus"].ToString()));
 			return retVal;
 		}
 
@@ -212,6 +213,38 @@ namespace OpenDentBusiness{
 				row["Note"]=rawComm.Rows[i]["Note"].ToString();
 				table.Rows.Add(row);
 			}
+			return table;
+		}
+
+		private static DataTable GetMiscTable(string aptNum,string apptStatus) {
+			DataConnection dcon=new DataConnection();
+			DataTable table=new DataTable("Misc");
+			DataRow row;
+			table.Columns.Add("LabCaseNum");
+			table.Columns.Add("labDescript");
+			string command="SELECT LabCaseNum,DateTimeDue,laboratory.Description FROM labcase,laboratory "
+				+"WHERE labcase.LaboratoryNum=laboratory.LaboratoryNum AND ";
+			if(apptStatus=="6") {//planned
+				command+="labcase.PlannedAptNum="+aptNum;
+			}
+			else {
+				command+="labcase.AptNum="+aptNum;
+			}
+			DataTable raw=dcon.GetTable(command);
+			//always return one row:
+			row=table.NewRow();
+			row["LabCaseNum"]="0";
+			row["labDescript"]="";
+			if(raw.Rows.Count>0){
+				row["LabCaseNum"]=raw.Rows[0]["LabCaseNum"].ToString();
+				row["labDescript"]=raw.Rows[0]["Description"].ToString();
+				DateTime date=PIn.PDateT(raw.Rows[0]["DateTimeDue"].ToString());
+				if(date.Year>1880) {
+					row["labDescript"]+="\r\n"+Lan.g("FormAppEdit","Due: ")+date.ToString("ddd")+" "
+					+date.ToShortDateString()+" "+date.ToShortTimeString();
+				}
+			}
+			table.Rows.Add(row);
 			return table;
 		}
 

@@ -238,7 +238,7 @@ namespace OpenDentBusiness {
 				if(PIn.PDate(rawLab.Rows[i]["DateTimeDue"].ToString()).Year>1880) {
 					duedate=PIn.PDateT(rawLab.Rows[i]["DateTimeDue"].ToString());
 					row["description"]+="\r\n"+Lan.g("ChartModule","Due")+" "+duedate.ToString("ddd")+" "
-						+duedate.ToShortDateString()+" "+duedate.ToShortTimeString();;
+						+duedate.ToShortDateString()+" "+duedate.ToShortTimeString();
 				}
 				if(PIn.PDate(rawLab.Rows[i]["DateTimeChecked"].ToString()).Year>1880){
 					row["description"]+="\r\n"+Lan.g("ChartModule","Quality Checked");

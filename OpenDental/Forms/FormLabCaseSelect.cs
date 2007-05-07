@@ -19,12 +19,13 @@ namespace OpenDental{
 		/// </summary>
 		private System.ComponentModel.Container components = null;
 		///<summary></summary>
-		//public bool IsNew;
 		private OpenDental.UI.Button butAdd;
-		//public Laboratory LabCur;
+		public int PatNum;
+		///<summary>This only has a value when DialogResult=OK.</summary>
+		public int SelectedLabCaseNum;
 		private OpenDental.UI.ODGrid gridMain;
 		private Label label1;
-		//private List<LabTurnaround> turnaroundList;
+		private List<LabCase> labCaseList;
 
 		///<summary></summary>
 		public FormLabCaseSelect()
@@ -80,7 +81,7 @@ namespace OpenDental{
 			this.butAdd.Name = "butAdd";
 			this.butAdd.Size = new System.Drawing.Size(81,26);
 			this.butAdd.TabIndex = 127;
-			this.butAdd.Text = "Add";
+			this.butAdd.Text = "New";
 			this.butAdd.Click += new System.EventHandler(this.butAdd_Click);
 			// 
 			// butOK
@@ -158,71 +159,71 @@ namespace OpenDental{
 
 		private void FormLabCaseSelect_Load(object sender, System.EventArgs e) {
 			FillGrid();
+			if(labCaseList.Count>0){
+				gridMain.SetSelected(0,true);
+			}
 		}
 
 		private void FillGrid(){
-			/*
-			//still need to refresh from database.
+//todo: exclude labcases already attached
+//todo: distinguish between reg and planned
+			labCaseList=LabCases.GetForPat(PatNum);
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
-			ODGridColumn col=new ODGridColumn(Lan.g("TableLabTurnaround","Service Description"),300);
+			ODGridColumn col=new ODGridColumn(Lan.g("TableLabCaseSelect","Date Created"),80);
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TableLabTurnaround","Days Published"),120);
+			col=new ODGridColumn(Lan.g("TableLabCaseSelect","Lab"),100);
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TableLabTurnaround","Actual Days"),120);
+			col=new ODGridColumn(Lan.g("TableLabCaseSelect","Phone"),100);
+			gridMain.Columns.Add(col);
+			col=new ODGridColumn(Lan.g("TableLabCaseSelect","Instructions"),200);
 			gridMain.Columns.Add(col);
 			gridMain.Rows.Clear();
 			ODGridRow row;
-			for(int i=0;i<turnaroundList.Count;i++){
+			DateTime dateCreated;
+			Laboratory lab;
+			for(int i=0;i<labCaseList.Count;i++){
 				row=new ODGridRow();
-				row.Cells.Add(turnaroundList[i].Description);
-				if(turnaroundList[i].DaysPublished==0){
-					row.Cells.Add("");
-				}
-				else{
-					row.Cells.Add(turnaroundList[i].DaysPublished.ToString());
-				}
-				row.Cells.Add(turnaroundList[i].DaysActual.ToString());
+				dateCreated=labCaseList[i].DateTimeCreated;
+				row.Cells.Add(dateCreated.ToString("ddd")+" "+dateCreated.ToShortDateString()+" "+dateCreated.ToShortTimeString());
+				lab=Laboratories.GetOne(labCaseList[i].LaboratoryNum);
+				row.Cells.Add(lab.Description);
+				row.Cells.Add(lab.Phone);
+				row.Cells.Add(labCaseList[i].Instructions);
 				gridMain.Rows.Add(row);
 			}
-			gridMain.EndUpdate();*/
+			gridMain.EndUpdate();
 		}
 
 		private void butAdd_Click(object sender,EventArgs e) {
-			/*FormLabTurnaroundEdit FormL=new FormLabTurnaroundEdit();
-			FormL.LabTurnaroundCur=new LabTurnaround();
+			LabCase lab=new LabCase();
+			lab.PatNum=PatNum;
+			Patient pat=Patients.GetPat(PatNum);
+			lab.ProvNum=Patients.GetProvNum(pat);
+			lab.DateTimeCreated=MiscData.GetNowDateTime();
+			FormLabCaseEdit FormL=new FormLabCaseEdit();
+			FormL.CaseCur=lab;
+			FormL.IsNew=true;
 			FormL.ShowDialog();
-			if(FormL.DialogResult==DialogResult.OK){
-				turnaroundList.Add(FormL.LabTurnaroundCur);
-				FillGrid();
-			}*/
+			if(FormL.DialogResult!=DialogResult.OK){
+				return;
+			}
+			SelectedLabCaseNum=FormL.CaseCur.LabCaseNum;
+			DialogResult=DialogResult.OK;
 		}
 
 		private void gridMain_CellDoubleClick(object sender,ODGridClickEventArgs e) {
-			/*FormLabTurnaroundEdit FormL=new FormLabTurnaroundEdit();
-			FormL.LabTurnaroundCur=turnaroundList[e.Row];
-			FormL.ShowDialog();
-			if(FormL.DialogResult==DialogResult.OK) {
-				FillGrid();
-			}*/
+			SelectedLabCaseNum=labCaseList[e.Row].LabCaseNum;
+			DialogResult=DialogResult.OK;
 		}
 
 		private void butOK_Click(object sender, System.EventArgs e) {
-			/*
-			try{
-				if(IsNew){
-					Laboratories.Insert(LabCur);
-				}
-				else{
-					Laboratories.Update(LabCur);
-				}
-				LabTurnarounds.SetForLab(LabCur.LaboratoryNum,turnaroundList);
-			}
-			catch(ApplicationException ex){
-				MessageBox.Show(ex.Message);
+			if(gridMain.GetSelectedIndex()==-1){
+				MsgBox.Show(this,"Please select an item first.");
 				return;
 			}
-			DialogResult=DialogResult.OK;*/
+			SelectedLabCaseNum=labCaseList[gridMain.GetSelectedIndex()].LabCaseNum;
+			DialogResult=DialogResult.OK;
 		}
 
 		private void butCancel_Click(object sender, System.EventArgs e) {

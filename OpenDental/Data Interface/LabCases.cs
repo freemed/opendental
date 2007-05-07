@@ -11,7 +11,7 @@ namespace OpenDental{
 
 		///<summary>Gets a filtered list of all labcases.</summary>
 		public static DataTable Refresh() {
-			string command="SELECT * FROM LabCase ORDER BY DateTimeCreated";
+			string command="SELECT * FROM labcase ORDER BY DateTimeCreated";
 			DataTable table=General.GetTable(command);
 			/*for(int i=0;i<table.Rows.Count;i++) {
 				lab=new LabCase();
@@ -27,27 +27,37 @@ namespace OpenDental{
 
 		///<Summary>Gets one labcase from database.</Summary>
 		public static LabCase GetOne(int labCaseNum){
-			string command="SELECT * FROM LabCase WHERE LabCaseNum="+POut.PInt(labCaseNum);
+			string command="SELECT * FROM labcase WHERE LabCaseNum="+POut.PInt(labCaseNum);
+			return FillFromCommand(command)[0];
+		}
+
+		///<Summary>Gets all labcases for a patient which have not been attached to an appointment.  Usually one or none.</Summary>
+		public static List<LabCase> GetForPat(int patNum) {
+			string command="SELECT * FROM labcase WHERE PatNum="+POut.PInt(patNum);
+			return FillFromCommand(command);
+		}
+
+		public static List<LabCase> FillFromCommand(string command){
 			DataTable table=General.GetTable(command);
-			LabCase lab=new LabCase();
-			//for(int i=0;i<table.Rows.Count;i++) {
-			if(table.Rows.Count==0){
-				return null;//this will never happen
+			LabCase lab;
+			List<LabCase> retVal=new List<LabCase>();
+			for(int i=0;i<table.Rows.Count;i++) {
+				lab=new LabCase();
+				lab.LabCaseNum     = PIn.PInt   (table.Rows[i][0].ToString());
+				lab.PatNum         = PIn.PInt   (table.Rows[i][1].ToString());
+				lab.LaboratoryNum  = PIn.PInt   (table.Rows[i][2].ToString());
+				lab.AptNum         = PIn.PInt   (table.Rows[i][3].ToString());
+				lab.PlannedAptNum  = PIn.PInt   (table.Rows[i][4].ToString());
+				lab.DateTimeDue    = PIn.PDateT (table.Rows[i][5].ToString());
+				lab.DateTimeCreated= PIn.PDateT (table.Rows[i][6].ToString());
+				lab.DateTimeSent   = PIn.PDateT (table.Rows[i][7].ToString());
+				lab.DateTimeRecd   = PIn.PDateT (table.Rows[i][8].ToString());
+				lab.DateTimeChecked= PIn.PDateT (table.Rows[i][9].ToString());
+				lab.ProvNum        = PIn.PInt   (table.Rows[i][10].ToString());
+				lab.Instructions   = PIn.PString(table.Rows[i][11].ToString());
+				retVal.Add(lab);
 			}
-			lab=new LabCase();
-			lab.LabCaseNum     = PIn.PInt   (table.Rows[0][0].ToString());
-			lab.PatNum         = PIn.PInt   (table.Rows[0][1].ToString());
-			lab.LaboratoryNum  = PIn.PInt   (table.Rows[0][2].ToString());
-			lab.AptNum         = PIn.PInt   (table.Rows[0][3].ToString());
-			lab.PlannedAptNum  = PIn.PInt   (table.Rows[0][4].ToString());
-			lab.DateTimeDue    = PIn.PDateT (table.Rows[0][5].ToString());
-			lab.DateTimeCreated= PIn.PDateT (table.Rows[0][6].ToString());
-			lab.DateTimeSent   = PIn.PDateT (table.Rows[0][7].ToString());
-			lab.DateTimeRecd   = PIn.PDateT (table.Rows[0][8].ToString());
-			lab.DateTimeChecked= PIn.PDateT (table.Rows[0][9].ToString());
-			lab.ProvNum        = PIn.PInt   (table.Rows[0][10].ToString());
-			lab.Instructions   = PIn.PString(table.Rows[0][11].ToString());
-			return lab;
+			return retVal;
 		}
 
 		///<summary></summary>
@@ -124,9 +134,17 @@ namespace OpenDental{
  			General.NonQ(command);
 		}
 
-		
-	
-		
+		///<summary>Attaches a labcase to an appointment.</summary>
+		public static void AttachToAppt(int labCaseNum,int aptNum){
+			string command="UPDATE labcase SET AptNum="+POut.PInt(aptNum)+" WHERE LabCaseNum="+POut.PInt(labCaseNum);
+			General.NonQ(command);
+		}
+
+		///<summary>Attaches a labcase to a planned appointment.</summary>
+		public static void AttachToPlannedAppt(int labCaseNum,int plannedAptNum) {
+			string command="UPDATE labcase SET PlannedAptNum="+POut.PInt(plannedAptNum)+" WHERE LabCaseNum="+POut.PInt(labCaseNum);
+			General.NonQ(command);
+		}
 
 	}
 	
