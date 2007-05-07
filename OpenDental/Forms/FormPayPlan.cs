@@ -583,6 +583,13 @@ namespace OpenDental{
 			// 
 			// gridCharges
 			// 
+			this.gridCharges.Columns.Add(new OpenDental.UI.ODGridColumn("#",25,System.Windows.Forms.HorizontalAlignment.Center));
+			this.gridCharges.Columns.Add(new OpenDental.UI.ODGridColumn("Date",65,System.Windows.Forms.HorizontalAlignment.Right));
+			this.gridCharges.Columns.Add(new OpenDental.UI.ODGridColumn("Principal",60,System.Windows.Forms.HorizontalAlignment.Right));
+			this.gridCharges.Columns.Add(new OpenDental.UI.ODGridColumn("Interest",60,System.Windows.Forms.HorizontalAlignment.Right));
+			this.gridCharges.Columns.Add(new OpenDental.UI.ODGridColumn("Payment",60,System.Windows.Forms.HorizontalAlignment.Right));
+			this.gridCharges.Columns.Add(new OpenDental.UI.ODGridColumn("Balance",60,System.Windows.Forms.HorizontalAlignment.Right));
+			this.gridCharges.Columns.Add(new OpenDental.UI.ODGridColumn("Note",147,System.Windows.Forms.HorizontalAlignment.Left));
 			this.gridCharges.HScrollVisible = false;
 			this.gridCharges.Location = new System.Drawing.Point(457,31);
 			this.gridCharges.Name = "gridCharges";

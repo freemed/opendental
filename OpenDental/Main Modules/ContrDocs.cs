@@ -536,10 +536,9 @@ namespace OpenDental{
 			}
 			button.DropDownMenu=menuForms;
 			ToolBarMain.Buttons.Add(button);
-			//TODO: Add back-into the program when finishing xray image capture work.
-			//button=new ODToolBarButton(Lan.g(this,"Capture"),-1,"Capture Image From Device","Capture");
-			//button.Style=ODToolBarButtonStyle.ToggleButton;
-			//ToolBarMain.Buttons.Add(button);
+			button=new ODToolBarButton(Lan.g(this,"Capture"),-1,"Capture Image From Device","Capture");
+			button.Style=ODToolBarButtonStyle.ToggleButton;
+			ToolBarMain.Buttons.Add(button);
 			button=new ODToolBarButton("",7,Lan.g(this,"Crop Tool"),"Crop");
 			button.Style=ODToolBarButtonStyle.ToggleButton;
 			if(IsCropMode){
@@ -590,8 +589,8 @@ namespace OpenDental{
 			FamCur=null;
 			PatCur=null;
 			//Cancel current image capture by manually untoggling the capture button.
-			//ToolBarMain.Buttons["Capture"].Pushed=false;//TODO: add back when image capture is supported.
-			//OnCapture_Click();
+			ToolBarMain.Buttons["Capture"].Pushed=false;
+			OnCapture_Click();
 		}
 
 		///<summary>This is public for NewPatientForm functionality.</summary>
@@ -688,7 +687,7 @@ namespace OpenDental{
 				ToolBarMain.Buttons["Copy"].Enabled=true;
 				ToolBarMain.Buttons["Paste"].Enabled=true;
 				ToolBarMain.Buttons["Forms"].Enabled=true;
-				//ToolBarMain.Buttons["Capture"].Enabled=true;//TODO: add back when image capture is supported.
+				ToolBarMain.Buttons["Capture"].Enabled=true;
 				paintTools.Buttons["Crop"].Enabled=true;
 				paintTools.Buttons["Hand"].Enabled=true;
 				paintTools.Buttons["ZoomIn"].Enabled=true;
@@ -710,7 +709,7 @@ namespace OpenDental{
 				ToolBarMain.Buttons["Copy"].Enabled=false;
 				ToolBarMain.Buttons["Paste"].Enabled=false;
 				ToolBarMain.Buttons["Forms"].Enabled=false;
-				//ToolBarMain.Buttons["Capture"].Enabled=false;//TODO: add back when image capture is supported.
+				ToolBarMain.Buttons["Capture"].Enabled=false;
 				paintTools.Buttons["Crop"].Enabled=false;
 				paintTools.Buttons["Hand"].Enabled=false;
 				paintTools.Buttons["ZoomIn"].Enabled=false;
