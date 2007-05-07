@@ -26,6 +26,7 @@ namespace OpenDental{
 		private OpenDental.UI.ODGrid gridMain;
 		private Label label1;
 		private List<LabCase> labCaseList;
+		public bool IsPlanned;
 
 		///<summary></summary>
 		public FormLabCaseSelect()
@@ -165,9 +166,7 @@ namespace OpenDental{
 		}
 
 		private void FillGrid(){
-//todo: exclude labcases already attached
-//todo: distinguish between reg and planned
-			labCaseList=LabCases.GetForPat(PatNum);
+			labCaseList=LabCases.GetForPat(PatNum,IsPlanned);
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
 			ODGridColumn col=new ODGridColumn(Lan.g("TableLabCaseSelect","Date Created"),80);

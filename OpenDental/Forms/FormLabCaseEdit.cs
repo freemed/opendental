@@ -544,13 +544,16 @@ namespace OpenDental{
 					textAppointment.Text=Lan.g(this,"Unscheduled");
 				}
 				else{
-					textAppointment.Text=apt.AptDateTime.ToString();
+					textAppointment.Text=apt.AptDateTime.ToShortDateString()+" "+apt.AptDateTime.ToShortTimeString();
 				}
-				textAppointment.Text+=" "+apt.ProcDescript;
+				textAppointment.Text+=", "+apt.ProcDescript;
 			}
 			apt=Appointments.GetOneApt(CaseCur.PlannedAptNum);
 			if(apt!=null){
 				textPlanned.Text=apt.ProcDescript;
+				if(textPlanned.Text==""){
+					textPlanned.Text=Lan.g(this,"Attached");
+				}
 			}
 			if(CaseCur.DateTimeCreated.Year>1880){
 				textDateCreated.Text=CaseCur.DateTimeCreated.ToString();

@@ -31,9 +31,15 @@ namespace OpenDental{
 			return FillFromCommand(command)[0];
 		}
 
-		///<Summary>Gets all labcases for a patient which have not been attached to an appointment.  Usually one or none.</Summary>
-		public static List<LabCase> GetForPat(int patNum) {
-			string command="SELECT * FROM labcase WHERE PatNum="+POut.PInt(patNum);
+		///<Summary>Gets all labcases for a patient which have not been attached to an appointment.  Usually one or none.  Only used when attaching a labcase from within an appointment.</Summary>
+		public static List<LabCase> GetForPat(int patNum,bool isPlanned) {
+			string command="SELECT * FROM labcase WHERE PatNum="+POut.PInt(patNum)+" AND ";
+			if(isPlanned){
+				command+="PlannedAptNum=0";
+			}
+			else{
+				command+="AptNum=0";
+			}
 			return FillFromCommand(command);
 		}
 

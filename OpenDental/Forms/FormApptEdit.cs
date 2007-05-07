@@ -1377,6 +1377,7 @@ namespace OpenDental{
 				//so let user pick one to add
 				FormLabCaseSelect FormL=new FormLabCaseSelect();
 				FormL.PatNum=AptCur.PatNum;
+				FormL.IsPlanned=AptCur.AptStatus==ApptStatus.Planned;
 				FormL.ShowDialog();
 				if(FormL.DialogResult!=DialogResult.OK){
 					return;
@@ -1494,7 +1495,7 @@ namespace OpenDental{
 			AptCur.ProcDescript="";
 			for(int i=0;i<gridProc.SelectedIndices.Length;i++) {
 				AptCur.ProcDescript+=ProcedureCodes.GetProcCode(
-					DS.Tables["Procedure"].Rows[gridProc.SelectedIndices[i]]["CodeNum"].ToString()).AbbrDesc+", ";
+					PIn.PInt(DS.Tables["Procedure"].Rows[gridProc.SelectedIndices[i]]["CodeNum"].ToString())).AbbrDesc+", ";
 			}
 			if(AptCur.ProcDescript.Length>1) {
 				//trims the last space and comma
