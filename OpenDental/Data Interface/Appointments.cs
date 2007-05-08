@@ -185,7 +185,7 @@ namespace OpenDental{
 				+POut.PDateT (appt.AptDateTime)+", "
 				+"'"+POut.PInt   (appt.NextAptNum)+"', "
 				+"'"+POut.PInt   (appt.UnschedStatus)+"', "
-				+"'"+POut.PInt   ((int)appt.Lab)+"', "
+				+"'"+POut.PInt   (appt.LabOld)+"', "
 				+"'"+POut.PBool  (appt.IsNewPatient)+"', "
 				+"'"+POut.PString(appt.ProcDescript)+"', "
 				+"'"+POut.PInt   (appt.Assistant)+"', "
@@ -270,11 +270,11 @@ namespace OpenDental{
 				c+="UnschedStatus = '" +POut.PInt(appt.UnschedStatus)+"'";
 				comma=true;
 			}
-			if(appt.Lab!=oldApt.Lab){
-				if(comma) c+=",";
-				c+="Lab = '"         +POut.PInt   ((int)appt.Lab)+"'";
-				comma=true;
-			}
+			//if(appt.Lab!=oldApt.Lab){
+			//	if(comma) c+=",";
+			//	c+="Lab = '"         +POut.PInt   ((int)appt.Lab)+"'";
+			//	comma=true;
+			//}
 			if(appt.IsNewPatient!=oldApt.IsNewPatient){
 				if(comma) c+=",";
 				c+="IsNewPatient = '"+POut.PBool  (appt.IsNewPatient)+"'";

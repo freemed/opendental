@@ -363,8 +363,8 @@ namespace OpenDentBusiness{
 		Provider,
 		///<summary>2</summary>
 		Blockout}
-	///<summary>Used in the appointment edit window.</summary>
-	public enum LabCaseOld{
+	//<summary>Used in the appointment edit window.</summary>
+	/*public enum LabCaseOld{
 		///<summary>0</summary>
 		None,
 		///<summary>1</summary>
@@ -372,7 +372,7 @@ namespace OpenDentBusiness{
 		///<summary>2</summary>
 		Received,
 		///<summary>3</summary>
-		QualityChecked};
+		QualityChecked};*/
 	///<summary></summary>
 	public enum PlaceOfService{
 		///<summary>0. CPT code 11</summary>

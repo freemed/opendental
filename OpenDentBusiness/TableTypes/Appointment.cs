@@ -31,8 +31,8 @@ namespace OpenDentBusiness{
 		public int NextAptNum;
 		///<summary>FK to definition.DefNum.  The definition.Category in the definition table is DefCat.RecallUnschedStatus.  Only used if this is an Unsched or Planned appt.</summary>
 		public int UnschedStatus;
-		///<summary>Enum:LabCase  A lab case is expected for this appointment.</summary>
-		public LabCaseOld Lab;
+		///<summary>Do not use.  See the labcase table instead.</summary>
+		public int LabOld;
 		///<summary>This is the first appoinment this patient has had at this office.  Somewhat automated.</summary>
 		public bool IsNewPatient;
 		///<summary>A one line summary of all procedures.  Can be used in various reports, Unscheduled list, and Planned appointment tracker.  Not user editable right now, so it doesn't show on the screen.</summary>
@@ -68,7 +68,7 @@ namespace OpenDentBusiness{
 			a.AptDateTime=AptDateTime;
 			a.NextAptNum=NextAptNum;
 			a.UnschedStatus=UnschedStatus;
-			a.Lab=Lab;
+			//a.Lab=Lab;
 			a.IsNewPatient=IsNewPatient;
 			a.ProcDescript=ProcDescript;
 			a.Assistant=Assistant;

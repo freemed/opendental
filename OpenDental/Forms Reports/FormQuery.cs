@@ -902,10 +902,10 @@ namespace OpenDental{
 							tableOut.Rows[i][j]
 								=((PatientGender)PIn.PInt(tableOut.Rows[i][j].ToString())).ToString();
 							break;
-						case "lab":
-							tableOut.Rows[i][j]
-								=((LabCaseOld)PIn.PInt(tableOut.Rows[i][j].ToString())).ToString();
-						  break;
+						//case "lab":
+						//	tableOut.Rows[i][j]
+						//		=((LabCaseOld)PIn.PInt(tableOut.Rows[i][j].ToString())).ToString();
+						//  break;
 						case "position":
 							tableOut.Rows[i][j]
 								=((PatientPosition)PIn.PInt(tableOut.Rows[i][j].ToString())).ToString();

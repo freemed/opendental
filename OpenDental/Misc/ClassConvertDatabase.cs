@@ -4918,6 +4918,47 @@ namespace OpenDental{
 						)";
 					General.NonQEx(command);
 				}
+				//Added after r250
+				command="INSERT INTO laboratory (Description,Phone,Notes,LabSlip) VALUES('Default Lab','','','')";
+				int laboratoryNum=General.NonQEx(command,true);
+				command="SELECT * FROM appointment WHERE Lab != 0";
+				DataTable table=General.GetTableEx(command);
+				for(int i=0;i<table.Rows.Count;i++){
+					command="INSERT INTO labcase (PatNum,LaboratoryNum,AptNum,PlannedAptNum,DateTimeDue,DateTimeCreated,"
+						+"DateTimeSent,DateTimeRecd,DateTimeChecked,ProvNum,Instructions) VALUES("
+						+table.Rows[i]["PatNum"].ToString()+", "
+						+POut.PInt(laboratoryNum)+", ";
+					if(table.Rows[i]["AptStatus"].ToString()=="6"){//if planned apt
+						command+="0, "//AptNum
+							+table.Rows[i]["AptNum"].ToString()+", ";//PlannedAptNum
+					}
+					else{
+						command+=table.Rows[i]["AptNum"].ToString()+", "//AptNum
+							+"0, ";//PlannedAptNum
+					}
+					command+=POut.PDateT(PIn.PDateT(table.Rows[i]["AptNum"].ToString()))+", "//DateTimeDue
+						+POut.PDate(DateTime.MinValue)+", ";//DateTimeCreated
+					if(table.Rows[i]["Lab"].ToString()=="1"){//sent
+						command+=POut.PDateT(new DateTime(2000,1,1))+", "//DateTimeSent
+							+POut.PDate(DateTime.MinValue)+", "//DateTimeRecd
+							+POut.PDate(DateTime.MinValue)+", ";//DateTimeChecked
+					}
+					else if(table.Rows[i]["Lab"].ToString()=="2"){//received
+						command+=POut.PDateT(new DateTime(2000,1,1))+", "//DateTimeSent
+							+POut.PDate(new DateTime(2000,1,1))+", "//DateTimeRecd
+							+POut.PDate(DateTime.MinValue)+", ";//DateTimeChecked
+					}
+					else if(table.Rows[i]["Lab"].ToString()=="3") {//checked
+						command+=POut.PDateT(new DateTime(2000,1,1))+", "//DateTimeSent
+							+POut.PDate(new DateTime(2000,1,1))+", "//DateTimeRecd
+							+POut.PDate(new DateTime(2000,1,1))+", ";//DateTimeChecked
+					}
+					command+=table.Rows[i]["ProvNum"].ToString()+", "
+						+"'')";
+					General.NonQEx(command);
+				}
+
+
 				command="UPDATE preference SET ValueString = '4.9.0.0' WHERE PrefName = 'DataBaseVersion'";
 				General.NonQEx(command);
 			}

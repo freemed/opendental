@@ -21,9 +21,6 @@ namespace OpenDental{
 		private System.Windows.Forms.Button butReset;
 		private System.Windows.Forms.Label labelVersion;
 		private System.Windows.Forms.Label label2;
-		private System.Windows.Forms.Label label7;
-		private System.Windows.Forms.Label label8;
-		private System.Windows.Forms.Label label10;
 		private OpenDental.UI.Button butDownload;
 		private OpenDental.UI.Button butCheck;
 		private System.Windows.Forms.TextBox textRegMain;
@@ -44,11 +41,14 @@ namespace OpenDental{
 		private TextBox textResultClaimform;
 		private TextBox textRegClaimform;
 		private Label label6;
-		private Label label9;
 		private Panel panel1;
 		private FormProgress FormP;
 		string BackgroundImg;//ADA2006.jpg
-		string OldClaimFormID;//OD1
+		string OldClaimFormID;
+		private Label label9;
+		private Label label10;
+		private Label label7;
+		private Label label8;//OD1
 		///<Summary>Includes path</Summary>
 		string WriteToFile;
 
@@ -90,9 +90,6 @@ namespace OpenDental{
 			this.label1 = new System.Windows.Forms.Label();
 			this.label2 = new System.Windows.Forms.Label();
 			this.textRegMain = new System.Windows.Forms.TextBox();
-			this.label7 = new System.Windows.Forms.Label();
-			this.label8 = new System.Windows.Forms.Label();
-			this.label10 = new System.Windows.Forms.Label();
 			this.textWebsitePath = new System.Windows.Forms.TextBox();
 			this.label3 = new System.Windows.Forms.Label();
 			this.textResult = new System.Windows.Forms.TextBox();
@@ -102,13 +99,16 @@ namespace OpenDental{
 			this.textResultClaimform = new System.Windows.Forms.TextBox();
 			this.textRegClaimform = new System.Windows.Forms.TextBox();
 			this.label6 = new System.Windows.Forms.Label();
-			this.label9 = new System.Windows.Forms.Label();
 			this.panel1 = new System.Windows.Forms.Panel();
 			this.butDownloadClaimform = new OpenDental.UI.Button();
 			this.butDownload = new OpenDental.UI.Button();
 			this.butCheck = new OpenDental.UI.Button();
 			this.butOK = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
+			this.label9 = new System.Windows.Forms.Label();
+			this.label10 = new System.Windows.Forms.Label();
+			this.label7 = new System.Windows.Forms.Label();
+			this.label8 = new System.Windows.Forms.Label();
 			this.SuspendLayout();
 			// 
 			// butReset
@@ -154,34 +154,6 @@ namespace OpenDental{
 			this.textRegMain.Name = "textRegMain";
 			this.textRegMain.Size = new System.Drawing.Size(113,20);
 			this.textRegMain.TabIndex = 19;
-			// 
-			// label7
-			// 
-			this.label7.Location = new System.Drawing.Point(13,348);
-			this.label7.Name = "label7";
-			this.label7.Size = new System.Drawing.Size(584,20);
-			this.label7.TabIndex = 13;
-			this.label7.Text = "All parts of this program are licensed under the GPL, www.opensource.org/licenses" +
-    "/gpl-license.php";
-			this.label7.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			// 
-			// label8
-			// 
-			this.label8.Location = new System.Drawing.Point(12,420);
-			this.label8.Name = "label8";
-			this.label8.Size = new System.Drawing.Size(584,20);
-			this.label8.TabIndex = 12;
-			this.label8.Text = "MySQL - Copyright 1995-2007, www.mysql.com";
-			this.label8.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			// 
-			// label10
-			// 
-			this.label10.Location = new System.Drawing.Point(12,394);
-			this.label10.Name = "label10";
-			this.label10.Size = new System.Drawing.Size(585,23);
-			this.label10.TabIndex = 10;
-			this.label10.Text = "This program Copyright 2003-2007, Jordan S. Sparks, D.M.D.";
-			this.label10.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// textWebsitePath
 			// 
@@ -263,16 +235,6 @@ namespace OpenDental{
 			this.label6.TabIndex = 40;
 			this.label6.Text = resources.GetString("label6.Text");
 			// 
-			// label9
-			// 
-			this.label9.Location = new System.Drawing.Point(13,371);
-			this.label9.Name = "label9";
-			this.label9.Size = new System.Drawing.Size(584,20);
-			this.label9.TabIndex = 41;
-			this.label9.Text = "ADA codes and claim forms are licensed through www.ada.org.  Redistribution is no" +
-    "t permitted.";
-			this.label9.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			// 
 			// panel1
 			// 
 			this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
@@ -353,12 +315,52 @@ namespace OpenDental{
 			this.butCancel.Text = "&Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
 			// 
+			// label9
+			// 
+			this.label9.Location = new System.Drawing.Point(12,392);
+			this.label9.Name = "label9";
+			this.label9.Size = new System.Drawing.Size(585,23);
+			this.label9.TabIndex = 47;
+			this.label9.Text = "All CDT codes are Copyrighted by the ADA.";
+			this.label9.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// label10
+			// 
+			this.label10.Location = new System.Drawing.Point(12,370);
+			this.label10.Name = "label10";
+			this.label10.Size = new System.Drawing.Size(585,23);
+			this.label10.TabIndex = 44;
+			this.label10.Text = "This program Copyright 2003-2007, Jordan S. Sparks, D.M.D.";
+			this.label10.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// label7
+			// 
+			this.label7.Location = new System.Drawing.Point(12,351);
+			this.label7.Name = "label7";
+			this.label7.Size = new System.Drawing.Size(584,20);
+			this.label7.TabIndex = 46;
+			this.label7.Text = "This software is licensed under the GPL, www.opensource.org/licenses/gpl-license." +
+    "php";
+			this.label7.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// label8
+			// 
+			this.label8.Location = new System.Drawing.Point(12,414);
+			this.label8.Name = "label8";
+			this.label8.Size = new System.Drawing.Size(584,20);
+			this.label8.TabIndex = 45;
+			this.label8.Text = "MySQL - Copyright 1995-2007, www.mysql.com";
+			this.label8.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
 			// FormUpdate
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.ClientSize = new System.Drawing.Size(814,472);
-			this.Controls.Add(this.panel1);
 			this.Controls.Add(this.label9);
+			this.Controls.Add(this.label10);
+			this.Controls.Add(this.label7);
+			this.Controls.Add(this.label8);
+			this.Controls.Add(this.panel1);
 			this.Controls.Add(this.label6);
 			this.Controls.Add(this.butDownloadClaimform);
 			this.Controls.Add(this.label5);
@@ -377,9 +379,6 @@ namespace OpenDental{
 			this.Controls.Add(this.label2);
 			this.Controls.Add(this.labelVersion);
 			this.Controls.Add(this.butReset);
-			this.Controls.Add(this.label10);
-			this.Controls.Add(this.label7);
-			this.Controls.Add(this.label8);
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.MaximizeBox = false;
 			this.MinimizeBox = false;
