@@ -11,56 +11,59 @@ namespace OpenDental{
 
 		///<summary>Gets a filtered list of all labcases.</summary>
 		public static DataTable Refresh(DateTime aptStartDate,DateTime aptEndDate) {
-			string command="SELECT * FROM labcase WHERE DateTimeChecked ORDER BY DateTimeCreated";
-			DataTable table=General.GetTable(command);
-
-			/*
-			DataTable table=new DataTable("Procedure");
+			DataTable table=new DataTable();
 			DataRow row;
 			//columns that start with lowercase are altered for display rather than being raw data.
-			table.Columns.Add("attached");//0 or 1
-			table.Columns.Add("CodeNum");
-			table.Columns.Add("descript");
-			table.Columns.Add("fee");
-			table.Columns.Add("priority");
-			table.Columns.Add("ProcCode");
-			table.Columns.Add("ProcNum");
-			table.Columns.Add("ProcStatus");
+			table.Columns.Add("aptDateTime");
+			table.Columns.Add("lab");
+			table.Columns.Add("LabCaseNum");
+			table.Columns.Add("patient");
+			table.Columns.Add("phone");
+			table.Columns.Add("ProcDescript");
 			table.Columns.Add("status");
-			table.Columns.Add("toothNum");
-			table.Columns.Add("Surf");
-			string command="SELECT procedurecode.ProcCode,AptNum,PlannedAptNum,Priority,ProcFee,ProcNum,ProcStatus,Surf,ToothNum, "
-				+"procedurecode.Descript,procedurelog.CodeNum "
-				+"FROM procedurelog LEFT JOIN procedurecode ON procedurelog.CodeNum=procedurecode.CodeNum "
-				+"WHERE PatNum="+patNum//sort later
-				+" AND (ProcStatus=1 OR ";//tp
-			if(apptStatus=="6") {//planned
-				command+="PlannedAptNum="+aptNum+")";
-			}
-			else {
-				command+="AptNum="+aptNum+")";
-			}
-			DataTable rawProc=dcon.GetTable(command);
-			for(int i=0;i<rawProc.Rows.Count;i++) {
+			string command="SELECT AptDateTime,DateTimeChecked,DateTimeRecd,DateTimeSent,"
+				+"LabCaseNum,laboratory.Description,LName,FName,Preferred,MiddleI,Phone,ProcDescript "
+				+"FROM labcase,appointment,patient,laboratory "
+				+"WHERE labcase.AptNum=appointment.AptNum "
+				+"AND labcase.PatNum=patient.PatNum "
+				+"AND labcase.LaboratoryNum=laboratory.LaboratoryNum "
+				+"AND AptDateTime > "+POut.PDate(aptStartDate)+" "
+				+"AND AptDateTime < "+POut.PDate(aptEndDate.AddDays(1))+" "
+				+"ORDER BY AptDateTime";
+			DataTable raw=General.GetTable(command);
+			DateTime AptDateTime;
+			DateTime date;
+			for(int i=0;i<raw.Rows.Count;i++) {
 				row=table.NewRow();
-				if(apptStatus=="6") {//planned
-					row["attached"]=(rawProc.Rows[i]["PlannedAptNum"].ToString()==aptNum) ? "1" : "0";
+		    AptDateTime=PIn.PDateT(raw.Rows[i]["AptDateTime"].ToString());
+				row["aptDateTime"]=AptDateTime.ToShortDateString()+" "+AptDateTime.ToShortTimeString();
+				row["lab"]=raw.Rows[i]["Description"].ToString();
+				row["LabCaseNum"]=raw.Rows[i]["LabCaseNum"].ToString();
+				row["patient"]=PatientB.GetNameLF(raw.Rows[i]["LName"].ToString(),raw.Rows[i]["FName"].ToString(),
+					raw.Rows[i]["Preferred"].ToString(),raw.Rows[i]["MiddleI"].ToString());
+				row["phone"]=raw.Rows[i]["Phone"].ToString();
+				row["ProcDescript"]=raw.Rows[i]["ProcDescript"].ToString();
+				date=PIn.PDateT(raw.Rows[i]["DateTimeChecked"].ToString());
+				if(date.Year>1880) {
+					row["status"]=Lan.g("FormLabCases","Quality Checked");
 				}
 				else {
-					row["attached"]=(rawProc.Rows[i]["AptNum"].ToString()==aptNum) ? "1" : "0";
+					date=PIn.PDateT(raw.Rows[i]["DateTimeRecd"].ToString());
+					if(date.Year>1880) {
+						row["status"]=Lan.g("FormLabCases","Received");
+					}
+					else {
+						date=PIn.PDateT(raw.Rows[i]["DateTimeSent"].ToString());
+						if(date.Year>1880) {
+							row["status"]=Lan.g("FormLabCases","Sent");//sent but not received
+						}
+						else {
+							row["status"]=Lan.g("FormLabCases","Not Sent");
+						}
+					}
 				}
-				row["CodeNum"]=rawProc.Rows[i]["CodeNum"].ToString();
-				row["descript"]=rawProc.Rows[i]["Descript"].ToString();
-				row["fee"]=PIn.PDouble(rawProc.Rows[i]["ProcFee"].ToString()).ToString("F");
-				row["priority"]=DefB.GetName(DefCat.TxPriorities,PIn.PInt(rawProc.Rows[i]["Priority"].ToString()));
-				row["ProcCode"]=rawProc.Rows[i]["ProcCode"].ToString();
-				row["ProcNum"]=rawProc.Rows[i]["ProcNum"].ToString();
-				row["ProcStatus"]=rawProc.Rows[i]["ProcStatus"].ToString();
-				row["status"]=((ProcStat)PIn.PInt(rawProc.Rows[i]["ProcStatus"].ToString())).ToString();
-				row["toothNum"]=Tooth.ToInternat(rawProc.Rows[i]["ToothNum"].ToString());
-				row["Surf"]=rawProc.Rows[i]["Surf"].ToString();
 				table.Rows.Add(row);
-			}*/
+			}
 			return table;
 		}
 

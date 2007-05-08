@@ -3458,7 +3458,8 @@ namespace OpenDental{
 		}
 
 		private void butLab_Click(object sender,EventArgs e) {
-			//Form
+			FormLabCases FormL=new FormLabCases();
+			FormL.ShowDialog();
 		}
 
 		//private void timerTimeIndic_Tick(object sender, System.EventArgs e) {
