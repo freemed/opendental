@@ -4664,7 +4664,7 @@ namespace OpenDental{
 			To4_9_0();
 		}
 
-		///<summary>Oracle conversions work up to this point.</summary>
+		///<summary></summary>
 		private void To4_9_0() {
 			if(FromVersion<new Version("4.9.0.0")) {
 				string command;

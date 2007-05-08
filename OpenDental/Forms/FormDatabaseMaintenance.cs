@@ -237,6 +237,8 @@ namespace OpenDental {
 			Application.DoEvents();
 			ClaimProcProvNumMissing();
 			Application.DoEvents();
+			ClaimProcStatusNotMatchClaim();
+			Application.DoEvents();
 			ClaimProcWithInvalidClaimPaymentNum();
 			Application.DoEvents();
 			ClaimProcWriteOffNegative();
@@ -727,6 +729,21 @@ namespace OpenDental {
 			int numberFixed=General.NonQ(command);
 			if(numberFixed>0 || checkShow.Checked) {
 				textLog.Text+=Lan.g(this,"ClaimProcs with missing provnums fixed: ")+numberFixed.ToString()+"\r\n";
+			}
+		}
+
+		private void ClaimProcStatusNotMatchClaim() {
+			if(FormChooseDatabase.DBtype==DatabaseType.Oracle) {
+				return;
+			}
+			command=@"UPDATE claimproc,claim
+				SET claimproc.Status=1
+				WHERE claimproc.ClaimNum=claim.ClaimNum
+				AND claim.ClaimStatus='R'
+				AND claimproc.Status=0";
+			int numberFixed=General.NonQ(command);
+			if(numberFixed>0 || checkShow.Checked) {
+				textLog.Text+=Lan.g(this,"ClaimProcs with status not matching claim fixed: ")+numberFixed.ToString()+"\r\n";
 			}
 		}
 

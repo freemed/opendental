@@ -89,7 +89,6 @@ namespace OpenDental{
 		private System.Windows.Forms.TextBox textPhone;
 		private OpenDental.UI.ODToolBar ToolBarMain;
 		private System.Windows.Forms.TextBox textLab;
-		private System.Windows.Forms.Label label3;
 		private System.Windows.Forms.TextBox textProduction;
 		private System.Windows.Forms.Label label7;
 		private System.Windows.Forms.ComboBox comboView;
@@ -143,6 +142,7 @@ namespace OpenDental{
 		private DateTime WeekStartDate;
 		private DateTime WeekEndDate;
 		public static int numOfWeekDaysToDisplay=5;
+		private OpenDental.UI.Button butLab;
 		public static int SheetClickedonDay;
 
 		///<summary></summary>
@@ -205,7 +205,6 @@ namespace OpenDental{
 			this.label7 = new System.Windows.Forms.Label();
 			this.textLab = new System.Windows.Forms.TextBox();
 			this.comboView = new System.Windows.Forms.ComboBox();
-			this.label3 = new System.Windows.Forms.Label();
 			this.label2 = new System.Windows.Forms.Label();
 			this.butClearPin = new OpenDental.UI.Button();
 			this.panelOps = new System.Windows.Forms.Panel();
@@ -241,6 +240,7 @@ namespace OpenDental{
 			this.label8 = new System.Windows.Forms.Label();
 			this.butSearchCloseX = new System.Windows.Forms.Button();
 			this.butSearchNext = new OpenDental.UI.Button();
+			this.butLab = new OpenDental.UI.Button();
 			this.panelPinBoard.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
 			this.panelArrows.SuspendLayout();
@@ -614,12 +614,12 @@ namespace OpenDental{
 			// 
 			// panelCalendar
 			// 
+			this.panelCalendar.Controls.Add(this.butLab);
 			this.panelCalendar.Controls.Add(this.butSearch);
 			this.panelCalendar.Controls.Add(this.textProduction);
 			this.panelCalendar.Controls.Add(this.label7);
 			this.panelCalendar.Controls.Add(this.textLab);
 			this.panelCalendar.Controls.Add(this.comboView);
-			this.panelCalendar.Controls.Add(this.label3);
 			this.panelCalendar.Controls.Add(this.label2);
 			this.panelCalendar.Controls.Add(this.butClearPin);
 			this.panelCalendar.Controls.Add(this.Calendar2);
@@ -688,15 +688,6 @@ namespace OpenDental{
 			this.comboView.Size = new System.Drawing.Size(134,21);
 			this.comboView.TabIndex = 35;
 			this.comboView.SelectedIndexChanged += new System.EventHandler(this.comboView_SelectedIndexChanged);
-			// 
-			// label3
-			// 
-			this.label3.Location = new System.Drawing.Point(0,304);
-			this.label3.Name = "label3";
-			this.label3.Size = new System.Drawing.Size(69,15);
-			this.label3.TabIndex = 37;
-			this.label3.Text = "Lab Cases";
-			this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// label2
 			// 
@@ -1030,6 +1021,22 @@ namespace OpenDental{
 			this.butSearchNext.Text = "More";
 			this.butSearchNext.Click += new System.EventHandler(this.butSearchMore_Click);
 			// 
+			// butLab
+			// 
+			this.butLab.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butLab.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.butLab.Autosize = true;
+			this.butLab.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butLab.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butLab.CornerRadius = 4F;
+			this.butLab.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butLab.Location = new System.Drawing.Point(2,302);
+			this.butLab.Name = "butLab";
+			this.butLab.Size = new System.Drawing.Size(67,21);
+			this.butLab.TabIndex = 77;
+			this.butLab.Text = "LabCases";
+			this.butLab.Click += new System.EventHandler(this.butLab_Click);
+			// 
 			// ContrAppt
 			// 
 			this.Controls.Add(this.groupSearch);
@@ -1331,7 +1338,6 @@ namespace OpenDental{
 				butSearch,
 				butClearPin,
 				label2,
-				label3,
 				label7,
 				butOther,
 				label4,
@@ -3451,6 +3457,10 @@ namespace OpenDental{
 			MessageBox.Show(Lan.g(this,this.GetType().Name));
 		}
 
+		private void butLab_Click(object sender,EventArgs e) {
+			//Form
+		}
+
 		//private void timerTimeIndic_Tick(object sender, System.EventArgs e) {
 			//if(FormOpenDental.ActiveForm.WindowState!=FormWindowState.Minimized){
 		//}
@@ -3549,6 +3559,8 @@ namespace OpenDental{
 			Commlogs.Insert(CommlogCur);
 			ev.HasMorePages = false;
 		}
+
+		
 
 		
 

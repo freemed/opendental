@@ -15,8 +15,7 @@ namespace OpenDental{
 	public class FormLabCases : System.Windows.Forms.Form{
 		private OpenDental.UI.Button butClose;
 		private System.ComponentModel.Container components = null;
-		private ODGrid gridMain;
-		private OpenDental.UI.Button butAdd;// Required designer variable.
+		private ODGrid gridMain;// Required designer variable.
 		private DataTable table;
 
 		///<summary></summary>
@@ -54,7 +53,6 @@ namespace OpenDental{
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormLabCases));
 			this.butClose = new OpenDental.UI.Button();
 			this.gridMain = new OpenDental.UI.ODGrid();
-			this.butAdd = new OpenDental.UI.Button();
 			this.SuspendLayout();
 			// 
 			// butClose
@@ -75,36 +73,19 @@ namespace OpenDental{
 			// gridMain
 			// 
 			this.gridMain.HScrollVisible = false;
-			this.gridMain.Location = new System.Drawing.Point(33,40);
+			this.gridMain.Location = new System.Drawing.Point(33,33);
 			this.gridMain.Name = "gridMain";
 			this.gridMain.ScrollValue = 0;
-			this.gridMain.Size = new System.Drawing.Size(634,334);
+			this.gridMain.Size = new System.Drawing.Size(634,409);
 			this.gridMain.TabIndex = 1;
 			this.gridMain.Title = "Lab Cases";
 			this.gridMain.TranslationName = "TableLabCases";
 			this.gridMain.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellDoubleClick);
 			// 
-			// butAdd
-			// 
-			this.butAdd.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butAdd.Autosize = true;
-			this.butAdd.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butAdd.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butAdd.CornerRadius = 4F;
-			this.butAdd.Image = global::OpenDental.Properties.Resources.Add;
-			this.butAdd.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butAdd.Location = new System.Drawing.Point(592,394);
-			this.butAdd.Name = "butAdd";
-			this.butAdd.Size = new System.Drawing.Size(75,26);
-			this.butAdd.TabIndex = 2;
-			this.butAdd.Text = "&Add";
-			this.butAdd.Click += new System.EventHandler(this.butAdd_Click);
-			// 
 			// FormLabCases
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.ClientSize = new System.Drawing.Size(719,520);
-			this.Controls.Add(this.butAdd);
 			this.Controls.Add(this.gridMain);
 			this.Controls.Add(this.butClose);
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -126,7 +107,7 @@ namespace OpenDental{
 		}
 
 		private void FillGrid(){
-			table=LabCases.Refresh();
+			table=LabCases.Refresh(DateTime.Today,DateTime.Today.AddDays(5));
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
 			ODGridColumn col=new ODGridColumn(Lan.g("TableLabCases","Description"),100);
@@ -153,14 +134,6 @@ namespace OpenDental{
 			FormL.ShowDialog();
 			//if(FormL.DialogResult==DialogResult.OK){
 				//changed=true;
-			FillGrid();*/
-		}
-
-		private void butAdd_Click(object sender,EventArgs e) {
-			/*FormLaboratoryEdit FormL=new FormLaboratoryEdit();
-			FormL.LabCur=new Laboratory();
-			FormL.IsNew=true;
-			FormL.ShowDialog();
 			FillGrid();*/
 		}
 
