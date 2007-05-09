@@ -4173,8 +4173,7 @@ namespace OpenDental{
 					General.NonQEx(command);
 					command="UPDATE clearinghouse SET GS03=ISA08";
 					General.NonQEx(command);
-				}
-				else {//Oracle
+				}else{//Oracle
 					//Recreate clearinghouse table from scratch. The data in this table is not likely to be important, and 
 					//can always be added again through the program. Recreating the table is easier than trying to mimic the
 					//above dozen or so mysql statements.
@@ -4218,8 +4217,7 @@ namespace OpenDental{
 						LabSlip mediumtext,
 						PRIMARY KEY (LaboratoryNum)
 						) DEFAULT CHARSET=utf8";
-				}
-				else {//Oracle.
+				}else {//Oracle.
 					command=@"CREATE TABLE laboratory(
 						LaboratoryNum number(8,0) NOT NULL,
 						Description varchar(255),
@@ -4247,8 +4245,7 @@ namespace OpenDental{
 						DateTimeChecked datetime NOT NULL default '0001-01-01',
 						PRIMARY KEY (LabCaseNum)
 						) DEFAULT CHARSET=utf8";
-				}
-				else {//Oracle.
+				}else {//Oracle.
 					command=@"CREATE TABLE labcase(
 						LabCaseNum number(8,0) NOT NULL,
 						PatNum number(8,0) NOT NULL,
@@ -4270,6 +4267,8 @@ namespace OpenDental{
 					General.NonQEx(command);
 					command="ALTER TABLE document ADD MountItemNum int NOT NULL";
 					General.NonQEx(command);
+					command="DROP TABLE IF EXISTS mount";
+					General.NonQEx(command);
 					command=@"CREATE TABLE mount(
 						MountNum int NOT NULL auto_increment,
 						PatNum mediumint NOT NULL,
@@ -4280,6 +4279,8 @@ namespace OpenDental{
 						PRIMARY KEY (MountNum)
 						) DEFAULT CHARSET=utf8";
 					General.NonQEx(command);
+					command="DROP TABLE IF EXISTS mountitem";
+					General.NonQEx(command);
 					command=@"CREATE TABLE mountitem(
 						MountItemNum int NOT NULL auto_increment,
 						MountNum int NOT NULL,
@@ -4288,8 +4289,7 @@ namespace OpenDental{
 						PRIMARY KEY (MountItemNum)
 						) DEFAULT CHARSET=utf8";
 					General.NonQEx(command);
-				}
-				else {//Oracle
+				}else {//Oracle
 					command="ALTER TABLE document RENAME COLUMN WithPat TO PatNum";//Oracle fails here.
 					General.NonQEx(command);
 					command="ALTER TABLE document ADD (MountItemNum int NOT NULL)";
@@ -4317,6 +4317,8 @@ namespace OpenDental{
 				if(FormChooseDatabase.DBtype==DatabaseType.MySql) {
 					command="ALTER TABLE procedurecode ADD PreExisting tinyint(1) NOT NULL default '0'";
 					General.NonQEx(command);
+					command="DROP TABLE IF EXISTS proclicense";
+					General.NonQEx(command);
 					command=@"CREATE TABLE proclicense(
 						ProcLicenseNum mediumint(5) NOT NULL auto_increment,
 						ADACode varchar(15) default '',
@@ -4324,8 +4326,7 @@ namespace OpenDental{
 						PRIMARY KEY (ProcLicenseNum)
 						)";
 					General.NonQEx(command);
-				}
-				else {//Oracle
+				}else {//Oracle
 					command="ALTER TABLE procedurecode ADD (PreExisting number(1,0) default '0' NOT NULL)";
 					General.NonQEx(command);
 					command=@"CREATE TABLE proclicense(
@@ -4349,9 +4350,13 @@ namespace OpenDental{
 		///<summary>First version where individual computer preferences were introduced.</summary>
 		private void To4_8_3() {
 			if(FromVersion<new Version("4.8.3.0")) {
-				string command="DELETE FROM preference WHERE PrefName='ToothChartLowerQuality'";
-				General.NonQEx(command);
+				//preferences should not be deleted since it causes bugs when upgrading.
+				//string command="DELETE FROM preference WHERE PrefName='ToothChartLowerQuality'";
+				//General.NonQEx(command);
+				string command;
 				if(FormChooseDatabase.DBtype==DatabaseType.MySql) {
+					command="DROP TABLE IF EXISTS computerpref";
+					General.NonQEx(command);
 					command=@"CREATE TABLE computerpref(
 						ComputerPrefNum int NOT NULL auto_increment,
 						ComputerName varchar(64) NOT NULL,
@@ -4359,8 +4364,7 @@ namespace OpenDental{
 						GraphicsSimple tinyint(1) NOT NULL default '0',
 						PRIMARY KEY (ComputerPrefNum)
 						) DEFAULT CHARSET=utf8";
-				}
-				else {//Assume Oracle
+				}else {//Assume Oracle
 					command=@"CREATE TABLE computerpref(
 						ComputerPrefNum int NOT NULL,
 						ComputerName varchar(64) NOT NULL,
@@ -4646,8 +4650,7 @@ namespace OpenDental{
 						if(columns[i+2]!=" ") {
 							command+=@"auto_increment ";
 						}
-					}
-					else {//Oracle.
+					}else {//Oracle.
 						command=@"ALTER TABLE "+columns[i]//table name
 							+@" MODIFY ("+columns[i+1]+" int)";
 						//Cannot specify 'NOT NULL' when already not null column. Additionally, not specifying 'NOT NULL' leaves
