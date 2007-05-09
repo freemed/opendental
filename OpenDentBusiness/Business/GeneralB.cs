@@ -66,7 +66,8 @@ namespace OpenDentBusiness {
 					throw new ApplicationException("MethodName not found");
 				case "Appointment.GetApptEdit":
 					return AppointmentB.GetApptEdit(parameters);
-				
+				case "Appointment.RefreshPeriod":
+					return AppointmentB.RefreshPeriod(parameters);
 			}
 
 		}

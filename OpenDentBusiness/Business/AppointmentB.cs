@@ -43,6 +43,40 @@ namespace OpenDentBusiness{
 			return list;
 		}
 
+		///<Summary>Parameters: 1:dateStart, 2:dateEnd</Summary>
+		public static DataSet RefreshPeriod(string[] parameters) {
+			DataSet retVal=new DataSet();
+			retVal.Tables.Add(GetPeriodApptsTable(parameters[0],parameters[1]));
+			return retVal;
+		}
+
+		private static DataTable GetPeriodApptsTable(string strDateStart,string strDateEnd) {
+			DateTime dateStart=PIn.PDate(strDateStart);
+			DateTime dateEnd=PIn.PDate(strDateEnd);
+			DataConnection dcon=new DataConnection();
+			DataTable table=new DataTable("Bubble");
+			DataRow row;
+			//columns that start with lowercase are altered for display rather than being raw data.
+			table.Columns.Add("AptNum");
+			table.Columns.Add("ImageFolder");
+			table.Columns.Add("patientName");
+			string command="SELECT AptNum,ImageFolder,LName,FName,MiddleI,Preferred "
+				+"FROM appointment LEFT JOIN patient ON patient.PatNum=appointment.PatNum "
+				+"WHERE AptDateTime > "+POut.PDate(dateStart)+" "
+				+"AND AptDateTime < "+POut.PDate(dateStart.AddDays(1))+" "
+				+"AND (AptStatus=1 OR AptStatus=2 OR AptStatus=4 OR AptStatus=5) ";
+			DataTable raw=dcon.GetTable(command);
+			for(int i=0;i<raw.Rows.Count;i++) {
+				//row=table.NewRow();
+				//row[""]=raw.Rows[i][""].ToString();
+				//table.Rows.Add(row);
+			}
+			return table;
+		}
+
+		//Get DS for one appointment in Edit window--------------------------------------------------------------------------------
+		//-------------------------------------------------------------------------------------------------------------------------
+
 		///<Summary>Parameters: 1:AptNum</Summary>
 		public static DataSet GetApptEdit(string[] parameters){
 			DataSet retVal=new DataSet();
@@ -267,6 +301,8 @@ namespace OpenDentBusiness{
 			table.Rows.Add(row);
 			return table;
 		}
+
+
 
 	}
 }

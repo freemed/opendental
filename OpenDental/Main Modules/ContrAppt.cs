@@ -144,12 +144,24 @@ namespace OpenDental{
 		public static int numOfWeekDaysToDisplay=5;
 		private OpenDental.UI.Button butLab;
 		public static int SheetClickedonDay;
+		private Panel infoBubble;
+		///<Summary>The datatable that holds the bubble data.  This will later become part of the dataset for the main screen.</Summary>
+		private DataSet DS;
+		//<Summary>This is the bitmap that is used to layout all the data for the bubble.  It's recreated each time a bubble is first made visible or whenever the aptNum changes.</Summary>
+		//private Bitmap bubbleBitmap;
+		///<Summary>This has to be tracked globally because mouse might move directly from one appt to another without any break.  This is the only way to know if we are still over the same appt.</Summary>
+		private int bubbleAptNum;
 
 		///<summary></summary>
 		public ContrAppt(){
 			Logger.openlog.Log("Initializing appointment module...",Logger.Severity.INFO);
 			InitializeComponent();// This call is required by the Windows.Forms Form Designer.
 			menuWeeklyApt=new System.Windows.Forms.ContextMenu();
+			infoBubble=new Panel();
+			infoBubble.Visible=false;
+			infoBubble.Size=new Size(200,300);
+			infoBubble.MouseMove+=new MouseEventHandler(InfoBubble_MouseMove);
+			this.Controls.Add(infoBubble);
 		}
 
 		///<summary></summary>
@@ -1535,6 +1547,8 @@ namespace OpenDental{
 				ContrApptSingle.SelectedAptNum=-1;//fixes a minor bug.
 			}
 			//else if(ContrApptSingle.se
+			//all data storage is being moved into this dataset:
+			DS=Appointments.RefreshPeriod(startDate,endDate);
 			//ApptViews.SetCur();
 			ApptViewItems.GetForCurView(comboView.SelectedIndex-1);
 			ContrApptSingle.ProvBar=new int[ApptViewItems.VisProvs.Length][];
@@ -2082,6 +2096,9 @@ namespace OpenDental{
 
 		///<summary>Mouse down event anywhere on the sheet.  Could be a blank space or on an actual appointment.</summary>
 		private void ContrApptSheet2_MouseDown(object sender, System.Windows.Forms.MouseEventArgs e) {
+			if(infoBubble.Visible) {
+				infoBubble.Visible=false;
+			}
 			if(ApptViewItems.VisOps.Length==0){//no ops visible.
 				return;
 			}
@@ -2228,7 +2245,8 @@ namespace OpenDental{
 		///<summary></summary>
 		private void ContrApptSheet2_MouseMove(object sender, System.Windows.Forms.MouseEventArgs e) {
 			if(!mouseIsDown){
-				//just decide what the pointer should look like.
+				InfoBubbleDraw(e.Location);
+				//decide what the pointer should look like.
 				if(HitTestApptBottom(e.Location)){
 					Cursor=Cursors.SizeNS;
 				}
@@ -2261,6 +2279,36 @@ namespace OpenDental{
 				contOrigin.X+e.X-mouseOrigin.X+ContrApptSheet2.Location.X+panelSheet.Location.X,
 				contOrigin.Y+e.Y-mouseOrigin.Y+ContrApptSheet2.Location.Y+panelSheet.Location.Y);
 			TempApptSingle.Visible=true;
+		}
+
+		///<summary></summary>
+		private void InfoBubble_MouseMove(object sender, System.Windows.Forms.MouseEventArgs e) {
+			//Calculate the real point in sheet coordinates
+			Point p=new Point(e.X+infoBubble.Left,e.Y+infoBubble.Top);
+			InfoBubbleDraw(p);
+		}
+
+		///<Summary>Does a hit test to determine if over an appointment.  Fills the bubble with data and then positions it.</Summary>
+		private void InfoBubbleDraw(Point p){
+			int aptNum=HitTestAppt(p);
+			if(aptNum==0 || HitTestApptBottom(p)) {
+				if(infoBubble.Visible) {
+					infoBubble.Visible=false;
+				}
+				return;
+			}
+			infoBubble.Location=new Point(p.X+ContrApptSheet2.Left+panelSheet.Left+2,p.Y+ContrApptSheet2.Top+panelSheet.Top+2);
+			if(!infoBubble.Visible){
+				//most data is already present in DS.Bubble, but we do need to get the patient picture
+				infoBubble.BackgroundImage=new Bitmap(infoBubble.Width,infoBubble.Height);
+				Image img=infoBubble.BackgroundImage;//alias
+				Graphics g=Graphics.FromImage(img);//infoBubble.BackgroundImage);
+				g.FillRectangle(new SolidBrush(Color.FromArgb(255,249,177)),0,0,img.Width,img.Height);
+				g.DrawString("bubble",Font,Brushes.Black,11,0);
+				g.Dispose();
+				infoBubble.BringToFront();
+				infoBubble.Visible=true;
+			}
 		}
 
 		///<summary>Usually dropping an appointment to a new location.</summary>

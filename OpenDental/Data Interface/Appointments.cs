@@ -109,6 +109,11 @@ namespace OpenDental{
 			return General.GetDS("Appointment.GetApptEdit",aptNum.ToString()).Tables["Misc"].Copy();
 		}
 
+		///<Summary>This is starting out simple, but will become quite complex eventually, holding all data needed to display appointments for a period.  For now, it just contains the bubble data.</Summary>
+		public static DataSet RefreshPeriod(DateTime dateStart,DateTime dateEnd){
+			return General.GetDS("Appointment.RefreshPeriod",dateStart.ToShortDateString(),dateEnd.ToShortDateString());
+		}
+
 		///<summary>Called when closing FormApptEdit with an OK in order to reattach the procedures to the appointment.</summary>
 		public static void UpdateAttached(int aptNum,int[] procNums,bool isPlanned){
 			//detach all procs from this appt.
