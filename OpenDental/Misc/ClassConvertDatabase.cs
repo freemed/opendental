@@ -4668,8 +4668,9 @@ namespace OpenDental{
 		private void To4_9_0() {
 			if(FromVersion<new Version("4.9.0.0")) {
 				string command;
+				DataTable table;
 				if(FormChooseDatabase.DBtype==DatabaseType.MySql) {
-					command="ALTER TABLE procedurecode ADD CodeNum int NOT NULL";//this column will be the new primary key
+					command="ALTER TABLE procedurecode ADD CodeNum int NOT NULL FIRST";//this column will be the new primary key
 					General.NonQEx(command);
 					command="ALTER TABLE procedurecode DROP PRIMARY KEY";
 					General.NonQEx(command);
@@ -4769,46 +4770,76 @@ namespace OpenDental{
 					General.NonQEx(command);
 				}
 				else{
-					command="ALTER TABLE procedurecode ADD CodeNum int default '0' NOT NULL";//this column will be the new primary key
-					General.NonQEx(command);
-					command="UPDATE procedurecode SET CodeNum=RowNum";//Set initial primary key values (since there is no auto_increment).
-					General.NonQ(command);					
-/*					command="ALTER TABLE procedurecode DROP PRIMARY KEY";
-					General.NonQEx(command);
-					command="ALTER TABLE procedurecode ADD PRIMARY KEY (CodeNum)";
-					General.NonQEx(command);*/
-					command="ALTER TABLE procedurecode Modify (CodeNum int)";//will stay not null.
-					General.NonQEx(command);
+					//Here we want to add a new column CodeNum and make it the primary key in the procedurecode table.
+					//However, it appears to be difficult to change a table primary key, so here we create a backup of
+					//the old procedurecode table and recreate the procedure code table, copying in the old data. Also,
+					//we desire the primary key to be the first column, which also appears to be difficult to specify in Oracle.
 					command="ALTER TABLE procedurecode RENAME COLUMN ADACode TO ProcCode";
 					General.NonQEx(command);
-					command="CREATE INDEX ind_CodeNum ON procedurecode (CodeNum)";
+					command="ALTER TABLE procedurecode RENAME TO procedurecodeold";
 					General.NonQEx(command);
-
-					/*command="CREATE TABLE procedurecode (
-						ADACode varchar(15) NOT NULL,
+					command=@"CREATE TABLE procedurecode (
+						CodeNum int default '0' NOT NULL,
+						ProcCode varchar(15) NOT NULL,
 						Descript varchar(255) default '',
 						AbbrDesc varchar(50) default '',
 						ProcTime varchar(24) default '',
 						ProcCat int default '0' NOT NULL,
 						TreatArea int default '0' NOT NULL,
-						RemoveTooth` tinyint(1) unsigned NOT NULL default '0',
-  `SetRecall` tinyint(1) unsigned NOT NULL default '0',
-  `NoBillIns` tinyint(1) unsigned NOT NULL default '0',
-  `IsProsth` tinyint(1) unsigned NOT NULL default '0',
-  `DefaultNote` text,
-  `IsHygiene` tinyint(1) unsigned NOT NULL default '0',
-  `GTypeNum` smallint(5) unsigned NOT NULL default '0',
-  `AlternateCode1` varchar(15) default '',
-  `MedicalCode` varchar(15) character set utf8 collate utf8_bin default '',
-  `IsTaxed` tinyint(3) unsigned NOT NULL default '0',
-  `PaintType` tinyint(4) NOT NULL default '0',
-  `GraphicColor` int(11) NOT NULL default '0',
-  `LaymanTerm` varchar(255) default '',
-  `IsCanadianLab` tinyint(3) unsigned NOT NULL,
-  `PreExisting` tinyint(1) NOT NULL default '0',
-  PRIMARY KEY  (`ADACode`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;*/
-
+						RemoveTooth int default '0' NOT NULL,
+						SetRecall int default '0' NOT NULL,
+						NoBillIns int default '0' NOT NULL,
+						IsProsth int default '0' NOT NULL,
+						DefaultNote varchar2(4000),
+						IsHygiene int default '0' NOT NULL,
+						GTypeNum int default '0' NOT NULL,
+						AlternateCode1 varchar(15) default '',
+						MedicalCode varchar(15) default '',
+						IsTaxed int default '0' NOT NULL,
+						PaintType int default '0' NOT NULL,
+						GraphicColor int default '0' NOT NULL,
+						LaymanTerm varchar(255) default '',
+						IsCanadianLab int NOT NULL,
+						PreExisting int default '0' NOT NULL,
+						PRIMARY KEY(CodeNum)
+						)";
+					General.NonQEx(command);
+					command="CREATE INDEX ind_procedurecode_ProcCode ON procedurecode (ProcCode)";
+					General.NonQEx(command);
+					command="SELECT * FROM procedurecodeold";
+					table=General.GetTable(command);
+					for(int i=0;i<table.Rows.Count;i++){
+						//Must specify CodeNum here, because auto-incrementation does not take place until an appropriate trigger
+						//and sequence are created in the database maintenence tool after this database upgrade is completed. Since
+						//the column is new, we can just assign consecutive values to keep things simple.
+						command="INSERT INTO procedurecode (CodeNum,ProcCode,Descript,AbbrDesc,ProcTime,"
+							+"ProcCat,TreatArea,RemoveTooth,SetRecall,NoBillIns,IsProsth,DefaultNote,"
+							+"IsHygiene,GTypeNum,AlternateCode1,MedicalCode,IsTaxed,PaintType,"
+							+"GraphicColor,LaymanTerm,IsCanadianLab,PreExisting) VALUES ("
+							+"'"+POut.PInt(i+1)+"',"
+							+"'"+POut.PString(PIn.PString(table.Rows[i]["ProcCode"].ToString()))+"',"
+							+"'"+POut.PString(PIn.PString(table.Rows[i]["Descript"].ToString()))+"',"
+							+"'"+POut.PString(PIn.PString(table.Rows[i]["AbbrDesc"].ToString()))+"',"
+							+"'"+POut.PString(PIn.PString(table.Rows[i]["ProcTime"].ToString()))+"',"
+							+"'"+POut.PInt(PIn.PInt(table.Rows[i]["ProcCat"].ToString()))+"',"
+							+"'"+POut.PInt(PIn.PInt(table.Rows[i]["TreatArea"].ToString()))+"',"
+							+"'"+POut.PInt(PIn.PInt(table.Rows[i]["RemoveTooth"].ToString()))+"',"
+							+"'"+POut.PInt(PIn.PInt(table.Rows[i]["SetRecall"].ToString()))+"',"
+							+"'"+POut.PInt(PIn.PInt(table.Rows[i]["NoBillIns"].ToString()))+"',"
+							+"'"+POut.PString(PIn.PString(table.Rows[i]["IsProsth"].ToString()))+"',"
+							+"'"+POut.PInt(PIn.PInt(table.Rows[i]["DefaultNote"].ToString()))+"',"
+							+"'"+POut.PInt(PIn.PInt(table.Rows[i]["IsHygiene"].ToString()))+"',"
+							+"'"+POut.PString(PIn.PString(table.Rows[i]["GTypeNum"].ToString()))+"',"
+							+"'"+POut.PString(PIn.PString(table.Rows[i]["AlternateCode1"].ToString()))+"',"
+							+"'"+POut.PString(PIn.PString(table.Rows[i]["MedicalCode"].ToString()))+"',"
+							+"'"+POut.PInt(PIn.PInt(table.Rows[i]["IsTaxed"].ToString()))+"',"
+							+"'"+POut.PInt(PIn.PInt(table.Rows[i]["PaintType"].ToString()))+"',"
+							+"'"+POut.PInt(PIn.PInt(table.Rows[i]["GraphicColor"].ToString()))+"',"
+							+"'"+POut.PString(PIn.PString(table.Rows[i]["LaymanTerm"].ToString()))+"',"
+							+"'"+POut.PInt(PIn.PInt(table.Rows[i]["IsCanadianLab"].ToString()))+"',"
+							+"'"+POut.PInt(PIn.PInt(table.Rows[i]["PreExisting"].ToString()))+"')";
+						General.NonQEx(command);
+					}
 					command="ALTER TABLE procedurelog ADD CodeNum int default '0' NOT NULL";
 					General.NonQEx(command);
 					//this is written in such a way as to be compatible with Oracle.
@@ -4875,6 +4906,8 @@ namespace OpenDental{
 					General.NonQEx(command);
 					command="ALTER TABLE procbuttonitem MODIFY (OldCode varchar(15))";
 					General.NonQEx(command);
+					command="DELETE FROM procbuttonitem WHERE EXISTS(SELECT procedurecode.CodeNum FROM procedurecode,procbuttonitem WHERE procedurecode.ProcCode=procbuttonitem.OldCode)";
+					General.NonQEx(command);
 					command="ALTER TABLE procbuttonitem ADD CodeNum int default '0' NOT NULL";
 					General.NonQEx(command);
 					command="UPDATE procbuttonitem SET procbuttonitem.CodeNum= (SELECT procedurecode.CodeNum FROM procedurecode WHERE procedurecode.ProcCode=procbuttonitem.OldCode)";
@@ -4919,13 +4952,24 @@ namespace OpenDental{
 					General.NonQEx(command);
 				}
 				//Added after r250
-				command="INSERT INTO laboratory (Description,Phone,Notes,LabSlip) VALUES('Default Lab','','','')";
-				int laboratoryNum=General.NonQEx(command,true);
+				int laboratoryNum=0;
+				//Determine the first available primary key number in the database. This is necessary because a sequence/trigger
+				//pair may not yet exist in the database from being run in the database maintenence tool. Also, this table is small,
+				//so incrementing by 1 will not waste much time.
+				do{
+					laboratoryNum++;
+					command="SELECT LaboratoryNum FROM laboratory WHERE LaboratoryNum='"+laboratoryNum+"'";
+					table=General.GetTableEx(command);
+				}while(table.Rows.Count>0);
+				command="INSERT INTO laboratory (LaboratoryNum,Description,Phone,Notes,LabSlip) VALUES('"
+					+laboratoryNum+"','Default Lab','','','')";
+				laboratoryNum=General.NonQEx(command,true);
 				command="SELECT * FROM appointment WHERE Lab != 0";
-				DataTable table=General.GetTableEx(command);
+				table=General.GetTableEx(command);
 				for(int i=0;i<table.Rows.Count;i++){
-					command="INSERT INTO labcase (PatNum,LaboratoryNum,AptNum,PlannedAptNum,DateTimeDue,DateTimeCreated,"
+					command="INSERT INTO labcase (LabCaseNum,PatNum,LaboratoryNum,AptNum,PlannedAptNum,DateTimeDue,DateTimeCreated,"
 						+"DateTimeSent,DateTimeRecd,DateTimeChecked,ProvNum,Instructions) VALUES("
+						+"'"+(i+1)+"', "
 						+table.Rows[i]["PatNum"].ToString()+", "
 						+POut.PInt(laboratoryNum)+", ";
 					if(table.Rows[i]["AptStatus"].ToString()=="6"){//if planned apt

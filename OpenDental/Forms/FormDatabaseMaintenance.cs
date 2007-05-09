@@ -497,8 +497,8 @@ namespace OpenDental {
 				if(table.Rows.Count>0) {
 					nextPrimaryKey=PIn.PInt(table.Rows[0][0].ToString())+1;
 				}
-				string sequenceName=(autoIncColName+"Sequence").ToUpper();//Always stored as upper case by Oracle.
-				string triggerName=(autoIncColName+"Trigger").ToUpper();
+				string sequenceName=(tablename+"Seq").ToUpper();//Always stored as upper case by Oracle.
+				string triggerName=(tablename+"Trig").ToUpper();
 				//Verify the sequence.
 				command="SELECT LAST_NUMBER FROM user_sequences WHERE SEQUENCE_NAME='"+sequenceName+"'";
 				try {

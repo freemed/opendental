@@ -29,28 +29,28 @@ namespace OpenDental{
 			List=new ProcedureCode[tableStat.Rows.Count];
 			for(int i=0;i<tableStat.Rows.Count;i++) {
 				tempCode=new ProcedureCode();
-				tempCode.ProcCode      =PIn.PString(tableStat.Rows[i][0].ToString());
-				tempCode.Descript      =PIn.PString(tableStat.Rows[i][1].ToString());
-				tempCode.AbbrDesc      =PIn.PString(tableStat.Rows[i][2].ToString());
-				tempCode.ProcTime      =PIn.PString(tableStat.Rows[i][3].ToString());
-				tempCode.ProcCat       =PIn.PInt(tableStat.Rows[i][4].ToString());
-				tempCode.TreatArea     =(TreatmentArea)PIn.PInt(tableStat.Rows[i][5].ToString());
-				//tempCode.RemoveTooth   =PIn.PBool  (tableStat.Rows[i][6].ToString());
-				tempCode.SetRecall     =PIn.PBool(tableStat.Rows[i][7].ToString());
-				tempCode.NoBillIns     =PIn.PBool(tableStat.Rows[i][8].ToString());
-				tempCode.IsProsth      =PIn.PBool(tableStat.Rows[i][9].ToString());
-				tempCode.DefaultNote   =PIn.PString(tableStat.Rows[i][10].ToString());
-				tempCode.IsHygiene     =PIn.PBool(tableStat.Rows[i][11].ToString());
-				tempCode.GTypeNum      =PIn.PInt(tableStat.Rows[i][12].ToString());
-				tempCode.AlternateCode1=PIn.PString(tableStat.Rows[i][13].ToString());
-				tempCode.MedicalCode   =PIn.PString(tableStat.Rows[i][14].ToString());
-				tempCode.IsTaxed       =PIn.PBool(tableStat.Rows[i][15].ToString());
-				tempCode.PaintType     =(ToothPaintingType)PIn.PInt(tableStat.Rows[i][16].ToString());
-				tempCode.GraphicColor  =Color.FromArgb(PIn.PInt(tableStat.Rows[i][17].ToString()));
-				tempCode.LaymanTerm    =PIn.PString(tableStat.Rows[i][18].ToString());
-				tempCode.IsCanadianLab =PIn.PBool  (tableStat.Rows[i][19].ToString());
-				tempCode.PreExisting	 =PIn.PBool  (tableStat.Rows[i][20].ToString());
-				tempCode.CodeNum    	 =PIn.PInt   (tableStat.Rows[i][21].ToString());
+				tempCode.CodeNum    	 =PIn.PInt(tableStat.Rows[i][0].ToString());
+				tempCode.ProcCode      =PIn.PString(tableStat.Rows[i][1].ToString());
+				tempCode.Descript      =PIn.PString(tableStat.Rows[i][2].ToString());
+				tempCode.AbbrDesc      =PIn.PString(tableStat.Rows[i][3].ToString());
+				tempCode.ProcTime      =PIn.PString(tableStat.Rows[i][4].ToString());
+				tempCode.ProcCat       =PIn.PInt(tableStat.Rows[i][5].ToString());
+				tempCode.TreatArea     =(TreatmentArea)PIn.PInt(tableStat.Rows[i][6].ToString());
+				//tempCode.RemoveTooth   =PIn.PBool  (tableStat.Rows[i][7].ToString());
+				tempCode.SetRecall     =PIn.PBool(tableStat.Rows[i][8].ToString());
+				tempCode.NoBillIns     =PIn.PBool(tableStat.Rows[i][9].ToString());
+				tempCode.IsProsth      =PIn.PBool(tableStat.Rows[i][10].ToString());
+				tempCode.DefaultNote   =PIn.PString(tableStat.Rows[i][11].ToString());
+				tempCode.IsHygiene     =PIn.PBool(tableStat.Rows[i][12].ToString());
+				tempCode.GTypeNum      =PIn.PInt(tableStat.Rows[i][13].ToString());
+				tempCode.AlternateCode1=PIn.PString(tableStat.Rows[i][14].ToString());
+				tempCode.MedicalCode   =PIn.PString(tableStat.Rows[i][15].ToString());
+				tempCode.IsTaxed       =PIn.PBool(tableStat.Rows[i][16].ToString());
+				tempCode.PaintType     =(ToothPaintingType)PIn.PInt(tableStat.Rows[i][17].ToString());
+				tempCode.GraphicColor  =Color.FromArgb(PIn.PInt(tableStat.Rows[i][18].ToString()));
+				tempCode.LaymanTerm    =PIn.PString(tableStat.Rows[i][19].ToString());
+				tempCode.IsCanadianLab =PIn.PBool  (tableStat.Rows[i][20].ToString());
+				tempCode.PreExisting	 =PIn.PBool  (tableStat.Rows[i][21].ToString());
 				HList.Add(tempCode.ProcCode,tempCode.Copy());
 				List[i]=tempCode.Copy();
 				if(tempCode.SetRecall) {
@@ -62,10 +62,11 @@ namespace OpenDental{
 		///<summary></summary>
 		public static void Insert(ProcedureCode code){
 			//must have already checked procCode for nonduplicate.
-			string command="INSERT INTO procedurecode (ProcCode,descript,abbrdesc,"
+			string command="INSERT INTO procedurecode (CodeNum,ProcCode,descript,abbrdesc,"
 				+"proctime,proccat,treatarea,RemoveTooth,setrecall,"
 				+"nobillins,isprosth,defaultnote,ishygiene,gtypenum,alternatecode1,MedicalCode,IsTaxed,"
-				+"PaintType,GraphicColor,LaymanTerm,IsCanadianLab,PreExisting,CodeNum) VALUES("
+				+"PaintType,GraphicColor,LaymanTerm,IsCanadianLab,PreExisting) VALUES("
+				+"'"+POut.PInt(code.CodeNum)+"', "
 				+"'"+POut.PString(code.ProcCode)+"', "
 				+"'"+POut.PString(code.Descript)+"', "
 				+"'"+POut.PString(code.AbbrDesc)+"', "
@@ -87,8 +88,7 @@ namespace OpenDental{
 				+"'"+POut.PInt   (code.GraphicColor.ToArgb())+"', "
 				+"'"+POut.PString(code.LaymanTerm)+"', "
 				+"'"+POut.PBool  (code.IsCanadianLab)+"', "
-				+"'"+POut.PBool  (code.PreExisting)+"', "
-				+"'"+POut.PInt   (code.CodeNum)+"')";
+				+"'"+POut.PBool  (code.PreExisting)+"')";
 			code.CodeNum=General.NonQ(command,true);
 			ProcedureCodes.Refresh();
 			//Cur already set
@@ -198,13 +198,13 @@ namespace OpenDental{
 			ArrayList AL=new ArrayList();
 			for(int j=0;j<DefB.Short[(int)DefCat.ProcCodeCats].Length;j++){
 				for(int k=0;k<tableStat.Rows.Count;k++){
-					if(DefB.Short[(int)DefCat.ProcCodeCats][j].DefNum==PIn.PInt(tableStat.Rows[k][4].ToString())){
+					if(DefB.Short[(int)DefCat.ProcCodeCats][j].DefNum==PIn.PInt(tableStat.Rows[k][5].ToString())){
 						procCode=new ProcedureCode();
-						procCode.ProcCode = PIn.PString(tableStat.Rows[k][0].ToString());
-						procCode.Descript= PIn.PString(tableStat.Rows[k][1].ToString());
-						procCode.AbbrDesc= PIn.PString(tableStat.Rows[k][2].ToString());
-						procCode.ProcCat = PIn.PInt   (tableStat.Rows[k][4].ToString());
-						procCode.CodeNum=PIn.PInt   (tableStat.Rows[k][21].ToString());
+						procCode.CodeNum=PIn.PInt(tableStat.Rows[k][0].ToString());
+						procCode.ProcCode = PIn.PString(tableStat.Rows[k][1].ToString());
+						procCode.Descript= PIn.PString(tableStat.Rows[k][2].ToString());
+						procCode.AbbrDesc= PIn.PString(tableStat.Rows[k][3].ToString());
+						procCode.ProcCat = PIn.PInt   (tableStat.Rows[k][5].ToString());
 						AL.Add(procCode);
 						//i++;
 					}

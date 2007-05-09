@@ -71,9 +71,9 @@ namespace OpenDental{
 		public static List<LabCase> GetForPeriod(DateTime startDate,DateTime endDate) {
 			string command="SELECT labcase.* FROM labcase,appointment "
 				+"WHERE labcase.AptNum=appointment.AptNum "
-				+"AND (appointment.AptStatus=1 || appointment.AptStatus=2 || appointment.AptStatus=4) "//scheduled,complete,or ASAP
+				+"AND (appointment.AptStatus=1 OR appointment.AptStatus=2 OR appointment.AptStatus=4) "//scheduled,complete,or ASAP
 				+"AND AptDateTime >= "+POut.PDate(startDate)
-				+"AND AptDateTime < "+POut.PDate(endDate.AddDays(1));//midnight of the next morning.
+				+" AND AptDateTime < "+POut.PDate(endDate.AddDays(1));//midnight of the next morning.
 			return FillFromCommand(command);
 		}
 
