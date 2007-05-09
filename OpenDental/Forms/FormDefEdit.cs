@@ -308,7 +308,9 @@ namespace OpenDental{
 					else if(textValue.Text=="X" || textValue.Text=="x"){
 						textValue.Text="X";
 					}
-					else if(textValue.Text.ToUpper()=="XP") {
+					else if(textValue.Text.ToUpper()=="XP" || textValue.Text.ToUpper()=="PX" 
+						|| textValue.Text.ToUpper()=="X,P" || textValue.Text.ToUpper()=="P,X")
+					{
 						textValue.Text="XP";
 					}
 					else textValue.Text="";

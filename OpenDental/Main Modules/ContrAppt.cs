@@ -6,6 +6,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Data;
 using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
@@ -151,6 +152,7 @@ namespace OpenDental{
 		//private Bitmap bubbleBitmap;
 		///<Summary>This has to be tracked globally because mouse might move directly from one appt to another without any break.  This is the only way to know if we are still over the same appt.</Summary>
 		private int bubbleAptNum;
+		private OpenDental.UI.PictureBox PicturePat;
 
 		///<summary></summary>
 		public ContrAppt(){
@@ -161,6 +163,15 @@ namespace OpenDental{
 			infoBubble.Visible=false;
 			infoBubble.Size=new Size(200,300);
 			infoBubble.MouseMove+=new MouseEventHandler(InfoBubble_MouseMove);
+			infoBubble.BackColor=Color.FromArgb(255,250,190);
+			PicturePat=new OpenDental.UI.PictureBox();
+			PicturePat.Location=new Point(6,17);
+			PicturePat.Size=new Size(100,100);
+			PicturePat.BackColor=Color.White;
+			PicturePat.TextNullImage=Lan.g(this,"Patient Picture Unavailable");
+			PicturePat.MouseMove+=new MouseEventHandler(PicturePat_MouseMove);
+			infoBubble.Controls.Clear();
+			infoBubble.Controls.Add(PicturePat);
 			this.Controls.Add(infoBubble);
 		}
 
@@ -2284,7 +2295,16 @@ namespace OpenDental{
 		///<summary></summary>
 		private void InfoBubble_MouseMove(object sender, System.Windows.Forms.MouseEventArgs e) {
 			//Calculate the real point in sheet coordinates
-			Point p=new Point(e.X+infoBubble.Left,e.Y+infoBubble.Top);
+			Point p=new Point(e.X+infoBubble.Left-ContrApptSheet2.Left-panelSheet.Left,
+				e.Y+infoBubble.Top-ContrApptSheet2.Top-panelSheet.Top);
+			InfoBubbleDraw(p);
+		}
+
+		///<summary></summary>
+		private void PicturePat_MouseMove(object sender,System.Windows.Forms.MouseEventArgs e) {
+			//Calculate the real point in sheet coordinates
+			Point p=new Point(e.X+infoBubble.Left+PicturePat.Left-ContrApptSheet2.Left-panelSheet.Left,
+				e.Y+infoBubble.Top+PicturePat.Top-ContrApptSheet2.Top-panelSheet.Top);
 			InfoBubbleDraw(p);
 		}
 
@@ -2298,14 +2318,59 @@ namespace OpenDental{
 				return;
 			}
 			infoBubble.Location=new Point(p.X+ContrApptSheet2.Left+panelSheet.Left+2,p.Y+ContrApptSheet2.Top+panelSheet.Top+2);
-			if(!infoBubble.Visible){
+			if(!infoBubble.Visible || aptNum!=bubbleAptNum){
+				bubbleAptNum=aptNum;
 				//most data is already present in DS.Bubble, but we do need to get the patient picture
-				infoBubble.BackgroundImage=new Bitmap(infoBubble.Width,infoBubble.Height);
+				infoBubble.BackgroundImage=new Bitmap(infoBubble.Width,800);
 				Image img=infoBubble.BackgroundImage;//alias
 				Graphics g=Graphics.FromImage(img);//infoBubble.BackgroundImage);
-				g.FillRectangle(new SolidBrush(Color.FromArgb(255,249,177)),0,0,img.Width,img.Height);
-				g.DrawString("bubble",Font,Brushes.Black,11,0);
+				g.TextRenderingHint=TextRenderingHint.SingleBitPerPixelGridFit;
+				g.SmoothingMode=SmoothingMode.HighQuality;
+				g.FillRectangle(new SolidBrush(infoBubble.BackColor),0,0,img.Width,img.Height);
+				DataRow row=null;
+				for(int i=0;i<DS.Tables["Bubble"].Rows.Count;i++){
+					if(DS.Tables["Bubble"].Rows[i]["AptNum"].ToString()==aptNum.ToString()){
+						row=DS.Tables["Bubble"].Rows[i];
+					}
+				}
+				//row will never be null
+				Font font=new Font(FontFamily.GenericSansSerif,10f,FontStyle.Bold);
+				float y=0;
+				Brush brush=Brushes.Black;
+				g.DrawString(row["patientName"].ToString(),font,brush,16,y);
+				y+=(int)g.MeasureString("X",font).Height;
+				PicturePat.Image=null;
+				if(//PatCur==null ||
+					row["ImageFolder"].ToString()!=""
+					&& PrefB.UsingAtoZfolder)//Do not use patient image when A to Z folders are disabled.
+					//return;
+				{
+					try {
+						Bitmap patPict;
+						Documents.GetPatPict(PIn.PInt(row["PatNum"].ToString()),
+							ODFileUtils.CombinePaths(new string[] {	FormPath.GetPreferredImagePath(),
+							row["ImageFolder"].ToString().Substring(0,1).ToUpper(),
+							row["ImageFolder"].ToString(),""}),
+							out patPict);
+						PicturePat.Image=patPict;
+					}
+					catch {		}
+				}
+				float x=110;
+				font=new Font(FontFamily.GenericSansSerif,9f);
+				float rowH=g.MeasureString("X",font).Height;
+				g.DrawString(row["aptDay"].ToString(),font,brush,x,y);
+				y+=rowH;
+				g.DrawString(row["aptDate"].ToString(),font,brush,x,y);
+				y+=rowH;
+				g.DrawString(row["aptTime"].ToString(),font,brush,x,y);
+				y+=rowH;
+				g.DrawString(row["aptLength"].ToString(),font,brush,x,y);
+				y+=rowH;
+
+				y=120;
 				g.Dispose();
+				infoBubble.Size=new Size(infoBubble.Width,(int)y+5);
 				infoBubble.BringToFront();
 				infoBubble.Visible=true;
 			}

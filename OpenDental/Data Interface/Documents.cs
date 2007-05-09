@@ -197,8 +197,8 @@ namespace OpenDental{
 			return retVal;
 		}
 
-		/// <summary>Makes one call to the database to retrieve the document of the patient for the given patNum, then uses that document and the pathPrepend to load and process the patient picture so it appears the same way it did in the image module(except for scaling and translation). Returns false if there is no patient picture, true otherwise. Sets the value of patientPict equal to a new instance of the patient's processed picture, but will be set to null on error. Assumes WithPat will always be same as patnum.</summary>
-		public static bool GetPatPict(int patNum,string pathPrepend,out Bitmap patientPict){
+		/// <summary>Makes one call to the database to retrieve the document of the patient for the given patNum, then uses that document and the patFolder to load and process the patient picture so it appears the same way it did in the image module.  It first creates a 100x100 thumbnail if needed, then it uses the thumbnail so no scaling needed. Returns false if there is no patient picture, true otherwise. Sets the value of patientPict equal to a new instance of the patient's processed picture, but will be set to null on error. Assumes WithPat will always be same as patnum.</summary>
+		public static bool GetPatPict(int patNum,string patFolder,out Bitmap patientPict){
 			patientPict=null;
 			//first establish which category pat pics are in
 			int defNumPicts=0;
@@ -231,12 +231,45 @@ namespace OpenDental{
 			if(shortFileName.Length<1){
 				return false;
 			}
-			string fullName=ODFileUtils.CombinePaths(pathPrepend,shortFileName);
+			string fullName=ODFileUtils.CombinePaths(patFolder,shortFileName);
 			if(!File.Exists(fullName)) {
 				return false;
 			}
-			patientPict=ContrDocs.ApplyDocumentSettingsToImage(pictureDocs[0],new Bitmap(fullName),
-				ContrDocs.ApplySettings.ALL);
+			//create Thumbnails folder
+			string thumbPath=ODFileUtils.CombinePaths(patFolder,"Thumbnails");
+			if(!Directory.Exists(thumbPath)) {
+				try {
+					Directory.CreateDirectory(thumbPath);
+				}
+				catch {
+					MessageBox.Show(Lan.g("Documents","Error.  Could not create thumbnails folder. "));
+					return false;
+				}
+			}
+			string thumbFileName=ODFileUtils.CombinePaths(new string[] { patFolder,"Thumbnails",shortFileName });
+			if(!ContrDocs.HasImageExtension(thumbFileName)){
+				return false;
+			}
+			if(File.Exists(thumbFileName)) {//use existing thumbnail
+				patientPict=(Bitmap)Bitmap.FromFile(thumbFileName);
+				return true;
+			}
+			//add thumbnail
+			int thumbSize=100;//All thumbnails are square.
+			Bitmap thumbBitmap;
+			//Gets the cropped/flipped/rotated image with any color filtering applied.
+			Bitmap sourceImage=new Bitmap(fullName);
+			Bitmap fullImage=ContrDocs.ApplyDocumentSettingsToImage(pictureDocs[0],sourceImage,ContrDocs.ApplySettings.ALL);
+			sourceImage.Dispose();
+			thumbBitmap=ContrDocs.GetThumbnail(fullImage,100);
+			fullImage.Dispose();
+			try {
+				thumbBitmap.Save(thumbFileName);
+			}
+			catch {
+				//Oh well, we can regenerate it next time if we have to!
+			}
+			patientPict=thumbBitmap;
 			return true;
 		}
 

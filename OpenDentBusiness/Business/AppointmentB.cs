@@ -57,19 +57,50 @@ namespace OpenDentBusiness{
 			DataTable table=new DataTable("Bubble");
 			DataRow row;
 			//columns that start with lowercase are altered for display rather than being raw data.
+			table.Columns.Add("aptDate");
+			table.Columns.Add("aptDay");
+			table.Columns.Add("aptLength");
+			table.Columns.Add("aptTime");
 			table.Columns.Add("AptNum");
 			table.Columns.Add("ImageFolder");
 			table.Columns.Add("patientName");
-			string command="SELECT AptNum,ImageFolder,LName,FName,MiddleI,Preferred "
+			table.Columns.Add("PatNum");
+			string command="SELECT AptDateTime,AptNum,ImageFolder,LName,FName,MiddleI,Preferred,appointment.PatNum,Pattern "
 				+"FROM appointment LEFT JOIN patient ON patient.PatNum=appointment.PatNum "
-				+"WHERE AptDateTime > "+POut.PDate(dateStart)+" "
+				+"WHERE AptDateTime >= "+POut.PDate(dateStart)+" "
 				+"AND AptDateTime < "+POut.PDate(dateStart.AddDays(1))+" "
 				+"AND (AptStatus=1 OR AptStatus=2 OR AptStatus=4 OR AptStatus=5) ";
 			DataTable raw=dcon.GetTable(command);
+			DateTime aptDate;
+			TimeSpan span;
+			int hours;
+			int minutes;
 			for(int i=0;i<raw.Rows.Count;i++) {
-				//row=table.NewRow();
-				//row[""]=raw.Rows[i][""].ToString();
-				//table.Rows.Add(row);
+				row=table.NewRow();
+				aptDate=PIn.PDateT(raw.Rows[i]["AptDateTime"].ToString());
+				row["aptDate"]=aptDate.ToShortDateString();
+				row["aptDay"]=aptDate.ToString("dddd");
+				span=TimeSpan.FromMinutes(raw.Rows[i]["Pattern"].ToString().Length*5);
+				hours=span.Hours;
+				minutes=span.Minutes;
+				if(hours==0){
+					row["aptLength"]=minutes.ToString()+Lan.g("Appointments"," Min");
+				}
+				else if(hours==1){
+					row["aptLength"]=hours.ToString()+Lan.g("Appointments"," Hr, ")
+						+minutes.ToString()+Lan.g("Appointments"," Min");
+				}
+				else{
+					row["aptLength"]=hours.ToString()+Lan.g("Appointments"," Hrs, ")
+						+minutes.ToString()+Lan.g("Appointments"," Min");
+				}
+				row["aptTime"]=aptDate.ToShortTimeString();
+				row["AptNum"]=raw.Rows[i]["AptNum"].ToString();
+				row["ImageFolder"]=raw.Rows[i]["ImageFolder"].ToString();
+				row["patientName"]=PatientB.GetNameLF(raw.Rows[i]["LName"].ToString(),raw.Rows[i]["FName"].ToString(),
+					raw.Rows[i]["Preferred"].ToString(),raw.Rows[i]["MiddleI"].ToString());
+				row["PatNum"]=raw.Rows[i]["PatNum"].ToString();
+				table.Rows.Add(row);
 			}
 			return table;
 		}
@@ -302,7 +333,7 @@ namespace OpenDentBusiness{
 			return table;
 		}
 
-
+		//private static DataRow GetRowFromTable(
 
 	}
 }

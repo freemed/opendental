@@ -83,7 +83,7 @@ namespace OpenDental.UI
 			base.OnPaint (e);
 			Graphics g=e.Graphics;
 			g.InterpolationMode=InterpolationMode.High;
-			g.DrawRectangle(Pens.Black,0,0,Width-1,Height-1);
+			g.DrawRectangle(Pens.Gray,0,0,Width-1,Height-1);
 			if(image==null){
 				StringFormat format=new StringFormat();
 				format.Alignment=StringAlignment.Center;
