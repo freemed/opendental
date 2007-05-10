@@ -1560,7 +1560,7 @@ namespace OpenDental{
 				textBirthdate.Text="";
 			else
 				textBirthdate.Text=PatCur.Birthdate.ToShortDateString();
-			textAge.Text=Shared.DateToAgeString(PatCur.Birthdate);
+			textAge.Text=PatientB.DateToAgeString(PatCur.Birthdate);
 			if(CultureInfo.CurrentCulture.Name=="en-US"//if USA
 				&& PatCur.SSN!=null//the null catches new patients
 				&& PatCur.SSN.Length==9)//and length exactly 9 (no data gets lost in formatting)
@@ -1843,7 +1843,7 @@ namespace OpenDental{
 			if(birthdate>DateTime.Today){
 				birthdate=birthdate.AddYears(-100);
 			}
-			textAge.Text=Shared.DateToAgeString(birthdate);// .AgeToString(Shared.DateToAge(birthdate));
+			textAge.Text=PatientB.DateToAgeString(birthdate);// .AgeToString(Shared.DateToAge(birthdate));
 		}
 
 		private void textZip_TextChanged(object sender, System.EventArgs e) {

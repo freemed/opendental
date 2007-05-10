@@ -44,10 +44,6 @@ namespace OpenDental{
 		private OpenDental.UI.Button butToday;
 		private OpenDental.UI.Button butTodayWk;
 		private System.Windows.Forms.Panel panelPinBoard;
-		private System.Windows.Forms.Label label1;
-		private System.Windows.Forms.Label label4;
-		private System.Windows.Forms.Label label5;
-		private System.Windows.Forms.Label label6;
 		private System.Windows.Forms.Panel panelSheet;
 		private System.Windows.Forms.Panel panelCalendar;
 		private System.Windows.Forms.Panel panelArrows;
@@ -60,9 +56,6 @@ namespace OpenDental{
 		private System.Windows.Forms.Button butDelete;
 		private System.Windows.Forms.Button butBreak;
 		private System.Windows.Forms.ImageList imageList1;
-		private System.Windows.Forms.TextBox textMedicalNote;
-		private System.Windows.Forms.TextBox textAddressNote;
-		private System.Windows.Forms.TextBox textFinancialNote;
 		///<summary></summary>
 		public static int SheetClickedonOp;
 		///<summary></summary>
@@ -72,9 +65,6 @@ namespace OpenDental{
 		private System.Windows.Forms.Panel panelNarrow;
 		///<summary></summary>
 		public static InfoApt CurInfo;
-		private System.Windows.Forms.Panel panelNotes;
-		private System.Windows.Forms.TextBox textApptModNote;
-		private OpenDental.UI.Button butAptModNoteEdit;
 		private System.Drawing.Printing.PrintDocument pd2;
 		private System.Windows.Forms.PrintDialog printDialog2;
 		///<summary></summary>
@@ -86,8 +76,6 @@ namespace OpenDental{
 		private OpenDental.UI.Button butFwd;
 		private System.Windows.Forms.Panel panelAptInfo;
 		private System.Windows.Forms.Label label2;
-		private System.Windows.Forms.Label labelPhoneType;
-		private System.Windows.Forms.TextBox textPhone;
 		private OpenDental.UI.ODToolBar ToolBarMain;
 		private System.Windows.Forms.TextBox textLab;
 		private System.Windows.Forms.TextBox textProduction;
@@ -204,14 +192,6 @@ namespace OpenDental{
 			this.butFwd = new OpenDental.UI.Button();
 			this.butBackWk = new OpenDental.UI.Button();
 			this.butFwdWk = new OpenDental.UI.Button();
-			this.textApptModNote = new System.Windows.Forms.TextBox();
-			this.textMedicalNote = new System.Windows.Forms.TextBox();
-			this.label1 = new System.Windows.Forms.Label();
-			this.textAddressNote = new System.Windows.Forms.TextBox();
-			this.textFinancialNote = new System.Windows.Forms.TextBox();
-			this.label4 = new System.Windows.Forms.Label();
-			this.label5 = new System.Windows.Forms.Label();
-			this.label6 = new System.Windows.Forms.Label();
 			this.panelSheet = new System.Windows.Forms.Panel();
 			this.vScrollBar1 = new System.Windows.Forms.VScrollBar();
 			this.panelAptInfo = new System.Windows.Forms.Panel();
@@ -223,6 +203,7 @@ namespace OpenDental{
 			this.butOther = new OpenDental.UI.Button();
 			this.imageList1 = new System.Windows.Forms.ImageList(this.components);
 			this.panelCalendar = new System.Windows.Forms.Panel();
+			this.butLab = new OpenDental.UI.Button();
 			this.butSearch = new OpenDental.UI.Button();
 			this.textProduction = new System.Windows.Forms.TextBox();
 			this.label7 = new System.Windows.Forms.Label();
@@ -233,10 +214,6 @@ namespace OpenDental{
 			this.panelOps = new System.Windows.Forms.Panel();
 			this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
 			this.panelNarrow = new System.Windows.Forms.Panel();
-			this.panelNotes = new System.Windows.Forms.Panel();
-			this.textPhone = new System.Windows.Forms.TextBox();
-			this.labelPhoneType = new System.Windows.Forms.Label();
-			this.butAptModNoteEdit = new OpenDental.UI.Button();
 			this.pd2 = new System.Drawing.Printing.PrintDocument();
 			this.printDialog2 = new System.Windows.Forms.PrintDialog();
 			this.ToolBarMain = new OpenDental.UI.ODToolBar();
@@ -263,14 +240,12 @@ namespace OpenDental{
 			this.label8 = new System.Windows.Forms.Label();
 			this.butSearchCloseX = new System.Windows.Forms.Button();
 			this.butSearchNext = new OpenDental.UI.Button();
-			this.butLab = new OpenDental.UI.Button();
 			this.panelPinBoard.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
 			this.panelArrows.SuspendLayout();
 			this.panelSheet.SuspendLayout();
 			this.panelAptInfo.SuspendLayout();
 			this.panelCalendar.SuspendLayout();
-			this.panelNotes.SuspendLayout();
 			this.groupSearch.SuspendLayout();
 			this.groupBox2.SuspendLayout();
 			this.panel1.SuspendLayout();
@@ -438,90 +413,6 @@ namespace OpenDental{
 			this.butFwdWk.TabIndex = 52;
 			this.butFwdWk.Click += new System.EventHandler(this.butFwdWk_Click);
 			// 
-			// textApptModNote
-			// 
-			this.textApptModNote.BackColor = System.Drawing.Color.White;
-			this.textApptModNote.ForeColor = System.Drawing.Color.Red;
-			this.textApptModNote.Location = new System.Drawing.Point(0,148);
-			this.textApptModNote.Multiline = true;
-			this.textApptModNote.Name = "textApptModNote";
-			this.textApptModNote.ReadOnly = true;
-			this.textApptModNote.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-			this.textApptModNote.Size = new System.Drawing.Size(202,36);
-			this.textApptModNote.TabIndex = 34;
-			// 
-			// textMedicalNote
-			// 
-			this.textMedicalNote.BackColor = System.Drawing.Color.White;
-			this.textMedicalNote.Font = new System.Drawing.Font("Microsoft Sans Serif",8.25F,System.Drawing.FontStyle.Regular,System.Drawing.GraphicsUnit.Point,((byte)(0)));
-			this.textMedicalNote.ForeColor = System.Drawing.Color.Red;
-			this.textMedicalNote.Location = new System.Drawing.Point(0,108);
-			this.textMedicalNote.Multiline = true;
-			this.textMedicalNote.Name = "textMedicalNote";
-			this.textMedicalNote.ReadOnly = true;
-			this.textMedicalNote.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-			this.textMedicalNote.Size = new System.Drawing.Size(202,20);
-			this.textMedicalNote.TabIndex = 35;
-			this.textMedicalNote.TextChanged += new System.EventHandler(this.textMedicalNote_TextChanged);
-			// 
-			// label1
-			// 
-			this.label1.Location = new System.Drawing.Point(0,134);
-			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(160,18);
-			this.label1.TabIndex = 36;
-			this.label1.Text = "Appointment module notes:";
-			// 
-			// textAddressNote
-			// 
-			this.textAddressNote.BackColor = System.Drawing.Color.White;
-			this.textAddressNote.ForeColor = System.Drawing.Color.Red;
-			this.textAddressNote.Location = new System.Drawing.Point(0,72);
-			this.textAddressNote.Multiline = true;
-			this.textAddressNote.Name = "textAddressNote";
-			this.textAddressNote.ReadOnly = true;
-			this.textAddressNote.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-			this.textAddressNote.Size = new System.Drawing.Size(202,20);
-			this.textAddressNote.TabIndex = 39;
-			// 
-			// textFinancialNote
-			// 
-			this.textFinancialNote.BackColor = System.Drawing.Color.White;
-			this.textFinancialNote.Font = new System.Drawing.Font("Microsoft Sans Serif",8.25F,System.Drawing.FontStyle.Regular,System.Drawing.GraphicsUnit.Point,((byte)(0)));
-			this.textFinancialNote.ForeColor = System.Drawing.Color.Red;
-			this.textFinancialNote.Location = new System.Drawing.Point(0,18);
-			this.textFinancialNote.Multiline = true;
-			this.textFinancialNote.Name = "textFinancialNote";
-			this.textFinancialNote.ReadOnly = true;
-			this.textFinancialNote.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-			this.textFinancialNote.Size = new System.Drawing.Size(202,20);
-			this.textFinancialNote.TabIndex = 40;
-			// 
-			// label4
-			// 
-			this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif",8.25F,System.Drawing.FontStyle.Regular,System.Drawing.GraphicsUnit.Point,((byte)(0)));
-			this.label4.Location = new System.Drawing.Point(0,2);
-			this.label4.Name = "label4";
-			this.label4.Size = new System.Drawing.Size(194,14);
-			this.label4.TabIndex = 41;
-			this.label4.Text = "Urgent Financial Notes";
-			// 
-			// label5
-			// 
-			this.label5.Location = new System.Drawing.Point(0,94);
-			this.label5.Name = "label5";
-			this.label5.Size = new System.Drawing.Size(134,14);
-			this.label5.TabIndex = 42;
-			this.label5.Text = "Urgent medical notes:";
-			// 
-			// label6
-			// 
-			this.label6.Location = new System.Drawing.Point(0,58);
-			this.label6.Name = "label6";
-			this.label6.Size = new System.Drawing.Size(100,14);
-			this.label6.TabIndex = 43;
-			this.label6.Text = "Phone/Addr notes:";
-			// 
 			// panelSheet
 			// 
 			this.panelSheet.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
@@ -655,6 +546,22 @@ namespace OpenDental{
 			this.panelCalendar.Size = new System.Drawing.Size(219,346);
 			this.panelCalendar.TabIndex = 46;
 			// 
+			// butLab
+			// 
+			this.butLab.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butLab.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.butLab.Autosize = true;
+			this.butLab.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butLab.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butLab.CornerRadius = 4F;
+			this.butLab.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butLab.Location = new System.Drawing.Point(2,302);
+			this.butLab.Name = "butLab";
+			this.butLab.Size = new System.Drawing.Size(67,21);
+			this.butLab.TabIndex = 77;
+			this.butLab.Text = "LabCases";
+			this.butLab.Click += new System.EventHandler(this.butLab_Click);
+			// 
 			// butSearch
 			// 
 			this.butSearch.AdjustImageLocation = new System.Drawing.Point(0,0);
@@ -758,55 +665,6 @@ namespace OpenDental{
 			this.panelNarrow.Size = new System.Drawing.Size(34,716);
 			this.panelNarrow.TabIndex = 49;
 			this.panelNarrow.Visible = false;
-			// 
-			// panelNotes
-			// 
-			this.panelNotes.Controls.Add(this.textFinancialNote);
-			this.panelNotes.Controls.Add(this.textPhone);
-			this.panelNotes.Controls.Add(this.labelPhoneType);
-			this.panelNotes.Controls.Add(this.butAptModNoteEdit);
-			this.panelNotes.Controls.Add(this.textApptModNote);
-			this.panelNotes.Controls.Add(this.textMedicalNote);
-			this.panelNotes.Controls.Add(this.label1);
-			this.panelNotes.Controls.Add(this.textAddressNote);
-			this.panelNotes.Controls.Add(this.label5);
-			this.panelNotes.Controls.Add(this.label6);
-			this.panelNotes.Controls.Add(this.label4);
-			this.panelNotes.Location = new System.Drawing.Point(665,494);
-			this.panelNotes.Name = "panelNotes";
-			this.panelNotes.Size = new System.Drawing.Size(219,188);
-			this.panelNotes.TabIndex = 50;
-			// 
-			// textPhone
-			// 
-			this.textPhone.Location = new System.Drawing.Point(102,38);
-			this.textPhone.Name = "textPhone";
-			this.textPhone.ReadOnly = true;
-			this.textPhone.Size = new System.Drawing.Size(100,20);
-			this.textPhone.TabIndex = 53;
-			// 
-			// labelPhoneType
-			// 
-			this.labelPhoneType.Location = new System.Drawing.Point(4,40);
-			this.labelPhoneType.Name = "labelPhoneType";
-			this.labelPhoneType.Size = new System.Drawing.Size(100,14);
-			this.labelPhoneType.TabIndex = 52;
-			this.labelPhoneType.Text = "Home Phone:";
-			this.labelPhoneType.TextAlign = System.Drawing.ContentAlignment.TopRight;
-			// 
-			// butAptModNoteEdit
-			// 
-			this.butAptModNoteEdit.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butAptModNoteEdit.Autosize = true;
-			this.butAptModNoteEdit.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butAptModNoteEdit.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butAptModNoteEdit.CornerRadius = 4F;
-			this.butAptModNoteEdit.Location = new System.Drawing.Point(150,129);
-			this.butAptModNoteEdit.Name = "butAptModNoteEdit";
-			this.butAptModNoteEdit.Size = new System.Drawing.Size(52,20);
-			this.butAptModNoteEdit.TabIndex = 51;
-			this.butAptModNoteEdit.Text = "Edit";
-			this.butAptModNoteEdit.Click += new System.EventHandler(this.butAptModNoteEdit_Click);
 			// 
 			// pd2
 			// 
@@ -1044,28 +902,11 @@ namespace OpenDental{
 			this.butSearchNext.Text = "More";
 			this.butSearchNext.Click += new System.EventHandler(this.butSearchMore_Click);
 			// 
-			// butLab
-			// 
-			this.butLab.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butLab.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.butLab.Autosize = true;
-			this.butLab.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butLab.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butLab.CornerRadius = 4F;
-			this.butLab.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butLab.Location = new System.Drawing.Point(2,302);
-			this.butLab.Name = "butLab";
-			this.butLab.Size = new System.Drawing.Size(67,21);
-			this.butLab.TabIndex = 77;
-			this.butLab.Text = "LabCases";
-			this.butLab.Click += new System.EventHandler(this.butLab_Click);
-			// 
 			// ContrAppt
 			// 
 			this.Controls.Add(this.groupSearch);
 			this.Controls.Add(this.butOther);
 			this.Controls.Add(this.ToolBarMain);
-			this.Controls.Add(this.panelNotes);
 			this.Controls.Add(this.panelOps);
 			this.Controls.Add(this.panelCalendar);
 			this.Controls.Add(this.panelAptInfo);
@@ -1083,8 +924,6 @@ namespace OpenDental{
 			this.panelAptInfo.ResumeLayout(false);
 			this.panelCalendar.ResumeLayout(false);
 			this.panelCalendar.PerformLayout();
-			this.panelNotes.ResumeLayout(false);
-			this.panelNotes.PerformLayout();
 			this.groupSearch.ResumeLayout(false);
 			this.groupBox2.ResumeLayout(false);
 			this.groupBox2.PerformLayout();
@@ -1288,8 +1127,8 @@ namespace OpenDental{
 			panelAptInfo.Location=new Point(ClientSize.Width-panelAptInfo.Width-2
 				,ToolBarMain.Height+panelCalendar.Height);
 			butOther.Location=new Point(panelAptInfo.Location.X+32,panelAptInfo.Location.Y+84);
-			panelNotes.Location=new Point(ClientSize.Width-panelAptInfo.Width-2
-				,ToolBarMain.Height+panelCalendar.Height+panelAptInfo.Height);
+			//panelNotes.Location=new Point(ClientSize.Width-panelAptInfo.Width-2
+			//	,ToolBarMain.Height+panelCalendar.Height+panelAptInfo.Height);
 			panelSheet.Width=ClientSize.Width-panelAptInfo.Width-2;
 			panelSheet.Height=ClientSize.Height-panelSheet.Location.Y;
 			RefreshVisops();
@@ -1362,13 +1201,7 @@ namespace OpenDental{
 				butClearPin,
 				label2,
 				label7,
-				butOther,
-				label4,
-				labelPhoneType,
-				label6,
-				label5,
-				label1,
-				butAptModNoteEdit
+				butOther
 				});
 			LayoutToolBar();
 			//Appointment action buttons
@@ -1476,13 +1309,6 @@ namespace OpenDental{
 			else{
 				butOther.Enabled=false;
 			}
-			if(//ContrApptSingle.PinBoardIsSelected ||
-				ContrApptSingle.SelectedAptNum!=-1){
-				panelNotes.Enabled=true;
-			}
-			else{
-				panelNotes.Enabled=false;
-			}
 			if(ContrApptSingle.SelectedAptNum==-1){//apt not selected
 				panelAptInfo.Enabled=false;
 			}
@@ -1497,36 +1323,6 @@ namespace OpenDental{
 				}
 				if(isPresent)	panelAptInfo.Enabled=true;//apt selected and present
 				else panelAptInfo.Enabled=false;//apt selected but not present
-			}
-			if(panelNotes.Enabled){
-				textFinancialNote.Text=FamCur.List[0].FamFinUrgNote;
-				textAddressNote.Text=FamCur.List[0].AddrNote;
-				textMedicalNote.Text=PatCur.MedUrgNote;
-				textApptModNote.Text=PatCur.ApptModNote;
-				if(PatCur.HmPhone!=""){
-					labelPhoneType.Text=Lan.g(this,"Home Phone:");
-					textPhone.Text=PatCur.HmPhone;
-				}
-				else if(PatCur.WirelessPhone!=""){
-					labelPhoneType.Text=Lan.g(this,"Wireless Phone:");
-					textPhone.Text=PatCur.WirelessPhone;
-				}
-				else if(PatCur.WkPhone!=""){
-					labelPhoneType.Text=Lan.g(this,"Work Phone:");
-					textPhone.Text=PatCur.WkPhone;
-				}
-				else{
-					labelPhoneType.Text=Lan.g(this,"(no phone listed)");
-					textPhone.Text="";
-				}
-			}
-			else{
-				textFinancialNote.Text="";
-				textAddressNote.Text="";
-				textMedicalNote.Text="";
-				textApptModNote.Text="";
-				labelPhoneType.Text="";
-				textPhone.Text="";
 			}
 			if(panelAptInfo.Enabled){
 				listConfirmed.SelectedIndex=DefB.GetOrder(DefCat.ApptConfirmed,AptCur.Confirmed);
@@ -1983,8 +1779,7 @@ namespace OpenDental{
 			mouseIsDown = false;
 			boolAptMoved=false;
 		}//end PinApptSingle_mouseup
-
-
+		
 		///<summary>Called when releasing an appointment to make sure it does not overlap any other appointment.  Tests all appts for the day, even if not visible.</summary>
 		private bool DoesOverlap(Appointment aptCur){
 			//bool retVal=false;
@@ -2359,6 +2154,7 @@ namespace OpenDental{
 				float x=110;
 				font=new Font(FontFamily.GenericSansSerif,9f);
 				float rowH=g.MeasureString("X",font).Height;
+				y-=3;
 				g.DrawString(row["aptDay"].ToString(),font,brush,x,y);
 				y+=rowH;
 				g.DrawString(row["aptDate"].ToString(),font,brush,x,y);
@@ -2370,6 +2166,8 @@ namespace OpenDental{
 				g.DrawString(row["provider"].ToString(),font,brush,x,y);
 				y+=rowH;
 				g.DrawString(row["production"].ToString(),font,brush,x,y);
+				y+=rowH;
+				g.DrawString(row["confirmed"].ToString(),font,brush,x,y);
 				y+=rowH;
 				y=120;
 				x=2;
@@ -2398,23 +2196,51 @@ namespace OpenDental{
 					y+=h;
 				}
 				//patient info---------------------
-				//PatNum
-				//ChartNumber
-				//Age
-				//HmPhone
-				//WkPhone
-				//WirelessPhone
-				//any preferred contact methods
-				//AddrNote
-				//ApptModuleNotes
+				y+=3;
+				g.DrawLine(new Pen(Brushes.Gray,1.5f),3,y,infoBubble.Width-3,y);
+				y+=2;
+				g.DrawString(row["patNum"].ToString(),font,brush,x,y);
+				y+=rowH;
+				if(row["chartNumber"].ToString()!="") {
+					g.DrawString(row["chartNumber"].ToString(),font,brush,x,y);
+					y+=rowH;
+				}
+				g.DrawString(row["billingType"].ToString(),font,brush,x,y);
+				y+=rowH;
+				g.DrawString(row["age"].ToString(),font,brush,x,y);
+				y+=rowH;
+				g.DrawString(row["hmPhone"].ToString(),font,brush,x,y);
+				y+=rowH;
+				g.DrawString(row["wkPhone"].ToString(),font,brush,x,y);
+				y+=rowH;
+				g.DrawString(row["wirelessPhone"].ToString(),font,brush,x,y);
+				y+=rowH;
+				if(row["contactMethods"].ToString()!="") {
+					h=g.MeasureString(row["contactMethods"].ToString(),font,infoBubble.Width).Height;
+					g.DrawString(row["contactMethods"].ToString(),font,brush,new RectangleF(x,y,infoBubble.Width,h));
+					y+=h;
+				}
+				if(row["insurance"].ToString()!="") {//overkill since it's only one line
+					h=g.MeasureString(row["insurance"].ToString(),font,infoBubble.Width).Height;
+					g.DrawString(row["insurance"].ToString(),font,brush,new RectangleF(x,y,infoBubble.Width,h));
+					y+=h;
+				}
+				if(row["addrNote"].ToString()!="") {
+					h=g.MeasureString(row["addrNote"].ToString(),font,infoBubble.Width).Height;
+					g.DrawString(row["addrNote"].ToString(),font,brush,new RectangleF(x,y,infoBubble.Width,h));
+					y+=h;
+				}
+				if(row["famFinUrgNote"].ToString()!="") {
+					h=g.MeasureString(row["famFinUrgNote"].ToString(),font,infoBubble.Width).Height;
+					g.DrawString(row["famFinUrgNote"].ToString(),font,Brushes.Red,new RectangleF(x,y,infoBubble.Width,h));
+					y+=h;
+				}
+				if(row["apptModNote"].ToString()!="") {
+					h=g.MeasureString(row["apptModNote"].ToString(),font,infoBubble.Width).Height;
+					g.DrawString(row["apptModNote"].ToString(),font,Brushes.Red,new RectangleF(x,y,infoBubble.Width,h));
+					y+=h;
+				}
 				//other family members?
-				//Insurance?
-				
-				//g.DrawString(row["aptLength"].ToString(),font,brush,x,y);
-				//y+=rowH;
-
-
-
 				g.DrawRectangle(Pens.Gray,0,0,infoBubble.Width-1,(int)y+4);
 				g.Dispose();
 				infoBubble.Size=new Size(infoBubble.Width,(int)y+5);
@@ -3477,12 +3303,6 @@ namespace OpenDental{
 			RefreshModuleScreen();//this is used because we are not changing the patient.
 			//ModuleSelected();
 			SetInvalid();
-		}
-
-		private void butAptModNoteEdit_Click(object sender, System.EventArgs e) {
-			FormNoteApptMod FormNAM=new FormNoteApptMod(PatCur);
-			FormNAM.ShowDialog();
-			textApptModNote.Text=PatCur.ApptModNote;
 		}
 
 		private void butSearch_Click(object sender, System.EventArgs e) {
