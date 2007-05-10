@@ -307,22 +307,22 @@ namespace OpenDental{
 						return 0;
 					}
 					else if(Info.MyLabCase.DateTimeChecked.Year>1880){
-						g.DrawString(Lan.g(this,"LAB QUALITY CHECKED"),baseFont,brush,xPos,yPos);
+						g.DrawString(Lan.g(this,"Lab Quality Checked"),baseFont,brush,xPos,yPos);
 						return 1;
 					}
 					else if(Info.MyLabCase.DateTimeRecd.Year>1880) {
-						g.DrawString(Lan.g(this,"LAB RECEIVED"),baseFont,brush,xPos,yPos);
+						g.DrawString(Lan.g(this,"Lab Received"),baseFont,brush,xPos,yPos);
 						return 1;
 					}
 					else if(Info.MyLabCase.DateTimeSent.Year>1880) {//sent, but not recd
-						g.DrawString(Lan.g(this,"LAB SENT"),baseFont,brush,xPos,yPos);
+						g.DrawString(Lan.g(this,"Lab Sent"),baseFont,brush,xPos,yPos);
 						return 1;
 					}
 					else{//not even sent
-						g.DrawString(Lan.g(this,"LAB NOT SENT"),baseFont,brush,xPos,yPos);
+						g.DrawString(Lan.g(this,"Lab Not Sent"),baseFont,brush,xPos,yPos);
 						return 1;
 					}
-					break;
+					//break;
 				case "MedUrgNote":
 					if(rowI==0)
 						noteSize=g.MeasureString(Info.MyPatient.MedUrgNote,baseFont,ContrApptSheet.ColWidth-9-4);
@@ -333,14 +333,6 @@ namespace OpenDental{
 					rect=new RectangleF(new PointF(xPos,yPos),noteSize);
 					g.DrawString(Info.MyPatient.MedUrgNote,baseFont,brush,rect,format);
 					return linesFilled;
-				case "PremedFlag":
-					if(Info.MyPatient.Premed){
-						g.DrawString(Lan.g(this,"Premedicate"),baseFont,brush,xPos,yPos);
-						return 1;
-					}
-					else{
-						return 0;
-					}
 				case "Note":
 					if(rowI==0)
 						noteSize=g.MeasureString(Info.MyApt.Note,baseFont,ContrApptSheet.ColWidth-9-4);
@@ -364,6 +356,14 @@ namespace OpenDental{
 					g.DrawString(Info.MyPatient.PatNum.ToString()+" "+Info.MyPatient.GetNameLF()
 						,baseFont,brush,xPos,yPos);
 					return 1;
+				case "PremedFlag":
+					if(Info.MyPatient.Premed) {
+						g.DrawString(Lan.g(this,"Premedicate"),baseFont,brush,xPos,yPos);
+						return 1;
+					}
+					else{
+						return 0;
+					}
 				case "Procs":
 					int rowsUsed=0;
 					for(int j=0;j<Info.Procs.Length;j++){

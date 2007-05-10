@@ -54,7 +54,7 @@ namespace OpenDentBusiness{
 			DateTime dateStart=PIn.PDate(strDateStart);
 			DateTime dateEnd=PIn.PDate(strDateEnd);
 			DataConnection dcon=new DataConnection();
-			DataTable table=new DataTable("Bubble");
+			DataTable table=new DataTable("Appointment");
 			DataRow row;
 			//columns that start with lowercase are altered for display rather than being raw data.
 			table.Columns.Add("aptDate");
@@ -63,18 +63,40 @@ namespace OpenDentBusiness{
 			table.Columns.Add("aptTime");
 			table.Columns.Add("AptNum");
 			table.Columns.Add("ImageFolder");
+			table.Columns.Add("lab");
+			table.Columns.Add("MedUrgNote");
+			table.Columns.Add("Note");
 			table.Columns.Add("patientName");
 			table.Columns.Add("PatNum");
-			string command="SELECT AptDateTime,AptNum,ImageFolder,LName,FName,MiddleI,Preferred,appointment.PatNum,Pattern "
+			table.Columns.Add("preMedFlag");
+			table.Columns.Add("procs");
+			table.Columns.Add("provider");
+			table.Columns.Add("production");
+			string command="SELECT AptDateTime,appointment.AptNum,ImageFolder,patient.LName,patient.FName,MiddleI,Preferred,"
+				+"DateTimeChecked,DateTimeRecd,DateTimeSent,LabCaseNum,Note,"
+				+"appointment.PatNum,Pattern,Premed,MedUrgNote, "
+				+"(SELECT SUM(ProcFee) FROM procedurelog WHERE procedurelog.AptNum=appointment.AptNum) Production, "
+				+"appointment.ProvNum,ProvHyg,IsHygiene,p1.Abbr ProvAbbr,p2.Abbr HygAbbr "
 				+"FROM appointment LEFT JOIN patient ON patient.PatNum=appointment.PatNum "
+				+"LEFT JOIN provider p1 ON p1.ProvNum=appointment.ProvNum "
+				+"LEFT JOIN provider p2 ON p2.ProvNum=appointment.ProvHyg "
+				+"LEFT JOIN labcase ON labcase.AptNum=appointment.AptNum "
 				+"WHERE AptDateTime >= "+POut.PDate(dateStart)+" "
 				+"AND AptDateTime < "+POut.PDate(dateStart.AddDays(1))+" "
 				+"AND (AptStatus=1 OR AptStatus=2 OR AptStatus=4 OR AptStatus=5) ";
 			DataTable raw=dcon.GetTable(command);
+			command="SELECT AbbrDesc,procedurelog.AptNum,procedurelog.CodeNum,Surf,ToothNum,TreatArea "
+				+"FROM procedurelog,appointment,procedurecode "
+				+"WHERE procedurelog.AptNum=appointment.AptNum "
+				+"AND procedurelog.CodeNum=procedurecode.CodeNum "
+				+"AND AptDateTime >= "+POut.PDate(dateStart)+" "
+				+"AND AptDateTime < "+POut.PDate(dateStart.AddDays(1))+" ";
+			DataTable rawProc=dcon.GetTable(command);
 			DateTime aptDate;
 			TimeSpan span;
 			int hours;
 			int minutes;
+			DateTime labDate;
 			for(int i=0;i<raw.Rows.Count;i++) {
 				row=table.NewRow();
 				aptDate=PIn.PDateT(raw.Rows[i]["AptDateTime"].ToString());
@@ -97,9 +119,81 @@ namespace OpenDentBusiness{
 				row["aptTime"]=aptDate.ToShortTimeString();
 				row["AptNum"]=raw.Rows[i]["AptNum"].ToString();
 				row["ImageFolder"]=raw.Rows[i]["ImageFolder"].ToString();
+				row["lab"]="";
+				if(raw.Rows[i]["LabCaseNum"].ToString()!=""){
+					labDate=PIn.PDateT(raw.Rows[i]["DateTimeChecked"].ToString());
+					if(labDate.Year>1880) {
+						row["lab"]=Lan.g("Appointments","Lab Quality Checked");
+					}
+					else {
+						labDate=PIn.PDateT(raw.Rows[i]["DateTimeRecd"].ToString());
+						if(labDate.Year>1880) {
+							row["lab"]=Lan.g("Appointments","Lab Received");
+						}
+						else {
+							labDate=PIn.PDateT(raw.Rows[i]["DateTimeSent"].ToString());
+							if(labDate.Year>1880) {
+								row["lab"]=Lan.g("Appointments","Lab Sent");//sent but not received
+							}
+							else {
+								row["lab"]=Lan.g("Appointments","Lab Not Sent");
+							}
+						}
+					}
+				}
+				row["MedUrgNote"]=raw.Rows[i]["MedUrgNote"].ToString();
+				row["Note"]=raw.Rows[i]["Note"].ToString();
 				row["patientName"]=PatientB.GetNameLF(raw.Rows[i]["LName"].ToString(),raw.Rows[i]["FName"].ToString(),
 					raw.Rows[i]["Preferred"].ToString(),raw.Rows[i]["MiddleI"].ToString());
 				row["PatNum"]=raw.Rows[i]["PatNum"].ToString();
+				if(raw.Rows[i]["Premed"].ToString()=="1"){
+					row["preMedFlag"]=Lan.g("Appointments","Premedicate");
+				}
+				row["procs"]="";
+				for(int p=0;p<rawProc.Rows.Count;p++){
+					if(rawProc.Rows[p]["AptNum"].ToString()==raw.Rows[i]["AptNum"].ToString()){
+						if(row["procs"].ToString()!=""){
+							row["procs"]+="\r\n";
+						}
+						switch(rawProc.Rows[p]["TreatArea"].ToString()) {
+							case "1"://TreatmentArea.Surf:
+								row["procs"]+="#"+Tooth.ToInternat(rawProc.Rows[p]["ToothNum"].ToString())+"-"
+									+rawProc.Rows[p]["Surf"].ToString()+"-";//""#12-MOD-"
+								break;
+							case "2"://TreatmentArea.Tooth:
+								row["procs"]+="#"+Tooth.ToInternat(rawProc.Rows[p]["ToothNum"].ToString())+"-";//"#12-"
+								break;
+							default://area 3 or 0 (mouth)
+								break;
+							case "4"://TreatmentArea.Quad:
+								row["procs"]+=rawProc.Rows[p]["Surf"].ToString()+"-";//"UL-"
+								break;
+							case "5"://TreatmentArea.Sextant:
+								row["procs"]+="S"+rawProc.Rows[p]["Surf"].ToString()+"-";//"S2-"
+								break;
+							case "6"://TreatmentArea.Arch:
+								row["procs"]+=rawProc.Rows[p]["Surf"].ToString()+"-";//"U-"
+								break;
+							case "7"://TreatmentArea.ToothRange:
+								//strLine+=table.Rows[j][13].ToString()+" ";//don't show range
+								break;
+						}
+						row["procs"]+=rawProc.Rows[p]["AbbrDesc"].ToString();
+					}	
+				}
+				if(raw.Rows[i]["IsHygiene"].ToString()=="1"){
+					row["provider"]=raw.Rows[i]["HygAbbr"].ToString();
+					if(raw.Rows[i]["ProvAbbr"].ToString()!=""){
+						row["provider"]+=" ("+raw.Rows[i]["ProvAbbr"].ToString()+")";
+					}
+				}
+				else{
+					row["provider"]=raw.Rows[i]["ProvAbbr"].ToString();
+					if(raw.Rows[i]["HygAbbr"].ToString()!="") {
+						row["provider"]+=" ("+raw.Rows[i]["HygAbbr"].ToString()+")";
+					}
+				}
+				row["production"]=PIn.PDouble(raw.Rows[i]["Production"].ToString()).ToString("c");
 				table.Rows.Add(row);
 			}
 			return table;

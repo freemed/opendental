@@ -167,7 +167,7 @@ namespace OpenDental{
 			PicturePat=new OpenDental.UI.PictureBox();
 			PicturePat.Location=new Point(6,17);
 			PicturePat.Size=new Size(100,100);
-			PicturePat.BackColor=Color.White;
+			PicturePat.BackColor=Color.FromArgb(232,220,190);
 			PicturePat.TextNullImage=Lan.g(this,"Patient Picture Unavailable");
 			PicturePat.MouseMove+=new MouseEventHandler(PicturePat_MouseMove);
 			infoBubble.Controls.Clear();
@@ -2320,17 +2320,17 @@ namespace OpenDental{
 			infoBubble.Location=new Point(p.X+ContrApptSheet2.Left+panelSheet.Left+2,p.Y+ContrApptSheet2.Top+panelSheet.Top+2);
 			if(!infoBubble.Visible || aptNum!=bubbleAptNum){
 				bubbleAptNum=aptNum;
-				//most data is already present in DS.Bubble, but we do need to get the patient picture
+				//most data is already present in DS.Appointment, but we do need to get the patient picture
 				infoBubble.BackgroundImage=new Bitmap(infoBubble.Width,800);
 				Image img=infoBubble.BackgroundImage;//alias
 				Graphics g=Graphics.FromImage(img);//infoBubble.BackgroundImage);
-				g.TextRenderingHint=TextRenderingHint.SingleBitPerPixelGridFit;
+				g.TextRenderingHint=TextRenderingHint.ClearTypeGridFit;
 				g.SmoothingMode=SmoothingMode.HighQuality;
 				g.FillRectangle(new SolidBrush(infoBubble.BackColor),0,0,img.Width,img.Height);
 				DataRow row=null;
-				for(int i=0;i<DS.Tables["Bubble"].Rows.Count;i++){
-					if(DS.Tables["Bubble"].Rows[i]["AptNum"].ToString()==aptNum.ToString()){
-						row=DS.Tables["Bubble"].Rows[i];
+				for(int i=0;i<DS.Tables["Appointment"].Rows.Count;i++){
+					if(DS.Tables["Appointment"].Rows[i]["AptNum"].ToString()==aptNum.ToString()){
+						row=DS.Tables["Appointment"].Rows[i];
 					}
 				}
 				//row will never be null
@@ -2367,8 +2367,55 @@ namespace OpenDental{
 				y+=rowH;
 				g.DrawString(row["aptLength"].ToString(),font,brush,x,y);
 				y+=rowH;
-
+				g.DrawString(row["provider"].ToString(),font,brush,x,y);
+				y+=rowH;
+				g.DrawString(row["production"].ToString(),font,brush,x,y);
+				y+=rowH;
 				y=120;
+				x=2;
+				if(row["preMedFlag"].ToString()!=""){
+					g.DrawString(row["preMedFlag"].ToString(),font,Brushes.Red,x,y);
+					y+=rowH;
+				}
+				float h;
+				if(row["MedUrgNote"].ToString()!="") {
+					h=g.MeasureString(row["MedUrgNote"].ToString(),font,infoBubble.Width).Height;
+					g.DrawString(row["MedUrgNote"].ToString(),font,Brushes.Red,new RectangleF(x,y,infoBubble.Width,h));
+					y+=h;
+				}
+				if(row["lab"].ToString()!="") {
+					g.DrawString(row["lab"].ToString(),font,Brushes.Red,x,y);
+					y+=rowH;
+				}
+				if(row["procs"].ToString()!="") {
+					h=g.MeasureString(row["procs"].ToString(),font,infoBubble.Width).Height;
+					g.DrawString(row["procs"].ToString(),font,brush,new RectangleF(x,y,infoBubble.Width,h));
+					y+=h;
+				}
+				if(row["Note"].ToString()!="") {
+					h=g.MeasureString(row["Note"].ToString(),font,infoBubble.Width).Height;
+					g.DrawString(row["Note"].ToString(),font,brush,new RectangleF(x,y,infoBubble.Width,h));
+					y+=h;
+				}
+				//patient info---------------------
+				//PatNum
+				//ChartNumber
+				//Age
+				//HmPhone
+				//WkPhone
+				//WirelessPhone
+				//any preferred contact methods
+				//AddrNote
+				//ApptModuleNotes
+				//other family members?
+				//Insurance?
+				
+				//g.DrawString(row["aptLength"].ToString(),font,brush,x,y);
+				//y+=rowH;
+
+
+
+				g.DrawRectangle(Pens.Gray,0,0,infoBubble.Width-1,(int)y+4);
 				g.Dispose();
 				infoBubble.Size=new Size(infoBubble.Width,(int)y+5);
 				infoBubble.BringToFront();
