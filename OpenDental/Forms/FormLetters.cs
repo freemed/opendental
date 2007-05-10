@@ -285,7 +285,7 @@ namespace OpenDental{
 			//date
 			str.Append(DateTime.Today.ToLongDateString()+"\r\n\r\n");
 			//greeting
-			str.Append("Dear ");
+			str.Append(Lan.g(this,"Dear "));
 			if(CultureInfo.CurrentCulture.Name=="en-GB"){
 				if(PatCur.Salutation!="")
 					str.Append(PatCur.Salutation);
@@ -314,7 +314,7 @@ namespace OpenDental{
 				str.Append("\r\n\r\nYours sincerely,\r\n\r\n\r\n\r\n");
 			}
 			else{
-				str.Append("\r\n\r\nSincerely,\r\n\r\n\r\n\r\n");
+				str.Append("\r\n\r\n"+Lan.g(this,"Sincerely,")+"\r\n\r\n\r\n\r\n");
 			}
 			str.Append(((Pref)PrefB.HList["PracticeTitle"]).ValueString);
 			textBody.Text=str.ToString();

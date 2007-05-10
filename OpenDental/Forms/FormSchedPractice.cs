@@ -121,14 +121,6 @@ namespace OpenDental{
 		#endregion
 
 		private void FormSchedPractice_Load(object sender, System.EventArgs e) {
-			/*if(PermissionsOld.AuthorizationRequired("Practice Schedule")){
-				user=Users.Authenticate("Practice Schedule");
-				if(!UserPermissions.IsAuthorized("Practice Schedule",user)){
-					MsgBox.Show(this,"You do not have permission for this feature");
-					DialogResult=DialogResult.Cancel;
-					return;
-				}	
-			}*/
 			if(SchedType==ScheduleType.Practice){
 				this.Text=Lan.g(this,"Practice Schedule");
 				labelProv.Visible=false;
@@ -165,8 +157,7 @@ namespace OpenDental{
 			if(SchedType==ScheduleType.Provider){
 				ProvNum=Providers.List[listProv.SelectedIndex].ProvNum;
 			}
-      SchedListMonth=Schedules.RefreshMonth(cal.SelectedDate
-				,SchedType,ProvNum);
+      SchedListMonth=Schedules.RefreshMonth(cal.SelectedDate,SchedType,ProvNum);
 			//Schedules.RefreshDay(cal.SelectedDate);//?
 			SchedDefault[] schedDefForType=SchedDefaults.GetForType(SchedType,ProvNum);
 			//if(SchedType==SchedType.

@@ -569,6 +569,9 @@ namespace OpenDental {
 
 		///<summary>Called from FormInsPlan when user wants to view a benefit note for similar plans.  Should never include the current plan that the user is editing.  This function will get one note from the database, not including blank notes.  If no note can be found, then it returns empty string.</summary>
 		public static string GetBenefitNotes(List<int> planNums){
+			if(planNums.Count==0){
+				return "";
+			}
 			string s="";
 			for(int i=0;i<planNums.Count;i++) {
 				if(i>0) {

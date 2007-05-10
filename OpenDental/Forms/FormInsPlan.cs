@@ -158,8 +158,8 @@ namespace OpenDental{
 		private Label labelCanadaEligibility;
 		private OpenDental.UI.Button butEligibility;
 		private Label labelViewRequestDocument;
-		///<summary>This is a field that is accessed only by clicking on the button because there's not room for it otherwise.  This variable should be treated just as if it was a visible textBox.</summary>
-		private string BenefitNotes;
+		//<summary>This is a field that is accessed only by clicking on the button because there's not room for it otherwise.  This variable should be treated just as if it was a visible textBox.</summary>
+		//private string BenefitNotes;
 
 		///<summary>Called from ContrFamily and FormInsPlans. Must pass in both the plan and the patPlan, although patPlan can be null.  They are handled separately.</summary>
 		public FormInsPlan(InsPlan planCur,PatPlan patPlanCur){
@@ -2199,6 +2199,10 @@ namespace OpenDental{
 								PlanCur.BenefitNotes+="\r\n";
 							}
 							PlanCur.BenefitNotes+=fields[1]+": "+fields[2];
+							//if(BenefitNotes!="") {
+							//	BenefitNotes+="\r\n";
+							//}
+							//BenefitNotes+=fields[1]+": "+fields[2];
 						}
 						switch(fields[0]) {
 							//default://for all rows that are not handled below
@@ -2813,7 +2817,7 @@ namespace OpenDental{
 		///<summary>This button is always active.</summary>
 		private void butBenefitNotes_Click(object sender,System.EventArgs e) {
 			string otherBenNote="";
-			if(BenefitNotes=="") {
+			if(PlanCur.BenefitNotes=="") {
 				//try to find some other similar notes. Never includes the current plan.
 				List<int> samePlans=InsPlans.GetPlanNumsOfSamePlans(textEmployer.Text,textGroupName.Text,textGroupNum.Text,
 					textDivisionNo.Text,textCarrier.Text,checkIsMedical.Checked,PlanCur.PlanNum,false);
@@ -2825,8 +2829,8 @@ namespace OpenDental{
 				MsgBox.Show(this,"This plan does not have a benefit note, but a note was found for an identical plan.  You will be able to view this note, but not change it.");
 			}
 			FormInsBenefitNotes FormI=new FormInsBenefitNotes();
-			if(BenefitNotes!="") {
-				FormI.BenefitNotes=BenefitNotes;
+			if(PlanCur.BenefitNotes!="") {
+				FormI.BenefitNotes=PlanCur.BenefitNotes;
 			}
 			else {
 				FormI.BenefitNotes=otherBenNote;
@@ -2835,8 +2839,8 @@ namespace OpenDental{
 			if(FormI.DialogResult==DialogResult.Cancel) {
 				return;
 			}
-			if(BenefitNotes!="") {
-				BenefitNotes=FormI.BenefitNotes;
+			if(PlanCur.BenefitNotes!="") {
+				PlanCur.BenefitNotes=FormI.BenefitNotes;
 			}
 		}
 
