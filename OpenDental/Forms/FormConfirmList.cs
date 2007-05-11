@@ -247,7 +247,7 @@ namespace OpenDental{
 			this.grid.Location = new System.Drawing.Point(4,103);
 			this.grid.Name = "grid";
 			this.grid.ScrollValue = 0;
-			this.grid.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
+			this.grid.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
 			this.grid.Size = new System.Drawing.Size(963,546);
 			this.grid.TabIndex = 0;
 			this.grid.Title = "Confirmation List";

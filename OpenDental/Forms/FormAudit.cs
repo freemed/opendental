@@ -227,7 +227,7 @@ namespace OpenDental{
 			this.grid.Location = new System.Drawing.Point(8,54);
 			this.grid.Name = "grid";
 			this.grid.ScrollValue = 0;
-			this.grid.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
+			this.grid.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
 			this.grid.Size = new System.Drawing.Size(889,578);
 			this.grid.TabIndex = 2;
 			this.grid.Title = "Audit Trail";

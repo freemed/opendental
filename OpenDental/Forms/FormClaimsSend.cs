@@ -192,7 +192,7 @@ namespace OpenDental{
 			this.gridHistory.Location = new System.Drawing.Point(4,31);
 			this.gridHistory.Name = "gridHistory";
 			this.gridHistory.ScrollValue = 0;
-			this.gridHistory.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
+			this.gridHistory.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
 			this.gridHistory.Size = new System.Drawing.Size(959,252);
 			this.gridHistory.TabIndex = 33;
 			this.gridHistory.Title = "History";
@@ -268,7 +268,7 @@ namespace OpenDental{
 			this.gridMain.Location = new System.Drawing.Point(4,31);
 			this.gridMain.Name = "gridMain";
 			this.gridMain.ScrollValue = 0;
-			this.gridMain.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
+			this.gridMain.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
 			this.gridMain.Size = new System.Drawing.Size(959,368);
 			this.gridMain.TabIndex = 32;
 			this.gridMain.Title = "Claims Waiting to Send";

@@ -257,7 +257,7 @@ namespace OpenDental{
 			this.gridIns.Location = new System.Drawing.Point(8,319);
 			this.gridIns.Name = "gridIns";
 			this.gridIns.ScrollValue = 0;
-			this.gridIns.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
+			this.gridIns.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
 			this.gridIns.Size = new System.Drawing.Size(584,301);
 			this.gridIns.TabIndex = 109;
 			this.gridIns.Title = "Insurance Payments";
@@ -311,7 +311,7 @@ namespace OpenDental{
 			this.gridPat.Location = new System.Drawing.Point(8,12);
 			this.gridPat.Name = "gridPat";
 			this.gridPat.ScrollValue = 0;
-			this.gridPat.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
+			this.gridPat.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
 			this.gridPat.Size = new System.Drawing.Size(584,299);
 			this.gridPat.TabIndex = 100;
 			this.gridPat.Title = "Patient Payments";
@@ -440,8 +440,8 @@ namespace OpenDental{
 			}
 			else{
 				groupSelect.Visible=false;
-				gridIns.SelectionMode=SelectionMode.None;
-				gridPat.SelectionMode=SelectionMode.None;
+				gridIns.SelectionMode=GridSelectionMode.None;
+				gridPat.SelectionMode=GridSelectionMode.None;
 				//we never again let user change the deposit linking again from here.
 				//They need to detach it from within the transaction
 				//Might be enhanced later to allow, but that's very complex.

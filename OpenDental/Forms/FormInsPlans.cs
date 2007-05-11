@@ -214,7 +214,7 @@ namespace OpenDental{
 			this.gridMain.Location = new System.Drawing.Point(11,51);
 			this.gridMain.Name = "gridMain";
 			this.gridMain.ScrollValue = 0;
-			this.gridMain.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
+			this.gridMain.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
 			this.gridMain.Size = new System.Drawing.Size(936,579);
 			this.gridMain.TabIndex = 19;
 			this.gridMain.Title = "Insurance Plans";

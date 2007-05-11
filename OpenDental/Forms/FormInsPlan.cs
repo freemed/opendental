@@ -1399,7 +1399,7 @@ namespace OpenDental{
 			this.gridBenefits.Location = new System.Drawing.Point(468,334);
 			this.gridBenefits.Name = "gridBenefits";
 			this.gridBenefits.ScrollValue = 0;
-			this.gridBenefits.SelectionMode = System.Windows.Forms.SelectionMode.None;
+			this.gridBenefits.SelectionMode = OpenDental.UI.GridSelectionMode.None;
 			this.gridBenefits.Size = new System.Drawing.Size(502,314);
 			this.gridBenefits.TabIndex = 146;
 			this.gridBenefits.Title = "Benefit Information";

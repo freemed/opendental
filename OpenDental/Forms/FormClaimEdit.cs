@@ -747,7 +747,7 @@ namespace OpenDental{
 			this.gridProc.Location = new System.Drawing.Point(2,168);
 			this.gridProc.Name = "gridProc";
 			this.gridProc.ScrollValue = 0;
-			this.gridProc.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
+			this.gridProc.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
 			this.gridProc.Size = new System.Drawing.Size(939,198);
 			this.gridProc.TabIndex = 128;
 			this.gridProc.Title = "Procedures";

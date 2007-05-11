@@ -630,7 +630,7 @@ namespace OpenDental{
 			this.gridProc.Location = new System.Drawing.Point(485,3);
 			this.gridProc.Name = "gridProc";
 			this.gridProc.ScrollValue = 0;
-			this.gridProc.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
+			this.gridProc.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
 			this.gridProc.Size = new System.Drawing.Size(488,345);
 			this.gridProc.TabIndex = 139;
 			this.gridProc.Title = "Procedures - highlight to attach";
