@@ -371,7 +371,7 @@ namespace OpenDental{
 			this.gridMessages.Location = new System.Drawing.Point(356,35);
 			this.gridMessages.Name = "gridMessages";
 			this.gridMessages.ScrollValue = 0;
-			this.gridMessages.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
+			this.gridMessages.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
 			this.gridMessages.Size = new System.Drawing.Size(540,417);
 			this.gridMessages.TabIndex = 13;
 			this.gridMessages.Title = "Message History";

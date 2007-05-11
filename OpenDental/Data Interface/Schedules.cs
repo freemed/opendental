@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Data;
 using System.Windows.Forms;
 using OpenDentBusiness;
@@ -268,8 +269,93 @@ namespace OpenDental{
 			return true;
 		}
 
+		///<Summary>Returns a 7 column data table in a calendar layout so all you have to do is draw it on the screen.</Summary>
+		public static DataTable GetPeriod(DateTime dateStart,DateTime dateEnd,List<int> provNums){
+			DataTable table=new DataTable();
+			DataRow row;
+			table.Columns.Add("sun");
+			table.Columns.Add("mon");
+			table.Columns.Add("tues");
+			table.Columns.Add("wed");
+			table.Columns.Add("thurs");
+			table.Columns.Add("fri");
+			table.Columns.Add("sat");
+			string command="SELECT Abbr,SchedDate,StartTime,StopTime "
+				+"FROM schedule,provider "
+				+"WHERE schedule.ProvNum=provider.ProvNum "
+				+"AND SchedDate >= "+POut.PDate(dateStart)+" "
+				+"AND SchedDate <= "+POut.PDate(dateEnd)+" "
+				+"AND SchedType=1 ";
+			for(int i=0;i<provNums.Count;i++){
+				if(i==0){
+					command+="AND (";
+				}
+				else{
+					command+=" OR ";
+				}
+				command+="schedule.ProvNum="+POut.PInt(provNums[i]);
+				if(i==provNums.Count-1){
+					command+=") ";
+				}
+			}
+			command+="ORDER BY SchedDate,provider.ItemOrder,StartTime";
+			DataTable raw=General.GetTable(command);
+			DateTime dateSched;
+			DateTime startTime;
+			DateTime stopTime;
+			int rowsInGrid=GetRowCal(dateStart,dateEnd)+1;//because 0-based
+			for(int i=0;i<rowsInGrid;i++){
+				row=table.NewRow();
+				table.Rows.Add(row);
+			}
+			dateSched=dateStart;
+			while(dateSched<=dateEnd){
+				table.Rows[GetRowCal(dateStart,dateSched)][(int)dateSched.DayOfWeek]=
+					dateSched.ToString("MMM d");
+				dateSched=dateSched.AddDays(1);
+			}
+			int rowI;
+			for(int i=0;i<raw.Rows.Count;i++){
+				dateSched=PIn.PDate(raw.Rows[i]["SchedDate"].ToString());
+				startTime=PIn.PDateT(raw.Rows[i]["StartTime"].ToString());
+				stopTime=PIn.PDateT(raw.Rows[i]["StopTime"].ToString());
+				rowI=GetRowCal(dateStart,dateSched);
+				//table.Rows[rowI][(int)dateSched.DayOfWeek]+=;
+				if(i==0){
+					table.Rows[rowI][(int)dateSched.DayOfWeek]+="\r\n"+raw.Rows[i]["Abbr"].ToString()+" ";
+				}
+				else if(raw.Rows[i-1]["Abbr"].ToString()==raw.Rows[i]["Abbr"].ToString()
+					&& raw.Rows[i-1]["SchedDate"].ToString()==raw.Rows[i]["SchedDate"].ToString())
+				{
+					table.Rows[rowI][(int)dateSched.DayOfWeek]+=", ";
+				}
+				else{
+					table.Rows[rowI][(int)dateSched.DayOfWeek]+="\r\n"+raw.Rows[i]["Abbr"].ToString()+" ";
+				}
+				table.Rows[rowI][(int)dateSched.DayOfWeek]+=
+					startTime.ToString("h:mm")+"-"+stopTime.ToString("h:mm");
+			}
+			return table;
+		}
 
+		///<summary>Returns the 0-based row where endDate will fall in a calendar grid.  It is not necessary to have a function to retrieve the column, because that is simply (int)myDate.DayOfWeek</summary>
+		public static int GetRowCal(DateTime startDate,DateTime endDate){
+			TimeSpan span=endDate-startDate;
+			int dayInterval=span.Days;
+			int daysFirstWeek=7-(int)startDate.DayOfWeek;//eg Monday=7-1=6.  or Sat=7-6=1.
+			dayInterval=dayInterval-daysFirstWeek;
+			if(dayInterval<0){
+				return 0;
+			}
+			return (int)Math.Ceiling((dayInterval+1)/7d);
+		}
 
+		///<Summary>When click on a calendar grid, this is used to calculate the date clicked on.  StartDate is the first date in the Calendar, which does not have to be Sun.</Summary>
+		public static DateTime GetDateCal(DateTime startDate,int row,int col){
+			DateTime dateFirstRow;//the first date of row 0. Typically a few days before startDate. Always a Sun.
+			dateFirstRow=startDate.AddDays(-(int)startDate.DayOfWeek);//example: (Tues,May 9).AddDays(-2)=Sun,May 7.
+			return dateFirstRow.AddDays(row*7+col);
+		}
 		
 	}
 

@@ -615,7 +615,7 @@ namespace OpenDental {
 			this.gridAccount.Location = new System.Drawing.Point(0,147);
 			this.gridAccount.Name = "gridAccount";
 			this.gridAccount.ScrollValue = 0;
-			this.gridAccount.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
+			this.gridAccount.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
 			this.gridAccount.Size = new System.Drawing.Size(769,275);
 			this.gridAccount.TabIndex = 73;
 			this.gridAccount.Title = "Patient Account";

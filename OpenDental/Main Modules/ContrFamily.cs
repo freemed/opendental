@@ -94,7 +94,7 @@ namespace OpenDental{
 			this.gridPat.Location = new System.Drawing.Point(0,133);
 			this.gridPat.Name = "gridPat";
 			this.gridPat.ScrollValue = 0;
-			this.gridPat.SelectionMode = System.Windows.Forms.SelectionMode.None;
+			this.gridPat.SelectionMode = OpenDental.UI.GridSelectionMode.None;
 			this.gridPat.Size = new System.Drawing.Size(252,467);
 			this.gridPat.TabIndex = 30;
 			this.gridPat.Title = "Patient Information";
@@ -107,7 +107,7 @@ namespace OpenDental{
 			this.gridIns.Location = new System.Drawing.Point(256,133);
 			this.gridIns.Name = "gridIns";
 			this.gridIns.ScrollValue = 0;
-			this.gridIns.SelectionMode = System.Windows.Forms.SelectionMode.None;
+			this.gridIns.SelectionMode = OpenDental.UI.GridSelectionMode.None;
 			this.gridIns.Size = new System.Drawing.Size(657,467);
 			this.gridIns.TabIndex = 29;
 			this.gridIns.Title = "Insurance Plans";

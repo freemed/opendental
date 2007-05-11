@@ -1,6 +1,6 @@
 /*=============================================================================================================
 Open Dental is a dental practice management program.
-Copyright (C) 2003,2004,2005,2006  Jordan Sparks, DMD.  http://www.open-dent.com,  http://www.docsparks.com
+Copyright (C) 2003,2004,2005,2006,2007  Jordan Sparks, DMD.  http://www.open-dent.com,  http://www.docsparks.com
 
 This program is free software; you can redistribute it and/or modify it under the terms of the
 GNU General Public License as published by the Free Software Foundation; either version 2 of the License,
@@ -296,6 +296,7 @@ namespace OpenDental{
 			this.menuItemInstructors = new System.Windows.Forms.MenuItem();
 			this.menuItemCarriers = new System.Windows.Forms.MenuItem();
 			this.menuItemInsPlans = new System.Windows.Forms.MenuItem();
+			this.menuItemLabCases = new System.Windows.Forms.MenuItem();
 			this.menuItemMedications = new System.Windows.Forms.MenuItem();
 			this.menuItemProviders = new System.Windows.Forms.MenuItem();
 			this.menuItemPrescriptions = new System.Windows.Forms.MenuItem();
@@ -375,7 +376,6 @@ namespace OpenDental{
 			this.ContrAppt2 = new OpenDental.ContrAppt();
 			this.lightSignalGrid1 = new OpenDental.UI.LightSignalGrid();
 			this.myOutlookBar = new OpenDental.OutlookBar();
-			this.menuItemLabCases = new System.Windows.Forms.MenuItem();
 			this.SuspendLayout();
 			// 
 			// timerTimeIndic
@@ -654,6 +654,7 @@ namespace OpenDental{
 			// 
 			this.menuItemSched.Index = 27;
 			this.menuItemSched.Text = "SCHEDULES";
+			this.menuItemSched.Click += new System.EventHandler(this.menuItemSched_Click);
 			// 
 			// menuItemPracDef
 			// 
@@ -783,6 +784,12 @@ namespace OpenDental{
 			this.menuItemInsPlans.Index = 11;
 			this.menuItemInsPlans.Text = "&Insurance Plans";
 			this.menuItemInsPlans.Click += new System.EventHandler(this.menuItemInsPlans_Click);
+			// 
+			// menuItemLabCases
+			// 
+			this.menuItemLabCases.Index = 12;
+			this.menuItemLabCases.Text = "Lab Cases";
+			this.menuItemLabCases.Click += new System.EventHandler(this.menuItemLabCases_Click);
 			// 
 			// menuItemMedications
 			// 
@@ -1331,12 +1338,6 @@ namespace OpenDental{
 			this.myOutlookBar.TabIndex = 18;
 			this.myOutlookBar.Text = "outlookBar1";
 			this.myOutlookBar.ButtonClicked += new OpenDental.ButtonClickedEventHandler(this.myOutlookBar_ButtonClicked);
-			// 
-			// menuItemLabCases
-			// 
-			this.menuItemLabCases.Index = 12;
-			this.menuItemLabCases.Text = "Lab Cases";
-			this.menuItemLabCases.Click += new System.EventHandler(this.menuItemLabCases_Click);
 			// 
 			// FormOpenDental
 			// 
@@ -2493,6 +2494,12 @@ namespace OpenDental{
 		}
 		
 		//Setup-Schedules
+
+		private void menuItemSched_Click(object sender,EventArgs e) {
+			FormSchedule FormS=new FormSchedule();
+			FormS.ShowDialog();
+		}
+
 		private void menuItemPracDef_Click(object sender, System.EventArgs e) {
 			if(!Security.IsAuthorized(Permissions.Schedules)){
 				return;
@@ -3231,6 +3238,8 @@ namespace OpenDental{
 				return false;
 			}
 		}
+
+		
 
 		
 

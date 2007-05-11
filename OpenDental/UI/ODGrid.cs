@@ -54,11 +54,12 @@ namespace OpenDental.UI{
 		///<summary>Set at the very beginning of OnPaint.  Uses the ColWidth of each column to set up this array with one element for each column.  Contains the columns Pos for that column.</summary>
 		private int[] ColPos;
 		private ArrayList selectedIndices;
+		private Point selectedCell;
 		private int MouseDownRow;
 		private int MouseDownCol;
 		private bool ControlIsDown;
 		private bool ShiftIsDown;
-		private SelectionMode selectionMode;
+		private GridSelectionMode selectionMode;
 		private bool MouseIsDown;
 		private bool MouseIsOver;//helps automate scrolling
 		private string translationName;
@@ -87,7 +88,8 @@ namespace OpenDental.UI{
 			this.Controls.Add(vScroll);
 			this.Controls.Add(hScroll);
 			selectedIndices=new ArrayList();
-			selectionMode=SelectionMode.One;
+			selectedCell=new Point(-1,-1);
+			selectionMode=GridSelectionMode.One;
 			selectedRowColor=Color.Silver;
 			allowSelection=true;
 			wrapText=true;
@@ -192,17 +194,29 @@ namespace OpenDental.UI{
 			}
 		}
 
+		///<summary>Holds the x,y values of the selected cell if in OneCell mode.  -1,-1 represents no cell selected.</summary>
+		[Browsable(false)]
+		public Point SelectedCell {
+			get {
+				return selectedCell;
+			}
+		}
+
 		///<summary></summary>
-		[Category("Behavior"),Description("Exactly like the listBox.SelectionMode, except no MultiSimple.")]
-		[DefaultValue(typeof(SelectionMode),"One")]
-		public SelectionMode SelectionMode{
+		[Category("Behavior"),Description("Just like the listBox.SelectionMode, except no MultiSimple, and added OneCell.")]
+		[DefaultValue(typeof(GridSelectionMode),"One")]
+		public GridSelectionMode SelectionMode{
 			get{ 
 				return selectionMode; 
 			}
 			set{
-				if((SelectionMode)value==SelectionMode.MultiSimple){
-					MessageBox.Show("MultiSimple not supported.");
-					return;
+				//if((GridSelectionMode)value==SelectionMode.MultiSimple){
+				//	MessageBox.Show("MultiSimple not supported.");
+				//	return;
+				//}
+				if((GridSelectionMode)value==GridSelectionMode.OneCell){
+					selectedCell=new Point(-1,-1);//?
+					selectedIndices=new ArrayList();
 				}
 				selectionMode=value;
 			}
@@ -401,6 +415,15 @@ namespace OpenDental.UI{
 					1,
 					-vScroll.Value+1+titleHeight+headerHeight+RowLocs[rowI]+1,
 					GridW,//this is a really simple width value that always works well
+					RowHeights[rowI]+NoteHeights[rowI]-1);
+			}
+			if(selectionMode==GridSelectionMode.OneCell && selectedCell.X!=-1 && selectedCell.Y!=-1
+				&& selectedCell.Y==rowI)
+			{
+				g.FillRectangle(new SolidBrush(selectedRowColor),
+					-hScroll.Value+1+ColPos[selectedCell.X],
+					-vScroll.Value+1+titleHeight+headerHeight+RowLocs[rowI]+1,
+					columns[selectedCell.X].ColWidth,
 					RowHeights[rowI]+NoteHeights[rowI]-1);
 			}
 			//lines for note section
@@ -718,13 +741,13 @@ namespace OpenDental.UI{
 		///<summary>Use to set a row selected or not.  Can handle values outside the acceptable range.</summary>
 		public void SetSelected(int index,bool setValue){
 			if(setValue){//select specified index
-				if(selectionMode==SelectionMode.None){
+				if(selectionMode==GridSelectionMode.None){
 					throw new Exception("Selection mode is none.");
 				}
 				if(index<0 || index>rows.Count-1){//check to see if index is within the valid range of values
 					return;//if not, then ignore.
 				}
-				if(selectionMode==SelectionMode.One){
+				if(selectionMode==GridSelectionMode.One){
 					selectedIndices.Clear();//clear existing selection before assigning the new one.
 				}
 				if(!selectedIndices.Contains(index)){
@@ -741,10 +764,10 @@ namespace OpenDental.UI{
 
 		///<summary>Allows setting multiple values all at once</summary>
 		public void SetSelected(int[] iArray,bool setValue){
-			if(selectionMode==SelectionMode.None){
+			if(selectionMode==GridSelectionMode.None){
 				throw new Exception("Selection mode is none.");
 			}
-			if(selectionMode==SelectionMode.One){
+			if(selectionMode==GridSelectionMode.One){
 				throw new Exception("Selection mode is one.");
 			}
 			for(int i=0;i<iArray.Length;i++){
@@ -767,11 +790,14 @@ namespace OpenDental.UI{
 
 		///<summary>Sets all rows to specified value.</summary>
 		public void SetSelected(bool setValue){
-			if(selectionMode==SelectionMode.None){
+			if(selectionMode==GridSelectionMode.None){
 				throw new Exception("Selection mode is none.");
 			}
-			if(selectionMode==SelectionMode.One && setValue==true){
+			if(selectionMode==GridSelectionMode.One && setValue==true){
 				throw new Exception("Selection mode is one.");
+			}
+			if(selectionMode==GridSelectionMode.OneCell){
+				throw new Exception("Selection mode is OneCell.");
 			}
 			selectedIndices.Clear();
 			if(setValue){//select all
@@ -779,6 +805,15 @@ namespace OpenDental.UI{
 					selectedIndices.Add(i);
 				}
 			}
+			Invalidate();
+		}
+
+		///<Summary></Summary>
+		public void SetSelected(Point setCell){
+			if(selectionMode!=GridSelectionMode.OneCell) {
+				throw new Exception("Selection mode must be OneCell.");
+			}
+			selectedCell=setCell;
 			Invalidate();
 		}
 
@@ -1056,13 +1091,17 @@ namespace OpenDental.UI{
 				return;//clicks do not trigger selection of rows, but cell click event still gets fired
 			}
 			switch(selectionMode){
-				case SelectionMode.None:
+				case GridSelectionMode.None:
 					return;
-				case SelectionMode.One:
+				case GridSelectionMode.One:
 					selectedIndices.Clear();
 					selectedIndices.Add(MouseDownRow);
 					break;
-				case SelectionMode.MultiExtended:
+				case GridSelectionMode.OneCell:
+					selectedIndices.Clear();
+					selectedCell=new Point(MouseDownCol,MouseDownRow);
+					break;
+				case GridSelectionMode.MultiExtended:
 					if(ControlIsDown){
 						if(selectedIndices.Contains(MouseDownRow)){
 							selectedIndices.Remove(MouseDownRow);
@@ -1106,7 +1145,7 @@ namespace OpenDental.UI{
 			if(!MouseIsDown){
 				return;
 			}
-			if(selectionMode!=SelectionMode.MultiExtended){
+			if(selectionMode!=GridSelectionMode.MultiExtended){
 				return;
 			}
 			int curRow=PointToRow(e.Y);
@@ -1287,6 +1326,19 @@ namespace OpenDental.UI{
 			}
 		}
 
+	}
+
+	///<summary>Specifies the selection behavior of an ODGrid.</summary>   
+	//[ComVisible(true)]
+	public enum GridSelectionMode {
+		///<summary>0-No items can be selected.</summary>  
+		None=0,
+		///<summary>1-Only one row can be selected.</summary>  
+		One=1,
+		///<summary>2-Only one cell can be selected.</summary>
+		OneCell=2,
+		///<summary>3-Multiple items can be selected, and the user can use the SHIFT, CTRL, and arrow keys to make selections</summary>   
+		MultiExtended=3,
 	}
 
 }

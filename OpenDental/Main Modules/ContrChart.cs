@@ -2090,7 +2090,7 @@ namespace OpenDental{
 			this.gridProg.Location = new System.Drawing.Point(415,295);
 			this.gridProg.Name = "gridProg";
 			this.gridProg.ScrollValue = 0;
-			this.gridProg.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
+			this.gridProg.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
 			this.gridProg.Size = new System.Drawing.Size(524,227);
 			this.gridProg.TabIndex = 192;
 			this.gridProg.Title = "Progress Notes";
@@ -2143,7 +2143,7 @@ namespace OpenDental{
 			this.gridPtInfo.Location = new System.Drawing.Point(0,409);
 			this.gridPtInfo.Name = "gridPtInfo";
 			this.gridPtInfo.ScrollValue = 0;
-			this.gridPtInfo.SelectionMode = System.Windows.Forms.SelectionMode.None;
+			this.gridPtInfo.SelectionMode = OpenDental.UI.GridSelectionMode.None;
 			this.gridPtInfo.Size = new System.Drawing.Size(411,325);
 			this.gridPtInfo.TabIndex = 193;
 			this.gridPtInfo.Title = "Patient Info";
