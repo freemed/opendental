@@ -28,7 +28,7 @@ namespace OpenDental{
 				+" AND SchedType="+POut.PInt((int)schedType)
 				+" AND ProvNum="+POut.PInt(provNum)
 				+" ORDER BY starttime";
-			return RefreshAndFill(command);
+			return RefreshAndFill(command).ToArray();
 		}
 
 		///<summary>Called every time the day is refreshed or changed in Appointments module.  Gets the data directly from the database.</summary>
@@ -36,7 +36,7 @@ namespace OpenDental{
 			string command=
 				"SELECT * FROM schedule WHERE SchedDate="+POut.PDate(thisDay)
 				+" ORDER BY starttime";
-			return RefreshAndFill(command);
+			return RefreshAndFill(command).ToArray();
 		}
 
 		///<summary>Called every time the period is refreshed or changed in Appointments module.  Gets the data directly from the database.</summary>
@@ -44,32 +44,46 @@ namespace OpenDental{
 			string command="SELECT * FROM schedule WHERE SchedDate BETWEEN '"
 				+POut.PDate(startDate,false)+"' AND '"+POut.PDate(endDate.AddDays(1),false)+"'"
 				+" ORDER BY starttime";
+			return RefreshAndFill(command).ToArray();
+		}
+
+		///<Summary></Summary>
+		public static List<Schedule> RefreshDayEdit(DateTime dateSched){
+			string command="SELECT schedule.* "
+				+"FROM schedule,provider "
+				+"WHERE schedule.ProvNum=provider.ProvNum "
+				+"AND SchedDate = "+POut.PDate(dateSched)+" "
+				+"AND SchedType=1 "
+				+"ORDER BY provider.ItemOrder,StartTime";
 			return RefreshAndFill(command);
 		}
 
 		///<summary>Used in the check database integrity tool.</summary>
 		public static Schedule[] RefreshAll() {
 			string command="SELECT * FROM schedule";
-			return RefreshAndFill(command);
+			return RefreshAndFill(command).ToArray();
 		}
 
-		private static Schedule[] RefreshAndFill(string command) {
+		private static List<Schedule> RefreshAndFill(string command) {
 			DataTable table=General.GetTableEx(command);
-			Schedule[] List=new Schedule[table.Rows.Count];
+			List<Schedule> retVal=new List<Schedule>();
+			//Schedule[] List=new Schedule[table.Rows.Count];
+			Schedule sched;
 			for(int i=0;i<table.Rows.Count;i++) {
-				List[i]=new Schedule();
-				List[i].ScheduleNum    = PIn.PInt(table.Rows[i][0].ToString());
-				List[i].SchedDate      = PIn.PDate(table.Rows[i][1].ToString());
-				List[i].StartTime      = PIn.PDateT(table.Rows[i][2].ToString());
-				List[i].StopTime       = PIn.PDateT(table.Rows[i][3].ToString());
-				List[i].SchedType      = (ScheduleType)PIn.PInt(table.Rows[i][4].ToString());
-				List[i].ProvNum        = PIn.PInt(table.Rows[i][5].ToString());
-				List[i].BlockoutType   = PIn.PInt(table.Rows[i][6].ToString());
-				List[i].Note           = PIn.PString(table.Rows[i][7].ToString());
-				List[i].Status         = (SchedStatus)PIn.PInt(table.Rows[i][8].ToString());
-				List[i].Op             = PIn.PInt(table.Rows[i][9].ToString());
+				sched=new Schedule();
+				sched.ScheduleNum    = PIn.PInt(table.Rows[i][0].ToString());
+				sched.SchedDate      = PIn.PDate(table.Rows[i][1].ToString());
+				sched.StartTime      = PIn.PDateT(table.Rows[i][2].ToString());
+				sched.StopTime       = PIn.PDateT(table.Rows[i][3].ToString());
+				sched.SchedType      = (ScheduleType)PIn.PInt(table.Rows[i][4].ToString());
+				sched.ProvNum        = PIn.PInt(table.Rows[i][5].ToString());
+				sched.BlockoutType   = PIn.PInt(table.Rows[i][6].ToString());
+				sched.Note           = PIn.PString(table.Rows[i][7].ToString());
+				sched.Status         = (SchedStatus)PIn.PInt(table.Rows[i][8].ToString());
+				sched.Op             = PIn.PInt(table.Rows[i][9].ToString());
+				retVal.Add(sched);
 			}
-			return List;
+			return retVal;
 		}
 
 		///<summary></summary>
@@ -186,9 +200,6 @@ namespace OpenDental{
 				Schedules.CheckIfDeletedLastBlockout(sched.SchedDate);
 			}
 		}
-
-
-
 	
 		///<summary>Supply a list of all Schedule for one day. Then, this filters out for one type.</summary>
 		public static Schedule[] GetForType(Schedule[] ListDay,ScheduleType schedType,int provNum){
@@ -337,6 +348,38 @@ namespace OpenDental{
 			}
 			return table;
 		}
+
+		/*
+		///<Summary>Gets all schedule objects for one day as a table.  But does not include the obsolete types such as practice schedules.</Summary>
+		public static DataTable GetDay(DateTime dateSched){
+			DataTable table=new DataTable();
+			DataRow row;
+			table.Columns.Add("note");
+			table.Columns.Add("provider");
+			table.Columns.Add("startTime");
+			table.Columns.Add("stopTime");
+			string command="SELECT * FROM schedule WHERE  "
+				+"FROM schedule,provider "
+				+"WHERE schedule.ProvNum=provider.ProvNum "
+				+"AND SchedDate = "+POut.PDate(dateSched)+" "
+				+"AND SchedType=1 "
+				+"ORDER BY provider.ItemOrder,StartTime";
+			DataTable raw=General.GetTable(command);
+			DateTime startTime;
+			DateTime stopTime;
+			DataRow row;
+			for(int i=0;i<raw.Rows.Count;i++){
+				row=new DataRow();
+				row["note"]="";
+				row["provider"]=raw.Rows[i]["Abbr"].ToString();
+				startTime=PIn.PDateT(raw.Rows[i]["StartTime"].ToString());
+				stopTime=PIn.PDateT(raw.Rows[i]["StopTime"].ToString());
+				row["startTime"]=startTime.ToShortTimeString();
+				row["stopTime"]=stopTime.ToShortTimeString();
+				table.Rows.Add(row);
+			}
+			return table;
+		}*/
 
 		///<summary>Returns the 0-based row where endDate will fall in a calendar grid.  It is not necessary to have a function to retrieve the column, because that is simply (int)myDate.DayOfWeek</summary>
 		public static int GetRowCal(DateTime startDate,DateTime endDate){

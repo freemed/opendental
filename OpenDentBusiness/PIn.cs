@@ -33,6 +33,7 @@ namespace OpenDentBusiness{
 				return DateTime.MinValue;
 			try{
 				return (DateTime.Parse(myString));
+				//return DateTime.Parse(myString,CultureInfo.InvariantCulture);
 			}
 			catch{
 				return DateTime.MinValue;
