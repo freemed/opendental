@@ -63,14 +63,28 @@ namespace OpenDentBusiness{
 		///<summary>Primary Key.  This happened in version 4.8.7.</summary>
 		[XmlIgnore]
 		public int CodeNum;
-		///<Summary>Not a database column.  Only used for xml import function.</Summary>
+		///<summary></summary>
+		[XmlIgnore]
 		public string CodeMod1;
+		///<summary></summary>
+		[XmlIgnore]
 		public string CodeMod2;
+		///<summary></summary>
+		[XmlIgnore]
 		public string CodeMod3;
+		///<summary></summary>
+		[XmlIgnore]
 		public string CodeMod4;
+		///<summary></summary>
+		[XmlIgnore]
 		public string RevCode;
+		///<summary></summary>
+		[XmlIgnore]
 		public string UnitCode;
+		///<summary></summary>
+		[XmlIgnore]
 		public string UnitQty;
+		///<Summary>Not a database column.  Only used for xml import function.</Summary>
 		private string procCatDescript;
 
 		public ProcedureCode(){

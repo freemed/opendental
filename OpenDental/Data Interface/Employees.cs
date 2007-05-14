@@ -98,6 +98,14 @@ namespace OpenDental{
 			return "";
 		}
 
+		public static Employee GetEmp(int employeeNum){
+			for(int i=0;i<ListLong.Length;i++) {
+				if(ListLong[i].EmployeeNum==employeeNum) {
+					return ListLong[i];
+				}
+			}
+			return null;
+		}
 
 
 	}

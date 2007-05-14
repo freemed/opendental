@@ -23,13 +23,13 @@ namespace OpenDental{
 		private GroupBox groupBox3;
 		private Label label1;
 		private ListBox listProv;
-		private OpenDental.UI.Button butAll;
 		private OpenDental.UI.Button butOK;
 		private Label label2;
 		private GroupBox groupBox1;
 		private OpenDental.UI.Button butNote;
 		private OpenDental.UI.Button butHoliday;
 		private OpenDental.UI.Button butProvNote;
+		private ListBox listEmp;
 		//private int ProvNum;
 		private List<Schedule> SchedList;
 
@@ -62,7 +62,7 @@ namespace OpenDental{
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormScheduleDayEdit));
 			this.labelDate = new System.Windows.Forms.Label();
 			this.groupBox3 = new System.Windows.Forms.GroupBox();
-			this.butAll = new OpenDental.UI.Button();
+			this.butProvNote = new OpenDental.UI.Button();
 			this.label1 = new System.Windows.Forms.Label();
 			this.listProv = new System.Windows.Forms.ListBox();
 			this.butAddTime = new OpenDental.UI.Button();
@@ -74,7 +74,7 @@ namespace OpenDental{
 			this.gridMain = new OpenDental.UI.ODGrid();
 			this.butCloseOffice = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
-			this.butProvNote = new OpenDental.UI.Button();
+			this.listEmp = new System.Windows.Forms.ListBox();
 			this.groupBox3.SuspendLayout();
 			this.groupBox1.SuspendLayout();
 			this.SuspendLayout();
@@ -90,60 +90,59 @@ namespace OpenDental{
 			// 
 			// groupBox3
 			// 
+			this.groupBox3.Controls.Add(this.listEmp);
 			this.groupBox3.Controls.Add(this.butProvNote);
-			this.groupBox3.Controls.Add(this.butAll);
 			this.groupBox3.Controls.Add(this.label1);
 			this.groupBox3.Controls.Add(this.listProv);
 			this.groupBox3.Controls.Add(this.butAddTime);
-			this.groupBox3.Location = new System.Drawing.Point(503,38);
+			this.groupBox3.Location = new System.Drawing.Point(558,32);
 			this.groupBox3.Name = "groupBox3";
-			this.groupBox3.Size = new System.Drawing.Size(178,454);
+			this.groupBox3.Size = new System.Drawing.Size(195,460);
 			this.groupBox3.TabIndex = 12;
 			this.groupBox3.TabStop = false;
 			this.groupBox3.Text = "Add Time Block";
 			// 
-			// butAll
+			// butProvNote
 			// 
-			this.butAll.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butAll.Autosize = true;
-			this.butAll.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butAll.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butAll.CornerRadius = 4F;
-			this.butAll.Location = new System.Drawing.Point(14,42);
-			this.butAll.Name = "butAll";
-			this.butAll.Size = new System.Drawing.Size(53,20);
-			this.butAll.TabIndex = 8;
-			this.butAll.Text = "All";
-			this.butAll.Click += new System.EventHandler(this.butAll_Click);
+			this.butProvNote.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butProvNote.Autosize = true;
+			this.butProvNote.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butProvNote.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butProvNote.CornerRadius = 4F;
+			this.butProvNote.Location = new System.Drawing.Point(58,424);
+			this.butProvNote.Name = "butProvNote";
+			this.butProvNote.Size = new System.Drawing.Size(80,26);
+			this.butProvNote.TabIndex = 15;
+			this.butProvNote.Text = "Note";
+			this.butProvNote.Click += new System.EventHandler(this.butProvNote_Click);
 			// 
 			// label1
 			// 
-			this.label1.Location = new System.Drawing.Point(11,23);
+			this.label1.Location = new System.Drawing.Point(9,17);
 			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(166,18);
+			this.label1.Size = new System.Drawing.Size(170,30);
 			this.label1.TabIndex = 7;
-			this.label1.Text = "Select One or More Providers";
+			this.label1.Text = "Select One or More Providers or Employees";
 			// 
 			// listProv
 			// 
 			this.listProv.FormattingEnabled = true;
-			this.listProv.Location = new System.Drawing.Point(14,67);
+			this.listProv.Location = new System.Drawing.Point(14,49);
 			this.listProv.Name = "listProv";
 			this.listProv.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
-			this.listProv.Size = new System.Drawing.Size(102,316);
+			this.listProv.Size = new System.Drawing.Size(80,329);
 			this.listProv.TabIndex = 6;
 			// 
 			// butAddTime
 			// 
 			this.butAddTime.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butAddTime.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.butAddTime.Autosize = true;
 			this.butAddTime.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butAddTime.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butAddTime.CornerRadius = 4F;
 			this.butAddTime.Image = global::OpenDental.Properties.Resources.Add;
 			this.butAddTime.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butAddTime.Location = new System.Drawing.Point(14,389);
+			this.butAddTime.Location = new System.Drawing.Point(58,391);
 			this.butAddTime.Name = "butAddTime";
 			this.butAddTime.Size = new System.Drawing.Size(80,26);
 			this.butAddTime.TabIndex = 4;
@@ -162,9 +161,9 @@ namespace OpenDental{
 			// 
 			this.groupBox1.Controls.Add(this.butHoliday);
 			this.groupBox1.Controls.Add(this.butNote);
-			this.groupBox1.Location = new System.Drawing.Point(503,535);
+			this.groupBox1.Location = new System.Drawing.Point(602,535);
 			this.groupBox1.Name = "groupBox1";
-			this.groupBox1.Size = new System.Drawing.Size(178,89);
+			this.groupBox1.Size = new System.Drawing.Size(110,89);
 			this.groupBox1.TabIndex = 15;
 			this.groupBox1.TabStop = false;
 			this.groupBox1.Text = "Practice";
@@ -176,7 +175,7 @@ namespace OpenDental{
 			this.butHoliday.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butHoliday.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butHoliday.CornerRadius = 4F;
-			this.butHoliday.Location = new System.Drawing.Point(14,52);
+			this.butHoliday.Location = new System.Drawing.Point(14,53);
 			this.butHoliday.Name = "butHoliday";
 			this.butHoliday.Size = new System.Drawing.Size(80,26);
 			this.butHoliday.TabIndex = 15;
@@ -205,7 +204,7 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(517,647);
+			this.butOK.Location = new System.Drawing.Point(574,647);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75,26);
 			this.butOK.TabIndex = 13;
@@ -219,7 +218,7 @@ namespace OpenDental{
 			this.gridMain.Name = "gridMain";
 			this.gridMain.ScrollValue = 0;
 			this.gridMain.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
-			this.gridMain.Size = new System.Drawing.Size(461,586);
+			this.gridMain.Size = new System.Drawing.Size(518,586);
 			this.gridMain.TabIndex = 8;
 			this.gridMain.Title = "Edit Day";
 			this.gridMain.TranslationName = null;
@@ -228,14 +227,13 @@ namespace OpenDental{
 			// butCloseOffice
 			// 
 			this.butCloseOffice.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butCloseOffice.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.butCloseOffice.Autosize = true;
 			this.butCloseOffice.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butCloseOffice.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCloseOffice.CornerRadius = 4F;
 			this.butCloseOffice.Image = global::OpenDental.Properties.Resources.deleteX;
 			this.butCloseOffice.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butCloseOffice.Location = new System.Drawing.Point(517,501);
+			this.butCloseOffice.Location = new System.Drawing.Point(616,503);
 			this.butCloseOffice.Name = "butCloseOffice";
 			this.butCloseOffice.Size = new System.Drawing.Size(80,26);
 			this.butCloseOffice.TabIndex = 5;
@@ -250,31 +248,26 @@ namespace OpenDental{
 			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
-			this.butCancel.Location = new System.Drawing.Point(606,647);
+			this.butCancel.Location = new System.Drawing.Point(661,647);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75,26);
 			this.butCancel.TabIndex = 2;
 			this.butCancel.Text = "&Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
 			// 
-			// butProvNote
+			// listEmp
 			// 
-			this.butProvNote.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butProvNote.Autosize = true;
-			this.butProvNote.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butProvNote.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butProvNote.CornerRadius = 4F;
-			this.butProvNote.Location = new System.Drawing.Point(14,421);
-			this.butProvNote.Name = "butProvNote";
-			this.butProvNote.Size = new System.Drawing.Size(80,26);
-			this.butProvNote.TabIndex = 15;
-			this.butProvNote.Text = "Note";
-			this.butProvNote.Click += new System.EventHandler(this.butProvNote_Click);
+			this.listEmp.FormattingEnabled = true;
+			this.listEmp.Location = new System.Drawing.Point(100,49);
+			this.listEmp.Name = "listEmp";
+			this.listEmp.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
+			this.listEmp.Size = new System.Drawing.Size(80,329);
+			this.listEmp.TabIndex = 6;
 			// 
 			// FormScheduleDayEdit
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
-			this.ClientSize = new System.Drawing.Size(718,687);
+			this.ClientSize = new System.Drawing.Size(782,687);
 			this.Controls.Add(this.groupBox1);
 			this.Controls.Add(this.label2);
 			this.Controls.Add(this.butOK);
@@ -368,14 +361,14 @@ namespace OpenDental{
 			if(x==null){
 				return -1;
 			}
-			if(x.ProvNum==0){
-				return -1;
-			}
-			if(y.ProvNum==0){
-				return 1;
+			if(x.SchedType!=y.SchedType){
+				return x.SchedType.CompareTo(y.SchedType);
 			}
 			if(x.ProvNum!=y.ProvNum){
 				return Providers.GetProv(x.ProvNum).ItemOrder.CompareTo(Providers.GetProv(y.ProvNum).ItemOrder);
+			}
+			if(x.EmployeeNum!=y.EmployeeNum) {
+				return Employees.GetEmp(x.EmployeeNum).FName.CompareTo(Employees.GetEmp(y.EmployeeNum).FName);
 			}
 			return x.StartTime.CompareTo(y.StartTime);
 		}
@@ -396,11 +389,11 @@ namespace OpenDental{
 			}
 		}
 
-		private void butAll_Click(object sender,EventArgs e) {
-			for(int i=0;i<listProv.Items.Count;i++){
-				listProv.SetSelected(i,true);
-			}
-		}
+		//private void butAll_Click(object sender,EventArgs e) {
+		//	for(int i=0;i<listProv.Items.Count;i++){
+		//		listProv.SetSelected(i,true);
+		//	}
+		//}
 
 		private void butAddTime_Click(object sender, System.EventArgs e) {
 			Schedule SchedCur=new Schedule();
@@ -409,7 +402,7 @@ namespace OpenDental{
 			SchedCur.Status=SchedStatus.Open;
 			SchedCur.StartTime=new DateTime(1,1,1,8,0,0);//8am
 			SchedCur.StopTime=new DateTime(1,1,1,17,0,0);//5pm
-			//provNum will be set down below
+			//schedtype, provNum, and empnumwill be set down below
 			FormScheduleEdit FormS=new FormScheduleEdit();
 			FormS.SchedCur=SchedCur;
 			FormS.ShowDialog();
@@ -507,6 +500,8 @@ namespace OpenDental{
 		private void butCancel_Click(object sender,EventArgs e) {
 			DialogResult=DialogResult.Cancel;
 		}
+
+		
 
 		
 

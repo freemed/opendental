@@ -822,10 +822,10 @@ namespace OpenDental.Eclaims
 				seg++;
 				sw.WriteLine("REF*0B*"//REF01: 0B=state license #
 					+Sout(provTreat.StateLicense,30)+"~");
-				//if(!isMedical){//we can't support these numbers very well yet for medical
+				if(!isMedical){//we can't support these numbers very well yet for medical
 					//2310B REF: Rendering Provider Secondary ID number(s). Only required by some carriers.
-				//	seg+=WriteProv_REF(sw,provTreat,(string)claimAr[0,i]);
-				//}
+					seg+=WriteProv_REF(sw,provTreat,(string)claimAr[0,i]);
+				}
 				//2310C (medical)Purchased Service provider secondary ID. We don't support this for medical
 				//2310C (not medical)NM1: Service facility location if not office
 				//or 2310D (medical)NM1: Service facility location. Required if different from 2010AA. Not supported.

@@ -61,18 +61,22 @@ namespace OpenDentBusiness {
 		public int BillingTypeOne;
 		///<summary>FK to definition.DefNum.  Same as BillingTypeOne, but used when there is a secondary billing type to account for.</summary>
 		public int BillingTypeTwo;
-		///<summary>Modifiers for certain CPT codes.  Not used yet.</summary>
+		///<summary>FK to procedurecode.CodeNum</summary>
+		public int CodeNum;
+///<summary>Modifier for certain CPT codes.  Not used yet.</summary>
 		public string CodeMod1;
+		///<summary>Modifier for certain CPT codes.  Not used yet.</summary>
 		public string CodeMod2;
+		///<summary>Modifier for certain CPT codes.  Not used yet.</summary>
 		public string CodeMod3;
+		///<summary>Modifier for certain CPT codes.  Not used yet.</summary>
 		public string CodeMod4;
 		///<summary>Revenue code for medical billing.  Not used yet.  Only used on UB92 claimforms.</summary>
 		public string RevCode;
 		/// <summary>Unit support for things like anesthesia billing and such.-dt</summary>
 		public string UnitCode;
+		///<summary>For certain CPT codes.  Not used yet.</summary>
 		public string UnitQty;
-		///<summary>FK to procedurecode.CodeNum</summary>
-		public int CodeNum;
 		
 		///<summary>Not a database column.  Saved in database in the procnote table.  This note is only the most recent note from that table.  If user changes it, then the business layer handles adding another procnote to that table.</summary>
 		public string Note;

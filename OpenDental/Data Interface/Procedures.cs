@@ -235,7 +235,7 @@ namespace OpenDental{
 				List[i].MedicalCode     = PIn.PString(table.Rows[i][20].ToString());
 				List[i].DiagnosticCode  = PIn.PString(table.Rows[i][21].ToString());
 				List[i].IsPrincDiag     = PIn.PBool  (table.Rows[i][22].ToString());
-				List[i].ProcNumLab      = PIn.PInt   (table.Rows[i][23].ToString());		
+				List[i].ProcNumLab      = PIn.PInt   (table.Rows[i][23].ToString());	
 				List[i].BillingTypeOne  = PIn.PInt   (table.Rows[i][24].ToString());
 				List[i].BillingTypeTwo  = PIn.PInt   (table.Rows[i][25].ToString());
 				List[i].CodeNum         = PIn.PInt   (table.Rows[i][26].ToString());
