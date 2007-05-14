@@ -1214,7 +1214,7 @@ namespace OpenDental.Eclaims
 			}
 			else{
 				sw.WriteLine("NM1*41*"//NM101: 41=submitter
-					+"1*"//NM102: 1=person
+					+"2*"//NM102: 1=person,2=nonperson
 					+Sout(clearhouse.SenderName,35,1)+"*"//NM103:Submitter Name. Validated.
 					+"****46*"//NM108: 46 indicates ETIN
 					+Sout(clearhouse.SenderTIN,80,2)+"~");//NM109: ID Code. aka ETIN#. Validated to be at least 2.

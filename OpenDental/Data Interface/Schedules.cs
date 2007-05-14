@@ -48,6 +48,37 @@ namespace OpenDental{
 			return RefreshAndFill(command).ToArray();
 		}
 
+		///<summary>Used in the Schedules edit window to get a filtered list of schedule items in preparation for paste or repeat.</summary>
+		public static List<Schedule> RefreshPeriod(DateTime dateStart,DateTime dateEnd,int[] provNums,int[] empNums,
+			bool includePractice)
+		{
+			if(provNums.Length==0 && empNums.Length==0 && !includePractice) {
+				return new List<Schedule>();
+			}
+			string command="SELECT * FROM schedule "
+				+"WHERE SchedDate >= "+POut.PDate(dateStart)+" "
+				+"AND SchedDate <= "+POut.PDate(dateEnd)+" "
+				+"AND (";
+			string orClause="";//this is guaranteed to be non empty by the time the command is assembled.
+			if(includePractice) {
+				orClause="SchedType=0 ";
+			}
+			for(int i=0;i<provNums.Length;i++) {
+				if(orClause!="") {
+					orClause+="OR ";
+				}
+				orClause+="schedule.ProvNum="+POut.PInt(provNums[i])+" ";
+			}
+			for(int i=0;i<empNums.Length;i++) {
+				if(orClause!="") {
+					orClause+="OR ";
+				}
+				orClause+="schedule.EmployeeNum="+POut.PInt(empNums[i])+" ";
+			}
+			command+=orClause+")";
+			return RefreshAndFill(command);
+		}
+
 		///<Summary></Summary>
 		public static List<Schedule> RefreshDayEdit(DateTime dateSched){
 			string command="SELECT schedule.* "

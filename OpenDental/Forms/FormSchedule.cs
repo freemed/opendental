@@ -42,6 +42,8 @@ namespace OpenDental{
 		private CheckBox checkPractice;
 		private ListBox listEmp;
 		private Label label5;
+		private CheckBox checkReplace;
+		private GroupBox groupBox2;
 		///<summary>This tracks whether the provList or empList has been click on since the last refresh.  Forces user to refresh before deleting or pasting so that the list exactly matches the grid.</summary>
 		private bool ProvsChanged;
 
@@ -84,29 +86,32 @@ namespace OpenDental{
 			this.labelProv = new System.Windows.Forms.Label();
 			this.checkWeekend = new System.Windows.Forms.CheckBox();
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
-			this.butRepeat = new OpenDental.UI.Button();
 			this.label4 = new System.Windows.Forms.Label();
 			this.textRepeat = new System.Windows.Forms.TextBox();
+			this.textClipboard = new System.Windows.Forms.TextBox();
+			this.label3 = new System.Windows.Forms.Label();
+			this.checkPractice = new System.Windows.Forms.CheckBox();
+			this.listEmp = new System.Windows.Forms.ListBox();
+			this.label5 = new System.Windows.Forms.Label();
+			this.butDelete = new OpenDental.UI.Button();
+			this.butPrint = new OpenDental.UI.Button();
+			this.butRepeat = new OpenDental.UI.Button();
 			this.butPaste = new OpenDental.UI.Button();
 			this.butCopyWeek = new OpenDental.UI.Button();
 			this.butCopyDay = new OpenDental.UI.Button();
-			this.textClipboard = new System.Windows.Forms.TextBox();
-			this.label3 = new System.Windows.Forms.Label();
-			this.butDelete = new OpenDental.UI.Button();
-			this.butPrint = new OpenDental.UI.Button();
 			this.textDateTo = new OpenDental.ValidDate();
 			this.textDateFrom = new OpenDental.ValidDate();
 			this.butRefresh = new OpenDental.UI.Button();
 			this.gridMain = new OpenDental.UI.ODGrid();
-			this.checkPractice = new System.Windows.Forms.CheckBox();
-			this.listEmp = new System.Windows.Forms.ListBox();
-			this.label5 = new System.Windows.Forms.Label();
+			this.checkReplace = new System.Windows.Forms.CheckBox();
+			this.groupBox2 = new System.Windows.Forms.GroupBox();
 			this.groupBox1.SuspendLayout();
+			this.groupBox2.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// label2
 			// 
-			this.label2.Location = new System.Drawing.Point(87,32);
+			this.label2.Location = new System.Drawing.Point(87,28);
 			this.label2.Name = "label2";
 			this.label2.Size = new System.Drawing.Size(85,18);
 			this.label2.TabIndex = 9;
@@ -115,7 +120,7 @@ namespace OpenDental{
 			// 
 			// label1
 			// 
-			this.label1.Location = new System.Drawing.Point(1,32);
+			this.label1.Location = new System.Drawing.Point(1,28);
 			this.label1.Name = "label1";
 			this.label1.Size = new System.Drawing.Size(86,18);
 			this.label1.TabIndex = 7;
@@ -124,7 +129,7 @@ namespace OpenDental{
 			// 
 			// listProv
 			// 
-			this.listProv.Location = new System.Drawing.Point(3,115);
+			this.listProv.Location = new System.Drawing.Point(3,100);
 			this.listProv.Name = "listProv";
 			this.listProv.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
 			this.listProv.Size = new System.Drawing.Size(82,290);
@@ -133,7 +138,7 @@ namespace OpenDental{
 			// 
 			// labelProv
 			// 
-			this.labelProv.Location = new System.Drawing.Point(0,95);
+			this.labelProv.Location = new System.Drawing.Point(0,80);
 			this.labelProv.Name = "labelProv";
 			this.labelProv.Size = new System.Drawing.Size(87,18);
 			this.labelProv.TabIndex = 22;
@@ -142,7 +147,7 @@ namespace OpenDental{
 			// 
 			// checkWeekend
 			// 
-			this.checkWeekend.Location = new System.Drawing.Point(14,419);
+			this.checkWeekend.Location = new System.Drawing.Point(14,392);
 			this.checkWeekend.Name = "checkWeekend";
 			this.checkWeekend.Size = new System.Drawing.Size(143,18);
 			this.checkWeekend.TabIndex = 24;
@@ -151,38 +156,20 @@ namespace OpenDental{
 			// 
 			// groupBox1
 			// 
-			this.groupBox1.Controls.Add(this.butRepeat);
-			this.groupBox1.Controls.Add(this.label4);
-			this.groupBox1.Controls.Add(this.textRepeat);
-			this.groupBox1.Controls.Add(this.butPaste);
 			this.groupBox1.Controls.Add(this.butCopyWeek);
 			this.groupBox1.Controls.Add(this.butCopyDay);
 			this.groupBox1.Controls.Add(this.textClipboard);
 			this.groupBox1.Controls.Add(this.label3);
-			this.groupBox1.Location = new System.Drawing.Point(8,477);
+			this.groupBox1.Location = new System.Drawing.Point(8,440);
 			this.groupBox1.Name = "groupBox1";
-			this.groupBox1.Size = new System.Drawing.Size(158,173);
+			this.groupBox1.Size = new System.Drawing.Size(158,111);
 			this.groupBox1.TabIndex = 25;
 			this.groupBox1.TabStop = false;
-			this.groupBox1.Text = "Copy-Paste";
-			// 
-			// butRepeat
-			// 
-			this.butRepeat.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butRepeat.Autosize = true;
-			this.butRepeat.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butRepeat.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butRepeat.CornerRadius = 4F;
-			this.butRepeat.Location = new System.Drawing.Point(6,143);
-			this.butRepeat.Name = "butRepeat";
-			this.butRepeat.Size = new System.Drawing.Size(75,24);
-			this.butRepeat.TabIndex = 30;
-			this.butRepeat.Text = "Repeat";
-			this.butRepeat.Click += new System.EventHandler(this.butRepeat_Click);
+			this.groupBox1.Text = "Copy";
 			// 
 			// label4
 			// 
-			this.label4.Location = new System.Drawing.Point(70,149);
+			this.label4.Location = new System.Drawing.Point(70,65);
 			this.label4.Name = "label4";
 			this.label4.Size = new System.Drawing.Size(37,14);
 			this.label4.TabIndex = 32;
@@ -191,53 +178,11 @@ namespace OpenDental{
 			// 
 			// textRepeat
 			// 
-			this.textRepeat.Location = new System.Drawing.Point(110,146);
+			this.textRepeat.Location = new System.Drawing.Point(110,62);
 			this.textRepeat.Name = "textRepeat";
 			this.textRepeat.Size = new System.Drawing.Size(39,20);
 			this.textRepeat.TabIndex = 31;
 			this.textRepeat.Text = "1";
-			// 
-			// butPaste
-			// 
-			this.butPaste.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butPaste.Autosize = true;
-			this.butPaste.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butPaste.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butPaste.CornerRadius = 4F;
-			this.butPaste.Location = new System.Drawing.Point(6,115);
-			this.butPaste.Name = "butPaste";
-			this.butPaste.Size = new System.Drawing.Size(75,24);
-			this.butPaste.TabIndex = 29;
-			this.butPaste.Text = "Paste";
-			this.butPaste.Click += new System.EventHandler(this.butPaste_Click);
-			// 
-			// butCopyWeek
-			// 
-			this.butCopyWeek.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butCopyWeek.Autosize = true;
-			this.butCopyWeek.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butCopyWeek.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butCopyWeek.CornerRadius = 4F;
-			this.butCopyWeek.Location = new System.Drawing.Point(6,87);
-			this.butCopyWeek.Name = "butCopyWeek";
-			this.butCopyWeek.Size = new System.Drawing.Size(75,24);
-			this.butCopyWeek.TabIndex = 28;
-			this.butCopyWeek.Text = "Copy Week";
-			this.butCopyWeek.Click += new System.EventHandler(this.butCopyWeek_Click);
-			// 
-			// butCopyDay
-			// 
-			this.butCopyDay.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butCopyDay.Autosize = true;
-			this.butCopyDay.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butCopyDay.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butCopyDay.CornerRadius = 4F;
-			this.butCopyDay.Location = new System.Drawing.Point(6,59);
-			this.butCopyDay.Name = "butCopyDay";
-			this.butCopyDay.Size = new System.Drawing.Size(75,24);
-			this.butCopyDay.TabIndex = 27;
-			this.butCopyDay.Text = "Copy Day";
-			this.butCopyDay.Click += new System.EventHandler(this.butCopyDay_Click);
 			// 
 			// textClipboard
 			// 
@@ -256,6 +201,36 @@ namespace OpenDental{
 			this.label3.Text = "Clipboard Contents";
 			this.label3.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
 			// 
+			// checkPractice
+			// 
+			this.checkPractice.Checked = true;
+			this.checkPractice.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.checkPractice.Location = new System.Drawing.Point(3,67);
+			this.checkPractice.Name = "checkPractice";
+			this.checkPractice.Size = new System.Drawing.Size(169,18);
+			this.checkPractice.TabIndex = 28;
+			this.checkPractice.Text = "Show Practice Notes";
+			this.checkPractice.UseVisualStyleBackColor = true;
+			this.checkPractice.Click += new System.EventHandler(this.checkPractice_Click);
+			// 
+			// listEmp
+			// 
+			this.listEmp.Location = new System.Drawing.Point(91,100);
+			this.listEmp.Name = "listEmp";
+			this.listEmp.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
+			this.listEmp.Size = new System.Drawing.Size(82,290);
+			this.listEmp.TabIndex = 30;
+			this.listEmp.Click += new System.EventHandler(this.listEmp_Click);
+			// 
+			// label5
+			// 
+			this.label5.Location = new System.Drawing.Point(88,80);
+			this.label5.Name = "label5";
+			this.label5.Size = new System.Drawing.Size(87,18);
+			this.label5.TabIndex = 29;
+			this.label5.Text = "Employees";
+			this.label5.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
+			// 
 			// butDelete
 			// 
 			this.butDelete.AdjustImageLocation = new System.Drawing.Point(0,0);
@@ -265,7 +240,7 @@ namespace OpenDental{
 			this.butDelete.CornerRadius = 4F;
 			this.butDelete.Image = global::OpenDental.Properties.Resources.deleteX;
 			this.butDelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butDelete.Location = new System.Drawing.Point(14,445);
+			this.butDelete.Location = new System.Drawing.Point(14,410);
 			this.butDelete.Name = "butDelete";
 			this.butDelete.Size = new System.Drawing.Size(103,26);
 			this.butDelete.TabIndex = 27;
@@ -288,16 +263,72 @@ namespace OpenDental{
 			this.butPrint.Text = "Print";
 			this.butPrint.Click += new System.EventHandler(this.butPrint_Click);
 			// 
+			// butRepeat
+			// 
+			this.butRepeat.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butRepeat.Autosize = true;
+			this.butRepeat.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butRepeat.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butRepeat.CornerRadius = 4F;
+			this.butRepeat.Location = new System.Drawing.Point(6,59);
+			this.butRepeat.Name = "butRepeat";
+			this.butRepeat.Size = new System.Drawing.Size(75,24);
+			this.butRepeat.TabIndex = 30;
+			this.butRepeat.Text = "Repeat";
+			this.butRepeat.Click += new System.EventHandler(this.butRepeat_Click);
+			// 
+			// butPaste
+			// 
+			this.butPaste.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butPaste.Autosize = true;
+			this.butPaste.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butPaste.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butPaste.CornerRadius = 4F;
+			this.butPaste.Location = new System.Drawing.Point(6,32);
+			this.butPaste.Name = "butPaste";
+			this.butPaste.Size = new System.Drawing.Size(75,24);
+			this.butPaste.TabIndex = 29;
+			this.butPaste.Text = "Paste";
+			this.butPaste.Click += new System.EventHandler(this.butPaste_Click);
+			// 
+			// butCopyWeek
+			// 
+			this.butCopyWeek.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butCopyWeek.Autosize = true;
+			this.butCopyWeek.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butCopyWeek.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butCopyWeek.CornerRadius = 4F;
+			this.butCopyWeek.Location = new System.Drawing.Point(6,83);
+			this.butCopyWeek.Name = "butCopyWeek";
+			this.butCopyWeek.Size = new System.Drawing.Size(75,24);
+			this.butCopyWeek.TabIndex = 28;
+			this.butCopyWeek.Text = "Copy Week";
+			this.butCopyWeek.Click += new System.EventHandler(this.butCopyWeek_Click);
+			// 
+			// butCopyDay
+			// 
+			this.butCopyDay.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butCopyDay.Autosize = true;
+			this.butCopyDay.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butCopyDay.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butCopyDay.CornerRadius = 4F;
+			this.butCopyDay.Location = new System.Drawing.Point(6,56);
+			this.butCopyDay.Name = "butCopyDay";
+			this.butCopyDay.Size = new System.Drawing.Size(75,24);
+			this.butCopyDay.TabIndex = 27;
+			this.butCopyDay.Text = "Copy Day";
+			this.butCopyDay.Click += new System.EventHandler(this.butCopyDay_Click);
+			// 
 			// textDateTo
 			// 
-			this.textDateTo.Location = new System.Drawing.Point(90,51);
+			this.textDateTo.Location = new System.Drawing.Point(90,47);
 			this.textDateTo.Name = "textDateTo";
 			this.textDateTo.Size = new System.Drawing.Size(82,20);
 			this.textDateTo.TabIndex = 10;
 			// 
 			// textDateFrom
 			// 
-			this.textDateFrom.Location = new System.Drawing.Point(3,51);
+			this.textDateFrom.Location = new System.Drawing.Point(3,47);
 			this.textDateFrom.Name = "textDateFrom";
 			this.textDateFrom.Size = new System.Drawing.Size(82,20);
 			this.textDateFrom.TabIndex = 8;
@@ -329,46 +360,42 @@ namespace OpenDental{
 			this.gridMain.TranslationName = null;
 			this.gridMain.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellDoubleClick);
 			// 
-			// checkPractice
+			// checkReplace
 			// 
-			this.checkPractice.Checked = true;
-			this.checkPractice.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.checkPractice.Location = new System.Drawing.Point(3,78);
-			this.checkPractice.Name = "checkPractice";
-			this.checkPractice.Size = new System.Drawing.Size(169,18);
-			this.checkPractice.TabIndex = 28;
-			this.checkPractice.Text = "Show Practice Notes";
-			this.checkPractice.UseVisualStyleBackColor = true;
-			this.checkPractice.Click += new System.EventHandler(this.checkPractice_Click);
+			this.checkReplace.Checked = true;
+			this.checkReplace.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.checkReplace.Location = new System.Drawing.Point(6,14);
+			this.checkReplace.Name = "checkReplace";
+			this.checkReplace.Size = new System.Drawing.Size(146,18);
+			this.checkReplace.TabIndex = 31;
+			this.checkReplace.Text = "Replace Existing";
+			this.checkReplace.UseVisualStyleBackColor = true;
 			// 
-			// listEmp
+			// groupBox2
 			// 
-			this.listEmp.Location = new System.Drawing.Point(91,115);
-			this.listEmp.Name = "listEmp";
-			this.listEmp.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
-			this.listEmp.Size = new System.Drawing.Size(82,290);
-			this.listEmp.TabIndex = 30;
-			this.listEmp.Click += new System.EventHandler(this.listEmp_Click);
-			// 
-			// label5
-			// 
-			this.label5.Location = new System.Drawing.Point(88,95);
-			this.label5.Name = "label5";
-			this.label5.Size = new System.Drawing.Size(87,18);
-			this.label5.TabIndex = 29;
-			this.label5.Text = "Employees";
-			this.label5.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
+			this.groupBox2.Controls.Add(this.butRepeat);
+			this.groupBox2.Controls.Add(this.label4);
+			this.groupBox2.Controls.Add(this.checkReplace);
+			this.groupBox2.Controls.Add(this.textRepeat);
+			this.groupBox2.Controls.Add(this.butPaste);
+			this.groupBox2.Location = new System.Drawing.Point(8,552);
+			this.groupBox2.Name = "groupBox2";
+			this.groupBox2.Size = new System.Drawing.Size(158,87);
+			this.groupBox2.TabIndex = 32;
+			this.groupBox2.TabStop = false;
+			this.groupBox2.Text = "Paste";
 			// 
 			// FormSchedule
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.ClientSize = new System.Drawing.Size(982,700);
+			this.Controls.Add(this.groupBox1);
+			this.Controls.Add(this.groupBox2);
 			this.Controls.Add(this.listEmp);
 			this.Controls.Add(this.label5);
 			this.Controls.Add(this.checkPractice);
 			this.Controls.Add(this.butDelete);
 			this.Controls.Add(this.butPrint);
-			this.Controls.Add(this.groupBox1);
 			this.Controls.Add(this.textDateTo);
 			this.Controls.Add(this.textDateFrom);
 			this.Controls.Add(this.checkWeekend);
@@ -388,6 +415,8 @@ namespace OpenDental{
 			this.Load += new System.EventHandler(this.FormSchedule_Load);
 			this.groupBox1.ResumeLayout(false);
 			this.groupBox1.PerformLayout();
+			this.groupBox2.ResumeLayout(false);
+			this.groupBox2.PerformLayout();
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -569,6 +598,7 @@ namespace OpenDental{
 				empNums.Add(Employees.ListShort[listEmp.SelectedIndices[i]].EmployeeNum);
 			}
 			Schedules.Clear(dateSelectedStart,dateSelectedEnd,provNums.ToArray(),empNums.ToArray(),checkPractice.Checked);
+			FillGrid();
 		}
 
 		private void butCopyDay_Click(object sender,EventArgs e) {
@@ -663,22 +693,45 @@ namespace OpenDental{
 				MsgBox.Show(this,"Not allowed to paste back onto the same date as is on the clipboard.");
 				return;
 			}
-			if(MsgBox.Show(this,true,"Replace existing schedule items?")){
-				List<int> provNums=new List<int>();
-				for(int i=0;i<listProv.SelectedIndices.Count;i++) {
-					if(listProv.SelectedIndices[i]==0) {
-					//	provNums.Add(0);
-					}
-					else {
-						provNums.Add(Providers.List[listProv.SelectedIndices[i]-1].ProvNum);
-					}
-				}
-				//Schedules.Clear(dateSelectedStart,dateSelectedEnd,provNums.ToArray());
+			List<int> provNums=new List<int>();
+			for(int i=0;i<listProv.SelectedIndices.Count;i++) {
+				provNums.Add(Providers.List[listProv.SelectedIndices[i]].ProvNum);
 			}
-			
-			if(DateCopyStart==DateCopyEnd){//single day on clipboard
-				//List<Schedule> SchedList=Schedules.RefreshDayEdit(SchedCurDate);
-
+			List<int> empNums=new List<int>();
+			for(int i=0;i<listEmp.SelectedIndices.Count;i++) {
+				empNums.Add(Employees.ListShort[listEmp.SelectedIndices[i]].EmployeeNum);
+			}
+			if(checkReplace.Checked){
+				Schedules.Clear(dateSelectedStart,dateSelectedEnd,provNums.ToArray(),empNums.ToArray(),checkPractice.Checked);
+			}
+			List<Schedule> SchedList=Schedules.RefreshPeriod(DateCopyStart,DateCopyEnd,provNums.ToArray(),
+				empNums.ToArray(),checkPractice.Checked);
+			Schedule sched;
+			int weekDelta=0;
+			if(isWeek){
+				TimeSpan span=dateSelectedStart-DateCopyStart;
+				weekDelta=span.Days/7;//usually a positive # representing a future paste, but can be negative
+			}
+			for(int i=0;i<SchedList.Count;i++){
+				sched=SchedList[i];
+				if(isWeek){
+					sched.SchedDate=sched.SchedDate.AddDays(weekDelta*7);
+				}
+				else{
+					sched.SchedDate=dateSelectedStart;
+				}
+				Schedules.Insert(sched);
+			}
+			DateTime rememberDateStart=DateCopyStart;
+			DateTime rememberDateEnd=DateCopyEnd;
+			FillGrid();
+			DateCopyStart=rememberDateStart;
+			DateCopyEnd=rememberDateEnd;
+			if(isWeek){
+				textClipboard.Text=DateCopyStart.ToShortDateString()+"-"+DateCopyEnd.ToShortDateString();
+			}
+			else{
+				textClipboard.Text=DateCopyStart.ToShortDateString();
 			}
 		}
 
