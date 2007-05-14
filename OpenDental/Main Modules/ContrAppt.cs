@@ -3087,6 +3087,7 @@ namespace OpenDental{
 			}
 			RefreshModuleScreen();
 			SetInvalid();
+			
 			Adjustment AdjustmentCur=new Adjustment();
 			AdjustmentCur.DateEntry=DateTime.Today;
 			AdjustmentCur.AdjDate=DateTime.Today;

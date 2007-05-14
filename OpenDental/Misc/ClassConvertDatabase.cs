@@ -5003,6 +5003,29 @@ namespace OpenDental{
 					command+=table.Rows[i]["ProvNum"].ToString()+", "
 						+"'')";
 					General.NonQEx(command);
+				//Added after r269
+				command = "INSERT INTO preference VALUES('PrintSimpleStatements','0')";
+				General.NonQEx(command);
+				command = "INSERT INTO preference VALUES('BrokenApptCommLogNotAdjustment','0')";
+				General.NonQEx(command);
+				command = "INSERT INTO preference VALUES('ShowNotesInAccount','0')";
+				General.NonQEx(command);
+				command = "INSERT INTO preference VALUES('PlannedApptTreatedAsRegularAppt','0')";
+				General.NonQEx(command);
+				command = "INSERT INTO preference VALUES('NotesInAccount','0')";
+				General.NonQEx(command);
+				command = "INSERT INTO preference VALUES('BoldFamilyAccountBalanceView','0')";
+				General.NonQEx(command);
+				command = "INSERT INTO preference VALUES('ShowProgressNotesInsteadofCommLog','0')";
+				General.NonQEx(command);
+				command = "INSERT INTO preference VALUES('ShowUrgFinNoteInProgressNotes','0')";
+				General.NonQEx(command);
+				command = "INSERT INTO preference VALUES('StationaryImage','0')";
+				General.NonQEx(command);
+				command = "INSERT INTO preference VALUES('StationaryDocment','0')";
+				General.NonQEx(command);
+
+
 				}
 
 
