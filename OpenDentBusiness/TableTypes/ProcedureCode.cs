@@ -63,27 +63,6 @@ namespace OpenDentBusiness{
 		///<summary>Primary Key.  This happened in version 4.8.7.</summary>
 		[XmlIgnore]
 		public int CodeNum;
-		///<summary></summary>
-		[XmlIgnore]
-		public string CodeMod1;
-		///<summary></summary>
-		[XmlIgnore]
-		public string CodeMod2;
-		///<summary></summary>
-		[XmlIgnore]
-		public string CodeMod3;
-		///<summary></summary>
-		[XmlIgnore]
-		public string CodeMod4;
-		///<summary></summary>
-		[XmlIgnore]
-		public string RevCode;
-		///<summary></summary>
-		[XmlIgnore]
-		public string UnitCode;
-		///<summary></summary>
-		[XmlIgnore]
-		public string UnitQty;
 		///<Summary>Not a database column.  Only used for xml import function.</Summary>
 		private string procCatDescript;
 
@@ -130,14 +109,6 @@ namespace OpenDentBusiness{
 			p.LaymanTerm=LaymanTerm;
 			p.IsCanadianLab=IsCanadianLab;
 			p.PreExisting=PreExisting;
-			p.CodeNum=CodeNum;
-			p.CodeMod1=CodeMod1;
-			p.CodeMod2=CodeMod2;
-			p.CodeMod3=CodeMod3;
-			p.CodeMod4=CodeMod4;
-			p.RevCode=RevCode;
-			p.UnitCode=UnitCode;
-			p.UnitQty=UnitQty;
 			return p;
 		}
 

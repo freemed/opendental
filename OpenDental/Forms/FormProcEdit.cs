@@ -791,11 +791,11 @@ namespace OpenDental{
 			// 
 			// label22
 			// 
-			this.label22.Location = new System.Drawing.Point(180,54);
+			this.label22.Location = new System.Drawing.Point(164,54);
 			this.label22.Name = "label22";
-			this.label22.Size = new System.Drawing.Size(60,17);
+			this.label22.Size = new System.Drawing.Size(81,17);
 			this.label22.TabIndex = 111;
-			this.label22.Text = "Rev Code";
+			this.label22.Text = "Revenue Code";
 			this.label22.TextAlign = System.Drawing.ContentAlignment.TopRight;
 			// 
 			// textUnitQty
@@ -862,9 +862,9 @@ namespace OpenDental{
 			// 
 			// label19
 			// 
-			this.label19.Location = new System.Drawing.Point(156,15);
+			this.label19.Location = new System.Drawing.Point(152,15);
 			this.label19.Name = "label19";
-			this.label19.Size = new System.Drawing.Size(29,17);
+			this.label19.Size = new System.Drawing.Size(33,17);
 			this.label19.TabIndex = 102;
 			this.label19.Text = "Mods";
 			this.label19.TextAlign = System.Drawing.ContentAlignment.TopRight;
@@ -889,9 +889,9 @@ namespace OpenDental{
 			// 
 			// label11
 			// 
-			this.label11.Location = new System.Drawing.Point(-8,35);
+			this.label11.Location = new System.Drawing.Point(8,35);
 			this.label11.Name = "label11";
-			this.label11.Size = new System.Drawing.Size(81,12);
+			this.label11.Size = new System.Drawing.Size(67,12);
 			this.label11.TabIndex = 99;
 			this.label11.Text = "ICD-9 Code";
 			this.label11.TextAlign = System.Drawing.ContentAlignment.TopRight;
@@ -905,9 +905,9 @@ namespace OpenDental{
 			// 
 			// label8
 			// 
-			this.label8.Location = new System.Drawing.Point(-7,15);
+			this.label8.Location = new System.Drawing.Point(0,15);
 			this.label8.Name = "label8";
-			this.label8.Size = new System.Drawing.Size(81,12);
+			this.label8.Size = new System.Drawing.Size(75,12);
 			this.label8.TabIndex = 97;
 			this.label8.Text = "Medical Code";
 			this.label8.TextAlign = System.Drawing.ContentAlignment.TopRight;
