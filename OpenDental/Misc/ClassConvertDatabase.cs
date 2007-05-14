@@ -5033,8 +5033,25 @@ namespace OpenDental{
 					command="ALTER TABLE schedule ADD EmployeeNum int";
 				}
 				General.NonQEx(command);
-				
-
+				//Added after r278
+				command="ALTER TABLE procedurelog DROP CPTModifier";
+				General.NonQEx(command);
+				command="ALTER TABLE procedurelog DROP RevenueCode";
+				General.NonQEx(command);
+				command="ALTER TABLE procedurelog ADD CodeMod1 char(2)";
+				General.NonQEx(command);
+				command="ALTER TABLE procedurelog ADD CodeMod2 char(2)";
+				General.NonQEx(command);
+				command="ALTER TABLE procedurelog ADD CodeMod3 char(2)";
+				General.NonQEx(command);
+				command="ALTER TABLE procedurelog ADD CodeMod4 char(2)";
+				General.NonQEx(command);
+				command="ALTER TABLE procedurelog ADD RevCode varchar(45)";
+				General.NonQEx(command);
+				command="ALTER TABLE procedurelog ADD UnitCode char(2)";
+				General.NonQEx(command);
+				command="ALTER TABLE procedurelog ADD UnitQty char(15)";
+				General.NonQEx(command);
 
 				command="UPDATE preference SET ValueString = '4.9.0.0' WHERE PrefName = 'DataBaseVersion'";
 				General.NonQEx(command);
