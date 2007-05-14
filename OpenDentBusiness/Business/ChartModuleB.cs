@@ -81,6 +81,7 @@ namespace OpenDentBusiness {
 				if(((DateTime)row["aptDateTime"]).Date==DateTime.Today){
 					row["colorBackG"]=DefB.Long[(int)DefCat.MiscColors][6].ItemColor.ToArgb().ToString();
 				}
+
 				switch((ProcStat)PIn.PInt(rawProcs.Rows[i]["ProcStatus"].ToString())){
 					case ProcStat.TP:
 						row["colorText"]=DefB.Long[(int)DefCat.ProgNoteColors][0].ItemColor.ToArgb().ToString();
@@ -273,8 +274,14 @@ namespace OpenDentBusiness {
 				row["AptNum"]=rawApt.Rows[i]["AptNum"].ToString();
 				row["colorBackG"]=Color.White.ToArgb();
 				dateT=PIn.PDateT(rawApt.Rows[i]["AptDateTime"].ToString());
-				if(dateT.Date==DateTime.Today) {
+				if(dateT.Date<DateTime.Today) {
+					row["colorBackG"]=Color.DarkGray.ToArgb(); //deliniates nicely between old appts
+				}
+				else if(dateT.Date==DateTime.Today) {
 					row["colorBackG"]=DefB.Long[(int)DefCat.MiscColors][6].ItemColor.ToArgb().ToString();
+				}
+				else if(dateT.Date>DateTime.Today) {
+					row["colorBackG"]=Color.LightGreen.ToArgb(); //at a glace, you see green...the pt is good to go as they have a future appt scheduled
 				}
 				row["colorText"]=DefB.Long[(int)DefCat.ProgNoteColors][8].ItemColor.ToArgb().ToString();
 				row["CommlogNum"]=0;
