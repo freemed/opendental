@@ -57,17 +57,23 @@ namespace OpenDentBusiness {
 		//public string LabProcCode;//need to delete.
 		///<summary>FK to procedurelog.ProcNum. Only used in Canada. If not zero, then this proc is a lab fee and this indicates to which actual procedure the lab fee is attached.  For ordinary use, they are treated like two separate procedures.  It's only for insurance claims that we need to know which lab fee belongs to which procedure.  For now, we limit one fee attached to one procedure.</summary>
 		public int ProcNumLab;
-		///<summary>Modifier for certain CPT codes.  Not used yet.</summary>
-		public string CPTModifier;
-		///<summary>Revenue code for medical billing.  Not used yet.  Only used on UB92 claimforms.</summary>
-		public string RevenueCode;
 		///<summary>FK to definition.DefNum. Lets some users track charges for certain types of reports.  For example, a Medicaid billing type could be assigned to a procedure, flagging it for inclusion in a report mandated by goverment.  Would be more useful if it was automated to flow down based on insurance plan type, but that can be added later.  Not visible if prefs.EasyHideMedicaid is true.</summary>
 		public int BillingTypeOne;
 		///<summary>FK to definition.DefNum.  Same as BillingTypeOne, but used when there is a secondary billing type to account for.</summary>
 		public int BillingTypeTwo;
+		///<summary>Modifiers for certain CPT codes.  Not used yet.</summary>
+		public string CodeMod1;
+		public string CodeMod2;
+		public string CodeMod3;
+		public string CodeMod4;
+		///<summary>Revenue code for medical billing.  Not used yet.  Only used on UB92 claimforms.</summary>
+		public string RevCode;
+		/// <summary>Unit support for things like anesthesia billing and such.-dt</summary>
+		public string UnitCode;
+		public string UnitQty;
 		///<summary>FK to procedurecode.CodeNum</summary>
 		public int CodeNum;
-
+		
 		///<summary>Not a database column.  Saved in database in the procnote table.  This note is only the most recent note from that table.  If user changes it, then the business layer handles adding another procnote to that table.</summary>
 		public string Note;
 		///<summary>Not a database column.  Just used for now to set the user so that it can be saved with the ProcNote.</summary>
@@ -104,11 +110,16 @@ namespace OpenDentBusiness {
 			proc.DiagnosticCode=DiagnosticCode;
 			proc.IsPrincDiag=IsPrincDiag;
 			proc.ProcNumLab=ProcNumLab;
-			proc.CPTModifier = CPTModifier;
-			proc.RevenueCode = RevenueCode;
 			proc.BillingTypeOne=BillingTypeOne;
 			proc.BillingTypeTwo=BillingTypeTwo;
 			proc.CodeNum=CodeNum;
+			proc.CodeMod1=CodeMod1;
+			proc.CodeMod2=CodeMod2;
+			proc.CodeMod3=CodeMod3;
+			proc.CodeMod4=CodeMod4;
+			proc.RevCode=RevCode;
+			proc.UnitCode=UnitCode;
+			proc.UnitQty=UnitQty;
 			//not database fields:
 			proc.Note=Note;
 			proc.UserNum=UserNum;

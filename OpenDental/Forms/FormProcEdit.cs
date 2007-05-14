@@ -126,23 +126,21 @@ namespace OpenDental{
 		private ComboBox comboPriority;
 		private TextBox textUser;
 		private Label label17;
-		private TextBox textRevenueCode;
-		private TextBox textCPTModifier;
 		private Label label18;
 		private Label label19;
-		private TextBox procMod1;
+		private TextBox textCodeMod1;
 		private ComboBox comboBillingTypeTwo;
 		private Label labelBillingTypeTwo;
 		private ComboBox comboBillingTypeOne;
 		private Label labelBillingTypeOne;
 		private Label label20;
-		private TextBox procMod4;
-		private TextBox procMod3;
-		private TextBox procMod2;
-		private TextBox revCode;
+		private TextBox textCodeMod4;
+		private TextBox textCodeMod3;
+		private TextBox textCodeMod2;
+		private TextBox textRevCode;
 		private Label label22;
-		private TextBox unitQty;
-		private TextBox unitCode;
+		private TextBox textUnitQty;
+		private TextBox textUnitCode;
 		private Label label21;
 		///<summary>This keeps the noteChanged event from erasing the signature when first loading.</summary>
 		private bool IsStartingUp;
@@ -207,17 +205,17 @@ namespace OpenDental{
 			this.listBoxTeeth2 = new System.Windows.Forms.ListBox();
 			this.butChange = new OpenDental.UI.Button();
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
-			this.revCode = new System.Windows.Forms.TextBox();
+			this.textRevCode = new System.Windows.Forms.TextBox();
 			this.label22 = new System.Windows.Forms.Label();
-			this.unitQty = new System.Windows.Forms.TextBox();
-			this.unitCode = new System.Windows.Forms.TextBox();
+			this.textUnitQty = new System.Windows.Forms.TextBox();
+			this.textUnitCode = new System.Windows.Forms.TextBox();
 			this.label21 = new System.Windows.Forms.Label();
 			this.label20 = new System.Windows.Forms.Label();
-			this.procMod4 = new System.Windows.Forms.TextBox();
-			this.procMod3 = new System.Windows.Forms.TextBox();
-			this.procMod2 = new System.Windows.Forms.TextBox();
+			this.textCodeMod4 = new System.Windows.Forms.TextBox();
+			this.textCodeMod3 = new System.Windows.Forms.TextBox();
+			this.textCodeMod2 = new System.Windows.Forms.TextBox();
 			this.label19 = new System.Windows.Forms.Label();
-			this.procMod1 = new System.Windows.Forms.TextBox();
+			this.textCodeMod1 = new System.Windows.Forms.TextBox();
 			this.checkIsPrincDiag = new System.Windows.Forms.CheckBox();
 			this.label11 = new System.Windows.Forms.Label();
 			this.textDiagnosticCode = new System.Windows.Forms.TextBox();
@@ -759,17 +757,17 @@ namespace OpenDental{
 			// 
 			// groupBox1
 			// 
-			this.groupBox1.Controls.Add(this.revCode);
+			this.groupBox1.Controls.Add(this.textRevCode);
 			this.groupBox1.Controls.Add(this.label22);
-			this.groupBox1.Controls.Add(this.unitQty);
-			this.groupBox1.Controls.Add(this.unitCode);
+			this.groupBox1.Controls.Add(this.textUnitQty);
+			this.groupBox1.Controls.Add(this.textUnitCode);
 			this.groupBox1.Controls.Add(this.label21);
 			this.groupBox1.Controls.Add(this.label20);
-			this.groupBox1.Controls.Add(this.procMod4);
-			this.groupBox1.Controls.Add(this.procMod3);
-			this.groupBox1.Controls.Add(this.procMod2);
+			this.groupBox1.Controls.Add(this.textCodeMod4);
+			this.groupBox1.Controls.Add(this.textCodeMod3);
+			this.groupBox1.Controls.Add(this.textCodeMod2);
 			this.groupBox1.Controls.Add(this.label19);
-			this.groupBox1.Controls.Add(this.procMod1);
+			this.groupBox1.Controls.Add(this.textCodeMod1);
 			this.groupBox1.Controls.Add(this.checkIsPrincDiag);
 			this.groupBox1.Controls.Add(this.label11);
 			this.groupBox1.Controls.Add(this.textDiagnosticCode);
@@ -783,13 +781,13 @@ namespace OpenDental{
 			this.groupBox1.TabStop = false;
 			this.groupBox1.Text = "Medical";
 			// 
-			// revCode
+			// textRevCode
 			// 
-			this.revCode.Location = new System.Drawing.Point(246,52);
-			this.revCode.MaxLength = 48;
-			this.revCode.Name = "revCode";
-			this.revCode.Size = new System.Drawing.Size(59,20);
-			this.revCode.TabIndex = 112;
+			this.textRevCode.Location = new System.Drawing.Point(246,52);
+			this.textRevCode.MaxLength = 48;
+			this.textRevCode.Name = "textRevCode";
+			this.textRevCode.Size = new System.Drawing.Size(59,20);
+			this.textRevCode.TabIndex = 112;
 			// 
 			// label22
 			// 
@@ -800,22 +798,22 @@ namespace OpenDental{
 			this.label22.Text = "Rev Code";
 			this.label22.TextAlign = System.Drawing.ContentAlignment.TopRight;
 			// 
-			// unitQty
+			// textUnitQty
 			// 
-			this.unitQty.Location = new System.Drawing.Point(246,32);
-			this.unitQty.MaxLength = 15;
-			this.unitQty.Name = "unitQty";
-			this.unitQty.Size = new System.Drawing.Size(59,20);
-			this.unitQty.TabIndex = 110;
+			this.textUnitQty.Location = new System.Drawing.Point(246,32);
+			this.textUnitQty.MaxLength = 15;
+			this.textUnitQty.Name = "textUnitQty";
+			this.textUnitQty.Size = new System.Drawing.Size(59,20);
+			this.textUnitQty.TabIndex = 110;
 			// 
-			// unitCode
+			// textUnitCode
 			// 
-			this.unitCode.Location = new System.Drawing.Point(186,32);
-			this.unitCode.MaxLength = 2;
-			this.unitCode.Name = "unitCode";
-			this.unitCode.Size = new System.Drawing.Size(29,20);
-			this.unitCode.TabIndex = 109;
-			this.unitCode.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+			this.textUnitCode.Location = new System.Drawing.Point(186,32);
+			this.textUnitCode.MaxLength = 2;
+			this.textUnitCode.Name = "textUnitCode";
+			this.textUnitCode.Size = new System.Drawing.Size(29,20);
+			this.textUnitCode.TabIndex = 109;
+			this.textUnitCode.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
 			// 
 			// label21
 			// 
@@ -835,32 +833,32 @@ namespace OpenDental{
 			this.label20.Text = "Unit";
 			this.label20.TextAlign = System.Drawing.ContentAlignment.TopRight;
 			// 
-			// procMod4
+			// textCodeMod4
 			// 
-			this.procMod4.Location = new System.Drawing.Point(276,12);
-			this.procMod4.MaxLength = 2;
-			this.procMod4.Name = "procMod4";
-			this.procMod4.Size = new System.Drawing.Size(29,20);
-			this.procMod4.TabIndex = 106;
-			this.procMod4.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+			this.textCodeMod4.Location = new System.Drawing.Point(276,12);
+			this.textCodeMod4.MaxLength = 2;
+			this.textCodeMod4.Name = "textCodeMod4";
+			this.textCodeMod4.Size = new System.Drawing.Size(29,20);
+			this.textCodeMod4.TabIndex = 106;
+			this.textCodeMod4.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
 			// 
-			// procMod3
+			// textCodeMod3
 			// 
-			this.procMod3.Location = new System.Drawing.Point(246,12);
-			this.procMod3.MaxLength = 2;
-			this.procMod3.Name = "procMod3";
-			this.procMod3.Size = new System.Drawing.Size(29,20);
-			this.procMod3.TabIndex = 105;
-			this.procMod3.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+			this.textCodeMod3.Location = new System.Drawing.Point(246,12);
+			this.textCodeMod3.MaxLength = 2;
+			this.textCodeMod3.Name = "textCodeMod3";
+			this.textCodeMod3.Size = new System.Drawing.Size(29,20);
+			this.textCodeMod3.TabIndex = 105;
+			this.textCodeMod3.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
 			// 
-			// procMod2
+			// textCodeMod2
 			// 
-			this.procMod2.Location = new System.Drawing.Point(216,12);
-			this.procMod2.MaxLength = 2;
-			this.procMod2.Name = "procMod2";
-			this.procMod2.Size = new System.Drawing.Size(29,20);
-			this.procMod2.TabIndex = 104;
-			this.procMod2.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+			this.textCodeMod2.Location = new System.Drawing.Point(216,12);
+			this.textCodeMod2.MaxLength = 2;
+			this.textCodeMod2.Name = "textCodeMod2";
+			this.textCodeMod2.Size = new System.Drawing.Size(29,20);
+			this.textCodeMod2.TabIndex = 104;
+			this.textCodeMod2.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
 			// 
 			// label19
 			// 
@@ -871,14 +869,14 @@ namespace OpenDental{
 			this.label19.Text = "Mods";
 			this.label19.TextAlign = System.Drawing.ContentAlignment.TopRight;
 			// 
-			// procMod1
+			// textCodeMod1
 			// 
-			this.procMod1.Location = new System.Drawing.Point(186,12);
-			this.procMod1.MaxLength = 2;
-			this.procMod1.Name = "procMod1";
-			this.procMod1.Size = new System.Drawing.Size(29,20);
-			this.procMod1.TabIndex = 103;
-			this.procMod1.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+			this.textCodeMod1.Location = new System.Drawing.Point(186,12);
+			this.textCodeMod1.MaxLength = 2;
+			this.textCodeMod1.Name = "textCodeMod1";
+			this.textCodeMod1.Size = new System.Drawing.Size(29,20);
+			this.textCodeMod1.TabIndex = 103;
+			this.textCodeMod1.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
 			// 
 			// checkIsPrincDiag
 			// 
@@ -1676,8 +1674,13 @@ namespace OpenDental{
 			textMedicalCode.Text=ProcCur.MedicalCode;
 			textDiagnosticCode.Text=ProcCur.DiagnosticCode;
 			checkIsPrincDiag.Checked=ProcCur.IsPrincDiag;
-			//textCPTModifier.Text = ProcCur.CPTModifier;
-			//textRevenueCode.Text = ProcCur.RevenueCode;
+			textCodeMod1.Text = ProcCur.CodeMod1;
+			textCodeMod2.Text = ProcCur.CodeMod2;
+			textCodeMod3.Text = ProcCur.CodeMod3;
+			textCodeMod4.Text = ProcCur.CodeMod4;
+			textRevCode.Text = ProcCur.RevCode;
+			textUnitCode.Text = ProcCur.UnitCode;
+			textUnitQty.Text = ProcCur.UnitQty;
 			switch (ProcedureCode2.TreatArea){
 				case TreatmentArea.Surf:
 					this.textTooth.Visible=true;
@@ -2390,8 +2393,13 @@ namespace OpenDental{
 			ProcCur.MedicalCode=textMedicalCode.Text;
 			ProcCur.DiagnosticCode=textDiagnosticCode.Text;
 			ProcCur.IsPrincDiag=checkIsPrincDiag.Checked;
-			//ProcCur.CPTModifier = textCPTModifier.Text;
-			//ProcCur.RevenueCode = textRevenueCode.Text;
+			ProcCur.CodeMod1 = textCodeMod1.Text;
+			ProcCur.CodeMod2 = textCodeMod2.Text;
+			ProcCur.CodeMod3 = textCodeMod3.Text;
+			ProcCur.CodeMod4 = textCodeMod4.Text;
+			ProcCur.RevCode = textRevCode.Text;
+			ProcCur.UnitCode = textUnitCode.Text;
+			ProcCur.UnitQty = textUnitQty.Text;
 			if(ProcOld.ProcStatus!=ProcStat.C && ProcCur.ProcStatus==ProcStat.C){
 				ProcCur.DateEntryC=DateTime.Now;//this triggers it to set to server time NOW().
 			}
@@ -2647,7 +2655,7 @@ namespace OpenDental{
         private void label17_Click(object sender, EventArgs e)
         {
 
-        }
+				}
 
 		
 

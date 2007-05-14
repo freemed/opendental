@@ -235,12 +235,17 @@ namespace OpenDental{
 				List[i].MedicalCode     = PIn.PString(table.Rows[i][20].ToString());
 				List[i].DiagnosticCode  = PIn.PString(table.Rows[i][21].ToString());
 				List[i].IsPrincDiag     = PIn.PBool  (table.Rows[i][22].ToString());
-				List[i].ProcNumLab      = PIn.PInt   (table.Rows[i][23].ToString());
-				List[i].CPTModifier     = PIn.PString(table.Rows[i][24].ToString());
-				List[i].RevenueCode     = PIn.PString(table.Rows[i][25].ToString());
-				List[i].BillingTypeOne  = PIn.PInt   (table.Rows[i][26].ToString());
-				List[i].BillingTypeTwo  = PIn.PInt   (table.Rows[i][27].ToString());
-				List[i].CodeNum         = PIn.PInt   (table.Rows[i][28].ToString());
+				List[i].ProcNumLab      = PIn.PInt   (table.Rows[i][23].ToString());		
+				List[i].BillingTypeOne  = PIn.PInt   (table.Rows[i][24].ToString());
+				List[i].BillingTypeTwo  = PIn.PInt   (table.Rows[i][25].ToString());
+				List[i].CodeNum         = PIn.PInt   (table.Rows[i][26].ToString());
+				List[i].CodeMod1        = PIn.PString(table.Rows[i][27].ToString());
+				List[i].CodeMod2        = PIn.PString(table.Rows[i][28].ToString());
+				List[i].CodeMod3        = PIn.PString(table.Rows[i][29].ToString());
+				List[i].CodeMod4        = PIn.PString(table.Rows[i][30].ToString());
+				List[i].RevCode         = PIn.PString(table.Rows[i][31].ToString());
+				List[i].UnitCode         = PIn.PString(table.Rows[i][32].ToString());
+				List[i].UnitQty        = PIn.PString(table.Rows[i][33].ToString());
 				//only used sometimes:
 				/*if(table.Columns.Count>24){
 					List[i].UserNum       = PIn.PInt   (table.Rows[i][24].ToString());

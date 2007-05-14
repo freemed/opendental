@@ -64,6 +64,13 @@ namespace OpenDentBusiness{
 		[XmlIgnore]
 		public int CodeNum;
 		///<Summary>Not a database column.  Only used for xml import function.</Summary>
+		public string CodeMod1;
+		public string CodeMod2;
+		public string CodeMod3;
+		public string CodeMod4;
+		public string RevCode;
+		public string UnitCode;
+		public string UnitQty;
 		private string procCatDescript;
 
 		public ProcedureCode(){
@@ -110,6 +117,13 @@ namespace OpenDentBusiness{
 			p.IsCanadianLab=IsCanadianLab;
 			p.PreExisting=PreExisting;
 			p.CodeNum=CodeNum;
+			p.CodeMod1=CodeMod1;
+			p.CodeMod2=CodeMod2;
+			p.CodeMod3=CodeMod3;
+			p.CodeMod4=CodeMod4;
+			p.RevCode=RevCode;
+			p.UnitCode=UnitCode;
+			p.UnitQty=UnitQty;
 			return p;
 		}
 
