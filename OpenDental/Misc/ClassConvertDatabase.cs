@@ -4772,7 +4772,7 @@ namespace OpenDental{
 						) DEFAULT CHARSET=utf8";
 					General.NonQEx(command);
 				}
-				else{
+				else{//Oracle
 					//Here we want to add a new column CodeNum and make it the primary key in the procedurecode table.
 					//However, it appears to be difficult to change a table primary key, so here we create a backup of
 					//the old procedurecode table and recreate the procedure code table, copying in the old data. Also,
@@ -4953,7 +4953,7 @@ namespace OpenDental{
 						PRIMARY KEY (LabTurnaroundNum)
 						)";
 					General.NonQEx(command);
-				}
+				}//end of oracle portion
 				//Added after r250
 				int laboratoryNum=0;
 				//Determine the first available primary key number in the database. This is necessary because a sequence/trigger
@@ -5003,6 +5003,7 @@ namespace OpenDental{
 					command+=table.Rows[i]["ProvNum"].ToString()+", "
 						+"'')";
 					General.NonQEx(command);
+				}
 				//Added after r269
 				command = "INSERT INTO preference VALUES('PrintSimpleStatements','0')";
 				General.NonQEx(command);
@@ -5024,9 +5025,15 @@ namespace OpenDental{
 				General.NonQEx(command);
 				command = "INSERT INTO preference VALUES('StationaryDocment','0')";
 				General.NonQEx(command);
-
-
+				//Added after r271
+				if(FormChooseDatabase.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE schedule ADD EmployeeNum int NOT NULL";
 				}
+				else{
+					command="ALTER TABLE schedule ADD EmployeeNum int";
+				}
+				General.NonQEx(command);
+				
 
 
 				command="UPDATE preference SET ValueString = '4.9.0.0' WHERE PrefName = 'DataBaseVersion'";

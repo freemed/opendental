@@ -362,7 +362,9 @@ namespace OpenDentBusiness{
 		///<summary>1</summary>
 		Provider,
 		///<summary>2</summary>
-		Blockout}
+		Blockout,
+		///<summary>3</summary>
+		Employee}
 	//<summary>Used in the appointment edit window.</summary>
 	/*public enum LabCaseOld{
 		///<summary>0</summary>

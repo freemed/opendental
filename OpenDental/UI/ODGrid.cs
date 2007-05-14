@@ -641,6 +641,7 @@ namespace OpenDental.UI{
 			LayoutScrollBars();
 			//ScrollValue=0;
 			selectedIndices=new ArrayList();
+			selectedCell=new Point(-1,-1);
 			IsUpdating=false;
 			Invalidate();
 		}

@@ -34,27 +34,26 @@ namespace OpenDental{
 		///<summary>Called every time the day is refreshed or changed in Appointments module.  Gets the data directly from the database.</summary>
 		public static Schedule[] RefreshDay(DateTime thisDay) {
 			string command=
-				"SELECT * FROM schedule WHERE SchedDate="+POut.PDate(thisDay)
-				+" ORDER BY starttime";
+				"SELECT * FROM schedule WHERE SchedDate= "+POut.PDate(thisDay)
+				+" ORDER BY StartTime";
 			return RefreshAndFill(command).ToArray();
 		}
 
 		///<summary>Called every time the period is refreshed or changed in Appointments module.  Gets the data directly from the database.</summary>
 		public static Schedule[] RefreshPeriod(DateTime startDate,DateTime endDate) {
-			string command="SELECT * FROM schedule WHERE SchedDate BETWEEN '"
-				+POut.PDate(startDate,false)+"' AND '"+POut.PDate(endDate.AddDays(1),false)+"'"
-				+" ORDER BY starttime";
+			string command="SELECT * FROM schedule "
+				+"WHERE SchedDate >= "+POut.PDate(startDate)+" "
+				+"AND SchedDate < "+POut.PDate(endDate.AddDays(1))+" "
+				+"ORDER BY StartTime";
 			return RefreshAndFill(command).ToArray();
 		}
 
 		///<Summary></Summary>
 		public static List<Schedule> RefreshDayEdit(DateTime dateSched){
 			string command="SELECT schedule.* "
-				+"FROM schedule,provider "
-				+"WHERE schedule.ProvNum=provider.ProvNum "
-				+"AND SchedDate = "+POut.PDate(dateSched)+" "
-				+"AND SchedType=1 "
-				+"ORDER BY provider.ItemOrder,StartTime";
+				+"FROM schedule "//,provider "
+				+"WHERE SchedDate = "+POut.PDate(dateSched)+" "
+				+"AND (SchedType=0 OR SchedType=1 OR SchedType=3)";//Practice or Provider or Employee
 			return RefreshAndFill(command);
 		}
 
@@ -81,6 +80,7 @@ namespace OpenDental{
 				sched.Note           = PIn.PString(table.Rows[i][7].ToString());
 				sched.Status         = (SchedStatus)PIn.PInt(table.Rows[i][8].ToString());
 				sched.Op             = PIn.PInt(table.Rows[i][9].ToString());
+				sched.EmployeeNum    = PIn.PInt(table.Rows[i][10].ToString());
 				retVal.Add(sched);
 			}
 			return retVal;
@@ -98,11 +98,12 @@ namespace OpenDental{
 				+ ",note = '"        +POut.PString(sched.Note)+"'"
 				+ ",status = '"      +POut.PInt   ((int)sched.Status)+"'"
 				+ ",Op = '"          +POut.PInt   (sched.Op)+"'"
+				+ ",Employee = '"    +POut.PInt   (sched.EmployeeNum)+"'"
 				+" WHERE ScheduleNum = '" +POut.PInt (sched.ScheduleNum)+"'";
  			General.NonQ(command);
 		}
 
-		///<summary>This should not be used from outside this class because it doesn't validate.  Use InsertOrUpdate instead.</summary>
+		///<summary>This should not be used from outside this class unless proper validation is written similar to InsertOrUpdate.</summary>
 		public static void Insert(Schedule sched){
 			if(PrefB.RandomKeys){
 				sched.ScheduleNum=MiscData.GetKey("schedule","ScheduleNum");
@@ -112,7 +113,7 @@ namespace OpenDental{
 				command+="ScheduleNum,";
 			}
 			command+="scheddate,starttime,stoptime,"
-				+"SchedType,ProvNum,BlockoutType,Note,Status,Op) VALUES(";
+				+"SchedType,ProvNum,BlockoutType,Note,Status,Op,EmployeeNum) VALUES(";
 			if(PrefB.RandomKeys){
 				command+="'"+POut.PInt(sched.ScheduleNum)+"', ";
 			}
@@ -125,7 +126,8 @@ namespace OpenDental{
 				+"'"+POut.PInt   (sched.BlockoutType)+"', "
 				+"'"+POut.PString(sched.Note)+"', "
 				+"'"+POut.PInt   ((int)sched.Status)+"', "
-				+"'"+POut.PInt   (sched.Op)+"')";
+				+"'"+POut.PInt   (sched.Op)+"', "
+				+"'"+POut.PInt   (sched.EmployeeNum)+"')";
 			if(PrefB.RandomKeys) {
 				General.NonQ(command);
 			}
@@ -191,8 +193,7 @@ namespace OpenDental{
 		}
 
 		///<summary>Also automatically handles situation where the last blockout for the day gets deleted.  In that case, it adds a "closed" blockout to signify an override of default blockouts.</summary>
-		public static void 
-			Delete(Schedule sched){
+		public static void Delete(Schedule sched){
 			string command= "DELETE from schedule WHERE schedulenum = '"+POut.PInt(sched.ScheduleNum)+"'";
  			General.NonQ(command);
 			//if this was the last blockout for a day, then create a blockout for 'closed'
@@ -272,6 +273,7 @@ namespace OpenDental{
 
 		public static bool DateIsHoliday(DateTime date){
 			string command="SELECT COUNT(*) FROM schedule WHERE Status=2 "//holiday
+				+"AND SchedType=0 "//practice
 				+"AND SchedDate= "+POut.PDate(date);
 			string result=General.GetCount(command);
 			if(result=="0"){
@@ -280,8 +282,8 @@ namespace OpenDental{
 			return true;
 		}
 
-		///<Summary>Returns a 7 column data table in a calendar layout so all you have to do is draw it on the screen.</Summary>
-		public static DataTable GetPeriod(DateTime dateStart,DateTime dateEnd,List<int> provNums){
+		///<Summary>Returns a 7 column data table in a calendar layout so all you have to do is draw it on the screen.  If includePractice is true, then practice notes and holidays will be included.</Summary>
+		public static DataTable GetPeriod(DateTime dateStart,DateTime dateEnd,int[] provNums,int[] empNums,bool includePractice){
 			DataTable table=new DataTable();
 			DataRow row;
 			table.Columns.Add("sun");
@@ -291,25 +293,39 @@ namespace OpenDental{
 			table.Columns.Add("thurs");
 			table.Columns.Add("fri");
 			table.Columns.Add("sat");
-			string command="SELECT Abbr,SchedDate,StartTime,StopTime "
-				+"FROM schedule,provider "
-				+"WHERE schedule.ProvNum=provider.ProvNum "
-				+"AND SchedDate >= "+POut.PDate(dateStart)+" "
-				+"AND SchedDate <= "+POut.PDate(dateEnd)+" "
-				+"AND SchedType=1 ";
-			for(int i=0;i<provNums.Count;i++){
-				if(i==0){
-					command+="AND (";
-				}
-				else{
-					command+=" OR ";
-				}
-				command+="schedule.ProvNum="+POut.PInt(provNums[i]);
-				if(i==provNums.Count-1){
-					command+=") ";
-				}
+			if(provNums.Length==0 && empNums.Length==0 && !includePractice){
+				return table;
 			}
-			command+="ORDER BY SchedDate,provider.ItemOrder,StartTime";
+			string command="SELECT Abbr,employee.FName,Note,SchedDate,SchedType,Status,StartTime,StopTime "
+				+"FROM schedule "
+				+"LEFT JOIN provider ON schedule.ProvNum=provider.ProvNum "
+				+"LEFT JOIN employee ON schedule.EmployeeNum=employee.EmployeeNum "
+				+"WHERE SchedDate >= "+POut.PDate(dateStart)+" "
+				+"AND SchedDate <= "+POut.PDate(dateEnd)+" "
+				+"AND (";
+			string orClause="";//this is guaranteed to be non empty by the time the command is assembled.
+			if(includePractice){
+				orClause="SchedType=0 ";
+			}
+			for(int i=0;i<provNums.Length;i++){
+				if(orClause!=""){
+					orClause+="OR ";
+				}
+				orClause+="schedule.ProvNum="+POut.PInt(provNums[i])+" ";
+			}
+			for(int i=0;i<empNums.Length;i++) {
+				if(orClause!="") {
+					orClause+="OR ";
+				}
+				orClause+="schedule.EmployeeNum="+POut.PInt(empNums[i])+" ";
+			}
+			command+=orClause+") ";
+			//if(FormChooseDatabase.DBtype==DatabaseType.Oracle){
+			//	command+="";
+			//}
+			//else{
+				command+="ORDER BY SchedDate,employee.FName,provider.ItemOrder,StartTime";
+			//}
 			DataTable raw=General.GetTable(command);
 			DateTime dateSched;
 			DateTime startTime;
@@ -331,55 +347,58 @@ namespace OpenDental{
 				startTime=PIn.PDateT(raw.Rows[i]["StartTime"].ToString());
 				stopTime=PIn.PDateT(raw.Rows[i]["StopTime"].ToString());
 				rowI=GetRowCal(dateStart,dateSched);
-				//table.Rows[rowI][(int)dateSched.DayOfWeek]+=;
-				if(i==0){
-					table.Rows[rowI][(int)dateSched.DayOfWeek]+="\r\n"+raw.Rows[i]["Abbr"].ToString()+" ";
-				}
-				else if(raw.Rows[i-1]["Abbr"].ToString()==raw.Rows[i]["Abbr"].ToString()
-					&& raw.Rows[i-1]["SchedDate"].ToString()==raw.Rows[i]["SchedDate"].ToString())
+				if(i!=0//not first row
+					&& raw.Rows[i-1]["Abbr"].ToString()==raw.Rows[i]["Abbr"].ToString()//same provider as previous row
+					&& raw.Rows[i-1]["FName"].ToString()==raw.Rows[i]["FName"].ToString()//same employee as previous row
+					&& raw.Rows[i-1]["SchedDate"].ToString()==raw.Rows[i]["SchedDate"].ToString())//and same date as previous row
 				{
 					table.Rows[rowI][(int)dateSched.DayOfWeek]+=", ";
+					if(startTime.TimeOfDay==PIn.PDateT("12 AM").TimeOfDay
+						&& stopTime.TimeOfDay==PIn.PDateT("12 AM").TimeOfDay)
+					{
+						if(raw.Rows[i]["Status"].ToString()=="2") {//if holiday
+							table.Rows[rowI][(int)dateSched.DayOfWeek]+=Lan.g("Schedules","Holiday: ")+raw.Rows[i]["Note"].ToString();
+						}
+						else {//note
+							table.Rows[rowI][(int)dateSched.DayOfWeek]+=raw.Rows[i]["Note"].ToString();
+						}
+					}
+					else{
+						table.Rows[rowI][(int)dateSched.DayOfWeek]+=startTime.ToString("h:mm")+"-"+stopTime.ToString("h:mm");
+					}
 				}
 				else{
-					table.Rows[rowI][(int)dateSched.DayOfWeek]+="\r\n"+raw.Rows[i]["Abbr"].ToString()+" ";
+					table.Rows[rowI][(int)dateSched.DayOfWeek]+="\r\n";
+					if(startTime.TimeOfDay==PIn.PDateT("12 AM").TimeOfDay
+						&& stopTime.TimeOfDay==PIn.PDateT("12 AM").TimeOfDay)
+					{
+						if(raw.Rows[i]["Status"].ToString()=="2"){//if holiday
+							table.Rows[rowI][(int)dateSched.DayOfWeek]+=Lan.g("Schedules","Holiday: ")+raw.Rows[i]["Note"].ToString();
+						}
+						else{//note
+							if(raw.Rows[i]["Abbr"].ToString()!=""){
+								table.Rows[rowI][(int)dateSched.DayOfWeek]+=raw.Rows[i]["Abbr"].ToString()+" ";
+							}
+							if(raw.Rows[i]["FName"].ToString()!="") {
+								table.Rows[rowI][(int)dateSched.DayOfWeek]+=raw.Rows[i]["FName"].ToString()+" ";
+							}
+							table.Rows[rowI][(int)dateSched.DayOfWeek]+=raw.Rows[i]["Note"].ToString();
+						}
+					}
+					else{
+						if(raw.Rows[i]["Abbr"].ToString()!="") {
+							table.Rows[rowI][(int)dateSched.DayOfWeek]+=raw.Rows[i]["Abbr"].ToString()+" ";
+						}
+						if(raw.Rows[i]["FName"].ToString()!="") {
+							table.Rows[rowI][(int)dateSched.DayOfWeek]+=raw.Rows[i]["FName"].ToString()+" ";
+						}
+						table.Rows[rowI][(int)dateSched.DayOfWeek]+=//raw.Rows[i]["Abbr"].ToString()+" "
+							startTime.ToString("h:mm")+"-"+stopTime.ToString("h:mm");
+					}
 				}
-				table.Rows[rowI][(int)dateSched.DayOfWeek]+=
-					startTime.ToString("h:mm")+"-"+stopTime.ToString("h:mm");
 			}
 			return table;
 		}
-
-		/*
-		///<Summary>Gets all schedule objects for one day as a table.  But does not include the obsolete types such as practice schedules.</Summary>
-		public static DataTable GetDay(DateTime dateSched){
-			DataTable table=new DataTable();
-			DataRow row;
-			table.Columns.Add("note");
-			table.Columns.Add("provider");
-			table.Columns.Add("startTime");
-			table.Columns.Add("stopTime");
-			string command="SELECT * FROM schedule WHERE  "
-				+"FROM schedule,provider "
-				+"WHERE schedule.ProvNum=provider.ProvNum "
-				+"AND SchedDate = "+POut.PDate(dateSched)+" "
-				+"AND SchedType=1 "
-				+"ORDER BY provider.ItemOrder,StartTime";
-			DataTable raw=General.GetTable(command);
-			DateTime startTime;
-			DateTime stopTime;
-			DataRow row;
-			for(int i=0;i<raw.Rows.Count;i++){
-				row=new DataRow();
-				row["note"]="";
-				row["provider"]=raw.Rows[i]["Abbr"].ToString();
-				startTime=PIn.PDateT(raw.Rows[i]["StartTime"].ToString());
-				stopTime=PIn.PDateT(raw.Rows[i]["StopTime"].ToString());
-				row["startTime"]=startTime.ToShortTimeString();
-				row["stopTime"]=stopTime.ToShortTimeString();
-				table.Rows.Add(row);
-			}
-			return table;
-		}*/
 
 		///<summary>Returns the 0-based row where endDate will fall in a calendar grid.  It is not necessary to have a function to retrieve the column, because that is simply (int)myDate.DayOfWeek</summary>
 		public static int GetRowCal(DateTime startDate,DateTime endDate){
@@ -399,6 +418,51 @@ namespace OpenDental{
 			dateFirstRow=startDate.AddDays(-(int)startDate.DayOfWeek);//example: (Tues,May 9).AddDays(-2)=Sun,May 7.
 			return dateFirstRow.AddDays(row*7+col);
 		}
+
+		///<summary>Surround with try/catch.  Deletes all existing practice and provider schedules for a day and then saves the provided list.</summary>
+		public static void SetForDay(List<Schedule> SchedList,DateTime schedDate){
+			for(int i=0;i<SchedList.Count;i++){
+				if(SchedList[i].StartTime.TimeOfDay > SchedList[i].StopTime.TimeOfDay) {
+					throw new Exception(Lan.g("Schedule","Stop time must be later than start time."));
+				}
+			}
+			string command="DELETE FROM schedule WHERE SchedDate= "+POut.PDate(schedDate)+" "
+				+"AND (SchedType=0 OR SchedType=1)";
+			General.NonQ(command);
+			for(int i=0;i<SchedList.Count;i++){
+				Insert(SchedList[i]);
+			}
+		}
+
+		///<summary>Clears all schedule entries for the given date range and the given providers, employees, and practice.</summary>
+		public static void Clear(DateTime dateStart,DateTime dateEnd,int[] provNums,int[] empNums,bool includePractice){
+			if(provNums.Length==0 && empNums.Length==0 && !includePractice) {
+				return;
+			}
+			string command="DELETE FROM schedule "
+				+"WHERE SchedDate >= "+POut.PDate(dateStart)+" "
+				+"AND SchedDate <= "+POut.PDate(dateEnd)+" "
+				+"AND (";
+			string orClause="";//this is guaranteed to be non empty by the time the command is assembled.
+			if(includePractice) {
+				orClause="SchedType=0 ";
+			}
+			for(int i=0;i<provNums.Length;i++) {
+				if(orClause!="") {
+					orClause+="OR ";
+				}
+				orClause+="schedule.ProvNum="+POut.PInt(provNums[i])+" ";
+			}
+			for(int i=0;i<empNums.Length;i++) {
+				if(orClause!="") {
+					orClause+="OR ";
+				}
+				orClause+="schedule.EmployeeNum="+POut.PInt(empNums[i])+" ";
+			}
+			command+=orClause+")";
+			General.NonQ(command);
+		}
+
 		
 	}
 
