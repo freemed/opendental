@@ -1,6 +1,7 @@
 using System;
 using System.Data;
 using System.Drawing;
+using System.Drawing.Printing;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -46,6 +47,10 @@ namespace OpenDental{
 		private GroupBox groupBox2;
 		///<summary>This tracks whether the provList or empList has been click on since the last refresh.  Forces user to refresh before deleting or pasting so that the list exactly matches the grid.</summary>
 		private bool ProvsChanged;
+		private PrintDocument pd;
+		private bool headingPrinted;
+		private int pagesPrinted;
+		private int headingPrintH;
 
 		///<summary></summary>
 		public FormSchedule()
@@ -86,10 +91,12 @@ namespace OpenDental{
 			this.labelProv = new System.Windows.Forms.Label();
 			this.checkWeekend = new System.Windows.Forms.CheckBox();
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
-			this.label4 = new System.Windows.Forms.Label();
-			this.textRepeat = new System.Windows.Forms.TextBox();
+			this.butCopyWeek = new OpenDental.UI.Button();
+			this.butCopyDay = new OpenDental.UI.Button();
 			this.textClipboard = new System.Windows.Forms.TextBox();
 			this.label3 = new System.Windows.Forms.Label();
+			this.label4 = new System.Windows.Forms.Label();
+			this.textRepeat = new System.Windows.Forms.TextBox();
 			this.checkPractice = new System.Windows.Forms.CheckBox();
 			this.listEmp = new System.Windows.Forms.ListBox();
 			this.label5 = new System.Windows.Forms.Label();
@@ -97,8 +104,6 @@ namespace OpenDental{
 			this.butPrint = new OpenDental.UI.Button();
 			this.butRepeat = new OpenDental.UI.Button();
 			this.butPaste = new OpenDental.UI.Button();
-			this.butCopyWeek = new OpenDental.UI.Button();
-			this.butCopyDay = new OpenDental.UI.Button();
 			this.textDateTo = new OpenDental.ValidDate();
 			this.textDateFrom = new OpenDental.ValidDate();
 			this.butRefresh = new OpenDental.UI.Button();
@@ -111,7 +116,7 @@ namespace OpenDental{
 			// 
 			// label2
 			// 
-			this.label2.Location = new System.Drawing.Point(87,28);
+			this.label2.Location = new System.Drawing.Point(101,28);
 			this.label2.Name = "label2";
 			this.label2.Size = new System.Drawing.Size(85,18);
 			this.label2.TabIndex = 9;
@@ -120,7 +125,7 @@ namespace OpenDental{
 			// 
 			// label1
 			// 
-			this.label1.Location = new System.Drawing.Point(1,28);
+			this.label1.Location = new System.Drawing.Point(15,28);
 			this.label1.Name = "label1";
 			this.label1.Size = new System.Drawing.Size(86,18);
 			this.label1.TabIndex = 7;
@@ -129,7 +134,7 @@ namespace OpenDental{
 			// 
 			// listProv
 			// 
-			this.listProv.Location = new System.Drawing.Point(3,100);
+			this.listProv.Location = new System.Drawing.Point(17,100);
 			this.listProv.Name = "listProv";
 			this.listProv.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
 			this.listProv.Size = new System.Drawing.Size(82,290);
@@ -138,7 +143,7 @@ namespace OpenDental{
 			// 
 			// labelProv
 			// 
-			this.labelProv.Location = new System.Drawing.Point(0,80);
+			this.labelProv.Location = new System.Drawing.Point(14,80);
 			this.labelProv.Name = "labelProv";
 			this.labelProv.Size = new System.Drawing.Size(87,18);
 			this.labelProv.TabIndex = 22;
@@ -147,7 +152,7 @@ namespace OpenDental{
 			// 
 			// checkWeekend
 			// 
-			this.checkWeekend.Location = new System.Drawing.Point(14,392);
+			this.checkWeekend.Location = new System.Drawing.Point(28,392);
 			this.checkWeekend.Name = "checkWeekend";
 			this.checkWeekend.Size = new System.Drawing.Size(143,18);
 			this.checkWeekend.TabIndex = 24;
@@ -160,29 +165,40 @@ namespace OpenDental{
 			this.groupBox1.Controls.Add(this.butCopyDay);
 			this.groupBox1.Controls.Add(this.textClipboard);
 			this.groupBox1.Controls.Add(this.label3);
-			this.groupBox1.Location = new System.Drawing.Point(8,440);
+			this.groupBox1.Location = new System.Drawing.Point(22,440);
 			this.groupBox1.Name = "groupBox1";
 			this.groupBox1.Size = new System.Drawing.Size(158,111);
 			this.groupBox1.TabIndex = 25;
 			this.groupBox1.TabStop = false;
 			this.groupBox1.Text = "Copy";
 			// 
-			// label4
+			// butCopyWeek
 			// 
-			this.label4.Location = new System.Drawing.Point(70,65);
-			this.label4.Name = "label4";
-			this.label4.Size = new System.Drawing.Size(37,14);
-			this.label4.TabIndex = 32;
-			this.label4.Text = "#";
-			this.label4.TextAlign = System.Drawing.ContentAlignment.BottomRight;
+			this.butCopyWeek.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butCopyWeek.Autosize = true;
+			this.butCopyWeek.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butCopyWeek.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butCopyWeek.CornerRadius = 4F;
+			this.butCopyWeek.Location = new System.Drawing.Point(6,83);
+			this.butCopyWeek.Name = "butCopyWeek";
+			this.butCopyWeek.Size = new System.Drawing.Size(75,24);
+			this.butCopyWeek.TabIndex = 28;
+			this.butCopyWeek.Text = "Copy Week";
+			this.butCopyWeek.Click += new System.EventHandler(this.butCopyWeek_Click);
 			// 
-			// textRepeat
+			// butCopyDay
 			// 
-			this.textRepeat.Location = new System.Drawing.Point(110,62);
-			this.textRepeat.Name = "textRepeat";
-			this.textRepeat.Size = new System.Drawing.Size(39,20);
-			this.textRepeat.TabIndex = 31;
-			this.textRepeat.Text = "1";
+			this.butCopyDay.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butCopyDay.Autosize = true;
+			this.butCopyDay.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butCopyDay.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butCopyDay.CornerRadius = 4F;
+			this.butCopyDay.Location = new System.Drawing.Point(6,56);
+			this.butCopyDay.Name = "butCopyDay";
+			this.butCopyDay.Size = new System.Drawing.Size(75,24);
+			this.butCopyDay.TabIndex = 27;
+			this.butCopyDay.Text = "Copy Day";
+			this.butCopyDay.Click += new System.EventHandler(this.butCopyDay_Click);
 			// 
 			// textClipboard
 			// 
@@ -201,11 +217,28 @@ namespace OpenDental{
 			this.label3.Text = "Clipboard Contents";
 			this.label3.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
 			// 
+			// label4
+			// 
+			this.label4.Location = new System.Drawing.Point(70,65);
+			this.label4.Name = "label4";
+			this.label4.Size = new System.Drawing.Size(37,14);
+			this.label4.TabIndex = 32;
+			this.label4.Text = "#";
+			this.label4.TextAlign = System.Drawing.ContentAlignment.BottomRight;
+			// 
+			// textRepeat
+			// 
+			this.textRepeat.Location = new System.Drawing.Point(110,62);
+			this.textRepeat.Name = "textRepeat";
+			this.textRepeat.Size = new System.Drawing.Size(39,20);
+			this.textRepeat.TabIndex = 31;
+			this.textRepeat.Text = "1";
+			// 
 			// checkPractice
 			// 
 			this.checkPractice.Checked = true;
 			this.checkPractice.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.checkPractice.Location = new System.Drawing.Point(3,67);
+			this.checkPractice.Location = new System.Drawing.Point(17,67);
 			this.checkPractice.Name = "checkPractice";
 			this.checkPractice.Size = new System.Drawing.Size(169,18);
 			this.checkPractice.TabIndex = 28;
@@ -215,7 +248,7 @@ namespace OpenDental{
 			// 
 			// listEmp
 			// 
-			this.listEmp.Location = new System.Drawing.Point(91,100);
+			this.listEmp.Location = new System.Drawing.Point(105,100);
 			this.listEmp.Name = "listEmp";
 			this.listEmp.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
 			this.listEmp.Size = new System.Drawing.Size(82,290);
@@ -224,7 +257,7 @@ namespace OpenDental{
 			// 
 			// label5
 			// 
-			this.label5.Location = new System.Drawing.Point(88,80);
+			this.label5.Location = new System.Drawing.Point(102,80);
 			this.label5.Name = "label5";
 			this.label5.Size = new System.Drawing.Size(87,18);
 			this.label5.TabIndex = 29;
@@ -240,7 +273,7 @@ namespace OpenDental{
 			this.butDelete.CornerRadius = 4F;
 			this.butDelete.Image = global::OpenDental.Properties.Resources.deleteX;
 			this.butDelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butDelete.Location = new System.Drawing.Point(14,410);
+			this.butDelete.Location = new System.Drawing.Point(28,410);
 			this.butDelete.Name = "butDelete";
 			this.butDelete.Size = new System.Drawing.Size(103,26);
 			this.butDelete.TabIndex = 27;
@@ -256,7 +289,7 @@ namespace OpenDental{
 			this.butPrint.CornerRadius = 4F;
 			this.butPrint.Image = global::OpenDental.Properties.Resources.butPrint;
 			this.butPrint.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butPrint.Location = new System.Drawing.Point(14,662);
+			this.butPrint.Location = new System.Drawing.Point(28,662);
 			this.butPrint.Name = "butPrint";
 			this.butPrint.Size = new System.Drawing.Size(90,26);
 			this.butPrint.TabIndex = 26;
@@ -291,44 +324,16 @@ namespace OpenDental{
 			this.butPaste.Text = "Paste";
 			this.butPaste.Click += new System.EventHandler(this.butPaste_Click);
 			// 
-			// butCopyWeek
-			// 
-			this.butCopyWeek.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butCopyWeek.Autosize = true;
-			this.butCopyWeek.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butCopyWeek.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butCopyWeek.CornerRadius = 4F;
-			this.butCopyWeek.Location = new System.Drawing.Point(6,83);
-			this.butCopyWeek.Name = "butCopyWeek";
-			this.butCopyWeek.Size = new System.Drawing.Size(75,24);
-			this.butCopyWeek.TabIndex = 28;
-			this.butCopyWeek.Text = "Copy Week";
-			this.butCopyWeek.Click += new System.EventHandler(this.butCopyWeek_Click);
-			// 
-			// butCopyDay
-			// 
-			this.butCopyDay.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butCopyDay.Autosize = true;
-			this.butCopyDay.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butCopyDay.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butCopyDay.CornerRadius = 4F;
-			this.butCopyDay.Location = new System.Drawing.Point(6,56);
-			this.butCopyDay.Name = "butCopyDay";
-			this.butCopyDay.Size = new System.Drawing.Size(75,24);
-			this.butCopyDay.TabIndex = 27;
-			this.butCopyDay.Text = "Copy Day";
-			this.butCopyDay.Click += new System.EventHandler(this.butCopyDay_Click);
-			// 
 			// textDateTo
 			// 
-			this.textDateTo.Location = new System.Drawing.Point(90,47);
+			this.textDateTo.Location = new System.Drawing.Point(104,47);
 			this.textDateTo.Name = "textDateTo";
 			this.textDateTo.Size = new System.Drawing.Size(82,20);
 			this.textDateTo.TabIndex = 10;
 			// 
 			// textDateFrom
 			// 
-			this.textDateFrom.Location = new System.Drawing.Point(3,47);
+			this.textDateFrom.Location = new System.Drawing.Point(17,47);
 			this.textDateFrom.Name = "textDateFrom";
 			this.textDateFrom.Size = new System.Drawing.Size(82,20);
 			this.textDateFrom.TabIndex = 8;
@@ -340,7 +345,7 @@ namespace OpenDental{
 			this.butRefresh.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butRefresh.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butRefresh.CornerRadius = 4F;
-			this.butRefresh.Location = new System.Drawing.Point(53,4);
+			this.butRefresh.Location = new System.Drawing.Point(67,4);
 			this.butRefresh.Name = "butRefresh";
 			this.butRefresh.Size = new System.Drawing.Size(75,26);
 			this.butRefresh.TabIndex = 11;
@@ -350,11 +355,11 @@ namespace OpenDental{
 			// gridMain
 			// 
 			this.gridMain.HScrollVisible = false;
-			this.gridMain.Location = new System.Drawing.Point(178,8);
+			this.gridMain.Location = new System.Drawing.Point(207,8);
 			this.gridMain.Name = "gridMain";
 			this.gridMain.ScrollValue = 0;
 			this.gridMain.SelectionMode = OpenDental.UI.GridSelectionMode.OneCell;
-			this.gridMain.Size = new System.Drawing.Size(794,680);
+			this.gridMain.Size = new System.Drawing.Size(765,680);
 			this.gridMain.TabIndex = 0;
 			this.gridMain.Title = "Schedule";
 			this.gridMain.TranslationName = null;
@@ -378,7 +383,7 @@ namespace OpenDental{
 			this.groupBox2.Controls.Add(this.checkReplace);
 			this.groupBox2.Controls.Add(this.textRepeat);
 			this.groupBox2.Controls.Add(this.butPaste);
-			this.groupBox2.Location = new System.Drawing.Point(8,552);
+			this.groupBox2.Location = new System.Drawing.Point(22,552);
 			this.groupBox2.Name = "groupBox2";
 			this.groupBox2.Size = new System.Drawing.Size(158,87);
 			this.groupBox2.TabIndex = 32;
@@ -849,7 +854,62 @@ namespace OpenDental{
 		}
 
 		private void butPrint_Click(object sender,EventArgs e) {
+			pagesPrinted=0;
+			pd=new PrintDocument();
+			pd.PrintPage += new PrintPageEventHandler(this.pd_PrintPage);
+			pd.DefaultPageSettings.Margins=new Margins(25,25,40,40);
+			//pd.OriginAtMargins=true;
+			if(pd.DefaultPageSettings.PaperSize.Height==0) {
+				pd.DefaultPageSettings.PaperSize=new PaperSize("default",850,1100);
+			}
+			headingPrinted=false;
+			try {
+#if DEBUG
+				FormRpPrintPreview pView = new FormRpPrintPreview();
+				pView.printPreviewControl2.Document=pd;
+				pView.ShowDialog();
+#else
+				if(Printers.SetPrinter(pd,PrintSituation.Default)) {
+					pd.Print();
+				}
+#endif
+			}
+			catch {
+				MessageBox.Show(Lan.g(this,"Printer not available"));
+			}
+		}
 
+		private void pd_PrintPage(object sender,System.Drawing.Printing.PrintPageEventArgs e) {
+			Rectangle bounds=e.MarginBounds;
+			//new Rectangle(50,40,800,1035);//Some printers can handle up to 1042
+			Graphics g=e.Graphics;
+			string text;
+			Font headingFont=new Font("Arial",13,FontStyle.Bold);
+			Font subHeadingFont=new Font("Arial",10,FontStyle.Bold);
+			int yPos=bounds.Top;
+			int center=bounds.X+bounds.Width/2;
+			#region printHeading
+			if(!headingPrinted) {
+				text=Lan.g(this,"Schedule");
+				g.DrawString(text,headingFont,Brushes.Black,center-g.MeasureString(text,headingFont).Width/2,yPos);
+				//yPos+=(int)g.MeasureString(text,headingFont).Height;
+				//text=textDateFrom.Text+" "+Lan.g(this,"to")+" "+textDateTo.Text;
+				//g.DrawString(text,subHeadingFont,Brushes.Black,center-g.MeasureString(text,subHeadingFont).Width/2,yPos);
+				yPos+=25;
+				headingPrinted=true;
+				headingPrintH=yPos;
+			}
+			#endregion
+			int totalPages=gridMain.GetNumberOfPages(bounds,headingPrintH);
+			yPos=gridMain.PrintPage(g,pagesPrinted,bounds,headingPrintH);
+			pagesPrinted++;
+			if(pagesPrinted < totalPages) {
+				e.HasMorePages=true;
+			}
+			else {
+				e.HasMorePages=false;
+			}
+			g.Dispose();
 		}
 
 		
