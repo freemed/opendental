@@ -194,6 +194,18 @@ namespace OpenDental{
 			return false;
 		}
 
+		public static int[] GetOpsForView(int apptViewNum){
+			ArrayList AL=new ArrayList();
+			for(int i=0;i<List.Length;i++){
+				if(List[i].ApptViewNum==apptViewNum && List[i].OpNum!=0){
+					AL.Add(List[i].OpNum);
+				}
+			}
+			//int[] retVal=new int[AL.Count]();
+			return (int[])AL.ToArray(typeof(int));
+		}
+
+
 
 	}
 

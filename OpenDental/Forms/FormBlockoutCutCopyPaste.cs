@@ -1,8 +1,10 @@
 using System;
 using System.Drawing;
 using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows.Forms;
+using OpenDentBusiness;
 
 namespace OpenDental{
 	/// <summary>
@@ -23,11 +25,15 @@ namespace OpenDental{
 		/// Required designer variable.
 		/// </summary>
 		private System.ComponentModel.Container components = null;
-		public static DateTime DateCopyStart=DateTime.MinValue;
 		private TextBox textClipboard;
 		private Label label3;
 		private Label label1;
-		public static DateTime DateCopyEnd=DateTime.MinValue;
+		private static DateTime DateCopyStart=DateTime.MinValue;
+		private static DateTime DateCopyEnd=DateTime.MinValue;
+		public int ApptViewNumCur;
+		private static int ApptViewNumPrevious;
+		private OpenDental.UI.Button button1;
+		public DateTime DateSelected;
 
 		///<summary></summary>
 		public FormBlockoutCutCopyPaste()
@@ -63,14 +69,15 @@ namespace OpenDental{
 		{
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormBlockoutCutCopyPaste));
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
+			this.textClipboard = new System.Windows.Forms.TextBox();
+			this.label3 = new System.Windows.Forms.Label();
 			this.groupBox2 = new System.Windows.Forms.GroupBox();
 			this.label4 = new System.Windows.Forms.Label();
 			this.checkReplace = new System.Windows.Forms.CheckBox();
 			this.textRepeat = new System.Windows.Forms.TextBox();
 			this.checkWeekend = new System.Windows.Forms.CheckBox();
-			this.textClipboard = new System.Windows.Forms.TextBox();
-			this.label3 = new System.Windows.Forms.Label();
 			this.label1 = new System.Windows.Forms.Label();
+			this.button1 = new OpenDental.UI.Button();
 			this.butCopyWeek = new OpenDental.UI.Button();
 			this.butCopyDay = new OpenDental.UI.Button();
 			this.butRepeat = new OpenDental.UI.Button();
@@ -85,12 +92,29 @@ namespace OpenDental{
 			this.groupBox1.Controls.Add(this.label3);
 			this.groupBox1.Controls.Add(this.butCopyWeek);
 			this.groupBox1.Controls.Add(this.butCopyDay);
-			this.groupBox1.Location = new System.Drawing.Point(26,92);
+			this.groupBox1.Location = new System.Drawing.Point(26,137);
 			this.groupBox1.Name = "groupBox1";
 			this.groupBox1.Size = new System.Drawing.Size(158,118);
 			this.groupBox1.TabIndex = 40;
 			this.groupBox1.TabStop = false;
 			this.groupBox1.Text = "Copy";
+			// 
+			// textClipboard
+			// 
+			this.textClipboard.Location = new System.Drawing.Point(6,33);
+			this.textClipboard.Name = "textClipboard";
+			this.textClipboard.ReadOnly = true;
+			this.textClipboard.Size = new System.Drawing.Size(146,20);
+			this.textClipboard.TabIndex = 30;
+			// 
+			// label3
+			// 
+			this.label3.Location = new System.Drawing.Point(3,16);
+			this.label3.Name = "label3";
+			this.label3.Size = new System.Drawing.Size(146,14);
+			this.label3.TabIndex = 29;
+			this.label3.Text = "Clipboard Contents";
+			this.label3.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
 			// 
 			// groupBox2
 			// 
@@ -99,7 +123,7 @@ namespace OpenDental{
 			this.groupBox2.Controls.Add(this.checkReplace);
 			this.groupBox2.Controls.Add(this.textRepeat);
 			this.groupBox2.Controls.Add(this.butPaste);
-			this.groupBox2.Location = new System.Drawing.Point(26,220);
+			this.groupBox2.Location = new System.Drawing.Point(26,263);
 			this.groupBox2.Name = "groupBox2";
 			this.groupBox2.Size = new System.Drawing.Size(158,97);
 			this.groupBox2.TabIndex = 45;
@@ -136,38 +160,34 @@ namespace OpenDental{
 			// 
 			// checkWeekend
 			// 
-			this.checkWeekend.Location = new System.Drawing.Point(32,68);
+			this.checkWeekend.Location = new System.Drawing.Point(32,113);
 			this.checkWeekend.Name = "checkWeekend";
 			this.checkWeekend.Size = new System.Drawing.Size(143,18);
 			this.checkWeekend.TabIndex = 46;
 			this.checkWeekend.Text = "Include Weekends";
 			this.checkWeekend.UseVisualStyleBackColor = true;
 			// 
-			// textClipboard
-			// 
-			this.textClipboard.Location = new System.Drawing.Point(6,33);
-			this.textClipboard.Name = "textClipboard";
-			this.textClipboard.ReadOnly = true;
-			this.textClipboard.Size = new System.Drawing.Size(146,20);
-			this.textClipboard.TabIndex = 30;
-			// 
-			// label3
-			// 
-			this.label3.Location = new System.Drawing.Point(3,16);
-			this.label3.Name = "label3";
-			this.label3.Size = new System.Drawing.Size(146,14);
-			this.label3.TabIndex = 29;
-			this.label3.Text = "Clipboard Contents";
-			this.label3.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
-			// 
 			// label1
 			// 
 			this.label1.Location = new System.Drawing.Point(29,9);
 			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(245,43);
+			this.label1.Size = new System.Drawing.Size(245,59);
 			this.label1.TabIndex = 47;
 			this.label1.Text = "Remember that this tool only applies to the visible operatories for the current a" +
-    "ppointment view";
+    "ppointment view.  It also does not copy to a different operatory.";
+			// 
+			// button1
+			// 
+			this.button1.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.button1.Autosize = true;
+			this.button1.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.button1.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.button1.CornerRadius = 4F;
+			this.button1.Location = new System.Drawing.Point(32,78);
+			this.button1.Name = "button1";
+			this.button1.Size = new System.Drawing.Size(75,24);
+			this.button1.TabIndex = 48;
+			this.button1.Text = "Clear Day";
 			// 
 			// butCopyWeek
 			// 
@@ -181,6 +201,7 @@ namespace OpenDental{
 			this.butCopyWeek.Size = new System.Drawing.Size(75,24);
 			this.butCopyWeek.TabIndex = 28;
 			this.butCopyWeek.Text = "Copy Week";
+			this.butCopyWeek.Click += new System.EventHandler(this.butCopyWeek_Click);
 			// 
 			// butCopyDay
 			// 
@@ -194,6 +215,7 @@ namespace OpenDental{
 			this.butCopyDay.Size = new System.Drawing.Size(75,24);
 			this.butCopyDay.TabIndex = 27;
 			this.butCopyDay.Text = "Copy Day";
+			this.butCopyDay.Click += new System.EventHandler(this.butCopyDay_Click);
 			// 
 			// butRepeat
 			// 
@@ -207,6 +229,7 @@ namespace OpenDental{
 			this.butRepeat.Size = new System.Drawing.Size(75,24);
 			this.butRepeat.TabIndex = 30;
 			this.butRepeat.Text = "Repeat";
+			this.butRepeat.Click += new System.EventHandler(this.butRepeat_Click);
 			// 
 			// butPaste
 			// 
@@ -220,11 +243,13 @@ namespace OpenDental{
 			this.butPaste.Size = new System.Drawing.Size(75,24);
 			this.butPaste.TabIndex = 29;
 			this.butPaste.Text = "Paste";
+			this.butPaste.Click += new System.EventHandler(this.butPaste_Click);
 			// 
 			// FormBlockoutCutCopyPaste
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
-			this.ClientSize = new System.Drawing.Size(281,338);
+			this.ClientSize = new System.Drawing.Size(290,383);
+			this.Controls.Add(this.button1);
 			this.Controls.Add(this.label1);
 			this.Controls.Add(this.checkWeekend);
 			this.Controls.Add(this.groupBox1);
@@ -247,11 +272,167 @@ namespace OpenDental{
 		#endregion
 
 		private void FormBlockoutCutCopyPaste_Load(object sender,EventArgs e) {
-
+			if(ApptViewNumCur!=ApptViewNumPrevious){
+				DateCopyStart=DateTime.MinValue;
+				DateCopyEnd=DateTime.MinValue;
+			}
+			FillClipboard();
+			ApptViewNumPrevious=ApptViewNumCur;//remember the appt view for next time.
 		}
 
 		private void FillClipboard(){
+			if(DateCopyStart.Year<1880){
+				textClipboard.Text="";
+			}
+			else if(DateCopyStart==DateCopyEnd) {
+				textClipboard.Text=DateCopyStart.ToShortDateString();
+			}
+			else {
+				textClipboard.Text=DateCopyStart.ToShortDateString()+"-"+DateCopyEnd.ToShortDateString();
+			}
+		}
 
+		private void butCopyDay_Click(object sender,EventArgs e) {
+			DateCopyStart=DateSelected;
+			DateCopyEnd=DateSelected;
+			//FillClipboard();
+			Close();
+		}
+
+		private void butCopyWeek_Click(object sender,EventArgs e) {
+			if(checkWeekend.Checked){
+				DateCopyStart=DateSelected.AddDays(-(int)DateSelected.DayOfWeek);//eg Wed-3=Sun.
+				DateCopyEnd=DateCopyStart.AddDays(6);
+			}
+			else{
+				DateCopyStart=DateSelected.AddDays(-(int)DateSelected.DayOfWeek+1);//eg Wed-3+1=Mon.
+				DateCopyEnd=DateCopyStart.AddDays(4);
+			}
+			//FillClipboard();
+			Close();
+		}
+
+		private void butPaste_Click(object sender,EventArgs e) {
+			if(DateCopyStart.Year<1880) {
+				MsgBox.Show(this,"Please copy a selection to the clipboard first.");
+				return;
+			}
+			//calculate which day or week is currently selected.
+			DateTime dateSelectedStart;
+			DateTime dateSelectedEnd;
+			bool isWeek=DateCopyStart!=DateCopyEnd;
+			if(isWeek){
+				if(checkWeekend.Checked) {
+					dateSelectedStart=DateSelected.AddDays(-(int)DateSelected.DayOfWeek);
+					dateSelectedEnd=dateSelectedStart.AddDays(6);
+				}
+				else{
+					dateSelectedStart=DateSelected.AddDays(-(int)DateSelected.DayOfWeek+1);
+					dateSelectedEnd=dateSelectedStart.AddDays(4);
+				}
+			}
+			else {
+				dateSelectedStart=DateSelected;
+				dateSelectedEnd=DateSelected;
+			}
+			//it's not allowed to paste back over the same day or week.
+			if(dateSelectedStart==DateCopyStart) {
+				MsgBox.Show(this,"Not allowed to paste back onto the same date as is on the clipboard.");
+				return;
+			}
+			int[] opNums=ApptViewItems.GetOpsForView(ApptViewNumCur);
+			List<Schedule> SchedList=Schedules.RefreshPeriodBlockouts(DateCopyStart,DateCopyEnd,opNums);
+			if(checkReplace.Checked) {
+				Schedules.ClearBlockouts(dateSelectedStart,dateSelectedEnd,opNums);
+			}
+			Schedule sched;
+			int weekDelta=0;
+			if(isWeek) {
+				TimeSpan span=dateSelectedStart-DateCopyStart;
+				weekDelta=span.Days/7;//usually a positive # representing a future paste, but can be negative
+			}
+			for(int i=0;i<SchedList.Count;i++) {
+				sched=SchedList[i];
+				if(isWeek) {
+					sched.SchedDate=sched.SchedDate.AddDays(weekDelta*7);
+				}
+				else {
+					sched.SchedDate=dateSelectedStart;
+				}
+				Schedules.Insert(sched);
+			}
+			Close();
+		}
+
+		private void butRepeat_Click(object sender,EventArgs e) {
+			try {
+				int.Parse(textRepeat.Text);
+			}
+			catch {
+				MsgBox.Show(this,"Please fix number box first.");
+				return;
+			}
+			if(DateCopyStart.Year<1880) {
+				MsgBox.Show(this,"Please copy a selection to the clipboard first.");
+				return;
+			}
+			//calculate which day or week is currently selected.
+			DateTime dateSelectedStart;
+			DateTime dateSelectedEnd;
+			bool isWeek=DateCopyStart!=DateCopyEnd;
+			if(isWeek) {
+				if(checkWeekend.Checked) {
+					dateSelectedStart=DateSelected.AddDays(-(int)DateSelected.DayOfWeek);
+					dateSelectedEnd=dateSelectedStart.AddDays(6);
+				}
+				else {
+					dateSelectedStart=DateSelected.AddDays(-(int)DateSelected.DayOfWeek+1);
+					dateSelectedEnd=dateSelectedStart.AddDays(4);
+				}
+			}
+			else {
+				dateSelectedStart=DateSelected;
+				dateSelectedEnd=DateSelected;
+			}
+			//it is allowed to paste back over the same day or week.
+			int[] opNums=ApptViewItems.GetOpsForView(ApptViewNumCur);
+			List<Schedule> SchedList=Schedules.RefreshPeriodBlockouts(DateCopyStart,DateCopyEnd,opNums);
+			Schedule sched;
+			int weekDelta=0;
+			TimeSpan span;
+			if(isWeek) {
+				span=dateSelectedStart-DateCopyStart;
+				weekDelta=span.Days/7;//usually a positive # representing a future paste, but can be negative
+			}
+			int dayDelta=0;//this is needed when repeat pasting days in order to calculate skipping weekends.
+			//dayDelta will start out zero and increment separately from r.
+			for(int r=0;r<PIn.PInt(textRepeat.Text);r++) {
+				if(checkReplace.Checked) {
+					if(isWeek) {
+						Schedules.ClearBlockouts(dateSelectedStart.AddDays(r*7),dateSelectedEnd.AddDays(r*7),opNums);
+					}
+					else {
+						Schedules.ClearBlockouts(dateSelectedStart.AddDays(dayDelta),dateSelectedEnd.AddDays(dayDelta),opNums);
+					}
+				}
+				for(int i=0;i<SchedList.Count;i++) {
+					sched=SchedList[i].Copy();
+					if(isWeek) {
+						sched.SchedDate=sched.SchedDate.AddDays((weekDelta+r)*7);
+					}
+					else {
+						sched.SchedDate=dateSelectedStart.AddDays(dayDelta);
+					}
+					Schedules.Insert(sched);
+				}
+				if(!checkWeekend.Checked && dateSelectedStart.AddDays(dayDelta).DayOfWeek==DayOfWeek.Friday) {
+					dayDelta+=3;
+				}
+				else {
+					dayDelta++;
+				}
+			}
+			Close();
 		}
 
 

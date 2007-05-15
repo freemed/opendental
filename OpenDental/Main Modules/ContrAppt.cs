@@ -135,6 +135,8 @@ namespace OpenDental{
 		private Panel infoBubble;
 		///<Summary>The datatable that holds the bubble data.  This will later become part of the dataset for the main screen.</Summary>
 		private DataSet DS;
+		///<summary>If the user has done a blockout/copy, then this will contain the blockout that is on the "clipboard".</summary>
+		private Schedule BlockoutClipboard;
 		//<Summary>This is the bitmap that is used to layout all the data for the bubble.  It's recreated each time a bubble is first made visible or whenever the aptNum changes.</Summary>
 		//private Bitmap bubbleBitmap;
 		///<Summary>This has to be tracked globally because mouse might move directly from one appt to another without any break.  This is the only way to know if we are still over the same appt.</Summary>
@@ -1186,6 +1188,9 @@ namespace OpenDental{
 			menuApt.MenuItems.Add(Lan.g(this,"Routing Slip"),new EventHandler(menuApt_Click));
 			menuBlockout.MenuItems.Clear();
 			menuBlockout.MenuItems.Add(Lan.g(this,"Edit Blockout"),new EventHandler(menuBlockout_Click));
+			menuBlockout.MenuItems.Add(Lan.g(this,"Cut Blockout"),new EventHandler(menuBlockout_Click));
+			menuBlockout.MenuItems.Add(Lan.g(this,"Copy Blockout"),new EventHandler(menuBlockout_Click));
+			menuBlockout.MenuItems.Add(Lan.g(this,"Paste Blockout"),new EventHandler(menuBlockout_Click));
 			menuBlockout.MenuItems.Add(Lan.g(this,"Delete Blockout"),new EventHandler(menuBlockout_Click));
 			menuBlockout.MenuItems.Add(Lan.g(this,"Add Blockout"),new EventHandler(menuBlockout_Click));
 			menuBlockout.MenuItems.Add(Lan.g(this,"Blockout Cut-Copy-Paste"),new EventHandler(menuBlockout_Click));
@@ -1997,34 +2002,24 @@ namespace OpenDental{
 							break;
 						}
 					}
-					/*if(ListForType.Length==0){//only if this day is all defaults
-						SchedDefault[] DefaultsForType=SchedDefaults.GetForType(ScheduleType.Blockout,0);
-						for(int i=0;i<DefaultsForType.Length;i++){
-							//skip if day doesn't match
-							if(DefaultsForType[i].DayOfWeek != (int)Appointments.DateSelected.DayOfWeek){
-								continue;
-							}
-							//skip if op doesn't match
-							if(DefaultsForType[i].Op!=0){//if op is zero, it doesn't matter which op.
-								if(DefaultsForType[i].Op != SheetClickedonOp){
-									continue;
-								}
-							}
-							if(DefaultsForType[i].StartTime.TimeOfDay <= sheetClickedOnTime
-								&& sheetClickedOnTime < DefaultsForType[i].StopTime.TimeOfDay)
-							{
-								clickedOnBlock=true;
-								break;
-							}
-						}
-					}*/
 					if(clickedOnBlock){
-						menuBlockout.MenuItems[0].Visible=true;//Edit
-						menuBlockout.MenuItems[1].Visible=true;//Delete
+						menuBlockout.MenuItems[0].Enabled=true;//Edit
+						menuBlockout.MenuItems[1].Enabled=true;//Cut
+						menuBlockout.MenuItems[2].Enabled=true;//Copy
+						menuBlockout.MenuItems[3].Enabled=false;//paste. Can't paste on top of an existing blockout
+						menuBlockout.MenuItems[4].Enabled=true;//Delete
 					}
 					else{
-						menuBlockout.MenuItems[0].Visible=false;
-						menuBlockout.MenuItems[1].Visible=false;
+						menuBlockout.MenuItems[0].Enabled=false;//edit
+						menuBlockout.MenuItems[1].Enabled=false;//edit
+						menuBlockout.MenuItems[2].Enabled=false;//copy
+						if(BlockoutClipboard==null){
+							menuBlockout.MenuItems[3].Enabled=false;//paste
+						}
+						else{
+							menuBlockout.MenuItems[3].Enabled=true;
+						}
+						menuBlockout.MenuItems[4].Enabled=false;//delete
 					}
 					menuBlockout.Show(ContrApptSheet2,new Point(e.X,e.Y));
 				}
@@ -2993,18 +2988,27 @@ namespace OpenDental{
 					OnBlockEdit_Click();
 					break;
 				case 1:
-					OnBlockDelete_Click();
+					OnBlockCut_Click();
 					break;
 				case 2:
-					OnBlockAdd_Click();
+					OnBlockCopy_Click();
 					break;
 				case 3:
-					OnBlockCutCopyPaste_Click();
+					OnBlockPaste_Click();
 					break;
 				case 4:
-					OnClearBlockouts_Click();
+					OnBlockDelete_Click();
 					break;
 				case 5:
+					OnBlockAdd_Click();
+					break;
+				case 6:
+					OnBlockCutCopyPaste_Click();
+					break;
+				case 7:
+					OnClearBlockouts_Click();
+					break;
+				case 8:
 					OnBlockTypes_Click();
 					break;
 			}
@@ -3142,11 +3146,56 @@ namespace OpenDental{
 			SetInvalid();
 		}		
 
+		private void OnBlockCopy_Click(){
+			if(!Security.IsAuthorized(Permissions.Blockouts)) {
+				return;
+			}
+			//not even enabled if not right click on a blockout
+			Schedule SchedCur=GetClickedBlockout();
+			if(SchedCur==null) {
+				MessageBox.Show("Blockout not found.");
+				return;//should never happen
+			}
+			BlockoutClipboard=SchedCur.Copy();
+		}
+
+		private void OnBlockCut_Click() {
+			if(!Security.IsAuthorized(Permissions.Blockouts)) {
+				return;
+			}
+			//not even enabled if not right click on a blockout
+			Schedule SchedCur=GetClickedBlockout();
+			if(SchedCur==null) {
+				MessageBox.Show("Blockout not found.");
+				return;//should never happen
+			}
+			BlockoutClipboard=SchedCur.Copy();
+			Schedules.Delete(SchedCur);
+			RefreshModuleScreen();
+		}
+
+		private void OnBlockPaste_Click(){
+			if(!Security.IsAuthorized(Permissions.Blockouts)) {
+				return;
+			}
+			Schedule sched=BlockoutClipboard.Copy();
+			sched.Op=SheetClickedonOp;
+			sched.SchedDate=Appointments.DateSelected;
+			TimeSpan span=sched.StopTime-sched.StartTime;
+			TimeSpan timeOfDay=new TimeSpan(SheetClickedonHour,SheetClickedonMin,0);
+			timeOfDay=TimeSpan.FromMinutes(
+				((int)Math.Round((decimal)timeOfDay.TotalMinutes/(decimal)ContrApptSheet.MinPerIncr))*ContrApptSheet.MinPerIncr);
+			sched.StartTime=DateTime.Today+timeOfDay;
+			sched.StopTime=sched.StartTime.Add(span);
+			Schedules.Insert(sched);
+			RefreshModuleScreen();
+		}
+
 		private void OnBlockEdit_Click(){
 			if(!Security.IsAuthorized(Permissions.Blockouts)){
 				return;
 			}
-			//not even visible if not right click on a blockout
+			//not even enabled if not right click on a blockout
 			Schedule SchedCur=GetClickedBlockout();
 			if(SchedCur==null){
 				MessageBox.Show("Blockout not found.");
@@ -3216,12 +3265,22 @@ namespace OpenDental{
 				return;
 			}
 			FormBlockoutCutCopyPaste FormB=new FormBlockoutCutCopyPaste();
+			FormB.DateSelected=Appointments.DateSelected;
+			if(comboView.SelectedIndex==0){
+				FormB.ApptViewNumCur=0;
+			}
+			else{
+				FormB.ApptViewNumCur=ApptViews.List[comboView.SelectedIndex-1].ApptViewNum;
+			}
 			FormB.ShowDialog();
 			RefreshModuleScreen();
 		}
 
 		private void OnClearBlockouts_Click(){
 			if(!Security.IsAuthorized(Permissions.Blockouts)){
+				return;
+			}
+			if(!MsgBox.Show(this,true,"Clear all blockouts for day?")){
 				return;
 			}
 			Schedules.ClearBlockoutsForDay(Appointments.DateSelected);

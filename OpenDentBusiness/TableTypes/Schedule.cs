@@ -23,7 +23,7 @@ namespace OpenDentBusiness{
 		public string Note;
 		///<summary>Enum:SchedStatus enumeration 0=Open,1=Closed,2=Holiday.  All blocks have a status of Open, but user doesn't see the status.  The "closed" status was previously used to override the defaults when the last timeblock was deleted.  But it's nearly phased out now.  Still used by blockouts.  Holidays are a special type of practice schedule item which do not have providers attached.</summary>
 		public SchedStatus Status;
-		///<summary>FK to definition.DefNum.  Only used right now for Blockouts.  If 0, then it applies to all ops.</summary>
+		///<summary>FK to operatory.OperatoryNum.  Only used right now for Blockouts.  If 0, then it applies to all ops.</summary>
 		public int Op;
 		///<summary>FK to employee.EmployeeNum.</summary>
 		public int EmployeeNum;

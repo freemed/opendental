@@ -79,6 +79,20 @@ namespace OpenDental{
 			return RefreshAndFill(command);
 		}
 
+		///<summary>The opNums array does not include 0.  0 indicates all ops and so it's always included in the output list.</summary>
+		public static List<Schedule> RefreshPeriodBlockouts(DateTime dateStart,DateTime dateEnd,int[] opNums){
+			string command="SELECT * FROM schedule "
+				+"WHERE SchedDate >= "+POut.PDate(dateStart)+" "
+				+"AND SchedDate <= "+POut.PDate(dateEnd)+" "
+				+"AND SchedType=2 "//blockouts
+				+"AND (Op=0 ";
+			for(int i=0;i<opNums.Length;i++) {
+				command+="OR Op="+POut.PInt(opNums[i])+" ";
+			}
+			command+=")";
+			return RefreshAndFill(command);
+		}
+
 		///<Summary></Summary>
 		public static List<Schedule> RefreshDayEdit(DateTime dateSched){
 			string command="SELECT schedule.* "
@@ -498,6 +512,20 @@ namespace OpenDental{
 				orClause+="schedule.EmployeeNum="+POut.PInt(empNums[i])+" ";
 			}
 			command+=orClause+")";
+			General.NonQ(command);
+		}
+
+		///<summary>Clears all Blockout schedule entries for the given date range and the given ops.</summary>
+		public static void ClearBlockouts(DateTime dateStart,DateTime dateEnd,int[] opNums) {
+			string command="DELETE FROM schedule "
+				+"WHERE SchedDate >= "+POut.PDate(dateStart)+" "
+				+"AND SchedDate <= "+POut.PDate(dateEnd)+" "
+				+"AND SchedType=2 "//blockouts
+				+"AND (Op=0 ";
+			for(int i=0;i<opNums.Length;i++) {
+				command+="OR Op="+POut.PInt(opNums[i])+" ";
+			}
+			command+=")";
 			General.NonQ(command);
 		}
 

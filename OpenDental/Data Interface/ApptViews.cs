@@ -52,6 +52,15 @@ namespace OpenDental{
 			General.NonQ(command);
 		}
 
+		public static ApptView GetView(int apptViewNum){
+			for(int i=0;i<List.Length;i++){
+				if(List[i].ApptViewNum==apptViewNum){
+					return List[i];
+				}
+			}
+			return null;//should never happen
+		}
+
 		/*
 		/// <summary>Used in appt module.  Can be -1 if no category selected </summary>
 		public static void SetCur(int index){
