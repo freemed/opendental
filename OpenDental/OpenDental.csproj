@@ -387,6 +387,9 @@
     <Compile Include="Forms\BasicTemplate.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Forms\FormBlockoutCutCopyPaste.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Forms\FormScheduleEdit.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -1283,6 +1286,10 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\BasicTemplate.resx">
       <DependentUpon>BasicTemplate.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormBlockoutCutCopyPaste.resx">
+      <DependentUpon>FormBlockoutCutCopyPaste.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormScheduleEdit.resx">

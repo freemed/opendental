@@ -1186,11 +1186,10 @@ namespace OpenDental{
 			menuApt.MenuItems.Add(Lan.g(this,"Print Card for Entire Family"),new EventHandler(menuApt_Click));
 			menuApt.MenuItems.Add(Lan.g(this,"Routing Slip"),new EventHandler(menuApt_Click));
 			menuBlockout.MenuItems.Clear();
-			//menuBlockout.MenuItems.Add(Lan.g(this,"BLOCKOUTS"));
 			menuBlockout.MenuItems.Add(Lan.g(this,"Edit Blockout"),new EventHandler(menuBlockout_Click));
 			menuBlockout.MenuItems.Add(Lan.g(this,"Delete Blockout"),new EventHandler(menuBlockout_Click));
 			menuBlockout.MenuItems.Add(Lan.g(this,"Add Blockout"),new EventHandler(menuBlockout_Click));
-			//menuBlockout.MenuItems.Add(Lan.g(this,"Set Blockouts for Day to Default"),new EventHandler(menuBlockout_Click));
+			menuBlockout.MenuItems.Add(Lan.g(this,"Blockout Cut-Copy-Paste"),new EventHandler(menuBlockout_Click));
 			menuBlockout.MenuItems.Add(Lan.g(this,"Clear All Blockouts for Day"),new EventHandler(menuBlockout_Click));
 			menuBlockout.MenuItems.Add(Lan.g(this,"Edit Blockout Types"),new EventHandler(menuBlockout_Click));
 			Lan.C(this,new Control[]
@@ -3001,9 +3000,12 @@ namespace OpenDental{
 					OnBlockAdd_Click();
 					break;
 				case 3:
-					OnClearBlockouts_Click();
+					OnBlockCutCopyPaste_Click();
 					break;
 				case 4:
+					OnClearBlockouts_Click();
+					break;
+				case 5:
 					OnBlockTypes_Click();
 					break;
 			}
@@ -3210,15 +3212,14 @@ namespace OpenDental{
 			RefreshModuleScreen();
 		}
 
-		/*
-		private void OnBlockDefault_Click(){
+		private void OnBlockCutCopyPaste_Click(){
 			if(!Security.IsAuthorized(Permissions.Blockouts)){
 				return;
 			}
-			Schedules.SetAllDefault(Appointments.DateSelected,ScheduleType.Blockout,0);
+			FormBlockoutCutCopyPaste FormB=new FormBlockoutCutCopyPaste();
+			FormB.ShowDialog();
 			RefreshModuleScreen();
-			MsgBox.Show(this,"All blockouts for this date have been set to default values.");
-		}*/
+		}
 
 		private void OnClearBlockouts_Click(){
 			if(!Security.IsAuthorized(Permissions.Blockouts)){
