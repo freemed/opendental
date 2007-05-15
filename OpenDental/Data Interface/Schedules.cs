@@ -43,7 +43,7 @@ namespace OpenDental{
 		public static Schedule[] RefreshPeriod(DateTime startDate,DateTime endDate) {
 			string command="SELECT * FROM schedule "
 				+"WHERE SchedDate >= "+POut.PDate(startDate)+" "
-				+"AND SchedDate < "+POut.PDate(endDate.AddDays(1))+" "
+				+"AND SchedDate <= "+POut.PDate(endDate)+" "
 				+"ORDER BY StartTime";
 			return RefreshAndFill(command).ToArray();
 		}

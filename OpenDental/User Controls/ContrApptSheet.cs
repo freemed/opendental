@@ -241,9 +241,18 @@ namespace OpenDental{
 			g.FillRectangle(closedBrush,TimeWidth,0,ColWidth*ColCount+ProvWidth*ProvCount,Height);
 			//then, loop through each operatory
 			Operatory curOp;
+			bool isHoliday=false;
+			if(!isWeeklyView){
+				for(int i=0;i<SchedListDay.Length;i++){
+					if(SchedListDay[i].SchedType==ScheduleType.Practice && SchedListDay[i].Status==SchedStatus.Holiday){
+						isHoliday=true;
+						break;
+					}
+				}
+			}
 			for(int j=0;j<ColCount;j++){
 				if(isWeeklyView){
-					schedForType=Schedules.GetForType(SchedListDay,ScheduleType.Practice,0);
+					schedForType=Schedules.GetForType(SchedListDay,ScheduleType.Provider,PrefB.GetInt("ScheduleProvUnassigned"));
 				}
 				else{
 					curOp=Operatories.ListShort[ApptViewItems.VisOps[j]];
@@ -253,54 +262,22 @@ namespace OpenDental{
 					else if(curOp.ProvHygienist!=0 && curOp.IsHygiene){//hygienist
 						schedForType=Schedules.GetForType(SchedListDay,ScheduleType.Provider,curOp.ProvHygienist);
 					}
-					else{//practice
-						schedForType=Schedules.GetForType(SchedListDay,ScheduleType.Practice,0);
+					else{//no provider set
+						schedForType=Schedules.GetForType(SchedListDay,ScheduleType.Provider,PrefB.GetInt("ScheduleProvUnassigned"));
 					}
 				}
-				if(schedForType.Length==0){//use default sched
-					if(isWeeklyView){
-						schedDefs=SchedDefaults.GetForType(ScheduleType.Practice,0);
-					}
-					else{
-						curOp=Operatories.ListShort[ApptViewItems.VisOps[j]];
-						if(curOp.ProvDentist!=0 && !curOp.IsHygiene){//dentist
-							schedDefs=SchedDefaults.GetForType(ScheduleType.Provider,curOp.ProvDentist);
-						}
-						else if(curOp.ProvHygienist!=0 && curOp.IsHygiene){//hygienist
-							schedDefs=SchedDefaults.GetForType(ScheduleType.Provider,curOp.ProvHygienist);
-						}
-						else{//practice
-							schedDefs=SchedDefaults.GetForType(ScheduleType.Practice,0);
-						}
-					}
-					for(int i=0;i<schedDefs.Length;i++){
-						if(schedDefs[i].DayOfWeek==(int)Appointments.DateSelected.DayOfWeek){
-							g.FillRectangle(openBrush
-								,TimeWidth+ProvWidth*ProvCount+j*ColWidth
-								,schedDefs[i].StartTime.Hour*Lh*RowsPerHr+schedDefs[i].StartTime.Minute*Lh/MinPerRow
-								,ColWidth
-								,(schedDefs[i].StopTime-schedDefs[i].StartTime).Hours*Lh*RowsPerHr
-								+(schedDefs[i].StopTime-schedDefs[i].StartTime).Minutes*Lh/MinPerRow);
-						}
-					}
+				if(isHoliday){
+					g.FillRectangle(holidayBrush,TimeWidth+ProvWidth*ProvCount+j*ColWidth,0,ColWidth,Height);
 				}
-				else{//use schedForType
-					for(int i=0;i<schedForType.Length;i++){	
-						if(schedForType[i].Status==SchedStatus.Holiday){
- 							//g.FillRectangle(holidayBrush,TimeWidth+ProvWidth*ProvCount,0,ColWidth*ColCount,Height);
-							g.FillRectangle(holidayBrush,TimeWidth+ProvWidth*ProvCount+j*ColWidth,0,ColWidth,Height);
-						} 
-						else{
- 							g.FillRectangle(openBrush
-								,TimeWidth+ProvWidth*ProvCount+j*ColWidth
-								,schedForType[i].StartTime.Hour*Lh*RowsPerHr+(int)schedForType[i].StartTime.Minute*Lh/MinPerRow//6RowsPerHr 10MinPerRow
-								,ColWidth
-								,(schedForType[i].StopTime-schedForType[i].StartTime).Hours*Lh*RowsPerHr//6
-								+(schedForType[i].StopTime-schedForType[i].StartTime).Minutes*Lh/MinPerRow);//10
-						}
-					}         
-				}//else use schedForType
-			}//for colCount
+				for(int i=0;i<schedForType.Length;i++){
+					g.FillRectangle(openBrush
+						,TimeWidth+ProvWidth*ProvCount+j*ColWidth
+						,schedForType[i].StartTime.Hour*Lh*RowsPerHr+(int)schedForType[i].StartTime.Minute*Lh/MinPerRow//6RowsPerHr 10MinPerRow
+						,ColWidth
+						,(schedForType[i].StopTime-schedForType[i].StartTime).Hours*Lh*RowsPerHr//6
+						+(schedForType[i].StopTime-schedForType[i].StartTime).Minutes*Lh/MinPerRow);//10
+				}         
+			}
 		}
 
 		///<summary>Draws all the blockouts for the entire day.</summary>

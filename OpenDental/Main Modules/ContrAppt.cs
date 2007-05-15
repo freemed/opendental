@@ -1371,16 +1371,8 @@ namespace OpenDental{
 				}
 				ContrApptSingle3=null;
 			}
-			if(isWeeklyView) {
-				ListDay=Appointments.GetForPeriod(startDate,endDate);
-				SchedListDay=Schedules.RefreshPeriod(startDate,endDate);
-			}
-			else {
-				//ListDay=Appointments.Refresh(myDate);
-				//SchedListDay=Schedules.RefreshDay(myDate);
-				ListDay=Appointments.GetForPeriod(startDate,endDate);
-				SchedListDay=Schedules.RefreshDay(startDate);
-			}
+			ListDay=Appointments.GetForPeriod(startDate,endDate);
+			SchedListDay=Schedules.RefreshPeriod(startDate,endDate);
 			labelDate.Text=startDate.ToString("ddd");
 			labelDate2.Text=startDate.ToString("-  MMM d");
 			Calendar2.SetDate(startDate);
