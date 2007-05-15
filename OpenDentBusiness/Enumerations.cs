@@ -703,7 +703,9 @@ namespace OpenDentBusiness{
 		///<summary>2</summary>
 		Photo,
 		///<summary>3- For instance a Word document or a spreadsheet. Not an image.</summary>
-		File
+		File,
+		///<summary>4- For xray mount sets.</summary>
+		Mount,
 	}
 
 	///<summary>Used by QuickPasteCat to determine which category to default to when opening.</summary>

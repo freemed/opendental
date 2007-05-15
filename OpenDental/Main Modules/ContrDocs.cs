@@ -33,26 +33,21 @@ using xImageDeviceManager;
 namespace OpenDental{
 
 	///<summary></summary>
-	public class ContrDocs : System.Windows.Forms.UserControl	{
+	public class ContrDocs : System.Windows.Forms.UserControl {
+
+		#region Designer Generated Variables
+
 		private System.Windows.Forms.ImageList imageListTree;
 		private System.ComponentModel.IContainer components;
 		private System.Windows.Forms.ImageList imageListTools2;
 		private System.Windows.Forms.PrintDialog PrintDialog1;
 		private System.Drawing.Printing.PrintDocument PrintDocument2;
 		private System.Windows.Forms.TreeView TreeDocuments;
-		///<summary>When dragging on Picturebox, this is the starting point in PictureBox coordinates.</summary>
-		private Point MouseDownOrigin;
-		private bool MouseIsDown;
-		private System.Drawing.Bitmap ImageCurrent=null;
 		private System.Windows.Forms.MainMenu mainMenu1;
 		private System.Windows.Forms.MenuItem menuItem1;
 		private System.Windows.Forms.MenuItem menuExit;
 		private System.Windows.Forms.MenuItem menuPrefs;
-		///<summary>The path to the patient folder, including the letter folder, and ending with \.  It's public for NewPatientForm.com functionality.</summary>
-		public string patFolder;
 		private OpenDental.UI.ODToolBar ToolBarMain;
-		///<summary>Starts out as false. It's only used when repainting the toolbar, not to test mode.</summary>
-		private bool IsCropMode;
 		private System.Windows.Forms.MenuItem menuItem2;
 		private System.Windows.Forms.ContextMenu contextTree;
 		private System.Windows.Forms.MenuItem menuItem3;
@@ -69,8 +64,6 @@ namespace OpenDental{
 		private Panel paintToolsUnderline;
 		private Panel panel1;
 		private System.Windows.Forms.PictureBox PictureBox1;
-		///<summary>Used to display Topaz signatures on Windows. Is added dynamically to avoid native code references crashing MONO.</summary>
-		private Topaz.SigPlusNET sigBoxTopaz;
 		///<summary></summary>
 		[Category("Data"),Description("Occurs when user changes current patient, usually by clicking on the Select Patient button.")]
 		public event PatientSelectedEventHandler PatientSelected=null;
@@ -90,32 +83,47 @@ namespace OpenDental{
 		///<summary></summary>
 		[System.Runtime.InteropServices.DllImport("EZTW32.DLL")] 
 		public static extern int TWAIN_EasyVersion();// spk 10/05/04
+		private ContextMenu menuForms;
+
+		#endregion
+
+		#region Manually Created Variables
+
+		///<summary>Used to display Topaz signatures on Windows. Is added dynamically to avoid native code references crashing MONO.</summary>
+		private Topaz.SigPlusNET sigBoxTopaz;
+		///<summary>Starts out as false. It's only used when repainting the toolbar, not to test mode.</summary>
+		private bool IsCropMode;
 		///<summary>The only reason this is public is for NewPatientForm.com functionality.</summary>
 		public Patient PatCur;
 		private Family FamCur;
-		private ContextMenu menuForms;
-		///<summary>The offset of the image due to the grab tool. Used as a basis for calculating imageTranslation.</summary>
-		PointF imageLocation=new PointF(0,0);
-		///<summary>The true offset of the image in screen-space.</summary>
-		PointF imageTranslation=new PointF(0,0);
-		///<summary>The current zoom of the image. 1 implies normal size, <1 implies the image is shrunk, >1 imples the image is blown-up.</summary>
-		float imageZoom=1.0f;
-		///<summary>The current amount. The zoomLevel is 0 after an image is loaded. The image is zoomed a factor of (initial image zoom)*(2^zoomLevel)</summary>
-		int zoomLevel=0;
-		///<summary>Represents the current factor for level of zoom from the initial zoom of the image. This is calculated directly as 2^zoomLevel every time a zoom occurs. Recalculated from zoomLevel each time, so that zoomFactor always hits the exact same values for the exact same zoom levels (not loss of data).</summary>
-		float zoomFactor=1;
-		///<summary>Represents the ImageCurrent image after the document settings have been applied.</summary>
+		///<summary>When dragging on Picturebox, this is the starting point in PictureBox coordinates.</summary>
+		private Point MouseDownOrigin;
+		private bool MouseIsDown;
+		///<summary>The path to the patient folder, including the letter folder, and ending with \.  It's public for NewPatientForm.com functionality.</summary>
+		public string patFolder;
+		///<summary>In-memory copies of the images being viewed/edited. No changes are made to these images in memory, they are just kept resident to avoid having to reload the images from disk each time the screen needs to be redrawn.</summary>
+		Bitmap[] currentImages;
+		///<summary>Used as a basis for calculating image translations.</summary>
+		PointF imageLocation;
+		///<summary>The true offset of each of the currently loaded images in screen-space.</summary>
+		PointF[] imageTranslations;
+		///<summary>The current zoom of the currently loaded images. 1 implies normal size, <1 implies the image is shrunk, >1 imples the image is blown-up.</summary>
+		float[] imageZooms;
+		///<summary>The zoom levels are 0 after the current images are loaded. The images are zoomed a factor of (initial image zoom)*(2^zoomLevel) individually.</summary>
+		int[] zoomLevels;
+		///<summary>Represents the current factor for level of zoom from the initial zoom of the currently loaded images. This is calculated directly as 2^zoomLevel[i] every time a zoom occurs. Recalculated from zoomLevel[i] each time, so that zoomFactor[i] always hits the exact same values for the exact same zoom levels (no loss of data).</summary>
+		float[] zoomFactors;
+		///<summary>Used to prevent concurrent access to the current images by multiple threads.</summary>
+		int[] curImageWidths;
+		///<summary>Used to prevent concurrent access to the current images by multiple threads.</summary>
+		int[] curImageHeights;
+		///<summary>The image currently on the screen.</summary>
 		Bitmap renderImage=null;
 		Rectangle cropTangle=new Rectangle(0,0,-1,-1);
-		const int thumbSize=100;
 		///<summary>Used for performing an xRay image capture on an imaging device.</summary>
 		DeviceControl xRayImageController=null;
 		///<summary>Thread to handle updating the graphical image to the screen when the current document is an image.</summary>
 		Thread myThread=null;
-		///<summary>Used to prevent concurrent access to the current image by multiple threads.</summary>
-		int curImageWidth=0;
-		///<summary>Used to prevent concurrent access to the current image by multiple threads.</summary>
-		int curImageHeight=0;
 		ApplySettings InvalidatedSettingsFlag;
 		///<summary>Used as a thread-safe communication device between the main and worker threads.</summary>
 		EventWaitHandle settingHandle=new EventWaitHandle(false,EventResetMode.AutoReset);
@@ -124,13 +132,15 @@ namespace OpenDental{
 		///<summary>Set by the main thread and read by the image worker thread. Specifies which image processing tasks are to be performed by the worker thread.</summary>
 		ApplySettings settingFlags=ApplySettings.NONE;
 		///<summary>Used to perform mouse selections in the TreeDocuments list.</summary>
-		string treeDocNumDown="";
+		string treeIdNumDown="";
 		///<summary>Used to keep track of the old document selection by document number (the only guaranteed unique idenifier). This is to help the code be compatible with both Windows and MONO.</summary>
-		string oldSelectDocNum="";
+		string oldSelectionIdentifier="";
 		///<summary>Used for Invoke() calls in RenderCurrentImage() to safely handle multi-thread access to the picture box.</summary>
 		delegate void RenderImageCallback(Document doc);
 		///<summary>Used to safe-guard against multi-threading issues when an image capture is completed.</summary>
 		delegate void CaptureCompleteCallback(object sender,EventArgs e);
+
+		#endregion
 
 		///<summary></summary>
 		public ContrDocs(){
@@ -190,6 +200,7 @@ namespace OpenDental{
 			this.menuPatient = new System.Windows.Forms.ContextMenu();
 			this.panelNote = new System.Windows.Forms.Panel();
 			this.labelInvalidSig = new System.Windows.Forms.Label();
+			this.sigBox = new OpenDental.UI.SignatureBox();
 			this.label15 = new System.Windows.Forms.Label();
 			this.label1 = new System.Windows.Forms.Label();
 			this.textNote = new System.Windows.Forms.TextBox();
@@ -198,7 +209,6 @@ namespace OpenDental{
 			this.ToolBarMain = new OpenDental.UI.ODToolBar();
 			this.paintTools = new OpenDental.UI.ODToolBar();
 			this.brightnessContrastSlider = new OpenDental.UI.ContrWindowingSlider();
-			this.sigBox = new OpenDental.UI.SignatureBox();
 			((System.ComponentModel.ISupportInitialize)(this.PictureBox1)).BeginInit();
 			this.panelNote.SuspendLayout();
 			this.SuspendLayout();
@@ -250,11 +260,12 @@ namespace OpenDental{
 			this.imageListTree.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imageListTree.ImageStream")));
 			this.imageListTree.TransparentColor = System.Drawing.Color.Transparent;
 			this.imageListTree.Images.SetKeyName(0,"");
-			this.imageListTree.Images.SetKeyName(1,"imageFolder.gif");
+			this.imageListTree.Images.SetKeyName(1,"");
 			this.imageListTree.Images.SetKeyName(2,"");
-			this.imageListTree.Images.SetKeyName(3,"imageXray.gif");
-			this.imageListTree.Images.SetKeyName(4,"imagePhoto.gif");
+			this.imageListTree.Images.SetKeyName(3,"");
+			this.imageListTree.Images.SetKeyName(4,"");
 			this.imageListTree.Images.SetKeyName(5,"");
+			this.imageListTree.Images.SetKeyName(6,"");
 			// 
 			// PrintDialog1
 			// 
@@ -355,6 +366,14 @@ namespace OpenDental{
 			this.labelInvalidSig.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			this.labelInvalidSig.DoubleClick += new System.EventHandler(this.labelInvalidSig_DoubleClick);
 			// 
+			// sigBox
+			// 
+			this.sigBox.Location = new System.Drawing.Point(308,20);
+			this.sigBox.Name = "sigBox";
+			this.sigBox.Size = new System.Drawing.Size(394,91);
+			this.sigBox.TabIndex = 90;
+			this.sigBox.DoubleClick += new System.EventHandler(this.sigBox_DoubleClick);
+			// 
 			// label15
 			// 
 			this.label15.Location = new System.Drawing.Point(305,0);
@@ -434,14 +453,6 @@ namespace OpenDental{
 			this.brightnessContrastSlider.Scroll += new System.EventHandler(this.brightnessContrastSlider_Scroll);
 			this.brightnessContrastSlider.ScrollComplete += new System.EventHandler(this.brightnessContrastSlider_ScrollComplete);
 			// 
-			// sigBox
-			// 
-			this.sigBox.Location = new System.Drawing.Point(308,20);
-			this.sigBox.Name = "sigBox";
-			this.sigBox.Size = new System.Drawing.Size(394,91);
-			this.sigBox.TabIndex = 90;
-			this.sigBox.DoubleClick += new System.EventHandler(this.sigBox_DoubleClick);
-			// 
 			// ContrDocs
 			// 
 			this.Controls.Add(this.panel1);
@@ -481,6 +492,12 @@ namespace OpenDental{
 			paintTools.Size=new Size(PictureBox1.Width-brightnessContrastSlider.Width-4,paintTools.Height);
 			paintToolsUnderline.Location=new Point(PictureBox1.Location.X,paintToolsUnderline.Location.Y);
 			paintToolsUnderline.Width=Width-paintToolsUnderline.Location.X;
+		}
+
+		///<summary>Sets the panelnote visibility based on the given document's signature data and the current operating system.</summary>
+		private void SetPanelNoteVisibility(Document doc) {
+			panelNote.Visible=(((doc.Note!=null && doc.Note!="") || (doc.Signature!=null && doc.Signature!="")) && 
+				(Environment.OSVersion.Platform!=PlatformID.Unix || !doc.SigIsTopaz));
 		}
 
 		///<summary></summary>
@@ -529,7 +546,7 @@ namespace OpenDental{
 				DirectoryInfo dirInfo=new DirectoryInfo(formDir);
 				FileInfo[] fileInfos=dirInfo.GetFiles();
 				for(int i=0;i<fileInfos.Length;i++){
-					if(IsAcceptableFileName(fileInfos[i].FullName)){
+					if(Documents.IsAcceptableFileName(fileInfos[i].FullName)){
 						menuForms.MenuItems.Add(fileInfos[i].Name,new System.EventHandler(menuForms_Click));
 					}
 				}
@@ -644,28 +661,13 @@ namespace OpenDental{
 				}
 			}
 			//now find all files in the patient folder that are not in the db and add them
-			List<DocAttach> DocAttachList=DocAttaches.Refresh(PatCur.PatNum);
-			Document[] DocumentList=Documents.Refresh(DocAttachList);
 			DirectoryInfo di=new DirectoryInfo(patFolder);
 			FileInfo[] fiList=di.GetFiles();
-			int countAdded=0;
-			string[] usedNames=new string[DocumentList.Length];
-			for(int i=0;i<DocumentList.Length;i++) {
-				usedNames[i]=DocumentList[i].FileName;
+			string[] fileList=new string[fiList.Length];
+			for(int i=0;i<fileList.Length;i++){
+				fileList[i]=fiList[i].Name;
 			}
-			for(int i=0;i<fiList.Length;i++){
-				if(!DocumentB.IsFileNameInList(fiList[i].Name,usedNames)
-					&& IsAcceptableFileName(fiList[i].Name)){
-					Document doc=new Document();
-					doc.DateCreated=DateTime.Today;
-					doc.Description=fiList[i].Name;
-					doc.DocCategory=DefB.Short[(int)DefCat.ImageCats][0].DefNum;
-					doc.FileName=fiList[i].Name;
-					doc.PatNum=PatCur.PatNum;
-					Documents.Insert(doc,PatCur);
-					countAdded++;
-				}
-			}
+			int countAdded=Documents.InsertMissing(PatCur,fileList);
 			if(countAdded>0){
 				MessageBox.Show(countAdded.ToString()+" documents found and added to the first category.");
 			}
@@ -721,7 +723,7 @@ namespace OpenDental{
 			FillPatientButton();
 			ToolBarMain.Invalidate();
 			paintTools.Invalidate();
-			FillDocList("",false);
+			FillDocList(false);
 		}
 
 		private void FillPatientButton(){
@@ -741,21 +743,115 @@ namespace OpenDental{
 				PatientSelected(this,eArgs);
 		}
 
-		private TreeNode GetTreeDocumentNode(string docNum) {
-			return GetTreeDocumentNode(docNum,TreeDocuments.Nodes);//This defines the root node.
+		///<summary>Selection doesn't only happen by the tree and mouse clicks, but can also happen by automatic processes, such as image import, image paste, etc...</summary>
+		private void SelectTreeNode(TreeNode node){
+			//Select the node always, but perform additional tasks when necessary (i.e. load an image, or mount).
+			TreeDocuments.SelectedNode=node;
+			TreeDocuments.Invalidate();
+			//We only perform a load if the new selection is different than the old selection.
+			string identifier=GetNodeIdentifier(node);
+			if(identifier==oldSelectionIdentifier){
+				return;
+			}
+			oldSelectionIdentifier=identifier;
+			//Disable all paint tools until the currently selected node is loaded properly in the picture box.
+			paintTools.Enabled=false;
+			//Must disable the brightnessContrastSlider seperately, since it is not actually in the paintTools control.
+			brightnessContrastSlider.Enabled=false;
+			//Stop any current image processing. This will avoid having the renderImage set to a valid image after
+			//the current image has been erased. This will also avoid concurrent access to the the currently loaded images by
+			//the main and worker threads.
+			EraseCurrentImage();
+			if(identifier.Length<1){//A folder was selected (or unselection, but I am not sure unselection would be possible here).
+				//The panel note control is made invisible to start and then made visible for the appropriate documents. This
+				//line prevents the possibility of showing a signature box after selecting a folder node.
+				panelNote.Visible=false;
+				//Make sure the controls are sized properly in the image module since the visibility of the panel note might
+				//have just changed.
+				ResizeAll();
+			}else{//A node that requires processing was selected.
+				DataRow obj=(DataRow)node.Tag;
+				int mountNum=Convert.ToInt32(obj["MountNum"].ToString());
+				int docNum=Convert.ToInt32(obj["DocNum"].ToString());
+				if(mountNum!=0){//This is a mount node.
+					MountItem[] mountItems=MountItems.GetItemsForMount(mountNum);
+					
+				}else{//This is a document node.
+					//Reload the doc from the db. We don't just keep reusing the tree data, because it will become more and 
+					//more stail with age if the program is left open in the image module for long periods of time.
+					Document selectDoc=Documents.GetByNum(docNum);
+					string srcFileName=ODFileUtils.CombinePaths(patFolder,selectDoc.FileName);
+					if(File.Exists(srcFileName)) {
+						if(HasImageExtension(srcFileName)) {
+							if(selectDoc.WindowingMax==0) {
+								//The document brightness/contrast settings have never been set. By default, we use settings
+								//which do not alter the original image.
+								brightnessContrastSlider.MinVal=0;
+								brightnessContrastSlider.MaxVal=255;
+							}else{
+								brightnessContrastSlider.MinVal=selectDoc.WindowingMin;
+								brightnessContrastSlider.MaxVal=selectDoc.WindowingMax;
+							}
+							paintTools.Enabled=true;								//Only allow painting tools to be used when a valid image has been loaded.
+							brightnessContrastSlider.Enabled=true;	//The brightnessContrastSlider is not actually part of the paintTools
+																											//toolbar, and so it must be enabled or disabled seperately.
+							currentImages=new Bitmap[1];
+							currentImages[0]=new Bitmap(srcFileName);
+							curImageWidths=new int[1];
+							curImageWidths[0]=currentImages[0].Width;
+							curImageHeights=new int[1];
+							curImageHeights[0]=currentImages[0].Height;
+							imageZooms=new float[1];//Values set in ReloadZoomTransCrop()
+							zoomLevels=new int[1];//Values set in ReloadZoomTransCrop()
+							zoomFactors=new float[1];//Values set in ReloadZoomTransCrop()
+							imageTranslations=new PointF[1];//Values set in ReloadZoomTransCrop()
+						}
+					}else{
+						MessageBox.Show(Lan.g(this,"File not found: ")+srcFileName);
+					}
+					//Adjust visibility of panel note control based on if the new document has a signature.
+					SetPanelNoteVisibility(selectDoc);
+					//Resize controls in our window to adjust for a possible change in the visibility of the panel note control.
+					ResizeAll();
+					//Refresh the signature and note in case the last document also had a signature.
+					FillSignature();
+				}
+				//Render the initial image within the current bounds of the picturebox (if the document is an image).
+				InvalidateSettings(ApplySettings.ALL,true);
+			}
 		}
 
-		///<summary>Searches the current file tree for a document row which has the given unique document number. This will work for a tree with any number of nested folders, as long as tags are defined only for items which correspond to data rows.</summary>
-		private TreeNode GetTreeDocumentNode(string docNum, TreeNodeCollection rootNodes){
-			if(docNum!=null && rootNodes!=null){
-				foreach(TreeNode n in rootNodes){
+		///<summary>Gets the category folder name for the given document node.</summary>
+		private string GetCurrentFolderName(TreeNode node) {
+			if(node!=null) {
+				while(node.Parent!=null) {//Find the corresponding root level node.
+					node=node.Parent;
+				}
+				return node.Text;
+			}
+			return "";
+		}
+
+		///<summary>Gets the document category of the current selection. The current selection can be a folder itself, or a document within a folder.</summary>
+		private int GetCurrentCategory() {
+			return DefB.GetByExactName(DefCat.ImageCats,GetCurrentFolderName(TreeDocuments.SelectedNode));
+		}
+
+		///<summary>Returns the current tree node with the given node id.</summary>
+		private TreeNode GetNodeById(string nodeId) {
+			return GetNodeById(nodeId,TreeDocuments.Nodes);//This defines the root node.
+		}
+
+		///<summary>Searches the current object tree for a row which has the given unique document number. This will work for a tree with any number of nested folders, as long as tags are defined only for items which correspond to data rows.</summary>
+		private TreeNode GetNodeById(string nodeId,TreeNodeCollection rootNodes) {
+			if(nodeId!=null && rootNodes!=null) {
+				foreach(TreeNode n in rootNodes) {
 					if(n!=null){
-						Document nodeDoc=GetDocumentFromNode(n);
-						if(nodeDoc!=null && nodeDoc.DocNum.ToString()==docNum){
+						if(GetNodeIdentifier(n)==nodeId) {
 							return n;
 						}else{//Check the child nodes.
-							TreeNode child=GetTreeDocumentNode(docNum,n.Nodes);
-							if(child!=null){
+							TreeNode child=GetNodeById(nodeId,n.Nodes);
+							if(child!=null) {
 								return child;
 							}
 						}
@@ -765,210 +861,50 @@ namespace OpenDental{
 			return null;
 		}
 
-		private int DocumentTypeToImageListIndex(ImageType imageType){
-			if(imageType==ImageType.File){
-				return 5;
-			}else if(imageType==ImageType.Radiograph){
-				return 3;
-			}else if(imageType==ImageType.Photo){
-				return 4;
+		///<summary>Constructs a unique node identifier that would be the same for nodes with tags containing the same data.</summary>
+		private string GetNodeIdentifier(TreeNode node) {
+			if(node==null || node.Tag==null || node.Parent==null) {//Invalid node or is a folder node.
+				return "";
 			}
-			return 2;//document
+			DataRow obj=(DataRow)node.Tag;
+			return MakeIdentifier(obj["DocNum"].ToString(),obj["MountNum"].ToString());
 		}
 
-		///<summary> 0<=index<=parentNode.Nodes.Count</summary>
-		private void AddTreeDocumentNodeAtIndex(ref Document doc,DataRow tag,bool selectNewNode,int index) {
-			TreeNode addNode=new TreeNode(doc.DateCreated.ToString("d")+": "+doc.Description);
-			int parentNode=DefB.GetOrder(DefCat.ImageCats,doc.DocCategory);
-			parentNode=(parentNode>0?parentNode:0);
-			TreeDocuments.Nodes[parentNode].Nodes.Insert(index,addNode);
-			addNode.Tag=tag;
-			addNode.ImageIndex=DocumentTypeToImageListIndex(doc.ImgType);
-			addNode.SelectedImageIndex=addNode.ImageIndex;
-			if(selectNewNode) {
-				SelectTreeDocumentNode(addNode);
-				doc=GetDocumentFromNode(TreeDocuments.SelectedNode);//Refresh the added document, since settings may have been adjusted
-																														//during selection process.
-			}
-			TreeDocuments.Invalidate();
+		///<summary>One of the given parameters must be positive, and the other must be zero.</summary>
+		private string MakeIdentifier(string docNum,string mountNum){
+			return docNum+"*"+mountNum;
 		}
 
-		///<summary>The document must have already been committed to the database.</summary>
-		private void AddTreeDocumentNode(ref Document doc,DataRow tag,bool selectNewNode){
-			int parentNode=DefB.GetOrder(DefCat.ImageCats,doc.DocCategory);
-			parentNode=(parentNode>0?parentNode:0);
-			int i=TreeDocuments.Nodes[parentNode].Nodes.Count-1;
-			while(i>=0 && //Order items by date in ascending order.
-				Documents.Fill((DataRow)TreeDocuments.Nodes[parentNode].Nodes[i].Tag).DateCreated.CompareTo(doc.DateCreated)>0){
-				i--;
-			}
-			AddTreeDocumentNodeAtIndex(ref doc,tag,selectNewNode,i+1);
-		}
-
-		///<summary>Simply deletes the specified node from the tree.</summary>
-		private void DeleteTreeDocumentNode(TreeNode deleteNode){
-			if(deleteNode==null || deleteNode.Parent==null){
-				return;
-			}
-			deleteNode.Parent.Nodes.Remove(deleteNode);
-			TreeDocuments.Invalidate();
-		}
-
-		///<summary>Moves the given document from its current node in the TreeDocuments list to another parent folder, or simply updates the given document if a request is made to move the document from its current folder back to the same folder. The moveDoc is provided as a reference so it can be updated along with the tree list when reading from the db, to ensure that the calling code's local document is the same as the tree list document.</summary>
-		private void MoveTreeDocumentNode(ref Document moveDoc,int newCategory,bool selectMovedNode){
-			if(moveDoc==null){
-				return;
-			}
-			TreeNode moveNode=GetTreeDocumentNode(moveDoc.DocNum.ToString());
-			if(moveNode==null) {
-				return;
-			}
-			string curFolder=GetCurrentFolderName(moveNode);
-			string destFolder=DefB.GetName(DefCat.ImageCats,newCategory);
-			DataRow tag=Documents.GetDocumentRow(moveDoc.DocNum.ToString());
-			//Only physically move the node in the tree if it is changing parent folders.
-			if(curFolder!=destFolder){
-				moveDoc.DocCategory=newCategory;
-				tag["DocCategory"]=newCategory;
-				DeleteTreeDocumentNode(moveNode);
-				AddTreeDocumentNode(ref moveDoc,tag,selectMovedNode);
-				Documents.Update(moveDoc);
-			}else{//Otherwise, simply update the document in the tree.
-				moveNode.Tag=Documents.GetDocumentRow(moveDoc.DocNum.ToString());
-				moveDoc=Documents.Fill((DataRow)moveNode.Tag);
-				if(selectMovedNode){
-					SelectTreeDocumentNode(moveNode);
-				}
-			}
-		}
-
-		///<summary>Selection doesn't only happen by the document tree and mouse clicks, but can also happen by automatic processes, such as image import, image paste, etc...</summary>
-		private void SelectTreeDocumentNode(TreeNode docNode){
-			//Select the node always, but perform additional tasks when necessary (i.e. load an image).
-			TreeDocuments.SelectedNode=docNode;
-			TreeDocuments.Invalidate();
-			Document selectDoc=GetDocumentFromNode(docNode);
-			//We only perform a load if the new selection is different than the old selection.
-			string docNum="";
-			if(selectDoc!=null){
-				docNum=selectDoc.DocNum.ToString();
-			}
-			if(docNum==oldSelectDocNum){
-				return;
-			}
-			oldSelectDocNum=docNum;
-			//Disable all paint tools until the currently selected document is loaded properly as an image.
-			paintTools.Enabled=false;
-			//Must disable the brightnessContrastSlider seperately, since it is not actually in the paintTools control.
-			brightnessContrastSlider.Enabled=false;
-			//Stop any current image processing. This will avoid having the renderImage set to a valid image after
-			//the current image has been erased. This will also avoid concurrent access to the ImageCurrent by
-			//the main and worker threads.
-			EraseCurrentImage();
-			if(selectDoc==null){//A folder was selected.
-				//The panel note control is made invisible to start and then made visible for the appropriate documents. This
-				//line prevents the possibility of showing a signature box after selecting a folder node.
-				panelNote.Visible=false;
-				//Make sure the controls are sized properly in the image module since the visibility of the panel note might
-				//have just changed.
-				ResizeAll();
-			}else{//A document was selected.
-				string srcFileName=ODFileUtils.CombinePaths(patFolder,selectDoc.FileName);
-				if(File.Exists(srcFileName)) {
-					if(HasImageExtension(srcFileName)) {
-						if(selectDoc.WindowingMax==0) {
-							//The document brightness/contrast settings have never been set. By default, we use settings
-							//which do not alter the original image.
-							brightnessContrastSlider.MinVal=0;
-							brightnessContrastSlider.MaxVal=255;
-						}else{
-							brightnessContrastSlider.MinVal=selectDoc.WindowingMin;
-							brightnessContrastSlider.MaxVal=selectDoc.WindowingMax;
-						}
-						paintTools.Enabled=true;								//Only allow painting tools to be used when a valid image has been loaded.
-						brightnessContrastSlider.Enabled=true;	//The brightnessContrastSlider is not actually part of the paintTools
-																										//toolbar, and so it must be enabled or disabled seperately.
-						ImageCurrent=new Bitmap(srcFileName);
-						curImageWidth=ImageCurrent.Width;
-						curImageHeight=ImageCurrent.Height;
-					}
-				}else{
-					MessageBox.Show(Lan.g(this,"File not found: ")+srcFileName);
-				}
-				//Adjust visibility of panel note control based on if the new document has a signature.
-				SetPanelNoteVisibility(selectDoc);
-				//Resize controls in our window to adjust for a possible change in the visibility of the panel note control.
-				ResizeAll();
-				//Refresh the signature and note in case the last document also had a signature.
-				FillSignature();
-				//Render the initial image within the current bounds of the picturebox (if the document is an image).
-				InvalidateSettings(ApplySettings.ALL,true);
-			}
-		}
-
-		///<summary>Sets the panelnote visibility based on the given document's signature data and the current operating system.</summary>
-		private void SetPanelNoteVisibility(Document doc){
-			panelNote.Visible=(((doc.Note!=null && doc.Note!="") || (doc.Signature!=null && doc.Signature!="")) && 
-				(Environment.OSVersion.Platform!=PlatformID.Unix || !doc.SigIsTopaz));
-		}
-
-		/// <summary>Refreshes list from db, then fills the treeview.  Set to an existing document number (as a string) to keep the current doc displayed, or set to "" to clear the current document.</summary>
-		private void FillDocList(string docNum,bool verbose){
-  	  string sNewNode;
-			SelectTreeDocumentNode(null);
+		/// <summary>Refreshes list from db, then fills the treeview.  Set keepDoc to true in order to keep the current selection active.</summary>
+		private void FillDocList(bool keepDoc){
+			//Clear current tree contents.
+			TreeDocuments.SelectedNode=null;
 			TreeDocuments.Nodes.Clear();
 			if(PatCur==null){
 				return;
 			}
-			List<DocAttach> DocAttachList=DocAttaches.Refresh(PatCur.PatNum);
-			if(DocAttachList==null){
-				return;
-			}
-			DataTable documentTable=Documents.RefreshTable(DocAttachList);
-			if(documentTable==null){
-				return;
-			}
-			Document[] DocumentList=Documents.Fill(documentTable);
-			if(DocumentList==null){
-				return;
-			}
 			//Add all predefined folder names to the tree.
 			for(int i=0;i<DefB.Short[(int)DefCat.ImageCats].Length;i++){
-				sNewNode=DefB.Short[(int)DefCat.ImageCats][i].ItemName;
-				TreeDocuments.Nodes.Add(new TreeNode(sNewNode));
+				TreeDocuments.Nodes.Add(new TreeNode(DefB.Short[(int)DefCat.ImageCats][i].ItemName));
 				TreeDocuments.Nodes[i].SelectedImageIndex=1;
 				TreeDocuments.Nodes[i].ImageIndex=1;
 			}
-			int hiddenObjectCount=0;
-			//Add all relevant documents as stored in the database to the tree for the current patient.
-			for(int i=0;i<DocumentList.Length;i++){
-				if(DefB.GetOrder(DefCat.ImageCats,DocumentList[i].DocCategory)!=-1) {//Don't add hidden objects.
-					if(DocumentList[i].MountItemNum==0){//Do not add individual documents which are part of a mount object.
-						AddTreeDocumentNode(ref DocumentList[i],documentTable.Rows[i],false);
-					}
-				}else{
-					hiddenObjectCount++;
-				}
+			//Add all relevant documents and mounts as stored in the database to the tree for the current patient.
+			string selectionId=(keepDoc?GetNodeIdentifier(TreeDocuments.SelectedNode):"");
+			DataSet patientDocData=Documents.RefreshForPatient(new string[] { PatCur.PatNum.ToString() });
+			DataRowCollection rows=patientDocData.Tables["DocumentList"].Rows;
+			for(int i=0;i<rows.Count;i++) {
+				TreeNode node=new TreeNode(rows[i]["description"].ToString());
+				int parentFolder=Convert.ToInt32(rows[i]["docFolder"].ToString());
+				TreeDocuments.Nodes[parentFolder].Nodes.Add(node);
+				node.Tag=rows[i];
+				node.ImageIndex=2+Convert.ToInt32(rows[i]["ImgType"].ToString());
+				node.SelectedImageIndex=node.ImageIndex;
+				if(GetNodeIdentifier(node)==selectionId){
+					SelectTreeNode(node);
+				}				
 			}
-			//Add all mounts for the current patient to the tree-view.
-			Mount[] mounts=Mounts.Refresh(PatCur.PatNum);
-			for(int i=0;i<mounts.Length;i++){
-				if(DefB.GetOrder(DefCat.ImageCats,mounts[i].DocCategory)!=-1) {//Don't add hidden objects.
-					
-				}else{
-					hiddenObjectCount++;
-				}
-			}
-
-
-			TreeDocuments.ExpandAll();
-			SelectTreeDocumentNode(GetTreeDocumentNode(docNum));
-			if(verbose){
-				if(hiddenObjectCount>0){
-					MessageBox.Show("There are currently "+hiddenObjectCount+
-						" hidden objects for this patient that are not visible in the file list.");
-				}
-			}
+			TreeDocuments.ExpandAll();//Invalidates tree too.
 		}
 
 		private void ToolBarMain_ButtonClick(object sender, OpenDental.UI.ODToolBarButtonClickEventArgs e) {
@@ -1058,12 +994,11 @@ namespace OpenDental{
 				OnPatientSelected(formPS.SelectedPatNum);
 				ModuleSelected(formPS.SelectedPatNum);
 			}
-			FillDocList("",true);
+			FillDocList(false);
 		}
 
 		private void OnPrint_Click(){
-			Document printDoc=GetDocumentFromNode(TreeDocuments.SelectedNode);
-			if(printDoc==null){
+			if(TreeDocuments.SelectedNode==null || TreeDocuments.SelectedNode.Tag==null){
 				MsgBox.Show(this,"Cannot print. No document currently selected.");
 				return;
 			}
@@ -1083,18 +1018,19 @@ namespace OpenDental{
 			}
 		}
 
-		///<summary>If the node does not correspond to a valid document, nothing happens. Otherwise the document record and its corresponding file are deleted. The function only reports errors or asks the user if they want to delete the file if verbose is set to true.</summary>
+		///<summary>If the node does not correspond to a valid document or mount, nothing happens. Otherwise the document/mount record and its corresponding file(s) are deleted.</summary>
 		private void OnDelete_Click(){
-			Document doc=GetDocumentFromNode(TreeDocuments.SelectedNode);
-			if(doc==null) {
-				return;
-			}
-			DeleteDocument(doc,true);
+			DeleteSelection(true);
 		}
 		
-		private void DeleteDocument(Document doc,bool verbose){
-			if(doc==null){
-				MessageBox.Show("Error getting document info.");//should never happen
+		///<summary>Deletes the current selection from the database and refreshes the tree view.</summary>
+		private void DeleteSelection(bool verbose){
+			if(TreeDocuments.SelectedNode==null || TreeDocuments.SelectedNode.Tag==null) {
+				MsgBox.Show(this,"No item is currently selected");
+				return;//No current selection, or some kind of internal error somehow.
+			}
+			if(TreeDocuments.SelectedNode.Parent==null){
+				MsgBox.Show(this,"Cannot delete folders");
 				return;
 			}
 			if(verbose){
@@ -1102,31 +1038,59 @@ namespace OpenDental{
 					return;
 				}
 			}
-			if(TreeDocuments.SelectedNode!=null && TreeDocuments.SelectedNode.Parent!=null){
-				TreeDocuments.SelectedNode.Parent.Nodes.Remove(TreeDocuments.SelectedNode);//does this really belong here?
+			DataRow obj=(DataRow)TreeDocuments.SelectedNode.Tag;
+			int mountNum=Convert.ToInt32(obj["MountNum"].ToString());
+			int docNum=Convert.ToInt32(obj["DocNum"].ToString());
+			Document[] docs;
+			if(mountNum!=0){//This is a mount object.
+				//Delete the mount object.
+				Mount mount=Mounts.GetByNum(mountNum);
+				Mounts.Delete(mount);
+				//Delete the mount items attached to the mount object.
+				MountItem[] mountItems=MountItems.GetItemsForMount(mountNum);
+				docs=new Document[mountItems.Length];
+				for(int i=0;i<mountItems.Length;i++){
+					docs[i]=Documents.GetDocumentForMountItem(mountItems[i].MountNum);//Mark the mountitem's document for deletion.
+					MountItems.Delete(mountItems[i]);
+				}
+			}else{
+				docs=new Document[1];
+				docs[0]=Documents.GetByNum(docNum);
 			}
-			try {
-				SelectTreeDocumentNode(null);//Release access to current image so it may be properly deleted.
-				string srcFile=ODFileUtils.CombinePaths(patFolder,doc.FileName);
-				if(File.Exists(srcFile)) {
-					File.Delete(srcFile);
+			//Delete all documents involved in deleting this object.
+			for(int i=0;i<docs.Length;i++){
+				try{
+					SelectTreeNode(null);//Release access to current image so it may be properly deleted.
+					string srcFile=ODFileUtils.CombinePaths(patFolder,docs[i].FileName);
+					if(File.Exists(srcFile)) {
+						File.Delete(srcFile);
+					}else if(verbose){
+						MsgBox.Show(this,"File could not be found. It may have already been deleted.");
+					}
+				}catch{
+					if(verbose) {
+						MsgBox.Show(this,"Could not delete file. It may be in use elsewhere, or may have already been deleted.");
+					}
 				}
-				else if(verbose){
-					MsgBox.Show(this,"File could not be found.  It may have already been deleted.");
-				}
-			}catch{
-				if(verbose) {
-					MsgBox.Show(this,"Could not delete file. It may be in use elsewhere, or may have already been deleted.");
-				}
+				Documents.Delete(docs[i]);
 			}
-			Documents.Delete(doc);
+			FillDocList(false);
 		}
 
 		private void OnSign_Click(){
-			Document curDoc=GetDocumentFromNode(TreeDocuments.SelectedNode);
-			if(curDoc==null){
+			if(TreeDocuments.SelectedNode==null ||				//No selection
+				TreeDocuments.SelectedNode.Tag==null ||			//Internal error
+				TreeDocuments.SelectedNode.Parent==null){		//This is a folder node.
 				return;
 			}
+			DataRow obj=(DataRow)TreeDocuments.SelectedNode.Tag;
+			int mountNum=Convert.ToInt32(obj["MountNum"].ToString());
+			int docNum=Convert.ToInt32(obj["DocNum"].ToString());
+			if(mountNum!=0){//Is this a mount object?
+				MsgBox.Show(this,"Cannot sign mount objects");
+				return;
+			}
+			Document curDoc=Documents.GetByNum(docNum);
 			//Show the underlying panel note box while the signature is being filled.
 			panelNote.Visible=true;
 			ResizeAll();
@@ -1136,10 +1100,9 @@ namespace OpenDental{
 			docSignForm.Location=PointToScreen(new Point(signLeft,this.ClientRectangle.Bottom-docSignForm.Height));
 			docSignForm.Width=Math.Max(0,Math.Min(docSignForm.Width,PictureBox1.Right-signLeft));
 			docSignForm.ShowDialog();
-			//Reload the document into the tree (since the tag/datarow may have had a signature or note change).
-			MoveTreeDocumentNode(ref curDoc,curDoc.DocCategory,true);
+			FillDocList(true);
 			//After the update, our local document copy is possibly out of date, so we must refresh it again.
-			curDoc=GetDocumentFromNode(TreeDocuments.SelectedNode);
+			curDoc=Documents.GetByNum(docNum);
 			//Adjust visibility of panel note based on changes made to the signature above.
 			SetPanelNoteVisibility(curDoc);
 			//Resize controls in our window to adjust for a possible change in the visibility of the panel note control.
@@ -1148,17 +1111,16 @@ namespace OpenDental{
 			FillSignature();
 		}
 
-		///<summary>Fills the panelnote control with the current document signature when the panelnote is visible and when a valid document is currently selected.</summary>
+		///<summary>DO NOT CALL UNLESS THE CURRENTLY SELECTED NODE IS A DOCUMENT NODE. Fills the panelnote control with the current document signature when the panelnote is visible and when a valid document is currently selected.</summary>
 		private void FillSignature() {
 			textNote.Text="";
 			sigBox.ClearTablet();
 			if(!panelNote.Visible){
 				return;
 			}
-			Document curDoc=GetDocumentFromNode(TreeDocuments.SelectedNode);
-			if(curDoc==null) {
-				return;
-			}
+			DataRow obj=(DataRow)TreeDocuments.SelectedNode.Tag;
+			int docNum=Convert.ToInt32(obj["DocNum"].ToString());
+			Document curDoc=Documents.GetByNum(docNum);
 			textNote.Text=curDoc.Note;
 			sigBox.SetTabletState(0);//never accepts input here
 			labelInvalidSig.Visible=false;
@@ -1291,17 +1253,15 @@ namespace OpenDental{
 				Documents.Delete(doc);
 			}
 			if(saved){
-				DataRow tag=Documents.GetDocumentRow(doc.DocNum.ToString());
-				AddTreeDocumentNode(ref doc,tag,true);//Selects the document and displays it as well.
+				FillDocList(true);//Reload and keep new document selected.
 				FormDocInfo formDocInfo=new FormDocInfo(PatCur,doc,GetCurrentFolderName(TreeDocuments.SelectedNode));
 				formDocInfo.ShowDialog();
 				if(formDocInfo.DialogResult!=DialogResult.OK){
 					File.Delete(doc.FileName);
-					DeleteDocument(doc,false);
-					SelectTreeDocumentNode(null);//Forces image to clear from screen and disables toolbars.
+					DeleteSelection(false);
+					FillDocList(false);//Clear selection.
 				}else{
-					MoveTreeDocumentNode(ref doc,doc.DocCategory,true);	//Reloads tree document data
-																															//(since it may have changed in FormDocInfo above).
+					FillDocList(true);//Keep current selection.
 				}
 			}
 		}
@@ -1316,7 +1276,7 @@ namespace OpenDental{
 			if(fileNames.Length<1){
 				return;
 			}
-			string docNum="";
+			string nodeId="";
 			Document doc=null;
 			for(int i=0;i<fileNames.Length;i++){
 				openFileDialog.FileName=fileNames[i];
@@ -1337,29 +1297,38 @@ namespace OpenDental{
 					copied=false;
 				}
 				if(copied){
-					DataRow tag=Documents.GetDocumentRow(doc.DocNum.ToString());
-					AddTreeDocumentNode(ref doc,tag,true);
-					int startCateogory=doc.DocCategory;
+					FillDocList(false);
+					SelectTreeNode(GetNodeById(MakeIdentifier(doc.DocNum.ToString(),"0")));
 					FormDocInfo FormD=new FormDocInfo(PatCur,doc,GetCurrentFolderName(TreeDocuments.SelectedNode));
 					FormD.ShowDialog();//some of the fields might get changed, but not the filename
 					if(FormD.DialogResult!=DialogResult.OK){
-						DeleteDocument(doc,false);
+						DeleteSelection(false);
 					}else{
-						docNum=doc.DocNum.ToString();
-						MoveTreeDocumentNode(ref doc,doc.DocCategory,true);
+						nodeId=MakeIdentifier(doc.DocNum.ToString(),"0");
 					}
 				}
 			}
 			//Reselect the last successfully added node when necessary.
-			if(doc!=null && doc.DocNum.ToString()!=docNum){
-				SelectTreeDocumentNode(GetTreeDocumentNode(docNum));
+			if(doc!=null && MakeIdentifier(doc.DocNum.ToString(),"0")!=nodeId){
+				SelectTreeNode(GetNodeById(MakeIdentifier(doc.DocNum.ToString(),"0")));
 			}
 		}
 
 		private void OnCopy_Click(){
+			if(TreeDocuments.SelectedNode==null || TreeDocuments.SelectedNode.Tag==null){
+				MsgBox.Show(this,"Please select a document before copying");
+				return;
+			}
+			DataRow obj=(DataRow)TreeDocuments.SelectedNode.Tag;
+			int mountNum=Convert.ToInt32(obj["MountNum"]);
+			int docNum=Convert.ToInt32(obj["DocNum"]);
+			if(mountNum!=0){//The current selection is a mount?
+				MsgBox.Show(this,"Copying mount objects is not supported");
+				return;
+			}
 			//Crop and color function has already been applied to the render image.
-			Bitmap copyImage=ApplyDocumentSettingsToImage(GetDocumentFromNode(TreeDocuments.SelectedNode),
-				renderImage,ApplySettings.FLIP|ApplySettings.ROTATE);
+			Bitmap copyImage=ApplyDocumentSettingsToImage(Documents.GetByNum(docNum),renderImage,
+				ApplySettings.FLIP|ApplySettings.ROTATE);
 			if(copyImage!=null){
 				Clipboard.SetDataObject(copyImage);
 			}
@@ -1374,6 +1343,7 @@ namespace OpenDental{
 			Document doc=new Document();
 			doc.FileName=".jpg";
 			doc.DateCreated=DateTime.Today;
+			doc.DocCategory=GetCurrentCategory();
 			doc.PatNum=PatCur.PatNum;
 			doc.ImgType=ImageType.Photo;
 			Documents.Insert(doc,PatCur);//this assigns a filename and saves to db
@@ -1386,17 +1356,16 @@ namespace OpenDental{
 				Documents.Delete(doc);
 				return;
 			}
-			DataRow tag=Documents.GetDocumentRow(doc.DocNum.ToString());
-			doc.DocCategory=GetCurrentCategory();
-			AddTreeDocumentNode(ref doc,tag,true);
+			FillDocList(false);
+			SelectTreeNode(GetNodeById(MakeIdentifier(doc.DocNum.ToString(),"0")));
 			FormDocInfo formD=new FormDocInfo(PatCur,doc,GetCurrentFolderName(TreeDocuments.SelectedNode));
 			formD.ShowDialog();
 			if(formD.DialogResult!=DialogResult.OK){
-				DeleteDocument(doc,false);
+				DeleteSelection(false);
 				paintTools.Enabled=false;//Force image to clear from screen.
 				brightnessContrastSlider.Enabled=false;
 			}else{
-				MoveTreeDocumentNode(ref doc,doc.DocCategory,true);
+				FillDocList(true);
 				paintTools.Enabled=true;//Allow image to remain on screen.
 				brightnessContrastSlider.Enabled=true;
 			}
@@ -1407,9 +1376,8 @@ namespace OpenDental{
 			//remember it's testing after the push has been completed
 			if(paintTools.Buttons["Crop"].Pushed){ //Crop Mode
 				paintTools.Buttons["Hand"].Pushed=false;
-				PictureBox1.Cursor = Cursors.Default;
-			}		
-			else{
+				PictureBox1.Cursor=Cursors.Default;
+			}else{
 				paintTools.Buttons["Crop"].Pushed=true;
 			}
 			IsCropMode=true;
@@ -1431,13 +1399,25 @@ namespace OpenDental{
 			Bitmap prePrintImage=renderImage; //Keep a local pointer to the render image after this point, 
 																				//so that the print results cannot be messed up by the current
 																				//rendering thread (by changing the renderImage).
-			if(prePrintImage==null || prePrintImage.Width<1 || prePrintImage.Height<1){
+			if(prePrintImage==null || prePrintImage.Width<1 || prePrintImage.Height<1 ||
+				TreeDocuments.SelectedNode==null ||
+				TreeDocuments.SelectedNode.Tag==null ||
+				TreeDocuments.SelectedNode.Parent==null){
 				e.HasMorePages=false;
 				return;
 			}
-			//Crop and color function have already been applied to the render image.
-			Bitmap printImage=ApplyDocumentSettingsToImage(GetDocumentFromNode(TreeDocuments.SelectedNode),
-                prePrintImage,ApplySettings.FLIP|ApplySettings.ROTATE);
+			DataRow obj=(DataRow)TreeDocuments.SelectedNode.Tag;
+			int mountNum=Convert.ToInt32(obj["MountNum"]);
+			int docNum=Convert.ToInt32(obj["DocNum"]);
+			Bitmap printImage;
+			if(mountNum!=0){//Is this a mount object?
+				printImage=prePrintImage;	//Just print the mount as is, since the mount is always in the same orientation, and
+																	//the images it houses are already flipped and rotated to generate the render image.
+			}else{//This is a document object.
+				//Crop and color function have already been applied to the render image, now do the rest.
+				printImage=ApplyDocumentSettingsToImage(Documents.GetByNum(docNum),
+					prePrintImage,ApplySettings.FLIP|ApplySettings.ROTATE);
+			}			
 			RectangleF rectf=e.MarginBounds;
 			float ratio=Math.Min(rectf.Width/printImage.Width,rectf.Height/printImage.Height);
 			Graphics g=e.Graphics;
@@ -1446,7 +1426,7 @@ namespace OpenDental{
 			g.SmoothingMode=SmoothingMode.HighQuality;
 			g.PixelOffsetMode=PixelOffsetMode.HighQuality;
 			g.DrawImage(printImage,0,0,(int)(printImage.Width*ratio),(int)(printImage.Height*ratio));
-			e.HasMorePages =false;
+			e.HasMorePages=false;
 		}
 
 		private void menuTree_Click(object sender, System.EventArgs e) {
@@ -1464,16 +1444,16 @@ namespace OpenDental{
 		}
 
 		private void menuForms_Click(object sender, System.EventArgs e) {
-			string fileName=ODFileUtils.CombinePaths
-				(new string[] {FormPath.GetPreferredImagePath(),"Forms",((MenuItem)sender).Text});
+			string fileName=ODFileUtils.CombinePaths(new string[] {FormPath.GetPreferredImagePath(),
+				"Forms",((MenuItem)sender).Text});
 			if(!File.Exists(fileName)){
 				MessageBox.Show(Lan.g(this,"Could not find file: ")+fileName);
 				return;
 			}
 			Document doc=new Document();
-			//Document.Insert will use this extension when naming:
 			doc.FileName=Path.GetExtension(fileName);
 			doc.DateCreated=DateTime.Today;
+			doc.DocCategory=GetCurrentCategory();
 			doc.PatNum=PatCur.PatNum;
 			doc.ImgType=ImageType.Document;
 			Documents.Insert(doc,PatCur);//this assigns a filename and saves to db
@@ -1486,15 +1466,14 @@ namespace OpenDental{
 				Documents.Delete(doc);
 			}
 			if(copied){
-				DataRow tag=Documents.GetDocumentRow(doc.DocNum.ToString());
-				doc.DocCategory=GetCurrentCategory();
-				AddTreeDocumentNode(ref doc,tag,true);
+				FillDocList(false);
+				SelectTreeNode(GetNodeById(MakeIdentifier(doc.DocNum.ToString(),"0")));
 				FormDocInfo FormD=new FormDocInfo(PatCur,doc,GetCurrentFolderName(TreeDocuments.SelectedNode));
 				FormD.ShowDialog();//some of the fields might get changed, but not the filename
 				if(FormD.DialogResult!=DialogResult.OK){
-					DeleteDocument(doc,false);
+					DeleteSelection(false);
 				}else{
-					MoveTreeDocumentNode(ref doc,doc.DocCategory,true);
+					FillDocList(true);//Refresh possible changes in the document due to FormD.
 				}
 			}
 		}
@@ -1531,40 +1510,10 @@ namespace OpenDental{
 			textNote.Cursor=Cursors.IBeam;
 		}
 
-		///<summary>Gets the category folder name for the given document node.</summary>
-		private string GetCurrentFolderName(TreeNode node) {
-			if(node!=null){
-				while(node.Parent!=null){//Find the corresponding root level node.
-					node=node.Parent;
-				}
-				return node.Text;
-			}
-			return"";
-		}
-
-		///<summary>Gets the document category of the current selection. The current selection can be a folder itself, or a document within a folder.</summary>
-		private int GetCurrentCategory(){
-			return DefB.GetByExactName(DefCat.ImageCats,GetCurrentFolderName(TreeDocuments.SelectedNode));
-		}
-
-		///<summary>A dataRow is stored as the tag for each node.  This Extracts the document object from any given node.</summary>
-		private Document GetDocumentFromNode(TreeNode node) {
-			if(node==null){
-				return null;
-			}
-			return Documents.Fill((DataRow)node.Tag);//Returns null if tag is null.
-		}
-
 		///<summary>Mouse selections were chosen to be implemented in this particular way, just to make the same code work the same way under both Windows and MONO.</summary>
 		private void TreeDocuments_MouseDown(object sender,MouseEventArgs e) {
 			TreeNode node=TreeDocuments.GetNodeAt(e.Location);
-			Document doc=GetDocumentFromNode(node);//Handles files, folders, or neither.
-			//Remember the unique document number of the selected document (if a document was selected).
-			if(doc!=null){
-				treeDocNumDown=doc.DocNum.ToString();
-			}else{
-				treeDocNumDown="";
-			}
+			treeIdNumDown=GetNodeIdentifier(node);
 			//Always select the node on a mouse-down press for either right or left buttons.
 			//If the left button is pressed, then the document is either being selected or dragged, so
 			//setting the image at the beginning of the drag will either display the image as expected, or
@@ -1572,17 +1521,12 @@ namespace OpenDental{
 			//If the right button is pressed, then the user wants to view the properties of the image they are
 			//clicking on, so displaying the image (in a different thread) will give the user a chance to view
 			//the image corresponding to a delete, info display, etc...
-			SelectTreeDocumentNode(node);
+			SelectTreeNode(node);
 		}
 
 		private void TreeDocuments_MouseMove(object sender,System.Windows.Forms.MouseEventArgs e) {
 			TreeNode node=TreeDocuments.GetNodeAt(e.Location);
-			Document doc=GetDocumentFromNode(node);
-			string docNum="";
-			if(doc!=null) {
-				docNum=doc.DocNum.ToString();
-			}
-			if(docNum!=treeDocNumDown && treeDocNumDown!=""){
+			if(treeIdNumDown!="" && GetNodeIdentifier(node)!=treeIdNumDown){
 				TreeDocuments.Cursor=Cursors.Hand;
 			}else{
 				TreeDocuments.Cursor=Cursors.Default;
@@ -1591,48 +1535,79 @@ namespace OpenDental{
 
 		///<summary>Mouse selections were chosen to be implemented in this particular way, just to make the same code work the same way under both Windows and MONO.</summary>
 		private void TreeDocuments_MouseUp(object sender,System.Windows.Forms.MouseEventArgs e) {
+			if(treeIdNumDown==""){
+				return;
+			}
 			TreeNode node=TreeDocuments.GetNodeAt(e.Location);
-			if(node!=null){
-				Document nodeDoc=GetDocumentFromNode(node);
-				TreeNode sourceNode=GetTreeDocumentNode(treeDocNumDown);
-				Document sourceDocument=GetDocumentFromNode(sourceNode);
-				//Dragging a document?
-				if(e.Button==MouseButtons.Left){
-					TreeDocuments.Cursor=Cursors.Default;
-					int destinationCategory;
-					if(node.Parent!=null){
-						destinationCategory=DefB.Short[(int)DefCat.ImageCats][node.Parent.Index].DefNum;
-					}else{
-						destinationCategory=DefB.Short[(int)DefCat.ImageCats][node.Index].DefNum;
-					}
-					MoveTreeDocumentNode(ref sourceDocument,//Grab the original document object.
-						destinationCategory,							//Move it to the destination category.
-						true);														//Select the document after is is moved.
-					treeDocNumDown="";
+			TreeNode sourceNode=GetNodeById(treeIdNumDown);			
+			//Dragging a document?
+			if(e.Button==MouseButtons.Left && GetNodeIdentifier(node)!=treeIdNumDown) {
+				TreeDocuments.Cursor=Cursors.Default;
+				//Find the destination folder.
+				int destinationCategory;
+				if(node.Parent!=null) {
+					destinationCategory=DefB.Short[(int)DefCat.ImageCats][node.Parent.Index].DefNum;
 				}
+				else {
+					destinationCategory=DefB.Short[(int)DefCat.ImageCats][node.Index].DefNum;
+				}
+				//Update the object's document category in the database.
+				DataRow obj=(DataRow)sourceNode.Tag;
+				int mountNum=Convert.ToInt32(obj["MountNum"].ToString());
+				int docNum=Convert.ToInt32(obj["DocNum"].ToString());
+				string id;
+				if(mountNum!=0) {//Mount object.
+					Mount mount=Mounts.GetByNum(mountNum);
+					mount.DocCategory=destinationCategory;
+					Mounts.Update(mount);
+					id=MakeIdentifier("0",mount.MountNum.ToString());
+				}
+				else {//Document object.
+					Document doc=Documents.GetByNum(docNum);
+					doc.DocCategory=destinationCategory;
+					Documents.Update(doc);
+					id=MakeIdentifier(doc.DocNum.ToString(),"0");
+				}
+				FillDocList(false);
+				SelectTreeNode(GetNodeById(id));
+				treeIdNumDown="";
 			}
 		}
 
 		private void TreeDocuments_MouseLeave(object sender,EventArgs e) {
 			TreeDocuments.Cursor=Cursors.Default;
-			treeDocNumDown="";
+			treeIdNumDown="";
 		}
 
 		///<Summary>Invalidates some or all of the image settings.  This will cause those settings to be recalculated, either immediately, or when the current ApplySettings thread is finished.  If supplied settings is ApplySettings.NONE, then that part will be skipped.</Summary>
 		private void InvalidateSettings(ApplySettings settings, bool reloadZoomTransCrop){
-			//Do not allow image rendering when the paint tools are disabled. This will disable the display image when a folder or non-image document is selected, or when no document is currently selected. The paintTools.Enabled boolean is controlled in SelectTreeDocumentNode() and is set to true only if a valid image is currently being displayed.
-			if(!paintTools.Enabled){
+			//Do not allow image rendering when the paint tools are disabled. This will disable the display image when a folder or non-image document is selected, or when no document is currently selected. The paintTools.Enabled boolean is controlled in SelectTreeNode() and is set to true only if a valid image is currently being displayed.
+			if(!paintTools.Enabled || TreeDocuments.SelectedNode==null || 
+				TreeDocuments.SelectedNode.Tag==null || TreeDocuments.SelectedNode.Parent==null){
 				EraseCurrentImage();
 				return;
 			}
-			Document curDoc=GetDocumentFromNode(TreeDocuments.SelectedNode);
+			DataRow obj=(DataRow)TreeDocuments.SelectedNode.Tag;
+			int mountNum=Convert.ToInt32(obj["MountNum"].ToString());
+			int docNum=Convert.ToInt32(obj["DocNum"].ToString());
+			if(mountNum!=0){//Settings invalidated for a mount object.
+				return;//TODO:??????
+			}
+			Document curDoc=Documents.GetByNum(docNum);
 			InvalidatedSettingsFlag|=settings;
 			if(reloadZoomTransCrop){
 				//Reloading the image settings only happens when a new image is selected, pasted, scanned, etc...
 				//Therefore, the is no need for any current image processing anymore (it would be on a stail image).
 				KillMyImageThreads();
-				ReloadZoomTransCrop(curImageWidth,curImageHeight,curDoc);
+				ReloadZoomTransCrop(curImageWidths[0],curImageHeights[0],curDoc,new Rectangle(0,0,PictureBox1.Width,PictureBox1.Height),
+					out imageZooms[0],out zoomLevels[0],out zoomFactors[0],out imageTranslations[0]);
+				cropTangle=new Rectangle(0,0,-1,-1);
 			}
+			//Pass the current brightness/contrast settings to the rendering thread. It doesn't matter if these 
+			//settings are stored in the database yet, because they are saved when the brightness/contrast slider
+			//is released by the user.
+			curDoc.WindowingMin=brightnessContrastSlider.MinVal;
+			curDoc.WindowingMax=brightnessContrastSlider.MaxVal;
 			//curDoc is an individual document instance. Assigning a new document to settingDoc here does not 
 			//negatively effect our image application thread, because the thread either will keep its current 
 			//reference to the old document, or will apply the settings with this newly assigned document. In either
@@ -1688,10 +1663,10 @@ namespace OpenDental{
 							renderImage=null;
 							oldRenderImage.Dispose();
 						}
-						//ImageCurrent is guaranteed to exist and be the current image. If ImageCurrent gets updated, this thread 
-						//gets aborted with a call to KillMyThread(). The only place ImageCurrent is invalid is in a call to 
+						//currentImages[0] is guaranteed to exist and be the current image. If currentImages[0] gets updated, this thread 
+						//gets aborted with a call to KillMyThread(). The only place currentImages[0] is invalid is in a call to 
 						//EraseCurrentImage(), but at that point, this thread has been terminated.
-						renderImage=ApplyDocumentSettingsToImage(curDocCopy,ImageCurrent,ApplySettings.CROP|ApplySettings.COLORFUNCTION);
+						renderImage=ApplyDocumentSettingsToImage(curDocCopy,currentImages[0],ApplySettings.CROP|ApplySettings.COLORFUNCTION);
 					}
           //Make the current renderImage visible in the picture box, and perform rotation, flip, zoom, and translation on
 					//the renderImage.
@@ -1711,9 +1686,7 @@ namespace OpenDental{
       if(myThread!=null){//Clear any previous image processing.
         if(myThread.IsAlive){
           myThread.Abort();//this is not recommended because it results in an exception.  But it seems to work.
-          while(myThread.IsAlive){
-            //Wait for the thread to stop execution.
-          }
+          myThread.Join();//Wait for thread to stop execution.
         }
         myThread=null;
       }
@@ -1740,8 +1713,8 @@ namespace OpenDental{
 			Graphics g=Graphics.FromImage(backBuffer);
 			try{
 				g.Clear(clearColor);
-				g.Transform=GetScreenMatrix(docCopy,curImageWidth,curImageHeight,
-					imageZoom*zoomFactor,imageTranslation);
+				g.Transform=GetScreenMatrix(docCopy,curImageWidths[0],curImageHeights[0],
+					imageZooms[0]*zoomFactors[0],imageTranslations[0]);
 				g.DrawImage(renderImage,0,0);
 				if(cropTangle.Width>0 && cropTangle.Height>0) {//Must be drawn last so it is on top.
 					g.ResetTransform();
@@ -1762,10 +1735,16 @@ namespace OpenDental{
 
 		private void TreeDocuments_MouseDoubleClick(object sender,MouseEventArgs e) {
 			TreeNode clickedNode=TreeDocuments.GetNodeAt(e.Location);
-			Document nodeDoc=GetDocumentFromNode(clickedNode);
-			if(nodeDoc==null) {
+			if(clickedNode==null || GetNodeIdentifier(clickedNode)==""){
 				return;
 			}
+			DataRow obj=(DataRow)clickedNode.Tag;
+			int mountNum=Convert.ToInt32(obj["MountNum"].ToString());
+			int docNum=Convert.ToInt32(obj["DocNum"].ToString());
+			if(mountNum!=0){//Is this object a mount object?
+				return;
+			}
+			Document nodeDoc=Documents.GetByNum(docNum);
 			string srcFileName=ODFileUtils.CombinePaths(patFolder,nodeDoc.FileName);
 			string ext=Path.GetExtension(srcFileName).ToLower();
 			if(ext==".jpg" || ext==".jpeg" || ext==".gif") {
@@ -1782,35 +1761,58 @@ namespace OpenDental{
 			}			
 		}
 
-		private void OnInfo_Click(){//TreeNode infoNode) {
-			Document infoDoc=GetDocumentFromNode(TreeDocuments.SelectedNode);//infoNode);
-			if(infoDoc==null) {
+		private void OnInfo_Click() {
+			if(GetNodeIdentifier(TreeDocuments.SelectedNode)=="") {
 				return;
 			}
-			//SelectTreeDocumentNode(infoNode);//Pre-render the image.
+			DataRow obj=(DataRow)TreeDocuments.SelectedNode.Tag;
+			int mountNum=Convert.ToInt32(obj["MountNum"].ToString());
+			int docNum=Convert.ToInt32(obj["DocNum"].ToString());
+			if(mountNum!=0) {
+				return;
+			}
+			Document infoDoc=Documents.GetByNum(docNum);
 			FormDocInfo formDocInfo2=new FormDocInfo(PatCur,infoDoc,GetCurrentFolderName(TreeDocuments.SelectedNode));
 			formDocInfo2.ShowDialog();
 			if(formDocInfo2.DialogResult!=DialogResult.OK) {
 				return;
 			}
-			MoveTreeDocumentNode(ref infoDoc,infoDoc.DocCategory,true);
+			FillDocList(true);
 		}
 
 		private void OnZoomIn_Click() {
-			zoomLevel++;
+			if(GetNodeIdentifier(TreeDocuments.SelectedNode)==""){
+				return;
+			}
+			DataRow obj=(DataRow)TreeDocuments.SelectedNode.Tag;
+			int mountNum=Convert.ToInt32(obj["MountNum"].ToString());
+			int docNum=Convert.ToInt32(obj["DocNum"].ToString());
+			if(mountNum!=0){
+				return;
+			}
+			zoomLevels[0]++;
 			PointF c=new PointF(PictureBox1.ClientRectangle.Width/2.0f,PictureBox1.ClientRectangle.Height/2.0f);
-			PointF p=new PointF(c.X-imageTranslation.X,c.Y-imageTranslation.Y);
-			imageTranslation=new PointF(imageTranslation.X-p.X,imageTranslation.Y-p.Y);
-			zoomFactor=(float)Math.Pow(2,zoomLevel);
+			PointF p=new PointF(c.X-imageTranslations[0].X,c.Y-imageTranslations[0].Y);
+			imageTranslations[0]=new PointF(imageTranslations[0].X-p.X,imageTranslations[0].Y-p.Y);
+			zoomFactors[0]=(float)Math.Pow(2,zoomLevels[0]);
 			InvalidateSettings(ApplySettings.NONE,false);//Refresh display.
 		}
 
 		private void OnZoomOut_Click() {
-			zoomLevel--;
+			if(GetNodeIdentifier(TreeDocuments.SelectedNode)=="") {
+				return;
+			}
+			DataRow obj=(DataRow)TreeDocuments.SelectedNode.Tag;
+			int mountNum=Convert.ToInt32(obj["MountNum"].ToString());
+			int docNum=Convert.ToInt32(obj["DocNum"].ToString());
+			if(mountNum!=0) {
+				return;
+			}
+			zoomLevels[0]--;
 			PointF c=new PointF(PictureBox1.ClientRectangle.Width/2.0f,PictureBox1.ClientRectangle.Height/2.0f);
-			PointF p=new PointF(c.X-imageTranslation.X,c.Y-imageTranslation.Y);
-			imageTranslation=new PointF(imageTranslation.X+p.X/2.0f,imageTranslation.Y+p.Y/2.0f);
-			zoomFactor=(float)Math.Pow(2,zoomLevel);
+			PointF p=new PointF(c.X-imageTranslations[0].X,c.Y-imageTranslations[0].Y);
+			imageTranslations[0]=new PointF(imageTranslations[0].X+p.X/2.0f,imageTranslations[0].Y+p.Y/2.0f);
+			zoomFactors[0]=(float)Math.Pow(2,zoomLevels[0]);
 			InvalidateSettings(ApplySettings.NONE,false);//Refresh display.
 		}
 
@@ -1827,41 +1829,59 @@ namespace OpenDental{
 		}
 
 		private void OnFlip_Click() {
-			Document curDoc=GetDocumentFromNode(TreeDocuments.SelectedNode);
-			if(curDoc==null){
+			if(GetNodeIdentifier(TreeDocuments.SelectedNode)=="") {
 				return;
 			}
-			curDoc.IsFlipped=!curDoc.IsFlipped;
-			Documents.Update(curDoc);
-			MoveTreeDocumentNode(ref curDoc,curDoc.DocCategory,true);//Update the file list data.
-			DeleteThumbnailImage(curDoc);
+			DataRow obj=(DataRow)TreeDocuments.SelectedNode.Tag;
+			int mountNum=Convert.ToInt32(obj["MountNum"].ToString());
+			int docNum=Convert.ToInt32(obj["DocNum"].ToString());
+			if(mountNum!=0) {
+				return;//TODO:
+			}else{
+				Document curDoc=Documents.GetByNum(docNum);
+				curDoc.IsFlipped=!curDoc.IsFlipped;
+				Documents.Update(curDoc);
+				DeleteThumbnailImage(curDoc);
+			}
 			InvalidateSettings(ApplySettings.FLIP,false);//Refresh display.
 		}
 
 		private void OnRotateL_Click() {
-			Document curDoc=GetDocumentFromNode(TreeDocuments.SelectedNode);
-			if(curDoc==null) {
+			if(GetNodeIdentifier(TreeDocuments.SelectedNode)=="") {
 				return;
 			}
-			curDoc.DegreesRotated-=90;
-			while(curDoc.DegreesRotated<0) {
-				curDoc.DegreesRotated+=360;
+			DataRow obj=(DataRow)TreeDocuments.SelectedNode.Tag;
+			int mountNum=Convert.ToInt32(obj["MountNum"].ToString());
+			int docNum=Convert.ToInt32(obj["DocNum"].ToString());
+			if(mountNum!=0) {
+				return;//TODO:
+			}else{
+				Document curDoc=Documents.GetByNum(docNum);
+				curDoc.DegreesRotated-=90;
+				while(curDoc.DegreesRotated<0) {
+					curDoc.DegreesRotated+=360;
+				}
+				Documents.Update(curDoc);
+				DeleteThumbnailImage(curDoc);
 			}
-			Documents.Update(curDoc);
-			MoveTreeDocumentNode(ref curDoc,curDoc.DocCategory,true);//Update the file list data.
-			DeleteThumbnailImage(curDoc);
 			InvalidateSettings(ApplySettings.ROTATE,false);//Refresh display.
 		}
 
 		private void OnRotateR_Click(){
-			Document curDoc=GetDocumentFromNode(TreeDocuments.SelectedNode);
-			if(curDoc==null) {
+			if(GetNodeIdentifier(TreeDocuments.SelectedNode)=="") {
 				return;
 			}
-			curDoc.DegreesRotated=(curDoc.DegreesRotated+90)%360;
-			Documents.Update(curDoc);
-			MoveTreeDocumentNode(ref curDoc,curDoc.DocCategory,true);//Update the file list data.
-			DeleteThumbnailImage(curDoc);
+			DataRow obj=(DataRow)TreeDocuments.SelectedNode.Tag;
+			int mountNum=Convert.ToInt32(obj["MountNum"].ToString());
+			int docNum=Convert.ToInt32(obj["DocNum"].ToString());
+			if(mountNum!=0) {
+				return;//TODO:
+			}else{
+				Document curDoc=Documents.GetByNum(docNum);
+				curDoc.DegreesRotated=(curDoc.DegreesRotated+90)%360;
+				Documents.Update(curDoc);
+				DeleteThumbnailImage(curDoc);
+			}
 			InvalidateSettings(ApplySettings.ROTATE,false);//Refresh display.
 		}
 
@@ -1874,7 +1894,7 @@ namespace OpenDental{
 		private void PictureBox1_MouseDown(object sender,System.Windows.Forms.MouseEventArgs e) {
 			MouseDownOrigin=new Point(e.X,e.Y);
 			MouseIsDown=true;
-			imageLocation=new PointF(imageTranslation.X,imageTranslation.Y);
+			imageLocation=new PointF(imageTranslations[0].X,imageTranslations[0].Y);
 		}
 
 		private void PictureBox1_MouseHover(object sender,EventArgs e) {
@@ -1890,7 +1910,7 @@ namespace OpenDental{
 				return;
 			}
 			if(paintTools.Buttons["Hand"].Pushed) {//Hand mode.
-				imageTranslation=new PointF(imageLocation.X+(e.Location.X-MouseDownOrigin.X),
+				imageTranslations[0]=new PointF(imageLocation.X+(e.Location.X-MouseDownOrigin.X),
 																		imageLocation.Y+(e.Location.Y-MouseDownOrigin.Y));				
 			}else if(paintTools.Buttons["Crop"].Pushed){
 				float[] intersect=ODMathLib.IntersectRectangles(Math.Min(e.Location.X,MouseDownOrigin.X),
@@ -1911,20 +1931,29 @@ namespace OpenDental{
 			if(!paintTools.Buttons["Crop"].Pushed) {//not Crop Mode
 				return;
 			}
-			Document curDoc=GetDocumentFromNode(TreeDocuments.SelectedNode);
-			if(curDoc==null || cropTangle.Width<=0 || cropTangle.Height<=0) {
+			if(cropTangle.Width<=0 || cropTangle.Height<=0) {
 				return;
 			}
+			if(GetNodeIdentifier(TreeDocuments.SelectedNode)=="") {
+				return;
+			}
+			DataRow obj=(DataRow)TreeDocuments.SelectedNode.Tag;
+			int mountNum=Convert.ToInt32(obj["MountNum"].ToString());
+			int docNum=Convert.ToInt32(obj["DocNum"].ToString());
+			if(mountNum!=0){
+				return;
+			}
+			Document curDoc=Documents.GetByNum(docNum);			
 			if(!MsgBox.Show(this,true,"Crop to Rectangle?")){
 				cropTangle=new Rectangle(0,0,-1,-1);
 				InvalidateSettings(ApplySettings.NONE,false);//Refresh display (since message box was covering).
 				return;
 			}
 			PointF cropPoint1=ScreenPointToUnalteredDocumentPoint(cropTangle.Location,curDoc,
-				curImageWidth,curImageHeight,imageZoom*zoomFactor,imageTranslation);
+				curImageWidths[0],curImageHeights[0],imageZooms[0]*zoomFactors[0],imageTranslations[0]);
 			PointF cropPoint2=ScreenPointToUnalteredDocumentPoint(new Point(cropTangle.Location.X+cropTangle.Width,
-				cropTangle.Location.Y+cropTangle.Height),curDoc,curImageWidth,curImageHeight,
-				imageZoom*zoomFactor,imageTranslation);
+				cropTangle.Location.Y+cropTangle.Height),curDoc,curImageWidths[0],curImageHeights[0],
+				imageZooms[0]*zoomFactors[0],imageTranslations[0]);
 			//cropPoint1 and cropPoint2 together define an axis-aligned bounding area, or our crop area. 
 			//However, the two points have no guaranteed order, thus we must sort them using Math.Min.
 			Rectangle rawCropRect=new Rectangle(
@@ -1934,7 +1963,7 @@ namespace OpenDental{
 				(int)Math.Ceiling((decimal)Math.Abs(cropPoint1.Y-cropPoint2.Y)));
 			//We must also intersect the old cropping rectangle with the new cropping rectangle, so that part of
 			//the image does not come back as a result of multiple crops.
-			Rectangle oldCropRect=DocCropRect(curDoc,curImageWidth,curImageHeight);
+			Rectangle oldCropRect=DocCropRect(curDoc,curImageWidths[0],curImageHeights[0]);
 			float[] finalCropRect=ODMathLib.IntersectRectangles(rawCropRect.X,rawCropRect.Y,rawCropRect.Width,
 				rawCropRect.Height,oldCropRect.X,oldCropRect.Y,oldCropRect.Width,oldCropRect.Height);
 			//Will return a null intersection when the user chooses a crop rectangle which is
@@ -1945,15 +1974,15 @@ namespace OpenDental{
 				InvalidateSettings(ApplySettings.NONE,false);//Refresh display (since message box was covering).
 				return;
 			}
-			Rectangle prevCropRect=DocCropRect(curDoc,curImageWidth,curImageHeight);
+			Rectangle prevCropRect=DocCropRect(curDoc,curImageWidths[0],curImageHeights[0]);
 			curDoc.CropX=(int)finalCropRect[0];
 			curDoc.CropY=(int)finalCropRect[1];
 			curDoc.CropW=(int)Math.Ceiling(finalCropRect[2]);
 			curDoc.CropH=(int)Math.Ceiling(finalCropRect[3]);
 			Documents.Update(curDoc);
-			MoveTreeDocumentNode(ref curDoc,curDoc.DocCategory,true);//Update the file list data.
+			FillDocList(true);
 			DeleteThumbnailImage(curDoc);
-			Rectangle newCropRect=DocCropRect(curDoc,curImageWidth,curImageHeight);
+			Rectangle newCropRect=DocCropRect(curDoc,curImageWidths[0],curImageHeights[0]);
 			//Update the location of the image so that the cropped portion of the image does not move in screen space.
 			PointF prevCropCenter=new PointF(prevCropRect.X+prevCropRect.Width/2.0f,prevCropRect.Y+prevCropRect.Height/2.0f);
 			PointF newCropCenter=new PointF(newCropRect.X+newCropRect.Width/2.0f,newCropRect.Y+newCropRect.Height/2.0f);
@@ -1962,28 +1991,30 @@ namespace OpenDental{
 				newCropCenter
 			};
 			Matrix docMat=GetDocumentFlippedRotatedMatrix(curDoc);
-			docMat.Scale(imageZoom*zoomFactor,imageZoom*zoomFactor);
+			docMat.Scale(imageZooms[0]*zoomFactors[0],imageZooms[0]*zoomFactors[0]);
 			docMat.TransformPoints(imageCropCenters);
-			imageTranslation=new PointF(imageTranslation.X+(imageCropCenters[1].X-imageCropCenters[0].X),
-																	imageTranslation.Y+(imageCropCenters[1].Y-imageCropCenters[0].Y));
+			imageTranslations[0]=new PointF(imageTranslations[0].X+(imageCropCenters[1].X-imageCropCenters[0].X),
+																			imageTranslations[0].Y+(imageCropCenters[1].Y-imageCropCenters[0].Y));
 			cropTangle=new Rectangle(0,0,-1,-1);
 			InvalidateSettings(ApplySettings.CROP,false);
 		}
 
 		private void brightnessContrastSlider_Scroll(object sender,EventArgs e){
-			if(TreeDocuments.SelectedNode!=null && TreeDocuments.SelectedNode.Tag!=null){
-				((DataRow)TreeDocuments.SelectedNode.Tag)["WindowingMin"]=brightnessContrastSlider.MinVal.ToString();
-				((DataRow)TreeDocuments.SelectedNode.Tag)["WindowingMax"]=brightnessContrastSlider.MaxVal.ToString();
-			}
 			InvalidateSettings(ApplySettings.COLORFUNCTION,false);
 		}
 
 		private void brightnessContrastSlider_ScrollComplete(object sender,EventArgs e) {
-			Document curDoc=GetDocumentFromNode(TreeDocuments.SelectedNode);
-			if(curDoc!=null) {
-				Documents.Update(curDoc);
-				DeleteThumbnailImage(curDoc);
+			//The brightness/contrast slider is only enabled when a document or mount is selected, so 
+			//we know we have a valid node here always.
+			DataRow obj=(DataRow)TreeDocuments.SelectedNode.Tag;
+			int mountNum=Convert.ToInt32(obj["MountNum"].ToString());
+			int docNum=Convert.ToInt32(obj["DocNum"].ToString());
+			if(mountNum!=0){
+				return;//TODO: do something here!
 			}
+			Document curDoc=Documents.GetByNum(docNum);
+			Documents.Update(curDoc);
+			DeleteThumbnailImage(curDoc);
 			InvalidateSettings(ApplySettings.COLORFUNCTION,false);
 		}
 
@@ -1991,6 +2022,16 @@ namespace OpenDental{
 		private void OnCapture_Click() {
 			bool capture=ToolBarMain.Buttons["Capture"].Pushed;
 			if(capture){
+				//Show the user that they are performing an image capture by generating a new mount.
+				Mount mount=new Mount();
+				mount.DateCreated=DateTime.Today;
+				mount.Description="unnamed image capture";
+				mount.DocCategory=DefB.Short[(int)DefCat.ImageCats][0].DefNum;//First category.
+				mount.ImgType=ImageType.Mount;
+				mount.PatNum=PatCur.PatNum;
+				mount.MountNum=Mounts.Insert(mount);
+				FillDocList(false);
+				SelectTreeNode(GetNodeById(MakeIdentifier("0",mount.MountNum.ToString())));
 				xRayImageController.CaptureXRay();
 			}else{//The user unselected the image capture button, so cancel the current image capture.
 				xRayImageController.KillXRayThread();//Stop current xRay capture and call OnCaptureAborted() when done.
@@ -2015,9 +2056,19 @@ namespace OpenDental{
 				Invoke(c,new object[] {sender,e});
 				return;
 			}
+			//Since we are in the middle of an image capture, we know that a new mount will always be the current selection.
+			DataRow mount=(DataRow)TreeDocuments.SelectedNode.Tag;
+			//Create the mount item that corresponds to the new document about to be created.
+			MountItem mountItem=new MountItem();
+			mountItem.MountNum=Convert.ToInt32(mount["MountNum"].ToString());
+			mountItem.Xpos=0;
+			mountItem.Ypos=0;
+			mountItem.MountItemNum=MountItems.Insert(mountItem);
+			//Create the document object in the database for this mount image.
 			string fileExtention=".bmp";//The file extention to save the greyscale image as.
 			Bitmap capturedImage=xRayImageController.capturedImage;
 			Document doc=new Document();
+			doc.MountItemNum=mountItem.MountItemNum;
 			doc.ImgType=ImageType.Radiograph;
 			doc.FileName=fileExtention;
 			doc.DateCreated=DateTime.Today;
@@ -2028,14 +2079,11 @@ namespace OpenDental{
 			Documents.Insert(doc,PatCur);//creates filename and saves to db
 			try{
 				capturedImage.Save(ODFileUtils.CombinePaths(patFolder,doc.FileName),ImageFormat.Bmp);
-			}
-			catch(Exception ex){
+			}catch(Exception ex){
 				Documents.Delete(doc);
 				//Raise an exception in the capture thread.
 				throw new Exception(Lan.g(this,"Unable to save captured XRay image as document")+": "+ex.Message);
 			}
-			DataRow tag=Documents.GetDocumentRow(doc.DocNum.ToString());
-			AddTreeDocumentNode(ref doc,tag,true);
 			//This capture was successful. Keep capturing more images until the capture is manually aborted.
 			//This will cause calls to OnCaptureAborted(), then OnCaptureBegin().
 			xRayImageController.CaptureXRay();
@@ -2052,14 +2100,18 @@ namespace OpenDental{
 			ToolBarMain.Invalidate();
 		}
 
-		///<summary>Kills ImageApplicationThread.  Disposes of both ImageCurrent and renderImage.  Does not actually trigger a refresh of the Picturebox, though.</summary>
+		///<summary>Kills ImageApplicationThread.  Disposes of both currentImages and renderImage.  Does not actually trigger a refresh of the Picturebox, though.</summary>
 		private void EraseCurrentImage(){
 			KillMyImageThreads();//Stop any current access to the current image and render image so we can dispose them.
 			PictureBox1.Image=null;
 			InvalidatedSettingsFlag=ApplySettings.NONE;
-			if(ImageCurrent!=null){
-				ImageCurrent.Dispose();
-				ImageCurrent=null;
+			if(currentImages!=null){
+				for(int i=0;i<currentImages.Length;i++){
+					if(currentImages[i]!=null){
+						currentImages[i].Dispose();
+						currentImages[i]=null;
+					}	
+				}
 			}
 			if(renderImage!=null){
 				renderImage.Dispose();
@@ -2067,25 +2119,25 @@ namespace OpenDental{
 			}
 		}
 
+		//===================================== STATIC FUNCTIONS =================================================
+
 		///<summary>Sets global variables: Zoom, translation, and crop to initial starting values where the image fits perfectly within the box.</summary>
-		private void ReloadZoomTransCrop(int docImageWidth,int docImageHeight,Document curDoc) {
+		private static void ReloadZoomTransCrop(int docImageWidth,int docImageHeight,Document curDoc,Rectangle viewport,
+			out float zoom,out int zoomLevel,out float zoomFactor,out PointF translation) {
 			//Choose an initial zoom so that the image is scaled to fit the picture box size.
 			//Keep in mind that bitmaps are not allowed to have either a width or height of 0,
 			//so the following equations will always work. The following subtracts from the 
 			//picture box width to force a little extra white space.
 			RectangleF imageRect=CalcImageDims(docImageWidth,docImageHeight,curDoc);
-			float matchWidth=PictureBox1.Width-16;
+			float matchWidth=viewport.Width-16;
 			matchWidth=(matchWidth<=0?1:matchWidth);
-			float matchHeight=PictureBox1.Height-16;
+			float matchHeight=viewport.Height-16;
 			matchHeight=(matchHeight<=0?1:matchHeight);
-			imageZoom=(float)Math.Min(matchWidth/imageRect.Width,matchHeight/imageRect.Height);
+			zoom=(float)Math.Min(matchWidth/imageRect.Width,matchHeight/imageRect.Height);
 			zoomLevel=0;
 			zoomFactor=1;
-			imageTranslation=new PointF(PictureBox1.Width/2.0f,PictureBox1.Height/2.0f);
-			cropTangle=new Rectangle(0,0,-1,-1);
+			translation=new PointF(viewport.Left+viewport.Width/2.0f,viewport.Top+viewport.Height/2.0f);
 		}
-
-		//===================================== STATIC FUNCTIONS =================================================
 
 		///<summary>The screen matrix of the image is relative to the upper left of the image, but our calculations are from the center of the image (since the calculations are easier everywhere else if taken from the center). This function converts our calculation matrix into an equivalent screen matrix for display. Assumes document rotations are in 90 degree multiples.</summary>
 		public static Matrix GetScreenMatrix(Document doc,int docOriginalImageWidth,int docOriginalImageHeight,
@@ -2165,21 +2217,6 @@ namespace OpenDental{
 			//The following supported bitmap types were found on a microsoft msdn page:
 			return (ext==".jpg"||ext==".jpeg"||ext==".tga"||ext==".bmp"||ext==".tif"||
 				ext==".tiff"||ext==".gif"||ext==".emf"||ext==".exif"||ext==".ico"||ext==".png"||ext==".wmf");
-		}
-
-		///<summary>Returns false if the file is a specific short file name that is not accepted or contains one of the unsupported file exentions.</summary>
-		public static bool IsAcceptableFileName(string file){
-			string[] specificBadFileNames=new string[] {
-				"thumbs.db"
-			};
-			for(int i=0;i<specificBadFileNames.Length;i++){
-				if(file.Length>=specificBadFileNames[i].Length && 
-					file.Substring(file.Length-specificBadFileNames[i].Length,
-					specificBadFileNames[i].Length).ToLower()==specificBadFileNames[i]){
-					return false;
-				}
-			}
-			return true;
 		}
 
 		///<summary>Returns a matrix for the given document which represents flipping over the Y-axis before rotating. Of course, if doc.IsFlipped is false, then no flipping is performed, and if doc.DegreesRotated is a multiple of 360 then no rotation is performed.</summary>

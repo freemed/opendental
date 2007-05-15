@@ -178,7 +178,6 @@ namespace OpenDental{
 		private CheckBox checkAudit;
 		///<summary>This date will usually have minVal except while the hospital print function is running.</summary>
 		private DateTime hospitalDate;
-		private List<DocAttach> DocAttachList;
 		private PatientNote PatientNoteCur;
 		private DataSet DataSetMain;
 		private MenuItem menuItemLabFee;
@@ -2481,8 +2480,7 @@ namespace OpenDental{
       //ClaimProcs.Refresh();
 			//RefAttaches.Refresh();
 			GetImageFolder();
-			DocAttachList=DocAttaches.Refresh(patNum);
-			DocumentList=Documents.Refresh(DocAttachList);
+			DocumentList=Documents.GetAllWithPat(patNum);
 			//Procs get refreshed in FillProgNotes
 			ApptList=Appointments.GetForPat(patNum);
 			ToothInitialList=ToothInitials.Refresh(patNum);

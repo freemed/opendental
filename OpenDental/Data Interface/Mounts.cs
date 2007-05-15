@@ -12,7 +12,7 @@ namespace OpenDental {
 				+"'"+POut.PInt(mount.MountNum)+"',"
 				+"'"+POut.PInt(mount.PatNum)+"',"
 				+"'"+POut.PInt(mount.DocCategory)+"',"
-				+"'"+POut.PDate(mount.DateCreated)+"',"
+				+POut.PDate(mount.DateCreated)+","
 				+"'"+POut.PString(mount.Description)+"',"
 				+"'"+POut.PInt((int)mount.ImgType)+"')";
 			return General.NonQEx(command);
@@ -46,15 +46,14 @@ namespace OpenDental {
 			return mount;
 		}
 
-		///<summary>Returns a list of all the current mount objects for the given patient key.</summary>
-		public static Mount[] Refresh(int patNum){
-			string command="SELECT * FROM mount WHERE PatNum='"+patNum+"'";
-			DataTable result=General.GetTable(command);
-			Mount[] mounts=new Mount[result.Rows.Count];
-			for(int i=0;i<mounts.Length;i++){
-				mounts[i]=Fill(result.Rows[i]);
+		///<summary>Returns a single mount object corresponding to the given mount number key.</summary>
+		public static Mount GetByNum(int mountNum){
+			string command="SELECT * FROM mount WHERE MountNum='"+mountNum+"'";
+			DataTable table=General.GetTable(command);
+			if(table.Rows.Count<0){
+				return new Mount();
 			}
-			return mounts;
+			return Fill(table.Rows[0]);
 		}
 
 	}
