@@ -451,7 +451,7 @@ namespace OpenDental{
 			// checkSolidBlockouts
 			// 
 			this.checkSolidBlockouts.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkSolidBlockouts.Location = new System.Drawing.Point(47,452);
+			this.checkSolidBlockouts.Location = new System.Drawing.Point(48,448);
 			this.checkSolidBlockouts.Name = "checkSolidBlockouts";
 			this.checkSolidBlockouts.Size = new System.Drawing.Size(433,18);
 			this.checkSolidBlockouts.TabIndex = 66;

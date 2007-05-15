@@ -1891,6 +1891,7 @@ namespace OpenDental{
 			else{
 				e.HasMorePages=false;
 			}
+			g.Dispose();
 		}
 
 		///<summary>Just used for printing the 3D chart.</summary>

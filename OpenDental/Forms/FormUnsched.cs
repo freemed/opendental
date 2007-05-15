@@ -251,6 +251,7 @@ namespace OpenDental{
 			else {
 				e.HasMorePages=false;
 			}
+			g.Dispose();
 		}
 
 		private void butClose_Click(object sender, System.EventArgs e) {

@@ -506,6 +506,7 @@ namespace OpenDental{
 			else {
 				e.HasMorePages=false;
 			}
+			g.Dispose();
 		}
 
 		private void gridMain_CellDoubleClick(object sender,ODGridClickEventArgs e) {

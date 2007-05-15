@@ -1550,6 +1550,7 @@ namespace OpenDental{
 				,font,Brushes.Black,xPos,yPos);
 			//pagesPrinted++;
 			ev.HasMorePages=false;
+			grfx.Dispose();
 		}
 
 		private string ConvertALtoString(ArrayList ALteeth){

@@ -30,6 +30,7 @@ namespace OpenDental{
 		private OpenDental.UI.Button butHoliday;
 		private OpenDental.UI.Button butProvNote;
 		private ListBox listEmp;
+		private ComboBox comboProv;
 		//private int ProvNum;
 		private List<Schedule> SchedList;
 
@@ -62,6 +63,7 @@ namespace OpenDental{
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormScheduleDayEdit));
 			this.labelDate = new System.Windows.Forms.Label();
 			this.groupBox3 = new System.Windows.Forms.GroupBox();
+			this.listEmp = new System.Windows.Forms.ListBox();
 			this.butProvNote = new OpenDental.UI.Button();
 			this.label1 = new System.Windows.Forms.Label();
 			this.listProv = new System.Windows.Forms.ListBox();
@@ -74,7 +76,7 @@ namespace OpenDental{
 			this.gridMain = new OpenDental.UI.ODGrid();
 			this.butCloseOffice = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
-			this.listEmp = new System.Windows.Forms.ListBox();
+			this.comboProv = new System.Windows.Forms.ComboBox();
 			this.groupBox3.SuspendLayout();
 			this.groupBox1.SuspendLayout();
 			this.SuspendLayout();
@@ -101,6 +103,15 @@ namespace OpenDental{
 			this.groupBox3.TabIndex = 12;
 			this.groupBox3.TabStop = false;
 			this.groupBox3.Text = "Add Time Block";
+			// 
+			// listEmp
+			// 
+			this.listEmp.FormattingEnabled = true;
+			this.listEmp.Location = new System.Drawing.Point(100,49);
+			this.listEmp.Name = "listEmp";
+			this.listEmp.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
+			this.listEmp.Size = new System.Drawing.Size(80,329);
+			this.listEmp.TabIndex = 6;
 			// 
 			// butProvNote
 			// 
@@ -151,9 +162,9 @@ namespace OpenDental{
 			// 
 			// label2
 			// 
-			this.label2.Location = new System.Drawing.Point(12,631);
+			this.label2.Location = new System.Drawing.Point(12,609);
 			this.label2.Name = "label2";
-			this.label2.Size = new System.Drawing.Size(461,47);
+			this.label2.Size = new System.Drawing.Size(518,44);
 			this.label2.TabIndex = 14;
 			this.label2.Text = resources.GetString("label2.Text");
 			// 
@@ -218,7 +229,7 @@ namespace OpenDental{
 			this.gridMain.Name = "gridMain";
 			this.gridMain.ScrollValue = 0;
 			this.gridMain.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
-			this.gridMain.Size = new System.Drawing.Size(518,586);
+			this.gridMain.Size = new System.Drawing.Size(518,568);
 			this.gridMain.TabIndex = 8;
 			this.gridMain.Title = "Edit Day";
 			this.gridMain.TranslationName = null;
@@ -255,19 +266,19 @@ namespace OpenDental{
 			this.butCancel.Text = "&Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
 			// 
-			// listEmp
+			// comboProv
 			// 
-			this.listEmp.FormattingEnabled = true;
-			this.listEmp.Location = new System.Drawing.Point(100,49);
-			this.listEmp.Name = "listEmp";
-			this.listEmp.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
-			this.listEmp.Size = new System.Drawing.Size(80,329);
-			this.listEmp.TabIndex = 6;
+			this.comboProv.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboProv.Location = new System.Drawing.Point(12,652);
+			this.comboProv.Name = "comboProv";
+			this.comboProv.Size = new System.Drawing.Size(121,21);
+			this.comboProv.TabIndex = 16;
 			// 
 			// FormScheduleDayEdit
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.ClientSize = new System.Drawing.Size(782,687);
+			this.Controls.Add(this.comboProv);
 			this.Controls.Add(this.groupBox1);
 			this.Controls.Add(this.label2);
 			this.Controls.Add(this.butOK);
@@ -304,7 +315,13 @@ namespace OpenDental{
 				listEmp.Items.Add(Employees.ListShort[i].FName);
 				listEmp.SetSelected(i,true);
 			}
-      FillGrid();      		
+      FillGrid();
+			for(int i=0;i<Providers.List.Length;i++) {
+				comboProv.Items.Add(Providers.List[i].Abbr);
+				if(Providers.List[i].ProvNum==PrefB.GetInt("ScheduleProvUnassigned")) {
+					comboProv.SelectedIndex=i;
+				}
+			}
 		}
 
     private void FillGrid(){
@@ -525,6 +542,11 @@ namespace OpenDental{
 
 		private void butOK_Click(object sender,EventArgs e) {
 			Schedules.SetForDay(SchedList,SchedCurDate);
+			if(Providers.List[comboProv.SelectedIndex]!=null
+				&& Prefs.UpdateInt("ScheduleProvUnassigned",Providers.List[comboProv.SelectedIndex].ProvNum))
+			{
+				DataValid.SetInvalid(InvalidTypes.Prefs);
+			}
 			DialogResult=DialogResult.OK;
 		}
 

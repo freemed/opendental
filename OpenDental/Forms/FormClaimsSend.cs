@@ -968,6 +968,7 @@ namespace OpenDental{
 			else {
 				e.HasMorePages=false;
 			}
+			g.Dispose();
 		}
 
 		private void PrintItem_Click(){

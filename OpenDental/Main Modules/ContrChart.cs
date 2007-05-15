@@ -5222,6 +5222,7 @@ namespace OpenDental{
 			else{
 				e.HasMorePages=false;
 			}
+			g.Dispose();
 		}
 
 		///<summary>Preview is only used for debugging.</summary>
@@ -5330,6 +5331,7 @@ namespace OpenDental{
 								subHeadingFont,Brushes.Black,160,yPos+20);
 				e.HasMorePages=false;
 			}
+			g.Dispose();
 		}
 
 		///<summary>Draws one button for the tabControlImages.</summary>
