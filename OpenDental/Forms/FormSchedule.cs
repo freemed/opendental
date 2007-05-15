@@ -426,7 +426,7 @@ namespace OpenDental{
 		private void FormSchedule_Load(object sender,EventArgs e) {
 			DateTime dateFrom=new DateTime(DateTime.Today.Year,DateTime.Today.Month,1);
 			textDateFrom.Text=dateFrom.ToShortDateString();
-			textDateTo.Text=dateFrom.AddMonths(2).AddDays(-1).ToShortDateString();
+			textDateTo.Text=dateFrom.AddMonths(12).AddDays(-1).ToShortDateString();
 			//DateTime dateFrom=new DateTime(2007,5,6);
 			//textDateFrom.Text=dateFrom.ToShortDateString();
 			//textDateTo.Text=dateFrom.AddDays(6).ToShortDateString();
@@ -537,6 +537,7 @@ namespace OpenDental{
 			if(!checkWeekend.Checked){
 				clickedCol++;
 			}
+			//the "clickedCell" is in terms of the entire 7 col layout.
 			Point clickedCell=new Point(clickedCol,e.Row);
 			DateTime selectedDate=Schedules.GetDateCal(PIn.PDate(textDateFrom.Text),e.Row,clickedCol);
 			if(selectedDate<PIn.PDate(textDateFrom.Text) || selectedDate>PIn.PDate(textDateTo.Text)){
@@ -549,7 +550,12 @@ namespace OpenDental{
 				return;
 			}
 			FillGrid();
-			gridMain.SetSelected(clickedCell);
+			if(checkWeekend.Checked){
+				gridMain.SetSelected(clickedCell);
+			}
+			else{
+				gridMain.SetSelected(new Point(clickedCell.X-1,clickedCell.Y));
+			}
 		}
 
 		private void listProv_Click(object sender,EventArgs e) {
@@ -736,7 +742,110 @@ namespace OpenDental{
 		}
 
 		private void butRepeat_Click(object sender,EventArgs e) {
-
+			if(textDateFrom.errorProvider1.GetError(textDateFrom)!=""
+				|| textDateTo.errorProvider1.GetError(textDateTo)!="") {
+				MsgBox.Show(this,"Please fix errors first.");
+				return;
+			}
+			try{
+				int.Parse(textRepeat.Text);
+			}
+			catch{
+				MsgBox.Show(this,"Please fix number box first.");
+				return;
+			}
+			if(gridMain.SelectedCell.X==-1) {
+				MsgBox.Show(this,"Please select a date first.");
+				return;
+			}
+			if(DateCopyStart.Year<1880) {
+				MsgBox.Show(this,"Please copy a selection to the clipboard first.");
+				return;
+			}
+			if(ProvsChanged) {
+				MsgBox.Show(this,"Provider or Employee selection has been changed.  Please refresh first.");
+				return;
+			}
+			//calculate which day or week is currently selected.
+			DateTime dateSelectedStart;
+			DateTime dateSelectedEnd;
+			bool isWeek=DateCopyStart!=DateCopyEnd;
+			if(isWeek) {
+				int startI=1;
+				if(checkWeekend.Checked) {
+					startI=0;
+				}
+				dateSelectedStart=Schedules.GetDateCal(PIn.PDate(textDateFrom.Text),gridMain.SelectedCell.Y,startI);
+				if(checkWeekend.Checked) {
+					dateSelectedEnd=dateSelectedStart.AddDays(6);
+				}
+				else {
+					dateSelectedEnd=dateSelectedStart.AddDays(4);
+				}
+			}
+			else {
+				int selectedCol=gridMain.SelectedCell.X;
+				if(!checkWeekend.Checked) {
+					selectedCol++;
+				}
+				dateSelectedStart=Schedules.GetDateCal(PIn.PDate(textDateFrom.Text),gridMain.SelectedCell.Y,selectedCol);
+				dateSelectedEnd=dateSelectedStart;
+			}
+			//it is allowed to paste back over the same day or week.
+			//if(dateSelectedStart==DateCopyStart) {
+			//	MsgBox.Show(this,"Not allowed to paste back onto the same date as is on the clipboard.");
+			//	return;
+			//}
+			List<int> provNums=new List<int>();
+			for(int i=0;i<listProv.SelectedIndices.Count;i++) {
+				provNums.Add(Providers.List[listProv.SelectedIndices[i]].ProvNum);
+			}
+			List<int> empNums=new List<int>();
+			for(int i=0;i<listEmp.SelectedIndices.Count;i++) {
+				empNums.Add(Employees.ListShort[listEmp.SelectedIndices[i]].EmployeeNum);
+			}
+			List<Schedule> SchedList=Schedules.RefreshPeriod(DateCopyStart,DateCopyEnd,provNums.ToArray(),
+				empNums.ToArray(),checkPractice.Checked);
+			Schedule sched;
+			int weekDelta=0;
+			TimeSpan span;
+			if(isWeek) {
+				span=dateSelectedStart-DateCopyStart;
+				weekDelta=span.Days/7;//usually a positive # representing a future paste, but can be negative
+			}
+			for(int r=0;r<PIn.PInt(textRepeat.Text);r++){
+				if(checkReplace.Checked) {
+					if(isWeek){
+						Schedules.Clear(dateSelectedStart.AddDays(r*7),dateSelectedEnd.AddDays(r*7),
+							provNums.ToArray(),empNums.ToArray(),checkPractice.Checked);
+					}
+					else{
+						Schedules.Clear(dateSelectedStart.AddDays(r),dateSelectedEnd.AddDays(r),
+							provNums.ToArray(),empNums.ToArray(),checkPractice.Checked);
+					}
+				}
+				for(int i=0;i<SchedList.Count;i++) {
+					sched=SchedList[i].Copy();
+					if(isWeek) {
+						sched.SchedDate=sched.SchedDate.AddDays((weekDelta+r)*7);
+					}
+					else {
+						sched.SchedDate=dateSelectedStart.AddDays(r);
+					}
+					Schedules.Insert(sched);
+				}
+			}
+			DateTime rememberDateStart=DateCopyStart;
+			DateTime rememberDateEnd=DateCopyEnd;
+			FillGrid();
+			DateCopyStart=rememberDateStart;
+			DateCopyEnd=rememberDateEnd;
+			if(isWeek) {
+				textClipboard.Text=DateCopyStart.ToShortDateString()+"-"+DateCopyEnd.ToShortDateString();
+			}
+			else {
+				textClipboard.Text=DateCopyStart.ToShortDateString();
+			}
 		}
 
 		private void butPrint_Click(object sender,EventArgs e) {

@@ -129,7 +129,7 @@ namespace OpenDental{
 				+ ",note = '"        +POut.PString(sched.Note)+"'"
 				+ ",status = '"      +POut.PInt   ((int)sched.Status)+"'"
 				+ ",Op = '"          +POut.PInt   (sched.Op)+"'"
-				+ ",Employee = '"    +POut.PInt   (sched.EmployeeNum)+"'"
+				+ ",EmployeeNum = '" +POut.PInt   (sched.EmployeeNum)+"'"
 				+" WHERE ScheduleNum = '" +POut.PInt (sched.ScheduleNum)+"'";
  			General.NonQ(command);
 		}
@@ -388,10 +388,7 @@ namespace OpenDental{
 						&& stopTime.TimeOfDay==PIn.PDateT("12 AM").TimeOfDay)
 					{
 						if(raw.Rows[i]["Status"].ToString()=="2") {//if holiday
-							table.Rows[rowI][(int)dateSched.DayOfWeek]+=Lan.g("Schedules","Holiday: ")+raw.Rows[i]["Note"].ToString();
-						}
-						else {//note
-							table.Rows[rowI][(int)dateSched.DayOfWeek]+=raw.Rows[i]["Note"].ToString();
+							table.Rows[rowI][(int)dateSched.DayOfWeek]+=Lan.g("Schedules","Holiday:");
 						}
 					}
 					else{
@@ -404,7 +401,7 @@ namespace OpenDental{
 						&& stopTime.TimeOfDay==PIn.PDateT("12 AM").TimeOfDay)
 					{
 						if(raw.Rows[i]["Status"].ToString()=="2"){//if holiday
-							table.Rows[rowI][(int)dateSched.DayOfWeek]+=Lan.g("Schedules","Holiday: ")+raw.Rows[i]["Note"].ToString();
+							table.Rows[rowI][(int)dateSched.DayOfWeek]+=Lan.g("Schedules","Holiday:");//+raw.Rows[i]["Note"].ToString();
 						}
 						else{//note
 							if(raw.Rows[i]["Abbr"].ToString()!=""){
@@ -413,7 +410,7 @@ namespace OpenDental{
 							if(raw.Rows[i]["FName"].ToString()!="") {
 								table.Rows[rowI][(int)dateSched.DayOfWeek]+=raw.Rows[i]["FName"].ToString()+" ";
 							}
-							table.Rows[rowI][(int)dateSched.DayOfWeek]+=raw.Rows[i]["Note"].ToString();
+							//table.Rows[rowI][(int)dateSched.DayOfWeek]+=raw.Rows[i]["Note"].ToString();
 						}
 					}
 					else{
@@ -423,9 +420,12 @@ namespace OpenDental{
 						if(raw.Rows[i]["FName"].ToString()!="") {
 							table.Rows[rowI][(int)dateSched.DayOfWeek]+=raw.Rows[i]["FName"].ToString()+" ";
 						}
-						table.Rows[rowI][(int)dateSched.DayOfWeek]+=//raw.Rows[i]["Abbr"].ToString()+" "
+						table.Rows[rowI][(int)dateSched.DayOfWeek]+=
 							startTime.ToString("h:mm")+"-"+stopTime.ToString("h:mm");
 					}
+				}
+				if(raw.Rows[i]["Note"].ToString()!="") {
+					table.Rows[rowI][(int)dateSched.DayOfWeek]+=" "+raw.Rows[i]["Note"].ToString();
 				}
 			}
 			return table;
@@ -450,7 +450,7 @@ namespace OpenDental{
 			return dateFirstRow.AddDays(row*7+col);
 		}
 
-		///<summary>Surround with try/catch.  Deletes all existing practice and provider schedules for a day and then saves the provided list.</summary>
+		///<summary>Surround with try/catch.  Deletes all existing practice, provider, and employee schedules for a day and then saves the provided list.</summary>
 		public static void SetForDay(List<Schedule> SchedList,DateTime schedDate){
 			for(int i=0;i<SchedList.Count;i++){
 				if(SchedList[i].StartTime.TimeOfDay > SchedList[i].StopTime.TimeOfDay) {
@@ -458,7 +458,7 @@ namespace OpenDental{
 				}
 			}
 			string command="DELETE FROM schedule WHERE SchedDate= "+POut.PDate(schedDate)+" "
-				+"AND (SchedType=0 OR SchedType=1)";
+				+"AND (SchedType=0 OR SchedType=1 OR SchedType=3)";
 			General.NonQ(command);
 			for(int i=0;i<SchedList.Count;i++){
 				Insert(SchedList[i]);

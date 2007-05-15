@@ -300,6 +300,10 @@ namespace OpenDental{
 				listProv.Items.Add(Providers.List[i].Abbr);
 				listProv.SetSelected(i,true);
 			}
+			for(int i=0;i<Employees.ListShort.Length;i++) {
+				listEmp.Items.Add(Employees.ListShort[i].FName);
+				listEmp.SetSelected(i,true);
+			}
       FillGrid();      		
 		}
 
@@ -308,7 +312,9 @@ namespace OpenDental{
 			SchedList.Sort(CompareSchedule);
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
-			ODGridColumn col=new ODGridColumn(Lan.g("TableSchedDay","Prov"),100);
+			ODGridColumn col=new ODGridColumn(Lan.g("TableSchedDay","Provider"),100);
+			gridMain.Columns.Add(col);
+			col=new ODGridColumn(Lan.g("TableSchedDay","Employee"),100);
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn(Lan.g("TableSchedDay","Start Time"),100);
 			gridMain.Columns.Add(col);
@@ -318,17 +324,22 @@ namespace OpenDental{
 			gridMain.Columns.Add(col);
 			gridMain.Rows.Clear();
 			ODGridRow row;
+			string note;
 			for(int i=0;i<SchedList.Count;i++){
 				row=new ODGridRow();
 				//Prov
 				if(SchedList[i].ProvNum!=0){
 					row.Cells.Add(Providers.GetAbbr(SchedList[i].ProvNum));
 				}
-				else if(SchedList[i].Status==SchedStatus.Holiday) {
-					row.Cells.Add(Lan.g(this,"(Holiday)"));
+				else{
+					row.Cells.Add("");
 				}
-				else {
-					row.Cells.Add(Lan.g(this,"(Note)"));
+				//Employee
+				if(SchedList[i].EmployeeNum==0) {
+					row.Cells.Add("");
+				}
+				else{
+					row.Cells.Add(Employees.GetEmp(SchedList[i].EmployeeNum).FName);
 				}
 				//times
 				if(SchedList[i].StartTime.TimeOfDay==PIn.PDateT("12 AM").TimeOfDay 
@@ -342,7 +353,13 @@ namespace OpenDental{
 					row.Cells.Add(SchedList[i].StartTime.ToShortTimeString());
 					row.Cells.Add(SchedList[i].StopTime.ToShortTimeString());
 				}
-				row.Cells.Add(SchedList[i].Note);
+				//note
+				note="";
+				if(SchedList[i].Status==SchedStatus.Holiday) {
+					note+=Lan.g(this,"Holiday: ");
+				}
+				note+=SchedList[i].Note;
+				row.Cells.Add(note);
 				gridMain.Rows.Add(row);
 			}
 			gridMain.EndUpdate();
@@ -398,11 +415,10 @@ namespace OpenDental{
 		private void butAddTime_Click(object sender, System.EventArgs e) {
 			Schedule SchedCur=new Schedule();
 			SchedCur.SchedDate=SchedCurDate;
-			SchedCur.SchedType=ScheduleType.Provider;
 			SchedCur.Status=SchedStatus.Open;
 			SchedCur.StartTime=new DateTime(1,1,1,8,0,0);//8am
 			SchedCur.StopTime=new DateTime(1,1,1,17,0,0);//5pm
-			//schedtype, provNum, and empnumwill be set down below
+			//schedtype, provNum, and empnum will be set down below
 			FormScheduleEdit FormS=new FormScheduleEdit();
 			FormS.SchedCur=SchedCur;
 			FormS.ShowDialog();
@@ -413,7 +429,15 @@ namespace OpenDental{
 			for(int i=0;i<listProv.SelectedIndices.Count;i++){
 				schedTemp=new Schedule();
 				schedTemp=SchedCur.Copy();
+				SchedCur.SchedType=ScheduleType.Provider;
 				schedTemp.ProvNum=Providers.List[listProv.SelectedIndices[i]].ProvNum;
+				SchedList.Add(schedTemp);
+			}
+			for(int i=0;i<listEmp.SelectedIndices.Count;i++) {
+				schedTemp=new Schedule();
+				schedTemp=SchedCur.Copy();
+				SchedCur.SchedType=ScheduleType.Employee;
+				schedTemp.EmployeeNum=Employees.ListShort[listEmp.SelectedIndices[i]].EmployeeNum;
 				SchedList.Add(schedTemp);
 			}
 			FillGrid();
@@ -422,9 +446,8 @@ namespace OpenDental{
 		private void butProvNote_Click(object sender,EventArgs e) {
 			Schedule SchedCur=new Schedule();
 			SchedCur.SchedDate=SchedCurDate;
-			SchedCur.SchedType=ScheduleType.Provider;
 			SchedCur.Status=SchedStatus.Open;
-			//provNum will be set down below
+			//schedtype, provNum, and empnum will be set down below
 			FormScheduleEdit FormS=new FormScheduleEdit();
 			FormS.SchedCur=SchedCur;
 			FormS.ShowDialog();
@@ -435,7 +458,15 @@ namespace OpenDental{
 			for(int i=0;i<listProv.SelectedIndices.Count;i++) {
 				schedTemp=new Schedule();
 				schedTemp=SchedCur.Copy();
+				SchedCur.SchedType=ScheduleType.Provider;
 				schedTemp.ProvNum=Providers.List[listProv.SelectedIndices[i]].ProvNum;
+				SchedList.Add(schedTemp);
+			}
+			for(int i=0;i<listEmp.SelectedIndices.Count;i++) {
+				schedTemp=new Schedule();
+				schedTemp=SchedCur.Copy();
+				SchedCur.SchedType=ScheduleType.Employee;
+				schedTemp.EmployeeNum=Employees.ListShort[listEmp.SelectedIndices[i]].EmployeeNum;
 				SchedList.Add(schedTemp);
 			}
 			FillGrid();

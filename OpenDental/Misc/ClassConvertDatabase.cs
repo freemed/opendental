@@ -5053,6 +5053,11 @@ namespace OpenDental{
 				command="ALTER TABLE procedurelog ADD UnitQty char(15)";
 				General.NonQEx(command);
 
+
+
+
+
+
 				command="UPDATE preference SET ValueString = '4.9.0.0' WHERE PrefName = 'DataBaseVersion'";
 				General.NonQEx(command);
 			}
