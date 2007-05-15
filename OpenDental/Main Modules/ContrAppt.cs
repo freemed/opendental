@@ -1190,7 +1190,7 @@ namespace OpenDental{
 			menuBlockout.MenuItems.Add(Lan.g(this,"Edit Blockout"),new EventHandler(menuBlockout_Click));
 			menuBlockout.MenuItems.Add(Lan.g(this,"Delete Blockout"),new EventHandler(menuBlockout_Click));
 			menuBlockout.MenuItems.Add(Lan.g(this,"Add Blockout"),new EventHandler(menuBlockout_Click));
-			menuBlockout.MenuItems.Add(Lan.g(this,"Set Blockouts for Day to Default"),new EventHandler(menuBlockout_Click));
+			//menuBlockout.MenuItems.Add(Lan.g(this,"Set Blockouts for Day to Default"),new EventHandler(menuBlockout_Click));
 			menuBlockout.MenuItems.Add(Lan.g(this,"Clear All Blockouts for Day"),new EventHandler(menuBlockout_Click));
 			menuBlockout.MenuItems.Add(Lan.g(this,"Edit Blockout Types"),new EventHandler(menuBlockout_Click));
 			Lan.C(this,new Control[]
@@ -1999,7 +1999,7 @@ namespace OpenDental{
 							break;
 						}
 					}
-					if(ListForType.Length==0){//only if this day is all defaults
+					/*if(ListForType.Length==0){//only if this day is all defaults
 						SchedDefault[] DefaultsForType=SchedDefaults.GetForType(ScheduleType.Blockout,0);
 						for(int i=0;i<DefaultsForType.Length;i++){
 							//skip if day doesn't match
@@ -2019,7 +2019,7 @@ namespace OpenDental{
 								break;
 							}
 						}
-					}
+					}*/
 					if(clickedOnBlock){
 						menuBlockout.MenuItems[0].Visible=true;//Edit
 						menuBlockout.MenuItems[1].Visible=true;//Delete
@@ -2784,8 +2784,7 @@ namespace OpenDental{
       DateTime StopTime;  
       Rectangle imageRect;  //holds new dimensions for temp image
 		  Bitmap imageTemp;  //clone of shadow image with correct dimensions depending on day of week. Needs to be rewritten.
-      bool IsDefault=true;
-			
+      //bool IsDefault=true;
 			Schedule[] SchedListDay;
 			if(isWeeklyView) {
 				SchedListDay = Schedules.RefreshPeriod(WeekStartDate,WeekEndDate);
@@ -2800,10 +2799,10 @@ namespace OpenDental{
 					}
           AListStart.Add(SchedListDay[i].StartTime);
           AListStop.Add(SchedListDay[i].StopTime);
-					IsDefault=false;
+					//IsDefault=false;
         } 
       }
-      if(IsDefault){	
+      /*if(IsDefault){	
 				SchedDefault[] schedDefPract=SchedDefaults.GetForType(ScheduleType.Practice,0);
 				for(int i=0;i<schedDefPract.Length;i++){
 					//if(SchedDefaults.List[i]
@@ -2812,7 +2811,7 @@ namespace OpenDental{
             AListStop.Add(schedDefPract[i].StopTime); 
 					}
 				}
-      }
+      }*/
 			if(AListStart.Count > 0){//makes sure there is at least one timeblock
         StartTime=(DateTime)AListStart[0]; 
 				for(int i=0;i<AListStart.Count;i++){
@@ -3002,12 +3001,9 @@ namespace OpenDental{
 					OnBlockAdd_Click();
 					break;
 				case 3:
-					OnBlockDefault_Click();
-					break;
-				case 4:
 					OnClearBlockouts_Click();
 					break;
-				case 5:
+				case 4:
 					OnBlockTypes_Click();
 					break;
 			}
@@ -3161,7 +3157,7 @@ namespace OpenDental{
 		}
 
 		private Schedule GetClickedBlockout(){
-			Schedules.ConvertFromDefault(Appointments.DateSelected,ScheduleType.Blockout,0);
+			//Schedules.ConvertFromDefault(Appointments.DateSelected,ScheduleType.Blockout,0);
 			SchedListDay=Schedules.RefreshDay(Appointments.DateSelected);
 			Schedule[] ListForType=Schedules.GetForType(SchedListDay,ScheduleType.Blockout,0);
 			//now find which blockout
@@ -3204,7 +3200,7 @@ namespace OpenDental{
 			if(!Security.IsAuthorized(Permissions.Blockouts)){
 				return;
 			}
-			Schedules.ConvertFromDefault(Appointments.DateSelected,ScheduleType.Blockout,0);
+			//Schedules.ConvertFromDefault(Appointments.DateSelected,ScheduleType.Blockout,0);
       Schedule SchedCur=new Schedule();
       SchedCur.SchedDate=Appointments.DateSelected;
 			SchedCur.SchedType=ScheduleType.Blockout;
@@ -3214,6 +3210,7 @@ namespace OpenDental{
 			RefreshModuleScreen();
 		}
 
+		/*
 		private void OnBlockDefault_Click(){
 			if(!Security.IsAuthorized(Permissions.Blockouts)){
 				return;
@@ -3221,7 +3218,7 @@ namespace OpenDental{
 			Schedules.SetAllDefault(Appointments.DateSelected,ScheduleType.Blockout,0);
 			RefreshModuleScreen();
 			MsgBox.Show(this,"All blockouts for this date have been set to default values.");
-		}
+		}*/
 
 		private void OnClearBlockouts_Click(){
 			if(!Security.IsAuthorized(Permissions.Blockouts)){

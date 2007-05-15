@@ -283,8 +283,6 @@ namespace OpenDental {
 			Application.DoEvents();
 			RecallDeleteDuplicate();
 			Application.DoEvents();
-			SchedDefaultsDeleteShort();
-			Application.DoEvents();
 			SchedulesDeleteShort();
 			Application.DoEvents();
 			SignalInFuture();
@@ -1082,20 +1080,6 @@ namespace OpenDental {
 			}
 		}
 
-		private void SchedDefaultsDeleteShort() {
-			int numberFixed=0;
-			for(int i=0;i<SchedDefaults.List.Length;i++) {
-				if(SchedDefaults.List[i].StopTime.TimeOfDay-SchedDefaults.List[i].StartTime.TimeOfDay<new TimeSpan(0,5,0)) {
-					SchedDefaults.Delete(SchedDefaults.List[i]);
-					numberFixed++;
-				}
-			}
-			if(numberFixed>0 || checkShow.Checked) {
-				textLog.Text+=Lan.g(this,"Default schedule blocks fixed: ")+numberFixed.ToString()+"\r\n";
-			}
-			DataValid.SetInvalid(InvalidTypes.Sched);
-		}
-
 		private void SchedulesDeleteShort() {
 			int numberFixed=0;
 			Schedule[] schedList=Schedules.RefreshAll();
@@ -1111,7 +1095,7 @@ namespace OpenDental {
 			if(numberFixed>0 || checkShow.Checked) {
 				textLog.Text+=Lan.g(this,"Schedule blocks fixed: ")+numberFixed.ToString()+"\r\n";
 			}
-			DataValid.SetInvalid(InvalidTypes.Sched);
+			//DataValid.SetInvalid(InvalidTypes.Sched);
 		}
 
 		private void SignalInFuture() {

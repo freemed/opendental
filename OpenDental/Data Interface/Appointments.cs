@@ -511,7 +511,7 @@ namespace OpenDental{
 			//int afterIndex=0;//GetProvBarIndex(afterTime);
 			//int beforeIndex=0;//GetProvBarIndex(beforeTime);
 			while(ALresults.Count<resultCount//stops when the specified number of results are retrieved
-				&& dayEvaluating<afterDate.AddYears(1))
+				&& dayEvaluating<afterDate.AddYears(2))
 			{
 				for(int i=0;i<providers.Length;i++){
 					provBar[i]=new int[24*ContrApptSheet.RowsPerHr];//[144]; or 24*6
@@ -555,7 +555,7 @@ namespace OpenDental{
 				//handle all schedules by setting element of provBarSched to true if provider schedule shows open.
 				schedDay=Schedules.RefreshDay(dayEvaluating);
 				for(int p=0;p<providers.Length;p++){
-					provHandled=false;
+					//provHandled=false;
 					//schedule for prov
 					for(int i=0;i<schedDay.Length;i++){
 						if(schedDay[i].SchedType!=ScheduleType.Provider){
@@ -564,14 +564,14 @@ namespace OpenDental{
 						if(providers[p]!=schedDay[i].ProvNum){
 							continue;
 						}
-						if(schedDay[i].Status==SchedStatus.Closed || schedDay[i].Status==SchedStatus.Holiday){
-							provHandled=true;//all elements remain false.
-							break;
-						}
+						//if(schedDay[i].Status==SchedStatus.Closed || schedDay[i].Status==SchedStatus.Holiday){
+						//	provHandled=true;//all elements remain false.
+						//	break;
+						//}
 						SetProvBarSched(ref provBarSched[p],schedDay[i].StartTime,schedDay[i].StopTime);
-						provHandled=true;
+						//provHandled=true;
 					}
-					if(provHandled){
+					/*if(provHandled){
 						continue;
 					}
 					//schedDefault for prov
@@ -615,7 +615,7 @@ namespace OpenDental{
 							continue;
 						}
 						SetProvBarSched(ref provBarSched[p],SchedDefaults.List[i].StartTime,SchedDefaults.List[i].StopTime);
-					}
+					}*/
 				}
 				//step through day, one increment at a time, looking for a slot
 				pattern=ContrApptSingle.GetPatternShowing(apt.Pattern);

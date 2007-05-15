@@ -253,8 +253,8 @@ namespace OpenDentBusiness{
 		ToolBut=524288,
 		///<summary>1048576  Also includes clinics.</summary>
 		Providers=1048576,
-		///<summary>2097152</summary>
-		Sched=2097152,
+		///<summary>2097152. No longer used.</summary>
+		SchedOld=2097152,
 		///<summary>4194304</summary>
 		ClaimForms=4194304,
 		///<summary>8388608  Also includes patientfields</summary>

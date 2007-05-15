@@ -235,7 +235,7 @@ namespace OpenDental{
 
 		///<summary>Including the practice schedule</summary>
 		private void DrawMainBackground(Graphics g){
-			SchedDefault[] schedDefs;//for one type at a time
+			//SchedDefault[] schedDefs;//for one type at a time
 			Schedule[] schedForType;
 			//one giant rectangle for everything closed
 			g.FillRectangle(closedBrush,TimeWidth,0,ColWidth*ColCount+ProvWidth*ProvCount,Height);
@@ -282,7 +282,6 @@ namespace OpenDental{
 
 		///<summary>Draws all the blockouts for the entire day.</summary>
 		private void DrawBlockouts(Graphics g){
-			SchedDefault[] schedDefs;//for one type at a time
 			Schedule[] schedForType;
 			schedForType=Schedules.GetForType(SchedListDay,ScheduleType.Blockout,0);
 			SolidBrush blockBrush;
@@ -292,131 +291,61 @@ namespace OpenDental{
 			string blockText;
 			RectangleF rect;
 			g.TextRenderingHint=TextRenderingHint.SingleBitPerPixelGridFit;//to make printing clearer
-      if(schedForType.Length==0){//use default sched
-				schedDefs=SchedDefaults.GetForType(ScheduleType.Blockout,0);
-				for(int i=0;i<schedDefs.Length;i++){
-					if(schedDefs[i].DayOfWeek==(int)Appointments.DateSelected.DayOfWeek){
-						blockBrush=new SolidBrush(DefB.GetColor(DefCat.BlockoutTypes,schedDefs[i].BlockoutType));
-						penOutline=new Pen(DefB.GetColor(DefCat.BlockoutTypes,schedDefs[i].BlockoutType),2);
-						blockText=DefB.GetName(DefCat.BlockoutTypes,schedDefs[i].BlockoutType);
-						if(schedDefs[i].Op==0){//all ops
-							rect=new RectangleF(
-								TimeWidth+ProvWidth*ProvCount+1
-								,schedDefs[i].StartTime.Hour*Lh*RowsPerHr
-								+schedDefs[i].StartTime.Minute*Lh/MinPerRow
-								,ColWidth*ColCount-1
-								,(schedDefs[i].StopTime-schedDefs[i].StartTime).Hours*Lh*RowsPerHr
-								+(schedDefs[i].StopTime-schedDefs[i].StartTime).Minutes*Lh/MinPerRow);
-						}
-						else{//just one op
-							if(ApptViewItems.GetIndexOp(schedDefs[i].Op)==-1){
-								continue;//don't display if op not visible
-							}
-							rect=new RectangleF(
-								TimeWidth+ProvWidth*ProvCount
-								+ColWidth*ApptViewItems.GetIndexOp(schedDefs[i].Op)+1
-								,schedDefs[i].StartTime.Hour*Lh*RowsPerHr
-								+schedDefs[i].StartTime.Minute*Lh/MinPerRow
-								,ColWidth-1
-								,(schedDefs[i].StopTime
-								-schedDefs[i].StartTime).Hours*Lh*RowsPerHr
-								+(schedDefs[i].StopTime
-								-schedDefs[i].StartTime).Minutes*Lh/MinPerRow);
-						}
-					//paint either solid block or outline
-					if(PrefB.GetBool("SolidBlockouts")){
-						g.FillRectangle(blockBrush,rect);
-						g.DrawLine(blockOutlinePen,rect.X,rect.Y+1,rect.Right-1,rect.Y+1);
-					}
-					else{
-						g.DrawRectangle(penOutline,rect.X+1,rect.Y+2,rect.Width-2,rect.Height-3);
-					}				
-					g.DrawString(blockText,blockFont,new SolidBrush(DefB.Short[(int)DefCat.AppointmentColors][5].ItemColor),rect);
-					}
+			for(int i=0;i<schedForType.Length;i++){	
+				blockBrush=new SolidBrush(DefB.GetColor(DefCat.BlockoutTypes,schedForType[i].BlockoutType));
+				penOutline = new Pen(DefB.GetColor(DefCat.BlockoutTypes, schedForType[i].BlockoutType),2);
+				blockText=DefB.GetName(DefCat.BlockoutTypes,schedForType[i].BlockoutType)+"\r\n"+schedForType[i].Note;
+				if(schedForType[i].Op==0){//all ops
+					rect=new RectangleF(
+						TimeWidth+ProvWidth*ProvCount+1
+						,schedForType[i].StartTime.Hour*Lh*RowsPerHr//6
+						+schedForType[i].StartTime.Minute*Lh/MinPerRow//10
+						,ColWidth*ColCount-1
+						,(schedForType[i].StopTime-schedForType[i].StartTime).Hours*Lh*RowsPerHr
+						+(schedForType[i].StopTime-schedForType[i].StartTime).Minutes*Lh/MinPerRow);
 				}
-			}
-			else{//use schedForType
-				for(int i=0;i<schedForType.Length;i++){	
-					blockBrush=new SolidBrush(DefB.GetColor(DefCat.BlockoutTypes,schedForType[i].BlockoutType));
-					penOutline = new Pen(DefB.GetColor(DefCat.BlockoutTypes, schedForType[i].BlockoutType),2);
-					blockText=DefB.GetName(DefCat.BlockoutTypes,schedForType[i].BlockoutType)+"\r\n"+schedForType[i].Note;
-					if(schedForType[i].Op==0){//all ops
-						rect=new RectangleF(
-							TimeWidth+ProvWidth*ProvCount+1
-							,schedForType[i].StartTime.Hour*Lh*RowsPerHr//6
-							+schedForType[i].StartTime.Minute*Lh/MinPerRow//10
-							,ColWidth*ColCount-1
-							,(schedForType[i].StopTime-schedForType[i].StartTime).Hours*Lh*RowsPerHr
-							+(schedForType[i].StopTime-schedForType[i].StartTime).Minutes*Lh/MinPerRow);
+				else{//just one op
+					if(ApptViewItems.GetIndexOp(schedForType[i].Op)==-1){
+						continue;//don't display if op not visible
 					}
-					else{//just one op
-						if(ApptViewItems.GetIndexOp(schedForType[i].Op)==-1){
-							continue;//don't display if op not visible
-						}
-						rect=new RectangleF(
-							TimeWidth+ProvWidth*ProvCount
-							+ColWidth*ApptViewItems.GetIndexOp(schedForType[i].Op)+1
-							,schedForType[i].StartTime.Hour*Lh*RowsPerHr
-							+schedForType[i].StartTime.Minute*Lh/MinPerRow
-							,ColWidth-1
-							,(schedForType[i].StopTime-schedForType[i].StartTime).Hours*Lh*RowsPerHr
-							+(schedForType[i].StopTime-schedForType[i].StartTime).Minutes*Lh/MinPerRow);
-					}
-					//paint either solid block or outline
-					if(PrefB.GetBool("SolidBlockouts")){
-						g.FillRectangle(blockBrush,rect);
-						g.DrawLine(blockOutlinePen,rect.X,rect.Y+1,rect.Right-1,rect.Y+1);
-					}
-					else{
-						g.DrawRectangle(penOutline,rect.X+1,rect.Y+2,rect.Width-2,rect.Height-3);
-					}				
-					g.DrawString(blockText,blockFont,new SolidBrush(DefB.Short[(int)DefCat.AppointmentColors][5].ItemColor),rect);
-    
-                }         
-      }
+					rect=new RectangleF(
+						TimeWidth+ProvWidth*ProvCount
+						+ColWidth*ApptViewItems.GetIndexOp(schedForType[i].Op)+1
+						,schedForType[i].StartTime.Hour*Lh*RowsPerHr
+						+schedForType[i].StartTime.Minute*Lh/MinPerRow
+						,ColWidth-1
+						,(schedForType[i].StopTime-schedForType[i].StartTime).Hours*Lh*RowsPerHr
+						+(schedForType[i].StopTime-schedForType[i].StartTime).Minutes*Lh/MinPerRow);
+				}
+				//paint either solid block or outline
+				if(PrefB.GetBool("SolidBlockouts")){
+					g.FillRectangle(blockBrush,rect);
+					g.DrawLine(blockOutlinePen,rect.X,rect.Y+1,rect.Right-1,rect.Y+1);
+				}
+				else{
+					g.DrawRectangle(penOutline,rect.X+1,rect.Y+2,rect.Width-2,rect.Height-3);
+				}				
+				g.DrawString(blockText,blockFont,new SolidBrush(DefB.Short[(int)DefCat.AppointmentColors][5].ItemColor),rect);
+			}         
 		}
 
 		///<summary>The background provider schedule for the timebar on the left</summary>
 		private void DrawProvSchedInTimebar(Graphics g){
 			Provider provCur;
-			SchedDefault[] schedDefs;//for one type at a time
+			//SchedDefault[] schedDefs;//for one type at a time
 			Schedule[] schedForType;
 			for(int j=0;j<ApptViewItems.VisProvs.Length;j++){
 				provCur=Providers.List[ApptViewItems.VisProvs[j]];
 				schedForType=Schedules.GetForType(SchedListDay,ScheduleType.Provider,provCur.ProvNum);
-				if(schedForType.Length==0){//use default sched
-					schedDefs=SchedDefaults.GetForType(ScheduleType.Provider,provCur.ProvNum);
-					for(int i=0;i<schedDefs.Length;i++){
-						if(schedDefs[i].DayOfWeek==(int)Appointments.DateSelected.DayOfWeek){
-							g.FillRectangle(openBrush
-								,TimeWidth+ProvWidth*j
-								,schedDefs[i].StartTime.Hour*Lh*RowsPerHr
-								+schedDefs[i].StartTime.Minute*Lh/MinPerRow
-								,ProvWidth
-								,(schedDefs[i].StopTime
-								-schedDefs[i].StartTime).Hours*Lh*RowsPerHr
-								+(schedDefs[i].StopTime
-								-schedDefs[i].StartTime).Minutes*Lh/MinPerRow);
-						}
-					}
-				}
-				else{//use schedForType
-					for(int i=0;i<schedForType.Length;i++){	
-						if(schedForType[i].Status==SchedStatus.Holiday){
- 							g.FillRectangle(holidayBrush,TimeWidth+ProvWidth*j,0
-								,ProvWidth,Height);
-						} 
-						else{
- 							g.FillRectangle(openBrush
-								,TimeWidth+ProvWidth*j
-								,schedForType[i].StartTime.Hour*Lh*RowsPerHr//6
-								+(int)schedForType[i].StartTime.Minute*Lh/MinPerRow//10
-								,ProvWidth
-								,(schedForType[i].StopTime-schedForType[i].StartTime).Hours*Lh*RowsPerHr//6
-								+(schedForType[i].StopTime-schedForType[i].StartTime).Minutes*Lh/MinPerRow);//10
-						}
-					}         
-				}
+				for(int i=0;i<schedForType.Length;i++){	
+					g.FillRectangle(openBrush
+						,TimeWidth+ProvWidth*j
+						,schedForType[i].StartTime.Hour*Lh*RowsPerHr//6
+						+(int)schedForType[i].StartTime.Minute*Lh/MinPerRow//10
+						,ProvWidth
+						,(schedForType[i].StopTime-schedForType[i].StartTime).Hours*Lh*RowsPerHr//6
+						+(schedForType[i].StopTime-schedForType[i].StartTime).Minutes*Lh/MinPerRow);//10
+				}         
 			}
 		}
 

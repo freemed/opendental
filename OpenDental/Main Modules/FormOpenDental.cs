@@ -70,8 +70,6 @@ namespace OpenDental{
 		private System.Windows.Forms.MenuItem menuItemPrescriptions;
 		private System.Windows.Forms.MenuItem menuItemProviders;
 		private System.Windows.Forms.MenuItem menuItemProcCodes;
-		private System.Windows.Forms.MenuItem menuItemPracDef;
-		private System.Windows.Forms.MenuItem menuItemPracSched;
 		private System.Windows.Forms.MenuItem menuItemPrintScreen;
 		private System.Windows.Forms.MenuItem menuItemFinanceCharge;
 		private System.Windows.Forms.MenuItem menuItemAging;
@@ -103,7 +101,6 @@ namespace OpenDental{
 		private System.Windows.Forms.MenuItem menuItemLists;
 		private System.Windows.Forms.MenuItem menuItemTools;
 		private System.Windows.Forms.MenuItem menuItemReferrals;
-		private System.Windows.Forms.MenuItem menuItem10;
 		private System.Windows.Forms.MenuItem menuItemExit;
 		private System.Windows.Forms.MenuItem menuItemDatabaseMaintenance;
 		private System.Windows.Forms.MenuItem menuItemProcedureButtons;
@@ -147,9 +144,6 @@ namespace OpenDental{
 		private System.Windows.Forms.MenuItem menuItemHelpWindows;
 		private System.Windows.Forms.MenuItem menuItemMisc;
 		private System.Windows.Forms.MenuItem menuItemBirthdays;
-		private System.Windows.Forms.MenuItem menuItemProvDefault;
-		private System.Windows.Forms.MenuItem menuItemProvSched;
-		private System.Windows.Forms.MenuItem menuItemBlockoutDefault;
 		private System.Windows.Forms.MenuItem menuItemRemote;
 		private System.Windows.Forms.MenuItem menuItemInstructors;
 		private System.Windows.Forms.MenuItem menuItemSchoolClass;
@@ -275,14 +269,8 @@ namespace OpenDental{
 			this.menuItemLinks = new System.Windows.Forms.MenuItem();
 			this.menuItemQuestions = new System.Windows.Forms.MenuItem();
 			this.menuItemRecall = new System.Windows.Forms.MenuItem();
-			this.menuItemSecurity = new System.Windows.Forms.MenuItem();
-			this.menuItem10 = new System.Windows.Forms.MenuItem();
 			this.menuItemSched = new System.Windows.Forms.MenuItem();
-			this.menuItemPracDef = new System.Windows.Forms.MenuItem();
-			this.menuItemPracSched = new System.Windows.Forms.MenuItem();
-			this.menuItemProvDefault = new System.Windows.Forms.MenuItem();
-			this.menuItemProvSched = new System.Windows.Forms.MenuItem();
-			this.menuItemBlockoutDefault = new System.Windows.Forms.MenuItem();
+			this.menuItemSecurity = new System.Windows.Forms.MenuItem();
 			this.menuItemLists = new System.Windows.Forms.MenuItem();
 			this.menuItemProcCodes = new System.Windows.Forms.MenuItem();
 			this.menuItem5 = new System.Windows.Forms.MenuItem();
@@ -478,14 +466,8 @@ namespace OpenDental{
             this.menuItemLinks,
             this.menuItemQuestions,
             this.menuItemRecall,
-            this.menuItemSecurity,
-            this.menuItem10,
             this.menuItemSched,
-            this.menuItemPracDef,
-            this.menuItemPracSched,
-            this.menuItemProvDefault,
-            this.menuItemProvSched,
-            this.menuItemBlockoutDefault});
+            this.menuItemSecurity});
 			this.menuItemSettings.Shortcut = System.Windows.Forms.Shortcut.CtrlS;
 			this.menuItemSettings.Text = "&Setup";
 			// 
@@ -639,52 +621,17 @@ namespace OpenDental{
 			this.menuItemRecall.Text = "Recall";
 			this.menuItemRecall.Click += new System.EventHandler(this.menuItemRecall_Click);
 			// 
-			// menuItemSecurity
-			// 
-			this.menuItemSecurity.Index = 25;
-			this.menuItemSecurity.Text = "Security";
-			this.menuItemSecurity.Click += new System.EventHandler(this.menuItemSecurity_Click);
-			// 
-			// menuItem10
-			// 
-			this.menuItem10.Index = 26;
-			this.menuItem10.Text = "-";
-			// 
 			// menuItemSched
 			// 
-			this.menuItemSched.Index = 27;
-			this.menuItemSched.Text = "SCHEDULES";
+			this.menuItemSched.Index = 25;
+			this.menuItemSched.Text = "Schedules";
 			this.menuItemSched.Click += new System.EventHandler(this.menuItemSched_Click);
 			// 
-			// menuItemPracDef
+			// menuItemSecurity
 			// 
-			this.menuItemPracDef.Index = 28;
-			this.menuItemPracDef.Text = "   Practice Default";
-			this.menuItemPracDef.Click += new System.EventHandler(this.menuItemPracDef_Click);
-			// 
-			// menuItemPracSched
-			// 
-			this.menuItemPracSched.Index = 29;
-			this.menuItemPracSched.Text = "   Practice";
-			this.menuItemPracSched.Click += new System.EventHandler(this.menuItemPracSched_Click);
-			// 
-			// menuItemProvDefault
-			// 
-			this.menuItemProvDefault.Index = 30;
-			this.menuItemProvDefault.Text = "   Provider Default";
-			this.menuItemProvDefault.Click += new System.EventHandler(this.menuItemProvDefault_Click);
-			// 
-			// menuItemProvSched
-			// 
-			this.menuItemProvSched.Index = 31;
-			this.menuItemProvSched.Text = "   Provider";
-			this.menuItemProvSched.Click += new System.EventHandler(this.menuItemProvSched_Click);
-			// 
-			// menuItemBlockoutDefault
-			// 
-			this.menuItemBlockoutDefault.Index = 32;
-			this.menuItemBlockoutDefault.Text = "   Blockout Default";
-			this.menuItemBlockoutDefault.Click += new System.EventHandler(this.menuItemBlockoutDefault_Click);
+			this.menuItemSecurity.Index = 26;
+			this.menuItemSecurity.Text = "Security";
+			this.menuItemSecurity.Click += new System.EventHandler(this.menuItemSecurity_Click);
 			// 
 			// menuItemLists
 			// 
@@ -1679,10 +1626,10 @@ namespace OpenDental{
 				UserGroups.Refresh();
 				GroupPermissions.Refresh();
 			}
-			if((itypes & InvalidTypes.Sched)==InvalidTypes.Sched){
-				SchedDefaults.Refresh();//assumed to change rarely
+			//if((itypes & InvalidTypes.Sched)==InvalidTypes.Sched){
+				//SchedDefaults.Refresh();//assumed to change rarely
 				//Schedules.Refresh();//Schedules are refreshed as needed.  Not here.
-			}
+			//}
 			if((itypes & InvalidTypes.Startup)==InvalidTypes.Startup){
 				Employers.Refresh();//only needed when opening the prog. After that, automated.
 				ElectIDs.Refresh();//only run on startup
@@ -2484,6 +2431,24 @@ namespace OpenDental{
 			SecurityLogs.MakeLogEntry(Permissions.Setup,0,"Recall");	
 		}
 
+		private void menuItemSched_Click(object sender,EventArgs e) {
+			if(!Security.IsAuthorized(Permissions.Schedules)) {
+				return;
+			}
+			FormSchedule FormS=new FormSchedule();
+			FormS.ShowDialog();
+			SecurityLogs.MakeLogEntry(Permissions.Schedules,0,"");
+		}
+
+		/*private void menuItemBlockoutDefault_Click(object sender,System.EventArgs e) {
+			if(!Security.IsAuthorized(Permissions.Blockouts)) {
+				return;
+			}
+			FormSchedDefault FormSD=new FormSchedDefault(ScheduleType.Blockout);
+			FormSD.ShowDialog();
+			SecurityLogs.MakeLogEntry(Permissions.Blockouts,0,"Default");
+		}*/
+
 		private void menuItemSecurity_Click(object sender, System.EventArgs e) {
 			if(!Security.IsAuthorized(Permissions.SecurityAdmin)){
 				return;
@@ -2491,58 +2456,6 @@ namespace OpenDental{
 			FormSecurity FormS=new FormSecurity(); 
 			FormS.ShowDialog();
 			SecurityLogs.MakeLogEntry(Permissions.SecurityAdmin,0,"");
-		}
-		
-		//Setup-Schedules
-
-		private void menuItemSched_Click(object sender,EventArgs e) {
-			FormSchedule FormS=new FormSchedule();
-			FormS.ShowDialog();
-		}
-
-		private void menuItemPracDef_Click(object sender, System.EventArgs e) {
-			if(!Security.IsAuthorized(Permissions.Schedules)){
-				return;
-			}
-			FormSchedDefault FormSD=new FormSchedDefault(ScheduleType.Practice);
-			FormSD.ShowDialog();
-			SecurityLogs.MakeLogEntry(Permissions.Schedules,0,"Practice Default");
-		}
-
-		private void menuItemPracSched_Click(object sender, System.EventArgs e) {
-			if(!Security.IsAuthorized(Permissions.Schedules)){
-				return;
-			}
-			FormSchedPractice FormSP=new FormSchedPractice(ScheduleType.Practice);
-			FormSP.ShowDialog();
-			SecurityLogs.MakeLogEntry(Permissions.Schedules,0,"Practice");
-		}
-
-		private void menuItemProvDefault_Click(object sender, System.EventArgs e) {
-			if(!Security.IsAuthorized(Permissions.Schedules)){
-				return;
-			}
-			FormSchedDefault FormSD=new FormSchedDefault(ScheduleType.Provider);
-			FormSD.ShowDialog();
-			SecurityLogs.MakeLogEntry(Permissions.Schedules,0,"Provider Default");	
-		}
-
-		private void menuItemProvSched_Click(object sender, System.EventArgs e) {
-			if(!Security.IsAuthorized(Permissions.Schedules)){
-				return;
-			}
-			FormSchedPractice FormSP=new FormSchedPractice(ScheduleType.Provider);
-			FormSP.ShowDialog();
-			SecurityLogs.MakeLogEntry(Permissions.Schedules,0,"Provider");
-		}
-
-		private void menuItemBlockoutDefault_Click(object sender, System.EventArgs e) {
-			if(!Security.IsAuthorized(Permissions.Blockouts)){
-				return;
-			}
-			FormSchedDefault FormSD=new FormSchedDefault(ScheduleType.Blockout);
-			FormSD.ShowDialog();
-			SecurityLogs.MakeLogEntry(Permissions.Blockouts,0,"Default");	
 		}
 
 		//Lists

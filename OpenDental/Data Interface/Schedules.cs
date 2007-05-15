@@ -223,14 +223,14 @@ namespace OpenDental{
 			return false;
 		}
 
-		///<summary>Also automatically handles situation where the last blockout for the day gets deleted.  In that case, it adds a "closed" blockout to signify an override of default blockouts.</summary>
+		///<summary></summary>
 		public static void Delete(Schedule sched){
 			string command= "DELETE from schedule WHERE schedulenum = '"+POut.PInt(sched.ScheduleNum)+"'";
  			General.NonQ(command);
 			//if this was the last blockout for a day, then create a blockout for 'closed'
-			if(sched.SchedType==ScheduleType.Blockout){
-				Schedules.CheckIfDeletedLastBlockout(sched.SchedDate);
-			}
+			//if(sched.SchedType==ScheduleType.Blockout){
+			//	Schedules.CheckIfDeletedLastBlockout(sched.SchedDate);
+			//}
 		}
 	
 		///<summary>Supply a list of all Schedule for one day. Then, this filters out for one type.</summary>
@@ -246,6 +246,7 @@ namespace OpenDental{
 			return retVal;
 		}
 
+		/*
 		///<summary>If a particular day already has some non-default schedule items, then this does nothing and returns false.  But if the day is all default, then it converts each default entry into an actual schedule entry and returns true.  The user would not notice this change, but now they can edit or add.</summary>
 		public static bool ConvertFromDefault(DateTime forDate,ScheduleType schedType,int provNum){
 			Schedule[] List=RefreshDay(forDate);
@@ -280,14 +281,20 @@ namespace OpenDental{
 				+"AND SchedType='"+POut.PInt((int)schedType)+"' "
 				+"AND ProvNum='"  +POut.PInt(provNum)+"'";
  			General.NonQ(command);
-		}
+		}*/
 
 		///<summary>Clears all blockouts for day.  But then defaults would show.  So adds a "closed" blockout.</summary>
 		public static void ClearBlockoutsForDay(DateTime date){
-			SetAllDefault(date,ScheduleType.Blockout,0);
-			CheckIfDeletedLastBlockout(date);
+			//SetAllDefault(date,ScheduleType.Blockout,0);
+			string command="DELETE from schedule WHERE "
+				+"SchedDate="    +POut.PDate(date)+" "
+				+"AND SchedType='"+POut.PInt((int)ScheduleType.Blockout)+"' ";
+				//+"AND ProvNum='"  +POut.PInt(provNum)+"'";
+			General.NonQ(command);
+			//CheckIfDeletedLastBlockout(date);
 		}
 
+		/*
 		///<summary></summary>
 		public static void CheckIfDeletedLastBlockout(DateTime schedDate){
 			string command="SELECT COUNT(*) FROM schedule WHERE SchedType='"+POut.PInt((int)ScheduleType.Blockout)+"' "
@@ -300,7 +307,7 @@ namespace OpenDental{
 				sched.Status=SchedStatus.Closed;
 				Insert(sched);
 			}
-		}
+		}*/
 
 		public static bool DateIsHoliday(DateTime date){
 			string command="SELECT COUNT(*) FROM schedule WHERE Status=2 "//holiday
