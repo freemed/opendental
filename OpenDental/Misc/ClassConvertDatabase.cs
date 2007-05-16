@@ -5067,35 +5067,25 @@ namespace OpenDental{
 				command="INSERT INTO definition (Category,ItemOrder,ItemName,ItemColor,IsHidden) VALUES(12,8,"
 				+"'Appointment Text - Today',-8388480,0)";
 				General.NonQEx(command);
-				command="INSERT INTO definition (Category,ItemOrder,ItemName,ItemColor,IsHidden) VALUES(12,9,"
-				+"'Appointment Background - Today',-886,0)";
+				command="INSERT INTO definition (Category,ItemOrder,ItemName,ItemColor,IsHidden) VALUES(12,9,'Appointment Background - Today',-886,0)";
 				General.NonQEx(command);
-				command="INSERT INTO definition (Category,ItemOrder,ItemName,ItemColor,IsHidden) VALUES(12,10,"
-				+"'Past Appointment Text',-8388480,0)";
+				command="INSERT INTO definition (Category,ItemOrder,ItemName,ItemColor,IsHidden) VALUES(12,10,'Past Appointment Text',-8388480,0)";
 				General.NonQEx(command);
-				command="INSERT INTO definition (Category,ItemOrder,ItemName,ItemColor,IsHidden) VALUES(12,11,"
-				+"'Past Appointment Background','"+Color.DarkGray.ToArgb()+"',0)";
+				command="INSERT INTO definition (Category,ItemOrder,ItemName,ItemColor,IsHidden) VALUES(12,11,'Past Appointment Background','"+Color.DarkGray.ToArgb()+"',0)";
 				General.NonQEx(command);
-				command="INSERT INTO definition (Category,ItemOrder,ItemName,ItemColor,IsHidden) VALUES(12,12,"
-				+"'Future Appointment Text',-8388480,0)";
+				command="INSERT INTO definition (Category,ItemOrder,ItemName,ItemColor,IsHidden) VALUES(12,12,'Future Appointment Text',-8388480,0)";
 				General.NonQEx(command);
-				command="INSERT INTO definition (Category,ItemOrder,ItemName,ItemColor,IsHidden) VALUES(12,13,"
-				+"'Future Appointment Background','"+Color.LightGreen.ToArgb()+"',0)";
+				command="INSERT INTO definition (Category,ItemOrder,ItemName,ItemColor,IsHidden) VALUES(12,13,'Future Appointment Background','"+Color.LightGreen.ToArgb()+"',0)";
 				General.NonQEx(command);
-				command="INSERT INTO definition (Category,ItemOrder,ItemName,ItemColor,IsHidden) VALUES(12,14,"
-				+"'Broken/Unschd Appt Text','"+Color.White.ToArgb()+"',0)";
+				command="INSERT INTO definition (Category,ItemOrder,ItemName,ItemColor,IsHidden) VALUES(12,14,'Broken/Unschd Appt Text','"+Color.White.ToArgb()+"',0)";
 				General.NonQEx(command);
-				command="INSERT INTO definition (Category,ItemOrder,ItemName,ItemColor,IsHidden) VALUES(12,15,"
-				+"'Broken/Unschd Appt Background','"+Color.Red.ToArgb()+"',0)";
+				command="INSERT INTO definition (Category,ItemOrder,ItemName,ItemColor,IsHidden) VALUES(12,15,'Broken/Unschd Appt Background','"+Color.Red.ToArgb()+"',0)";
 				General.NonQEx(command);
-				command="INSERT INTO definition (Category,ItemOrder,ItemName,ItemColor,IsHidden) VALUES(12,16,"
-				+"'Planned Appointment Text',-8388480,0)";
+				command="INSERT INTO definition (Category,ItemOrder,ItemName,ItemColor,IsHidden) VALUES(12,16,'Planned Appointment Text',-8388480,0)";
 				General.NonQEx(command);
-				command="INSERT INTO definition (Category,ItemOrder,ItemName,ItemColor,IsHidden) VALUES(12,17,"
-				+"'Planned Appointment Background',-17409,0)";
+				command="INSERT INTO definition (Category,ItemOrder,ItemName,ItemColor,IsHidden) VALUES(12,17,'Planned Appointment Background',-17409,0)";
 				General.NonQEx(command);
-				command="INSERT INTO definition (Category,ItemOrder,ItemName,ItemColor,IsHidden) VALUES(21,8,"
-				+"'List Selection Color','"+Color.LightGray.ToArgb()+"',0)";
+				command="INSERT INTO definition (Category,ItemOrder,ItemName,ItemColor,IsHidden) VALUES(21,8,'List Selection Color','"+Color.LightGray.ToArgb()+"',0)";
 				General.NonQEx(command);
 				
 				
