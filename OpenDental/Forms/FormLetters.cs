@@ -34,7 +34,8 @@ namespace OpenDental{
 		private int pagesPrinted=0;
 		private Patient PatCur;
 		private Letter LetterCur;
-
+		///<summary>If this is not null, then this letter will be addressed to the referral rather than the patient.</summary>
+		public Referral ReferralCur;
 
 		///<summary></summary>
 		public FormLetters(Patient patCur){
@@ -276,35 +277,54 @@ namespace OpenDental{
 			}
 			str.Append("\r\n\r\n");
 			//address
-			str.Append(PatCur.FName+" "+PatCur.MiddleI+" "+PatCur.LName+"\r\n");
-			str.Append(PatCur.Address+"\r\n");
-			if(PatCur.Address2!="")
-				str.Append(PatCur.Address2+"\r\n");
-			str.Append(PatCur.City+", "+PatCur.State+"  "+PatCur.Zip);
-			str.Append("\r\n\r\n\r\n\r\n");
-			//date
-			str.Append(DateTime.Today.ToLongDateString()+"\r\n\r\n");
-			//greeting
-			str.Append(Lan.g(this,"Dear "));
-			if(CultureInfo.CurrentCulture.Name=="en-GB"){
-				if(PatCur.Salutation!="")
-					str.Append(PatCur.Salutation);
-				else{
-					if(PatCur.Gender==PatientGender.Female){
-						str.Append("Ms. "+PatCur.LName);
-					}
-					else{
-						str.Append("Mr. "+PatCur.LName);
-					}
-				}
+			if(ReferralCur==null){
+				str.Append(PatCur.FName+" "+PatCur.MiddleI+" "+PatCur.LName+"\r\n");
+				str.Append(PatCur.Address+"\r\n");
+				if(PatCur.Address2!="")
+					str.Append(PatCur.Address2+"\r\n");
+				str.Append(PatCur.City+", "+PatCur.State+"  "+PatCur.Zip);
 			}
 			else{
-				if(PatCur.Salutation!="")
-					str.Append(PatCur.Salutation);
-				else if(PatCur.Preferred!="")
-					str.Append(PatCur.Preferred);
-				else
-					str.Append(PatCur.FName);
+				str.Append(Referrals.GetNameFL(ReferralCur.ReferralNum)+"\r\n");
+				str.Append(ReferralCur.Address+"\r\n");
+				if(ReferralCur.Address2!="")
+					str.Append(ReferralCur.Address2+"\r\n");
+				str.Append(ReferralCur.City+", "+ReferralCur.ST+"  "+ReferralCur.Zip);
+			}
+			str.Append("\r\n\r\n\r\n\r\n");
+			//date
+			str.Append(DateTime.Today.ToLongDateString()+"\r\n");
+			//referral RE
+			if(ReferralCur!=null){
+				str.Append(Lan.g(this,"RE Patient: ")+PatCur.GetNameFL()+"\r\n");
+			}
+			str.Append("\r\n");
+			//greeting
+			str.Append(Lan.g(this,"Dear "));
+			if(ReferralCur==null){
+				if(CultureInfo.CurrentCulture.Name=="en-GB"){
+					if(PatCur.Salutation!="")
+						str.Append(PatCur.Salutation);
+					else{
+						if(PatCur.Gender==PatientGender.Female){
+							str.Append("Ms. "+PatCur.LName);
+						}
+						else{
+							str.Append("Mr. "+PatCur.LName);
+						}
+					}
+				}
+				else{
+					if(PatCur.Salutation!="")
+						str.Append(PatCur.Salutation);
+					else if(PatCur.Preferred!="")
+						str.Append(PatCur.Preferred);
+					else
+						str.Append(PatCur.FName);
+				}
+			}
+			else{//referral
+				str.Append(ReferralCur.FName);
 			}
 			str.Append(",\r\n\r\n");
 			//body text

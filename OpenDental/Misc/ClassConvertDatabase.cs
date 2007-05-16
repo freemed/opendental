@@ -5086,11 +5086,14 @@ namespace OpenDental{
 				command="INSERT INTO definition (Category,ItemOrder,ItemName,ItemColor,IsHidden) VALUES(12,17,'Planned Appointment Background',-17409,0)";
 				General.NonQEx(command);
 		//I don't think this is a good idea.  There's such a thing as too many choices.  We need to discuss it more.
+	//I would be much more comfortable with it if we had a mechanism to let the user easily switch it back to default.  But why is there a need for it anyway?
 				//command="INSERT INTO definition (Category,ItemOrder,ItemName,ItemColor,IsHidden) VALUES(21,8,'List Selection Color','"+Color.LightGray.ToArgb()+"',0)";
 				//General.NonQEx(command);
 
 
 				
+
+
 				
 				
 				command="UPDATE preference SET ValueString = '4.9.0.0' WHERE PrefName = 'DataBaseVersion'";
