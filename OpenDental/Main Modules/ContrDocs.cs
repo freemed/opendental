@@ -877,6 +877,7 @@ namespace OpenDental{
 
 		/// <summary>Refreshes list from db, then fills the treeview.  Set keepDoc to true in order to keep the current selection active.</summary>
 		private void FillDocList(bool keepDoc){
+			string selectionId=(keepDoc?GetNodeIdentifier(TreeDocuments.SelectedNode):"");
 			//Clear current tree contents.
 			TreeDocuments.SelectedNode=null;
 			TreeDocuments.Nodes.Clear();
@@ -890,7 +891,6 @@ namespace OpenDental{
 				TreeDocuments.Nodes[i].ImageIndex=1;
 			}
 			//Add all relevant documents and mounts as stored in the database to the tree for the current patient.
-			string selectionId=(keepDoc?GetNodeIdentifier(TreeDocuments.SelectedNode):"");
 			DataSet patientDocData=Documents.RefreshForPatient(new string[] { PatCur.PatNum.ToString() });
 			DataRowCollection rows=patientDocData.Tables["DocumentList"].Rows;
 			for(int i=0;i<rows.Count;i++) {
@@ -1312,6 +1312,7 @@ namespace OpenDental{
 			if(doc!=null && MakeIdentifier(doc.DocNum.ToString(),"0")!=nodeId){
 				SelectTreeNode(GetNodeById(MakeIdentifier(doc.DocNum.ToString(),"0")));
 			}
+			FillDocList(true);
 		}
 
 		private void OnCopy_Click(){
@@ -1561,15 +1562,13 @@ namespace OpenDental{
 					mount.DocCategory=destinationCategory;
 					Mounts.Update(mount);
 					id=MakeIdentifier("0",mount.MountNum.ToString());
-				}
-				else {//Document object.
+				}else{//Document object.
 					Document doc=Documents.GetByNum(docNum);
 					doc.DocCategory=destinationCategory;
 					Documents.Update(doc);
 					id=MakeIdentifier(doc.DocNum.ToString(),"0");
 				}
-				FillDocList(false);
-				SelectTreeNode(GetNodeById(id));
+				FillDocList(true);
 				treeIdNumDown="";
 			}
 		}
