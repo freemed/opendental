@@ -931,7 +931,9 @@ namespace OpenDentBusiness{
 		///<summary>31</summary>
 		AccountingEdit,
 		///<summary>32</summary>
-		AccountingCreate
+		AccountingCreate,
+		///<summary>33</summary>
+		Accounting
 	}
 
 	///<summary>The type of signal being sent.</summary>

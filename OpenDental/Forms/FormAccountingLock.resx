@@ -117,50 +117,9 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <metadata name="imageListMain.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>17, 17</value>
-  </metadata>
-  <data name="imageListMain.ImageStream" mimetype="application/x-microsoft.net.object.binary.base64">
-    <value>
-        AAEAAAD/////AQAAAAAAAAAMAgAAAFdTeXN0ZW0uV2luZG93cy5Gb3JtcywgVmVyc2lvbj0yLjAuMC4w
-        LCBDdWx0dXJlPW5ldXRyYWwsIFB1YmxpY0tleVRva2VuPWI3N2E1YzU2MTkzNGUwODkFAQAAACZTeXN0
-        ZW0uV2luZG93cy5Gb3Jtcy5JbWFnZUxpc3RTdHJlYW1lcgEAAAAERGF0YQcCAgAAAAkDAAAADwMAAAAS
-        BwAAAk1TRnQBSQFMAgEBAgEAAQQBAAEEAQABFgEAARYBAAT/ASEBAAj/AUIBTQE2BwABNgMAASgDAAFY
-        AwABFgMAAQEBAAEgBQABQAEedgADJwH/AycB/wMnAf8DJwH/AycB//8AYQADJwH/AycB/wMnAf8DJwH/
-        /wABAAz/LAADWgH/A7IB/yAAAycB/wMnAf8DJwH/AycB/wMnAf8MAAMnAf8DJwH/1AABigF/AXgB/wGK
-        AX8BeAH/AYoBfwF4Bf8sAAOyAf8DWgH/A1oB/zAAAycB/wMnAf8DJwH/3AABigF/AXgB/wGKAX8BeAH/
-        AYoBfwF4Bf8wAANaAf8DWgH/AWsBgQGwAf8BawGBAbAB//8AEQABigF/AXgB/wGKAX8BeAH/AYoBfwF4
-        Bf80AAFrAYEBsAH/AWsBgQGwAf8BawGBAbAB/wFrAYEBsAH//wANAAGKAX8BeAH/AYoBfwF4Af8BigF/
-        AXgF/zQAAWsBgQGwAf8BawGBAbAB/wFrAYEBsAH/AScB8gL/AScBpAGtAf//AAkAAYoBfwF4Af8BigF/
-        AXgB/wGKAX8BeAX/OAABawGBAbAB/wEnAfIC/wEnAfIC/wEnAfIC/wEnAaQBrQH//wAFAAGKAX8BeAH/
-        AYoBfwF4Af8BigF/AXgF/zwABP8BJwHyAv8BJwHyAv8BJwHyAv8BJwGkAa0B/+gAGP8BigF/AXgB/wGK
-        AX8BeAH/AYoBfwF4If8kAAT/AScB8gL/AScB8gL/AScB8gL/AScBpAGtAf/gAAGKAX8BeAH/AYoBfwF4
-        Af8BigF/AXgB/wGKAX8BeAH/AYoBfwF4Af8BigF/AXgB/wGKAX8BeAH/AYoBfwF4Af8BigF/AXgB/wGK
-        AX8BeAH/AYoBfwF4Af8BigF/AXgB/wGKAX8BeAH/AYoBfwF4Af8BigF/AXgB/wGKAX8BeAH/AYoBfwF4
-        Bf8oAAT/AScB8gL/AScB8gL/AScB8gL/AScBpAGtAf/cAAGKAX8BeAH/AYoBfwF4Af8BigF/AXgB/wGK
-        AX8BeAH/AYoBfwF4Af8BigF/AXgB/wGKAX8BeAH/AYoBfwF4Af8BigF/AXgB/wGKAX8BeAH/AYoBfwF4
-        Af8BigF/AXgB/wGKAX8BeAH/AYoBfwF4Af8BigF/AXgB/wGKAX8BeAH/AYoBfwF4Bf8sAAT/AScB8gL/
-        AScB8gL/AScB8gL/AScBpAGtAf/YAAGKAX8BeAH/AYoBfwF4Af8BigF/AXgB/wGKAX8BeAH/AYoBfwF4
-        Af8BigF/AXgB/wGKAX8BeAH/AYoBfwF4Af8BigF/AXgB/wGKAX8BeAH/AYoBfwF4Af8BigF/AXgB/wGK
-        AX8BeAH/AYoBfwF4Af8BigF/AXgB/wGKAX8BeAH/AYoBfwF4Af80AAT/AScB8gL/AScB8gL/AScB8gL/
-        AScBpAGtAf/wAAGKAX8BeAH/AYoBfwF4Af8BigF/AXgF/1AABP8BJwHyAv8BJwHyAv8BJwHyAv8BJwGk
-        Aa0B/+wAAYoBfwF4Af8BigF/AXgB/wGKAX8BeAX/VAAE/wEnAfIC/wEnAfIC/wEnAfIC/wEnAaQBrQH/
-        6AABigF/AXgB/wGKAX8BeAH/AYoBfwF4Bf9YAAT/AScB8gL/AScB8gL/AScB8gL/AScBpAGtAf/kAAGK
-        AX8BeAH/AYoBfwF4Af8BigF/AXgF/1wABP8BJwHyAv8BJwHyAv8DsgH/A4EB/+AAAYoBfwF4Af8BigF/
-        AXgB/wGKAX8BeAX/YAAE/wOyAf8DsgH/A7IB/wErAYEB+gH/3AABigF/AXgB/wGKAX8BeAH/AYoBfwF4
-        Bf9kAAOyAf8DsgH/ASsBgQH6Af8BKwGBAfoB/wErAYEB+gH/2AABigF/AXgB/wGKAX8BeAH/AYoBfwF4
-        Af9sAAErAYEB+gH/ASsBgQH6Af8BKwGBAfoB/wErAYEB+gH//wBVAAErAYEB+gH/ASsBgQH6Af//AP8A
-        GgABQgFNAT4HAAE+AwABKAMAAVgDAAEWAwABAQEAAQEFAAEIAQEWAAP/AQAD/wGDAf8B8AYAA/8B/AE/
-        AfAGAAH/AccB/wE/AcEBwAYAAf8BhwH/AR8B/gEwBgAB/wGHAf8BhwH/AfAGAAH/AYcB/wHDAf8B8AYA
-        Af8BhwH/AcEB/wHwBgAB/wGHAf8B4AH/AfAGAAH/AYcB/wHwAX8B8AYAAeABAAEPAfgBPwHwBgABwAEA
-        AQ8B/AEfAfAGAAHAAQABDwH+AQ8B8AYAAcABAAEfAf8BBwHwBgAB/wGHAv8BgwHwBgAB/wGHAv8BwQHw
-        BgAB/wGHAv8B4AHwBgAB/wGHAv8B8AFwBgAB/wGHAv8B+AEwBgAB/wGHAv8B/AEQBgAB/wGPAv8B/gEQ
-        BgAF/wEwBgAF/wHwBgAL
-</value>
+  <data name="label1.Text" xml:space="preserve">
+    <value>This locks all accounting entries on or before the date entered below, regardless of security level.  The lock would have to be turned off by a security admin before anyone could change history.  Typically used to lock previous years from accidental or intentional alteration.  But any complex database may develop flaws, so the lock is not perfect.  It is strongly recommended to print a hard copy of the General Ledger at the same time as the lock is set.</value>
   </data>
-  <metadata name="mainMenu1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>139, 17</value>
-  </metadata>
   <assembly alias="System.Drawing" name="System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
   <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>

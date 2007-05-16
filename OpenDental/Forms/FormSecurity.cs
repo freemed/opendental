@@ -87,7 +87,7 @@ namespace OpenDental{
 			this.treeUsers.Location = new System.Drawing.Point(8,29);
 			this.treeUsers.Name = "treeUsers";
 			this.treeUsers.ShowRootLines = false;
-			this.treeUsers.Size = new System.Drawing.Size(184,565);
+			this.treeUsers.Size = new System.Drawing.Size(184,567);
 			this.treeUsers.TabIndex = 4;
 			this.treeUsers.DoubleClick += new System.EventHandler(this.treeUsers_DoubleClick);
 			this.treeUsers.MouseDown += new System.Windows.Forms.MouseEventHandler(this.treeUsers_MouseDown);
@@ -102,7 +102,7 @@ namespace OpenDental{
 			this.treePermissions.SelectedImageIndex = 0;
 			this.treePermissions.ShowPlusMinus = false;
 			this.treePermissions.ShowRootLines = false;
-			this.treePermissions.Size = new System.Drawing.Size(479,565);
+			this.treePermissions.Size = new System.Drawing.Size(479,567);
 			this.treePermissions.TabIndex = 6;
 			this.treePermissions.DoubleClick += new System.EventHandler(this.treePermissions_DoubleClick);
 			this.treePermissions.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treePermissions_AfterSelect);
@@ -129,7 +129,7 @@ namespace OpenDental{
 			// 
 			this.checkTimecardSecurityEnabled.CheckAlign = System.Drawing.ContentAlignment.TopLeft;
 			this.checkTimecardSecurityEnabled.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkTimecardSecurityEnabled.Location = new System.Drawing.Point(198,580);
+			this.checkTimecardSecurityEnabled.Location = new System.Drawing.Point(198,582);
 			this.checkTimecardSecurityEnabled.Name = "checkTimecardSecurityEnabled";
 			this.checkTimecardSecurityEnabled.Size = new System.Drawing.Size(192,19);
 			this.checkTimecardSecurityEnabled.TabIndex = 57;
@@ -144,7 +144,7 @@ namespace OpenDental{
 			this.butSetAll.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butSetAll.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butSetAll.CornerRadius = 4F;
-			this.butSetAll.Location = new System.Drawing.Point(388,608);
+			this.butSetAll.Location = new System.Drawing.Point(388,610);
 			this.butSetAll.Name = "butSetAll";
 			this.butSetAll.Size = new System.Drawing.Size(79,25);
 			this.butSetAll.TabIndex = 58;
@@ -159,7 +159,7 @@ namespace OpenDental{
 			this.butAddUser.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butAddUser.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butAddUser.CornerRadius = 4F;
-			this.butAddUser.Location = new System.Drawing.Point(118,608);
+			this.butAddUser.Location = new System.Drawing.Point(118,610);
 			this.butAddUser.Name = "butAddUser";
 			this.butAddUser.Size = new System.Drawing.Size(75,25);
 			this.butAddUser.TabIndex = 0;
@@ -174,7 +174,7 @@ namespace OpenDental{
 			this.butAddGroup.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butAddGroup.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butAddGroup.CornerRadius = 4F;
-			this.butAddGroup.Location = new System.Drawing.Point(8,608);
+			this.butAddGroup.Location = new System.Drawing.Point(8,610);
 			this.butAddGroup.Name = "butAddGroup";
 			this.butAddGroup.Size = new System.Drawing.Size(75,25);
 			this.butAddGroup.TabIndex = 1;
@@ -189,7 +189,7 @@ namespace OpenDental{
 			this.butClose.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butClose.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butClose.CornerRadius = 4F;
-			this.butClose.Location = new System.Drawing.Point(792,608);
+			this.butClose.Location = new System.Drawing.Point(792,610);
 			this.butClose.Name = "butClose";
 			this.butClose.Size = new System.Drawing.Size(75,25);
 			this.butClose.TabIndex = 0;
@@ -199,7 +199,7 @@ namespace OpenDental{
 			// FormSecurity
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
-			this.ClientSize = new System.Drawing.Size(884,642);
+			this.ClientSize = new System.Drawing.Size(884,644);
 			this.Controls.Add(this.butSetAll);
 			this.Controls.Add(this.treePermissions);
 			this.Controls.Add(this.checkTimecardSecurityEnabled);
@@ -290,7 +290,7 @@ namespace OpenDental{
 			node=SetNode(Permissions.ImagesModule);
 				treePermissions.Nodes.Add(node);
 			node=SetNode(Permissions.ManageModule);
-				node2=SetNode("Accounting");
+				node2=SetNode(Permissions.Accounting);
 					node3=SetNode(Permissions.AccountingCreate);
 						node2.Nodes.Add(node3);
 					node3=SetNode(Permissions.AccountingEdit);

@@ -5056,9 +5056,12 @@ namespace OpenDental{
 				command="INSERT INTO preference VALUES('ScheduleProvUnassigned','1')";
 				General.NonQEx(command);
 				//this next one is hard to run manually and can be skipped by developers:
-				command="UPDATE preference Set ValueString= '"+PrefB.GetInt("").ToString()+"' WHERE PrefName='ScheduleProvUnassigned'";
+				command="UPDATE preference Set ValueString= '"+PrefB.GetInt("PracticeDefaultProv").ToString()
+					+"' WHERE PrefName='ScheduleProvUnassigned'";
 				General.NonQEx(command);
-				
+				//added after r292
+				command="INSERT INTO preference VALUES('AccountingLockDate','')";
+				General.NonQEx(command);
 
 
 

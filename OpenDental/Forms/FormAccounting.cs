@@ -27,6 +27,7 @@ namespace OpenDental{
 		private ValidDate textDate;
 		private Label label2;
 		private OpenDental.UI.Button butToday;
+		private MenuItem menuItemLock;
 		//private Account[] AccountList;
 		private DataTable table;
 
@@ -77,6 +78,7 @@ namespace OpenDental{
 			this.textDate = new OpenDental.ValidDate();
 			this.gridMain = new OpenDental.UI.ODGrid();
 			this.ToolBarMain = new OpenDental.UI.ODToolBar();
+			this.menuItemLock = new System.Windows.Forms.MenuItem();
 			this.SuspendLayout();
 			// 
 			// imageListMain
@@ -101,6 +103,7 @@ namespace OpenDental{
 			// 
 			this.mainMenu1.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
             this.menuItemSetup,
+            this.menuItemLock,
             this.menuItem1});
 			// 
 			// menuItemSetup
@@ -111,7 +114,7 @@ namespace OpenDental{
 			// 
 			// menuItem1
 			// 
-			this.menuItem1.Index = 1;
+			this.menuItem1.Index = 2;
 			this.menuItem1.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
             this.menuItemGL,
             this.menuItemBalSheet});
@@ -200,6 +203,12 @@ namespace OpenDental{
 			this.ToolBarMain.TabIndex = 0;
 			this.ToolBarMain.ButtonClick += new OpenDental.UI.ODToolBarButtonClickEventHandler(this.ToolBarMain_ButtonClick);
 			// 
+			// menuItemLock
+			// 
+			this.menuItemLock.Index = 1;
+			this.menuItemLock.Text = "Lock";
+			this.menuItemLock.Click += new System.EventHandler(this.menuItemLock_Click);
+			// 
 			// FormAccounting
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
@@ -248,6 +257,17 @@ namespace OpenDental{
 		private void menuItemSetup_Click(object sender,EventArgs e) {
 			FormAccountingSetup FormA=new FormAccountingSetup();
 			FormA.ShowDialog();
+		}
+
+		private void menuItemLock_Click(object sender,EventArgs e) {
+			if(!Security.IsAuthorized(Permissions.SecurityAdmin)) {
+				return;
+			}
+			FormAccountingLock FormA=new FormAccountingLock();
+			FormA.ShowDialog();
+			if(FormA.DialogResult==DialogResult.OK){
+				SecurityLogs.MakeLogEntry(Permissions.SecurityAdmin,0,"Accounting Lock Changed");
+			}
 		}
 
 		private void menuItemGL_Click(object sender,EventArgs e) {
@@ -417,6 +437,8 @@ namespace OpenDental{
 			textDate.Text=DateTime.Today.ToShortDateString();
 			FillGrid();
 		}
+
+		
 
 		
 

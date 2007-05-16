@@ -681,6 +681,9 @@ namespace OpenDental{
 		}
 
 		private void butAccounting_Click(object sender,System.EventArgs e) {
+			if(!Security.IsAuthorized(Permissions.Accounting)) {
+				return;
+			}
 			FormAccounting FormA=new FormAccounting();
 			FormA.Show();
 		}

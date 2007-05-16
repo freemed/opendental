@@ -137,6 +137,8 @@ namespace OpenDental{
 		///<summary>Gets the description for the specified permisssion.  Already translated.</summary>
 		public static string GetDesc(Permissions perm){
 			switch(perm){
+				case Permissions.Accounting:
+					return Lan.g("enumPermissions","Accounting");
 				case Permissions.AccountingCreate:
 					return Lan.g("enumPermissions","Accounting Create Entry");
 				case Permissions.AccountingEdit:
