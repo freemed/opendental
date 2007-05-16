@@ -63,7 +63,7 @@ namespace OpenDentBusiness {
 		public int BillingTypeTwo;
 		///<summary>FK to procedurecode.CodeNum</summary>
 		public int CodeNum;
-///<summary>Modifier for certain CPT codes.  Not used yet.</summary>
+		///<summary>Modifier for certain CPT codes.  Not used yet.</summary>
 		public string CodeMod1;
 		///<summary>Modifier for certain CPT codes.  Not used yet.</summary>
 		public string CodeMod2;

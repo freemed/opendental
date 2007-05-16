@@ -7,6 +7,9 @@ namespace OpenDentBusiness{
 	
 	///<summary>A list setup ahead of time with all the procedure codes used by the office.  Every procedurelog entry which is attached to a patient is also linked to this table.</summary>
 	public class ProcedureCode{
+		///<summary>Primary Key.  This happened in version 4.8.7.</summary>
+		[XmlIgnore]
+		public int CodeNum;
 		///<summary>Was Primary key, but now CodeNum is primary key.  Can hold dental codes, medical codes, custom codes, etc.</summary>
 		public string ProcCode;
 		///<summary>The main description.</summary>
@@ -60,9 +63,7 @@ namespace OpenDentBusiness{
 		///<summary>This is true if this procedure code existed before ADA code distribution changed at version 4.8, false otherwise.</summary>
 		[XmlIgnore]
 		public bool PreExisting;
-		///<summary>Primary Key.  This happened in version 4.8.7.</summary>
-		[XmlIgnore]
-		public int CodeNum;
+		
 		///<Summary>Not a database column.  Only used for xml import function.</Summary>
 		private string procCatDescript;
 
@@ -88,6 +89,7 @@ namespace OpenDentBusiness{
 		///<summary>Returns a copy of this Procedurecode.</summary>
 		public ProcedureCode Copy(){
 			ProcedureCode p=new ProcedureCode();
+			p.CodeNum=CodeNum;
 			p.ProcCode=ProcCode;
 			p.Descript=Descript;
 			p.AbbrDesc=AbbrDesc;

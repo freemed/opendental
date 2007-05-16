@@ -10,6 +10,7 @@ namespace OpenDental{
 		private PrintDocument pd;
 		private Patient Pat;
 		private Carrier CarrierCur;
+		private Referral ReferralCur;
 
 		///<summary></summary>
 		public LabelSingle(){
@@ -54,6 +55,25 @@ namespace OpenDental{
 			return true;
 		}
 
+		///<summary></summary>
+		public void PrintReferral(Referral referralCur) {
+			ReferralCur=referralCur.Copy();
+			pd=new PrintDocument();
+			pd.PrintPage+=new PrintPageEventHandler(pd_PrintPageReferral);
+			pd.DefaultPageSettings.Margins=new Margins(0,0,0,0);
+			pd.OriginAtMargins=true;
+			pd.DefaultPageSettings.Landscape=false;
+			if(!Printers.SetPrinter(pd,PrintSituation.LabelSingle)) {
+				return;
+			}
+			try {
+				pd.Print();
+			}
+			catch {
+				MessageBox.Show(Lan.g("Label","Printer not available"));
+			}
+		}
+
 		private void pd_PrintPagePat(object sender, System.Drawing.Printing.PrintPageEventArgs e) {
 			float xPos=25;
 			float yPos=10;//22;
@@ -92,6 +112,27 @@ namespace OpenDental{
 				yPos+=lineH;
 			}
 			g.DrawString(CarrierCur.City+", "+CarrierCur.State+"  "+CarrierCur.Zip
+				,mainFont,Brushes.Black,xPos,yPos);
+			//e.HasMorePages=false;
+		}
+
+		private void pd_PrintPageReferral(object sender,System.Drawing.Printing.PrintPageEventArgs e) {
+			float xPos=25;
+			float yPos=10;
+			Graphics g=e.Graphics;
+			g.TranslateTransform(100,0);
+			g.RotateTransform(90);
+			Font mainFont=new Font(FontFamily.GenericSansSerif,12);
+			float lineH=e.Graphics.MeasureString("any",mainFont).Height;
+			g.DrawString(Referrals.GetNameFL(ReferralCur.ReferralNum),mainFont,Brushes.Black,xPos,yPos);
+			yPos+=lineH;
+			g.DrawString(ReferralCur.Address,mainFont,Brushes.Black,xPos,yPos);
+			yPos+=lineH;
+			if(ReferralCur.Address2!="") {
+				g.DrawString(ReferralCur.Address2,mainFont,Brushes.Black,xPos,yPos);
+				yPos+=lineH;
+			}
+			g.DrawString(ReferralCur.City+", "+ReferralCur.ST+"  "+ReferralCur.Zip
 				,mainFont,Brushes.Black,xPos,yPos);
 			//e.HasMorePages=false;
 		}

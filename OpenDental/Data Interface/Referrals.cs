@@ -137,6 +137,25 @@ namespace OpenDental{
 		}
 
 		///<summary></summary>
+		public static string GetNameFL(int referralNum) {
+			if(referralNum==0)
+				return "";
+			if(!HList.ContainsKey(referralNum)) {
+				return "";
+			}
+			Referral refer=(Referral)HList[referralNum];
+			string retVal="";
+			if(refer.FName!="") {
+				retVal+=refer.FName+" "+refer.MName+" ";
+			}
+			retVal+=refer.LName;
+			if(refer.Title!="") {
+				retVal+=", "+refer.Title;
+			}
+			return retVal;
+		}
+
+		///<summary></summary>
 		public static string GetPhone(int referralNum) {
 			if(referralNum==0)
 				return "";
@@ -150,7 +169,7 @@ namespace OpenDental{
 			return refer.Telephone;
 		}
 	
-		///<summary>Gets Referral info from memory (HList). Does not make a call to the database.</summary>
+		///<summary>Gets Referral info from memory (HList). Does not make a call to the database unless needed.</summary>
 		public static Referral GetReferral(int referralNum){
 			if(referralNum==0){
 				return null;
@@ -164,6 +183,17 @@ namespace OpenDental{
 				return null;
 			}
 			return (Referral)HList[referralNum];
+		}
+
+		///<summary>Gets the first referral "from" for the given patient.  Will return null if no "from" found for patient.</summary>
+		public static Referral GetReferralForPat(int patNum){
+			RefAttach[] RefAttachList=RefAttaches.Refresh(patNum);
+			for(int i=0;i<RefAttachList.Length;i++) {
+				if(RefAttachList[i].IsFrom) {
+					return GetReferral(RefAttachList[i].ReferralNum);
+				}
+			}
+			return null;
 		}
 
 

@@ -75,7 +75,6 @@ namespace OpenDental {
 		private int SplitterOriginalY;
 		private OpenDental.UI.Button butComm;
 		private System.Windows.Forms.Panel panelCommButs;
-		private OpenDental.UI.Button butEmail;
 		private int OriginalMousePos;
 		private ClaimProc[] ClaimProcList;
 		private OpenDental.ODtextBox textFinNotes;
@@ -86,10 +85,6 @@ namespace OpenDental {
 		private Family FamCur;
 		///<summary>Public because used by FormRpStatement</summary>
 		public Patient PatCur;
-		private OpenDental.UI.Button butLetterSimple;
-		private System.Windows.Forms.GroupBox groupBox1;
-		private OpenDental.UI.Button butLetterMerge;
-		private OpenDental.UI.Button butLabel;
 		private System.Windows.Forms.ContextMenu contextMenuStatement;
 		private System.Windows.Forms.MenuItem menuItemStatementWalkout;
 		private System.Windows.Forms.MenuItem menuItemStatementMore;
@@ -114,7 +109,6 @@ namespace OpenDental {
 		private Benefit[] BenefitList;
 		private Commlog[] CommlogList;
 		private PatientNote PatientNoteCur;
-		private OpenDental.UI.Button butQuest;
 		///<summary>This will eventually hold all data needed for display.  It will be retrieved in one call to the database.</summary>
 		private DataSet DataSetMain;
 
@@ -167,14 +161,9 @@ namespace OpenDental {
 			this.ToolBarMain = new OpenDental.UI.ODToolBar();
 			this.imageListMain = new System.Windows.Forms.ImageList(this.components);
 			this.panelSplitter = new System.Windows.Forms.Panel();
-			this.butLetterSimple = new OpenDental.UI.Button();
 			this.butComm = new OpenDental.UI.Button();
 			this.panelCommButs = new System.Windows.Forms.Panel();
 			this.butTask = new OpenDental.UI.Button();
-			this.butLabel = new OpenDental.UI.Button();
-			this.groupBox1 = new System.Windows.Forms.GroupBox();
-			this.butLetterMerge = new OpenDental.UI.Button();
-			this.butEmail = new OpenDental.UI.Button();
 			this.textFinNotes = new OpenDental.ODtextBox();
 			this.menuPatient = new System.Windows.Forms.ContextMenu();
 			this.contextMenuStatement = new System.Windows.Forms.ContextMenu();
@@ -187,10 +176,8 @@ namespace OpenDental {
 			this.contextMenuRepeat = new System.Windows.Forms.ContextMenu();
 			this.menuItemRepeatStand = new System.Windows.Forms.MenuItem();
 			this.menuItemRepeatEmail = new System.Windows.Forms.MenuItem();
-			this.butQuest = new OpenDental.UI.Button();
 			this.panelTotal.SuspendLayout();
 			this.panelCommButs.SuspendLayout();
-			this.groupBox1.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// label1
@@ -446,41 +433,24 @@ namespace OpenDental {
 			this.panelSplitter.MouseMove += new System.Windows.Forms.MouseEventHandler(this.panelSplitter_MouseMove);
 			this.panelSplitter.MouseUp += new System.Windows.Forms.MouseEventHandler(this.panelSplitter_MouseUp);
 			// 
-			// butLetterSimple
-			// 
-			this.butLetterSimple.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butLetterSimple.Autosize = true;
-			this.butLetterSimple.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butLetterSimple.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butLetterSimple.Location = new System.Drawing.Point(4,14);
-			this.butLetterSimple.Name = "butLetterSimple";
-			this.butLetterSimple.Size = new System.Drawing.Size(82,25);
-			this.butLetterSimple.TabIndex = 50;
-			this.butLetterSimple.Text = "Simple";
-			this.butLetterSimple.Click += new System.EventHandler(this.butLetterSimple_Click);
-			// 
 			// butComm
 			// 
 			this.butComm.AdjustImageLocation = new System.Drawing.Point(0,0);
 			this.butComm.Autosize = true;
 			this.butComm.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butComm.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butComm.Image = ((System.Drawing.Image)(resources.GetObject("butComm.Image")));
+			this.butComm.CornerRadius = 4F;
 			this.butComm.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.butComm.Location = new System.Drawing.Point(0,0);
 			this.butComm.Name = "butComm";
-			this.butComm.Size = new System.Drawing.Size(90,26);
+			this.butComm.Size = new System.Drawing.Size(98,26);
 			this.butComm.TabIndex = 68;
-			this.butComm.Text = "Comm";
+			this.butComm.Text = "Communications";
 			this.butComm.Click += new System.EventHandler(this.butComm_Click);
 			// 
 			// panelCommButs
 			// 
-			this.panelCommButs.Controls.Add(this.butQuest);
 			this.panelCommButs.Controls.Add(this.butTask);
-			this.panelCommButs.Controls.Add(this.butLabel);
-			this.panelCommButs.Controls.Add(this.groupBox1);
-			this.panelCommButs.Controls.Add(this.butEmail);
 			this.panelCommButs.Controls.Add(this.butComm);
 			this.panelCommButs.Location = new System.Drawing.Point(769,429);
 			this.panelCommButs.Name = "panelCommButs";
@@ -494,64 +464,13 @@ namespace OpenDental {
 			this.butTask.Autosize = true;
 			this.butTask.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butTask.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butTask.Location = new System.Drawing.Point(0,186);
+			this.butTask.CornerRadius = 4F;
+			this.butTask.Location = new System.Drawing.Point(0,32);
 			this.butTask.Name = "butTask";
-			this.butTask.Size = new System.Drawing.Size(90,25);
+			this.butTask.Size = new System.Drawing.Size(98,25);
 			this.butTask.TabIndex = 84;
 			this.butTask.Text = "To Task List";
 			this.butTask.Click += new System.EventHandler(this.butTask_Click);
-			// 
-			// butLabel
-			// 
-			this.butLabel.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butLabel.Autosize = true;
-			this.butLabel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butLabel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butLabel.Image = ((System.Drawing.Image)(resources.GetObject("butLabel.Image")));
-			this.butLabel.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butLabel.Location = new System.Drawing.Point(0,132);
-			this.butLabel.Name = "butLabel";
-			this.butLabel.Size = new System.Drawing.Size(90,25);
-			this.butLabel.TabIndex = 71;
-			this.butLabel.Text = "Label";
-			this.butLabel.Click += new System.EventHandler(this.butLabel_Click);
-			// 
-			// groupBox1
-			// 
-			this.groupBox1.Controls.Add(this.butLetterMerge);
-			this.groupBox1.Controls.Add(this.butLetterSimple);
-			this.groupBox1.Location = new System.Drawing.Point(4,28);
-			this.groupBox1.Name = "groupBox1";
-			this.groupBox1.Size = new System.Drawing.Size(111,73);
-			this.groupBox1.TabIndex = 70;
-			this.groupBox1.TabStop = false;
-			this.groupBox1.Text = "Letter";
-			// 
-			// butLetterMerge
-			// 
-			this.butLetterMerge.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butLetterMerge.Autosize = true;
-			this.butLetterMerge.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butLetterMerge.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butLetterMerge.Location = new System.Drawing.Point(4,41);
-			this.butLetterMerge.Name = "butLetterMerge";
-			this.butLetterMerge.Size = new System.Drawing.Size(82,25);
-			this.butLetterMerge.TabIndex = 51;
-			this.butLetterMerge.Text = "Merge";
-			this.butLetterMerge.Click += new System.EventHandler(this.butLetterMerge_Click);
-			// 
-			// butEmail
-			// 
-			this.butEmail.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butEmail.Autosize = true;
-			this.butEmail.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butEmail.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butEmail.Location = new System.Drawing.Point(0,159);
-			this.butEmail.Name = "butEmail";
-			this.butEmail.Size = new System.Drawing.Size(90,25);
-			this.butEmail.TabIndex = 69;
-			this.butEmail.Text = "E-mail";
-			this.butEmail.Click += new System.EventHandler(this.butEmail_Click);
 			// 
 			// textFinNotes
 			// 
@@ -653,19 +572,6 @@ namespace OpenDental {
 			this.menuItemRepeatEmail.Text = "Email Monthly";
 			this.menuItemRepeatEmail.Click += new System.EventHandler(this.MenuItemRepeatEmail_Click);
 			// 
-			// butQuest
-			// 
-			this.butQuest.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butQuest.Autosize = true;
-			this.butQuest.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butQuest.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butQuest.Location = new System.Drawing.Point(0,105);
-			this.butQuest.Name = "butQuest";
-			this.butQuest.Size = new System.Drawing.Size(90,25);
-			this.butQuest.TabIndex = 85;
-			this.butQuest.Text = "Questionnaire";
-			this.butQuest.Click += new System.EventHandler(this.butQuest_Click);
-			// 
 			// ContrAccount
 			// 
 			this.Controls.Add(this.gridRepeat);
@@ -701,7 +607,6 @@ namespace OpenDental {
 			this.Load += new System.EventHandler(this.ContrAccount_Load);
 			this.panelTotal.ResumeLayout(false);
 			this.panelCommButs.ResumeLayout(false);
-			this.groupBox1.ResumeLayout(false);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -725,10 +630,10 @@ namespace OpenDental {
 					labelUrgFinNote,
 					label1,
 					butComm,
-					butLetterSimple,
-					butLetterMerge,
-					butLabel,
-					butEmail,
+					//butLetterSimple,
+					//butLetterMerge,
+					//butLabel,
+					//butEmail,
 					gridAccount,
 					gridAcctPat,
 					gridComm
@@ -1064,12 +969,6 @@ namespace OpenDental {
 				return;
 			}
 			panelCommButs.Enabled=true;
-			if(PatCur.Email==""){
-				butEmail.Enabled=false;
-			}
-			else{
-				butEmail.Enabled=true;
-			}
 			gridComm.BeginUpdate();
 			gridComm.Columns.Clear();
 			ODGridColumn col=new ODGridColumn(Lan.g("TableCommLogAccount","Date"),70);
@@ -2646,21 +2545,16 @@ namespace OpenDental {
 		}
 
 		private void butComm_Click(object sender, System.EventArgs e) {
-			Commlog CommlogCur=new Commlog();
-			CommlogCur.PatNum=PatCur.PatNum;
-			CommlogCur.CommDateTime=DateTime.Now;
-			if(ViewingInRecall)
-				CommlogCur.CommType=CommItemType.Recall;
-			else
-				CommlogCur.CommType=CommItemType.Financial;
-			FormCommItem FormCI=new FormCommItem(CommlogCur);
-			FormCI.IsNew=true;
-			FormCI.ShowDialog();
-			//CommlogList=Commlogs.Refresh(PatCur.PatNum);
-			ModuleSelected(PatCur.PatNum);
+			FormCommunications FormC=new FormCommunications();
+			FormC.PatCur=PatCur.Copy();
+			FormC.ViewingInRecall=ViewingInRecall;
+			FormC.ShowDialog();
+			if(FormC.DialogResult==DialogResult.OK){
+				ModuleSelected(PatCur.PatNum);
+			}
 		}
 
-		private void butLetterSimple_Click(object sender, System.EventArgs e) {
+		/*private void butLetterSimple_Click(object sender, System.EventArgs e) {
 			FormLetters FormL=new FormLetters(PatCur);
 			FormL.ShowDialog();
 			CommlogList=Commlogs.Refresh(PatCur.PatNum);
@@ -2703,7 +2597,7 @@ namespace OpenDental {
 			}
 			//CommlogList=Commlogs.Refresh(PatCur.PatNum);
 			//FillComm();
-		}
+		}*/
 
 		private void butTask_Click(object sender, System.EventArgs e) {
 			FormTaskListSelect FormT=new FormTaskListSelect(TaskObjectType.Patient,PatCur.PatNum);
