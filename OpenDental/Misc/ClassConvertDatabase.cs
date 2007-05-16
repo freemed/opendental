@@ -4758,9 +4758,10 @@ namespace OpenDental{
 					command="INSERT INTO definition (Category,ItemOrder,ItemName,ItemColor) VALUES(12,7,"
 						+"'LabCase',-65536)";
 					General.NonQEx(command);
-					command="INSERT INTO definition (Category,ItemOrder,ItemName,ItemColor) VALUES(12,8,"
-						+"'Appointment',-8388480)";
-					General.NonQEx(command);
+					//commented this "Appointment" option out after r294 and added it back with other related custom colors after r293
+					//command="INSERT INTO definition (Category,ItemOrder,ItemName,ItemColor) VALUES(12,8,"
+					//	+"'Appointment',-8388480)";
+					//General.NonQEx(command);
 					//Added after r244
 					command=@"CREATE TABLE labturnaround(
 						LabTurnaroundNum int NOT NULL auto_increment,
@@ -4940,9 +4941,10 @@ namespace OpenDental{
 					command="INSERT INTO definition (Category,ItemOrder,ItemName,ItemColor,IsHidden) VALUES(12,7,"
 						+"'LabCase',-65536,0)";
 					General.NonQEx(command);
-					command="INSERT INTO definition (Category,ItemOrder,ItemName,ItemColor,IsHidden) VALUES(12,8,"
-						+"'Appointment',-8388480,0)";
-					General.NonQEx(command);
+					//commented this "Appointment" option out after r294 and added it back with other related custom colors after r293
+					//command="INSERT INTO definition (Category,ItemOrder,ItemName,ItemColor,IsHidden) VALUES(12,8,"
+					//	+"'Appointment',-8388480,0)";
+					//General.NonQEx(command);
 					//Added after r244
 					command=@"CREATE TABLE labturnaround(
 						LabTurnaroundNum int NOT NULL,
@@ -5013,8 +5015,6 @@ namespace OpenDental{
 				General.NonQEx(command);
 				command = "INSERT INTO preference VALUES('PlannedApptTreatedAsRegularAppt','0')";
 				General.NonQEx(command);
-				command = "INSERT INTO preference VALUES('NotesInAccount','0')";
-				General.NonQEx(command);
 				command = "INSERT INTO preference VALUES('BoldFamilyAccountBalanceView','0')";
 				General.NonQEx(command);
 				command = "INSERT INTO preference VALUES('ShowProgressNotesInsteadofCommLog','0')";
@@ -5062,12 +5062,44 @@ namespace OpenDental{
 				//added after r292
 				command="INSERT INTO preference VALUES('AccountingLockDate','')";
 				General.NonQEx(command);
-
-
-
-
-
-
+				//added after r294
+				//this first line replaces the one commented out earlier in v4.9
+				command="INSERT INTO definition (Category,ItemOrder,ItemName,ItemColor,IsHidden) VALUES(12,8,"
+				+"'Appointment Text - Today',-8388480,0)";
+				General.NonQEx(command);
+				command="INSERT INTO definition (Category,ItemOrder,ItemName,ItemColor,IsHidden) VALUES(12,9,"
+				+"'Appointment Background - Today',-886,0)";
+				General.NonQEx(command);
+				command="INSERT INTO definition (Category,ItemOrder,ItemName,ItemColor,IsHidden) VALUES(12,10,"
+				+"'Past Appointment Text',-8388480,0)";
+				General.NonQEx(command);
+				command="INSERT INTO definition (Category,ItemOrder,ItemName,ItemColor,IsHidden) VALUES(12,11,"
+				+"'Past Appointment Background','"+Color.DarkGray.ToArgb()+"',0)";
+				General.NonQEx(command);
+				command="INSERT INTO definition (Category,ItemOrder,ItemName,ItemColor,IsHidden) VALUES(12,12,"
+				+"'Future Appointment Text',-8388480,0)";
+				General.NonQEx(command);
+				command="INSERT INTO definition (Category,ItemOrder,ItemName,ItemColor,IsHidden) VALUES(12,13,"
+				+"'Future Appointment Background','"+Color.LightGreen.ToArgb()+"',0)";
+				General.NonQEx(command);
+				command="INSERT INTO definition (Category,ItemOrder,ItemName,ItemColor,IsHidden) VALUES(12,14,"
+				+"'Broken/Unschd Appt Text','"+Color.White.ToArgb()+"',0)";
+				General.NonQEx(command);
+				command="INSERT INTO definition (Category,ItemOrder,ItemName,ItemColor,IsHidden) VALUES(12,15,"
+				+"'Broken/Unschd Appt Background','"+Color.Red.ToArgb()+"',0)";
+				General.NonQEx(command);
+				command="INSERT INTO definition (Category,ItemOrder,ItemName,ItemColor,IsHidden) VALUES(12,16,"
+				+"'Planned Appointment Text',-8388480,0)";
+				General.NonQEx(command);
+				command="INSERT INTO definition (Category,ItemOrder,ItemName,ItemColor,IsHidden) VALUES(12,17,"
+				+"'Planned Appointment Background',-17409,0)";
+				General.NonQEx(command);
+				command="INSERT INTO definition (Category,ItemOrder,ItemName,ItemColor,IsHidden) VALUES(21,8,"
+				+"'List Selection Color','"+Color.LightGray.ToArgb()+"',0)";
+				General.NonQEx(command);
+				
+				
+				
 				command="UPDATE preference SET ValueString = '4.9.0.0' WHERE PrefName = 'DataBaseVersion'";
 				General.NonQEx(command);
 			}

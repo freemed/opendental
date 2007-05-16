@@ -266,29 +266,54 @@ namespace OpenDentBusiness {
 			}
 			//Appointments---------------------------------------------------------------------------------------------------------
 			command="SELECT * FROM appointment WHERE PatNum="+POut.PInt(patNum)
-				+" AND AptStatus != 6 "//do not include planned appts.
-				+"ORDER BY AptDateTime";
+				+" ORDER BY AptDateTime";
+			//+" AND AptStatus != 6"//do not include planned appts.
+
 			DataTable rawApt=dcon.GetTable(command);
+			Int32 apptS;
 			for(int i=0;i<rawApt.Rows.Count;i++) {
 				row=table.NewRow();
 				row["AptNum"]=rawApt.Rows[i]["AptNum"].ToString();
 				row["colorBackG"]=Color.White.ToArgb();
 				dateT=PIn.PDateT(rawApt.Rows[i]["AptDateTime"].ToString());
-				//I commented out the recent colorBackG changes until they are customizable:
-				//if(dateT.Date<DateTime.Today) {
-				//	row["colorBackG"]=Color.DarkGray.ToArgb(); //deliniates nicely between old appts
-				//}
-				//else 
-				if(dateT.Date==DateTime.Today) {
-					row["colorBackG"]=DefB.Long[(int)DefCat.MiscColors][6].ItemColor.ToArgb().ToString();
-				}
-				//else if(dateT.Date>DateTime.Today) {
-				//	row["colorBackG"]=Color.LightGreen.ToArgb(); //at a glace, you see green...the pt is good to go as they have a future appt scheduled
-				//}
+				apptS=PIn.PInt(rawApt.Rows[i]["AptStatus"].ToString());
 				row["colorText"]=DefB.Long[(int)DefCat.ProgNoteColors][8].ItemColor.ToArgb().ToString();
 				row["CommlogNum"]=0;
 				row["description"]=Lan.g("ChartModule","Appointment - ")+dateT.ToShortTimeString()+"\r\n"
 					+rawApt.Rows[i]["ProcDescript"].ToString();
+				if(dateT.Date==DateTime.Today) {
+					row["colorBackG"]=DefB.Long[(int)DefCat.ProgNoteColors][9].ItemColor.ToArgb().ToString(); //deliniates nicely between old appts
+					row["colorText"]=DefB.Long[(int)DefCat.ProgNoteColors][8].ItemColor.ToArgb().ToString();
+				}
+				else if(dateT.Date<DateTime.Today) {
+					row["colorBackG"]=DefB.Long[(int)DefCat.ProgNoteColors][11].ItemColor.ToArgb().ToString();
+					row["colorText"]=DefB.Long[(int)DefCat.ProgNoteColors][10].ItemColor.ToArgb().ToString();
+
+				}
+				else if(dateT.Date>DateTime.Today) {
+					row["colorBackG"]=DefB.Long[(int)DefCat.ProgNoteColors][13].ItemColor.ToArgb().ToString(); //at a glace, you see green...the pt is good to go as they have a future appt scheduled
+					row["colorText"]=DefB.Long[(int)DefCat.ProgNoteColors][12].ItemColor.ToArgb().ToString();
+				}
+				if (apptS==5){ //broken
+					row["colorText"]=DefB.Long[(int)DefCat.ProgNoteColors][14].ItemColor.ToArgb().ToString(); 
+					row["colorBackG"]=DefB.Long[(int)DefCat.ProgNoteColors][15].ItemColor.ToArgb().ToString();
+					row["description"]=Lan.g("ChartModule","BROKEN Appointment - ")+dateT.ToShortTimeString()+"\r\n"
+					+rawApt.Rows[i]["ProcDescript"].ToString();
+
+				}
+				else if (apptS==3){ //unscheduled
+					row["colorText"]=DefB.Long[(int)DefCat.ProgNoteColors][14].ItemColor.ToArgb().ToString(); 
+					row["colorBackG"]=DefB.Long[(int)DefCat.ProgNoteColors][15].ItemColor.ToArgb().ToString();
+					row["description"]=Lan.g("ChartModule","UNSCHEDULED Appointment - ")+dateT.ToShortTimeString()+"\r\n"
+					+rawApt.Rows[i]["ProcDescript"].ToString();
+
+				}
+				else if (apptS==6){ //Planned Appt
+					row["colorText"]=DefB.Long[(int)DefCat.ProgNoteColors][16].ItemColor.ToArgb().ToString(); 
+					row["colorBackG"]=DefB.Long[(int)DefCat.ProgNoteColors][17].ItemColor.ToArgb().ToString();
+					row["description"]=Lan.g("ChartModule","PLANNED Appointment - ")+dateT.ToShortTimeString()+"\r\n"
+					+rawApt.Rows[i]["ProcDescript"].ToString();
+				}
 				row["LabCaseNum"]=0;
 				row["note"]=rawApt.Rows[i]["Note"].ToString();
 				if(dateT.Year<1880) {
@@ -301,8 +326,7 @@ namespace OpenDentBusiness {
 				row["ProcNum"]=0;
 				row["RxNum"]=0;
 				rows.Add(row);
-			}
-			//Sorting
+			}			//Sorting
 			rows.Sort(CompareChartRows);
 			//Canadian lab procedures need to come immediately after their corresponding proc---------------------------------
 			for(int i=0;i<labRows.Count;i++) {
