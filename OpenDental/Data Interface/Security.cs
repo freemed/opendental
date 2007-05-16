@@ -26,27 +26,32 @@ namespace OpenDental{
 
 		///<summary>Checks to see if current user is authorized.  It also checks any date restrictions.  If not authorized, it gives a Message box saying so and returns false.</summary>
 		public static bool IsAuthorized(Permissions perm,DateTime date,bool suppressMessage){
-			if(Security.CurUser!=null && GroupPermissions.HasPermission(Security.CurUser.UserGroupNum,perm)){
-				if(GroupPermissions.PermTakesDates(perm)){
-					DateTime dateLimit=GetDateLimit(perm,Security.CurUser.UserGroupNum);
-					if(date<=dateLimit){//not authorized
-						if(!suppressMessage){
-							MessageBox.Show(Lan.g("Security","Not authorized for")+"\r\n"
-								+GroupPermissions.GetDesc(perm)+"\r\n"
-								+Lan.g("Security","Date limitation"));
-						}
-						return false;
-					}
-					return true;
+			if(Security.CurUser==null || !GroupPermissions.HasPermission(Security.CurUser.UserGroupNum,perm)){
+				if(!suppressMessage){
+					MessageBox.Show(Lan.g("Security","Not authorized for")+"\r\n"+GroupPermissions.GetDesc(perm));
 				}
-				//doesn't take a date
+				return false;
+			}
+			if(perm==Permissions.AccountingCreate || perm==Permissions.AccountingEdit){
+				if(date <= PrefB.GetDate("AccountingLockDate")){
+					if(!suppressMessage) {
+						MessageBox.Show(Lan.g("Security","Locked by Administrator."));
+					}
+					return false;	
+				}
+			}
+			if(!GroupPermissions.PermTakesDates(perm)){
 				return true;
-			}			
+			}
+			DateTime dateLimit=GetDateLimit(perm,Security.CurUser.UserGroupNum);
+			if(date>dateLimit){//authorized
+				return true;
+			}
 			if(!suppressMessage){
 				MessageBox.Show(Lan.g("Security","Not authorized for")+"\r\n"
-					+GroupPermissions.GetDesc(perm));
+					+GroupPermissions.GetDesc(perm)+"\r\n"+Lan.g("Security","Date limitation"));
 			}
-			return false;
+			return false;		
 		}
 
 		private static DateTime GetDateLimit(Permissions permType,int userGroupNum){

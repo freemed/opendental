@@ -4,6 +4,7 @@ using System.Collections;
 using System.ComponentModel;
 using System.Windows.Forms;
 using OpenDental.UI;
+using OpenDentBusiness;
 
 namespace OpenDental{
 ///<summary></summary>
@@ -254,7 +255,18 @@ namespace OpenDental{
 			#if DEBUG
 				FormS.ShowDialog();
 			#endif
-			MsgBox.Show(this,"Printing Statements Complete");
+			if(MsgBox.Show(this,true,"Printing Statements Complete.  OK to make Commlog entries?")){
+				Commlog commlog;
+				for(int i=0;i<guarNums.Length;i++){
+					commlog=new Commlog();
+					commlog.CommDateTime=DateTime.Now;
+					commlog.CommType=CommItemType.StatementSent;
+					commlog.SentOrReceived=CommSentOrReceived.Sent;
+					commlog.Mode_=CommItemMode.Mail;
+					commlog.PatNum=guarNums[i];//uaually the guarantor
+					Commlogs.Insert(commlog);
+				}
+			}
 			DialogResult=DialogResult.OK;
 		}
 

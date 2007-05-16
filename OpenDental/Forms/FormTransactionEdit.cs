@@ -54,6 +54,8 @@ namespace OpenDental{
 		private Label label8;
 		private TextBox textSourcePay;
 		private OpenDental.UI.Button butAttachPay;
+		private Label labelReconcile;
+		private TextBox textReconcile;
 		///<summary>Just used for security.</summary>
 		public bool IsNew;
 
@@ -125,6 +127,8 @@ namespace OpenDental{
 			this.textDate = new OpenDental.ValidDate();
 			this.butOK = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
+			this.labelReconcile = new System.Windows.Forms.Label();
+			this.textReconcile = new System.Windows.Forms.TextBox();
 			this.panelSimple.SuspendLayout();
 			this.panelCompound.SuspendLayout();
 			this.groupBox1.SuspendLayout();
@@ -132,7 +136,7 @@ namespace OpenDental{
 			// 
 			// label1
 			// 
-			this.label1.Location = new System.Drawing.Point(28,36);
+			this.label1.Location = new System.Drawing.Point(28,34);
 			this.label1.Name = "label1";
 			this.label1.Size = new System.Drawing.Size(100,20);
 			this.label1.TabIndex = 4;
@@ -238,7 +242,7 @@ namespace OpenDental{
 			this.panelSimple.Controls.Add(this.label5);
 			this.panelSimple.Controls.Add(this.label6);
 			this.panelSimple.Controls.Add(this.label4);
-			this.panelSimple.Location = new System.Drawing.Point(21,74);
+			this.panelSimple.Location = new System.Drawing.Point(21,81);
 			this.panelSimple.Name = "panelSimple";
 			this.panelSimple.Size = new System.Drawing.Size(494,186);
 			this.panelSimple.TabIndex = 16;
@@ -304,7 +308,7 @@ namespace OpenDental{
 			this.panelCompound.Controls.Add(this.textDebit);
 			this.panelCompound.Controls.Add(this.textCredit);
 			this.panelCompound.Controls.Add(this.checkMemoSame);
-			this.panelCompound.Location = new System.Drawing.Point(42,74);
+			this.panelCompound.Location = new System.Drawing.Point(42,81);
 			this.panelCompound.Name = "panelCompound";
 			this.panelCompound.Size = new System.Drawing.Size(504,262);
 			this.panelCompound.TabIndex = 17;
@@ -346,7 +350,7 @@ namespace OpenDental{
 			this.groupBox1.Controls.Add(this.butAttachPay);
 			this.groupBox1.Controls.Add(this.textSourceDeposit);
 			this.groupBox1.Controls.Add(this.butAttachDep);
-			this.groupBox1.Location = new System.Drawing.Point(119,349);
+			this.groupBox1.Location = new System.Drawing.Point(119,367);
 			this.groupBox1.Name = "groupBox1";
 			this.groupBox1.Size = new System.Drawing.Size(416,80);
 			this.groupBox1.TabIndex = 18;
@@ -427,7 +431,7 @@ namespace OpenDental{
 			this.butDelete.CornerRadius = 4F;
 			this.butDelete.Image = global::OpenDental.Properties.Resources.deleteX;
 			this.butDelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butDelete.Location = new System.Drawing.Point(31,396);
+			this.butDelete.Location = new System.Drawing.Point(31,414);
 			this.butDelete.Name = "butDelete";
 			this.butDelete.Size = new System.Drawing.Size(75,26);
 			this.butDelete.TabIndex = 8;
@@ -436,7 +440,7 @@ namespace OpenDental{
 			// 
 			// textDate
 			// 
-			this.textDate.Location = new System.Drawing.Point(132,33);
+			this.textDate.Location = new System.Drawing.Point(132,31);
 			this.textDate.Name = "textDate";
 			this.textDate.Size = new System.Drawing.Size(100,20);
 			this.textDate.TabIndex = 3;
@@ -449,7 +453,7 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(568,366);
+			this.butOK.Location = new System.Drawing.Point(568,384);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75,26);
 			this.butOK.TabIndex = 1;
@@ -464,17 +468,38 @@ namespace OpenDental{
 			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
-			this.butCancel.Location = new System.Drawing.Point(568,395);
+			this.butCancel.Location = new System.Drawing.Point(568,413);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75,26);
 			this.butCancel.TabIndex = 0;
 			this.butCancel.Text = "&Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
 			// 
+			// labelReconcile
+			// 
+			this.labelReconcile.Location = new System.Drawing.Point(9,57);
+			this.labelReconcile.Name = "labelReconcile";
+			this.labelReconcile.Size = new System.Drawing.Size(120,20);
+			this.labelReconcile.TabIndex = 19;
+			this.labelReconcile.Text = "Reconcile Date";
+			this.labelReconcile.TextAlign = System.Drawing.ContentAlignment.TopRight;
+			this.labelReconcile.Visible = false;
+			// 
+			// textReconcile
+			// 
+			this.textReconcile.Location = new System.Drawing.Point(132,54);
+			this.textReconcile.Name = "textReconcile";
+			this.textReconcile.ReadOnly = true;
+			this.textReconcile.Size = new System.Drawing.Size(100,20);
+			this.textReconcile.TabIndex = 20;
+			this.textReconcile.Visible = false;
+			// 
 			// FormTransactionEdit
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
-			this.ClientSize = new System.Drawing.Size(677,441);
+			this.ClientSize = new System.Drawing.Size(677,459);
+			this.Controls.Add(this.textReconcile);
+			this.Controls.Add(this.labelReconcile);
 			this.Controls.Add(this.groupBox1);
 			this.Controls.Add(this.panelSimple);
 			this.Controls.Add(this.panelCompound);
@@ -540,6 +565,9 @@ namespace OpenDental{
 				FillCompound();
 			}
 			else if(JournalEntries.AttachedToReconcile(JournalList)){
+				labelReconcile.Visible=true;
+				textReconcile.Visible=true;
+				textReconcile.Text=JournalEntries.GetReconcileDate(JournalList).ToShortDateString();
 				checkSimple.Checked=false;
 				checkSimple.Visible=false;//don't allow user to switch back to simple view
 				FillCompound();

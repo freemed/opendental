@@ -248,7 +248,7 @@ namespace OpenDental{
 			labelTotPages.Text="/ "+totalPages.ToString();
 		}
 
-		///<summary>Used from FormBilling to print all statements for all the supplied patNums.</summary>
+		///<summary>Used from FormBilling to print all statements for all the supplied patNums.  But commlog entries are done afterward, only when user confirms that they printed properly.</summary>
 		public void LoadAndPrint(int[] guarNums,string generalNote){
 			//this will be moved later when we make each statement an actual object. Right now, it's functional, but inefficient:
 			int[][] patNums=new int[guarNums.Length][];
@@ -326,19 +326,22 @@ namespace OpenDental{
 			Commlog commlog;
 			for(int i=0;i<patNums.GetLength(0);i++){//loop through each family
 				StatementA[i]=AssembleStatement(contrAccount,patNums[i],fromDate,toDate,includeClaims,nextAppt);
-				commlog=new Commlog();
-				commlog.CommDateTime=DateTime.Now;
-				commlog.CommType=CommItemType.StatementSent;
-				commlog.SentOrReceived=CommSentOrReceived.Sent;
-				if(isBill){
-					commlog.Mode_=CommItemMode.Mail;
+				//This has all been moved externally for multiple billing statements
+				if(patNums.GetLength(0)==1){
+					commlog=new Commlog();
+					commlog.CommDateTime=DateTime.Now;
+					commlog.CommType=CommItemType.StatementSent;
+					commlog.SentOrReceived=CommSentOrReceived.Sent;
+					if(isBill){
+						commlog.Mode_=CommItemMode.Mail;
+					}
+					else{
+						commlog.Mode_=CommItemMode.InPerson;
+					}
+					commlog.PatNum=patNums[i][0];//uaually the guarantor
+					//there is no dialog here because it is just a simple entry
+					Commlogs.Insert(commlog);
 				}
-				else{
-					commlog.Mode_=CommItemMode.InPerson;
-				}
-				commlog.PatNum=patNums[i][0];//uaually the guarantor
-				//there is no dialog here because it is just a simple entry
-				Commlogs.Insert(commlog);
 			}
 			famsPrinted=0;
 			linesPrinted=0;

@@ -183,6 +183,16 @@ namespace OpenDental{
 			return false;
 		}
 
+		///<summary>Called from FormTransactionEdit.</summary>
+		public static DateTime GetReconcileDate(ArrayList journalList) {
+			for(int i=0;i<journalList.Count;i++) {
+				if(((JournalEntry)journalList[i]).ReconcileNum!=0) {
+					return Reconciles.GetOne(((JournalEntry)journalList[i]).ReconcileNum).DateReconcile;
+				}
+			}
+			return DateTime.MinValue;
+		}
+
 		///<summary>Called once from FormReconcileEdit when closing.  Saves the reconcileNum for every item in the list.</summary>
 		public static void SaveList(JournalEntry[] journalList,int reconcileNum) {
 			string command="UPDATE journalentry SET ReconcileNum=0 WHERE";
