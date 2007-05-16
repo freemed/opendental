@@ -5071,22 +5071,25 @@ namespace OpenDental{
 				General.NonQEx(command);
 				command="INSERT INTO definition (Category,ItemOrder,ItemName,ItemColor,IsHidden) VALUES(12,10,'Past Appointment Text',-8388480,0)";
 				General.NonQEx(command);
-				command="INSERT INTO definition (Category,ItemOrder,ItemName,ItemColor,IsHidden) VALUES(12,11,'Past Appointment Background','"+Color.DarkGray.ToArgb()+"',0)";
+				command="INSERT INTO definition (Category,ItemOrder,ItemName,ItemColor,IsHidden) VALUES(12,11,'Past Appointment Background','-5658199',0)";
 				General.NonQEx(command);
 				command="INSERT INTO definition (Category,ItemOrder,ItemName,ItemColor,IsHidden) VALUES(12,12,'Future Appointment Text',-8388480,0)";
 				General.NonQEx(command);
-				command="INSERT INTO definition (Category,ItemOrder,ItemName,ItemColor,IsHidden) VALUES(12,13,'Future Appointment Background','"+Color.LightGreen.ToArgb()+"',0)";
+				command="INSERT INTO definition (Category,ItemOrder,ItemName,ItemColor,IsHidden) VALUES(12,13,'Future Appointment Background','-7278960',0)";
 				General.NonQEx(command);
-				command="INSERT INTO definition (Category,ItemOrder,ItemName,ItemColor,IsHidden) VALUES(12,14,'Broken/Unschd Appt Text','"+Color.White.ToArgb()+"',0)";
+				command="INSERT INTO definition (Category,ItemOrder,ItemName,ItemColor,IsHidden) VALUES(12,14,'Broken/Unschd Appt Text','-1',0)";
 				General.NonQEx(command);
-				command="INSERT INTO definition (Category,ItemOrder,ItemName,ItemColor,IsHidden) VALUES(12,15,'Broken/Unschd Appt Background','"+Color.Red.ToArgb()+"',0)";
+				command="INSERT INTO definition (Category,ItemOrder,ItemName,ItemColor,IsHidden) VALUES(12,15,'Broken/Unschd Appt Background','-65536',0)";
 				General.NonQEx(command);
 				command="INSERT INTO definition (Category,ItemOrder,ItemName,ItemColor,IsHidden) VALUES(12,16,'Planned Appointment Text',-8388480,0)";
 				General.NonQEx(command);
 				command="INSERT INTO definition (Category,ItemOrder,ItemName,ItemColor,IsHidden) VALUES(12,17,'Planned Appointment Background',-17409,0)";
 				General.NonQEx(command);
-				command="INSERT INTO definition (Category,ItemOrder,ItemName,ItemColor,IsHidden) VALUES(21,8,'List Selection Color','"+Color.LightGray.ToArgb()+"',0)";
-				General.NonQEx(command);
+		//I don't think this is a good idea.  There's such a thing as too many choices.  We need to discuss it more.
+				//command="INSERT INTO definition (Category,ItemOrder,ItemName,ItemColor,IsHidden) VALUES(21,8,'List Selection Color','"+Color.LightGray.ToArgb()+"',0)";
+				//General.NonQEx(command);
+
+
 				
 				
 				
