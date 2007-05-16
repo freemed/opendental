@@ -11,12 +11,12 @@ namespace OpenDental{
 		private System.ComponentModel.Container components = null;
 		private OpenDental.UI.Button butCancel;
 		private OpenDental.UI.Button butOK;
-		private System.Windows.Forms.TextBox textStop;
-		private System.Windows.Forms.TextBox textStart;
 		private System.Windows.Forms.Label label2;
 		private System.Windows.Forms.Label label1;
 		private System.Windows.Forms.TextBox textNote;
 		private System.Windows.Forms.Label label4;
+		private ComboBox comboStop;
+		private ComboBox comboStart;
 		//<summary></summary>
 		//public bool IsNew;
 		public Schedule SchedCur;
@@ -47,12 +47,12 @@ namespace OpenDental{
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormScheduleEdit));
 			this.butCancel = new OpenDental.UI.Button();
 			this.butOK = new OpenDental.UI.Button();
-			this.textStop = new System.Windows.Forms.TextBox();
-			this.textStart = new System.Windows.Forms.TextBox();
 			this.label2 = new System.Windows.Forms.Label();
 			this.label1 = new System.Windows.Forms.Label();
 			this.textNote = new System.Windows.Forms.TextBox();
 			this.label4 = new System.Windows.Forms.Label();
+			this.comboStop = new System.Windows.Forms.ComboBox();
+			this.comboStart = new System.Windows.Forms.ComboBox();
 			this.SuspendLayout();
 			// 
 			// butCancel
@@ -84,20 +84,6 @@ namespace OpenDental{
 			this.butOK.TabIndex = 12;
 			this.butOK.Text = "&OK";
 			this.butOK.Click += new System.EventHandler(this.butOK_Click);
-			// 
-			// textStop
-			// 
-			this.textStop.Location = new System.Drawing.Point(75,36);
-			this.textStop.Name = "textStop";
-			this.textStop.Size = new System.Drawing.Size(102,20);
-			this.textStop.TabIndex = 8;
-			// 
-			// textStart
-			// 
-			this.textStart.Location = new System.Drawing.Point(75,10);
-			this.textStart.Name = "textStart";
-			this.textStart.Size = new System.Drawing.Size(102,20);
-			this.textStart.TabIndex = 6;
 			// 
 			// label2
 			// 
@@ -134,15 +120,33 @@ namespace OpenDental{
 			this.label4.Text = "Note";
 			this.label4.TextAlign = System.Drawing.ContentAlignment.TopRight;
 			// 
+			// comboStop
+			// 
+			this.comboStop.FormattingEnabled = true;
+			this.comboStop.Location = new System.Drawing.Point(75,35);
+			this.comboStop.MaxDropDownItems = 48;
+			this.comboStop.Name = "comboStop";
+			this.comboStop.Size = new System.Drawing.Size(120,21);
+			this.comboStop.TabIndex = 25;
+			// 
+			// comboStart
+			// 
+			this.comboStart.FormattingEnabled = true;
+			this.comboStart.Location = new System.Drawing.Point(75,11);
+			this.comboStart.MaxDropDownItems = 48;
+			this.comboStart.Name = "comboStart";
+			this.comboStart.Size = new System.Drawing.Size(120,21);
+			this.comboStart.TabIndex = 24;
+			// 
 			// FormScheduleEdit
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.ClientSize = new System.Drawing.Size(430,233);
+			this.Controls.Add(this.comboStop);
+			this.Controls.Add(this.comboStart);
 			this.Controls.Add(this.textNote);
 			this.Controls.Add(this.butCancel);
 			this.Controls.Add(this.butOK);
-			this.Controls.Add(this.textStop);
-			this.Controls.Add(this.textStart);
 			this.Controls.Add(this.label4);
 			this.Controls.Add(this.label2);
 			this.Controls.Add(this.label1);
@@ -162,38 +166,42 @@ namespace OpenDental{
 		#endregion
 
 		private void FormScheduleDayEdit_Load(object sender, System.EventArgs e) {
-			textStart.Text=SchedCur.StartTime.ToShortTimeString();
-      textStop.Text=SchedCur.StopTime.ToShortTimeString();
+			DateTime time;
+			for(int i=0;i<24;i++) {
+				time=DateTime.Today+TimeSpan.FromHours(7)+TimeSpan.FromMinutes(30*i);
+				comboStart.Items.Add(time.ToShortTimeString());
+				comboStop.Items.Add(time.ToShortTimeString());
+			}
+			comboStart.Text=SchedCur.StartTime.ToShortTimeString();
+      comboStop.Text=SchedCur.StopTime.ToShortTimeString();
 			textNote.Text=SchedCur.Note;
-			//DateTime twelve=PIn.PDateT("12 AM");
 			if(SchedCur.StartTime.TimeOfDay==PIn.PDateT("12 AM").TimeOfDay 
 				&& SchedCur.StopTime.TimeOfDay==PIn.PDateT("12 AM").TimeOfDay)
 			{ 
-				//.SchedType==ScheduleType.Practice){
-				textStop.Visible=false;
-				textStart.Visible=false;
+				comboStop.Visible=false;
+				comboStart.Visible=false;
 				label1.Visible=false;
 				label2.Visible=false;
 				textNote.Select();
 			}
 			else{
-				textStart.Select();
+				comboStart.Select();
 			}
 		}
 
     private void butOK_Click(object sender, System.EventArgs e) { 
-      if(textStart.Visible){   
+      if(comboStart.Visible){   
 			  try{
-					DateTime.Parse(textStart.Text);
-					DateTime.Parse(textStop.Text);
+					DateTime.Parse(comboStart.Text);
+					DateTime.Parse(comboStop.Text);
 				}
 				catch{
 					MessageBox.Show(Lan.g(this,"Incorrect time format"));
 					return;
 				}
 			}
-			SchedCur.StartTime=DateTime.Parse(textStart.Text);
-			SchedCur.StopTime=DateTime.Parse(textStop.Text);
+			SchedCur.StartTime=DateTime.Parse(comboStart.Text);
+			SchedCur.StopTime=DateTime.Parse(comboStop.Text);
       SchedCur.Note=textNote.Text;
 			DialogResult=DialogResult.OK;		  
     }
