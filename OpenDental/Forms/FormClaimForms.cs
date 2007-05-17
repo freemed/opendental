@@ -348,7 +348,7 @@ namespace OpenDental{
 				return;
 			}
 			try{
-				ImportForm(openDlg.FileName,false);
+				ImportForm(openDlg.FileName,false,"");
 			}
 			catch(ApplicationException ex){
 				MessageBox.Show(ex.Message);
@@ -360,27 +360,44 @@ namespace OpenDental{
 			FillList();
 		}
 
-		///<Summary>Can be called externally as part of the update sequence.  Surround with try catch.  Returns the ClaimFormNum of the new ClaimForm if it inserted a new claimform.</Summary>
-		public static int ImportForm(string path, bool isUpdateSequence){
-			if(!File.Exists(path)) {
-				throw new ApplicationException(Lan.g("FormClaimForm","File does not exist."));
-			}
+		///<Summary>Can be called externally as part of the conversion sequence.  Surround with try catch.  Always returns the ClaimFormNum of the claimform.  If using resourceName, path will be ignored, so leave it blank.</Summary>
+		public static int ImportForm(string path, bool isUpdateSequence,string resourceName){
 			ClaimForm tempClaimForm=new ClaimForm();
 			XmlSerializer serializer=new XmlSerializer(typeof(ClaimForm));
-			try{
-				using(TextReader reader=new StreamReader(path)){
-					tempClaimForm=(ClaimForm)serializer.Deserialize(reader);
+			if(resourceName==""){//use path
+				if(!File.Exists(path)) {
+					throw new ApplicationException(Lan.g("FormClaimForm","File does not exist."));
+				}
+				try {
+					using(TextReader reader=new StreamReader(path)) {
+						tempClaimForm=(ClaimForm)serializer.Deserialize(reader);
+					}
+				}
+				catch {
+					throw new ApplicationException(Lan.g("FormClaimForm","Invalid file format"));
 				}
 			}
-			catch{
-				throw new ApplicationException(Lan.g("FormClaimForm","Invalid file format"));
+			else{//use resource
+				try {
+					using(TextReader reader=new StringReader(resourceName)) {
+						tempClaimForm=(ClaimForm)serializer.Deserialize(reader);
+					}
+				}
+				catch {
+					throw new ApplicationException(Lan.g("FormClaimForm","Invalid file format"));
+				}
 			}
 			int retVal=0;
 			bool isNew=true;
+			if(isUpdateSequence){
+				ClaimFormItems.Refresh();
+				ClaimForms.Refresh();
+			}
 			if(tempClaimForm.UniqueID!=""){//if it's blank, it's always inserted.
 				for(int i=0;i<ClaimForms.ListLong.Length;i++){
 					if(ClaimForms.ListLong[i].UniqueID==tempClaimForm.UniqueID){
 						isNew=false;
+						retVal=ClaimForms.ListLong[i].ClaimFormNum;
 					}
 				}
 			}
@@ -401,7 +418,7 @@ namespace OpenDental{
 				}
 				ClaimForms.UpdateByUniqueID(tempClaimForm);
 			}
-			return retVal;//only if uniqueID
+			return retVal;
 		}
 
 		private void butDefault_Click(object sender,EventArgs e) {

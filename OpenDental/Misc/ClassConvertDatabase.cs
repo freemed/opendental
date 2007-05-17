@@ -5088,13 +5088,20 @@ namespace OpenDental{
 				//After r299
 				command = "INSERT INTO preference VALUES('FuchsListSelectionColor','')";
 				General.NonQEx(command);
-				//General.NonQEx(command);
+				//added after r301
+				//Load ADA2006 claimform (without background)---------------------------------------------------------------------
+				int claimFormNum=FormClaimForms.ImportForm("",true,Properties.Resources.ClaimForm2006);
+				command="UPDATE preference SET ValueString="+POut.PInt(claimFormNum)+" WHERE PrefName='DefaultClaimForm'";
+				General.NonQEx(command);
+				command="UPDATE insplan SET ClaimFormNum="+POut.PInt(claimFormNum)
+					+" WHERE insplan.ClaimFormNum= (SELECT claimform.ClaimFormNum FROM claimform WHERE claimform.UniqueID='OD1')";
+				General.NonQEx(command);
+				command="UPDATE insplan SET ClaimFormNum="+POut.PInt(claimFormNum)+" WHERE insplan.ClaimFormNum=0";
+				General.NonQEx(command);
 
 
-				
 
 
-				
 				
 				command="UPDATE preference SET ValueString = '4.9.0.0' WHERE PrefName = 'DataBaseVersion'";
 				General.NonQEx(command);

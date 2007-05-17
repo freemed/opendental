@@ -186,6 +186,30 @@ namespace OpenDental.Properties {
             }
         }
         
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+        ///&lt;ClaimForm xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xmlns:xsd=&quot;http://www.w3.org/2001/XMLSchema&quot;&gt;
+        ///  &lt;Description&gt;ADA 2006&lt;/Description&gt;
+        ///  &lt;FontName&gt;Arial&lt;/FontName&gt;
+        ///  &lt;FontSize&gt;9&lt;/FontSize&gt;
+        ///  &lt;UniqueID&gt;OD8&lt;/UniqueID&gt;
+        ///  &lt;PrintImages&gt;true&lt;/PrintImages&gt;
+        ///  &lt;Items&gt;
+        ///    &lt;ClaimFormItem&gt;
+        ///      &lt;ImageFileName&gt;ADA2006.gif&lt;/ImageFileName&gt;
+        ///      &lt;FieldName /&gt;
+        ///      &lt;FormatString /&gt;
+        ///      &lt;XPos&gt;-1&lt;/XPos&gt;
+        ///      &lt;YPos&gt;12&lt;/YPos&gt;
+        ///      &lt;Width&gt;853&lt;/Width&gt;
+        ///    [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string ClaimForm2006 {
+            get {
+                return ResourceManager.GetString("ClaimForm2006", resourceCulture);
+            }
+        }
+        
         internal static System.Drawing.Bitmap deleteX {
             get {
                 object obj = ResourceManager.GetObject("deleteX", resourceCulture);

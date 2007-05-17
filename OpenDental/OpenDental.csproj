@@ -2797,6 +2797,7 @@
   <ItemGroup>
     <Content Include="Misc\App.ico" />
     <Content Include="Misc\TerminalMgr.ico" />
+    <None Include="Resources\ClaimForm.xml" />
     <None Include="Resources\butZoomOut.gif" />
     <None Include="Resources\butQView.gif" />
     <None Include="Resources\butPaste.gif" />
