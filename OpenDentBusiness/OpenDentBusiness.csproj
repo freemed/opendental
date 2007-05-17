@@ -176,6 +176,7 @@
     <Compile Include="TableTypes\Reconcile.cs" />
     <Compile Include="TableTypes\RefAttach.cs" />
     <Compile Include="TableTypes\Referral.cs" />
+    <Compile Include="TableTypes\RegistrationKey.cs" />
     <Compile Include="TableTypes\RepeatCharge.cs" />
     <Compile Include="TableTypes\RxAlert.cs" />
     <Compile Include="TableTypes\RxDef.cs" />

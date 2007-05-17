@@ -553,9 +553,10 @@ namespace OpenDental{
 			}
 			button.DropDownMenu=menuForms;
 			ToolBarMain.Buttons.Add(button);
-			button=new ODToolBarButton(Lan.g(this,"Capture"),-1,"Capture Image From Device","Capture");
-			button.Style=ODToolBarButtonStyle.ToggleButton;
-			ToolBarMain.Buttons.Add(button);
+			//TODO: Re-enable when image capturing is supported.
+			//button=new ODToolBarButton(Lan.g(this,"Capture"),-1,"Capture Image From Device","Capture");
+			//button.Style=ODToolBarButtonStyle.ToggleButton;
+			//ToolBarMain.Buttons.Add(button);
 			button=new ODToolBarButton("",7,Lan.g(this,"Crop Tool"),"Crop");
 			button.Style=ODToolBarButtonStyle.ToggleButton;
 			if(IsCropMode){
@@ -606,8 +607,8 @@ namespace OpenDental{
 			FamCur=null;
 			PatCur=null;
 			//Cancel current image capture by manually untoggling the capture button.
-			ToolBarMain.Buttons["Capture"].Pushed=false;
-			OnCapture_Click();
+			//ToolBarMain.Buttons["Capture"].Pushed=false;//TODO: Re-enable when image capturing is supported.
+			//OnCapture_Click();//TODO: Re-enable when image capturing is supported.
 		}
 
 		///<summary>This is public for NewPatientForm functionality.</summary>
@@ -689,7 +690,7 @@ namespace OpenDental{
 				ToolBarMain.Buttons["Copy"].Enabled=true;
 				ToolBarMain.Buttons["Paste"].Enabled=true;
 				ToolBarMain.Buttons["Forms"].Enabled=true;
-				ToolBarMain.Buttons["Capture"].Enabled=true;
+				//ToolBarMain.Buttons["Capture"].Enabled=true;//TODO: Re-enable when image capturing is supported.
 				paintTools.Buttons["Crop"].Enabled=true;
 				paintTools.Buttons["Hand"].Enabled=true;
 				paintTools.Buttons["ZoomIn"].Enabled=true;
@@ -711,7 +712,7 @@ namespace OpenDental{
 				ToolBarMain.Buttons["Copy"].Enabled=false;
 				ToolBarMain.Buttons["Paste"].Enabled=false;
 				ToolBarMain.Buttons["Forms"].Enabled=false;
-				ToolBarMain.Buttons["Capture"].Enabled=false;
+				//ToolBarMain.Buttons["Capture"].Enabled=false;//TODO: Re-enable when image capturing is supported.
 				paintTools.Buttons["Crop"].Enabled=false;
 				paintTools.Buttons["Hand"].Enabled=false;
 				paintTools.Buttons["ZoomIn"].Enabled=false;
@@ -947,7 +948,7 @@ namespace OpenDental{
 						MsgBox.Show(this,"Use the dropdown list.  Add forms to the list by copying image files into your A-Z folder, Forms.  Restart the program to see newly added forms.");
 						break;
 					case "Capture":
-						OnCapture_Click();
+						//OnCapture_Click();//TODO: Re-enable when image capturing is supported.
 						break;
 				}
 			}
@@ -1115,17 +1116,17 @@ namespace OpenDental{
 		private void FillSignature() {
 			textNote.Text="";
 			sigBox.ClearTablet();
-			if(!panelNote.Visible){
+			if(!panelNote.Visible) {
 				return;
 			}
 			DataRow obj=(DataRow)TreeDocuments.SelectedNode.Tag;
-			int docNum=Convert.ToInt32(obj["DocNum"].ToString());
-			Document curDoc=Documents.GetByNum(docNum);
+			Document curDoc=Documents.GetByNum(Convert.ToInt32(obj["DocNum"].ToString()));
 			textNote.Text=curDoc.Note;
+			sigBox.Visible=true;
 			sigBox.SetTabletState(0);//never accepts input here
 			labelInvalidSig.Visible=false;
 			//Topaz box is not supported in Unix, since the required dll is Windows native.
-			if(Environment.OSVersion.Platform!=PlatformID.Unix){
+			if(Environment.OSVersion.Platform!=PlatformID.Unix) {
 				sigBoxTopaz.Location=sigBox.Location;//this puts both boxes in the same spot.
 				sigBoxTopaz.Visible=false;
 				sigBoxTopaz.SetTabletState(0);
@@ -1135,6 +1136,7 @@ namespace OpenDental{
 			//run on Unix systems.
 			if(curDoc.SigIsTopaz) {
 				if(curDoc.Signature!=null && curDoc.Signature!="") {
+					sigBox.Visible=false;
 					sigBoxTopaz.Visible=true;
 					sigBoxTopaz.ClearTablet();
 					sigBoxTopaz.SetSigCompressionMode(0);
@@ -1150,6 +1152,8 @@ namespace OpenDental{
 			}else{
 				sigBox.ClearTablet();
 				if(curDoc.Signature!=null && curDoc.Signature!="") {
+					sigBox.Visible=true;
+					sigBoxTopaz.Visible=false;
 					sigBox.SetKeyString(GetHashString(curDoc));
 					sigBox.SetSigString(curDoc.Signature);
 					if(sigBox.NumberOfTabletPoints()==0) {
@@ -1253,15 +1257,15 @@ namespace OpenDental{
 				Documents.Delete(doc);
 			}
 			if(saved){
-				FillDocList(true);//Reload and keep new document selected.
+				FillDocList(false);//Reload and keep new document selected.
+				SelectTreeNode(GetNodeById(MakeIdentifier(doc.DocNum.ToString(),"0")));
 				FormDocInfo formDocInfo=new FormDocInfo(PatCur,doc,GetCurrentFolderName(TreeDocuments.SelectedNode));
 				formDocInfo.ShowDialog();
 				if(formDocInfo.DialogResult!=DialogResult.OK){
 					File.Delete(doc.FileName);
 					DeleteSelection(false);
-					FillDocList(false);//Clear selection.
 				}else{
-					FillDocList(true);//Keep current selection.
+					FillDocList(true);//Update tree, in case the new document's icon or category were modified in formDocInfo.
 				}
 			}
 		}

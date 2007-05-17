@@ -234,6 +234,7 @@
     <Compile Include="Data Interface\Reconciles.cs" />
     <Compile Include="Data Interface\RefAttaches.cs" />
     <Compile Include="Data Interface\Referrals.cs" />
+    <Compile Include="Data Interface\RegistrationKeys.cs" />
     <Compile Include="Data Interface\RemotingClient.cs" />
     <Compile Include="Data Interface\RepeatCharges.cs" />
     <Compile Include="Data Interface\RxAlerts.cs" />

@@ -133,11 +133,11 @@ namespace OpenDental{
 			// label2
 			// 
 			this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif",8.25F,System.Drawing.FontStyle.Underline,System.Drawing.GraphicsUnit.Point,((byte)(0)));
-			this.label2.Location = new System.Drawing.Point(130,134);
+			this.label2.Location = new System.Drawing.Point(151,134);
 			this.label2.Name = "label2";
-			this.label2.Size = new System.Drawing.Size(134,19);
+			this.label2.Size = new System.Drawing.Size(77,19);
 			this.label2.TabIndex = 18;
-			this.label2.Text = "Registration numbers";
+			this.label2.Text = "Update codes";
 			this.label2.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
 			// 
 			// textRegMain

@@ -5101,6 +5101,29 @@ namespace OpenDental{
 				//added after r303
 				command="INSERT INTO preference VALUES('RegistrationKey','')";
 				General.NonQEx(command);
+				//After r304
+				//Distributor keys must be manually added to a distributor's database using their own database software installation
+				//(i.e. MySQL) by way of an update SQL statement.
+				command="INSERT INTO preference VALUES('DistributorKey','')";
+				General.NonQEx(command);
+				if(FormChooseDatabase.DBtype==DatabaseType.MySql) {
+					command=@"CREATE TABLE registrationkey(
+						RegistrationKeyNum int NOT NULL auto_increment,
+						PatNum int NOT NULL,
+						RegKey varchar(4000),
+						Note varchar(4000),
+						PRIMARY KEY (RegistrationKeyNum)
+						) DEFAULT CHARSET=utf8";
+				}else {//Oracle.
+					command=@"CREATE TABLE registrationkey(
+						RegistrationKeyNum int NOT NULL,
+						PatNum int NOT NULL,
+						RegKey varchar2(4000),
+						Note varchar2(4000),
+						PRIMARY KEY (RegistrationKeyNum)
+						)";
+				}
+				General.NonQEx(command);
 
 
 

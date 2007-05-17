@@ -228,8 +228,10 @@ namespace OpenDental{
 			IsStartingUp=true;
 			textNote.Text=DocCur.Note;
 			labelInvalidSig.Visible=false;
+			sigBox.Visible=true;
 			if(Environment.OSVersion.Platform!=PlatformID.Unix && DocCur.SigIsTopaz) {
 				if(DocCur.Signature!="") {
+					sigBox.Visible=false;
 					sigBoxTopaz.Visible=true;
 					sigBoxTopaz.ClearTablet();
 					sigBoxTopaz.SetSigCompressionMode(0);
@@ -247,6 +249,8 @@ namespace OpenDental{
 			}
 			else {
 				if(DocCur.Signature!="") {
+					sigBox.Visible=true;
+					sigBoxTopaz.Visible=false;
 					sigBox.ClearTablet();
 					//sigBox.SetSigCompressionMode(0);
 					//sigBox.SetEncryptionMode(0);
@@ -318,6 +322,7 @@ namespace OpenDental{
 			if(!IsStartingUp//so this happens only if user changes the note
 				&& !SigChanged)//and the original signature is still showing.
 			{
+				sigBox.Visible=true;
 				sigBox.ClearTablet();
 				if(Environment.OSVersion.Platform!=PlatformID.Unix){
 					sigBoxTopaz.ClearTablet();

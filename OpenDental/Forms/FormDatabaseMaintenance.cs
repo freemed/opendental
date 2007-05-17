@@ -448,6 +448,7 @@ namespace OpenDental {
 				"reconcile","ReconcileNum",
 				"refattach","RefAttachNum",
 				"referral","ReferralNum",
+				"registrationkey","RegistrationKeyNum",
 				"repeatcharge","RepeatChargeNum",
 				"rxalert","RxAlertNum",
 				"rxdef","RxDefNum",
