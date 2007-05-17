@@ -5023,7 +5023,7 @@ namespace OpenDental{
 				General.NonQEx(command);
 				command = "INSERT INTO preference VALUES('StationaryImage','0')";
 				General.NonQEx(command);
-				command = "INSERT INTO preference VALUES('StationaryDocment','0')";
+				command = "INSERT INTO preference VALUES('StationaryDocument','0')";
 				General.NonQEx(command);
 				//Added after r271
 				if(FormChooseDatabase.DBtype==DatabaseType.MySql) {
@@ -5085,9 +5085,9 @@ namespace OpenDental{
 				General.NonQEx(command);
 				command="INSERT INTO definition (Category,ItemOrder,ItemName,ItemColor,IsHidden) VALUES(12,17,'Planned Appointment Background',-17409,0)";
 				General.NonQEx(command);
-		//I don't think this is a good idea.  There's such a thing as too many choices.  We need to discuss it more.
-	//I would be much more comfortable with it if we had a mechanism to let the user easily switch it back to default.  But why is there a need for it anyway?
-				//command="INSERT INTO definition (Category,ItemOrder,ItemName,ItemColor,IsHidden) VALUES(21,8,'List Selection Color','"+Color.LightGray.ToArgb()+"',0)";
+				//After r299
+				command = "INSERT INTO preference VALUES('FuchsListSelectionColor','')";
+				General.NonQEx(command);
 				//General.NonQEx(command);
 
 
