@@ -5098,6 +5098,9 @@ namespace OpenDental{
 				General.NonQEx(command);
 				command="UPDATE insplan SET ClaimFormNum="+POut.PInt(claimFormNum)+" WHERE insplan.ClaimFormNum=0";
 				General.NonQEx(command);
+				//added after r303
+				command="INSERT INTO preference VALUES('RegistrationKey','')";
+				General.NonQEx(command);
 
 
 
