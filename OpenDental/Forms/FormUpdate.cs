@@ -36,10 +36,6 @@ namespace OpenDental{
 		private TextBox textResult;
 		private TextBox textResult2;
 		private Label label4;
-		private OpenDental.UI.Button butDownloadClaimform;
-		private Label label5;
-		private TextBox textResultClaimform;
-		private TextBox textRegClaimform;
 		private Label label6;
 		private Panel panel1;
 		private FormProgress FormP;
@@ -95,12 +91,8 @@ namespace OpenDental{
 			this.textResult = new System.Windows.Forms.TextBox();
 			this.textResult2 = new System.Windows.Forms.TextBox();
 			this.label4 = new System.Windows.Forms.Label();
-			this.label5 = new System.Windows.Forms.Label();
-			this.textResultClaimform = new System.Windows.Forms.TextBox();
-			this.textRegClaimform = new System.Windows.Forms.TextBox();
 			this.label6 = new System.Windows.Forms.Label();
 			this.panel1 = new System.Windows.Forms.Panel();
-			this.butDownloadClaimform = new OpenDental.UI.Button();
 			this.butDownload = new OpenDental.UI.Button();
 			this.butCheck = new OpenDental.UI.Button();
 			this.butOK = new OpenDental.UI.Button();
@@ -116,7 +108,7 @@ namespace OpenDental{
 			this.butReset.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.butReset.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this.butReset.ForeColor = System.Drawing.SystemColors.Control;
-			this.butReset.Location = new System.Drawing.Point(755,0);
+			this.butReset.Location = new System.Drawing.Point(723,0);
 			this.butReset.Name = "butReset";
 			this.butReset.Size = new System.Drawing.Size(61,49);
 			this.butReset.TabIndex = 6;
@@ -201,32 +193,6 @@ namespace OpenDental{
 			this.label4.Text = "Main Program";
 			this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
-			// label5
-			// 
-			this.label5.Location = new System.Drawing.Point(2,272);
-			this.label5.Name = "label5";
-			this.label5.Size = new System.Drawing.Size(129,18);
-			this.label5.TabIndex = 38;
-			this.label5.Text = "Claimform and Codes";
-			this.label5.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// textResultClaimform
-			// 
-			this.textResultClaimform.AcceptsReturn = true;
-			this.textResultClaimform.BackColor = System.Drawing.SystemColors.Window;
-			this.textResultClaimform.Location = new System.Drawing.Point(264,271);
-			this.textResultClaimform.Name = "textResultClaimform";
-			this.textResultClaimform.ReadOnly = true;
-			this.textResultClaimform.Size = new System.Drawing.Size(388,20);
-			this.textResultClaimform.TabIndex = 39;
-			// 
-			// textRegClaimform
-			// 
-			this.textRegClaimform.Location = new System.Drawing.Point(133,271);
-			this.textRegClaimform.Name = "textRegClaimform";
-			this.textRegClaimform.Size = new System.Drawing.Size(113,20);
-			this.textRegClaimform.TabIndex = 36;
-			// 
 			// label6
 			// 
 			this.label6.Location = new System.Drawing.Point(9,36);
@@ -238,24 +204,10 @@ namespace OpenDental{
 			// panel1
 			// 
 			this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.panel1.Location = new System.Drawing.Point(9,326);
+			this.panel1.Location = new System.Drawing.Point(9,278);
 			this.panel1.Name = "panel1";
-			this.panel1.Size = new System.Drawing.Size(800,4);
+			this.panel1.Size = new System.Drawing.Size(760,4);
 			this.panel1.TabIndex = 42;
-			// 
-			// butDownloadClaimform
-			// 
-			this.butDownloadClaimform.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butDownloadClaimform.Autosize = true;
-			this.butDownloadClaimform.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butDownloadClaimform.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butDownloadClaimform.CornerRadius = 4F;
-			this.butDownloadClaimform.Location = new System.Drawing.Point(660,268);
-			this.butDownloadClaimform.Name = "butDownloadClaimform";
-			this.butDownloadClaimform.Size = new System.Drawing.Size(83,25);
-			this.butDownloadClaimform.TabIndex = 37;
-			this.butDownloadClaimform.Text = "Download";
-			this.butDownloadClaimform.Click += new System.EventHandler(this.butDownloadClaimform_Click);
 			// 
 			// butDownload
 			// 
@@ -293,7 +245,7 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(634,435);
+			this.butOK.Location = new System.Drawing.Point(602,389);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75,25);
 			this.butOK.TabIndex = 1;
@@ -308,7 +260,7 @@ namespace OpenDental{
 			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
-			this.butCancel.Location = new System.Drawing.Point(727,435);
+			this.butCancel.Location = new System.Drawing.Point(695,389);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75,25);
 			this.butCancel.TabIndex = 0;
@@ -317,7 +269,7 @@ namespace OpenDental{
 			// 
 			// label9
 			// 
-			this.label9.Location = new System.Drawing.Point(12,392);
+			this.label9.Location = new System.Drawing.Point(12,344);
 			this.label9.Name = "label9";
 			this.label9.Size = new System.Drawing.Size(585,23);
 			this.label9.TabIndex = 47;
@@ -326,7 +278,7 @@ namespace OpenDental{
 			// 
 			// label10
 			// 
-			this.label10.Location = new System.Drawing.Point(12,370);
+			this.label10.Location = new System.Drawing.Point(12,322);
 			this.label10.Name = "label10";
 			this.label10.Size = new System.Drawing.Size(585,23);
 			this.label10.TabIndex = 44;
@@ -335,7 +287,7 @@ namespace OpenDental{
 			// 
 			// label7
 			// 
-			this.label7.Location = new System.Drawing.Point(12,351);
+			this.label7.Location = new System.Drawing.Point(12,303);
 			this.label7.Name = "label7";
 			this.label7.Size = new System.Drawing.Size(584,20);
 			this.label7.TabIndex = 46;
@@ -345,7 +297,7 @@ namespace OpenDental{
 			// 
 			// label8
 			// 
-			this.label8.Location = new System.Drawing.Point(12,414);
+			this.label8.Location = new System.Drawing.Point(12,366);
 			this.label8.Name = "label8";
 			this.label8.Size = new System.Drawing.Size(584,20);
 			this.label8.TabIndex = 45;
@@ -355,17 +307,13 @@ namespace OpenDental{
 			// FormUpdate
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
-			this.ClientSize = new System.Drawing.Size(814,472);
+			this.ClientSize = new System.Drawing.Size(782,426);
 			this.Controls.Add(this.label9);
 			this.Controls.Add(this.label10);
 			this.Controls.Add(this.label7);
 			this.Controls.Add(this.label8);
 			this.Controls.Add(this.panel1);
 			this.Controls.Add(this.label6);
-			this.Controls.Add(this.butDownloadClaimform);
-			this.Controls.Add(this.label5);
-			this.Controls.Add(this.textResultClaimform);
-			this.Controls.Add(this.textRegClaimform);
 			this.Controls.Add(this.butDownload);
 			this.Controls.Add(this.textResult2);
 			this.Controls.Add(this.label4);
@@ -394,13 +342,12 @@ namespace OpenDental{
 		#endregion
 
 		private void FormUpdate_Load(object sender, System.EventArgs e) {
-			//Height=butLicense.Bottom+50;
 			labelVersion.Text=Lan.g(this,"Using Version:")+" "+Application.ProductVersion;
 			textRegMain.Text=PrefB.GetString("RegistrationNumber");
-			textRegClaimform.Text=PrefB.GetString("RegistrationNumberClaim");
+			//textRegClaimform.Text=PrefB.GetString("RegistrationNumberClaim");
 			textWebsitePath.Text=PrefB.GetString("UpdateWebsitePath");//should include trailing /
 			butDownload.Enabled=false;
-			butDownloadClaimform.Enabled=false;
+			//butDownloadClaimform.Enabled=false;
 			if(!Security.IsAuthorized(Permissions.Setup)) {
 				butCheck.Enabled=false;
 				butOK.Enabled=false;
@@ -421,7 +368,7 @@ namespace OpenDental{
 			Cursor=Cursors.WaitCursor;
 			SavePrefs();
 			CheckMain();
-			CheckClaimForm();
+			//CheckClaimForm();
 			Cursor=Cursors.Default;
 		}
 
@@ -503,6 +450,7 @@ namespace OpenDental{
 			return shouldDownload;
 		}
 
+		/*
 		private void CheckClaimForm() {
 			butDownloadClaimform.Enabled=false;
 			textResultClaimform.Text="";
@@ -533,7 +481,7 @@ namespace OpenDental{
 			}
 			textResultClaimform.Text+=description;
 			butDownloadClaimform.Enabled=true;
-		}
+		}*/
 
 		private void butDownload_Click(object sender, System.EventArgs e){
 			string patchName="Setup.exe";
@@ -610,6 +558,7 @@ namespace OpenDental{
 			//myWebClient.DownloadFile(downloadUri,ODFileUtils.CombinePaths(FormPath.GetPreferredImagePath(),"Setup.exe"));
 		}
 
+		/*
 		private void butDownloadClaimform_Click(object sender,EventArgs e) {
 			Cursor=Cursors.WaitCursor;
 			FormP=new FormProgress();//just so the InstanceMethod won't crash.  We won't be telling user about progress.
@@ -734,16 +683,16 @@ namespace OpenDental{
 			}
 			MsgBox.Show(this,"Done");
 			Cursor=Cursors.Default;
-		}
+		}*/
 
 		private void SavePrefs(){
 			bool changed=false;
 			if(Prefs.UpdateString("RegistrationNumber",textRegMain.Text)){
 				changed=true;
 			}
-			if(Prefs.UpdateString("RegistrationNumberClaim",textRegClaimform.Text)) {
-				changed=true;
-			}
+			//if(Prefs.UpdateString("RegistrationNumberClaim",textRegClaimform.Text)) {
+			//	changed=true;
+			//}
 			if(Prefs.UpdateString("UpdateWebsitePath",textWebsitePath.Text)){
 				changed=true;
 			}

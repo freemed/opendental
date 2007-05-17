@@ -33,6 +33,8 @@ namespace OpenDental{
 		private OpenDental.UI.Button butRight;
 		private FormQuery FormQuery2;
 		private DateTime dateFrom;
+		private ListBox listClinic;
+		private Label labelClinic;
 		private DateTime dateTo;
 
 		///<summary></summary>
@@ -78,6 +80,8 @@ namespace OpenDental{
 			this.butRight = new OpenDental.UI.Button();
 			this.butThis = new OpenDental.UI.Button();
 			this.butLeft = new OpenDental.UI.Button();
+			this.listClinic = new System.Windows.Forms.ListBox();
+			this.labelClinic = new System.Windows.Forms.Label();
 			this.groupBox1.SuspendLayout();
 			this.groupBox2.SuspendLayout();
 			this.SuspendLayout();
@@ -85,12 +89,12 @@ namespace OpenDental{
 			// butCancel
 			// 
 			this.butCancel.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.butCancel.Autosize = true;
 			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
-			this.butCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.butCancel.Location = new System.Drawing.Point(506,295);
+			this.butCancel.Location = new System.Drawing.Point(554,342);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75,26);
 			this.butCancel.TabIndex = 4;
@@ -100,11 +104,12 @@ namespace OpenDental{
 			// butOK
 			// 
 			this.butOK.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.butOK.Autosize = true;
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(506,260);
+			this.butOK.Location = new System.Drawing.Point(554,307);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75,26);
 			this.butOK.TabIndex = 3;
@@ -113,18 +118,19 @@ namespace OpenDental{
 			// 
 			// label1
 			// 
-			this.label1.Location = new System.Drawing.Point(37,128);
+			this.label1.Location = new System.Drawing.Point(35,128);
 			this.label1.Name = "label1";
 			this.label1.Size = new System.Drawing.Size(104,16);
 			this.label1.TabIndex = 29;
 			this.label1.Text = "Providers";
+			this.label1.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
 			// 
 			// listProv
 			// 
 			this.listProv.Location = new System.Drawing.Point(37,147);
 			this.listProv.Name = "listProv";
 			this.listProv.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
-			this.listProv.Size = new System.Drawing.Size(120,134);
+			this.listProv.Size = new System.Drawing.Size(123,186);
 			this.listProv.TabIndex = 30;
 			// 
 			// butAll
@@ -134,7 +140,7 @@ namespace OpenDental{
 			this.butAll.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butAll.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butAll.CornerRadius = 4F;
-			this.butAll.Location = new System.Drawing.Point(37,295);
+			this.butAll.Location = new System.Drawing.Point(37,342);
 			this.butAll.Name = "butAll";
 			this.butAll.Size = new System.Drawing.Size(70,25);
 			this.butAll.TabIndex = 31;
@@ -220,7 +226,7 @@ namespace OpenDental{
 			// 
 			// label4
 			// 
-			this.label4.Location = new System.Drawing.Point(259,10);
+			this.label4.Location = new System.Drawing.Point(305,23);
 			this.label4.Name = "label4";
 			this.label4.Size = new System.Drawing.Size(127,20);
 			this.label4.TabIndex = 41;
@@ -229,7 +235,7 @@ namespace OpenDental{
 			// 
 			// textToday
 			// 
-			this.textToday.Location = new System.Drawing.Point(388,8);
+			this.textToday.Location = new System.Drawing.Point(434,21);
 			this.textToday.Name = "textToday";
 			this.textToday.Size = new System.Drawing.Size(100,20);
 			this.textToday.TabIndex = 42;
@@ -244,7 +250,7 @@ namespace OpenDental{
 			this.groupBox2.Controls.Add(this.label3);
 			this.groupBox2.Controls.Add(this.butLeft);
 			this.groupBox2.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.groupBox2.Location = new System.Drawing.Point(302,57);
+			this.groupBox2.Location = new System.Drawing.Point(348,70);
 			this.groupBox2.Name = "groupBox2";
 			this.groupBox2.Size = new System.Drawing.Size(281,144);
 			this.groupBox2.TabIndex = 43;
@@ -293,10 +299,29 @@ namespace OpenDental{
 			this.butLeft.TabIndex = 44;
 			this.butLeft.Click += new System.EventHandler(this.butLeft_Click);
 			// 
+			// listClinic
+			// 
+			this.listClinic.Location = new System.Drawing.Point(179,147);
+			this.listClinic.Name = "listClinic";
+			this.listClinic.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
+			this.listClinic.Size = new System.Drawing.Size(123,186);
+			this.listClinic.TabIndex = 45;
+			// 
+			// labelClinic
+			// 
+			this.labelClinic.Location = new System.Drawing.Point(177,128);
+			this.labelClinic.Name = "labelClinic";
+			this.labelClinic.Size = new System.Drawing.Size(104,16);
+			this.labelClinic.TabIndex = 44;
+			this.labelClinic.Text = "Clinics";
+			this.labelClinic.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
+			// 
 			// FormRpProdInc
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
-			this.ClientSize = new System.Drawing.Size(606,350);
+			this.ClientSize = new System.Drawing.Size(662,394);
+			this.Controls.Add(this.listClinic);
+			this.Controls.Add(this.labelClinic);
 			this.Controls.Add(this.groupBox2);
 			this.Controls.Add(this.textToday);
 			this.Controls.Add(this.label4);
@@ -329,6 +354,18 @@ namespace OpenDental{
 					+Providers.List[i].FName);
 				listProv.SetSelected(i,true);
 			}
+			//if(PrefB.GetBool("EasyNoClinics")){
+				listClinic.Visible=false;
+				labelClinic.Visible=false;
+			/*}
+			else{
+				listClinic.Items.Add(Lan.g(this,"Unassigned"));
+				listClinic.SetSelected(0,true);
+				for(int i=0;i<Clinics.List.Length;i++) {
+					listClinic.Items.Add(Clinics.List[i].Description);
+					listClinic.SetSelected(i+1,true);
+				}
+			}*/
 			SetDates();
 		}
 
@@ -1339,6 +1376,10 @@ ORDER BY adjdate DESC
 				MessageBox.Show(Lan.g(this,"You must select at least one provider."));
 				return;
 			}
+			//if(!PrefB.GetBool("EasyNoClinics") && listClinic.SelectedIndices.Count==0) {
+			//	MessageBox.Show(Lan.g(this,"You must select at least one clinic."));
+			//	return;
+			//}
 			dateFrom=PIn.PDate(textDateFrom.Text);
 			dateTo=PIn.PDate(textDateTo.Text);
 			if(radioDaily.Checked){
