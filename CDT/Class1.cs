@@ -13,7 +13,13 @@ namespace CDT {
 			return CDT.Properties.Resources.ADAcodes;
 		}
 
+		public static string GenerateRandKey(){
+			return "";
+		}
 
+		public static bool ValidateKey(string key){
+			return true;
+		}
 
 	}
 

@@ -182,7 +182,7 @@ namespace OpenDental{
 		}
 
 		public static bool ValidateKey(string keystr){
-			return true;//no key required yet
+			return CDT.Class1.ValidateKey(keystr);
 		}
 
 		private void butOK_Click(object sender, System.EventArgs e) {

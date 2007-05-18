@@ -18,7 +18,6 @@ redistributed.
 
 //This program can be compiled differently for different situations.  Use conditional compilation constants, but do not put them here or they will only apply to this file.  Instead, put them in project properties, Release config, Build tab.  Here are some of the constants available:
 //TRIALONLY - Limits to 30 patient input.  Program will also run without a registration key.
-//USA - For release by us in the USA, the program requires a registration key.  We will always release full versions with this constant set.  We only remove it for use in foreign countries.
 //ORA_DB - Oracle, and also using a crypto dll for more secure login (it is used below)
 
 //#define ORA_DB
@@ -1478,7 +1477,6 @@ namespace OpenDental{
 					if(!Prefs.CheckProgramVersion()){
 						return false;
 					}
-					#if(USA)
 					if(true){//!FormRegistrationKey.ValidateKey(PrefB.GetString("RegistrationKey"))){
 						//
 						FormRegistrationKey FormR=new FormRegistrationKey();
@@ -1489,7 +1487,6 @@ namespace OpenDental{
 						}
 						Prefs.Refresh();
 					}
-					#endif
 					Lan.Refresh();//automatically skips if current culture is en-US
 					LanguageForeigns.Refresh(CultureInfo.CurrentCulture);//automatically skips if current culture is en-US
 				}
