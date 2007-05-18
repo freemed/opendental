@@ -5124,8 +5124,17 @@ namespace OpenDental{
 						)";
 				}
 				General.NonQEx(command);
-
-
+				//After r306
+				//We need our preference values to be larger now that the database must store rsa info in distributor databases.
+				if(FormChooseDatabase.DBtype==DatabaseType.MySql){
+					command="ALTER TABLE preference CHANGE ValueString ValueString varchar(4000) NOT NULL default ''";
+					General.NonQEx(command);
+				}else{//Oracle
+					command="ALTER TABLE preference MODIFY (ValueString varchar2(4000) default '')";
+					General.NonQEx(command);
+				}
+				
+				
 
 
 				

@@ -2844,8 +2844,18 @@ namespace OpenDental{
 				row.Cells.Add("");
 			}
 			gridPtInfo.Rows.Add(row);
+			//Create row for registration keys. 6
+			RegistrationKey[] keys=RegistrationKeys.GetForPatient(PatCur.PatNum);
+			string keyList="";
+			for(int i=0;i<keys.Length;i++) {
+				keyList+=keys[i].RegKey+":   "+keys[i].Note+"\r\n";
+			}
+			row=new ODGridRow();
+			row.Cells.Add(Lan.g("TableChartPtInfo","Registration Keys"));
+			row.Cells.Add(keyList);
+			gridPtInfo.Rows.Add(row);
 			ODGridCell cell;
-			//premed flag. Row 6
+			//premed flag. Row 7
 			if(PatCur.Premed){
 				row=new ODGridRow();
 				row.Cells.Add("");
@@ -2934,16 +2944,6 @@ namespace OpenDental{
 				row.ColorBackG=DefB.Long[(int)DefCat.MiscColors][3].ItemColor;
 				gridPtInfo.Rows.Add(row);
 			}
-			//Create row for registration keys.
-			RegistrationKey[] keys=RegistrationKeys.GetForPatient(PatCur.PatNum);
-			string keyList="";
-			for(int i=0;i<keys.Length;i++) {
-				keyList+=keys[i].RegKey+":   "+keys[i].Note+"\r\n";
-			}
-			row=new ODGridRow();
-			row.Cells.Add(Lan.g("TableChartPtInfo","Registration Keys"));
-			row.Cells.Add(keyList);
-			gridPtInfo.Rows.Add(row);
 			gridPtInfo.EndUpdate();
 		}
 
@@ -4867,10 +4867,12 @@ namespace OpenDental{
 		}
 
 		private void gridPtInfo_CellDoubleClick(object sender,ODGridClickEventArgs e) {
-			if(e.Row>=6){// && e.Row<=8){
+			if(e.Row>=7){// && e.Row<=8){//Medical info
 				FormMedical FormM=new FormMedical(PatientNoteCur,PatCur);
 				FormM.ShowDialog();
 				ModuleSelected(PatCur.PatNum);
+			}else if(e.Row==6){//Registration key list click.
+				//TODO: edit registration key notes.
 			}
 		}
 
