@@ -122,7 +122,6 @@ namespace OpenDental{
 			}
 		}
 
-
 		///<summary>Returns the claim form specified by the given claimFormNum</summary>
 		public static ClaimForm GetClaimForm(int claimFormNum){
 			for(int i=0;i<ListLong.Length;i++){
@@ -134,7 +133,13 @@ namespace OpenDental{
 			return null;
 		}
 
-		
+		///<summary>Returns number of insplans affected.</summary>
+		public static int Reassign(int oldClaimFormNum, int newClaimFormNum){
+			string command="UPDATE insplan SET ClaimFormNum="+POut.PInt(newClaimFormNum)
+				+" WHERE ClaimFormNum="+POut.PInt(oldClaimFormNum);
+			return General.NonQ(command);
+		}
+
 
 
 	}

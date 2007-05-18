@@ -5102,8 +5102,6 @@ namespace OpenDental{
 				command="INSERT INTO preference VALUES('RegistrationKey','')";
 				General.NonQEx(command);
 				//After r304
-				//Distributor keys must be manually added to a distributor's database using their own database software installation
-				//(i.e. MySQL) by way of an update SQL statement.
 				command="INSERT INTO preference VALUES('DistributorKey','')";
 				General.NonQEx(command);
 				if(FormChooseDatabase.DBtype==DatabaseType.MySql) {
