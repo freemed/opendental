@@ -2843,6 +2843,10 @@
     <None Include="Web References\com.dentalxchange.webservices\wsdl.wsdl" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\CDT\xCDT.csproj">
+      <Project>{76BA82E6-D8E1-45B1-8ED6-41D97B8D67EC}</Project>
+      <Name>xCDT</Name>
+    </ProjectReference>
     <ProjectReference Include="..\CodeBase\xCodeBase.csproj">
       <Project>{18F7BC78-4B99-48D3-A1F1-0D13A63E3CF9}</Project>
       <Name>xCodeBase</Name>

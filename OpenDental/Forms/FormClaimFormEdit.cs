@@ -8,6 +8,7 @@ using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using OpenDentBusiness;
 using CodeBase;
+using CDT;
 
 namespace OpenDental{
 	/// <summary>
@@ -599,29 +600,38 @@ namespace OpenDental{
 						,ClaimFormCur.Items[i].Width,ClaimFormCur.Items[i].Height));
 				}
 				else{//image
-					string fileName=ODFileUtils.CombinePaths(FormPath.GetPreferredImagePath(),ClaimFormCur.Items[i].ImageFileName);
-					if(!File.Exists(fileName)){
-						grfx.DrawString("IMAGE FILE NOT FOUND",new Font(FontFamily.GenericSansSerif,12,FontStyle.Bold)
-							,Brushes.DarkRed,0,0);
-						//MessageBox.Show("File not found.");
-						continue;
+					Image thisImage;
+					string extension;
+					if(ClaimFormCur.Items[i].ImageFileName=="ADA2006.gif"){
+						thisImage=CDT.Class1.GetADA2006();
+						extension=".gif";
 					}
-					Image thisImage=Image.FromFile(fileName);
-					if(fileName.Substring(fileName.Length-3)=="jpg"){
+					else{
+						string fileName=ODFileUtils.CombinePaths(FormPath.GetPreferredImagePath(),ClaimFormCur.Items[i].ImageFileName);
+						if(!File.Exists(fileName)){
+							grfx.DrawString("IMAGE FILE NOT FOUND",new Font(FontFamily.GenericSansSerif,12,FontStyle.Bold)
+								,Brushes.DarkRed,0,0);
+							//MessageBox.Show("File not found.");
+							continue;
+						}
+						thisImage=Image.FromFile(fileName);
+						extension=Path.GetExtension(fileName);
+					}
+					if(extension==".jpg"){
 						grfx.DrawImage(thisImage
 							,ClaimFormCur.Items[i].XPos
 							,ClaimFormCur.Items[i].YPos
 							,(int)(thisImage.Width/thisImage.HorizontalResolution*100)
 							,(int)(thisImage.Height/thisImage.VerticalResolution*100));
 					}
-					else if(fileName.Substring(fileName.Length-3)=="gif"){
+					else if(extension==".gif"){
 						grfx.DrawImage(thisImage
 							,ClaimFormCur.Items[i].XPos
 							,ClaimFormCur.Items[i].YPos
 							,ClaimFormCur.Items[i].Width
 							,ClaimFormCur.Items[i].Height);
 					}
-					else if(fileName.Substring(fileName.Length-3)=="emf"){
+					else if(extension==".emf"){
 						grfx.DrawImage(thisImage
 							,ClaimFormCur.Items[i].XPos
 							,ClaimFormCur.Items[i].YPos
