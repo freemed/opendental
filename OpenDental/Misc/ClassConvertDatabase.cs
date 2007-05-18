@@ -44,12 +44,13 @@ namespace OpenDental{
 			if(FromVersion.ToString()=="2.9.0.0"
 				|| FromVersion.ToString()=="3.0.0.0"
 				|| FromVersion.ToString()=="4.7.0.0"
-				|| FromVersion.ToString()=="4.8.0.0")
+				|| FromVersion.ToString()=="4.8.0.0"
+				|| FromVersion.ToString()=="4.9.0.0")
 			{
 				MsgBox.Show(this,"Cannot convert this database version which was only for development purposes.");
 				return false;
 			}
-			if(FromVersion < new Version("4.9.0.0")){
+			if(FromVersion < new Version("4.9.1.0")){
 				if(MessageBox.Show(Lan.g(this,"Your database will now be converted")+"\r"
 					+Lan.g(this,"from version")+" "+FromVersion.ToString()+"\r"
 					+Lan.g(this,"to version")+" "+ToVersion.ToString()+"\r"
@@ -4664,12 +4665,12 @@ namespace OpenDental{
 				command="UPDATE preference SET ValueString = '4.8.9.0' WHERE PrefName = 'DataBaseVersion'";
 				General.NonQEx(command);
 			}
-			To4_9_0();
+			To4_9_1();
 		}
 
 		///<summary></summary>
-		private void To4_9_0() {
-			if(FromVersion<new Version("4.9.0.0")) {
+		private void To4_9_1() {
+			if(FromVersion<new Version("4.9.1.0")) {
 				string command;
 				DataTable table;
 				if(FormChooseDatabase.DBtype==DatabaseType.MySql) {
@@ -5130,14 +5131,7 @@ namespace OpenDental{
 					command="ALTER TABLE preference MODIFY (ValueString varchar2(4000) default '')";
 					General.NonQEx(command);
 				}
-				
-				
-
-
-
-
-				
-				command="UPDATE preference SET ValueString = '4.9.0.0' WHERE PrefName = 'DataBaseVersion'";
+				command="UPDATE preference SET ValueString = '4.9.1.0' WHERE PrefName = 'DataBaseVersion'";
 				General.NonQEx(command);
 			}
 			//To4_9_?();
