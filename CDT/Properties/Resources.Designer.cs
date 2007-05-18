@@ -66,5 +66,14 @@ namespace CDT.Properties {
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string ADAcodes {
+            get {
+                return ResourceManager.GetString("ADAcodes", resourceCulture);
+            }
+        }
     }
 }

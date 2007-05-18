@@ -21,6 +21,9 @@ namespace OpenDental{
 		private Label label1;
 		private OpenDental.UI.Button butDelete;
 		private Label label9;
+		private OpenDental.UI.Button butNewCust;
+		private Label label3;
+		private Label label4;
 		public bool Changed;
 
 		///<summary></summary>
@@ -63,6 +66,9 @@ namespace OpenDental{
 			this.label1 = new System.Windows.Forms.Label();
 			this.butDelete = new OpenDental.UI.Button();
 			this.label9 = new System.Windows.Forms.Label();
+			this.butNewCust = new OpenDental.UI.Button();
+			this.label3 = new System.Windows.Forms.Label();
+			this.label4 = new System.Windows.Forms.Label();
 			this.SuspendLayout();
 			// 
 			// butClose
@@ -73,7 +79,7 @@ namespace OpenDental{
 			this.butClose.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butClose.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butClose.CornerRadius = 4F;
-			this.butClose.Location = new System.Drawing.Point(539,197);
+			this.butClose.Location = new System.Drawing.Point(539,274);
 			this.butClose.Name = "butClose";
 			this.butClose.Size = new System.Drawing.Size(75,26);
 			this.butClose.TabIndex = 0;
@@ -87,7 +93,7 @@ namespace OpenDental{
 			this.butProcButtons.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butProcButtons.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butProcButtons.CornerRadius = 4F;
-			this.butProcButtons.Location = new System.Drawing.Point(24,115);
+			this.butProcButtons.Location = new System.Drawing.Point(24,224);
 			this.butProcButtons.Name = "butProcButtons";
 			this.butProcButtons.Size = new System.Drawing.Size(103,26);
 			this.butProcButtons.TabIndex = 39;
@@ -96,7 +102,7 @@ namespace OpenDental{
 			// 
 			// label2
 			// 
-			this.label2.Location = new System.Drawing.Point(132,115);
+			this.label2.Location = new System.Drawing.Point(132,224);
 			this.label2.Name = "label2";
 			this.label2.Size = new System.Drawing.Size(501,36);
 			this.label2.TabIndex = 38;
@@ -111,7 +117,7 @@ namespace OpenDental{
 			this.butAutocodes.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butAutocodes.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butAutocodes.CornerRadius = 4F;
-			this.butAutocodes.Location = new System.Drawing.Point(24,68);
+			this.butAutocodes.Location = new System.Drawing.Point(24,177);
 			this.butAutocodes.Name = "butAutocodes";
 			this.butAutocodes.Size = new System.Drawing.Size(103,26);
 			this.butAutocodes.TabIndex = 37;
@@ -120,7 +126,7 @@ namespace OpenDental{
 			// 
 			// label1
 			// 
-			this.label1.Location = new System.Drawing.Point(132,68);
+			this.label1.Location = new System.Drawing.Point(132,177);
 			this.label1.Name = "label1";
 			this.label1.Size = new System.Drawing.Size(443,36);
 			this.label1.TabIndex = 36;
@@ -134,7 +140,7 @@ namespace OpenDental{
 			this.butDelete.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butDelete.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butDelete.CornerRadius = 4F;
-			this.butDelete.Location = new System.Drawing.Point(24,21);
+			this.butDelete.Location = new System.Drawing.Point(24,130);
 			this.butDelete.Name = "butDelete";
 			this.butDelete.Size = new System.Drawing.Size(103,26);
 			this.butDelete.TabIndex = 35;
@@ -143,7 +149,7 @@ namespace OpenDental{
 			// 
 			// label9
 			// 
-			this.label9.Location = new System.Drawing.Point(132,21);
+			this.label9.Location = new System.Drawing.Point(132,130);
 			this.label9.Name = "label9";
 			this.label9.Size = new System.Drawing.Size(443,36);
 			this.label9.TabIndex = 34;
@@ -151,10 +157,47 @@ namespace OpenDental{
     "e after converting from another software in order to comply with copyright on co" +
     "des.";
 			// 
+			// butNewCust
+			// 
+			this.butNewCust.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butNewCust.Autosize = true;
+			this.butNewCust.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butNewCust.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butNewCust.CornerRadius = 4F;
+			this.butNewCust.Location = new System.Drawing.Point(24,12);
+			this.butNewCust.Name = "butNewCust";
+			this.butNewCust.Size = new System.Drawing.Size(103,26);
+			this.butNewCust.TabIndex = 41;
+			this.butNewCust.Text = "New Customer";
+			this.butNewCust.Click += new System.EventHandler(this.butNewCust_Click);
+			// 
+			// label3
+			// 
+			this.label3.Location = new System.Drawing.Point(132,12);
+			this.label3.Name = "label3";
+			this.label3.Size = new System.Drawing.Size(443,50);
+			this.label3.TabIndex = 40;
+			this.label3.Text = "Performs all the necessary tasks to make a new database functional.  Removes dumm" +
+    "y codes that start with \"T\".  Adds ADA codes if missing.  Resets autocodes and p" +
+    "rocedure buttons.";
+			// 
+			// label4
+			// 
+			this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif",10F,((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Underline))),System.Drawing.GraphicsUnit.Point,((byte)(0)));
+			this.label4.Location = new System.Drawing.Point(21,91);
+			this.label4.Name = "label4";
+			this.label4.Size = new System.Drawing.Size(184,18);
+			this.label4.TabIndex = 42;
+			this.label4.Text = "Other Tools";
+			this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
 			// FormProcTools
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
-			this.ClientSize = new System.Drawing.Size(644,247);
+			this.ClientSize = new System.Drawing.Size(644,324);
+			this.Controls.Add(this.label4);
+			this.Controls.Add(this.butNewCust);
+			this.Controls.Add(this.label3);
 			this.Controls.Add(this.butProcButtons);
 			this.Controls.Add(this.label2);
 			this.Controls.Add(this.butAutocodes);
@@ -176,7 +219,26 @@ namespace OpenDental{
 		#endregion
 
 		private void FormProcTools_Load(object sender,EventArgs e) {
+			if(CDT.Class1.GetADAcodes()==""){
+				butNewCust.Enabled=false;
+			}
+		}
 
+		private void butNewCust_Click(object sender,EventArgs e) {
+			int rowsInserted=0;
+			try{
+				rowsInserted=FormProcCodes.ImportProcCodes("",CDT.Class1.GetADAcodes());
+			}
+			catch(ApplicationException ex) {
+				MessageBox.Show(ex.Message);
+				return;
+			}
+			MessageBox.Show("Procedure codes inserted: "+rowsInserted);
+			AutoCodes.SetToDefault();
+			ProcButtons.SetToDefault();
+			DataValid.SetInvalid(InvalidTypes.AutoCodes | InvalidTypes.ProcButtons | InvalidTypes.Defs);
+			MessageBox.Show(Lan.g(this,"Done."));
+			SecurityLogs.MakeLogEntry(Permissions.Setup,0,"New Customer Procedure codes tool was run.");
 		}
 
 		private void butDelete_Click(object sender,EventArgs e) {
@@ -202,6 +264,8 @@ namespace OpenDental{
 		private void butClose_Click(object sender, System.EventArgs e) {
 			Close();
 		}
+
+		
 
 		
 

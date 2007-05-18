@@ -309,11 +309,11 @@ namespace OpenDental{
 			//listProv
 			for(int i=0;i<Providers.List.Length;i++){
 				listProv.Items.Add(Providers.List[i].Abbr);
-				listProv.SetSelected(i,true);
+				//listProv.SetSelected(i,true);
 			}
 			for(int i=0;i<Employees.ListShort.Length;i++) {
 				listEmp.Items.Add(Employees.ListShort[i].FName);
-				listEmp.SetSelected(i,true);
+				//listEmp.SetSelected(i,true);
 			}
       FillGrid();
 			for(int i=0;i<Providers.List.Length;i++) {
@@ -446,14 +446,14 @@ namespace OpenDental{
 			for(int i=0;i<listProv.SelectedIndices.Count;i++){
 				schedTemp=new Schedule();
 				schedTemp=SchedCur.Copy();
-				SchedCur.SchedType=ScheduleType.Provider;
+				schedTemp.SchedType=ScheduleType.Provider;
 				schedTemp.ProvNum=Providers.List[listProv.SelectedIndices[i]].ProvNum;
 				SchedList.Add(schedTemp);
 			}
 			for(int i=0;i<listEmp.SelectedIndices.Count;i++) {
 				schedTemp=new Schedule();
 				schedTemp=SchedCur.Copy();
-				SchedCur.SchedType=ScheduleType.Employee;
+				schedTemp.SchedType=ScheduleType.Employee;
 				schedTemp.EmployeeNum=Employees.ListShort[listEmp.SelectedIndices[i]].EmployeeNum;
 				SchedList.Add(schedTemp);
 			}

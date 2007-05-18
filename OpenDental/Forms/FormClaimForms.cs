@@ -402,11 +402,11 @@ namespace OpenDental{
 			FillList();
 		}
 
-		///<Summary>Can be called externally as part of the conversion sequence.  Surround with try catch.  Always returns the ClaimFormNum of the claimform.  If using resourceName, path will be ignored, so leave it blank.</Summary>
-		public static int ImportForm(string path, bool isUpdateSequence,string resourceName){
+		///<Summary>Can be called externally as part of the conversion sequence.  Surround with try catch.  Always returns the ClaimFormNum of the claimform.  If using xmlData, path will be ignored, so leave it blank.</Summary>
+		public static int ImportForm(string path, bool isUpdateSequence,string xmlData){
 			ClaimForm tempClaimForm=new ClaimForm();
 			XmlSerializer serializer=new XmlSerializer(typeof(ClaimForm));
-			if(resourceName==""){//use path
+			if(xmlData==""){//use path
 				if(!File.Exists(path)) {
 					throw new ApplicationException(Lan.g("FormClaimForm","File does not exist."));
 				}
@@ -419,9 +419,9 @@ namespace OpenDental{
 					throw new ApplicationException(Lan.g("FormClaimForm","Invalid file format"));
 				}
 			}
-			else{//use resource
+			else{//use xmlData
 				try {
-					using(TextReader reader=new StringReader(resourceName)) {
+					using(TextReader reader=new StringReader(xmlData)) {
 						tempClaimForm=(ClaimForm)serializer.Deserialize(reader);
 					}
 				}
