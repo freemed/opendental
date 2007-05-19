@@ -7,7 +7,7 @@ using OpenDentBusiness;
 namespace OpenDental{
 	///<summary></summary>
 	public class SchoolCourses {
-		///<summary></summary>
+		///<summary>A list of all schoolcourses, organized by course ID.</summary>
 		public static SchoolCourse[] List;
 
 		///<summary>Refreshes all SchoolCourses.</summary>
@@ -81,9 +81,27 @@ namespace OpenDental{
  			General.NonQ(command);
 		}
 
+		public static string GetDescript(int schoolCourseNum) {
+			for(int i=0;i<List.Length;i++) {
+				if(List[i].SchoolCourseNum==schoolCourseNum) {
+					return GetDescript(List[i]);
+				}
+			}
+			return "";
+		}
 
-	
-	
+		public static string GetDescript(SchoolCourse course){
+			return course.CourseID+" "+course.Descript;
+		}
+
+		public static string GetCourseID(int schoolCourseNum) {
+			for(int i=0;i<List.Length;i++) {
+				if(List[i].SchoolCourseNum==schoolCourseNum) {
+					return List[i].CourseID;
+				}
+			}
+			return "";
+		}
 
 	
 	}

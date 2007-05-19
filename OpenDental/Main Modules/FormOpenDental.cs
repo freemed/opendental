@@ -203,6 +203,7 @@ namespace OpenDental{
 		private MenuItem menuLicenseCompliance;
 		private MenuItem menuItemGraphics;
 		private MenuItem menuItemLabCases;
+		private MenuItem menuItemRequirementsNeeded;
 		private string dconnStr;
 
 		///<summary></summary>
@@ -368,6 +369,7 @@ namespace OpenDental{
 			this.ContrAppt2 = new OpenDental.ContrAppt();
 			this.lightSignalGrid1 = new OpenDental.UI.LightSignalGrid();
 			this.myOutlookBar = new OpenDental.OutlookBar();
+			this.menuItemRequirementsNeeded = new System.Windows.Forms.MenuItem();
 			this.SuspendLayout();
 			// 
 			// timerTimeIndic
@@ -470,6 +472,7 @@ namespace OpenDental{
             this.menuItemLinks,
             this.menuItemQuestions,
             this.menuItemRecall,
+            this.menuItemRequirementsNeeded,
             this.menuItemSched,
             this.menuItemSecurity});
 			this.menuItemSettings.Shortcut = System.Windows.Forms.Shortcut.CtrlS;
@@ -627,13 +630,13 @@ namespace OpenDental{
 			// 
 			// menuItemSched
 			// 
-			this.menuItemSched.Index = 25;
+			this.menuItemSched.Index = 26;
 			this.menuItemSched.Text = "Schedules";
 			this.menuItemSched.Click += new System.EventHandler(this.menuItemSched_Click);
 			// 
 			// menuItemSecurity
 			// 
-			this.menuItemSecurity.Index = 26;
+			this.menuItemSecurity.Index = 27;
 			this.menuItemSecurity.Text = "Security";
 			this.menuItemSecurity.Click += new System.EventHandler(this.menuItemSecurity_Click);
 			// 
@@ -1290,6 +1293,12 @@ namespace OpenDental{
 			this.myOutlookBar.Text = "outlookBar1";
 			this.myOutlookBar.ButtonClicked += new OpenDental.ButtonClickedEventHandler(this.myOutlookBar_ButtonClicked);
 			// 
+			// menuItemRequirementsNeeded
+			// 
+			this.menuItemRequirementsNeeded.Index = 25;
+			this.menuItemRequirementsNeeded.Text = "Requirements Needed";
+			this.menuItemRequirementsNeeded.Click += new System.EventHandler(this.menuItemRequirementsNeeded_Click);
+			// 
 			// FormOpenDental
 			// 
 			this.ClientSize = new System.Drawing.Size(982,710);
@@ -1539,12 +1548,14 @@ namespace OpenDental{
 					menuItemSchoolCourses.Visible=false;
 					menuItemInstructors.Visible=false;
 					menuItemCourseGrades.Visible=false;
+					menuItemRequirementsNeeded.Visible=false;
 				}
 				else{
 					menuItemSchoolClass.Visible=true;
 					menuItemSchoolCourses.Visible=true;
 					menuItemInstructors.Visible=true;
 					menuItemCourseGrades.Visible=true;
+					menuItemRequirementsNeeded.Visible=true;
 				}
 				if(PrefB.GetBool("EasyHideRepeatCharges")){
 					menuItemRepeatingCharges.Visible=false;
@@ -2445,6 +2456,15 @@ namespace OpenDental{
 			SecurityLogs.MakeLogEntry(Permissions.Setup,0,"Recall");	
 		}
 
+		private void menuItemRequirementsNeeded_Click(object sender,EventArgs e) {
+			if(!Security.IsAuthorized(Permissions.Setup)) {
+				return;
+			}
+			FormReqNeededs FormR=new FormReqNeededs();
+			FormR.ShowDialog();
+			SecurityLogs.MakeLogEntry(Permissions.Setup,0,"Requirements Needed");
+		}
+
 		private void menuItemSched_Click(object sender,EventArgs e) {
 			if(!Security.IsAuthorized(Permissions.Schedules)) {
 				return;
@@ -3165,6 +3185,8 @@ namespace OpenDental{
 				return false;
 			}
 		}
+
+		
 
 		
 

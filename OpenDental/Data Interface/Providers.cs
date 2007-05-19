@@ -13,8 +13,6 @@ namespace OpenDental{
 		public static Provider[] ListLong;
 		///<summary>This is the list used most often. It does not include hidden providers.</summary>
 		public static Provider[] List;
-		//<summary>This should be eliminated when time.  It's just used in FormProviderSelect to keep track of which provider is highlighted.</summary>
-		//public static int Selected;
 
 		///<summary>Refreshes List with all providers.</summary>
 		public static void Refresh(){
@@ -114,24 +112,23 @@ namespace OpenDental{
  			prov.ProvNum=General.NonQ(command,true);
 		}
 
-		/*
-		///<summary></summary>
-		public static void InsertOrUpdate(Provider prov, bool IsNew){
-			//if(){
-				//throw new ApplicationException(Lan.g(this,""));
-			//}
-			if(IsNew){
-				Insert(prov);
-			}
-			else{
-				Update(prov);
-			}
-		}*/
-
 		///<summary>Only used from FormProvEdit if user clicks cancel before finishing entering a new provider.</summary>
 		public static void Delete(Provider prov){
 			string command="DELETE from provider WHERE provnum = '"+prov.ProvNum.ToString()+"'";
  			General.NonQ(command);
+		}
+
+		///<summary>Gets table for main provider edit list.  SchoolClass is usually zero to indicate all providers.  IsAlph will sort aphabetically instead of by ItemOrder.</summary>
+		public static DataTable Refresh(int schoolClass,bool isAlph){
+			string command="SELECT Abbr,LName,FName,IsHidden,ProvNum,GradYear,Descript "
+				+"FROM provider LEFT JOIN schoolclass ON provider.SchoolClassNum=schoolclass.SchoolClassNum ";
+			if(schoolClass!=0){
+				command+="WHERE provider.SchoolClassNum="+POut.PInt(schoolClass)+" ";
+			}
+			if(isAlph){
+				command+="ORDER BY GradYear,Descript,LName,FName";
+			}
+			return General.GetTable(command);
 		}
 
 		///<summary></summary>
@@ -198,7 +195,7 @@ namespace OpenDental{
 			return retVal;
 		}
 
-		///<summary>If provnum is not valid, then it returns null.</summary>
+		///<summary>Gets a provider from the List.  If provnum is not valid, then it returns null.</summary>
 		public static Provider GetProv(int provNum) {
 			for(int i=0;i<ListLong.Length;i++) {
 				if(ListLong[i].ProvNum==provNum) {
@@ -240,6 +237,17 @@ namespace OpenDental{
 			else {
 				return PrefB.GetInt("InsBillingProv");
 			}
+		}
+
+		///<summary>Used when adding a provider to get the next available itemOrder.</summary>
+		public static int GetNextItemOrder(){
+			//Is this valid in Oracle??
+			string command="SELECT MAX(ItemOrder) FROM provider";
+			DataTable table=General.GetTable(command);
+			if(table.Rows.Count==0){
+				return 1;
+			}
+			return PIn.PInt(table.Rows[0][0].ToString())+1;
 		}
 
 

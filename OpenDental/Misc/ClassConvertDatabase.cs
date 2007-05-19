@@ -4764,6 +4764,8 @@ namespace OpenDental{
 					//	+"'Appointment',-8388480)";
 					//General.NonQEx(command);
 					//Added after r244
+					command="DROP TABLE IF EXISTS labturnaround";
+					General.NonQEx(command);
 					command=@"CREATE TABLE labturnaround(
 						LabTurnaroundNum int NOT NULL auto_increment,
 						LaboratoryNum int NOT NULL,
@@ -5106,6 +5108,8 @@ namespace OpenDental{
 				command="INSERT INTO preference VALUES('DistributorKey','')";
 				General.NonQEx(command);
 				if(FormChooseDatabase.DBtype==DatabaseType.MySql) {
+					command="DROP TABLE IF EXISTS registrationkey";
+					General.NonQEx(command);
 					command=@"CREATE TABLE registrationkey(
 						RegistrationKeyNum int NOT NULL auto_increment,
 						PatNum int NOT NULL,
@@ -5142,7 +5146,28 @@ namespace OpenDental{
 			if(FromVersion<new Version("5.0.0.0")) {
 				string command;
 				DataTable table;
-
+				//after r318
+				if(FormChooseDatabase.DBtype==DatabaseType.MySql) {
+					command="DROP TABLE IF EXISTS reqneeded";
+					General.NonQEx(command);
+					command=@"CREATE TABLE reqneeded(
+						ReqNeededNum int NOT NULL auto_increment,
+						Descript varchar(255),
+						SchoolCourseNum int NOT NULL,
+						SchoolClassNum int NOT NULL,
+						PRIMARY KEY (ReqNeededNum)
+						) DEFAULT CHARSET=utf8";
+				}
+				else {//Oracle.
+					command=@"CREATE TABLE reqneeded(
+						ReqNeededNum int NOT NULL,
+						Descript varchar(255),
+						SchoolCourseNum int NOT NULL,
+						SchoolClassNum int NOT NULL,
+						PRIMARY KEY (ReqNeededNum)
+						)";
+				}
+				General.NonQEx(command);
 
 
 

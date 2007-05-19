@@ -7,7 +7,7 @@ using OpenDentBusiness;
 namespace OpenDental{
 	///<summary></summary>
 	public class SchoolClasses {
-		///<summary></summary>
+		///<summary>A list of all classes, ordered by year and descript.</summary>
 		public static SchoolClass[] List;
 
 		///<summary>Refreshes all SchoolClasses.</summary>
@@ -78,7 +78,7 @@ namespace OpenDental{
 				+POut.PInt(sc.SchoolClassNum)+"'";
 			DataTable table=General.GetTable(command);
 			if(PIn.PString(table.Rows[0][0].ToString())!="0"){
-				throw new Exception(Lan.g("SchoolClasses","Class alread in use by providers."));
+				throw new Exception(Lan.g("SchoolClasses","Class already in use by providers."));
 			}
 			command= "DELETE from schoolclass WHERE SchoolClassNum = '"
 				+POut.PInt(sc.SchoolClassNum)+"'";
@@ -88,13 +88,15 @@ namespace OpenDental{
 		public static string GetDescript(int SchoolClassNum){
 			for(int i=0;i<List.Length;i++){
 				if(List[i].SchoolClassNum==SchoolClassNum){
-					return List[i].GradYear+"-"+List[i].Descript;
+					return GetDescript(List[i]);
 				}
 			}
 			return "";
 		}
 
-
+		public static string GetDescript(SchoolClass schoolClass) {
+			return schoolClass.GradYear+"-"+schoolClass.Descript;
+		}
 
 
 	
