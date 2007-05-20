@@ -7,7 +7,7 @@ using OpenDentBusiness;
 namespace OpenDental{
 	///<summary></summary>
 	public class UserGroups {
-		///<summary>A list of all users.</summary>
+		///<summary>A list of all user groups, ordered by description.</summary>
 		public static UserGroup[] List;
 
 		///<summary></summary>
@@ -23,7 +23,7 @@ namespace OpenDental{
 		}
 
 		///<summary></summary>
-		private static void Update(UserGroup group){
+		public static void Update(UserGroup group){
 			string command= "UPDATE usergroup SET " 
 				+"Description = '"  +POut.PString(group.Description)+"'"
 				+" WHERE UserGroupNum = '"+POut.PInt(group.UserGroupNum)+"'";
@@ -31,23 +31,10 @@ namespace OpenDental{
 		}
 
 		///<summary></summary>
-		private static void Insert(UserGroup group){
+		public static void Insert(UserGroup group){
 			string command= "INSERT INTO usergroup (Description) VALUES("
 				+"'"+POut.PString(group.Description)+"')";
  			group.UserGroupNum=General.NonQ(command,true);
-		}
-
-		///<summary></summary>
-		public static void InsertOrUpdate(UserGroup group, bool isNew){
-			//if(){
-			//	throw new Exception(Lan.g(this,""));
-			//}
-			if(isNew){
-				Insert(group);
-			}
-			else{
-				Update(group);
-			}
 		}
 
 		///<summary>Checks for dependencies first</summary>
@@ -62,9 +49,6 @@ namespace OpenDental{
 				+POut.PInt(group.UserGroupNum)+"'";
  			General.NonQ(command);
 		}
-
-	
-	
 
 		///<summary></summary>
 		public static UserGroup GetGroup(int userGroupNum){

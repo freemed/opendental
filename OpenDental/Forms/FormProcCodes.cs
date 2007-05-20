@@ -486,9 +486,10 @@ namespace OpenDental{
 			if(!Security.IsAuthorized(Permissions.Setup,DateTime.MinValue,true)) {
 				groupFeeScheds.Visible=false;
 				butEditCategories.Visible=false;
-				butNew.Visible=false;
-				butImport.Visible=false;
-				butExport.Visible=false;
+				//butNew.Visible=false;
+				//butImport.Visible=false;
+				//butExport.Visible=false;
+				groupProcCodeSetup.Visible=false;
 			}
 			if(!IsSelectionMode){
 				butOK.Visible=false;

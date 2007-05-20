@@ -175,7 +175,12 @@ namespace OpenDental{
 			}
 			CurGroup.Description=textDescription.Text;
 			try{
-				UserGroups.InsertOrUpdate(CurGroup,IsNew);
+				if(IsNew){
+					UserGroups.Insert(CurGroup);
+				}
+				else{
+					UserGroups.Update(CurGroup);
+				}
 			}
 			catch(Exception ex){
 				MessageBox.Show(ex.Message);

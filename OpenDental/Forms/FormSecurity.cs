@@ -178,8 +178,8 @@ namespace OpenDental{
 			this.butAddGroup.Name = "butAddGroup";
 			this.butAddGroup.Size = new System.Drawing.Size(75,25);
 			this.butAddGroup.TabIndex = 1;
-			this.butAddGroup.Text = "Add Group";
-			this.butAddGroup.Click += new System.EventHandler(this.butAddGroup_Click);
+			this.butAddGroup.Text = "Edit Groups";
+			this.butAddGroup.Click += new System.EventHandler(this.butEditGroups_Click);
 			// 
 			// butClose
 			// 
@@ -349,14 +349,17 @@ namespace OpenDental{
 			SelectedGroupNum=UserGroups.List[0].UserGroupNum;
 		}
 
-		private void butAddGroup_Click(object sender, System.EventArgs e) {
+		private void butEditGroups_Click(object sender, System.EventArgs e) {
+			FormUserGroups FormU=new FormUserGroups();
+			FormU.ShowDialog();
+			/*
 			UserGroup group=new UserGroup();
 			FormUserGroupEdit FormU=new FormUserGroupEdit(group);
 			FormU.IsNew=true;
 			FormU.ShowDialog();
 			if(FormU.DialogResult==DialogResult.Cancel){
 				return;
-			}
+			}*/
 			FillTreeUsers();
 			FillTreePerm();
 			changed=true;
