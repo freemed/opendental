@@ -120,8 +120,9 @@ namespace OpenDental{
 
 		///<summary>Gets table for main provider edit list.  SchoolClass is usually zero to indicate all providers.  IsAlph will sort aphabetically instead of by ItemOrder.</summary>
 		public static DataTable Refresh(int schoolClass,bool isAlph){
-			string command="SELECT Abbr,LName,FName,IsHidden,ProvNum,GradYear,Descript "
-				+"FROM provider LEFT JOIN schoolclass ON provider.SchoolClassNum=schoolclass.SchoolClassNum ";
+			string command="SELECT Abbr,LName,FName,IsHidden,provider.ProvNum,GradYear,Descript,UserName "
+				+"FROM provider LEFT JOIN schoolclass ON provider.SchoolClassNum=schoolclass.SchoolClassNum "
+				+"LEFT JOIN userod ON userod.ProvNum=provider.ProvNum ";
 			if(schoolClass!=0){
 				command+="WHERE provider.SchoolClassNum="+POut.PInt(schoolClass)+" ";
 			}

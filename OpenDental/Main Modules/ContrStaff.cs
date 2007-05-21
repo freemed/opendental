@@ -754,7 +754,7 @@ namespace OpenDental{
 			UI.ODGridRow row;
 			for(int i=0;i<Employees.ListShort.Length;i++){
 				row=new OpenDental.UI.ODGridRow();
-				row.Cells.Add(Employees.GetName(Employees.ListShort[i]));
+				row.Cells.Add(Employees.GetNameFL(Employees.ListShort[i]));
 				row.Cells.Add(Employees.ListShort[i].ClockStatus);
 				gridEmp.Rows.Add(row);
 			}

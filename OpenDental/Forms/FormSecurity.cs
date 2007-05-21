@@ -1,18 +1,18 @@
 using System;
+using System.Data;
 using System.Drawing;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows.Forms;
 using OpenDentBusiness;
+using OpenDental.UI;
 
 namespace OpenDental{
 	/// <summary>
 	/// Summary description for FormBasicTemplate.
 	/// </summary>
-	public class FormSecurity : System.Windows.Forms.Form{
-		private System.Windows.Forms.Label label2;
-		private System.Windows.Forms.TreeView treeUsers;
+	public class FormSecurity:System.Windows.Forms.Form {
 		private OpenDental.UI.Button butClose;
 		private OpenDental.UI.Button butAddGroup;
 		private OpenDental.UI.Button butAddUser;
@@ -24,7 +24,12 @@ namespace OpenDental{
 		private TreeNode clickedPermNode;
 		private System.Windows.Forms.CheckBox checkTimecardSecurityEnabled;
 		private OpenDental.UI.Button butSetAll;
+		private OpenDental.UI.ODGrid gridMain;
 		private bool changed;
+		private ComboBox comboUsers;
+		private ComboBox comboSchoolClass;
+		private Label labelSchoolClass;
+		private DataTable table;
 
 		///<summary></summary>
 		public FormSecurity()
@@ -60,49 +65,31 @@ namespace OpenDental{
 		{
 			this.components = new System.ComponentModel.Container();
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormSecurity));
-			this.label2 = new System.Windows.Forms.Label();
-			this.treeUsers = new System.Windows.Forms.TreeView();
 			this.treePermissions = new System.Windows.Forms.TreeView();
 			this.imageListPerm = new System.Windows.Forms.ImageList(this.components);
 			this.labelPerm = new System.Windows.Forms.Label();
 			this.checkTimecardSecurityEnabled = new System.Windows.Forms.CheckBox();
+			this.gridMain = new OpenDental.UI.ODGrid();
 			this.butSetAll = new OpenDental.UI.Button();
 			this.butAddUser = new OpenDental.UI.Button();
 			this.butAddGroup = new OpenDental.UI.Button();
 			this.butClose = new OpenDental.UI.Button();
+			this.comboUsers = new System.Windows.Forms.ComboBox();
+			this.comboSchoolClass = new System.Windows.Forms.ComboBox();
+			this.labelSchoolClass = new System.Windows.Forms.Label();
 			this.SuspendLayout();
-			// 
-			// label2
-			// 
-			this.label2.Location = new System.Drawing.Point(8,6);
-			this.label2.Name = "label2";
-			this.label2.Size = new System.Drawing.Size(141,19);
-			this.label2.TabIndex = 3;
-			this.label2.Text = "Groups and Users";
-			this.label2.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
-			// 
-			// treeUsers
-			// 
-			this.treeUsers.HideSelection = false;
-			this.treeUsers.Location = new System.Drawing.Point(8,29);
-			this.treeUsers.Name = "treeUsers";
-			this.treeUsers.ShowRootLines = false;
-			this.treeUsers.Size = new System.Drawing.Size(184,567);
-			this.treeUsers.TabIndex = 4;
-			this.treeUsers.DoubleClick += new System.EventHandler(this.treeUsers_DoubleClick);
-			this.treeUsers.MouseDown += new System.Windows.Forms.MouseEventHandler(this.treeUsers_MouseDown);
 			// 
 			// treePermissions
 			// 
 			this.treePermissions.HideSelection = false;
 			this.treePermissions.ImageIndex = 0;
 			this.treePermissions.ImageList = this.imageListPerm;
-			this.treePermissions.Location = new System.Drawing.Point(388,29);
+			this.treePermissions.Location = new System.Drawing.Point(450,29);
 			this.treePermissions.Name = "treePermissions";
 			this.treePermissions.SelectedImageIndex = 0;
 			this.treePermissions.ShowPlusMinus = false;
 			this.treePermissions.ShowRootLines = false;
-			this.treePermissions.Size = new System.Drawing.Size(479,567);
+			this.treePermissions.Size = new System.Drawing.Size(417,567);
 			this.treePermissions.TabIndex = 6;
 			this.treePermissions.DoubleClick += new System.EventHandler(this.treePermissions_DoubleClick);
 			this.treePermissions.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treePermissions_AfterSelect);
@@ -118,7 +105,7 @@ namespace OpenDental{
 			// 
 			// labelPerm
 			// 
-			this.labelPerm.Location = new System.Drawing.Point(386,6);
+			this.labelPerm.Location = new System.Drawing.Point(447,7);
 			this.labelPerm.Name = "labelPerm";
 			this.labelPerm.Size = new System.Drawing.Size(425,19);
 			this.labelPerm.TabIndex = 5;
@@ -129,12 +116,25 @@ namespace OpenDental{
 			// 
 			this.checkTimecardSecurityEnabled.CheckAlign = System.Drawing.ContentAlignment.TopLeft;
 			this.checkTimecardSecurityEnabled.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkTimecardSecurityEnabled.Location = new System.Drawing.Point(198,582);
+			this.checkTimecardSecurityEnabled.Location = new System.Drawing.Point(222,618);
 			this.checkTimecardSecurityEnabled.Name = "checkTimecardSecurityEnabled";
 			this.checkTimecardSecurityEnabled.Size = new System.Drawing.Size(192,19);
 			this.checkTimecardSecurityEnabled.TabIndex = 57;
 			this.checkTimecardSecurityEnabled.Text = "TimecardSecurityEnabled";
 			this.checkTimecardSecurityEnabled.TextAlign = System.Drawing.ContentAlignment.TopLeft;
+			// 
+			// gridMain
+			// 
+			this.gridMain.HScrollVisible = false;
+			this.gridMain.Location = new System.Drawing.Point(11,29);
+			this.gridMain.Name = "gridMain";
+			this.gridMain.ScrollValue = 0;
+			this.gridMain.Size = new System.Drawing.Size(433,567);
+			this.gridMain.TabIndex = 59;
+			this.gridMain.Title = "Users";
+			this.gridMain.TranslationName = "TableSecurity";
+			this.gridMain.CellClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellClick);
+			this.gridMain.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellDoubleClick);
 			// 
 			// butSetAll
 			// 
@@ -144,7 +144,7 @@ namespace OpenDental{
 			this.butSetAll.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butSetAll.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butSetAll.CornerRadius = 4F;
-			this.butSetAll.Location = new System.Drawing.Point(388,610);
+			this.butSetAll.Location = new System.Drawing.Point(450,610);
 			this.butSetAll.Name = "butSetAll";
 			this.butSetAll.Size = new System.Drawing.Size(79,25);
 			this.butSetAll.TabIndex = 58;
@@ -196,10 +196,43 @@ namespace OpenDental{
 			this.butClose.Text = "Close";
 			this.butClose.Click += new System.EventHandler(this.butClose_Click);
 			// 
+			// comboUsers
+			// 
+			this.comboUsers.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboUsers.FormattingEnabled = true;
+			this.comboUsers.Location = new System.Drawing.Point(11,5);
+			this.comboUsers.Name = "comboUsers";
+			this.comboUsers.Size = new System.Drawing.Size(182,21);
+			this.comboUsers.TabIndex = 60;
+			this.comboUsers.SelectionChangeCommitted += new System.EventHandler(this.comboUsers_SelectionChangeCommitted);
+			// 
+			// comboSchoolClass
+			// 
+			this.comboSchoolClass.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboSchoolClass.Location = new System.Drawing.Point(276,5);
+			this.comboSchoolClass.MaxDropDownItems = 30;
+			this.comboSchoolClass.Name = "comboSchoolClass";
+			this.comboSchoolClass.Size = new System.Drawing.Size(168,21);
+			this.comboSchoolClass.TabIndex = 90;
+			this.comboSchoolClass.SelectionChangeCommitted += new System.EventHandler(this.comboSchoolClass_SelectionChangeCommitted);
+			// 
+			// labelSchoolClass
+			// 
+			this.labelSchoolClass.Location = new System.Drawing.Point(203,8);
+			this.labelSchoolClass.Name = "labelSchoolClass";
+			this.labelSchoolClass.Size = new System.Drawing.Size(72,16);
+			this.labelSchoolClass.TabIndex = 91;
+			this.labelSchoolClass.Text = "Class";
+			this.labelSchoolClass.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
 			// FormSecurity
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.ClientSize = new System.Drawing.Size(884,644);
+			this.Controls.Add(this.comboSchoolClass);
+			this.Controls.Add(this.labelSchoolClass);
+			this.Controls.Add(this.comboUsers);
+			this.Controls.Add(this.gridMain);
 			this.Controls.Add(this.butSetAll);
 			this.Controls.Add(this.treePermissions);
 			this.Controls.Add(this.checkTimecardSecurityEnabled);
@@ -207,8 +240,6 @@ namespace OpenDental{
 			this.Controls.Add(this.butAddGroup);
 			this.Controls.Add(this.butClose);
 			this.Controls.Add(this.labelPerm);
-			this.Controls.Add(this.treeUsers);
-			this.Controls.Add(this.label2);
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.MaximizeBox = false;
 			this.MinimizeBox = false;
@@ -223,8 +254,24 @@ namespace OpenDental{
 		#endregion
 
 		private void FormSecurity_Load(object sender, System.EventArgs e) {
+			comboUsers.Items.Add(Lan.g(this,"All Users"));
+			comboUsers.Items.Add(Lan.g(this,"Providers"));
+			comboUsers.Items.Add(Lan.g(this,"Employees"));
+			comboUsers.Items.Add(Lan.g(this,"Other"));
+			comboUsers.SelectedIndex=0;
+			if(PrefB.GetBool("EasyHideDentalSchools")){
+				comboSchoolClass.Visible=false;
+				labelSchoolClass.Visible=false;
+			}
+			else{
+				comboSchoolClass.Items.Add(Lan.g(this,"All"));
+				comboSchoolClass.SelectedIndex=0;
+				for(int i=0;i<SchoolClasses.List.Length;i++) {
+					comboSchoolClass.Items.Add(SchoolClasses.GetDescript(SchoolClasses.List[i]));
+				}
+			}
 			FillTreePermissionsInitial();
-			FillTreeUsers();
+			FillUsers();
 			FillTreePerm();
 			checkTimecardSecurityEnabled.Checked=PrefB.GetBool("TimecardSecurityEnabled");
 		}
@@ -326,110 +373,105 @@ namespace OpenDental{
 			return retVal;
 		}
 
-		private void FillTreeUsers(){
+		private void FillUsers(){
 			UserGroups.Refresh();
 			Userods.Refresh();
-			treeUsers.Nodes.Clear();
-			List<Userod> usersForGroup;
-			TreeNode groupNode;
-			TreeNode userNode;
-			for(int i=0;i<UserGroups.List.Length;i++){
-				groupNode=new TreeNode(UserGroups.List[i].Description);
-				groupNode.Tag=UserGroups.List[i].UserGroupNum;
-				usersForGroup=Userods.GetForGroup(UserGroups.List[i].UserGroupNum);
-				for(int j=0;j<usersForGroup.Count;j++){
-					userNode=new TreeNode(usersForGroup[j].UserName);
-					userNode.Tag=usersForGroup[j].UserNum;
-					groupNode.Nodes.Add(userNode);
-				}
-				treeUsers.Nodes.Add(groupNode);
+			SelectedGroupNum=0;
+			gridMain.BeginUpdate();
+			gridMain.Columns.Clear();
+			ODGridColumn col=new ODGridColumn(Lan.g("TableSecurity","Username"),90);
+			gridMain.Columns.Add(col);
+			col=new ODGridColumn(Lan.g("TableSecurity","Group"),90);
+			gridMain.Columns.Add(col);
+			col=new ODGridColumn(Lan.g("TableSecurity","Employee"),120);
+			gridMain.Columns.Add(col);
+			col=new ODGridColumn(Lan.g("TableSecurity","Provider"),120);
+			gridMain.Columns.Add(col);
+			gridMain.Rows.Clear();
+			ODGridRow row;
+			string usertype="all";
+			if(comboUsers.SelectedIndex==1){
+				usertype="prov";
 			}
-			treeUsers.ExpandAll();
-			treeUsers.SelectedNode=treeUsers.Nodes[0];
-			SelectedGroupNum=UserGroups.List[0].UserGroupNum;
+			if(comboUsers.SelectedIndex==2) {
+				usertype="emp";
+			}
+			if(comboUsers.SelectedIndex==3) {
+				usertype="other";
+			}
+			int classNum=0;
+			if(comboSchoolClass.Visible && comboSchoolClass.SelectedIndex>0){
+				classNum=SchoolClasses.List[comboSchoolClass.SelectedIndex-1].SchoolClassNum;
+			}
+			table=Userods.RefreshSecurity(usertype,classNum);
+			for(int i=0;i<table.Rows.Count;i++){
+				row=new ODGridRow();
+				row.Cells.Add(table.Rows[i]["UserName"].ToString());
+				row.Cells.Add(UserGroups.GetGroup(PIn.PInt(table.Rows[i]["UserGroupNum"].ToString())).Description);
+				row.Cells.Add(Employees.GetNameFL(PIn.PInt(table.Rows[i]["EmployeeNum"].ToString())));
+				row.Cells.Add(Providers.GetNameLF(PIn.PInt(table.Rows[i]["ProvNum"].ToString())));
+				gridMain.Rows.Add(row);
+			}
+			gridMain.EndUpdate();
+			
+		}
+
+		private void gridMain_CellClick(object sender,ODGridClickEventArgs e) {
+			SelectedGroupNum=PIn.PInt(table.Rows[e.Row]["UserGroupNum"].ToString());
+			for(int i=0;i<table.Rows.Count;i++){
+				if(table.Rows[i]["UserGroupNum"].ToString()==SelectedGroupNum.ToString()){
+					gridMain.Rows[i].ColorText=Color.Red;
+				}
+				else{
+					gridMain.Rows[i].ColorText=Color.Black;
+				}
+			}
+			gridMain.Invalidate();
+			FillTreePerm();
+		}
+
+		private void comboUsers_SelectionChangeCommitted(object sender,EventArgs e) {
+			FillUsers();
+		}
+
+		private void comboSchoolClass_SelectionChangeCommitted(object sender,EventArgs e) {
+			FillUsers();
 		}
 
 		private void butEditGroups_Click(object sender, System.EventArgs e) {
 			FormUserGroups FormU=new FormUserGroups();
 			FormU.ShowDialog();
-			/*
-			UserGroup group=new UserGroup();
-			FormUserGroupEdit FormU=new FormUserGroupEdit(group);
-			FormU.IsNew=true;
-			FormU.ShowDialog();
-			if(FormU.DialogResult==DialogResult.Cancel){
-				return;
-			}*/
-			FillTreeUsers();
+			FillUsers();
 			FillTreePerm();
 			changed=true;
 		}
 
 		private void butAddUser_Click(object sender, System.EventArgs e) {
 			Userod user=new Userod();
-			user.UserGroupNum=SelectedGroupNum;
+			//user.UserGroupNum=SelectedGroupNum;
 			FormUserEdit FormU=new FormUserEdit(user);
 			FormU.IsNew=true;
 			FormU.ShowDialog();
 			if(FormU.DialogResult==DialogResult.Cancel){
 				return;
 			}
-			FillTreeUsers();
+			FillUsers();
 			FillTreePerm();
 			changed=true;
 		}
 
-		private void treeUsers_MouseDown(object sender, System.Windows.Forms.MouseEventArgs e) {
-			TreeNode clickedNode=treeUsers.GetNodeAt(e.X,e.Y);
-			if(clickedNode==null){
+		private void gridMain_CellDoubleClick(object sender,ODGridClickEventArgs e) {
+			Userod user=UserodB.GetUser(PIn.PInt(table.Rows[e.Row]["UserNum"].ToString()));
+			FormUserEdit FormU=new FormUserEdit(user);
+			FormU.ShowDialog();
+			if(FormU.DialogResult==DialogResult.Cancel){
 				return;
 			}
-			SelectedGroupNum=0;
-			if(clickedNode.Parent==null){//group
-				SelectedGroupNum=(int)clickedNode.Tag;
-			}
-			else{//user
-				SelectedGroupNum=UserodB.GetUser((int)clickedNode.Tag).UserGroupNum;
-			}
-			FillTreePerm();
-		}
-
-		private void treeUsers_DoubleClick(object sender, System.EventArgs e) {
-			if(treeUsers.SelectedNode==null){
-				return;
-			}
-			treeUsers.ExpandAll();
-			if(treeUsers.SelectedNode.Parent==null){//group
-				UserGroup group=UserGroups.List[treeUsers.SelectedNode.Index];
-				FormUserGroupEdit FormU=new FormUserGroupEdit(group);
-				FormU.ShowDialog();
-				if(FormU.DialogResult==DialogResult.Cancel){
-					return;
-				}
-				FillTreeUsers();
-				//reselect group
-				for(int i=0;i<treeUsers.Nodes.Count;i++){
-					if((int)treeUsers.Nodes[i].Tag==group.UserGroupNum){
-						treeUsers.SelectedNode=treeUsers.Nodes[i];
-						SelectedGroupNum=group.UserGroupNum;
-					}
-				}
-			}
-			else{//user
-				Userod user=UserodB.GetUser((int)treeUsers.SelectedNode.Tag);
-				FormUserEdit FormU=new FormUserEdit(user);
-				FormU.ShowDialog();
-				if(FormU.DialogResult==DialogResult.Cancel){
-					return;
-				}
-				FillTreeUsers();
-				for(int i=0;i<treeUsers.Nodes.Count;i++){
-					for(int j=0;j<treeUsers.Nodes[i].Nodes.Count;j++){
-						if((int)treeUsers.Nodes[i].Nodes[j].Tag==FormU.UserCur.UserNum){
-							treeUsers.SelectedNode=treeUsers.Nodes[i].Nodes[j];
-							SelectedGroupNum=FormU.UserCur.UserGroupNum;
-						}
-					}
+			FillUsers();
+			for(int i=0;i<table.Rows.Count;i++){
+				if(table.Rows[i]["UserNum"].ToString()==FormU.UserCur.UserNum.ToString()){
+					gridMain.SetSelected(i,true);
+					SelectedGroupNum=FormU.UserCur.UserGroupNum;
 				}
 			}
 			FillTreePerm();
@@ -438,7 +480,14 @@ namespace OpenDental{
 
 		private void FillTreePerm(){
 			GroupPermissions.Refresh();
-			labelPerm.Text=Lan.g(this,"Permissions for group:")+"  "+UserGroups.GetGroup(SelectedGroupNum).Description;
+			if(SelectedGroupNum==0){
+				labelPerm.Text="";
+				treePermissions.Enabled=false;
+			}
+			else{
+				labelPerm.Text=Lan.g(this,"Permissions for group:")+"  "+UserGroups.GetGroup(SelectedGroupNum).Description;
+				treePermissions.Enabled=true;
+			}
 			for(int i=0;i<treePermissions.Nodes.Count;i++){
 				FillNodes(treePermissions.Nodes[i],SelectedGroupNum);
 			}
@@ -589,6 +638,13 @@ namespace OpenDental{
 			}
 			Close();
 		}
+
+		
+		
+
+		
+
+		
 
 	
 

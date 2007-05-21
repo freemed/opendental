@@ -35,6 +35,7 @@ namespace OpenDentBusiness {
 				user.UserGroupNum  = PIn.PInt   (RawData.Rows[i][3].ToString());
 				user.EmployeeNum   = PIn.PInt(RawData.Rows[i][4].ToString());
 				user.ClinicNum     = PIn.PInt(RawData.Rows[i][5].ToString());
+				user.ProvNum       = PIn.PInt(RawData.Rows[i][6].ToString());
 			}
 			return user;
 		}		

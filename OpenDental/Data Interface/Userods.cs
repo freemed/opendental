@@ -40,8 +40,36 @@ namespace OpenDental{
 				user.UserGroupNum  = PIn.PInt   (UserodB.RawData.Rows[i][3].ToString());
 				user.EmployeeNum   = PIn.PInt(UserodB.RawData.Rows[i][4].ToString());
 				user.ClinicNum     = PIn.PInt(UserodB.RawData.Rows[i][5].ToString());
+				user.ProvNum       = PIn.PInt(UserodB.RawData.Rows[i][6].ToString());
 				Listt.Add(user);
 			}
+		}
+
+		///<summary>usertype can be 'all', 'prov', 'emp', or 'other'.</summary>
+		public static DataTable RefreshSecurity(string usertype,int schoolClassNum){
+			string command;
+			if(usertype=="prov" && schoolClassNum>0){
+				command="SELECT userod.* FROM userod,provider "
+					+"WHERE userod.ProvNum=provider.ProvNum "
+					+"AND SchoolClassNum="+POut.PInt(schoolClassNum)
+					+"ORDER BY UserName";
+				return General.GetTable(command);
+			}
+			command="SELECT * FROM userod ";
+			if(usertype=="emp"){
+				command+="WHERE EmployeeNum!=0 ";
+			}
+			else if(usertype=="prov") {//and all schoolclassnums
+				command+="WHERE ProvNum!=0 ";
+			}
+			else if(usertype=="all") {
+				//command+="";
+			}
+			else if(usertype=="other") {
+				command+="WHERE ProvNum=0 AND EmployeeNum=0";
+			}
+			command+="ORDER BY UserName";
+			return General.GetTable(command);
 		}
 
 
@@ -53,18 +81,20 @@ namespace OpenDental{
 				+",UserGroupNum = '" +POut.PInt   (user.UserGroupNum)+"'"
 				+",EmployeeNum = '"  +POut.PInt(user.EmployeeNum)+"'"
 				+",ClinicNum = '"    +POut.PInt(user.ClinicNum)+"'"
+				+",ProvNum = '"      +POut.PInt(user.ProvNum)+"'"
 				+" WHERE UserNum = '"+POut.PInt   (user.UserNum)+"'";
  			General.NonQ(command);
 		}
 
 		///<summary></summary>
 		private static void Insert(Userod user){
-			string command= "INSERT INTO userod (UserName,Password,UserGroupNum,EmployeeNum,ClinicNum) VALUES("
+			string command= "INSERT INTO userod (UserName,Password,UserGroupNum,EmployeeNum,ClinicNum,ProvNum) VALUES("
 				+"'"+POut.PString(user.UserName)+"', "
 				+"'"+POut.PString(user.Password)+"', "
 				+"'"+POut.PInt   (user.UserGroupNum)+"', "
 				+"'"+POut.PInt(user.EmployeeNum)+"', "
-				+"'"+POut.PInt(user.ClinicNum)+"')";
+				+"'"+POut.PInt(user.ClinicNum)+"', "
+				+"'"+POut.PInt(user.ProvNum)+"')";
  			user.UserNum=General.NonQ(command,true);
 		}
 

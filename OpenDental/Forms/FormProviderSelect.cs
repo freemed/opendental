@@ -239,13 +239,15 @@ namespace OpenDental{
 			table=Providers.Refresh(schoolClass,isAlph);
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
-			ODGridColumn col=new ODGridColumn(Lan.g("TableProviders","Abbrev"),65);
+			ODGridColumn col=new ODGridColumn(Lan.g("TableProviders","Abbrev"),60);
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn(Lan.g("TableProviders","Last Name"),80);
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn(Lan.g("TableProviders","First Name"),80);
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TableProviders","Hidden"),55,HorizontalAlignment.Center);
+			col=new ODGridColumn(Lan.g("TableProviders","User Name"),70);
+			gridMain.Columns.Add(col);
+			col=new ODGridColumn(Lan.g("TableProviders","Hidden"),50,HorizontalAlignment.Center);
 			gridMain.Columns.Add(col);
 			if(!PrefB.GetBool("EasyHideDentalSchools")) {
 				col=new ODGridColumn(Lan.g("TableProviders","Class"),90);
@@ -258,6 +260,7 @@ namespace OpenDental{
 				row.Cells.Add(table.Rows[i]["Abbr"].ToString());
 				row.Cells.Add(table.Rows[i]["LName"].ToString());
 				row.Cells.Add(table.Rows[i]["FName"].ToString());
+				row.Cells.Add(table.Rows[i]["UserName"].ToString());
 				if(table.Rows[i]["IsHidden"].ToString()=="1"){
 					row.Cells.Add("X");
 				}

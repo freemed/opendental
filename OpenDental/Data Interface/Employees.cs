@@ -69,16 +69,32 @@ namespace OpenDental{
 			General.NonQ(command);
 		}
 
+		/*
 		///<summary>Returns LName,FName MiddleI for the provided employee.</summary>
-		public static string GetName(Employee emp){
+		public static string GetNameLF(Employee emp){
 			return(emp.LName+", "+emp.FName+" "+emp.MiddleI);
 		}
 
 		///<summary>Loops through List to find matching employee, and returns LName,FName MiddleI.</summary>
-		public static string GetName(int employeeNum){
+		public static string GetNameLF(int employeeNum){
 			for(int i=0;i<ListLong.Length;i++){
 				if(ListLong[i].EmployeeNum==employeeNum){
-					return GetName(ListLong[i]);
+					return GetNameLF(ListLong[i]);
+				}
+			}
+			return "";
+		}*/
+
+		///<summary>Returns FName MiddleI LName for the provided employee.</summary>
+		public static string GetNameFL(Employee emp) {
+			return (emp.FName+" "+emp.MiddleI+" "+emp.LName);
+		}
+
+		///<summary>Loops through List to find matching employee, and returns FName MiddleI LName.</summary>
+		public static string GetNameFL(int employeeNum) {
+			for(int i=0;i<ListLong.Length;i++) {
+				if(ListLong[i].EmployeeNum==employeeNum) {
+					return GetNameFL(ListLong[i]);
 				}
 			}
 			return "";

@@ -208,7 +208,7 @@ namespace OpenDental{
 			listEmployee.Items.Add(Lan.g(this,"none"));
 			listEmployee.SelectedIndex=0;
 			for(int i=0;i<Employees.ListShort.Length;i++){
-				listEmployee.Items.Add(Employees.GetName(Employees.ListShort[i]));
+				listEmployee.Items.Add(Employees.GetNameFL(Employees.ListShort[i]));
 				if(UserCur.EmployeeNum==Employees.ListShort[i].EmployeeNum){
 					listEmployee.SelectedIndex=i+1;
 				}

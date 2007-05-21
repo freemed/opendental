@@ -130,12 +130,12 @@ namespace OpenDental{
 				if(Employees.ListLong[i].IsHidden){
 					if(checkHidden.Checked){
 						ALemployees.Add(Employees.ListLong[i]);
-						listEmployees.Items.Add(Employees.GetName(Employees.ListLong[i])+"(hidden)");
+						listEmployees.Items.Add(Employees.GetNameFL(Employees.ListLong[i])+"(hidden)");
 					}
 				}
 				else{
 					ALemployees.Add(Employees.ListLong[i]);
-					listEmployees.Items.Add(Employees.GetName(Employees.ListLong[i]));
+					listEmployees.Items.Add(Employees.GetNameFL(Employees.ListLong[i]));
 				}
 			}
 		}

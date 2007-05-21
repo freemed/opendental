@@ -5168,6 +5168,16 @@ namespace OpenDental{
 						)";
 				}
 				General.NonQEx(command);
+				//after r320
+				if(FormChooseDatabase.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE userod ADD ProvNum int NOT NULL";
+				}
+				else {//Oracle.
+					command="ALTER TABLE userod ADD ProvNum int NOT NULL";
+				}
+				General.NonQEx(command);
+
+
 
 
 
