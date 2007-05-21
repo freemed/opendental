@@ -2198,6 +2198,7 @@ namespace OpenDental{
 			this.addKeyBut.TabIndex = 195;
 			this.addKeyBut.Text = "Add Key";
 			this.addKeyBut.UseVisualStyleBackColor = true;
+			this.addKeyBut.Visible = false;
 			this.addKeyBut.Click += new System.EventHandler(this.addKeyBut_Click);
 			// 
 			// butBig
@@ -2417,9 +2418,7 @@ namespace OpenDental{
 
 		///<summary>Called every time prefs are changed from any workstation.</summary>
 		public void InitializeLocalData(){
-			if(PrefB.GetString("DistributorKey").Length>0) {
-				addKeyBut.Visible=true;
-			}
+			addKeyBut.Visible=PrefB.GetBool("DistributorKey");
 			ComputerPref computerPrefs=ComputerPrefs.GetForLocalComputer();
 			toothChart.UseHardware=computerPrefs.GraphicsUseHardware;
 			toothChart.SimpleMode=computerPrefs.GraphicsSimple;	//Must be last preference set here, because this causes the 

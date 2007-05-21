@@ -38,6 +38,10 @@ namespace OpenDental {
 		public static void Create(RegistrationKey registrationKey){
 			do{
 				registrationKey.RegKey=CDT.Class1.GenerateRandKey();
+				if(registrationKey.RegKey==""){
+					//Don't loop forever when software is unverified.
+					return;
+				}
 			} while(KeyIsInUse(registrationKey.RegKey));
 			string command="INSERT INTO registrationkey (PatNum,RegKey,Note) VALUES ("+
 				"'"+POut.PInt(registrationKey.PatNum)+"',"+
