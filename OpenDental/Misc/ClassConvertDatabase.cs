@@ -4776,7 +4776,7 @@ namespace OpenDental{
 						) DEFAULT CHARSET=utf8";
 					General.NonQEx(command);
 				}
-				else{//Oracle
+				else {//Oracle
 					//Here we want to add a new column CodeNum and make it the primary key in the procedurecode table.
 					//However, it appears to be difficult to change a table primary key, so here we create a backup of
 					//the old procedurecode table and recreate the procedure code table, copying in the old data. Also,
@@ -4815,7 +4815,7 @@ namespace OpenDental{
 					General.NonQEx(command);
 					command="SELECT * FROM procedurecodeold";
 					table=General.GetTable(command);
-					for(int i=0;i<table.Rows.Count;i++){
+					for(int i=0;i<table.Rows.Count;i++) {
 						//Must specify CodeNum here, because auto-incrementation does not take place until an appropriate trigger
 						//and sequence are created in the database maintenence tool after this database upgrade is completed. Since
 						//the column is new, we can just assign consecutive values to keep things simple.
@@ -4964,38 +4964,38 @@ namespace OpenDental{
 				//Determine the first available primary key number in the database. This is necessary because a sequence/trigger
 				//pair may not yet exist in the database from being run in the database maintenence tool. Also, this table is small,
 				//so incrementing by 1 will not waste much time.
-				do{
+				do {
 					laboratoryNum++;
 					command="SELECT LaboratoryNum FROM laboratory WHERE LaboratoryNum='"+laboratoryNum+"'";
 					table=General.GetTableEx(command);
-				}while(table.Rows.Count>0);
+				} while(table.Rows.Count>0);
 				command="INSERT INTO laboratory (LaboratoryNum,Description,Phone,Notes,LabSlip) VALUES('"
 					+laboratoryNum+"','Default Lab','','','')";
 				laboratoryNum=General.NonQEx(command,true);
 				command="SELECT * FROM appointment WHERE Lab != 0";
 				table=General.GetTableEx(command);
-				for(int i=0;i<table.Rows.Count;i++){
+				for(int i=0;i<table.Rows.Count;i++) {
 					command="INSERT INTO labcase (LabCaseNum,PatNum,LaboratoryNum,AptNum,PlannedAptNum,DateTimeDue,DateTimeCreated,"
 						+"DateTimeSent,DateTimeRecd,DateTimeChecked,ProvNum,Instructions) VALUES("
 						+"'"+(i+1)+"', "
 						+table.Rows[i]["PatNum"].ToString()+", "
 						+POut.PInt(laboratoryNum)+", ";
-					if(table.Rows[i]["AptStatus"].ToString()=="6"){//if planned apt
+					if(table.Rows[i]["AptStatus"].ToString()=="6") {//if planned apt
 						command+="0, "//AptNum
 							+table.Rows[i]["AptNum"].ToString()+", ";//PlannedAptNum
 					}
-					else{
+					else {
 						command+=table.Rows[i]["AptNum"].ToString()+", "//AptNum
 							+"0, ";//PlannedAptNum
 					}
 					command+=POut.PDateT(PIn.PDateT(table.Rows[i]["AptNum"].ToString()))+", "//DateTimeDue
 						+POut.PDate(DateTime.MinValue)+", ";//DateTimeCreated
-					if(table.Rows[i]["Lab"].ToString()=="1"){//sent
+					if(table.Rows[i]["Lab"].ToString()=="1") {//sent
 						command+=POut.PDateT(new DateTime(2000,1,1))+", "//DateTimeSent
 							+POut.PDate(DateTime.MinValue)+", "//DateTimeRecd
 							+POut.PDate(DateTime.MinValue)+", ";//DateTimeChecked
 					}
-					else if(table.Rows[i]["Lab"].ToString()=="2"){//received
+					else if(table.Rows[i]["Lab"].ToString()=="2") {//received
 						command+=POut.PDateT(new DateTime(2000,1,1))+", "//DateTimeSent
 							+POut.PDate(new DateTime(2000,1,1))+", "//DateTimeRecd
 							+POut.PDate(DateTime.MinValue)+", ";//DateTimeChecked
@@ -5032,15 +5032,23 @@ namespace OpenDental{
 				if(FormChooseDatabase.DBtype==DatabaseType.MySql) {
 					command="ALTER TABLE schedule ADD EmployeeNum int NOT NULL";
 				}
-				else{
+				else {
 					command="ALTER TABLE schedule ADD EmployeeNum int";
 				}
 				General.NonQEx(command);
 				//Added after r278
-				command="ALTER TABLE procedurelog DROP CPTModifier";
-				General.NonQEx(command);
-				command="ALTER TABLE procedurelog DROP RevenueCode";
-				General.NonQEx(command);
+				if(FormChooseDatabase.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE procedurelog DROP CPTModifier";
+					General.NonQEx(command);
+					command="ALTER TABLE procedurelog DROP RevenueCode";
+					General.NonQEx(command);
+				}
+				else {
+					command="ALTER TABLE procedurelog DROP COLUMN CPTModifier";
+					General.NonQEx(command);
+					command="ALTER TABLE procedurelog DROP COLUMN RevenueCode";
+					General.NonQEx(command);
+				}
 				command="ALTER TABLE procedurelog ADD CodeMod1 char(2)";
 				General.NonQEx(command);
 				command="ALTER TABLE procedurelog ADD CodeMod2 char(2)";
@@ -5049,8 +5057,14 @@ namespace OpenDental{
 				General.NonQEx(command);
 				command="ALTER TABLE procedurelog ADD CodeMod4 char(2)";
 				General.NonQEx(command);
-				command="ALTER TABLE procedurelog ADD RevCode varchar(45)";
-				General.NonQEx(command);
+				if(FormChooseDatabase.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE procedurelog ADD RevCode varchar(45)";
+					General.NonQEx(command);
+				}
+				else {
+					command="ALTER TABLE procedurelog ADD RevCode varchar2(45)";
+					General.NonQEx(command);
+				}
 				command="ALTER TABLE procedurelog ADD UnitCode char(2)";
 				General.NonQEx(command);
 				command="ALTER TABLE procedurelog ADD UnitQty char(15)";
@@ -5117,7 +5131,8 @@ namespace OpenDental{
 						Note varchar(4000),
 						PRIMARY KEY (RegistrationKeyNum)
 						) DEFAULT CHARSET=utf8";
-				}else {//Oracle.
+				}
+				else {//Oracle.
 					command=@"CREATE TABLE registrationkey(
 						RegistrationKeyNum int NOT NULL,
 						PatNum int NOT NULL,
@@ -5128,10 +5143,11 @@ namespace OpenDental{
 				}
 				General.NonQEx(command);
 				//After r306
-				if(FormChooseDatabase.DBtype==DatabaseType.MySql){
+				if(FormChooseDatabase.DBtype==DatabaseType.MySql) {
 					command="ALTER TABLE preference CHANGE ValueString ValueString varchar(4000) NOT NULL default ''";
 					General.NonQEx(command);
-				}else{//Oracle
+				}
+				else {//Oracle
 					command="ALTER TABLE preference MODIFY (ValueString varchar2(4000) default '')";
 					General.NonQEx(command);
 				}
@@ -5145,10 +5161,16 @@ namespace OpenDental{
 		private void To4_9_2() {
 			if(FromVersion<new Version("4.9.2.0")) {
 				string command;
-				command="ALTER TABLE procedurelog DROP INDEX indexADACode";
-				General.NonQEx(command);
-				command="ALTER TABLE procedurelog ADD INDEX (CodeNum)";
-				General.NonQEx(command);
+				if(FormChooseDatabase.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE procedurelog DROP INDEX indexADACode";
+					General.NonQEx(command);
+					command="ALTER TABLE procedurelog ADD INDEX (CodeNum)";
+					General.NonQEx(command);
+				}
+				else {//Oracle
+					command="CREATE INDEX ind_procedurelog_CodeNum ON procedurelog (CodeNum)";
+					General.NonQEx(command);
+				}
 				command="UPDATE preference SET ValueString = '4.9.2.0' WHERE PrefName = 'DataBaseVersion'";
 				General.NonQEx(command);
 			}
@@ -5187,7 +5209,7 @@ namespace OpenDental{
 					command="ALTER TABLE userod ADD ProvNum int NOT NULL";
 				}
 				else {//Oracle.
-					command="ALTER TABLE userod ADD ProvNum int NOT NULL";
+					command="ALTER TABLE userod ADD ProvNum int";
 				}
 				General.NonQEx(command);
 

@@ -450,6 +450,7 @@ namespace OpenDental {
 				"referral","ReferralNum",
 				"registrationkey","RegistrationKeyNum",
 				"repeatcharge","RepeatChargeNum",
+				"reqneeded","ReqNeededNum",
 				"rxalert","RxAlertNum",
 				"rxdef","RxDefNum",
 				"rxpat","RxNum",
