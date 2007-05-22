@@ -100,6 +100,7 @@ namespace OpenDental{
 
 		///<summary></summary>
 		public static void InsertOrUpdate(bool isNew,Userod user){
+			//should add a check that employeenum and provnum are not both set.
 			//make sure username is not already taken
 			string command;
 			int excludeUserNum;

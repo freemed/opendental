@@ -379,13 +379,15 @@ namespace OpenDental{
 			SelectedGroupNum=0;
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
-			ODGridColumn col=new ODGridColumn(Lan.g("TableSecurity","Username"),90);
+			ODGridColumn col=new ODGridColumn(Lan.g("TableSecurity","Username"),80);
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn(Lan.g("TableSecurity","Group"),90);
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TableSecurity","Employee"),120);
+			col=new ODGridColumn(Lan.g("TableSecurity","Employee"),90);
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TableSecurity","Provider"),120);
+			col=new ODGridColumn(Lan.g("TableSecurity","Provider"),90);
+			gridMain.Columns.Add(col);
+			col=new ODGridColumn(Lan.g("TableSecurity","Clinic"),90);
 			gridMain.Columns.Add(col);
 			gridMain.Rows.Clear();
 			ODGridRow row;
@@ -410,6 +412,7 @@ namespace OpenDental{
 				row.Cells.Add(UserGroups.GetGroup(PIn.PInt(table.Rows[i]["UserGroupNum"].ToString())).Description);
 				row.Cells.Add(Employees.GetNameFL(PIn.PInt(table.Rows[i]["EmployeeNum"].ToString())));
 				row.Cells.Add(Providers.GetNameLF(PIn.PInt(table.Rows[i]["ProvNum"].ToString())));
+				row.Cells.Add(Clinics.GetDesc(PIn.PInt(table.Rows[i]["ClinicNum"].ToString())));
 				gridMain.Rows.Add(row);
 			}
 			gridMain.EndUpdate();
@@ -432,10 +435,12 @@ namespace OpenDental{
 
 		private void comboUsers_SelectionChangeCommitted(object sender,EventArgs e) {
 			FillUsers();
+			FillTreePerm();
 		}
 
 		private void comboSchoolClass_SelectionChangeCommitted(object sender,EventArgs e) {
 			FillUsers();
+			FillTreePerm();
 		}
 
 		private void butEditGroups_Click(object sender, System.EventArgs e) {
@@ -604,6 +609,10 @@ namespace OpenDental{
 		}
 
 		private void butSetAll_Click(object sender,EventArgs e) {
+			if(gridMain.SelectedIndices.Length==0){
+				MsgBox.Show(this,"Please select user first.");
+				return;
+			}
 			GroupPermission perm;
 			for(int i=0;i<Enum.GetNames(typeof(Permissions)).Length;i++){
 				if(i==(int)Permissions.SecurityAdmin

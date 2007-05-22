@@ -25,6 +25,11 @@ namespace OpenDental{
 		private OpenDental.UI.Button butPassword;
 		private System.Windows.Forms.ListBox listEmployee;
 		private System.Windows.Forms.Label label2;
+		private Label label4;
+		private ListBox listProv;
+		private Label label5;
+		private ListBox listClinic;
+		private Label labelClinic;
 		///<summary></summary>
 		public Userod UserCur;
 
@@ -71,6 +76,11 @@ namespace OpenDental{
 			this.butPassword = new OpenDental.UI.Button();
 			this.listEmployee = new System.Windows.Forms.ListBox();
 			this.label2 = new System.Windows.Forms.Label();
+			this.label4 = new System.Windows.Forms.Label();
+			this.listProv = new System.Windows.Forms.ListBox();
+			this.label5 = new System.Windows.Forms.Label();
+			this.listClinic = new System.Windows.Forms.ListBox();
+			this.labelClinic = new System.Windows.Forms.Label();
 			this.SuspendLayout();
 			// 
 			// butCancel
@@ -81,7 +91,7 @@ namespace OpenDental{
 			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
-			this.butCancel.Location = new System.Drawing.Point(666,381);
+			this.butCancel.Location = new System.Drawing.Point(662,381);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75,26);
 			this.butCancel.TabIndex = 0;
@@ -96,7 +106,7 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(666,340);
+			this.butOK.Location = new System.Drawing.Point(662,340);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75,26);
 			this.butOK.TabIndex = 1;
@@ -105,34 +115,34 @@ namespace OpenDental{
 			// 
 			// label1
 			// 
-			this.label1.Location = new System.Drawing.Point(17,26);
+			this.label1.Location = new System.Drawing.Point(4,26);
 			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(118,20);
+			this.label1.Size = new System.Drawing.Size(88,20);
 			this.label1.TabIndex = 2;
 			this.label1.Text = "Name";
 			this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// textUserName
 			// 
-			this.textUserName.Location = new System.Drawing.Point(140,26);
+			this.textUserName.Location = new System.Drawing.Point(94,26);
 			this.textUserName.Name = "textUserName";
-			this.textUserName.Size = new System.Drawing.Size(271,20);
+			this.textUserName.Size = new System.Drawing.Size(198,20);
 			this.textUserName.TabIndex = 3;
 			// 
 			// label3
 			// 
-			this.label3.Location = new System.Drawing.Point(17,57);
+			this.label3.Location = new System.Drawing.Point(1,60);
 			this.label3.Name = "label3";
-			this.label3.Size = new System.Drawing.Size(118,20);
+			this.label3.Size = new System.Drawing.Size(93,60);
 			this.label3.TabIndex = 6;
 			this.label3.Text = "User Group";
-			this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.label3.TextAlign = System.Drawing.ContentAlignment.TopRight;
 			// 
 			// listUserGroup
 			// 
-			this.listUserGroup.Location = new System.Drawing.Point(141,58);
+			this.listUserGroup.Location = new System.Drawing.Point(95,58);
 			this.listUserGroup.Name = "listUserGroup";
-			this.listUserGroup.Size = new System.Drawing.Size(270,225);
+			this.listUserGroup.Size = new System.Drawing.Size(197,225);
 			this.listUserGroup.TabIndex = 7;
 			// 
 			// butPassword
@@ -143,7 +153,7 @@ namespace OpenDental{
 			this.butPassword.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butPassword.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butPassword.CornerRadius = 4F;
-			this.butPassword.Location = new System.Drawing.Point(412,381);
+			this.butPassword.Location = new System.Drawing.Point(189,381);
 			this.butPassword.Name = "butPassword";
 			this.butPassword.Size = new System.Drawing.Size(103,26);
 			this.butPassword.TabIndex = 8;
@@ -152,24 +162,70 @@ namespace OpenDental{
 			// 
 			// listEmployee
 			// 
-			this.listEmployee.Location = new System.Drawing.Point(455,58);
+			this.listEmployee.Location = new System.Drawing.Point(317,58);
 			this.listEmployee.Name = "listEmployee";
 			this.listEmployee.Size = new System.Drawing.Size(124,225);
 			this.listEmployee.TabIndex = 11;
 			// 
 			// label2
 			// 
-			this.label2.Location = new System.Drawing.Point(454,34);
+			this.label2.Location = new System.Drawing.Point(316,34);
 			this.label2.Name = "label2";
-			this.label2.Size = new System.Drawing.Size(222,20);
+			this.label2.Size = new System.Drawing.Size(152,20);
 			this.label2.TabIndex = 10;
 			this.label2.Text = "Employee (for timecards)";
 			this.label2.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
 			// 
+			// label4
+			// 
+			this.label4.Location = new System.Drawing.Point(322,9);
+			this.label4.Name = "label4";
+			this.label4.Size = new System.Drawing.Size(407,23);
+			this.label4.TabIndex = 12;
+			this.label4.Text = "Setting employee, provider, or clinic is entirely optional";
+			this.label4.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+			// 
+			// listProv
+			// 
+			this.listProv.Location = new System.Drawing.Point(465,58);
+			this.listProv.Name = "listProv";
+			this.listProv.Size = new System.Drawing.Size(124,225);
+			this.listProv.TabIndex = 14;
+			// 
+			// label5
+			// 
+			this.label5.Location = new System.Drawing.Point(464,34);
+			this.label5.Name = "label5";
+			this.label5.Size = new System.Drawing.Size(156,20);
+			this.label5.TabIndex = 13;
+			this.label5.Text = "Provider";
+			this.label5.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
+			// 
+			// listClinic
+			// 
+			this.listClinic.Location = new System.Drawing.Point(612,58);
+			this.listClinic.Name = "listClinic";
+			this.listClinic.Size = new System.Drawing.Size(124,225);
+			this.listClinic.TabIndex = 16;
+			// 
+			// labelClinic
+			// 
+			this.labelClinic.Location = new System.Drawing.Point(611,34);
+			this.labelClinic.Name = "labelClinic";
+			this.labelClinic.Size = new System.Drawing.Size(156,20);
+			this.labelClinic.TabIndex = 15;
+			this.labelClinic.Text = "Clinic (restricts user)";
+			this.labelClinic.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
+			// 
 			// FormUserEdit
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
-			this.ClientSize = new System.Drawing.Size(777,432);
+			this.ClientSize = new System.Drawing.Size(773,432);
+			this.Controls.Add(this.listClinic);
+			this.Controls.Add(this.labelClinic);
+			this.Controls.Add(this.listProv);
+			this.Controls.Add(this.label5);
+			this.Controls.Add(this.label4);
 			this.Controls.Add(this.listEmployee);
 			this.Controls.Add(this.label2);
 			this.Controls.Add(this.butPassword);
@@ -213,6 +269,30 @@ namespace OpenDental{
 					listEmployee.SelectedIndex=i+1;
 				}
 			}
+			listProv.Items.Clear();
+			listProv.Items.Add(Lan.g(this,"none"));
+			listProv.SelectedIndex=0;
+			for(int i=0;i<Providers.List.Length;i++) {
+				listProv.Items.Add(Providers.GetNameLF(Providers.List[i].ProvNum));
+				if(UserCur.ProvNum==Providers.List[i].ProvNum) {
+					listProv.SelectedIndex=i+1;
+				}
+			}
+			if(PrefB.GetBool("EasyNoClinics")){
+				labelClinic.Visible=false;
+				listClinic.Visible=false;
+			}
+			else{
+				listClinic.Items.Clear();
+				listClinic.Items.Add(Lan.g(this,"all"));
+				listClinic.SelectedIndex=0;
+				for(int i=0;i<Clinics.List.Length;i++) {
+					listClinic.Items.Add(Clinics.List[i].Description);
+					if(UserCur.ClinicNum==Clinics.List[i].ClinicNum) {
+						listClinic.SelectedIndex=i+1;
+					}
+				}
+			}
 			if(UserCur.Password==""){
 				butPassword.Text=Lan.g(this,"Create Password");
 			}
@@ -221,7 +301,7 @@ namespace OpenDental{
 
 		private void butPassword_Click(object sender, System.EventArgs e) {
 			bool isCreate=UserCur.Password=="";
-			FormUserPassword FormU=new FormUserPassword(isCreate);
+			FormUserPassword FormU=new FormUserPassword(isCreate,UserCur.UserName);
 			FormU.ShowDialog();
 			if(FormU.DialogResult==DialogResult.Cancel){
 				return;
@@ -255,6 +335,10 @@ namespace OpenDental{
 				MsgBox.Show(this,"Please enter a username.");
 				return;
 			}
+			if(listEmployee.SelectedIndex>0 && listProv.SelectedIndex>0){
+				MsgBox.Show(this,"Cannot set an employee and a provider for the same user.");
+				return;
+			}
 			UserCur.UserName=textUserName.Text;
 			UserCur.UserGroupNum=UserGroups.List[listUserGroup.SelectedIndex].UserGroupNum;
 			if(listEmployee.SelectedIndex==0){
@@ -262,6 +346,18 @@ namespace OpenDental{
 			}
 			else{
 				UserCur.EmployeeNum=Employees.ListShort[listEmployee.SelectedIndex-1].EmployeeNum;
+			}
+			if(listProv.SelectedIndex==0) {
+				UserCur.ProvNum=0;
+			}
+			else {
+				UserCur.ProvNum=Providers.List[listProv.SelectedIndex-1].ProvNum;
+			}
+			if(listClinic.SelectedIndex==0) {
+				UserCur.ClinicNum=0;
+			}
+			else {
+				UserCur.ClinicNum=Clinics.List[listClinic.SelectedIndex-1].ClinicNum;
 			}
 			try{
 				Userods.InsertOrUpdate(IsNew,UserCur);
