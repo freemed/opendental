@@ -10,7 +10,7 @@ namespace OpenDental{
 		///<summary>All referrals for all patients</summary>
 		public static Referral[] List;
 		//should later add a faster refresh sequence.
-		private static Hashtable HList;
+		//private static Hashtable HList;
 
 		///<summary>Refreshes all referrals for all patients.  Need to rework at some point so less memory is consumed.  Also refreshes dynamically, so no need to invalidate local data.</summary>
 		public static void Refresh(){
@@ -19,7 +19,7 @@ namespace OpenDental{
 				+"ORDER BY lname";
  			DataTable table=General.GetTable(command);
 			List=new Referral[table.Rows.Count];
-			HList=new Hashtable();
+			//HList=new Hashtable();
 			for(int i=0;i<table.Rows.Count;i++){
 				List[i]=new Referral();
 				List[i].ReferralNum= PIn.PInt   (table.Rows[i][0].ToString());
@@ -42,7 +42,7 @@ namespace OpenDental{
 				List[i].Title      = PIn.PString(table.Rows[i][17].ToString());
 				List[i].EMail      = PIn.PString(table.Rows[i][18].ToString());
 				List[i].PatNum     = PIn.PInt   (table.Rows[i][19].ToString());
-				HList.Add(List[i].ReferralNum,List[i]);
+				//HList.Add(List[i].ReferralNum,List[i].Copy());
 			}
 		}
 
@@ -125,64 +125,74 @@ namespace OpenDental{
 		public static string GetName(int referralNum) {
 			if(referralNum==0)
 				return "";
-			if(!HList.ContainsKey(referralNum)) {
-				return "";
+			for(int i=0;i<List.Length;i++){
+				if(List[i].ReferralNum==referralNum){
+					//Referral refer=List[i];
+					string retVal=List[i].LName;
+					if(List[i].FName!="") {
+						retVal+=", "+List[i].FName+" "+List[i].MName;
+					}
+					return retVal;
+				}
 			}
-			Referral refer=(Referral)HList[referralNum];
-			string retVal=refer.LName;
-			if(refer.FName!="") {
-				retVal+=", "+refer.FName+" "+refer.MName;
-			}
-			return retVal;
+			return "";
 		}
 
 		///<summary></summary>
 		public static string GetNameFL(int referralNum) {
 			if(referralNum==0)
 				return "";
-			if(!HList.ContainsKey(referralNum)) {
-				return "";
+			for(int i=0;i<List.Length;i++) {
+				if(List[i].ReferralNum==referralNum) {
+					//Referral refer=List[i];
+					string retVal="";
+					if(List[i].FName!="") {
+						retVal+=List[i].FName+" "+List[i].MName;
+					}
+					retVal+=List[i].LName;
+					if(List[i].Title!="") {
+						retVal+=", "+List[i].Title;
+					}
+					return retVal;
+				}
 			}
-			Referral refer=(Referral)HList[referralNum];
-			string retVal="";
-			if(refer.FName!="") {
-				retVal+=refer.FName+" "+refer.MName+" ";
-			}
-			retVal+=refer.LName;
-			if(refer.Title!="") {
-				retVal+=", "+refer.Title;
-			}
-			return retVal;
+			return "";
 		}
 
 		///<summary></summary>
 		public static string GetPhone(int referralNum) {
 			if(referralNum==0)
 				return "";
-			if(!HList.ContainsKey(referralNum)) {
-				return "";
+			for(int i=0;i<List.Length;i++) {
+				if(List[i].ReferralNum==referralNum) {
+					//Referral refer=(Referral)HList[referralNum];
+					if(List[i].Telephone.Length==10) {
+						return List[i].Telephone.Substring(0,3)+"-"+List[i].Telephone.Substring(3,3)+"-"+List[i].Telephone.Substring(6);
+					}
+					return List[i].Telephone;
+				}
 			}
-			Referral refer=(Referral)HList[referralNum];
-			if(refer.Telephone.Length==10){
-				return refer.Telephone.Substring(0,3)+"-"+refer.Telephone.Substring(3,3)+"-"+refer.Telephone.Substring(6);
-			}
-			return refer.Telephone;
+			return "";
 		}
 	
-		///<summary>Gets Referral info from memory (HList). Does not make a call to the database unless needed.</summary>
+		///<summary>Gets Referral info from memory. Does not make a call to the database unless needed.</summary>
 		public static Referral GetReferral(int referralNum){
 			if(referralNum==0){
 				return null;
 			}
-			if(HList.ContainsKey(referralNum)){
-				return (Referral)HList[referralNum];
+			for(int i=0;i<List.Length;i++) {
+				if(List[i].ReferralNum==referralNum) {
+					return List[i].Copy();
+				}
 			}
 			Refresh();//must be outdated
-			if(!HList.ContainsKey(referralNum)){
-				MessageBox.Show("Error.  Referral not found: "+referralNum.ToString());
-				return null;
+			for(int i=0;i<List.Length;i++) {
+				if(List[i].ReferralNum==referralNum) {
+					return List[i].Copy();
+				}
 			}
-			return (Referral)HList[referralNum];
+			MessageBox.Show("Error.  Referral not found: "+referralNum.ToString());
+			return null;
 		}
 
 		///<summary>Gets the first referral "from" for the given patient.  Will return null if no "from" found for patient.</summary>

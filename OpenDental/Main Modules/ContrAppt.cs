@@ -132,6 +132,7 @@ namespace OpenDental{
 		public static int numOfWeekDaysToDisplay=5;
 		private OpenDental.UI.Button butLab;
 		public static int SheetClickedonDay;
+		///<summary></summary>
 		private Panel infoBubble;
 		///<Summary>The datatable that holds the bubble data.  This will later become part of the dataset for the main screen.</Summary>
 		private DataSet DS;
@@ -1832,21 +1833,21 @@ namespace OpenDental{
 		///<summary>Now clicking the button turns on the weekly view based on selected date.
 		///Old behavior: Clicked week button, setting the date to the current week, but not necessarily to today.</summary>
 		private void butTodayWk_Click(object sender, System.EventArgs e) {
-			//int dayChange = Appointments.DateSelected.DayOfWeek-DateTime.Now.DayOfWeek;
-			//Appointments.DateSelected=DateTime.Now.AddDays(dayChange);
-			SetWeeklyView(true);
+			int dayChange = Appointments.DateSelected.DayOfWeek-DateTime.Now.DayOfWeek;
+			Appointments.DateSelected=DateTime.Now.AddDays(dayChange);
+			SetWeeklyView(false);//true);
 		}
 
 		///<summary>Clicked back one week.</summary>
 		private void butBackWk_Click(object sender, System.EventArgs e) {
 			Appointments.DateSelected=Appointments.DateSelected.AddDays(-7);
-			SetWeeklyView(true);
+			SetWeeklyView(false);//true);
 		}
 
 		///<summary>Clicked forward one week.</summary>
 		private void butFwdWk_Click(object sender, System.EventArgs e) {
 			Appointments.DateSelected=Appointments.DateSelected.AddDays(7);
-			SetWeeklyView(true);
+			SetWeeklyView(false);//true);
 		}
 
 		///<summary>Clicked a date on the calendar.</summary>
@@ -2098,7 +2099,6 @@ namespace OpenDental{
 				}
 				return;
 			}
-			infoBubble.Location=new Point(p.X+ContrApptSheet2.Left+panelSheet.Left+10,p.Y+ContrApptSheet2.Top+panelSheet.Top+10);
 			if(aptNum!=bubbleAptNum){
 				bubbleAptNum=aptNum;
 				//most data is already present in DS.Appointment, but we do need to get the patient picture
@@ -2232,6 +2232,11 @@ namespace OpenDental{
 				infoBubble.Size=new Size(infoBubble.Width,(int)y+5);
 				infoBubble.BringToFront();
 			}
+			int yval=p.Y+ContrApptSheet2.Top+panelSheet.Top+10;
+			if(yval > panelSheet.Bottom-infoBubble.Height){
+				yval=panelSheet.Bottom-infoBubble.Height;
+			}
+			infoBubble.Location=new Point(p.X+ContrApptSheet2.Left+panelSheet.Left+10,yval);
 			infoBubble.Visible=true;
 		}
 

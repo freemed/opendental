@@ -296,30 +296,39 @@ namespace OpenDental{
 					if(HideBackground){
 						continue;
 					}
-					//In the case when the A to Z folders are not being used, an invalid form image path is returned
-					//and we simply print without the background image (just as if the background image were removed
-					//from the A to Z folders where it was expected.
-					string fileName=ODFileUtils.CombinePaths(FormPath.GetPreferredImagePath(),ClaimFormCur.Items[i].ImageFileName);
-					if(!File.Exists(fileName)){
-						//MessageBox.Show("File not found.");
-						continue;
+					Image thisImage;
+					string extension;
+					if(ClaimFormCur.Items[i].ImageFileName=="ADA2006.gif"){
+						thisImage=CDT.Class1.GetADA2006();
+						extension=".gif";
 					}
-					Image thisImage=Image.FromFile(fileName);
-					if(fileName.Substring(fileName.Length-3)=="jpg"){
+					else{
+						//In the case when the A to Z folders are not being used, an invalid form image path is returned
+						//and we simply print without the background image (just as if the background image were removed
+						//from the A to Z folders where it was expected.
+						string fileName=ODFileUtils.CombinePaths(FormPath.GetPreferredImagePath(),ClaimFormCur.Items[i].ImageFileName);
+						if(!File.Exists(fileName)){
+							//MessageBox.Show("File not found.");
+							continue;
+						}
+						thisImage=Image.FromFile(fileName);
+						extension=Path.GetExtension(fileName);
+					}
+					if(extension==".jpg"){
 						grfx.DrawImage(thisImage
 							,ClaimFormCur.Items[i].XPos+ClaimFormCur.OffsetX
 							,ClaimFormCur.Items[i].YPos+ClaimFormCur.OffsetY
 							,(int)(thisImage.Width/thisImage.HorizontalResolution*100)
 							,(int)(thisImage.Height/thisImage.VerticalResolution*100));
 					}
-					else if(fileName.Substring(fileName.Length-3)=="gif"){
+					else if(extension==".gif"){
 						grfx.DrawImage(thisImage
 							,ClaimFormCur.Items[i].XPos+ClaimFormCur.OffsetX
 							,ClaimFormCur.Items[i].YPos+ClaimFormCur.OffsetY
 							,ClaimFormCur.Items[i].Width
 							,ClaimFormCur.Items[i].Height);
 					}
-					else if(fileName.Substring(fileName.Length-3)=="emf"){
+					else if(extension==".emf"){
 						grfx.DrawImage(thisImage
 							,ClaimFormCur.Items[i].XPos+ClaimFormCur.OffsetX
 							,ClaimFormCur.Items[i].YPos+ClaimFormCur.OffsetY

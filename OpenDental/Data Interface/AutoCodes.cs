@@ -89,7 +89,8 @@ namespace OpenDental{
 			autoCodeNum=General.NonQ(command,true);
 			//1Surf
 			if(ProcedureCodes.IsValidCode("D2140")) {
-				command="INSERT INTO autocodeitem (AutoCodeNum,ADACode) VALUES ("+POut.PInt(autoCodeNum)+",'D2140')";
+				command="INSERT INTO autocodeitem (AutoCodeNum,CodeNum) VALUES ("+POut.PInt(autoCodeNum)+","
+					+ProcedureCodes.GetCodeNum("D2140")+")";
 				autoCodeItemNum=General.NonQ(command,true);
 				command="INSERT INTO autocodecond (AutoCodeItemNum,Cond) VALUES ("+POut.PInt(autoCodeItemNum)+","
 				+POut.PInt((int)AutoCondition.One_Surf)+")";
@@ -97,7 +98,8 @@ namespace OpenDental{
 			}
 			//2Surf
 			if(ProcedureCodes.IsValidCode("D2150")) {
-				command="INSERT INTO autocodeitem (AutoCodeNum,ADACode) VALUES ("+POut.PInt(autoCodeNum)+",'D2150')";
+				command="INSERT INTO autocodeitem (AutoCodeNum,CodeNum) VALUES ("+POut.PInt(autoCodeNum)+","
+					+ProcedureCodes.GetCodeNum("D2150")+")";
 				autoCodeItemNum=General.NonQ(command,true);
 				command="INSERT INTO autocodecond (AutoCodeItemNum,Cond) VALUES ("+POut.PInt(autoCodeItemNum)+","
 					+POut.PInt((int)AutoCondition.Two_Surf)+")";
@@ -105,7 +107,8 @@ namespace OpenDental{
 			}
 			//3Surf
 			if(ProcedureCodes.IsValidCode("D2160")) {
-				command="INSERT INTO autocodeitem (AutoCodeNum,ADACode) VALUES ("+POut.PInt(autoCodeNum)+",'D2160')";
+				command="INSERT INTO autocodeitem (AutoCodeNum,CodeNum) VALUES ("+POut.PInt(autoCodeNum)+","
+					+ProcedureCodes.GetCodeNum("D2160")+")";
 				autoCodeItemNum=General.NonQ(command,true);
 				command="INSERT INTO autocodecond (AutoCodeItemNum,Cond) VALUES ("+POut.PInt(autoCodeItemNum)+","
 					+POut.PInt((int)AutoCondition.Three_Surf)+")";
@@ -113,7 +116,8 @@ namespace OpenDental{
 			}
 			//4Surf
 			if(ProcedureCodes.IsValidCode("D2161")) {
-				command="INSERT INTO autocodeitem (AutoCodeNum,ADACode) VALUES ("+POut.PInt(autoCodeNum)+",'D2161')";
+				command="INSERT INTO autocodeitem (AutoCodeNum,CodeNum) VALUES ("+POut.PInt(autoCodeNum)+","
+					+ProcedureCodes.GetCodeNum("D2161")+")";
 				autoCodeItemNum=General.NonQ(command,true);
 				command="INSERT INTO autocodecond (AutoCodeItemNum,Cond) VALUES ("+POut.PInt(autoCodeItemNum)+","
 					+POut.PInt((int)AutoCondition.Four_Surf)+")";
@@ -121,7 +125,8 @@ namespace OpenDental{
 			}
 			//5Surf
 			if(ProcedureCodes.IsValidCode("D2161")) {
-				command="INSERT INTO autocodeitem (AutoCodeNum,ADACode) VALUES ("+POut.PInt(autoCodeNum)+",'D2161')";
+				command="INSERT INTO autocodeitem (AutoCodeNum,CodeNum) VALUES ("+POut.PInt(autoCodeNum)+","
+					+ProcedureCodes.GetCodeNum("D2161")+")";
 				autoCodeItemNum=General.NonQ(command,true);
 				command="INSERT INTO autocodecond (AutoCodeItemNum,Cond) VALUES ("+POut.PInt(autoCodeItemNum)+","
 					+POut.PInt((int)AutoCondition.Five_Surf)+")";
@@ -132,7 +137,8 @@ namespace OpenDental{
 			autoCodeNum=General.NonQ(command,true);
 			//1SurfAnt
 			if(ProcedureCodes.IsValidCode("D2330")) {
-				command="INSERT INTO autocodeitem (AutoCodeNum,ADACode) VALUES ("+POut.PInt(autoCodeNum)+",'D2330')";
+				command="INSERT INTO autocodeitem (AutoCodeNum,CodeNum) VALUES ("+POut.PInt(autoCodeNum)+","
+					+ProcedureCodes.GetCodeNum("D2330")+")";
 				autoCodeItemNum=General.NonQ(command,true);
 				command="INSERT INTO autocodecond (AutoCodeItemNum,Cond) VALUES ("+POut.PInt(autoCodeItemNum)+","
 					+POut.PInt((int)AutoCondition.One_Surf)+")";
@@ -143,7 +149,8 @@ namespace OpenDental{
 			}
 			//2SurfAnt
 			if(ProcedureCodes.IsValidCode("D2331")) {
-				command="INSERT INTO autocodeitem (AutoCodeNum,ADACode) VALUES ("+POut.PInt(autoCodeNum)+",'D2331')";
+				command="INSERT INTO autocodeitem (AutoCodeNum,CodeNum) VALUES ("+POut.PInt(autoCodeNum)+","
+					+ProcedureCodes.GetCodeNum("D2331")+")";
 				autoCodeItemNum=General.NonQ(command,true);
 				command="INSERT INTO autocodecond (AutoCodeItemNum,Cond) VALUES ("+POut.PInt(autoCodeItemNum)+","
 					+POut.PInt((int)AutoCondition.Two_Surf)+")";
@@ -154,7 +161,8 @@ namespace OpenDental{
 			}
 			//3SurfAnt
 			if(ProcedureCodes.IsValidCode("D2332")) {
-				command="INSERT INTO autocodeitem (AutoCodeNum,ADACode) VALUES ("+POut.PInt(autoCodeNum)+",'D2332')";
+				command="INSERT INTO autocodeitem (AutoCodeNum,CodeNum) VALUES ("+POut.PInt(autoCodeNum)+","
+					+ProcedureCodes.GetCodeNum("D2332")+")";
 				autoCodeItemNum=General.NonQ(command,true);
 				command="INSERT INTO autocodecond (AutoCodeItemNum,Cond) VALUES ("+POut.PInt(autoCodeItemNum)+","
 					+POut.PInt((int)AutoCondition.Three_Surf)+")";
@@ -165,7 +173,8 @@ namespace OpenDental{
 			}
 			//4SurfAnt
 			if(ProcedureCodes.IsValidCode("D2335")) {
-				command="INSERT INTO autocodeitem (AutoCodeNum,ADACode) VALUES ("+POut.PInt(autoCodeNum)+",'D2335')";
+				command="INSERT INTO autocodeitem (AutoCodeNum,CodeNum) VALUES ("+POut.PInt(autoCodeNum)+","
+					+ProcedureCodes.GetCodeNum("D2335")+")";
 				autoCodeItemNum=General.NonQ(command,true);
 				command="INSERT INTO autocodecond (AutoCodeItemNum,Cond) VALUES ("+POut.PInt(autoCodeItemNum)+","
 					+POut.PInt((int)AutoCondition.Four_Surf)+")";
@@ -176,7 +185,8 @@ namespace OpenDental{
 			}
 			//5SurfAnt
 			if(ProcedureCodes.IsValidCode("D2335")) {
-				command="INSERT INTO autocodeitem (AutoCodeNum,ADACode) VALUES ("+POut.PInt(autoCodeNum)+",'D2335')";
+				command="INSERT INTO autocodeitem (AutoCodeNum,CodeNum) VALUES ("+POut.PInt(autoCodeNum)+","
+					+ProcedureCodes.GetCodeNum("D2335")+")";
 				autoCodeItemNum=General.NonQ(command,true);
 				command="INSERT INTO autocodecond (AutoCodeItemNum,Cond) VALUES ("+POut.PInt(autoCodeItemNum)+","
 					+POut.PInt((int)AutoCondition.Five_Surf)+")";
@@ -188,7 +198,8 @@ namespace OpenDental{
 			//Posterior Composite----------------------------------------------------------------------------------------------
 			//1SurfPost
 			if(ProcedureCodes.IsValidCode("D2391")) {
-				command="INSERT INTO autocodeitem (AutoCodeNum,ADACode) VALUES ("+POut.PInt(autoCodeNum)+",'D2391')";
+				command="INSERT INTO autocodeitem (AutoCodeNum,CodeNum) VALUES ("+POut.PInt(autoCodeNum)+","
+					+ProcedureCodes.GetCodeNum("D2391")+")";
 				autoCodeItemNum=General.NonQ(command,true);
 				command="INSERT INTO autocodecond (AutoCodeItemNum,Cond) VALUES ("+POut.PInt(autoCodeItemNum)+","
 					+POut.PInt((int)AutoCondition.One_Surf)+")";
@@ -199,7 +210,8 @@ namespace OpenDental{
 			}
 			//2SurfPost
 			if(ProcedureCodes.IsValidCode("D2392")) {
-				command="INSERT INTO autocodeitem (AutoCodeNum,ADACode) VALUES ("+POut.PInt(autoCodeNum)+",'D2392')";
+				command="INSERT INTO autocodeitem (AutoCodeNum,CodeNum) VALUES ("+POut.PInt(autoCodeNum)+","
+					+ProcedureCodes.GetCodeNum("D2392")+")";
 				autoCodeItemNum=General.NonQ(command,true);
 				command="INSERT INTO autocodecond (AutoCodeItemNum,Cond) VALUES ("+POut.PInt(autoCodeItemNum)+","
 					+POut.PInt((int)AutoCondition.Two_Surf)+")";
@@ -210,7 +222,8 @@ namespace OpenDental{
 			}
 			//3SurfPost
 			if(ProcedureCodes.IsValidCode("D2393")) {
-				command="INSERT INTO autocodeitem (AutoCodeNum,ADACode) VALUES ("+POut.PInt(autoCodeNum)+",'D2393')";
+				command="INSERT INTO autocodeitem (AutoCodeNum,CodeNum) VALUES ("+POut.PInt(autoCodeNum)+","
+					+ProcedureCodes.GetCodeNum("D2393")+")";
 				autoCodeItemNum=General.NonQ(command,true);
 				command="INSERT INTO autocodecond (AutoCodeItemNum,Cond) VALUES ("+POut.PInt(autoCodeItemNum)+","
 					+POut.PInt((int)AutoCondition.Three_Surf)+")";
@@ -221,7 +234,8 @@ namespace OpenDental{
 			}
 			//4SurfPost
 			if(ProcedureCodes.IsValidCode("D2394")) {
-				command="INSERT INTO autocodeitem (AutoCodeNum,ADACode) VALUES ("+POut.PInt(autoCodeNum)+",'D2394')";
+				command="INSERT INTO autocodeitem (AutoCodeNum,CodeNum) VALUES ("+POut.PInt(autoCodeNum)+","
+					+ProcedureCodes.GetCodeNum("D2394")+")";
 				autoCodeItemNum=General.NonQ(command,true);
 				command="INSERT INTO autocodecond (AutoCodeItemNum,Cond) VALUES ("+POut.PInt(autoCodeItemNum)+","
 					+POut.PInt((int)AutoCondition.Four_Surf)+")";
@@ -232,7 +246,8 @@ namespace OpenDental{
 			}
 			//5SurfPost
 			if(ProcedureCodes.IsValidCode("D2394")) {
-				command="INSERT INTO autocodeitem (AutoCodeNum,ADACode) VALUES ("+POut.PInt(autoCodeNum)+",'D2394')";
+				command="INSERT INTO autocodeitem (AutoCodeNum,CodeNum) VALUES ("+POut.PInt(autoCodeNum)+","
+					+ProcedureCodes.GetCodeNum("D2394")+")";
 				autoCodeItemNum=General.NonQ(command,true);
 				command="INSERT INTO autocodecond (AutoCodeItemNum,Cond) VALUES ("+POut.PInt(autoCodeItemNum)+","
 					+POut.PInt((int)AutoCondition.Five_Surf)+")";
@@ -246,7 +261,8 @@ namespace OpenDental{
 			autoCodeNum=General.NonQ(command,true);
 			//Ant
 			if(ProcedureCodes.IsValidCode("D3310")) {
-				command="INSERT INTO autocodeitem (AutoCodeNum,ADACode) VALUES ("+POut.PInt(autoCodeNum)+",'D3310')";
+				command="INSERT INTO autocodeitem (AutoCodeNum,CodeNum) VALUES ("+POut.PInt(autoCodeNum)+","
+					+ProcedureCodes.GetCodeNum("D3310")+")";
 				autoCodeItemNum=General.NonQ(command,true);
 				command="INSERT INTO autocodecond (AutoCodeItemNum,Cond) VALUES ("+POut.PInt(autoCodeItemNum)+","
 					+POut.PInt((int)AutoCondition.Anterior)+")";
@@ -254,7 +270,8 @@ namespace OpenDental{
 			}
 			//Premolar
 			if(ProcedureCodes.IsValidCode("D3320")) {
-				command="INSERT INTO autocodeitem (AutoCodeNum,ADACode) VALUES ("+POut.PInt(autoCodeNum)+",'D3320')";
+				command="INSERT INTO autocodeitem (AutoCodeNum,CodeNum) VALUES ("+POut.PInt(autoCodeNum)+","
+					+ProcedureCodes.GetCodeNum("D3320")+")";
 				autoCodeItemNum=General.NonQ(command,true);
 				command="INSERT INTO autocodecond (AutoCodeItemNum,Cond) VALUES ("+POut.PInt(autoCodeItemNum)+","
 					+POut.PInt((int)AutoCondition.Premolar)+")";
@@ -262,7 +279,8 @@ namespace OpenDental{
 			}
 			//Molar
 			if(ProcedureCodes.IsValidCode("D3330")) {
-				command="INSERT INTO autocodeitem (AutoCodeNum,ADACode) VALUES ("+POut.PInt(autoCodeNum)+",'D3330')";
+				command="INSERT INTO autocodeitem (AutoCodeNum,CodeNum) VALUES ("+POut.PInt(autoCodeNum)+","
+					+ProcedureCodes.GetCodeNum("D3330")+")";
 				autoCodeItemNum=General.NonQ(command,true);
 				command="INSERT INTO autocodecond (AutoCodeItemNum,Cond) VALUES ("+POut.PInt(autoCodeItemNum)+","
 					+POut.PInt((int)AutoCondition.Molar)+")";
@@ -273,7 +291,8 @@ namespace OpenDental{
 			autoCodeNum=General.NonQ(command,true);
 			//Pontic
 			if(ProcedureCodes.IsValidCode("D6242")) {
-				command="INSERT INTO autocodeitem (AutoCodeNum,ADACode) VALUES ("+POut.PInt(autoCodeNum)+",'D6242')";
+				command="INSERT INTO autocodeitem (AutoCodeNum,CodeNum) VALUES ("+POut.PInt(autoCodeNum)+","
+					+ProcedureCodes.GetCodeNum("D6242")+")";
 				autoCodeItemNum=General.NonQ(command,true);
 				command="INSERT INTO autocodecond (AutoCodeItemNum,Cond) VALUES ("+POut.PInt(autoCodeItemNum)+","
 					+POut.PInt((int)AutoCondition.Pontic)+")";
@@ -281,7 +300,8 @@ namespace OpenDental{
 			}
 			//Retainer
 			if(ProcedureCodes.IsValidCode("D6752")) {
-				command="INSERT INTO autocodeitem (AutoCodeNum,ADACode) VALUES ("+POut.PInt(autoCodeNum)+",'D6752')";
+				command="INSERT INTO autocodeitem (AutoCodeNum,CodeNum) VALUES ("+POut.PInt(autoCodeNum)+","
+					+ProcedureCodes.GetCodeNum("D6752")+")";
 				autoCodeItemNum=General.NonQ(command,true);
 				command="INSERT INTO autocodecond (AutoCodeItemNum,Cond) VALUES ("+POut.PInt(autoCodeItemNum)+","
 					+POut.PInt((int)AutoCondition.Retainer)+")";
@@ -292,7 +312,8 @@ namespace OpenDental{
 			autoCodeNum=General.NonQ(command,true);
 			//Max
 			if(ProcedureCodes.IsValidCode("D5110")) {
-				command="INSERT INTO autocodeitem (AutoCodeNum,ADACode) VALUES ("+POut.PInt(autoCodeNum)+",'D5110')";
+				command="INSERT INTO autocodeitem (AutoCodeNum,CodeNum) VALUES ("+POut.PInt(autoCodeNum)+","
+					+ProcedureCodes.GetCodeNum("D5110")+")";
 				autoCodeItemNum=General.NonQ(command,true);
 				command="INSERT INTO autocodecond (AutoCodeItemNum,Cond) VALUES ("+POut.PInt(autoCodeItemNum)+","
 					+POut.PInt((int)AutoCondition.Maxillary)+")";
@@ -300,7 +321,8 @@ namespace OpenDental{
 			}
 			//Mand
 			if(ProcedureCodes.IsValidCode("D5120")) {
-				command="INSERT INTO autocodeitem (AutoCodeNum,ADACode) VALUES ("+POut.PInt(autoCodeNum)+",'D5120')";
+				command="INSERT INTO autocodeitem (AutoCodeNum,CodeNum) VALUES ("+POut.PInt(autoCodeNum)+","
+					+ProcedureCodes.GetCodeNum("D5120")+")";
 				autoCodeItemNum=General.NonQ(command,true);
 				command="INSERT INTO autocodecond (AutoCodeItemNum,Cond) VALUES ("+POut.PInt(autoCodeItemNum)+","
 					+POut.PInt((int)AutoCondition.Mandibular)+")";
@@ -311,7 +333,8 @@ namespace OpenDental{
 			autoCodeNum=General.NonQ(command,true);
 			//BU
 			if(ProcedureCodes.IsValidCode("D2950")) {
-				command="INSERT INTO autocodeitem (AutoCodeNum,ADACode) VALUES ("+POut.PInt(autoCodeNum)+",'D2950')";
+				command="INSERT INTO autocodeitem (AutoCodeNum,CodeNum) VALUES ("+POut.PInt(autoCodeNum)+","
+					+ProcedureCodes.GetCodeNum("D2950")+")";
 				autoCodeItemNum=General.NonQ(command,true);
 				command="INSERT INTO autocodecond (AutoCodeItemNum,Cond) VALUES ("+POut.PInt(autoCodeItemNum)+","
 					+POut.PInt((int)AutoCondition.Posterior)+")";
@@ -319,7 +342,8 @@ namespace OpenDental{
 			}
 			//P&C
 			if(ProcedureCodes.IsValidCode("D2954")) {
-				command="INSERT INTO autocodeitem (AutoCodeNum,ADACode) VALUES ("+POut.PInt(autoCodeNum)+",'D2954')";
+				command="INSERT INTO autocodeitem (AutoCodeNum,CodeNum) VALUES ("+POut.PInt(autoCodeNum)+","
+					+ProcedureCodes.GetCodeNum("D2954")+")";
 				autoCodeItemNum=General.NonQ(command,true);
 				command="INSERT INTO autocodecond (AutoCodeItemNum,Cond) VALUES ("+POut.PInt(autoCodeItemNum)+","
 					+POut.PInt((int)AutoCondition.Anterior)+")";
@@ -330,7 +354,8 @@ namespace OpenDental{
 			autoCodeNum=General.NonQ(command,true);
 			//Ant
 			if(ProcedureCodes.IsValidCode("D3346")) {
-				command="INSERT INTO autocodeitem (AutoCodeNum,ADACode) VALUES ("+POut.PInt(autoCodeNum)+",'D3346')";
+				command="INSERT INTO autocodeitem (AutoCodeNum,CodeNum) VALUES ("+POut.PInt(autoCodeNum)+","
+					+ProcedureCodes.GetCodeNum("D3346")+")";
 				autoCodeItemNum=General.NonQ(command,true);
 				command="INSERT INTO autocodecond (AutoCodeItemNum,Cond) VALUES ("+POut.PInt(autoCodeItemNum)+","
 					+POut.PInt((int)AutoCondition.Anterior)+")";
@@ -338,7 +363,8 @@ namespace OpenDental{
 			}
 			//Premolar
 			if(ProcedureCodes.IsValidCode("D3347")) {
-				command="INSERT INTO autocodeitem (AutoCodeNum,ADACode) VALUES ("+POut.PInt(autoCodeNum)+",'D3347')";
+				command="INSERT INTO autocodeitem (AutoCodeNum,CodeNum) VALUES ("+POut.PInt(autoCodeNum)+","
+					+ProcedureCodes.GetCodeNum("D3347")+")";
 				autoCodeItemNum=General.NonQ(command,true);
 				command="INSERT INTO autocodecond (AutoCodeItemNum,Cond) VALUES ("+POut.PInt(autoCodeItemNum)+","
 					+POut.PInt((int)AutoCondition.Premolar)+")";
@@ -346,7 +372,8 @@ namespace OpenDental{
 			}
 			//Molar
 			if(ProcedureCodes.IsValidCode("D3348")) {
-				command="INSERT INTO autocodeitem (AutoCodeNum,ADACode) VALUES ("+POut.PInt(autoCodeNum)+",'D3348')";
+				command="INSERT INTO autocodeitem (AutoCodeNum,CodeNum) VALUES ("+POut.PInt(autoCodeNum)+","
+					+ProcedureCodes.GetCodeNum("D3348")+")";
 				autoCodeItemNum=General.NonQ(command,true);
 				command="INSERT INTO autocodecond (AutoCodeItemNum,Cond) VALUES ("+POut.PInt(autoCodeItemNum)+","
 					+POut.PInt((int)AutoCondition.Molar)+")";
