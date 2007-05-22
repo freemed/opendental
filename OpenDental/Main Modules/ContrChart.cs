@@ -2192,6 +2192,7 @@ namespace OpenDental{
 			this.addKeyBut.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.addKeyBut.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.addKeyBut.CornerRadius = 4F;
+			this.addKeyBut.Enabled = false;
 			this.addKeyBut.Location = new System.Drawing.Point(334,428);
 			this.addKeyBut.Name = "addKeyBut";
 			this.addKeyBut.Size = new System.Drawing.Size(75,14);
@@ -2570,6 +2571,7 @@ namespace OpenDental{
 				ToolBarMain.Buttons["LabCase"].Enabled=false;
 				ToolBarMain.Buttons["Perio"].Enabled=false;
 				tabProc.Enabled=false;
+				addKeyBut.Enabled=false;
 			}
 			else {
 				//groupShow.Enabled=true;
@@ -2582,6 +2584,7 @@ namespace OpenDental{
 				ToolBarMain.Buttons["LabCase"].Enabled=true;
 				ToolBarMain.Buttons["Perio"].Enabled=true;
 				tabProc.Enabled=true;
+				addKeyBut.Enabled=true;
 			}
 			FillPatientButton();
 			ToolBarMain.Invalidate();
@@ -2845,16 +2848,14 @@ namespace OpenDental{
 			gridPtInfo.Rows.Add(row);
 			//Create row for registration keys. 6
 			RegistrationKey[] keys=RegistrationKeys.GetForPatient(PatCur.PatNum);
-			string keyList="";
 			for(int i=0;i<keys.Length;i++) {
-				keyList+=keys[i].RegKey+":   "+keys[i].Note+"\r\n";
+				row=new ODGridRow();
+				row.Cells.Add(Lan.g("TableChartPtInfo","Registration Key"));
+				row.Cells.Add(keys[i].RegKey+":  "+keys[i].Note);
+				gridPtInfo.Rows.Add(row);
 			}
-			row=new ODGridRow();
-			row.Cells.Add(Lan.g("TableChartPtInfo","Registration Keys"));
-			row.Cells.Add(keyList);
-			gridPtInfo.Rows.Add(row);
 			ODGridCell cell;
-			//premed flag. Row 7
+			//premed flag. Row 6+(# registration keys)
 			if(PatCur.Premed){
 				row=new ODGridRow();
 				row.Cells.Add("");
@@ -4866,12 +4867,27 @@ namespace OpenDental{
 		}
 
 		private void gridPtInfo_CellDoubleClick(object sender,ODGridClickEventArgs e) {
-			if(e.Row>=7){// && e.Row<=8){//Medical info
+			RegistrationKey[] registrationKeys=RegistrationKeys.GetForPatient(PatCur.PatNum);
+			if(e.Row>=6+registrationKeys.Length) {
 				FormMedical FormM=new FormMedical(PatientNoteCur,PatCur);
 				FormM.ShowDialog();
 				ModuleSelected(PatCur.PatNum);
-			}else if(e.Row==6){//Registration key list click.
-				//TODO: edit registration key notes.
+			}
+			else if(e.Row>=6) {//Registration key list click.
+				ODGridRow row=gridPtInfo.Rows[e.Row];
+				//Key is grabbed from cell text using regex, so that if key formats change, this code will not be buggy.
+				Match m=Regex.Match(row.Cells[1].Text,"^(.*):.*$");
+				if(m.Success) {
+					string registrationKey=m.Result("$1");
+					for(int i=0;i<registrationKeys.Length;i++) {
+						if(registrationKeys[i].RegKey==registrationKey) {
+							FormRegistrationKeyEdit frke=new FormRegistrationKeyEdit(registrationKeys[i]);
+							frke.ShowDialog();
+							FillPtInfo();
+							return;
+						}
+					}
+				}
 			}
 		}
 

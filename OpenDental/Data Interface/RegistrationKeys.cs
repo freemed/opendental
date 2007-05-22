@@ -27,11 +27,14 @@ namespace OpenDental {
 			return keys;
 		}
 
-		///<summary>Returns true if the given registration key is currently in use by a customer, false otherwise.</summary>
-		public static bool KeyIsInUse(string regKey){
-			string command="SELECT RegKey FROM registrationkey WHERE RegKey='"+POut.PString(regKey)+"'";
-			DataTable table=General.GetTable(command);
-			return(table.Rows.Count>0);
+		///<summary>Updates the given key data to the database.</summary>
+		public static void Update(RegistrationKey registrationKey){
+			string command="UPDATE registrationkey SET "
+				+"PatNum='"+POut.PInt(registrationKey.PatNum)+"',"
+				+"RegKey='"+POut.PString(registrationKey.RegKey)+"',"
+				+"Note='"+POut.PString(registrationKey.Note)+"'"
+				+" WHERE RegistrationKeyNum='"+POut.PInt(registrationKey.RegistrationKeyNum)+"'";
+			General.NonQ(command);
 		}
 
 		///<summary>Inserts a new and unique registration key into the database.</summary>
@@ -48,6 +51,19 @@ namespace OpenDental {
 				"'"+POut.PString(registrationKey.RegKey)+"',"+
 				"'"+POut.PString(registrationKey.Note)+"')";
 			General.NonQ(command);
+		}
+
+		public static void Delete(RegistrationKey registrationKey){
+			string command="DELETE FROM registrationkey WHERE RegistrationKeyNum='"
+				+POut.PInt(registrationKey.RegistrationKeyNum)+"'";
+			General.NonQ(command);
+		}
+
+		///<summary>Returns true if the given registration key is currently in use by a customer, false otherwise.</summary>
+		public static bool KeyIsInUse(string regKey) {
+			string command="SELECT RegKey FROM registrationkey WHERE RegKey='"+POut.PString(regKey)+"'";
+			DataTable table=General.GetTable(command);
+			return (table.Rows.Count>0);
 		}
 
 	}
