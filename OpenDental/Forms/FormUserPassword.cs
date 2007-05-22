@@ -19,6 +19,8 @@ namespace OpenDental{
 		/// </summary>
 		private System.ComponentModel.Container components = null;
 		private bool IsCreate;
+		private TextBox textPasswordAgain;
+		private Label label2;
 		///<summary></summary>
 		public string hashedResult;
 
@@ -60,6 +62,8 @@ namespace OpenDental{
 			this.butOK = new OpenDental.UI.Button();
 			this.label1 = new System.Windows.Forms.Label();
 			this.textPassword = new System.Windows.Forms.TextBox();
+			this.textPasswordAgain = new System.Windows.Forms.TextBox();
+			this.label2 = new System.Windows.Forms.Label();
 			this.SuspendLayout();
 			// 
 			// butCancel
@@ -85,7 +89,7 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(357,81);
+			this.butOK.Location = new System.Drawing.Point(264,122);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75,26);
 			this.butOK.TabIndex = 1;
@@ -94,7 +98,7 @@ namespace OpenDental{
 			// 
 			// label1
 			// 
-			this.label1.Location = new System.Drawing.Point(25,22);
+			this.label1.Location = new System.Drawing.Point(29,22);
 			this.label1.Name = "label1";
 			this.label1.Size = new System.Drawing.Size(157,18);
 			this.label1.TabIndex = 2;
@@ -105,13 +109,33 @@ namespace OpenDental{
 			// 
 			this.textPassword.Location = new System.Drawing.Point(188,21);
 			this.textPassword.Name = "textPassword";
+			this.textPassword.PasswordChar = '*';
 			this.textPassword.Size = new System.Drawing.Size(245,20);
 			this.textPassword.TabIndex = 0;
+			// 
+			// textPasswordAgain
+			// 
+			this.textPasswordAgain.Location = new System.Drawing.Point(187,56);
+			this.textPasswordAgain.Name = "textPasswordAgain";
+			this.textPasswordAgain.PasswordChar = '*';
+			this.textPasswordAgain.Size = new System.Drawing.Size(245,20);
+			this.textPasswordAgain.TabIndex = 3;
+			// 
+			// label2
+			// 
+			this.label2.Location = new System.Drawing.Point(9,57);
+			this.label2.Name = "label2";
+			this.label2.Size = new System.Drawing.Size(176,18);
+			this.label2.TabIndex = 4;
+			this.label2.Text = "New Password Again";
+			this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// FormUserPassword
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.ClientSize = new System.Drawing.Size(484,173);
+			this.Controls.Add(this.textPasswordAgain);
+			this.Controls.Add(this.label2);
 			this.Controls.Add(this.textPassword);
 			this.Controls.Add(this.butOK);
 			this.Controls.Add(this.butCancel);
@@ -137,6 +161,10 @@ namespace OpenDental{
 		}
 
 		private void butOK_Click(object sender, System.EventArgs e) {
+			if(textPassword.Text!=textPasswordAgain.Text){
+				MsgBox.Show(this,"Passwords do not match.");
+				return;
+			}
 			if(textPassword.Text==""){
 				hashedResult="";
 			}

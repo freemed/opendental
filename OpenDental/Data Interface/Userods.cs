@@ -52,7 +52,7 @@ namespace OpenDental{
 				command="SELECT userod.* FROM userod,provider "
 					+"WHERE userod.ProvNum=provider.ProvNum "
 					+"AND SchoolClassNum="+POut.PInt(schoolClassNum)
-					+"ORDER BY UserName";
+					+" ORDER BY UserName";
 				return General.GetTable(command);
 			}
 			command="SELECT * FROM userod ";
@@ -66,7 +66,7 @@ namespace OpenDental{
 				//command+="";
 			}
 			else if(usertype=="other") {
-				command+="WHERE ProvNum=0 AND EmployeeNum=0";
+				command+="WHERE ProvNum=0 AND EmployeeNum=0 ";
 			}
 			command+="ORDER BY UserName";
 			return General.GetTable(command);
@@ -102,15 +102,14 @@ namespace OpenDental{
 		public static void InsertOrUpdate(bool isNew,Userod user){
 			//make sure username is not already taken
 			string command;
+			int excludeUserNum;
 			if(isNew){
-				command="SELECT COUNT(*) FROM userod WHERE UserName='"+POut.PString(user.UserName)+"'";
+				excludeUserNum=0;
 			}
 			else{
-				command="SELECT COUNT(*) FROM userod WHERE UserName='"+POut.PString(user.UserName)+"' "
-					+"AND UserNum !="+POut.PInt(user.UserNum);//it's ok if the name matches the current username
+				excludeUserNum=user.UserNum;//it's ok if the name matches the current username
 			}
-			DataTable table=General.GetTable(command);
-			if(table.Rows[0][0].ToString()!="0"){
+			if(!IsUserNameUnique(user.UserName,excludeUserNum)){
 				throw new Exception(Lan.g("Userods","UserName already in use."));
 			}
 			//make sure that there would still be at least one user with security admin permissions
@@ -135,6 +134,20 @@ namespace OpenDental{
 			else{
 				Update(user);
 			}
+		}
+
+		///<summary>Supply 0 or -1 for the excludeUserNum to not exclude any.</summary>
+		public static bool IsUserNameUnique(string username,int excludeUserNum){
+			if(username==""){
+				return false;
+			}
+			string command="SELECT COUNT(*) FROM userod WHERE UserName='"+POut.PString(username)+"' "
+				+"AND UserNum !="+POut.PInt(excludeUserNum);
+			DataTable table=General.GetTable(command);
+			if(table.Rows[0][0].ToString()=="0") {
+				return true;
+			}
+			return false;
 		}
 
 		/*  Too dangerous.

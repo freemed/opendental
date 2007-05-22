@@ -448,7 +448,7 @@ namespace OpenDental{
 
 		private void butAddUser_Click(object sender, System.EventArgs e) {
 			Userod user=new Userod();
-			//user.UserGroupNum=SelectedGroupNum;
+			user.UserGroupNum=SelectedGroupNum;
 			FormUserEdit FormU=new FormUserEdit(user);
 			FormU.IsNew=true;
 			FormU.ShowDialog();

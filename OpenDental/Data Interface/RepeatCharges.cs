@@ -81,12 +81,12 @@ namespace OpenDental{
 	
 
 		///<summary>Used in FormRepeatChargesUpdate to get a list of the dates of procedures that have the proccode and patnum specified.</summary>
-		public static ArrayList GetDates(string procCode,int patNum){
+		public static ArrayList GetDates(int codeNum,int patNum){
 			ArrayList retVal=new ArrayList();
 			string command="SELECT ProcDate FROM procedurelog "
 				+"WHERE PatNum="+POut.PInt(patNum)
-				+" AND ProcCode='"+POut.PString(procCode)
-				+"' AND ProcStatus=2";//complete
+				+" AND CodeNum="+POut.PInt(codeNum)
+				+" AND ProcStatus=2";//complete
 			DataTable table=General.GetTable(command);
 			for(int i=0;i<table.Rows.Count;i++){
 				retVal.Add(PIn.PDate(table.Rows[i][0].ToString()));

@@ -339,23 +339,24 @@ namespace OpenDental{
 
 		///<summary>Deletes unused codes.  Returns the number of rows affected.</summary>
 		public static int DeleteUnusedCodes() {
-			string command=@"SELECT DISTINCT procedurecode.ADACode FROM procedurecode
-				LEFT JOIN procedurelog ON procedurelog.ADACode=procedurecode.ADACode
-				WHERE procedurelog.ADACode IS NULL";
+			string command=@"SELECT CodeNum,ProcCode FROM procedurecode
+				WHERE NOT EXISTS(SELECT * FROM procedurelog WHERE procedurelog.CodeNum=procedurecode.CodeNum)";
 			DataTable table=General.GetTable(command);
-			string adacode;
+			int codenum;
+			string proccode;
 			int rowsaffected=0;
 			for(int i=0;i<table.Rows.Count;i++) {
-				adacode=PIn.PString(table.Rows[i]["ADACode"].ToString());
-				if(!Regex.IsMatch(adacode,"^D([0-9]{4})$")) {
+				codenum=PIn.PInt(table.Rows[i]["CodeNum"].ToString());
+				proccode=PIn.PString(table.Rows[i]["ProcCode"].ToString());
+				if(!Regex.IsMatch(proccode,"^D([0-9]{4})$")) {
 					continue;//ignore anything but D####
 				}
 				//make sure it's not used in fees
-				command="SELECT COUNT(*) FROM fee WHERE ADACode='"+POut.PString(adacode)+"'";
+				command="SELECT COUNT(*) FROM fee WHERE CodeNum="+POut.PInt(codenum);
 				if(General.GetCount(command)!="0") {
 					continue;
 				}
-				command="DELETE FROM procedurecode WHERE ADACode='"+POut.PString(adacode)+"'";
+				command="DELETE FROM procedurecode WHERE CodeNum="+POut.PInt(codenum);
 				rowsaffected+=General.NonQ(command);
 			}
 			return rowsaffected;

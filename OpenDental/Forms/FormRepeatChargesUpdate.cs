@@ -137,7 +137,7 @@ namespace OpenDental{
 					continue;
 				}
 				//get a list dates of all completed procedures with this Code and patNum
-				ArrayList ALdates=RepeatCharges.GetDates(chargeList[i].ProcCode,chargeList[i].PatNum);
+				ArrayList ALdates=RepeatCharges.GetDates(ProcedureCodes.GetCodeNum(chargeList[i].ProcCode),chargeList[i].PatNum);
 				possibleDate=chargeList[i].DateStart;
 				//start looping through possible dates, beginning with the start date of the repeating charge
 				while(possibleDate<=DateTime.Today){
