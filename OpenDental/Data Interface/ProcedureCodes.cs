@@ -159,9 +159,10 @@ namespace OpenDental{
 			if(HList.Contains(myCode)) {
 				return ((ProcedureCode)HList[myCode]).CodeNum;
 			}
-			else {
-				throw new ApplicationException("Missing code");
-			}
+			return 0;
+			//else {
+			//	throw new ApplicationException("Missing code");
+			//}
 		}
 
 		public static string GetStringProcCode(int codeNum) {
