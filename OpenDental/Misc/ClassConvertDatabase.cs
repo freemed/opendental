@@ -4971,7 +4971,7 @@ namespace OpenDental{
 				} while(table.Rows.Count>0);
 				command="INSERT INTO laboratory (LaboratoryNum,Description,Phone,Notes,LabSlip) VALUES('"
 					+laboratoryNum+"','Default Lab','','','')";
-				laboratoryNum=General.NonQEx(command,true);
+				General.NonQEx(command);
 				command="SELECT * FROM appointment WHERE Lab != 0";
 				table=General.GetTableEx(command);
 				for(int i=0;i<table.Rows.Count;i++) {
@@ -5172,6 +5172,27 @@ namespace OpenDental{
 					General.NonQEx(command);
 				}
 				command="UPDATE preference SET ValueString = '4.9.2.0' WHERE PrefName = 'DataBaseVersion'";
+				General.NonQEx(command);
+			}
+			To4_9_5();
+		}
+
+		///<summary></summary>
+		private void To4_9_5() {
+			if(FromVersion<new Version("4.9.5.0")) {
+				string command;
+				//fix labcase.LaboratoryNum orphaned keys.
+				//get target labnum
+				command="SELECT LaboratoryNum FROM laboratory";
+				DataTable table=General.GetTableEx(command);
+				string labnum=table.Rows[0][0].ToString();//just use the first lab we can find.
+				command="SELECT LaboratoryNum FROM labcase WHERE NOT EXISTS (SELECT * FROM laboratory WHERE laboratory.LaboratoryNum=labcase.LaboratoryNum) GROUP BY LaboratoryNum";
+				table=General.GetTableEx(command);
+				for(int i=0;i<table.Rows.Count;i++){
+					command="UPDATE labcase SET LaboratoryNum="+labnum+" WHERE LaboratoryNum="+table.Rows[i][0].ToString();
+					General.NonQEx(command);
+				}
+				command="UPDATE preference SET ValueString = '4.9.5.0' WHERE PrefName = 'DataBaseVersion'";
 				General.NonQEx(command);
 			}
 			To5_0_0();
