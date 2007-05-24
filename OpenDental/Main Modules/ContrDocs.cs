@@ -102,21 +102,21 @@ namespace OpenDental{
 		///<summary>The path to the patient folder, including the letter folder, and ending with \.  It's public for NewPatientForm.com functionality.</summary>
 		public string patFolder;
 		///<summary>In-memory copies of the images being viewed/edited. No changes are made to these images in memory, they are just kept resident to avoid having to reload the images from disk each time the screen needs to be redrawn.</summary>
-		Bitmap[] currentImages;
+		Bitmap[] currentImages=new Bitmap[1];
 		///<summary>Used as a basis for calculating image translations.</summary>
 		PointF imageLocation;
 		///<summary>The true offset of each of the currently loaded images in screen-space.</summary>
-		PointF[] imageTranslations;
+		PointF[] imageTranslations=new PointF[1];
 		///<summary>The current zoom of the currently loaded images. 1 implies normal size, <1 implies the image is shrunk, >1 imples the image is blown-up.</summary>
-		float[] imageZooms;
+		float[] imageZooms=new float[1];
 		///<summary>The zoom levels are 0 after the current images are loaded. The images are zoomed a factor of (initial image zoom)*(2^zoomLevel) individually.</summary>
-		int[] zoomLevels;
+		int[] zoomLevels=new int[1];
 		///<summary>Represents the current factor for level of zoom from the initial zoom of the currently loaded images. This is calculated directly as 2^zoomLevel[i] every time a zoom occurs. Recalculated from zoomLevel[i] each time, so that zoomFactor[i] always hits the exact same values for the exact same zoom levels (no loss of data).</summary>
-		float[] zoomFactors;
+		float[] zoomFactors=new float[1];
 		///<summary>Used to prevent concurrent access to the current images by multiple threads.</summary>
-		int[] curImageWidths;
+		int[] curImageWidths=new int[1];
 		///<summary>Used to prevent concurrent access to the current images by multiple threads.</summary>
-		int[] curImageHeights;
+		int[] curImageHeights=new int[1];
 		///<summary>The image currently on the screen.</summary>
 		Bitmap renderImage=null;
 		Rectangle cropTangle=new Rectangle(0,0,-1,-1);
@@ -553,10 +553,9 @@ namespace OpenDental{
 			}
 			button.DropDownMenu=menuForms;
 			ToolBarMain.Buttons.Add(button);
-			//TODO: Re-enable when image capturing is supported.
-			//button=new ODToolBarButton(Lan.g(this,"Capture"),-1,"Capture Image From Device","Capture");
-			//button.Style=ODToolBarButtonStyle.ToggleButton;
-			//ToolBarMain.Buttons.Add(button);
+			button=new ODToolBarButton(Lan.g(this,"Capture"),-1,"Capture Image From Device","Capture");
+			button.Style=ODToolBarButtonStyle.ToggleButton;
+			ToolBarMain.Buttons.Add(button);
 			button=new ODToolBarButton("",7,Lan.g(this,"Crop Tool"),"Crop");
 			button.Style=ODToolBarButtonStyle.ToggleButton;
 			if(IsCropMode){
@@ -607,8 +606,8 @@ namespace OpenDental{
 			FamCur=null;
 			PatCur=null;
 			//Cancel current image capture by manually untoggling the capture button.
-			//ToolBarMain.Buttons["Capture"].Pushed=false;//TODO: Re-enable when image capturing is supported.
-			//OnCapture_Click();//TODO: Re-enable when image capturing is supported.
+			ToolBarMain.Buttons["Capture"].Pushed=false;
+			OnCapture_Click();
 		}
 
 		///<summary>This is public for NewPatientForm functionality.</summary>
@@ -691,7 +690,7 @@ namespace OpenDental{
 				ToolBarMain.Buttons["Copy"].Enabled=true;
 				ToolBarMain.Buttons["Paste"].Enabled=true;
 				ToolBarMain.Buttons["Forms"].Enabled=true;
-				//ToolBarMain.Buttons["Capture"].Enabled=true;//TODO: Re-enable when image capturing is supported.
+				ToolBarMain.Buttons["Capture"].Enabled=true;
 				paintTools.Buttons["Crop"].Enabled=true;
 				paintTools.Buttons["Hand"].Enabled=true;
 				paintTools.Buttons["ZoomIn"].Enabled=true;
@@ -713,7 +712,7 @@ namespace OpenDental{
 				ToolBarMain.Buttons["Copy"].Enabled=false;
 				ToolBarMain.Buttons["Paste"].Enabled=false;
 				ToolBarMain.Buttons["Forms"].Enabled=false;
-				//ToolBarMain.Buttons["Capture"].Enabled=false;//TODO: Re-enable when image capturing is supported.
+				ToolBarMain.Buttons["Capture"].Enabled=false;
 				paintTools.Buttons["Crop"].Enabled=false;
 				paintTools.Buttons["Hand"].Enabled=false;
 				paintTools.Buttons["ZoomIn"].Enabled=false;
@@ -949,7 +948,7 @@ namespace OpenDental{
 						MsgBox.Show(this,"Use the dropdown list.  Add forms to the list by copying image files into your A-Z folder, Forms.  Restart the program to see newly added forms.");
 						break;
 					case "Capture":
-						//OnCapture_Click();//TODO: Re-enable when image capturing is supported.
+						OnCapture_Click();
 						break;
 				}
 			}
@@ -2029,7 +2028,7 @@ namespace OpenDental{
 				//Show the user that they are performing an image capture by generating a new mount.
 				Mount mount=new Mount();
 				mount.DateCreated=DateTime.Today;
-				mount.Description="unnamed image capture";
+				mount.Description="unnamed capture";
 				mount.DocCategory=DefB.Short[(int)DefCat.ImageCats][0].DefNum;//First category.
 				mount.ImgType=ImageType.Mount;
 				mount.PatNum=PatCur.PatNum;
@@ -2065,14 +2064,49 @@ namespace OpenDental{
 			//Create the mount item that corresponds to the new document about to be created.
 			MountItem mountItem=new MountItem();
 			mountItem.MountNum=Convert.ToInt32(mount["MountNum"].ToString());
-			mountItem.Xpos=0;
-			mountItem.Ypos=0;
+			//Here we check to see which items are already in the db, in case an image capture session is being continued
+			//(in case the user tabs out of the module and back in during the capture, or if power fails and they need
+			//to restart their computer, for instance).
+			MountItem[] existingMountItems=MountItems.GetItemsForMount(mountItem.MountNum);			
+			if(existingMountItems.Length>3){
+				return;//Mount is full.
+			}
+			//Depending on the device being captured from, we need to rotate the images returned from the device by a certain
+			//angle, and we need to place the returned images in a specific order within the mount slots. Later, we will allow
+			//the user to define the rotations and slot orders, but for now, they will be hard-coded.
+			bool[] takenOrdinals=new bool[4];
+			for(int i=0;i<existingMountItems.Length;i++){
+				takenOrdinals[existingMountItems[i].OrdinalPos]=true;
+			}
+			int rotationAngle=0;
+			for(int i=0;i<takenOrdinals.Length;i++){
+				if(!takenOrdinals[i]){
+					mountItem.OrdinalPos=i;	//The new image ordinal position becomes the lowest available position (in case images
+																	//were swapped around after a partial previous capture).
+					switch(mountItem.OrdinalPos) {
+						case(0):
+							rotationAngle=90;
+							break;
+						case(1):
+							rotationAngle=90;
+							break;
+						case(2):
+							rotationAngle=270;
+							break;
+						default://3
+							rotationAngle=270;
+							break;
+					}
+					break;
+				}
+			}
 			mountItem.MountItemNum=MountItems.Insert(mountItem);
 			//Create the document object in the database for this mount image.
 			string fileExtention=".bmp";//The file extention to save the greyscale image as.
 			Bitmap capturedImage=xRayImageController.capturedImage;
 			Document doc=new Document();
 			doc.MountItemNum=mountItem.MountItemNum;
+			doc.DegreesRotated=rotationAngle;
 			doc.ImgType=ImageType.Radiograph;
 			doc.FileName=fileExtention;
 			doc.DateCreated=DateTime.Today;

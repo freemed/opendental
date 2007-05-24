@@ -4689,12 +4689,12 @@ namespace OpenDental{
 					//this is written in such a way as to be compatible with Oracle.
 					command="UPDATE procedurelog SET procedurelog.CodeNum= (SELECT procedurecode.CodeNum FROM procedurecode WHERE procedurecode.ProcCode=procedurelog.ADACode)";
 					General.NonQEx(command);
-					command="ALTER TABLE procedurelog CHANGE ADACode OldCode varchar(15)";
+					command="ALTER TABLE procedurelog CHANGE ADACode OldCode varchar(15) character set utf8 collate utf8_bin NOT NULL default ''";
 					General.NonQEx(command);
 					//added after r215
 					command="UPDATE procedurelog SET OldCode=''";
 					General.NonQEx(command);
-					command="ALTER TABLE fee CHANGE ADACode OldCode varchar(15)";
+					command="ALTER TABLE fee CHANGE ADACode OldCode varchar(15) character set utf8 collate utf8_bin NOT NULL default ''";
 					General.NonQEx(command);
 					command="ALTER TABLE fee ADD CodeNum int NOT NULL";
 					General.NonQEx(command);
@@ -4708,7 +4708,7 @@ namespace OpenDental{
 					command="ALTER TABLE appointmentrule CHANGE ADACodeEnd CodeEnd varchar(15)";
 					General.NonQEx(command);
 					//added after r217
-					command="ALTER TABLE autocodeitem CHANGE ADACode OldCode varchar(15)";
+					command="ALTER TABLE autocodeitem CHANGE ADACode OldCode varchar(15) character set utf8 collate utf8_bin NOT NULL default ''";
 					General.NonQEx(command);
 					command="ALTER TABLE autocodeitem ADD CodeNum int NOT NULL";
 					General.NonQEx(command);
@@ -4717,7 +4717,7 @@ namespace OpenDental{
 					command="UPDATE autocodeitem SET OldCode=''";
 					General.NonQEx(command);
 					//added after r218
-					command="ALTER TABLE benefit CHANGE ADACode OldCode varchar(15)";
+					command="ALTER TABLE benefit CHANGE ADACode OldCode varchar(15) character set utf8 collate utf8_bin NOT NULL default ''";
 					General.NonQEx(command);
 					command="ALTER TABLE benefit ADD CodeNum int NOT NULL";
 					General.NonQEx(command);
@@ -4734,7 +4734,7 @@ namespace OpenDental{
 						+"procedurelog.CodeNum=procedurecode.CodeNum)";
 					General.NonQEx(command);
 					//added after r219
-					command="ALTER TABLE procbuttonitem CHANGE ADACode OldCode varchar(15)";
+					command="ALTER TABLE procbuttonitem CHANGE ADACode OldCode varchar(15) character set utf8 collate utf8_bin NOT NULL default ''";
 					General.NonQEx(command);
 					command="ALTER TABLE procbuttonitem ADD CodeNum int NOT NULL";
 					General.NonQEx(command);
@@ -5144,7 +5144,7 @@ namespace OpenDental{
 				General.NonQEx(command);
 				//After r306
 				if(FormChooseDatabase.DBtype==DatabaseType.MySql) {
-					command="ALTER TABLE preference CHANGE ValueString ValueString varchar(4000) NOT NULL default ''";
+					command="ALTER TABLE preference CHANGE ValueString ValueString text NOT NULL default ''";
 					General.NonQEx(command);
 				}
 				else {//Oracle
@@ -5188,11 +5188,30 @@ namespace OpenDental{
 				string labnum=table.Rows[0][0].ToString();//just use the first lab we can find.
 				command="SELECT LaboratoryNum FROM labcase WHERE NOT EXISTS (SELECT * FROM laboratory WHERE laboratory.LaboratoryNum=labcase.LaboratoryNum) GROUP BY LaboratoryNum";
 				table=General.GetTableEx(command);
-				for(int i=0;i<table.Rows.Count;i++){
+				for(int i=0;i<table.Rows.Count;i++) {
 					command="UPDATE labcase SET LaboratoryNum="+labnum+" WHERE LaboratoryNum="+table.Rows[i][0].ToString();
 					General.NonQEx(command);
 				}
 				command="UPDATE preference SET ValueString = '4.9.5.0' WHERE PrefName = 'DataBaseVersion'";
+				General.NonQEx(command);
+			}
+			To4_9_7();
+		}
+
+		private void To4_9_7() {
+			if(FromVersion<new Version("4.9.7.0")) {
+				string command;
+				if(FormChooseDatabase.DBtype==DatabaseType.MySql) {
+					//This step was performed in an earlier conversion, but is required here again, for
+					//customers who's data has been converted to using a varchar 4000 here. After this command is
+					//run, every MySQL user will be using text in the preference value column.
+					command="ALTER TABLE preference CHANGE ValueString ValueString text NOT NULL default ''";
+					General.NonQEx(command);
+				}
+				else {
+					//Already converted to varchar2 4000 for Oracle. No conversion necessary here.
+				}
+				command="UPDATE preference SET ValueString = '4.9.7.0' WHERE PrefName = 'DataBaseVersion'";
 				General.NonQEx(command);
 			}
 			To5_0_0();
@@ -5233,7 +5252,22 @@ namespace OpenDental{
 					command="ALTER TABLE userod ADD ProvNum int";
 				}
 				General.NonQEx(command);
-
+				//after r337
+				if(FormChooseDatabase.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE mountitem DROP Xpos";
+					General.NonQEx(command);
+					command="ALTER TABLE mountitem DROP Ypos";
+					General.NonQEx(command);
+					command="ALTER TABLE mountitem ADD OrdinalPos int NOT NULL default '0'";
+					General.NonQEx(command);
+				}else{
+					command="ALTER TABLE mountitem DROP COLUMN Xpos";
+					General.NonQEx(command);
+					command="ALTER TABLE mountitem DROP COLUMN Ypos";
+					General.NonQEx(command);
+					command="ALTER TABLE mountitem ADD OrdinalPos int default '0'";
+					General.NonQEx(command);
+				}
 
 
 

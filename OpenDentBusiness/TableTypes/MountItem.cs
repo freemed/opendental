@@ -9,18 +9,15 @@ namespace OpenDentBusiness {
 		public int MountItemNum;
 		///<summary>FK to mount.MountNum.</summary>
 		public int MountNum;
-		///<summary>The x position, in pixels, of the item on the mount.</summary>
-		public int Xpos;
-		///<summary>The y position, in pixels, of the item on the mount.</summary>
-		public int Ypos;
+		///<summary>The ordinal position of the item on the mount.</summary>
+		public int OrdinalPos;
 
 		///<summary></summary>
 		public MountItem Copy() {
 			MountItem m=new MountItem();
 			m.MountItemNum=MountItemNum;
 			m.MountNum=MountNum;
-			m.Xpos=Xpos;
-			m.Ypos=Ypos;
+			m.OrdinalPos=OrdinalPos;
 			return m;
 		}
 

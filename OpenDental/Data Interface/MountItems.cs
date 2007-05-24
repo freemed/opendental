@@ -9,19 +9,17 @@ namespace OpenDental {
 	class MountItems {
 
 		public static int Insert(MountItem mountItem) {
-			string command="INSERT INTO mountitem (MountItemNum,MountNum,Xpos,Ypos) VALUES ("
+			string command="INSERT INTO mountitem (MountItemNum,MountNum,OrdinalPos) VALUES ("
 				+"'"+POut.PInt(mountItem.MountItemNum)+"',"
 				+"'"+POut.PInt(mountItem.MountNum)+"',"
-				+"'"+POut.PInt(mountItem.Xpos)+"',"
-				+"'"+POut.PInt(mountItem.Ypos)+"')";
+				+"'"+POut.PInt(mountItem.OrdinalPos)+"')";
 			return General.NonQEx(command);
 		}
 
 		public static int Update(MountItem mountItem) {
 			string command="UPDATE mountitem SET "
 				+"MountNum='"+POut.PInt(mountItem.MountNum)+"',"
-				+"Xpos='"+POut.PInt(mountItem.Xpos)+"',"
-				+"Ypos='"+POut.PInt(mountItem.Ypos)+"' "
+				+"Ypos='"+POut.PInt(mountItem.OrdinalPos)+"' "
 				+"WHERE MountItemNum='"+POut.PInt(mountItem.MountItemNum)+"'";
 			return General.NonQEx(command);
 		}
@@ -36,8 +34,7 @@ namespace OpenDental {
 			MountItem mountItem=new MountItem();
 			mountItem.MountItemNum=PIn.PInt(mountItemRow["MountItemNum"].ToString());
 			mountItem.MountNum=PIn.PInt(mountItemRow["MountNum"].ToString());
-			mountItem.Xpos=PIn.PInt(mountItemRow["Xpos"].ToString());
-			mountItem.Ypos=PIn.PInt(mountItemRow["Ypos"].ToString());
+			mountItem.OrdinalPos=PIn.PInt(mountItemRow["OrdinalPos"].ToString());
 			return mountItem;
 		}
 
