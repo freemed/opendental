@@ -161,7 +161,7 @@ WHERE patient.patnum=rxpat.patnum && provider.provnum=rxpat.provnum
 			Queries.CurReport.Query="SELECT CONCAT(CONCAT(CONCAT(CONCAT(patient.LName,', '),patient.FName),"+
 				"' '),patient.MiddleI),rxpat.rxdate,"
 				+"rxpat.drug,rxpat.sig,rxpat.disp,provider.abbr FROM patient,rxpat,provider "
-				+"WHERE patient.patnum=rxpat.patnum AND provider.provnum=rxpat.provnum";
+				+"WHERE patient.patnum=rxpat.patnum AND provider.provnum=rxpat.provnum ";
 
 			if(radioPatient.Checked==true){
 				Queries.CurReport.Query

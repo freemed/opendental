@@ -47,6 +47,7 @@ namespace OpenDentBusiness{
 		public static DataSet RefreshPeriod(string[] parameters) {
 			DataSet retVal=new DataSet();
 			retVal.Tables.Add(GetPeriodApptsTable(parameters[0],parameters[1]));
+			retVal.Tables.Add(GetPeriodEmployeeSchedTable(parameters[0],parameters[1]));
 			return retVal;
 		}
 
@@ -262,6 +263,46 @@ namespace OpenDentBusiness{
 				row["production"]=PIn.PDouble(raw.Rows[i]["Production"].ToString()).ToString("c");
 				row["wirelessPhone"]=Lan.g("Appointments","Wireless: ")+raw.Rows[i]["WirelessPhone"].ToString();
 				row["wkPhone"]=Lan.g("Appointments","Work Phone: ")+raw.Rows[i]["WkPhone"].ToString();
+				table.Rows.Add(row);
+			}
+			return table;
+		}
+
+		private static DataTable GetPeriodEmployeeSchedTable(string strDateStart,string strDateEnd) {
+			DateTime dateStart=PIn.PDate(strDateStart);
+			DateTime dateEnd=PIn.PDate(strDateEnd);
+			DataConnection dcon=new DataConnection();
+			DataTable table=new DataTable("EmpSched");
+			DataRow row;
+			//columns that start with lowercase are altered for display rather than being raw data.
+			table.Columns.Add("empName");
+			table.Columns.Add("schedule");
+			if(dateStart!=dateEnd) {
+				return table;
+			}
+			string command="SELECT StartTime,StopTime,FName,employee.EmployeeNum "
+				+"FROM employee,schedule "
+				+"WHERE schedule.EmployeeNum=employee.EmployeeNum "
+				+"AND SchedType=3 "//employee
+				+"AND SchedDate = "+POut.PDate(dateStart)+" "
+				+"ORDER BY schedule.EmployeeNum,StartTime";
+			DataTable raw=dcon.GetTable(command);
+			DateTime startTime;
+			DateTime stopTime;
+			for(int i=0;i<raw.Rows.Count;i++) {
+				row=table.NewRow();
+				if(i==0 || raw.Rows[i]["EmployeeNum"].ToString()!=raw.Rows[i-1]["EmployeeNum"].ToString()){
+					row["empName"]=raw.Rows[i]["FName"].ToString();
+				}
+				else{
+					row["empName"]="";
+				}
+				if(row["schedule"].ToString()!=""){
+					row["schedule"]+=",";
+				}
+				startTime=PIn.PDateT(raw.Rows[i]["StartTime"].ToString());
+				stopTime=PIn.PDateT(raw.Rows[i]["StopTime"].ToString());
+				row["schedule"]+=startTime.ToString("h:mm")+"-"+stopTime.ToString("h:mm");
 				table.Rows.Add(row);
 			}
 			return table;

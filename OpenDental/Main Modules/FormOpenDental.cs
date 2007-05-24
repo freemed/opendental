@@ -274,6 +274,7 @@ namespace OpenDental{
 			this.menuItemLinks = new System.Windows.Forms.MenuItem();
 			this.menuItemQuestions = new System.Windows.Forms.MenuItem();
 			this.menuItemRecall = new System.Windows.Forms.MenuItem();
+			this.menuItemRequirementsNeeded = new System.Windows.Forms.MenuItem();
 			this.menuItemSched = new System.Windows.Forms.MenuItem();
 			this.menuItemSecurity = new System.Windows.Forms.MenuItem();
 			this.menuItemLists = new System.Windows.Forms.MenuItem();
@@ -369,7 +370,6 @@ namespace OpenDental{
 			this.ContrAppt2 = new OpenDental.ContrAppt();
 			this.lightSignalGrid1 = new OpenDental.UI.LightSignalGrid();
 			this.myOutlookBar = new OpenDental.OutlookBar();
-			this.menuItemRequirementsNeeded = new System.Windows.Forms.MenuItem();
 			this.SuspendLayout();
 			// 
 			// timerTimeIndic
@@ -627,6 +627,12 @@ namespace OpenDental{
 			this.menuItemRecall.Index = 24;
 			this.menuItemRecall.Text = "Recall";
 			this.menuItemRecall.Click += new System.EventHandler(this.menuItemRecall_Click);
+			// 
+			// menuItemRequirementsNeeded
+			// 
+			this.menuItemRequirementsNeeded.Index = 25;
+			this.menuItemRequirementsNeeded.Text = "Requirements Needed";
+			this.menuItemRequirementsNeeded.Click += new System.EventHandler(this.menuItemRequirementsNeeded_Click);
 			// 
 			// menuItemSched
 			// 
@@ -1292,12 +1298,6 @@ namespace OpenDental{
 			this.myOutlookBar.TabIndex = 18;
 			this.myOutlookBar.Text = "outlookBar1";
 			this.myOutlookBar.ButtonClicked += new OpenDental.ButtonClickedEventHandler(this.myOutlookBar_ButtonClicked);
-			// 
-			// menuItemRequirementsNeeded
-			// 
-			this.menuItemRequirementsNeeded.Index = 25;
-			this.menuItemRequirementsNeeded.Text = "Requirements Needed";
-			this.menuItemRequirementsNeeded.Click += new System.EventHandler(this.menuItemRequirementsNeeded_Click);
 			// 
 			// FormOpenDental
 			// 
@@ -2466,12 +2466,13 @@ namespace OpenDental{
 		}
 
 		private void menuItemSched_Click(object sender,EventArgs e) {
-			if(!Security.IsAuthorized(Permissions.Schedules)) {
-				return;
-			}
+			//anyone should be able to view. Security must be inside schedule window.
+			//if(!Security.IsAuthorized(Permissions.Schedules)) {
+			//	return;
+			//}
 			FormSchedule FormS=new FormSchedule();
 			FormS.ShowDialog();
-			SecurityLogs.MakeLogEntry(Permissions.Schedules,0,"");
+			//SecurityLogs.MakeLogEntry(Permissions.Schedules,0,"");
 		}
 
 		/*private void menuItemBlockoutDefault_Click(object sender,System.EventArgs e) {

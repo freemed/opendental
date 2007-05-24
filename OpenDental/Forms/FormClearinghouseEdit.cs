@@ -74,7 +74,7 @@ namespace OpenDental{
 		private TextBox textGS03;
 		private Label label24;
 		private Label label29;
-		private Label label28;
+		private Label label30;
 		///<summary>Set this externally before opening the form</summary>
 		public Clearinghouse ClearinghouseCur;
 
@@ -148,7 +148,6 @@ namespace OpenDental{
 			this.label24 = new System.Windows.Forms.Label();
 			this.groupBox2 = new System.Windows.Forms.GroupBox();
 			this.label29 = new System.Windows.Forms.Label();
-			this.label28 = new System.Windows.Forms.Label();
 			this.textSenderTelephone = new System.Windows.Forms.TextBox();
 			this.textSenderName = new System.Windows.Forms.TextBox();
 			this.radioSenderBelow = new System.Windows.Forms.RadioButton();
@@ -171,6 +170,7 @@ namespace OpenDental{
 			this.butDelete = new OpenDental.UI.Button();
 			this.butOK = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
+			this.label30 = new System.Windows.Forms.Label();
 			this.groupBox1.SuspendLayout();
 			this.groupBox2.SuspendLayout();
 			this.SuspendLayout();
@@ -470,8 +470,8 @@ namespace OpenDental{
 			// 
 			// groupBox2
 			// 
+			this.groupBox2.Controls.Add(this.label30);
 			this.groupBox2.Controls.Add(this.label29);
-			this.groupBox2.Controls.Add(this.label28);
 			this.groupBox2.Controls.Add(this.textSenderTelephone);
 			this.groupBox2.Controls.Add(this.textSenderName);
 			this.groupBox2.Controls.Add(this.radioSenderBelow);
@@ -495,14 +495,6 @@ namespace OpenDental{
 			this.label29.TabIndex = 117;
 			this.label29.Text = "(much more common)";
 			this.label29.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			// 
-			// label28
-			// 
-			this.label28.Location = new System.Drawing.Point(248,18);
-			this.label28.Name = "label28";
-			this.label28.Size = new System.Drawing.Size(231,15);
-			this.label28.TabIndex = 116;
-			this.label28.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// textSenderTelephone
 			// 
@@ -725,6 +717,15 @@ namespace OpenDental{
 			this.butCancel.Text = "&Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
 			// 
+			// label30
+			// 
+			this.label30.Location = new System.Drawing.Point(248,17);
+			this.label30.Name = "label30";
+			this.label30.Size = new System.Drawing.Size(231,15);
+			this.label30.TabIndex = 118;
+			this.label30.Text = "(use this for Emdeon)";
+			this.label30.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
 			// FormClearinghouseEdit
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
@@ -840,6 +841,10 @@ namespace OpenDental{
 		private void butOK_Click(object sender, System.EventArgs e) {
 			if(textDescription.Text==""){
 				MsgBox.Show(this,"Description cannot be blank.");
+				return;
+			}
+			if(textISA08.Text=="0135WCH00" && !radioSenderOD.Checked){
+				MsgBox.Show(this,"When using Emdeon, this software must be the sender.");
 				return;
 			}
 			if(comboFormat.SelectedIndex==(int)ElectronicClaimFormat.X12) {

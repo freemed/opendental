@@ -2766,6 +2766,7 @@ namespace OpenDental{
 			ApptPlanned.Info.Procs=procs;
 			ApptPlanned.Info.Production=Procedures.GetProductionOneApt(ApptPlanned.Info.MyApt.AptNum,procs,true);
 			ApptPlanned.Info.MyPatient=PatCur.Copy();
+			ApptPlanned.Info.MyLabCase=LabCases.GetForPlanned(apt.AptNum);
 			ApptPlanned.SetSize();
 			ApptPlanned.Width=114;
 			ApptPlanned.CreateShadow();

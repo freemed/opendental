@@ -77,6 +77,17 @@ namespace OpenDental{
 			return FillFromCommand(command);
 		}
 
+		///<Summary>Used when drawing the planned appointment.</Summary>
+		public static LabCase GetForPlanned(int aptNum) {
+			string command="SELECT labcase.* FROM labcase,appointment "
+				+"WHERE labcase.PlannedAptNum="+POut.PInt(aptNum);
+			List<LabCase> list=FillFromCommand(command);
+			if(list.Count==0){
+				return null;
+			}
+			return list[0];
+		}
+
 		///<Summary>Gets one labcase from database.</Summary>
 		public static LabCase GetOne(int labCaseNum){
 			string command="SELECT * FROM labcase WHERE LabCaseNum="+POut.PInt(labCaseNum);
@@ -87,7 +98,7 @@ namespace OpenDental{
 		public static List<LabCase> GetForPat(int patNum,bool isPlanned) {
 			string command="SELECT * FROM labcase WHERE PatNum="+POut.PInt(patNum)+" AND ";
 			if(isPlanned){
-				command+="PlannedAptNum=0";
+				command+="PlannedAptNum=0 AND AptNum=0";//We only show lab cases that have not been attached to any kind of appt.
 			}
 			else{
 				command+="AptNum=0";
