@@ -1049,9 +1049,8 @@ namespace OpenDental{
 				Mounts.Delete(mount);
 				//Delete the mount items attached to the mount object.
 				MountItem[] mountItems=MountItems.GetItemsForMount(mountNum);
-				docs=new Document[mountItems.Length];
+				docs=Documents.GetDocumentsForMountItems(mountItems);
 				for(int i=0;i<mountItems.Length;i++){
-					docs[i]=Documents.GetDocumentForMountItem(mountItems[i].MountNum);//Mark the mountitem's document for deletion.
 					MountItems.Delete(mountItems[i]);
 				}
 			}else{
@@ -2406,11 +2405,69 @@ namespace OpenDental{
 			g.Dispose();
 			return retVal;
 		}
-		
-		///<summary>Takes in a mount object and finds all the images pertaining to the mount, then concatonates them together into one large, unscaled image and returns that image.</summary>
-		//public static Image CreateMountImage(Mount mount){
-			//TODO:
-		//}
+
+		///<summary>Returns the selection rectangles for each of the images on the mount, as well as the rectangle which encapsulates the entire mount object when rendered (stored in the end location of the resulting array).</summary>
+		public static RectangleF[] GetMountItemBoundingBoxes(Mount mount) {
+			RectangleF leftImageBox=new RectangleF(20,20,200,200);
+			int[] imageSetOrder=new int[] { 1,0,2,3 };
+			int imageSpacing=20;
+			int numImages=4;
+			RectangleF[] imageBoundingBoxes=new RectangleF[numImages+1];
+			int i=0;
+			for(;i<numImages;i++) {
+				imageBoundingBoxes[i]=new RectangleF();
+				imageBoundingBoxes[i].Width=leftImageBox.Width;
+				imageBoundingBoxes[i].Height=leftImageBox.Height;
+				imageBoundingBoxes[i].Y=leftImageBox.Y;
+				imageBoundingBoxes[i].X=leftImageBox.X+imageSetOrder[i]*(leftImageBox.Width+imageSpacing);
+			}
+			imageBoundingBoxes[i]=new RectangleF(0,0,2*leftImageBox.X+numImages*leftImageBox.Width+(numImages-1)*imageSpacing,
+				2*leftImageBox.Y+leftImageBox.Height);
+			return imageBoundingBoxes;
+		}
+
+		///<summary>Takes in a mount object and finds all the images pertaining to the mount, then concatonates them together into one large, unscaled image and returns that image. Set imageSelected=-1 to unselect all images, or set to an image ordinal to highlight the image.</summary>
+		public static Image CreateMountImage(Mount mount,Bitmap[] originalImages,int imageSelected) {
+			RectangleF[] boundingBoxes=GetMountItemBoundingBoxes(mount);
+			MountItem[] mountItems=MountItems.GetItemsForMount(mount.MountNum);
+			if(originalImages==null || mountItems==null ||
+				originalImages.Length!=mountItems.Length) {
+				return new Bitmap(0,0);
+			}
+			int width=(int)Math.Ceiling(boundingBoxes[boundingBoxes.Length-1].Width);
+			int height=(int)Math.Ceiling(boundingBoxes[boundingBoxes.Length-1].Width);
+			if(width<=0 || height<=0) {
+				return new Bitmap(0,0);
+			}
+			Bitmap mountImage=new Bitmap(width,height);
+			Graphics g=Graphics.FromImage(mountImage);
+			Document[] documents=Documents.GetDocumentsForMountItems(mountItems);
+			try {
+				g.Clear(Pens.SlateGray.Color);//Draw mount background rectangle.
+				for(int i=0;i<mountItems.Length;i++){
+					RectangleF imageFrame=boundingBoxes[mountItems[i].OrdinalPos];
+					g.DrawRectangle(Pens.DarkGray,imageFrame.X,imageFrame.Y,imageFrame.Width,imageFrame.Height);//draw box behind image
+					if(mountItems[i].OrdinalPos==imageSelected) {
+						g.DrawRectangle(Pens.Yellow,imageFrame.X,imageFrame.Y,imageFrame.Width,imageFrame.Height);//highlight selected image
+					}
+					RectangleF imageBounds=new RectangleF(imageFrame.X+imageFrame.Width*0.025f,imageFrame.Y+imageFrame.Height*0.025f,
+						imageFrame.Width*0.95f,imageFrame.Height*0.95f);
+					Bitmap image=ApplyDocumentSettingsToImage(documents[i],originalImages[i],ApplySettings.ALL);
+					float widthScale=imageBounds.Width/image.Width;
+					float heightScale=imageBounds.Height/image.Height;
+					float scale=(widthScale<heightScale?widthScale:heightScale);
+					RectangleF imageRect=new RectangleF(0,0,scale*image.Width,scale*image.Height);
+					imageRect.X=imageBounds.X+imageBounds.Width/2-imageRect.Width/2;
+					imageRect.Y=imageBounds.Y+imageBounds.Height/2-imageRect.Height/2;
+					g.DrawImage(image,imageRect);
+					image.Dispose();
+				}
+			}catch(Exception){
+			}finally{
+				g.Dispose();
+			}
+			return mountImage;
+		}
 
 	}
 }

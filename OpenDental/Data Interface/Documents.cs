@@ -227,16 +227,19 @@ namespace OpenDental{
 			return true;
 		}
 
-		///<summary>Returns the document which corresponds to the given mountitem.</summary>
-		public static Document GetDocumentForMountItem(int mountItemNum) {
-			string command="SELECT * FROM document WHERE MountItemNum='"+mountItemNum+"'";
-			DataTable result=General.GetTable(command);
-			if(result.Rows.Count!=1) {
-				Logger.openlog.Log("Documents.GetDocumentForMountItem: There are "+result.Rows.Count+
-					" documents associated with mount item "+mountItemNum+" when exactly 1 "+
-					"document was expected.",Logger.Severity.ERROR);
+		///<summary>Returns the documents which correspond to the given mountitems.</summary>
+		public static Document[] GetDocumentsForMountItems(MountItem[] mountItems) {
+			if(mountItems==null || mountItems.Length<1){
+				return new Document[0];
 			}
-			return Fill(result.Rows[0]);
+			string command="SELECT * FROM document WHERE ";
+			for(int i=0;i<mountItems.Length;i++){
+				command+="MountItemNum='"+POut.PInt(mountItems[i].MountItemNum)+"' ";
+				if(i<mountItems.Length-1){
+					command+="OR ";
+				}
+			}
+			return Fill(General.GetTable(command));
 		}
 
 		///<summary>Any filenames mentioned in the fileList which are not attached to the given patient are properly attached to that patient. Returns the total number of documents that were newly attached to the patient.</summary>
