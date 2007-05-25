@@ -1387,43 +1387,47 @@ namespace OpenDental{
 				}
 				ContrApptSingle3=null;
 			}
-			ListDay=Appointments.GetForPeriod(startDate,endDate);
+			//ListDay=Appointments.GetForPeriod(startDate,endDate);
 			SchedListDay=Schedules.RefreshPeriod(startDate,endDate);
 			labelDate.Text=startDate.ToString("ddd");
 			labelDate2.Text=startDate.ToString("-  MMM d");
 			Calendar2.SetDate(startDate);
 			ContrApptSheet2.Controls.Clear();
-			ContrApptSingle3=new ContrApptSingle[ListDay.Length];
-			int[] aptNums=new int[ListDay.Length];
-			int[] patNums=new int[ListDay.Length];
-			for(int i=0;i<ListDay.Length;i++){
-				aptNums[i]=ListDay[i].AptNum;
-				patNums[i]=ListDay[i].PatNum;
+			ContrApptSingle3=new ContrApptSingle[DS.Tables["Appointments"].Rows.Count];//ListDay.Length];
+			int[] aptNums=new int[DS.Tables["Appointments"].Rows.Count];
+			int[] patNums=new int[DS.Tables["Appointments"].Rows.Count];
+			for(int i=0;i<DS.Tables["Appointments"].Rows.Count;i++){
+				aptNums[i]=PIn.PInt(DS.Tables["Appointments"].Rows[i]["AptNum"].ToString());//ListDay[i].AptNum;
+				patNums[i]=PIn.PInt(DS.Tables["Appointments"].Rows[i]["PatNum"].ToString());//ListDay[i].PatNum;
 			}
-			procsMultApts=Procedures.GetProcsMultApts(aptNums);
-			Patient[] multPats=Patients.GetMultPats(patNums);
-			List<LabCase> labCaseList=LabCases.GetForPeriod(startDate,endDate);
-			Procedure[] procsOneApt;
+			//procsMultApts=Procedures.GetProcsMultApts(aptNums);
+			//Patient[] multPats=Patients.GetMultPats(patNums);
+			//List<LabCase> labCaseList=LabCases.GetForPeriod(startDate,endDate);
+			//Procedure[] procsOneApt;
 			int indexProv;
-			for(int i=0;i<ListDay.Length;i++){
+			DataRow row;
+			//for(int i=0;i<ListDay.Length;i++){
+			for(int i=0;i<DS.Tables["Appointments"].Rows.Count;i++){
+				row=DS.Tables["Appointments"].Rows[i];
 				ContrApptSingle3[i]=new ContrApptSingle();
 				ContrApptSingle3[i].Visible=false;
 				ContrApptSingle3[i].Info=new InfoApt();
-				ContrApptSingle3[i].Info.MyApt=ListDay[i].Copy();
-				if(ContrApptSingle.SelectedAptNum==ListDay[i].AptNum){//if this is the selected apt
+				ContrApptSingle3[i].Info.MyApt=null;//ListDay[i].Copy();
+				if(ContrApptSingle.SelectedAptNum.ToString()==row["AptNum"].ToString()){//ListDay[i].AptNum){//if this is the selected apt
 					//if the selected patient was changed from another module, then deselect the apt.
-					if(PatCur.PatNum!=ListDay[i].PatNum){
+					if(PatCur.PatNum.ToString()!=row["PatNum"].ToString()){
 						ContrApptSingle.SelectedAptNum=-1;
 					}
 				}
-				procsOneApt=Procedures.GetProcsOneApt(ListDay[i].AptNum,procsMultApts);
-				ContrApptSingle3[i].Info.Procs=procsOneApt;
-				ContrApptSingle3[i].Info.Production=Procedures.GetProductionOneApt(ListDay[i].AptNum,procsMultApts,false);
-				ContrApptSingle3[i].Info.MyPatient=Patients.GetOnePat(multPats,ListDay[i].PatNum);
-				ContrApptSingle3[i].Info.MyLabCase=LabCases.GetOneFromList(labCaseList,ListDay[i].AptNum);
+				//procsOneApt=Procedures.GetProcsOneApt(ListDay[i].AptNum,procsMultApts);
+				//ContrApptSingle3[i].Info.Procs=procsOneApt;
+				ContrApptSingle3[i].DataRoww=row;
+				//ContrApptSingle3[i].Info.Production=Procedures.GetProductionOneApt(ListDay[i].AptNum,procsMultApts,false);
+				//ContrApptSingle3[i].Info.MyPatient=Patients.GetOnePat(multPats,ListDay[i].PatNum);
+				//ContrApptSingle3[i].Info.MyLabCase=LabCases.GetOneFromList(labCaseList,ListDay[i].AptNum);
 				//copy time pattern to provBar[]:
 				indexProv=-1;
-				if(ListDay[i].IsHygiene){
+				/*if(row["IsHygiene"].ToString()=="1"){
 					indexProv=ApptViewItems.GetIndexProv(ListDay[i].ProvHyg);
 				}
 				else{
@@ -1443,8 +1447,8 @@ namespace OpenDental{
 							}
 						}
 					}
-				}
-				ContrApptSingle3[i].isWeeklyView=isWeeklyView;
+				}*/
+				ContrApptSingle3[i].IsWeeklyView=isWeeklyView;
 				ContrApptSingle3[i].SetLocation();
 				ContrApptSheet2.Controls.Add(ContrApptSingle3[i]);
 			}//end for
@@ -1455,7 +1459,8 @@ namespace OpenDental{
 			CreateAptShadows();
 			ContrApptSheet2.DrawShadow();
 			FillPanelPatient();
-			FillLab(labCaseList);
+//broken:
+			//FillLab(labCaseList);
 			FillProduction();
 			FillEmpSched();
 		}
@@ -1492,10 +1497,10 @@ namespace OpenDental{
 					showProduction=true;
 				}
 			}
-			if(showProduction){
+//broken:
+/*		if(showProduction){
 				double production=0;
-
-                int indexProv;
+				int indexProv;
 				for(int i=0;i<ListDay.Length;i++){
 					indexProv=-1;
 					if(ListDay[i].IsHygiene){
@@ -1514,9 +1519,9 @@ namespace OpenDental{
 				}
 				textProduction.Text=production.ToString("c0");
 			}
-			else{
+			else{*/
 				textProduction.Text="";
-			}
+			//}
 		}
 
 		///<Summary></Summary>
@@ -1561,7 +1566,7 @@ namespace OpenDental{
 			if(ContrApptSheet2.Shadow==null)//if user resizes window to be very narrow
 				return;
 			Graphics grfx=Graphics.FromImage(ContrApptSheet2.Shadow);
-			for(int i=0;i<ListDay.Length;i++){
+			for(int i=0;i<DS.Tables["Appointments"].Rows.Count;i++){
 				//MessageBox.Show("i:"+i.ToString()+",height:"+ContrApptSingle3[i].Height.ToString());
 				ContrApptSingle3[i].CreateShadow();
 				if(ContrApptSingle3[i].Location.X>=ContrApptSheet.TimeWidth+ContrApptSheet.ProvWidth*ContrApptSheet.ProvCount
@@ -1914,14 +1919,15 @@ namespace OpenDental{
 			int hour=ContrApptSheet.YPosToHour(point.Y);
 			int minute=ContrApptSheet.YPosToMin(point.Y);
 			TimeSpan time=new TimeSpan(hour,minute,0);
-			for(int i=0;i<ListDay.Length;i++) {
+//broken:
+/*			for(int i=0;i<ListDay.Length;i++) {
 				if(op==ListDay[i].Op
 					&& ListDay[i].AptDateTime.TimeOfDay <= time
 					&& time < ListDay[i].AptDateTime.TimeOfDay+TimeSpan.FromMinutes(ListDay[i].Pattern.Length*5))
 				{
 					return ListDay[i].AptNum;
 				}
-			}
+			}*/
 			return 0;
 		}
 

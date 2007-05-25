@@ -33,7 +33,9 @@ namespace OpenDental{
 		public Bitmap Shadow;
 		private Font baseFont=new Font("Arial",8);
 		private string patternShowing;
-		public bool isWeeklyView;
+		public bool IsWeeklyView;
+		///<Summary>This is a datarow that stores all info necessary to draw appt.  Replacing Info.</Summary>
+		public DataRow DataRoww;
 
 		///<summary></summary>
 		public ContrApptSingle(){
@@ -81,9 +83,9 @@ namespace OpenDental{
 
 		///<summary>Used from SetLocation. Also used for Next apt and pinboard instead of SetLocation so that the location won't be altered.</summary>
 		public void SetSize(){
-			patternShowing=GetPatternShowing(Info.MyApt.Pattern);
+			patternShowing=GetPatternShowing(DataRoww["Pattern"].ToString());
 			//height is based on original 5 minute pattern. Might result in half-rows
-			Height=Info.MyApt.Pattern.Length*ContrApptSheet.Lh*ContrApptSheet.RowsPerIncr;
+			Height=DataRoww["Pattern"].ToString().Length*ContrApptSheet.Lh*ContrApptSheet.RowsPerIncr;
 			//if(ContrApptSheet.TwoRowsPerIncrement){
 			//	Height=Height*2;
 			//}
@@ -103,21 +105,23 @@ namespace OpenDental{
 		
 		///<summary>Called from SetLocation to establish X position of control.</summary>
 		private int ConvertToX(){
-			if(isWeeklyView) {
+			if(IsWeeklyView) {
 				return ContrApptSheet.TimeWidth+ContrApptSheet.ProvWidth*ContrApptSheet.ProvCount
 					+ContrApptSheet.ColWidth*((int)Info.MyApt.AptDateTime.DayOfWeek-1)+1;
 			}
 			else {
 				return ContrApptSheet.TimeWidth+ContrApptSheet.ProvWidth*ContrApptSheet.ProvCount
-					+ContrApptSheet.ColWidth*(ApptViewItems.GetIndexOp(Info.MyApt.Op))+1;
+					+ContrApptSheet.ColWidth*(ApptViewItems.GetIndexOp(PIn.PInt(DataRoww["Op"].ToString())))+1;
+					//Info.MyApt.Op))+1;
 			}
 		}
 
 		///<summary>Called from SetLocation to establish Y position of control.  Also called from ContrAppt.RefreshDay when determining provBar markings. Does not round to the nearest row.</summary>
 		public int ConvertToY(){
-			int retVal=(int)(((double)Info.MyApt.AptDateTime.Hour*(double)60
+			DateTime aptDateTime=PIn.PDateT(DataRoww["AptDateTime"].ToString());
+			int retVal=(int)(((double)aptDateTime.Hour*(double)60
 				/(double)PrefB.GetInt("AppointmentTimeIncrement")
-				+(double)Info.MyApt.AptDateTime.Minute
+				+(double)aptDateTime.Minute
 				/(double)PrefB.GetInt("AppointmentTimeIncrement")
 				)*(double)ContrApptSheet.Lh*ContrApptSheet.RowsPerIncr);
 			//if(ContrApptSheet.TwoRowsPerIncrement){
@@ -149,17 +153,21 @@ namespace OpenDental{
 		public void CreateShadow(){
 			if(this.Parent is ContrApptSheet) {
 				bool isVisible=false;
-				for(int j=0;j<ApptViewItems.VisOps.Length;j++)
-					if(this.Info.MyApt.Op==Operatories.ListShort[ApptViewItems.VisOps[j]].OperatoryNum)
+				for(int j=0;j<ApptViewItems.VisOps.Length;j++){
+					if(this.DataRoww["Op"].ToString()==Operatories.ListShort[ApptViewItems.VisOps[j]].OperatoryNum.ToString()){
 						isVisible=true;
-				if(!isVisible)
+					}
+				}
+				if(!isVisible){
 					return;
+				}
 			}
 			if(Shadow!=null){
 				Shadow=null;
 			}
-			if(Width<4)
+			if(Width<4){
 				return;
+			}
 			if(Height<4){
 				return;
 			}
@@ -173,20 +181,20 @@ namespace OpenDental{
 			Color backColor;
 			Color provColor;
 			Color confirmColor;
-			confirmColor=DefB.GetColor(DefCat.ApptConfirmed,Info.MyApt.Confirmed);
-			if(Info.MyApt.ProvNum!=0 && !Info.MyApt.IsHygiene){//dentist
-				provColor=Providers.GetColor(Info.MyApt.ProvNum);
-				penO=new Pen(Providers.GetOutlineColor(Info.MyApt.ProvNum));
+			confirmColor=DefB.GetColor(DefCat.ApptConfirmed,PIn.PInt(DataRoww["Confirmed"].ToString()));
+			if(DataRoww["ProvNum"].ToString()!="0" && DataRoww["IsHygiene"].ToString()=="0"){//dentist
+				provColor=Providers.GetColor(PIn.PInt(DataRoww["ProvNum"].ToString()));
+				penO=new Pen(Providers.GetOutlineColor(PIn.PInt(DataRoww["ProvNum"].ToString())));
 			}
-			else if(Info.MyApt.ProvHyg!=0 && Info.MyApt.IsHygiene){//hygienist
-				provColor=Providers.GetColor(Info.MyApt.ProvHyg);
-				penO=new Pen(Providers.GetOutlineColor(Info.MyApt.ProvHyg));
+			else if(DataRoww["ProvHyg"].ToString()!="0" && DataRoww["IsHygiene"].ToString()=="1"){//hygienist
+				provColor=Providers.GetColor(PIn.PInt(DataRoww["ProvHyg"].ToString()));
+				penO=new Pen(Providers.GetOutlineColor(PIn.PInt(DataRoww["ProvHyg"].ToString())));
 			}
 			else{//unknown
 				provColor=Color.White;
 				penO=new Pen(Color.Black);
 			}
-			if(Info.MyApt.AptStatus==ApptStatus.Complete){
+			if(PIn.PInt(DataRoww["AptStatus"].ToString())==(int)ApptStatus.Complete){
 				backColor=DefB.Long[(int)DefCat.AppointmentColors][3].ItemColor;
 			}
 			else{
@@ -198,7 +206,7 @@ namespace OpenDental{
 			g.DrawLine(penB,7,0,7,Height);
 			//Highlighting border
 			if(PinBoardIsSelected && ThisIsPinBoard
-				|| (Info.MyApt.AptNum==SelectedAptNum && !ThisIsPinBoard))
+				|| (DataRoww["AptNum"].ToString()==SelectedAptNum.ToString() && !ThisIsPinBoard))
 			{
 				//Left
 				g.DrawLine(penO,8,1,8,Height-2);
@@ -248,21 +256,22 @@ namespace OpenDental{
 			g.FillRectangle(new SolidBrush(confirmColor),Width-13,1,12,ContrApptSheet.Lh-2);
 			//g.DrawRectangle(new Pen(Color.Black),0,0,13,ContrApptSheet.Lh-1);
 			g.DrawRectangle(new Pen(Color.Black),Width-13,0,13,ContrApptSheet.Lh-1);
-			g.DrawString(Info.MyPatient.GetCreditIns(),baseFont,new SolidBrush(Color.Black),Width-13,-1);//0,-1);
+//broken
+//g.DrawString(Info.MyPatient.GetCreditIns(),baseFont,new SolidBrush(Color.Black),Width-13,-1);//0,-1);
 			//assistant box
-			if(Info.MyApt.Assistant!=0){
-				g.FillRectangle(new SolidBrush(Color.White)
-					,Width-18,Height-ContrApptSheet.Lh,17,ContrApptSheet.Lh-1);
-				g.DrawLine(Pens.Gray,Width-18,Height-ContrApptSheet.Lh,Width,Height-ContrApptSheet.Lh);
-				g.DrawLine(Pens.Gray,Width-18,Height-ContrApptSheet.Lh,Width-18,Height);
-				g.DrawString(Employees.GetAbbr(Info.MyApt.Assistant)
-					,baseFont,new SolidBrush(Color.Black),Width-18,Height-ContrApptSheet.Lh-1);
-			}
+/*if(Info.MyApt.Assistant!=0){
+	g.FillRectangle(new SolidBrush(Color.White)
+		,Width-18,Height-ContrApptSheet.Lh,17,ContrApptSheet.Lh-1);
+	g.DrawLine(Pens.Gray,Width-18,Height-ContrApptSheet.Lh,Width,Height-ContrApptSheet.Lh);
+	g.DrawLine(Pens.Gray,Width-18,Height-ContrApptSheet.Lh,Width-18,Height);
+	g.DrawString(Employees.GetAbbr(Info.MyApt.Assistant)
+		,baseFont,new SolidBrush(Color.Black),Width-18,Height-ContrApptSheet.Lh-1);
+}*/
 			//g.DrawString(":10",font,new SolidBrush(Color.Black),timeWidth-19,i*Lh*6+Lh-1);
-			if(Info.MyApt.AptStatus==ApptStatus.Broken){
-				g.DrawLine(new Pen(Color.Black),8,1,Width-1,Height-1);
-				g.DrawLine(new Pen(Color.Black),8,Height-1,Width-1,1);
-			}
+/*if(Info.MyApt.AptStatus==ApptStatus.Broken){
+	g.DrawLine(new Pen(Color.Black),8,1,Width-1,Height-1);
+	g.DrawLine(new Pen(Color.Black),8,Height-1,Width-1,1);
+}*/
 			this.BackgroundImage=Shadow;
 			//Shadow=null;
 			g.Dispose();
@@ -281,90 +290,76 @@ namespace OpenDental{
 			int linesFilled;
 			SizeF noteSize;
 			RectangleF rect;
+			string text;
 			switch(ApptViewItems.ApptRows[elementI].ElementDesc){
 				case "AddrNote":
+					text=DataRoww["addrNote"].ToString();
 					if(rowI==0)
-						noteSize=g.MeasureString(Info.MyPatient.AddrNote,baseFont,ContrApptSheet.ColWidth-9-4);
+						noteSize=g.MeasureString(text,baseFont,ContrApptSheet.ColWidth-9-4);
 					else
-						noteSize=g.MeasureString(Info.MyPatient.AddrNote,baseFont,ContrApptSheet.ColWidth-9);
-					g.MeasureString(Info.MyPatient.AddrNote,baseFont,noteSize,format,
-						out charactersFitted,out linesFilled);
+						noteSize=g.MeasureString(text,baseFont,ContrApptSheet.ColWidth-9);
+					g.MeasureString(text,baseFont,noteSize,format,out charactersFitted,out linesFilled);
 					rect=new RectangleF(new PointF(xPos,yPos),noteSize);
-					g.DrawString(Info.MyPatient.AddrNote,baseFont,brush,rect,format);
+					g.DrawString(text,baseFont,brush,rect,format);
 					return linesFilled;
 				case "ChartNumAndName":
-					g.DrawString(Info.MyPatient.ChartNumber+" "+Info.MyPatient.GetNameLF()
-						,baseFont,brush,xPos,yPos);
+					text=DataRoww["chartNumAndName"].ToString();
+					g.DrawString(text,baseFont,brush,xPos,yPos);
 					return 1;
 				case "ChartNumber":
-					g.DrawString(Info.MyPatient.ChartNumber,baseFont,brush,xPos,yPos);
+					g.DrawString(DataRoww["chartNumber"].ToString(),baseFont,brush,xPos,yPos);
 					return 1;
 				case "HmPhone":
-					g.DrawString("Hm:"+Info.MyPatient.HmPhone,baseFont,brush,xPos,yPos);
+					g.DrawString(DataRoww["hmPhone"].ToString(),baseFont,brush,xPos,yPos);
 					return 1;
 				case "Lab":
-					if(Info.MyLabCase==null){
+					text=DataRoww["lab"].ToString();
+					if(text==""){
 						return 0;
 					}
-					else if(Info.MyLabCase.DateTimeChecked.Year>1880){
-						g.DrawString(Lan.g(this,"Lab Quality Checked"),baseFont,brush,xPos,yPos);
+					else {
+						g.DrawString(text,baseFont,brush,xPos,yPos);
 						return 1;
 					}
-					else if(Info.MyLabCase.DateTimeRecd.Year>1880) {
-						g.DrawString(Lan.g(this,"Lab Received"),baseFont,brush,xPos,yPos);
-						return 1;
-					}
-					else if(Info.MyLabCase.DateTimeSent.Year>1880) {//sent, but not recd
-						g.DrawString(Lan.g(this,"Lab Sent"),baseFont,brush,xPos,yPos);
-						return 1;
-					}
-					else{//not even sent
-						g.DrawString(Lan.g(this,"Lab Not Sent"),baseFont,brush,xPos,yPos);
-						return 1;
-					}
-					//break;
 				case "MedUrgNote":
+					text=DataRoww["MedUrgNote"].ToString();
 					if(rowI==0)
-						noteSize=g.MeasureString(Info.MyPatient.MedUrgNote,baseFont,ContrApptSheet.ColWidth-9-4);
+						noteSize=g.MeasureString(text,baseFont,ContrApptSheet.ColWidth-9-4);
 					else
-						noteSize=g.MeasureString(Info.MyPatient.MedUrgNote,baseFont,ContrApptSheet.ColWidth-9);
-					g.MeasureString(Info.MyPatient.MedUrgNote,baseFont,noteSize,format,
-						out charactersFitted,out linesFilled);
+						noteSize=g.MeasureString(text,baseFont,ContrApptSheet.ColWidth-9);
+					g.MeasureString(text,baseFont,noteSize,format,out charactersFitted,out linesFilled);
 					rect=new RectangleF(new PointF(xPos,yPos),noteSize);
-					g.DrawString(Info.MyPatient.MedUrgNote,baseFont,brush,rect,format);
+					g.DrawString(text,baseFont,brush,rect,format);
 					return linesFilled;
 				case "Note":
+					text=DataRoww["Note"].ToString();
 					if(rowI==0)
-						noteSize=g.MeasureString(Info.MyApt.Note,baseFont,ContrApptSheet.ColWidth-9-4);
+						noteSize=g.MeasureString(text,baseFont,ContrApptSheet.ColWidth-9-4);
 					else
-						noteSize=g.MeasureString(Info.MyApt.Note,baseFont,ContrApptSheet.ColWidth-9);
-					g.MeasureString(Info.MyApt.Note,baseFont,noteSize,format,
-						out charactersFitted,out linesFilled);
+						noteSize=g.MeasureString(text,baseFont,ContrApptSheet.ColWidth-9);
+					g.MeasureString(text,baseFont,noteSize,format,out charactersFitted,out linesFilled);
 					rect=new RectangleF(new PointF(xPos,yPos),noteSize);
-					g.DrawString(Info.MyApt.Note,baseFont,brush,rect,format);
+					g.DrawString(text,baseFont,brush,rect,format);
 					return linesFilled;
 				case "PatientName":
-					if(Info.MyApt.IsNewPatient)
-						g.DrawString("NP-"+Info.MyPatient.GetNameLF(),baseFont,brush,xPos,yPos);
-					else
-						g.DrawString(Info.MyPatient.GetNameLF(),baseFont,brush,xPos,yPos);
+					g.DrawString(DataRoww["patientName"].ToString(),baseFont,brush,xPos,yPos);
 					return 1;
 				case "PatNum":
-					g.DrawString(Info.MyPatient.PatNum.ToString(),baseFont,brush,xPos,yPos);
+					g.DrawString(DataRoww["patNum"].ToString(),baseFont,brush,xPos,yPos);
 					return 1;
 				case "PatNumAndName":
-					g.DrawString(Info.MyPatient.PatNum.ToString()+" "+Info.MyPatient.GetNameLF()
-						,baseFont,brush,xPos,yPos);
+					g.DrawString(DataRoww["patNumAndName"].ToString(),baseFont,brush,xPos,yPos);
 					return 1;
 				case "PremedFlag":
-					if(Info.MyPatient.Premed) {
-						g.DrawString(Lan.g(this,"Premedicate"),baseFont,brush,xPos,yPos);
-						return 1;
-					}
-					else{
+					if(DataRoww["preMedFlag"].ToString()==""){
 						return 0;
 					}
-				case "Procs":
+					else{
+						g.DrawString(DataRoww["preMedFlag"].ToString(),baseFont,brush,xPos,yPos);
+						return 1;
+					}
+				/*case "Procs":
+					//text=DataRoww[""].ToString();
 					int rowsUsed=0;
 					for(int j=0;j<Info.Procs.Length;j++){
 						g.DrawString(Procedures.GetDescription(Info.Procs[j]),baseFont,brush,xPos,yPos);
@@ -372,13 +367,16 @@ namespace OpenDental{
 						rowsUsed++;
 					}
 					return rowsUsed;
-				case "ProcDescript":
-					g.DrawString(Info.MyApt.ProcDescript,baseFont,brush,xPos,yPos);
-					return 1;
+				//case "ProcDescript":
+					//no longer used
+					//g.DrawString(Info.MyApt.ProcDescript,baseFont,brush,xPos,yPos);
+					//return 1;
 				case "Production":
+					//text=DataRoww[""].ToString();
 					g.DrawString(Info.Production.ToString("c"),baseFont,brush,xPos,yPos);
 					return 1;
 				case "Provider":
+					//text=DataRoww[""].ToString();
 					if(Info.MyApt.IsHygiene && Providers.GetProv(Info.MyApt.ProvHyg)!=null){
 						g.DrawString(Providers.GetNameLF(Info.MyApt.ProvHyg),baseFont,brush,xPos,yPos);
 					}
@@ -387,14 +385,17 @@ namespace OpenDental{
 					}
 					return 1;
 				case "WirelessPhone":
+					//text=DataRoww[""].ToString();
 					g.DrawString("Cell:"+Info.MyPatient.WirelessPhone,baseFont,brush,xPos,yPos);
 					return 1;
 				case "WkPhone":
+					//text=DataRoww[""].ToString();
 					g.DrawString("Wk:"+Info.MyPatient.WkPhone,baseFont,brush,xPos,yPos);
 					return 1;
 				case "Age":
+					//text=DataRoww[""].ToString();
 					g.DrawString("Age:"+Info.MyPatient.Age.ToString(),baseFont,brush,xPos,yPos);
-					return 1;
+					return 1;*/
 			}
 			return 0;
 		}

@@ -5268,6 +5268,9 @@ namespace OpenDental{
 					command="ALTER TABLE mountitem ADD OrdinalPos int default '0'";
 					General.NonQEx(command);
 				}
+				//After 342:
+				command="UPDATE apptviewitem SET ElementDesc='Procs' WHERE ElementDesc='ProcDescript'";
+				General.NonQEx(command);
 
 
 
