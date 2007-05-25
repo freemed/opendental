@@ -781,34 +781,28 @@ namespace OpenDental{
 					//Reload the doc from the db. We don't just keep reusing the tree data, because it will become more and 
 					//more stail with age if the program is left open in the image module for long periods of time.
 					Document selectDoc=Documents.GetByNum(docNum);
-					string srcFileName=ODFileUtils.CombinePaths(patFolder,selectDoc.FileName);
-					if(File.Exists(srcFileName)) {
-						if(HasImageExtension(srcFileName)) {
-							if(selectDoc.WindowingMax==0) {
-								//The document brightness/contrast settings have never been set. By default, we use settings
-								//which do not alter the original image.
-								brightnessContrastSlider.MinVal=0;
-								brightnessContrastSlider.MaxVal=255;
-							}else{
-								brightnessContrastSlider.MinVal=selectDoc.WindowingMin;
-								brightnessContrastSlider.MaxVal=selectDoc.WindowingMax;
-							}
-							paintTools.Enabled=true;								//Only allow painting tools to be used when a valid image has been loaded.
-							brightnessContrastSlider.Enabled=true;	//The brightnessContrastSlider is not actually part of the paintTools
-																											//toolbar, and so it must be enabled or disabled seperately.
-							currentImages=new Bitmap[1];
-							currentImages[0]=new Bitmap(srcFileName);
-							curImageWidths=new int[1];
-							curImageWidths[0]=currentImages[0].Width;
-							curImageHeights=new int[1];
-							curImageHeights[0]=currentImages[0].Height;
-							imageZooms=new float[1];//Values set in ReloadZoomTransCrop()
-							zoomLevels=new int[1];//Values set in ReloadZoomTransCrop()
-							zoomFactors=new float[1];//Values set in ReloadZoomTransCrop()
-							imageTranslations=new PointF[1];//Values set in ReloadZoomTransCrop()
+					currentImages=GetDocumentImages(new Document[] {selectDoc},patFolder);
+					if(currentImages[0]!=null){
+						if(selectDoc.WindowingMax==0) {
+							//The document brightness/contrast settings have never been set. By default, we use settings
+							//which do not alter the original image.
+							brightnessContrastSlider.MinVal=0;
+							brightnessContrastSlider.MaxVal=255;
+						}else{
+							brightnessContrastSlider.MinVal=selectDoc.WindowingMin;
+							brightnessContrastSlider.MaxVal=selectDoc.WindowingMax;
 						}
-					}else{
-						MessageBox.Show(Lan.g(this,"File not found: ")+srcFileName);
+						paintTools.Enabled=true;								//Only allow painting tools to be used when a valid image has been loaded.
+						brightnessContrastSlider.Enabled=true;	//The brightnessContrastSlider is not actually part of the paintTools
+						//toolbar, and so it must be enabled or disabled seperately.
+						curImageWidths=new int[1];
+						curImageWidths[0]=currentImages[0].Width;
+						curImageHeights=new int[1];
+						curImageHeights[0]=currentImages[0].Height;
+						imageZooms=new float[1];//Values set in ReloadZoomTransCrop()
+						zoomLevels=new int[1];//Values set in ReloadZoomTransCrop()
+						zoomFactors=new float[1];//Values set in ReloadZoomTransCrop()
+						imageTranslations=new PointF[1];//Values set in ReloadZoomTransCrop()
 					}
 					//Adjust visibility of panel note control based on if the new document has a signature.
 					SetPanelNoteVisibility(selectDoc);
@@ -2427,9 +2421,8 @@ namespace OpenDental{
 		}
 
 		///<summary>Takes in a mount object and finds all the images pertaining to the mount, then concatonates them together into one large, unscaled image and returns that image. Set imageSelected=-1 to unselect all images, or set to an image ordinal to highlight the image.</summary>
-		public static Image CreateMountImage(Mount mount,Bitmap[] originalImages,int imageSelected) {
+		public static Bitmap CreateMountImage(Mount mount,Bitmap[] originalImages,MountItem[] mountItems,Document[] documents,int imageSelected) {
 			RectangleF[] boundingBoxes=GetMountItemBoundingBoxes(mount);
-			MountItem[] mountItems=MountItems.GetItemsForMount(mount.MountNum);
 			if(originalImages==null || mountItems==null ||
 				originalImages.Length!=mountItems.Length) {
 				return new Bitmap(0,0);
@@ -2441,7 +2434,6 @@ namespace OpenDental{
 			}
 			Bitmap mountImage=new Bitmap(width,height);
 			Graphics g=Graphics.FromImage(mountImage);
-			Document[] documents=Documents.GetDocumentsForMountItems(mountItems);
 			try {
 				g.Clear(Pens.SlateGray.Color);//Draw mount background rectangle.
 				for(int i=0;i<mountItems.Length;i++){
@@ -2467,6 +2459,33 @@ namespace OpenDental{
 				g.Dispose();
 			}
 			return mountImage;
+		}
+
+		///<summary>Takes in a mount object and finds all the images pertaining to the mount, then concatonates them together into one large, unscaled image and returns that image. For use in other modules.</summary>
+		public static Bitmap CreateMountImage(Mount mount,string patFolder){
+			MountItem[] mountItems=MountItems.GetItemsForMount(mount.MountNum);
+			Document[] documents=Documents.GetDocumentsForMountItems(mountItems);
+			Bitmap[] originalImages=GetDocumentImages(documents,patFolder);
+			return CreateMountImage(mount,originalImages,mountItems,documents,-1);
+		}
+
+		///<summary>The returned image array is the same length as the input array. If a document at index i is not an image, or if the image could not be found, then null is returned in index i of the return array. Otherwise, index i will contain a loaded image from file.</summary>
+		public static Bitmap[] GetDocumentImages(Document[] documents,string patFolder){
+			if(documents==null){
+				return new Bitmap[0];
+			}
+			Bitmap[] images=new Bitmap[documents.Length];//All images in the list start as null (c# default).
+			for(int i=0;i<documents.Length;i++){
+				string srcFileName=ODFileUtils.CombinePaths(patFolder,documents[i].FileName);
+				if(File.Exists(srcFileName)) {
+					if(HasImageExtension(srcFileName)) {
+						images[i]=new Bitmap(srcFileName);
+					}
+				}else{
+					MessageBox.Show(Lan.g("ContrDocs","File not found: ")+srcFileName);
+				}
+			}
+			return images;
 		}
 
 	}
