@@ -12,8 +12,10 @@ namespace OpenDental{
 	public class Patients{
 		///<summary>A list of all patient names. Key=patNum, value=formatted name.  Fill with GetHList.  Used in FormQuery, FormTrackNext, and FormUnsched.</summary>
 		public static Hashtable HList;
-		///<summary>Collection of Patients. The last five patients. Gets displayed on dropdown button.</summary>
-		private static ArrayList buttonLastFive;
+		///<summary>Collection of Patient Names. The last five patients. Gets displayed on dropdown button.</summary>
+		private static ArrayList buttonLastFiveNames;
+		///<summary>Collection of PatNums. The last five patients. Used when clicking on dropdown button.</summary>
+		private static ArrayList buttonLastFivePatNums;
 
 		///<summary>Returns a Family object for the supplied patNum.  Use Family.GetPatient to extract the desired patient from the family.</summary>
 		public static Family GetFamily(int patNum){
@@ -138,7 +140,7 @@ namespace OpenDental{
 				retVal[i].SchedDayOfWeek= PIn.PInt(table.Rows[i][63].ToString());
 				retVal[i].Language     = PIn.PString(table.Rows[i][64].ToString());
 				retVal[i].AdmitDate    = PIn.PDate  (table.Rows[i][65].ToString());
-				//WARNING.  If you add any rows, you MUST change the number in GetFamily()
+				//WARNING.  If you add any rows, you MUST change the number in GetFamily(). Always last num above +2.
 			}
 			return retVal;
 		}
@@ -1291,22 +1293,26 @@ namespace OpenDental{
 		///<summary>Adds the current patient to the button. Can handle null values for pat and fam. Also resets the family list on the button appropriately. Need to supply the menu to fill as well as the EventHandler to set for each item (all the same).</summary>
 		public static void AddPatsToMenu(ContextMenu menu,EventHandler onClick,Patient pat,Family fam){
 			//add current patient
-			if(buttonLastFive==null){
-				buttonLastFive=new ArrayList();
+			if(buttonLastFivePatNums==null){
+				buttonLastFivePatNums=new ArrayList();
+			}
+			if(buttonLastFiveNames==null) {
+				buttonLastFiveNames=new ArrayList();
 			}
 			if(pat!=null){
-				if(buttonLastFive.Count==0
-					|| pat.PatNum!=((Patient)buttonLastFive[0]).PatNum){//different patient selected
-					buttonLastFive.Insert(0,pat);
-					if(buttonLastFive.Count>5){
-						buttonLastFive.RemoveAt(5);
+				if(buttonLastFivePatNums.Count==0	|| pat.PatNum!=(int)buttonLastFivePatNums[0]){//different patient selected
+					buttonLastFivePatNums.Insert(0,pat.PatNum);
+					buttonLastFiveNames.Insert(0,pat.GetNameLF());
+					if(buttonLastFivePatNums.Count>5){
+						buttonLastFivePatNums.RemoveAt(5);
+						buttonLastFiveNames.RemoveAt(5);
 					}
 				}
 			}
 			//fill menu
 			menu.MenuItems.Clear();
-			for(int i=0;i<buttonLastFive.Count;i++){
-				menu.MenuItems.Add(((Patient)buttonLastFive[i]).GetNameLF(),onClick);
+			for(int i=0;i<buttonLastFiveNames.Count;i++){
+				menu.MenuItems.Add(buttonLastFiveNames[i].ToString(),onClick);
 			}
 			menu.MenuItems.Add("-");
 			menu.MenuItems.Add("FAMILY");
@@ -1317,14 +1323,43 @@ namespace OpenDental{
 			}
 		}
 
+		///<Summary>A newer alternative which requires fewer calls to the database.  Does not handle null values. Use zero.</Summary>
+		public static void AddPatsToMenu(ContextMenu menu,EventHandler onClick,string nameLF,int patNum) {
+			//add current patient
+			if(buttonLastFivePatNums==null) {
+				buttonLastFivePatNums=new ArrayList();
+			}
+			if(buttonLastFiveNames==null) {
+				buttonLastFiveNames=new ArrayList();
+			}
+			if(patNum!=0) {
+				if(buttonLastFivePatNums.Count==0	|| patNum!=(int)buttonLastFivePatNums[0]) {//different patient selected
+					buttonLastFivePatNums.Insert(0,patNum);
+					buttonLastFiveNames.Insert(0,nameLF);
+					if(buttonLastFivePatNums.Count>5) {
+						buttonLastFivePatNums.RemoveAt(5);
+						buttonLastFiveNames.RemoveAt(5);
+					}
+				}
+			}
+			//fill menu
+			menu.MenuItems.Clear();
+			for(int i=0;i<buttonLastFiveNames.Count;i++) {
+				menu.MenuItems.Add(buttonLastFiveNames[i].ToString(),onClick);
+			}
+		}
+
 		///<summary>Determines which menu Item was selected from the Patient dropdown list and returns the patNum for that patient. This will not be activated when click on 'FAMILY' or on separator, because they do not have events attached.  Calling class then does a ModuleSelected.</summary>
 		public static int ButtonSelect(ContextMenu menu,object sender,Family fam){
 			int index=menu.MenuItems.IndexOf((MenuItem)sender);
 			//Patients.PatIsLoaded=true;
-			if(index<buttonLastFive.Count){
-				return ((Patient)buttonLastFive[index]).PatNum;
+			if(index<buttonLastFivePatNums.Count){
+				return (int)buttonLastFivePatNums[index];
 			}
-			return fam.List[index-buttonLastFive.Count-2].PatNum;
+			if(fam==null){
+				return 0;//will never happen
+			}
+			return fam.List[index-buttonLastFivePatNums.Count-2].PatNum;
 		}
 
 		///<summary>Makes a call to the db to figure out if the current HasIns status is correct.  If not, then it changes it.</summary>
@@ -1374,6 +1409,19 @@ namespace OpenDental{
 			}
 			else if(PrefB.GetInt("ShowIDinTitleBar")==2) {
 				retVal+=" - "+PatCur.ChartNumber;
+			}
+			return retVal;
+		}
+
+		///<summary>A simpler version which does not require as much data.</summary>
+		public static string GetMainTitle(string nameLF,int patNum,string chartNumber) {
+			string retVal=PrefB.GetString("MainWindowTitle");
+			retVal+=" - "+nameLF;
+			if(PrefB.GetInt("ShowIDinTitleBar")==1) {
+				retVal+=" - "+patNum.ToString();
+			}
+			else if(PrefB.GetInt("ShowIDinTitleBar")==2) {
+				retVal+=" - "+chartNumber;
 			}
 			return retVal;
 		}

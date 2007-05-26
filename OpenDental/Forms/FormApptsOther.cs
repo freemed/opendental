@@ -643,7 +643,8 @@ namespace OpenDental{
 
 		///<summary>Prepares the necessary info for placement of the appointment on the pinboard.</summary>
 		private void CreateCurInfo(Appointment AptCur){
-			ContrAppt.CurInfo=new InfoApt();
+MessageBox.Show("Not functional");
+			/*ContrAppt.CurInfo=new InfoApt();
 			ContrAppt.CurInfo.MyApt=AptCur.Copy();
 			Procedure[] procsForSingle;
 			if(AptCur.AptNum==PatCur.NextAptNum){//if is Next apt
@@ -655,7 +656,7 @@ namespace OpenDental{
 				ContrAppt.CurInfo.Production=Procedures.GetProductionOneApt(AptCur.AptNum,procsForSingle,false);
 			}
 			ContrAppt.CurInfo.Procs=procsForSingle;
-			ContrAppt.CurInfo.MyPatient=PatCur.Copy();
+			ContrAppt.CurInfo.MyPatient=PatCur.Copy();*/
 		}
 
 		private void butGoTo_Click(object sender, System.EventArgs e) {

@@ -187,12 +187,13 @@ namespace OpenDental{
 		}
 
 		private void CreateCurInfo(Appointment aptCur){
-			ContrAppt.CurInfo=new InfoApt();
+MessageBox.Show("Not functional");
+			/*ContrAppt.CurInfo=new InfoApt();
 			ContrAppt.CurInfo.MyApt=aptCur;
 			Procedure[] procs=Procedures.GetProcsForSingle(aptCur.AptNum,false);
 			ContrAppt.CurInfo.Procs=procs;
 			ContrAppt.CurInfo.Production=Procedures.GetProductionOneApt(aptCur.AptNum,procs,false);
-			ContrAppt.CurInfo.MyPatient=Patients.GetPat(aptCur.PatNum);
+			ContrAppt.CurInfo.MyPatient=Patients.GetPat(aptCur.PatNum);*/
 		}
 
 		private void butPrint_Click(object sender,EventArgs e) {

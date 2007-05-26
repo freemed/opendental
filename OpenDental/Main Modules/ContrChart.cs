@@ -43,7 +43,7 @@ namespace OpenDental{
 		private bool dataValid=false;
 		private System.Windows.Forms.ListBox listDx;
 		private int[] hiLightedRows=new int[1];
-		private ContrApptSingle ApptPlanned;
+		//private ContrApptSingle ApptPlanned;
 		private System.Windows.Forms.CheckBox checkDone;
 		private System.Windows.Forms.Label labelMinutes;
 		private System.Windows.Forms.RadioButton radioEntryR;
@@ -2381,12 +2381,12 @@ namespace OpenDental{
 		///<summary></summary>
 		public void InitializeOnStartup(){
 			newStatus=ProcStat.TP;
-			ApptPlanned=new ContrApptSingle();
-			ApptPlanned.Info.IsNext=true;
-			ApptPlanned.Location=new Point(1,3);
-			ApptPlanned.Visible=false;
-			tabPlanned.Controls.Add(ApptPlanned);
-			ApptPlanned.DoubleClick += new System.EventHandler(ApptPlanned_DoubleClick);
+			//ApptPlanned=new ContrApptSingle();
+			//ApptPlanned.IsPlanned=true;
+			//ApptPlanned.Location=new Point(1,3);
+			//ApptPlanned.Visible=false;
+			//tabPlanned.Controls.Add(ApptPlanned);
+			//ApptPlanned.DoubleClick += new System.EventHandler(ApptPlanned_DoubleClick);
 			tabProc.SelectedIndex=0;
 			tabProc.Height=253;
 			gridProg.Location=new Point(tabProc.Left,tabProc.Bottom+2);
@@ -2726,7 +2726,7 @@ namespace OpenDental{
 		}
 
 		private void FillPlanned(){
-			if(PatCur==null){
+			/*if(PatCur==null){
 				ApptPlanned.Visible=false;
 				checkDone.Checked=false;
 				butPin.Enabled=false;
@@ -2775,7 +2775,7 @@ namespace OpenDental{
 			butPin.Enabled=true;
 			butClear.Enabled=true;
 			labelMinutes.Text=(ApptPlanned.Info.MyApt.Pattern.Length*5).ToString()+" minutes";
-			//ContrApptSingle.ApptIsSelected=false;
+			//ContrApptSingle.ApptIsSelected=false;*/
 		}
 
 		private void FillPtInfo(){
@@ -4921,7 +4921,7 @@ namespace OpenDental{
 		}
 
 		private void checkDone_Click(object sender, System.EventArgs e) {
-			Patient oldPat=PatCur.Copy();
+			/*Patient oldPat=PatCur.Copy();
 			if(checkDone.Checked){
 				if(ApptPlanned.Visible){
 					if(!MsgBox.Show(this,true,"Existing planned appointment will be deleted. Continue?")){
@@ -4940,11 +4940,11 @@ namespace OpenDental{
 				PatCur.PlannedIsDone=false;
 				Patients.Update(PatCur,oldPat);
 			}
-			ModuleSelected(PatCur.PatNum);
+			ModuleSelected(PatCur.PatNum);*/
 		}
 
 		private void butNew_Click(object sender, System.EventArgs e) {
-			if(ApptPlanned.Visible){
+			/*if(ApptPlanned.Visible){
 				if(MessageBox.Show(Lan.g(this,"Replace existing planned appointment?")
 					,"",MessageBoxButtons.OKCancel)!=DialogResult.OK)
 					return;
@@ -4987,31 +4987,31 @@ namespace OpenDental{
 			PatCur.NextAptNum=AptCur.AptNum;
 			PatCur.PlannedIsDone=false;
 			Patients.Update(PatCur,patOld);
-			ModuleSelected(PatCur.PatNum);//if procs were added in appt, then this will display them
+			ModuleSelected(PatCur.PatNum);//if procs were added in appt, then this will display them*/
 		}
 
 		///<summary>Not enabled if there is no planned appointment.</summary>
 		private void butClear_Click(object sender, System.EventArgs e) {
-			if(MessageBox.Show(Lan.g(this,"Delete planned appointment?"),"",MessageBoxButtons.OKCancel)!=DialogResult.OK)
+			/*if(MessageBox.Show(Lan.g(this,"Delete planned appointment?"),"",MessageBoxButtons.OKCancel)!=DialogResult.OK)
 				return;
 			//Procedures.UnattachProcsInPlannedAppt(ApptPlanned.Info.MyApt.AptNum);
 			Appointments.Delete(ApptPlanned.Info.MyApt.AptNum);
 			Patient patOld=PatCur.Copy();
 			PatCur.NextAptNum=0;
 			Patients.Update(PatCur,patOld);
-			ModuleSelected(PatCur.PatNum);
+			ModuleSelected(PatCur.PatNum);*/
 		}
 
 		///<summary>Not enabled if there is no planned appointment.</summary>
 		private void butPin_Click(object sender,EventArgs e) {
-			GotoModule.PinToAppt(ApptPlanned.Info.MyApt);
+			//GotoModule.PinToAppt(ApptPlanned.Info.MyApt);
 		}
 
-		private void ApptPlanned_DoubleClick(object sender, System.EventArgs e){
+		/*private void ApptPlanned_DoubleClick(object sender, System.EventArgs e){
 			FormApptEdit FormAE=new FormApptEdit(ApptPlanned.Info.MyApt.AptNum);
 			FormAE.ShowDialog();
 			ModuleSelected(PatCur.PatNum);//if procs were added in appt, then this will display them
-		}
+		}*/
 
 		private void toothChart_Click(object sender,EventArgs e) {
 			textSurf.Text="";

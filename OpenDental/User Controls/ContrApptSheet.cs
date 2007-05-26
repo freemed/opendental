@@ -48,7 +48,7 @@ namespace OpenDental{
     private SolidBrush holidayBrush;
 		///<summary>This gets set externally each time the module is selected.  It is the background schedule for the entire day.  Includes all types.</summary>
 		public Schedule[] SchedListDay;
-		public bool isWeeklyView;
+		public static bool IsWeeklyView;
 
 		///<summary></summary>
 		public ContrApptSheet(){
@@ -223,7 +223,7 @@ namespace OpenDental{
 			}
 			DrawMainBackground(g);
 			DrawBlockouts(g);
-			if(!isWeeklyView){
+			if(!IsWeeklyView){
 				DrawProvSchedInTimebar(g);
 				DrawProvTimebar(g);
 			}
@@ -242,7 +242,7 @@ namespace OpenDental{
 			//then, loop through each operatory
 			Operatory curOp;
 			bool isHoliday=false;
-			if(!isWeeklyView){
+			if(!IsWeeklyView){
 				for(int i=0;i<SchedListDay.Length;i++){
 					if(SchedListDay[i].SchedType==ScheduleType.Practice && SchedListDay[i].Status==SchedStatus.Holiday){
 						isHoliday=true;
@@ -251,7 +251,7 @@ namespace OpenDental{
 				}
 			}
 			for(int j=0;j<ColCount;j++){
-				if(isWeeklyView){
+				if(IsWeeklyView){
 					schedForType=Schedules.GetForType(SchedListDay,ScheduleType.Provider,PrefB.GetInt("ScheduleProvUnassigned"));
 				}
 				else{
@@ -497,7 +497,7 @@ namespace OpenDental{
 			try{
 				if(RowsPerIncr==0)
 					RowsPerIncr=1;
-				if(isWeeklyView){
+				if(IsWeeklyView){
 					ColCount=ContrAppt.numOfWeekDaysToDisplay;
 					ProvCount=0;
 				}

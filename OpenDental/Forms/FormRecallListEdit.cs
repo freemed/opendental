@@ -653,13 +653,14 @@ namespace OpenDental{
 
 		/// <summary>Creates appointment and appropriate procedures, and places data in ContrAppt.CurInfo so it will display on pinboard.</summary>
 		private void CreateCurInfo(){
-			ContrAppt.CurInfo=new InfoApt();
+MessageBox.Show("Not functional");
+			/*ContrAppt.CurInfo=new InfoApt();
 			Appointment AptCur=Appointments.CreateRecallApt(PatCur,ProcList,RecallCur,PlanList);
 			ContrAppt.CurInfo.MyApt=AptCur.Copy();
 			Procedure[] procs=Procedures.GetProcsForSingle(AptCur.AptNum,false);
 			ContrAppt.CurInfo.Procs=procs;
 			ContrAppt.CurInfo.Production=Procedures.GetProductionOneApt(AptCur.AptNum,procs,false);
-			ContrAppt.CurInfo.MyPatient=PatCur;
+			ContrAppt.CurInfo.MyPatient=PatCur;*/
 		}
 
 		///<summary>Called from Pin_Click and OK_Click.</summary>

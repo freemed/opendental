@@ -145,7 +145,8 @@ namespace OpenDental{
 
 		/// <summary>This is not the best way to handle this for the long term.  There must be a better way to get some of the extra display info.</summary>
 		private void CreateCurInfo(Appointment aptCur){
-			ContrAppt.CurInfo=new InfoApt();
+MessageBox.Show("Not functional");
+			/*ContrAppt.CurInfo=new InfoApt();
 			ContrAppt.CurInfo.MyApt=aptCur.Copy();
 			//ContrAppt.CurInfo.CreditAndIns=Patients.GetCreditIns();
 			//ContrAppt.CurInfo.PatientName=Patients.GetCurNameLF();
@@ -153,7 +154,7 @@ namespace OpenDental{
 			ContrAppt.CurInfo.Procs=procs;
 			ContrAppt.CurInfo.Production=Procedures.GetProductionOneApt(aptCur.AptNum,procs,true);
 			ContrAppt.CurInfo.MyPatient=Patients.GetPat(aptCur.PatNum);
-				//patCur.Copy();
+				//patCur.Copy();*/
 		}
 
 		private void butClose_Click(object sender, System.EventArgs e) {

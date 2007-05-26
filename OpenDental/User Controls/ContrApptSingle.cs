@@ -27,8 +27,10 @@ namespace OpenDental{
 		public static bool PinBoardIsSelected;
 		///<summary>Stores the shading info for the provider bars on the left of the appointments module</summary>
 		public static int[][] ProvBar;
-		///<summary>Contains info inluding the lab, procs, and all other items that need to be displayed. Also contains Appointment object</summary>
-		public InfoApt Info;
+		//<summary>Contains info inluding the lab, procs, and all other items that need to be displayed. Also contains Appointment object</summary>
+		//public InfoApt Info;
+		//<summary>Set to true if this appointment is simply being displayed in the Chart module Planned apt section rather than in the Appointments module.</summary>
+		//public bool IsPlanned;
 		///<summary>Stores the background bitmap for this control</summary>
 		public Bitmap Shadow;
 		private Font baseFont=new Font("Arial",8);
@@ -40,7 +42,7 @@ namespace OpenDental{
 		///<summary></summary>
 		public ContrApptSingle(){
 			InitializeComponent();// This call is required by the Windows.Forms Form Designer.
-			Info=new InfoApt();
+			//Info=new InfoApt();
 		}
 
 		///<summary></summary>
@@ -107,7 +109,7 @@ namespace OpenDental{
 		private int ConvertToX(){
 			if(IsWeeklyView) {
 				return ContrApptSheet.TimeWidth+ContrApptSheet.ProvWidth*ContrApptSheet.ProvCount
-					+ContrApptSheet.ColWidth*((int)Info.MyApt.AptDateTime.DayOfWeek-1)+1;
+					+ContrApptSheet.ColWidth*((int)PIn.PDateT(DataRoww["AptDateTime"].ToString()).DayOfWeek-1)+1;
 			}
 			else {
 				return ContrApptSheet.TimeWidth+ContrApptSheet.ProvWidth*ContrApptSheet.ProvCount
@@ -415,7 +417,7 @@ namespace OpenDental{
 		}
 
 		private void ContrApptSingle_MouseDown(object sender, System.Windows.Forms.MouseEventArgs e) {
-			ClickedAptNum=Info.MyApt.AptNum;
+			ClickedAptNum=PIn.PInt(DataRoww["AptNum"].ToString());
 		}
 
 

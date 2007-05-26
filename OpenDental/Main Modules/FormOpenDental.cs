@@ -1932,7 +1932,7 @@ namespace OpenDental{
 				signalLastRefreshed=sigList[sigList.Length-1].SigDateTime;
 			}
 			if(ContrAppt2.Visible && Signals.ApptNeedsRefresh(sigList,Appointments.DateSelected.Date)){
-				ContrAppt2.RefreshModuleScreen();
+				ContrAppt2.RefreshPeriod();
 			}
 			InvalidTypes invalidTypes=Signals.GetInvalidTypes(sigList);
 			if(invalidTypes!=0){
