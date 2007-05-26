@@ -12,7 +12,7 @@ namespace OpenDentBusiness {
 			return retVal;
 		}
 
-		private static DataTable GetProgNotes(int patNum,bool isAuditMode) {
+		public static DataTable GetProgNotes(int patNum,bool isAuditMode) {
 			DataConnection dcon=new DataConnection();
 			DataTable table=new DataTable("ProgNotes");
 			DataRow row;

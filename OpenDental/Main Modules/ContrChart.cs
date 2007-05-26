@@ -4844,17 +4844,20 @@ namespace OpenDental{
 		}
 
 		private void checkRx_Click(object sender, System.EventArgs e) {
-			if (checkRx.Checked) {
-				checkShowTP.Checked = false;
-				checkShowC.Checked = false;
-				checkShowE.Checked = false;
-				checkShowR.Checked = false;
-				checkNotes.Checked = false;
-				checkRx.Checked = true;
-				checkComm.Checked = false;
-				checkExtraNotes.Checked = false;
+		if (checkRx.Checked)//since there is no double click event...this allows almost the same thing
+            {
+                checkShowTP.Checked=false;
+                checkShowC.Checked=false;
+                checkShowE.Checked=false;
+                checkShowR.Checked=false;
+                checkNotes.Checked=false;
+                checkRx.Checked=true;
+                checkComm.Checked=false;
+                checkAppt.Checked=false;
+				checkLabCase.Checked=false;
+                checkExtraNotes.Checked=false;
 
-			}
+            }
 
 			FillProgNotes();
 		}
