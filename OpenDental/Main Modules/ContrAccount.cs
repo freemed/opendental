@@ -2745,12 +2745,12 @@ namespace OpenDental {
 			else{
 				fromDate=DateTime.Today.AddDays(-45);
 			}
-			PrintStatement(patNums,fromDate,DateTime.MaxValue,true,false,false,false,"");
+			PrintStatement(patNums,fromDate,DateTime.MaxValue,true,false,false,false,"",false,(PrefB.GetBool("PrintSimpleStatements")));
 			ModuleSelected(PatCur.PatNum);
 		}
 		
 		private void menuItemStatementWalkout_Click(object sender, System.EventArgs e) {
-			PrintStatement(new int[] {PatCur.PatNum},DateTime.Today,DateTime.Today,false,false,true,true,"");
+			PrintStatement(new int[] {PatCur.PatNum},DateTime.Today,DateTime.Today,false,false,true,true,"",false,(PrefB.GetBool("PrintSimpleStatements")));
 			ModuleSelected(PatCur.PatNum);
 		}
 
@@ -2769,7 +2769,7 @@ namespace OpenDental {
 			}
 			//FillMain(FormSO.FromDate,FormSO.ToDate,FormSO.IncludeClaims,FormSO.SubtotalsOnly);
 			PrintStatement(FormSO.PatNums,FormSO.FromDate,FormSO.ToDate,FormSO.IncludeClaims
-				,FormSO.SubtotalsOnly,FormSO.HidePayment,FormSO.NextAppt,FormSO.Note);
+				,FormSO.SubtotalsOnly,FormSO.HidePayment,FormSO.NextAppt,FormSO.Note,FormSO.IsBill,FormSO.SimpleStatement);
 			ModuleSelected(PatCur.PatNum);
 		}
 
@@ -2832,7 +2832,7 @@ namespace OpenDental {
 		}
 
 		/// <summary>Prints a single statement.</summary>
-		private void PrintStatement(int[] famPatNums,DateTime fromDate,DateTime toDate,bool includeClaims, bool subtotalsOnly,bool hidePayment,bool nextAppt,string note){
+		private void PrintStatement(int[] famPatNums,DateTime fromDate,DateTime toDate,bool includeClaims, bool subtotalsOnly,bool hidePayment,bool nextAppt,string note, bool isBill, bool simpleStatement){
 			FormRpStatement FormST=new FormRpStatement();
 			int[][] patNums=new int[1][];
 			patNums[0]=new int[famPatNums.Length];
@@ -2840,7 +2840,7 @@ namespace OpenDental {
 				patNums[0][i]=famPatNums[i];
 			}
 			FormST.PrintStatements(patNums,fromDate,toDate,includeClaims,subtotalsOnly,hidePayment,nextAppt,
-				new string[] {note},false);
+				new string[] {note}, isBill, simpleStatement);
 			#if DEBUG
 				FormST.ShowDialog();
 			#endif

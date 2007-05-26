@@ -48,6 +48,8 @@ namespace OpenDental{
 		private int[][] PatNums;
 		///<summary>The guarantor for the statement that is currently printing.</summary>
 		private Patient PatGuar;
+		///<summary>Remove the detail from the itemized grid and make the statement simple</summary>
+		private bool  SimpleStatement;
 
 		///<summary></summary>
 		public FormRpStatement(){
@@ -296,16 +298,17 @@ namespace OpenDental{
 				}
 				notes[i]+=generalNote;
 			}
-			PrintStatements(patNums,DateTime.Today.AddDays(-45),DateTime.Today,true,false,false,false,notes,true);
+			PrintStatements(patNums,DateTime.Today.AddDays(-45),DateTime.Today,true,false,false,false,notes,true,(PrefB.GetBool("PrintSimpleStatements")));
 		}
 
-		///<summary>This is called from ContrAccount about 3 times and also from FormRpStatement as part of the billing process.  This is what you call to print statements, either one or many.  For the patNum parameter, the first dim is for the family. Second dim is family members. The note array must have one element for every statement, so same number as dim one of patNums.  IsBill distinguishes bills sent by mail from statements handed to the patient.</summary>
-		public void PrintStatements(int[][] patNums,DateTime fromDate,DateTime toDate,bool includeClaims, bool subtotalsOnly,bool hidePayment,bool nextAppt,string[] notes,bool isBill){
+		///<summary>This is called from ContrAccount about 3 times and also from FormRpStatement as part of the billing process.  This is what you call to print statements, either one or many.  For the patNum parameter, the first dim is for the family. Second dim is family members. The note array must have one element for every statement, so same number as dim one of patNums.  IsBill distinguishes bills sent by mail from statements handed to the patient. simpleStatement removes the detail of the itemized grid</summary>
+		public void PrintStatements(int[][] patNums,DateTime fromDate,DateTime toDate,bool includeClaims, bool subtotalsOnly,bool hidePayment,bool nextAppt,string[] notes,bool isBill, bool simpleStatement){
 			//these 4 variables are needed by the printing logic. The rest are not.
 			PatNums=(int[][])patNums.Clone();
 			Notes=(string[])notes.Clone();
 			SubtotalsOnly=subtotalsOnly;
 			HidePayment=hidePayment;
+			SimpleStatement=simpleStatement;
 			PrintDocument pd=new PrintDocument();
 			if(!Printers.SetPrinter(pd,PrintSituation.Statement)){
 				return;
@@ -662,7 +665,7 @@ namespace OpenDental{
 					g.DrawString(text,font,brush,xPos,yPos);
 				}
 				//Aging-----------------------------------------------------------------------------------
-				if(!HidePayment && !SubtotalsOnly){
+				if(!HidePayment && !SubtotalsOnly && !SimpleStatement){
 					yPos=350+25;
 					xPos=160;
 					width=70;//width of an individual cell
@@ -732,6 +735,16 @@ namespace OpenDental{
 						text=(PatGuar.BalTotal-PatGuar.InsEst).ToString("F");
 						g.DrawString(text,font,brush,xPos+width/2-g.MeasureString(text,font).Width/2,yPos);
 					}
+				}
+				else if(SimpleStatement){
+				    yPos=350+25;
+                    xPos = 425 - g.MeasureString(text, font).Width / 2;
+					text = "Account Balance: $" + PatGuar.BalTotal.ToString("F");
+                    font = new Font("Arial", 18, FontStyle.Bold);
+                    brush = Brushes.Black;
+                    g.DrawString(text, font, brush, xPos, yPos);
+
+
 				}
 				yPos=350+68;
 				//yPos=770;//change this value to test multiple pages
