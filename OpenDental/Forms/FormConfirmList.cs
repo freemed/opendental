@@ -46,6 +46,8 @@ namespace OpenDental{
 		private OpenDental.UI.PrintPreview printPreview;
 		private bool headingPrinted;
 		private int headingPrintH;
+		///<summary>Only used if PinClicked=true</summary>
+		public int AptSelected;
 
 		///<summary></summary>
 		public FormConfirmList(){
@@ -412,14 +414,22 @@ namespace OpenDental{
 		}
 
 		private void grid_CellDoubleClick(object sender, OpenDental.UI.ODGridClickEventArgs e) {
+			SelectedPatNum=PIn.PInt(table.Rows[e.Row]["PatNum"].ToString());
 			Cursor=Cursors.WaitCursor;
 			int selectedApt=PIn.PInt(table.Rows[e.Row]["AptNum"].ToString());
 			//Appointment apt=Appointments.GetOneApt(selectedApt);
 			FormApptEdit FormA=new FormApptEdit(selectedApt);
+			FormA.PinIsVisible=true;
 			FormA.ShowDialog();
-			//if(FormA.DialogResult==DialogResult.Cancel){
-			//	Cursor=Cursors.Default;
-			FillMain();
+			if(FormA.PinClicked) {
+				PinClicked=true;
+				AptSelected=selectedApt;
+				DialogResult=DialogResult.OK;
+				return;
+			}
+			else {
+				FillMain();
+			}
 			for(int i=0;i<table.Rows.Count;i++){
 				if(PIn.PInt(table.Rows[i]["AptNum"].ToString())==selectedApt){
 					grid.SetSelected(i,true);

@@ -27,15 +27,10 @@ namespace OpenDental{
 		public static bool PinBoardIsSelected;
 		///<summary>Stores the shading info for the provider bars on the left of the appointments module</summary>
 		public static int[][] ProvBar;
-		//<summary>Contains info inluding the lab, procs, and all other items that need to be displayed. Also contains Appointment object</summary>
-		//public InfoApt Info;
-		//<summary>Set to true if this appointment is simply being displayed in the Chart module Planned apt section rather than in the Appointments module.</summary>
-		//public bool IsPlanned;
 		///<summary>Stores the background bitmap for this control</summary>
 		public Bitmap Shadow;
 		private Font baseFont=new Font("Arial",8);
 		private string patternShowing;
-		public bool IsWeeklyView;
 		///<Summary>This is a datarow that stores all info necessary to draw appt.  Replacing Info.</Summary>
 		public DataRow DataRoww;
 
@@ -107,7 +102,7 @@ namespace OpenDental{
 		
 		///<summary>Called from SetLocation to establish X position of control.</summary>
 		private int ConvertToX(){
-			if(IsWeeklyView) {
+			if(ContrApptSheet.IsWeeklyView) {
 				return ContrApptSheet.TimeWidth+ContrApptSheet.ProvWidth*ContrApptSheet.ProvCount
 					+ContrApptSheet.ColWidth*((int)PIn.PDateT(DataRoww["AptDateTime"].ToString()).DayOfWeek-1)+1;
 			}
@@ -258,22 +253,19 @@ namespace OpenDental{
 			g.FillRectangle(new SolidBrush(confirmColor),Width-13,1,12,ContrApptSheet.Lh-2);
 			//g.DrawRectangle(new Pen(Color.Black),0,0,13,ContrApptSheet.Lh-1);
 			g.DrawRectangle(new Pen(Color.Black),Width-13,0,13,ContrApptSheet.Lh-1);
-//broken
-//g.DrawString(Info.MyPatient.GetCreditIns(),baseFont,new SolidBrush(Color.Black),Width-13,-1);//0,-1);
+			g.DrawString(DataRoww["creditIns"].ToString(),baseFont,new SolidBrush(Color.Black),Width-13,-1);//0,-1);
 			//assistant box
-/*if(Info.MyApt.Assistant!=0){
-	g.FillRectangle(new SolidBrush(Color.White)
-		,Width-18,Height-ContrApptSheet.Lh,17,ContrApptSheet.Lh-1);
-	g.DrawLine(Pens.Gray,Width-18,Height-ContrApptSheet.Lh,Width,Height-ContrApptSheet.Lh);
-	g.DrawLine(Pens.Gray,Width-18,Height-ContrApptSheet.Lh,Width-18,Height);
-	g.DrawString(Employees.GetAbbr(Info.MyApt.Assistant)
-		,baseFont,new SolidBrush(Color.Black),Width-18,Height-ContrApptSheet.Lh-1);
-}*/
-			//g.DrawString(":10",font,new SolidBrush(Color.Black),timeWidth-19,i*Lh*6+Lh-1);
-/*if(Info.MyApt.AptStatus==ApptStatus.Broken){
-	g.DrawLine(new Pen(Color.Black),8,1,Width-1,Height-1);
-	g.DrawLine(new Pen(Color.Black),8,Height-1,Width-1,1);
-}*/
+			if(DataRoww["Assistant"].ToString()!="0"){
+				g.FillRectangle(new SolidBrush(Color.White),Width-18,Height-ContrApptSheet.Lh,17,ContrApptSheet.Lh-1);
+				g.DrawLine(Pens.Gray,Width-18,Height-ContrApptSheet.Lh,Width,Height-ContrApptSheet.Lh);
+				g.DrawLine(Pens.Gray,Width-18,Height-ContrApptSheet.Lh,Width-18,Height);
+				g.DrawString(Employees.GetAbbr(PIn.PInt(DataRoww["Assistant"].ToString()))
+					,baseFont,new SolidBrush(Color.Black),Width-18,Height-ContrApptSheet.Lh-1);
+			}
+			if(DataRoww["AptStatus"].ToString()==((int)ApptStatus.Broken).ToString()){
+				g.DrawLine(new Pen(Color.Black),8,1,Width-1,Height-1);
+				g.DrawLine(new Pen(Color.Black),8,Height-1,Width-1,1);
+			}
 			this.BackgroundImage=Shadow;
 			//Shadow=null;
 			g.Dispose();
@@ -360,44 +352,35 @@ namespace OpenDental{
 						g.DrawString(DataRoww["preMedFlag"].ToString(),baseFont,brush,xPos,yPos);
 						return 1;
 					}
-				/*case "Procs":
-					//text=DataRoww[""].ToString();
-					int rowsUsed=0;
-					for(int j=0;j<Info.Procs.Length;j++){
-						g.DrawString(Procedures.GetDescription(Info.Procs[j]),baseFont,brush,xPos,yPos);
-						yPos+=ContrApptSheet.Lh;
-						rowsUsed++;
-					}
-					return rowsUsed;
+				case "Procs":
+					text=DataRoww["procs"].ToString();
+					if(rowI==0)
+						noteSize=g.MeasureString(text,baseFont,ContrApptSheet.ColWidth-9-4);
+					else
+						noteSize=g.MeasureString(text,baseFont,ContrApptSheet.ColWidth-9);
+					g.MeasureString(text,baseFont,noteSize,format,out charactersFitted,out linesFilled);
+					rect=new RectangleF(new PointF(xPos,yPos),noteSize);
+					g.DrawString(text,baseFont,brush,rect,format);
+					return linesFilled;
 				//case "ProcDescript":
 					//no longer used
 					//g.DrawString(Info.MyApt.ProcDescript,baseFont,brush,xPos,yPos);
 					//return 1;
 				case "Production":
-					//text=DataRoww[""].ToString();
-					g.DrawString(Info.Production.ToString("c"),baseFont,brush,xPos,yPos);
+					g.DrawString(DataRoww["production"].ToString(),baseFont,brush,xPos,yPos);
 					return 1;
 				case "Provider":
-					//text=DataRoww[""].ToString();
-					if(Info.MyApt.IsHygiene && Providers.GetProv(Info.MyApt.ProvHyg)!=null){
-						g.DrawString(Providers.GetNameLF(Info.MyApt.ProvHyg),baseFont,brush,xPos,yPos);
-					}
-					else{
-						g.DrawString(Providers.GetNameLF(Info.MyApt.ProvNum),baseFont,brush,xPos,yPos);
-					}
+					g.DrawString(DataRoww["provider"].ToString(),baseFont,brush,xPos,yPos);
 					return 1;
 				case "WirelessPhone":
-					//text=DataRoww[""].ToString();
-					g.DrawString("Cell:"+Info.MyPatient.WirelessPhone,baseFont,brush,xPos,yPos);
+					g.DrawString(DataRoww["wirelessPhone"].ToString(),baseFont,brush,xPos,yPos);
 					return 1;
 				case "WkPhone":
-					//text=DataRoww[""].ToString();
-					g.DrawString("Wk:"+Info.MyPatient.WkPhone,baseFont,brush,xPos,yPos);
+					g.DrawString(DataRoww["wkPhone"].ToString(),baseFont,brush,xPos,yPos);
 					return 1;
 				case "Age":
-					//text=DataRoww[""].ToString();
-					g.DrawString("Age:"+Info.MyPatient.Age.ToString(),baseFont,brush,xPos,yPos);
-					return 1;*/
+					g.DrawString(DataRoww["age"].ToString(),baseFont,brush,xPos,yPos);
+					return 1;
 			}
 			return 0;
 		}

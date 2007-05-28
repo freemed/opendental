@@ -46,14 +46,23 @@ namespace OpenDentBusiness{
 		///<Summary>Parameters: 1:dateStart, 2:dateEnd</Summary>
 		public static DataSet RefreshPeriod(string[] parameters) {
 			DataSet retVal=new DataSet();
-			retVal.Tables.Add(GetPeriodApptsTable(parameters[0],parameters[1]));
+			retVal.Tables.Add(GetPeriodApptsTable(parameters[0],parameters[1],"0"));
 			retVal.Tables.Add(GetPeriodEmployeeSchedTable(parameters[0],parameters[1]));
 			return retVal;
 		}
 
-		private static DataTable GetPeriodApptsTable(string strDateStart,string strDateEnd) {
+		///<summary>Parameter: 1:AptNum</summary>
+		public static DataSet RefreshOneApt(string[] parameters) {
+			DataSet retVal=new DataSet();
+			retVal.Tables.Add(GetPeriodApptsTable("","",parameters[0]));
+			return retVal;
+		}
+
+		///<summary>If aptnum is specified, then the dates are ignored.</summary>
+		private static DataTable GetPeriodApptsTable(string strDateStart,string strDateEnd,string strAptNum) {
 			DateTime dateStart=PIn.PDate(strDateStart);
 			DateTime dateEnd=PIn.PDate(strDateEnd);
+			int aptNum=PIn.PInt(strAptNum);
 			DataConnection dcon=new DataConnection();
 			DataTable table=new DataTable("Appointments");
 			DataRow row;
@@ -68,12 +77,14 @@ namespace OpenDentBusiness{
 			table.Columns.Add("AptDateTime");
 			table.Columns.Add("AptNum");
 			table.Columns.Add("AptStatus");
+			table.Columns.Add("Assistant");
 			table.Columns.Add("billingType");
 			table.Columns.Add("chartNumber");
 			table.Columns.Add("chartNumAndName");
 			table.Columns.Add("confirmed");
 			table.Columns.Add("Confirmed");
 			table.Columns.Add("contactMethods");
+			table.Columns.Add("creditIns");
 			table.Columns.Add("famFinUrgNote");
 			table.Columns.Add("hmPhone");
 			table.Columns.Add("ImageFolder");
@@ -97,9 +108,9 @@ namespace OpenDentBusiness{
 			table.Columns.Add("wkPhone");
 			table.Columns.Add("wirelessPhone");
 			string command="SELECT p1.Abbr ProvAbbr,p2.Abbr HygAbbr,patient.AddrNote,"
-				+"patient.ApptModNote,AptDateTime,appointment.AptNum,AptStatus,"
+				+"patient.ApptModNote,AptDateTime,appointment.AptNum,AptStatus,Assistant,"
 				+"patient.BillingType,patient.BirthDate,"
-				+"patient.ChartNumber,Confirmed,DateTimeChecked,DateTimeRecd,DateTimeSent,"
+				+"patient.ChartNumber,Confirmed,patient.CreditType,DateTimeChecked,DateTimeRecd,DateTimeSent,"
 				+"guar.FamFinUrgNote,patient.FName,patient.HmPhone,patient.ImageFolder,IsHygiene,IsNewPatient,"
 				+"LabCaseNum,patient.LName,patient.MedUrgNote,patient.MiddleI,Note,Op,appointment.PatNum,"
 				+"Pattern,patplan.PlanNum,patient.PreferConfirmMethod,patient.PreferContactMethod,patient.Preferred,"
@@ -111,17 +122,27 @@ namespace OpenDentBusiness{
 				+"LEFT JOIN provider p2 ON p2.ProvNum=appointment.ProvHyg "
 				+"LEFT JOIN labcase ON labcase.AptNum=appointment.AptNum "
 				+"LEFT JOIN patient guar ON guar.PatNum=patient.Guarantor "
-				+"LEFT JOIN patplan ON patplan.PatNum=patient.PatNum "
-				+"WHERE AptDateTime >= "+POut.PDate(dateStart)+" "
-				+"AND AptDateTime < "+POut.PDate(dateStart.AddDays(1))+" "
-				+"AND (AptStatus=1 OR AptStatus=2 OR AptStatus=4 OR AptStatus=5) ";
+				+"LEFT JOIN patplan ON patplan.PatNum=patient.PatNum ";
+			if(aptNum==0){
+				command+="WHERE AptDateTime >= "+POut.PDate(dateStart)+" "
+					+"AND AptDateTime < "+POut.PDate(dateStart.AddDays(1))+" "
+					+"AND (AptStatus=1 OR AptStatus=2 OR AptStatus=4 OR AptStatus=5) ";
+			}
+			else{
+				command+="WHERE appointment.AptNum="+POut.PInt(aptNum);
+			}
 			DataTable raw=dcon.GetTable(command);
 			command="SELECT AbbrDesc,procedurelog.AptNum,procedurelog.CodeNum,Surf,ToothNum,TreatArea "
 				+"FROM procedurelog,appointment,procedurecode "
 				+"WHERE procedurelog.AptNum=appointment.AptNum "
-				+"AND procedurelog.CodeNum=procedurecode.CodeNum "
-				+"AND AptDateTime >= "+POut.PDate(dateStart)+" "
-				+"AND AptDateTime < "+POut.PDate(dateStart.AddDays(1))+" ";
+				+"AND procedurelog.CodeNum=procedurecode.CodeNum ";
+			if(aptNum==0) {
+				command+="AND AptDateTime >= "+POut.PDate(dateStart)+" "
+					+"AND AptDateTime < "+POut.PDate(dateStart.AddDays(1))+" ";
+			}
+			else {
+				command+="AND procedurelog.AptNum="+POut.PInt(aptNum);
+			}
 			DataTable rawProc=dcon.GetTable(command);
 			DateTime aptDate;
 			TimeSpan span;
@@ -166,6 +187,7 @@ namespace OpenDentBusiness{
 				row["aptTime"]=aptDate.ToShortTimeString();
 				row["AptNum"]=raw.Rows[i]["AptNum"].ToString();
 				row["AptStatus"]=raw.Rows[i]["AptStatus"].ToString();
+				row["Assistant"]=raw.Rows[i]["Assistant"].ToString();
 				row["billingType"]=DefB.GetName(DefCat.BillingTypes,PIn.PInt(raw.Rows[i]["BillingType"].ToString()));
 				if(raw.Rows[i]["ChartNumber"].ToString()!=""){
 					row["chartNumber"]="ChartNumber: "+raw.Rows[i]["ChartNumber"].ToString();
@@ -198,6 +220,10 @@ namespace OpenDentBusiness{
 					}
 					row["contactMethods"]+=Lan.g("Appointments","Recall Method: ")
 						+((ContactMethod)PIn.PInt(raw.Rows[i]["PreferRecallMethod"].ToString())).ToString();
+				}
+				row["creditIns"]=raw.Rows[i]["CreditType"].ToString();
+				if(raw.Rows[i]["PlanNum"].ToString()!="0") {
+					row["creditIns"]+="I";
 				}
 				if(raw.Rows[i]["FamFinUrgNote"].ToString()!="") {
 					row["famFinUrgNote"]=Lan.g("Appointments","FamFinUrgNote: ")+raw.Rows[i]["FamFinUrgNote"].ToString();

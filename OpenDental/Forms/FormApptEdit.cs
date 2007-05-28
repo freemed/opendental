@@ -699,6 +699,7 @@ namespace OpenDental{
 			this.butPin.Size = new System.Drawing.Size(92,26);
 			this.butPin.TabIndex = 122;
 			this.butPin.Text = "&Pinboard";
+			this.butPin.Click += new System.EventHandler(this.butPin_Click);
 			// 
 			// butOK
 			// 

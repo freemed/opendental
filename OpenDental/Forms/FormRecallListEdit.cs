@@ -33,8 +33,6 @@ namespace OpenDental{
 		private PatientNotes PatientNotes=new PatientNotes();
 		///<summary>If Pin clicked, this allows FormRecall to know about it.</summary>
 		public bool PinClicked=false;
-		//<summary>Needed just in case send to pinboard to check when due for BW.</summary>
-		//public DateTime DueDate;
 		private System.Windows.Forms.TextBox textBillingType;
 		private OpenDental.UI.Button butPin;
 		private System.Windows.Forms.Label label14;
@@ -44,15 +42,13 @@ namespace OpenDental{
 		private System.Windows.Forms.ListView listFamily;
 		private System.Windows.Forms.ColumnHeader columnHeader4;
 		private System.Windows.Forms.ColumnHeader columnHeader5;
-		//private ArrayList ALCommItems;
 		private Procedure[] ProcList;
 		private System.Windows.Forms.ComboBox comboStatus;
 		private System.Windows.Forms.GroupBox groupBox2;
 		private System.Windows.Forms.Label label3;
 		private OpenDental.UI.Button butEditRecall;
-		//public RecallItem DisplayedRecallItem;
-		//public int RecallStatus;//foreign key to DefNum
-		//public int PatNum;
+		///<summary>Only used if PinClicked=true</summary>
+		public int AptSelected;
 		private Recall RecallCur;
 		private Patient PatCur;
 		private Family FamCur;
@@ -651,18 +647,6 @@ namespace OpenDental{
 			FillRecall();
 		}
 
-		/// <summary>Creates appointment and appropriate procedures, and places data in ContrAppt.CurInfo so it will display on pinboard.</summary>
-		private void CreateCurInfo(){
-MessageBox.Show("Not functional");
-			/*ContrAppt.CurInfo=new InfoApt();
-			Appointment AptCur=Appointments.CreateRecallApt(PatCur,ProcList,RecallCur,PlanList);
-			ContrAppt.CurInfo.MyApt=AptCur.Copy();
-			Procedure[] procs=Procedures.GetProcsForSingle(AptCur.AptNum,false);
-			ContrAppt.CurInfo.Procs=procs;
-			ContrAppt.CurInfo.Production=Procedures.GetProductionOneApt(AptCur.AptNum,procs,false);
-			ContrAppt.CurInfo.MyPatient=PatCur;*/
-		}
-
 		///<summary>Called from Pin_Click and OK_Click.</summary>
 		private void SaveRecall(){
 			int newStatus;
@@ -724,9 +708,23 @@ MessageBox.Show("Not functional");
 		private void butPin_Click(object sender, System.EventArgs e) {
 			SaveRecall();
 			PinClicked=true;
-			CreateCurInfo();
+			Appointment apt=Appointments.CreateRecallApt(PatCur,ProcList,RecallCur,PlanList);
+			AptSelected=apt.AptNum;
 			DialogResult=DialogResult.OK;
 		}
+
+		/*
+		// <summary>Creates appointment and appropriate procedures, and places data in ContrAppt.CurInfo so it will display on pinboard.</summary>
+		private void CreateCurInfo() {
+			MessageBox.Show("Not functional");
+			ContrAppt.CurInfo=new InfoApt();
+			Appointment AptCur=Appointments.CreateRecallApt(PatCur,ProcList,RecallCur,PlanList);
+			ContrAppt.CurInfo.MyApt=AptCur.Copy();
+			Procedure[] procs=Procedures.GetProcsForSingle(AptCur.AptNum,false);
+			ContrAppt.CurInfo.Procs=procs;
+			ContrAppt.CurInfo.Production=Procedures.GetProductionOneApt(AptCur.AptNum,procs,false);
+			ContrAppt.CurInfo.MyPatient=PatCur;
+		}*/
 
 		private void butOK_Click(object sender, System.EventArgs e){
 			SaveRecall();

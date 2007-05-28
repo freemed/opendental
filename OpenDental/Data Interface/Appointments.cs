@@ -10,8 +10,6 @@ using OpenDentBusiness;
 namespace OpenDental{
 	///<summary>Handles database commands related to the appointment table in the db.</summary>
 	public class Appointments {
-		///<summary>The appointment on the pinboard.</summary>
-		public static Appointment PinBoard;
 		///<summary>The date currently selected in the appointment module.</summary>
 		public static DateTime DateSelected;
 
@@ -109,9 +107,14 @@ namespace OpenDental{
 			return General.GetDS("Appointment.GetApptEdit",aptNum.ToString()).Tables["Misc"].Copy();
 		}
 
-		///<Summary>This is starting out simple, but will become quite complex eventually, holding all data needed to display appointments for a period.  For now, it just contains the bubble data.</Summary>
+		///<Summary>Contains all data needed to display appointments for a period.</Summary>
 		public static DataSet RefreshPeriod(DateTime dateStart,DateTime dateEnd){
 			return General.GetDS("Appointment.RefreshPeriod",dateStart.ToShortDateString(),dateEnd.ToShortDateString());
+		}
+
+		///<summary>The resulting datatable will have just one row in it.</summary>
+		public static DataTable RefreshOneApt(int aptNum){
+			return General.GetDS("Appointment.RefreshOneApt",aptNum.ToString()).Tables["Appointments"].Copy();
 		}
 
 		///<summary>Called when closing FormApptEdit with an OK in order to reattach the procedures to the appointment.</summary>
@@ -781,7 +784,7 @@ namespace OpenDental{
 		}
 
 		///<summary>Tests to see if this appointment will create a double booking. Returns arrayList with no items in it if no double bookings for this appt.  But if double booking, then it returns an arrayList of codes which would be double booked.  You must supply the appointment being scheduled as well as a list of all appointments for that day.  The list can include the appointment being tested if user is moving it to a different time on the same day.  The ProcsForOne list of procedures needs to contain the procedures for the apt becauese procsMultApts won't necessarily, especially if it's a planned appt on the pinboard.</summary>
-		public static ArrayList GetDoubleBookedCodes(Appointment apt,Appointment[] dayList,Procedure[] procsMultApts,Procedure[] procsForOne) {
+		public static ArrayList GetDoubleBookedCodes(Appointment apt,DataTable dayTable,Procedure[] procsMultApts,Procedure[] procsForOne) {
 			ArrayList retVal=new ArrayList();//codes
 			//figure out which provider we are testing for
 			int provNum;
@@ -810,29 +813,31 @@ namespace OpenDental{
 			bool overlaps;
 			Procedure[] procs;
 			bool doubleBooked=false;//applies to all appts, not just one at a time.
-			for(int i=0;i<dayList.Length;i++){
-				if(dayList[i].AptNum==apt.AptNum){//ignore current apt in its old location
+			DateTime aptDateTime;
+			for(int i=0;i<dayTable.Rows.Count;i++){
+				if(dayTable.Rows[i]["AptNum"].ToString()==apt.AptNum.ToString()){//ignore current apt in its old location
 					continue;
 				}
 				//ignore other providers
-				if(dayList[i].IsHygiene && dayList[i].ProvHyg!=provNum){
+				if(dayTable.Rows[i]["IsHygiene"].ToString()=="1" && dayTable.Rows[i]["ProvHyg"].ToString()!=provNum.ToString()){
 					continue;
 				}
-				if(!dayList[i].IsHygiene && dayList[i].ProvNum!=provNum){
+				if(dayTable.Rows[i]["IsHygiene"].ToString()=="0" && dayTable.Rows[i]["ProvNum"].ToString()!=provNum.ToString()){
 					continue;
 				}
-				if(dayList[i].AptStatus==ApptStatus.Broken){//ignore broken appts
+				if(dayTable.Rows[i]["AptStatus"].ToString()==((int)ApptStatus.Broken).ToString()){//ignore broken appts
 					continue;
 				}
 				//calculate starting row
 				//this math is copied from another section of the program, so it's sloppy. Safer than trying to rewrite it:
-				convertToY=(int)(((double)dayList[i].AptDateTime.Hour*(double)60
+				aptDateTime=PIn.PDateT(dayTable.Rows[i]["AptDateTime"].ToString());
+				convertToY=(int)(((double)aptDateTime.Hour*(double)60
 					/(double)PrefB.GetInt("AppointmentTimeIncrement")
-					+(double)dayList[i].AptDateTime.Minute
+					+(double)aptDateTime.Minute
 					/(double)PrefB.GetInt("AppointmentTimeIncrement")
 					)*(double)ContrApptSheet.Lh*ContrApptSheet.RowsPerIncr);
 				startIndex=convertToY/ContrApptSheet.Lh;//rounds down
-				pattern=ContrApptSingle.GetPatternShowing(dayList[i].Pattern);
+				pattern=ContrApptSingle.GetPatternShowing(dayTable.Rows[i]["Pattern"].ToString());
 				//now compare it to apt
 				overlaps=false;
 				for(int k=0;k<pattern.Length;k++){
@@ -845,7 +850,7 @@ namespace OpenDental{
 				}
 				if(overlaps){
 					//we need to add all codes for this appt to retVal
-					procs=Procedures.GetProcsOneApt(dayList[i].AptNum,procsMultApts);
+					procs=Procedures.GetProcsOneApt(PIn.PInt(dayTable.Rows[i]["AptNum"].ToString()),procsMultApts);
 					for(int j=0;j<procs.Length;j++){
 						retVal.Add(ProcedureCodes.GetStringProcCode(procs[j].CodeNum));
 					}

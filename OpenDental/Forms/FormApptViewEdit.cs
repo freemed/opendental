@@ -403,7 +403,7 @@ namespace OpenDental{
 			allElements.Add("PatNum");
 			allElements.Add("PatNumAndName");
 			allElements.Add("Procs");
-			allElements.Add("ProcDescript");
+			//allElements.Add("ProcDescript");
 			allElements.Add("Production");
 			allElements.Add("Provider");
 			allElements.Add("WirelessPhone");

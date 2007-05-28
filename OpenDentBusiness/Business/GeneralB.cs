@@ -68,6 +68,9 @@ namespace OpenDentBusiness {
 					return AppointmentB.GetApptEdit(parameters);
 				case "Appointment.RefreshPeriod":
 					return AppointmentB.RefreshPeriod(parameters);
+				case "Appointment.RefreshOneApt":
+					return AppointmentB.RefreshOneApt(parameters);
+					
 			}
 
 		}

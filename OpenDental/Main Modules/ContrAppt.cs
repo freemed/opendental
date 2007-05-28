@@ -61,8 +61,6 @@ namespace OpenDental{
 		public static int SheetClickedonHour;
 		///<summary></summary>
 		public static int SheetClickedonMin;
-		//<summary></summary>
-		//public static InfoApt CurInfo;
 		private System.Drawing.Printing.PrintDocument pd2;
 		private System.Windows.Forms.PrintDialog printDialog2;
 		///<summary></summary>
@@ -84,18 +82,13 @@ namespace OpenDental{
 	  public FormRpPrintPreview pView = new FormRpPrintPreview();
 		private OpenDental.UI.Button butOther;
 		private bool cardPrintFamily;
-		//private Patient PatCur;
-		//private Family FamCur;
 		private System.Windows.Forms.ContextMenu menuApt;
 		private System.Windows.Forms.ContextMenu menuBlockout;
 		private System.Windows.Forms.ContextMenu menuWeeklyApt;
-		//private InsPlan[] PlanList;
 		private Schedule[] SchedListDay;
 		///<summary></summary>
 		[Category("Data"),Description("Occurs when user changes current patient, usually by clicking on the Select Patient button.")]
 		public event PatientSelectedEventHandler PatientSelected=null;
-		//<summary>The list of appointments for one day, whether hidden or not</summary>
-		//private Appointment[] ListDay;
 		private OpenDental.UI.Button butSearch;
 		private System.Windows.Forms.GroupBox groupSearch;
 		private OpenDental.UI.Button butSearchNext;
@@ -116,15 +109,8 @@ namespace OpenDental{
 		private System.Windows.Forms.ListBox listSearchResults;
 		private System.Windows.Forms.Label label9;
 		private System.Windows.Forms.DateTimePicker dateSearch;
-		//private Appointment AptCur;
-		//<Summary>This is replacing AptCur as the way of tracking which appointment is clicked.</Summary>
-		//private int AptNumCur;
-		//private Appointment AptOld;
 		private DateTime[] SearchResults;
-		//private PatPlan[] PatPlanList;
 		private OpenDental.UI.Button butRefresh;
-		//<summary>During RefreshDay, this is filled with all procedures for all appointments for the day.  The list is then used for various display purposes.</summary>
-		//private Procedure[] procsMultApts;
 		private bool ResizingAppt;
 		private int ResizingOrigH;
 		//private bool isWeeklyView;
@@ -135,12 +121,10 @@ namespace OpenDental{
 		public static int SheetClickedonDay;
 		///<summary></summary>
 		private Panel infoBubble;
-		///<Summary>The datatable that holds the bubble data.  This will later become part of the dataset for the main screen.</Summary>
+		///<Summary>The dataset that holds all the data (well, not quite all of it yet)</Summary>
 		private DataSet DS;
 		///<summary>If the user has done a blockout/copy, then this will contain the blockout that is on the "clipboard".</summary>
 		private Schedule BlockoutClipboard;
-		//<Summary>This is the bitmap that is used to layout all the data for the bubble.  It's recreated each time a bubble is first made visible or whenever the aptNum changes.</Summary>
-		//private Bitmap bubbleBitmap;
 		///<Summary>This has to be tracked globally because mouse might move directly from one appt to another without any break.  This is the only way to know if we are still over the same appt.</Summary>
 		private int bubbleAptNum;
 		private ODGrid gridEmpSched;
@@ -945,11 +929,7 @@ namespace OpenDental{
 
 		}
 		#endregion
-
-		private void button1_Click(object sender, System.EventArgs e) {
-			//if(Environment.
-		}
-
+		
 		private void ContrApptSheet2_MouseWheel(object sender, System.Windows.Forms.MouseEventArgs e){
 			int max=vScrollBar1.Maximum-vScrollBar1.LargeChange;//panelTable.Height-panelScroll.Height+3;
 			int newScrollVal=vScrollBar1.Value-(int)(e.Delta/4);
@@ -963,14 +943,12 @@ namespace OpenDental{
 				vScrollBar1.Value=newScrollVal;
 			}
 			ContrApptSheet2.Location=new Point(0,-vScrollBar1.Value);
-			//panelTable.Location=new Point(0,-vScrollBar1.Value);
     }
 
 		///<summary>Includes RefreshModulePatient.  One overload is used when jumping here from another module, and you want to place an appointment on the pinboard.</summary>
 		public void ModuleSelected(int patNum,Appointment pinAppt){
-			ModuleSelected(patNum);
-MessageBox.Show("Not functional");
-			/*CurInfo=new InfoApt();
+			/*ModuleSelected(patNum);
+			CurInfo=new InfoApt();
 			CurInfo.MyApt=pinAppt.Copy();
 			Procedure[] procsForSingle;
 			if(pinAppt.AptNum==PatCur.NextAptNum) {//if is Next apt
@@ -982,20 +960,16 @@ MessageBox.Show("Not functional");
 				CurInfo.Production=Procedures.GetProductionOneApt(pinAppt.AptNum,procsForSingle,false);
 			}
 			CurInfo.Procs=procsForSingle;
-			CurInfo.MyPatient=PatCur.Copy();*/
-			CurToPinBoard();
+			CurInfo.MyPatient=PatCur.Copy();
+			CurToPinBoard();*/
 			//RefreshModuleScreen();
 		}
 
 		///<summary></summary>
 		public void ModuleSelected(int patNum){
-			//ApptViewItems.GetForCurView(comboView.SelectedIndex-1);
-			//ContrApptSheet2.ComputeColWidth(panelSheet.Width-vScrollBar1.Width);
 			//the scrollbar logic cannot be moved to someplace where it will be activated while working in apptbook
-			//MessageBox.Show("about to refresh");
 			//RefreshVisops();//forces reset after changing databases
 			if(DefB.Short!=null) {
-				//ApptViews.SetCur();
 				ApptViewItems.GetForCurView(comboView.SelectedIndex-1);//refreshes visops,etc
 				ContrApptSheet2.ComputeColWidth(panelSheet.Width-vScrollBar1.Width);
 			}
@@ -1100,12 +1074,10 @@ MessageBox.Show("Not functional");
 		///<summary>Was RefreshModuleData and FillPatientButton.  Gets the data for the specified patient. Does not refresh any appointment data.  This function should always be called when the patient changes since that's all this function is responsible for.</summary>
 		private void RefreshModulePatient(int patNum){//
 			PatCurNum=patNum;//might be zero
-			//this is a bit messy for now. Cleanup later
 			if(PatCurNum==0){
 				PatCurName="";
 				PatCurChartNumber="";
 				butOther.Enabled=false;
-				//return;
 			}
 			else{
 				Patient pat=Patients.GetPat(PatCurNum);
@@ -1633,24 +1605,34 @@ MessageBox.Show("Not functional");
 			return retVal;
 		}
 
-		///<summary>Copies all info for for current appointment into the control that displays the pinboard appointment. Sets pinboard appointment as selected.  CurInfo needs to be setup ahead of time.  Copy this functionality from another similar area of the program.</summary>
-		private void CurToPinBoard(){
-MessageBox.Show("Not functional");
-			/*PinApptSingle.Visible=false;
-			PinApptSingle.Info=CurInfo;
+		///<summary>Copies all info for for specified appointment into the control that displays the pinboard appointment. Sets pinboard appointment as selected.</summary>
+		private void CurToPinBoard(int aptNum){
+			PinApptSingle.Visible=false;
+			//if aptNum is already in DS, then use that row.  Otherwise, get a new row.
+			DataRow row=null;
+			for(int i=0;i<DS.Tables["Appointments"].Rows.Count;i++){
+				if(DS.Tables["Appointments"].Rows[i]["AptNum"].ToString()==aptNum.ToString()){
+					row=DS.Tables["Appointments"].Rows[i];
+					break;
+				}
+			}
+			if(row==null){
+				row=Appointments.RefreshOneApt(aptNum).Rows[0];
+			}
+			RefreshModulePatient(PIn.PInt(row["PatNum"].ToString()));
+			PinApptSingle.DataRoww=row;
 			PinApptSingle.SetLocation();//MUST come before next line
 			PinApptSingle.Location=new Point(panelCalendar.Location.X+panelPinBoard.Location.X+2
 				,panelCalendar.Location.Y+panelPinBoard.Location.Y+2);
 			PinApptSingle.SetSize();
-			Appointments.PinBoard=CurInfo.MyApt;//Appointments.List[ContrApptSingle.SelectedIndex];
 			PinApptSingle.Visible=true;
 			PinApptSingle.BringToFront();
 			mouseIsDown=false;
 			boolAptMoved=false;
 			ContrApptSingle.PinBoardIsSelected=true;
-			ContrApptSingle.SelectedAptNum=-1;//CurInfo.MyApt.AptNum;
+			ContrApptSingle.SelectedAptNum=-1;
 			PinApptSingle.CreateShadow();
-			PinApptSingle.Refresh();*/
+			PinApptSingle.Refresh();
 		}
 
 		///<summary>Mouse down event for the pinboard appointment. Sets selected and prepares for drag.</summary>
@@ -1664,13 +1646,8 @@ MessageBox.Show("Not functional");
 			TempApptSingle.SetLocation();
 			TempApptSingle.CreateShadow();
 			TempApptSingle.BringToFront();
-			ContrApptSingle.SelectedAptNum=-1;//PinApptSingle.Info.MyApt.AptNum;
-			//FamCur=Patients.GetFamily(PinApptSingle.Info.MyApt.PatNum);
-			//PatCur=FamCur.GetPatient(PinApptSingle.Info.MyApt.PatNum);
+			ContrApptSingle.SelectedAptNum=-1;
 			RefreshModulePatient(PIn.PInt(PinApptSingle.DataRoww["PatNum"].ToString()));
-			//FillPatientButton();
-			//ParentForm.Text=Patients.GetMainTitle(PatCur);
-			//FillPanelPatient();
 			PinApptSingle.CreateShadow();
 			PinApptSingle.Refresh();
 			CreateAptShadows();
@@ -1679,7 +1656,7 @@ MessageBox.Show("Not functional");
 			mouseOrigin.X=e.X+PinApptSingle.Location.X;
 			mouseOrigin.Y=e.Y+PinApptSingle.Location.Y;
 			contOrigin=PinApptSingle.Location;
-		}//end PinApptSingle_MouseDown
+		}
 
 		///<summary>Mouse move event for pinboard appt. Moves pinboard appt if mouse is down.</summary>
 		private void PinApptSingle_MouseMove(object sender, System.Windows.Forms.MouseEventArgs e){
@@ -1705,19 +1682,15 @@ MessageBox.Show("Not functional");
 			if(!boolAptMoved){
 				mouseIsDown=false;
 				TempApptSingle.Dispose();
-				//PinApptSingle.Refresh();//?
-				//ContrApptSheet2.Refresh();//?
 				return;
 			}
-			if(TempApptSingle.Location.X>ContrApptSheet2.Width){//
+			if(TempApptSingle.Location.X>ContrApptSheet2.Width){
 				mouseIsDown=false;
 				boolAptMoved=false;
-				//pinIsOccupied=true;
 				TempApptSingle.Dispose();
-				//ContrApptSheet2.Refresh();//?
 				return;
 			}
-			if(Appointments.PinBoard.AptStatus==ApptStatus.Planned//if Planned appt is on pinboard
+			if(PinApptSingle.DataRoww["AptStatus"].ToString()==((int)ApptStatus.Planned).ToString()//if Planned appt is on pinboard
 				&& !Security.IsAuthorized(Permissions.AppointmentCreate))//and no permission to create a new appt
 			{
 				mouseIsDown = false;
@@ -1728,11 +1701,11 @@ MessageBox.Show("Not functional");
 			//security prevents moving an appointment by preventing placing it on the pinboard, not here
 			//We no longer ask user this question.  It just slows things down: "Move Appointment?"
 			//convert loc to new time
-			Appointment aptCur=Appointments.PinBoard.Copy();
-			Appointment aptOld=Appointments.PinBoard.Copy();
+			Appointment aptCur=Appointments.GetOneApt(PIn.PInt(PinApptSingle.DataRoww["AptNum"].ToString()));
+			Appointment aptOld=aptCur.Copy();
+			Patient pat=Patients.GetPat(PIn.PInt(PinApptSingle.DataRoww["PatNum"].ToString()));
 			if(aptCur.IsNewPatient && Appointments.DateSelected!=aptCur.AptDateTime){
-//broken:
-				//Procedures.SetDateFirstVisit(Appointments.DateSelected,4,PatCur);
+				Procedures.SetDateFirstVisit(Appointments.DateSelected,4,pat);
 			}
 			int tHr=ContrApptSheet2.ConvertToHour
 				(TempApptSingle.Location.Y-ContrApptSheet2.Location.Y-panelSheet.Location.Y);
@@ -1749,9 +1722,8 @@ MessageBox.Show("Not functional");
 				}
 				Procedure[] procsMultApts=Procedures.GetProcsMultApts(aptNums);
 				Procedure[] procsForOne=Procedures.GetProcsOneApt(aptCur.AptNum,procsMultApts);
-//broken:
 				ArrayList doubleBookedCodes=new ArrayList();
-					//Appointments.GetDoubleBookedCodes(aptCur,ListDay,procsMultApts,procsForOne);
+					Appointments.GetDoubleBookedCodes(aptCur,DS.Tables["Appointments"].Copy(),procsMultApts,procsForOne);
 				if(doubleBookedCodes.Count>0){//if some codes would be double booked
 					if(AppointmentRules.IsBlocked(doubleBookedCodes)){
 						MessageBox.Show(Lan.g(this,"Not allowed to double book:")+" "
@@ -1768,10 +1740,8 @@ MessageBox.Show("Not functional");
 			aptCur.Op=curOp.OperatoryNum;
 			if(DoesOverlap(aptCur)){
 				int startingOp=ApptViewItems.GetIndexOp(aptCur.Op);
-					//DefB.GetOrder(DefCat.Operatories,Appointments.Cur.Op);
 				bool stillOverlaps=true;
 				for(int i=startingOp;i<ApptViewItems.VisOps.Length;i++){
-					//DefB.Short[(int)DefCat.Operatories].Length
 					aptCur.Op=Operatories.ListShort[ApptViewItems.VisOps[i]].OperatoryNum;
 					if(!DoesOverlap(aptCur)){
 						stillOverlaps=false;
@@ -1829,32 +1799,20 @@ MessageBox.Show("Not functional");
 					+aptCur.ProcDescript);
 				Procedure[] ProcList=Procedures.Refresh(PatCurNum);
 				bool procAlreadyAttached=false;
-				//Procedure ProcCur;
-				//Procedure ProcOld;
-//broken:
-				/*for(int i=0;i<ProcList.Length;i++){
-					if(ProcList[i].PlannedAptNum==PatCur.NextAptNum){//if on the planned apt
+				for(int i=0;i<ProcList.Length;i++){
+					if(ProcList[i].PlannedAptNum==pat.NextAptNum){//if on the planned apt
 						if(ProcList[i].AptNum>0){//already attached to another appt
 							procAlreadyAttached=true;
 						}
 						else{//only update procedures not already attached to another apt
-							//ProcCur=ProcList[i];
-							//ProcOld=ProcCur.Copy();
-							//ProcCur.AptNum=aptCur.AptNum;
 							Procedures.UpdateAptNum(ProcList[i].ProcNum,aptCur.AptNum);
 								//.Update(ProcCur,ProcOld);//recall synch not required.
 						}
 					}
-				}*/
+				}
 				if(procAlreadyAttached){
 					MessageBox.Show(Lan.g(this,"One or more procedures could not be scheduled because they were already attached to another appointment. Someone probably forgot to update the Next appointment in the Chart module."));
 				}
-				//Procedure[] procs=Procedures.GetProcsForSingle(aptCur.AptNum,true);
-				//CurInfo.Procs=procs;
-				//CurInfo.Production=Procedures.GetProductionOneApt(aptCur.AptNum,procs,true);
-				//CurInfo.MyApt...
-				//CurInfo.MyPatient...
-				//might be missing some CurInfo.
 			}//if planned appointment is on pinboard
 			else{//simple drag off pinboard to a new date/time
 				try{
@@ -2438,10 +2396,6 @@ MessageBox.Show("Not functional");
 			if(!boolAptMoved){
 				mouseIsDown=false;
 				TempApptSingle.Dispose();
-				//PlanList=InsPlans.Refresh(FamCur);
-				//PatPlanList=PatPlans.Refresh(PatCur.PatNum);
-				//CovPats.Refresh(PlanList,PatPlanList);
-				//PinApptSingle.Refresh();
 				return;
 			}
 			//dragging to pinboard, so place a copy there---------------------------------------------------------------------------
@@ -2449,22 +2403,14 @@ MessageBox.Show("Not functional");
 				if(!Security.IsAuthorized(Permissions.AppointmentMove)){
 					mouseIsDown=false;
 					TempApptSingle.Dispose();
-					//PlanList=InsPlans.Refresh(FamCur);
-					//PatPlanList=PatPlans.Refresh(PatCur.PatNum);
-					//CovPats.Refresh(PlanList,PatPlanList);
 					return;
 				}
 				int prevSel=GetIndex(ContrApptSingle.SelectedAptNum);
-//CurInfo=TempApptSingle.Info;
-CurToPinBoard();//sets selectedAptNum=-1. do before refresh prev
+				CurToPinBoard(ContrApptSingle.SelectedAptNum);//sets selectedAptNum=-1. do before refresh prev
 				if(prevSel!=-1){
 					CreateAptShadows();
 					ContrApptSheet2.DrawShadow();
 				}
-				//PlanList=InsPlans.Refresh(FamCur);
-				//PatPlanList=PatPlans.Refresh(PatCur.PatNum);
-				//CovPats.Refresh(PlanList,PatPlanList);
-				//FillPanelPatient();
 				RefreshModulePatient(PatCurNum);
 				TempApptSingle.Dispose();
 				return;
@@ -2603,7 +2549,7 @@ CurToPinBoard();//sets selectedAptNum=-1. do before refresh prev
 
 		///<summary>Double click on appt sheet or on a single appointment.</summary>
 		private void ContrApptSheet2_DoubleClick(object sender, System.EventArgs e) {
-			/*mouseIsDown=false;
+			mouseIsDown=false;
 			if(ContrApptSheet.IsWeeklyView){//Temporary solution - double clicking opens the day in the daily view mode
 				Appointments.DateSelected=WeekStartDate.AddDays(SheetClickedonDay-1);
 				SetWeeklyView(false);
@@ -2651,24 +2597,23 @@ CurToPinBoard();//sets selectedAptNum=-1. do before refresh prev
 				if(FormPS.DialogResult!=DialogResult.OK){
 					return;
 				}
-				if(PatCurNum==0 || FormPS.SelectedPatNum!=PatCurNum){//if the patient was changed
-					//OnPatientSelected(FormPS.SelectedPatNum);
-					//RefreshModuleData(FormPS.SelectedPatNum);//then pull up all the new info.
+				if(FormPS.SelectedPatNum!=PatCurNum){//if the patient was changed
 					RefreshModulePatient(FormPS.SelectedPatNum);
 				}
 				if(FormPS.NewPatientAdded){
+					Patient pat=Patients.GetPat(PatCurNum);
 					Appointment apt=new Appointment();
 					apt.PatNum=PatCurNum;
 					apt.IsNewPatient=true;
 					apt.Pattern="/X/";
-					if(PatCur.PriProv==0){
+					if(pat.PriProv==0){
 						apt.ProvNum=PrefB.GetInt("PracticeDefaultProv");
 					}
 					else{			
-						apt.ProvNum=PatCur.PriProv;
+						apt.ProvNum=pat.PriProv;
 					}
-					apt.ProvHyg=PatCur.SecProv;
-					apt.ClinicNum=PatCur.ClinicNum;
+					apt.ProvHyg=pat.SecProv;
+					apt.ClinicNum=pat.ClinicNum;
 					apt.AptStatus=ApptStatus.Scheduled;
 					DateTime d=Appointments.DateSelected;
 					//minutes always rounded down.
@@ -2693,7 +2638,7 @@ CurToPinBoard();//sets selectedAptNum=-1. do before refresh prev
 				else{
 					DisplayOtherDlg(true);//this also refreshes screen if needed.
 				}
-			}*/
+			}
 		}
 
 		///<summary>Displays the Other Appointments for the current patient, then refreshes screen as needed.  initialClick specifies whether the user doubleclicked on a blank time to get to this dialog.</summary>
@@ -2790,10 +2735,10 @@ CurToPinBoard();//sets selectedAptNum=-1. do before refresh prev
 			FormUnsched FormUnsched2=new FormUnsched();
 			FormUnsched2.ShowDialog();
 			if(FormUnsched2.PinClicked){
-				CurToPinBoard();
-	//this is the wrong patnum:
-				RefreshModulePatient(PatCurNum);
-				//RefreshPeriod();
+				CurToPinBoard(FormUnsched2.AptSelected);
+			}
+			if(FormUnsched2.SelectedPatNum!=0){
+				RefreshModulePatient(FormUnsched2.SelectedPatNum);
 			}
 			Cursor=Cursors.Default;
 		}
@@ -2803,11 +2748,10 @@ CurToPinBoard();//sets selectedAptNum=-1. do before refresh prev
 			FormRecallList FormRL=new FormRecallList();
 			FormRL.ShowDialog();
 			if(FormRL.PinClicked){
-				CurToPinBoard();
+				CurToPinBoard(FormRL.AptSelected);
 			}
 			if(FormRL.SelectedPatNum!=0){
-				//OnPatientSelected(FormRL.SelectedPatNum);
-				ModuleSelected(FormRL.SelectedPatNum);
+				RefreshModulePatient(FormRL.SelectedPatNum);
 			}
 			Cursor=Cursors.Default;
 		}
@@ -2816,11 +2760,13 @@ CurToPinBoard();//sets selectedAptNum=-1. do before refresh prev
 			Cursor=Cursors.WaitCursor;
 			FormConfirmList FormC=new FormConfirmList();
 			FormC.ShowDialog();
-			Cursor=Cursors.Default;
-			if(FormC.SelectedPatNum!=0){
-				//OnPatientSelected(FormC.SelectedPatNum);
-				ModuleSelected(FormC.SelectedPatNum);
+			if(FormC.PinClicked) {
+				CurToPinBoard(FormC.AptSelected);
 			}
+			if(FormC.SelectedPatNum!=0){
+				RefreshModulePatient(FormC.SelectedPatNum);
+			}
+			Cursor=Cursors.Default;
 		}
 
 		private void OnTrack_Click() {
@@ -2828,14 +2774,11 @@ CurToPinBoard();//sets selectedAptNum=-1. do before refresh prev
 			FormTrackNext FormTN=new FormTrackNext();
 			FormTN.ShowDialog();
 			if(FormTN.PinClicked){
-				CurToPinBoard();
+				CurToPinBoard(FormTN.AptSelected);
 			}
-			//if(PatCur==null){
-			//	ModuleSelected(0);
-			//}
-			//else{
-				ModuleSelected(PatCurNum);
-			//}
+			if(FormTN.SelectedPatNum!=0) {
+				RefreshModulePatient(FormTN.SelectedPatNum);
+			}
 			Cursor=Cursors.Default;
 		}
 

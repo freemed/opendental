@@ -17,6 +17,10 @@ namespace OpenDental{
 		///<summary>Passes the pinclicked result down from the appointment to the parent form.</summary>
 		public bool PinClicked;
 		private Appointment[] ListUn;
+		///<summary>When this form closes, this will be the patNum of the last patient viewed.  The calling form should then make use of this to refresh to that patient.  If 0, then calling form should not refresh.</summary>
+		public int SelectedPatNum;
+		///<summary>Only used if PinClicked=true</summary>
+		public int AptSelected;
 
 		///<summary></summary>
 		public FormTrackNext(){
@@ -124,6 +128,7 @@ namespace OpenDental{
 		}
 
 		private void tbApts_CellDoubleClicked(object sender, CellEventArgs e){
+			SelectedPatNum=ListUn[e.Row].PatNum;
 			int currentSelection=tbApts.SelectedRow;
 			int currentScroll=tbApts.ScrollValue;
 			FormApptEdit FormAE=new FormApptEdit(ListUn[e.Row].AptNum);
@@ -131,31 +136,18 @@ namespace OpenDental{
 			FormAE.ShowDialog();
 			if(FormAE.DialogResult!=DialogResult.OK)
 				return;
-			if(FormAE.PinClicked){
+			if(FormAE.PinClicked) {
 				PinClicked=true;
-				CreateCurInfo(ListUn[e.Row]);
+				AptSelected=ListUn[e.Row].AptNum;
 				DialogResult=DialogResult.OK;
+				return;
 			}
-			else{
+			else {
 				FillAppointments();
 				tbApts.SetSelected(currentSelection,true);
 				tbApts.ScrollValue=currentScroll;
 			}
 		}	
-
-		/// <summary>This is not the best way to handle this for the long term.  There must be a better way to get some of the extra display info.</summary>
-		private void CreateCurInfo(Appointment aptCur){
-MessageBox.Show("Not functional");
-			/*ContrAppt.CurInfo=new InfoApt();
-			ContrAppt.CurInfo.MyApt=aptCur.Copy();
-			//ContrAppt.CurInfo.CreditAndIns=Patients.GetCreditIns();
-			//ContrAppt.CurInfo.PatientName=Patients.GetCurNameLF();
-			Procedure[] procs=Procedures.GetProcsForSingle(aptCur.AptNum,true);
-			ContrAppt.CurInfo.Procs=procs;
-			ContrAppt.CurInfo.Production=Procedures.GetProductionOneApt(aptCur.AptNum,procs,true);
-			ContrAppt.CurInfo.MyPatient=Patients.GetPat(aptCur.PatNum);
-				//patCur.Copy();*/
-		}
 
 		private void butClose_Click(object sender, System.EventArgs e) {
 			Close();

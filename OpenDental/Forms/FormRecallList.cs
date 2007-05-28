@@ -49,6 +49,8 @@ namespace OpenDental{
 		DataTable table;
 		private bool headingPrinted;
 		private int headingPrintH;
+		///<summary>Only used if PinClicked=true</summary>
+		public int AptSelected;
 
 		///<summary></summary>
 		public FormRecallList(){
@@ -473,22 +475,20 @@ namespace OpenDental{
 
 		private void gridMain_CellDoubleClick(object sender,ODGridClickEventArgs e) {
 			SelectedPatNum=PIn.PInt(table.Rows[e.Row]["PatNum"].ToString());
-				//((RecallItem)gridMain.Rows[e.Row].Tag).PatNum;
 			Recall[] recalls=Recalls.GetList(new int[] {SelectedPatNum});
-				//((RecallItem)gridMain.Rows[e.Row].Tag).PatNum});
 			FormRecallListEdit FormRE=new FormRecallListEdit(recalls[0]);
-			//FormRE.RecallCur=recalls[0];
 			FormRE.ShowDialog();
 			if(FormRE.PinClicked){
 				PinClicked=true;
+				AptSelected=FormRE.AptSelected;
 				DialogResult=DialogResult.OK;
+				return;
 			}
 			else{
 				FillMain();
 			}
 			for(int i=0;i<gridMain.Rows.Count;i++) {
 				if(PIn.PInt(table.Rows[i]["PatNum"].ToString())==SelectedPatNum){
-					//((RecallItem)gridMain.Rows[i].Tag).PatNum==SelectedPatNum) {
 					gridMain.SetSelected(i,true);
 				}
 			}
