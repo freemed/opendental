@@ -289,9 +289,9 @@ namespace OpenDental{
 				case "AddrNote":
 					text=DataRoww["addrNote"].ToString();
 					if(rowI==0)
-						noteSize=g.MeasureString(text,baseFont,ContrApptSheet.ColWidth-9-4);
+						noteSize=g.MeasureString(text,baseFont,Width-9-4);
 					else
-						noteSize=g.MeasureString(text,baseFont,ContrApptSheet.ColWidth-9);
+						noteSize=g.MeasureString(text,baseFont,Width-9);
 					g.MeasureString(text,baseFont,noteSize,format,out charactersFitted,out linesFilled);
 					rect=new RectangleF(new PointF(xPos,yPos),noteSize);
 					g.DrawString(text,baseFont,brush,rect,format);
@@ -318,9 +318,9 @@ namespace OpenDental{
 				case "MedUrgNote":
 					text=DataRoww["MedUrgNote"].ToString();
 					if(rowI==0)
-						noteSize=g.MeasureString(text,baseFont,ContrApptSheet.ColWidth-9-4);
+						noteSize=g.MeasureString(text,baseFont,Width-9-4);
 					else
-						noteSize=g.MeasureString(text,baseFont,ContrApptSheet.ColWidth-9);
+						noteSize=g.MeasureString(text,baseFont,Width-9);
 					g.MeasureString(text,baseFont,noteSize,format,out charactersFitted,out linesFilled);
 					rect=new RectangleF(new PointF(xPos,yPos),noteSize);
 					g.DrawString(text,baseFont,brush,rect,format);
@@ -328,9 +328,9 @@ namespace OpenDental{
 				case "Note":
 					text=DataRoww["Note"].ToString();
 					if(rowI==0)
-						noteSize=g.MeasureString(text,baseFont,ContrApptSheet.ColWidth-9-4);
+						noteSize=g.MeasureString(text,baseFont,Width-9-4);
 					else
-						noteSize=g.MeasureString(text,baseFont,ContrApptSheet.ColWidth-9);
+						noteSize=g.MeasureString(text,baseFont,Width-9);
 					g.MeasureString(text,baseFont,noteSize,format,out charactersFitted,out linesFilled);
 					rect=new RectangleF(new PointF(xPos,yPos),noteSize);
 					g.DrawString(text,baseFont,brush,rect,format);
@@ -355,9 +355,9 @@ namespace OpenDental{
 				case "Procs":
 					text=DataRoww["procs"].ToString();
 					if(rowI==0)
-						noteSize=g.MeasureString(text,baseFont,ContrApptSheet.ColWidth-9-4);
+						noteSize=g.MeasureString(text,baseFont,Width-9-4);
 					else
-						noteSize=g.MeasureString(text,baseFont,ContrApptSheet.ColWidth-9);
+						noteSize=g.MeasureString(text,baseFont,Width-9);
 					g.MeasureString(text,baseFont,noteSize,format,out charactersFitted,out linesFilled);
 					rect=new RectangleF(new PointF(xPos,yPos),noteSize);
 					g.DrawString(text,baseFont,brush,rect,format);

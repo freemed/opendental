@@ -184,22 +184,22 @@ namespace OpenDental{
 
 		///<summary>Goes directly to an existing appointment.</summary>
 		public static void GotoAppointment(DateTime dateSelected,int selectedAptNum) {
-			OnModuleSelected(new ModuleEventArgs(dateSelected,null,selectedAptNum,0,0));
+			OnModuleSelected(new ModuleEventArgs(dateSelected,0,selectedAptNum,0,0));
 		}
 
 		///<summary>Goes directly to a claim in someone's Account.</summary>
 		public static void GotoClaim(int claimNum){
-			OnModuleSelected(new ModuleEventArgs(DateTime.MinValue,null,0,2,claimNum));
+			OnModuleSelected(new ModuleEventArgs(DateTime.MinValue,0,0,2,claimNum));
 		}
 
 		///<summary>Goes directly to an Account.  Patient should already have been selected</summary>
 		public static void GotoAccount() {
-			OnModuleSelected(new ModuleEventArgs(DateTime.MinValue,null,0,2,0));
+			OnModuleSelected(new ModuleEventArgs(DateTime.MinValue,0,0,2,0));
 		}
 
 		///<summary>Puts appointment on pinboard, then jumps to Appointments module.  Patient should already have been selected</summary>
-		public static void PinToAppt(Appointment pinAppt) {
-			OnModuleSelected(new ModuleEventArgs(DateTime.Today,pinAppt,0,0,0));
+		public static void PinToAppt(int pinAptNum) {
+			OnModuleSelected(new ModuleEventArgs(DateTime.Today,pinAptNum,0,0,0));
 		}
 
 		///<summary></summary>
@@ -216,13 +216,13 @@ namespace OpenDental{
 	///<summary></summary>
 	public class ModuleEventArgs : System.EventArgs{
 		private DateTime dateSelected;
-		private Appointment pinAppt;
+		private int pinAppt;
 		private int selectedAptNum;
 		private int iModule;
 		private int claimNum;
 		
 		///<summary></summary>
-		public ModuleEventArgs(DateTime dateSelected,Appointment pinAppt,int selectedAptNum,int iModule,
+		public ModuleEventArgs(DateTime dateSelected,int pinAppt,int selectedAptNum,int iModule,
 			int claimNum) : base()
 		{
 			this.dateSelected=dateSelected;
@@ -237,8 +237,8 @@ namespace OpenDental{
 			get{return dateSelected;}
 		}
 
-		///<summary>This will be for the pinboard appt.  Just not implemented yet.</summary>
-		public Appointment PinAppt{
+		///<summary>The aptNum of the appointment that we want to put on the pinboard of the Apt Module.</summary>
+		public int PinAppt{
 			get{return pinAppt;}
 		}
 

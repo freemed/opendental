@@ -46,23 +46,24 @@ namespace OpenDentBusiness{
 		///<Summary>Parameters: 1:dateStart, 2:dateEnd</Summary>
 		public static DataSet RefreshPeriod(string[] parameters) {
 			DataSet retVal=new DataSet();
-			retVal.Tables.Add(GetPeriodApptsTable(parameters[0],parameters[1],"0"));
+			retVal.Tables.Add(GetPeriodApptsTable(parameters[0],parameters[1],"0","0"));
 			retVal.Tables.Add(GetPeriodEmployeeSchedTable(parameters[0],parameters[1]));
 			return retVal;
 		}
 
-		///<summary>Parameter: 1:AptNum</summary>
+		///<summary>Parameters: 1:AptNum 2:IsPlanned</summary>
 		public static DataSet RefreshOneApt(string[] parameters) {
 			DataSet retVal=new DataSet();
-			retVal.Tables.Add(GetPeriodApptsTable("","",parameters[0]));
+			retVal.Tables.Add(GetPeriodApptsTable("","",parameters[0],parameters[1]));
 			return retVal;
 		}
 
-		///<summary>If aptnum is specified, then the dates are ignored.</summary>
-		private static DataTable GetPeriodApptsTable(string strDateStart,string strDateEnd,string strAptNum) {
+		///<summary>If aptnum is specified, then the dates are ignored.  If getting data for one planned appt, then pass isPlanned=true.  This changes which procedures are retrieved.</summary>
+		private static DataTable GetPeriodApptsTable(string strDateStart,string strDateEnd,string strAptNum,string strIsPlanned) {
 			DateTime dateStart=PIn.PDate(strDateStart);
 			DateTime dateEnd=PIn.PDate(strDateEnd);
 			int aptNum=PIn.PInt(strAptNum);
+			bool isPlanned=PIn.PBool(strIsPlanned);
 			DataConnection dcon=new DataConnection();
 			DataTable table=new DataTable("Appointments");
 			DataRow row;
@@ -132,16 +133,21 @@ namespace OpenDentBusiness{
 				command+="WHERE appointment.AptNum="+POut.PInt(aptNum);
 			}
 			DataTable raw=dcon.GetTable(command);
-			command="SELECT AbbrDesc,procedurelog.AptNum,procedurelog.CodeNum,Surf,ToothNum,TreatArea "
-				+"FROM procedurelog,appointment,procedurecode "
-				+"WHERE procedurelog.AptNum=appointment.AptNum "
-				+"AND procedurelog.CodeNum=procedurecode.CodeNum ";
+			command="SELECT AbbrDesc,procedurelog.AptNum,procedurelog.CodeNum,PlannedAptNum,Surf,ToothNum,TreatArea "
+				+"FROM procedurelog,appointment,procedurecode ";
+			if(isPlanned){
+				command+="WHERE procedurelog.PlannedAptNum=appointment.AptNum ";
+			}
+			else{
+				command+="WHERE procedurelog.AptNum=appointment.AptNum ";
+			}
+			command+="AND procedurelog.CodeNum=procedurecode.CodeNum ";
 			if(aptNum==0) {
 				command+="AND AptDateTime >= "+POut.PDate(dateStart)+" "
 					+"AND AptDateTime < "+POut.PDate(dateStart.AddDays(1))+" ";
 			}
 			else {
-				command+="AND procedurelog.AptNum="+POut.PInt(aptNum);
+				command+="AND appointment.AptNum="+POut.PInt(aptNum);
 			}
 			DataTable rawProc=dcon.GetTable(command);
 			DateTime aptDate;
@@ -279,35 +285,39 @@ namespace OpenDentBusiness{
 				}
 				row["procs"]="";
 				for(int p=0;p<rawProc.Rows.Count;p++){
-					if(rawProc.Rows[p]["AptNum"].ToString()==raw.Rows[i]["AptNum"].ToString()){
-						if(row["procs"].ToString()!=""){
-							row["procs"]+=", ";
-						}
-						switch(rawProc.Rows[p]["TreatArea"].ToString()) {
-							case "1"://TreatmentArea.Surf:
-								row["procs"]+="#"+Tooth.ToInternat(rawProc.Rows[p]["ToothNum"].ToString())+"-"
-									+rawProc.Rows[p]["Surf"].ToString()+"-";//""#12-MOD-"
-								break;
-							case "2"://TreatmentArea.Tooth:
-								row["procs"]+="#"+Tooth.ToInternat(rawProc.Rows[p]["ToothNum"].ToString())+"-";//"#12-"
-								break;
-							default://area 3 or 0 (mouth)
-								break;
-							case "4"://TreatmentArea.Quad:
-								row["procs"]+=rawProc.Rows[p]["Surf"].ToString()+"-";//"UL-"
-								break;
-							case "5"://TreatmentArea.Sextant:
-								row["procs"]+="S"+rawProc.Rows[p]["Surf"].ToString()+"-";//"S2-"
-								break;
-							case "6"://TreatmentArea.Arch:
-								row["procs"]+=rawProc.Rows[p]["Surf"].ToString()+"-";//"U-"
-								break;
-							case "7"://TreatmentArea.ToothRange:
-								//strLine+=table.Rows[j][13].ToString()+" ";//don't show range
-								break;
-						}
-						row["procs"]+=rawProc.Rows[p]["AbbrDesc"].ToString();
-					}	
+					if(!isPlanned && rawProc.Rows[p]["AptNum"].ToString()!=raw.Rows[i]["AptNum"].ToString()){
+						continue;
+					}
+					if(isPlanned && rawProc.Rows[p]["PlannedAptNum"].ToString()!=raw.Rows[i]["AptNum"].ToString()) {
+						continue;
+					}
+					if(row["procs"].ToString()!=""){
+						row["procs"]+=", ";
+					}
+					switch(rawProc.Rows[p]["TreatArea"].ToString()) {
+						case "1"://TreatmentArea.Surf:
+							row["procs"]+="#"+Tooth.ToInternat(rawProc.Rows[p]["ToothNum"].ToString())+"-"
+								+rawProc.Rows[p]["Surf"].ToString()+"-";//""#12-MOD-"
+							break;
+						case "2"://TreatmentArea.Tooth:
+							row["procs"]+="#"+Tooth.ToInternat(rawProc.Rows[p]["ToothNum"].ToString())+"-";//"#12-"
+							break;
+						default://area 3 or 0 (mouth)
+							break;
+						case "4"://TreatmentArea.Quad:
+							row["procs"]+=rawProc.Rows[p]["Surf"].ToString()+"-";//"UL-"
+							break;
+						case "5"://TreatmentArea.Sextant:
+							row["procs"]+="S"+rawProc.Rows[p]["Surf"].ToString()+"-";//"S2-"
+							break;
+						case "6"://TreatmentArea.Arch:
+							row["procs"]+=rawProc.Rows[p]["Surf"].ToString()+"-";//"U-"
+							break;
+						case "7"://TreatmentArea.ToothRange:
+							//strLine+=table.Rows[j][13].ToString()+" ";//don't show range
+							break;
+					}
+					row["procs"]+=rawProc.Rows[p]["AbbrDesc"].ToString();	
 				}
 				row["production"]=PIn.PDouble(raw.Rows[i]["Production"].ToString()).ToString("c");
 				if(raw.Rows[i]["IsHygiene"].ToString()=="1"){

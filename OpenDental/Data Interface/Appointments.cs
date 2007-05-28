@@ -113,8 +113,8 @@ namespace OpenDental{
 		}
 
 		///<summary>The resulting datatable will have just one row in it.</summary>
-		public static DataTable RefreshOneApt(int aptNum){
-			return General.GetDS("Appointment.RefreshOneApt",aptNum.ToString()).Tables["Appointments"].Copy();
+		public static DataTable RefreshOneApt(int aptNum,bool isPlanned){
+			return General.GetDS("Appointment.RefreshOneApt",aptNum.ToString(),POut.PBool(isPlanned)).Tables["Appointments"].Copy();
 		}
 
 		///<summary>Called when closing FormApptEdit with an OK in order to reattach the procedures to the appointment.</summary>
@@ -866,7 +866,12 @@ namespace OpenDental{
 			return retVal;
 		}
 
-		
+		///<summary>The newStatus will be a DefNum or 0.</summary>
+		public static void SetApptConfirmed(int aptNum,int newStatus){
+			string command="UPDATE appointment SET Confirmed="+POut.PInt(newStatus)
+				+" WHERE AptNum="+POut.PInt(aptNum);
+			General.NonQ(command);
+		}
 		
 
 
