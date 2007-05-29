@@ -328,7 +328,7 @@ namespace OpenDental{
 			StatementA=new string[patNums.GetLength(0)][,];
 			Commlog commlog;
 			for(int i=0;i<patNums.GetLength(0);i++){//loop through each family
-				StatementA[i]=AssembleStatement(contrAccount,patNums[i],fromDate,toDate,includeClaims,nextAppt);
+				StatementA[i]=AssembleStatement(contrAccount,patNums[i],fromDate,toDate,includeClaims,nextAppt,simpleStatement);
 				//This has all been moved externally for multiple billing statements
 				if(patNums.GetLength(0)==1){
 					commlog=new Commlog();
@@ -364,13 +364,13 @@ namespace OpenDental{
 		}
 
 		/// <summary>Gets one statement grid for a single family.</summary>
-		private string[,] AssembleStatement(ContrAccount contrAccount,int[] famPatNums,DateTime fromDate,DateTime toDate,bool includeClaims,bool nextAppt){
+		private string[,] AssembleStatement(ContrAccount contrAccount,int[] famPatNums,DateTime fromDate,DateTime toDate,bool includeClaims,bool nextAppt, bool simpleStatement){
 			ArrayList StatementAL=new ArrayList();
 			AcctLine tempLine;
 			double subtotal;//used because .NET won't let me contrAccount.Subtotal.ToString().
 			for(int i=0;i<famPatNums.Length;i++){
 				contrAccount.RefreshModuleData(famPatNums[i]);
-				contrAccount.FillAcctLineAL(fromDate,toDate,includeClaims,SubtotalsOnly);
+				contrAccount.FillAcctLineAL(fromDate,toDate,includeClaims,SubtotalsOnly, simpleStatement);
 				//FamTotDue+=PatCur.EstBalance;
 				tempLine=new AcctLine();
 				tempLine.Description=contrAccount.PatCur.GetNameLF();
@@ -737,11 +737,11 @@ namespace OpenDental{
 					}
 				}
 				else if(SimpleStatement){
-				    yPos=350+25;
-                    xPos = 425 - g.MeasureString(text, font).Width / 2;
 					text = "Account Balance: $" + PatGuar.BalTotal.ToString("F");
                     font = new Font("Arial", 18, FontStyle.Bold);
                     brush = Brushes.Black;
+				    yPos=350+25;
+                    xPos = 425 - g.MeasureString(text, font).Width / 2;
                     g.DrawString(text, font, brush, xPos, yPos);
 
 
@@ -759,17 +759,35 @@ namespace OpenDental{
 			int[] colPos=new int[12];
 			HorizontalAlignment[] colAlign=new HorizontalAlignment[11];
 			string[] ColCaption=new string[11];
-			ColCaption[0]=Lan.g(this,"Date");
-      ColCaption[1]=Lan.g(this,"Code");
-      ColCaption[2]=Lan.g(this,"Tooth");
-      ColCaption[3]=Lan.g(this,"Description");
-			ColCaption[4]=Lan.g(this,"Fee");
-      ColCaption[5]=Lan.g(this,"Ins Est");
-			ColCaption[6]=Lan.g(this,"Ins Pd");
-      ColCaption[7]=Lan.g(this,"Patient");
-			ColCaption[8]=Lan.g(this,"Adj");
-			ColCaption[9]=Lan.g(this,"Paid");
-			ColCaption[10]=Lan.g(this,"Balance");
+            if (SimpleStatement)
+            {
+                ColCaption[0]=Lan.g(this,"Date");
+				ColCaption[1]=Lan.g(this,"Code");
+                ColCaption[2]=Lan.g(this,"Tooth");
+                ColCaption[3]=Lan.g(this,"Description");
+                ColCaption[4]=Lan.g(this,"Fee");
+                ColCaption[5]=Lan.g(this,"");
+                ColCaption[6]=Lan.g(this,"Ins");
+                ColCaption[7]=Lan.g(this,"");
+                ColCaption[8]=Lan.g(this,"Adj");
+                ColCaption[9]=Lan.g(this,"Paid");
+                ColCaption[10]=Lan.g(this,"");
+
+            }
+            else
+            {
+				ColCaption[0]=Lan.g(this,"Date");
+				ColCaption[1]=Lan.g(this,"Code");
+				ColCaption[2]=Lan.g(this,"Tooth");
+				ColCaption[3]=Lan.g(this,"Description");
+				ColCaption[4]=Lan.g(this,"Fee");
+				ColCaption[5]=Lan.g(this,"Ins Est");
+				ColCaption[6]=Lan.g(this,"Ins Pd");
+				ColCaption[7]=Lan.g(this,"Patient");
+				ColCaption[8]=Lan.g(this,"Adj");
+				ColCaption[9]=Lan.g(this,"Paid");
+				ColCaption[10]=Lan.g(this,"Balance");
+			}
 			colPos[0]=30;   colAlign[0]=HorizontalAlignment.Left;//date
 			colPos[1]=103;  colAlign[1]=HorizontalAlignment.Left;//code
 			colPos[2]=148;  colAlign[2]=HorizontalAlignment.Left;//tooth
@@ -814,12 +832,14 @@ namespace OpenDental{
 				}
 				else if(StatementA[famsPrinted][11,linesPrinted]=="PatTotal"){
 					//Totals--------------------------------------------------------------------------------
-					for(int iCol=3;iCol<11;iCol++){
-						g.DrawString(StatementA[famsPrinted][iCol,linesPrinted]
-							,TotalFont,Brushes.Black,new RectangleF(
-							colPos[iCol+1]
-							-g.MeasureString(StatementA[famsPrinted][iCol,linesPrinted],TotalFont).Width-1,yPos
-							,colPos[iCol+1]-colPos[iCol]+8,TotalFont.GetHeight(g)));
+					if(!SimpleStatement){
+						for(int iCol=3;iCol<11;iCol++){
+							g.DrawString(StatementA[famsPrinted][iCol,linesPrinted]
+								,TotalFont,Brushes.Black,new RectangleF(
+								colPos[iCol+1]
+								-g.MeasureString(StatementA[famsPrinted][iCol,linesPrinted],TotalFont).Width-1,yPos
+								,colPos[iCol+1]-colPos[iCol]+8,TotalFont.GetHeight(g)));
+						}
 					}
 					yPos+=TotalFont.GetHeight(g);
 				}

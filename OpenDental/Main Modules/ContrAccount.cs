@@ -1308,7 +1308,7 @@ namespace OpenDental {
 				gridAccount.EndUpdate();
 				return;
 			}
-			FillAcctLineAL(fromDate,toDate,includeClaims,subtotalsOnly);
+			FillAcctLineAL(fromDate,toDate,includeClaims,subtotalsOnly,false);
 			FillgridAccount();
 		}
 
@@ -1452,7 +1452,7 @@ namespace OpenDental {
 		}
 
 		///<summary>Public because used by FormRpStatement</summary>
-		public void FillAcctLineAL(DateTime fromDate, DateTime toDate,bool includeClaims,bool subtotalsOnly){
+		public void FillAcctLineAL(DateTime fromDate, DateTime toDate,bool includeClaims,bool subtotalsOnly, bool simpleStatement){
 			AccProcList=Procedures.Refresh(PatCur.PatNum);
 			Claims.Refresh(PatCur.PatNum);
 			Adjustment[] AdjustmentList=Adjustments.Refresh(PatCur.PatNum);
@@ -1627,6 +1627,14 @@ namespace OpenDental {
 					{
 						runBal+=subtot;
 						tempAcctLine.Balance=runBal.ToString("F");
+						if (simpleStatement)
+							{
+								tempAcctLine.InsEst="";
+								tempAcctLine.InsPay="";
+								tempAcctLine.Patient="";
+								tempAcctLine.Balance="";
+							}
+   
 						AcctLineAL.Add(tempAcctLine);
 					}
 					else if(!subtotalsOnly){//out of date range, but show normal totals
@@ -1707,7 +1715,14 @@ namespace OpenDental {
 						&& arrayClaim[tempCountClaim].DateService <= toDate){//within date range
 						runBal+=subTotal;
 						tempAcctLine.Balance=runBal.ToString("F");
-						AcctLineAL.Add(tempAcctLine);
+						if (simpleStatement)
+							{
+								tempAcctLine.InsEst="";
+								//tempAcctLine.InsPay="";//we want to show the status of the claim
+								tempAcctLine.Patient="";
+								tempAcctLine.Balance="";
+							}
+ 						AcctLineAL.Add(tempAcctLine);
 					}
 					else if(!subtotalsOnly){//out of date range, but show normal totals
 						runBal+=subTotal;//add to the running balance, but do not display it.
@@ -1715,6 +1730,13 @@ namespace OpenDental {
 					//old claims that have been received only recently, or not at all:
 					else if(includeClaims && arrayClaim[tempCountClaim].ClaimStatus != "R"){
 						tempAcctLine.Balance="";//don't show running balance
+						if (simpleStatement)
+							{
+								tempAcctLine.InsEst="";
+								tempAcctLine.InsPay="";
+								tempAcctLine.Patient="";
+								tempAcctLine.Balance="";
+							}
 						AcctLineAL.Add(tempAcctLine);
 					}
 					if(tempCountClaim<countClaim) tempCountClaim++;
@@ -1737,6 +1759,13 @@ namespace OpenDental {
 					if(arrayAdj[tempCountAdj].AdjDate >= fromDate && arrayAdj[tempCountAdj].AdjDate <= toDate){
 						runBal+=arrayAdj[tempCountAdj].AdjAmt;
 						tempAcctLine.Balance=runBal.ToString("F");
+						if (simpleStatement)
+							{
+								tempAcctLine.InsEst="";
+								tempAcctLine.InsPay="";
+								tempAcctLine.Patient="";
+								tempAcctLine.Balance="";
+							}
 						AcctLineAL.Add(tempAcctLine);
 					}
 					else if(!subtotalsOnly){//out of date range, but show normal totals
@@ -1767,6 +1796,13 @@ namespace OpenDental {
 						&& arrayPay[tempCountPay].Date <= toDate){
 						runBal-=arrayPay[tempCountPay].Amount;
 						tempAcctLine.Balance=runBal.ToString("F");
+						if (simpleStatement)
+							{
+								tempAcctLine.InsEst="";
+								tempAcctLine.InsPay="";
+								tempAcctLine.Patient="";
+								tempAcctLine.Balance="";
+							}
 						AcctLineAL.Add(tempAcctLine);
 					}
 					else if(!subtotalsOnly){//out of date range, but show normal totals
@@ -1798,6 +1834,13 @@ namespace OpenDental {
 					tempAcctLine.Balance="";
 					if(arrayComm[tempCountComm].CommDateTime.Date >= fromDate
 						&& arrayComm[tempCountComm].CommDateTime.Date <= toDate){
+						if (simpleStatement)
+							{
+								tempAcctLine.InsEst="";
+								tempAcctLine.InsPay="";
+								tempAcctLine.Patient="";
+								tempAcctLine.Balance="";
+							}
 						AcctLineAL.Add(tempAcctLine);
 					}
 					if(tempCountComm<countComm) tempCountComm++;
@@ -1853,6 +1896,13 @@ namespace OpenDental {
 					{
 						runBal+=subTotal;
 						tempAcctLine.Balance=runBal.ToString("F");
+						if (simpleStatement)
+							{
+								tempAcctLine.InsEst="";
+								tempAcctLine.InsPay="";
+								tempAcctLine.Patient="";
+								tempAcctLine.Balance="";
+							}
 						AcctLineAL.Add(tempAcctLine);
 					}
 					else if(!subtotalsOnly){//out of date range, but show normal totals
@@ -3188,7 +3238,7 @@ namespace OpenDental {
                 checkShowC.Checked=false;
                 checkShowE.Checked=false;
                 checkShowR.Checked=false;
-                checkNotes.Checked=false;
+                checkNotes.Checked=true;
                 checkRx.Checked=true;
                 checkComm.Checked=false;
                 checkAppt.Checked=false;
