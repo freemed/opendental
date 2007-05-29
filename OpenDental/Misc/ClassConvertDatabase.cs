@@ -505,20 +505,22 @@ namespace OpenDental{
 				//convert all estimates into claimprocs-------------------------------------------------
 				command="SELECT procedurelog.ProcNum,procedurelog.PatNum,"//0,1
 					+"procedurelog.ProvNum,patient.PriPlanNum,patient.SecPlanNum,"//2,3,4
-					+"claimproc.ClaimProcNum,procedurelog.ADACode,procedurelog.ProcDate,"//5,6,7
-					+"procedurelog.OverridePri,procedurelog.OverrideSec,procedurelog.NoBillIns,"//8,9,10
-					+"procedurelog.CapCoPay,procedurelog.ProcStatus,procedurelog.ProcFee,"//11,12,13
-					+"insplan.PlanType "//14
+					//+"claimproc.ClaimProcNum,
+					+"procedurelog.ADACode,procedurelog.ProcDate,"//5,6
+					+"procedurelog.OverridePri,procedurelog.OverrideSec,procedurelog.NoBillIns,"//7,8,9
+					+"procedurelog.CapCoPay,procedurelog.ProcStatus,procedurelog.ProcFee,"//10,11,12
+					+"insplan.PlanType, '' as Dummy "//13
 					+"FROM procedurelog,patient,insplan "
-					+"LEFT JOIN claimproc ON claimproc.ProcNum=procedurelog.ProcNum "//only interested in NULL
+					//+"LEFT JOIN claimproc ON claimproc.ProcNum=procedurelog.ProcNum "//only interested in NULL
 					+"WHERE procedurelog.PatNum=patient.PatNum "
 					//this is to test for capitation. It also limits results to patients with insurance.
 					+"AND patient.PriPlanNum=insplan.PlanNum "
 					//+"AND patient.PriPlanNum > 0 "//only patients with insurance
 					+"AND (procedurelog.ProcStatus=1 "//status TP
 					+"OR procedurelog.ProcStatus=2) "//status C
-					+"AND (claimproc.ClaimProcNum IS NULL "//only if not already attached to a claim
-					+"OR claimproc.Status='5')";//or CapClaim
+					+"AND NOT EXISTS (SELECT * FROM claimproc WHERE claimproc.ProcNum=procedurelog.ProcNum)";
+				//claimproc.ClaimProcNum IS NULL "//only if not already attached to a claim
+				//+"OR claimproc.Status='5')";//or CapClaim
 				table=General.GetTableEx(command);
 				procTable=table.Copy();//so that we can perform other queries
 				int status=0;
