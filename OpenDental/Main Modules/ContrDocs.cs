@@ -139,6 +139,8 @@ namespace OpenDental{
 		delegate void RenderImageCallback(Document doc);
 		///<summary>Used to safe-guard against multi-threading issues when an image capture is completed.</summary>
 		delegate void CaptureCompleteCallback(object sender,EventArgs e);
+		///<summary>Keeps track of the document settings for the currently selected document or mount document.</summary>
+		Document selectionDoc=new Document();
 
 		#endregion
 
@@ -749,6 +751,7 @@ namespace OpenDental{
 			//Select the node always, but perform additional tasks when necessary (i.e. load an image, or mount).
 			TreeDocuments.SelectedNode=node;
 			TreeDocuments.Invalidate();
+			selectionDoc=new Document();
 			//We only perform a load if the new selection is different than the old selection.
 			string identifier=GetNodeIdentifier(node);
 			if(identifier==oldSelectionIdentifier){
@@ -776,21 +779,21 @@ namespace OpenDental{
 				int docNum=Convert.ToInt32(obj["DocNum"].ToString());
 				if(mountNum!=0){//This is a mount node.
 					MountItem[] mountItems=MountItems.GetItemsForMount(mountNum);
-					
+					//TODO: set selection doc to orginal image 0 (if available).
 				}else{//This is a document node.
 					//Reload the doc from the db. We don't just keep reusing the tree data, because it will become more and 
 					//more stail with age if the program is left open in the image module for long periods of time.
-					Document selectDoc=Documents.GetByNum(docNum);
-					currentImages=GetDocumentImages(new Document[] {selectDoc},patFolder);
+					selectionDoc=Documents.GetByNum(docNum);
+					currentImages=GetDocumentImages(new Document[] {selectionDoc},patFolder);
 					if(currentImages[0]!=null){
-						if(selectDoc.WindowingMax==0) {
+						if(selectionDoc.WindowingMax==0) {
 							//The document brightness/contrast settings have never been set. By default, we use settings
 							//which do not alter the original image.
 							brightnessContrastSlider.MinVal=0;
 							brightnessContrastSlider.MaxVal=255;
 						}else{
-							brightnessContrastSlider.MinVal=selectDoc.WindowingMin;
-							brightnessContrastSlider.MaxVal=selectDoc.WindowingMax;
+							brightnessContrastSlider.MinVal=selectionDoc.WindowingMin;
+							brightnessContrastSlider.MaxVal=selectionDoc.WindowingMax;
 						}
 						paintTools.Enabled=true;								//Only allow painting tools to be used when a valid image has been loaded.
 						brightnessContrastSlider.Enabled=true;	//The brightnessContrastSlider is not actually part of the paintTools
@@ -805,7 +808,7 @@ namespace OpenDental{
 						imageTranslations=new PointF[1];//Values set in ReloadZoomTransCrop()
 					}
 					//Adjust visibility of panel note control based on if the new document has a signature.
-					SetPanelNoteVisibility(selectDoc);
+					SetPanelNoteVisibility(selectionDoc);
 					//Resize controls in our window to adjust for a possible change in the visibility of the panel note control.
 					ResizeAll();
 					//Refresh the signature and note in case the last document also had a signature.
@@ -1033,6 +1036,7 @@ namespace OpenDental{
 					return;
 				}
 			}
+			selectionDoc=new Document();
 			DataRow obj=(DataRow)TreeDocuments.SelectedNode.Tag;
 			int mountNum=Convert.ToInt32(obj["MountNum"].ToString());
 			int docNum=Convert.ToInt32(obj["DocNum"].ToString());
@@ -1084,21 +1088,18 @@ namespace OpenDental{
 				MsgBox.Show(this,"Cannot sign mount objects");
 				return;
 			}
-			Document curDoc=Documents.GetByNum(docNum);
 			//Show the underlying panel note box while the signature is being filled.
 			panelNote.Visible=true;
 			ResizeAll();
 			//Display the document signature form.
-			FormDocSign docSignForm=new FormDocSign(curDoc,patFolder);
+			FormDocSign docSignForm=new FormDocSign(selectionDoc,patFolder);//Updates our local document and saves changes to db also.
 			int signLeft=TreeDocuments.Left;
 			docSignForm.Location=PointToScreen(new Point(signLeft,this.ClientRectangle.Bottom-docSignForm.Height));
 			docSignForm.Width=Math.Max(0,Math.Min(docSignForm.Width,PictureBox1.Right-signLeft));
 			docSignForm.ShowDialog();
 			FillDocList(true);
-			//After the update, our local document copy is possibly out of date, so we must refresh it again.
-			curDoc=Documents.GetByNum(docNum);
 			//Adjust visibility of panel note based on changes made to the signature above.
-			SetPanelNoteVisibility(curDoc);
+			SetPanelNoteVisibility(selectionDoc);
 			//Resize controls in our window to adjust for a possible change in the visibility of the panel note control.
 			ResizeAll();
 			//Update the signature and note with the new data.
@@ -1113,8 +1114,7 @@ namespace OpenDental{
 				return;
 			}
 			DataRow obj=(DataRow)TreeDocuments.SelectedNode.Tag;
-			Document curDoc=Documents.GetByNum(Convert.ToInt32(obj["DocNum"].ToString()));
-			textNote.Text=curDoc.Note;
+			textNote.Text=selectionDoc.Note;
 			sigBox.Visible=true;
 			sigBox.SetTabletState(0);//never accepts input here
 			labelInvalidSig.Visible=false;
@@ -1124,31 +1124,31 @@ namespace OpenDental{
 				sigBoxTopaz.Visible=false;
 				sigBoxTopaz.SetTabletState(0);
 			}
-			//A machine running Unix will have curDoc.SigIsTopaz set to false here, because the visibility of the panelNote
+			//A machine running Unix will have selectionDoc.SigIsTopaz set to false here, because the visibility of the panelNote
 			//will be set to false in the case of Unix and SigIsTopaz. Therefore, the else part of this if-else clause is always
 			//run on Unix systems.
-			if(curDoc.SigIsTopaz) {
-				if(curDoc.Signature!=null && curDoc.Signature!="") {
+			if(selectionDoc.SigIsTopaz) {
+				if(selectionDoc.Signature!=null && selectionDoc.Signature!="") {
 					sigBox.Visible=false;
 					sigBoxTopaz.Visible=true;
 					sigBoxTopaz.ClearTablet();
 					sigBoxTopaz.SetSigCompressionMode(0);
 					sigBoxTopaz.SetEncryptionMode(0);
-					sigBoxTopaz.SetKeyString(GetHashString(curDoc));
+					sigBoxTopaz.SetKeyString(GetHashString(selectionDoc));
 					sigBoxTopaz.SetEncryptionMode(2);//high encryption
 					sigBoxTopaz.SetSigCompressionMode(2);//high compression
-					sigBoxTopaz.SetSigString(curDoc.Signature);
+					sigBoxTopaz.SetSigString(selectionDoc.Signature);
 					if(sigBoxTopaz.NumberOfTabletPoints()==0) {
 						labelInvalidSig.Visible=true;
 					}
 				}
 			}else{
 				sigBox.ClearTablet();
-				if(curDoc.Signature!=null && curDoc.Signature!="") {
+				if(selectionDoc.Signature!=null && selectionDoc.Signature!="") {
 					sigBox.Visible=true;
 					sigBoxTopaz.Visible=false;
-					sigBox.SetKeyString(GetHashString(curDoc));
-					sigBox.SetSigString(curDoc.Signature);
+					sigBox.SetKeyString(GetHashString(selectionDoc));
+					sigBox.SetSigString(selectionDoc.Signature);
 					if(sigBox.NumberOfTabletPoints()==0) {
 						labelInvalidSig.Visible=true;
 					}
@@ -1157,16 +1157,16 @@ namespace OpenDental{
 			}
 		}
 
-		private string GetHashString(Document curDoc) {
+		private string GetHashString(Document doc) {
 			//the key data is the bytes of the file, concatenated with the bytes of the note.
 			byte[] textbytes;
-			if(curDoc.Note==null) {
+			if(doc.Note==null) {
 				textbytes=Encoding.UTF8.GetBytes("");
 			}
 			else {
-				textbytes=Encoding.UTF8.GetBytes(curDoc.Note);
+				textbytes=Encoding.UTF8.GetBytes(doc.Note);
 			}
-			string path=ODFileUtils.CombinePaths(patFolder,curDoc.FileName);
+			string path=ODFileUtils.CombinePaths(patFolder,doc.FileName);
 			if(!File.Exists(path)) {
 				return "";
 			}
@@ -1589,29 +1589,23 @@ namespace OpenDental{
 			if(mountNum!=0){//Settings invalidated for a mount object.
 				return;//TODO:??????
 			}
-			Document curDoc=Documents.GetByNum(docNum);
 			InvalidatedSettingsFlag|=settings;
 			if(reloadZoomTransCrop){
 				//Reloading the image settings only happens when a new image is selected, pasted, scanned, etc...
 				//Therefore, the is no need for any current image processing anymore (it would be on a stail image).
 				KillMyImageThreads();
-				ReloadZoomTransCrop(curImageWidths[0],curImageHeights[0],curDoc,new Rectangle(0,0,PictureBox1.Width,PictureBox1.Height),
+				ReloadZoomTransCrop(curImageWidths[0],curImageHeights[0],selectionDoc,new Rectangle(0,0,PictureBox1.Width,PictureBox1.Height),
 					out imageZooms[0],out zoomLevels[0],out zoomFactors[0],out imageTranslations[0]);
 				cropTangle=new Rectangle(0,0,-1,-1);
 			}
-			//Pass the current brightness/contrast settings to the rendering thread. It doesn't matter if these 
-			//settings are stored in the database yet, because they are saved when the brightness/contrast slider
-			//is released by the user.
-			curDoc.WindowingMin=brightnessContrastSlider.MinVal;
-			curDoc.WindowingMax=brightnessContrastSlider.MaxVal;
-			//curDoc is an individual document instance. Assigning a new document to settingDoc here does not 
+			//selectionDoc is an individual document instance. Assigning a new document to settingDoc here does not 
 			//negatively effect our image application thread, because the thread either will keep its current 
 			//reference to the old document, or will apply the settings with this newly assigned document. In either
 			//case, the output is either what we expected originally, or is a more accurate image for more recent 
 			//settings. We lock here so that we are sure that the resulting document and setting tuple represent
 			//a single point in time.
 			lock(settingHandle){//Does not actually lock the settingHandle object.
-				settingDoc=curDoc;
+				settingDoc=selectionDoc;
 				settingFlags=InvalidatedSettingsFlag;
 			}
 			//Tell the thread to start processing (as soon as the thread is created, or as soon as otherwise 
@@ -1767,8 +1761,8 @@ namespace OpenDental{
 			if(mountNum!=0) {
 				return;
 			}
-			Document infoDoc=Documents.GetByNum(docNum);
-			FormDocInfo formDocInfo2=new FormDocInfo(PatCur,infoDoc,GetCurrentFolderName(TreeDocuments.SelectedNode));
+			//The FormDocInfo object updates the selectionDoc and stores the changes in the database as well.
+			FormDocInfo formDocInfo2=new FormDocInfo(PatCur,selectionDoc,GetCurrentFolderName(TreeDocuments.SelectedNode));
 			formDocInfo2.ShowDialog();
 			if(formDocInfo2.DialogResult!=DialogResult.OK) {
 				return;
@@ -1834,10 +1828,9 @@ namespace OpenDental{
 			if(mountNum!=0) {
 				return;//TODO:
 			}else{
-				Document curDoc=Documents.GetByNum(docNum);
-				curDoc.IsFlipped=!curDoc.IsFlipped;
-				Documents.Update(curDoc);
-				DeleteThumbnailImage(curDoc);
+				selectionDoc.IsFlipped=!selectionDoc.IsFlipped;
+				Documents.Update(selectionDoc);
+				DeleteThumbnailImage(selectionDoc);
 			}
 			InvalidateSettings(ApplySettings.FLIP,false);//Refresh display.
 		}
@@ -1852,13 +1845,12 @@ namespace OpenDental{
 			if(mountNum!=0) {
 				return;//TODO:
 			}else{
-				Document curDoc=Documents.GetByNum(docNum);
-				curDoc.DegreesRotated-=90;
-				while(curDoc.DegreesRotated<0) {
-					curDoc.DegreesRotated+=360;
+				selectionDoc.DegreesRotated-=90;
+				while(selectionDoc.DegreesRotated<0) {
+					selectionDoc.DegreesRotated+=360;
 				}
-				Documents.Update(curDoc);
-				DeleteThumbnailImage(curDoc);
+				Documents.Update(selectionDoc);
+				DeleteThumbnailImage(selectionDoc);
 			}
 			InvalidateSettings(ApplySettings.ROTATE,false);//Refresh display.
 		}
@@ -1873,10 +1865,9 @@ namespace OpenDental{
 			if(mountNum!=0) {
 				return;//TODO:
 			}else{
-				Document curDoc=Documents.GetByNum(docNum);
-				curDoc.DegreesRotated=(curDoc.DegreesRotated+90)%360;
-				Documents.Update(curDoc);
-				DeleteThumbnailImage(curDoc);
+				selectionDoc.DegreesRotated=(selectionDoc.DegreesRotated+90)%360;
+				Documents.Update(selectionDoc);
+				DeleteThumbnailImage(selectionDoc);
 			}
 			InvalidateSettings(ApplySettings.ROTATE,false);//Refresh display.
 		}
@@ -1939,16 +1930,15 @@ namespace OpenDental{
 			if(mountNum!=0){
 				return;
 			}
-			Document curDoc=Documents.GetByNum(docNum);			
 			if(!MsgBox.Show(this,true,"Crop to Rectangle?")){
 				cropTangle=new Rectangle(0,0,-1,-1);
 				InvalidateSettings(ApplySettings.NONE,false);//Refresh display (since message box was covering).
 				return;
 			}
-			PointF cropPoint1=ScreenPointToUnalteredDocumentPoint(cropTangle.Location,curDoc,
+			PointF cropPoint1=ScreenPointToUnalteredDocumentPoint(cropTangle.Location,selectionDoc,
 				curImageWidths[0],curImageHeights[0],imageZooms[0]*zoomFactors[0],imageTranslations[0]);
 			PointF cropPoint2=ScreenPointToUnalteredDocumentPoint(new Point(cropTangle.Location.X+cropTangle.Width,
-				cropTangle.Location.Y+cropTangle.Height),curDoc,curImageWidths[0],curImageHeights[0],
+				cropTangle.Location.Y+cropTangle.Height),selectionDoc,curImageWidths[0],curImageHeights[0],
 				imageZooms[0]*zoomFactors[0],imageTranslations[0]);
 			//cropPoint1 and cropPoint2 together define an axis-aligned bounding area, or our crop area. 
 			//However, the two points have no guaranteed order, thus we must sort them using Math.Min.
@@ -1959,7 +1949,7 @@ namespace OpenDental{
 				(int)Math.Ceiling((decimal)Math.Abs(cropPoint1.Y-cropPoint2.Y)));
 			//We must also intersect the old cropping rectangle with the new cropping rectangle, so that part of
 			//the image does not come back as a result of multiple crops.
-			Rectangle oldCropRect=DocCropRect(curDoc,curImageWidths[0],curImageHeights[0]);
+			Rectangle oldCropRect=DocCropRect(selectionDoc,curImageWidths[0],curImageHeights[0]);
 			float[] finalCropRect=ODMathLib.IntersectRectangles(rawCropRect.X,rawCropRect.Y,rawCropRect.Width,
 				rawCropRect.Height,oldCropRect.X,oldCropRect.Y,oldCropRect.Width,oldCropRect.Height);
 			//Will return a null intersection when the user chooses a crop rectangle which is
@@ -1970,15 +1960,15 @@ namespace OpenDental{
 				InvalidateSettings(ApplySettings.NONE,false);//Refresh display (since message box was covering).
 				return;
 			}
-			Rectangle prevCropRect=DocCropRect(curDoc,curImageWidths[0],curImageHeights[0]);
-			curDoc.CropX=(int)finalCropRect[0];
-			curDoc.CropY=(int)finalCropRect[1];
-			curDoc.CropW=(int)Math.Ceiling(finalCropRect[2]);
-			curDoc.CropH=(int)Math.Ceiling(finalCropRect[3]);
-			Documents.Update(curDoc);
+			Rectangle prevCropRect=DocCropRect(selectionDoc,curImageWidths[0],curImageHeights[0]);
+			selectionDoc.CropX=(int)finalCropRect[0];
+			selectionDoc.CropY=(int)finalCropRect[1];
+			selectionDoc.CropW=(int)Math.Ceiling(finalCropRect[2]);
+			selectionDoc.CropH=(int)Math.Ceiling(finalCropRect[3]);
+			Documents.Update(selectionDoc);
 			FillDocList(true);
-			DeleteThumbnailImage(curDoc);
-			Rectangle newCropRect=DocCropRect(curDoc,curImageWidths[0],curImageHeights[0]);
+			DeleteThumbnailImage(selectionDoc);
+			Rectangle newCropRect=DocCropRect(selectionDoc,curImageWidths[0],curImageHeights[0]);
 			//Update the location of the image so that the cropped portion of the image does not move in screen space.
 			PointF prevCropCenter=new PointF(prevCropRect.X+prevCropRect.Width/2.0f,prevCropRect.Y+prevCropRect.Height/2.0f);
 			PointF newCropCenter=new PointF(newCropRect.X+newCropRect.Width/2.0f,newCropRect.Y+newCropRect.Height/2.0f);
@@ -1986,7 +1976,7 @@ namespace OpenDental{
 				prevCropCenter,
 				newCropCenter
 			};
-			Matrix docMat=GetDocumentFlippedRotatedMatrix(curDoc);
+			Matrix docMat=GetDocumentFlippedRotatedMatrix(selectionDoc);
 			docMat.Scale(imageZooms[0]*zoomFactors[0],imageZooms[0]*zoomFactors[0]);
 			docMat.TransformPoints(imageCropCenters);
 			imageTranslations[0]=new PointF(imageTranslations[0].X+(imageCropCenters[1].X-imageCropCenters[0].X),
@@ -1996,6 +1986,8 @@ namespace OpenDental{
 		}
 
 		private void brightnessContrastSlider_Scroll(object sender,EventArgs e){
+			selectionDoc.WindowingMin=brightnessContrastSlider.MinVal;
+			selectionDoc.WindowingMax=brightnessContrastSlider.MaxVal;
 			InvalidateSettings(ApplySettings.COLORFUNCTION,false);
 		}
 
@@ -2008,9 +2000,8 @@ namespace OpenDental{
 			if(mountNum!=0){
 				return;//TODO: do something here!
 			}
-			Document curDoc=Documents.GetByNum(docNum);
-			Documents.Update(curDoc);
-			DeleteThumbnailImage(curDoc);
+			Documents.Update(selectionDoc);
+			DeleteThumbnailImage(selectionDoc);
 			InvalidateSettings(ApplySettings.COLORFUNCTION,false);
 		}
 
@@ -2153,13 +2144,13 @@ namespace OpenDental{
 		//===================================== STATIC FUNCTIONS =================================================
 
 		///<summary>Sets global variables: Zoom, translation, and crop to initial starting values where the image fits perfectly within the box.</summary>
-		private static void ReloadZoomTransCrop(int docImageWidth,int docImageHeight,Document curDoc,Rectangle viewport,
+		private static void ReloadZoomTransCrop(int docImageWidth,int docImageHeight,Document doc,Rectangle viewport,
 			out float zoom,out int zoomLevel,out float zoomFactor,out PointF translation) {
 			//Choose an initial zoom so that the image is scaled to fit the picture box size.
 			//Keep in mind that bitmaps are not allowed to have either a width or height of 0,
 			//so the following equations will always work. The following subtracts from the 
 			//picture box width to force a little extra white space.
-			RectangleF imageRect=CalcImageDims(docImageWidth,docImageHeight,curDoc);
+			RectangleF imageRect=CalcImageDims(docImageWidth,docImageHeight,doc);
 			float matchWidth=viewport.Width-16;
 			matchWidth=(matchWidth<=0?1:matchWidth);
 			float matchHeight=viewport.Height-16;
