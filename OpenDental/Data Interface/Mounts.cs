@@ -22,8 +22,8 @@ namespace OpenDental {
 			string command="UPDATE mount SET "
 				+"PatNum='"+POut.PInt(mount.PatNum)+"',"
 				+"DocCategory='"+POut.PInt(mount.DocCategory)+"',"
-				+"DateCreated='"+POut.PDate(mount.DateCreated)+"',"
-				+"Description='"+POut.PString(mount.Description)+"'"
+				+"DateCreated="+POut.PDate(mount.DateCreated)+","
+				+"Description='"+POut.PString(mount.Description)+"',"
 				+"ImgType='"+POut.PInt((int)mount.ImgType)+"' "
 				+"WHERE MountNum='"+POut.PInt(mount.MountNum)+"'";
 			return General.NonQEx(command);

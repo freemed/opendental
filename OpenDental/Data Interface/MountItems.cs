@@ -40,7 +40,7 @@ namespace OpenDental {
 
 		///<summary>Returns the list of mount items associated with the given mount key.</summary>
 		public static MountItem[] GetItemsForMount(int mountNum){
-			string command="SELECT * FROM mountitem WHERE MountNum='"+POut.PInt(mountNum)+"'";
+			string command="SELECT * FROM mountitem WHERE MountNum='"+POut.PInt(mountNum)+"' ORDER BY MountItemNum";
 			DataTable result=General.GetTable(command);
 			MountItem[] mountItems=new MountItem[result.Rows.Count];
 			for(int i=0;i<mountItems.Length;i++){
