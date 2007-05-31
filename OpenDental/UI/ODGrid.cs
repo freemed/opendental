@@ -26,7 +26,7 @@ namespace OpenDental.UI{
 		private string title;
 		private Font titleFont=new Font(FontFamily.GenericSansSerif,10,FontStyle.Bold);
 		private Font headerFont=new Font(FontFamily.GenericSansSerif,8.5f,FontStyle.Bold);
-		private Font cellFont=new Font(FontFamily.GenericSansSerif,8.5f);
+		private Font cellFont=new Font("Arial",8.5f);
 		private int titleHeight=18;
 		private int headerHeight=15;
 		private Color cGridLine=Color.FromArgb(180,180,180);

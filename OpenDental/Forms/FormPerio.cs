@@ -946,9 +946,10 @@ namespace OpenDental{
 			// 
 			// listExams
 			// 
+			this.listExams.ItemHeight = 14;
 			this.listExams.Location = new System.Drawing.Point(7,37);
 			this.listExams.Name = "listExams";
-			this.listExams.Size = new System.Drawing.Size(124,134);
+			this.listExams.Size = new System.Drawing.Size(124,130);
 			this.listExams.TabIndex = 59;
 			this.listExams.DoubleClick += new System.EventHandler(this.listExams_DoubleClick);
 			this.listExams.MouseDown += new System.Windows.Forms.MouseEventHandler(this.listExams_MouseDown);
@@ -1055,6 +1056,7 @@ namespace OpenDental{
 			this.Controls.Add(this.but3);
 			this.Controls.Add(this.but7);
 			this.Controls.Add(this.butClose);
+			this.Font = new System.Drawing.Font("Arial",8.25F,System.Drawing.FontStyle.Regular,System.Drawing.GraphicsUnit.Point,((byte)(0)));
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.MaximizeBox = false;
 			this.MinimizeBox = false;
@@ -1496,10 +1498,10 @@ namespace OpenDental{
 			//MessageBox.Show(grfx.
 			float yPos=75;
 			float xPos=100;
-			Font font=new Font(FontFamily.GenericSansSerif,9);
+			Font font=new Font("Arial",9);
 			StringFormat format=new StringFormat();
 			format.Alignment=StringAlignment.Center;
-			grfx.DrawString("Periodontal Charting",new Font(FontFamily.GenericSansSerif,15),Brushes.Black
+			grfx.DrawString("Periodontal Charting",new Font("Arial",15),Brushes.Black
 				,new RectangleF(xPos,yPos,650,25),format);
 			yPos+=30;
 			grfx.DrawString(PatCur.GetNameFL(),font,Brushes.Black
