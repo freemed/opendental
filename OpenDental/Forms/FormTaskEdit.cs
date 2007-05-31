@@ -468,15 +468,13 @@ namespace OpenDental{
 				Cur.KeyNum=FormPS.SelectedPatNum;
 			}
 			if(Cur.ObjectType==TaskObjectType.Appointment){
-				Family fam=Patients.GetFamily(FormPS.SelectedPatNum);
-				Patient pat=fam.GetPatient(FormPS.SelectedPatNum);
-				FormApptsOther FormA=new FormApptsOther(pat,fam);
+				FormApptsOther FormA=new FormApptsOther(FormPS.SelectedPatNum);
 				FormA.SelectOnly=true;
 				FormA.ShowDialog();
 				if(FormA.DialogResult==DialogResult.Cancel){
 					return;
 				}
-				Cur.KeyNum=FormA.SelectedAppt.AptNum;
+				Cur.KeyNum=FormA.AptSelected;
 			}
 			FillObject();
 		}

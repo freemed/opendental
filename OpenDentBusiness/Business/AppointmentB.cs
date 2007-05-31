@@ -103,6 +103,7 @@ namespace OpenDentBusiness{
 			table.Columns.Add("preMedFlag");
 			table.Columns.Add("procs");
 			table.Columns.Add("production");
+			table.Columns.Add("productionVal");
 			table.Columns.Add("provider");
 			table.Columns.Add("ProvHyg");
 			table.Columns.Add("ProvNum");
@@ -320,6 +321,7 @@ namespace OpenDentBusiness{
 					row["procs"]+=rawProc.Rows[p]["AbbrDesc"].ToString();	
 				}
 				row["production"]=PIn.PDouble(raw.Rows[i]["Production"].ToString()).ToString("c");
+				row["productionVal"]=raw.Rows[i]["Production"].ToString();
 				if(raw.Rows[i]["IsHygiene"].ToString()=="1"){
 					row["provider"]=raw.Rows[i]["HygAbbr"].ToString();
 					if(raw.Rows[i]["ProvAbbr"].ToString()!=""){

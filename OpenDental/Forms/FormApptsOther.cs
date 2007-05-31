@@ -37,17 +37,19 @@ namespace OpenDental{
 		public bool SelectOnly;
 		private OpenDental.UI.Button butRecall;
 		///<summary>This will contain a selected appointment upon closing of the form in some situations.  Used when picking an appointment for task lists.  Also used if the GoTo or Create new buttons are clicked.</summary>
-		public Appointment SelectedAppt;
-        private TextBox textFinUrg;
-        private Label label3;
-		///<summary>If oResult=PinboardAndSearch, then when closing this form, this will contain the date to jump to when beginning the search.</summary>
+		public int AptSelected;
+		///<summary>When this form closes, this will be the patNum of the last patient viewed.  The calling form should then make use of this to refresh to that patient.  If 0, then calling form should not refresh.</summary>
+		public int SelectedPatNum;
+		private TextBox textFinUrg;
+		private Label label3;
+		///<summary>If oResult=PinboardAndSearch, then when closing this form, this will contain the date to jump to when beginning the search.  If oResult=GoTo, then this will also contain the date.  Can't use DateTime type because C# complains about marshal by reference.</summary>
 		public string DateJumpToString;
 
 		///<summary></summary>
-		public FormApptsOther(Patient pat,Family fam){
+		public FormApptsOther(int patNum){//Patient pat,Family fam){
 			InitializeComponent();
-			PatCur=pat;
-			FamCur=fam;
+			FamCur=Patients.GetFamily(patNum);
+			PatCur=FamCur.GetPatient(patNum);
 			tbApts.CellDoubleClicked += new OpenDental.ContrTable.CellEventHandler(tbApts_CellDoubleClicked);
 			Lan.F(this);
 			for(int i=0;i<listFamily.Columns.Count;i++){
@@ -363,7 +365,7 @@ namespace OpenDental{
 				butOK.Visible=false;
 			}
 			Filltb();
-            CheckStatus();
+			CheckStatus();
 		}
 
 		private void CheckStatus(){
@@ -378,6 +380,7 @@ namespace OpenDental{
 		}
 
 		private void Filltb(){
+			SelectedPatNum=PatCur.PatNum;//just in case user has selected a different family member
 			RecallList=Recalls.GetList(FamCur.List);
 			Appointment[] aptsOnePat;
 			listFamily.Items.Clear();
@@ -442,9 +445,7 @@ namespace OpenDental{
 				tbApts.Cell[5,i]=ListOth[i].Note;
 			}
 			textFinUrg.Text=PatCur.FamFinUrgNote;
-            tbApts.LayoutTables();
-            
-
+			tbApts.LayoutTables();
 		}
 
 		private void listFamily_DoubleClick(object sender, System.EventArgs e) {
@@ -467,7 +468,7 @@ namespace OpenDental{
 			FormRLE.ShowDialog();
 			if(FormRLE.PinClicked){
 				oResult=OtherResult.CopyToPinBoard;
-				//already created curInfo in FormRE.
+				AptSelected=FormRLE.AptSelected;
 				DialogResult=DialogResult.OK;
 			}
 			else{
@@ -486,8 +487,8 @@ namespace OpenDental{
 			}
 			Recall recallCur=recallList[0];
 			InsPlan[] planList=InsPlans.Refresh(FamCur);
-			Appointment AptCur=Appointments.CreateRecallApt(PatCur,procList,recallCur,planList);
-			CreateCurInfo(AptCur);
+			Appointment apt=Appointments.CreateRecallApt(PatCur,procList,recallCur,planList);
+			AptSelected=apt.AptNum;
 			oResult=OtherResult.PinboardAndSearch;
 			if(recallCur.DateDue<DateTime.Today){
 				DateJumpToString=DateTime.Today.ToShortDateString();//they are overdue
@@ -540,12 +541,11 @@ namespace OpenDental{
 			if(FormApptEdit2.DialogResult!=DialogResult.OK){
 				return;
 			}
+			AptSelected=AptCur.AptNum;
 			if(InitialClick){
-				SelectedAppt=AptCur;
 				oResult=OtherResult.CreateNew;
 			}
 			else{
-				CreateCurInfo(AptCur);
 				oResult=OtherResult.NewToPinBoard;
 			}
 			DialogResult=DialogResult.OK;
@@ -556,9 +556,10 @@ namespace OpenDental{
 				MessageBox.Show(Lan.g(this,"Please select appointment first."));
 				return;
 			}
-			if(!OKtoSendToPinboard(ListOth[tbApts.SelectedRow]))
+			if(!OKtoSendToPinboard(ListOth[tbApts.SelectedRow])){
 				return;
-			CreateCurInfo(ListOth[tbApts.SelectedRow]);
+			}
+			AptSelected=ListOth[tbApts.SelectedRow].AptNum;
 			oResult=OtherResult.CopyToPinBoard;
 			DialogResult=DialogResult.OK;
 		}
@@ -610,7 +611,7 @@ namespace OpenDental{
 			if(FormAE.PinClicked){
 				if(!OKtoSendToPinboard(ListOth[e.Row]))
 					return;
-				CreateCurInfo(ListOth[e.Row]);
+				AptSelected=ListOth[e.Row].AptNum;
 				oResult=OtherResult.CopyToPinBoard;
 				DialogResult=DialogResult.OK;
 			}
@@ -623,11 +624,12 @@ namespace OpenDental{
 
 		private void listFamily_Click(object sender,EventArgs e) {
 			//Changes the patient to whoever was clicked in the list 
-			int OldPatNum=PatCur.PatNum;
-			int NewPatNum=FamCur.List[listFamily.SelectedIndices[0]].PatNum;
-			if(NewPatNum==OldPatNum)
+			int oldPatNum=PatCur.PatNum;
+			int newPatNum=FamCur.List[listFamily.SelectedIndices[0]].PatNum;
+			if(newPatNum==oldPatNum){
 				return;
-			PatCur = FamCur.GetPatient(NewPatNum);
+			}
+			PatCur=FamCur.GetPatient(newPatNum);
 			Text=Lan.g(this,"Appointments for")+" "+PatCur.GetNameLF();
 			Filltb();
 			CheckStatus();
@@ -641,10 +643,11 @@ namespace OpenDental{
 			}
 		}
 
+		/*
 		///<summary>Prepares the necessary info for placement of the appointment on the pinboard.</summary>
 		private void CreateCurInfo(Appointment AptCur){
-MessageBox.Show("Not functional");
-			/*ContrAppt.CurInfo=new InfoApt();
+
+			ContrAppt.CurInfo=new InfoApt();
 			ContrAppt.CurInfo.MyApt=AptCur.Copy();
 			Procedure[] procsForSingle;
 			if(AptCur.AptNum==PatCur.NextAptNum){//if is Next apt
@@ -656,8 +659,8 @@ MessageBox.Show("Not functional");
 				ContrAppt.CurInfo.Production=Procedures.GetProductionOneApt(AptCur.AptNum,procsForSingle,false);
 			}
 			ContrAppt.CurInfo.Procs=procsForSingle;
-			ContrAppt.CurInfo.MyPatient=PatCur.Copy();*/
-		}
+			ContrAppt.CurInfo.MyPatient=PatCur.Copy();
+		}*/
 
 		private void butGoTo_Click(object sender, System.EventArgs e) {
 			if(tbApts.SelectedRow==-1){
@@ -668,7 +671,8 @@ MessageBox.Show("Not functional");
 				MessageBox.Show(Lan.g(this,"Unable to go to unscheduled appointment."));
 				return;
 			}
-			SelectedAppt=ListOth[tbApts.SelectedRow];
+			AptSelected=ListOth[tbApts.SelectedRow].AptNum;
+			DateJumpToString=ListOth[tbApts.SelectedRow].AptDateTime.Date.ToShortDateString();
 			oResult=OtherResult.GoTo;
 			DialogResult=DialogResult.OK;
 		}
@@ -680,7 +684,7 @@ MessageBox.Show("Not functional");
 				MessageBox.Show(Lan.g(this,"Please select appointment first."));
 				return;
 			}
-			SelectedAppt=ListOth[tbApts.SelectedRow];
+			AptSelected=ListOth[tbApts.SelectedRow].AptNum;
 			DialogResult=DialogResult.OK;
 		}
 
@@ -689,8 +693,9 @@ MessageBox.Show("Not functional");
 		}
 
 		private void FormApptsOther_Closing(object sender, System.ComponentModel.CancelEventArgs e) {
-			if(DialogResult==DialogResult.OK)
+			if(DialogResult==DialogResult.OK){
 				return;
+			}
 			oResult=OtherResult.Cancel;
 		}
 

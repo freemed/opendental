@@ -494,9 +494,10 @@ namespace OpenDental{
 		}
 
 		///<summary>Used by appt search function.  Returns the next available time for the appointment.  Starts searching on lastSlot, which can be tonight at midnight for the first search.  Then, each subsequent search will start at the time of the previous search plus the length of the appointment.  Provider array cannot be length 0.  Might return array of 0 if it goes more than 1 year into the future.</summary>
-		public static DateTime[] GetSearchResults(Appointment apt,DateTime afterDate,int[] providers,int resultCount,
+		public static DateTime[] GetSearchResults(int aptNum,DateTime afterDate,int[] providers,int resultCount,
 			TimeSpan beforeTime,TimeSpan afterTime)
 		{
+			Appointment apt=GetOneApt(aptNum);
 			DateTime dayEvaluating=afterDate.AddDays(1);
 			Appointment[] aptList;//list of appointments for one day
 			ArrayList ALresults=new ArrayList();//result Date/Times
@@ -574,51 +575,6 @@ namespace OpenDental{
 						SetProvBarSched(ref provBarSched[p],schedDay[i].StartTime,schedDay[i].StopTime);
 						//provHandled=true;
 					}
-					/*if(provHandled){
-						continue;
-					}
-					//schedDefault for prov
-					for(int i=0;i<SchedDefaults.List.Length;i++){
-						if(SchedDefaults.List[i].DayOfWeek!=(int)dayEvaluating.DayOfWeek){
-							continue;
-						}
-						if(SchedDefaults.List[i].SchedType!=ScheduleType.Provider){
-							continue;
-						}
-						if(providers[p]!=SchedDefaults.List[i].ProvNum){
-							continue;
-						}
-						SetProvBarSched(ref provBarSched[p],SchedDefaults.List[i].StartTime,SchedDefaults.List[i].StopTime);
-						provHandled=true;
-					}
-					if(provHandled){
-						continue;
-					}
-					//schedule for practice
-					for(int i=0;i<schedDay.Length;i++){
-						if(schedDay[i].SchedType!=ScheduleType.Practice){
-							continue;
-						}
-						if(schedDay[i].Status==SchedStatus.Closed || schedDay[i].Status==SchedStatus.Holiday){
-							provHandled=true;//all elements remain false.
-							break;
-						}
-						SetProvBarSched(ref provBarSched[p],schedDay[i].StartTime,schedDay[i].StopTime);
-						provHandled=true;
-					}
-					if(provHandled){
-						continue;
-					}
-					//SchedDefault for practice
-					for(int i=0;i<SchedDefaults.List.Length;i++){
-						if(SchedDefaults.List[i].DayOfWeek!=(int)dayEvaluating.DayOfWeek){
-							continue;
-						}
-						if(SchedDefaults.List[i].SchedType!=ScheduleType.Practice){
-							continue;
-						}
-						SetProvBarSched(ref provBarSched[p],SchedDefaults.List[i].StartTime,SchedDefaults.List[i].StopTime);
-					}*/
 				}
 				//step through day, one increment at a time, looking for a slot
 				pattern=ContrApptSingle.GetPatternShowing(apt.Pattern);
@@ -872,8 +828,12 @@ namespace OpenDental{
 				+" WHERE AptNum="+POut.PInt(aptNum);
 			General.NonQ(command);
 		}
-		
 
+		///<summary>Sets the new pattern for an appointment.  This is how resizing is done.  Must contain only / and X, with each char representing 5 minutes.</summary>
+		public static void SetPattern(int aptNum,string newPattern) {
+			string command="UPDATE appointment SET Pattern='"+POut.PString(newPattern)+"' WHERE AptNum="+POut.PInt(aptNum);
+			General.NonQ(command);
+		}
 
 
 
