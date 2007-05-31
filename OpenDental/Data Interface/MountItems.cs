@@ -13,7 +13,7 @@ namespace OpenDental {
 				+"'"+POut.PInt(mountItem.MountItemNum)+"',"
 				+"'"+POut.PInt(mountItem.MountNum)+"',"
 				+"'"+POut.PInt(mountItem.OrdinalPos)+"')";
-			return General.NonQEx(command);
+			return General.NonQEx(command,true);
 		}
 
 		public static int Update(MountItem mountItem) {

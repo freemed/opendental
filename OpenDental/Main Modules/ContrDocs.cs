@@ -141,6 +141,8 @@ namespace OpenDental{
 		delegate void CaptureCompleteCallback(object sender,EventArgs e);
 		///<summary>Keeps track of the document settings for the currently selected document or mount document.</summary>
 		Document selectionDoc=new Document();
+		///<summary>Keeps track of the currently selected mount object (only when a mount is selected).</summary>
+		Mount selectionMount=new Mount();
 		///<summary>Keeps track of the currently selected image within the list of currently loaded images.</summary>
 		int hotDocument=0;
 
@@ -500,7 +502,7 @@ namespace OpenDental{
 
 		///<summary>Sets the panelnote visibility based on the given document's signature data and the current operating system.</summary>
 		private void SetPanelNoteVisibility(Document doc) {
-			panelNote.Visible=(((doc.Note!=null && doc.Note!="") || (doc.Signature!=null && doc.Signature!="")) && 
+			panelNote.Visible=(doc!=null) && (((doc.Note!=null && doc.Note!="") || (doc.Signature!=null && doc.Signature!="")) && 
 				(Environment.OSVersion.Platform!=PlatformID.Unix || !doc.SigIsTopaz));
 		}
 
@@ -768,6 +770,8 @@ namespace OpenDental{
 			//the current image has been erased. This will also avoid concurrent access to the the currently loaded images by
 			//the main and worker threads.
 			EraseCurrentImage();
+			//selectionDoc=null;
+			//selectionMount=null;
 			if(identifier.Length<1){//A folder was selected (or unselection, but I am not sure unselection would be possible here).
 				//The panel note control is made invisible to start and then made visible for the appropriate documents. This
 				//line prevents the possibility of showing a signature box after selecting a folder node.
@@ -780,7 +784,6 @@ namespace OpenDental{
 				int mountNum=Convert.ToInt32(obj["MountNum"].ToString());
 				int docNum=Convert.ToInt32(obj["DocNum"].ToString());
 				if(mountNum!=0){//This is a mount node.
-					//TODO: set selection doc to orginal image 0 (if available).
 					//Creates a complete initial mount image. No need to call invalidate until changes are made to the mount later.
 					MountItem[] mountItems=MountItems.GetItemsForMount(mountNum);
 					Document[] documents=Documents.GetDocumentsForMountItems(mountItems);
@@ -789,7 +792,9 @@ namespace OpenDental{
 						selectionDoc=documents[hotDocument];
 					}
 					currentImages=GetDocumentImages(documents,patFolder);
-					renderImage=CreateMountImage(Mounts.GetByNum(mountNum),currentImages,mountItems,documents,hotDocument);
+					selectionMount=Mounts.GetByNum(mountNum);
+					renderImage=CreateBlankMountImage(selectionMount);
+					RenderMountImage(renderImage,selectionMount,currentImages,mountItems,documents,hotDocument);
 				}else{//This is a document node.
 					//Reload the doc from the db. We don't just keep reusing the tree data, because it will become more and 
 					//more stail with age if the program is left open in the image module for long periods of time.
@@ -2066,11 +2071,9 @@ namespace OpenDental{
 				Invoke(c,new object[] {sender,e});
 				return;
 			}
-			//Since we are in the middle of an image capture, we know that a new mount will always be the current selection.
-			DataRow mount=(DataRow)TreeDocuments.SelectedNode.Tag;
 			//Create the mount item that corresponds to the new document about to be created.
 			MountItem mountItem=new MountItem();
-			mountItem.MountNum=Convert.ToInt32(mount["MountNum"].ToString());
+			mountItem.MountNum=selectionMount.MountNum;
 			//Here we check to see which items are already in the db, in case an image capture session is being continued
 			//(in case the user tabs out of the module and back in during the capture, or if power fails and they need
 			//to restart their computer, for instance).
@@ -2416,7 +2419,7 @@ namespace OpenDental{
 		}
 
 		///<summary>Returns the selection rectangles for each of the images on the mount, as well as the rectangle which encapsulates the entire mount object when rendered (stored in the end location of the resulting array).</summary>
-		public static RectangleF[] GetMountItemBoundingBoxes(Mount mount) {
+		private static RectangleF[] GetMountItemBoundingBoxes(Mount mount) {
 			RectangleF leftImageBox=new RectangleF(20,20,200,200);
 			int[] imageSetOrder=new int[] { 1,0,2,3 };
 			int imageSpacing=20;
@@ -2435,24 +2438,47 @@ namespace OpenDental{
 			return imageBoundingBoxes;
 		}
 
-		///<summary>Takes in a mount object and finds all the images pertaining to the mount, then concatonates them together into one large, unscaled image and returns that image. Set imageSelected=-1 to unselect all images, or set to an image ordinal to highlight the image.</summary>
-		private static Bitmap CreateMountImage(Mount mount,Bitmap[] originalImages,MountItem[] mountItems,Document[] documents,int imageSelected) {
+		///<summary>Returns the mount in its final dimentions, but only as a blank/white image.</summary>
+		private static Bitmap CreateBlankMountImage(Mount mount){
 			RectangleF[] boundingBoxes=GetMountItemBoundingBoxes(mount);
-			if(originalImages==null || mountItems==null ||
-				originalImages.Length!=mountItems.Length) {
-				return new Bitmap(0,0);
-			}
 			int width=(int)Math.Ceiling(boundingBoxes[boundingBoxes.Length-1].Width);
 			int height=(int)Math.Ceiling(boundingBoxes[boundingBoxes.Length-1].Height);
 			if(width<=0 || height<=0) {
 				return new Bitmap(0,0);
 			}
-			Bitmap mountImage=new Bitmap(width,height);
+			return new Bitmap(width,height);
+		}
+
+		///<summary>Renders the given image using the settings provided by the given document object into the given ordinal location of the given mountImage object.</summary>
+		private static void RenderImageIntoMount(Mount mount,Bitmap mountImage,Bitmap mountItemImage,Document mountItemDoc,int ordinalPos){
+			Graphics g=Graphics.FromImage(mountImage);
+			try {
+				RectangleF[] boundingBoxes=GetMountItemBoundingBoxes(mount);
+				RectangleF imageBounds=boundingBoxes[ordinalPos];
+				Bitmap image=ApplyDocumentSettingsToImage(mountItemDoc,mountItemImage,ApplySettings.ALL);
+				float widthScale=imageBounds.Width/image.Width;
+				float heightScale=imageBounds.Height/image.Height;
+				float scale=(widthScale<heightScale?widthScale:heightScale);
+				RectangleF imageRect=new RectangleF(0,0,scale*image.Width,scale*image.Height);
+				imageRect.X=imageBounds.X+imageBounds.Width/2-imageRect.Width/2;
+				imageRect.Y=imageBounds.Y+imageBounds.Height/2-imageRect.Height/2;
+				g.DrawImage(image,imageRect);
+				image.Dispose();
+			}catch(Exception ex){//Catch is requried for finally clause.
+				throw ex;//Pass the exception upward.
+			}finally{
+				g.Dispose();
+			}
+		}
+
+		///<summary>Takes in a mount object and finds all the images pertaining to the mount, then concatonates them together into one large, unscaled image and returns that image. Set imageSelected=-1 to unselect all images, or set to an image ordinal to highlight the image. The mount is rendered onto the given mountImage, so it must have been appropriately created by CreateBlankMountImage(). One can create a mount template by passing in arrays of zero length.</summary>
+		private static void RenderMountImage(Bitmap mountImage,Mount mount,Bitmap[] originalImages,MountItem[] mountItems,Document[] documents,int imageSelected) {
 			Graphics g=Graphics.FromImage(mountImage);
 			try {
 				//Draw mount encapsulating background rectangle.
 				g.Clear(Pens.SlateGray.Color);
 				//Draw image encapsulating background rectangles.
+				RectangleF[] boundingBoxes=GetMountItemBoundingBoxes(mount);
 				for(int i=0;i<boundingBoxes.Length-1;i++){
 					g.FillRectangle(Brushes.Black,boundingBoxes[i].X,boundingBoxes[i].Y,
 						boundingBoxes[i].Width,boundingBoxes[i].Height);//draw box behind image
@@ -2467,22 +2493,13 @@ namespace OpenDental{
 						boundingBoxes[i].Width+highlight.Width,boundingBoxes[i].Height+highlight.Width);
 				}
 				for(int i=0;i<mountItems.Length;i++){
-					RectangleF imageBounds=boundingBoxes[mountItems[i].OrdinalPos];
-					Bitmap image=ApplyDocumentSettingsToImage(documents[i],originalImages[i],ApplySettings.ALL);
-					float widthScale=imageBounds.Width/image.Width;
-					float heightScale=imageBounds.Height/image.Height;
-					float scale=(widthScale<heightScale?widthScale:heightScale);
-					RectangleF imageRect=new RectangleF(0,0,scale*image.Width,scale*image.Height);
-					imageRect.X=imageBounds.X+imageBounds.Width/2-imageRect.Width/2;
-					imageRect.Y=imageBounds.Y+imageBounds.Height/2-imageRect.Height/2;
-					g.DrawImage(image,imageRect);
-					image.Dispose();
+					RenderImageIntoMount(mount,mountImage,originalImages[i],documents[i],mountItems[i].OrdinalPos);
 				}
-			}catch(Exception){
+			}catch(Exception ex){//Catch is requried for finally clause.
+				throw ex;//Pass the exception upward.
 			}finally{
 				g.Dispose();
 			}
-			return mountImage;
 		}
 
 		///<summary>Takes in a mount object and finds all the images pertaining to the mount, then concatonates them together into one large, unscaled image and returns that image. For use in other modules.</summary>
@@ -2490,7 +2507,9 @@ namespace OpenDental{
 			MountItem[] mountItems=MountItems.GetItemsForMount(mount.MountNum);
 			Document[] documents=Documents.GetDocumentsForMountItems(mountItems);
 			Bitmap[] originalImages=GetDocumentImages(documents,patFolder);
-			return CreateMountImage(mount,originalImages,mountItems,documents,-1);
+			Bitmap mountImage=CreateBlankMountImage(mount);
+			RenderMountImage(mountImage,mount,originalImages,mountItems,documents,-1);
+			return mountImage;
 		}
 
 		///<summary>The returned image array is the same length as the input array. If a document at index i is not an image, or if the image could not be found, then null is returned in index i of the return array. Otherwise, index i will contain a loaded image from file.</summary>
