@@ -139,12 +139,16 @@ namespace OpenDental{
 		delegate void RenderImageCallback(Document docCopy,int originalWidth,int originalHeight,float zoom,PointF translation);
 		///<summary>Used to safe-guard against multi-threading issues when an image capture is completed.</summary>
 		delegate void CaptureCompleteCallback(object sender,EventArgs e);
-		///<summary>Keeps track of the document settings for the currently selected document or mount document.</summary>
+		///<summary>Keeps track of the document settings for the currently selected document or mount.</summary>
 		Document selectionDoc=new Document();
+		///<summary>Keeps track of the mount settings for the currently selected mount document.</summary>
+		Mount settingMount=new Mount();
 		///<summary>Keeps track of the currently selected mount object (only when a mount is selected).</summary>
 		Mount selectionMount=new Mount();
 		///<summary>Keeps track of the currently selected image within the list of currently loaded images.</summary>
 		int hotDocument=0;
+		///<summary>The scaling factor required for the currently loaded mount to fit to the picture box window.</summary>
+		float mountScale=1;
 
 		#endregion
 
@@ -790,6 +794,9 @@ namespace OpenDental{
 					hotDocument=mountItems.Length;
 					if(documents.Length>hotDocument){
 						selectionDoc=documents[hotDocument];
+						SetBrightnessAndContrast();
+						paintTools.Enabled=true;
+						brightnessContrastSlider.Enabled=true;
 					}
 					currentImages=GetDocumentImages(documents,patFolder);
 					selectionMount=Mounts.GetByNum(mountNum);
@@ -804,15 +811,7 @@ namespace OpenDental{
 				}
 				//Setup toolbars and factors only if an image is currently selected.
 				if(currentImages.Length>hotDocument && currentImages[hotDocument]!=null) {
-					if(selectionDoc.WindowingMax==0) {
-						//The document brightness/contrast settings have never been set. By default, we use settings
-						//which do not alter the original image.
-						brightnessContrastSlider.MinVal=0;
-						brightnessContrastSlider.MaxVal=255;
-					}else{
-						brightnessContrastSlider.MinVal=selectionDoc.WindowingMin;
-						brightnessContrastSlider.MaxVal=selectionDoc.WindowingMax;
-					}
+					SetBrightnessAndContrast();
 					paintTools.Enabled=true;								//Only allow painting tools to be used when a valid image has been loaded.
 					brightnessContrastSlider.Enabled=true;	//The brightnessContrastSlider is not actually part of the paintTools
 																									//toolbar, and so it must be enabled or disabled seperately.
@@ -835,10 +834,10 @@ namespace OpenDental{
 					float zoom;
 					int zoomLevel;
 					float zoomFactor;
-					PointF trans;
 					ReloadZoomTransCrop(renderImage.Width,renderImage.Height,new Document(),
-						new Rectangle(0,0,PictureBox1.Width,PictureBox1.Height),out zoom,out zoomLevel,out zoomFactor,out trans);
-					RenderCurrentImage(new Document(),renderImage.Width,renderImage.Height,zoom,trans);
+						new Rectangle(0,0,PictureBox1.Width,PictureBox1.Height),out zoom,out zoomLevel,out zoomFactor,out imageTranslation);
+					mountScale=zoom*zoomFactor;
+					RenderCurrentImage(new Document(),renderImage.Width,renderImage.Height,zoom,imageTranslation);
 				}else{//document
 					//Render the initial image within the current bounds of the picturebox (if the document is an image).
 					InvalidateSettings(ApplySettings.ALL,true);
@@ -1606,36 +1605,43 @@ namespace OpenDental{
 		///<Summary>Invalidates some or all of the image settings.  This will cause those settings to be recalculated, either immediately, or when the current ApplySettings thread is finished.  If supplied settings is ApplySettings.NONE, then that part will be skipped.</Summary>
 		private void InvalidateSettings(ApplySettings settings, bool reloadZoomTransCrop){
 			//Do not allow image rendering when the paint tools are disabled. This will disable the display image when a folder or non-image document is selected, or when no document is currently selected. The paintTools.Enabled boolean is controlled in SelectTreeNode() and is set to true only if a valid image is currently being displayed.
-			if(!paintTools.Enabled || TreeDocuments.SelectedNode==null || 
+			if(TreeDocuments.SelectedNode==null || 
 				TreeDocuments.SelectedNode.Tag==null || TreeDocuments.SelectedNode.Parent==null){
 				EraseCurrentImage();
 				return;
 			}
 			DataRow obj=(DataRow)TreeDocuments.SelectedNode.Tag;
-			int mountNum=Convert.ToInt32(obj["MountNum"].ToString());
 			int docNum=Convert.ToInt32(obj["DocNum"].ToString());
-			if(mountNum!=0){//Settings invalidated for a mount object.
-				return;//TODO:??????
+			if(docNum!=0){//Only applied to document nodes.
+				if(!paintTools.Enabled){
+					EraseCurrentImage();
+					return;
+				}
+				if(reloadZoomTransCrop) {
+					//Reloading the image settings only happens when a new image is selected, pasted, scanned, etc...
+					//Therefore, the is no need for any current image processing anymore (it would be on a stail image).
+					KillMyImageThreads();
+					ReloadZoomTransCrop(curImageWidths[0],curImageHeights[0],selectionDoc,
+						new Rectangle(0,0,PictureBox1.Width,PictureBox1.Height),
+						out imageZoom,out zoomLevel,out zoomFactor,out imageTranslation);
+					cropTangle=new Rectangle(0,0,-1,-1);
+				}	
 			}
 			InvalidatedSettingsFlag|=settings;
-			if(reloadZoomTransCrop){
-				//Reloading the image settings only happens when a new image is selected, pasted, scanned, etc...
-				//Therefore, the is no need for any current image processing anymore (it would be on a stail image).
-				KillMyImageThreads();
-				ReloadZoomTransCrop(curImageWidths[0],curImageHeights[0],selectionDoc,
-					new Rectangle(0,0,PictureBox1.Width,PictureBox1.Height),
-					out imageZoom,out zoomLevel,out zoomFactor,out imageTranslation);
-				cropTangle=new Rectangle(0,0,-1,-1);
-			}
 			//selectionDoc is an individual document instance. Assigning a new document to settingDoc here does not 
 			//negatively effect our image application thread, because the thread either will keep its current 
 			//reference to the old document, or will apply the settings with this newly assigned document. In either
 			//case, the output is either what we expected originally, or is a more accurate image for more recent 
 			//settings. We lock here so that we are sure that the resulting document and setting tuple represent
 			//a single point in time.
-			lock(settingHandle){//Does not actually lock the settingHandle object.
+			lock(settingHandle){//Does not actually lock the settingHandle object, but rather locks the variables in the block.
 				settingDoc=selectionDoc.Copy();
 				settingFlags=InvalidatedSettingsFlag;
+				if(docNum!=0){									
+					settingMount=null;					
+				}else{//Mount
+					settingMount=selectionMount.Copy();
+				}
 			}
 			//Tell the thread to start processing (as soon as the thread is created, or as soon as otherwise 
 			//possible). Set() has no effect if the handle is already signaled.
@@ -1664,34 +1670,46 @@ namespace OpenDental{
 					//signaled to start. We lock here so that we are sure that the resulting document and setting tuple represent
 					//a single point in time.
 					Document curDocCopy;
+					Mount curMountCopy;
 					ApplySettings applySettings;
 					lock(settingHandle){//Does not actually lock the settingHandle object.
 						curDocCopy=settingDoc;
+						curMountCopy=settingMount;
 						applySettings=settingFlags;
 					}
-					//Perform cropping and colorfunction here if one of the two flags is set. Rotation, flip, zoom and translation are
-					//taken care of in RenderCurrentImage().
-					if(	(applySettings&ApplySettings.COLORFUNCTION)!=ApplySettings.NONE || 
-							(applySettings&ApplySettings.CROP)!=ApplySettings.NONE){
-						//Ensure that memory management for the renderImage is performed in the worker thread, otherwise the main thread
-						//will be slowed when it has to cleanup dozens of old renderImages, which causes a temporary pause in operation.
-						if(renderImage!=null){
-							//Done like this so that the renderImage is cleared in a single atomic line of code (in case the thread is
-							//killed during this step), so that we don't end up with a pointer to a disposed image in the renderImage.
-							Bitmap oldRenderImage=renderImage;
-							renderImage=null;
-							oldRenderImage.Dispose();
+					if(settingMount==null){//The current selection is a document.
+						//Perform cropping and colorfunction here if one of the two flags is set. Rotation, flip, zoom and translation are
+						//taken care of in RenderCurrentImage().
+						if(	(applySettings&ApplySettings.COLORFUNCTION)!=ApplySettings.NONE || 
+								(applySettings&ApplySettings.CROP)!=ApplySettings.NONE){
+							//Ensure that memory management for the renderImage is performed in the worker thread, otherwise the main thread
+							//will be slowed when it has to cleanup dozens of old renderImages, which causes a temporary pause in operation.
+							if(renderImage!=null){
+								//Done like this so that the renderImage is cleared in a single atomic line of code (in case the thread is
+								//killed during this step), so that we don't end up with a pointer to a disposed image in the renderImage.
+								Bitmap oldRenderImage=renderImage;
+								renderImage=null;
+								oldRenderImage.Dispose();
+							}
+							//currentImages[] is guaranteed to exist and be the current. If currentImages gets updated, this thread 
+							//gets aborted with a call to KillMyThread(). The only place currentImages[] is invalid is in a call to 
+							//EraseCurrentImage(), but at that point, this thread has been terminated.
+							renderImage=ApplyDocumentSettingsToImage(curDocCopy,currentImages[hotDocument],
+								ApplySettings.CROP|ApplySettings.COLORFUNCTION);
 						}
-						//currentImages[] is guaranteed to exist and be the current. If currentImages gets updated, this thread 
-						//gets aborted with a call to KillMyThread(). The only place currentImages[] is invalid is in a call to 
-						//EraseCurrentImage(), but at that point, this thread has been terminated.
-						renderImage=ApplyDocumentSettingsToImage(curDocCopy,currentImages[hotDocument],
-							ApplySettings.CROP|ApplySettings.COLORFUNCTION);
+						//Make the current renderImage visible in the picture box, and perform rotation, flip, zoom, and translation on
+						//the renderImage.
+						RenderCurrentImage(curDocCopy,curImageWidths[hotDocument],curImageHeights[hotDocument],
+							imageZoom*zoomFactor,imageTranslation);
+					}else{//The current selection is a mount.
+						RenderMountFrames(renderImage,curMountCopy,hotDocument);
+						//Render only the modified image over the old mount image.
+						//A null document can happen when a new image frame is selected, but there is not image in that frame.
+						if(curDocCopy!=null && hotDocument>=0){
+							RenderImageIntoMount(curMountCopy,renderImage,currentImages[hotDocument],curDocCopy,hotDocument);
+						}
+						RenderCurrentImage(new Document(),renderImage.Width,renderImage.Height,mountScale,imageTranslation);
 					}
-          //Make the current renderImage visible in the picture box, and perform rotation, flip, zoom, and translation on
-					//the renderImage.
-					RenderCurrentImage(curDocCopy,curImageWidths[hotDocument],curImageHeights[hotDocument],
-						imageZoom*zoomFactor,imageTranslation);
         }catch(ThreadAbortException){
             return;	//Exit as requested. This can happen when the current document is being deleted, 
 										//or during shutdown of the program.
@@ -1848,56 +1866,35 @@ namespace OpenDental{
 		}
 
 		private void OnFlip_Click() {
-			if(GetNodeIdentifier(TreeDocuments.SelectedNode)=="") {
+			if(GetNodeIdentifier(TreeDocuments.SelectedNode)=="" || selectionDoc==null) {
 				return;
-			}
-			DataRow obj=(DataRow)TreeDocuments.SelectedNode.Tag;
-			int mountNum=Convert.ToInt32(obj["MountNum"].ToString());
-			int docNum=Convert.ToInt32(obj["DocNum"].ToString());
-			if(mountNum!=0) {
-				return;//TODO:
-			}else{
-				selectionDoc.IsFlipped=!selectionDoc.IsFlipped;
-				Documents.Update(selectionDoc);
-				DeleteThumbnailImage(selectionDoc);
-			}
+			}			
+			selectionDoc.IsFlipped=!selectionDoc.IsFlipped;
+			Documents.Update(selectionDoc);
+			DeleteThumbnailImage(selectionDoc);
 			InvalidateSettings(ApplySettings.FLIP,false);//Refresh display.
 		}
 
 		private void OnRotateL_Click() {
-			if(GetNodeIdentifier(TreeDocuments.SelectedNode)=="") {
+			if(GetNodeIdentifier(TreeDocuments.SelectedNode)=="" || selectionDoc==null) {
 				return;
 			}
-			DataRow obj=(DataRow)TreeDocuments.SelectedNode.Tag;
-			int mountNum=Convert.ToInt32(obj["MountNum"].ToString());
-			int docNum=Convert.ToInt32(obj["DocNum"].ToString());
-			if(mountNum!=0) {
-				return;//TODO:
-			}else{
-				selectionDoc.DegreesRotated-=90;
-				while(selectionDoc.DegreesRotated<0) {
-					selectionDoc.DegreesRotated+=360;
-				}
-				Documents.Update(selectionDoc);
-				DeleteThumbnailImage(selectionDoc);
+			selectionDoc.DegreesRotated-=90;
+			while(selectionDoc.DegreesRotated<0) {
+				selectionDoc.DegreesRotated+=360;
 			}
+			Documents.Update(selectionDoc);
+			DeleteThumbnailImage(selectionDoc);
 			InvalidateSettings(ApplySettings.ROTATE,false);//Refresh display.
 		}
 
 		private void OnRotateR_Click(){
-			if(GetNodeIdentifier(TreeDocuments.SelectedNode)=="") {
+			if(GetNodeIdentifier(TreeDocuments.SelectedNode)=="" || selectionDoc==null) {
 				return;
 			}
-			DataRow obj=(DataRow)TreeDocuments.SelectedNode.Tag;
-			int mountNum=Convert.ToInt32(obj["MountNum"].ToString());
-			int docNum=Convert.ToInt32(obj["DocNum"].ToString());
-			if(mountNum!=0) {
-				return;//TODO:
-			}else{
-				selectionDoc.DegreesRotated=(selectionDoc.DegreesRotated+90)%360;
-				Documents.Update(selectionDoc);
-				DeleteThumbnailImage(selectionDoc);
-			}
+			selectionDoc.DegreesRotated=(selectionDoc.DegreesRotated+90)%360;
+			Documents.Update(selectionDoc);
+			DeleteThumbnailImage(selectionDoc);
 			InvalidateSettings(ApplySettings.ROTATE,false);//Refresh display.
 		}
 
@@ -1911,6 +1908,37 @@ namespace OpenDental{
 			MouseDownOrigin=new Point(e.X,e.Y);
 			MouseIsDown=true;
 			imageLocation=new PointF(imageTranslation.X,imageTranslation.Y);
+			if(GetNodeIdentifier(TreeDocuments.SelectedNode)!=""){
+				DataRow obj=(DataRow)TreeDocuments.SelectedNode.Tag;
+				int mountNum=Convert.ToInt32(obj["MountNum"].ToString());
+				if(mountNum!=0){//The user may be trying to select an individual image within the current mount.
+					paintTools.Enabled=false;
+					brightnessContrastSlider.Enabled=false;
+					RectangleF[] itemLocations=GetMountItemBoundingBoxes(selectionMount);
+					PointF relativeMouseLocation=new PointF(
+						MouseDownOrigin.X-imageTranslation.X+itemLocations[itemLocations.Length-1].Width*mountScale/2,
+						MouseDownOrigin.Y-imageTranslation.Y+itemLocations[itemLocations.Length-1].Height*mountScale/2);
+					//Unselect all mount frames, and reselect the frame clicked on (if any).
+					hotDocument=-1;
+					//Enumerate the image locations only, do not count whole mount frame (last rectangle in list).
+					for(int i=0;i<itemLocations.Length-1;i++){
+						if(itemLocations[i].Contains(relativeMouseLocation)){
+							hotDocument=i;//Set the item selection in the mount.
+							MountItem[] mountItems=MountItems.GetItemsForMount(selectionMount.MountNum);
+							Document[] documents=Documents.GetDocumentsForMountItems(mountItems);
+							for(int j=0;j<mountItems.Length;j++){
+								if(mountItems[j].OrdinalPos==hotDocument){
+									selectionDoc=documents[j];
+									SetBrightnessAndContrast();
+									paintTools.Enabled=true;
+									brightnessContrastSlider.Enabled=true;
+								}
+							}
+						}
+					}
+					InvalidateSettings(ApplySettings.ALL,false);
+				}
+			}
 		}
 
 		private void PictureBox1_MouseHover(object sender,EventArgs e) {
@@ -1922,7 +1950,12 @@ namespace OpenDental{
 		}
 
 		private void PictureBox1_MouseMove(object sender,System.Windows.Forms.MouseEventArgs e) {
-			if(!MouseIsDown){
+			if(GetNodeIdentifier(TreeDocuments.SelectedNode)==""){
+				return;
+			}
+			DataRow obj=(DataRow)TreeDocuments.SelectedNode.Tag;
+			int docNum=Convert.ToInt32(obj["DocNum"].ToString());
+			if(!MouseIsDown || docNum==0){
 				return;
 			}
 			if(paintTools.Buttons["Hand"].Pushed) {//Hand mode.
@@ -1956,7 +1989,7 @@ namespace OpenDental{
 			DataRow obj=(DataRow)TreeDocuments.SelectedNode.Tag;
 			int mountNum=Convert.ToInt32(obj["MountNum"].ToString());
 			int docNum=Convert.ToInt32(obj["DocNum"].ToString());
-			if(mountNum!=0){
+			if(docNum==0){
 				return;
 			}
 			if(!MsgBox.Show(this,true,"Crop to Rectangle?")){
@@ -2013,20 +2046,31 @@ namespace OpenDental{
 			InvalidateSettings(ApplySettings.CROP,false);
 		}
 
+		private void SetBrightnessAndContrast() {
+			if(selectionDoc.WindowingMax==0) {
+				//The document brightness/contrast settings have never been set. By default, we use settings
+				//which do not alter the original image.
+				brightnessContrastSlider.MinVal=0;
+				brightnessContrastSlider.MaxVal=255;
+			}
+			else {
+				brightnessContrastSlider.MinVal=selectionDoc.WindowingMin;
+				brightnessContrastSlider.MaxVal=selectionDoc.WindowingMax;
+			}
+		}
+
 		private void brightnessContrastSlider_Scroll(object sender,EventArgs e){
+			if(selectionDoc==null){
+				return;
+			}
 			selectionDoc.WindowingMin=brightnessContrastSlider.MinVal;
 			selectionDoc.WindowingMax=brightnessContrastSlider.MaxVal;
 			InvalidateSettings(ApplySettings.COLORFUNCTION,false);
 		}
 
 		private void brightnessContrastSlider_ScrollComplete(object sender,EventArgs e) {
-			//The brightness/contrast slider is only enabled when a document or mount is selected, so 
-			//we know we have a valid node here always.
-			DataRow obj=(DataRow)TreeDocuments.SelectedNode.Tag;
-			int mountNum=Convert.ToInt32(obj["MountNum"].ToString());
-			int docNum=Convert.ToInt32(obj["DocNum"].ToString());
-			if(mountNum!=0){
-				return;//TODO: do something here!
+			if(selectionDoc==null){
+				return;
 			}
 			Documents.Update(selectionDoc);
 			DeleteThumbnailImage(selectionDoc);
@@ -2041,7 +2085,7 @@ namespace OpenDental{
 				Mount mount=new Mount();
 				mount.DateCreated=DateTime.Today;
 				mount.Description="unnamed capture";
-				mount.DocCategory=DefB.Short[(int)DefCat.ImageCats][0].DefNum;//First category.
+				mount.DocCategory=GetCurrentCategory();
 				mount.ImgType=ImageType.Mount;
 				mount.PatNum=PatCur.PatNum;
 				mount.MountNum=Mounts.Insert(mount);
@@ -2449,12 +2493,37 @@ namespace OpenDental{
 			return new Bitmap(width,height);
 		}
 
+		///<summary>Renders the hallow rectangles which represent the individual image frames into the given mount image.</summary>
+		private static void RenderMountFrames(Bitmap mountImage,Mount mount,int imageSelected){
+			Graphics g=Graphics.FromImage(mountImage);
+			try {
+				//Draw image encapsulating background rectangles.
+				RectangleF[] boundingBoxes=GetMountItemBoundingBoxes(mount);
+				for(int i=0;i<boundingBoxes.Length-1;i++) {
+					Pen highlight;
+					if(i==imageSelected) {
+						highlight=(Pen)Pens.Yellow.Clone();//highlight desired image.
+					}else{
+						highlight=(Pen)Pens.DarkGray.Clone();//just surround other images with standard border.
+					}
+					highlight.Width=8;//Should be even
+					g.DrawRectangle(highlight,boundingBoxes[i].X-highlight.Width/2,boundingBoxes[i].Y-highlight.Width/2,
+						boundingBoxes[i].Width+highlight.Width,boundingBoxes[i].Height+highlight.Width);
+				}
+			}catch(Exception ex){//Catch is requried for finally clause.
+				throw ex;//Pass the exception upward.
+			}finally{
+				g.Dispose();
+			}
+		}
+
 		///<summary>Renders the given image using the settings provided by the given document object into the given ordinal location of the given mountImage object.</summary>
 		private static void RenderImageIntoMount(Mount mount,Bitmap mountImage,Bitmap mountItemImage,Document mountItemDoc,int ordinalPos){
 			Graphics g=Graphics.FromImage(mountImage);
 			try {
 				RectangleF[] boundingBoxes=GetMountItemBoundingBoxes(mount);
 				RectangleF imageBounds=boundingBoxes[ordinalPos];
+				g.FillRectangle(Brushes.Black,imageBounds.X,imageBounds.Y,imageBounds.Width,imageBounds.Height);//draw box behind image
 				Bitmap image=ApplyDocumentSettingsToImage(mountItemDoc,mountItemImage,ApplySettings.ALL);
 				float widthScale=imageBounds.Width/image.Width;
 				float heightScale=imageBounds.Height/image.Height;
@@ -2477,20 +2546,11 @@ namespace OpenDental{
 			try {
 				//Draw mount encapsulating background rectangle.
 				g.Clear(Pens.SlateGray.Color);
-				//Draw image encapsulating background rectangles.
+				RenderMountFrames(mountImage,mount,imageSelected);
 				RectangleF[] boundingBoxes=GetMountItemBoundingBoxes(mount);
-				for(int i=0;i<boundingBoxes.Length-1;i++){
-					g.FillRectangle(Brushes.Black,boundingBoxes[i].X,boundingBoxes[i].Y,
-						boundingBoxes[i].Width,boundingBoxes[i].Height);//draw box behind image
-					Pen highlight;
-					if(i==imageSelected) {
-						highlight=(Pen)Pens.Yellow.Clone();//highlight desired image.
-					}else{
-						highlight=(Pen)Pens.DarkGray.Clone();//just surround other images with standard border.
-					}
-					highlight.Width=8;//Should be even
-					g.DrawRectangle(highlight,boundingBoxes[i].X-highlight.Width/2,boundingBoxes[i].Y-highlight.Width/2,
-						boundingBoxes[i].Width+highlight.Width,boundingBoxes[i].Height+highlight.Width);
+				for(int i=0;i<boundingBoxes.Length-1;i++) {
+					RectangleF imageBounds=boundingBoxes[i];
+					g.FillRectangle(Brushes.Black,imageBounds.X,imageBounds.Y,imageBounds.Width,imageBounds.Height);//draw box behind image
 				}
 				for(int i=0;i<mountItems.Length;i++){
 					RenderImageIntoMount(mount,mountImage,originalImages[i],documents[i],mountItems[i].OrdinalPos);
