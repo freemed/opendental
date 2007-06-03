@@ -48,6 +48,8 @@ namespace OpenDental{
 		private CheckBox checkSimpleStatement;
 		private CheckBox checkProgNotesNotComm;
 		private CheckBox checkBox5;
+		private GroupBox groupBox6;
+		private CheckBox checkBrokenApptNote;
 		private System.Windows.Forms.Label label1;// Required designer variable.
 
 		///<summary></summary>
@@ -84,7 +86,6 @@ namespace OpenDental{
 			this.checkAgingMonthly = new System.Windows.Forms.CheckBox();
 			this.checkStatementShowReturnAddress = new System.Windows.Forms.CheckBox();
 			this.checkBalancesDontSubtractIns = new System.Windows.Forms.CheckBox();
-			this.textStatementsCalcDueDate = new OpenDental.ValidNumber();
 			this.label2 = new System.Windows.Forms.Label();
 			this.groupBox2 = new System.Windows.Forms.GroupBox();
 			this.radioUsePatNum = new System.Windows.Forms.RadioButton();
@@ -94,14 +95,10 @@ namespace OpenDental{
 			this.label3 = new System.Windows.Forms.Label();
 			this.checkInsurancePlansShared = new System.Windows.Forms.CheckBox();
 			this.checkMedicalEclaimsEnabled = new System.Windows.Forms.CheckBox();
-			this.textSigInterval = new OpenDental.ValidNumber();
-			this.butCancel = new OpenDental.UI.Button();
-			this.butOK = new OpenDental.UI.Button();
 			this.groupBox3 = new System.Windows.Forms.GroupBox();
 			this.radioShowIDnone = new System.Windows.Forms.RadioButton();
 			this.radioShowIDpatNum = new System.Windows.Forms.RadioButton();
 			this.radioShowIDchartNum = new System.Windows.Forms.RadioButton();
-			this.butLanguages = new OpenDental.UI.Button();
 			this.label4 = new System.Windows.Forms.Label();
 			this.checkSolidBlockouts = new System.Windows.Forms.CheckBox();
 			this.groupBox4 = new System.Windows.Forms.GroupBox();
@@ -110,11 +107,19 @@ namespace OpenDental{
 			this.checkProgNotesNotComm = new System.Windows.Forms.CheckBox();
 			this.checkSimpleStatement = new System.Windows.Forms.CheckBox();
 			this.checkBox5 = new System.Windows.Forms.CheckBox();
+			this.butLanguages = new OpenDental.UI.Button();
+			this.textSigInterval = new OpenDental.ValidNumber();
+			this.butCancel = new OpenDental.UI.Button();
+			this.butOK = new OpenDental.UI.Button();
+			this.textStatementsCalcDueDate = new OpenDental.ValidNumber();
+			this.groupBox6 = new System.Windows.Forms.GroupBox();
+			this.checkBrokenApptNote = new System.Windows.Forms.CheckBox();
 			this.groupBox1.SuspendLayout();
 			this.groupBox5.SuspendLayout();
 			this.groupBox2.SuspendLayout();
 			this.groupBox3.SuspendLayout();
 			this.groupBox4.SuspendLayout();
+			this.groupBox6.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// textTreatNote
@@ -257,15 +262,6 @@ namespace OpenDental{
 			this.checkBalancesDontSubtractIns.TabIndex = 55;
 			this.checkBalancesDontSubtractIns.Text = "Balances don\'t subtract insurance estimate";
 			// 
-			// textStatementsCalcDueDate
-			// 
-			this.textStatementsCalcDueDate.Location = new System.Drawing.Point(19,138);
-			this.textStatementsCalcDueDate.MaxVal = 255;
-			this.textStatementsCalcDueDate.MinVal = 0;
-			this.textStatementsCalcDueDate.Name = "textStatementsCalcDueDate";
-			this.textStatementsCalcDueDate.Size = new System.Drawing.Size(60,20);
-			this.textStatementsCalcDueDate.TabIndex = 54;
-			// 
 			// label2
 			// 
 			this.label2.Location = new System.Drawing.Point(80,137);
@@ -359,46 +355,6 @@ namespace OpenDental{
 			this.checkMedicalEclaimsEnabled.Text = "Enable medical e-claims";
 			this.checkMedicalEclaimsEnabled.TextAlign = System.Drawing.ContentAlignment.TopLeft;
 			// 
-			// textSigInterval
-			// 
-			this.textSigInterval.Location = new System.Drawing.Point(47,424);
-			this.textSigInterval.MaxVal = 1000000;
-			this.textSigInterval.MinVal = 1;
-			this.textSigInterval.Name = "textSigInterval";
-			this.textSigInterval.Size = new System.Drawing.Size(74,20);
-			this.textSigInterval.TabIndex = 57;
-			// 
-			// butCancel
-			// 
-			this.butCancel.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butCancel.Autosize = true;
-			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butCancel.CornerRadius = 4F;
-			this.butCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.butCancel.Location = new System.Drawing.Point(676,611);
-			this.butCancel.Name = "butCancel";
-			this.butCancel.Size = new System.Drawing.Size(75,26);
-			this.butCancel.TabIndex = 8;
-			this.butCancel.Text = "&Cancel";
-			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
-			// 
-			// butOK
-			// 
-			this.butOK.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butOK.Autosize = true;
-			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(676,573);
-			this.butOK.Name = "butOK";
-			this.butOK.Size = new System.Drawing.Size(75,26);
-			this.butOK.TabIndex = 7;
-			this.butOK.Text = "&OK";
-			this.butOK.Click += new System.EventHandler(this.butOK_Click);
-			// 
 			// groupBox3
 			// 
 			this.groupBox3.Controls.Add(this.radioShowIDnone);
@@ -441,20 +397,6 @@ namespace OpenDental{
 			this.radioShowIDchartNum.TabIndex = 0;
 			this.radioShowIDchartNum.Text = "Chart Number";
 			// 
-			// butLanguages
-			// 
-			this.butLanguages.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butLanguages.Autosize = true;
-			this.butLanguages.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butLanguages.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butLanguages.CornerRadius = 4F;
-			this.butLanguages.Location = new System.Drawing.Point(48,614);
-			this.butLanguages.Name = "butLanguages";
-			this.butLanguages.Size = new System.Drawing.Size(88,26);
-			this.butLanguages.TabIndex = 63;
-			this.butLanguages.Text = "Edit Languages";
-			this.butLanguages.Click += new System.EventHandler(this.butLanguages_Click);
-			// 
 			// label4
 			// 
 			this.label4.Location = new System.Drawing.Point(142,621);
@@ -466,9 +408,9 @@ namespace OpenDental{
 			// checkSolidBlockouts
 			// 
 			this.checkSolidBlockouts.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkSolidBlockouts.Location = new System.Drawing.Point(48,586);
+			this.checkSolidBlockouts.Location = new System.Drawing.Point(20,75);
 			this.checkSolidBlockouts.Name = "checkSolidBlockouts";
-			this.checkSolidBlockouts.Size = new System.Drawing.Size(433,18);
+			this.checkSolidBlockouts.Size = new System.Drawing.Size(346,18);
 			this.checkSolidBlockouts.TabIndex = 66;
 			this.checkSolidBlockouts.Text = "Use solid blockouts instead of outlines on the appointment book";
 			this.checkSolidBlockouts.UseVisualStyleBackColor = true;
@@ -476,11 +418,12 @@ namespace OpenDental{
 			// groupBox4
 			// 
 			this.groupBox4.Controls.Add(this.checkProgNotesNotComm);
+			this.groupBox4.Controls.Add(this.checkSolidBlockouts);
 			this.groupBox4.Controls.Add(this.checkBoldBalance);
 			this.groupBox4.Controls.Add(this.checkShowAccountNotes);
 			this.groupBox4.Location = new System.Drawing.Point(32,272);
 			this.groupBox4.Name = "groupBox4";
-			this.groupBox4.Size = new System.Drawing.Size(379,128);
+			this.groupBox4.Size = new System.Drawing.Size(381,128);
 			this.groupBox4.TabIndex = 67;
 			this.groupBox4.TabStop = false;
 			this.groupBox4.Text = "Display Options";
@@ -508,9 +451,9 @@ namespace OpenDental{
 			this.checkProgNotesNotComm.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.checkProgNotesNotComm.Location = new System.Drawing.Point(20,57);
 			this.checkProgNotesNotComm.Name = "checkProgNotesNotComm";
-			this.checkProgNotesNotComm.Size = new System.Drawing.Size(278,16);
+			this.checkProgNotesNotComm.Size = new System.Drawing.Size(330,16);
 			this.checkProgNotesNotComm.TabIndex = 58;
-			this.checkProgNotesNotComm.Text = "Show all progress notes instead of only Comm. Log";
+			this.checkProgNotesNotComm.Text = "Show Prog Notes instead of Comm. Log: Appts and Account";
 			// 
 			// checkSimpleStatement
 			// 
@@ -531,12 +474,95 @@ namespace OpenDental{
 			this.checkBox5.Text = "Show Tx Plan colors in chart module graphical tooth chart";
 			this.checkBox5.Visible = false;
 			// 
+			// butLanguages
+			// 
+			this.butLanguages.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butLanguages.Autosize = true;
+			this.butLanguages.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butLanguages.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butLanguages.CornerRadius = 4F;
+			this.butLanguages.Location = new System.Drawing.Point(48,614);
+			this.butLanguages.Name = "butLanguages";
+			this.butLanguages.Size = new System.Drawing.Size(88,26);
+			this.butLanguages.TabIndex = 63;
+			this.butLanguages.Text = "Edit Languages";
+			this.butLanguages.Click += new System.EventHandler(this.butLanguages_Click);
+			// 
+			// textSigInterval
+			// 
+			this.textSigInterval.Location = new System.Drawing.Point(47,424);
+			this.textSigInterval.MaxVal = 1000000;
+			this.textSigInterval.MinVal = 1;
+			this.textSigInterval.Name = "textSigInterval";
+			this.textSigInterval.Size = new System.Drawing.Size(74,20);
+			this.textSigInterval.TabIndex = 57;
+			// 
+			// butCancel
+			// 
+			this.butCancel.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.butCancel.Autosize = true;
+			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butCancel.CornerRadius = 4F;
+			this.butCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+			this.butCancel.Location = new System.Drawing.Point(676,611);
+			this.butCancel.Name = "butCancel";
+			this.butCancel.Size = new System.Drawing.Size(75,26);
+			this.butCancel.TabIndex = 8;
+			this.butCancel.Text = "&Cancel";
+			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
+			// 
+			// butOK
+			// 
+			this.butOK.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.butOK.Autosize = true;
+			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butOK.CornerRadius = 4F;
+			this.butOK.Location = new System.Drawing.Point(676,573);
+			this.butOK.Name = "butOK";
+			this.butOK.Size = new System.Drawing.Size(75,26);
+			this.butOK.TabIndex = 7;
+			this.butOK.Text = "&OK";
+			this.butOK.Click += new System.EventHandler(this.butOK_Click);
+			// 
+			// textStatementsCalcDueDate
+			// 
+			this.textStatementsCalcDueDate.Location = new System.Drawing.Point(19,138);
+			this.textStatementsCalcDueDate.MaxVal = 255;
+			this.textStatementsCalcDueDate.MinVal = 0;
+			this.textStatementsCalcDueDate.Name = "textStatementsCalcDueDate";
+			this.textStatementsCalcDueDate.Size = new System.Drawing.Size(60,20);
+			this.textStatementsCalcDueDate.TabIndex = 54;
+			// 
+			// groupBox6
+			// 
+			this.groupBox6.Controls.Add(this.checkBrokenApptNote);
+			this.groupBox6.Location = new System.Drawing.Point(433,272);
+			this.groupBox6.Name = "groupBox6";
+			this.groupBox6.Size = new System.Drawing.Size(318,128);
+			this.groupBox6.TabIndex = 68;
+			this.groupBox6.TabStop = false;
+			this.groupBox6.Text = "User Interactions";
+			// 
+			// checkBrokenApptNote
+			// 
+			this.checkBrokenApptNote.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.checkBrokenApptNote.Location = new System.Drawing.Point(12,19);
+			this.checkBrokenApptNote.Name = "checkBrokenApptNote";
+			this.checkBrokenApptNote.Size = new System.Drawing.Size(297,18);
+			this.checkBrokenApptNote.TabIndex = 67;
+			this.checkBrokenApptNote.Text = "Place broken appt. note in Comm. Log,  not Account";
+			this.checkBrokenApptNote.UseVisualStyleBackColor = true;
+			// 
 			// FormMisc
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.ClientSize = new System.Drawing.Size(797,657);
+			this.Controls.Add(this.groupBox6);
 			this.Controls.Add(this.groupBox4);
-			this.Controls.Add(this.checkSolidBlockouts);
 			this.Controls.Add(this.label4);
 			this.Controls.Add(this.butLanguages);
 			this.Controls.Add(this.groupBox3);
@@ -568,6 +594,7 @@ namespace OpenDental{
 			this.groupBox2.ResumeLayout(false);
 			this.groupBox3.ResumeLayout(false);
 			this.groupBox4.ResumeLayout(false);
+			this.groupBox6.ResumeLayout(false);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -622,7 +649,7 @@ namespace OpenDental{
 			checkShowAccountNotes.Checked=PrefB.GetBool("ShowNotesInAccount");
 			checkSimpleStatement.Checked=PrefB.GetBool("PrintSimpleStatements");
 			checkProgNotesNotComm.Checked=PrefB.GetBool("ShowProgressNotesInsteadofCommLog");
-
+			checkBrokenApptNote.Checked=PrefB.GetBool("BrokenApptCommLogNotAdjustment");
 		}
 
 		private void checkRandomPrimaryKeys_Click(object sender, System.EventArgs e) {
@@ -674,6 +701,7 @@ namespace OpenDental{
 				| Prefs.UpdateBool("BoldFamilyAccountBalanceView", checkBoldBalance.Checked)
 				| Prefs.UpdateBool("ShowNotesInAccount", checkShowAccountNotes.Checked)
 				| Prefs.UpdateBool("PrintSimpleStatements", checkSimpleStatement.Checked)
+				| Prefs.UpdateBool("BrokenApptCommLogNotAdjustment", checkBrokenApptNote.Checked)
 				| Prefs.UpdateBool("ShowProgressNotesInsteadofCommLog", checkProgNotesNotComm.Checked))
 							
 			{

@@ -1155,7 +1155,7 @@ namespace OpenDental {
 
 
 			if(panelSplitter.Top>=400) {//Height>=446){
-				textUrgFinNote.Height=86;//5 lines
+				textUrgFinNote.Height=86;//6 lines
 			}
 			else {
 				textUrgFinNote.Height=46;//3 lines
