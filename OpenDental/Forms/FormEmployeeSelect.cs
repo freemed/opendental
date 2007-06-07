@@ -8,13 +8,13 @@ using OpenDentBusiness;
 namespace OpenDental{
 ///<summary></summary>
 	public class FormEmployee : System.Windows.Forms.Form{
-		private OpenDental.UI.Button butOK;
+		private OpenDental.UI.Button butClose;
 		private System.Windows.Forms.CheckBox checkHidden;
 		private System.Windows.Forms.ListBox listEmployees;
 		private System.ComponentModel.Container components = null;
 		private OpenDental.UI.Button butAdd;
 		private ArrayList ALemployees;
-		//private User user;
+		private bool isChanged;
 
 		///<summary></summary>
 		public FormEmployee(){
@@ -36,27 +36,26 @@ namespace OpenDental{
 
 		private void InitializeComponent(){
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormEmployee));
-			this.butOK = new OpenDental.UI.Button();
+			this.butClose = new OpenDental.UI.Button();
 			this.checkHidden = new System.Windows.Forms.CheckBox();
 			this.listEmployees = new System.Windows.Forms.ListBox();
 			this.butAdd = new OpenDental.UI.Button();
 			this.SuspendLayout();
 			// 
-			// butOK
+			// butClose
 			// 
-			this.butOK.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butOK.Autosize = true;
-			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butOK.CornerRadius = 4F;
-			this.butOK.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.butOK.Location = new System.Drawing.Point(278,400);
-			this.butOK.Name = "butOK";
-			this.butOK.Size = new System.Drawing.Size(75,26);
-			this.butOK.TabIndex = 16;
-			this.butOK.Text = "&Close";
-			this.butOK.Click += new System.EventHandler(this.butOK_Click);
+			this.butClose.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.butClose.Autosize = true;
+			this.butClose.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butClose.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butClose.CornerRadius = 4F;
+			this.butClose.Location = new System.Drawing.Point(278,400);
+			this.butClose.Name = "butClose";
+			this.butClose.Size = new System.Drawing.Size(75,26);
+			this.butClose.TabIndex = 16;
+			this.butClose.Text = "&Close";
+			this.butClose.Click += new System.EventHandler(this.butClose_Click);
 			// 
 			// checkHidden
 			// 
@@ -95,14 +94,14 @@ namespace OpenDental{
 			// 
 			// FormEmployee
 			// 
-			this.AcceptButton = this.butOK;
+			this.AcceptButton = this.butClose;
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
-			this.CancelButton = this.butOK;
+			this.CancelButton = this.butClose;
 			this.ClientSize = new System.Drawing.Size(376,440);
 			this.Controls.Add(this.butAdd);
 			this.Controls.Add(this.listEmployees);
 			this.Controls.Add(this.checkHidden);
-			this.Controls.Add(this.butOK);
+			this.Controls.Add(this.butClose);
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.MaximizeBox = false;
 			this.MinimizeBox = false;
@@ -146,6 +145,7 @@ namespace OpenDental{
 			FormEE.IsNew=true;
 			FormEE.ShowDialog();
 			FillList();
+			isChanged=true;
 		}
 
 		private void listEmployees_DoubleClick(object sender, System.EventArgs e) {
@@ -156,20 +156,21 @@ namespace OpenDental{
 			FormEE.EmployeeCur=(Employee)ALemployees[listEmployees.SelectedIndex];
 			FormEE.ShowDialog();
 			FillList();
+			isChanged=true;
 		}
 
 		private void checkHidden_Click(object sender, System.EventArgs e) {
 			FillList();
 		}
 
-		private void butOK_Click(object sender, System.EventArgs e) {
-			DialogResult=DialogResult.OK;
+		private void butClose_Click(object sender, System.EventArgs e) {
+			this.Close();
 		}
 
 		private void FormEmployee_Closing(object sender, System.ComponentModel.CancelEventArgs e) {
-			//if(user!=null){
-				//SecurityLogs.MakeLogEntry("Employees","Altered Employees",user);
-			//}
+			if(isChanged){
+				DataValid.SetInvalid(InvalidTypes.Employees);
+			}
 		}
 
 	}

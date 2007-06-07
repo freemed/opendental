@@ -299,6 +299,35 @@ namespace OpenDental.Properties {
             }
         }
         
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+        ///&lt;Report Name=&quot;&quot;&gt;
+        ///  &lt;CodeModules&gt;
+        ///    &lt;CodeModule&gt;ODR.dll&lt;/CodeModule&gt;
+        ///  &lt;/CodeModules&gt;
+        ///  &lt;Classes&gt;
+        ///    &lt;Class&gt;
+        ///      &lt;ClassName&gt;ODR.Query&lt;/ClassName&gt;
+        ///      &lt;InstanceName&gt;Query&lt;/InstanceName&gt;
+        ///    &lt;/Class&gt;
+        ///  &lt;/Classes&gt;
+        ///  &lt;Description&gt;
+        ///  &lt;/Description&gt;
+        ///  &lt;Author&gt;
+        ///  &lt;/Author&gt;
+        ///  &lt;PageHeight&gt;11in&lt;/PageHeight&gt;
+        ///  &lt;PageWidth&gt;8.5in&lt;/PageWidth&gt;
+        ///  &lt;DataSources&gt;
+        ///    &lt;DataSource Name=&quot;DS1&quot;&gt;
+        ///      &lt;ConnectionProperties&gt;
+        ///        &lt;DataProvider&gt;MySQL.NET&lt;/DataProvide [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string Unsched_Treat_Plans {
+            get {
+                return ResourceManager.GetString("Unsched_Treat_Plans", resourceCulture);
+            }
+        }
+        
         internal static System.Drawing.Bitmap up {
             get {
                 object obj = ResourceManager.GetObject("up", resourceCulture);

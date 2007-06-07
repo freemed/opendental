@@ -81,11 +81,14 @@ namespace OpenDental{
 			this.checkTreatPlanShowGraphics = new System.Windows.Forms.CheckBox();
 			this.checkTreatPlanShowCompleted = new System.Windows.Forms.CheckBox();
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
+			this.checkBox5 = new System.Windows.Forms.CheckBox();
 			this.checkTreatPlanShowIns = new System.Windows.Forms.CheckBox();
 			this.groupBox5 = new System.Windows.Forms.GroupBox();
+			this.checkSimpleStatement = new System.Windows.Forms.CheckBox();
 			this.checkAgingMonthly = new System.Windows.Forms.CheckBox();
 			this.checkStatementShowReturnAddress = new System.Windows.Forms.CheckBox();
 			this.checkBalancesDontSubtractIns = new System.Windows.Forms.CheckBox();
+			this.textStatementsCalcDueDate = new OpenDental.ValidNumber();
 			this.label2 = new System.Windows.Forms.Label();
 			this.groupBox2 = new System.Windows.Forms.GroupBox();
 			this.radioUsePatNum = new System.Windows.Forms.RadioButton();
@@ -102,16 +105,13 @@ namespace OpenDental{
 			this.label4 = new System.Windows.Forms.Label();
 			this.checkSolidBlockouts = new System.Windows.Forms.CheckBox();
 			this.groupBox4 = new System.Windows.Forms.GroupBox();
-			this.checkShowAccountNotes = new System.Windows.Forms.CheckBox();
-			this.checkBoldBalance = new System.Windows.Forms.CheckBox();
 			this.checkProgNotesNotComm = new System.Windows.Forms.CheckBox();
-			this.checkSimpleStatement = new System.Windows.Forms.CheckBox();
-			this.checkBox5 = new System.Windows.Forms.CheckBox();
+			this.checkBoldBalance = new System.Windows.Forms.CheckBox();
+			this.checkShowAccountNotes = new System.Windows.Forms.CheckBox();
 			this.butLanguages = new OpenDental.UI.Button();
 			this.textSigInterval = new OpenDental.ValidNumber();
 			this.butCancel = new OpenDental.UI.Button();
 			this.butOK = new OpenDental.UI.Button();
-			this.textStatementsCalcDueDate = new OpenDental.ValidNumber();
 			this.groupBox6 = new System.Windows.Forms.GroupBox();
 			this.checkBrokenApptNote = new System.Windows.Forms.CheckBox();
 			this.groupBox1.SuspendLayout();
@@ -186,7 +186,7 @@ namespace OpenDental{
 			// checkTreatPlanShowCompleted
 			// 
 			this.checkTreatPlanShowCompleted.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkTreatPlanShowCompleted.Location = new System.Drawing.Point(16,179);
+			this.checkTreatPlanShowCompleted.Location = new System.Drawing.Point(16,178);
 			this.checkTreatPlanShowCompleted.Name = "checkTreatPlanShowCompleted";
 			this.checkTreatPlanShowCompleted.Size = new System.Drawing.Size(334,17);
 			this.checkTreatPlanShowCompleted.TabIndex = 47;
@@ -208,10 +208,20 @@ namespace OpenDental{
 			this.groupBox1.TabStop = false;
 			this.groupBox1.Text = "Treatment Plans";
 			// 
+			// checkBox5
+			// 
+			this.checkBox5.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.checkBox5.Location = new System.Drawing.Point(16,216);
+			this.checkBox5.Name = "checkBox5";
+			this.checkBox5.Size = new System.Drawing.Size(334,17);
+			this.checkBox5.TabIndex = 49;
+			this.checkBox5.Text = "Show Tx Plan colors in chart module graphical tooth chart";
+			this.checkBox5.Visible = false;
+			// 
 			// checkTreatPlanShowIns
 			// 
 			this.checkTreatPlanShowIns.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkTreatPlanShowIns.Location = new System.Drawing.Point(16,199);
+			this.checkTreatPlanShowIns.Location = new System.Drawing.Point(16,197);
 			this.checkTreatPlanShowIns.Name = "checkTreatPlanShowIns";
 			this.checkTreatPlanShowIns.Size = new System.Drawing.Size(334,17);
 			this.checkTreatPlanShowIns.TabIndex = 48;
@@ -234,6 +244,15 @@ namespace OpenDental{
 			this.groupBox5.TabIndex = 52;
 			this.groupBox5.TabStop = false;
 			this.groupBox5.Text = "Statements";
+			// 
+			// checkSimpleStatement
+			// 
+			this.checkSimpleStatement.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.checkSimpleStatement.Location = new System.Drawing.Point(19,214);
+			this.checkSimpleStatement.Name = "checkSimpleStatement";
+			this.checkSimpleStatement.Size = new System.Drawing.Size(288,17);
+			this.checkSimpleStatement.TabIndex = 58;
+			this.checkSimpleStatement.Text = "Print simiple statements with less detail ";
 			// 
 			// checkAgingMonthly
 			// 
@@ -262,6 +281,15 @@ namespace OpenDental{
 			this.checkBalancesDontSubtractIns.TabIndex = 55;
 			this.checkBalancesDontSubtractIns.Text = "Balances don\'t subtract insurance estimate";
 			// 
+			// textStatementsCalcDueDate
+			// 
+			this.textStatementsCalcDueDate.Location = new System.Drawing.Point(19,138);
+			this.textStatementsCalcDueDate.MaxVal = 255;
+			this.textStatementsCalcDueDate.MinVal = 0;
+			this.textStatementsCalcDueDate.Name = "textStatementsCalcDueDate";
+			this.textStatementsCalcDueDate.Size = new System.Drawing.Size(60,20);
+			this.textStatementsCalcDueDate.TabIndex = 54;
+			// 
 			// label2
 			// 
 			this.label2.Location = new System.Drawing.Point(80,137);
@@ -269,7 +297,7 @@ namespace OpenDental{
 			this.label2.Size = new System.Drawing.Size(235,31);
 			this.label2.TabIndex = 53;
 			this.label2.Text = "Days to calculate due date.  Usually 10 or 15.  Leave blank to show \"Due on Recei" +
-				"pt\"";
+    "pt\"";
 			// 
 			// groupBox2
 			// 
@@ -331,7 +359,7 @@ namespace OpenDental{
 			this.label3.Size = new System.Drawing.Size(696,17);
 			this.label3.TabIndex = 56;
 			this.label3.Text = "Process Signal Interval in seconds.  Usually every 6 to 20 seconds.  Leave blank " +
-				"to disable autorefresh.";
+    "to disable autorefresh.";
 			this.label3.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
 			// 
 			// checkInsurancePlansShared
@@ -342,7 +370,7 @@ namespace OpenDental{
 			this.checkInsurancePlansShared.Size = new System.Drawing.Size(617,18);
 			this.checkInsurancePlansShared.TabIndex = 58;
 			this.checkInsurancePlansShared.Text = "Many patients have identical insurance plans.  Change behavior of program slightl" +
-				"y to optimize for identical plans.";
+    "y to optimize for identical plans.";
 			// 
 			// checkMedicalEclaimsEnabled
 			// 
@@ -408,7 +436,7 @@ namespace OpenDental{
 			// checkSolidBlockouts
 			// 
 			this.checkSolidBlockouts.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkSolidBlockouts.Location = new System.Drawing.Point(20,75);
+			this.checkSolidBlockouts.Location = new System.Drawing.Point(16,76);
 			this.checkSolidBlockouts.Name = "checkSolidBlockouts";
 			this.checkSolidBlockouts.Size = new System.Drawing.Size(346,18);
 			this.checkSolidBlockouts.TabIndex = 66;
@@ -428,51 +456,32 @@ namespace OpenDental{
 			this.groupBox4.TabStop = false;
 			this.groupBox4.Text = "Display Options";
 			// 
-			// checkShowAccountNotes
-			// 
-			this.checkShowAccountNotes.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkShowAccountNotes.Location = new System.Drawing.Point(20,19);
-			this.checkShowAccountNotes.Name = "checkShowAccountNotes";
-			this.checkShowAccountNotes.Size = new System.Drawing.Size(215,17);
-			this.checkShowAccountNotes.TabIndex = 56;
-			this.checkShowAccountNotes.Text = "Show Notes in account module";
-			// 
-			// checkBoldBalance
-			// 
-			this.checkBoldBalance.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkBoldBalance.Location = new System.Drawing.Point(20,38);
-			this.checkBoldBalance.Name = "checkBoldBalance";
-			this.checkBoldBalance.Size = new System.Drawing.Size(215,17);
-			this.checkBoldBalance.TabIndex = 57;
-			this.checkBoldBalance.Text = "Use bold balance view In Account";
-			// 
 			// checkProgNotesNotComm
 			// 
 			this.checkProgNotesNotComm.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkProgNotesNotComm.Location = new System.Drawing.Point(20,57);
+			this.checkProgNotesNotComm.Location = new System.Drawing.Point(16,58);
 			this.checkProgNotesNotComm.Name = "checkProgNotesNotComm";
 			this.checkProgNotesNotComm.Size = new System.Drawing.Size(330,16);
 			this.checkProgNotesNotComm.TabIndex = 58;
 			this.checkProgNotesNotComm.Text = "Show Prog Notes instead of Comm. Log: Appts and Account";
 			// 
-			// checkSimpleStatement
+			// checkBoldBalance
 			// 
-			this.checkSimpleStatement.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkSimpleStatement.Location = new System.Drawing.Point(19,214);
-			this.checkSimpleStatement.Name = "checkSimpleStatement";
-			this.checkSimpleStatement.Size = new System.Drawing.Size(288,17);
-			this.checkSimpleStatement.TabIndex = 58;
-			this.checkSimpleStatement.Text = "Print simiple statements with less detail ";
+			this.checkBoldBalance.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.checkBoldBalance.Location = new System.Drawing.Point(16,39);
+			this.checkBoldBalance.Name = "checkBoldBalance";
+			this.checkBoldBalance.Size = new System.Drawing.Size(215,17);
+			this.checkBoldBalance.TabIndex = 57;
+			this.checkBoldBalance.Text = "Use bold balance view In Account";
 			// 
-			// checkBox5
+			// checkShowAccountNotes
 			// 
-			this.checkBox5.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkBox5.Location = new System.Drawing.Point(16,217);
-			this.checkBox5.Name = "checkBox5";
-			this.checkBox5.Size = new System.Drawing.Size(334,17);
-			this.checkBox5.TabIndex = 49;
-			this.checkBox5.Text = "Show Tx Plan colors in chart module graphical tooth chart";
-			this.checkBox5.Visible = false;
+			this.checkShowAccountNotes.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.checkShowAccountNotes.Location = new System.Drawing.Point(16,20);
+			this.checkShowAccountNotes.Name = "checkShowAccountNotes";
+			this.checkShowAccountNotes.Size = new System.Drawing.Size(215,17);
+			this.checkShowAccountNotes.TabIndex = 56;
+			this.checkShowAccountNotes.Text = "Show Notes in account module";
 			// 
 			// butLanguages
 			// 
@@ -528,15 +537,6 @@ namespace OpenDental{
 			this.butOK.Text = "&OK";
 			this.butOK.Click += new System.EventHandler(this.butOK_Click);
 			// 
-			// textStatementsCalcDueDate
-			// 
-			this.textStatementsCalcDueDate.Location = new System.Drawing.Point(19,138);
-			this.textStatementsCalcDueDate.MaxVal = 255;
-			this.textStatementsCalcDueDate.MinVal = 0;
-			this.textStatementsCalcDueDate.Name = "textStatementsCalcDueDate";
-			this.textStatementsCalcDueDate.Size = new System.Drawing.Size(60,20);
-			this.textStatementsCalcDueDate.TabIndex = 54;
-			// 
 			// groupBox6
 			// 
 			this.groupBox6.Controls.Add(this.checkBrokenApptNote);
@@ -550,7 +550,7 @@ namespace OpenDental{
 			// checkBrokenApptNote
 			// 
 			this.checkBrokenApptNote.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkBrokenApptNote.Location = new System.Drawing.Point(12,19);
+			this.checkBrokenApptNote.Location = new System.Drawing.Point(19,19);
 			this.checkBrokenApptNote.Name = "checkBrokenApptNote";
 			this.checkBrokenApptNote.Size = new System.Drawing.Size(297,18);
 			this.checkBrokenApptNote.TabIndex = 67;

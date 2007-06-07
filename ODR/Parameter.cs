@@ -137,7 +137,7 @@ namespace ODR
 					}
 				}
 				else if(valueType==ParamValueType.Date){
-					outputValue+=Regex.Replace(snippet,@"\?",POut.PDate((DateTime)currentValues[i]));
+					outputValue+=Regex.Replace(snippet,@"\?",POut.PDate((DateTime)currentValues[i],false));
 				}
 				else if(valueType==ParamValueType.Enum){
 					outputValue+=Regex.Replace(snippet,@"\?",POut.PInt((int)currentValues[i]));

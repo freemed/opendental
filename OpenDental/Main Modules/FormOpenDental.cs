@@ -149,7 +149,6 @@ namespace OpenDental{
 		private System.Windows.Forms.MenuItem menuItemMisc;
 		private System.Windows.Forms.MenuItem menuItemBirthdays;
 		private System.Windows.Forms.MenuItem menuItemRemote;
-		private System.Windows.Forms.MenuItem menuItemInstructors;
 		private System.Windows.Forms.MenuItem menuItemSchoolClass;
 		private System.Windows.Forms.MenuItem menuItemSchoolCourses;
 		private System.Windows.Forms.MenuItem menuItemCourseGrades;
@@ -287,7 +286,6 @@ namespace OpenDental{
 			this.menuItemSchoolCourses = new System.Windows.Forms.MenuItem();
 			this.menuItemEmployees = new System.Windows.Forms.MenuItem();
 			this.menuItemEmployers = new System.Windows.Forms.MenuItem();
-			this.menuItemInstructors = new System.Windows.Forms.MenuItem();
 			this.menuItemCarriers = new System.Windows.Forms.MenuItem();
 			this.menuItemInsPlans = new System.Windows.Forms.MenuItem();
 			this.menuItemLabCases = new System.Windows.Forms.MenuItem();
@@ -659,7 +657,6 @@ namespace OpenDental{
             this.menuItemSchoolCourses,
             this.menuItemEmployees,
             this.menuItemEmployers,
-            this.menuItemInstructors,
             this.menuItemCarriers,
             this.menuItemInsPlans,
             this.menuItemLabCases,
@@ -727,63 +724,57 @@ namespace OpenDental{
 			this.menuItemEmployers.Text = "Employers";
 			this.menuItemEmployers.Click += new System.EventHandler(this.menuItemEmployers_Click);
 			// 
-			// menuItemInstructors
-			// 
-			this.menuItemInstructors.Index = 9;
-			this.menuItemInstructors.Text = "Instructors";
-			this.menuItemInstructors.Click += new System.EventHandler(this.menuItemInstructors_Click);
-			// 
 			// menuItemCarriers
 			// 
-			this.menuItemCarriers.Index = 10;
+			this.menuItemCarriers.Index = 9;
 			this.menuItemCarriers.Text = "Insurance Carriers";
 			this.menuItemCarriers.Click += new System.EventHandler(this.menuItemCarriers_Click);
 			// 
 			// menuItemInsPlans
 			// 
-			this.menuItemInsPlans.Index = 11;
+			this.menuItemInsPlans.Index = 10;
 			this.menuItemInsPlans.Text = "&Insurance Plans";
 			this.menuItemInsPlans.Click += new System.EventHandler(this.menuItemInsPlans_Click);
 			// 
 			// menuItemLabCases
 			// 
-			this.menuItemLabCases.Index = 12;
+			this.menuItemLabCases.Index = 11;
 			this.menuItemLabCases.Text = "Lab Cases";
 			this.menuItemLabCases.Click += new System.EventHandler(this.menuItemLabCases_Click);
 			// 
 			// menuItemMedications
 			// 
-			this.menuItemMedications.Index = 13;
+			this.menuItemMedications.Index = 12;
 			this.menuItemMedications.Text = "&Medications";
 			this.menuItemMedications.Click += new System.EventHandler(this.menuItemMedications_Click);
 			// 
 			// menuItemProviders
 			// 
-			this.menuItemProviders.Index = 14;
+			this.menuItemProviders.Index = 13;
 			this.menuItemProviders.Text = "Providers";
 			this.menuItemProviders.Click += new System.EventHandler(this.menuItemProviders_Click);
 			// 
 			// menuItemPrescriptions
 			// 
-			this.menuItemPrescriptions.Index = 15;
+			this.menuItemPrescriptions.Index = 14;
 			this.menuItemPrescriptions.Text = "Pre&scriptions";
 			this.menuItemPrescriptions.Click += new System.EventHandler(this.menuItemPrescriptions_Click);
 			// 
 			// menuItemReferrals
 			// 
-			this.menuItemReferrals.Index = 16;
+			this.menuItemReferrals.Index = 15;
 			this.menuItemReferrals.Text = "&Referrals";
 			this.menuItemReferrals.Click += new System.EventHandler(this.menuItemReferrals_Click);
 			// 
 			// menuItemSchools
 			// 
-			this.menuItemSchools.Index = 17;
+			this.menuItemSchools.Index = 16;
 			this.menuItemSchools.Text = "Sites";
 			this.menuItemSchools.Click += new System.EventHandler(this.menuItemSchools_Click);
 			// 
 			// menuItemZipCodes
 			// 
-			this.menuItemZipCodes.Index = 18;
+			this.menuItemZipCodes.Index = 17;
 			this.menuItemZipCodes.Text = "&Zip Codes";
 			this.menuItemZipCodes.Click += new System.EventHandler(this.menuItemZipCodes_Click);
 			// 
@@ -1546,14 +1537,14 @@ namespace OpenDental{
 				if(PrefB.GetBool("EasyHideDentalSchools")){
 					menuItemSchoolClass.Visible=false;
 					menuItemSchoolCourses.Visible=false;
-					menuItemInstructors.Visible=false;
+					//menuItemInstructors.Visible=false;
 					menuItemCourseGrades.Visible=false;
 					menuItemRequirementsNeeded.Visible=false;
 				}
 				else{
 					menuItemSchoolClass.Visible=true;
 					menuItemSchoolCourses.Visible=true;
-					menuItemInstructors.Visible=true;
+					//menuItemInstructors.Visible=true;
 					menuItemCourseGrades.Visible=true;
 					menuItemRequirementsNeeded.Visible=true;
 				}
@@ -1595,7 +1586,7 @@ namespace OpenDental{
 				Defs.Refresh();
 			}
 			if((itypes & InvalidTypes.DentalSchools)==InvalidTypes.DentalSchools){
-				Instructors.Refresh();
+				//Instructors.Refresh();
 				SchoolClasses.Refresh();
 				SchoolCourses.Refresh();
 			}
@@ -2557,12 +2548,12 @@ namespace OpenDental{
 		}
 
 		private void menuItemInstructors_Click(object sender, System.EventArgs e) {
-			if(!Security.IsAuthorized(Permissions.Setup)){
+			/*if(!Security.IsAuthorized(Permissions.Setup)){
 				return;
 			}
 			FormInstructors FormI=new FormInstructors();
 			FormI.ShowDialog();
-			SecurityLogs.MakeLogEntry(Permissions.Setup,0,"Dental School Instructors");
+			SecurityLogs.MakeLogEntry(Permissions.Setup,0,"Dental School Instructors");*/
 		}
 
 		private void menuItemCarriers_Click(object sender, System.EventArgs e) {

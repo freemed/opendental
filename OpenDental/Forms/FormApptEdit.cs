@@ -894,11 +894,11 @@ namespace OpenDental{
 			textLabCase.Text=DS.Tables["Misc"].Rows[0]["labDescript"].ToString();
 			comboInstructor.Items.Add(Lan.g(this,"none"));
 			comboInstructor.SelectedIndex=0;
-			for(int i=0;i<Instructors.List.Length;i++) {
-				comboInstructor.Items.Add(Instructors.List[i].LName+", "+Instructors.List[i].FName+", "+Instructors.List[i].Suffix);
-				if(Instructors.List[i].InstructorNum==AptCur.InstructorNum)
-					comboInstructor.SelectedIndex=i+1;
-			}
+			//for(int i=0;i<Instructors.List.Length;i++) {
+			//	comboInstructor.Items.Add(Instructors.List[i].LName+", "+Instructors.List[i].FName+", "+Instructors.List[i].Suffix);
+			//	if(Instructors.List[i].InstructorNum==AptCur.InstructorNum)
+			//		comboInstructor.SelectedIndex=i+1;
+			//}
 			//SchoolClassNum was filled earlier.  Now selected:
 			comboSchoolClass.SelectedIndex=0;
 			for(int i=0;i<SchoolClasses.List.Length;i++) {
@@ -1466,10 +1466,10 @@ namespace OpenDental{
 				AptCur.Assistant=0;
 			else
 				AptCur.Assistant=Employees.ListShort[comboAssistant.SelectedIndex-1].EmployeeNum;
-			if(comboInstructor.SelectedIndex==0)//none
+			//if(comboInstructor.SelectedIndex==0)//none
 				AptCur.InstructorNum=0;
-			else
-				AptCur.InstructorNum=Instructors.List[comboInstructor.SelectedIndex-1].InstructorNum;
+			//else
+			//	AptCur.InstructorNum=Instructors.List[comboInstructor.SelectedIndex-1].InstructorNum;
 			if(comboSchoolClass.SelectedIndex==0)//none
 				AptCur.SchoolClassNum=0;
 			else

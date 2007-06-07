@@ -105,6 +105,7 @@
     <Compile Include="TableTypes\CanadianClaim.cs" />
     <Compile Include="TableTypes\CanadianExtract.cs" />
     <Compile Include="TableTypes\CanadianNetwork.cs" />
+    <Compile Include="TableTypes\ReqStudent.cs" />
     <Compile Include="TableTypes\ReqNeeded.cs" />
     <Compile Include="TableTypes\LabTurnaround.cs" />
     <Compile Include="TableTypes\LabCase.cs" />

@@ -25,16 +25,16 @@ namespace OpenDental{
 		private System.Windows.Forms.TextBox textFName;
 		private System.Windows.Forms.TextBox textSuffix;
 		private OpenDental.UI.Button butDelete;
-    private Instructor InstCur;
+    //private Instructor InstCur;
 
 		///<summary></summary>
-		public FormInstructorEdit(Instructor instCur)
+		public FormInstructorEdit()//Instructor instCur)
 		{
 			//
 			// Required for Windows Form Designer support
 			//
 			InitializeComponent();
-			InstCur=instCur.Copy();
+			//InstCur=instCur.Copy();
 			Lan.F(this);
 		}
 
@@ -195,13 +195,13 @@ namespace OpenDental{
 		#endregion
 
 		private void FormInstructorEdit_Load(object sender, System.EventArgs e) {
-			textLName.Text=InstCur.LName;
+			/*textLName.Text=InstCur.LName;
 			textFName.Text=InstCur.FName;
-			textSuffix.Text=InstCur.Suffix;
+			textSuffix.Text=InstCur.Suffix;*/
 		}
 
 		private void butDelete_Click(object sender, System.EventArgs e) {
-			if(IsNew){
+			/*if(IsNew){
 				DialogResult=DialogResult.Cancel;
 			}
 			else{
@@ -216,19 +216,19 @@ namespace OpenDental{
 					return;
 				}
 			}
-			DialogResult=DialogResult.OK;
+			DialogResult=DialogResult.OK;*/
 		}
 
 		private void butOK_Click(object sender, System.EventArgs e) {
-			InstCur.LName=textLName.Text;
+			/*InstCur.LName=textLName.Text;
 			InstCur.FName=textFName.Text;
 			InstCur.Suffix=textSuffix.Text;
 			Instructors.InsertOrUpdate(InstCur,IsNew);
-			DialogResult=DialogResult.OK;
+			DialogResult=DialogResult.OK;*/
 		}
 
 		private void butCancel_Click(object sender, System.EventArgs e) {
-			DialogResult=DialogResult.Cancel;
+			//DialogResult=DialogResult.Cancel;
 		}
 
 		

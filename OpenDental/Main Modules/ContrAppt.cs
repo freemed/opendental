@@ -1749,7 +1749,7 @@ namespace OpenDental{
 				if(DS.Tables["Appointments"].Rows[i]["AptNum"].ToString()==aptCur.AptNum.ToString()){
 					continue;
 				}
-				if(DS.Tables["Appointments"].Rows[i]["Op"].ToString()==aptCur.Op.ToString()){
+				if(DS.Tables["Appointments"].Rows[i]["Op"].ToString()!=aptCur.Op.ToString()){
 					continue;
 				}
 				aptDateTime=PIn.PDateT(DS.Tables["Appointments"].Rows[i]["AptDateTime"].ToString());
@@ -2728,7 +2728,6 @@ namespace OpenDental{
       DateTime StopTime;  
       Rectangle imageRect;  //holds new dimensions for temp image
 		  Bitmap imageTemp;  //clone of shadow image with correct dimensions depending on day of week. Needs to be rewritten.
-      //bool IsDefault=true;
 			Schedule[] SchedListDay;
 			if(ContrApptSheet.IsWeeklyView) {
 				SchedListDay = Schedules.RefreshPeriod(WeekStartDate,WeekEndDate);
@@ -2738,24 +2737,13 @@ namespace OpenDental{
 			}
       if(SchedListDay.Length > 0){
         for(int i=0;i<SchedListDay.Length;i++){
-					if(SchedListDay[i].SchedType!=ScheduleType.Practice){
+					if(SchedListDay[i].SchedType!=ScheduleType.Provider){
 						continue;
 					}
           AListStart.Add(SchedListDay[i].StartTime);
           AListStop.Add(SchedListDay[i].StopTime);
-					//IsDefault=false;
         } 
       }
-      /*if(IsDefault){	
-				SchedDefault[] schedDefPract=SchedDefaults.GetForType(ScheduleType.Practice,0);
-				for(int i=0;i<schedDefPract.Length;i++){
-					//if(SchedDefaults.List[i]
-					if(schedDefPract[i].DayOfWeek==(int)Appointments.DateSelected.DayOfWeek){
-            AListStart.Add(schedDefPract[i].StartTime);
-            AListStop.Add(schedDefPract[i].StopTime); 
-					}
-				}
-      }*/
 			if(AListStart.Count > 0){//makes sure there is at least one timeblock
         StartTime=(DateTime)AListStart[0]; 
 				for(int i=0;i<AListStart.Count;i++){
@@ -2839,35 +2827,26 @@ namespace OpenDental{
 
 		///<summary>Clears the pinboard.</summary>
 		private void butClearPin_Click(object sender, System.EventArgs e) {
-MessageBox.Show("Not functional");
-			/*if(!PinApptSingle.Visible){
+			if(!PinApptSingle.Visible){
 				return;
 			}
 			PinApptSingle.Visible=false;
-			//Appointment apt=PinApptSingle.Info.MyApt.Copy();
-			//get the patient associate with the pinboard appt so we can test for next apt.
-			//Patient PatCur=Patients.Cur;//but we don't really care
-			//PatCur.PatNum=Appointments.Cur.PatNum;
-			//Patients.Cur=PatCur;
-			RefreshModuleData(AptCur.PatNum);
 			ContrApptSingle.SelectedAptNum=-1;
 			ContrApptSingle.PinBoardIsSelected=false;
-			if(AptCur.AptStatus==ApptStatus.UnschedList){//on unscheduled list
+			if(PinApptSingle.DataRoww["AptStatus"].ToString()==((int)ApptStatus.UnschedList).ToString()){//on unscheduled list
 				//do nothing to database
 			}
-			else if(AptCur.AptDateTime.Year<1880){//not already scheduled
-				if(AptCur.AptNum==PatCur.NextAptNum){//if next apt
+			else if(PIn.PDateT(PinApptSingle.DataRoww["AptDateTime"].ToString()).Year<1880){//not already scheduled
+				Patient pat=Patients.GetPat(PIn.PInt(PinApptSingle.DataRoww["PatNum"].ToString()));//so we can test for next apt.
+				if(PinApptSingle.DataRoww["AptNum"].ToString()==pat.NextAptNum.ToString()){//if is planned apt
 					//do nothing except remove it from pinboard
 				}
 				else{//for normal appt:
 					//this gets rid of new appointments that never made it off the pinboard
-					//Procedures.UnattachProcsInAppt(AptCur.AptNum);
-					Appointments.Delete(AptCur.AptNum);
+					Appointments.Delete(PIn.PInt(PinApptSingle.DataRoww["AptNum"].ToString()));
 				}
 			}
-			//PatCur=null;
-			//RefreshModuleScreen();
-			RefreshModulePatient(0);*/
+			RefreshModulePatient(0);
 		}
 
 		///<summary>The scrollbar has been moved by the user.</summary>
@@ -2989,125 +2968,95 @@ MessageBox.Show("Not functional");
 		}
 
 		private void OnUnsched_Click(){
-MessageBox.Show("Not functional");
-			/*if(!Security.IsAuthorized(Permissions.AppointmentMove)){
+			if(!Security.IsAuthorized(Permissions.AppointmentMove)){
 				return;
 			}
 			if(MessageBox.Show(Lan.g(this,"Send Appointment to Unscheduled List?")
 				,"",MessageBoxButtons.OKCancel)!=DialogResult.OK){
 				return;
 			}
-			Appointment aptOld=AptCur.Copy();
-			AptCur.AptStatus=ApptStatus.UnschedList;
-			try{
-				Appointments.InsertOrUpdate(AptCur,aptOld,false);
-				SecurityLogs.MakeLogEntry(Permissions.AppointmentMove,AptCur.PatNum,
-					PatCur.GetNameLF()+", "
-					+AptCur.ProcDescript+", "
-					+AptCur.AptDateTime.ToString()+", "
-					+"Sent to Unscheduled List");
-			}
-			catch(ApplicationException ex){
-				MessageBox.Show(ex.Message);
-			}
-			RefreshModulePatient(PatCurNum);
-			RefreshPeriod();
-			SetInvalid();*/
+			Appointments.SetAptStatus(ContrApptSingle.SelectedAptNum,ApptStatus.UnschedList);
+			int thisI=GetIndex(ContrApptSingle.SelectedAptNum);
+			Patient pat=Patients.GetPat(PIn.PInt(ContrApptSingle3[thisI].DataRoww["PatNum"].ToString()));
+			SecurityLogs.MakeLogEntry(Permissions.AppointmentMove,pat.PatNum,
+				pat.GetNameLF()+", "
+				+ContrApptSingle3[thisI].DataRoww["procs"].ToString()+", "
+				+ContrApptSingle3[thisI].DataRoww["AptDateTime"].ToString()+", "
+				+"Sent to Unscheduled List");
+			ModuleSelected(pat.PatNum);
+			SetInvalid();
 		}
 
 		private void OnBreak_Click(){
-MessageBox.Show("Not working");
-			/*
 			if(!Security.IsAuthorized(Permissions.AppointmentEdit)){
 				return;
 			}
-			int thisIndex=GetIndex(ContrApptSingle.SelectedAptNum);
-			Appointment aptOld=AptCur.Copy();
-			AptCur.AptStatus=ApptStatus.Broken;
-			try{
-				Appointments.InsertOrUpdate(AptCur,aptOld,false);
-				SecurityLogs.MakeLogEntry(Permissions.AppointmentEdit,AptCur.PatNum,
-					PatCur.GetNameLF()+", "
-					+AptCur.ProcDescript+", "
-					+AptCur.AptDateTime.ToString()+", "
-					+"Broke");
-			}
-			catch(ApplicationException ex){
-				MessageBox.Show(ex.Message);
-			}
-			RefreshModulePatient(PatCurNum);//??
-			RefreshPeriod();//??
-			SetInvalid();
-			
+			Appointments.SetAptStatus(ContrApptSingle.SelectedAptNum,ApptStatus.Broken);
+			int thisI=GetIndex(ContrApptSingle.SelectedAptNum);
+			Patient pat=Patients.GetPat(PIn.PInt(ContrApptSingle3[thisI].DataRoww["PatNum"].ToString()));
+			SecurityLogs.MakeLogEntry(Permissions.AppointmentMove,pat.PatNum,
+				pat.GetNameLF()+", "
+				+ContrApptSingle3[thisI].DataRoww["procs"].ToString()+", "
+				+ContrApptSingle3[thisI].DataRoww["AptDateTime"].ToString()+", "
+				+"Broke");
+			int provNum=PIn.PInt(ContrApptSingle3[thisI].DataRoww["ProvNum"].ToString());//remember before ModuleSelected
+			ModuleSelected(pat.PatNum);
+			SetInvalid();		
 			Adjustment AdjustmentCur=new Adjustment();
 			AdjustmentCur.DateEntry=DateTime.Today;
 			AdjustmentCur.AdjDate=DateTime.Today;
 			AdjustmentCur.ProcDate=DateTime.Today;
-			AdjustmentCur.ProvNum=AptCur.ProvNum;
-			AdjustmentCur.PatNum=PatCur.PatNum;
-			FormAdjust FormA=new FormAdjust(PatCur,AdjustmentCur);
+			AdjustmentCur.ProvNum=provNum;
+			AdjustmentCur.PatNum=pat.PatNum;
+			FormAdjust FormA=new FormAdjust(pat,AdjustmentCur);
 			FormA.IsNew=true;
-			FormA.ShowDialog();*/
+			FormA.ShowDialog();
 		}
 
 		private void OnComplete_Click(){
-			MessageBox.Show("Not working");
-			/*
 			if(!Security.IsAuthorized(Permissions.ProcComplCreate)){
 				return;
 			}
 			if(!Security.IsAuthorized(Permissions.AppointmentEdit)){
 				return;
 			}
-			int thisIndex=GetIndex(ContrApptSingle.SelectedAptNum);
-			Appointment aptOld=AptCur.Copy();
-			AptCur.AptStatus=ApptStatus.Complete;
+			Appointment apt=Appointments.GetOneApt(ContrApptSingle.SelectedAptNum);
+			Appointments.SetAptStatus(apt.AptNum,ApptStatus.Complete);
 			//Procedures.SetDateFirstVisit(Appointments.Cur.AptDateTime.Date);//done when making appt instead
-			InsPlan[] PlanList=InsPlans.Refresh(FamCur);
-			PatPlan[] PatPlanList=PatPlans.Refresh(PatCur.PatNum);
-			Procedures.SetCompleteInAppt(AptCur,PlanList,PatPlanList);//loops through each proc
-			try{
-				Appointments.InsertOrUpdate(AptCur,aptOld,false);
-				SecurityLogs.MakeLogEntry(Permissions.AppointmentEdit,AptCur.PatNum,
-					PatCur.GetNameLF()+", "
-					+AptCur.ProcDescript+", "
-					+AptCur.AptDateTime.ToString()+", "
-					+"Set Complete");
-			}
-			catch(ApplicationException ex){
-				MessageBox.Show(ex.Message);
-			}
-			RefreshModulePatient(PatCurNum);
-			RefreshPeriod();
+			Family fam=Patients.GetFamily(apt.PatNum);
+			Patient pat=fam.GetPatient(apt.PatNum);
+			InsPlan[] PlanList=InsPlans.Refresh(fam);
+			PatPlan[] PatPlanList=PatPlans.Refresh(apt.PatNum);
+			Procedures.SetCompleteInAppt(apt,PlanList,PatPlanList);//loops through each proc
+			SecurityLogs.MakeLogEntry(Permissions.AppointmentEdit,apt.PatNum,
+				pat.GetNameLF()+", "
+				+ContrApptSingle3[GetIndex(apt.AptNum)].DataRoww["procs"].ToString()+", "
+				+apt.AptDateTime.ToString()+", "
+				+"Set Complete");
+			ModuleSelected(pat.PatNum);
 			SetInvalid();
-			SecurityLogs.MakeLogEntry(Permissions.ProcComplCreate,PatCur.PatNum,
-				PatCur.GetNameLF()+" "+AptCur.AptDateTime.ToShortDateString());
-			//ContrApptSingle3[thisIndex].Info.MyApt.AptStatus=ApptStatus.Complete;
-			//ContrApptSingle3[thisIndex].Refresh();*/
+			SecurityLogs.MakeLogEntry(Permissions.ProcComplCreate,pat.PatNum,
+				pat.GetNameLF()+" "+apt.AptDateTime.ToShortDateString());
 		}
 
 		private void OnDelete_Click(){
-			MessageBox.Show("Not working");
-			/*
 			if(!Security.IsAuthorized(Permissions.AppointmentEdit)){
 				return;
 			}
 			if(!MsgBox.Show(this,true,"Delete Appointment?")){
 				return;
 			}
-			//Procedures.UnattachProcsInAppt(AptCur.AptNum);
-			Appointments.Delete(AptCur.AptNum);
-			SecurityLogs.MakeLogEntry(Permissions.AppointmentEdit,AptCur.PatNum,
-				PatCur.GetNameLF()+", "
-				+AptCur.ProcDescript+", "
-				+AptCur.AptDateTime.ToString()+", "
+			Appointments.Delete(ContrApptSingle.SelectedAptNum);
+			int thisI=GetIndex(ContrApptSingle.SelectedAptNum);
+			SecurityLogs.MakeLogEntry(Permissions.AppointmentEdit,PatCurNum,
+				PatCurName+", "
+				+ContrApptSingle3[thisI].DataRoww["procs"].ToString()+", "
+				+ContrApptSingle3[thisI].DataRoww["AptDateTime"].ToString()+", "
 				+"Deleted");
 			ContrApptSingle.SelectedAptNum=-1;
 			ContrApptSingle.PinBoardIsSelected=false;
-			PatCur=null;
-			RefreshModulePatient(PatCurNum);
-			RefreshPeriod();
-			SetInvalid();*/
+			ModuleSelected(PatCurNum);
+			SetInvalid();
 		}		
 
 		private void OnBlockCopy_Click(){
@@ -3171,7 +3120,6 @@ MessageBox.Show("Not working");
 		}
 
 		private Schedule GetClickedBlockout(){
-			//Schedules.ConvertFromDefault(Appointments.DateSelected,ScheduleType.Blockout,0);
 			SchedListDay=Schedules.RefreshDay(Appointments.DateSelected);
 			Schedule[] ListForType=Schedules.GetForType(SchedListDay,ScheduleType.Blockout,0);
 			//now find which blockout
@@ -3203,9 +3151,6 @@ MessageBox.Show("Not working");
 				MessageBox.Show("Blockout not found.");
 				return;//should never happen
 			}
-			//if(!MsgBox.Show(this,true,"Delete blockout?")){
-			//	return;
-			//}
 			Schedules.Delete(SchedCur);
 			RefreshPeriod();
 		}
@@ -3214,7 +3159,6 @@ MessageBox.Show("Not working");
 			if(!Security.IsAuthorized(Permissions.Blockouts)){
 				return;
 			}
-			//Schedules.ConvertFromDefault(Appointments.DateSelected,ScheduleType.Blockout,0);
       Schedule SchedCur=new Schedule();
       SchedCur.SchedDate=Appointments.DateSelected;
 			SchedCur.SchedType=ScheduleType.Blockout;
@@ -3261,54 +3205,25 @@ MessageBox.Show("Not working");
 		}
 
 		private void OnCopyToPin_Click() {
-			MessageBox.Show("Not working");
-			/*
 			if(!Security.IsAuthorized(Permissions.AppointmentMove)) {
 				return;
 			}
 			int prevSel=GetIndex(ContrApptSingle.SelectedAptNum);
-			CurInfo=new InfoApt();
-			CurInfo.MyApt=AptCur.Copy();
-			Procedure[] procsForSingle;
-			procsForSingle=Procedures.GetProcsForSingle(AptCur.AptNum,false);
-			CurInfo.Procs=procsForSingle;
-			CurInfo.Production=Procedures.GetProductionOneApt(AptCur.AptNum,procsForSingle,false);
-			CurInfo.MyPatient=PatCur.Copy();
-			CurToPinBoard();//sets selectedAptNum=-1. do before refresh prev
+			CurToPinBoard(ContrApptSingle.SelectedAptNum);//sets selectedAptNum=-1. do before refresh prev
 			if(prevSel!=-1) {
 				CreateAptShadows();
 				ContrApptSheet2.DrawShadow();
 			}
-			RefreshModulePatient(PatCurNum);//??
-			RefreshPeriod();//??
-
-
-			//
-			//CurInfo=TempApptSingle.Info;
-			//CurToPinBoard();
-			//
-			//PlanList=InsPlans.Refresh(FamCur);
-			//PatPlanList=PatPlans.Refresh(PatCur.PatNum);
-			//CovPats.Refresh(PlanList,PatPlanList);
-			//FillPanelPatient();
-			//TempApptSingle.Dispose();
-			//return;*/
+			//RefreshModulePatient(PatCurNum);
+			//RefreshPeriod();
 		}
-
-		private void textMedicalNote_TextChanged(object sender, System.EventArgs e) {
-		
-		}
-
-		/*private void listConfirmed_SelectedIndexChanged(object sender, System.EventArgs e) {
-			listConfirmed.SelectedIndex=-1;
-		}*/
 
 		private void listConfirmed_MouseDown(object sender, System.Windows.Forms.MouseEventArgs e) {
 			if(listConfirmed.IndexFromPoint(e.X,e.Y)==-1){
 				return;
 			}
 			int newStatus=DefB.Short[(int)DefCat.ApptConfirmed][listConfirmed.IndexFromPoint(e.X,e.Y)].DefNum;
-			Appointments.SetApptConfirmed(ContrApptSingle.SelectedAptNum,newStatus);
+			Appointments.SetConfirmed(ContrApptSingle.SelectedAptNum,newStatus);
 			RefreshPeriod();
 			SetInvalid();
 		}
@@ -3428,8 +3343,6 @@ MessageBox.Show("Not working");
 			}
 			Appointments.DateSelected=SearchResults[clickedI];
 			SetWeeklyView(false);
-			//RefreshPeriod(SearchResults[clickedI],SearchResults[clickedI]);
-			//RefreshDay(SearchResults[clickedI]);
 		}
 
 		private void butRefresh_Click(object sender,EventArgs e) {
@@ -3452,10 +3365,6 @@ MessageBox.Show("Not working");
 			FormLabCases FormL=new FormLabCases();
 			FormL.ShowDialog();
 		}
-
-		//private void timerTimeIndic_Tick(object sender, System.EventArgs e) {
-			//if(FormOpenDental.ActiveForm.WindowState!=FormWindowState.Minimized){
-		//}
 
 		///<summary></summary>
 		public void TickRefresh(){
@@ -3578,21 +3487,7 @@ MessageBox.Show("Not working");
 
 	}
 
-	//<summary>This is the info to display on an appointment. This will be eliminated when we move to datasets.</summary>
-	//public class InfoApt{
-		//<summary>Set to true if this appointment is simply being displayed in the Chart module Next apt section rather than int the Appointments module.</summary>
-		//public bool IsNext;
-		//<summary>A list of procedures attached to this appointment.</summary>
-		//public Procedure[] Procs;
-		//<summary>The appointment object holding the actual db info for this displayed appointment.</summary>
-		//public Appointment MyApt;
-		//<summary>The patient associated with this appt.</summary>
-		//public Patient MyPatient;
-		//<summary>The amount of money generated from this appointment.</summary>
-		//public double Production;
-		//<Summary>Could be null.</Summary>
-		//public LabCase MyLabCase;
-	//}
+	
 
 
 }

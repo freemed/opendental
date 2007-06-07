@@ -393,6 +393,9 @@
     <Compile Include="Forms\BasicTemplate.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Forms\FormReportsMore.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Forms\FormRegistrationKeyEdit.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -1313,6 +1316,10 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\BasicTemplate.resx">
       <DependentUpon>BasicTemplate.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormReportsMore.resx">
+      <DependentUpon>FormReportsMore.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormRegistrationKeyEdit.resx">
@@ -2865,6 +2872,7 @@
     <None Include="Resources\editPencil.gif" />
     <None Include="Resources\Add.gif" />
     <None Include="Resources\down.gif" />
+    <None Include="Resources\Unsched Treat Plans.rdl" />
     <None Include="Resources\up.gif" />
     <None Include="Resources\deleteX.gif" />
     <None Include="Web References\com.dentalxchange.webservices\Reference.map">

@@ -12,7 +12,7 @@ namespace OpenDental{
 		private OpenDental.UI.Button butAdd;
 		private System.ComponentModel.Container components = null;
 		private System.Windows.Forms.ListBox listInstructors;
-		private bool changed;
+		//private bool changed;
 		
 		///<summary></summary>
 		public FormInstructors(){
@@ -107,11 +107,11 @@ namespace OpenDental{
 		#endregion
 
 		private void FormInstructors_Load(object sender, System.EventArgs e) {
-			FillList();
+			//FillList();
 		}
 
 		private void FillList(){
-			int previousSelected=-1;
+			/*int previousSelected=-1;
 			if(listInstructors.SelectedIndex!=-1){
 				previousSelected=Instructors.List[listInstructors.SelectedIndex].InstructorNum;
 			}
@@ -122,11 +122,11 @@ namespace OpenDental{
 				if(Instructors.List[i].InstructorNum==previousSelected){
 					listInstructors.SelectedIndex=i;
 				}
-			}
+			}*/
 		}
 
 		private void butAdd_Click(object sender, System.EventArgs e) {
-			Instructor cur=new Instructor();
+			/*Instructor cur=new Instructor();
 			FormInstructorEdit FormI=new FormInstructorEdit(cur);
 			FormI.IsNew=true;
 			FormI.ShowDialog();
@@ -135,11 +135,11 @@ namespace OpenDental{
 			}
 			changed=true;
 			FillList();
-			listInstructors.SelectedIndex=-1;
+			listInstructors.SelectedIndex=-1;*/
 		}
 
 		private void listInstructors_DoubleClick(object sender, System.EventArgs e) {
-			if(listInstructors.SelectedIndex==-1)
+			/*if(listInstructors.SelectedIndex==-1)
 				return;
 			FormInstructorEdit FormI=new FormInstructorEdit(Instructors.List[listInstructors.SelectedIndex]);
 			FormI.ShowDialog();
@@ -147,17 +147,17 @@ namespace OpenDental{
 				return;
 			}
 			changed=true;
-			FillList();
+			FillList();*/
 		}
 
 		private void butClose_Click(object sender, System.EventArgs e) {
-			Close();
+			//Close();
 		}
 
 		private void FormInstructors_Closing(object sender, System.ComponentModel.CancelEventArgs e) {
-			if(changed){
-				DataValid.SetInvalid(InvalidTypes.DentalSchools);
-			}
+			//if(changed){
+			//	DataValid.SetInvalid(InvalidTypes.DentalSchools);
+			//}
 		}
 
 	}

@@ -39,7 +39,7 @@ namespace OpenDentBusiness{
 		public string ProcDescript;
 		///<summary>FK to employee.EmployeeNum.  You can assign an assistant to the appointment.</summary>
 		public int Assistant;
-		///<summary>FK to instructor.InstructorNum.  Only used in dental schools.</summary>
+		///<summary>Not currently used.  Will be FK to provider.ProvNum</summary>
 		public int InstructorNum;
 		///<summary>FK to schoolclass.SchoolClassNum.  Only used in dental schools.</summary>
 		public int SchoolClassNum;

@@ -823,7 +823,7 @@ namespace OpenDental{
 		}
 
 		///<summary>The newStatus will be a DefNum or 0.</summary>
-		public static void SetApptConfirmed(int aptNum,int newStatus){
+		public static void SetConfirmed(int aptNum,int newStatus){
 			string command="UPDATE appointment SET Confirmed="+POut.PInt(newStatus)
 				+" WHERE AptNum="+POut.PInt(aptNum);
 			General.NonQ(command);
@@ -835,7 +835,12 @@ namespace OpenDental{
 			General.NonQ(command);
 		}
 
-
+		///<summary>Use to send to unscheduled list, or to set broken.</summary>
+		public static void SetAptStatus(int aptNum,ApptStatus newStatus) {
+			string command="UPDATE appointment SET AptStatus="+POut.PInt((int)newStatus)
+				+" WHERE AptNum="+POut.PInt(aptNum);
+			General.NonQ(command);
+		}
 
 
 
