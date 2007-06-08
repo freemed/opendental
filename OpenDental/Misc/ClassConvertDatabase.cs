@@ -5284,6 +5284,34 @@ namespace OpenDental{
 				//After 342:
 				command="UPDATE apptviewitem SET ElementDesc='Procs' WHERE ElementDesc='ProcDescript'";
 				General.NonQEx(command);
+				//After 365: These are for new auto recall appointment functions and film/SRP indicators
+				command = "INSERT INTO preference VALUES('RecallPatternChild','')";
+				General.NonQEx(command);
+				command = "INSERT INTO preference VALUES('RecallProceduresChild','')";
+				General.NonQEx(command);
+				command = "INSERT INTO preference VALUES('RecallPatternPerio','')";
+				General.NonQEx(command);
+				command = "INSERT INTO preference VALUES('RecallProceduresPerio','')";
+				General.NonQEx(command);
+				command = "INSERT INTO preference VALUES('RecallSRPProcs','')";
+				General.NonQEx(command);
+				command = "INSERT INTO preference VALUES('RecallOtherPerioProcs','')";
+				General.NonQEx(command);
+				command = "INSERT INTO preference VALUES('RecallPerioMaintProc','')";
+				General.NonQEx(command);
+				command = "INSERT INTO preference VALUES('RecallFMXPanoProc','')";
+				General.NonQEx(command);
+				command = "INSERT INTO preference VALUES('RecallFMXPanoYrInterval','4')";
+				General.NonQEx(command);
+				if ((((Pref)PrefB.HList["RecallBW"]).ValueString) == "") {
+					command = "INSERT INTO preference VALUES('RecallDisableAutoFilms','1')";
+				}
+				else {
+					command = "INSERT INTO preference VALUES('RecallDisableAutoFilms','0')";
+				}
+				General.NonQEx(command);
+				command = "INSERT INTO preference VALUES('RecallDisablePerioAlt','1')";
+				General.NonQEx(command);
 
 
 
