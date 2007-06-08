@@ -17,6 +17,10 @@ namespace OpenDentBusiness {
 		public string Description;
 		///<summary>Enum:ImageType This is so that an image can be properly associated with the mount in the image module tree-view.</summary>
 		public ImageType ImgType;
+		///<summary>The static width of the mount, in pixels.</summary>
+		public int Width;
+		///<summary>The static height of the mount, in pixels.</summary>
+		public int Height;
 
 		///<summary></summary>
 		public Mount Copy() {
@@ -26,6 +30,8 @@ namespace OpenDentBusiness {
 			m.DocCategory=DocCategory;
 			m.DateCreated=DateCreated;
 			m.Description=Description;
+			m.Width=Width;
+			m.Height=Height;
 			return m;
 		}
 

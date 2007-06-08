@@ -8,14 +8,16 @@ namespace OpenDental {
 	class Mounts {
 
 		public static int Insert(Mount mount){
-			string command="INSERT INTO mount (MountNum,PatNum,DocCategory,DateCreated,Description,ImgType) VALUES ("
+			string command="INSERT INTO mount (MountNum,PatNum,DocCategory,DateCreated,Description,ImgType,Width,Height) VALUES ("
 				+"'"+POut.PInt(mount.MountNum)+"',"
 				+"'"+POut.PInt(mount.PatNum)+"',"
 				+"'"+POut.PInt(mount.DocCategory)+"',"
 				+POut.PDate(mount.DateCreated)+","
 				+"'"+POut.PString(mount.Description)+"',"
-				+"'"+POut.PInt((int)mount.ImgType)+"')";
-			return General.NonQEx(command);
+				+"'"+POut.PInt((int)mount.ImgType)+"',"
+				+"'"+POut.PInt(mount.Width)+"',"
+				+"'"+POut.PInt(mount.Height)+"')";
+			return General.NonQEx(command,true);
 		}
 
 		public static int Update(Mount mount){
@@ -24,7 +26,9 @@ namespace OpenDental {
 				+"DocCategory='"+POut.PInt(mount.DocCategory)+"',"
 				+"DateCreated="+POut.PDate(mount.DateCreated)+","
 				+"Description='"+POut.PString(mount.Description)+"',"
-				+"ImgType='"+POut.PInt((int)mount.ImgType)+"' "
+				+"ImgType='"+POut.PInt((int)mount.ImgType)+"',"
+				+"Width='"+POut.PInt(mount.Width)+"',"
+				+"Height='"+POut.PInt(mount.Height)+"' "
 				+"WHERE MountNum='"+POut.PInt(mount.MountNum)+"'";
 			return General.NonQEx(command);
 		}
@@ -43,6 +47,8 @@ namespace OpenDental {
 			mount.DateCreated=PIn.PDate(mountRow["DateCreated"].ToString());
 			mount.Description=PIn.PString(mountRow["Description"].ToString());
 			mount.ImgType=(ImageType)PIn.PInt(mountRow["ImgType"].ToString());
+			mount.Width=PIn.PInt(mountRow["Width"].ToString());
+			mount.Height=PIn.PInt(mountRow["Height"].ToString());
 			return mount;
 		}
 

@@ -232,14 +232,17 @@ namespace OpenDental{
 			if(mountItems==null || mountItems.Length<1){
 				return new Document[0];
 			}
-			string command="SELECT * FROM document WHERE ";
+			Document[] documents=new Document[mountItems.Length];
 			for(int i=0;i<mountItems.Length;i++){
-				command+="MountItemNum='"+POut.PInt(mountItems[i].MountItemNum)+"' ";
-				if(i<mountItems.Length-1){
-					command+="OR ";
+				string command="SELECT * FROM document WHERE MountItemNum='"+POut.PInt(mountItems[i].MountItemNum)+"'";
+				DataTable table=General.GetTable(command);
+				if(table.Rows.Count<1){
+					documents[i]=null;
+				}else{
+					documents[i]=Fill(table)[0];
 				}
 			}
-			return Fill(General.GetTable(command));
+			return documents;
 		}
 
 		///<summary>Any filenames mentioned in the fileList which are not attached to the given patient are properly attached to that patient. Returns the total number of documents that were newly attached to the patient.</summary>
