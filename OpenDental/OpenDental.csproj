@@ -164,6 +164,7 @@
     <Compile Include="Data Interface\CanadianExtracts.cs" />
     <Compile Include="Data Interface\ChartModule.cs" />
     <Compile Include="Data Interface\CanadianNetworks.cs" />
+    <Compile Include="Data Interface\ReqStudents.cs" />
     <Compile Include="Data Interface\ReqNeededs.cs" />
     <Compile Include="Data Interface\LabTurnarounds.cs" />
     <Compile Include="Data Interface\LabCases.cs" />
@@ -391,6 +392,12 @@
     </Compile>
     <Compile Include="Forms Reports\Queries.cs" />
     <Compile Include="Forms\BasicTemplate.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormReqStudentOne.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormReqStudentsMany.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\FormReportsMore.cs">
@@ -1316,6 +1323,14 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\BasicTemplate.resx">
       <DependentUpon>BasicTemplate.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormReqStudentOne.resx">
+      <DependentUpon>FormReqStudentOne.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormReqStudentsMany.resx">
+      <DependentUpon>FormReqStudentsMany.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormReportsMore.resx">

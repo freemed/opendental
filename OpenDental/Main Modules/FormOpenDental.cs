@@ -203,6 +203,7 @@ namespace OpenDental{
 		private MenuItem menuItemGraphics;
 		private MenuItem menuItemLabCases;
 		private MenuItem menuItemRequirementsNeeded;
+		private MenuItem menuItemReqStudents;
 		private string dconnStr;
 
 		///<summary></summary>
@@ -351,6 +352,7 @@ namespace OpenDental{
 			this.menuItemScreening = new System.Windows.Forms.MenuItem();
 			this.menuItemTerminal = new System.Windows.Forms.MenuItem();
 			this.menuItemTerminalManager = new System.Windows.Forms.MenuItem();
+			this.menuItemReqStudents = new System.Windows.Forms.MenuItem();
 			this.menuItemHelp = new System.Windows.Forms.MenuItem();
 			this.menuItemHelpWindows = new System.Windows.Forms.MenuItem();
 			this.menuItemHelpContents = new System.Windows.Forms.MenuItem();
@@ -1054,7 +1056,8 @@ namespace OpenDental{
             this.menuItemTranslation,
             this.menuItemScreening,
             this.menuItemTerminal,
-            this.menuItemTerminalManager});
+            this.menuItemTerminalManager,
+            this.menuItemReqStudents});
 			this.menuItemTools.Shortcut = System.Windows.Forms.Shortcut.CtrlU;
 			this.menuItemTools.Text = "&Tools";
 			// 
@@ -1161,6 +1164,12 @@ namespace OpenDental{
 			this.menuItemTerminalManager.Index = 13;
 			this.menuItemTerminalManager.Text = "Terminal Manager";
 			this.menuItemTerminalManager.Click += new System.EventHandler(this.menuItemTerminalManager_Click);
+			// 
+			// menuItemReqStudents
+			// 
+			this.menuItemReqStudents.Index = 14;
+			this.menuItemReqStudents.Text = "Student Requirements";
+			this.menuItemReqStudents.Click += new System.EventHandler(this.menuItemReqStudents_Click);
 			// 
 			// menuItemHelp
 			// 
@@ -3002,6 +3011,11 @@ namespace OpenDental{
 			FormT.Show();
 		}
 
+		private void menuItemReqStudents_Click(object sender,EventArgs e) {
+			//FormReqStudent FormR=new FormReqStudent();
+			//FormR.ShowDialog();
+		}
+
 		private void menuItemTranslation_Click(object sender, System.EventArgs e) {
 			if(!Security.IsAuthorized(Permissions.Setup)){
 				return;
@@ -3177,6 +3191,8 @@ namespace OpenDental{
 				return false;
 			}
 		}
+
+	
 
 		
 
