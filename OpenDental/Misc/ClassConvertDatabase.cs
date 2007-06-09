@@ -5301,7 +5301,7 @@ namespace OpenDental{
 				General.NonQEx(command);
 				command = "INSERT INTO preference VALUES('RecallFMXPanoProc','')";
 				General.NonQEx(command);
-				command = "INSERT INTO preference VALUES('RecallFMXPanoYrInterval','4')";
+				command = "INSERT INTO preference VALUES('RecallFMXPanoYrInterval','5')";
 				General.NonQEx(command);
 				if ((((Pref)PrefB.HList["RecallBW"]).ValueString) == "") {
 					command = "INSERT INTO preference VALUES('RecallDisableAutoFilms','1')";

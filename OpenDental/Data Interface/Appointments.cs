@@ -677,21 +677,52 @@ namespace OpenDental{
 			}
 			AptCur.ClinicNum=patCur.ClinicNum;
 			string[] procs=PrefB.GetString("RecallProcedures").Split(',');
-			if(PrefB.GetString("RecallBW")!=""){//BWs
+			
+			if (PrefB.GetBool("RecallDisableAutoFilms")==false) {//Films
 				bool dueBW=true;
+				bool dueFMXPano=true;
+				bool dueBW_w_FMXPano=false;
 				//DateTime dueDate=PIn.PDate(listFamily.Items[
 				for(int i=0;i<procList.Length;i++){//loop through all procedures for this pt.
-					//if any BW found within last year, then dueBW=false.
-					if(PrefB.GetString("RecallBW")==ProcedureCodes.GetStringProcCode(procList[i].CodeNum)
-						&& recallCur.DateDue.Year>1880
-						&& procList[i].ProcDate > recallCur.DateDue.AddYears(-1)){
-						dueBW=false;
+					//if enabled, and any BW/Panos not found within last specifed time period, then dueFMXPano=true and dueBW=false because we don't want to take both.
+					if(PrefB.GetInt("RecallFMXPanoYrInterval").ToString()!=""){
+						if(PrefB.GetString("RecallFMXPanoProc")==ProcedureCodes.GetStringProcCode(procList[i].CodeNum)
+							&& procList[i].ProcStatus.ToString()=="C"
+							&& recallCur.DateDue.Year>1880
+							&& procList[i].ProcDate > recallCur.DateDue.AddYears(-(PrefB.GetInt("RecallFMXPanoYrInterval")))){
+								dueFMXPano = false;
+								if (procList[i].ProcDate > recallCur.DateDue.AddYears(-1)){
+									dueBW=false;
+								}
+								else{//FMXPano between specified interval and 1 year...BW should be due
+									dueBW_w_FMXPano=true;
+								}
+						}
+						//if any BW found within last year, then dueBW=false, dueBW_w_FMXPano=false.
+						if(PrefB.GetString("RecallBW")==ProcedureCodes.GetStringProcCode(procList[i].CodeNum)
+							&& procList[i].ProcStatus.ToString()=="C"
+							&& recallCur.DateDue.Year>1880
+							&& procList[i].ProcDate > recallCur.DateDue.AddYears(-1)){
+								dueFMXPano = false;
+								dueBW=false;
+								dueBW_w_FMXPano=false;
+						}
+
 					}
 				}
-				if(dueBW){
+				//if FMXPano has been taken instead of BW, then we don't need any new films
+				if (dueFMXPano==true |!dueBW_w_FMXPano){
+					dueBW=false;
+				}
+				if (dueBW_w_FMXPano){
+					dueBW=true;
+					dueFMXPano=false;
+				}
+				if(dueBW | dueFMXPano){
 					string[] procs2=new string[procs.Length+1];
 					procs.CopyTo(procs2,0);
-					procs2[procs2.Length-1]=PrefB.GetString("RecallBW");
+					if (dueBW) procs2[procs2.Length-1]=PrefB.GetString("RecallBW");
+					else procs2[procs2.Length - 1] = PrefB.GetString("RecallFMXPanoProc");
 					procs=new string[procs2.Length];
 					procs2.CopyTo(procs,0);
 				}
