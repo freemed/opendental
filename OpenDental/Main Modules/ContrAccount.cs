@@ -1152,8 +1152,6 @@ namespace OpenDental {
 			gridProg.Height=panelProgNotes.Height;
 			panelBoldBalance.Left=329;
 			panelBoldBalance.Top=29;
-
-
 			if(panelSplitter.Top>=400) {//Height>=446){
 				textUrgFinNote.Height=86;//6 lines
 			}

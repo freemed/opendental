@@ -1399,6 +1399,9 @@ namespace OpenDental{
 		///<summary>It is entirely acceptable to pass in a null value for PatCur.  In that case, no patient name will show.</summary>
 		public static string GetMainTitle(Patient PatCur){
 			string retVal=PrefB.GetString("MainWindowTitle");
+			if(Security.CurUser!=null) {
+				retVal+=" {"+Security.CurUser.UserName+"}";
+			}
 			if(PatCur==null){
 				return retVal;
 			}
@@ -1416,6 +1419,12 @@ namespace OpenDental{
 		///<summary>A simpler version which does not require as much data.</summary>
 		public static string GetMainTitle(string nameLF,int patNum,string chartNumber) {
 			string retVal=PrefB.GetString("MainWindowTitle");
+			if(Security.CurUser!=null){
+				retVal+=" {"+Security.CurUser.UserName+"}";
+			}
+			if(patNum==0 || patNum==-1){
+				return retVal;
+			}
 			retVal+=" - "+nameLF;
 			if(PrefB.GetInt("ShowIDinTitleBar")==1) {
 				retVal+=" - "+patNum.ToString();

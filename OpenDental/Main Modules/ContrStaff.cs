@@ -638,6 +638,7 @@ namespace OpenDental{
 		}
 
 		private void RefreshModuleScreen(){
+			ParentForm.Text=Patients.GetMainTitle(null);
 			textTime.Text=(DateTime.Now+TimeDelta).ToLongTimeString();
 			FillEmps();
 			FillMessageDefs();

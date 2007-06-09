@@ -5312,7 +5312,42 @@ namespace OpenDental{
 				General.NonQEx(command);
 				command = "INSERT INTO preference VALUES('RecallDisablePerioAlt','1')";
 				General.NonQEx(command);
-
+				//After r366
+				if(FormChooseDatabase.DBtype==DatabaseType.MySql) {
+					command="DROP TABLE IF EXISTS reqstudent";
+					General.NonQEx(command);
+					command=@"CREATE TABLE reqstudent(
+						ReqStudentNum int NOT NULL auto_increment,
+						ReqNeededNum int NOT NULL,
+						Descript varchar(255),
+						SchoolCourseNum int NOT NULL,
+						ProvNum int NOT NULL,
+						AptNum int NOT NULL,
+						PatNum int NOT NULL,
+						InstructorNum int NOT NULL,
+						GradePoint float NOT NULL,
+						PRIMARY KEY (ReqStudentNum),
+						INDEX (ReqNeededNum),
+						INDEX (ProvNum)
+						) DEFAULT CHARSET=utf8";
+				}
+				else {//Oracle.
+					command=@"CREATE TABLE reqstudent(
+						ReqStudentNum int NOT NULL,
+						ReqNeededNum int NOT NULL,
+						Descript varchar(255),
+						SchoolCourseNum int NOT NULL,
+						ProvNum int NOT NULL,
+						AptNum int NOT NULL,
+						PatNum int NOT NULL,
+						InstructorNum int NOT NULL,
+						GradePoint float NOT NULL,
+						PRIMARY KEY (ReqStudentNum),
+						INDEX (ReqNeededNum),
+						INDEX (ProvNum)
+						)";
+				}
+				General.NonQEx(command);
 
 
 

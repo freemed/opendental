@@ -1294,14 +1294,14 @@ namespace OpenDental{
 			this.myOutlookBar.ImageList = this.imageList32;
 			this.myOutlookBar.Location = new System.Drawing.Point(0,0);
 			this.myOutlookBar.Name = "myOutlookBar";
-			this.myOutlookBar.Size = new System.Drawing.Size(51,710);
+			this.myOutlookBar.Size = new System.Drawing.Size(51,689);
 			this.myOutlookBar.TabIndex = 18;
 			this.myOutlookBar.Text = "outlookBar1";
 			this.myOutlookBar.ButtonClicked += new OpenDental.ButtonClickedEventHandler(this.myOutlookBar_ButtonClicked);
 			// 
 			// FormOpenDental
 			// 
-			this.ClientSize = new System.Drawing.Size(982,710);
+			this.ClientSize = new System.Drawing.Size(982,689);
 			this.Controls.Add(this.ContrManage2);
 			this.Controls.Add(this.ContrChart2);
 			this.Controls.Add(this.ContrDocs2);
@@ -3012,8 +3012,19 @@ namespace OpenDental{
 		}
 
 		private void menuItemReqStudents_Click(object sender,EventArgs e) {
-			//FormReqStudent FormR=new FormReqStudent();
-			//FormR.ShowDialog();
+			Provider prov=Providers.GetProv(Security.CurUser.ProvNum);
+			if(prov!=null && prov.SchoolClassNum!=0){//if a student is logged in
+				//the student always has permission to view their own requirements
+				FormReqStudentOne FormO=new FormReqStudentOne();
+				FormO.ProvNum=prov.ProvNum;
+				FormO.ShowDialog();
+				return;
+			}
+			if(!Security.IsAuthorized(Permissions.Setup)) {
+				return;
+			}
+			FormReqStudentsMany FormM=new FormReqStudentsMany();
+			FormM.ShowDialog();	
 		}
 
 		private void menuItemTranslation_Click(object sender, System.EventArgs e) {

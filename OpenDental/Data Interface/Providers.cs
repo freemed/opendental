@@ -198,6 +198,9 @@ namespace OpenDental{
 
 		///<summary>Gets a provider from the List.  If provnum is not valid, then it returns null.</summary>
 		public static Provider GetProv(int provNum) {
+			if(provNum==0){
+				return null;
+			}
 			for(int i=0;i<ListLong.Length;i++) {
 				if(ListLong[i].ProvNum==provNum) {
 					return ListLong[i].Copy();

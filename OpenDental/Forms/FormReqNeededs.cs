@@ -19,6 +19,8 @@ namespace OpenDental{
 		private Label label1;
 		private Label label2;
 		private ComboBox comboCourse;
+		private OpenDental.UI.Button butSynch;
+		private Label label3;
 		private DataTable table;
 		
 		///<summary></summary>
@@ -48,6 +50,8 @@ namespace OpenDental{
 			this.butAdd = new OpenDental.UI.Button();
 			this.gridMain = new OpenDental.UI.ODGrid();
 			this.butClose = new OpenDental.UI.Button();
+			this.butSynch = new OpenDental.UI.Button();
+			this.label3 = new System.Windows.Forms.Label();
 			this.SuspendLayout();
 			// 
 			// label1
@@ -98,7 +102,7 @@ namespace OpenDental{
 			this.butAdd.CornerRadius = 4F;
 			this.butAdd.Image = global::OpenDental.Properties.Resources.Add;
 			this.butAdd.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butAdd.Location = new System.Drawing.Point(511,507);
+			this.butAdd.Location = new System.Drawing.Point(511,392);
 			this.butAdd.Name = "butAdd";
 			this.butAdd.Size = new System.Drawing.Size(82,26);
 			this.butAdd.TabIndex = 10;
@@ -125,7 +129,6 @@ namespace OpenDental{
 			this.butClose.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butClose.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butClose.CornerRadius = 4F;
-			this.butClose.DialogResult = System.Windows.Forms.DialogResult.Cancel;
 			this.butClose.Location = new System.Drawing.Point(511,628);
 			this.butClose.Name = "butClose";
 			this.butClose.Size = new System.Drawing.Size(82,26);
@@ -133,10 +136,36 @@ namespace OpenDental{
 			this.butClose.Text = "&Close";
 			this.butClose.Click += new System.EventHandler(this.butClose_Click);
 			// 
+			// butSynch
+			// 
+			this.butSynch.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butSynch.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.butSynch.Autosize = true;
+			this.butSynch.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butSynch.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butSynch.CornerRadius = 4F;
+			this.butSynch.Location = new System.Drawing.Point(511,449);
+			this.butSynch.Name = "butSynch";
+			this.butSynch.Size = new System.Drawing.Size(82,26);
+			this.butSynch.TabIndex = 19;
+			this.butSynch.Text = "Synch";
+			this.butSynch.Click += new System.EventHandler(this.butSynch_Click);
+			// 
+			// label3
+			// 
+			this.label3.Location = new System.Drawing.Point(455,490);
+			this.label3.Name = "label3";
+			this.label3.Size = new System.Drawing.Size(157,84);
+			this.label3.TabIndex = 20;
+			this.label3.Text = "Synch after editing the requirements needed list.  This makes the requirements fo" +
+    "r each student match this list.";
+			// 
 			// FormReqNeededs
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.ClientSize = new System.Drawing.Size(614,670);
+			this.Controls.Add(this.label3);
+			this.Controls.Add(this.butSynch);
 			this.Controls.Add(this.label2);
 			this.Controls.Add(this.comboCourse);
 			this.Controls.Add(this.label1);
@@ -258,9 +287,15 @@ namespace OpenDental{
 			FillGrid();
 		}
 
+		private void butSynch_Click(object sender,EventArgs e) {
+
+		}
+
 		private void butClose_Click(object sender, System.EventArgs e) {
 			Close();
 		}
+
+		
 
 
 
