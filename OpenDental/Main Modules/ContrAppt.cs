@@ -3315,7 +3315,7 @@ namespace OpenDental{
 			for(int i=0;i<providers.Length;i++){
 				providers[i]=Providers.List[listProviders.SelectedIndices[i]].ProvNum;
 			}
-			//the result set is never empty
+			//the result might be empty
 			SearchResults=Appointments.GetSearchResults(PIn.PInt(PinApptSingle.DataRoww["AptNum"].ToString()),
 				afterDate,providers,10,beforeTime,afterTime);
 			listSearchResults.Items.Clear();
@@ -3323,8 +3323,10 @@ namespace OpenDental{
 				listSearchResults.Items.Add(
 					SearchResults[i].ToString("ddd")+"\t"+SearchResults[i].ToShortDateString()+"     "+SearchResults[i].ToShortTimeString());
 			}
-			listSearchResults.SetSelected(0,true);
-			Appointments.DateSelected=SearchResults[0];
+			if(listSearchResults.Items.Count>0){
+				listSearchResults.SetSelected(0,true);
+				Appointments.DateSelected=SearchResults[0];
+			}
 			SetWeeklyView(false);//jump to that day.
 			Cursor=Cursors.Default;
 			//scroll to make visible?

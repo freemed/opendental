@@ -493,7 +493,7 @@ namespace OpenDental{
 			return General.GetTable(command);
 		}
 
-		///<summary>Used by appt search function.  Returns the next available time for the appointment.  Starts searching on lastSlot, which can be tonight at midnight for the first search.  Then, each subsequent search will start at the time of the previous search plus the length of the appointment.  Provider array cannot be length 0.  Might return array of 0 if it goes more than 1 year into the future.</summary>
+		///<summary>Used by appt search function.  Returns the next available time for the appointment.  Starts searching on lastSlot, which can be tonight at midnight for the first search.  Then, each subsequent search will start at the time of the previous search plus the length of the appointment.  Provider array cannot be length 0.  Might return array of 0 if it goes more than 2 years into the future.</summary>
 		public static DateTime[] GetSearchResults(int aptNum,DateTime afterDate,int[] providers,int resultCount,
 			TimeSpan beforeTime,TimeSpan afterTime)
 		{

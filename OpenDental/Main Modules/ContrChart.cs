@@ -449,7 +449,7 @@ namespace OpenDental{
 			// radioEntryR
 			// 
 			this.radioEntryR.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.radioEntryR.Location = new System.Drawing.Point(8,76);
+			this.radioEntryR.Location = new System.Drawing.Point(2,76);
 			this.radioEntryR.Name = "radioEntryR";
 			this.radioEntryR.Size = new System.Drawing.Size(75,16);
 			this.radioEntryR.TabIndex = 4;
@@ -459,7 +459,7 @@ namespace OpenDental{
 			// radioEntryC
 			// 
 			this.radioEntryC.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.radioEntryC.Location = new System.Drawing.Point(8,31);
+			this.radioEntryC.Location = new System.Drawing.Point(2,31);
 			this.radioEntryC.Name = "radioEntryC";
 			this.radioEntryC.Size = new System.Drawing.Size(74,16);
 			this.radioEntryC.TabIndex = 3;
@@ -469,7 +469,7 @@ namespace OpenDental{
 			// radioEntryEO
 			// 
 			this.radioEntryEO.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.radioEntryEO.Location = new System.Drawing.Point(8,61);
+			this.radioEntryEO.Location = new System.Drawing.Point(2,61);
 			this.radioEntryEO.Name = "radioEntryEO";
 			this.radioEntryEO.Size = new System.Drawing.Size(72,16);
 			this.radioEntryEO.TabIndex = 2;
@@ -479,10 +479,10 @@ namespace OpenDental{
 			// radioEntryEC
 			// 
 			this.radioEntryEC.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.radioEntryEC.Font = new System.Drawing.Font("Microsoft Sans Serif",6.75F,System.Drawing.FontStyle.Regular,System.Drawing.GraphicsUnit.Point,((byte)(0)));
-			this.radioEntryEC.Location = new System.Drawing.Point(8,46);
+			this.radioEntryEC.Font = new System.Drawing.Font("Microsoft Sans Serif",8.25F,System.Drawing.FontStyle.Regular,System.Drawing.GraphicsUnit.Point,((byte)(0)));
+			this.radioEntryEC.Location = new System.Drawing.Point(2,46);
 			this.radioEntryEC.Name = "radioEntryEC";
-			this.radioEntryEC.Size = new System.Drawing.Size(77,16);
+			this.radioEntryEC.Size = new System.Drawing.Size(85,16);
 			this.radioEntryEC.TabIndex = 1;
 			this.radioEntryEC.Text = "ExistCurProv";
 			this.radioEntryEC.CheckedChanged += new System.EventHandler(this.radioEntryEC_CheckedChanged);
@@ -491,7 +491,7 @@ namespace OpenDental{
 			// 
 			this.radioEntryTP.Checked = true;
 			this.radioEntryTP.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.radioEntryTP.Location = new System.Drawing.Point(8,16);
+			this.radioEntryTP.Location = new System.Drawing.Point(2,16);
 			this.radioEntryTP.Name = "radioEntryTP";
 			this.radioEntryTP.Size = new System.Drawing.Size(77,16);
 			this.radioEntryTP.TabIndex = 0;
@@ -1063,7 +1063,6 @@ namespace OpenDental{
 			// 
 			// label1
 			// 
-			this.label1.AutoSize = true;
 			this.label1.Location = new System.Drawing.Point(3,65);
 			this.label1.Name = "label1";
 			this.label1.Size = new System.Drawing.Size(78,13);
@@ -1280,7 +1279,6 @@ namespace OpenDental{
 			// 
 			// label24
 			// 
-			this.label24.AutoSize = true;
 			this.label24.Location = new System.Drawing.Point(3,103);
 			this.label24.Name = "label24";
 			this.label24.Size = new System.Drawing.Size(50,13);
@@ -1289,7 +1287,6 @@ namespace OpenDental{
 			// 
 			// label23
 			// 
-			this.label23.AutoSize = true;
 			this.label23.Location = new System.Drawing.Point(4,1);
 			this.label23.Name = "label23";
 			this.label23.Size = new System.Drawing.Size(83,13);
@@ -2324,7 +2321,6 @@ namespace OpenDental{
 			this.tabEnterTx.ResumeLayout(false);
 			this.tabEnterTx.PerformLayout();
 			this.panelQuickButtons.ResumeLayout(false);
-			this.panelQuickButtons.PerformLayout();
 			this.tabMissing.ResumeLayout(false);
 			this.groupBox1.ResumeLayout(false);
 			this.tabMovements.ResumeLayout(false);
