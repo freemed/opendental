@@ -657,16 +657,6 @@ namespace OpenDental{
 			Appointment AptCur=new Appointment();
 			AptCur.PatNum=patCur.PatNum;
 			AptCur.AptStatus=ApptStatus.Scheduled;
-			//convert time pattern to 5 minute increment
-			StringBuilder savePattern=new StringBuilder();
-			for(int i=0;i<PrefB.GetString("RecallPattern").Length;i++){
-				savePattern.Append(PrefB.GetString("RecallPattern").Substring(i,1));
-				savePattern.Append(PrefB.GetString("RecallPattern").Substring(i,1));
-				if(PrefB.GetInt("AppointmentTimeIncrement")==15){
-					savePattern.Append(PrefB.GetString("RecallPattern").Substring(i,1));
-				}
-			}
-			AptCur.Pattern=savePattern.ToString();
 			if(patCur.PriProv==0)
 				AptCur.ProvNum=PrefB.GetInt("PracticeDefaultProv");
 			else
@@ -676,42 +666,100 @@ namespace OpenDental{
 				AptCur.IsHygiene=true;
 			}
 			AptCur.ClinicNum=patCur.ClinicNum;
-			string[] procs=PrefB.GetString("RecallProcedures").Split(',');
-			
-			if (PrefB.GetBool("RecallDisableAutoFilms")==false) {//Films
+			bool perioPt=false;
+			StringBuilder savePattern=new StringBuilder();
+			string[] procs;
+			if (patCur.Birthdate.AddYears(12) < recallCur.DateDue) {//pt is over 12 at recall date)
+				if (!PrefB.GetBool("RecallDisablePerioAlt")) {
+					//if pt is perio pt RecallPerioMaintProc RecallOtherPerioProcs RecallSRPProcs
+					string[] PerioProc=(PrefB.GetString("RecallOtherPerioProcs")+","+PrefB.GetString("RecallPerioMaintProc")+","+PrefB.GetString("RecallSRPProcs")).Split(',');
+					for (int q=0;q<PerioProc.Length;q++) {//see if pt has had any perio procs in the past
+						for (int i=0;i<procList.Length;i++) {
+							if (PerioProc[q]==ProcedureCodes.GetStringProcCode(procList[i].CodeNum)
+								&&procList[i].ProcStatus.ToString()=="C") {
+								perioPt=true;
+							}
+						}
+					}
+				}
+				if (perioPt) {
+					procs=PrefB.GetString("RecallProceduresPerio").Split(',');
+					//convert time pattern to 5 minute increment
+					for(int i=0;i<PrefB.GetString("RecallPatternPerio").Length;i++){
+						savePattern.Append(PrefB.GetString("RecallPatternPerio").Substring(i,1));
+						savePattern.Append(PrefB.GetString("RecallPatternPerio").Substring(i,1));
+						if(PrefB.GetInt("AppointmentTimeIncrement")==15){
+						savePattern.Append(PrefB.GetString("RecallPatternPerio").Substring(i,1));
+						}
+					}
+				}
+				else {//not perio pt
+					procs=PrefB.GetString("RecallProcedures").Split(',');
+					//convert time pattern to 5 minute increment
+					for(int i=0;i<PrefB.GetString("RecallPattern").Length;i++){
+						savePattern.Append(PrefB.GetString("RecallPattern").Substring(i,1));
+						savePattern.Append(PrefB.GetString("RecallPattern").Substring(i,1));
+						if(PrefB.GetInt("AppointmentTimeIncrement")==15){
+						savePattern.Append(PrefB.GetString("RecallPattern").Substring(i,1));
+						}
+					}
+				}
+			}
+			else {//child under 12 years
+				procs=PrefB.GetString("RecallProceduresChild").Split(',');
+				for (int i=0;i<PrefB.GetString("RecallPatternChild").Length;i++) {
+					savePattern.Append(PrefB.GetString("RecallPatternChild").Substring(i, 1));
+					savePattern.Append(PrefB.GetString("RecallPatternChild").Substring(i, 1));
+					if (PrefB.GetInt("AppointmentTimeIncrement")==15) {
+						savePattern.Append(PrefB.GetString("RecallPatternChild").Substring(i, 1));
+					}
+				}
+			}
+			AptCur.Pattern=savePattern.ToString();
+
+			if (PrefB.GetBool("RecallDisableAutoFilms")==false) {//Add Films
 				bool dueBW=true;
 				bool dueFMXPano=true;
 				bool dueBW_w_FMXPano=false;
+				bool skipFMXPano=false;
 				//DateTime dueDate=PIn.PDate(listFamily.Items[
 				for(int i=0;i<procList.Length;i++){//loop through all procedures for this pt.
-					//if enabled, and any BW/Panos not found within last specifed time period, then dueFMXPano=true and dueBW=false because we don't want to take both.
-					if(PrefB.GetInt("RecallFMXPanoYrInterval").ToString()!=""){
-						if(PrefB.GetString("RecallFMXPanoProc")==ProcedureCodes.GetStringProcCode(procList[i].CodeNum)
-							&& procList[i].ProcStatus.ToString()=="C"
-							&& recallCur.DateDue.Year>1880
-							&& procList[i].ProcDate > recallCur.DateDue.AddYears(-(PrefB.GetInt("RecallFMXPanoYrInterval")))){
-								dueFMXPano = false;
-								if (procList[i].ProcDate > recallCur.DateDue.AddYears(-1)){
-									dueBW=false;
-								}
-								else{//FMXPano between specified interval and 1 year...BW should be due
-									dueBW_w_FMXPano=true;
-								}
-						}
-						//if any BW found within last year, then dueBW=false, dueBW_w_FMXPano=false.
-						if(PrefB.GetString("RecallBW")==ProcedureCodes.GetStringProcCode(procList[i].CodeNum)
-							&& procList[i].ProcStatus.ToString()=="C"
-							&& recallCur.DateDue.Year>1880
-							&& procList[i].ProcDate > recallCur.DateDue.AddYears(-1)){
-								dueFMXPano = false;
+					//if enabled, and any BW/Panos not found within last specifed time period, then 
+					//dueFMXPano=true and dueBW=false because we don't want to take both.
+					//also skip this is pt is less than 18 years old.
+					//later, might add here check for FMX freq based on ins information
+					if ((PrefB.GetInt("RecallFMXPanoYrInterval").ToString() != "") && (patCur.Birthdate.AddYears(18) < recallCur.DateDue)) {
+						if (PrefB.GetString("RecallFMXPanoProc") == ProcedureCodes.GetStringProcCode(procList[i].CodeNum)
+							&& (procList[i].ProcStatus.ToString() == "C" | procList[i].ProcStatus.ToString() == "EO")
+							&& recallCur.DateDue.Year > 1880
+							&& procList[i].ProcDate > recallCur.DateDue.AddYears(-(PrefB.GetInt("RecallFMXPanoYrInterval")))) {
+							dueFMXPano=false;
+							if (procList[i].ProcDate > recallCur.DateDue.AddYears(-1)) {//if FMX was taken w/ year, then we don't need BW's either
 								dueBW=false;
-								dueBW_w_FMXPano=false;
+							}
+							else {//FMXPano between specified interval and 1 year...BW should be due
+								dueBW_w_FMXPano=true;
+							}
 						}
-
 					}
+					else { //entry is blank or pt is <12 years old, so don't even try to include FMX
+						dueFMXPano=false;
+						skipFMXPano=true;
+					}
+					//if any BW found within last year, then dueBW=false, dueBW_w_FMXPano=false.
+					if(PrefB.GetString("RecallBW")==ProcedureCodes.GetStringProcCode(procList[i].CodeNum)
+						&& (procList[i].ProcStatus.ToString() == "C" | procList[i].ProcStatus.ToString() == "EO")
+						&& recallCur.DateDue.Year > 1880
+						&& procList[i].ProcDate > recallCur.DateDue.AddYears(-1)){
+							dueFMXPano=false;
+							dueBW=false;
+							dueBW_w_FMXPano=false;
+					}
+
+					
 				}
 				//if FMXPano has been taken instead of BW, then we don't need any new films
-				if (dueFMXPano==true |!dueBW_w_FMXPano){
+				if (dueFMXPano==true | (!dueBW_w_FMXPano && !skipFMXPano)){
 					dueBW=false;
 				}
 				if (dueBW_w_FMXPano){
@@ -722,7 +770,7 @@ namespace OpenDental{
 					string[] procs2=new string[procs.Length+1];
 					procs.CopyTo(procs2,0);
 					if (dueBW) procs2[procs2.Length-1]=PrefB.GetString("RecallBW");
-					else procs2[procs2.Length - 1] = PrefB.GetString("RecallFMXPanoProc");
+					else procs2[procs2.Length-1]=PrefB.GetString("RecallFMXPanoProc");
 					procs=new string[procs2.Length];
 					procs2.CopyTo(procs,0);
 				}

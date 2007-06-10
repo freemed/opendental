@@ -3323,9 +3323,8 @@ namespace OpenDental{
 				listSearchResults.Items.Add(
 					SearchResults[i].ToString("ddd")+"\t"+SearchResults[i].ToShortDateString()+"     "+SearchResults[i].ToShortTimeString());
 			}
-//DrTech--> had to temp comment out next two lines because i couldn't test new recall code 
-			//listSearchResults.SetSelected(0,true);
-			//Appointments.DateSelected=SearchResults[0];
+			listSearchResults.SetSelected(0,true);
+			Appointments.DateSelected=SearchResults[0];
 			SetWeeklyView(false);//jump to that day.
 			Cursor=Cursors.Default;
 			//scroll to make visible?
