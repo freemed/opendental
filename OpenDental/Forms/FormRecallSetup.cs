@@ -155,9 +155,7 @@ namespace OpenDental{
 			this.textPostcardFamMsg = new System.Windows.Forms.TextBox();
 			this.label11 = new System.Windows.Forms.Label();
 			this.groupBox2 = new System.Windows.Forms.GroupBox();
-			this.textDown = new OpenDental.ValidDouble();
 			this.label12 = new System.Windows.Forms.Label();
-			this.textRight = new OpenDental.ValidDouble();
 			this.label13 = new System.Windows.Forms.Label();
 			this.checkGroupFamilies = new System.Windows.Forms.CheckBox();
 			this.label14 = new System.Windows.Forms.Label();
@@ -165,6 +163,8 @@ namespace OpenDental{
 			this.groupBox3 = new System.Windows.Forms.GroupBox();
 			this.textDaysFuture = new OpenDental.ValidNum();
 			this.textDaysPast = new OpenDental.ValidNum();
+			this.textDown = new OpenDental.ValidDouble();
+			this.textRight = new OpenDental.ValidDouble();
 			this.butOK = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
 			this.groupBox1.SuspendLayout();
@@ -252,9 +252,9 @@ namespace OpenDental{
 			this.groupBox1.Controls.Add(this.textBW);
 			this.groupBox1.Controls.Add(this.label3);
 			this.groupBox1.Controls.Add(this.textBox1);
-			this.groupBox1.Location = new System.Drawing.Point(16,12);
+			this.groupBox1.Location = new System.Drawing.Point(7,12);
 			this.groupBox1.Name = "groupBox1";
-			this.groupBox1.Size = new System.Drawing.Size(884,374);
+			this.groupBox1.Size = new System.Drawing.Size(893,374);
 			this.groupBox1.TabIndex = 21;
 			this.groupBox1.TabStop = false;
 			this.groupBox1.Text = "Recall Automation";
@@ -307,9 +307,9 @@ namespace OpenDental{
 			this.groupBox7.Controls.Add(this.label23);
 			this.groupBox7.Controls.Add(this.textSRPProcs);
 			this.groupBox7.Controls.Add(this.label24);
-			this.groupBox7.Location = new System.Drawing.Point(470,219);
+			this.groupBox7.Location = new System.Drawing.Point(463,219);
 			this.groupBox7.Name = "groupBox7";
-			this.groupBox7.Size = new System.Drawing.Size(402,146);
+			this.groupBox7.Size = new System.Drawing.Size(424,146);
 			this.groupBox7.TabIndex = 36;
 			this.groupBox7.TabStop = false;
 			this.groupBox7.Text = "Perio Codes";
@@ -368,9 +368,9 @@ namespace OpenDental{
 			// label24
 			// 
 			this.label24.Font = new System.Drawing.Font("Microsoft Sans Serif",8.25F,System.Drawing.FontStyle.Regular,System.Drawing.GraphicsUnit.Point,((byte)(0)));
-			this.label24.Location = new System.Drawing.Point(5,109);
+			this.label24.Location = new System.Drawing.Point(1,109);
 			this.label24.Name = "label24";
-			this.label24.Size = new System.Drawing.Size(389,33);
+			this.label24.Size = new System.Drawing.Size(422,33);
 			this.label24.TabIndex = 37;
 			this.label24.Text = "These will show in graphical tooth chart. If perio exceptions are enabled, any or" +
     " all of the above codes completed for a patient will trigger perio exceptions in" +
@@ -386,9 +386,9 @@ namespace OpenDental{
 			this.groupBox6.Controls.Add(this.label20);
 			this.groupBox6.Controls.Add(this.label21);
 			this.groupBox6.Controls.Add(this.checkDisablePerioAlt);
-			this.groupBox6.Location = new System.Drawing.Point(17,219);
+			this.groupBox6.Location = new System.Drawing.Point(6,219);
 			this.groupBox6.Name = "groupBox6";
-			this.groupBox6.Size = new System.Drawing.Size(440,146);
+			this.groupBox6.Size = new System.Drawing.Size(452,146);
 			this.groupBox6.TabIndex = 35;
 			this.groupBox6.TabStop = false;
 			this.groupBox6.Text = "Perio Exceptions";
@@ -396,9 +396,9 @@ namespace OpenDental{
 			// label27
 			// 
 			this.label27.Font = new System.Drawing.Font("Microsoft Sans Serif",8.25F,System.Drawing.FontStyle.Regular,System.Drawing.GraphicsUnit.Point,((byte)(0)));
-			this.label27.Location = new System.Drawing.Point(3,108);
+			this.label27.Location = new System.Drawing.Point(2,108);
 			this.label27.Name = "label27";
-			this.label27.Size = new System.Drawing.Size(433,36);
+			this.label27.Size = new System.Drawing.Size(449,36);
 			this.label27.TabIndex = 38;
 			this.label27.Text = "If a patient has a history of perio treatment or maintenance as determined by cod" +
     "es on the right, these values will overide the above adult or child values in re" +
@@ -466,9 +466,9 @@ namespace OpenDental{
 			this.groupBox5.Controls.Add(this.label5);
 			this.groupBox5.Controls.Add(this.label1);
 			this.groupBox5.Controls.Add(this.label2);
-			this.groupBox5.Location = new System.Drawing.Point(16,53);
+			this.groupBox5.Location = new System.Drawing.Point(6,53);
 			this.groupBox5.Name = "groupBox5";
-			this.groupBox5.Size = new System.Drawing.Size(441,95);
+			this.groupBox5.Size = new System.Drawing.Size(451,95);
 			this.groupBox5.TabIndex = 34;
 			this.groupBox5.TabStop = false;
 			this.groupBox5.Text = "Adults";
@@ -529,9 +529,9 @@ namespace OpenDental{
 			this.groupBox4.Controls.Add(this.label6);
 			this.groupBox4.Controls.Add(this.textPatternChild);
 			this.groupBox4.Controls.Add(this.textProcsChild);
-			this.groupBox4.Location = new System.Drawing.Point(470,53);
+			this.groupBox4.Location = new System.Drawing.Point(463,53);
 			this.groupBox4.Name = "groupBox4";
-			this.groupBox4.Size = new System.Drawing.Size(322,95);
+			this.groupBox4.Size = new System.Drawing.Size(329,95);
 			this.groupBox4.TabIndex = 33;
 			this.groupBox4.TabStop = false;
 			this.groupBox4.Text = "Children under 12";
@@ -561,9 +561,9 @@ namespace OpenDental{
 			// 
 			// checkDisableAutoFilms
 			// 
-			this.checkDisableAutoFilms.Location = new System.Drawing.Point(633,153);
+			this.checkDisableAutoFilms.Location = new System.Drawing.Point(604,153);
 			this.checkDisableAutoFilms.Name = "checkDisableAutoFilms";
-			this.checkDisableAutoFilms.Size = new System.Drawing.Size(231,17);
+			this.checkDisableAutoFilms.Size = new System.Drawing.Size(260,17);
 			this.checkDisableAutoFilms.TabIndex = 26;
 			this.checkDisableAutoFilms.Text = "Disable automated film entry to appointment";
 			this.checkDisableAutoFilms.UseVisualStyleBackColor = true;
@@ -698,13 +698,6 @@ namespace OpenDental{
 			this.groupBox2.TabStop = false;
 			this.groupBox2.Text = "Adjust Postcard Position in Inches";
 			// 
-			// textDown
-			// 
-			this.textDown.Location = new System.Drawing.Point(113,47);
-			this.textDown.Name = "textDown";
-			this.textDown.Size = new System.Drawing.Size(73,20);
-			this.textDown.TabIndex = 6;
-			// 
 			// label12
 			// 
 			this.label12.Location = new System.Drawing.Point(49,46);
@@ -713,13 +706,6 @@ namespace OpenDental{
 			this.label12.TabIndex = 5;
 			this.label12.Text = "Down";
 			this.label12.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// textRight
-			// 
-			this.textRight.Location = new System.Drawing.Point(113,22);
-			this.textRight.Name = "textRight";
-			this.textRight.Size = new System.Drawing.Size(73,20);
-			this.textRight.TabIndex = 4;
 			// 
 			// label13
 			// 
@@ -790,6 +776,20 @@ namespace OpenDental{
 			this.textDaysPast.Name = "textDaysPast";
 			this.textDaysPast.Size = new System.Drawing.Size(53,20);
 			this.textDaysPast.TabIndex = 51;
+			// 
+			// textDown
+			// 
+			this.textDown.Location = new System.Drawing.Point(113,47);
+			this.textDown.Name = "textDown";
+			this.textDown.Size = new System.Drawing.Size(73,20);
+			this.textDown.TabIndex = 6;
+			// 
+			// textRight
+			// 
+			this.textRight.Location = new System.Drawing.Point(113,22);
+			this.textRight.Name = "textRight";
+			this.textRight.Size = new System.Drawing.Size(73,20);
+			this.textRight.TabIndex = 4;
 			// 
 			// butOK
 			// 
