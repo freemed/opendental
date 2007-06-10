@@ -70,6 +70,43 @@ namespace OpenDental{
 			General.NonQ(command);
 		}
 
+		///<summary></summary>
+		public static void Synch(int schoolClassNum,int schoolCourseNum){
+			//get list of all reqneededs for the given class and course.
+			DataTable table=Refresh(schoolClassNum,schoolCourseNum);
+			string command;
+			int reqNeededNum;
+			DataTable tStudent;
+			string descript;
+			ReqStudent req;
+			//1. Delete any reqstudents that do not have gradepoint
+			command="DELETE FROM reqstudent "
+				+"WHERE NOT EXISTS(SELECT * FROM reqneeded WHERE reqstudent.ReqNeededNum=reqneeded.ReqNeededNum) "
+				+"AND GradePoint=0";
+			General.NonQ(command);
+			for(int i=0;i<table.Rows.Count;i++){
+				reqNeededNum=PIn.PInt(table.Rows[i]["ReqNeededNum"].ToString());
+				descript=PIn.PString(table.Rows[i]["Descript"].ToString());
+				//2. Update.  Update the description for all students using this requirement.
+				command="UPDATE reqstudent SET Descript='"+POut.PString(descript)+"' "
+					+"WHERE ReqNeededNum="+POut.PInt(reqNeededNum);
+				General.NonQ(command);
+				//3. Insert.  Get list of students that do not have this req.  For each student, insert.
+				command="SELECT ProvNum FROM provider WHERE SchoolClassNum="+POut.PInt(schoolClassNum)
+					+" AND NOT EXISTS(SELECT * FROM reqstudent WHERE reqstudent.ProvNum=provider.ProvNum"
+					+" AND ReqNeededNum="+POut.PInt(reqNeededNum)+")";
+				tStudent=General.GetTable(command);
+				for(int s=0;s<tStudent.Rows.Count;s++){
+					req=new ReqStudent();
+					req.Descript=descript;
+					req.ProvNum=PIn.PInt(tStudent.Rows[s]["ProvNum"].ToString());
+					req.ReqNeededNum=reqNeededNum;
+					req.SchoolCourseNum=PIn.PInt(table.Rows[i]["SchoolCourseNum"].ToString());
+					ReqStudents.Insert(req);
+				}
+			}
+		}
+
 
 		
 

@@ -32,9 +32,11 @@ namespace OpenDental{
 			for(int i=0;i<raw.Rows.Count;i++) {
 				row=table.NewRow();
 				AptDateTime=PIn.PDateT(raw.Rows[i]["AptDateTime"].ToString());
-				row["appointment"]=AptDateTime.ToShortDateString()+" "+AptDateTime.ToShortTimeString()
-					+" "+raw.Rows[i]["ProcDescript"].ToString();
-				row["course"]=raw.Rows[i]["CourseID"].ToString()+" "+raw.Rows[i]["CourseDescript"].ToString();
+				if(AptDateTime.Year>1880){
+					row["appointment"]=AptDateTime.ToShortDateString()+" "+AptDateTime.ToShortTimeString()
+						+" "+raw.Rows[i]["ProcDescript"].ToString();
+				}
+				row["course"]=raw.Rows[i]["CourseID"].ToString();//+" "+raw.Rows[i]["CourseDescript"].ToString();
 				//for now, this is pass/fail
 				if(raw.Rows[i]["GradePoint"].ToString()=="0"){
 					row["grade"]="";
@@ -54,7 +56,8 @@ namespace OpenDental{
 		public static string InUseBy(int reqNeededNum){
 			string command="SELECT LName,FName FROM provider,reqstudent "
 				+"WHERE provider.ProvNum=reqstudent.ProvNum "
-				+"AND reqstudent.ReqNeededNum="+POut.PInt(reqNeededNum);
+				+"AND reqstudent.ReqNeededNum="+POut.PInt(reqNeededNum)
+				+" AND reqstudent.GradePoint!=0";
 			DataTable table=General.GetTable(command);
 			string retVal="";
 			for(int i=0;i<table.Rows.Count;i++){
@@ -83,25 +86,30 @@ namespace OpenDental{
 				+ ",SchoolClassNum = '" +POut.PInt   (req.SchoolClassNum)+"'"   
 				+" WHERE ReqStudentNum = '" +POut.PInt(req.ReqStudentNum)+"'";
 			General.NonQ(command);
-		}
+		}*/
 
 		///<summary></summary>
 		public static void Insert(ReqStudent req) {
 			if(PrefB.RandomKeys) {
-				req.ReqStudentNum=MiscData.GetKey("ReqStudent","ReqStudentNum");
+				req.ReqStudentNum=MiscData.GetKey("reqstudent","ReqStudentNum");
 			}
-			string command= "INSERT INTO ReqStudent (";
+			string command= "INSERT INTO reqstudent (";
 			if(PrefB.RandomKeys) {
 				command+="ReqStudentNum,";
 			}
-			command+="Descript,SchoolCourseNum,SchoolClassNum) VALUES(";
+			command+="ReqNeededNum,Descript,SchoolCourseNum,ProvNum,AptNum,PatNum,InstructorNum,GradePoint) VALUES(";
 			if(PrefB.RandomKeys) {
 				command+="'"+POut.PInt(req.ReqStudentNum)+"', ";
 			}
 			command+=
-				 "'"+POut.PString(req.Descript)+"', "
+				 "'"+POut.PInt   (req.ReqNeededNum)+"', "
+				+"'"+POut.PString(req.Descript)+"', "
 				+"'"+POut.PInt   (req.SchoolCourseNum)+"', "
-				+"'"+POut.PInt   (req.SchoolClassNum)+"')";
+				+"'"+POut.PInt   (req.ProvNum)+"', "
+				+"'"+POut.PInt   (req.AptNum)+"', "
+				+"'"+POut.PInt   (req.PatNum)+"', "
+				+"'"+POut.PInt   (req.InstructorNum)+"', "
+				+"'"+POut.PFloat (req.GradePoint)+"')";
 			if(PrefB.RandomKeys) {
 				General.NonQ(command);
 			}
@@ -110,6 +118,7 @@ namespace OpenDental{
 			}
 		}
 
+		/*
 		///<summary>Surround with try/catch.</summary>
 		public static void Delete(int ReqStudentNum) {
 			//still need to validate

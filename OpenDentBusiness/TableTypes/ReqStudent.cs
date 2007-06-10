@@ -15,14 +15,16 @@ namespace OpenDentBusiness{
 		public int SchoolCourseNum;
 		///<summary>FK to provider.ProvNum.  The student.  Never 0.</summary>
 		public int ProvNum;
-		///<Summary></Summary>
+		///<Summary>FK to appointment.AptNum.</Summary>
 		public int AptNum;
-		///<Summary></Summary>
+		///<Summary>FK to patient.PatNum</Summary>
 		public int PatNum;
-		///<Summary></Summary>
+		///<Summary>FK to provider.ProvNum</Summary>
 		public int InstructorNum;
-		///<Summary></Summary>
+		///<Summary>For now, either 0 or 1.  Later, grades like 3.5 will be supported.</Summary>
 		public float GradePoint;
+		///<summary>The date that the requirement was completed.</summary>
+		public DateTime DateCompleted;
 
 		///<summary></summary>
 		public ReqStudent Copy(){

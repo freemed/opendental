@@ -288,7 +288,13 @@ namespace OpenDental{
 		}
 
 		private void butSynch_Click(object sender,EventArgs e) {
-
+			if(comboClass.SelectedIndex==-1 || comboCourse.SelectedIndex==-1) {
+				MsgBox.Show(this,"Please select a Class and Course first.");
+				return;
+			}
+			ReqNeededs.Synch(SchoolClasses.List[comboClass.SelectedIndex].SchoolClassNum,
+				SchoolCourses.List[comboCourse.SelectedIndex].SchoolCourseNum);
+			MsgBox.Show(this,"Done.");
 		}
 
 		private void butClose_Click(object sender, System.EventArgs e) {

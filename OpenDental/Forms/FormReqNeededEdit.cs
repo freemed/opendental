@@ -173,7 +173,7 @@ namespace OpenDental{
 				string inuseby=ReqStudents.InUseBy(ReqCur.ReqNeededNum);
 				if(inuseby!=""){
 					if(MessageBox.Show(Lan.g(this,"Requirement is already in use by student(s) with grade point(s) attached:")
-						+"\r\n"+inuseby+Lan.g(this,"Delete anyway?"),"",MessageBoxButtons.OKCancel)!=DialogResult.OK)
+						+"\r\n"+inuseby+Lan.g(this,"Delete anyway?  Student grades will not be affected."),"",MessageBoxButtons.OKCancel)!=DialogResult.OK)
 					{
 						return;
 					}

@@ -69,7 +69,7 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(760,575);
+			this.butOK.Location = new System.Drawing.Point(723,575);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75,26);
 			this.butOK.TabIndex = 1;
@@ -84,7 +84,7 @@ namespace OpenDental{
 			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
-			this.butCancel.Location = new System.Drawing.Point(760,621);
+			this.butCancel.Location = new System.Drawing.Point(723,621);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75,26);
 			this.butCancel.TabIndex = 0;
@@ -97,7 +97,7 @@ namespace OpenDental{
 			this.gridMain.Location = new System.Drawing.Point(19,20);
 			this.gridMain.Name = "gridMain";
 			this.gridMain.ScrollValue = 0;
-			this.gridMain.Size = new System.Drawing.Size(718,627);
+			this.gridMain.Size = new System.Drawing.Size(668,627);
 			this.gridMain.TabIndex = 2;
 			this.gridMain.Title = "Student Requirements";
 			this.gridMain.TranslationName = "TableReqStudentOne";
@@ -105,7 +105,7 @@ namespace OpenDental{
 			// FormReqStudentOne
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
-			this.ClientSize = new System.Drawing.Size(847,665);
+			this.ClientSize = new System.Drawing.Size(810,665);
 			this.Controls.Add(this.gridMain);
 			this.Controls.Add(this.butOK);
 			this.Controls.Add(this.butCancel);
@@ -132,7 +132,7 @@ namespace OpenDental{
 			table=ReqStudents.RefreshOneStudent(ProvNum);
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
-			ODGridColumn col=new ODGridColumn(Lan.g("TableReqStudentOne","Course"),150);
+			ODGridColumn col=new ODGridColumn(Lan.g("TableReqStudentOne","Course"),100);
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn(Lan.g("TableReqStudentOne","Requirement"),200);
 			gridMain.Columns.Add(col);
