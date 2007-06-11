@@ -73,11 +73,24 @@ namespace OpenDental{
 		}
 
 		///<summary></summary>
-		public static void Delete(SchoolCourse sc){
-			//todo: check for dependencies
-
-			string command= "DELETE from schoolcourse WHERE SchoolCourseNum = '"
-				+POut.PInt(sc.SchoolCourseNum)+"'";
+		public static void Delete(int courseNum){
+			//check for attached reqneededs---------------------------------------------------------------------
+			string command="SELECT COUNT(*) FROM reqneeded WHERE SchoolCourseNum = '"
+				+POut.PInt(courseNum)+"'";
+			DataTable table=General.GetTable(command);
+			if(PIn.PString(table.Rows[0][0].ToString())!="0") {
+				throw new Exception(Lan.g("SchoolCourses","Course already in use by 'requirements needed' table."));
+			}
+			//check for attached reqstudents--------------------------------------------------------------------------
+			command="SELECT COUNT(*) FROM reqstudent WHERE SchoolCourseNum = '"
+				+POut.PInt(courseNum)+"'";
+			table=General.GetTable(command);
+			if(PIn.PString(table.Rows[0][0].ToString())!="0") {
+				throw new Exception(Lan.g("SchoolCourses","Course already in use by 'student requirements' table."));
+			}
+			//delete---------------------------------------------------------------------------------------------
+			command= "DELETE from schoolcourse WHERE SchoolCourseNum = '"
+				+POut.PInt(courseNum)+"'";
  			General.NonQ(command);
 		}
 

@@ -73,15 +73,23 @@ namespace OpenDental{
 		}
 
 		///<summary>Surround by a try/catch in case there are dependencies.</summary>
-		public static void Delete(SchoolClass sc){
+		public static void Delete(int classNum){
+			//check for attached providers
 			string  command="SELECT COUNT(*) FROM provider WHERE SchoolClassNum = '"
-				+POut.PInt(sc.SchoolClassNum)+"'";
+				+POut.PInt(classNum)+"'";
 			DataTable table=General.GetTable(command);
 			if(PIn.PString(table.Rows[0][0].ToString())!="0"){
 				throw new Exception(Lan.g("SchoolClasses","Class already in use by providers."));
 			}
+			//check for attached reqneededs.
+			command="SELECT COUNT(*) FROM reqneeded WHERE SchoolClassNum = '"
+				+POut.PInt(classNum)+"'";
+			table=General.GetTable(command);
+			if(PIn.PString(table.Rows[0][0].ToString())!="0") {
+				throw new Exception(Lan.g("SchoolClasses","Class already in use by 'requirements needed' table."));
+			}
 			command= "DELETE from schoolclass WHERE SchoolClassNum = '"
-				+POut.PInt(sc.SchoolClassNum)+"'";
+				+POut.PInt(classNum)+"'";
  			General.NonQ(command);
 		}
 

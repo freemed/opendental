@@ -139,10 +139,11 @@ namespace OpenDental{
 		#endregion
 
 		private void FormReqStudentOne_Load(object sender,EventArgs e) {
-			if(!IsSelectionMode){
-				labelSelection.Visible=false;
+			if(IsSelectionMode){
+				
 			}
 			else{
+				labelSelection.Visible=false;
 				butOK.Visible=false;
 				butCancel.Text=Lan.g(this,"Close");
 			}

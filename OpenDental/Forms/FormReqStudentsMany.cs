@@ -12,8 +12,7 @@ namespace OpenDental{
 	/// Summary description for FormBasicTemplate.
 	/// </summary>
 	public class FormReqStudentsMany : System.Windows.Forms.Form{
-		private OpenDental.UI.Button butCancel;
-		private OpenDental.UI.Button butOK;
+		private OpenDental.UI.Button butClose;
 		private OpenDental.UI.ODGrid gridMain;
 		/// <summary>
 		/// Required designer variable.
@@ -58,61 +57,19 @@ namespace OpenDental{
 		private void InitializeComponent()
 		{
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormReqStudentsMany));
-			this.butCancel = new OpenDental.UI.Button();
-			this.butOK = new OpenDental.UI.Button();
-			this.gridMain = new OpenDental.UI.ODGrid();
 			this.label2 = new System.Windows.Forms.Label();
 			this.comboCourse = new System.Windows.Forms.ComboBox();
 			this.label1 = new System.Windows.Forms.Label();
 			this.comboClass = new System.Windows.Forms.ComboBox();
+			this.gridMain = new OpenDental.UI.ODGrid();
+			this.butClose = new OpenDental.UI.Button();
 			this.SuspendLayout();
-			// 
-			// butCancel
-			// 
-			this.butCancel.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butCancel.Autosize = true;
-			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butCancel.CornerRadius = 4F;
-			this.butCancel.Location = new System.Drawing.Point(394,513);
-			this.butCancel.Name = "butCancel";
-			this.butCancel.Size = new System.Drawing.Size(75,26);
-			this.butCancel.TabIndex = 0;
-			this.butCancel.Text = "&Cancel";
-			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
-			// 
-			// butOK
-			// 
-			this.butOK.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butOK.Autosize = true;
-			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(394,472);
-			this.butOK.Name = "butOK";
-			this.butOK.Size = new System.Drawing.Size(75,26);
-			this.butOK.TabIndex = 1;
-			this.butOK.Text = "&OK";
-			this.butOK.Click += new System.EventHandler(this.butOK_Click);
-			// 
-			// gridMain
-			// 
-			this.gridMain.HScrollVisible = false;
-			this.gridMain.Location = new System.Drawing.Point(25,63);
-			this.gridMain.Name = "gridMain";
-			this.gridMain.ScrollValue = 0;
-			this.gridMain.Size = new System.Drawing.Size(329,476);
-			this.gridMain.TabIndex = 3;
-			this.gridMain.Title = "Student Requirements";
-			this.gridMain.TranslationName = "TableReqStudentMany";
 			// 
 			// label2
 			// 
-			this.label2.Location = new System.Drawing.Point(16,36);
+			this.label2.Location = new System.Drawing.Point(351,39);
 			this.label2.Name = "label2";
-			this.label2.Size = new System.Drawing.Size(100,18);
+			this.label2.Size = new System.Drawing.Size(77,18);
 			this.label2.TabIndex = 22;
 			this.label2.Text = "Course";
 			this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -121,7 +78,7 @@ namespace OpenDental{
 			// 
 			this.comboCourse.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.comboCourse.FormattingEnabled = true;
-			this.comboCourse.Location = new System.Drawing.Point(120,36);
+			this.comboCourse.Location = new System.Drawing.Point(432,39);
 			this.comboCourse.Name = "comboCourse";
 			this.comboCourse.Size = new System.Drawing.Size(234,21);
 			this.comboCourse.TabIndex = 21;
@@ -129,7 +86,7 @@ namespace OpenDental{
 			// 
 			// label1
 			// 
-			this.label1.Location = new System.Drawing.Point(36,9);
+			this.label1.Location = new System.Drawing.Point(348,12);
 			this.label1.Name = "label1";
 			this.label1.Size = new System.Drawing.Size(81,18);
 			this.label1.TabIndex = 20;
@@ -140,23 +97,49 @@ namespace OpenDental{
 			// 
 			this.comboClass.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.comboClass.FormattingEnabled = true;
-			this.comboClass.Location = new System.Drawing.Point(120,9);
+			this.comboClass.Location = new System.Drawing.Point(432,12);
 			this.comboClass.Name = "comboClass";
 			this.comboClass.Size = new System.Drawing.Size(234,21);
 			this.comboClass.TabIndex = 19;
 			this.comboClass.SelectionChangeCommitted += new System.EventHandler(this.comboClass_SelectionChangeCommitted);
 			// 
+			// gridMain
+			// 
+			this.gridMain.HScrollVisible = false;
+			this.gridMain.Location = new System.Drawing.Point(15,12);
+			this.gridMain.Name = "gridMain";
+			this.gridMain.ScrollValue = 0;
+			this.gridMain.Size = new System.Drawing.Size(329,637);
+			this.gridMain.TabIndex = 3;
+			this.gridMain.Title = "Student Requirements";
+			this.gridMain.TranslationName = "TableReqStudentMany";
+			this.gridMain.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellDoubleClick);
+			// 
+			// butClose
+			// 
+			this.butClose.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.butClose.Autosize = true;
+			this.butClose.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butClose.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butClose.CornerRadius = 4F;
+			this.butClose.Location = new System.Drawing.Point(591,623);
+			this.butClose.Name = "butClose";
+			this.butClose.Size = new System.Drawing.Size(75,26);
+			this.butClose.TabIndex = 0;
+			this.butClose.Text = "Close";
+			this.butClose.Click += new System.EventHandler(this.butClose_Click);
+			// 
 			// FormReqStudentsMany
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
-			this.ClientSize = new System.Drawing.Size(521,564);
+			this.ClientSize = new System.Drawing.Size(689,661);
 			this.Controls.Add(this.label2);
 			this.Controls.Add(this.comboCourse);
 			this.Controls.Add(this.label1);
 			this.Controls.Add(this.comboClass);
 			this.Controls.Add(this.gridMain);
-			this.Controls.Add(this.butOK);
-			this.Controls.Add(this.butCancel);
+			this.Controls.Add(this.butClose);
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.MaximizeBox = false;
 			this.MinimizeBox = false;
@@ -195,7 +178,9 @@ namespace OpenDental{
 			table=ReqStudents.RefreshManyStudents(schoolClass,schoolCourse);
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
-			ODGridColumn col=new ODGridColumn(Lan.g("TableReqStudentMany","Student"),200);
+			ODGridColumn col=new ODGridColumn(Lan.g("TableReqStudentMany","Last"),100);
+			gridMain.Columns.Add(col);
+			col=new ODGridColumn(Lan.g("TableReqStudentMany","First"),100);
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn(Lan.g("TableReqStudentMany","Total"),50);
 			gridMain.Columns.Add(col);
@@ -205,12 +190,20 @@ namespace OpenDental{
 			ODGridRow row;
 			for(int i=0;i<table.Rows.Count;i++) {
 				row=new ODGridRow();
-				row.Cells.Add(table.Rows[i]["student"].ToString());
-				row.Cells.Add(table.Rows[i]["total"].ToString());
-				row.Cells.Add(table.Rows[i]["done"].ToString());
+				row.Cells.Add(table.Rows[i]["LName"].ToString());
+				row.Cells.Add(table.Rows[i]["FName"].ToString());
+				row.Cells.Add(table.Rows[i]["totalreq"].ToString());
+				row.Cells.Add(table.Rows[i]["donereq"].ToString());
 				gridMain.Rows.Add(row);
 			}
 			gridMain.EndUpdate();
+		}
+
+		private void gridMain_CellDoubleClick(object sender,ODGridClickEventArgs e) {
+			FormReqStudentOne FormR=new FormReqStudentOne();
+			FormR.ProvNum=PIn.PInt(table.Rows[e.Row]["studentNum"].ToString());
+			FormR.ShowDialog();
+			FillGrid();
 		}
 
 		private void comboClass_SelectionChangeCommitted(object sender,EventArgs e) {
@@ -221,13 +214,11 @@ namespace OpenDental{
 			FillGrid();
 		}
 
-		private void butOK_Click(object sender, System.EventArgs e) {
-			DialogResult=DialogResult.OK;
+		private void butClose_Click(object sender, System.EventArgs e) {
+			Close();
 		}
 
-		private void butCancel_Click(object sender, System.EventArgs e) {
-			DialogResult=DialogResult.Cancel;
-		}
+		
 
 		
 

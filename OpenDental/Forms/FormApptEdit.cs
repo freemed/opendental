@@ -1329,6 +1329,9 @@ namespace OpenDental{
 			DS.Tables.Remove("Misc");
 			DS.Tables.Add(Appointments.GetApptEditMisc(AptCur.AptNum));
 			textRequirement.Text=DS.Tables["Misc"].Rows[0]["requirement"].ToString();
+			//NOTE: It is possible to close the appt edit window in such a way that the attached requirement is for a different
+			//provider than the appointment itself.  This must be fixed by the user by changing the appointment.ProvNum
+			//or by detaching the erroneous requirement.  It should not cause any problems.
 		}
 
 		///<summary>Called from butOK_Click and butPin_Click</summary>

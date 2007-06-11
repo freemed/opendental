@@ -186,7 +186,7 @@ namespace OpenDental{
 					return;
 				}
 				try{
-					SchoolCourses.Delete(CourseCur);
+					SchoolCourses.Delete(CourseCur.SchoolCourseNum);
 				}
 				catch(Exception ex){
 					MessageBox.Show(ex.Message);

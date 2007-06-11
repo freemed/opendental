@@ -39,13 +39,13 @@ namespace OpenDentBusiness{
 		public string ProcDescript;
 		///<summary>FK to employee.EmployeeNum.  You can assign an assistant to the appointment.</summary>
 		public int Assistant;
-		///<summary>Not currently used.  Will be FK to provider.ProvNum</summary>
+		///<summary>Not used.</summary>
 		public int InstructorNum;
-		///<summary>FK to schoolclass.SchoolClassNum.  Only used in dental schools.</summary>
+		///<summary>Not used</summary>
 		public int SchoolClassNum;
-		///<summary>FK to schoolcourse.SchoolCourseNum.  Only used in dental schools.</summary>
+		///<summary>Not used.</summary>
 		public int SchoolCourseNum;
-		///<summary>Dental School field. eg 3.5. Only a grade for this single appointment. The course grade shows on a report.</summary>
+		///<summary>Not used.</summary>
 		public float GradePoint;
 		///<summary>FK to clinic.ClinicNum.  0 if no clinic.</summary>
 		public int ClinicNum;
