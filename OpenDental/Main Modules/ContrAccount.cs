@@ -2610,14 +2610,14 @@ namespace OpenDental {
 					}
 					break;
 				case "Other":
-					FormInsPlanSelect FormIPS=new FormInsPlanSelect(PatCur.PatNum);
-					FormIPS.ViewRelat=true;
-					FormIPS.ShowDialog();
-					if(FormIPS.DialogResult!=DialogResult.OK){
+					FormClaimCreate FormCC=new FormClaimCreate(PatCur.PatNum);
+					FormCC.ViewRelat=true;
+					FormCC.ShowDialog();
+					if(FormCC.DialogResult!=DialogResult.OK){
 						return new Claim();
 					}
-					PlanCur=FormIPS.SelectedPlan;
-					RelatOther=FormIPS.PatRelat;
+					PlanCur=FormCC.SelectedPlan;
+					RelatOther=FormCC.PatRelat;
 					break;
 			}
 			for(int i=0;i<gridAccount.SelectedIndices.Length;i++){

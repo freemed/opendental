@@ -8,7 +8,7 @@ using OpenDentBusiness;
 
 namespace OpenDental{
 ///<summary>Lists all insurance plans for which the supplied patient is the subscriber. Lets you select an insurance plan based on a patNum. SelectedPlan will contain the plan selected.</summary>
-	public class FormInsPlanSelect : System.Windows.Forms.Form{
+	public class FormClaimCreate : System.Windows.Forms.Form{
 		private OpenDental.UI.Button butCancel;
 		private OpenDental.UI.Button butOK;
 		private System.ComponentModel.Container components = null;
@@ -25,10 +25,14 @@ namespace OpenDental{
 		public InsPlan SelectedPlan;
 		private InsPlan[] PlanList;
 		private OpenDental.UI.ODGrid gridMain;
+		private GroupBox groupBox1;
+		private GroupBox groupBox2;
+		private ComboBox comboBox1;
+		private ComboBox comboBox2;
 		private int PatNum;
 
 		///<summary></summary>
-		public FormInsPlanSelect(int patNum){
+		public FormClaimCreate(int patNum){
 			InitializeComponent();
 			PatNum=patNum;
 			//tbPlans.CellDoubleClicked += new OpenDental.ContrTable.CellEventHandler(tbPlans_CellDoubleClicked);
@@ -48,12 +52,18 @@ namespace OpenDental{
 		#region Windows Form Designer generated code
 
 		private void InitializeComponent(){
-			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormInsPlanSelect));
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormClaimCreate));
 			this.butCancel = new OpenDental.UI.Button();
 			this.butOK = new OpenDental.UI.Button();
 			this.labelRelat = new System.Windows.Forms.Label();
 			this.listRelat = new System.Windows.Forms.ListBox();
 			this.gridMain = new OpenDental.UI.ODGrid();
+			this.groupBox1 = new System.Windows.Forms.GroupBox();
+			this.comboBox1 = new System.Windows.Forms.ComboBox();
+			this.groupBox2 = new System.Windows.Forms.GroupBox();
+			this.comboBox2 = new System.Windows.Forms.ComboBox();
+			this.groupBox1.SuspendLayout();
+			this.groupBox2.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// butCancel
@@ -114,12 +124,50 @@ namespace OpenDental{
 			this.gridMain.TranslationName = "TableInsPlans";
 			this.gridMain.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellDoubleClick);
 			// 
-			// FormInsPlanSelect
+			// groupBox1
+			// 
+			this.groupBox1.Controls.Add(this.comboBox1);
+			this.groupBox1.Location = new System.Drawing.Point(22,239);
+			this.groupBox1.Name = "groupBox1";
+			this.groupBox1.Size = new System.Drawing.Size(211,42);
+			this.groupBox1.TabIndex = 11;
+			this.groupBox1.TabStop = false;
+			this.groupBox1.Text = "Claim Form";
+			// 
+			// comboBox1
+			// 
+			this.comboBox1.FormattingEnabled = true;
+			this.comboBox1.Location = new System.Drawing.Point(6,15);
+			this.comboBox1.Name = "comboBox1";
+			this.comboBox1.Size = new System.Drawing.Size(199,21);
+			this.comboBox1.TabIndex = 0;
+			// 
+			// groupBox2
+			// 
+			this.groupBox2.Controls.Add(this.comboBox2);
+			this.groupBox2.Location = new System.Drawing.Point(22,287);
+			this.groupBox2.Name = "groupBox2";
+			this.groupBox2.Size = new System.Drawing.Size(211,47);
+			this.groupBox2.TabIndex = 12;
+			this.groupBox2.TabStop = false;
+			this.groupBox2.Text = "E-Format";
+			// 
+			// comboBox2
+			// 
+			this.comboBox2.FormattingEnabled = true;
+			this.comboBox2.Location = new System.Drawing.Point(6,19);
+			this.comboBox2.Name = "comboBox2";
+			this.comboBox2.Size = new System.Drawing.Size(199,21);
+			this.comboBox2.TabIndex = 0;
+			// 
+			// FormClaimCreate
 			// 
 			this.AcceptButton = this.butOK;
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.CancelButton = this.butCancel;
 			this.ClientSize = new System.Drawing.Size(724,374);
+			this.Controls.Add(this.groupBox2);
+			this.Controls.Add(this.groupBox1);
 			this.Controls.Add(this.gridMain);
 			this.Controls.Add(this.listRelat);
 			this.Controls.Add(this.labelRelat);
@@ -128,19 +176,21 @@ namespace OpenDental{
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.MaximizeBox = false;
 			this.MinimizeBox = false;
-			this.Name = "FormInsPlanSelect";
+			this.Name = "FormClaimCreate";
 			this.RightToLeft = System.Windows.Forms.RightToLeft.No;
 			this.ShowInTaskbar = false;
 			this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-			this.Text = "Select Insurance Plan";
-			this.Load += new System.EventHandler(this.FormInsPlansSelect_Load);
+			this.Text = "Create New Claim";
+			this.Load += new System.EventHandler(this.FormClaimCreate_Load);
+			this.groupBox1.ResumeLayout(false);
+			this.groupBox2.ResumeLayout(false);
 			this.ResumeLayout(false);
 
 		}
 		#endregion
 
-		private void FormInsPlansSelect_Load(object sender, System.EventArgs e) {
+		private void FormClaimCreate_Load(object sender, System.EventArgs e) {
 			if(!ViewRelat){
 				labelRelat.Visible=false;
 				listRelat.Visible=false;
