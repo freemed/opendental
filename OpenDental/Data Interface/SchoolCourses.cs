@@ -81,6 +81,7 @@ namespace OpenDental{
  			General.NonQ(command);
 		}
 
+		///<summary>Description is CourseID Descript.</summary>
 		public static string GetDescript(int schoolCourseNum) {
 			for(int i=0;i<List.Length;i++) {
 				if(List[i].SchoolCourseNum==schoolCourseNum) {

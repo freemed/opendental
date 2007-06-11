@@ -21,8 +21,6 @@ namespace OpenDentBusiness{
 		public int PatNum;
 		///<Summary>FK to provider.ProvNum</Summary>
 		public int InstructorNum;
-		///<Summary>For now, either 0 or 1.  Later, grades like 3.5 will be supported.</Summary>
-		public float GradePoint;
 		///<summary>The date that the requirement was completed.</summary>
 		public DateTime DateCompleted;
 
@@ -37,7 +35,7 @@ namespace OpenDentBusiness{
 			r.AptNum=AptNum;
 			r.PatNum=PatNum;
 			r.InstructorNum=InstructorNum;
-			r.GradePoint=GradePoint;
+			r.DateCompleted=DateCompleted;
 			return r;
 		}
 	}

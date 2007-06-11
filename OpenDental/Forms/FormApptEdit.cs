@@ -60,15 +60,6 @@ namespace OpenDental{
 		public bool PinIsVisible;
 		public bool PinClicked;
 		private Panel panel1;
-		private GroupBox groupDentalSchools;
-		private TextBox textGradePoint;
-		private ComboBox comboSchoolCourse;
-		private ComboBox comboSchoolClass;
-		private ComboBox comboInstructor;
-		private Label label20;
-		private Label label21;
-		private Label label22;
-		private Label label23;
 		public bool IsNew;
 		private DataSet DS;
 		private Appointment AptCur;
@@ -84,6 +75,8 @@ namespace OpenDental{
 		private Family fam;
 		private OpenDental.UI.Button butLab;
 		private TextBox textLabCase;
+		private TextBox textRequirement;
+		private OpenDental.UI.Button butRequirement;
 		private PatPlan[] PatPlanList;
 
 		///<summary></summary>
@@ -149,15 +142,6 @@ namespace OpenDental{
 			this.panel1 = new System.Windows.Forms.Panel();
 			this.textLabCase = new System.Windows.Forms.TextBox();
 			this.butLab = new OpenDental.UI.Button();
-			this.groupDentalSchools = new System.Windows.Forms.GroupBox();
-			this.textGradePoint = new System.Windows.Forms.TextBox();
-			this.comboSchoolCourse = new System.Windows.Forms.ComboBox();
-			this.comboSchoolClass = new System.Windows.Forms.ComboBox();
-			this.comboInstructor = new System.Windows.Forms.ComboBox();
-			this.label20 = new System.Windows.Forms.Label();
-			this.label21 = new System.Windows.Forms.Label();
-			this.label22 = new System.Windows.Forms.Label();
-			this.label23 = new System.Windows.Forms.Label();
 			this.textAddTime = new OpenDental.ValidNum();
 			this.butCalcTime = new OpenDental.UI.Button();
 			this.butAddComm = new OpenDental.UI.Button();
@@ -172,8 +156,9 @@ namespace OpenDental{
 			this.butPin = new OpenDental.UI.Button();
 			this.butOK = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
+			this.textRequirement = new System.Windows.Forms.TextBox();
+			this.butRequirement = new OpenDental.UI.Button();
 			this.panel1.SuspendLayout();
-			this.groupDentalSchools.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// comboConfirmed
@@ -400,9 +385,10 @@ namespace OpenDental{
 			// 
 			this.panel1.AutoScroll = true;
 			this.panel1.AutoScrollMargin = new System.Drawing.Size(0,3);
+			this.panel1.Controls.Add(this.textRequirement);
+			this.panel1.Controls.Add(this.butRequirement);
 			this.panel1.Controls.Add(this.textLabCase);
 			this.panel1.Controls.Add(this.butLab);
-			this.panel1.Controls.Add(this.groupDentalSchools);
 			this.panel1.Controls.Add(this.labelStatus);
 			this.panel1.Controls.Add(this.label5);
 			this.panel1.Controls.Add(this.comboStatus);
@@ -447,94 +433,6 @@ namespace OpenDental{
 			this.butLab.TabIndex = 141;
 			this.butLab.Text = "Lab";
 			this.butLab.Click += new System.EventHandler(this.butLab_Click);
-			// 
-			// groupDentalSchools
-			// 
-			this.groupDentalSchools.Controls.Add(this.textGradePoint);
-			this.groupDentalSchools.Controls.Add(this.comboSchoolCourse);
-			this.groupDentalSchools.Controls.Add(this.comboSchoolClass);
-			this.groupDentalSchools.Controls.Add(this.comboInstructor);
-			this.groupDentalSchools.Controls.Add(this.label20);
-			this.groupDentalSchools.Controls.Add(this.label21);
-			this.groupDentalSchools.Controls.Add(this.label22);
-			this.groupDentalSchools.Controls.Add(this.label23);
-			this.groupDentalSchools.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.groupDentalSchools.Location = new System.Drawing.Point(17,224);
-			this.groupDentalSchools.Name = "groupDentalSchools";
-			this.groupDentalSchools.Size = new System.Drawing.Size(228,101);
-			this.groupDentalSchools.TabIndex = 139;
-			this.groupDentalSchools.TabStop = false;
-			this.groupDentalSchools.Text = "Dental Schools";
-			// 
-			// textGradePoint
-			// 
-			this.textGradePoint.Location = new System.Drawing.Point(93,75);
-			this.textGradePoint.Name = "textGradePoint";
-			this.textGradePoint.Size = new System.Drawing.Size(63,20);
-			this.textGradePoint.TabIndex = 90;
-			// 
-			// comboSchoolCourse
-			// 
-			this.comboSchoolCourse.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboSchoolCourse.Location = new System.Drawing.Point(93,54);
-			this.comboSchoolCourse.MaxDropDownItems = 30;
-			this.comboSchoolCourse.Name = "comboSchoolCourse";
-			this.comboSchoolCourse.Size = new System.Drawing.Size(130,21);
-			this.comboSchoolCourse.TabIndex = 89;
-			// 
-			// comboSchoolClass
-			// 
-			this.comboSchoolClass.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboSchoolClass.Location = new System.Drawing.Point(93,33);
-			this.comboSchoolClass.MaxDropDownItems = 30;
-			this.comboSchoolClass.Name = "comboSchoolClass";
-			this.comboSchoolClass.Size = new System.Drawing.Size(130,21);
-			this.comboSchoolClass.TabIndex = 88;
-			// 
-			// comboInstructor
-			// 
-			this.comboInstructor.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboInstructor.Location = new System.Drawing.Point(93,12);
-			this.comboInstructor.MaxDropDownItems = 30;
-			this.comboInstructor.Name = "comboInstructor";
-			this.comboInstructor.Size = new System.Drawing.Size(130,21);
-			this.comboInstructor.TabIndex = 87;
-			// 
-			// label20
-			// 
-			this.label20.Location = new System.Drawing.Point(9,78);
-			this.label20.Name = "label20";
-			this.label20.Size = new System.Drawing.Size(82,16);
-			this.label20.TabIndex = 86;
-			this.label20.Text = "Grade";
-			this.label20.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// label21
-			// 
-			this.label21.Location = new System.Drawing.Point(9,58);
-			this.label21.Name = "label21";
-			this.label21.Size = new System.Drawing.Size(82,16);
-			this.label21.TabIndex = 85;
-			this.label21.Text = "Course";
-			this.label21.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// label22
-			// 
-			this.label22.Location = new System.Drawing.Point(9,36);
-			this.label22.Name = "label22";
-			this.label22.Size = new System.Drawing.Size(82,16);
-			this.label22.TabIndex = 84;
-			this.label22.Text = "Class";
-			this.label22.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// label23
-			// 
-			this.label23.Location = new System.Drawing.Point(9,16);
-			this.label23.Name = "label23";
-			this.label23.Size = new System.Drawing.Size(82,16);
-			this.label23.TabIndex = 83;
-			this.label23.Text = "Instructor";
-			this.label23.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// textAddTime
 			// 
@@ -731,6 +629,29 @@ namespace OpenDental{
 			this.butCancel.Text = "&Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
 			// 
+			// textRequirement
+			// 
+			this.textRequirement.Location = new System.Drawing.Point(56,219);
+			this.textRequirement.Multiline = true;
+			this.textRequirement.Name = "textRequirement";
+			this.textRequirement.ReadOnly = true;
+			this.textRequirement.Size = new System.Drawing.Size(188,34);
+			this.textRequirement.TabIndex = 144;
+			// 
+			// butRequirement
+			// 
+			this.butRequirement.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butRequirement.Autosize = true;
+			this.butRequirement.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butRequirement.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butRequirement.CornerRadius = 4F;
+			this.butRequirement.Location = new System.Drawing.Point(4,218);
+			this.butRequirement.Name = "butRequirement";
+			this.butRequirement.Size = new System.Drawing.Size(46,20);
+			this.butRequirement.TabIndex = 143;
+			this.butRequirement.Text = "Req";
+			this.butRequirement.Click += new System.EventHandler(this.butRequirement_Click);
+			// 
 			// FormApptEdit
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
@@ -767,8 +688,6 @@ namespace OpenDental{
 			this.Load += new System.EventHandler(this.FormApptEdit_Load);
 			this.panel1.ResumeLayout(false);
 			this.panel1.PerformLayout();
-			this.groupDentalSchools.ResumeLayout(false);
-			this.groupDentalSchools.PerformLayout();
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -799,7 +718,8 @@ namespace OpenDental{
 			PlanList=InsPlans.Refresh(fam);
 			PatPlanList=PatPlans.Refresh(AptCur.PatNum);
 			if(PrefB.GetBool("EasyHideDentalSchools")) {
-				groupDentalSchools.Visible=false;
+				butRequirement.Visible=false;
+				textRequirement.Visible=false;
 			}
 			if(PrefB.GetBool("EasyNoClinics")) {
 				labelClinic.Visible=false;
@@ -854,11 +774,6 @@ namespace OpenDental{
 			for(int i=0;i<DefB.Short[(int)DefCat.ApptProcsQuickAdd].Length;i++) {
 				listQuickAdd.Items.Add(DefB.Short[(int)DefCat.ApptProcsQuickAdd][i].ItemName);
 			}
-			//SchoolClassNum must be filled before provider
-			comboSchoolClass.Items.Add(Lan.g(this,"none"));
-			for(int i=0;i<SchoolClasses.List.Length;i++) {
-				comboSchoolClass.Items.Add(SchoolClasses.List[i].GradYear.ToString()+"-"+SchoolClasses.List[i].Descript);
-			}
 			comboClinic.Items.Add(Lan.g(this,"none"));
 			comboClinic.SelectedIndex=0;
 			for(int i=0;i<Clinics.List.Length;i++) {
@@ -886,33 +801,8 @@ namespace OpenDental{
 				if(Employees.ListShort[i].EmployeeNum==AptCur.Assistant)
 					comboAssistant.SelectedIndex=i+1;
 			}
-			//string[] enumLab=Enum.GetNames(typeof(LabCaseOld));
-			//for(int i=0;i<enumLab.Length;i++) {
-			//	comboLab.Items.Add(Lan.g("enumLab",enumLab[i]));
-			//}
-			//comboLab.SelectedIndex=(int)AptCur.Lab;
 			textLabCase.Text=DS.Tables["Misc"].Rows[0]["labDescript"].ToString();
-			comboInstructor.Items.Add(Lan.g(this,"none"));
-			comboInstructor.SelectedIndex=0;
-			//for(int i=0;i<Instructors.List.Length;i++) {
-			//	comboInstructor.Items.Add(Instructors.List[i].LName+", "+Instructors.List[i].FName+", "+Instructors.List[i].Suffix);
-			//	if(Instructors.List[i].InstructorNum==AptCur.InstructorNum)
-			//		comboInstructor.SelectedIndex=i+1;
-			//}
-			//SchoolClassNum was filled earlier.  Now selected:
-			comboSchoolClass.SelectedIndex=0;
-			for(int i=0;i<SchoolClasses.List.Length;i++) {
-				if(SchoolClasses.List[i].SchoolClassNum==AptCur.SchoolClassNum)
-					comboSchoolClass.SelectedIndex=i+1;
-			}
-			comboSchoolCourse.Items.Add(Lan.g(this,"none"));
-			comboSchoolCourse.SelectedIndex=0;
-			for(int i=0;i<SchoolCourses.List.Length;i++) {
-				comboSchoolCourse.Items.Add(SchoolCourses.List[i].CourseID+"  "+SchoolCourses.List[i].Descript);
-				if(SchoolCourses.List[i].SchoolCourseNum==AptCur.SchoolCourseNum)
-					comboSchoolCourse.SelectedIndex=i+1;
-			}
-			textGradePoint.Text=AptCur.GradePoint.ToString();
+			textRequirement.Text=DS.Tables["Misc"].Rows[0]["requirement"].ToString();
 			//IsNewPatient is set well before opening this form.
 			checkIsNewPatient.Checked=AptCur.IsNewPatient;
 			if(ContrApptSheet.MinPerIncr==10) {
@@ -1392,6 +1282,55 @@ namespace OpenDental{
 			textLabCase.Text=DS.Tables["Misc"].Rows[0]["labDescript"].ToString();
 		}
 
+		private void butRequirement_Click(object sender,EventArgs e) {
+			if(comboProvNum.SelectedIndex==-1){
+				MsgBox.Show(this,"Please select a provider first.");
+				return;
+			}
+			if(Providers.List[comboProvNum.SelectedIndex].SchoolClassNum==0){
+				MsgBox.Show(this,"Provider is not a dental student.");
+				return;
+			}
+			Provider provUser=Providers.GetProv(Security.CurUser.ProvNum);
+			int provnum=Providers.List[comboProvNum.SelectedIndex].ProvNum;///of the appt.
+			if(provUser!=null && provUser.SchoolClassNum!=0) {//if a student is logged in
+				//the student only has permission to view/attach/detach their own requirements
+				if(provnum!=provUser.ProvNum){
+					MsgBox.Show(this,"Students may only edit their own requirements.");
+					return;
+				}
+			}
+			else{//A student is not logged in
+				if(!Security.IsAuthorized(Permissions.Setup,DateTime.MinValue)) {
+					//This will be checked again inside FormReqStudentEdit, but will be suppressed there.
+					return;
+				}
+			}
+			if(DS.Tables["Misc"].Rows[0]["ReqStudentNum"].ToString()=="0") {//no requirement
+				//so let user pick one to add
+				FormReqStudentOne FormR=new FormReqStudentOne();
+				FormR.ProvNum=provnum;
+				FormR.IsSelectionMode=true;
+				FormR.ShowDialog();
+				if(FormR.DialogResult!=DialogResult.OK) {
+					return;
+				}
+				ReqStudents.AttachToApt(FormR.SelectedReqStudentNum,AptCur.AptNum);//also changes req.patnum
+			}
+			else {//already a requirement attached
+				FormReqStudentEdit FormRSE=new FormReqStudentEdit();
+				FormRSE.ReqCur=ReqStudents.GetOne(PIn.PInt(DS.Tables["Misc"].Rows[0]["ReqStudentNum"].ToString()));
+				FormRSE.ShowDialog();
+				if(FormRSE.DialogResult!=DialogResult.OK) {
+					return;
+				}
+				//Detaching a requirement would have been done from in that window
+			}
+			DS.Tables.Remove("Misc");
+			DS.Tables.Add(Appointments.GetApptEditMisc(AptCur.AptNum));
+			textRequirement.Text=DS.Tables["Misc"].Rows[0]["requirement"].ToString();
+		}
+
 		///<summary>Called from butOK_Click and butPin_Click</summary>
 		private bool UpdateToDB(){
 			if(textAddTime.errorProvider1.GetError(textAddTime)!=""
@@ -1399,18 +1338,6 @@ namespace OpenDental{
 				) {
 				MessageBox.Show(Lan.g(this,"Please fix data entry errors first."));
 				return false;
-			}
-			if(textGradePoint.Text=="0" || textGradePoint.Text=="") {
-				AptCur.GradePoint=0;
-			}
-			else {
-				try {
-					AptCur.GradePoint=PIn.PFloat(textGradePoint.Text);
-				}
-				catch {
-					MsgBox.Show(this,"Grade invalid");
-					return false;
-				}
 			}
 			if(AptCur.AptStatus==ApptStatus.Planned) {
 				;
@@ -1466,20 +1393,6 @@ namespace OpenDental{
 				AptCur.Assistant=0;
 			else
 				AptCur.Assistant=Employees.ListShort[comboAssistant.SelectedIndex-1].EmployeeNum;
-			//if(comboInstructor.SelectedIndex==0)//none
-				AptCur.InstructorNum=0;
-			//else
-			//	AptCur.InstructorNum=Instructors.List[comboInstructor.SelectedIndex-1].InstructorNum;
-			if(comboSchoolClass.SelectedIndex==0)//none
-				AptCur.SchoolClassNum=0;
-			else
-				AptCur.SchoolClassNum=SchoolClasses.List[comboSchoolClass.SelectedIndex-1].SchoolClassNum;
-			if(comboSchoolCourse.SelectedIndex==0)//none
-				AptCur.SchoolCourseNum=0;
-			else
-				AptCur.SchoolCourseNum=SchoolCourses.List[comboSchoolCourse.SelectedIndex-1].SchoolCourseNum;
-			//AptCur.GradePoint //already done at top of this function
-			//AptCur.Lab=(LabCaseOld)comboLab.SelectedIndex;
 			AptCur.IsNewPatient=checkIsNewPatient.Checked;
 			AptCur.ProcDescript="";
 			for(int i=0;i<gridProc.SelectedIndices.Length;i++) {
@@ -1575,6 +1488,8 @@ namespace OpenDental{
 		private void butCancel_Click(object sender, System.EventArgs e) {
 			DialogResult=DialogResult.Cancel;
 		}
+
+		
 
 		
 

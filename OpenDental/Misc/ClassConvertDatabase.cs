@@ -5325,7 +5325,7 @@ namespace OpenDental{
 						AptNum int NOT NULL,
 						PatNum int NOT NULL,
 						InstructorNum int NOT NULL,
-						GradePoint float NOT NULL,
+						DateCompleted date NOT NULL default '0001-01-01',
 						PRIMARY KEY (ReqStudentNum),
 						INDEX (ReqNeededNum),
 						INDEX (ProvNum)
@@ -5341,7 +5341,7 @@ namespace OpenDental{
 						AptNum int NOT NULL,
 						PatNum int NOT NULL,
 						InstructorNum int NOT NULL,
-						GradePoint float NOT NULL,
+						DateCompleted date default '0001-01-01' NOT NULL,
 						PRIMARY KEY (ReqStudentNum),
 						INDEX (ReqNeededNum),
 						INDEX (ProvNum)

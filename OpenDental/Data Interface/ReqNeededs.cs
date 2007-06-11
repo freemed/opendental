@@ -18,6 +18,9 @@ namespace OpenDental{
 		public static ReqNeeded GetReq(int reqNeededNum){
 			string command="SELECT * FROM reqneeded WHERE ReqNeededNum="+POut.PInt(reqNeededNum);
  			DataTable table=General.GetTable(command);
+			if(table.Rows.Count==0){
+				return null;
+			}
 			ReqNeeded req=new ReqNeeded();
 			//for(int i=0;i<table.Rows.Count;i++){
 			req.ReqNeededNum   = PIn.PInt   (table.Rows[0][0].ToString());
@@ -82,7 +85,7 @@ namespace OpenDental{
 			//1. Delete any reqstudents that do not have gradepoint
 			command="DELETE FROM reqstudent "
 				+"WHERE NOT EXISTS(SELECT * FROM reqneeded WHERE reqstudent.ReqNeededNum=reqneeded.ReqNeededNum) "
-				+"AND GradePoint=0";
+				+"AND reqstudent.DateCompleted < "+POut.PDate(new DateTime(1880,1,1));
 			General.NonQ(command);
 			for(int i=0;i<table.Rows.Count;i++){
 				reqNeededNum=PIn.PInt(table.Rows[i]["ReqNeededNum"].ToString());

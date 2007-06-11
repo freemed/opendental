@@ -565,6 +565,9 @@ namespace OpenDentBusiness{
 			DataRow row;
 			table.Columns.Add("LabCaseNum");
 			table.Columns.Add("labDescript");
+			table.Columns.Add("ReqStudentNum");
+			table.Columns.Add("requirement");
+			table.Columns.Add("reqProvNum");
 			string command="SELECT LabCaseNum,DateTimeDue,DateTimeChecked,DateTimeRecd,DateTimeSent,"
 				+"laboratory.Description FROM labcase,laboratory "
 				+"WHERE labcase.LaboratoryNum=laboratory.LaboratoryNum AND ";
@@ -575,6 +578,7 @@ namespace OpenDentBusiness{
 				command+="labcase.AptNum="+aptNum;
 			}
 			DataTable raw=dcon.GetTable(command);
+			DateTime date;
 			//always return one row:
 			row=table.NewRow();
 			row["LabCaseNum"]="0";
@@ -587,25 +591,45 @@ namespace OpenDentBusiness{
 				//	row["labDescript"]+="\r\n"+Lan.g("FormAppEdit","Due: ")+date.ToString("ddd")+" "
 				//	+date.ToShortDateString()+" "+date.ToShortTimeString();
 				//}
-				DateTime date=PIn.PDateT(raw.Rows[0]["DateTimeChecked"].ToString());
+				date=PIn.PDateT(raw.Rows[0]["DateTimeChecked"].ToString());
 				if(date.Year>1880){
-					row["labDescript"]+="\r\n"+Lan.g("FormAppEdit","Quality Checked");
+					row["labDescript"]+="\r\n"+Lan.g("FormApptEdit","Quality Checked");
 				}
 				else{
 					date=PIn.PDateT(raw.Rows[0]["DateTimeRecd"].ToString());
 					if(date.Year>1880){
-						row["labDescript"]+="\r\n"+Lan.g("FormAppEdit","Received");
+						row["labDescript"]+="\r\n"+Lan.g("FormApptEdit","Received");
 					}
 					else{
 						date=PIn.PDateT(raw.Rows[0]["DateTimeSent"].ToString());
 						if(date.Year>1880){
-							row["labDescript"]+="\r\n"+Lan.g("FormAppEdit","Sent");//sent but not received
+							row["labDescript"]+="\r\n"+Lan.g("FormApptEdit","Sent");//sent but not received
 						}
 						else{
-							row["labDescript"]+="\r\n"+Lan.g("FormAppEdit","Not Sent");
+							row["labDescript"]+="\r\n"+Lan.g("FormApptEdit","Not Sent");
 						}
 					}
 				}
+			}
+			//requirement-------------------------------------------------------------------------------------------
+			command="SELECT ReqStudentNum,reqstudent.Descript,CourseID,DateCompleted,ProvNum "
+				+"FROM reqstudent,schoolcourse "
+				+"WHERE reqstudent.SchoolCourseNum=schoolcourse.SchoolCourseNum "
+				+"AND reqstudent.AptNum="+aptNum;
+			raw=dcon.GetTable(command);
+			row["reqProvNum"]="0";
+			row["reqStudentNum"]="0";
+			if(raw.Rows.Count>0) {
+				row["ReqStudentNum"]=raw.Rows[0]["ReqStudentNum"].ToString();
+				date=PIn.PDate(raw.Rows[0]["DateCompleted"].ToString());
+				if(date.Year<1880){
+					row["requirement"]=Lan.g("FormApptEdit","Not Done. ");
+				}
+				else{
+					row["requirement"]=Lan.g("FormApptEdit","Done. ");
+				}
+				row["requirement"]+=raw.Rows[0]["CourseID"].ToString()+" "+raw.Rows[0]["Descript"].ToString();
+				row["reqProvNum"]=raw.Rows[0]["ProvNum"].ToString();
 			}
 			table.Rows.Add(row);
 			return table;
