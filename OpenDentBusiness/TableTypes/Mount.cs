@@ -15,6 +15,8 @@ namespace OpenDentBusiness {
 		public DateTime DateCreated;
 		///<summary>Used to provide a document description in the image module tree-view.</summary>
 		public string Description;
+		///<summary>To allow the user to enter specific information regarding the exam and tooth numbers, as well as points on interest in the xray images.</summary>
+		public string Note;
 		///<summary>Enum:ImageType This is so that an image can be properly associated with the mount in the image module tree-view.</summary>
 		public ImageType ImgType;
 		///<summary>The static width of the mount, in pixels.</summary>
@@ -30,6 +32,7 @@ namespace OpenDentBusiness {
 			m.DocCategory=DocCategory;
 			m.DateCreated=DateCreated;
 			m.Description=Description;
+			m.Note=Note;
 			m.Width=Width;
 			m.Height=Height;
 			return m;

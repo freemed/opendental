@@ -8,12 +8,13 @@ namespace OpenDental {
 	class Mounts {
 
 		public static int Insert(Mount mount){
-			string command="INSERT INTO mount (MountNum,PatNum,DocCategory,DateCreated,Description,ImgType,Width,Height) VALUES ("
+			string command="INSERT INTO mount (MountNum,PatNum,DocCategory,DateCreated,Description,Note,ImgType,Width,Height) VALUES ("
 				+"'"+POut.PInt(mount.MountNum)+"',"
 				+"'"+POut.PInt(mount.PatNum)+"',"
 				+"'"+POut.PInt(mount.DocCategory)+"',"
 				+POut.PDate(mount.DateCreated)+","
 				+"'"+POut.PString(mount.Description)+"',"
+				+"'"+POut.PString(mount.Note)+"',"
 				+"'"+POut.PInt((int)mount.ImgType)+"',"
 				+"'"+POut.PInt(mount.Width)+"',"
 				+"'"+POut.PInt(mount.Height)+"')";
@@ -26,6 +27,7 @@ namespace OpenDental {
 				+"DocCategory='"+POut.PInt(mount.DocCategory)+"',"
 				+"DateCreated="+POut.PDate(mount.DateCreated)+","
 				+"Description='"+POut.PString(mount.Description)+"',"
+				+"Note='"+POut.PString(mount.Note)+"',"
 				+"ImgType='"+POut.PInt((int)mount.ImgType)+"',"
 				+"Width='"+POut.PInt(mount.Width)+"',"
 				+"Height='"+POut.PInt(mount.Height)+"' "
@@ -46,6 +48,7 @@ namespace OpenDental {
 			mount.DocCategory=PIn.PInt(mountRow["DocCategory"].ToString());
 			mount.DateCreated=PIn.PDate(mountRow["DateCreated"].ToString());
 			mount.Description=PIn.PString(mountRow["Description"].ToString());
+			mount.Note=PIn.PString(mountRow["Note"].ToString());
 			mount.ImgType=(ImageType)PIn.PInt(mountRow["ImgType"].ToString());
 			mount.Width=PIn.PInt(mountRow["Width"].ToString());
 			mount.Height=PIn.PInt(mountRow["Height"].ToString());

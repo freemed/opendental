@@ -5257,13 +5257,15 @@ namespace OpenDental{
 					command="ALTER TABLE userod ADD ProvNum int";
 				}
 				General.NonQEx(command);
-				//after r337 modified again after r362
+				//after r337,r362,r378
 				if(FormChooseDatabase.DBtype==DatabaseType.MySql) {
 					command="ALTER TABLE mountitem ADD OrdinalPos int NOT NULL default '0'";
 					General.NonQEx(command);
 					command="ALTER TABLE mountitem ADD Width int default '0'";
 					General.NonQEx(command);
 					command="ALTER TABLE mountitem ADD Height int default '0'";
+					General.NonQEx(command);
+					command="ALTER TABLE mount ADD Note text default ''";
 					General.NonQEx(command);
 					command="ALTER TABLE mount ADD Width int default '0'";
 					General.NonQEx(command);
@@ -5275,6 +5277,8 @@ namespace OpenDental{
 					command="ALTER TABLE mountitem ADD Width int default '0'";
 					General.NonQEx(command);
 					command="ALTER TABLE mountitem ADD Height int default '0'";
+					General.NonQEx(command);
+					command="ALTER TABLE mount ADD Note varchar2 default ''";
 					General.NonQEx(command);
 					command="ALTER TABLE mount ADD Width int default '0'";
 					General.NonQEx(command);

@@ -140,7 +140,7 @@ namespace OpenDental{
 		///<summary>Used for Invoke() calls in RenderCurrentImage() to safely handle multi-thread access to the picture box.</summary>
 		delegate void RenderImageCallback(Document docCopy,int originalWidth,int originalHeight,float zoom,PointF translation);
 		///<summary>Used to safe-guard against multi-threading issues when an image capture is completed.</summary>
-		delegate void CaptureCompleteCallback(object sender,EventArgs e);
+		delegate void CaptureCallback(object sender,EventArgs e);
 		///<summary>Used to protect against multi-threading issues when refreshing a mount during an image capture.</summary>
 		delegate void InvalidatesettingsCallback(ApplySettings settings,bool reloadZoomTransCrop);
 		///<summary>Keeps track of the document settings for the currently selected document or mount.</summary>
@@ -777,6 +777,8 @@ namespace OpenDental{
 			paintTools.Enabled=false;
 			//Must disable the brightnessContrastSlider seperately, since it is not actually in the paintTools control.
 			brightnessContrastSlider.Enabled=false;
+			paintTools.Buttons["Hand"].Pushed=true;
+			paintTools.Buttons["Crop"].Pushed=false;
 			//Stop any current image processing. This will avoid having the renderImage set to a valid image after
 			//the current image has been erased. This will also avoid concurrent access to the the currently loaded images by
 			//the main and worker threads.
@@ -795,6 +797,12 @@ namespace OpenDental{
 				int mountNum=Convert.ToInt32(obj["MountNum"].ToString());
 				int docNum=Convert.ToInt32(obj["DocNum"].ToString());
 				if(mountNum!=0){//This is a mount node.
+					paintTools.Buttons["Crop"].Enabled=false;
+					paintTools.Buttons["ZoomIn"].Enabled=false;
+					paintTools.Buttons["ZoomOut"].Enabled=false;
+					paintTools.Buttons["Flip"].Enabled=false;
+					paintTools.Buttons["RotateL"].Enabled=false;
+					paintTools.Buttons["RotateR"].Enabled=false;
 					//Creates a complete initial mount image. No need to call invalidate until changes are made to the mount later.
 					selectionMountItems=MountItems.GetItemsForMount(mountNum);
 					mountDocs=Documents.GetDocumentsForMountItems(selectionMountItems);
@@ -804,6 +812,9 @@ namespace OpenDental{
 					renderImage=new Bitmap(selectionMount.Width,selectionMount.Height);
 					RenderMountImage(renderImage,currentImages,selectionMountItems,mountDocs,hotDocument);
 				}else{//This is a document node.
+					paintTools.Buttons["Crop"].Enabled=true;
+					paintTools.Buttons["ZoomIn"].Enabled=true;
+					paintTools.Buttons["ZoomOut"].Enabled=true;
 					//Reload the doc from the db. We don't just keep reusing the tree data, because it will become more and 
 					//more stail with age if the program is left open in the image module for long periods of time.
 					selectionDoc=Documents.GetByNum(docNum);
@@ -814,6 +825,7 @@ namespace OpenDental{
 					brightnessContrastSlider.Enabled=true;	//The brightnessContrastSlider is not actually part of the paintTools
 																									//toolbar, and so it must be enabled or disabled seperately.
 				}
+				paintTools.Invalidate();
 				curImageWidths=new int[currentImages.Length];
 				curImageHeights=new int[currentImages.Length];
 				for(int i=0;i<currentImages.Length;i++) {
@@ -1079,7 +1091,7 @@ namespace OpenDental{
 						currentImages[hotDocument].Dispose();
 						currentImages[hotDocument]=null;
 					}
-					InvalidateSettings(ApplySettings.NONE,false);
+					InvalidateSettings(ApplySettings.ALL,false);
 					refreshTree=false;
 				}else{
 					if(verbose) {
@@ -1743,8 +1755,8 @@ namespace OpenDental{
 					}else{//The current selection is a mount.
 						RenderMountFrames(renderImage,selectionMountItems,hotDocument);
 						//Render only the modified image over the old mount image.
-						//A null document can happen when a new image frame is selected, but there is not image in that frame.
-						if(curDocCopy!=null && hotDocument>=0){
+						//A null document can happen when a new image frame is selected, but there is no image in that frame.
+						if(curDocCopy!=null && hotDocument>=0 && applySettings!=ApplySettings.NONE){
 							RenderImageIntoMount(renderImage,selectionMountItems[hotDocument],currentImages[hotDocument],curDocCopy);
 						}
 						RenderCurrentImage(new Document(),renderImage.Width,renderImage.Height,mountScale,imageTranslation);
@@ -1818,6 +1830,9 @@ namespace OpenDental{
 			int mountNum=Convert.ToInt32(obj["MountNum"].ToString());
 			int docNum=Convert.ToInt32(obj["DocNum"].ToString());
 			if(mountNum!=0){//Is this object a mount object?
+				FormMountEdit fme=new FormMountEdit(selectionMount);
+				fme.ShowDialog();//Edits the selectionMount object directly and updates and changes to the database as well.
+				FillDocList(true);//Refresh tree in case description for the mount changed.
 				return;
 			}
 			Document nodeDoc=Documents.GetByNum(docNum);
@@ -1844,28 +1859,23 @@ namespace OpenDental{
 			DataRow obj=(DataRow)TreeDocuments.SelectedNode.Tag;
 			int mountNum=Convert.ToInt32(obj["MountNum"].ToString());
 			int docNum=Convert.ToInt32(obj["DocNum"].ToString());
-			if(mountNum!=0) {
-				return;
+			if(mountNum!=0) {//The current selection is a mount.
+				FormMountEdit fme=new FormMountEdit(selectionMount);
+				fme.ShowDialog();//Edits the selectionMount object directly and updates and changes to the database as well.
+				FillDocList(true);//Refresh tree in case description for the mount changed.}
+			}else if(docNum!=0){//A document is currently selected.
+				//The FormDocInfo object updates the selectionDoc and stores the changes in the database as well.
+				FormDocInfo formDocInfo2=new FormDocInfo(PatCur,selectionDoc,GetCurrentFolderName(TreeDocuments.SelectedNode));
+				formDocInfo2.ShowDialog();
+				if(formDocInfo2.DialogResult!=DialogResult.OK) {
+					return;
+				}
+				FillDocList(true);
 			}
-			//The FormDocInfo object updates the selectionDoc and stores the changes in the database as well.
-			FormDocInfo formDocInfo2=new FormDocInfo(PatCur,selectionDoc,GetCurrentFolderName(TreeDocuments.SelectedNode));
-			formDocInfo2.ShowDialog();
-			if(formDocInfo2.DialogResult!=DialogResult.OK) {
-				return;
-			}
-			FillDocList(true);
 		}
 
+		///<summary>This button is disabled for mounts, in which case this code is never called.</summary>
 		private void OnZoomIn_Click() {
-			if(GetNodeIdentifier(TreeDocuments.SelectedNode)==""){
-				return;
-			}
-			DataRow obj=(DataRow)TreeDocuments.SelectedNode.Tag;
-			int mountNum=Convert.ToInt32(obj["MountNum"].ToString());
-			int docNum=Convert.ToInt32(obj["DocNum"].ToString());
-			if(mountNum!=0){
-				return;
-			}
 			zoomLevel++;
 			PointF c=new PointF(PictureBox1.ClientRectangle.Width/2.0f,PictureBox1.ClientRectangle.Height/2.0f);
 			PointF p=new PointF(c.X-imageTranslation.X,c.Y-imageTranslation.Y);
@@ -1874,16 +1884,8 @@ namespace OpenDental{
 			InvalidateSettings(ApplySettings.NONE,false);//Refresh display.
 		}
 
+		///<summary>This button is disabled for mounts, in which case this code is never called.</summary>
 		private void OnZoomOut_Click() {
-			if(GetNodeIdentifier(TreeDocuments.SelectedNode)=="") {
-				return;
-			}
-			DataRow obj=(DataRow)TreeDocuments.SelectedNode.Tag;
-			int mountNum=Convert.ToInt32(obj["MountNum"].ToString());
-			int docNum=Convert.ToInt32(obj["DocNum"].ToString());
-			if(mountNum!=0) {
-				return;
-			}
 			zoomLevel--;
 			PointF c=new PointF(PictureBox1.ClientRectangle.Width/2.0f,PictureBox1.ClientRectangle.Height/2.0f);
 			PointF p=new PointF(c.X-imageTranslation.X,c.Y-imageTranslation.Y);
@@ -1967,13 +1969,14 @@ namespace OpenDental{
 			MouseDownOrigin=new Point(e.X,e.Y);
 			MouseIsDown=true;
 			imageLocation=new PointF(imageTranslation.X,imageTranslation.Y);
-			if(e.Button!=MouseButtons.Left){
+			if(e.Button!=MouseButtons.Left || !paintTools.Buttons["Hand"].Pushed) {
 				return;
 			}
 			if(GetNodeIdentifier(TreeDocuments.SelectedNode)!=""){
 				DataRow obj=(DataRow)TreeDocuments.SelectedNode.Tag;
 				int mountNum=Convert.ToInt32(obj["MountNum"].ToString());
 				if(mountNum!=0){//The user may be trying to select an individual image within the current mount.
+					MouseIsDown=false;
 					paintTools.Enabled=false;
 					brightnessContrastSlider.Enabled=false;
 					PointF relativeMouseLocation=new PointF(
@@ -1981,6 +1984,9 @@ namespace OpenDental{
 						(MouseDownOrigin.Y-imageTranslation.Y)/mountScale+selectionMount.Height/2);
 					//Unselect all mount frames, and reselect the frame clicked on (if any).
 					hotDocument=-1;
+					paintTools.Buttons["Flip"].Enabled=false;
+					paintTools.Buttons["RotateL"].Enabled=false;
+					paintTools.Buttons["RotateR"].Enabled=false;
 					//Enumerate the image locations.
 					for(int i=0;i<selectionMountItems.Length;i++){
 						RectangleF itemLocation=new RectangleF(selectionMountItems[i].Xpos,selectionMountItems[i].Ypos,
@@ -1994,11 +2000,15 @@ namespace OpenDental{
 										SetBrightnessAndContrast();
 										paintTools.Enabled=true;
 										brightnessContrastSlider.Enabled=true;
+										paintTools.Buttons["Flip"].Enabled=true;
+										paintTools.Buttons["RotateL"].Enabled=true;
+										paintTools.Buttons["RotateR"].Enabled=true;
 									}
 								}
 							}
 						}
 					}
+					paintTools.Invalidate();
 					if(hotDocument<0){//The current selection was unselected.
 						xRayImageController.KillXRayThread();//Stop xray capture, because it relies on the current selection to place images.
 					}
@@ -2016,12 +2026,15 @@ namespace OpenDental{
 		}
 
 		private void PictureBox1_MouseMove(object sender,System.Windows.Forms.MouseEventArgs e) {
-			if(GetNodeIdentifier(TreeDocuments.SelectedNode)==""){
+			if(!MouseIsDown){
+				return;
+			}
+			if(GetNodeIdentifier(TreeDocuments.SelectedNode)=="") {
 				return;
 			}
 			DataRow obj=(DataRow)TreeDocuments.SelectedNode.Tag;
 			int docNum=Convert.ToInt32(obj["DocNum"].ToString());
-			if(!MouseIsDown || docNum==0){
+			if(docNum==0) {
 				return;
 			}
 			if(paintTools.Buttons["Hand"].Pushed) {//Hand mode.
@@ -2052,22 +2065,31 @@ namespace OpenDental{
 			if(GetNodeIdentifier(TreeDocuments.SelectedNode)=="") {
 				return;
 			}
-			DataRow obj=(DataRow)TreeDocuments.SelectedNode.Tag;
-			int mountNum=Convert.ToInt32(obj["MountNum"].ToString());
-			int docNum=Convert.ToInt32(obj["DocNum"].ToString());
-			if(docNum==0){
-				return;
-			}
 			if(!MsgBox.Show(this,true,"Crop to Rectangle?")){
 				cropTangle=new Rectangle(0,0,-1,-1);
 				InvalidateSettings(ApplySettings.NONE,false);//Refresh display (since message box was covering).
 				return;
 			}
+			DataRow obj=(DataRow)TreeDocuments.SelectedNode.Tag;
+			int mountNum=Convert.ToInt32(obj["MountNum"].ToString());
+			int docNum=Convert.ToInt32(obj["DocNum"].ToString());
+			float cropZoom;
+			PointF cropTrans;
+			if(mountNum!=0){
+				return;
+				/*cropZoom=mountScale;
+				cropTrans=MountSpaceToScreenSpace(new PointF(
+					selectionMountItems[hotDocument].Xpos+selectionMountItems[hotDocument].Width/2,
+					selectionMountItems[hotDocument].Ypos+selectionMountItems[hotDocument].Height/2));*/
+			}else{//document
+				cropZoom=imageZoom*zoomFactor;
+				cropTrans=imageTranslation;
+			}
 			PointF cropPoint1=ScreenPointToUnalteredDocumentPoint(cropTangle.Location,selectionDoc,
-				curImageWidths[0],curImageHeights[0],imageZoom*zoomFactor,imageTranslation);
+				curImageWidths[hotDocument],curImageHeights[hotDocument],cropZoom,cropTrans);
 			PointF cropPoint2=ScreenPointToUnalteredDocumentPoint(new Point(cropTangle.Location.X+cropTangle.Width,
-				cropTangle.Location.Y+cropTangle.Height),selectionDoc,curImageWidths[0],curImageHeights[0],
-				imageZoom*zoomFactor,imageTranslation);
+				cropTangle.Location.Y+cropTangle.Height),selectionDoc,curImageWidths[hotDocument],curImageHeights[hotDocument],
+				cropZoom,cropTrans);
 			//cropPoint1 and cropPoint2 together define an axis-aligned bounding area, or our crop area. 
 			//However, the two points have no guaranteed order, thus we must sort them using Math.Min.
 			Rectangle rawCropRect=new Rectangle(
@@ -2077,7 +2099,7 @@ namespace OpenDental{
 				(int)Math.Ceiling((decimal)Math.Abs(cropPoint1.Y-cropPoint2.Y)));
 			//We must also intersect the old cropping rectangle with the new cropping rectangle, so that part of
 			//the image does not come back as a result of multiple crops.
-			Rectangle oldCropRect=DocCropRect(selectionDoc,curImageWidths[0],curImageHeights[0]);
+			Rectangle oldCropRect=DocCropRect(selectionDoc,curImageWidths[hotDocument],curImageHeights[hotDocument]);
 			float[] finalCropRect=ODMathLib.IntersectRectangles(rawCropRect.X,rawCropRect.Y,rawCropRect.Width,
 				rawCropRect.Height,oldCropRect.X,oldCropRect.Y,oldCropRect.Width,oldCropRect.Height);
 			//Will return a null intersection when the user chooses a crop rectangle which is
@@ -2088,28 +2110,36 @@ namespace OpenDental{
 				InvalidateSettings(ApplySettings.NONE,false);//Refresh display (since message box was covering).
 				return;
 			}
-			Rectangle prevCropRect=DocCropRect(selectionDoc,curImageWidths[0],curImageHeights[0]);
+			Rectangle prevCropRect=DocCropRect(selectionDoc,curImageWidths[hotDocument],curImageHeights[hotDocument]);
 			selectionDoc.CropX=(int)finalCropRect[0];
 			selectionDoc.CropY=(int)finalCropRect[1];
 			selectionDoc.CropW=(int)Math.Ceiling(finalCropRect[2]);
 			selectionDoc.CropH=(int)Math.Ceiling(finalCropRect[3]);
 			Documents.Update(selectionDoc);
-			DeleteThumbnailImage(selectionDoc);
-			Rectangle newCropRect=DocCropRect(selectionDoc,curImageWidths[0],curImageHeights[0]);
-			//Update the location of the image so that the cropped portion of the image does not move in screen space.
-			PointF prevCropCenter=new PointF(prevCropRect.X+prevCropRect.Width/2.0f,prevCropRect.Y+prevCropRect.Height/2.0f);
-			PointF newCropCenter=new PointF(newCropRect.X+newCropRect.Width/2.0f,newCropRect.Y+newCropRect.Height/2.0f);
-			PointF[] imageCropCenters=new PointF[] {
-				prevCropCenter,
-				newCropCenter
-			};
-			Matrix docMat=GetDocumentFlippedRotatedMatrix(selectionDoc);
-			docMat.Scale(imageZoom*zoomFactor,imageZoom*zoomFactor);
-			docMat.TransformPoints(imageCropCenters);
-			imageTranslation=new PointF(imageTranslation.X+(imageCropCenters[1].X-imageCropCenters[0].X),
-																	imageTranslation.Y+(imageCropCenters[1].Y-imageCropCenters[0].Y));
+			if(docNum!=0){
+				DeleteThumbnailImage(selectionDoc);
+				Rectangle newCropRect=DocCropRect(selectionDoc,curImageWidths[hotDocument],curImageHeights[hotDocument]);
+				//Update the location of the image so that the cropped portion of the image does not move in screen space.
+				PointF prevCropCenter=new PointF(prevCropRect.X+prevCropRect.Width/2.0f,prevCropRect.Y+prevCropRect.Height/2.0f);
+				PointF newCropCenter=new PointF(newCropRect.X+newCropRect.Width/2.0f,newCropRect.Y+newCropRect.Height/2.0f);
+				PointF[] imageCropCenters=new PointF[] {
+					prevCropCenter,
+					newCropCenter
+				};
+				Matrix docMat=GetDocumentFlippedRotatedMatrix(selectionDoc);
+				docMat.Scale(cropZoom,cropZoom);
+				docMat.TransformPoints(imageCropCenters);
+				imageTranslation=new PointF(imageTranslation.X+(imageCropCenters[1].X-imageCropCenters[0].X),
+																		imageTranslation.Y+(imageCropCenters[1].Y-imageCropCenters[0].Y));
+			}
 			cropTangle=new Rectangle(0,0,-1,-1);
 			InvalidateSettings(ApplySettings.CROP,false);
+		}
+
+		private PointF MountSpaceToScreenSpace(PointF p){
+			PointF relvec=new PointF(p.X/selectionMount.Width-0.5f,p.Y/selectionMount.Height-0.5f);
+			return new PointF(imageTranslation.X+relvec.X*selectionMount.Width*mountScale,
+				imageTranslation.Y+relvec.Y*selectionMount.Height*mountScale);
 		}
 
 		private void SetBrightnessAndContrast() {
@@ -2160,25 +2190,26 @@ namespace OpenDental{
 					mount.DocCategory=GetCurrentCategory();
 					mount.ImgType=ImageType.Mount;
 					mount.PatNum=PatCur.PatNum;
-					mount.Width=900;
-					mount.Height=240;
+					int border=80;
+					mount.Width=6400+5*border;
+					mount.Height=1156+2*border;
 					mount.MountNum=Mounts.Insert(mount);
 					MountItem mountItem=new MountItem();
 					mountItem.MountNum=mount.MountNum;
-					mountItem.Width=200;
-					mountItem.Height=200;
-					mountItem.Ypos=20;
+					mountItem.Width=1600;
+					mountItem.Height=1156;
+					mountItem.Ypos=border;
 					mountItem.OrdinalPos=1;
-					mountItem.Xpos=20;
+					mountItem.Xpos=border;
 					MountItems.Insert(mountItem);
 					mountItem.OrdinalPos=0;
-					mountItem.Xpos=240;
+					mountItem.Xpos=mountItem.Width+2*border;
 					MountItems.Insert(mountItem);
 					mountItem.OrdinalPos=2;
-					mountItem.Xpos=460;
+					mountItem.Xpos=2*mountItem.Width+3*border;
 					MountItems.Insert(mountItem);
 					mountItem.OrdinalPos=3;
-					mountItem.Xpos=680;
+					mountItem.Xpos=3*mountItem.Width+4*border;
 					MountItems.Insert(mountItem);
 					FillDocList(false);
 					SelectTreeNode(GetNodeById(MakeIdentifier("0",mount.MountNum.ToString())));
@@ -2198,7 +2229,7 @@ namespace OpenDental{
 		///<summary>Called when an xray capture begins, but after any previous image capture threads are killed.</summary>
 		private void OnCaptureBegin(object sender,EventArgs e){
 			if(ToolBarMain.InvokeRequired) {
-				CaptureCompleteCallback c=new CaptureCompleteCallback(OnCaptureBegin);
+				CaptureCallback c=new CaptureCallback(OnCaptureBegin);
 				Invoke(c,new object[] { sender,e });
 				return;
 			}
@@ -2208,14 +2239,21 @@ namespace OpenDental{
 
 		///<summary>Called when the image capture device is ready for exposure.</summary>
 		private void OnCaptureReady(object sender,EventArgs e) {
-			GotoNextUnusedFrame();//Advance selection box to the location where the next image will capture to.
+			if(this.InvokeRequired) {
+				CaptureCallback c=new CaptureCallback(OnCaptureReady);
+				Invoke(c,new object[] { sender,e });
+				return;
+			}
+			paintTools.Enabled=false;
+			brightnessContrastSlider.Enabled=false;
+			GetNextUnusedMountItem();
 			InvalidateSettings(ApplySettings.NONE,false);//Refresh the selection box change (does not do any image processing here).
 		}
 
 		///<summary>Called on successful capture of image.</summary>
 		private void OnCaptureComplete(object sender,EventArgs e) {
 			if(this.InvokeRequired){
-				CaptureCompleteCallback c=new CaptureCompleteCallback(OnCaptureComplete);
+				CaptureCallback c=new CaptureCallback(OnCaptureComplete);
 				Invoke(c,new object[] {sender,e});
 				return;
 			}
@@ -2263,11 +2301,15 @@ namespace OpenDental{
 				throw new Exception(Lan.g(this,"Unable to save captured XRay image as document")+": "+ex.Message);
 			}
 			currentImages[hotDocument]=capturedImage;
+			curImageWidths[hotDocument]=capturedImage.Width;
+			curImageHeights[hotDocument]=capturedImage.Height;
 			mountDocs[hotDocument]=doc;
 			selectionDoc=doc;
 			SetBrightnessAndContrast();
 			//Refresh image in in picture box.
 			InvalidateSettings(ApplySettings.ALL,false);
+			paintTools.Enabled=true;
+			brightnessContrastSlider.Enabled=true;
 			//This capture was successful. Keep capturing more images until the capture is manually aborted.
 			//This will cause calls to OnCaptureAborted(), then OnCaptureBegin().
 			xRayImageController.CaptureXRay();
@@ -2276,7 +2318,7 @@ namespace OpenDental{
 		///<summary>Called under any error circumstance resulting from the image capture process, or when one image capture is finishing and launching the next image capture.</summary>
 		private void OnCaptureAborted(object sender,EventArgs e) {
 			if(ToolBarMain.InvokeRequired) {
-				CaptureCompleteCallback c=new CaptureCompleteCallback(OnCaptureAborted);
+				CaptureCallback c=new CaptureCallback(OnCaptureAborted);
 				Invoke(c,new object[] { sender,e });
 				return;
 			}
@@ -2284,12 +2326,14 @@ namespace OpenDental{
 			ToolBarMain.Invalidate();
 		}
 
-		private void GotoNextUnusedFrame() {
-			if(hotDocument<0){
+		private void GetNextUnusedMountItem() {
+			//Advance selection box to the location where the next image will capture to.
+			if(hotDocument<0) {
 				hotDocument=0;
 			}
 			int hotStart=hotDocument;
-			do {
+			int d=hotDocument;
+			do{
 				if(mountDocs[hotDocument]==null) {
 					return;//Found an open frame in the mount.
 				}
@@ -2361,7 +2405,7 @@ namespace OpenDental{
 		}
 
 		///<summary>Calculates the image dimensions after factoring flip and rotation of the given document.</summary>
-		public static RectangleF CalcImageDims(int imageWidth,int imageHeight,Document doc) {
+		private static RectangleF CalcImageDims(int imageWidth,int imageHeight,Document doc) {
 			Matrix orientation=GetScreenMatrix(doc,imageWidth,imageHeight,1,new PointF(0,0));
 			PointF[] corners=new PointF[] {
 				new PointF(-imageWidth/2,-imageHeight/2),
@@ -2392,7 +2436,7 @@ namespace OpenDental{
 		}
 
 		///<summary>Converts a screen-space location into a location which is relative to the given document in its unrotated/unflipped/unscaled/untranslated state.</summary>
-		public static PointF ScreenPointToUnalteredDocumentPoint(PointF screenLocation,Document doc,
+		private static PointF ScreenPointToUnalteredDocumentPoint(PointF screenLocation,Document doc,
 				int docOriginalImageWidth,int docOriginalImageHeight,float imageScale,PointF imageTranslation){
 			Matrix docMat=GetDocumentFlippedRotatedMatrix(doc);
 			docMat.Scale(imageScale,imageScale);
@@ -2418,7 +2462,7 @@ namespace OpenDental{
 		}
 
 		///<summary>Returns a matrix for the given document which represents flipping over the Y-axis before rotating. Of course, if doc.IsFlipped is false, then no flipping is performed, and if doc.DegreesRotated is a multiple of 360 then no rotation is performed.</summary>
-		public static Matrix GetDocumentFlippedRotatedMatrix(Document doc) {
+		private static Matrix GetDocumentFlippedRotatedMatrix(Document doc) {
 			Matrix result=new Matrix(doc.IsFlipped?-1:1,0,//X-axis
 																0,1,//Y-axis
 																0,0);//Offset/Translation(dx,dy)
@@ -2577,9 +2621,9 @@ namespace OpenDental{
 					if(i==imageSelected) {
 						highlight=(Pen)Pens.Yellow.Clone();//highlight desired image.
 					}else{
-						highlight=(Pen)Pens.DarkGray.Clone();//just surround other images with standard border.
+						highlight=(Pen)Pens.SlateGray.Clone();//just surround other images with standard border.
 					}
-					highlight.Width=8;//Should be even
+					highlight.Width=16;//Should be even
 					g.DrawRectangle(highlight,mountItems[i].Xpos-highlight.Width/2,mountItems[i].Ypos-highlight.Width/2,
 						mountItems[i].Width+highlight.Width,mountItems[i].Height+highlight.Width);
 				}
