@@ -179,10 +179,9 @@ namespace OpenDental{
 			//TODO: In the future use a device locator in the xImagingDeviceManager
 			//project to return the appropriate general device control.
 			xRayImageController=new SuniDeviceControl();
-			this.xRayImageController.OnCaptureBegin+=new System.EventHandler(this.OnCaptureBegin);
 			this.xRayImageController.OnCaptureReady+=new System.EventHandler(this.OnCaptureReady);
 			this.xRayImageController.OnCaptureComplete+=new System.EventHandler(this.OnCaptureComplete);
-			this.xRayImageController.OnCaptureAbort+=new System.EventHandler(this.OnCaptureAborted);
+			this.xRayImageController.OnCaptureFinalize+=new System.EventHandler(this.OnCaptureFinalize);
 		}
 
 		///<summary></summary>
@@ -217,7 +216,6 @@ namespace OpenDental{
 			this.menuPatient = new System.Windows.Forms.ContextMenu();
 			this.panelNote = new System.Windows.Forms.Panel();
 			this.labelInvalidSig = new System.Windows.Forms.Label();
-			this.sigBox = new OpenDental.UI.SignatureBox();
 			this.label15 = new System.Windows.Forms.Label();
 			this.label1 = new System.Windows.Forms.Label();
 			this.textNote = new System.Windows.Forms.TextBox();
@@ -226,6 +224,7 @@ namespace OpenDental{
 			this.ToolBarMain = new OpenDental.UI.ODToolBar();
 			this.paintTools = new OpenDental.UI.ODToolBar();
 			this.brightnessContrastSlider = new OpenDental.UI.ContrWindowingSlider();
+			this.sigBox = new OpenDental.UI.SignatureBox();
 			((System.ComponentModel.ISupportInitialize)(this.PictureBox1)).BeginInit();
 			this.panelNote.SuspendLayout();
 			this.SuspendLayout();
@@ -383,14 +382,6 @@ namespace OpenDental{
 			this.labelInvalidSig.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			this.labelInvalidSig.DoubleClick += new System.EventHandler(this.labelInvalidSig_DoubleClick);
 			// 
-			// sigBox
-			// 
-			this.sigBox.Location = new System.Drawing.Point(308,20);
-			this.sigBox.Name = "sigBox";
-			this.sigBox.Size = new System.Drawing.Size(394,91);
-			this.sigBox.TabIndex = 90;
-			this.sigBox.DoubleClick += new System.EventHandler(this.sigBox_DoubleClick);
-			// 
 			// label15
 			// 
 			this.label15.Location = new System.Drawing.Point(305,0);
@@ -460,6 +451,7 @@ namespace OpenDental{
 			// 
 			// brightnessContrastSlider
 			// 
+			this.brightnessContrastSlider.Enabled = false;
 			this.brightnessContrastSlider.Location = new System.Drawing.Point(240,36);
 			this.brightnessContrastSlider.MaxVal = 255;
 			this.brightnessContrastSlider.MinVal = 0;
@@ -469,6 +461,14 @@ namespace OpenDental{
 			this.brightnessContrastSlider.Text = "contrWindowingSlider1";
 			this.brightnessContrastSlider.Scroll += new System.EventHandler(this.brightnessContrastSlider_Scroll);
 			this.brightnessContrastSlider.ScrollComplete += new System.EventHandler(this.brightnessContrastSlider_ScrollComplete);
+			// 
+			// sigBox
+			// 
+			this.sigBox.Location = new System.Drawing.Point(308,20);
+			this.sigBox.Name = "sigBox";
+			this.sigBox.Size = new System.Drawing.Size(394,91);
+			this.sigBox.TabIndex = 90;
+			this.sigBox.DoubleClick += new System.EventHandler(this.sigBox_DoubleClick);
 			// 
 			// ContrDocs
 			// 
@@ -571,19 +571,15 @@ namespace OpenDental{
 			button.DropDownMenu=menuForms;
 			ToolBarMain.Buttons.Add(button);
 			button=new ODToolBarButton(Lan.g(this,"Capture"),-1,"Capture Image From Device","Capture");
-			button.Style=ODToolBarButtonStyle.ToggleButton;
+			button.Style=ODToolBarButtonStyle.ToggleButton;			
 			ToolBarMain.Buttons.Add(button);
 			button=new ODToolBarButton("",7,Lan.g(this,"Crop Tool"),"Crop");
 			button.Style=ODToolBarButtonStyle.ToggleButton;
-			if(IsCropMode){
-				button.Pushed=true;
-			}
+			button.Pushed=IsCropMode;
 			paintTools.Buttons.Add(button);
 			button=new ODToolBarButton("",10,Lan.g(this,"Hand Tool"),"Hand");
 			button.Style=ODToolBarButtonStyle.ToggleButton;
-			if(!IsCropMode){
-				button.Pushed=true;
-			}
+			button.Pushed=!IsCropMode;
 			paintTools.Buttons.Add(button);
 			paintTools.Buttons.Add(new ODToolBarButton(ODToolBarButtonStyle.Separator));
 			paintTools.Buttons.Add(new ODToolBarButton("",8,Lan.g(this,"Zoom In"),"ZoomIn"));
@@ -622,9 +618,8 @@ namespace OpenDental{
 		public void ModuleUnselected(){
 			FamCur=null;
 			PatCur=null;
-			//Cancel current image capture by manually untoggling the capture button.
-			ToolBarMain.Buttons["Capture"].Pushed=false;
-			OnCapture_Click();
+			//Cancel current image capture.
+			xRayImageController.KillXRayThread();
 		}
 
 		///<summary>This is public for NewPatientForm functionality.</summary>
@@ -637,7 +632,8 @@ namespace OpenDental{
 			}
 			FamCur=Patients.GetFamily(patNum);
 			PatCur=FamCur.GetPatient(patNum);
-			if(ParentForm != null){ //Added so NewPatientform can have access without showing
+			if(ParentForm!=null){
+				//Added so NewPatientform can have access without showing
 				ParentForm.Text=Patients.GetMainTitle(PatCur);
 			}
 			if(PatCur.ImageFolder==""){//creates new folder for patient if none present
@@ -695,48 +691,12 @@ namespace OpenDental{
 		private void RefreshModuleScreen(){
 			ParentForm.Text=Patients.GetMainTitle(PatCur);
 			if(this.Enabled && PatCur!=null){
-				//ParentForm.Text=((Pref)PrefB.HList["MainWindowTitle"]).ValueString+" - "
-				//	+PatCur.GetNameLF();
-				ToolBarMain.Buttons["Print"].Enabled=true;
-				ToolBarMain.Buttons["Delete"].Enabled=true;
-				ToolBarMain.Buttons["Info"].Enabled=true;
-				ToolBarMain.Buttons["Import"].Enabled=true;
-				ToolBarMain.Buttons["ScanDoc"].Enabled=true;
-				ToolBarMain.Buttons["ScanXRay"].Enabled=true;
-				ToolBarMain.Buttons["ScanPhoto"].Enabled=true;
-				ToolBarMain.Buttons["Copy"].Enabled=true;
-				ToolBarMain.Buttons["Paste"].Enabled=true;
-				ToolBarMain.Buttons["Forms"].Enabled=true;
-				ToolBarMain.Buttons["Capture"].Enabled=true;
-				paintTools.Buttons["Crop"].Enabled=true;
-				paintTools.Buttons["Hand"].Enabled=true;
-				paintTools.Buttons["ZoomIn"].Enabled=true;
-				paintTools.Buttons["ZoomOut"].Enabled=true;
-				paintTools.Buttons["Flip"].Enabled=true;
-				paintTools.Buttons["RotateR"].Enabled=true;
-				paintTools.Buttons["RotateL"].Enabled=true;
-			}
-			else{
-				//ParentForm.Text=((Pref)PrefB.HList["MainWindowTitle"]).ValueString;
-				//PatCur=new Patient();
-				ToolBarMain.Buttons["Print"].Enabled=false;
-				ToolBarMain.Buttons["Delete"].Enabled=false;
-				ToolBarMain.Buttons["Info"].Enabled=false;
-				ToolBarMain.Buttons["Import"].Enabled=false;
-				ToolBarMain.Buttons["ScanDoc"].Enabled=false;
-				ToolBarMain.Buttons["ScanXRay"].Enabled=false;
-				ToolBarMain.Buttons["ScanPhoto"].Enabled=false;
-				ToolBarMain.Buttons["Copy"].Enabled=false;
-				ToolBarMain.Buttons["Paste"].Enabled=false;
-				ToolBarMain.Buttons["Forms"].Enabled=false;
-				ToolBarMain.Buttons["Capture"].Enabled=false;
-				paintTools.Buttons["Crop"].Enabled=false;
-				paintTools.Buttons["Hand"].Enabled=false;
-				paintTools.Buttons["ZoomIn"].Enabled=false;
-				paintTools.Buttons["ZoomOut"].Enabled=false;
-				paintTools.Buttons["Flip"].Enabled=false;
-				paintTools.Buttons["RotateR"].Enabled=false;
-				paintTools.Buttons["RotateL"].Enabled=false;
+				//Enable tools which must always be accessible when a valid patient is selected.
+				EnableAllTools(true);
+				//Item specific tools disabled until item chosen.
+				EnableAllTreeItemTools(false);
+			}else{
+				EnableAllTools(false);//Disable entire menu (besides select patient).
 			}
 			FillPatientButton();
 			ToolBarMain.Invalidate();
@@ -761,6 +721,50 @@ namespace OpenDental{
 				PatientSelected(this,eArgs);
 		}
 
+		///<summary>Applies to all tools and excludes patient selection button.</summary>
+		private void EnableAllTools(bool enable) {
+			for(int i=0;i<ToolBarMain.Buttons.Count;i++){
+				ToolBarMain.Buttons[i].Enabled=enable;			
+			}
+			ToolBarMain.Buttons["Patient"].Enabled=true;
+			ToolBarMain.Buttons["Capture"].Enabled=(ToolBarMain.Buttons["Capture"].Enabled &&
+				Environment.OSVersion.Platform!=PlatformID.Unix);
+			ToolBarMain.Invalidate();
+			for(int i=0;i<paintTools.Buttons.Count;i++){
+				paintTools.Buttons[i].Enabled=enable;
+			}
+			paintTools.Enabled=enable;
+			paintTools.Invalidate();
+			brightnessContrastSlider.Enabled=enable;
+			brightnessContrastSlider.Invalidate();
+		}
+
+		///<summary>Defined this way to force future programming to consider which tools are enabled and disabled for every possible tool in the menu.</summary>
+		private void EnableTreeItemTools(bool print,bool delete,bool info,bool copy,bool sign,bool brightAndContrast,bool crop,bool hand,bool zoomIn,bool zoomOut,bool flip,bool rotateL,bool rotateR){
+			ToolBarMain.Buttons["Print"].Enabled=print;
+			ToolBarMain.Buttons["Delete"].Enabled=delete;
+			ToolBarMain.Buttons["Info"].Enabled=info;
+			ToolBarMain.Buttons["Copy"].Enabled=copy;
+			ToolBarMain.Buttons["Sign"].Enabled=sign;
+			ToolBarMain.Invalidate();
+			paintTools.Buttons["Crop"].Enabled=crop;
+			paintTools.Buttons["Hand"].Enabled=hand;
+			paintTools.Buttons["ZoomIn"].Enabled=zoomIn;
+			paintTools.Buttons["ZoomOut"].Enabled=zoomOut;
+			paintTools.Buttons["Flip"].Enabled=flip;
+			paintTools.Buttons["RotateR"].Enabled=rotateR;
+			paintTools.Buttons["RotateL"].Enabled=rotateL;
+			//Enabled if one tool inside is enabled.
+			paintTools.Enabled=(brightAndContrast||crop||hand||zoomIn||zoomOut||flip||rotateL||rotateR);
+			paintTools.Invalidate();
+			brightnessContrastSlider.Enabled=brightAndContrast;
+			brightnessContrastSlider.Invalidate();
+		}
+
+		private void EnableAllTreeItemTools(bool enable){
+			EnableTreeItemTools(enable,enable,enable,enable,enable,enable,enable,enable,enable,enable,enable,enable,enable);
+		}
+
 		///<summary>Selection doesn't only happen by the tree and mouse clicks, but can also happen by automatic processes, such as image import, image paste, etc...</summary>
 		private void SelectTreeNode(TreeNode node){
 			//Select the node always, but perform additional tasks when necessary (i.e. load an image, or mount).
@@ -773,10 +777,8 @@ namespace OpenDental{
 				return;
 			}
 			oldSelectionIdentifier=identifier;
-			//Disable all paint tools until the currently selected node is loaded properly in the picture box.
-			paintTools.Enabled=false;
-			//Must disable the brightnessContrastSlider seperately, since it is not actually in the paintTools control.
-			brightnessContrastSlider.Enabled=false;
+			//Disable all item tools until the currently selected node is loaded properly in the picture box.
+			EnableAllTreeItemTools(false);
 			paintTools.Buttons["Hand"].Pushed=true;
 			paintTools.Buttons["Crop"].Pushed=false;
 			//Stop any current image processing. This will avoid having the renderImage set to a valid image after
@@ -797,12 +799,6 @@ namespace OpenDental{
 				int mountNum=Convert.ToInt32(obj["MountNum"].ToString());
 				int docNum=Convert.ToInt32(obj["DocNum"].ToString());
 				if(mountNum!=0){//This is a mount node.
-					paintTools.Buttons["Crop"].Enabled=false;
-					paintTools.Buttons["ZoomIn"].Enabled=false;
-					paintTools.Buttons["ZoomOut"].Enabled=false;
-					paintTools.Buttons["Flip"].Enabled=false;
-					paintTools.Buttons["RotateL"].Enabled=false;
-					paintTools.Buttons["RotateR"].Enabled=false;
 					//Creates a complete initial mount image. No need to call invalidate until changes are made to the mount later.
 					selectionMountItems=MountItems.GetItemsForMount(mountNum);
 					mountDocs=Documents.GetDocumentsForMountItems(selectionMountItems);
@@ -811,21 +807,16 @@ namespace OpenDental{
 					selectionMount=Mounts.GetByNum(mountNum);
 					renderImage=new Bitmap(selectionMount.Width,selectionMount.Height);
 					RenderMountImage(renderImage,currentImages,selectionMountItems,mountDocs,hotDocument);
+					EnableTreeItemTools(true,true,true,true,false,false,false,true,false,false,false,false,false);
 				}else{//This is a document node.
-					paintTools.Buttons["Crop"].Enabled=true;
-					paintTools.Buttons["ZoomIn"].Enabled=true;
-					paintTools.Buttons["ZoomOut"].Enabled=true;
 					//Reload the doc from the db. We don't just keep reusing the tree data, because it will become more and 
 					//more stail with age if the program is left open in the image module for long periods of time.
 					selectionDoc=Documents.GetByNum(docNum);
 					hotDocument=0;
 					currentImages=GetDocumentImages(new Document[] {selectionDoc},patFolder);
 					SetBrightnessAndContrast();
-					paintTools.Enabled=true;								//Only allow painting tools to be used when a valid image has been loaded.
-					brightnessContrastSlider.Enabled=true;	//The brightnessContrastSlider is not actually part of the paintTools
-																									//toolbar, and so it must be enabled or disabled seperately.
+					EnableAllTools(true);
 				}
-				paintTools.Invalidate();
 				curImageWidths=new int[currentImages.Length];
 				curImageHeights=new int[currentImages.Length];
 				for(int i=0;i<currentImages.Length;i++) {
@@ -1067,6 +1058,7 @@ namespace OpenDental{
 				MsgBox.Show(this,"Cannot delete folders");
 				return;
 			}
+			EnableAllTreeItemTools(false);
 			selectionDoc=new Document();
 			DataRow obj=(DataRow)TreeDocuments.SelectedNode.Tag;
 			int mountNum=Convert.ToInt32(obj["MountNum"].ToString());
@@ -1143,13 +1135,6 @@ namespace OpenDental{
 			if(TreeDocuments.SelectedNode==null ||				//No selection
 				TreeDocuments.SelectedNode.Tag==null ||			//Internal error
 				TreeDocuments.SelectedNode.Parent==null){		//This is a folder node.
-				return;
-			}
-			DataRow obj=(DataRow)TreeDocuments.SelectedNode.Tag;
-			int mountNum=Convert.ToInt32(obj["MountNum"].ToString());
-			int docNum=Convert.ToInt32(obj["DocNum"].ToString());
-			if(mountNum!=0){//Is this a mount object?
-				MsgBox.Show(this,"Cannot sign mount objects");
 				return;
 			}
 			//Show the underlying panel note box while the signature is being filled.
@@ -1429,12 +1414,8 @@ namespace OpenDental{
 			formD.ShowDialog();
 			if(formD.DialogResult!=DialogResult.OK){
 				DeleteSelection(false);
-				paintTools.Enabled=false;//Force image to clear from screen.
-				brightnessContrastSlider.Enabled=false;
 			}else{
 				FillDocList(true);
-				paintTools.Enabled=true;//Allow image to remain on screen.
-				brightnessContrastSlider.Enabled=true;
 			}
 			InvalidateSettings(ApplySettings.ALL,true);
 		}
@@ -1977,16 +1958,13 @@ namespace OpenDental{
 				int mountNum=Convert.ToInt32(obj["MountNum"].ToString());
 				if(mountNum!=0){//The user may be trying to select an individual image within the current mount.
 					MouseIsDown=false;
-					paintTools.Enabled=false;
-					brightnessContrastSlider.Enabled=false;
 					PointF relativeMouseLocation=new PointF(
 						(MouseDownOrigin.X-imageTranslation.X)/mountScale+selectionMount.Width/2,
 						(MouseDownOrigin.Y-imageTranslation.Y)/mountScale+selectionMount.Height/2);
 					//Unselect all mount frames, and reselect the frame clicked on (if any).
 					hotDocument=-1;
-					paintTools.Buttons["Flip"].Enabled=false;
-					paintTools.Buttons["RotateL"].Enabled=false;
-					paintTools.Buttons["RotateR"].Enabled=false;
+					//Assume no item will be selected and enable tools again if an item was actually selected.
+					EnableTreeItemTools(true,true,true,true,false,false,false,true,false,false,false,false,false);
 					//Enumerate the image locations.
 					for(int i=0;i<selectionMountItems.Length;i++){
 						RectangleF itemLocation=new RectangleF(selectionMountItems[i].Xpos,selectionMountItems[i].Ypos,
@@ -1998,11 +1976,7 @@ namespace OpenDental{
 									if(mountDocs[j]!=null){
 										selectionDoc=mountDocs[j];
 										SetBrightnessAndContrast();
-										paintTools.Enabled=true;
-										brightnessContrastSlider.Enabled=true;
-										paintTools.Buttons["Flip"].Enabled=true;
-										paintTools.Buttons["RotateL"].Enabled=true;
-										paintTools.Buttons["RotateR"].Enabled=true;
+										EnableTreeItemTools(true,true,false,true,false,true,false,true,false,false,true,true,true);
 									}
 								}
 							}
@@ -2073,18 +2047,8 @@ namespace OpenDental{
 			DataRow obj=(DataRow)TreeDocuments.SelectedNode.Tag;
 			int mountNum=Convert.ToInt32(obj["MountNum"].ToString());
 			int docNum=Convert.ToInt32(obj["DocNum"].ToString());
-			float cropZoom;
-			PointF cropTrans;
-			if(mountNum!=0){
-				return;
-				/*cropZoom=mountScale;
-				cropTrans=MountSpaceToScreenSpace(new PointF(
-					selectionMountItems[hotDocument].Xpos+selectionMountItems[hotDocument].Width/2,
-					selectionMountItems[hotDocument].Ypos+selectionMountItems[hotDocument].Height/2));*/
-			}else{//document
-				cropZoom=imageZoom*zoomFactor;
-				cropTrans=imageTranslation;
-			}
+			float cropZoom=imageZoom*zoomFactor;
+			PointF cropTrans=imageTranslation;
 			PointF cropPoint1=ScreenPointToUnalteredDocumentPoint(cropTangle.Location,selectionDoc,
 				curImageWidths[hotDocument],curImageHeights[hotDocument],cropZoom,cropTrans);
 			PointF cropPoint2=ScreenPointToUnalteredDocumentPoint(new Point(cropTangle.Location.X+cropTangle.Width,
@@ -2175,8 +2139,7 @@ namespace OpenDental{
 
 		///<summary>Handles a change in selection of the xRay capture button.</summary>
 		private void OnCapture_Click() {
-			bool capture=ToolBarMain.Buttons["Capture"].Pushed;
-			if(capture){
+			if(ToolBarMain.Buttons["Capture"].Pushed) {
 				int mountNum=0;
 				if(GetNodeIdentifier(TreeDocuments.SelectedNode)!=""){//A document or mount is currently selected.
 					DataRow obj=(DataRow)TreeDocuments.SelectedNode.Tag;
@@ -2213,39 +2176,24 @@ namespace OpenDental{
 					MountItems.Insert(mountItem);
 					FillDocList(false);
 					SelectTreeNode(GetNodeById(MakeIdentifier("0",mount.MountNum.ToString())));
-					paintTools.Enabled=true;
-					brightnessContrastSlider.Enabled=true;
 					brightnessContrastSlider.MinVal=PrefB.GetInt("ImageWindowingMin");
 					brightnessContrastSlider.MaxVal=PrefB.GetInt("ImageWindowingMax");
 				}else {//A mount is currently selected. We must allow the user to insert new images into partially complete mounts.
 					//Just use the current mount selection in the capture.
 				}
+				//Here we can only allow access to the capture button during a capture, because it is too complicated and hard for a 
+				//user to follow what is going on if they use the other tools when a capture is taking place.
+				EnableAllTools(false);
+				ToolBarMain.Buttons["Capture"].Enabled=true;
+				ToolBarMain.Invalidate();
 				xRayImageController.CaptureXRay();
 			}else{//The user unselected the image capture button, so cancel the current image capture.
 				xRayImageController.KillXRayThread();//Stop current xRay capture and call OnCaptureAborted() when done.
 			}
 		}
 
-		///<summary>Called when an xray capture begins, but after any previous image capture threads are killed.</summary>
-		private void OnCaptureBegin(object sender,EventArgs e){
-			if(ToolBarMain.InvokeRequired) {
-				CaptureCallback c=new CaptureCallback(OnCaptureBegin);
-				Invoke(c,new object[] { sender,e });
-				return;
-			}
-			ToolBarMain.Buttons["Capture"].Pushed=true;
-			ToolBarMain.Invalidate();
-		}
-
 		///<summary>Called when the image capture device is ready for exposure.</summary>
 		private void OnCaptureReady(object sender,EventArgs e) {
-			if(this.InvokeRequired) {
-				CaptureCallback c=new CaptureCallback(OnCaptureReady);
-				Invoke(c,new object[] { sender,e });
-				return;
-			}
-			paintTools.Enabled=false;
-			brightnessContrastSlider.Enabled=false;
 			GetNextUnusedMountItem();
 			InvalidateSettings(ApplySettings.NONE,false);//Refresh the selection box change (does not do any image processing here).
 		}
@@ -2308,22 +2256,20 @@ namespace OpenDental{
 			SetBrightnessAndContrast();
 			//Refresh image in in picture box.
 			InvalidateSettings(ApplySettings.ALL,false);
-			paintTools.Enabled=true;
-			brightnessContrastSlider.Enabled=true;
 			//This capture was successful. Keep capturing more images until the capture is manually aborted.
 			//This will cause calls to OnCaptureAborted(), then OnCaptureBegin().
 			xRayImageController.CaptureXRay();
 		}
 
-		///<summary>Called under any error circumstance resulting from the image capture process, or when one image capture is finishing and launching the next image capture.</summary>
-		private void OnCaptureAborted(object sender,EventArgs e) {
-			if(ToolBarMain.InvokeRequired) {
-				CaptureCallback c=new CaptureCallback(OnCaptureAborted);
-				Invoke(c,new object[] { sender,e });
-				return;
-			}
+		///<summary>Called when the entire sequence of image captures is complete (possibly because of failure, or a full mount among other things).</summary>
+		private void OnCaptureFinalize(object sender,EventArgs e) {
 			ToolBarMain.Buttons["Capture"].Pushed=false;
-			ToolBarMain.Invalidate();
+			EnableAllTools(true);
+			if(hotDocument>0 && mountDocs[hotDocument]!=null) {//The capture finished in a state where a mount item is selected.
+				EnableTreeItemTools(true,true,false,true,false,true,false,true,false,false,true,true,true);
+			}else{//The capture finished without a mount item selected (so the mount itself is considered to be selected).
+				EnableTreeItemTools(true,true,true,true,false,false,false,true,false,false,false,false,false);
+			}
 		}
 
 		private void GetNextUnusedMountItem() {

@@ -77,13 +77,15 @@ namespace OpenDental.UI {
 			//gradient bars
 			Rectangle rect=new Rectangle((int)(endW/2),2,GetRectMiddle().Left-(int)(endW/2),Height-5);
 			g.FillRectangle(Brushes.Black,rect);
-			rect=new Rectangle(GetRectMiddle().Left,2,GetRectMiddle().Width,Height-5);
-			LinearGradientBrush gradientBrush=new LinearGradientBrush(
-				new Point(GetRectMiddle().X+(int)(endW/2),0),
-				new Point(GetRectMiddle().Right-(int)(endW/2)+1,0),
-				Color.Black,Color.White);
-				//new Point(0,0),new Point(rect.Right+1,0),
-			g.FillRectangle(gradientBrush,rect);
+			if(Enabled){
+				rect=new Rectangle(GetRectMiddle().Left,2,GetRectMiddle().Width,Height-5);
+				LinearGradientBrush gradientBrush=new LinearGradientBrush(
+					new Point(GetRectMiddle().X+(int)(endW/2),0),
+					new Point(GetRectMiddle().Right-(int)(endW/2)+1,0),
+					Color.Black,Color.White);
+					//new Point(0,0),new Point(rect.Right+1,0),
+				g.FillRectangle(gradientBrush,rect);
+			}
 			//this one is just to eliminate a rounding artifact
 			rect=new Rectangle(GetRectMiddle().Right-(int)(endW/2)+1,2,2,Height-5);
 			g.FillRectangle(Brushes.White,rect);
@@ -330,6 +332,14 @@ namespace OpenDental.UI {
 			EventArgs ea=new EventArgs();
 			if(ScrollComplete!=null) {
 				ScrollComplete(this,ea);
+			}
+		}
+
+		private void ContrWindowingSlider_EnabledChanged(object sender,EventArgs e) {
+			if(!Enabled){
+				MinVal=0;
+				MaxVal=255;
+				Invalidate();
 			}
 		}
 
