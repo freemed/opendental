@@ -77,31 +77,12 @@ namespace OpenDental{
 		private System.Windows.Forms.MenuItem menuItemPrintScreen;
 		private System.Windows.Forms.MenuItem menuItemFinanceCharge;
 		private System.Windows.Forms.MenuItem menuItemAging;
-		private System.Windows.Forms.MenuItem menuItemDaily;
-		private System.Windows.Forms.MenuItem menuItemRpProc;
-		private System.Windows.Forms.MenuItem menuItemRpPay;
-		private System.Windows.Forms.MenuItem menuItemRpAdj;
-		private System.Windows.Forms.MenuItem menuItemMonthly;
-		private System.Windows.Forms.MenuItem menuItemRpOutInsClaims;
 		private System.Windows.Forms.MenuItem menuItemSched;
-		private System.Windows.Forms.MenuItem menuItemRpAging;
-		private System.Windows.Forms.MenuItem menuItemRpProcNoBilled;
-		private System.Windows.Forms.MenuItem menuItemRpClaimsNotSent;
-		private System.Windows.Forms.MenuItem menuItemRpFinanceCharge;
-		private System.Windows.Forms.MenuItem menuItem2;
-		private System.Windows.Forms.MenuItem menuItem3;
 		private System.Windows.Forms.MenuItem menuItem5;
 		private System.Windows.Forms.MenuItem menuItem6;
-		private System.Windows.Forms.MenuItem menuItemUserQuery;
-		private System.Windows.Forms.MenuItem menuItemList;
 		private System.Windows.Forms.MenuItem menuItemTranslation;
-		private System.Windows.Forms.MenuItem menuItemPatList;
-		private System.Windows.Forms.MenuItem menuItemRpProcCodes;
-		private System.Windows.Forms.MenuItem menuItemRxs;
-		private System.Windows.Forms.MenuItem menuItemRefs;
 		private System.Windows.Forms.MenuItem menuItemFile;
 		private System.Windows.Forms.MenuItem menuItem7;
-		private System.Windows.Forms.MenuItem menuItem8;
 		private System.Windows.Forms.MenuItem menuItemLists;
 		private System.Windows.Forms.MenuItem menuItemTools;
 		private System.Windows.Forms.MenuItem menuItemReferrals;
@@ -119,8 +100,6 @@ namespace OpenDental{
 		private OpenDental.OutlookBar myOutlookBar;
 		private System.Windows.Forms.ImageList imageList32;
 		private System.Windows.Forms.MenuItem menuItemApptViews;
-		private System.Windows.Forms.MenuItem menuItemRpCapitation;
-		private System.Windows.Forms.MenuItem menuItemPracticeWebReports;
 		private System.Windows.Forms.MenuItem menuItemComputers;
 		private System.Windows.Forms.MenuItem menuItemEmployers;
 		private System.Windows.Forms.MenuItem menuItemEasy;
@@ -128,30 +107,19 @@ namespace OpenDental{
 		private System.Windows.Forms.MenuItem menuItemSchools;
 		private System.Windows.Forms.MenuItem menuItemCounties;
 		private System.Windows.Forms.MenuItem menuItemScreening;
-		private System.Windows.Forms.MenuItem menuItemPHSep;
-		private System.Windows.Forms.MenuItem menuItemPHRawScreen;
-		private System.Windows.Forms.MenuItem menuItemPHRawPop;
-		private System.Windows.Forms.MenuItem menuItemPHScreen;
-		private System.Windows.Forms.MenuItem menuItemInsCarriers;
 		private System.Windows.Forms.MenuItem menuItemEmail;
 		private System.Windows.Forms.MenuItem menuItemHelpContents;
 		private System.Windows.Forms.MenuItem menuItemHelp;
-		private System.Windows.Forms.MenuItem menuItem12;
-		private System.Windows.Forms.MenuItem menuItemRpProdInc;
-		private System.Windows.Forms.MenuItem menuAppointments;
 		//private Image buttonsShadow;
 		///<summary>The only reason this is public static is so that it can be seen from the terminal manager.  Otherwise, it's passed around properly.</summary>
 		public static int CurPatNum;
 		private System.Windows.Forms.MenuItem menuItemClearinghouses;
 		private System.Windows.Forms.MenuItem menuItemUpdate;
-		private System.Windows.Forms.MenuItem menuItemRpProcNote;
 		private System.Windows.Forms.MenuItem menuItemHelpWindows;
 		private System.Windows.Forms.MenuItem menuItemMisc;
-		private System.Windows.Forms.MenuItem menuItemBirthdays;
 		private System.Windows.Forms.MenuItem menuItemRemote;
 		private System.Windows.Forms.MenuItem menuItemSchoolClass;
 		private System.Windows.Forms.MenuItem menuItemSchoolCourses;
-		private System.Windows.Forms.MenuItem menuItemCourseGrades;
 		private System.Windows.Forms.MenuItem menuItemPatientImport;
 		private System.Windows.Forms.MenuItem menuItemSecurity;
 		private System.Windows.Forms.MenuItem menuItemLogOff;
@@ -163,13 +131,10 @@ namespace OpenDental{
 		private System.Windows.Forms.Timer timerSignals;
 		///<summary>When user logs out, this keeps track of where they were for when they log back in.</summary>
 		private int LastModule;
-		private System.Windows.Forms.MenuItem menuItemRDLReport;
-		private System.Windows.Forms.MenuItem menuItemReportsSetup;
 		private System.Windows.Forms.MenuItem menuItemRepeatingCharges;
 		private System.Windows.Forms.MenuItem menuItemImportXML;
 		private MenuItem menuItemPayPeriods;
 		private MenuItem menuItemApptRules;
-		private MenuItem menuItemRouting;
 		private MenuItem menuItemAuditTrail;
 		private MenuItem menuItemPatFieldDefs;
 		private MenuItem menuItemDiseases;
@@ -184,7 +149,6 @@ namespace OpenDental{
 		private DateTime signalLastRefreshed;
 		private FormSplash Splash;
 		private Bitmap bitmapIcon;
-		private MenuItem menuItemRpWriteoff;
 		private ContrAppt ContrAppt2;
 		private ContrFamily ContrFamily2;
 		private ContrAccount ContrAccount2;
@@ -297,42 +261,6 @@ namespace OpenDental{
 			this.menuItemSchools = new System.Windows.Forms.MenuItem();
 			this.menuItemZipCodes = new System.Windows.Forms.MenuItem();
 			this.menuItemReports = new System.Windows.Forms.MenuItem();
-			this.menuItemRDLReport = new System.Windows.Forms.MenuItem();
-			this.menuItemReportsSetup = new System.Windows.Forms.MenuItem();
-			this.menuItemUserQuery = new System.Windows.Forms.MenuItem();
-			this.menuItemPracticeWebReports = new System.Windows.Forms.MenuItem();
-			this.menuItem12 = new System.Windows.Forms.MenuItem();
-			this.menuItemRpProdInc = new System.Windows.Forms.MenuItem();
-			this.menuItem2 = new System.Windows.Forms.MenuItem();
-			this.menuItemDaily = new System.Windows.Forms.MenuItem();
-			this.menuItemRpAdj = new System.Windows.Forms.MenuItem();
-			this.menuItemRpPay = new System.Windows.Forms.MenuItem();
-			this.menuItemRpProc = new System.Windows.Forms.MenuItem();
-			this.menuItemRpWriteoff = new System.Windows.Forms.MenuItem();
-			this.menuItemRpProcNote = new System.Windows.Forms.MenuItem();
-			this.menuItem3 = new System.Windows.Forms.MenuItem();
-			this.menuItemMonthly = new System.Windows.Forms.MenuItem();
-			this.menuItemRpAging = new System.Windows.Forms.MenuItem();
-			this.menuItemRpClaimsNotSent = new System.Windows.Forms.MenuItem();
-			this.menuItemRpCapitation = new System.Windows.Forms.MenuItem();
-			this.menuItemRpFinanceCharge = new System.Windows.Forms.MenuItem();
-			this.menuItemRpOutInsClaims = new System.Windows.Forms.MenuItem();
-			this.menuItemRpProcNoBilled = new System.Windows.Forms.MenuItem();
-			this.menuItem8 = new System.Windows.Forms.MenuItem();
-			this.menuItemList = new System.Windows.Forms.MenuItem();
-			this.menuAppointments = new System.Windows.Forms.MenuItem();
-			this.menuItemBirthdays = new System.Windows.Forms.MenuItem();
-			this.menuItemInsCarriers = new System.Windows.Forms.MenuItem();
-			this.menuItemPatList = new System.Windows.Forms.MenuItem();
-			this.menuItemRxs = new System.Windows.Forms.MenuItem();
-			this.menuItemRpProcCodes = new System.Windows.Forms.MenuItem();
-			this.menuItemRefs = new System.Windows.Forms.MenuItem();
-			this.menuItemRouting = new System.Windows.Forms.MenuItem();
-			this.menuItemPHSep = new System.Windows.Forms.MenuItem();
-			this.menuItemPHRawScreen = new System.Windows.Forms.MenuItem();
-			this.menuItemPHRawPop = new System.Windows.Forms.MenuItem();
-			this.menuItemPHScreen = new System.Windows.Forms.MenuItem();
-			this.menuItemCourseGrades = new System.Windows.Forms.MenuItem();
 			this.menuItemCustomReports = new System.Windows.Forms.MenuItem();
 			this.menuItemTools = new System.Windows.Forms.MenuItem();
 			this.menuItemPrintScreen = new System.Windows.Forms.MenuItem();
@@ -783,256 +711,9 @@ namespace OpenDental{
 			// menuItemReports
 			// 
 			this.menuItemReports.Index = 4;
-			this.menuItemReports.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
-            this.menuItemRDLReport,
-            this.menuItemReportsSetup,
-            this.menuItemUserQuery,
-            this.menuItemPracticeWebReports,
-            this.menuItem12,
-            this.menuItemRpProdInc,
-            this.menuItem2,
-            this.menuItemDaily,
-            this.menuItemRpAdj,
-            this.menuItemRpPay,
-            this.menuItemRpProc,
-            this.menuItemRpWriteoff,
-            this.menuItemRpProcNote,
-            this.menuItem3,
-            this.menuItemMonthly,
-            this.menuItemRpAging,
-            this.menuItemRpClaimsNotSent,
-            this.menuItemRpCapitation,
-            this.menuItemRpFinanceCharge,
-            this.menuItemRpOutInsClaims,
-            this.menuItemRpProcNoBilled,
-            this.menuItem8,
-            this.menuItemList,
-            this.menuAppointments,
-            this.menuItemBirthdays,
-            this.menuItemInsCarriers,
-            this.menuItemPatList,
-            this.menuItemRxs,
-            this.menuItemRpProcCodes,
-            this.menuItemRefs,
-            this.menuItemRouting,
-            this.menuItemPHSep,
-            this.menuItemPHRawScreen,
-            this.menuItemPHRawPop,
-            this.menuItemPHScreen,
-            this.menuItemCourseGrades});
 			this.menuItemReports.Shortcut = System.Windows.Forms.Shortcut.CtrlR;
 			this.menuItemReports.Text = "&Reports";
-			// 
-			// menuItemRDLReport
-			// 
-			this.menuItemRDLReport.Index = 0;
-			this.menuItemRDLReport.Text = "RDL Report";
-			this.menuItemRDLReport.Visible = false;
-			this.menuItemRDLReport.Click += new System.EventHandler(this.menuItemRDLReport_Click);
-			// 
-			// menuItemReportsSetup
-			// 
-			this.menuItemReportsSetup.Index = 1;
-			this.menuItemReportsSetup.Text = "Setup Reports";
-			this.menuItemReportsSetup.Visible = false;
-			this.menuItemReportsSetup.Click += new System.EventHandler(this.menuItemReportsSetup_Click);
-			// 
-			// menuItemUserQuery
-			// 
-			this.menuItemUserQuery.Index = 2;
-			this.menuItemUserQuery.Text = "&User Query";
-			this.menuItemUserQuery.Click += new System.EventHandler(this.menuItemUserQuery_Click);
-			// 
-			// menuItemPracticeWebReports
-			// 
-			this.menuItemPracticeWebReports.Index = 3;
-			this.menuItemPracticeWebReports.Text = "Other Reports";
-			this.menuItemPracticeWebReports.Click += new System.EventHandler(this.menuItemPracticeWebReports_Click);
-			// 
-			// menuItem12
-			// 
-			this.menuItem12.Index = 4;
-			this.menuItem12.Text = "-";
-			// 
-			// menuItemRpProdInc
-			// 
-			this.menuItemRpProdInc.Index = 5;
-			this.menuItemRpProdInc.Shortcut = System.Windows.Forms.Shortcut.CtrlShiftP;
-			this.menuItemRpProdInc.Text = "&Production and Income";
-			this.menuItemRpProdInc.Click += new System.EventHandler(this.menuItemRpProdInc_Click);
-			// 
-			// menuItem2
-			// 
-			this.menuItem2.Index = 6;
-			this.menuItem2.Text = "-";
-			// 
-			// menuItemDaily
-			// 
-			this.menuItemDaily.Index = 7;
-			this.menuItemDaily.Text = "DAILY";
-			// 
-			// menuItemRpAdj
-			// 
-			this.menuItemRpAdj.Index = 8;
-			this.menuItemRpAdj.Text = "   &Adjustments";
-			this.menuItemRpAdj.Click += new System.EventHandler(this.menuItemRpAdj_Click);
-			// 
-			// menuItemRpPay
-			// 
-			this.menuItemRpPay.Index = 9;
-			this.menuItemRpPay.Text = "   Pa&yments";
-			this.menuItemRpPay.Click += new System.EventHandler(this.menuItemRpPay_Click);
-			// 
-			// menuItemRpProc
-			// 
-			this.menuItemRpProc.Index = 10;
-			this.menuItemRpProc.Text = "   P&rocedures";
-			this.menuItemRpProc.Click += new System.EventHandler(this.menuItemRpProc_Click);
-			// 
-			// menuItemRpWriteoff
-			// 
-			this.menuItemRpWriteoff.Index = 11;
-			this.menuItemRpWriteoff.Text = "   Writeoffs";
-			this.menuItemRpWriteoff.Click += new System.EventHandler(this.menuItemRpWriteoff_Click);
-			// 
-			// menuItemRpProcNote
-			// 
-			this.menuItemRpProcNote.Index = 12;
-			this.menuItemRpProcNote.Text = "   Incomplete Procedure Notes";
-			this.menuItemRpProcNote.Click += new System.EventHandler(this.menuItemRpProcNote_Click);
-			// 
-			// menuItem3
-			// 
-			this.menuItem3.Index = 13;
-			this.menuItem3.Text = "-";
-			// 
-			// menuItemMonthly
-			// 
-			this.menuItemMonthly.Index = 14;
-			this.menuItemMonthly.Text = "MONTHLY";
-			// 
-			// menuItemRpAging
-			// 
-			this.menuItemRpAging.Index = 15;
-			this.menuItemRpAging.Text = "   Aging Report";
-			this.menuItemRpAging.Click += new System.EventHandler(this.menuItemRpAging_Click);
-			// 
-			// menuItemRpClaimsNotSent
-			// 
-			this.menuItemRpClaimsNotSent.Index = 16;
-			this.menuItemRpClaimsNotSent.Text = "   Claims Not Sent";
-			this.menuItemRpClaimsNotSent.Click += new System.EventHandler(this.menuItemRpClaimsNotSent_Click);
-			// 
-			// menuItemRpCapitation
-			// 
-			this.menuItemRpCapitation.Index = 17;
-			this.menuItemRpCapitation.Text = "   Capitation Utilization";
-			this.menuItemRpCapitation.Click += new System.EventHandler(this.menuItemRpCapitation_Click);
-			// 
-			// menuItemRpFinanceCharge
-			// 
-			this.menuItemRpFinanceCharge.Index = 18;
-			this.menuItemRpFinanceCharge.Text = "   Finance Charge Report";
-			this.menuItemRpFinanceCharge.Click += new System.EventHandler(this.menuItemRpFinanceCharge_Click);
-			// 
-			// menuItemRpOutInsClaims
-			// 
-			this.menuItemRpOutInsClaims.Index = 19;
-			this.menuItemRpOutInsClaims.Text = "   Outstanding Insurance Claims";
-			this.menuItemRpOutInsClaims.Click += new System.EventHandler(this.menuItemRpOutInsClaims_Click);
-			// 
-			// menuItemRpProcNoBilled
-			// 
-			this.menuItemRpProcNoBilled.Index = 20;
-			this.menuItemRpProcNoBilled.Text = "   Procedures Not Billed To Insurance";
-			this.menuItemRpProcNoBilled.Click += new System.EventHandler(this.menuItemRpProcNoBilled_Click);
-			// 
-			// menuItem8
-			// 
-			this.menuItem8.Index = 21;
-			this.menuItem8.Text = "-";
-			// 
-			// menuItemList
-			// 
-			this.menuItemList.Index = 22;
-			this.menuItemList.Text = "LISTS";
-			// 
-			// menuAppointments
-			// 
-			this.menuAppointments.Index = 23;
-			this.menuAppointments.Text = "   Appointments";
-			this.menuAppointments.Click += new System.EventHandler(this.menuAppointments_Click);
-			// 
-			// menuItemBirthdays
-			// 
-			this.menuItemBirthdays.Index = 24;
-			this.menuItemBirthdays.Text = "   Birthdays";
-			this.menuItemBirthdays.Click += new System.EventHandler(this.menuItemBirthdays_Click);
-			// 
-			// menuItemInsCarriers
-			// 
-			this.menuItemInsCarriers.Index = 25;
-			this.menuItemInsCarriers.Text = "   Insurance Plans";
-			this.menuItemInsCarriers.Click += new System.EventHandler(this.menuItemInsCarriers_Click);
-			// 
-			// menuItemPatList
-			// 
-			this.menuItemPatList.Index = 26;
-			this.menuItemPatList.Text = "   Patients";
-			this.menuItemPatList.Click += new System.EventHandler(this.menuItemPatList_Click);
-			// 
-			// menuItemRxs
-			// 
-			this.menuItemRxs.Index = 27;
-			this.menuItemRxs.Text = "   Prescriptions";
-			this.menuItemRxs.Click += new System.EventHandler(this.menuItemRxs_Click);
-			// 
-			// menuItemRpProcCodes
-			// 
-			this.menuItemRpProcCodes.Index = 28;
-			this.menuItemRpProcCodes.Text = "   Procedure Codes";
-			this.menuItemRpProcCodes.Click += new System.EventHandler(this.menuItemRpProcCodes_Click);
-			// 
-			// menuItemRefs
-			// 
-			this.menuItemRefs.Index = 29;
-			this.menuItemRefs.Text = "   Referrals";
-			this.menuItemRefs.Click += new System.EventHandler(this.menuItemRefs_Click);
-			// 
-			// menuItemRouting
-			// 
-			this.menuItemRouting.Index = 30;
-			this.menuItemRouting.Text = "   Routing Slips";
-			this.menuItemRouting.Click += new System.EventHandler(this.menuItemRouting_Click);
-			// 
-			// menuItemPHSep
-			// 
-			this.menuItemPHSep.Index = 31;
-			this.menuItemPHSep.Text = "-";
-			// 
-			// menuItemPHRawScreen
-			// 
-			this.menuItemPHRawScreen.Index = 32;
-			this.menuItemPHRawScreen.Text = "Raw Screening Data";
-			this.menuItemPHRawScreen.Click += new System.EventHandler(this.menuItemPHRawScreen_Click);
-			// 
-			// menuItemPHRawPop
-			// 
-			this.menuItemPHRawPop.Index = 33;
-			this.menuItemPHRawPop.Text = "Raw Population Data";
-			this.menuItemPHRawPop.Click += new System.EventHandler(this.menuItemPHRawPop_Click);
-			// 
-			// menuItemPHScreen
-			// 
-			this.menuItemPHScreen.Index = 34;
-			this.menuItemPHScreen.Text = "Screening Report";
-			this.menuItemPHScreen.Click += new System.EventHandler(this.menuItemPHScreen_Click);
-			// 
-			// menuItemCourseGrades
-			// 
-			this.menuItemCourseGrades.Index = 35;
-			this.menuItemCourseGrades.Text = "Dental School Course Grades";
-			this.menuItemCourseGrades.Click += new System.EventHandler(this.menuItemCourseGrades_Click);
+			this.menuItemReports.Click += new System.EventHandler(this.menuItemReports_Click);
 			// 
 			// menuItemCustomReports
 			// 
@@ -1294,14 +975,14 @@ namespace OpenDental{
 			this.myOutlookBar.ImageList = this.imageList32;
 			this.myOutlookBar.Location = new System.Drawing.Point(0,0);
 			this.myOutlookBar.Name = "myOutlookBar";
-			this.myOutlookBar.Size = new System.Drawing.Size(51,689);
+			this.myOutlookBar.Size = new System.Drawing.Size(51,699);
 			this.myOutlookBar.TabIndex = 18;
 			this.myOutlookBar.Text = "outlookBar1";
 			this.myOutlookBar.ButtonClicked += new OpenDental.ButtonClickedEventHandler(this.myOutlookBar_ButtonClicked);
 			// 
 			// FormOpenDental
 			// 
-			this.ClientSize = new System.Drawing.Size(982,689);
+			this.ClientSize = new System.Drawing.Size(982,699);
 			this.Controls.Add(this.ContrManage2);
 			this.Controls.Add(this.ContrChart2);
 			this.Controls.Add(this.ContrDocs2);
@@ -1503,20 +1184,20 @@ namespace OpenDental{
 					menuItemSchools.Visible=false;
 					menuItemCounties.Visible=false;
 					menuItemScreening.Visible=false;
-					menuItemPHSep.Visible=false;
-					menuItemPHRawScreen.Visible=false;
-					menuItemPHRawPop.Visible=false;
-					menuItemPHScreen.Visible=false;
+					//menuItemPHSep.Visible=false;
+					//menuItemPHRawScreen.Visible=false;
+					//menuItemPHRawPop.Visible=false;
+					//menuItemPHScreen.Visible=false;
 				}
 				else{
 					menuItemSchools.Visible=true;
 					menuItemCounties.Visible=true;
 					menuItemScreening.Visible=true;
-					menuItemPHSep.Visible=true;
+					//menuItemPHSep.Visible=true;
 					//menuItemPublicHealth.Visible=true;
-					menuItemPHRawScreen.Visible=true;
-					menuItemPHRawPop.Visible=true;
-					menuItemPHScreen.Visible=true;
+					//menuItemPHRawScreen.Visible=true;
+					//menuItemPHRawPop.Visible=true;
+					//menuItemPHScreen.Visible=true;
 				}
 				if(PrefB.GetBool("EasyNoClinics")){
 					menuItemClinics.Visible=false;
@@ -1547,15 +1228,17 @@ namespace OpenDental{
 					menuItemSchoolClass.Visible=false;
 					menuItemSchoolCourses.Visible=false;
 					//menuItemInstructors.Visible=false;
-					menuItemCourseGrades.Visible=false;
+					//menuItemCourseGrades.Visible=false;
 					menuItemRequirementsNeeded.Visible=false;
+					menuItemReqStudents.Visible=false;
 				}
 				else{
 					menuItemSchoolClass.Visible=true;
 					menuItemSchoolCourses.Visible=true;
 					//menuItemInstructors.Visible=true;
-					menuItemCourseGrades.Visible=true;
+					//menuItemCourseGrades.Visible=true;
 					menuItemRequirementsNeeded.Visible=true;
+					menuItemReqStudents.Visible=true;
 				}
 				if(PrefB.GetBool("EasyHideRepeatCharges")){
 					menuItemRepeatingCharges.Visible=false;
@@ -1635,7 +1318,6 @@ namespace OpenDental{
 			if((itypes & InvalidTypes.Programs)==InvalidTypes.Programs){
 				Programs.Refresh();
 				ProgramProperties.Refresh();
-				menuItemPracticeWebReports.Visible=Programs.IsEnabled("PracticeWebReports");
 			}
 			if((itypes & InvalidTypes.Providers)==InvalidTypes.Providers){
 				Providers.Refresh();
@@ -2629,251 +2311,12 @@ namespace OpenDental{
 			//SecurityLogs.MakeLogEntry(Permissions.Setup,"Zip Codes");
 		}
 
-		//Reports
-		private void menuItemReportsSetup_Click(object sender, System.EventArgs e) {
-			try{
-				Process.Start("RdlDesigner.exe");
-			}
-			catch{
-				MsgBox.Show(this,"Could not locate RdlDesigner.exe.");
-			}
-		}
-
-		private void menuItemUserQuery_Click(object sender, System.EventArgs e) {
-			if(!Security.IsAuthorized(Permissions.UserQuery)){
-				return;
-			}
-			FormQuery FormQuery2=new FormQuery();
-			FormQuery2.ShowDialog();
-			SecurityLogs.MakeLogEntry(Permissions.UserQuery,0,"");
-		}
-
-		private void menuItemPracticeWebReports_Click(object sender, System.EventArgs e) {
-			if(!Security.IsAuthorized(Permissions.Reports)){
-				return;
-			}
-			try{
-				Process.Start("PWReports.exe");
-			}
-			catch{
-				MessageBox.Show("PracticeWeb Reports module unavailable.");
-			}
-			SecurityLogs.MakeLogEntry(Permissions.Reports,0,"Practice Web");
-		}
-
-		private void menuItemRpProdInc_Click(object sender, System.EventArgs e) {
-			if(!Security.IsAuthorized(Permissions.Reports)){
-				return;
-			}
-			FormRpProdInc FormPI=new FormRpProdInc();
-			FormPI.ShowDialog();
-			SecurityLogs.MakeLogEntry(Permissions.Reports,0,"Production and Income");
-		}
-
-		//Reports-Daily
-		private void menuItemRpAdj_Click(object sender, System.EventArgs e) {
-			if(!Security.IsAuthorized(Permissions.Reports)){
-				return;
-			}
-			FormRpAdjSheet FormAdjSheet=new FormRpAdjSheet();
-			FormAdjSheet.ShowDialog();
-			SecurityLogs.MakeLogEntry(Permissions.Reports,0,"Adjustments");
-		}
-
-		private void menuItemRpPay_Click(object sender, System.EventArgs e) {
-			if(!Security.IsAuthorized(Permissions.Reports)){
-				return;
-			}
-			FormRpPaySheet FormPaySheet=new FormRpPaySheet();
-			FormPaySheet.ShowDialog();
-			SecurityLogs.MakeLogEntry(Permissions.Reports,0,"Daily Payments");
-		}
-		
-		private void menuItemRpProc_Click(object sender, System.EventArgs e) {
-			if(!Security.IsAuthorized(Permissions.Reports)){
-				return;
-			}
-			FormRpProcSheet FormProcSheet=new FormRpProcSheet();
-			FormProcSheet.ShowDialog();
-			SecurityLogs.MakeLogEntry(Permissions.Reports,0,"Daily Procedures");	
-		}
-
-		private void menuItemRpWriteoff_Click(object sender,EventArgs e) {
+		private void menuItemReports_Click(object sender,EventArgs e) {
 			if(!Security.IsAuthorized(Permissions.Reports)) {
 				return;
 			}
-			FormRpWriteoffSheet FormW=new FormRpWriteoffSheet();
-			FormW.ShowDialog();
-			SecurityLogs.MakeLogEntry(Permissions.Reports,0,"Daily Writeoffs");	
-		}
-
-		private void menuItemRpProcNote_Click(object sender, System.EventArgs e) {
-			if(!Security.IsAuthorized(Permissions.Reports)){
-				return;
-			}
-			FormRpProcNote FormPN=new FormRpProcNote();
-			FormPN.ShowDialog();
-			SecurityLogs.MakeLogEntry(Permissions.Reports,0,"Daily Procedure Notes");
-		}
-
-		//Reports-Monthly
-		private void menuItemRpAging_Click(object sender, System.EventArgs e) {
-			if(!Security.IsAuthorized(Permissions.Reports)){
-				return;
-			}
-			FormRpAging FormA=new FormRpAging();
-			FormA.ShowDialog();
-			SecurityLogs.MakeLogEntry(Permissions.Reports,0,"Aging");
-		}
-
-		private void menuItemRpClaimsNotSent_Click(object sender, System.EventArgs e) {
-			if(!Security.IsAuthorized(Permissions.Reports)){
-				return;
-			}
-			FormRpClaimNotSent FormClaim=new FormRpClaimNotSent();
-			FormClaim.ShowDialog();
-			SecurityLogs.MakeLogEntry(Permissions.Reports,0,"Claims Not Sent");
-		}
-
-		private void menuItemRpCapitation_Click(object sender, System.EventArgs e) {
-			if(!Security.IsAuthorized(Permissions.Reports)){
-				return;
-			}
-			FormRpCapitation FormC=new FormRpCapitation();
-			FormC.ShowDialog();
-			SecurityLogs.MakeLogEntry(Permissions.Reports,0,"Capitation");
-		}
-
-		private void menuItemRpFinanceCharge_Click(object sender, System.EventArgs e) {
-			if(!Security.IsAuthorized(Permissions.Reports)){
-				return;
-			}
-			FormRpFinanceCharge FormRpFinance=new FormRpFinanceCharge();
-			FormRpFinance.ShowDialog();
-			SecurityLogs.MakeLogEntry(Permissions.Reports,0,"Finance Charges");
-		}
-
-		private void menuItemRpOutInsClaims_Click(object sender, System.EventArgs e) {
-			if(!Security.IsAuthorized(Permissions.Reports)){
-				return;
-			}
-			FormRpOutInsClaims FormOut=new FormRpOutInsClaims();
-			FormOut.ShowDialog();
-			SecurityLogs.MakeLogEntry(Permissions.Reports,0,"Outstanding Insurance Claims");
-		}
-
-		private void menuItemRpProcNoBilled_Click(object sender, System.EventArgs e) {
-			if(!Security.IsAuthorized(Permissions.Reports)){
-				return;
-			}
-			FormRpProcNotBilledIns FormProc=new FormRpProcNotBilledIns();
-			FormProc.ShowDialog();
-			SecurityLogs.MakeLogEntry(Permissions.Reports,0,"Procedures not billed to insurance.");
-		}
-
-		//Reports-Lists
-		private void menuAppointments_Click(object sender, System.EventArgs e) {
-			if(!Security.IsAuthorized(Permissions.Reports)){
-				return;
-			}
-			FormRpAppointments FormA=new FormRpAppointments();
-			FormA.ShowDialog();
-			SecurityLogs.MakeLogEntry(Permissions.Reports,0,"Appointments");
-		}
-
-		private void menuItemBirthdays_Click(object sender, System.EventArgs e) {
-			if(!Security.IsAuthorized(Permissions.Reports)){
-				return;
-			}
-			FormRpBirthday FormB=new FormRpBirthday();
-			FormB.ShowDialog();
-			SecurityLogs.MakeLogEntry(Permissions.Reports,0,"Birthdays");
-		}
-
-		private void menuItemInsCarriers_Click(object sender, System.EventArgs e) {
-			if(!Security.IsAuthorized(Permissions.Reports)){
-				return;
-			}
-			FormRpInsCo FormInsCo=new FormRpInsCo();
-			FormInsCo.ShowDialog();
-			SecurityLogs.MakeLogEntry(Permissions.Reports,0,"Insurance Carriers");	
-		}
-
-		private void menuItemPatList_Click(object sender, System.EventArgs e) {
-			if(!Security.IsAuthorized(Permissions.Reports)){
-				return;
-			}
-			FormRpPatients FormPatients=new FormRpPatients();
-			FormPatients.ShowDialog();
-			SecurityLogs.MakeLogEntry(Permissions.Reports,0,"Patient List");				
-		}
-
-		private void menuItemRxs_Click(object sender, System.EventArgs e) {
-			if(!Security.IsAuthorized(Permissions.Reports)){
-				return;
-			}
-			FormRpPrescriptions FormPrescript=new FormRpPrescriptions();
-			FormPrescript.ShowDialog();
-			SecurityLogs.MakeLogEntry(Permissions.Reports,0,"Rx");
-		}
-
-		private void menuItemRpProcCodes_Click(object sender, System.EventArgs e) {
-			if(!Security.IsAuthorized(Permissions.Reports)){
-				return;
-			}
-			FormRpProcCodes FormProcCodes=new FormRpProcCodes();
-			FormProcCodes.ShowDialog();
-			SecurityLogs.MakeLogEntry(Permissions.Reports,0,"Procedure Codes");
-		}
-
-		private void menuItemRefs_Click(object sender, System.EventArgs e) {
-			if(!Security.IsAuthorized(Permissions.Reports)){
-				return;
-			}
-			FormRpReferrals FormReferral=new FormRpReferrals();
-			FormReferral.ShowDialog();
-			SecurityLogs.MakeLogEntry(Permissions.Reports,0,"Referrals");	
-		}
-
-		private void menuItemRouting_Click(object sender,EventArgs e) {
-			FormRpRouting FormR=new FormRpRouting();
+			FormReportsMore FormR=new FormReportsMore();
 			FormR.ShowDialog();
-		}
-
-		//Public Health
-		private void menuItemPHRawScreen_Click(object sender, System.EventArgs e) {
-			if(!Security.IsAuthorized(Permissions.Reports)){
-				return;
-			}
-			FormRpPHRawScreen FormPH=new FormRpPHRawScreen();
-			FormPH.ShowDialog();
-			SecurityLogs.MakeLogEntry(Permissions.Reports,0,"PH Raw Screening");
-		}
-
-		private void menuItemPHRawPop_Click(object sender, System.EventArgs e) {
-			if(!Security.IsAuthorized(Permissions.Reports)){
-				return;
-			}
-			FormRpPHRawPop FormPH=new FormRpPHRawPop();
-			FormPH.ShowDialog();
-			SecurityLogs.MakeLogEntry(Permissions.Reports,0,"PH Raw population");
-		}
-
-		private void menuItemPHScreen_Click(object sender, System.EventArgs e) {
-			if(!Security.IsAuthorized(Permissions.Reports)){
-				return;
-			}
-			MessageBox.Show("This report is incomplete.");
-			//SecurityLogs.MakeLogEntry(Permissions.Reports,"");
-		}
-
-		private void menuItemCourseGrades_Click(object sender, System.EventArgs e) {
-			if(!Security.IsAuthorized(Permissions.Reports)){
-				return;
-			}
-			FormRpCourseGrades FormR=new FormRpCourseGrades();
-			FormR.ShowDialog();
-			SecurityLogs.MakeLogEntry(Permissions.Reports,0,"Dental School Grades");
 		}
 
 		//Custom Reports
@@ -2881,23 +2324,11 @@ namespace OpenDental{
 			//This point in the code is only reached if the A to Z folders are enabled, thus
 			//the image path should exist.
 			FormReport FormR=new FormReport();
-			FormR.SourceFilePath=ODFileUtils.CombinePaths(new string[] {	FormPath.GetPreferredImagePath(),
-																																		PrefB.GetString("ReportFolderName"),
-																																		((MenuItem)sender).Text+".rdl"});
+			FormR.SourceFilePath=ODFileUtils.CombinePaths(new string[]
+				{FormPath.GetPreferredImagePath(),PrefB.GetString("ReportFolderName"),((MenuItem)sender).Text+".rdl"}
+				);
 			FormR.ShowDialog();
 		}
-
-		//Letters
-		/*
-		private void menuItemLetterSetup_Click(object sender, System.EventArgs e) {
-			FormLetterSetup FormLS=new FormLetterSetup();
-			FormLS.ShowDialog();
-		}*/
-
-		/*
-		private void menuItemLetter_Click(object sender, System.EventArgs e) {
-			MessageBox.Show(((MenuItem)sender).Index.ToString());
-		}*/
 
 		//Tools
 		private void menuItemPrintScreen_Click(object sender, System.EventArgs e) {
@@ -3202,6 +2633,10 @@ namespace OpenDental{
 				return false;
 			}
 		}
+
+		
+
+		
 
 	
 

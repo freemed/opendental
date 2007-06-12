@@ -2793,6 +2793,12 @@
     <Compile Include="UI\LightSignalGrid.Designer.cs">
       <DependentUpon>LightSignalGrid.cs</DependentUpon>
     </Compile>
+    <Compile Include="UI\ListBoxClickable.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="UI\ListBoxClickable.Designer.cs">
+      <DependentUpon>ListBoxClickable.cs</DependentUpon>
+    </Compile>
     <Compile Include="UI\MsgBox.cs" />
     <Compile Include="UI\ODGrid.cs">
       <SubType>UserControl</SubType>
