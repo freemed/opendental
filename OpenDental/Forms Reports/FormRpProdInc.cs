@@ -36,6 +36,12 @@ namespace OpenDental{
 		private ListBox listClinic;
 		private Label labelClinic;
 		private DateTime dateTo;
+		///<Summary>Can be set externally when automating.</Summary>
+		public string DailyMonthlyAnnual;
+		///<Summary>If set externally, then this sets the date on startup.</Summary>
+		public DateTime DateStart;
+		///<Summary>If set externally, then this sets the date on startup.</Summary>
+		public DateTime DateEnd;
 
 		///<summary></summary>
 		public FormRpProdInc(){
@@ -366,7 +372,34 @@ namespace OpenDental{
 					listClinic.SetSelected(i+1,true);
 				}
 			}*/
+			switch(DailyMonthlyAnnual){
+				case "Daily":
+					radioDaily.Checked=true;
+					break;
+				case "Monthly":
+					radioMonthly.Checked=true;
+					break;
+				case "Annual":
+					radioAnnual.Checked=true;
+					break;
+			}
 			SetDates();
+			if(DateStart.Year>1880){
+				textDateFrom.Text=DateStart.ToShortDateString();
+				textDateTo.Text=DateEnd.ToShortDateString();
+				switch(DailyMonthlyAnnual) {
+					case "Daily":
+						RunDaily();
+						break;
+					case "Monthly":
+						RunMonthly();
+						break;
+					case "Annual":
+						RunAnnual();
+						break;
+				}
+				Close();
+			}
 		}
 
 		private void butAll_Click(object sender, System.EventArgs e) {
@@ -477,6 +510,8 @@ namespace OpenDental{
 		}
 
 		private void RunDaily(){
+			dateFrom=PIn.PDate(textDateFrom.Text);
+			dateTo=PIn.PDate(textDateTo.Text);
 			//Date
 			//PatientName
 			//Description
@@ -706,6 +741,8 @@ namespace OpenDental{
 		}
 
 		private void RunMonthly(){
+			dateFrom=PIn.PDate(textDateFrom.Text);
+			dateTo=PIn.PDate(textDateTo.Text);
 /*  There are 8 temp tables  
  *  TableCharge: Holds sum of all charges for a certain date.
  *  TableCapWriteoff: Holds capComplete writeoffs which will be subtracted from Charges.  They are subtracted from charges to give the illusion of not so much being charged in the first place. Calculated using dateCP, which should be same as DateProc. 
@@ -1084,6 +1121,8 @@ ORDER BY adjdate DESC
 		}
 
 		private void RunAnnual(){
+			dateFrom=PIn.PDate(textDateFrom.Text);
+			dateTo=PIn.PDate(textDateTo.Text);
 			/*  There are 4 temp tables  
 			*  TableProduction: Sum of all charges for each month - CapComplete Writeoffs
 			*  TableAdj: Sum of all adjustments for each month

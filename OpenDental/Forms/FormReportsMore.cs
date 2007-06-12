@@ -28,6 +28,7 @@ namespace OpenDental{
 		private Label label4;
 		private OpenDental.UI.ListBoxClickable listDaily;
 		private Label label5;
+		private Label label6;
 		private OpenDental.UI.ListBoxClickable listMonthly;
 
 		///<summary></summary>
@@ -76,6 +77,7 @@ namespace OpenDental{
 			this.listLists = new OpenDental.UI.ListBoxClickable();
 			this.listMonthly = new OpenDental.UI.ListBoxClickable();
 			this.butClose = new OpenDental.UI.Button();
+			this.label6 = new System.Windows.Forms.Label();
 			this.SuspendLayout();
 			// 
 			// label1
@@ -219,17 +221,26 @@ namespace OpenDental{
 			this.butClose.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butClose.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butClose.CornerRadius = 4F;
-			this.butClose.Location = new System.Drawing.Point(444,368);
+			this.butClose.Location = new System.Drawing.Point(554,473);
 			this.butClose.Name = "butClose";
 			this.butClose.Size = new System.Drawing.Size(75,26);
 			this.butClose.TabIndex = 0;
 			this.butClose.Text = "Close";
 			this.butClose.Click += new System.EventHandler(this.butClose_Click);
 			// 
+			// label6
+			// 
+			this.label6.Location = new System.Drawing.Point(12,414);
+			this.label6.Name = "label6";
+			this.label6.Size = new System.Drawing.Size(479,100);
+			this.label6.TabIndex = 17;
+			this.label6.Text = resources.GetString("label6.Text");
+			// 
 			// FormReportsMore
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
-			this.ClientSize = new System.Drawing.Size(566,430);
+			this.ClientSize = new System.Drawing.Size(676,535);
+			this.Controls.Add(this.label6);
 			this.Controls.Add(this.listDaily);
 			this.Controls.Add(this.label5);
 			this.Controls.Add(this.listProdInc);
@@ -322,28 +333,45 @@ namespace OpenDental{
 			if(selected==-1) {
 				return;
 			}
+			FormRpProdInc FormPI=new FormRpProdInc();
 			switch(selected) {
 				case 0://Today
-					
+					FormPI.DailyMonthlyAnnual="Daily";
+					FormPI.DateStart=DateTime.Today;
+					FormPI.DateEnd=DateTime.Today;
 					break;
 				case 1://Yesterday
-					
+					FormPI.DailyMonthlyAnnual="Daily";
+					if(DateTime.Today.DayOfWeek==DayOfWeek.Monday){
+						FormPI.DateStart=DateTime.Today.AddDays(-3);
+						FormPI.DateEnd=DateTime.Today.AddDays(-3);
+					}
+					else{
+						FormPI.DateStart=DateTime.Today.AddDays(-1);
+						FormPI.DateEnd=DateTime.Today.AddDays(-1);
+					}
 					break;
 				case 2://This Month
-					
+					FormPI.DailyMonthlyAnnual="Monthly";
+					FormPI.DateStart=new DateTime(DateTime.Today.Year,DateTime.Today.Month,1);
+					FormPI.DateEnd=new DateTime(DateTime.Today.AddMonths(1).Year,DateTime.Today.AddMonths(1).Month,1).AddDays(-1);
 					break;
 				case 3://Last Month
-					
+					FormPI.DailyMonthlyAnnual="Monthly";
+					FormPI.DateStart=new DateTime(DateTime.Today.AddMonths(-1).Year,DateTime.Today.AddMonths(-1).Month,1);
+					FormPI.DateEnd=new DateTime(DateTime.Today.Year,DateTime.Today.Month,1).AddDays(-1);
 					break;
 				case 4://This Year
-					
+					FormPI.DailyMonthlyAnnual="Annual";
+					FormPI.DateStart=new DateTime(DateTime.Today.Year,1,1);
+					FormPI.DateEnd=new DateTime(DateTime.Today.Year,12,31);
 					break;
 				case 5://More Options
-					FormRpProdInc FormPI=new FormRpProdInc();
-					FormPI.ShowDialog();
-					SecurityLogs.MakeLogEntry(Permissions.Reports,0,"Production and Income");
+					//do nothing
 					break;
 			}
+			FormPI.ShowDialog();
+			SecurityLogs.MakeLogEntry(Permissions.Reports,0,"Production and Income");
 		}
 
 		private void listDaily_MouseDown(object sender,MouseEventArgs e) {
