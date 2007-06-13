@@ -44,7 +44,10 @@ namespace OpenDental{
 		private OpenDental.UI.Button butMerge;
 		///<summary>Supply a string here to start off the search with filtered carriers.</summary>
 		public string carrierText;
+		private TextBox textTrojanID;
+		private Label labelTrojanID;
 		private DataTable table;
+		private bool trojan;
 
 		///<summary></summary>
 		public FormInsPlans(){
@@ -77,6 +80,8 @@ namespace OpenDental{
 			this.label3 = new System.Windows.Forms.Label();
 			this.textGroupName = new System.Windows.Forms.TextBox();
 			this.label4 = new System.Windows.Forms.Label();
+			this.textTrojanID = new System.Windows.Forms.TextBox();
+			this.labelTrojanID = new System.Windows.Forms.Label();
 			this.butMerge = new OpenDental.UI.Button();
 			this.gridMain = new OpenDental.UI.ODGrid();
 			this.butOK = new OpenDental.UI.Button();
@@ -123,7 +128,7 @@ namespace OpenDental{
 			// label1
 			// 
 			this.label1.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.label1.Location = new System.Drawing.Point(12,7);
+			this.label1.Location = new System.Drawing.Point(7,7);
 			this.label1.Name = "label1";
 			this.label1.Size = new System.Drawing.Size(100,17);
 			this.label1.TabIndex = 15;
@@ -132,7 +137,7 @@ namespace OpenDental{
 			// 
 			// textEmployer
 			// 
-			this.textEmployer.Location = new System.Drawing.Point(118,4);
+			this.textEmployer.Location = new System.Drawing.Point(113,4);
 			this.textEmployer.Name = "textEmployer";
 			this.textEmployer.Size = new System.Drawing.Size(140,20);
 			this.textEmployer.TabIndex = 1;
@@ -140,7 +145,7 @@ namespace OpenDental{
 			// 
 			// textCarrier
 			// 
-			this.textCarrier.Location = new System.Drawing.Point(118,25);
+			this.textCarrier.Location = new System.Drawing.Point(113,25);
 			this.textCarrier.Name = "textCarrier";
 			this.textCarrier.Size = new System.Drawing.Size(140,20);
 			this.textCarrier.TabIndex = 0;
@@ -149,7 +154,7 @@ namespace OpenDental{
 			// label2
 			// 
 			this.label2.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.label2.Location = new System.Drawing.Point(12,28);
+			this.label2.Location = new System.Drawing.Point(7,28);
 			this.label2.Name = "label2";
 			this.label2.Size = new System.Drawing.Size(100,17);
 			this.label2.TabIndex = 17;
@@ -158,7 +163,7 @@ namespace OpenDental{
 			// 
 			// textGroupNum
 			// 
-			this.textGroupNum.Location = new System.Drawing.Point(408,25);
+			this.textGroupNum.Location = new System.Drawing.Point(372,25);
 			this.textGroupNum.Name = "textGroupNum";
 			this.textGroupNum.Size = new System.Drawing.Size(140,20);
 			this.textGroupNum.TabIndex = 20;
@@ -167,7 +172,7 @@ namespace OpenDental{
 			// label3
 			// 
 			this.label3.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.label3.Location = new System.Drawing.Point(302,28);
+			this.label3.Location = new System.Drawing.Point(266,28);
 			this.label3.Name = "label3";
 			this.label3.Size = new System.Drawing.Size(100,17);
 			this.label3.TabIndex = 23;
@@ -176,7 +181,7 @@ namespace OpenDental{
 			// 
 			// textGroupName
 			// 
-			this.textGroupName.Location = new System.Drawing.Point(408,4);
+			this.textGroupName.Location = new System.Drawing.Point(372,4);
 			this.textGroupName.Name = "textGroupName";
 			this.textGroupName.Size = new System.Drawing.Size(140,20);
 			this.textGroupName.TabIndex = 21;
@@ -185,12 +190,30 @@ namespace OpenDental{
 			// label4
 			// 
 			this.label4.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.label4.Location = new System.Drawing.Point(302,7);
+			this.label4.Location = new System.Drawing.Point(266,7);
 			this.label4.Name = "label4";
 			this.label4.Size = new System.Drawing.Size(100,17);
 			this.label4.TabIndex = 22;
 			this.label4.Text = "Group Name";
 			this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// textTrojanID
+			// 
+			this.textTrojanID.Location = new System.Drawing.Point(616,4);
+			this.textTrojanID.Name = "textTrojanID";
+			this.textTrojanID.Size = new System.Drawing.Size(95,20);
+			this.textTrojanID.TabIndex = 25;
+			this.textTrojanID.TextChanged += new System.EventHandler(this.textTrojanID_TextChanged);
+			// 
+			// labelTrojanID
+			// 
+			this.labelTrojanID.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.labelTrojanID.Location = new System.Drawing.Point(536,7);
+			this.labelTrojanID.Name = "labelTrojanID";
+			this.labelTrojanID.Size = new System.Drawing.Size(74,17);
+			this.labelTrojanID.TabIndex = 26;
+			this.labelTrojanID.Text = "Trojan ID";
+			this.labelTrojanID.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// butMerge
 			// 
@@ -210,7 +233,7 @@ namespace OpenDental{
 			// 
 			// gridMain
 			// 
-			this.gridMain.HScrollVisible = false;
+			this.gridMain.HScrollVisible = true;
 			this.gridMain.Location = new System.Drawing.Point(11,51);
 			this.gridMain.Name = "gridMain";
 			this.gridMain.ScrollValue = 0;
@@ -273,6 +296,8 @@ namespace OpenDental{
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.ClientSize = new System.Drawing.Size(962,669);
+			this.Controls.Add(this.textTrojanID);
+			this.Controls.Add(this.labelTrojanID);
 			this.Controls.Add(this.butMerge);
 			this.Controls.Add(this.textGroupNum);
 			this.Controls.Add(this.label3);
@@ -301,6 +326,14 @@ namespace OpenDental{
 		#endregion
 
 		private void FormInsTemplates_Load(object sender, System.EventArgs e) {
+			Program prog=Programs.GetCur("Trojan");
+			if(prog!=null && prog.Enabled) {
+				trojan=true;
+			}
+			else{
+				labelTrojanID.Visible=false;
+				textTrojanID.Visible=false;
+			}
 			textEmployer.Text=empText;
 			textCarrier.Text=carrierText;
 			FillGrid();
@@ -309,7 +342,7 @@ namespace OpenDental{
 		private void FillGrid(){
 			Cursor=Cursors.WaitCursor;
 			table=InsPlans.GetBigList(radioOrderEmp.Checked,textEmployer.Text,textCarrier.Text,
-				textGroupName.Text,textGroupNum.Text);
+				textGroupName.Text,textGroupNum.Text,textTrojanID.Text);
 			if(IsSelectMode){
 				butBlank.Visible=true;
 			}
@@ -346,7 +379,11 @@ namespace OpenDental{
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn("Plans",40);
 			gridMain.Columns.Add(col);
-			//TrojanID and PlanNote not shown
+			if(trojan){
+				col=new ODGridColumn("TrojanID",60);
+				gridMain.Columns.Add(col);
+			}
+			//PlanNote not shown
 			gridMain.Rows.Clear();
 			ODGridRow row;
 			//Carrier carrier;
@@ -364,6 +401,9 @@ namespace OpenDental{
 				row.Cells.Add(table.Rows[i]["noSendElect"].ToString());
 				row.Cells.Add(table.Rows[i]["ElectID"].ToString());
 				row.Cells.Add(table.Rows[i]["plans"].ToString());
+				if(trojan){
+					row.Cells.Add(table.Rows[i]["TrojanID"].ToString());
+				}
 				gridMain.Rows.Add(row);
 			}
 			gridMain.EndUpdate();
@@ -407,6 +447,10 @@ namespace OpenDental{
 		}
 
 		private void textGroupNum_TextChanged(object sender,EventArgs e) {
+			FillGrid();
+		}
+
+		private void textTrojanID_TextChanged(object sender,EventArgs e) {
 			FillGrid();
 		}
 
@@ -487,6 +531,8 @@ namespace OpenDental{
 		private void butCancel_Click(object sender, System.EventArgs e) {
 			DialogResult=DialogResult.Cancel;
 		}
+
+		
 
 		
 

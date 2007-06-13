@@ -1513,7 +1513,16 @@ namespace OpenDental{
 			}
 			if(IsForAll) {
 				butPick.Visible=false;//This prevents an infinite loop
-				groupRequestBen.Visible=false;//might try to make this functional later, but not now.
+				//groupRequestBen.Visible=false;//might try to make this functional later, but not now.
+				//groupRequestBen:---------------------------------------------
+				butImportTrojan.Visible=false;
+				labelIAP.Visible=false;
+				butIapFind.Visible=false;
+				textTrojanID.Enabled=false;//view only
+				butBenefitNotes.Visible=false;
+				labelCanadaEligibility.Visible=false;
+				butCanadaEligibility.Visible=false;
+				//end of groupRequestBen
 				groupSubscriber.Visible=false;
 				checkApplyAll.Checked=true;
 				checkApplyAll.Visible=false;
@@ -1553,7 +1562,7 @@ namespace OpenDental{
 				checkApplyAll.Visible=false;//because it wouldn't make sense to apply anything to "all"
 			}
 			Program ProgramCur=Programs.GetCur("Trojan");
-			if(ProgramCur.Enabled) {
+			if(ProgramCur!=null && ProgramCur.Enabled) {
 				textTrojanID.Text=PlanCur.TrojanID;
 			}
 			else {
@@ -1563,7 +1572,7 @@ namespace OpenDental{
 				textTrojanID.Visible=false;
 			}
 			ProgramCur=Programs.GetCur("IAP");
-			if(!ProgramCur.Enabled) {
+			if(ProgramCur==null || !ProgramCur.Enabled) {
 				labelIAP.Visible=false;
 				butIapFind.Visible=false;
 			}

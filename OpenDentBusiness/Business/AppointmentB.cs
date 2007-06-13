@@ -229,7 +229,7 @@ namespace OpenDentBusiness{
 						+((ContactMethod)PIn.PInt(raw.Rows[i]["PreferRecallMethod"].ToString())).ToString();
 				}
 				row["creditIns"]=raw.Rows[i]["CreditType"].ToString();
-				if(raw.Rows[i]["PlanNum"].ToString()!="0") {
+				if(raw.Rows[i]["PlanNum"].ToString()!="" && raw.Rows[i]["PlanNum"].ToString()!="0") {
 					row["creditIns"]+="I";
 				}
 				if(raw.Rows[i]["FamFinUrgNote"].ToString()!="") {
@@ -237,7 +237,7 @@ namespace OpenDentBusiness{
 				}
 				row["hmPhone"]=Lan.g("Appointments","Hm: ")+raw.Rows[i]["HmPhone"].ToString();
 				row["ImageFolder"]=raw.Rows[i]["ImageFolder"].ToString();
-				if(raw.Rows[i]["PlanNum"].ToString()!="0"){
+				if(raw.Rows[i]["PlanNum"].ToString()!="" && raw.Rows[i]["PlanNum"].ToString()!="0"){
 					row["insurance"]=Lan.g("Appointments","Insured");
 				}
 				row["IsHygiene"]=raw.Rows[i]["IsHygiene"].ToString();

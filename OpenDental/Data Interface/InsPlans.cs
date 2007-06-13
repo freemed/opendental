@@ -647,7 +647,9 @@ namespace OpenDental {
 		}
 
 		///<summary>Used from FormInsPlans to get a big list of many plans, organized by carrier name or by employer.  Identical plans are grouped as one row.</summary>
-		public static DataTable GetBigList(bool byEmployer,string empName,string carrierName,string groupName,string groupNum) {
+		public static DataTable GetBigList(bool byEmployer,string empName,string carrierName,string groupName,string groupNum,
+			string trojanID)
+		{
 			DataTable table=new DataTable();
 			DataRow row;
 			table.Columns.Add("Address");
@@ -662,11 +664,12 @@ namespace OpenDental {
 			table.Columns.Add("PlanNum");
 			table.Columns.Add("plans");
 			table.Columns.Add("State");
+			table.Columns.Add("trojanID");
 			table.Columns.Add("Zip");
 			List<DataRow> rows=new List<DataRow>();
 			string command="SELECT carrier.Address,carrier.City,CarrierName,ElectID,EmpName,GroupName,GroupNum,NoSendElect,"
 				+"carrier.Phone,MAX(PlanNum) onePlanNum,"//for Oracle
-				+"COUNT(*) plans,carrier.State,carrier.Zip, "
+				+"COUNT(*) plans,carrier.State,TrojanID,carrier.Zip, "
 				+"CASE WHEN (EmpName IS NULL) THEN 1 ELSE 0 END as haveName "//for Oracle
 				+"FROM insplan "
 				+"LEFT JOIN employer ON employer.EmployerNum = insplan.EmployerNum "
@@ -682,7 +685,7 @@ namespace OpenDental {
 				command+="AND GroupNum LIKE '%"+POut.PString(groupNum)+"%' ";
 			}
 			command+="GROUP BY insplan.EmployerNum,GroupName,GroupNum,DivisionNo,"
-				+"insplan.CarrierNum,insplan.IsMedical ";
+				+"insplan.CarrierNum,insplan.IsMedical,TrojanID ";
 			if(FormChooseDatabase.DBtype==DatabaseType.Oracle){
 				command+=",carrier.Address,carrier.City,CarrierName,ElectID,EmpName,NoSendElect,carrier.Phone,carrier.State,carrier.Zip ";
 			}
@@ -711,6 +714,7 @@ namespace OpenDental {
 				row["PlanNum"]=rawT.Rows[i]["onePlanNum"].ToString();
 				row["plans"]=rawT.Rows[i]["plans"].ToString();
 				row["State"]=rawT.Rows[i]["State"].ToString();
+				row["TrojanID"]=rawT.Rows[i]["TrojanID"].ToString();
 				row["Zip"]=rawT.Rows[i]["Zip"].ToString();
 				rows.Add(row);
 			}
