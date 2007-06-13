@@ -5297,11 +5297,7 @@ namespace OpenDental{
 				General.NonQEx(command);
 				command = "INSERT INTO preference VALUES('RecallProceduresPerio','')";
 				General.NonQEx(command);
-				command = "INSERT INTO preference VALUES('RecallSRPProcs','')";
-				General.NonQEx(command);
-				command = "INSERT INTO preference VALUES('RecallOtherPerioProcs','')";
-				General.NonQEx(command);
-				command = "INSERT INTO preference VALUES('RecallPerioMaintProc','')";
+				command = "INSERT INTO preference VALUES('RecallPerioTriggerProcs','')";
 				General.NonQEx(command);
 				command = "INSERT INTO preference VALUES('RecallFMXPanoProc','')";
 				General.NonQEx(command);
@@ -5351,6 +5347,14 @@ namespace OpenDental{
 						INDEX (ProvNum)
 						)";
 				}
+				General.NonQEx(command);
+				//after r381
+				command="INSERT INTO definition (Category,ItemOrder,ItemName,ItemColor,IsHidden) VALUES(17,6,"
+				+"'Patient Note',-1051718,0)";//post-it note yellow
+				General.NonQEx(command);
+				command = "INSERT INTO definition (Category,ItemOrder,ItemName,ItemColor,IsHidden) VALUES(12,18,'Patient Note Text',-8388480,0)";//purple
+				General.NonQEx(command);
+				command = "INSERT INTO definition (Category,ItemOrder,ItemName,ItemColor,IsHidden) VALUES(12,19,'Patient Note Background',-1,0)";
 				General.NonQEx(command);
 
 

@@ -194,7 +194,10 @@ namespace OpenDental{
 			if(PIn.PInt(DataRoww["AptStatus"].ToString())==(int)ApptStatus.Complete){
 				backColor=DefB.Long[(int)DefCat.AppointmentColors][3].ItemColor;
 			}
-			else{
+			else if (PIn.PInt(DataRoww["AptStatus"].ToString())==(int)ApptStatus.PtNote) {
+				backColor=DefB.Long[(int)DefCat.AppointmentColors][6].ItemColor;
+			}
+			else {
 				backColor=provColor;
 				//We might want to do something interesting here.
 			}

@@ -671,8 +671,8 @@ namespace OpenDental{
 			string[] procs;
 			if (patCur.Birthdate.AddYears(12) < recallCur.DateDue) {//pt is over 12 at recall date)
 				if (!PrefB.GetBool("RecallDisablePerioAlt")) {
-					//if pt is perio pt RecallPerioMaintProc RecallOtherPerioProcs RecallSRPProcs
-					string[] PerioProc=(PrefB.GetString("RecallOtherPerioProcs")+","+PrefB.GetString("RecallPerioMaintProc")+","+PrefB.GetString("RecallSRPProcs")).Split(',');
+					//if pt is perio pt RecallPerioTriggerProcs
+					string[] PerioProc=PrefB.GetString("RecallPerioTriggerProcs").Split(',');
 					for (int q=0;q<PerioProc.Length;q++) {//see if pt has had any perio procs in the past
 						for (int i=0;i<procList.Length;i++) {
 							if (PerioProc[q]==ProcedureCodes.GetStringProcCode(procList[i].CodeNum)

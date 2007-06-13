@@ -281,7 +281,7 @@ namespace OpenDentBusiness {
 				row["CommlogNum"]=0;
 				row["description"]=Lan.g("ChartModule","Appointment - ")+dateT.ToShortTimeString()+"\r\n"
 					+rawApt.Rows[i]["ProcDescript"].ToString();
-				if(dateT.Date==DateTime.Today) {
+				if(dateT.Date.Date==DateTime.Today.Date) {
 					row["colorBackG"]=DefB.Long[(int)DefCat.ProgNoteColors][9].ItemColor.ToArgb().ToString(); //deliniates nicely between old appts
 					row["colorText"]=DefB.Long[(int)DefCat.ProgNoteColors][8].ItemColor.ToArgb().ToString();
 				}
@@ -311,8 +311,13 @@ namespace OpenDentBusiness {
 				else if (apptS==6){ //Planned Appt
 					row["colorText"]=DefB.Long[(int)DefCat.ProgNoteColors][16].ItemColor.ToArgb().ToString(); 
 					row["colorBackG"]=DefB.Long[(int)DefCat.ProgNoteColors][17].ItemColor.ToArgb().ToString();
-					row["description"]=Lan.g("ChartModule","PLANNED Appointment - ")+dateT.ToShortTimeString()+"\r\n"
+					row["description"]=Lan.g("ChartModule","PLANNED Appointment")+"\r\n"
 					+rawApt.Rows[i]["ProcDescript"].ToString();
+				}
+				else if(apptS==7){//Patient Note
+					row["colorText"]=DefB.Long[(int)DefCat.ProgNoteColors][18].ItemColor.ToArgb().ToString(); 
+					row["colorBackG"]=DefB.Long[(int)DefCat.ProgNoteColors][19].ItemColor.ToArgb().ToString();
+					row["description"] = Lan.g("ChartModule", "***  Patient NOTE  *** - ") + dateT.ToShortTimeString();
 				}
 				row["LabCaseNum"]=0;
 				row["note"]=rawApt.Rows[i]["Note"].ToString();

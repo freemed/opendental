@@ -181,7 +181,8 @@ namespace OpenDental{
 			xRayImageController=new SuniDeviceControl();
 			this.xRayImageController.OnCaptureReady+=new System.EventHandler(this.OnCaptureReady);
 			this.xRayImageController.OnCaptureComplete+=new System.EventHandler(this.OnCaptureComplete);
-			this.xRayImageController.OnCaptureFinalize+=new System.EventHandler(this.OnCaptureFinalize);
+			//techchange
+			//this.xRayImageController.OnCaptureFinalize+=new System.EventHandler(this.OnCaptureFinalize);
 		}
 
 		///<summary></summary>

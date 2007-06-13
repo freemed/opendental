@@ -128,7 +128,7 @@ namespace OpenDentBusiness{
 			if(aptNum==0){
 				command+="WHERE AptDateTime >= "+POut.PDate(dateStart)+" "
 					+"AND AptDateTime < "+POut.PDate(dateStart.AddDays(1))+" "
-					+"AND (AptStatus=1 OR AptStatus=2 OR AptStatus=4 OR AptStatus=5) ";
+					+"AND (AptStatus=1 OR AptStatus=2 OR AptStatus=4 OR AptStatus=5 OR AptStatus=7) ";
 			}
 			else{
 				command+="WHERE appointment.AptNum="+POut.PInt(aptNum);

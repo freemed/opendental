@@ -18,7 +18,6 @@ namespace OpenDentBusiness{
 		///<summary>FK to patient.PatNum.  Can be 0 if not applicable.</summary>
 		public int PatNum;
 
-
 		
 
 	}

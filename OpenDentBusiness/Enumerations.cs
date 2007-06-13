@@ -320,7 +320,10 @@ namespace OpenDentBusiness{
 		///<summary>5- Shows with a big X on it.</summary>
 		Broken,
 		///<summary>6- Planned appointment.  Only shows in Chart module. User not allowed to change this status, and it does not display as one of the options.</summary>
-		Planned}
+		Planned,
+		///<summary>7- Patient "post-it" note on the schedule. Shows light yellow. Shows on day scheduled just like appt, as well as in prog notes, etc.</summary>
+		PtNote}
+
 	///<summary></summary>
 	public enum PatientStatus{
 		///<summary>0</summary>

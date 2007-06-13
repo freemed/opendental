@@ -107,8 +107,8 @@ namespace OpenDental{
 			SecurityLog securityLog=new SecurityLog();
 			securityLog.PermType=permType;
 			securityLog.UserNum=Security.CurUser.UserNum;
-			securityLog.LogText=logText;
-			securityLog.PatNum=patNum;
+			securityLog.LogText = "From: " + (SystemInformation.ComputerName) + " - " + (logText);
+			securityLog.PatNum = patNum;
 			SecurityLogs.Insert(securityLog);
 		}
 

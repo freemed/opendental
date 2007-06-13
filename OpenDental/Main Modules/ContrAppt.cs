@@ -2968,7 +2968,12 @@ namespace OpenDental{
 		}
 
 		private void OnUnsched_Click(){
+			Appointment apt = Appointments.GetOneApt(ContrApptSingle.SelectedAptNum);
+
 			if(!Security.IsAuthorized(Permissions.AppointmentMove)){
+				return;
+			}
+			if (apt.AptStatus==ApptStatus.PtNote) {
 				return;
 			}
 			if(MessageBox.Show(Lan.g(this,"Send Appointment to Unscheduled List?")
@@ -2988,7 +2993,11 @@ namespace OpenDental{
 		}
 
 		private void OnBreak_Click(){
+			Appointment apt = Appointments.GetOneApt(ContrApptSingle.SelectedAptNum);
 			if(!Security.IsAuthorized(Permissions.AppointmentEdit)){
+				return;
+			}
+			if (apt.AptStatus==ApptStatus.PtNote) {
 				return;
 			}
 			Appointments.SetAptStatus(ContrApptSingle.SelectedAptNum,ApptStatus.Broken);
@@ -3027,12 +3036,20 @@ namespace OpenDental{
 			Patient pat=fam.GetPatient(apt.PatNum);
 			InsPlan[] PlanList=InsPlans.Refresh(fam);
 			PatPlan[] PatPlanList=PatPlans.Refresh(apt.PatNum);
-			Procedures.SetCompleteInAppt(apt,PlanList,PatPlanList);//loops through each proc
-			SecurityLogs.MakeLogEntry(Permissions.AppointmentEdit,apt.PatNum,
-				pat.GetNameLF()+", "
-				+ContrApptSingle3[GetIndex(apt.AptNum)].DataRoww["procs"].ToString()+", "
-				+apt.AptDateTime.ToString()+", "
-				+"Set Complete");
+			if (apt.AptStatus!=ApptStatus.PtNote) {//shouldn't ever happen, but don't allow procedures to be completed from notes
+				Procedures.SetCompleteInAppt(apt, PlanList, PatPlanList);//loops through each proc
+				SecurityLogs.MakeLogEntry(Permissions.AppointmentEdit, apt.PatNum,
+					pat.GetNameLF() + ", "
+					+ ContrApptSingle3[GetIndex(apt.AptNum)].DataRoww["procs"].ToString() + ", "
+					+ apt.AptDateTime.ToString() + ", "
+					+ "Set Complete");
+			}
+			else {
+				SecurityLogs.MakeLogEntry(Permissions.AppointmentEdit, apt.PatNum,
+					pat.GetNameLF() + ", "
+					+ apt.AptDateTime.ToString() + ", "
+					+ "Pt NOTE Set Complete");
+			}
 			ModuleSelected(pat.PatNum);
 			SetInvalid();
 			SecurityLogs.MakeLogEntry(Permissions.ProcComplCreate,pat.PatNum,
@@ -3040,12 +3057,21 @@ namespace OpenDental{
 		}
 
 		private void OnDelete_Click(){
-			if(!Security.IsAuthorized(Permissions.AppointmentEdit)){
+			Appointment apt = Appointments.GetOneApt(ContrApptSingle.SelectedAptNum);
+			if (!Security.IsAuthorized(Permissions.AppointmentEdit)) {
 				return;
 			}
-			if(!MsgBox.Show(this,true,"Delete Appointment?")){
-				return;
+			if (apt.AptStatus==ApptStatus.PtNote) {
+				if (!MsgBox.Show(this, true, "Delete Patient Note?")) {
+					return;
+				}
 			}
+			else {
+				if (!MsgBox.Show(this, true, "Delete Appointment?")) {
+					return;
+				}
+			}
+
 			Appointments.Delete(ContrApptSingle.SelectedAptNum);
 			int thisI=GetIndex(ContrApptSingle.SelectedAptNum);
 			SecurityLogs.MakeLogEntry(Permissions.AppointmentEdit,PatCurNum,
