@@ -490,7 +490,11 @@ namespace OpenDental{
 			}
 			Provider treatDent=Providers.ListLong[Providers.GetIndexLong(ClaimCur.ProvTreat)];
 			if(ClaimFormCur==null){
+				if(ClaimCur.ClaimForm>0){
+					ClaimFormCur=ClaimForms.GetClaimForm(ClaimCur.ClaimForm);
+				} else {
 				ClaimFormCur=ClaimForms.GetClaimForm(planCur.ClaimFormNum);
+				}
 			}
 			//else{//usually only for batch generic e-claims and Renaissance
 			//	ClaimFormCur=ClaimForms.GetClaimForm(ClaimFormNum);

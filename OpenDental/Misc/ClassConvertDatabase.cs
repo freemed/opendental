@@ -5361,6 +5361,11 @@ namespace OpenDental{
 
 				command="UPDATE preference SET ValueString = '5.0.0.0' WHERE PrefName = 'DataBaseVersion'";
 				General.NonQEx(command);
+
+				command="ALTER TABLE claim ADD ClaimForm int NOT NULL default '0'";
+				General.NonQEx(command);
+				command="ALTER TABLE claim ADD EFormat int NOT NULL";
+				General.NonQEx(command);
 			}
 			//To5_0_?();
 		}

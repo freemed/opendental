@@ -114,6 +114,8 @@ namespace OpenDental{
 				tempClaim.WriteOff      =   PIn.PDouble(table.Rows[i][32].ToString());
 				tempClaim.Radiographs   =   PIn.PInt   (table.Rows[i][33].ToString());
 				tempClaim.ClinicNum     =   PIn.PInt   (table.Rows[i][34].ToString());
+				tempClaim.ClaimForm     =   PIn.PInt   (table.Rows[i][35].ToString());
+				tempClaim.EFormat     =   PIn.PInt   (table.Rows[i][36].ToString());
 				if(single){
 					retVal=tempClaim;
 				}
@@ -140,7 +142,7 @@ namespace OpenDental{
 				+",claimtype,provbill,referringprov"
 				+",refnumstring,placeservice,accidentrelated,accidentdate,accidentst"
 				+",employrelated,isortho,orthoremainm,orthodate,patrelat,plannum2"
-				+",patrelat2,writeoff,Radiographs,ClinicNum) VALUES(";
+				+",patrelat2,writeoff,Radiographs,ClinicNum,ClaimForm,EFormat) VALUES(";
 			if(PrefB.RandomKeys){
 				command+="'"+POut.PInt(Cur.ClaimNum)+"', ";
 			}
@@ -178,7 +180,9 @@ namespace OpenDental{
 				+"'"+POut.PInt   ((int)Cur.PatRelat2)+"', "
 				+"'"+POut.PDouble(Cur.WriteOff)+"', "
 				+"'"+POut.PInt   (Cur.Radiographs)+"', "
-				+"'"+POut.PInt   (Cur.ClinicNum)+"')";
+				+"'"+POut.PInt   (Cur.ClinicNum)+"', "
+				+"'"+POut.PInt   (Cur.ClaimForm)+"', "
+				+"'"+POut.PInt   (Cur.EFormat)+"')";
 			if(PrefB.RandomKeys){
 				General.NonQ(command);
 			}
@@ -224,6 +228,8 @@ namespace OpenDental{
 				+",writeoff = '"     +	POut.PDouble(Cur.WriteOff)+"' "
 				+",Radiographs = '"  +  POut.PInt   (Cur.Radiographs)+"' "
 				+",ClinicNum = '"    +  POut.PInt   (Cur.ClinicNum)+"' "
+				+",ClaimForm = '"    +  POut.PInt   (Cur.ClaimForm)+"' "
+				+",EFormat = '"    +  POut.PInt   (Cur.EFormat)+"' "
 				+"WHERE claimnum = '"+	POut.PInt   (Cur.ClaimNum)+"'";
 			General.NonQ(command);
 		}

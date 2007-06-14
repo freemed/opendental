@@ -77,6 +77,10 @@ namespace OpenDentBusiness{
 		public int Radiographs;
 		///<summary>FK to clinic.ClinicNum.  0 if no clinic.</summary>
 		public int ClinicNum;
+		///<summary>FK to claim.ClaimNum.  '' if not assigned.</summary>
+		public int ClaimForm;
+		///<summary>Enum:EtransType to define a specific version of an e-claim</summary>
+		public int EFormat;
 
 		///<summary>Returns a copy of the claim.</summary>
 		public Claim Copy() {
@@ -115,19 +119,12 @@ namespace OpenDentBusiness{
 			c.PatRelat2=PatRelat2;
 			c.WriteOff=WriteOff;
 			c.Radiographs=Radiographs;
-			c.ClinicNum=ClinicNum;			
+			c.ClinicNum=ClinicNum;
+			c.ClaimForm=ClaimForm;
+			c.EFormat=EFormat;
 			return c;
 		}
 	
 	}
 
 }
-
-
-
-
-
-
-
-
-

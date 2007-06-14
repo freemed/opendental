@@ -27,9 +27,11 @@ namespace OpenDental{
 		private OpenDental.UI.ODGrid gridMain;
 		private GroupBox groupBox1;
 		private GroupBox groupBox2;
-		private ComboBox comboBox1;
-		private ComboBox comboBox2;
+		private ComboBox comboClaimForm;
+		private ComboBox comboEFormat;
 		private int PatNum;
+		public int ClaimForm;
+		public int EFormat;
 
 		///<summary></summary>
 		public FormClaimCreate(int patNum){
@@ -59,9 +61,9 @@ namespace OpenDental{
 			this.listRelat = new System.Windows.Forms.ListBox();
 			this.gridMain = new OpenDental.UI.ODGrid();
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
-			this.comboBox1 = new System.Windows.Forms.ComboBox();
+			this.comboClaimForm = new System.Windows.Forms.ComboBox();
 			this.groupBox2 = new System.Windows.Forms.GroupBox();
-			this.comboBox2 = new System.Windows.Forms.ComboBox();
+			this.comboEFormat = new System.Windows.Forms.ComboBox();
 			this.groupBox1.SuspendLayout();
 			this.groupBox2.SuspendLayout();
 			this.SuspendLayout();
@@ -126,7 +128,7 @@ namespace OpenDental{
 			// 
 			// groupBox1
 			// 
-			this.groupBox1.Controls.Add(this.comboBox1);
+			this.groupBox1.Controls.Add(this.comboClaimForm);
 			this.groupBox1.Location = new System.Drawing.Point(22,239);
 			this.groupBox1.Name = "groupBox1";
 			this.groupBox1.Size = new System.Drawing.Size(211,42);
@@ -134,17 +136,17 @@ namespace OpenDental{
 			this.groupBox1.TabStop = false;
 			this.groupBox1.Text = "Claim Form";
 			// 
-			// comboBox1
+			// comboClaimForm
 			// 
-			this.comboBox1.FormattingEnabled = true;
-			this.comboBox1.Location = new System.Drawing.Point(6,15);
-			this.comboBox1.Name = "comboBox1";
-			this.comboBox1.Size = new System.Drawing.Size(199,21);
-			this.comboBox1.TabIndex = 0;
+			this.comboClaimForm.FormattingEnabled = true;
+			this.comboClaimForm.Location = new System.Drawing.Point(6,15);
+			this.comboClaimForm.Name = "comboClaimForm";
+			this.comboClaimForm.Size = new System.Drawing.Size(199,21);
+			this.comboClaimForm.TabIndex = 0;
 			// 
 			// groupBox2
 			// 
-			this.groupBox2.Controls.Add(this.comboBox2);
+			this.groupBox2.Controls.Add(this.comboEFormat);
 			this.groupBox2.Location = new System.Drawing.Point(22,287);
 			this.groupBox2.Name = "groupBox2";
 			this.groupBox2.Size = new System.Drawing.Size(211,47);
@@ -152,13 +154,13 @@ namespace OpenDental{
 			this.groupBox2.TabStop = false;
 			this.groupBox2.Text = "E-Format";
 			// 
-			// comboBox2
+			// comboEFormat
 			// 
-			this.comboBox2.FormattingEnabled = true;
-			this.comboBox2.Location = new System.Drawing.Point(6,19);
-			this.comboBox2.Name = "comboBox2";
-			this.comboBox2.Size = new System.Drawing.Size(199,21);
-			this.comboBox2.TabIndex = 0;
+			this.comboEFormat.FormattingEnabled = true;
+			this.comboEFormat.Location = new System.Drawing.Point(6,19);
+			this.comboEFormat.Name = "comboEFormat";
+			this.comboEFormat.Size = new System.Drawing.Size(199,21);
+			this.comboEFormat.TabIndex = 0;
 			// 
 			// FormClaimCreate
 			// 
@@ -200,7 +202,18 @@ namespace OpenDental{
 			PatCur=FamCur.GetPatient(PatNum);
       PlanList=InsPlans.Refresh(FamCur);
 			FillPlanData();
+			FillClaimForms();
     }
+
+		private void FillClaimForms(){
+			ArrayList ClaimFormsArray = new ArrayList();
+			for(int i=0;i<ClaimForms.ListShort.Length;i++) {
+				ClaimFormsArray.Add(ClaimForms.ListShort[i]);
+			}
+				this.comboClaimForm.DataSource=ClaimFormsArray;
+				this.comboClaimForm.ValueMember="ClaimKey";
+				this.comboClaimForm.DisplayMember="ClaimDescription";
+		}
 
 		private void FillPlanData(){
 			gridMain.BeginUpdate();
@@ -264,7 +277,9 @@ namespace OpenDental{
 				PatRelat=(Relat)listRelat.SelectedIndex;
 			}
 			SelectedPlan=PlanList[gridMain.GetSelectedIndex()];
-      DialogResult=DialogResult.OK;		
+			ClaimForm=Convert.ToInt16(comboClaimForm.SelectedValue.ToString());
+			EFormat=2;
+      DialogResult=DialogResult.OK;
 		}
 
 		private void butCancel_Click(object sender, System.EventArgs e) {
