@@ -3011,15 +3011,32 @@ namespace OpenDental{
 			int provNum=PIn.PInt(ContrApptSingle3[thisI].DataRoww["ProvNum"].ToString());//remember before ModuleSelected
 			ModuleSelected(pat.PatNum);
 			SetInvalid();		
-			Adjustment AdjustmentCur=new Adjustment();
-			AdjustmentCur.DateEntry=DateTime.Today;
-			AdjustmentCur.AdjDate=DateTime.Today;
-			AdjustmentCur.ProcDate=DateTime.Today;
-			AdjustmentCur.ProvNum=provNum;
-			AdjustmentCur.PatNum=pat.PatNum;
-			FormAdjust FormA=new FormAdjust(pat,AdjustmentCur);
-			FormA.IsNew=true;
-			FormA.ShowDialog();
+			if(!PrefB.GetBool("BrokenApptCommLogNotAdjustment")){
+				Adjustment AdjustmentCur=new Adjustment();
+				AdjustmentCur.DateEntry=DateTime.Today;
+				AdjustmentCur.AdjDate=DateTime.Today;
+				AdjustmentCur.ProcDate=DateTime.Today;
+				AdjustmentCur.ProvNum=provNum;
+				AdjustmentCur.PatNum=pat.PatNum;
+				FormAdjust FormA=new FormAdjust(pat,AdjustmentCur);
+				FormA.IsNew=true;
+				FormA.ShowDialog();
+			}
+			else{
+				/* //will fill in here sometime for other dialog
+				Commlog CommlogCur=new Commlog();
+				CommlogCur.PatNum=pat.PatNum;
+				CommlogCur.CommDateTime=DateTime.Now;
+				CommlogCur.CommType=CommItemType.ApptRelated;
+				CommlogCur.Note="Appt BROKEN for " + apt.ProcDescript + " on " +apt.AptDateTime; 
+				FormCommItem FormCI=new FormCommItem(CommlogCur);
+				FormCI.IsNew=true;
+				FormCI.ShowDialog();
+				if(FormCI.DialogResult==DialogResult.OK){
+					DialogResult=DialogResult.OK;
+				}
+			*/
+			}
 		}
 
 		private void OnComplete_Click(){
