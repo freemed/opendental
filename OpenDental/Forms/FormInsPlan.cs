@@ -2182,6 +2182,8 @@ namespace OpenDental{
 				return;
 			}
 			usesAnnivers=false;
+			bool resetFeeSched=false;//This will be set to true if a FeeSched was imported.
+			int feeSchedNum=0;//and if resetFeeSched, then this is the new feesched.
 			Benefit ben;
 			//clear exising benefits from screen, not db:
 			benefitList=new List<Benefit>();
@@ -2193,13 +2195,16 @@ namespace OpenDental{
 					string[] splitField;//if a field is a sentence with more than one word, we can split it for analysis
 					while((line=sr.ReadLine())!=null) {
 						fields=line.Split(new char[] { '\t' });
-						if(fields.Length!=3) {
+						if(fields.Length!=3 && fields.Length!=4) {
 							continue;
 						}
 						//remove any trailing or leading spaces:
 						fields[0]=fields[0].Trim();
 						fields[1]=fields[1].Trim();
 						fields[2]=fields[2].Trim();
+						if(fields.Length==4){
+							fields[3]=fields[3].Trim();
+						}
 						if(fields[2]=="") {
 							continue;
 						}
@@ -2208,6 +2213,9 @@ namespace OpenDental{
 								PlanCur.BenefitNotes+="\r\n";
 							}
 							PlanCur.BenefitNotes+=fields[1]+": "+fields[2];
+							if(fields.Length==4){
+								PlanCur.BenefitNotes+=" "+fields[3];
+							}
 							//if(BenefitNotes!="") {
 							//	BenefitNotes+="\r\n";
 							//}
@@ -2362,6 +2370,17 @@ namespace OpenDental{
 								benefitList.Add(ben.Copy());
 								//does prosthodontics include crowns?
 								break;
+							case "FEE":
+								if(!ProcedureCodes.IsValidCode(fields[1])) {
+									break;//skip
+								}
+								if(textTrojanID.Text==""){
+									break;
+								}
+								feeSchedNum=Fees.ImportTrojan(fields[1],PIn.PDouble(fields[3]),textTrojanID.Text);
+								//the step above probably created a new feeschedule, requiring a reset of the three listboxes.
+								resetFeeSched=true;
+								break;
 						}
 					}
 				}
@@ -2379,6 +2398,38 @@ namespace OpenDental{
 				}
 			}
 			FillBenefits();
+			if(resetFeeSched){
+				FeeSchedsStandard=DefB.GetFeeSchedList("");
+				FeeSchedsCopay=DefB.GetFeeSchedList("C");
+				FeeSchedsAllowed=DefB.GetFeeSchedList("A");
+				//if managed care, then do it a bit differently
+				comboFeeSched.Items.Clear();
+				comboFeeSched.Items.Add(Lan.g(this,"none"));
+				comboFeeSched.SelectedIndex=0;
+				for(int i=0;i<FeeSchedsStandard.Length;i++) {
+					comboFeeSched.Items.Add(FeeSchedsStandard[i].ItemName);
+					if(FeeSchedsStandard[i].DefNum==feeSchedNum)
+						comboFeeSched.SelectedIndex=i+1;
+				}
+				comboCopay.Items.Clear();
+				comboCopay.Items.Add(Lan.g(this,"none"));
+				comboCopay.SelectedIndex=0;
+				for(int i=0;i<FeeSchedsCopay.Length;i++) {
+					comboCopay.Items.Add(FeeSchedsCopay[i].ItemName);
+					//This will get set for managed care
+					//if(FeeSchedsCopay[i].DefNum==PlanCur.CopayFeeSched)
+					//	comboCopay.SelectedIndex=i+1;
+				}
+				comboAllowedFeeSched.Items.Clear();
+				comboAllowedFeeSched.Items.Add(Lan.g(this,"none"));
+				comboAllowedFeeSched.SelectedIndex=0;
+				for(int i=0;i<FeeSchedsAllowed.Length;i++) {
+					comboAllowedFeeSched.Items.Add(FeeSchedsAllowed[i].ItemName);
+					//I would have set allowed for PPO, but we are probably going to deprecate this when we do coverage tables.
+					//if(FeeSchedsAllowed[i].DefNum==PlanCur.AllowedFeeSched)
+					//	comboAllowedFeeSched.SelectedIndex=i+1;
+				}
+			}
 		}
 
 		private void butIapFind_Click(object sender,System.EventArgs e) {
@@ -3610,11 +3661,12 @@ namespace OpenDental{
 			if(checkApplyAll.Checked){//also triggered when IsForAll, because box is checked but hidden
 				InsPlans.UpdateForLike(PlanCurOld,PlanCur);
 				bool changed=Benefits.UpdateListForIdentical(benefitListOld,benefitList,planNums);
-				if(changed){
-					for(int i=0;i<planNums.Count;i++){
-						InsPlans.ComputeEstimatesForPlan(planNums[i]);
-					}
-				}
+				//if(changed){
+					//for(int i=0;i<planNums.Count;i++){
+						//InsPlans.ComputeEstimatesForPlan(planNums[i]);
+						//Eliminated in 5.0 because of severe speed issues.
+					//}
+				//}
 			}
 			else{//also triggered when IsNew, because box is unchecked and hidden
 				Benefits.UpdateList(benefitListOld,benefitList);

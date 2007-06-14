@@ -485,9 +485,10 @@ namespace OpenDental{
 					listSelected[i].IsMedical,listSelected[i].PlanNum,false));//remember that planNum=0
 				//First plan info
 				InsPlans.UpdateForLike(listSelected[i],planToMergeTo);
-				for(int j=0;j<planNums.Count;j++) {
-					InsPlans.ComputeEstimatesForPlan(planNums[j]);
-				}
+				//for(int j=0;j<planNums.Count;j++) {
+					//InsPlans.ComputeEstimatesForPlan(planNums[j]);
+					//Eliminated in 5.0 for speed.
+				//}
 				//then benefits
 				Benefits.UpdateListForIdentical(new List<Benefit>(),benList,planNums);//there will always be changes
 				//Then PlanNote.  This is much simpler than the usual synch, because user has seen all versions of note.

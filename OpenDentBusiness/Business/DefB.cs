@@ -94,6 +94,16 @@ namespace OpenDentBusiness {
 			return rowsChanged;
 		}
 
+		///<summary>Get one def from Long.  Returns null if not found.  Only used for very limited situations.  Other Get functions tend to be much more useful since they don't return null.  There is also BIG potential for silent bugs if you use this.ItemOrder instead of GetOrder().</summary>
+		public static Def GetDef(DefCat myCat,int myDefNum) {
+			for(int i=0;i<Long[(int)myCat].GetLength(0);i++) {
+				if(Long[(int)myCat][i].DefNum==myDefNum) {
+					return Long[(int)myCat][i].Copy();
+				}
+			}
+			return null;
+		}
+
 		///<summary></summary>
 		public static string GetName(DefCat myCat,int myDefNum) {
 			if(myDefNum==0){
@@ -107,7 +117,7 @@ namespace OpenDentBusiness {
 			return "";
 		}
 
-		///<summary></summary>
+		///<summary>Returns 0 if it can't find the named def.  If the name is blank, then it returns the first def in the category.</summary>
 		public static int GetByExactName(DefCat myCat, string itemName) {
 			if(itemName=="") {
 				return Long[(int)myCat][0].DefNum;//return the first one in the list

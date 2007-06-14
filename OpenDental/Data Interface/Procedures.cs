@@ -783,7 +783,8 @@ namespace OpenDental{
 			if(proc.ProcDate<DateTime.Today && proc.ProcStatus==ProcStat.C) {
 				//don't automatically create an estimate for completed procedures
 				//especially if they are older than today
-				//this may need to be relaxed a little for offices that enter treatment a few days after it's done.
+				//Very important after a conversion from another software.
+				//This may need to be relaxed a little for offices that enter treatment a few days after it's done.
 				doCreate=false;
 			}
 			//first test to see if each estimate matches an existing patPlan (current coverage),

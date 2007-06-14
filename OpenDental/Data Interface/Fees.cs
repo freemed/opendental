@@ -73,7 +73,7 @@ namespace OpenDental{
 			General.NonQ(command);
 		}
 
-		///<summary>Used in FormProcCodeEdit,FormProcedures, and FormClaimProc to get Fees for display and for editing. Returns null if no matching fee found.</summary>
+		///<summary>Used in FormProcCodeEdit,FormProcedures, and FormClaimProc to get Fees for display and for editing. Returns null if no matching fee found.  Warning, "order" is within Def.Short, not Long.</summary>
 		public static Fee GetFeeByOrder(int codeNum, int order){
 			if(codeNum==0)
 				return null;
@@ -196,6 +196,47 @@ namespace OpenDental{
 			fee.FeeSched=DefB.Short[(int)DefCat.FeeSchedNames][schedI].DefNum;
 			fee.CodeNum=ProcedureCodes.GetCodeNum(codeText);
 			Insert(fee);
+		}
+
+		///<summary>If the named fee schedule does not exist, then it will be created.  It always returns the defnum for the feesched used, regardless of whether it already existed.  procCode must have already been tested for valid code, and feeSchedName must not be blank.</summary>
+		public static int ImportTrojan(string procCode,double amt,string feeSchedName){
+			Def def;
+			int feeSched=DefB.GetByExactName(DefCat.FeeSchedNames,feeSchedName);
+			//if isManaged, then this should be done differently from here on out.
+			if(feeSched==0){
+				//add the new fee schedule
+				def=new Def();
+				def.Category=DefCat.FeeSchedNames;
+				def.ItemName=feeSchedName;
+				def.ItemOrder=DefB.Long[(int)DefCat.FeeSchedNames].Length;
+				Defs.Insert(def);
+				feeSched=def.DefNum;
+				Defs.Refresh();
+				Fees.Refresh();
+				DataValid.SetInvalid(InvalidTypes.Defs | InvalidTypes.Fees);
+			}
+			else{
+				def=DefB.GetDef(DefCat.FeeSchedNames,feeSched);
+			}
+			if(def.IsHidden){//if the fee schedule is hidden
+				def.IsHidden=false;//unhide it
+				Defs.Update(def);
+				Defs.Refresh();
+				DataValid.SetInvalid(InvalidTypes.Defs);
+			}
+			Fee fee=GetFeeByOrder(ProcedureCodes.GetCodeNum(procCode),DefB.GetOrder(DefCat.FeeSchedNames,def.DefNum));
+			if(fee==null) {
+				fee=new Fee();
+				fee.Amount=amt;
+				fee.FeeSched=def.DefNum;
+				fee.CodeNum=ProcedureCodes.GetCodeNum(procCode);
+				Insert(fee);
+			}
+			else{
+				fee.Amount=amt;
+				Update(fee);
+			}
+			return def.DefNum;
 		}
 
 	
