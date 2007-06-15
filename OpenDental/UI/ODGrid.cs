@@ -827,20 +827,19 @@ namespace OpenDental.UI{
 		}
 
 		///<summary>When using the included printing function, this tells you how many pages the printing will take.  The first page does not need to start at 0, but can start further down.</summary>
-		public int GetNumberOfPages(Rectangle bounds,int marginTopFirstPage){
+		public int GetNumberOfPages(Rectangle bounds,int marginTopFirstPage) {
 			float adj=100f/96f;
 			int totalPages=0;
 			int rowsPrinted=0;
-			int yPos=marginTopFirstPage+headerHeight;//set for first page
-			while(rowsPrinted<rows.Count){
-				//if row is too tall to fit
-				if(yPos+adj*(float)RowHeights[rowsPrinted]+adj*(float)NoteHeights[rowsPrinted] > bounds.Bottom){
+			float yPos=marginTopFirstPage+headerHeight;//set for first page
+			while(rowsPrinted<rows.Count) {
+				float rowHeight=adj*RowHeights[rowsPrinted]+adj*NoteHeights[rowsPrinted];
+				if(yPos+rowHeight>bounds.Bottom) {//The row is too tall to fit on the current page.
 					totalPages++;
-					yPos=bounds.Top+headerHeight;//reset y for next page. We always print header for each page.
+					yPos=bounds.Top;//Reset y for next page. We only print header for first page.
 				}
-				else{
-					yPos+=(int)(adj*(float)RowHeights[rowsPrinted]+adj*(float)NoteHeights[rowsPrinted]);
-				}
+				yPos+=rowHeight;//Must always add rowHeight to yPos, because if a row spills onto the next page,
+				//it immediately gets printed at the top of the page (bounds.Top+rowHeight).
 				rowsPrinted++;
 			}
 			return totalPages+1;
