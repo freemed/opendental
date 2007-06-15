@@ -1662,7 +1662,7 @@ namespace OpenDental{
 				DrawProcsOfStatus(ProcStat.R);
 				DrawProcsOfStatus(ProcStat.TP);
 				toothChart.Refresh();
-				Thread.Sleep(500);//wait for 1/2 second for graphics to refresh
+				Thread.Sleep(1000);//wait for 1 full second for graphics to refresh.
 				//chartBitmap=new Bitmap(toothChart.Width,toothChart.Height);
 				chartBitmap=toothChart.GetBitmap();
 				//Graphics g=Graphics.FromImage(chartBitmap);

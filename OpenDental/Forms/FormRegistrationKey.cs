@@ -24,6 +24,10 @@ namespace OpenDental{
 		/// Required designer variable.
 		/// </summary>
 		private System.ComponentModel.Container components = null;
+		private string prevKey1Text="";
+		private string prevKey2Text="";
+		private string prevKey3Text="";
+		private string prevKey4Text="";
 
 		///<summary></summary>
 		public FormRegistrationKey()
@@ -84,6 +88,9 @@ namespace OpenDental{
 			this.textKey1.Name = "textKey1";
 			this.textKey1.Size = new System.Drawing.Size(62,20);
 			this.textKey1.TabIndex = 0;
+			this.textKey1.WordWrap = false;
+			this.textKey1.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textKey1_KeyPress);
+			this.textKey1.TextChanged += new System.EventHandler(this.textKey1_TextChanged);
 			// 
 			// textKey2
 			// 
@@ -91,6 +98,8 @@ namespace OpenDental{
 			this.textKey2.Name = "textKey2";
 			this.textKey2.Size = new System.Drawing.Size(62,20);
 			this.textKey2.TabIndex = 1;
+			this.textKey2.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textKey2_KeyPress);
+			this.textKey2.TextChanged += new System.EventHandler(this.textKey2_TextChanged);
 			// 
 			// textKey3
 			// 
@@ -98,6 +107,8 @@ namespace OpenDental{
 			this.textKey3.Name = "textKey3";
 			this.textKey3.Size = new System.Drawing.Size(62,20);
 			this.textKey3.TabIndex = 2;
+			this.textKey3.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textKey3_KeyPress);
+			this.textKey3.TextChanged += new System.EventHandler(this.textKey3_TextChanged);
 			// 
 			// textKey4
 			// 
@@ -105,6 +116,8 @@ namespace OpenDental{
 			this.textKey4.Name = "textKey4";
 			this.textKey4.Size = new System.Drawing.Size(62,20);
 			this.textKey4.TabIndex = 3;
+			this.textKey4.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textKey4_KeyPress);
+			this.textKey4.TextChanged += new System.EventHandler(this.textKey4_TextChanged);
 			// 
 			// textAgreement
 			// 
@@ -115,6 +128,7 @@ namespace OpenDental{
 			this.textAgreement.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
 			this.textAgreement.Size = new System.Drawing.Size(387,359);
 			this.textAgreement.TabIndex = 5;
+			this.textAgreement.TabStop = false;
 			// 
 			// label2
 			// 
@@ -229,8 +243,62 @@ namespace OpenDental{
 			butOK.Enabled=checkAgree.Checked;
 		}
 
-		
+		private void textKey1_TextChanged(object sender,EventArgs e) {
+			if(textKey1.Text.Length==4){
+				textKey2.Select();
+			}else if(textKey1.Text.Length>4){
+				textKey1.Text=prevKey1Text;
+				textKey1.Invalidate();
+				textKey2.Select();
+			}
+			prevKey1Text=textKey1.Text;
+		}
 
+		private void textKey2_TextChanged(object sender,EventArgs e) {
+			if(textKey2.Text.Length==4) {
+				textKey3.Select();
+			}else if(textKey2.Text.Length>4) {
+				textKey2.Text=prevKey2Text;
+				textKey2.Invalidate();
+				textKey3.Select();
+			}
+			prevKey2Text=textKey2.Text;
+		}
+
+		private void textKey3_TextChanged(object sender,EventArgs e) {
+			if(textKey3.Text.Length==4) {
+				textKey4.Select();
+			}else if(textKey3.Text.Length>4) {
+				textKey3.Text=prevKey3Text;
+				textKey3.Invalidate();
+				textKey4.Select();
+			}
+			prevKey3Text=textKey3.Text;
+		}
+
+		private void textKey4_TextChanged(object sender,EventArgs e) {
+			if(textKey4.Text.Length>4) {
+				textKey4.Text=prevKey4Text;
+				textKey4.Invalidate();
+			}
+			prevKey4Text=textKey4.Text;
+		}
+
+		private void textKey1_KeyPress(object sender,KeyPressEventArgs e) {
+			e.KeyChar=(""+e.KeyChar).ToUpper()[0];
+		}
+
+		private void textKey2_KeyPress(object sender,KeyPressEventArgs e) {
+			e.KeyChar=(""+e.KeyChar).ToUpper()[0];
+		}
+
+		private void textKey3_KeyPress(object sender,KeyPressEventArgs e) {
+			e.KeyChar=(""+e.KeyChar).ToUpper()[0];
+		}
+
+		private void textKey4_KeyPress(object sender,KeyPressEventArgs e) {
+			e.KeyChar=(""+e.KeyChar).ToUpper()[0];
+		}
 
 	}
 }
