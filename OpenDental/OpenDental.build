@@ -36,6 +36,7 @@
 			</nowarn>
 			<sources>
 				<include name="**/*.cs"/>
+                <exclude name="Forms/FormApptEditOld.cs"/>
 			</sources>
       			<resources dynamicprefix="true" prefix="OpenDental">
 				<include name="**/*.resx"/>
@@ -60,7 +61,9 @@
                 <include name="../Required dlls/Tao.Platform.Windows.dll"/>
                 <include name="../Required dlls/VBbridges.dll"/>
                 <include name="../Required dlls/xImageDeviceManager.dll"/>
+                <include name="../Required dlls/CDT.dll"/>
                 <include name="${build.dir}/bin/OpenDentBusiness.dll"/>
+                <include name="${build.dir}/bin/ODR.dll"/>
                 <include name="${build.dir}/bin/RdlEngine.dll"/>
                 <include name="${build.dir}/bin/RdlViewer.dll"/>
                 <include name="${build.dir}/bin/SparksToothChart.dll"/>

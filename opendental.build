@@ -43,8 +43,9 @@
 
 	<fileset id="ext.core">
         <include name="CodeBase/CodeBase.build"/>
-		<include name="OpenDentBusiness/OpenDentBusiness.build" />
-		<include name="OpenDentServer/OpenDentServer.build" />
+	<include name="OpenDentBusiness/OpenDentBusiness.build" />
+	<include name="ODR/ODR.build" />
+	<include name="OpenDentServer/OpenDentServer.build" />
         <include name="RdlEngine/RdlEngine.build"/>
         <include name="RdlViewer/RdlViewer.build"/>
         <include name="SparksToothChart/SparksToothChart.build"/>

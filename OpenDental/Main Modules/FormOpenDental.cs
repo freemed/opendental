@@ -1444,7 +1444,7 @@ namespace OpenDental{
 				this.ActiveControl=this.ContrAccount2;
 				ContrAccount2.ModuleSelected(CurPatNum,e.ClaimNum);
 			}
-			else if(e.PinAppt!=null){
+			else if(e.PinAppt!=0){
 				myOutlookBar.SelectedIndex=e.IModule;
 				ContrAppt2.Visible=true;
 				this.ActiveControl=this.ContrAppt2;
