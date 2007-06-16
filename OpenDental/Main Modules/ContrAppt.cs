@@ -2305,12 +2305,22 @@ namespace OpenDental{
 				(TempApptSingle.Location.Y-ContrApptSheet2.Location.Y-panelSheet.Location.Y);
 			bool timeWasMoved=tHr!=apt.AptDateTime.Hour
 				|| tMin!=apt.AptDateTime.Minute;
-			if(timeWasMoved){
-				if(!Security.IsAuthorized(Permissions.AppointmentMove) || !MsgBox.Show(this,true,"Move Appointment?")){
-					mouseIsDown=false;
-					boolAptMoved=false;
-					TempApptSingle.Dispose();
-					return;
+			if(timeWasMoved){//no question for notes
+				if (apt.AptStatus == ApptStatus.PtNote) {
+					if (!Security.IsAuthorized(Permissions.AppointmentMove)) {
+						mouseIsDown = false;
+						boolAptMoved = false;
+						TempApptSingle.Dispose();
+						return;
+					}
+				}
+				else {
+					if (!Security.IsAuthorized(Permissions.AppointmentMove) || !MsgBox.Show(this, true, "Move Appointment?")) {
+						mouseIsDown = false;
+						boolAptMoved = false;
+						TempApptSingle.Dispose();
+						return;
+					}
 				}
 			}
 			//convert loc to new time
