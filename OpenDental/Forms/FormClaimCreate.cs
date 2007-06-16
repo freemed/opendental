@@ -17,8 +17,8 @@ namespace OpenDental{
 		///<summary></summary>
 		public Relat PatRelat;
 		private System.Windows.Forms.Label labelRelat;
-		///<summary>Set to true to view the relationship selection</summary>
-		public bool ViewRelat;
+		//<summary>Set to true to view the relationship selection</summary>
+		//public bool ViewRelat;
 		private Patient PatCur;
 		private Family FamCur;
 		///<summary>After closing this form, this will contain the selected plan.</summary>
@@ -30,8 +30,8 @@ namespace OpenDental{
 		private ComboBox comboClaimForm;
 		private ComboBox comboEFormat;
 		private int PatNum;
-		public int ClaimForm;
-		public int EFormat;
+		public int ClaimFormNum;
+		public EtransType EFormat;
 
 		///<summary></summary>
 		public FormClaimCreate(int patNum){
@@ -193,10 +193,6 @@ namespace OpenDental{
 		#endregion
 
 		private void FormClaimCreate_Load(object sender, System.EventArgs e) {
-			if(!ViewRelat){
-				labelRelat.Visible=false;
-				listRelat.Visible=false;
-			}
 			//usage: eg. from coverage.  Since can be totally new subscriber, get all plans for them.
 			FamCur=Patients.GetFamily(PatNum);
 			PatCur=FamCur.GetPatient(PatNum);
@@ -210,9 +206,9 @@ namespace OpenDental{
 			for(int i=0;i<ClaimForms.ListShort.Length;i++) {
 				ClaimFormsArray.Add(ClaimForms.ListShort[i]);
 			}
-				this.comboClaimForm.DataSource=ClaimFormsArray;
-				this.comboClaimForm.ValueMember="ClaimKey";
-				this.comboClaimForm.DisplayMember="ClaimDescription";
+			comboClaimForm.DataSource=ClaimFormsArray;
+			comboClaimForm.ValueMember="ClaimFormKey";
+			comboClaimForm.DisplayMember="ClaimFormDescription";
 		}
 
 		private void FillPlanData(){
@@ -253,13 +249,11 @@ namespace OpenDental{
 		}
 
 		private void gridMain_CellDoubleClick(object sender,OpenDental.UI.ODGridClickEventArgs e) {
-			if(ViewRelat && listRelat.SelectedIndex==-1) {
+			if(listRelat.SelectedIndex==-1) {
 				MessageBox.Show(Lan.g(this,"Please select a relationship first."));
 				return;
 			}
-			if(ViewRelat) {
-				PatRelat=(Relat)listRelat.SelectedIndex;
-			}
+			PatRelat=(Relat)listRelat.SelectedIndex;
 			SelectedPlan=PlanList[e.Row];
 			DialogResult=DialogResult.OK;
 		}
@@ -269,16 +263,14 @@ namespace OpenDental{
 				MessageBox.Show(Lan.g(this,"Please select a plan first."));
 				return;
 			}
-			if(ViewRelat && listRelat.SelectedIndex==-1){
+			if(listRelat.SelectedIndex==-1){
 				MessageBox.Show(Lan.g(this,"Please select a relationship first."));
 				return;
 			}
-			if(ViewRelat){
-				PatRelat=(Relat)listRelat.SelectedIndex;
-			}
+			PatRelat=(Relat)listRelat.SelectedIndex;
 			SelectedPlan=PlanList[gridMain.GetSelectedIndex()];
-			ClaimForm=Convert.ToInt16(comboClaimForm.SelectedValue.ToString());
-			EFormat=2;
+			ClaimFormNum=Convert.ToInt16(comboClaimForm.SelectedValue.ToString());
+			EFormat=EtransType.ClaimSent;//?? was 2;
       DialogResult=DialogResult.OK;
 		}
 

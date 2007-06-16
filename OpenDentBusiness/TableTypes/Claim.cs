@@ -77,10 +77,10 @@ namespace OpenDentBusiness{
 		public int Radiographs;
 		///<summary>FK to clinic.ClinicNum.  0 if no clinic.</summary>
 		public int ClinicNum;
-		///<summary>FK to claim.ClaimNum.  '' if not assigned.</summary>
+		///<summary>FK to claimform.ClaimFormNum.  0 if not assigned to use the claimform for the insplan.</summary>
 		public int ClaimForm;
-		///<summary>Enum:EtransType to define a specific version of an e-claim</summary>
-		public int EFormat;
+		///<summary>Enum:EtransType to define a specific version of an e-claim.  Only used for medical claims right now.</summary>
+		public EtransType EFormat;
 
 		///<summary>Returns a copy of the claim.</summary>
 		public Claim Copy() {

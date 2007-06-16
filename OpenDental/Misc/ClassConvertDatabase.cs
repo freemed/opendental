@@ -5356,13 +5356,13 @@ namespace OpenDental{
 				General.NonQEx(command);
 				command = "INSERT INTO definition (Category,ItemOrder,ItemName,ItemColor,IsHidden) VALUES(12,19,'Patient Note Background',-1,0)";
 				General.NonQEx(command);
-				command="ALTER TABLE claim ADD ClaimForm int NOT NULL default '0'";
+				command="ALTER TABLE claim ADD ClaimForm int NOT NULL";
 				General.NonQEx(command);
 				command="ALTER TABLE claim ADD EFormat int NOT NULL";
 				General.NonQEx(command);
 				//after r393
-				command="DROP TABLE proclicense";
-				General.NonQEx(command);
+				//command="DROP TABLE proclicense";//js-let's keep this around for a while.
+				//General.NonQEx(command);
 
 
 

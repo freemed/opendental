@@ -2591,10 +2591,10 @@ namespace OpenDental {
 
 		///<summary>The only validation that's been done is just to make sure that only procedures are selected.  All validation on the procedures selected is done here.  Creates and saves claim initially, attaching all selected procedures.  But it does not refresh any data. Does not do a final update of the new claim.  Does not enter fee amounts.  claimType=P,S,Med,or Other</summary>
 		private Claim CreateClaim(string claimType){
-			int ClaimForm = 0;
-			int EFormat = 0;
+			int claimFormNum = 0;
+			EtransType eFormat = 0;
 			InsPlan PlanCur=new InsPlan();
-			Relat RelatOther=Relat.Self;
+			Relat relatOther=Relat.Self;
 			switch(claimType){
 				case "P":
 					PlanCur=InsPlans.GetPlan(PatPlans.GetPlanNum(PatPlanList,1),PlanList);
@@ -2613,15 +2613,15 @@ namespace OpenDental {
 					break;
 				case "Other":
 					FormClaimCreate FormCC=new FormClaimCreate(PatCur.PatNum);
-					FormCC.ViewRelat=true;
+					//FormCC.ViewRelat=true;
 					FormCC.ShowDialog();
 					if(FormCC.DialogResult!=DialogResult.OK){
 						return new Claim();
 					}
 					PlanCur=FormCC.SelectedPlan;
-					RelatOther=FormCC.PatRelat;
-					ClaimForm=FormCC.ClaimForm;
-					EFormat=FormCC.EFormat;
+					relatOther=FormCC.PatRelat;
+					claimFormNum=FormCC.ClaimFormNum;
+					eFormat=FormCC.EFormat;
 					break;
 			}
 			for(int i=0;i<gridAccount.SelectedIndices.Length;i++){
@@ -2698,11 +2698,11 @@ namespace OpenDental {
 					break;
 				case "Other":
 					ClaimCur.PlanNum=PlanCur.PlanNum;
-					ClaimCur.PatRelat=RelatOther;
+					ClaimCur.PatRelat=relatOther;
 					ClaimCur.ClaimType="Other";
 					//plannum2 is not automatically filled in.
-					ClaimCur.ClaimForm=ClaimForm;
-					ClaimCur.EFormat=EFormat;
+					ClaimCur.ClaimForm=claimFormNum;
+					ClaimCur.EFormat=eFormat;
 					break;
 			}
 			//InsPlans.GetCur(ClaimCur.PlanNum);

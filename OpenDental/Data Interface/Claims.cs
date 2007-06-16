@@ -115,7 +115,7 @@ namespace OpenDental{
 				tempClaim.Radiographs   =   PIn.PInt   (table.Rows[i][33].ToString());
 				tempClaim.ClinicNum     =   PIn.PInt   (table.Rows[i][34].ToString());
 				tempClaim.ClaimForm     =   PIn.PInt   (table.Rows[i][35].ToString());
-				tempClaim.EFormat     =   PIn.PInt   (table.Rows[i][36].ToString());
+				tempClaim.EFormat       =(EtransType)PIn.PInt(table.Rows[i][36].ToString());
 				if(single){
 					retVal=tempClaim;
 				}
@@ -182,7 +182,7 @@ namespace OpenDental{
 				+"'"+POut.PInt   (Cur.Radiographs)+"', "
 				+"'"+POut.PInt   (Cur.ClinicNum)+"', "
 				+"'"+POut.PInt   (Cur.ClaimForm)+"', "
-				+"'"+POut.PInt   (Cur.EFormat)+"')";
+				+"'"+POut.PInt   ((int)Cur.EFormat)+"')";
 			if(PrefB.RandomKeys){
 				General.NonQ(command);
 			}
@@ -229,7 +229,7 @@ namespace OpenDental{
 				+",Radiographs = '"  +  POut.PInt   (Cur.Radiographs)+"' "
 				+",ClinicNum = '"    +  POut.PInt   (Cur.ClinicNum)+"' "
 				+",ClaimForm = '"    +  POut.PInt   (Cur.ClaimForm)+"' "
-				+",EFormat = '"    +  POut.PInt   (Cur.EFormat)+"' "
+				+",EFormat = '"      +  POut.PInt   ((int)Cur.EFormat)+"' "
 				+"WHERE claimnum = '"+	POut.PInt   (Cur.ClaimNum)+"'";
 			General.NonQ(command);
 		}

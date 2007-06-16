@@ -47,12 +47,12 @@ namespace OpenDentBusiness{
 			return cf;
 		}
 
-		public int ClaimKey {
+		public int ClaimFormKey {
 			get {
 				return ClaimFormNum;
 			}
 		}
-		public string ClaimDescription {
+		public string ClaimFormDescription {
 			get {
 					return Description;
 			}
