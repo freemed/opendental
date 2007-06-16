@@ -93,6 +93,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Required dlls\VBbridges.dll</HintPath>
     </Reference>
+    <Reference Include="xImageDeviceManager, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Required dlls\xImageDeviceManager.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Bridges\Apteryx.cs" />
@@ -2915,10 +2919,6 @@
     <ProjectReference Include="..\SparksToothChart\SparksToothChart.csproj">
       <Project>{033B77F4-2E98-49A7-901F-5F388DEDF83E}</Project>
       <Name>SparksToothChart</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\xImageDeviceManager\xImageDeviceManager\xImageDeviceManager.csproj">
-      <Project>{62F6365F-F372-4637-A6C6-699574F89533}</Project>
-      <Name>xImageDeviceManager</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
