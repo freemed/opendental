@@ -28,7 +28,6 @@ namespace OpenDental.UI {
 			// ContrWindowingSlider
 			// 
 			this.Size = new System.Drawing.Size(100,50);
-			this.EnabledChanged += new System.EventHandler(this.ContrWindowingSlider_EnabledChanged);
 			this.ResumeLayout(false);
 
 		}

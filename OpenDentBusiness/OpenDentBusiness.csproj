@@ -165,7 +165,6 @@
     <Compile Include="TableTypes\ProcButtonItem.cs" />
     <Compile Include="TableTypes\Procedure.cs" />
     <Compile Include="TableTypes\ProcedureCode.cs" />
-    <Compile Include="TableTypes\ProcLicense.cs" />
     <Compile Include="TableTypes\ProcNote.cs" />
     <Compile Include="TableTypes\ProcTP.cs" />
     <Compile Include="TableTypes\Program.cs" />

@@ -163,7 +163,6 @@ namespace OpenDental{
 		/// <summary>Added these 3 fields for Oracle encrypted connection string</summary>
 		private string connStr;
 		private string key;
-		private MenuItem menuLicenseCompliance;
 		private MenuItem menuItemGraphics;
 		private MenuItem menuItemLabCases;
 		private MenuItem menuItemRequirementsNeeded;
@@ -271,7 +270,6 @@ namespace OpenDental{
 			this.menuItem9 = new System.Windows.Forms.MenuItem();
 			this.menuItemAuditTrail = new System.Windows.Forms.MenuItem();
 			this.menuItemDatabaseMaintenance = new System.Windows.Forms.MenuItem();
-			this.menuLicenseCompliance = new System.Windows.Forms.MenuItem();
 			this.menuItemImportXML = new System.Windows.Forms.MenuItem();
 			this.menuItemAging = new System.Windows.Forms.MenuItem();
 			this.menuItemFinanceCharge = new System.Windows.Forms.MenuItem();
@@ -729,7 +727,6 @@ namespace OpenDental{
             this.menuItem9,
             this.menuItemAuditTrail,
             this.menuItemDatabaseMaintenance,
-            this.menuLicenseCompliance,
             this.menuItemImportXML,
             this.menuItemAging,
             this.menuItemFinanceCharge,
@@ -792,63 +789,57 @@ namespace OpenDental{
 			this.menuItemDatabaseMaintenance.Text = "Database Maintenance";
 			this.menuItemDatabaseMaintenance.Click += new System.EventHandler(this.menuItemDatabaseMaintenance_Click);
 			// 
-			// menuLicenseCompliance
-			// 
-			this.menuLicenseCompliance.Index = 5;
-			this.menuLicenseCompliance.Text = "ADA Code Update Tool";
-			this.menuLicenseCompliance.Click += new System.EventHandler(this.menuLicenseCompliance_Click);
-			// 
 			// menuItemImportXML
 			// 
-			this.menuItemImportXML.Index = 6;
+			this.menuItemImportXML.Index = 5;
 			this.menuItemImportXML.Text = "Import Patient XML";
 			this.menuItemImportXML.Click += new System.EventHandler(this.menuItemImportXML_Click);
 			// 
 			// menuItemAging
 			// 
-			this.menuItemAging.Index = 7;
+			this.menuItemAging.Index = 6;
 			this.menuItemAging.Text = "Calculate &Aging";
 			this.menuItemAging.Click += new System.EventHandler(this.menuItemAging_Click);
 			// 
 			// menuItemFinanceCharge
 			// 
-			this.menuItemFinanceCharge.Index = 8;
+			this.menuItemFinanceCharge.Index = 7;
 			this.menuItemFinanceCharge.Text = "Run &Finance Charges";
 			this.menuItemFinanceCharge.Click += new System.EventHandler(this.menuItemFinanceCharge_Click);
 			// 
 			// menuItemRepeatingCharges
 			// 
-			this.menuItemRepeatingCharges.Index = 9;
+			this.menuItemRepeatingCharges.Index = 8;
 			this.menuItemRepeatingCharges.Text = "Update Repeating Charges";
 			this.menuItemRepeatingCharges.Click += new System.EventHandler(this.menuItemRepeatingCharges_Click);
 			// 
 			// menuItemTranslation
 			// 
-			this.menuItemTranslation.Index = 10;
+			this.menuItemTranslation.Index = 9;
 			this.menuItemTranslation.Text = "Language Translation";
 			this.menuItemTranslation.Click += new System.EventHandler(this.menuItemTranslation_Click);
 			// 
 			// menuItemScreening
 			// 
-			this.menuItemScreening.Index = 11;
+			this.menuItemScreening.Index = 10;
 			this.menuItemScreening.Text = "Public Health Screening";
 			this.menuItemScreening.Click += new System.EventHandler(this.menuItemScreening_Click);
 			// 
 			// menuItemTerminal
 			// 
-			this.menuItemTerminal.Index = 12;
+			this.menuItemTerminal.Index = 11;
 			this.menuItemTerminal.Text = "Terminal";
 			this.menuItemTerminal.Click += new System.EventHandler(this.menuItemTerminal_Click);
 			// 
 			// menuItemTerminalManager
 			// 
-			this.menuItemTerminalManager.Index = 13;
+			this.menuItemTerminalManager.Index = 12;
 			this.menuItemTerminalManager.Text = "Terminal Manager";
 			this.menuItemTerminalManager.Click += new System.EventHandler(this.menuItemTerminalManager_Click);
 			// 
 			// menuItemReqStudents
 			// 
-			this.menuItemReqStudents.Index = 14;
+			this.menuItemReqStudents.Index = 13;
 			this.menuItemReqStudents.Text = "Student Requirements";
 			this.menuItemReqStudents.Click += new System.EventHandler(this.menuItemReqStudents_Click);
 			// 
@@ -2343,15 +2334,6 @@ namespace OpenDental{
 			FormDatabaseMaintenance FormDM=new FormDatabaseMaintenance();
 			FormDM.ShowDialog();
 			SecurityLogs.MakeLogEntry(Permissions.Setup,0,"Database Maintenance");
-		}
-
-		private void menuLicenseCompliance_Click(object sender,EventArgs e) {
-			if(!Security.IsAuthorized(Permissions.Setup)) {
-				return;
-			}
-			FormLicenseTool flt=new FormLicenseTool();
-			flt.ShowDialog();
-			SecurityLogs.MakeLogEntry(Permissions.Setup,0,"License Compliance Tool");
 		}
 
 		private void menuTelephone_Click(object sender, System.EventArgs e) {

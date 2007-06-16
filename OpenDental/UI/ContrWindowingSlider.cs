@@ -37,6 +37,9 @@ namespace OpenDental.UI {
 		[DefaultValue(64)]
 		public int MinVal{
 			get{
+				if(!Enabled){
+					return 0;
+				}
 				return minVal;
 			}
 			set{
@@ -50,6 +53,9 @@ namespace OpenDental.UI {
 		[DefaultValue(192)]
 		public int MaxVal {
 			get {
+				if(!Enabled){
+					return 255;
+				}
 				return maxVal;
 			}
 			set {
@@ -99,7 +105,7 @@ namespace OpenDental.UI {
 		///<summary>Gets the outline path of the middle button that connects the two ends. But it's partly tucked under the end buttons.</summary>
 		private Rectangle GetRectMiddle(){
 			//GraphicsPath path=new GraphicsPath();
-			return new Rectangle((int)(endW/2f+minVal*tick),0,(int)((maxVal-minVal)*tick),Height-1);
+			return new Rectangle((int)(endW/2f+MinVal*tick),0,(int)((MaxVal-MinVal)*tick),Height-1);
 			//path.AddRectangle(rect);
 			//return path;
 		}
@@ -108,13 +114,13 @@ namespace OpenDental.UI {
 		private GraphicsPath GetPathLeft() {
 			GraphicsPath path=new GraphicsPath();
 			path.AddLines(new PointF[] {
-				new PointF(minVal*tick,Height-4),//start at lower left, work clockwise
-				new PointF(minVal*tick,3),
-				new PointF(minVal*tick+endW/2f,0),
-				new PointF(minVal*tick+endW,3),
-				new PointF(minVal*tick+endW,Height-4),
-				new PointF(minVal*tick+endW/2f,Height-1),
-				new PointF(minVal*tick,Height-4)
+				new PointF(MinVal*tick,Height-4),//start at lower left, work clockwise
+				new PointF(MinVal*tick,3),
+				new PointF(MinVal*tick+endW/2f,0),
+				new PointF(MinVal*tick+endW,3),
+				new PointF(MinVal*tick+endW,Height-4),
+				new PointF(MinVal*tick+endW/2f,Height-1),
+				new PointF(MinVal*tick,Height-4)
 			});
 			return path;
 		}
@@ -123,13 +129,13 @@ namespace OpenDental.UI {
 		private GraphicsPath GetPathRight() {
 			GraphicsPath path=new GraphicsPath();
 			path.AddLines(new PointF[] {
-				new PointF(maxVal*tick,Height-4),//start at lower left, work clockwise
-				new PointF(maxVal*tick,3),
-				new PointF(maxVal*tick+endW/2f,0),
-				new PointF(maxVal*tick+endW,3),
-				new PointF(maxVal*tick+endW,Height-4),
-				new PointF(maxVal*tick+endW/2f,Height-1),
-				new PointF(maxVal*tick,Height-4)
+				new PointF(MaxVal*tick,Height-4),//start at lower left, work clockwise
+				new PointF(MaxVal*tick,3),
+				new PointF(MaxVal*tick+endW/2f,0),
+				new PointF(MaxVal*tick+endW,3),
+				new PointF(MaxVal*tick+endW,Height-4),
+				new PointF(MaxVal*tick+endW/2f,Height-1),
+				new PointF(MaxVal*tick,Height-4)
 			});
 			return path;
 		}
@@ -173,44 +179,44 @@ namespace OpenDental.UI {
 				int maxAllowedR=255;
 				float deltaPix=mouseDownX-e.X;
 				if(butStateL==Button.ControlState.Pressed){
-					minVal=(int)((originalPixL-deltaPix-endW/2f)/tick);
-					maxAllowedL=maxVal-(int)(endW/tick);
-					if(minVal<minAllowedL){
-						minVal=minAllowedL;
+					MinVal=(int)((originalPixL-deltaPix-endW/2f)/tick);
+					maxAllowedL=MaxVal-(int)(endW/tick);
+					if(MinVal<minAllowedL){
+						MinVal=minAllowedL;
 					}
-					else if(minVal>maxAllowedL){
-						minVal=maxAllowedL;
+					else if(MinVal>maxAllowedL){
+						MinVal=maxAllowedL;
 					}
 					OnScroll();
 				}
 				else if(butStateR==Button.ControlState.Pressed){
-					maxVal=(int)((originalPixR-deltaPix-endW/2f)/tick);
-					minAllowedR=minVal+(int)(endW/tick);
-					if(maxVal<minAllowedR){
-						maxVal=minAllowedR;
+					MaxVal=(int)((originalPixR-deltaPix-endW/2f)/tick);
+					minAllowedR=MinVal+(int)(endW/tick);
+					if(MaxVal<minAllowedR){
+						MaxVal=minAllowedR;
 					}
-					else if(maxVal>maxAllowedR){
-						maxVal=maxAllowedR;
+					else if(MaxVal>maxAllowedR){
+						MaxVal=maxAllowedR;
 					}
 					OnScroll();
 				}
 				else if(butStateM==Button.ControlState.Pressed) {
-					minVal=(int)((originalPixL-deltaPix-endW/2f)/tick);
-					maxVal=(int)((originalPixR-deltaPix-endW/2f)/tick);
+					MinVal=(int)((originalPixL-deltaPix-endW/2f)/tick);
+					MaxVal=(int)((originalPixR-deltaPix-endW/2f)/tick);
 					int originalValSpan=(int)((originalPixR-originalPixL)/tick);
 					maxAllowedL=maxAllowedR-originalValSpan;
 					minAllowedR=minAllowedL+originalValSpan;
-					if(minVal<minAllowedL) {
-						minVal=minAllowedL;
+					if(MinVal<minAllowedL) {
+						MinVal=minAllowedL;
 					}
-					else if(minVal>maxAllowedL) {
-						minVal=maxAllowedL;
+					else if(MinVal>maxAllowedL) {
+						MinVal=maxAllowedL;
 					}
-					if(maxVal<minAllowedR) {
-						maxVal=minAllowedR;
+					if(MaxVal<minAllowedR) {
+						MaxVal=minAllowedR;
 					}
-					else if(maxVal>maxAllowedR) {
-						maxVal=maxAllowedR;
+					else if(MaxVal>maxAllowedR) {
+						MaxVal=maxAllowedR;
 					}
 					OnScroll();
 				}
@@ -268,16 +274,16 @@ namespace OpenDental.UI {
 			butStateM=Button.ControlState.Normal;
 			if(GetPathLeft().IsVisible(e.Location)){//if mouse pressed within the left button
 				butStateL=Button.ControlState.Pressed;
-				originalPixL=(float)minVal*tick+endW/2f;
+				originalPixL=(float)MinVal*tick+endW/2f;
 			}
 			else if(GetPathRight().IsVisible(e.Location)) {
 				butStateR=Button.ControlState.Pressed;
-				originalPixR=(float)maxVal*tick+endW/2f;
+				originalPixR=(float)MaxVal*tick+endW/2f;
 			}
 			else if(GetRectMiddle().Contains(e.Location)) {
 				butStateM=Button.ControlState.Pressed;
-				originalPixL=(float)minVal*tick+endW/2f;
-				originalPixR=(float)maxVal*tick+endW/2f;
+				originalPixL=(float)MinVal*tick+endW/2f;
+				originalPixR=(float)MaxVal*tick+endW/2f;
 			}
 			Invalidate();
 		}
@@ -332,14 +338,6 @@ namespace OpenDental.UI {
 			EventArgs ea=new EventArgs();
 			if(ScrollComplete!=null) {
 				ScrollComplete(this,ea);
-			}
-		}
-
-		private void ContrWindowingSlider_EnabledChanged(object sender,EventArgs e) {
-			if(!Enabled){
-				MinVal=0;
-				MaxVal=255;
-				Invalidate();
 			}
 		}
 

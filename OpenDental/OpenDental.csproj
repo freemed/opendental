@@ -93,10 +93,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Required dlls\VBbridges.dll</HintPath>
     </Reference>
-    <Reference Include="xImageDeviceManager, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Required dlls\xImageDeviceManager.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Bridges\Apteryx.cs" />
@@ -226,7 +222,6 @@
     <Compile Include="Data Interface\ProcButtons.cs" />
     <Compile Include="Data Interface\ProcedureCodes.cs" />
     <Compile Include="Data Interface\Procedures.cs" />
-    <Compile Include="Data Interface\ProcLicenses.cs" />
     <Compile Include="Data Interface\ProcTPs.cs" />
     <Compile Include="Data Interface\ProgramProperties.cs" />
     <Compile Include="Data Interface\Programs.cs" />
@@ -471,24 +466,6 @@
     </Compile>
     <Compile Include="Forms\FormAtoZFoldersCreate.cs">
       <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\FormLicenseMissing.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\FormLicenseMissing.Designer.cs">
-      <DependentUpon>FormLicenseMissing.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\FormLicenseTool.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\FormLicenseTool.Designer.cs">
-      <DependentUpon>FormLicenseTool.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\FormLicenseToolEdit.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\FormLicenseToolEdit.Designer.cs">
-      <DependentUpon>FormLicenseToolEdit.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\FormMountDefEdit.cs">
       <SubType>Form</SubType>
@@ -1437,18 +1414,6 @@
     <EmbeddedResource Include="Forms\FormAtoZFoldersCreate.resx">
       <DependentUpon>FormAtoZFoldersCreate.cs</DependentUpon>
       <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\FormLicenseMissing.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>FormLicenseMissing.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\FormLicenseTool.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>FormLicenseTool.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\FormLicenseToolEdit.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>FormLicenseToolEdit.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormMountDefEdit.resx">
       <DependentUpon>FormMountDefEdit.cs</DependentUpon>
@@ -2950,6 +2915,10 @@
     <ProjectReference Include="..\SparksToothChart\SparksToothChart.csproj">
       <Project>{033B77F4-2E98-49A7-901F-5F388DEDF83E}</Project>
       <Name>SparksToothChart</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\xImageDeviceManager\xImageDeviceManager\xImageDeviceManager.csproj">
+      <Project>{62F6365F-F372-4637-A6C6-699574F89533}</Project>
+      <Name>xImageDeviceManager</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

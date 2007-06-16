@@ -2188,7 +2188,7 @@ namespace OpenDental{
 				ToolBarMain.Invalidate();
 				xRayImageController.CaptureXRay();
 			}else{//The user unselected the image capture button, so cancel the current image capture.
-				xRayImageController.KillXRayThread();//Stop current xRay capture and call OnCaptureAborted() when done.
+				xRayImageController.KillXRayThread();//Stop current xRay capture and call OnCaptureFinalize() when done.
 			}
 		}
 
@@ -2257,13 +2257,19 @@ namespace OpenDental{
 			//Refresh image in in picture box.
 			InvalidateSettings(ApplySettings.ALL,false);
 			//This capture was successful. Keep capturing more images until the capture is manually aborted.
-			//This will cause calls to OnCaptureAborted(), then OnCaptureBegin().
+			//This will cause calls to OnCaptureBegin(), then OnCaptureFinalize().
 			xRayImageController.CaptureXRay();
 		}
 
 		///<summary>Called when the entire sequence of image captures is complete (possibly because of failure, or a full mount among other things).</summary>
 		private void OnCaptureFinalize(object sender,EventArgs e) {
+			if(this.InvokeRequired) {
+				CaptureCallback c=new CaptureCallback(OnCaptureFinalize);
+				Invoke(c,new object[] { sender,e });
+				return;
+			}
 			ToolBarMain.Buttons["Capture"].Pushed=false;
+			ToolBarMain.Invalidate();
 			EnableAllTools(true);
 			if(hotDocument>0 && mountDocs[hotDocument]!=null) {//The capture finished in a state where a mount item is selected.
 				EnableTreeItemTools(true,true,false,true,false,true,false,true,false,false,true,true,true);
