@@ -281,6 +281,8 @@ namespace OpenDental{
 				//xPos=13;//the first row is indented because of CreditIns
 			int yPos=rowI*ContrApptSheet.Lh;
 			SolidBrush brush=new SolidBrush(ApptViewItems.ApptRows[elementI].ElementColor);
+			Font noteTitleFont=new Font("Arial",7);
+			SolidBrush noteTitlebrush = new SolidBrush(Color.DarkGray);
 			StringFormat format=new StringFormat();
 			format.Alignment=StringAlignment.Near;
 			int charactersFitted;//not used
@@ -288,102 +290,122 @@ namespace OpenDental{
 			SizeF noteSize;
 			RectangleF rect;
 			string text;
-			switch(ApptViewItems.ApptRows[elementI].ElementDesc){
-				case "AddrNote":
-					text=DataRoww["addrNote"].ToString();
-					if(rowI==0)
-						noteSize=g.MeasureString(text,baseFont,Width-9-4);
-					else
-						noteSize=g.MeasureString(text,baseFont,Width-9);
-					g.MeasureString(text,baseFont,noteSize,format,out charactersFitted,out linesFilled);
-					rect=new RectangleF(new PointF(xPos,yPos),noteSize);
-					g.DrawString(text,baseFont,brush,rect,format);
-					return linesFilled;
-				case "ChartNumAndName":
-					text=DataRoww["chartNumAndName"].ToString();
-					g.DrawString(text,baseFont,brush,xPos,yPos);
-					return 1;
-				case "ChartNumber":
-					g.DrawString(DataRoww["chartNumber"].ToString(),baseFont,brush,xPos,yPos);
-					return 1;
-				case "HmPhone":
-					g.DrawString(DataRoww["hmPhone"].ToString(),baseFont,brush,xPos,yPos);
-					return 1;
-				case "Lab":
-					text=DataRoww["lab"].ToString();
-					if(text==""){
-						return 0;
-					}
-					else {
+			//only draw everything on appts, not notes
+			if (PIn.PInt(DataRoww["AptStatus"].ToString())!=(int)ApptStatus.PtNote) {
+				switch(ApptViewItems.ApptRows[elementI].ElementDesc){
+					case "AddrNote":
+						text=DataRoww["addrNote"].ToString();
+						if(rowI==0)
+							noteSize=g.MeasureString(text,baseFont,Width-9-4);
+						else
+							noteSize=g.MeasureString(text,baseFont,Width-9);
+						g.MeasureString(text,baseFont,noteSize,format,out charactersFitted,out linesFilled);
+						rect=new RectangleF(new PointF(xPos,yPos),noteSize);
+						g.DrawString(text,baseFont,brush,rect,format);
+						return linesFilled;
+					case "ChartNumAndName":
+						text=DataRoww["chartNumAndName"].ToString();
 						g.DrawString(text,baseFont,brush,xPos,yPos);
 						return 1;
-					}
-				case "MedUrgNote":
-					text=DataRoww["MedUrgNote"].ToString();
-					if(rowI==0)
-						noteSize=g.MeasureString(text,baseFont,Width-9-4);
-					else
-						noteSize=g.MeasureString(text,baseFont,Width-9);
-					g.MeasureString(text,baseFont,noteSize,format,out charactersFitted,out linesFilled);
-					rect=new RectangleF(new PointF(xPos,yPos),noteSize);
-					g.DrawString(text,baseFont,brush,rect,format);
-					return linesFilled;
+					case "ChartNumber":
+						g.DrawString(DataRoww["chartNumber"].ToString(),baseFont,brush,xPos,yPos);
+						return 1;
+					case "HmPhone":
+						g.DrawString(DataRoww["hmPhone"].ToString(),baseFont,brush,xPos,yPos);
+						return 1;
+					case "Lab":
+						text=DataRoww["lab"].ToString();
+						if(text==""){
+							return 0;
+						}
+						else {
+							g.DrawString(text,baseFont,brush,xPos,yPos);
+							return 1;
+						}
+					case "MedUrgNote":
+						text=DataRoww["MedUrgNote"].ToString();
+						if(rowI==0)
+							noteSize=g.MeasureString(text,baseFont,Width-9-4);
+						else
+							noteSize=g.MeasureString(text,baseFont,Width-9);
+						g.MeasureString(text,baseFont,noteSize,format,out charactersFitted,out linesFilled);
+						rect=new RectangleF(new PointF(xPos,yPos),noteSize);
+						g.DrawString(text,baseFont,brush,rect,format);
+						return linesFilled;
+					case "Note":
+						text=DataRoww["Note"].ToString();
+						if(rowI==0)
+							noteSize=g.MeasureString(text,baseFont,Width-9-4);
+						else
+							noteSize=g.MeasureString(text,baseFont,Width-9);
+						g.MeasureString(text,baseFont,noteSize,format,out charactersFitted,out linesFilled);
+						rect=new RectangleF(new PointF(xPos,yPos),noteSize);
+						g.DrawString(text,baseFont,brush,rect,format);
+						return linesFilled;
+					case "PatientName":
+						g.DrawString(DataRoww["patientName"].ToString(),baseFont,brush,xPos,yPos);
+						return 1;
+					case "PatNum":
+						g.DrawString(DataRoww["patNum"].ToString(),baseFont,brush,xPos,yPos);
+						return 1;
+					case "PatNumAndName":
+						g.DrawString(DataRoww["patNumAndName"].ToString(),baseFont,brush,xPos,yPos);
+						return 1;
+					case "PremedFlag":
+						if(DataRoww["preMedFlag"].ToString()==""){
+							return 0;
+						}
+						else{
+							g.DrawString(DataRoww["preMedFlag"].ToString(),baseFont,brush,xPos,yPos);
+							return 1;
+						}
+					case "Procs":
+						text=DataRoww["procs"].ToString();
+						if(rowI==0)
+							noteSize=g.MeasureString(text,baseFont,Width-9-4);
+						else
+							noteSize=g.MeasureString(text,baseFont,Width-9);
+						g.MeasureString(text,baseFont,noteSize,format,out charactersFitted,out linesFilled);
+						rect=new RectangleF(new PointF(xPos,yPos),noteSize);
+						g.DrawString(text,baseFont,brush,rect,format);
+						return linesFilled;
+					//case "ProcDescript":
+						//no longer used
+						//g.DrawString(Info.MyApt.ProcDescript,baseFont,brush,xPos,yPos);
+						//return 1;
+					case "Production":
+						g.DrawString(DataRoww["production"].ToString(),baseFont,brush,xPos,yPos);
+						return 1;
+					case "Provider":
+						g.DrawString(DataRoww["provider"].ToString(),baseFont,brush,xPos,yPos);
+						return 1;
+					case "WirelessPhone":
+						g.DrawString(DataRoww["wirelessPhone"].ToString(),baseFont,brush,xPos,yPos);
+						return 1;
+					case "WkPhone":
+						g.DrawString(DataRoww["wkPhone"].ToString(),baseFont,brush,xPos,yPos);
+						return 1;
+					case "Age":
+						g.DrawString(DataRoww["age"].ToString(),baseFont,brush,xPos,yPos);
+						return 1;
+				}
+			}
+			else{
+				switch(ApptViewItems.ApptRows[elementI].ElementDesc){
 				case "Note":
-					text=DataRoww["Note"].ToString();
-					if(rowI==0)
-						noteSize=g.MeasureString(text,baseFont,Width-9-4);
+					text = DataRoww["Note"].ToString();
+					if (rowI == 0)
+						noteSize = g.MeasureString(text, baseFont, Width - 9 - 4);
 					else
-						noteSize=g.MeasureString(text,baseFont,Width-9);
-					g.MeasureString(text,baseFont,noteSize,format,out charactersFitted,out linesFilled);
-					rect=new RectangleF(new PointF(xPos,yPos),noteSize);
-					g.DrawString(text,baseFont,brush,rect,format);
+						noteSize = g.MeasureString(text, baseFont, Width - 9);
+					g.MeasureString(text, baseFont, noteSize, format, out charactersFitted, out linesFilled);
+					rect = new RectangleF(new PointF(xPos, yPos), noteSize);
+					g.DrawString(text, baseFont, brush, rect, format);
 					return linesFilled;
 				case "PatientName":
-					g.DrawString(DataRoww["patientName"].ToString(),baseFont,brush,xPos,yPos);
+				g.DrawString(DataRoww["patientName"].ToString(), noteTitleFont, noteTitlebrush, xPos, yPos);
 					return 1;
-				case "PatNum":
-					g.DrawString(DataRoww["patNum"].ToString(),baseFont,brush,xPos,yPos);
-					return 1;
-				case "PatNumAndName":
-					g.DrawString(DataRoww["patNumAndName"].ToString(),baseFont,brush,xPos,yPos);
-					return 1;
-				case "PremedFlag":
-					if(DataRoww["preMedFlag"].ToString()==""){
-						return 0;
-					}
-					else{
-						g.DrawString(DataRoww["preMedFlag"].ToString(),baseFont,brush,xPos,yPos);
-						return 1;
-					}
-				case "Procs":
-					text=DataRoww["procs"].ToString();
-					if(rowI==0)
-						noteSize=g.MeasureString(text,baseFont,Width-9-4);
-					else
-						noteSize=g.MeasureString(text,baseFont,Width-9);
-					g.MeasureString(text,baseFont,noteSize,format,out charactersFitted,out linesFilled);
-					rect=new RectangleF(new PointF(xPos,yPos),noteSize);
-					g.DrawString(text,baseFont,brush,rect,format);
-					return linesFilled;
-				//case "ProcDescript":
-					//no longer used
-					//g.DrawString(Info.MyApt.ProcDescript,baseFont,brush,xPos,yPos);
-					//return 1;
-				case "Production":
-					g.DrawString(DataRoww["production"].ToString(),baseFont,brush,xPos,yPos);
-					return 1;
-				case "Provider":
-					g.DrawString(DataRoww["provider"].ToString(),baseFont,brush,xPos,yPos);
-					return 1;
-				case "WirelessPhone":
-					g.DrawString(DataRoww["wirelessPhone"].ToString(),baseFont,brush,xPos,yPos);
-					return 1;
-				case "WkPhone":
-					g.DrawString(DataRoww["wkPhone"].ToString(),baseFont,brush,xPos,yPos);
-					return 1;
-				case "Age":
-					g.DrawString(DataRoww["age"].ToString(),baseFont,brush,xPos,yPos);
-					return 1;
+				}
 			}
 			return 0;
 		}
