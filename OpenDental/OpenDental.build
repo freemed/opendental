@@ -80,6 +80,7 @@
                 <include name="Tao.OpenGl.dll"/>
                 <include name="Tao.Platform.Windows.dll"/>
                 <include name="VBbridges.dll"/>
+                <include name="xImageDeviceManager.dll"/>
             </fileset>
         </copy>
         <copy todir="${build.dir}/bin">
@@ -90,7 +91,9 @@
         </copy>
 	</target>
 	<target name="clean">
+        <!-- The "bin/" directory contains some valuable files, such as the conversion scripts. Don't remove them!
 		<delete dir="bin"/>
+        -->
 		<delete dir="obj"/>
 	</target>
 </project>
