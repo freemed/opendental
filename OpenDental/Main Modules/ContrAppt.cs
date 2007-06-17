@@ -2306,7 +2306,7 @@ namespace OpenDental{
 			bool timeWasMoved=tHr!=apt.AptDateTime.Hour
 				|| tMin!=apt.AptDateTime.Minute;
 			if(timeWasMoved){//no question for notes
-				if (apt.AptStatus == ApptStatus.PtNote) {
+				if (apt.AptStatus == ApptStatus.PtNote | apt.AptStatus == ApptStatus.PtNoteCompleted) {
 					if (!Security.IsAuthorized(Permissions.AppointmentMove)) {
 						mouseIsDown = false;
 						boolAptMoved = false;
@@ -2983,7 +2983,7 @@ namespace OpenDental{
 			if(!Security.IsAuthorized(Permissions.AppointmentMove)){
 				return;
 			}
-			if (apt.AptStatus==ApptStatus.PtNote) {
+			if (apt.AptStatus == ApptStatus.PtNote | apt.AptStatus == ApptStatus.PtNoteCompleted) {
 				return;
 			}
 			if(MessageBox.Show(Lan.g(this,"Send Appointment to Unscheduled List?")
@@ -3007,7 +3007,7 @@ namespace OpenDental{
 			if(!Security.IsAuthorized(Permissions.AppointmentEdit)){
 				return;
 			}
-			if (apt.AptStatus==ApptStatus.PtNote) {
+			if (apt.AptStatus == ApptStatus.PtNote | apt.AptStatus==ApptStatus.PtNoteCompleted) {
 				return;
 			}
 			Appointments.SetAptStatus(ContrApptSingle.SelectedAptNum,ApptStatus.Broken);
@@ -3056,14 +3056,18 @@ namespace OpenDental{
 			if(!Security.IsAuthorized(Permissions.AppointmentEdit)){
 				return;
 			}
-			Appointment apt=Appointments.GetOneApt(ContrApptSingle.SelectedAptNum);
-			Appointments.SetAptStatus(apt.AptNum,ApptStatus.Complete);
+			Appointment apt = Appointments.GetOneApt(ContrApptSingle.SelectedAptNum);
+			if (apt.AptStatus == ApptStatus.PtNoteCompleted) {
+				return;
+			}
 			//Procedures.SetDateFirstVisit(Appointments.Cur.AptDateTime.Date);//done when making appt instead
-			Family fam=Patients.GetFamily(apt.PatNum);
-			Patient pat=fam.GetPatient(apt.PatNum);
-			InsPlan[] PlanList=InsPlans.Refresh(fam);
-			PatPlan[] PatPlanList=PatPlans.Refresh(apt.PatNum);
-			if (apt.AptStatus!=ApptStatus.PtNote) {//shouldn't ever happen, but don't allow procedures to be completed from notes
+			Family fam = Patients.GetFamily(apt.PatNum);
+			Patient pat = fam.GetPatient(apt.PatNum);
+			InsPlan[] PlanList = InsPlans.Refresh(fam);
+			PatPlan[] PatPlanList = PatPlans.Refresh(apt.PatNum);
+
+			if (apt.AptStatus != ApptStatus.PtNote) {//shouldn't ever happen, but don't allow procedures to be completed from notes
+				Appointments.SetAptStatus(apt.AptNum, ApptStatus.Complete);
 				Procedures.SetCompleteInAppt(apt, PlanList, PatPlanList);//loops through each proc
 				SecurityLogs.MakeLogEntry(Permissions.AppointmentEdit, apt.PatNum,
 					pat.GetNameLF() + ", "
@@ -3072,11 +3076,14 @@ namespace OpenDental{
 					+ "Set Complete");
 			}
 			else {
+				Appointments.SetAptStatus(apt.AptNum, ApptStatus.PtNoteCompleted);
 				SecurityLogs.MakeLogEntry(Permissions.AppointmentEdit, apt.PatNum,
 					pat.GetNameLF() + ", "
 					+ apt.AptDateTime.ToString() + ", "
 					+ "Pt NOTE Set Complete");
+			
 			}
+
 			ModuleSelected(pat.PatNum);
 			SetInvalid();
 			SecurityLogs.MakeLogEntry(Permissions.ProcComplCreate,pat.PatNum,
@@ -3088,7 +3095,7 @@ namespace OpenDental{
 			if (!Security.IsAuthorized(Permissions.AppointmentEdit)) {
 				return;
 			}
-			if (apt.AptStatus==ApptStatus.PtNote) {
+			if (apt.AptStatus == ApptStatus.PtNote | apt.AptStatus == ApptStatus.PtNoteCompleted) {
 				if (!MsgBox.Show(this, true, "Delete Patient Note?")) {
 					return;
 				}

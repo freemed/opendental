@@ -377,7 +377,7 @@ namespace OpenDental{
 				if(nextAppt){
 					Appointment[] allAppts=Appointments.GetForPat(contrAccount.PatCur.PatNum);
 					for(int a=0;a<allAppts.Length;a++){
-						if(allAppts[a].AptDateTime.Date<=DateTime.Today | allAppts[a].AptStatus==ApptStatus.PtNote){
+						if (allAppts[a].AptDateTime.Date <= DateTime.Today | allAppts[a].AptStatus == ApptStatus.PtNote | allAppts[a].AptStatus == ApptStatus.PtNoteCompleted) {
 							continue;//ignore old appts.
 						}
 						tempLine.Description+=":  "+Lan.g(this,"Your next appointment is on")+" "

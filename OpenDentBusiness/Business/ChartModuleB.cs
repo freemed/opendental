@@ -317,7 +317,12 @@ namespace OpenDentBusiness {
 				else if(apptS==7){//Patient Note
 					row["colorText"]=DefB.Long[(int)DefCat.ProgNoteColors][18].ItemColor.ToArgb().ToString(); 
 					row["colorBackG"]=DefB.Long[(int)DefCat.ProgNoteColors][19].ItemColor.ToArgb().ToString();
-					row["description"] = Lan.g("ChartModule", "***  Patient NOTE  *** - ") + dateT.ToShortTimeString();
+					row["description"] = Lan.g("ChartModule", "*** Patient NOTE  *** - ") + dateT.ToShortTimeString();
+				}
+				else if (apptS == 8) {//Complete Patient Note
+					row["colorText"] = DefB.Long[(int)DefCat.ProgNoteColors][20].ItemColor.ToArgb().ToString();
+					row["colorBackG"] = DefB.Long[(int)DefCat.ProgNoteColors][21].ItemColor.ToArgb().ToString();
+					row["description"] = Lan.g("ChartModule", "** Complete Patient NOTE ** - ") + dateT.ToShortTimeString();
 				}
 				row["LabCaseNum"]=0;
 				row["note"]=rawApt.Rows[i]["Note"].ToString();

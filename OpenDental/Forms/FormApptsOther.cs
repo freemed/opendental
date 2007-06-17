@@ -451,7 +451,7 @@ namespace OpenDental{
 				tbApts.Cell[0, i] = ListOth[i].AptStatus.ToString();
 				if (ListOth[i].AptDateTime.Year > 1880) {
 					//only regular still scheduled appts
-					if (ListOth[i].AptStatus != ApptStatus.Planned && ListOth[i].AptStatus != ApptStatus.PtNote && ListOth[i].AptStatus != ApptStatus.UnschedList && ListOth[i].AptStatus != ApptStatus.Broken) {
+					if (ListOth[i].AptStatus != ApptStatus.Planned && ListOth[i].AptStatus != ApptStatus.PtNote && ListOth[i].AptStatus != ApptStatus.PtNoteCompleted && ListOth[i].AptStatus != ApptStatus.UnschedList && ListOth[i].AptStatus != ApptStatus.Broken) {
 						tbApts.Cell[1, i] = ListOth[i].AptDateTime.ToString("d");
 						tbApts.Cell[2, i] = ListOth[i].AptDateTime.ToString("t");
 
@@ -477,10 +477,15 @@ namespace OpenDental{
 						tbApts.Cell[0, i] = "Next Plan";
 
 					}
-					else if (ListOth[i].AptStatus == ApptStatus.PtNote) {
+					else if (ListOth[i].AptStatus ==ApptStatus.PtNote) {
 						tbApts.SetTextColorRow(i, DefB.Long[(int)DefCat.ProgNoteColors][18].ItemColor);
 						tbApts.SetBackColorRow(i, DefB.Long[(int)DefCat.ProgNoteColors][19].ItemColor);
 						tbApts.Cell[0, i] = "**Pt NOTE**";
+					}
+					else if (ListOth[i].AptStatus == ApptStatus.PtNoteCompleted) {
+						tbApts.SetTextColorRow(i, DefB.Long[(int)DefCat.ProgNoteColors][20].ItemColor);
+						tbApts.SetBackColorRow(i, DefB.Long[(int)DefCat.ProgNoteColors][21].ItemColor);
+						tbApts.Cell[0, i] = "Complete NOTE";
 					}
 
 					else if (ListOth[i].AptStatus == ApptStatus.Broken | ListOth[i].AptStatus == ApptStatus.UnschedList) {

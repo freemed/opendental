@@ -5349,9 +5349,6 @@ namespace OpenDental{
 				}
 				General.NonQEx(command);
 				//after r381
-				command="INSERT INTO definition (Category,ItemOrder,ItemName,ItemColor,IsHidden) VALUES(17,6,"
-				+"'Patient Note',-1051718,0)";//post-it note yellow
-				General.NonQEx(command);
 				command = "INSERT INTO definition (Category,ItemOrder,ItemName,ItemColor,IsHidden) VALUES(12,18,'Patient Note Text',-8388480,0)";//purple
 				General.NonQEx(command);
 				command = "INSERT INTO definition (Category,ItemOrder,ItemName,ItemColor,IsHidden) VALUES(12,19,'Patient Note Background',-1,0)";
@@ -5363,6 +5360,30 @@ namespace OpenDental{
 				//after r393
 				//command="DROP TABLE proclicense";//js-let's keep this around for a while.
 				//General.NonQEx(command);
+				
+				//after 401
+				//-8355712 drk gray, -16777056 drkblue, -16777216 black, -1051718 lt yellow
+				command = "INSERT INTO definition (Category,ItemOrder,ItemName,ItemColor,IsHidden) VALUES(17,6,"
+				+ "'Patient Note Text',-16777216,0)";//black
+				General.NonQEx(command);
+				command = "INSERT INTO definition (Category,ItemOrder,ItemName,ItemColor,IsHidden) VALUES(17,7,"
+				+ "'Patient Note Background',-1051718,0)";//post-it note yellow
+				General.NonQEx(command);
+				command = "INSERT INTO definition (Category,ItemOrder,ItemName,ItemColor,IsHidden) VALUES(17,8,"
+				+ "'Patient Note - Pt Name',-16777056,0)";//dr blue
+				General.NonQEx(command);
+				command = "INSERT INTO definition (Category,ItemOrder,ItemName,ItemColor,IsHidden) VALUES(17,9,"
+				+ "'Completed Pt. Note Text',-16777216,0)";//black
+				General.NonQEx(command);
+				command = "INSERT INTO definition (Category,ItemOrder,ItemName,ItemColor,IsHidden) VALUES(17,10,"
+				+ "'Completed Pt. Note Background',-8355712,0)";//drk gray
+				General.NonQEx(command);
+				command = "INSERT INTO definition (Category,ItemOrder,ItemName,ItemColor,IsHidden) VALUES(12,20,'Completed Pt Note Text',-8388480,0)";//purple
+				General.NonQEx(command);
+				command = "INSERT INTO definition (Category,ItemOrder,ItemName,ItemColor,IsHidden) VALUES(12,21,'Completed Pt Note Background',-1,0)";
+				General.NonQEx(command);
+
+
 
 
 
