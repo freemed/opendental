@@ -55,7 +55,7 @@ namespace OpenDental{
 		private ODtextBox textNote;
 		private Label labelApptNote;
 		private OpenDental.UI.Button butAddComm;
-		private Label label8;
+		private Label labelQuickAdd;
 		private ListBox listQuickAdd;
 		public bool PinIsVisible;
 		public bool PinClicked;
@@ -133,7 +133,7 @@ namespace OpenDental{
 			this.label3 = new System.Windows.Forms.Label();
 			this.label2 = new System.Windows.Forms.Label();
 			this.labelApptNote = new System.Windows.Forms.Label();
-			this.label8 = new System.Windows.Forms.Label();
+			this.labelQuickAdd = new System.Windows.Forms.Label();
 			this.listQuickAdd = new System.Windows.Forms.ListBox();
 			this.label6 = new System.Windows.Forms.Label();
 			this.textTime = new System.Windows.Forms.TextBox();
@@ -142,12 +142,12 @@ namespace OpenDental{
 			this.panel1 = new System.Windows.Forms.Panel();
 			this.textRequirement = new System.Windows.Forms.TextBox();
 			this.textLabCase = new System.Windows.Forms.TextBox();
+			this.textNote = new OpenDental.ODtextBox();
 			this.butRequirement = new OpenDental.UI.Button();
 			this.butLab = new OpenDental.UI.Button();
 			this.textAddTime = new OpenDental.ValidNum();
 			this.butCalcTime = new OpenDental.UI.Button();
 			this.butAddComm = new OpenDental.UI.Button();
-			this.textNote = new OpenDental.ODtextBox();
 			this.tbTime = new OpenDental.TableTimeBar();
 			this.gridPatient = new OpenDental.UI.ODGrid();
 			this.gridComm = new OpenDental.UI.ODGrid();
@@ -326,13 +326,13 @@ namespace OpenDental{
 			this.labelApptNote.Text = "Appointment Note";
 			this.labelApptNote.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
 			// 
-			// label8
+			// labelQuickAdd
 			// 
-			this.label8.Location = new System.Drawing.Point(336, 1);
-			this.label8.Name = "label8";
-			this.label8.Size = new System.Drawing.Size(143, 39);
-			this.label8.TabIndex = 145;
-			this.label8.Text = "Single click on items in the list below to add them to the treatment plan.";
+			this.labelQuickAdd.Location = new System.Drawing.Point(336, 1);
+			this.labelQuickAdd.Name = "labelQuickAdd";
+			this.labelQuickAdd.Size = new System.Drawing.Size(143, 39);
+			this.labelQuickAdd.TabIndex = 145;
+			this.labelQuickAdd.Text = "Single click on items in the list below to add them to the treatment plan.";
 			// 
 			// listQuickAdd
 			// 
@@ -429,6 +429,17 @@ namespace OpenDental{
 			this.textLabCase.Size = new System.Drawing.Size(188, 34);
 			this.textLabCase.TabIndex = 142;
 			// 
+			// textNote
+			// 
+			this.textNote.AcceptsReturn = true;
+			this.textNote.Location = new System.Drawing.Point(24, 263);
+			this.textNote.Multiline = true;
+			this.textNote.Name = "textNote";
+			this.textNote.QuickPasteType = OpenDentBusiness.QuickPasteType.Appointment;
+			this.textNote.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+			this.textNote.Size = new System.Drawing.Size(312, 101);
+			this.textNote.TabIndex = 142;
+			// 
 			// butRequirement
 			// 
 			this.butRequirement.AdjustImageLocation = new System.Drawing.Point(0, 0);
@@ -490,23 +501,12 @@ namespace OpenDental{
 			this.butAddComm.CornerRadius = 4F;
 			this.butAddComm.Image = global::OpenDental.Properties.Resources.Add;
 			this.butAddComm.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butAddComm.Location = new System.Drawing.Point(870, 359);
+			this.butAddComm.Location = new System.Drawing.Point(870, 366);
 			this.butAddComm.Name = "butAddComm";
 			this.butAddComm.Size = new System.Drawing.Size(92, 26);
 			this.butAddComm.TabIndex = 143;
 			this.butAddComm.Text = "Co&mm";
 			this.butAddComm.Click += new System.EventHandler(this.butAddComm_Click);
-			// 
-			// textNote
-			// 
-			this.textNote.AcceptsReturn = true;
-			this.textNote.Location = new System.Drawing.Point(24, 263);
-			this.textNote.Multiline = true;
-			this.textNote.Name = "textNote";
-			this.textNote.QuickPasteType = OpenDentBusiness.QuickPasteType.Appointment;
-			this.textNote.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-			this.textNote.Size = new System.Drawing.Size(312, 101);
-			this.textNote.TabIndex = 142;
 			// 
 			// tbTime
 			// 
@@ -662,7 +662,7 @@ namespace OpenDental{
 			this.Controls.Add(this.label6);
 			this.Controls.Add(this.textAddTime);
 			this.Controls.Add(this.textTime);
-			this.Controls.Add(this.label8);
+			this.Controls.Add(this.labelQuickAdd);
 			this.Controls.Add(this.butCalcTime);
 			this.Controls.Add(this.listQuickAdd);
 			this.Controls.Add(this.label1);
@@ -743,17 +743,19 @@ namespace OpenDental{
 				comboStatus.Items.Add(Lan.g("enumApptStatus", "Patient Note"));
 				comboStatus.Items.Add(Lan.g("enumApptStatus", "Completed Pt. Note"));
 				comboStatus.SelectedIndex = (int)AptCur.AptStatus - 7;
+				labelQuickAdd.Visible = false;
 				labelStatus.Visible=false;
 				gridProc.Visible=false;
 				listQuickAdd.Visible=false;
 				textNote.Width = 400;
 			}
 			else if ( AptCur.AptStatus == ApptStatus.PtNoteCompleted) {
-				labelApptNote.Text = "Patient NOTE:";
+				labelApptNote.Text = "Completed Patient NOTE:";
 				Text = Lan.g(this, "Edit Completed Patient Note") + " - " + DS.Tables["Patient"].Rows[0]["value"].ToString() + " on " + AptCur.AptDateTime.DayOfWeek + ", " + AptCur.AptDateTime;
 				comboStatus.Items.Add(Lan.g("enumApptStatus", "Patient Note"));
 				comboStatus.Items.Add(Lan.g("enumApptStatus", "Completed Pt. Note"));
 				comboStatus.SelectedIndex = (int)AptCur.AptStatus - 7;
+				labelQuickAdd.Visible = false;
 				labelStatus.Visible = false;
 				gridProc.Visible= false;
 				listQuickAdd.Visible = false;
