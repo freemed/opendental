@@ -38,8 +38,8 @@ namespace OpenDental
 					this.AutoSize = true;
 					this.BackColor = System.Drawing.SystemColors.GradientActiveCaption;
 					this.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("$this.BackgroundImage")));
-					this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-					this.ClientSize = new System.Drawing.Size(235,80);
+					this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+					this.ClientSize = new System.Drawing.Size(500,300);
 					this.ControlBox = false;
 					this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
 					this.MaximizeBox = false;
