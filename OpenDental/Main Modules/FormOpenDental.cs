@@ -1061,8 +1061,11 @@ namespace OpenDental{
 				}
 			}
 			Cursor=Cursors.WaitCursor;
+			Splash=new FormSplash();
+			Splash.Show();
 			if(!RefreshLocalData(InvalidTypes.AllLocal,true)){
 				Cursor=Cursors.Default;
+				Splash.Dispose();
 				return;
 			}
 			//Lan.Refresh();//automatically skips if current culture is en-US
@@ -1124,6 +1127,7 @@ namespace OpenDental{
 			myOutlookBar.Invalidate();
 			SetModuleSelected();
 			Cursor=Cursors.Default;
+			Splash.Dispose();
 			if(myOutlookBar.SelectedIndex==-1){
 				MsgBox.Show(this,"You do not have permission to use any modules.");
 			}
