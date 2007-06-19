@@ -2171,7 +2171,9 @@ namespace OpenDental{
 					brightnessContrastSlider.MinVal=PrefB.GetInt("ImageWindowingMin");
 					brightnessContrastSlider.MaxVal=PrefB.GetInt("ImageWindowingMax");
 				}else {//A mount is currently selected. We must allow the user to insert new images into partially complete mounts.
-					//Just use the current mount selection in the capture.
+					//Clear the visible selection so that the user will know when the device is ready for xray exposure.
+					RenderMountFrames(renderImage,selectionMountItems,-1);
+					RenderCurrentImage(new Document(),renderImage.Width,renderImage.Height,imageZoom*zoomFactor,imageTranslation);
 				}
 				//Here we can only allow access to the capture button during a capture, because it is too complicated and hard for a 
 				//user to follow what is going on if they use the other tools when a capture is taking place.

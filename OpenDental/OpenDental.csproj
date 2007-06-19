@@ -64,6 +64,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Required dlls\NDde.dll</HintPath>
     </Reference>
+    <Reference Include="Oracle.DataAccess, Version=10.2.0.100, Culture=neutral, PublicKeyToken=89b483f429c47342">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Required dlls\Oracle.DataAccess.dll</HintPath>
+    </Reference>
     <Reference Include="RS232, Version=1.18.0.0, Culture=neutral">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Required dlls\RS232.dll</HintPath>
