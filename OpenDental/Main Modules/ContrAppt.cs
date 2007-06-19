@@ -3099,10 +3099,39 @@ namespace OpenDental{
 				if (!MsgBox.Show(this, true, "Delete Patient Note?")) {
 					return;
 				}
+				if (apt.Note != "") {
+					if (MessageBox.Show(Lan.g(this, "Save a copy of this note in CommLog? " + "\r\n" + "\r\n" + apt.Note), "Question...",
+							MessageBoxButtons.YesNo) == DialogResult.Yes) {
+						Commlog CommlogCur = new Commlog();
+						CommlogCur.PatNum = apt.PatNum;
+						CommlogCur.CommDateTime = DateTime.Now;
+						CommlogCur.CommType = CommItemType.ApptRelated;
+						CommlogCur.Note = "Deleted Pt NOTE from schedule, saved copy: ";
+						CommlogCur.Note += apt.Note;
+						//there is no dialog here because it is just a simple entry
+						Commlogs.Insert(CommlogCur);
+					}
+				}
 			}
 			else {
 				if (!MsgBox.Show(this, true, "Delete Appointment?")) {
 					return;
+				}
+				if (apt.Note != "") {
+					if (MessageBox.Show(Lan.g(this, "Save appointment note in CommLog? " + "\r\n" + "\r\n" + apt.Note), "Question...",
+							MessageBoxButtons.YesNo) == DialogResult.Yes){
+						Commlog CommlogCur = new Commlog();
+						CommlogCur.PatNum = apt.PatNum;
+						CommlogCur.CommDateTime = DateTime.Now;
+						CommlogCur.CommType = CommItemType.ApptRelated;
+						CommlogCur.Note = "Deleted Appt. & saved note: ";
+						if (apt.ProcDescript != "") {
+							CommlogCur.Note += apt.ProcDescript + ": ";
+						}
+						CommlogCur.Note += apt.Note;
+						//there is no dialog here because it is just a simple entry
+						Commlogs.Insert(CommlogCur);
+					}
 				}
 			}
 

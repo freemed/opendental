@@ -19,10 +19,7 @@ namespace OpenDental{
 		private OpenDental.UI.Button butOK;
 		private OpenDental.UI.ODGrid gridPatient;
 		private OpenDental.UI.ODGrid gridComm;
-		/// <summary>
-		/// Required designer variable.
-		/// </summary>
-		private System.ComponentModel.Container components = null;
+		private IContainer components;
 		private ComboBox comboConfirmed;
 		private ComboBox comboUnschedStatus;
 		private Label label4;
@@ -77,6 +74,7 @@ namespace OpenDental{
 		private TextBox textLabCase;
 		private TextBox textRequirement;
 		private OpenDental.UI.Button butRequirement;
+		private ToolTip toolTip1;
 		private PatPlan[] PatPlanList;
 
 		///<summary></summary>
@@ -114,6 +112,7 @@ namespace OpenDental{
 		/// </summary>
 		private void InitializeComponent()
 		{
+			this.components = new System.ComponentModel.Container();
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormApptEdit));
 			this.comboConfirmed = new System.Windows.Forms.ComboBox();
 			this.comboUnschedStatus = new System.Windows.Forms.ComboBox();
@@ -158,6 +157,7 @@ namespace OpenDental{
 			this.butPin = new OpenDental.UI.Button();
 			this.butOK = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
+			this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
 			this.panel1.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -1501,9 +1501,46 @@ namespace OpenDental{
 		}
 
 		private void butDelete_Click(object sender,EventArgs e) {
-			if(MessageBox.Show(Lan.g(this,"Delete appointment?"),"",MessageBoxButtons.OKCancel)!=DialogResult.OK) {
-				return;
+			if (AptCur.AptStatus == ApptStatus.PtNote | AptCur.AptStatus == ApptStatus.PtNoteCompleted) {
+				if (!MsgBox.Show(this, true, "Delete Patient Note?")) {
+					return;
+				}
+				if (textNote.Text != "") {
+					if (MessageBox.Show(Lan.g(this, "Save a copy of this note in CommLog? " + "\r\n" + "\r\n" + textNote.Text), "Question...",
+							MessageBoxButtons.YesNo) == DialogResult.Yes) {
+						Commlog CommlogCur = new Commlog();
+						CommlogCur.PatNum = AptCur.PatNum;
+						CommlogCur.CommDateTime = DateTime.Now;
+						CommlogCur.CommType = CommItemType.ApptRelated;
+						CommlogCur.Note = "Deleted Pt NOTE from schedule, saved copy: ";
+						CommlogCur.Note += textNote.Text;
+						//there is no dialog here because it is just a simple entry
+						Commlogs.Insert(CommlogCur);
+					}
+				}
 			}
+			else {
+				if (MessageBox.Show(Lan.g(this, "Delete appointment?"), "", MessageBoxButtons.OKCancel) != DialogResult.OK) {
+					return;
+				}
+				if (textNote.Text != "") {
+					if (MessageBox.Show(Lan.g(this, "Save appointment note in CommLog? " + "\r\n" + "\r\n" + textNote.Text), "Question...",
+							MessageBoxButtons.YesNo) == DialogResult.Yes) {
+						Commlog CommlogCur = new Commlog();
+						CommlogCur.PatNum = AptCur.PatNum;
+						CommlogCur.CommDateTime = DateTime.Now;
+						CommlogCur.CommType = CommItemType.ApptRelated;
+						CommlogCur.Note = "Deleted Appt. & saved note: ";
+						if (AptCur.ProcDescript != "") {
+							CommlogCur.Note += AptCur.ProcDescript + ": ";
+						}
+						CommlogCur.Note += textNote.Text;
+						//there is no dialog here because it is just a simple entry
+						Commlogs.Insert(CommlogCur);
+					}
+				}
+			}
+
 			/*if(AptCur.AptStatus==ApptStatus.Planned) {
 				Procedures.UnattachProcsInPlannedAppt(AptCur.AptNum);
 			}
@@ -1528,6 +1565,8 @@ namespace OpenDental{
 		private void butCancel_Click(object sender, System.EventArgs e) {
 			DialogResult=DialogResult.Cancel;
 		}
+
+
 
 
 
