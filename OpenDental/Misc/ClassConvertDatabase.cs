@@ -5278,7 +5278,7 @@ namespace OpenDental{
 					General.NonQEx(command);
 					command="ALTER TABLE mountitem ADD Height int default '0'";
 					General.NonQEx(command);
-					command="ALTER TABLE mount ADD Note varchar2 default ''";
+					command="ALTER TABLE mount ADD Note varchar2(4000) default ''";
 					General.NonQEx(command);
 					command="ALTER TABLE mount ADD Width int default '0'";
 					General.NonQEx(command);
@@ -5330,6 +5330,7 @@ namespace OpenDental{
 						INDEX (ReqNeededNum),
 						INDEX (ProvNum)
 						) DEFAULT CHARSET=utf8";
+					General.NonQEx(command);
 				}
 				else {//Oracle.
 					command=@"CREATE TABLE reqstudent(
@@ -5342,12 +5343,14 @@ namespace OpenDental{
 						PatNum int NOT NULL,
 						InstructorNum int NOT NULL,
 						DateCompleted date default '0001-01-01' NOT NULL,
-						PRIMARY KEY (ReqStudentNum),
-						INDEX (ReqNeededNum),
-						INDEX (ProvNum)
+						PRIMARY KEY (ReqStudentNum)
 						)";
+					General.NonQEx(command);
+					command="CREATE INDEX ind_reqstudent_ReqNeededNum ON reqstudent (ReqNeededNum)";
+					General.NonQEx(command);
+					command="CREATE INDEX ind_reqstudent_ProvNum ON reqstudent (ProvNum)";
+					General.NonQEx(command);
 				}
-				General.NonQEx(command);
 				//after r381
 				command = "INSERT INTO definition (Category,ItemOrder,ItemName,ItemColor,IsHidden) VALUES(12,18,'Patient Note Text',-8388480,0)";//purple
 				General.NonQEx(command);
