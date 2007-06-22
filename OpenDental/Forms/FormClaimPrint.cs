@@ -1483,7 +1483,7 @@ namespace OpenDental{
 						displayStrings[i]=GetProcInfo("UnitQty",1+startProc);
 						break;
 					case "P1CodeAndMods":
-						displayStrings[i]=GetProcInfo("Code",1+startProc);// + GetProcInfo("CodeMod1",1+startProc) + GetProcInfo("CodeMod2",1+startProc) + GetProcInfo("CodeMod3",1+startProc) + GetProcInfo("CodeMod4",1+startProc);
+						displayStrings[i]=GetProcInfo("Code",1+startProc) + GetProcInfo("CodeMod1",1+startProc) + GetProcInfo("CodeMod2",1+startProc) + GetProcInfo("CodeMod3",1+startProc) + GetProcInfo("CodeMod4",1+startProc);
 						break;
 					case "P2Date":
 						displayStrings[i]=GetProcInfo("Date",2+startProc,ClaimFormCur.Items[i].FormatString);
@@ -1531,25 +1531,32 @@ namespace OpenDental{
 						displayStrings[i]=GetProcInfo("TreatProvNPI",2+startProc);
 						break;
 					case "P2RevCode":
-						displayStrings[i]=GetProcInfo("RevCode",1+startProc);
+						displayStrings[i]=GetProcInfo("RevCode",2+startProc);
 						break;
 					case "P2CodeMod1":
-						displayStrings[i]=GetProcInfo("CodeMod1",1+startProc);
+						displayStrings[i]=GetProcInfo("CodeMod1",2+startProc);
 						break;
 					case "P2CodeMod2":
-						displayStrings[i]=GetProcInfo("CodeMod2",1+startProc);
+						displayStrings[i]=GetProcInfo("CodeMod2",2+startProc);
 						break;
 					case "P2CodeMod3":
-						displayStrings[i]=GetProcInfo("CodeMod3",1+startProc);
+						displayStrings[i]=GetProcInfo("CodeMod3",2+startProc);
 						break;
 					case "P2CodeMod4":
-						displayStrings[i]=GetProcInfo("CodeMod4",1+startProc);
+						displayStrings[i]=GetProcInfo("CodeMod4",2+startProc);
 						break;
 					case "P2UnitCode":
-						displayStrings[i]=GetProcInfo("UnitCode",1+startProc);
+						displayStrings[i]=GetProcInfo("UnitCode",2+startProc);
 						break;
 					case "P2UnitQty":
-						displayStrings[i]=GetProcInfo("UnitQty",1+startProc);
+						displayStrings[i]=GetProcInfo("UnitQty",2+startProc);
+						break;
+					case "P2CodeAndMods":
+						displayStrings[i]=GetProcInfo("Code",2+startProc) 
+							+ GetProcInfo("CodeMod1",2+startProc) 
+							+ GetProcInfo("CodeMod2",2+startProc) 
+							+ GetProcInfo("CodeMod3",2+startProc) 
+							+ GetProcInfo("CodeMod4",2+startProc);
 						break;
 					case "P3Date":
 						displayStrings[i]=GetProcInfo("Date",3+startProc,ClaimFormCur.Items[i].FormatString);
@@ -1597,25 +1604,32 @@ namespace OpenDental{
 						displayStrings[i]=GetProcInfo("TreatProvNPI",3+startProc);
 						break;
 					case "P3RevCode":
-						displayStrings[i]=GetProcInfo("RevCode",1+startProc);
+						displayStrings[i]=GetProcInfo("RevCode",3+startProc);
 						break;
 					case "P3CodeMod1":
-						displayStrings[i]=GetProcInfo("CodeMod1",1+startProc);
+						displayStrings[i]=GetProcInfo("CodeMod1",3+startProc);
 						break;
 					case "P3CodeMod2":
-						displayStrings[i]=GetProcInfo("CodeMod2",1+startProc);
+						displayStrings[i]=GetProcInfo("CodeMod2",3+startProc);
 						break;
 					case "P3CodeMod3":
-						displayStrings[i]=GetProcInfo("CodeMod3",1+startProc);
+						displayStrings[i]=GetProcInfo("CodeMod3",3+startProc);
 						break;
 					case "P3CodeMod4":
-						displayStrings[i]=GetProcInfo("CodeMod4",1+startProc);
+						displayStrings[i]=GetProcInfo("CodeMod4",3+startProc);
 						break;
 					case "P3UnitCode":
-						displayStrings[i]=GetProcInfo("UnitCode",1+startProc);
+						displayStrings[i]=GetProcInfo("UnitCode",3+startProc);
 						break;
 					case "P3UnitQty":
-						displayStrings[i]=GetProcInfo("UnitQty",1+startProc);
+						displayStrings[i]=GetProcInfo("UnitQty",3+startProc);
+						break;
+					case "P3CodeAndMods":
+						displayStrings[i]=GetProcInfo("Code",3+startProc) 
+							+ GetProcInfo("CodeMod1",3+startProc) 
+							+ GetProcInfo("CodeMod2",3+startProc) 
+							+ GetProcInfo("CodeMod3",3+startProc) 
+							+ GetProcInfo("CodeMod4",3+startProc);
 						break;
 					case "P4Date":
 						displayStrings[i]=GetProcInfo("Date",4+startProc,ClaimFormCur.Items[i].FormatString);
@@ -1663,25 +1677,32 @@ namespace OpenDental{
 						displayStrings[i]=GetProcInfo("TreatProvNPI",4+startProc);
 						break;
 					case "P4RevCode":
-						displayStrings[i]=GetProcInfo("RevCode",1+startProc);
+						displayStrings[i]=GetProcInfo("RevCode",4+startProc);
 						break;
 					case "P4CodeMod1":
-						displayStrings[i]=GetProcInfo("CodeMod1",1+startProc);
+						displayStrings[i]=GetProcInfo("CodeMod1",4+startProc);
 						break;
 					case "P4CodeMod2":
-						displayStrings[i]=GetProcInfo("CodeMod2",1+startProc);
+						displayStrings[i]=GetProcInfo("CodeMod2",4+startProc);
 						break;
 					case "P4CodeMod3":
-						displayStrings[i]=GetProcInfo("CodeMod3",1+startProc);
+						displayStrings[i]=GetProcInfo("CodeMod3",4+startProc);
 						break;
 					case "P4CodeMod4":
-						displayStrings[i]=GetProcInfo("CodeMod4",1+startProc);
+						displayStrings[i]=GetProcInfo("CodeMod4",4+startProc);
 						break;
 					case "P4UnitCode":
-						displayStrings[i]=GetProcInfo("UnitCode",1+startProc);
+						displayStrings[i]=GetProcInfo("UnitCode",4+startProc);
 						break;
 					case "P4UnitQty":
-						displayStrings[i]=GetProcInfo("UnitQty",1+startProc);
+						displayStrings[i]=GetProcInfo("UnitQty",4+startProc);
+						break;
+					case "P4CodeAndMods":
+						displayStrings[i]=GetProcInfo("Code",4+startProc) 
+							+ GetProcInfo("CodeMod1",4+startProc) 
+							+ GetProcInfo("CodeMod2",4+startProc) 
+							+ GetProcInfo("CodeMod3",4+startProc) 
+							+ GetProcInfo("CodeMod4",4+startProc);
 						break;
 					case "P5Date":
 						displayStrings[i]=GetProcInfo("Date",5+startProc,ClaimFormCur.Items[i].FormatString);
@@ -1729,25 +1750,32 @@ namespace OpenDental{
 						displayStrings[i]=GetProcInfo("TreatProvNPI",5+startProc);
 						break;
 					case "P5RevCode":
-						displayStrings[i]=GetProcInfo("RevCode",1+startProc);
+						displayStrings[i]=GetProcInfo("RevCode",5+startProc);
 						break;
 					case "P5CodeMod1":
-						displayStrings[i]=GetProcInfo("CodeMod1",1+startProc);
+						displayStrings[i]=GetProcInfo("CodeMod1",5+startProc);
 						break;
 					case "P5CodeMod2":
-						displayStrings[i]=GetProcInfo("CodeMod2",1+startProc);
+						displayStrings[i]=GetProcInfo("CodeMod2",5+startProc);
 						break;
 					case "P5CodeMod3":
-						displayStrings[i]=GetProcInfo("CodeMod3",1+startProc);
+						displayStrings[i]=GetProcInfo("CodeMod3",5+startProc);
 						break;
 					case "P5CodeMod4":
-						displayStrings[i]=GetProcInfo("CodeMod4",1+startProc);
+						displayStrings[i]=GetProcInfo("CodeMod4",5+startProc);
 						break;
 					case "P5UnitCode":
-						displayStrings[i]=GetProcInfo("UnitCode",1+startProc);
+						displayStrings[i]=GetProcInfo("UnitCode",5+startProc);
 						break;
 					case "P5UnitQty":
-						displayStrings[i]=GetProcInfo("UnitQty",1+startProc);
+						displayStrings[i]=GetProcInfo("UnitQty",5+startProc);
+						break;
+					case "P5CodeAndMods":
+						displayStrings[i]=GetProcInfo("Code",5+startProc) 
+							+ GetProcInfo("CodeMod1",5+startProc) 
+							+ GetProcInfo("CodeMod2",5+startProc) 
+							+ GetProcInfo("CodeMod3",5+startProc) 
+							+ GetProcInfo("CodeMod4",5+startProc);
 						break;
 					case "P6Date":
 						displayStrings[i]=GetProcInfo("Date",6+startProc,ClaimFormCur.Items[i].FormatString);
@@ -1795,25 +1823,32 @@ namespace OpenDental{
 						displayStrings[i]=GetProcInfo("TreatProvNPI",6+startProc);
 						break;
 					case "P6RevCode":
-						displayStrings[i]=GetProcInfo("RevCode",1+startProc);
+						displayStrings[i]=GetProcInfo("RevCode",6+startProc);
 						break;
 					case "P6CodeMod1":
-						displayStrings[i]=GetProcInfo("CodeMod1",1+startProc);
+						displayStrings[i]=GetProcInfo("CodeMod1",6+startProc);
 						break;
 					case "P6CodeMod2":
-						displayStrings[i]=GetProcInfo("CodeMod2",1+startProc);
+						displayStrings[i]=GetProcInfo("CodeMod2",6+startProc);
 						break;
 					case "P6CodeMod3":
-						displayStrings[i]=GetProcInfo("CodeMod3",1+startProc);
+						displayStrings[i]=GetProcInfo("CodeMod3",6+startProc);
 						break;
 					case "P6CodeMod4":
-						displayStrings[i]=GetProcInfo("CodeMod4",1+startProc);
+						displayStrings[i]=GetProcInfo("CodeMod4",6+startProc);
 						break;
 					case "P6UnitCode":
-						displayStrings[i]=GetProcInfo("UnitCode",1+startProc);
+						displayStrings[i]=GetProcInfo("UnitCode",6+startProc);
 						break;
 					case "P6UnitQty":
-						displayStrings[i]=GetProcInfo("UnitQty",1+startProc);
+						displayStrings[i]=GetProcInfo("UnitQty",6+startProc);
+						break;
+					case "P6CodeAndMods":
+						displayStrings[i]=GetProcInfo("Code",6+startProc) 
+							+ GetProcInfo("CodeMod1",6+startProc) 
+							+ GetProcInfo("CodeMod2",6+startProc) 
+							+ GetProcInfo("CodeMod3",6+startProc) 
+							+ GetProcInfo("CodeMod4",6+startProc);
 						break;
 					case "P7Date":
 						displayStrings[i]=GetProcInfo("Date",7+startProc,ClaimFormCur.Items[i].FormatString);
@@ -1858,25 +1893,32 @@ namespace OpenDental{
 						displayStrings[i]=GetProcInfo("ToothNumOrArea",7+startProc);
 						break;
 					case "P7RevCode":
-						displayStrings[i]=GetProcInfo("RevCode",1+startProc);
+						displayStrings[i]=GetProcInfo("RevCode",7+startProc);
 						break;
 					case "P7CodeMod1":
-						displayStrings[i]=GetProcInfo("CodeMod1",1+startProc);
+						displayStrings[i]=GetProcInfo("CodeMod1",7+startProc);
 						break;
 					case "P7CodeMod2":
-						displayStrings[i]=GetProcInfo("CodeMod2",1+startProc);
+						displayStrings[i]=GetProcInfo("CodeMod2",7+startProc);
 						break;
 					case "P7CodeMod3":
-						displayStrings[i]=GetProcInfo("CodeMod3",1+startProc);
+						displayStrings[i]=GetProcInfo("CodeMod3",7+startProc);
 						break;
 					case "P7CodeMod4":
-						displayStrings[i]=GetProcInfo("CodeMod4",1+startProc);
+						displayStrings[i]=GetProcInfo("CodeMod4",7+startProc);
 						break;
 					case "P7UnitCode":
-						displayStrings[i]=GetProcInfo("UnitCode",1+startProc);
+						displayStrings[i]=GetProcInfo("UnitCode",7+startProc);
 						break;
 					case "P7UnitQty":
-						displayStrings[i]=GetProcInfo("UnitQty",1+startProc);
+						displayStrings[i]=GetProcInfo("UnitQty",7+startProc);
+						break;
+					case "P7CodeAndMods":
+						displayStrings[i]=GetProcInfo("Code",7+startProc) 
+							+ GetProcInfo("CodeMod1",7+startProc) 
+							+ GetProcInfo("CodeMod2",7+startProc) 
+							+ GetProcInfo("CodeMod3",7+startProc) 
+							+ GetProcInfo("CodeMod4",7+startProc);
 						break;
 					case "P8Date":
 						displayStrings[i]=GetProcInfo("Date",8+startProc,ClaimFormCur.Items[i].FormatString);
@@ -1921,25 +1963,32 @@ namespace OpenDental{
 						displayStrings[i]=GetProcInfo("ToothNumOrArea",8+startProc);
 						break;
 					case "P8RevCode":
-						displayStrings[i]=GetProcInfo("RevCode",1+startProc);
+						displayStrings[i]=GetProcInfo("RevCode",8+startProc);
 						break;
 					case "P8CodeMod1":
-						displayStrings[i]=GetProcInfo("CodeMod1",1+startProc);
+						displayStrings[i]=GetProcInfo("CodeMod1",8+startProc);
 						break;
 					case "P8CodeMod2":
-						displayStrings[i]=GetProcInfo("CodeMod2",1+startProc);
+						displayStrings[i]=GetProcInfo("CodeMod2",8+startProc);
 						break;
 					case "P8CodeMod3":
-						displayStrings[i]=GetProcInfo("CodeMod3",1+startProc);
+						displayStrings[i]=GetProcInfo("CodeMod3",8+startProc);
 						break;
 					case "P8CodeMod4":
-						displayStrings[i]=GetProcInfo("CodeMod4",1+startProc);
+						displayStrings[i]=GetProcInfo("CodeMod4",8+startProc);
 						break;
 					case "P8UnitCode":
-						displayStrings[i]=GetProcInfo("UnitCode",1+startProc);
+						displayStrings[i]=GetProcInfo("UnitCode",8+startProc);
 						break;
 					case "P8UnitQty":
-						displayStrings[i]=GetProcInfo("UnitQty",1+startProc);
+						displayStrings[i]=GetProcInfo("UnitQty",8+startProc);
+						break;
+					case "P8CodeAndMods":
+						displayStrings[i]=GetProcInfo("Code",8+startProc) 
+							+ GetProcInfo("CodeMod1",8+startProc) 
+							+ GetProcInfo("CodeMod2",8+startProc) 
+							+ GetProcInfo("CodeMod3",8+startProc) 
+							+ GetProcInfo("CodeMod4",8+startProc);
 						break;
 					case "P9Date":
 						displayStrings[i]=GetProcInfo("Date",9+startProc,ClaimFormCur.Items[i].FormatString);
@@ -1984,25 +2033,32 @@ namespace OpenDental{
 						displayStrings[i]=GetProcInfo("ToothNumOrArea",9+startProc);
 						break;
 					case "P9RevCode":
-						displayStrings[i]=GetProcInfo("RevCode",1+startProc);
+						displayStrings[i]=GetProcInfo("RevCode",9+startProc);
 						break;
 					case "P9CodeMod1":
-						displayStrings[i]=GetProcInfo("CodeMod1",1+startProc);
+						displayStrings[i]=GetProcInfo("CodeMod1",9+startProc);
 						break;
 					case "P9CodeMod2":
-						displayStrings[i]=GetProcInfo("CodeMod2",1+startProc);
+						displayStrings[i]=GetProcInfo("CodeMod2",9+startProc);
 						break;
 					case "P9CodeMod3":
-						displayStrings[i]=GetProcInfo("CodeMod3",1+startProc);
+						displayStrings[i]=GetProcInfo("CodeMod3",9+startProc);
 						break;
 					case "P9CodeMod4":
-						displayStrings[i]=GetProcInfo("CodeMod4",1+startProc);
+						displayStrings[i]=GetProcInfo("CodeMod4",9+startProc);
 						break;
 					case "P9UnitCode":
-						displayStrings[i]=GetProcInfo("UnitCode",1+startProc);
+						displayStrings[i]=GetProcInfo("UnitCode",9+startProc);
 						break;
 					case "P9UnitQty":
-						displayStrings[i]=GetProcInfo("UnitQty",1+startProc);
+						displayStrings[i]=GetProcInfo("UnitQty",9+startProc);
+						break;
+					case "P9CodeAndMods":
+						displayStrings[i]=GetProcInfo("Code",9+startProc) 
+							+ GetProcInfo("CodeMod1",9+startProc) 
+							+ GetProcInfo("CodeMod2",9+startProc) 
+							+ GetProcInfo("CodeMod3",9+startProc) 
+							+ GetProcInfo("CodeMod4",9+startProc);
 						break;
 					case "P10Date":
 						displayStrings[i]=GetProcInfo("Date",10+startProc,ClaimFormCur.Items[i].FormatString);
@@ -2047,25 +2103,32 @@ namespace OpenDental{
 						displayStrings[i]=GetProcInfo("ToothNumOrArea",10+startProc);
 						break;
 					case "P10RevCode":
-						displayStrings[i]=GetProcInfo("RevCode",1+startProc);
+						displayStrings[i]=GetProcInfo("RevCode",10+startProc);
 						break;
 					case "P10CodeMod1":
-						displayStrings[i]=GetProcInfo("CodeMod1",1+startProc);
+						displayStrings[i]=GetProcInfo("CodeMod1",10+startProc);
 						break;
 					case "P10CodeMod2":
-						displayStrings[i]=GetProcInfo("CodeMod2",1+startProc);
+						displayStrings[i]=GetProcInfo("CodeMod2",10+startProc);
 						break;
 					case "P10CodeMod3":
-						displayStrings[i]=GetProcInfo("CodeMod3",1+startProc);
+						displayStrings[i]=GetProcInfo("CodeMod3",10+startProc);
 						break;
 					case "P10CodeMod4":
-						displayStrings[i]=GetProcInfo("CodeMod4",1+startProc);
+						displayStrings[i]=GetProcInfo("CodeMod4",10+startProc);
 						break;
 					case "P10UnitCode":
-						displayStrings[i]=GetProcInfo("UnitCode",1+startProc);
+						displayStrings[i]=GetProcInfo("UnitCode",10+startProc);
 						break;
 					case "P10UnitQty":
-						displayStrings[i]=GetProcInfo("UnitQty",1+startProc);
+						displayStrings[i]=GetProcInfo("UnitQty",10+startProc);
+						break;
+					case "P10CodeAndMods":
+						displayStrings[i]=GetProcInfo("Code",10+startProc) 
+							+ GetProcInfo("CodeMod1",10+startProc) 
+							+ GetProcInfo("CodeMod2",10+startProc) 
+							+ GetProcInfo("CodeMod3",10+startProc) 
+							+ GetProcInfo("CodeMod4",10+startProc);
 						break;
 					case "TotalFee":
 						double fee=0;//fee only for this page. Each page is treated like a separate claim.
@@ -2161,6 +2224,27 @@ namespace OpenDental{
 			}
 			Procedure ProcCur=Procedures.GetProc(ProcList,claimprocs[procIndex].ProcNum);
 			ProcedureCode procCode=ProcedureCodes.GetProcCode(ProcCur.CodeNum);
+			if(field=="RevCode"){
+				return ProcCur.RevCode;
+			}
+			if(field=="CodeMod1"){
+				return ProcCur.CodeMod1;
+			}
+			if(field=="CodeMod2"){
+				return ProcCur.CodeMod2;
+			}
+			if(field=="CodeMod3"){
+				return ProcCur.CodeMod3;
+			}
+			if(field=="CodeMod4"){
+				return ProcCur.CodeMod4;
+			}
+			if(field=="UnitCode"){
+				return ProcCur.UnitCode;
+			}
+			if(field=="UnitQty"){
+				return ProcCur.UnitQty;
+			}
 			if(field=="Desc")
 				if(procCode.TreatArea==TreatmentArea.Quad){
 					return ProcCur.Surf+" "+procCode.Descript;
