@@ -381,6 +381,7 @@ namespace OpenDental{
 			return false;
 		}
 
+
 		///<summary>Used in FormConfirmList</summary>
 		public static DataTable GetConfirmList(DateTime dateFrom,DateTime dateTo){
 			DataTable table=new DataTable();

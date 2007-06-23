@@ -98,6 +98,7 @@ namespace OpenDentBusiness{
 			table.Columns.Add("patientName");
 			table.Columns.Add("PatNum");
 			table.Columns.Add("patNum");
+			table.Columns.Add("GuarNum");
 			table.Columns.Add("patNumAndName");
 			table.Columns.Add("Pattern");
 			table.Columns.Add("preMedFlag");
@@ -111,7 +112,7 @@ namespace OpenDentBusiness{
 			table.Columns.Add("wirelessPhone");
 			string command="SELECT p1.Abbr ProvAbbr,p2.Abbr HygAbbr,patient.AddrNote,"
 				+"patient.ApptModNote,AptDateTime,appointment.AptNum,AptStatus,Assistant,"
-				+"patient.BillingType,patient.BirthDate,"
+				+"patient.BillingType,patient.BirthDate,patient.Guarantor,"
 				+"patient.ChartNumber,Confirmed,patient.CreditType,DateTimeChecked,DateTimeRecd,DateTimeSent,"
 				+"guar.FamFinUrgNote,patient.FName,patient.HmPhone,patient.ImageFolder,IsHygiene,IsNewPatient,"
 				+"LabCaseNum,patient.LName,patient.MedUrgNote,patient.MiddleI,Note,Op,appointment.PatNum,"
@@ -151,6 +152,22 @@ namespace OpenDentBusiness{
 				command+="AND appointment.AptNum="+POut.PInt(aptNum);
 			}
 			DataTable rawProc=dcon.GetTable(command);
+			
+			//procs for flag, InsNotSent
+				command ="SELECT patient.PatNum, patient.Guarantor "
+				+"FROM patient,procedurecode,procedurelog,claimproc "
+				+"WHERE claimproc.procnum=procedurelog.procnum "
+				+"AND patient.PatNum=procedurelog.PatNum "
+				+"AND procedurelog.CodeNum=procedurecode.CodeNum "
+				+"AND claimproc.NoBillIns=0 "
+				+"AND procedurelog.ProcFee>0 "
+				+"AND claimproc.Status=6 "//estimate
+				+"AND procedurelog.procstatus=2 "
+				+"AND procedurelog.ProcDate >= "+POut.PDate(DateTime.Now.AddYears(-1))+" "
+				+"AND procedurelog.ProcDate <= "+POut.PDate(DateTime.Now)+ " "
+				+"GROUP BY patient.Guarantor"; 
+			DataTable rawInsProc=dcon.GetTable(command);
+
 			DateTime aptDate;
 			TimeSpan span;
 			int hours;
@@ -229,7 +246,19 @@ namespace OpenDentBusiness{
 						+((ContactMethod)PIn.PInt(raw.Rows[i]["PreferRecallMethod"].ToString())).ToString();
 				}
 				row["creditIns"]=raw.Rows[i]["CreditType"].ToString();
-				if(raw.Rows[i]["PlanNum"].ToString()!="" && raw.Rows[i]["PlanNum"].ToString()!="0") {
+				//figure out if pt's family has ins claims that need to be created
+				bool InsToSend=false;
+				for(int j=0;j<rawInsProc.Rows.Count;j++){
+					if(raw.Rows[i]["PlanNum"].ToString()!="" && raw.Rows[i]["PlanNum"].ToString()!="0") {
+						if (raw.Rows[i]["Guarantor"].ToString()==rawInsProc.Rows[j]["Guarantor"].ToString() | raw.Rows[i]["Guarantor"].ToString()==rawInsProc.Rows[j]["PatNum"].ToString()){
+							InsToSend=true;
+						}
+					}
+				}
+				if (InsToSend){
+					row["creditIns"]+="!";
+				}
+				else{
 					row["creditIns"]+="I";
 				}
 				if(raw.Rows[i]["FamFinUrgNote"].ToString()!="") {
@@ -273,6 +302,7 @@ namespace OpenDentBusiness{
 					raw.Rows[i]["Preferred"].ToString(),raw.Rows[i]["MiddleI"].ToString());
 				row["PatNum"]=raw.Rows[i]["PatNum"].ToString();
 				row["patNum"]="PatNum: "+raw.Rows[i]["PatNum"].ToString();
+				row["GuarNum"]=raw.Rows[i]["Guarantor"].ToString();
 				row["patNumAndName"]="";
 				if(raw.Rows[i]["IsNewPatient"].ToString()=="1") {
 					row["patNumAndName"]="NP-";
