@@ -845,6 +845,7 @@ namespace OpenDental{
 			Patient pat=Patients.GetPat(PaymentCur.PatNum);
 			info.Arguments+="\"/ZIP:"+pat.Zip+"\" ";
 			info.Arguments+="\"/ADDRESS:"+pat.Address+"\" ";
+			info.Arguments+="/RECEIPT:"+PaymentCur.PayNum.ToString()+" ";//aka invoice#
 			info.Arguments+="\"/CLERK:"+Security.CurUser.UserName+"\" ";
 			info.Arguments+="/AUTOCLOSE ";
 			string resultfile=Path.GetDirectoryName(prog.Path)+"XResult.txt";
@@ -858,8 +859,26 @@ namespace OpenDental{
 			process.WaitForExit();
 			Cursor=Cursors.Default;
 			string resulttext="";
+			string line="";
 			using(TextReader reader=new StreamReader(resultfile)){
-				resulttext=reader.ReadToEnd();
+				line=reader.ReadLine();
+				while(line!=null){
+					if(resulttext!=""){
+						resulttext+="\r\n";
+					}
+					resulttext+=line;
+					if(line.StartsWith("RESULT=")){
+						if(line!="RESULT=SUCCESS"){
+							break;
+						}
+					}
+					if(line.StartsWith("AMOUNT=")){
+						amt=PIn.PDouble(line.Substring(7));
+						textAmount.Text=amt.ToString("F2");
+					}
+					line=reader.ReadLine();
+				}
+				//resulttext+=reader.ReadToEnd();
 				//MessageBox.Show("ResultFile:\r\n"+resultText);
 			}
 			/*Example of successful transaction:
@@ -872,6 +891,9 @@ namespace OpenDental{
 				AVSRESULT=Y
 				CVRESULT=M
 			*/
+			if(textNote.Text!=""){
+				textNote.Text+="\r\n";
+			}
 			textNote.Text+=resulttext;
 		}
 
