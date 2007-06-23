@@ -3,7 +3,9 @@ Open Dental GPL license Copyright (C) 2003  Jordan Sparks, DMD.  http://www.open
 See header in FormOpenDental.cs for complete text.  Redistributions must retain this text.
 ===============================================================================================================*/
 using System;
+using System.Diagnostics;
 using System.Drawing;
+using System.IO;
 using System.Collections;
 using System.ComponentModel;
 using System.Windows.Forms;
@@ -65,6 +67,9 @@ namespace OpenDental{
 		private TextBox textDepositAccount;
 		private ArrayList SplitListOld;
 		private OpenDental.UI.Button butEditAccounting;
+		private Panel panelXcharge;
+		private ContextMenu contextMenuXcharge;
+		private MenuItem menuXcharge;
 		private int[] DepositAccounts;
 
 		///<summary>PatCur and FamCur are not for the PatCur of the payment.  They are for the patient and family from which this window was accessed.</summary>
@@ -74,6 +79,7 @@ namespace OpenDental{
 			FamCur=famCur;
 			PaymentCur=paymentCur;
 			Lan.F(this);
+			panelXcharge.ContextMenu=contextMenuXcharge;
 		}
 
 		///<summary></summary>
@@ -117,6 +123,10 @@ namespace OpenDental{
 			this.textDepositAccount = new System.Windows.Forms.TextBox();
 			this.labelDepositAccount = new System.Windows.Forms.Label();
 			this.comboDepositAccount = new System.Windows.Forms.ComboBox();
+			this.panelXcharge = new System.Windows.Forms.Panel();
+			this.contextMenuXcharge = new System.Windows.Forms.ContextMenu();
+			this.menuXcharge = new System.Windows.Forms.MenuItem();
+			this.butEditAccounting = new OpenDental.UI.Button();
 			this.gridMain = new OpenDental.UI.ODGrid();
 			this.textDateEntry = new OpenDental.ValidDate();
 			this.textNote = new OpenDental.ODtextBox();
@@ -126,7 +136,6 @@ namespace OpenDental{
 			this.butOK = new OpenDental.UI.Button();
 			this.butDeleteAll = new OpenDental.UI.Button();
 			this.butAdd = new OpenDental.UI.Button();
-			this.butEditAccounting = new OpenDental.UI.Button();
 			this.SuspendLayout();
 			// 
 			// label1
@@ -332,6 +341,40 @@ namespace OpenDental{
 			this.comboDepositAccount.Size = new System.Drawing.Size(260,21);
 			this.comboDepositAccount.TabIndex = 113;
 			// 
+			// panelXcharge
+			// 
+			this.panelXcharge.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("panelXcharge.BackgroundImage")));
+			this.panelXcharge.Location = new System.Drawing.Point(556,22);
+			this.panelXcharge.Name = "panelXcharge";
+			this.panelXcharge.Size = new System.Drawing.Size(59,26);
+			this.panelXcharge.TabIndex = 118;
+			this.panelXcharge.MouseClick += new System.Windows.Forms.MouseEventHandler(this.panelXcharge_MouseClick);
+			// 
+			// contextMenuXcharge
+			// 
+			this.contextMenuXcharge.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
+            this.menuXcharge});
+			// 
+			// menuXcharge
+			// 
+			this.menuXcharge.Index = 0;
+			this.menuXcharge.Text = "Settings";
+			this.menuXcharge.Click += new System.EventHandler(this.menuXcharge_Click);
+			// 
+			// butEditAccounting
+			// 
+			this.butEditAccounting.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butEditAccounting.Autosize = true;
+			this.butEditAccounting.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butEditAccounting.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butEditAccounting.CornerRadius = 4F;
+			this.butEditAccounting.Location = new System.Drawing.Point(671,161);
+			this.butEditAccounting.Name = "butEditAccounting";
+			this.butEditAccounting.Size = new System.Drawing.Size(75,26);
+			this.butEditAccounting.TabIndex = 117;
+			this.butEditAccounting.Text = "Edit";
+			this.butEditAccounting.Click += new System.EventHandler(this.butEditAccounting_Click);
+			// 
 			// gridMain
 			// 
 			this.gridMain.HScrollVisible = false;
@@ -442,25 +485,11 @@ namespace OpenDental{
 			this.butAdd.Text = "&Add Split";
 			this.butAdd.Click += new System.EventHandler(this.butAdd_Click);
 			// 
-			// butEditAccounting
-			// 
-			this.butEditAccounting.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butEditAccounting.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butEditAccounting.Autosize = true;
-			this.butEditAccounting.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butEditAccounting.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butEditAccounting.CornerRadius = 4F;
-			this.butEditAccounting.Location = new System.Drawing.Point(671,161);
-			this.butEditAccounting.Name = "butEditAccounting";
-			this.butEditAccounting.Size = new System.Drawing.Size(75,26);
-			this.butEditAccounting.TabIndex = 117;
-			this.butEditAccounting.Text = "Edit";
-			this.butEditAccounting.Click += new System.EventHandler(this.butEditAccounting_Click);
-			// 
 			// FormPayment
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.ClientSize = new System.Drawing.Size(840,588);
+			this.Controls.Add(this.panelXcharge);
 			this.Controls.Add(this.butEditAccounting);
 			this.Controls.Add(this.gridMain);
 			this.Controls.Add(this.textDepositAccount);
@@ -754,6 +783,8 @@ namespace OpenDental{
 				return;
 			}
 			if(!IsNew){
+				//we should probably do something here if user is switching to a type that is linked
+				//like if they entered check payment at first, and then realized it should be cash
 				return;
 			}
 			AccountingAutoPay autoPay=AccountingAutoPays.GetForPayType(
@@ -771,6 +802,83 @@ namespace OpenDental{
 					comboDepositAccount.Items.Add(Accounts.GetDescript(DepositAccounts[i]));
 				}
 				comboDepositAccount.SelectedIndex=0;
+			}
+		}
+
+		private void panelXcharge_MouseClick(object sender,MouseEventArgs e) {
+			if(e.Button != MouseButtons.Left){
+				return;
+			}
+			Program prog=Programs.GetCur("Xcharge");
+			if(prog==null){
+				MsgBox.Show(this,"X-Charge entry is missing from the database.");//should never happen
+				return;
+			}
+			if(!prog.Enabled){
+				if(Security.IsAuthorized(Permissions.Setup)){
+					FormXchargeSetup FormX=new FormXchargeSetup();
+					FormX.ShowDialog();
+				}
+				return;
+			}
+			if(!File.Exists(prog.Path)){
+				MsgBox.Show(this,"Path is not valid.");
+				if(Security.IsAuthorized(Permissions.Setup)){
+					FormXchargeSetup FormX=new FormXchargeSetup();
+					FormX.ShowDialog();
+				}
+				return;
+			}
+			ProgramProperty prop=(ProgramProperty)ProgramProperties.GetForProgram(prog.ProgramNum)[0];
+			//still need to add functionality for accountingAutoPay
+			listPayType.SelectedIndex=DefB.GetOrder(DefCat.PaymentTypes,PIn.PInt(prop.PropertyValue));
+			/*XCharge.exe [/TRANSACTIONTYPE:type] [/AMOUNT:amount] [/ACCOUNT:account] [/EXP:exp]
+				[“/TRACK:track”] [/ZIP:zip] [/ADDRESS:address] [/RECEIPT:receipt] [/CLERK:clerk]
+				[/APPROVALCODE:approval] [/AUTOPROCESS] [/AUTOCLOSE] [/STAYONTOP] [/MID]
+				[/RESULTFILE:”C:\Program Files\X-Charge\LocalTran\XCResult.txt”*/
+			ProcessStartInfo info=new ProcessStartInfo(prog.Path);
+			info.Arguments="";
+			double amt=PIn.PDouble(textAmount.Text);
+			if(amt>0){
+				info.Arguments+="/AMOUNT:"+amt.ToString("F2")+" ";
+			}
+			Patient pat=Patients.GetPat(PaymentCur.PatNum);
+			info.Arguments+="\"/ZIP:"+pat.Zip+"\" ";
+			info.Arguments+="\"/ADDRESS:"+pat.Address+"\" ";
+			info.Arguments+="\"/CLERK:"+Security.CurUser.UserName+"\" ";
+			info.Arguments+="/AUTOCLOSE ";
+			string resultfile=Path.GetDirectoryName(prog.Path)+"XResult.txt";
+			info.Arguments+="/RESULTFILE:\""+resultfile+"\"";
+			//info.Arguments+="/MID:223496";//what's this?
+			Cursor=Cursors.WaitCursor;
+			Process process=new Process();
+			process.StartInfo=info;
+			process.EnableRaisingEvents=true;
+			process.Start();
+			process.WaitForExit();
+			Cursor=Cursors.Default;
+			string resulttext="";
+			using(TextReader reader=new StreamReader(resultfile)){
+				resulttext=reader.ReadToEnd();
+				//MessageBox.Show("ResultFile:\r\n"+resultText);
+			}
+			/*Example of successful transaction:
+				RESULT=SUCCESS
+				TYPE=Purchase
+				APPROVALCODE=000064
+				ACCOUNT=XXXXXXXXXXXX6781
+				ACCOUNTTYPE=VISA*
+				AMOUNT=1.77
+				AVSRESULT=Y
+				CVRESULT=M
+			*/
+			textNote.Text+=resulttext;
+		}
+
+		private void menuXcharge_Click(object sender,EventArgs e) {
+			if(Security.IsAuthorized(Permissions.Setup)) {
+				FormXchargeSetup FormX=new FormXchargeSetup();
+				FormX.ShowDialog();
 			}
 		}
 
@@ -986,6 +1094,12 @@ namespace OpenDental{
 			//	return;
 			//}	
 		}
+
+		
+
+		
+
+		
 
 		
 

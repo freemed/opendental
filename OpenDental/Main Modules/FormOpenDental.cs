@@ -1110,6 +1110,7 @@ namespace OpenDental{
 			if(Environment.OSVersion.Platform==PlatformID.Unix){//Create A to Z unsupported on Unix for now.
 				menuItemCreateAtoZFolders.Visible=false;
 			}
+			Splash.Dispose();
 			Userod adminUser=Userods.GetAdminUser();
 			if(adminUser.Password=="") {
 				Security.CurUser=adminUser.Copy();
@@ -1127,7 +1128,6 @@ namespace OpenDental{
 			myOutlookBar.Invalidate();
 			SetModuleSelected();
 			Cursor=Cursors.Default;
-			Splash.Dispose();
 			if(myOutlookBar.SelectedIndex==-1){
 				MsgBox.Show(this,"You do not have permission to use any modules.");
 			}

@@ -2177,7 +2177,7 @@ namespace OpenDental{
 				}
 				if(row["addrNote"].ToString()!="") {
 					h=g.MeasureString(row["addrNote"].ToString(),font,infoBubble.Width).Height;
-					g.DrawString(row["addrNote"].ToString(),font,brush,new RectangleF(x,y,infoBubble.Width,h));
+					g.DrawString(row["addrNote"].ToString(),font,Brushes.Red,new RectangleF(x,y,infoBubble.Width,h));
 					y+=h;
 				}
 				if(row["famFinUrgNote"].ToString()!="") {

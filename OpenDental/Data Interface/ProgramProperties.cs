@@ -56,7 +56,7 @@ namespace OpenDental{
 			General.NonQ(command);
 		}
 
-		///<summary>Fills ForProgram with programproperties attached to the Programs.Cur</summary>
+		///<summary>Returns an ArrayList of programproperties attached to the specified programNum</summary>
 		public static ArrayList GetForProgram(int programNum){
 			ArrayList ForProgram=new ArrayList();
 			for(int i=0;i<List.Length;i++){
@@ -67,7 +67,7 @@ namespace OpenDental{
 			return ForProgram;
 		}
 
-		///<summary>After GetForProgram has been run, this gets one of those properties into Cur.</summary>
+		///<summary>After GetForProgram has been run, this gets one of those properties.</summary>
 		public static ProgramProperty GetCur(ArrayList ForProgram, string desc){
 			for(int i=0;i<ForProgram.Count;i++){
 				if(((ProgramProperty)ForProgram[i]).PropertyDesc==desc){

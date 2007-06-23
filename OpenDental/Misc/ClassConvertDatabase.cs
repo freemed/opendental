@@ -4133,7 +4133,7 @@ namespace OpenDental{
 				string command="";
 				int practiceDefaultProv=PrefB.GetInt("PracticeDefaultProv");
 				if(FormChooseDatabase.DBtype==DatabaseType.MySql) {
-					//Turn all hardcoded clearinghouse fields into dynamic fields---------------------------------------------------------
+					//Turn all hardcoded clearinghouse fields into dynamic fields------------------------------------------------------
 					command="ALTER TABLE clearinghouse ADD ISA05 varchar(255) AFTER Eformat";
 					General.NonQEx(command);
 					command="UPDATE clearinghouse SET ISA05='30' WHERE ReceiverID='660610220' OR ReceiverID='AOS'";
@@ -5113,8 +5113,10 @@ namespace OpenDental{
 				//added after r301
 				//Load ADA2006 claimform (without background)---------------------------------------------------------------------
 				int claimFormNum=FormClaimForms.ImportForm("",true,Properties.Resources.ClaimForm2006);
-				command="UPDATE preference SET ValueString="+POut.PInt(claimFormNum)+" WHERE PrefName='DefaultClaimForm'";
-				General.NonQEx(command);
+				if(CultureInfo.CurrentCulture.Name=="en-US"){
+					command="UPDATE preference SET ValueString="+POut.PInt(claimFormNum)+" WHERE PrefName='DefaultClaimForm'";
+					General.NonQEx(command);
+				}
 				command="UPDATE insplan SET ClaimFormNum="+POut.PInt(claimFormNum)
 					+" WHERE insplan.ClaimFormNum= (SELECT claimform.ClaimFormNum FROM claimform WHERE claimform.UniqueID='OD1')";
 				General.NonQEx(command);
@@ -5384,9 +5386,23 @@ namespace OpenDental{
 				General.NonQEx(command);
 				command = "INSERT INTO definition (Category,ItemOrder,ItemName,ItemColor,IsHidden) VALUES(12,21,'Completed Pt Note Background',-1,0)";//white
 				General.NonQEx(command);
-
-
-
+				//After r438
+				//X-Charge Bridge---------------------------------------------------------------------------
+				command = @"INSERT INTO program (ProgName,ProgDesc,Enabled,Path,CommandLine,Note
+					) VALUES(
+					'Xcharge',
+					'X-Charge from x-charge.com',
+					'0','"
+					+POut.PString(@"C:\Program Files\X-Charge\XCharge.exe") + "', "
+					+"'', "
+					+ "'" + POut.PString(@"This setup is typically performed by right clicking on the X-Charge icon in the payment window.") + "')";
+				int programNum=General.NonQEx(command,true);//we now have a ProgramNum to work with
+				command="INSERT INTO programproperty (ProgramNum,PropertyDesc,PropertyValue"
+					+") VALUES("
+					+"'"+programNum.ToString()+"', "
+					+"'PaymentType', "
+					+"'0')";
+				General.NonQEx(command);
 
 
 

@@ -397,6 +397,9 @@
     <Compile Include="Forms\BasicTemplate.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Forms\FormXchargeSetup.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Forms\FormClaimCreate.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -1317,6 +1320,10 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\BasicTemplate.resx">
       <DependentUpon>BasicTemplate.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormXchargeSetup.resx">
+      <DependentUpon>FormXchargeSetup.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormClaimCreate.resx">
