@@ -124,6 +124,15 @@
         D4bCdnTXeIqk0YmutwbmjKlI+9olavE+fMu5YjKN0UJJKpfMpvNpKAAAOw==
 </value>
   </data>
+  <metadata name="toolTip1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>17, 17</value>
+  </metadata>
+  <data name="butStationary.ToolTip" xml:space="preserve">
+    <value>This will copy the patient's name and address to the clipboard and allow you to paste that into Word, or OpenOffice writer
+when the document opens. This will be saved in patient's images. 
+
+Setup what document to use for this process in Setup--&gt;Misc.</value>
+  </data>
   <data name="butComm.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         R0lGODlhFgAWAPEAAFFYiuHg5P///wAAACH5BAEAAAEALAAAAAAWABYAAAI0jI+py80AXYNAyEXtTXlz

@@ -487,47 +487,50 @@ namespace OpenDental{
 			DialogResult=DialogResult.OK;
 		}
 
-		private void pd2_PrintPage(object sender, PrintPageEventArgs ev){//raised for each page to be printed.
+		private void pd2_PrintPage(object sender, PrintPageEventArgs ev) {//raised for each page to be printed.
 			Graphics grfx = ev.Graphics;
-
-			ev.PageSettings.Margins = new Margins(80, 80, 0, 0);
-			//ev.PageSettings.PrinterSettings.
-			//ev.
-			//grfx.TextRenderingHint=TextRenderingHint.
-			//StringFormat format=new StringFormat();
-			//format..FormatFlags=StringFormatFlags.
-
-			//Letterhead image
-			string fileName;
-			if (((Pref)PrefB.HList["StationaryImage"]).ValueString != "") {
-				fileName = ((Pref)PrefB.HList["DocPath"]).ValueString + @"\"
-					+ ((Pref)PrefB.HList["StationaryImage"]).ValueString;
-				Image thisImage = Image.FromFile(fileName);
-				grfx.DrawImage(thisImage
-					, -100
-					, -100
-					, (int)(thisImage.Width / thisImage.HorizontalResolution * 62)
-					, (int)(thisImage.Height / thisImage.VerticalResolution * 65));
+			if (PrefB.GetString("StationaryImage") == "") {//no stationary image specified
+				ev.PageSettings.Margins = new Margins(100, 100, 80, 80);
+				grfx.DrawString(textBody.Text, new Font(FontFamily.GenericSansSerif, 11), Brushes.Black
+					, new RectangleF(0, 0, ev.MarginBounds.Width, ev.MarginBounds.Height));
+				pagesPrinted++;
+				ev.HasMorePages = false;
 			}
+			else {
 
-			if (ExtraImageToPrint != "") {
-				//handwritten image saved to print
-				fileName = ((Pref)PrefB.HList["DocPath"]).ValueString + @"\" + ExtraImageToPrint;
-				Image thisImage2 = Image.FromFile(fileName);
-				grfx.DrawImage(thisImage2
-					, 080
-					, 300
-					, (int)(thisImage2.Width / thisImage2.HorizontalResolution * 100)//62
-					, (int)(thisImage2.Height / thisImage2.VerticalResolution * 100));//65
+				ev.PageSettings.Margins = new Margins(80, 80, 0, 0);
+
+				//Letterhead image
+				string fileName;
+				if (((Pref)PrefB.HList["StationaryImage"]).ValueString != "") {
+					fileName = ((Pref)PrefB.HList["DocPath"]).ValueString + @"\"
+						+ ((Pref)PrefB.HList["StationaryImage"]).ValueString;
+					Image thisImage = Image.FromFile(fileName);
+					grfx.DrawImage(thisImage
+						, -100
+						, -100
+						, (int)(thisImage.Width / thisImage.HorizontalResolution * 62)
+						, (int)(thisImage.Height / thisImage.VerticalResolution * 65));
+				}
+
+				if (ExtraImageToPrint != "") {
+					//handwritten image saved to print
+					fileName = ((Pref)PrefB.HList["DocPath"]).ValueString + @"\" + ExtraImageToPrint;
+					Image thisImage2 = Image.FromFile(fileName);
+					grfx.DrawImage(thisImage2
+						, 080
+						, 300
+						, (int)(thisImage2.Width / thisImage2.HorizontalResolution * 100)//62
+						, (int)(thisImage2.Height / thisImage2.VerticalResolution * 100));//65
+				}
+				// grfx.DrawString(textBody.Text,new Font(FontFamily.GenericSansSerif,11),Brushes.Black
+				//	,new RectangleF(0,0,ev.MarginBounds.Width,ev.MarginBounds.Height));
+				grfx.DrawString(textBody.Text, new Font(FontFamily.GenericSerif, 11), Brushes.Black
+					, new RectangleF(100, 80, ev.MarginBounds.Width, ev.MarginBounds.Height));
+				pagesPrinted++;
+				ev.HasMorePages = false;
 			}
-			// grfx.DrawString(textBody.Text,new Font(FontFamily.GenericSansSerif,11),Brushes.Black
-			//	,new RectangleF(0,0,ev.MarginBounds.Width,ev.MarginBounds.Height));
-			grfx.DrawString(textBody.Text, new Font(FontFamily.GenericSerif, 11), Brushes.Black
-				, new RectangleF(100, 80, ev.MarginBounds.Width, ev.MarginBounds.Height));
-			pagesPrinted++;
-			ev.HasMorePages = false;
 		}
-
 		private void butCancel_Click(object sender, System.EventArgs e) {
 			DialogResult=DialogResult.Cancel;
 		}

@@ -4,6 +4,9 @@ using System.Collections;
 using System.ComponentModel;
 using System.Windows.Forms;
 using OpenDentBusiness;
+using System.IO;
+using System.Text;
+using System.Diagnostics;
 
 namespace OpenDental{
 	/// <summary>
@@ -21,13 +24,12 @@ namespace OpenDental{
 		private OpenDental.UI.Button butLabelRef;
 		private OpenDental.UI.Button butEmailRef;
 		private OpenDental.UI.Button butLetterSimpleRef;
-		/// <summary>
-		/// Required designer variable.
-		/// </summary>
-		private System.ComponentModel.Container components = null;
+		private IContainer components;
 		public Patient PatCur;
 		private TextBox textReferral;
 		public bool ViewingInRecall;
+		private OpenDental.UI.Button butStationary;
+		private ToolTip toolTip1;
 		///<summary>Can be null.</summary>
 		private Referral ReferralCur;
 
@@ -63,6 +65,7 @@ namespace OpenDental{
 		/// </summary>
 		private void InitializeComponent()
 		{
+			this.components = new System.ComponentModel.Container();
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormCommunications));
 			this.butQuest = new OpenDental.UI.Button();
 			this.butLabel = new OpenDental.UI.Button();
@@ -72,109 +75,112 @@ namespace OpenDental{
 			this.butEmail = new OpenDental.UI.Button();
 			this.butComm = new OpenDental.UI.Button();
 			this.groupBox2 = new System.Windows.Forms.GroupBox();
-			this.butLetterSimpleRef = new OpenDental.UI.Button();
+			this.textReferral = new System.Windows.Forms.TextBox();
 			this.butLabelRef = new OpenDental.UI.Button();
 			this.butEmailRef = new OpenDental.UI.Button();
-			this.textReferral = new System.Windows.Forms.TextBox();
+			this.butLetterSimpleRef = new OpenDental.UI.Button();
+			this.butStationary = new OpenDental.UI.Button();
+			this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
 			this.groupBox1.SuspendLayout();
 			this.groupBox2.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// butQuest
 			// 
-			this.butQuest.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butQuest.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butQuest.Autosize = true;
 			this.butQuest.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butQuest.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butQuest.CornerRadius = 4F;
-			this.butQuest.Location = new System.Drawing.Point(20,224);
+			this.butQuest.Location = new System.Drawing.Point(20, 241);
 			this.butQuest.Name = "butQuest";
-			this.butQuest.Size = new System.Drawing.Size(90,25);
+			this.butQuest.Size = new System.Drawing.Size(90, 25);
 			this.butQuest.TabIndex = 90;
 			this.butQuest.Text = "Questionnaire";
 			this.butQuest.Click += new System.EventHandler(this.butQuest_Click);
 			// 
 			// butLabel
 			// 
-			this.butLabel.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butLabel.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butLabel.Autosize = true;
 			this.butLabel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butLabel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butLabel.CornerRadius = 4F;
 			this.butLabel.Image = ((System.Drawing.Image)(resources.GetObject("butLabel.Image")));
 			this.butLabel.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butLabel.Location = new System.Drawing.Point(20,149);
+			this.butLabel.Location = new System.Drawing.Point(20, 171);
 			this.butLabel.Name = "butLabel";
-			this.butLabel.Size = new System.Drawing.Size(90,25);
+			this.butLabel.Size = new System.Drawing.Size(90, 25);
 			this.butLabel.TabIndex = 89;
 			this.butLabel.Text = "Label";
 			this.butLabel.Click += new System.EventHandler(this.butLabel_Click);
 			// 
 			// groupBox1
 			// 
+			this.groupBox1.Controls.Add(this.butStationary);
 			this.groupBox1.Controls.Add(this.butLetterMerge);
 			this.groupBox1.Controls.Add(this.butLetterSimple);
-			this.groupBox1.Location = new System.Drawing.Point(12,55);
+			this.groupBox1.Location = new System.Drawing.Point(12, 55);
 			this.groupBox1.Name = "groupBox1";
-			this.groupBox1.Size = new System.Drawing.Size(106,81);
+			this.groupBox1.Size = new System.Drawing.Size(106, 110);
 			this.groupBox1.TabIndex = 88;
 			this.groupBox1.TabStop = false;
 			this.groupBox1.Text = "Letter to Patient";
 			// 
 			// butLetterMerge
 			// 
-			this.butLetterMerge.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butLetterMerge.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butLetterMerge.Autosize = true;
 			this.butLetterMerge.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butLetterMerge.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butLetterMerge.CornerRadius = 4F;
-			this.butLetterMerge.Location = new System.Drawing.Point(8,48);
+			this.butLetterMerge.Location = new System.Drawing.Point(8, 48);
 			this.butLetterMerge.Name = "butLetterMerge";
-			this.butLetterMerge.Size = new System.Drawing.Size(90,25);
+			this.butLetterMerge.Size = new System.Drawing.Size(90, 25);
 			this.butLetterMerge.TabIndex = 51;
 			this.butLetterMerge.Text = "Merge";
 			this.butLetterMerge.Click += new System.EventHandler(this.butLetterMerge_Click);
 			// 
 			// butLetterSimple
 			// 
-			this.butLetterSimple.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butLetterSimple.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butLetterSimple.Autosize = true;
 			this.butLetterSimple.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butLetterSimple.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butLetterSimple.CornerRadius = 4F;
-			this.butLetterSimple.Location = new System.Drawing.Point(8,17);
+			this.butLetterSimple.Location = new System.Drawing.Point(8, 17);
 			this.butLetterSimple.Name = "butLetterSimple";
-			this.butLetterSimple.Size = new System.Drawing.Size(90,25);
+			this.butLetterSimple.Size = new System.Drawing.Size(90, 25);
 			this.butLetterSimple.TabIndex = 50;
 			this.butLetterSimple.Text = "Simple";
 			this.butLetterSimple.Click += new System.EventHandler(this.butLetterSimple_Click);
 			// 
 			// butEmail
 			// 
-			this.butEmail.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butEmail.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butEmail.Autosize = true;
 			this.butEmail.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butEmail.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butEmail.CornerRadius = 4F;
-			this.butEmail.Location = new System.Drawing.Point(20,180);
+			this.butEmail.Location = new System.Drawing.Point(20, 202);
 			this.butEmail.Name = "butEmail";
-			this.butEmail.Size = new System.Drawing.Size(90,25);
+			this.butEmail.Size = new System.Drawing.Size(90, 25);
 			this.butEmail.TabIndex = 87;
 			this.butEmail.Text = "E-mail";
 			this.butEmail.Click += new System.EventHandler(this.butEmail_Click);
 			// 
 			// butComm
 			// 
-			this.butComm.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butComm.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butComm.Autosize = true;
 			this.butComm.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butComm.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butComm.CornerRadius = 4F;
 			this.butComm.Image = ((System.Drawing.Image)(resources.GetObject("butComm.Image")));
 			this.butComm.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butComm.Location = new System.Drawing.Point(20,12);
+			this.butComm.Location = new System.Drawing.Point(20, 12);
 			this.butComm.Name = "butComm";
-			this.butComm.Size = new System.Drawing.Size(90,26);
+			this.butComm.Size = new System.Drawing.Size(90, 26);
 			this.butComm.TabIndex = 86;
 			this.butComm.Text = "Commlog";
 			this.butComm.Click += new System.EventHandler(this.butComm_Click);
@@ -185,69 +191,84 @@ namespace OpenDental{
 			this.groupBox2.Controls.Add(this.butLabelRef);
 			this.groupBox2.Controls.Add(this.butEmailRef);
 			this.groupBox2.Controls.Add(this.butLetterSimpleRef);
-			this.groupBox2.Location = new System.Drawing.Point(134,25);
+			this.groupBox2.Location = new System.Drawing.Point(134, 25);
 			this.groupBox2.Name = "groupBox2";
-			this.groupBox2.Size = new System.Drawing.Size(186,189);
+			this.groupBox2.Size = new System.Drawing.Size(186, 189);
 			this.groupBox2.TabIndex = 91;
 			this.groupBox2.TabStop = false;
 			this.groupBox2.Text = "To Referral";
 			// 
-			// butLetterSimpleRef
+			// textReferral
 			// 
-			this.butLetterSimpleRef.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butLetterSimpleRef.Autosize = true;
-			this.butLetterSimpleRef.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butLetterSimpleRef.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butLetterSimpleRef.CornerRadius = 4F;
-			this.butLetterSimpleRef.Location = new System.Drawing.Point(6,47);
-			this.butLetterSimpleRef.Name = "butLetterSimpleRef";
-			this.butLetterSimpleRef.Size = new System.Drawing.Size(89,25);
-			this.butLetterSimpleRef.TabIndex = 51;
-			this.butLetterSimpleRef.Text = "Simple Letter";
-			this.butLetterSimpleRef.Click += new System.EventHandler(this.butLetterSimpleRef_Click);
+			this.textReferral.Location = new System.Drawing.Point(6, 19);
+			this.textReferral.Name = "textReferral";
+			this.textReferral.ReadOnly = true;
+			this.textReferral.Size = new System.Drawing.Size(174, 20);
+			this.textReferral.TabIndex = 92;
 			// 
 			// butLabelRef
 			// 
-			this.butLabelRef.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butLabelRef.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butLabelRef.Autosize = true;
 			this.butLabelRef.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butLabelRef.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butLabelRef.CornerRadius = 4F;
 			this.butLabelRef.Image = ((System.Drawing.Image)(resources.GetObject("butLabelRef.Image")));
 			this.butLabelRef.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butLabelRef.Location = new System.Drawing.Point(6,124);
+			this.butLabelRef.Location = new System.Drawing.Point(6, 124);
 			this.butLabelRef.Name = "butLabelRef";
-			this.butLabelRef.Size = new System.Drawing.Size(90,25);
+			this.butLabelRef.Size = new System.Drawing.Size(90, 25);
 			this.butLabelRef.TabIndex = 91;
 			this.butLabelRef.Text = "Label";
 			this.butLabelRef.Click += new System.EventHandler(this.butLabelRef_Click);
 			// 
 			// butEmailRef
 			// 
-			this.butEmailRef.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butEmailRef.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butEmailRef.Autosize = true;
 			this.butEmailRef.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butEmailRef.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butEmailRef.CornerRadius = 4F;
-			this.butEmailRef.Location = new System.Drawing.Point(6,155);
+			this.butEmailRef.Location = new System.Drawing.Point(6, 155);
 			this.butEmailRef.Name = "butEmailRef";
-			this.butEmailRef.Size = new System.Drawing.Size(90,25);
+			this.butEmailRef.Size = new System.Drawing.Size(90, 25);
 			this.butEmailRef.TabIndex = 90;
 			this.butEmailRef.Text = "E-mail";
 			this.butEmailRef.Click += new System.EventHandler(this.butEmailRef_Click);
 			// 
-			// textReferral
+			// butLetterSimpleRef
 			// 
-			this.textReferral.Location = new System.Drawing.Point(6,19);
-			this.textReferral.Name = "textReferral";
-			this.textReferral.ReadOnly = true;
-			this.textReferral.Size = new System.Drawing.Size(174,20);
-			this.textReferral.TabIndex = 92;
+			this.butLetterSimpleRef.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butLetterSimpleRef.Autosize = true;
+			this.butLetterSimpleRef.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butLetterSimpleRef.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butLetterSimpleRef.CornerRadius = 4F;
+			this.butLetterSimpleRef.Location = new System.Drawing.Point(6, 47);
+			this.butLetterSimpleRef.Name = "butLetterSimpleRef";
+			this.butLetterSimpleRef.Size = new System.Drawing.Size(89, 25);
+			this.butLetterSimpleRef.TabIndex = 51;
+			this.butLetterSimpleRef.Text = "Simple Letter";
+			this.butLetterSimpleRef.Click += new System.EventHandler(this.butLetterSimpleRef_Click);
+			// 
+			// butStationary
+			// 
+			this.butStationary.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butStationary.Autosize = true;
+			this.butStationary.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butStationary.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butStationary.CornerRadius = 4F;
+			this.butStationary.Location = new System.Drawing.Point(8, 79);
+			this.butStationary.Name = "butStationary";
+			this.butStationary.Size = new System.Drawing.Size(90, 25);
+			this.butStationary.TabIndex = 54;
+			this.butStationary.Text = "Stationary";
+			this.toolTip1.SetToolTip(this.butStationary, resources.GetString("butStationary.ToolTip"));
+			this.butStationary.Click += new System.EventHandler(this.butStationary_Click);
 			// 
 			// FormCommunications
 			// 
-			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
-			this.ClientSize = new System.Drawing.Size(332,278);
+			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
+			this.ClientSize = new System.Drawing.Size(332, 278);
 			this.Controls.Add(this.groupBox2);
 			this.Controls.Add(this.butQuest);
 			this.Controls.Add(this.butLabel);
@@ -379,6 +400,78 @@ namespace OpenDental{
 			if(FormE.DialogResult==DialogResult.OK) {
 				DialogResult=DialogResult.OK;
 			}
+		}
+		public void PtLetter_ToClipboard() {
+			StringBuilder str = new StringBuilder();
+			str.Append(PatCur.FName + " " + PatCur.MiddleI + " " + PatCur.LName + "\r\n");
+			str.Append(PatCur.Address + "\r\n");
+			if (PatCur.Address2 != "")
+				str.Append(PatCur.Address2 + "\r\n");
+			str.Append(PatCur.City + ", " + PatCur.State + "  " + PatCur.Zip);
+			str.Append("\r\n\r\n\r\n\r\n");
+			//date
+			str.Append(DateTime.Today.ToLongDateString() + "\r\n\r\n");
+			//greeting
+			str.Append("Dear ");
+			if (PatCur.Salutation != "")
+				str.Append(PatCur.Salutation);
+			else if (PatCur.Preferred != "")
+				str.Append(PatCur.Preferred);
+			else
+				str.Append(PatCur.FName);
+			str.Append(",\r\n\r\n");
+			//closing
+			str.Append("\r\n\r\nSincerely,\r\n\r\n\r\n\r\n");
+
+			//Clipboard.SetDataObject(textQuery.Text);
+			//str.CopyTo;
+			//string FinalString = str.CopyTo;
+			//textTest.Text = str.ToString();
+			Clipboard.SetDataObject(str.ToString());
+		}
+		private void butStationary_Click(object sender, EventArgs e) {
+				if(PrefB.GetString("StationaryDocument")=="" | PrefB.GetString("WordProcessorPath")==""){
+					MessageBox.Show("You must setup your stationary document and word processor path in Setup--> Misc");
+					return;
+				}
+				Cursor = Cursors.AppStarting;
+				PtLetter_ToClipboard();
+
+				try {
+					this.Cursor = Cursors.AppStarting;
+
+					string patFolder = (PrefB.GetString("DocPath"))
+					+ PatCur.ImageFolder.Substring(0, 1) + @"\"
+					+ PatCur.ImageFolder + @"\";
+
+					//string ProgName = @"C:\Program Files\OpenOffice.org 2.0\program\swriter.exe";
+					string ProgName = PrefB.GetString("WordProcessorPath");
+					string TheFile = patFolder + "Letter_" + DateTime.Now.ToFileTime() + ".doc";
+					try{
+						File.Copy((PrefB.GetString("DocPath")) + @"\"
+						+ PrefB.GetString("StationaryDocument"), TheFile);
+						DialogResult = DialogResult.OK;
+					}
+					catch {
+					}
+					try {
+						Process.Start(ProgName, TheFile);
+					}
+					catch {
+					}
+					this.Cursor = Cursors.Default;
+
+					Commlog CommlogCur = new Commlog();
+					CommlogCur.CommDateTime = DateTime.Now;
+					CommlogCur.CommType = CommItemType.Misc;
+					CommlogCur.PatNum = PatCur.PatNum;
+					CommlogCur.Note = "Letter sent: See Images for this date. ";
+					Commlogs.Insert(CommlogCur);
+				}
+				catch{
+					Cursor = Cursors.Default;
+					MsgBox.Show(this, "Cannot Find Stationary Document. Or another problem exists.");
+				}
 		}
 
 		

@@ -5406,9 +5406,13 @@ namespace OpenDental{
 				//After r442
 				command = "INSERT INTO preference VALUES('FuchsOptionsOn','0')";
 				General.NonQEx(command);
-
-
-
+				//change these from 0 to nothing
+				command = "UPDATE preference SET ValueString = '' WHERE PrefName = 'StationaryImage'";
+				General.NonQEx(command);
+				command = command = "UPDATE preference SET ValueString = '' WHERE PrefName = 'StationaryDocument'";
+				General.NonQEx(command);
+				command = "INSERT INTO preference VALUES('WordProcessorPath','')";
+				General.NonQEx(command);
 
 
 

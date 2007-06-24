@@ -299,6 +299,20 @@ namespace OpenDental.Properties {
             }
         }
         
+        internal static System.Drawing.Bitmap stationary_sample {
+            get {
+                object obj = ResourceManager.GetObject("stationary sample", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap stationary_sample1 {
+            get {
+                object obj = ResourceManager.GetObject("stationary sample1", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         /// <summary>
         ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
         ///&lt;Report Name=&quot;&quot;&gt;

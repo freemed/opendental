@@ -35,7 +35,40 @@ namespace OpenDental{
 				MessageBox.Show(Lan.g("Label","Printer not available"));
 			}
 		}
-
+		public void PrintPatXRay(Patient pat) {
+			Pat = pat.Copy();
+			pd = new PrintDocument();
+			pd.PrintPage += new PrintPageEventHandler(pd_PrintPageXRay);
+			pd.DefaultPageSettings.Margins = new Margins(0, 0, 0, 0);
+			pd.OriginAtMargins = true;
+			pd.DefaultPageSettings.Landscape = false;
+			if (!Printers.SetPrinter(pd, PrintSituation.LabelSingle)) {
+				return;
+			}
+			try {
+				pd.Print();
+			}
+			catch {
+				MessageBox.Show(Lan.g("Label", "Printer not available"));
+			}
+		}
+		public void PrintPatLF(Patient pat) {
+			Pat = pat.Copy();
+			pd = new PrintDocument();
+			pd.PrintPage += new PrintPageEventHandler(pd_PrintPagePatLF);
+			pd.DefaultPageSettings.Margins = new Margins(0, 0, 0, 0);
+			pd.OriginAtMargins = true;
+			pd.DefaultPageSettings.Landscape = false;
+			if (!Printers.SetPrinter(pd, PrintSituation.LabelSingle)) {
+				return;
+			}
+			try {
+				pd.Print();
+			}
+			catch {
+				MessageBox.Show(Lan.g("Label", "Printer not available"));
+			}
+		}
 		///<summary>Have to supply printer name because this can be called multiple times in a loop. Returns false if fails.</summary>
 		public bool PrintIns(Carrier carrierCur,string printerName){
 			CarrierCur=carrierCur;
@@ -73,7 +106,22 @@ namespace OpenDental{
 				MessageBox.Show(Lan.g("Label","Printer not available"));
 			}
 		}
-
+		private void pd_PrintPageXRay(object sender, System.Drawing.Printing.PrintPageEventArgs e) {
+			float xPos = 25;
+			float yPos = 50;
+			Graphics g = e.Graphics;
+			g.TranslateTransform(100, 0);
+			g.RotateTransform(90);
+			Font mainFont = new Font(FontFamily.GenericSansSerif, 14);
+			Font smallFont = new Font(FontFamily.GenericSansSerif, 9);
+			float lineH = e.Graphics.MeasureString("any", mainFont).Height;
+			float smlineH = e.Graphics.MeasureString("any", smallFont).Height;
+			g.DrawString(Pat.GetNameFL() + " - " + DateTime.Now.ToShortDateString(), mainFont, Brushes.Black, xPos, yPos);
+			yPos += lineH;
+			g.DrawString("BDay:" + Pat.Birthdate.ToShortDateString() + " - Dr. " + Providers.GetLName(Pat.PriProv) + " - " + Providers.GetAbbr(Pat.PriProv), smallFont, Brushes.Black, xPos, yPos);
+			yPos += smlineH;
+			//e.HasMorePages=false;
+		}
 		private void pd_PrintPagePat(object sender, System.Drawing.Printing.PrintPageEventArgs e) {
 			float xPos=25;
 			float yPos=10;//22;
@@ -94,7 +142,26 @@ namespace OpenDental{
 				,mainFont,Brushes.Black,xPos,yPos);
 			//e.HasMorePages=false;
 		}
-
+		private void pd_PrintPagePatLF(object sender, System.Drawing.Printing.PrintPageEventArgs e) {
+			float xPos = 25;
+			float yPos = 10;//22;
+			Graphics g = e.Graphics;
+			g.TranslateTransform(100, 0);
+			g.RotateTransform(90);
+			Font mainFont = new Font(FontFamily.GenericSansSerif, 12);
+			float lineH = e.Graphics.MeasureString("any", mainFont).Height;
+			g.DrawString(Pat.GetNameLF(), mainFont, Brushes.Black, xPos, yPos);
+			yPos += lineH;
+			g.DrawString(Pat.Address, mainFont, Brushes.Black, xPos, yPos);
+			yPos += lineH;
+			if (Pat.Address2 != "") {
+				g.DrawString(Pat.Address2, mainFont, Brushes.Black, xPos, yPos);
+				yPos += lineH;
+			}
+			g.DrawString(Pat.City + ", " + Pat.State + "  " + Pat.Zip
+				, mainFont, Brushes.Black, xPos, yPos);
+			//e.HasMorePages=false;
+		}
 		private void pd_PrintPageIns(object sender, System.Drawing.Printing.PrintPageEventArgs e) {
 			float xPos=25;
 			float yPos=10;
