@@ -64,12 +64,11 @@ namespace OpenDental{
 		///<summary>An array list of PaySplits</summary>
 		private ArrayList SplitList;
 		private OpenDental.UI.ODGrid gridMain;
-		private TextBox textDepositAccount;
 		private ArrayList SplitListOld;
-		private OpenDental.UI.Button butEditAccounting;
 		private Panel panelXcharge;
 		private ContextMenu contextMenuXcharge;
 		private MenuItem menuXcharge;
+		private TextBox textDepositAccount;
 		private int[] DepositAccounts;
 
 		///<summary>PatCur and FamCur are not for the PatCur of the payment.  They are for the patient and family from which this window was accessed.</summary>
@@ -120,13 +119,11 @@ namespace OpenDental{
 			this.comboClinic = new System.Windows.Forms.ComboBox();
 			this.labelClinic = new System.Windows.Forms.Label();
 			this.label12 = new System.Windows.Forms.Label();
-			this.textDepositAccount = new System.Windows.Forms.TextBox();
 			this.labelDepositAccount = new System.Windows.Forms.Label();
 			this.comboDepositAccount = new System.Windows.Forms.ComboBox();
 			this.panelXcharge = new System.Windows.Forms.Panel();
 			this.contextMenuXcharge = new System.Windows.Forms.ContextMenu();
 			this.menuXcharge = new System.Windows.Forms.MenuItem();
-			this.butEditAccounting = new OpenDental.UI.Button();
 			this.gridMain = new OpenDental.UI.ODGrid();
 			this.textDateEntry = new OpenDental.ValidDate();
 			this.textNote = new OpenDental.ODtextBox();
@@ -136,6 +133,7 @@ namespace OpenDental{
 			this.butOK = new OpenDental.UI.Button();
 			this.butDeleteAll = new OpenDental.UI.Button();
 			this.butAdd = new OpenDental.UI.Button();
+			this.textDepositAccount = new System.Windows.Forms.TextBox();
 			this.SuspendLayout();
 			// 
 			// label1
@@ -315,14 +313,6 @@ namespace OpenDental{
 			this.label12.Text = "Entry Date";
 			this.label12.TextAlign = System.Drawing.ContentAlignment.TopRight;
 			// 
-			// textDepositAccount
-			// 
-			this.textDepositAccount.Location = new System.Drawing.Point(405,189);
-			this.textDepositAccount.Name = "textDepositAccount";
-			this.textDepositAccount.ReadOnly = true;
-			this.textDepositAccount.Size = new System.Drawing.Size(260,20);
-			this.textDepositAccount.TabIndex = 115;
-			// 
 			// labelDepositAccount
 			// 
 			this.labelDepositAccount.Location = new System.Drawing.Point(405,144);
@@ -360,20 +350,6 @@ namespace OpenDental{
 			this.menuXcharge.Index = 0;
 			this.menuXcharge.Text = "Settings";
 			this.menuXcharge.Click += new System.EventHandler(this.menuXcharge_Click);
-			// 
-			// butEditAccounting
-			// 
-			this.butEditAccounting.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butEditAccounting.Autosize = true;
-			this.butEditAccounting.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butEditAccounting.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butEditAccounting.CornerRadius = 4F;
-			this.butEditAccounting.Location = new System.Drawing.Point(671,161);
-			this.butEditAccounting.Name = "butEditAccounting";
-			this.butEditAccounting.Size = new System.Drawing.Size(75,26);
-			this.butEditAccounting.TabIndex = 117;
-			this.butEditAccounting.Text = "Edit";
-			this.butEditAccounting.Click += new System.EventHandler(this.butEditAccounting_Click);
 			// 
 			// gridMain
 			// 
@@ -485,14 +461,21 @@ namespace OpenDental{
 			this.butAdd.Text = "&Add Split";
 			this.butAdd.Click += new System.EventHandler(this.butAdd_Click);
 			// 
+			// textDepositAccount
+			// 
+			this.textDepositAccount.Location = new System.Drawing.Point(405,188);
+			this.textDepositAccount.Name = "textDepositAccount";
+			this.textDepositAccount.ReadOnly = true;
+			this.textDepositAccount.Size = new System.Drawing.Size(260,20);
+			this.textDepositAccount.TabIndex = 119;
+			// 
 			// FormPayment
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.ClientSize = new System.Drawing.Size(840,588);
-			this.Controls.Add(this.panelXcharge);
-			this.Controls.Add(this.butEditAccounting);
-			this.Controls.Add(this.gridMain);
 			this.Controls.Add(this.textDepositAccount);
+			this.Controls.Add(this.panelXcharge);
+			this.Controls.Add(this.gridMain);
 			this.Controls.Add(this.labelDepositAccount);
 			this.Controls.Add(this.comboDepositAccount);
 			this.Controls.Add(this.textDateEntry);
@@ -603,46 +586,25 @@ namespace OpenDental{
 					}
 				}
 			}
-			if(IsNew) {
-				textDepositAccount.Visible=false;//this is never visible for new. It's a description if already attached.
-				butEditAccounting.Visible=false;//there's no transaction to edit since not attached yet.
-				if(Accounts.PaymentsLinked()) {
-					AccountingAutoPay autoPay=AccountingAutoPays.GetForPayType(
-						DefB.Short[(int)DefCat.PaymentTypes][listPayType.SelectedIndex].DefNum);
-					if(autoPay==null){
-						labelDepositAccount.Visible=false;
-						comboDepositAccount.Visible=false;
-					}
-					else{
-						DepositAccounts=AccountingAutoPays.GetPickListAccounts(autoPay);
-						for(int i=0;i<DepositAccounts.Length;i++) {
-							comboDepositAccount.Items.Add(Accounts.GetDescript(DepositAccounts[i]));
-						}
-						comboDepositAccount.SelectedIndex=0;
-					}
-				}
-				else {
-					labelDepositAccount.Visible=false;
-					comboDepositAccount.Visible=false;
-				}
+			if(IsNew){
+				//Fill comboDepositAccount based on autopay for listPayType.SelectedIndex
+				SetComboDepositAccounts();
+				textDepositAccount.Visible=false;
 			}
-			else {
-				//User will have to use the edit button.  Not allowed to pick from list like when new.
+			else{
+				//put a description in the textbox.  If the user clicks on the same or another item in listPayType,
+				//then the textbox will go away, and be replaced by comboDepositAccount.
+				labelDepositAccount.Visible=false;
+				comboDepositAccount.Visible=false;
 				Transaction trans=Transactions.GetAttachedToPayment(PaymentCur.PayNum);
 				if(trans==null) {
-					labelDepositAccount.Visible=false;
-					butEditAccounting.Visible=false;
-					comboDepositAccount.Visible=false;
 					textDepositAccount.Visible=false;
 				}
 				else {
-					comboDepositAccount.Enabled=false;
-					labelDepositAccount.Text=Lan.g(this,"Payed into Account");
+					//add only the description based on PaymentCur attached to transaction
 					ArrayList jeAL=JournalEntries.GetForTrans(trans.TransactionNum);
 					for(int i=0;i<jeAL.Count;i++) {
 						if(Accounts.GetAccount(((JournalEntry)jeAL[i]).AccountNum).AcctType==AccountType.Asset) {
-							comboDepositAccount.Items.Add(Accounts.GetDescript(((JournalEntry)jeAL[i]).AccountNum));
-							comboDepositAccount.SelectedIndex=0;
 							textDepositAccount.Text=((JournalEntry)jeAL[i]).DateDisplayed.ToShortDateString();
 							if(((JournalEntry)jeAL[i]).DebitAmt>0){
 								textDepositAccount.Text+=" "+((JournalEntry)jeAL[i]).DebitAmt.ToString("c");
@@ -779,14 +741,12 @@ namespace OpenDental{
 		}
 
 		private void listPayType_Click(object sender,EventArgs e) {
-			if(!Accounts.PaymentsLinked()) {
-				return;
-			}
-			if(!IsNew){
-				//we should probably do something here if user is switching to a type that is linked
-				//like if they entered check payment at first, and then realized it should be cash
-				return;
-			}
+			textDepositAccount.Visible=false;
+			SetComboDepositAccounts();
+		}
+
+		///<summary>Called from all 3 places where listPayType gets changed.</summary>
+		private void SetComboDepositAccounts(){
 			AccountingAutoPay autoPay=AccountingAutoPays.GetForPayType(
 				DefB.Short[(int)DefCat.PaymentTypes][listPayType.SelectedIndex].DefNum);
 			if(autoPay==null) {
@@ -801,7 +761,9 @@ namespace OpenDental{
 				for(int i=0;i<DepositAccounts.Length;i++) {
 					comboDepositAccount.Items.Add(Accounts.GetDescript(DepositAccounts[i]));
 				}
-				comboDepositAccount.SelectedIndex=0;
+				if(comboDepositAccount.Items.Count>0){
+					comboDepositAccount.SelectedIndex=0;
+				}
 			}
 		}
 
@@ -832,6 +794,7 @@ namespace OpenDental{
 			ProgramProperty prop=(ProgramProperty)ProgramProperties.GetForProgram(prog.ProgramNum)[0];
 			//still need to add functionality for accountingAutoPay
 			listPayType.SelectedIndex=DefB.GetOrder(DefCat.PaymentTypes,PIn.PInt(prop.PropertyValue));
+			SetComboDepositAccounts();
 			/*XCharge.exe [/TRANSACTIONTYPE:type] [/AMOUNT:amount] [/ACCOUNT:account] [/EXP:exp]
 				[“/TRACK:track”] [/ZIP:zip] [/ADDRESS:address] [/RECEIPT:receipt] [/CLERK:clerk]
 				[/APPROVALCODE:approval] [/AUTOPROCESS] [/AUTOCLOSE] [/STAYONTOP] [/MID]
@@ -904,7 +867,9 @@ namespace OpenDental{
 			}
 		}
 
-		private void butEditAccounting_Click(object sender,EventArgs e){
+		//private void butEditAccounting_Click(object sender,EventArgs e){
+			//this is obsolete.  Too hard for people to understand
+			/*
 			Transaction trans=Transactions.GetAttachedToPayment(PaymentCur.PayNum);
 			if(trans==null) {//this should never happen.  But just in case...
 				MsgBox.Show(this,"No transaction to edit.");
@@ -926,8 +891,8 @@ namespace OpenDental{
 								+" "+((JournalEntry)jeAL[i]).DebitAmt.ToString("c");
 					break;
 				}
-			}
-		}
+			}*/
+		//}
 
 		private void butDeleteAll_Click(object sender, System.EventArgs e) {
 			if(!MsgBox.Show(this,true,"This will delete the entire payment and all splits.")){
@@ -982,16 +947,25 @@ namespace OpenDental{
 				MessageBox.Show(Lan.g(this,"Amount must not be zero."));
 				return;
 			}
-			//If user is trying to change the amount of an entry that was already copied and linked to accounting section
-			//(category can only be changed by clicking the edit button.)
-			if(!IsNew){
-				try{
-					Payments.AlterLinkedEntries(PaymentCur,PIn.PDouble(textAmount.Text));
-				}
-				catch(ApplicationException ex){
-					MessageBox.Show(ex.Message);//not able to alter, so must not allow user to continue.
-					return;
-				}
+			bool accountingSynchRequired=false;
+			double accountingOldAmt=PaymentCur.PayAmt;
+			int accountingNewAcct=-1;//the old acctNum will be retrieved inside the validation code.
+			if(textDepositAccount.Visible){
+				accountingNewAcct=-1;//indicates no change
+			}
+			else if(comboDepositAccount.Visible && comboDepositAccount.Items.Count>0 && comboDepositAccount.SelectedIndex!=-1){
+				accountingNewAcct=DepositAccounts[comboDepositAccount.SelectedIndex];
+			}
+			else{//neither textbox nor combo visible. Or something's wrong with combobox
+				accountingNewAcct=0;
+			}
+			try {
+				accountingSynchRequired=Payments.ValidateLinkedEntries(accountingOldAmt,PIn.PDouble(textAmount.Text),IsNew,
+					PaymentCur.PayNum,accountingNewAcct);
+			}
+			catch(ApplicationException ex) {
+				MessageBox.Show(ex.Message);//not able to alter, so must not allow user to continue.
+				return;
 			}
 			PaymentCur.PayAmt=PIn.PDouble(textAmount.Text);
 			PaymentCur.PayDate=PIn.PDate(textDate.Text);
@@ -1059,33 +1033,11 @@ namespace OpenDental{
 				((PaySplit)SplitList[i]).DatePay=PaymentCur.PayDate;
 			}
 			PaySplits.UpdateList(SplitListOld,SplitList);
-			if(IsNew && Accounts.PaymentsLinked() && comboDepositAccount.Visible && PaymentCur.PayAmt>0) {
-				//create a transaction here
-				Transaction trans=new Transaction();
-				trans.PayNum=PaymentCur.PayNum;
-				trans.UserNum=Security.CurUser.UserNum;
-				Transactions.Insert(trans);
-				//first the deposit entry
-				JournalEntry je=new JournalEntry();
-				je.AccountNum=DepositAccounts[comboDepositAccount.SelectedIndex];
-				je.CheckNumber=Lan.g(this,"DEP");
-				je.DateDisplayed=PaymentCur.PayDate;//it would be nice to add security here.
-				
-				je.DebitAmt=PaymentCur.PayAmt;
-				je.Memo=Lan.g(this,"Payment -")+" "+FamCur.GetNameInFamFL(PaymentCur.PatNum);
-				je.Splits=Accounts.GetDescript(PrefB.GetInt("AccountingCashIncomeAccount"));
-				je.TransactionNum=trans.TransactionNum;
-				JournalEntries.Insert(je);
-				//then, the income entry
-				je=new JournalEntry();
-				je.AccountNum=PrefB.GetInt("AccountingCashIncomeAccount");
-				//je.CheckNumber=;
-				je.DateDisplayed=PaymentCur.PayDate;//it would be nice to add security here.
-				je.CreditAmt=PaymentCur.PayAmt;
-				je.Memo=Lan.g(this,"Payment -")+" "+FamCur.GetNameInFamFL(PaymentCur.PatNum);
-				je.Splits=Accounts.GetDescript(DepositAccounts[comboDepositAccount.SelectedIndex]);
-				je.TransactionNum=trans.TransactionNum;
-				JournalEntries.Insert(je);
+			//Accounting synch is done here.  All validation was done further up
+			//If user is trying to change the amount or linked account of an entry that was already copied and linked to accounting section
+			if(accountingSynchRequired){
+				Payments.AlterLinkedEntries(accountingOldAmt,PIn.PDouble(textAmount.Text),IsNew,
+					PaymentCur.PayNum,accountingNewAcct,PaymentCur.PayDate,FamCur.GetNameInFamFL(PaymentCur.PatNum));
 			}
 			if(IsNew){
 				SecurityLogs.MakeLogEntry(Permissions.PaymentCreate,PaymentCur.PatNum,

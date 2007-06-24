@@ -85,7 +85,7 @@ namespace OpenDental{
 			command+=
 				 "'"+POut.PInt   (je.TransactionNum)+"', "
 				+"'"+POut.PInt   (je.AccountNum)+"', "
-				+POut.PDate  (je.DateDisplayed)+", "
+				    +POut.PDate  (je.DateDisplayed)+", "
 				+"'"+POut.PDouble(je.DebitAmt)+"', "
 				+"'"+POut.PDouble(je.CreditAmt)+"', "
 				+"'"+POut.PString(je.Memo)+"', "

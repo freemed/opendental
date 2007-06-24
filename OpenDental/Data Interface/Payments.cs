@@ -301,23 +301,23 @@ namespace OpenDental{
 			return retVal;
 		}
 
-		///<summary>Called from FormPayment when trying to change an amount on payment that's already linked to the Accounting section.  This automates updating the Accounting section.  Surround with try-catch, because it with throw an exception if not able to alter the link.</summary>
-		public static void AlterLinkedEntries(Payment pay, Double newAmt){
+		///<summary>This does all the validation before calling AlterLinkedEntries.  It had to be separated like this because of the complexity of saving a payment.  Surround with try-catch.  Will throw an exception if user is trying to change, but not allowed.  Will return false if no synch with accounting is needed.  Use -1 for newAcct to indicate no change.</summary>
+		public static bool ValidateLinkedEntries(double oldAmt, double newAmt, bool isNew, int payNum, int newAcct){
+			if(!Accounts.PaymentsLinked()){
+				return false;//user has not even set up accounting links, so no need to check any of this.
+			}
 			bool amtChanged=false;
-			//bool typeChanged=false;
-			if(pay.PayAmt!=newAmt){
-				amtChanged=true;	
+			if(oldAmt!=newAmt) {
+				amtChanged=true;
 			}
-			//if(PayType!=newPayType){
-			//	typeChanged=true;
-			//}
-			if(!amtChanged){// && !typeChanged){
-				return;//no changes being made to amount, so skip the rest.
+			Transaction trans=Transactions.GetAttachedToPayment(payNum);//this gives us the oldAcctNum
+			if(trans==null && (newAcct==0 || newAcct==-1)) {//if there was no previous link, and there is no attempt to create a link
+				return false;//no synch needed
 			}
-			Transaction trans=Transactions.GetAttachedToPayment(pay.PayNum);
-			if(trans==null) {
-				return;//not linked to any accounting entry.
+			if(trans==null){//no previous link, but user is trying to create one. newAcct>0.
+				return true;//new transaction will be required
 			}
+			//at this point, we have established that there is a previous transaction.
 			//If payment is attached to a transaction which is more than 48 hours old, then not allowed to change.
 			if(amtChanged && trans.DateTimeEntry < MiscData.GetNowDateTime().AddDays(-2)) {
 				throw new ApplicationException(Lan.g("Payments","Not allowed to change amount that is more than 48 hours old.  This payment is already attached to an accounting transaction.  You will need to detach it from within the accounting section of the program."));
@@ -326,67 +326,168 @@ namespace OpenDental{
 				throw new ApplicationException(Lan.g("Payments","Not allowed to change amount.  This payment is attached to an accounting transaction that has been reconciled.  You will need to detach it from within the accounting section of the program."));
 			}
 			ArrayList jeAL=JournalEntries.GetForTrans(trans.TransactionNum);
-			if(jeAL.Count!=2){
+			int oldAcct=0;
+			JournalEntry jeDebit=null;
+			JournalEntry jeCredit=null;
+			double absOld=oldAmt;//the absolute value of the old amount
+			if(oldAmt<0) {
+				absOld=-oldAmt;
+			}
+			for(int i=0;i<jeAL.Count;i++) {//we make sure down below that this count is exactly 2.
+				if(Accounts.GetAccount(((JournalEntry)jeAL[i]).AccountNum).AcctType==AccountType.Asset) {
+					oldAcct=((JournalEntry)jeAL[i]).AccountNum;
+				}
+				if(((JournalEntry)jeAL[i]).DebitAmt==absOld) {
+					jeDebit=(JournalEntry)jeAL[i];
+				}
+				//old credit entry
+				if(((JournalEntry)jeAL[i]).CreditAmt==absOld) {
+					jeCredit=(JournalEntry)jeAL[i];
+				}
+			}
+			if(jeCredit==null || jeDebit==null) {
+				throw new ApplicationException(Lan.g("Payments","Not able to automatically make changes in the accounting section to match the change made here.  You will need to detach it from within the accounting section."));
+			}
+			if(oldAcct==0){//something must have gone wrong.  But this should never happen
+				throw new ApplicationException(Lan.g("Payments","Could not locate linked transaction.  You will need to detach it manually from within the accounting section of the program."));
+			}
+			if(newAcct==0){//detaching it from a linked transaction.
+				//We will delete the transaction
+				return true;
+			}
+			bool acctChanged=false;
+			if(newAcct!=-1 && oldAcct!=newAcct){
+				acctChanged=true;//changing linked acctNum
+			}
+			if(!amtChanged && !acctChanged){
+				return false;//no changes being made to amount or account, so no synch required.
+			}
+			if(jeAL.Count!=2) {
 				throw new ApplicationException(Lan.g("Payments","Not able to automatically change the amount in the accounting section to match the change made here.  You will need to detach it from within the accounting section."));
 			}
+			//Amount or account changed on an existing linked transaction.
+			return true;
+		}
+
+		///<summary>Only called once from FormPayment when trying to change an amount or an account on a payment that's already linked to the Accounting section or when trying to create a new link.  This automates updating the Accounting section.  Do not surround with try-catch, because it was already validated in ValidateLinkedEntries above.  Use -1 for newAcct to indicate no changed. The name is required to give descriptions to new entries.</summary>
+		public static void AlterLinkedEntries(double oldAmt, double newAmt, bool isNew, int payNum, int newAcct,DateTime payDate,
+			string patName)
+		{
+			if(!Accounts.PaymentsLinked()) {
+				return;//user has not even set up accounting links.
+			}
+			bool amtChanged=false;
+			if(oldAmt!=newAmt) {
+				amtChanged=true;
+			}
+			Transaction trans=Transactions.GetAttachedToPayment(payNum);//this gives us the oldAcctNum
+			double absNew=newAmt;//absolute value of the new amount
+			if(newAmt<0) {
+				absNew=-newAmt;
+			}
+			//if(trans==null && (newAcct==0 || newAcct==-1)) {//then this method will not even be called
+			if(trans==null) {//no previous link, but user is trying to create one.
+				//this is the only case where a new trans is required.
+				trans=new Transaction();
+				trans.PayNum=payNum;
+				trans.UserNum=Security.CurUser.UserNum;
+				Transactions.Insert(trans);//sets entry date
+				//first the deposit entry
+				JournalEntry je=new JournalEntry();
+				je.AccountNum=newAcct;//DepositAccounts[comboDepositAccount.SelectedIndex];
+				je.CheckNumber=Lan.g("Payments","DEP");
+				je.DateDisplayed=payDate;//it would be nice to add security here.
+				if(absNew==newAmt){//amount is positive
+					je.DebitAmt=newAmt;
+				}
+				else{
+					je.CreditAmt=absNew;
+				}
+				je.Memo=Lan.g("Payments","Payment -")+" "+patName;
+				je.Splits=Accounts.GetDescript(PrefB.GetInt("AccountingCashIncomeAccount"));
+				je.TransactionNum=trans.TransactionNum;
+				JournalEntries.Insert(je);
+				//then, the income entry
+				je=new JournalEntry();
+				je.AccountNum=PrefB.GetInt("AccountingCashIncomeAccount");
+				//je.CheckNumber=;
+				je.DateDisplayed=payDate;//it would be nice to add security here.
+				if(absNew==newAmt) {//amount is positive
+					je.CreditAmt=newAmt;
+				}
+				else {
+					je.DebitAmt=absNew;
+				}
+				je.Memo=Lan.g("Payments","Payment -")+" "+patName;
+				je.Splits=Accounts.GetDescript(newAcct);
+				je.TransactionNum=trans.TransactionNum;
+				JournalEntries.Insert(je);
+				return;
+			}
+			//at this point, we have established that there is a previous transaction.
+			ArrayList jeAL=JournalEntries.GetForTrans(trans.TransactionNum);
+			int oldAcct=0;
 			JournalEntry jeDebit=null;
 			JournalEntry jeCredit=null;
 			bool signChanged=false;
-			double absOld=pay.PayAmt;//the absolute value of the old amount
-			if(pay.PayAmt<0){
-				absOld=-pay.PayAmt;
+			double absOld=oldAmt;//the absolute value of the old amount
+			if(oldAmt<0){
+				absOld=-oldAmt;
 			}
-			double absNew=newAmt;//absolute value of the new amount
-			if(newAmt<0){
-				absNew=-newAmt;
-			}
-			if(pay.PayAmt<0 && newAmt>0){
+			if(oldAmt<0 && newAmt>0){
 				signChanged=true;
 			}
-			if(pay.PayAmt>0 && newAmt<0){
+			if(oldAmt>0 && newAmt<0){
 				signChanged=true;
 			}
 			for(int i=0;i<2;i++){
-				//first the old debit entry
-				if(((JournalEntry)jeAL[i]).DebitAmt==absOld){
+				if(Accounts.GetAccount(((JournalEntry)jeAL[i]).AccountNum).AcctType==AccountType.Asset) {
+					oldAcct=((JournalEntry)jeAL[i]).AccountNum;
+				}
+				if(((JournalEntry)jeAL[i]).DebitAmt==absOld) {
 					jeDebit=(JournalEntry)jeAL[i];
 				}
-				//then, the old credit entry
-				if(((JournalEntry)jeAL[i]).CreditAmt==absOld){
+				//old credit entry
+				if(((JournalEntry)jeAL[i]).CreditAmt==absOld) {
 					jeCredit=(JournalEntry)jeAL[i];
 				}
-
 			}
-			if(jeCredit==null || jeDebit==null){
-				throw new ApplicationException(Lan.g("Payments","Not able to automatically make changes in the accounting section to match the change made here.  You will need to detach it from within the accounting section."));
+			//Already validated that both je's are not null, and that oldAcct is not 0.
+			if(newAcct==0){//detaching it from a linked transaction. We will delete the transaction
+				//we don't care about the amount
+				Transactions.Delete(trans);//we need to make sure this doesn't throw any exceptions by carefully checking all
+					//possibilities in the validation routine above.
+				return;
+			}
+			//Either the amount or the account changed on an existing linked transaction.
+			bool acctChanged=false;
+			if(newAcct!=-1 && oldAcct!=newAcct) {
+				acctChanged=true;//changing linked acctNum
 			}
 			if(amtChanged){
 				if(signChanged) {
 					jeDebit.DebitAmt=0;
 					jeDebit.CreditAmt=absNew;
-					JournalEntries.Update(jeDebit);
 					jeCredit.DebitAmt=absNew;
 					jeCredit.CreditAmt=0;
-					JournalEntries.Update(jeCredit);
 				}
 				else {
 					jeDebit.DebitAmt=absNew;
-					JournalEntries.Update(jeDebit);
 					jeCredit.CreditAmt=absNew;
-					JournalEntries.Update(jeCredit);
 				}
 			}
-			//if(!typeChanged){
-			//	return;
-			//}
-			//From here on down, we are just altering the type
-			//jeAL=JournalEntries.GetForTrans(trans.TransactionNum);
-			//JournalEntry jeDebit=null;
-			//JournalEntry jeCredit=null;
+			if(acctChanged){
+				if(jeDebit.AccountNum==oldAcct){
+					jeDebit.AccountNum=newAcct;
+				}
+				if(jeCredit.AccountNum==oldAcct) {
+					jeCredit.AccountNum=newAcct;
+				}
+			}
+			JournalEntries.Update(jeDebit);
+			JournalEntries.Update(jeCredit);
 		}		
 
-	
-	
 		///<summary>Used for display in ProcEdit. List MUST include the requested payment. Use GetPayments to get the list.</summary>
 		public static Payment GetFromList(int payNum,Payment[] List){
 			for(int i=0;i<List.Length;i++){

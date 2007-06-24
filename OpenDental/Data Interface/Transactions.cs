@@ -39,7 +39,7 @@ namespace OpenDental{
 			return RefreshAndFill(command);
 		}
 
-		///<summary>Gets one transaction directly from the database which has this payment attached to it.  If none exist, then returns null.</summary>
+		///<summary>Gets one transaction directly from the database which has this payment attached to it.  If none exist, then returns null.  There should never be more than one, so that's why it doesn't return more than one.</summary>
 		public static Transaction GetAttachedToPayment(int payNum) {
 			string command=
 				"SELECT * FROM transaction "
