@@ -221,6 +221,7 @@ namespace OpenDental{
 			this.menuPatient = new System.Windows.Forms.ContextMenu();
 			this.panelNote = new System.Windows.Forms.Panel();
 			this.labelInvalidSig = new System.Windows.Forms.Label();
+			this.sigBox = new OpenDental.UI.SignatureBox();
 			this.label15 = new System.Windows.Forms.Label();
 			this.label1 = new System.Windows.Forms.Label();
 			this.textNote = new System.Windows.Forms.TextBox();
@@ -234,7 +235,6 @@ namespace OpenDental{
 			this.ToolBarMain = new OpenDental.UI.ODToolBar();
 			this.paintTools = new OpenDental.UI.ODToolBar();
 			this.brightnessContrastSlider = new OpenDental.UI.ContrWindowingSlider();
-			this.sigBox = new OpenDental.UI.SignatureBox();
 			((System.ComponentModel.ISupportInitialize)(this.PictureBox1)).BeginInit();
 			this.panelNote.SuspendLayout();
 			this.panelDrTech.SuspendLayout();
@@ -393,6 +393,14 @@ namespace OpenDental{
 			this.labelInvalidSig.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			this.labelInvalidSig.DoubleClick += new System.EventHandler(this.labelInvalidSig_DoubleClick);
 			// 
+			// sigBox
+			// 
+			this.sigBox.Location = new System.Drawing.Point(308, 20);
+			this.sigBox.Name = "sigBox";
+			this.sigBox.Size = new System.Drawing.Size(394, 91);
+			this.sigBox.TabIndex = 90;
+			this.sigBox.DoubleClick += new System.EventHandler(this.sigBox_DoubleClick);
+			// 
 			// label15
 			// 
 			this.label15.Location = new System.Drawing.Point(305, 0);
@@ -498,7 +506,7 @@ namespace OpenDental{
 			this.butCameraPic.Name = "butCameraPic";
 			this.butCameraPic.Size = new System.Drawing.Size(72, 20);
 			this.butCameraPic.TabIndex = 83;
-			this.butCameraPic.Text = "Camera Pictures";
+			this.butCameraPic.Text = "Camera Pics";
 			this.butCameraPic.Click += new System.EventHandler(this.butCameraPic_Click);
 			// 
 			// butOpenFolder
@@ -548,14 +556,6 @@ namespace OpenDental{
 			this.brightnessContrastSlider.Text = "contrWindowingSlider1";
 			this.brightnessContrastSlider.Scroll += new System.EventHandler(this.brightnessContrastSlider_Scroll);
 			this.brightnessContrastSlider.ScrollComplete += new System.EventHandler(this.brightnessContrastSlider_ScrollComplete);
-			// 
-			// sigBox
-			// 
-			this.sigBox.Location = new System.Drawing.Point(308, 20);
-			this.sigBox.Name = "sigBox";
-			this.sigBox.Size = new System.Drawing.Size(394, 91);
-			this.sigBox.TabIndex = 90;
-			this.sigBox.DoubleClick += new System.EventHandler(this.sigBox_DoubleClick);
 			// 
 			// ContrDocs
 			// 
@@ -2761,17 +2761,17 @@ namespace OpenDental{
 		private void butCBSheet_Click(object sender, EventArgs e) {
 			this.Cursor = Cursors.AppStarting;
 
-			string ProgName = @"C:\Program Files\OpenOffice.org 2.0\program\swriter.exe";
+			string ProgName = PrefB.GetString("WordProcessorPath");
 			//if (File.Exists(patFolder + @"~C&B Sheet.doc")){
 			//open existing file
 			//}; 
 			//else{
 			//copy new file there
-			string TheFile = patFolder + "CB-Sheet" + DateTime.Now.ToFileTime() + ".odt";
+			string TheFile = patFolder + "CB-Sheet" + DateTime.Now.ToFileTime() + ".doc";
 			try {
 				//File.Copy(@"\\server\opendental\data\CB-Sheet.odt", TheFile);
 				File.Copy(((PrefB.GetString("DocPath")) + @"\"
-					+ "CB-Sheet.odt"), TheFile);
+					+ "CB-Sheet.doc"), TheFile);
 			}
 			catch {
 			}//}

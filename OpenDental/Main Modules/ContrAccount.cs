@@ -3585,7 +3585,7 @@ namespace OpenDental {
 
 		private void buttonLabelChart_Click(object sender, EventArgs e) {
 			LabelSingle label = new LabelSingle();
-			label.PrintPat(PatCur);
+			label.PrintPatLF(PatCur);
 
 		}
 
