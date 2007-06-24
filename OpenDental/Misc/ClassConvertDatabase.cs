@@ -5403,6 +5403,10 @@ namespace OpenDental{
 					+"'PaymentType', "
 					+"'0')";
 				General.NonQEx(command);
+				//After r442
+				command = "INSERT INTO preference VALUES('FuchsOptionsOn','0')";
+				General.NonQEx(command);
+
 
 
 
