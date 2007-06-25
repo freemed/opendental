@@ -124,9 +124,29 @@ namespace OpenDental{
 
 		///<summary></summary>
 		public static int XPosToOp(int xPos) {
-			int retVal=(int)Math.Floor((double)(xPos-TimeWidth-ProvWidth*ProvCount)/ColWidth);
+			int retVal;
+			if(IsWeeklyView){
+				int day=XPosToDay(xPos);
+				retVal=(int)Math.Floor((double)(xPos-TimeWidth-day*ColDayWidth)/ColAptWidth);
+			}
+			else{
+				retVal=(int)Math.Floor((double)(xPos-TimeWidth-ProvWidth*ProvCount)/ColWidth);
+			}
 			if(retVal>ColCount-1)
 				retVal=ColCount-1;
+			if(retVal<0)
+				retVal=0;
+			return retVal;
+		}
+
+		///<summary>If not weekview, then it always returns 0.  If weekview, then it gives the dayofweek as int. Always based on current view, so 0 will be first day showing.</summary>
+		public static int XPosToDay(int xPos){
+			if(!IsWeeklyView){
+				return 0;
+			}
+			int retVal=(int)Math.Floor((double)(xPos-TimeWidth)/ColDayWidth);
+			if(retVal>NumOfWeekDaysToDisplay-1)
+				retVal=NumOfWeekDaysToDisplay-1;
 			if(retVal<0)
 				retVal=0;
 			return retVal;

@@ -1830,13 +1830,20 @@ namespace OpenDental{
 			if(ApptViewItems.VisOps.Length==0){//no ops visible.
 				return 0;
 			}
+			int day=ContrApptSheet.XPosToDay(point.X);
 			int op=Operatories.ListShort[ApptViewItems.VisOps[ContrApptSheet.XPosToOp(point.X)]].OperatoryNum;
 			int hour=ContrApptSheet.YPosToHour(point.Y);
 			int minute=ContrApptSheet.YPosToMin(point.Y);
 			TimeSpan time=new TimeSpan(hour,minute,0);
 			TimeSpan aptTime;
+			int aptDayOfWeek;
 			for(int i=0;i<DS.Tables["Appointments"].Rows.Count;i++) {
 				if(op.ToString()!=DS.Tables["Appointments"].Rows[i]["Op"].ToString()){
+					continue;
+				}
+				aptDayOfWeek=(int)PIn.PDateT(DS.Tables["Appointments"].Rows[i]["AptDateTime"].ToString()).DayOfWeek;
+				//just done this way to flag NumOfWeekDaysToDisplay to be changed later.
+				if(ContrApptSheet.IsWeeklyView && aptDayOfWeek+5-ContrApptSheet.NumOfWeekDaysToDisplay-1!=day){
 					continue;
 				}
 				aptTime=PIn.PDateT(DS.Tables["Appointments"].Rows[i]["AptDateTime"].ToString()).TimeOfDay;
