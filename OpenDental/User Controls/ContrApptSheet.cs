@@ -282,6 +282,9 @@ namespace OpenDental{
 						isHoliday=true;
 						break;
 					}
+					if(isHoliday){
+						g.FillRectangle(holidayBrush,TimeWidth+1+d*ColDayWidth,0,ColDayWidth,Height);
+					}
 					for(int j=0;j<ColCount;j++) {
 						curOp=Operatories.ListShort[ApptViewItems.VisOps[j]];
 						if(curOp.ProvDentist!=0 && !curOp.IsHygiene) {//dentist
@@ -293,21 +296,16 @@ namespace OpenDental{
 						else {//no provider set
 							schedForType=Schedules.GetForType(SchedListPeriod,ScheduleType.Provider,PrefB.GetInt("ScheduleProvUnassigned"));
 						}
-						if(isHoliday) {
-							g.FillRectangle(holidayBrush,TimeWidth+1+d*ColDayWidth+j*ColAptWidth,0,ColAptWidth+1,Height);
-						}
-						else{
-							for(int i=0;i<schedForType.Length;i++) {
-								if((int)schedForType[i].SchedDate.DayOfWeek!=d+1){
-									continue;
-								}
-								g.FillRectangle(openBrush
-									,TimeWidth+1+d*ColDayWidth+j*ColAptWidth
-									,schedForType[i].StartTime.Hour*Lh*RowsPerHr+(int)schedForType[i].StartTime.Minute*Lh/MinPerRow//6RowsPerHr 10MinPerRow
-									,ColAptWidth+1
-									,(schedForType[i].StopTime-schedForType[i].StartTime).Hours*Lh*RowsPerHr//6
-									+(schedForType[i].StopTime-schedForType[i].StartTime).Minutes*Lh/MinPerRow);//10
+						for(int i=0;i<schedForType.Length;i++) {
+							if((int)schedForType[i].SchedDate.DayOfWeek!=d+1){
+								continue;
 							}
+							g.FillRectangle(openBrush
+								,TimeWidth+1+d*ColDayWidth+j*ColAptWidth
+								,schedForType[i].StartTime.Hour*Lh*RowsPerHr+(int)schedForType[i].StartTime.Minute*Lh/MinPerRow//6RowsPerHr 10MinPerRow
+								,ColAptWidth+1
+								,(schedForType[i].StopTime-schedForType[i].StartTime).Hours*Lh*RowsPerHr//6
+								+(schedForType[i].StopTime-schedForType[i].StartTime).Minutes*Lh/MinPerRow);//10
 						}
 					}
 				}

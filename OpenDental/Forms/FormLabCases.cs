@@ -22,6 +22,8 @@ namespace OpenDental{
 		private Label label2;
 		private OpenDental.UI.Button butRefresh;// Required designer variable.
 		private DataTable table;
+		///<Summary>Set this to the selected date on the schedule, and date range will start out based on this date.</Summary>
+		public DateTime DateViewing;
 
 		///<summary></summary>
 		public FormLabCases()
@@ -164,8 +166,8 @@ namespace OpenDental{
 		#endregion
 
 		private void FormLabCases_Load(object sender,EventArgs e) {
-			textDateFrom.Text=DateTime.Today.ToShortDateString();
-			textDateTo.Text=DateTime.Today.AddDays(5).ToShortDateString();
+			textDateFrom.Text=DateViewing.ToShortDateString();
+			textDateTo.Text=DateViewing.AddDays(5).ToShortDateString();
 			FillGrid();
 		}
 

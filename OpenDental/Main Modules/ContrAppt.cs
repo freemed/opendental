@@ -1357,7 +1357,7 @@ namespace OpenDental{
 					}
 				}
 				ContrApptSingle3[i].DataRoww=row;
-				if(ContrApptSheet.IsWeeklyView) {
+				if(!ContrApptSheet.IsWeeklyView) {
 					//copy time pattern to provBar[]:
 					indexProv=-1;
 					if(row["IsHygiene"].ToString()=="1"){
@@ -3485,6 +3485,12 @@ namespace OpenDental{
 
 		private void butLab_Click(object sender,EventArgs e) {
 			FormLabCases FormL=new FormLabCases();
+			if(ContrApptSheet.IsWeeklyView){
+				FormL.DateViewing=WeekStartDate;
+			}
+			else{
+				FormL.DateViewing=Appointments.DateSelected;
+			}
 			FormL.ShowDialog();
 		}
 
