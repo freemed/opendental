@@ -1651,6 +1651,9 @@ namespace OpenDental{
 			int tMin=ContrApptSheet2.ConvertToMin
 				(TempApptSingle.Location.Y-ContrApptSheet2.Location.Y-panelSheet.Location.Y);
 			DateTime tDate=Appointments.DateSelected;
+			if(ContrApptSheet.IsWeeklyView) {
+				tDate=WeekStartDate.AddDays(ContrApptSheet2.ConvertToDay(TempApptSingle.Location.X-ContrApptSheet2.Location.X));
+			}
 			DateTime fromDate=aptCur.AptDateTime.Date;
 			aptCur.AptDateTime=new DateTime(tDate.Year,tDate.Month,tDate.Day,tHr,tMin,0);
 			if(AppointmentRules.List.Length>0){
@@ -1957,12 +1960,12 @@ namespace OpenDental{
 					,ContrApptSingle3[thisIndex].Location.Y);
 				RefreshModulePatient(PIn.PInt(ContrApptSingle3[thisIndex].DataRoww["PatNum"].ToString()));
 				if(e.Button==MouseButtons.Right){
-					if(ContrApptSheet.IsWeeklyView){
-						menuWeeklyApt.Show(ContrApptSheet2,new Point(e.X,e.Y));
-					}
-					else{
+					//if(ContrApptSheet.IsWeeklyView){
+					//	menuWeeklyApt.Show(ContrApptSheet2,new Point(e.X,e.Y));
+					//}
+					//else{
 						menuApt.Show(ContrApptSheet2,new Point(e.X,e.Y));
-					}
+					//}
 				}
 				else{
 					mouseIsDown = true;
