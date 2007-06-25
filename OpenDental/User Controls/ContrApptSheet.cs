@@ -49,8 +49,9 @@ namespace OpenDental{
 		///<summary>This gets set externally each time the module is selected.  It is the background schedule for the entire period.  Includes all types.</summary>
 		public Schedule[] SchedListPeriod;
 		public static bool IsWeeklyView;
-		public static int NumOfWeekDaysToDisplay=5;
 		///<summary>Typically 5. Only used with weekview.</summary>
+		public static int NumOfWeekDaysToDisplay=5;
+		///<summary>The width of an entire day if using week view.</summary>
 		public static int ColDayWidth;
 		///<summary>Only used with weekview. The width of individual appointments within each day.  There might be rounding errors for now.</summary>
 		public static int ColAptWidth;
@@ -262,48 +263,96 @@ namespace OpenDental{
 			Schedule[] schedForType;
 			//one giant rectangle for everything closed
 			g.FillRectangle(closedBrush,TimeWidth,0,ColWidth*ColCount+ProvWidth*ProvCount,Height);
-			//then, loop through each operatory
+			//then, loop through each day and operatory
 			Operatory curOp;
-			bool isHoliday=false;
-			if(!IsWeeklyView){
-				for(int i=0;i<SchedListPeriod.Length;i++){
-					if(SchedListPeriod[i].SchedType==ScheduleType.Practice && SchedListPeriod[i].Status==SchedStatus.Holiday){
+			bool isHoliday;
+			if(IsWeeklyView){
+				for(int d=0;d<NumOfWeekDaysToDisplay;d++){
+					isHoliday=false;
+					for(int i=0;i<SchedListPeriod.Length;i++) {
+						if(SchedListPeriod[i].SchedType!=ScheduleType.Practice){
+							continue;	
+						}
+						if(SchedListPeriod[i].Status!=SchedStatus.Holiday) {
+							continue;
+						}
+						if((int)SchedListPeriod[i].SchedDate.DayOfWeek!=d+1){
+							continue;
+						}
 						isHoliday=true;
 						break;
 					}
+					for(int j=0;j<ColCount;j++) {
+						curOp=Operatories.ListShort[ApptViewItems.VisOps[j]];
+						if(curOp.ProvDentist!=0 && !curOp.IsHygiene) {//dentist
+							schedForType=Schedules.GetForType(SchedListPeriod,ScheduleType.Provider,curOp.ProvDentist);
+						}
+						else if(curOp.ProvHygienist!=0 && curOp.IsHygiene) {//hygienist
+							schedForType=Schedules.GetForType(SchedListPeriod,ScheduleType.Provider,curOp.ProvHygienist);
+						}
+						else {//no provider set
+							schedForType=Schedules.GetForType(SchedListPeriod,ScheduleType.Provider,PrefB.GetInt("ScheduleProvUnassigned"));
+						}
+						if(isHoliday) {
+							g.FillRectangle(holidayBrush,TimeWidth+1+d*ColDayWidth+j*ColAptWidth,0,ColAptWidth+1,Height);
+						}
+						else{
+							for(int i=0;i<schedForType.Length;i++) {
+								if((int)schedForType[i].SchedDate.DayOfWeek!=d+1){
+									continue;
+								}
+								g.FillRectangle(openBrush
+									,TimeWidth+1+d*ColDayWidth+j*ColAptWidth
+									,schedForType[i].StartTime.Hour*Lh*RowsPerHr+(int)schedForType[i].StartTime.Minute*Lh/MinPerRow//6RowsPerHr 10MinPerRow
+									,ColAptWidth+1
+									,(schedForType[i].StopTime-schedForType[i].StartTime).Hours*Lh*RowsPerHr//6
+									+(schedForType[i].StopTime-schedForType[i].StartTime).Minutes*Lh/MinPerRow);//10
+							}
+						}
+					}
 				}
 			}
-			for(int j=0;j<ColCount;j++){
-				if(IsWeeklyView){
-					schedForType=Schedules.GetForType(SchedListPeriod,ScheduleType.Provider,PrefB.GetInt("ScheduleProvUnassigned"));
+			else{//only one day showing
+				isHoliday=false;
+				for(int i=0;i<SchedListPeriod.Length;i++) {
+					if(SchedListPeriod[i].SchedType!=ScheduleType.Practice) {
+						continue;
+					}
+					if(SchedListPeriod[i].Status!=SchedStatus.Holiday) {
+						continue;
+					}
+					isHoliday=true;
+					break;
 				}
-				else{
+				for(int j=0;j<ColCount;j++) {
 					curOp=Operatories.ListShort[ApptViewItems.VisOps[j]];
-					if(curOp.ProvDentist!=0 && !curOp.IsHygiene){//dentist
+					if(curOp.ProvDentist!=0 && !curOp.IsHygiene) {//dentist
 						schedForType=Schedules.GetForType(SchedListPeriod,ScheduleType.Provider,curOp.ProvDentist);
 					}
-					else if(curOp.ProvHygienist!=0 && curOp.IsHygiene){//hygienist
+					else if(curOp.ProvHygienist!=0 && curOp.IsHygiene) {//hygienist
 						schedForType=Schedules.GetForType(SchedListPeriod,ScheduleType.Provider,curOp.ProvHygienist);
 					}
-					else{//no provider set
+					else {//no provider set
 						schedForType=Schedules.GetForType(SchedListPeriod,ScheduleType.Provider,PrefB.GetInt("ScheduleProvUnassigned"));
 					}
+					if(isHoliday) {
+						g.FillRectangle(holidayBrush,TimeWidth+ProvWidth*ProvCount+j*ColWidth,0,ColWidth,Height);
+					}
+					else{
+						for(int i=0;i<schedForType.Length;i++) {
+							g.FillRectangle(openBrush
+								,TimeWidth+ProvWidth*ProvCount+j*ColWidth
+								,schedForType[i].StartTime.Hour*Lh*RowsPerHr+(int)schedForType[i].StartTime.Minute*Lh/MinPerRow//6RowsPerHr 10MinPerRow
+								,ColWidth
+								,(schedForType[i].StopTime-schedForType[i].StartTime).Hours*Lh*RowsPerHr//6
+							+(schedForType[i].StopTime-schedForType[i].StartTime).Minutes*Lh/MinPerRow);//10
+						}
+					}
 				}
-				if(isHoliday){
-					g.FillRectangle(holidayBrush,TimeWidth+ProvWidth*ProvCount+j*ColWidth,0,ColWidth,Height);
-				}
-				for(int i=0;i<schedForType.Length;i++){
-					g.FillRectangle(openBrush
-						,TimeWidth+ProvWidth*ProvCount+j*ColWidth
-						,schedForType[i].StartTime.Hour*Lh*RowsPerHr+(int)schedForType[i].StartTime.Minute*Lh/MinPerRow//6RowsPerHr 10MinPerRow
-						,ColWidth
-						,(schedForType[i].StopTime-schedForType[i].StartTime).Hours*Lh*RowsPerHr//6
-						+(schedForType[i].StopTime-schedForType[i].StartTime).Minutes*Lh/MinPerRow);//10
-				}         
-			}
+			}			
 		}
 
-		///<summary>Draws all the blockouts for the entire day.</summary>
+		///<summary>Draws all the blockouts for the entire period.</summary>
 		private void DrawBlockouts(Graphics g){
 			Schedule[] schedForType;
 			schedForType=Schedules.GetForType(SchedListPeriod,ScheduleType.Blockout,0);
@@ -313,32 +362,58 @@ namespace OpenDental{
 			Font blockFont=new Font("Arial",8);
 			string blockText;
 			RectangleF rect;
-			g.TextRenderingHint=TextRenderingHint.SingleBitPerPixelGridFit;//to make printing clearer
+			//g.TextRenderingHint=TextRenderingHint.SingleBitPerPixelGridFit;//to make printing clearer
 			for(int i=0;i<schedForType.Length;i++){	
 				blockBrush=new SolidBrush(DefB.GetColor(DefCat.BlockoutTypes,schedForType[i].BlockoutType));
 				penOutline = new Pen(DefB.GetColor(DefCat.BlockoutTypes, schedForType[i].BlockoutType),2);
 				blockText=DefB.GetName(DefCat.BlockoutTypes,schedForType[i].BlockoutType)+"\r\n"+schedForType[i].Note;
-				if(schedForType[i].Op==0){//all ops
-					rect=new RectangleF(
-						TimeWidth+ProvWidth*ProvCount+1
-						,schedForType[i].StartTime.Hour*Lh*RowsPerHr//6
-						+schedForType[i].StartTime.Minute*Lh/MinPerRow//10
-						,ColWidth*ColCount-1
-						,(schedForType[i].StopTime-schedForType[i].StartTime).Hours*Lh*RowsPerHr
-						+(schedForType[i].StopTime-schedForType[i].StartTime).Minutes*Lh/MinPerRow);
-				}
-				else{//just one op
-					if(ApptViewItems.GetIndexOp(schedForType[i].Op)==-1){
-						continue;//don't display if op not visible
+				if(IsWeeklyView){
+					if(schedForType[i].Op==0) {//all ops
+						rect=new RectangleF(
+							TimeWidth+1+((int)schedForType[i].SchedDate.DayOfWeek-1)*ColDayWidth
+							,schedForType[i].StartTime.Hour*Lh*RowsPerHr//6
+							+schedForType[i].StartTime.Minute*Lh/MinPerRow//10
+							,ColDayWidth-1
+							,(schedForType[i].StopTime-schedForType[i].StartTime).Hours*Lh*RowsPerHr
+							+(schedForType[i].StopTime-schedForType[i].StartTime).Minutes*Lh/MinPerRow);
 					}
-					rect=new RectangleF(
-						TimeWidth+ProvWidth*ProvCount
-						+ColWidth*ApptViewItems.GetIndexOp(schedForType[i].Op)+1
-						,schedForType[i].StartTime.Hour*Lh*RowsPerHr
-						+schedForType[i].StartTime.Minute*Lh/MinPerRow
-						,ColWidth-1
-						,(schedForType[i].StopTime-schedForType[i].StartTime).Hours*Lh*RowsPerHr
-						+(schedForType[i].StopTime-schedForType[i].StartTime).Minutes*Lh/MinPerRow);
+					else {//just one op
+						if(ApptViewItems.GetIndexOp(schedForType[i].Op)==-1) {
+							continue;//don't display if op not visible
+						}
+						rect=new RectangleF(
+							TimeWidth+1+((int)schedForType[i].SchedDate.DayOfWeek-1)*ColDayWidth
+							+ColAptWidth*ApptViewItems.GetIndexOp(schedForType[i].Op)+1
+							,schedForType[i].StartTime.Hour*Lh*RowsPerHr
+							+schedForType[i].StartTime.Minute*Lh/MinPerRow
+							,ColAptWidth-1
+							,(schedForType[i].StopTime-schedForType[i].StartTime).Hours*Lh*RowsPerHr
+							+(schedForType[i].StopTime-schedForType[i].StartTime).Minutes*Lh/MinPerRow);
+					}
+				}
+				else{
+					if(schedForType[i].Op==0){//all ops
+						rect=new RectangleF(
+							TimeWidth+ProvWidth*ProvCount+1
+							,schedForType[i].StartTime.Hour*Lh*RowsPerHr//6
+							+schedForType[i].StartTime.Minute*Lh/MinPerRow//10
+							,ColWidth*ColCount-1
+							,(schedForType[i].StopTime-schedForType[i].StartTime).Hours*Lh*RowsPerHr
+							+(schedForType[i].StopTime-schedForType[i].StartTime).Minutes*Lh/MinPerRow);
+					}
+					else{//just one op
+						if(ApptViewItems.GetIndexOp(schedForType[i].Op)==-1){
+							continue;//don't display if op not visible
+						}
+						rect=new RectangleF(
+							TimeWidth+ProvWidth*ProvCount
+							+ColWidth*ApptViewItems.GetIndexOp(schedForType[i].Op)+1
+							,schedForType[i].StartTime.Hour*Lh*RowsPerHr
+							+schedForType[i].StartTime.Minute*Lh/MinPerRow
+							,ColWidth-1
+							,(schedForType[i].StopTime-schedForType[i].StartTime).Hours*Lh*RowsPerHr
+							+(schedForType[i].StopTime-schedForType[i].StartTime).Minutes*Lh/MinPerRow);
+					}
 				}
 				//paint either solid block or outline
 				if(PrefB.GetBool("SolidBlockouts")){
@@ -406,21 +481,36 @@ namespace OpenDental{
 
 		///<summary></summary>
 		private void DrawGridLines(Graphics g){
-		//Vert
-			g.DrawLine(new Pen(Color.DarkGray),0,0,0,Height);
-			g.DrawLine(new Pen(Color.White),TimeWidth-2,0,TimeWidth-2,Height);
-			g.DrawLine(new Pen(Color.DarkGray),TimeWidth-1,0,TimeWidth-1,Height);
-			for(int i=0;i<ProvCount;i++){
-				g.DrawLine(new Pen(Color.DarkGray),TimeWidth+ProvWidth*i,0,TimeWidth+ProvWidth*i,Height);
+			//Vert
+			if(IsWeeklyView){
+				g.DrawLine(new Pen(Color.DarkGray),0,0,0,Height);
+				g.DrawLine(new Pen(Color.White),TimeWidth-1,0,TimeWidth-1,Height);
+				g.DrawLine(new Pen(Color.DarkGray),TimeWidth,0,TimeWidth,Height);
+				for(int d=0;d<NumOfWeekDaysToDisplay;d++){
+					g.DrawLine(new Pen(Color.DarkGray),TimeWidth+ColDayWidth*d,0
+						,TimeWidth+ColDayWidth*d,Height);
+				}
+				g.DrawLine(new Pen(Color.DarkGray),TimeWidth+ColDayWidth*NumOfWeekDaysToDisplay,0
+					,TimeWidth+1+ColDayWidth*NumOfWeekDaysToDisplay,Height);
+				g.DrawLine(new Pen(Color.DarkGray),TimeWidth*2+ColDayWidth*NumOfWeekDaysToDisplay,0
+					,TimeWidth*2+1+ColDayWidth*NumOfWeekDaysToDisplay,Height);
 			}
-			for(int i=0;i<ColCount;i++){
-				g.DrawLine(new Pen(Color.DarkGray),TimeWidth+ProvWidth*ProvCount+ColWidth*i,0
-					,TimeWidth+ProvWidth*ProvCount+ColWidth*i,Height);
+			else{
+				g.DrawLine(new Pen(Color.DarkGray),0,0,0,Height);
+				g.DrawLine(new Pen(Color.White),TimeWidth-2,0,TimeWidth-2,Height);
+				g.DrawLine(new Pen(Color.DarkGray),TimeWidth-1,0,TimeWidth-1,Height);
+				for(int i=0;i<ProvCount;i++){
+					g.DrawLine(new Pen(Color.DarkGray),TimeWidth+ProvWidth*i,0,TimeWidth+ProvWidth*i,Height);
+				}
+				for(int i=0;i<ColCount;i++){
+					g.DrawLine(new Pen(Color.DarkGray),TimeWidth+ProvWidth*ProvCount+ColWidth*i,0
+						,TimeWidth+ProvWidth*ProvCount+ColWidth*i,Height);
+				}
+				g.DrawLine(new Pen(Color.DarkGray), TimeWidth+ProvWidth*ProvCount+ColWidth*ColCount,0
+					,TimeWidth+ProvWidth*ProvCount+ColWidth*ColCount,Height);
+				g.DrawLine(new Pen(Color.DarkGray),TimeWidth*2+ProvWidth*ProvCount+ColWidth*ColCount,0
+					,TimeWidth*2+ProvWidth*ProvCount+ColWidth*ColCount,Height);
 			}
-			g.DrawLine(new Pen(Color.DarkGray), TimeWidth+ProvWidth*ProvCount+ColWidth*ColCount,0
-				,TimeWidth+ProvWidth*ProvCount+ColWidth*ColCount,Height);
-			g.DrawLine(new Pen(Color.DarkGray),TimeWidth*2+ProvWidth*ProvCount+ColWidth*ColCount,0
-				,TimeWidth*2+ProvWidth*ProvCount+ColWidth*ColCount,Height);
 			//horiz gray
 			for(int i=0;i<(Height);i+=Lh*RowsPerIncr){
 				g.DrawLine(new Pen(Color.LightGray),TimeWidth,i

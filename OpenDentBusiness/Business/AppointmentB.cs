@@ -146,7 +146,7 @@ namespace OpenDentBusiness{
 			command+="AND procedurelog.CodeNum=procedurecode.CodeNum ";
 			if(aptNum==0) {
 				command+="AND AptDateTime >= "+POut.PDate(dateStart)+" "
-					+"AND AptDateTime < "+POut.PDate(dateStart.AddDays(1))+" ";
+					+"AND AptDateTime < "+POut.PDate(dateEnd.AddDays(1))+" ";
 			}
 			else {
 				command+="AND appointment.AptNum="+POut.PInt(aptNum);
@@ -248,7 +248,9 @@ namespace OpenDentBusiness{
 				bool InsToSend=false;
 				for(int j=0;j<rawInsProc.Rows.Count;j++){
 					if(raw.Rows[i]["PlanNum"].ToString()!="" && raw.Rows[i]["PlanNum"].ToString()!="0") {
-						if (raw.Rows[i]["Guarantor"].ToString()==rawInsProc.Rows[j]["Guarantor"].ToString() | raw.Rows[i]["Guarantor"].ToString()==rawInsProc.Rows[j]["PatNum"].ToString()){
+						if (raw.Rows[i]["Guarantor"].ToString()==rawInsProc.Rows[j]["Guarantor"].ToString() 
+							|| raw.Rows[i]["Guarantor"].ToString()==rawInsProc.Rows[j]["PatNum"].ToString())
+						{
 							InsToSend=true;
 						}
 					}
@@ -256,7 +258,7 @@ namespace OpenDentBusiness{
 				if (InsToSend){
 					row["creditIns"]+="!";
 				}
-				else{
+				else if(raw.Rows[i]["PlanNum"].ToString()!="" && raw.Rows[i]["PlanNum"].ToString()!="0"){
 					row["creditIns"]+="I";
 				}
 				if(raw.Rows[i]["FamFinUrgNote"].ToString()!="") {

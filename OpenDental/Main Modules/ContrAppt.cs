@@ -117,6 +117,7 @@ namespace OpenDental{
 		private DateTime WeekStartDate;
 		private DateTime WeekEndDate;
 		private OpenDental.UI.Button butLab;
+		///<summary>The index of the day as shown on the screen.  Only used in weekly view.</summary>
 		public static int SheetClickedonDay;
 		///<summary></summary>
 		private Panel infoBubble;
@@ -992,13 +993,31 @@ namespace OpenDental{
 				toolTip1.SetToolTip(panProv,Providers.List[ApptViewItems.VisProvs[i]].Abbr);
 			}
 			Operatory curOp;
-			for(int i=0;i<ContrApptSheet.ColCount;i++){
-				Panel panOpName=new Panel();
-				Label labOpName=new Label();
-				if(ContrApptSheet.IsWeeklyView){
+			if(ContrApptSheet.IsWeeklyView){
+				for(int i=0;i<ContrApptSheet.NumOfWeekDaysToDisplay;i++) {
+					Panel panOpName=new Panel();
+					Label labOpName=new Label();
 					labOpName.Text=WeekStartDate.AddDays(i).ToString("dddd");
+					panOpName.Location=new Point
+						(2+ContrApptSheet.TimeWidth+i*ContrApptSheet.ColDayWidth,0);
+					panOpName.Width=ContrApptSheet.ColDayWidth;
+					panOpName.Height=18;
+					panOpName.BorderStyle=BorderStyle.Fixed3D;
+					panOpName.ForeColor=Color.DarkGray;
+					//add label within panOpName
+					labOpName.Location=new Point(0,-2);
+					labOpName.Width=panOpName.Width;
+					labOpName.Height=18;
+					labOpName.TextAlign=ContentAlignment.MiddleCenter;
+					labOpName.ForeColor=Color.Black;
+					panOpName.Controls.Add(labOpName);
+					panelOps.Controls.Add(panOpName);
 				}
-				else{
+			}
+			else{
+				for(int i=0;i<ContrApptSheet.ColCount;i++){
+					Panel panOpName=new Panel();
+					Label labOpName=new Label();
 					curOp=Operatories.ListShort[ApptViewItems.VisOps[i]];
 					labOpName.Text=curOp.OpName;
 					if(curOp.ProvDentist!=0 && !curOp.IsHygiene){
@@ -1007,21 +1026,21 @@ namespace OpenDental{
 					else if(curOp.ProvHygienist!=0 && curOp.IsHygiene){
 						panOpName.BackColor=Providers.GetColor(curOp.ProvHygienist);
 					}
+					panOpName.Location=new Point
+						(2+ContrApptSheet.TimeWidth+ContrApptSheet.ProvWidth*ContrApptSheet.ProvCount+i*ContrApptSheet.ColWidth,0);
+					panOpName.Width=ContrApptSheet.ColWidth;
+					panOpName.Height=18;
+					panOpName.BorderStyle=BorderStyle.Fixed3D;
+					panOpName.ForeColor=Color.DarkGray;
+					//add label within panOpName
+					labOpName.Location=new Point(0,-2);
+					labOpName.Width=panOpName.Width;
+					labOpName.Height=18;
+					labOpName.TextAlign=ContentAlignment.MiddleCenter;
+					labOpName.ForeColor=Color.Black;
+					panOpName.Controls.Add(labOpName);
+					panelOps.Controls.Add(panOpName);
 				}
-				panOpName.Location=new Point
-					(2+ContrApptSheet.TimeWidth+ContrApptSheet.ProvWidth*ContrApptSheet.ProvCount+i*ContrApptSheet.ColWidth,0);
-				panOpName.Width=ContrApptSheet.ColWidth;
-				panOpName.Height=18;
-				panOpName.BorderStyle=BorderStyle.Fixed3D;
-				panOpName.ForeColor=Color.DarkGray;
-				//add label within panOpName
-				labOpName.Location=new Point(0,-2);
-				labOpName.Width=panOpName.Width;
-				labOpName.Height=18;
-				labOpName.TextAlign=ContentAlignment.MiddleCenter;
-				labOpName.ForeColor=Color.Black;
-				panOpName.Controls.Add(labOpName);
-				panelOps.Controls.Add(panOpName);
 			}
 			this.ResumeLayout();
 			listConfirmed.Items.Clear();
@@ -1842,8 +1861,7 @@ namespace OpenDental{
 					continue;
 				}
 				aptDayOfWeek=(int)PIn.PDateT(DS.Tables["Appointments"].Rows[i]["AptDateTime"].ToString()).DayOfWeek;
-				//just done this way to flag NumOfWeekDaysToDisplay to be changed later.
-				if(ContrApptSheet.IsWeeklyView && aptDayOfWeek+5-ContrApptSheet.NumOfWeekDaysToDisplay-1!=day){
+				if(ContrApptSheet.IsWeeklyView && aptDayOfWeek-1!=day){
 					continue;
 				}
 				aptTime=PIn.PDateT(DS.Tables["Appointments"].Rows[i]["AptDateTime"].ToString()).TimeOfDay;
@@ -1890,25 +1908,9 @@ namespace OpenDental{
 			SheetClickedonHour=ContrApptSheet.YPosToHour(e.Y);
 			SheetClickedonMin=ContrApptSheet.YPosToMin(e.Y);
 			TimeSpan sheetClickedOnTime=new TimeSpan(SheetClickedonHour,SheetClickedonMin,0);
-			if(ContrApptSheet.IsWeeklyView){
-				DateTime aptDateTime;
-				SheetClickedonDay=ContrApptSheet2.ConvertToOp(e.X)+1;
-				for(int i=0;i<DS.Tables["Appointments"].Rows.Count;i++) {
-					aptDateTime=PIn.PDateT(DS.Tables["Appointments"].Rows[i]["AptDateTime"].ToString());
-					if(SheetClickedonDay==(int)aptDateTime.DayOfWeek
-						&& aptDateTime.TimeOfDay<=sheetClickedOnTime
-						&& sheetClickedOnTime<aptDateTime.TimeOfDay
-						+TimeSpan.FromMinutes(DS.Tables["Appointments"].Rows[i]["Pattern"].ToString().Length*5))
-					{
-						ContrApptSingle.ClickedAptNum=PIn.PInt(DS.Tables["Appointments"].Rows[i]["AptNum"].ToString());
-						SheetClickedonOp=PIn.PInt(DS.Tables["Appointments"].Rows[i]["Op"].ToString());
-					}
-				}
-			}
-			else {//daily view
-				ContrApptSingle.ClickedAptNum=HitTestAppt(e.Location);//0;
-				SheetClickedonOp=Operatories.ListShort[ApptViewItems.VisOps[ContrApptSheet.XPosToOp(e.X)]].OperatoryNum;
-			}
+			ContrApptSingle.ClickedAptNum=HitTestAppt(e.Location);
+			SheetClickedonOp=Operatories.ListShort[ApptViewItems.VisOps[ContrApptSheet.XPosToOp(e.X)]].OperatoryNum;
+			SheetClickedonDay=ContrApptSheet.XPosToDay(e.X);
 			Graphics grfx=ContrApptSheet2.CreateGraphics();
 			//if clicked on an appt-----------------------------------------------------------------------------------------------
 			if(ContrApptSingle.ClickedAptNum!=0){
@@ -2032,8 +2034,10 @@ namespace OpenDental{
 				return;
 			}
 			//dragging an appointment
-			if(ContrApptSheet.IsWeeklyView)
+			if(ContrApptSheet.IsWeeklyView){
+				boolAptMoved=false;
 				return;
+			}
 			int thisIndex=GetIndex(ContrApptSingle.SelectedAptNum);
 			if ((Math.Abs(e.X-mouseOrigin.X)<3)//enhances double clicking
 				&(Math.Abs(e.Y-mouseOrigin.Y)<3)){
@@ -2215,8 +2219,13 @@ namespace OpenDental{
 
 		///<summary>Usually dropping an appointment to a new location.</summary>
 		private void ContrApptSheet2_MouseUp(object sender, System.Windows.Forms.MouseEventArgs e) {
-			if(ContrApptSheet.IsWeeklyView) return;//Because an operatory num is required
 			if(!mouseIsDown) return;
+			if(ContrApptSheet.IsWeeklyView) {
+				ResizingAppt=false;
+				mouseIsDown=false;
+				TempApptSingle.Dispose();
+				return;
+			}
 			int thisIndex=GetIndex(ContrApptSingle.SelectedAptNum);
 			Appointment aptOld;
 			//Resizing-------------------------------------------------------------------------------------------------------------
@@ -2437,8 +2446,11 @@ namespace OpenDental{
 		///<summary>Double click on appt sheet or on a single appointment.</summary>
 		private void ContrApptSheet2_DoubleClick(object sender, System.EventArgs e) {
 			mouseIsDown=false;
-			if(ContrApptSheet.IsWeeklyView){//Temporary solution - double clicking opens the day in the daily view mode
-				Appointments.DateSelected=WeekStartDate.AddDays(SheetClickedonDay-1);
+			if(ContrApptSheet.IsWeeklyView){//Opens the clicked day in the daily view mode
+				if(TempApptSingle!=null){
+					TempApptSingle.Dispose();
+				}
+				Appointments.DateSelected=WeekStartDate.AddDays(SheetClickedonDay);
 				SetWeeklyView(false);
 				return;
 			}
