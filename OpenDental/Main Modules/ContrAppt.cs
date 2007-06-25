@@ -997,19 +997,23 @@ namespace OpenDental{
 				for(int i=0;i<ContrApptSheet.NumOfWeekDaysToDisplay;i++) {
 					Panel panOpName=new Panel();
 					Label labOpName=new Label();
-					labOpName.Text=WeekStartDate.AddDays(i).ToString("dddd");
+					labOpName.Text=WeekStartDate.AddDays(i).ToString("dddd-d");
 					panOpName.Location=new Point
 						(2+ContrApptSheet.TimeWidth+i*ContrApptSheet.ColDayWidth,0);
 					panOpName.Width=ContrApptSheet.ColDayWidth;
 					panOpName.Height=18;
 					panOpName.BorderStyle=BorderStyle.Fixed3D;
 					panOpName.ForeColor=Color.DarkGray;
+					panOpName.MouseDown += new System.Windows.Forms.MouseEventHandler(panOpName_MouseDown);
+					panOpName.Tag=i;//stores the day index
 					//add label within panOpName
 					labOpName.Location=new Point(0,-2);
 					labOpName.Width=panOpName.Width;
 					labOpName.Height=18;
 					labOpName.TextAlign=ContentAlignment.MiddleCenter;
 					labOpName.ForeColor=Color.Black;
+					labOpName.MouseDown += new System.Windows.Forms.MouseEventHandler(panOpName_MouseDown);
+					labOpName.Tag=i;//stores the day index
 					panOpName.Controls.Add(labOpName);
 					panelOps.Controls.Add(panOpName);
 				}
@@ -1049,6 +1053,22 @@ namespace OpenDental{
 			}
 			RefreshModulePatient(patNum);
 			RefreshPeriod();
+		}
+
+		///<summary>Only used when viewing weekly.</summary>
+		private void panOpName_MouseDown(object sender,System.Windows.Forms.MouseEventArgs e) {
+			if(e.Button!=MouseButtons.Left){
+				return;
+			}
+			int dayI=0;
+			if(sender.GetType()==typeof(Panel)){
+				dayI=(int)((Panel)sender).Tag;
+			}
+			else{
+				dayI=(int)((Label)sender).Tag;
+			}
+			Appointments.DateSelected=WeekStartDate.AddDays(dayI);
+			SetWeeklyView(false);
 		}
 
 		///<summary>Sets the ContrApptSingle array to null.</summary>
@@ -1295,7 +1315,7 @@ namespace OpenDental{
 				WeekEndDate=WeekStartDate.AddDays(ContrApptSheet.NumOfWeekDaysToDisplay-1);
 			}
 			ContrApptSheet.IsWeeklyView=isWeeklyView;
-			if(weeklyViewChanged){
+			if(weeklyViewChanged || isWeeklyView){
 				ModuleSelected(PatCurNum);
 			}
 			else{
