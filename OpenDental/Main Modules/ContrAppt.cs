@@ -85,7 +85,7 @@ namespace OpenDental{
 		private System.Windows.Forms.ContextMenu menuApt;
 		private System.Windows.Forms.ContextMenu menuBlockout;
 		private System.Windows.Forms.ContextMenu menuWeeklyApt;
-		private Schedule[] SchedListDay;
+		private Schedule[] SchedListPeriod;
 		///<summary></summary>
 		[Category("Data"),Description("Occurs when user changes current patient, usually by clicking on the Select Patient button.")]
 		public event PatientSelectedEventHandler PatientSelected=null;
@@ -116,7 +116,6 @@ namespace OpenDental{
 		//private bool isWeeklyView;
 		private DateTime WeekStartDate;
 		private DateTime WeekEndDate;
-		public static int numOfWeekDaysToDisplay=5;
 		private OpenDental.UI.Button butLab;
 		public static int SheetClickedonDay;
 		///<summary></summary>
@@ -1274,7 +1273,7 @@ namespace OpenDental{
 			}
 			if(isWeeklyView) {
 				WeekStartDate=Appointments.DateSelected.AddDays(1-(int)Appointments.DateSelected.DayOfWeek);
-				WeekEndDate=WeekStartDate.AddDays(numOfWeekDaysToDisplay-1);
+				WeekEndDate=WeekStartDate.AddDays(ContrApptSheet.NumOfWeekDaysToDisplay-1);
 			}
 			ContrApptSheet.IsWeeklyView=isWeeklyView;
 			if(weeklyViewChanged){
@@ -1292,10 +1291,12 @@ namespace OpenDental{
 			if(ContrApptSheet.IsWeeklyView) {
 				startDate=WeekStartDate;
 				endDate=WeekEndDate;
+				Calendar2.SetSelectionRange(startDate,endDate);
 			}
 			else {
 				startDate=Appointments.DateSelected;
 				endDate=Appointments.DateSelected;
+				Calendar2.SetDate(startDate);
 			}
 			if(startDate.Year<1880 || endDate.Year<1880) {
 				return;
@@ -1319,10 +1320,9 @@ namespace OpenDental{
 				}
 				ContrApptSingle3=null;
 			}
-			SchedListDay=Schedules.RefreshPeriod(startDate,endDate);
+			SchedListPeriod=Schedules.RefreshPeriod(startDate,endDate);
 			labelDate.Text=startDate.ToString("ddd");
 			labelDate2.Text=startDate.ToString("-  MMM d");
-			Calendar2.SetDate(startDate);
 			ContrApptSheet2.Controls.Clear();
 			ContrApptSingle3=new ContrApptSingle[DS.Tables["Appointments"].Rows.Count];//ListDay.Length];
 			int indexProv;
@@ -1338,24 +1338,26 @@ namespace OpenDental{
 					}
 				}
 				ContrApptSingle3[i].DataRoww=row;
-				//copy time pattern to provBar[]:
-				indexProv=-1;
-				if(row["IsHygiene"].ToString()=="1"){
-					indexProv=ApptViewItems.GetIndexProv(PIn.PInt(row["ProvHyg"].ToString()));
-				}
-				else{
-					indexProv=ApptViewItems.GetIndexProv(PIn.PInt(row["ProvNum"].ToString()));
-				}
-				if(indexProv!=-1 && row["AptStatus"].ToString()!=((int)ApptStatus.Broken).ToString()){
-					string pattern=ContrApptSingle.GetPatternShowing(row["Pattern"].ToString());
-					int startIndex=ContrApptSingle3[i].ConvertToY()/ContrApptSheet.Lh;//rounds down
-					for(int k=0;k<pattern.Length;k++){
-						if(pattern.Substring(k,1)=="X"){
-							try{
-								ContrApptSingle.ProvBar[indexProv][startIndex+k]++;
-							}
-							catch{
-								//appointment must extend past midnight.  Very rare
+				if(ContrApptSheet.IsWeeklyView) {
+					//copy time pattern to provBar[]:
+					indexProv=-1;
+					if(row["IsHygiene"].ToString()=="1"){
+						indexProv=ApptViewItems.GetIndexProv(PIn.PInt(row["ProvHyg"].ToString()));
+					}
+					else{
+						indexProv=ApptViewItems.GetIndexProv(PIn.PInt(row["ProvNum"].ToString()));
+					}
+					if(indexProv!=-1 && row["AptStatus"].ToString()!=((int)ApptStatus.Broken).ToString()){
+						string pattern=ContrApptSingle.GetPatternShowing(row["Pattern"].ToString());
+						int startIndex=ContrApptSingle3[i].ConvertToY()/ContrApptSheet.Lh;//rounds down
+						for(int k=0;k<pattern.Length;k++){
+							if(pattern.Substring(k,1)=="X"){
+								try{
+									ContrApptSingle.ProvBar[indexProv][startIndex+k]++;
+								}
+								catch{
+									//appointment must extend past midnight.  Very rare
+								}
 							}
 						}
 					}
@@ -1364,7 +1366,7 @@ namespace OpenDental{
 				ContrApptSheet2.Controls.Add(ContrApptSingle3[i]);
 			}//end for
 			PinApptSingle.Refresh();
-			ContrApptSheet2.SchedListDay=SchedListDay;
+			ContrApptSheet2.SchedListPeriod=SchedListPeriod;
 			ContrApptSheet2.CreateShadow();
 			CreateAptShadows();
 			ContrApptSheet2.DrawShadow();
@@ -1800,21 +1802,21 @@ namespace OpenDental{
 		///<summary>Now clicking the button turns on the weekly view based on selected date.
 		///Old behavior: Clicked week button, setting the date to the current week, but not necessarily to today.</summary>
 		private void butTodayWk_Click(object sender, System.EventArgs e) {
-			int dayChange = Appointments.DateSelected.DayOfWeek-DateTime.Now.DayOfWeek;
-			Appointments.DateSelected=DateTime.Now.AddDays(dayChange);
-			SetWeeklyView(false);//true);
+			//int dayChange = Appointments.DateSelected.DayOfWeek-DateTime.Now.DayOfWeek;
+			//Appointments.DateSelected=DateTime.Now.AddDays(dayChange);
+			SetWeeklyView(true);//false);
 		}
 
 		///<summary>Clicked back one week.</summary>
 		private void butBackWk_Click(object sender, System.EventArgs e) {
 			Appointments.DateSelected=Appointments.DateSelected.AddDays(-7);
-			SetWeeklyView(false);//true);
+			SetWeeklyView(true);//false);
 		}
 
 		///<summary>Clicked forward one week.</summary>
 		private void butFwdWk_Click(object sender, System.EventArgs e) {
 			Appointments.DateSelected=Appointments.DateSelected.AddDays(7);
-			SetWeeklyView(false);//true);
+			SetWeeklyView(true);//false);
 		}
 
 		///<summary>Clicked a date on the calendar.</summary>
@@ -1954,7 +1956,7 @@ namespace OpenDental{
 					return;
 				if(e.Button==MouseButtons.Right){
 					bool clickedOnBlock=false;
-					Schedule[] ListForType=Schedules.GetForType(SchedListDay,ScheduleType.Blockout,0);
+					Schedule[] ListForType=Schedules.GetForType(SchedListPeriod,ScheduleType.Blockout,0);
 					for(int i=0;i<ListForType.Length;i++){
 						//skip if op doesn't match
 						if(ListForType[i].Op!=0){//if op is zero, it doesn't matter which op.
@@ -2743,7 +2745,7 @@ namespace OpenDental{
 				SchedListDay = Schedules.RefreshPeriod(WeekStartDate,WeekEndDate);
 			}
 			else {
-				SchedListDay=Schedules.RefreshDay(Appointments.DateSelected);
+				SchedListDay=Schedules.RefreshPeriod(Appointments.DateSelected,Appointments.DateSelected);
 			}
       if(SchedListDay.Length > 0){
         for(int i=0;i<SchedListDay.Length;i++){
@@ -3209,8 +3211,18 @@ namespace OpenDental{
 		}
 
 		private Schedule GetClickedBlockout(){
-			SchedListDay=Schedules.RefreshDay(Appointments.DateSelected);
-			Schedule[] ListForType=Schedules.GetForType(SchedListDay,ScheduleType.Blockout,0);
+			DateTime startDate;
+			DateTime endDate;
+			if(ContrApptSheet.IsWeeklyView) {
+				startDate=WeekStartDate;
+				endDate=WeekEndDate;
+			}
+			else {
+				startDate=Appointments.DateSelected;
+				endDate=Appointments.DateSelected;
+			}
+			SchedListPeriod=Schedules.RefreshPeriod(startDate,endDate);
+			Schedule[] ListForType=Schedules.GetForType(SchedListPeriod,ScheduleType.Blockout,0);
 			//now find which blockout
 			Schedule SchedCur=null;
 			//date is irrelevant. This is just for the time:
@@ -3460,8 +3472,18 @@ namespace OpenDental{
 		///<summary></summary>
 		public void TickRefresh(){
 			try{
-				Schedule[] schedListDay=Schedules.RefreshDay(Appointments.DateSelected);
-				ContrApptSheet2.SchedListDay=schedListDay;
+				DateTime startDate;
+				DateTime endDate;
+				if(ContrApptSheet.IsWeeklyView) {
+					startDate=WeekStartDate;
+					endDate=WeekEndDate;
+				}
+				else {
+					startDate=Appointments.DateSelected;
+					endDate=Appointments.DateSelected;
+				}
+				Schedule[] schedListPeriod=Schedules.RefreshPeriod(startDate,endDate);
+				ContrApptSheet2.SchedListPeriod=schedListPeriod;
 				ContrApptSheet2.CreateShadow();
 				CreateAptShadows();
 				ContrApptSheet2.DrawShadow();

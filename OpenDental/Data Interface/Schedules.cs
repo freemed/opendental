@@ -31,13 +31,14 @@ namespace OpenDental{
 			return RefreshAndFill(command).ToArray();
 		}
 
+		/*
 		///<summary>Called every time the day is refreshed or changed in Appointments module.  Gets the data directly from the database.</summary>
 		public static Schedule[] RefreshDay(DateTime thisDay) {
 			string command=
 				"SELECT * FROM schedule WHERE SchedDate= "+POut.PDate(thisDay)
 				+" ORDER BY StartTime";
 			return RefreshAndFill(command).ToArray();
-		}
+		}*/
 
 		///<summary>Called every time the period is refreshed or changed in Appointments module.  Gets the data directly from the database.</summary>
 		public static Schedule[] RefreshPeriod(DateTime startDate,DateTime endDate) {
@@ -204,7 +205,7 @@ namespace OpenDental{
 
 		///<summary></summary>
 		private static bool Overlaps(Schedule sched){
-			Schedule[] SchedListDay=Schedules.RefreshDay(sched.SchedDate);
+			Schedule[] SchedListDay=Schedules.RefreshPeriod(sched.SchedDate,sched.SchedDate);
 			Schedule[] ListForType=Schedules.GetForType(SchedListDay,sched.SchedType,sched.ProvNum);
 			for(int i=0;i<ListForType.Length;i++){
 				if(ListForType[i].SchedType==ScheduleType.Blockout){

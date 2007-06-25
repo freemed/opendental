@@ -558,7 +558,7 @@ namespace OpenDental{
 				//}
 				//Debug.WriteLine("");
 				//handle all schedules by setting element of provBarSched to true if provider schedule shows open.
-				schedDay=Schedules.RefreshDay(dayEvaluating);
+				schedDay=Schedules.RefreshPeriod(dayEvaluating,dayEvaluating);
 				for(int p=0;p<providers.Length;p++){
 					//provHandled=false;
 					//schedule for prov

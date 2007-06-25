@@ -26,7 +26,7 @@ namespace OpenDental{
 		public static int ProvWidth;
 		///<summary></summary>
 		public static int Lh;
-		///<summary></summary>
+		///<summary>The number of columns.  Stays consistent even if weekly view.  The number of colums showing for one day.</summary>
 		public static int ColCount;
 		///<summary></summary>
 		public static int ProvCount;
@@ -46,9 +46,14 @@ namespace OpenDental{
 		private SolidBrush openBrush;
 		private SolidBrush closedBrush;
     private SolidBrush holidayBrush;
-		///<summary>This gets set externally each time the module is selected.  It is the background schedule for the entire day.  Includes all types.</summary>
-		public Schedule[] SchedListDay;
+		///<summary>This gets set externally each time the module is selected.  It is the background schedule for the entire period.  Includes all types.</summary>
+		public Schedule[] SchedListPeriod;
 		public static bool IsWeeklyView;
+		public static int NumOfWeekDaysToDisplay=5;
+		///<summary>Typically 5. Only used with weekview.</summary>
+		public static int ColDayWidth;
+		///<summary>Only used with weekview. The width of individual appointments within each day.  There might be rounding errors for now.</summary>
+		public static int ColAptWidth;
 
 		///<summary></summary>
 		public ContrApptSheet(){
@@ -118,7 +123,7 @@ namespace OpenDental{
 		}*/
 
 		///<summary></summary>
-		public static int XPosToOp(int xPos){
+		public static int XPosToOp(int xPos) {
 			int retVal=(int)Math.Floor((double)(xPos-TimeWidth-ProvWidth*ProvCount)/ColWidth);
 			if(retVal>ColCount-1)
 				retVal=ColCount-1;
@@ -202,12 +207,10 @@ namespace OpenDental{
 			Shadow=new Bitmap(Width,Height);
 			if(RowsPerIncr==0)
 				RowsPerIncr=1;
-			if(SchedListDay==null){
+			if(SchedListPeriod==null){
 				return;//not sure if this is necessary
 			}
 			Graphics g=Graphics.FromImage(Shadow);
-			//SchedDefault[] schedDefs;//for one type at a time
-			//Schedule[] schedForType;
 			//background
 			g.FillRectangle(new SolidBrush(Color.LightGray),0,0,TimeWidth,Height);//L time bar
 			g.FillRectangle(new SolidBrush(Color.LightGray),TimeWidth+ColWidth*ColCount+ProvWidth*ProvCount,0,TimeWidth,Height);//R time bar
@@ -243,8 +246,8 @@ namespace OpenDental{
 			Operatory curOp;
 			bool isHoliday=false;
 			if(!IsWeeklyView){
-				for(int i=0;i<SchedListDay.Length;i++){
-					if(SchedListDay[i].SchedType==ScheduleType.Practice && SchedListDay[i].Status==SchedStatus.Holiday){
+				for(int i=0;i<SchedListPeriod.Length;i++){
+					if(SchedListPeriod[i].SchedType==ScheduleType.Practice && SchedListPeriod[i].Status==SchedStatus.Holiday){
 						isHoliday=true;
 						break;
 					}
@@ -252,18 +255,18 @@ namespace OpenDental{
 			}
 			for(int j=0;j<ColCount;j++){
 				if(IsWeeklyView){
-					schedForType=Schedules.GetForType(SchedListDay,ScheduleType.Provider,PrefB.GetInt("ScheduleProvUnassigned"));
+					schedForType=Schedules.GetForType(SchedListPeriod,ScheduleType.Provider,PrefB.GetInt("ScheduleProvUnassigned"));
 				}
 				else{
 					curOp=Operatories.ListShort[ApptViewItems.VisOps[j]];
 					if(curOp.ProvDentist!=0 && !curOp.IsHygiene){//dentist
-						schedForType=Schedules.GetForType(SchedListDay,ScheduleType.Provider,curOp.ProvDentist);
+						schedForType=Schedules.GetForType(SchedListPeriod,ScheduleType.Provider,curOp.ProvDentist);
 					}
 					else if(curOp.ProvHygienist!=0 && curOp.IsHygiene){//hygienist
-						schedForType=Schedules.GetForType(SchedListDay,ScheduleType.Provider,curOp.ProvHygienist);
+						schedForType=Schedules.GetForType(SchedListPeriod,ScheduleType.Provider,curOp.ProvHygienist);
 					}
 					else{//no provider set
-						schedForType=Schedules.GetForType(SchedListDay,ScheduleType.Provider,PrefB.GetInt("ScheduleProvUnassigned"));
+						schedForType=Schedules.GetForType(SchedListPeriod,ScheduleType.Provider,PrefB.GetInt("ScheduleProvUnassigned"));
 					}
 				}
 				if(isHoliday){
@@ -283,7 +286,7 @@ namespace OpenDental{
 		///<summary>Draws all the blockouts for the entire day.</summary>
 		private void DrawBlockouts(Graphics g){
 			Schedule[] schedForType;
-			schedForType=Schedules.GetForType(SchedListDay,ScheduleType.Blockout,0);
+			schedForType=Schedules.GetForType(SchedListPeriod,ScheduleType.Blockout,0);
 			SolidBrush blockBrush;
 			Pen blockOutlinePen=new Pen(Color.Black,1);
 			Pen penOutline;
@@ -336,7 +339,7 @@ namespace OpenDental{
 			Schedule[] schedForType;
 			for(int j=0;j<ApptViewItems.VisProvs.Length;j++){
 				provCur=Providers.List[ApptViewItems.VisProvs[j]];
-				schedForType=Schedules.GetForType(SchedListDay,ScheduleType.Provider,provCur.ProvNum);
+				schedForType=Schedules.GetForType(SchedListPeriod,ScheduleType.Provider,provCur.ProvNum);
 				for(int i=0;i<schedForType.Length;i++){	
 					g.FillRectangle(openBrush
 						,TimeWidth+ProvWidth*j
@@ -490,26 +493,32 @@ namespace OpenDental{
 
 		///<summary>Called from ContrAppt.comboView_SelectedIndexChanged and ContrAppt.RefreshVisops. So, whenever appt Module layout and when comboView is changed.</summary>
 		public void ComputeColWidth(int totalWidth){
-			if(ApptViewItems.VisOps==null || ApptViewItems.VisProvs==null)
-			{
+			if(ApptViewItems.VisOps==null || ApptViewItems.VisProvs==null){
 				return;
 			}
 			try{
 				if(RowsPerIncr==0)
 					RowsPerIncr=1;
+				ColCount=ApptViewItems.VisOps.Length;
 				if(IsWeeklyView){
-					ColCount=ContrAppt.numOfWeekDaysToDisplay;
+					//ColCount=NumOfWeekDaysToDisplay;
 					ProvCount=0;
 				}
 				else{
-					ColCount=ApptViewItems.VisOps.Length;
 					ProvCount=ApptViewItems.VisProvs.Length;
 				}
 				if(ColCount==0) {
 					ColWidth=0;
 				}
 				else {
-					ColWidth=(totalWidth-TimeWidth*2-ProvWidth*ProvCount)/ColCount;
+					if(IsWeeklyView){
+						ColDayWidth=(totalWidth-TimeWidth*2)/NumOfWeekDaysToDisplay;
+						ColAptWidth=(ColDayWidth-1)/ColCount;
+						ColWidth=(totalWidth-TimeWidth*2-ProvWidth*ProvCount)/ColCount;
+					}
+					else{
+						ColWidth=(totalWidth-TimeWidth*2-ProvWidth*ProvCount)/ColCount;
+					}
 				}
 				MinPerIncr=PrefB.GetInt("AppointmentTimeIncrement");
 				MinPerRow=(float)MinPerIncr/(float)RowsPerIncr;
@@ -519,10 +528,12 @@ namespace OpenDental{
 					//RowsPerHr=RowsPerHr*2;
 				//}
 				Height=Lh*24*RowsPerHr;
-				//if(TwoRowsPerIncrement){
-				//	Height=Height*2;
-				//}
-				Width=TimeWidth*2+ProvWidth*ProvCount+ColWidth*ColCount;
+				if(IsWeeklyView){
+					Width=TimeWidth*2+ColDayWidth*NumOfWeekDaysToDisplay;
+				}
+				else{
+					Width=TimeWidth*2+ProvWidth*ProvCount+ColWidth*ColCount;
+				}
 			}
 			catch{
 				MessageBox.Show("error computing width");

@@ -128,7 +128,7 @@ namespace OpenDentBusiness{
 				+"LEFT JOIN patplan ON patplan.PatNum=patient.PatNum ";
 			if(aptNum==0){
 				command+="WHERE AptDateTime >= "+POut.PDate(dateStart)+" "
-					+"AND AptDateTime < "+POut.PDate(dateStart.AddDays(1))+" "
+					+"AND AptDateTime < "+POut.PDate(dateEnd.AddDays(1))+" "
 					+ "AND (AptStatus=1 OR AptStatus=2 OR AptStatus=4 OR AptStatus=5 OR AptStatus=7 OR AptStatus=8) ";
 			}
 			else{
@@ -152,9 +152,8 @@ namespace OpenDentBusiness{
 				command+="AND appointment.AptNum="+POut.PInt(aptNum);
 			}
 			DataTable rawProc=dcon.GetTable(command);
-			
 			//procs for flag, InsNotSent
-				command ="SELECT patient.PatNum, patient.Guarantor "
+			command ="SELECT patient.PatNum, patient.Guarantor "
 				+"FROM patient,procedurecode,procedurelog,claimproc "
 				+"WHERE claimproc.procnum=procedurelog.procnum "
 				+"AND patient.PatNum=procedurelog.PatNum "
@@ -167,7 +166,6 @@ namespace OpenDentBusiness{
 				+"AND procedurelog.ProcDate <= "+POut.PDate(DateTime.Now)+ " "
 				+"GROUP BY patient.Guarantor"; 
 			DataTable rawInsProc=dcon.GetTable(command);
-
 			DateTime aptDate;
 			TimeSpan span;
 			int hours;
