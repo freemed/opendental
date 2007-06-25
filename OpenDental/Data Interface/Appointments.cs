@@ -864,9 +864,12 @@ namespace OpenDental{
 				if(dayTable.Rows[i]["AptStatus"].ToString()==((int)ApptStatus.Broken).ToString()){//ignore broken appts
 					continue;
 				}
+				aptDateTime=PIn.PDateT(dayTable.Rows[i]["AptDateTime"].ToString());
+				if(ContrApptSheet.IsWeeklyView && aptDateTime.Date==apt.AptDateTime.Date){
+					continue;
+				}
 				//calculate starting row
 				//this math is copied from another section of the program, so it's sloppy. Safer than trying to rewrite it:
-				aptDateTime=PIn.PDateT(dayTable.Rows[i]["AptDateTime"].ToString());
 				convertToY=(int)(((double)aptDateTime.Hour*(double)60
 					/(double)PrefB.GetInt("AppointmentTimeIncrement")
 					+(double)aptDateTime.Minute

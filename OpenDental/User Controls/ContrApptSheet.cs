@@ -54,7 +54,7 @@ namespace OpenDental{
 		///<summary>The width of an entire day if using week view.</summary>
 		public static int ColDayWidth;
 		///<summary>Only used with weekview. The width of individual appointments within each day.  There might be rounding errors for now.</summary>
-		public static int ColAptWidth;
+		public static float ColAptWidth;
 
 		///<summary></summary>
 		public ContrApptSheet(){
@@ -167,13 +167,40 @@ namespace OpenDental{
 			return minutes;
 		}
 
-		///<summary>converts x-coordinate to operatory index of ApptCatItems.VisOps</summary>
+		///<summary>Used when dropping an appointment to a new location.  Converts x-coordinate to operatory index of ApptCatItems.VisOps, rounding to the nearest.  In this respect it is very different from XPosToOp.</summary>
 		public int ConvertToOp(int newX){
 			int retVal=0;
-			retVal=(int)Math.Round((double)(newX-TimeWidth-ProvWidth*ProvCount)/ColWidth);
+			if(IsWeeklyView){
+				int dayI=XPosToDay(newX);//does not round
+				int deltaDay=dayI*ColDayWidth;
+				int adjustedX=newX-TimeWidth-deltaDay;
+				retVal=(int)Math.Round((double)(adjustedX)/ColAptWidth);
+				//when there are multiple days, special situation where x is within the last op for the day, so it goes to next day.
+				if(retVal>ApptViewItems.VisOps.Length-1 && dayI<NumOfWeekDaysToDisplay-1){
+					retVal=0;
+				}
+			}
+			else{
+				retVal=(int)Math.Round((double)(newX-TimeWidth-ProvWidth*ProvCount)/ColWidth);
+			}
 			//make sure it's not outside bounds of array:
 			if(retVal > ApptViewItems.VisOps.Length-1)
 				retVal=ApptViewItems.VisOps.Length-1;
+			if(retVal<0)
+				retVal=0;
+			return retVal;
+		}
+
+		///<summary>Used when dropping an appointment to a new location.  Converts x-coordinate to day index.  Only used in weekly view.</summary>
+		public int ConvertToDay(int newX) {
+			int retVal=(int)Math.Floor((double)(newX-TimeWidth)/(double)ColDayWidth);
+			//the above works for every situation except when in the right half of the last op for a day. Test for that situation:
+			if(newX-TimeWidth > (retVal+1)*ColDayWidth-ColAptWidth/2){
+				retVal++;
+			}
+			//make sure it's not outside bounds of array:
+			if(retVal>NumOfWeekDaysToDisplay-1)
+				retVal=NumOfWeekDaysToDisplay-1;
 			if(retVal<0)
 				retVal=0;
 			return retVal;
@@ -301,9 +328,9 @@ namespace OpenDental{
 								continue;
 							}
 							g.FillRectangle(openBrush
-								,TimeWidth+1+d*ColDayWidth+j*ColAptWidth
+								,TimeWidth+1+d*ColDayWidth+(float)j*ColAptWidth
 								,schedForType[i].StartTime.Hour*Lh*RowsPerHr+(int)schedForType[i].StartTime.Minute*Lh/MinPerRow//6RowsPerHr 10MinPerRow
-								,ColAptWidth+1
+								,ColAptWidth
 								,(schedForType[i].StopTime-schedForType[i].StartTime).Hours*Lh*RowsPerHr//6
 								+(schedForType[i].StopTime-schedForType[i].StartTime).Minutes*Lh/MinPerRow);//10
 						}
@@ -621,7 +648,7 @@ namespace OpenDental{
 				else {
 					if(IsWeeklyView){
 						ColDayWidth=(totalWidth-TimeWidth*2)/NumOfWeekDaysToDisplay;
-						ColAptWidth=(ColDayWidth-1)/ColCount;
+						ColAptWidth=(float)(ColDayWidth-1)/(float)ColCount;
 						ColWidth=(totalWidth-TimeWidth*2-ProvWidth*ProvCount)/ColCount;
 					}
 					else{

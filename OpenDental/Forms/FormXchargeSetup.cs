@@ -24,6 +24,7 @@ namespace OpenDental{
 		private Label label1;
 		private ComboBox comboPaymentType;
 		private Program prog;
+		private LinkLabel linkLabel2;
 		private ProgramProperty prop=null;
 
 		///<summary></summary>
@@ -67,6 +68,7 @@ namespace OpenDental{
 			this.label3 = new System.Windows.Forms.Label();
 			this.label1 = new System.Windows.Forms.Label();
 			this.comboPaymentType = new System.Windows.Forms.ComboBox();
+			this.linkLabel2 = new System.Windows.Forms.LinkLabel();
 			this.SuspendLayout();
 			// 
 			// butCancel
@@ -102,17 +104,17 @@ namespace OpenDental{
 			// linkLabel1
 			// 
 			this.linkLabel1.LinkArea = new System.Windows.Forms.LinkArea(27,16);
-			this.linkLabel1.Location = new System.Drawing.Point(21,23);
+			this.linkLabel1.Location = new System.Drawing.Point(20,20);
 			this.linkLabel1.Name = "linkLabel1";
-			this.linkLabel1.Size = new System.Drawing.Size(311,16);
+			this.linkLabel1.Size = new System.Drawing.Size(425,16);
 			this.linkLabel1.TabIndex = 3;
 			this.linkLabel1.TabStop = true;
-			this.linkLabel1.Text = "The X-Charge website is at www.x-charge.com";
+			this.linkLabel1.Text = "The X-Charge website is at www.x-charge.com 1-800-637-8268";
 			this.linkLabel1.UseCompatibleTextRendering = true;
 			// 
 			// checkEnabled
 			// 
-			this.checkEnabled.Location = new System.Drawing.Point(21,68);
+			this.checkEnabled.Location = new System.Drawing.Point(21,70);
 			this.checkEnabled.Name = "checkEnabled";
 			this.checkEnabled.Size = new System.Drawing.Size(104,18);
 			this.checkEnabled.TabIndex = 4;
@@ -121,14 +123,14 @@ namespace OpenDental{
 			// 
 			// textPath
 			// 
-			this.textPath.Location = new System.Drawing.Point(20,115);
+			this.textPath.Location = new System.Drawing.Point(20,117);
 			this.textPath.Name = "textPath";
 			this.textPath.Size = new System.Drawing.Size(410,20);
 			this.textPath.TabIndex = 51;
 			// 
 			// label3
 			// 
-			this.label3.Location = new System.Drawing.Point(18,94);
+			this.label3.Location = new System.Drawing.Point(18,96);
 			this.label3.Name = "label3";
 			this.label3.Size = new System.Drawing.Size(231,18);
 			this.label3.TabIndex = 50;
@@ -137,7 +139,7 @@ namespace OpenDental{
 			// 
 			// label1
 			// 
-			this.label1.Location = new System.Drawing.Point(18,145);
+			this.label1.Location = new System.Drawing.Point(18,147);
 			this.label1.Name = "label1";
 			this.label1.Size = new System.Drawing.Size(154,16);
 			this.label1.TabIndex = 53;
@@ -148,16 +150,28 @@ namespace OpenDental{
 			// 
 			this.comboPaymentType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.comboPaymentType.FormattingEnabled = true;
-			this.comboPaymentType.Location = new System.Drawing.Point(21,164);
+			this.comboPaymentType.Location = new System.Drawing.Point(21,166);
 			this.comboPaymentType.MaxDropDownItems = 25;
 			this.comboPaymentType.Name = "comboPaymentType";
 			this.comboPaymentType.Size = new System.Drawing.Size(205,21);
 			this.comboPaymentType.TabIndex = 54;
 			// 
+			// linkLabel2
+			// 
+			this.linkLabel2.LinkArea = new System.Windows.Forms.LinkArea(27,18);
+			this.linkLabel2.Location = new System.Drawing.Point(20,38);
+			this.linkLabel2.Name = "linkLabel2";
+			this.linkLabel2.Size = new System.Drawing.Size(311,16);
+			this.linkLabel2.TabIndex = 55;
+			this.linkLabel2.TabStop = true;
+			this.linkLabel2.Text = "Purchase information is at www.open-dentx.com";
+			this.linkLabel2.UseCompatibleTextRendering = true;
+			// 
 			// FormXchargeSetup
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.ClientSize = new System.Drawing.Size(480,274);
+			this.Controls.Add(this.linkLabel2);
 			this.Controls.Add(this.comboPaymentType);
 			this.Controls.Add(this.label1);
 			this.Controls.Add(this.textPath);

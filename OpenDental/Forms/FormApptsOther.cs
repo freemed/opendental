@@ -564,6 +564,65 @@ namespace OpenDental{
 			DialogResult=DialogResult.OK;
 		}
 
+		private void butNote_Click(object sender,EventArgs e) {
+			Appointment AptCur=new Appointment();
+			AptCur.PatNum=PatCur.PatNum;
+			if(PatCur.DateFirstVisit.Year<1880
+				&& !Procedures.AreAnyComplete(PatCur.PatNum))//this only runs if firstVisit blank
+			{
+				AptCur.IsNewPatient=true;
+			}
+			AptCur.Pattern="/X/";
+			if(PatCur.PriProv==0) {
+				AptCur.ProvNum=PIn.PInt(((Pref)PrefB.HList["PracticeDefaultProv"]).ValueString);
+			}
+			else {
+				AptCur.ProvNum=PatCur.PriProv;
+			}
+			AptCur.ProvHyg=PatCur.SecProv;
+			AptCur.AptStatus=ApptStatus.PtNote;
+			AptCur.ClinicNum=PatCur.ClinicNum;
+			if(InitialClick) {//initially double clicked on appt module
+				DateTime d;
+				if(ContrApptSheet.IsWeeklyView) {
+					d=ContrAppt.WeekStartDate.AddDays(ContrAppt.SheetClickedonDay);
+				}
+				else {
+					d=Appointments.DateSelected;
+				}
+				int minutes=(int)(ContrAppt.SheetClickedonMin/ContrApptSheet.MinPerIncr)
+					*ContrApptSheet.MinPerIncr;
+				AptCur.AptDateTime=new DateTime(d.Year,d.Month,d.Day
+					,ContrAppt.SheetClickedonHour,minutes,0);
+				AptCur.Op=ContrAppt.SheetClickedonOp;
+			}
+			else {
+				//new appt will be placed on pinboard instead of specific time
+			}
+			try {
+				Appointments.InsertOrUpdate(AptCur,null,true);
+			}
+			catch(ApplicationException ex) {
+				MessageBox.Show(ex.Message);
+				return;
+			}
+			FormApptEdit FormApptEdit2=new FormApptEdit(AptCur.AptNum);
+			FormApptEdit2.IsNew=true;
+			FormApptEdit2.ShowDialog();
+			if(FormApptEdit2.DialogResult!=DialogResult.OK) {
+				return;
+			}
+			AptSelected=AptCur.AptNum;
+			if(InitialClick) {
+				oResult=OtherResult.CreateNew;
+			}
+			else {
+				oResult=OtherResult.NewToPinBoard;
+			}
+			DialogResult=DialogResult.OK;
+
+		}
+
 		private void butNew_Click(object sender, System.EventArgs e) {
 			Appointment AptCur=new Appointment();
 			AptCur.PatNum=PatCur.PatNum;
@@ -583,9 +642,14 @@ namespace OpenDental{
 			AptCur.AptStatus=ApptStatus.Scheduled;
 			AptCur.ClinicNum=PatCur.ClinicNum;
 			if(InitialClick){//initially double clicked on appt module
-				DateTime d=Appointments.DateSelected;
-				int minutes=(int)(ContrAppt.SheetClickedonMin/ContrApptSheet.MinPerIncr)
-					*ContrApptSheet.MinPerIncr;
+				DateTime d;
+				if(ContrApptSheet.IsWeeklyView){
+					d=ContrAppt.WeekStartDate.AddDays(ContrAppt.SheetClickedonDay);
+				}
+				else{
+					d=Appointments.DateSelected;
+				}
+				int minutes=(int)(ContrAppt.SheetClickedonMin/ContrApptSheet.MinPerIncr)*ContrApptSheet.MinPerIncr;
 				AptCur.AptDateTime=new DateTime(d.Year,d.Month,d.Day
 					,ContrAppt.SheetClickedonHour,minutes,0);
 				AptCur.Op=ContrAppt.SheetClickedonOp;
@@ -708,25 +772,6 @@ namespace OpenDental{
 			}
 		}
 
-		/*
-		///<summary>Prepares the necessary info for placement of the appointment on the pinboard.</summary>
-		private void CreateCurInfo(Appointment AptCur){
-
-			ContrAppt.CurInfo=new InfoApt();
-			ContrAppt.CurInfo.MyApt=AptCur.Copy();
-			Procedure[] procsForSingle;
-			if(AptCur.AptNum==PatCur.NextAptNum){//if is Next apt
-				procsForSingle=Procedures.GetProcsForSingle(AptCur.AptNum,true);
-				ContrAppt.CurInfo.Production=Procedures.GetProductionOneApt(AptCur.AptNum,procsForSingle,true);
-			}
-			else{//normal apt
-				procsForSingle=Procedures.GetProcsForSingle(AptCur.AptNum,false);
-				ContrAppt.CurInfo.Production=Procedures.GetProductionOneApt(AptCur.AptNum,procsForSingle,false);
-			}
-			ContrAppt.CurInfo.Procs=procsForSingle;
-			ContrAppt.CurInfo.MyPatient=PatCur.Copy();
-		}*/
-
 		private void butGoTo_Click(object sender, System.EventArgs e) {
 			if(tbApts.SelectedRow==-1){
 				MessageBox.Show(Lan.g(this,"Please select appointment first."));
@@ -764,58 +809,7 @@ namespace OpenDental{
 			oResult=OtherResult.Cancel;
 		}
 
-		private void butNote_Click(object sender, EventArgs e) {
-			Appointment AptCur=new Appointment();
-			AptCur.PatNum=PatCur.PatNum;
-			if(PatCur.DateFirstVisit.Year<1880
-				&& !Procedures.AreAnyComplete(PatCur.PatNum))//this only runs if firstVisit blank
-			{
-				AptCur.IsNewPatient=true;
-			}
-			AptCur.Pattern="/X/";
-			if(PatCur.PriProv==0){
-				AptCur.ProvNum=PIn.PInt(((Pref)PrefB.HList["PracticeDefaultProv"]).ValueString);
-			}
-			else{			
-				AptCur.ProvNum=PatCur.PriProv;
-			}
-			AptCur.ProvHyg=PatCur.SecProv;
-			AptCur.AptStatus=ApptStatus.PtNote;
-			AptCur.ClinicNum=PatCur.ClinicNum;
-			if(InitialClick){//initially double clicked on appt module
-				DateTime d=Appointments.DateSelected;
-				int minutes=(int)(ContrAppt.SheetClickedonMin/ContrApptSheet.MinPerIncr)
-					*ContrApptSheet.MinPerIncr;
-				AptCur.AptDateTime=new DateTime(d.Year,d.Month,d.Day
-					,ContrAppt.SheetClickedonHour,minutes,0);
-				AptCur.Op=ContrAppt.SheetClickedonOp;
-			}
-			else{
-				//new appt will be placed on pinboard instead of specific time
-			}
-			try{
-				Appointments.InsertOrUpdate(AptCur,null,true);
-			}
-			catch(ApplicationException ex){
-				MessageBox.Show(ex.Message);
-				return;
-			}
-			FormApptEdit FormApptEdit2=new FormApptEdit(AptCur.AptNum);
-			FormApptEdit2.IsNew=true;
-			FormApptEdit2.ShowDialog();
-			if(FormApptEdit2.DialogResult!=DialogResult.OK){
-				return;
-			}
-			AptSelected=AptCur.AptNum;
-			if(InitialClick){
-				oResult=OtherResult.CreateNew;
-			}
-			else{
-				oResult=OtherResult.NewToPinBoard;
-			}
-			DialogResult=DialogResult.OK;
-
-		}
+		
 
 
 

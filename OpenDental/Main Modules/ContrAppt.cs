@@ -114,8 +114,8 @@ namespace OpenDental{
 		private bool ResizingAppt;
 		private int ResizingOrigH;
 		//private bool isWeeklyView;
-		private DateTime WeekStartDate;
-		private DateTime WeekEndDate;
+		public static DateTime WeekStartDate;
+		public static DateTime WeekEndDate;
 		private OpenDental.UI.Button butLab;
 		///<summary>The index of the day as shown on the screen.  Only used in weekly view.</summary>
 		public static int SheetClickedonDay;
@@ -1794,6 +1794,9 @@ namespace OpenDental{
 					continue;
 				}
 				aptDateTime=PIn.PDateT(DS.Tables["Appointments"].Rows[i]["AptDateTime"].ToString());
+				if(aptDateTime.Date!=aptCur.AptDateTime.Date) {
+					continue;
+				}
 				//tests start time
 				if(aptCur.AptDateTime.TimeOfDay >= aptDateTime.TimeOfDay
 					&& aptCur.AptDateTime.TimeOfDay < aptDateTime.TimeOfDay.Add(TimeSpan.FromMinutes(
@@ -2054,10 +2057,10 @@ namespace OpenDental{
 				return;
 			}
 			//dragging an appointment
-			if(ContrApptSheet.IsWeeklyView){
-				boolAptMoved=false;
-				return;
-			}
+			//if(ContrApptSheet.IsWeeklyView){
+			//	boolAptMoved=false;
+			//	return;
+			//}
 			int thisIndex=GetIndex(ContrApptSingle.SelectedAptNum);
 			if ((Math.Abs(e.X-mouseOrigin.X)<3)//enhances double clicking
 				&(Math.Abs(e.Y-mouseOrigin.Y)<3)){
@@ -2240,12 +2243,12 @@ namespace OpenDental{
 		///<summary>Usually dropping an appointment to a new location.</summary>
 		private void ContrApptSheet2_MouseUp(object sender, System.Windows.Forms.MouseEventArgs e) {
 			if(!mouseIsDown) return;
-			if(ContrApptSheet.IsWeeklyView) {
+			/*if(ContrApptSheet.IsWeeklyView) {
 				ResizingAppt=false;
 				mouseIsDown=false;
 				TempApptSingle.Dispose();
 				return;
-			}
+			}*/
 			int thisIndex=GetIndex(ContrApptSingle.SelectedAptNum);
 			Appointment aptOld;
 			//Resizing-------------------------------------------------------------------------------------------------------------
@@ -2289,6 +2292,9 @@ namespace OpenDental{
 						continue;
 					}
 					aptDateTime=PIn.PDateT(DS.Tables["Appointments"].Rows[i]["AptDateTime"].ToString());
+					if(ContrApptSheet.IsWeeklyView && aptDateTime.Date!=aptDateTimeCur.Date){
+						continue;
+					}
 					if(aptDateTime<aptDateTimeCur){
 						continue;//we don't care about appointments that are earlier than this one
 					}
@@ -2361,8 +2367,11 @@ namespace OpenDental{
 					}
 				}
 			}
-			//convert loc to new time
+			//convert loc to new date/time
 			DateTime tDate=apt.AptDateTime.Date;
+			if(ContrApptSheet.IsWeeklyView){
+				tDate=WeekStartDate.AddDays(ContrApptSheet2.ConvertToDay(TempApptSingle.Location.X-ContrApptSheet2.Location.X));
+			}
 			apt.AptDateTime=new DateTime(tDate.Year,tDate.Month,tDate.Day,tHr,tMin,0);
 			Procedure[] procsMultApts=null;
 			Procedure[] procsForOne=null;
@@ -2466,14 +2475,6 @@ namespace OpenDental{
 		///<summary>Double click on appt sheet or on a single appointment.</summary>
 		private void ContrApptSheet2_DoubleClick(object sender, System.EventArgs e) {
 			mouseIsDown=false;
-			if(ContrApptSheet.IsWeeklyView){//Opens the clicked day in the daily view mode
-				if(TempApptSingle!=null){
-					TempApptSingle.Dispose();
-				}
-				Appointments.DateSelected=WeekStartDate.AddDays(SheetClickedonDay);
-				SetWeeklyView(false);
-				return;
-			}
 			//this logic is a little different than mouse down for now because on the first click of a 
 			//double click, an appointment control is created under the mouse.
 			if(ContrApptSingle.ClickedAptNum!=0){//on appt
@@ -2536,6 +2537,9 @@ namespace OpenDental{
 					apt.ClinicNum=pat.ClinicNum;
 					apt.AptStatus=ApptStatus.Scheduled;
 					DateTime d=Appointments.DateSelected;
+					if(ContrApptSheet.IsWeeklyView){
+						d=WeekStartDate.AddDays(SheetClickedonDay);
+					}
 					//minutes always rounded down.
 					int minutes=(int)(ContrAppt.SheetClickedonMin/ContrApptSheet.MinPerIncr)*ContrApptSheet.MinPerIncr;
 					apt.AptDateTime=new DateTime(d.Year,d.Month,d.Day,ContrAppt.SheetClickedonHour,minutes,0);
