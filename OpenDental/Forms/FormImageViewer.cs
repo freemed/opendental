@@ -196,6 +196,7 @@ namespace OpenDental{
 			ToolBarMain.Buttons.Clear();
 			ToolBarMain.Buttons.Add(new ODToolBarButton("",0,Lan.g(this,"Zoom In"),"ZoomIn"));
 			ToolBarMain.Buttons.Add(new ODToolBarButton("",1,Lan.g(this,"Zoom Out"),"ZoomOut"));
+			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"White"),-1,Lan.g(this,"Clear screen to solid white"),"White"));
 			ToolBarMain.Invalidate();
 		}
 
@@ -206,6 +207,9 @@ namespace OpenDental{
 					break;
 				case "ZoomOut":
 					OnZoomOut_Click();
+					break;
+				case "White":
+					OnWhite_Click();
 					break;
 			}
 		}
@@ -224,6 +228,11 @@ namespace OpenDental{
 			PointF p=new PointF(c.X-imageTranslation.X,c.Y-imageTranslation.Y);
 			imageTranslation=new PointF(imageTranslation.X+p.X/2.0f,imageTranslation.Y+p.Y/2.0f);
 			zoomFactor=(float)Math.Pow(2,zoomLevel);
+		}
+
+		private void OnWhite_Click(){
+			ImageCurrent=new Bitmap(1,1);
+			renderImage=new Bitmap(1,1);
 		}
 
 		private void PictureBox1_MouseDown(object sender,MouseEventArgs e) {
