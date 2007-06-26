@@ -106,6 +106,7 @@ namespace OpenDental{
 				MessageBox.Show(Lan.g("Label","Printer not available"));
 			}
 		}
+
 		private void pd_PrintPageXRay(object sender, System.Drawing.Printing.PrintPageEventArgs e) {
 			float xPos = 25;
 			float yPos = 50;
@@ -118,7 +119,7 @@ namespace OpenDental{
 			float smlineH = e.Graphics.MeasureString("any", smallFont).Height;
 			g.DrawString(Pat.GetNameFL() + " - " + DateTime.Now.ToShortDateString(), mainFont, Brushes.Black, xPos, yPos);
 			yPos += lineH;
-			g.DrawString("BDay:" + Pat.Birthdate.ToShortDateString() + " - Dr. " + Providers.GetLName(Pat.PriProv) + " - " + Providers.GetAbbr(Pat.PriProv), smallFont, Brushes.Black, xPos, yPos);
+			g.DrawString(Lan.g(this,"BDay:") + Pat.Birthdate.ToShortDateString() + Lan.g(this," - Dr. ") + Providers.GetLName(Pat.PriProv) + " - " + Providers.GetAbbr(Pat.PriProv), smallFont, Brushes.Black, xPos, yPos);
 			yPos += smlineH;
 			//e.HasMorePages=false;
 		}
