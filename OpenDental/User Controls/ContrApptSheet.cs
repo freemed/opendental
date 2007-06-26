@@ -55,6 +55,8 @@ namespace OpenDental{
 		public static int ColDayWidth;
 		///<summary>Only used with weekview. The width of individual appointments within each day.  There might be rounding errors for now.</summary>
 		public static float ColAptWidth;
+		//<summary>Monday for now if week view. This should have been added earlier, but it's just assumed in many places instead.</summary>
+		//public static int WeekStartDay=1;
 
 		///<summary></summary>
 		public ContrApptSheet(){

@@ -55,7 +55,7 @@ namespace OpenDental{
 		private System.Windows.Forms.Button butDelete;
 		private System.Windows.Forms.Button butBreak;
 		private System.Windows.Forms.ImageList imageList1;
-		///<summary></summary>
+		///<summary>The actual operatoryNum of the clicked op.</summary>
 		public static int SheetClickedonOp;
 		///<summary></summary>
 		public static int SheetClickedonHour;
@@ -1311,8 +1311,8 @@ namespace OpenDental{
 				weeklyViewChanged=true;
 			}
 			if(isWeeklyView) {
-				WeekStartDate=Appointments.DateSelected.AddDays(1-(int)Appointments.DateSelected.DayOfWeek);
-				WeekEndDate=WeekStartDate.AddDays(ContrApptSheet.NumOfWeekDaysToDisplay-1);
+				WeekStartDate=Appointments.DateSelected.AddDays(1-(int)Appointments.DateSelected.DayOfWeek).Date;
+				WeekEndDate=WeekStartDate.AddDays(ContrApptSheet.NumOfWeekDaysToDisplay-1).Date;
 			}
 			ContrApptSheet.IsWeeklyView=isWeeklyView;
 			if(weeklyViewChanged || isWeeklyView){
@@ -1987,8 +1987,6 @@ namespace OpenDental{
 			}
 			//not clicked on appt---------------------------------------------------------------------------------------------------
 			else{ 
-				if(ContrApptSheet.IsWeeklyView)
-					return;
 				if(e.Button==MouseButtons.Right){
 					bool clickedOnBlock=false;
 					Schedule[] ListForType=Schedules.GetForType(SchedListPeriod,ScheduleType.Blockout,0);
@@ -1998,6 +1996,9 @@ namespace OpenDental{
 							if(ListForType[i].Op != SheetClickedonOp){
 								continue;
 							}
+						}
+						if(ListForType[i].SchedDate.Date!=WeekStartDate.AddDays(SheetClickedonDay).Date){
+							continue;
 						}
 						if(ListForType[i].StartTime.TimeOfDay <= sheetClickedOnTime
 							&& sheetClickedOnTime < ListForType[i].StopTime.TimeOfDay)
@@ -3231,6 +3232,9 @@ namespace OpenDental{
 			Schedule sched=BlockoutClipboard.Copy();
 			sched.Op=SheetClickedonOp;
 			sched.SchedDate=Appointments.DateSelected;
+			if(ContrApptSheet.IsWeeklyView){
+				sched.SchedDate=WeekStartDate.AddDays(SheetClickedonDay);
+			}
 			TimeSpan span=sched.StopTime-sched.StartTime;
 			TimeSpan timeOfDay=new TimeSpan(SheetClickedonHour,SheetClickedonMin,0);
 			timeOfDay=TimeSpan.FromMinutes(
@@ -3280,6 +3284,9 @@ namespace OpenDental{
 						continue;
 					}
 				}
+				if(ListForType[i].SchedDate.Date!=WeekStartDate.AddDays(SheetClickedonDay)){
+					continue;
+				}
 				if(ListForType[i].StartTime.TimeOfDay <= SheetClickedonTime.TimeOfDay
 					&& SheetClickedonTime.TimeOfDay < ListForType[i].StopTime.TimeOfDay) {
 					SchedCur=ListForType[i];
@@ -3308,6 +3315,9 @@ namespace OpenDental{
 			}
       Schedule SchedCur=new Schedule();
       SchedCur.SchedDate=Appointments.DateSelected;
+			if(ContrApptSheet.IsWeeklyView) {
+				SchedCur.SchedDate=WeekStartDate.AddDays(SheetClickedonDay);
+			}
 			SchedCur.SchedType=ScheduleType.Blockout;
 		  FormScheduleBlockEdit FormSB=new FormScheduleBlockEdit(SchedCur);
       FormSB.IsNew=true;
@@ -3321,6 +3331,9 @@ namespace OpenDental{
 			}
 			FormBlockoutCutCopyPaste FormB=new FormBlockoutCutCopyPaste();
 			FormB.DateSelected=Appointments.DateSelected;
+			if(ContrApptSheet.IsWeeklyView) {
+				FormB.DateSelected=WeekStartDate.AddDays(SheetClickedonDay);
+			}
 			if(comboView.SelectedIndex==0){
 				FormB.ApptViewNumCur=0;
 			}
@@ -3338,7 +3351,12 @@ namespace OpenDental{
 			if(!MsgBox.Show(this,true,"Clear all blockouts for day?")){
 				return;
 			}
-			Schedules.ClearBlockoutsForDay(Appointments.DateSelected);
+			if(ContrApptSheet.IsWeeklyView) {
+				Schedules.ClearBlockoutsForDay(WeekStartDate.AddDays(SheetClickedonDay));
+			}
+			else{
+				Schedules.ClearBlockoutsForDay(Appointments.DateSelected);
+			}
 			RefreshPeriod();
 		}
 
