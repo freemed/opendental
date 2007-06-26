@@ -2849,7 +2849,9 @@ namespace OpenDental{
 			for(int i=0;i<keys.Length;i++) {
 				row=new ODGridRow();
 				row.Cells.Add(Lan.g("TableChartPtInfo","Registration Key"));
-				row.Cells.Add(keys[i].RegKey+":  "+keys[i].Note);
+				string visRegKey=keys[i].RegKey.Substring(0,4)+"-"+keys[i].RegKey.Substring(4,4)+"-"+
+					keys[i].RegKey.Substring(8,4)+"-"+keys[i].RegKey.Substring(12,4);
+				row.Cells.Add(visRegKey+":  "+keys[i].Note);
 				gridPtInfo.Rows.Add(row);
 			}
 			ODGridCell cell;
