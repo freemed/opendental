@@ -5404,17 +5404,22 @@ namespace OpenDental{
 					+"'0')";
 				General.NonQEx(command);
 				//After r442
-				command = "INSERT INTO preference VALUES('FuchsOptionsOn','0')";
+				command="INSERT INTO preference VALUES('FuchsOptionsOn','0')";
 				General.NonQEx(command);
 				//change these from 0 to nothing
-				command = "UPDATE preference SET ValueString = '' WHERE PrefName = 'StationaryImage'";
+				command="UPDATE preference SET ValueString = '' WHERE PrefName = 'StationaryImage'";
 				General.NonQEx(command);
-				command = command = "UPDATE preference SET ValueString = '' WHERE PrefName = 'StationaryDocument'";
+				command=command = "UPDATE preference SET ValueString = '' WHERE PrefName = 'StationaryDocument'";
 				General.NonQEx(command);
-				command = "INSERT INTO preference VALUES('WordProcessorPath','')";
+				command="INSERT INTO preference VALUES('WordProcessorPath','')";
 				General.NonQEx(command);
-
-
+				//After r457
+				if(DataConnection.DBtype==DatabaseType.MySql){
+					command="ALTER TABLE refattach CHANGE RefAttachNum RefAttachNum int unsigned NOT NULL auto_increment";
+				}else{
+					command="ALTER TABLE refattach MODIFY (RefAttachNum int)";
+				}
+				General.NonQEx(command);
 
 
 				

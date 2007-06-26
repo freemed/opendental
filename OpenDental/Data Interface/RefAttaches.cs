@@ -42,13 +42,23 @@ namespace OpenDental{
 
 		///<summary></summary>
 		public static void Insert(RefAttach attach){
-			string command= "INSERT INTO refattach (referralnum,patnum,"
-				+"itemorder,refdate,IsFrom) VALUES("
-				+"'"+POut.PInt   (attach.ReferralNum)+"', "
-				+"'"+POut.PInt   (attach.PatNum)+"', "
-				+"'"+POut.PInt   (attach.ItemOrder)+"', "
-				+POut.PDate  (attach.RefDate)+", "
-				+"'"+POut.PBool  (attach.IsFrom)+"')";
+			if(PrefB.RandomKeys){
+				attach.RefAttachNum=MiscData.GetKey("refattach","RefAttachNum");
+			}
+			string command="INSERT INTO refattach (";
+			if(PrefB.RandomKeys){
+				command+="RefAttachNum,";
+			}			
+			command+="referralnum,patnum,"
+				+"itemorder,refdate,IsFrom) VALUES (";
+			if(PrefB.RandomKeys){
+				command+="'"+POut.PInt(attach.RefAttachNum)+"', ";
+			}
+			command+="'"+POut.PInt(attach.ReferralNum)+"', "
+				+"'"+POut.PInt(attach.PatNum)+"', "
+				+"'"+POut.PInt(attach.ItemOrder)+"', "
+				+POut.PDate(attach.RefDate)+", "
+				+"'"+POut.PBool(attach.IsFrom)+"')";
  			attach.RefAttachNum=General.NonQ(command,true);
 		}
 
@@ -57,9 +67,7 @@ namespace OpenDental{
 			string command= "DELETE FROM refattach "
 				+"WHERE refattachnum = '"+attach.RefAttachNum+"'";
  			General.NonQ(command);
-		}
-
-		
+		}		
 
 		///<summary></summary>
 		public static bool IsReferralAttached(int referralNum){
