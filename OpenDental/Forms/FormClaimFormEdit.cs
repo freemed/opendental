@@ -1190,11 +1190,16 @@ namespace OpenDental{
 						continue;
 					}
 					string fileName=ODFileUtils.CombinePaths(FormPath.GetPreferredImagePath(),ClaimFormCur.Items[i].ImageFileName);
-					if(!File.Exists(fileName)){
-						MessageBox.Show("File not found.");
-						continue;
+					Image thisImage=null;
+					if(ClaimFormCur.Items[i].ImageFileName=="ADA2006.gif"){
+						thisImage=CDT.Class1.GetADA2006();
+					}else{
+						if(!File.Exists(fileName)){
+							MessageBox.Show("File not found.");
+							continue;
+						}
+						thisImage=Image.FromFile(fileName);
 					}
-					Image thisImage=Image.FromFile(fileName);
 					if(fileName.Substring(fileName.Length-3)=="jpg"){
 						grfx.DrawImage(thisImage
 							,ClaimFormCur.Items[i].XPos+ClaimFormCur.OffsetX
