@@ -314,13 +314,6 @@ namespace OpenDental.Properties {
             }
         }
         
-        internal static System.Drawing.Bitmap stationary_sample {
-            get {
-                object obj = ResourceManager.GetObject("stationary sample", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
         internal static System.Drawing.Bitmap stationary_sample1 {
             get {
                 object obj = ResourceManager.GetObject("stationary sample1", resourceCulture);

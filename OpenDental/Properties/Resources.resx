@@ -184,9 +184,6 @@
   <data name="butExportExcel" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\butExportExcel.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="stationary sample" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\stationary sample.jpg;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="canadiancarriers" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\canadiancarriers.txt;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
