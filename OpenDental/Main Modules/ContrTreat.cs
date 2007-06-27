@@ -1661,15 +1661,9 @@ namespace OpenDental{
 				DrawProcsOfStatus(ProcStat.C);
 				DrawProcsOfStatus(ProcStat.R);
 				DrawProcsOfStatus(ProcStat.TP);
-				toothChart.Refresh();
-				Thread.Sleep(1000);//wait for 1 full second for graphics to refresh.
-				//chartBitmap=new Bitmap(toothChart.Width,toothChart.Height);
+				toothChart.AutoFinish=true;
 				chartBitmap=toothChart.GetBitmap();
-				//Graphics g=Graphics.FromImage(chartBitmap);
-				//Rectangle bounds=Rectangle.FromLTRB(0,0,chartBitmap.Width,chartBitmap.Height);
-				//toothChart.DrawToBitmap(chartBitmap,bounds);
 				toothChart.Dispose();
-				//panelHide.Dispose();
 			}
 			#if DEBUG
 				PrintReport(true);

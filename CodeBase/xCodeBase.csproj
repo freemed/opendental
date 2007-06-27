@@ -72,6 +72,10 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Controls\OpenGLWinFormsControl.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>OpenGLWinFormsControl.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Utilities\MsgBoxCopyPaste.resx">
       <DependentUpon>MsgBoxCopyPaste.cs</DependentUpon>
       <SubType>Designer</SubType>

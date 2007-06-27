@@ -49,6 +49,7 @@
 
 using System;
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.Collections.Generic;
 using System.Text;
 using System.Windows.Forms;
@@ -71,7 +72,8 @@ namespace CodeBase {
 		protected IntPtr deviceContext = IntPtr.Zero,renderContext = IntPtr.Zero;
 		protected bool renderEnabled = false;
 
-		protected bool autoMakeCurrent = true,autoSwapBuffers = false,autoFinish = false,usehardware=true;
+		protected bool autoMakeCurrent = true,autoSwapBuffers = false,usehardware=true;
+		public bool autoFinish=false;
 
 		protected byte accumBits = 0,colorBits = 32,depthBits = 16,stencilBits = 0;
 		protected int lastErrorCode = Gl.GL_NO_ERROR;
@@ -408,6 +410,23 @@ namespace CodeBase {
 			Invalidate();
 		}
 
+		///<summary>Reads the contents of the front OpenGL drawing surface and returns an unaltered, unscaled copy as an image. The idea is that one would first draw using OpenGL, perform a swap (if double buffering), then read the contents of the resulting image to perform an operation on it, then use the final image for rendering.</summary>
+		public Bitmap ReadFrontBuffer(){
+			byte[] data=new byte[3*this.Width*this.Height];//3 components in each pixel of the width X height image.
+			Gl.glReadPixels(0,0,this.Width,this.Height,Gl.GL_RGB,Gl.GL_UNSIGNED_BYTE,data);
+			//The red and blue components are swapped in comparison of the returned OpenGL image and a windows bitmap. The returned image data is also inverted on over the x-axis (in the y or vertical direction). Otherwise, this function would be very fast, because we could just basically return the data into the bitmap in just a few lines of code.
+			for(int i=0;i<3*this.Width*this.Height;i+=3){
+				//Swap the red and blue components of the current pixel.
+				byte temp=data[i];
+				data[i]=data[i+2];
+				data[i+2]=temp;
+			}
+			IntPtr dataPtr=GCHandle.Alloc(data,GCHandleType.Pinned).AddrOfPinnedObject();
+			Bitmap result=new Bitmap(this.Width,this.Height,3*this.Width,PixelFormat.Format24bppRgb,dataPtr);
+			result.RotateFlip(RotateFlipType.RotateNoneFlipY);
+			return result;
+		}
+
 		#endregion
 
 		#region Control Methods
@@ -418,7 +437,10 @@ namespace CodeBase {
 
 		protected override void OnPaint(PaintEventArgs e) {
 			base.OnPaint(e);
+			Paint(e);
+		}
 
+		public void Paint(PaintEventArgs e) {
 			//Only draw with OpenGL if rendering is enabled (disabled by default for designing)
 			if(renderEnabled) {
 				//Initialize the device and rendering contexts if the user hasn't already
@@ -427,13 +449,13 @@ namespace CodeBase {
 				//Make this the current context
 				if(autoMakeCurrent) {
 					//Only switch contexts if this is already not the current context
-					if(renderContext != Wgl.wglGetCurrentContext()) {
+					if(renderContext!=Wgl.wglGetCurrentContext()) {
 						MakeCurrentContext();
 					}
 				}
 
 				//Fire the user-defined TaoRenderScene event
-				if(TaoRenderScene != null) {
+				if(TaoRenderScene!=null) {
 					TaoRenderScene(this,null);
 				}
 
@@ -443,11 +465,11 @@ namespace CodeBase {
 				}
 
 				//Automatically check for errors
-				lastErrorCode = Gl.glGetError();
+				lastErrorCode=Gl.glGetError();
 
-				if(lastErrorCode != Gl.GL_NO_ERROR) {
+				if(lastErrorCode!=Gl.GL_NO_ERROR) {
 					//Fire the error handling event
-					if(TaoOpenGLError != null) {
+					if(TaoOpenGLError!=null) {
 						TaoOpenGLError(this,new OpenGLErrorEventArgs(lastErrorCode));
 					}
 				}
@@ -456,8 +478,7 @@ namespace CodeBase {
 				if(autoSwapBuffers) {
 					Gdi.SwapBuffersFast(deviceContext);
 				}
-			}
-			else {
+			} else {
 				//Draw the background for this control when it's in design
 				//mode (TaoRenderEnabled = false)
 				DrawDesignBackground(e.Graphics);

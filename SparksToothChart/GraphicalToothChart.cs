@@ -153,6 +153,15 @@ namespace SparksToothChart {
 			}
 		}
 
+		public bool AutoFinish{
+			get{
+				return toothChart.autoFinish;
+			}
+			set{
+				toothChart.autoFinish=value;
+			}
+		}
+
 		#endregion Properties
 
 		private void ResetControls(){
@@ -397,12 +406,13 @@ namespace SparksToothChart {
 
 		///<summary>Returns a bitmap of what is showing in the control.  Used for printing.</summary>
 		public Bitmap GetBitmap() {
-			Bitmap bitmap=new Bitmap(this.Width,this.Height);
-			Graphics g=Graphics.FromImage(bitmap);
-			Point screenLoc=PointToScreen(Location);
-			g.CopyFromScreen(screenLoc.X,screenLoc.Y,0,0,new Size(Width,Height));
+			Bitmap dummy=new Bitmap(toothChart.Width,toothChart.Height);
+			Graphics g=Graphics.FromImage(dummy);
+			PaintEventArgs e=new PaintEventArgs(g,new Rectangle(0,0,dummy.Width,dummy.Height));
+			toothChart.Paint(e);
+			Bitmap result=toothChart.ReadFrontBuffer();
 			g.Dispose();
-			return bitmap;
+			return result;
 		}
 
 		#endregion
