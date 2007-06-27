@@ -4893,7 +4893,7 @@ namespace OpenDental{
 				//Key is grabbed from cell text using regex, so that if key formats change, this code will not be buggy.
 				Match m=Regex.Match(row.Cells[1].Text,"^(.*):.*$");
 				if(m.Success) {
-					string registrationKey=m.Result("$1");
+					string registrationKey=m.Result("$1").Replace("-","");
 					for(int i=0;i<registrationKeys.Length;i++) {
 						if(registrationKeys[i].RegKey==registrationKey) {
 							FormRegistrationKeyEdit frke=new FormRegistrationKeyEdit(registrationKeys[i]);
