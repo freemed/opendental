@@ -1163,7 +1163,7 @@ namespace OpenDental{
 						return false;
 					}
 					if(!FormRegistrationKey.ValidateKey(PrefB.GetString("RegistrationKey"))){
-						//true){//
+						//true){
 						FormRegistrationKey FormR=new FormRegistrationKey();
 						FormR.ShowDialog();
 						if(FormR.DialogResult!=DialogResult.OK){

@@ -17,7 +17,6 @@ namespace OpenDental{
 		private TextBox textKey2;
 		private TextBox textKey3;
 		private TextBox textKey4;
-		private TextBox textAgreement;
 		private Label label2;
 		private CheckBox checkAgree;
 		/// <summary>
@@ -27,6 +26,7 @@ namespace OpenDental{
 		private string prevKey1Text="";
 		private string prevKey2Text="";
 		private string prevKey3Text="";
+		private RichTextBox richTextAgreement;
 		private string prevKey4Text="";
 
 		///<summary></summary>
@@ -67,24 +67,25 @@ namespace OpenDental{
 			this.textKey2 = new System.Windows.Forms.TextBox();
 			this.textKey3 = new System.Windows.Forms.TextBox();
 			this.textKey4 = new System.Windows.Forms.TextBox();
-			this.textAgreement = new System.Windows.Forms.TextBox();
 			this.label2 = new System.Windows.Forms.Label();
 			this.checkAgree = new System.Windows.Forms.CheckBox();
 			this.butOK = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
+			this.richTextAgreement = new System.Windows.Forms.RichTextBox();
 			this.SuspendLayout();
 			// 
 			// label1
 			// 
-			this.label1.Location = new System.Drawing.Point(85,9);
+			this.label1.Location = new System.Drawing.Point(164,6);
 			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(266,27);
+			this.label1.Size = new System.Drawing.Size(266,19);
 			this.label1.TabIndex = 2;
-			this.label1.Text = "Please enter the Registration Key we provided you.";
+			this.label1.Text = "Registration Key";
+			this.label1.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
 			// 
 			// textKey1
 			// 
-			this.textKey1.Location = new System.Drawing.Point(85,31);
+			this.textKey1.Location = new System.Drawing.Point(164,29);
 			this.textKey1.Name = "textKey1";
 			this.textKey1.Size = new System.Drawing.Size(62,20);
 			this.textKey1.TabIndex = 0;
@@ -94,7 +95,7 @@ namespace OpenDental{
 			// 
 			// textKey2
 			// 
-			this.textKey2.Location = new System.Drawing.Point(153,31);
+			this.textKey2.Location = new System.Drawing.Point(232,29);
 			this.textKey2.Name = "textKey2";
 			this.textKey2.Size = new System.Drawing.Size(62,20);
 			this.textKey2.TabIndex = 1;
@@ -103,7 +104,7 @@ namespace OpenDental{
 			// 
 			// textKey3
 			// 
-			this.textKey3.Location = new System.Drawing.Point(221,31);
+			this.textKey3.Location = new System.Drawing.Point(300,29);
 			this.textKey3.Name = "textKey3";
 			this.textKey3.Size = new System.Drawing.Size(62,20);
 			this.textKey3.TabIndex = 2;
@@ -112,39 +113,27 @@ namespace OpenDental{
 			// 
 			// textKey4
 			// 
-			this.textKey4.Location = new System.Drawing.Point(289,31);
+			this.textKey4.Location = new System.Drawing.Point(368,29);
 			this.textKey4.Name = "textKey4";
 			this.textKey4.Size = new System.Drawing.Size(62,20);
 			this.textKey4.TabIndex = 3;
 			this.textKey4.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textKey4_KeyPress);
 			this.textKey4.TextChanged += new System.EventHandler(this.textKey4_TextChanged);
 			// 
-			// textAgreement
-			// 
-			this.textAgreement.Location = new System.Drawing.Point(26,85);
-			this.textAgreement.Multiline = true;
-			this.textAgreement.Name = "textAgreement";
-			this.textAgreement.ReadOnly = true;
-			this.textAgreement.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-			this.textAgreement.Size = new System.Drawing.Size(387,359);
-			this.textAgreement.TabIndex = 5;
-			this.textAgreement.TabStop = false;
-			// 
 			// label2
 			// 
-			this.label2.AutoSize = true;
 			this.label2.Location = new System.Drawing.Point(26,66);
 			this.label2.Name = "label2";
-			this.label2.Size = new System.Drawing.Size(99,13);
+			this.label2.Size = new System.Drawing.Size(150,13);
 			this.label2.TabIndex = 6;
 			this.label2.Text = "Licence Agreement";
+			this.label2.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
 			// 
 			// checkAgree
 			// 
-			this.checkAgree.AutoSize = true;
-			this.checkAgree.Location = new System.Drawing.Point(29,462);
+			this.checkAgree.Location = new System.Drawing.Point(26,559);
 			this.checkAgree.Name = "checkAgree";
-			this.checkAgree.Size = new System.Drawing.Size(333,17);
+			this.checkAgree.Size = new System.Drawing.Size(373,17);
 			this.checkAgree.TabIndex = 7;
 			this.checkAgree.Text = "I agree to the terms of the above license agreement in its entirety.";
 			this.checkAgree.UseVisualStyleBackColor = true;
@@ -159,7 +148,7 @@ namespace OpenDental{
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
 			this.butOK.Enabled = false;
-			this.butOK.Location = new System.Drawing.Point(270,496);
+			this.butOK.Location = new System.Drawing.Point(546,557);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75,26);
 			this.butOK.TabIndex = 4;
@@ -174,20 +163,28 @@ namespace OpenDental{
 			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
-			this.butCancel.Location = new System.Drawing.Point(351,496);
+			this.butCancel.Location = new System.Drawing.Point(627,557);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75,26);
 			this.butCancel.TabIndex = 0;
 			this.butCancel.Text = "&Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
 			// 
+			// richTextAgreement
+			// 
+			this.richTextAgreement.Location = new System.Drawing.Point(26,82);
+			this.richTextAgreement.Name = "richTextAgreement";
+			this.richTextAgreement.Size = new System.Drawing.Size(675,465);
+			this.richTextAgreement.TabIndex = 8;
+			this.richTextAgreement.Text = "";
+			// 
 			// FormRegistrationKey
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
-			this.ClientSize = new System.Drawing.Size(438,534);
+			this.ClientSize = new System.Drawing.Size(720,597);
+			this.Controls.Add(this.richTextAgreement);
 			this.Controls.Add(this.checkAgree);
 			this.Controls.Add(this.label2);
-			this.Controls.Add(this.textAgreement);
 			this.Controls.Add(this.textKey1);
 			this.Controls.Add(this.textKey4);
 			this.Controls.Add(this.textKey3);
@@ -218,6 +215,7 @@ namespace OpenDental{
 				textKey3.Text=key.Substring(8,4);
 				textKey4.Text=key.Substring(12,4);
 			}
+			richTextAgreement.Rtf=Properties.Resources.CDT_Content_End_User_License;  //LoadFile(
 		}
 
 		public static bool ValidateKey(string keystr){

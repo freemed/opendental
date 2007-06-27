@@ -2867,6 +2867,7 @@
   <ItemGroup>
     <Content Include="Misc\App.ico" />
     <Content Include="Misc\TerminalMgr.ico" />
+    <None Include="Resources\CDT Content End User License.rtf" />
     <None Include="Resources\stationary sample1.jpg" />
     <None Include="Resources\stationary sample.jpg" />
     <None Include="Resources\ClaimForm.xml" />

@@ -187,6 +187,21 @@ namespace OpenDental.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to {\rtf1\ansi\ansicpg1252\deff0\deflang1033{\fonttbl{\f0\froman\fcharset0 Times New Roman;}{\f1\fswiss\fcharset0 Arial;}}
+        ///{\colortbl ;\red0\green0\blue0;}
+        ///{\*\generator Msftedit 5.41.15.1507;}\viewkind4\uc1\pard\cf1\b\f0\fs24 CDT Content End User License\par
+        ///\par
+        ///Definitions\par
+        ///\par
+        ///\pard\sa240\b0\ldblquote CDT\rdblquote  means the textual, graphic and other editorial content included in the ADA developed publications titled \ul\i CDT-2007/2008: Current Dental Terminology \ulnone\i0 (\ldblquote CDT-200 [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string CDT_Content_End_User_License {
+            get {
+                return ResourceManager.GetString("CDT_Content_End_User_License", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
         ///&lt;ClaimForm xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xmlns:xsd=&quot;http://www.w3.org/2001/XMLSchema&quot;&gt;
         ///  &lt;Description&gt;ADA 2006&lt;/Description&gt;
