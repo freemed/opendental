@@ -2641,7 +2641,7 @@ namespace OpenDental{
 			if(formPS.DialogResult!=DialogResult.OK){
 				return;
 			}
-			RefreshModulePatient(PatCurNum);
+			RefreshModulePatient(formPS.SelectedPatNum);
 			DisplayOtherDlg(false);
 		}
 
