@@ -1568,8 +1568,10 @@ namespace OpenDental{
 		}
 
 		private void FormApptEdit_FormClosing(object sender,FormClosingEventArgs e) {
-			if(DialogResult!=DialogResult.OK){
-				Appointments.Delete(AptCur.AptNum);		
+			if(DialogResult==DialogResult.OK)
+				return;
+			if(IsNew) {
+				Appointments.Delete(AptCur);
 			}
 		}
 
