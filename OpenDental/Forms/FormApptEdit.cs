@@ -1571,7 +1571,7 @@ namespace OpenDental{
 			if(DialogResult==DialogResult.OK)
 				return;
 			if(IsNew) {
-				Appointments.Delete(AptCur);
+				Appointments.Delete(AptCur.AptNum);
 			}
 		}
 
