@@ -283,18 +283,13 @@ namespace CodeBase {
 			Logger.openlog.Log(this,"ChoosePixelFormatEx","Done. Chosen format="+maxindex,Logger.Severity.INFO);
 			return pfd;
 		}
+
 		/// <summary>
 		/// Creates the device and rendering contexts using the supplied settings
 		/// in accumBits, colorBits, depthBits, and stencilBits.
 		/// </summary>
-		protected virtual void CreateContexts() {
-			//Make sure the handle for this control has been created
-			if(this.Handle == IntPtr.Zero) {
-				throw new Exception("CreateContexts: The control's window handle has not been created.");
-			}
-
-			//Create device context
-			deviceContext = User.GetDC(this.Handle);
+		protected virtual void CreateContexts(IntPtr pDeviceContext) {
+			deviceContext = pDeviceContext;
 
 			if(deviceContext == IntPtr.Zero) {
 				throw new Exception("CreateContexts: Unable to create an OpenGL device context");
@@ -388,14 +383,21 @@ namespace CodeBase {
 
 		#region Public Methods
 
+		public void TaoInitializeContexts() {
+			//Make sure the handle for this control has been created
+			if(this.Handle==IntPtr.Zero) {
+				throw new Exception("CreateContexts: The control's window handle has not been created.");
+			}
+			TaoInitializeContexts(User.GetDC(this.Handle));
+		}
+
 		/// <summary>
 		/// Creates device and rendering contexts then fires the user-defined SetupContext event
 		/// (if the contexts have not already been created). Call this in your initialization routine.
 		/// </summary>
-		public void TaoInitializeContexts() {
+		public void TaoInitializeContexts(IntPtr pDeviceContext) {
 			if(!ContextsReady) {
-				CreateContexts();
-
+				CreateContexts(pDeviceContext);
 				//Fire the user-defined TaoSetupContext event
 				if(TaoSetupContext != null) {
 					TaoSetupContext(this,null);
@@ -437,14 +439,14 @@ namespace CodeBase {
 
 		protected override void OnPaint(PaintEventArgs e) {
 			base.OnPaint(e);
-			Paint(e);
+			Render(e);
 		}
 
-		public void Paint(PaintEventArgs e) {
+		public void Render(PaintEventArgs e) {
 			//Only draw with OpenGL if rendering is enabled (disabled by default for designing)
 			if(renderEnabled) {
 				//Initialize the device and rendering contexts if the user hasn't already
-				TaoInitializeContexts();
+				TaoInitializeContexts(e.Graphics.GetHdc());
 
 				//Make this the current context
 				if(autoMakeCurrent) {

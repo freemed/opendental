@@ -409,7 +409,7 @@ namespace SparksToothChart {
 			Bitmap dummy=new Bitmap(toothChart.Width,toothChart.Height);
 			Graphics g=Graphics.FromImage(dummy);
 			PaintEventArgs e=new PaintEventArgs(g,new Rectangle(0,0,dummy.Width,dummy.Height));
-			toothChart.Paint(e);
+			toothChart.Render(e);
 			Bitmap result=toothChart.ReadFrontBuffer();
 			g.Dispose();
 			return result;
@@ -466,8 +466,12 @@ namespace SparksToothChart {
 			if(toothGraphic.DrawBigX) {
 				//toothGraphic.colorX
 				if(ToothGraphic.IsMaxillary(toothGraphic.ToothID)) {
-					g.DrawLine(new Pen(toothGraphic.colorX),x-20,Height/2f-100,x+20,Height/2f-20);
-					g.DrawLine(new Pen(toothGraphic.colorX),x+20,Height/2f-100,x-20,Height/2f-20);
+					float halfxwidth=20;
+					if(SimpleMode){
+						halfxwidth=8;
+					}
+					g.DrawLine(new Pen(toothGraphic.colorX),x-halfxwidth,Height/2f-100,x+halfxwidth,Height/2f-20);
+					g.DrawLine(new Pen(toothGraphic.colorX),x+halfxwidth,Height/2f-100,x-halfxwidth,Height/2f-20);
 				}
 				else {
 					
