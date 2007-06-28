@@ -339,7 +339,7 @@ namespace OpenDental{
 						commlog.Mode_=CommItemMode.Mail;
 					}
 					else{
-						commlog.Mode_=CommItemMode.InPerson;
+						commlog.Mode_=CommItemMode.None;//.InPerson;
 					}
 					commlog.PatNum=patNums[i][0];//uaually the guarantor
 					//there is no dialog here because it is just a simple entry
