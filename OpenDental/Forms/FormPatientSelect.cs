@@ -139,6 +139,7 @@ namespace OpenDental{
 			this.textLName.Enter += new System.EventHandler(this.textBox_Enter);
 			this.textLName.Leave += new System.EventHandler(this.textBox_Leave);
 			this.textLName.TextChanged += new System.EventHandler(this.textLName_TextChanged);
+			this.textLName.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textLName_KeyDown);
 			// 
 			// label1
 			// 
@@ -256,6 +257,7 @@ namespace OpenDental{
 			this.textChartNumber.TabIndex = 8;
 			this.textChartNumber.Enter += new System.EventHandler(this.textBox_Enter);
 			this.textChartNumber.TextChanged += new System.EventHandler(this.textChartNumber_TextChanged);
+			this.textChartNumber.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textChartNumber_KeyDown);
 			// 
 			// listBillingTypes
 			// 
@@ -274,6 +276,7 @@ namespace OpenDental{
 			this.textSSN.TabIndex = 6;
 			this.textSSN.Enter += new System.EventHandler(this.textBox_Enter);
 			this.textSSN.TextChanged += new System.EventHandler(this.textSSN_TextChanged);
+			this.textSSN.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textSSN_KeyDown);
 			// 
 			// label12
 			// 
@@ -310,6 +313,7 @@ namespace OpenDental{
 			this.textPatNum.TabIndex = 7;
 			this.textPatNum.Enter += new System.EventHandler(this.textBox_Enter);
 			this.textPatNum.TextChanged += new System.EventHandler(this.textPatNum_TextChanged);
+			this.textPatNum.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textPatNum_KeyDown);
 			// 
 			// label9
 			// 
@@ -328,6 +332,7 @@ namespace OpenDental{
 			this.textState.TabIndex = 5;
 			this.textState.Enter += new System.EventHandler(this.textBox_Enter);
 			this.textState.TextChanged += new System.EventHandler(this.textState_TextChanged);
+			this.textState.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textState_KeyDown);
 			// 
 			// label8
 			// 
@@ -346,6 +351,7 @@ namespace OpenDental{
 			this.textCity.TabIndex = 4;
 			this.textCity.Enter += new System.EventHandler(this.textBox_Enter);
 			this.textCity.TextChanged += new System.EventHandler(this.textCity_TextChanged);
+			this.textCity.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textCity_KeyDown);
 			// 
 			// label7
 			// 
@@ -393,6 +399,7 @@ namespace OpenDental{
 			this.textAddress.TabIndex = 3;
 			this.textAddress.Enter += new System.EventHandler(this.textBox_Enter);
 			this.textAddress.TextChanged += new System.EventHandler(this.textAddress_TextChanged);
+			this.textAddress.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textAddress_KeyDown);
 			// 
 			// label5
 			// 
@@ -411,6 +418,7 @@ namespace OpenDental{
 			this.textHmPhone.TabIndex = 2;
 			this.textHmPhone.Enter += new System.EventHandler(this.textBox_Enter);
 			this.textHmPhone.TextChanged += new System.EventHandler(this.textHmPhone_TextChanged);
+			this.textHmPhone.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textHmPhone_KeyDown);
 			// 
 			// label4
 			// 
@@ -429,6 +437,7 @@ namespace OpenDental{
 			this.textFName.TabIndex = 1;
 			this.textFName.Enter += new System.EventHandler(this.textBox_Enter);
 			this.textFName.TextChanged += new System.EventHandler(this.textFName_TextChanged);
+			this.textFName.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textFName_KeyDown);
 			// 
 			// label3
 			// 
@@ -498,6 +507,7 @@ namespace OpenDental{
 			this.gridMain.TranslationName = "FormPatientSelect";
 			this.gridMain.WrapText = false;
 			this.gridMain.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellDoubleClick);
+			this.gridMain.KeyDown += new System.Windows.Forms.KeyEventHandler(this.gridMain_KeyDown);
 			// 
 			// contrKeyboard1
 			// 
@@ -531,7 +541,6 @@ namespace OpenDental{
 			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Select Patient";
-			this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.FormSelectPatient_KeyDown);
 			this.Load += new System.EventHandler(this.FormSelectPatient_Load);
 			this.groupAddPt.ResumeLayout(false);
 			this.groupBox2.ResumeLayout(false);
@@ -807,9 +816,14 @@ namespace OpenDental{
 		private void gridMain_CellDoubleClick(object sender,ODGridClickEventArgs e) {
 			PatSelected();
 		}
-
+		private void OnArrowsUpDown(System.Windows.Forms.KeyEventArgs e){
+			if (e.KeyCode == Keys.Up){
+				gridMain_KeyDown(this,e);
+				//gridMain.KeyDown;
+			}
+		}
 		private void FormSelectPatient_KeyDown(object sender, System.Windows.Forms.KeyEventArgs e) {
-		
+			OnArrowsUpDown(e);
 		}
 
 		///<summary>Remember, this button is not even visible if SelectionModeOnly.</summary>
@@ -866,6 +880,64 @@ namespace OpenDental{
 
 		private void butCancel_Click(object sender, System.EventArgs e) {
 			DialogResult=DialogResult.Cancel;
+		}
+
+
+		private void textLName_KeyDown(object sender,KeyEventArgs e) {
+			if(e.KeyCode==Keys.Up | e.KeyCode==Keys.Down) 
+				gridMain.Refresh();
+		}
+
+		private void textFName_KeyDown(object sender,KeyEventArgs e) {
+			if(e.KeyCode==Keys.Up | e.KeyCode==Keys.Down) 
+				gridMain_KeyDown(sender, e);
+
+		}
+
+		private void gridMain_KeyDown(object sender,KeyEventArgs e) {
+		}
+
+
+		private void textHmPhone_KeyDown(object sender,KeyEventArgs e) {
+			if(e.KeyCode==Keys.Up | e.KeyCode==Keys.Down) 
+				gridMain_KeyDown(sender, e);
+
+		}
+
+		private void textAddress_KeyDown(object sender,KeyEventArgs e) {
+			if(e.KeyCode==Keys.Up | e.KeyCode==Keys.Down) 
+				gridMain_KeyDown(sender, e);
+
+		}
+
+		private void textCity_KeyDown(object sender,KeyEventArgs e) {
+			if(e.KeyCode==Keys.Up | e.KeyCode==Keys.Down) 
+				gridMain_KeyDown(sender, e);
+
+		}
+
+		private void textState_KeyDown(object sender,KeyEventArgs e) {
+			if(e.KeyCode==Keys.Up | e.KeyCode==Keys.Down) 
+				gridMain_KeyDown(sender, e);
+
+		}
+
+		private void textSSN_KeyDown(object sender,KeyEventArgs e) {
+			if(e.KeyCode==Keys.Up | e.KeyCode==Keys.Down) 
+				gridMain_KeyDown(sender, e);
+
+		}
+
+		private void textPatNum_KeyDown(object sender,KeyEventArgs e) {
+			if(e.KeyCode==Keys.Up | e.KeyCode==Keys.Down) 
+				gridMain_KeyDown(sender, e);
+
+		}
+
+		private void textChartNumber_KeyDown(object sender,KeyEventArgs e) {
+			if(e.KeyCode==Keys.Up | e.KeyCode==Keys.Down) 
+				gridMain_KeyDown(sender, e);
+
 		}
 
 		

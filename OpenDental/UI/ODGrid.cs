@@ -59,6 +59,7 @@ namespace OpenDental.UI{
 		private int MouseDownCol;
 		private bool ControlIsDown;
 		private bool ShiftIsDown;
+		//private bool UpDownKey;
 		private GridSelectionMode selectionMode;
 		private bool MouseIsDown;
 		private bool MouseIsOver;//helps automate scrolling
@@ -1066,6 +1067,7 @@ namespace OpenDental.UI{
 		}
 
 		private void hScroll_Scroll(object sender,System.Windows.Forms.ScrollEventArgs e){
+			//if(UpDownKey) return;
 			Invalidate();
 			this.Focus();
 		}
@@ -1249,6 +1251,7 @@ namespace OpenDental.UI{
 			if(e.KeyCode==Keys.ShiftKey){
 				ShiftIsDown=true;
 			}
+
 		}
 
 		///<summary></summary>
@@ -1269,6 +1272,22 @@ namespace OpenDental.UI{
 			if(e.KeyCode==Keys.ShiftKey){
 				ShiftIsDown=true;
 			}
+			if(selectionMode==GridSelectionMode.One){
+				if (e.KeyCode==Keys.Down){
+						int PrevRow=(int)selectedIndices[0];
+						selectedIndices.Clear();
+						selectedIndices.Add(PrevRow +1);
+						hScroll.Value=hScroll.Minimum;
+
+				}
+				else if (e.KeyCode==Keys.Up){
+						int PrevRow=(int)selectedIndices[0];
+					if (PrevRow>0){
+						selectedIndices.Clear();
+						selectedIndices.Add(PrevRow -1);
+					}
+				}
+			}
 		}
 
 		private void Parent_KeyUp(Object sender,KeyEventArgs e){
@@ -1278,6 +1297,10 @@ namespace OpenDental.UI{
 			if(e.KeyCode==Keys.ShiftKey){
 				ShiftIsDown=false;
 			}
+			//if(e.KeyCode==Keys.Down | e.KeyCode==Keys.Up){
+			//	UpDownKey=false;
+			//	hScroll.Value=hScroll.Minimum;
+			//}
 		}
 
 		#endregion
