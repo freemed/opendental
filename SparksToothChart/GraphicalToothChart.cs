@@ -442,6 +442,7 @@ namespace SparksToothChart {
 			g.Dispose();
 		}
 
+		///<summary>Only called when in simple graphical mode.</summary>
 		private void DrawFacialView(ToothGraphic toothGraphic,Graphics g) {
 			float x,y;
 			x=GetTransX(toothGraphic.ToothID);
@@ -464,17 +465,17 @@ namespace SparksToothChart {
 				}
 			}
 			if(toothGraphic.DrawBigX) {
+				float halfxwidth=6;
+				float xheight=58;
+				float offsetofx=73;
 				//toothGraphic.colorX
-				if(ToothGraphic.IsMaxillary(toothGraphic.ToothID)) {
-					float halfxwidth=20;
-					if(SimpleMode){
-						halfxwidth=8;
-					}
-					g.DrawLine(new Pen(toothGraphic.colorX),x-halfxwidth,Height/2f-100,x+halfxwidth,Height/2f-20);
-					g.DrawLine(new Pen(toothGraphic.colorX),x+halfxwidth,Height/2f-100,x-halfxwidth,Height/2f-20);
+				if(ToothGraphic.IsMaxillary(toothGraphic.ToothID)) {					
+					g.DrawLine(new Pen(toothGraphic.colorX),x-halfxwidth,Height/2f-offsetofx-xheight,x+halfxwidth,Height/2f-offsetofx);
+					g.DrawLine(new Pen(toothGraphic.colorX),x+halfxwidth,Height/2f-offsetofx-xheight,x-halfxwidth,Height/2f-offsetofx);
 				}
-				else {
-					
+				else {//Mandible
+					g.DrawLine(new Pen(toothGraphic.colorX),x-halfxwidth,Height/2f+offsetofx+xheight,x+halfxwidth,Height/2f+offsetofx);
+					g.DrawLine(new Pen(toothGraphic.colorX),x+halfxwidth,Height/2f+offsetofx+xheight,x-halfxwidth,Height/2f+offsetofx);
 				}
 			}
 			if(toothGraphic.Visible && toothGraphic.IsRCT) {//draw RCT
