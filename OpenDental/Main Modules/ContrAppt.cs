@@ -1101,6 +1101,10 @@ namespace OpenDental{
 				Patients.AddPatsToMenu(menuPatient,new EventHandler(menuPatient_Click),PatCurName,PatCurNum);
 				butOther.Enabled=true;
 			}
+			butUnsched.Enabled=butOther.Enabled;
+			butBreak.Enabled=butOther.Enabled;
+			butComplete.Enabled=butOther.Enabled;
+			butDelete.Enabled=butOther.Enabled;
 			ParentForm.Text=Patients.GetMainTitle(PatCurName,PatCurNum,PatCurChartNumber);
 			OnPatientSelected(PatCurNum);
 		}
@@ -3183,7 +3187,6 @@ namespace OpenDental{
 					}
 				}
 			}
-
 			Appointments.Delete(ContrApptSingle.SelectedAptNum);
 			int thisI=GetIndex(ContrApptSingle.SelectedAptNum);
 			SecurityLogs.MakeLogEntry(Permissions.AppointmentEdit,PatCurNum,
@@ -3193,6 +3196,7 @@ namespace OpenDental{
 				+"Deleted");
 			ContrApptSingle.SelectedAptNum=-1;
 			ContrApptSingle.PinBoardIsSelected=false;
+			PatCurNum=0;
 			ModuleSelected(PatCurNum);
 			SetInvalid();
 		}		
