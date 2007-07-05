@@ -9,10 +9,10 @@ using System.Web.UI.WebControls;
 using System.Web.UI.WebControls.WebParts;
 using System.Web.UI.HtmlControls;
 
-namespace WebApplication {
-	public partial class Default:System.Web.UI.Page {
+namespace WebApplication.MainModules {
+	public partial class FamilyModule:System.Web.UI.Page {
 		protected void Page_Load(object sender,EventArgs e) {
-
+			Session["SelectedModule"]=1;
 		}
 	}
 }

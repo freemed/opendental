@@ -12,11 +12,11 @@ namespace WebApplication {
     
     
     /// <summary>
-    /// Default class.
+    /// ApptModule class.
     /// </summary>
     /// <remarks>
     /// Auto-generated class.
     /// </remarks>
-    public partial class Default {
+    public partial class ApptModule {
     }
 }
