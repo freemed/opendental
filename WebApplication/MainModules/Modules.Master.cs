@@ -40,11 +40,11 @@ namespace WebApplication {
 		}
 
 		protected void ImgButApt_Click(object sender,ImageClickEventArgs e) {
-			//selectedModule=0;
+			//not useful
 		}
 
 		protected void ImgButFamily_Click(object sender,ImageClickEventArgs e) {
-			//selectedModule=1;
+			//not useful
 		}
 
 		protected void Page_PreRender(object sender,EventArgs e){

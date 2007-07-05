@@ -24,7 +24,7 @@ namespace OpenDental{
 		public static int TimeWidth;
 		///<summary></summary>
 		public static int ProvWidth;
-		///<summary></summary>
+		///<summary>Line height.</summary>
 		public static int Lh;
 		///<summary>The number of columns.  Stays consistent even if weekly view.  The number of colums showing for one day.</summary>
 		public static int ColCount;

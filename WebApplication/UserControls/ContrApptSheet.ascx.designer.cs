@@ -8,33 +8,24 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace WebApplication {
+namespace WebApplication.UserControls {
     
     
     /// <summary>
-    /// ApptModule class.
+    /// ContrApptSheet class.
     /// </summary>
     /// <remarks>
     /// Auto-generated class.
     /// </remarks>
-    public partial class ApptModule {
+    public partial class ContrApptSheet {
         
         /// <summary>
-        /// ContrApptSheet2 control.
+        /// Table1 control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Panel ContrApptSheet2;
-        
-        /// <summary>
-        /// Calendar1 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Calendar Calendar1;
+        protected global::System.Web.UI.WebControls.Table Table1;
     }
 }
