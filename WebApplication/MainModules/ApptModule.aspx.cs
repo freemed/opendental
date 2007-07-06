@@ -17,7 +17,10 @@ namespace WebApplication {
 
 		protected void Page_Load(object sender,EventArgs e) {
 			Session["SelectedModule"]=0;
-			Calendar1.SelectedDate=DateTime.Today;
+			//string scrollY=Page.Request.Params[panelSheet.ClientID+"ScrollY"];
+			if(Calendar1.SelectedDate==DateTime.MinValue){
+				Calendar1.SelectedDate=DateTime.Today;
+			}
 			RefreshPeriod();
 		}
 
