@@ -14,13 +14,14 @@ namespace OpenDentBusiness {
 		public bool GraphicsUseHardware;
 		///<summary>Set to true to use the low-quality 2D tooth chart in the chart module. Set to false to use an 3D OpenGL based tooth chart in the chart module. This option is a work-around for machines where the OpenGL implementation on the local graphics hardware is buggy or unavailable (i.e. MONO).</summary>
 		public bool GraphicsSimple;
-
-		public ComputerPref(){
-			//OpenGL tooth chart not supported on Unix systems.
-			if(Environment.OSVersion.Platform==PlatformID.Unix){
-				GraphicsSimple=true;
-			}
-		}
+		///<summary>Indicates the type of Suni sensor connected to the local computer (if any). This can be a value of A, B, C, or D.</summary>
+		public string SensorType;
+		///<summary>Indicates wether or not the Suni sensor uses binned operation.</summary>
+		public bool SensorBinned;
+		///<summary>Indicates which Suni box port to connect with. There are 2 ports on a box (ports 0 and 1).</summary>
+		public int SensorPort;
+		///<summary>Indicates the exposure level to use when capturing from a Suni sensor. Values can be 1 through 7.</summary>
+		public int SensorExposure;
 
 		public ComputerPref Copy(){
 			ComputerPref cp=new ComputerPref();
@@ -28,6 +29,10 @@ namespace OpenDentBusiness {
 			cp.ComputerName=ComputerName;
 			cp.GraphicsUseHardware=GraphicsUseHardware;
 			cp.GraphicsSimple=GraphicsSimple;
+			cp.SensorType=SensorType;
+			cp.SensorBinned=SensorBinned;
+			cp.SensorPort=SensorPort;
+			cp.SensorExposure=SensorExposure;
 			return cp;
 		}
 	}

@@ -53,7 +53,7 @@ namespace OpenDental{
 				MsgBox.Show(this,"Cannot convert this database version which was only for development purposes.");
 				return false;
 			}
-			if(FromVersion < new Version("5.0.2.0")){
+			if(FromVersion < new Version("5.0.4.0")){
 				if(MessageBox.Show(Lan.g(this,"Your database will now be converted")+"\r"
 					+Lan.g(this,"from version")+" "+FromVersion.ToString()+"\r"
 					+Lan.g(this,"to version")+" "+ToVersion.ToString()+"\r"
@@ -5432,6 +5432,34 @@ namespace OpenDental{
 				string command="DELETE FROM appointment WHERE AptStatus=6 AND NOT EXISTS(SELECT * FROM patient WHERE patient.NextAptNum=appointment.AptNum)";
 				General.NonQEx(command);
 				command="UPDATE preference SET ValueString = '5.0.2.0' WHERE PrefName = 'DataBaseVersion'";
+				General.NonQEx(command);
+			}
+			To5_0_4();
+		}
+
+		///<summary></summary>
+		private void To5_0_4() {
+			if(FromVersion<new Version("5.0.4.0")) {
+				string command;
+				if(DataConnection.DBtype==DatabaseType.MySql){
+					command="ALTER TABLE computerpref ADD SensorType varchar(256) default 'D'";
+					General.NonQEx(command);
+					command="ALTER TABLE computerpref ADD SensorBinned varchar(1) default '0'";
+					General.NonQEx(command);
+				}else{//oracle.
+					command="ALTER TABLE computerpref ADD SensorType varchar2(256)";
+					General.NonQEx(command);
+					command="ALTER TABLE computerpref ADD SensorBinned varchar2(1) default '0'";
+					General.NonQEx(command);
+				}
+				command="ALTER TABLE computerpref ADD SensorPort int default '0'";
+				General.NonQEx(command);
+				command="ALTER TABLE computerpref ADD SensorExposure int default '1'";
+				General.NonQEx(command);
+				
+
+
+				command="UPDATE preference SET ValueString = '5.0.4.0' WHERE PrefName = 'DataBaseVersion'";
 				General.NonQEx(command);
 			}
 			//To5_0_?();

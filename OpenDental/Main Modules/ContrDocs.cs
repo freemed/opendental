@@ -128,7 +128,7 @@ namespace OpenDental{
 		Bitmap renderImage=null;
 		Rectangle cropTangle=new Rectangle(0,0,-1,-1);
 		///<summary>Used for performing an xRay image capture on an imaging device.</summary>
-		DeviceControl xRayImageController=null;
+		SuniDeviceControl xRayImageController=null;
 		///<summary>Thread to handle updating the graphical image to the screen when the current document is an image.</summary>
 		Thread myThread=null;
 		ApplySettings InvalidatedSettingsFlag;
@@ -2230,6 +2230,11 @@ namespace OpenDental{
 					DataRow obj=(DataRow)TreeDocuments.SelectedNode.Tag;
 					mountNum=Convert.ToInt32(obj["MountNum"].ToString());					
 				}
+				ComputerPref computerPrefs=ComputerPrefs.GetForLocalComputer();
+				xRayImageController.SensorType=computerPrefs.SensorType;
+				xRayImageController.PortNumber=computerPrefs.SensorPort;
+				xRayImageController.Binned=computerPrefs.SensorBinned;
+				xRayImageController.ExposureLevel=computerPrefs.SensorExposure;
 				if(mountNum==0) {//No mount is currently selected.
 					//Show the user that they are performing an image capture by generating a new mount.
 					Mount mount=new Mount();
@@ -2238,14 +2243,14 @@ namespace OpenDental{
 					mount.DocCategory=GetCurrentCategory();
 					mount.ImgType=ImageType.Mount;
 					mount.PatNum=PatCur.PatNum;
-					int border=80;
-					mount.Width=6400+5*border;
-					mount.Height=1156+2*border;
+					int border=Math.Max(xRayImageController.SensorSize.Width,xRayImageController.SensorSize.Height)/24;
+					mount.Width=4*xRayImageController.SensorSize.Width+5*border;
+					mount.Height=xRayImageController.SensorSize.Height+2*border;
 					mount.MountNum=Mounts.Insert(mount);
 					MountItem mountItem=new MountItem();
 					mountItem.MountNum=mount.MountNum;
-					mountItem.Width=1600;
-					mountItem.Height=1156;
+					mountItem.Width=xRayImageController.SensorSize.Width;
+					mountItem.Height=xRayImageController.SensorSize.Height;										
 					mountItem.Ypos=border;
 					mountItem.OrdinalPos=1;
 					mountItem.Xpos=border;
@@ -2662,7 +2667,7 @@ namespace OpenDental{
 					}else{
 						highlight=(Pen)Pens.SlateGray.Clone();//just surround other images with standard border.
 					}
-					highlight.Width=16;//Should be even
+					highlight.Width=Math.Max(mountItems[i].Width,mountItems[i].Height)/100.0f;
 					g.DrawRectangle(highlight,mountItems[i].Xpos-highlight.Width/2,mountItems[i].Ypos-highlight.Width/2,
 						mountItems[i].Width+highlight.Width,mountItems[i].Height+highlight.Width);
 				}
