@@ -7,11 +7,10 @@ using System.Net.Sockets;
 using System.Text;
 using System.Xml;
 using System.Xml.Serialization;
-using System.Windows.Forms;
 using OpenDentBusiness;
 
 namespace OpenDental {
-	class RemotingClient {
+	public class RemotingClient {
 		public static bool OpenDentBusinessIsLocal;
 		private static TcpClient client;
 		private static NetworkStream netStream;
@@ -77,7 +76,7 @@ namespace OpenDental {
 			}
 		}		
 
-		private static byte[] SendAndReceive(DataTransferObject dto){
+		internal static byte[] SendAndReceive(DataTransferObject dto){
 			byte[] data=dto.Serialize();
 			//#if DEBUG
 			//	string xmlString=Encoding.UTF8.GetString(data);

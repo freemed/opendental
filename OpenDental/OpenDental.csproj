@@ -168,6 +168,9 @@
     <Compile Include="Data Interface\CanadianExtracts.cs" />
     <Compile Include="Data Interface\ChartModule.cs" />
     <Compile Include="Data Interface\CanadianNetworks.cs" />
+    <Compile Include="Data Interface\MiscData.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Data Interface\ReqStudents.cs" />
     <Compile Include="Data Interface\ReqNeededs.cs" />
     <Compile Include="Data Interface\LabTurnarounds.cs" />
@@ -209,7 +212,6 @@
     <Compile Include="Data Interface\Letters.cs" />
     <Compile Include="Data Interface\MedicationPats.cs" />
     <Compile Include="Data Interface\Medications.cs" />
-    <Compile Include="Data Interface\MiscData.cs" />
     <Compile Include="Data Interface\AccountModule.cs" />
     <Compile Include="Data Interface\Operatories.cs" />
     <Compile Include="Data Interface\PatFieldDefs.cs" />
@@ -244,7 +246,6 @@
     <Compile Include="Data Interface\RefAttaches.cs" />
     <Compile Include="Data Interface\Referrals.cs" />
     <Compile Include="Data Interface\RegistrationKeys.cs" />
-    <Compile Include="Data Interface\RemotingClient.cs" />
     <Compile Include="Data Interface\RepeatCharges.cs" />
     <Compile Include="Data Interface\RxAlerts.cs" />
     <Compile Include="Data Interface\RxDefs.cs" />

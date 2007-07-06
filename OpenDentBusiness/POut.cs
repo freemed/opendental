@@ -6,12 +6,54 @@ using System.Globalization;
 using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
+using OpenDentBusiness.Properties;
 //using System.Windows.Forms;
 
 namespace OpenDentBusiness{
 
 	///<summary>Converts various datatypes into strings formatted correctly for MySQL. "P" was originally short for Parameter because this class was written specifically to replace parameters in the mysql queries. Using strings instead of parameters is much easier to debug.  This will later be rewritten as a System.IConvertible interface on custom mysql types.  I would rather not ever depend on the mysql connector for this so that this program remains very db independent.</summary>
 	public class POut{
+		public static string PObject(object value) {
+			if (value == null)
+				return string.Empty;
+
+			Type dataType = value.GetType();
+
+			if (dataType == typeof(string)) {
+				return '\'' + PString((string)value) + '\'';
+			}
+			else if (dataType.IsEnum) {
+				return ((int)value).ToString();
+			}
+			else if (dataType == typeof(Bitmap)) {
+				return PBitmap((Bitmap)value);
+			}
+			else if (dataType == typeof(bool)) {
+				return PBool((bool)value);
+			}
+			else if (dataType == typeof(Byte)) {
+				return PByte((Byte)value);
+			}
+			else if (dataType == typeof(DateTime)) {
+				return PDate((DateTime)value);
+			}
+			else if (dataType == typeof(TimeSpan)) {
+				return PTimeSpan((TimeSpan)value);
+			}
+			else if (dataType == typeof(double)) {
+				return PDouble((double)value);
+			}
+			else if (dataType == typeof(float)) {
+				return PFloat((float)value);
+			}
+			else if (dataType == typeof(int)) {
+				return PInt((int)value);
+			}
+			else {
+				throw new NotSupportedException(string.Format(Resources.DataTypeNotSupportedByPOut, dataType.Name));
+			}
+		}
+
 		///<summary></summary>
 		public static string PBool (bool myBool){
 			if (myBool==true){
@@ -81,6 +123,25 @@ namespace OpenDentBusiness{
 			catch{
 				//return "0000-00-00";
 				return "";//this saves zeros to the database
+			}
+		}
+
+		public static string PTimeSpan(TimeSpan myTimeSpan) {
+			return PTimeSpan(myTimeSpan, true);
+		}
+
+		public static string PTimeSpan(TimeSpan myTimeSpan, bool encapsulate) {
+			try {
+				string outTimeSpan = myTimeSpan.ToString();
+				string frontCap = "'";
+				string backCap = "'";
+				if (encapsulate) {
+					outTimeSpan = frontCap + outTimeSpan + backCap;
+				}
+				return outTimeSpan;
+			}
+			catch {
+				return "";//this saves zero's to the database
 			}
 		}
 
