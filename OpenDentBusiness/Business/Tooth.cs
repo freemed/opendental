@@ -97,7 +97,8 @@ namespace OpenDentBusiness{
 		///<summary>Sometimes validated by IsValidDB before coming here, otherwise an invalid toothnum .  This should be run on all displayed tooth numbers. It will handle checking for whether user is using international tooth numbers.  All tooth numbers are passed in american values until the very last moment.  Just before display, the string is converted using this method.</summary>
 		public static string ToInternat(string toothNum){
 			//if not using international tooth numbers, no change.
-			if(((Pref)PrefB.HList["UseInternationalToothNumbers"]).ValueString=="0"){
+			if(!PrefB.GetBool("UseInternationalToothNumbers")){
+				//((Pref)PrefB.HList[]).ValueString=="0"){
 				return toothNum;
 			}
 			if(toothNum==null || toothNum=="")

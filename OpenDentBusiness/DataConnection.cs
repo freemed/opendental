@@ -109,6 +109,7 @@ namespace OpenDentBusiness{
 			}
 		}
 
+		///<summary>This needs to be run every time we switch databases, especially on startup.  Will throw an exception if fails.  Calling class should catch exception.</summary>
 		public void SetDb(string server, string database,string user, string password, string userLow, string passLow, DatabaseType dbtype){
 			DBtype=dbtype;
 			string connectStr=BuildSimpleConnectionString(server,database,DefaultPortNum().ToString(),user,password);

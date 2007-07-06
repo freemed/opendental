@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ConnectionSettings>
+    <DatabaseConnection>
+        <ComputerName>localhost</ComputerName>
+        <Database>development51</Database>
+        <User>root</User>
+        <Password></Password>
+        <NoShowOnStartup>False</NoShowOnStartup>
+    </DatabaseConnection>
+    <DatabaseType>MySql</DatabaseType>
+</ConnectionSettings>

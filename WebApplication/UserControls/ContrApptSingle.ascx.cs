@@ -62,9 +62,10 @@ namespace WebApplication.UserControls {
 			int yPos=(int)(((double)(ContrApptSheet.Lh*6))*aptDateTime.TimeOfDay.TotalHours);
 			int xPos=op*ContrApptSheet.ColWidth;
 			Panel1.Style.Clear();
-			Panel1.Style.Add("position","relative");
+			Panel1.Style.Add("position","absolute");
 			Panel1.Style.Add("top",yPos.ToString()+"px");
 			Panel1.Style.Add("left",xPos.ToString()+"px");
+			//Panel1.Style.Add("overflow","hidden");
 			Label1.Text=patientName;
 		}
 

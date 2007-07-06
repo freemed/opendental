@@ -14,10 +14,10 @@ namespace WebApplication.UserControls {
 		///<summary>Line height.</summary>
 		public static int Lh=12;
 		///<summary>The width of each operatory.</summary>
-		public static int ColWidth=100;
+		public static int ColWidth=120;
 
 		protected void Page_Load(object sender,EventArgs e) {
-
+			
 		}
 	}
 }

@@ -19,3 +19,15 @@ td
 	font-size: 8pt;
 	color: Black;
 }
+
+.apptsheet
+{
+	position:absolute;
+	height:1968;
+}
+
+.panelsheet
+{
+	position:relative;
+	overflow:hidden;
+}

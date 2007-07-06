@@ -109,6 +109,9 @@ namespace OpenDentBusiness {
 			if(myDefNum==0){
 				return "";
 			}
+			if(Long==null){
+				Refresh();
+			}
 			for(int i=0;i<Long[(int)myCat].GetLength(0);i++) {
 				if(Long[(int)myCat][i].DefNum==myDefNum) {
 					return Long[(int)myCat][i].ItemName;

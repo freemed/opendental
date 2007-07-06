@@ -20,13 +20,22 @@ namespace WebApplication {
     public partial class ApptModule {
         
         /// <summary>
+        /// panelSheet control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel panelSheet;
+        
+        /// <summary>
         /// ContrApptSheet2 control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Panel ContrApptSheet2;
+        protected global::WebApplication.UserControls.ContrApptSheet ContrApptSheet2;
         
         /// <summary>
         /// Calendar1 control.

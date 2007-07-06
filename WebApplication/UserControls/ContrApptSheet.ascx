@@ -1,8 +1,29 @@
 <%@ Control Language="C#" AutoEventWireup="true" CodeBehind="ContrApptSheet.ascx.cs" Inherits="WebApplication.UserControls.ContrApptSheet" %>
-<asp:Table ID="Table1" runat="server" GridLines="Both" Height="504px" Width="621px">
-	<asp:TableRow runat="server">
-		<asp:TableCell runat="server"></asp:TableCell>
-		<asp:TableCell runat="server"></asp:TableCell>
-		<asp:TableCell runat="server"></asp:TableCell>
-	</asp:TableRow>
-</asp:Table>
+<asp:Panel ID="Panel1" runat="server" Height="1968px" Width="720px" CssClass="panelsheet">
+	<table style="width: 100%; height: 100%; background-color: white;" border="1" cellpadding="0" cellspacing="1">
+		<tr>
+			<td style="width:130">&nbsp;</td>
+			<td style="width:130">&nbsp;</td>
+			<td style="width:130">&nbsp;</td>
+			<td style="width:130">&nbsp;</td>
+			<td style="width:130">&nbsp;</td>
+			<td style="width:130">&nbsp;</td>
+		</tr>
+		<tr>
+			<td style="width:130">&nbsp;</td>
+			<td style="width:130">&nbsp;</td>
+			<td style="width:130">&nbsp;</td>
+			<td style="width:130">&nbsp;</td>
+			<td style="width:130">&nbsp;</td>
+			<td style="width:130">&nbsp;</td>
+		</tr>
+		<tr>
+			<td style="width:130">&nbsp;</td>
+			<td style="width:130">&nbsp;</td>
+			<td style="width:130">&nbsp;</td>
+			<td style="width:130">&nbsp;</td>
+			<td style="width:130">&nbsp;</td>
+			<td style="width:130">&nbsp;</td>
+		</tr>
+	</table>
+</asp:Panel>
