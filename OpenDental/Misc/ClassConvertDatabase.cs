@@ -5442,12 +5442,12 @@ namespace OpenDental{
 			if(FromVersion<new Version("5.0.4.0")) {
 				string command;
 				if(DataConnection.DBtype==DatabaseType.MySql){
-					command="ALTER TABLE computerpref ADD SensorType varchar(256) default 'D'";
+					command="ALTER TABLE computerpref ADD SensorType varchar(255) default 'D'";
 					General.NonQEx(command);
 					command="ALTER TABLE computerpref ADD SensorBinned varchar(1) default '0'";
 					General.NonQEx(command);
 				}else{//oracle.
-					command="ALTER TABLE computerpref ADD SensorType varchar2(256)";
+					command="ALTER TABLE computerpref ADD SensorType varchar2(255)";
 					General.NonQEx(command);
 					command="ALTER TABLE computerpref ADD SensorBinned varchar2(1) default '0'";
 					General.NonQEx(command);
