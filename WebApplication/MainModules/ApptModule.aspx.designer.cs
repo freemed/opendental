@@ -26,7 +26,7 @@ namespace WebApplication {
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Panel panelSheet;
+        protected global::WebApplication.CustomControls.StatefullScrollPanel panelSheet;
         
         /// <summary>
         /// ContrApptSheet2 control.

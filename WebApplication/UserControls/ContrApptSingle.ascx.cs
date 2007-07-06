@@ -60,7 +60,7 @@ namespace WebApplication.UserControls {
 			Panel1.Height=(int)(heightInRows*(float)ContrApptSheet.Lh);
 			Panel1.Width=ContrApptSheet.ColWidth-5;
 			int yPos=(int)(((double)(ContrApptSheet.Lh*6))*aptDateTime.TimeOfDay.TotalHours);
-			int xPos=op*ContrApptSheet.ColWidth;
+			int xPos=op*ContrApptSheet.ColWidth+1;
 			Panel1.Style.Clear();
 			Panel1.Style.Add("position","absolute");
 			Panel1.Style.Add("top",yPos.ToString()+"px");

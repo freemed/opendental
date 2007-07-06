@@ -55,6 +55,7 @@ namespace WebApplication {
 		}
 
 		protected void Calendar1_SelectionChanged(object sender,EventArgs e) {
+			
 			RefreshPeriod();
 		}
 

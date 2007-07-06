@@ -33,6 +33,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>.\AjaxControlToolkit.dll</HintPath>
     </Reference>
+    <Reference Include="StatefullScrollPanel, Version=1.0.2503.42155, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>.\StatefullScrollPanel.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
@@ -48,6 +52,7 @@
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CustomControls\StatefullScrollPanel.cs" />
     <Compile Include="MainModules\ApptModule.aspx.cs">
       <DependentUpon>ApptModule.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
