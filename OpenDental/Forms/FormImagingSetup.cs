@@ -72,27 +72,27 @@ namespace OpenDental{
 		private void InitializeComponent()
 		{
 			System.ComponentModel.ComponentResourceManager resources=new System.ComponentModel.ComponentResourceManager(typeof(FormImagingSetup));
-			this.butOK=new OpenDental.UI.Button();
-			this.butCancel=new OpenDental.UI.Button();
 			this.label12=new System.Windows.Forms.Label();
 			this.label13=new System.Windows.Forms.Label();
 			this.groupBox1=new System.Windows.Forms.GroupBox();
-			this.textDoc=new OpenDental.ValidNum();
 			this.groupBox2=new System.Windows.Forms.GroupBox();
 			this.label1=new System.Windows.Forms.Label();
 			this.label25=new System.Windows.Forms.Label();
-			this.slider=new OpenDental.UI.ContrWindowingSlider();
 			this.groupBox3=new System.Windows.Forms.GroupBox();
 			this.label37=new System.Windows.Forms.Label();
-			this.butMounts=new OpenDental.UI.Button();
 			this.groupBox4=new System.Windows.Forms.GroupBox();
+			this.checkBinned=new System.Windows.Forms.CheckBox();
 			this.comboType=new System.Windows.Forms.ComboBox();
 			this.upDownPort=new System.Windows.Forms.NumericUpDown();
 			this.label4=new System.Windows.Forms.Label();
 			this.label3=new System.Windows.Forms.Label();
 			this.label2=new System.Windows.Forms.Label();
 			this.upDownExposure=new System.Windows.Forms.NumericUpDown();
-			this.checkBinned=new System.Windows.Forms.CheckBox();
+			this.butMounts=new OpenDental.UI.Button();
+			this.slider=new OpenDental.UI.ContrWindowingSlider();
+			this.textDoc=new OpenDental.ValidNum();
+			this.butCancel=new OpenDental.UI.Button();
+			this.butOK=new OpenDental.UI.Button();
 			this.groupBox1.SuspendLayout();
 			this.groupBox2.SuspendLayout();
 			this.groupBox3.SuspendLayout();
@@ -100,37 +100,6 @@ namespace OpenDental{
 			((System.ComponentModel.ISupportInitialize)(this.upDownPort)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.upDownExposure)).BeginInit();
 			this.SuspendLayout();
-			// 
-			// butOK
-			// 
-			this.butOK.AdjustImageLocation=new System.Drawing.Point(0,0);
-			this.butOK.Anchor=((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom|System.Windows.Forms.AnchorStyles.Right)));
-			this.butOK.Autosize=true;
-			this.butOK.BtnShape=OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butOK.BtnStyle=OpenDental.UI.enumType.XPStyle.Silver;
-			this.butOK.CornerRadius=4F;
-			this.butOK.Location=new System.Drawing.Point(548,333);
-			this.butOK.Name="butOK";
-			this.butOK.Size=new System.Drawing.Size(75,26);
-			this.butOK.TabIndex=2;
-			this.butOK.Text="&OK";
-			this.butOK.Click+=new System.EventHandler(this.butOK_Click);
-			// 
-			// butCancel
-			// 
-			this.butCancel.AdjustImageLocation=new System.Drawing.Point(0,0);
-			this.butCancel.Anchor=((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom|System.Windows.Forms.AnchorStyles.Right)));
-			this.butCancel.Autosize=true;
-			this.butCancel.BtnShape=OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butCancel.BtnStyle=OpenDental.UI.enumType.XPStyle.Silver;
-			this.butCancel.CornerRadius=4F;
-			this.butCancel.DialogResult=System.Windows.Forms.DialogResult.Cancel;
-			this.butCancel.Location=new System.Drawing.Point(548,371);
-			this.butCancel.Name="butCancel";
-			this.butCancel.Size=new System.Drawing.Size(75,26);
-			this.butCancel.TabIndex=3;
-			this.butCancel.Text="&Cancel";
-			this.butCancel.Click+=new System.EventHandler(this.butCancel_Click);
 			// 
 			// label12
 			// 
@@ -163,15 +132,6 @@ namespace OpenDental{
 			this.groupBox1.TabStop=false;
 			this.groupBox1.Text="Documents";
 			// 
-			// textDoc
-			// 
-			this.textDoc.Location=new System.Drawing.Point(16,35);
-			this.textDoc.MaxVal=255;
-			this.textDoc.MinVal=0;
-			this.textDoc.Name="textDoc";
-			this.textDoc.Size=new System.Drawing.Size(68,20);
-			this.textDoc.TabIndex=20;
-			// 
 			// groupBox2
 			// 
 			this.groupBox2.Controls.Add(this.label1);
@@ -202,14 +162,6 @@ namespace OpenDental{
 			this.label25.TabIndex=15;
 			this.label25.Text="Suggested setting for scanning panos is Greyscale, 300 dpi.  For BWs, 400dpi.";
 			// 
-			// slider
-			// 
-			this.slider.Location=new System.Drawing.Point(14,38);
-			this.slider.MaxVal=128;
-			this.slider.Name="slider";
-			this.slider.Size=new System.Drawing.Size(194,14);
-			this.slider.TabIndex=21;
-			// 
 			// groupBox3
 			// 
 			this.groupBox3.Controls.Add(this.label37);
@@ -229,21 +181,6 @@ namespace OpenDental{
 			this.label37.TabIndex=15;
 			this.label37.Text="Suggested setting for scanning photos is Color, 300 dpi.";
 			// 
-			// butMounts
-			// 
-			this.butMounts.AdjustImageLocation=new System.Drawing.Point(0,0);
-			this.butMounts.Anchor=((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top|System.Windows.Forms.AnchorStyles.Right)));
-			this.butMounts.Autosize=true;
-			this.butMounts.BtnShape=OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butMounts.BtnStyle=OpenDental.UI.enumType.XPStyle.Silver;
-			this.butMounts.CornerRadius=4F;
-			this.butMounts.Location=new System.Drawing.Point(544,21);
-			this.butMounts.Name="butMounts";
-			this.butMounts.Size=new System.Drawing.Size(79,26);
-			this.butMounts.TabIndex=20;
-			this.butMounts.Text="Setup Mounts";
-			this.butMounts.Click+=new System.EventHandler(this.butMounts_Click);
-			// 
 			// groupBox4
 			// 
 			this.groupBox4.Controls.Add(this.checkBinned);
@@ -259,6 +196,16 @@ namespace OpenDental{
 			this.groupBox4.TabIndex=21;
 			this.groupBox4.TabStop=false;
 			this.groupBox4.Text="XRay Imaging";
+			// 
+			// checkBinned
+			// 
+			this.checkBinned.AutoSize=true;
+			this.checkBinned.Location=new System.Drawing.Point(242,83);
+			this.checkBinned.Name="checkBinned";
+			this.checkBinned.Size=new System.Drawing.Size(150,17);
+			this.checkBinned.TabIndex=8;
+			this.checkBinned.Text="Binned (not normally used)";
+			this.checkBinned.UseVisualStyleBackColor=true;
 			// 
 			// comboType
 			// 
@@ -286,27 +233,27 @@ namespace OpenDental{
 			this.label4.AutoSize=true;
 			this.label4.Location=new System.Drawing.Point(11,66);
 			this.label4.Name="label4";
-			this.label4.Size=new System.Drawing.Size(216,13);
+			this.label4.Size=new System.Drawing.Size(210,13);
 			this.label4.TabIndex=5;
-			this.label4.Text="Sensor Port ( place where sensor connects )";
+			this.label4.Text="Sensor Port (place where sensor connects)";
 			// 
 			// label3
 			// 
 			this.label3.AutoSize=true;
 			this.label3.Location=new System.Drawing.Point(239,20);
 			this.label3.Name="label3";
-			this.label3.Size=new System.Drawing.Size(241,13);
+			this.label3.Size=new System.Drawing.Size(229,13);
 			this.label3.TabIndex=3;
-			this.label3.Text="Sensor Type ( last letter of serial on sensor cable )";
+			this.label3.Text="Sensor Type (last serical letter on sensor cable)";
 			// 
 			// label2
 			// 
 			this.label2.AutoSize=true;
 			this.label2.Location=new System.Drawing.Point(11,20);
 			this.label2.Name="label2";
-			this.label2.Size=new System.Drawing.Size(221,13);
+			this.label2.Size=new System.Drawing.Size(189,13);
 			this.label2.TabIndex=2;
-			this.label2.Text="Exposure Level (1-7) for New Image Captures";
+			this.label2.Text="Exposure Level (1-7) for New Captures";
 			// 
 			// upDownExposure
 			// 
@@ -330,21 +277,72 @@ namespace OpenDental{
             0,
             0});
 			// 
-			// checkBinned
+			// butMounts
 			// 
-			this.checkBinned.AutoSize=true;
-			this.checkBinned.Location=new System.Drawing.Point(242,83);
-			this.checkBinned.Name="checkBinned";
-			this.checkBinned.Size=new System.Drawing.Size(156,17);
-			this.checkBinned.TabIndex=8;
-			this.checkBinned.Text="Binned ( not normally used )";
-			this.checkBinned.UseVisualStyleBackColor=true;
+			this.butMounts.AdjustImageLocation=new System.Drawing.Point(0,0);
+			this.butMounts.Anchor=((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top|System.Windows.Forms.AnchorStyles.Right)));
+			this.butMounts.Autosize=true;
+			this.butMounts.BtnShape=OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butMounts.BtnStyle=OpenDental.UI.enumType.XPStyle.Silver;
+			this.butMounts.CornerRadius=4F;
+			this.butMounts.Location=new System.Drawing.Point(544,21);
+			this.butMounts.Name="butMounts";
+			this.butMounts.Size=new System.Drawing.Size(79,26);
+			this.butMounts.TabIndex=20;
+			this.butMounts.Text="Setup Mounts";
+			this.butMounts.Click+=new System.EventHandler(this.butMounts_Click);
+			// 
+			// slider
+			// 
+			this.slider.Location=new System.Drawing.Point(14,38);
+			this.slider.MaxVal=128;
+			this.slider.Name="slider";
+			this.slider.Size=new System.Drawing.Size(194,14);
+			this.slider.TabIndex=21;
+			// 
+			// textDoc
+			// 
+			this.textDoc.Location=new System.Drawing.Point(16,35);
+			this.textDoc.MaxVal=255;
+			this.textDoc.MinVal=0;
+			this.textDoc.Name="textDoc";
+			this.textDoc.Size=new System.Drawing.Size(68,20);
+			this.textDoc.TabIndex=20;
+			// 
+			// butCancel
+			// 
+			this.butCancel.AdjustImageLocation=new System.Drawing.Point(0,0);
+			this.butCancel.Anchor=((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom|System.Windows.Forms.AnchorStyles.Right)));
+			this.butCancel.Autosize=true;
+			this.butCancel.BtnShape=OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butCancel.BtnStyle=OpenDental.UI.enumType.XPStyle.Silver;
+			this.butCancel.CornerRadius=4F;
+			this.butCancel.DialogResult=System.Windows.Forms.DialogResult.Cancel;
+			this.butCancel.Location=new System.Drawing.Point(548,371);
+			this.butCancel.Name="butCancel";
+			this.butCancel.Size=new System.Drawing.Size(75,26);
+			this.butCancel.TabIndex=3;
+			this.butCancel.Text="&Cancel";
+			this.butCancel.Click+=new System.EventHandler(this.butCancel_Click);
+			// 
+			// butOK
+			// 
+			this.butOK.AdjustImageLocation=new System.Drawing.Point(0,0);
+			this.butOK.Anchor=((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom|System.Windows.Forms.AnchorStyles.Right)));
+			this.butOK.Autosize=true;
+			this.butOK.BtnShape=OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butOK.BtnStyle=OpenDental.UI.enumType.XPStyle.Silver;
+			this.butOK.CornerRadius=4F;
+			this.butOK.Location=new System.Drawing.Point(548,333);
+			this.butOK.Name="butOK";
+			this.butOK.Size=new System.Drawing.Size(75,26);
+			this.butOK.TabIndex=2;
+			this.butOK.Text="&OK";
+			this.butOK.Click+=new System.EventHandler(this.butOK_Click);
 			// 
 			// FormImagingSetup
 			// 
-			this.AcceptButton=this.butOK;
 			this.AutoScaleBaseSize=new System.Drawing.Size(5,13);
-			this.CancelButton=this.butCancel;
 			this.ClientSize=new System.Drawing.Size(650,422);
 			this.Controls.Add(this.groupBox4);
 			this.Controls.Add(this.butMounts);
@@ -353,11 +351,13 @@ namespace OpenDental{
 			this.Controls.Add(this.groupBox1);
 			this.Controls.Add(this.butCancel);
 			this.Controls.Add(this.butOK);
+			this.FormBorderStyle=System.Windows.Forms.FormBorderStyle.FixedSingle;
 			this.Icon=((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.MaximizeBox=false;
 			this.MinimizeBox=false;
 			this.Name="FormImagingSetup";
 			this.ShowInTaskbar=false;
+			this.SizeGripStyle=System.Windows.Forms.SizeGripStyle.Hide;
 			this.StartPosition=System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text="Imaging Setup";
 			this.Load+=new System.EventHandler(this.FormImagingSetup_Load);
