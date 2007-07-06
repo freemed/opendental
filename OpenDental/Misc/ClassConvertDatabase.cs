@@ -53,7 +53,7 @@ namespace OpenDental{
 				MsgBox.Show(this,"Cannot convert this database version which was only for development purposes.");
 				return false;
 			}
-			if(FromVersion < new Version("5.0.4.0")){
+			if(FromVersion < new Version("5.0.5.0")){
 				if(MessageBox.Show(Lan.g(this,"Your database will now be converted")+"\r"
 					+Lan.g(this,"from version")+" "+FromVersion.ToString()+"\r"
 					+Lan.g(this,"to version")+" "+ToVersion.ToString()+"\r"
@@ -5456,10 +5456,24 @@ namespace OpenDental{
 				General.NonQEx(command);
 				command="ALTER TABLE computerpref ADD SensorExposure int default '1'";
 				General.NonQEx(command);
-				
-
-
 				command="UPDATE preference SET ValueString = '5.0.4.0' WHERE PrefName = 'DataBaseVersion'";
+				General.NonQEx(command);
+			}
+			To5_0_5();
+		}
+
+		///<summary>Just ensures that the SensorType column in the computerpref table has length of 255 (since older code used a length of 256, which is invalid in MySQL version 4.1).</summary>
+		private void To5_0_5() {
+			if(FromVersion<new Version("5.0.5.0")) {
+				string command;
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE computerpref CHANGE SensorType SensorType varchar(255) default 'D'";
+					General.NonQEx(command);
+				} else {//oracle.
+					command="ALTER TABLE computerpref MODIFY (SensorType varchar2(255) default 'D')";
+					General.NonQEx(command);
+				}
+				command="UPDATE preference SET ValueString = '5.0.5.0' WHERE PrefName = 'DataBaseVersion'";
 				General.NonQEx(command);
 			}
 			//To5_0_?();
