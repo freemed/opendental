@@ -1220,6 +1220,7 @@ namespace OpenDental{
 			toolTip1.SetToolTip(butComplete, Lan.g(this,"Set Complete"));
 			toolTip1.SetToolTip(butDelete, Lan.g(this,"Delete"));
 			toolTip1.SetToolTip(butOther, Lan.g(this,"Other Appointments"));
+			SetWeeklyView(false);
 		}
 
 		///<summary></summary>
@@ -1314,8 +1315,8 @@ namespace OpenDental{
 			if(isWeeklyView!=ContrApptSheet.IsWeeklyView){
 				weeklyViewChanged=true;
 			}
+			WeekStartDate=Appointments.DateSelected.AddDays(1-(int)Appointments.DateSelected.DayOfWeek).Date;
 			if(isWeeklyView) {
-				WeekStartDate=Appointments.DateSelected.AddDays(1-(int)Appointments.DateSelected.DayOfWeek).Date;
 				WeekEndDate=WeekStartDate.AddDays(ContrApptSheet.NumOfWeekDaysToDisplay-1).Date;
 			}
 			ContrApptSheet.IsWeeklyView=isWeeklyView;
@@ -1941,6 +1942,9 @@ namespace OpenDental{
 			ContrApptSingle.ClickedAptNum=HitTestAppt(e.Location);
 			SheetClickedonOp=Operatories.ListShort[ApptViewItems.VisOps[ContrApptSheet.XPosToOp(e.X)]].OperatoryNum;
 			SheetClickedonDay=ContrApptSheet.XPosToDay(e.X);
+			if(!ContrApptSheet.IsWeeklyView) {
+				SheetClickedonDay=((int)Appointments.DateSelected.DayOfWeek)-1;
+			}
 			Graphics grfx=ContrApptSheet2.CreateGraphics();
 			//if clicked on an appt-----------------------------------------------------------------------------------------------
 			if(ContrApptSingle.ClickedAptNum!=0){
