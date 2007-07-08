@@ -1438,12 +1438,13 @@ namespace OpenDental{
 						displayStrings[i]=GetProcInfo("Desc",1+startProc);
 						break;
 					case "P1Fee":
-						if(ClaimFormCur.Items[i].FormatString==""){
-							displayStrings[i]=GetProcInfo("Fee",1+startProc);
-						} else {
-							double feeNoDec = (System.Convert.ToDouble( GetProcInfo("Fee",1+startProc) )) * 100;
-							displayStrings[i]=feeNoDec.ToString();
-						}
+						//if(ClaimFormCur.Items[i].FormatString==""){
+							displayStrings[i]=GetProcInfo("Fee",1+startProc,ClaimFormCur.Items[i].FormatString);
+						//}
+						//else {
+						//	double feeNoDec = (System.Convert.ToDouble( GetProcInfo("Fee",1+startProc) )) * 100;
+						//	displayStrings[i]=feeNoDec.ToString();
+						//}
 						break;
 					case "P1TreatDentMedicaidID":
 						displayStrings[i]=GetProcInfo("TreatDentMedicaidID",1+startProc);
@@ -2225,7 +2226,13 @@ namespace OpenDental{
 			if(field=="System")
 				return "JP";
 			if(field=="Fee"){
-				return claimprocs[procIndex].FeeBilled.ToString("F");
+				if(stringFormat==""){
+					return claimprocs[procIndex].FeeBilled.ToString("F");
+				}
+				else{
+					return claimprocs[procIndex].FeeBilled.ToString(stringFormat);
+					//Still trying to come up with the correct stringFormat to show both zeros, but no decimal.
+				}
 			}
 			Procedure ProcCur=Procedures.GetProc(ProcList,claimprocs[procIndex].ProcNum);
 			ProcedureCode procCode=ProcedureCodes.GetProcCode(ProcCur.CodeNum);
