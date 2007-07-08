@@ -1438,7 +1438,12 @@ namespace OpenDental{
 						displayStrings[i]=GetProcInfo("Desc",1+startProc);
 						break;
 					case "P1Fee":
-						displayStrings[i]=GetProcInfo("Fee",1+startProc);
+						if(ClaimFormCur.Items[i].FormatString==""){
+							displayStrings[i]=GetProcInfo("Fee",1+startProc);
+						} else {
+							double feeNoDec = (System.Convert.ToDouble( GetProcInfo("Fee",1+startProc) )) * 100;
+							displayStrings[i]=feeNoDec.ToString();
+						}
 						break;
 					case "P1TreatDentMedicaidID":
 						displayStrings[i]=GetProcInfo("TreatDentMedicaidID",1+startProc);

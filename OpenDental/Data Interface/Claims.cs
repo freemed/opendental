@@ -372,16 +372,20 @@ namespace OpenDental{
 					continue;//ignores payments, etc
 				}
 				//fee:
+				int Qty = 1;
+				if(ProcCur.UnitQty != ""){
+					Qty = System.Convert.ToInt32( ProcCur.UnitQty );
+				}
 				if(PlanCur.ClaimsUseUCR){//use UCR for the provider of the procedure
 					provNum=ProcCur.ProvNum;
 					if(provNum==0){//if no prov set, then use practice default.
 						provNum=PrefB.GetInt("PracticeDefaultProv");
 					}
-					ClaimProcsForClaim[i].FeeBilled=Fees.GetAmount0(//get the fee based on code and prov fee sched
-						ProcCur.CodeNum,Providers.ListLong[Providers.GetIndexLong(provNum)].FeeSched);
+					ClaimProcsForClaim[i].FeeBilled=Qty*(Fees.GetAmount0(//get the fee based on code and prov fee sched
+						ProcCur.CodeNum,Providers.ListLong[Providers.GetIndexLong(provNum)].FeeSched));
 				}
 				else{//don't use ucr.  Use the procedure fee instead.
-					ClaimProcsForClaim[i].FeeBilled=ProcCur.ProcFee;
+					ClaimProcsForClaim[i].FeeBilled=Qty*ProcCur.ProcFee;
 				}
 				claimFee+=ClaimProcsForClaim[i].FeeBilled;
 				if(ClaimCur.ClaimType=="PreAuth" || ClaimCur.ClaimType=="Other"){
