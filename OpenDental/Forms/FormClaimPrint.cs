@@ -2231,7 +2231,8 @@ namespace OpenDental{
 				}
 				else{
 					return claimprocs[procIndex].FeeBilled.ToString(stringFormat);
-					//Still trying to come up with the correct stringFormat to show both zeros, but no decimal.
+					//Use "F0' 00'" as the format string to display a number with no decimal and with both zeros.
+					//The space is optional, and is only used for alignment purposes.  Multiple spaces can be used.
 				}
 			}
 			Procedure ProcCur=Procedures.GetProc(ProcList,claimprocs[procIndex].ProcNum);
