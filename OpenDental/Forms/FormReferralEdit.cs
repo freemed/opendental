@@ -64,6 +64,8 @@ namespace OpenDental{
 		private System.Windows.Forms.Label label18;
 		private System.Windows.Forms.TextBox textPatientsNumFrom;
 		private System.Windows.Forms.ComboBox comboPatientsFrom;
+		private TextBox textNationalProvID;
+		private Label label19;
 		///<summary></summary>
 		public Referral RefCur;
 
@@ -100,8 +102,6 @@ namespace OpenDental{
 		private void InitializeComponent()
 		{
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormReferralEdit));
-			this.butOK = new OpenDental.UI.Button();
-			this.butCancel = new OpenDental.UI.Button();
 			this.textLName = new System.Windows.Forms.TextBox();
 			this.label1 = new System.Windows.Forms.Label();
 			this.label2 = new System.Windows.Forms.Label();
@@ -141,8 +141,6 @@ namespace OpenDental{
 			this.checkHidden = new System.Windows.Forms.CheckBox();
 			this.labelPatient = new System.Windows.Forms.Label();
 			this.checkNotPerson = new System.Windows.Forms.CheckBox();
-			this.butNone = new OpenDental.UI.Button();
-			this.textNotes = new OpenDental.ODtextBox();
 			this.groupBox2 = new System.Windows.Forms.GroupBox();
 			this.label18 = new System.Windows.Forms.Label();
 			this.textPatientsNumFrom = new System.Windows.Forms.TextBox();
@@ -150,41 +148,15 @@ namespace OpenDental{
 			this.label6 = new System.Windows.Forms.Label();
 			this.textPatientsNumTo = new System.Windows.Forms.TextBox();
 			this.comboPatientsTo = new System.Windows.Forms.ComboBox();
+			this.textNationalProvID = new System.Windows.Forms.TextBox();
+			this.label19 = new System.Windows.Forms.Label();
+			this.textNotes = new OpenDental.ODtextBox();
+			this.butNone = new OpenDental.UI.Button();
+			this.butCancel = new OpenDental.UI.Button();
+			this.butOK = new OpenDental.UI.Button();
 			this.groupSSN.SuspendLayout();
 			this.groupBox2.SuspendLayout();
 			this.SuspendLayout();
-			// 
-			// butOK
-			// 
-			this.butOK.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butOK.Autosize = true;
-			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(787,583);
-			this.butOK.Name = "butOK";
-			this.butOK.Size = new System.Drawing.Size(75,26);
-			this.butOK.TabIndex = 17;
-			this.butOK.Text = "&OK";
-			this.butOK.Click += new System.EventHandler(this.butOK_Click);
-			// 
-			// butCancel
-			// 
-			this.butCancel.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butCancel.Autosize = true;
-			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butCancel.CornerRadius = 4F;
-			this.butCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.butCancel.Location = new System.Drawing.Point(787,621);
-			this.butCancel.Name = "butCancel";
-			this.butCancel.RightToLeft = System.Windows.Forms.RightToLeft.No;
-			this.butCancel.Size = new System.Drawing.Size(75,26);
-			this.butCancel.TabIndex = 18;
-			this.butCancel.Text = "&Cancel";
-			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
 			// 
 			// textLName
 			// 
@@ -258,7 +230,7 @@ namespace OpenDental{
 			this.groupSSN.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.groupSSN.Location = new System.Drawing.Point(110,412);
 			this.groupSSN.Name = "groupSSN";
-			this.groupSSN.Size = new System.Drawing.Size(156,82);
+			this.groupSSN.Size = new System.Drawing.Size(141,82);
 			this.groupSSN.TabIndex = 0;
 			this.groupSSN.TabStop = false;
 			this.groupSSN.Text = "SSN or TIN (no dashes)";
@@ -268,7 +240,7 @@ namespace OpenDental{
 			this.radioTIN.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.radioTIN.Location = new System.Drawing.Point(9,34);
 			this.radioTIN.Name = "radioTIN";
-			this.radioTIN.Size = new System.Drawing.Size(135,15);
+			this.radioTIN.Size = new System.Drawing.Size(104,16);
 			this.radioTIN.TabIndex = 18;
 			this.radioTIN.Text = "TIN";
 			this.radioTIN.Click += new System.EventHandler(this.radioTIN_Click);
@@ -544,31 +516,6 @@ namespace OpenDental{
 			this.checkNotPerson.Text = "Not Person";
 			this.checkNotPerson.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
-			// butNone
-			// 
-			this.butNone.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butNone.Autosize = true;
-			this.butNone.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butNone.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butNone.CornerRadius = 4F;
-			this.butNone.Location = new System.Drawing.Point(502,276);
-			this.butNone.Name = "butNone";
-			this.butNone.Size = new System.Drawing.Size(72,26);
-			this.butNone.TabIndex = 72;
-			this.butNone.Text = "&None";
-			this.butNone.Click += new System.EventHandler(this.butNone_Click);
-			// 
-			// textNotes
-			// 
-			this.textNotes.AcceptsReturn = true;
-			this.textNotes.Location = new System.Drawing.Point(109,510);
-			this.textNotes.Multiline = true;
-			this.textNotes.Name = "textNotes";
-			this.textNotes.QuickPasteType = OpenDentBusiness.QuickPasteType.Referral;
-			this.textNotes.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-			this.textNotes.Size = new System.Drawing.Size(412,123);
-			this.textNotes.TabIndex = 73;
-			// 
 			// groupBox2
 			// 
 			this.groupBox2.Controls.Add(this.label18);
@@ -639,12 +586,85 @@ namespace OpenDental{
 			this.comboPatientsTo.Size = new System.Drawing.Size(299,21);
 			this.comboPatientsTo.TabIndex = 34;
 			// 
+			// textNationalProvID
+			// 
+			this.textNationalProvID.Location = new System.Drawing.Point(367,466);
+			this.textNationalProvID.Name = "textNationalProvID";
+			this.textNationalProvID.Size = new System.Drawing.Size(100,20);
+			this.textNationalProvID.TabIndex = 75;
+			// 
+			// label19
+			// 
+			this.label19.AutoSize = true;
+			this.label19.Location = new System.Drawing.Point(257,469);
+			this.label19.Name = "label19";
+			this.label19.Size = new System.Drawing.Size(102,13);
+			this.label19.TabIndex = 76;
+			this.label19.Text = "National Provider ID";
+			// 
+			// textNotes
+			// 
+			this.textNotes.AcceptsReturn = true;
+			this.textNotes.Location = new System.Drawing.Point(109,510);
+			this.textNotes.Multiline = true;
+			this.textNotes.Name = "textNotes";
+			this.textNotes.QuickPasteType = OpenDentBusiness.QuickPasteType.Referral;
+			this.textNotes.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+			this.textNotes.Size = new System.Drawing.Size(412,123);
+			this.textNotes.TabIndex = 73;
+			// 
+			// butNone
+			// 
+			this.butNone.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butNone.Autosize = true;
+			this.butNone.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butNone.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butNone.CornerRadius = 4F;
+			this.butNone.Location = new System.Drawing.Point(502,276);
+			this.butNone.Name = "butNone";
+			this.butNone.Size = new System.Drawing.Size(72,26);
+			this.butNone.TabIndex = 72;
+			this.butNone.Text = "&None";
+			this.butNone.Click += new System.EventHandler(this.butNone_Click);
+			// 
+			// butCancel
+			// 
+			this.butCancel.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.butCancel.Autosize = true;
+			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butCancel.CornerRadius = 4F;
+			this.butCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+			this.butCancel.Location = new System.Drawing.Point(787,621);
+			this.butCancel.Name = "butCancel";
+			this.butCancel.RightToLeft = System.Windows.Forms.RightToLeft.No;
+			this.butCancel.Size = new System.Drawing.Size(75,26);
+			this.butCancel.TabIndex = 18;
+			this.butCancel.Text = "&Cancel";
+			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
+			// 
+			// butOK
+			// 
+			this.butOK.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.butOK.Autosize = true;
+			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butOK.CornerRadius = 4F;
+			this.butOK.Location = new System.Drawing.Point(787,583);
+			this.butOK.Name = "butOK";
+			this.butOK.Size = new System.Drawing.Size(75,26);
+			this.butOK.TabIndex = 17;
+			this.butOK.Text = "&OK";
+			this.butOK.Click += new System.EventHandler(this.butOK_Click);
+			// 
 			// FormReferralEdit
 			// 
-			this.AcceptButton = this.butOK;
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
-			this.CancelButton = this.butCancel;
 			this.ClientSize = new System.Drawing.Size(877,663);
+			this.Controls.Add(this.label19);
+			this.Controls.Add(this.textNationalProvID);
 			this.Controls.Add(this.groupBox2);
 			this.Controls.Add(this.textNotes);
 			this.Controls.Add(this.butNone);
@@ -777,7 +797,7 @@ namespace OpenDental{
 			textAddress2.Text=RefCur.Address2;
 			textCity.Text=RefCur.City;         
 			textST.Text=RefCur.ST;
-			textZip.Text=RefCur.Zip; 
+			textZip.Text=RefCur.Zip;
 			string phone=RefCur.Telephone;
 			if(phone!=null && phone.Length==10){
 				textPhone1.Text=phone.Substring(0,3);
@@ -791,6 +811,7 @@ namespace OpenDental{
 			else{
 				radioSSN.Checked=true;
 			}
+			textNationalProvID.Text=RefCur.NationalProvID;
 			textOtherPhone.Text=RefCur.Phone2;  
 			textEmail.Text=RefCur.EMail; 
 			textNotes.Text=RefCur.Note;
@@ -854,6 +875,7 @@ namespace OpenDental{
 			RefCur.Telephone=phone;
       RefCur.Phone2=textOtherPhone.Text;    
 			RefCur.SSN=textSSN.Text;
+			RefCur.NationalProvID=textNationalProvID.Text;
       RefCur.EMail=textEmail.Text;
       RefCur.Note=textNotes.Text; 
 			//RefCur.UsingTIN already taken care of

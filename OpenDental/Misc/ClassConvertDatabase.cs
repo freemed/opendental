@@ -5475,6 +5475,8 @@ namespace OpenDental{
 				}
 				command="UPDATE preference SET ValueString = '5.0.5.0' WHERE PrefName = 'DataBaseVersion'";
 				General.NonQEx(command);
+				command="ALTER TABLE referral ADD NationalProvID varchar(255)";
+				General.NonQEx(command);
 			}
 			//To5_0_?();
 		}

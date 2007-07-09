@@ -45,6 +45,8 @@ namespace OpenDentBusiness{
 		public string EMail;
 		///<summary>FK to patient.PatNum for referrals that are patients.</summary>
 		public int PatNum;
+		///<summary>NPI for the referral</summary>
+		public string NationalProvID;
 
 		///<summary>Returns a copy of this Referral.</summary>
 		public Referral Copy(){
@@ -69,20 +71,12 @@ namespace OpenDentBusiness{
 			r.Title=Title;
 			r.EMail=EMail;
 			r.PatNum=PatNum;
+			r.NationalProvID=NationalProvID;
 			return r;
 		}
 		
 
-		
-
-
-
-
 	}
-
-	
-
-	
 
 
 }

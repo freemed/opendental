@@ -42,6 +42,7 @@ namespace OpenDental{
 				List[i].Title      = PIn.PString(table.Rows[i][17].ToString());
 				List[i].EMail      = PIn.PString(table.Rows[i][18].ToString());
 				List[i].PatNum     = PIn.PInt   (table.Rows[i][19].ToString());
+				List[i].NationalProvID     = PIn.PString   (table.Rows[i][20].ToString());
 				//HList.Add(List[i].ReferralNum,List[i].Copy());
 			}
 		}
@@ -67,7 +68,8 @@ namespace OpenDental{
 				+ ",NotPerson = '" +POut.PBool(refer.NotPerson)+"'"
 				+ ",Title = '"     +POut.PString(refer.Title)+"'"
 				+ ",EMail = '"     +POut.PString(refer.EMail)+"'"
-				+ ",PatNum = '"    +POut.PInt(refer.PatNum)+"'"     
+				+ ",PatNum = '"    +POut.PInt(refer.PatNum)+"'"
+				+ ",NationalProvID = '"    +POut.PString(refer.NationalProvID)+"'"
 				+" WHERE ReferralNum = '" +POut.PInt(refer.ReferralNum)+"'";
 			General.NonQ(command);
 		}
@@ -82,7 +84,7 @@ namespace OpenDental{
 				command+="ReferralNum,";
 			}
 			command+="LName,FName,MName,SSN,UsingTIN,Specialty,ST,"
-				+"Telephone,Address,Address2,City,Zip,Note,Phone2,IsHidden,NotPerson,Title,Email,PatNum) VALUES(";
+				+"Telephone,Address,Address2,City,Zip,Note,Phone2,IsHidden,NotPerson,Title,Email,PatNum,NationalProvID) VALUES(";
 			if(PrefB.RandomKeys) {
 				command+="'"+POut.PInt(refer.ReferralNum)+"', ";
 			}
@@ -105,7 +107,8 @@ namespace OpenDental{
 				+"'"+POut.PBool(refer.NotPerson)+"', "
 				+"'"+POut.PString(refer.Title)+"', "
 				+"'"+POut.PString(refer.EMail)+"', "
-				+"'"+POut.PInt(refer.PatNum)+"')";
+				+"'"+POut.PInt(refer.PatNum)+"', "
+				+"'"+POut.PString(refer.NationalProvID)+"')";
 			if(PrefB.RandomKeys) {
 				General.NonQ(command);
 			}
