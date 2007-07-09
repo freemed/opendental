@@ -195,6 +195,7 @@ namespace OpenDental{
 				if(components != null){
 					components.Dispose();
 				}
+				xRayImageController.KillXRayThread();
 			}
 			base.Dispose( disposing );
 		}

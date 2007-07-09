@@ -2148,11 +2148,7 @@ namespace OpenDental{
 							if(f < claimprocs.Count)
 								fee+=((ClaimProc)claimprocs[f]).FeeBilled;
 						}
-						if(ClaimFormCur.Items[i].FormatString=="")
-							displayStrings[i]=fee.ToString("F");
-						else //below is a dirty hack to remove the decimal from the total...maybe we should create a new field called TotalFeeNoDec?
-							fee = fee * 100;
-							displayStrings[i]=fee.ToString();
+						displayStrings[i]=fee.ToString("F");
 						break;
 					case "DateOfService"://only for this page, Earliest proc date.
 						DateTime dateService=((ClaimProc)claimprocs[0]).ProcDate;
