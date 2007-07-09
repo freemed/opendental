@@ -296,6 +296,7 @@ namespace OpenDental{
 				"PatientSSN",
 				"PatientMedicaidID",
 				"PatientID-MedicaidOrSSN",
+				"PatientChartNum",
 				"Diagnosis1",
 				"Diagnosis2",
 				"Diagnosis3",
@@ -459,6 +460,7 @@ namespace OpenDental{
 				"P7CodeMod4",
 				"P7UnitCode",
 				"P7UnitQty",
+				"P7Date",
 				"P7CodeAndMods",
 				"P8Date",
 				"P8Area",
@@ -632,7 +634,8 @@ namespace OpenDental{
 				"TreatingDentistPh123",
 				"TreatingDentistPh456",
 				"TreatingDentistPh78910",
-				"TreatingProviderSpecialty"
+				"TreatingProviderSpecialty",
+				"TotalPages"
 			};
 		}
 

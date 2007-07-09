@@ -834,6 +834,9 @@ namespace OpenDental{
 						else
 							displayStrings[i]=PatCur.SSN;
 						break;
+					case "PatientChartNum":
+						displayStrings[i]=PatCur.ChartNumber;
+						break;
 					case "Diagnosis1":
 						displayStrings[i]=diagnoses[0];
 						break;
@@ -1364,6 +1367,9 @@ namespace OpenDental{
 					case "TreatingProviderSpecialty":
 						displayStrings[i]=Eclaims.X12.GetTaxonomy
 							(Providers.ListLong[Providers.GetIndexLong(ClaimCur.ProvTreat)].Specialty);
+						break;
+					case "TotalPages":
+						displayStrings[i]=totalPages.ToString();
 						break;
 				}//switch
 				if(CultureInfo.CurrentCulture.Name=="nl-BE"//Dutch Belgium
