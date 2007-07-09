@@ -112,6 +112,7 @@ namespace OpenDental{
 		private PatPlan[] PatPlanList;
 		private OpenDental.UI.ODGrid gridProc;
 		private ODGrid gridPay;
+		private OpenDental.UI.Button butSend;
 		private Claim ClaimCur;
 
 		///<summary></summary>
@@ -196,6 +197,7 @@ namespace OpenDental{
 			this.labelRadiographs = new System.Windows.Forms.Label();
 			this.comboClinic = new System.Windows.Forms.ComboBox();
 			this.labelClinic = new System.Windows.Forms.Label();
+			this.butSend = new OpenDental.UI.Button();
 			this.gridPay = new OpenDental.UI.ODGrid();
 			this.gridProc = new OpenDental.UI.ODGrid();
 			this.butSplit = new OpenDental.UI.Button();
@@ -279,9 +281,9 @@ namespace OpenDental{
 			// 
 			// labelNote
 			// 
-			this.labelNote.Location = new System.Drawing.Point(349,510);
+			this.labelNote.Location = new System.Drawing.Point(342,510);
 			this.labelNote.Name = "labelNote";
-			this.labelNote.Size = new System.Drawing.Size(346,16);
+			this.labelNote.Size = new System.Drawing.Size(320,16);
 			this.labelNote.TabIndex = 19;
 			this.labelNote.Text = "Claim Note (this will show on the claim when submitted)";
 			// 
@@ -350,7 +352,7 @@ namespace OpenDental{
 			// 
 			this.labelMissingTeeth.Location = new System.Drawing.Point(17,597);
 			this.labelMissingTeeth.Name = "labelMissingTeeth";
-			this.labelMissingTeeth.Size = new System.Drawing.Size(313,32);
+			this.labelMissingTeeth.Size = new System.Drawing.Size(262,32);
 			this.labelMissingTeeth.TabIndex = 28;
 			this.labelMissingTeeth.Text = "For bridges, dentures, and partials, missing teeth must have been correctly enter" +
     "ed in the Chart module. ";
@@ -366,7 +368,7 @@ namespace OpenDental{
 			// 
 			// textInsPayEst
 			// 
-			this.textInsPayEst.Location = new System.Drawing.Point(469,372);
+			this.textInsPayEst.Location = new System.Drawing.Point(469,350);
 			this.textInsPayEst.Name = "textInsPayEst";
 			this.textInsPayEst.ReadOnly = true;
 			this.textInsPayEst.Size = new System.Drawing.Size(65,20);
@@ -382,7 +384,7 @@ namespace OpenDental{
 			// 
 			// textClaimFee
 			// 
-			this.textClaimFee.Location = new System.Drawing.Point(339,372);
+			this.textClaimFee.Location = new System.Drawing.Point(339,350);
 			this.textClaimFee.Name = "textClaimFee";
 			this.textClaimFee.ReadOnly = true;
 			this.textClaimFee.Size = new System.Drawing.Size(65,20);
@@ -392,7 +394,7 @@ namespace OpenDental{
 			// label1
 			// 
 			this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif",8.25F,System.Drawing.FontStyle.Bold,System.Drawing.GraphicsUnit.Point,((byte)(0)));
-			this.label1.Location = new System.Drawing.Point(219,375);
+			this.label1.Location = new System.Drawing.Point(219,353);
 			this.label1.Name = "label1";
 			this.label1.Size = new System.Drawing.Size(116,16);
 			this.label1.TabIndex = 50;
@@ -703,11 +705,11 @@ namespace OpenDental{
 			// 
 			// labelRadiographs
 			// 
-			this.labelRadiographs.Location = new System.Drawing.Point(391,608);
+			this.labelRadiographs.Location = new System.Drawing.Point(300,608);
 			this.labelRadiographs.Name = "labelRadiographs";
-			this.labelRadiographs.Size = new System.Drawing.Size(187,18);
+			this.labelRadiographs.Size = new System.Drawing.Size(85,18);
 			this.labelRadiographs.TabIndex = 117;
-			this.labelRadiographs.Text = "Radiographs Attached";
+			this.labelRadiographs.Text = "Radiographs";
 			this.labelRadiographs.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// comboClinic
@@ -728,13 +730,29 @@ namespace OpenDental{
 			this.labelClinic.Text = "Clinic";
 			this.labelClinic.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
+			// butSend
+			// 
+			this.butSend.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butSend.Autosize = true;
+			this.butSend.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butSend.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butSend.CornerRadius = 4F;
+			this.butSend.Image = ((System.Drawing.Image)(resources.GetObject("butSend.Image")));
+			this.butSend.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butSend.Location = new System.Drawing.Point(620,636);
+			this.butSend.Name = "butSend";
+			this.butSend.Size = new System.Drawing.Size(86,26);
+			this.butSend.TabIndex = 130;
+			this.butSend.Text = "Send";
+			this.butSend.Click += new System.EventHandler(this.butSend_Click);
+			// 
 			// gridPay
 			// 
 			this.gridPay.HScrollVisible = false;
 			this.gridPay.Location = new System.Drawing.Point(2,400);
 			this.gridPay.Name = "gridPay";
 			this.gridPay.ScrollValue = 0;
-			this.gridPay.Size = new System.Drawing.Size(549,106);
+			this.gridPay.Size = new System.Drawing.Size(549,73);
 			this.gridPay.TabIndex = 129;
 			this.gridPay.Title = "Insurance Checks";
 			this.gridPay.TranslationName = "TableClaimPay";
@@ -748,7 +766,7 @@ namespace OpenDental{
 			this.gridProc.Name = "gridProc";
 			this.gridProc.ScrollValue = 0;
 			this.gridProc.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
-			this.gridProc.Size = new System.Drawing.Size(939,198);
+			this.gridProc.Size = new System.Drawing.Size(939,179);
 			this.gridProc.TabIndex = 128;
 			this.gridProc.Title = "Procedures";
 			this.gridProc.TranslationName = "TableClaimProc";
@@ -795,7 +813,7 @@ namespace OpenDental{
 			// textNote
 			// 
 			this.textNote.AcceptsReturn = true;
-			this.textNote.Location = new System.Drawing.Point(350,528);
+			this.textNote.Location = new System.Drawing.Point(343,528);
 			this.textNote.MaxLength = 255;
 			this.textNote.Multiline = true;
 			this.textNote.Name = "textNote";
@@ -806,7 +824,7 @@ namespace OpenDental{
 			// 
 			// textRadiographs
 			// 
-			this.textRadiographs.Location = new System.Drawing.Point(580,606);
+			this.textRadiographs.Location = new System.Drawing.Point(387,606);
 			this.textRadiographs.MaxVal = 255;
 			this.textRadiographs.MinVal = 0;
 			this.textRadiographs.Name = "textRadiographs";
@@ -815,7 +833,7 @@ namespace OpenDental{
 			// 
 			// textWriteOff
 			// 
-			this.textWriteOff.Location = new System.Drawing.Point(599,372);
+			this.textWriteOff.Location = new System.Drawing.Point(599,350);
 			this.textWriteOff.Name = "textWriteOff";
 			this.textWriteOff.ReadOnly = true;
 			this.textWriteOff.Size = new System.Drawing.Size(65,20);
@@ -824,7 +842,7 @@ namespace OpenDental{
 			// 
 			// textInsPayAmt
 			// 
-			this.textInsPayAmt.Location = new System.Drawing.Point(534,372);
+			this.textInsPayAmt.Location = new System.Drawing.Point(534,350);
 			this.textInsPayAmt.Name = "textInsPayAmt";
 			this.textInsPayAmt.ReadOnly = true;
 			this.textInsPayAmt.Size = new System.Drawing.Size(65,20);
@@ -833,7 +851,7 @@ namespace OpenDental{
 			// 
 			// textDedApplied
 			// 
-			this.textDedApplied.Location = new System.Drawing.Point(404,372);
+			this.textDedApplied.Location = new System.Drawing.Point(404,350);
 			this.textDedApplied.Name = "textDedApplied";
 			this.textDedApplied.ReadOnly = true;
 			this.textDedApplied.Size = new System.Drawing.Size(65,20);
@@ -863,7 +881,7 @@ namespace OpenDental{
 			this.butPreview.CornerRadius = 4F;
 			this.butPreview.Image = global::OpenDental.Properties.Resources.butPreview;
 			this.butPreview.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butPreview.Location = new System.Drawing.Point(519,636);
+			this.butPreview.Location = new System.Drawing.Point(432,636);
 			this.butPreview.Name = "butPreview";
 			this.butPreview.Size = new System.Drawing.Size(92,26);
 			this.butPreview.TabIndex = 115;
@@ -879,7 +897,7 @@ namespace OpenDental{
 			this.butPrint.CornerRadius = 4F;
 			this.butPrint.Image = global::OpenDental.Properties.Resources.butPrintSmall;
 			this.butPrint.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butPrint.Location = new System.Drawing.Point(429,636);
+			this.butPrint.Location = new System.Drawing.Point(529,636);
 			this.butPrint.Name = "butPrint";
 			this.butPrint.Size = new System.Drawing.Size(86,26);
 			this.butPrint.TabIndex = 114;
@@ -970,7 +988,7 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(766,636);
+			this.butOK.Location = new System.Drawing.Point(769,636);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75,26);
 			this.butOK.TabIndex = 14;
@@ -982,6 +1000,7 @@ namespace OpenDental{
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.AutoScroll = true;
 			this.ClientSize = new System.Drawing.Size(947,669);
+			this.Controls.Add(this.butSend);
 			this.Controls.Add(this.gridPay);
 			this.Controls.Add(this.gridProc);
 			this.Controls.Add(this.butSplit);
@@ -1150,7 +1169,7 @@ namespace OpenDental{
 			listClaimType.Items.Add(Lan.g(this,"Capitation"));
 			listClaimStatus.Items.Add(Lan.g(this,"Unsent"));
 			listClaimStatus.Items.Add(Lan.g(this,"Hold until Pri received"));
-			listClaimStatus.Items.Add(Lan.g(this,"Waiting to Send"));
+			listClaimStatus.Items.Add(Lan.g(this,"Waiting to Send"));//2
 			listClaimStatus.Items.Add(Lan.g(this,"Probably Sent"));
 			listClaimStatus.Items.Add(Lan.g(this,"Sent - Verified"));
 			listClaimStatus.Items.Add(Lan.g(this,"Received"));
@@ -1829,15 +1848,6 @@ namespace OpenDental{
 			}
 		}
 
-		private void butSend_Click(object sender, System.EventArgs e) {
-			if(!ClaimIsValid())
-				return;
-			listClaimStatus.SelectedIndex=2;//W
-			textDateSent.Text=DateTime.Today.ToString("d");
-			UpdateClaim();		
-			DialogResult=DialogResult.OK;
-		}
-
 		private void butLabel_Click(object sender, System.EventArgs e) {
 			LabelSingle label=new LabelSingle();
 			PrintDocument pd=new PrintDocument();//only used to pass printerName
@@ -1848,26 +1858,6 @@ namespace OpenDental{
 			InsPlan planCur=InsPlans.GetPlan(ClaimCur.PlanNum,PlanList);
 			Carrier carrierCur=Carriers.GetCarrier(planCur.CarrierNum);
 			label.PrintIns(carrierCur,pd.PrinterSettings.PrinterName);
-		}
-
-		private void ButPrint_Click(object sender, System.EventArgs e) {
-			if(!ClaimIsValid())
-				return;
-			UpdateClaim();
-			PrintDocument pd=new PrintDocument();
-			if(!Printers.SetPrinter(pd,PrintSituation.Claim)){
-				return;
-			}
-			FormClaimPrint FormCP=new FormClaimPrint();
-			FormCP.ThisPatNum=ClaimCur.PatNum;
-			FormCP.ThisClaimNum=ClaimCur.ClaimNum;
-			if(!FormCP.PrintImmediate(pd.PrinterSettings.PrinterName,pd.PrinterSettings.Copies)){
-				return;
-			}
-			ClaimCur.ClaimStatus="S";
-			ClaimCur.DateSent=DateTime.Today;
-			Claims.Update(ClaimCur);		
-			DialogResult=DialogResult.OK;
 		}
 
 		private void butPreview_Click(object sender, System.EventArgs e) {
@@ -1886,6 +1876,47 @@ namespace OpenDental{
 			Claims.Refresh(PatCur.PatNum); 
       ClaimProcList=ClaimProcs.Refresh(PatCur.PatNum);
 			FillForm();		
+		}
+
+		private void ButPrint_Click(object sender,System.EventArgs e) {
+			if(!ClaimIsValid())
+				return;
+			UpdateClaim();
+			PrintDocument pd=new PrintDocument();
+			if(!Printers.SetPrinter(pd,PrintSituation.Claim)) {
+				return;
+			}
+			FormClaimPrint FormCP=new FormClaimPrint();
+			FormCP.ThisPatNum=ClaimCur.PatNum;
+			FormCP.ThisClaimNum=ClaimCur.ClaimNum;
+			if(!FormCP.PrintImmediate(pd.PrinterSettings.PrinterName,pd.PrinterSettings.Copies)) {
+				return;
+			}
+			Etranss.SetClaimSentOrPrinted(ClaimCur.ClaimNum,ClaimCur.PatNum,0,EtransType.ClaimPrinted);
+			//ClaimCur.ClaimStatus="S";
+			//ClaimCur.DateSent=DateTime.Today;
+			//Claims.Update(ClaimCur);
+			DialogResult=DialogResult.OK;
+		}
+
+		private void butSend_Click(object sender,EventArgs e) {
+			if(!ClaimIsValid())
+				return;
+			UpdateClaim();
+			ClaimSendQueueItem[] listQueue=Claims.GetQueueList(ClaimCur.ClaimNum);
+			if(listQueue[0].NoSendElect) {
+				MsgBox.Show(this,"This carrier is marked to not receive e-claims.");
+				return;
+			}
+			string missingData=Eclaims.Eclaims.GetMissingData(listQueue[0]);
+			if(missingData!=""){
+				MessageBox.Show(Lan.g(this,"Cannot send claim until missing data is fixed:")+"\r\n"+missingData);
+				return;
+			}
+			List<ClaimSendQueueItem> queueItems=new List<ClaimSendQueueItem>();
+			queueItems.Add(listQueue[0]);
+			Eclaims.Eclaims.SendBatches(queueItems);//this also calls SetClaimSentOrPrinted which creates the etrans entry.
+			DialogResult=DialogResult.OK;
 		}
 
 		private void butDelete_Click(object sender, System.EventArgs e) {
@@ -1986,6 +2017,24 @@ namespace OpenDental{
 				textDateRec.Text=DateTime.Today.ToShortDateString();
 			}
 			UpdateClaim();
+			if(listClaimStatus.SelectedIndex==2){//waiting to send
+				ClaimSendQueueItem[] listQueue=Claims.GetQueueList(ClaimCur.ClaimNum);
+				if(listQueue[0].NoSendElect) {
+					DialogResult=DialogResult.OK;
+					return;
+				}
+				string missingData=Eclaims.Eclaims.GetMissingData(listQueue[0]);
+				if(missingData!="") {
+					MessageBox.Show(Lan.g(this,"Cannot send claim until missing data is fixed:")+"\r\n"+missingData);
+					DialogResult=DialogResult.OK;
+					return;
+				}
+				if(MsgBox.Show(this,true,"Send electronic claim immediately?")){
+					List<ClaimSendQueueItem> queueItems=new List<ClaimSendQueueItem>();
+					queueItems.Add(listQueue[0]);
+					Eclaims.Eclaims.SendBatches(queueItems);//this also calls SetClaimSentOrPrinted which creates the etrans entry.
+				}
+			}
 			DialogResult=DialogResult.OK;
 		}
 		
@@ -2093,6 +2142,8 @@ namespace OpenDental{
 				Claims.Delete(ClaimCur);//does not do any validation.  Also deletes the claimcanadian.
 			}
 		}
+
+		
 
 		
 

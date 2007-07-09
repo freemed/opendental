@@ -253,8 +253,13 @@ namespace OpenDental{
 			General.NonQ(command);
 		}
 
-		///<summary>Called from claimsend window.</summary>
+		///<summary>Called from claimsend window and from Claim edit window.  Use -1 to get all waiting claims, or an actual claimnum to get just one claim.</summary>
 		public static ClaimSendQueueItem[] GetQueueList(){
+			return GetQueueList(0);
+		}
+
+		///<summary>Called from claimsend window and from Claim edit window.  Use -1 to get all waiting claims, or an actual claimnum to get just one claim.</summary>
+		public static ClaimSendQueueItem[] GetQueueList(int claimNum){
 			string command=
 				"SELECT claim.ClaimNum,carrier.NoSendElect"
 				+",CONCAT(CONCAT(CONCAT(concat(patient.LName,', '),patient.FName),' '),patient.MiddleI)"
@@ -262,9 +267,14 @@ namespace OpenDental{
 				+"FROM claim "
 				+"Left join insplan on claim.PlanNum = insplan.PlanNum "
 				+"Left join carrier on insplan.CarrierNum = carrier.CarrierNum "
-				+"Left join patient on patient.PatNum = claim.PatNum "
-				+"WHERE claim.ClaimStatus = 'W' OR claim.ClaimStatus = 'P' "
-				+"ORDER BY insplan.IsMedical";//this puts the medical claims at the end, helping with the looping in X12.
+				+"Left join patient on patient.PatNum = claim.PatNum ";
+			if(claimNum==0){
+				command+="WHERE claim.ClaimStatus = 'W' OR claim.ClaimStatus = 'P' ";
+			}
+			else{
+				command+="WHERE claim.ClaimNum="+POut.PInt(claimNum)+" ";
+			}
+			command+="ORDER BY insplan.IsMedical";//this puts the medical claims at the end, helping with the looping in X12.
 			//MessageBox.Show(string command);
 			DataTable table=General.GetTable(command);
 			ClaimSendQueueItem[] listQueue=new ClaimSendQueueItem[table.Rows.Count];
@@ -282,14 +292,18 @@ namespace OpenDental{
 			return listQueue;
 		}
 
-		///<summary>Supply an arrayList of type ClaimSendQueueItem. Called from X12 to begin the sorting process on claims going to one clearinghouse. Returns an array with Carrier,ProvBill,Subscriber,PatNum,ClaimNum, all in the correct order. Carrier is a string, the rest are int.</summary>
-		public static object[,] GetX12TransactionInfo(ArrayList queueItems){
+		public static object[,] GetX12TransactionInfo(int claimNum){
+			return GetX12TransactionInfo(new int[1] {claimNum});
+		}
+
+		///<summary>Supply claimnums. Called from X12 to begin the sorting process on claims going to one clearinghouse. Returns an array with Carrier,ProvBill,Subscriber,PatNum,ClaimNum, all in the correct order. Carrier is a string, the rest are int.</summary>
+		public static object[,] GetX12TransactionInfo(int[] claimNums){//ArrayList queueItemss){
 			StringBuilder str=new StringBuilder();
-			for(int i=0;i<queueItems.Count;i++){
+			for(int i=0;i<claimNums.Length;i++){
 				if(i>0){
 					str.Append(" OR");
 				}
-				str.Append(" claim.ClaimNum="+((ClaimSendQueueItem)queueItems[i]).ClaimNum.ToString());
+				str.Append(" claim.ClaimNum="+POut.PInt(claimNums[i]));//((ClaimSendQueueItem)queueItems[i]).ClaimNum.ToString());
 			}
 			string command;
 			if(FormChooseDatabase.DBtype==DatabaseType.Oracle){//FIXME:ORDER-BY. Probably Fixed.  ??
@@ -471,7 +485,7 @@ namespace OpenDental{
 
 
 
-	///<summary>Used to hold a list of claims to show in the claims 'queue' waiting to be sent.</summary>
+	///<summary>Holds a list of claims to show in the claims 'queue' waiting to be sent.</summary>
 	public class ClaimSendQueueItem{
 		///<summary></summary>
 		public int ClaimNum;
@@ -492,7 +506,7 @@ namespace OpenDental{
 		public bool IsMedical;
 	}
 
-	///<summary>Used to hold a list of claims to show in the Claim Check Edit window.</summary>
+	///<summary>Holds a list of claims to show in the Claim Check Edit window.</summary>
 	public class ClaimPaySplit{
 		///<summary></summary>
 		public int ClaimNum;

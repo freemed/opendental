@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Windows.Forms;
@@ -17,17 +18,17 @@ namespace OpenDental.Eclaims
 			
 		}
 
-		///<summary>Supply an arrayList of type ClaimSendQueueItem. Called from FormClaimSend.  Can send to multiple clearinghouses simultaneously.</summary>
-		public static void SendBatches(ArrayList queueItems){
-			//claimsByCHouse is of type ClaimSendQueueItem
-			ArrayList[] claimsByCHouse=new ArrayList[Clearinghouses.List.Length];
+		///<summary>Supply a list of ClaimSendQueueItems. Called from FormClaimSend.  Can send to multiple clearinghouses simultaneously or can also just send one claim.</summary>
+		public static void SendBatches(List<ClaimSendQueueItem> queueItems){
+			List<ClaimSendQueueItem>[] claimsByCHouse=new List<ClaimSendQueueItem>[Clearinghouses.List.Length];
+			//ArrayList[Clearinghouses.List.Length];
 			for(int i=0;i<claimsByCHouse.Length;i++){
-				claimsByCHouse[i]=new ArrayList();
+				claimsByCHouse[i]=new List<ClaimSendQueueItem>();
+				//claimsByCHouse[i]=new ArrayList();
 			}
 			//divide the items by clearinghouse:
 			for(int i=0;i<queueItems.Count;i++){
-				claimsByCHouse[Clearinghouses.GetIndex(((ClaimSendQueueItem)queueItems[i]).ClearinghouseNum)]
-					.Add(queueItems[i]);
+				claimsByCHouse[Clearinghouses.GetIndex(queueItems[i].ClearinghouseNum)].Add(queueItems[i]);
 			}
 			//for any clearinghouses with claims, send them:
 			int batchNum;
@@ -118,8 +119,7 @@ namespace OpenDental.Eclaims
 				}
 				if(Clearinghouses.List[i].Eformat!=ElectronicClaimFormat.Canadian){
 					for(int j=0;j<claimsByCHouse[i].Count;j++){
-						Etranss.SetClaimSentOrPrinted(((ClaimSendQueueItem)claimsByCHouse[i][j]).ClaimNum,
-							((ClaimSendQueueItem)claimsByCHouse[i][j]).PatNum,
+						Etranss.SetClaimSentOrPrinted(claimsByCHouse[i][j].ClaimNum,claimsByCHouse[i][j].PatNum,
 							Clearinghouses.List[i].ClearinghouseNum,etype);
 					}
 				}

@@ -17,8 +17,8 @@ namespace OpenDental.Eclaims {
 			
 		//}
 
-		///<summary>Supply an arrayList of type ClaimSendQueueItem. Called from Eclaims and includes multiple claims.</summary>
-		public static bool SendBatch(ArrayList queueItems,int interchangeNum){
+		///<summary>Called from Eclaims and includes multiple claims.</summary>
+		public static bool SendBatch(List<ClaimSendQueueItem> queueItems,int interchangeNum){
 			Clearinghouse clearhouse=GetClearinghouse();//clearinghouse must be valid to get to this point.
 				//Clearinghouses.GetClearinghouse(((ClaimSendQueueItem)queueItems[0]).ClearinghouseNum);
 //Warning: this path is not handled properly if trailing slash is missing:
@@ -51,11 +51,10 @@ namespace OpenDental.Eclaims {
 			List<CanadianExtract> missingListDates;
 			string txt;
 			for(int i=0;i<queueItems.Count;i++){
-				etrans=Etranss.SetClaimSentOrPrinted(((ClaimSendQueueItem)queueItems[i]).ClaimNum,
-					((ClaimSendQueueItem)queueItems[i]).PatNum,
+				etrans=Etranss.SetClaimSentOrPrinted(queueItems[i].ClaimNum,queueItems[i].PatNum,
 					clearhouse.ClearinghouseNum,EtransType.Claim_CA);
 				txt="";
-				claim=Claims.GetClaim(((ClaimSendQueueItem)queueItems[i]).ClaimNum);
+				claim=Claims.GetClaim(queueItems[i].ClaimNum);
 				canClaim=CanadianClaims.GetForClaim(claim.ClaimNum);//already validated to not=null
 				clinic=Clinics.GetClinic(claim.ClinicNum);
 				billProv=Providers.ListLong[Providers.GetIndexLong(claim.ProvBill)];

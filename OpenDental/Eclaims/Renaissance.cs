@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.IO;
 using System.Windows.Forms;
 using OpenDentBusiness;
@@ -16,11 +17,10 @@ namespace OpenDental.Eclaims{
 			
 		}
 
-		///<summary>Supply an arrayList of type ClaimSendQueueItem. Called from Eclaims and includes multiple claims.</summary>
-		public static bool SendBatch(ArrayList queueItems,int batchNum){
+		///<summary>Called from Eclaims and includes multiple claims.</summary>
+		public static bool SendBatch(List<ClaimSendQueueItem> queueItems,int batchNum){
 			for(int i=0;i<queueItems.Count;i++){
-				if(!CreateClaim(((ClaimSendQueueItem)queueItems[i]).PatNum,
-					((ClaimSendQueueItem)queueItems[i]).ClaimNum,batchNum))
+				if(!CreateClaim(queueItems[i].PatNum,queueItems[i].ClaimNum,batchNum))
 				{
 					return false;
 				}

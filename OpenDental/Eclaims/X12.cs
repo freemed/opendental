@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
 using System.IO;
@@ -51,13 +52,13 @@ namespace OpenDental.Eclaims
 			}
 		}
 
-		///<summary>Supply an arrayList of type ClaimSendQueueItem. Called from Eclaims and includes multiple claims.</summary>
-		public static bool SendBatch(ArrayList queueItems,int interchangeNum){
-			Clearinghouse clearhouse=Clearinghouses.GetClearinghouse(((ClaimSendQueueItem)queueItems[0]).ClearinghouseNum);
-			ArrayList functionalGroupDental=new ArrayList();//arrayList of ClaimSendQueueItem
-			ArrayList functionalGroupMedical=new ArrayList();
+		///<summary>Called from Eclaims and includes multiple claims.</summary>
+		public static bool SendBatch(List<ClaimSendQueueItem> queueItems,int interchangeNum){
+			Clearinghouse clearhouse=Clearinghouses.GetClearinghouse(queueItems[0].ClearinghouseNum);
+			List<ClaimSendQueueItem> functionalGroupDental=new List<ClaimSendQueueItem>();
+			List<ClaimSendQueueItem> functionalGroupMedical=new List<ClaimSendQueueItem>();
 			for(int i=0;i<queueItems.Count;i++){
-				if(((ClaimSendQueueItem)queueItems[i]).IsMedical){
+				if(queueItems[i].IsMedical){
 					functionalGroupMedical.Add(queueItems[i]);
 				}
 				else{
@@ -114,11 +115,11 @@ namespace OpenDental.Eclaims
 			return true;
 		}
 
-		private static void WriteFunctionalGroup(StreamWriter sw,ArrayList queueItems,int interchangeNum,Clearinghouse clearhouse){
+		private static void WriteFunctionalGroup(StreamWriter sw,List<ClaimSendQueueItem> queueItems,int interchangeNum,Clearinghouse clearhouse){
 			int transactionNum=1;//one for each carrier. Can be reused in other functional groups and interchanges, so not persisted
 			//Functional Group Header
 			string groupControlNumber="";//Must be unique within file.
-			bool isMedical=((ClaimSendQueueItem)queueItems[0]).IsMedical;
+			bool isMedical=queueItems[0].IsMedical;
 			if(isMedical){
 				groupControlNumber="2";//this works for now because only two groups
 				sw.WriteLine("GS*HC*"//GS01: Health Care Claim
@@ -142,7 +143,11 @@ namespace OpenDental.Eclaims
 					+"004010X097A1~");//GS08: Version
 			}
 			//Gets an array with PayorID,ProvBill,Subscriber,PatNum,ClaimNum all in the correct order
-			object[,] claimAr=Claims.GetX12TransactionInfo(queueItems);
+			int[] claimNums=new int[queueItems.Count];
+			for(int i=0;i<queueItems.Count;i++){
+				claimNums[i]=queueItems[i].ClaimNum;
+			}
+			object[,] claimAr=Claims.GetX12TransactionInfo(claimNums);
 			bool newTrans;//true if this loop has transaction header
 			bool hasFooter;//true if this loop has transaction footer(if the Next loop is a newTrans)
 			int HLcount=1;
@@ -1582,9 +1587,7 @@ namespace OpenDental.Eclaims
 					retVal+=",";
 				retVal+="Clearinghouse GS03";
 			}
-			ArrayList queueItems=new ArrayList();
-			queueItems.Add(queueItem);
-			object[,] claimAr=Claims.GetX12TransactionInfo(queueItems);//just to get prov. Needs work.
+			object[,] claimAr=Claims.GetX12TransactionInfo(((ClaimSendQueueItem)queueItem).ClaimNum);//just to get prov. Needs work.
 			Provider billProv=Providers.ListLong[Providers.GetIndexLong((int)claimAr[1,0])];
 			Provider treatProv=Providers.ListLong[Providers.GetIndexLong(claim.ProvTreat)];
 			InsPlan insPlan=InsPlans.GetPlan(claim.PlanNum,new InsPlan[] {});

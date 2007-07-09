@@ -630,7 +630,7 @@ namespace OpenDental{
 		}
 
 		private void OnEclaims_Click(){
-			ArrayList queueItems=new ArrayList();//a list of queue items to send
+			List<ClaimSendQueueItem> queueItems=new List<ClaimSendQueueItem>();//a list of queue items to send
 			if(gridMain.SelectedIndices.Length==0){
 				for(int i=0;i<listQueue.Length;i++){
 					if(//(listQueue[i].ClaimStatus=="W" || listQueue[i].ClaimStatus=="P")
@@ -670,7 +670,7 @@ namespace OpenDental{
 			for(int i=0;i<queueItems.Count;i++){
 				for(int j=0;j<tableHistory.Rows.Count;j++){
 					int claimNum=PIn.PInt(tableHistory.Rows[j]["ClaimNum"].ToString());
-					if(claimNum==((ClaimSendQueueItem)queueItems[i]).ClaimNum){
+					if(claimNum==queueItems[i].ClaimNum){
 						gridHistory.SetSelected(j,true);
 						break;
 					}
