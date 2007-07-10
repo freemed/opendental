@@ -53,7 +53,7 @@ namespace OpenDental{
 				MsgBox.Show(this,"Cannot convert this database version which was only for development purposes.");
 				return false;
 			}
-			if(FromVersion < new Version("5.0.5.0")){
+			if(FromVersion < new Version("5.0.6.0")){
 				if(MessageBox.Show(Lan.g(this,"Your database will now be converted")+"\r"
 					+Lan.g(this,"from version")+" "+FromVersion.ToString()+"\r"
 					+Lan.g(this,"to version")+" "+ToVersion.ToString()+"\r"
@@ -5485,6 +5485,18 @@ namespace OpenDental{
 				command="UPDATE preference SET ValueString = '5.0.5.0' WHERE PrefName = 'DataBaseVersion'";
 				General.NonQEx(command);
 				command="ALTER TABLE referral ADD NationalProvID varchar(255)";
+				General.NonQEx(command);
+			}
+			To5_0_6();
+		}
+
+		private void To5_0_6() {
+			if(FromVersion<new Version("5.0.6.0")) {
+				string command;
+				//Adjust the ada 2006 total fee location to fit be in box #33.
+				command="UPDATE claimformitem SET  YPos='694' WHERE  FieldName='TotalFee' AND ClaimFormNum=(SELECT ClaimFormNum FROM claimform WHERE Description LIKE '%ADA 2006%')";
+				General.NonQEx(command);
+				command="UPDATE preference SET ValueString = '5.0.6.0' WHERE PrefName = 'DataBaseVersion'";
 				General.NonQEx(command);
 			}
 			//To5_0_?();
