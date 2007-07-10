@@ -5214,15 +5214,24 @@ namespace OpenDental{
 					//run, every MySQL user will be using text in the preference value column.
 					command="ALTER TABLE preference CHANGE ValueString ValueString text NOT NULL default ''";
 					General.NonQEx(command);
-				}
-				else {
+				} else {
 					//Already converted to varchar2 4000 for Oracle. No conversion necessary here.
 				}
 				command="UPDATE preference SET ValueString = '4.9.7.0' WHERE PrefName = 'DataBaseVersion'";
 				General.NonQEx(command);
 			}
-			To5_0_0();
+			To4_9_11();
 		}
+
+		private void To4_9_11() {
+			if(FromVersion<new Version("4.9.11.0")) {
+				string command="DELETE FROM appointment WHERE AptStatus=6 AND NOT EXISTS(SELECT * FROM patient WHERE patient.NextAptNum=appointment.AptNum)";
+				General.NonQEx(command);
+				command="UPDATE preference SET ValueString = '4.9.11.0' WHERE PrefName = 'DataBaseVersion'";
+				General.NonQEx(command);
+			}
+			To5_0_0();
+		}	
 
 		///<summary></summary>
 		private void To5_0_0() {
