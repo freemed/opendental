@@ -16,6 +16,9 @@ using System.Xml.Serialization;
 using System.Xml.XPath;
 using OpenDentBusiness;
 using CodeBase;
+using OpenDental.DataAccess;
+using System.Reflection;
+using OpenDentServer.Properties;
 
 namespace OpenDentServer {
 	partial class OpenDentalService:ServiceBase {
@@ -210,22 +213,34 @@ namespace OpenDentServer {
 				XmlSerializer serializer;
 				memStream=new MemoryStream();
 				try {
-					if(dto.GetType()==typeof(DtoGetDS)){
+					Type type = dto.GetType();
+					if(type==typeof(DtoGetDS)){
 						DataSet ds=GeneralB.GetDS(((DtoGetDS)dto).MethodName,((DtoGetDS)dto).Parameters);
 						serializer=new XmlSerializer(typeof(DataSet));
 						serializer.Serialize(memStream,ds);
 					}
-					else if(dto.GetType().BaseType==typeof(DtoCommandBase)) {
+					else if(type.BaseType==typeof(DtoCommandBase)) {
 						int result=BusinessLayer.ProcessCommand((DtoCommandBase)dto);
 						DtoServerAck ack=new DtoServerAck();
 						ack.IDorRows=result;
 						serializer=new XmlSerializer(typeof(DtoServerAck));
 						serializer.Serialize(memStream,ack);
 					}
-					else if(dto.GetType().BaseType==typeof(DtoQueryBase)) {
+					else if(type.BaseType==typeof(DtoQueryBase)) {
 						DataSet ds=BusinessLayer.ProcessQuery((DtoQueryBase)dto);
 						serializer=new XmlSerializer(typeof(DataSet));
 						serializer.Serialize(memStream,ds);
+					}
+					else if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(FactoryTransferObject<>)) {
+						// Pass the DTO to the FactoryServer<T>
+						Type factoryServerType = typeof(FactoryServer<>);
+						factoryServerType = factoryServerType.MakeGenericType(type.GetGenericArguments());
+
+						MethodInfo processCommandMethod = factoryServerType.GetMethod("ProcessCommand", BindingFlags.Public | BindingFlags.Static);
+						processCommandMethod.Invoke(null, new object[] { memStream, dto });
+					}
+					else {
+						throw new NotSupportedException(string.Format(Resources.DtoNotSupportedException, type.FullName));
 					}
 				}
 				catch(Exception e) {
