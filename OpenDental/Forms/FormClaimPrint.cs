@@ -1444,13 +1444,7 @@ namespace OpenDental{
 						displayStrings[i]=GetProcInfo("Desc",1+startProc);
 						break;
 					case "P1Fee":
-						//if(ClaimFormCur.Items[i].FormatString==""){
 							displayStrings[i]=GetProcInfo("Fee",1+startProc,ClaimFormCur.Items[i].FormatString);
-						//}
-						//else {
-						//	double feeNoDec = (System.Convert.ToDouble( GetProcInfo("Fee",1+startProc) )) * 100;
-						//	displayStrings[i]=feeNoDec.ToString();
-						//}
 						break;
 					case "P1TreatDentMedicaidID":
 						displayStrings[i]=GetProcInfo("TreatDentMedicaidID",1+startProc);
@@ -1519,7 +1513,7 @@ namespace OpenDental{
 						displayStrings[i]=GetProcInfo("Desc",2+startProc);
 						break;
 					case "P2Fee":
-						displayStrings[i]=GetProcInfo("Fee",2+startProc);
+						displayStrings[i]=GetProcInfo("Fee",2+startProc,ClaimFormCur.Items[i].FormatString);
 						break;
 					case "P2TreatDentMedicaidID":
 						displayStrings[i]=GetProcInfo("TreatDentMedicaidID",2+startProc);
@@ -1592,7 +1586,7 @@ namespace OpenDental{
 						displayStrings[i]=GetProcInfo("Desc",3+startProc);
 						break;
 					case "P3Fee":
-						displayStrings[i]=GetProcInfo("Fee",3+startProc);
+						displayStrings[i]=GetProcInfo("Fee",3+startProc,ClaimFormCur.Items[i].FormatString);
 						break;
 					case "P3TreatDentMedicaidID":
 						displayStrings[i]=GetProcInfo("TreatDentMedicaidID",3+startProc);
@@ -1665,7 +1659,7 @@ namespace OpenDental{
 						displayStrings[i]=GetProcInfo("Desc",4+startProc);
 						break;
 					case "P4Fee":
-						displayStrings[i]=GetProcInfo("Fee",4+startProc);
+						displayStrings[i]=GetProcInfo("Fee",4+startProc,ClaimFormCur.Items[i].FormatString);
 						break;
 					case "P4TreatDentMedicaidID":
 						displayStrings[i]=GetProcInfo("TreatDentMedicaidID",4+startProc);
@@ -1738,7 +1732,7 @@ namespace OpenDental{
 						displayStrings[i]=GetProcInfo("Desc",5+startProc);
 						break;
 					case "P5Fee":
-						displayStrings[i]=GetProcInfo("Fee",5+startProc);
+						displayStrings[i]=GetProcInfo("Fee",5+startProc,ClaimFormCur.Items[i].FormatString);
 						break;
 					case "P5TreatDentMedicaidID":
 						displayStrings[i]=GetProcInfo("TreatDentMedicaidID",5);
@@ -1811,7 +1805,7 @@ namespace OpenDental{
 						displayStrings[i]=GetProcInfo("Desc",6+startProc);
 						break;
 					case "P6Fee":
-						displayStrings[i]=GetProcInfo("Fee",6+startProc);
+						displayStrings[i]=GetProcInfo("Fee",6+startProc,ClaimFormCur.Items[i].FormatString);
 						break;
 					case "P6TreatDentMedicaidID":
 						displayStrings[i]=GetProcInfo("TreatDentMedicaidID",6+startProc);
@@ -1884,7 +1878,7 @@ namespace OpenDental{
 						displayStrings[i]=GetProcInfo("Desc",7+startProc);
 						break;
 					case "P7Fee":
-						displayStrings[i]=GetProcInfo("Fee",7+startProc);
+						displayStrings[i]=GetProcInfo("Fee",7+startProc,ClaimFormCur.Items[i].FormatString);
 						break;
 					case "P7TreatDentMedicaidID":
 						displayStrings[i]=GetProcInfo("TreatDentMedicaidID",7+startProc);
@@ -1954,7 +1948,7 @@ namespace OpenDental{
 						displayStrings[i]=GetProcInfo("Desc",8+startProc);
 						break;
 					case "P8Fee":
-						displayStrings[i]=GetProcInfo("Fee",8+startProc);
+						displayStrings[i]=GetProcInfo("Fee",8+startProc,ClaimFormCur.Items[i].FormatString);
 						break;
 					case "P8TreatDentMedicaidID":
 						displayStrings[i]=GetProcInfo("TreatDentMedicaidID",8+startProc);
@@ -2024,7 +2018,7 @@ namespace OpenDental{
 						displayStrings[i]=GetProcInfo("Desc",9+startProc);
 						break;
 					case "P9Fee":
-						displayStrings[i]=GetProcInfo("Fee",9+startProc);
+						displayStrings[i]=GetProcInfo("Fee",9+startProc,ClaimFormCur.Items[i].FormatString);
 						break;
 					case "P9TreatDentMedicaidID":
 						displayStrings[i]=GetProcInfo("TreatDentMedicaidID",9+startProc);
@@ -2094,7 +2088,7 @@ namespace OpenDental{
 						displayStrings[i]=GetProcInfo("Desc",10+startProc);
 						break;
 					case "P10Fee":
-						displayStrings[i]=GetProcInfo("Fee",10+startProc);
+						displayStrings[i]=GetProcInfo("Fee",10+startProc,ClaimFormCur.Items[i].FormatString);
 						break;
 					case "P10TreatDentMedicaidID":
 						displayStrings[i]=GetProcInfo("TreatDentMedicaidID",10+startProc);
@@ -2148,7 +2142,11 @@ namespace OpenDental{
 							if(f < claimprocs.Count)
 								fee+=((ClaimProc)claimprocs[f]).FeeBilled;
 						}
-						displayStrings[i]=fee.ToString("F");
+						if(ClaimFormCur.Items[i].FormatString==""){
+							displayStrings[i]=fee.ToString("F");
+						} else {
+							displayStrings[i]=fee.ToString(ClaimFormCur.Items[i].FormatString);
+						}
 						break;
 					case "DateOfService"://only for this page, Earliest proc date.
 						DateTime dateService=((ClaimProc)claimprocs[0]).ProcDate;
@@ -2233,7 +2231,7 @@ namespace OpenDental{
 				}
 				else{
 					return claimprocs[procIndex].FeeBilled.ToString(stringFormat);
-					//Use "F0' 00'" as the format string to display a number with no decimal and with both zeros.
+					//Use "0' 00'" as the format string to display a number with no decimal and with both zeros.
 					//The space is optional, and is only used for alignment purposes.  Multiple spaces can be used.
 				}
 			}
