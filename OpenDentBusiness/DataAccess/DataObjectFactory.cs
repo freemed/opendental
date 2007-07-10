@@ -8,6 +8,10 @@ using OpenDentBusiness.Properties;
 using System.Drawing;
 
 namespace OpenDental.DataAccess {
+	/// <summary>
+	/// Provides common methods for creating, reading, updating and deleting <see cref="IDataObject"/> objects.
+	/// </summary>
+	/// <typeparam name="T">The type of object.</typeparam>
 	public static class DataObjectFactory<T> where T : DataObjectBase, new() {
 		private const char ParameterPrefix = '?';
 
@@ -17,10 +21,20 @@ namespace OpenDental.DataAccess {
 			set { useParameters = value; }
 		}
 
+		/// <summary>
+		/// Creates a new <typeparamref name="T"/>.
+		/// </summary>
+		/// <returns>A new <typeparamref name="T"/>.</returns>
 		public static T NewObject() {
 			return new T();
 		}
 
+		/// <summary>
+		/// Loads a collection of objects of type <typeparamref name="T"/> from the database, using the
+		/// given <paramref name="query"/>.
+		/// </summary>
+		/// <param name="query">The query to execute on the server.</param>
+		/// <returns>A collection of objects of type <typeparamref name="T"/>.</returns>
 		public static Collection<T> CreateObjects(string query) {
 			if (query == null)
 				throw new ArgumentNullException("query");
@@ -44,6 +58,12 @@ namespace OpenDental.DataAccess {
 			return values;
 		}
 
+		/// <summary>
+		/// Loads an objects of type <typeparamref name="T"/> from the database, using the
+		/// given <paramref name="query"/>.
+		/// </summary>
+		/// <param name="query">The query to execute on the server.</param>
+		/// <returns>An objects of type <typeparamref name="T"/>.</returns>
 		public static T CreateObject(string query) {
 			if (query == null)
 				throw new ArgumentNullException("query");
@@ -68,6 +88,16 @@ namespace OpenDental.DataAccess {
 			return value;
 		}
 
+		/// <summary>
+		/// Retrieves the objects of type <typeparamref name="T"/> whose Id match the ids specified
+		/// from the database.
+		/// </summary>
+		/// <param name="id">The ids of the objects.</param>
+		/// <returns>A collection of objects of type <typeparamref name="T"/>.</returns>
+		/// <remarks>This method assumes the table corresponding to this object has a single, integer primary key.</remarks>
+		/// <exception cref="ArgumentNullException"><paramref name="id"/> is <see langword="null"/>.</exception>
+		/// <exception cref="InvalidOperationException">The object does not have a single primary key.</exception>
+		/// <exception cref="InvalidOperationException">The object does have a single primary key, but it is not of the <see cref="System.Int32"/> type.</exception>
 		public static Collection<T> CreateObjects(int[] id) {
 			if (id == null)
 				throw new ArgumentNullException("id");
@@ -89,6 +119,15 @@ namespace OpenDental.DataAccess {
 			return CreateObjects(queryBuilder.ToString());
 		}
 
+		/// <summary>
+		/// Retrieves the object of type <typeparamref name="T"/> whose Id match the id specified
+		/// from the database.
+		/// </summary>
+		/// <param name="id">The id of the object.</param>
+		/// <returns>An object of type <typeparamref name="T"/>.</returns>
+		/// <remarks>This method assumes the table corresponding to this object has a single, integer primary key.</remarks>
+		/// <exception cref="InvalidOperationException">The object does not have a single primary key.</exception>
+		/// <exception cref="InvalidOperationException">The object does have a single primary key, but it is not of the <see cref="System.Int32"/> type.</exception>
 		public static T CreateObject(int id) {
 			// Specific case. Create an object, based on an ID. 
 			// Construct the query.
@@ -99,6 +138,12 @@ namespace OpenDental.DataAccess {
 			return CreateObject(query);
 		}
 
+		/// <summary>
+		/// Reads one row from the <paramref name="reader"/> specified and creates an object of type <typeparamref name="T"/>.
+		/// </summary>
+		/// <param name="reader">A <see cref="IDataReader"/> that provides access to the raw database data.</param>
+		/// <returns>An object of type <typeparamref name="T"/>.</returns>
+		/// <exception cref="ArgumentNullException"><paramref name="reader"/> is <see langword="null"/>.</exception>
 		public static T CreateObject(IDataReader reader) {
 			if (reader == null)
 				throw new ArgumentNullException("reader");
@@ -139,7 +184,7 @@ namespace OpenDental.DataAccess {
 		}
 
 		/// <summary>
-		///  Creates an objects of type <typeparamref name="T"/> based on a <see cref="DataRow"/>.
+		///  Creates an object of type <typeparamref name="T"/> based on a <see cref="DataRow"/>.
 		///  The fields of the <see cref="DataRow"/> can be either of the corresponding type, or of the 
 		///  <see cref="String"/> type. In the case of a <see cref="String"/>, conversion will be done using
 		///  the <see cref="PIn"/> data class.
@@ -270,6 +315,13 @@ namespace OpenDental.DataAccess {
 			return values;
 		}
 
+		/// <summary>
+		/// Reads all rows from the <paramref name="reader"/> specified and creates a collection of
+		/// objects of type <typeparamref name="T"/>.
+		/// </summary>
+		/// <param name="reader">A <see cref="IDataReader"/> that provides access to the raw database data.</param>
+		/// <returns>An object of type <typeparamref name="T"/>.</returns>
+		/// <exception cref="ArgumentNullException"><paramref name="reader"/> is <see langword="null"/>.</exception>
 		public static Collection<T> CreateObjects(IDataReader reader) {
 			if (reader == null)
 				throw new ArgumentNullException("reader");
@@ -283,7 +335,26 @@ namespace OpenDental.DataAccess {
 			return values;
 		}
 
-
+		/// <summary>
+		///  <para>
+		///   Saves an object to the database. If the IsNew propery of the object is set to false, an existing
+		///   row will be updated. If the IsNew property is set to true, a new row will be created.
+		///  </para>
+		///  <para>
+		///  If the object contains a single PrimaryKey field, with AutoNumber set to true, a new primary key 
+		///  will be generated. Depending on the current settings, this may be a new, random key or an incremental
+		///  key.
+		/// </summary>
+		/// <remarks>
+		///  <para>
+		///   When an existing object is saved to the database, only modified values are being sent to the database.
+		///   This is to avoid concurrency issues as much as possible.
+		///  </para>
+		///  <para>
+		///   This method is not thread safe.
+		///  </para>
+		/// </remarks>
+		/// <param name="value">The object to be saved.</param>
 		public static void WriteObject(T value) {
 			WriteObject(value, false);
 		}
