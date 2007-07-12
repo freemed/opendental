@@ -127,10 +127,13 @@ namespace OpenDental{
 		private Schedule BlockoutClipboard;
 		///<Summary>This has to be tracked globally because mouse might move directly from one appt to another without any break.  This is the only way to know if we are still over the same appt.</Summary>
 		private int bubbleAptNum;
+		private DateTime bubbleTime;
+		private Point bubbleLocation;
 		private ODGrid gridEmpSched;
 		private OpenDental.UI.PictureBox PicturePat;
 		private string PatCurName;
 		private int PatCurNum;
+		private Timer timerInfoBubble;
 		private string PatCurChartNumber;
 
 		///<summary></summary>
@@ -231,6 +234,7 @@ namespace OpenDental{
 			this.butOther = new OpenDental.UI.Button();
 			this.ToolBarMain = new OpenDental.UI.ODToolBar();
 			this.gridEmpSched = new OpenDental.UI.ODGrid();
+			this.timerInfoBubble = new System.Windows.Forms.Timer(this.components);
 			this.panelPinBoard.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
 			this.panelArrows.SuspendLayout();
@@ -899,6 +903,11 @@ namespace OpenDental{
 			this.gridEmpSched.DoubleClick += new System.EventHandler(this.gridEmpSched_DoubleClick);
 			this.gridEmpSched.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridEmpSched_CellDoubleClick);
 			// 
+			// timerInfoBubble
+			// 
+			this.timerInfoBubble.Interval = 500;
+			this.timerInfoBubble.Tick += new System.EventHandler(this.timerInfoBubble_Tick);
+			// 
 			// ContrAppt
 			// 
 			this.Controls.Add(this.groupSearch);
@@ -1106,6 +1115,11 @@ namespace OpenDental{
 			butComplete.Enabled=butOther.Enabled;
 			butDelete.Enabled=butOther.Enabled;
 			ParentForm.Text=Patients.GetMainTitle(PatCurName,PatCurNum,PatCurChartNumber);
+			Appointment aptCur=Appointments.GetOneApt(ContrApptSingle.ClickedAptNum);
+			if (aptCur!=null){
+				SetConfirmed(aptCur);
+			}
+
 			OnPatientSelected(PatCurNum);
 		}
 
@@ -1293,15 +1307,15 @@ namespace OpenDental{
 				comboView.SelectedIndex=0;
 			}
 		}
-
-		/*This still doesn't have a home:
+		public void SetConfirmed(Appointment AptCur){
+		//This still doesn't have a home:
 			if(panelAptInfo.Enabled){
 				listConfirmed.SelectedIndex=DefB.GetOrder(DefCat.ApptConfirmed,AptCur.Confirmed);
 			}
 			else{
 				listConfirmed.SelectedIndex=-1;
 			}
-		}*/
+		}
 
 		///<summary>Sets appointment data invalid on all other computers, causing them to refresh.  Does NOT refresh the data for this computer which must be done separately.</summary>
 		private void SetInvalid(){
@@ -2104,14 +2118,21 @@ namespace OpenDental{
 
 		///<Summary>Does a hit test to determine if over an appointment.  Fills the bubble with data and then positions it.</Summary>
 		private void InfoBubbleDraw(Point p){
+			//remember where to draw for hover effect
+			bubbleLocation=p;
 			int aptNum=HitTestAppt(p);
 			if(aptNum==0 || HitTestApptBottom(p)) {
 				if(infoBubble.Visible) {
 					infoBubble.Visible=false;
+					timerInfoBubble.Enabled=false;
 				}
 				return;
 			}
 			if(aptNum!=bubbleAptNum){
+				timerInfoBubble.Enabled=false;
+				timerInfoBubble.Enabled=true;
+				//delay for hover effect 0.5 sec
+				bubbleTime=DateTime.Now;
 				bubbleAptNum=aptNum;
 				//most data is already present in DS.Appointment, but we do need to get the patient picture
 				infoBubble.BackgroundImage=new Bitmap(infoBubble.Width,800);
@@ -2190,7 +2211,7 @@ namespace OpenDental{
 				}
 				if(row["Note"].ToString()!="") {
 					h=g.MeasureString(row["Note"].ToString(),font,infoBubble.Width).Height;
-					g.DrawString(row["Note"].ToString(),font,brush,new RectangleF(x,y,infoBubble.Width,h));
+					g.DrawString(row["Note"].ToString(),font,Brushes.Blue,new RectangleF(x,y,infoBubble.Width,h));
 					y+=h;
 				}
 				//patient info---------------------
@@ -2249,7 +2270,12 @@ namespace OpenDental{
 				yval=panelSheet.Bottom-infoBubble.Height;
 			}
 			infoBubble.Location=new Point(p.X+ContrApptSheet2.Left+panelSheet.Left+10,yval);
-			infoBubble.Visible=true;
+			if (DateTime.Now.AddMilliseconds(-500) > bubbleTime){
+				infoBubble.Visible=true;
+			}
+			else{
+				infoBubble.Visible=false;
+			}
 		}
 
 		///<summary>Usually dropping an appointment to a new location.</summary>
@@ -2481,6 +2507,7 @@ namespace OpenDental{
 
 		private void ContrApptSheet2_MouseLeave(object sender,EventArgs e) {
 			InfoBubbleDraw(new Point(-1,-1));
+			timerInfoBubble.Enabled=false;
 			Cursor=Cursors.Default;
 		}
 
@@ -3061,6 +3088,13 @@ namespace OpenDental{
 
 		private void OnBreak_Click(){
 			Appointment apt = Appointments.GetOneApt(ContrApptSingle.SelectedAptNum);
+			int thisI=GetIndex(ContrApptSingle.SelectedAptNum);
+			Patient pat=Patients.GetPat(PIn.PInt(ContrApptSingle3[thisI].DataRoww["PatNum"].ToString()));
+			if (MessageBox.Show(Lan.g(this, "Are you sure you want to break appointment for: " + "\r\n" + "\r\n" +  pat.GetNameFL()), "Question...",
+					MessageBoxButtons.YesNo) != DialogResult.Yes) {
+				return;
+			}
+
 			if(!Security.IsAuthorized(Permissions.AppointmentEdit)){
 				return;
 			}
@@ -3068,8 +3102,6 @@ namespace OpenDental{
 				return;
 			}
 			Appointments.SetAptStatus(ContrApptSingle.SelectedAptNum,ApptStatus.Broken);
-			int thisI=GetIndex(ContrApptSingle.SelectedAptNum);
-			Patient pat=Patients.GetPat(PIn.PInt(ContrApptSingle3[thisI].DataRoww["PatNum"].ToString()));
 			SecurityLogs.MakeLogEntry(Permissions.AppointmentMove,pat.PatNum,
 				pat.GetNameLF()+", "
 				+ContrApptSingle3[thisI].DataRoww["procs"].ToString()+", "
@@ -3652,6 +3684,18 @@ namespace OpenDental{
 			//there is no dialog here because it is just a simple entry
 			Commlogs.Insert(CommlogCur);
 			ev.HasMorePages = false;
+		}
+
+		private void ContrApptSheet2_MouseHover(object sender,System.Windows.Forms.MouseEventArgs e) {
+			if(!mouseIsDown){
+				InfoBubbleDraw(e.Location);
+			}
+
+		}
+
+		private void timerInfoBubble_Tick(object sender,EventArgs e) {
+			InfoBubbleDraw(bubbleLocation);
+			timerInfoBubble.Enabled =false;
 		}
 
 		

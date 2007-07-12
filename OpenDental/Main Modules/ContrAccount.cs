@@ -34,7 +34,7 @@ namespace OpenDental {
 		///<summary></summary>
 		//public static string[,] StatementA;
 		private System.Windows.Forms.Label labelUrgFinNote;
-		private System.Windows.Forms.TextBox textUrgFinNote;
+		private OpenDental.ODtextBox textUrgFinNote;
 		private System.Windows.Forms.Panel panelTotal;
 		///<summary>Set to true if this control is placed in the recall edit window. This affects the control behavior.</summary>
 		public bool ViewingInRecall=false;
@@ -172,7 +172,7 @@ namespace OpenDental {
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ContrAccount));
 			this.label1 = new System.Windows.Forms.Label();
 			this.labelUrgFinNote = new System.Windows.Forms.Label();
-			this.textUrgFinNote = new System.Windows.Forms.TextBox();
+			this.textUrgFinNote = new OpenDental.ODtextBox();
 			this.panelTotal = new System.Windows.Forms.Panel();
 			this.checkShowAll = new System.Windows.Forms.CheckBox();
 			this.contextMenuIns = new System.Windows.Forms.ContextMenu();

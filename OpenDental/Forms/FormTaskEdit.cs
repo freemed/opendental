@@ -21,7 +21,7 @@ namespace OpenDental{
 		private System.Windows.Forms.Label label3;
 		private System.Windows.Forms.Label label4;
 		private System.Windows.Forms.ListBox listDateType;
-		private System.Windows.Forms.TextBox textDescript;
+		private OpenDental.ODtextBox textDescript;
 		private Task Cur;
 		private OpenDental.ValidDate textDateTask;
 		private OpenDental.UI.Button butChange;
@@ -80,7 +80,7 @@ namespace OpenDental{
 			this.butCancel = new OpenDental.UI.Button();
 			this.butOK = new OpenDental.UI.Button();
 			this.label1 = new System.Windows.Forms.Label();
-			this.textDescript = new System.Windows.Forms.TextBox();
+			this.textDescript = new OpenDental.ODtextBox();
 			this.label2 = new System.Windows.Forms.Label();
 			this.label3 = new System.Windows.Forms.Label();
 			this.label4 = new System.Windows.Forms.Label();

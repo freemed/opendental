@@ -201,6 +201,13 @@ namespace OpenDental.Properties {
             }
         }
         
+        internal static System.Drawing.Bitmap Check_mark_23x20_02 {
+            get {
+                object obj = ResourceManager.GetObject("Check_mark_23x20_02", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         /// <summary>
         ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
         ///&lt;ClaimForm xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xmlns:xsd=&quot;http://www.w3.org/2001/XMLSchema&quot;&gt;

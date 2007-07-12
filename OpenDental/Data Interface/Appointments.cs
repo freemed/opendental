@@ -64,6 +64,18 @@ namespace OpenDental{
 			}
 			return list[0];
 		}
+		public static Appointment GetScheduledPlannedApt(int aptNum) {
+			if(aptNum==0) {
+				return null;
+			}
+			string command="SELECT * FROM appointment "
+				+"WHERE NextAptNum = '"+POut.PInt(aptNum)+"'";
+			Appointment[] list=FillList(command);
+			if(list.Length==0) {
+				return null;
+			}
+			return list[0];
+		}
 
 		///<summary>Gets a list of appointments for one day in the schedule for a given set of providers.</summary>
 		public static Appointment[] GetRouting(DateTime date,int[] provNums) {

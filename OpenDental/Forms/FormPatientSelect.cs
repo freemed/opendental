@@ -885,13 +885,14 @@ namespace OpenDental{
 
 		private void textLName_KeyDown(object sender,KeyEventArgs e) {
 			if(e.KeyCode==Keys.Up | e.KeyCode==Keys.Down) 
+				gridMain_KeyDown(sender, e);
 				gridMain.Refresh();
 		}
 
 		private void textFName_KeyDown(object sender,KeyEventArgs e) {
 			if(e.KeyCode==Keys.Up | e.KeyCode==Keys.Down) 
 				gridMain_KeyDown(sender, e);
-
+				gridMain.Refresh();
 		}
 
 		private void gridMain_KeyDown(object sender,KeyEventArgs e) {
@@ -901,43 +902,43 @@ namespace OpenDental{
 		private void textHmPhone_KeyDown(object sender,KeyEventArgs e) {
 			if(e.KeyCode==Keys.Up | e.KeyCode==Keys.Down) 
 				gridMain_KeyDown(sender, e);
-
+				gridMain.Refresh();
 		}
 
 		private void textAddress_KeyDown(object sender,KeyEventArgs e) {
 			if(e.KeyCode==Keys.Up | e.KeyCode==Keys.Down) 
 				gridMain_KeyDown(sender, e);
-
+				gridMain.Refresh();
 		}
 
 		private void textCity_KeyDown(object sender,KeyEventArgs e) {
 			if(e.KeyCode==Keys.Up | e.KeyCode==Keys.Down) 
 				gridMain_KeyDown(sender, e);
-
+				gridMain.Refresh();
 		}
 
 		private void textState_KeyDown(object sender,KeyEventArgs e) {
 			if(e.KeyCode==Keys.Up | e.KeyCode==Keys.Down) 
 				gridMain_KeyDown(sender, e);
-
+				gridMain.Refresh();
 		}
 
 		private void textSSN_KeyDown(object sender,KeyEventArgs e) {
 			if(e.KeyCode==Keys.Up | e.KeyCode==Keys.Down) 
 				gridMain_KeyDown(sender, e);
-
+				gridMain.Refresh();
 		}
 
 		private void textPatNum_KeyDown(object sender,KeyEventArgs e) {
 			if(e.KeyCode==Keys.Up | e.KeyCode==Keys.Down) 
 				gridMain_KeyDown(sender, e);
-
+				gridMain.Refresh();
 		}
 
 		private void textChartNumber_KeyDown(object sender,KeyEventArgs e) {
 			if(e.KeyCode==Keys.Up | e.KeyCode==Keys.Down) 
 				gridMain_KeyDown(sender, e);
-
+				gridMain.Refresh();
 		}
 
 		

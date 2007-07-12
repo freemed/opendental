@@ -219,6 +219,10 @@ namespace OpenDental{
 		private OpenDental.UI.Button buttonCMODB;
 		private OpenDental.UI.Button addKeyBut;
 		private CheckBox checkExtraNotes;
+		private System.Windows.Forms.PictureBox picCheck;
+		private Label label2;
+		private Label labelApptStatus2;
+		private Label labelApptStatus;
     private MenuItem menuItemDeleteSelected;
 
 			
@@ -383,6 +387,10 @@ namespace OpenDental{
 			this.butAllPrimary = new OpenDental.UI.Button();
 			this.butAllPerm = new OpenDental.UI.Button();
 			this.tabPlanned = new System.Windows.Forms.TabPage();
+			this.labelApptStatus2 = new System.Windows.Forms.Label();
+			this.labelApptStatus = new System.Windows.Forms.Label();
+			this.picCheck = new System.Windows.Forms.PictureBox();
+			this.label2 = new System.Windows.Forms.Label();
 			this.butPin = new OpenDental.UI.Button();
 			this.butClear = new OpenDental.UI.Button();
 			this.butNew = new OpenDental.UI.Button();
@@ -416,6 +424,7 @@ namespace OpenDental{
 			this.tabPrimary.SuspendLayout();
 			this.groupBox5.SuspendLayout();
 			this.tabPlanned.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.picCheck)).BeginInit();
 			this.tabShow.SuspendLayout();
 			this.groupBox7.SuspendLayout();
 			this.groupBox6.SuspendLayout();
@@ -482,7 +491,7 @@ namespace OpenDental{
 			this.radioEntryEC.Font = new System.Drawing.Font("Microsoft Sans Serif",8.25F,System.Drawing.FontStyle.Regular,System.Drawing.GraphicsUnit.Point,((byte)(0)));
 			this.radioEntryEC.Location = new System.Drawing.Point(2,46);
 			this.radioEntryEC.Name = "radioEntryEC";
-			this.radioEntryEC.Size = new System.Drawing.Size(85,16);
+			this.radioEntryEC.Size = new System.Drawing.Size(84,16);
 			this.radioEntryEC.TabIndex = 1;
 			this.radioEntryEC.Text = "ExistCurProv";
 			this.radioEntryEC.CheckedChanged += new System.EventHandler(this.radioEntryEC_CheckedChanged);
@@ -831,7 +840,7 @@ namespace OpenDental{
 			// 
 			this.tabPage2.Location = new System.Drawing.Point(4,4);
 			this.tabPage2.Name = "tabPage2";
-			this.tabPage2.Size = new System.Drawing.Size(931,-3);
+			this.tabPage2.Size = new System.Drawing.Size(931,0);
 			this.tabPage2.TabIndex = 1;
 			this.tabPage2.Text = "Pano";
 			// 
@@ -839,7 +848,7 @@ namespace OpenDental{
 			// 
 			this.tabPage4.Location = new System.Drawing.Point(4,4);
 			this.tabPage4.Name = "tabPage4";
-			this.tabPage4.Size = new System.Drawing.Size(931,-3);
+			this.tabPage4.Size = new System.Drawing.Size(931,0);
 			this.tabPage4.TabIndex = 3;
 			this.tabPage4.Text = "tabPage4";
 			// 
@@ -1065,7 +1074,7 @@ namespace OpenDental{
 			// 
 			this.label1.Location = new System.Drawing.Point(3,65);
 			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(102,11);
+			this.label1.Size = new System.Drawing.Size(78,13);
 			this.label1.TabIndex = 214;
 			this.label1.Text = "Ant. Composite";
 			// 
@@ -1281,7 +1290,7 @@ namespace OpenDental{
 			// 
 			this.label24.Location = new System.Drawing.Point(3,103);
 			this.label24.Name = "label24";
-			this.label24.Size = new System.Drawing.Size(70,18);
+			this.label24.Size = new System.Drawing.Size(50,13);
 			this.label24.TabIndex = 199;
 			this.label24.Text = "Amalgam";
 			// 
@@ -1289,7 +1298,7 @@ namespace OpenDental{
 			// 
 			this.label23.Location = new System.Drawing.Point(4,1);
 			this.label23.Name = "label23";
-			this.label23.Size = new System.Drawing.Size(101,13);
+			this.label23.Size = new System.Drawing.Size(83,13);
 			this.label23.TabIndex = 198;
 			this.label23.Text = "Post. Composite";
 			// 
@@ -2024,6 +2033,10 @@ namespace OpenDental{
 			// tabPlanned
 			// 
 			this.tabPlanned.BackColor = System.Drawing.Color.White;
+			this.tabPlanned.Controls.Add(this.labelApptStatus2);
+			this.tabPlanned.Controls.Add(this.labelApptStatus);
+			this.tabPlanned.Controls.Add(this.picCheck);
+			this.tabPlanned.Controls.Add(this.label2);
 			this.tabPlanned.Controls.Add(this.butPin);
 			this.tabPlanned.Controls.Add(this.butClear);
 			this.tabPlanned.Controls.Add(this.butNew);
@@ -2034,6 +2047,46 @@ namespace OpenDental{
 			this.tabPlanned.Size = new System.Drawing.Size(516,235);
 			this.tabPlanned.TabIndex = 4;
 			this.tabPlanned.Text = "Planned Appointment";
+			// 
+			// labelApptStatus2
+			// 
+			this.labelApptStatus2.Location = new System.Drawing.Point(3,141);
+			this.labelApptStatus2.Name = "labelApptStatus2";
+			this.labelApptStatus2.Size = new System.Drawing.Size(120,28);
+			this.labelApptStatus2.TabIndex = 10;
+			this.labelApptStatus2.Text = "label3";
+			this.labelApptStatus2.Visible = false;
+			// 
+			// labelApptStatus
+			// 
+			this.labelApptStatus.Font = new System.Drawing.Font("Microsoft Sans Serif",12F,System.Drawing.FontStyle.Bold,System.Drawing.GraphicsUnit.Point,((byte)(0)));
+			this.labelApptStatus.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))),((int)(((byte)(0)))),((int)(((byte)(192)))));
+			this.labelApptStatus.Location = new System.Drawing.Point(3,114);
+			this.labelApptStatus.Name = "labelApptStatus";
+			this.labelApptStatus.Size = new System.Drawing.Size(120,27);
+			this.labelApptStatus.TabIndex = 9;
+			this.labelApptStatus.Text = "label3";
+			this.labelApptStatus.Visible = false;
+			// 
+			// picCheck
+			// 
+			this.picCheck.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+			this.picCheck.Image = global::OpenDental.Properties.Resources.Check_mark_23x20_02;
+			this.picCheck.Location = new System.Drawing.Point(91,21);
+			this.picCheck.Name = "picCheck";
+			this.picCheck.Size = new System.Drawing.Size(23,23);
+			this.picCheck.TabIndex = 8;
+			this.picCheck.TabStop = false;
+			this.picCheck.Visible = false;
+			// 
+			// label2
+			// 
+			this.label2.AutoSize = true;
+			this.label2.Location = new System.Drawing.Point(12,102);
+			this.label2.Name = "label2";
+			this.label2.Size = new System.Drawing.Size(0,13);
+			this.label2.TabIndex = 7;
+			this.label2.Visible = false;
 			// 
 			// butPin
 			// 
@@ -2331,6 +2384,8 @@ namespace OpenDental{
 			this.tabPrimary.ResumeLayout(false);
 			this.groupBox5.ResumeLayout(false);
 			this.tabPlanned.ResumeLayout(false);
+			this.tabPlanned.PerformLayout();
+			((System.ComponentModel.ISupportInitialize)(this.picCheck)).EndInit();
 			this.tabShow.ResumeLayout(false);
 			this.groupBox7.ResumeLayout(false);
 			this.groupBox6.ResumeLayout(false);
@@ -2713,6 +2768,10 @@ namespace OpenDental{
 		}
 
 		private void FillPlanned(){
+				labelApptStatus.Visible=false;
+				labelApptStatus2.Visible=false;
+				picCheck.Visible=false;
+
 			if(PatCur==null){
 				ApptPlanned.Visible=false;
 				checkDone.Checked=false;
@@ -2735,6 +2794,7 @@ namespace OpenDental{
 				return;
 			}
 			//MessageBox.Show
+			Appointment SchedPlanapt=Appointments.GetScheduledPlannedApt(PatCur.NextAptNum);
 			Appointment apt=Appointments.GetOneApt(PatCur.NextAptNum);//although apt won't be used
 			if(apt==null){//next appointment not found
 				Patient patOld=PatCur.Copy();
@@ -2746,7 +2806,59 @@ namespace OpenDental{
 				butPin.Enabled=false;
 				butClear.Enabled=false;
 				labelMinutes.Text="";
+				labelApptStatus.Visible=false;
+				labelApptStatus2.Visible=false;
+				picCheck.Visible=false;
 				return;
+			}
+			if(SchedPlanapt!=null){//planned appt has been scheduled
+				if(SchedPlanapt.AptStatus==ApptStatus.Complete){
+					picCheck.Visible=true;
+					labelApptStatus.Text="Completed:";
+					labelApptStatus2.Text=SchedPlanapt.AptDateTime.ToString();
+					labelApptStatus.ForeColor=DefB.Long[(int)DefCat.ProgNoteColors][10].ItemColor;
+					labelApptStatus.BackColor=DefB.Long[(int)DefCat.ProgNoteColors][11].ItemColor;
+				}
+				else if(SchedPlanapt.AptStatus==ApptStatus.Broken) {
+					picCheck.Visible=false;
+					labelApptStatus.Text="Broken:";
+					labelApptStatus2.Text=SchedPlanapt.AptDateTime.ToString();
+					labelApptStatus.ForeColor=DefB.Long[(int)DefCat.ProgNoteColors][14].ItemColor;
+					labelApptStatus.BackColor=DefB.Long[(int)DefCat.ProgNoteColors][15].ItemColor;
+					}
+				else if(SchedPlanapt.AptStatus==ApptStatus.UnschedList) {
+					picCheck.Visible=false;
+					labelApptStatus.Text="Unscheduled:";
+					labelApptStatus2.Text=SchedPlanapt.AptDateTime.ToString();
+					labelApptStatus.ForeColor=DefB.Long[(int)DefCat.ProgNoteColors][14].ItemColor;
+					labelApptStatus.BackColor=DefB.Long[(int)DefCat.ProgNoteColors][15].ItemColor;
+					}
+				else {
+					picCheck.Visible=false;
+					if(SchedPlanapt.AptDateTime.Date==DateTime.Today.Date){
+						labelApptStatus.Text="Today's Appt";
+						labelApptStatus2.Text=SchedPlanapt.AptDateTime.ToString();
+					labelApptStatus.ForeColor=DefB.Long[(int)DefCat.ProgNoteColors][8].ItemColor;
+					labelApptStatus.BackColor=DefB.Long[(int)DefCat.ProgNoteColors][9].ItemColor;
+					}
+					else{
+						labelApptStatus.Text="Scheduled: ";
+						labelApptStatus2.Text=SchedPlanapt.AptDateTime.ToString();
+					labelApptStatus.ForeColor=DefB.Long[(int)DefCat.ProgNoteColors][12].ItemColor;
+					labelApptStatus.BackColor=DefB.Long[(int)DefCat.ProgNoteColors][13].ItemColor;
+					}
+
+				}
+				labelApptStatus.Visible=true;
+				labelApptStatus2.Visible=true;
+				labelApptStatus2.ForeColor=labelApptStatus.ForeColor;
+				labelApptStatus2.BackColor=labelApptStatus.BackColor;
+
+			}
+			else{//planned appt is not scheduled
+				labelApptStatus.Visible=false;
+				labelApptStatus2.Visible=false;
+				picCheck.Visible=false;
 			}
 			ApptPlanned.DataRoww=Appointments.RefreshOneApt(apt.AptNum,true).Rows[0];
 			ApptPlanned.SetSize();
