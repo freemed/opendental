@@ -176,7 +176,7 @@ namespace OpenDental{
 			ClaimCur=claimCur;
 			if(ClaimCur.ClaimForm != 0){
 				ClaimFormCur=ClaimForms.GetClaimForm(ClaimCur.ClaimForm);
-				ClaimValCodes=ClaimValCodeLog.GetValCodes(ClaimCur);
+//				ClaimValCodes=ClaimValCodeLog.GetValCodes(ClaimCur);
 			}
 			InitializeComponent();// Required for Windows Form Designer support
 			//tbPay.CellDoubleClicked += new OpenDental.ContrTable.CellEventHandler(tbPay_CellDoubleClicked);
@@ -1800,7 +1800,7 @@ namespace OpenDental{
 		///<summary></summary>
 		public void FillForm(){
 			this.Text=Lan.g(this,"Edit Claim")+" - "+PatCur.GetNameLF();
-			if(ClaimValCodes!=null){
+			/*if(ClaimValCodes!=null){
 				for(int i=0;i<ClaimValCodes.Count;i++){
 					ClaimValCode vc = (ClaimValCode)ClaimValCodes[i];
 					TextBox code = (TextBox)Controls.Find("textVC" + i + "Code", true)[0];
@@ -1808,7 +1808,7 @@ namespace OpenDental{
 					TextBox amount = (TextBox)Controls.Find("textVC" + i + "Amount", true)[0];
 					amount.Text=vc.ValAmount.ToString();
 				}
-			}
+			}*/
 			if(ClaimCur.DateService.Year<1880)
 				textDateService.Text="";
 			else
@@ -2734,7 +2734,7 @@ namespace OpenDental{
 			else
 				ClaimCur.ClinicNum=Clinics.List[comboClinic.SelectedIndex-1].ClinicNum;
 			Claims.Update(ClaimCur);
-			if(ClaimValCodes!=null){
+			/*if(ClaimValCodes!=null){
 				for(int i=0;i<ClaimValCodes.Count;i++){ //update existing Value Code pairs
 						ClaimValCode vc = (ClaimValCode)ClaimValCodes[i];
 						TextBox code = (TextBox)Controls.Find("textVC" + i + "Code", true)[0];
@@ -2755,7 +2755,7 @@ namespace OpenDental{
 					}
 				}
 				ClaimValCodeLog.Update(ClaimValCodes);
-			}
+			}*/
 			//if(ClaimCur.ClaimStatus=="S"){
 				//SecurityLogs.MakeLogEntry("Claims Sent Edit",Claims.cmd.CommandText,user);
 			//}
