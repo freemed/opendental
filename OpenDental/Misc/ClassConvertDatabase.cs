@@ -5498,6 +5498,18 @@ namespace OpenDental{
 				General.NonQEx(command);
 				command="UPDATE preference SET ValueString = '5.0.6.0' WHERE PrefName = 'DataBaseVersion'";
 				General.NonQEx(command);
+
+				command=@"CREATE TABLE claimvalcodelog( 
+					ClaimValCodeLogNum int unsigned NOT NULL auto_increment, 
+					ClaimNum int unsigned NOT NULL, 
+					ClaimField varchar(5) NOT NULL, 
+					ValCode char(2) NOT NULL, 
+          ValAmount varchar(10) NOT NULL, 
+					Ordinal int unsigned NOT NULL, 
+					PRIMARY KEY (ClaimValCodeLogNum) 
+					) DEFAULT CHARSET=utf8;";
+				General.NonQEx(command);
+
 			}
 			//To5_0_?();
 		}
