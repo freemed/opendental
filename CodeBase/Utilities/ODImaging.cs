@@ -79,7 +79,7 @@ namespace CodeBase {
 			}
 			return AntiAlias(new Bitmap(image.Width,image.Height,inData.Stride,image.PixelFormat,
 				GCHandle.Alloc(resultBytes,GCHandleType.Pinned).AddrOfPinnedObject()),numPasses-1);
-		}
+		}//dummy comment.
 
 	}
 }
