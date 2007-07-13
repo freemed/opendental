@@ -9,7 +9,7 @@ namespace CodeBase {
 	public class ODImaging {
 
 		///<summary>Returns the bits per channel, channels per pixel and bytes per pixel of the given pixel format. However, the pixel format must contain the same number of bits per channel. Additionally, future pixel formats may not be supported by this function.</summary>
-		public static void GetFormatInfo(PixelFormat pf,ref int bitsPerChannel,ref int channelsPerPixel,ref int bytesPerPixel) {
+		public static void GetFormatInfo(PixelFormat pf,out int bitsPerChannel,out int channelsPerPixel,out int bytesPerPixel) {
 			int[] formatDataTable=new int[] {
 				//	PixelFormat																#bits/channel		#channels/pixel		#bytes/pixel
 						(int)PixelFormat.Format16bppGrayScale,		16,							1,								2,
@@ -38,7 +38,10 @@ namespace CodeBase {
 		}
 
 		///<summary>Performs anti-alias correction on the input image and returns the anti-aliased image in a new memory location (the  input image is unchanged).</summary>
-		public static Bitmap AntiAlias(Bitmap image){
+		public static Bitmap AntiAlias(Bitmap image,int numPasses){
+			if(numPasses<1){
+				return image;
+			}
 			BitmapData inData=image.LockBits(new Rectangle(0,0,image.Width,image.Height),
 				ImageLockMode.ReadWrite,image.PixelFormat);
 			byte[] imageBytes=new byte[inData.Stride*inData.Height];//For reading the data quickly and efficiently.
@@ -52,31 +55,30 @@ namespace CodeBase {
 				1/12.0,	0.5,		1/12.0,
 				1/24.0,	1/12.0,	1/24.0,
 			};
+			int bitsPerChannel=0;
+			int channelsPerPixel=0;
+			int bytesPerPixel=0;
+			GetFormatInfo(image.PixelFormat,out bitsPerChannel,out channelsPerPixel,out bytesPerPixel);
 			for(int x=1;x<image.Width-1;x++){//border pixels unaffected
 				for(int y=1;y<image.Height-1;y++) {//border pixels unaffected
-					double red=0;
-					double green=0;
-					double blue=0;
-					double alpha=0;					
+					double[] components=new double[channelsPerPixel];//Sets entire array to zeros.
 					for(int i=0;i<maskSize;i++) {
 						for(int j=0;j<maskSize;j++) {
-							int pixelOffset=inData.Stride*(y-maskSize/2+j)+(x-maskSize/2+i);
+							int pixelOffset=inData.Stride*(y-maskSize/2+j)+(x-maskSize/2+i)*channelsPerPixel;
 							double weight=mask[j*maskSize+i];
-							red+=imageBytes[pixelOffset]*weight;
-							green+=imageBytes[pixelOffset+1]*weight;
-							blue+=imageBytes[pixelOffset+2]*weight;
-							alpha+=imageBytes[pixelOffset+3]*weight;
+							for(int c=0;c<channelsPerPixel;c++){
+								components[c]+=imageBytes[pixelOffset+c]*weight;
+							}
 						}
 					}
-					int resultPixelOffset=inData.Stride*y+x;
-					resultBytes[resultPixelOffset]=(byte)red;
-					resultBytes[resultPixelOffset+1]=(byte)green;
-					resultBytes[resultPixelOffset+2]=(byte)blue;
-					resultBytes[resultPixelOffset+3]=(byte)alpha;
+					int resultPixelOffset=inData.Stride*y+x*channelsPerPixel;
+					for(int c=0;c<channelsPerPixel;c++){
+						resultBytes[resultPixelOffset+c]=(byte)Math.Round(components[c]);
+					}
 				}
 			}
-			return new Bitmap(image.Width,image.Height,inData.Stride,image.PixelFormat,
-				GCHandle.Alloc(resultBytes,GCHandleType.Pinned).AddrOfPinnedObject());
+			return AntiAlias(new Bitmap(image.Width,image.Height,inData.Stride,image.PixelFormat,
+				GCHandle.Alloc(resultBytes,GCHandleType.Pinned).AddrOfPinnedObject()),numPasses-1);
 		}
 
 	}
