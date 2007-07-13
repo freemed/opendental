@@ -48,12 +48,13 @@ namespace OpenDental{
 				|| FromVersion.ToString()=="3.0.0.0"
 				|| FromVersion.ToString()=="4.7.0.0"
 				|| FromVersion.ToString()=="4.8.0.0"
-				|| FromVersion.ToString()=="4.9.0.0")
+				|| FromVersion.ToString()=="4.9.0.0"
+				|| FromVersion.ToString()=="5.0.0.0")
 			{
 				MsgBox.Show(this,"Cannot convert this database version which was only for development purposes.");
 				return false;
 			}
-			if(FromVersion < new Version("5.0.6.0")){
+			if(FromVersion < new Version("5.1.0.0")){
 				if(MessageBox.Show(Lan.g(this,"Your database will now be converted")+"\r"
 					+Lan.g(this,"from version")+" "+FromVersion.ToString()+"\r"
 					+Lan.g(this,"to version")+" "+ToVersion.ToString()+"\r"
@@ -5484,8 +5485,6 @@ namespace OpenDental{
 				}
 				command="UPDATE preference SET ValueString = '5.0.5.0' WHERE PrefName = 'DataBaseVersion'";
 				General.NonQEx(command);
-				command="ALTER TABLE referral ADD NationalProvID varchar(255)";
-				General.NonQEx(command);
 			}
 			To5_0_6();
 		}
@@ -5498,7 +5497,15 @@ namespace OpenDental{
 				General.NonQEx(command);
 				command="UPDATE preference SET ValueString = '5.0.6.0' WHERE PrefName = 'DataBaseVersion'";
 				General.NonQEx(command);
+			}
+			To5_1_0();
+		}
 
+		private void To5_1_0() {
+			if(FromVersion<new Version("5.1.0.0")) {
+				string command;
+				command="DROP TABLE IF EXISTS claimvalcodelog";
+				General.NonQEx(command);
 				command=@"CREATE TABLE claimvalcodelog( 
 					ClaimValCodeLogNum int unsigned NOT NULL auto_increment, 
 					ClaimNum int unsigned NOT NULL, 
@@ -5507,11 +5514,18 @@ namespace OpenDental{
           ValAmount varchar(10) NOT NULL, 
 					Ordinal int unsigned NOT NULL, 
 					PRIMARY KEY (ClaimValCodeLogNum) 
-					) DEFAULT CHARSET=utf8;";
+					) DEFAULT CHARSET=utf8";
+				General.NonQEx(command);
+				command="ALTER TABLE referral ADD NationalProvID varchar(255)";
 				General.NonQEx(command);
 
+
+
+
+				command="UPDATE preference SET ValueString = '5.1.0.0' WHERE PrefName = 'DataBaseVersion'";
+				General.NonQEx(command);
 			}
-			//To5_0_?();
+			//To5_1_?();
 		}
 
 	}
