@@ -14,7 +14,7 @@ namespace OpenDentBusiness {
 		///<summary>Value Code.</summary>
 		public string ValCode;
 		///<summary>Value Code Amount.</summary>
-		public string ValAmount;
+		public double ValAmount;
 		///<summary>Order of Value Code</summary>
 		public int Ordinal;
 	}

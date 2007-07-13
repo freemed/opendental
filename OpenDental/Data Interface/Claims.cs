@@ -69,6 +69,16 @@ namespace OpenDental{
 			SubmitAndFill(command,false);
 		}
 
+		public static Claim[] GetAllClaims(int patNum){
+		  string command=
+		    "SELECT * FROM claim"
+		    +" WHERE PatNum = '"+patNum.ToString()+"'";
+			//DataTable table=General.NonQ(command);
+			//Claim tempClaim;
+			SubmitAndFill(command,false);
+			return List;
+		}
+
 		private static Claim SubmitAndFill(string command,bool single){
 			DataTable table=General.GetTable(command);
 			Claim tempClaim;

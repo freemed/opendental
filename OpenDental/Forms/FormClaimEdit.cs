@@ -2742,21 +2742,27 @@ namespace OpenDental{
 			Claims.Update(ClaimCur);
 			if(ClaimValCodes!=null){
 				for(int i=0;i<ClaimValCodes.Count;i++){ //update existing Value Code pairs
-						ClaimValCode vc = (ClaimValCode)ClaimValCodes[i];
-						TextBox code = (TextBox)Controls.Find("textVC" + i + "Code", true)[0];
-						vc.ValCode=code.Text.ToString();
-						TextBox amount = (TextBox)Controls.Find("textVC" + i + "Amount", true)[0];
-						vc.ValAmount=amount.Text.ToString();
+					ClaimValCode vc = (ClaimValCode)ClaimValCodes[i];
+					TextBox code = (TextBox)Controls.Find("textVC" + i + "Code", true)[0];
+					vc.ValCode=code.Text.ToString();
+					TextBox amount = (TextBox)Controls.Find("textVC" + i + "Amount", true)[0];
+					string amt = amount.Text;
+					if(amt=="")
+						amt = "0";
+					vc.ValAmount=Double.Parse(amt);
 				}
 				for(int i=(ClaimValCodes.Count);i<12;i++){ //add new Value Code pairs
 					ClaimValCode vc = new ClaimValCode();
 					TextBox code = (TextBox)Controls.Find("textVC" + i + "Code", true)[0];
 					vc.ValCode=code.Text.ToString();
 					TextBox amount = (TextBox)Controls.Find("textVC" + i + "Amount", true)[0];
-					vc.ValAmount=amount.Text.ToString();
+					string amt = amount.Text;
+					if(amt=="")
+						amt = "0";
+					vc.ValAmount=Double.Parse(amt);
 					vc.ClaimNum=ClaimCur.ClaimNum;
 					vc.ClaimValCodeLogNum=0;
-					if(vc.ValCode!="" || vc.ValAmount!=""){
+					if(vc.ValCode!="" || vc.ValAmount!=0){
 						ClaimValCodes.Add(vc);
 					}
 				}

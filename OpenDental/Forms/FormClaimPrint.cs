@@ -49,9 +49,13 @@ namespace OpenDental{
 		///<summary>This is set externally for Renaissance and generic e-claims.  If it was not set ahead of time, it will set in FillDisplayStrings according to the insPlan.</summary>
 		public ClaimForm ClaimFormCur;
 		private InsPlan[] PlanList;
+		private InsPlan[] MedPlanList;
 		private Claim ClaimCur;
 		///<summary>Always length of 4.</summary>
 		private string[] diagnoses;
+		private Claim[] ClaimsArray;
+		private Claim[] MedClaimsArray;
+		private ArrayList MedValueCodes;
 
 		///<summary></summary>
 		public FormClaimPrint(){
@@ -243,6 +247,17 @@ namespace OpenDental{
 			else
 				totalPages=(int)Math.Ceiling((double)claimprocs.Count/(double)procLimit);
 			FillProcStrings(pagesPrinted*procLimit,procLimit);
+			bool HasMedical = false;
+			for(int i=0;i<PlanList.Length;i++){
+			  if(PlanList[i].IsMedical){
+					HasMedical=true;
+			  }
+			}
+			if(HasMedical){
+					FillMedInsStrings();
+					FillMedValueCodes();
+					FillMedCondCodes();
+			}
 			Graphics grfx=ev.Graphics;
 			float xPosText;
 			for(int i=0;i<ClaimFormCur.Items.Length;i++){
@@ -2166,6 +2181,318 @@ namespace OpenDental{
 					displayStrings[i]="*   *   *";
 				}
 			}//for i
+		}
+
+		private void FillMedValueCodes(){
+			MedValueCodes = ClaimValCodeLog.GetValCodes(ClaimCur);
+			if(MedValueCodes.Count>0){
+				ClaimValCode[] vcA;
+				vcA = new ClaimValCode[12];
+				for(int i=0;i<MedValueCodes.Count;i++){
+					vcA[i]=(ClaimValCode)MedValueCodes[i];
+				}
+				for(int i=MedValueCodes.Count;i<12;i++){
+					vcA[i]= new ClaimValCode();
+				}
+				for(int i=0;i<ClaimFormCur.Items.Length;i++){
+					double amt = 0;
+					switch(ClaimFormCur.Items[i].FieldName){
+						case "MedValCode39a":
+							displayStrings[i]=vcA[0].ValCode;
+							break;
+						case "MedValAmount39a":
+							if(vcA[0].ValAmount==0){
+								displayStrings[i]="";
+							} else {
+								displayStrings[i]=vcA[0].ValAmount.ToString(ClaimFormCur.Items[i].FormatString);
+							}
+							break;
+						case "MedValCode39b":
+							if(vcA[3]!=null)
+								displayStrings[i]=vcA[3].ValCode;
+							break;
+						case "MedValAmount39b":
+							if(vcA[3].ValAmount==0){
+								displayStrings[i]="";
+							} else {
+								displayStrings[i]=vcA[3].ValAmount.ToString(ClaimFormCur.Items[i].FormatString);
+							}
+							break;
+						case "MedValCode39c":
+							if(vcA[6]!=null)
+								displayStrings[i]=vcA[6].ValCode;
+							break;
+						case "MedValAmount39c":
+							if(vcA[6].ValAmount==0){
+								displayStrings[i]="";
+							} else {
+								displayStrings[i]=vcA[6].ValAmount.ToString(ClaimFormCur.Items[i].FormatString);
+							}
+							break;
+						case "MedValCode39d":
+							if(vcA[9]!=null)
+								displayStrings[i]=vcA[9].ValCode;
+							break;
+						case "MedValAmount39d":
+							if(vcA[9].ValAmount==0){
+								displayStrings[i]="";
+							} else {
+								displayStrings[i]=vcA[9].ValAmount.ToString(ClaimFormCur.Items[i].FormatString);
+							}
+							break;
+						case "MedValCode40a":
+							if(vcA[1]!=null)
+								displayStrings[i]=vcA[1].ValCode;
+							break;
+						case "MedValAmount40a":
+							if(vcA[1].ValAmount==0){
+								displayStrings[i]="";
+							} else {
+								displayStrings[i]=vcA[1].ValAmount.ToString(ClaimFormCur.Items[i].FormatString);
+							}
+							break;
+						case "MedValCode40b":
+							if(vcA[4]!=null)
+								displayStrings[i]=vcA[4].ValCode;
+							break;
+						case "MedValAmount40b":
+							if(vcA[4].ValAmount==0){
+								displayStrings[i]="";
+							} else {
+								displayStrings[i]=vcA[4].ValAmount.ToString(ClaimFormCur.Items[i].FormatString);
+							}
+							break;
+						case "MedValCode40c":
+							if(vcA[7]!=null)
+								displayStrings[i]=vcA[7].ValCode;
+							break;
+						case "MedValAmount40c":
+							if(vcA[7].ValAmount==0){
+								displayStrings[i]="";
+							} else {
+								displayStrings[i]=vcA[7].ValAmount.ToString(ClaimFormCur.Items[i].FormatString);
+							}
+							break;
+						case "MedValCode40d":
+							if(vcA[10]!=null)
+								displayStrings[i]=vcA[10].ValCode;
+							break;
+						case "MedValAmount40d":
+							if(vcA[10].ValAmount==0){
+								displayStrings[i]="";
+							} else {
+								displayStrings[i]=vcA[10].ValAmount.ToString(ClaimFormCur.Items[i].FormatString);
+							}
+							break;
+						case "MedValCode41a":
+							if(vcA[2]!=null)
+								displayStrings[i]=vcA[2].ValCode;
+							break;
+						case "MedValAmount41a":
+							if(vcA[2].ValAmount==0){
+								displayStrings[i]="";
+							} else {
+								displayStrings[i]=vcA[2].ValAmount.ToString(ClaimFormCur.Items[i].FormatString);
+							}
+							break;
+						case "MedValCode41b":
+							if(vcA[5]!=null)
+								displayStrings[i]=vcA[5].ValCode;
+							break;
+						case "MedValAmount41b":
+							if(vcA[5].ValAmount==0){
+								displayStrings[i]="";
+							} else {
+								displayStrings[i]=vcA[5].ValAmount.ToString(ClaimFormCur.Items[i].FormatString);
+							}
+							break;
+						case "MedValCode41c":
+							if(vcA[8]!=null)
+								displayStrings[i]=vcA[8].ValCode;
+							break;
+						case "MedValAmount41c":
+							if(vcA[8].ValAmount==0){
+								displayStrings[i]="";
+							} else {
+								displayStrings[i]=vcA[8].ValAmount.ToString(ClaimFormCur.Items[i].FormatString);
+							}
+							break;
+						case "MedValCode41d":
+							if(vcA[11]!=null)
+								displayStrings[i]=vcA[11].ValCode;
+							break;
+						case "MedValAmount41d":
+							if(vcA[11].ValAmount==0){
+								displayStrings[i]="";
+							} else {
+								displayStrings[i]=vcA[11].ValAmount.ToString(ClaimFormCur.Items[i].FormatString);
+							}
+							break;
+					}
+				}
+			}
+		}
+
+		private void FillMedCondCodes(){
+
+		}
+
+
+		private void FillMedInsStrings(){
+			MedPlanList = new InsPlan[3];
+			ClaimsArray = Claims.GetAllClaims(ThisPatNum);
+			MedClaimsArray = new Claim[3];
+			int ii=0;
+			for(int i=0;i<ClaimsArray.Length;i++){
+				InsPlan tmpPlan = InsPlans.GetPlan(ClaimsArray[i].PlanNum,PlanList);
+				if(tmpPlan.IsMedical && (ClaimsArray[i].ClaimNum <= ClaimCur.ClaimNum)){
+					MedPlanList[ii] = tmpPlan.Copy();
+					MedClaimsArray[ii] = ClaimsArray[i].Copy();
+					ii++;
+				}
+			}
+			double TotalValAmount = ClaimValCodeLog.GetValAmountTotal(ClaimCur,"23");
+			//MessageBox.Show(TotalValAmount.ToString());
+			double PriorPayments = 0;
+			if(MedPlanList[0]!=null){
+				for(int i=0;i<ClaimFormCur.Items.Length;i++){
+					switch(ClaimFormCur.Items[i].FieldName){
+						case "MedInsAName":
+							displayStrings[i]=Carriers.GetName(MedPlanList[0].CarrierNum);
+							break;
+						case "MedInsAPlanID":
+							break;
+						case "MedInsARelInfo":
+							break;
+						case "MedInsAAssignBen":
+							break;
+						case "MedInsAPriorPmt":
+							if(ClaimCur.ClaimNum==MedClaimsArray[0].ClaimNum){
+								displayStrings[i]="";
+							} else {
+								PriorPayments+=MedClaimsArray[0].InsPayAmt;
+								displayStrings[i]=MedClaimsArray[0].InsPayAmt.ToString();
+							}
+							break;
+						case "MedInsAAmtDue":
+							double AmtDue;
+							if(ClaimCur.ClaimNum==MedClaimsArray[0].ClaimNum){
+								AmtDue = ClaimCur.ClaimFee-PriorPayments-TotalValAmount;
+								displayStrings[i]=AmtDue.ToString(ClaimFormCur.Items[i].FormatString);
+							} else {
+								displayStrings[i]="";
+							}
+							break;
+						case "MedInsAOtherProvID":
+							break;
+						case "MedInsAInsuredName":
+							break;
+						case "MedInsAInsuredID":
+							break;
+						case "MedInsAGroupName":
+							break;
+						case "MedInsAGroupNum":
+							break;
+						case "MedInsAAuthCode":
+							break;
+						case "MedInsAEmployer":
+							break;
+					}
+				}
+			}
+			if(MedPlanList[1]!=null){
+				for(int i=0;i<ClaimFormCur.Items.Length;i++){
+					switch(ClaimFormCur.Items[i].FieldName){
+						case "MedInsBName":
+							displayStrings[i]=Carriers.GetName(MedPlanList[1].CarrierNum);
+							break;
+						case "MedInsBPlanID":
+							break;
+						case "MedInsBRelInfo":
+							break;
+						case "MedInsBAssignBen":
+							break;
+						case "MedInsBPriorPmt":
+							if(ClaimCur.ClaimNum==MedClaimsArray[1].ClaimNum){
+								displayStrings[i]="";
+							} else {
+								PriorPayments+=MedClaimsArray[1].InsPayAmt;
+								displayStrings[i]=MedClaimsArray[1].InsPayAmt.ToString();
+							}
+							break;
+						case "MedInsBAmtDue":
+							double AmtDue;
+							if(ClaimCur.ClaimNum==MedClaimsArray[1].ClaimNum){
+								AmtDue = ClaimCur.ClaimFee-PriorPayments-TotalValAmount;
+								displayStrings[i]=AmtDue.ToString(ClaimFormCur.Items[i].FormatString);
+							} else {
+								displayStrings[i]="";
+							}
+							break;
+						case "MedInsBOtherProvID":
+							break;
+						case "MedInsBInsuredName":
+							break;
+						case "MedInsBInsuredID":
+							break;
+						case "MedInsBGroupName":
+							break;
+						case "MedInsBGroupNum":
+							break;
+						case "MedInsBAuthCode":
+							break;
+						case "MedInsBEmployer":
+							break;
+					}
+				}
+			}
+			if(MedPlanList[2]!=null){
+				for(int i=0;i<ClaimFormCur.Items.Length;i++){
+					switch(ClaimFormCur.Items[i].FieldName){
+						case "MedInsCName":
+							displayStrings[i]=Carriers.GetName(MedPlanList[2].CarrierNum);
+							break;
+						case "MedInsCPlanID":
+							break;
+						case "MedInsCRelInfo":
+							break;
+						case "MedInsCAssignBen":
+							break;
+						case "MedInsCPriorPmt":
+							if(ClaimCur.ClaimNum==MedClaimsArray[2].ClaimNum){
+								displayStrings[i]="";
+							} else {
+								PriorPayments+=MedClaimsArray[2].InsPayAmt;
+								displayStrings[i]=MedClaimsArray[2].InsPayAmt.ToString();
+							}
+							break;
+						case "MedInsCAmtDue":
+							double AmtDue;
+							if(ClaimCur.ClaimNum==MedClaimsArray[2].ClaimNum){
+								AmtDue = ClaimCur.ClaimFee-PriorPayments-TotalValAmount;
+								displayStrings[i]=AmtDue.ToString(ClaimFormCur.Items[i].FormatString);
+							} else {
+								displayStrings[i]="";
+							}
+							break;
+						case "MedInsCOtherProvID":
+							break;
+						case "MedInsCInsuredName":
+							break;
+						case "MedInsCInsuredID":
+							break;
+						case "MedInsCGroupName":
+							break;
+						case "MedInsCGroupNum":
+							break;
+						case "MedInsCAuthCode":
+							break;
+						case "MedInsCEmployer":
+							break;
+					}
+				}
+			}
+
 		}
 
 		/// <summary>Uses the fee field to determine how many procedures this claim will print.</summary>
