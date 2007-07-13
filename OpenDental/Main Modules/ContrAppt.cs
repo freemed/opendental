@@ -2270,7 +2270,7 @@ namespace OpenDental{
 				yval=panelSheet.Bottom-infoBubble.Height;
 			}
 			infoBubble.Location=new Point(p.X+ContrApptSheet2.Left+panelSheet.Left+10,yval);
-			if (DateTime.Now.AddMilliseconds(-500) > bubbleTime){
+			if (DateTime.Now.AddMilliseconds(-300) > bubbleTime){
 				infoBubble.Visible=true;
 			}
 			else{
@@ -3686,12 +3686,6 @@ namespace OpenDental{
 			ev.HasMorePages = false;
 		}
 
-		private void ContrApptSheet2_MouseHover(object sender,System.Windows.Forms.MouseEventArgs e) {
-			if(!mouseIsDown){
-				InfoBubbleDraw(e.Location);
-			}
-
-		}
 
 		private void timerInfoBubble_Tick(object sender,EventArgs e) {
 			InfoBubbleDraw(bubbleLocation);
