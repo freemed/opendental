@@ -19,6 +19,7 @@ using System.Windows.Forms;
 using OpenDental.UI;
 using OpenDentBusiness;
 using CodeBase;
+using OpenDental.Imaging.Business;
 
 namespace OpenDental{
 

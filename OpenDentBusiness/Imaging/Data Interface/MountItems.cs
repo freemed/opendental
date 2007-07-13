@@ -5,8 +5,8 @@ using OpenDentBusiness;
 using System.Data;
 using CodeBase;
 
-namespace OpenDental {
-	class MountItems {
+namespace OpenDental.Imaging.Business {
+	public class MountItems {
 
 		public static int Insert(MountItem mountItem) {
 			string command="INSERT INTO mountitem (MountItemNum,MountNum,Xpos,Ypos,OrdinalPos,Width,Height) VALUES ("
@@ -17,7 +17,7 @@ namespace OpenDental {
 				+"'"+POut.PInt(mountItem.OrdinalPos)+"',"
 				+"'"+POut.PInt(mountItem.Width)+"',"
 				+"'"+POut.PInt(mountItem.Height)+"')";
-			return General.NonQEx(command,true);
+			return General2.NonQEx(command,true);
 		}
 
 		public static int Update(MountItem mountItem) {
@@ -29,12 +29,12 @@ namespace OpenDental {
 				+"Width='"+POut.PInt(mountItem.Width)+"',"
 				+"Height='"+POut.PInt(mountItem.Height)+"' "
 				+"WHERE MountItemNum='"+POut.PInt(mountItem.MountItemNum)+"'";
-			return General.NonQEx(command);
+			return General2.NonQEx(command);
 		}
 
 		public static void Delete(MountItem mountItem) {
 			string command="DELETE FROM mountitem WHERE MountItemNum='"+POut.PInt(mountItem.MountItemNum)+"'";
-			General.NonQEx(command);
+			General2.NonQEx(command);
 		}
 
 		///<summary>Converts the given datarow to a mountitem, assuming that the row represents a mountitem.</summary>
@@ -53,7 +53,7 @@ namespace OpenDental {
 		///<summary>Returns the list of mount items associated with the given mount key.</summary>
 		public static MountItem[] GetItemsForMount(int mountNum){
 			string command="SELECT * FROM mountitem WHERE MountNum='"+POut.PInt(mountNum)+"' ORDER BY OrdinalPos";
-			DataTable result=General.GetTable(command);
+			DataTable result=General2.GetTable(command);
 			MountItem[] mountItems=new MountItem[result.Rows.Count];
 			for(int i=0;i<mountItems.Length;i++){
 				mountItems[i]=Fill(result.Rows[i]);

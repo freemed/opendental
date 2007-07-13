@@ -8,6 +8,8 @@ using System.Net;
 using System.Windows.Forms;
 using OpenDental.UI;
 using OpenDentBusiness;
+using OpenDental.Imaging.Business;
+using OpenDentBusiness.Imaging;
 
 namespace OpenDental{
 	///<summary>Eventually, the user will be able to edit some image display settings and do a Documents.UpdateCur, but they can't actually make changes to the image.</summary>
@@ -152,7 +154,7 @@ namespace OpenDental{
 			}try{
 				ImageCurrent=new Bitmap(fileName);
 				renderImage=ContrDocs.ApplyDocumentSettingsToImage(thisDocument,ImageCurrent,
-					ContrDocs.ApplySettings.CROP|ContrDocs.ApplySettings.COLORFUNCTION);
+					ApplySettings.CROP|ApplySettings.COLORFUNCTION);
 				if(renderImage==null) {
 					imageZoom=1;
 					imageTranslation=new PointF(0,0);

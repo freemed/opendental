@@ -4,8 +4,8 @@ using System.Text;
 using OpenDentBusiness;
 using System.Data;
 
-namespace OpenDental {
-	class Mounts {
+namespace OpenDental.Imaging.Business {
+	public class Mounts {
 
 		public static int Insert(Mount mount){
 			string command="INSERT INTO mount (MountNum,PatNum,DocCategory,DateCreated,Description,Note,ImgType,Width,Height) VALUES ("
@@ -18,7 +18,7 @@ namespace OpenDental {
 				+"'"+POut.PInt((int)mount.ImgType)+"',"
 				+"'"+POut.PInt(mount.Width)+"',"
 				+"'"+POut.PInt(mount.Height)+"')";
-			return General.NonQEx(command,true);
+			return General2.NonQEx(command,true);
 		}
 
 		public static int Update(Mount mount){
@@ -32,12 +32,12 @@ namespace OpenDental {
 				+"Width='"+POut.PInt(mount.Width)+"',"
 				+"Height='"+POut.PInt(mount.Height)+"' "
 				+"WHERE MountNum='"+POut.PInt(mount.MountNum)+"'";
-			return General.NonQEx(command);
+			return General2.NonQEx(command);
 		}
 
 		public static void Delete(Mount mount){
 			string command="DELETE FROM mount WHERE MountNum='"+POut.PInt(mount.MountNum)+"'";
-			General.NonQEx(command);
+			General2.NonQEx(command);
 		}
 
 		///<summary>Converts the given datarow into a mount object.</summary>
@@ -58,7 +58,7 @@ namespace OpenDental {
 		///<summary>Returns a single mount object corresponding to the given mount number key.</summary>
 		public static Mount GetByNum(int mountNum){
 			string command="SELECT * FROM mount WHERE MountNum='"+mountNum+"'";
-			DataTable table=General.GetTable(command);
+			DataTable table=General2.GetTable(command);
 			if(table.Rows.Count<0){
 				return new Mount();
 			}

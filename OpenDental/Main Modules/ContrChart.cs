@@ -20,6 +20,8 @@ using Tao.Platform.Windows;
 using SparksToothChart;
 using OpenDentBusiness;
 using CodeBase;
+using OpenDental.Imaging.Business;
+using OpenDentBusiness.Imaging;
 
 namespace OpenDental{
 ///<summary></summary>
@@ -3659,7 +3661,7 @@ namespace OpenDental{
 					if(File.Exists(sourceImagePath) && ContrDocs.HasImageExtension(sourceImagePath)){//create and save thumbnail?
 						//Gets the cropped/flipped/rotated image with any color filtering applied.
 						Bitmap sourceImage=new Bitmap(sourceImagePath);
-						Bitmap fullImage=ContrDocs.ApplyDocumentSettingsToImage(DocumentList[i],sourceImage,ContrDocs.ApplySettings.ALL);
+						Bitmap fullImage=ContrDocs.ApplyDocumentSettingsToImage(DocumentList[i],sourceImage,ApplySettings.ALL);
 						sourceImage.Dispose();
 						thumbBitmap=ContrDocs.GetThumbnail(fullImage,thumbSize);
 						fullImage.Dispose();

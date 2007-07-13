@@ -6,58 +6,75 @@ using System.Data;
 using System.Data.Common;
 using OpenDentBusiness;
 
-namespace OpenDental.DataAccess
-{
-	public static class DataSettings
-	{
-#warning Hard-coded connection string
+namespace OpenDental.DataAccess {
+	public static class DataSettings {
 		private static string connectionString = "Server=localhost;Database=opendental;Uid=root;Pwd=;";
-		public static string ConnectionString
-		{
+		public static string ConnectionString {
 			get { return connectionString; }
 			set { connectionString = value; }
 		}
 
-#warning Hard-coded ProviderInvariantName
-		private static string providerInvariantName = "MySql.Data.MySqlClient";
-		public static string ProviderInvariantName
-		{
-			get { return providerInvariantName; }
-			set { providerInvariantName = value; }
+		public static string ProviderInvariantName {
+			get {
+				switch (DbType) {
+					case DatabaseType.MySql:
+						return "MySql.Data.MySqlClient";
+					case DatabaseType.Oracle:
+						return "Oracle.DataAccess.Client";
+					default:
+						throw new NotSupportedException();
+				}
+			}
 		}
 
-		public static DatabaseType DbType
-		{
-			get { return DatabaseType.MySql; }
+		private static DatabaseType dbType = DatabaseType.MySql;
+		public static DatabaseType DbType {
+			get { return dbType; }
+			set { dbType = value; }
 		}
 
-		public static IDbConnection GetConnection()
-		{
-			DbProviderFactory factory = DbProviderFactories.GetFactory(providerInvariantName);
+		public static void CreateConnectionString(string server, string database, string username, string password) {
+			CreateConnectionString(server, DefaultPortNum, database, username, password);
+		}
+
+		public static void CreateConnectionString(string server, int port, string database, string username, string password) {
+			switch (DbType) {
+				case DatabaseType.Oracle:
+					ConnectionString = "Data Source=(DESCRIPTION=(ADDRESS_LIST="
+					+ "(ADDRESS=(PROTOCOL=TCP)(HOST=" + server + ")(PORT=" + port + ")))"
+					+ "(CONNECT_DATA=(SERVER=DEDICATED)(SERVICE_NAME=" + database + ")));"
+					+ "User Id=" + username + ";Password=" + password + ";";
+					break;
+				case DatabaseType.MySql:
+					ConnectionString = "Server=" + server
+					+ ";Database=" + database
+					+ ";User ID=" + username
+					+ ";Password=" + password
+					+ ";CharSet=utf8";
+					break;
+				default:
+					throw new NotSupportedException();
+			}
+		}
+
+		public static int DefaultPortNum {
+			get {
+				switch (DbType) {
+					case DatabaseType.Oracle:
+						return 1521;
+					case DatabaseType.MySql:
+						return 3306;
+					default:
+						throw new NotSupportedException();
+				}
+			}
+		}
+
+		public static IDbConnection GetConnection() {
+			DbProviderFactory factory = DbProviderFactories.GetFactory(ProviderInvariantName);
 			DbConnection connection = factory.CreateConnection();
 			connection.ConnectionString = ConnectionString;
 			return connection;
-		}
-
-		public static bool LogOn(string username, string password)
-		{
-			// TODO: Get the connection string and provider from saved settings
-			connectionString = string.Format("Data Source=localhost;Database=opendental;User ID={0};Password={1};", username, password);
-			providerInvariantName = "MySql.Data.MySqlClient";
-
-			using (IDbConnection connection = GetConnection())
-			{
-				try
-				{
-					connection.Open();
-				}
-				catch(DbException)
-				{
-					return false;
-				}
-			}
-
-			return true;
 		}
 	}
 }

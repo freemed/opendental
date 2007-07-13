@@ -18,6 +18,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -56,6 +57,21 @@
     <Compile Include="Business\DefB.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Imaging\ApplySettings.cs" />
+    <Compile Include="Imaging\Data Interface\Documents.cs" />
+    <Compile Include="Imaging\Data Interface\General.cs" />
+    <Compile Include="Imaging\Data Interface\MountDefs.cs" />
+    <Compile Include="Imaging\Data Interface\MountItemDefs.cs" />
+    <Compile Include="Imaging\Data Interface\MountItems.cs" />
+    <Compile Include="Imaging\Data Interface\Mounts.cs" />
+    <Compile Include="Imaging\FileStore.cs" />
+    <Compile Include="Imaging\FileStoreSettings.cs" />
+    <Compile Include="Imaging\IImageStore.cs" />
+    <Compile Include="Imaging\ImageHelper.cs" />
+    <Compile Include="Imaging\ImageNotFoundException.cs" />
+    <Compile Include="Imaging\ImageStoreCreationException.cs" />
+    <Compile Include="Imaging\ImageStoreRemovalException.cs" />
+    <Compile Include="Imaging\NoActivePatientException.cs" />
     <Compile Include="Business\PatientB.cs" />
     <Compile Include="Business\CovCatB.cs" />
     <Compile Include="Business\DocAttachB.cs" />

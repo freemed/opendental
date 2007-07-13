@@ -4,11 +4,12 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.IO;
-using System.Windows.Forms;
 using OpenDentBusiness;
 using CodeBase;
+using OpenDental.DataAccess;
+using OpenDentBusiness.Imaging;
 
-namespace OpenDental{
+namespace OpenDental.Imaging.Business {
 	///<summary>Handles documents and images for the Images module</summary>
 	public class Documents {
 
@@ -21,7 +22,7 @@ namespace OpenDental{
 		///<summary>Gets the document with the specified document number.</summary>
 		public static Document GetByNum(int docNum){
 			string command="SELECT * FROM document WHERE DocNum='"+docNum+"'";
-			DataTable table=General.GetTable(command);
+			DataTable table=General2.GetTable(command);
 			if(table.Rows.Count<1){
 				return new Document();
 			}
@@ -69,13 +70,13 @@ namespace OpenDental{
 		}
 
 		private static Document[] RefreshAndFill(string command) {
-			return Fill(General.GetTable(command));
+			return Fill(General2.GetTable(command));
 		}
 
 		///<summary>Inserts a new document into db, creates a filename based on Cur.DocNum, and then updates the db with this filename.  Also attaches the document to the current patient.</summary>
+		[Obsolete("This method now throws an exception!")]
 		public static void Insert(Document doc,Patient pat){
 			int insertID=0;
-			try {
 				if(RemotingClient.OpenDentBusinessIsLocal) {
 					insertID=DocumentB.Insert(doc,pat.LName+pat.FName,pat.PatNum);
 				}
@@ -86,16 +87,12 @@ namespace OpenDental{
 					dto.PatNum=pat.PatNum;
 					insertID=RemotingClient.ProcessCommand(dto);
 				}
-			}
-			catch(Exception e) {
-				MessageBox.Show(e.Message);
-			}
 			doc.DocNum=insertID;
 		}
 
 		///<summary></summary>
+		[Obsolete("This method now throws an exception!")]
 		public static void Update(Document doc){
-			try {
 				if(RemotingClient.OpenDentBusinessIsLocal) {
 					DocumentB.Update(doc);
 				}
@@ -104,18 +101,14 @@ namespace OpenDental{
 					dto.Doc=doc;
 					RemotingClient.ProcessCommand(dto);
 				}
-			}
-			catch(Exception e) {
-				MessageBox.Show(e.Message);
-			}		
 		}
 
 		///<summary></summary>
 		public static void Delete(Document doc){
 			string command= "DELETE from document WHERE DocNum = '"+doc.DocNum.ToString()+"'";
-			General.NonQ(command);	
+			General2.NonQ(command);	
 			command= "DELETE from docattach WHERE DocNum = '"+doc.DocNum.ToString()+"'";
-			General.NonQ(command);	
+			General2.NonQ(command);	
 		}
 
 		///<summary>This is used by FormImageViewer to get a list of paths based on supplied list of DocNums. The reason is that later we will allow sharing of documents, so the paths may not be in the current patient folder.</summary>
@@ -131,7 +124,7 @@ namespace OpenDental{
 				command+=" OR document.DocNum = '"+docNums[i].ToString()+"'";
 			}
 			//remember, they will not be in the correct order.
-			DataTable table=General.GetTable(command);
+			DataTable table=General2.GetTable(command);
 			Hashtable hList=new Hashtable();//key=docNum, value=path
 			//one row for each document, but in the wrong order
 			for(int i=0;i<table.Rows.Count;i++){
@@ -140,7 +133,7 @@ namespace OpenDental{
 				//making it impossible to launch the form image viewer (the only place this
 				//function is called from.
 				hList.Add(PIn.PInt(table.Rows[i][0].ToString()),
-					ODFileUtils.CombinePaths(new string[] {	FormPath.GetPreferredImagePath(),
+					ODFileUtils.CombinePaths(new string[] {	FileStoreSettings.GetPreferredImagePath,
 																									PIn.PString(table.Rows[i][2].ToString()).Substring(0,1).ToUpper(),
 																									PIn.PString(table.Rows[i][2].ToString()),
 																									PIn.PString(table.Rows[i][1].ToString()),}));
@@ -153,7 +146,8 @@ namespace OpenDental{
 		}
 
 		/// <summary>Makes one call to the database to retrieve the document of the patient for the given patNum, then uses that document and the patFolder to load and process the patient picture so it appears the same way it did in the image module.  It first creates a 100x100 thumbnail if needed, then it uses the thumbnail so no scaling needed. Returns false if there is no patient picture, true otherwise. Sets the value of patientPict equal to a new instance of the patient's processed picture, but will be set to null on error. Assumes WithPat will always be same as patnum.</summary>
-		public static bool GetPatPict(int patNum,string patFolder,out Bitmap patientPict){
+		[Obsolete("This method now throws an exception!")]
+		public static bool GetPatPict(int patNum, string patFolder, out Bitmap patientPict) {
 			patientPict=null;
 			//first establish which category pat pics are in
 			int defNumPicts=0;
@@ -173,7 +167,7 @@ namespace OpenDental{
 				+" AND document.DocCategory="+POut.PInt(defNumPicts)
 				+" ORDER BY DateCreated DESC ";
 			//gets the most recent
-			if(FormChooseDatabase.DBtype==DatabaseType.Oracle){
+			if(DataSettings.DbType==DatabaseType.Oracle){
 				command="SELECT * FROM ("+command+") WHERE ROWNUM<=1";
 			}else{//Assume MySQL
 				command+="LIMIT 1";
@@ -197,12 +191,11 @@ namespace OpenDental{
 					Directory.CreateDirectory(thumbPath);
 				}
 				catch {
-					MessageBox.Show(Lan.g("Documents","Error.  Could not create thumbnails folder. "));
-					return false;
+					throw new ImageStoreCreationException(Lan.g("Documents","Error.  Could not create thumbnails folder. "));
 				}
 			}
 			string thumbFileName=ODFileUtils.CombinePaths(new string[] { patFolder,"Thumbnails",shortFileName });
-			if(!ContrDocs.HasImageExtension(thumbFileName)){
+			if(!ImageHelper.HasImageExtension(thumbFileName)){
 				return false;
 			}
 			if(File.Exists(thumbFileName)) {//use existing thumbnail
@@ -213,9 +206,9 @@ namespace OpenDental{
 			Bitmap thumbBitmap;
 			//Gets the cropped/flipped/rotated image with any color filtering applied.
 			Bitmap sourceImage=new Bitmap(fullName);
-			Bitmap fullImage=ContrDocs.ApplyDocumentSettingsToImage(pictureDocs[0],sourceImage,ContrDocs.ApplySettings.ALL);
+			Bitmap fullImage=ImageHelper.ApplyDocumentSettingsToImage(pictureDocs[0],sourceImage,ApplySettings.ALL);
 			sourceImage.Dispose();
-			thumbBitmap=ContrDocs.GetThumbnail(fullImage,100);
+			thumbBitmap=ImageHelper.GetThumbnail(fullImage,100);
 			fullImage.Dispose();
 			try {
 				thumbBitmap.Save(thumbFileName);
@@ -235,7 +228,7 @@ namespace OpenDental{
 			Document[] documents=new Document[mountItems.Length];
 			for(int i=0;i<mountItems.Length;i++){
 				string command="SELECT * FROM document WHERE MountItemNum='"+POut.PInt(mountItems[i].MountItemNum)+"'";
-				DataTable table=General.GetTable(command);
+				DataTable table=General2.GetTable(command);
 				if(table.Rows.Count<1){
 					documents[i]=null;
 				}else{
@@ -249,7 +242,7 @@ namespace OpenDental{
 		public static int InsertMissing(Patient patient,string[] fileList){
 			int countAdded=0;
 			string command="SELECT FileName FROM document WHERE PatNum='"+patient.PatNum+"' ORDER BY FileName";
-			DataTable table=General.GetTable(command);
+			DataTable table=General2.GetTable(command);
 			for(int j=0;j<fileList.Length;j++){
 				if(!IsAcceptableFileName(fileList[j])){
 					continue;

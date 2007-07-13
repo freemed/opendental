@@ -4,10 +4,9 @@ using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
 using System.Drawing;
-using System.Windows.Forms;
 using OpenDentBusiness;
 
-namespace OpenDental {
+namespace OpenDental.Imaging.Business {
 	///<summary></summary>
 	public class MountItemDefs {
 		///<summary>A list of all MountItemDefs.</summary>
@@ -16,7 +15,7 @@ namespace OpenDental {
 		///<summary>Gets a list of all MountItemDefs when program first opens.</summary>
 		public static void Refresh() {
 			string command="SELECT * FROM mountitemdef";
-			DataTable table=General.GetTable(command);
+			DataTable table=General2.GetTable(command);
 			Listt=new List<MountItemDef>();
 			MountItemDef mount;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -40,7 +39,7 @@ namespace OpenDental {
 				+",Width = '"     +POut.PInt(def.Width)+"'"
 				+",Height = '"    +POut.PInt(def.Height)+"'"
 				+" WHERE MountItemDefNum  ='"+POut.PInt (def.MountItemDefNum)+"'";
-			General.NonQ(command);
+			General2.NonQ(command);
 		}
 
 		///<summary></summary>
@@ -52,13 +51,13 @@ namespace OpenDental {
 				+"'"+POut.PInt(def.Ypos)+"', "
 				+"'"+POut.PInt(def.Width)+"', "
 				+"'"+POut.PInt(def.Height)+"')";
-			def.MountItemDefNum=General.NonQ(command,true);
+			def.MountItemDefNum=General2.NonQ(command,true);
 		}
 
 		///<summary>No need to surround with try/catch, because all deletions are allowed.</summary>
 		public static void Delete(int mountItemDefNum) {
 			string command="DELETE FROM mountitemdef WHERE MountItemDefNum="+POut.PInt(mountItemDefNum);
-			General.NonQ(command);
+			General2.NonQ(command);
 		}
 
 		

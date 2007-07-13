@@ -16,6 +16,7 @@ using System.Security.Cryptography;
 using System.Text;
 using OpenDentBusiness;
 using CodeBase;
+using OpenDental.Imaging.Business;
 
 namespace OpenDental{
 ///<summary></summary>

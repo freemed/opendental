@@ -4,10 +4,9 @@ using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
 using System.Drawing;
-using System.Windows.Forms;
 using OpenDentBusiness;
 
-namespace OpenDental {
+namespace OpenDental.Imaging.Business {
 	///<summary></summary>
 	public class MountDefs {
 		///<summary>A list of all MountDefs.</summary>
@@ -17,7 +16,7 @@ namespace OpenDental {
 		public static void Refresh() {
 			MountItemDefs.Refresh();
 			string command="SELECT * FROM mountdef ORDER BY ItemOrder";
-			DataTable table=General.GetTable(command);
+			DataTable table=General2.GetTable(command);
 			Listt=new List<MountDef>();
 			MountDef mount;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -41,7 +40,7 @@ namespace OpenDental {
 				+",Width = '" +POut.PInt(def.Width)+"'"
 				+",Height = '" +POut.PInt(def.Height)+"'"
 				+" WHERE MountDefNum  ='"+POut.PInt (def.MountDefNum)+"'";
-			General.NonQ(command);
+			General2.NonQ(command);
 		}
 
 		///<summary></summary>
@@ -53,15 +52,15 @@ namespace OpenDental {
 				+"'"+POut.PBool(def.IsRadiograph)+"', "
 				+"'"+POut.PInt(def.Width)+"', "
 				+"'"+POut.PInt(def.Height)+"')";
-			def.MountDefNum=General.NonQ(command,true);
+			def.MountDefNum=General2.NonQ(command,true);
 		}
 
 		///<summary>No need to surround with try/catch, because all deletions are allowed.</summary>
 		public static void Delete(int mountDefNum) {
 			string command="DELETE FROM mountdef WHERE MountDefNum="+POut.PInt(mountDefNum);
-			General.NonQ(command);
+			General2.NonQ(command);
 			command="DELETE FROM mountitemdef WHERE MountDefNum ="+POut.PInt(mountDefNum);
-			General.NonQ(command);
+			General2.NonQ(command);
 		}
 
 		

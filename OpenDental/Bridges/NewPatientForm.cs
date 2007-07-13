@@ -8,6 +8,7 @@ using System.Windows.Forms;
 using System.Xml;
 using System.IO;
 using OpenDentBusiness;
+using OpenDental.Imaging.Business;
 
 namespace OpenDental.Bridges
 {
