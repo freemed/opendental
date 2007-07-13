@@ -155,10 +155,14 @@ namespace SparksToothChart {
 
 		public bool AutoFinish{
 			get{
+				if(simpleMode){
+					return false;
+				}
 				return toothChart.autoFinish;
-			}
-			set{
-				toothChart.autoFinish=value;
+			}set{
+				if(!simpleMode){
+					toothChart.autoFinish=value;
+				}
 			}
 		}
 
@@ -406,9 +410,13 @@ namespace SparksToothChart {
 
 		///<summary>Returns a bitmap of what is showing in the control.  Used for printing.</summary>
 		public Bitmap GetBitmap() {
-			Bitmap dummy=new Bitmap(toothChart.Width,toothChart.Height);
+			Bitmap dummy=new Bitmap(this.Width,this.Height);
 			Graphics g=Graphics.FromImage(dummy);
 			PaintEventArgs e=new PaintEventArgs(g,new Rectangle(0,0,dummy.Width,dummy.Height));
+			if(simpleMode) {
+				OnPaint(e);
+				return dummy;
+			}
 			toothChart.Render(e);
 			Bitmap result=toothChart.ReadFrontBuffer();
 			g.Dispose();
