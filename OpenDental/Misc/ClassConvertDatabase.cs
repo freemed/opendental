@@ -5498,6 +5498,23 @@ namespace OpenDental{
 				command="UPDATE preference SET ValueString = '5.0.6.0' WHERE PrefName = 'DataBaseVersion'";
 				General.NonQEx(command);
 			}
+			To5_0_7();
+		}
+
+		private void To5_0_7() {
+			if(FromVersion<new Version("5.0.7.0")) {
+				string command;
+				command="UPDATE clearinghouse SET ExportPath = '"+POut.PString(@"C:\TesiaLink\IN\")+"' WHERE ISA08='113504607'";
+				General.NonQEx(command);
+				command="UPDATE clearinghouse SET ResponsePath = '"+POut.PString(@"C:\TesiaLink\OUT\")+"' WHERE ISA08='113504607'";
+				General.NonQEx(command);
+				command="UPDATE clearinghouse SET ClientProgram = '"+POut.PString(@"C:\Program Files\TesiaLink\TesiaLink.exe")+"' WHERE ISA08='113504607'";
+				General.NonQEx(command);
+
+
+				command="UPDATE preference SET ValueString = '5.0.7.0' WHERE PrefName = 'DataBaseVersion'";
+				General.NonQEx(command);
+			}
 			To5_1_0();
 		}
 
