@@ -866,12 +866,12 @@ namespace OpenDental{
 			//Select the node always, but perform additional tasks when necessary (i.e. load an image, or mount).
 			TreeDocuments.SelectedNode=node;
 			TreeDocuments.Invalidate();
-			selectionDoc=new Document();
 			//We only perform a load if the new selection is different than the old selection.
 			string identifier=GetNodeIdentifier(node);
 			if(identifier==oldSelectionIdentifier){
 				return;
 			}
+			selectionDoc=new Document();
 			oldSelectionIdentifier=identifier;
 			//Disable all item tools until the currently selected node is loaded properly in the picture box.
 			EnableAllTreeItemTools(false);
@@ -1152,7 +1152,6 @@ namespace OpenDental{
 				return;
 			}
 			EnableAllTreeItemTools(false);
-			selectionDoc=new Document();
 			DataRow obj=(DataRow)TreeDocuments.SelectedNode.Tag;
 			int mountNum=Convert.ToInt32(obj["MountNum"].ToString());
 			int docNum=Convert.ToInt32(obj["DocNum"].ToString());
@@ -1169,6 +1168,7 @@ namespace OpenDental{
 							return;
 						}
 					}
+					selectionDoc=new Document();
 					docs=new Document[1] { mountDocs[hotDocument] };
 					mountDocs[hotDocument]=null;
 					//Release access to current image so it may be properly deleted.
