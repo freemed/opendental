@@ -125,7 +125,7 @@ namespace OpenDental{
 		}
 
 		///<summary></summary>
-		public static string GetName(int referralNum) {
+		public static string GetNameLF(int referralNum) {
 			if(referralNum==0)
 				return "";
 			for(int i=0;i<List.Length;i++){

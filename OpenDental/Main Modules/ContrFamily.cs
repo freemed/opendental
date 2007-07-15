@@ -684,7 +684,7 @@ namespace OpenDental{
 					row.Cells.Add(Lan.g("TablePatient","Referred To"));
 				}
 				try{
-					row.Cells.Add(Referrals.GetName(RefList[i].ReferralNum)+"\r\n"
+					row.Cells.Add(Referrals.GetNameLF(RefList[i].ReferralNum)+"\r\n"
 						+Referrals.GetPhone(RefList[i].ReferralNum));
 				}
 				catch{

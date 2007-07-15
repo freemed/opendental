@@ -2910,7 +2910,7 @@ namespace OpenDental{
 			string referral="";
 			for(int i=0;i<RefAttachList.Length;i++) {
 				if(RefAttachList[i].IsFrom) {
-					referral=Referrals.GetName(RefAttachList[i].ReferralNum);
+					referral=Referrals.GetNameLF(RefAttachList[i].ReferralNum);
 					break;
 				}
 			}

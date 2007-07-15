@@ -185,7 +185,7 @@ namespace OpenDental{
 			// textNote
 			// 
 			this.textNote.Location = new System.Drawing.Point(162,133);
-			this.textNote.MaxLength = 15;
+			this.textNote.MaxLength = 10000;
 			this.textNote.Multiline = true;
 			this.textNote.Name = "textNote";
 			this.textNote.Size = new System.Drawing.Size(424,114);
