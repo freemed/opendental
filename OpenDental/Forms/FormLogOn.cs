@@ -18,6 +18,7 @@ namespace OpenDental{
 		private System.Windows.Forms.Label label2;
 		private System.Windows.Forms.TextBox textPassword;
 		private System.Windows.Forms.Button butResetPassword;
+		private CheckBox chkboxShowHidden;
 		/// <summary>
 		/// Required designer variable.
 		/// </summary>
@@ -63,6 +64,7 @@ namespace OpenDental{
 			this.label2 = new System.Windows.Forms.Label();
 			this.textPassword = new System.Windows.Forms.TextBox();
 			this.butResetPassword = new System.Windows.Forms.Button();
+			this.chkboxShowHidden = new System.Windows.Forms.CheckBox();
 			this.SuspendLayout();
 			// 
 			// butCancel
@@ -139,11 +141,23 @@ namespace OpenDental{
 			this.butResetPassword.TabIndex = 45;
 			this.butResetPassword.Click += new System.EventHandler(this.butResetPassword_Click);
 			// 
+			// chkboxShowHidden
+			// 
+			this.chkboxShowHidden.AutoSize = true;
+			this.chkboxShowHidden.Location = new System.Drawing.Point(191, 57);
+			this.chkboxShowHidden.Name = "chkboxShowHidden";
+			this.chkboxShowHidden.Size = new System.Drawing.Size(120, 17);
+			this.chkboxShowHidden.TabIndex = 46;
+			this.chkboxShowHidden.Text = "Show Hidden Users";
+			this.chkboxShowHidden.UseVisualStyleBackColor = true;
+			this.chkboxShowHidden.CheckedChanged += new System.EventHandler(this.chkboxShowHidden_CheckedChanged);
+			// 
 			// FormLogOn
 			// 
 			this.AcceptButton = this.butOK;
 			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
 			this.ClientSize = new System.Drawing.Size(464, 378);
+			this.Controls.Add(this.chkboxShowHidden);
 			this.Controls.Add(this.butResetPassword);
 			this.Controls.Add(this.textPassword);
 			this.Controls.Add(this.butOK);
@@ -166,15 +180,7 @@ namespace OpenDental{
 		#endregion
 
 		private void FormLogOn_Load(object sender, System.EventArgs e) {
-			for(int i=0;i<Userods.Listt.Count;i++){
-				listUser.Items.Add(Userods.Listt[i].UserName);
-				if(Security.CurUser!=null && Userods.Listt[i].UserNum==Security.CurUser.UserNum){
-					listUser.SelectedIndex=i;
-				}
-			}
-			if(listUser.SelectedIndex==-1){
-				listUser.SelectedIndex=0;
-			}
+			FillListBox();
 		}
 
 		private void listUser_MouseUp(object sender, System.Windows.Forms.MouseEventArgs e) {
@@ -187,13 +193,23 @@ namespace OpenDental{
 		}
 
 		private void butOK_Click(object sender, System.EventArgs e) {
-			if(Userods.Listt[listUser.SelectedIndex].Password!=""){
-				if(!UserodB.CheckPassword(textPassword.Text,Userods.Listt[listUser.SelectedIndex].Password)){
-					MsgBox.Show(this,"Incorrect password");
+			Userod selectedUser = (Userod) listUser.SelectedItem;
+			//if(Userods.Listt[listUser.SelectedIndex].Password!=""){
+			//    if(!UserodB.CheckPassword(textPassword.Text,Userods.Listt[listUser.SelectedIndex].Password)){
+			//        MsgBox.Show(this,"Incorrect password");
+			//        return;
+			//    }
+			//}
+			//Security.CurUser=Userods.Listt[listUser.SelectedIndex].Copy();
+			if (selectedUser.Password != "")
+			{
+				if (!UserodB.CheckPassword(textPassword.Text, selectedUser.Password))
+				{
+					MsgBox.Show(this, "Incorrect password");
 					return;
 				}
 			}
-			Security.CurUser=Userods.Listt[listUser.SelectedIndex].Copy();
+			Security.CurUser = selectedUser.Copy();
 			//SecurityLogs.MakeLogEntry(Permissions.StartupSingleUser,"");
 			DialogResult=DialogResult.OK;
 		}
@@ -205,6 +221,44 @@ namespace OpenDental{
 		private void FormLogOn_MinimumSizeChanged(object sender, EventArgs e)
 		{		
 			this.Parent.MinimumSize = this.MinimumSize;
+		}
+		private void FillListBox()
+		{
+			listUser.BeginUpdate();
+			listUser.Items.Clear();
+			for (int i = 0; i < Userods.Listt.Count; i++)
+			{
+				// Note Employees should be refreshed at this point
+				// Need to check if you add employee and then logout is the 
+				// employee list refreshed.
+				Userod user = Userods.Listt[i];
+
+				if (user.EmployeeNum == 0 || this.chkboxShowHidden.Checked)
+					listUser.Items.Add(user);
+				else
+				{
+					if (Employees.IsHidden(user.EmployeeNum) != 1)
+						listUser.Items.Add(user);
+				}
+
+
+				if (Security.CurUser != null && Userods.Listt[i].UserNum == Security.CurUser.UserNum)
+				{
+					if (listUser.Items.Count != 0)
+						listUser.SelectedIndex = listUser.Items.Count - 1; // last item added
+				}
+			}
+			if (listUser.SelectedIndex == -1)
+			{
+				listUser.SelectedIndex = 0;
+			}
+			listUser.EndUpdate();
+
+		}
+
+		private void chkboxShowHidden_CheckedChanged(object sender, EventArgs e)
+		{
+			FillListBox();
 		}
 
 		
