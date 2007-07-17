@@ -357,6 +357,7 @@ namespace OpenDental{
 				UserCur.ClinicNum=0;
 			}
 			else {
+
 				UserCur.ClinicNum=Clinics.List[listClinic.SelectedIndex-1].ClinicNum;
 			}
 			try{
