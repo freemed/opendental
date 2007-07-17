@@ -131,6 +131,7 @@
     <Compile Include="TableTypes\Benefit.cs" />
     <Compile Include="TableTypes\Carrier.cs" />
     <Compile Include="TableTypes\Claim.cs" />
+    <Compile Include="TableTypes\ClaimCondCodes.cs" />
     <Compile Include="TableTypes\ClaimForm.cs" />
     <Compile Include="TableTypes\ClaimFormItem.cs" />
     <Compile Include="TableTypes\ClaimPayment.cs" />

@@ -5536,8 +5536,23 @@ namespace OpenDental{
 				command="ALTER TABLE referral ADD NationalProvID varchar(255)";
 				General.NonQEx(command);
 
-
-
+				command=@"CREATE TABLE claimcondcodelog (
+					ClaimCondCodeLogNum int unsigned NOT NULL auto_increment,
+					ClaimNum int unsigned NOT NULL,
+					Code0 varchar(2),
+					Code1 varchar(2),
+					Code2 varchar(2),
+					Code3 varchar(2),
+					Code4 varchar(2),
+					Code5 varchar(2),
+					Code6 varchar(2),
+					Code7 varchar(2),
+					Code8 varchar(2),
+					Code9 varchar(2),
+					Code10 varchar(2),
+					PRIMARY KEY (ClaimCondCodeLogNum)
+					) DEFAULT CHARSET=utf8";
+				General.NonQEx(command);
 
 				command="UPDATE preference SET ValueString = '5.1.0.0' WHERE PrefName = 'DataBaseVersion'";
 				General.NonQEx(command);

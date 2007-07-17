@@ -152,6 +152,7 @@
     <Compile Include="Data Interface\AutoCodes.cs" />
     <Compile Include="Data Interface\Benefits.cs" />
     <Compile Include="Data Interface\Carriers.cs" />
+    <Compile Include="Data Interface\ClaimCondCodeLog.cs" />
     <Compile Include="Data Interface\ClaimFormItems.cs" />
     <Compile Include="Data Interface\ClaimForms.cs" />
     <Compile Include="Data Interface\ClaimPayments.cs" />

@@ -56,6 +56,7 @@ namespace OpenDental{
 		private Claim[] ClaimsArray;
 		private Claim[] MedClaimsArray;
 		private ArrayList MedValueCodes;
+		private Referral ClaimReferral;
 
 		///<summary></summary>
 		public FormClaimPrint(){
@@ -448,6 +449,9 @@ namespace OpenDental{
 					otherSubsc=FamCur.List[FamCur.GetIndex(otherPlan.Subscriber)];
 				}				
 			}	
+			if(ClaimCur.ReferringProv>0){
+				ClaimReferral=Referrals.GetReferral(ClaimCur.ReferringProv);
+			}
 			ProcList=Procedures.Refresh(PatCur.PatNum);
 			ToothInitial[] initialList=ToothInitials.Refresh(PatCur.PatNum);
       ClaimProc[] ClaimProcList=ClaimProcs.Refresh(PatCur.PatNum);
@@ -1385,6 +1389,9 @@ namespace OpenDental{
 						break;
 					case "TotalPages":
 						displayStrings[i]=totalPages.ToString();
+						break;
+					case "ReferringProvNPI":
+						displayStrings[i]=ClaimReferral.NationalProvID;
 						break;
 				}//switch
 				if(CultureInfo.CurrentCulture.Name=="nl-BE"//Dutch Belgium

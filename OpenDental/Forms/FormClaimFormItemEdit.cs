@@ -698,7 +698,8 @@ namespace OpenDental{
 				"MedValCode41c",
 				"MedValAmount41c",
 				"MedValCode41d",
-				"MedValAmount41d"
+				"MedValAmount41d",
+				"ReferringProvNPI"
 			};
 		}
 
