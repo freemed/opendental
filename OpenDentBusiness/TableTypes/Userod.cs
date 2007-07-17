@@ -19,7 +19,7 @@ namespace OpenDentBusiness{
 		public int ClinicNum;
 		///<summary>FK to provider.ProvNum.  Cannot be used if EmployeeNum is used.</summary>
 		public int ProvNum;
-
+		
 		///<summary></summary>
 		public Userod Copy(){
 			Userod u=new Userod();
@@ -29,8 +29,13 @@ namespace OpenDentBusiness{
 			u.UserGroupNum=UserGroupNum;
 			u.EmployeeNum=EmployeeNum;
 			u.ClinicNum=ClinicNum;
-			u.ProvNum=ProvNum;
+			u.ProvNum=ProvNum;			
 			return u;
+		}
+
+		public override string ToString()
+		{
+			return UserName;
 		}
 	}
 
