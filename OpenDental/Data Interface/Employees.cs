@@ -122,7 +122,19 @@ namespace OpenDental{
 			}
 			return null;
 		}
-
+		/// <summary> Returns -1 if employeeNum is not found.  0 if not hidden and 1 if hidden </summary>		
+		public static int IsHidden(int employeeNum){
+			int rValue = -1;
+			if (ListLong != null){
+				for (int i = 0; i < ListLong.Length; i++){
+					if (ListLong[i].EmployeeNum == employeeNum){
+						rValue = (ListLong[i].IsHidden ? 1 : 0);
+						i = ListLong.Length;
+					}
+				}
+			}
+			return rValue;
+		}
 
 	}
 
