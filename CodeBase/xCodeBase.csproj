@@ -38,6 +38,10 @@
     <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="SigPlusNET, Version=1.0.2057.23757, Culture=neutral, PublicKeyToken=6aef07010bb0624f">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Required dlls\SigPlusNET.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Deployment" />
@@ -62,6 +66,7 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Controls\ODErrorProvider.cs" />
+    <Compile Include="Utilities\ODEnvironment.cs" />
     <Compile Include="Utilities\ODImaging.cs" />
     <Compile Include="Utilities\ODFileUtils.cs" />
     <Compile Include="Utilities\ODMathLib.cs" />
@@ -70,6 +75,7 @@
     <Compile Include="Utilities\MsgBoxCopyPaste.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Utilities\TopazWrapper.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Utilities\MsgBoxCopyPaste.resx">

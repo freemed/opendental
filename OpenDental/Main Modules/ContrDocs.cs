@@ -31,6 +31,7 @@ using CodeBase;
 using xImageDeviceManager;
 using OpenDentBusiness.Imaging;
 using OpenDental.Imaging.Business;
+using System.Text.RegularExpressions;
 
 namespace OpenDental{
 
@@ -97,7 +98,7 @@ namespace OpenDental{
 		#region Manually Created Variables
 
 		///<summary>Used to display Topaz signatures on Windows. Is added dynamically to avoid native code references crashing MONO.</summary>
-		private Topaz.SigPlusNET sigBoxTopaz;
+		private Control sigBoxTopaz;
 		///<summary>Starts out as false. It's only used when repainting the toolbar, not to test mode.</summary>
 		private bool IsCropMode;
 		///<summary>The only reason this is public is for NewPatientForm.com functionality.</summary>
@@ -167,13 +168,19 @@ namespace OpenDental{
 
 		///<summary></summary>
 		public ContrDocs(){
+            Logger.openlog.Log("Initializing Document Module...", Logger.Severity.INFO);
 			InitializeComponent();
 			//The context menu causes strange bugs in MONO when performing selections on the tree.
 			//Perhaps when MONO is more developed we can remove this check.
-			if(Environment.OSVersion.Platform==PlatformID.Unix){
+            //Also, the SigPlusNet() object cannot be instantiated on 64-bit machines, because
+            //the code for instantiation exists in a 32-bit native dll. Therefore, we have put
+            //the creation code for the topaz box in CodeBase.TopazWrapper.GetTopaz() so that
+            //the native code does not exist or get called anywhere in the program unless we are running on a 
+            //32-bit version of Windows.
+			if(Environment.OSVersion.Platform==PlatformID.Unix || CodeBase.ODEnvironment.Is64BitOperatingSystem()){
 				TreeDocuments.ContextMenu=null;
-			}else{
-				sigBoxTopaz=new Topaz.SigPlusNET();
+			}else{//Windows OS
+                sigBoxTopaz=CodeBase.TopazWrapper.GetTopaz();
 				panelNote.Controls.Add(sigBoxTopaz);
 				sigBoxTopaz.Location=new System.Drawing.Point(437,15);
 				sigBoxTopaz.Name="sigBoxTopaz";
@@ -189,6 +196,7 @@ namespace OpenDental{
 			this.xRayImageController.OnCaptureReady+=new System.EventHandler(this.OnCaptureReady);
 			this.xRayImageController.OnCaptureComplete+=new System.EventHandler(this.OnCaptureComplete);
 			this.xRayImageController.OnCaptureFinalize+=new System.EventHandler(this.OnCaptureFinalize);
+            Logger.openlog.Log("Document Module initialization complete.", Logger.Severity.INFO);
 		}
 
 		///<summary></summary>
@@ -1264,7 +1272,7 @@ namespace OpenDental{
 			if(Environment.OSVersion.Platform!=PlatformID.Unix) {
 				sigBoxTopaz.Location=sigBox.Location;//this puts both boxes in the same spot.
 				sigBoxTopaz.Visible=false;
-				sigBoxTopaz.SetTabletState(0);
+				((Topaz.SigPlusNET)sigBoxTopaz).SetTabletState(0);
 			}
 			//A machine running Unix will have selectionDoc.SigIsTopaz set to false here, because the visibility of the panelNote
 			//will be set to false in the case of Unix and SigIsTopaz. Therefore, the else part of this if-else clause is always
@@ -1273,14 +1281,15 @@ namespace OpenDental{
 				if(selectionDoc.Signature!=null && selectionDoc.Signature!="") {
 					sigBox.Visible=false;
 					sigBoxTopaz.Visible=true;
-					sigBoxTopaz.ClearTablet();
-					sigBoxTopaz.SetSigCompressionMode(0);
-					sigBoxTopaz.SetEncryptionMode(0);
-					sigBoxTopaz.SetKeyString(GetHashString(selectionDoc));
-					sigBoxTopaz.SetEncryptionMode(2);//high encryption
-					sigBoxTopaz.SetSigCompressionMode(2);//high compression
-					sigBoxTopaz.SetSigString(selectionDoc.Signature);
-					if(sigBoxTopaz.NumberOfTabletPoints()==0) {
+					((Topaz.SigPlusNET)sigBoxTopaz).ClearTablet();
+					((Topaz.SigPlusNET)sigBoxTopaz).SetSigCompressionMode(0);
+					((Topaz.SigPlusNET)sigBoxTopaz).SetEncryptionMode(0);
+					((Topaz.SigPlusNET)sigBoxTopaz).SetKeyString(GetHashString(selectionDoc));
+					((Topaz.SigPlusNET)sigBoxTopaz).SetEncryptionMode(2);//high encryption
+					((Topaz.SigPlusNET)sigBoxTopaz).SetSigCompressionMode(2);//high compression
+					((Topaz.SigPlusNET)sigBoxTopaz).SetSigString(selectionDoc.Signature);
+                    if (((Topaz.SigPlusNET)sigBoxTopaz).NumberOfTabletPoints() == 0)
+                    {
 						labelInvalidSig.Visible=true;
 					}
 				}
