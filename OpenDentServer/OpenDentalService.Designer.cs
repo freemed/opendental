@@ -1,5 +1,5 @@
 namespace OpenDentServer {
-	partial class OpenDentalService {
+	public partial class OpenDentalService {
 		/// <summary> 
 		/// Required designer variable.
 		/// </summary>

@@ -21,7 +21,7 @@ using System.Reflection;
 using OpenDentServer.Properties;
 
 namespace OpenDentServer {
-	partial class OpenDentalService:ServiceBase {
+	public partial class OpenDentalService:ServiceBase {
 		private Thread workerThread = null;
 		public static TcpListener server;
 		private static XPathNavigator Navigator;
