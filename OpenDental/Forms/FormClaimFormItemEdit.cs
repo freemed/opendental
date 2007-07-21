@@ -296,11 +296,11 @@ namespace OpenDental{
 				"PatientSSN",
 				"PatientMedicaidID",
 				"PatientID-MedicaidOrSSN",
-				"PatientChartNum",
 				"Diagnosis1",
 				"Diagnosis2",
 				"Diagnosis3",
 				"Diagnosis4",
+				//1
 				"P1Date",
 				"P1Area",
 				"P1System",
@@ -324,6 +324,7 @@ namespace OpenDental{
 				"P1UnitCode",
 				"P1UnitQty",
 				"P1CodeAndMods",
+				//2
 				"P2Date",
 				"P2Area",
 				"P2System",
@@ -347,6 +348,7 @@ namespace OpenDental{
 				"P2UnitCode",
 				"P2UnitQty",
 				"P2CodeAndMods",
+				//3
 				"P3Date",
 				"P3Area",
 				"P3System",
@@ -370,6 +372,7 @@ namespace OpenDental{
 				"P3UnitCode",
 				"P3UnitQty",
 				"P3CodeAndMods",
+				//4
 				"P4Date",
 				"P4Area",
 				"P4System",
@@ -393,6 +396,7 @@ namespace OpenDental{
 				"P4UnitCode",
 				"P4UnitQty",
 				"P4CodeAndMods",
+				//5
 				"P5Date",
 				"P5Area",
 				"P5System",
@@ -415,8 +419,9 @@ namespace OpenDental{
 				"P5CodeMod4",
 				"P5UnitCode",
 				"P5UnitQty",
-				"P5Date",
 				"P5CodeAndMods",
+				//6
+				"P6Date",
 				"P6Area",
 				"P6System",
 				"P6ToothNumber",
@@ -438,10 +443,11 @@ namespace OpenDental{
 				"P6CodeMod4",
 				"P6UnitCode",
 				"P6UnitQty",
-				"P6Date",
-				"P6Area",
-				"P6System",
 				"P6CodeAndMods",
+				//7
+				"P7Date",
+				"P7Area",
+				"P7System",
 				"P7ToothNumber",
 				"P7Surface",
 				"P7Code",
@@ -460,8 +466,8 @@ namespace OpenDental{
 				"P7CodeMod4",
 				"P7UnitCode",
 				"P7UnitQty",
-				"P7Date",
 				"P7CodeAndMods",
+				//8
 				"P8Date",
 				"P8Area",
 				"P8System",
@@ -484,6 +490,7 @@ namespace OpenDental{
 				"P8UnitCode",
 				"P8UnitQty",
 				"P8CodeAndMods",
+				//9
 				"P9Date",
 				"P9Area",
 				"P9System",
@@ -506,6 +513,7 @@ namespace OpenDental{
 				"P9UnitCode",
 				"P9UnitQty",
 				"P9CodeAndMods",
+				//10
 				"P10Date",
 				"P10Area",
 				"P10System",

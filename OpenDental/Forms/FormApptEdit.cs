@@ -1389,6 +1389,9 @@ namespace OpenDental{
 			else if (AptCur.AptStatus == ApptStatus.PtNote | AptCur.AptStatus == ApptStatus.PtNoteCompleted){
 				AptCur.AptStatus = (ApptStatus)comboStatus.SelectedIndex + 7;
 			}
+			else {
+				AptCur.AptStatus=(ApptStatus)comboStatus.SelectedIndex+1;
+			}
 			//set procs complete was moved further down
 			//convert from current increment into 5 minute increment
 			//MessageBox.Show(strBTime.ToString());

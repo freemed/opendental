@@ -353,11 +353,10 @@ namespace OpenDental{
 			else {
 				UserCur.ProvNum=Providers.List[listProv.SelectedIndex-1].ProvNum;
 			}
-			if(listClinic.SelectedIndex==0) {
+			if(PrefB.GetBool("EasyNoClinics") || listClinic.SelectedIndex==0) {
 				UserCur.ClinicNum=0;
 			}
-			else {
-
+			else{
 				UserCur.ClinicNum=Clinics.List[listClinic.SelectedIndex-1].ClinicNum;
 			}
 			try{

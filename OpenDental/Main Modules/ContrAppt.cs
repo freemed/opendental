@@ -3282,6 +3282,9 @@ namespace OpenDental{
 				((int)Math.Round((decimal)timeOfDay.TotalMinutes/(decimal)ContrApptSheet.MinPerIncr))*ContrApptSheet.MinPerIncr);
 			sched.StartTime=DateTime.Today+timeOfDay;
 			sched.StopTime=sched.StartTime.Add(span);
+			if(sched.StopTime.Date!=sched.StartTime.Date) {//long span that spills over to next day
+				sched.StopTime=DateTime.Today+(new TimeSpan(23,59,0));
+			}
 			Schedules.Insert(sched);
 			RefreshPeriod();
 		}
