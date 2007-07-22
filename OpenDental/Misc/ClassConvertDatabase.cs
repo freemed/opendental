@@ -5515,6 +5515,17 @@ namespace OpenDental{
 				command="UPDATE preference SET ValueString = '5.0.7.0' WHERE PrefName = 'DataBaseVersion'";
 				General.NonQEx(command);
 			}
+			To5_0_10();
+		}
+
+		private void To5_0_10() {
+			if(FromVersion<new Version("5.0.10.0")) {
+				string command;
+				command="UPDATE preference SET ValueString = '0' WHERE PrefName = 'ShowProgressNotesInsteadofCommLog'";
+				General.NonQEx(command);
+				command="UPDATE preference SET ValueString = '5.0.10.0' WHERE PrefName = 'DataBaseVersion'";
+				General.NonQEx(command);
+			}
 			To5_1_0();
 		}
 
