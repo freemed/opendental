@@ -62,6 +62,7 @@ namespace OpenDental{
 		private Label label9;
 		private TextBox textBoxWordProcessor;
 		private Label label10;
+		private CheckBox checkApptBubbleDelay;
 		private System.Windows.Forms.Label label1;// Required designer variable.
 
 		///<summary></summary>
@@ -139,6 +140,7 @@ namespace OpenDental{
 			this.textSigInterval = new OpenDental.ValidNumber();
 			this.butCancel = new OpenDental.UI.Button();
 			this.butOK = new OpenDental.UI.Button();
+			this.checkApptBubbleDelay = new System.Windows.Forms.CheckBox();
 			this.groupBox1.SuspendLayout();
 			this.groupBox5.SuspendLayout();
 			this.groupBox2.SuspendLayout();
@@ -324,7 +326,7 @@ namespace OpenDental{
 			this.label2.Size = new System.Drawing.Size(235,31);
 			this.label2.TabIndex = 53;
 			this.label2.Text = "Days to calculate due date.  Usually 10 or 15.  Leave blank to show \"Due on Recei" +
-    "pt\"";
+				"pt\"";
 			// 
 			// groupBox2
 			// 
@@ -396,7 +398,7 @@ namespace OpenDental{
 			this.checkInsurancePlansShared.Size = new System.Drawing.Size(617,18);
 			this.checkInsurancePlansShared.TabIndex = 58;
 			this.checkInsurancePlansShared.Text = "Many patients have identical insurance plans.  Change behavior of program slightl" +
-    "y to optimize for identical plans.";
+				"y to optimize for identical plans.";
 			// 
 			// checkMedicalEclaimsEnabled
 			// 
@@ -462,7 +464,7 @@ namespace OpenDental{
 			// checkSolidBlockouts
 			// 
 			this.checkSolidBlockouts.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkSolidBlockouts.Location = new System.Drawing.Point(16,76);
+			this.checkSolidBlockouts.Location = new System.Drawing.Point(16,59);
 			this.checkSolidBlockouts.Name = "checkSolidBlockouts";
 			this.checkSolidBlockouts.Size = new System.Drawing.Size(346,18);
 			this.checkSolidBlockouts.TabIndex = 66;
@@ -501,6 +503,7 @@ namespace OpenDental{
 			// 
 			// groupBox6
 			// 
+			this.groupBox6.Controls.Add(this.checkApptBubbleDelay);
 			this.groupBox6.Controls.Add(this.checkBrokenApptNote);
 			this.groupBox6.Location = new System.Drawing.Point(436,272);
 			this.groupBox6.Name = "groupBox6";
@@ -571,7 +574,7 @@ namespace OpenDental{
 			this.textBoxDocPath.Size = new System.Drawing.Size(338,20);
 			this.textBoxDocPath.TabIndex = 62;
 			this.toolTip1.SetToolTip(this.textBoxDocPath,"This shows you where you have your document path setup and where you should place" +
-        " your files specified below.");
+					" your files specified below.");
 			// 
 			// label8
 			// 
@@ -688,6 +691,16 @@ namespace OpenDental{
 			this.butOK.Text = "&OK";
 			this.butOK.Click += new System.EventHandler(this.butOK_Click);
 			// 
+			// checkApptBubbleDelay
+			// 
+			this.checkApptBubbleDelay.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.checkApptBubbleDelay.Location = new System.Drawing.Point(19,38);
+			this.checkApptBubbleDelay.Name = "checkApptBubbleDelay";
+			this.checkApptBubbleDelay.Size = new System.Drawing.Size(297,18);
+			this.checkApptBubbleDelay.TabIndex = 68;
+			this.checkApptBubbleDelay.Text = "Appointment Bubble Popup Delay";
+			this.checkApptBubbleDelay.UseVisualStyleBackColor = true;
+			// 
 			// FormMisc
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
@@ -791,6 +804,8 @@ namespace OpenDental{
 			textBoxLogo.Text = PrefB.GetString("StationaryImage");
 			textBoxStationary.Text = PrefB.GetString("StationaryDocument");
 			textBoxWordProcessor.Text = PrefB.GetString("WordProcessorPath");
+			checkApptBubbleDelay.Checked=PrefB.GetBool("ApptBubbleDelay");
+
 		}
 
 		private void checkRandomPrimaryKeys_Click(object sender, System.EventArgs e) {
@@ -846,7 +861,8 @@ namespace OpenDental{
 				//| Prefs.UpdateBool("ShowProgressNotesInsteadofCommLog", checkProgNotesNotComm.Checked)
 				| Prefs.UpdateString("StationaryImage", textBoxLogo.Text)
 				| Prefs.UpdateString("StationaryDocument", textBoxStationary.Text)
-				| Prefs.UpdateString("WordProcessorPath", textBoxWordProcessor.Text))
+				| Prefs.UpdateString("WordProcessorPath", textBoxWordProcessor.Text)
+				| Prefs.UpdateBool("ApptBubbleDelay", checkApptBubbleDelay.Checked))
 					
 			{
 				changed=true;

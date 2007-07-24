@@ -906,7 +906,7 @@ namespace OpenDental{
 			// 
 			// timerInfoBubble
 			// 
-			this.timerInfoBubble.Interval = 500;
+			this.timerInfoBubble.Interval = 300;
 			this.timerInfoBubble.Tick += new System.EventHandler(this.timerInfoBubble_Tick);
 			// 
 			// ContrAppt
@@ -2130,9 +2130,10 @@ namespace OpenDental{
 				return;
 			}
 			if(aptNum!=bubbleAptNum){
+				//reset timer for popup delay
 				timerInfoBubble.Enabled=false;
 				timerInfoBubble.Enabled=true;
-				//delay for hover effect 0.5 sec
+				//delay for hover effect 0.28 sec
 				bubbleTime=DateTime.Now;
 				bubbleAptNum=aptNum;
 				//most data is already present in DS.Appointment, but we do need to get the patient picture
@@ -2271,7 +2272,11 @@ namespace OpenDental{
 				yval=panelSheet.Bottom-infoBubble.Height;
 			}
 			infoBubble.Location=new Point(p.X+ContrApptSheet2.Left+panelSheet.Left+10,yval);
-			if (DateTime.Now.AddMilliseconds(-300) > bubbleTime){
+			/*only show right away if option set for no delay, otherwise, it will not show
+			until mouse had hovered for at least 0.28 seconds(arbitrary #)
+			the timer fires at 0.30 seconds, so the difference was introduced because
+			of what seemed to be inconsistencies in the timer function */
+			if (DateTime.Now.AddMilliseconds(-280) > bubbleTime | !PrefB.GetBool("ApptBubbleDelay")){
 				infoBubble.Visible=true;
 			}
 			else{

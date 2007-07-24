@@ -5565,6 +5565,11 @@ namespace OpenDental{
 					) DEFAULT CHARSET=utf8";
 				General.NonQEx(command);
 
+				//after r566
+				command = "INSERT INTO preference VALUES('ApptBubbleDelay','0')";
+				General.NonQEx(command);
+
+
 				command="UPDATE preference SET ValueString = '5.1.0.0' WHERE PrefName = 'DataBaseVersion'";
 				General.NonQEx(command);
 			}
