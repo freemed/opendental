@@ -5546,7 +5546,8 @@ namespace OpenDental{
 				General.NonQEx(command);
 				command="ALTER TABLE referral ADD NationalProvID varchar(255)";
 				General.NonQEx(command);
-
+				command="DROP TABLE IF EXISTS claimcondcodelog";
+				General.NonQEx(command);
 				command=@"CREATE TABLE claimcondcodelog (
 					ClaimCondCodeLogNum int unsigned NOT NULL auto_increment,
 					ClaimNum int unsigned NOT NULL,
@@ -5564,10 +5565,11 @@ namespace OpenDental{
 					PRIMARY KEY (ClaimCondCodeLogNum)
 					) DEFAULT CHARSET=utf8";
 				General.NonQEx(command);
-
 				//after r566
 				command = "INSERT INTO preference VALUES('ApptBubbleDelay','0')";
 				General.NonQEx(command);
+
+
 
 
 				command="UPDATE preference SET ValueString = '5.1.0.0' WHERE PrefName = 'DataBaseVersion'";

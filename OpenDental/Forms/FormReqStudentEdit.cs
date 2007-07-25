@@ -383,7 +383,10 @@ namespace OpenDental{
 				textDateCompleted.Text=ReqCur.DateCompleted.ToShortDateString();
 			}
 			//if an apt is attached, then the same pat must be attached.
-			textPatient.Text=Patients.GetPat(ReqCur.PatNum).GetNameFL();
+			Patient pat=Patients.GetPat(ReqCur.PatNum);
+			if(pat!=null) {
+				textPatient.Text=pat.GetNameFL();
+			}
 			Appointment apt=Appointments.GetOneApt(ReqCur.AptNum);
 			if(apt!=null) {
 				if(apt.AptStatus==ApptStatus.UnschedList) {

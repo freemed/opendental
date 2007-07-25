@@ -63,6 +63,9 @@ namespace OpenDental{
 
 		///<summary>This is a way to get a single patient from the database if you don't already have a family object to use.</summary>
 		public static Patient GetPat(int patNum){
+			if(patNum==0) {
+				return null;
+			}
 			string command="SELECT * FROM patient WHERE PatNum="+POut.PInt(patNum);
 			return SubmitAndFill(command)[0];
 		}

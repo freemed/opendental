@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using System.Drawing;
 using System.Collections;
 using System.ComponentModel;
@@ -24,7 +25,6 @@ namespace OpenDental{
 		private Label label1;
 		private ComboBox comboPaymentType;
 		private Program prog;
-		private LinkLabel linkLabel2;
 		private ProgramProperty prop=null;
 
 		///<summary></summary>
@@ -68,7 +68,6 @@ namespace OpenDental{
 			this.label3 = new System.Windows.Forms.Label();
 			this.label1 = new System.Windows.Forms.Label();
 			this.comboPaymentType = new System.Windows.Forms.ComboBox();
-			this.linkLabel2 = new System.Windows.Forms.LinkLabel();
 			this.SuspendLayout();
 			// 
 			// butCancel
@@ -111,6 +110,7 @@ namespace OpenDental{
 			this.linkLabel1.TabStop = true;
 			this.linkLabel1.Text = "The X-Charge website is at www.x-charge.com 1-800-637-8268";
 			this.linkLabel1.UseCompatibleTextRendering = true;
+			this.linkLabel1.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel1_LinkClicked);
 			// 
 			// checkEnabled
 			// 
@@ -156,22 +156,10 @@ namespace OpenDental{
 			this.comboPaymentType.Size = new System.Drawing.Size(205,21);
 			this.comboPaymentType.TabIndex = 54;
 			// 
-			// linkLabel2
-			// 
-			this.linkLabel2.LinkArea = new System.Windows.Forms.LinkArea(27,18);
-			this.linkLabel2.Location = new System.Drawing.Point(20,38);
-			this.linkLabel2.Name = "linkLabel2";
-			this.linkLabel2.Size = new System.Drawing.Size(311,16);
-			this.linkLabel2.TabIndex = 55;
-			this.linkLabel2.TabStop = true;
-			this.linkLabel2.Text = "Purchase information is at www.open-dentx.com";
-			this.linkLabel2.UseCompatibleTextRendering = true;
-			// 
 			// FormXchargeSetup
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.ClientSize = new System.Drawing.Size(480,274);
-			this.Controls.Add(this.linkLabel2);
 			this.Controls.Add(this.comboPaymentType);
 			this.Controls.Add(this.label1);
 			this.Controls.Add(this.textPath);
@@ -209,6 +197,10 @@ namespace OpenDental{
 			}
 		}
 
+		private void linkLabel1_LinkClicked(object sender,LinkLabelLinkClickedEventArgs e) {
+			Process.Start("http://www.x-charge.com");
+		}
+
 		private void butOK_Click(object sender, System.EventArgs e) {
 			if(prog==null){
 				MsgBox.Show(this,"X-Charge entry is missing from the database.");//should never happen
@@ -234,6 +226,8 @@ namespace OpenDental{
 		private void butCancel_Click(object sender, System.EventArgs e) {
 			DialogResult=DialogResult.Cancel;
 		}
+
+		
 
 		
 

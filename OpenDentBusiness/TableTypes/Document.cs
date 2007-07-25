@@ -11,7 +11,7 @@ namespace OpenDentBusiness{
 		public string Description;
 		///<summary>Date created.</summary>
 		public DateTime DateCreated;
-		///<summary>FK to definition.DefNum. Cateories for documents.</summary>
+		///<summary>FK to definition.DefNum. Categories for documents.</summary>
 		public int DocCategory;
 		///<summary>FK to patient.PatNum.  Patient folder that document is in.(for sharing situations later)</summary>
 		public int PatNum;
