@@ -303,7 +303,7 @@ namespace OpenDental{
 
 		///<summary>This is called from ContrAccount about 3 times and also from FormRpStatement as part of the billing process.  This is what you call to print statements, either one or many.  For the patNum parameter, the first dim is for the family. Second dim is family members. The note array must have one element for every statement, so same number as dim one of patNums.  IsBill distinguishes bills sent by mail from statements handed to the patient. simpleStatement removes the detail of the itemized grid</summary>
 		public void PrintStatements(int[][] patNums,DateTime fromDate,DateTime toDate,bool includeClaims, bool subtotalsOnly,bool hidePayment,bool nextAppt,string[] notes,bool isBill, bool simpleStatement){
-			//these 4 variables are needed by the printing logic. The rest are not.
+			//these 5 variables are needed by the printing logic. The rest are not.
 			PatNums=(int[][])patNums.Clone();
 			Notes=(string[])notes.Clone();
 			SubtotalsOnly=subtotalsOnly;
@@ -334,6 +334,7 @@ namespace OpenDental{
 					commlog=new Commlog();
 					commlog.CommDateTime=DateTime.Now;
 					commlog.CommType=CommItemType.StatementSent;
+					commlog.Note=Notes[i];
 					commlog.SentOrReceived=CommSentOrReceived.Sent;
 					if(isBill){
 						commlog.Mode_=CommItemMode.Mail;
