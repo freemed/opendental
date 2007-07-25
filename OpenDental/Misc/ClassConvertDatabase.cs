@@ -5510,8 +5510,6 @@ namespace OpenDental{
 				General.NonQEx(command);
 				command="UPDATE clearinghouse SET ClientProgram = '"+POut.PString(@"C:\Program Files\TesiaLink\TesiaLink.exe")+"' WHERE ISA08='113504607'";
 				General.NonQEx(command);
-
-
 				command="UPDATE preference SET ValueString = '5.0.7.0' WHERE PrefName = 'DataBaseVersion'";
 				General.NonQEx(command);
 			}
@@ -5568,7 +5566,12 @@ namespace OpenDental{
 				//after r566
 				command = "INSERT INTO preference VALUES('ApptBubbleDelay','0')";
 				General.NonQEx(command);
-
+				//after r567
+				//Change Tesia clearinghouse settings to use internal functions instead of external program for uploading.
+				command="UPDATE clearinghouse SET ClientProgram = '' WHERE ISA08='113504607'";
+				General.NonQEx(command);
+				command="UPDATE clearinghouse SET CommBridge = '10' WHERE ISA08='113504607'";
+				General.NonQEx(command);
 
 
 

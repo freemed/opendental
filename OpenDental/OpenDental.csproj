@@ -277,6 +277,7 @@
     <Compile Include="Eclaims\BCBSGA.cs" />
     <Compile Include="Eclaims\Canadian.cs" />
     <Compile Include="Eclaims\CanadianOutput.cs" />
+    <Compile Include="Eclaims\Tesia.cs" />
     <Compile Include="Eclaims\DocumentGenerator.cs" />
     <Compile Include="Eclaims\CCDerror.cs" />
     <Compile Include="Eclaims\CCDField.cs" />

@@ -808,11 +808,13 @@ namespace OpenDentBusiness{
 		///<summary>6</summary>
 		Inmediata,
 		///<summary>7</summary>
-		AOS,//added by SPK 7/15/05
+		AOS,
 		///<summary>8</summary>
 		PostnTrack,
 		///<summary>9 Canada</summary>
-		CDAnet
+		CDAnet,
+		///<summary>10</summary>
+		Tesia
 	}
 
 	///<summary></summary>
