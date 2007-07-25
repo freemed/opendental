@@ -354,7 +354,7 @@ namespace OpenDental{
 		private void FormTaskListEdit_Load(object sender, System.EventArgs e) {
 			checkTaskStatus.Checked=Cur.TaskStatus;
 			if(Cur.DateTimeEntry.Year<1880){
-				textDateTimeEntry.Text="";
+				textDateTimeEntry.Text=DateTime.Now.ToString();
 			}
 			else{
 				textDateTimeEntry.Text=Cur.DateTimeEntry.ToString();
