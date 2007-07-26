@@ -41,7 +41,7 @@ namespace OpenDental.Eclaims
 			}
 		}
 
-		///<summary>If file creation was successful but communications failed, then this deletes the X12 file.</summary>
+		///<summary>If file creation was successful but communications failed, then this deletes the X12 file.  This is not used in the Tesia bridge because of the unique filenaming.</summary>
 		public static void Rollback(Clearinghouse clearhouse,int interchangeNum){
 			if(clearhouse.CommBridge==EclaimsCommBridge.RECS){
 				//A RECS rollback never deletes the file, because there is only one

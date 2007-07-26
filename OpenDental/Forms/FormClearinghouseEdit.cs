@@ -897,8 +897,29 @@ namespace OpenDental{
 			}
 //todo: Check all parts of program to allow either trailing slash or not
 			if(!Directory.Exists(textExportPath.Text)){
-				if(!MsgBox.Show(this,true,"Export path does not exist. Continue anyway?")){
-					return;
+				if(MsgBox.Show(this,true,"Export path does not exist. Attempt to create?")) {
+					try{
+						Directory.CreateDirectory(textExportPath.Text);
+						MsgBox.Show(this,"Folder created.");
+					}
+					catch{
+						if(!MsgBox.Show(this,true,"Not able to create folder. Continue anyway?")){
+							return;
+						}
+					}
+				}
+			}
+			if(!Directory.Exists(textResponsePath.Text)) {
+				if(MsgBox.Show(this,true,"Report path does not exist. Attempt to create?")) {
+					try {
+						Directory.CreateDirectory(textResponsePath.Text);
+						MsgBox.Show(this,"Folder created.");
+					}
+					catch {
+						if(!MsgBox.Show(this,true,"Not able to create folder. Continue anyway?")) {
+							return;
+						}
+					}
 				}
 			}
 			if(comboFormat.SelectedIndex==0){

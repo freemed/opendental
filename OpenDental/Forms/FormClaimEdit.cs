@@ -3188,6 +3188,7 @@ namespace OpenDental{
 			ClaimSendQueueItem[] listQueue=Claims.GetQueueList(ClaimCur.ClaimNum);
 			if(listQueue[0].NoSendElect) {
 				MsgBox.Show(this,"This carrier is marked to not receive e-claims.");
+				//Later: we need to let user send anyway, using all 0's for electronic id.
 				return;
 			}
 			string missingData=Eclaims.Eclaims.GetMissingData(listQueue[0]);
@@ -3195,9 +3196,11 @@ namespace OpenDental{
 				MessageBox.Show(Lan.g(this,"Cannot send claim until missing data is fixed:")+"\r\n"+missingData);
 				return;
 			}
+			Cursor=Cursors.WaitCursor;
 			List<ClaimSendQueueItem> queueItems=new List<ClaimSendQueueItem>();
 			queueItems.Add(listQueue[0]);
 			Eclaims.Eclaims.SendBatches(queueItems);//this also calls SetClaimSentOrPrinted which creates the etrans entry.
+			Cursor=Cursors.Default;
 			DialogResult=DialogResult.OK;
 		}
 
