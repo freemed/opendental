@@ -788,7 +788,7 @@ namespace OpenDental{
 			}
 			int rowsInserted=0;
 			try {
-				rowsInserted=ImportProcCodes(openDlg.FileName,"");
+				rowsInserted=ImportProcCodes(openDlg.FileName,null);
 			}
 			catch(ApplicationException ex) {
 				MessageBox.Show(ex.Message);
@@ -803,27 +803,15 @@ namespace OpenDental{
 			SecurityLogs.MakeLogEntry(Permissions.Setup,0,"Imported Procedure Codes");
 		}
 
-		///<Summary>Can be called externally as part of the update sequence.  Surround with try catch.  Returns number of codes inserted.  Supply either path or xml string data.</Summary>
-		public static int ImportProcCodes(string path, string xmlData) {
-			//xmlData should already be tested ahead of time to make sure it's not blank.
-			XmlSerializer serializer=new XmlSerializer(typeof(List<ProcedureCode>));
-			List<ProcedureCode> listCodes=new List<ProcedureCode>();
+		///<Summary>Can be called externally as part of the update sequence.  Surround with try catch.  Returns number of codes inserted.  Supply path to file to import or a list of procedure codes.</Summary>
+		public static int ImportProcCodes(string path, List<ProcedureCode> listCodes) {
 			if(path!=""){
 				if(!File.Exists(path)) {
 					throw new ApplicationException(Lan.g("FormProcCodes","File does not exist."));
 				}
 				try {
+					XmlSerializer serializer=new XmlSerializer(typeof(List<ProcedureCode>));
 					using(TextReader reader=new StreamReader(path)) {
-						listCodes=(List<ProcedureCode>)serializer.Deserialize(reader);
-					}
-				}
-				catch {
-					throw new ApplicationException(Lan.g("FormProcCodes","Invalid file format"));
-				}
-			}
-			else {//use xmlData
-				try {
-					using(TextReader reader=new StringReader(xmlData)) {
 						listCodes=(List<ProcedureCode>)serializer.Deserialize(reader);
 					}
 				}
@@ -850,6 +838,8 @@ namespace OpenDental{
 			}
 			return retVal;
 		}
+
+		
 
 		private void butProcTools_Click(object sender,EventArgs e) {
 			FormProcTools FormP=new FormProcTools();
