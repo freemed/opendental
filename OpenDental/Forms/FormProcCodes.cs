@@ -820,17 +820,28 @@ namespace OpenDental{
 				}
 			}
 			int retVal=0;
-			for(int i=0;i<listCodes.Count;i++){
-				if(ProcedureCodes.HList.ContainsKey(listCodes[i].ProcCode)){
+			Def def;
+			for(int i=0;i<listCodes.Count;i++) {
+				if(ProcedureCodes.HList.ContainsKey(listCodes[i].ProcCode)) {
 					continue;//don't import duplicates.
 				}
 				listCodes[i].ProcCat=DefB.GetByExactName(DefCat.ProcCodeCats,listCodes[i].ProcCatDescript);
-				if(listCodes[i].ProcCat==0){//no category exists with that name
-					Def def=new Def();
+				if(listCodes[i].ProcCat!=0) {//if a category exists with that name
+					def=DefB.GetDef(DefCat.ProcCodeCats,listCodes[i].ProcCat);
+					if(!def.IsHidden) {
+						def.IsHidden=true;
+						Defs.Update(def);
+						Defs.Refresh();
+					}
+				}
+				if(listCodes[i].ProcCat==0) {//no category exists with that name
+					def=new Def();
 					def.Category=DefCat.ProcCodeCats;
 					def.ItemName=listCodes[i].ProcCatDescript;
 					def.ItemOrder=DefB.Long[(int)DefCat.ProcCodeCats].Length;
+					def.IsHidden=true;
 					Defs.Insert(def);
+					Defs.Refresh();
 					listCodes[i].ProcCat=def.DefNum;
 				}
 				ProcedureCodes.Insert(listCodes[i]);
@@ -846,6 +857,7 @@ namespace OpenDental{
 			FormP.ShowDialog();
 			if(FormP.Changed) {
 				changed=true;
+				FillCats();
 				FillGrid();
 			}
 		}

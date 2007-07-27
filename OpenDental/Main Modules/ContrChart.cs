@@ -4199,7 +4199,13 @@ namespace OpenDental{
 		}
 
 		///<summary>If quickbutton, then pass the code in and set procButtonNum to 0.</summary>
-		private void ProcButtonClicked(int procButtonNum,string quickcode){
+		private void ProcButtonClicked(int procButtonNum,string quickcode) {
+			#if TRIALONLY
+				if(procButtonNum==0){
+					MsgBox.Show(this,"Quick buttons do not work in the trial version because dummy codes are being used instead of real codes.  Just to the left, change to a different category to see other procedure buttons available which do work.");
+					return;
+				}
+			#endif
 			Procedures.SetDateFirstVisit(DateTime.Today,1,PatCur);
 			bool isValid;
 			TreatmentArea tArea;

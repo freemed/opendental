@@ -301,32 +301,57 @@ namespace OpenDental{
 			return "";
 		}
 
-		///<summary>Used by FormUpdate to check whether codes starting with T exist and are in a visible category.  If so, it moves them to the Obsolete category.</summary>
-		public static void TcodesMove(){
-			string command=@"SELECT DISTINCT ProcCat FROM procedurecode,definition 
+		///<summary>Used to check whether codes starting with T exist and are in a visible category.  If so, it moves them to the Obsolete category.  If the T code has never been used, then it deletes it.</summary>
+		public static void TcodesClear() {
+			//first delete any unused T codes
+			string command=@"SELECT CodeNum,ProcCode FROM procedurecode
+				WHERE NOT EXISTS(SELECT * FROM procedurelog WHERE procedurelog.CodeNum=procedurecode.CodeNum)
+				AND ProcCode LIKE 'T%'";
+			DataTable table=General.GetTable(command);
+			int codenum;
+			for(int i=0;i<table.Rows.Count;i++) {
+				codenum=PIn.PInt(table.Rows[i]["CodeNum"].ToString());
+				command="DELETE FROM fee WHERE CodeNum="+POut.PInt(codenum);
+				General.NonQ(command);
+				command="DELETE FROM procedurecode WHERE CodeNum="+POut.PInt(codenum);
+				General.NonQ(command);
+			}
+			//then, move any other T codes to obsolete category
+			command=@"SELECT DISTINCT ProcCat FROM procedurecode,definition 
 				WHERE procedurecode.ProcCode LIKE 'T%'
 				AND definition.IsHidden=0
 				AND procedurecode.ProcCat=definition.DefNum";
-			DataTable table=General.GetTable(command);
-			if(table.Rows.Count==0){
+			table=General.GetTable(command);
+			if(table.Rows.Count==0) {
 				return;
 			}
 			int catNum=DefB.GetByExactName(DefCat.ProcCodeCats,"Obsolete");//check to make sure an Obsolete category exists.
-			if(catNum==0){
-				Def def=new Def();
+			Def def;
+			if(catNum!=0) {//if a category exists with that name
+				def=DefB.GetDef(DefCat.ProcCodeCats,catNum);
+				if(!def.IsHidden) {
+					def.IsHidden=true;
+					Defs.Update(def);
+					Defs.Refresh();
+				}
+			}
+			if(catNum==0) {
+				def=new Def();
 				def.Category=DefCat.ProcCodeCats;
 				def.ItemName="Obsolete";
 				def.ItemOrder=DefB.Long[(int)DefCat.ProcCodeCats].Length;
+				def.IsHidden=true;
 				Defs.Insert(def);
+				Defs.Refresh();
 				catNum=def.DefNum;
 			}
-			for(int i=0;i<table.Rows.Count;i++){
+			for(int i=0;i<table.Rows.Count;i++) {
 				command="UPDATE procedurecode SET ProcCat="+POut.PInt(catNum)
 					+" WHERE ProcCat="+table.Rows[i][0].ToString();
 				General.NonQ(command);
-			}			
+			}
 		}
-
+/*
 		///<summary>Used by FormUpdate when converting from T codes to D codes.  It's not converting the actual codes.  It's converting the autocodes and procbuttons from T to D.</summary>
 		public static void TcodesAlter(){
 			//string command="UPDATE autocodeitem SET Code = REPLACE(Code,'T','D') WHERE Code LIKE 'T%'";
@@ -362,7 +387,7 @@ namespace OpenDental{
 			}
 			return rowsaffected;
 		}
-/*
+
 		///<summary>Checks other tables which use ProcCodes elsewhere in the database and deletes codes from the procedurecode table which are not referenced in any of the other tables. This is used in FormLicenseMissing.cs.</summary>
 		public static void DeleteUnusedProcCodes(){
 			//First collect the individual proc codes currently in use from the various different tables.

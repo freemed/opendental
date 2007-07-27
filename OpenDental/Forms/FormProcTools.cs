@@ -1,6 +1,7 @@
 using System;
 using System.Drawing;
 using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows.Forms;
 using OpenDentBusiness;
@@ -189,12 +190,13 @@ namespace OpenDental{
 		#endregion
 
 		private void FormProcTools_Load(object sender,EventArgs e) {
-			if(CDT.Class1.GetADAcodes()==""){
-				butNewCust.Enabled=false;
-			}
+			//if(CDT.Class1.GetADAcodes()==""){
+			//	butNewCust.Enabled=false;
+			//}
 		}
 
 		private void butNewCust_Click(object sender,EventArgs e) {
+			Changed=true;
 			int rowsInserted=0;
 			try{
 				rowsInserted=FormProcCodes.ImportProcCodes("",null);//CDT.Class1.GetADAcodes());
@@ -203,7 +205,9 @@ namespace OpenDental{
 				MessageBox.Show(ex.Message);
 				return;
 			}
+			DataValid.SetInvalid(InvalidTypes.Defs | InvalidTypes.ProcCodes | InvalidTypes.Fees);
 			MessageBox.Show("Procedure codes inserted: "+rowsInserted);
+			ProcedureCodes.TcodesClear();
 			AutoCodes.SetToDefault();
 			ProcButtons.SetToDefault();
 			DataValid.SetInvalid(InvalidTypes.AutoCodes | InvalidTypes.ProcButtons | InvalidTypes.Defs);
@@ -211,21 +215,23 @@ namespace OpenDental{
 			SecurityLogs.MakeLogEntry(Permissions.Setup,0,"New Customer Procedure codes tool was run.");
 		}
 
-		private void butDelete_Click(object sender,EventArgs e) {
+		/*private void butDelete_Click(object sender,EventArgs e) {
 			int affectedRows=ProcedureCodes.DeleteUnusedCodes();
 			MessageBox.Show(affectedRows.ToString()+Lan.g(this," codes deleted."));
 			if(affectedRows>0) {
 				Changed=true;
 			}
-		}
+		}*/
 
 		private void butAutocodes_Click(object sender,EventArgs e) {
+			Changed=true;
 			AutoCodes.SetToDefault();
 			DataValid.SetInvalid(InvalidTypes.AutoCodes);
 			MessageBox.Show(Lan.g(this,"Done."));
 		}
 
 		private void butProcButtons_Click(object sender,EventArgs e) {
+			Changed=true;
 			ProcButtons.SetToDefault();
 			DataValid.SetInvalid(InvalidTypes.ProcButtons | InvalidTypes.Defs);
 			MessageBox.Show(Lan.g(this,"Done."));
