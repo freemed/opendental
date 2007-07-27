@@ -199,7 +199,8 @@ namespace OpenDental{
 			Changed=true;
 			int rowsInserted=0;
 			try{
-				rowsInserted=FormProcCodes.ImportProcCodes("",null);//CDT.Class1.GetADAcodes());
+				rowsInserted=FormProcCodes.ImportProcCodes("",new List<ProcedureCode>(),"");//CDT.Class1.GetADAcodes());
+				rowsInserted+=FormProcCodes.ImportProcCodes("",new List<ProcedureCode>(),Properties.Resources.NoFeeProcCodes);
 			}
 			catch(ApplicationException ex) {
 				MessageBox.Show(ex.Message);

@@ -788,7 +788,7 @@ namespace OpenDental{
 			}
 			int rowsInserted=0;
 			try {
-				rowsInserted=ImportProcCodes(openDlg.FileName,null);
+				rowsInserted=ImportProcCodes(openDlg.FileName,null,"");
 			}
 			catch(ApplicationException ex) {
 				MessageBox.Show(ex.Message);
@@ -803,14 +803,15 @@ namespace OpenDental{
 			SecurityLogs.MakeLogEntry(Permissions.Setup,0,"Imported Procedure Codes");
 		}
 
-		///<Summary>Can be called externally as part of the update sequence.  Surround with try catch.  Returns number of codes inserted.  Supply path to file to import or a list of procedure codes.</Summary>
-		public static int ImportProcCodes(string path, List<ProcedureCode> listCodes) {
-			if(path!=""){
+		///<Summary>Can be called externally as part of the update sequence.  Surround with try catch.  Returns number of codes inserted.  Supply path to file to import or a list of procedure codes, or an xml string.  Make sure to set the other two values blank or empty(not null).</Summary>
+		public static int ImportProcCodes(string path,List<ProcedureCode> listCodes,string xmlData) {
+			//xmlData should already be tested ahead of time to make sure it's not blank.
+			XmlSerializer serializer=new XmlSerializer(typeof(List<ProcedureCode>));
+			if(path!="") {
 				if(!File.Exists(path)) {
 					throw new ApplicationException(Lan.g("FormProcCodes","File does not exist."));
 				}
 				try {
-					XmlSerializer serializer=new XmlSerializer(typeof(List<ProcedureCode>));
 					using(TextReader reader=new StreamReader(path)) {
 						listCodes=(List<ProcedureCode>)serializer.Deserialize(reader);
 					}
@@ -819,27 +820,27 @@ namespace OpenDental{
 					throw new ApplicationException(Lan.g("FormProcCodes","Invalid file format"));
 				}
 			}
+			else if(xmlData!="") {
+				try {
+					using(TextReader reader=new StringReader(xmlData)) {
+						listCodes=(List<ProcedureCode>)serializer.Deserialize(reader);
+					}
+				}
+				catch {
+					throw new ApplicationException(Lan.g("FormProcCodes","xml format"));
+				}
+			}
 			int retVal=0;
-			Def def;
 			for(int i=0;i<listCodes.Count;i++) {
 				if(ProcedureCodes.HList.ContainsKey(listCodes[i].ProcCode)) {
 					continue;//don't import duplicates.
 				}
 				listCodes[i].ProcCat=DefB.GetByExactName(DefCat.ProcCodeCats,listCodes[i].ProcCatDescript);
-				if(listCodes[i].ProcCat!=0) {//if a category exists with that name
-					def=DefB.GetDef(DefCat.ProcCodeCats,listCodes[i].ProcCat);
-					if(!def.IsHidden) {
-						def.IsHidden=true;
-						Defs.Update(def);
-						Defs.Refresh();
-					}
-				}
 				if(listCodes[i].ProcCat==0) {//no category exists with that name
-					def=new Def();
+					Def def=new Def();
 					def.Category=DefCat.ProcCodeCats;
 					def.ItemName=listCodes[i].ProcCatDescript;
 					def.ItemOrder=DefB.Long[(int)DefCat.ProcCodeCats].Length;
-					def.IsHidden=true;
 					Defs.Insert(def);
 					Defs.Refresh();
 					listCodes[i].ProcCat=def.DefNum;
@@ -849,8 +850,6 @@ namespace OpenDental{
 			}
 			return retVal;
 		}
-
-		
 
 		private void butProcTools_Click(object sender,EventArgs e) {
 			FormProcTools FormP=new FormProcTools();

@@ -261,6 +261,28 @@ namespace OpenDental.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+        ///&lt;ArrayOfProcedureCode xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xmlns:xsd=&quot;http://www.w3.org/2001/XMLSchema&quot;&gt;
+        ///  &lt;ProcedureCode&gt;
+        ///    &lt;ProcCode&gt;N4101&lt;/ProcCode&gt;
+        ///    &lt;Descript&gt;Post Op&lt;/Descript&gt;
+        ///    &lt;AbbrDesc&gt;PostOp&lt;/AbbrDesc&gt;
+        ///    &lt;ProcTime&gt;/X/&lt;/ProcTime&gt;
+        ///    &lt;TreatArea&gt;Mouth&lt;/TreatArea&gt;
+        ///    &lt;SetRecall&gt;false&lt;/SetRecall&gt;
+        ///    &lt;NoBillIns&gt;true&lt;/NoBillIns&gt;
+        ///    &lt;IsProsth&gt;false&lt;/IsProsth&gt;
+        ///    &lt;IsHygiene&gt;false&lt;/IsHygiene&gt;
+        ///    &lt;PaintType&gt;None&lt;/PaintType&gt;
+        ///  [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string NoFeeProcCodes {
+            get {
+                return ResourceManager.GetString("NoFeeProcCodes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
         ///&lt;Report Name=&quot;&quot;&gt;
         ///  &lt;Description&gt;
