@@ -1793,6 +1793,7 @@ namespace OpenDental {
 			double runBal=0;
 				//tempAcctLine.Balance=runBal.ToString("F");
 				//AcctLineAL.Add(tempAcctLine);
+			ProcedureCode procedurecode;
 			for(int j=0;j<countProc+countClaim+countAdj+countPay+countComm+countPayPlan+1;j++){
 			//for(int i=0;i<AcctLineAL.Length;i++){
 				//set lineDate to the value of the first array that is not maxed out:
@@ -1825,9 +1826,15 @@ namespace OpenDental {
 					tempAcctLine.Index=tempCountProc;
 					tempAcctLine.Date=arrayProc[tempCountProc].ProcDate.ToString("d");
 					tempAcctLine.Provider=Providers.GetAbbr(arrayProc[tempCountProc].ProvNum);
-					tempAcctLine.Code=ProcedureCodes.GetProcCode(arrayProc[tempCountProc].CodeNum).ProcCode;
+					procedurecode=ProcedureCodes.GetProcCode(arrayProc[tempCountProc].CodeNum);
+					tempAcctLine.Code=procedurecode.ProcCode;
 					tempAcctLine.Tooth=Tooth.ToInternat(arrayProc[tempCountProc].ToothNum);
-					tempAcctLine.Description=ProcedureCodes.GetProcCode(arrayProc[tempCountProc].CodeNum).Descript;
+					if(procedurecode.LaymanTerm=="") {
+						tempAcctLine.Description=procedurecode.Descript;
+					}
+					else {
+						tempAcctLine.Description=procedurecode.LaymanTerm;
+					}
 					if(arrayProc[tempCountProc].MedicalCode!=""){
 						tempAcctLine.Description=Lan.g(this,"(medical)")+" "+tempAcctLine.Description;
 					}

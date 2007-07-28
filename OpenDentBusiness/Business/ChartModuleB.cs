@@ -49,7 +49,8 @@ namespace OpenDentBusiness {
 			//but we won't actually fill this table with rows until the very end.  It's more useful to use a List<> for now.
 			List<DataRow> rows=new List<DataRow>();
 			//Procedures-----------------------------------------------------------------------------------------------------
-			string command="SELECT ProcDate,ProcStatus,ToothNum,Surf,Dx,procedurecode.ProcCode,ProcNum,procedurecode.Descript,"
+			string command="SELECT LaymanTerm,ProcDate,ProcStatus,ToothNum,Surf,Dx,"
+				+"procedurecode.ProcCode,ProcNum,procedurecode.Descript,"
 				+"provider.Abbr,ProcFee,ProcNumLab,appointment.AptDateTime,Priority,ToothRange,procedurelog.CodeNum "
 				+"FROM procedurelog "
 				+"LEFT JOIN procedurecode ON procedurecode.CodeNum=procedurelog.CodeNum "
@@ -103,7 +104,12 @@ namespace OpenDentBusiness {
 						break;
 				}
 				row["CommlogNum"]=0;
-				row["description"]=rawProcs.Rows[i]["Descript"].ToString();
+				if(rawProcs.Rows[i]["LaymanTerm"].ToString()=="") {
+					row["description"]=rawProcs.Rows[i]["Descript"].ToString();
+				}
+				else {
+					row["description"]=rawProcs.Rows[i]["LaymanTerm"].ToString();
+				}
 				row["dx"]=DefB.GetValue(DefCat.Diagnosis,PIn.PInt(rawProcs.Rows[i]["Dx"].ToString()));
 				row["Dx"]=rawProcs.Rows[i]["Dx"].ToString();
 				row["LabCaseNum"]=0;

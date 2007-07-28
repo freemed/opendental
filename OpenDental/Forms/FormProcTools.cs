@@ -209,14 +209,15 @@ namespace OpenDental{
 				MessageBox.Show(ex.Message);
 				return;
 			}
-			DataValid.SetInvalid(InvalidTypes.Defs | InvalidTypes.ProcCodes | InvalidTypes.Fees);//yes, the really does refresh before moving on.
+			DataValid.SetInvalid(InvalidTypes.Defs | InvalidTypes.ProcCodes | InvalidTypes.Fees);//yes, this really does refresh before moving on.
 			MessageBox.Show("Procedure codes inserted: "+rowsInserted);
 			ProcedureCodes.ResetADAdescriptions(codeList);
 			DataValid.SetInvalid(InvalidTypes.ProcCodes);
 			ProcedureCodes.TcodesClear();
 			AutoCodes.SetToDefault();
+			DataValid.SetInvalid(InvalidTypes.AutoCodes);
 			ProcButtons.SetToDefault();
-			DataValid.SetInvalid(InvalidTypes.AutoCodes | InvalidTypes.ProcButtons | InvalidTypes.Defs);
+			DataValid.SetInvalid(InvalidTypes.ProcButtons | InvalidTypes.Defs);
 			MessageBox.Show(Lan.g(this,"Done."));
 			SecurityLogs.MakeLogEntry(Permissions.Setup,0,"New Customer Procedure codes tool was run.");
 		}
