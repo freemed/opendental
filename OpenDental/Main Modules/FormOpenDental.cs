@@ -1106,6 +1106,9 @@ namespace OpenDental{
 			if(Environment.OSVersion.Platform==PlatformID.Unix){//Create A to Z unsupported on Unix for now.
 				menuItemCreateAtoZFolders.Visible=false;
 			}
+			if(!PrefB.GetBool("ADAdescriptionsReset")) {
+				ProcedureCodes.ResetADAdescriptions();
+			}
 			Splash.Dispose();
 			Userod adminUser=Userods.GetAdminUser();
 			if(adminUser.Password=="") {
