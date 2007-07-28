@@ -1469,12 +1469,20 @@ namespace OpenDental{
 				}
 			}
 			if(showProduction){
-				double production=0;
+				double totalproduction=0;
+				double hygproduction = 0;
+				double drproduction = 0;
+				bool nohygAssigned = false;
 				int indexProv;
 				for(int i=0;i<DS.Tables["Appointments"].Rows.Count;i++){
 					indexProv=-1;
 					if(DS.Tables["Appointments"].Rows[i]["IsHygiene"].ToString()=="1"){
 						indexProv=ApptViewItems.GetIndexProv(PIn.PInt(DS.Tables["Appointments"].Rows[i]["ProvHyg"].ToString()));
+						//if not assigned hyg prov, then set it to regular prov
+						if (indexProv == -1) {
+							indexProv = ApptViewItems.GetIndexProv(PIn.PInt(DS.Tables["Appointments"].Rows[i]["ProvNum"].ToString()));
+							nohygAssigned = true;
+						}
 					}
 					else{
 						indexProv=ApptViewItems.GetIndexProv(PIn.PInt(DS.Tables["Appointments"].Rows[i]["ProvNum"].ToString()));
@@ -1482,14 +1490,24 @@ namespace OpenDental{
 					if(indexProv!=-1){
 						//prevents broken appt from totaling in production for the day
 						if(DS.Tables["Appointments"].Rows[i]["AptStatus"].ToString()!=((int)ApptStatus.Broken).ToString()
-							&& DS.Tables["Appointments"].Rows[i]["AptStatus"].ToString()!=((int)ApptStatus.UnschedList).ToString())
+							&& DS.Tables["Appointments"].Rows[i]["AptStatus"].ToString()!=((int)ApptStatus.UnschedList).ToString()
+							&& DS.Tables["Appointments"].Rows[i]["AptStatus"].ToString() != ((int)ApptStatus.PtNote).ToString()
+							&& DS.Tables["Appointments"].Rows[i]["AptStatus"].ToString() != ((int)ApptStatus.PtNoteCompleted).ToString())
 						{
-							production+=PIn.PDouble(DS.Tables["Appointments"].Rows[i]["productionVal"].ToString());
+							//set individual production #'s
+							if (DS.Tables["Appointments"].Rows[i]["IsHygiene"].ToString() == "1" && !nohygAssigned) {
+								hygproduction += PIn.PDouble(DS.Tables["Appointments"].Rows[i]["productionVal"].ToString());
+							}
+							else {
+								drproduction += PIn.PDouble(DS.Tables["Appointments"].Rows[i]["productionVal"].ToString());
+							}
+							
+							totalproduction+=PIn.PDouble(DS.Tables["Appointments"].Rows[i]["productionVal"].ToString());
 								//Procedures.GetProductionOneApt(ListDay[i].AptNum, procsMultApts, false);
 						}
 					}
 				}
-				textProduction.Text=production.ToString("c0");
+				textProduction.Text=totalproduction.ToString("c0");
 			}
 			else{
 				textProduction.Text="";
