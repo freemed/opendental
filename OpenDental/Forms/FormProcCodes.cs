@@ -849,6 +849,7 @@ namespace OpenDental{
 				retVal++;
 			}
 			return retVal;
+			//don't forget to refresh procedurecodes
 		}
 
 		private void butProcTools_Click(object sender,EventArgs e) {

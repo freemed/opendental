@@ -111,7 +111,7 @@ namespace OpenDental{
 		///<summary></summary>
 		public static event OpenDental.ValidEventHandler BecameInvalid;	
 
-		///<summary>Triggers an event that causes a signal to be sent to all other computers telling them what kind of locally stored data needs to be updated.  Either supply a set of flags for the types, or supply a date if the appointment screen needs to be refreshed.</summary>
+		///<summary>Triggers an event that causes a signal to be sent to all other computers telling them what kind of locally stored data needs to be updated.  Either supply a set of flags for the types, or supply a date if the appointment screen needs to be refreshed.  Yes, this does immediately refresh the local data.</summary>
 		public static void SetInvalid(InvalidTypes itypes){
 			OnBecameInvalid(new OpenDental.ValidEventArgs(DateTime.MinValue,itypes,false));
 		}

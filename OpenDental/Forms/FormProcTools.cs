@@ -190,24 +190,29 @@ namespace OpenDental{
 		#endregion
 
 		private void FormProcTools_Load(object sender,EventArgs e) {
-			//if(CDT.Class1.GetADAcodes()==""){
-			//	butNewCust.Enabled=false;
-			//}
+			
 		}
 
 		private void butNewCust_Click(object sender,EventArgs e) {
+			#if TRIALONLY
+				MsgBox.Show(this,"This button is only used after upgrading to the full version.");
+				return;
+			#endif
 			Changed=true;
 			int rowsInserted=0;
-			try{
-				rowsInserted=FormProcCodes.ImportProcCodes("",new List<ProcedureCode>(),"");//CDT.Class1.GetADAcodes());
+			List<ProcedureCode> codeList=CDT.Class1.GetADAcodes();
+			try {
+				rowsInserted=FormProcCodes.ImportProcCodes("",codeList,"");
 				rowsInserted+=FormProcCodes.ImportProcCodes("",new List<ProcedureCode>(),Properties.Resources.NoFeeProcCodes);
 			}
 			catch(ApplicationException ex) {
 				MessageBox.Show(ex.Message);
 				return;
 			}
-			DataValid.SetInvalid(InvalidTypes.Defs | InvalidTypes.ProcCodes | InvalidTypes.Fees);
+			DataValid.SetInvalid(InvalidTypes.Defs | InvalidTypes.ProcCodes | InvalidTypes.Fees);//yes, the really does refresh before moving on.
 			MessageBox.Show("Procedure codes inserted: "+rowsInserted);
+			ProcedureCodes.ResetADAdescriptions(codeList);
+			DataValid.SetInvalid(InvalidTypes.ProcCodes);
 			ProcedureCodes.TcodesClear();
 			AutoCodes.SetToDefault();
 			ProcButtons.SetToDefault();
@@ -215,14 +220,6 @@ namespace OpenDental{
 			MessageBox.Show(Lan.g(this,"Done."));
 			SecurityLogs.MakeLogEntry(Permissions.Setup,0,"New Customer Procedure codes tool was run.");
 		}
-
-		/*private void butDelete_Click(object sender,EventArgs e) {
-			int affectedRows=ProcedureCodes.DeleteUnusedCodes();
-			MessageBox.Show(affectedRows.ToString()+Lan.g(this," codes deleted."));
-			if(affectedRows>0) {
-				Changed=true;
-			}
-		}*/
 
 		private void butAutocodes_Click(object sender,EventArgs e) {
 			Changed=true;

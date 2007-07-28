@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Data;
 using System.Drawing;
 using System.Windows.Forms;
@@ -322,9 +323,6 @@ namespace OpenDental{
 				AND definition.IsHidden=0
 				AND procedurecode.ProcCat=definition.DefNum";
 			table=General.GetTable(command);
-			if(table.Rows.Count==0) {
-				return;
-			}
 			int catNum=DefB.GetByExactName(DefCat.ProcCodeCats,"Obsolete");//check to make sure an Obsolete category exists.
 			Def def;
 			if(catNum!=0) {//if a category exists with that name
@@ -350,7 +348,38 @@ namespace OpenDental{
 					+" WHERE ProcCat="+table.Rows[i][0].ToString();
 				General.NonQ(command);
 			}
+			//finally, set Never Used category to be hidden.  This isn't really part of clearing Tcodes, but is required
+			//because many customers won't have that category hidden
+			catNum=DefB.GetByExactName(DefCat.ProcCodeCats,"Never Used");
+			if(catNum!=0) {//if a category exists with that name
+				def=DefB.GetDef(DefCat.ProcCodeCats,catNum);
+				if(!def.IsHidden) {
+					def.IsHidden=true;
+					Defs.Update(def);
+					Defs.Refresh();
+				}
+			}
 		}
+
+		///<Summary>Resets the descriptions for all ADA codes to the official wording.  Required by the license.</Summary>
+		public static void ResetADAdescriptions() {
+			ResetADAdescriptions(CDT.Class1.GetADAcodes());
+		}
+
+		///<Summary>Resets the descriptions for all ADA codes to the official wording.  Required by the license.</Summary>
+		public static void ResetADAdescriptions(List<ProcedureCode> codeList) {
+			ProcedureCode code;
+			for(int i=0;i<codeList.Count;i++) {
+				if(!ProcedureCodes.IsValidCode(codeList[i].ProcCode)) {
+					continue;
+				}
+				code=ProcedureCodes.GetProcCode(codeList[i].ProcCode);
+				code.Descript=codeList[i].Descript;
+				ProcedureCodes.Update(code);
+			}
+			//don't forget to refresh procedurecodes.
+		}
+
 /*
 		///<summary>Used by FormUpdate when converting from T codes to D codes.  It's not converting the actual codes.  It's converting the autocodes and procbuttons from T to D.</summary>
 		public static void TcodesAlter(){
