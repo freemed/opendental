@@ -3114,15 +3114,14 @@ namespace OpenDental{
 			Appointment apt = Appointments.GetOneApt(ContrApptSingle.SelectedAptNum);
 			int thisI=GetIndex(ContrApptSingle.SelectedAptNum);
 			Patient pat=Patients.GetPat(PIn.PInt(ContrApptSingle3[thisI].DataRoww["PatNum"].ToString()));
-			if (MessageBox.Show(Lan.g(this, "Are you sure you want to break appointment for: " + "\r\n" + "\r\n" +  pat.GetNameFL()), "Question...",
+			if (!Security.IsAuthorized(Permissions.AppointmentEdit)) {
+				return;
+			}
+			if (apt.AptStatus == ApptStatus.PtNote | apt.AptStatus == ApptStatus.PtNoteCompleted) {
+				return;
+			}
+			if (MessageBox.Show(Lan.g(this, "Are you sure you want to break appointment for: " + "\r\n" + "\r\n" + pat.GetNameFL()), "Question...",
 					MessageBoxButtons.YesNo) != DialogResult.Yes) {
-				return;
-			}
-
-			if(!Security.IsAuthorized(Permissions.AppointmentEdit)){
-				return;
-			}
-			if (apt.AptStatus == ApptStatus.PtNote | apt.AptStatus==ApptStatus.PtNoteCompleted) {
 				return;
 			}
 			Appointments.SetAptStatus(ContrApptSingle.SelectedAptNum,ApptStatus.Broken);
@@ -3208,6 +3207,7 @@ namespace OpenDental{
 			if (!Security.IsAuthorized(Permissions.AppointmentEdit)) {
 				return;
 			}
+			int thisI = GetIndex(ContrApptSingle.SelectedAptNum);
 			if (apt.AptStatus == ApptStatus.PtNote | apt.AptStatus == ApptStatus.PtNoteCompleted) {
 				if (!MsgBox.Show(this, true, "Delete Patient Note?")) {
 					return;
@@ -3217,7 +3217,7 @@ namespace OpenDental{
 							MessageBoxButtons.YesNo) == DialogResult.Yes) {
 						Commlog CommlogCur = new Commlog();
 						CommlogCur.PatNum = apt.PatNum;
-						CommlogCur.CommDateTime = DateTime.Now;
+						CommlogCur.CommDateTime = apt.AptDateTime;
 						CommlogCur.CommType = CommItemType.ApptRelated;
 						CommlogCur.Note = "Deleted Pt NOTE from schedule, saved copy: ";
 						CommlogCur.Note += apt.Note;
@@ -3225,6 +3225,11 @@ namespace OpenDental{
 						Commlogs.Insert(CommlogCur);
 					}
 				}
+				SecurityLogs.MakeLogEntry(Permissions.AppointmentEdit, PatCurNum,
+					PatCurName + ", "
+					+ ContrApptSingle3[thisI].DataRoww["procs"].ToString() + ", "
+					+ ContrApptSingle3[thisI].DataRoww["AptDateTime"].ToString() + ", "
+					+ "NOTE Deleted");
 			}
 			else {
 				if (!MsgBox.Show(this, true, "Delete Appointment?")) {
@@ -3235,9 +3240,9 @@ namespace OpenDental{
 							MessageBoxButtons.YesNo) == DialogResult.Yes){
 						Commlog CommlogCur = new Commlog();
 						CommlogCur.PatNum = apt.PatNum;
-						CommlogCur.CommDateTime = DateTime.Now;
+						CommlogCur.CommDateTime = apt.AptDateTime;
 						CommlogCur.CommType = CommItemType.ApptRelated;
-						CommlogCur.Note = "Deleted Appt. & saved note: ";
+						CommlogCur.Note = "Deleted Appointment & saved note: ";
 						if (apt.ProcDescript != "") {
 							CommlogCur.Note += apt.ProcDescript + ": ";
 						}
@@ -3246,14 +3251,14 @@ namespace OpenDental{
 						Commlogs.Insert(CommlogCur);
 					}
 				}
+				SecurityLogs.MakeLogEntry(Permissions.AppointmentEdit, PatCurNum,
+					PatCurName + ", "
+					+ ContrApptSingle3[thisI].DataRoww["procs"].ToString() + ", "
+					+ ContrApptSingle3[thisI].DataRoww["AptDateTime"].ToString() + ", "
+					+ "Deleted");
 			}
 			Appointments.Delete(ContrApptSingle.SelectedAptNum);
-			int thisI=GetIndex(ContrApptSingle.SelectedAptNum);
-			SecurityLogs.MakeLogEntry(Permissions.AppointmentEdit,PatCurNum,
-				PatCurName+", "
-				+ContrApptSingle3[thisI].DataRoww["procs"].ToString()+", "
-				+ContrApptSingle3[thisI].DataRoww["AptDateTime"].ToString()+", "
-				+"Deleted");
+
 			ContrApptSingle.SelectedAptNum=-1;
 			ContrApptSingle.PinBoardIsSelected=false;
 			PatCurNum=0;

@@ -8,6 +8,7 @@ using System.Globalization;
 using System.Text;
 using System.Windows.Forms;
 using OpenDentBusiness;
+using CodeBase;
 
 namespace OpenDental{
 	/// <summary>
@@ -38,6 +39,7 @@ namespace OpenDental{
 		private OpenDental.UI.Button buttonTYDMF;
 		///<summary>If this is not null, then this letter will be addressed to the referral rather than the patient.</summary>
 		public Referral ReferralCur;
+		///<summary>Only used if FuchsOptionsOn</summary>
 		private string ExtraImageToPrint;
 
 		///<summary></summary>
@@ -283,10 +285,10 @@ namespace OpenDental{
 		#endregion
 
 		private void FormLetterSetup_Load(object sender, System.EventArgs e) {
-			if(((Pref)PrefB.HList["LettersIncludeReturnAddress"]).ValueString=="1"){
+			if(PrefB.GetBool("LettersIncludeReturnAddress")){
 				checkIncludeRet.Checked=true;
 			}
-			if (((Pref)PrefB.HList["FuchsOptionsOn"]).ValueString == "1") {
+			if(PrefB.GetBool("FuchsOptionsOn")) {
 				buttonTYDMF.Visible = true;
 				buttonTYREF.Visible = true;
 			}
@@ -312,13 +314,13 @@ namespace OpenDental{
 			StringBuilder str = new StringBuilder();
 			//return address
 			if (checkIncludeRet.Checked) {
-				str.Append(((Pref)PrefB.HList["PracticeTitle"]).ValueString + "\r\n");
-				str.Append(((Pref)PrefB.HList["PracticeAddress"]).ValueString + "\r\n");
-				if (((Pref)PrefB.HList["PracticeAddress2"]).ValueString != "")
-					str.Append(((Pref)PrefB.HList["PracticeAddress2"]).ValueString + "\r\n");
-				str.Append(((Pref)PrefB.HList["PracticeCity"]).ValueString + ", ");
-				str.Append(((Pref)PrefB.HList["PracticeST"]).ValueString + "  ");
-				str.Append(((Pref)PrefB.HList["PracticeZip"]).ValueString + "\r\n");
+				str.Append(PrefB.GetString("PracticeTitle") + "\r\n");
+				str.Append(PrefB.GetString("PracticeAddress") + "\r\n");
+				if (PrefB.GetString("PracticeAddress2") != "")
+					str.Append(PrefB.GetString("PracticeAddress2") + "\r\n");
+				str.Append(PrefB.GetString("PracticeCity") + ", ");
+				str.Append(PrefB.GetString("PracticeST") + "  ");
+				str.Append(PrefB.GetString("PracticeZip") + "\r\n");
 			}
 			else {
 				str.Append("\r\n\r\n\r\n\r\n");
@@ -388,7 +390,7 @@ namespace OpenDental{
 				str.Append("Dr. Fuchs");
 			}
 			else {
-				str.Append(((Pref)PrefB.HList["PracticeTitle"]).ValueString);
+				str.Append(PrefB.GetString("PracticeTitle"));
 			}
 			textBody.Text = str.ToString();
 			bodyChanged = false;
@@ -439,10 +441,8 @@ namespace OpenDental{
 		///<summary>If the user has selected a letter, and then edited it in the main textbox, this warns them before continuing.</summary>
 		private bool WarnOK(){
 			if(bodyChanged){
-				if(MessageBox.Show(Lan.g(this
-					,"Any changes you made to the letter you were working on will be lost.  "
-					+"Do you wish to continue?"),"",MessageBoxButtons.OKCancel)
-					!=DialogResult.OK)
+				if(!MsgBox.Show(this,true,
+					"Any changes you made to the letter you were working on will be lost.  Do you wish to continue?"))
 				{
 					return false;
 				}
@@ -497,14 +497,11 @@ namespace OpenDental{
 				ev.HasMorePages = false;
 			}
 			else {
-
 				ev.PageSettings.Margins = new Margins(80, 80, 0, 0);
-
 				//Letterhead image
 				string fileName;
-				if (((Pref)PrefB.HList["StationaryImage"]).ValueString != "") {
-					fileName = ((Pref)PrefB.HList["DocPath"]).ValueString + @"\"
-						+ ((Pref)PrefB.HList["StationaryImage"]).ValueString;
+				if(PrefB.GetString("StationaryImage") != "") {
+					fileName = ODFileUtils.CombinePaths(FormPath.GetPreferredImagePath(),PrefB.GetString("StationaryImage"));
 					Image thisImage = Image.FromFile(fileName);
 					grfx.DrawImage(thisImage
 						, -100
@@ -512,10 +509,9 @@ namespace OpenDental{
 						, (int)(thisImage.Width / thisImage.HorizontalResolution * 62)
 						, (int)(thisImage.Height / thisImage.VerticalResolution * 65));
 				}
-
-				if (ExtraImageToPrint != "") {
+				if(ExtraImageToPrint != "") {
 					//handwritten image saved to print
-					fileName = ((Pref)PrefB.HList["DocPath"]).ValueString + @"\" + ExtraImageToPrint;
+					fileName =ODFileUtils.CombinePaths(FormPath.GetPreferredImagePath(),ExtraImageToPrint);
 					Image thisImage2 = Image.FromFile(fileName);
 					grfx.DrawImage(thisImage2
 						, 080
@@ -531,29 +527,20 @@ namespace OpenDental{
 				ev.HasMorePages = false;
 			}
 		}
-		private void butCancel_Click(object sender, System.EventArgs e) {
-			DialogResult=DialogResult.Cancel;
-		}
 
-		private void FormLetters_Closing(object sender, System.ComponentModel.CancelEventArgs e) {
-			if(localChanged){
-				DataValid.SetInvalid(InvalidTypes.Letters);
-			}
-		}
-		//this prints a "handwritten" thank you letter image for DrTech's office (pref:'FuchsOptionsOn') for it to work
-		private void buttonTYDMF_Click(object sender, EventArgs e) {
+		///<summary>this prints a "handwritten" thank you letter image for DrTech's office (pref:'FuchsOptionsOn') for it to work</summary>
+		private void buttonTYDMF_Click(object sender,EventArgs e) {
 			textBody.Text = "";
-
 			StringBuilder str = new StringBuilder();
 			//return address
-			if (checkIncludeRet.Checked){
-				str.Append(((Pref)PrefB.HList["PracticeTitle"]).ValueString + "\r\n");
-				str.Append(((Pref)PrefB.HList["PracticeAddress"]).ValueString + "\r\n");
-				if (((Pref)PrefB.HList["PracticeAddress2"]).ValueString != "")
-					str.Append(((Pref)PrefB.HList["PracticeAddress2"]).ValueString + "\r\n");
-				str.Append(((Pref)PrefB.HList["PracticeCity"]).ValueString + ", ");
-				str.Append(((Pref)PrefB.HList["PracticeST"]).ValueString + "  ");
-				str.Append(((Pref)PrefB.HList["PracticeZip"]).ValueString + "\r\n");
+			if(checkIncludeRet.Checked) {
+				str.Append(PrefB.GetString("PracticeTitle") + "\r\n");
+				str.Append(PrefB.GetString("PracticeAddress") + "\r\n");
+				if(PrefB.GetString("PracticeAddress2") != "")
+					str.Append(PrefB.GetString("PracticeAddress2") + "\r\n");
+				str.Append(PrefB.GetString("PracticeCity") + ", ");
+				str.Append(PrefB.GetString("PracticeST") + "  ");
+				str.Append(PrefB.GetString("PracticeZip") + "\r\n");
 			}
 			else {
 				str.Append("\r\n\r\n\r\n");
@@ -562,7 +549,7 @@ namespace OpenDental{
 			//address
 			str.Append(PatCur.FName + " " + PatCur.MiddleI + " " + PatCur.LName + "\r\n");
 			str.Append(PatCur.Address + "\r\n");
-			if (PatCur.Address2 != "")
+			if(PatCur.Address2 != "")
 				str.Append(PatCur.Address2 + "\r\n");
 			str.Append(PatCur.City + ", " + PatCur.State + "  " + PatCur.Zip);
 			str.Append("\r\n\r\n\r\n\r\n");
@@ -570,11 +557,11 @@ namespace OpenDental{
 			str.Append(DateTime.Today.ToLongDateString() + "\r\n\r\n");
 			//greeting
 			str.Append("Dear ");
-			if (CultureInfo.CurrentCulture.Name == "en-GB") {
-				if (PatCur.Salutation != "")
+			if(CultureInfo.CurrentCulture.Name == "en-GB") {
+				if(PatCur.Salutation != "")
 					str.Append(PatCur.Salutation);
 				else {
-					if (PatCur.Gender == PatientGender.Female) {
+					if(PatCur.Gender == PatientGender.Female) {
 						str.Append("Ms. " + PatCur.LName);
 					}
 					else {
@@ -583,24 +570,21 @@ namespace OpenDental{
 				}
 			}
 			else {
-				if (PatCur.Salutation != "")
+				if(PatCur.Salutation != "")
 					str.Append(PatCur.Salutation);
-				else if (PatCur.Preferred != "")
+				else if(PatCur.Preferred != "")
 					str.Append(PatCur.Preferred);
 				else
 					str.Append(PatCur.FName);
 			}
 			str.Append(",\r\n\r\n");
-
 			textBody.Text = str.ToString();
 			bodyChanged = false;
-
-
 			ExtraImageToPrint = "dmfthankyou.jpg";
 			pd2 = new PrintDocument();
 			pd2.PrintPage += new PrintPageEventHandler(this.pd2_PrintPage);
 			pd2.OriginAtMargins = true;
-			if (!Printers.SetPrinter(pd2, PrintSituation.Default)) {
+			if(!Printers.SetPrinter(pd2,PrintSituation.Default)) {
 				return;
 			}
 			try {
@@ -608,7 +592,7 @@ namespace OpenDental{
 
 			}
 			catch {
-				MessageBox.Show(Lan.g(this, "Error in finding files or printer not available"));
+				MessageBox.Show(Lan.g(this,"Error in finding files or printer not available"));
 			}
 			Commlog CommlogCur = new Commlog();
 			CommlogCur.CommDateTime = DateTime.Now;
@@ -621,25 +605,22 @@ namespace OpenDental{
 			FormCI.IsNew = true;
 			FormCI.ShowDialog();
 			//this window now closes regardless of whether the user saved the comm item.
-
 			DialogResult = DialogResult.OK;
-
 		}
+
 		//this prints a "handwritten" thank you letter image for DrTech's office (pref:'FuchsOptionsOn') for it to work
-		private void buttonTYREF_Click(object sender, EventArgs e) {
+		private void buttonTYREF_Click(object sender,EventArgs e) {
 			textBody.Text = "";
-
-
 			StringBuilder str = new StringBuilder();
 			//return address
-			if (checkIncludeRet.Checked) {
-				str.Append(((Pref)PrefB.HList["PracticeTitle"]).ValueString + "\r\n");
-				str.Append(((Pref)PrefB.HList["PracticeAddress"]).ValueString + "\r\n");
-				if (((Pref)PrefB.HList["PracticeAddress2"]).ValueString != "")
-					str.Append(((Pref)PrefB.HList["PracticeAddress2"]).ValueString + "\r\n");
-				str.Append(((Pref)PrefB.HList["PracticeCity"]).ValueString + ", ");
-				str.Append(((Pref)PrefB.HList["PracticeST"]).ValueString + "  ");
-				str.Append(((Pref)PrefB.HList["PracticeZip"]).ValueString + "\r\n");
+			if(checkIncludeRet.Checked) {
+				str.Append(PrefB.GetString("PracticeTitle") + "\r\n");
+				str.Append(PrefB.GetString("PracticeAddress") + "\r\n");
+				if(PrefB.GetString("PracticeAddress2") != "")
+					str.Append(PrefB.GetString("PracticeAddress2") + "\r\n");
+				str.Append(PrefB.GetString("PracticeCity") + ", ");
+				str.Append(PrefB.GetString("PracticeST") + "  ");
+				str.Append(PrefB.GetString("PracticeZip") + "\r\n");
 			}
 			else {
 				str.Append("\r\n\r\n\r\n");
@@ -648,7 +629,7 @@ namespace OpenDental{
 			//address
 			str.Append(PatCur.FName + " " + PatCur.MiddleI + " " + PatCur.LName + "\r\n");
 			str.Append(PatCur.Address + "\r\n");
-			if (PatCur.Address2 != "")
+			if(PatCur.Address2 != "")
 				str.Append(PatCur.Address2 + "\r\n");
 			str.Append(PatCur.City + ", " + PatCur.State + "  " + PatCur.Zip);
 			str.Append("\r\n\r\n\r\n\r\n");
@@ -656,11 +637,11 @@ namespace OpenDental{
 			str.Append(DateTime.Today.ToLongDateString() + "\r\n\r\n");
 			//greeting
 			str.Append("Dear ");
-			if (CultureInfo.CurrentCulture.Name == "en-GB") {
-				if (PatCur.Salutation != "")
+			if(CultureInfo.CurrentCulture.Name == "en-GB") {
+				if(PatCur.Salutation != "")
 					str.Append(PatCur.Salutation);
 				else {
-					if (PatCur.Gender == PatientGender.Female) {
+					if(PatCur.Gender == PatientGender.Female) {
 						str.Append("Ms. " + PatCur.LName);
 					}
 					else {
@@ -669,9 +650,9 @@ namespace OpenDental{
 				}
 			}
 			else {
-				if (PatCur.Salutation != "")
+				if(PatCur.Salutation != "")
 					str.Append(PatCur.Salutation);
-				else if (PatCur.Preferred != "")
+				else if(PatCur.Preferred != "")
 					str.Append(PatCur.Preferred);
 				else
 					str.Append(PatCur.FName);
@@ -679,13 +660,11 @@ namespace OpenDental{
 			str.Append(",\r\n\r\n");
 			textBody.Text = str.ToString();
 			bodyChanged = false;
-
-
 			ExtraImageToPrint = "refthankyou.jpg";
 			pd2 = new PrintDocument();
 			pd2.PrintPage += new PrintPageEventHandler(this.pd2_PrintPage);
 			pd2.OriginAtMargins = true;
-			if (!Printers.SetPrinter(pd2, PrintSituation.Default)) {
+			if(!Printers.SetPrinter(pd2,PrintSituation.Default)) {
 				return;
 			}
 			try {
@@ -693,9 +672,8 @@ namespace OpenDental{
 
 			}
 			catch {
-				MessageBox.Show(Lan.g(this, "Images or printer not available"));
+				MessageBox.Show(Lan.g(this,"Images or printer not available"));
 			}
-
 			Commlog CommlogCur = new Commlog();
 			CommlogCur.CommDateTime = DateTime.Now;
 			CommlogCur.CommType = CommItemType.Misc;
@@ -708,8 +686,19 @@ namespace OpenDental{
 			FormCI.ShowDialog();
 			//this window now closes regardless of whether the user saved the comm item.
 			DialogResult = DialogResult.OK;
-
 		}
+
+		private void butCancel_Click(object sender, System.EventArgs e) {
+			DialogResult=DialogResult.Cancel;
+		}
+
+		private void FormLetters_Closing(object sender, System.ComponentModel.CancelEventArgs e) {
+			if(localChanged){
+				DataValid.SetInvalid(InvalidTypes.Letters);
+			}
+		}
+
+		
 
 
 		

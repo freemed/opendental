@@ -7,6 +7,7 @@ using OpenDentBusiness;
 using System.IO;
 using System.Text;
 using System.Diagnostics;
+using CodeBase;
 
 namespace OpenDental{
 	/// <summary>
@@ -422,55 +423,53 @@ namespace OpenDental{
 			str.Append(",\r\n\r\n");
 			//closing
 			str.Append("\r\n\r\nSincerely,\r\n\r\n\r\n\r\n");
-
 			//Clipboard.SetDataObject(textQuery.Text);
 			//str.CopyTo;
 			//string FinalString = str.CopyTo;
 			//textTest.Text = str.ToString();
 			Clipboard.SetDataObject(str.ToString());
 		}
+
 		private void butStationary_Click(object sender, EventArgs e) {
-				if(PrefB.GetString("StationaryDocument")=="" | PrefB.GetString("WordProcessorPath")==""){
-					MessageBox.Show("You must setup your stationary document and word processor path in Setup--> Misc");
+				if(PrefB.GetString("StationaryDocument")==""){
+					MsgBox.Show(this,"You must setup your stationary document and word processor path in Setup | Misc");
 					return;
 				}
 				Cursor = Cursors.AppStarting;
 				PtLetter_ToClipboard();
-
 				try {
 					this.Cursor = Cursors.AppStarting;
-
-					string patFolder = (PrefB.GetString("DocPath"))
-					+ PatCur.ImageFolder.Substring(0, 1) + @"\"
-					+ PatCur.ImageFolder + @"\";
-
+					string patFolder=ODFileUtils.CombinePaths(
+						FormPath.GetPreferredImagePath(),
+						PatCur.ImageFolder.Substring(0, 1),
+						PatCur.ImageFolder);
 					//string ProgName = @"C:\Program Files\OpenOffice.org 2.0\program\swriter.exe";
-					string ProgName = PrefB.GetString("WordProcessorPath");
-					string TheFile = patFolder + "Letter_" + DateTime.Now.ToFileTime() + ".doc";
+					//string ProgName = PrefB.GetString("WordProcessorPath");
+					string TheFile=ODFileUtils.CombinePaths(patFolder,"Letter_"+DateTime.Now.ToFileTime()+".doc");
 					try{
-						File.Copy((PrefB.GetString("DocPath")) + @"\"
-						+ PrefB.GetString("StationaryDocument"), TheFile);
+						File.Copy(
+							ODFileUtils.CombinePaths(FormPath.GetPreferredImagePath(),PrefB.GetString("StationaryDocument")),
+							TheFile);
 						DialogResult = DialogResult.OK;
 					}
 					catch {
 					}
 					try {
-						Process.Start(ProgName, TheFile);
+						Process.Start(TheFile);
 					}
 					catch {
 					}
 					this.Cursor = Cursors.Default;
-
 					Commlog CommlogCur = new Commlog();
 					CommlogCur.CommDateTime = DateTime.Now;
 					CommlogCur.CommType = CommItemType.Misc;
 					CommlogCur.PatNum = PatCur.PatNum;
-					CommlogCur.Note = "Letter sent: See Images for this date. ";
+					CommlogCur.Note = Lan.g(this,"Letter sent: See Images for this date.");
 					Commlogs.Insert(CommlogCur);
 				}
 				catch{
 					Cursor = Cursors.Default;
-					MsgBox.Show(this, "Cannot Find Stationary Document. Or another problem exists.");
+					MsgBox.Show(this, "Cannot find stationary document. Or another problem exists.");
 				}
 		}
 
