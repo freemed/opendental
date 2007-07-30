@@ -16,14 +16,18 @@ namespace OpenDental{
 		/// Required designer variable.
 		/// </summary>
 		private System.ComponentModel.Container components = null;
-		private OpenDental.UI.Button butProcButtons;
-		private Label label2;
-		private OpenDental.UI.Button butAutocodes;
-		private Label label1;
-		private OpenDental.UI.Button butNewCust;
-		private Label label3;
-		private Label label4;
+		private CheckBox checkAutocodes;
+		private CheckBox checkTcodes;
+		private CheckBox checkDcodes;
+		private CheckBox checkNcodes;
+		private OpenDental.UI.Button butUncheck;
+		private Label label5;
+		private CheckBox checkProcButtons;
+		private OpenDental.UI.Button butRun;
 		public bool Changed;
+		private CheckBox checkApptProcsQuickAdd;
+		///<summary>The actual list of ADA codes as published by the ADA.  Only available on our compiled releases.  There is no other way to get this info.</summary>
+		private List<ProcedureCode> codeList;
 
 		///<summary></summary>
 		public FormProcTools()
@@ -58,15 +62,114 @@ namespace OpenDental{
 		private void InitializeComponent()
 		{
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormProcTools));
+			this.checkAutocodes = new System.Windows.Forms.CheckBox();
+			this.checkTcodes = new System.Windows.Forms.CheckBox();
+			this.checkDcodes = new System.Windows.Forms.CheckBox();
+			this.checkNcodes = new System.Windows.Forms.CheckBox();
+			this.label5 = new System.Windows.Forms.Label();
+			this.checkProcButtons = new System.Windows.Forms.CheckBox();
+			this.butRun = new OpenDental.UI.Button();
+			this.butUncheck = new OpenDental.UI.Button();
 			this.butClose = new OpenDental.UI.Button();
-			this.butProcButtons = new OpenDental.UI.Button();
-			this.label2 = new System.Windows.Forms.Label();
-			this.butAutocodes = new OpenDental.UI.Button();
-			this.label1 = new System.Windows.Forms.Label();
-			this.butNewCust = new OpenDental.UI.Button();
-			this.label3 = new System.Windows.Forms.Label();
-			this.label4 = new System.Windows.Forms.Label();
+			this.checkApptProcsQuickAdd = new System.Windows.Forms.CheckBox();
 			this.SuspendLayout();
+			// 
+			// checkAutocodes
+			// 
+			this.checkAutocodes.Checked = true;
+			this.checkAutocodes.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.checkAutocodes.Location = new System.Drawing.Point(15,238);
+			this.checkAutocodes.Name = "checkAutocodes";
+			this.checkAutocodes.Size = new System.Drawing.Size(646,36);
+			this.checkAutocodes.TabIndex = 43;
+			this.checkAutocodes.Text = "Autocodes - Deletes all current autocodes and then adds the default autocodes.  P" +
+    "rocedure codes must have already been entered or they cannot be added as an auto" +
+    "code.";
+			this.checkAutocodes.UseVisualStyleBackColor = true;
+			// 
+			// checkTcodes
+			// 
+			this.checkTcodes.Checked = true;
+			this.checkTcodes.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.checkTcodes.Location = new System.Drawing.Point(15,115);
+			this.checkTcodes.Name = "checkTcodes";
+			this.checkTcodes.Size = new System.Drawing.Size(646,36);
+			this.checkTcodes.TabIndex = 44;
+			this.checkTcodes.Text = "T codes - Remove temp codes, codes that start with \"T\", which were only needed fo" +
+    "r the trial version.  If a T code has already been used, then this moves it to t" +
+    "he obsolete category.";
+			this.checkTcodes.UseVisualStyleBackColor = true;
+			// 
+			// checkDcodes
+			// 
+			this.checkDcodes.Checked = true;
+			this.checkDcodes.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.checkDcodes.Location = new System.Drawing.Point(15,197);
+			this.checkDcodes.Name = "checkDcodes";
+			this.checkDcodes.Size = new System.Drawing.Size(646,36);
+			this.checkDcodes.TabIndex = 45;
+			this.checkDcodes.Text = "D codes - Add any missing ADA codes.  This option does not work in the trial vers" +
+    "ion or compiled version.";
+			this.checkDcodes.UseVisualStyleBackColor = true;
+			// 
+			// checkNcodes
+			// 
+			this.checkNcodes.Checked = true;
+			this.checkNcodes.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.checkNcodes.Location = new System.Drawing.Point(15,156);
+			this.checkNcodes.Name = "checkNcodes";
+			this.checkNcodes.Size = new System.Drawing.Size(646,36);
+			this.checkNcodes.TabIndex = 46;
+			this.checkNcodes.Text = "N codes - Add any missing no-fee codes.";
+			this.checkNcodes.UseVisualStyleBackColor = true;
+			// 
+			// label5
+			// 
+			this.label5.Location = new System.Drawing.Point(12,9);
+			this.label5.Name = "label5";
+			this.label5.Size = new System.Drawing.Size(666,54);
+			this.label5.TabIndex = 48;
+			this.label5.Text = resources.GetString("label5.Text");
+			// 
+			// checkProcButtons
+			// 
+			this.checkProcButtons.Checked = true;
+			this.checkProcButtons.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.checkProcButtons.Location = new System.Drawing.Point(15,279);
+			this.checkProcButtons.Name = "checkProcButtons";
+			this.checkProcButtons.Size = new System.Drawing.Size(646,36);
+			this.checkProcButtons.TabIndex = 49;
+			this.checkProcButtons.Text = resources.GetString("checkProcButtons.Text");
+			this.checkProcButtons.UseVisualStyleBackColor = true;
+			// 
+			// butRun
+			// 
+			this.butRun.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butRun.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.butRun.Autosize = true;
+			this.butRun.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butRun.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butRun.CornerRadius = 4F;
+			this.butRun.Location = new System.Drawing.Point(477,384);
+			this.butRun.Name = "butRun";
+			this.butRun.Size = new System.Drawing.Size(82,26);
+			this.butRun.TabIndex = 50;
+			this.butRun.Text = "Run Now";
+			this.butRun.Click += new System.EventHandler(this.butRun_Click);
+			// 
+			// butUncheck
+			// 
+			this.butUncheck.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butUncheck.Autosize = true;
+			this.butUncheck.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butUncheck.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butUncheck.CornerRadius = 4F;
+			this.butUncheck.Location = new System.Drawing.Point(15,78);
+			this.butUncheck.Name = "butUncheck";
+			this.butUncheck.Size = new System.Drawing.Size(84,22);
+			this.butUncheck.TabIndex = 47;
+			this.butUncheck.Text = "Uncheck All";
+			this.butUncheck.Click += new System.EventHandler(this.butUncheck_Click);
 			// 
 			// butClose
 			// 
@@ -76,105 +179,38 @@ namespace OpenDental{
 			this.butClose.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butClose.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butClose.CornerRadius = 4F;
-			this.butClose.Location = new System.Drawing.Point(539,226);
+			this.butClose.Location = new System.Drawing.Point(586,384);
 			this.butClose.Name = "butClose";
-			this.butClose.Size = new System.Drawing.Size(75,26);
+			this.butClose.Size = new System.Drawing.Size(82,26);
 			this.butClose.TabIndex = 0;
 			this.butClose.Text = "&Close";
 			this.butClose.Click += new System.EventHandler(this.butClose_Click);
 			// 
-			// butProcButtons
+			// checkApptProcsQuickAdd
 			// 
-			this.butProcButtons.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butProcButtons.Autosize = true;
-			this.butProcButtons.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butProcButtons.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butProcButtons.CornerRadius = 4F;
-			this.butProcButtons.Location = new System.Drawing.Point(24,175);
-			this.butProcButtons.Name = "butProcButtons";
-			this.butProcButtons.Size = new System.Drawing.Size(103,26);
-			this.butProcButtons.TabIndex = 39;
-			this.butProcButtons.Text = "Procedure Buttons";
-			this.butProcButtons.Click += new System.EventHandler(this.butProcButtons_Click);
-			// 
-			// label2
-			// 
-			this.label2.Location = new System.Drawing.Point(132,175);
-			this.label2.Name = "label2";
-			this.label2.Size = new System.Drawing.Size(501,36);
-			this.label2.TabIndex = 38;
-			this.label2.Text = "Deletes all current ProcButtons from the Chart module, and then adds the default " +
-    "ProcButtons.  Procedure codes must have already been entered or they cannot be a" +
-    "dded as a ProcButton.";
-			// 
-			// butAutocodes
-			// 
-			this.butAutocodes.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butAutocodes.Autosize = true;
-			this.butAutocodes.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butAutocodes.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butAutocodes.CornerRadius = 4F;
-			this.butAutocodes.Location = new System.Drawing.Point(24,128);
-			this.butAutocodes.Name = "butAutocodes";
-			this.butAutocodes.Size = new System.Drawing.Size(103,26);
-			this.butAutocodes.TabIndex = 37;
-			this.butAutocodes.Text = "Autocodes";
-			this.butAutocodes.Click += new System.EventHandler(this.butAutocodes_Click);
-			// 
-			// label1
-			// 
-			this.label1.Location = new System.Drawing.Point(132,128);
-			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(443,36);
-			this.label1.TabIndex = 36;
-			this.label1.Text = "Deletes all current autocodes and then adds the default autocodes.  Procedure cod" +
-    "es must have already been entered or they cannot be added as an autocode.";
-			// 
-			// butNewCust
-			// 
-			this.butNewCust.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butNewCust.Autosize = true;
-			this.butNewCust.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butNewCust.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butNewCust.CornerRadius = 4F;
-			this.butNewCust.Location = new System.Drawing.Point(24,12);
-			this.butNewCust.Name = "butNewCust";
-			this.butNewCust.Size = new System.Drawing.Size(103,26);
-			this.butNewCust.TabIndex = 41;
-			this.butNewCust.Text = "New Customer";
-			this.butNewCust.Click += new System.EventHandler(this.butNewCust_Click);
-			// 
-			// label3
-			// 
-			this.label3.Location = new System.Drawing.Point(132,12);
-			this.label3.Name = "label3";
-			this.label3.Size = new System.Drawing.Size(443,50);
-			this.label3.TabIndex = 40;
-			this.label3.Text = "Performs all the necessary tasks to make a new database functional.  Removes dumm" +
-    "y codes that start with \"T\".  Adds ADA codes if missing.  Resets autocodes and p" +
-    "rocedure buttons.";
-			// 
-			// label4
-			// 
-			this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif",10F,((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Underline))),System.Drawing.GraphicsUnit.Point,((byte)(0)));
-			this.label4.Location = new System.Drawing.Point(21,91);
-			this.label4.Name = "label4";
-			this.label4.Size = new System.Drawing.Size(184,18);
-			this.label4.TabIndex = 42;
-			this.label4.Text = "Other Tools";
-			this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.checkApptProcsQuickAdd.Checked = true;
+			this.checkApptProcsQuickAdd.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.checkApptProcsQuickAdd.Location = new System.Drawing.Point(15,320);
+			this.checkApptProcsQuickAdd.Name = "checkApptProcsQuickAdd";
+			this.checkApptProcsQuickAdd.Size = new System.Drawing.Size(646,36);
+			this.checkApptProcsQuickAdd.TabIndex = 51;
+			this.checkApptProcsQuickAdd.Text = "Appt Procs Quick Add - This is the list of procedures that you pick from within t" +
+    "he appt edit window.  This resets the list to default.";
+			this.checkApptProcsQuickAdd.UseVisualStyleBackColor = true;
 			// 
 			// FormProcTools
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
-			this.ClientSize = new System.Drawing.Size(644,276);
-			this.Controls.Add(this.label4);
-			this.Controls.Add(this.butNewCust);
-			this.Controls.Add(this.label3);
-			this.Controls.Add(this.butProcButtons);
-			this.Controls.Add(this.label2);
-			this.Controls.Add(this.butAutocodes);
-			this.Controls.Add(this.label1);
+			this.ClientSize = new System.Drawing.Size(698,434);
+			this.Controls.Add(this.checkApptProcsQuickAdd);
+			this.Controls.Add(this.butRun);
+			this.Controls.Add(this.checkProcButtons);
+			this.Controls.Add(this.label5);
+			this.Controls.Add(this.butUncheck);
+			this.Controls.Add(this.checkNcodes);
+			this.Controls.Add(this.checkDcodes);
+			this.Controls.Add(this.checkTcodes);
+			this.Controls.Add(this.checkAutocodes);
 			this.Controls.Add(this.butClose);
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.MaximizeBox = false;
@@ -190,55 +226,95 @@ namespace OpenDental{
 		#endregion
 
 		private void FormProcTools_Load(object sender,EventArgs e) {
-			
+			#if TRIALONLY
+				checkTcodes.Checked=false;
+				checkNcodes.Checked=false;
+				checkDcodes.Checked=false;
+				checkAutocodes.Checked=false;
+				checkProcButtons.Checked=false;
+				checkApptProcsQuickAdd.Checked=false;
+				checkTcodes.Enabled=false;
+				//checkNcodes.Enabled=false;
+				checkDcodes.Enabled=false;
+				checkAutocodes.Enabled=false;
+				checkProcButtons.Enabled=false;
+				checkApptProcsQuickAdd.Enabled=false;
+			#endif
+			codeList=CDT.Class1.GetADAcodes();
+			if(codeList.Count==0){
+				checkDcodes.Checked=false;
+				checkDcodes.Enabled=false;
+			}
 		}
 
-		private void butNewCust_Click(object sender,EventArgs e) {
-			#if TRIALONLY
-				MsgBox.Show(this,"This button is only used after upgrading to the full version.");
+		private void butUncheck_Click(object sender,EventArgs e) {
+			checkTcodes.Checked=false;
+			checkNcodes.Checked=false;
+			checkDcodes.Checked=false;
+			checkAutocodes.Checked=false;
+			checkProcButtons.Checked=false;
+			checkApptProcsQuickAdd.Checked=false;
+		}
+
+		private void butRun_Click(object sender,EventArgs e) {
+			if(!checkTcodes.Checked && !checkNcodes.Checked && !checkDcodes.Checked && !checkAutocodes.Checked 
+				&& !checkProcButtons.Checked && !checkApptProcsQuickAdd.Checked)
+			{
+				MsgBox.Show(this,"Please select at least one tool first.");
 				return;
-			#endif
+			}
 			Changed=true;
 			int rowsInserted=0;
-			List<ProcedureCode> codeList=CDT.Class1.GetADAcodes();
-			try {
-				rowsInserted=FormProcCodes.ImportProcCodes("",codeList,"");
-				rowsInserted+=FormProcCodes.ImportProcCodes("",new List<ProcedureCode>(),Properties.Resources.NoFeeProcCodes);
+			if(checkTcodes.Checked){
+				ProcedureCodes.TcodesClear();
+				//yes, this really does refresh before moving on.
+				DataValid.SetInvalid(InvalidTypes.Defs | InvalidTypes.ProcCodes | InvalidTypes.Fees);
 			}
-			catch(ApplicationException ex) {
-				MessageBox.Show(ex.Message);
-				return;
+			if(checkNcodes.Checked) {
+				try {
+					rowsInserted+=FormProcCodes.ImportProcCodes("",new List<ProcedureCode>(),Properties.Resources.NoFeeProcCodes);
+				}
+				catch(ApplicationException ex) {
+					MessageBox.Show(ex.Message);
+				}
+				DataValid.SetInvalid(InvalidTypes.Defs | InvalidTypes.ProcCodes | InvalidTypes.Fees);
+				//fees are included because they are grouped by defs.
 			}
-			DataValid.SetInvalid(InvalidTypes.Defs | InvalidTypes.ProcCodes | InvalidTypes.Fees);//yes, this really does refresh before moving on.
-			MessageBox.Show("Procedure codes inserted: "+rowsInserted);
-			ProcedureCodes.ResetADAdescriptions(codeList);
-			DataValid.SetInvalid(InvalidTypes.ProcCodes);
-			ProcedureCodes.TcodesClear();
-			AutoCodes.SetToDefault();
-			DataValid.SetInvalid(InvalidTypes.AutoCodes);
-			ProcButtons.SetToDefault();
-			DataValid.SetInvalid(InvalidTypes.ProcButtons | InvalidTypes.Defs);
+			if(checkDcodes.Checked) {
+				try {
+					rowsInserted+=FormProcCodes.ImportProcCodes("",codeList,"");
+				}
+				catch(ApplicationException ex) {
+					MessageBox.Show(ex.Message);
+				}
+				DataValid.SetInvalid(InvalidTypes.Defs | InvalidTypes.ProcCodes | InvalidTypes.Fees);
+			}
+			if(checkNcodes.Checked || checkDcodes.Checked){
+				MessageBox.Show("Procedure codes inserted: "+rowsInserted);
+			}
+			if(checkAutocodes.Checked) {
+				AutoCodes.SetToDefault();
+				DataValid.SetInvalid(InvalidTypes.AutoCodes);
+			}
+			if(checkProcButtons.Checked) {
+				ProcButtons.SetToDefault();
+				DataValid.SetInvalid(InvalidTypes.ProcButtons | InvalidTypes.Defs);
+			}
+			if(checkApptProcsQuickAdd.Checked) {
+				ProcedureCodes.ResetApptProcsQuickAdd();
+				DataValid.SetInvalid(InvalidTypes.Defs);
+			}
 			MessageBox.Show(Lan.g(this,"Done."));
 			SecurityLogs.MakeLogEntry(Permissions.Setup,0,"New Customer Procedure codes tool was run.");
-		}
-
-		private void butAutocodes_Click(object sender,EventArgs e) {
-			Changed=true;
-			AutoCodes.SetToDefault();
-			DataValid.SetInvalid(InvalidTypes.AutoCodes);
-			MessageBox.Show(Lan.g(this,"Done."));
-		}
-
-		private void butProcButtons_Click(object sender,EventArgs e) {
-			Changed=true;
-			ProcButtons.SetToDefault();
-			DataValid.SetInvalid(InvalidTypes.ProcButtons | InvalidTypes.Defs);
-			MessageBox.Show(Lan.g(this,"Done."));
 		}
 
 		private void butClose_Click(object sender, System.EventArgs e) {
 			Close();
 		}
+
+	
+
+	
 
 		
 

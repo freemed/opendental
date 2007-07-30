@@ -380,6 +380,57 @@ namespace OpenDental{
 			//don't forget to refresh procedurecodes.
 		}
 
+		public static void ResetApptProcsQuickAdd() {
+			string command= "DELETE FROM definition WHERE Category=3";
+			General.NonQ(command);
+			string[] array=new string[] {
+				"CompEx-4BW-Pano-Pro-Flo","D0150,D0274,D0330,D1110,D1204",
+				"CompEx-2BW-Pano-ChPro-Flo","D0150,D0272,D0330,D1120,D1203",
+				"PerEx-4BW-Pro-Flo","D0120,D0274,D1110,D1204",
+				"LimEx-PA","D0140,D0220",
+				"PerEx-4BW-Pro-Flo","D0120,D0274,D1110,D1204",
+				"PerEx-2BW-ChildPro-Flo","D0120,D0272,D1120,D1203",
+				"Comp Exam","D0150",
+				"Per Exam","D0120",
+				"Lim Exam","D0140",
+				"1 PA","D0220",
+				"2BW","D0272",
+				"4BW","D0274",
+				"Pano","D0330",
+				"Pro Adult","D1110",
+				"Fluor Adult","D1204",
+				"Pro Child","D1120",
+				"Fuor Child","D1203",
+				"PostOp","N4101",
+				"DentAdj","N4102",
+				"Consult","D9310"
+			};
+			Def def;
+			string[] codelist;
+			bool allvalid;
+			int itemorder=0;
+			for(int i=0;i<array.Length;i+=2) {
+				//first, test all procedures for valid
+				codelist=array[i+1].Split(',');
+				allvalid=true;
+				for(int c=0;c<codelist.Length;c++) {
+					if(!ProcedureCodes.IsValidCode(codelist[c])) {
+						allvalid=false;
+					}
+				}
+				if(!allvalid) {
+					continue;
+				}
+				def=new Def();
+				def.Category=DefCat.ApptProcsQuickAdd;
+				def.ItemOrder=itemorder;
+				def.ItemName=array[i];
+				def.ItemValue=array[i+1];
+				Defs.Insert(def);
+				itemorder++;
+			}
+		}
+
 /*
 		///<summary>Used by FormUpdate when converting from T codes to D codes.  It's not converting the actual codes.  It's converting the autocodes and procbuttons from T to D.</summary>
 		public static void TcodesAlter(){
