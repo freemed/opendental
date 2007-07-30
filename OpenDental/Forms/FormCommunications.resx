@@ -117,13 +117,6 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <assembly alias="System.Drawing" name="System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
-  <data name="butLabel.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
-    <value>
-        R0lGODlhFgAWAPEAAExMTPfyr////wAAACH5BAEAAAEALAAAAAAWABYAAAI4jI+py+0Po5wS2IszSED4
-        D4bCdnTXeIqk0YmutwbmjKlI+9olavE+fMu5YjKN0UJJKpfMpvNpKAAAOw==
-</value>
-  </data>
   <metadata name="toolTip1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 17</value>
   </metadata>
@@ -133,13 +126,14 @@ when the document opens. This will be saved in patient's images.
 
 Setup what document to use for this process in Setup--&gt;Misc.</value>
   </data>
-  <data name="butComm.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+  <assembly alias="System.Drawing" name="System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <data name="butLabelRef.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
-        R0lGODlhFgAWAPEAAFFYiuHg5P///wAAACH5BAEAAAEALAAAAAAWABYAAAI0jI+py80AXYNAyEXtTXlz
-        qHlGJ46gRKWq+q3uebxyaAj2nd06Cpek3xP9hEHPUHQrKZeGAgA7
+        R0lGODlhFgAWAPEAAExMTPfyr////wAAACH5BAEAAAEALAAAAAAWABYAAAI4jI+py+0Po5wS2IszSED4
+        D4bCdnTXeIqk0YmutwbmjKlI+9olavE+fMu5YjKN0UJJKpfMpvNpKAAAOw==
 </value>
   </data>
-  <data name="butLabelRef.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+  <data name="butLabel.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         R0lGODlhFgAWAPEAAExMTPfyr////wAAACH5BAEAAAEALAAAAAAWABYAAAI4jI+py+0Po5wS2IszSED4
         D4bCdnTXeIqk0YmutwbmjKlI+9olavE+fMu5YjKN0UJJKpfMpvNpKAAAOw==
