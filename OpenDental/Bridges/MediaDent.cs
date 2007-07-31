@@ -27,7 +27,7 @@ namespace OpenDental.Bridges{
 			string info="/P"+Cleanup(pat.FName+" "+pat.LName);
 			Provider prov=Providers.GetProv(Patients.GetProvNum(pat));
 			info+=" /D"+prov.FName+" "+prov.LName
-				+" /L1 F/";
+				+" /L1 /F";
 			ProgramProperty PPCur=ProgramProperties.GetCur(ForProgram, "Image Folder");
 			info+=PPCur.PropertyValue;
 			PPCur=ProgramProperties.GetCur(ForProgram, "Enter 0 to use PatientNum, or 1 to use ChartNum");;

@@ -2652,6 +2652,9 @@ namespace OpenDental{
 					break;
 				case OtherResult.PinboardAndSearch:
 					CurToPinBoard(FormAO.AptSelected);
+					if(ContrApptSheet.IsWeeklyView) {
+						break;
+					}
 					dateSearch.Text=FormAO.DateJumpToString;
 					if(!groupSearch.Visible){//if search not already visible
 						ShowSearch();
