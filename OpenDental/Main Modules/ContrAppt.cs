@@ -1116,11 +1116,19 @@ namespace OpenDental{
 			butComplete.Enabled=butOther.Enabled;
 			butDelete.Enabled=butOther.Enabled;
 			ParentForm.Text=Patients.GetMainTitle(PatCurName,PatCurNum,PatCurChartNumber);
-			Appointment aptCur=Appointments.GetOneApt(ContrApptSingle.ClickedAptNum);
-			if (aptCur!=null){
-				SetConfirmed(aptCur);
+			if(panelAptInfo.Enabled) {
+				int aptconfirmed=0;
+				for(int i=0;i<DS.Tables["Appointments"].Rows.Count;i++) {
+					if(DS.Tables["Appointments"].Rows[i]["AptNum"].ToString()==ContrApptSingle.ClickedAptNum.ToString()) {
+						aptconfirmed=PIn.PInt(DS.Tables["Appointments"].Rows[i]["Confirmed"].ToString());
+						break;
+					}
+				}
+				listConfirmed.SelectedIndex=DefB.GetOrder(DefCat.ApptConfirmed,aptconfirmed);//could be -1
 			}
-
+			else {
+				listConfirmed.SelectedIndex=-1;
+			}
 			OnPatientSelected(PatCurNum);
 		}
 
@@ -1306,15 +1314,6 @@ namespace OpenDental{
 			}
 			if(comboView.SelectedIndex==-1){
 				comboView.SelectedIndex=0;
-			}
-		}
-		public void SetConfirmed(Appointment AptCur){
-		//This still doesn't have a home:
-			if(panelAptInfo.Enabled){
-				listConfirmed.SelectedIndex=DefB.GetOrder(DefCat.ApptConfirmed,AptCur.Confirmed);
-			}
-			else{
-				listConfirmed.SelectedIndex=-1;
 			}
 		}
 
