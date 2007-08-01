@@ -1116,7 +1116,7 @@ namespace OpenDental{
 			butComplete.Enabled=butOther.Enabled;
 			butDelete.Enabled=butOther.Enabled;
 			ParentForm.Text=Patients.GetMainTitle(PatCurName,PatCurNum,PatCurChartNumber);
-			if(panelAptInfo.Enabled) {
+			if(panelAptInfo.Enabled && DS!=null) {
 				int aptconfirmed=0;
 				for(int i=0;i<DS.Tables["Appointments"].Rows.Count;i++) {
 					if(DS.Tables["Appointments"].Rows[i]["AptNum"].ToString()==ContrApptSingle.ClickedAptNum.ToString()) {
@@ -1476,34 +1476,37 @@ namespace OpenDental{
 				for(int i=0;i<DS.Tables["Appointments"].Rows.Count;i++){
 					indexProv=-1;
 					if(DS.Tables["Appointments"].Rows[i]["IsHygiene"].ToString()=="1"){
-						indexProv=ApptViewItems.GetIndexProv(PIn.PInt(DS.Tables["Appointments"].Rows[i]["ProvHyg"].ToString()));
-						//if not assigned hyg prov, then set it to regular prov
-						if (indexProv == -1) {
-							indexProv = ApptViewItems.GetIndexProv(PIn.PInt(DS.Tables["Appointments"].Rows[i]["ProvNum"].ToString()));
-							nohygAssigned = true;
+						if(DS.Tables["Appointments"].Rows[i]["ProvHyg"].ToString()=="0") {//set ishyg, but no hyg prov set.
+							indexProv=ApptViewItems.GetIndexProv(PIn.PInt(DS.Tables["Appointments"].Rows[i]["ProvNum"].ToString()));
+						}
+						else {
+							indexProv=ApptViewItems.GetIndexProv(PIn.PInt(DS.Tables["Appointments"].Rows[i]["ProvHyg"].ToString()));
 						}
 					}
 					else{
 						indexProv=ApptViewItems.GetIndexProv(PIn.PInt(DS.Tables["Appointments"].Rows[i]["ProvNum"].ToString()));
 					}
-					if(indexProv!=-1){
-						//prevents broken appt from totaling in production for the day
-						if(DS.Tables["Appointments"].Rows[i]["AptStatus"].ToString()!=((int)ApptStatus.Broken).ToString()
-							&& DS.Tables["Appointments"].Rows[i]["AptStatus"].ToString()!=((int)ApptStatus.UnschedList).ToString()
-							&& DS.Tables["Appointments"].Rows[i]["AptStatus"].ToString() != ((int)ApptStatus.PtNote).ToString()
-							&& DS.Tables["Appointments"].Rows[i]["AptStatus"].ToString() != ((int)ApptStatus.PtNoteCompleted).ToString())
-						{
-							//set individual production #'s
-							if (DS.Tables["Appointments"].Rows[i]["IsHygiene"].ToString() == "1" && !nohygAssigned) {
-								hygproduction += PIn.PDouble(DS.Tables["Appointments"].Rows[i]["productionVal"].ToString());
-							}
-							else {
-								drproduction += PIn.PDouble(DS.Tables["Appointments"].Rows[i]["productionVal"].ToString());
-							}
-							
-							totalproduction+=PIn.PDouble(DS.Tables["Appointments"].Rows[i]["productionVal"].ToString());
-								//Procedures.GetProductionOneApt(ListDay[i].AptNum, procsMultApts, false);
+					if(indexProv==-1){
+						continue;
+					}
+					if(DS.Tables["Appointments"].Rows[i]["AptStatus"].ToString()!=((int)ApptStatus.Broken).ToString()
+						&& DS.Tables["Appointments"].Rows[i]["AptStatus"].ToString()!=((int)ApptStatus.UnschedList).ToString()
+						&& DS.Tables["Appointments"].Rows[i]["AptStatus"].ToString() != ((int)ApptStatus.PtNote).ToString()
+						&& DS.Tables["Appointments"].Rows[i]["AptStatus"].ToString() != ((int)ApptStatus.PtNoteCompleted).ToString())
+					{
+						//set individual production #'s
+						if(DS.Tables["Appointments"].Rows[i]["IsHygiene"].ToString() == "1" && !nohygAssigned) {
+							hygproduction += PIn.PDouble(DS.Tables["Appointments"].Rows[i]["productionVal"].ToString());
 						}
+						else {
+							drproduction += PIn.PDouble(DS.Tables["Appointments"].Rows[i]["productionVal"].ToString());
+						}
+						//the production numbers above will not be accurate enough to be useful.  They are not based on individual
+						//procedures, so the inaccuracies will only cause more complaints rather than providing useful information.
+						//The only real solution would be to generate the total production numbers in another table
+						//from the business layer.  But even that won't work until hyg procedures are appropriately assigned
+						//when setting appointments.
+						totalproduction+=PIn.PDouble(DS.Tables["Appointments"].Rows[i]["productionVal"].ToString());
 					}
 				}
 				textProduction.Text=totalproduction.ToString("c0");
