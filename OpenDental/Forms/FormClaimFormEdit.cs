@@ -800,6 +800,12 @@ namespace OpenDental{
 					case "P8FeeMinusLab":
 					case "P9FeeMinusLab":
 					case "P10FeeMinusLab":
+					case "MedInsAAmtDue":
+					case "MedInsBAmtDue":
+					case "MedInsCAmtDue":
+					case "MedInsAPriorPmt":
+					case "MedInsBPriorPmt":
+					case "MedInsCPriorPmt":
 					case "TotalFee":
 						displayStrings[i]="1234.00";
 						break;

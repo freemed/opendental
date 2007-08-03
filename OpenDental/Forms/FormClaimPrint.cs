@@ -294,7 +294,13 @@ namespace OpenDental{
 						|| ClaimFormCur.Items[i].FieldName=="P8FeeMinusLab"
 						|| ClaimFormCur.Items[i].FieldName=="P9FeeMinusLab"
 						|| ClaimFormCur.Items[i].FieldName=="P10FeeMinusLab"
-						|| ClaimFormCur.Items[i].FieldName=="TotalFee")
+						|| ClaimFormCur.Items[i].FieldName=="TotalFee"
+						|| ClaimFormCur.Items[i].FieldName=="MedInsAAmtDue"
+						|| ClaimFormCur.Items[i].FieldName=="MedInsBAmtDue"
+						|| ClaimFormCur.Items[i].FieldName=="MedInsCAmtDue"
+						|| ClaimFormCur.Items[i].FieldName=="MedInsAPriorPmt"
+						|| ClaimFormCur.Items[i].FieldName=="MedInsBPriorPmt"
+						|| ClaimFormCur.Items[i].FieldName=="MedInsCPriorPmt")
 					{
 						//this aligns it to the right
 						xPosText-=grfx.MeasureString(displayStrings[i],new Font(ClaimFormCur.FontName,ClaimFormCur.FontSize)).Width;
@@ -1466,7 +1472,7 @@ namespace OpenDental{
 						displayStrings[i]=GetProcInfo("Desc",1+startProc);
 						break;
 					case "P1Fee":
-							displayStrings[i]=GetProcInfo("Fee",1+startProc,ClaimFormCur.Items[i].FormatString);
+						displayStrings[i]=GetProcInfo("Fee",1+startProc,ClaimFormCur.Items[i].FormatString);
 						break;
 					case "P1TreatDentMedicaidID":
 						displayStrings[i]=GetProcInfo("TreatDentMedicaidID",1+startProc);
@@ -2202,7 +2208,6 @@ namespace OpenDental{
 					vcA[i]= new ClaimValCode();
 				}
 				for(int i=0;i<ClaimFormCur.Items.Length;i++){
-					double amt = 0;
 					switch(ClaimFormCur.Items[i].FieldName){
 						case "MedValCode39a":
 							displayStrings[i]=vcA[0].ValCode;
