@@ -2374,6 +2374,7 @@ namespace OpenDental{
 				TempApptSingle.Dispose();
 				RefreshModulePatient(PatCurNum);
 				RefreshPeriod();
+				bubbleAptNum=0;
 				SetInvalid();
 				return;
 			}
