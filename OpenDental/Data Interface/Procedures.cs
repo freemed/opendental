@@ -1055,8 +1055,8 @@ namespace OpenDental{
 				FROM procedurelog
 				LEFT JOIN patient ON patient.PatNum=procedurelog.PatNum
 				LEFT JOIN patplan ON patplan.PatNum=procedurelog.PatNum
-				LEFT JOIN procedurecode ON procedurecode.CodeNum=procedurelog.CodeNum
 				AND patplan.Ordinal=1
+				LEFT JOIN procedurecode ON procedurecode.CodeNum=procedurelog.CodeNum
 				LEFT JOIN insplan ON insplan.PlanNum=patplan.PlanNum
 				WHERE procedurelog.ProcStatus=1";
 /*@"SELECT procedurelog.ProcCode,insplan.FeeSched AS PlanFeeSched,patient.FeeSched AS PatFeeSched,
