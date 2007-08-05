@@ -118,13 +118,24 @@ namespace OpenDentBusiness{
 				+"LabCaseNum,patient.LName,patient.MedUrgNote,patient.MiddleI,Note,Op,appointment.PatNum,"
 				+"Pattern,patplan.PlanNum,patient.PreferConfirmMethod,patient.PreferContactMethod,patient.Preferred,"
 				+"patient.PreferRecallMethod,patient.Premed,"
-				+"(SELECT SUM(ProcFee) FROM procedurelog WHERE procedurelog.AptNum=appointment.AptNum) Production, "
-				+"ProvHyg,appointment.ProvNum,patient.WirelessPhone,patient.WkPhone "
+				+"(SELECT SUM(ProcFee) FROM procedurelog ";
+			if(isPlanned){
+				command+="WHERE procedurelog.PlannedAptNum=appointment.AptNum) Production, ";
+			}
+			else{
+				command+="WHERE procedurelog.AptNum=appointment.AptNum) Production, ";
+			}
+			command+="ProvHyg,appointment.ProvNum,patient.WirelessPhone,patient.WkPhone "
 				+"FROM appointment LEFT JOIN patient ON patient.PatNum=appointment.PatNum "
 				+"LEFT JOIN provider p1 ON p1.ProvNum=appointment.ProvNum "
-				+"LEFT JOIN provider p2 ON p2.ProvNum=appointment.ProvHyg "
-				+"LEFT JOIN labcase ON labcase.AptNum=appointment.AptNum "
-				+"LEFT JOIN patient guar ON guar.PatNum=patient.Guarantor "
+				+"LEFT JOIN provider p2 ON p2.ProvNum=appointment.ProvHyg ";
+			if(isPlanned){
+				command+="LEFT JOIN labcase ON labcase.PlannedAptNum=appointment.AptNum ";
+			}
+			else{
+				command+="LEFT JOIN labcase ON labcase.AptNum=appointment.AptNum ";
+			}
+			command+="LEFT JOIN patient guar ON guar.PatNum=patient.Guarantor "
 				+"LEFT JOIN patplan ON patplan.PatNum=patient.PatNum ";
 			if(aptNum==0){
 				command+="WHERE AptDateTime >= "+POut.PDate(dateStart)+" "
