@@ -3079,14 +3079,14 @@ namespace OpenDental{
 		///<summary>The supplied procedure row must include these columns: ProcDate,ProcStatus,ProcCode,Surf,ToothNum, and ToothRange, all in raw database format.</summary>
 		private bool ShouldDisplayProc(DataRow row){
 			//if printing for hospital
-			//if(hospitalDate.Year>1880) {
-			//	if(hospitalDate!=PIn.PDateT(row["ProcDate"].ToString()).Date) {
-			//		return false;
-			//	}
-			//	if(row["ProcStatus"].ToString()!=((int)ProcStat.C).ToString()) {
-			//		return false;
-			//	}
-			//}
+			if(hospitalDate.Year>1880) {
+				if(hospitalDate.Date!=PIn.PDateT(row["ProcDate"].ToString()).Date) {
+					return false;
+				}
+				if(row["ProcStatus"].ToString()!=((int)ProcStat.C).ToString()) {
+					return false;
+				}
+			}
 			if(checkShowTeeth.Checked) {
 				bool showProc=false;
 				ArrayList selectedTeeth=new ArrayList();//integers 1-32
@@ -5175,40 +5175,35 @@ namespace OpenDental{
 		}
 
 		private void menuItemPrintDay_Click(object sender,EventArgs e) {
-			if(gridProg.SelectedIndices.Length==0){
+			if(gridProg.SelectedIndices.Length==0) {
 				MsgBox.Show(this,"Please select at least one item first.");
 				return;
 			}
-			Type type=gridProg.Rows[gridProg.SelectedIndices[0]].Tag.GetType();
-			if(type==typeof(Procedure)){
-				hospitalDate=((Procedure)gridProg.Rows[gridProg.SelectedIndices[0]].Tag).ProcDate.Date;
-			}
-			else if(type==typeof(RxPat)) {
-				hospitalDate=((RxPat)gridProg.Rows[gridProg.SelectedIndices[0]].Tag).RxDate.Date;
-			}
-			else if(type==typeof(Commlog)) {
-				hospitalDate=((Commlog)gridProg.Rows[gridProg.SelectedIndices[0]].Tag).CommDateTime.Date;
-			}
+			DataRow row=(DataRow)gridProg.Rows[gridProg.SelectedIndices[0]].Tag;
+			hospitalDate=PIn.PDateT(row["ProcDate"].ToString());
 			bool showRx=this.checkRx.Checked;
 			bool showComm=this.checkComm.Checked;
+			bool showApt=this.checkAppt.Checked;
 			checkRx.Checked=false;
 			checkComm.Checked=false;
+			checkAppt.Checked=false;
 			FillProgNotes();
-			try{
+			try {
 				pagesPrinted=0;
 				headingPrinted=false;
 				#if DEBUG
 					PrintDay(true);
 				#else
-					PrintDay(false);	
+					PrintDay(false);
 				#endif
 			}
-			catch{
+			catch {
 
 			}
 			hospitalDate=DateTime.MinValue;
 			checkRx.Checked=showRx;
 			checkComm.Checked=showComm;
+			checkAppt.Checked=showApt;
 			FillProgNotes();
 		}
 
