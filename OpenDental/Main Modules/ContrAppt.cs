@@ -1597,6 +1597,10 @@ namespace OpenDental{
 			}
 			if(row==null){
 				row=Appointments.RefreshOneApt(aptNum,false).Rows[0];
+				if(row["AptStatus"].ToString()=="6") {//planned
+					//then do it again the right way
+					row=Appointments.RefreshOneApt(aptNum,true).Rows[0];
+				}
 			}
 			RefreshModulePatient(PIn.PInt(row["PatNum"].ToString()));
 			PinApptSingle.DataRoww=row;
