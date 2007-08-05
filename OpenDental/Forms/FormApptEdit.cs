@@ -1563,6 +1563,11 @@ namespace OpenDental{
 			if(!UpdateToDB()){
 				return;
 			}
+			if(IsNew) {
+				SecurityLogs.MakeLogEntry(Permissions.AppointmentCreate,pat.PatNum,pat.GetNameLF()+", "
+					+AptCur.AptDateTime.ToString()+", "
+					+AptCur.ProcDescript);
+			}
 			DialogResult=DialogResult.OK;
 		}
 
