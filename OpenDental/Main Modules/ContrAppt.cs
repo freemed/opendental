@@ -1770,6 +1770,7 @@ namespace OpenDental{
 				aptCur.ClinicNum=curOp.ClinicNum;
 			}
 			if(aptCur.AptStatus==ApptStatus.Planned){//if Planned appt is on pinboard
+				LabCase lab=LabCases.GetForPlanned(aptCur.AptNum);
 				aptCur.NextAptNum=aptCur.AptNum;
 				aptCur.AptStatus=ApptStatus.Scheduled;
 				try{
@@ -1798,6 +1799,9 @@ namespace OpenDental{
 				}
 				if(procAlreadyAttached){
 					MessageBox.Show(Lan.g(this,"One or more procedures could not be scheduled because they were already attached to another appointment. Someone probably forgot to update the Next appointment in the Chart module."));
+				}
+				if(lab!=null) {
+					LabCases.AttachToAppt(lab.LabCaseNum,aptCur.AptNum);
 				}
 			}//if planned appointment is on pinboard
 			else{//simple drag off pinboard to a new date/time
