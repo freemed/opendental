@@ -129,6 +129,9 @@ namespace OpenDental{
 			if(isAlph){
 				command+="ORDER BY GradYear,Descript,LName,FName";
 			}
+			else {
+				command+="ORDER BY ItemOrder";
+			}
 			return General.GetTable(command);
 		}
 
