@@ -961,9 +961,11 @@ namespace OpenDental{
 								else {
 									claimproc.DedApplied=dedRem;
 								}
-								if(claimproc.DedApplied>0){
-									row.Cells[5].Text+="\r\n"+Lan.g(this,"Pri Deduct Applied: ")+claimproc.DedApplied.ToString("F");
-								}
+								//This was moved down for situations where percentages are 0, so it won't show a deductible applied when it shouldn't.
+								//Don't know if this will cause other problems.
+								//if(claimproc.DedApplied>0){
+								//	row.Cells[5].Text+="\r\n"+Lan.g(this,"Pri Deduct Applied: ")+claimproc.DedApplied.ToString("F");
+								//}
 								//insest:
 								insRem=InsPlans.GetInsRem(ClaimProcList,DateTime.Today,PriPlanCur.PlanNum,
 									PatPlanList[0].PatPlanNum,-1,InsPlanList,BenefitList)
@@ -982,6 +984,9 @@ namespace OpenDental{
 									claimproc.InsPayEst=0;
 									//so only 19 of deductible gets applied, and inspayest is 0
 								}
+								if(claimproc.DedApplied>0) {
+									row.Cells[5].Text+="\r\n"+Lan.g(this,"Pri Deduct Applied: ")+claimproc.DedApplied.ToString("F");
+								}
 								if(claimproc.InsPayEst>insRem) {//if ins has maxed out
 									if(!hasMaxedPri){
 										row.Cells[5].Text+="\r\n"+Lan.g(this,"Pri Annual Max Met.");
@@ -989,7 +994,6 @@ namespace OpenDental{
 									hasMaxedPri=true;
 									claimproc.OverAnnualMax=claimproc.InsPayEst-insRem;
 									claimproc.InsPayEst=insRem;
-
 								}
 								dedAppliedPri+=claimproc.DedApplied;
 								insPayEstPri+=claimproc.InsPayEst;
