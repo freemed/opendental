@@ -1614,7 +1614,13 @@ namespace OpenDental{
 					comboPriProv.SelectedIndex=i;
 			}
 			if(comboPriProv.SelectedIndex==-1){
-				comboPriProv.SelectedIndex=0;
+				int defaultindex=Providers.GetIndex(PrefB.GetInt("PracticeDefaultProv"));
+				if(defaultindex==-1) {//default provider hidden
+					comboPriProv.SelectedIndex=0;
+				}
+				else {
+					comboPriProv.SelectedIndex=defaultindex;
+				}
 			}
 			comboSecProv.Items.Clear();
 			comboSecProv.Items.Add(Lan.g(this,"none"));
