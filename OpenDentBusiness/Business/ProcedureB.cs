@@ -333,7 +333,43 @@ namespace OpenDentBusiness {
 			//delete claimprocs
 			command="DELETE from claimproc WHERE ProcNum = '"+POut.PInt(procNum)+"'";
 			dcon.NonQ(command);
-			//set the procedure deleted
+			//resynch appointment description-------------------------------------------------------------------------------------
+			command="SELECT AptNum,PlannedAptNum FROM procedurelog WHERE ProcNum = "+POut.PInt(procNum);
+			DataTable table=dcon.GetTable(command);
+			string aptnum=table.Rows[0][0].ToString();
+			string plannedaptnum=table.Rows[0][1].ToString();
+			string procdescript;
+			if(aptnum!="0"){
+				command=@"SELECT AbbrDesc FROM procedurecode,procedurelog
+					WHERE procedurecode.CodeNum=procedurelog.CodeNum
+					AND ProcNum != "+POut.PInt(procNum)
+					+" AND procedurelog.AptNum="+aptnum;
+				table=dcon.GetTable(command);
+				procdescript="";
+				for(int i=0;i<table.Rows.Count;i++) {
+					if(i>0) procdescript+=", ";
+					procdescript+=table.Rows[i]["AbbrDesc"].ToString();
+				}
+				command="UPDATE appointment SET ProcDescript='"+POut.PString(procdescript)+"' "
+					+"WHERE AptNum="+aptnum;
+				dcon.NonQ(command);
+			}
+			if(plannedaptnum!="0") {
+				command=@"SELECT AbbrDesc FROM procedurecode,procedurelog
+					WHERE procedurecode.CodeNum=procedurelog.CodeNum
+					AND ProcNum != "+POut.PInt(procNum)
+					+" AND procedurelog.PlannedAptNum="+plannedaptnum;
+				table=dcon.GetTable(command);
+				procdescript="";
+				for(int i=0;i<table.Rows.Count;i++) {
+					if(i>0)	procdescript+=", ";
+					procdescript+=table.Rows[i]["AbbrDesc"].ToString();
+				}
+				command="UPDATE appointment SET ProcDescript='"+POut.PString(procdescript)+"' "
+					+"WHERE PlannedAptNum="+plannedaptnum;
+				dcon.NonQ(command);
+			}
+			//set the procedure deleted-----------------------------------------------------------------------------------------
 			command="UPDATE procedurelog SET ProcStatus = "+POut.PInt((int)ProcStat.D)+", "
 				+"AptNum=0, "
 				+"PlannedAptNum=0 "

@@ -1440,13 +1440,9 @@ namespace OpenDental{
 			AptCur.IsNewPatient=checkIsNewPatient.Checked;
 			AptCur.ProcDescript="";
 			for(int i=0;i<gridProc.SelectedIndices.Length;i++) {
+				if(i>0) AptCur.ProcDescript+=", ";
 				AptCur.ProcDescript+=ProcedureCodes.GetProcCode(
-					PIn.PInt(DS.Tables["Procedure"].Rows[gridProc.SelectedIndices[i]]["CodeNum"].ToString())).AbbrDesc+", ";
-			}
-			if(AptCur.ProcDescript.Length>1) {
-				//trims the last space and comma
-				AptCur.ProcDescript
-					=AptCur.ProcDescript.Substring(0,AptCur.ProcDescript.Length-2);
+					PIn.PInt(DS.Tables["Procedure"].Rows[gridProc.SelectedIndices[i]]["CodeNum"].ToString())).AbbrDesc;
 			}
 			int[] procNums=new int[gridProc.SelectedIndices.Length];
 			for(int i=0;i<procNums.Length;i++){
