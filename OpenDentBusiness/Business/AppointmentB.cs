@@ -145,6 +145,7 @@ namespace OpenDentBusiness{
 			else{
 				command+="WHERE appointment.AptNum="+POut.PInt(aptNum);
 			}
+			command+=" GROUP BY appointment.AptNum";
 			DataTable raw=dcon.GetTable(command);
 			command="SELECT AbbrDesc,procedurelog.AptNum,procedurelog.CodeNum,PlannedAptNum,Surf,ToothNum,TreatArea "
 				+"FROM procedurelog,appointment,procedurecode ";
