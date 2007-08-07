@@ -80,7 +80,7 @@ namespace OpenDental{
 		private System.Windows.Forms.ComboBox comboView;
 		private System.Windows.Forms.ContextMenu menuPatient;	
 		///<summary></summary>
-	  public FormRpPrintPreview pView = new FormRpPrintPreview();
+	  public FormRpPrintPreview pView;
 		private OpenDental.UI.Button butOther;
 		private bool cardPrintFamily;
 		private System.Windows.Forms.ContextMenu menuApt;
@@ -2807,6 +2807,7 @@ namespace OpenDental{
 			pd2.PrintPage += new PrintPageEventHandler(this.pd2_PrintPage);
 			//pd2.DefaultPageSettings.Margins= new Margins(10,40,40,60);
 			#if DEBUG
+				pView = new FormRpPrintPreview();
 				pView.printPreviewControl2.Document=pd2;
   			pView.ShowDialog();
 			#else

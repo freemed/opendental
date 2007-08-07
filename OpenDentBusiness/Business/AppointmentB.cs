@@ -551,7 +551,8 @@ namespace OpenDentBusiness{
 				command+="PlannedAptNum="+aptNum+")";
 			}
 			else{
-				command+="AptNum="+aptNum+")";
+				command+="AptNum="+aptNum+") "
+					+"AND (AptNum=0 OR AptNum="+aptNum+")";//exclude procs attached to other appts.
 			}
 			DataTable rawProc=dcon.GetTable(command);
 			for(int i=0;i<rawProc.Rows.Count;i++) {
