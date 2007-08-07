@@ -464,53 +464,53 @@ namespace OpenDentBusiness{
 			table.Rows.Add(row);
 			//Patient First Name--------------------------------------------------------------------
 			row=table.NewRow();
-			row["field"]=Lan.g("FormAppEdit","First Name");
+			row["field"]=Lan.g("FormApptEdit","First Name");
 			row["value"]=rawPat.Rows[0]["FName"];
 			table.Rows.Add(row);
 			//Patient Last name---------------------------------------------------------------------
 			row=table.NewRow();
-			row["field"]=Lan.g("FormAppEdit","Last Name");
+			row["field"]=Lan.g("FormApptEdit","Last Name");
 			row["value"]=rawPat.Rows[0]["LName"];
 			table.Rows.Add(row);
 			//Patient middle initial----------------------------------------------------------------
 			row=table.NewRow();
-			row["field"]=Lan.g("FormAppEdit","Middle Initial");
+			row["field"]=Lan.g("FormApptEdit","Middle Initial");
 			row["value"]=rawPat.Rows[0]["MiddleI"];
 			table.Rows.Add(row);
 			//Patient home phone--------------------------------------------------------------------
 			row=table.NewRow();
-			row["field"]=Lan.g("FormAppEdit","Home Phone");
+			row["field"]=Lan.g("FormApptEdit","Home Phone");
 			row["value"]=rawPat.Rows[0]["HmPhone"];
 			table.Rows.Add(row);
 			//Patient work phone--------------------------------------------------------------------
 			row=table.NewRow();
-			row["field"]=Lan.g("FormAppEdit","Work Phone");
+			row["field"]=Lan.g("FormApptEdit","Work Phone");
 			row["value"]=rawPat.Rows[0]["WkPhone"];
 			table.Rows.Add(row);
 			//Patient wireless phone----------------------------------------------------------------
 			row=table.NewRow();
-			row["field"]=Lan.g("FormAppEdit","Wireless Phone");
+			row["field"]=Lan.g("FormApptEdit","Wireless Phone");
 			row["value"]=rawPat.Rows[0]["WirelessPhone"];
 			table.Rows.Add(row);
 			//Patient credit type-------------------------------------------------------------------
 			row=table.NewRow();
-			row["field"]=Lan.g("FormAppEdit","Credit Type");
+			row["field"]=Lan.g("FormApptEdit","Credit Type");
 			row["value"]=rawPat.Rows[0]["CreditType"];
 			table.Rows.Add(row);
 			//Patient billing type------------------------------------------------------------------
 			row=table.NewRow();
-			row["field"]=Lan.g("FormAppEdit","Billing Type");
+			row["field"]=Lan.g("FormApptEdit","Billing Type");
 			row["value"]=DefB.GetName(DefCat.BillingTypes,PIn.PInt(rawPat.Rows[0]["BillingType"].ToString()));
 			table.Rows.Add(row);
 			//Patient total balance-----------------------------------------------------------------
 			row=table.NewRow();
-			row["field"]=Lan.g("FormAppEdit","Total Balance");
+			row["field"]=Lan.g("FormApptEdit","Total Balance");
 			double totalBalance=PIn.PDouble(rawPat.Rows[0]["EstBalance"].ToString());
 			row["value"]=totalBalance.ToString("F");
 			table.Rows.Add(row);
 			//Patient address and phone notes-------------------------------------------------------
 			row=table.NewRow();
-			row["field"]=Lan.g("FormAppEdit","Address and Phone Notes");
+			row["field"]=Lan.g("FormApptEdit","Address and Phone Notes");
 			row["value"]=rawPat.Rows[0]["AddrNote"];
 			table.Rows.Add(row);
 			//Patient family balance----------------------------------------------------------------
@@ -518,7 +518,7 @@ namespace OpenDentBusiness{
 				+rawPat.Rows[0]["Guarantor"].ToString()+"'";
 			DataTable familyBalance=dcon.GetTable(command);
 			row=table.NewRow();
-			row["field"]=Lan.g("FormAppEdit","Family Balance");
+			row["field"]=Lan.g("FormApptEdit","Family Balance");
 			double balance=PIn.PDouble(familyBalance.Rows[0]["BalTotal"].ToString())
 				-PIn.PDouble(familyBalance.Rows[0]["InsEst"].ToString());
 			row["value"]=balance.ToString("F");

@@ -872,13 +872,13 @@ namespace OpenDental{
 			DataTable table=DS.Tables["Patient"];
 			gridPatient.BeginUpdate();
 			gridPatient.Columns.Clear();
-			for(int i=0;i<table.Columns.Count;i++) {
-				ODGridColumn col=new ODGridColumn(Lan.g("TableCommLog",""),120);//Add blank columns
-				gridPatient.Columns.Add(col);
-			}
+			ODGridColumn col=new ODGridColumn("",120);//Add 2 blank columns
+			gridPatient.Columns.Add(col);
+			col=new ODGridColumn("",120);
+			gridPatient.Columns.Add(col);
 			gridPatient.Rows.Clear();
 			ODGridRow row;
-			for(int i=0;i<table.Rows.Count;i++) {
+			for(int i=1;i<table.Rows.Count;i++) {//starts with 1 to skip name
 				row=new ODGridRow();
 				row.Cells.Add(table.Rows[i]["field"].ToString());
 				row.Cells.Add(table.Rows[i]["value"].ToString());
