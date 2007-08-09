@@ -15,155 +15,194 @@ namespace OpenDental{
 	/// <summary>
 	/// Summary description for FormBasicTemplate.
 	/// </summary>
-	public class FormImport : System.Windows.Forms.Form{
-		private System.Windows.Forms.Label label2;
-		private System.Windows.Forms.DataGrid grid;
+		public class FormImport:System.Windows.Forms.Form {
 		/// <summary>
 		/// Required designer variable.
 		/// </summary>
-		private System.ComponentModel.Container components = null;
-		private System.Windows.Forms.GroupBox groupBox1;
-		private System.Windows.Forms.Label label3;
-		private System.Windows.Forms.Label label4;
-		private System.Windows.Forms.Label label5;
-		private System.Windows.Forms.Button butSubstitute;
-		private DataTable table;
-		private System.Windows.Forms.TextBox textSubstOld;
-		private System.Windows.Forms.TextBox textSubstNew;
-		private System.Windows.Forms.GroupBox groupBox3;
-		private System.Windows.Forms.Button butFixDates;
-		private System.Windows.Forms.Label label7;
-		private System.Windows.Forms.Label label8;
-		private System.Windows.Forms.TextBox textDateOldFormats;
-		private System.Windows.Forms.Label label6;
-		private System.Windows.Forms.GroupBox groupBox4;
-		private System.Windows.Forms.TextBox textSepChar;
-		private System.Windows.Forms.Label label9;
-		private System.Windows.Forms.Label label10;
-		private System.Windows.Forms.Label label11;
-		private System.Windows.Forms.Button butCombine;
-		private System.Windows.Forms.GroupBox groupBox5;
-		private System.Windows.Forms.Label label13;
-		private System.Windows.Forms.Label label14;
-		private System.Windows.Forms.Button butRename;
-		private System.Windows.Forms.GroupBox groupBox6;
-		private System.Windows.Forms.Button butMoveCol;
-		private System.Windows.Forms.Label label15;
-		private System.Windows.Forms.RadioButton radioFirst;
-		private System.Windows.Forms.RadioButton radioAfter;
-		private System.Windows.Forms.Button butValidate;
-		private System.Windows.Forms.Button butImport;
-		private System.Windows.Forms.Button butRefresh;
-		private System.Windows.Forms.TabControl tabContr;
-		private System.Windows.Forms.TabPage tabLoadData;
-		private System.Windows.Forms.TabPage tabEdit;
-		private System.Windows.Forms.TabPage tabSpecialtyF;
-		private System.Windows.Forms.TabPage tabFinalImport;
-		private System.Windows.Forms.Label label17;
-		private System.Windows.Forms.Label label18;
-		private System.Windows.Forms.TextBox textBox1;
-		private System.Windows.Forms.Label label19;
-		private System.Windows.Forms.TextBox textNewTable;
-		private System.Windows.Forms.TextBox textFileName;
-		private System.Windows.Forms.Label label20;
-		private System.Windows.Forms.Button butBrowse;
-		private System.Windows.Forms.Button butLoad;
-		private System.Windows.Forms.Label label21;
-		private System.Windows.Forms.Label label22;
-		private System.Windows.Forms.TabPage tabColumns;
-		private System.Windows.Forms.TabPage tabRows;
-		private System.Windows.Forms.Button butDeleteRows;
-		private System.Windows.Forms.Button butDeleteTable;
-		private System.Windows.Forms.ComboBox comboTableName;
-		private System.Windows.Forms.GroupBox groupBox2;
-		private System.Windows.Forms.Label label16;
-		private System.Windows.Forms.ComboBox comboColMove;
-		private System.Windows.Forms.ComboBox comboColMoveAfter;
-		private System.Windows.Forms.ComboBox comboColCombine1;
-		private System.Windows.Forms.ComboBox comboColCombine2;
-		private System.Windows.Forms.ComboBox comboColRename;
-		private System.Windows.Forms.ComboBox comboColDelete;
-		private System.Windows.Forms.Button butDeleteCol;
-		private System.Windows.Forms.ComboBox comboColNewName;
+				private System.ComponentModel.Container components = null;
+				private DataTable table;
 		///<summary>The name of the column which is the primary key, or "" for no primary key.</summary>
-		private string pkCol="";
-		private System.Windows.Forms.Label label12;
-		private System.Windows.Forms.TextBox textRows;
-		private System.Windows.Forms.ComboBox comboColDateSource;
-		private System.Windows.Forms.ComboBox comboColDateDest;
-		private System.Windows.Forms.RadioButton radioInsert;
-		private System.Windows.Forms.RadioButton radioUpdate;
-		private System.Windows.Forms.Label label23;
-		private System.Windows.Forms.GroupBox groupBox8;
-		private System.Windows.Forms.Button butAddCol;
-		private System.Windows.Forms.Label label24;
-		private System.Windows.Forms.TabPage tabPK;
-		private System.Windows.Forms.Button butClearPK;
-		private System.Windows.Forms.ComboBox comboColPK;
-		private System.Windows.Forms.Label label1;
-		private System.Windows.Forms.Button butSetPK;
-		private System.Windows.Forms.GroupBox groupBox7;
-		private System.Windows.Forms.RadioButton radioPatients;
-		private System.Windows.Forms.RadioButton radioCarriers;
-		private System.Windows.Forms.Label label25;
-		private System.Windows.Forms.TabPage tabQuery;
-		private System.Windows.Forms.Button butQuerySubmit;
-		private System.Windows.Forms.TextBox textQuery;
-		private System.Windows.Forms.GroupBox groupBox9;
-		private System.Windows.Forms.Button butColClear;
-		private System.Windows.Forms.TextBox textDateNewFormat;
-		private System.Windows.Forms.Label label27;
-		private System.Windows.Forms.CheckBox checkDontUsePK;
-		private System.Windows.Forms.Label label28;
-		private System.Windows.Forms.ComboBox comboColAdd;
-		private System.Windows.Forms.GroupBox groupBox10;
-		private System.Windows.Forms.Button butColCap;
-		private System.Windows.Forms.GroupBox groupBox11;
-		private System.Windows.Forms.TextBox textPadChar;
-		private System.Windows.Forms.Label label31;
-		private System.Windows.Forms.TextBox textPadLength;
-		private System.Windows.Forms.Label label32;
-		private System.Windows.Forms.Button butColPad;
-		private System.Windows.Forms.GroupBox groupBox12;
-		private System.Windows.Forms.ComboBox comboColCopyFrom;
-		private System.Windows.Forms.Label label34;
-		private System.Windows.Forms.ComboBox comboColEdit;
-		private System.Windows.Forms.Button butColCopy;
-		private System.Windows.Forms.GroupBox groupBox13;
-		private System.Windows.Forms.ComboBox comboColDateTo;
-		private System.Windows.Forms.Label label29;
-		private System.Windows.Forms.Label label30;
-		private System.Windows.Forms.Button butConvertDate;
-		private System.Windows.Forms.TextBox textDateBase;
-		private System.Windows.Forms.Label label33;
-		private System.Windows.Forms.Label label35;
-		private System.Windows.Forms.ComboBox comboColDateFrom;
-		private System.Windows.Forms.Label label26;
-		private System.Windows.Forms.Label label36;
-		private System.Windows.Forms.Button butColCapAll;
-		private System.Windows.Forms.GroupBox groupBox14;
-		private System.Windows.Forms.Button butColsDelete;
-		private System.Windows.Forms.Label label37;
-		private System.Windows.Forms.TextBox textColsDelete;
-		private System.Windows.Forms.GroupBox groupBox15;
-		private System.Windows.Forms.Label label39;
-		private System.Windows.Forms.Button butGuarantor;
-		private System.Windows.Forms.TextBox textBox2;
-		private System.Windows.Forms.Label label38;
-		private System.Windows.Forms.TextBox textBox3;
-		private System.Windows.Forms.Label label40;
-		private System.Windows.Forms.TextBox textBox4;
-		private System.Windows.Forms.Label label41;
-		private System.Windows.Forms.Label label42;
-		private System.Windows.Forms.TextBox textBox5;
-		private System.Windows.Forms.Label label43;
-		private System.Windows.Forms.TextBox textBox6;
-		private System.Windows.Forms.Label label44;
-		private System.Windows.Forms.Button butGuarAccount;
-		private System.Windows.Forms.Label label45;
-		private System.Windows.Forms.TextBox textBox7;
-		private System.Windows.Forms.Label label46;
-		private string[] AllowedColNames;
+				private string pkCol="";
+				private string[] AllowedColNames;
+				private DataGrid grid;
+				private TabPage tabFinalImport;
+				private RadioButton radioUpdate;
+				private RadioButton radioInsert;
+				private Button butImport;
+				private Button butValidate;
+				private TabPage tabScript;
+				private Label label47;
+				private Button butReloadScript;
+				private Button butSaveScript;
+				private Button butRunScript;
+				private TextBox textScript;
+				private TabPage tabEdit;
+				private GroupBox groupBox12;
+				private ComboBox comboColCopyFrom;
+				private Button butColCopy;
+				private Label label34;
+				private GroupBox groupBox11;
+				private TextBox textPadLength;
+				private Label label32;
+				private TextBox textPadChar;
+				private Label label31;
+				private Button butColPad;
+				private GroupBox groupBox10;
+				private Label label36;
+				private Button butColCapAll;
+				private Label label26;
+				private Button butColCap;
+				private GroupBox groupBox9;
+				private Button butColClear;
+				private GroupBox groupBox1;
+				private Button butSubstitute;
+				private TextBox textSubstNew;
+				private Label label5;
+				private TextBox textSubstOld;
+				private Label label4;
+				private Label label3;
+				private ComboBox comboColEdit;
+				private TabPage tabRows;
+				private Label label23;
+				private TextBox textRows;
+				private Label label12;
+				private Button butDeleteRows;
+				private TabPage tabQuery;
+				private Label label28;
+				private Button butQuerySubmit;
+				private TextBox textQuery;
+				private TabPage tabColumns;
+				private GroupBox groupBox14;
+				private TextBox textColsDelete;
+				private Button butColsDelete;
+				private Label label37;
+				private GroupBox groupBox8;
+				private ComboBox comboColAdd;
+				private Button butAddCol;
+				private Label label24;
+				private GroupBox groupBox2;
+				private ComboBox comboColDelete;
+				private Button butDeleteCol;
+				private Label label16;
+				private GroupBox groupBox6;
+				private RadioButton radioAfter;
+				private RadioButton radioFirst;
+				private Button butMoveCol;
+				private Label label15;
+				private ComboBox comboColMove;
+				private ComboBox comboColMoveAfter;
+				private GroupBox groupBox4;
+				private ComboBox comboColCombine2;
+				private ComboBox comboColCombine1;
+				private Button butCombine;
+				private TextBox textSepChar;
+				private Label label9;
+				private Label label10;
+				private Label label11;
+				private GroupBox groupBox5;
+				private ComboBox comboColNewName;
+				private ComboBox comboColRename;
+				private Button butRename;
+				private Label label13;
+				private Label label14;
+				private TabPage tabPK;
+				private CheckBox checkDontUsePK;
+				private Label label25;
+				private GroupBox groupBox7;
+				private RadioButton radioPatients;
+				private RadioButton radioCarriers;
+				private Button butClearPK;
+				private ComboBox comboColPK;
+				private Label label1;
+				private Button butSetPK;
+				private TabPage tabSpecialtyF;
+				private GroupBox groupBox15;
+				private TextBox textBox7;
+				private Label label46;
+				private Label label45;
+				private TextBox textBox5;
+				private Label label43;
+				private TextBox textBox6;
+				private Label label44;
+				private Button butGuarAccount;
+				private TextBox textBox4;
+				private Label label41;
+				private TextBox textBox3;
+				private Label label40;
+				private TextBox textBox2;
+				private Label label38;
+				private Label label39;
+				private Button butGuarantor;
+				private GroupBox groupBox13;
+				private ComboBox comboColDateTo;
+				private Label label29;
+				private Label label30;
+				private Button butConvertDate;
+				private TextBox textDateBase;
+				private Label label33;
+				private Label label35;
+				private ComboBox comboColDateFrom;
+				private GroupBox groupBox3;
+				private TextBox textDateNewFormat;
+				private Label label27;
+				private ComboBox comboColDateDest;
+				private Label label17;
+				private Label label6;
+				private Button butFixDates;
+				private TextBox textDateOldFormats;
+				private Label label7;
+				private Label label8;
+				private ComboBox comboColDateSource;
+				private TabPage tabLoadData;
+				private GroupBox groupBox16;
+				private RadioButton radioGenerateColNames;
+				private RadioButton radioColNamRow;
+				private Label label42;
+				private ComboBox comboTableName;
+				private Button butDeleteTable;
+				private Label label22;
+				private Label label21;
+				private Button butLoad;
+				private Button butBrowse;
+				private Label label20;
+				private TextBox textFileName;
+				private TextBox textNewTable;
+				private TextBox textBox1;
+				private Label label19;
+				private Label label18;
+				private Button butRefresh;
+				private Label label2;
+				private TabControl tabContr;
+				private TabPage tabPage1;
+				private GroupBox groupBox17;
+				private Label label49;
+				private NumericUpDown upDownNumTempCols;
+				private TextBox textCreateTempName;
+				private TextBox textBox9;
+				private Label label48;
+				private Button butCreateTemporaryTable;
+				private GroupBox groupBox19;
+				private Label label51;
+				private Label label50;
+				private Button butCopyAppendRows;
+				private Button butToTableNoColumn;
+				private Button butToTableDown;
+				private Button butToTableUp;
+				private Button butFromTableNoColumn;
+				private Button butFromTableDown;
+				private Button butFromTableUp;
+				private ListBox listCopyToTable;
+				private ListBox listCopyFromTable;
+				private ComboBox comboCopyToTable;
+				private ComboBox comboCopyFromTable;
+				private Label label53;
+				private Label label52;
+				private GroupBox groupBox18;
+				private Label label54;
+				private NumericUpDown upDownCopyFromInc;
+				private Label label55;
+				private NumericUpDown upDownCopyToInc;
+		private string currentDb;
 
 		///<summary></summary>
 		public FormImport()
@@ -197,1649 +236,2158 @@ namespace OpenDental{
 		/// </summary>
 		private void InitializeComponent()
 		{
-			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormImport));
-			this.grid = new System.Windows.Forms.DataGrid();
-			this.label2 = new System.Windows.Forms.Label();
-			this.butRefresh = new System.Windows.Forms.Button();
-			this.groupBox1 = new System.Windows.Forms.GroupBox();
-			this.butSubstitute = new System.Windows.Forms.Button();
-			this.textSubstNew = new System.Windows.Forms.TextBox();
-			this.label5 = new System.Windows.Forms.Label();
-			this.textSubstOld = new System.Windows.Forms.TextBox();
-			this.label4 = new System.Windows.Forms.Label();
-			this.label3 = new System.Windows.Forms.Label();
-			this.comboColEdit = new System.Windows.Forms.ComboBox();
-			this.groupBox3 = new System.Windows.Forms.GroupBox();
-			this.textDateNewFormat = new System.Windows.Forms.TextBox();
-			this.label27 = new System.Windows.Forms.Label();
-			this.comboColDateDest = new System.Windows.Forms.ComboBox();
-			this.label17 = new System.Windows.Forms.Label();
-			this.label6 = new System.Windows.Forms.Label();
-			this.butFixDates = new System.Windows.Forms.Button();
-			this.textDateOldFormats = new System.Windows.Forms.TextBox();
-			this.label7 = new System.Windows.Forms.Label();
-			this.label8 = new System.Windows.Forms.Label();
-			this.comboColDateSource = new System.Windows.Forms.ComboBox();
-			this.groupBox4 = new System.Windows.Forms.GroupBox();
-			this.comboColCombine2 = new System.Windows.Forms.ComboBox();
-			this.comboColCombine1 = new System.Windows.Forms.ComboBox();
-			this.butCombine = new System.Windows.Forms.Button();
-			this.textSepChar = new System.Windows.Forms.TextBox();
-			this.label9 = new System.Windows.Forms.Label();
-			this.label10 = new System.Windows.Forms.Label();
-			this.label11 = new System.Windows.Forms.Label();
-			this.groupBox5 = new System.Windows.Forms.GroupBox();
-			this.comboColNewName = new System.Windows.Forms.ComboBox();
-			this.comboColRename = new System.Windows.Forms.ComboBox();
-			this.butRename = new System.Windows.Forms.Button();
-			this.label13 = new System.Windows.Forms.Label();
-			this.label14 = new System.Windows.Forms.Label();
-			this.groupBox6 = new System.Windows.Forms.GroupBox();
-			this.radioAfter = new System.Windows.Forms.RadioButton();
-			this.radioFirst = new System.Windows.Forms.RadioButton();
-			this.butMoveCol = new System.Windows.Forms.Button();
-			this.label15 = new System.Windows.Forms.Label();
-			this.comboColMove = new System.Windows.Forms.ComboBox();
-			this.comboColMoveAfter = new System.Windows.Forms.ComboBox();
-			this.butValidate = new System.Windows.Forms.Button();
-			this.butImport = new System.Windows.Forms.Button();
-			this.tabContr = new System.Windows.Forms.TabControl();
-			this.tabLoadData = new System.Windows.Forms.TabPage();
-			this.label42 = new System.Windows.Forms.Label();
-			this.comboTableName = new System.Windows.Forms.ComboBox();
-			this.butDeleteTable = new System.Windows.Forms.Button();
-			this.label22 = new System.Windows.Forms.Label();
-			this.label21 = new System.Windows.Forms.Label();
-			this.butLoad = new System.Windows.Forms.Button();
-			this.butBrowse = new System.Windows.Forms.Button();
-			this.label20 = new System.Windows.Forms.Label();
-			this.textFileName = new System.Windows.Forms.TextBox();
-			this.textNewTable = new System.Windows.Forms.TextBox();
-			this.textBox1 = new System.Windows.Forms.TextBox();
-			this.label19 = new System.Windows.Forms.Label();
-			this.label18 = new System.Windows.Forms.Label();
-			this.tabSpecialtyF = new System.Windows.Forms.TabPage();
-			this.groupBox15 = new System.Windows.Forms.GroupBox();
-			this.textBox7 = new System.Windows.Forms.TextBox();
-			this.label46 = new System.Windows.Forms.Label();
-			this.label45 = new System.Windows.Forms.Label();
-			this.textBox5 = new System.Windows.Forms.TextBox();
-			this.label43 = new System.Windows.Forms.Label();
-			this.textBox6 = new System.Windows.Forms.TextBox();
-			this.label44 = new System.Windows.Forms.Label();
-			this.butGuarAccount = new System.Windows.Forms.Button();
-			this.textBox4 = new System.Windows.Forms.TextBox();
-			this.label41 = new System.Windows.Forms.Label();
-			this.textBox3 = new System.Windows.Forms.TextBox();
-			this.label40 = new System.Windows.Forms.Label();
-			this.textBox2 = new System.Windows.Forms.TextBox();
-			this.label38 = new System.Windows.Forms.Label();
-			this.label39 = new System.Windows.Forms.Label();
-			this.butGuarantor = new System.Windows.Forms.Button();
-			this.groupBox13 = new System.Windows.Forms.GroupBox();
-			this.comboColDateTo = new System.Windows.Forms.ComboBox();
-			this.label29 = new System.Windows.Forms.Label();
-			this.label30 = new System.Windows.Forms.Label();
-			this.butConvertDate = new System.Windows.Forms.Button();
-			this.textDateBase = new System.Windows.Forms.TextBox();
-			this.label33 = new System.Windows.Forms.Label();
-			this.label35 = new System.Windows.Forms.Label();
-			this.comboColDateFrom = new System.Windows.Forms.ComboBox();
-			this.tabPK = new System.Windows.Forms.TabPage();
-			this.checkDontUsePK = new System.Windows.Forms.CheckBox();
-			this.label25 = new System.Windows.Forms.Label();
-			this.groupBox7 = new System.Windows.Forms.GroupBox();
-			this.radioPatients = new System.Windows.Forms.RadioButton();
-			this.radioCarriers = new System.Windows.Forms.RadioButton();
-			this.butClearPK = new System.Windows.Forms.Button();
-			this.comboColPK = new System.Windows.Forms.ComboBox();
-			this.label1 = new System.Windows.Forms.Label();
-			this.butSetPK = new System.Windows.Forms.Button();
-			this.tabColumns = new System.Windows.Forms.TabPage();
-			this.groupBox14 = new System.Windows.Forms.GroupBox();
-			this.textColsDelete = new System.Windows.Forms.TextBox();
-			this.butColsDelete = new System.Windows.Forms.Button();
-			this.label37 = new System.Windows.Forms.Label();
-			this.groupBox8 = new System.Windows.Forms.GroupBox();
-			this.comboColAdd = new System.Windows.Forms.ComboBox();
-			this.butAddCol = new System.Windows.Forms.Button();
-			this.label24 = new System.Windows.Forms.Label();
-			this.groupBox2 = new System.Windows.Forms.GroupBox();
-			this.comboColDelete = new System.Windows.Forms.ComboBox();
-			this.butDeleteCol = new System.Windows.Forms.Button();
-			this.label16 = new System.Windows.Forms.Label();
-			this.tabQuery = new System.Windows.Forms.TabPage();
-			this.label28 = new System.Windows.Forms.Label();
-			this.butQuerySubmit = new System.Windows.Forms.Button();
-			this.textQuery = new System.Windows.Forms.TextBox();
-			this.tabRows = new System.Windows.Forms.TabPage();
-			this.label23 = new System.Windows.Forms.Label();
-			this.textRows = new System.Windows.Forms.TextBox();
-			this.label12 = new System.Windows.Forms.Label();
-			this.butDeleteRows = new System.Windows.Forms.Button();
-			this.tabEdit = new System.Windows.Forms.TabPage();
-			this.groupBox12 = new System.Windows.Forms.GroupBox();
-			this.comboColCopyFrom = new System.Windows.Forms.ComboBox();
-			this.butColCopy = new System.Windows.Forms.Button();
-			this.label34 = new System.Windows.Forms.Label();
-			this.groupBox11 = new System.Windows.Forms.GroupBox();
-			this.textPadLength = new System.Windows.Forms.TextBox();
-			this.label32 = new System.Windows.Forms.Label();
-			this.textPadChar = new System.Windows.Forms.TextBox();
-			this.label31 = new System.Windows.Forms.Label();
-			this.butColPad = new System.Windows.Forms.Button();
-			this.groupBox10 = new System.Windows.Forms.GroupBox();
-			this.label36 = new System.Windows.Forms.Label();
-			this.butColCapAll = new System.Windows.Forms.Button();
-			this.label26 = new System.Windows.Forms.Label();
-			this.butColCap = new System.Windows.Forms.Button();
-			this.groupBox9 = new System.Windows.Forms.GroupBox();
-			this.butColClear = new System.Windows.Forms.Button();
-			this.tabFinalImport = new System.Windows.Forms.TabPage();
-			this.radioUpdate = new System.Windows.Forms.RadioButton();
-			this.radioInsert = new System.Windows.Forms.RadioButton();
-			((System.ComponentModel.ISupportInitialize)(this.grid)).BeginInit();
-			this.groupBox1.SuspendLayout();
-			this.groupBox3.SuspendLayout();
-			this.groupBox4.SuspendLayout();
-			this.groupBox5.SuspendLayout();
-			this.groupBox6.SuspendLayout();
-			this.tabContr.SuspendLayout();
-			this.tabLoadData.SuspendLayout();
-			this.tabSpecialtyF.SuspendLayout();
-			this.groupBox15.SuspendLayout();
-			this.groupBox13.SuspendLayout();
-			this.tabPK.SuspendLayout();
-			this.groupBox7.SuspendLayout();
-			this.tabColumns.SuspendLayout();
-			this.groupBox14.SuspendLayout();
-			this.groupBox8.SuspendLayout();
-			this.groupBox2.SuspendLayout();
-			this.tabQuery.SuspendLayout();
-			this.tabRows.SuspendLayout();
-			this.tabEdit.SuspendLayout();
-			this.groupBox12.SuspendLayout();
-			this.groupBox11.SuspendLayout();
-			this.groupBox10.SuspendLayout();
-			this.groupBox9.SuspendLayout();
-			this.tabFinalImport.SuspendLayout();
-			this.SuspendLayout();
-			// 
-			// grid
-			// 
-			this.grid.DataMember = "";
-			this.grid.HeaderForeColor = System.Drawing.SystemColors.ControlText;
-			this.grid.Location = new System.Drawing.Point(0,244);
-			this.grid.Name = "grid";
-			this.grid.ReadOnly = true;
-			this.grid.Size = new System.Drawing.Size(1191,602);
-			this.grid.TabIndex = 0;
-			// 
-			// label2
-			// 
-			this.label2.Location = new System.Drawing.Point(9,128);
-			this.label2.Name = "label2";
-			this.label2.Size = new System.Drawing.Size(100,16);
-			this.label2.TabIndex = 3;
-			this.label2.Text = "Temp Table";
-			this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// butRefresh
-			// 
-			this.butRefresh.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.butRefresh.Location = new System.Drawing.Point(238,123);
-			this.butRefresh.Name = "butRefresh";
-			this.butRefresh.Size = new System.Drawing.Size(75,23);
-			this.butRefresh.TabIndex = 6;
-			this.butRefresh.Text = "Refresh";
-			this.butRefresh.Click += new System.EventHandler(this.butRefresh_Click);
-			// 
-			// groupBox1
-			// 
-			this.groupBox1.Controls.Add(this.butSubstitute);
-			this.groupBox1.Controls.Add(this.textSubstNew);
-			this.groupBox1.Controls.Add(this.label5);
-			this.groupBox1.Controls.Add(this.textSubstOld);
-			this.groupBox1.Controls.Add(this.label4);
-			this.groupBox1.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.groupBox1.Location = new System.Drawing.Point(8,39);
-			this.groupBox1.Name = "groupBox1";
-			this.groupBox1.Size = new System.Drawing.Size(245,91);
-			this.groupBox1.TabIndex = 7;
-			this.groupBox1.TabStop = false;
-			this.groupBox1.Text = "Substitution";
-			// 
-			// butSubstitute
-			// 
-			this.butSubstitute.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.butSubstitute.Location = new System.Drawing.Point(162,62);
-			this.butSubstitute.Name = "butSubstitute";
-			this.butSubstitute.Size = new System.Drawing.Size(75,23);
-			this.butSubstitute.TabIndex = 9;
-			this.butSubstitute.Text = "Substitute";
-			this.butSubstitute.Click += new System.EventHandler(this.butSubstitute_Click);
-			// 
-			// textSubstNew
-			// 
-			this.textSubstNew.Location = new System.Drawing.Point(114,37);
-			this.textSubstNew.Name = "textSubstNew";
-			this.textSubstNew.Size = new System.Drawing.Size(123,20);
-			this.textSubstNew.TabIndex = 8;
-			// 
-			// label5
-			// 
-			this.label5.Location = new System.Drawing.Point(8,38);
-			this.label5.Name = "label5";
-			this.label5.Size = new System.Drawing.Size(100,16);
-			this.label5.TabIndex = 7;
-			this.label5.Text = "New Value";
-			this.label5.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// textSubstOld
-			// 
-			this.textSubstOld.Location = new System.Drawing.Point(114,13);
-			this.textSubstOld.Name = "textSubstOld";
-			this.textSubstOld.Size = new System.Drawing.Size(123,20);
-			this.textSubstOld.TabIndex = 6;
-			// 
-			// label4
-			// 
-			this.label4.Location = new System.Drawing.Point(9,15);
-			this.label4.Name = "label4";
-			this.label4.Size = new System.Drawing.Size(100,16);
-			this.label4.TabIndex = 5;
-			this.label4.Text = "Old Value";
-			this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// label3
-			// 
-			this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif",9F,System.Drawing.FontStyle.Bold,System.Drawing.GraphicsUnit.Point,((byte)(0)));
-			this.label3.Location = new System.Drawing.Point(9,7);
-			this.label3.Name = "label3";
-			this.label3.Size = new System.Drawing.Size(92,16);
-			this.label3.TabIndex = 3;
-			this.label3.Text = "Column";
-			this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// comboColEdit
-			// 
-			this.comboColEdit.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboColEdit.Location = new System.Drawing.Point(105,5);
-			this.comboColEdit.MaxDropDownItems = 100;
-			this.comboColEdit.Name = "comboColEdit";
-			this.comboColEdit.Size = new System.Drawing.Size(142,21);
-			this.comboColEdit.TabIndex = 8;
-			// 
-			// groupBox3
-			// 
-			this.groupBox3.Controls.Add(this.textDateNewFormat);
-			this.groupBox3.Controls.Add(this.label27);
-			this.groupBox3.Controls.Add(this.comboColDateDest);
-			this.groupBox3.Controls.Add(this.label17);
-			this.groupBox3.Controls.Add(this.label6);
-			this.groupBox3.Controls.Add(this.butFixDates);
-			this.groupBox3.Controls.Add(this.textDateOldFormats);
-			this.groupBox3.Controls.Add(this.label7);
-			this.groupBox3.Controls.Add(this.label8);
-			this.groupBox3.Controls.Add(this.comboColDateSource);
-			this.groupBox3.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.groupBox3.Location = new System.Drawing.Point(322,4);
-			this.groupBox3.Name = "groupBox3";
-			this.groupBox3.Size = new System.Drawing.Size(302,189);
-			this.groupBox3.TabIndex = 9;
-			this.groupBox3.TabStop = false;
-			this.groupBox3.Text = "Fix Dates";
-			// 
-			// textDateNewFormat
-			// 
-			this.textDateNewFormat.Location = new System.Drawing.Point(121,130);
-			this.textDateNewFormat.Name = "textDateNewFormat";
-			this.textDateNewFormat.Size = new System.Drawing.Size(170,20);
-			this.textDateNewFormat.TabIndex = 18;
-			this.textDateNewFormat.Text = "MM/dd/yyyy";
-			// 
-			// label27
-			// 
-			this.label27.Location = new System.Drawing.Point(4,132);
-			this.label27.Name = "label27";
-			this.label27.Size = new System.Drawing.Size(115,16);
-			this.label27.TabIndex = 17;
-			this.label27.Text = "New Format";
-			this.label27.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// comboColDateDest
-			// 
-			this.comboColDateDest.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboColDateDest.Location = new System.Drawing.Point(121,84);
-			this.comboColDateDest.MaxDropDownItems = 100;
-			this.comboColDateDest.Name = "comboColDateDest";
-			this.comboColDateDest.Size = new System.Drawing.Size(170,21);
-			this.comboColDateDest.TabIndex = 16;
-			// 
-			// label17
-			// 
-			this.label17.Location = new System.Drawing.Point(14,15);
-			this.label17.Name = "label17";
-			this.label17.Size = new System.Drawing.Size(275,41);
-			this.label17.TabIndex = 12;
-			this.label17.Text = "Rarely used.  Might be used if month and day are switched in source file or if da" +
-    "te is in non-standard format, like yyyyMMdd";
-			// 
-			// label6
-			// 
-			this.label6.Location = new System.Drawing.Point(16,88);
-			this.label6.Name = "label6";
-			this.label6.Size = new System.Drawing.Size(100,16);
-			this.label6.TabIndex = 10;
-			this.label6.Text = "Destination Col";
-			this.label6.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// butFixDates
-			// 
-			this.butFixDates.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.butFixDates.Location = new System.Drawing.Point(218,158);
-			this.butFixDates.Name = "butFixDates";
-			this.butFixDates.Size = new System.Drawing.Size(75,23);
-			this.butFixDates.TabIndex = 9;
-			this.butFixDates.Text = "Fix";
-			this.butFixDates.Click += new System.EventHandler(this.butFixDates_Click);
-			// 
-			// textDateOldFormats
-			// 
-			this.textDateOldFormats.Location = new System.Drawing.Point(121,108);
-			this.textDateOldFormats.Name = "textDateOldFormats";
-			this.textDateOldFormats.Size = new System.Drawing.Size(170,20);
-			this.textDateOldFormats.TabIndex = 6;
-			this.textDateOldFormats.Text = "dd/MM/yyyy,d/M/yyyy,dd/M/yyyy,d/MM/yyyy";
-			// 
-			// label7
-			// 
-			this.label7.Location = new System.Drawing.Point(4,110);
-			this.label7.Name = "label7";
-			this.label7.Size = new System.Drawing.Size(115,16);
-			this.label7.TabIndex = 5;
-			this.label7.Text = "Old Formats sep by ,";
-			this.label7.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// label8
-			// 
-			this.label8.Location = new System.Drawing.Point(16,65);
-			this.label8.Name = "label8";
-			this.label8.Size = new System.Drawing.Size(100,16);
-			this.label8.TabIndex = 3;
-			this.label8.Text = "Source Column";
-			this.label8.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// comboColDateSource
-			// 
-			this.comboColDateSource.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboColDateSource.Location = new System.Drawing.Point(121,60);
-			this.comboColDateSource.MaxDropDownItems = 100;
-			this.comboColDateSource.Name = "comboColDateSource";
-			this.comboColDateSource.Size = new System.Drawing.Size(170,21);
-			this.comboColDateSource.TabIndex = 15;
-			// 
-			// groupBox4
-			// 
-			this.groupBox4.Controls.Add(this.comboColCombine2);
-			this.groupBox4.Controls.Add(this.comboColCombine1);
-			this.groupBox4.Controls.Add(this.butCombine);
-			this.groupBox4.Controls.Add(this.textSepChar);
-			this.groupBox4.Controls.Add(this.label9);
-			this.groupBox4.Controls.Add(this.label10);
-			this.groupBox4.Controls.Add(this.label11);
-			this.groupBox4.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.groupBox4.Location = new System.Drawing.Point(230,6);
-			this.groupBox4.Name = "groupBox4";
-			this.groupBox4.Size = new System.Drawing.Size(235,128);
-			this.groupBox4.TabIndex = 10;
-			this.groupBox4.TabStop = false;
-			this.groupBox4.Text = "Combine Columns";
-			// 
-			// comboColCombine2
-			// 
-			this.comboColCombine2.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboColCombine2.Location = new System.Drawing.Point(101,42);
-			this.comboColCombine2.MaxDropDownItems = 100;
-			this.comboColCombine2.Name = "comboColCombine2";
-			this.comboColCombine2.Size = new System.Drawing.Size(123,21);
-			this.comboColCombine2.TabIndex = 16;
-			// 
-			// comboColCombine1
-			// 
-			this.comboColCombine1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboColCombine1.Location = new System.Drawing.Point(101,16);
-			this.comboColCombine1.MaxDropDownItems = 100;
-			this.comboColCombine1.Name = "comboColCombine1";
-			this.comboColCombine1.Size = new System.Drawing.Size(123,21);
-			this.comboColCombine1.TabIndex = 15;
-			// 
-			// butCombine
-			// 
-			this.butCombine.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.butCombine.Location = new System.Drawing.Point(150,95);
-			this.butCombine.Name = "butCombine";
-			this.butCombine.Size = new System.Drawing.Size(75,23);
-			this.butCombine.TabIndex = 9;
-			this.butCombine.Text = "Combine";
-			this.butCombine.Click += new System.EventHandler(this.butCombine_Click);
-			// 
-			// textSepChar
-			// 
-			this.textSepChar.Location = new System.Drawing.Point(101,68);
-			this.textSepChar.Name = "textSepChar";
-			this.textSepChar.Size = new System.Drawing.Size(42,20);
-			this.textSepChar.TabIndex = 8;
-			// 
-			// label9
-			// 
-			this.label9.Location = new System.Drawing.Point(12,69);
-			this.label9.Name = "label9";
-			this.label9.Size = new System.Drawing.Size(83,16);
-			this.label9.TabIndex = 7;
-			this.label9.Text = "Sep Char";
-			this.label9.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// label10
-			// 
-			this.label10.Location = new System.Drawing.Point(12,45);
-			this.label10.Name = "label10";
-			this.label10.Size = new System.Drawing.Size(83,16);
-			this.label10.TabIndex = 5;
-			this.label10.Text = "Column 2";
-			this.label10.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// label11
-			// 
-			this.label11.Location = new System.Drawing.Point(12,21);
-			this.label11.Name = "label11";
-			this.label11.Size = new System.Drawing.Size(83,16);
-			this.label11.TabIndex = 3;
-			this.label11.Text = "Column 1";
-			this.label11.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// groupBox5
-			// 
-			this.groupBox5.Controls.Add(this.comboColNewName);
-			this.groupBox5.Controls.Add(this.comboColRename);
-			this.groupBox5.Controls.Add(this.butRename);
-			this.groupBox5.Controls.Add(this.label13);
-			this.groupBox5.Controls.Add(this.label14);
-			this.groupBox5.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.groupBox5.Location = new System.Drawing.Point(468,6);
-			this.groupBox5.Name = "groupBox5";
-			this.groupBox5.Size = new System.Drawing.Size(250,128);
-			this.groupBox5.TabIndex = 11;
-			this.groupBox5.TabStop = false;
-			this.groupBox5.Text = "Rename Column";
-			// 
-			// comboColNewName
-			// 
-			this.comboColNewName.Location = new System.Drawing.Point(116,43);
-			this.comboColNewName.MaxDropDownItems = 100;
-			this.comboColNewName.Name = "comboColNewName";
-			this.comboColNewName.Size = new System.Drawing.Size(123,21);
-			this.comboColNewName.TabIndex = 17;
-			// 
-			// comboColRename
-			// 
-			this.comboColRename.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboColRename.Location = new System.Drawing.Point(116,18);
-			this.comboColRename.MaxDropDownItems = 100;
-			this.comboColRename.Name = "comboColRename";
-			this.comboColRename.Size = new System.Drawing.Size(123,21);
-			this.comboColRename.TabIndex = 16;
-			// 
-			// butRename
-			// 
-			this.butRename.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.butRename.Location = new System.Drawing.Point(166,95);
-			this.butRename.Name = "butRename";
-			this.butRename.Size = new System.Drawing.Size(75,23);
-			this.butRename.TabIndex = 9;
-			this.butRename.Text = "Rename";
-			this.butRename.Click += new System.EventHandler(this.butRename_Click);
-			// 
-			// label13
-			// 
-			this.label13.Location = new System.Drawing.Point(10,45);
-			this.label13.Name = "label13";
-			this.label13.Size = new System.Drawing.Size(100,16);
-			this.label13.TabIndex = 5;
-			this.label13.Text = "New Name";
-			this.label13.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// label14
-			// 
-			this.label14.Location = new System.Drawing.Point(10,21);
-			this.label14.Name = "label14";
-			this.label14.Size = new System.Drawing.Size(100,16);
-			this.label14.TabIndex = 3;
-			this.label14.Text = "Column";
-			this.label14.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// groupBox6
-			// 
-			this.groupBox6.Controls.Add(this.radioAfter);
-			this.groupBox6.Controls.Add(this.radioFirst);
-			this.groupBox6.Controls.Add(this.butMoveCol);
-			this.groupBox6.Controls.Add(this.label15);
-			this.groupBox6.Controls.Add(this.comboColMove);
-			this.groupBox6.Controls.Add(this.comboColMoveAfter);
-			this.groupBox6.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.groupBox6.Location = new System.Drawing.Point(7,6);
-			this.groupBox6.Name = "groupBox6";
-			this.groupBox6.Size = new System.Drawing.Size(219,128);
-			this.groupBox6.TabIndex = 12;
-			this.groupBox6.TabStop = false;
-			this.groupBox6.Text = "Move Column";
-			// 
-			// radioAfter
-			// 
-			this.radioAfter.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.radioAfter.Checked = true;
-			this.radioAfter.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.radioAfter.Location = new System.Drawing.Point(8,61);
-			this.radioAfter.Name = "radioAfter";
-			this.radioAfter.Size = new System.Drawing.Size(72,19);
-			this.radioAfter.TabIndex = 11;
-			this.radioAfter.TabStop = true;
-			this.radioAfter.Text = "After";
-			this.radioAfter.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.radioAfter.Click += new System.EventHandler(this.radioAfter_Click);
-			// 
-			// radioFirst
-			// 
-			this.radioFirst.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.radioFirst.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.radioFirst.Location = new System.Drawing.Point(7,42);
-			this.radioFirst.Name = "radioFirst";
-			this.radioFirst.Size = new System.Drawing.Size(73,19);
-			this.radioFirst.TabIndex = 10;
-			this.radioFirst.Text = "First";
-			this.radioFirst.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.radioFirst.Click += new System.EventHandler(this.radioFirst_Click);
-			// 
-			// butMoveCol
-			// 
-			this.butMoveCol.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.butMoveCol.Location = new System.Drawing.Point(132,95);
-			this.butMoveCol.Name = "butMoveCol";
-			this.butMoveCol.Size = new System.Drawing.Size(75,23);
-			this.butMoveCol.TabIndex = 9;
-			this.butMoveCol.Text = "Move";
-			this.butMoveCol.Click += new System.EventHandler(this.butMoveCol_Click);
-			// 
-			// label15
-			// 
-			this.label15.Location = new System.Drawing.Point(11,21);
-			this.label15.Name = "label15";
-			this.label15.Size = new System.Drawing.Size(68,16);
-			this.label15.TabIndex = 3;
-			this.label15.Text = "Column";
-			this.label15.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// comboColMove
-			// 
-			this.comboColMove.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboColMove.Location = new System.Drawing.Point(85,18);
-			this.comboColMove.MaxDropDownItems = 100;
-			this.comboColMove.Name = "comboColMove";
-			this.comboColMove.Size = new System.Drawing.Size(123,21);
-			this.comboColMove.TabIndex = 14;
-			// 
-			// comboColMoveAfter
-			// 
-			this.comboColMoveAfter.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboColMoveAfter.Location = new System.Drawing.Point(85,59);
-			this.comboColMoveAfter.MaxDropDownItems = 100;
-			this.comboColMoveAfter.Name = "comboColMoveAfter";
-			this.comboColMoveAfter.Size = new System.Drawing.Size(123,21);
-			this.comboColMoveAfter.TabIndex = 15;
-			// 
-			// butValidate
-			// 
-			this.butValidate.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.butValidate.Location = new System.Drawing.Point(10,67);
-			this.butValidate.Name = "butValidate";
-			this.butValidate.Size = new System.Drawing.Size(75,23);
-			this.butValidate.TabIndex = 9;
-			this.butValidate.Text = "Validate";
-			this.butValidate.Click += new System.EventHandler(this.butValidate_Click);
-			// 
-			// butImport
-			// 
-			this.butImport.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.butImport.Location = new System.Drawing.Point(10,99);
-			this.butImport.Name = "butImport";
-			this.butImport.Size = new System.Drawing.Size(75,23);
-			this.butImport.TabIndex = 10;
-			this.butImport.Text = "Import";
-			this.butImport.Click += new System.EventHandler(this.butImport_Click);
-			// 
-			// tabContr
-			// 
-			this.tabContr.Controls.Add(this.tabLoadData);
-			this.tabContr.Controls.Add(this.tabSpecialtyF);
-			this.tabContr.Controls.Add(this.tabPK);
-			this.tabContr.Controls.Add(this.tabColumns);
-			this.tabContr.Controls.Add(this.tabQuery);
-			this.tabContr.Controls.Add(this.tabRows);
-			this.tabContr.Controls.Add(this.tabEdit);
-			this.tabContr.Controls.Add(this.tabFinalImport);
-			this.tabContr.Location = new System.Drawing.Point(0,0);
-			this.tabContr.Name = "tabContr";
-			this.tabContr.SelectedIndex = 0;
-			this.tabContr.Size = new System.Drawing.Size(1054,243);
-			this.tabContr.TabIndex = 14;
-			// 
-			// tabLoadData
-			// 
-			this.tabLoadData.Controls.Add(this.label42);
-			this.tabLoadData.Controls.Add(this.comboTableName);
-			this.tabLoadData.Controls.Add(this.butDeleteTable);
-			this.tabLoadData.Controls.Add(this.label22);
-			this.tabLoadData.Controls.Add(this.label21);
-			this.tabLoadData.Controls.Add(this.butLoad);
-			this.tabLoadData.Controls.Add(this.butBrowse);
-			this.tabLoadData.Controls.Add(this.label20);
-			this.tabLoadData.Controls.Add(this.textFileName);
-			this.tabLoadData.Controls.Add(this.textNewTable);
-			this.tabLoadData.Controls.Add(this.textBox1);
-			this.tabLoadData.Controls.Add(this.label19);
-			this.tabLoadData.Controls.Add(this.label18);
-			this.tabLoadData.Controls.Add(this.butRefresh);
-			this.tabLoadData.Controls.Add(this.label2);
-			this.tabLoadData.Location = new System.Drawing.Point(4,22);
-			this.tabLoadData.Name = "tabLoadData";
-			this.tabLoadData.Size = new System.Drawing.Size(1046,217);
-			this.tabLoadData.TabIndex = 0;
-			this.tabLoadData.Text = "Load Data";
-			// 
-			// label42
-			// 
-			this.label42.Location = new System.Drawing.Point(193,75);
-			this.label42.Name = "label42";
-			this.label42.Size = new System.Drawing.Size(836,18);
-			this.label42.TabIndex = 19;
-			this.label42.Text = "If you get an error loading,  consider the possibility that your A-Z folder is no" +
-    "t accessible from both the server and the workstation";
-			this.label42.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			// 
-			// comboTableName
-			// 
-			this.comboTableName.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboTableName.Location = new System.Drawing.Point(112,125);
-			this.comboTableName.MaxDropDownItems = 18;
-			this.comboTableName.Name = "comboTableName";
-			this.comboTableName.Size = new System.Drawing.Size(122,21);
-			this.comboTableName.TabIndex = 18;
-			this.comboTableName.SelectedIndexChanged += new System.EventHandler(this.comboTableName_SelectedIndexChanged);
-			// 
-			// butDeleteTable
-			// 
-			this.butDeleteTable.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.butDeleteTable.Location = new System.Drawing.Point(323,123);
-			this.butDeleteTable.Name = "butDeleteTable";
-			this.butDeleteTable.Size = new System.Drawing.Size(75,23);
-			this.butDeleteTable.TabIndex = 17;
-			this.butDeleteTable.Text = "Delete";
-			this.butDeleteTable.Click += new System.EventHandler(this.butDeleteTable_Click);
-			// 
-			// label22
-			// 
-			this.label22.Font = new System.Drawing.Font("Microsoft Sans Serif",9.5F,System.Drawing.FontStyle.Bold,System.Drawing.GraphicsUnit.Point,((byte)(0)));
-			this.label22.Location = new System.Drawing.Point(11,101);
-			this.label22.Name = "label22";
-			this.label22.Size = new System.Drawing.Size(631,19);
-			this.label22.TabIndex = 16;
-			this.label22.Text = "Or, if you already loaded a file earlier, you can select an existing temp table t" +
-    "o work with";
-			this.label22.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			// 
-			// label21
-			// 
-			this.label21.Font = new System.Drawing.Font("Microsoft Sans Serif",9.5F,System.Drawing.FontStyle.Bold,System.Drawing.GraphicsUnit.Point,((byte)(0)));
-			this.label21.Location = new System.Drawing.Point(8,169);
-			this.label21.Name = "label21";
-			this.label21.Size = new System.Drawing.Size(477,19);
-			this.label21.TabIndex = 15;
-			this.label21.Text = "Then, check settings in the Primary Key tab";
-			this.label21.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			// 
-			// butLoad
-			// 
-			this.butLoad.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.butLoad.Location = new System.Drawing.Point(112,72);
-			this.butLoad.Name = "butLoad";
-			this.butLoad.Size = new System.Drawing.Size(75,23);
-			this.butLoad.TabIndex = 14;
-			this.butLoad.Text = "Load";
-			this.butLoad.Click += new System.EventHandler(this.butLoad_Click);
-			// 
-			// butBrowse
-			// 
-			this.butBrowse.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.butBrowse.Location = new System.Drawing.Point(772,21);
-			this.butBrowse.Name = "butBrowse";
-			this.butBrowse.Size = new System.Drawing.Size(75,23);
-			this.butBrowse.TabIndex = 13;
-			this.butBrowse.Text = "Browse";
-			this.butBrowse.Click += new System.EventHandler(this.butBrowse_Click);
-			// 
-			// label20
-			// 
-			this.label20.Location = new System.Drawing.Point(8,51);
-			this.label20.Name = "label20";
-			this.label20.Size = new System.Drawing.Size(100,16);
-			this.label20.TabIndex = 12;
-			this.label20.Text = "File Name";
-			this.label20.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// textFileName
-			// 
-			this.textFileName.Location = new System.Drawing.Point(112,49);
-			this.textFileName.Name = "textFileName";
-			this.textFileName.Size = new System.Drawing.Size(736,20);
-			this.textFileName.TabIndex = 11;
-			// 
-			// textNewTable
-			// 
-			this.textNewTable.Location = new System.Drawing.Point(156,27);
-			this.textNewTable.Name = "textNewTable";
-			this.textNewTable.Size = new System.Drawing.Size(123,20);
-			this.textNewTable.TabIndex = 10;
-			// 
-			// textBox1
-			// 
-			this.textBox1.Location = new System.Drawing.Point(112,27);
-			this.textBox1.Name = "textBox1";
-			this.textBox1.ReadOnly = true;
-			this.textBox1.Size = new System.Drawing.Size(46,20);
-			this.textBox1.TabIndex = 9;
-			this.textBox1.Text = "temp";
-			this.textBox1.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-			// 
-			// label19
-			// 
-			this.label19.Location = new System.Drawing.Point(9,29);
-			this.label19.Name = "label19";
-			this.label19.Size = new System.Drawing.Size(100,16);
-			this.label19.TabIndex = 8;
-			this.label19.Text = "New Table Name";
-			this.label19.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// label18
-			// 
-			this.label18.Font = new System.Drawing.Font("Microsoft Sans Serif",9.5F,System.Drawing.FontStyle.Bold,System.Drawing.GraphicsUnit.Point,((byte)(0)));
-			this.label18.Location = new System.Drawing.Point(9,5);
-			this.label18.Name = "label18";
-			this.label18.Size = new System.Drawing.Size(477,19);
-			this.label18.TabIndex = 7;
-			this.label18.Text = "Load data from a text file into a temp table";
-			this.label18.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			// 
-			// tabSpecialtyF
-			// 
-			this.tabSpecialtyF.Controls.Add(this.groupBox15);
-			this.tabSpecialtyF.Controls.Add(this.groupBox13);
-			this.tabSpecialtyF.Controls.Add(this.groupBox3);
-			this.tabSpecialtyF.Location = new System.Drawing.Point(4,22);
-			this.tabSpecialtyF.Name = "tabSpecialtyF";
-			this.tabSpecialtyF.Size = new System.Drawing.Size(1046,217);
-			this.tabSpecialtyF.TabIndex = 3;
-			this.tabSpecialtyF.Text = "Specialty Functions";
-			// 
-			// groupBox15
-			// 
-			this.groupBox15.Controls.Add(this.textBox7);
-			this.groupBox15.Controls.Add(this.label46);
-			this.groupBox15.Controls.Add(this.label45);
-			this.groupBox15.Controls.Add(this.textBox5);
-			this.groupBox15.Controls.Add(this.label43);
-			this.groupBox15.Controls.Add(this.textBox6);
-			this.groupBox15.Controls.Add(this.label44);
-			this.groupBox15.Controls.Add(this.butGuarAccount);
-			this.groupBox15.Controls.Add(this.textBox4);
-			this.groupBox15.Controls.Add(this.label41);
-			this.groupBox15.Controls.Add(this.textBox3);
-			this.groupBox15.Controls.Add(this.label40);
-			this.groupBox15.Controls.Add(this.textBox2);
-			this.groupBox15.Controls.Add(this.label38);
-			this.groupBox15.Controls.Add(this.label39);
-			this.groupBox15.Controls.Add(this.butGuarantor);
-			this.groupBox15.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.groupBox15.Location = new System.Drawing.Point(634,4);
-			this.groupBox15.Name = "groupBox15";
-			this.groupBox15.Size = new System.Drawing.Size(302,200);
-			this.groupBox15.TabIndex = 11;
-			this.groupBox15.TabStop = false;
-			this.groupBox15.Text = "Fill Guarantor";
-			// 
-			// textBox7
-			// 
-			this.textBox7.Location = new System.Drawing.Point(122,133);
-			this.textBox7.Name = "textBox7";
-			this.textBox7.ReadOnly = true;
-			this.textBox7.Size = new System.Drawing.Size(167,20);
-			this.textBox7.TabIndex = 29;
-			this.textBox7.Text = "tempHoH";
-			// 
-			// label46
-			// 
-			this.label46.Location = new System.Drawing.Point(5,135);
-			this.label46.Name = "label46";
-			this.label46.Size = new System.Drawing.Size(115,16);
-			this.label46.TabIndex = 28;
-			this.label46.Text = "HoH Indic Column";
-			this.label46.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// label45
-			// 
-			this.label45.Location = new System.Drawing.Point(9,98);
-			this.label45.Name = "label45";
-			this.label45.Size = new System.Drawing.Size(100,17);
-			this.label45.TabIndex = 27;
-			this.label45.Text = "OR:";
-			// 
-			// textBox5
-			// 
-			this.textBox5.Location = new System.Drawing.Point(122,153);
-			this.textBox5.Name = "textBox5";
-			this.textBox5.ReadOnly = true;
-			this.textBox5.Size = new System.Drawing.Size(167,20);
-			this.textBox5.TabIndex = 26;
-			this.textBox5.Text = "Guarantor";
-			// 
-			// label43
-			// 
-			this.label43.Location = new System.Drawing.Point(5,155);
-			this.label43.Name = "label43";
-			this.label43.Size = new System.Drawing.Size(115,16);
-			this.label43.TabIndex = 25;
-			this.label43.Text = "Destination Column";
-			this.label43.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// textBox6
-			// 
-			this.textBox6.Location = new System.Drawing.Point(122,113);
-			this.textBox6.Name = "textBox6";
-			this.textBox6.ReadOnly = true;
-			this.textBox6.Size = new System.Drawing.Size(167,20);
-			this.textBox6.TabIndex = 24;
-			this.textBox6.Text = "tempAccountNum";
-			// 
-			// label44
-			// 
-			this.label44.Location = new System.Drawing.Point(5,115);
-			this.label44.Name = "label44";
-			this.label44.Size = new System.Drawing.Size(115,16);
-			this.label44.TabIndex = 23;
-			this.label44.Text = "Reference Column";
-			this.label44.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// butGuarAccount
-			// 
-			this.butGuarAccount.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.butGuarAccount.Location = new System.Drawing.Point(215,174);
-			this.butGuarAccount.Name = "butGuarAccount";
-			this.butGuarAccount.Size = new System.Drawing.Size(75,22);
-			this.butGuarAccount.TabIndex = 22;
-			this.butGuarAccount.Text = "Fill";
-			this.butGuarAccount.Click += new System.EventHandler(this.butGuarAccount_Click);
-			// 
-			// textBox4
-			// 
-			this.textBox4.Location = new System.Drawing.Point(121,32);
-			this.textBox4.Name = "textBox4";
-			this.textBox4.ReadOnly = true;
-			this.textBox4.Size = new System.Drawing.Size(167,20);
-			this.textBox4.TabIndex = 21;
-			this.textBox4.Text = "ChartNumber";
-			// 
-			// label41
-			// 
-			this.label41.Location = new System.Drawing.Point(4,34);
-			this.label41.Name = "label41";
-			this.label41.Size = new System.Drawing.Size(115,16);
-			this.label41.TabIndex = 20;
-			this.label41.Text = "Key Column";
-			this.label41.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// textBox3
-			// 
-			this.textBox3.Location = new System.Drawing.Point(121,72);
-			this.textBox3.Name = "textBox3";
-			this.textBox3.ReadOnly = true;
-			this.textBox3.Size = new System.Drawing.Size(167,20);
-			this.textBox3.TabIndex = 19;
-			this.textBox3.Text = "Guarantor";
-			// 
-			// label40
-			// 
-			this.label40.Location = new System.Drawing.Point(4,75);
-			this.label40.Name = "label40";
-			this.label40.Size = new System.Drawing.Size(115,16);
-			this.label40.TabIndex = 18;
-			this.label40.Text = "Destination Column";
-			this.label40.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// textBox2
-			// 
-			this.textBox2.Location = new System.Drawing.Point(121,52);
-			this.textBox2.Name = "textBox2";
-			this.textBox2.ReadOnly = true;
-			this.textBox2.Size = new System.Drawing.Size(167,20);
-			this.textBox2.TabIndex = 17;
-			this.textBox2.Text = "tempGuarantor";
-			// 
-			// label38
-			// 
-			this.label38.Location = new System.Drawing.Point(4,54);
-			this.label38.Name = "label38";
-			this.label38.Size = new System.Drawing.Size(115,16);
-			this.label38.TabIndex = 16;
-			this.label38.Text = "Reference Column";
-			this.label38.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// label39
-			// 
-			this.label39.Location = new System.Drawing.Point(14,15);
-			this.label39.Name = "label39";
-			this.label39.Size = new System.Drawing.Size(275,20);
-			this.label39.TabIndex = 12;
-			this.label39.Text = "Used when the guarantor is not in PatNum format.";
-			// 
-			// butGuarantor
-			// 
-			this.butGuarantor.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.butGuarantor.Location = new System.Drawing.Point(214,92);
-			this.butGuarantor.Name = "butGuarantor";
-			this.butGuarantor.Size = new System.Drawing.Size(75,22);
-			this.butGuarantor.TabIndex = 9;
-			this.butGuarantor.Text = "Fill";
-			this.butGuarantor.Click += new System.EventHandler(this.butGuarantor_Click);
-			// 
-			// groupBox13
-			// 
-			this.groupBox13.Controls.Add(this.comboColDateTo);
-			this.groupBox13.Controls.Add(this.label29);
-			this.groupBox13.Controls.Add(this.label30);
-			this.groupBox13.Controls.Add(this.butConvertDate);
-			this.groupBox13.Controls.Add(this.textDateBase);
-			this.groupBox13.Controls.Add(this.label33);
-			this.groupBox13.Controls.Add(this.label35);
-			this.groupBox13.Controls.Add(this.comboColDateFrom);
-			this.groupBox13.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.groupBox13.Location = new System.Drawing.Point(7,4);
-			this.groupBox13.Name = "groupBox13";
-			this.groupBox13.Size = new System.Drawing.Size(302,189);
-			this.groupBox13.TabIndex = 10;
-			this.groupBox13.TabStop = false;
-			this.groupBox13.Text = "Convert numbers to dates";
-			// 
-			// comboColDateTo
-			// 
-			this.comboColDateTo.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboColDateTo.Location = new System.Drawing.Point(121,76);
-			this.comboColDateTo.MaxDropDownItems = 100;
-			this.comboColDateTo.Name = "comboColDateTo";
-			this.comboColDateTo.Size = new System.Drawing.Size(170,21);
-			this.comboColDateTo.TabIndex = 16;
-			// 
-			// label29
-			// 
-			this.label29.Location = new System.Drawing.Point(14,20);
-			this.label29.Name = "label29";
-			this.label29.Size = new System.Drawing.Size(275,30);
-			this.label29.TabIndex = 12;
-			this.label29.Text = "The number of days since a given date";
-			// 
-			// label30
-			// 
-			this.label30.Location = new System.Drawing.Point(16,80);
-			this.label30.Name = "label30";
-			this.label30.Size = new System.Drawing.Size(100,16);
-			this.label30.TabIndex = 10;
-			this.label30.Text = "Destination Col";
-			this.label30.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// butConvertDate
-			// 
-			this.butConvertDate.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.butConvertDate.Location = new System.Drawing.Point(218,150);
-			this.butConvertDate.Name = "butConvertDate";
-			this.butConvertDate.Size = new System.Drawing.Size(75,23);
-			this.butConvertDate.TabIndex = 9;
-			this.butConvertDate.Text = "Convert";
-			this.butConvertDate.Click += new System.EventHandler(this.butConvertDate_Click);
-			// 
-			// textDateBase
-			// 
-			this.textDateBase.Location = new System.Drawing.Point(121,100);
-			this.textDateBase.Name = "textDateBase";
-			this.textDateBase.Size = new System.Drawing.Size(96,20);
-			this.textDateBase.TabIndex = 6;
-			// 
-			// label33
-			// 
-			this.label33.Location = new System.Drawing.Point(4,102);
-			this.label33.Name = "label33";
-			this.label33.Size = new System.Drawing.Size(115,16);
-			this.label33.TabIndex = 5;
-			this.label33.Text = "Base date";
-			this.label33.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// label35
-			// 
-			this.label35.Location = new System.Drawing.Point(16,57);
-			this.label35.Name = "label35";
-			this.label35.Size = new System.Drawing.Size(100,16);
-			this.label35.TabIndex = 3;
-			this.label35.Text = "Source Column";
-			this.label35.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// comboColDateFrom
-			// 
-			this.comboColDateFrom.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboColDateFrom.Location = new System.Drawing.Point(121,52);
-			this.comboColDateFrom.MaxDropDownItems = 100;
-			this.comboColDateFrom.Name = "comboColDateFrom";
-			this.comboColDateFrom.Size = new System.Drawing.Size(170,21);
-			this.comboColDateFrom.TabIndex = 15;
-			// 
-			// tabPK
-			// 
-			this.tabPK.Controls.Add(this.checkDontUsePK);
-			this.tabPK.Controls.Add(this.label25);
-			this.tabPK.Controls.Add(this.groupBox7);
-			this.tabPK.Controls.Add(this.butClearPK);
-			this.tabPK.Controls.Add(this.comboColPK);
-			this.tabPK.Controls.Add(this.label1);
-			this.tabPK.Controls.Add(this.butSetPK);
-			this.tabPK.Location = new System.Drawing.Point(4,22);
-			this.tabPK.Name = "tabPK";
-			this.tabPK.Size = new System.Drawing.Size(1046,217);
-			this.tabPK.TabIndex = 6;
-			this.tabPK.Text = "Primary Key";
-			// 
-			// checkDontUsePK
-			// 
-			this.checkDontUsePK.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkDontUsePK.Location = new System.Drawing.Point(234,14);
-			this.checkDontUsePK.Name = "checkDontUsePK";
-			this.checkDontUsePK.Size = new System.Drawing.Size(375,19);
-			this.checkDontUsePK.TabIndex = 31;
-			this.checkDontUsePK.Text = "Do not use the primary key values in the final import";
-			// 
-			// label25
-			// 
-			this.label25.Location = new System.Drawing.Point(114,125);
-			this.label25.Name = "label25";
-			this.label25.Size = new System.Drawing.Size(599,19);
-			this.label25.TabIndex = 30;
-			this.label25.Text = "If you set an empty column as the primary key, it will automatically be filled wi" +
-    "th numbers";
-			// 
-			// groupBox7
-			// 
-			this.groupBox7.Controls.Add(this.radioPatients);
-			this.groupBox7.Controls.Add(this.radioCarriers);
-			this.groupBox7.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.groupBox7.Location = new System.Drawing.Point(15,11);
-			this.groupBox7.Name = "groupBox7";
-			this.groupBox7.Size = new System.Drawing.Size(200,64);
-			this.groupBox7.TabIndex = 29;
-			this.groupBox7.TabStop = false;
-			this.groupBox7.Text = "Table Type";
-			// 
-			// radioPatients
-			// 
-			this.radioPatients.Checked = true;
-			this.radioPatients.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.radioPatients.Location = new System.Drawing.Point(16,20);
-			this.radioPatients.Name = "radioPatients";
-			this.radioPatients.Size = new System.Drawing.Size(154,18);
-			this.radioPatients.TabIndex = 19;
-			this.radioPatients.TabStop = true;
-			this.radioPatients.Text = "Patients";
-			this.radioPatients.Click += new System.EventHandler(this.radioPatients_Click);
-			// 
-			// radioCarriers
-			// 
-			this.radioCarriers.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.radioCarriers.Location = new System.Drawing.Point(16,37);
-			this.radioCarriers.Name = "radioCarriers";
-			this.radioCarriers.Size = new System.Drawing.Size(154,18);
-			this.radioCarriers.TabIndex = 20;
-			this.radioCarriers.Text = "Carriers";
-			this.radioCarriers.Click += new System.EventHandler(this.radioCarriers_Click);
-			// 
-			// butClearPK
-			// 
-			this.butClearPK.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.butClearPK.Location = new System.Drawing.Point(319,96);
-			this.butClearPK.Name = "butClearPK";
-			this.butClearPK.Size = new System.Drawing.Size(69,23);
-			this.butClearPK.TabIndex = 28;
-			this.butClearPK.Text = "Clear";
-			this.butClearPK.Click += new System.EventHandler(this.butClearPK_Click);
-			// 
-			// comboColPK
-			// 
-			this.comboColPK.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboColPK.Location = new System.Drawing.Point(116,97);
-			this.comboColPK.MaxDropDownItems = 100;
-			this.comboColPK.Name = "comboColPK";
-			this.comboColPK.Size = new System.Drawing.Size(123,21);
-			this.comboColPK.TabIndex = 27;
-			// 
-			// label1
-			// 
-			this.label1.Location = new System.Drawing.Point(12,100);
-			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(100,16);
-			this.label1.TabIndex = 25;
-			this.label1.Text = "Primary Key";
-			this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// butSetPK
-			// 
-			this.butSetPK.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.butSetPK.Location = new System.Drawing.Point(242,96);
-			this.butSetPK.Name = "butSetPK";
-			this.butSetPK.Size = new System.Drawing.Size(70,23);
-			this.butSetPK.TabIndex = 26;
-			this.butSetPK.Text = "Set";
-			this.butSetPK.Click += new System.EventHandler(this.butSetPK_Click);
-			// 
-			// tabColumns
-			// 
-			this.tabColumns.Controls.Add(this.groupBox14);
-			this.tabColumns.Controls.Add(this.groupBox8);
-			this.tabColumns.Controls.Add(this.groupBox2);
-			this.tabColumns.Controls.Add(this.groupBox6);
-			this.tabColumns.Controls.Add(this.groupBox4);
-			this.tabColumns.Controls.Add(this.groupBox5);
-			this.tabColumns.Location = new System.Drawing.Point(4,22);
-			this.tabColumns.Name = "tabColumns";
-			this.tabColumns.Size = new System.Drawing.Size(1046,217);
-			this.tabColumns.TabIndex = 1;
-			this.tabColumns.Text = "Columns";
-			// 
-			// groupBox14
-			// 
-			this.groupBox14.Controls.Add(this.textColsDelete);
-			this.groupBox14.Controls.Add(this.butColsDelete);
-			this.groupBox14.Controls.Add(this.label37);
-			this.groupBox14.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.groupBox14.Location = new System.Drawing.Point(262,136);
-			this.groupBox14.Name = "groupBox14";
-			this.groupBox14.Size = new System.Drawing.Size(250,77);
-			this.groupBox14.TabIndex = 15;
-			this.groupBox14.TabStop = false;
-			this.groupBox14.Text = "Delete Multiple Columns From the End";
-			// 
-			// textColsDelete
-			// 
-			this.textColsDelete.Location = new System.Drawing.Point(198,18);
-			this.textColsDelete.Name = "textColsDelete";
-			this.textColsDelete.Size = new System.Drawing.Size(42,20);
-			this.textColsDelete.TabIndex = 10;
-			// 
-			// butColsDelete
-			// 
-			this.butColsDelete.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.butColsDelete.Location = new System.Drawing.Point(166,47);
-			this.butColsDelete.Name = "butColsDelete";
-			this.butColsDelete.Size = new System.Drawing.Size(75,23);
-			this.butColsDelete.TabIndex = 9;
-			this.butColsDelete.Text = "Delete";
-			this.butColsDelete.Click += new System.EventHandler(this.butColsDelete_Click);
-			// 
-			// label37
-			// 
-			this.label37.Location = new System.Drawing.Point(15,21);
-			this.label37.Name = "label37";
-			this.label37.Size = new System.Drawing.Size(176,16);
-			this.label37.TabIndex = 3;
-			this.label37.Text = "Number of Columns";
-			this.label37.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// groupBox8
-			// 
-			this.groupBox8.Controls.Add(this.comboColAdd);
-			this.groupBox8.Controls.Add(this.butAddCol);
-			this.groupBox8.Controls.Add(this.label24);
-			this.groupBox8.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.groupBox8.Location = new System.Drawing.Point(549,136);
-			this.groupBox8.Name = "groupBox8";
-			this.groupBox8.Size = new System.Drawing.Size(250,77);
-			this.groupBox8.TabIndex = 14;
-			this.groupBox8.TabStop = false;
-			this.groupBox8.Text = "Add Column";
-			// 
-			// comboColAdd
-			// 
-			this.comboColAdd.Location = new System.Drawing.Point(119,18);
-			this.comboColAdd.MaxDropDownItems = 100;
-			this.comboColAdd.Name = "comboColAdd";
-			this.comboColAdd.Size = new System.Drawing.Size(123,21);
-			this.comboColAdd.TabIndex = 18;
-			// 
-			// butAddCol
-			// 
-			this.butAddCol.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.butAddCol.Location = new System.Drawing.Point(166,47);
-			this.butAddCol.Name = "butAddCol";
-			this.butAddCol.Size = new System.Drawing.Size(75,23);
-			this.butAddCol.TabIndex = 9;
-			this.butAddCol.Text = "Add";
-			this.butAddCol.Click += new System.EventHandler(this.butAddCol_Click);
-			// 
-			// label24
-			// 
-			this.label24.Location = new System.Drawing.Point(10,21);
-			this.label24.Name = "label24";
-			this.label24.Size = new System.Drawing.Size(100,16);
-			this.label24.TabIndex = 3;
-			this.label24.Text = "Name";
-			this.label24.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// groupBox2
-			// 
-			this.groupBox2.Controls.Add(this.comboColDelete);
-			this.groupBox2.Controls.Add(this.butDeleteCol);
-			this.groupBox2.Controls.Add(this.label16);
-			this.groupBox2.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.groupBox2.Location = new System.Drawing.Point(7,136);
-			this.groupBox2.Name = "groupBox2";
-			this.groupBox2.Size = new System.Drawing.Size(250,77);
-			this.groupBox2.TabIndex = 13;
-			this.groupBox2.TabStop = false;
-			this.groupBox2.Text = "Delete Column";
-			// 
-			// comboColDelete
-			// 
-			this.comboColDelete.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboColDelete.Location = new System.Drawing.Point(118,18);
-			this.comboColDelete.MaxDropDownItems = 100;
-			this.comboColDelete.Name = "comboColDelete";
-			this.comboColDelete.Size = new System.Drawing.Size(123,21);
-			this.comboColDelete.TabIndex = 16;
-			// 
-			// butDeleteCol
-			// 
-			this.butDeleteCol.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.butDeleteCol.Location = new System.Drawing.Point(166,47);
-			this.butDeleteCol.Name = "butDeleteCol";
-			this.butDeleteCol.Size = new System.Drawing.Size(75,23);
-			this.butDeleteCol.TabIndex = 9;
-			this.butDeleteCol.Text = "Delete";
-			this.butDeleteCol.Click += new System.EventHandler(this.butDeleteCol_Click);
-			// 
-			// label16
-			// 
-			this.label16.Location = new System.Drawing.Point(10,21);
-			this.label16.Name = "label16";
-			this.label16.Size = new System.Drawing.Size(100,16);
-			this.label16.TabIndex = 3;
-			this.label16.Text = "Column";
-			this.label16.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// tabQuery
-			// 
-			this.tabQuery.Controls.Add(this.label28);
-			this.tabQuery.Controls.Add(this.butQuerySubmit);
-			this.tabQuery.Controls.Add(this.textQuery);
-			this.tabQuery.Location = new System.Drawing.Point(4,22);
-			this.tabQuery.Name = "tabQuery";
-			this.tabQuery.Size = new System.Drawing.Size(1046,217);
-			this.tabQuery.TabIndex = 7;
-			this.tabQuery.Text = "Query";
-			// 
-			// label28
-			// 
-			this.label28.Location = new System.Drawing.Point(545,8);
-			this.label28.Name = "label28";
-			this.label28.Size = new System.Drawing.Size(182,30);
-			this.label28.TabIndex = 11;
-			this.label28.Text = "Should be a command, not a query to retrieve a table";
-			// 
-			// butQuerySubmit
-			// 
-			this.butQuerySubmit.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.butQuerySubmit.Location = new System.Drawing.Point(545,169);
-			this.butQuerySubmit.Name = "butQuerySubmit";
-			this.butQuerySubmit.Size = new System.Drawing.Size(75,23);
-			this.butQuerySubmit.TabIndex = 10;
-			this.butQuerySubmit.Text = "Submit";
-			this.butQuerySubmit.Click += new System.EventHandler(this.butQuerySubmit_Click);
-			// 
-			// textQuery
-			// 
-			this.textQuery.Font = new System.Drawing.Font("Courier New",8.25F,System.Drawing.FontStyle.Regular,System.Drawing.GraphicsUnit.Point,((byte)(0)));
-			this.textQuery.Location = new System.Drawing.Point(1,2);
-			this.textQuery.Multiline = true;
-			this.textQuery.Name = "textQuery";
-			this.textQuery.Size = new System.Drawing.Size(537,190);
-			this.textQuery.TabIndex = 0;
-			// 
-			// tabRows
-			// 
-			this.tabRows.Controls.Add(this.label23);
-			this.tabRows.Controls.Add(this.textRows);
-			this.tabRows.Controls.Add(this.label12);
-			this.tabRows.Controls.Add(this.butDeleteRows);
-			this.tabRows.Location = new System.Drawing.Point(4,22);
-			this.tabRows.Name = "tabRows";
-			this.tabRows.Size = new System.Drawing.Size(1046,217);
-			this.tabRows.TabIndex = 5;
-			this.tabRows.Text = "Rows";
-			// 
-			// label23
-			// 
-			this.label23.Location = new System.Drawing.Point(134,15);
-			this.label23.Name = "label23";
-			this.label23.Size = new System.Drawing.Size(377,35);
-			this.label23.TabIndex = 14;
-			this.label23.Text = "Warning!  There is a bug in the delete feature.  Do not delete a row if you have " +
+				System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormImport));
+				this.grid = new System.Windows.Forms.DataGrid();
+				this.tabFinalImport = new System.Windows.Forms.TabPage();
+				this.radioUpdate = new System.Windows.Forms.RadioButton();
+				this.radioInsert = new System.Windows.Forms.RadioButton();
+				this.butImport = new System.Windows.Forms.Button();
+				this.butValidate = new System.Windows.Forms.Button();
+				this.tabScript = new System.Windows.Forms.TabPage();
+				this.label47 = new System.Windows.Forms.Label();
+				this.butReloadScript = new System.Windows.Forms.Button();
+				this.butSaveScript = new System.Windows.Forms.Button();
+				this.butRunScript = new System.Windows.Forms.Button();
+				this.textScript = new System.Windows.Forms.TextBox();
+				this.tabEdit = new System.Windows.Forms.TabPage();
+				this.groupBox12 = new System.Windows.Forms.GroupBox();
+				this.comboColCopyFrom = new System.Windows.Forms.ComboBox();
+				this.butColCopy = new System.Windows.Forms.Button();
+				this.label34 = new System.Windows.Forms.Label();
+				this.groupBox11 = new System.Windows.Forms.GroupBox();
+				this.textPadLength = new System.Windows.Forms.TextBox();
+				this.label32 = new System.Windows.Forms.Label();
+				this.textPadChar = new System.Windows.Forms.TextBox();
+				this.label31 = new System.Windows.Forms.Label();
+				this.butColPad = new System.Windows.Forms.Button();
+				this.groupBox10 = new System.Windows.Forms.GroupBox();
+				this.label36 = new System.Windows.Forms.Label();
+				this.butColCapAll = new System.Windows.Forms.Button();
+				this.label26 = new System.Windows.Forms.Label();
+				this.butColCap = new System.Windows.Forms.Button();
+				this.groupBox9 = new System.Windows.Forms.GroupBox();
+				this.butColClear = new System.Windows.Forms.Button();
+				this.groupBox1 = new System.Windows.Forms.GroupBox();
+				this.butSubstitute = new System.Windows.Forms.Button();
+				this.textSubstNew = new System.Windows.Forms.TextBox();
+				this.label5 = new System.Windows.Forms.Label();
+				this.textSubstOld = new System.Windows.Forms.TextBox();
+				this.label4 = new System.Windows.Forms.Label();
+				this.label3 = new System.Windows.Forms.Label();
+				this.comboColEdit = new System.Windows.Forms.ComboBox();
+				this.tabRows = new System.Windows.Forms.TabPage();
+				this.groupBox18 = new System.Windows.Forms.GroupBox();
+				this.label12 = new System.Windows.Forms.Label();
+				this.butDeleteRows = new System.Windows.Forms.Button();
+				this.label23 = new System.Windows.Forms.Label();
+				this.textRows = new System.Windows.Forms.TextBox();
+				this.groupBox19 = new System.Windows.Forms.GroupBox();
+				this.label55 = new System.Windows.Forms.Label();
+				this.upDownCopyToInc = new System.Windows.Forms.NumericUpDown();
+				this.label54 = new System.Windows.Forms.Label();
+				this.upDownCopyFromInc = new System.Windows.Forms.NumericUpDown();
+				this.label51 = new System.Windows.Forms.Label();
+				this.label50 = new System.Windows.Forms.Label();
+				this.butCopyAppendRows = new System.Windows.Forms.Button();
+				this.butToTableNoColumn = new System.Windows.Forms.Button();
+				this.butToTableDown = new System.Windows.Forms.Button();
+				this.butToTableUp = new System.Windows.Forms.Button();
+				this.butFromTableNoColumn = new System.Windows.Forms.Button();
+				this.butFromTableDown = new System.Windows.Forms.Button();
+				this.butFromTableUp = new System.Windows.Forms.Button();
+				this.listCopyToTable = new System.Windows.Forms.ListBox();
+				this.listCopyFromTable = new System.Windows.Forms.ListBox();
+				this.comboCopyToTable = new System.Windows.Forms.ComboBox();
+				this.comboCopyFromTable = new System.Windows.Forms.ComboBox();
+				this.label53 = new System.Windows.Forms.Label();
+				this.label52 = new System.Windows.Forms.Label();
+				this.tabQuery = new System.Windows.Forms.TabPage();
+				this.label28 = new System.Windows.Forms.Label();
+				this.butQuerySubmit = new System.Windows.Forms.Button();
+				this.textQuery = new System.Windows.Forms.TextBox();
+				this.tabColumns = new System.Windows.Forms.TabPage();
+				this.groupBox14 = new System.Windows.Forms.GroupBox();
+				this.textColsDelete = new System.Windows.Forms.TextBox();
+				this.butColsDelete = new System.Windows.Forms.Button();
+				this.label37 = new System.Windows.Forms.Label();
+				this.groupBox8 = new System.Windows.Forms.GroupBox();
+				this.comboColAdd = new System.Windows.Forms.ComboBox();
+				this.butAddCol = new System.Windows.Forms.Button();
+				this.label24 = new System.Windows.Forms.Label();
+				this.groupBox2 = new System.Windows.Forms.GroupBox();
+				this.comboColDelete = new System.Windows.Forms.ComboBox();
+				this.butDeleteCol = new System.Windows.Forms.Button();
+				this.label16 = new System.Windows.Forms.Label();
+				this.groupBox6 = new System.Windows.Forms.GroupBox();
+				this.radioAfter = new System.Windows.Forms.RadioButton();
+				this.radioFirst = new System.Windows.Forms.RadioButton();
+				this.butMoveCol = new System.Windows.Forms.Button();
+				this.label15 = new System.Windows.Forms.Label();
+				this.comboColMove = new System.Windows.Forms.ComboBox();
+				this.comboColMoveAfter = new System.Windows.Forms.ComboBox();
+				this.groupBox4 = new System.Windows.Forms.GroupBox();
+				this.comboColCombine2 = new System.Windows.Forms.ComboBox();
+				this.comboColCombine1 = new System.Windows.Forms.ComboBox();
+				this.butCombine = new System.Windows.Forms.Button();
+				this.textSepChar = new System.Windows.Forms.TextBox();
+				this.label9 = new System.Windows.Forms.Label();
+				this.label10 = new System.Windows.Forms.Label();
+				this.label11 = new System.Windows.Forms.Label();
+				this.groupBox5 = new System.Windows.Forms.GroupBox();
+				this.comboColNewName = new System.Windows.Forms.ComboBox();
+				this.comboColRename = new System.Windows.Forms.ComboBox();
+				this.butRename = new System.Windows.Forms.Button();
+				this.label13 = new System.Windows.Forms.Label();
+				this.label14 = new System.Windows.Forms.Label();
+				this.tabPK = new System.Windows.Forms.TabPage();
+				this.checkDontUsePK = new System.Windows.Forms.CheckBox();
+				this.label25 = new System.Windows.Forms.Label();
+				this.groupBox7 = new System.Windows.Forms.GroupBox();
+				this.radioPatients = new System.Windows.Forms.RadioButton();
+				this.radioCarriers = new System.Windows.Forms.RadioButton();
+				this.butClearPK = new System.Windows.Forms.Button();
+				this.comboColPK = new System.Windows.Forms.ComboBox();
+				this.label1 = new System.Windows.Forms.Label();
+				this.butSetPK = new System.Windows.Forms.Button();
+				this.tabSpecialtyF = new System.Windows.Forms.TabPage();
+				this.groupBox15 = new System.Windows.Forms.GroupBox();
+				this.textBox7 = new System.Windows.Forms.TextBox();
+				this.label46 = new System.Windows.Forms.Label();
+				this.label45 = new System.Windows.Forms.Label();
+				this.textBox5 = new System.Windows.Forms.TextBox();
+				this.label43 = new System.Windows.Forms.Label();
+				this.textBox6 = new System.Windows.Forms.TextBox();
+				this.label44 = new System.Windows.Forms.Label();
+				this.butGuarAccount = new System.Windows.Forms.Button();
+				this.textBox4 = new System.Windows.Forms.TextBox();
+				this.label41 = new System.Windows.Forms.Label();
+				this.textBox3 = new System.Windows.Forms.TextBox();
+				this.label40 = new System.Windows.Forms.Label();
+				this.textBox2 = new System.Windows.Forms.TextBox();
+				this.label38 = new System.Windows.Forms.Label();
+				this.label39 = new System.Windows.Forms.Label();
+				this.butGuarantor = new System.Windows.Forms.Button();
+				this.groupBox13 = new System.Windows.Forms.GroupBox();
+				this.comboColDateTo = new System.Windows.Forms.ComboBox();
+				this.label29 = new System.Windows.Forms.Label();
+				this.label30 = new System.Windows.Forms.Label();
+				this.butConvertDate = new System.Windows.Forms.Button();
+				this.textDateBase = new System.Windows.Forms.TextBox();
+				this.label33 = new System.Windows.Forms.Label();
+				this.label35 = new System.Windows.Forms.Label();
+				this.comboColDateFrom = new System.Windows.Forms.ComboBox();
+				this.groupBox3 = new System.Windows.Forms.GroupBox();
+				this.textDateNewFormat = new System.Windows.Forms.TextBox();
+				this.label27 = new System.Windows.Forms.Label();
+				this.comboColDateDest = new System.Windows.Forms.ComboBox();
+				this.label17 = new System.Windows.Forms.Label();
+				this.label6 = new System.Windows.Forms.Label();
+				this.butFixDates = new System.Windows.Forms.Button();
+				this.textDateOldFormats = new System.Windows.Forms.TextBox();
+				this.label7 = new System.Windows.Forms.Label();
+				this.label8 = new System.Windows.Forms.Label();
+				this.comboColDateSource = new System.Windows.Forms.ComboBox();
+				this.tabLoadData = new System.Windows.Forms.TabPage();
+				this.groupBox16 = new System.Windows.Forms.GroupBox();
+				this.radioGenerateColNames = new System.Windows.Forms.RadioButton();
+				this.radioColNamRow = new System.Windows.Forms.RadioButton();
+				this.label42 = new System.Windows.Forms.Label();
+				this.comboTableName = new System.Windows.Forms.ComboBox();
+				this.butDeleteTable = new System.Windows.Forms.Button();
+				this.label22 = new System.Windows.Forms.Label();
+				this.label21 = new System.Windows.Forms.Label();
+				this.butLoad = new System.Windows.Forms.Button();
+				this.butBrowse = new System.Windows.Forms.Button();
+				this.label20 = new System.Windows.Forms.Label();
+				this.textFileName = new System.Windows.Forms.TextBox();
+				this.textNewTable = new System.Windows.Forms.TextBox();
+				this.textBox1 = new System.Windows.Forms.TextBox();
+				this.label19 = new System.Windows.Forms.Label();
+				this.label18 = new System.Windows.Forms.Label();
+				this.butRefresh = new System.Windows.Forms.Button();
+				this.label2 = new System.Windows.Forms.Label();
+				this.tabContr = new System.Windows.Forms.TabControl();
+				this.tabPage1 = new System.Windows.Forms.TabPage();
+				this.groupBox17 = new System.Windows.Forms.GroupBox();
+				this.butCreateTemporaryTable = new System.Windows.Forms.Button();
+				this.label49 = new System.Windows.Forms.Label();
+				this.upDownNumTempCols = new System.Windows.Forms.NumericUpDown();
+				this.textCreateTempName = new System.Windows.Forms.TextBox();
+				this.textBox9 = new System.Windows.Forms.TextBox();
+				this.label48 = new System.Windows.Forms.Label();
+				((System.ComponentModel.ISupportInitialize)(this.grid)).BeginInit();
+				this.tabFinalImport.SuspendLayout();
+				this.tabScript.SuspendLayout();
+				this.tabEdit.SuspendLayout();
+				this.groupBox12.SuspendLayout();
+				this.groupBox11.SuspendLayout();
+				this.groupBox10.SuspendLayout();
+				this.groupBox9.SuspendLayout();
+				this.groupBox1.SuspendLayout();
+				this.tabRows.SuspendLayout();
+				this.groupBox18.SuspendLayout();
+				this.groupBox19.SuspendLayout();
+				((System.ComponentModel.ISupportInitialize)(this.upDownCopyToInc)).BeginInit();
+				((System.ComponentModel.ISupportInitialize)(this.upDownCopyFromInc)).BeginInit();
+				this.tabQuery.SuspendLayout();
+				this.tabColumns.SuspendLayout();
+				this.groupBox14.SuspendLayout();
+				this.groupBox8.SuspendLayout();
+				this.groupBox2.SuspendLayout();
+				this.groupBox6.SuspendLayout();
+				this.groupBox4.SuspendLayout();
+				this.groupBox5.SuspendLayout();
+				this.tabPK.SuspendLayout();
+				this.groupBox7.SuspendLayout();
+				this.tabSpecialtyF.SuspendLayout();
+				this.groupBox15.SuspendLayout();
+				this.groupBox13.SuspendLayout();
+				this.groupBox3.SuspendLayout();
+				this.tabLoadData.SuspendLayout();
+				this.groupBox16.SuspendLayout();
+				this.tabContr.SuspendLayout();
+				this.tabPage1.SuspendLayout();
+				this.groupBox17.SuspendLayout();
+				((System.ComponentModel.ISupportInitialize)(this.upDownNumTempCols)).BeginInit();
+				this.SuspendLayout();
+				// 
+				// grid
+				// 
+				this.grid.DataMember = "";
+				this.grid.HeaderForeColor = System.Drawing.SystemColors.ControlText;
+				this.grid.Location = new System.Drawing.Point(0,244);
+				this.grid.Name = "grid";
+				this.grid.ReadOnly = true;
+				this.grid.Size = new System.Drawing.Size(1191,602);
+				this.grid.TabIndex = 0;
+				// 
+				// tabFinalImport
+				// 
+				this.tabFinalImport.Controls.Add(this.radioUpdate);
+				this.tabFinalImport.Controls.Add(this.radioInsert);
+				this.tabFinalImport.Controls.Add(this.butImport);
+				this.tabFinalImport.Controls.Add(this.butValidate);
+				this.tabFinalImport.Location = new System.Drawing.Point(4,22);
+				this.tabFinalImport.Name = "tabFinalImport";
+				this.tabFinalImport.Size = new System.Drawing.Size(1046,217);
+				this.tabFinalImport.TabIndex = 4;
+				this.tabFinalImport.Text = "Final Import";
+				this.tabFinalImport.UseVisualStyleBackColor = true;
+				// 
+				// radioUpdate
+				// 
+				this.radioUpdate.FlatStyle = System.Windows.Forms.FlatStyle.System;
+				this.radioUpdate.Location = new System.Drawing.Point(9,27);
+				this.radioUpdate.Name = "radioUpdate";
+				this.radioUpdate.Size = new System.Drawing.Size(290,18);
+				this.radioUpdate.TabIndex = 12;
+				this.radioUpdate.Text = "Update some columns for existing rows";
+				// 
+				// radioInsert
+				// 
+				this.radioInsert.Checked = true;
+				this.radioInsert.FlatStyle = System.Windows.Forms.FlatStyle.System;
+				this.radioInsert.Location = new System.Drawing.Point(9,7);
+				this.radioInsert.Name = "radioInsert";
+				this.radioInsert.Size = new System.Drawing.Size(266,18);
+				this.radioInsert.TabIndex = 11;
+				this.radioInsert.TabStop = true;
+				this.radioInsert.Text = "Insert new rows";
+				// 
+				// butImport
+				// 
+				this.butImport.FlatStyle = System.Windows.Forms.FlatStyle.System;
+				this.butImport.Location = new System.Drawing.Point(10,99);
+				this.butImport.Name = "butImport";
+				this.butImport.Size = new System.Drawing.Size(75,23);
+				this.butImport.TabIndex = 10;
+				this.butImport.Text = "Import";
+				this.butImport.Click += new System.EventHandler(this.butImport_Click);
+				// 
+				// butValidate
+				// 
+				this.butValidate.FlatStyle = System.Windows.Forms.FlatStyle.System;
+				this.butValidate.Location = new System.Drawing.Point(10,67);
+				this.butValidate.Name = "butValidate";
+				this.butValidate.Size = new System.Drawing.Size(75,23);
+				this.butValidate.TabIndex = 9;
+				this.butValidate.Text = "Validate";
+				this.butValidate.Click += new System.EventHandler(this.butValidate_Click);
+				// 
+				// tabScript
+				// 
+				this.tabScript.Controls.Add(this.label47);
+				this.tabScript.Controls.Add(this.butReloadScript);
+				this.tabScript.Controls.Add(this.butSaveScript);
+				this.tabScript.Controls.Add(this.butRunScript);
+				this.tabScript.Controls.Add(this.textScript);
+				this.tabScript.Location = new System.Drawing.Point(4,22);
+				this.tabScript.Name = "tabScript";
+				this.tabScript.Size = new System.Drawing.Size(1046,217);
+				this.tabScript.TabIndex = 8;
+				this.tabScript.Text = "Script";
+				this.tabScript.UseVisualStyleBackColor = true;
+				// 
+				// label47
+				// 
+				this.label47.Location = new System.Drawing.Point(3,84);
+				this.label47.Name = "label47";
+				this.label47.Size = new System.Drawing.Size(72,46);
+				this.label47.TabIndex = 13;
+				this.label47.Text = "(not needed)";
+				// 
+				// butReloadScript
+				// 
+				this.butReloadScript.FlatStyle = System.Windows.Forms.FlatStyle.System;
+				this.butReloadScript.Location = new System.Drawing.Point(0,58);
+				this.butReloadScript.Name = "butReloadScript";
+				this.butReloadScript.Size = new System.Drawing.Size(75,23);
+				this.butReloadScript.TabIndex = 12;
+				this.butReloadScript.Text = "Reload";
+				this.butReloadScript.Click += new System.EventHandler(this.butReloadScript_Click);
+				// 
+				// butSaveScript
+				// 
+				this.butSaveScript.FlatStyle = System.Windows.Forms.FlatStyle.System;
+				this.butSaveScript.Location = new System.Drawing.Point(0,29);
+				this.butSaveScript.Name = "butSaveScript";
+				this.butSaveScript.Size = new System.Drawing.Size(75,23);
+				this.butSaveScript.TabIndex = 11;
+				this.butSaveScript.Text = "Save";
+				this.butSaveScript.Click += new System.EventHandler(this.butSaveScript_Click);
+				// 
+				// butRunScript
+				// 
+				this.butRunScript.FlatStyle = System.Windows.Forms.FlatStyle.System;
+				this.butRunScript.Location = new System.Drawing.Point(0,0);
+				this.butRunScript.Name = "butRunScript";
+				this.butRunScript.Size = new System.Drawing.Size(75,23);
+				this.butRunScript.TabIndex = 10;
+				this.butRunScript.Text = "Run";
+				this.butRunScript.Click += new System.EventHandler(this.butRunScript_Click);
+				// 
+				// textScript
+				// 
+				this.textScript.AcceptsReturn = true;
+				this.textScript.Location = new System.Drawing.Point(75,1);
+				this.textScript.MaxLength = 327670000;
+				this.textScript.Multiline = true;
+				this.textScript.Name = "textScript";
+				this.textScript.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+				this.textScript.Size = new System.Drawing.Size(971,215);
+				this.textScript.TabIndex = 0;
+				// 
+				// tabEdit
+				// 
+				this.tabEdit.Controls.Add(this.groupBox12);
+				this.tabEdit.Controls.Add(this.groupBox11);
+				this.tabEdit.Controls.Add(this.groupBox10);
+				this.tabEdit.Controls.Add(this.groupBox9);
+				this.tabEdit.Controls.Add(this.groupBox1);
+				this.tabEdit.Controls.Add(this.label3);
+				this.tabEdit.Controls.Add(this.comboColEdit);
+				this.tabEdit.Location = new System.Drawing.Point(4,22);
+				this.tabEdit.Name = "tabEdit";
+				this.tabEdit.Size = new System.Drawing.Size(1046,217);
+				this.tabEdit.TabIndex = 2;
+				this.tabEdit.Text = "Edit";
+				this.tabEdit.UseVisualStyleBackColor = true;
+				// 
+				// groupBox12
+				// 
+				this.groupBox12.Controls.Add(this.comboColCopyFrom);
+				this.groupBox12.Controls.Add(this.butColCopy);
+				this.groupBox12.Controls.Add(this.label34);
+				this.groupBox12.FlatStyle = System.Windows.Forms.FlatStyle.System;
+				this.groupBox12.Location = new System.Drawing.Point(7,135);
+				this.groupBox12.Name = "groupBox12";
+				this.groupBox12.Size = new System.Drawing.Size(246,68);
+				this.groupBox12.TabIndex = 19;
+				this.groupBox12.TabStop = false;
+				this.groupBox12.Text = "Copy Column";
+				// 
+				// comboColCopyFrom
+				// 
+				this.comboColCopyFrom.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+				this.comboColCopyFrom.Location = new System.Drawing.Point(116,13);
+				this.comboColCopyFrom.MaxDropDownItems = 100;
+				this.comboColCopyFrom.Name = "comboColCopyFrom";
+				this.comboColCopyFrom.Size = new System.Drawing.Size(123,21);
+				this.comboColCopyFrom.TabIndex = 16;
+				// 
+				// butColCopy
+				// 
+				this.butColCopy.FlatStyle = System.Windows.Forms.FlatStyle.System;
+				this.butColCopy.Location = new System.Drawing.Point(163,38);
+				this.butColCopy.Name = "butColCopy";
+				this.butColCopy.Size = new System.Drawing.Size(75,23);
+				this.butColCopy.TabIndex = 9;
+				this.butColCopy.Text = "Copy";
+				this.butColCopy.Click += new System.EventHandler(this.butColCopy_Click);
+				// 
+				// label34
+				// 
+				this.label34.Location = new System.Drawing.Point(10,16);
+				this.label34.Name = "label34";
+				this.label34.Size = new System.Drawing.Size(100,16);
+				this.label34.TabIndex = 3;
+				this.label34.Text = "From Column";
+				this.label34.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+				// 
+				// groupBox11
+				// 
+				this.groupBox11.Controls.Add(this.textPadLength);
+				this.groupBox11.Controls.Add(this.label32);
+				this.groupBox11.Controls.Add(this.textPadChar);
+				this.groupBox11.Controls.Add(this.label31);
+				this.groupBox11.Controls.Add(this.butColPad);
+				this.groupBox11.FlatStyle = System.Windows.Forms.FlatStyle.System;
+				this.groupBox11.Location = new System.Drawing.Point(298,6);
+				this.groupBox11.Name = "groupBox11";
+				this.groupBox11.Size = new System.Drawing.Size(188,90);
+				this.groupBox11.TabIndex = 18;
+				this.groupBox11.TabStop = false;
+				this.groupBox11.Text = "Pad Left (Add characters on left)";
+				// 
+				// textPadLength
+				// 
+				this.textPadLength.Location = new System.Drawing.Point(148,37);
+				this.textPadLength.Name = "textPadLength";
+				this.textPadLength.Size = new System.Drawing.Size(31,20);
+				this.textPadLength.TabIndex = 22;
+				// 
+				// label32
+				// 
+				this.label32.Location = new System.Drawing.Point(43,39);
+				this.label32.Name = "label32";
+				this.label32.Size = new System.Drawing.Size(100,16);
+				this.label32.TabIndex = 21;
+				this.label32.Text = "Final Length";
+				this.label32.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+				// 
+				// textPadChar
+				// 
+				this.textPadChar.Location = new System.Drawing.Point(148,16);
+				this.textPadChar.MaxLength = 1;
+				this.textPadChar.Name = "textPadChar";
+				this.textPadChar.Size = new System.Drawing.Size(31,20);
+				this.textPadChar.TabIndex = 20;
+				// 
+				// label31
+				// 
+				this.label31.Location = new System.Drawing.Point(43,18);
+				this.label31.Name = "label31";
+				this.label31.Size = new System.Drawing.Size(100,16);
+				this.label31.TabIndex = 19;
+				this.label31.Text = "Pad Character";
+				this.label31.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+				// 
+				// butColPad
+				// 
+				this.butColPad.FlatStyle = System.Windows.Forms.FlatStyle.System;
+				this.butColPad.Location = new System.Drawing.Point(105,62);
+				this.butColPad.Name = "butColPad";
+				this.butColPad.Size = new System.Drawing.Size(75,23);
+				this.butColPad.TabIndex = 9;
+				this.butColPad.Text = "Pad";
+				this.butColPad.Click += new System.EventHandler(this.butColPad_Click);
+				// 
+				// groupBox10
+				// 
+				this.groupBox10.Controls.Add(this.label36);
+				this.groupBox10.Controls.Add(this.butColCapAll);
+				this.groupBox10.Controls.Add(this.label26);
+				this.groupBox10.Controls.Add(this.butColCap);
+				this.groupBox10.FlatStyle = System.Windows.Forms.FlatStyle.System;
+				this.groupBox10.Location = new System.Drawing.Point(498,10);
+				this.groupBox10.Name = "groupBox10";
+				this.groupBox10.Size = new System.Drawing.Size(244,95);
+				this.groupBox10.TabIndex = 17;
+				this.groupBox10.TabStop = false;
+				this.groupBox10.Text = "Capitalize first letter of each word";
+				// 
+				// label36
+				// 
+				this.label36.Location = new System.Drawing.Point(5,47);
+				this.label36.Name = "label36";
+				this.label36.Size = new System.Drawing.Size(155,40);
+				this.label36.TabIndex = 22;
+				this.label36.Text = "Fixes LName, FName, Address, Address2, and City";
+				this.label36.TextAlign = System.Drawing.ContentAlignment.TopRight;
+				// 
+				// butColCapAll
+				// 
+				this.butColCapAll.FlatStyle = System.Windows.Forms.FlatStyle.System;
+				this.butColCapAll.Location = new System.Drawing.Point(163,49);
+				this.butColCapAll.Name = "butColCapAll";
+				this.butColCapAll.Size = new System.Drawing.Size(75,23);
+				this.butColCapAll.TabIndex = 21;
+				this.butColCapAll.Text = "Capitalize";
+				this.butColCapAll.Click += new System.EventHandler(this.butColCapAll_Click);
+				// 
+				// label26
+				// 
+				this.label26.Location = new System.Drawing.Point(4,20);
+				this.label26.Name = "label26";
+				this.label26.Size = new System.Drawing.Size(155,16);
+				this.label26.TabIndex = 20;
+				this.label26.Text = "Selected Column Only";
+				this.label26.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+				// 
+				// butColCap
+				// 
+				this.butColCap.FlatStyle = System.Windows.Forms.FlatStyle.System;
+				this.butColCap.Location = new System.Drawing.Point(163,16);
+				this.butColCap.Name = "butColCap";
+				this.butColCap.Size = new System.Drawing.Size(75,23);
+				this.butColCap.TabIndex = 9;
+				this.butColCap.Text = "Capitalize";
+				this.butColCap.Click += new System.EventHandler(this.butColCap_Click);
+				// 
+				// groupBox9
+				// 
+				this.groupBox9.Controls.Add(this.butColClear);
+				this.groupBox9.FlatStyle = System.Windows.Forms.FlatStyle.System;
+				this.groupBox9.Location = new System.Drawing.Point(298,159);
+				this.groupBox9.Name = "groupBox9";
+				this.groupBox9.Size = new System.Drawing.Size(188,48);
+				this.groupBox9.TabIndex = 16;
+				this.groupBox9.TabStop = false;
+				this.groupBox9.Text = "Clear all values";
+				// 
+				// butColClear
+				// 
+				this.butColClear.FlatStyle = System.Windows.Forms.FlatStyle.System;
+				this.butColClear.Location = new System.Drawing.Point(105,17);
+				this.butColClear.Name = "butColClear";
+				this.butColClear.Size = new System.Drawing.Size(75,23);
+				this.butColClear.TabIndex = 9;
+				this.butColClear.Text = "Clear";
+				this.butColClear.Click += new System.EventHandler(this.butColClear_Click);
+				// 
+				// groupBox1
+				// 
+				this.groupBox1.Controls.Add(this.butSubstitute);
+				this.groupBox1.Controls.Add(this.textSubstNew);
+				this.groupBox1.Controls.Add(this.label5);
+				this.groupBox1.Controls.Add(this.textSubstOld);
+				this.groupBox1.Controls.Add(this.label4);
+				this.groupBox1.FlatStyle = System.Windows.Forms.FlatStyle.System;
+				this.groupBox1.Location = new System.Drawing.Point(8,39);
+				this.groupBox1.Name = "groupBox1";
+				this.groupBox1.Size = new System.Drawing.Size(245,91);
+				this.groupBox1.TabIndex = 7;
+				this.groupBox1.TabStop = false;
+				this.groupBox1.Text = "Substitution";
+				// 
+				// butSubstitute
+				// 
+				this.butSubstitute.FlatStyle = System.Windows.Forms.FlatStyle.System;
+				this.butSubstitute.Location = new System.Drawing.Point(162,62);
+				this.butSubstitute.Name = "butSubstitute";
+				this.butSubstitute.Size = new System.Drawing.Size(75,23);
+				this.butSubstitute.TabIndex = 9;
+				this.butSubstitute.Text = "Substitute";
+				this.butSubstitute.Click += new System.EventHandler(this.butSubstitute_Click);
+				// 
+				// textSubstNew
+				// 
+				this.textSubstNew.Location = new System.Drawing.Point(114,37);
+				this.textSubstNew.Name = "textSubstNew";
+				this.textSubstNew.Size = new System.Drawing.Size(123,20);
+				this.textSubstNew.TabIndex = 8;
+				// 
+				// label5
+				// 
+				this.label5.Location = new System.Drawing.Point(8,38);
+				this.label5.Name = "label5";
+				this.label5.Size = new System.Drawing.Size(100,16);
+				this.label5.TabIndex = 7;
+				this.label5.Text = "New Value";
+				this.label5.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+				// 
+				// textSubstOld
+				// 
+				this.textSubstOld.Location = new System.Drawing.Point(114,13);
+				this.textSubstOld.Name = "textSubstOld";
+				this.textSubstOld.Size = new System.Drawing.Size(123,20);
+				this.textSubstOld.TabIndex = 6;
+				// 
+				// label4
+				// 
+				this.label4.Location = new System.Drawing.Point(9,15);
+				this.label4.Name = "label4";
+				this.label4.Size = new System.Drawing.Size(100,16);
+				this.label4.TabIndex = 5;
+				this.label4.Text = "Old Value";
+				this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+				// 
+				// label3
+				// 
+				this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif",9F,System.Drawing.FontStyle.Bold,System.Drawing.GraphicsUnit.Point,((byte)(0)));
+				this.label3.Location = new System.Drawing.Point(9,7);
+				this.label3.Name = "label3";
+				this.label3.Size = new System.Drawing.Size(92,16);
+				this.label3.TabIndex = 3;
+				this.label3.Text = "Column";
+				this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+				// 
+				// comboColEdit
+				// 
+				this.comboColEdit.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+				this.comboColEdit.Location = new System.Drawing.Point(105,5);
+				this.comboColEdit.MaxDropDownItems = 100;
+				this.comboColEdit.Name = "comboColEdit";
+				this.comboColEdit.Size = new System.Drawing.Size(142,21);
+				this.comboColEdit.TabIndex = 8;
+				// 
+				// tabRows
+				// 
+				this.tabRows.Controls.Add(this.groupBox18);
+				this.tabRows.Controls.Add(this.groupBox19);
+				this.tabRows.Location = new System.Drawing.Point(4,22);
+				this.tabRows.Name = "tabRows";
+				this.tabRows.Size = new System.Drawing.Size(1046,217);
+				this.tabRows.TabIndex = 5;
+				this.tabRows.Text = "Rows";
+				this.tabRows.UseVisualStyleBackColor = true;
+				// 
+				// groupBox18
+				// 
+				this.groupBox18.AccessibleRole = System.Windows.Forms.AccessibleRole.None;
+				this.groupBox18.BackColor = System.Drawing.SystemColors.Control;
+				this.groupBox18.Controls.Add(this.label12);
+				this.groupBox18.Controls.Add(this.butDeleteRows);
+				this.groupBox18.Controls.Add(this.label23);
+				this.groupBox18.Controls.Add(this.textRows);
+				this.groupBox18.Location = new System.Drawing.Point(3,3);
+				this.groupBox18.Name = "groupBox18";
+				this.groupBox18.Size = new System.Drawing.Size(288,137);
+				this.groupBox18.TabIndex = 18;
+				this.groupBox18.TabStop = false;
+				this.groupBox18.Text = "Delete Rows";
+				// 
+				// label12
+				// 
+				this.label12.Location = new System.Drawing.Point(6,38);
+				this.label12.Name = "label12";
+				this.label12.Size = new System.Drawing.Size(100,19);
+				this.label12.TabIndex = 12;
+				this.label12.Text = "Number of Rows";
+				this.label12.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+				// 
+				// butDeleteRows
+				// 
+				this.butDeleteRows.FlatStyle = System.Windows.Forms.FlatStyle.System;
+				this.butDeleteRows.Location = new System.Drawing.Point(115,110);
+				this.butDeleteRows.Name = "butDeleteRows";
+				this.butDeleteRows.Size = new System.Drawing.Size(93,21);
+				this.butDeleteRows.TabIndex = 11;
+				this.butDeleteRows.Text = "Delete Row(s)";
+				this.butDeleteRows.Click += new System.EventHandler(this.butDeleteRows_Click);
+				// 
+				// label23
+				// 
+				this.label23.Location = new System.Drawing.Point(112,30);
+				this.label23.Name = "label23";
+				this.label23.Size = new System.Drawing.Size(170,74);
+				this.label23.TabIndex = 14;
+				this.label23.Text = "Warning!  There is a bug in the delete feature.  Do not delete a row if you have " +
     "reordered any column by clicking on a column header.";
-			// 
-			// textRows
-			// 
-			this.textRows.Location = new System.Drawing.Point(119,80);
-			this.textRows.Name = "textRows";
-			this.textRows.ReadOnly = true;
-			this.textRows.Size = new System.Drawing.Size(70,20);
-			this.textRows.TabIndex = 13;
-			// 
-			// label12
-			// 
-			this.label12.Location = new System.Drawing.Point(13,80);
-			this.label12.Name = "label12";
-			this.label12.Size = new System.Drawing.Size(100,19);
-			this.label12.TabIndex = 12;
-			this.label12.Text = "Number of Rows";
-			this.label12.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// butDeleteRows
-			// 
-			this.butDeleteRows.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.butDeleteRows.Location = new System.Drawing.Point(21,18);
-			this.butDeleteRows.Name = "butDeleteRows";
-			this.butDeleteRows.Size = new System.Drawing.Size(93,23);
-			this.butDeleteRows.TabIndex = 11;
-			this.butDeleteRows.Text = "Delete Row(s)";
-			this.butDeleteRows.Click += new System.EventHandler(this.butDeleteRows_Click);
-			// 
-			// tabEdit
-			// 
-			this.tabEdit.Controls.Add(this.groupBox12);
-			this.tabEdit.Controls.Add(this.groupBox11);
-			this.tabEdit.Controls.Add(this.groupBox10);
-			this.tabEdit.Controls.Add(this.groupBox9);
-			this.tabEdit.Controls.Add(this.groupBox1);
-			this.tabEdit.Controls.Add(this.label3);
-			this.tabEdit.Controls.Add(this.comboColEdit);
-			this.tabEdit.Location = new System.Drawing.Point(4,22);
-			this.tabEdit.Name = "tabEdit";
-			this.tabEdit.Size = new System.Drawing.Size(1046,217);
-			this.tabEdit.TabIndex = 2;
-			this.tabEdit.Text = "Edit";
-			// 
-			// groupBox12
-			// 
-			this.groupBox12.Controls.Add(this.comboColCopyFrom);
-			this.groupBox12.Controls.Add(this.butColCopy);
-			this.groupBox12.Controls.Add(this.label34);
-			this.groupBox12.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.groupBox12.Location = new System.Drawing.Point(7,135);
-			this.groupBox12.Name = "groupBox12";
-			this.groupBox12.Size = new System.Drawing.Size(246,68);
-			this.groupBox12.TabIndex = 19;
-			this.groupBox12.TabStop = false;
-			this.groupBox12.Text = "Copy Column";
-			// 
-			// comboColCopyFrom
-			// 
-			this.comboColCopyFrom.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboColCopyFrom.Location = new System.Drawing.Point(116,13);
-			this.comboColCopyFrom.MaxDropDownItems = 100;
-			this.comboColCopyFrom.Name = "comboColCopyFrom";
-			this.comboColCopyFrom.Size = new System.Drawing.Size(123,21);
-			this.comboColCopyFrom.TabIndex = 16;
-			// 
-			// butColCopy
-			// 
-			this.butColCopy.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.butColCopy.Location = new System.Drawing.Point(163,38);
-			this.butColCopy.Name = "butColCopy";
-			this.butColCopy.Size = new System.Drawing.Size(75,23);
-			this.butColCopy.TabIndex = 9;
-			this.butColCopy.Text = "Copy";
-			this.butColCopy.Click += new System.EventHandler(this.butColCopy_Click);
-			// 
-			// label34
-			// 
-			this.label34.Location = new System.Drawing.Point(10,16);
-			this.label34.Name = "label34";
-			this.label34.Size = new System.Drawing.Size(100,16);
-			this.label34.TabIndex = 3;
-			this.label34.Text = "From Column";
-			this.label34.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// groupBox11
-			// 
-			this.groupBox11.Controls.Add(this.textPadLength);
-			this.groupBox11.Controls.Add(this.label32);
-			this.groupBox11.Controls.Add(this.textPadChar);
-			this.groupBox11.Controls.Add(this.label31);
-			this.groupBox11.Controls.Add(this.butColPad);
-			this.groupBox11.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.groupBox11.Location = new System.Drawing.Point(298,6);
-			this.groupBox11.Name = "groupBox11";
-			this.groupBox11.Size = new System.Drawing.Size(188,90);
-			this.groupBox11.TabIndex = 18;
-			this.groupBox11.TabStop = false;
-			this.groupBox11.Text = "Pad Left (Add characters on left)";
-			// 
-			// textPadLength
-			// 
-			this.textPadLength.Location = new System.Drawing.Point(148,37);
-			this.textPadLength.Name = "textPadLength";
-			this.textPadLength.Size = new System.Drawing.Size(31,20);
-			this.textPadLength.TabIndex = 22;
-			// 
-			// label32
-			// 
-			this.label32.Location = new System.Drawing.Point(43,39);
-			this.label32.Name = "label32";
-			this.label32.Size = new System.Drawing.Size(100,16);
-			this.label32.TabIndex = 21;
-			this.label32.Text = "Final Length";
-			this.label32.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// textPadChar
-			// 
-			this.textPadChar.Location = new System.Drawing.Point(148,16);
-			this.textPadChar.MaxLength = 1;
-			this.textPadChar.Name = "textPadChar";
-			this.textPadChar.Size = new System.Drawing.Size(31,20);
-			this.textPadChar.TabIndex = 20;
-			// 
-			// label31
-			// 
-			this.label31.Location = new System.Drawing.Point(43,18);
-			this.label31.Name = "label31";
-			this.label31.Size = new System.Drawing.Size(100,16);
-			this.label31.TabIndex = 19;
-			this.label31.Text = "Pad Character";
-			this.label31.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// butColPad
-			// 
-			this.butColPad.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.butColPad.Location = new System.Drawing.Point(105,62);
-			this.butColPad.Name = "butColPad";
-			this.butColPad.Size = new System.Drawing.Size(75,23);
-			this.butColPad.TabIndex = 9;
-			this.butColPad.Text = "Pad";
-			this.butColPad.Click += new System.EventHandler(this.butColPad_Click);
-			// 
-			// groupBox10
-			// 
-			this.groupBox10.Controls.Add(this.label36);
-			this.groupBox10.Controls.Add(this.butColCapAll);
-			this.groupBox10.Controls.Add(this.label26);
-			this.groupBox10.Controls.Add(this.butColCap);
-			this.groupBox10.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.groupBox10.Location = new System.Drawing.Point(498,10);
-			this.groupBox10.Name = "groupBox10";
-			this.groupBox10.Size = new System.Drawing.Size(244,95);
-			this.groupBox10.TabIndex = 17;
-			this.groupBox10.TabStop = false;
-			this.groupBox10.Text = "Capitalize first letter of each word";
-			// 
-			// label36
-			// 
-			this.label36.Location = new System.Drawing.Point(5,47);
-			this.label36.Name = "label36";
-			this.label36.Size = new System.Drawing.Size(155,40);
-			this.label36.TabIndex = 22;
-			this.label36.Text = "Fixes LName, FName, Address, Address2, and City";
-			this.label36.TextAlign = System.Drawing.ContentAlignment.TopRight;
-			// 
-			// butColCapAll
-			// 
-			this.butColCapAll.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.butColCapAll.Location = new System.Drawing.Point(163,49);
-			this.butColCapAll.Name = "butColCapAll";
-			this.butColCapAll.Size = new System.Drawing.Size(75,23);
-			this.butColCapAll.TabIndex = 21;
-			this.butColCapAll.Text = "Capitalize";
-			this.butColCapAll.Click += new System.EventHandler(this.butColCapAll_Click);
-			// 
-			// label26
-			// 
-			this.label26.Location = new System.Drawing.Point(4,20);
-			this.label26.Name = "label26";
-			this.label26.Size = new System.Drawing.Size(155,16);
-			this.label26.TabIndex = 20;
-			this.label26.Text = "Selected Column Only";
-			this.label26.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// butColCap
-			// 
-			this.butColCap.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.butColCap.Location = new System.Drawing.Point(163,16);
-			this.butColCap.Name = "butColCap";
-			this.butColCap.Size = new System.Drawing.Size(75,23);
-			this.butColCap.TabIndex = 9;
-			this.butColCap.Text = "Capitalize";
-			this.butColCap.Click += new System.EventHandler(this.butColCap_Click);
-			// 
-			// groupBox9
-			// 
-			this.groupBox9.Controls.Add(this.butColClear);
-			this.groupBox9.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.groupBox9.Location = new System.Drawing.Point(298,159);
-			this.groupBox9.Name = "groupBox9";
-			this.groupBox9.Size = new System.Drawing.Size(188,48);
-			this.groupBox9.TabIndex = 16;
-			this.groupBox9.TabStop = false;
-			this.groupBox9.Text = "Clear all values";
-			// 
-			// butColClear
-			// 
-			this.butColClear.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.butColClear.Location = new System.Drawing.Point(105,17);
-			this.butColClear.Name = "butColClear";
-			this.butColClear.Size = new System.Drawing.Size(75,23);
-			this.butColClear.TabIndex = 9;
-			this.butColClear.Text = "Clear";
-			this.butColClear.Click += new System.EventHandler(this.butColClear_Click);
-			// 
-			// tabFinalImport
-			// 
-			this.tabFinalImport.Controls.Add(this.radioUpdate);
-			this.tabFinalImport.Controls.Add(this.radioInsert);
-			this.tabFinalImport.Controls.Add(this.butImport);
-			this.tabFinalImport.Controls.Add(this.butValidate);
-			this.tabFinalImport.Location = new System.Drawing.Point(4,22);
-			this.tabFinalImport.Name = "tabFinalImport";
-			this.tabFinalImport.Size = new System.Drawing.Size(1046,217);
-			this.tabFinalImport.TabIndex = 4;
-			this.tabFinalImport.Text = "Final Import";
-			// 
-			// radioUpdate
-			// 
-			this.radioUpdate.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.radioUpdate.Location = new System.Drawing.Point(9,27);
-			this.radioUpdate.Name = "radioUpdate";
-			this.radioUpdate.Size = new System.Drawing.Size(290,18);
-			this.radioUpdate.TabIndex = 12;
-			this.radioUpdate.Text = "Update some columns for existing rows";
-			// 
-			// radioInsert
-			// 
-			this.radioInsert.Checked = true;
-			this.radioInsert.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.radioInsert.Location = new System.Drawing.Point(9,7);
-			this.radioInsert.Name = "radioInsert";
-			this.radioInsert.Size = new System.Drawing.Size(266,18);
-			this.radioInsert.TabIndex = 11;
-			this.radioInsert.TabStop = true;
-			this.radioInsert.Text = "Insert new rows";
-			// 
-			// FormImport
-			// 
-			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
-			this.ClientSize = new System.Drawing.Size(1192,848);
-			this.Controls.Add(this.tabContr);
-			this.Controls.Add(this.grid);
-			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-			this.Name = "FormImport";
-			this.ShowInTaskbar = false;
-			this.Text = "Import";
-			this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
-			this.Load += new System.EventHandler(this.FormImport_Load);
-			((System.ComponentModel.ISupportInitialize)(this.grid)).EndInit();
-			this.groupBox1.ResumeLayout(false);
-			this.groupBox1.PerformLayout();
-			this.groupBox3.ResumeLayout(false);
-			this.groupBox3.PerformLayout();
-			this.groupBox4.ResumeLayout(false);
-			this.groupBox4.PerformLayout();
-			this.groupBox5.ResumeLayout(false);
-			this.groupBox6.ResumeLayout(false);
-			this.tabContr.ResumeLayout(false);
-			this.tabLoadData.ResumeLayout(false);
-			this.tabLoadData.PerformLayout();
-			this.tabSpecialtyF.ResumeLayout(false);
-			this.groupBox15.ResumeLayout(false);
-			this.groupBox15.PerformLayout();
-			this.groupBox13.ResumeLayout(false);
-			this.groupBox13.PerformLayout();
-			this.tabPK.ResumeLayout(false);
-			this.groupBox7.ResumeLayout(false);
-			this.tabColumns.ResumeLayout(false);
-			this.groupBox14.ResumeLayout(false);
-			this.groupBox14.PerformLayout();
-			this.groupBox8.ResumeLayout(false);
-			this.groupBox2.ResumeLayout(false);
-			this.tabQuery.ResumeLayout(false);
-			this.tabQuery.PerformLayout();
-			this.tabRows.ResumeLayout(false);
-			this.tabRows.PerformLayout();
-			this.tabEdit.ResumeLayout(false);
-			this.groupBox12.ResumeLayout(false);
-			this.groupBox11.ResumeLayout(false);
-			this.groupBox11.PerformLayout();
-			this.groupBox10.ResumeLayout(false);
-			this.groupBox9.ResumeLayout(false);
-			this.tabFinalImport.ResumeLayout(false);
-			this.ResumeLayout(false);
+				// 
+				// textRows
+				// 
+				this.textRows.BackColor = System.Drawing.SystemColors.ControlLightLight;
+				this.textRows.Location = new System.Drawing.Point(24,60);
+				this.textRows.Name = "textRows";
+				this.textRows.ReadOnly = true;
+				this.textRows.Size = new System.Drawing.Size(70,20);
+				this.textRows.TabIndex = 13;
+				// 
+				// groupBox19
+				// 
+				this.groupBox19.BackColor = System.Drawing.SystemColors.Control;
+				this.groupBox19.Controls.Add(this.label55);
+				this.groupBox19.Controls.Add(this.upDownCopyToInc);
+				this.groupBox19.Controls.Add(this.label54);
+				this.groupBox19.Controls.Add(this.upDownCopyFromInc);
+				this.groupBox19.Controls.Add(this.label51);
+				this.groupBox19.Controls.Add(this.label50);
+				this.groupBox19.Controls.Add(this.butCopyAppendRows);
+				this.groupBox19.Controls.Add(this.butToTableNoColumn);
+				this.groupBox19.Controls.Add(this.butToTableDown);
+				this.groupBox19.Controls.Add(this.butToTableUp);
+				this.groupBox19.Controls.Add(this.butFromTableNoColumn);
+				this.groupBox19.Controls.Add(this.butFromTableDown);
+				this.groupBox19.Controls.Add(this.butFromTableUp);
+				this.groupBox19.Controls.Add(this.listCopyToTable);
+				this.groupBox19.Controls.Add(this.listCopyFromTable);
+				this.groupBox19.Controls.Add(this.comboCopyToTable);
+				this.groupBox19.Controls.Add(this.comboCopyFromTable);
+				this.groupBox19.Controls.Add(this.label53);
+				this.groupBox19.Controls.Add(this.label52);
+				this.groupBox19.Location = new System.Drawing.Point(297,3);
+				this.groupBox19.Name = "groupBox19";
+				this.groupBox19.Size = new System.Drawing.Size(270,211);
+				this.groupBox19.TabIndex = 17;
+				this.groupBox19.TabStop = false;
+				this.groupBox19.Text = "Append Rows By Column";
+				// 
+				// label55
+				// 
+				this.label55.AutoSize = true;
+				this.label55.Location = new System.Drawing.Point(183,195);
+				this.label55.Name = "label55";
+				this.label55.Size = new System.Drawing.Size(22,13);
+				this.label55.TabIndex = 19;
+				this.label55.Text = "Inc";
+				// 
+				// upDownCopyToInc
+				// 
+				this.upDownCopyToInc.Location = new System.Drawing.Point(209,191);
+				this.upDownCopyToInc.Maximum = new decimal(new int[] {
+            1316134912,
+            2328,
+            0,
+            0});
+				this.upDownCopyToInc.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+				this.upDownCopyToInc.Name = "upDownCopyToInc";
+				this.upDownCopyToInc.Size = new System.Drawing.Size(46,20);
+				this.upDownCopyToInc.TabIndex = 18;
+				this.upDownCopyToInc.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+				// 
+				// label54
+				// 
+				this.label54.AutoSize = true;
+				this.label54.Location = new System.Drawing.Point(15,193);
+				this.label54.Name = "label54";
+				this.label54.Size = new System.Drawing.Size(22,13);
+				this.label54.TabIndex = 17;
+				this.label54.Text = "Inc";
+				// 
+				// upDownCopyFromInc
+				// 
+				this.upDownCopyFromInc.Location = new System.Drawing.Point(41,189);
+				this.upDownCopyFromInc.Maximum = new decimal(new int[] {
+            1316134912,
+            2328,
+            0,
+            0});
+				this.upDownCopyFromInc.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+				this.upDownCopyFromInc.Name = "upDownCopyFromInc";
+				this.upDownCopyFromInc.Size = new System.Drawing.Size(46,20);
+				this.upDownCopyFromInc.TabIndex = 16;
+				this.upDownCopyFromInc.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+				// 
+				// label51
+				// 
+				this.label51.AutoSize = true;
+				this.label51.Location = new System.Drawing.Point(132,61);
+				this.label51.Name = "label51";
+				this.label51.Size = new System.Drawing.Size(63,13);
+				this.label51.TabIndex = 15;
+				this.label51.Text = "To Columns";
+				// 
+				// label50
+				// 
+				this.label50.AutoSize = true;
+				this.label50.Location = new System.Drawing.Point(6,61);
+				this.label50.Name = "label50";
+				this.label50.Size = new System.Drawing.Size(73,13);
+				this.label50.TabIndex = 14;
+				this.label50.Text = "From Columns";
+				// 
+				// butCopyAppendRows
+				// 
+				this.butCopyAppendRows.Location = new System.Drawing.Point(97,183);
+				this.butCopyAppendRows.Name = "butCopyAppendRows";
+				this.butCopyAppendRows.Size = new System.Drawing.Size(75,26);
+				this.butCopyAppendRows.TabIndex = 13;
+				this.butCopyAppendRows.Text = "Append";
+				this.butCopyAppendRows.UseVisualStyleBackColor = true;
+				this.butCopyAppendRows.Click += new System.EventHandler(this.butCopyAppendRows_Click);
+				// 
+				// butToTableNoColumn
+				// 
+				this.butToTableNoColumn.Location = new System.Drawing.Point(171,153);
+				this.butToTableNoColumn.Name = "butToTableNoColumn";
+				this.butToTableNoColumn.Size = new System.Drawing.Size(85,27);
+				this.butToTableNoColumn.TabIndex = 12;
+				this.butToTableNoColumn.Text = "No Column";
+				this.butToTableNoColumn.UseVisualStyleBackColor = true;
+				this.butToTableNoColumn.Click += new System.EventHandler(this.butToTableNoColumn_Click);
+				// 
+				// butToTableDown
+				// 
+				this.butToTableDown.Image = global::OpenDental.Properties.Resources.down;
+				this.butToTableDown.Location = new System.Drawing.Point(152,153);
+				this.butToTableDown.Name = "butToTableDown";
+				this.butToTableDown.Size = new System.Drawing.Size(20,27);
+				this.butToTableDown.TabIndex = 11;
+				this.butToTableDown.UseVisualStyleBackColor = true;
+				this.butToTableDown.Click += new System.EventHandler(this.butToTableDown_Click);
+				// 
+				// butToTableUp
+				// 
+				this.butToTableUp.Image = global::OpenDental.Properties.Resources.up;
+				this.butToTableUp.Location = new System.Drawing.Point(134,153);
+				this.butToTableUp.Name = "butToTableUp";
+				this.butToTableUp.Size = new System.Drawing.Size(19,27);
+				this.butToTableUp.TabIndex = 10;
+				this.butToTableUp.UseVisualStyleBackColor = true;
+				this.butToTableUp.Click += new System.EventHandler(this.butToTableUp_Click);
+				// 
+				// butFromTableNoColumn
+				// 
+				this.butFromTableNoColumn.Location = new System.Drawing.Point(43,153);
+				this.butFromTableNoColumn.Name = "butFromTableNoColumn";
+				this.butFromTableNoColumn.Size = new System.Drawing.Size(85,27);
+				this.butFromTableNoColumn.TabIndex = 8;
+				this.butFromTableNoColumn.Text = "No Column";
+				this.butFromTableNoColumn.UseVisualStyleBackColor = true;
+				this.butFromTableNoColumn.Click += new System.EventHandler(this.butFromTableNoColumn_Click);
+				// 
+				// butFromTableDown
+				// 
+				this.butFromTableDown.Image = global::OpenDental.Properties.Resources.down;
+				this.butFromTableDown.Location = new System.Drawing.Point(24,153);
+				this.butFromTableDown.Name = "butFromTableDown";
+				this.butFromTableDown.Size = new System.Drawing.Size(20,27);
+				this.butFromTableDown.TabIndex = 7;
+				this.butFromTableDown.UseVisualStyleBackColor = true;
+				this.butFromTableDown.Click += new System.EventHandler(this.butFromTableDown_Click);
+				// 
+				// butFromTableUp
+				// 
+				this.butFromTableUp.Image = global::OpenDental.Properties.Resources.up;
+				this.butFromTableUp.Location = new System.Drawing.Point(6,153);
+				this.butFromTableUp.Name = "butFromTableUp";
+				this.butFromTableUp.Size = new System.Drawing.Size(19,27);
+				this.butFromTableUp.TabIndex = 6;
+				this.butFromTableUp.UseVisualStyleBackColor = true;
+				this.butFromTableUp.Click += new System.EventHandler(this.butFromTableUp_Click);
+				// 
+				// listCopyToTable
+				// 
+				this.listCopyToTable.FormattingEnabled = true;
+				this.listCopyToTable.Location = new System.Drawing.Point(135,80);
+				this.listCopyToTable.Name = "listCopyToTable";
+				this.listCopyToTable.Size = new System.Drawing.Size(120,69);
+				this.listCopyToTable.TabIndex = 5;
+				// 
+				// listCopyFromTable
+				// 
+				this.listCopyFromTable.FormattingEnabled = true;
+				this.listCopyFromTable.Location = new System.Drawing.Point(6,80);
+				this.listCopyFromTable.Name = "listCopyFromTable";
+				this.listCopyFromTable.Size = new System.Drawing.Size(120,69);
+				this.listCopyFromTable.TabIndex = 4;
+				// 
+				// comboCopyToTable
+				// 
+				this.comboCopyToTable.FormattingEnabled = true;
+				this.comboCopyToTable.Location = new System.Drawing.Point(135,35);
+				this.comboCopyToTable.Name = "comboCopyToTable";
+				this.comboCopyToTable.Size = new System.Drawing.Size(121,21);
+				this.comboCopyToTable.TabIndex = 3;
+				this.comboCopyToTable.SelectedIndexChanged += new System.EventHandler(this.comboCopyToTable_SelectedIndexChanged);
+				// 
+				// comboCopyFromTable
+				// 
+				this.comboCopyFromTable.FormattingEnabled = true;
+				this.comboCopyFromTable.Location = new System.Drawing.Point(6,35);
+				this.comboCopyFromTable.Name = "comboCopyFromTable";
+				this.comboCopyFromTable.Size = new System.Drawing.Size(121,21);
+				this.comboCopyFromTable.TabIndex = 2;
+				this.comboCopyFromTable.SelectedIndexChanged += new System.EventHandler(this.comboCopyFromTable_SelectedIndexChanged);
+				// 
+				// label53
+				// 
+				this.label53.AutoSize = true;
+				this.label53.Location = new System.Drawing.Point(131,17);
+				this.label53.Name = "label53";
+				this.label53.Size = new System.Drawing.Size(90,13);
+				this.label53.TabIndex = 1;
+				this.label53.Text = "Append To Table";
+				// 
+				// label52
+				// 
+				this.label52.AutoSize = true;
+				this.label52.Location = new System.Drawing.Point(6,17);
+				this.label52.Name = "label52";
+				this.label52.Size = new System.Drawing.Size(87,13);
+				this.label52.TabIndex = 0;
+				this.label52.Text = "Copy From Table";
+				// 
+				// tabQuery
+				// 
+				this.tabQuery.Controls.Add(this.label28);
+				this.tabQuery.Controls.Add(this.butQuerySubmit);
+				this.tabQuery.Controls.Add(this.textQuery);
+				this.tabQuery.Location = new System.Drawing.Point(4,22);
+				this.tabQuery.Name = "tabQuery";
+				this.tabQuery.Size = new System.Drawing.Size(1046,217);
+				this.tabQuery.TabIndex = 7;
+				this.tabQuery.Text = "Query";
+				this.tabQuery.UseVisualStyleBackColor = true;
+				// 
+				// label28
+				// 
+				this.label28.Location = new System.Drawing.Point(545,8);
+				this.label28.Name = "label28";
+				this.label28.Size = new System.Drawing.Size(182,30);
+				this.label28.TabIndex = 11;
+				this.label28.Text = "Should be a command, not a query to retrieve a table";
+				// 
+				// butQuerySubmit
+				// 
+				this.butQuerySubmit.FlatStyle = System.Windows.Forms.FlatStyle.System;
+				this.butQuerySubmit.Location = new System.Drawing.Point(545,169);
+				this.butQuerySubmit.Name = "butQuerySubmit";
+				this.butQuerySubmit.Size = new System.Drawing.Size(75,23);
+				this.butQuerySubmit.TabIndex = 10;
+				this.butQuerySubmit.Text = "Submit";
+				this.butQuerySubmit.Click += new System.EventHandler(this.butQuerySubmit_Click);
+				// 
+				// textQuery
+				// 
+				this.textQuery.Font = new System.Drawing.Font("Courier New",8.25F,System.Drawing.FontStyle.Regular,System.Drawing.GraphicsUnit.Point,((byte)(0)));
+				this.textQuery.Location = new System.Drawing.Point(1,2);
+				this.textQuery.Multiline = true;
+				this.textQuery.Name = "textQuery";
+				this.textQuery.Size = new System.Drawing.Size(537,190);
+				this.textQuery.TabIndex = 0;
+				// 
+				// tabColumns
+				// 
+				this.tabColumns.Controls.Add(this.groupBox14);
+				this.tabColumns.Controls.Add(this.groupBox8);
+				this.tabColumns.Controls.Add(this.groupBox2);
+				this.tabColumns.Controls.Add(this.groupBox6);
+				this.tabColumns.Controls.Add(this.groupBox4);
+				this.tabColumns.Controls.Add(this.groupBox5);
+				this.tabColumns.Location = new System.Drawing.Point(4,22);
+				this.tabColumns.Name = "tabColumns";
+				this.tabColumns.Size = new System.Drawing.Size(1046,217);
+				this.tabColumns.TabIndex = 1;
+				this.tabColumns.Text = "Columns";
+				this.tabColumns.UseVisualStyleBackColor = true;
+				// 
+				// groupBox14
+				// 
+				this.groupBox14.Controls.Add(this.textColsDelete);
+				this.groupBox14.Controls.Add(this.butColsDelete);
+				this.groupBox14.Controls.Add(this.label37);
+				this.groupBox14.FlatStyle = System.Windows.Forms.FlatStyle.System;
+				this.groupBox14.Location = new System.Drawing.Point(262,136);
+				this.groupBox14.Name = "groupBox14";
+				this.groupBox14.Size = new System.Drawing.Size(250,77);
+				this.groupBox14.TabIndex = 15;
+				this.groupBox14.TabStop = false;
+				this.groupBox14.Text = "Delete Multiple Columns From the End";
+				// 
+				// textColsDelete
+				// 
+				this.textColsDelete.Location = new System.Drawing.Point(198,18);
+				this.textColsDelete.Name = "textColsDelete";
+				this.textColsDelete.Size = new System.Drawing.Size(42,20);
+				this.textColsDelete.TabIndex = 10;
+				// 
+				// butColsDelete
+				// 
+				this.butColsDelete.FlatStyle = System.Windows.Forms.FlatStyle.System;
+				this.butColsDelete.Location = new System.Drawing.Point(166,47);
+				this.butColsDelete.Name = "butColsDelete";
+				this.butColsDelete.Size = new System.Drawing.Size(75,23);
+				this.butColsDelete.TabIndex = 9;
+				this.butColsDelete.Text = "Delete";
+				this.butColsDelete.Click += new System.EventHandler(this.butColsDelete_Click);
+				// 
+				// label37
+				// 
+				this.label37.Location = new System.Drawing.Point(15,21);
+				this.label37.Name = "label37";
+				this.label37.Size = new System.Drawing.Size(176,16);
+				this.label37.TabIndex = 3;
+				this.label37.Text = "Number of Columns";
+				this.label37.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+				// 
+				// groupBox8
+				// 
+				this.groupBox8.Controls.Add(this.comboColAdd);
+				this.groupBox8.Controls.Add(this.butAddCol);
+				this.groupBox8.Controls.Add(this.label24);
+				this.groupBox8.FlatStyle = System.Windows.Forms.FlatStyle.System;
+				this.groupBox8.Location = new System.Drawing.Point(517,136);
+				this.groupBox8.Name = "groupBox8";
+				this.groupBox8.Size = new System.Drawing.Size(250,77);
+				this.groupBox8.TabIndex = 14;
+				this.groupBox8.TabStop = false;
+				this.groupBox8.Text = "Add Column";
+				// 
+				// comboColAdd
+				// 
+				this.comboColAdd.Location = new System.Drawing.Point(119,18);
+				this.comboColAdd.MaxDropDownItems = 100;
+				this.comboColAdd.Name = "comboColAdd";
+				this.comboColAdd.Size = new System.Drawing.Size(123,21);
+				this.comboColAdd.TabIndex = 18;
+				// 
+				// butAddCol
+				// 
+				this.butAddCol.FlatStyle = System.Windows.Forms.FlatStyle.System;
+				this.butAddCol.Location = new System.Drawing.Point(166,47);
+				this.butAddCol.Name = "butAddCol";
+				this.butAddCol.Size = new System.Drawing.Size(75,23);
+				this.butAddCol.TabIndex = 9;
+				this.butAddCol.Text = "Add";
+				this.butAddCol.Click += new System.EventHandler(this.butAddCol_Click);
+				// 
+				// label24
+				// 
+				this.label24.Location = new System.Drawing.Point(10,21);
+				this.label24.Name = "label24";
+				this.label24.Size = new System.Drawing.Size(100,16);
+				this.label24.TabIndex = 3;
+				this.label24.Text = "Name";
+				this.label24.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+				// 
+				// groupBox2
+				// 
+				this.groupBox2.Controls.Add(this.comboColDelete);
+				this.groupBox2.Controls.Add(this.butDeleteCol);
+				this.groupBox2.Controls.Add(this.label16);
+				this.groupBox2.FlatStyle = System.Windows.Forms.FlatStyle.System;
+				this.groupBox2.Location = new System.Drawing.Point(7,136);
+				this.groupBox2.Name = "groupBox2";
+				this.groupBox2.Size = new System.Drawing.Size(250,77);
+				this.groupBox2.TabIndex = 13;
+				this.groupBox2.TabStop = false;
+				this.groupBox2.Text = "Delete Column";
+				// 
+				// comboColDelete
+				// 
+				this.comboColDelete.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+				this.comboColDelete.Location = new System.Drawing.Point(118,18);
+				this.comboColDelete.MaxDropDownItems = 100;
+				this.comboColDelete.Name = "comboColDelete";
+				this.comboColDelete.Size = new System.Drawing.Size(123,21);
+				this.comboColDelete.TabIndex = 16;
+				// 
+				// butDeleteCol
+				// 
+				this.butDeleteCol.FlatStyle = System.Windows.Forms.FlatStyle.System;
+				this.butDeleteCol.Location = new System.Drawing.Point(166,47);
+				this.butDeleteCol.Name = "butDeleteCol";
+				this.butDeleteCol.Size = new System.Drawing.Size(75,23);
+				this.butDeleteCol.TabIndex = 9;
+				this.butDeleteCol.Text = "Delete";
+				this.butDeleteCol.Click += new System.EventHandler(this.butDeleteCol_Click);
+				// 
+				// label16
+				// 
+				this.label16.Location = new System.Drawing.Point(10,21);
+				this.label16.Name = "label16";
+				this.label16.Size = new System.Drawing.Size(100,16);
+				this.label16.TabIndex = 3;
+				this.label16.Text = "Column";
+				this.label16.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+				// 
+				// groupBox6
+				// 
+				this.groupBox6.Controls.Add(this.radioAfter);
+				this.groupBox6.Controls.Add(this.radioFirst);
+				this.groupBox6.Controls.Add(this.butMoveCol);
+				this.groupBox6.Controls.Add(this.label15);
+				this.groupBox6.Controls.Add(this.comboColMove);
+				this.groupBox6.Controls.Add(this.comboColMoveAfter);
+				this.groupBox6.FlatStyle = System.Windows.Forms.FlatStyle.System;
+				this.groupBox6.Location = new System.Drawing.Point(7,6);
+				this.groupBox6.Name = "groupBox6";
+				this.groupBox6.Size = new System.Drawing.Size(219,128);
+				this.groupBox6.TabIndex = 12;
+				this.groupBox6.TabStop = false;
+				this.groupBox6.Text = "Move Column";
+				// 
+				// radioAfter
+				// 
+				this.radioAfter.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+				this.radioAfter.Checked = true;
+				this.radioAfter.FlatStyle = System.Windows.Forms.FlatStyle.System;
+				this.radioAfter.Location = new System.Drawing.Point(8,61);
+				this.radioAfter.Name = "radioAfter";
+				this.radioAfter.Size = new System.Drawing.Size(72,19);
+				this.radioAfter.TabIndex = 11;
+				this.radioAfter.TabStop = true;
+				this.radioAfter.Text = "After";
+				this.radioAfter.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+				this.radioAfter.Click += new System.EventHandler(this.radioAfter_Click);
+				// 
+				// radioFirst
+				// 
+				this.radioFirst.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+				this.radioFirst.FlatStyle = System.Windows.Forms.FlatStyle.System;
+				this.radioFirst.Location = new System.Drawing.Point(7,42);
+				this.radioFirst.Name = "radioFirst";
+				this.radioFirst.Size = new System.Drawing.Size(73,19);
+				this.radioFirst.TabIndex = 10;
+				this.radioFirst.Text = "First";
+				this.radioFirst.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+				this.radioFirst.Click += new System.EventHandler(this.radioFirst_Click);
+				// 
+				// butMoveCol
+				// 
+				this.butMoveCol.FlatStyle = System.Windows.Forms.FlatStyle.System;
+				this.butMoveCol.Location = new System.Drawing.Point(132,95);
+				this.butMoveCol.Name = "butMoveCol";
+				this.butMoveCol.Size = new System.Drawing.Size(75,23);
+				this.butMoveCol.TabIndex = 9;
+				this.butMoveCol.Text = "Move";
+				this.butMoveCol.Click += new System.EventHandler(this.butMoveCol_Click);
+				// 
+				// label15
+				// 
+				this.label15.Location = new System.Drawing.Point(11,21);
+				this.label15.Name = "label15";
+				this.label15.Size = new System.Drawing.Size(68,16);
+				this.label15.TabIndex = 3;
+				this.label15.Text = "Column";
+				this.label15.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+				// 
+				// comboColMove
+				// 
+				this.comboColMove.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+				this.comboColMove.Location = new System.Drawing.Point(85,18);
+				this.comboColMove.MaxDropDownItems = 100;
+				this.comboColMove.Name = "comboColMove";
+				this.comboColMove.Size = new System.Drawing.Size(123,21);
+				this.comboColMove.TabIndex = 14;
+				// 
+				// comboColMoveAfter
+				// 
+				this.comboColMoveAfter.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+				this.comboColMoveAfter.Location = new System.Drawing.Point(85,59);
+				this.comboColMoveAfter.MaxDropDownItems = 100;
+				this.comboColMoveAfter.Name = "comboColMoveAfter";
+				this.comboColMoveAfter.Size = new System.Drawing.Size(123,21);
+				this.comboColMoveAfter.TabIndex = 15;
+				// 
+				// groupBox4
+				// 
+				this.groupBox4.Controls.Add(this.comboColCombine2);
+				this.groupBox4.Controls.Add(this.comboColCombine1);
+				this.groupBox4.Controls.Add(this.butCombine);
+				this.groupBox4.Controls.Add(this.textSepChar);
+				this.groupBox4.Controls.Add(this.label9);
+				this.groupBox4.Controls.Add(this.label10);
+				this.groupBox4.Controls.Add(this.label11);
+				this.groupBox4.FlatStyle = System.Windows.Forms.FlatStyle.System;
+				this.groupBox4.Location = new System.Drawing.Point(230,6);
+				this.groupBox4.Name = "groupBox4";
+				this.groupBox4.Size = new System.Drawing.Size(235,128);
+				this.groupBox4.TabIndex = 10;
+				this.groupBox4.TabStop = false;
+				this.groupBox4.Text = "Combine Columns";
+				// 
+				// comboColCombine2
+				// 
+				this.comboColCombine2.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+				this.comboColCombine2.Location = new System.Drawing.Point(101,42);
+				this.comboColCombine2.MaxDropDownItems = 100;
+				this.comboColCombine2.Name = "comboColCombine2";
+				this.comboColCombine2.Size = new System.Drawing.Size(123,21);
+				this.comboColCombine2.TabIndex = 16;
+				// 
+				// comboColCombine1
+				// 
+				this.comboColCombine1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+				this.comboColCombine1.Location = new System.Drawing.Point(101,16);
+				this.comboColCombine1.MaxDropDownItems = 100;
+				this.comboColCombine1.Name = "comboColCombine1";
+				this.comboColCombine1.Size = new System.Drawing.Size(123,21);
+				this.comboColCombine1.TabIndex = 15;
+				// 
+				// butCombine
+				// 
+				this.butCombine.FlatStyle = System.Windows.Forms.FlatStyle.System;
+				this.butCombine.Location = new System.Drawing.Point(150,95);
+				this.butCombine.Name = "butCombine";
+				this.butCombine.Size = new System.Drawing.Size(75,23);
+				this.butCombine.TabIndex = 9;
+				this.butCombine.Text = "Combine";
+				this.butCombine.Click += new System.EventHandler(this.butCombine_Click);
+				// 
+				// textSepChar
+				// 
+				this.textSepChar.Location = new System.Drawing.Point(101,68);
+				this.textSepChar.Name = "textSepChar";
+				this.textSepChar.Size = new System.Drawing.Size(42,20);
+				this.textSepChar.TabIndex = 8;
+				// 
+				// label9
+				// 
+				this.label9.Location = new System.Drawing.Point(12,69);
+				this.label9.Name = "label9";
+				this.label9.Size = new System.Drawing.Size(83,16);
+				this.label9.TabIndex = 7;
+				this.label9.Text = "Sep Char";
+				this.label9.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+				// 
+				// label10
+				// 
+				this.label10.Location = new System.Drawing.Point(12,45);
+				this.label10.Name = "label10";
+				this.label10.Size = new System.Drawing.Size(83,16);
+				this.label10.TabIndex = 5;
+				this.label10.Text = "Column 2";
+				this.label10.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+				// 
+				// label11
+				// 
+				this.label11.Location = new System.Drawing.Point(12,21);
+				this.label11.Name = "label11";
+				this.label11.Size = new System.Drawing.Size(83,16);
+				this.label11.TabIndex = 3;
+				this.label11.Text = "Column 1";
+				this.label11.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+				// 
+				// groupBox5
+				// 
+				this.groupBox5.Controls.Add(this.comboColNewName);
+				this.groupBox5.Controls.Add(this.comboColRename);
+				this.groupBox5.Controls.Add(this.butRename);
+				this.groupBox5.Controls.Add(this.label13);
+				this.groupBox5.Controls.Add(this.label14);
+				this.groupBox5.FlatStyle = System.Windows.Forms.FlatStyle.System;
+				this.groupBox5.Location = new System.Drawing.Point(468,6);
+				this.groupBox5.Name = "groupBox5";
+				this.groupBox5.Size = new System.Drawing.Size(250,128);
+				this.groupBox5.TabIndex = 11;
+				this.groupBox5.TabStop = false;
+				this.groupBox5.Text = "Rename Column";
+				// 
+				// comboColNewName
+				// 
+				this.comboColNewName.Location = new System.Drawing.Point(116,43);
+				this.comboColNewName.MaxDropDownItems = 100;
+				this.comboColNewName.Name = "comboColNewName";
+				this.comboColNewName.Size = new System.Drawing.Size(123,21);
+				this.comboColNewName.TabIndex = 17;
+				// 
+				// comboColRename
+				// 
+				this.comboColRename.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+				this.comboColRename.Location = new System.Drawing.Point(116,18);
+				this.comboColRename.MaxDropDownItems = 100;
+				this.comboColRename.Name = "comboColRename";
+				this.comboColRename.Size = new System.Drawing.Size(123,21);
+				this.comboColRename.TabIndex = 16;
+				// 
+				// butRename
+				// 
+				this.butRename.FlatStyle = System.Windows.Forms.FlatStyle.System;
+				this.butRename.Location = new System.Drawing.Point(166,95);
+				this.butRename.Name = "butRename";
+				this.butRename.Size = new System.Drawing.Size(75,23);
+				this.butRename.TabIndex = 9;
+				this.butRename.Text = "Rename";
+				this.butRename.Click += new System.EventHandler(this.butRename_Click);
+				// 
+				// label13
+				// 
+				this.label13.Location = new System.Drawing.Point(10,45);
+				this.label13.Name = "label13";
+				this.label13.Size = new System.Drawing.Size(100,16);
+				this.label13.TabIndex = 5;
+				this.label13.Text = "New Name";
+				this.label13.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+				// 
+				// label14
+				// 
+				this.label14.Location = new System.Drawing.Point(10,21);
+				this.label14.Name = "label14";
+				this.label14.Size = new System.Drawing.Size(100,16);
+				this.label14.TabIndex = 3;
+				this.label14.Text = "Column";
+				this.label14.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+				// 
+				// tabPK
+				// 
+				this.tabPK.Controls.Add(this.checkDontUsePK);
+				this.tabPK.Controls.Add(this.label25);
+				this.tabPK.Controls.Add(this.groupBox7);
+				this.tabPK.Controls.Add(this.butClearPK);
+				this.tabPK.Controls.Add(this.comboColPK);
+				this.tabPK.Controls.Add(this.label1);
+				this.tabPK.Controls.Add(this.butSetPK);
+				this.tabPK.Location = new System.Drawing.Point(4,22);
+				this.tabPK.Name = "tabPK";
+				this.tabPK.Size = new System.Drawing.Size(1046,217);
+				this.tabPK.TabIndex = 6;
+				this.tabPK.Text = "Primary Key";
+				this.tabPK.UseVisualStyleBackColor = true;
+				// 
+				// checkDontUsePK
+				// 
+				this.checkDontUsePK.FlatStyle = System.Windows.Forms.FlatStyle.System;
+				this.checkDontUsePK.Location = new System.Drawing.Point(234,14);
+				this.checkDontUsePK.Name = "checkDontUsePK";
+				this.checkDontUsePK.Size = new System.Drawing.Size(375,19);
+				this.checkDontUsePK.TabIndex = 31;
+				this.checkDontUsePK.Text = "Do not use the primary key values in the final import";
+				// 
+				// label25
+				// 
+				this.label25.Location = new System.Drawing.Point(114,125);
+				this.label25.Name = "label25";
+				this.label25.Size = new System.Drawing.Size(599,19);
+				this.label25.TabIndex = 30;
+				this.label25.Text = "If you set an empty column as the primary key, it will automatically be filled wi" +
+    "th numbers";
+				// 
+				// groupBox7
+				// 
+				this.groupBox7.Controls.Add(this.radioPatients);
+				this.groupBox7.Controls.Add(this.radioCarriers);
+				this.groupBox7.FlatStyle = System.Windows.Forms.FlatStyle.System;
+				this.groupBox7.Location = new System.Drawing.Point(15,11);
+				this.groupBox7.Name = "groupBox7";
+				this.groupBox7.Size = new System.Drawing.Size(200,64);
+				this.groupBox7.TabIndex = 29;
+				this.groupBox7.TabStop = false;
+				this.groupBox7.Text = "Table Type";
+				// 
+				// radioPatients
+				// 
+				this.radioPatients.Checked = true;
+				this.radioPatients.FlatStyle = System.Windows.Forms.FlatStyle.System;
+				this.radioPatients.Location = new System.Drawing.Point(16,20);
+				this.radioPatients.Name = "radioPatients";
+				this.radioPatients.Size = new System.Drawing.Size(154,18);
+				this.radioPatients.TabIndex = 19;
+				this.radioPatients.TabStop = true;
+				this.radioPatients.Text = "Patients";
+				this.radioPatients.Click += new System.EventHandler(this.radioPatients_Click);
+				// 
+				// radioCarriers
+				// 
+				this.radioCarriers.FlatStyle = System.Windows.Forms.FlatStyle.System;
+				this.radioCarriers.Location = new System.Drawing.Point(16,37);
+				this.radioCarriers.Name = "radioCarriers";
+				this.radioCarriers.Size = new System.Drawing.Size(154,18);
+				this.radioCarriers.TabIndex = 20;
+				this.radioCarriers.Text = "Carriers";
+				this.radioCarriers.Click += new System.EventHandler(this.radioCarriers_Click);
+				// 
+				// butClearPK
+				// 
+				this.butClearPK.FlatStyle = System.Windows.Forms.FlatStyle.System;
+				this.butClearPK.Location = new System.Drawing.Point(319,96);
+				this.butClearPK.Name = "butClearPK";
+				this.butClearPK.Size = new System.Drawing.Size(69,23);
+				this.butClearPK.TabIndex = 28;
+				this.butClearPK.Text = "Clear";
+				this.butClearPK.Click += new System.EventHandler(this.butClearPK_Click);
+				// 
+				// comboColPK
+				// 
+				this.comboColPK.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+				this.comboColPK.Location = new System.Drawing.Point(116,97);
+				this.comboColPK.MaxDropDownItems = 100;
+				this.comboColPK.Name = "comboColPK";
+				this.comboColPK.Size = new System.Drawing.Size(123,21);
+				this.comboColPK.TabIndex = 27;
+				// 
+				// label1
+				// 
+				this.label1.Location = new System.Drawing.Point(12,100);
+				this.label1.Name = "label1";
+				this.label1.Size = new System.Drawing.Size(100,16);
+				this.label1.TabIndex = 25;
+				this.label1.Text = "Primary Key";
+				this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+				// 
+				// butSetPK
+				// 
+				this.butSetPK.FlatStyle = System.Windows.Forms.FlatStyle.System;
+				this.butSetPK.Location = new System.Drawing.Point(242,96);
+				this.butSetPK.Name = "butSetPK";
+				this.butSetPK.Size = new System.Drawing.Size(70,23);
+				this.butSetPK.TabIndex = 26;
+				this.butSetPK.Text = "Set";
+				this.butSetPK.Click += new System.EventHandler(this.butSetPK_Click);
+				// 
+				// tabSpecialtyF
+				// 
+				this.tabSpecialtyF.Controls.Add(this.groupBox15);
+				this.tabSpecialtyF.Controls.Add(this.groupBox13);
+				this.tabSpecialtyF.Controls.Add(this.groupBox3);
+				this.tabSpecialtyF.Location = new System.Drawing.Point(4,22);
+				this.tabSpecialtyF.Name = "tabSpecialtyF";
+				this.tabSpecialtyF.Size = new System.Drawing.Size(1046,217);
+				this.tabSpecialtyF.TabIndex = 3;
+				this.tabSpecialtyF.Text = "Specialty Functions";
+				this.tabSpecialtyF.UseVisualStyleBackColor = true;
+				// 
+				// groupBox15
+				// 
+				this.groupBox15.Controls.Add(this.textBox7);
+				this.groupBox15.Controls.Add(this.label46);
+				this.groupBox15.Controls.Add(this.label45);
+				this.groupBox15.Controls.Add(this.textBox5);
+				this.groupBox15.Controls.Add(this.label43);
+				this.groupBox15.Controls.Add(this.textBox6);
+				this.groupBox15.Controls.Add(this.label44);
+				this.groupBox15.Controls.Add(this.butGuarAccount);
+				this.groupBox15.Controls.Add(this.textBox4);
+				this.groupBox15.Controls.Add(this.label41);
+				this.groupBox15.Controls.Add(this.textBox3);
+				this.groupBox15.Controls.Add(this.label40);
+				this.groupBox15.Controls.Add(this.textBox2);
+				this.groupBox15.Controls.Add(this.label38);
+				this.groupBox15.Controls.Add(this.label39);
+				this.groupBox15.Controls.Add(this.butGuarantor);
+				this.groupBox15.FlatStyle = System.Windows.Forms.FlatStyle.System;
+				this.groupBox15.Location = new System.Drawing.Point(634,4);
+				this.groupBox15.Name = "groupBox15";
+				this.groupBox15.Size = new System.Drawing.Size(302,200);
+				this.groupBox15.TabIndex = 11;
+				this.groupBox15.TabStop = false;
+				this.groupBox15.Text = "Fill Guarantor";
+				// 
+				// textBox7
+				// 
+				this.textBox7.Location = new System.Drawing.Point(122,133);
+				this.textBox7.Name = "textBox7";
+				this.textBox7.ReadOnly = true;
+				this.textBox7.Size = new System.Drawing.Size(167,20);
+				this.textBox7.TabIndex = 29;
+				this.textBox7.Text = "tempHoH";
+				// 
+				// label46
+				// 
+				this.label46.Location = new System.Drawing.Point(5,135);
+				this.label46.Name = "label46";
+				this.label46.Size = new System.Drawing.Size(115,16);
+				this.label46.TabIndex = 28;
+				this.label46.Text = "HoH Indic Column";
+				this.label46.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+				// 
+				// label45
+				// 
+				this.label45.Location = new System.Drawing.Point(9,98);
+				this.label45.Name = "label45";
+				this.label45.Size = new System.Drawing.Size(100,17);
+				this.label45.TabIndex = 27;
+				this.label45.Text = "OR:";
+				// 
+				// textBox5
+				// 
+				this.textBox5.Location = new System.Drawing.Point(122,153);
+				this.textBox5.Name = "textBox5";
+				this.textBox5.ReadOnly = true;
+				this.textBox5.Size = new System.Drawing.Size(167,20);
+				this.textBox5.TabIndex = 26;
+				this.textBox5.Text = "Guarantor";
+				// 
+				// label43
+				// 
+				this.label43.Location = new System.Drawing.Point(5,155);
+				this.label43.Name = "label43";
+				this.label43.Size = new System.Drawing.Size(115,16);
+				this.label43.TabIndex = 25;
+				this.label43.Text = "Destination Column";
+				this.label43.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+				// 
+				// textBox6
+				// 
+				this.textBox6.Location = new System.Drawing.Point(122,113);
+				this.textBox6.Name = "textBox6";
+				this.textBox6.ReadOnly = true;
+				this.textBox6.Size = new System.Drawing.Size(167,20);
+				this.textBox6.TabIndex = 24;
+				this.textBox6.Text = "tempAccountNum";
+				// 
+				// label44
+				// 
+				this.label44.Location = new System.Drawing.Point(5,115);
+				this.label44.Name = "label44";
+				this.label44.Size = new System.Drawing.Size(115,16);
+				this.label44.TabIndex = 23;
+				this.label44.Text = "Reference Column";
+				this.label44.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+				// 
+				// butGuarAccount
+				// 
+				this.butGuarAccount.FlatStyle = System.Windows.Forms.FlatStyle.System;
+				this.butGuarAccount.Location = new System.Drawing.Point(215,174);
+				this.butGuarAccount.Name = "butGuarAccount";
+				this.butGuarAccount.Size = new System.Drawing.Size(75,22);
+				this.butGuarAccount.TabIndex = 22;
+				this.butGuarAccount.Text = "Fill";
+				this.butGuarAccount.Click += new System.EventHandler(this.butGuarAccount_Click);
+				// 
+				// textBox4
+				// 
+				this.textBox4.Location = new System.Drawing.Point(121,32);
+				this.textBox4.Name = "textBox4";
+				this.textBox4.ReadOnly = true;
+				this.textBox4.Size = new System.Drawing.Size(167,20);
+				this.textBox4.TabIndex = 21;
+				this.textBox4.Text = "ChartNumber";
+				// 
+				// label41
+				// 
+				this.label41.Location = new System.Drawing.Point(4,34);
+				this.label41.Name = "label41";
+				this.label41.Size = new System.Drawing.Size(115,16);
+				this.label41.TabIndex = 20;
+				this.label41.Text = "Key Column";
+				this.label41.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+				// 
+				// textBox3
+				// 
+				this.textBox3.Location = new System.Drawing.Point(121,72);
+				this.textBox3.Name = "textBox3";
+				this.textBox3.ReadOnly = true;
+				this.textBox3.Size = new System.Drawing.Size(167,20);
+				this.textBox3.TabIndex = 19;
+				this.textBox3.Text = "Guarantor";
+				// 
+				// label40
+				// 
+				this.label40.Location = new System.Drawing.Point(4,75);
+				this.label40.Name = "label40";
+				this.label40.Size = new System.Drawing.Size(115,16);
+				this.label40.TabIndex = 18;
+				this.label40.Text = "Destination Column";
+				this.label40.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+				// 
+				// textBox2
+				// 
+				this.textBox2.Location = new System.Drawing.Point(121,52);
+				this.textBox2.Name = "textBox2";
+				this.textBox2.ReadOnly = true;
+				this.textBox2.Size = new System.Drawing.Size(167,20);
+				this.textBox2.TabIndex = 17;
+				this.textBox2.Text = "tempGuarantor";
+				// 
+				// label38
+				// 
+				this.label38.Location = new System.Drawing.Point(4,54);
+				this.label38.Name = "label38";
+				this.label38.Size = new System.Drawing.Size(115,16);
+				this.label38.TabIndex = 16;
+				this.label38.Text = "Reference Column";
+				this.label38.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+				// 
+				// label39
+				// 
+				this.label39.Location = new System.Drawing.Point(14,15);
+				this.label39.Name = "label39";
+				this.label39.Size = new System.Drawing.Size(275,20);
+				this.label39.TabIndex = 12;
+				this.label39.Text = "Used when the guarantor is not in PatNum format.";
+				// 
+				// butGuarantor
+				// 
+				this.butGuarantor.FlatStyle = System.Windows.Forms.FlatStyle.System;
+				this.butGuarantor.Location = new System.Drawing.Point(214,92);
+				this.butGuarantor.Name = "butGuarantor";
+				this.butGuarantor.Size = new System.Drawing.Size(75,22);
+				this.butGuarantor.TabIndex = 9;
+				this.butGuarantor.Text = "Fill";
+				this.butGuarantor.Click += new System.EventHandler(this.butGuarantor_Click);
+				// 
+				// groupBox13
+				// 
+				this.groupBox13.Controls.Add(this.comboColDateTo);
+				this.groupBox13.Controls.Add(this.label29);
+				this.groupBox13.Controls.Add(this.label30);
+				this.groupBox13.Controls.Add(this.butConvertDate);
+				this.groupBox13.Controls.Add(this.textDateBase);
+				this.groupBox13.Controls.Add(this.label33);
+				this.groupBox13.Controls.Add(this.label35);
+				this.groupBox13.Controls.Add(this.comboColDateFrom);
+				this.groupBox13.FlatStyle = System.Windows.Forms.FlatStyle.System;
+				this.groupBox13.Location = new System.Drawing.Point(7,4);
+				this.groupBox13.Name = "groupBox13";
+				this.groupBox13.Size = new System.Drawing.Size(302,189);
+				this.groupBox13.TabIndex = 10;
+				this.groupBox13.TabStop = false;
+				this.groupBox13.Text = "Convert numbers to dates";
+				// 
+				// comboColDateTo
+				// 
+				this.comboColDateTo.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+				this.comboColDateTo.Location = new System.Drawing.Point(121,76);
+				this.comboColDateTo.MaxDropDownItems = 100;
+				this.comboColDateTo.Name = "comboColDateTo";
+				this.comboColDateTo.Size = new System.Drawing.Size(170,21);
+				this.comboColDateTo.TabIndex = 16;
+				// 
+				// label29
+				// 
+				this.label29.Location = new System.Drawing.Point(14,20);
+				this.label29.Name = "label29";
+				this.label29.Size = new System.Drawing.Size(275,30);
+				this.label29.TabIndex = 12;
+				this.label29.Text = "The number of days since a given date";
+				// 
+				// label30
+				// 
+				this.label30.Location = new System.Drawing.Point(16,80);
+				this.label30.Name = "label30";
+				this.label30.Size = new System.Drawing.Size(100,16);
+				this.label30.TabIndex = 10;
+				this.label30.Text = "Destination Col";
+				this.label30.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+				// 
+				// butConvertDate
+				// 
+				this.butConvertDate.FlatStyle = System.Windows.Forms.FlatStyle.System;
+				this.butConvertDate.Location = new System.Drawing.Point(218,150);
+				this.butConvertDate.Name = "butConvertDate";
+				this.butConvertDate.Size = new System.Drawing.Size(75,23);
+				this.butConvertDate.TabIndex = 9;
+				this.butConvertDate.Text = "Convert";
+				this.butConvertDate.Click += new System.EventHandler(this.butConvertDate_Click);
+				// 
+				// textDateBase
+				// 
+				this.textDateBase.Location = new System.Drawing.Point(121,100);
+				this.textDateBase.Name = "textDateBase";
+				this.textDateBase.Size = new System.Drawing.Size(96,20);
+				this.textDateBase.TabIndex = 6;
+				// 
+				// label33
+				// 
+				this.label33.Location = new System.Drawing.Point(4,102);
+				this.label33.Name = "label33";
+				this.label33.Size = new System.Drawing.Size(115,16);
+				this.label33.TabIndex = 5;
+				this.label33.Text = "Base date";
+				this.label33.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+				// 
+				// label35
+				// 
+				this.label35.Location = new System.Drawing.Point(16,57);
+				this.label35.Name = "label35";
+				this.label35.Size = new System.Drawing.Size(100,16);
+				this.label35.TabIndex = 3;
+				this.label35.Text = "Source Column";
+				this.label35.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+				// 
+				// comboColDateFrom
+				// 
+				this.comboColDateFrom.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+				this.comboColDateFrom.Location = new System.Drawing.Point(121,52);
+				this.comboColDateFrom.MaxDropDownItems = 100;
+				this.comboColDateFrom.Name = "comboColDateFrom";
+				this.comboColDateFrom.Size = new System.Drawing.Size(170,21);
+				this.comboColDateFrom.TabIndex = 15;
+				// 
+				// groupBox3
+				// 
+				this.groupBox3.Controls.Add(this.textDateNewFormat);
+				this.groupBox3.Controls.Add(this.label27);
+				this.groupBox3.Controls.Add(this.comboColDateDest);
+				this.groupBox3.Controls.Add(this.label17);
+				this.groupBox3.Controls.Add(this.label6);
+				this.groupBox3.Controls.Add(this.butFixDates);
+				this.groupBox3.Controls.Add(this.textDateOldFormats);
+				this.groupBox3.Controls.Add(this.label7);
+				this.groupBox3.Controls.Add(this.label8);
+				this.groupBox3.Controls.Add(this.comboColDateSource);
+				this.groupBox3.FlatStyle = System.Windows.Forms.FlatStyle.System;
+				this.groupBox3.Location = new System.Drawing.Point(322,4);
+				this.groupBox3.Name = "groupBox3";
+				this.groupBox3.Size = new System.Drawing.Size(302,189);
+				this.groupBox3.TabIndex = 9;
+				this.groupBox3.TabStop = false;
+				this.groupBox3.Text = "Fix Dates";
+				// 
+				// textDateNewFormat
+				// 
+				this.textDateNewFormat.Location = new System.Drawing.Point(121,130);
+				this.textDateNewFormat.Name = "textDateNewFormat";
+				this.textDateNewFormat.Size = new System.Drawing.Size(170,20);
+				this.textDateNewFormat.TabIndex = 18;
+				this.textDateNewFormat.Text = "MM/dd/yyyy";
+				// 
+				// label27
+				// 
+				this.label27.Location = new System.Drawing.Point(4,132);
+				this.label27.Name = "label27";
+				this.label27.Size = new System.Drawing.Size(115,16);
+				this.label27.TabIndex = 17;
+				this.label27.Text = "New Format";
+				this.label27.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+				// 
+				// comboColDateDest
+				// 
+				this.comboColDateDest.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+				this.comboColDateDest.Location = new System.Drawing.Point(121,84);
+				this.comboColDateDest.MaxDropDownItems = 100;
+				this.comboColDateDest.Name = "comboColDateDest";
+				this.comboColDateDest.Size = new System.Drawing.Size(170,21);
+				this.comboColDateDest.TabIndex = 16;
+				// 
+				// label17
+				// 
+				this.label17.Location = new System.Drawing.Point(14,15);
+				this.label17.Name = "label17";
+				this.label17.Size = new System.Drawing.Size(275,41);
+				this.label17.TabIndex = 12;
+				this.label17.Text = "Rarely used.  Might be used if month and day are switched in source file or if da" +
+    "te is in non-standard format, like yyyyMMdd";
+				// 
+				// label6
+				// 
+				this.label6.Location = new System.Drawing.Point(16,88);
+				this.label6.Name = "label6";
+				this.label6.Size = new System.Drawing.Size(100,16);
+				this.label6.TabIndex = 10;
+				this.label6.Text = "Destination Col";
+				this.label6.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+				// 
+				// butFixDates
+				// 
+				this.butFixDates.FlatStyle = System.Windows.Forms.FlatStyle.System;
+				this.butFixDates.Location = new System.Drawing.Point(218,158);
+				this.butFixDates.Name = "butFixDates";
+				this.butFixDates.Size = new System.Drawing.Size(75,23);
+				this.butFixDates.TabIndex = 9;
+				this.butFixDates.Text = "Fix";
+				this.butFixDates.Click += new System.EventHandler(this.butFixDates_Click);
+				// 
+				// textDateOldFormats
+				// 
+				this.textDateOldFormats.Location = new System.Drawing.Point(121,108);
+				this.textDateOldFormats.Name = "textDateOldFormats";
+				this.textDateOldFormats.Size = new System.Drawing.Size(170,20);
+				this.textDateOldFormats.TabIndex = 6;
+				this.textDateOldFormats.Text = "dd/MM/yyyy,d/M/yyyy,dd/M/yyyy,d/MM/yyyy";
+				// 
+				// label7
+				// 
+				this.label7.Location = new System.Drawing.Point(4,110);
+				this.label7.Name = "label7";
+				this.label7.Size = new System.Drawing.Size(115,16);
+				this.label7.TabIndex = 5;
+				this.label7.Text = "Old Formats sep by ,";
+				this.label7.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+				// 
+				// label8
+				// 
+				this.label8.Location = new System.Drawing.Point(16,65);
+				this.label8.Name = "label8";
+				this.label8.Size = new System.Drawing.Size(100,16);
+				this.label8.TabIndex = 3;
+				this.label8.Text = "Source Column";
+				this.label8.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+				// 
+				// comboColDateSource
+				// 
+				this.comboColDateSource.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+				this.comboColDateSource.Location = new System.Drawing.Point(121,60);
+				this.comboColDateSource.MaxDropDownItems = 100;
+				this.comboColDateSource.Name = "comboColDateSource";
+				this.comboColDateSource.Size = new System.Drawing.Size(170,21);
+				this.comboColDateSource.TabIndex = 15;
+				// 
+				// tabLoadData
+				// 
+				this.tabLoadData.Controls.Add(this.groupBox16);
+				this.tabLoadData.Controls.Add(this.label42);
+				this.tabLoadData.Controls.Add(this.comboTableName);
+				this.tabLoadData.Controls.Add(this.butDeleteTable);
+				this.tabLoadData.Controls.Add(this.label22);
+				this.tabLoadData.Controls.Add(this.label21);
+				this.tabLoadData.Controls.Add(this.butLoad);
+				this.tabLoadData.Controls.Add(this.butBrowse);
+				this.tabLoadData.Controls.Add(this.label20);
+				this.tabLoadData.Controls.Add(this.textFileName);
+				this.tabLoadData.Controls.Add(this.textNewTable);
+				this.tabLoadData.Controls.Add(this.textBox1);
+				this.tabLoadData.Controls.Add(this.label19);
+				this.tabLoadData.Controls.Add(this.label18);
+				this.tabLoadData.Controls.Add(this.butRefresh);
+				this.tabLoadData.Controls.Add(this.label2);
+				this.tabLoadData.Location = new System.Drawing.Point(4,22);
+				this.tabLoadData.Name = "tabLoadData";
+				this.tabLoadData.Size = new System.Drawing.Size(1046,217);
+				this.tabLoadData.TabIndex = 0;
+				this.tabLoadData.Text = "Load Data";
+				this.tabLoadData.UseVisualStyleBackColor = true;
+				// 
+				// groupBox16
+				// 
+				this.groupBox16.Controls.Add(this.radioGenerateColNames);
+				this.groupBox16.Controls.Add(this.radioColNamRow);
+				this.groupBox16.Location = new System.Drawing.Point(110,75);
+				this.groupBox16.Name = "groupBox16";
+				this.groupBox16.Size = new System.Drawing.Size(406,38);
+				this.groupBox16.TabIndex = 20;
+				this.groupBox16.TabStop = false;
+				this.groupBox16.Text = "Get Table Column Names From:";
+				// 
+				// radioGenerateColNames
+				// 
+				this.radioGenerateColNames.AutoSize = true;
+				this.radioGenerateColNames.Location = new System.Drawing.Point(173,19);
+				this.radioGenerateColNames.Name = "radioGenerateColNames";
+				this.radioGenerateColNames.Size = new System.Drawing.Size(185,17);
+				this.radioGenerateColNames.TabIndex = 1;
+				this.radioGenerateColNames.Text = "Generate numberically left to right.";
+				this.radioGenerateColNames.UseVisualStyleBackColor = true;
+				this.radioGenerateColNames.Click += new System.EventHandler(this.radioGenerateColNames_Click);
+				// 
+				// radioColNamRow
+				// 
+				this.radioColNamRow.AutoSize = true;
+				this.radioColNamRow.Checked = true;
+				this.radioColNamRow.Location = new System.Drawing.Point(6,19);
+				this.radioColNamRow.Name = "radioColNamRow";
+				this.radioColNamRow.Size = new System.Drawing.Size(129,17);
+				this.radioColNamRow.TabIndex = 0;
+				this.radioColNamRow.TabStop = true;
+				this.radioColNamRow.Text = "First row of input data.";
+				this.radioColNamRow.UseVisualStyleBackColor = true;
+				this.radioColNamRow.Click += new System.EventHandler(this.radioColNamRow_Click);
+				// 
+				// label42
+				// 
+				this.label42.Location = new System.Drawing.Point(193,124);
+				this.label42.Name = "label42";
+				this.label42.Size = new System.Drawing.Size(836,18);
+				this.label42.TabIndex = 19;
+				this.label42.Text = "If you get an error loading,  consider the possibility that your A-Z folder is no" +
+    "t accessible from both the server and the workstation";
+				this.label42.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+				// 
+				// comboTableName
+				// 
+				this.comboTableName.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+				this.comboTableName.Location = new System.Drawing.Point(110,171);
+				this.comboTableName.MaxDropDownItems = 18;
+				this.comboTableName.Name = "comboTableName";
+				this.comboTableName.Size = new System.Drawing.Size(122,21);
+				this.comboTableName.TabIndex = 18;
+				this.comboTableName.SelectedIndexChanged += new System.EventHandler(this.comboTableName_SelectedIndexChanged);
+				// 
+				// butDeleteTable
+				// 
+				this.butDeleteTable.FlatStyle = System.Windows.Forms.FlatStyle.System;
+				this.butDeleteTable.Location = new System.Drawing.Point(321,169);
+				this.butDeleteTable.Name = "butDeleteTable";
+				this.butDeleteTable.Size = new System.Drawing.Size(75,23);
+				this.butDeleteTable.TabIndex = 17;
+				this.butDeleteTable.Text = "Delete";
+				this.butDeleteTable.Click += new System.EventHandler(this.butDeleteTable_Click);
+				// 
+				// label22
+				// 
+				this.label22.Font = new System.Drawing.Font("Microsoft Sans Serif",9.5F,System.Drawing.FontStyle.Bold,System.Drawing.GraphicsUnit.Point,((byte)(0)));
+				this.label22.Location = new System.Drawing.Point(9,147);
+				this.label22.Name = "label22";
+				this.label22.Size = new System.Drawing.Size(631,19);
+				this.label22.TabIndex = 16;
+				this.label22.Text = "Or, if you already loaded a file earlier, you can select an existing temp table t" +
+    "o work with";
+				this.label22.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+				// 
+				// label21
+				// 
+				this.label21.Font = new System.Drawing.Font("Microsoft Sans Serif",9.5F,System.Drawing.FontStyle.Bold,System.Drawing.GraphicsUnit.Point,((byte)(0)));
+				this.label21.Location = new System.Drawing.Point(9,195);
+				this.label21.Name = "label21";
+				this.label21.Size = new System.Drawing.Size(477,19);
+				this.label21.TabIndex = 15;
+				this.label21.Text = "Then, check settings in the Primary Key tab";
+				this.label21.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+				// 
+				// butLoad
+				// 
+				this.butLoad.FlatStyle = System.Windows.Forms.FlatStyle.System;
+				this.butLoad.Location = new System.Drawing.Point(112,121);
+				this.butLoad.Name = "butLoad";
+				this.butLoad.Size = new System.Drawing.Size(75,23);
+				this.butLoad.TabIndex = 14;
+				this.butLoad.Text = "Load";
+				this.butLoad.Click += new System.EventHandler(this.butLoad_Click);
+				// 
+				// butBrowse
+				// 
+				this.butBrowse.FlatStyle = System.Windows.Forms.FlatStyle.System;
+				this.butBrowse.Location = new System.Drawing.Point(772,21);
+				this.butBrowse.Name = "butBrowse";
+				this.butBrowse.Size = new System.Drawing.Size(75,23);
+				this.butBrowse.TabIndex = 13;
+				this.butBrowse.Text = "Browse";
+				this.butBrowse.Click += new System.EventHandler(this.butBrowse_Click);
+				// 
+				// label20
+				// 
+				this.label20.Location = new System.Drawing.Point(8,51);
+				this.label20.Name = "label20";
+				this.label20.Size = new System.Drawing.Size(100,16);
+				this.label20.TabIndex = 12;
+				this.label20.Text = "File Name";
+				this.label20.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+				// 
+				// textFileName
+				// 
+				this.textFileName.Location = new System.Drawing.Point(112,49);
+				this.textFileName.Name = "textFileName";
+				this.textFileName.Size = new System.Drawing.Size(736,20);
+				this.textFileName.TabIndex = 11;
+				// 
+				// textNewTable
+				// 
+				this.textNewTable.Location = new System.Drawing.Point(156,27);
+				this.textNewTable.Name = "textNewTable";
+				this.textNewTable.Size = new System.Drawing.Size(123,20);
+				this.textNewTable.TabIndex = 10;
+				// 
+				// textBox1
+				// 
+				this.textBox1.Location = new System.Drawing.Point(112,27);
+				this.textBox1.Name = "textBox1";
+				this.textBox1.ReadOnly = true;
+				this.textBox1.Size = new System.Drawing.Size(46,20);
+				this.textBox1.TabIndex = 9;
+				this.textBox1.Text = "temp";
+				this.textBox1.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+				// 
+				// label19
+				// 
+				this.label19.Location = new System.Drawing.Point(9,29);
+				this.label19.Name = "label19";
+				this.label19.Size = new System.Drawing.Size(100,16);
+				this.label19.TabIndex = 8;
+				this.label19.Text = "New Table Name";
+				this.label19.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+				// 
+				// label18
+				// 
+				this.label18.Font = new System.Drawing.Font("Microsoft Sans Serif",9.5F,System.Drawing.FontStyle.Bold,System.Drawing.GraphicsUnit.Point,((byte)(0)));
+				this.label18.Location = new System.Drawing.Point(9,5);
+				this.label18.Name = "label18";
+				this.label18.Size = new System.Drawing.Size(477,19);
+				this.label18.TabIndex = 7;
+				this.label18.Text = "Load data from a text file into a temp table";
+				this.label18.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+				// 
+				// butRefresh
+				// 
+				this.butRefresh.FlatStyle = System.Windows.Forms.FlatStyle.System;
+				this.butRefresh.Location = new System.Drawing.Point(236,169);
+				this.butRefresh.Name = "butRefresh";
+				this.butRefresh.Size = new System.Drawing.Size(75,23);
+				this.butRefresh.TabIndex = 6;
+				this.butRefresh.Text = "Refresh";
+				this.butRefresh.Click += new System.EventHandler(this.butRefresh_Click);
+				// 
+				// label2
+				// 
+				this.label2.Location = new System.Drawing.Point(7,174);
+				this.label2.Name = "label2";
+				this.label2.Size = new System.Drawing.Size(100,16);
+				this.label2.TabIndex = 3;
+				this.label2.Text = "Temp Table";
+				this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+				// 
+				// tabContr
+				// 
+				this.tabContr.Controls.Add(this.tabLoadData);
+				this.tabContr.Controls.Add(this.tabSpecialtyF);
+				this.tabContr.Controls.Add(this.tabPK);
+				this.tabContr.Controls.Add(this.tabColumns);
+				this.tabContr.Controls.Add(this.tabQuery);
+				this.tabContr.Controls.Add(this.tabRows);
+				this.tabContr.Controls.Add(this.tabEdit);
+				this.tabContr.Controls.Add(this.tabScript);
+				this.tabContr.Controls.Add(this.tabFinalImport);
+				this.tabContr.Controls.Add(this.tabPage1);
+				this.tabContr.Location = new System.Drawing.Point(0,0);
+				this.tabContr.Name = "tabContr";
+				this.tabContr.SelectedIndex = 0;
+				this.tabContr.Size = new System.Drawing.Size(1054,243);
+				this.tabContr.TabIndex = 14;
+				// 
+				// tabPage1
+				// 
+				this.tabPage1.Controls.Add(this.groupBox17);
+				this.tabPage1.Location = new System.Drawing.Point(4,22);
+				this.tabPage1.Name = "tabPage1";
+				this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
+				this.tabPage1.Size = new System.Drawing.Size(1046,217);
+				this.tabPage1.TabIndex = 9;
+				this.tabPage1.Text = "Table";
+				this.tabPage1.UseVisualStyleBackColor = true;
+				// 
+				// groupBox17
+				// 
+				this.groupBox17.BackColor = System.Drawing.SystemColors.Control;
+				this.groupBox17.Controls.Add(this.butCreateTemporaryTable);
+				this.groupBox17.Controls.Add(this.label49);
+				this.groupBox17.Controls.Add(this.upDownNumTempCols);
+				this.groupBox17.Controls.Add(this.textCreateTempName);
+				this.groupBox17.Controls.Add(this.textBox9);
+				this.groupBox17.Controls.Add(this.label48);
+				this.groupBox17.Location = new System.Drawing.Point(8,6);
+				this.groupBox17.Name = "groupBox17";
+				this.groupBox17.Size = new System.Drawing.Size(415,100);
+				this.groupBox17.TabIndex = 0;
+				this.groupBox17.TabStop = false;
+				this.groupBox17.Text = "Create Temporary";
+				this.groupBox17.UseCompatibleTextRendering = true;
+				// 
+				// butCreateTemporaryTable
+				// 
+				this.butCreateTemporaryTable.Location = new System.Drawing.Point(173,54);
+				this.butCreateTemporaryTable.Name = "butCreateTemporaryTable";
+				this.butCreateTemporaryTable.Size = new System.Drawing.Size(101,23);
+				this.butCreateTemporaryTable.TabIndex = 16;
+				this.butCreateTemporaryTable.Text = "Create Table";
+				this.butCreateTemporaryTable.UseVisualStyleBackColor = true;
+				this.butCreateTemporaryTable.Click += new System.EventHandler(this.butCreateTemporaryTable_Click);
+				// 
+				// label49
+				// 
+				this.label49.AutoSize = true;
+				this.label49.Location = new System.Drawing.Point(12,59);
+				this.label49.Name = "label49";
+				this.label49.Size = new System.Drawing.Size(99,13);
+				this.label49.TabIndex = 15;
+				this.label49.Text = "Number of Columns";
+				// 
+				// upDownNumTempCols
+				// 
+				this.upDownNumTempCols.Location = new System.Drawing.Point(116,57);
+				this.upDownNumTempCols.Maximum = new decimal(new int[] {
+            10000,
+            0,
+            0,
+            0});
+				this.upDownNumTempCols.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+				this.upDownNumTempCols.Name = "upDownNumTempCols";
+				this.upDownNumTempCols.Size = new System.Drawing.Size(46,20);
+				this.upDownNumTempCols.TabIndex = 14;
+				this.upDownNumTempCols.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+				// 
+				// textCreateTempName
+				// 
+				this.textCreateTempName.Location = new System.Drawing.Point(159,19);
+				this.textCreateTempName.Name = "textCreateTempName";
+				this.textCreateTempName.Size = new System.Drawing.Size(123,20);
+				this.textCreateTempName.TabIndex = 13;
+				// 
+				// textBox9
+				// 
+				this.textBox9.Location = new System.Drawing.Point(115,19);
+				this.textBox9.Name = "textBox9";
+				this.textBox9.ReadOnly = true;
+				this.textBox9.Size = new System.Drawing.Size(46,20);
+				this.textBox9.TabIndex = 12;
+				this.textBox9.Text = "temp";
+				this.textBox9.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+				// 
+				// label48
+				// 
+				this.label48.Location = new System.Drawing.Point(12,21);
+				this.label48.Name = "label48";
+				this.label48.Size = new System.Drawing.Size(100,16);
+				this.label48.TabIndex = 11;
+				this.label48.Text = "New Table Name";
+				this.label48.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+				// 
+				// FormImport
+				// 
+				this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
+				this.ClientSize = new System.Drawing.Size(1156,842);
+				this.Controls.Add(this.tabContr);
+				this.Controls.Add(this.grid);
+				this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+				this.Name = "FormImport";
+				this.ShowInTaskbar = false;
+				this.Text = "Import";
+				this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
+				this.Load += new System.EventHandler(this.FormImport_Load);
+				((System.ComponentModel.ISupportInitialize)(this.grid)).EndInit();
+				this.tabFinalImport.ResumeLayout(false);
+				this.tabScript.ResumeLayout(false);
+				this.tabScript.PerformLayout();
+				this.tabEdit.ResumeLayout(false);
+				this.groupBox12.ResumeLayout(false);
+				this.groupBox11.ResumeLayout(false);
+				this.groupBox11.PerformLayout();
+				this.groupBox10.ResumeLayout(false);
+				this.groupBox9.ResumeLayout(false);
+				this.groupBox1.ResumeLayout(false);
+				this.groupBox1.PerformLayout();
+				this.tabRows.ResumeLayout(false);
+				this.groupBox18.ResumeLayout(false);
+				this.groupBox18.PerformLayout();
+				this.groupBox19.ResumeLayout(false);
+				this.groupBox19.PerformLayout();
+				((System.ComponentModel.ISupportInitialize)(this.upDownCopyToInc)).EndInit();
+				((System.ComponentModel.ISupportInitialize)(this.upDownCopyFromInc)).EndInit();
+				this.tabQuery.ResumeLayout(false);
+				this.tabQuery.PerformLayout();
+				this.tabColumns.ResumeLayout(false);
+				this.groupBox14.ResumeLayout(false);
+				this.groupBox14.PerformLayout();
+				this.groupBox8.ResumeLayout(false);
+				this.groupBox2.ResumeLayout(false);
+				this.groupBox6.ResumeLayout(false);
+				this.groupBox4.ResumeLayout(false);
+				this.groupBox4.PerformLayout();
+				this.groupBox5.ResumeLayout(false);
+				this.tabPK.ResumeLayout(false);
+				this.groupBox7.ResumeLayout(false);
+				this.tabSpecialtyF.ResumeLayout(false);
+				this.groupBox15.ResumeLayout(false);
+				this.groupBox15.PerformLayout();
+				this.groupBox13.ResumeLayout(false);
+				this.groupBox13.PerformLayout();
+				this.groupBox3.ResumeLayout(false);
+				this.groupBox3.PerformLayout();
+				this.tabLoadData.ResumeLayout(false);
+				this.tabLoadData.PerformLayout();
+				this.groupBox16.ResumeLayout(false);
+				this.groupBox16.PerformLayout();
+				this.tabContr.ResumeLayout(false);
+				this.tabPage1.ResumeLayout(false);
+				this.groupBox17.ResumeLayout(false);
+				this.groupBox17.PerformLayout();
+				((System.ComponentModel.ISupportInitialize)(this.upDownNumTempCols)).EndInit();
+				this.ResumeLayout(false);
 
 		}
 		#endregion
@@ -1854,16 +2402,17 @@ namespace OpenDental{
 			grid.Height=ClientSize.Height-grid.Top-2;
 			tabContr.Width=ClientSize.Width-3;
 			FillTableNames();
-			if(!Regex.IsMatch(MiscData.GetCurrentDatabase(),@"^[a-z0-9]+$")){
+			currentDb=MiscData.GetCurrentDatabase();
+			if(!Regex.IsMatch(currentDb,@"^[a-z0-9]+$")){
 				MsgBox.Show(this,"Name of database is invalid for use with this tool.  Must be all lowercase, numbers optional, but with no other characters.  Use the format lnamefname of the dentist.");
 				DialogResult=DialogResult.Cancel;
 				return;
 			}
-			if(Application.CurrentCulture.Name=="en-US" && ProcedureCodes.List.Length<500){
+			/*if(Application.CurrentCulture.Name=="en-US"){
 				MsgBox.Show(this,"This database was not derived from the standard usa database.  You must use a blank usa database.");
 				DialogResult=DialogResult.Cancel;
 				return;
-			}
+			}*/
 			string command="SELECT COUNT(*) FROM patient";
 			if(General.GetCount(command)!="0"){
 				if(!MsgBox.Show(this,true,"Warning! This database already has at least one patient.  It is typically recommended to start with a blank database.  Continue anyway?"))
@@ -1881,6 +2430,21 @@ namespace OpenDental{
 				MsgBox.Show(this,"Warning.  This feature is only intended for advanced users doing data conversions from other software.  It is not yet easy enough for beginners to use.");
 			}
 			GetAllowedCols();
+			//set script file:
+			if(File.Exists(GetScriptPath())){
+				textScript.Text=File.ReadAllText(GetScriptPath());
+			}
+			else{
+				FileStream fs=File.Create(GetScriptPath());
+				fs.Flush();
+				fs.Dispose();
+			}
+		}
+		
+		private string GetScriptPath(){
+			string progPath=Application.ExecutablePath.Remove(
+				 Application.ExecutablePath.LastIndexOf(Path.DirectorySeparatorChar));
+			return ODFileUtils.CombinePaths(progPath,currentDb+".txt");
 		}
 
 		///<summary>Depending on whether this is patients, carriers, or..., this sets a few of the comboboxes and also enables proper validation when doing the final export.</summary>
@@ -1964,7 +2528,7 @@ namespace OpenDental{
 					MsgBox.Show(this,"Table already exists.");
 					return;
 				}
-			}
+			}			
 			//get a list of the new column name
 			//missing feature: check for duplicate column names
 			string line="";
@@ -1981,8 +2545,15 @@ namespace OpenDental{
 				MsgBox.Show(this,"First line is blank.");
 				return;
 			}
-			line=line.Replace("\"","");
-			string[] colNames=line.Split(new char[] {'\t'});
+			string[] colNames=line.Split(new char[] {'\t'});	
+			if(this.radioColNamRow.Checked){			
+				line=line.Replace("\"","");				
+			}else if(this.radioGenerateColNames.Checked){
+				colNames=new string[colNames.Length];//Get number of columns.
+				for(int i=0;i<colNames.Length;i++){
+						colNames[i]="tempCol"+(i+1).ToString();
+				}
+			}			
 			//ArrayList ALcolNames=new ArrayList();
 			//ALcolNames.AddRange(colNames);
 			command="CREATE TABLE "+newTable+"(";
@@ -2024,9 +2595,14 @@ namespace OpenDental{
 			string command="SHOW TABLES";
 			DataTable tempT=General.GetTable(command);
 			comboTableName.Items.Clear();
+			comboCopyFromTable.Items.Clear();
+			comboCopyToTable.Items.Clear();
 			for(int i=0;i<tempT.Rows.Count;i++){
 				if(tempT.Rows[i][0].ToString().Length>4 && tempT.Rows[i][0].ToString().Substring(0,4)=="temp"){
-					comboTableName.Items.Add(tempT.Rows[i][0].ToString());
+					string val=tempT.Rows[i][0].ToString();
+					comboTableName.Items.Add(val);
+					comboCopyFromTable.Items.Add(val);
+					comboCopyToTable.Items.Add(val);
 				}
 			}
 		}
@@ -2067,6 +2643,7 @@ namespace OpenDental{
 			textRows.Text=table.Rows.Count.ToString();
 		}
 
+		///<Summary>Gets primary key and sets the combobox in the primary key tab to display it.</Summary>
 		private void GetPK(){
 			//missing feature: check for no table selected
 			string command="SHOW INDEX FROM "+POut.PString(comboTableName.SelectedItem.ToString());
@@ -2088,6 +2665,26 @@ namespace OpenDental{
 		private void radioCarriers_Click(object sender, System.EventArgs e) {
 			GetAllowedCols();
 		}
+
+		///<Summary>Most queries get run goes throught this method EXCEPT the ones that are performing validation.  The query then gets sent to the db as well as to the script file.  The script file is reloaded from disk just to make sure it's perfectly synched. Returns false if the query failed, true otherwise.</Summary>
+		private bool ProcessCommand(string command){
+			if(command[command.Length-1]!=';'){
+				 command+=';';//Ensure that commands are always terminated, but only with a single ';', otherwise there are blank queries that are somtimes created due to 2 ';' characters.
+			}
+			try{
+				 General.NonQEx(command);//If SQL command fails, then the SQL statement is not written to the conversion script.
+				 StreamWriter writer=File.AppendText(GetScriptPath());
+				 writer.Write("\r\n"+command);
+				 writer.Flush();
+				 writer.Dispose();
+				 textScript.Text=File.ReadAllText(GetScriptPath());
+			}catch(Exception ex){
+				 MessageBox.Show(ex.Message);
+				 return false;
+			}
+			return true;
+			//scroll to end?			
+		}
 		
 		private void butSetPK_Click(object sender, System.EventArgs e) {
 			if(comboColPK.SelectedIndex==-1){
@@ -2099,7 +2696,7 @@ namespace OpenDental{
 			DataTable tempT=General.GetTable(command);
 			if(tempT.Rows.Count!=0){//if a primary key exists
 				command="ALTER TABLE "+comboTableName.SelectedItem.ToString()+" DROP PRIMARY KEY";
-				General.NonQ(command);
+				ProcessCommand(command);
 			}
 			pkCol=comboColPK.SelectedItem.ToString();
 			//first, test to see if it's a blank column
@@ -2109,17 +2706,27 @@ namespace OpenDental{
 				command="ALTER TABLE "+comboTableName.SelectedItem.ToString()+" CHANGE "+pkCol+" "+pkCol
 					+" int unsigned NOT NULL auto_increment, "
 					+" ADD PRIMARY KEY ("+pkCol+")";
-				General.NonQ(command);
+				ProcessCommand(command);
 				command="ALTER TABLE "+comboTableName.SelectedItem.ToString()+" DROP PRIMARY KEY,"
 				//General.NonQ(command);
 				//command="ALTER TABLE "+comboTableName.SelectedItem.ToString()
 					+" CHANGE "+pkCol+" "+pkCol+" text NOT NULL,"
 					+" ADD PRIMARY KEY ("+pkCol+"(10))";
-				General.NonQ(command);
+				ProcessCommand(command);
 			}
-			else{//primary keys already exist.  An error will show if duplicates
+			else{//primary keys already exist.
 				command="ALTER TABLE "+comboTableName.SelectedItem.ToString()+" ADD PRIMARY KEY ("+pkCol+"(10))";
-				General.NonQ(command);
+				if(!ProcessCommand(command)){
+					command="SELECT COUNT(*) - COUNT(DISTINCT "+pkCol+") FROM "+comboTableName.SelectedItem.ToString();
+					DataTable dupCount=General.GetTable(command);
+					if(MessageBox.Show("There are "+PIn.PInt(dupCount.Rows[0][0].ToString())
+						+" duplicate values in the given column. Remove duplicates and continue?",
+						"Duplicate Values",
+						MessageBoxButtons.YesNo)==DialogResult.Yes){
+						command="ALTER IGNORE TABLE "+comboTableName.SelectedItem.ToString()+" ADD PRIMARY KEY ("+pkCol+"(10))";
+						ProcessCommand(command);
+					}
+				}
 			}
 			FillGrid();
 			GetPK();
@@ -2135,7 +2742,7 @@ namespace OpenDental{
 			}
 			else{//if a primary key exists
 				command="ALTER TABLE "+POut.PString(comboTableName.SelectedItem.ToString())+" DROP PRIMARY KEY";
-				General.NonQ(command);
+				ProcessCommand(command);
 				GetPK();
 				MessageBox.Show("done");
 			}
@@ -2206,7 +2813,7 @@ namespace OpenDental{
 					count++;
 					command="UPDATE "+comboTableName.SelectedItem.ToString()+" SET "+colName+"='"+POut.PString(newVal)+"' "
 						+"WHERE "+pkCol+"='"+POut.PString(table.Rows[i][pkCol].ToString())+"'";
-					General.NonQ(command);
+					ProcessCommand(command);
 				}
 			}
 			//textSubstOld.Text="";
@@ -2226,7 +2833,7 @@ namespace OpenDental{
 			Cursor=Cursors.WaitCursor;
 			string colName=comboColEdit.SelectedItem.ToString();
 			string command="UPDATE "+comboTableName.SelectedItem.ToString()+" SET "+colName+"=''";
-			General.NonQ(command);
+			ProcessCommand(command);
 			comboColEdit.SelectedIndex=-1;
 			FillGrid();
 			Cursor=Cursors.Default;
@@ -2264,7 +2871,7 @@ namespace OpenDental{
 				command="UPDATE "+POut.PString(comboTableName.SelectedItem.ToString())
 					+" SET "+colName+"='"+POut.PString(strBuild.ToString())+"' "
 					+"WHERE "+pkCol+"='"+table.Rows[i][pkCol].ToString()+"'";
-				General.NonQ(command);
+				ProcessCommand(command);
 			}
 			comboColEdit.SelectedIndex=-1;
 			FillGrid();
@@ -2314,7 +2921,7 @@ namespace OpenDental{
 					command="UPDATE "+POut.PString(comboTableName.SelectedItem.ToString())
 						+" SET "+colName+"='"+POut.PString(strBuild.ToString())+"' "
 						+"WHERE "+pkCol+"='"+table.Rows[i][pkCol].ToString()+"'";
-					General.NonQ(command);
+					ProcessCommand(command);
 				}//for rows
 			}//for columns
 			FillGrid();
@@ -2365,7 +2972,7 @@ namespace OpenDental{
 				command="UPDATE "+POut.PString(comboTableName.SelectedItem.ToString())
 					+" SET "+colName+"='"+POut.PString(newVal)+"' "
 					+"WHERE "+pkCol+"='"+table.Rows[i][pkCol].ToString()+"'";
-				General.NonQ(command);
+				ProcessCommand(command);
 			}
 			comboColEdit.SelectedIndex=-1;
 			FillGrid();
@@ -2391,7 +2998,7 @@ namespace OpenDental{
 			string colFrom=comboColCopyFrom.SelectedItem.ToString();
 			string command="UPDATE "+POut.PString(comboTableName.SelectedItem.ToString())
 				+" SET "+colName+"="+colFrom;
-			General.NonQ(command);
+			ProcessCommand(command);
 			comboColEdit.SelectedIndex=-1;
 			comboColCopyFrom.SelectedIndex=-1;
 			FillGrid();
@@ -2437,7 +3044,7 @@ namespace OpenDental{
 				command="UPDATE "+POut.PString(comboTableName.SelectedItem.ToString())+" SET "+colTo+"="
 					+POut.PDate(newDate)+" "
 					+"WHERE "+POut.PString(pkCol)+"='"+table.Rows[i][pkCol].ToString()+"'";
-				General.NonQ(command);
+				ProcessCommand(command);
 			}
 			//comboColDateFrom.Text="";
 			//comboColDateTo.Text="";
@@ -2479,7 +3086,7 @@ namespace OpenDental{
 				newVal=date.ToString(textDateNewFormat.Text);
 				command="UPDATE "+POut.PString(comboTableName.SelectedItem.ToString())+" SET "+colDest+"='"+POut.PString(newVal)+"' "
 					+"WHERE "+POut.PString(pkCol)+"='"+table.Rows[i][pkCol].ToString()+"'";
-				General.NonQ(command);
+				ProcessCommand(command);
 			}
 			//comboColDateSource.Text="";
 			//comboColDateDest.Text="";
@@ -2582,10 +3189,10 @@ namespace OpenDental{
 				+comboTableName.SelectedItem.ToString()+" AS t2 "//t2 is the target
 				+"SET t2.Guarantor=t1.PatNum "
 				+"WHERE t1.ChartNumber=t2.tempGuarantor";
-			General.NonQ(command);
+			ProcessCommand(command);
 			command="UPDATE "+comboTableName.SelectedItem.ToString()
 				+" SET Guarantor=PatNum WHERE Guarantor=''";
-			General.NonQ(command);
+			ProcessCommand(command);
 			FillGrid();
 			Cursor=Cursors.Default;
 		}
@@ -2680,17 +3287,13 @@ namespace OpenDental{
 				command="UPDATE "+comboTableName.SelectedItem.ToString()
 					+" SET Guarantor='"+hashAccounts[table.Rows[r]["tempAccountNum"].ToString()]
 					+"' WHERE PatNum='"+table.Rows[r]["PatNum"].ToString()+"'";
-				General.NonQ(command);
+				ProcessCommand(command);
 			}
 			FillGrid();
 			Cursor=Cursors.Default;
 		}
 
 		private void butCombine_Click(object sender, System.EventArgs e) {
-			if(pkCol==""){
-				MsgBox.Show(this,"Please set a primary key first.");
-				return;
-			}
 			if(comboColCombine1.SelectedIndex==-1 || comboColCombine1.SelectedIndex==-1){
 				MsgBox.Show(this,"Please select columns first.");
 				return;
@@ -2699,16 +3302,11 @@ namespace OpenDental{
 			string col1=comboColCombine1.SelectedItem.ToString();
 			string col2=comboColCombine2.SelectedItem.ToString();
 			string sep=textSepChar.Text;
-			string newVal;
 			string command;
-			for(int i=0;i<table.Rows.Count;i++){
-				newVal=table.Rows[i][col1].ToString()+sep+table.Rows[i][col2].ToString();
-				command="UPDATE "+POut.PString(comboTableName.SelectedItem.ToString())+" SET "+col1+"='"+POut.PString(newVal)+"' "
-					+"WHERE "+POut.PString(pkCol)+"='"+table.Rows[i][pkCol].ToString()+"'";
-				General.NonQ(command);
-			}
+      command="UPDATE "+POut.PString(comboTableName.SelectedItem.ToString())+" SET "+col1+"=CONCAT("+col1+",'"+sep+"',"+col2+")";
+			ProcessCommand(command);
       command="ALTER TABLE "+POut.PString(comboTableName.SelectedItem.ToString())+" DROP "+col2;
-			General.NonQ(command);
+			ProcessCommand(command);
 			FillGrid();
 			Cursor=Cursors.Default;
 			MessageBox.Show("done");
@@ -2739,7 +3337,7 @@ namespace OpenDental{
 			string colName=comboColRename.SelectedItem.ToString();
 			string command="ALTER TABLE "+POut.PString(comboTableName.SelectedItem.ToString())+" CHANGE "+colName
 				+" "+newName+" text NOT NULL";
-			General.NonQ(command);
+			ProcessCommand(command);
 			FillGrid();
 			GetPK();//in case the primary key column was renamed
 			Cursor=Cursors.Default;
@@ -2772,7 +3370,7 @@ namespace OpenDental{
 			else{
 				command+="AFTER "+colAfter;
 			}
-			General.NonQ(command);
+			ProcessCommand(command);
 			FillGrid();
 			Cursor=Cursors.Default;
 		}
@@ -2798,7 +3396,7 @@ namespace OpenDental{
 			Cursor=Cursors.WaitCursor;
 			string col=comboColDelete.SelectedItem.ToString();
 			string command="ALTER TABLE "+comboTableName.SelectedItem.ToString()+" DROP "+col;
-			General.NonQ(command);
+			ProcessCommand(command);
 			FillGrid();
 			Cursor=Cursors.Default;
 			//MessageBox.Show("done");
@@ -2823,7 +3421,7 @@ namespace OpenDental{
 			for(int i=0;i<numCols;i++){
 				col=table.Columns[table.Columns.Count-1-i].ColumnName;
 				command="ALTER TABLE "+comboTableName.SelectedItem.ToString()+" DROP "+col;
-				General.NonQ(command);
+				ProcessCommand(command);
 			}
 			FillGrid();
 			Cursor=Cursors.Default;
@@ -2849,7 +3447,7 @@ namespace OpenDental{
 			}
 			Cursor=Cursors.WaitCursor;
 			string command="ALTER TABLE "+comboTableName.SelectedItem.ToString()+" ADD "+newName+" text NOT NULL";
-			General.NonQ(command);
+			ProcessCommand(command);
 			FillGrid();
 			comboColAdd.Text="";
 			Cursor=Cursors.Default;
@@ -2881,7 +3479,7 @@ namespace OpenDental{
 				}
 				command+=" "+pkCol+"='"+POut.PString(selectedRowPKs[i])+"'";
 			}
-			General.NonQ(command);
+			ProcessCommand(command);
 			FillGrid();
 		}
 
@@ -2892,10 +3490,33 @@ namespace OpenDental{
 			}
 			Cursor=Cursors.WaitCursor;
 			string command=textQuery.Text;
-			General.NonQ(command);
+			ProcessCommand(command);
 			FillGrid();
 			Cursor=Cursors.Default;
 			MessageBox.Show("done");
+		}
+
+		private void butRunScript_Click(object sender,EventArgs e) {
+			Cursor=Cursors.WaitCursor;
+			General.NonQ(textScript.Text);
+			Cursor=Cursors.Default;
+			FillGrid();
+			GetPK();
+			MessageBox.Show("done");			
+		}
+
+		private void butSaveScript_Click(object sender,EventArgs e) {
+			if(!MsgBox.Show(this,true,"Overwrite existing file with the text that is showing?")){
+				return;
+			}
+			File.WriteAllText(GetScriptPath(),textScript.Text);
+		}
+
+		private void butReloadScript_Click(object sender,EventArgs e) {
+			if(!MsgBox.Show(this,true,"Reload script from file, overwriting what is showing?")) {
+				return;
+			}
+			textScript.Text=File.ReadAllText(GetScriptPath());
 		}
 
 		private void butValidate_Click(object sender, System.EventArgs e) {
@@ -2927,7 +3548,7 @@ namespace OpenDental{
 			int billType=PrefB.GetInt("PracticeDefaultBillType");
 			Patient pat;
 			Adjustment adj;
-			int adjType=189;
+			int adjType=2;
 			Patient patOld=new Patient();
 			Carrier CarrierCur;
 			for(int i=0;i<table.Rows.Count;i++){
@@ -3113,6 +3734,7 @@ namespace OpenDental{
 					adj.AdjType=adjType;
 					//adj.AdjDate=DateTime.Today;//automatically handled
 					adj.ProcDate=DateTime.Today;
+					adj.AdjDate=DateTime.Today;
 					adj.ProvNum=pat.PriProv;
 					Adjustments.InsertOrUpdate(adj,true);
 				}
@@ -3422,6 +4044,176 @@ namespace OpenDental{
 			}
 			
 		}
+
+		private void radioColNamRow_Click(object sender,EventArgs e) {
+				radioColNamRow.Checked=true;
+				radioGenerateColNames.Checked=false;
+		}
+
+		private void radioGenerateColNames_Click(object sender,EventArgs e) {
+				radioColNamRow.Checked=false;
+				radioGenerateColNames.Checked=true;
+		}
+
+		private void butCreateTemporaryTable_Click(object sender,EventArgs e) {
+				if(this.textCreateTempName.Text==""){
+						MessageBox.Show("You must first enter a table name.");
+						return;
+				}
+				string command="CREATE TABLE temp"+this.textCreateTempName.Text+" (";
+				for(int i=0;i<(int)this.upDownNumTempCols.Value;i++){
+						command+="tempCol"+(i+1).ToString()+" text default ''";
+						if(i<(int)this.upDownNumTempCols.Value-1){
+								command+=',';
+						}
+				}				
+				command+=")";
+				ProcessCommand(command);
+		}
+
+		private void comboCopyFromTable_SelectedIndexChanged(object sender,EventArgs e) {
+				if(comboCopyFromTable.SelectedIndex<0){
+						return;
+				}
+				//Get the column names of the newly selected temporary table.
+				string command="SELECT * FROM "+comboCopyFromTable.SelectedItem.ToString()+" LIMIT 1";
+				DataTable result=General.GetTable(command);
+				listCopyFromTable.Items.Clear();
+				for(int i=0;i<result.Columns.Count;i++){
+						listCopyFromTable.Items.Add(result.Columns[i].ColumnName);
+				}
+		}
+
+		private void comboCopyToTable_SelectedIndexChanged(object sender,EventArgs e) {
+				if(comboCopyToTable.SelectedIndex<0){
+						return;
+				}
+				//Get the column names of the newly selected temporary table.
+				string command="SELECT * FROM "+comboCopyToTable.SelectedItem.ToString()+" LIMIT 1";
+				DataTable result=General.GetTable(command);
+				listCopyToTable.Items.Clear();
+				for(int i=0;i<result.Columns.Count;i++){
+						listCopyToTable.Items.Add(result.Columns[i].ColumnName);
+				}
+		}
+
+		private void butFromTableUp_Click(object sender,EventArgs e) {
+				for(int i=0;i<(int)this.upDownCopyFromInc.Value;i++){
+						if(listCopyFromTable.SelectedIndex<1){
+								return;
+						}
+						object temp=listCopyFromTable.Items[listCopyFromTable.SelectedIndex];
+						listCopyFromTable.Items[listCopyFromTable.SelectedIndex]=listCopyFromTable.Items[listCopyFromTable.SelectedIndex-1];
+						listCopyFromTable.Items[listCopyFromTable.SelectedIndex-1]=temp;
+						listCopyFromTable.SelectedIndex--;
+				}
+		}
+
+		private void butFromTableDown_Click(object sender,EventArgs e) {
+				for(int i=0;i<(int)this.upDownCopyFromInc.Value;i++){
+						if(listCopyFromTable.SelectedIndex>listCopyFromTable.Items.Count-2 || listCopyFromTable.SelectedIndex<0){
+								return;
+						}
+						object temp=listCopyFromTable.Items[listCopyFromTable.SelectedIndex];
+						listCopyFromTable.Items[listCopyFromTable.SelectedIndex]=listCopyFromTable.Items[listCopyFromTable.SelectedIndex+1];
+						listCopyFromTable.Items[listCopyFromTable.SelectedIndex+1]=temp;
+						listCopyFromTable.SelectedIndex++;
+				}
+		}
+
+		private void butFromTableNoColumn_Click(object sender,EventArgs e) {
+				listCopyFromTable.Items.Insert(listCopyFromTable.SelectedIndex+1,"@NO COLUMN");
+		}
+
+		private void butToTableUp_Click(object sender,EventArgs e) {
+				for(int i=0;i<(int)this.upDownCopyToInc.Value;i++){
+						if(listCopyToTable.SelectedIndex<1){
+								return;
+						}
+						object temp=listCopyToTable.Items[listCopyToTable.SelectedIndex];
+						listCopyToTable.Items[listCopyToTable.SelectedIndex]=listCopyToTable.Items[listCopyToTable.SelectedIndex-1];
+						listCopyToTable.Items[listCopyToTable.SelectedIndex-1]=temp;
+						listCopyToTable.SelectedIndex--;
+				}
+		}
+
+		private void butToTableDown_Click(object sender,EventArgs e) {
+				for(int i=0;i<(int)this.upDownCopyToInc.Value;i++){
+						if(listCopyToTable.SelectedIndex>listCopyToTable.Items.Count-2 || listCopyToTable.SelectedIndex<0){
+								return;
+						}
+						object temp=listCopyToTable.Items[listCopyToTable.SelectedIndex];
+						listCopyToTable.Items[listCopyToTable.SelectedIndex]=listCopyToTable.Items[listCopyToTable.SelectedIndex+1];
+						listCopyToTable.Items[listCopyToTable.SelectedIndex+1]=temp;
+						listCopyToTable.SelectedIndex++;
+				}
+		}
+
+		private void butToTableNoColumn_Click(object sender,EventArgs e) {
+				listCopyToTable.Items.Insert(listCopyToTable.SelectedIndex+1,"@NO COLUMN");
+		}
+
+/*		private void tabRows_Enter(object sender,EventArgs e) {
+				object curSelection=comboTableName.SelectedItem;
+				FillTableNames();
+				for(int i=0;i<comboTableName.Items.Count;i++){
+						if(comboTableName.Items[i].ToString()==curSelection.ToString()){
+								comboTableName.SelectedIndex=i;
+						}
+				}
+		}
+
+		private void tabContr_Enter(object sender,EventArgs e) {
+				object curSelection=comboTableName.SelectedItem;
+				FillTableNames();
+				for(int i=0;i<comboTableName.Items.Count;i++){
+						if(comboTableName.Items[i].ToString()==curSelection.ToString()){
+								comboTableName.SelectedIndex=i;
+						}
+				}
+		}*/
+
+		private void butCopyAppendRows_Click(object sender,EventArgs e) {
+				int numCols=Math.Min(listCopyFromTable.Items.Count,listCopyToTable.Items.Count);
+				int numColsCopied=0;
+				string command="INSERT INTO "+comboCopyToTable.Text+" (";
+				for(int i=0;i<numCols;i++){
+						if(listCopyFromTable.Items[i].ToString()[0]!='@' && 
+								listCopyToTable.Items[i].ToString()[0]!='@'){
+								if(numColsCopied>0){
+										command+=",";
+								}
+								command+=listCopyToTable.Items[i].ToString();
+								numColsCopied++;
+						}
+				}
+				command+=") SELECT ";
+				if(numColsCopied<1){
+						MessageBox.Show("No columns marked for copy.");
+						return;
+				}
+				if(MessageBox.Show("Click yes to allow duplicate rows, no to force distinct rows.",
+						"",MessageBoxButtons.YesNo)==DialogResult.No){
+						command+="DISTINCTROW ";
+				}
+				numColsCopied=0;
+				for(int i=0;i<numCols;i++){
+						if(listCopyFromTable.Items[i].ToString()[0]!='@' && 
+								listCopyToTable.Items[i].ToString()[0]!='@'){
+								if(numColsCopied>0){
+										command+=",";
+								}
+								command+=listCopyFromTable.Items[i].ToString();
+								numColsCopied++;
+						}
+				}
+				command+=" FROM "+comboCopyFromTable.Text;
+				ProcessCommand(command);
+		}
+
+	
+
+		
 
 		
 
