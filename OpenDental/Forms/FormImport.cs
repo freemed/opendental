@@ -202,6 +202,10 @@ namespace OpenDental{
 				private NumericUpDown upDownCopyFromInc;
 				private Label label55;
 				private NumericUpDown upDownCopyToInc;
+				private GroupBox groupBox20;
+				private ComboBox comboColUnused;
+				private Button butColMarkUnused;
+				private Label label56;
 		private string currentDb;
 
 		///<summary></summary>
@@ -306,6 +310,10 @@ namespace OpenDental{
 				this.butQuerySubmit = new System.Windows.Forms.Button();
 				this.textQuery = new System.Windows.Forms.TextBox();
 				this.tabColumns = new System.Windows.Forms.TabPage();
+				this.groupBox20 = new System.Windows.Forms.GroupBox();
+				this.comboColUnused = new System.Windows.Forms.ComboBox();
+				this.butColMarkUnused = new System.Windows.Forms.Button();
+				this.label56 = new System.Windows.Forms.Label();
 				this.groupBox14 = new System.Windows.Forms.GroupBox();
 				this.textColsDelete = new System.Windows.Forms.TextBox();
 				this.butColsDelete = new System.Windows.Forms.Button();
@@ -431,6 +439,7 @@ namespace OpenDental{
 				((System.ComponentModel.ISupportInitialize)(this.upDownCopyFromInc)).BeginInit();
 				this.tabQuery.SuspendLayout();
 				this.tabColumns.SuspendLayout();
+				this.groupBox20.SuspendLayout();
 				this.groupBox14.SuspendLayout();
 				this.groupBox8.SuspendLayout();
 				this.groupBox2.SuspendLayout();
@@ -1176,6 +1185,7 @@ namespace OpenDental{
 				// 
 				// tabColumns
 				// 
+				this.tabColumns.Controls.Add(this.groupBox20);
 				this.tabColumns.Controls.Add(this.groupBox14);
 				this.tabColumns.Controls.Add(this.groupBox8);
 				this.tabColumns.Controls.Add(this.groupBox2);
@@ -1188,6 +1198,46 @@ namespace OpenDental{
 				this.tabColumns.TabIndex = 1;
 				this.tabColumns.Text = "Columns";
 				this.tabColumns.UseVisualStyleBackColor = true;
+				// 
+				// groupBox20
+				// 
+				this.groupBox20.Controls.Add(this.comboColUnused);
+				this.groupBox20.Controls.Add(this.butColMarkUnused);
+				this.groupBox20.Controls.Add(this.label56);
+				this.groupBox20.FlatStyle = System.Windows.Forms.FlatStyle.System;
+				this.groupBox20.Location = new System.Drawing.Point(773,136);
+				this.groupBox20.Name = "groupBox20";
+				this.groupBox20.Size = new System.Drawing.Size(250,77);
+				this.groupBox20.TabIndex = 16;
+				this.groupBox20.TabStop = false;
+				this.groupBox20.Text = "Mark Unused";
+				// 
+				// comboColUnused
+				// 
+				this.comboColUnused.Location = new System.Drawing.Point(119,18);
+				this.comboColUnused.MaxDropDownItems = 100;
+				this.comboColUnused.Name = "comboColUnused";
+				this.comboColUnused.Size = new System.Drawing.Size(123,21);
+				this.comboColUnused.TabIndex = 18;
+				// 
+				// butColMarkUnused
+				// 
+				this.butColMarkUnused.FlatStyle = System.Windows.Forms.FlatStyle.System;
+				this.butColMarkUnused.Location = new System.Drawing.Point(166,47);
+				this.butColMarkUnused.Name = "butColMarkUnused";
+				this.butColMarkUnused.Size = new System.Drawing.Size(75,23);
+				this.butColMarkUnused.TabIndex = 9;
+				this.butColMarkUnused.Text = "Mark";
+				this.butColMarkUnused.Click += new System.EventHandler(this.butColMarkUnused_Click);
+				// 
+				// label56
+				// 
+				this.label56.Location = new System.Drawing.Point(10,21);
+				this.label56.Name = "label56";
+				this.label56.Size = new System.Drawing.Size(100,16);
+				this.label56.TabIndex = 3;
+				this.label56.Text = "Name";
+				this.label56.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 				// 
 				// groupBox14
 				// 
@@ -2361,6 +2411,7 @@ namespace OpenDental{
 				this.tabQuery.ResumeLayout(false);
 				this.tabQuery.PerformLayout();
 				this.tabColumns.ResumeLayout(false);
+				this.groupBox20.ResumeLayout(false);
 				this.groupBox14.ResumeLayout(false);
 				this.groupBox14.PerformLayout();
 				this.groupBox8.ResumeLayout(false);
@@ -2545,10 +2596,9 @@ namespace OpenDental{
 				MsgBox.Show(this,"First line is blank.");
 				return;
 			}
+			line=line.Replace("\"","");
 			string[] colNames=line.Split(new char[] {'\t'});	
-			if(this.radioColNamRow.Checked){			
-				line=line.Replace("\"","");				
-			}else if(this.radioGenerateColNames.Checked){
+			if(this.radioGenerateColNames.Checked){
 				colNames=new string[colNames.Length];//Get number of columns.
 				for(int i=0;i<colNames.Length;i++){
 						colNames[i]="tempCol"+(i+1).ToString();
@@ -2585,6 +2635,11 @@ namespace OpenDental{
 			//MessageBox.Show("Preparing to run: "+command);
 			General.NonQ(command);
 			File.Delete(newPath);//Remove temporary file.
+			if(this.radioColNamRow.Checked){
+				//Remove the first row containing the column names, as they are not useful and possibly harmful to the conversion.
+				command="DELETE FROM "+newTable+" LIMIT 1";
+				General.NonQ(command);
+			}
 			FillTableNames();
 			comboTableName.SelectedItem=newTable;
 			FillGrid();
@@ -2624,6 +2679,7 @@ namespace OpenDental{
 			comboColDateDest.Items.Clear();
 			comboColPK.Items.Clear();
 			comboColCopyFrom.Items.Clear();
+			comboColUnused.Items.Clear();
 			for(int i=0;i<table.Columns.Count;i++){
 				comboColEdit.Items.Add(table.Columns[i].ColumnName);
 				comboColMove.Items.Add(table.Columns[i].ColumnName);
@@ -2638,6 +2694,7 @@ namespace OpenDental{
 				comboColDateDest.Items.Add(table.Columns[i].ColumnName);
 				comboColPK.Items.Add(table.Columns[i].ColumnName);
 				comboColCopyFrom.Items.Add(table.Columns[i].ColumnName);
+				comboColUnused.Items.Add(table.Columns[i].ColumnName);
 			}
 			grid.SetDataBinding(table,"");
 			textRows.Text=table.Rows.Count.ToString();
@@ -4153,26 +4210,6 @@ namespace OpenDental{
 				listCopyToTable.Items.Insert(listCopyToTable.SelectedIndex+1,"@NO COLUMN");
 		}
 
-/*		private void tabRows_Enter(object sender,EventArgs e) {
-				object curSelection=comboTableName.SelectedItem;
-				FillTableNames();
-				for(int i=0;i<comboTableName.Items.Count;i++){
-						if(comboTableName.Items[i].ToString()==curSelection.ToString()){
-								comboTableName.SelectedIndex=i;
-						}
-				}
-		}
-
-		private void tabContr_Enter(object sender,EventArgs e) {
-				object curSelection=comboTableName.SelectedItem;
-				FillTableNames();
-				for(int i=0;i<comboTableName.Items.Count;i++){
-						if(comboTableName.Items[i].ToString()==curSelection.ToString()){
-								comboTableName.SelectedIndex=i;
-						}
-				}
-		}*/
-
 		private void butCopyAppendRows_Click(object sender,EventArgs e) {
 				int numCols=Math.Min(listCopyFromTable.Items.Count,listCopyToTable.Items.Count);
 				int numColsCopied=0;
@@ -4209,6 +4246,34 @@ namespace OpenDental{
 				}
 				command+=" FROM "+comboCopyFromTable.Text;
 				ProcessCommand(command);
+		}
+
+		private void butColMarkUnused_Click(object sender,EventArgs e) {
+			if(this.comboColUnused.Text==""){
+				MsgBox.Show(this,"Please choose a name first.");
+				return;
+			}
+			//note that user has a list of acceptable col names to choose from, but they may also type in their own name.
+			string newName=this.comboColUnused.Text;
+			if(!Regex.IsMatch(newName,@"^[a-zA-Z0-9]+$")){
+				MsgBox.Show(this,"Name must be only upper and lowercase letters and numbers with no other symbols.");
+				return;
+			}
+			newName="temp"+newName;
+			for(int i=0;i<this.comboColUnused.Items.Count;i++){//go through the list of existing col names
+				if(newName==comboColUnused.Items[i].ToString()){
+					MsgBox.Show(this,"The new column name duplicates an existing column name.");
+					return;
+				}
+			}
+			Cursor=Cursors.WaitCursor;
+			string colName=this.comboColUnused.Text;
+			string command="ALTER TABLE "+POut.PString(comboTableName.SelectedItem.ToString())+" CHANGE "+colName
+				+" "+newName+" text NOT NULL";
+			ProcessCommand(command);
+			FillGrid();
+			GetPK();//in case the primary key column was renamed
+			Cursor=Cursors.Default;
 		}
 
 	
