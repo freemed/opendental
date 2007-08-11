@@ -142,6 +142,7 @@ namespace OpenDental{
 		private TextBox textUnitQty;
 		private TextBox textUnitCode;
 		private Label label21;
+		private OpenDental.UI.Button buttonUseAutoNote;
 		///<summary>This keeps the noteChanged event from erasing the signature when first loading.</summary>
 		private bool IsStartingUp;
 
@@ -261,6 +262,7 @@ namespace OpenDental{
 			this.labelBillingTypeTwo = new System.Windows.Forms.Label();
 			this.comboBillingTypeOne = new System.Windows.Forms.ComboBox();
 			this.labelBillingTypeOne = new System.Windows.Forms.Label();
+			this.buttonUseAutoNote = new OpenDental.UI.Button();
 			this.groupQuadrant.SuspendLayout();
 			this.groupArch.SuspendLayout();
 			this.groupSextant.SuspendLayout();
@@ -1338,12 +1340,27 @@ namespace OpenDental{
 			this.labelBillingTypeOne.Text = "Billing Type 1";
 			this.labelBillingTypeOne.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
+			// buttonUseAutoNote
+			// 
+			this.buttonUseAutoNote.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.buttonUseAutoNote.Autosize = true;
+			this.buttonUseAutoNote.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.buttonUseAutoNote.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.buttonUseAutoNote.CornerRadius = 4F;
+			this.buttonUseAutoNote.Location = new System.Drawing.Point(873,110);
+			this.buttonUseAutoNote.Name = "buttonUseAutoNote";
+			this.buttonUseAutoNote.Size = new System.Drawing.Size(80,25);
+			this.buttonUseAutoNote.TabIndex = 106;
+			this.buttonUseAutoNote.Text = "Auto Note";
+			this.buttonUseAutoNote.Click += new System.EventHandler(this.buttonUseAutoNote_Click);
+			// 
 			// FormProcEdit
 			// 
 			this.AcceptButton = this.butOK;
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.CancelButton = this.butCancel;
 			this.ClientSize = new System.Drawing.Size(962,675);
+			this.Controls.Add(this.buttonUseAutoNote);
 			this.Controls.Add(this.comboBillingTypeOne);
 			this.Controls.Add(this.labelBillingTypeOne);
 			this.Controls.Add(this.comboBillingTypeTwo);
@@ -2652,10 +2669,11 @@ namespace OpenDental{
 			}
 		}
 
-        private void label17_Click(object sender, EventArgs e)
-        {
-
-				}
+		private void buttonUseAutoNote_Click(object sender,EventArgs e) {
+			//Forms.FormAutoNoteRunAutoNote form = new Forms.FormAutoNoteRunAutoNote(this);
+			//form.Owner = this;
+			//form.ShowDialog(this);
+		}
 
 		
 
