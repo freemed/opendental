@@ -1,6 +1,6 @@
 namespace OpenDental
 {
-    partial class FormAutoNoteCreate
+    partial class FormAutoNoteEdit
     {
         /// <summary>
         /// Required designer variable.
@@ -348,12 +348,11 @@ namespace OpenDental
 					this.label8.Text = "Double Click A Variable To Add  ";
 					this.label8.Visible = false;
 					// 
-					// FormAutoNoteCreate
+					// FormAutoNoteEdit
 					// 
 					this.AutoScaleDimensions = new System.Drawing.SizeF(6F,13F);
 					this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 					this.ClientSize = new System.Drawing.Size(909,673);
-					this.ControlBox = false;
 					this.Controls.Add(this.label8);
 					this.Controls.Add(this.button3Cancel);
 					this.Controls.Add(this.button3EditVarDone);
@@ -380,10 +379,11 @@ namespace OpenDental
 					this.Controls.Add(this.button2EditFinish);
 					this.Controls.Add(this.button2Cancel);
 					this.Controls.Add(this.button2EditVar);
-					this.Name = "FormAutoNoteCreate";
+					this.Name = "FormAutoNoteEdit";
 					this.ShowInTaskbar = false;
-					this.Text = "FormAutoNoteCreate";
-					this.Load += new System.EventHandler(this.FormAutoNoteCreate_Load);
+					this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+					this.Text = "Auto Note";
+					this.Load += new System.EventHandler(this.FormAutoNoteEdit_Load);
 					this.ResumeLayout(false);
 					this.PerformLayout();
 

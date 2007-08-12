@@ -7,8 +7,8 @@ using System.Text;
 using System.Windows.Forms;
 
 namespace OpenDental {
-	public partial class FormAutoNoteCreate:Form {
-		public FormAutoNoteCreate() {
+	public partial class FormAutoNoteEdit:Form {
+		public FormAutoNoteEdit() {
 			InitializeComponent();
 		}
 
@@ -50,7 +50,7 @@ namespace OpenDental {
 			*/
 		}
 
-		private void FormAutoNoteCreate_Load(object sender,EventArgs e) {
+		private void FormAutoNoteEdit_Load(object sender,EventArgs e) {
 			/*
 			//TODOautonote
 			//This form is in desperate need of a redo unfortunately I'm unable to do this because of my lack of skill.
@@ -171,15 +171,14 @@ namespace OpenDental {
 			}
 			sw.Close();
 			sw.Dispose();
-
 			this.Close();
-			FormAutoNoteCreate form = new FormAutoNoteCreate();
-			form.Show();
+			//FormAutoNoteCreate form = new FormAutoNoteCreate();
+			//form.Show();
 		}
 
 		private void button3_Click(object sender,EventArgs e) {
-			FormAutoNoteCreate form = new FormAutoNoteCreate();
-			form.Show();
+			//FormAutoNoteCreate form = new FormAutoNoteCreate();
+			//form.Show();
 			this.Close();
 		}
 

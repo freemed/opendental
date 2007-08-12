@@ -1352,6 +1352,7 @@ namespace OpenDental{
 			this.buttonUseAutoNote.Size = new System.Drawing.Size(80,25);
 			this.buttonUseAutoNote.TabIndex = 106;
 			this.buttonUseAutoNote.Text = "Auto Note";
+			this.buttonUseAutoNote.Visible = false;
 			this.buttonUseAutoNote.Click += new System.EventHandler(this.buttonUseAutoNote_Click);
 			// 
 			// FormProcEdit
