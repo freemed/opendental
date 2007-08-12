@@ -206,6 +206,16 @@ namespace OpenDental{
 				private ComboBox comboColUnused;
 				private Button butColMarkUnused;
 				private Label label56;
+				private GroupBox groupBox21;
+				private ListBox listDupRowCols;
+				private ComboBox comboFindDups;
+				private Button button1;
+				private TextBox textDupRowTable;
+				private TextBox textBox10;
+				private Label label57;
+				private Label label59;
+				private Label label58;
+				private CheckBox checkFindDupsInsensitive;
 		private string currentDb;
 
 		///<summary></summary>
@@ -423,6 +433,16 @@ namespace OpenDental{
 				this.textCreateTempName = new System.Windows.Forms.TextBox();
 				this.textBox9 = new System.Windows.Forms.TextBox();
 				this.label48 = new System.Windows.Forms.Label();
+				this.groupBox21 = new System.Windows.Forms.GroupBox();
+				this.comboFindDups = new System.Windows.Forms.ComboBox();
+				this.listDupRowCols = new System.Windows.Forms.ListBox();
+				this.textDupRowTable = new System.Windows.Forms.TextBox();
+				this.textBox10 = new System.Windows.Forms.TextBox();
+				this.label57 = new System.Windows.Forms.Label();
+				this.button1 = new System.Windows.Forms.Button();
+				this.label58 = new System.Windows.Forms.Label();
+				this.label59 = new System.Windows.Forms.Label();
+				this.checkFindDupsInsensitive = new System.Windows.Forms.CheckBox();
 				((System.ComponentModel.ISupportInitialize)(this.grid)).BeginInit();
 				this.tabFinalImport.SuspendLayout();
 				this.tabScript.SuspendLayout();
@@ -458,6 +478,7 @@ namespace OpenDental{
 				this.tabPage1.SuspendLayout();
 				this.groupBox17.SuspendLayout();
 				((System.ComponentModel.ISupportInitialize)(this.upDownNumTempCols)).BeginInit();
+				this.groupBox21.SuspendLayout();
 				this.SuspendLayout();
 				// 
 				// grid
@@ -852,6 +873,7 @@ namespace OpenDental{
 				// 
 				// tabRows
 				// 
+				this.tabRows.Controls.Add(this.groupBox21);
 				this.tabRows.Controls.Add(this.groupBox18);
 				this.tabRows.Controls.Add(this.groupBox19);
 				this.tabRows.Location = new System.Drawing.Point(4,22);
@@ -2377,6 +2399,107 @@ namespace OpenDental{
 				this.label48.Text = "New Table Name";
 				this.label48.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 				// 
+				// groupBox21
+				// 
+				this.groupBox21.BackColor = System.Drawing.SystemColors.Control;
+				this.groupBox21.Controls.Add(this.checkFindDupsInsensitive);
+				this.groupBox21.Controls.Add(this.label59);
+				this.groupBox21.Controls.Add(this.label58);
+				this.groupBox21.Controls.Add(this.button1);
+				this.groupBox21.Controls.Add(this.textDupRowTable);
+				this.groupBox21.Controls.Add(this.textBox10);
+				this.groupBox21.Controls.Add(this.label57);
+				this.groupBox21.Controls.Add(this.listDupRowCols);
+				this.groupBox21.Controls.Add(this.comboFindDups);
+				this.groupBox21.Location = new System.Drawing.Point(573,7);
+				this.groupBox21.Name = "groupBox21";
+				this.groupBox21.Size = new System.Drawing.Size(267,207);
+				this.groupBox21.TabIndex = 19;
+				this.groupBox21.TabStop = false;
+				this.groupBox21.Text = "Find Duplicate Table Rows";
+				// 
+				// comboFindDups
+				// 
+				this.comboFindDups.FormattingEnabled = true;
+				this.comboFindDups.Location = new System.Drawing.Point(7,34);
+				this.comboFindDups.Name = "comboFindDups";
+				this.comboFindDups.Size = new System.Drawing.Size(121,21);
+				this.comboFindDups.TabIndex = 0;
+				this.comboFindDups.SelectedIndexChanged += new System.EventHandler(this.comboFindDups_SelectedIndexChanged);
+				// 
+				// listDupRowCols
+				// 
+				this.listDupRowCols.FormattingEnabled = true;
+				this.listDupRowCols.Location = new System.Drawing.Point(134,34);
+				this.listDupRowCols.Name = "listDupRowCols";
+				this.listDupRowCols.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
+				this.listDupRowCols.Size = new System.Drawing.Size(120,95);
+				this.listDupRowCols.TabIndex = 1;
+				// 
+				// textDupRowTable
+				// 
+				this.textDupRowTable.Location = new System.Drawing.Point(51,134);
+				this.textDupRowTable.Name = "textDupRowTable";
+				this.textDupRowTable.Size = new System.Drawing.Size(123,20);
+				this.textDupRowTable.TabIndex = 13;
+				// 
+				// textBox10
+				// 
+				this.textBox10.Location = new System.Drawing.Point(7,134);
+				this.textBox10.Name = "textBox10";
+				this.textBox10.ReadOnly = true;
+				this.textBox10.Size = new System.Drawing.Size(46,20);
+				this.textBox10.TabIndex = 12;
+				this.textBox10.Text = "temp";
+				this.textBox10.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+				// 
+				// label57
+				// 
+				this.label57.Location = new System.Drawing.Point(6,111);
+				this.label57.Name = "label57";
+				this.label57.Size = new System.Drawing.Size(122,16);
+				this.label57.TabIndex = 11;
+				this.label57.Text = "Output Table Name";
+				this.label57.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+				// 
+				// button1
+				// 
+				this.button1.Location = new System.Drawing.Point(70,178);
+				this.button1.Name = "button1";
+				this.button1.Size = new System.Drawing.Size(125,23);
+				this.button1.TabIndex = 14;
+				this.button1.Text = "Find Duplicates";
+				this.button1.UseVisualStyleBackColor = true;
+				this.button1.Click += new System.EventHandler(this.button1_Click);
+				// 
+				// label58
+				// 
+				this.label58.AutoSize = true;
+				this.label58.Location = new System.Drawing.Point(6,17);
+				this.label58.Name = "label58";
+				this.label58.Size = new System.Drawing.Size(71,13);
+				this.label58.TabIndex = 15;
+				this.label58.Text = "Source Table";
+				// 
+				// label59
+				// 
+				this.label59.AutoSize = true;
+				this.label59.Location = new System.Drawing.Point(133,17);
+				this.label59.Name = "label59";
+				this.label59.Size = new System.Drawing.Size(97,13);
+				this.label59.TabIndex = 16;
+				this.label59.Text = "Columns To Check";
+				// 
+				// checkFindDupsInsensitive
+				// 
+				this.checkFindDupsInsensitive.AutoSize = true;
+				this.checkFindDupsInsensitive.Location = new System.Drawing.Point(81,158);
+				this.checkFindDupsInsensitive.Name = "checkFindDupsInsensitive";
+				this.checkFindDupsInsensitive.Size = new System.Drawing.Size(103,17);
+				this.checkFindDupsInsensitive.TabIndex = 17;
+				this.checkFindDupsInsensitive.Text = "Case Insensitive";
+				this.checkFindDupsInsensitive.UseVisualStyleBackColor = true;
+				// 
 				// FormImport
 				// 
 				this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
@@ -2438,6 +2561,8 @@ namespace OpenDental{
 				this.groupBox17.ResumeLayout(false);
 				this.groupBox17.PerformLayout();
 				((System.ComponentModel.ISupportInitialize)(this.upDownNumTempCols)).EndInit();
+				this.groupBox21.ResumeLayout(false);
+				this.groupBox21.PerformLayout();
 				this.ResumeLayout(false);
 
 		}
@@ -2652,12 +2777,14 @@ namespace OpenDental{
 			comboTableName.Items.Clear();
 			comboCopyFromTable.Items.Clear();
 			comboCopyToTable.Items.Clear();
+			comboFindDups.Items.Clear();
 			for(int i=0;i<tempT.Rows.Count;i++){
 				if(tempT.Rows[i][0].ToString().Length>4 && tempT.Rows[i][0].ToString().Substring(0,4)=="temp"){
 					string val=tempT.Rows[i][0].ToString();
 					comboTableName.Items.Add(val);
 					comboCopyFromTable.Items.Add(val);
 					comboCopyToTable.Items.Add(val);
+					comboFindDups.Items.Add(val);
 				}
 			}
 		}
@@ -3559,6 +3686,7 @@ namespace OpenDental{
 			Cursor=Cursors.Default;
 			FillGrid();
 			GetPK();
+			FillTableNames();
 			MessageBox.Show("done");			
 		}
 
@@ -3669,12 +3797,17 @@ namespace OpenDental{
 								pat.PatNum=PIn.PInt(table.Rows[i][j].ToString());
 								break;
 							case "Position":
-								if(table.Rows[i][j].ToString()=="M")
+								if(table.Rows[i][j].ToString().ToUpper()=="M")
 									pat.Position=PatientPosition.Married;
-								else if(table.Rows[i][j].ToString()=="S")
+								else if(table.Rows[i][j].ToString().ToUpper()=="S")
 									pat.Position=PatientPosition.Single;
-								else if(table.Rows[i][j].ToString()=="W")
+								else if(table.Rows[i][j].ToString().ToUpper()=="W")
 									pat.Position=PatientPosition.Widowed;
+								else if(table.Rows[i][j].ToString().ToUpper()=="C"){
+										pat.Position=PatientPosition.Child;
+								}else if(table.Rows[i][j].ToString().ToUpper()=="D"){
+										pat.Position=PatientPosition.Divorced;
+								}
 								break;
 							case "Preferred":
 								pat.Preferred=PIn.PString(table.Rows[i][j].ToString());
@@ -4126,6 +4259,7 @@ namespace OpenDental{
 				}				
 				command+=")";
 				ProcessCommand(command);
+				FillTableNames();
 		}
 
 		private void comboCopyFromTable_SelectedIndexChanged(object sender,EventArgs e) {
@@ -4276,46 +4410,72 @@ namespace OpenDental{
 			Cursor=Cursors.Default;
 		}
 
-	
+		private void comboFindDups_SelectedIndexChanged(object sender,EventArgs e) {
+				if(comboFindDups.SelectedIndex<0){
+						return;
+				}
+				string tempTable=comboFindDups.SelectedItem.ToString();
+				//Get the column names of the newly selected temporary table.
+				string command="SELECT * FROM "+tempTable+" LIMIT 1";
+				DataTable result=General.GetTable(command);
+				listDupRowCols.Items.Clear();
+				for(int i=0;i<result.Columns.Count;i++){
+						listDupRowCols.Items.Add(result.Columns[i].ColumnName);
+				}
+				textDupRowTable.Text=tempTable.Substring(4,tempTable.Length-4)+"dups";
+		}
 
-		
-
-		
-
-		
-
-		
-
-		
-
-		
-
-		
-
-		
-
-
-		
-
-		
-
-		
-
-		
-		
-
-		
-		
-
-		
-
-		
-
-		
-
-	
-
-		
+		private void button1_Click(object sender,EventArgs e) {
+				if(comboFindDups.Text.Length<4 || comboFindDups.Text.Substring(0,4).ToLower()!="temp"){
+						MessageBox.Show("You must first enter a valid temporary table name.");
+						return;
+				}
+				if(listDupRowCols.SelectedItems.Count<1){
+						MessageBox.Show("You must first select at least 1 column of the temporary table to perform duplicate analysis on.");
+						return;
+				}
+				if(textDupRowTable.Text==""){
+						MessageBox.Show("You must first enter an output temporary table name for the duplicate row results to be placed into.");
+						return;
+				}
+				Cursor=Cursors.WaitCursor;
+				//Create the table where the result will be stored.
+				string tab="temp"+textDupRowTable.Text;
+				string command="CREATE TABLE "+tab+" SELECT * FROM "+comboFindDups.Text;
+				General.NonQ(command);
+				//Modify the copy table so it is all upper-cased if we care about case insensitivity.
+				if(checkFindDupsInsensitive.Checked){
+						command="UPDATE "+tab+" SET ";
+						for(int i=0;i<listDupRowCols.SelectedItems.Count;i++){
+								string colName=listDupRowCols.SelectedItems[i].ToString();
+								command+=colName+"=UPPER("+colName+")";
+								if(i<listDupRowCols.SelectedItems.Count-1){
+										command+=",";
+								}
+						}
+						General.NonQ(command);
+				}
+				string tab2=tab+"2";
+				command="CREATE TABLE "+tab2+" SELECT * FROM "+tab;
+				General.NonQ(command);
+				command="DELETE FROM "+tab+" WHERE (SELECT COUNT(*) FROM "+tab2+" WHERE ";
+				for(int i=0;i<listDupRowCols.SelectedItems.Count;i++){
+						string colName=listDupRowCols.SelectedItems[i].ToString();
+						command+=tab+"."+colName+"="+tab2+"."+colName;
+						if(i<listDupRowCols.SelectedItems.Count-1){
+								command+=" AND ";
+						}
+				}			
+				command+=" LIMIT 2)=1";
+				General.NonQ(command);
+				command="DROP TABLE "+tab2;
+				General.NonQ(command);
+				Cursor=Cursors.Default;			
+				FillTableNames();
+				comboTableName.Text=tab;
+				FillGrid();
+				MessageBox.Show("Done");
+			}
 
 		
 
