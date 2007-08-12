@@ -1344,6 +1344,7 @@ namespace OpenDental{
 
 		///<summary>Important.  Gets all new day info from db and redraws screen</summary>
 		public void RefreshPeriod(){
+			bubbleAptNum=0;
 			DateTime startDate;
 			DateTime endDate;
 			if(ContrApptSheet.IsWeeklyView) {

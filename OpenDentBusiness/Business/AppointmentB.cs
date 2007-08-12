@@ -224,7 +224,7 @@ namespace OpenDentBusiness{
 				row["Assistant"]=raw.Rows[i]["Assistant"].ToString();
 				row["billingType"]=DefB.GetName(DefCat.BillingTypes,PIn.PInt(raw.Rows[i]["BillingType"].ToString()));
 				if(raw.Rows[i]["ChartNumber"].ToString()!=""){
-					row["chartNumber"]="ChartNumber: "+raw.Rows[i]["ChartNumber"].ToString();
+					row["chartNumber"]=raw.Rows[i]["ChartNumber"].ToString();
 				}
 				//row["ChartNumber"]=raw.Rows[i]["ChartNumber"].ToString();
 				row["chartNumAndName"]="";
