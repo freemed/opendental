@@ -1303,7 +1303,7 @@ namespace OpenDental {
 			//CovPats.Refresh(PlanList,PatPlanList);
 			PatientNoteCur=PatientNotes.Refresh(PatCur.PatNum,PatCur.Guarantor);
 			//other tables are refreshed in FillAcctLineAL
-			DataSetMain=AccountModule.GetAll(patNum);
+			DataSetMain=AccountModule.GetAll(patNum,ViewingInRecall);
 		}
 
 		private void RefreshModuleScreen() {
@@ -3356,7 +3356,7 @@ namespace OpenDental {
 			}
 			DataSetMain = null;
 			if (PatCur != null) {
-				DataSetMain = AccountModule.GetAll(PatCur.PatNum);
+				DataSetMain = AccountModule.GetAll(PatCur.PatNum,ViewingInRecall);
 			}
 			gridProg.BeginUpdate();
 			gridProg.Columns.Clear();

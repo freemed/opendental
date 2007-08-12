@@ -2330,6 +2330,11 @@ namespace OpenDental{
 			}
 		}
 
+		private void buttonUseAutoNote_Click(object sender,EventArgs e) {
+			//Forms.FormAutoNoteRunAutoNote form = new Forms.FormAutoNoteRunAutoNote(this);
+			//form.Owner = this;
+			//form.ShowDialog(this);
+		}
 
 		private void butDelete_Click(object sender, System.EventArgs e) {
 			if(MessageBox.Show(Lan.g(this,"Delete Procedure?"),"",MessageBoxButtons.OKCancel)!=DialogResult.OK){
@@ -2339,15 +2344,7 @@ namespace OpenDental{
 				Recalls.Synch(ProcCur.PatNum);//needs to be moved into ProcedureB.Delete
 				DialogResult=DialogResult.OK;	
 			}
-		}
-
-		/*private void DeleteClaimProcs(){
-			for(int i=0;i<ClaimProcList.Length;i++){
-				if(ClaimProcList[i].ProcNum==ProcCur.ProcNum){
-					ClaimProcList[i].Delete();
-				}
-			}
-		}*/
+		}		
 
 		private void butOK_Click(object sender, System.EventArgs e){
 			if(EntriesAreValid()){
@@ -2669,11 +2666,7 @@ namespace OpenDental{
 			}
 		}
 
-		private void buttonUseAutoNote_Click(object sender,EventArgs e) {
-			//Forms.FormAutoNoteRunAutoNote form = new Forms.FormAutoNoteRunAutoNote(this);
-			//form.Owner = this;
-			//form.ShowDialog(this);
-		}
+		
 
 		
 

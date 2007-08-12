@@ -48,7 +48,13 @@ namespace OpenDental.Eclaims
 				File.Delete(oldFileNameFull);
 				return false;
 			}
-			string fileNameOnly=Path.GetFileName(fileNameFull);
+			//encrypt
+			//example usage: "C:\temp\7z.exe" a -tzip -pmypass "C:\temp\temp.zip" "C:\temp\temp.txt"
+			string zipNameFull=fileNameFull.Substring(0,fileNameFull.Length-4)+".zip";
+			string arguments="a -tzip -p"+clearhouse.Password+" \""+zipNameFull+"\" \""+fileNameFull+"\"";
+			Process.Start("7z.exe",arguments);
+			File.Delete(fileNameFull);
+			string fileNameOnly=Path.GetFileName(zipNameFull);
 			//upload
 			try{
 				FtpWebRequest request;
@@ -65,7 +71,7 @@ namespace OpenDental.Eclaims
 				const int bufferLength = 2048;
 				byte[] buffer = new byte[bufferLength];
 				int readBytes = 0;
-				streamRead=File.OpenRead(fileNameFull);
+				streamRead=File.OpenRead(zipNameFull);
 				do{
 					readBytes = streamRead.Read(buffer,0,bufferLength);
 					streamRequest.Write(buffer,0,readBytes);
@@ -76,7 +82,7 @@ namespace OpenDental.Eclaims
 			}
 			catch(Exception e) {
 				MessageBox.Show(e.Message);
-				File.Delete(fileNameFull);
+				File.Delete(zipNameFull);
 				return false;
 			}
 			return true;

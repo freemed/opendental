@@ -6,16 +6,15 @@ using System.Drawing;
 
 namespace OpenDentBusiness {
 	public class AccountModuleB {
-		public static DataSet GetAll(int patNum){
+		public static DataSet GetAll(int patNum,bool viewingInRecall){
 			DataSet retVal=new DataSet();
-			if (PrefB.GetBool("ShowProgressNotesInsteadofCommLog")) {
+			if (viewingInRecall) {
 				retVal.Tables.Add(ChartModuleB.GetProgNotes(patNum, false));
 			}
 			else {
 				retVal.Tables.Add(GetCommLog(patNum));
 			}
-
-				return retVal;
+			return retVal;
 		}
 
 		private static DataTable GetCommLog(int patNum) {
@@ -136,6 +135,7 @@ namespace OpenDentBusiness {
 
 	public class DtoAccountModuleGetAll:DtoQueryBase {
 		public int PatNum;
+		public bool ViewingInRecall;
 	}
 
 

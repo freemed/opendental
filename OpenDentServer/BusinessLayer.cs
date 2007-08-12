@@ -21,7 +21,7 @@ namespace OpenDentServer {
 				return GeneralB.GetDataSet(((DtoGeneralGetDataSet)dto).Commands);
 			}
 			else if(type==typeof(DtoAccountModuleGetAll)) {
-				return AccountModuleB.GetAll(((DtoAccountModuleGetAll)dto).PatNum);
+				return AccountModuleB.GetAll(((DtoAccountModuleGetAll)dto).PatNum,((DtoAccountModuleGetAll)dto).ViewingInRecall);
 			}
 			else if(type==typeof(DtoChartModuleGetAll)) {
 				return ChartModuleB.GetAll(((DtoChartModuleGetAll)dto).PatNum,((DtoChartModuleGetAll)dto).IsAuditMode);

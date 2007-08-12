@@ -844,7 +844,6 @@ namespace OpenDental{
 				| Prefs.UpdateBool("ShowNotesInAccount", checkShowAccountNotes.Checked)
 				| Prefs.UpdateBool("PrintSimpleStatements", checkSimpleStatement.Checked)
 				| Prefs.UpdateBool("BrokenApptCommLogNotAdjustment", checkBrokenApptNote.Checked)
-				//| Prefs.UpdateBool("ShowProgressNotesInsteadofCommLog", checkProgNotesNotComm.Checked)
 				| Prefs.UpdateString("StationaryImage", textBoxLogo.Text)
 				| Prefs.UpdateString("StationaryDocument", textBoxStationary.Text)
 				| Prefs.UpdateBool("ApptBubbleDelay", checkApptBubbleDelay.Checked))
