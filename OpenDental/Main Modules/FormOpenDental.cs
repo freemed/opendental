@@ -1920,7 +1920,12 @@ namespace OpenDental{
 		}
 
 		private void menuItemAutoNotes_Click(object sender,EventArgs e) {
-
+			if(!Security.IsAuthorized(Permissions.Setup)) {
+				return;
+			}
+			FormAutoNoteSetup FormA=new FormAutoNoteSetup();
+			FormA.ShowDialog();
+			SecurityLogs.MakeLogEntry(Permissions.Setup,0,"Auto Notes");
 		}
 
 		private void menuItemClaimForms_Click(object sender, System.EventArgs e) {
