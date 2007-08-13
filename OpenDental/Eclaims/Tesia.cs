@@ -88,6 +88,10 @@ namespace OpenDental.Eclaims
 			return true;
 		}
 
+		public static void Eligibility270(){
+
+		}
+
 		
 
 

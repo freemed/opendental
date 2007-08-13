@@ -374,38 +374,6 @@ namespace OpenDental{
 			ToolBarHistory.Invalidate();
 		}
 
-		/*private void ChangeSelectedTo(string claimStatus){
-			if(gridMain.SelectedIndices.Length==0){
-				MessageBox.Show(Lan.g(this,"Please select items first."));
-				return;
-			}
-			for(int i=0;i<gridMain.SelectedIndices.Length;i++){
-				Claims.UpdateStatus(listQueue[gridMain.SelectedIndices[i]].ClaimNum,claimStatus);
-			}
-			FillGrid();
-			FillHistory();
-		}*/
-
-		/*private void StatusUnsent_Clicked(object sender, System.EventArgs e){
-			//ChangeSelectedTo("U");
-		}
-
-		private void StatusHold_Clicked(object sender, System.EventArgs e){
-			//ChangeSelectedTo("H");
-		}
-
-		private void StatusWaiting_Clicked(object sender, System.EventArgs e){
-			//ChangeSelectedTo("W");
-		}
-
-		private void StatusProbably_Clicked(object sender, System.EventArgs e){
-			//ChangeSelectedTo("P");
-		}
-
-		private void StatusSent_Clicked(object sender, System.EventArgs e){
-			//ChangeSelectedTo("S");
-		}*/
-
 		private void GotoAccount_Clicked(object sender, System.EventArgs e){
 			//accessed by right clicking
 			if(gridMain.SelectedIndices.Length!=1) {
@@ -443,29 +411,6 @@ namespace OpenDental{
 				else{
 					row.Cells.Add(Clearinghouses.GetDescript(listQueue[i].ClearinghouseNum));
 				}
-				/*string status="";
-				switch(listQueue[i].ClaimStatus){
-					case "U"://unsent
-						status="Unsent";
-						break;
-					case "H"://hold until pri received
-						status="Hold";
-						break;
-					case "W"://waiting to be sent
-						status="Waiting to Send";
-						break;
-					case "P"://probably sent
-						status="Probably Sent";
-						break;
-					case "S"://sent-verified
-						status="Sent-Verified";
-						break;
-					case "R"://received
-						status="Received";
-						break;
-				}
-				row.Cells.Add(Lan.g(this,status));
-				row.Cells.Add("");*/
 				if(listQueue[i].NoSendElect){
 					row.Cells.Add("");
 				}
@@ -504,9 +449,6 @@ namespace OpenDental{
 				case "Labels":
 					OnLabels_Click();
 					break;
-				/*case "Status":
-					OnStatus_Click();
-					break;*/
 				case "Eclaims":
 					OnEclaims_Click();
 					break;

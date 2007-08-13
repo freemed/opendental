@@ -213,10 +213,10 @@ namespace OpenDental{
 			}
 			panelPat.BackColor=DefB.Long[(int)DefCat.MiscColors][0].ItemColor;
 			labelViewRequestDocument.Text="         ";
-			if(!PrefB.GetBool("CustomizedForPracticeWeb")) {
-				butEligibility.Visible=false;
-				labelViewRequestDocument.Visible=false;
-			}
+			//if(!PrefB.GetBool("CustomizedForPracticeWeb")) {
+			//	butEligibility.Visible=false;
+			//	labelViewRequestDocument.Visible=false;
+			//}
 			Cursor=Cursors.Default;
 		}
 
@@ -3082,23 +3082,27 @@ namespace OpenDental{
 			}
 		}
 
-		//<summary>Gets a carrierNum based on the data entered. Called from FillPlanCur and butLabel_Click</summary>
-		//private void GetCarrierNum(){
-
-		//}
-
-		//<summary>Fills the current insplan with data from the form.  Validates first. Only called from butOK click. Does not save to database.</summary>
-		//private bool FillPlanCur(){
-		//}
-
-		//<summary>Only called from butOK_Click</summary>
-		//private bool FillPatPlanCur(){
-		//}
-
-		//Added SPK/AAD 10/06 for eligibility check.-------------------------------------------------------------------------
-		#region EligibilityCheck
-		//PraciceWeb seems to have a partnership agreement with this clearinghouse, but we do not yet.
 		private void butEligibility_Click(object sender,EventArgs e) {
+			Clearinghouse clearhouse=Clearinghouses.GetDefault();
+			if(clearhouse==null){
+				MsgBox.Show(this,"No clearinghouse is set as default.");
+				return;
+			}
+			if(clearhouse.CommBridge==EclaimsCommBridge.ClaimConnect){
+				EligibilityCheckDentalXchange();
+				return;
+			}
+			if(clearhouse.CommBridge==EclaimsCommBridge.Tesia) {
+				Eclaims.Tesia.Eligibility270();
+				return;
+			}
+			MsgBox.Show(this,"We do not have eligibility checks functional with your default clearinghouse.");
+		}
+		
+		#region EligibilityCheckDentalXchange
+		//Added SPK/AAD 10/06 for eligibility check.-------------------------------------------------------------------------
+		//PraciceWeb seems to have a partnership agreement with this clearinghouse, but we do not yet.
+		private void EligibilityCheckDentalXchange() {
 			Cursor = Cursors.WaitCursor;
 			OpenDental.com.dentalxchange.webservices.WebServiceService DCIService 
 				= new OpenDental.com.dentalxchange.webservices.WebServiceService();
@@ -3121,13 +3125,11 @@ namespace OpenDental{
 				loginID = "";
 				passWord = "";
 			}
-
 			if(loginID == "") {
 				MessageBox.Show("ClaimConnect login ID and password are required to check eligibility.");
 				Cursor = Cursors.Default;
 				return;
 			}
-
 			// Set Credentials
 			DCICredential.serviceID = "DCI Web Service ID: 001513";
 			DCICredential.username = loginID;   // ABCuser
@@ -3136,20 +3138,19 @@ namespace OpenDental{
 			DCICredential.version = "1";
 			// Set Request Document
 			//textAddress.Text = PrepareEligibilityRequest();
-			DCIRequest.content = PrepareEligibilityRequest(loginID,passWord);
+			DCIRequest.content = PrepareEligibilityRequestDentalXchange(loginID,passWord);
 			try {
 				DCIResponse = DCIService.lookupEligibility(DCICredential,DCIRequest);
 				//DisplayEligibilityStatus();
-				ProcessResponse(DCIResponse.content.ToString());
+				ProcessEligibilityResponseDentalXchange(DCIResponse.content.ToString());
 			}
 			catch(Exception ex) {
-
 				MessageBox.Show("Error : " + ex.Message);
 			}
 			Cursor = Cursors.Default;
 		}
 
-		private string PrepareEligibilityRequest(string loginID,string passWord) {
+		private string PrepareEligibilityRequestDentalXchange(string loginID,string passWord) {
 			string command;
 			DataTable table;
 			string infoReceiverLastName;
@@ -3165,16 +3166,13 @@ namespace OpenDental{
 			string GenderCode;
 			string TaxoCode;
 			string RelationShip;
-
 			XmlDocument doc = new XmlDocument();
-
 			XmlNode EligNode = doc.CreateNode(XmlNodeType.Element,"EligRequest","");
 			doc.AppendChild(EligNode);
 			// Prepare Namespace Attribute
 			XmlAttribute nameSpaceAttribute = doc.CreateAttribute("xmlns","xsi","http://www.w3.org/2000/xmlns/");
 			nameSpaceAttribute.Value = "http://www.w3.org/2001/XMLSchema-instance";
 			doc.DocumentElement.SetAttributeNode(nameSpaceAttribute);
-
 			// Prepare noNamespace Schema Location Attribute
 			XmlAttribute noNameSpaceSchemaLocation = doc.CreateAttribute("xsi","noNamespaceSchemaLocation","http://www.w3.org/2001/XMLSchema-instance");
 			//dmg Note sure what this is for. This path will not exist on Unix and will fail. In fact, this path
@@ -3182,7 +3180,6 @@ namespace OpenDental{
 			//a bug, but has not caused any user complaints thus far.
 			noNameSpaceSchemaLocation.Value = @"D:\eligreq.xsd";
 			doc.DocumentElement.SetAttributeNode(noNameSpaceSchemaLocation);
-
 			//  Prepare AuthInfo Node
 			XmlNode AuthInfoNode = doc.CreateNode(XmlNodeType.Element,"AuthInfo","");
 			//  Create UserName / Password ChildNode for AuthInfoNode
@@ -3194,21 +3191,17 @@ namespace OpenDental{
 			//  Append UserName / Password to AuthInfoNode
 			AuthInfoNode.AppendChild(UserName);
 			AuthInfoNode.AppendChild(Password);
-
 			//  Append AuthInfoNode To EligNode
 			EligNode.AppendChild(AuthInfoNode);
-
 			//  Prepare Information Receiver Node
 			XmlNode InfoReceiver = doc.CreateNode(XmlNodeType.Element,"InformationReceiver","");
 			XmlNode InfoAddress = doc.CreateNode(XmlNodeType.Element,"Address","");
 			XmlNode InfoAddressName = doc.CreateNode(XmlNodeType.Element,"Name","");
 			XmlNode InfoAddressFirstName = doc.CreateNode(XmlNodeType.Element,"FirstName","");
 			XmlNode InfoAddressLastName = doc.CreateNode(XmlNodeType.Element,"LastName","");
-
 			// Get Provider Information
 			command = @"SELECT FName,LName,Specialty FROM provider WHERE provnum=" + Convert.ToInt32(((Pref)PrefB.HList["PracticeDefaultProv"]).ValueString);
 			table =General.GetTable(command);
-
 			if(table.Rows.Count != 0) {
 				infoReceiverFirstName = PIn.PString(table.Rows[0][0].ToString());
 				infoReceiverLastName = PIn.PString(table.Rows[0][1].ToString());
@@ -3248,26 +3241,22 @@ namespace OpenDental{
 						TaxoCode = "1223G0001X";
 						break;
 				}
-
 			}
 			else {
 				infoReceiverFirstName = "Unknown";
 				infoReceiverLastName = "Unknown";
 				TaxoCode = "Unknown";
 			};
-
 			InfoAddressFirstName.InnerText = infoReceiverLastName;
 			InfoAddressLastName.InnerText = infoReceiverFirstName;
 			InfoAddressName.AppendChild(InfoAddressFirstName);
 			InfoAddressName.AppendChild(InfoAddressLastName);
-
 			XmlNode InfoAddressLine1 = doc.CreateNode(XmlNodeType.Element,"AddressLine1","");
 			XmlNode InfoAddressLine2 = doc.CreateNode(XmlNodeType.Element,"AddressLine2","");
 			XmlNode InfoPhone = doc.CreateNode(XmlNodeType.Element,"Phone","");
 			XmlNode InfoCity = doc.CreateNode(XmlNodeType.Element,"City","");
 			XmlNode InfoState = doc.CreateNode(XmlNodeType.Element,"State","");
 			XmlNode InfoZip = doc.CreateNode(XmlNodeType.Element,"Zip","");
-
 			//  Populate Practioner demographic from hash table
 			practiceAddress1 = ((Pref)PrefB.HList["PracticeAddress"]).ValueString;
 			practiceAddress2 = ((Pref)PrefB.HList["PracticeAddress2"]).ValueString;
@@ -3280,18 +3269,15 @@ namespace OpenDental{
 			else {
 				practicePhone = ((Pref)PrefB.HList["PracticePhone"]).ValueString;
 			}
-
 			practiceCity = ((Pref)PrefB.HList["PracticeCity"]).ValueString;
 			practiceState = ((Pref)PrefB.HList["PracticeST"]).ValueString;
 			practiceZip = ((Pref)PrefB.HList["PracticeZip"]).ValueString;
-
 			InfoAddressLine1.InnerText = practiceAddress1;
 			InfoAddressLine2.InnerText = practiceAddress2;
 			InfoPhone.InnerText = practicePhone;
 			InfoCity.InnerText = practiceCity;
 			InfoState.InnerText = practiceState;
 			InfoZip.InnerText = practiceZip;
-
 			InfoAddress.AppendChild(InfoAddressName);
 			InfoAddress.AppendChild(InfoAddressLine1);
 			InfoAddress.AppendChild(InfoAddressLine2);
@@ -3300,8 +3286,6 @@ namespace OpenDental{
 			InfoAddress.AppendChild(InfoState);
 			InfoAddress.AppendChild(InfoZip);
 			InfoReceiver.AppendChild(InfoAddress);
-
-
 			XmlNode InfoCredential = doc.CreateNode(XmlNodeType.Element,"Credential","");
 			XmlNode InfoCredentialType = doc.CreateNode(XmlNodeType.Element,"Type","");
 			XmlNode InfoCredentialValue = doc.CreateNode(XmlNodeType.Element,"Value","");
@@ -3309,23 +3293,18 @@ namespace OpenDental{
 			InfoCredentialValue.InnerText = "123456789";
 			InfoCredential.AppendChild(InfoCredentialType);
 			InfoCredential.AppendChild(InfoCredentialValue);
-
 			InfoReceiver.AppendChild(InfoCredential);
-
 			XmlNode InfoTaxonomyCode = doc.CreateNode(XmlNodeType.Element,"TaxonomyCode","");
 			InfoTaxonomyCode.InnerText = TaxoCode;
 			InfoReceiver.AppendChild(InfoTaxonomyCode);
-
 			//  Append InfoReceiver To EligNode
 			EligNode.AppendChild(InfoReceiver);
-
 			//  Payer Info
 			XmlNode InfoPayer = doc.CreateNode(XmlNodeType.Element,"Payer","");
 			XmlNode InfoPayerNEIC = doc.CreateNode(XmlNodeType.Element,"PayerNEIC","");
 			InfoPayerNEIC.InnerText = textElectID.Text;
 			InfoPayer.AppendChild(InfoPayerNEIC);
 			EligNode.AppendChild(InfoPayer);
-
 			//  Patient
 			XmlNode Patient = doc.CreateNode(XmlNodeType.Element,"Patient","");
 			XmlNode PatientName = doc.CreateNode(XmlNodeType.Element,"Name","");
@@ -3335,12 +3314,10 @@ namespace OpenDental{
 			XmlNode PatientSubscriber = doc.CreateNode(XmlNodeType.Element,"SubscriberID","");
 			XmlNode PatientRelationship = doc.CreateNode(XmlNodeType.Element,"RelationshipCode","");
 			XmlNode PatientGender = doc.CreateNode(XmlNodeType.Element,"Gender","");
-
 			// Read Patient FName,LName,DOB, and Gender from Patient Table
 			command = @"SELECT FName,LName,date_format(birthdate,'%m/%d/%Y') as BirthDate,Gender
 				FROM patient WHERE patient.PatNum=" + PatPlanCur.PatNum;
 			table = General.GetTable(command);
-
 			if(table.Rows.Count != 0) {
 				PatientFirstName.InnerText = PIn.PString(table.Rows[0][0].ToString());
 				PatientLastName.InnerText = PIn.PString(table.Rows[0][1].ToString());
@@ -3358,9 +3335,7 @@ namespace OpenDental{
 					default:
 						RelationShip = "34";
 						break;
-
 				}
-
 				switch(PIn.PString(table.Rows[0][3].ToString())) {
 					case "1":
 						GenderCode = "F";
@@ -3369,7 +3344,6 @@ namespace OpenDental{
 						GenderCode = "M";
 						break;
 				}
-
 			}
 			else {
 				PatientFirstName.InnerText = "Unknown";
@@ -3378,11 +3352,9 @@ namespace OpenDental{
 				RelationShip = "??";
 				GenderCode = "?";
 			}
-
 			PatientName.AppendChild(PatientFirstName);
 			PatientName.AppendChild(PatientLastName);
 			PatientSubscriber.InnerText = textSubscriberID.Text;
-
 			PatientRelationship.InnerText = RelationShip;
 			PatientGender.InnerText = GenderCode;
 			Patient.AppendChild(PatientName);
@@ -3391,7 +3363,6 @@ namespace OpenDental{
 			Patient.AppendChild(PatientRelationship);
 			Patient.AppendChild(PatientGender);
 			EligNode.AppendChild(Patient);
-
 			//  Subscriber
 			XmlNode Subscriber = doc.CreateNode(XmlNodeType.Element,"Subscriber","");
 			XmlNode SubscriberName = doc.CreateNode(XmlNodeType.Element,"Name","");
@@ -3401,13 +3372,11 @@ namespace OpenDental{
 			XmlNode SubscriberSubscriber = doc.CreateNode(XmlNodeType.Element,"SubscriberID","");
 			XmlNode SubscriberRelationship = doc.CreateNode(XmlNodeType.Element,"RelationshipCode","");
 			XmlNode SubscriberGender = doc.CreateNode(XmlNodeType.Element,"Gender","");
-
 			// Read Subscriber FName,LName,DOB, and Gender from Patient Table
 			command = @"SELECT FName,LName,date_format(birthdate,'%m/%d/%Y') as BirthDate,Gender
 				        FROM PATIENT WHERE PatNum In (SELECT Guarantor FROM 
                             PATIENT WHERE patnum = " + PatPlanCur.PatNum + ")";
 			table = General.GetTable(command);
-
 			if(table.Rows.Count != 0) {
 				SubscriberFirstName.InnerText = PIn.PString(table.Rows[0][0].ToString());
 				SubscriberLastName.InnerText = PIn.PString(table.Rows[0][1].ToString());
@@ -3427,12 +3396,9 @@ namespace OpenDental{
 				SubscriberDOB.InnerText = "99/99/9999";
 				GenderCode = "?";
 			}
-
 			SubscriberName.AppendChild(SubscriberFirstName);
 			SubscriberName.AppendChild(SubscriberLastName);
-
 			SubscriberSubscriber.InnerText = textSubscriberID.Text;
-
 			SubscriberRelationship.InnerText = RelationShip;
 			SubscriberGender.InnerText = GenderCode;
 			Subscriber.AppendChild(SubscriberName);
@@ -3441,26 +3407,21 @@ namespace OpenDental{
 			Subscriber.AppendChild(SubscriberRelationship);
 			Subscriber.AppendChild(SubscriberGender);
 			EligNode.AppendChild(Subscriber);
-
 			//  Prepare Information Receiver Node
 			XmlNode RenderingProvider = doc.CreateNode(XmlNodeType.Element,"RenderingProvider","");
 			XmlNode RenderingAddress = doc.CreateNode(XmlNodeType.Element,"Address","");
 			XmlNode RenderingAddressName = doc.CreateNode(XmlNodeType.Element,"Name","");
 			XmlNode RenderingAddressFirstName = doc.CreateNode(XmlNodeType.Element,"FirstName","");
 			XmlNode RenderingAddressLastName = doc.CreateNode(XmlNodeType.Element,"LastName","");
-
 			// Get Rendering Provider first and lastname
-
 			// Read Patient FName,LName,DOB, and Gender from Patient Table
 			command = @"SELECT Fname,Lname from provider
                         WHERE provnum in (select priprov from 
                         patient where patnum = " + PatPlanCur.PatNum + ")";
 			table = General.GetTable(command);
-
 			if(table.Rows.Count != 0) {
 				renderingProviderFirstName = PIn.PString(table.Rows[0][0].ToString());
 				renderingProviderLastName = PIn.PString(table.Rows[0][1].ToString());
-
 			}
 			else {
 				renderingProviderFirstName = infoReceiverFirstName;
@@ -3468,26 +3429,20 @@ namespace OpenDental{
 			};
 			RenderingAddressFirstName.InnerText = renderingProviderFirstName;
 			RenderingAddressLastName.InnerText = renderingProviderLastName;
-
 			RenderingAddressName.AppendChild(RenderingAddressFirstName);
 			RenderingAddressName.AppendChild(RenderingAddressLastName);
-
-
 			XmlNode RenderingAddressLine1 = doc.CreateNode(XmlNodeType.Element,"AddressLine1","");
 			XmlNode RenderingAddressLine2 = doc.CreateNode(XmlNodeType.Element,"AddressLine2","");
 			XmlNode RenderingPhone = doc.CreateNode(XmlNodeType.Element,"Phone","");
 			XmlNode RenderingCity = doc.CreateNode(XmlNodeType.Element,"City","");
 			XmlNode RenderingState = doc.CreateNode(XmlNodeType.Element,"State","");
 			XmlNode RenderingZip = doc.CreateNode(XmlNodeType.Element,"Zip","");
-
 			RenderingAddressLine1.InnerText = practiceAddress1;
 			RenderingAddressLine2.InnerText = practiceAddress2;
 			RenderingPhone.InnerText = practicePhone;
 			RenderingCity.InnerText = practiceCity;
 			RenderingState.InnerText = practiceState;
 			RenderingZip.InnerText = practiceZip;
-
-
 			RenderingAddress.AppendChild(RenderingAddressName);
 			RenderingAddress.AppendChild(RenderingAddressLine1);
 			RenderingAddress.AppendChild(RenderingAddressLine2);
@@ -3495,7 +3450,6 @@ namespace OpenDental{
 			RenderingAddress.AppendChild(RenderingCity);
 			RenderingAddress.AppendChild(RenderingState);
 			RenderingAddress.AppendChild(RenderingZip);
-
 			XmlNode RenderingCredential = doc.CreateNode(XmlNodeType.Element,"Credential","");
 			XmlNode RenderingCredentialType = doc.CreateNode(XmlNodeType.Element,"Type","");
 			XmlNode RenderingCredentialValue = doc.CreateNode(XmlNodeType.Element,"Value","");
@@ -3503,19 +3457,17 @@ namespace OpenDental{
 			RenderingCredentialValue.InnerText = "123456789";
 			RenderingCredential.AppendChild(RenderingCredentialType);
 			RenderingCredential.AppendChild(RenderingCredentialValue);
-
 			XmlNode RenderingTaxonomyCode = doc.CreateNode(XmlNodeType.Element,"TaxonomyCode","");
 			RenderingTaxonomyCode.InnerText = TaxoCode;
 			RenderingProvider.AppendChild(RenderingAddress);
 			RenderingProvider.AppendChild(RenderingCredential);
 			RenderingProvider.AppendChild(RenderingTaxonomyCode);
-
 			//  Append RenderingProvider To EligNode
 			EligNode.AppendChild(RenderingProvider);
 			return doc.OuterXml;
 		}
 
-		private void ProcessResponse(string DCIResponse) {
+		private void ProcessEligibilityResponseDentalXchange(string DCIResponse) {
 			XmlDocument doc = new XmlDocument();
 			XmlNode IsEligibleNode;
 			string IsEligibleStatus;
@@ -3549,11 +3501,9 @@ namespace OpenDental{
 			string loginID;
 			string passWord;
 			string command;
-
 			// Get Login / Password
 			command = @"select loginid,password from clearinghouse where isDefault=1";
 			table = General.GetTable(command);
-
 			if(table.Rows.Count != 0) {
 				loginID = PIn.PString(table.Rows[0][0].ToString());
 				passWord = PIn.PString(table.Rows[0][1].ToString());
@@ -3562,8 +3512,7 @@ namespace OpenDental{
 				loginID = "";
 				passWord = "";
 			}
-
-			MsgBoxCopyPaste MB = new MsgBoxCopyPaste(PrepareEligibilityRequest(loginID,passWord));
+			MsgBoxCopyPaste MB = new MsgBoxCopyPaste(PrepareEligibilityRequestDentalXchange(loginID,passWord));
 			MB.ShowDialog();
 		}
 		#endregion
