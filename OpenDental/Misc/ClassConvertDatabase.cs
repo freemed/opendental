@@ -5592,6 +5592,11 @@ namespace OpenDental{
 				General.NonQEx(command);
 				command="UPDATE clearinghouse SET CommBridge = '10' WHERE ISA08='113504607'";
 				General.NonQEx(command);
+				//after r627  No longer use TesiaLink folder.
+				command="UPDATE clearinghouse SET ExportPath = '"+POut.PString(@"C:\Tesia\OUT\")+"' WHERE ISA08='113504607'";
+				General.NonQEx(command);
+				command="UPDATE clearinghouse SET ResponsePath = '"+POut.PString(@"C:\Tesia\IN\")+"' WHERE ISA08='113504607'";
+				General.NonQEx(command);
 
 
 

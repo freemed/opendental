@@ -164,9 +164,7 @@ namespace OpenDental{
 					comboClearhouse.SelectedIndex=i;
 				}
 			}
-			if(comboClearhouse.Items.Count>0
-				&& comboClearhouse.SelectedIndex==-1)
-			{
+			if(comboClearhouse.Items.Count>0 && comboClearhouse.SelectedIndex==-1){
 				comboClearhouse.SelectedIndex=0;
 			}
 			FillGrid();
@@ -194,44 +192,40 @@ namespace OpenDental{
 				MsgBox.Show(this,"Please select a clearinghouse first.");
 				return;
 			}
-			if(Clearinghouses.List[comboClearhouse.SelectedIndex].CommBridge
-				==EclaimsCommBridge.None
-				|| Clearinghouses.List[comboClearhouse.SelectedIndex].CommBridge
-				==EclaimsCommBridge.Renaissance
-				|| Clearinghouses.List[comboClearhouse.SelectedIndex].CommBridge
-				==EclaimsCommBridge.RECS)
+			if(Clearinghouses.List[comboClearhouse.SelectedIndex].CommBridge==EclaimsCommBridge.None
+				|| Clearinghouses.List[comboClearhouse.SelectedIndex].CommBridge==EclaimsCommBridge.Renaissance
+				|| Clearinghouses.List[comboClearhouse.SelectedIndex].CommBridge==EclaimsCommBridge.RECS)
 			{
-				MsgBox.Show
-					(this,"No built-in functionality for retrieving reports from this clearinghouse.");
+				MsgBox.Show(this,"No built-in functionality for retrieving reports from this clearinghouse.");
 				return;
 			}
 			if(!MsgBox.Show(this,true,"Connect to clearinghouse to retrieve reports?")){
 				return;
 			}
-			else if(Clearinghouses.List[comboClearhouse.SelectedIndex].CommBridge
-				==EclaimsCommBridge.WebMD)
-			{
+			else if(Clearinghouses.List[comboClearhouse.SelectedIndex].CommBridge==EclaimsCommBridge.Tesia) {
+				try{
+					MessageBox.Show("Incomplete");
+					Tesia.GetReports();
+				}
+				catch(Exception ex){
+					MessageBox.Show(ex.Message);
+					return;
+				}
+			}
+			else if(Clearinghouses.List[comboClearhouse.SelectedIndex].CommBridge==EclaimsCommBridge.WebMD){
 				if(!WebMD.Launch(Clearinghouses.List[comboClearhouse.SelectedIndex],0)){
 					MessageBox.Show(Lan.g(this,"Error retrieving."));
 					return;
 				}
-				//MsgBox.Show
-				//	(this,"Reports from WebMD are retrieved every time you send the next batch of claims.");
-				//return;
 			}
-			else if(Clearinghouses.List[comboClearhouse.SelectedIndex].CommBridge
-				==EclaimsCommBridge.BCBSGA)
-			{
+			else if(Clearinghouses.List[comboClearhouse.SelectedIndex].CommBridge==EclaimsCommBridge.BCBSGA){
 				if(!BCBSGA.Retrieve(Clearinghouses.List[comboClearhouse.SelectedIndex])){
 					MessageBox.Show(Lan.g(this,"Error retrieving."));
 					return;
 				}
 			}
-			else if(Clearinghouses.List[comboClearhouse.SelectedIndex].CommBridge
-				==EclaimsCommBridge.ClaimConnect)
-			{ //Added SPK 5/05
-				try
-				{
+			else if(Clearinghouses.List[comboClearhouse.SelectedIndex].CommBridge==EclaimsCommBridge.ClaimConnect){ //Added SPK 5/05
+				try{
 					Process.Start(@"http://www.dentalxchange.com/newdxc");
 				}
 				catch
@@ -251,8 +245,8 @@ namespace OpenDental{
 				catch
 				{
 					MessageBox.Show("Could not locate the file.");
+					return;
 				}
-				return;
 			}
 			MsgBox.Show(this,"Retrieval successful");
 			FillGrid();

@@ -92,6 +92,10 @@ namespace OpenDental.Eclaims
 
 		}
 
+		public static void GetReports(){
+
+		}
+
 		
 
 
