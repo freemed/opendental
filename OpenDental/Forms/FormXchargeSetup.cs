@@ -102,13 +102,13 @@ namespace OpenDental{
 			// 
 			// linkLabel1
 			// 
-			this.linkLabel1.LinkArea = new System.Windows.Forms.LinkArea(27,16);
+			this.linkLabel1.LinkArea = new System.Windows.Forms.LinkArea(27,18);
 			this.linkLabel1.Location = new System.Drawing.Point(20,20);
 			this.linkLabel1.Name = "linkLabel1";
 			this.linkLabel1.Size = new System.Drawing.Size(425,16);
 			this.linkLabel1.TabIndex = 3;
 			this.linkLabel1.TabStop = true;
-			this.linkLabel1.Text = "The X-Charge website is at www.x-charge.com 1-800-637-8268";
+			this.linkLabel1.Text = "The X-Charge website is at www.open-dentx.com";
 			this.linkLabel1.UseCompatibleTextRendering = true;
 			this.linkLabel1.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel1_LinkClicked);
 			// 
@@ -198,7 +198,7 @@ namespace OpenDental{
 		}
 
 		private void linkLabel1_LinkClicked(object sender,LinkLabelLinkClickedEventArgs e) {
-			Process.Start("http://www.x-charge.com");
+			Process.Start("http://www.open-dentx.com");
 		}
 
 		private void butOK_Click(object sender, System.EventArgs e) {
