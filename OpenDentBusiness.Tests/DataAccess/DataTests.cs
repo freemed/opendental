@@ -11,7 +11,8 @@ using System.Reflection;
 
 namespace OpenDentBusiness.Tests {
 	[TestFixture()]
-	public class DataTests {
+	public abstract class DataTests<T>
+			where T : DataObjectBase, new() {
 		private const int DatabaseMaxInteger = 65535;
 
 		Random random;
@@ -41,28 +42,25 @@ namespace OpenDentBusiness.Tests {
 			AppDomain.Unload(domain);
 		}
 		
-		/*
 		[Test()]
-		public void PatientTest() {
+		public void Test() {
 			RemotingClient.OpenDentBusinessIsLocal = true;
-			DataObjectFactory<Patient>.UseParameters = false;
-			TestTableType<Patient>();
-			DataObjectFactory<Patient>.UseParameters = true;
-			TestTableType<Patient>();
+			DataObjectFactory<T>.UseParameters = false;
+			TestTableType();
+			DataObjectFactory<T>.UseParameters = true;
+			TestTableType();
 
 			RemotingClient.OpenDentBusinessIsLocal = false;
 			RemotingClient.ServerName = "localhost";
 			RemotingClient.ServerPort = 9390;
 
-			DataObjectFactory<Patient>.UseParameters = false;
-			TestTableType<Patient>();
-			DataObjectFactory<Patient>.UseParameters = true;
-			TestTableType<Patient>();
+			DataObjectFactory<T>.UseParameters = false;
+			TestTableType();
+			DataObjectFactory<T>.UseParameters = true;
+			TestTableType();
 		}
-		*/
 
-		private void TestTableType<T>()
-			where T : DataObjectBase, new() {
+		private void TestTableType() {
 
 			// Create a new object
 			T t = DataObjectFactory<T>.NewObject();
