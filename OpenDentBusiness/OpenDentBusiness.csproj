@@ -158,7 +158,6 @@
     <Compile Include="TableTypes\MountItem.cs" />
     <Compile Include="TableTypes\MountItemDef.cs" />
     <Compile Include="TableTypes\MountDef.cs" />
-    <Compile Include="TableTypes\Ebatch.cs" />
     <Compile Include="TableTypes\Etrans.cs" />
     <Compile Include="TableTypes\FormPat.cs" />
     <Compile Include="TableTypes\County.cs" />

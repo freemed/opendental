@@ -167,10 +167,23 @@ namespace OpenDental{
 			if(comboClearhouse.Items.Count>0 && comboClearhouse.SelectedIndex==-1){
 				comboClearhouse.SelectedIndex=0;
 			}
+			ImportReportFiles();
 			FillGrid();
 		}
 
 		private void comboClearhouse_SelectedIndexChanged(object sender, System.EventArgs e) {
+			ImportReportFiles();
+			if(Clearinghouses.List[comboClearhouse.SelectedIndex].CommBridge==EclaimsCommBridge.None
+				|| Clearinghouses.List[comboClearhouse.SelectedIndex].CommBridge==EclaimsCommBridge.Renaissance
+				|| Clearinghouses.List[comboClearhouse.SelectedIndex].CommBridge==EclaimsCommBridge.RECS)
+			{
+				//MsgBox.Show(this,"No built-in functionality for retrieving reports from this clearinghouse.");
+				//return;
+				butRetrieve.Visible=false;
+			}
+			else{
+				butRetrieve.Visible=true;
+			}
 			FillGrid();
 		}
 
@@ -179,12 +192,30 @@ namespace OpenDental{
 			if(comboClearhouse.Items.Count==0){
 				return;
 			}
+			
+			
+				
+		}
+
+		///<summary>Takes any files found in the reports folder for the clearinghouse, and imports them into the database.  Deletes the original files.  No longer any such thing as archive.</summary>
+		private void ImportReportFiles(){
 			if(!Directory.Exists(Clearinghouses.List[comboClearhouse.SelectedIndex].ResponsePath)){
 				//MsgBox.Show(this,"Clearinghouse does not have a valid Report Path set.");
 				return;
 			}
-			listMain.Items.AddRange(
-				Directory.GetFiles(Clearinghouses.List[comboClearhouse.SelectedIndex].ResponsePath));
+			string[] files=Directory.GetFiles(Clearinghouses.List[comboClearhouse.SelectedIndex].ResponsePath);
+			Etrans etrans;
+			//FileInfo info;
+			DateTime creationTime;
+			for(int i=0;i<files.Length;i++){
+				creationTime=File.GetCreationTime(files[i]);
+				etrans=new Etrans();
+				etrans.DateTimeTrans=creationTime;
+				etrans.ClearinghouseNum=Clearinghouses.List[comboClearhouse.SelectedIndex].ClearinghouseNum;
+				//etrans.Etype=EtransType.Response;
+				etrans.MessageText=File.ReadAllText(files[i]);
+				//Etranss.
+			}
 		}
 
 		private void butRetrieve_Click(object sender, System.EventArgs e) {

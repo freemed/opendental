@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.IO;
 using System.Windows.Forms;
 
@@ -42,7 +43,7 @@ namespace OpenDental.Eclaims
 					}
 					else if(segment.SegmentID=="ST"){//if new transaction set
 						if(LastGroup().Transactions==null){
-							LastGroup().Transactions=new ArrayList();
+							LastGroup().Transactions=new List<X12Transaction>();
 						}
 						LastGroup().Transactions.Add(new X12Transaction(segment));
 					}
@@ -51,7 +52,7 @@ namespace OpenDental.Eclaims
 					}
 					else{//it must be a detail segment within a transaction.
 						if(LastTransaction().Segments==null){
-							LastTransaction().Segments=new ArrayList();
+							LastTransaction().Segments=new List<X12Segment>();
 						}
 						LastTransaction().Segments.Add(segment);
 					}
@@ -76,7 +77,7 @@ namespace OpenDental.Eclaims
 	///<summary></summary>
 	public class X12FunctionalGroup{
 		///<summary>A collection of X12Transactions</summary>
-		public ArrayList Transactions;
+		public List<X12Transaction> Transactions;
 		///<summary>The segment that identifies this functional group</summary>
 		public X12Segment Header;
 
@@ -90,7 +91,7 @@ namespace OpenDental.Eclaims
 	///<summary></summary>
 	public class X12Transaction{
 		///<summary>A collection of all the X12Segments for this transaction, in the order they originally appeared.</summary>
-		public ArrayList Segments;
+		public List<X12Segment> Segments;
 
 		///<summary>Supply the transaction header(ST) when creating this object.</summary>
 		public X12Transaction(X12Segment header){

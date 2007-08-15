@@ -3,6 +3,7 @@ using System.Collections;
 using System.Data;
 using System.Windows.Forms;
 using OpenDentBusiness;
+using OpenDental.Eclaims;
 
 namespace OpenDental{
 	///<summary></summary>
@@ -243,8 +244,22 @@ namespace OpenDental{
 			Insert(etrans);
 			return etrans;
 		}
+
+		///<summary>Etrans type will be figured out by this class.  Either TextReport, Acknowledge_997, or StatusNotify_277.</summary>
+		public static Etrans ProcessIncomingReport(DateTime dateTimeTrans,int clearhouse,string messageText){
+			Etrans etrans=new Etrans();
+			etrans.DateTimeTrans=dateTimeTrans;
+			etrans.ClearinghouseNum=clearhouse;
+			etrans.MessageText=messageText;
+			//X12.
+
+
+			//etrans.Etype=EtransType.Response;
+			//File.ReadAllText(files[i]);
+			return null;
+		}
 		
-		///<summary>DateTimeTrans is always handled automatically here.  No need to set it in advance.</summary>
+		///<summary>DateTimeTrans can be handled automatically here.  No need to set it in advance, but it's allowed to do so.</summary>
 		private static void Insert(Etrans etrans){
 			if(PrefB.RandomKeys) {
 				etrans.EtransNum=MiscData.GetKey("etrans","EtransNum");
@@ -258,12 +273,17 @@ namespace OpenDental{
 			if(PrefB.RandomKeys) {
 				command+="'"+POut.PInt(etrans.EtransNum)+"', ";
 			}
-			if(FormChooseDatabase.DBtype==DatabaseType.Oracle) {
-				command+=POut.PDateT(MiscData.GetNowDateTime());
-			}else{//Assume MySQL
-				command+="NOW()";
+			if(etrans.DateTimeTrans.Year<1880){
+				if(FormChooseDatabase.DBtype==DatabaseType.Oracle) {
+					command+=POut.PDateT(MiscData.GetNowDateTime());
+				}else{//Assume MySQL
+					command+="NOW()";
+				}
 			}
-			command+=", " //"'"+POut.PDateT (etrans.DateTimeTrans)+"', "
+			else{
+				command+=POut.PDateT(etrans.DateTimeTrans);
+			}
+			command+=", "
 				+"'"+POut.PInt   (etrans.ClearinghouseNum)+"', "
 				+"'"+POut.PInt   ((int)etrans.Etype)+"', "
 				+"'"+POut.PInt   (etrans.ClaimNum)+"', "

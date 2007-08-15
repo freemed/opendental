@@ -33,20 +33,7 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public Etrans Copy(){
-			Etrans e=new Etrans();
-			e.EtransNum=EtransNum;
-			e.DateTimeTrans=DateTimeTrans;
-			e.ClearinghouseNum=ClearinghouseNum;
-			e.Etype=Etype;
-			e.ClaimNum=ClaimNum;
-			e.OfficeSequenceNumber=OfficeSequenceNumber;
-			e.CarrierTransCounter=CarrierTransCounter;
-			e.CarrierTransCounter2=CarrierTransCounter2;
-			e.CarrierNum=CarrierNum;
-			e.CarrierNum2=CarrierNum2;
-			e.PatNum=PatNum;
-			e.MessageText=MessageText;
-			return e;
+			return (Etrans)this.MemberwiseClone();
 		}
 
 	}

@@ -1219,6 +1219,12 @@ namespace OpenDentBusiness{
 		PaymentResponse_CA,
 		///<summary>20 Canada. Type 15</summary>
 		SummaryResponse_CA,
+		///<summary>21 Ack from clearinghouse. X12-997.</summary>
+		Acknowledge_997,
+		///<summary>22 X12-277. Unsolicited claim status notification.</summary>
+		StatusNotify_277,
+		///<summary>23 Text report from clearinghouse in human readable format.</summary>
+		TextReport
 	}
 
 	///<summary></summary>
