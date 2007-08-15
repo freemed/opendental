@@ -1,6 +1,7 @@
 using System;
 using System.Drawing;
 using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows.Forms;
 using OpenDentBusiness;
@@ -20,6 +21,7 @@ namespace OpenDental{
 		public bool IsSelectionMode;
 		///<summary>If IsSelectionMode, then after closing with OK, this will contain number.</summary>
 		//public int SelectedDiseaseDefNum;
+		private List<AutoNote> AutoNoteList;
 
 		///<summary></summary>
 		public FormAutoNoteSetup()
@@ -160,6 +162,12 @@ namespace OpenDental{
 		}
 
 		private void FillGrid(){
+			listMain.Items.Clear();
+			AutoNoteList=AutoNotes.Refresh();
+			string s;
+			for(int i = 0;i < AutoNoteList.Count;i++) {
+				listMain.Items.Add(AutoNoteList[i].AutoNoteName);
+			}
 			/*DiseaseDefs.Refresh();
 			listMain.Items.Clear();
 			string s;

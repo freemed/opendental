@@ -5607,7 +5607,7 @@ namespace OpenDental{
 					PRIMARY KEY (AutoNoteNum)
 					) DEFAULT CHARSET=utf8";
 				General.NonQEx(command);
-				command="DROP TABLE IF EXISTS autonote";
+				command="DROP TABLE IF EXISTS autonotecontrol";
 				General.NonQEx(command);
 				command=@"CREATE TABLE autonotecontrol (
 					AutoNoteControlNum int unsigned NOT NULL auto_increment,
