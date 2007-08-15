@@ -150,6 +150,7 @@
     <Compile Include="Data Interface\AutoCodeConds.cs" />
     <Compile Include="Data Interface\AutoCodeItems.cs" />
     <Compile Include="Data Interface\AutoCodes.cs" />
+    <Compile Include="Data Interface\AutoNoteControls.cs" />
     <Compile Include="Data Interface\AutoNotes.cs" />
     <Compile Include="Data Interface\Benefits.cs" />
     <Compile Include="Data Interface\Carriers.cs" />

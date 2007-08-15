@@ -129,6 +129,7 @@
     <Compile Include="TableTypes\AutoCodeCond.cs" />
     <Compile Include="TableTypes\AutoCodeItem.cs" />
     <Compile Include="TableTypes\AutoNote.cs" />
+    <Compile Include="TableTypes\AutoNoteControl.cs" />
     <Compile Include="TableTypes\Benefit.cs" />
     <Compile Include="TableTypes\Carrier.cs" />
     <Compile Include="TableTypes\Claim.cs" />
