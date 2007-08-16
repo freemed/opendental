@@ -2703,7 +2703,8 @@ namespace OpenDental{
 					"SSN",
 					"State",
 					"WkPhone",
-					"Zip"
+					"Zip",
+					"PatStatus"
 				};
 			}
 			else if(radioCarriers.Checked){
@@ -3807,91 +3808,107 @@ namespace OpenDental{
 				CarrierCur=new Carrier();
 				for(int j=0;j<table.Columns.Count;j++){
 					if(radioPatients.Checked){
+						string fieldVal=table.Rows[i][j].ToString();
 						switch(table.Columns[j].ColumnName){
 							case "Address":
-								pat.Address=PIn.PString(table.Rows[i][j].ToString());
+								pat.Address=PIn.PString(fieldVal);
 								break;
 							case "Address2":
-								pat.Address2=PIn.PString(table.Rows[i][j].ToString());
+								pat.Address2=PIn.PString(fieldVal);
 								break;
 							case "AddrNote":
-								pat.AddrNote=PIn.PString(table.Rows[i][j].ToString());
+								pat.AddrNote=PIn.PString(fieldVal);
 								break;
 							//Balance
 							case "Birthdate":
-								pat.Birthdate=PIn.PDate(table.Rows[i][j].ToString());//handles "" ok
+								pat.Birthdate=PIn.PDate(fieldVal);//handles "" ok
 								break;
 							case "ChartNumber":
-								pat.ChartNumber=PIn.PString(table.Rows[i][j].ToString());
+								pat.ChartNumber=PIn.PString(fieldVal);
 								break;
 							case "City":
-								pat.City=PIn.PString(table.Rows[i][j].ToString());
+								pat.City=PIn.PString(fieldVal);
 								break;
 							case "DateFirstVisit":
-								pat.DateFirstVisit=PIn.PDate(table.Rows[i][j].ToString());
+								pat.DateFirstVisit=PIn.PDate(fieldVal);
 								break;
 							case "FName":
-								pat.FName=PIn.PString(table.Rows[i][j].ToString());
+								pat.FName=PIn.PString(fieldVal);
 								break;
 							case "Gender":
-								if(table.Rows[i][j].ToString()=="M")
+								if(fieldVal=="M")
 									pat.Gender=PatientGender.Male;
-								else if(table.Rows[i][j].ToString()=="F")
+								else if(fieldVal=="F")
 									pat.Gender=PatientGender.Female;
-								else if(table.Rows[i][j].ToString()=="U")
+								else if(fieldVal=="U")
 									pat.Gender=PatientGender.Unknown;
 								break;
 							case "Guarantor":
-								pat.Guarantor=PIn.PInt(table.Rows[i][j].ToString());
+								pat.Guarantor=PIn.PInt(fieldVal);
 								break;
 							case "HmPhone":
-								pat.HmPhone=PIn.PString(table.Rows[i][j].ToString());
+								pat.HmPhone=PIn.PString(fieldVal);
 								break;
 							case "LName":
-								pat.LName=PIn.PString(table.Rows[i][j].ToString());
+								pat.LName=PIn.PString(fieldVal);
 								break;
 							case "MedicaidID":
-								pat.MedicaidID=PIn.PString(table.Rows[i][j].ToString());
+								pat.MedicaidID=PIn.PString(fieldVal);
 								break;
 							case "MedUrgNote":
-								pat.MedUrgNote=PIn.PString(table.Rows[i][j].ToString());
+								pat.MedUrgNote=PIn.PString(fieldVal);
 								break;
 							case "MiddleI":
-								pat.MiddleI=PIn.PString(table.Rows[i][j].ToString());
+								pat.MiddleI=PIn.PString(fieldVal);
 								break;
 							case "PatNum":
-								pat.PatNum=PIn.PInt(table.Rows[i][j].ToString());
+								pat.PatNum=PIn.PInt(fieldVal);
 								break;
 							case "Position":
-								if(table.Rows[i][j].ToString().ToUpper()=="M")
+								if(fieldVal.ToUpper()=="M")
 									pat.Position=PatientPosition.Married;
-								else if(table.Rows[i][j].ToString().ToUpper()=="S")
+								else if(fieldVal.ToUpper()=="S")
 									pat.Position=PatientPosition.Single;
-								else if(table.Rows[i][j].ToString().ToUpper()=="W")
+								else if(fieldVal.ToUpper()=="W")
 									pat.Position=PatientPosition.Widowed;
-								else if(table.Rows[i][j].ToString().ToUpper()=="C"){
+								else if(fieldVal.ToUpper()=="C"){
 										pat.Position=PatientPosition.Child;
-								}else if(table.Rows[i][j].ToString().ToUpper()=="D"){
+								}else if(fieldVal.ToUpper()=="D"){
 										pat.Position=PatientPosition.Divorced;
 								}
 								break;
 							case "Preferred":
-								pat.Preferred=PIn.PString(table.Rows[i][j].ToString());
+								pat.Preferred=PIn.PString(fieldVal);
 								break;
 							case "PriProv":
-//								pat.PriProv=PIn.PString(table.Rows[i][j].ToString());
+//								pat.PriProv=PIn.PString(fieldVal);
 								break;
 							case "SSN":
-								pat.SSN=PIn.PString(table.Rows[i][j].ToString());
+								pat.SSN=PIn.PString(fieldVal);
 								break;
 							case "State":
-								pat.State=PIn.PString(table.Rows[i][j].ToString());
+								pat.State=PIn.PString(fieldVal);
 								break;
 							case "WkPhone":
-								pat.WkPhone=PIn.PString(table.Rows[i][j].ToString());
+								pat.WkPhone=PIn.PString(fieldVal);
 								break;
 							case "Zip":
-								pat.Zip=PIn.PString(table.Rows[i][j].ToString());
+								pat.Zip=PIn.PString(fieldVal);
+								break;
+							case "PatStatus":
+								if(fieldVal.ToLower()=="archived"){
+										pat.PatStatus=PatientStatus.Archived;
+								}else if(fieldVal.ToLower()=="deceased"){
+										pat.PatStatus=PatientStatus.Deceased;
+								}else if(fieldVal.ToLower()=="deleted"){
+										pat.PatStatus=PatientStatus.Deleted;
+								}else if(fieldVal.ToLower()=="inactive"){
+										pat.PatStatus=PatientStatus.Inactive;
+								}else if(fieldVal.ToLower()=="nonpatient"){
+										pat.PatStatus=PatientStatus.NonPatient;
+								}else if(fieldVal.ToLower()=="patient"){
+										pat.PatStatus=PatientStatus.Patient;
+								}
 								break;
 						}
 					}
@@ -4162,6 +4179,7 @@ namespace OpenDental{
 				//Errors-----------------------------------------------------------------------------------------------------------
 				for(int r=0;r<table.Rows.Count;r++){
 					if(radioPatients.Checked){
+						string fieldVal=table.Rows[r][i].ToString();
 						switch(table.Columns[i].ColumnName){
 							case "Address":
 								break;
@@ -4171,14 +4189,14 @@ namespace OpenDental{
 								break;
 							//Balance
 							case "Birthdate":
-								if(table.Rows[r][i].ToString()==""){
+								if(fieldVal==""){
 									continue;
 								}
 								try{
-									DateTime.Parse(table.Rows[r][i].ToString());
+									DateTime.Parse(fieldVal);
 								}
 								catch{
-									throw new Exception("Column Birthdate, unrecognizable date: "+table.Rows[r][i].ToString());
+									throw new Exception("Column Birthdate, unrecognizable date: "+fieldVal);
 								}
 								break;
 							case "ChartNumber":
@@ -4186,29 +4204,29 @@ namespace OpenDental{
 							case "City":
 								break;
 							case "DateFirstVisit":
-								if(table.Rows[r][i].ToString()==""){
+								if(fieldVal==""){
 									continue;
 								}
 								try{
-									DateTime.Parse(table.Rows[r][i].ToString());
+									DateTime.Parse(fieldVal);
 								}
 								catch{
-									throw new Exception("Column DateFirstVisit, unrecognizable date: "+table.Rows[r][i].ToString());
+									throw new Exception("Column DateFirstVisit, unrecognizable date: "+fieldVal);
 								}
 								break;
 							case "FName":
 								//handled in warnings
 								break;
 							case "Gender":
-								if(table.Rows[r][i].ToString()!="M" && table.Rows[r][i].ToString()!="F" && table.Rows[r][i].ToString()!="U"){
-									throw new Exception(Lan.g(this,"Column Gender, invalid value: ")+table.Rows[r][i].ToString()
+								if(fieldVal!="M" && fieldVal!="F" && fieldVal!="U"){
+									throw new Exception(Lan.g(this,"Column Gender, invalid value: ")+fieldVal
 										+".  Only valid values are M,F, or U.");
 								}
 								break;
 							case "Guarantor":
-								if(!Regex.IsMatch(table.Rows[r][i].ToString(),@"^\d+$")){
+								if(!Regex.IsMatch(fieldVal,@"^\d+$")){
 									throw new Exception(Lan.g(this,"Invalid value in column Guarantor: ")
-										+table.Rows[r][i].ToString()+". "+Lan.g(this,"Must contain only digits."));
+										+fieldVal+". "+Lan.g(this,"Must contain only digits."));
 								}
 								break;
 							case "HmPhone":
@@ -4222,27 +4240,27 @@ namespace OpenDental{
 							case "MiddleI":
 								break;
 							case "PatNum":
-								if(!Regex.IsMatch(table.Rows[r][i].ToString(),@"^\d+$")){
+								if(!Regex.IsMatch(fieldVal,@"^\d+$")){
 									throw new Exception(Lan.g(this,"Invalid value in column")+" PatNum: "
-										+table.Rows[r][i].ToString()+". "+Lan.g(this,"Must contain only digits."));
+										+fieldVal+". "+Lan.g(this,"Must contain only digits."));
 								}
 								break;
 							case "Position":
-								if(table.Rows[r][i].ToString()!="M"//married
-									&& table.Rows[r][i].ToString()!="S"//single
-									&& table.Rows[r][i].ToString()!="W"//widowed
-									&& table.Rows[r][i].ToString()!="C"//child
-									&& table.Rows[r][i].ToString()!="D")//divorced
+								if(fieldVal!="M"//married
+									&& fieldVal!="S"//single
+									&& fieldVal!="W"//widowed
+									&& fieldVal!="C"//child
+									&& fieldVal!="D")//divorced
 								{
-									throw new Exception("Column Position, invalid value: "+table.Rows[r][i].ToString()+".  Only valid values are M,S,C,D,or W.");
+									throw new Exception("Column Position, invalid value: "+fieldVal+".  Only valid values are M,S,C,D,or W.");
 								}
 								break;
 							case "Preferred":
 								break;
 							case "SSN":
-								if(Regex.IsMatch(table.Rows[r][i].ToString(),"-")){
+								if(Regex.IsMatch(fieldVal,"-")){
 									throw new Exception(Lan.g(this,"Invalid value in column SSN: ")
-										+table.Rows[r][i].ToString()+". "+Lan.g(this,"Cannot contain dashes."));
+										+fieldVal+". "+Lan.g(this,"Cannot contain dashes."));
 								}
 								break;
 							case "State":
@@ -4250,7 +4268,17 @@ namespace OpenDental{
 							case "WkPhone":
 								break;
 							case "Zip":
-								break;								
+								break;
+							case "PatStatus":
+								if(fieldVal.ToLower()!="archived" &&
+										fieldVal.ToLower()!="deceased" &&
+										fieldVal.ToLower()!="deleted" &&
+										fieldVal.ToLower()!="inactive" &&
+										fieldVal.ToLower()!="nonpatient" &&
+										fieldVal.ToLower()!="patient"){
+										throw new Exception("Only allowed values for PatStatus are: archived, deceased, deleted, inactive, nonpatient, and patient. Found the following value in the PatStatus: "+fieldVal);
+								}
+								break;						
 						}//switch colName
 					}//if patients
 				}//r rows
