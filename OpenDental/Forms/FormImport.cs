@@ -173,7 +173,7 @@ namespace OpenDental{
 				private Button butRefresh;
 				private Label label2;
 				private TabControl tabContr;
-				private TabPage tabPage1;
+				private TabPage tabTable;
 				private GroupBox groupBox17;
 				private Label label49;
 				private NumericUpDown upDownNumTempCols;
@@ -294,6 +294,10 @@ namespace OpenDental{
 				this.label3 = new System.Windows.Forms.Label();
 				this.comboColEdit = new System.Windows.Forms.ComboBox();
 				this.tabRows = new System.Windows.Forms.TabPage();
+				this.groupBox22 = new System.Windows.Forms.GroupBox();
+				this.butDeleteExDups = new System.Windows.Forms.Button();
+				this.label60 = new System.Windows.Forms.Label();
+				this.comboDeleteExDupsTable = new System.Windows.Forms.ComboBox();
 				this.groupBox21 = new System.Windows.Forms.GroupBox();
 				this.checkFindDupsInsensitive = new System.Windows.Forms.CheckBox();
 				this.label59 = new System.Windows.Forms.Label();
@@ -439,7 +443,7 @@ namespace OpenDental{
 				this.butRefresh = new System.Windows.Forms.Button();
 				this.label2 = new System.Windows.Forms.Label();
 				this.tabContr = new System.Windows.Forms.TabControl();
-				this.tabPage1 = new System.Windows.Forms.TabPage();
+				this.tabTable = new System.Windows.Forms.TabPage();
 				this.groupBox17 = new System.Windows.Forms.GroupBox();
 				this.butCreateTemporaryTable = new System.Windows.Forms.Button();
 				this.label49 = new System.Windows.Forms.Label();
@@ -447,10 +451,6 @@ namespace OpenDental{
 				this.textCreateTempName = new System.Windows.Forms.TextBox();
 				this.textBox9 = new System.Windows.Forms.TextBox();
 				this.label48 = new System.Windows.Forms.Label();
-				this.groupBox22 = new System.Windows.Forms.GroupBox();
-				this.comboDeleteExDupsTable = new System.Windows.Forms.ComboBox();
-				this.label60 = new System.Windows.Forms.Label();
-				this.butDeleteExDups = new System.Windows.Forms.Button();
 				((System.ComponentModel.ISupportInitialize)(this.grid)).BeginInit();
 				this.tabFinalImport.SuspendLayout();
 				this.tabScript.SuspendLayout();
@@ -461,6 +461,7 @@ namespace OpenDental{
 				this.groupBox9.SuspendLayout();
 				this.groupBox1.SuspendLayout();
 				this.tabRows.SuspendLayout();
+				this.groupBox22.SuspendLayout();
 				this.groupBox21.SuspendLayout();
 				this.groupBox18.SuspendLayout();
 				this.groupBox19.SuspendLayout();
@@ -484,10 +485,9 @@ namespace OpenDental{
 				this.tabLoadData.SuspendLayout();
 				this.groupBox16.SuspendLayout();
 				this.tabContr.SuspendLayout();
-				this.tabPage1.SuspendLayout();
+				this.tabTable.SuspendLayout();
 				this.groupBox17.SuspendLayout();
 				((System.ComponentModel.ISupportInitialize)(this.upDownNumTempCols)).BeginInit();
-				this.groupBox22.SuspendLayout();
 				this.SuspendLayout();
 				// 
 				// grid
@@ -892,6 +892,46 @@ namespace OpenDental{
 				this.tabRows.TabIndex = 5;
 				this.tabRows.Text = "Rows";
 				this.tabRows.UseVisualStyleBackColor = true;
+				// 
+				// groupBox22
+				// 
+				this.groupBox22.BackColor = System.Drawing.SystemColors.Control;
+				this.groupBox22.Controls.Add(this.butDeleteExDups);
+				this.groupBox22.Controls.Add(this.label60);
+				this.groupBox22.Controls.Add(this.comboDeleteExDupsTable);
+				this.groupBox22.Location = new System.Drawing.Point(3,146);
+				this.groupBox22.Name = "groupBox22";
+				this.groupBox22.Size = new System.Drawing.Size(288,68);
+				this.groupBox22.TabIndex = 20;
+				this.groupBox22.TabStop = false;
+				this.groupBox22.Text = "Delete Exact Duplicates";
+				// 
+				// butDeleteExDups
+				// 
+				this.butDeleteExDups.Location = new System.Drawing.Point(166,40);
+				this.butDeleteExDups.Name = "butDeleteExDups";
+				this.butDeleteExDups.Size = new System.Drawing.Size(75,23);
+				this.butDeleteExDups.TabIndex = 2;
+				this.butDeleteExDups.Text = "Delete";
+				this.butDeleteExDups.UseVisualStyleBackColor = true;
+				this.butDeleteExDups.Click += new System.EventHandler(this.butDeleteExDups_Click);
+				// 
+				// label60
+				// 
+				this.label60.AutoSize = true;
+				this.label60.Location = new System.Drawing.Point(9,23);
+				this.label60.Name = "label60";
+				this.label60.Size = new System.Drawing.Size(119,13);
+				this.label60.TabIndex = 1;
+				this.label60.Text = "Table To Remove From";
+				// 
+				// comboDeleteExDupsTable
+				// 
+				this.comboDeleteExDupsTable.FormattingEnabled = true;
+				this.comboDeleteExDupsTable.Location = new System.Drawing.Point(9,40);
+				this.comboDeleteExDupsTable.Name = "comboDeleteExDupsTable";
+				this.comboDeleteExDupsTable.Size = new System.Drawing.Size(121,21);
+				this.comboDeleteExDupsTable.TabIndex = 0;
 				// 
 				// groupBox21
 				// 
@@ -1731,15 +1771,15 @@ namespace OpenDental{
 				this.checkDontUsePK.FlatStyle = System.Windows.Forms.FlatStyle.System;
 				this.checkDontUsePK.Location = new System.Drawing.Point(234,14);
 				this.checkDontUsePK.Name = "checkDontUsePK";
-				this.checkDontUsePK.Size = new System.Drawing.Size(375,19);
+				this.checkDontUsePK.Size = new System.Drawing.Size(360,19);
 				this.checkDontUsePK.TabIndex = 31;
 				this.checkDontUsePK.Text = "Do not use the primary key values in the final import";
 				// 
 				// label25
 				// 
-				this.label25.Location = new System.Drawing.Point(294,76);
+				this.label25.Location = new System.Drawing.Point(294,78);
 				this.label25.Name = "label25";
-				this.label25.Size = new System.Drawing.Size(421,19);
+				this.label25.Size = new System.Drawing.Size(511,19);
 				this.label25.TabIndex = 30;
 				this.label25.Text = "If you set an empty column as the primary key, it will automatically be filled wi" +
     "th numbers";
@@ -1799,9 +1839,9 @@ namespace OpenDental{
 				// 
 				// label1
 				// 
-				this.label1.Location = new System.Drawing.Point(229,51);
+				this.label1.Location = new System.Drawing.Point(221,51);
 				this.label1.Name = "label1";
-				this.label1.Size = new System.Drawing.Size(63,18);
+				this.label1.Size = new System.Drawing.Size(71,18);
 				this.label1.TabIndex = 25;
 				this.label1.Text = "Primary Key";
 				this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -2408,23 +2448,23 @@ namespace OpenDental{
 				this.tabContr.Controls.Add(this.tabEdit);
 				this.tabContr.Controls.Add(this.tabScript);
 				this.tabContr.Controls.Add(this.tabFinalImport);
-				this.tabContr.Controls.Add(this.tabPage1);
+				this.tabContr.Controls.Add(this.tabTable);
 				this.tabContr.Location = new System.Drawing.Point(0,0);
 				this.tabContr.Name = "tabContr";
 				this.tabContr.SelectedIndex = 0;
 				this.tabContr.Size = new System.Drawing.Size(1054,243);
 				this.tabContr.TabIndex = 14;
 				// 
-				// tabPage1
+				// tabTable
 				// 
-				this.tabPage1.Controls.Add(this.groupBox17);
-				this.tabPage1.Location = new System.Drawing.Point(4,22);
-				this.tabPage1.Name = "tabPage1";
-				this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-				this.tabPage1.Size = new System.Drawing.Size(1046,217);
-				this.tabPage1.TabIndex = 9;
-				this.tabPage1.Text = "Table";
-				this.tabPage1.UseVisualStyleBackColor = true;
+				this.tabTable.Controls.Add(this.groupBox17);
+				this.tabTable.Location = new System.Drawing.Point(4,22);
+				this.tabTable.Name = "tabTable";
+				this.tabTable.Padding = new System.Windows.Forms.Padding(3);
+				this.tabTable.Size = new System.Drawing.Size(1046,217);
+				this.tabTable.TabIndex = 9;
+				this.tabTable.Text = "Table";
+				this.tabTable.UseVisualStyleBackColor = true;
 				// 
 				// groupBox17
 				// 
@@ -2510,46 +2550,6 @@ namespace OpenDental{
 				this.label48.Text = "New Table Name";
 				this.label48.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 				// 
-				// groupBox22
-				// 
-				this.groupBox22.BackColor = System.Drawing.SystemColors.Control;
-				this.groupBox22.Controls.Add(this.butDeleteExDups);
-				this.groupBox22.Controls.Add(this.label60);
-				this.groupBox22.Controls.Add(this.comboDeleteExDupsTable);
-				this.groupBox22.Location = new System.Drawing.Point(3,146);
-				this.groupBox22.Name = "groupBox22";
-				this.groupBox22.Size = new System.Drawing.Size(288,68);
-				this.groupBox22.TabIndex = 20;
-				this.groupBox22.TabStop = false;
-				this.groupBox22.Text = "Delete Exact Duplicates";
-				// 
-				// comboDeleteExDupsTable
-				// 
-				this.comboDeleteExDupsTable.FormattingEnabled = true;
-				this.comboDeleteExDupsTable.Location = new System.Drawing.Point(9,40);
-				this.comboDeleteExDupsTable.Name = "comboDeleteExDupsTable";
-				this.comboDeleteExDupsTable.Size = new System.Drawing.Size(121,21);
-				this.comboDeleteExDupsTable.TabIndex = 0;
-				// 
-				// label60
-				// 
-				this.label60.AutoSize = true;
-				this.label60.Location = new System.Drawing.Point(9,23);
-				this.label60.Name = "label60";
-				this.label60.Size = new System.Drawing.Size(119,13);
-				this.label60.TabIndex = 1;
-				this.label60.Text = "Table To Remove From";
-				// 
-				// butDeleteExDups
-				// 
-				this.butDeleteExDups.Location = new System.Drawing.Point(166,40);
-				this.butDeleteExDups.Name = "butDeleteExDups";
-				this.butDeleteExDups.Size = new System.Drawing.Size(75,23);
-				this.butDeleteExDups.TabIndex = 2;
-				this.butDeleteExDups.Text = "Delete";
-				this.butDeleteExDups.UseVisualStyleBackColor = true;
-				this.butDeleteExDups.Click += new System.EventHandler(this.butDeleteExDups_Click);
-				// 
 				// FormImport
 				// 
 				this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
@@ -2575,6 +2575,8 @@ namespace OpenDental{
 				this.groupBox1.ResumeLayout(false);
 				this.groupBox1.PerformLayout();
 				this.tabRows.ResumeLayout(false);
+				this.groupBox22.ResumeLayout(false);
+				this.groupBox22.PerformLayout();
 				this.groupBox21.ResumeLayout(false);
 				this.groupBox21.PerformLayout();
 				this.groupBox18.ResumeLayout(false);
@@ -2609,12 +2611,10 @@ namespace OpenDental{
 				this.groupBox16.ResumeLayout(false);
 				this.groupBox16.PerformLayout();
 				this.tabContr.ResumeLayout(false);
-				this.tabPage1.ResumeLayout(false);
+				this.tabTable.ResumeLayout(false);
 				this.groupBox17.ResumeLayout(false);
 				this.groupBox17.PerformLayout();
 				((System.ComponentModel.ISupportInitialize)(this.upDownNumTempCols)).EndInit();
-				this.groupBox22.ResumeLayout(false);
-				this.groupBox22.PerformLayout();
 				this.ResumeLayout(false);
 
 		}
@@ -2684,6 +2684,10 @@ namespace OpenDental{
 					"Address2",
 					"AddrNote",
 					"Balance",
+					"Bal_0_30",
+					"Bal_31_60",
+					"Bal_61_90",
+					"BalOver90",
 					"Birthdate",
 					"ChartNumber",
 					"City",
@@ -3743,6 +3747,7 @@ namespace OpenDental{
 			string command=textQuery.Text;
 			ProcessCommand(command);
 			FillGrid();
+			FillTableNames();//Just in case the command was a create table command.
 			Cursor=Cursors.Default;
 			MessageBox.Show("done");
 		}
@@ -4000,16 +4005,18 @@ namespace OpenDental{
 					}
 				}
 				//if the balance column exists. Needs to come AFTER initial insert in case we don't have primary key to work with
-				if(radioPatients.Checked && table.Columns["Balance"]!=null){
-					adj=new Adjustment();
-					adj.PatNum=PIn.PInt(table.Rows[i][pkCol].ToString());
-					adj.AdjAmt=PIn.PDouble(table.Rows[i][table.Columns["Balance"].Ordinal].ToString());
-					adj.AdjType=adjType;
-					//adj.AdjDate=DateTime.Today;//automatically handled
-					adj.ProcDate=DateTime.Today;
-					adj.AdjDate=DateTime.Today;
-					adj.ProvNum=pat.PriProv;
-					Adjustments.InsertOrUpdate(adj,true);
+				if(radioPatients.Checked){
+						if(table.Columns["Balance"]!=null){
+								adj=new Adjustment();
+								adj.PatNum=PIn.PInt(table.Rows[i][pkCol].ToString());
+								adj.AdjAmt=PIn.PDouble(table.Rows[i][table.Columns["Balance"].Ordinal].ToString());
+								adj.AdjType=adjType;
+								//adj.AdjDate=DateTime.Today;//automatically handled
+								adj.ProcDate=DateTime.Today;
+								adj.AdjDate=DateTime.Today;
+								adj.ProvNum=pat.PriProv;
+								Adjustments.InsertOrUpdate(adj,true);
+						}
 				}
 			}//rows
 			Cursor=Cursors.Default;
@@ -4278,7 +4285,7 @@ namespace OpenDental{
 										fieldVal.ToLower()!="patient"){
 										throw new Exception("Only allowed values for PatStatus are: archived, deceased, deleted, inactive, nonpatient, and patient. Found the following value in the PatStatus: "+fieldVal);
 								}
-								break;						
+								break;
 						}//switch colName
 					}//if patients
 				}//r rows
