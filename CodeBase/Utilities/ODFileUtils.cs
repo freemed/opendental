@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.IO;
+using System.CodeDom;
+using System.Windows.Forms;
 
 namespace CodeBase {
 	public class ODFileUtils {
@@ -16,10 +18,6 @@ namespace CodeBase {
 
 		public static string CombinePaths(string path1,string path2) {
 			return CombinePaths(new string[] { path1,path2 });
-		}
-
-		public static string CombinePaths(string path1,string path2,string path3) {
-			return CombinePaths(new string[] { path1,path2,path3 });
 		}
 
 		///<summary>OS independent path cominations. Ensures that each of the given path pieces are separated by the correct path separator for the current operating system. There is guaranteed not to be a trailing path separator at the end of the returned string (to accomodate file paths), unless the last specified path piece in the array is the empty string.</summary>
@@ -38,7 +36,11 @@ namespace CodeBase {
 			return finalPath;
 		}
 
-		
+		///<summary>Returns the directory in which the program executable rests. To get the full path for the program executable, use Applicaiton.ExecutablePath.</summary>
+		public static string GetProgramDirectory(){
+				int endPos=Application.ExecutablePath.LastIndexOf(Path.DirectorySeparatorChar);
+				return Application.ExecutablePath.Substring(0,endPos+1);
+		}
 
 	}
 }

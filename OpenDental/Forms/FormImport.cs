@@ -2386,6 +2386,7 @@ namespace OpenDental{
 				// 
 				this.textNewTable.Location = new System.Drawing.Point(156,27);
 				this.textNewTable.Name = "textNewTable";
+				this.textNewTable.ReadOnly = true;
 				this.textNewTable.Size = new System.Drawing.Size(123,20);
 				this.textNewTable.TabIndex = 10;
 				// 
@@ -2737,6 +2738,10 @@ namespace OpenDental{
 				return;
 			}
 			textFileName.Text=dlg.FileName;
+			int fileNameStartPos=dlg.FileName.LastIndexOf(Path.DirectorySeparatorChar)+1;
+			string fileName=dlg.FileName.Substring(fileNameStartPos,dlg.FileName.Length-fileNameStartPos);
+			int fileNameEndLen=(fileName+".").IndexOf('.');
+			textNewTable.Text=fileName.Substring(0,fileNameEndLen).ToLower();
 		}
 
 		private void butLoad_Click(object sender, System.EventArgs e) {

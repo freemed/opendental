@@ -20,7 +20,7 @@ namespace CodeBase {
 
 		///<summary>The number of bytes it takes to move the current log to the backup/old log, to prevent the log files from growing infinately.</summary>
 		private const int logRollByteCount=1048576;
-		public static Logger openlog=new Logger("openlog.txt");
+		public static Logger openlog=new Logger(ODFileUtils.GetProgramDirectory()+"openlog.txt");
 		
 		private string logFile="";
 		///<summary>Specifies the current logging level. Any severity less than the given level is not logged.</summary>
