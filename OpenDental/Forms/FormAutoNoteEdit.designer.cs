@@ -28,361 +28,269 @@ namespace OpenDental
         /// </summary>
         private void InitializeComponent()
         {
-					this.textBox1MainName = new System.Windows.Forms.TextBox();
+					System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormAutoNoteEdit));
+					this.textBoxAutoNoteName = new System.Windows.Forms.TextBox();
+					this.labelName = new System.Windows.Forms.Label();
+					this.labelControlToInc = new System.Windows.Forms.Label();
+					this.labelLabelControl = new System.Windows.Forms.Label();
+					this.labelNameControl = new System.Windows.Forms.Label();
+					this.listBoxOptionsControl = new System.Windows.Forms.ListBox();
+					this.textBoxLabelControl = new System.Windows.Forms.TextBox();
+					this.textBoxDescriptControl = new System.Windows.Forms.TextBox();
+					this.listBoxControlsToIncl = new System.Windows.Forms.ListBox();
+					this.listBoxControls = new System.Windows.Forms.ListBox();
+					this.labelAddControl = new System.Windows.Forms.Label();
+					this.labelControl = new System.Windows.Forms.Label();
+					this.textBoxTextPrefaceControl = new System.Windows.Forms.TextBox();
+					this.textBoxTextControl = new System.Windows.Forms.TextBox();
 					this.label1 = new System.Windows.Forms.Label();
 					this.label2 = new System.Windows.Forms.Label();
-					this.label3 = new System.Windows.Forms.Label();
-					this.listBox1AutoNotes = new System.Windows.Forms.ListBox();
-					this.textBox3AddOption = new System.Windows.Forms.TextBox();
-					this.label4 = new System.Windows.Forms.Label();
-					this.label5 = new System.Windows.Forms.Label();
-					this.label6 = new System.Windows.Forms.Label();
-					this.listBox3Options = new System.Windows.Forms.ListBox();
-					this.textBox3Text = new System.Windows.Forms.TextBox();
-					this.textBox3Name = new System.Windows.Forms.TextBox();
-					this.listBox2AutoNoteVariables = new System.Windows.Forms.ListBox();
-					this.label7 = new System.Windows.Forms.Label();
-					this.listBox2Variables = new System.Windows.Forms.ListBox();
-					this.textBox1 = new System.Windows.Forms.TextBox();
-					this.button3Cancel = new OpenDental.UI.Button();
-					this.button3EditVarDone = new OpenDental.UI.Button();
-					this.button3AddOption = new OpenDental.UI.Button();
-					this.button1EditAutoNote = new OpenDental.UI.Button();
-					this.button1Cancel = new OpenDental.UI.Button();
-					this.button1Create = new OpenDental.UI.Button();
-					this.button2EditFinish = new OpenDental.UI.Button();
-					this.button2Cancel = new OpenDental.UI.Button();
-					this.button2EditVar = new OpenDental.UI.Button();
-					this.label8 = new System.Windows.Forms.Label();
+					this.butEditControl = new OpenDental.UI.Button();
+					this.butCreateControl = new OpenDental.UI.Button();
+					this.butOK = new OpenDental.UI.Button();
+					this.butCancel = new OpenDental.UI.Button();
 					this.SuspendLayout();
 					// 
-					// textBox1MainName
+					// textBoxAutoNoteName
 					// 
-					this.textBox1MainName.Location = new System.Drawing.Point(444,124);
-					this.textBox1MainName.Name = "textBox1MainName";
-					this.textBox1MainName.Size = new System.Drawing.Size(356,20);
-					this.textBox1MainName.TabIndex = 0;
+					this.textBoxAutoNoteName.Location = new System.Drawing.Point(269,133);
+					this.textBoxAutoNoteName.Name = "textBoxAutoNoteName";
+					this.textBoxAutoNoteName.Size = new System.Drawing.Size(356,20);
+					this.textBoxAutoNoteName.TabIndex = 0;
+					// 
+					// labelName
+					// 
+					this.labelName.AutoSize = true;
+					this.labelName.Location = new System.Drawing.Point(121,136);
+					this.labelName.Name = "labelName";
+					this.labelName.Size = new System.Drawing.Size(142,13);
+					this.labelName.TabIndex = 1;
+					this.labelName.Text = "Change the Auto Note name";
+					// 
+					// labelControlToInc
+					// 
+					this.labelControlToInc.AutoSize = true;
+					this.labelControlToInc.Location = new System.Drawing.Point(195,218);
+					this.labelControlToInc.Name = "labelControlToInc";
+					this.labelControlToInc.Size = new System.Drawing.Size(230,13);
+					this.labelControlToInc.TabIndex = 57;
+					this.labelControlToInc.Text = "The contols that will be added to the Auto Note";
+					// 
+					// labelLabelControl
+					// 
+					this.labelLabelControl.AutoSize = true;
+					this.labelLabelControl.Location = new System.Drawing.Point(435,268);
+					this.labelLabelControl.Name = "labelLabelControl";
+					this.labelLabelControl.Size = new System.Drawing.Size(33,13);
+					this.labelLabelControl.TabIndex = 75;
+					this.labelLabelControl.Text = "Label";
+					this.labelLabelControl.Visible = false;
+					// 
+					// labelNameControl
+					// 
+					this.labelNameControl.AutoSize = true;
+					this.labelNameControl.Location = new System.Drawing.Point(435,218);
+					this.labelNameControl.Name = "labelNameControl";
+					this.labelNameControl.Size = new System.Drawing.Size(35,13);
+					this.labelNameControl.TabIndex = 74;
+					this.labelNameControl.Text = "Name";
+					this.labelNameControl.Visible = false;
+					// 
+					// listBoxOptionsControl
+					// 
+					this.listBoxOptionsControl.Enabled = false;
+					this.listBoxOptionsControl.FormattingEnabled = true;
+					this.listBoxOptionsControl.Location = new System.Drawing.Point(471,403);
+					this.listBoxOptionsControl.Name = "listBoxOptionsControl";
+					this.listBoxOptionsControl.Size = new System.Drawing.Size(120,108);
+					this.listBoxOptionsControl.TabIndex = 73;
+					this.listBoxOptionsControl.Visible = false;
+					// 
+					// textBoxLabelControl
+					// 
+					this.textBoxLabelControl.Location = new System.Drawing.Point(480,265);
+					this.textBoxLabelControl.Name = "textBoxLabelControl";
+					this.textBoxLabelControl.ReadOnly = true;
+					this.textBoxLabelControl.Size = new System.Drawing.Size(177,20);
+					this.textBoxLabelControl.TabIndex = 70;
+					this.textBoxLabelControl.Visible = false;
+					// 
+					// textBoxDescriptControl
+					// 
+					this.textBoxDescriptControl.Location = new System.Drawing.Point(480,218);
+					this.textBoxDescriptControl.Name = "textBoxDescriptControl";
+					this.textBoxDescriptControl.ReadOnly = true;
+					this.textBoxDescriptControl.Size = new System.Drawing.Size(177,20);
+					this.textBoxDescriptControl.TabIndex = 69;
+					this.textBoxDescriptControl.Visible = false;
+					// 
+					// listBoxControlsToIncl
+					// 
+					this.listBoxControlsToIncl.FormattingEnabled = true;
+					this.listBoxControlsToIncl.Location = new System.Drawing.Point(240,246);
+					this.listBoxControlsToIncl.Name = "listBoxControlsToIncl";
+					this.listBoxControlsToIncl.Size = new System.Drawing.Size(120,277);
+					this.listBoxControlsToIncl.TabIndex = 79;
+					this.listBoxControlsToIncl.SelectedIndexChanged += new System.EventHandler(this.listBoxControlsToIncl_SelectedIndexChanged);
+					// 
+					// listBoxControls
+					// 
+					this.listBoxControls.FormattingEnabled = true;
+					this.listBoxControls.Location = new System.Drawing.Point(32,246);
+					this.listBoxControls.Name = "listBoxControls";
+					this.listBoxControls.Size = new System.Drawing.Size(120,277);
+					this.listBoxControls.TabIndex = 85;
+					this.listBoxControls.SelectedIndexChanged += new System.EventHandler(this.listBoxControls_SelectedIndexChanged);
+					// 
+					// labelAddControl
+					// 
+					this.labelAddControl.AutoSize = true;
+					this.labelAddControl.Location = new System.Drawing.Point(12,218);
+					this.labelAddControl.Name = "labelAddControl";
+					this.labelAddControl.Size = new System.Drawing.Size(143,13);
+					this.labelAddControl.TabIndex = 89;
+					this.labelAddControl.Text = "Double click a control to add";
+					// 
+					// labelControl
+					// 
+					this.labelControl.AutoSize = true;
+					this.labelControl.Location = new System.Drawing.Point(496,197);
+					this.labelControl.Name = "labelControl";
+					this.labelControl.Size = new System.Drawing.Size(126,13);
+					this.labelControl.TabIndex = 91;
+					this.labelControl.Text = "Selected Control Settings";
+					this.labelControl.Visible = false;
+					// 
+					// textBoxTextPrefaceControl
+					// 
+					this.textBoxTextPrefaceControl.Location = new System.Drawing.Point(480,291);
+					this.textBoxTextPrefaceControl.Multiline = true;
+					this.textBoxTextPrefaceControl.Name = "textBoxTextPrefaceControl";
+					this.textBoxTextPrefaceControl.ReadOnly = true;
+					this.textBoxTextPrefaceControl.Size = new System.Drawing.Size(177,43);
+					this.textBoxTextPrefaceControl.TabIndex = 96;
+					this.textBoxTextPrefaceControl.Visible = false;
+					// 
+					// textBoxTextControl
+					// 
+					this.textBoxTextControl.Location = new System.Drawing.Point(480,340);
+					this.textBoxTextControl.Multiline = true;
+					this.textBoxTextControl.Name = "textBoxTextControl";
+					this.textBoxTextControl.ReadOnly = true;
+					this.textBoxTextControl.Size = new System.Drawing.Size(177,57);
+					this.textBoxTextControl.TabIndex = 97;
+					this.textBoxTextControl.Visible = false;
 					// 
 					// label1
 					// 
 					this.label1.AutoSize = true;
-					this.label1.Location = new System.Drawing.Point(365,124);
+					this.label1.Location = new System.Drawing.Point(446,340);
 					this.label1.Name = "label1";
-					this.label1.Size = new System.Drawing.Size(73,13);
-					this.label1.TabIndex = 1;
-					this.label1.Text = "Enter A Name";
-					this.label1.Click += new System.EventHandler(this.label1_Click);
+					this.label1.Size = new System.Drawing.Size(28,13);
+					this.label1.TabIndex = 98;
+					this.label1.Text = "Text";
+					this.label1.Visible = false;
 					// 
 					// label2
 					// 
 					this.label2.AutoSize = true;
-					this.label2.Location = new System.Drawing.Point(240,54);
+					this.label2.Location = new System.Drawing.Point(406,291);
 					this.label2.Name = "label2";
-					this.label2.Size = new System.Drawing.Size(156,13);
-					this.label2.TabIndex = 57;
-					this.label2.Text = "Create A New Auto Note Below";
+					this.label2.Size = new System.Drawing.Size(68,13);
+					this.label2.TabIndex = 99;
+					this.label2.Text = "Preface Text";
+					this.label2.Visible = false;
 					// 
-					// label3
+					// butEditControl
 					// 
-					this.label3.AutoSize = true;
-					this.label3.Location = new System.Drawing.Point(427,241);
-					this.label3.Name = "label3";
-					this.label3.Size = new System.Drawing.Size(138,13);
-					this.label3.TabIndex = 58;
-					this.label3.Text = "Select A Auto Note  To Edit";
+					this.butEditControl.AdjustImageLocation = new System.Drawing.Point(0,0);
+					this.butEditControl.Autosize = true;
+					this.butEditControl.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+					this.butEditControl.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+					this.butEditControl.CornerRadius = 4F;
+					this.butEditControl.Location = new System.Drawing.Point(32,560);
+					this.butEditControl.Name = "butEditControl";
+					this.butEditControl.Size = new System.Drawing.Size(123,25);
+					this.butEditControl.TabIndex = 95;
+					this.butEditControl.Text = "Edit Control";
+					this.butEditControl.Visible = false;
+					this.butEditControl.Click += new System.EventHandler(this.butEditControl_Click);
 					// 
-					// listBox1AutoNotes
+					// butCreateControl
 					// 
-					this.listBox1AutoNotes.FormattingEnabled = true;
-					this.listBox1AutoNotes.Location = new System.Drawing.Point(430,270);
-					this.listBox1AutoNotes.Name = "listBox1AutoNotes";
-					this.listBox1AutoNotes.Size = new System.Drawing.Size(120,147);
-					this.listBox1AutoNotes.TabIndex = 59;
+					this.butCreateControl.AdjustImageLocation = new System.Drawing.Point(0,0);
+					this.butCreateControl.Autosize = true;
+					this.butCreateControl.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+					this.butCreateControl.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+					this.butCreateControl.CornerRadius = 4F;
+					this.butCreateControl.Location = new System.Drawing.Point(32,529);
+					this.butCreateControl.Name = "butCreateControl";
+					this.butCreateControl.Size = new System.Drawing.Size(120,25);
+					this.butCreateControl.TabIndex = 94;
+					this.butCreateControl.Text = "Create New Control";
+					this.butCreateControl.Visible = false;
+					this.butCreateControl.Click += new System.EventHandler(this.butCreateControl_Click);
 					// 
-					// textBox3AddOption
+					// butOK
 					// 
-					this.textBox3AddOption.Location = new System.Drawing.Point(630,298);
-					this.textBox3AddOption.Name = "textBox3AddOption";
-					this.textBox3AddOption.Size = new System.Drawing.Size(100,20);
-					this.textBox3AddOption.TabIndex = 77;
-					this.textBox3AddOption.Visible = false;
+					this.butOK.AdjustImageLocation = new System.Drawing.Point(0,0);
+					this.butOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+					this.butOK.Autosize = true;
+					this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+					this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+					this.butOK.CornerRadius = 4F;
+					this.butOK.Location = new System.Drawing.Point(602,529);
+					this.butOK.Name = "butOK";
+					this.butOK.Size = new System.Drawing.Size(78,25);
+					this.butOK.TabIndex = 83;
+					this.butOK.Text = "OK";
+					this.butOK.Click += new System.EventHandler(this.butOK_Click);
 					// 
-					// label4
+					// butCancel
 					// 
-					this.label4.AutoSize = true;
-					this.label4.Location = new System.Drawing.Point(427,254);
-					this.label4.Name = "label4";
-					this.label4.Size = new System.Drawing.Size(165,13);
-					this.label4.TabIndex = 76;
-					this.label4.Text = "Options Double Click To Remove";
-					this.label4.Visible = false;
-					// 
-					// label5
-					// 
-					this.label5.AutoSize = true;
-					this.label5.Location = new System.Drawing.Point(441,102);
-					this.label5.Name = "label5";
-					this.label5.Size = new System.Drawing.Size(28,13);
-					this.label5.TabIndex = 75;
-					this.label5.Text = "Text";
-					this.label5.Visible = false;
-					// 
-					// label6
-					// 
-					this.label6.AutoSize = true;
-					this.label6.Location = new System.Drawing.Point(434,24);
-					this.label6.Name = "label6";
-					this.label6.Size = new System.Drawing.Size(35,13);
-					this.label6.TabIndex = 74;
-					this.label6.Text = "Name";
-					this.label6.Visible = false;
-					// 
-					// listBox3Options
-					// 
-					this.listBox3Options.FormattingEnabled = true;
-					this.listBox3Options.Location = new System.Drawing.Point(430,453);
-					this.listBox3Options.Name = "listBox3Options";
-					this.listBox3Options.Size = new System.Drawing.Size(120,147);
-					this.listBox3Options.TabIndex = 73;
-					this.listBox3Options.Visible = false;
-					this.listBox3Options.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.listBox3Options_MouseDoubleClick);
-					// 
-					// textBox3Text
-					// 
-					this.textBox3Text.Location = new System.Drawing.Point(475,98);
-					this.textBox3Text.Name = "textBox3Text";
-					this.textBox3Text.ReadOnly = true;
-					this.textBox3Text.Size = new System.Drawing.Size(177,20);
-					this.textBox3Text.TabIndex = 70;
-					this.textBox3Text.Visible = false;
-					// 
-					// textBox3Name
-					// 
-					this.textBox3Name.Location = new System.Drawing.Point(475,21);
-					this.textBox3Name.Name = "textBox3Name";
-					this.textBox3Name.ReadOnly = true;
-					this.textBox3Name.Size = new System.Drawing.Size(177,20);
-					this.textBox3Name.TabIndex = 69;
-					this.textBox3Name.Visible = false;
-					// 
-					// listBox2AutoNoteVariables
-					// 
-					this.listBox2AutoNoteVariables.FormattingEnabled = true;
-					this.listBox2AutoNoteVariables.Location = new System.Drawing.Point(243,70);
-					this.listBox2AutoNoteVariables.Name = "listBox2AutoNoteVariables";
-					this.listBox2AutoNoteVariables.Size = new System.Drawing.Size(120,316);
-					this.listBox2AutoNoteVariables.TabIndex = 79;
-					this.listBox2AutoNoteVariables.Visible = false;
-					this.listBox2AutoNoteVariables.DoubleClick += new System.EventHandler(this.listBox2AutoNoteVariables_DoubleClick);
-					// 
-					// label7
-					// 
-					this.label7.AutoSize = true;
-					this.label7.Location = new System.Drawing.Point(240,28);
-					this.label7.Name = "label7";
-					this.label7.Size = new System.Drawing.Size(129,13);
-					this.label7.TabIndex = 84;
-					this.label7.Text = " Double Click To Remove";
-					this.label7.Visible = false;
-					// 
-					// listBox2Variables
-					// 
-					this.listBox2Variables.FormattingEnabled = true;
-					this.listBox2Variables.Location = new System.Drawing.Point(35,70);
-					this.listBox2Variables.Name = "listBox2Variables";
-					this.listBox2Variables.Size = new System.Drawing.Size(120,316);
-					this.listBox2Variables.TabIndex = 85;
-					this.listBox2Variables.Visible = false;
-					this.listBox2Variables.DoubleClick += new System.EventHandler(this.listBox2Variables_DoubleClick);
-					// 
-					// textBox1
-					// 
-					this.textBox1.Location = new System.Drawing.Point(55,392);
-					this.textBox1.Name = "textBox1";
-					this.textBox1.Size = new System.Drawing.Size(100,20);
-					this.textBox1.TabIndex = 86;
-					this.textBox1.Visible = false;
-					// 
-					// button3Cancel
-					// 
-					this.button3Cancel.AdjustImageLocation = new System.Drawing.Point(0,0);
-					this.button3Cancel.Autosize = true;
-					this.button3Cancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-					this.button3Cancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-					this.button3Cancel.CornerRadius = 4F;
-					this.button3Cancel.Location = new System.Drawing.Point(577,606);
-					this.button3Cancel.Name = "button3Cancel";
-					this.button3Cancel.Size = new System.Drawing.Size(91,25);
-					this.button3Cancel.TabIndex = 88;
-					this.button3Cancel.Text = "Cancel";
-					this.button3Cancel.Visible = false;
-					this.button3Cancel.Click += new System.EventHandler(this.button3Cancel_Click);
-					// 
-					// button3EditVarDone
-					// 
-					this.button3EditVarDone.AdjustImageLocation = new System.Drawing.Point(0,0);
-					this.button3EditVarDone.Autosize = true;
-					this.button3EditVarDone.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-					this.button3EditVarDone.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-					this.button3EditVarDone.CornerRadius = 4F;
-					this.button3EditVarDone.Location = new System.Drawing.Point(577,575);
-					this.button3EditVarDone.Name = "button3EditVarDone";
-					this.button3EditVarDone.Size = new System.Drawing.Size(91,25);
-					this.button3EditVarDone.TabIndex = 87;
-					this.button3EditVarDone.Text = "Done";
-					this.button3EditVarDone.Visible = false;
-					this.button3EditVarDone.Click += new System.EventHandler(this.button3EditVarDone_Click);
-					// 
-					// button3AddOption
-					// 
-					this.button3AddOption.AdjustImageLocation = new System.Drawing.Point(0,0);
-					this.button3AddOption.Autosize = true;
-					this.button3AddOption.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-					this.button3AddOption.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-					this.button3AddOption.CornerRadius = 4F;
-					this.button3AddOption.Location = new System.Drawing.Point(748,293);
-					this.button3AddOption.Name = "button3AddOption";
-					this.button3AddOption.Size = new System.Drawing.Size(91,25);
-					this.button3AddOption.TabIndex = 78;
-					this.button3AddOption.Text = "Add";
-					this.button3AddOption.Visible = false;
-					this.button3AddOption.Click += new System.EventHandler(this.buttonAddOption_Click);
-					// 
-					// button1EditAutoNote
-					// 
-					this.button1EditAutoNote.AdjustImageLocation = new System.Drawing.Point(0,0);
-					this.button1EditAutoNote.Autosize = true;
-					this.button1EditAutoNote.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-					this.button1EditAutoNote.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-					this.button1EditAutoNote.CornerRadius = 4F;
-					this.button1EditAutoNote.Location = new System.Drawing.Point(577,392);
-					this.button1EditAutoNote.Name = "button1EditAutoNote";
-					this.button1EditAutoNote.Size = new System.Drawing.Size(91,25);
-					this.button1EditAutoNote.TabIndex = 72;
-					this.button1EditAutoNote.Text = "Edit";
-					this.button1EditAutoNote.Click += new System.EventHandler(this.button1_Click);
-					// 
-					// button1Cancel
-					// 
-					this.button1Cancel.AdjustImageLocation = new System.Drawing.Point(0,0);
-					this.button1Cancel.Autosize = true;
-					this.button1Cancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-					this.button1Cancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-					this.button1Cancel.CornerRadius = 4F;
-					this.button1Cancel.Location = new System.Drawing.Point(806,133);
-					this.button1Cancel.Name = "button1Cancel";
-					this.button1Cancel.Size = new System.Drawing.Size(91,25);
-					this.button1Cancel.TabIndex = 56;
-					this.button1Cancel.Text = "Cancel";
-					this.button1Cancel.Click += new System.EventHandler(this.buttonCancel_Click);
-					// 
-					// button1Create
-					// 
-					this.button1Create.AdjustImageLocation = new System.Drawing.Point(0,0);
-					this.button1Create.Autosize = true;
-					this.button1Create.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-					this.button1Create.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-					this.button1Create.CornerRadius = 4F;
-					this.button1Create.Location = new System.Drawing.Point(806,102);
-					this.button1Create.Name = "button1Create";
-					this.button1Create.Size = new System.Drawing.Size(91,25);
-					this.button1Create.TabIndex = 55;
-					this.button1Create.Text = "Create";
-					this.button1Create.Click += new System.EventHandler(this.butCreate_Click);
-					// 
-					// button2EditFinish
-					// 
-					this.button2EditFinish.AdjustImageLocation = new System.Drawing.Point(0,0);
-					this.button2EditFinish.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-					this.button2EditFinish.Autosize = true;
-					this.button2EditFinish.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-					this.button2EditFinish.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-					this.button2EditFinish.CornerRadius = 4F;
-					this.button2EditFinish.Location = new System.Drawing.Point(806,575);
-					this.button2EditFinish.Name = "button2EditFinish";
-					this.button2EditFinish.Size = new System.Drawing.Size(91,25);
-					this.button2EditFinish.TabIndex = 83;
-					this.button2EditFinish.Text = "Finish";
-					this.button2EditFinish.Visible = false;
-					this.button2EditFinish.Click += new System.EventHandler(this.buttonEditFinish_Click);
-					// 
-					// button2Cancel
-					// 
-					this.button2Cancel.AdjustImageLocation = new System.Drawing.Point(0,0);
-					this.button2Cancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-					this.button2Cancel.Autosize = true;
-					this.button2Cancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-					this.button2Cancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-					this.button2Cancel.CornerRadius = 4F;
-					this.button2Cancel.Location = new System.Drawing.Point(806,636);
-					this.button2Cancel.Name = "button2Cancel";
-					this.button2Cancel.Size = new System.Drawing.Size(91,25);
-					this.button2Cancel.TabIndex = 82;
-					this.button2Cancel.Text = "Cancel";
-					this.button2Cancel.Visible = false;
-					this.button2Cancel.Click += new System.EventHandler(this.button3_Click);
-					// 
-					// button2EditVar
-					// 
-					this.button2EditVar.AdjustImageLocation = new System.Drawing.Point(0,0);
-					this.button2EditVar.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-					this.button2EditVar.Autosize = true;
-					this.button2EditVar.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-					this.button2EditVar.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-					this.button2EditVar.CornerRadius = 4F;
-					this.button2EditVar.Location = new System.Drawing.Point(806,606);
-					this.button2EditVar.Name = "button2EditVar";
-					this.button2EditVar.Size = new System.Drawing.Size(91,25);
-					this.button2EditVar.TabIndex = 81;
-					this.button2EditVar.Text = "Edit";
-					this.button2EditVar.Visible = false;
-					this.button2EditVar.Click += new System.EventHandler(this.buttonEditVar_Click);
-					// 
-					// label8
-					// 
-					this.label8.AutoSize = true;
-					this.label8.Location = new System.Drawing.Point(32,54);
-					this.label8.Name = "label8";
-					this.label8.Size = new System.Drawing.Size(162,13);
-					this.label8.TabIndex = 89;
-					this.label8.Text = "Double Click A Variable To Add  ";
-					this.label8.Visible = false;
+					this.butCancel.AdjustImageLocation = new System.Drawing.Point(0,0);
+					this.butCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+					this.butCancel.Autosize = true;
+					this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+					this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+					this.butCancel.CornerRadius = 4F;
+					this.butCancel.Location = new System.Drawing.Point(602,560);
+					this.butCancel.Name = "butCancel";
+					this.butCancel.Size = new System.Drawing.Size(78,25);
+					this.butCancel.TabIndex = 82;
+					this.butCancel.Text = "Cancel";
+					this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
 					// 
 					// FormAutoNoteEdit
 					// 
 					this.AutoScaleDimensions = new System.Drawing.SizeF(6F,13F);
 					this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-					this.ClientSize = new System.Drawing.Size(909,673);
-					this.Controls.Add(this.label8);
-					this.Controls.Add(this.button3Cancel);
-					this.Controls.Add(this.button3EditVarDone);
-					this.Controls.Add(this.textBox1);
-					this.Controls.Add(this.button3AddOption);
-					this.Controls.Add(this.textBox3AddOption);
-					this.Controls.Add(this.label4);
-					this.Controls.Add(this.label5);
-					this.Controls.Add(this.label6);
-					this.Controls.Add(this.listBox3Options);
-					this.Controls.Add(this.button1EditAutoNote);
-					this.Controls.Add(this.textBox3Text);
-					this.Controls.Add(this.textBox3Name);
-					this.Controls.Add(this.listBox1AutoNotes);
-					this.Controls.Add(this.label3);
+					this.ClientSize = new System.Drawing.Size(704,602);
 					this.Controls.Add(this.label2);
-					this.Controls.Add(this.button1Cancel);
-					this.Controls.Add(this.button1Create);
 					this.Controls.Add(this.label1);
-					this.Controls.Add(this.textBox1MainName);
-					this.Controls.Add(this.label7);
-					this.Controls.Add(this.listBox2AutoNoteVariables);
-					this.Controls.Add(this.listBox2Variables);
-					this.Controls.Add(this.button2EditFinish);
-					this.Controls.Add(this.button2Cancel);
-					this.Controls.Add(this.button2EditVar);
+					this.Controls.Add(this.textBoxTextControl);
+					this.Controls.Add(this.textBoxTextPrefaceControl);
+					this.Controls.Add(this.butEditControl);
+					this.Controls.Add(this.butCreateControl);
+					this.Controls.Add(this.labelControl);
+					this.Controls.Add(this.labelAddControl);
+					this.Controls.Add(this.labelLabelControl);
+					this.Controls.Add(this.labelNameControl);
+					this.Controls.Add(this.listBoxOptionsControl);
+					this.Controls.Add(this.textBoxLabelControl);
+					this.Controls.Add(this.textBoxDescriptControl);
+					this.Controls.Add(this.labelControlToInc);
+					this.Controls.Add(this.labelName);
+					this.Controls.Add(this.textBoxAutoNoteName);
+					this.Controls.Add(this.listBoxControlsToIncl);
+					this.Controls.Add(this.listBoxControls);
+					this.Controls.Add(this.butOK);
+					this.Controls.Add(this.butCancel);
+					this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 					this.Name = "FormAutoNoteEdit";
 					this.ShowInTaskbar = false;
 					this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-					this.Text = "Auto Note";
+					this.Text = "Auto Note Edit";
 					this.Load += new System.EventHandler(this.FormAutoNoteEdit_Load);
 					this.ResumeLayout(false);
 					this.PerformLayout();
@@ -391,31 +299,25 @@ namespace OpenDental
 
         #endregion
 
-        private System.Windows.Forms.TextBox textBox1MainName;
-        private System.Windows.Forms.Label label1;
-        private OpenDental.UI.Button button1Create;
-        private OpenDental.UI.Button button1Cancel;
-        private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.ListBox listBox1AutoNotes;
-        private OpenDental.UI.Button button3AddOption;
-        private System.Windows.Forms.TextBox textBox3AddOption;
-        private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.Label label6;
-        private System.Windows.Forms.ListBox listBox3Options;
-        private OpenDental.UI.Button button1EditAutoNote;
-        private System.Windows.Forms.TextBox textBox3Text;
-        private System.Windows.Forms.TextBox textBox3Name;
-        private System.Windows.Forms.ListBox listBox2AutoNoteVariables;
-        private OpenDental.UI.Button button2EditVar;
-        private OpenDental.UI.Button button2Cancel;
-        private OpenDental.UI.Button button2EditFinish;
-        private System.Windows.Forms.Label label7;
-        private System.Windows.Forms.ListBox listBox2Variables;
-        private System.Windows.Forms.TextBox textBox1;
-        private OpenDental.UI.Button button3EditVarDone;
-        private OpenDental.UI.Button button3Cancel;
-        private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.TextBox textBoxAutoNoteName;
+		private System.Windows.Forms.Label labelName;
+		private System.Windows.Forms.Label labelControlToInc;
+        private System.Windows.Forms.Label labelLabelControl;
+        private System.Windows.Forms.Label labelNameControl;
+		private System.Windows.Forms.ListBox listBoxOptionsControl;
+        private System.Windows.Forms.TextBox textBoxLabelControl;
+        private System.Windows.Forms.TextBox textBoxDescriptControl;
+		private System.Windows.Forms.ListBox listBoxControlsToIncl;
+        private OpenDental.UI.Button butCancel;
+			private OpenDental.UI.Button butOK;
+		private System.Windows.Forms.ListBox listBoxControls;
+		private System.Windows.Forms.Label labelAddControl;
+		private System.Windows.Forms.Label labelControl;
+		private OpenDental.UI.Button butCreateControl;
+		private OpenDental.UI.Button butEditControl;
+		private System.Windows.Forms.TextBox textBoxTextPrefaceControl;
+		private System.Windows.Forms.TextBox textBoxTextControl;
+		private System.Windows.Forms.Label label1;
+		private System.Windows.Forms.Label label2;
     }
 }

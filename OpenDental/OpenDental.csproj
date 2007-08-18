@@ -398,11 +398,20 @@
     <Compile Include="Forms\BasicTemplate.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Forms\FormAutoNoteControlEdit.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormAutoNoteControlEdit.designer.cs">
+      <DependentUpon>FormAutoNoteControlEdit.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\FormAutoNoteEdit.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\FormAutoNoteEdit.designer.cs">
       <DependentUpon>FormAutoNoteEdit.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\FormAutoNotes.cs">
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\FormXchargeSetup.cs">
       <SubType>Form</SubType>
@@ -1326,8 +1335,16 @@
       <DependentUpon>BasicTemplate.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormAutoNoteControlEdit.resx">
+      <DependentUpon>FormAutoNoteControlEdit.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormAutoNoteEdit.resx">
       <DependentUpon>FormAutoNoteEdit.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormAutoNotes.resx">
+      <DependentUpon>FormAutoNotes.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormXchargeSetup.resx">
