@@ -1923,8 +1923,8 @@ namespace OpenDental{
 			if(!Security.IsAuthorized(Permissions.Setup)) {
 				return;
 			}
-			FormAutoNoteSetup FormA=new FormAutoNoteSetup();
-			FormA.ShowDialog();
+			//FormAutoNoteSetup FormA=new FormAutoNoteSetup();
+			//FormA.ShowDialog();
 			SecurityLogs.MakeLogEntry(Permissions.Setup,0,"Auto Notes");
 		}
 

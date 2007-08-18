@@ -398,9 +398,6 @@
     <Compile Include="Forms\BasicTemplate.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\FormAutoNoteSetup.cs">
-      <SubType>Form</SubType>
-    </Compile>
     <Compile Include="Forms\FormAutoNoteEdit.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -1327,10 +1324,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\BasicTemplate.resx">
       <DependentUpon>BasicTemplate.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\FormAutoNoteSetup.resx">
-      <DependentUpon>FormAutoNoteSetup.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormAutoNoteEdit.resx">
