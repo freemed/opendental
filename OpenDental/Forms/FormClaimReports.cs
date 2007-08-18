@@ -204,17 +204,11 @@ namespace OpenDental{
 				return;
 			}
 			string[] files=Directory.GetFiles(Clearinghouses.List[comboClearhouse.SelectedIndex].ResponsePath);
-			Etrans etrans;
-			//FileInfo info;
-			DateTime creationTime;
 			for(int i=0;i<files.Length;i++){
-				creationTime=File.GetCreationTime(files[i]);
-				etrans=new Etrans();
-				etrans.DateTimeTrans=creationTime;
-				etrans.ClearinghouseNum=Clearinghouses.List[comboClearhouse.SelectedIndex].ClearinghouseNum;
-				//etrans.Etype=EtransType.Response;
-				etrans.MessageText=File.ReadAllText(files[i]);
-				//Etranss.
+				Etranss.ProcessIncomingReport(
+					File.GetCreationTime(files[i]),
+					Clearinghouses.List[comboClearhouse.SelectedIndex].ClearinghouseNum,
+					File.ReadAllText(files[i]));
 			}
 		}
 

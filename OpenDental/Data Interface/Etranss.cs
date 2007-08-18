@@ -246,11 +246,14 @@ namespace OpenDental{
 		}
 
 		///<summary>Etrans type will be figured out by this class.  Either TextReport, Acknowledge_997, or StatusNotify_277.</summary>
-		public static Etrans ProcessIncomingReport(DateTime dateTimeTrans,int clearhouse,string messageText){
+		public static Etrans ProcessIncomingReport(DateTime dateTimeTrans,int clearinghouseNum,string messageText){
 			Etrans etrans=new Etrans();
 			etrans.DateTimeTrans=dateTimeTrans;
-			etrans.ClearinghouseNum=clearhouse;
+			etrans.ClearinghouseNum=clearinghouseNum;
 			etrans.MessageText=messageText;
+			if(X997.Is997(messageText)){
+			
+			}
 			//X12.
 
 
