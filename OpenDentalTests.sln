@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "xCodeBase", "CodeBase\xCode
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenDentBusiness.Tests", "OpenDentBusiness.Tests\OpenDentBusiness.Tests.csproj", "{141C4C8B-9C0E-4751-BB78-DB5427591E7C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenDentServer", "OpenDentServer\OpenDentServer.csproj", "{F25AC0EE-B218-4A50-B659-5936E3E50545}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -32,6 +34,12 @@ Global
 		{141C4C8B-9C0E-4751-BB78-DB5427591E7C}.LinuxRelease|Any CPU.Build.0 = Release|Any CPU
 		{141C4C8B-9C0E-4751-BB78-DB5427591E7C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{141C4C8B-9C0E-4751-BB78-DB5427591E7C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F25AC0EE-B218-4A50-B659-5936E3E50545}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F25AC0EE-B218-4A50-B659-5936E3E50545}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F25AC0EE-B218-4A50-B659-5936E3E50545}.LinuxRelease|Any CPU.ActiveCfg = LinuxRelease|Any CPU
+		{F25AC0EE-B218-4A50-B659-5936E3E50545}.LinuxRelease|Any CPU.Build.0 = LinuxRelease|Any CPU
+		{F25AC0EE-B218-4A50-B659-5936E3E50545}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F25AC0EE-B218-4A50-B659-5936E3E50545}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
