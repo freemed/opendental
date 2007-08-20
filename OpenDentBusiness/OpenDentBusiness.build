@@ -29,7 +29,7 @@
 	        * current.build.defines - framework-specific build defines
 	-->
 	<target name="build">
-        	<csc target="library" define="${current.build.defines}" debug="${build.debug}" output="${build.dir}/bin/${project::get-name()}.dll" doc="${build.dir}/bin/${project::get-name()}.xml">
+        	<csc target="library" define="${current.build.defines}" debug="${build.debug}" output="${build.dir}/bin/${project::get-name()}.dll" doc="${build.dir}/bin/${project::get-name()}.xml" unsafe="true">
             <nowarn>
                 <!-- do not report warnings for missing XML comments -->
                 <warning number="1591" />

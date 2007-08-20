@@ -47,9 +47,10 @@
 				<include name="System.Drawing.dll"/>
 				<include name="System.Windows.Forms.dll"/>
 				<include name="System.Xml.dll"/>
-                <include name="../Required dlls/Tao.FreeGlut.dll"/>
-                <include name="../Required dlls/Tao.OpenGl.dll"/>
-                <include name="../Required dlls/Tao.Platform.Windows.dll"/>
+                		<include name="../Required dlls/Tao.FreeGlut.dll"/>
+                		<include name="../Required dlls/Tao.OpenGl.dll"/>
+                		<include name="../Required dlls/Tao.Platform.Windows.dll"/>
+                		<include name="../Required dlls/SigPlusNET.dll"/>
 			</references>
 		</csc>
         <copy file="../Required dlls/MySql.Data.dll" todir="${build.dir}/bin"/>
