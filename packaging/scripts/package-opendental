@@ -6,7 +6,7 @@
 # References:
 # * http://www.debian.org/doc/maint-guide/ch-first.en.html
 
-opendentalversion=4.7
+opendentalversion=5.1
 packageversion=0opendental1
 version=${opendentalversion}-${packageversion}
 currentdir=`pwd`
@@ -22,10 +22,10 @@ mkdir -p ~/downloads
 cd ~/source
 
 # Check out sources if required, else update
-if [ ! -d "opendental4.7" ]; then
-    svn co https://70.90.133.65:23793/svn/opendental/opendental4.7/
+if [ ! -d "opendental5.1" ]; then
+    svn co https://70.90.133.65:23793/svn/opendental/head/ opendental5.1/
 else
-    svn update opendental4.7/
+    svn update opendental5.1/
 fi
 
 # Remove and re-create the entire opendental directory
@@ -35,7 +35,7 @@ mkdir opendental
 cd opendental
 
 # Check out the sources and create a tarball
-svn export ~/source/opendental4.7 opendental-${opendentalversion}/
+svn export ~/source/opendental5.1 opendental-${opendentalversion}/
 tar -cvzf opendental-${opendentalversion}.tar.gz opendental-${opendentalversion}
 rm -rf opendental-${opendentalversion}
 
