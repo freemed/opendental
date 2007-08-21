@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Text;
 
 namespace OpenDental.Eclaims
@@ -8,7 +10,8 @@ namespace OpenDental.Eclaims
 
 		///<summary>This can take a 277 file of any length and convert it to a human readable format.  It can then be saved to a text file in the same folder as the original. The original file should be immediately archived if this is successful.  Actually includes extra functionality to make an 837 readable.</summary>
 		public static string MakeHumanReadable(string fileName){
-			X12object xObj=new X12object(fileName);
+			List<string> messageLines=new List<string>();
+			X12object xObj=new X12object(File.ReadAllText(fileName));
 			string rn="\r\n";
 			StringBuilder ret=new StringBuilder();
 			X12Segment segment;

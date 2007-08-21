@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Text;
 using System.Windows.Forms;
 
 namespace OpenDental.Eclaims
@@ -11,54 +12,63 @@ namespace OpenDental.Eclaims
 		///<summary>usually *,:,and ~</summary>
 		public X12Separators Separators;
 		///<summary>A collection of X12FunctionalGroups.</summary>
-		public ArrayList functGroups;
-		
+		public List<X12FunctionalGroup> functGroups;
 
-		///<summary>Takes raw text from a file and converts it into an X12Object.</summary>
-		public X12object(string fileName){
-			string row="";
-			using(StreamReader sr=new StreamReader(fileName)){
-				row=sr.ReadLine();
-				//Get separator date from the first row (ISA)
-				if(row.Substring(0,3)!="ISA"){
-					throw new Exception("ISA not found");
+		public static bool IsX12(string messageText){
+			if(messageText==null || messageText.Length<106){
+				return false;
+			}
+			if(messageText.Substring(0,3)=="ISA"){
+				return true;
+			}
+			return false;
+		}
+
+		///<summary>Takes raw text and converts it into an X12Object.  Pass it in as a string array.</summary>
+		public X12object(string messageText){
+			messageText=messageText.Replace("\r","");
+			messageText=messageText.Replace("\n","");
+			if(messageText.Substring(0,3)!="ISA"){
+				throw new ApplicationException("ISA not found");
+			}
+			Separators=new X12Separators();
+			Separators.Element=messageText.Substring(3,1);
+			Separators.Subelement=messageText.Substring(104,1);
+			Separators.Segment=messageText.Substring(105,1);
+			string[] messageRows=messageText.Split(new string[] {Separators.Segment},StringSplitOptions.None);
+			functGroups=new List<X12FunctionalGroup>();
+			string row;
+			X12Segment segment;
+			for(int i=1;i<messageRows.Length;i++){
+				row=messageRows[i];
+				segment=new X12Segment(row,Separators);
+				if(segment.SegmentID=="IEA"){//if end of interchange
+					//do nothing
 				}
-				Separators=new X12Separators();
-				Separators.Element=row.Substring(3,1);
-				Separators.Subelement=row.Substring(104,1);
-				Separators.Segment=row.Substring(105,1);
-				functGroups=new ArrayList();
-				X12Segment segment;
-				row=sr.ReadLine();
-				while(row!=null){
-					segment=new X12Segment(row,Separators);
-					if(segment.SegmentID=="IEA"){//if end of interchange
-						//do nothing
-					}
-					if(segment.SegmentID=="GS"){//if new functional group
-						functGroups.Add(new X12FunctionalGroup(segment));
-					}
-					else if(segment.SegmentID=="GE"){//if end of functional group
-						//do nothing
-					}
-					else if(segment.SegmentID=="ST"){//if new transaction set
-						if(LastGroup().Transactions==null){
-							LastGroup().Transactions=new List<X12Transaction>();
-						}
-						LastGroup().Transactions.Add(new X12Transaction(segment));
-					}
-					else if(segment.SegmentID=="SE"){//if end of transaction
-						//do nothing
-					}
-					else{//it must be a detail segment within a transaction.
-						if(LastTransaction().Segments==null){
-							LastTransaction().Segments=new List<X12Segment>();
-						}
-						LastTransaction().Segments.Add(segment);
-					}
-					row=sr.ReadLine();
+				if(segment.SegmentID=="GS"){//if new functional group
+					functGroups.Add(new X12FunctionalGroup(segment));
 				}
-			}//using streamReader on filename
+				else if(segment.SegmentID=="GE"){//if end of functional group
+					//do nothing
+				}
+				else if(segment.SegmentID=="ST"){//if new transaction set
+					if(LastGroup().Transactions==null){
+						LastGroup().Transactions=new List<X12Transaction>();
+					}
+					LastGroup().Transactions.Add(new X12Transaction(segment));
+				}
+				else if(segment.SegmentID=="SE"){//if end of transaction
+					//do nothing
+				}
+				else{//it must be a detail segment within a transaction.
+					if(LastTransaction().Segments==null){
+						LastTransaction().Segments=new List<X12Segment>();
+					}
+					LastTransaction().Segments.Add(segment);
+				}
+				//row=sr.ReadLine();
+			}
+			//}//using streamReader on filename
 		}
 
 		private X12FunctionalGroup LastGroup(){
@@ -74,7 +84,7 @@ namespace OpenDental.Eclaims
 	}
 
 
-	///<summary></summary>
+	///<summary>GS/GE combination. Contained within an interchange control combination (ISA/IEA). Contains at least one transaction (ST/SE). </summary>
 	public class X12FunctionalGroup{
 		///<summary>A collection of X12Transactions</summary>
 		public List<X12Transaction> Transactions;
@@ -88,7 +98,7 @@ namespace OpenDental.Eclaims
 	}
 
 
-	///<summary></summary>
+	///<summary>ST/SE combination.  Containted within functional group (GS/GE).</summary>
 	public class X12Transaction{
 		///<summary>A collection of all the X12Segments for this transaction, in the order they originally appeared.</summary>
 		public List<X12Segment> Segments;
@@ -155,12 +165,12 @@ namespace OpenDental.Eclaims
 
 	///<summary></summary>
 	public struct X12Separators{
+		///<summary>usually ~</summary>
+		public string Segment;
 		///<summary>usually *</summary>
 		public string Element;
 		///<summary>usually :</summary>
 		public string Subelement;
-		///<summary>usually ~</summary>
-		public string Segment;
 	}
 
 }

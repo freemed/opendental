@@ -251,10 +251,17 @@ namespace OpenDental{
 			etrans.DateTimeTrans=dateTimeTrans;
 			etrans.ClearinghouseNum=clearinghouseNum;
 			etrans.MessageText=messageText;
-			if(X997.Is997(messageText)){
-			
+			if(X12object.IsX12(messageText)){
+				X12object Xobj=new X12object(messageText);
+				if(X997.Is997(Xobj)){
+					etrans.Etype=EtransType.Acknowledge_997;
+					//later: analyze to figure out which e-claim is being acked.
+				}
 			}
-			//X12.
+			else{//not X12
+				etrans.Etype=EtransType.TextReport;
+			}
+			
 
 
 			//etrans.Etype=EtransType.Response;
