@@ -366,7 +366,7 @@ namespace OpenDentBusiness {
 					procdescript+=table.Rows[i]["AbbrDesc"].ToString();
 				}
 				command="UPDATE appointment SET ProcDescript='"+POut.PString(procdescript)+"' "
-					+"WHERE PlannedAptNum="+plannedaptnum;
+					+"WHERE NextAptNum="+plannedaptnum;
 				dcon.NonQ(command);
 			}
 			//set the procedure deleted-----------------------------------------------------------------------------------------
