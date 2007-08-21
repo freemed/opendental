@@ -8,7 +8,7 @@ namespace OpenDentBusiness {
 	[DataObject("mount")]
 	public class Mount : DataObjectBase {
 		///<summary>Primary key.</summary>
-		[DataField("MountNum")]
+		[DataField("MountNum", PrimaryKey=true, AutoNumber=true)]
 		private int mountNum;
 
 		/// <summary>Primary key.</summary>

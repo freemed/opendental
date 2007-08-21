@@ -61,6 +61,8 @@ namespace OpenDentBusiness.Tests {
 			TestTableType();
 			DataObjectFactory<T>.UseParameters = true;
 			TestTableType();
+
+			RemotingClient.Disconnect();
 		}
 
 		private void TestTableType() {

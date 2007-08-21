@@ -38,8 +38,13 @@ namespace OpenDentBusiness.Tests {
 		}
 
 		public void Stop() {
-			if (Thread.IsAlive)
+			if(Thread.IsAlive) {
+				OpenDentalService.server.Stop();
 				Thread.Abort();
+			}
+			while(Thread.IsAlive) {
+				Thread.Sleep(100);
+			}
 		}
 	}
 }

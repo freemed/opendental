@@ -35,27 +35,12 @@ namespace OpenDentServer {
 		}
 
 		protected override void OnStart(string[] args) {
-			//base.OnStart(args);
-			//EventLog.WriteEntry("SimpleService.OnStart", DateTime.Now.ToLongTimeString());
 			if((workerThread==null) || 
 				((workerThread.ThreadState & (System.Threading.ThreadState.Unstarted | System.Threading.ThreadState.Stopped)) != 0))
 			{
-				//#if LOGEVENTS
-        //EventLog.WriteEntry("SimpleService starting worker thread", DateTime.Now.ToLongTimeString() +
-        //" - Starting the service worker thread.");
-				//#endif
 				workerThread = new Thread(new ThreadStart(ServiceWorkerMethod));
 				workerThread.Start();
 			}
-			if(workerThread != null) {
-				//#if LOGEVENTS
-        //EventLog.WriteEntry("SimpleService worker thread state", DateTime.Now.ToLongTimeString() +
-        //" - Worker thread state = " + workerThread.ThreadState.ToString());
-				//#endif
-			}
-			//myServiceStatus.currentState = (int)State.SERVICE_RUNNING;
-			//SetServiceStatus(handle,myServiceStatus);
-			//EventLog.WriteEntry("SimpleService.OnStart ending");
 		}
 
 		protected override void OnStop() {
@@ -129,9 +114,7 @@ namespace OpenDentServer {
 					int port=PIn.PInt(navport.Value);
 					server=null;
 					try {
-						//Int32 port = 9390;
-						//IPAddress localAddr=Dns.GetHostEntry(Dns.GetHostName()).AddressList[0];
-						server=new TcpListener(port);//localAddr,port);//but this is the only way that works!
+						server = new TcpListener(port);//localAddr,port);//but this is the only way that works!
 						server.Start();
 						//String datablock = null;
 						Console.Write("Waiting...");
@@ -141,10 +124,10 @@ namespace OpenDentServer {
 							// Perform a blocking call to accept requests.
 							// You could also use server.AcceptSocket() here.
 							TcpClient client = server.AcceptTcpClient();
-							NetworkStream netStream=client.GetStream();
+							NetworkStream netStream = client.GetStream();
 							Console.Write("Connecting...");
-							WorkerClass worker=new WorkerClass(netStream);
-							Thread workerThread=new Thread(new ThreadStart(worker.DoWork));
+							WorkerClass worker = new WorkerClass(netStream);
+							Thread workerThread = new Thread(new ThreadStart(worker.DoWork));
 							workerThread.Start();
 							//
 							//client.Close();
@@ -152,13 +135,14 @@ namespace OpenDentServer {
 						}
 					}
 					catch(SocketException e) {
-						Console.WriteLine("SocketException: {0}",e);
+						Console.WriteLine("SocketException: {0}", e);
 					}
 					finally {
 						// Stop listening for new clients.
 						server.Stop();
 						Console.WriteLine("Server stopped");
 					}
+
 					//Console.WriteLine("\nHit enter to exit...");
 					//Console.Read();
 					//goto StartingPoint;
@@ -202,12 +186,10 @@ namespace OpenDentServer {
 				catch {//if connection was closed by client.
 					break;
 				}
-				//Console.Write("Processing...");
-				//string debugMessage=Encoding.UTF8.GetString(memStream.GetBuffer());
-				//memStream.Position=0;
-				//if(debugMessage.StartsWith("SELECT * FROM claimformitem")){
-				//	Debug.WriteLine(debugMessage);
-				//}
+				if(numberOfBytesRead == 0) {
+					// The connection was closed by the client
+					break;
+				}
 				DataTransferObject dto=DataTransferObject.Deserialize(memStream.GetBuffer());//myCompleteMessage.ToString());
 				memStream.Close();
 				//Process and send response to client--------------------------------------------------------------
@@ -264,16 +246,5 @@ namespace OpenDentServer {
 			//connection was lost.  Client probably closed program
 			netStream.Close();
 		}
-
-
-
-
-
-
-
-
 	}
-
-
-
 }

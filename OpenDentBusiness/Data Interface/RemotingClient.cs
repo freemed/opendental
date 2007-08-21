@@ -121,34 +121,23 @@ namespace OpenDental {
 				if(strBuild.ToString().IndexOf("<EOF>") != -1) {
 					break;
 				}
-				//memStream.WriteByte((byte)readValue);
-				//memStream.Write(buffer,0,numberOfBytesRead);
 			}
 			while(numberOfBytesRead!=0);//netStream.DataAvailable);
 			strBuild.Replace("<EOF>","");
 			//memStream must be decoupled by converting to byte[] and then back to memStream.
 			buffer=Encoding.UTF8.GetBytes(strBuild.ToString());//memStream.ToArray();
-			//memStream.Close();
-			//netStream.Close();
-			//client.Close();
-			//#if DEBUG
-			//string responseString=Encoding.UTF8.GetString(buffer);
-			//Debug.WriteLine("Client Received: "+responseString);
-			//#endif
 			return buffer;		
 		}
-				
-			//} 
-			//catch (ArgumentNullException e) {
-				//Console.WriteLine("ArgumentNullException: {0}", e);
-			//} 
-			//catch (SocketException e) {
-				//Console.WriteLine("SocketException: {0}", e);
-			//} 
-			//Console.WriteLine("\n Press Enter to continue...");
-			//Console.Read();
-		//return null;
-		//}
 
+		public static void Disconnect() {
+			if(netStream != null) {
+				netStream.Close();
+				netStream = null;
+			}
+			if(client != null) {
+				client.Close();
+				client = null;
+			}
+		}
 	}
 }
