@@ -9,6 +9,11 @@ namespace OpenDentBusiness.Tests {
 	class ServiceWrapper : MarshalByRefObject {
 		public ServiceWrapper() {
 			RemotingClient.OpenDentBusinessIsLocal = true;
+
+			// Connect to the local mysql server.
+			DataConnection connection = new DataConnection();
+			connection.SetDb("localhost", "opendental", "root", "", "root", "", DatabaseType.MySql);
+
 			service = new OpenDentalService();
 			thread = new Thread((ThreadStart)delegate() {
 				service.ServiceWorkerMethod();

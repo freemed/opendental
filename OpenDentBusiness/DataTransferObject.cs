@@ -5,6 +5,7 @@ using System.Net.Sockets;
 using System.Text;
 using System.Xml;
 using System.Xml.Serialization;
+using OpenDental.DataAccess;
 
 namespace OpenDentBusiness {
 	///<summary>Provides a base class for the hundreds of DTO classes that we will need.  A DTO class is a simple data storage type.  A DTO is the only format accepted by OpenDentBusiness.dll.</summary>
@@ -24,8 +25,19 @@ namespace OpenDentBusiness {
 			XmlDocument doc=new XmlDocument();
 			doc.Load(memStream);
 			XmlNode node=doc.SelectSingleNode("/*");
-			//Console.WriteLine(node.Name+node.InnerText);
-			Type type=Type.GetType("OpenDentBusiness."+node.Name);
+			// Get the type of the object that was serialized.
+			// In case of a generic DTO, the type is FactoryTransferObject<T>, and we need special logic to handle that.
+			Type type;
+			if(node.Name.StartsWith("FactoryTransferObjectOf")) {
+				type = typeof(FactoryTransferObject<>);
+				int length = "FactoryTransferObjectOf".Length;
+				string genericArgument = "OpenDentBusiness." + node.Name.Substring(length);
+				Type genericType = Type.GetType(genericArgument);
+				type = type.MakeGenericType(genericType);
+			}
+			else {
+				type = Type.GetType("OpenDentBusiness." + node.Name);
+			}
 			memStream=new MemoryStream(data);//resets to beginning of stream
 			XmlSerializer serializer = new XmlSerializer(type);
 			DataTransferObject retVal=(DataTransferObject)serializer.Deserialize(memStream);		

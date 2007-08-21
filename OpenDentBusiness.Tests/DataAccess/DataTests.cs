@@ -45,6 +45,9 @@ namespace OpenDentBusiness.Tests {
 		[Test()]
 		public void Test() {
 			RemotingClient.OpenDentBusinessIsLocal = true;
+            // Connect to the local mysql server.
+            DataConnection connection = new DataConnection();
+            connection.SetDb("localhost", "opendental", "root", "", "root", "", DatabaseType.MySql);
 			DataObjectFactory<T>.UseParameters = false;
 			TestTableType();
 			DataObjectFactory<T>.UseParameters = true;
