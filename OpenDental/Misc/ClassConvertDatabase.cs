@@ -5597,7 +5597,7 @@ namespace OpenDental{
 				General.NonQEx(command);
 				command="UPDATE clearinghouse SET ResponsePath = '"+POut.PString(@"C:\Tesia\IN\")+"' WHERE ISA08='113504607'";
 				General.NonQEx(command);
-				//after 630
+				//after r630. Altered again after r659
 				command="DROP TABLE IF EXISTS autonote";
 				General.NonQEx(command);
 				command=@"CREATE TABLE autonote (
@@ -5614,6 +5614,8 @@ namespace OpenDental{
 					Descript varchar(50),
 					ControlType varchar(50),
 					ControlLabel varchar(50),
+					PrefaceText text,
+					MultiLineText text,
 					ControlOptions text,
 					PRIMARY KEY (AutoNoteControlNum)
 					) DEFAULT CHARSET=utf8";
