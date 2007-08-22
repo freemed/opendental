@@ -326,6 +326,9 @@ namespace OpenDental{
 			contextMenuHist.MenuItems.Add(Lan.g(this,"Show Raw Message"),new EventHandler(ShowRawMessage_Clicked));
 			gridHistory.ContextMenu=contextMenuHist;
 			LayoutToolBars();
+			FormClaimReports FormC=new FormClaimReports();
+			FormC.AutomaticMode=true;
+			FormC.ShowDialog();
 			FillGrid();
 			textDateFrom.Text=DateTime.Today.AddDays(-7).ToShortDateString();
 			textDateTo.Text=DateTime.Today.ToShortDateString();
@@ -346,7 +349,7 @@ namespace OpenDental{
 			ToolBarMain.Buttons.Add(button);*/
 			ToolBarMain.Buttons.Add(new ODToolBarButton(ODToolBarButtonStyle.Separator));
 			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Send E-Claims"),4,Lan.g(this,"Send claims Electronically"),"Eclaims"));
-			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"View Reports"),5,Lan.g(this,"View Reports from Clearinghouses"),"Reports"));
+			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Get Reports"),5,Lan.g(this,"Get Reports from Other Clearinghouses"),"Reports"));
 			ToolBarMain.Buttons.Add(new ODToolBarButton(ODToolBarButtonStyle.Separator));
 			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Close"),-1,"","Close"));
 			/*ArrayList toolButItems=ToolButItems.GetForToolBar(ToolBarsAvail.ClaimsSend);
@@ -516,7 +519,7 @@ namespace OpenDental{
 					return;
 				}
 				Etranss.SetClaimSentOrPrinted(listQueue[gridMain.SelectedIndices[i]].ClaimNum,
-					listQueue[gridMain.SelectedIndices[i]].PatNum,0,EtransType.ClaimPrinted);
+					listQueue[gridMain.SelectedIndices[i]].PatNum,0,EtransType.ClaimPrinted,"",0);
 			}
 			FillGrid();
 			FillHistory();
@@ -543,32 +546,6 @@ namespace OpenDental{
 					return;
 				}
 			}
-		}
-
-		private void OnStatus_Click(){
-			//this changes the status of claims from P to S.
-			MsgBox.Show(this,"Please use the drop down list to change statuses");
-			/*if(gridMain.SelectedIndices.Length==0){
-				if(MessageBox.Show(Lan.g(this,"Change all 'Probably Sent' claims to 'Sent'?"),""
-					,MessageBoxButtons.OKCancel)!=DialogResult.OK){
-					return;
-				}
-				for(int i=0;i<listQueue.Length;i++){
-					if(listQueue[i].ClaimStatus=="P"){
-						Claims.UpdateStatus(listQueue[i].ClaimNum,"S");
-					}	
-				}
-			}
-			else{
-				if(MessageBox.Show(Lan.g(this,"Change selected claims to 'Sent'?"),""
-					,MessageBoxButtons.OKCancel)!=DialogResult.OK){
-					return;
-				}
-				for(int i=0;i<gridMain.SelectedIndices.Length;i++){
-					Claims.UpdateStatus(listQueue[gridMain.SelectedIndices[i]].ClaimNum,"S");
-				}
-			}
-			FillGrid();	*/
 		}
 
 		private void OnEclaims_Click(){
@@ -685,6 +662,7 @@ namespace OpenDental{
 				gridHistory.Rows.Add(row);
 			}
 			gridHistory.EndUpdate();
+			gridHistory.ScrollToEnd();
 		}
 
 		private void panelSplitter_MouseDown(object sender,System.Windows.Forms.MouseEventArgs e) {

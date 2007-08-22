@@ -158,7 +158,9 @@ namespace OpenDental{
 		}
 
 		///<summary>Sets the status of the claim to sent.  Also makes an entry in etrans.  If this is canadian eclaims, then this function gets run first.  Then, the messagetext is created and an attempt is made to send the claim.  Finally, the messagetext and added to the etrans.  This is necessary because the transaction numbers must be incremented and assigned to each claim before creating the message and attempting to send.  If it fails, Canadians will need to delete the etrans entries (or we will need to roll back the changes).</summary>
-		public static Etrans SetClaimSentOrPrinted(int claimNum, int patNum, int clearinghouseNum, EtransType etype) {
+		public static Etrans SetClaimSentOrPrinted(int claimNum, int patNum, int clearinghouseNum, EtransType etype,
+			string messageText,int batchNumber) 
+		{
 			string command= "UPDATE claim SET ClaimStatus = 'S' WHERE claimnum = "+POut.PInt(claimNum);
 			General.NonQ(command);
 			Etrans etrans=new Etrans();
@@ -177,6 +179,8 @@ namespace OpenDental{
 			DataTable table=General.GetTable(command);
 			etrans.CarrierNum=PIn.PInt(table.Rows[0][0].ToString());
 			etrans.CarrierNum2=PIn.PInt(table.Rows[0][1].ToString());//might be 0 if no secondary on this claim
+			etrans.MessageText=messageText;
+			etrans.BatchNumber=batchNumber;
 			if(etype==EtransType.Claim_CA){
 				etrans.OfficeSequenceNumber=0;
 				//find the next officeSequenceNumber
@@ -246,7 +250,7 @@ namespace OpenDental{
 		}
 
 		///<summary>Etrans type will be figured out by this class.  Either TextReport, Acknowledge_997, or StatusNotify_277.</summary>
-		public static Etrans ProcessIncomingReport(DateTime dateTimeTrans,int clearinghouseNum,string messageText){
+		public static void ProcessIncomingReport(DateTime dateTimeTrans,int clearinghouseNum,string messageText){
 			Etrans etrans=new Etrans();
 			etrans.DateTimeTrans=dateTimeTrans;
 			etrans.ClearinghouseNum=clearinghouseNum;
@@ -257,16 +261,18 @@ namespace OpenDental{
 					etrans.Etype=EtransType.Acknowledge_997;
 					//later: analyze to figure out which e-claim is being acked.
 				}
+				else if(X277U.Is277U(Xobj)){
+					etrans.Etype=EtransType.StatusNotify_277;
+					//later: analyze to figure out which e-claim is being referenced.
+				}
 			}
 			else{//not X12
 				etrans.Etype=EtransType.TextReport;
 			}
-			
-
-
-			//etrans.Etype=EtransType.Response;
-			//File.ReadAllText(files[i]);
-			return null;
+			//etrans.CarrierNum
+			//etrans.CarrierNum2
+			//etrans.ClaimNum
+			//etrans.PatNum
 		}
 		
 		///<summary>DateTimeTrans can be handled automatically here.  No need to set it in advance, but it's allowed to do so.</summary>

@@ -18,14 +18,14 @@ namespace OpenDental.Eclaims{
 		}
 
 		///<summary>Called from Eclaims and includes multiple claims.</summary>
-		public static bool SendBatch(List<ClaimSendQueueItem> queueItems,int batchNum){
+		public static string SendBatch(List<ClaimSendQueueItem> queueItems,int batchNum){
 			for(int i=0;i<queueItems.Count;i++){
 				if(!CreateClaim(queueItems[i].PatNum,queueItems[i].ClaimNum,batchNum))
 				{
-					return false;
+					return "";
 				}
 			}
-			return true;
+			return "Sent";
 		}
 
 		///<summary>Called once for each claim to be created.  For claims with a lot of procedures, this may actually create multiple claims.</summary>

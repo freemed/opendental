@@ -8,23 +8,31 @@ namespace OpenDental.Eclaims
 	///<summary>X12 277 Unsolicited Claim Status Notification</summary>
 	public class X277U{
 
+		public static bool Is277U(X12object xobj) {
+			if(xobj.functGroups.Count!=1) {//Assume only one funct group allowed.  Is this too strict?
+				return false;
+			}
+			if(xobj.functGroups[0].Header.Get(1)=="HN") {
+				return true;
+			}
+			return false;
+		}
+
 		///<summary>This can take a 277 file of any length and convert it to a human readable format.  It can then be saved to a text file in the same folder as the original. The original file should be immediately archived if this is successful.  Actually includes extra functionality to make an 837 readable.</summary>
-		public static string MakeHumanReadable(string fileName){
-			List<string> messageLines=new List<string>();
-			X12object xObj=new X12object(File.ReadAllText(fileName));
+		public static string MakeHumanReadable(X12object xobj){
+			//List<string> messageLines=new List<string>();
+			//X12object xObj=new X12object(File.ReadAllText(fileName));
 			string rn="\r\n";
 			StringBuilder ret=new StringBuilder();
-			X12Segment segment;
-			foreach(Object functObj in xObj.functGroups){
+			foreach(X12FunctionalGroup functGroup in xobj.functGroups){
 				ret.Append("Functional Group");
-				if(((X12FunctionalGroup)functObj).Header.Get(1)=="HN"){
-					ret.Append(" 277-Claim Status Notification");
+				if(functGroup.Header.Get(1)=="HN"){
+					ret.Append(" 277-Unsolicited Claim Status Notification");
 				}
 				ret.Append(rn);	
-				foreach(Object transObj in ((X12FunctionalGroup)functObj).Transactions){
+				foreach(X12Transaction trans in functGroup.Transactions){
 					ret.Append("Transaction Set 277-Claim Status Notification"+rn);
-					foreach(Object segmentObj in ((X12Transaction)transObj).Segments){
-						segment=(X12Segment)segmentObj;
+					foreach(X12Segment segment in trans.Segments){
 						ret.Append(SegmentToString(segment));
 					}
 				}

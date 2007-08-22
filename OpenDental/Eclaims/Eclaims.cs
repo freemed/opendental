@@ -32,7 +32,8 @@ namespace OpenDental.Eclaims
 			}
 			//for any clearinghouses with claims, send them:
 			int batchNum;
-			bool result=true;
+			//bool result=true;
+			string messageText="";
 			for(int i=0;i<claimsByCHouse.Length;i++){
 				if(claimsByCHouse[i].Count==0){
 					continue;
@@ -42,10 +43,10 @@ namespace OpenDental.Eclaims
 				//---------------------------------------------------------------------------------------
 				//Create the claim file(s) for this clearinghouse
 				if(Clearinghouses.List[i].Eformat==ElectronicClaimFormat.X12){
-					result=X12.SendBatch(claimsByCHouse[i],batchNum);
+					messageText=X12.SendBatch(claimsByCHouse[i],batchNum);
 				}
 				else if(Clearinghouses.List[i].Eformat==ElectronicClaimFormat.Renaissance){
-					result=Renaissance.SendBatch(claimsByCHouse[i],batchNum);
+					messageText=Renaissance.SendBatch(claimsByCHouse[i],batchNum);
 				}
 				else if(Clearinghouses.List[i].Eformat==ElectronicClaimFormat.Canadian) {
 					//Canadian is a little different because we need the sequence numbers.
@@ -55,9 +56,9 @@ namespace OpenDental.Eclaims
 					continue;
 				}
 				else{
-					result=false;//(ElectronicClaimFormat.None does not get sent)
+					messageText="";//(ElectronicClaimFormat.None does not get sent)
 				}
-				if(!result){//if failed to create claim file properly,
+				if(messageText==""){//if failed to create claim file properly,
 					continue;//don't launch program or change claim status
 				}
 				//----------------------------------------------------------------------------------------
@@ -126,7 +127,7 @@ namespace OpenDental.Eclaims
 				if(Clearinghouses.List[i].Eformat!=ElectronicClaimFormat.Canadian){
 					for(int j=0;j<claimsByCHouse[i].Count;j++){
 						Etranss.SetClaimSentOrPrinted(claimsByCHouse[i][j].ClaimNum,claimsByCHouse[i][j].PatNum,
-							Clearinghouses.List[i].ClearinghouseNum,etype);
+							Clearinghouses.List[i].ClearinghouseNum,etype,messageText,batchNum);
 					}
 				}
 			}//for(int i=0;i<claimsByCHouse.Length;i++){

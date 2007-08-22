@@ -5618,6 +5618,8 @@ namespace OpenDental{
 					PRIMARY KEY (AutoNoteControlNum)
 					) DEFAULT CHARSET=utf8";
 				General.NonQEx(command);
+				//after r658
+				//command="ALTER TABLE  etrans ADD BatchNumber ";
 
 
 

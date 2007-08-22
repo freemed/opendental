@@ -52,7 +52,7 @@ namespace OpenDental.Eclaims {
 			string txt;
 			for(int i=0;i<queueItems.Count;i++){
 				etrans=Etranss.SetClaimSentOrPrinted(queueItems[i].ClaimNum,queueItems[i].PatNum,
-					clearhouse.ClearinghouseNum,EtransType.Claim_CA);
+					clearhouse.ClearinghouseNum,EtransType.Claim_CA,"",0);
 				txt="";
 				claim=Claims.GetClaim(queueItems[i].ClaimNum);
 				canClaim=CanadianClaims.GetForClaim(claim.ClaimNum);//already validated to not=null

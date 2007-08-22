@@ -52,8 +52,8 @@ namespace OpenDental.Eclaims
 			}
 		}
 
-		///<summary>Called from Eclaims and includes multiple claims.</summary>
-		public static bool SendBatch(List<ClaimSendQueueItem> queueItems,int interchangeNum){
+		///<summary>Called from Eclaims and includes multiple claims.  Returns the string that was sent.</summary>
+		public static string SendBatch(List<ClaimSendQueueItem> queueItems,int interchangeNum){
 			Clearinghouse clearhouse=Clearinghouses.GetClearinghouse(queueItems[0].ClearinghouseNum);
 			List<ClaimSendQueueItem> functionalGroupDental=new List<ClaimSendQueueItem>();
 			List<ClaimSendQueueItem> functionalGroupMedical=new List<ClaimSendQueueItem>();
@@ -67,7 +67,7 @@ namespace OpenDental.Eclaims
 			}
 			string saveFile=GetFileName(clearhouse,interchangeNum);
 			if(saveFile==""){
-				return false;
+				return "";
 			}
 			using(StreamWriter sw=new StreamWriter(saveFile,false,Encoding.ASCII))
 			{
@@ -112,7 +112,7 @@ namespace OpenDental.Eclaims
 				}
 			}
 			CopyToArchive(saveFile);
-			return true;
+			return File.ReadAllText(saveFile);
 		}
 
 		private static void WriteFunctionalGroup(StreamWriter sw,List<ClaimSendQueueItem> queueItems,int interchangeNum,Clearinghouse clearhouse){

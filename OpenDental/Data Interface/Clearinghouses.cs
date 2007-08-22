@@ -8,45 +8,55 @@ namespace OpenDental{
 	///<summary></summary>
 	public class Clearinghouses {
 		///<summary>List of all clearinghouses.</summary>
-		public static Clearinghouse[] List;
+		private static Clearinghouse[] list;
 		///<summary>Key=PayorID. Value=ClearinghouseNum.</summary>
 		private static Hashtable HList;
+
+		public static Clearinghouse[] List{
+			get{
+				if(list==null){
+					Refresh();
+				}
+				return list;
+			}
+			//set{list=List;}
+		}
 
 		///<summary></summary>
 		public static void Refresh() {
 			string command=
 				"SELECT * FROM clearinghouse";
 			DataTable table=General.GetTable(command);
-			List=new Clearinghouse[table.Rows.Count];
+			list=new Clearinghouse[table.Rows.Count];
 			HList=new Hashtable();
 			string[] payors;
 			for(int i=0;i<table.Rows.Count;i++) {
-				List[i]=new Clearinghouse();
-				List[i].ClearinghouseNum= PIn.PInt(table.Rows[i][0].ToString());
-				List[i].Description     = PIn.PString(table.Rows[i][1].ToString());
-				List[i].ExportPath      = PIn.PString(table.Rows[i][2].ToString());
-				List[i].IsDefault       = PIn.PBool(table.Rows[i][3].ToString());
-				List[i].Payors          = PIn.PString(table.Rows[i][4].ToString());
-				List[i].Eformat         = (ElectronicClaimFormat)PIn.PInt(table.Rows[i][5].ToString());
-				List[i].ISA05           = PIn.PString(table.Rows[i][6].ToString());
-				List[i].SenderTIN       = PIn.PString(table.Rows[i][7].ToString());
-				List[i].ISA07           = PIn.PString(table.Rows[i][8].ToString());
-				List[i].ISA08           = PIn.PString(table.Rows[i][9].ToString());
-				List[i].ISA15           = PIn.PString(table.Rows[i][10].ToString());
-				List[i].Password        = PIn.PString(table.Rows[i][11].ToString());
-				List[i].ResponsePath    = PIn.PString(table.Rows[i][12].ToString());
-				List[i].CommBridge      = (EclaimsCommBridge)PIn.PInt(table.Rows[i][13].ToString());
-				List[i].ClientProgram   = PIn.PString(table.Rows[i][14].ToString());
+				list[i]=new Clearinghouse();
+				list[i].ClearinghouseNum= PIn.PInt(table.Rows[i][0].ToString());
+				list[i].Description     = PIn.PString(table.Rows[i][1].ToString());
+				list[i].ExportPath      = PIn.PString(table.Rows[i][2].ToString());
+				list[i].IsDefault       = PIn.PBool(table.Rows[i][3].ToString());
+				list[i].Payors          = PIn.PString(table.Rows[i][4].ToString());
+				list[i].Eformat         = (ElectronicClaimFormat)PIn.PInt(table.Rows[i][5].ToString());
+				list[i].ISA05           = PIn.PString(table.Rows[i][6].ToString());
+				list[i].SenderTIN       = PIn.PString(table.Rows[i][7].ToString());
+				list[i].ISA07           = PIn.PString(table.Rows[i][8].ToString());
+				list[i].ISA08           = PIn.PString(table.Rows[i][9].ToString());
+				list[i].ISA15           = PIn.PString(table.Rows[i][10].ToString());
+				list[i].Password        = PIn.PString(table.Rows[i][11].ToString());
+				list[i].ResponsePath    = PIn.PString(table.Rows[i][12].ToString());
+				list[i].CommBridge      = (EclaimsCommBridge)PIn.PInt(table.Rows[i][13].ToString());
+				list[i].ClientProgram   = PIn.PString(table.Rows[i][14].ToString());
 				//15: LastBatchNumber
-				List[i].ModemPort       = PIn.PInt(table.Rows[i][16].ToString());
-				List[i].LoginID         = PIn.PString(table.Rows[i][17].ToString());
-				List[i].SenderName      = PIn.PString(table.Rows[i][18].ToString());
-				List[i].SenderTelephone = PIn.PString(table.Rows[i][19].ToString());
-				List[i].GS03            = PIn.PString(table.Rows[i][20].ToString());
-				payors=List[i].Payors.Split(',');
+				list[i].ModemPort       = PIn.PInt(table.Rows[i][16].ToString());
+				list[i].LoginID         = PIn.PString(table.Rows[i][17].ToString());
+				list[i].SenderName      = PIn.PString(table.Rows[i][18].ToString());
+				list[i].SenderTelephone = PIn.PString(table.Rows[i][19].ToString());
+				list[i].GS03            = PIn.PString(table.Rows[i][20].ToString());
+				payors=list[i].Payors.Split(',');
 				for(int j=0;j<payors.Length;j++) {
 					if(!HList.ContainsKey(payors[j])) {
-						HList.Add(payors[j],List[i].ClearinghouseNum);
+						HList.Add(payors[j],list[i].ClearinghouseNum);
 					}
 				}
 			}
@@ -163,9 +173,9 @@ namespace OpenDental{
 
 		///<summary>Returns the clearinghouse specified by the given num.</summary>
 		public static Clearinghouse GetClearinghouse(int clearinghouseNum){
-			for(int i=0;i<List.Length;i++){
-				if(List[i].ClearinghouseNum==clearinghouseNum){
-					return List[i];
+			for(int i=0;i<list.Length;i++){
+				if(list[i].ClearinghouseNum==clearinghouseNum){
+					return list[i];
 				}
 			}
 			MessageBox.Show("Error. Could not locate Clearinghouse.");

@@ -27,8 +27,12 @@ namespace OpenDentBusiness{
 		public int CarrierNum2;
 		///<summary>This is useful in case the original claim has been deleted.  Now, we can still tell who the patient was.</summary>
 		public int PatNum;
-		///<summary>Whether outgoing or incoming, this field contains the actual text of the message.  We don't yet know how we will handle multiple transactions in a single batch message if that becomes necessary.</summary>
+		///<summary>Whether outgoing or incoming, this field contains the actual text of the message.  When there is a batch, this field will contain the text of the entire batch.  Other claims will be mixed in.  The same text will be duplicated in the MessageText fields on the other claims.</summary>
 		public string MessageText;
+		///<Summary>Maxes out at 999, then loops back to 1.  So dates must also be used to isolate the correct BatchNumber.  Specific to on clearinghouse.  Only used with e-claims.  Claim will have BatchNumber, and 997 will have matching BatchNumber. (In X12 lingo, it's a transaction#)</Summary>
+		public int BatchNumber;
+		///<Summary>A=Accepted, R=Rejected.  More options will be added later.  The incoming 997 sets this flag automatically.  To find the 997, look for a matching BatchNumber, since both the claims and the 997 will all have the same batch number.</Summary>
+		public string AckCode;
 
 
 		///<summary></summary>
