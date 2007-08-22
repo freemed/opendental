@@ -4,7 +4,7 @@ using System.Text;
 using OpenDental.DataAccess;
 
 namespace OpenDentBusiness {
-	/// <summary>These can be freely deleted, renamed, moved, etc. without affecting any patient info.  mountitem</summary>
+	/// <summary>A mount shows in the images module just like other images in the tree.  But it is just a container for images within it rather than an actual image itself.</summary>
 	[DataObject("mount")]
 	public class Mount : DataObjectBase {
 		///<summary>Primary key.</summary>
@@ -39,11 +39,11 @@ namespace OpenDentBusiness {
 			get { return patNumChanged; }
 			
 		}
-		///<summary>The category enumeration/folder that this mount belongs to in the image module tree-view.</summary>
+		///<summary></summary>
 		[DataField("DocCategory")]
 		private int docCategory;
 
-		/// <summary>The category enumeration/folder that this mount belongs to in the image module tree-view.</summary>
+		/// <summary>FK to definition.DefNum. Categories for documents.</summary>
 		public int DocCategory {
 			get { return docCategory; }
 			set { docCategory = value; MarkDirty(); docCategoryChanged = true; }
