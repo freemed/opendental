@@ -807,6 +807,18 @@ namespace OpenDental{
 					case "MedInsBPriorPmt":
 					case "MedInsCPriorPmt":
 					case "TotalFee":
+					case "MedValAmount39a":
+					case "MedValAmount39b":
+					case "MedValAmount39c":
+					case "MedValAmount39d":
+					case "MedValAmount40a":
+					case "MedValAmount40b":
+					case "MedValAmount40c":
+					case "MedValAmount40d":
+					case "MedValAmount41a":
+					case "MedValAmount41b":
+					case "MedValAmount41c":
+					case "MedValAmount41d":
 						displayStrings[i]="1234.00";
 						break;
 					case "Remarks":

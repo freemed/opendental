@@ -300,7 +300,19 @@ namespace OpenDental{
 						|| ClaimFormCur.Items[i].FieldName=="MedInsCAmtDue"
 						|| ClaimFormCur.Items[i].FieldName=="MedInsAPriorPmt"
 						|| ClaimFormCur.Items[i].FieldName=="MedInsBPriorPmt"
-						|| ClaimFormCur.Items[i].FieldName=="MedInsCPriorPmt")
+						|| ClaimFormCur.Items[i].FieldName=="MedInsCPriorPmt"
+						|| ClaimFormCur.Items[i].FieldName=="MedValAmount39a"
+						|| ClaimFormCur.Items[i].FieldName=="MedValAmount39b"
+						|| ClaimFormCur.Items[i].FieldName=="MedValAmount39c"
+						|| ClaimFormCur.Items[i].FieldName=="MedValAmount39d"
+						|| ClaimFormCur.Items[i].FieldName=="MedValAmount40a"
+						|| ClaimFormCur.Items[i].FieldName=="MedValAmount40b"
+						|| ClaimFormCur.Items[i].FieldName=="MedValAmount40c"
+						|| ClaimFormCur.Items[i].FieldName=="MedValAmount40d"
+						|| ClaimFormCur.Items[i].FieldName=="MedValAmount41a"
+						|| ClaimFormCur.Items[i].FieldName=="MedValAmount41b"
+						|| ClaimFormCur.Items[i].FieldName=="MedValAmount41c"
+						|| ClaimFormCur.Items[i].FieldName=="MedValAmount41d")
 					{
 						//this aligns it to the right
 						xPosText-=grfx.MeasureString(displayStrings[i],new Font(ClaimFormCur.FontName,ClaimFormCur.FontSize)).Width;

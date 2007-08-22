@@ -353,15 +353,6 @@ namespace OpenDental{
 			this.panelRightEdge = new System.Windows.Forms.Panel();
 			this.tabMain = new System.Windows.Forms.TabControl();
 			this.tabGeneral = new System.Windows.Forms.TabPage();
-			this.groupBox4 = new System.Windows.Forms.GroupBox();
-			this.label45 = new System.Windows.Forms.Label();
-			this.textRefProv = new System.Windows.Forms.TextBox();
-			this.butReferralEdit = new OpenDental.UI.Button();
-			this.label47 = new System.Windows.Forms.Label();
-			this.butReferralNone = new OpenDental.UI.Button();
-			this.butReferralSelect = new OpenDental.UI.Button();
-			this.textRefNum = new System.Windows.Forms.TextBox();
-			this.label46 = new System.Windows.Forms.Label();
 			this.textRadiographs = new OpenDental.ValidNum();
 			this.tabUB04 = new System.Windows.Forms.TabPage();
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
@@ -387,6 +378,15 @@ namespace OpenDental{
 			this.textCode2 = new System.Windows.Forms.TextBox();
 			this.textCode1 = new System.Windows.Forms.TextBox();
 			this.textCode0 = new System.Windows.Forms.TextBox();
+			this.groupBox4 = new System.Windows.Forms.GroupBox();
+			this.label45 = new System.Windows.Forms.Label();
+			this.textRefProv = new System.Windows.Forms.TextBox();
+			this.butReferralEdit = new OpenDental.UI.Button();
+			this.label47 = new System.Windows.Forms.Label();
+			this.butReferralNone = new OpenDental.UI.Button();
+			this.butReferralSelect = new OpenDental.UI.Button();
+			this.textRefNum = new System.Windows.Forms.TextBox();
+			this.label46 = new System.Windows.Forms.Label();
 			this.label42 = new System.Windows.Forms.Label();
 			this.comboAccident = new System.Windows.Forms.ComboBox();
 			this.label43 = new System.Windows.Forms.Label();
@@ -431,9 +431,9 @@ namespace OpenDental{
 			this.groupValueCodes.SuspendLayout();
 			this.tabMain.SuspendLayout();
 			this.tabGeneral.SuspendLayout();
-			this.groupBox4.SuspendLayout();
 			this.tabUB04.SuspendLayout();
 			this.groupBox1.SuspendLayout();
+			this.groupBox4.SuspendLayout();
 			this.groupEnterPayment.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -915,6 +915,7 @@ namespace OpenDental{
 			this.textVC11Amount.Name = "textVC11Amount";
 			this.textVC11Amount.Size = new System.Drawing.Size(66, 20);
 			this.textVC11Amount.TabIndex = 56;
+			this.textVC11Amount.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
 			// 
 			// textVC8Amount
 			// 
@@ -922,6 +923,7 @@ namespace OpenDental{
 			this.textVC8Amount.Name = "textVC8Amount";
 			this.textVC8Amount.Size = new System.Drawing.Size(66, 20);
 			this.textVC8Amount.TabIndex = 55;
+			this.textVC8Amount.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
 			// 
 			// textVC5Amount
 			// 
@@ -929,6 +931,7 @@ namespace OpenDental{
 			this.textVC5Amount.Name = "textVC5Amount";
 			this.textVC5Amount.Size = new System.Drawing.Size(66, 20);
 			this.textVC5Amount.TabIndex = 54;
+			this.textVC5Amount.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
 			// 
 			// textVC2Amount
 			// 
@@ -936,6 +939,7 @@ namespace OpenDental{
 			this.textVC2Amount.Name = "textVC2Amount";
 			this.textVC2Amount.Size = new System.Drawing.Size(66, 20);
 			this.textVC2Amount.TabIndex = 53;
+			this.textVC2Amount.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
 			// 
 			// textVC11Code
 			// 
@@ -1033,6 +1037,7 @@ namespace OpenDental{
 			this.textVC10Amount.Name = "textVC10Amount";
 			this.textVC10Amount.Size = new System.Drawing.Size(66, 20);
 			this.textVC10Amount.TabIndex = 42;
+			this.textVC10Amount.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
 			// 
 			// textVC7Amount
 			// 
@@ -1040,6 +1045,7 @@ namespace OpenDental{
 			this.textVC7Amount.Name = "textVC7Amount";
 			this.textVC7Amount.Size = new System.Drawing.Size(66, 20);
 			this.textVC7Amount.TabIndex = 41;
+			this.textVC7Amount.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
 			// 
 			// textVC4Amount
 			// 
@@ -1047,6 +1053,7 @@ namespace OpenDental{
 			this.textVC4Amount.Name = "textVC4Amount";
 			this.textVC4Amount.Size = new System.Drawing.Size(66, 20);
 			this.textVC4Amount.TabIndex = 40;
+			this.textVC4Amount.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
 			// 
 			// textVC1Amount
 			// 
@@ -1054,6 +1061,7 @@ namespace OpenDental{
 			this.textVC1Amount.Name = "textVC1Amount";
 			this.textVC1Amount.Size = new System.Drawing.Size(66, 20);
 			this.textVC1Amount.TabIndex = 39;
+			this.textVC1Amount.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
 			// 
 			// textVC10Code
 			// 
@@ -1178,6 +1186,7 @@ namespace OpenDental{
 			this.textVC9Amount.Name = "textVC9Amount";
 			this.textVC9Amount.Size = new System.Drawing.Size(66, 20);
 			this.textVC9Amount.TabIndex = 17;
+			this.textVC9Amount.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
 			// 
 			// textVC6Amount
 			// 
@@ -1185,6 +1194,7 @@ namespace OpenDental{
 			this.textVC6Amount.Name = "textVC6Amount";
 			this.textVC6Amount.Size = new System.Drawing.Size(66, 20);
 			this.textVC6Amount.TabIndex = 16;
+			this.textVC6Amount.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
 			// 
 			// textVC3Amount
 			// 
@@ -1192,6 +1202,7 @@ namespace OpenDental{
 			this.textVC3Amount.Name = "textVC3Amount";
 			this.textVC3Amount.Size = new System.Drawing.Size(66, 20);
 			this.textVC3Amount.TabIndex = 15;
+			this.textVC3Amount.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
 			// 
 			// textVC0Amount
 			// 
@@ -1199,6 +1210,7 @@ namespace OpenDental{
 			this.textVC0Amount.Name = "textVC0Amount";
 			this.textVC0Amount.Size = new System.Drawing.Size(66, 20);
 			this.textVC0Amount.TabIndex = 14;
+			this.textVC0Amount.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
 			// 
 			// textVC9Code
 			// 
@@ -1398,114 +1410,6 @@ namespace OpenDental{
 			this.tabGeneral.TabIndex = 2;
 			this.tabGeneral.Text = "Dental";
 			this.tabGeneral.UseVisualStyleBackColor = true;
-			// 
-			// groupBox4
-			// 
-			this.groupBox4.Controls.Add(this.label45);
-			this.groupBox4.Controls.Add(this.textRefProv);
-			this.groupBox4.Controls.Add(this.butReferralEdit);
-			this.groupBox4.Controls.Add(this.label47);
-			this.groupBox4.Controls.Add(this.butReferralNone);
-			this.groupBox4.Controls.Add(this.butReferralSelect);
-			this.groupBox4.Controls.Add(this.textRefNum);
-			this.groupBox4.Controls.Add(this.label46);
-			this.groupBox4.Location = new System.Drawing.Point(301, 486);
-			this.groupBox4.Name = "groupBox4";
-			this.groupBox4.Size = new System.Drawing.Size(313, 148);
-			this.groupBox4.TabIndex = 118;
-			this.groupBox4.TabStop = false;
-			this.groupBox4.Text = "Claim Referral";
-			// 
-			// label45
-			// 
-			this.label45.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-			this.label45.Location = new System.Drawing.Point(13, 16);
-			this.label45.Name = "label45";
-			this.label45.Size = new System.Drawing.Size(282, 36);
-			this.label45.TabIndex = 133;
-			this.label45.Text = "Only enter referring provider and referral number if required by your insurance c" +
-				"arrier.";
-			// 
-			// textRefProv
-			// 
-			this.textRefProv.BackColor = System.Drawing.SystemColors.Window;
-			this.textRefProv.Location = new System.Drawing.Point(122, 55);
-			this.textRefProv.Name = "textRefProv";
-			this.textRefProv.ReadOnly = true;
-			this.textRefProv.Size = new System.Drawing.Size(171, 20);
-			this.textRefProv.TabIndex = 139;
-			// 
-			// butReferralEdit
-			// 
-			this.butReferralEdit.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butReferralEdit.Autosize = true;
-			this.butReferralEdit.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butReferralEdit.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butReferralEdit.CornerRadius = 4F;
-			this.butReferralEdit.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-			this.butReferralEdit.Location = new System.Drawing.Point(236, 81);
-			this.butReferralEdit.Name = "butReferralEdit";
-			this.butReferralEdit.Size = new System.Drawing.Size(57, 25);
-			this.butReferralEdit.TabIndex = 144;
-			this.butReferralEdit.Text = "Edit";
-			this.butReferralEdit.Click += new System.EventHandler(this.butReferralEdit_Click);
-			// 
-			// label47
-			// 
-			this.label47.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-			this.label47.Location = new System.Drawing.Point(17, 57);
-			this.label47.Name = "label47";
-			this.label47.Size = new System.Drawing.Size(99, 14);
-			this.label47.TabIndex = 131;
-			this.label47.Text = "Referring Provider";
-			this.label47.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// butReferralNone
-			// 
-			this.butReferralNone.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butReferralNone.Autosize = true;
-			this.butReferralNone.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butReferralNone.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butReferralNone.CornerRadius = 4F;
-			this.butReferralNone.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-			this.butReferralNone.Location = new System.Drawing.Point(122, 81);
-			this.butReferralNone.Name = "butReferralNone";
-			this.butReferralNone.Size = new System.Drawing.Size(52, 25);
-			this.butReferralNone.TabIndex = 135;
-			this.butReferralNone.Text = "&None";
-			this.butReferralNone.Click += new System.EventHandler(this.butReferralNone_Click);
-			// 
-			// butReferralSelect
-			// 
-			this.butReferralSelect.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butReferralSelect.Autosize = true;
-			this.butReferralSelect.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butReferralSelect.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butReferralSelect.CornerRadius = 4F;
-			this.butReferralSelect.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-			this.butReferralSelect.Location = new System.Drawing.Point(178, 81);
-			this.butReferralSelect.Name = "butReferralSelect";
-			this.butReferralSelect.Size = new System.Drawing.Size(53, 25);
-			this.butReferralSelect.TabIndex = 138;
-			this.butReferralSelect.Text = "Select";
-			this.butReferralSelect.Click += new System.EventHandler(this.butReferralSelect_Click);
-			// 
-			// textRefNum
-			// 
-			this.textRefNum.Location = new System.Drawing.Point(122, 112);
-			this.textRefNum.Name = "textRefNum";
-			this.textRefNum.Size = new System.Drawing.Size(171, 20);
-			this.textRefNum.TabIndex = 127;
-			// 
-			// label46
-			// 
-			this.label46.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-			this.label46.Location = new System.Drawing.Point(26, 114);
-			this.label46.Name = "label46";
-			this.label46.Size = new System.Drawing.Size(90, 18);
-			this.label46.TabIndex = 132;
-			this.label46.Text = "Referral Number";
-			this.label46.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// textRadiographs
 			// 
@@ -1760,6 +1664,114 @@ namespace OpenDental{
 			this.textCode0.Size = new System.Drawing.Size(26, 20);
 			this.textCode0.TabIndex = 57;
 			this.textCode0.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+			// 
+			// groupBox4
+			// 
+			this.groupBox4.Controls.Add(this.label45);
+			this.groupBox4.Controls.Add(this.textRefProv);
+			this.groupBox4.Controls.Add(this.butReferralEdit);
+			this.groupBox4.Controls.Add(this.label47);
+			this.groupBox4.Controls.Add(this.butReferralNone);
+			this.groupBox4.Controls.Add(this.butReferralSelect);
+			this.groupBox4.Controls.Add(this.textRefNum);
+			this.groupBox4.Controls.Add(this.label46);
+			this.groupBox4.Location = new System.Drawing.Point(301, 486);
+			this.groupBox4.Name = "groupBox4";
+			this.groupBox4.Size = new System.Drawing.Size(313, 148);
+			this.groupBox4.TabIndex = 118;
+			this.groupBox4.TabStop = false;
+			this.groupBox4.Text = "Claim Referral";
+			// 
+			// label45
+			// 
+			this.label45.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+			this.label45.Location = new System.Drawing.Point(13, 16);
+			this.label45.Name = "label45";
+			this.label45.Size = new System.Drawing.Size(282, 36);
+			this.label45.TabIndex = 133;
+			this.label45.Text = "Only enter referring provider and referral number if required by your insurance c" +
+				"arrier.";
+			// 
+			// textRefProv
+			// 
+			this.textRefProv.BackColor = System.Drawing.SystemColors.Window;
+			this.textRefProv.Location = new System.Drawing.Point(122, 55);
+			this.textRefProv.Name = "textRefProv";
+			this.textRefProv.ReadOnly = true;
+			this.textRefProv.Size = new System.Drawing.Size(171, 20);
+			this.textRefProv.TabIndex = 139;
+			// 
+			// butReferralEdit
+			// 
+			this.butReferralEdit.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butReferralEdit.Autosize = true;
+			this.butReferralEdit.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butReferralEdit.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butReferralEdit.CornerRadius = 4F;
+			this.butReferralEdit.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+			this.butReferralEdit.Location = new System.Drawing.Point(236, 81);
+			this.butReferralEdit.Name = "butReferralEdit";
+			this.butReferralEdit.Size = new System.Drawing.Size(57, 25);
+			this.butReferralEdit.TabIndex = 144;
+			this.butReferralEdit.Text = "Edit";
+			this.butReferralEdit.Click += new System.EventHandler(this.butReferralEdit_Click);
+			// 
+			// label47
+			// 
+			this.label47.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+			this.label47.Location = new System.Drawing.Point(17, 57);
+			this.label47.Name = "label47";
+			this.label47.Size = new System.Drawing.Size(99, 14);
+			this.label47.TabIndex = 131;
+			this.label47.Text = "Referring Provider";
+			this.label47.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// butReferralNone
+			// 
+			this.butReferralNone.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butReferralNone.Autosize = true;
+			this.butReferralNone.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butReferralNone.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butReferralNone.CornerRadius = 4F;
+			this.butReferralNone.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+			this.butReferralNone.Location = new System.Drawing.Point(122, 81);
+			this.butReferralNone.Name = "butReferralNone";
+			this.butReferralNone.Size = new System.Drawing.Size(52, 25);
+			this.butReferralNone.TabIndex = 135;
+			this.butReferralNone.Text = "&None";
+			this.butReferralNone.Click += new System.EventHandler(this.butReferralNone_Click);
+			// 
+			// butReferralSelect
+			// 
+			this.butReferralSelect.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butReferralSelect.Autosize = true;
+			this.butReferralSelect.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butReferralSelect.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butReferralSelect.CornerRadius = 4F;
+			this.butReferralSelect.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+			this.butReferralSelect.Location = new System.Drawing.Point(178, 81);
+			this.butReferralSelect.Name = "butReferralSelect";
+			this.butReferralSelect.Size = new System.Drawing.Size(53, 25);
+			this.butReferralSelect.TabIndex = 138;
+			this.butReferralSelect.Text = "Select";
+			this.butReferralSelect.Click += new System.EventHandler(this.butReferralSelect_Click);
+			// 
+			// textRefNum
+			// 
+			this.textRefNum.Location = new System.Drawing.Point(122, 112);
+			this.textRefNum.Name = "textRefNum";
+			this.textRefNum.Size = new System.Drawing.Size(171, 20);
+			this.textRefNum.TabIndex = 127;
+			// 
+			// label46
+			// 
+			this.label46.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+			this.label46.Location = new System.Drawing.Point(26, 114);
+			this.label46.Name = "label46";
+			this.label46.Size = new System.Drawing.Size(90, 18);
+			this.label46.TabIndex = 132;
+			this.label46.Text = "Referral Number";
+			this.label46.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// label42
 			// 
@@ -2285,11 +2297,11 @@ namespace OpenDental{
 			this.tabMain.ResumeLayout(false);
 			this.tabGeneral.ResumeLayout(false);
 			this.tabGeneral.PerformLayout();
-			this.groupBox4.ResumeLayout(false);
-			this.groupBox4.PerformLayout();
 			this.tabUB04.ResumeLayout(false);
 			this.groupBox1.ResumeLayout(false);
 			this.groupBox1.PerformLayout();
+			this.groupBox4.ResumeLayout(false);
+			this.groupBox4.PerformLayout();
 			this.groupEnterPayment.ResumeLayout(false);
 			this.ResumeLayout(false);
 			this.PerformLayout();
