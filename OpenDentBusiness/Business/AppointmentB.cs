@@ -552,8 +552,8 @@ namespace OpenDentBusiness{
 				command+="PlannedAptNum="+aptNum+")";
 			}
 			else{
-				command+="AptNum="+aptNum+") "
-					+"AND (AptNum=0 OR AptNum="+aptNum+")";//exclude procs attached to other appts.
+				command+="AptNum="+aptNum+") ";
+					//+"AND (AptNum=0 OR AptNum="+aptNum+")";//exclude procs attached to other appts.
 			}
 			DataTable rawProc=dcon.GetTable(command);
 			for(int i=0;i<rawProc.Rows.Count;i++) {
@@ -565,7 +565,11 @@ namespace OpenDentBusiness{
 					row["attached"]=(rawProc.Rows[i]["AptNum"].ToString()==aptNum) ? "1" : "0";
 				}
 				row["CodeNum"]=rawProc.Rows[i]["CodeNum"].ToString();
-				row["descript"]=rawProc.Rows[i]["Descript"].ToString();
+				row["descript"]="";
+				if(rawProc.Rows[i]["AptNum"].ToString()!="0" && rawProc.Rows[i]["AptNum"].ToString()!=aptNum) {
+					row["descript"]=Lan.g("FormApptEdit","(other appt)");
+				}
+				row["descript"]+=rawProc.Rows[i]["Descript"].ToString();
 				row["fee"]=PIn.PDouble(rawProc.Rows[i]["ProcFee"].ToString()).ToString("F");
 				row["priority"]=DefB.GetName(DefCat.TxPriorities,PIn.PInt(rawProc.Rows[i]["Priority"].ToString()));
 				row["ProcCode"]=rawProc.Rows[i]["ProcCode"].ToString();
