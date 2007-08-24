@@ -32,6 +32,7 @@ using xImageDeviceManager;
 using OpenDentBusiness.Imaging;
 using OpenDental.Imaging.Business;
 using System.Text.RegularExpressions;
+using OpenDental.Imaging;
 
 namespace OpenDental{
 
@@ -101,16 +102,12 @@ namespace OpenDental{
 		private Control sigBoxTopaz;
 		///<summary>Starts out as false. It's only used when repainting the toolbar, not to test mode.</summary>
 		private bool IsCropMode;
-		///<summary>The only reason this is public is for NewPatientForm.com functionality.</summary>
-		public Patient PatCur;
 		private Family FamCur;
 		///<summary>When dragging on Picturebox, this is the starting point in PictureBox coordinates.</summary>
 		private Point MouseDownOrigin;
 		private bool MouseIsDown;
 		///<summary>Set to true when the image in the picture box is currently being translated.</summary>
 		private bool dragging=false;
-		///<summary>The path to the patient folder, including the letter folder, and ending with \.  It's public for NewPatientForm.com functionality.</summary>
-		public string patFolder;
 		///<summary>In-memory copies of the images being viewed/edited. No changes are made to these images in memory, they are just kept resident to avoid having to reload the images from disk each time the screen needs to be redrawn.</summary>
 		Bitmap[] currentImages=new Bitmap[1];
 		///<summary>Used as a basis for calculating image translations.</summary>
@@ -164,6 +161,12 @@ namespace OpenDental{
 		///<summary>List of documents currently loaded into the currently selected mount (if any).</summary>
 		Document[] mountDocs=null;
 
+		public FileStore imageStore;
+
+		///<summary>The only reason this is public is for NewPatientForm.com functionality.</summary>
+		public Patient PatCur { get { return imageStore == null ? null : imageStore.Patient; } }
+		///<summary>The path to the patient folder, including the letter folder, and ending with \.  It's public for NewPatientForm.com functionality.</summary>
+		public string patFolder { get { return imageStore == null ? null : imageStore.PatFolder;} }
 		#endregion
 
 		///<summary></summary>
@@ -717,7 +720,7 @@ namespace OpenDental{
 		///<summary></summary>
 		public void ModuleUnselected(){
 			FamCur=null;
-			PatCur=null;
+			imageStore=null;
 			//Cancel current image capture.
 			xRayImageController.KillXRayThread();
 		}
@@ -726,66 +729,19 @@ namespace OpenDental{
   		public void RefreshModuleData(int patNum){
 			SelectTreeNode(null);//Clear selection and image and reset visibilities.
 			if(patNum==0){
-				PatCur=null;
+				imageStore=null;
 				FamCur=null;
 				return;
 			}
 			FamCur=Patients.GetFamily(patNum);
-			PatCur=FamCur.GetPatient(patNum);
+			imageStore = new FileStore();
+			// This is a temporary HACK;
+			imageStore.SetUpdatePatientDelegate(new FileStore.UpdatePatientDelegate(Patients.Update));
+			imageStore.OpenPatientStore(FamCur.GetPatient(patNum));
 			if(ParentForm!=null){
 				//Added so NewPatientform can have access without showing
 				ParentForm.Text=Patients.GetMainTitle(PatCur);
 			}
-			if(PatCur.ImageFolder==""){//creates new folder for patient if none present
-				string name=PatCur.LName+PatCur.FName;
-				string folder="";
-				for(int i=0;i<name.Length;i++){
-					if(Char.IsLetter(name,i)){
-						folder+=name.Substring(i,1);
-					}
-				}
-				folder+=PatCur.PatNum.ToString();//ensures unique name
-				try{
-					Patient PatOld=PatCur.Copy();
-					PatCur.ImageFolder=folder;
-					patFolder=ODFileUtils.CombinePaths(new string[] {	FormPath.GetPreferredImagePath(),
-																														PatCur.ImageFolder.Substring(0,1).ToUpper(),
-																														PatCur.ImageFolder});
-					Directory.CreateDirectory(patFolder);
-					Patients.Update(PatCur,PatOld);
-				}
-				catch{
-					MessageBox.Show(Lan.g(this,"Error.  Could not create folder for patient. "));
-					return;
-				}
-			}
-			else{//patient folder already created once
-				patFolder=ODFileUtils.CombinePaths(new string [] {	FormPath.GetPreferredImagePath(),
-																														PatCur.ImageFolder.Substring(0,1).ToUpper(),
-																														PatCur.ImageFolder});
-			}
-			if(!Directory.Exists(patFolder)){//this makes it more resiliant and allows copies
-					//of the opendentaldata folder to be used in read-only situations.
-				try{
-					Directory.CreateDirectory(patFolder);
-				}
-				catch{
-					MessageBox.Show(Lan.g(this,"Error.  Could not create folder for patient. "));
-					return;
-				}
-			}
-			//now find all files in the patient folder that are not in the db and add them
-			DirectoryInfo di=new DirectoryInfo(patFolder);
-			FileInfo[] fiList=di.GetFiles();
-			string[] fileList=new string[fiList.Length];
-			for(int i=0;i<fileList.Length;i++){
-				fileList[i]=fiList[i].Name;
-			}
-			int countAdded=Documents.InsertMissing(PatCur,fileList);
-			if(countAdded>0){
-				MessageBox.Show(countAdded.ToString()+" documents found and added to the first category.");
-			}
-			//it will refresh in FillDocList																					 
 		}
 
 		private void RefreshModuleScreen(){
@@ -907,7 +863,7 @@ namespace OpenDental{
 					selectionMountItems=MountItems.GetItemsForMount(mountNum);
 					mountDocs=Documents.GetDocumentsForMountItems(selectionMountItems);
 					hotDocument=-1;//No selection to start.
-					currentImages=GetDocumentImages(mountDocs,patFolder);
+					currentImages=imageStore.RetrieveImage(mountDocs);
 					selectionMount=Mounts.GetByNum(mountNum);
 					renderImage=new Bitmap(selectionMount.Width,selectionMount.Height);
 					RenderMountImage(renderImage,currentImages,selectionMountItems,mountDocs,hotDocument);
@@ -917,7 +873,7 @@ namespace OpenDental{
 					//more stail with age if the program is left open in the image module for long periods of time.
 					selectionDoc=Documents.GetByNum(docNum);
 					hotDocument=0;
-					currentImages=GetDocumentImages(new Document[] {selectionDoc},patFolder);
+					currentImages=imageStore.RetrieveImage(new Document[] {selectionDoc});
 					SetBrightnessAndContrast();
 					EnableAllTools(true);
 				}
@@ -1209,24 +1165,7 @@ namespace OpenDental{
 				SelectTreeNode(null);//Release access to current image so it may be properly deleted.
 			}
 			//Delete all documents involved in deleting this object.
-			for(int i=0;i<docs.Length;i++){
-				if(docs[i]==null){
-					continue;
-				}
-				try{
-					string srcFile=ODFileUtils.CombinePaths(patFolder,docs[i].FileName);
-					if(File.Exists(srcFile)) {
-						File.Delete(srcFile);
-					}else if(verbose){
-						MsgBox.Show(this,"File could not be found. It may have already been deleted.");
-					}
-				}catch{
-					if(verbose) {
-						MsgBox.Show(this,"Could not delete file. It may be in use elsewhere, or may have already been deleted.");
-					}
-				}
-				Documents.Delete(docs[i]);
-			}
+			imageStore.DeleteImage(docs);
 			if(refreshTree){
 				FillDocList(false);
 			}
@@ -2562,36 +2501,13 @@ namespace OpenDental{
 		}
 
 		///<summary>Takes in a mount object and finds all the images pertaining to the mount, then concatonates them together into one large, unscaled image and returns that image. For use in other modules.</summary>
-		public static Bitmap CreateMountImage(Mount mount,string patFolder){
+		public Bitmap CreateMountImage(Mount mount){
 			MountItem[] mountItems=MountItems.GetItemsForMount(mount.MountNum);
 			Document[] documents=Documents.GetDocumentsForMountItems(mountItems);
-			Bitmap[] originalImages=GetDocumentImages(documents,patFolder);
+			Bitmap[] originalImages=imageStore.RetrieveImage(documents);
 			Bitmap mountImage=new Bitmap(mount.Width,mount.Height);
 			RenderMountImage(mountImage,originalImages,mountItems,documents,-1);
 			return mountImage;
-		}
-
-		///<summary>The returned image array is the same length as the input array. If a document at index i is not an image, or if the image could not be found, then null is returned in index i of the return array. Otherwise, index i will contain a loaded image from file.</summary>
-		public static Bitmap[] GetDocumentImages(Document[] documents,string patFolder){
-			if(documents==null){
-				return new Bitmap[0];
-			}
-			Bitmap[] images=new Bitmap[documents.Length];//All images in the list start as null (c# default).
-			for(int i=0;i<documents.Length;i++){
-				if(documents[i]==null){
-					images[i]=null;
-				}else{
-					string srcFileName=ODFileUtils.CombinePaths(patFolder,documents[i].FileName);
-					if(File.Exists(srcFileName)) {
-						if(HasImageExtension(srcFileName)) {
-							images[i]=new Bitmap(srcFileName);
-						}
-					}else{
-						MessageBox.Show(Lan.g("ContrDocs","File not found: ")+srcFileName);
-					}
-				}
-			}
-			return images;
 		}
 
 		private void buttonClipboard_Click(object sender, EventArgs e) {

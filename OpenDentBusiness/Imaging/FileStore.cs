@@ -12,6 +12,8 @@ using OpenDentBusiness.Imaging;
 
 namespace OpenDental.Imaging {
 	public class FileStore : IImageStore {
+		public delegate int UpdatePatientDelegate(Patient patCur, Patient patOld);
+		private UpdatePatientDelegate updatePatient;
 		private bool verbose = false;
 
 		private Patient patient;
@@ -33,6 +35,10 @@ namespace OpenDental.Imaging {
 			get {
 				return File.Exists(PatFolder);
 			}
+		}
+
+		public void SetUpdatePatientDelegate(UpdatePatientDelegate updatePatient) {
+			this.updatePatient = updatePatient;
 		}
 
 		public void OpenPatientStore(Patient patient) {
@@ -61,8 +67,7 @@ namespace OpenDental.Imaging {
 																		patient.ImageFolder.Substring(0,1).ToUpper(),
 																		patient.ImageFolder});
 					Directory.CreateDirectory(patFolder);
-#warning Needs to be uncommented! Otherwise it won't work!
-					// Patients.Update(PatCur, PatOld);
+					updatePatient(patient, PatOld);
 				}
 				catch {
 					throw new Exception(Lan.g("ContrDocs", "Error.  Could not create folder for patient. "));
