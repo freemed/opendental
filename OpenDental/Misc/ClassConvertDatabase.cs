@@ -5623,6 +5623,9 @@ namespace OpenDental{
 				// After r665
 				command = @"ALTER TABLE mount MODIFY DocCategory INTEGER NOT NULL";
 				General.NonQEx(command);
+				// After r672
+				command = @"ALTER TABLE document MODIFY DocCategory INTEGER NOT NULL";
+				General.NonQEx(command);
 
 				command="UPDATE preference SET ValueString = '5.1.0.0' WHERE PrefName = 'DataBaseVersion'";
 				General.NonQEx(command);

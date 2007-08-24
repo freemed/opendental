@@ -36,6 +36,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DataAccess\DataTests.cs" />
+    <Compile Include="DataAccess\DocumentTest.cs" />
     <Compile Include="DataAccess\MountDefTest.cs" />
     <Compile Include="DataAccess\MountItemDefTest.cs" />
     <Compile Include="DataAccess\MountItemTest.cs" />
