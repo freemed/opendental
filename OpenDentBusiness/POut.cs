@@ -49,6 +49,9 @@ namespace OpenDentBusiness{
 			else if (dataType == typeof(int)) {
 				return PInt((int)value);
 			}
+			else if(dataType == typeof(short)) {
+				return PShort((short)value);
+			}
 			else {
 				throw new NotSupportedException(string.Format(Resources.DataTypeNotSupportedByPOut, dataType.Name));
 			}
@@ -159,6 +162,10 @@ namespace OpenDentBusiness{
 		///<summary></summary>
 		public static string PInt (int myInt){
 			return myInt.ToString();
+		}
+
+		public static string PShort(short myShort) {
+			return myShort.ToString();
 		}
 
 		///<summary></summary>

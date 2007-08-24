@@ -5626,6 +5626,9 @@ namespace OpenDental{
 				// After r672
 				command = @"ALTER TABLE document MODIFY DocCategory INTEGER NOT NULL";
 				General.NonQEx(command);
+				// After r673
+				command = @"ALTER TABLE document MODIFY DegreesRotated SMALLINT NOT NULL";
+				General.NonQEx(command);
 
 				command="UPDATE preference SET ValueString = '5.1.0.0' WHERE PrefName = 'DataBaseVersion'";
 				General.NonQEx(command);

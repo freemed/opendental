@@ -43,7 +43,7 @@ namespace OpenDental.Imaging.Business {
 			doc.FileName      =PIn.PString(document[5].ToString());
 			doc.ImgType       =(ImageType)PIn.PInt(document[6].ToString());
 			doc.IsFlipped     =PIn.PBool(document[7].ToString());
-			doc.DegreesRotated=PIn.PInt(document[8].ToString());
+			doc.DegreesRotated=PIn.PShort(document[8].ToString());
 			doc.ToothNumbers  =PIn.PString(document[9].ToString());
 			doc.Note          =PIn.PString(document[10].ToString());
 			doc.SigIsTopaz    =PIn.PBool(document[11].ToString());

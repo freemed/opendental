@@ -13,7 +13,7 @@ namespace OpenDentBusiness.Tests {
 	[TestFixture()]
 	public abstract class DataTests<T>
 			where T : DataObjectBase, new() {
-		private const int DatabaseMaxInteger = 65535;
+		private const int DatabaseMaxInteger = short.MaxValue;
 
 		Random random;
 		AppDomain domain;
@@ -306,6 +306,9 @@ namespace OpenDentBusiness.Tests {
 			}
 			else if(dataType == typeof(int)) {
 				return random.Next(DatabaseMaxInteger + 1);
+			}
+			else if(dataType == typeof(short)) {
+				return (short)random.Next(short.MaxValue);
 			}
 			else if(dataType.IsEnum) {
 				Array values = Enum.GetValues(dataType);

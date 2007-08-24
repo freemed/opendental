@@ -2316,7 +2316,7 @@ namespace OpenDental{
 			//Depending on the device being captured from, we need to rotate the images returned from the device by a certain
 			//angle, and we need to place the returned images in a specific order within the mount slots. Later, we will allow
 			//the user to define the rotations and slot orders, but for now, they will be hard-coded.
-			int rotationAngle=0;
+			short rotationAngle=0;
 			switch(hotDocument){
 				case(0):
 					rotationAngle=90;

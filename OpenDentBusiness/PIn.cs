@@ -82,6 +82,16 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
+		public static short PShort(string myString) {
+			if(myString == "") {
+				return 0;
+			}
+			else {
+				return System.Convert.ToInt16(myString);
+			}
+		}
+
+		///<summary></summary>
 		public static float PFloat(string myString){
 			if(myString==""){
 				return 0;
