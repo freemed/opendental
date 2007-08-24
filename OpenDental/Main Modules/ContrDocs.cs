@@ -723,7 +723,7 @@ namespace OpenDental{
 		}
 
 		///<summary>This is public for NewPatientForm functionality.</summary>
-  	public void RefreshModuleData(int patNum){
+  		public void RefreshModuleData(int patNum){
 			SelectTreeNode(null);//Clear selection and image and reset visibilities.
 			if(patNum==0){
 				PatCur=null;
