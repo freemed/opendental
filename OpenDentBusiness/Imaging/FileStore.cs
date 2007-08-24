@@ -22,14 +22,14 @@ namespace OpenDental.Imaging {
 			get { return storeIdentifier; }
 		}
 
-		private string storeFolderName;
-		public string StoreFolderName {
-			get { return storeFolderName; }
+		private string patFolder;
+		public string PatFolder {
+			get { return patFolder; }
 		}
 
 		public bool Exists {
 			get {
-				return File.Exists(StoreFolderName);
+				return File.Exists(PatFolder);
 			}
 		}
 
@@ -37,45 +37,63 @@ namespace OpenDental.Imaging {
 			if (patient == null) {
 				this.patient = null;
 				this.storeIdentifier = null;
-				this.storeFolderName = null;
+				this.patFolder = null;
 				return;
 			}
 
 			this.patient = patient;
 
-			// Get the identifier for the patient store
-			// (this is the name of the sub-folder)
-			string name = Patient.LName + Patient.FName;
-
-			string folder = "";
-			for (int i = 0; i < name.Length; i++) {
-				if (Char.IsLetter(name, i)) {
-					folder += name.Substring(i, 1);
+			if(patient.ImageFolder == "") {//creates new folder for patient if none present
+				string name = patient.LName + patient.FName;
+				string folder = "";
+				for(int i = 0; i < name.Length; i++) {
+					if(Char.IsLetter(name, i)) {
+						folder += name.Substring(i, 1);
+					}
+				}
+				folder += patient.PatNum.ToString();//ensures unique name
+				try {
+					Patient PatOld = patient.Copy();
+					patient.ImageFolder = folder;
+					patFolder = ODFileUtils.CombinePaths(new string[] {	FileStoreSettings.GetPreferredImagePath,
+																		patient.ImageFolder.Substring(0,1).ToUpper(),
+																		patient.ImageFolder});
+					Directory.CreateDirectory(patFolder);
+#warning Needs to be uncommented! Otherwise it won't work!
+					// Patients.Update(PatCur, PatOld);
+				}
+				catch {
+					throw new Exception(Lan.g("ContrDocs", "Error.  Could not create folder for patient. "));
+					return;
 				}
 			}
-
-			folder += Patient.PatNum.ToString();//ensures unique name
-			storeIdentifier = folder;
-
-			// Set the name of the store folder
-			storeFolderName = ODFileUtils.CombinePaths(
-				new string[] {	
-					FileStoreSettings.GetPreferredImagePath,
-					storeIdentifier.Substring(0,1).ToUpper(),
-					storeIdentifier});
-
+			else {//patient folder already created once
+				patFolder = ODFileUtils.CombinePaths(new string[] {	FileStoreSettings.GetPreferredImagePath,
+																	patient.ImageFolder.Substring(0,1).ToUpper(),
+																	patient.ImageFolder});
+			}
+			if(!Directory.Exists(patFolder)) {//this makes it more resiliant and allows copies
+				//of the opendentaldata folder to be used in read-only situations.
+				try {
+					Directory.CreateDirectory(patFolder);
+				}
+				catch {
+					throw new Exception(Lan.g("ContrDocs", "Error.  Could not create folder for patient. "));
+					return;
+				}
+			}
 			//now find all files in the patient folder that are not in the db and add them
-			DirectoryInfo di = new DirectoryInfo(StoreFolderName);
+			DirectoryInfo di = new DirectoryInfo(patFolder);
 			FileInfo[] fiList = di.GetFiles();
 			string[] fileList = new string[fiList.Length];
-			for (int i = 0; i < fileList.Length; i++) {
+			for(int i = 0; i < fileList.Length; i++) {
 				fileList[i] = fiList[i].Name;
 			}
-
-			int countAdded = Documents.InsertMissing(Patient, fileList);
-			if (countAdded > 0) {
+			int countAdded = Documents.InsertMissing(patient, fileList);
+			if(countAdded > 0) {
 				Debug.WriteLine(countAdded.ToString() + " documents found and added to the first category.");
 			}
+			//it will refresh in FillDocList
 		}
 
 		public void ClosePatientStore() {
@@ -87,7 +105,7 @@ namespace OpenDental.Imaging {
 				throw new InvalidOperationException();
 
 			try {
-				Directory.CreateDirectory(StoreFolderName);
+				Directory.CreateDirectory(PatFolder);
 			}
 			catch (IOException e) {
 				throw new ImageStoreCreationException(Lan.g("ContrDocs", "Error.  Could not create folder for patient. "), e);
@@ -99,7 +117,7 @@ namespace OpenDental.Imaging {
 				throw new InvalidOperationException();
 
 			try {
-				Directory.CreateDirectory(StoreFolderName);
+				Directory.CreateDirectory(PatFolder);
 			}
 			catch (IOException e) {
 				throw new ImageStoreRemovalException(Lan.g("ContrDocs", "Error.  Could not delete folder for patient. "), e);
@@ -113,7 +131,7 @@ namespace OpenDental.Imaging {
 			if (document == null)
 				throw new ArgumentNullException("document");
 
-			string srcFileName = ODFileUtils.CombinePaths(StoreFolderName, document.FileName);
+			string srcFileName = ODFileUtils.CombinePaths(PatFolder, document.FileName);
 			if (File.Exists(srcFileName) && HasImageExtension(srcFileName)) {
 				return new Bitmap(srcFileName);
 			}
@@ -166,7 +184,7 @@ namespace OpenDental.Imaging {
 			if (Patient == null)
 				throw new NoActivePatientException();
 
-			File.Copy(filename, Path.Combine(StoreFolderName, document.FileName));
+			File.Copy(filename, Path.Combine(PatFolder, document.FileName));
 		}
 
 		///<summary>Returns true if the given filename contains a supported file image extension.</summary>
