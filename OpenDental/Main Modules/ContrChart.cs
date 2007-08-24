@@ -2959,6 +2959,11 @@ namespace OpenDental{
 			}
 			gridPtInfo.Rows.Add(row);
 			//Create row for registration keys. 6
+
+
+
+
+
 			RegistrationKey[] keys=RegistrationKeys.GetForPatient(PatCur.PatNum);
 			for(int i=0;i<keys.Length;i++) {
 				row=new ODGridRow();

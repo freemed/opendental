@@ -12,9 +12,16 @@ using CDT;
 namespace OpenDental {
 	///<summary>Used to keep track of which product keys have been assigned to which customers. This class is only used if the program is being run from a distributor installation.</summary>
 	class RegistrationKeys {
-		///<summary>Retrieves all registration keys for a particular customer. There can be multiple keys assigned to a single customer, since the customer may have multiple physical locations of business.</summary>
+		///<summary>Retrieves all registration keys for a particular customer's family. There can be multiple keys assigned to a single customer, or keys assigned to individual family members, since the customer may have multiple physical locations of business.</summary>
 		public static RegistrationKey[] GetForPatient(int patNum){
-			string command="SELECT * FROM registrationkey WHERE PatNum='"+patNum+"'";
+			string command="SELECT * FROM registrationkey WHERE ";
+			Family fam=Patients.GetFamily(patNum);
+			for(int i=0;i<fam.List.Length;i++){
+				command+="PatNum='"+fam.List[i].PatNum+"' ";
+				if(i<fam.List.Length-1){
+					command+="OR ";
+				}
+			}
 			DataTable table=General.GetTable(command);
 			RegistrationKey[] keys=new RegistrationKey[table.Rows.Count];
 			for(int i=0;i<keys.Length;i++){
