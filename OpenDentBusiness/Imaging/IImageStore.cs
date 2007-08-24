@@ -16,10 +16,9 @@ namespace OpenDental.Imaging {
 
 		void OpenPatientStore(Patient patient);
 		void ClosePatientStore();
-		void CreateStore();
-		void DeleteStore();
 		Bitmap RetrieveImage(Document document);
 		Collection<Bitmap> RetrieveImage(IList<Document> documents);
+		void DeleteImage(IList<Document> documents);
 		void ImportImage(Document document, string filename);
 	}
 }

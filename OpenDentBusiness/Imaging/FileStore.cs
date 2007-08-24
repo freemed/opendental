@@ -12,6 +12,8 @@ using OpenDentBusiness.Imaging;
 
 namespace OpenDental.Imaging {
 	public class FileStore : IImageStore {
+		private bool verbose = false;
+
 		private Patient patient;
 		public Patient Patient {
 			get { return patient; }
@@ -100,30 +102,6 @@ namespace OpenDental.Imaging {
 			OpenPatientStore(null);
 		}
 
-		public void CreateStore() {
-			if (Exists)
-				throw new InvalidOperationException();
-
-			try {
-				Directory.CreateDirectory(PatFolder);
-			}
-			catch (IOException e) {
-				throw new ImageStoreCreationException(Lan.g("ContrDocs", "Error.  Could not create folder for patient. "), e);
-			}
-		}
-
-		public void DeleteStore() {
-			if (!Exists)
-				throw new InvalidOperationException();
-
-			try {
-				Directory.CreateDirectory(PatFolder);
-			}
-			catch (IOException e) {
-				throw new ImageStoreRemovalException(Lan.g("ContrDocs", "Error.  Could not delete folder for patient. "), e);
-			}
-		}
-
 		public Bitmap RetrieveImage(Document document) {
 			if (Patient == null)
 				throw new NoActivePatientException();
@@ -168,6 +146,29 @@ namespace OpenDental.Imaging {
 			Collection<Bitmap> bitmaps = RetrieveImage(new Collection<Document>(documents));
 			bitmaps.CopyTo(values, 0);
 			return values;
+		}
+
+		public void DeleteImage(IList<Document> documents) {
+			for(int i = 0; i < documents.Count; i++) {
+				if(documents[i] == null) {
+					continue;
+				}
+				try {
+					string srcFile = ODFileUtils.CombinePaths(patFolder, documents[i].FileName);
+					if(File.Exists(srcFile)) {
+						File.Delete(srcFile);
+					}
+					else if(verbose) {
+						Debug.WriteLine(Lan.g("ContrDocs", "File could not be found. It may have already been deleted."));
+					}
+				}
+				catch {
+					if(verbose) {
+						Debug.WriteLine(Lan.g("ContrDocs", "Could not delete file. It may be in use elsewhere, or may have already been deleted."));
+					}
+				}
+				Documents.Delete(documents[i]);
+			}
 		}
 
 		///<summary>Takes in a mount object and finds all the images pertaining to the mount, then concatonates them together into one large, unscaled image and returns that image. For use in other modules.</summary>
