@@ -110,20 +110,20 @@ namespace OpenDentBusiness.Tests {
 				}
 
 				if(dataField.Field.FieldType == typeof(double)) {
-					Assert.AreEqual((double)localValue, (double)databaseValue, 0.01, "#3a - " + dataField.Field.Name + " (Value retrieved from database should equal stored value)");
+					Assert.AreEqual((double)localValue, (double)databaseValue, 0.01, string.Format("#3a - {0} (Value retrieved from database should equal stored value)", FormatFieldName(dataField)));
 				}
 				else if(dataField.Field.FieldType == typeof(float)) {
-					Assert.AreEqual((float)localValue, (float)databaseValue, 0.01, "#3b - " + dataField.Field.Name + " (Value retrieved from database should equal stored value)");
+					Assert.AreEqual((float)localValue, (float)databaseValue, 0.01, string.Format("#3b - {0} (Value retrieved from database should equal stored value)", FormatFieldName(dataField)));
 				}
 				else {
-					Assert.AreEqual(localValue, databaseValue, "#3x - " + dataField.Field.Name + " (Value retrieved from database should equal stored value)");
+					Assert.AreEqual(localValue, databaseValue, string.Format("#3x - {0} (Value retrieved from database should equal stored value)", FormatFieldName(dataField)));
 				}
 			}
 
 			// Modify the object
 			foreach(DataFieldInfo dataField in dataFields) {
 				DataObjectInfo<T>.SetProperty(dataField, t, Random(dataField.Field.FieldType));
-				Assert.IsTrue(DataObjectInfo<T>.HasChanged(dataField, t), "#11 - " + dataField.Field.Name + " (Field should be marked as dirty)");
+				Assert.IsTrue(DataObjectInfo<T>.HasChanged(dataField, t), string.Format("#11 - {0} (Field should be marked as dirty)", FormatFieldName(dataField)));
 			}
 
 			Assert.IsTrue(t.IsDirty, "#12 (Object should be dirty)");
@@ -150,13 +150,13 @@ namespace OpenDentBusiness.Tests {
 				}
 
 				if(dataField.Field.FieldType == typeof(double)) {
-					Assert.AreEqual((double)localValue, (double)databaseValue, 0.01, "#4a - " + dataField.Field.Name);
+					Assert.AreEqual((double)localValue, (double)databaseValue, 0.01, string.Format("#4a - {0}", FormatFieldName(dataField)));
 				}
 				else if(dataField.Field.FieldType == typeof(float)) {
-					Assert.AreEqual((float)localValue, (float)databaseValue, 0.01, "#4b - " + dataField.Field.Name);
+					Assert.AreEqual((float)localValue, (float)databaseValue, 0.01, string.Format("#4b - {0}", FormatFieldName(dataField)));
 				}
 				else {
-					Assert.AreEqual(localValue, databaseValue, "#4x - " + dataField.Field.Name);
+					Assert.AreEqual(localValue, databaseValue, string.Format("#4x - {0}", FormatFieldName(dataField)));
 				}
 			}
 
@@ -191,9 +191,13 @@ namespace OpenDentBusiness.Tests {
 
 				if(fieldType.IsValueType && fieldType.IsPrimitive) {
 					object storedValue = field.Field.GetValue(value);
-					Assert.AreEqual(Extremum(fieldType, extremumType), storedValue, "#17 - " + field.Field.Name + ": Maximum value should store correctly.");
+					Assert.AreEqual(Extremum(fieldType, extremumType), storedValue, string.Format("#17 - {0}: Maximum value should store correctly.", FormatFieldName(field)));
 				}
 			}
+		}
+
+		private string FormatFieldName(DataFieldInfo field) {
+			return string.Format("{0}.{1}", typeof(T).Name, field.Field.Name);
 		}
 
 		private enum ExtremumType {
