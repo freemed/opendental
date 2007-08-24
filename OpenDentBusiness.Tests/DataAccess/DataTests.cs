@@ -41,13 +41,13 @@ namespace OpenDentBusiness.Tests {
 			wrapper.Stop();
 			AppDomain.Unload(domain);
 		}
-		
+
 		[Test()]
 		public void Test() {
 			RemotingClient.OpenDentBusinessIsLocal = true;
-            // Connect to the local mysql server.
-            DataConnection connection = new DataConnection();
-            connection.SetDb("localhost", "opendental", "root", "", "root", "", DatabaseType.MySql);
+			// Connect to the local mysql server.
+			DataConnection connection = new DataConnection();
+			connection.SetDb("localhost", "opendental", "root", "", "root", "", DatabaseType.MySql);
 			DataObjectFactory<T>.UseParameters = false;
 			TestTableType();
 			DataObjectFactory<T>.UseParameters = true;
@@ -76,14 +76,14 @@ namespace OpenDentBusiness.Tests {
 
 			// Fill the data
 			Collection<DataFieldInfo> dataFields = DataObjectInfo<T>.GetDataFields(DataFieldMask.Data);
-			foreach (DataFieldInfo dataField in dataFields) {
+			foreach(DataFieldInfo dataField in dataFields) {
 				DataObjectInfo<T>.SetProperty(dataField, t, Random(dataField.Field.FieldType));
 			}
 
 			// Save the object to the database
 			DataObjectFactory<T>.WriteObject(t);
 
-			if (!DataObjectInfo<T>.HasPrimaryKeyWithAutoNumber())
+			if(!DataObjectInfo<T>.HasPrimaryKeyWithAutoNumber())
 				throw new NotSupportedException();
 
 			int id = DataObjectInfo<T>.GetPrimaryKey(t);
@@ -94,25 +94,25 @@ namespace OpenDentBusiness.Tests {
 
 			// Load a new object
 			T database = DataObjectFactory<T>.CreateObject(id);
-			foreach (DataFieldInfo dataField in dataFields) {
+			foreach(DataFieldInfo dataField in dataFields) {
 				object localValue = dataField.Field.GetValue(t);
 				object databaseValue = dataField.Field.GetValue(database);
 
 				// Text strings may be trimmed by the database. For now,
 				// ignore that.
-				if (dataField.Field.FieldType == typeof(string)) {
+				if(dataField.Field.FieldType == typeof(string)) {
 					string localText = (string)localValue;
 					string databaseText = (string)databaseValue;
 
-					if (databaseText.Length < localText.Length) {
+					if(databaseText.Length < localText.Length) {
 						localValue = localText.Substring(0, databaseText.Length);
 					}
 				}
 
-				if (dataField.Field.FieldType == typeof(double)) {
+				if(dataField.Field.FieldType == typeof(double)) {
 					Assert.AreEqual((double)localValue, (double)databaseValue, 0.01, "#3a - " + dataField.Field.Name + " (Value retrieved from database should equal stored value)");
 				}
-				else if (dataField.Field.FieldType == typeof(float)) {
+				else if(dataField.Field.FieldType == typeof(float)) {
 					Assert.AreEqual((float)localValue, (float)databaseValue, 0.01, "#3b - " + dataField.Field.Name + " (Value retrieved from database should equal stored value)");
 				}
 				else {
@@ -121,7 +121,7 @@ namespace OpenDentBusiness.Tests {
 			}
 
 			// Modify the object
-			foreach (DataFieldInfo dataField in dataFields) {
+			foreach(DataFieldInfo dataField in dataFields) {
 				DataObjectInfo<T>.SetProperty(dataField, t, Random(dataField.Field.FieldType));
 				Assert.IsTrue(DataObjectInfo<T>.HasChanged(dataField, t), "#11 - " + dataField.Field.Name + " (Field should be marked as dirty)");
 			}
@@ -134,25 +134,25 @@ namespace OpenDentBusiness.Tests {
 			Assert.IsFalse(t.IsNew, "#15 (IsNew should not be set");
 
 			database = DataObjectFactory<T>.CreateObject(id);
-			foreach (DataFieldInfo dataField in dataFields) {
+			foreach(DataFieldInfo dataField in dataFields) {
 				object localValue = dataField.Field.GetValue(t);
 				object databaseValue = dataField.Field.GetValue(database);
 
 				// Text strings may be trimmed by the database. For now,
 				// ignore that.
-				if (dataField.Field.FieldType == typeof(string)) {
+				if(dataField.Field.FieldType == typeof(string)) {
 					string localText = (string)localValue;
 					string databaseText = (string)databaseValue;
 
-					if (databaseText.Length < localText.Length) {
+					if(databaseText.Length < localText.Length) {
 						localValue = localText.Substring(0, databaseText.Length);
 					}
 				}
 
-				if (dataField.Field.FieldType == typeof(double)) {
+				if(dataField.Field.FieldType == typeof(double)) {
 					Assert.AreEqual((double)localValue, (double)databaseValue, 0.01, "#4a - " + dataField.Field.Name);
 				}
-				else if (dataField.Field.FieldType == typeof(float)) {
+				else if(dataField.Field.FieldType == typeof(float)) {
 					Assert.AreEqual((float)localValue, (float)databaseValue, 0.01, "#4b - " + dataField.Field.Name);
 				}
 				else {
@@ -160,44 +160,150 @@ namespace OpenDentBusiness.Tests {
 				}
 			}
 
+			// For all fields of value types, try to store the maximum and minimum value, to make sure
+			// the type in the database can hold the values given by the program.
+			TestExtremum(t, id, ExtremumType.Maximum);
+			TestExtremum(t, id, ExtremumType.Minimum);
+
 			// Delete the object
 			DataObjectFactory<T>.DeleteObject(t);
 		}
 
+		private void TestExtremum(T value, int id, ExtremumType extremumType) {
+			Collection<DataFieldInfo> dataFields = DataObjectInfo<T>.GetDataFields(DataFieldMask.Data);
+
+			// Set the value
+			foreach(DataFieldInfo field in dataFields) {
+				Type fieldType = field.Field.FieldType;
+
+				if(fieldType.IsValueType && fieldType.IsPrimitive) {
+					field.Field.SetValue(value, Extremum(fieldType, extremumType));
+				}
+			}
+
+			// Save the object
+			DataObjectFactory<T>.WriteObject(value);
+			value = DataObjectFactory<T>.CreateObject(id);
+
+			// Verify the value
+			foreach(DataFieldInfo field in dataFields) {
+				Type fieldType = field.Field.FieldType;
+
+				if(fieldType.IsValueType && fieldType.IsPrimitive) {
+					object storedValue = field.Field.GetValue(value);
+					Assert.AreEqual(Extremum(fieldType, extremumType), storedValue, "#17 - " + field.Field.Name + ": Maximum value should store correctly.");
+				}
+			}
+		}
+
+		private enum ExtremumType {
+			Minimum,
+			Maximum
+		}
+
+		private object Extremum(Type dataType, ExtremumType extremumType) {
+			if(dataType == typeof(bool)) {
+				switch(extremumType) {
+					case ExtremumType.Maximum:
+						return true;
+					case ExtremumType.Minimum:
+						return false;
+				}
+			}
+			if(dataType == typeof(byte)) {
+				switch(extremumType) {
+					case ExtremumType.Maximum:
+						return byte.MaxValue;
+					case ExtremumType.Minimum:
+						return byte.MinValue;
+				}
+			}
+			else if(dataType == typeof(short)) {
+				switch(extremumType) {
+					case ExtremumType.Maximum:
+						return short.MaxValue;
+					case ExtremumType.Minimum:
+						return short.MinValue;
+				}
+			}
+			else if(dataType == typeof(int)) {
+				switch(extremumType) {
+					case ExtremumType.Maximum:
+						return int.MaxValue;
+					case ExtremumType.Minimum:
+						return int.MinValue;
+				}
+			}
+			else if(dataType == typeof(long)) {
+				switch(extremumType) {
+					case ExtremumType.Maximum:
+						return long.MaxValue;
+					case ExtremumType.Minimum:
+						return long.MinValue;
+				}
+			}
+			else if(dataType == typeof(float)) {
+				switch(extremumType) {
+					case ExtremumType.Maximum:
+						return float.MaxValue;
+					case ExtremumType.Minimum:
+						return float.MinValue;
+				}
+			}
+			else if(dataType == typeof(double)) {
+				switch(extremumType) {
+					case ExtremumType.Maximum:
+						return double.MaxValue;
+					case ExtremumType.Minimum:
+						return double.MinValue;
+				}
+			}
+			else if(dataType == typeof(decimal)) {
+				switch(extremumType) {
+					case ExtremumType.Maximum:
+						return decimal.MaxValue;
+					case ExtremumType.Minimum:
+						return decimal.MinValue;
+				}
+			}
+
+			throw new NotSupportedException();
+		}
+
 		private object Random(Type dataType) {
-			if (dataType == typeof(string)) {
+			if(dataType == typeof(string)) {
 				string value = string.Empty;
-				for (int i = 0; i < 20; i++) {
+				for(int i = 0; i < 20; i++) {
 					value += (char)(random.Next(33, 126));
 				}
 				return value;
 			}
-			else if (dataType == typeof(bool)) {
+			else if(dataType == typeof(bool)) {
 				return Convert.ToBoolean(random.Next(0, 1));
 			}
-			else if (dataType == typeof(Byte)) {
+			else if(dataType == typeof(Byte)) {
 				byte[] buffer = new byte[1];
 				random.NextBytes(buffer);
 				return buffer[0];
 			}
-			else if (dataType == typeof(DateTime)) {
+			else if(dataType == typeof(DateTime)) {
 				DateTime value = DateTime.Today;
 				value = value.AddDays(random.Next(-1000, 1000));
 				return value;
 			}
-			else if (dataType == typeof(TimeSpan)) {
+			else if(dataType == typeof(TimeSpan)) {
 				return new TimeSpan(0, random.Next(0, 60), 0);
 			}
-			else if (dataType == typeof(double)) {
+			else if(dataType == typeof(double)) {
 				return random.NextDouble();
 			}
-			else if (dataType == typeof(float)) {
+			else if(dataType == typeof(float)) {
 				return (float)random.NextDouble();
 			}
-			else if (dataType == typeof(int)) {
+			else if(dataType == typeof(int)) {
 				return random.Next(DatabaseMaxInteger + 1);
 			}
-			else if (dataType.IsEnum) {
+			else if(dataType.IsEnum) {
 				Array values = Enum.GetValues(dataType);
 				int index = random.Next(0, values.Length);
 				return values.GetValue(index);
