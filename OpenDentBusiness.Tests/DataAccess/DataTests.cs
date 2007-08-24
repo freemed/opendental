@@ -177,7 +177,7 @@ namespace OpenDentBusiness.Tests {
 				Type fieldType = field.Field.FieldType;
 
 				if(fieldType.IsValueType && fieldType.IsPrimitive) {
-					field.Field.SetValue(value, Extremum(fieldType, extremumType));
+					DataObjectInfo<T>.SetProperty(field, value, Extremum(fieldType, extremumType));
 				}
 			}
 
