@@ -5620,11 +5620,9 @@ namespace OpenDental{
 					PRIMARY KEY (AutoNoteControlNum)
 					) DEFAULT CHARSET=utf8";
 				General.NonQEx(command);
-				//after r658
-				//command="ALTER TABLE  etrans ADD BatchNumber ";
-
-
-
+				// After r665
+				command = @"ALTER TABLE mount MODIFY DocCategory INTEGER NOT NULL";
+				General.NonQEx(command);
 
 				command="UPDATE preference SET ValueString = '5.1.0.0' WHERE PrefName = 'DataBaseVersion'";
 				General.NonQEx(command);
