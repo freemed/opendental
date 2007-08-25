@@ -5629,6 +5629,14 @@ namespace OpenDental{
 				// After r673
 				command = @"ALTER TABLE document MODIFY DegreesRotated SMALLINT NOT NULL";
 				General.NonQEx(command);
+				//after r678
+				command = "ALTER TABLE etrans ADD BatchNumber INT NOT NULL";
+				General.NonQEx(command);
+				command = "ALTER TABLE etrans ADD AckCode varchar(255)";
+				General.NonQEx(command);
+
+
+
 
 				command="UPDATE preference SET ValueString = '5.1.0.0' WHERE PrefName = 'DataBaseVersion'";
 				General.NonQEx(command);

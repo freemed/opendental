@@ -13,7 +13,7 @@ namespace OpenDental{
 		public static DataTable RefreshHistory(DateTime dateFrom,DateTime dateTo) {
 			string command="Select CONCAT(CONCAT(patient.LName,', '),patient.FName) AS PatName,carrier.CarrierName,"
 				+"clearinghouse.Description AS Clearinghouse,DateTimeTrans,etrans.OfficeSequenceNumber,"
-				+"etrans.CarrierTransCounter,Etype,etrans.ClaimNum,etrans.EtransNum "
+				+"etrans.CarrierTransCounter,Etype,etrans.ClaimNum,etrans.EtransNum,etrans.AckCode "
 				+"FROM etrans "
 				+"LEFT JOIN carrier ON etrans.CarrierNum=carrier.CarrierNum "
 				+"LEFT JOIN patient ON patient.PatNum=etrans.PatNum "
@@ -39,6 +39,7 @@ namespace OpenDental{
 			tHist.Columns.Add("Etype");
 			tHist.Columns.Add("ClaimNum");
 			tHist.Columns.Add("EtransNum");
+			tHist.Columns.Add("ack");
 			DataRow row;
 			string etype;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -57,6 +58,12 @@ namespace OpenDental{
 				row["etype"]=etype;
 				row["ClaimNum"]=table.Rows[i]["ClaimNum"].ToString();
 				row["EtransNum"]=table.Rows[i]["EtransNum"].ToString();
+				if(table.Rows[i]["AckCode"].ToString()=="A"){
+					row["ack"]=Lan.g("Etrans","Accepted");
+				}
+				else if(table.Rows[i]["AckCode"].ToString()=="R") {
+					row["ack"]=Lan.g("Etrans","Rejected");
+				}
 				tHist.Rows.Add(row);
 			}
 			return tHist;
@@ -79,6 +86,8 @@ namespace OpenDental{
 			etrans.CarrierNum2         =PIn.PInt   (table.Rows[0][9].ToString());
 			etrans.PatNum              =PIn.PInt   (table.Rows[0][10].ToString());
 			etrans.MessageText         =PIn.PString(table.Rows[0][11].ToString());
+			etrans.BatchNumber         =PIn.PInt   (table.Rows[0][12].ToString());
+			etrans.AckCode             =PIn.PString(table.Rows[0][13].ToString());
 			return etrans;
 		}
 
@@ -259,7 +268,18 @@ namespace OpenDental{
 				X12object Xobj=new X12object(messageText);
 				if(X997.Is997(Xobj)){
 					etrans.Etype=EtransType.Acknowledge_997;
-					//later: analyze to figure out which e-claim is being acked.
+					//todo: analyze to figure out which e-claim is being acked.
+
+
+
+					//etrans.CarrierNum
+					//etrans.CarrierNum2
+					//etrans.ClaimNum
+					//etrans.PatNum
+					//etrans.BatchNumber;
+					//etrans.AckCode
+
+					//set ackcode for corresponding claims with same batch number.
 				}
 				else if(X277U.Is277U(Xobj)){
 					etrans.Etype=EtransType.StatusNotify_277;
@@ -269,10 +289,7 @@ namespace OpenDental{
 			else{//not X12
 				etrans.Etype=EtransType.TextReport;
 			}
-			//etrans.CarrierNum
-			//etrans.CarrierNum2
-			//etrans.ClaimNum
-			//etrans.PatNum
+			
 		}
 		
 		///<summary>DateTimeTrans can be handled automatically here.  No need to set it in advance, but it's allowed to do so.</summary>
@@ -285,7 +302,7 @@ namespace OpenDental{
 				command+="EtransNum,";
 			}
 			command+="DateTimeTrans,ClearinghouseNum,Etype,ClaimNum,OfficeSequenceNumber,CarrierTransCounter,"
-				+"CarrierTransCounter2,CarrierNum,CarrierNum2,PatNum,MessageText) VALUES(";
+				+"CarrierTransCounter2,CarrierNum,CarrierNum2,PatNum,MessageText,BatchNumber,AckCode) VALUES(";
 			if(PrefB.RandomKeys) {
 				command+="'"+POut.PInt(etrans.EtransNum)+"', ";
 			}
@@ -309,7 +326,9 @@ namespace OpenDental{
 				+"'"+POut.PInt   (etrans.CarrierNum)+"', "
 				+"'"+POut.PInt   (etrans.CarrierNum2)+"', "
 				+"'"+POut.PInt   (etrans.PatNum)+"', "
-				+"'"+POut.PString(etrans.MessageText)+"')";
+				+"'"+POut.PString(etrans.MessageText)+"', "
+				+"'"+POut.PInt   (etrans.BatchNumber)+"', "
+				+"'"+POut.PString(etrans.AckCode)+"')";
 			if(PrefB.RandomKeys) {
 				General.NonQ(command);
 			}
@@ -318,7 +337,7 @@ namespace OpenDental{
 			}
 		}
 
-		///<summary></summary>
+		///<summary>Only used by Canadian code right now.</summary>
 		public static void SetMessage(int etransNum, string msg) {
 			string command= "UPDATE etrans SET MessageText='"+POut.PString(msg)+"' "
 				+"WHERE EtransNum = '"+POut.PInt(etransNum)+"'";
