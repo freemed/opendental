@@ -75,7 +75,7 @@ namespace OpenDental{
 
 		}*/
 
-		///<Summary>Deletes all current ProcButtons from the Chart module, and then adds the default ProcButtons.  Procedure codes must have already been entered or they cannot be added as a ProcButton.</Summary>
+		///<summary>Deletes all current ProcButtons from the Chart module, and then adds the default ProcButtons.  Procedure codes must have already been entered or they cannot be added as a ProcButton.</summary>
 		public static void SetToDefault() {
 			string command= @"
 				DELETE FROM procbutton;

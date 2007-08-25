@@ -44,7 +44,7 @@ namespace OpenDental{
 		private Label label10;
 		private Label label7;
 		private Label label8;//OD1
-		///<Summary>Includes path</Summary>
+		///<summary>Includes path</summary>
 		string WriteToFile;
 
 		///<summary></summary>

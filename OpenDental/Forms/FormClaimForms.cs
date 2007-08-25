@@ -402,7 +402,7 @@ namespace OpenDental{
 			FillList();
 		}
 
-		///<Summary>Can be called externally as part of the conversion sequence.  Surround with try catch.  Always returns the ClaimFormNum of the claimform.  If using xmlData, path will be ignored, so leave it blank.</Summary>
+		///<summary>Can be called externally as part of the conversion sequence.  Surround with try catch.  Always returns the ClaimFormNum of the claimform.  If using xmlData, path will be ignored, so leave it blank.</summary>
 		public static int ImportForm(string path, bool isUpdateSequence,string xmlData){
 			ClaimForm tempClaimForm=new ClaimForm();
 			XmlSerializer serializer=new XmlSerializer(typeof(ClaimForm));

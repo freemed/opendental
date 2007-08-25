@@ -361,12 +361,12 @@ namespace OpenDental{
 			}
 		}
 
-		///<Summary>Resets the descriptions for all ADA codes to the official wording.  Required by the license.</Summary>
+		///<summary>Resets the descriptions for all ADA codes to the official wording.  Required by the license.</summary>
 		public static void ResetADAdescriptions() {
 			ResetADAdescriptions(CDT.Class1.GetADAcodes());
 		}
 
-		///<Summary>Resets the descriptions for all ADA codes to the official wording.  Required by the license.</Summary>
+		///<summary>Resets the descriptions for all ADA codes to the official wording.  Required by the license.</summary>
 		public static void ResetADAdescriptions(List<ProcedureCode> codeList) {
 			ProcedureCode code;
 			for(int i=0;i<codeList.Count;i++) {

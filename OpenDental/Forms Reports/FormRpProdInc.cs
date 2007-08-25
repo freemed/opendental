@@ -36,11 +36,11 @@ namespace OpenDental{
 		private ListBox listClinic;
 		private Label labelClinic;
 		private DateTime dateTo;
-		///<Summary>Can be set externally when automating.</Summary>
+		///<summary>Can be set externally when automating.</summary>
 		public string DailyMonthlyAnnual;
-		///<Summary>If set externally, then this sets the date on startup.</Summary>
+		///<summary>If set externally, then this sets the date on startup.</summary>
 		public DateTime DateStart;
-		///<Summary>If set externally, then this sets the date on startup.</Summary>
+		///<summary>If set externally, then this sets the date on startup.</summary>
 		public DateTime DateEnd;
 
 		///<summary></summary>

@@ -215,11 +215,11 @@ namespace OpenDentBusiness{
 			get { return signatureChanged; }
 			
 		}
-		///<Summary>Crop rectangle X in original image pixel coordinates.  May be negative.</Summary>
+		///<summary>Crop rectangle X in original image pixel coordinates.  May be negative.</summary>
 		[DataField("CropX")]
 		private int cropX;
 
-		/// <Summary>Crop rectangle X in original image pixel coordinates.  May be negative.</Summary>
+		/// <summary>Crop rectangle X in original image pixel coordinates.  May be negative.</summary>
 		public int CropX {
 			get { return cropX; }
 			set { cropX = value; MarkDirty(); cropXChanged = true; }
@@ -231,11 +231,11 @@ namespace OpenDentBusiness{
 			get { return cropXChanged; }
 			
 		}
-		///<Summary>Crop rectangle Y in original image pixel coordinates.  May be negative.</Summary>
+		///<summary>Crop rectangle Y in original image pixel coordinates.  May be negative.</summary>
 		[DataField("CropY")]
 		private int cropY;
 
-		/// <Summary>Crop rectangle Y in original image pixel coordinates.  May be negative.</Summary>
+		/// <summary>Crop rectangle Y in original image pixel coordinates.  May be negative.</summary>
 		public int CropY {
 			get { return cropY; }
 			set { cropY = value; MarkDirty(); cropYChanged = true; }
@@ -247,11 +247,11 @@ namespace OpenDentBusiness{
 			get { return cropYChanged; }
 			
 		}
-		///<Summary>Crop rectangle Width in original image pixel coordinates.  May be zero if no cropping.  May be greater than original image width.</Summary>
+		///<summary>Crop rectangle Width in original image pixel coordinates.  May be zero if no cropping.  May be greater than original image width.</summary>
 		[DataField("CropW")]
 		private int cropW;
 
-		/// <Summary>Crop rectangle Width in original image pixel coordinates.  May be zero if no cropping.  May be greater than original image width.</Summary>
+		/// <summary>Crop rectangle Width in original image pixel coordinates.  May be zero if no cropping.  May be greater than original image width.</summary>
 		public int CropW {
 			get { return cropW; }
 			set { cropW = value; MarkDirty(); cropWChanged = true; }
@@ -263,11 +263,11 @@ namespace OpenDentBusiness{
 			get { return cropWChanged; }
 			
 		}
-		///<Summary>Crop rectangle Height in original image pixel coordinates.  May be zero if no cropping.  May be greater than original image height.</Summary>
+		///<summary>Crop rectangle Height in original image pixel coordinates.  May be zero if no cropping.  May be greater than original image height.</summary>
 		[DataField("CropH")]
 		private int cropH;
 
-		/// <Summary>Crop rectangle Height in original image pixel coordinates.  May be zero if no cropping.  May be greater than original image height.</Summary>
+		/// <summary>Crop rectangle Height in original image pixel coordinates.  May be zero if no cropping.  May be greater than original image height.</summary>
 		public int CropH {
 			get { return cropH; }
 			set { cropH = value; MarkDirty(); cropHChanged = true; }

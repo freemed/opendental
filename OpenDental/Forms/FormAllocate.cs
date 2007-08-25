@@ -180,7 +180,7 @@ namespace OpenDental{
 			return changed;
 		}
 
-		///<Summary>This will eventually replace Misc.ClassesShared.ComputeBalance.  Returns true if a change was made.</Summary>
+		///<summary>This will eventually replace Misc.ClassesShared.ComputeBalance.  Returns true if a change was made.</summary>
 		public static bool ComputeBalances(int patNum){
 			string command="SELECT (SELECT EstBalance FROM patient WHERE PatNum="+POut.PInt(patNum)+" GROUP BY PatNum) EstBalance, "
 				+"IFNULL((SELECT SUM(ProcFee) FROM procedurelog WHERE PatNum="+POut.PInt(patNum)+" AND ProcStatus=2 GROUP BY PatNum),0)"//complete

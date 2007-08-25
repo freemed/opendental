@@ -122,11 +122,11 @@ namespace OpenDental{
 		public static int SheetClickedonDay;
 		///<summary></summary>
 		private Panel infoBubble;
-		///<Summary>The dataset that holds all the data (well, not quite all of it yet)</Summary>
+		///<summary>The dataset that holds all the data (well, not quite all of it yet)</summary>
 		private DataSet DS;
 		///<summary>If the user has done a blockout/copy, then this will contain the blockout that is on the "clipboard".</summary>
 		private Schedule BlockoutClipboard;
-		///<Summary>This has to be tracked globally because mouse might move directly from one appt to another without any break.  This is the only way to know if we are still over the same appt.</Summary>
+		///<summary>This has to be tracked globally because mouse might move directly from one appt to another without any break.  This is the only way to know if we are still over the same appt.</summary>
 		private int bubbleAptNum;
 		private DateTime bubbleTime;
 		private Point bubbleLocation;
@@ -1169,7 +1169,7 @@ namespace OpenDental{
 			LayoutPanels();
 		}
 
-		///<Summary>This might not be getting called frequently enough.  Done on resize and when refreshing the period.  But it used to be done very very frequently.</Summary>
+		///<summary>This might not be getting called frequently enough.  Done on resize and when refreshing the period.  But it used to be done very very frequently.</summary>
 		private void LayoutPanels(){
 			//Assumes widths of the first 3 panels were set the same in the designer,
 			ToolBarMain.Location=new Point(ClientSize.Width-panelAptInfo.Width-2,0);
@@ -1517,7 +1517,7 @@ namespace OpenDental{
 			}
 		}
 
-		///<Summary></Summary>
+		///<summary></summary>
 		private void FillEmpSched(){
 			DataTable table=DS.Tables["EmpSched"];
 			gridEmpSched.BeginUpdate();
@@ -2146,7 +2146,7 @@ namespace OpenDental{
 			InfoBubbleDraw(p);
 		}
 
-		///<Summary>Does a hit test to determine if over an appointment.  Fills the bubble with data and then positions it.</Summary>
+		///<summary>Does a hit test to determine if over an appointment.  Fills the bubble with data and then positions it.</summary>
 		private void InfoBubbleDraw(Point p){
 			//remember where to draw for hover effect
 			bubbleLocation=p;

@@ -381,7 +381,7 @@ namespace OpenDental.Eclaims {
 			return true;
 		}
 
-		///<Summary>Takes a string, creates a file, and drops it into the correct CCD folder.  Waits for the response, and then returns it as a string.  Will throw an exception if response not received in a reasonable amount of time.  </Summary>
+		///<summary>Takes a string, creates a file, and drops it into the correct CCD folder.  Waits for the response, and then returns it as a string.  Will throw an exception if response not received in a reasonable amount of time.  </summary>
 		public static string PassToCCD(string msgText, int networkNum, Clearinghouse clearhouse){
 			if(clearhouse==null){
 				throw new ApplicationException(Lan.g("Canadian","CDAnet Clearinghouse could not be found."));

@@ -203,7 +203,7 @@ namespace OpenDental{
 			//}
 		}
 
-		///<Summary>Called just before Allocate in FormPayment.butOK click.  If true, then it will prompt the user before allocating.</Summary>
+		///<summary>Called just before Allocate in FormPayment.butOK click.  If true, then it will prompt the user before allocating.</summary>
 		public static bool AllocationRequired(double payAmt, int patNum){
 			string command="SELECT EstBalance FROM patient "
 				+"WHERE PatNum = "+POut.PInt(patNum);

@@ -67,7 +67,7 @@ namespace OpenDental{
 			return table;
 		}
 
-		///<Summary>Used when drawing the appointments for a day.</Summary>
+		///<summary>Used when drawing the appointments for a day.</summary>
 		public static List<LabCase> GetForPeriod(DateTime startDate,DateTime endDate) {
 			string command="SELECT labcase.* FROM labcase,appointment "
 				+"WHERE labcase.AptNum=appointment.AptNum "
@@ -77,7 +77,7 @@ namespace OpenDental{
 			return FillFromCommand(command);
 		}
 
-		///<Summary>Used when drawing the planned appointment.</Summary>
+		///<summary>Used when drawing the planned appointment.</summary>
 		public static LabCase GetForPlanned(int aptNum) {
 			string command="SELECT labcase.* FROM labcase,appointment "
 				+"WHERE labcase.PlannedAptNum="+POut.PInt(aptNum);
@@ -88,13 +88,13 @@ namespace OpenDental{
 			return list[0];
 		}
 
-		///<Summary>Gets one labcase from database.</Summary>
+		///<summary>Gets one labcase from database.</summary>
 		public static LabCase GetOne(int labCaseNum){
 			string command="SELECT * FROM labcase WHERE LabCaseNum="+POut.PInt(labCaseNum);
 			return FillFromCommand(command)[0];
 		}
 
-		///<Summary>Gets all labcases for a patient which have not been attached to an appointment.  Usually one or none.  Only used when attaching a labcase from within an appointment.</Summary>
+		///<summary>Gets all labcases for a patient which have not been attached to an appointment.  Usually one or none.  Only used when attaching a labcase from within an appointment.</summary>
 		public static List<LabCase> GetForPat(int patNum,bool isPlanned) {
 			string command="SELECT * FROM labcase WHERE PatNum="+POut.PInt(patNum)+" AND ";
 			if(isPlanned){
@@ -215,7 +215,7 @@ namespace OpenDental{
 			General.NonQ(command);
 		}
 
-		///<Summary>Frequently returns null.</Summary>
+		///<summary>Frequently returns null.</summary>
 		public static LabCase GetOneFromList(List<LabCase> labCaseList,int aptNum){
 			for(int i=0;i<labCaseList.Count;i++){
 				if(labCaseList[i].AptNum==aptNum){

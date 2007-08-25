@@ -119,7 +119,7 @@ namespace OpenDental{
 			return General.GetDS("Appointment.GetApptEdit",aptNum.ToString()).Tables["Misc"].Copy();
 		}
 
-		///<Summary>Contains all data needed to display appointments for a period.</Summary>
+		///<summary>Contains all data needed to display appointments for a period.</summary>
 		public static DataSet RefreshPeriod(DateTime dateStart,DateTime dateEnd){
 			return General.GetDS("Appointment.RefreshPeriod",dateStart.ToShortDateString(),dateEnd.ToShortDateString());
 		}

@@ -64,7 +64,7 @@ namespace OpenDentBusiness{
 		[XmlIgnore]
 		public bool PreExisting;
 		
-		///<Summary>Not a database column.  Only used for xml import function.</Summary>
+		///<summary>Not a database column.  Only used for xml import function.</summary>
 		private string procCatDescript;
 
 		public ProcedureCode(){

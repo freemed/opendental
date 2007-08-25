@@ -43,7 +43,7 @@ namespace OpenDentBusiness{
 			return list;
 		}
 
-		///<Summary>Parameters: 1:dateStart, 2:dateEnd</Summary>
+		///<summary>Parameters: 1:dateStart, 2:dateEnd</summary>
 		public static DataSet RefreshPeriod(string[] parameters) {
 			DataSet retVal=new DataSet();
 			retVal.Tables.Add(GetPeriodApptsTable(parameters[0],parameters[1],"0","0"));
@@ -428,7 +428,7 @@ namespace OpenDentBusiness{
 		//Get DS for one appointment in Edit window--------------------------------------------------------------------------------
 		//-------------------------------------------------------------------------------------------------------------------------
 
-		///<Summary>Parameters: 1:AptNum</Summary>
+		///<summary>Parameters: 1:AptNum</summary>
 		public static DataSet GetApptEdit(string[] parameters){
 			DataSet retVal=new DataSet();
 			retVal.Tables.Add(GetApptTable(parameters[0]));

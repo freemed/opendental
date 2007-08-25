@@ -7,7 +7,7 @@ namespace OpenDentBusiness {
 	public class ClaimValCode {
 		///<summary>Primary key.</summary>
 		public int ClaimValCodeLogNum;
-		///<summary>FK to claim number.</summary>
+		///<summary>FK to claim.ClaimNum.</summary>
 		public int ClaimNum;
 		///<summary>Descriptive abbreviation to help place field on form (Ex: "FL55" for field 55).</summary>
 		public string ClaimField;

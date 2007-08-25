@@ -2897,7 +2897,7 @@ namespace OpenDental{
 			textRows.Text=table.Rows.Count.ToString();
 		}
 
-		///<Summary>Gets primary key and sets the combobox in the primary key tab to display it.</Summary>
+		///<summary>Gets primary key and sets the combobox in the primary key tab to display it.</summary>
 		private void GetPK(){
 			//missing feature: check for no table selected
 			string command="SHOW INDEX FROM "+POut.PString(comboTableName.SelectedItem.ToString());
@@ -2920,7 +2920,7 @@ namespace OpenDental{
 			GetAllowedCols();
 		}
 
-		///<Summary>Most queries get run goes throught this method EXCEPT the ones that are performing validation.  The query then gets sent to the db as well as to the script file.  The script file is reloaded from disk just to make sure it's perfectly synched. Returns false if the query failed, true otherwise.</Summary>
+		///<summary>Most queries get run goes throught this method EXCEPT the ones that are performing validation.  The query then gets sent to the db as well as to the script file.  The script file is reloaded from disk just to make sure it's perfectly synched. Returns false if the query failed, true otherwise.</summary>
 		private bool ProcessCommand(string command){
 			if(command[command.Length-1]!=';'){
 				 command+=';';//Ensure that commands are always terminated, but only with a single ';', otherwise there are blank queries that are somtimes created due to 2 ';' characters.

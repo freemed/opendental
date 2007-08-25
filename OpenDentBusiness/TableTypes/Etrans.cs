@@ -29,9 +29,9 @@ namespace OpenDentBusiness{
 		public int PatNum;
 		///<summary>Whether outgoing or incoming, this field contains the actual text of the message.  When there is a batch, this field will contain the text of the entire batch.  Other claims will be mixed in.  The same text will be duplicated in the MessageText fields on the other claims.</summary>
 		public string MessageText;
-		///<Summary>Maxes out at 999, then loops back to 1.  This is not a good key, but is a restriction of X12.  So dates must also be used to isolate the correct BatchNumber key.  Specific to one clearinghouse.  Only used with e-claims.  Claim will have BatchNumber, and 997 will have matching BatchNumber. (In X12 lingo, it's a transaction#)</Summary>
+		///<summary>Maxes out at 999, then loops back to 1.  This is not a good key, but is a restriction of X12.  So dates must also be used to isolate the correct BatchNumber key.  Specific to one clearinghouse.  Only used with e-claims.  Claim will have BatchNumber, and 997 will have matching BatchNumber. (In X12 lingo, it's a transaction#)</summary>
 		public int BatchNumber;
-		///<Summary>A=Accepted, R=Rejected.  More options will be added later.  The incoming 997 sets this flag automatically.  To find the 997, look for a matching BatchNumber with a similar date, since both the claims and the 997 will both have the same batch number.</Summary>
+		///<summary>A=Accepted, R=Rejected.  More options will be added later.  The incoming 997 sets this flag automatically.  To find the 997, look for a matching BatchNumber with a similar date, since both the claims and the 997 will both have the same batch number.</summary>
 		public string AckCode;
 
 

@@ -73,7 +73,7 @@ namespace OpenDental{
 
 		}
 
-		///<Summary></Summary>
+		///<summary></summary>
 		public static CanadianNetwork GetNetwork(int networkNum){
 			if(listt==null) {
 				Refresh();

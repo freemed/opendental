@@ -8,7 +8,7 @@ namespace OpenDentBusiness{
 	public class LabTurnaround{
 		///<summary>Primary key.</summary>
 		public int LabTurnaroundNum;
-		///<Summary>FK to laboratory.LaboratoryNum. The lab that this item is attached to.</Summary>
+		///<summary>FK to laboratory.LaboratoryNum. The lab that this item is attached to.</summary>
 		public int LaboratoryNum;
 		///<summary>The description of the service that the lab is performing.</summary>
 		public string Description;

@@ -9,9 +9,9 @@ namespace OpenDentBusiness{
 	public class CanadianNetwork{
 		///<summary>Primary key.</summary>
 		public int CanadianNetworkNum;
-		///<Summary>This will also be the folder name</Summary>
+		///<summary>This will also be the folder name</summary>
 		public string Abbrev;
-		///<Summary></Summary>
+		///<summary></summary>
 		public string Descript;
 
 		///<summary></summary>

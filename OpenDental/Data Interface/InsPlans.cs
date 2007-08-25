@@ -786,7 +786,7 @@ namespace OpenDental {
 			return General.NonQ(command);
 		}
 
-		///<Summary>Returns number of rows affected.</Summary>
+		///<summary>Returns number of rows affected.</summary>
 		public static int ConvertToNewClaimform(int oldClaimFormNum, int newClaimFormNum){
 			string command="UPDATE insplan SET ClaimFormNum="+POut.PInt(newClaimFormNum)
 				+" WHERE ClaimFormNum="+POut.PInt(oldClaimFormNum);

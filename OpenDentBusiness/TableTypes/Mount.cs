@@ -7,11 +7,11 @@ namespace OpenDentBusiness {
 	/// <summary>A mount shows in the images module just like other images in the tree.  But it is just a container for images within it rather than an actual image itself.</summary>
 	[DataObject("mount")]
 	public class Mount : DataObjectBase {
-		///<summary>Primary key.</summary>
+		///<summary>Primary key. Private</summary>
 		[DataField("MountNum", PrimaryKey=true, AutoNumber=true)]
 		private int mountNum;
 
-		/// <summary>Primary key.</summary>
+		/// <summary>Primary key. Public</summary>
 		public int MountNum {
 			get { return mountNum; }
 			set { mountNum = value; MarkDirty(); mountNumChanged = true; }

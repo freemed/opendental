@@ -23,7 +23,7 @@ namespace OpenDental{
 		/// Required designer variable.
 		/// </summary>
 		private System.ComponentModel.Container components = null;
-		///<Summary>If true, then reports will be automatically retrieved for default clearinghouse.  Then this form will close.</Summary>
+		///<summary>If true, then reports will be automatically retrieved for default clearinghouse.  Then this form will close.</summary>
 		public bool AutomaticMode;
 
 		///<summary></summary>

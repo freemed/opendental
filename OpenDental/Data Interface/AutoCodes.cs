@@ -65,7 +65,7 @@ namespace OpenDental{
 			General.NonQ(command);
 		}
 
-		///<Summary>Used in ProcButtons.SetToDefault.  Returns 0 if the given autocode does not exist.</Summary>
+		///<summary>Used in ProcButtons.SetToDefault.  Returns 0 if the given autocode does not exist.</summary>
 		public static int GetNumFromDescript(string descript) {
 			for(int i=0;i<ListShort.Length;i++) {
 				if(ListShort[i].Description==descript) {

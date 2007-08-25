@@ -1670,7 +1670,7 @@ namespace OpenDental{
 			treeIdNumDown="";
 		}
 
-		///<Summary>Invalidates some or all of the image settings.  This will cause those settings to be recalculated, either immediately, or when the current ApplySettings thread is finished.  If supplied settings is ApplySettings.NONE, then that part will be skipped.</Summary>
+		///<summary>Invalidates some or all of the image settings.  This will cause those settings to be recalculated, either immediately, or when the current ApplySettings thread is finished.  If supplied settings is ApplySettings.NONE, then that part will be skipped.</summary>
 		private void InvalidateSettings(ApplySettings settings,bool reloadZoomTransCrop){
 			if(this.InvokeRequired){
 				InvalidatesettingsCallback c=new InvalidatesettingsCallback(InvalidateSettings);

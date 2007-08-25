@@ -810,7 +810,7 @@ namespace OpenDental.UI{
 			Invalidate();
 		}
 
-		///<Summary></Summary>
+		///<summary></summary>
 		public void SetSelected(Point setCell){
 			if(selectionMode!=GridSelectionMode.OneCell) {
 				throw new Exception("Selection mode must be OneCell.");

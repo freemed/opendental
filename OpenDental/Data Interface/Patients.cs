@@ -1326,7 +1326,7 @@ namespace OpenDental{
 			}
 		}
 
-		///<Summary>A newer alternative which requires fewer calls to the database.  Does not handle null values. Use zero.</Summary>
+		///<summary>A newer alternative which requires fewer calls to the database.  Does not handle null values. Use zero.</summary>
 		public static void AddPatsToMenu(ContextMenu menu,EventHandler onClick,string nameLF,int patNum) {
 			//add current patient
 			if(buttonLastFivePatNums==null) {

@@ -7,7 +7,7 @@ namespace OpenDentBusiness{
 	public class ReqStudent{
 		///<summary>Primary key.</summary>
 		public int ReqStudentNum;
-		///<Summary>FK to reqneeded.ReqNeededNum.  Used for synchronization.</Summary>
+		///<summary>FK to reqneeded.ReqNeededNum.  Used for synchronization.</summary>
 		public int ReqNeededNum;
 		///<summary>.</summary>
 		public string Descript;
@@ -15,11 +15,11 @@ namespace OpenDentBusiness{
 		public int SchoolCourseNum;
 		///<summary>FK to provider.ProvNum.  The student.  Never 0.</summary>
 		public int ProvNum;
-		///<Summary>FK to appointment.AptNum.</Summary>
+		///<summary>FK to appointment.AptNum.</summary>
 		public int AptNum;
-		///<Summary>FK to patient.PatNum</Summary>
+		///<summary>FK to patient.PatNum</summary>
 		public int PatNum;
-		///<Summary>FK to provider.ProvNum</Summary>
+		///<summary>FK to provider.ProvNum</summary>
 		public int InstructorNum;
 		///<summary>The date that the requirement was completed.</summary>
 		public DateTime DateCompleted;

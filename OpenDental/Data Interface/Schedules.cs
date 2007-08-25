@@ -94,7 +94,7 @@ namespace OpenDental{
 			return RefreshAndFill(command);
 		}
 
-		///<Summary></Summary>
+		///<summary></summary>
 		public static List<Schedule> RefreshDayEdit(DateTime dateSched){
 			string command="SELECT schedule.* "
 				+"FROM schedule "//,provider "
@@ -335,7 +335,7 @@ namespace OpenDental{
 			return true;
 		}
 
-		///<Summary>Returns a 7 column data table in a calendar layout so all you have to do is draw it on the screen.  If includePractice is true, then practice notes and holidays will be included.</Summary>
+		///<summary>Returns a 7 column data table in a calendar layout so all you have to do is draw it on the screen.  If includePractice is true, then practice notes and holidays will be included.</summary>
 		public static DataTable GetPeriod(DateTime dateStart,DateTime dateEnd,int[] provNums,int[] empNums,bool includePractice){
 			DataTable table=new DataTable();
 			DataRow row;
@@ -465,7 +465,7 @@ namespace OpenDental{
 			return (int)Math.Ceiling((dayInterval+1)/7d);
 		}
 
-		///<Summary>When click on a calendar grid, this is used to calculate the date clicked on.  StartDate is the first date in the Calendar, which does not have to be Sun.</Summary>
+		///<summary>When click on a calendar grid, this is used to calculate the date clicked on.  StartDate is the first date in the Calendar, which does not have to be Sun.</summary>
 		public static DateTime GetDateCal(DateTime startDate,int row,int col){
 			DateTime dateFirstRow;//the first date of row 0. Typically a few days before startDate. Always a Sun.
 			dateFirstRow=startDate.AddDays(-(int)startDate.DayOfWeek);//example: (Tues,May 9).AddDays(-2)=Sun,May 7.

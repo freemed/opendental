@@ -36,7 +36,7 @@ namespace OpenDental {
 			}
 		}
 
-		///<Summary>This is the new way. It will be replacing the many different types of DTOs that we currently have.</Summary>
+		///<summary>This is the new way. It will be replacing the many different types of DTOs that we currently have.</summary>
 		public static DataSet ProcessGetDS(DtoGetDS dto){
 			byte[] buffer=SendAndReceive(dto);//this might throw an exception if server unavailable
 			MemoryStream memStream=new MemoryStream(buffer);

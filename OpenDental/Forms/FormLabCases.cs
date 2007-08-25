@@ -22,7 +22,7 @@ namespace OpenDental{
 		private Label label2;
 		private OpenDental.UI.Button butRefresh;// Required designer variable.
 		private DataTable table;
-		///<Summary>Set this to the selected date on the schedule, and date range will start out based on this date.</Summary>
+		///<summary>Set this to the selected date on the schedule, and date range will start out based on this date.</summary>
 		public DateTime DateViewing;
 
 		///<summary></summary>
