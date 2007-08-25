@@ -10,6 +10,7 @@ namespace ODR{
 ///<summary>This differs slightly from ValidNum. Use this to allow a blank entry instead of defaulting to 0.
 ///</summary>
 	public class ValidNumber : System.Windows.Forms.TextBox{
+		private System.ComponentModel.Container components = null;
 		public ODErrorProvider errorProvider1=new ODErrorProvider();
 		///<summary></summary>
 		private int maxVal=255;
@@ -19,6 +20,16 @@ namespace ODR{
 		///<summary></summary>
 		public ValidNumber(){
 			InitializeComponent();
+		}
+
+		///<summary></summary>
+		protected override void Dispose(bool disposing) {
+			if(disposing) {
+				if(components != null) {
+					components.Dispose();
+				}
+			}
+			base.Dispose(disposing);
 		}
 
 		#region Component Designer generated code
