@@ -260,6 +260,28 @@ namespace OpenDental.Imaging {
 			return doc;
 		}
 
+		public Document ImportForm(string form, int docCategory) {
+			string fileName = ODFileUtils.CombinePaths(new string[] {FileStoreSettings.GetPreferredImagePath,
+				"Forms",form});
+			if(!File.Exists(fileName)) {
+				throw new Exception(Lan.g("ContrDocs", "Could not find file: ") + fileName);
+			}
+			Document doc = new Document();
+			doc.FileName = Path.GetExtension(fileName);
+			doc.DateCreated = DateTime.Today;
+			doc.DocCategory = docCategory;
+			doc.PatNum = Patient.PatNum;
+			doc.ImgType = ImageType.Document;
+			Documents.Insert(doc, Patient);//this assigns a filename and saves to db
+			try {
+				File.Copy(fileName,ODFileUtils.CombinePaths(patFolder,doc.FileName));
+			}catch{
+				throw new Exception(Lan.g("ContrDocs","Unable to copy file. May be in use: ")+fileName);
+
+			}
+			return doc;
+		}
+
 		public void DeleteImage(IList<Document> documents) {
 			for(int i = 0; i < documents.Count; i++) {
 				if(documents[i] == null) {
@@ -280,6 +302,18 @@ namespace OpenDental.Imaging {
 					}
 				}
 				Documents.Delete(documents[i]);
+			}
+		}
+
+		public void DeleteThumbnailImage(Document doc) {
+			string thumbnailFile = ODFileUtils.CombinePaths(new string[] { patFolder, "Thumbnails", doc.FileName });
+			if(File.Exists(thumbnailFile)) {
+				try {
+					File.Delete(thumbnailFile);
+				}
+				catch {
+					//Two users *might* edit the same image at the same time, so the image might already be deleted.
+				}
 			}
 		}
 

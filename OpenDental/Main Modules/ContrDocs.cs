@@ -1472,24 +1472,13 @@ namespace OpenDental{
 		}
 
 		private void menuForms_Click(object sender, System.EventArgs e) {
-			string fileName=ODFileUtils.CombinePaths(new string[] {FormPath.GetPreferredImagePath(),
-				"Forms",((MenuItem)sender).Text});
-			if(!File.Exists(fileName)){
-				MessageBox.Show(Lan.g(this,"Could not find file: ")+fileName);
-				return;
-			}
-			Document doc=new Document();
-			doc.FileName=Path.GetExtension(fileName);
-			doc.DateCreated=DateTime.Today;
-			doc.DocCategory=GetCurrentCategory();
-			doc.PatNum=PatCur.PatNum;
-			doc.ImgType=ImageType.Document;
-			Documents.Insert(doc,PatCur);//this assigns a filename and saves to db
-			bool copied=true;
-			try{
-				File.Copy(fileName,ODFileUtils.CombinePaths(patFolder,doc.FileName));
-			}catch{
-				MessageBox.Show(Lan.g(this,"Unable to copy file. May be in use: ")+fileName);
+			string formName = ((MenuItem)sender).Text;
+			bool copied = true;
+			Document doc = null;
+			try {
+				doc = imageStore.ImportForm(formName, GetCurrentCategory());
+			}catch(Exception ex){
+				MessageBox.Show(ex.Message);
 				copied=false;
 				Documents.Delete(doc);
 			}
@@ -1852,15 +1841,7 @@ namespace OpenDental{
 		}
 
 		private void DeleteThumbnailImage(Document doc){
-			string thumbnailFile=ODFileUtils.CombinePaths(new string[] {patFolder,"Thumbnails",doc.FileName});
-			if(File.Exists(thumbnailFile)) {
-				try {
-					File.Delete(thumbnailFile);
-				}
-				catch {
-					//Two users *might* edit the same image at the same time, so the image might already be deleted.
-				}
-			}
+			imageStore.DeleteThumbnailImage(doc);
 		}
 
 		private void OnFlip_Click() {
