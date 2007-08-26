@@ -9,6 +9,7 @@ using System.Diagnostics;
 using OpenDentBusiness;
 using OpenDentBusiness.Imaging;
 using System.Security.Cryptography;
+using System.Drawing.Imaging;
 
 namespace OpenDental.Imaging {
 	public class FileStore : IImageStore {
@@ -212,6 +213,50 @@ namespace OpenDental.Imaging {
 				Documents.Delete(doc);
 				throw;
 			}
+			return doc;
+		}
+
+		public Document Import(Bitmap image, int docCategory, ImageType imageType) {
+			Document doc = new Document();
+			doc.ImgType = imageType;
+			doc.FileName = ".jpg";
+			doc.DateCreated = DateTime.Today;
+			doc.PatNum = Patient.PatNum;
+			Documents.Insert(doc, Patient);//creates filename and saves to db
+
+			long qualityL = 0;
+			if(imageType == ImageType.Radiograph) {
+				qualityL = Convert.ToInt64(((Pref)PrefB.HList["ScannerCompressionRadiographs"]).ValueString);
+			}
+			else if(imageType == ImageType.Photo) {
+				qualityL = Convert.ToInt64(((Pref)PrefB.HList["ScannerCompressionPhotos"]).ValueString);
+			}
+			else {//Assume document
+				//Possible values 0-100?
+				qualityL = (long)Convert.ToInt32(((Pref)PrefB.HList["ScannerCompression"]).ValueString);
+			}
+
+			ImageCodecInfo myImageCodecInfo;
+			ImageCodecInfo[] encoders;
+			encoders=ImageCodecInfo.GetImageEncoders();
+			myImageCodecInfo=null;
+			for(int j=0;j<encoders.Length;j++) {
+				if(encoders[j].MimeType=="image/jpeg")
+					myImageCodecInfo=encoders[j];
+			}
+			System.Drawing.Imaging.Encoder myEncoder=System.Drawing.Imaging.Encoder.Quality;
+			EncoderParameters myEncoderParameters=new EncoderParameters(1);
+			EncoderParameter myEncoderParameter=new EncoderParameter(myEncoder,qualityL);
+			myEncoderParameters.Param[0]=myEncoderParameter;
+			//AutoCrop()?
+			try {
+				image.Save(ODFileUtils.CombinePaths(patFolder, doc.FileName), myImageCodecInfo, myEncoderParameters);
+			}
+			catch {
+				Documents.Delete(doc);
+				throw;
+			}
+
 			return doc;
 		}
 

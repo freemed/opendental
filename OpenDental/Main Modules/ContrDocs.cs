@@ -1275,48 +1275,21 @@ namespace OpenDental{
 					"Please check to see that the scanner is properly connected to the computer. Specific error: "+ex.Message);
 				return;
 			}
-			Document doc=new Document();
+			ImageType imgType;
 			if(scanType=="xray"){
-				doc.ImgType=ImageType.Radiograph;
+				imgType=ImageType.Radiograph;
 			}else if(scanType=="photo"){
-				doc.ImgType=ImageType.Photo;
+				imgType=ImageType.Photo;
 			}else{//Assume document
-				doc.ImgType=ImageType.Document;
+				imgType=ImageType.Document;
 			}
-			doc.FileName=".jpg";
-			doc.DateCreated=DateTime.Today;
-			doc.PatNum=PatCur.PatNum;		
-			doc.DocCategory=GetCurrentCategory();
-			Documents.Insert(doc,PatCur);//creates filename and saves to db
 			bool saved=true;
+			Document doc = null;
 			try{//Create corresponding image file.
-				ImageCodecInfo myImageCodecInfo;
-				ImageCodecInfo[] encoders;
-				encoders=ImageCodecInfo.GetImageEncoders();
-				myImageCodecInfo=null;
-				for(int j=0;j<encoders.Length;j++) {
-					if(encoders[j].MimeType=="image/jpeg")
-						myImageCodecInfo=encoders[j];
-				}
-				System.Drawing.Imaging.Encoder myEncoder=System.Drawing.Imaging.Encoder.Quality;
-				EncoderParameters myEncoderParameters=new EncoderParameters(1);
-				long qualityL=0;
-				if(scanType=="xray"){
-					qualityL=Convert.ToInt64(((Pref)PrefB.HList["ScannerCompressionRadiographs"]).ValueString);
-				}else if(scanType=="photo"){
-					qualityL=Convert.ToInt64(((Pref)PrefB.HList["ScannerCompressionPhotos"]).ValueString);
-				}else{//Assume document
-					//Possible values 0-100?
-					qualityL=(long)Convert.ToInt32(((Pref)PrefB.HList["ScannerCompression"]).ValueString);
-				}
-				EncoderParameter myEncoderParameter=new EncoderParameter(myEncoder,qualityL);
-				myEncoderParameters.Param[0]=myEncoderParameter;
-				//AutoCrop()?
-				scannedImage.Save(ODFileUtils.CombinePaths(patFolder,doc.FileName),myImageCodecInfo,myEncoderParameters);
+				doc = imageStore.Import(scannedImage, GetCurrentCategory(), imgType);
 			}catch{
 				saved=false;
 				MessageBox.Show(Lan.g(this,"Unable to save document."));
-				Documents.Delete(doc);
 			}
 			if(saved){
 				FillDocList(false);//Reload and keep new document selected.
