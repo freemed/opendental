@@ -16,6 +16,7 @@ using System.Security.Cryptography;
 using System.Text;
 using OpenDentBusiness;
 using CodeBase;
+using OpenDental.Imaging;
 
 namespace OpenDental{
 ///<summary></summary>
@@ -34,7 +35,7 @@ namespace OpenDental{
 		private Document DocCur;
 		///<summary>This keeps the noteChanged event from erasing the signature when first loading.</summary>
 		private bool IsStartingUp;
-		private string PatFolder;
+		private FileStore imageStore;
 		private Label labelInvalidSig;
 		private bool SigChanged;
 		///<summary>To allow tablet signatures on Windows. Must be added dynamically when the program is not running on Unix so that MONO does not crash.</summary>
@@ -43,7 +44,7 @@ namespace OpenDental{
 		private OpenDental.UI.Button butTopazSign;
 		
 		///<summary></summary>
-		public FormDocSign(Document docCur,string patFolder){
+		public FormDocSign(Document docCur,FileStore imageStore){
 			InitializeComponent();
 			//Can only allow tablet signatures on Windows, since we use a native dll to handle the tablet interaction.
 			if(Environment.OSVersion.Platform!=PlatformID.Unix){
@@ -73,7 +74,7 @@ namespace OpenDental{
 				Controls.Add(butTopazSign);
 			}
 			DocCur=docCur;
-			PatFolder=patFolder;
+			this.imageStore=imageStore;
 			Lan.F(this);
 		}
 
@@ -270,21 +271,7 @@ namespace OpenDental{
 		}
 
 		private string GetHashString(){
-			//the key data is the bytes of the file, concatenated with the bytes of the note.
-			byte[] textbytes=Encoding.UTF8.GetBytes(textNote.Text);
-			string path=ODFileUtils.CombinePaths(PatFolder,DocCur.FileName);
-			if(!File.Exists(path)){
-				return "";
-			}
-			FileStream fs=new FileStream(path,FileMode.Open,FileAccess.Read,FileShare.Read);
-			int fileLength=(int)fs.Length;
-			byte[] buffer=new byte[fileLength+textbytes.Length];
-			fs.Read(buffer,0,fileLength);
-			fs.Close();
-			Array.Copy(textbytes,0,buffer,fileLength,textbytes.Length);
-			HashAlgorithm algorithm=MD5.Create();
-			byte[] hash=algorithm.ComputeHash(buffer);//always results in length of 16.
-			return Encoding.ASCII.GetString(hash);
+			return imageStore.GetHashString(DocCur);
 		}
 
 		private void butClearSig_Click(object sender,EventArgs e) {

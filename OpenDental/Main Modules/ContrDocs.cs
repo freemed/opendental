@@ -1180,7 +1180,7 @@ namespace OpenDental{
 			panelNote.Visible=true;
 			ResizeAll();
 			//Display the document signature form.
-			FormDocSign docSignForm=new FormDocSign(selectionDoc,patFolder);//Updates our local document and saves changes to db also.
+			FormDocSign docSignForm=new FormDocSign(selectionDoc,imageStore);//Updates our local document and saves changes to db also.
 			int signLeft=TreeDocuments.Left;
 			docSignForm.Location=PointToScreen(new Point(signLeft,this.ClientRectangle.Bottom-docSignForm.Height));
 			docSignForm.Width=Math.Max(0,Math.Min(docSignForm.Width,PictureBox1.Right-signLeft));
@@ -1320,7 +1320,7 @@ namespace OpenDental{
 			for(int i=0;i<fileNames.Length;i++){
 				bool copied = true;
 				try {
-					imageStore.Import(fileNames[i], GetCurrentCategory());
+					doc = imageStore.Import(fileNames[i], GetCurrentCategory());
 				}
 				catch(Exception ex) {
 					MessageBox.Show(Lan.g(this, "Unable to copy file, May be in use: ") + ex.Message + ": " + openFileDialog.FileName);
@@ -1480,7 +1480,6 @@ namespace OpenDental{
 			}catch(Exception ex){
 				MessageBox.Show(ex.Message);
 				copied=false;
-				Documents.Delete(doc);
 			}
 			if(copied){
 				FillDocList(false);

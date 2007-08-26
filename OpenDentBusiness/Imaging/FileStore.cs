@@ -276,8 +276,8 @@ namespace OpenDental.Imaging {
 			try {
 				File.Copy(fileName,ODFileUtils.CombinePaths(patFolder,doc.FileName));
 			}catch{
+				Documents.Delete(doc);
 				throw new Exception(Lan.g("ContrDocs","Unable to copy file. May be in use: ")+fileName);
-
 			}
 			return doc;
 		}
