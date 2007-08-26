@@ -59,13 +59,13 @@
     <Compile Include="Business\DefB.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Data Interface\Documents.cs" />
+    <Compile Include="Data Interface\General.cs" />
+    <Compile Include="Data Interface\MountDefs.cs" />
+    <Compile Include="Data Interface\MountItemDefs.cs" />
+    <Compile Include="Data Interface\MountItems.cs" />
+    <Compile Include="Data Interface\Mounts.cs" />
     <Compile Include="Imaging\ApplySettings.cs" />
-    <Compile Include="Imaging\Data Interface\Documents.cs" />
-    <Compile Include="Imaging\Data Interface\General.cs" />
-    <Compile Include="Imaging\Data Interface\MountDefs.cs" />
-    <Compile Include="Imaging\Data Interface\MountItemDefs.cs" />
-    <Compile Include="Imaging\Data Interface\MountItems.cs" />
-    <Compile Include="Imaging\Data Interface\Mounts.cs" />
     <Compile Include="Imaging\FileStore.cs" />
     <Compile Include="Imaging\FileStoreSettings.cs" />
     <Compile Include="Imaging\IImageStore.cs" />

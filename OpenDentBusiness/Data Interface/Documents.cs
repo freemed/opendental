@@ -265,7 +265,7 @@ namespace OpenDental.Imaging.Business {
 			return countAdded;
 		}
 
-		///<summary>Parameters: 1:PatNum</summary>
+		///<Summary>Parameters: 1:PatNum</Summary>
 		public static DataSet RefreshForPatient(string[] parameters) {
 			DataSet retVal=new DataSet();
 			retVal.Tables.Add(GetTreeListTableForPatient(parameters[0]));
