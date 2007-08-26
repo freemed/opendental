@@ -5,7 +5,7 @@ using OpenDentBusiness;
 using System.Data;
 using CodeBase;
 
-namespace OpenDental.Imaging.Business {
+namespace OpenDentBusiness {
 	public class MountItems {
 
 		public static int Insert(MountItem mountItem) {

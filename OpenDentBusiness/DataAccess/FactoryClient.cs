@@ -4,6 +4,7 @@ using System.Text;
 using OpenDental;
 using System.IO;
 using System.Xml.Serialization;
+using OpenDentBusiness;
 
 namespace OpenDental.DataAccess {
 	public static class FactoryClient<T>

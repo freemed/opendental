@@ -8,8 +8,9 @@ using OpenDentBusiness;
 using CodeBase;
 using OpenDental.DataAccess;
 using OpenDentBusiness.Imaging;
+using OpenDental.Imaging;
 
-namespace OpenDental.Imaging.Business {
+namespace OpenDentBusiness {
 	///<summary>Handles documents and images for the Images module</summary>
 	public class Documents {
 

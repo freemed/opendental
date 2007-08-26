@@ -4,7 +4,7 @@ using System.Text;
 using OpenDentBusiness;
 using System.Data;
 
-namespace OpenDental.Imaging.Business {
+namespace OpenDentBusiness {
 	public class Mounts {
 
 		public static int Insert(Mount mount){

@@ -6,7 +6,7 @@ using System.Diagnostics;
 using System.Drawing;
 using OpenDentBusiness;
 
-namespace OpenDental.Imaging.Business {
+namespace OpenDentBusiness {
 	///<summary></summary>
 	public class MountItemDefs {
 		///<summary>A list of all MountItemDefs.</summary>

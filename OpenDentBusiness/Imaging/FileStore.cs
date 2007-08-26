@@ -7,7 +7,6 @@ using System.Drawing;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using OpenDentBusiness;
-using OpenDental.Imaging.Business;
 using OpenDentBusiness.Imaging;
 
 namespace OpenDental.Imaging {

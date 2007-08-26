@@ -4,7 +4,7 @@ using System.Data;
 using System.Text;
 using OpenDentBusiness;
 
-namespace OpenDental {
+namespace OpenDentBusiness {
 	class General2 {
 		///<summary></summary>
 		[Obsolete("This method now throws an exception!")]

@@ -9,7 +9,7 @@ using System.Xml;
 using System.Xml.Serialization;
 using OpenDentBusiness;
 
-namespace OpenDental {
+namespace OpenDentBusiness {
 	public class RemotingClient {
 		public static bool OpenDentBusinessIsLocal;
 		private static TcpClient client;
