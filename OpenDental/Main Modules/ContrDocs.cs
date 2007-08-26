@@ -1247,27 +1247,7 @@ namespace OpenDental{
 		}
 
 		private string GetHashString(Document doc) {
-			//the key data is the bytes of the file, concatenated with the bytes of the note.
-			byte[] textbytes;
-			if(doc.Note==null) {
-				textbytes=Encoding.UTF8.GetBytes("");
-			}
-			else {
-				textbytes=Encoding.UTF8.GetBytes(doc.Note);
-			}
-			string path=ODFileUtils.CombinePaths(patFolder,doc.FileName);
-			if(!File.Exists(path)) {
-				return "";
-			}
-			FileStream fs=new FileStream(path,FileMode.Open,FileAccess.Read,FileShare.Read);
-			int fileLength=(int)fs.Length;
-			byte[] buffer=new byte[fileLength+textbytes.Length];
-			fs.Read(buffer,0,fileLength);
-			fs.Close();
-			Array.Copy(textbytes,0,buffer,fileLength,textbytes.Length);
-			HashAlgorithm algorithm=MD5.Create();
-			byte[] hash=algorithm.ComputeHash(buffer);//always results in length of 16.
-			return Encoding.ASCII.GetString(hash);
+			return imageStore.GetHashString(doc);
 		}
 
 		///<summary>Valid values for scanType are "doc","xray",and "photo"</summary>
@@ -1365,22 +1345,13 @@ namespace OpenDental{
 			string nodeId="";
 			Document doc=null;
 			for(int i=0;i<fileNames.Length;i++){
-				openFileDialog.FileName=fileNames[i];
-				doc=new Document();
-				//Document.Insert will use this extension when naming:
-				doc.FileName=Path.GetExtension(openFileDialog.FileName);
-				doc.DateCreated=DateTime.Today;
-				doc.PatNum=PatCur.PatNum;
-				doc.ImgType=HasImageExtension(doc.FileName)?ImageType.Photo:ImageType.Document;
-				doc.DocCategory=GetCurrentCategory();
-				Documents.Insert(doc,PatCur);//this assigns a filename and saves to db
-				bool copied=true;
-				try{
-					File.Copy(openFileDialog.FileName,ODFileUtils.CombinePaths(patFolder,doc.FileName));
-				}catch(Exception ex){
-					MessageBox.Show(Lan.g(this,"Unable to copy file, May be in use: ")+ex.Message+": "+openFileDialog.FileName);
-					Documents.Delete(doc);
-					copied=false;
+				bool copied = true;
+				try {
+					imageStore.Import(fileNames[i], GetCurrentCategory());
+				}
+				catch(Exception ex) {
+					MessageBox.Show(Lan.g(this, "Unable to copy file, May be in use: ") + ex.Message + ": " + openFileDialog.FileName);
+					copied = false;
 				}
 				if(copied){
 					FillDocList(false);

@@ -8,6 +8,7 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using OpenDentBusiness;
 using OpenDentBusiness.Imaging;
+using System.Security.Cryptography;
 
 namespace OpenDental.Imaging {
 	public class FileStore : IImageStore {
@@ -150,6 +151,48 @@ namespace OpenDental.Imaging {
 			Collection<Bitmap> bitmaps = RetrieveImage(new Collection<Document>(documents));
 			bitmaps.CopyTo(values, 0);
 			return values;
+		}
+
+		public string GetHashString(Document doc) {
+			//the key data is the bytes of the file, concatenated with the bytes of the note.
+			byte[] textbytes;
+			if(doc.Note == null) {
+				textbytes = Encoding.UTF8.GetBytes("");
+			}
+			else {
+				textbytes = Encoding.UTF8.GetBytes(doc.Note);
+			}
+			string path = ODFileUtils.CombinePaths(patFolder, doc.FileName);
+			if(!File.Exists(path)) {
+				return "";
+			}
+			FileStream fs = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read);
+			int fileLength = (int)fs.Length;
+			byte[] buffer = new byte[fileLength + textbytes.Length];
+			fs.Read(buffer, 0, fileLength);
+			fs.Close();
+			Array.Copy(textbytes, 0, buffer, fileLength, textbytes.Length);
+			HashAlgorithm algorithm = MD5.Create();
+			byte[] hash = algorithm.ComputeHash(buffer);//always results in length of 16.
+			return Encoding.ASCII.GetString(hash);
+		}
+
+		public void Import(string path, int docCategory) {
+			Document doc = new Document();
+			//Document.Insert will use this extension when naming:
+			doc.FileName = Path.GetExtension(path);
+			doc.DateCreated = DateTime.Today;
+			doc.PatNum = Patient.PatNum;
+			doc.ImgType = HasImageExtension(path) ? ImageType.Photo : ImageType.Document;
+			doc.DocCategory = docCategory;
+			Documents.Insert(doc, Patient);//this assigns a filename and saves to db
+			try {
+				File.Copy(path, ODFileUtils.CombinePaths(patFolder, doc.FileName));
+			}
+			catch {
+				Documents.Delete(doc);
+				throw;
+			}
 		}
 
 		public void DeleteImage(IList<Document> documents) {
