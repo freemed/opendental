@@ -334,6 +334,43 @@ namespace OpenDental.Imaging {
 			File.Copy(filename, Path.Combine(PatFolder, document.FileName));
 		}
 
+		public void ImportPdf(string sPDF) {
+			Document DocCur = new Document();
+			DocCur.FileName = ".pdf";
+			DocCur.DateCreated = DateTime.Today;
+
+			//Find the category, hopefully 'Patient Information'
+			//otherwise, just default to first one
+			int iCategory = iCategory = DefB.Short[(int)DefCat.ImageCats][0].DefNum; ;
+			for(int i = 0; i < DefB.Short[(int)DefCat.ImageCats].Length; i++) {
+				if(DefB.Short[(int)DefCat.ImageCats][i].ItemName == "Patient Information") {
+					iCategory = DefB.Short[(int)DefCat.ImageCats][i].DefNum;
+				}
+
+			}
+
+			DocCur.DocCategory = iCategory;
+			DocCur.ImgType = ImageType.Document;
+			DocCur.Description = "New Patient Form";
+			DocCur.PatNum = Patient.PatNum;
+			Documents.Insert(DocCur, Patient);//this assigns a filename and saves to db
+
+			try {
+				// Convert the Base64 UUEncoded input into binary output.
+				byte[] binaryData = Convert.FromBase64String(sPDF);
+
+				// Write out the decoded data.
+				FileStream outFile = new FileStream(patFolder + DocCur.FileName, FileMode.Create, FileAccess.Write);
+				outFile.Write(binaryData, 0, binaryData.Length);
+				outFile.Close();
+				//Above is the code to save the file to a particular directory from NewPatientForm.com
+			}
+			catch {
+				Documents.Delete(DocCur);
+				throw;
+			}
+		}
+
 		///<summary>Returns true if the given filename contains a supported file image extension.</summary>
 		public static bool HasImageExtension(string fileName) {
 			string ext = Path.GetExtension(fileName).ToLower();

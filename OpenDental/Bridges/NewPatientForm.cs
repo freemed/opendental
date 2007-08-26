@@ -8,6 +8,7 @@ using System.Windows.Forms;
 using System.Xml;
 using System.IO;
 using OpenDentBusiness;
+using OpenDental.Imaging;
 
 namespace OpenDental.Bridges
 {
@@ -118,7 +119,6 @@ namespace OpenDental.Bridges
 
                     try
                     {
-
                         //We'll be working with a document
 
                         //First make sure we have a directory and
@@ -127,51 +127,12 @@ namespace OpenDental.Bridges
 
                         cd.RefreshModuleData(frmX.existingPatOld.PatNum);
 
-
-                        Document DocCur = new Document();
-
-                        OpenFileDialog openFileDialog = new OpenFileDialog();
-                        DocCur.FileName = ".pdf";
-                        DocCur.DateCreated = DateTime.Today;
-
-                        //Find the category, hopefully 'Patient Information'
-                        //otherwise, just default to first one
-                        int iCategory = iCategory = DefB.Short[(int)DefCat.ImageCats][0].DefNum; ;
-                        for (int i = 0; i < DefB.Short[(int)DefCat.ImageCats].Length; i++)
-                        {
-                            if (DefB.Short[(int)DefCat.ImageCats][i].ItemName == "Patient Information")
-                            {
-                                iCategory = DefB.Short[(int)DefCat.ImageCats][i].DefNum;
-                            }
-
-                        }
-                        DocCur.DocCategory = iCategory;
-                        DocCur.ImgType = ImageType.Document;
-                        DocCur.Description = "New Patient Form";
-                        DocCur.PatNum = cd.PatCur.PatNum;
-                        Documents.Insert(DocCur,cd.PatCur);//this assigns a filename and saves to db
-
-
-                        try
-                        {
-
-                            // Convert the Base64 UUEncoded input into binary output.
-                            byte[] binaryData = System.Convert.FromBase64String(sPDF);
-
-                            // Write out the decoded data.
-                            System.IO.FileStream outFile = new System.IO.FileStream(cd.patFolder + DocCur.FileName, System.IO.FileMode.Create, System.IO.FileAccess.Write);
-                            outFile.Write(binaryData, 0, binaryData.Length);
-                            outFile.Close();
-                            //Above is the code to save the file to a particular directory from NewPatientForm.com
-                        }
-                        catch
-                        {
-                            MessageBox.Show(Lan.g(this, "Unable to write pdf file to disk."));
-                            Documents.Delete(DocCur);
-                        }
-
-
-
+						try {
+							cd.imageStore.ImportPdf(sPDF);
+						}
+						catch{		
+							MessageBox.Show(Lan.g(this, "Unable to write pdf file to disk."));
+						}
                     }
                     catch
                     {
