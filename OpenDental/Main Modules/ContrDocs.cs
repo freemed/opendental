@@ -30,7 +30,6 @@ using Tao.OpenGl;
 using CodeBase;
 using xImageDeviceManager;
 using OpenDentBusiness.Imaging;
-using OpenDental.Imaging.Business;
 using System.Text.RegularExpressions;
 using OpenDental.Imaging;
 

@@ -8,7 +8,6 @@ using System.Net;
 using System.Windows.Forms;
 using OpenDental.UI;
 using OpenDentBusiness;
-using OpenDental.Imaging.Business;
 using OpenDentBusiness.Imaging;
 
 namespace OpenDental{

@@ -20,7 +20,6 @@ using Tao.Platform.Windows;
 using SparksToothChart;
 using OpenDentBusiness;
 using CodeBase;
-using OpenDental.Imaging.Business;
 using OpenDentBusiness.Imaging;
 
 namespace OpenDental{
