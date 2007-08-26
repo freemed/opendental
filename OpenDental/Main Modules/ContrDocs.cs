@@ -1403,20 +1403,12 @@ namespace OpenDental{
 				MessageBox.Show(Lan.g(this,"No bitmap present on clipboard"));	
 				return;
 			}
-			Document doc=new Document();
-			doc.FileName=".jpg";
-			doc.DateCreated=DateTime.Today;
-			doc.DocCategory=GetCurrentCategory();
-			doc.PatNum=PatCur.PatNum;
-			doc.ImgType=ImageType.Photo;
-			Documents.Insert(doc,PatCur);//this assigns a filename and saves to db
-			string srcFile=ODFileUtils.CombinePaths(patFolder,doc.FileName);
+			Document doc;
 			try{
 				Bitmap pasteImage=(Bitmap)clipboard.GetData(DataFormats.Bitmap);
-				pasteImage.Save(srcFile);
+				doc = imageStore.Import(pasteImage, GetCurrentCategory());
 			}catch{
 				MessageBox.Show(Lan.g(this,"Error saving document."));
-				Documents.Delete(doc);
 				return;
 			}
 			FillDocList(false);

@@ -177,7 +177,7 @@ namespace OpenDental.Imaging {
 			return Encoding.ASCII.GetString(hash);
 		}
 
-		public void Import(string path, int docCategory) {
+		public Document Import(string path, int docCategory) {
 			Document doc = new Document();
 			//Document.Insert will use this extension when naming:
 			doc.FileName = Path.GetExtension(path);
@@ -193,6 +193,26 @@ namespace OpenDental.Imaging {
 				Documents.Delete(doc);
 				throw;
 			}
+			return doc;
+		}
+
+		public Document Import(Bitmap image, int docCategory) {
+			Document doc = new Document();
+			doc.FileName = ".jpg";
+			doc.DateCreated = DateTime.Today;
+			doc.DocCategory = docCategory;
+			doc.PatNum = Patient.PatNum;
+			doc.ImgType = ImageType.Photo;
+			Documents.Insert(doc, Patient);//this assigns a filename and saves to db
+			string srcFile = ODFileUtils.CombinePaths(patFolder, doc.FileName);
+			try {
+				image.Save(srcFile);
+			}
+			catch {
+				Documents.Delete(doc);
+				throw;
+			}
+			return doc;
 		}
 
 		public void DeleteImage(IList<Document> documents) {
