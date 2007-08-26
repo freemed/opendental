@@ -91,7 +91,6 @@
     <Compile Include="Business\Tooth.cs" />
     <Compile Include="Business\UserodB.cs" />
     <Compile Include="Data Interface\MiscData.cs" />
-    <Compile Include="Data Interface\RemotingClient.cs" />
     <Compile Include="DataAccess\DataCommand.cs" />
     <Compile Include="DataAccess\DataFieldAttribute.cs" />
     <Compile Include="DataAccess\DataFieldInfo.cs" />
@@ -121,6 +120,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="RemotingClient.cs" />
     <Compile Include="TableTypes\Account.cs" />
     <Compile Include="TableTypes\AccountingAutoPay.cs" />
     <Compile Include="TableTypes\Adjustment.cs" />

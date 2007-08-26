@@ -266,20 +266,20 @@ namespace OpenDental{
 			etrans.MessageText=messageText;
 			if(X12object.IsX12(messageText)){
 				X12object Xobj=new X12object(messageText);
-				if(X997.Is997(Xobj)){
+				if(Xobj.Is997()){
+					X997 x997=(X997)Xobj;
 					etrans.Etype=EtransType.Acknowledge_997;
-					//todo: analyze to figure out which e-claim is being acked.
-
-
-
-					//etrans.CarrierNum
-					//etrans.CarrierNum2
-					//etrans.ClaimNum
-					//etrans.PatNum
-					//etrans.BatchNumber;
-					//etrans.AckCode
-
-					//set ackcode for corresponding claims with same batch number.
+					etrans.BatchNumber=x997.GetBatchNumber();
+					string ack=x997.GetAckCode();
+					if(ack!=""){
+						//the ackCode needs to be set for the corresponding claims
+						string command="UPDATE etrans SET AckCode='"+POut.PString(ack)+"' WHERE BatchNumber="+POut.PInt(etrans.BatchNumber)
+							+" AND ClearinghouseNum="+POut.PInt(clearinghouseNum)
+							+" AND DateTimeTrans > "+POut.PDateT(dateTimeTrans.AddDays(-14))
+							+" AND DateTimeTrans < "+POut.PDateT(dateTimeTrans.AddDays(1));
+						General.NonQ(command);
+					}
+					//none of the other fields make sense, because this ack could refer to many claims.
 				}
 				else if(X277U.Is277U(Xobj)){
 					etrans.Etype=EtransType.StatusNotify_277;
@@ -289,7 +289,7 @@ namespace OpenDental{
 			else{//not X12
 				etrans.Etype=EtransType.TextReport;
 			}
-			
+			Insert(etrans);
 		}
 		
 		///<summary>DateTimeTrans can be handled automatically here.  No need to set it in advance, but it's allowed to do so.</summary>

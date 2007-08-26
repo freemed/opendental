@@ -31,7 +31,7 @@ namespace OpenDentBusiness{
 		public string MessageText;
 		///<summary>Maxes out at 999, then loops back to 1.  This is not a good key, but is a restriction of X12.  So dates must also be used to isolate the correct BatchNumber key.  Specific to one clearinghouse.  Only used with e-claims.  Claim will have BatchNumber, and 997 will have matching BatchNumber. (In X12 lingo, it's a transaction#)</summary>
 		public int BatchNumber;
-		///<summary>A=Accepted, R=Rejected.  More options will be added later.  The incoming 997 sets this flag automatically.  To find the 997, look for a matching BatchNumber with a similar date, since both the claims and the 997 will both have the same batch number.</summary>
+		///<summary>A=Accepted, R=Rejected, blank if not able to parse.  More options will be added later.  The incoming 997 sets this flag automatically.  To find the 997, look for a matching BatchNumber with a similar date, since both the claims and the 997 will both have the same batch number.</summary>
 		public string AckCode;
 
 

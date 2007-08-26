@@ -1,19 +1,42 @@
 using System;
+using OpenDentBusiness;
 
 namespace OpenDental.Eclaims
 {
 	///<summary></summary>
-	public class X997{
-		public static bool Is997(X12object xobj){
-			//There is only one transaction set per functional group, but I think there can be multiple functional groups
-			//if acking multiple 
-			if(xobj.functGroups.Count!=1){
-				return false;
+	public class X997:X12object{
+		
+		public int GetBatchNumber(){
+			if(this.functGroups[0].Transactions.Count!=1) {
+				return 0;
 			}
-			if(xobj.functGroups[0].Header.Get(1)=="997"){
-				return true;
+			X12Segment seg=functGroups[0].Transactions[0].GetSegmentByID("AK2");
+			if(seg==null) {
+				return 0;
 			}
-			return false;
+			string num=seg.Get(2);
+			try{
+				return PIn.PInt(num);
+			}
+			catch{
+				return 0;
+			}
+		}
+
+		///<summary>Will return "" if unable to determine.  But would normally return A=Accepted or R=Rejected.</summary>
+		public string GetAckCode(){
+			if(this.functGroups[0].Transactions.Count!=1){
+				return "";
+			}
+			X12Segment seg=functGroups[0].Transactions[0].GetSegmentByID("AK5");
+			if(seg==null){
+				return "";
+			}
+			string code=seg.Get(1);
+			if(code=="A" || code=="E"){//Accepted or accepted with Errors.
+				return "A";
+			}
+			return "R";//rejected
 		}
 
 		/*Example 997

@@ -155,45 +155,6 @@ namespace OpenDental{
 			}
 		}
 
-		/*private void comboClearhouse_SelectedIndexChanged(object sender, System.EventArgs e) {
-			ImportReportFiles();
-			if(Clearinghouses.List[comboClearhouse.SelectedIndex].CommBridge==EclaimsCommBridge.None
-				|| Clearinghouses.List[comboClearhouse.SelectedIndex].CommBridge==EclaimsCommBridge.Renaissance
-				|| Clearinghouses.List[comboClearhouse.SelectedIndex].CommBridge==EclaimsCommBridge.RECS)
-			{
-				//MsgBox.Show(this,"No built-in functionality for retrieving reports from this clearinghouse.");
-				//return;
-				butRetrieve.Visible=false;
-			}
-			else{
-				butRetrieve.Visible=true;
-			}
-			FillGrid();
-		}*/
-
-		/*private void FillGrid(){
-			listMain.Items.Clear();
-			if(comboClearhouse.Items.Count==0){
-				return;
-			}
-			
-		}*/
-
-		///<summary>Takes any files found in the reports folder for the clearinghouse, and imports them into the database.  Deletes the original files.  No longer any such thing as archive.</summary>
-		private void ImportReportFiles(){
-			if(!Directory.Exists(Clearinghouses.List[comboClearhouse.SelectedIndex].ResponsePath)){
-				//MsgBox.Show(this,"Clearinghouse does not have a valid Report Path set.");
-				return;
-			}
-			string[] files=Directory.GetFiles(Clearinghouses.List[comboClearhouse.SelectedIndex].ResponsePath);
-			for(int i=0;i<files.Length;i++){
-				Etranss.ProcessIncomingReport(
-					File.GetCreationTime(files[i]),
-					Clearinghouses.List[comboClearhouse.SelectedIndex].ClearinghouseNum,
-					File.ReadAllText(files[i]));
-			}
-		}
-
 		private void butRetrieve_Click(object sender,EventArgs e) {
 			if(comboClearhouse.SelectedIndex==-1) {
 				MsgBox.Show(this,"Please select a clearinghouse first.");
@@ -210,6 +171,7 @@ namespace OpenDental{
 			}
 			labelRetrieving.Visible=true;
 			RetrieveReports();
+			ImportReportFiles();
 			labelRetrieving.Visible=false;
 		}
 
@@ -276,49 +238,22 @@ namespace OpenDental{
 			if(!AutomaticMode){
 				MsgBox.Show(this,"Retrieval successful");
 			}
-			//FillGrid();
 		}
 
-		/*private void butArchive_Click(object sender, System.EventArgs e) {
-			if(listMain.Items.Count==0){
-				MsgBox.Show(this,"There are no reports to archive.");
+		///<summary>Takes any files found in the reports folder for the clearinghouse, and imports them into the database.  Deletes the original files.  No longer any such thing as archive.</summary>
+		private void ImportReportFiles() {
+			if(!Directory.Exists(Clearinghouses.List[comboClearhouse.SelectedIndex].ResponsePath)) {
+				//MsgBox.Show(this,"Clearinghouse does not have a valid Report Path set.");
 				return;
 			}
-			if(listMain.SelectedIndices.Count==0){
-				for(int i=0;i<listMain.Items.Count;i++){
-					listMain.SetSelected(i,true);
-				}
+			string[] files=Directory.GetFiles(Clearinghouses.List[comboClearhouse.SelectedIndex].ResponsePath);
+			for(int i=0;i<files.Length;i++) {
+				Etranss.ProcessIncomingReport(
+					File.GetCreationTime(files[i]),
+					Clearinghouses.List[comboClearhouse.SelectedIndex].ClearinghouseNum,
+					File.ReadAllText(files[i]));
 			}
-			if(!MsgBox.Show(this,true,"Move selected reports to the archive folder?")){
-				return;
-			}
-			//string respPath=Clearinghouses.List[comboClearhouse.SelectedIndex].ResponsePath;
-			for(int i=0;i<listMain.SelectedIndices.Count;i++){
-				ArchiveFile((string)listMain.Items[listMain.SelectedIndices[i]]);
-			}
-			FillGrid();
-		}*/
-
-		/*
-		///<summary>Supply the fileName including the full path. Moves it to an Archive folder within the original folder, renaming as necessary to avoid duplicate.</summary>
-		private void ArchiveFile(string fileName){
-			//original fileName actually includes full path
-			string archivePath=ODFileUtils.CombinePaths(Path.GetDirectoryName(fileName),"Archive");
-			if(!Directory.Exists(archivePath)){
-				Directory.CreateDirectory(archivePath);
-			}
-			//find a unique filename
-			string oldFileName=Path.GetFileNameWithoutExtension(fileName);//no extens
-			string extens=Path.GetExtension(fileName);
-			string newFileName=oldFileName+DateTime.Today.ToString("yyyy_MM_dd");//no extens
-			int i=0;
-			string uniqueFile=ODFileUtils.CombinePaths(archivePath,newFileName+extens);
-			while(File.Exists(uniqueFile)){
-				i++;
-				uniqueFile=ODFileUtils.CombinePaths(archivePath,newFileName+"("+i.ToString()+")"+extens);
-			}
-			File.Move(fileName,uniqueFile);
-		}*/
+		}
 
 		/*private void listMain_DoubleClick(object sender, System.EventArgs e) {
 			if(listMain.SelectedIndices.Count==0){

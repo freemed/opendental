@@ -24,6 +24,11 @@ namespace OpenDental.Eclaims
 			return false;
 		}
 
+		///<summary>This override is never used.</summary>
+		protected X12object(){
+
+		}
+
 		///<summary>Takes raw text and converts it into an X12Object.  Pass it in as a string array.</summary>
 		public X12object(string messageText){
 			messageText=messageText.Replace("\r","");
@@ -68,7 +73,18 @@ namespace OpenDental.Eclaims
 				}
 				//row=sr.ReadLine();
 			}
-			//}//using streamReader on filename
+		}
+
+		public bool Is997() {
+			//There is only one transaction set (ST/SE) per functional group (GS/GE), but I think there can be multiple functional groups
+			//if acking multiple 
+			if(this.functGroups.Count!=1) {
+				return false;
+			}
+			if(this.functGroups[0].Header.Get(1)=="997") {
+				return true;
+			}
+			return false;
 		}
 
 		private X12FunctionalGroup LastGroup(){
@@ -106,6 +122,15 @@ namespace OpenDental.Eclaims
 		///<summary>Supply the transaction header(ST) when creating this object.</summary>
 		public X12Transaction(X12Segment header){
 			
+		}
+
+		public X12Segment GetSegmentByID(string segID){
+			for(int i=0;i<Segments.Count;i++){
+				if(Segments[i].SegmentID==segID){
+					return Segments[i];
+				}
+			}
+			return null;
 		}
 	}
 
@@ -172,6 +197,8 @@ namespace OpenDental.Eclaims
 		///<summary>usually :</summary>
 		public string Subelement;
 	}
+
+
 
 }
 
