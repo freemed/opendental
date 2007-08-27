@@ -1641,19 +1641,19 @@ namespace OpenDental{
 			}
 			//Tell the thread to start processing (as soon as the thread is created, or as soon as otherwise 
 			//possible). Set() has no effect if the handle is already signaled.
-      settingHandle.Set();
-      if(myThread==null){//Create the thread if it has not been created, or if it was killed for some reason.
-        myThread=new Thread((ThreadStart)(delegate { Worker(); }));
-        myThread.IsBackground=true;
-        myThread.Start();
-      }
-      InvalidatedSettingsFlag=ApplySettings.NONE;
+			settingHandle.Set();
+			if(myThread==null){//Create the thread if it has not been created, or if it was killed for some reason.
+				myThread=new Thread((ThreadStart)(delegate { Worker(); }));
+				myThread.IsBackground=true;
+				myThread.Start();
+			}
+			InvalidatedSettingsFlag=ApplySettings.NONE;
 		}
 
 		///<summary>Applies crop and colors. Then, paints renderImage onto PictureBox1.</summary>
 		private void Worker() {
 			while(true){
-			  try{
+				try{
 					//Wait indefinitely for a signal to start processing again. Since the OS handles this function,
 					//this thread will not run even a single process cycle until a signal is recieved. This is ideal,
 					//since it means that we do not waste any CPU cycles when image processing is not currently needed.
@@ -1706,26 +1706,26 @@ namespace OpenDental{
 						}
 						RenderCurrentImage(new Document(),renderImage.Width,renderImage.Height,imageZoom*zoomFactor,imageTranslation);
 					}
-        }catch(ThreadAbortException){
-            return;	//Exit as requested. This can happen when the current document is being deleted, 
-										//or during shutdown of the program.
-        }catch(Exception){
-			    //We don't draw anyting on error (because most of the time it will be due to the current selection state).
-		    }
+				}catch(ThreadAbortException){
+					return;	//Exit as requested. This can happen when the current document is being deleted, 
+							//or during shutdown of the program.
+				}catch(Exception){
+					//We don't draw anyting on error (because most of the time it will be due to the current selection state).
+				}
 			}
 		}
 
-    ///<summary>Kills the image processing thread if it is currently running.</summary>
-    private void KillMyImageThreads(){
+		///<summary>Kills the image processing thread if it is currently running.</summary>
+		private void KillMyImageThreads(){
 			xRayImageController.KillXRayThread();//Stop the current xRay image thread if it is running.
-      if(myThread!=null){//Clear any previous image processing.
-        if(myThread.IsAlive){
-          myThread.Abort();//this is not recommended because it results in an exception.  But it seems to work.
-          myThread.Join();//Wait for thread to stop execution.
-        }
-        myThread=null;
-      }
-    }
+			if(myThread!=null){//Clear any previous image processing.
+				if(myThread.IsAlive){
+					myThread.Abort();//this is not recommended because it results in an exception.  But it seems to work.
+					myThread.Join();//Wait for thread to stop execution.
+				}
+				myThread=null;
+			}
+		}
 
 		///<summary>Handles rendering to the PictureBox of the image in its current state. The image calculations are not performed here, only rendering of the image is performed here, so that we can guarantee a fast display.</summary>
 		private void RenderCurrentImage(Document docCopy,int originalWidth,int originalHeight,float zoom,PointF translation) {
