@@ -2468,8 +2468,13 @@ namespace OpenDental{
 		}
 
 		private void butOpenFolder_Click(object sender, EventArgs e) {
-			string ProgName = @"C:\WINDOWS\explorer.exe";
-			Process.Start(ProgName, patFolder);
+			if(imageStore.OpenFolderSupported) {
+				string ProgName = @"C:\WINDOWS\explorer.exe";
+				Process.Start(ProgName, imageStore.FolderPath);
+			}
+			else {
+				MessageBox.Show(Lan.g(this, "Cannot open the folder in which the images are stored. This is most likely because the images are stored in a database, which cannot be browsed."));
+			}
 		}
 
 	}

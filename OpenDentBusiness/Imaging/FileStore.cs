@@ -371,6 +371,14 @@ namespace OpenDental.Imaging {
 			}
 		}
 
+		public bool OpenFolderSupported {
+			get { return true; }
+		}
+
+		public string FolderPath {
+			get { return patFolder; }
+		}
+
 		///<summary>Returns true if the given filename contains a supported file image extension.</summary>
 		public static bool HasImageExtension(string fileName) {
 			string ext = Path.GetExtension(fileName).ToLower();
