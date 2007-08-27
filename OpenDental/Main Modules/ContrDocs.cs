@@ -1781,8 +1781,7 @@ namespace OpenDental{
 				return;
 			}
 			Document nodeDoc=Documents.GetByNum(docNum);
-			string srcFileName=ODFileUtils.CombinePaths(patFolder,nodeDoc.FileName);
-			string ext=Path.GetExtension(srcFileName).ToLower();
+			string ext = imageStore.GetExtension(nodeDoc);
 			if(ext==".jpg" || ext==".jpeg" || ext==".gif") {
 				return;
 			}
@@ -1790,11 +1789,18 @@ namespace OpenDental{
 			//Specifically, multi-page faxes can be viewed more easily by one of our customers using the fax
 			//viewer. On Unix systems, it is imagined that an equivalent viewer will launch to allow the image
 			//to be viewed.
-			try{
-				Process.Start(srcFileName);
-			}catch(Exception ex){
-				MessageBox.Show(ex.Message);
-			}			
+			if(imageStore.FilePathSupported) {
+
+				try {
+					Process.Start(imageStore.GetFilePath(nodeDoc));
+				}
+				catch(Exception ex) {
+					MessageBox.Show(ex.Message);
+				}
+			}
+			else {
+				MessageBox.Show(Lan.g(this, "Cannot open the document in an external viewer. This is most likely because the images are stored in a database, which cannot be browsed."));
+			}
 		}
 
 		private void OnInfo_Click() {

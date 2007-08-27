@@ -379,6 +379,19 @@ namespace OpenDental.Imaging {
 			get { return patFolder; }
 		}
 
+		public string GetExtension(Document doc) {
+			string srcFileName = ODFileUtils.CombinePaths(patFolder, doc.FileName);
+			return Path.GetExtension(srcFileName).ToLower();
+		}
+
+		public bool FilePathSupported {
+			get { return true; }
+		}
+
+		public string GetFilePath(Document doc) {
+			return ODFileUtils.CombinePaths(patFolder, doc.FileName);
+		}
+
 		///<summary>Returns true if the given filename contains a supported file image extension.</summary>
 		public static bool HasImageExtension(string fileName) {
 			string ext = Path.GetExtension(fileName).ToLower();
