@@ -1349,16 +1349,15 @@ namespace OpenDental{
 			if(ContrApptSheet.IsWeeklyView) {
 				startDate=WeekStartDate;
 				endDate=WeekEndDate;
-				Calendar2.SetSelectionRange(startDate,endDate);
 			}
 			else {
 				startDate=Appointments.DateSelected;
 				endDate=Appointments.DateSelected;
-				Calendar2.SetDate(startDate);
 			}
 			if(startDate.Year<1880 || endDate.Year<1880) {
 				return;
 			}
+			Calendar2.SetSelectionRange(startDate, endDate);
 			if(PatCurNum==0){
 				//there cannot be a selected appointment if no patient is loaded.
 				ContrApptSingle.SelectedAptNum=-1;//fixes a minor bug.
