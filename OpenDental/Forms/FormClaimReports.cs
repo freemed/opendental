@@ -176,6 +176,10 @@ namespace OpenDental{
 		}
 
 		private void RetrieveReports() {
+			if(!AutomaticMode && Clearinghouses.List[comboClearhouse.SelectedIndex].ISA08=="113504607") {//TesiaLink
+				MsgBox.Show(this,"No need to Retrieve.  Available reports are automatically downloaded every three minutes.");
+				return;
+			}
 			if(Clearinghouses.List[comboClearhouse.SelectedIndex].CommBridge==EclaimsCommBridge.None
 				|| Clearinghouses.List[comboClearhouse.SelectedIndex].CommBridge==EclaimsCommBridge.Renaissance
 				|| Clearinghouses.List[comboClearhouse.SelectedIndex].CommBridge==EclaimsCommBridge.RECS)

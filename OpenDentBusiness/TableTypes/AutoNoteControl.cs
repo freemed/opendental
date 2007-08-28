@@ -12,8 +12,13 @@ namespace OpenDentBusiness {
 		public string ControlType;
 		///<summary>Is the text for the label the user wants</summary>
 		public string ControlLabel;
+		///<summary>The preface text</summary>
+		public string PrefaceText;
+		///<summary>If the control is a multi line text box then store the text here</summary>
+		public string MultiLineText;
 		///<summary>If the control is a combo box then the user puts the the selection options for the combo box here</summary>
 		public string ControlOptions;
+		
 
 		///<summary></summary>
 		public AutoNote Copy() {

@@ -549,6 +549,11 @@ namespace OpenDental{
 		}
 
 		private void OnEclaims_Click(){
+			Clearinghouse clearDefault=Clearinghouses.GetDefault();
+			if(clearDefault!=null && clearDefault.ISA08=="113504607" && Process.GetProcessesByName("TesiaLink").Length==0){
+				MsgBox.Show(this,"Please start TesiaLink first.");
+				return;
+			}
 			List<ClaimSendQueueItem> queueItems=new List<ClaimSendQueueItem>();//a list of queue items to send
 			if(gridMain.SelectedIndices.Length==0){
 				for(int i=0;i<listQueue.Length;i++){
