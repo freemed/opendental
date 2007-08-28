@@ -51,23 +51,23 @@
 				<include name="System.ServiceProcess.dll"/>
 				<include name="System.Windows.Forms.dll"/>
 				<include name="System.Xml.dll"/>
-                <!-- Building on Linux requires the Linux equivalent, of course -->
-                <include name="../Required dlls/Interop.Microsoft.Office.Core.dll"/>
-                <include name="../Required dlls/Interop.Word.dll"/>
-                <include name="../Required dlls/NDde.dll"/>
-                <include name="../Required dlls/RS232.dll"/>
-                <include name="../Required dlls/SigPlusNET.dll"/>
-                <include name="../Required dlls/Tao.OpenGl.dll"/>
-                <include name="../Required dlls/Tao.Platform.Windows.dll"/>
-                <include name="../Required dlls/VBbridges.dll"/>
-                <include name="../Required dlls/xImageDeviceManager.dll"/>
-                <include name="../Required dlls/CDT.dll"/>
-                <include name="${build.dir}/bin/OpenDentBusiness.dll"/>
-                <include name="${build.dir}/bin/ODR.dll"/>
-                <include name="${build.dir}/bin/RdlEngine.dll"/>
-                <include name="${build.dir}/bin/RdlViewer.dll"/>
-                <include name="${build.dir}/bin/SparksToothChart.dll"/>
-                <include name="${build.dir}/bin/CodeBase.dll"/>
+		                <!-- Building on Linux requires the Linux equivalent, of course -->
+		                <include name="../Required dlls/Interop.Microsoft.Office.Core.dll"/>
+		                <include name="../Required dlls/Interop.Word.dll"/>
+		                <include name="../Required dlls/NDde.dll"/>
+		                <include name="../Required dlls/RS232.dll"/>
+		                <include name="../Required dlls/SigPlusNET.dll"/>
+		                <include name="../Required dlls/Tao.OpenGl.dll"/>
+		                <include name="../Required dlls/Tao.Platform.Windows.dll"/>
+		                <include name="../Required dlls/VBbridges.dll"/>
+		                <include name="../Required dlls/xImageDeviceManager.dll"/>
+		                <include name="../Required dlls/CDT.dll"/>
+		                <include name="${build.dir}/bin/OpenDentBusiness.dll"/>
+		                <include name="${build.dir}/bin/ODR.dll"/>
+		                <include name="${build.dir}/bin/RdlEngine.dll"/>
+		                <include name="${build.dir}/bin/RdlViewer.dll"/>
+		                <include name="${build.dir}/bin/SparksToothChart.dll"/>
+		                <include name="${build.dir}/bin/CodeBase.dll"/>
 			</references>
 		</csc>
         <copy todir="${build.dir}/bin">
@@ -81,6 +81,7 @@
                 <include name="Tao.Platform.Windows.dll"/>
                 <include name="VBbridges.dll"/>
                 <include name="xImageDeviceManager.dll"/>
+                <include name="CDT.dll"/>
             </fileset>
         </copy>
         <copy todir="${build.dir}/bin">
