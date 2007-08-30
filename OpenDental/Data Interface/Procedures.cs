@@ -438,10 +438,15 @@ namespace OpenDental{
 			double retVal=0;
 			for(int i=0;i<List.Length;i++){
 				if(List[i].ProcStatus==ProcStat.C){//complete
+					double amt = List[i].ProcFee;
+					int qty = Int16.Parse(List[i].UnitQty);
+					if(qty > 0){
+						amt = amt * qty;
+					}
 					//cur=List[i];
 					//note: capitation estimates are now part of claimproc.WriteOff
 					//if(cur.CapCoPay==-1)//not capitation
-					retVal+=List[i].ProcFee;
+					retVal+=amt;//List[i].ProcFee;
 					//else//capitation
 					//	retVal+=cur.CapCoPay;
 				}

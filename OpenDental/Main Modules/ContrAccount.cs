@@ -1865,6 +1865,10 @@ namespace OpenDental {
 						tempAcctLine.Description=Lan.g(this,"(medical)")+" "+tempAcctLine.Description;
 					}
 					double fee=arrayProc[tempCountProc].ProcFee;
+					if(arrayProc[tempCountProc].UnitQty != ""){
+						int qty = Int16.Parse(arrayProc[tempCountProc].UnitQty);
+						fee*=qty;
+					}
 					double insEst=ClaimProcs.ProcEstNotReceived(ClaimProcList,arrayProc[tempCountProc].ProcNum);
 					double insPay=ClaimProcs.ProcInsPay(ClaimProcList,arrayProc[tempCountProc].ProcNum);
 					double pat=fee

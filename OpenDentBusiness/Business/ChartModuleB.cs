@@ -49,7 +49,7 @@ namespace OpenDentBusiness {
 			//but we won't actually fill this table with rows until the very end.  It's more useful to use a List<> for now.
 			List<DataRow> rows=new List<DataRow>();
 			//Procedures-----------------------------------------------------------------------------------------------------
-			string command="SELECT LaymanTerm,ProcDate,ProcStatus,ToothNum,Surf,Dx,"
+			string command="SELECT LaymanTerm,ProcDate,ProcStatus,ToothNum,Surf,Dx,UnitQty,"
 				+"procedurecode.ProcCode,ProcNum,procedurecode.Descript,"
 				+"provider.Abbr,ProcFee,ProcNumLab,appointment.AptDateTime,Priority,ToothRange,procedurelog.CodeNum "
 				+"FROM procedurelog "
@@ -156,7 +156,13 @@ namespace OpenDentBusiness {
 					row["procDate"]=dateT.ToShortDateString();
 				}
 				row["ProcDate"]=dateT;
-				row["procFee"]=PIn.PDouble(rawProcs.Rows[i]["ProcFee"].ToString()).ToString("F");
+				double amt = PIn.PDouble(rawProcs.Rows[i]["ProcFee"].ToString());
+				if(PIn.PInt(rawProcs.Rows[i]["UnitQty"].ToString()) > 0){
+					int qty = PIn.PInt(rawProcs.Rows[i]["UnitQty"].ToString());
+					amt *= qty;
+				}
+
+				row["procFee"]=amt.ToString("F");
 				row["ProcNum"]=rawProcs.Rows[i]["ProcNum"].ToString();
 				row["ProcNumLab"]=rawProcs.Rows[i]["ProcNumLab"].ToString();
 				row["procStatus"]=Lan.g("enumProcStat",((ProcStat)PIn.PInt(rawProcs.Rows[i]["ProcStatus"].ToString())).ToString());
