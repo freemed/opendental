@@ -37,18 +37,18 @@ namespace OpenDental {
 			this.textBoxTextControl = new System.Windows.Forms.TextBox();
 			this.label1 = new System.Windows.Forms.Label();
 			this.comboBoxControlType = new System.Windows.Forms.ComboBox();
-			this.label2 = new System.Windows.Forms.Label();
+			this.labelControlOptions = new System.Windows.Forms.Label();
 			this.textBoxControlOptions = new System.Windows.Forms.TextBox();
 			this.listBoxControlOptions = new System.Windows.Forms.ListBox();
 			this.textBoxControlLabel = new System.Windows.Forms.TextBox();
 			this.textBoxControlDescript = new System.Windows.Forms.TextBox();
 			this.labelControlType = new System.Windows.Forms.Label();
-			this.label4 = new System.Windows.Forms.Label();
+			this.labelControlLabel = new System.Windows.Forms.Label();
 			this.labelControlName = new System.Windows.Forms.Label();
 			this.textBoxTextPreface = new System.Windows.Forms.TextBox();
-			this.labelTextBefore = new System.Windows.Forms.Label();
+			this.labelTextPreface = new System.Windows.Forms.Label();
 			this.textBoxMultiLineText = new System.Windows.Forms.TextBox();
-			this.labelControlText = new System.Windows.Forms.Label();
+			this.labelControlTextMultiLineText = new System.Windows.Forms.Label();
 			this.butCancel = new OpenDental.UI.Button();
 			this.butOK = new OpenDental.UI.Button();
 			this.butAdd = new OpenDental.UI.Button();
@@ -175,15 +175,16 @@ namespace OpenDental {
 			this.comboBoxControlType.Name = "comboBoxControlType";
 			this.comboBoxControlType.Size = new System.Drawing.Size(121, 21);
 			this.comboBoxControlType.TabIndex = 0;
+			this.comboBoxControlType.SelectedIndexChanged += new System.EventHandler(this.comboBoxControlType_SelectedIndexChanged);
 			// 
-			// label2
+			// labelControlOptions
 			// 
-			this.label2.AutoSize = true;
-			this.label2.Location = new System.Drawing.Point(33, 364);
-			this.label2.Name = "label2";
-			this.label2.Size = new System.Drawing.Size(314, 13);
-			this.label2.TabIndex = 109;
-			this.label2.Text = "You can add options for the control below double click to remove";
+			this.labelControlOptions.AutoSize = true;
+			this.labelControlOptions.Location = new System.Drawing.Point(33, 364);
+			this.labelControlOptions.Name = "labelControlOptions";
+			this.labelControlOptions.Size = new System.Drawing.Size(314, 13);
+			this.labelControlOptions.TabIndex = 109;
+			this.labelControlOptions.Text = "You can add options for the control below double click to remove";
 			// 
 			// textBoxControlOptions
 			// 
@@ -195,10 +196,11 @@ namespace OpenDental {
 			// listBoxControlOptions
 			// 
 			this.listBoxControlOptions.FormattingEnabled = true;
-			this.listBoxControlOptions.Location = new System.Drawing.Point(100, 414);
+			this.listBoxControlOptions.Location = new System.Drawing.Point(100, 409);
 			this.listBoxControlOptions.Name = "listBoxControlOptions";
 			this.listBoxControlOptions.Size = new System.Drawing.Size(120, 147);
 			this.listBoxControlOptions.TabIndex = 7;
+			this.listBoxControlOptions.DoubleClick += new System.EventHandler(this.listBoxControlOptions_DoubleClick);
 			// 
 			// textBoxControlLabel
 			// 
@@ -222,15 +224,16 @@ namespace OpenDental {
 			this.labelControlType.Size = new System.Drawing.Size(31, 13);
 			this.labelControlType.TabIndex = 115;
 			this.labelControlType.Text = "Type";
+			this.labelControlType.Click += new System.EventHandler(this.labelControlType_Click);
 			// 
-			// label4
+			// labelControlLabel
 			// 
-			this.label4.AutoSize = true;
-			this.label4.Location = new System.Drawing.Point(33, 97);
-			this.label4.Name = "label4";
-			this.label4.Size = new System.Drawing.Size(33, 13);
-			this.label4.TabIndex = 114;
-			this.label4.Text = "Label";
+			this.labelControlLabel.AutoSize = true;
+			this.labelControlLabel.Location = new System.Drawing.Point(33, 97);
+			this.labelControlLabel.Name = "labelControlLabel";
+			this.labelControlLabel.Size = new System.Drawing.Size(33, 13);
+			this.labelControlLabel.TabIndex = 114;
+			this.labelControlLabel.Text = "Label";
 			// 
 			// labelControlName
 			// 
@@ -249,14 +252,14 @@ namespace OpenDental {
 			this.textBoxTextPreface.Size = new System.Drawing.Size(177, 57);
 			this.textBoxTextPreface.TabIndex = 3;
 			// 
-			// labelTextBefore
+			// labelTextPreface
 			// 
-			this.labelTextBefore.AutoSize = true;
-			this.labelTextBefore.Location = new System.Drawing.Point(33, 140);
-			this.labelTextBefore.Name = "labelTextBefore";
-			this.labelTextBefore.Size = new System.Drawing.Size(342, 13);
-			this.labelTextBefore.TabIndex = 118;
-			this.labelTextBefore.Text = "This text will appear right before the control text in the Auto Note output";
+			this.labelTextPreface.AutoSize = true;
+			this.labelTextPreface.Location = new System.Drawing.Point(33, 143);
+			this.labelTextPreface.Name = "labelTextPreface";
+			this.labelTextPreface.Size = new System.Drawing.Size(342, 13);
+			this.labelTextPreface.TabIndex = 118;
+			this.labelTextPreface.Text = "This text will appear right before the control text in the Auto Note output";
 			// 
 			// textBoxMultiLineText
 			// 
@@ -266,14 +269,14 @@ namespace OpenDental {
 			this.textBoxMultiLineText.Size = new System.Drawing.Size(177, 67);
 			this.textBoxMultiLineText.TabIndex = 4;
 			// 
-			// labelControlText
+			// labelControlTextMultiLineText
 			// 
-			this.labelControlText.AutoSize = true;
-			this.labelControlText.Location = new System.Drawing.Point(75, 246);
-			this.labelControlText.Name = "labelControlText";
-			this.labelControlText.Size = new System.Drawing.Size(207, 13);
-			this.labelControlText.TabIndex = 120;
-			this.labelControlText.Text = "Add Text for the Multi Line Text Box below";
+			this.labelControlTextMultiLineText.AutoSize = true;
+			this.labelControlTextMultiLineText.Location = new System.Drawing.Point(75, 246);
+			this.labelControlTextMultiLineText.Name = "labelControlTextMultiLineText";
+			this.labelControlTextMultiLineText.Size = new System.Drawing.Size(207, 13);
+			this.labelControlTextMultiLineText.TabIndex = 120;
+			this.labelControlTextMultiLineText.Text = "Add Text for the Multi Line Text Box below";
 			// 
 			// butCancel
 			// 
@@ -349,25 +352,27 @@ namespace OpenDental {
 			// FormAutoNoteControlEdit
 			// 
 			this.ClientSize = new System.Drawing.Size(467, 603);
-			this.Controls.Add(this.labelControlText);
+			this.Controls.Add(this.labelControlTextMultiLineText);
 			this.Controls.Add(this.textBoxMultiLineText);
-			this.Controls.Add(this.labelTextBefore);
+			this.Controls.Add(this.labelTextPreface);
 			this.Controls.Add(this.textBoxTextPreface);
 			this.Controls.Add(this.labelControlType);
-			this.Controls.Add(this.label4);
+			this.Controls.Add(this.labelControlLabel);
 			this.Controls.Add(this.labelControlName);
 			this.Controls.Add(this.comboBoxControlType);
 			this.Controls.Add(this.butCancel);
 			this.Controls.Add(this.butOK);
-			this.Controls.Add(this.label2);
+			this.Controls.Add(this.labelControlOptions);
 			this.Controls.Add(this.butAdd);
 			this.Controls.Add(this.textBoxControlOptions);
 			this.Controls.Add(this.listBoxControlOptions);
 			this.Controls.Add(this.textBoxControlLabel);
 			this.Controls.Add(this.textBoxControlDescript);
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+			this.MaximizeBox = false;
+			this.MinimizeBox = false;
 			this.Name = "FormAutoNoteControlEdit";
-			this.Text = "Auto Note Control Edit";
+			this.Text = "Auto Note Control Setup";
 			this.Load += new System.EventHandler(this.FormAutoNoteControlEdit_Load);
 			this.ResumeLayout(false);
 			this.PerformLayout();
@@ -393,18 +398,18 @@ namespace OpenDental {
 		private System.Windows.Forms.ComboBox comboBoxControlType;
 		private OpenDental.UI.Button butCancel;
 		private OpenDental.UI.Button butOK;
-		private System.Windows.Forms.Label label2;
+		private System.Windows.Forms.Label labelControlOptions;
 		private OpenDental.UI.Button butAdd;
 		private System.Windows.Forms.TextBox textBoxControlOptions;
 		private System.Windows.Forms.ListBox listBoxControlOptions;
 		private System.Windows.Forms.TextBox textBoxControlLabel;
 		private System.Windows.Forms.TextBox textBoxControlDescript;
 		private System.Windows.Forms.Label labelControlType;
-		private System.Windows.Forms.Label label4;
+		private System.Windows.Forms.Label labelControlLabel;
 		private System.Windows.Forms.Label labelControlName;
 		private System.Windows.Forms.TextBox textBoxTextPreface;
-		private System.Windows.Forms.Label labelTextBefore;
+		private System.Windows.Forms.Label labelTextPreface;
 		private System.Windows.Forms.TextBox textBoxMultiLineText;
-		private System.Windows.Forms.Label labelControlText;
+		private System.Windows.Forms.Label labelControlTextMultiLineText;
 	}
 }

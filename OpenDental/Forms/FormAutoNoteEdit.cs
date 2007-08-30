@@ -9,115 +9,165 @@ using System.Windows.Forms;
 using OpenDentBusiness;
 
 namespace OpenDental {
-	
-	public partial class FormAutoNoteEdit:Form {
+
+	public partial class FormAutoNoteEdit : Form {
 		public bool IsNew;
-		public string autoNoteToEdit;
+		public AutoNote AutoNoteCur;
 		List<AutoNoteControl> ControlsList;
-		List<AutoNote> AutoNoteList;
+		//List<AutoNote> AutoNoteList;
+		/// <summary>This is set to true if the user clicks on the edit control button</summary>
+		bool RefreshControlsToIncEdit=false;
+		string[] ControlsToInc;
 
 		public FormAutoNoteEdit() {
 			InitializeComponent();
 			Lan.F(this);
-		}		
+		}
 
-		private void FormAutoNoteEdit_Load(object sender,EventArgs e) {
-			//todo: fill controls on form
-			if (IsNew!=true) {
-				string controlOptions;
-				AutoNoteList=AutoNotes.AutoNoteEdit(autoNoteToEdit);
-				textBoxAutoNoteName.Text=AutoNoteList[0].AutoNoteName;
-				controlOptions=AutoNoteList[0].ControlsToInc;
-				string[] lines=controlOptions.Split(new char[] { '|' });
-				for (int i=0; i<lines.Length; i++) {
-					if (lines[i].ToString()!="") {
-						ControlsList=AutoNoteControls.ControlNumToName(lines[i].ToString());
-						listBoxControlsToIncl.Items.Add(ControlsList[0].Descript);
-					}
+		private void FormAutoNoteEdit_Load(object sender, EventArgs e) {
+			string controlOptions;
+			textBoxAutoNoteName.Text=AutoNoteCur.AutoNoteName;
+			controlOptions=AutoNoteCur.ControlsToInc;
+			string[] lines=controlOptions.Split(new char[] { '|' });
+			for (int i=0; i<lines.Length; i++) {
+				if (lines[i].ToString()!="") {
+					ControlsList=AutoNoteControls.ControlNumToName(lines[i].ToString());
+					listBoxControlsToIncl.Items.Add(ControlsList[0].Descript);
 				}
-				//todo fill the listBoxControlToIncl
 			}
-				fillListBoxControls();
-			
+			fillListBoxControls();
 		}
 
 		private void listBoxControlsToIncl_SelectedIndexChanged(object sender, EventArgs e) {
-			
+
 		}
 
 		private void listBoxControls_SelectedIndexChanged(object sender, EventArgs e) {
 			//Loads all the control info into the control viewer
+			if (listBoxControls.SelectedItem.ToString()=="") {
+				return;
+			}
 			string controlOptions;
 			ControlsList = AutoNoteControls.RefreshControlEdit(listBoxControls.SelectedItem.ToString());
 			textBoxDescriptControl.Text=ControlsList[0].Descript;
 			textBoxLabelControl.Text=ControlsList[0].ControlLabel;
 			textBoxTextControl.Text=ControlsList[0].MultiLineText;
 			textBoxTextPrefaceControl.Text=ControlsList[0].PrefaceText;
-			
 			listBoxOptionsControl.Items.Clear();
 			controlOptions=ControlsList[0].ControlOptions;
-			string[] lines=controlOptions.Split(new char[] {'|'});
+			string[] lines=controlOptions.Split(new char[] { '|' });
 			for (int i=0; i<lines.Length; i++) {
 				listBoxOptionsControl.Items.Add(lines[i].ToString());
 			}
-			
+			ControlContentViewerVisible(true);
 		}
 
-		private void butCreateControl_Click(object sender,EventArgs e) {
+		private void ControlContentViewerVisible(bool visible) {
+			if (visible == true) {
+				labelControl.Visible=true;
+				labelNameControl.Visible=true;
+				labelLabelControl.Visible=true;
+				labelPrefaceText.Visible=true;
+				labelText.Visible=true;
+				textBoxDescriptControl.Visible=true;
+				textBoxLabelControl.Visible=true;
+				textBoxTextPrefaceControl.Visible=true;
+				textBoxTextControl.Visible=true;
+				listBoxOptionsControl.Visible=true;
+				butEditControl.Visible=true;
+			}
+			else if (visible==false) {
+				labelControl.Visible=false;
+				labelNameControl.Visible=false;
+				labelLabelControl.Visible=false;
+				labelPrefaceText.Visible=false;
+				labelText.Visible=false;
+				textBoxDescriptControl.Visible=false;
+				textBoxLabelControl.Visible=false;
+				textBoxTextPrefaceControl.Visible=false;
+				textBoxTextControl.Visible=false;
+				listBoxOptionsControl.Visible=false;
+				butEditControl.Visible=false;
+			}
+		}
+
+		private void butCreateControl_Click(object sender, EventArgs e) {
 			//should launch FormAutoNoteControlEdit
-			FormAutoNoteControlEdit form=new FormAutoNoteControlEdit(false, null);
+			FormAutoNoteControlEdit form=new FormAutoNoteControlEdit();//false, null);
+			form.IsNew=true;
+			form.ControlCur=new AutoNoteControl();
 			form.ShowDialog();
 		}
 
-		private void butEditControl_Click(object sender,EventArgs e) {
+		private void butEditControl_Click(object sender, EventArgs e) {
 			//should launch FormAutoNoteControlEdit
-			//todo
+			//I did not have time to look closely at this:
+			/*
+			ControlsToInc=new string[listBoxControlsToIncl.Items.Count];
+			for (int i=0; i<listBoxControlsToIncl.Items.Count; i++) {
+				if (listBoxControlsToIncl.Items[i].ToString()!="") {
+					ControlsList=AutoNoteControls.ControlNameToNum(listBoxControlsToIncl.Items[i].ToString());
+					ControlsToInc[i]=ControlsList[0].AutoNoteControlNum.ToString();
+				}
+			}
+			RefreshControlsToIncEdit=true;*/
+			if (listBoxControls.SelectedItem.ToString()!="") {
+				FormAutoNoteControlEdit form = new FormAutoNoteControlEdit();//true, listBoxControls.SelectedItem.ToString());
+				form.IsNew=false;
+				form.ControlCur=null;//this needs work.  Use SelectedIndex, not SelectedItem.ToString to isolate the needed control. 
+				form.ShowDialog();
+			}
 		}
 
-		private void butOK_Click(object sender,EventArgs e) {
+		private void butOK_Click(object sender, EventArgs e) {
+			if (textBoxAutoNoteName.Text=="") {
+				MsgBox.Show(this, "Please enter a name for the Auto Note into the text box");
+				return;
+			}
+			bool IsUsed=AutoNotes.AutoNoteNameUsed(textBoxAutoNoteName.Text.ToString(),AutoNoteCur.AutoNoteName);
+			if(IsUsed){
+				MsgBox.Show(this, "This name is already used please choose a different name");
+				return;
+			}
+			if (listBoxControlsToIncl.Items.Count==0) {
+				MsgBox.Show(this, "Please add some controls to the Auto Note");
+				return;
+			}
 			//Save changes to database here
 			//Saves the items in the listboxControlsToIncl in a array that will be passed on 
-			if (textBoxAutoNoteName.Text!="") {
-				if (listBoxControlsToIncl.Items.Count!=0) {
-					if (IsNew==true) {
-						string[] controlsToInc;
-						int ArraySize;
-						controlsToInc = new string[listBoxControlsToIncl.Items.Count];
-						ArraySize = listBoxControlsToIncl.Items.Count;
-						for (int i = 0; i<listBoxControlsToIncl.Items.Count; i++) {
-							if (listBoxControlsToIncl.Items[i].ToString()!="") {
-								ControlsList=AutoNoteControls.ControlNameToNum(listBoxControlsToIncl.Items[i].ToString());
-								controlsToInc[i]=ControlsList[0].AutoNoteControlNum.ToString();
-							}
-						}
-						AutoNotes.Insert(textBoxAutoNoteName.Text.ToString(), controlsToInc, ArraySize);
-						this.Close();
-					}
-					else {
-						string[] controlsToInc;
-						int ArraySize;
-						controlsToInc = new string[listBoxControlsToIncl.Items.Count];
-						ArraySize = listBoxControlsToIncl.Items.Count;						
-						for (int i = 0; i<listBoxControlsToIncl.Items.Count; i++) {
-							if (listBoxControlsToIncl.Items[i].ToString()!="") {
-								ControlsList=AutoNoteControls.ControlNameToNum(listBoxControlsToIncl.Items[i].ToString());
-								controlsToInc[i]=ControlsList[0].AutoNoteControlNum.ToString();
-							}
-						}
-						AutoNotes.AutoNoteUpdate(autoNoteToEdit, textBoxAutoNoteName.Text.ToString(), controlsToInc, ArraySize);
-						this.Close();
+			if (IsNew) {
+				string[] controlsToInc;
+				int ArraySize;
+				controlsToInc = new string[listBoxControlsToIncl.Items.Count];
+				ArraySize = listBoxControlsToIncl.Items.Count;
+				for (int i = 0; i<listBoxControlsToIncl.Items.Count; i++) {
+					if (listBoxControlsToIncl.Items[i].ToString()!="") {
+						ControlsList=AutoNoteControls.ControlNameToNum(listBoxControlsToIncl.Items[i].ToString());
+						controlsToInc[i]=ControlsList[0].AutoNoteControlNum.ToString();
 					}
 				}
-				else {
-					MessageBox.Show(Lan.g(this, "Please add some Controls to the Auto Note"));
-				}
+				AutoNotes.Insert(textBoxAutoNoteName.Text.ToString(), controlsToInc, ArraySize);
+				this.Close();
 			}
-			else {
-				MessageBox.Show(Lan.g(this, "Please enter a Name"));
+			//The code below is used if this Auto Note being edited
+			if (!IsNew) {
+				string[] controlsToInc;
+				int ArraySize;
+				controlsToInc = new string[listBoxControlsToIncl.Items.Count];
+				ArraySize = listBoxControlsToIncl.Items.Count;
+				for (int i = 0; i<listBoxControlsToIncl.Items.Count; i++) {
+					if (listBoxControlsToIncl.Items[i].ToString()!="") {
+						ControlsList=AutoNoteControls.ControlNameToNum(listBoxControlsToIncl.Items[i].ToString());
+						controlsToInc[i]=ControlsList[0].AutoNoteControlNum.ToString();
+					}
+				}
+				//This is VERY wrong.  Update is performed by AutoNoteNum, not by name.
+				AutoNotes.Update(AutoNoteCur.AutoNoteName, textBoxAutoNoteName.Text.ToString(), controlsToInc, ArraySize);
+				this.Close();
 			}
 		}
 
-		private void butCancel_Click(object sender,EventArgs e) {
+		private void butCancel_Click(object sender, EventArgs e) {
 			this.Close();
 		}
 
@@ -128,12 +178,23 @@ namespace OpenDental {
 			listBoxControls.Items.Clear();
 			ControlsList=AutoNoteControls.Refresh();
 			for (int i=0; i<ControlsList.Count; i++) {
-			listBoxControls.Items.Add(ControlsList[i].Descript);
+				listBoxControls.Items.Add(ControlsList[i].Descript);
 			}
 		}
 
 
 		private void FormAutoNoteEdit_Activated(object sender, EventArgs e) {
+			if (RefreshControlsToIncEdit==true) {
+				listBoxControlsToIncl.Items.Clear();
+				for (int i=0; i<ControlsToInc.Length; i++) {
+					if (ControlsToInc[i].ToString()!=null) {
+						ControlsList=AutoNoteControls.ControlNumToName(ControlsToInc[i].ToString());
+						listBoxControlsToIncl.Items.Add(ControlsList[0].Descript);
+					}
+				}
+				RefreshControlsToIncEdit=false;
+				ControlsToInc=null;
+			}
 			fillListBoxControls();
 		}
 
@@ -143,16 +204,14 @@ namespace OpenDental {
 			}
 		}
 
-		private void listBoxControlsToIncl_MouseDoubleClick(object sender, MouseEventArgs e) {//Removes the selected item from the list
-			if (listBoxControlsToIncl.SelectedIndex!=-1) {
-				listBoxControlsToIncl.Items.Remove(listBoxControls.SelectedIndex);
-			}
-		}
-
 		private void listBoxOptionsControl_SelectedIndexChanged(object sender, EventArgs e) {
 
-		}	
+		}
 
-
+		private void listBoxControlsToIncl_DoubleClick(object sender, EventArgs e) {
+			if (listBoxControlsToIncl.SelectedIndex!=-1) {
+				listBoxControlsToIncl.Items.RemoveAt(listBoxControlsToIncl.SelectedIndex);
+			}
+		}
 	}
 }

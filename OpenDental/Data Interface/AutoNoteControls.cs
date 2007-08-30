@@ -9,7 +9,7 @@ using OpenDentBusiness;
 
 namespace OpenDental {
 	class AutoNoteControls {
-		
+
 		/// <summary>A list with all the control settings</summary>
 		public static List<AutoNoteControl> Refresh() {
 			string command = "SELECT * FROM autonotecontrol ";
@@ -89,12 +89,12 @@ namespace OpenDental {
 			return Listt;
 		}
 
-		public static void Insert(string controlType, string controlName, string controlLabel, string Prefacetext, string MultiLinetext, Array controlOptions, int arraySize) { 
-		string controlOptionsString=null;
-		for (int i=0; i<arraySize; i++) {
-			controlOptionsString = controlOptionsString + controlOptions.GetValue(i).ToString()+"|";
-		}
-		string command = "INSERT INTO autonotecontrol (AutoNoteControlNum,Descript,ControlType,ControlLabel,PrefaceText,MultiLineText,ControlOptions)"
+		public static void Insert(string controlType, string controlName, string controlLabel, string Prefacetext, string MultiLinetext, Array controlOptions, int arraySize) {
+			string controlOptionsString=null;
+			for (int i=0; i<arraySize; i++) {
+				controlOptionsString = controlOptionsString + controlOptions.GetValue(i).ToString()+"|";
+			}
+			string command = "INSERT INTO autonotecontrol (AutoNoteControlNum,Descript,ControlType,ControlLabel,PrefaceText,MultiLineText,ControlOptions)"
 			+"VALUES ("			
 			+"'DEFAULT', " 
 			+"'"+POut.PString(controlName)+"', " 
@@ -103,24 +103,57 @@ namespace OpenDental {
 			+"'"+POut.PString(Prefacetext)+"', "
 			+"'"+POut.PString(MultiLinetext)+"', "
 			+"'"+POut.PString(controlOptionsString)+"')";
-		General.NonQ(command);
+			General.NonQ(command);
+		}
+
+		/// <summary>
+		/// Used to save the changes to the Control to the database
+		/// </summary>
+		/// <param name="ControlToUpdate"></param>
+		/// The Name of the control to Update
+		/// <param name="ControlType"></param> 
+		/// <param name="Descripept"></param>
+		/// <param name="Label"></param>
+		/// <param name="Preface"></param>
+		/// <param name="MultiLineText"></param>
+		/// <param name="ControlOptions"></param>
+		/// <param name="ArraySize"></param>
+		/// The number of control options that will be added
+		public static void ControlUpdate(string ControlToUpdate, string ControlType, string Descript, string Label, string Preface, string MultiLineText, Array ControlOptions, int ArraySize) {
+			string controlOptions="";
+			for (int x=0; x<ArraySize; x++) {
+				controlOptions=controlOptions + ControlOptions.GetValue(x).ToString()+"|";
+			}
+			string command="UPDATE autonotecontrol "
+            +"SET ControlType = '"+POut.PString(ControlType)+"', "
+			+"Descript = '"+POut.PString(Descript)+"', "
+			+"ControlLabel = '"+POut.PString(Label)+"', "
+			+"PrefaceText = '"+POut.PString(Preface)+"', "
+			+"MultiLineText = '"+POut.PString(MultiLineText)+"', "
+			+"ControlOptions = '"+POut.PString(controlOptions)+"' "
+			+"WHERE Descript = '"+POut.PString(ControlToUpdate)+"'";
+			General.NonQ(command);
 		}
 
 		/// <summary>
 		/// Checks to see if the Control Name Already Exists.
 		/// </summary>
 		/// <param name="ControlName"></param>
+		/// The control name to search for		
+		/// <param name="OriginalControl"></param>
+		/// If you are editing a control you would add the name of the control you are editing hear.
+		/// This name will be ignored in the search. If else set to NULL
 		/// <returns></returns>
-		public static bool ControlNameUsed(string ControlName) {
+		public static bool ControlNameUsed(string ControlName,  string OriginalControlName) {
 			string command="SELECT Descript FROM autonotecontrol WHERE "
-			+"Descript = '"+ControlName+"'";
+			+"Descript = '"+ControlName+"'"+"And Descript != '"+OriginalControlName+"'";
 			DataTable table=General.GetTable(command);
 			bool IsUsed=false;
-			if (table.Rows.Count!=0) {//found duplicate control name
+			if (table.Rows.Count!=0) {//found duplicate control name				
 				IsUsed=true;
 			}
 			return IsUsed;
 		}
 	}
-	}
+}
 
