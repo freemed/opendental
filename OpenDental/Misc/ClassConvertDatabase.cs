@@ -5646,7 +5646,18 @@ namespace OpenDental{
 		private void To5_2_0() {
 			if(FromVersion<new Version("5.2.0.0")) {
 				string command;
-				
+				command="INSERT INTO preference VALUES('UseBillingAddressOnClaims','0')";
+				General.NonQEx(command);
+				command="INSERT INTO preference VALUES('PracticeBillingAddress','')";
+				General.NonQEx(command);
+				command="INSERT INTO preference VALUES('PracticeBillingAddress2','')";
+				General.NonQEx(command);
+				command="INSERT INTO preference VALUES('PracticeBillingCity','')";
+				General.NonQEx(command);
+				command="INSERT INTO preference VALUES('PracticeBillingST','')";
+				General.NonQEx(command);
+				command="INSERT INTO preference VALUES('PracticeBillingZip','')";
+				General.NonQEx(command);
 
 
 
