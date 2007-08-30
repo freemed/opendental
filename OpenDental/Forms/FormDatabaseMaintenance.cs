@@ -225,6 +225,8 @@ namespace OpenDental {
 			Application.DoEvents();
 			ClaimWriteoffSum();
 			Application.DoEvents();
+			ClaimPaymentCheckAmt();//also fixes resulting deposit misbalances.
+			Application.DoEvents();
 			ClaimPaymentDeleteWithNoSplits();
 			Application.DoEvents();
 			ClaimProcDeleteWithInvalidClaimNum();
@@ -666,6 +668,54 @@ namespace OpenDental {
 			int numberFixed=table.Rows.Count;
 			if(numberFixed>0 || checkShow.Checked) {
 				textLog.Text+=Lan.g(this,"Claim writeoff sums fixed: ")+numberFixed.ToString()+"\r\n";
+			}
+		}
+
+		///<Summary>also fixes resulting deposit misbalances.</Summary>
+		private void ClaimPaymentCheckAmt() {
+			//because of the way this is grouped, it will just get one of many patients for each
+			command=@"SELECT claimproc.ClaimPaymentNum,ROUND(SUM(InsPayAmt),2) _sumpay,ROUND(CheckAmt,2) _checkamt
+				FROM claimpayment,claimproc
+				WHERE claimpayment.ClaimPaymentNum=claimproc.ClaimPaymentNum
+				GROUP BY claimproc.ClaimPaymentNum
+				HAVING _sumpay!=_checkamt";
+			table=General.GetTable(command);
+			for(int i=0;i<table.Rows.Count;i++) {
+				//if(i==0){
+				//	textLog.Text+=Lan.g(this,"PRINT THIS FOR REFERENCE. Claim Payments fixed:")+"\r\n";
+				//}
+				//textLog.Text+="\r\n";
+				command="UPDATE claimpayment SET CheckAmt='"+POut.PDouble(PIn.PDouble(table.Rows[i]["_sumpay"].ToString()))+"' "
+					+"WHERE ClaimPaymentNum="+table.Rows[i]["ClaimPaymentNum"].ToString();
+				General.NonQ(command);
+			}
+			int numberFixed=table.Rows.Count;
+			if(numberFixed>0 || checkShow.Checked) {
+				textLog.Text+=Lan.g(this,"Claim payment sums fixed: ")+numberFixed.ToString()+"\r\n";
+			}
+			//now deposits which were affected by the changes above--------------------------------------------------
+			command=@"SELECT DepositNum,deposit.Amount,DateDeposit,
+				IFNULL((SELECT SUM(CheckAmt) FROM claimpayment WHERE claimpayment.DepositNum=deposit.DepositNum GROUP BY deposit.DepositNum),0)
+				+IFNULL((SELECT SUM(PayAmt) FROM payment WHERE payment.DepositNum=deposit.DepositNum GROUP BY deposit.DepositNum),0) _sum
+				FROM deposit
+				HAVING ROUND(_sum,2) != ROUND(deposit.Amount,2)";
+			table=General.GetTable(command);
+			for(int i=0;i<table.Rows.Count;i++) {
+				if(i==0) {
+					textLog.Text+=Lan.g(this,"PRINT THIS FOR REFERENCE. Deposit sums recalculated:")+"\r\n";
+				}
+				DateTime date=PIn.PDate(table.Rows[i]["DateDeposit"].ToString());
+				Double oldval=PIn.PDouble(table.Rows[i]["Amount"].ToString());
+				Double newval=PIn.PDouble(table.Rows[i]["_sum"].ToString());
+				textLog.Text+=date.ToShortDateString()+" "+Lan.g(this,"OldSum:")+oldval.ToString("c")
+					+", "+Lan.g(this,"NewSum:")+newval.ToString("c")+"\r\n";
+				command="UPDATE deposit SET Amount='"+POut.PDouble(PIn.PDouble(table.Rows[i]["_sum"].ToString()))+"' "
+					+"WHERE DepositNum="+table.Rows[i]["DepositNum"].ToString();
+				General.NonQ(command);
+			}
+			numberFixed=table.Rows.Count;
+			if(numberFixed>0 || checkShow.Checked) {
+				textLog.Text+=Lan.g(this,"Deposit sums fixed: ")+numberFixed.ToString()+"\r\n";
 			}
 		}
 
