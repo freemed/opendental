@@ -49,12 +49,13 @@ namespace OpenDental{
 				|| FromVersion.ToString()=="4.7.0.0"
 				|| FromVersion.ToString()=="4.8.0.0"
 				|| FromVersion.ToString()=="4.9.0.0"
-				|| FromVersion.ToString()=="5.0.0.0")
+				|| FromVersion.ToString()=="5.0.0.0"
+				|| FromVersion.ToString()=="5.1.0.0")
 			{
 				MsgBox.Show(this,"Cannot convert this database version which was only for development purposes.");
 				return false;
 			}
-			if(FromVersion < new Version("5.1.0.0")){
+			if(FromVersion < new Version("5.1.1.0")){
 				if(MessageBox.Show(Lan.g(this,"Your database will now be converted")+"\r"
 					+Lan.g(this,"from version")+" "+FromVersion.ToString()+"\r"
 					+Lan.g(this,"to version")+" "+ToVersion.ToString()+"\r"
@@ -5544,11 +5545,11 @@ namespace OpenDental{
 				command="UPDATE preference SET ValueString = '5.0.11.0' WHERE PrefName = 'DataBaseVersion'";
 				General.NonQEx(command);
 			}
-			To5_1_0();
+			To5_1_1();
 		}
 
-		private void To5_1_0() {
-			if(FromVersion<new Version("5.1.0.0")) {
+		private void To5_1_1() {
+			if(FromVersion<new Version("5.1.1.0")) {
 				string command;
 				command="DROP TABLE IF EXISTS claimvalcodelog";
 				General.NonQEx(command);
@@ -5636,15 +5637,13 @@ namespace OpenDental{
 				General.NonQEx(command);
 				command = "ALTER TABLE etrans ADD AckCode varchar(255)";
 				General.NonQEx(command);
-
-
-
-
-				command="UPDATE preference SET ValueString = '5.1.0.0' WHERE PrefName = 'DataBaseVersion'";
+				command="UPDATE preference SET ValueString = '5.1.1.0' WHERE PrefName = 'DataBaseVersion'";
 				General.NonQEx(command);
 			}
 			//To5_1_?();
 		}
+
+
 
 	}
 
