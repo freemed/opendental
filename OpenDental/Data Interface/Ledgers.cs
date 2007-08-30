@@ -92,7 +92,7 @@ namespace OpenDental{
 				wherePats+=" PatNum = '"+table.Rows[i][0].ToString()+"'";
 			}
 			//REGULAR PROCEDURES:
-			command="SELECT procdate,procfee FROM procedurelog"
+			command="SELECT procdate,procfee,unitqty FROM procedurelog"
 				+" WHERE procstatus = '2'"//complete
 				+" AND ("+wherePats+")";
 			table=General.GetTable(command);
@@ -100,7 +100,11 @@ namespace OpenDental{
 			for(int i=0;i<table.Rows.Count;i++){
 				pairs[i].Date=  PIn.PDate  (table.Rows[i][0].ToString());
 				//if(PIn.PDouble(table.Rows[i][2].ToString())==-1)//not a capitation proc
-				pairs[i].Value= PIn.PDouble(table.Rows[i][1].ToString());
+				double val = PIn.PDouble(table.Rows[i][1].ToString());
+				if(PIn.PInt(table.Rows[i][2].ToString()) > 0){
+					val *= PIn.PInt(table.Rows[i][2].ToString());
+				}
+				pairs[i].Value=val;
 				//else//capitation proc
 				//	pairs[i].Value= PIn.PDouble(table.Rows[i][2].ToString());
 			}
