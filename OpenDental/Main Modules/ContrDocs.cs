@@ -164,8 +164,6 @@ namespace OpenDental{
 
 		///<summary>The only reason this is public is for NewPatientForm.com functionality.</summary>
 		public Patient PatCur { get { return imageStore == null ? null : imageStore.Patient; } }
-		///<summary>The path to the patient folder, including the letter folder, and ending with \.  It's public for NewPatientForm.com functionality.</summary>
-		public string patFolder { get { return imageStore == null ? null : imageStore.PatFolder;} }
 		#endregion
 
 		///<summary></summary>
@@ -2414,37 +2412,44 @@ namespace OpenDental{
 		}
 
 		private void buttonClipboard_Click(object sender, EventArgs e) {
-			string theFolder = patFolder;
-			Clipboard.SetDataObject(theFolder.ToString());
-
+			if(imageStore.OpenFolderSupported) {
+				string theFolder = imageStore.FolderPath;
+				Clipboard.SetDataObject(theFolder.ToString());
+			}
+			else {
+				MessageBox.Show(Lan.g(this, "Cannot open the folder in which the images are stored. This is most likely because the images are stored in a database, which cannot be browsed."));
+			}
 		}
 
 		private void butCBSheet_Click(object sender, EventArgs e) {
-			this.Cursor = Cursors.AppStarting;
+			if(imageStore.OpenFolderSupported) {
+				this.Cursor = Cursors.AppStarting;
 
-			string ProgName = PrefB.GetString("WordProcessorPath");
-			//if (File.Exists(patFolder + @"~C&B Sheet.doc")){
-			//open existing file
-			//}; 
-			//else{
-			//copy new file there
-			string TheFile = patFolder + "CB-Sheet" + DateTime.Now.ToFileTime() + ".doc";
-			try {
-				//File.Copy(@"\\server\opendental\data\CB-Sheet.odt", TheFile);
-				File.Copy(((PrefB.GetString("DocPath")) + @"\"
-					+ "CB-Sheet.doc"), TheFile);
+				string ProgName = PrefB.GetString("WordProcessorPath");
+				//if (File.Exists(patFolder + @"~C&B Sheet.doc")){
+				//open existing file
+				//}; 
+				//else{
+				//copy new file there
+				string TheFile = imageStore.FolderPath + "CB-Sheet" + DateTime.Now.ToFileTime() + ".doc";
+				try {
+					//File.Copy(@"\\server\opendental\data\CB-Sheet.odt", TheFile);
+					File.Copy(((PrefB.GetString("DocPath")) + @"\"
+						+ "CB-Sheet.doc"), TheFile);
+				}
+				catch {
+				}//}
+				//string TheFile = patFolder + @"~C&B Sheet.doc";
+				try {
+					Process.Start(ProgName, TheFile);
+				}
+				catch {
+				}
+				this.Cursor = Cursors.Default;
 			}
-			catch {
-			}//}
-			//string TheFile = patFolder + @"~C&B Sheet.doc";
-			try {
-				Process.Start(ProgName, TheFile);
+			else {
+				MessageBox.Show(Lan.g(this, "Cannot open the folder in which the images are stored. This is most likely because the images are stored in a database, which cannot be browsed."));
 			}
-			catch {
-			}
-			this.Cursor = Cursors.Default;
-           
-
 		}
 
 		private void butCameraPic_Click(object sender, EventArgs e) {
