@@ -436,19 +436,16 @@ namespace OpenDental{
 		///<summary>Does not make any calls to db.</summary>
 		public static double ComputeBal(Procedure[] List){
 			double retVal=0;
-			for(int i=0;i<List.Length;i++){
-				if(List[i].ProcStatus==ProcStat.C){//complete
-					double amt = List[i].ProcFee;
-					int qty = Int16.Parse(List[i].UnitQty);
-					if(qty > 0){
-						amt = amt * qty;
+			double procFee=0;
+			double qty=0;
+			for(int i=0;i<List.Length;i++) {
+				if(List[i].ProcStatus==ProcStat.C) {//complete
+					procFee= List[i].ProcFee;
+					qty =PIn.PDouble(List[i].UnitQty);//handles 0 and blank
+					if(qty > 0) {
+						procFee = procFee * qty;
 					}
-					//cur=List[i];
-					//note: capitation estimates are now part of claimproc.WriteOff
-					//if(cur.CapCoPay==-1)//not capitation
-					retVal+=amt;//List[i].ProcFee;
-					//else//capitation
-					//	retVal+=cur.CapCoPay;
+					retVal+=procFee;//List[i].ProcFee;
 				}
 			}
 			return retVal;

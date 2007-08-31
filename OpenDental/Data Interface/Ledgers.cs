@@ -97,16 +97,16 @@ namespace OpenDental{
 				+" AND ("+wherePats+")";
 			table=General.GetTable(command);
 			pairs=new DateValuePair[table.Rows.Count];
+			double val;
+			double qty;
 			for(int i=0;i<table.Rows.Count;i++){
 				pairs[i].Date=  PIn.PDate  (table.Rows[i][0].ToString());
-				//if(PIn.PDouble(table.Rows[i][2].ToString())==-1)//not a capitation proc
-				double val = PIn.PDouble(table.Rows[i][1].ToString());
-				if(PIn.PInt(table.Rows[i][2].ToString()) > 0){
-					val *= PIn.PInt(table.Rows[i][2].ToString());
+				val=PIn.PDouble(table.Rows[i][1].ToString());
+				qty=PIn.PDouble(table.Rows[i][2].ToString());
+				if(qty > 0) {
+					val *= qty;
 				}
 				pairs[i].Value=val;
-				//else//capitation proc
-				//	pairs[i].Value= PIn.PDouble(table.Rows[i][2].ToString());
 			}
 			for(int i=0;i<pairs.Length;i++){
 				Bal[GetAgingType(pairs[i].Date)]+=pairs[i].Value;
