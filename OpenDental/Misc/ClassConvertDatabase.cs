@@ -5640,6 +5640,32 @@ namespace OpenDental{
 				command="UPDATE preference SET ValueString = '5.1.1.0' WHERE PrefName = 'DataBaseVersion'";
 				General.NonQEx(command);
 			}
+			To5_1_3();
+		}
+
+		private void To5_1_3() {
+			if(FromVersion<new Version("5.1.3.0")) {
+				string command="";
+				//after r708
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE computerpref ADD GraphicsDoubleBuffering varchar(1) default '0'";
+					General.NonQEx(command);
+				} else {//oracle.
+					command="ALTER TABLE computerpref ADD GraphicsDoubleBuffering varchar2(1) default '0'";
+					General.NonQEx(command);
+				}
+				command="ALTER TABLE computerpref ADD PreferredPixelFormatNum int default '0'";
+				General.NonQEx(command);
+
+
+
+
+
+
+
+				command="UPDATE preference SET ValueString = '5.1.3.0' WHERE PrefName = 'DataBaseVersion'";
+				General.NonQEx(command);
+			}
 			To5_2_0();
 		}
 
@@ -5657,10 +5683,7 @@ namespace OpenDental{
 				command="INSERT INTO preference VALUES('PracticeBillingST','')";
 				General.NonQEx(command);
 				command="INSERT INTO preference VALUES('PracticeBillingZip','')";
-				General.NonQEx(command);
-
-
-
+				General.NonQEx(command);	
 
 
 

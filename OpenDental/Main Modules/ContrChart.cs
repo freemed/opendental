@@ -2491,6 +2491,7 @@ namespace OpenDental{
 			addKeyBut.Visible=PrefB.GetBool("DistributorKey");
 			ComputerPref computerPrefs=ComputerPrefs.GetForLocalComputer();
 			toothChart.UseHardware=computerPrefs.GraphicsUseHardware;
+			toothChart.PreferredPixelFormatNumber=computerPrefs.PreferredPixelFormatNum;
 			toothChart.SimpleMode=computerPrefs.GraphicsSimple;	//Must be last preference set here, because this causes the 
 																													//pixel format to be recreated.
 			if(computerPrefs.GraphicsSimple){

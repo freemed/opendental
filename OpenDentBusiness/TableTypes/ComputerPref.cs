@@ -22,6 +22,10 @@ namespace OpenDentBusiness {
 		public int SensorPort;
 		///<summary>Indicates the exposure level to use when capturing from a Suni sensor. Values can be 1 through 7.</summary>
 		public int SensorExposure;
+		///<summary>Indicates if the user prefers double-buffered 3D tooth-chart (where applicable).</summary>
+		public bool GraphicsDoubleBuffering;
+		///<summary>Indicates the current pixel format by number which the user prefers.</summary>
+		public int PreferredPixelFormatNum;
 
 		public ComputerPref Copy(){
 			ComputerPref cp=new ComputerPref();
@@ -33,6 +37,8 @@ namespace OpenDentBusiness {
 			cp.SensorBinned=SensorBinned;
 			cp.SensorPort=SensorPort;
 			cp.SensorExposure=SensorExposure;
+			cp.GraphicsDoubleBuffering=GraphicsDoubleBuffering;
+			cp.PreferredPixelFormatNum=PreferredPixelFormatNum;
 			return cp;
 		}
 	}

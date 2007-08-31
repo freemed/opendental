@@ -34,6 +34,7 @@ namespace SparksToothChart {
 		private int hotTooth;
 		///<summary>The previous hotTooth.  If this is different than hotTooth, then mouse has just now moved to a new tooth.  Can be 0 to represent no previous.</summary>
 		private int hotToothOld;
+		int preferredPixelFormatNum;
 
 		public GraphicalToothChart() {
 			InitializeComponent();
@@ -166,6 +167,20 @@ namespace SparksToothChart {
 			}
 		}
 
+		public int PreferredPixelFormatNumber{
+			get{
+				if(simpleMode){
+					return 0;
+				}
+				return preferredPixelFormatNum;
+			}set{
+				if(simpleMode){
+					return;
+				}
+				preferredPixelFormatNum=value;
+			}
+		}
+
 		#endregion Properties
 
 		private void ResetControls(){
@@ -176,7 +191,7 @@ namespace SparksToothChart {
 			}
 			else{
 				//pictBox.Visible=false;
-				toothChart=new GraphicalToothChartControl(hardwareMode);
+				toothChart=new GraphicalToothChartControl(hardwareMode,preferredPixelFormatNum);
 				toothChart.ColorText=colorText;
 				toothChart.ColorBackground = colorBackground;
 				toothChart.Dock = System.Windows.Forms.DockStyle.Fill;

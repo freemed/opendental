@@ -91,6 +91,7 @@ namespace OpenDental{
 		private void FormToothChartingBig_Load(object sender,EventArgs e) {
 			ComputerPref computerPref=ComputerPrefs.GetForLocalComputer();
 			toothChart.UseHardware=computerPref.GraphicsUseHardware;
+			toothChart.PreferredPixelFormatNumber=computerPref.PreferredPixelFormatNum;
 			toothChart.SimpleMode=computerPref.GraphicsSimple;//Must be last preference set, last so that all
 																												//settings are caried through in the reinitialization
 																												//this line triggers.

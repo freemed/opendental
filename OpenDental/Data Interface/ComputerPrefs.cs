@@ -42,14 +42,16 @@ namespace OpenDental {
 					+"database maintenance tool, then call us for help if you still get this message.",
 					Logger.Severity.WARNING);
 			}
-			computerPref.ComputerPrefNum=			PIn.PInt		(table.Rows[0][0].ToString());
-			computerPref.ComputerName=				PIn.PString	(table.Rows[0][1].ToString());
-			computerPref.GraphicsUseHardware=	PIn.PBool		(table.Rows[0][2].ToString());
-			computerPref.GraphicsSimple=			PIn.PBool		(table.Rows[0][3].ToString());
-			computerPref.SensorType=					PIn.PString	(table.Rows[0][4].ToString());
-			computerPref.SensorBinned=				PIn.PBool		(table.Rows[0][5].ToString());
-			computerPref.SensorPort=					PIn.PInt		(table.Rows[0][6].ToString());
-			computerPref.SensorExposure=			PIn.PInt		(table.Rows[0][7].ToString());
+			computerPref.ComputerPrefNum=						PIn.PInt		(table.Rows[0][0].ToString());
+			computerPref.ComputerName=							PIn.PString	(table.Rows[0][1].ToString());
+			computerPref.GraphicsUseHardware=				PIn.PBool		(table.Rows[0][2].ToString());
+			computerPref.GraphicsSimple=						PIn.PBool		(table.Rows[0][3].ToString());
+			computerPref.SensorType=								PIn.PString	(table.Rows[0][4].ToString());
+			computerPref.SensorBinned=							PIn.PBool		(table.Rows[0][5].ToString());
+			computerPref.SensorPort=								PIn.PInt		(table.Rows[0][6].ToString());
+			computerPref.SensorExposure=						PIn.PInt		(table.Rows[0][7].ToString());
+			computerPref.GraphicsDoubleBuffering=		PIn.PBool		(table.Rows[0][8].ToString());
+			computerPref.PreferredPixelFormatNum=		PIn.PInt		(table.Rows[0][9].ToString());
 			return computerPref;
 		}
 
@@ -62,7 +64,7 @@ namespace OpenDental {
 			if(PrefB.RandomKeys){
 				command+="ComputerPrefNum,";
 			}			
-			command+="ComputerName,GraphicsUseHardware,GraphicsSimple,SensorType,SensorPort,SensorExposure,SensorBinned) VALUES(";
+			command+="ComputerName,GraphicsUseHardware,GraphicsSimple,SensorType,SensorPort,SensorExposure,SensorBinned,GraphicsDoubleBuffering,PreferredPixelFormatNum) VALUES(";
 			if(PrefB.RandomKeys){
 				command+="'"+POut.PInt(computerPref.ComputerPrefNum)+"',";
 			}
@@ -72,7 +74,9 @@ namespace OpenDental {
 				+"'"+POut.PString(computerPref.SensorType)+"',"
 				+"'"+POut.PBool(computerPref.SensorBinned)+"',"
 				+"'"+POut.PInt(computerPref.SensorPort)+"',"
-				+"'"+POut.PInt(computerPref.SensorExposure)+"')";
+				+"'"+POut.PInt(computerPref.SensorExposure)+"',"
+				+"'"+POut.PBool(computerPref.GraphicsDoubleBuffering)+"',"
+				+"'"+POut.PInt(computerPref.PreferredPixelFormatNum)+"')";
 			if(PrefB.RandomKeys){
 				General.NonQ(command);
 			}else{
@@ -88,7 +92,9 @@ namespace OpenDental {
 				+"SensorType='"+POut.PString(computerPref.SensorType)+"',"
 				+"SensorBinned='"+POut.PBool(computerPref.SensorBinned)+"',"
 				+"SensorPort='"+POut.PInt(computerPref.SensorPort)+"',"
-				+"SensorExposure='"+POut.PInt(computerPref.SensorExposure)+"' "
+				+"SensorExposure='"+POut.PInt(computerPref.SensorExposure)+"',"
+				+"GraphicsDoubleBuffering='"+POut.PBool(computerPref.GraphicsDoubleBuffering)+"',"
+				+"PreferredPixelFormatNum='"+POut.PInt(computerPref.PreferredPixelFormatNum)+"' "
 				+"WHERE ComputerPrefNum='"+POut.PInt(computerPref.ComputerPrefNum)+"'";
 			return General.NonQ(command);
 		}

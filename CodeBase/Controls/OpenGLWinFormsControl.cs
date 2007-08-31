@@ -55,6 +55,7 @@ using System.Text;
 using System.Windows.Forms;
 using System.Runtime.InteropServices;
 using System.Security;
+using System.Collections;
 
 
 using Tao.OpenGl;
@@ -160,7 +161,7 @@ namespace CodeBase {
 		///selection is returned in this reference variable, which corresponds to the returned Gdi.PIXELFORMATDESCRIPTOR. Specify a
 		///non-positive number for "don't care".
 		///</summary>
-		Gdi.PIXELFORMATDESCRIPTOR ChoosePixelFormatEx(System.IntPtr hdc,int p_bpp,int p_depth,int p_dbl,int p_acc,ref int formatRef){
+		protected Gdi.PIXELFORMATDESCRIPTOR ChoosePixelFormatEx(System.IntPtr hdc,int p_bpp,int p_depth,int p_dbl,int p_acc,ref int formatRef){
 			Logger.openlog.Log(this,"ChoosePixelFormatEx","Beginning",false,Logger.Severity.DEBUG);
 			Gdi.PIXELFORMATDESCRIPTOR pfd = new Gdi.PIXELFORMATDESCRIPTOR();
 			pfd.nSize = (short)Marshal.SizeOf(pfd);
@@ -288,19 +289,34 @@ namespace CodeBase {
 		/// Creates the device and rendering contexts using the supplied settings
 		/// in accumBits, colorBits, depthBits, and stencilBits.
 		/// </summary>
-		protected virtual void CreateContexts(IntPtr pDeviceContext) {
+		protected virtual void CreateContexts(IntPtr pDeviceContext,int preferredPixelFormatNum) {
 			deviceContext = pDeviceContext;
-
 			if(deviceContext == IntPtr.Zero) {
 				throw new Exception("CreateContexts: Unable to create an OpenGL device context");
 			}
+			bool invalidFormat=false;
 			int selectedFormat=100;//Don't try more than 100 formats (too time consuming).
-			Gdi.PIXELFORMATDESCRIPTOR pixelFormat=ChoosePixelFormatEx(deviceContext,//The window context.
-																																colorBits,//Bits-per-pixel of color
-																																depthBits,//Z-depth
-																																autoSwapBuffers?1:0,//Don't use double buffering.
-																																usehardware?1:0,
-																																ref selectedFormat);
+			Gdi.PIXELFORMATDESCRIPTOR pixelFormat=new Gdi.PIXELFORMATDESCRIPTOR();
+			pixelFormat.nSize=(short)Marshal.SizeOf(pixelFormat);
+			pixelFormat.nVersion=1;
+			if(preferredPixelFormatNum>0){
+				try{
+					_DescribePixelFormat(pDeviceContext,preferredPixelFormatNum,(uint)pixelFormat.nSize,ref pixelFormat);
+					selectedFormat=preferredPixelFormatNum;
+				}catch{
+					invalidFormat=true;
+				}
+			}else{
+				invalidFormat=true;
+			}
+			if(invalidFormat){//Automatically select an most-commonly safe pixel format.
+				pixelFormat=ChoosePixelFormatEx(deviceContext,//The window context.
+																				colorBits,//Bits-per-pixel of color
+																				depthBits,//Z-depth
+																				autoSwapBuffers?1:0,//Don't use double buffering.
+																				usehardware?1:0,
+																				ref selectedFormat);
+			}
 			//Make sure the requested pixel format is available
 			if(selectedFormat == 0) {
 				throw new Exception("CreateContexts: Unable to find a suitable pixel format");
@@ -381,23 +397,179 @@ namespace CodeBase {
 
 		#endregion
 
-		#region Public Methods
+		#region Public Methods And Objects
 
-		public void TaoInitializeContexts() {
+		public class PixelFormatValue:IComparable {
+			public Gdi.PIXELFORMATDESCRIPTOR pfd;
+			public long q;
+			public int formatNumber;
+
+			public int CompareTo(object obj) {
+				PixelFormatValue other=(PixelFormatValue)obj;
+				//Format desire is of most importance.
+				if(other.q>q) {
+					return 1;
+				} else if(other.q<q) {
+					return -1;
+				}
+				//Next, sort by color depth, with greatest color depth first.
+				if(other.pfd.cColorBits>pfd.cColorBits) {
+					return 1;
+				} else if(other.pfd.cColorBits<pfd.cColorBits) {
+					return -1;
+				}
+				//Next, sort by z-buffer depth, with greatest z-depth first.
+				if(other.pfd.cDepthBits>pfd.cDepthBits) {
+					return 1;
+				} else if(other.pfd.cDepthBits<pfd.cDepthBits) {
+					return -1;
+				}
+				//Now by format number.
+				if(other.formatNumber>formatNumber){
+					return 1;
+				}else if(other.formatNumber<formatNumber){
+					return -1;
+				}
+				//At this point the formats are considered equivalent.
+				return 0;
+			}
+		};
+
+		public static PixelFormatValue[] PrioritizePixelFormats(Gdi.PIXELFORMATDESCRIPTOR[] unsortedFormats,int preferredPixelBits,int preferredDepthBits,bool requireDoubleBuffering,bool requireHardwareAccerleration) {
+			ArrayList sortedFormatsByQValue=new ArrayList();
+			for(int i=0;i<unsortedFormats.Length;i++) {
+				Gdi.PIXELFORMATDESCRIPTOR pfd=unsortedFormats[i];
+				long bpp=pfd.cColorBits;
+				long depth=pfd.cDepthBits;
+				bool pal=(pfd.iPixelType==Gdi.PFD_TYPE_COLORINDEX);
+				bool icd=(pfd.dwFlags&Gdi.PFD_GENERIC_FORMAT)==0&&
+					(pfd.dwFlags&Gdi.PFD_GENERIC_ACCELERATED)==0;//full hardware accel.
+				bool mcd=(pfd.dwFlags&Gdi.PFD_GENERIC_FORMAT)!=0&&
+					(pfd.dwFlags&Gdi.PFD_GENERIC_ACCELERATED)!=0;//general/partial hardware accel.
+				bool soft=(pfd.dwFlags&Gdi.PFD_GENERIC_FORMAT)!=0&&
+					(pfd.dwFlags&Gdi.PFD_GENERIC_ACCELERATED)==0;//software only
+				bool opengl=(pfd.dwFlags&Gdi.PFD_SUPPORT_OPENGL)!=0;
+				bool window=(pfd.dwFlags&Gdi.PFD_DRAW_TO_WINDOW)!=0;
+				bool bitmap=(pfd.dwFlags&Gdi.PFD_DRAW_TO_BITMAP)!=0;
+				bool dbuff=(pfd.dwFlags&Gdi.PFD_DOUBLEBUFFER)!=0;
+				long q=0;//Value indicating the level of desire requested of the current format.
+				//Recognize formats which do not meet minimum requirements first and foremost.
+				if(!opengl||!window||bpp<8||depth<8||pal||requireDoubleBuffering!=dbuff||
+					(requireHardwareAccerleration&&soft&&!mcd&&!icd)||(!requireHardwareAccerleration&&!soft&&(mcd||icd))) {
+					continue;
+				}
+				//Check that color depth meets requested depth or better. Penalty for color-depths which are less than the requested.
+				if(bpp>=preferredPixelBits) {
+					q+=0x0800;
+				} else {
+					q-=0x0800*(preferredPixelBits-bpp);
+				}
+				//Check that z-depth meets requested z-depth or better. Penalty for z-depths which are less than the requested.
+				if(depth>=preferredDepthBits) {
+					q+=0x0400;
+				} else {
+					q-=0x0400*(preferredDepthBits-depth);
+				}
+				//We are pretty much neutral with bitmapped formats, as long as the format supports windowed rendering.
+				//Formats which are bitmapped only are not valid for our uses and lead to blank OpenGL displays. For this
+				//reason, there is a slight penalty for bitmapped formats (which really only will make a difference if
+				//this format is windowed).
+				if(bitmap) {
+					q-=0x0001;
+				}
+				PixelFormatValue pfv=new PixelFormatValue();
+				pfv.pfd=pfd;
+				pfv.q=q;
+				pfv.formatNumber=i+1;
+				sortedFormatsByQValue.Add(pfv);
+			}
+			sortedFormatsByQValue.Sort();
+			return (PixelFormatValue[])sortedFormatsByQValue.ToArray(typeof(PixelFormatValue));
+		}
+
+		///<summary>Returns the pixel formats from 1 to Max(maximumCount,maximum available pixel formats).</summary>
+		public static Gdi.PIXELFORMATDESCRIPTOR[] GetPixelFormats(System.IntPtr hdc,int maximumCount) {
+			Gdi.PIXELFORMATDESCRIPTOR pfd=new Gdi.PIXELFORMATDESCRIPTOR();
+			pfd.nSize=(short)Marshal.SizeOf(pfd);
+			pfd.nVersion=1;
+			int numFormats=Math.Max(Math.Min(maximumCount,_DescribePixelFormat(hdc,1,(uint)pfd.nSize,ref pfd)),0);
+			Gdi.PIXELFORMATDESCRIPTOR[] pixelFormats=new Gdi.PIXELFORMATDESCRIPTOR[numFormats];
+			for(int i=0;i<pixelFormats.Length;i++) {
+				pixelFormats[i]=new Gdi.PIXELFORMATDESCRIPTOR();
+				pixelFormats[i].nSize=(short)Marshal.SizeOf(pixelFormats[i]);
+				pixelFormats[i].nVersion=1;
+				_DescribePixelFormat(hdc,i+1,(uint)pixelFormats[i].nSize,ref pixelFormats[i]);
+			}
+			return pixelFormats;
+		}
+
+		///<summary>Does the pixel format support a color palette?</summary>
+		public static bool FormatUsesPalette(Gdi.PIXELFORMATDESCRIPTOR pfd) {
+			return (pfd.iPixelType==Gdi.PFD_TYPE_COLORINDEX);
+		}
+
+		///<summary>Does the pixel format support full hardware acceleration?</summary>
+		public static bool FormatIsICD(Gdi.PIXELFORMATDESCRIPTOR pfd) {
+			return (pfd.dwFlags&Gdi.PFD_GENERIC_FORMAT)==0&&
+						(pfd.dwFlags&Gdi.PFD_GENERIC_ACCELERATED)==0;
+		}
+
+		///<summary>Does the pixel format support general hardware acceleration?</summary>
+		public static bool FormatIsMCD(Gdi.PIXELFORMATDESCRIPTOR pfd) {
+			return (pfd.dwFlags&Gdi.PFD_GENERIC_FORMAT)!=0&&
+						(pfd.dwFlags&Gdi.PFD_GENERIC_ACCELERATED)!=0;
+		}
+
+		///<summary>Returns true if the given pixel format supports some kind of hardware acceleration.</summary>
+		public static bool FormatSupportsAcceleration(Gdi.PIXELFORMATDESCRIPTOR pfd) {
+			return FormatIsICD(pfd)||FormatIsMCD(pfd);
+		}
+
+		///<summary>Does the pixel format only allow software rendering?</summary>
+		public static bool FormatIsSoftwareOnly(Gdi.PIXELFORMATDESCRIPTOR pfd) {
+			return (pfd.dwFlags&Gdi.PFD_GENERIC_FORMAT)!=0&&
+						(pfd.dwFlags&Gdi.PFD_GENERIC_ACCELERATED)==0;
+		}
+
+		///<summary>Returns true if the given pixel format supports OpenGL rendering, false otherwise.</summary>
+		public static bool FormatSupportsOpenGL(Gdi.PIXELFORMATDESCRIPTOR pfd) {
+			return (pfd.dwFlags&Gdi.PFD_SUPPORT_OPENGL)!=0;
+		}
+
+		///<summary>Returns true if the given pixel format supports windowed rendering, false otherwise.</summary>
+		public static bool FormatSupportsWindow(Gdi.PIXELFORMATDESCRIPTOR pfd) {
+			return (pfd.dwFlags&Gdi.PFD_DRAW_TO_WINDOW)!=0;
+		}
+
+		///<summary>Returns true if the given pixel format supports bitmapped rendering, false otherwise.</summary>
+		public static bool FormatSupportsBitmap(Gdi.PIXELFORMATDESCRIPTOR pfd) {
+			return (pfd.dwFlags&Gdi.PFD_DRAW_TO_BITMAP)!=0;
+		}
+
+		///<summary>Returns true if the given pixel format supports double-buffering, false otherwise.</summary>
+		public static bool FormatSupportsDoubleBuffering(Gdi.PIXELFORMATDESCRIPTOR pfd) {
+			return (pfd.dwFlags&Gdi.PFD_DOUBLEBUFFER)!=0;
+		}
+
+		public IntPtr GetHDC(){
+			return User.GetDC(this.Handle);
+		}
+
+		public void TaoInitializeContexts(int preferredPixelFormatNum) {
 			//Make sure the handle for this control has been created
 			if(this.Handle==IntPtr.Zero) {
 				throw new Exception("CreateContexts: The control's window handle has not been created.");
 			}
-			TaoInitializeContexts(User.GetDC(this.Handle));
+			TaoInitializeContexts(GetHDC(),preferredPixelFormatNum);
 		}
 
 		/// <summary>
 		/// Creates device and rendering contexts then fires the user-defined SetupContext event
 		/// (if the contexts have not already been created). Call this in your initialization routine.
 		/// </summary>
-		public void TaoInitializeContexts(IntPtr pDeviceContext) {
+		public void TaoInitializeContexts(IntPtr pDeviceContext,int preferredPixelFormatNum) {
 			if(!ContextsReady) {
-				CreateContexts(pDeviceContext);
+				CreateContexts(pDeviceContext,preferredPixelFormatNum);
 				//Fire the user-defined TaoSetupContext event
 				if(TaoSetupContext != null) {
 					TaoSetupContext(this,null);
@@ -446,7 +618,7 @@ namespace CodeBase {
 			//Only draw with OpenGL if rendering is enabled (disabled by default for designing)
 			if(renderEnabled) {
 				//Initialize the device and rendering contexts if the user hasn't already
-				TaoInitializeContexts(e.Graphics.GetHdc());
+				//TaoInitializeContexts(e.Graphics.GetHdc());
 
 				//Make this the current context
 				if(autoMakeCurrent) {
