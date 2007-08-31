@@ -2192,26 +2192,8 @@ namespace OpenDental{
 					break;
 			}
 			//Create the document object in the database for this mount image.
-			string fileExtention=".bmp";//The file extention to save the greyscale image as.
 			Bitmap capturedImage=xRayImageController.capturedImage;
-			Document doc=new Document();
-			doc.MountItemNum=selectionMountItems[hotDocument].MountItemNum;
-			doc.DegreesRotated=rotationAngle;
-			doc.ImgType=ImageType.Radiograph;
-			doc.FileName=fileExtention;
-			doc.DateCreated=DateTime.Today;
-			doc.PatNum=PatCur.PatNum;
-			doc.DocCategory=GetCurrentCategory();
-			doc.WindowingMin=PrefB.GetInt("ImageWindowingMin");
-			doc.WindowingMax=PrefB.GetInt("ImageWindowingMax");
-			Documents.Insert(doc,PatCur);//creates filename and saves to db
-			try{
-				capturedImage.Save(ODFileUtils.CombinePaths(patFolder,doc.FileName),ImageFormat.Bmp);
-			}catch(Exception ex){
-				Documents.Delete(doc);
-				//Raise an exception in the capture thread.
-				throw new Exception(Lan.g(this,"Unable to save captured XRay image as document")+": "+ex.Message);
-			}
+			Document doc = imageStore.ImportCapturedImage(capturedImage, rotationAngle, selectionMountItems[hotDocument].MountItemNum, GetCurrentCategory());
 			currentImages[hotDocument]=capturedImage;
 			curImageWidths[hotDocument]=capturedImage.Width;
 			curImageHeights[hotDocument]=capturedImage.Height;

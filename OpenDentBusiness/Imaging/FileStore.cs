@@ -282,6 +282,30 @@ namespace OpenDental.Imaging {
 			return doc;
 		}
 
+		public Document ImportCapturedImage(Bitmap image, short rotationAngle, int mountItemNum, int docCategory) {
+			string fileExtention = ".bmp";//The file extention to save the greyscale image as.
+			Document doc = new Document();
+			doc.MountItemNum = mountItemNum;
+			doc.DegreesRotated = rotationAngle;
+			doc.ImgType = ImageType.Radiograph;
+			doc.FileName = fileExtention;
+			doc.DateCreated = DateTime.Today;
+			doc.PatNum = Patient.PatNum;
+			doc.DocCategory = docCategory;
+			doc.WindowingMin = PrefB.GetInt("ImageWindowingMin");
+			doc.WindowingMax = PrefB.GetInt("ImageWindowingMax");
+			Documents.Insert(doc, Patient);//creates filename and saves to db
+			try {
+				image.Save(ODFileUtils.CombinePaths(patFolder, doc.FileName), ImageFormat.Bmp);
+			}
+			catch(Exception ex) {
+				Documents.Delete(doc);
+				//Raise an exception in the capture thread.
+				throw new Exception(Lan.g("ContrDocs", "Unable to save captured XRay image as document") + ": " + ex.Message);
+			}
+			return doc;
+		}
+
 		public void DeleteImage(IList<Document> documents) {
 			for(int i = 0; i < documents.Count; i++) {
 				if(documents[i] == null) {
