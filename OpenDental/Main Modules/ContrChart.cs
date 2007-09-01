@@ -2494,6 +2494,9 @@ namespace OpenDental{
 			toothChart.PreferredPixelFormatNumber=computerPrefs.PreferredPixelFormatNum;
 			toothChart.SimpleMode=computerPrefs.GraphicsSimple;	//Must be last preference set here, because this causes the 
 																													//pixel format to be recreated.
+			//The preferred pixel format number changes to the selected pixel format number after a context is chosen.
+			computerPrefs.PreferredPixelFormatNum=toothChart.PreferredPixelFormatNumber;
+			ComputerPrefs.Update(computerPrefs);
 			if(computerPrefs.GraphicsSimple){
 				butBig.Visible=false;				
 			}else{

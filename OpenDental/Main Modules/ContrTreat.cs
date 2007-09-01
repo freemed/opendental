@@ -1622,6 +1622,9 @@ namespace OpenDental{
 				toothChart.SimpleMode=computerPrefs.GraphicsSimple;	//Must be last setting set for preferences, because
 																														//this is the line where the device pixel format is
 																														//recreated.
+																														//The preferred pixel format number changes to the selected pixel format number after a context is chosen.
+				computerPrefs.PreferredPixelFormatNum=toothChart.PreferredPixelFormatNumber;
+				ComputerPrefs.Update(computerPrefs);
 				this.Controls.Add(toothChart);
 				toothChart.BringToFront();
 				toothChart.ResetTeeth();

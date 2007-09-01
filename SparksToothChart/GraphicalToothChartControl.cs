@@ -61,6 +61,7 @@ namespace SparksToothChart {
 		private string[][] letters;
 		///<summary>This gets set to true during certain operations where we do not need to redraw all the teeth.  Specifically, during tooth selection where only the color of the tooth number text needs to change.  In this case, the rest of the scene will not be rendered again.</summary>
 		private bool suspendRendering;
+		private int selectedPixelFormat;
 
 		///<summary>Specify the hardware mode to create the tooth chart with. Set hardwareMode=true to try for hardware accelerated graphics, and set hardwareMode=false to try and get software graphics.</summary>
 		public GraphicalToothChartControl(bool hardwareMode,int preferredPixelFormatNum) {
@@ -68,7 +69,7 @@ namespace SparksToothChart {
 			InitializeComponent();
 			this.TaoSetupContext += new System.EventHandler(ToothChart_TaoSetupContext);
 			this.TaoRenderScene += new System.EventHandler(ToothChart_TaoRenderScene);
-			TaoInitializeContexts(preferredPixelFormatNum);
+			selectedPixelFormat=TaoInitializeContexts(preferredPixelFormatNum);
 			TaoRenderEnabled=true;
 			WidthProjection=130;
 			ListToothGraphics=new ToothGraphicCollection();
@@ -109,6 +110,7 @@ namespace SparksToothChart {
 		
 
 		private void ToothChart_TaoSetupContext(object sender, System.EventArgs e){//event from base class when context needs to be setup.
+		
 			MakeRasterFont();
 			//TaoInitializeContexts();//initializes the device context for the control.
 			//Color backColor=ClearColor;
@@ -180,6 +182,12 @@ namespace SparksToothChart {
 				Gl.glClearColor((float)ColorBackground.R/255f,(float)ColorBackground.G/255f,(float)ColorBackground.B/255f,0f);
 				Invalidate();
 			}
+		}
+
+		public int SelectedPixelFormatNumber {
+				get{
+						return selectedPixelFormat;
+				}
 		}
 
 		#endregion Properties

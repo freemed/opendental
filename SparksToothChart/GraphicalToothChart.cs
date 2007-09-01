@@ -169,14 +169,8 @@ namespace SparksToothChart {
 
 		public int PreferredPixelFormatNumber{
 			get{
-				if(simpleMode){
-					return 0;
-				}
 				return preferredPixelFormatNum;
 			}set{
-				if(simpleMode){
-					return;
-				}
 				preferredPixelFormatNum=value;
 			}
 		}
@@ -192,6 +186,7 @@ namespace SparksToothChart {
 			else{
 				//pictBox.Visible=false;
 				toothChart=new GraphicalToothChartControl(hardwareMode,preferredPixelFormatNum);
+				preferredPixelFormatNum=toothChart.SelectedPixelFormatNumber;
 				toothChart.ColorText=colorText;
 				toothChart.ColorBackground = colorBackground;
 				toothChart.Dock = System.Windows.Forms.DockStyle.Fill;

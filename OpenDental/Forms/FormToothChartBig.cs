@@ -67,7 +67,6 @@ namespace OpenDental{
 			this.toothChart.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.toothChart.Location = new System.Drawing.Point(0,0);
 			this.toothChart.Name = "toothChart";
-			this.toothChart.SimpleMode = false;
 			this.toothChart.Size = new System.Drawing.Size(926,858);
 			this.toothChart.TabIndex = 0;
 			this.toothChart.UseHardware = false;
@@ -95,6 +94,9 @@ namespace OpenDental{
 			toothChart.SimpleMode=computerPref.GraphicsSimple;//Must be last preference set, last so that all
 																												//settings are caried through in the reinitialization
 																												//this line triggers.
+			//The preferred pixel format number changes to the selected pixel format number after a context is chosen.
+			computerPref.PreferredPixelFormatNum=toothChart.PreferredPixelFormatNumber;
+			ComputerPrefs.Update(computerPref);
 			FillToothChart();
 			//toothChart.Refresh();
 		}
