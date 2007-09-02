@@ -24,7 +24,7 @@ namespace OpenDental.Eclaims
 			return false;
 		}
 
-		///<summary>This override is never used.</summary>
+		///<summary>This override is never explicitly used.</summary>
 		protected X12object(){
 
 		}
@@ -114,7 +114,7 @@ namespace OpenDental.Eclaims
 	}
 
 
-	///<summary>ST/SE combination.  Containted within functional group (GS/GE).</summary>
+	///<summary>ST/SE combination.  Containted within functional group (GS/GE).  In claims, there will be one transaction per carrier.</summary>
 	public class X12Transaction{
 		///<summary>A collection of all the X12Segments for this transaction, in the order they originally appeared.</summary>
 		public List<X12Segment> Segments;

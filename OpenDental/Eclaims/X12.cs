@@ -23,7 +23,7 @@ namespace OpenDental.Eclaims
 		}
 
 		///<summary>Gets the filename for this batch. Used when saving or when rolling back.</summary>
-		private static string GetFileName(Clearinghouse clearhouse,int interchangeNum){
+		private static string GetFileName(Clearinghouse clearhouse,int batchNum){
 			string saveFolder=clearhouse.ExportPath;
 			if(!Directory.Exists(saveFolder)){
 				MessageBox.Show(saveFolder+" not found.");
@@ -31,29 +31,29 @@ namespace OpenDental.Eclaims
 			}
 			if(clearhouse.CommBridge==EclaimsCommBridge.RECS){
 				if(File.Exists(ODFileUtils.CombinePaths(saveFolder,"ecs.txt"))){
-					MessageBox.Show("You must send your existing claims from the RECS program before you can create another batch.");
+					MsgBox.Show("FormClaimsSend","You must send your existing claims from the RECS program before you can create another batch.");
 					return "";//prevents overwriting an existing ecs.txt.
 				}
 				return ODFileUtils.CombinePaths(saveFolder,"ecs.txt");
 			}
 			else{
-				return ODFileUtils.CombinePaths(saveFolder,"claims"+interchangeNum.ToString()+".txt");
+				return ODFileUtils.CombinePaths(saveFolder,"claims"+batchNum.ToString()+".txt");
 			}
 		}
 
 		///<summary>If file creation was successful but communications failed, then this deletes the X12 file.  This is not used in the Tesia bridge because of the unique filenaming.</summary>
-		public static void Rollback(Clearinghouse clearhouse,int interchangeNum){
+		public static void Rollback(Clearinghouse clearhouse,int batchNum){
 			if(clearhouse.CommBridge==EclaimsCommBridge.RECS){
 				//A RECS rollback never deletes the file, because there is only one
 			}
 			else{
 				//This is a Windows extension, so we do not need to worry about Unix path separator characters.
-				File.Delete(ODFileUtils.CombinePaths(clearhouse.ExportPath,"claims"+interchangeNum.ToString()+".txt"));
+				File.Delete(ODFileUtils.CombinePaths(clearhouse.ExportPath,"claims"+batchNum.ToString()+".txt"));
 			}
 		}
 
-		///<summary>Called from Eclaims and includes multiple claims.  Returns the string that was sent.</summary>
-		public static string SendBatch(List<ClaimSendQueueItem> queueItems,int interchangeNum){
+		///<summary>Called from Eclaims and includes multiple claims.  Returns the string that was sent.  The string needs to be parsed to determine the transaction numbers used for each claim.</summary>
+		public static string SendBatch(List<ClaimSendQueueItem> queueItems,int batchNum){
 			Clearinghouse clearhouse=Clearinghouses.GetClearinghouse(queueItems[0].ClearinghouseNum);
 			List<ClaimSendQueueItem> functionalGroupDental=new List<ClaimSendQueueItem>();
 			List<ClaimSendQueueItem> functionalGroupMedical=new List<ClaimSendQueueItem>();
@@ -65,7 +65,10 @@ namespace OpenDental.Eclaims
 					functionalGroupDental.Add(queueItems[i]);
 				}
 			}
-			string saveFile=GetFileName(clearhouse,interchangeNum);
+			if(functionalGroupMedical.Count>0 && functionalGroupDental.Count>0) {
+				return "";//not allowed
+			}
+			string saveFile=GetFileName(clearhouse,batchNum);
 			if(saveFile==""){
 				return "";
 			}
@@ -83,21 +86,22 @@ namespace OpenDental.Eclaims
 					+DateTime.Now.ToString("HHmm")+"*"//ISA10: current time
 					+"U*00401*"//ISA11 and ISA12. 
 					//ISA13: interchange control number, right aligned:
-					+interchangeNum.ToString().PadLeft(9,'0')+"*"
+					+batchNum.ToString().PadLeft(9,'0')+"*"
 					+"0*"//ISA14: no acknowledgment requested
 					+clearhouse.ISA15+"*");//ISA15: T=Test P=Production. Validated.
 					sw.WriteLine(":~");//ISA16: use ':'
 				//Functional groups: one for dental and one for medical
-				//But it looks like we might instead want to restrict file output to either medical OR dental, not both.
+				//But we instead need to restrict file output to either medical OR dental, not both.
+				//So this part is changing.  One or the other.
 				if(functionalGroupMedical.Count>0){
-					WriteFunctionalGroup(sw,functionalGroupMedical,interchangeNum,clearhouse);
+					WriteFunctionalGroup(sw,functionalGroupMedical,batchNum,clearhouse);
 				}
 				if(functionalGroupDental.Count>0){
-					WriteFunctionalGroup(sw,functionalGroupDental,interchangeNum,clearhouse);
+					WriteFunctionalGroup(sw,functionalGroupDental,batchNum,clearhouse);
 				}
 				//Interchange Control Trailer
 				sw.WriteLine("IEA*1*"//IEA01: number of functional groups
-					+interchangeNum.ToString().PadLeft(9,'0')+"~");//IEA02: Interchange control number
+					+batchNum.ToString().PadLeft(9,'0')+"~");//IEA02: Interchange control number
 			}//using sw
 			if(clearhouse.CommBridge==EclaimsCommBridge.PostnTrack){
 				//need to clear out all CRLF from entire file
@@ -115,13 +119,14 @@ namespace OpenDental.Eclaims
 			return File.ReadAllText(saveFile);
 		}
 
-		private static void WriteFunctionalGroup(StreamWriter sw,List<ClaimSendQueueItem> queueItems,int interchangeNum,Clearinghouse clearhouse){
+		private static void WriteFunctionalGroup(StreamWriter sw,List<ClaimSendQueueItem> queueItems,int batchNum,Clearinghouse clearhouse){
 			int transactionNum=1;//one for each carrier. Can be reused in other functional groups and interchanges, so not persisted
 			//Functional Group Header
-			string groupControlNumber="";//Must be unique within file.
+			string groupControlNumber=batchNum.ToString();//Must be unique within file.  We will use batchNum
 			bool isMedical=queueItems[0].IsMedical;
+			//this needs to be changed.  Medical should not be sent with dental.
 			if(isMedical){
-				groupControlNumber="2";//this works for now because only two groups
+				//groupControlNumber="2";//this works for now because only two groups
 				sw.WriteLine("GS*HC*"//GS01: Health Care Claim
 					+GetGS02(clearhouse)+"*"//GS02: Senders Code. Sometimes OpenDental.  Sometimes the sending clinic. Validated
 					+Sout(clearhouse.GS03,15,2)+"*"//GS03: Application Receiver's Code
@@ -132,7 +137,7 @@ namespace OpenDental.Eclaims
 					+"005010X222~");//GS08: Version
 			}
 			else{//dental
-				groupControlNumber="1";
+				//groupControlNumber="1";
 				sw.WriteLine("GS*HC*"//GS01: Health Care Claim
 					+GetGS02(clearhouse)+"*"//GS02: Senders Code. Sometimes Jordan Sparks.  Sometimes the sending clinic.
 					+Sout(clearhouse.GS03,15,2)+"*"//GS03: Application Receiver's Code
@@ -184,20 +189,20 @@ namespace OpenDental.Eclaims
 					//Transaction Set Header (one for each carrier)
 					//transactionNum gets incremented in SE section
 					//ST02 Transact. control #. Must be unique within ISA
-					//So we used combination of transaction and group, eg 00011
+					//NO: So we used combination of transaction and group, eg 00011
 					seg++;
 					if(isMedical){
 						sw.WriteLine("ST*837*"//ST01
-							+transactionNum.ToString().PadLeft(4,'0')+groupControlNumber+"*"//ST02
+							+transactionNum.ToString().PadLeft(4,'0')+"*"//ST02 4/9
 							+"005010X222~");//ST03: Implementation convention reference
 					}
 					else{//dental
 						sw.WriteLine("ST*837*"//ST01
-							+transactionNum.ToString().PadLeft(4,'0')+groupControlNumber+"~");//ST02
+							+transactionNum.ToString().PadLeft(4,'0')+"~");//ST02
 					}
 					seg++;
 					sw.WriteLine("BHT*0019*00*"
-						+transactionNum.ToString().PadLeft(4,'0')+groupControlNumber+"*"//BHT03. Can be same as ST02
+						+transactionNum.ToString().PadLeft(4,'0')+"*"//BHT03. Can be same as ST02
 						+DateTime.Now.ToString("yyyyMMdd")+"*"//BHT04: Date
 						+DateTime.Now.ToString("HHmmss")+"*"//BHT05: Time
 						+"CH~");//BHT06: Type=Chargable
@@ -278,13 +283,25 @@ namespace OpenDental.Eclaims
 					sw.WriteLine(Sout(billProv.NationalProvID,80)+"~");//NM109: ID code. NPI validated
 					//2010AA N3: Billing provider address
 					seg++;
-					if(clinic==null){
+					if(PrefB.GetBool("UseBillingAddressOnClaims")) {
+						sw.Write("N3*"+Sout(PrefB.GetString("PracticeBillingAddress"),55));//N301: Address
+					}
+					else if(clinic==null){
 						sw.Write("N3*"+Sout(PrefB.GetString("PracticeAddress"),55));//N301: Address
 					}
 					else{
 						sw.Write("N3*"+Sout(clinic.Address,55));//N301: Address
 					}
-					if(clinic==null){
+					if(PrefB.GetBool("UseBillingAddressOnClaims")) {
+						if(PrefB.GetString("PracticeBillingAddress2")=="") {
+							sw.WriteLine("~");
+						}
+						else {
+							//N302: Address2. Optional.
+							sw.WriteLine("*"+Sout(PrefB.GetString("PracticeBillingAddress2"),55)+"~");
+						}
+					}
+					else if(clinic==null) {
 						if(PrefB.GetString("PracticeAddress2")==""){
 							sw.WriteLine("~");
 						}
@@ -304,7 +321,12 @@ namespace OpenDental.Eclaims
 					}
 					//2010AA N4: Billing prov City,State,Zip
 					seg++;
-					if(clinic==null){
+					if(PrefB.GetBool("UseBillingAddressOnClaims")) {
+						sw.WriteLine("N4*"+Sout(PrefB.GetString("PracticeBillingCity"),30)+"*"//N401: City
+							+Sout(PrefB.GetString("PracticeBillingST"),2)+"*"//N402: State
+							+Sout(PrefB.GetString("PracticeBillingZip").Replace("-",""),15)+"~");//N403: Zip
+					}
+					else if(clinic==null){
 						sw.WriteLine("N4*"+Sout(PrefB.GetString("PracticeCity"),30)+"*"//N401: City
 							+Sout(PrefB.GetString("PracticeST"),2)+"*"//N402: State
 							+Sout(PrefB.GetString("PracticeZip").Replace("-",""),15)+"~");//N403: Zip
@@ -622,7 +644,7 @@ namespace OpenDental.Eclaims
 				//2300 CLM: Claim
 				seg++;
 				sw.Write("CLM*"
-					+claim.ClaimNum.ToString()+"*"//CLM01: ClaimNum, a unique id.
+					+claim.ClaimNum.ToString()+"*"//CLM01: ClaimNum, a unique id. Can support 20 char
 					+claim.ClaimFee.ToString()+"*"//CLM02: Claim Fee
 					+"**"//CLM03 & 04 not used
 					+GetPlaceService(claim.PlaceService)+"::1*"//CLM05: place+1. 1=Original claim
@@ -1175,7 +1197,7 @@ namespace OpenDental.Eclaims
 					seg++;
 					sw.WriteLine("SE*"
 						+seg.ToString()+"*"//SE01: Total segments, including ST & SE
-						+transactionNum.ToString().PadLeft(4,'0')+groupControlNumber+"~");
+						+transactionNum.ToString().PadLeft(4,'0')+"~");
 					if(i<claimAr.GetLength(1)-1){//if this is not the last loop
 						transactionNum++;
 					}

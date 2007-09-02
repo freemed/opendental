@@ -5646,7 +5646,6 @@ namespace OpenDental{
 		private void To5_1_3() {
 			if(FromVersion<new Version("5.1.3.0")) {
 				string command="";
-				//after r708
 				if(DataConnection.DBtype==DatabaseType.MySql) {
 					command="ALTER TABLE computerpref ADD GraphicsDoubleBuffering varchar(1) default '0'";
 					General.NonQEx(command);
@@ -5656,14 +5655,18 @@ namespace OpenDental{
 				}
 				command="ALTER TABLE computerpref ADD PreferredPixelFormatNum int default '0'";
 				General.NonQEx(command);
-
-
-
-
-
-
-
 				command="UPDATE preference SET ValueString = '5.1.3.0' WHERE PrefName = 'DataBaseVersion'";
+				General.NonQEx(command);
+			}
+			To5_1_4();
+		}
+
+		private void To5_1_4() {
+			if(FromVersion<new Version("5.1.4.0")) {
+				string command="";
+				command = "ALTER TABLE etrans ADD TransSetNum INT NOT NULL";
+				General.NonQEx(command);
+				command="UPDATE preference SET ValueString = '5.1.4.0' WHERE PrefName = 'DataBaseVersion'";
 				General.NonQEx(command);
 			}
 			To5_2_0();

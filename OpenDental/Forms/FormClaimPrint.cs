@@ -1198,31 +1198,46 @@ namespace OpenDental{
 						displayStrings[i]=P.FName+" "+P.MI+" "+P.LName+" "+P.Suffix;
 						break;
 					case "BillingDentistAddress":
-						if(clinic==null)
-							displayStrings[i]=((Pref)PrefB.HList["PracticeAddress"]).ValueString;
+						if(PrefB.GetBool("UseBillingAddressOnClaims")){
+							displayStrings[i]=PrefB.GetString("PracticeBillingAddress");
+						}
+						else if(clinic==null)
+							displayStrings[i]=PrefB.GetString("PracticeAddress");
 						else
 							displayStrings[i]=clinic.Address;
 						break;
 					case "BillingDentistAddress2":
-						if(clinic==null)
+						if(PrefB.GetBool("UseBillingAddressOnClaims")) {
+							displayStrings[i]=PrefB.GetString("PracticeBillingAddress2");
+						}
+						else if(clinic==null)
 							displayStrings[i]=((Pref)PrefB.HList["PracticeAddress2"]).ValueString;
 						else
 							displayStrings[i]=clinic.Address2;
 						break;
 					case "BillingDentistCity":
-						if(clinic==null)
+						if(PrefB.GetBool("UseBillingAddressOnClaims")) {
+							displayStrings[i]=PrefB.GetString("PracticeBillingCity");
+						}
+						else if(clinic==null)
 							displayStrings[i]=((Pref)PrefB.HList["PracticeCity"]).ValueString;
 						else
 							displayStrings[i]=clinic.City;
 						break;
 					case "BillingDentistST":
-						if(clinic==null)
+						if(PrefB.GetBool("UseBillingAddressOnClaims")) {
+							displayStrings[i]=PrefB.GetString("PracticeBillingST");
+						}
+						else if(clinic==null)
 							displayStrings[i]=((Pref)PrefB.HList["PracticeST"]).ValueString;
 						else
 							displayStrings[i]=clinic.State;
 						break;
 					case "BillingDentistZip":
-						if(clinic==null)
+						if(PrefB.GetBool("UseBillingAddressOnClaims")) {
+							displayStrings[i]=PrefB.GetString("PracticeBillingZip");
+						}
+						else if(clinic==null)
 							displayStrings[i]=((Pref)PrefB.HList["PracticeZip"]).ValueString;
 						else
 							displayStrings[i]=clinic.Zip;

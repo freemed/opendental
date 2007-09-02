@@ -131,11 +131,11 @@ namespace OpenDental{
 				if(chargeList[i].DateStart>DateTime.Today){//not started yet
 					continue;
 				}
-				if(chargeList[i].DateStop.Year>1880//not blank
-					&& chargeList[i].DateStop<DateTime.Today)//but already ended
-				{
-					continue;
-				}
+				//if(chargeList[i].DateStop.Year>1880//not blank
+				//	&& chargeList[i].DateStop<DateTime.Today)//but already ended
+				//{
+				//	continue;
+				//}
 				//get a list dates of all completed procedures with this Code and patNum
 				ArrayList ALdates=RepeatCharges.GetDates(ProcedureCodes.GetCodeNum(chargeList[i].ProcCode),chargeList[i].PatNum);
 				possibleDate=chargeList[i].DateStart;
@@ -149,6 +149,11 @@ namespace OpenDental{
 					if(ALdates.Contains(possibleDate)){
 						possibleDate=possibleDate.AddMonths(1);
 						continue;
+					}
+					if(chargeList[i].DateStop.Year>1880//not blank
+						&& chargeList[i].DateStop < possibleDate)//but already ended
+					{
+						break;
 					}
 					//otherwise, insert a procedure to db
 					proc=new Procedure();

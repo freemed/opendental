@@ -43,7 +43,6 @@ namespace OpenDental{
 		private TextBox textBankRouting;
 		private Label label1;
 		private GroupBox groupBox1;
-		private Label label14;
 		private Label label7;
 		private TextBox textBillingZip;
 		private TextBox textBillingST;
@@ -109,6 +108,7 @@ namespace OpenDental{
 			this.textBankRouting = new System.Windows.Forms.TextBox();
 			this.label1 = new System.Windows.Forms.Label();
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
+			this.checkUseBillingAddressOnClaims = new System.Windows.Forms.CheckBox();
 			this.label7 = new System.Windows.Forms.Label();
 			this.textBillingZip = new System.Windows.Forms.TextBox();
 			this.textBillingST = new System.Windows.Forms.TextBox();
@@ -117,8 +117,6 @@ namespace OpenDental{
 			this.textBillingAddress = new System.Windows.Forms.TextBox();
 			this.label8 = new System.Windows.Forms.Label();
 			this.label11 = new System.Windows.Forms.Label();
-			this.label14 = new System.Windows.Forms.Label();
-			this.checkUseBillingAddressOnClaims = new System.Windows.Forms.CheckBox();
 			this.groupBox2.SuspendLayout();
 			this.groupBox4.SuspendLayout();
 			this.groupSwiss.SuspendLayout();
@@ -163,7 +161,7 @@ namespace OpenDental{
 			// 
 			// textBankNumber
 			// 
-			this.textBankNumber.Location = new System.Drawing.Point(144,315);
+			this.textBankNumber.Location = new System.Drawing.Point(144,291);
 			this.textBankNumber.Multiline = true;
 			this.textBankNumber.Name = "textBankNumber";
 			this.textBankNumber.Size = new System.Drawing.Size(317,49);
@@ -171,7 +169,7 @@ namespace OpenDental{
 			// 
 			// label4
 			// 
-			this.label4.Location = new System.Drawing.Point(3,314);
+			this.label4.Location = new System.Drawing.Point(3,290);
 			this.label4.Name = "label4";
 			this.label4.Size = new System.Drawing.Size(140,31);
 			this.label4.TabIndex = 22;
@@ -300,7 +298,7 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(865,450);
+			this.butOK.Location = new System.Drawing.Point(865,426);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75,26);
 			this.butOK.TabIndex = 7;
@@ -316,7 +314,7 @@ namespace OpenDental{
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
 			this.butCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.butCancel.Location = new System.Drawing.Point(865,488);
+			this.butCancel.Location = new System.Drawing.Point(865,464);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75,26);
 			this.butCancel.TabIndex = 8;
@@ -396,7 +394,7 @@ namespace OpenDental{
 			this.groupSwiss.Controls.Add(this.label2);
 			this.groupSwiss.Controls.Add(this.textBankRouting);
 			this.groupSwiss.Controls.Add(this.label1);
-			this.groupSwiss.Location = new System.Drawing.Point(41,370);
+			this.groupSwiss.Location = new System.Drawing.Point(41,346);
 			this.groupSwiss.Name = "groupSwiss";
 			this.groupSwiss.Size = new System.Drawing.Size(429,146);
 			this.groupSwiss.TabIndex = 51;
@@ -440,7 +438,6 @@ namespace OpenDental{
 			// groupBox1
 			// 
 			this.groupBox1.Controls.Add(this.checkUseBillingAddressOnClaims);
-			this.groupBox1.Controls.Add(this.label14);
 			this.groupBox1.Controls.Add(this.label7);
 			this.groupBox1.Controls.Add(this.textBillingZip);
 			this.groupBox1.Controls.Add(this.textBillingST);
@@ -452,14 +449,25 @@ namespace OpenDental{
 			this.groupBox1.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.groupBox1.Location = new System.Drawing.Point(41,168);
 			this.groupBox1.Name = "groupBox1";
-			this.groupBox1.Size = new System.Drawing.Size(429,136);
+			this.groupBox1.Size = new System.Drawing.Size(429,111);
 			this.groupBox1.TabIndex = 52;
 			this.groupBox1.TabStop = false;
 			this.groupBox1.Text = "Billing Address";
 			// 
+			// checkUseBillingAddressOnClaims
+			// 
+			this.checkUseBillingAddressOnClaims.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkUseBillingAddressOnClaims.Location = new System.Drawing.Point(1,19);
+			this.checkUseBillingAddressOnClaims.Name = "checkUseBillingAddressOnClaims";
+			this.checkUseBillingAddressOnClaims.Size = new System.Drawing.Size(116,16);
+			this.checkUseBillingAddressOnClaims.TabIndex = 53;
+			this.checkUseBillingAddressOnClaims.Text = "Use on Claims";
+			this.checkUseBillingAddressOnClaims.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkUseBillingAddressOnClaims.UseVisualStyleBackColor = true;
+			// 
 			// label7
 			// 
-			this.label7.Location = new System.Drawing.Point(4,88);
+			this.label7.Location = new System.Drawing.Point(4,61);
 			this.label7.Name = "label7";
 			this.label7.Size = new System.Drawing.Size(97,16);
 			this.label7.TabIndex = 19;
@@ -468,42 +476,42 @@ namespace OpenDental{
 			// 
 			// textBillingZip
 			// 
-			this.textBillingZip.Location = new System.Drawing.Point(318,109);
+			this.textBillingZip.Location = new System.Drawing.Point(318,82);
 			this.textBillingZip.Name = "textBillingZip";
 			this.textBillingZip.Size = new System.Drawing.Size(102,20);
 			this.textBillingZip.TabIndex = 4;
 			// 
 			// textBillingST
 			// 
-			this.textBillingST.Location = new System.Drawing.Point(264,109);
+			this.textBillingST.Location = new System.Drawing.Point(264,82);
 			this.textBillingST.Name = "textBillingST";
 			this.textBillingST.Size = new System.Drawing.Size(52,20);
 			this.textBillingST.TabIndex = 3;
 			// 
 			// textBillingCity
 			// 
-			this.textBillingCity.Location = new System.Drawing.Point(103,109);
+			this.textBillingCity.Location = new System.Drawing.Point(103,82);
 			this.textBillingCity.Name = "textBillingCity";
 			this.textBillingCity.Size = new System.Drawing.Size(159,20);
 			this.textBillingCity.TabIndex = 2;
 			// 
 			// textBillingAddress2
 			// 
-			this.textBillingAddress2.Location = new System.Drawing.Point(103,87);
+			this.textBillingAddress2.Location = new System.Drawing.Point(103,60);
 			this.textBillingAddress2.Name = "textBillingAddress2";
 			this.textBillingAddress2.Size = new System.Drawing.Size(317,20);
 			this.textBillingAddress2.TabIndex = 1;
 			// 
 			// textBillingAddress
 			// 
-			this.textBillingAddress.Location = new System.Drawing.Point(103,65);
+			this.textBillingAddress.Location = new System.Drawing.Point(103,38);
 			this.textBillingAddress.Name = "textBillingAddress";
 			this.textBillingAddress.Size = new System.Drawing.Size(317,20);
 			this.textBillingAddress.TabIndex = 0;
 			// 
 			// label8
 			// 
-			this.label8.Location = new System.Drawing.Point(3,67);
+			this.label8.Location = new System.Drawing.Point(3,40);
 			this.label8.Name = "label8";
 			this.label8.Size = new System.Drawing.Size(98,14);
 			this.label8.TabIndex = 3;
@@ -512,37 +520,17 @@ namespace OpenDental{
 			// 
 			// label11
 			// 
-			this.label11.Location = new System.Drawing.Point(3,111);
+			this.label11.Location = new System.Drawing.Point(3,84);
 			this.label11.Name = "label11";
 			this.label11.Size = new System.Drawing.Size(98,15);
 			this.label11.TabIndex = 4;
 			this.label11.Text = "City, ST, Zip";
 			this.label11.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
-			// label14
-			// 
-			this.label14.Location = new System.Drawing.Point(9,16);
-			this.label14.Name = "label14";
-			this.label14.Size = new System.Drawing.Size(411,30);
-			this.label14.TabIndex = 23;
-			this.label14.Text = "Used on insurance claims when the insurance payments go to a different address th" +
-    "an where the treatment was performed";
-			// 
-			// checkUseBillingAddressOnClaims
-			// 
-			this.checkUseBillingAddressOnClaims.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.checkUseBillingAddressOnClaims.Location = new System.Drawing.Point(13,47);
-			this.checkUseBillingAddressOnClaims.Name = "checkUseBillingAddressOnClaims";
-			this.checkUseBillingAddressOnClaims.Size = new System.Drawing.Size(104,16);
-			this.checkUseBillingAddressOnClaims.TabIndex = 53;
-			this.checkUseBillingAddressOnClaims.Text = "Use";
-			this.checkUseBillingAddressOnClaims.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.checkUseBillingAddressOnClaims.UseVisualStyleBackColor = true;
-			// 
 			// FormPractice
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
-			this.ClientSize = new System.Drawing.Size(972,537);
+			this.ClientSize = new System.Drawing.Size(972,513);
 			this.Controls.Add(this.groupBox1);
 			this.Controls.Add(this.groupSwiss);
 			this.Controls.Add(this.groupBox4);

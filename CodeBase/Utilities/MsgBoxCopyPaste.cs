@@ -57,7 +57,7 @@ namespace CodeBase{
 			// butOK
 			// 
 			this.butOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butOK.Location = new System.Drawing.Point(598,327);
+			this.butOK.Location = new System.Drawing.Point(615,606);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75,26);
 			this.butOK.TabIndex = 1;
@@ -66,20 +66,23 @@ namespace CodeBase{
 			// 
 			// textMain
 			// 
+			this.textMain.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.textMain.BackColor = System.Drawing.SystemColors.Window;
 			this.textMain.Font = new System.Drawing.Font("Courier New",8.25F,System.Drawing.FontStyle.Regular,System.Drawing.GraphicsUnit.Point,((byte)(0)));
-			this.textMain.Location = new System.Drawing.Point(24,28);
+			this.textMain.Location = new System.Drawing.Point(12,12);
 			this.textMain.Multiline = true;
 			this.textMain.Name = "textMain";
 			this.textMain.ReadOnly = true;
 			this.textMain.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-			this.textMain.Size = new System.Drawing.Size(649,273);
+			this.textMain.Size = new System.Drawing.Size(678,588);
 			this.textMain.TabIndex = 2;
 			// 
 			// MsgBoxCopyPaste
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
-			this.ClientSize = new System.Drawing.Size(702,374);
+			this.ClientSize = new System.Drawing.Size(702,644);
 			this.Controls.Add(this.textMain);
 			this.Controls.Add(this.butOK);
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));

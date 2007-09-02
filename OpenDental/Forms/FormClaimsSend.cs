@@ -322,9 +322,9 @@ namespace OpenDental{
 			gridMain.ContextMenu=contextMenuStatus;
 			//do not show received because that would mess up the balances
 			//contextMenuStatus.MenuItems.Add("Received",new EventHandler(StatusReceived_Clicked));
-			contextMenuHist=new ContextMenu();
-			contextMenuHist.MenuItems.Add(Lan.g(this,"Show Raw Message"),new EventHandler(ShowRawMessage_Clicked));
-			gridHistory.ContextMenu=contextMenuHist;
+			//contextMenuHist=new ContextMenu();
+			//contextMenuHist.MenuItems.Add(Lan.g(this,"Show Raw Message"),new EventHandler(ShowRawMessage_Clicked));
+			//gridHistory.ContextMenu=contextMenuHist;
 			LayoutToolBars();
 			FormClaimReports FormC=new FormClaimReports();
 			FormC.AutomaticMode=true;
@@ -468,7 +468,7 @@ namespace OpenDental{
 			FormClaimPrint FormCP;
 			FormCP=new FormClaimPrint();
 			if(gridMain.SelectedIndices.Length==0){
-				MessageBox.Show(Lan.g(this,"Please select an item first."));
+				MessageBox.Show(Lan.g(this,"Please select a claim first."));
 				return;
 			}
 			if(gridMain.SelectedIndices.Length > 1){
@@ -503,8 +503,7 @@ namespace OpenDental{
 						gridMain.SetSelected(i,true);		
 					}	
 				}
-				if(MessageBox.Show(Lan.g(this,"No items were selected.  Print all selected paper claims?"),""
-					,MessageBoxButtons.OKCancel)!=DialogResult.OK){
+				if(!MsgBox.Show(this,true,"No claims were selected.  Print all selected paper claims?")){
 					return;
 				}
 			}
@@ -527,7 +526,7 @@ namespace OpenDental{
 
 		private void OnLabels_Click(){
 			if(gridMain.SelectedIndices.Length==0){
-				MessageBox.Show(Lan.g(this,"Please select an item first."));
+				MessageBox.Show(Lan.g(this,"Please select a claim first."));
 				return;
 			}
 			PrintDocument pd=new PrintDocument();//only used to pass printerName
@@ -820,18 +819,18 @@ namespace OpenDental{
 		}
 
 		private void gridHistory_CellDoubleClick(object sender,ODGridClickEventArgs e) {
-
+			//if(gridHistory.SelectedIndices.Length!=1) {
+			//	MsgBox.Show(this,"Please select exactly one item first.");
+			//	return;
+			//}
+			Etrans et=Etranss.GetEtrans(PIn.PInt(tableHistory.Rows[e.Row]["EtransNum"].ToString()));
+			MsgBoxCopyPaste msgbox=new MsgBoxCopyPaste(et.MessageText);
+			msgbox.ShowDialog();
 		}
 
 		private void ShowRawMessage_Clicked(object sender,System.EventArgs e) {
 			//accessed by right clicking on history
-			if(gridHistory.SelectedIndices.Length!=1) {
-				MsgBox.Show(this,"Please select exactly one item first.");
-				return;
-			}
-			Etrans et=Etranss.GetEtrans(PIn.PInt(tableHistory.Rows[gridHistory.SelectedIndices[0]]["EtransNum"].ToString()));
-			MsgBoxCopyPaste msgbox=new MsgBoxCopyPaste(et.MessageText);
-			msgbox.ShowDialog();
+			
 		}
 
 		///<summary>Preview is only used for debugging.</summary>

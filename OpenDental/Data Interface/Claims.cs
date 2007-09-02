@@ -302,6 +302,7 @@ namespace OpenDental{
 			return listQueue;
 		}
 
+		///<summary>Supply claimnums. Called from X12 to begin the sorting process on claims going to one clearinghouse. Returns an array with Carrier,ProvBill,Subscriber,PatNum,ClaimNum, all in the correct order. Carrier is a string, the rest are int.</summary>
 		public static object[,] GetX12TransactionInfo(int claimNum){
 			return GetX12TransactionInfo(new int[1] {claimNum});
 		}

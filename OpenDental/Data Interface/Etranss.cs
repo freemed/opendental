@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Data;
 using System.Windows.Forms;
 using OpenDentBusiness;
@@ -25,7 +26,7 @@ namespace OpenDental{
 				if(FormChooseDatabase.DBtype==DatabaseType.Oracle){
 					command+="TO_";
 				}
-				command+="DATE(DateTimeTrans) <= "+POut.PDate(dateTo)+" "
+				command+="DATE(DateTimeTrans) <= "+POut.PDate(dateTo.AddDays(1))+" "//because it's midnight
 					+"ORDER BY DateTimeTrans";
 			DataTable table=General.GetTable(command);
 			DataTable tHist=new DataTable("Table");
@@ -88,6 +89,7 @@ namespace OpenDental{
 			etrans.MessageText         =PIn.PString(table.Rows[0][11].ToString());
 			etrans.BatchNumber         =PIn.PInt   (table.Rows[0][12].ToString());
 			etrans.AckCode             =PIn.PString(table.Rows[0][13].ToString());
+			etrans.TransSetNum         =PIn.PInt   (table.Rows[0][14].ToString());
 			return etrans;
 		}
 
@@ -190,6 +192,8 @@ namespace OpenDental{
 			etrans.CarrierNum2=PIn.PInt(table.Rows[0][1].ToString());//might be 0 if no secondary on this claim
 			etrans.MessageText=messageText;
 			etrans.BatchNumber=batchNumber;
+			X837 x837=new X837(messageText);
+			etrans.TransSetNum=x837.GetTransNum(claimNum);
 			if(etype==EtransType.Claim_CA){
 				etrans.OfficeSequenceNumber=0;
 				//find the next officeSequenceNumber
@@ -264,20 +268,35 @@ namespace OpenDental{
 			etrans.DateTimeTrans=dateTimeTrans;
 			etrans.ClearinghouseNum=clearinghouseNum;
 			etrans.MessageText=messageText;
+			string command;
 			if(X12object.IsX12(messageText)){
 				X12object Xobj=new X12object(messageText);
 				if(Xobj.Is997()){
 					X997 x997=(X997)Xobj;
 					etrans.Etype=EtransType.Acknowledge_997;
 					etrans.BatchNumber=x997.GetBatchNumber();
-					string ack=x997.GetAckCode();
-					if(ack!=""){
-						//the ackCode needs to be set for the corresponding claims
-						string command="UPDATE etrans SET AckCode='"+POut.PString(ack)+"' WHERE BatchNumber="+POut.PInt(etrans.BatchNumber)
+					string batchack=x997.GetBatchAckCode();
+					if(batchack=="A" || batchack=="R"){//accepted or rejected
+						command="UPDATE etrans SET AckCode='"+batchack+"' WHERE BatchNumber="+POut.PInt(etrans.BatchNumber)
 							+" AND ClearinghouseNum="+POut.PInt(clearinghouseNum)
 							+" AND DateTimeTrans > "+POut.PDateT(dateTimeTrans.AddDays(-14))
 							+" AND DateTimeTrans < "+POut.PDateT(dateTimeTrans.AddDays(1));
 						General.NonQ(command);
+					}
+					else{//partially accepted
+						List<int> transNums=x997.GetTransNums();
+						string ack;
+						for(int i=0;i<transNums.Count;i++){
+							ack=x997.GetAckForTrans(transNums[i]);
+							if(ack=="A" || ack=="R") {//accepted or rejected
+								command="UPDATE etrans SET AckCode='"+ack+"' WHERE BatchNumber="+POut.PInt(etrans.BatchNumber)
+									+" AND TransSetNum="+POut.PInt(transNums[i])
+									+" AND ClearinghouseNum="+POut.PInt(clearinghouseNum)
+									+" AND DateTimeTrans > "+POut.PDateT(dateTimeTrans.AddDays(-14))
+									+" AND DateTimeTrans < "+POut.PDateT(dateTimeTrans.AddDays(1));
+								General.NonQ(command);
+							}
+						}
 					}
 					//none of the other fields make sense, because this ack could refer to many claims.
 				}
@@ -302,7 +321,7 @@ namespace OpenDental{
 				command+="EtransNum,";
 			}
 			command+="DateTimeTrans,ClearinghouseNum,Etype,ClaimNum,OfficeSequenceNumber,CarrierTransCounter,"
-				+"CarrierTransCounter2,CarrierNum,CarrierNum2,PatNum,MessageText,BatchNumber,AckCode) VALUES(";
+				+"CarrierTransCounter2,CarrierNum,CarrierNum2,PatNum,MessageText,BatchNumber,AckCode,TransSetNum) VALUES(";
 			if(PrefB.RandomKeys) {
 				command+="'"+POut.PInt(etrans.EtransNum)+"', ";
 			}
@@ -328,7 +347,8 @@ namespace OpenDental{
 				+"'"+POut.PInt   (etrans.PatNum)+"', "
 				+"'"+POut.PString(etrans.MessageText)+"', "
 				+"'"+POut.PInt   (etrans.BatchNumber)+"', "
-				+"'"+POut.PString(etrans.AckCode)+"')";
+				+"'"+POut.PString(etrans.AckCode)+"', "
+				+"'"+POut.PInt   (etrans.TransSetNum)+"')";
 			if(PrefB.RandomKeys) {
 				General.NonQ(command);
 			}
