@@ -9,14 +9,13 @@ using OpenDentBusiness;
 
 namespace OpenDental {
 	public class AutoNotes {
-		//<summary>A list of all Auto Notes</summary>
-		//public static List<AutoNote> Listt;
+		///<summary>A list of all Auto Notes</summary>
+		public static List<AutoNote> Listt;
 
-		public static List<AutoNote> Refresh() {
-			string command = "SELECT * FROM autonote";
+		public static void Refresh() {
+			string command = "SELECT * FROM autonote ORDER BY AutoNoteName";
 			DataTable table = General.GetTable(command);
-			List<AutoNote> Listt=new List<AutoNote>();
-			//List = new AutoNote[table.Rows.Count];
+			Listt=new List<AutoNote>();
 			AutoNote note;
 			for(int i=0;i<table.Rows.Count;i++){
 				note = new AutoNote();
@@ -25,33 +24,23 @@ namespace OpenDental {
 				note.ControlsToInc = PIn.PString(table.Rows[i][2].ToString());
 				Listt.Add(note);
 			}
-			return Listt;
 		}
 
-		///<summary>This is wrong.  It needs to be reworked to be just like insert in the other similar classes.  The only passed parameter should be the AutoNote.</summary>
-		public static void Insert(string autoNoteName,Array controlsToInc,int ArraySize) {
-		string controlsToIncText="";
-		for (int i=0; i<ArraySize; i++) {
-			controlsToIncText = controlsToIncText + controlsToInc.GetValue(i).ToString()+"|";
-		}     
-		string command = "INSERT INTO autonote (AutoNoteNum,AutoNoteName, ControlsToInc)"
+		///<summary></summary>
+		public static void Insert(AutoNote autonote) {		
+		string command = "INSERT INTO autonote (AutoNoteName, ControlsToInc)"
 			+"VALUES ("			
-		    +"'DEFAULT'," 
-			+"'"+POut.PString(autoNoteName)+"'," 
-			+"'"+POut.PString(controlsToIncText)+"')";
+			+"'"+POut.PString(autonote.AutoNoteName)+"'," 
+			+"'"+POut.PString(autonote.ControlsToInc)+"')";
 		General.NonQ(command);
 		}
 
-		///<summary>This is wrong.  It needs to be reworked to be just like insert in the other similar classes.  The only passed parameter should be the AutoNote.</summary>
-		public static void Update(string AutoNoteToUpdate,string AutoNoteName,Array ControlsToInc,int ArraySize) {
-			string controlsToIncText="";
-			for(int i=0;i<ArraySize;i++) {
-				controlsToIncText = controlsToIncText + ControlsToInc.GetValue(i).ToString()+"|";
-			}
-			string command="UPDATE autonote "
-			+"SET AutoNoteName = '"+POut.PString(AutoNoteName)+"', "
-			+"ControlsToInc = '"+POut.PString(controlsToIncText)+"' "
-			+"WHERE AutoNoteName = '"+POut.PString(AutoNoteToUpdate)+"'";
+		///<summary></summary>
+		public static void Update(AutoNote autonote) {			
+			string command="UPDATE autonote SET "
+			+"AutoNoteName = '"+POut.PString(autonote.AutoNoteName)+"', "
+			+"ControlsToInc = '"+POut.PString(autonote.ControlsToInc)+"' "
+			+"WHERE AutoNoteNum = '"+POut.PInt(autonote.AutoNoteNum)+"'";
 			General.NonQ(command);
 		}
 

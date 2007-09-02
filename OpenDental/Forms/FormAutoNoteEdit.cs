@@ -20,19 +20,24 @@ namespace OpenDental {
 		string[] ControlsToInc;
 
 		public FormAutoNoteEdit() {
+			//
+			// Required for Windows Form Designer support
+			//
 			InitializeComponent();
 			Lan.F(this);
 		}
 
 		private void FormAutoNoteEdit_Load(object sender, EventArgs e) {
-			string controlOptions;
-			textBoxAutoNoteName.Text=AutoNoteCur.AutoNoteName;
-			controlOptions=AutoNoteCur.ControlsToInc;
-			string[] lines=controlOptions.Split(new char[] { '|' });
-			for (int i=0; i<lines.Length; i++) {
-				if (lines[i].ToString()!="") {
-					ControlsList=AutoNoteControls.ControlNumToName(lines[i].ToString());
-					listBoxControlsToIncl.Items.Add(ControlsList[0].Descript);
+			if (!IsNew) {
+				string controlOptions;
+				textBoxAutoNoteName.Text=AutoNoteCur.AutoNoteName;
+				controlOptions=AutoNoteCur.ControlsToInc;
+				string[] lines=controlOptions.Split(new char[] { '|' });
+				for (int i=0; i<lines.Length; i++) {
+					if (lines[i].ToString()!="") {
+						ControlsList=AutoNoteControls.ControlNumToName(lines[i].ToString());
+						listBoxControlsToIncl.Items.Add(ControlsList[0].Descript);
+					}
 				}
 			}
 			fillListBoxControls();
@@ -92,8 +97,7 @@ namespace OpenDental {
 		}
 
 		private void butCreateControl_Click(object sender, EventArgs e) {
-			//should launch FormAutoNoteControlEdit
-			FormAutoNoteControlEdit form=new FormAutoNoteControlEdit();//false, null);
+			FormAutoNoteControlEdit form=new FormAutoNoteControlEdit();
 			form.IsNew=true;
 			form.ControlCur=new AutoNoteControl();
 			form.ShowDialog();
@@ -111,64 +115,13 @@ namespace OpenDental {
 				}
 			}
 			RefreshControlsToIncEdit=true;*/
-			if (listBoxControls.SelectedItem.ToString()!="") {
-				FormAutoNoteControlEdit form = new FormAutoNoteControlEdit();//true, listBoxControls.SelectedItem.ToString());
-				form.IsNew=false;
-				form.ControlCur=null;//this needs work.  Use SelectedIndex, not SelectedItem.ToString to isolate the needed control. 
-				form.ShowDialog();
-			}
-		}
-
-		private void butOK_Click(object sender, EventArgs e) {
-			if (textBoxAutoNoteName.Text=="") {
-				MsgBox.Show(this, "Please enter a name for the Auto Note into the text box");
+			if (listBoxControls.SelectedIndex==-1) {
 				return;
 			}
-			bool IsUsed=AutoNotes.AutoNoteNameUsed(textBoxAutoNoteName.Text.ToString(),AutoNoteCur.AutoNoteName);
-			if(IsUsed){
-				MsgBox.Show(this, "This name is already used please choose a different name");
-				return;
-			}
-			if (listBoxControlsToIncl.Items.Count==0) {
-				MsgBox.Show(this, "Please add some controls to the Auto Note");
-				return;
-			}
-			//Save changes to database here
-			//Saves the items in the listboxControlsToIncl in a array that will be passed on 
-			if (IsNew) {
-				string[] controlsToInc;
-				int ArraySize;
-				controlsToInc = new string[listBoxControlsToIncl.Items.Count];
-				ArraySize = listBoxControlsToIncl.Items.Count;
-				for (int i = 0; i<listBoxControlsToIncl.Items.Count; i++) {
-					if (listBoxControlsToIncl.Items[i].ToString()!="") {
-						ControlsList=AutoNoteControls.ControlNameToNum(listBoxControlsToIncl.Items[i].ToString());
-						controlsToInc[i]=ControlsList[0].AutoNoteControlNum.ToString();
-					}
-				}
-				AutoNotes.Insert(textBoxAutoNoteName.Text.ToString(), controlsToInc, ArraySize);
-				this.Close();
-			}
-			//The code below is used if this Auto Note being edited
-			if (!IsNew) {
-				string[] controlsToInc;
-				int ArraySize;
-				controlsToInc = new string[listBoxControlsToIncl.Items.Count];
-				ArraySize = listBoxControlsToIncl.Items.Count;
-				for (int i = 0; i<listBoxControlsToIncl.Items.Count; i++) {
-					if (listBoxControlsToIncl.Items[i].ToString()!="") {
-						ControlsList=AutoNoteControls.ControlNameToNum(listBoxControlsToIncl.Items[i].ToString());
-						controlsToInc[i]=ControlsList[0].AutoNoteControlNum.ToString();
-					}
-				}
-				//This is VERY wrong.  Update is performed by AutoNoteNum, not by name.
-				AutoNotes.Update(AutoNoteCur.AutoNoteName, textBoxAutoNoteName.Text.ToString(), controlsToInc, ArraySize);
-				this.Close();
-			}
-		}
-
-		private void butCancel_Click(object sender, EventArgs e) {
-			this.Close();
+			FormAutoNoteControlEdit form = new FormAutoNoteControlEdit();
+			form.IsNew=false;
+			form.ControlCur=null;//this needs work.  Use SelectedIndex, not SelectedItem.ToString to isolate the needed control. 
+			form.ShowDialog();
 		}
 
 		/// <summary>
@@ -212,6 +165,43 @@ namespace OpenDental {
 			if (listBoxControlsToIncl.SelectedIndex!=-1) {
 				listBoxControlsToIncl.Items.RemoveAt(listBoxControlsToIncl.SelectedIndex);
 			}
+		}
+
+		private void butOK_Click(object sender,EventArgs e) {
+			if(textBoxAutoNoteName.Text=="") {
+				MsgBox.Show(this,"Please enter a name for the Auto Note into the text box");
+				return;
+			}
+			bool IsUsed=AutoNotes.AutoNoteNameUsed(textBoxAutoNoteName.Text.ToString(),AutoNoteCur.AutoNoteName);
+			if(IsUsed) {
+				MsgBox.Show(this,"This name is already used please choose a different name");
+				return;
+			}
+			/*if (listBoxControlsToIncl.Items.Count==0) {
+				MsgBox.Show(this, "Please add some controls to the Auto Note");
+				return;
+			}*/
+			//Save changes to database here
+			//Saves the items in the listboxControlsToIncl in a array that will be passed on 
+			string controlsToIncText="";
+			for(int i=0;i<listBoxControlsToIncl.Items.Count;i++) {
+				ControlsList=AutoNoteControls.ControlNameToNum(listBoxControlsToIncl.Items[i].ToString());
+				controlsToIncText = controlsToIncText + ControlsList+",";
+			}
+			AutoNoteCur.ControlsToInc=controlsToIncText;
+			AutoNoteCur.AutoNoteName=textBoxAutoNoteName.Text.ToString();
+			if(IsNew) {
+				AutoNotes.Insert(AutoNoteCur);
+			}
+			else {
+				AutoNotes.Update(AutoNoteCur);
+			}
+			DialogResult=DialogResult.OK;
+		}
+
+
+		private void butCancel_Click(object sender,EventArgs e) {
+			DialogResult=DialogResult.Cancel;
 		}
 	}
 }

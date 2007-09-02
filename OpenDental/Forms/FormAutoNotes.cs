@@ -18,6 +18,7 @@ namespace OpenDental{
 		private Label label1;
 		private System.Windows.Forms.ToolTip toolTip1;
 		private List<AutoNote> AutoNoteList;
+		public AutoNote AutoNoteCur;
 
 		///<summary></summary>
 		public FormAutoNotes(){
@@ -59,38 +60,38 @@ namespace OpenDental{
 			// 
 			// listMain
 			// 
-			this.listMain.Location = new System.Drawing.Point(18,34);
+			this.listMain.Location = new System.Drawing.Point(18, 34);
 			this.listMain.Name = "listMain";
-			this.listMain.Size = new System.Drawing.Size(265,628);
+			this.listMain.Size = new System.Drawing.Size(265, 628);
 			this.listMain.TabIndex = 2;
 			this.listMain.DoubleClick += new System.EventHandler(this.listMain_DoubleClick);
 			// 
 			// label1
 			// 
-			this.label1.Location = new System.Drawing.Point(15,9);
+			this.label1.Location = new System.Drawing.Point(15, 9);
 			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(413,24);
+			this.label1.Size = new System.Drawing.Size(413, 24);
 			this.label1.TabIndex = 8;
 			this.label1.Text = "This is a list of auto notes.";
 			// 
 			// butClose
 			// 
-			this.butClose.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butClose.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.butClose.Autosize = true;
 			this.butClose.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butClose.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butClose.CornerRadius = 4F;
-			this.butClose.Location = new System.Drawing.Point(349,637);
+			this.butClose.Location = new System.Drawing.Point(349, 637);
 			this.butClose.Name = "butClose";
-			this.butClose.Size = new System.Drawing.Size(79,26);
+			this.butClose.Size = new System.Drawing.Size(79, 26);
 			this.butClose.TabIndex = 1;
 			this.butClose.Text = "Close";
 			this.butClose.Click += new System.EventHandler(this.butClose_Click);
 			// 
 			// butAdd
 			// 
-			this.butAdd.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butAdd.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butAdd.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.butAdd.Autosize = true;
 			this.butAdd.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
@@ -98,17 +99,17 @@ namespace OpenDental{
 			this.butAdd.CornerRadius = 4F;
 			this.butAdd.Image = global::OpenDental.Properties.Resources.Add;
 			this.butAdd.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butAdd.Location = new System.Drawing.Point(349,605);
+			this.butAdd.Location = new System.Drawing.Point(349, 605);
 			this.butAdd.Name = "butAdd";
-			this.butAdd.Size = new System.Drawing.Size(79,26);
+			this.butAdd.Size = new System.Drawing.Size(79, 26);
 			this.butAdd.TabIndex = 7;
 			this.butAdd.Text = "&Add";
 			this.butAdd.Click += new System.EventHandler(this.butAdd_Click);
 			// 
 			// FormAutoNotes
 			// 
-			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
-			this.ClientSize = new System.Drawing.Size(447,675);
+			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
+			this.ClientSize = new System.Drawing.Size(447, 675);
 			this.Controls.Add(this.label1);
 			this.Controls.Add(this.listMain);
 			this.Controls.Add(this.butClose);
@@ -120,6 +121,7 @@ namespace OpenDental{
 			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Auto Notes";
+			this.Activated += new System.EventHandler(this.FormAutoNotes_Activated);
 			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormDiseaseDefs_FormClosing);
 			this.Load += new System.EventHandler(this.FormAutoNotes_Load);
 			this.ResumeLayout(false);
@@ -131,11 +133,11 @@ namespace OpenDental{
 			FillList();
 		}
 
-		private void FillList(){
+		private void FillList(){			
+			AutoNotes.Refresh();
 			listMain.Items.Clear();
-			AutoNoteList=AutoNotes.Refresh();
-			for(int i = 0;i < AutoNoteList.Count;i++) {
-				listMain.Items.Add(AutoNoteList[i].AutoNoteName);
+			for(int i = 0;i < AutoNotes.Listt.Count;i++) {
+				listMain.Items.Add(AutoNotes.Listt[i].AutoNoteName);
 			}
 		}
 
@@ -145,7 +147,7 @@ namespace OpenDental{
 			}
 			FormAutoNoteEdit form = new FormAutoNoteEdit();
 			form.IsNew=false;
-			form.AutoNoteCur=AutoNoteList[listMain.SelectedIndex];
+			form.AutoNoteCur=AutoNotes.Listt[listMain.SelectedIndex];
 			form.ShowDialog();
 		}
 
@@ -163,6 +165,11 @@ namespace OpenDental{
 
 		private void FormDiseaseDefs_FormClosing(object sender,FormClosingEventArgs e) {
 			//nothing goes here
+		}
+
+		//This is needed to reload the list items after the user edits something
+		private void FormAutoNotes_Activated(object sender, EventArgs e) {
+			FillList();
 		}
 
 		
