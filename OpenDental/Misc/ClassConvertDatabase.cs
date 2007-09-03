@@ -5669,6 +5669,17 @@ namespace OpenDental{
 				command="UPDATE preference SET ValueString = '5.1.4.0' WHERE PrefName = 'DataBaseVersion'";
 				General.NonQEx(command);
 			}
+			To5_1_5();
+		}
+
+		private void To5_1_5() {
+			if(FromVersion<new Version("5.1.5.0")) {
+				string command="";
+				command="ALTER TABLE etrans ADD Note text";
+				General.NonQEx(command);
+				command="UPDATE preference SET ValueString = '5.1.5.0' WHERE PrefName = 'DataBaseVersion'";
+				General.NonQEx(command);
+			}
 			To5_2_0();
 		}
 

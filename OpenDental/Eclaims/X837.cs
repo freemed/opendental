@@ -13,15 +13,13 @@ namespace OpenDental.Eclaims
 		
 		///<summary>Loops through the 837 to find the transaction number for the specified claim. Will return 0 if can't find.</summary>
 		public int GetTransNum(int claimNum){
-			X12Segment seg;
 			string curTransNumStr="";
-			for(int i=0;i<functGroups[0].Transactions[0].Segments.Count;i++) {
-				seg=functGroups[0].Transactions[0].Segments[i];
-				if(seg.SegmentID=="ST"){
-					curTransNumStr=seg.Get(2);
+			for(int i=0;i<Segments.Count;i++) {
+				if(Segments[i].SegmentID=="ST"){
+					curTransNumStr=Segments[i].Get(2);
 				}
-				if(seg.SegmentID=="CLM"){
-					if(seg.Get(1).TrimStart(new char[] {'0'})==claimNum.ToString()){//if for specified claim
+				if(Segments[i].SegmentID=="CLM"){
+					if(Segments[i].Get(1).TrimStart(new char[] {'0'})==claimNum.ToString()){//if for specified claim
 						try {
 							return PIn.PInt(curTransNumStr);
 						}

@@ -3347,11 +3347,11 @@ namespace OpenDental{
 					DialogResult=DialogResult.OK;
 					return;
 				}
-				if(MsgBox.Show(this,true,"Send electronic claim immediately?")){
-					List<ClaimSendQueueItem> queueItems=new List<ClaimSendQueueItem>();
-					queueItems.Add(listQueue[0]);
-					Eclaims.Eclaims.SendBatches(queueItems);//this also calls SetClaimSentOrPrinted which creates the etrans entry.
-				}
+				//if(MsgBox.Show(this,true,"Send electronic claim immediately?")){
+				//	List<ClaimSendQueueItem> queueItems=new List<ClaimSendQueueItem>();
+				//	queueItems.Add(listQueue[0]);
+				//	Eclaims.Eclaims.SendBatches(queueItems);//this also calls SetClaimSentOrPrinted which creates the etrans entry.
+				//}
 			}
 			DialogResult=DialogResult.OK;
 		}

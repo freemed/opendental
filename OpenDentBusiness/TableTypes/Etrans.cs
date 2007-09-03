@@ -35,6 +35,8 @@ namespace OpenDentBusiness{
 		public string AckCode;
 		///<summary>For sent e-claims, within each batch (functional group), each carrier gets it's own transaction set.  Since 997s acknowledge transaction sets rather than batches, we need to keep track of which transaction set each claim is part of as well as which batch it's part of.  This field can't be set as part of 997, because one 997 refers to multiple trans sets.</summary>
 		public int TransSetNum;
+		///<summary>Typical uses include indicating that report was printed, claim was resent, reason for rejection, etc.</summary>
+		public string Note;
 
 
 		///<summary></summary>

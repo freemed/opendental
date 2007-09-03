@@ -12,7 +12,9 @@ namespace OpenDental.Eclaims
 		///<summary>usually *,:,and ~</summary>
 		public X12Separators Separators;
 		///<summary>A collection of X12FunctionalGroups.</summary>
-		public List<X12FunctionalGroup> functGroups;
+		public List<X12FunctionalGroup> FunctGroups;
+		///<summary>All segments for the entiremessage.</summary>
+		public List<X12Segment> Segments;
 
 		public static bool IsX12(string messageText){
 			if(messageText==null || messageText.Length<106){
@@ -41,17 +43,19 @@ namespace OpenDental.Eclaims
 			Separators.Subelement=messageText.Substring(104,1);
 			Separators.Segment=messageText.Substring(105,1);
 			string[] messageRows=messageText.Split(new string[] {Separators.Segment},StringSplitOptions.None);
-			functGroups=new List<X12FunctionalGroup>();
+			FunctGroups=new List<X12FunctionalGroup>();
+			Segments=new List<X12Segment>();
 			string row;
 			X12Segment segment;
 			for(int i=1;i<messageRows.Length;i++){
 				row=messageRows[i];
 				segment=new X12Segment(row,Separators);
+				Segments.Add(segment);
 				if(segment.SegmentID=="IEA"){//if end of interchange
 					//do nothing
 				}
 				if(segment.SegmentID=="GS"){//if new functional group
-					functGroups.Add(new X12FunctionalGroup(segment));
+					FunctGroups.Add(new X12FunctionalGroup(segment));
 				}
 				else if(segment.SegmentID=="GE"){//if end of functional group
 					//do nothing
@@ -78,17 +82,17 @@ namespace OpenDental.Eclaims
 		public bool Is997() {
 			//There is only one transaction set (ST/SE) per functional group (GS/GE), but I think there can be multiple functional groups
 			//if acking multiple 
-			if(this.functGroups.Count!=1) {
+			if(this.FunctGroups.Count!=1) {
 				return false;
 			}
-			if(this.functGroups[0].Header.Get(1)=="997") {
+			if(this.FunctGroups[0].Transactions[0].Header.Get(1)=="997") {
 				return true;
 			}
 			return false;
 		}
 
 		private X12FunctionalGroup LastGroup(){
-			return (X12FunctionalGroup)functGroups[functGroups.Count-1];
+			return (X12FunctionalGroup)FunctGroups[FunctGroups.Count-1];
 		}
 
 		private X12Transaction LastTransaction(){
@@ -118,10 +122,12 @@ namespace OpenDental.Eclaims
 	public class X12Transaction{
 		///<summary>A collection of all the X12Segments for this transaction, in the order they originally appeared.</summary>
 		public List<X12Segment> Segments;
+		///<summary>The segment that identifies this functional group</summary>
+		public X12Segment Header;
 
 		///<summary>Supply the transaction header(ST) when creating this object.</summary>
 		public X12Transaction(X12Segment header){
-			
+			Header=header.Copy();
 		}
 
 		public X12Segment GetSegmentByID(string segID){

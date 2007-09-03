@@ -550,8 +550,14 @@ namespace OpenDental{
 		private void OnEclaims_Click(){
 			Clearinghouse clearDefault=Clearinghouses.GetDefault();
 			if(clearDefault!=null && clearDefault.ISA08=="113504607" && Process.GetProcessesByName("TesiaLink").Length==0){
-				MsgBox.Show(this,"Please start TesiaLink first.");
-				return;
+				#if DEBUG
+					if(!MsgBox.Show(this,true,"TesiaLink is not started.  Create file anyway?")){
+						return;
+					}
+				#else
+					MsgBox.Show(this,"Please start TesiaLink first.");
+					return;
+				#endif
 			}
 			List<ClaimSendQueueItem> queueItems=new List<ClaimSendQueueItem>();//a list of queue items to send
 			if(gridMain.SelectedIndices.Length==0){
@@ -635,6 +641,10 @@ namespace OpenDental{
 			gridHistory.Columns.Add(col);
 			col=new ODGridColumn(Lan.g("TableClaimHistory","Type"),100);
 			gridHistory.Columns.Add(col);
+			col=new ODGridColumn(Lan.g("TableClaimHistory","AckCode"),100);
+			gridHistory.Columns.Add(col);
+			col=new ODGridColumn(Lan.g("TableClaimHistory","Note"),100);
+			gridHistory.Columns.Add(col);
 			if(CultureInfo.CurrentCulture.Name.Substring(3)=="CA"){//en-CA or fr-CA
 				col=new ODGridColumn(Lan.g("TableClaimHistory","Office#"),100);
 				gridHistory.Columns.Add(col);
@@ -642,8 +652,8 @@ namespace OpenDental{
 				gridHistory.Columns.Add(col);
 			}
 			else{
-				col=new ODGridColumn("",100);//spacer
-				gridHistory.Columns.Add(col);
+				//col=new ODGridColumn("",100);//spacer
+				//gridHistory.Columns.Add(col);
 			}
 			gridHistory.Rows.Clear();
 			ODGridRow row;
@@ -656,12 +666,14 @@ namespace OpenDental{
 					//((DateTime)tableHistory.Rows[i]["DateTimeTrans"]).ToShortDateString());
 	//still need to trim the _CA
 				row.Cells.Add(tableHistory.Rows[i]["etype"].ToString());
+				row.Cells.Add(tableHistory.Rows[i]["ack"].ToString());
+				row.Cells.Add(tableHistory.Rows[i]["Note"].ToString());
 				if(CultureInfo.CurrentCulture.Name.Substring(3)=="CA"){
 					row.Cells.Add(tableHistory.Rows[i]["OfficeSequenceNumber"].ToString());
 					row.Cells.Add(tableHistory.Rows[i]["CarrierTransCounter"].ToString());
 				}
 				else{
-					row.Cells.Add("");
+					//row.Cells.Add("");
 				}
 				gridHistory.Rows.Add(row);
 			}
@@ -819,13 +831,21 @@ namespace OpenDental{
 		}
 
 		private void gridHistory_CellDoubleClick(object sender,ODGridClickEventArgs e) {
-			//if(gridHistory.SelectedIndices.Length!=1) {
-			//	MsgBox.Show(this,"Please select exactly one item first.");
-			//	return;
-			//}
 			Etrans et=Etranss.GetEtrans(PIn.PInt(tableHistory.Rows[e.Row]["EtransNum"].ToString()));
-			MsgBoxCopyPaste msgbox=new MsgBoxCopyPaste(et.MessageText);
-			msgbox.ShowDialog();
+			FormEtransEdit FormE=new FormEtransEdit();
+			FormE.EtransCur=et;
+			FormE.ShowDialog();
+			if(FormE.DialogResult!=DialogResult.OK){
+				return;
+			}
+			int scroll=gridHistory.ScrollValue;
+			FillHistory();
+			for(int i=0;i<tableHistory.Rows.Count;i++){
+				if(tableHistory.Rows[i]["EtransNum"].ToString()==et.EtransNum.ToString()){
+					gridHistory.SetSelected(i,true);
+				}
+			}
+			gridHistory.ScrollValue=scroll;
 		}
 
 		private void ShowRawMessage_Clicked(object sender,System.EventArgs e) {

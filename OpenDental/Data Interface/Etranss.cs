@@ -14,7 +14,7 @@ namespace OpenDental{
 		public static DataTable RefreshHistory(DateTime dateFrom,DateTime dateTo) {
 			string command="Select CONCAT(CONCAT(patient.LName,', '),patient.FName) AS PatName,carrier.CarrierName,"
 				+"clearinghouse.Description AS Clearinghouse,DateTimeTrans,etrans.OfficeSequenceNumber,"
-				+"etrans.CarrierTransCounter,Etype,etrans.ClaimNum,etrans.EtransNum,etrans.AckCode "
+				+"etrans.CarrierTransCounter,Etype,etrans.ClaimNum,etrans.EtransNum,etrans.AckCode,etrans.Note "
 				+"FROM etrans "
 				+"LEFT JOIN carrier ON etrans.CarrierNum=carrier.CarrierNum "
 				+"LEFT JOIN patient ON patient.PatNum=etrans.PatNum "
@@ -27,6 +27,7 @@ namespace OpenDental{
 					command+="TO_";
 				}
 				command+="DATE(DateTimeTrans) <= "+POut.PDate(dateTo.AddDays(1))+" "//because it's midnight
+					+"AND Etype!=21 "
 					+"ORDER BY DateTimeTrans";
 			DataTable table=General.GetTable(command);
 			DataTable tHist=new DataTable("Table");
@@ -41,6 +42,7 @@ namespace OpenDental{
 			tHist.Columns.Add("ClaimNum");
 			tHist.Columns.Add("EtransNum");
 			tHist.Columns.Add("ack");
+			tHist.Columns.Add("Note");
 			DataRow row;
 			string etype;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -65,6 +67,7 @@ namespace OpenDental{
 				else if(table.Rows[i]["AckCode"].ToString()=="R") {
 					row["ack"]=Lan.g("Etrans","Rejected");
 				}
+				row["Note"]=table.Rows[i]["Note"].ToString();
 				tHist.Rows.Add(row);
 			}
 			return tHist;
@@ -73,7 +76,28 @@ namespace OpenDental{
 		///<summary></summary>
 		public static Etrans GetEtrans(int etransNum){
 			string command="SELECT * FROM etrans WHERE EtransNum="+POut.PInt(etransNum);
+			return SubmitAndFill(command);
+		}
+
+		///<summary></summary>
+		public static Etrans GetAckForTrans(int etransNum) {
+			//first, get the actual trans.
+			string command="SELECT * FROM etrans WHERE EtransNum="+POut.PInt(etransNum);
+			Etrans etrans=SubmitAndFill(command);
+			command="SELECT * FROM etrans WHERE "
+				+"Etype=21 "//ack997
+				+"AND ClearinghouseNum="+POut.PInt(etrans.ClearinghouseNum)
+				+" AND BatchNumber= "+POut.PInt(etrans.BatchNumber)
+				+" AND DateTimeTrans < "+POut.PDateT(etrans.DateTimeTrans.AddDays(14))//less than 2wks in the future
+				+" AND DateTimeTrans > "+POut.PDateT(etrans.DateTimeTrans.AddDays(-1));//and no more than one day before claim
+			return SubmitAndFill(command);
+		}
+
+		private static Etrans SubmitAndFill(string command){
 			DataTable table=General.GetTable(command);
+			if(table.Rows.Count==0){
+				return null;
+			}
 			Etrans etrans=new Etrans();
 			etrans.EtransNum           =PIn.PInt   (table.Rows[0][0].ToString());
 			etrans.DateTimeTrans       =PIn.PDateT (table.Rows[0][1].ToString());
@@ -90,7 +114,77 @@ namespace OpenDental{
 			etrans.BatchNumber         =PIn.PInt   (table.Rows[0][12].ToString());
 			etrans.AckCode             =PIn.PString(table.Rows[0][13].ToString());
 			etrans.TransSetNum         =PIn.PInt   (table.Rows[0][14].ToString());
+			etrans.Note                =PIn.PString(table.Rows[0][15].ToString());
 			return etrans;
+		}
+
+		///<summary>DateTimeTrans can be handled automatically here.  No need to set it in advance, but it's allowed to do so.</summary>
+		private static void Insert(Etrans etrans) {
+			if(PrefB.RandomKeys) {
+				etrans.EtransNum=MiscData.GetKey("etrans","EtransNum");
+			}
+			string command="INSERT INTO etrans (";
+			if(PrefB.RandomKeys) {
+				command+="EtransNum,";
+			}
+			command+="DateTimeTrans,ClearinghouseNum,Etype,ClaimNum,OfficeSequenceNumber,CarrierTransCounter,"
+				+"CarrierTransCounter2,CarrierNum,CarrierNum2,PatNum,MessageText,BatchNumber,AckCode,TransSetNum,Note) VALUES(";
+			if(PrefB.RandomKeys) {
+				command+="'"+POut.PInt(etrans.EtransNum)+"', ";
+			}
+			if(etrans.DateTimeTrans.Year<1880) {
+				if(FormChooseDatabase.DBtype==DatabaseType.Oracle) {
+					command+=POut.PDateT(MiscData.GetNowDateTime());
+				}
+				else {//Assume MySQL
+					command+="NOW()";
+				}
+			}
+			else {
+				command+=POut.PDateT(etrans.DateTimeTrans);
+			}
+			command+=", "
+				+"'"+POut.PInt   (etrans.ClearinghouseNum)+"', "
+				+"'"+POut.PInt   ((int)etrans.Etype)+"', "
+				+"'"+POut.PInt   (etrans.ClaimNum)+"', "
+				+"'"+POut.PInt   (etrans.OfficeSequenceNumber)+"', "
+				+"'"+POut.PInt   (etrans.CarrierTransCounter)+"', "
+				+"'"+POut.PInt   (etrans.CarrierTransCounter2)+"', "
+				+"'"+POut.PInt   (etrans.CarrierNum)+"', "
+				+"'"+POut.PInt   (etrans.CarrierNum2)+"', "
+				+"'"+POut.PInt   (etrans.PatNum)+"', "
+				+"'"+POut.PString(etrans.MessageText)+"', "
+				+"'"+POut.PInt   (etrans.BatchNumber)+"', "
+				+"'"+POut.PString(etrans.AckCode)+"', "
+				+"'"+POut.PInt   (etrans.TransSetNum)+"', "
+				+"'"+POut.PString(etrans.Note)+"')";
+			if(PrefB.RandomKeys) {
+				General.NonQ(command);
+			}
+			else {
+				etrans.EtransNum=General.NonQ(command,true);
+			}
+		}
+
+		///<summary></summary>
+		public static void Update(Etrans etrans) {
+			string command= "UPDATE etrans SET "
+				+"ClearinghouseNum = '"   +POut.PInt   (etrans.ClearinghouseNum)+"', "
+				+"Etype= '"               +POut.PInt   ((int)etrans.Etype)+"', "
+				+"ClaimNum= '"            +POut.PInt   (etrans.ClaimNum)+"', "
+				+"OfficeSequenceNumber= '"+POut.PInt   (etrans.OfficeSequenceNumber)+"', "
+				+"CarrierTransCounter= '" +POut.PInt   (etrans.CarrierTransCounter)+"', "
+				+"CarrierTransCounter2= '"+POut.PInt   (etrans.CarrierTransCounter2)+"', "
+				+"CarrierNum= '"          +POut.PInt   (etrans.CarrierNum)+"', "
+				+"CarrierNum2= '"         +POut.PInt   (etrans.CarrierNum2)+"', "
+				+"PatNum= '"              +POut.PInt   (etrans.PatNum)+"', "
+				+"MessageText= '"         +POut.PString(etrans.MessageText)+"', "
+				+"BatchNumber= '"         +POut.PInt   (etrans.BatchNumber)+"', "
+				+"AckCode= '"             +POut.PString(etrans.AckCode)+"', "
+				+"TransSetNum= '"         +POut.PInt   (etrans.TransSetNum)+"', "
+				+"Note= '"                +POut.PString(etrans.Note)+"' "
+				+"WHERE EtransNum = "+POut.PInt(etrans.EtransNum);
+			General.NonQ(command);
 		}
 
 		///<summary>Not for claim types, just other types, including Eligibility. This function gets run first.  Then, the messagetext is created and an attempt is made to send the message.  Finally, the messagetext is added to the etrans.  This is necessary because the transaction numbers must be incremented and assigned to each message before creating the message and attempting to send.  If it fails, we will need to roll back.  Provide EITHER a carrierNum OR a canadianNetworkNum.  Many transactions can be sent to a carrier or to a network.</summary>
@@ -272,7 +366,7 @@ namespace OpenDental{
 			if(X12object.IsX12(messageText)){
 				X12object Xobj=new X12object(messageText);
 				if(Xobj.Is997()){
-					X997 x997=(X997)Xobj;
+					X997 x997=new X997(messageText);
 					etrans.Etype=EtransType.Acknowledge_997;
 					etrans.BatchNumber=x997.GetBatchNumber();
 					string batchack=x997.GetBatchAckCode();
@@ -304,57 +398,14 @@ namespace OpenDental{
 					etrans.Etype=EtransType.StatusNotify_277;
 					//later: analyze to figure out which e-claim is being referenced.
 				}
+				else{//unknown type of X12 report.
+					etrans.Etype=EtransType.TextReport;
+				}
 			}
 			else{//not X12
 				etrans.Etype=EtransType.TextReport;
 			}
 			Insert(etrans);
-		}
-		
-		///<summary>DateTimeTrans can be handled automatically here.  No need to set it in advance, but it's allowed to do so.</summary>
-		private static void Insert(Etrans etrans){
-			if(PrefB.RandomKeys) {
-				etrans.EtransNum=MiscData.GetKey("etrans","EtransNum");
-			}
-			string command="INSERT INTO etrans (";
-			if(PrefB.RandomKeys) {
-				command+="EtransNum,";
-			}
-			command+="DateTimeTrans,ClearinghouseNum,Etype,ClaimNum,OfficeSequenceNumber,CarrierTransCounter,"
-				+"CarrierTransCounter2,CarrierNum,CarrierNum2,PatNum,MessageText,BatchNumber,AckCode,TransSetNum) VALUES(";
-			if(PrefB.RandomKeys) {
-				command+="'"+POut.PInt(etrans.EtransNum)+"', ";
-			}
-			if(etrans.DateTimeTrans.Year<1880){
-				if(FormChooseDatabase.DBtype==DatabaseType.Oracle) {
-					command+=POut.PDateT(MiscData.GetNowDateTime());
-				}else{//Assume MySQL
-					command+="NOW()";
-				}
-			}
-			else{
-				command+=POut.PDateT(etrans.DateTimeTrans);
-			}
-			command+=", "
-				+"'"+POut.PInt   (etrans.ClearinghouseNum)+"', "
-				+"'"+POut.PInt   ((int)etrans.Etype)+"', "
-				+"'"+POut.PInt   (etrans.ClaimNum)+"', "
-				+"'"+POut.PInt   (etrans.OfficeSequenceNumber)+"', "
-				+"'"+POut.PInt   (etrans.CarrierTransCounter)+"', "
-				+"'"+POut.PInt   (etrans.CarrierTransCounter2)+"', "
-				+"'"+POut.PInt   (etrans.CarrierNum)+"', "
-				+"'"+POut.PInt   (etrans.CarrierNum2)+"', "
-				+"'"+POut.PInt   (etrans.PatNum)+"', "
-				+"'"+POut.PString(etrans.MessageText)+"', "
-				+"'"+POut.PInt   (etrans.BatchNumber)+"', "
-				+"'"+POut.PString(etrans.AckCode)+"', "
-				+"'"+POut.PInt   (etrans.TransSetNum)+"')";
-			if(PrefB.RandomKeys) {
-				General.NonQ(command);
-			}
-			else {
-				etrans.EtransNum=General.NonQ(command,true);
-			}
 		}
 
 		///<summary>Only used by Canadian code right now.</summary>

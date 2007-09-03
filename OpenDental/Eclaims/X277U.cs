@@ -9,10 +9,10 @@ namespace OpenDental.Eclaims
 	public class X277U{
 
 		public static bool Is277U(X12object xobj) {
-			if(xobj.functGroups.Count!=1) {//Assume only one funct group allowed.  Is this too strict?
+			if(xobj.FunctGroups.Count!=1) {//Assume only one funct group allowed.  Is this too strict?
 				return false;
 			}
-			if(xobj.functGroups[0].Header.Get(1)=="HN") {
+			if(xobj.FunctGroups[0].Header.Get(1)=="HN") {
 				return true;
 			}
 			return false;
@@ -24,7 +24,7 @@ namespace OpenDental.Eclaims
 			//X12object xObj=new X12object(File.ReadAllText(fileName));
 			string rn="\r\n";
 			StringBuilder ret=new StringBuilder();
-			foreach(X12FunctionalGroup functGroup in xobj.functGroups){
+			foreach(X12FunctionalGroup functGroup in xobj.FunctGroups){
 				ret.Append("Functional Group");
 				if(functGroup.Header.Get(1)=="HN"){
 					ret.Append(" 277-Unsolicited Claim Status Notification");

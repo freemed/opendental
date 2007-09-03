@@ -2,17 +2,20 @@ using System;
 using System.Collections.Generic;
 using OpenDentBusiness;
 
-namespace OpenDental.Eclaims
-{
+namespace OpenDental.Eclaims{
 	///<summary></summary>
 	public class X997:X12object{
+
+		public X997(string messageText):base(messageText){
+		
+		}
 		
 		///<summary>In X12 lingo, the batchNumber is known as the functional group.</summary>
 		public int GetBatchNumber(){
-			if(this.functGroups[0].Transactions.Count!=1) {
+			if(this.FunctGroups[0].Transactions.Count!=1) {
 				return 0;
 			}
-			X12Segment seg=functGroups[0].Transactions[0].GetSegmentByID("AK1");
+			X12Segment seg=FunctGroups[0].Transactions[0].GetSegmentByID("AK1");
 			if(seg==null) {
 				return 0;
 			}
@@ -30,8 +33,8 @@ namespace OpenDental.Eclaims
 			List<int> retVal=new List<int>();
 			X12Segment seg;
 			int transNum=0;
-			for(int i=0;i<functGroups[0].Transactions[0].Segments.Count;i++){
-				seg=functGroups[0].Transactions[0].Segments[i];
+			for(int i=0;i<FunctGroups[0].Transactions[0].Segments.Count;i++){
+				seg=FunctGroups[0].Transactions[0].Segments[i];
 				if(seg.SegmentID=="AK2"){
 					transNum=0;
 					try{
@@ -53,8 +56,8 @@ namespace OpenDental.Eclaims
 			X12Segment seg;
 			bool foundTransNum=false;
 			int thisTransNum=0;
-			for(int i=0;i<functGroups[0].Transactions[0].Segments.Count;i++){
-				seg=functGroups[0].Transactions[0].Segments[i];
+			for(int i=0;i<FunctGroups[0].Transactions[0].Segments.Count;i++){
+				seg=FunctGroups[0].Transactions[0].Segments[i];
 				if(foundTransNum){
 					if(seg.SegmentID!="AK5"){
 						continue;
@@ -83,10 +86,10 @@ namespace OpenDental.Eclaims
 
 		///<summary>Will return "" if unable to determine.  But would normally return A=Accepted or R=Rejected or P=Partially accepted if only some of the transactions were accepted.</summary>
 		public string GetBatchAckCode(){
-			if(this.functGroups[0].Transactions.Count!=1){
+			if(this.FunctGroups[0].Transactions.Count!=1){
 				return "";
 			}
-			X12Segment seg=functGroups[0].Transactions[0].GetSegmentByID("AK9");
+			X12Segment seg=FunctGroups[0].Transactions[0].GetSegmentByID("AK9");
 			if(seg==null){
 				return "";
 			}
