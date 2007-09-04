@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Data;
 using System.Windows.Forms;
 using OpenDentBusiness;
@@ -80,6 +81,80 @@ namespace OpenDental{
 				table.Rows.Add(row);
 			}
 			return table;
+		}
+
+		public static List<Provider> GetStudents(int classNum) {
+			List<Provider> retVal=new List<Provider>();
+			for(int i=0;i<Providers.List.Length;i++){
+				if(Providers.List[i].SchoolClassNum==classNum){
+					retVal.Add(Providers.List[i]);
+				}
+			}
+			return retVal;
+		}
+
+		///<summary>Provider(student) is required. Course could be 0</summary>
+		public static DataTable GetForStudent(int provNum,int schoolCourse){
+			string command="SELECT Descript,ReqStudentNum "
+				+"FROM reqstudent ";
+			if(schoolCourse==0){
+				command+="WHERE ProvNum="+POut.PInt(provNum);
+			}
+			else{
+				command+="WHERE SchoolCourseNum="+POut.PInt(schoolCourse)
+					+" AND ProvNum="+POut.PInt(provNum);
+			}
+			command+=" ORDER BY Descript";
+			return General.GetTable(command);
+		}
+
+		public static DataTable GetForAppt(int aptNum){
+			DataTable table=new DataTable();
+			DataRow row;
+			//columns that start with lowercase are altered for display rather than being raw data.
+			table.Columns.Add("lFName");
+			table.Columns.Add("Descript");
+			table.Columns.Add("ReqStudentNum");
+			table.Columns.Add("completed");
+			string command="SELECT LName,FName,Descript,ReqStudentNum,DateCompleted "
+				+"FROM reqstudent,provider "
+				+"WHERE reqstudent.ProvNum=provider.ProvNum "
+				+"AND AptNum="+POut.PInt(aptNum);
+			DataTable raw=General.GetTable(command);
+			DateTime date;
+			for(int i=0;i<raw.Rows.Count;i++) {
+				row=table.NewRow();
+				row["lFName"]=raw.Rows[i]["LName"].ToString()+", "+raw.Rows[i]["FName"].ToString();
+				row["Descript"]=raw.Rows[i]["Descript"].ToString();
+				row["ReqStudentNum"]=raw.Rows[i]["ReqStudentNum"].ToString();
+				date=PIn.PDate(raw.Rows[i]["DateCompleted"].ToString());
+				if(date.Year<1880){
+					row["completed"]="";
+				}
+				else{
+					row["completed"]="X";
+				}
+				table.Rows.Add(row);
+			}
+			return table;
+		}
+
+		public static void SynchApt(int aptNum,List<int> reqNums){
+			//first, detach all from this appt
+			string command="UPDATE reqstudent SET AptNum=0 WHERE AptNum="+POut.PInt(aptNum);
+			General.NonQ(command);
+			//then, attach all in the supplied list
+			if(reqNums.Count==0){
+				return;
+			}
+			command="UPDATE reqstudent SET AptNum="+POut.PInt(aptNum)+" WHERE";
+			for(int i=0;i<reqNums.Count;i++){
+				if(i!=0){
+					command+=" OR";
+				}
+				command+=" ReqStudentNum="+POut.PInt(reqNums[i]);
+			}
+			General.NonQ(command);
 		}
 
 		///<summary>Before reqneeded.Delete, this checks to make sure that req is not in use by students.  Used to prompt user.</summary>

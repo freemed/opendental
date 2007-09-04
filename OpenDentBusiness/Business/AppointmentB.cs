@@ -612,9 +612,7 @@ namespace OpenDentBusiness{
 			DataRow row;
 			table.Columns.Add("LabCaseNum");
 			table.Columns.Add("labDescript");
-			table.Columns.Add("ReqStudentNum");
-			table.Columns.Add("requirement");
-			table.Columns.Add("reqProvNum");
+			table.Columns.Add("requirements");
 			string command="SELECT LabCaseNum,DateTimeDue,DateTimeChecked,DateTimeRecd,DateTimeSent,"
 				+"laboratory.Description FROM labcase,laboratory "
 				+"WHERE labcase.LaboratoryNum=laboratory.LaboratoryNum AND ";
@@ -658,25 +656,20 @@ namespace OpenDentBusiness{
 					}
 				}
 			}
-			//requirement-------------------------------------------------------------------------------------------
-			command="SELECT ReqStudentNum,reqstudent.Descript,CourseID,DateCompleted,ProvNum "
-				+"FROM reqstudent,schoolcourse "
-				+"WHERE reqstudent.SchoolCourseNum=schoolcourse.SchoolCourseNum "
+			//requirements-------------------------------------------------------------------------------------------
+			command="SELECT "
+				+"reqstudent.Descript,LName,FName "
+				+"FROM reqstudent,provider "//schoolcourse "
+				+"WHERE reqstudent.ProvNum=provider.ProvNum "
 				+"AND reqstudent.AptNum="+aptNum;
 			raw=dcon.GetTable(command);
-			row["reqProvNum"]="0";
-			row["reqStudentNum"]="0";
-			if(raw.Rows.Count>0) {
-				row["ReqStudentNum"]=raw.Rows[0]["ReqStudentNum"].ToString();
-				date=PIn.PDate(raw.Rows[0]["DateCompleted"].ToString());
-				if(date.Year<1880){
-					row["requirement"]=Lan.g("FormApptEdit","Not Done. ");
+			row["requirements"]="";
+			for(int i=0;i<raw.Rows.Count;i++){
+				if(i!=0){
+					row["requirements"]+="\r\n";
 				}
-				else{
-					row["requirement"]=Lan.g("FormApptEdit","Done. ");
-				}
-				row["requirement"]+=raw.Rows[0]["CourseID"].ToString()+" "+raw.Rows[0]["Descript"].ToString();
-				row["reqProvNum"]=raw.Rows[0]["ProvNum"].ToString();
+				row["requirements"]+=raw.Rows[i]["LName"].ToString()+", "+raw.Rows[i]["FName"].ToString()
+					+": "+raw.Rows[i]["Descript"].ToString();
 			}
 			table.Rows.Add(row);
 			return table;
