@@ -151,32 +151,6 @@ namespace CodeBase {
 		public static extern int _DescribePixelFormat(System.IntPtr hdc,int iPixelFormat,uint nBytes,ref Gdi.PIXELFORMATDESCRIPTOR ppfd);
 		#endregion int _DescribePixelFormat(System.IntPtr hdc,int iPixelFormat,uint nBytes,ref Gdi.PIXELFORMATDESCRIPTOR ppfd)
 
-		///<summary>Tries to automatically select the pixel format which is most likely to work. Use in the case that the program is being loaded for the first time.</summary>
-		protected PixelFormatValue ChoosePixelFormatEx(System.IntPtr hdc,int maximumFormatCount){
-			Gdi.PIXELFORMATDESCRIPTOR[] saneformats=GetPixelFormats(hdc,maximumFormatCount);
-			PixelFormatValue[] formats=PrioritizePixelFormats(saneformats,32,32,false,false);
-			if(formats.Length>0){
-				//We most prefer non-buffered, non-accelerated pixel formats.
-				return formats[0];
-			}
-			formats=PrioritizePixelFormats(saneformats,32,32,false,true);
-			if(formats.Length>0){
-				//We then prefer non-buffered, accelerated pixel formats.
-				return formats[0];
-			}
-			formats=PrioritizePixelFormats(saneformats,32,32,true,false);
-			if(formats.Length>0){
-				//We then prefer buffered, non-acclerated formats.
-				return formats[0];
-			}
-			formats=PrioritizePixelFormats(saneformats,32,32,true,true);
-			if(formats.Length>0){
-				//Finally, we least prefer buffered, accelerated formats.
-				return formats[0];
-			}
-			return new PixelFormatValue();//Invalid format, since its formatNumber is zero.
-		}
-
 		/// <summary>
 		/// Creates the device and rendering contexts using the supplied settings
 		/// in accumBits, colorBits, depthBits, and stencilBits. Returns the selected
@@ -449,6 +423,32 @@ namespace CodeBase {
 
 		public IntPtr GetHDC(){
 			return User.GetDC(this.Handle);
+		}
+
+		///<summary>Tries to automatically select the pixel format which is most likely to work. Use in the case that the program is being loaded for the first time.</summary>
+		public static PixelFormatValue ChoosePixelFormatEx(System.IntPtr hdc,int maximumFormatCount) {
+			Gdi.PIXELFORMATDESCRIPTOR[] saneformats=GetPixelFormats(hdc,maximumFormatCount);
+			PixelFormatValue[] formats=PrioritizePixelFormats(saneformats,32,32,false,false);
+			if(formats.Length>0) {
+				//We most prefer non-buffered, non-accelerated pixel formats.
+				return formats[0];
+			}
+			formats=PrioritizePixelFormats(saneformats,32,32,false,true);
+			if(formats.Length>0) {
+				//We then prefer non-buffered, accelerated pixel formats.
+				return formats[0];
+			}
+			formats=PrioritizePixelFormats(saneformats,32,32,true,false);
+			if(formats.Length>0) {
+				//We then prefer buffered, non-acclerated formats.
+				return formats[0];
+			}
+			formats=PrioritizePixelFormats(saneformats,32,32,true,true);
+			if(formats.Length>0) {
+				//Finally, we least prefer buffered, accelerated formats.
+				return formats[0];
+			}
+			return new PixelFormatValue();//Invalid format, since its formatNumber is zero.
 		}
 
 		///<summary>Returns the selected pixel format of the tooth chart.</summary>
