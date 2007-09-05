@@ -1042,7 +1042,10 @@ namespace OpenDental{
 		}
 
 		private void FillTime() {
-			Color provColor=Providers.List[comboProvNum.SelectedIndex].ProvColor;
+			Color provColor=Color.Gray;
+			if(comboProvNum.SelectedIndex!=-1) {
+				provColor=Providers.List[comboProvNum.SelectedIndex].ProvColor;
+			}
 			for(int i=0;i<strBTime.Length;i++) {
 				if(strBTime.ToString(i,1)=="X") {
 					tbTime.BackGColor[0,i]=provColor;

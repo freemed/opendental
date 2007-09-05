@@ -523,10 +523,7 @@ namespace OpenDental{
 			int startIndex;
 			int provIndex;//the index of a provider within providers
 			Schedule[] schedDay;//all schedule items for a given day.
-			bool provHandled;
 			bool aptIsMatch=false;
-			//int afterIndex=0;//GetProvBarIndex(afterTime);
-			//int beforeIndex=0;//GetProvBarIndex(beforeTime);
 			while(ALresults.Count<resultCount//stops when the specified number of results are retrieved
 				&& dayEvaluating<afterDate.AddYears(2))
 			{
@@ -555,25 +552,18 @@ namespace OpenDental{
 						continue;
 					}
 					pattern=ContrApptSingle.GetPatternShowing(aptList[i].Pattern);
-					startIndex=(int)(((double)aptList[i].AptDateTime.Hour*(double)60/(double)PrefB.GetInt("AppointmentTimeIncrement")
-						+(double)aptList[i].AptDateTime.Minute/(double)PrefB.GetInt("AppointmentTimeIncrement"))
-						*(double)ContrApptSheet.Lh*ContrApptSheet.RowsPerIncr)
-						/ContrApptSheet.Lh;//rounds down
+					startIndex=(int)(((double)aptList[i].AptDateTime.Hour*(double)60/ContrApptSheet.MinPerRow
+						+(double)aptList[i].AptDateTime.Minute/ContrApptSheet.MinPerRow)
+						*(double)ContrApptSheet.Lh)/ContrApptSheet.Lh;//rounds down
 					for(int k=0;k<pattern.Length;k++){
 						if(pattern.Substring(k,1)=="X"){
 							provBar[provIndex][startIndex+k]++;
 						}
 					}
 				}
-				//for(int i=0;i<provBar[0].Length;i++){
-				//	Debug.Write(provBar[0][i].ToString());
-				//}
-				//Debug.WriteLine("");
 				//handle all schedules by setting element of provBarSched to true if provider schedule shows open.
 				schedDay=Schedules.RefreshPeriod(dayEvaluating,dayEvaluating);
 				for(int p=0;p<providers.Length;p++){
-					//provHandled=false;
-					//schedule for prov
 					for(int i=0;i<schedDay.Length;i++){
 						if(schedDay[i].SchedType!=ScheduleType.Provider){
 							continue;
@@ -581,12 +571,7 @@ namespace OpenDental{
 						if(providers[p]!=schedDay[i].ProvNum){
 							continue;
 						}
-						//if(schedDay[i].Status==SchedStatus.Closed || schedDay[i].Status==SchedStatus.Holiday){
-						//	provHandled=true;//all elements remain false.
-						//	break;
-						//}
 						SetProvBarSched(ref provBarSched[p],schedDay[i].StartTime,schedDay[i].StopTime);
-						//provHandled=true;
 					}
 				}
 				//step through day, one increment at a time, looking for a slot
@@ -617,12 +602,11 @@ namespace OpenDental{
 							continue;
 						}
 						//convert to valid time
-						hourFound=(int)((double)(i)/60*PrefB.GetInt("AppointmentTimeIncrement"));
+						hourFound=(int)((double)(i)/(float)60*ContrApptSheet.MinPerRow);//8am=48/60*10
 						timeFound=new TimeSpan(
 							hourFound,
 							//minutes. eg. (13-(2*60/10))*10
-							(int)((i-((double)hourFound*60/(double)PrefB.GetInt("AppointmentTimeIncrement")))
-								*PrefB.GetInt("AppointmentTimeIncrement")),
+							(int)((i-((double)hourFound*(float)60/ContrApptSheet.MinPerRow))*ContrApptSheet.MinPerRow),
 							0);
 						//make sure it's after the time restricted
 						//Debug.WriteLine(timeFound.ToString()+"  "+afterTime.ToString());
