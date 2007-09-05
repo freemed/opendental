@@ -70,9 +70,9 @@ namespace OpenDental{
 			this.checkDoubleBuffering=new System.Windows.Forms.CheckBox();
 			this.group3DToothChart=new System.Windows.Forms.GroupBox();
 			this.checkAllFormats=new System.Windows.Forms.CheckBox();
+			this.gridFormats=new OpenDental.UI.ODGrid();
 			this.label1=new System.Windows.Forms.Label();
 			this.buttonAutoFormat=new System.Windows.Forms.Button();
-			this.gridFormats=new OpenDental.UI.ODGrid();
 			this.butOK=new OpenDental.UI.Button();
 			this.butCancel=new OpenDental.UI.Button();
 			this.group3DToothChart.SuspendLayout();
@@ -111,6 +111,7 @@ namespace OpenDental{
 			// 
 			// group3DToothChart
 			// 
+			this.group3DToothChart.Controls.Add(this.buttonAutoFormat);
 			this.group3DToothChart.Controls.Add(this.checkAllFormats);
 			this.group3DToothChart.Controls.Add(this.gridFormats);
 			this.group3DToothChart.Controls.Add(this.label1);
@@ -118,7 +119,7 @@ namespace OpenDental{
 			this.group3DToothChart.Controls.Add(this.checkDoubleBuffering);
 			this.group3DToothChart.Location=new System.Drawing.Point(47,67);
 			this.group3DToothChart.Name="group3DToothChart";
-			this.group3DToothChart.Size=new System.Drawing.Size(908,271);
+			this.group3DToothChart.Size=new System.Drawing.Size(908,300);
 			this.group3DToothChart.TabIndex=5;
 			this.group3DToothChart.TabStop=false;
 			this.group3DToothChart.Text="Options For 3D Tooth Chart";
@@ -134,25 +135,6 @@ namespace OpenDental{
 			this.checkAllFormats.UseVisualStyleBackColor=true;
 			this.checkAllFormats.CheckedChanged+=new System.EventHandler(this.checkAllFormats_CheckedChanged);
 			// 
-			// label1
-			// 
-			this.label1.AutoSize=true;
-			this.label1.Location=new System.Drawing.Point(6,68);
-			this.label1.Name="label1";
-			this.label1.Size=new System.Drawing.Size(166,13);
-			this.label1.TabIndex=6;
-			this.label1.Text="List of Available Graphics Formats";
-			// 
-			// buttonAutoFormat
-			// 
-			this.buttonAutoFormat.Location=new System.Drawing.Point(53,364);
-			this.buttonAutoFormat.Name="buttonAutoFormat";
-			this.buttonAutoFormat.Size=new System.Drawing.Size(127,23);
-			this.buttonAutoFormat.TabIndex=6;
-			this.buttonAutoFormat.Text="Auto-Select Format";
-			this.buttonAutoFormat.UseVisualStyleBackColor=true;
-			this.buttonAutoFormat.Click+=new System.EventHandler(this.buttonAutoFormat_Click);
-			// 
 			// gridFormats
 			// 
 			this.gridFormats.HScrollVisible=false;
@@ -165,6 +147,25 @@ namespace OpenDental{
 			this.gridFormats.TranslationName=null;
 			this.gridFormats.CellClick+=new OpenDental.UI.ODGridClickEventHandler(this.gridFormats_CellClick);
 			// 
+			// label1
+			// 
+			this.label1.AutoSize=true;
+			this.label1.Location=new System.Drawing.Point(6,68);
+			this.label1.Name="label1";
+			this.label1.Size=new System.Drawing.Size(166,13);
+			this.label1.TabIndex=6;
+			this.label1.Text="List of Available Graphics Formats";
+			// 
+			// buttonAutoFormat
+			// 
+			this.buttonAutoFormat.Location=new System.Drawing.Point(6,268);
+			this.buttonAutoFormat.Name="buttonAutoFormat";
+			this.buttonAutoFormat.Size=new System.Drawing.Size(127,23);
+			this.buttonAutoFormat.TabIndex=6;
+			this.buttonAutoFormat.Text="Auto-Select Format";
+			this.buttonAutoFormat.UseVisualStyleBackColor=true;
+			this.buttonAutoFormat.Click+=new System.EventHandler(this.buttonAutoFormat_Click);
+			// 
 			// butOK
 			// 
 			this.butOK.AdjustImageLocation=new System.Drawing.Point(0,0);
@@ -173,7 +174,7 @@ namespace OpenDental{
 			this.butOK.BtnShape=OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle=OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius=4F;
-			this.butOK.Location=new System.Drawing.Point(778,364);
+			this.butOK.Location=new System.Drawing.Point(778,373);
 			this.butOK.Name="butOK";
 			this.butOK.Size=new System.Drawing.Size(75,26);
 			this.butOK.TabIndex=1;
@@ -188,7 +189,7 @@ namespace OpenDental{
 			this.butCancel.BtnShape=OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butCancel.BtnStyle=OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius=4F;
-			this.butCancel.Location=new System.Drawing.Point(880,364);
+			this.butCancel.Location=new System.Drawing.Point(880,373);
 			this.butCancel.Name="butCancel";
 			this.butCancel.Size=new System.Drawing.Size(75,26);
 			this.butCancel.TabIndex=0;
@@ -198,8 +199,7 @@ namespace OpenDental{
 			// FormGraphics
 			// 
 			this.AutoScaleBaseSize=new System.Drawing.Size(5,13);
-			this.ClientSize=new System.Drawing.Size(992,415);
-			this.Controls.Add(this.buttonAutoFormat);
+			this.ClientSize=new System.Drawing.Size(992,424);
 			this.Controls.Add(this.group3DToothChart);
 			this.Controls.Add(this.checkSimpleChart);
 			this.Controls.Add(this.butOK);
