@@ -286,8 +286,10 @@ namespace OpenDental{
 			etrans.CarrierNum2=PIn.PInt(table.Rows[0][1].ToString());//might be 0 if no secondary on this claim
 			etrans.MessageText=messageText;
 			etrans.BatchNumber=batchNumber;
-			X837 x837=new X837(messageText);
-			etrans.TransSetNum=x837.GetTransNum(claimNum);
+			if(X837.IsX12(messageText)) {
+				X837 x837=new X837(messageText);
+				etrans.TransSetNum=x837.GetTransNum(claimNum);
+			}
 			if(etype==EtransType.Claim_CA){
 				etrans.OfficeSequenceNumber=0;
 				//find the next officeSequenceNumber
