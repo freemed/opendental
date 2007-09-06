@@ -253,6 +253,8 @@ namespace OpenDental {
 			Application.DoEvents();
 			MedicationPatDeleteWithInvalidMedNum();
 			Application.DoEvents();
+			PatientBadGuarantor();
+			Application.DoEvents();
 			PatientPriProvMissing();
 			Application.DoEvents();
 			PatientUnDeleteWithBalance();
@@ -863,6 +865,19 @@ namespace OpenDental {
 			int numberFixed=General.NonQ(command);
 			if(numberFixed>0 || checkShow.Checked) {
 				textLog.Text+=Lan.g(this,"Medications deleted because no defition exists for them: ")+numberFixed.ToString()+"\r\n";
+			}
+		}
+
+		private void PatientBadGuarantor() {
+			command="SELECT p.PatNum FROM patient p LEFT JOIN patient p2 ON p.Guarantor = p2.PatNum WHERE p2.PatNum IS NULL";
+			table=General.GetTable(command);
+			for(int i=0;i<table.Rows.Count;i++) {
+				command="UPDATE patient SET Guarantor=PatNum WHERE PatNum="+table.Rows[i][0].ToString();
+				General.NonQ(command);
+			}
+			int numberFixed=table.Rows.Count;
+			if(numberFixed>0 || checkShow.Checked) {
+				textLog.Text+=Lan.g(this,"Patients with invalid Guarantors fixed: ")+numberFixed.ToString()+"\r\n";
 			}
 		}
 
