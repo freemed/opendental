@@ -723,7 +723,7 @@ namespace OpenDental{
 		}
 
 		///<summary>This is public for NewPatientForm functionality.</summary>
-  		public void RefreshModuleData(int patNum){
+  	public void RefreshModuleData(int patNum){
 			SelectTreeNode(null);//Clear selection and image and reset visibilities.
 			if(patNum==0){
 				imageStore=null;
@@ -867,7 +867,7 @@ namespace OpenDental{
 					EnableTreeItemTools(true,true,true,true,false,false,false,true,true,true,false,false,false);
 				}else{//This is a document node.
 					//Reload the doc from the db. We don't just keep reusing the tree data, because it will become more and 
-					//more stail with age if the program is left open in the image module for long periods of time.
+					//more stale with age if the program is left open in the image module for long periods of time.
 					selectionDoc=Documents.GetByNum(docNum);
 					hotDocument=0;
 					currentImages=imageStore.RetrieveImage(new Document[] {selectionDoc});
