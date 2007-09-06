@@ -69,10 +69,10 @@ namespace OpenDental{
 			this.checkSimpleChart=new System.Windows.Forms.CheckBox();
 			this.checkDoubleBuffering=new System.Windows.Forms.CheckBox();
 			this.group3DToothChart=new System.Windows.Forms.GroupBox();
+			this.buttonAutoFormat=new System.Windows.Forms.Button();
 			this.checkAllFormats=new System.Windows.Forms.CheckBox();
 			this.gridFormats=new OpenDental.UI.ODGrid();
 			this.label1=new System.Windows.Forms.Label();
-			this.buttonAutoFormat=new System.Windows.Forms.Button();
 			this.butOK=new OpenDental.UI.Button();
 			this.butCancel=new OpenDental.UI.Button();
 			this.group3DToothChart.SuspendLayout();
@@ -119,10 +119,20 @@ namespace OpenDental{
 			this.group3DToothChart.Controls.Add(this.checkDoubleBuffering);
 			this.group3DToothChart.Location=new System.Drawing.Point(47,67);
 			this.group3DToothChart.Name="group3DToothChart";
-			this.group3DToothChart.Size=new System.Drawing.Size(908,300);
+			this.group3DToothChart.Size=new System.Drawing.Size(833,300);
 			this.group3DToothChart.TabIndex=5;
 			this.group3DToothChart.TabStop=false;
 			this.group3DToothChart.Text="Options For 3D Tooth Chart";
+			// 
+			// buttonAutoFormat
+			// 
+			this.buttonAutoFormat.Location=new System.Drawing.Point(6,268);
+			this.buttonAutoFormat.Name="buttonAutoFormat";
+			this.buttonAutoFormat.Size=new System.Drawing.Size(127,23);
+			this.buttonAutoFormat.TabIndex=6;
+			this.buttonAutoFormat.Text="Auto-Select Format";
+			this.buttonAutoFormat.UseVisualStyleBackColor=true;
+			this.buttonAutoFormat.Click+=new System.EventHandler(this.buttonAutoFormat_Click);
 			// 
 			// checkAllFormats
 			// 
@@ -141,7 +151,7 @@ namespace OpenDental{
 			this.gridFormats.Location=new System.Drawing.Point(6,85);
 			this.gridFormats.Name="gridFormats";
 			this.gridFormats.ScrollValue=0;
-			this.gridFormats.Size=new System.Drawing.Size(896,180);
+			this.gridFormats.Size=new System.Drawing.Size(821,180);
 			this.gridFormats.TabIndex=8;
 			this.gridFormats.Title=null;
 			this.gridFormats.TranslationName=null;
@@ -156,16 +166,6 @@ namespace OpenDental{
 			this.label1.TabIndex=6;
 			this.label1.Text="List of Available Graphics Formats";
 			// 
-			// buttonAutoFormat
-			// 
-			this.buttonAutoFormat.Location=new System.Drawing.Point(6,268);
-			this.buttonAutoFormat.Name="buttonAutoFormat";
-			this.buttonAutoFormat.Size=new System.Drawing.Size(127,23);
-			this.buttonAutoFormat.TabIndex=6;
-			this.buttonAutoFormat.Text="Auto-Select Format";
-			this.buttonAutoFormat.UseVisualStyleBackColor=true;
-			this.buttonAutoFormat.Click+=new System.EventHandler(this.buttonAutoFormat_Click);
-			// 
 			// butOK
 			// 
 			this.butOK.AdjustImageLocation=new System.Drawing.Point(0,0);
@@ -174,7 +174,7 @@ namespace OpenDental{
 			this.butOK.BtnShape=OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle=OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius=4F;
-			this.butOK.Location=new System.Drawing.Point(778,373);
+			this.butOK.Location=new System.Drawing.Point(678,373);
 			this.butOK.Name="butOK";
 			this.butOK.Size=new System.Drawing.Size(75,26);
 			this.butOK.TabIndex=1;
@@ -189,7 +189,7 @@ namespace OpenDental{
 			this.butCancel.BtnShape=OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butCancel.BtnStyle=OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius=4F;
-			this.butCancel.Location=new System.Drawing.Point(880,373);
+			this.butCancel.Location=new System.Drawing.Point(780,373);
 			this.butCancel.Name="butCancel";
 			this.butCancel.Size=new System.Drawing.Size(75,26);
 			this.butCancel.TabIndex=0;
@@ -199,7 +199,7 @@ namespace OpenDental{
 			// FormGraphics
 			// 
 			this.AutoScaleBaseSize=new System.Drawing.Size(5,13);
-			this.ClientSize=new System.Drawing.Size(992,424);
+			this.ClientSize=new System.Drawing.Size(892,424);
 			this.Controls.Add(this.group3DToothChart);
 			this.Controls.Add(this.checkSimpleChart);
 			this.Controls.Add(this.butOK);
@@ -224,25 +224,21 @@ namespace OpenDental{
 			gridFormats.Columns.Clear();
 			ODGridColumn col=new ODGridColumn(Lan.g(this,"FormatNum"),80);
 			gridFormats.Columns.Add(col);
-			col=new ODGridColumn(Lan.g(this,"OpenGL"),80);
+			col=new ODGridColumn(Lan.g(this,"OpenGL"),60);
 			gridFormats.Columns.Add(col);
 			col=new ODGridColumn(Lan.g(this,"Windowed"),80);
 			gridFormats.Columns.Add(col);
 			col=new ODGridColumn(Lan.g(this,"Bitmapped"),80);
 			gridFormats.Columns.Add(col);
-			col=new ODGridColumn(Lan.g(this,"Palette"),80);
+			col=new ODGridColumn(Lan.g(this,"Palette"),75);
 			gridFormats.Columns.Add(col);
-			col=new ODGridColumn(Lan.g(this,"FullAccel"),80);
+			col=new ODGridColumn(Lan.g(this,"Accelerated"),80);
 			gridFormats.Columns.Add(col);
-			col=new ODGridColumn(Lan.g(this,"PartialAccel"),80);
+			col=new ODGridColumn(Lan.g(this,"Buffered"),75);
 			gridFormats.Columns.Add(col);
-			col=new ODGridColumn(Lan.g(this,"SoftOnly"),80);
+			col=new ODGridColumn(Lan.g(this,"ColorBits"),75);
 			gridFormats.Columns.Add(col);
-			col=new ODGridColumn(Lan.g(this,"Buffered"),80);
-			gridFormats.Columns.Add(col);
-			col=new ODGridColumn(Lan.g(this,"ColorBits"),80);
-			gridFormats.Columns.Add(col);
-			col=new ODGridColumn(Lan.g(this,"DepthBits"),80);
+			col=new ODGridColumn(Lan.g(this,"DepthBits"),75);
 			gridFormats.Columns.Add(col);
 			gridFormats.EndUpdate();
 			ComputerPref computerPrefs=ComputerPrefs.GetForLocalComputer();
@@ -263,9 +259,7 @@ namespace OpenDental{
 				row.Cells.Add(OpenGLWinFormsControl.FormatSupportsWindow(formats[i].pfd)?"Yes":"No");
 				row.Cells.Add(OpenGLWinFormsControl.FormatSupportsBitmap(formats[i].pfd)?"Yes":"No");
 				row.Cells.Add(OpenGLWinFormsControl.FormatUsesPalette(formats[i].pfd)?"Yes":"No");
-				row.Cells.Add(OpenGLWinFormsControl.FormatIsICD(formats[i].pfd)?"Yes":"No");//full hardware?
-				row.Cells.Add(OpenGLWinFormsControl.FormatIsMCD(formats[i].pfd)?"Yes":"No");//partial hardware?
-				row.Cells.Add(OpenGLWinFormsControl.FormatIsSoftwareOnly(formats[i].pfd)?"Yes":"No");
+				row.Cells.Add(OpenGLWinFormsControl.FormatSupportsAcceleration(formats[i].pfd)?"Yes":"No");
 				row.Cells.Add(OpenGLWinFormsControl.FormatSupportsDoubleBuffering(formats[i].pfd)?"Yes":"No");
 				row.Cells.Add(formats[i].pfd.cColorBits.ToString());
 				row.Cells.Add(formats[i].pfd.cDepthBits.ToString());

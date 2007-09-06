@@ -311,21 +311,15 @@ namespace CodeBase {
 				Gdi.PIXELFORMATDESCRIPTOR pfd=unsortedFormats[i];
 				long bpp=pfd.cColorBits;
 				long depth=pfd.cDepthBits;
-				bool pal=(pfd.iPixelType==Gdi.PFD_TYPE_COLORINDEX);
-				bool icd=(pfd.dwFlags&Gdi.PFD_GENERIC_FORMAT)==0&&
-					(pfd.dwFlags&Gdi.PFD_GENERIC_ACCELERATED)==0;//full hardware accel.
-				bool mcd=(pfd.dwFlags&Gdi.PFD_GENERIC_FORMAT)!=0&&
-					(pfd.dwFlags&Gdi.PFD_GENERIC_ACCELERATED)!=0;//general/partial hardware accel.
-				bool soft=(pfd.dwFlags&Gdi.PFD_GENERIC_FORMAT)!=0&&
-					(pfd.dwFlags&Gdi.PFD_GENERIC_ACCELERATED)==0;//software only
-				bool opengl=(pfd.dwFlags&Gdi.PFD_SUPPORT_OPENGL)!=0;
-				bool window=(pfd.dwFlags&Gdi.PFD_DRAW_TO_WINDOW)!=0;
-				bool bitmap=(pfd.dwFlags&Gdi.PFD_DRAW_TO_BITMAP)!=0;
-				bool dbuff=(pfd.dwFlags&Gdi.PFD_DOUBLEBUFFER)!=0;
+				bool pal=FormatUsesPalette(pfd);
+				bool hardware=FormatSupportsAcceleration(pfd);
+				bool opengl=FormatSupportsOpenGL(pfd);
+				bool window=FormatSupportsWindow(pfd);
+				bool bitmap=FormatSupportsBitmap(pfd);
+				bool dbuff=FormatSupportsDoubleBuffering(pfd);
 				long q=0;//Value indicating the level of desire requested of the current format.
 				//Recognize formats which do not meet minimum requirements first and foremost.
-				if(!opengl||!window||bpp<8||depth<8||pal||requireDoubleBuffering!=dbuff||
-					(requireHardwareAccerleration&&soft&&!mcd&&!icd)||(!requireHardwareAccerleration&&!soft&&(mcd||icd))) {
+				if(!opengl||!window||bpp<8||depth<8||pal||requireDoubleBuffering!=dbuff||requireHardwareAccerleration!=hardware) {
 					continue;
 				}
 				//Check that color depth meets requested depth or better. Penalty for color-depths which are less than the requested.
@@ -378,27 +372,9 @@ namespace CodeBase {
 			return (pfd.iPixelType==Gdi.PFD_TYPE_COLORINDEX);
 		}
 
-		///<summary>Does the pixel format support full hardware acceleration?</summary>
-		public static bool FormatIsICD(Gdi.PIXELFORMATDESCRIPTOR pfd) {
-			return (pfd.dwFlags&Gdi.PFD_GENERIC_FORMAT)==0&&
-						(pfd.dwFlags&Gdi.PFD_GENERIC_ACCELERATED)==0;
-		}
-
-		///<summary>Does the pixel format support general hardware acceleration?</summary>
-		public static bool FormatIsMCD(Gdi.PIXELFORMATDESCRIPTOR pfd) {
-			return (pfd.dwFlags&Gdi.PFD_GENERIC_FORMAT)!=0&&
-						(pfd.dwFlags&Gdi.PFD_GENERIC_ACCELERATED)!=0;
-		}
-
-		///<summary>Returns true if the given pixel format supports some kind of hardware acceleration.</summary>
+		///<summary>Returns true if the given pixel format supports some kind of hardware acceleration, false if the format is a software only graphics.</summary>
 		public static bool FormatSupportsAcceleration(Gdi.PIXELFORMATDESCRIPTOR pfd) {
-			return FormatIsICD(pfd)||FormatIsMCD(pfd);
-		}
-
-		///<summary>Does the pixel format only allow software rendering?</summary>
-		public static bool FormatIsSoftwareOnly(Gdi.PIXELFORMATDESCRIPTOR pfd) {
-			return (pfd.dwFlags&Gdi.PFD_GENERIC_FORMAT)!=0&&
-						(pfd.dwFlags&Gdi.PFD_GENERIC_ACCELERATED)==0;
+			return (pfd.dwFlags&Gdi.PFD_GENERIC_FORMAT)==0;
 		}
 
 		///<summary>Returns true if the given pixel format supports OpenGL rendering, false otherwise.</summary>
