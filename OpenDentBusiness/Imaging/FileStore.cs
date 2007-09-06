@@ -10,6 +10,7 @@ using OpenDentBusiness;
 using OpenDentBusiness.Imaging;
 using System.Security.Cryptography;
 using System.Drawing.Imaging;
+using System.Windows.Forms;
 
 namespace OpenDental.Imaging {
 	public class FileStore : IImageStore {
@@ -87,7 +88,6 @@ namespace OpenDental.Imaging {
 				}
 				catch {
 					throw new Exception(Lan.g("ContrDocs", "Error.  Could not create folder for patient. "));
-					return;
 				}
 			}
 			//now find all files in the patient folder that are not in the db and add them
@@ -116,12 +116,14 @@ namespace OpenDental.Imaging {
 				throw new ArgumentNullException("document");
 
 			string srcFileName = ODFileUtils.CombinePaths(PatFolder, document.FileName);
-			if (File.Exists(srcFileName) && HasImageExtension(srcFileName)) {
-				return new Bitmap(srcFileName);
+			if(File.Exists(srcFileName)){
+				if(HasImageExtension(srcFileName)){
+					return new Bitmap(srcFileName);
+				}
+			}else{
+				MessageBox.Show(Lan.g("ContrDocs","File not found")+document.FileName);
 			}
-			else {
-				throw new ImageNotFoundException(Lan.g("ContrDocs", "File not found: ") + srcFileName);
-			}
+			return null;
 		}
 
 		public Collection<Bitmap> RetrieveImage(IList<Document> documents) {
@@ -184,11 +186,24 @@ namespace OpenDental.Imaging {
 			doc.FileName = Path.GetExtension(path);
 			doc.DateCreated = DateTime.Today;
 			doc.PatNum = Patient.PatNum;
-			doc.ImgType = HasImageExtension(path) ? ImageType.Photo : ImageType.Document;
+			doc.ImgType = (HasImageExtension(path)||Path.GetExtension(path)=="") ? ImageType.Photo : ImageType.Document;
 			doc.DocCategory = docCategory;
 			Documents.Insert(doc, Patient);//this assigns a filename and saves to db
 			try {
-				File.Copy(path, ODFileUtils.CombinePaths(patFolder, doc.FileName));
+				string destinationFile=ODFileUtils.CombinePaths(patFolder,doc.FileName);
+				if(Path.GetExtension(path)=="") {
+					try {//Find out if the file is actually an image.
+						Bitmap testImage=new Bitmap(path);
+						testImage.Save(destinationFile+".jpg",ImageFormat.Jpeg);
+						testImage.Dispose();
+						doc.FileName+=".jpg";
+						Documents.Update(doc);
+					} catch {
+						File.Copy(path,destinationFile);
+					}
+				} else {
+					File.Copy(path,destinationFile);
+				}
 			}
 			catch {
 				Documents.Delete(doc);
