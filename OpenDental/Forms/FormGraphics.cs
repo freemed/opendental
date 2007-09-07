@@ -317,7 +317,9 @@ namespace OpenDental{
 		private void butOK_Click(object sender, System.EventArgs e) {
 			OpenGLWinFormsControl contextTester=new OpenGLWinFormsControl();
 			try{
-				contextTester.TaoInitializeContexts(currentFormatNum);
+				if(contextTester.TaoInitializeContexts(currentFormatNum)!=currentFormatNum){
+					throw new Exception(Lan.g(this,"Could not initialize pixel format ")+currentFormatNum+".");
+				}
 			}catch(Exception ex){
 				MessageBox.Show(Lan.g(this,"Please choose a different pixel format, the selected pixel format will not support the 3D tooth chart on this computer: "+ex.Message));
 				contextTester.Dispose();

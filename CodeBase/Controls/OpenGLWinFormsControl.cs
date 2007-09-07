@@ -161,39 +161,44 @@ namespace CodeBase {
 			if(deviceContext == IntPtr.Zero) {
 				throw new Exception("CreateContexts: Unable to create an OpenGL device context");
 			}
-			bool invalidFormat=false;
 			int selectedFormat=0;
 			Gdi.PIXELFORMATDESCRIPTOR pixelFormat=new Gdi.PIXELFORMATDESCRIPTOR();
 			pixelFormat.nSize=(short)Marshal.SizeOf(pixelFormat);
 			pixelFormat.nVersion=1;
-			if(preferredPixelFormatNum>0){
-				try{
-					_DescribePixelFormat(pDeviceContext,preferredPixelFormatNum,(uint)pixelFormat.nSize,ref pixelFormat);
-					selectedFormat=preferredPixelFormatNum;
-				}catch{
-					invalidFormat=true;
+			//Here we care most about finding a format that will allow the proper creation of the control first and foremost, because even if the format is so bad that output to the display cannot be understood by the user, then the user is able to change the graphical options from within the program. We care second most about finding a format which is quick to load and which will be most time efficient during graphics display. Again, if a wrong choice is made, the user can make a choice of format manually.
+			try {//Simply try the preferred pixel format number. If it works, then that is all we care about. Remember, 0 is an invalid format number.
+				if(_DescribePixelFormat(deviceContext,preferredPixelFormatNum,(uint)pixelFormat.nSize,ref pixelFormat)==0 ||
+					!Gdi.SetPixelFormat(deviceContext,preferredPixelFormatNum,ref pixelFormat)) {
+					throw new Exception(string.Format("Unable to set the requested pixel format ({0})",selectedFormat));
 				}
-			}else{
-				invalidFormat=true;
-			}
-			if(invalidFormat){//Automatically select an most-commonly safe pixel format.
-				PixelFormatValue pfv=ChoosePixelFormatEx(deviceContext);
-				pixelFormat=pfv.pfd;
-				selectedFormat=pfv.formatNumber;
+				selectedFormat=preferredPixelFormatNum;
+			}catch{//Could not set the preferred pixel format for some reason. Possibly initial startup or the graphics card or driver changed since the program was last started.
+				//Now try to auto-select the best pixel-format for speed efficientcy and graphical quality.
+				try{
+					PixelFormatValue pfv=ChoosePixelFormatEx(deviceContext);
+					if(!Gdi.SetPixelFormat(deviceContext,pfv.formatNumber,ref pfv.pfd)) {
+						throw new Exception("");
+					}
+					pixelFormat=pfv.pfd;
+					selectedFormat=pfv.formatNumber;
+				}catch{
+					pixelFormat=new Gdi.PIXELFORMATDESCRIPTOR();//Zero out the old pixel format.
+					pixelFormat.nSize=(short)Marshal.SizeOf(pixelFormat);
+					pixelFormat.nVersion=1;
+					//Unable to select a good pixel format. Now we are desperate. Try all formats starting from 1 until we get some format which at least works. That way the user can change the pixel format from the graphical options from inside the program after this point.
+					selectedFormat=0;
+					do{
+						selectedFormat++;
+						if(selectedFormat>_DescribePixelFormat(deviceContext,selectedFormat,(uint)pixelFormat.nSize,ref pixelFormat)){
+ 							throw new Exception("There are no acceptable pixel formats for OpenGL graphics.");
+						}
+					}while(!Gdi.SetPixelFormat(deviceContext,selectedFormat,ref pixelFormat));
+				}
 			}
 			colorBits=pixelFormat.cColorBits;
 			depthBits=pixelFormat.cDepthBits;
 			autoSwapBuffers=FormatSupportsDoubleBuffering(pixelFormat);
-			usehardware=FormatSupportsAcceleration(pixelFormat);			
-			
-			//Make sure the requested pixel format is available
-			if(selectedFormat == 0) {
-				throw new Exception("CreateContexts: Unable to find a suitable pixel format. Your graphics hardware does not support the 3D tooth chart.");
-			}
-
-			if(!Gdi.SetPixelFormat(deviceContext,selectedFormat,ref pixelFormat)) {
-				throw new Exception(string.Format("CreateContexts: Unable to set the requested pixel format ({0})",selectedFormat));
-			}
+			usehardware=FormatSupportsAcceleration(pixelFormat);
 
 			//Create rendering context
 			renderContext = Wgl.wglCreateContext(deviceContext);
