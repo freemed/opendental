@@ -5691,6 +5691,23 @@ namespace OpenDental{
 				command="UPDATE preference SET ValueString = '5.1.11.0' WHERE PrefName = 'DataBaseVersion'";
 				General.NonQEx(command);
 			}
+			To5_1_12();
+		}
+
+		private void To5_1_12() {
+			if(FromVersion<new Version("5.1.12.0")) {
+				string command="";
+				command="UPDATE computerpref SET PreferredPixelFormatNum='0'";//again
+				General.NonQEx(command);
+				command="UPDATE computerpref SET GraphicsUseHardware='1'";
+				General.NonQEx(command);
+				command="UPDATE computerpref SET GraphicsDoubleBuffering='1'";
+				General.NonQEx(command);
+				command="UPDATE computerpref SET GraphicsSimple='0'";
+				General.NonQEx(command);
+				command="UPDATE preference SET ValueString = '5.1.12.0' WHERE PrefName = 'DataBaseVersion'";
+				General.NonQEx(command);
+			}
 			To5_2_0();
 		}
 

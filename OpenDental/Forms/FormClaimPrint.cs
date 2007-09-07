@@ -255,9 +255,9 @@ namespace OpenDental{
 			  }
 			}
 			if(HasMedical){
-					FillMedInsStrings();
-					FillMedValueCodes();
-					FillMedCondCodes();
+				FillMedInsStrings();
+				FillMedValueCodes();
+				FillMedCondCodes();
 			}
 			Graphics grfx=ev.Graphics;
 			float xPosText;
