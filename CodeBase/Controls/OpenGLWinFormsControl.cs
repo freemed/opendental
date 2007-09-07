@@ -177,7 +177,7 @@ namespace CodeBase {
 				invalidFormat=true;
 			}
 			if(invalidFormat){//Automatically select an most-commonly safe pixel format.
-				PixelFormatValue pfv=ChoosePixelFormatEx(deviceContext,100);
+				PixelFormatValue pfv=ChoosePixelFormatEx(deviceContext);
 				pixelFormat=pfv.pfd;
 				selectedFormat=pfv.formatNumber;
 			}
@@ -271,18 +271,11 @@ namespace CodeBase {
 
 		public class PixelFormatValue:IComparable {
 			public Gdi.PIXELFORMATDESCRIPTOR pfd;
-			public long q;
 			public int formatNumber;
 
 			public int CompareTo(object obj) {
 				PixelFormatValue other=(PixelFormatValue)obj;
-				//Format desire is of most importance.
-				if(other.q>q) {
-					return 1;
-				} else if(other.q<q) {
-					return -1;
-				}
-				//Next, sort by color depth, with greatest color depth first.
+				//Sort by color depth, with greatest color depth first.
 				if(other.pfd.cColorBits>pfd.cColorBits) {
 					return 1;
 				} else if(other.pfd.cColorBits<pfd.cColorBits) {
@@ -295,9 +288,9 @@ namespace CodeBase {
 					return -1;
 				}
 				//Now by format number.
-				if(other.formatNumber>formatNumber){
+				if(other.formatNumber<formatNumber){
 					return 1;
-				}else if(other.formatNumber<formatNumber){
+				}else if(other.formatNumber>formatNumber){
 					return -1;
 				}
 				//At this point the formats are considered equivalent.
@@ -305,8 +298,8 @@ namespace CodeBase {
 			}
 		};
 
-		public static PixelFormatValue[] PrioritizePixelFormats(Gdi.PIXELFORMATDESCRIPTOR[] unsortedFormats,int preferredPixelBits,int preferredDepthBits,bool requireDoubleBuffering,bool requireHardwareAccerleration) {
-			ArrayList sortedFormatsByQValue=new ArrayList();
+		public static PixelFormatValue[] PrioritizePixelFormats(Gdi.PIXELFORMATDESCRIPTOR[] unsortedFormats,bool requireDoubleBuffering,bool requireHardwareAccerleration) {
+			ArrayList sortedFormats=new ArrayList();
 			for(int i=0;i<unsortedFormats.Length;i++) {
 				Gdi.PIXELFORMATDESCRIPTOR pfd=unsortedFormats[i];
 				long bpp=pfd.cColorBits;
@@ -317,46 +310,25 @@ namespace CodeBase {
 				bool window=FormatSupportsWindow(pfd);
 				bool bitmap=FormatSupportsBitmap(pfd);
 				bool dbuff=FormatSupportsDoubleBuffering(pfd);
-				long q=0;//Value indicating the level of desire requested of the current format.
 				//Recognize formats which do not meet minimum requirements first and foremost.
 				if(!opengl||!window||bpp<8||depth<8||pal||requireDoubleBuffering!=dbuff||requireHardwareAccerleration!=hardware) {
 					continue;
 				}
-				//Check that color depth meets requested depth or better. Penalty for color-depths which are less than the requested.
-				if(bpp>=preferredPixelBits) {
-					q+=0x0800;
-				} else {
-					q-=0x0800*(preferredPixelBits-bpp);
-				}
-				//Check that z-depth meets requested z-depth or better. Penalty for z-depths which are less than the requested.
-				if(depth>=preferredDepthBits) {
-					q+=0x0400;
-				} else {
-					q-=0x0400*(preferredDepthBits-depth);
-				}
-				//We are pretty much neutral with bitmapped formats, as long as the format supports windowed rendering.
-				//Formats which are bitmapped only are not valid for our uses and lead to blank OpenGL displays. For this
-				//reason, there is a slight penalty for bitmapped formats (which really only will make a difference if
-				//this format is windowed).
-				if(bitmap) {
-					q-=0x0001;
-				}
 				PixelFormatValue pfv=new PixelFormatValue();
 				pfv.pfd=pfd;
-				pfv.q=q;
 				pfv.formatNumber=i+1;
-				sortedFormatsByQValue.Add(pfv);
+				sortedFormats.Add(pfv);
 			}
-			sortedFormatsByQValue.Sort();
-			return (PixelFormatValue[])sortedFormatsByQValue.ToArray(typeof(PixelFormatValue));
+			sortedFormats.Sort();
+			return (PixelFormatValue[])sortedFormats.ToArray(typeof(PixelFormatValue));
 		}
 
 		///<summary>Returns the pixel formats from 1 to Max(maximumCount,maximum available pixel formats).</summary>
-		public static Gdi.PIXELFORMATDESCRIPTOR[] GetPixelFormats(System.IntPtr hdc,int maximumCount) {
+		public static Gdi.PIXELFORMATDESCRIPTOR[] GetPixelFormats(System.IntPtr hdc) {
 			Gdi.PIXELFORMATDESCRIPTOR pfd=new Gdi.PIXELFORMATDESCRIPTOR();
 			pfd.nSize=(short)Marshal.SizeOf(pfd);
 			pfd.nVersion=1;
-			int numFormats=Math.Max(Math.Min(maximumCount,_DescribePixelFormat(hdc,1,(uint)pfd.nSize,ref pfd)),0);
+			int numFormats=_DescribePixelFormat(hdc,1,(uint)pfd.nSize,ref pfd);
 			Gdi.PIXELFORMATDESCRIPTOR[] pixelFormats=new Gdi.PIXELFORMATDESCRIPTOR[numFormats];
 			for(int i=0;i<pixelFormats.Length;i++) {
 				pixelFormats[i]=new Gdi.PIXELFORMATDESCRIPTOR();
@@ -401,27 +373,24 @@ namespace CodeBase {
 			return User.GetDC(this.Handle);
 		}
 
-		///<summary>Tries to automatically select the pixel format which is most likely to work. Use in the case that the program is being loaded for the first time.</summary>
-		public static PixelFormatValue ChoosePixelFormatEx(System.IntPtr hdc,int maximumFormatCount) {
-			Gdi.PIXELFORMATDESCRIPTOR[] saneformats=GetPixelFormats(hdc,maximumFormatCount);
-			PixelFormatValue[] formats=PrioritizePixelFormats(saneformats,32,32,false,false);
+		///<summary>Tries to automatically select the pixel format which will be most efficient if it works. Use in the case that the program is being loaded for the first time.</summary>
+		public static PixelFormatValue ChoosePixelFormatEx(System.IntPtr hdc) {
+			Gdi.PIXELFORMATDESCRIPTOR[] saneformats=GetPixelFormats(hdc);
+			PixelFormatValue[] formats=null;
+			formats=PrioritizePixelFormats(saneformats,true,true);//Buffered and accelerated.
 			if(formats.Length>0) {
-				//We most prefer non-buffered, non-accelerated pixel formats.
 				return formats[0];
 			}
-			formats=PrioritizePixelFormats(saneformats,32,32,false,true);
+			formats=PrioritizePixelFormats(saneformats,false,true);//Non-buffered and accelerated.
 			if(formats.Length>0) {
-				//We then prefer non-buffered, accelerated pixel formats.
 				return formats[0];
 			}
-			formats=PrioritizePixelFormats(saneformats,32,32,true,false);
+			formats=PrioritizePixelFormats(saneformats,true,false);//Buffered and non-accelerated.
 			if(formats.Length>0) {
-				//We then prefer buffered, non-acclerated formats.
 				return formats[0];
 			}
-			formats=PrioritizePixelFormats(saneformats,32,32,true,true);
+			formats=PrioritizePixelFormats(saneformats,false,false);//Non-buffered and non-accelerated.
 			if(formats.Length>0) {
-				//Finally, we least prefer buffered, accelerated formats.
 				return formats[0];
 			}
 			return new PixelFormatValue();//Invalid format, since its formatNumber is zero.

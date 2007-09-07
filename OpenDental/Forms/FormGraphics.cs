@@ -26,6 +26,7 @@ namespace OpenDental{
 		private int currentFormatNum=0;
 		private CheckBox checkAllFormats;
 		private System.Windows.Forms.Button buttonAutoFormat;
+		private bool refreshAllowed=false;
 
 		/// <summary>
 		/// Required designer variable.
@@ -245,7 +246,9 @@ namespace OpenDental{
 			checkHardwareAccel.Checked=computerPrefs.GraphicsUseHardware;
 			checkDoubleBuffering.Checked=computerPrefs.GraphicsDoubleBuffering;
 			currentFormatNum=computerPrefs.PreferredPixelFormatNum;
-			checkSimpleChart.Checked=computerPrefs.GraphicsSimple;//Must be set last. Sets initial visibility.			
+			checkSimpleChart.Checked=computerPrefs.GraphicsSimple;//Must be set last. Sets initial visibility.
+			refreshAllowed=true;
+			RefreshFormats();
 		}
 
 		private void UpdateFormatGrid() {
@@ -275,10 +278,13 @@ namespace OpenDental{
 		}
 
 		private void RefreshFormats() {
+			if(!refreshAllowed){
+				return;
+			}
 			this.Cursor=Cursors.WaitCursor;
 			OpenGLWinFormsControl contextFinder=new OpenGLWinFormsControl();
 			//Get raw formats.
-			Gdi.PIXELFORMATDESCRIPTOR[] rawformats=OpenGLWinFormsControl.GetPixelFormats(contextFinder.GetHDC(),1000000);
+			Gdi.PIXELFORMATDESCRIPTOR[] rawformats=OpenGLWinFormsControl.GetPixelFormats(contextFinder.GetHDC());
 			if(checkAllFormats.Checked){
 				formats=new OpenGLWinFormsControl.PixelFormatValue[rawformats.Length];
 				for(int i=0;i<rawformats.Length;i++) {
@@ -288,7 +294,7 @@ namespace OpenDental{
 				}
 			}else{
 				//Prioritize formats as requested by the user.
-				formats=OpenGLWinFormsControl.PrioritizePixelFormats(rawformats,32,32,checkDoubleBuffering.Checked,checkHardwareAccel.Checked);
+				formats=OpenGLWinFormsControl.PrioritizePixelFormats(rawformats,checkDoubleBuffering.Checked,checkHardwareAccel.Checked);
 			}
 			contextFinder.Dispose();
 			//Update the format grid to reflect possible changes in formats.
@@ -351,7 +357,7 @@ namespace OpenDental{
 
 		private void buttonAutoFormat_Click(object sender,EventArgs e) {
 			OpenGLWinFormsControl autoFormat=new OpenGLWinFormsControl();
-			OpenGLWinFormsControl.PixelFormatValue pfv=OpenGLWinFormsControl.ChoosePixelFormatEx(autoFormat.GetHDC(),1000000);
+			OpenGLWinFormsControl.PixelFormatValue pfv=OpenGLWinFormsControl.ChoosePixelFormatEx(autoFormat.GetHDC());
 			autoFormat.Dispose();
 			currentFormatNum=pfv.formatNumber;
 			RefreshFormats();
