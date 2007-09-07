@@ -2489,16 +2489,22 @@ namespace OpenDental{
 						case "MedInsAOtherProvID":
 							break;
 						case "MedInsAInsuredName":
+							Patient pTemp = Patients.GetPat(Int16.Parse((MedPlanList[0].Subscriber.ToString())));
+							displayStrings[i] = pTemp.FName.ToString() + " " + pTemp.MiddleI.ToString() + " " + pTemp.LName.ToString();
 							break;
 						case "MedInsAInsuredID":
+							displayStrings[i]=MedPlanList[0].SubscriberID.ToString();
 							break;
 						case "MedInsAGroupName":
+							displayStrings[i]=MedPlanList[0].GroupName.ToString();
 							break;
 						case "MedInsAGroupNum":
+							displayStrings[i]=MedPlanList[0].GroupNum.ToString();
 							break;
 						case "MedInsAAuthCode":
 							break;
 						case "MedInsAEmployer":
+							displayStrings[i] = Employers.GetName(MedPlanList[0].EmployerNum);
 							break;
 					}
 				}
@@ -2536,16 +2542,22 @@ namespace OpenDental{
 						case "MedInsBOtherProvID":
 							break;
 						case "MedInsBInsuredName":
+							Patient pTemp = Patients.GetPat(Int16.Parse((MedPlanList[1].Subscriber.ToString())));
+							displayStrings[i] = pTemp.FName.ToString() + " " + pTemp.MiddleI.ToString() + " " + pTemp.LName.ToString();
 							break;
 						case "MedInsBInsuredID":
+							displayStrings[i] = MedPlanList[1].SubscriberID.ToString();
 							break;
 						case "MedInsBGroupName":
+							displayStrings[i]=MedPlanList[1].GroupName.ToString();
 							break;
 						case "MedInsBGroupNum":
+							displayStrings[i]=MedPlanList[1].GroupNum.ToString();
 							break;
 						case "MedInsBAuthCode":
 							break;
 						case "MedInsBEmployer":
+							displayStrings[i]=Employers.GetName(MedPlanList[1].EmployerNum);
 							break;
 					}
 				}
@@ -2583,16 +2595,22 @@ namespace OpenDental{
 						case "MedInsCOtherProvID":
 							break;
 						case "MedInsCInsuredName":
+							Patient pTemp = Patients.GetPat(Int16.Parse((MedPlanList[2].Subscriber.ToString())));
+							displayStrings[i] = pTemp.FName.ToString() + " " + pTemp.MiddleI.ToString() + " " + pTemp.LName.ToString();
 							break;
 						case "MedInsCInsuredID":
+							displayStrings[i] = MedPlanList[2].SubscriberID.ToString();
 							break;
 						case "MedInsCGroupName":
+							displayStrings[i]=MedPlanList[2].GroupName.ToString();
 							break;
 						case "MedInsCGroupNum":
+							displayStrings[i]=MedPlanList[2].GroupNum.ToString();
 							break;
 						case "MedInsCAuthCode":
 							break;
 						case "MedInsCEmployer":
+							displayStrings[i] = Employers.GetName(MedPlanList[2].EmployerNum);
 							break;
 					}
 				}
