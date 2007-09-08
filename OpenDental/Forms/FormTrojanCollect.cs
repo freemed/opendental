@@ -37,10 +37,9 @@ namespace OpenDental{
 		private RadioButton radioSkip;
 		private Label label18;
 		private TextBox textPassword;
-		/// <summary>
-		/// Required designer variable.
-		/// </summary>
-		private System.ComponentModel.Container components = null;
+		private MainMenu mainMenu1;
+		private MenuItem menuItemSetup;
+		private IContainer components;
 
 		///<summary></summary>
 		public FormTrojanCollect()
@@ -74,6 +73,7 @@ namespace OpenDental{
 		/// </summary>
 		private void InitializeComponent()
 		{
+			this.components = new System.ComponentModel.Container();
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormTrojanCollect));
 			this.butCancel = new OpenDental.UI.Button();
 			this.butOK = new OpenDental.UI.Button();
@@ -103,6 +103,8 @@ namespace OpenDental{
 			this.radioSkip = new System.Windows.Forms.RadioButton();
 			this.label18 = new System.Windows.Forms.Label();
 			this.textPassword = new System.Windows.Forms.TextBox();
+			this.mainMenu1 = new System.Windows.Forms.MainMenu(this.components);
+			this.menuItemSetup = new System.Windows.Forms.MenuItem();
 			this.SuspendLayout();
 			// 
 			// butCancel
@@ -369,6 +371,17 @@ namespace OpenDental{
 			this.textPassword.TabIndex = 27;
 			this.textPassword.Text = "123456";
 			// 
+			// mainMenu1
+			// 
+			this.mainMenu1.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
+            this.menuItemSetup});
+			// 
+			// menuItemSetup
+			// 
+			this.menuItemSetup.Index = 0;
+			this.menuItemSetup.Text = "Setup";
+			this.menuItemSetup.Click += new System.EventHandler(this.menuItemSetup_Click);
+			// 
 			// FormTrojanCollect
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
@@ -403,6 +416,7 @@ namespace OpenDental{
 			this.Controls.Add(this.butCancel);
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.MaximizeBox = false;
+			this.Menu = this.mainMenu1;
 			this.MinimizeBox = false;
 			this.Name = "FormTrojanCollect";
 			this.ShowInTaskbar = false;
@@ -415,8 +429,17 @@ namespace OpenDental{
 		}
 		#endregion
 
+		private void FormTrojanCollect_Load(object sender,EventArgs e) {
+
+		}
+
+		private void menuItemSetup_Click(object sender,EventArgs e) {
+			FormTrojanCollectSetup FormT=new FormTrojanCollectSetup();
+			FormT.ShowDialog();
+		}
 
 		private void butOK_Click(object sender, System.EventArgs e) {
+
 			DialogResult=DialogResult.OK;
 		}
 
@@ -424,14 +447,12 @@ namespace OpenDental{
 			DialogResult=DialogResult.Cancel;
 		}
 
-		private void FormTrojanCollect_Load(object sender,EventArgs e) {
-
-		}
-
 		private void butHelp_Click(object sender,EventArgs e) {
 			FormTrojanHelp FormH=new FormTrojanHelp();
 			FormH.ShowDialog();
 		}
+
+		
 
 
 	}

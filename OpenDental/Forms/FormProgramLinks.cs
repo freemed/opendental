@@ -13,6 +13,8 @@ namespace OpenDental{
 		private OpenDental.UI.Button butClose;
 		private OpenDental.UI.Button butAdd;// Required designer variable.
 		private Programs Programs=new Programs();
+		private Label label2;
+		private Label label1;
 		private bool changed;
 
 		///<summary></summary>
@@ -38,15 +40,17 @@ namespace OpenDental{
 			this.listProgram = new System.Windows.Forms.ListBox();
 			this.butClose = new OpenDental.UI.Button();
 			this.butAdd = new OpenDental.UI.Button();
+			this.label2 = new System.Windows.Forms.Label();
+			this.label1 = new System.Windows.Forms.Label();
 			this.SuspendLayout();
 			// 
 			// listProgram
 			// 
 			this.listProgram.Items.AddRange(new object[] {
             ""});
-			this.listProgram.Location = new System.Drawing.Point(17,11);
+			this.listProgram.Location = new System.Drawing.Point(17,41);
 			this.listProgram.Name = "listProgram";
-			this.listProgram.Size = new System.Drawing.Size(282,394);
+			this.listProgram.Size = new System.Drawing.Size(282,459);
 			this.listProgram.TabIndex = 34;
 			this.listProgram.DoubleClick += new System.EventHandler(this.listProgram_DoubleClick);
 			// 
@@ -59,7 +63,7 @@ namespace OpenDental{
 			this.butClose.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butClose.CornerRadius = 4F;
 			this.butClose.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.butClose.Location = new System.Drawing.Point(344,437);
+			this.butClose.Location = new System.Drawing.Point(344,518);
 			this.butClose.Name = "butClose";
 			this.butClose.Size = new System.Drawing.Size(75,26);
 			this.butClose.TabIndex = 38;
@@ -76,17 +80,38 @@ namespace OpenDental{
 			this.butAdd.CornerRadius = 4F;
 			this.butAdd.Image = global::OpenDental.Properties.Resources.Add;
 			this.butAdd.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butAdd.Location = new System.Drawing.Point(17,435);
+			this.butAdd.Location = new System.Drawing.Point(17,516);
 			this.butAdd.Name = "butAdd";
 			this.butAdd.Size = new System.Drawing.Size(75,26);
 			this.butAdd.TabIndex = 41;
 			this.butAdd.Text = "&Add";
 			this.butAdd.Click += new System.EventHandler(this.butAdd_Click);
 			// 
+			// label2
+			// 
+			this.label2.Location = new System.Drawing.Point(14,2);
+			this.label2.Name = "label2";
+			this.label2.Size = new System.Drawing.Size(294,36);
+			this.label2.TabIndex = 43;
+			this.label2.Text = "Double click on one of the programs in the list below to enable it or change its " +
+    "settings";
+			this.label2.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
+			// 
+			// label1
+			// 
+			this.label1.Location = new System.Drawing.Point(97,512);
+			this.label1.Name = "label1";
+			this.label1.Size = new System.Drawing.Size(240,32);
+			this.label1.TabIndex = 44;
+			this.label1.Text = "Do not Add unless you have a totally custom bridge which we don\'t support.";
+			this.label1.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
+			// 
 			// FormProgramLinks
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
-			this.ClientSize = new System.Drawing.Size(447,473);
+			this.ClientSize = new System.Drawing.Size(447,554);
+			this.Controls.Add(this.label1);
+			this.Controls.Add(this.label2);
 			this.Controls.Add(this.butAdd);
 			this.Controls.Add(this.listProgram);
 			this.Controls.Add(this.butClose);

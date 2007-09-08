@@ -235,7 +235,7 @@ namespace OpenDental{
 			this.label5.Name = "label5";
 			this.label5.Size = new System.Drawing.Size(331,17);
 			this.label5.TabIndex = 55;
-			this.label5.Text = "Additional Properties (you can edit, but not add)";
+			this.label5.Text = "Additional Properties (double click row to edit)";
 			this.label5.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
 			// 
 			// label6
