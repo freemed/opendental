@@ -841,13 +841,14 @@ namespace OpenDental {
 			// textBoldBalance
 			// 
 			this.textBoldBalance.BackColor = System.Drawing.SystemColors.Control;
-			this.textBoldBalance.Font = new System.Drawing.Font("Microsoft Sans Serif",10F,System.Drawing.FontStyle.Bold,System.Drawing.GraphicsUnit.Point,((byte)(0)));
-			this.textBoldBalance.ForeColor = System.Drawing.SystemColors.ControlText;
-			this.textBoldBalance.Location = new System.Drawing.Point(12,9);
+			this.textBoldBalance.Font = new System.Drawing.Font("Microsoft Sans Serif",16F,System.Drawing.FontStyle.Bold,System.Drawing.GraphicsUnit.Point,((byte)(0)));
+			this.textBoldBalance.ForeColor = System.Drawing.Color.Maroon;
+			this.textBoldBalance.Location = new System.Drawing.Point(12,2);
 			this.textBoldBalance.Name = "textBoldBalance";
 			this.textBoldBalance.ReadOnly = true;
-			this.textBoldBalance.Size = new System.Drawing.Size(166,23);
+			this.textBoldBalance.Size = new System.Drawing.Size(166,32);
 			this.textBoldBalance.TabIndex = 80;
+			this.textBoldBalance.Text = "1234.00";
 			this.textBoldBalance.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
 			// 
 			// labelPriRem
