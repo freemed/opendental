@@ -146,6 +146,7 @@ namespace OpenDental {
 		private OpenDental.UI.Button buttonLabelChart;
 		private OpenDental.UI.Button buttonLabelxray;
 		private OpenDental.UI.Button butCommLog;
+		private OpenDental.UI.Button butTrojan;
 		public static bool PrintingStatement = false;
 
 
@@ -249,6 +250,7 @@ namespace OpenDental {
 			this.gridComm = new OpenDental.UI.ODGrid();
 			this.textFinNotes = new OpenDental.ODtextBox();
 			this.ToolBarMain = new OpenDental.UI.ODToolBar();
+			this.butTrojan = new OpenDental.UI.Button();
 			this.panelTotal.SuspendLayout();
 			this.panelCommButs.SuspendLayout();
 			this.groupBoxChartLabels.SuspendLayout();
@@ -371,6 +373,7 @@ namespace OpenDental {
 			// 
 			// panelCommButs
 			// 
+			this.panelCommButs.Controls.Add(this.butTrojan);
 			this.panelCommButs.Controls.Add(this.butCommLog);
 			this.panelCommButs.Controls.Add(this.groupBoxChartLabels);
 			this.panelCommButs.Controls.Add(this.butTask);
@@ -400,7 +403,7 @@ namespace OpenDental {
 			// 
 			this.groupBoxChartLabels.Controls.Add(this.buttonLabelChart);
 			this.groupBoxChartLabels.Controls.Add(this.buttonLabelxray);
-			this.groupBoxChartLabels.Location = new System.Drawing.Point(1,98);
+			this.groupBoxChartLabels.Location = new System.Drawing.Point(1,120);
 			this.groupBoxChartLabels.Name = "groupBoxChartLabels";
 			this.groupBoxChartLabels.Size = new System.Drawing.Size(161,52);
 			this.groupBoxChartLabels.TabIndex = 85;
@@ -447,7 +450,7 @@ namespace OpenDental {
 			this.butTask.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butTask.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butTask.CornerRadius = 4F;
-			this.butTask.Location = new System.Drawing.Point(3,64);
+			this.butTask.Location = new System.Drawing.Point(3,61);
 			this.butTask.Name = "butTask";
 			this.butTask.Size = new System.Drawing.Size(98,25);
 			this.butTask.TabIndex = 84;
@@ -1104,6 +1107,20 @@ namespace OpenDental {
 			this.ToolBarMain.Size = new System.Drawing.Size(939,29);
 			this.ToolBarMain.TabIndex = 47;
 			this.ToolBarMain.ButtonClick += new OpenDental.UI.ODToolBarButtonClickEventHandler(this.ToolBarMain_ButtonClick);
+			// 
+			// butTrojan
+			// 
+			this.butTrojan.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butTrojan.Autosize = true;
+			this.butTrojan.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butTrojan.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butTrojan.CornerRadius = 4F;
+			this.butTrojan.Location = new System.Drawing.Point(3,89);
+			this.butTrojan.Name = "butTrojan";
+			this.butTrojan.Size = new System.Drawing.Size(146,25);
+			this.butTrojan.TabIndex = 93;
+			this.butTrojan.Text = "Send Transaction to Trojan";
+			this.butTrojan.Click += new System.EventHandler(this.butTrojan_Click);
 			// 
 			// ContrAccount
 			// 
@@ -3265,6 +3282,12 @@ namespace OpenDental {
 			FormT.ShowDialog();
 		}
 
+		private void butTrojan_Click(object sender,EventArgs e) {
+			FormTrojanCollect FormT=new FormTrojanCollect();
+			FormT.PatNum=PatCur.PatNum;
+			FormT.ShowDialog();
+		}
+
 		/*private void tbComm_CellDoubleClicked(object sender, OpenDental.CellEventArgs e) {
 			Commlog CommlogCur=CommlogList[(int)CommIndices[e.Row]].Copy();
 			FormCommItem FormCI=new FormCommItem(CommlogCur);
@@ -3639,6 +3662,8 @@ namespace OpenDental {
 			if (FormCI.DialogResult == DialogResult.OK)
 				ModuleSelected(PatCur.PatNum);
 		}
+
+		
 
 
 

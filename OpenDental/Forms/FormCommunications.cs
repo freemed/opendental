@@ -30,7 +30,6 @@ namespace OpenDental{
 		public bool ViewingInRecall;
 		private OpenDental.UI.Button butStationary;
 		private ToolTip toolTip1;
-		private OpenDental.UI.Button butTrojan;
 		///<summary>Can be null.</summary>
 		private Referral ReferralCur;
 
@@ -81,7 +80,6 @@ namespace OpenDental{
 			this.butQuest = new OpenDental.UI.Button();
 			this.butLabel = new OpenDental.UI.Button();
 			this.butEmail = new OpenDental.UI.Button();
-			this.butTrojan = new OpenDental.UI.Button();
 			this.groupBox1.SuspendLayout();
 			this.groupBox2.SuspendLayout();
 			this.SuspendLayout();
@@ -250,25 +248,10 @@ namespace OpenDental{
 			this.butEmail.Text = "E-mail";
 			this.butEmail.Click += new System.EventHandler(this.butEmail_Click);
 			// 
-			// butTrojan
-			// 
-			this.butTrojan.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butTrojan.Autosize = true;
-			this.butTrojan.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butTrojan.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butTrojan.CornerRadius = 4F;
-			this.butTrojan.Location = new System.Drawing.Point(20,242);
-			this.butTrojan.Name = "butTrojan";
-			this.butTrojan.Size = new System.Drawing.Size(146,25);
-			this.butTrojan.TabIndex = 92;
-			this.butTrojan.Text = "Send Transaction to Trojan";
-			this.butTrojan.Click += new System.EventHandler(this.butTrojan_Click);
-			// 
 			// FormCommunications
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
-			this.ClientSize = new System.Drawing.Size(332,295);
-			this.Controls.Add(this.butTrojan);
+			this.ClientSize = new System.Drawing.Size(332,267);
 			this.Controls.Add(this.groupBox2);
 			this.Controls.Add(this.butQuest);
 			this.Controls.Add(this.butLabel);
@@ -471,11 +454,7 @@ namespace OpenDental{
 				}
 		}
 
-		private void butTrojan_Click(object sender,EventArgs e) {
-			FormTrojanCollect FormT=new FormTrojanCollect();
-			FormT.ShowDialog();
-			Close();
-		}
+		
 
 		
 		

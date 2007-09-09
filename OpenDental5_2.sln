@@ -1,60 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 9.00
 # Visual Studio 2005
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "xODR", "ODR\xODR.csproj", "{84688345-BB6A-4F2F-8672-A82B52FD433B}"
-	ProjectSection(WebsiteProperties) = preProject
-		Debug.AspNetCompiler.Debug = "True"
-		Release.AspNetCompiler.Debug = "False"
-	EndProjectSection
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RdlEngine", "RdlEngine\RdlEngine.csproj", "{C97E91F4-B310-44E2-9B6C-96775395722D}"
-	ProjectSection(WebsiteProperties) = preProject
-		Debug.AspNetCompiler.Debug = "True"
-		Release.AspNetCompiler.Debug = "False"
-	EndProjectSection
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RdlViewer", "RdlViewer\RdlViewer.csproj", "{D99145B1-CB6C-41F5-BA86-723325145FB5}"
-	ProjectSection(WebsiteProperties) = preProject
-		Debug.AspNetCompiler.Debug = "True"
-		Release.AspNetCompiler.Debug = "False"
-	EndProjectSection
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReportDesigner", "RdlDesign\ReportDesigner.csproj", "{3E1D2C49-44A2-46A0-B107-9E8A87AE78A7}"
-	ProjectSection(WebsiteProperties) = preProject
-		Debug.AspNetCompiler.Debug = "True"
-		Release.AspNetCompiler.Debug = "False"
-	EndProjectSection
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SparksToothChart", "SparksToothChart\SparksToothChart.csproj", "{033B77F4-2E98-49A7-901F-5F388DEDF83E}"
-	ProjectSection(WebsiteProperties) = preProject
-		Debug.AspNetCompiler.Debug = "True"
-		Release.AspNetCompiler.Debug = "False"
-	EndProjectSection
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "xDatabaseIntegrityCheck", "DatabaseIntegrityCheck\xDatabaseIntegrityCheck.csproj", "{3FB82BFD-6E2A-4CDD-987E-0AC199771BC8}"
-	ProjectSection(WebsiteProperties) = preProject
-		Debug.AspNetCompiler.Debug = "True"
-		Release.AspNetCompiler.Debug = "False"
-	EndProjectSection
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "xDocumentationBuilder", "DocumentationBuilder\xDocumentationBuilder.csproj", "{460E581F-836B-4414-B8E2-4DFC259585C9}"
-	ProjectSection(WebsiteProperties) = preProject
-		Debug.AspNetCompiler.Debug = "True"
-		Release.AspNetCompiler.Debug = "False"
-	EndProjectSection
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QueryExecutor", "QueryExecutor\QueryExecutor.csproj", "{25647049-C08B-4787-863C-B8D607DDED88}"
-	ProjectSection(WebsiteProperties) = preProject
-		Debug.AspNetCompiler.Debug = "True"
-		Release.AspNetCompiler.Debug = "False"
-	EndProjectSection
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenDentServer", "OpenDentServer\OpenDentServer.csproj", "{F25AC0EE-B218-4A50-B659-5936E3E50545}"
-	ProjectSection(WebsiteProperties) = preProject
-		Debug.AspNetCompiler.Debug = "True"
-		Release.AspNetCompiler.Debug = "False"
-	EndProjectSection
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenDental", "OpenDental\OpenDental.csproj", "{8136317D-C936-49B6-9E31-D90F02D2F207}"
 	ProjectSection(WebsiteProperties) = preProject
 		Debug.AspNetCompiler.Debug = "True"
@@ -87,60 +33,6 @@ Global
 		Description = 
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{84688345-BB6A-4F2F-8672-A82B52FD433B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{84688345-BB6A-4F2F-8672-A82B52FD433B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{84688345-BB6A-4F2F-8672-A82B52FD433B}.LinuxRelease|Any CPU.ActiveCfg = LinuxRelease|Any CPU
-		{84688345-BB6A-4F2F-8672-A82B52FD433B}.LinuxRelease|Any CPU.Build.0 = LinuxRelease|Any CPU
-		{84688345-BB6A-4F2F-8672-A82B52FD433B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{84688345-BB6A-4F2F-8672-A82B52FD433B}.Release|Any CPU.Build.0 = Release|Any CPU
-		{C97E91F4-B310-44E2-9B6C-96775395722D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C97E91F4-B310-44E2-9B6C-96775395722D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C97E91F4-B310-44E2-9B6C-96775395722D}.LinuxRelease|Any CPU.ActiveCfg = LinuxRelease|Any CPU
-		{C97E91F4-B310-44E2-9B6C-96775395722D}.LinuxRelease|Any CPU.Build.0 = LinuxRelease|Any CPU
-		{C97E91F4-B310-44E2-9B6C-96775395722D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C97E91F4-B310-44E2-9B6C-96775395722D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D99145B1-CB6C-41F5-BA86-723325145FB5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D99145B1-CB6C-41F5-BA86-723325145FB5}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D99145B1-CB6C-41F5-BA86-723325145FB5}.LinuxRelease|Any CPU.ActiveCfg = LinuxRelease|Any CPU
-		{D99145B1-CB6C-41F5-BA86-723325145FB5}.LinuxRelease|Any CPU.Build.0 = LinuxRelease|Any CPU
-		{D99145B1-CB6C-41F5-BA86-723325145FB5}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D99145B1-CB6C-41F5-BA86-723325145FB5}.Release|Any CPU.Build.0 = Release|Any CPU
-		{3E1D2C49-44A2-46A0-B107-9E8A87AE78A7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{3E1D2C49-44A2-46A0-B107-9E8A87AE78A7}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{3E1D2C49-44A2-46A0-B107-9E8A87AE78A7}.LinuxRelease|Any CPU.ActiveCfg = LinuxRelease|Any CPU
-		{3E1D2C49-44A2-46A0-B107-9E8A87AE78A7}.LinuxRelease|Any CPU.Build.0 = LinuxRelease|Any CPU
-		{3E1D2C49-44A2-46A0-B107-9E8A87AE78A7}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{3E1D2C49-44A2-46A0-B107-9E8A87AE78A7}.Release|Any CPU.Build.0 = Release|Any CPU
-		{033B77F4-2E98-49A7-901F-5F388DEDF83E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{033B77F4-2E98-49A7-901F-5F388DEDF83E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{033B77F4-2E98-49A7-901F-5F388DEDF83E}.LinuxRelease|Any CPU.ActiveCfg = LinuxRelease|Any CPU
-		{033B77F4-2E98-49A7-901F-5F388DEDF83E}.LinuxRelease|Any CPU.Build.0 = LinuxRelease|Any CPU
-		{033B77F4-2E98-49A7-901F-5F388DEDF83E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{033B77F4-2E98-49A7-901F-5F388DEDF83E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{3FB82BFD-6E2A-4CDD-987E-0AC199771BC8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{3FB82BFD-6E2A-4CDD-987E-0AC199771BC8}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{3FB82BFD-6E2A-4CDD-987E-0AC199771BC8}.LinuxRelease|Any CPU.ActiveCfg = LinuxRelease|Any CPU
-		{3FB82BFD-6E2A-4CDD-987E-0AC199771BC8}.LinuxRelease|Any CPU.Build.0 = LinuxRelease|Any CPU
-		{3FB82BFD-6E2A-4CDD-987E-0AC199771BC8}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{3FB82BFD-6E2A-4CDD-987E-0AC199771BC8}.Release|Any CPU.Build.0 = Release|Any CPU
-		{460E581F-836B-4414-B8E2-4DFC259585C9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{460E581F-836B-4414-B8E2-4DFC259585C9}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{460E581F-836B-4414-B8E2-4DFC259585C9}.LinuxRelease|Any CPU.ActiveCfg = LinuxRelease|Any CPU
-		{460E581F-836B-4414-B8E2-4DFC259585C9}.LinuxRelease|Any CPU.Build.0 = LinuxRelease|Any CPU
-		{460E581F-836B-4414-B8E2-4DFC259585C9}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{460E581F-836B-4414-B8E2-4DFC259585C9}.Release|Any CPU.Build.0 = Release|Any CPU
-		{25647049-C08B-4787-863C-B8D607DDED88}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{25647049-C08B-4787-863C-B8D607DDED88}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{25647049-C08B-4787-863C-B8D607DDED88}.LinuxRelease|Any CPU.ActiveCfg = LinuxRelease|Any CPU
-		{25647049-C08B-4787-863C-B8D607DDED88}.LinuxRelease|Any CPU.Build.0 = LinuxRelease|Any CPU
-		{25647049-C08B-4787-863C-B8D607DDED88}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{25647049-C08B-4787-863C-B8D607DDED88}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F25AC0EE-B218-4A50-B659-5936E3E50545}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F25AC0EE-B218-4A50-B659-5936E3E50545}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F25AC0EE-B218-4A50-B659-5936E3E50545}.LinuxRelease|Any CPU.ActiveCfg = LinuxRelease|Any CPU
-		{F25AC0EE-B218-4A50-B659-5936E3E50545}.LinuxRelease|Any CPU.Build.0 = LinuxRelease|Any CPU
-		{F25AC0EE-B218-4A50-B659-5936E3E50545}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F25AC0EE-B218-4A50-B659-5936E3E50545}.Release|Any CPU.Build.0 = Release|Any CPU
 		{8136317D-C936-49B6-9E31-D90F02D2F207}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{8136317D-C936-49B6-9E31-D90F02D2F207}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8136317D-C936-49B6-9E31-D90F02D2F207}.LinuxRelease|Any CPU.ActiveCfg = LinuxRelease|Any CPU

@@ -111,17 +111,17 @@ namespace OpenDental{
 		///<summary></summary>
 		public static event OpenDental.ValidEventHandler BecameInvalid;	
 
-		///<summary>Triggers an event that causes a signal to be sent to all other computers telling them what kind of locally stored data needs to be updated.  Either supply a set of flags for the types, or supply a date if the appointment screen needs to be refreshed.  Yes, this does immediately refresh the local data.</summary>
+		///<summary>Triggers an event that causes a signal to be sent to all other computers telling them what kind of locally stored data needs to be updated.  Either supply a set of flags for the types, or supply a date if the appointment screen needs to be refreshed.  Yes, this does immediately refresh the local data, too.  The AllLocal override does all types except appointment date for the local computer only, such as when starting up.</summary>
 		public static void SetInvalid(InvalidTypes itypes){
 			OnBecameInvalid(new OpenDental.ValidEventArgs(DateTime.MinValue,itypes,false));
 		}
 
-		///<summary>Triggers an event that causes a signal to be sent to all other computers telling them what kind of locally stored data needs to be updated.  Either supply a set of flags for the types, or supply a date if the appointment screen needs to be refreshed.</summary>
+		///<summary>Triggers an event that causes a signal to be sent to all other computers telling them what kind of locally stored data needs to be updated.  Either supply a set of flags for the types, or supply a date if the appointment screen needs to be refreshed.  Yes, this does immediately refresh the local data, too.  The AllLocal override does all types except appointment date for the local computer only, such as when starting up.</summary>
 		public static void SetInvalid(DateTime date){
 			OnBecameInvalid(new OpenDental.ValidEventArgs(date,InvalidTypes.Date,false));
 		}
 
-		///<summary>Triggers an event that only causes this computer to refresh itself as if starting up.  Does not send out signal to other computers.  Used when restoring database from a backup.</summary>
+		///<summary>Triggers an event that causes a signal to be sent to all other computers telling them what kind of locally stored data needs to be updated.  Either supply a set of flags for the types, or supply a date if the appointment screen needs to be refreshed.  Yes, this does immediately refresh the local data, too.  The AllLocal override does all types except appointment date for the local computer only, such as when starting up.</summary>
 		public static void SetInvalid(bool onlyLocal){
 			OnBecameInvalid(new OpenDental.ValidEventArgs(DateTime.MinValue,InvalidTypes.AllLocal,true));
 		}

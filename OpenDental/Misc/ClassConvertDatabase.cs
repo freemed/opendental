@@ -5725,7 +5725,16 @@ namespace OpenDental{
 				command="INSERT INTO preference VALUES('PracticeBillingST','')";
 				General.NonQEx(command);
 				command="INSERT INTO preference VALUES('PracticeBillingZip','')";
-				General.NonQEx(command);	
+				General.NonQEx(command);
+				//after r749
+				command="INSERT INTO preference VALUES('TrojanExpressCollectPath','')";
+				General.NonQEx(command);
+				command="INSERT INTO preference VALUES('TrojanExpressCollectPassword','')";
+				General.NonQEx(command);
+				command="INSERT INTO preference VALUES('TrojanExpressCollectBillingType','')";
+				General.NonQEx(command);
+				command="INSERT INTO preference VALUES('TrojanExpressCollectPreviousFileNumber','0')";
+				General.NonQEx(command);
 
 
 

@@ -590,11 +590,6 @@ namespace OpenDental{
 			textBillingCity.Text=PrefB.GetString("PracticeBillingCity");
 			textBillingST.Text=PrefB.GetString("PracticeBillingST");
 			textBillingZip.Text=PrefB.GetString("PracticeBillingZip");
-
-
-
-
-
 			textBankNumber.Text=PrefB.GetString("PracticeBankNumber");
 			if(CultureInfo.CurrentCulture.Name.EndsWith("CH")) {//CH is for switzerland. eg de-CH
 				textBankRouting.Text=PrefB.GetString("BankRouting");
