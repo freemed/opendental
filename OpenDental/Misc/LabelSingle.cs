@@ -52,6 +52,7 @@ namespace OpenDental{
 				MessageBox.Show(Lan.g("Label", "Printer not available"));
 			}
 		}
+
 		public void PrintPatLF(Patient pat) {
 			Pat = pat.Copy();
 			pd = new PrintDocument();
@@ -69,6 +70,7 @@ namespace OpenDental{
 				MessageBox.Show(Lan.g("Label", "Printer not available"));
 			}
 		}
+
 		///<summary>Have to supply printer name because this can be called multiple times in a loop. Returns false if fails.</summary>
 		public bool PrintIns(Carrier carrierCur,string printerName){
 			CarrierCur=carrierCur;

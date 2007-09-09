@@ -5735,7 +5735,9 @@ namespace OpenDental{
 				General.NonQEx(command);
 				command="INSERT INTO preference VALUES('TrojanExpressCollectPreviousFileNumber','0')";
 				General.NonQEx(command);
-
+				//after 752
+				command="ALTER TABLE userod ADD IsHidden BOOL NOT NULL";
+				General.NonQEx(command);
 
 
 				command="UPDATE preference SET ValueString = '5.2.0.0' WHERE PrefName = 'DataBaseVersion'";

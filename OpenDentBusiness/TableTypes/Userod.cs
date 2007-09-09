@@ -19,22 +19,15 @@ namespace OpenDentBusiness{
 		public int ClinicNum;
 		///<summary>FK to provider.ProvNum.  Cannot be used if EmployeeNum is used.</summary>
 		public int ProvNum;
+		///<summary>Set true to hide user from login list.</summary>
+		public bool IsHidden;
 		
 		///<summary></summary>
 		public Userod Copy(){
-			Userod u=new Userod();
-			u.UserNum=UserNum;
-			u.UserName=UserName;
-			u.Password=Password;
-			u.UserGroupNum=UserGroupNum;
-			u.EmployeeNum=EmployeeNum;
-			u.ClinicNum=ClinicNum;
-			u.ProvNum=ProvNum;			
-			return u;
+			return (Userod)this.MemberwiseClone();
 		}
 
-		public override string ToString()
-		{
+		public override string ToString(){
 			return UserName;
 		}
 	}
