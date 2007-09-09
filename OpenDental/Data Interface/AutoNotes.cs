@@ -13,7 +13,7 @@ namespace OpenDental {
 		public static List<AutoNote> Listt;
 
 		public static void Refresh() {
-			string command = "SELECT * FROM autonote ORDER BY AutoNoteName";
+			string command = "SELECT * FROM autonote ORDER BY AutoNoteNum";
 			DataTable table = General.GetTable(command);
 			Listt=new List<AutoNote>();
 			AutoNote note;

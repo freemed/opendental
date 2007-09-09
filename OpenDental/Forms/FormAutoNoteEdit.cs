@@ -13,6 +13,7 @@ namespace OpenDental {
 	public partial class FormAutoNoteEdit : Form {
 		public bool IsNew;
 		public AutoNote AutoNoteCur;
+		public AutoNoteControl ControlCur;
 		List<AutoNoteControl> ControlsList;
 		//List<AutoNote> AutoNoteList;
 		/// <summary>This is set to true if the user clicks on the edit control button</summary>
@@ -29,14 +30,15 @@ namespace OpenDental {
 
 		private void FormAutoNoteEdit_Load(object sender, EventArgs e) {
 			if (!IsNew) {
-				string controlOptions;
+				string controls;
 				textBoxAutoNoteName.Text=AutoNoteCur.AutoNoteName;
-				controlOptions=AutoNoteCur.ControlsToInc;
-				string[] lines=controlOptions.Split(new char[] { '|' });
+				controls=AutoNoteCur.ControlsToInc;
+				string[] lines=controls.Split(new char[] { ',' });
 				for (int i=0; i<lines.Length; i++) {
 					if (lines[i].ToString()!="") {
+						listBoxControlToIncNum.Items.Add(lines[i].ToString());
 						ControlsList=AutoNoteControls.ControlNumToName(lines[i].ToString());
-						listBoxControlsToIncl.Items.Add(ControlsList[0].Descript);
+						listBoxControlsToIncl.Items.Add(AutoNoteControls.Listt[0].Descript);
 					}
 				}
 			}
@@ -53,47 +55,34 @@ namespace OpenDental {
 				return;
 			}
 			string controlOptions;
-			ControlsList = AutoNoteControls.RefreshControlEdit(listBoxControls.SelectedItem.ToString());
-			textBoxDescriptControl.Text=ControlsList[0].Descript;
-			textBoxLabelControl.Text=ControlsList[0].ControlLabel;
-			textBoxTextControl.Text=ControlsList[0].MultiLineText;
-			textBoxTextPrefaceControl.Text=ControlsList[0].PrefaceText;
+			//AutoNoteControls.RefreshControlEdit(listBoxControls.SelectedIndex.ToString());
+			AutoNoteControls.Refresh();
+			ControlCur=AutoNoteControls.Listt[listBoxControls.SelectedIndex];
+			textBoxDescriptControl.Text=ControlCur.Descript;
+			textBoxLabelControl.Text=ControlCur.ControlLabel;
+			textBoxTextControl.Text=ControlCur.MultiLineText;
+			textBoxTextPrefaceControl.Text=ControlCur.PrefaceText;
 			listBoxOptionsControl.Items.Clear();
-			controlOptions=ControlsList[0].ControlOptions;
-			string[] lines=controlOptions.Split(new char[] { '|' });
+			controlOptions=ControlCur.ControlOptions;
+			string[] lines=controlOptions.Split(new char[] { ',' });
 			for (int i=0; i<lines.Length; i++) {
 				listBoxOptionsControl.Items.Add(lines[i].ToString());
 			}
 			ControlContentViewerVisible(true);
 		}
 
-		private void ControlContentViewerVisible(bool visible) {
-			if (visible == true) {
-				labelControl.Visible=true;
-				labelNameControl.Visible=true;
-				labelLabelControl.Visible=true;
-				labelPrefaceText.Visible=true;
-				labelText.Visible=true;
-				textBoxDescriptControl.Visible=true;
-				textBoxLabelControl.Visible=true;
-				textBoxTextPrefaceControl.Visible=true;
-				textBoxTextControl.Visible=true;
-				listBoxOptionsControl.Visible=true;
-				butEditControl.Visible=true;
-			}
-			else if (visible==false) {
-				labelControl.Visible=false;
-				labelNameControl.Visible=false;
-				labelLabelControl.Visible=false;
-				labelPrefaceText.Visible=false;
-				labelText.Visible=false;
-				textBoxDescriptControl.Visible=false;
-				textBoxLabelControl.Visible=false;
-				textBoxTextPrefaceControl.Visible=false;
-				textBoxTextControl.Visible=false;
-				listBoxOptionsControl.Visible=false;
-				butEditControl.Visible=false;
-			}
+		private void ControlContentViewerVisible(bool visible) {			
+				labelControl.Visible=visible;
+				labelNameControl.Visible=visible;
+				labelLabelControl.Visible=visible;
+				labelPrefaceText.Visible=visible;
+				labelText.Visible=visible;
+				textBoxDescriptControl.Visible=visible;
+				textBoxLabelControl.Visible=visible;
+				textBoxTextPrefaceControl.Visible=visible;
+				textBoxTextControl.Visible=visible;
+				listBoxOptionsControl.Visible=visible;
+				butEditControl.Visible=visible;
 		}
 
 		private void butCreateControl_Click(object sender, EventArgs e) {
@@ -120,7 +109,7 @@ namespace OpenDental {
 			}
 			FormAutoNoteControlEdit form = new FormAutoNoteControlEdit();
 			form.IsNew=false;
-			form.ControlCur=null;//this needs work.  Use SelectedIndex, not SelectedItem.ToString to isolate the needed control. 
+			form.ControlCur=AutoNoteControls.Listt[listBoxControls.SelectedIndex];//this needs work.  Use SelectedIndex, not SelectedItem.ToString to isolate the needed control. 
 			form.ShowDialog();
 		}
 
@@ -129,9 +118,22 @@ namespace OpenDental {
 		/// </summary>
 		private void fillListBoxControls() {
 			listBoxControls.Items.Clear();
-			ControlsList=AutoNoteControls.Refresh();
-			for (int i=0; i<ControlsList.Count; i++) {
-				listBoxControls.Items.Add(ControlsList[i].Descript);
+			AutoNoteControls.Refresh();
+			for (int i=0; i<AutoNoteControls.Listt.Count; i++) {
+				listBoxControls.Items.Add(AutoNoteControls.Listt[i].Descript);
+			}
+			if (!IsNew) {
+				listBoxControlsToIncl.Items.Clear();
+				listBoxControlToIncNum.Items.Clear();
+				string controls=AutoNoteCur.ControlsToInc;
+				string[] lines=controls.Split(new char[] { ',' });
+				for (int i=0; i<lines.Length; i++) {
+					if (lines[i].ToString()!="") {
+						listBoxControlToIncNum.Items.Add(lines[i].ToString());
+						ControlsList=AutoNoteControls.ControlNumToName(lines[i].ToString());
+						listBoxControlsToIncl.Items.Add(AutoNoteControls.Listt[0].Descript);
+					}
+				}
 			}
 		}
 
@@ -154,6 +156,7 @@ namespace OpenDental {
 		private void listBoxControls_MouseDoubleClick(object sender, MouseEventArgs e) {//Adds the selected item to the ListboxControlToInc
 			if (listBoxControls.SelectedIndex!=-1) {
 				listBoxControlsToIncl.Items.Add(listBoxControls.SelectedItem);
+				listBoxControlToIncNum.Items.Add(listBoxControls.SelectedIndex+1);
 			}
 		}
 
@@ -163,6 +166,7 @@ namespace OpenDental {
 
 		private void listBoxControlsToIncl_DoubleClick(object sender, EventArgs e) {
 			if (listBoxControlsToIncl.SelectedIndex!=-1) {
+				listBoxControlToIncNum.Items.RemoveAt(listBoxControlsToIncl.SelectedIndex);
 				listBoxControlsToIncl.Items.RemoveAt(listBoxControlsToIncl.SelectedIndex);
 			}
 		}
@@ -172,11 +176,11 @@ namespace OpenDental {
 				MsgBox.Show(this,"Please enter a name for the Auto Note into the text box");
 				return;
 			}
-			bool IsUsed=AutoNotes.AutoNoteNameUsed(textBoxAutoNoteName.Text.ToString(),AutoNoteCur.AutoNoteName);
-			if(IsUsed) {
-				MsgBox.Show(this,"This name is already used please choose a different name");
-				return;
-			}
+			//bool IsUsed=AutoNotes.AutoNoteNameUsed(textBoxAutoNoteName.Text.ToString(),AutoNoteCur.AutoNoteName);
+			//if(IsUsed) {
+			//	MsgBox.Show(this,"This name is already used please choose a different name");
+			//	return;
+			//}
 			/*if (listBoxControlsToIncl.Items.Count==0) {
 				MsgBox.Show(this, "Please add some controls to the Auto Note");
 				return;
@@ -184,9 +188,8 @@ namespace OpenDental {
 			//Save changes to database here
 			//Saves the items in the listboxControlsToIncl in a array that will be passed on 
 			string controlsToIncText="";
-			for(int i=0;i<listBoxControlsToIncl.Items.Count;i++) {
-				ControlsList=AutoNoteControls.ControlNameToNum(listBoxControlsToIncl.Items[i].ToString());
-				controlsToIncText = controlsToIncText + ControlsList+",";
+			for (int i=0; i<listBoxControlToIncNum.Items.Count; i++) {
+				controlsToIncText = controlsToIncText + listBoxControlToIncNum.Items[i].ToString()+",";
 			}
 			AutoNoteCur.ControlsToInc=controlsToIncText;
 			AutoNoteCur.AutoNoteName=textBoxAutoNoteName.Text.ToString();
