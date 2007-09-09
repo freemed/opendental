@@ -245,9 +245,17 @@ namespace OpenDental{
 		private void FormRpStatement_Load(object sender, System.EventArgs e) {
 			//this only happens during debugging
 			labelTotPages.Text="/ "+totalPages.ToString();
-			printPreviewControl2.Zoom=((double)printPreviewControl2.ClientSize.Height
-				/(double)pd2.DefaultPageSettings.PaperSize.Height);
-			labelTotPages.Text="/ "+totalPages.ToString();
+			if(PrefB.GetBool("FuchsOptionsOn")) {
+				butFullPage.Visible = true;
+				butZoomIn.Visible = false;
+				printPreviewControl2.Zoom = 1;
+			}
+			else{
+				printPreviewControl2.Zoom = ((double)printPreviewControl2.ClientSize.Height
+				/ (double)pd2.DefaultPageSettings.PaperSize.Height);
+			}
+			labelTotPages.Text = "/ " + totalPages.ToString();
+
 		}
 
 		///<summary>Used from FormBilling to print all statements for all the supplied patNums.  But commlog entries are done afterward, only when user confirms that they printed properly.</summary>

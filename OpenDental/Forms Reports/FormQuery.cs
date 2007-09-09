@@ -550,9 +550,16 @@ namespace OpenDental{
 				panelZoom.Visible=true;
 				PrintReport(true);
 				labelTotPages.Text="/ "+totalPages.ToString();
-				printPreviewControl2.Zoom=((double)printPreviewControl2.ClientSize.Height
-					/(double)pd2.DefaultPageSettings.PaperSize.Height);
-			}
+				if(PrefB.GetBool("FuchsOptionsOn")) {
+					butFullPage.Visible = true;
+					butZoomIn.Visible = false;
+					printPreviewControl2.Zoom = 1;
+				}
+				else {
+					printPreviewControl2.Zoom = ((double)printPreviewControl2.ClientSize.Height
+					/ (double)pd2.DefaultPageSettings.PaperSize.Height);
+				}
+            }
 			else{
 				printPreviewControl2.Visible=false;
 				Text=Lan.g(this,"Query");
