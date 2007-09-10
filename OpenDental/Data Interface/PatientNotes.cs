@@ -28,6 +28,8 @@ namespace OpenDental{
 			Cur.Service     = PIn.PString(table.Rows[0][3].ToString());
 			Cur.MedicalComp = PIn.PString(table.Rows[0][4].ToString());
 			Cur.Treatment   = PIn.PString(table.Rows[0][5].ToString());
+			Cur.CCNumber    = PIn.PString(table.Rows[0][6].ToString());
+			Cur.CCExpiration= PIn.PDate  (table.Rows[0][7].ToString());
 			//fam financial note:
 			command = 
 				"SELECT * FROM patientnote WHERE patnum ='"+POut.PInt(guarantor)+"'";
@@ -48,10 +50,12 @@ namespace OpenDental{
 		public static void Update(PatientNote Cur, int guarantor){
 			string command = "UPDATE patientnote SET "
 				//+ "apptphone = '"   +POut.PString(Cur.ApptPhone)+"'"
-				+ "Medical = '"     +POut.PString(Cur.Medical)+"'"
-				+ ",Service = '"    +POut.PString(Cur.Service)+"'"
-				+ ",MedicalComp = '"+POut.PString(Cur.MedicalComp)+"'"
-				+ ",Treatment = '"  +POut.PString(Cur.Treatment)+"'"
+				+ "Medical = '"      +POut.PString(Cur.Medical)+"'"
+				+ ",Service = '"     +POut.PString(Cur.Service)+"'"
+				+ ",MedicalComp = '" +POut.PString(Cur.MedicalComp)+"'"
+				+ ",Treatment = '"   +POut.PString(Cur.Treatment)+"'"
+				+ ",CCNumber = '"    +POut.PString(Cur.CCNumber)+"'"
+				+ ",CCExpiration = '"+POut.PDate  (Cur.CCExpiration)+"'"
 				+" WHERE patnum = '"+POut.PInt   (Cur.PatNum)+"'";
 			//MessageBox.Show(command);
 			General.NonQ(command);

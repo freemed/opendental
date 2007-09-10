@@ -5738,6 +5738,14 @@ namespace OpenDental{
 				//after 752
 				command="ALTER TABLE userod ADD IsHidden BOOL NOT NULL";
 				General.NonQEx(command);
+				//after 755
+				command="ALTER TABLE patientnote ADD CCNumber VARCHAR(255)";
+				General.NonQEx(command);
+				command="ALTER TABLE patientnote ADD CCExpiration date NOT NULL default '0001-01-01'";
+				General.NonQEx(command);
+
+
+
 
 
 				command="UPDATE preference SET ValueString = '5.2.0.0' WHERE PrefName = 'DataBaseVersion'";

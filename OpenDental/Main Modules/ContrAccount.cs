@@ -1233,10 +1233,7 @@ namespace OpenDental {
 		}
 
 		private void ContrAccount_Layout(object sender,System.Windows.Forms.LayoutEventArgs e) {
-			//tbAccount.InstantClasses();
-			//gridAccount.Location=new Point(0,65);
 			gridAccount.Height=panelSplitter.Top-gridAccount.Location.Y+1;
-			//tbAccount.LayoutTables();
 			gridComm.Top=panelSplitter.Bottom-1;
 			gridComm.Height=Height-gridComm.Top;
 			panelCommButs.Top=panelSplitter.Bottom-1;
