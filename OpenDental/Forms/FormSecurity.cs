@@ -84,7 +84,7 @@ namespace OpenDental{
 			this.treePermissions.HideSelection = false;
 			this.treePermissions.ImageIndex = 0;
 			this.treePermissions.ImageList = this.imageListPerm;
-			this.treePermissions.Location = new System.Drawing.Point(450,29);
+			this.treePermissions.Location = new System.Drawing.Point(470,29);
 			this.treePermissions.Name = "treePermissions";
 			this.treePermissions.SelectedImageIndex = 0;
 			this.treePermissions.ShowPlusMinus = false;
@@ -105,9 +105,9 @@ namespace OpenDental{
 			// 
 			// labelPerm
 			// 
-			this.labelPerm.Location = new System.Drawing.Point(447,7);
+			this.labelPerm.Location = new System.Drawing.Point(468,5);
 			this.labelPerm.Name = "labelPerm";
-			this.labelPerm.Size = new System.Drawing.Size(425,19);
+			this.labelPerm.Size = new System.Drawing.Size(285,19);
 			this.labelPerm.TabIndex = 5;
 			this.labelPerm.Text = "Permissions for group:";
 			this.labelPerm.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
@@ -126,10 +126,10 @@ namespace OpenDental{
 			// gridMain
 			// 
 			this.gridMain.HScrollVisible = false;
-			this.gridMain.Location = new System.Drawing.Point(11,29);
+			this.gridMain.Location = new System.Drawing.Point(8,29);
 			this.gridMain.Name = "gridMain";
 			this.gridMain.ScrollValue = 0;
-			this.gridMain.Size = new System.Drawing.Size(433,567);
+			this.gridMain.Size = new System.Drawing.Size(456,567);
 			this.gridMain.TabIndex = 59;
 			this.gridMain.Title = "Users";
 			this.gridMain.TranslationName = "TableSecurity";
@@ -144,7 +144,7 @@ namespace OpenDental{
 			this.butSetAll.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butSetAll.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butSetAll.CornerRadius = 4F;
-			this.butSetAll.Location = new System.Drawing.Point(450,610);
+			this.butSetAll.Location = new System.Drawing.Point(470,610);
 			this.butSetAll.Name = "butSetAll";
 			this.butSetAll.Size = new System.Drawing.Size(79,25);
 			this.butSetAll.TabIndex = 58;
@@ -189,7 +189,7 @@ namespace OpenDental{
 			this.butClose.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butClose.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butClose.CornerRadius = 4F;
-			this.butClose.Location = new System.Drawing.Point(792,610);
+			this.butClose.Location = new System.Drawing.Point(812,610);
 			this.butClose.Name = "butClose";
 			this.butClose.Size = new System.Drawing.Size(75,25);
 			this.butClose.TabIndex = 0;
@@ -200,7 +200,7 @@ namespace OpenDental{
 			// 
 			this.comboUsers.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.comboUsers.FormattingEnabled = true;
-			this.comboUsers.Location = new System.Drawing.Point(11,5);
+			this.comboUsers.Location = new System.Drawing.Point(8,5);
 			this.comboUsers.Name = "comboUsers";
 			this.comboUsers.Size = new System.Drawing.Size(182,21);
 			this.comboUsers.TabIndex = 60;
@@ -228,7 +228,7 @@ namespace OpenDental{
 			// FormSecurity
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
-			this.ClientSize = new System.Drawing.Size(884,644);
+			this.ClientSize = new System.Drawing.Size(894,644);
 			this.Controls.Add(this.comboSchoolClass);
 			this.Controls.Add(this.labelSchoolClass);
 			this.Controls.Add(this.comboUsers);
@@ -379,7 +379,7 @@ namespace OpenDental{
 			SelectedGroupNum=0;
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
-			ODGridColumn col=new ODGridColumn(Lan.g("TableSecurity","Username"),80);
+			ODGridColumn col=new ODGridColumn(Lan.g("TableSecurity","Username"),90);
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn(Lan.g("TableSecurity","Group"),90);
 			gridMain.Columns.Add(col);
@@ -406,9 +406,14 @@ namespace OpenDental{
 				classNum=SchoolClasses.List[comboSchoolClass.SelectedIndex-1].SchoolClassNum;
 			}
 			table=Userods.RefreshSecurity(usertype,classNum);
+			string userdesc;
 			for(int i=0;i<table.Rows.Count;i++){
 				row=new ODGridRow();
-				row.Cells.Add(table.Rows[i]["UserName"].ToString());
+				userdesc=table.Rows[i]["UserName"].ToString();
+				if(table.Rows[i]["IsHidden"].ToString()=="1"){
+					userdesc+=Lan.g(this,"(hidden)");
+				}
+				row.Cells.Add(userdesc);
 				row.Cells.Add(UserGroups.GetGroup(PIn.PInt(table.Rows[i]["UserGroupNum"].ToString())).Description);
 				row.Cells.Add(Employees.GetNameFL(PIn.PInt(table.Rows[i]["EmployeeNum"].ToString())));
 				row.Cells.Add(Providers.GetNameLF(PIn.PInt(table.Rows[i]["ProvNum"].ToString())));

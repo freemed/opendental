@@ -41,6 +41,7 @@ namespace OpenDental{
 				user.EmployeeNum   = PIn.PInt(UserodB.RawData.Rows[i][4].ToString());
 				user.ClinicNum     = PIn.PInt(UserodB.RawData.Rows[i][5].ToString());
 				user.ProvNum       = PIn.PInt(UserodB.RawData.Rows[i][6].ToString());
+				user.IsHidden      = PIn.PBool  (UserodB.RawData.Rows[i][7].ToString());
 				Listt.Add(user);
 			}
 		}
@@ -82,19 +83,21 @@ namespace OpenDental{
 				+",EmployeeNum = '"  +POut.PInt(user.EmployeeNum)+"'"
 				+",ClinicNum = '"    +POut.PInt(user.ClinicNum)+"'"
 				+",ProvNum = '"      +POut.PInt(user.ProvNum)+"'"
+				+",IsHidden = '"     +POut.PBool  (user.IsHidden)+"'"
 				+" WHERE UserNum = '"+POut.PInt   (user.UserNum)+"'";
  			General.NonQ(command);
 		}
 
 		///<summary></summary>
 		private static void Insert(Userod user){
-			string command= "INSERT INTO userod (UserName,Password,UserGroupNum,EmployeeNum,ClinicNum,ProvNum) VALUES("
+			string command= "INSERT INTO userod (UserName,Password,UserGroupNum,EmployeeNum,ClinicNum,ProvNum,IsHidden) VALUES("
 				+"'"+POut.PString(user.UserName)+"', "
 				+"'"+POut.PString(user.Password)+"', "
 				+"'"+POut.PInt   (user.UserGroupNum)+"', "
 				+"'"+POut.PInt(user.EmployeeNum)+"', "
 				+"'"+POut.PInt(user.ClinicNum)+"', "
-				+"'"+POut.PInt(user.ProvNum)+"')";
+				+"'"+POut.PInt(user.ProvNum)+"', "
+				+"'"+POut.PBool  (user.IsHidden)+"')";
  			user.UserNum=General.NonQ(command,true);
 		}
 
@@ -123,6 +126,7 @@ namespace OpenDental{
 					command="SELECT COUNT(*) FROM userod,grouppermission "
 						+"WHERE grouppermission.PermType='"+POut.PInt((int)Permissions.SecurityAdmin)+"'"
 						+" AND userod.UserGroupNum=grouppermission.UserGroupNum"
+						+" AND userod.IsHidden =0"
 						+" AND userod.UserNum != "+POut.PInt(user.UserNum);
 					if(General.GetCount(command)=="0"){//there are no other users with this permission
 						throw new Exception(Lan.g("Users","At least one user must have Security Admin permission."));

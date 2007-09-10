@@ -30,6 +30,7 @@ namespace OpenDental{
 		private Label label5;
 		private ListBox listClinic;
 		private Label labelClinic;
+		private CheckBox checkIsHidden;
 		///<summary></summary>
 		public Userod UserCur;
 
@@ -81,6 +82,7 @@ namespace OpenDental{
 			this.label5 = new System.Windows.Forms.Label();
 			this.listClinic = new System.Windows.Forms.ListBox();
 			this.labelClinic = new System.Windows.Forms.Label();
+			this.checkIsHidden = new System.Windows.Forms.CheckBox();
 			this.SuspendLayout();
 			// 
 			// butCancel
@@ -115,7 +117,7 @@ namespace OpenDental{
 			// 
 			// label1
 			// 
-			this.label1.Location = new System.Drawing.Point(4,26);
+			this.label1.Location = new System.Drawing.Point(5,29);
 			this.label1.Name = "label1";
 			this.label1.Size = new System.Drawing.Size(88,20);
 			this.label1.TabIndex = 2;
@@ -124,14 +126,14 @@ namespace OpenDental{
 			// 
 			// textUserName
 			// 
-			this.textUserName.Location = new System.Drawing.Point(94,26);
+			this.textUserName.Location = new System.Drawing.Point(95,29);
 			this.textUserName.Name = "textUserName";
 			this.textUserName.Size = new System.Drawing.Size(198,20);
 			this.textUserName.TabIndex = 3;
 			// 
 			// label3
 			// 
-			this.label3.Location = new System.Drawing.Point(1,60);
+			this.label3.Location = new System.Drawing.Point(1,63);
 			this.label3.Name = "label3";
 			this.label3.Size = new System.Drawing.Size(93,60);
 			this.label3.TabIndex = 6;
@@ -140,7 +142,7 @@ namespace OpenDental{
 			// 
 			// listUserGroup
 			// 
-			this.listUserGroup.Location = new System.Drawing.Point(95,58);
+			this.listUserGroup.Location = new System.Drawing.Point(95,61);
 			this.listUserGroup.Name = "listUserGroup";
 			this.listUserGroup.Size = new System.Drawing.Size(197,225);
 			this.listUserGroup.TabIndex = 7;
@@ -162,14 +164,14 @@ namespace OpenDental{
 			// 
 			// listEmployee
 			// 
-			this.listEmployee.Location = new System.Drawing.Point(317,58);
+			this.listEmployee.Location = new System.Drawing.Point(317,61);
 			this.listEmployee.Name = "listEmployee";
 			this.listEmployee.Size = new System.Drawing.Size(124,225);
 			this.listEmployee.TabIndex = 11;
 			// 
 			// label2
 			// 
-			this.label2.Location = new System.Drawing.Point(316,34);
+			this.label2.Location = new System.Drawing.Point(316,37);
 			this.label2.Name = "label2";
 			this.label2.Size = new System.Drawing.Size(152,20);
 			this.label2.TabIndex = 10;
@@ -178,7 +180,7 @@ namespace OpenDental{
 			// 
 			// label4
 			// 
-			this.label4.Location = new System.Drawing.Point(322,9);
+			this.label4.Location = new System.Drawing.Point(322,12);
 			this.label4.Name = "label4";
 			this.label4.Size = new System.Drawing.Size(407,23);
 			this.label4.TabIndex = 12;
@@ -187,14 +189,14 @@ namespace OpenDental{
 			// 
 			// listProv
 			// 
-			this.listProv.Location = new System.Drawing.Point(465,58);
+			this.listProv.Location = new System.Drawing.Point(465,61);
 			this.listProv.Name = "listProv";
 			this.listProv.Size = new System.Drawing.Size(124,225);
 			this.listProv.TabIndex = 14;
 			// 
 			// label5
 			// 
-			this.label5.Location = new System.Drawing.Point(464,34);
+			this.label5.Location = new System.Drawing.Point(464,37);
 			this.label5.Name = "label5";
 			this.label5.Size = new System.Drawing.Size(156,20);
 			this.label5.TabIndex = 13;
@@ -203,24 +205,36 @@ namespace OpenDental{
 			// 
 			// listClinic
 			// 
-			this.listClinic.Location = new System.Drawing.Point(612,58);
+			this.listClinic.Location = new System.Drawing.Point(612,61);
 			this.listClinic.Name = "listClinic";
 			this.listClinic.Size = new System.Drawing.Size(124,225);
 			this.listClinic.TabIndex = 16;
 			// 
 			// labelClinic
 			// 
-			this.labelClinic.Location = new System.Drawing.Point(611,34);
+			this.labelClinic.Location = new System.Drawing.Point(611,37);
 			this.labelClinic.Name = "labelClinic";
 			this.labelClinic.Size = new System.Drawing.Size(156,20);
 			this.labelClinic.TabIndex = 15;
 			this.labelClinic.Text = "Clinic (restricts user)";
 			this.labelClinic.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
 			// 
+			// checkIsHidden
+			// 
+			this.checkIsHidden.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkIsHidden.Location = new System.Drawing.Point(5,8);
+			this.checkIsHidden.Name = "checkIsHidden";
+			this.checkIsHidden.Size = new System.Drawing.Size(104,16);
+			this.checkIsHidden.TabIndex = 17;
+			this.checkIsHidden.Text = "Is Hidden";
+			this.checkIsHidden.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkIsHidden.UseVisualStyleBackColor = true;
+			// 
 			// FormUserEdit
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.ClientSize = new System.Drawing.Size(773,432);
+			this.Controls.Add(this.checkIsHidden);
 			this.Controls.Add(this.listClinic);
 			this.Controls.Add(this.labelClinic);
 			this.Controls.Add(this.listProv);
@@ -250,6 +264,7 @@ namespace OpenDental{
 		#endregion
 
 		private void FormUserEdit_Load(object sender, System.EventArgs e) {
+			checkIsHidden.Checked=UserCur.IsHidden;
 			textUserName.Text=UserCur.UserName;
 			for(int i=0;i<UserGroups.List.Length;i++){
 				listUserGroup.Items.Add(UserGroups.List[i].Description);
@@ -339,6 +354,7 @@ namespace OpenDental{
 				MsgBox.Show(this,"Cannot set an employee and a provider for the same user.");
 				return;
 			}
+			UserCur.IsHidden=checkIsHidden.Checked;
 			UserCur.UserName=textUserName.Text;
 			UserCur.UserGroupNum=UserGroups.List[listUserGroup.SelectedIndex].UserGroupNum;
 			if(listEmployee.SelectedIndex==0){
