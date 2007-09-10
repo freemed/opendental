@@ -1186,7 +1186,7 @@ namespace OpenDental{
 		}
 
 		///<summary>Called from FormOpenDental upon startup.</summary>
-		public void InstantClasses(){
+		public void InitializeOnStartup(){
 			PinApptSingle=new ContrApptSingle();
 			PinApptSingle.Visible=false;
 			PinApptSingle.ThisIsPinBoard=true;

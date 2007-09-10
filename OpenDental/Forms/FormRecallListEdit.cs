@@ -534,7 +534,7 @@ namespace OpenDental{
 
 		private void FormRecallListEdit_Load(object sender, System.EventArgs e) {
 			contrAccount3.ViewingInRecall=true;
-			contrAccount3.InstantClasses();
+			contrAccount3.InitializeOnStartup();
 			contrAccount3.ModuleSelected(RecallCur.PatNum);
 				//also refreshes these internal classes:family,patients,procedures,insplans
 				//and these global classes:claims,adjustments

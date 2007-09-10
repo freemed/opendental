@@ -1161,7 +1161,7 @@ namespace OpenDental {
 		#endregion
 
 		///<summary></summary>
-		public void InstantClasses() {
+		public void InitializeOnStartup() {
 			//can't use Lan.F(this);
 			Lan.C(this,new Control[]
 				{

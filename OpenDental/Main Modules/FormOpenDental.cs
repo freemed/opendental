@@ -1088,12 +1088,12 @@ namespace OpenDental{
 			signalLastRefreshed=MiscData.GetNowDateTime();
 			timerSignals.Interval=PrefB.GetInt("ProcessSigsIntervalInSecs")*1000;
 			timerSignals.Enabled=true;
-			ContrAccount2.InstantClasses();
-			ContrAppt2.InstantClasses();
+			ContrAccount2.InitializeOnStartup();
+			ContrAppt2.InitializeOnStartup();
 			ContrChart2.InitializeOnStartup();
-			ContrDocs2.InstantClasses();
-			ContrFamily2.InstantClasses();
-			ContrManage2.InstantClasses();
+			ContrDocs2.InitializeOnStartup();
+			ContrFamily2.InitializeOnStartup();
+			ContrManage2.InitializeOnStartup();
 			ContrTreat2.InitializeOnStartup();
 			timerTimeIndic.Enabled=true;
 			myOutlookBar.Buttons[0].Caption=Lan.g(this,"Appts");

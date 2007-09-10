@@ -618,7 +618,7 @@ namespace OpenDental{
 		}
 
 		///<summary></summary>
-		public void InstantClasses(){
+		public void InitializeOnStartup(){
 			MouseDownOrigin=new Point();
 			Lan.C(this, new System.Windows.Forms.Control[] {
 				//this.button1,

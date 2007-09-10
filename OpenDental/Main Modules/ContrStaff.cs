@@ -604,7 +604,7 @@ namespace OpenDental{
 		}
 
 		///<summary>Only gets run on startup.</summary>
-		public void InstantClasses(){
+		public void InitializeOnStartup(){
 			//can't use Lan.F
 			Lan.C(this,new Control[]
 				{

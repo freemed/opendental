@@ -270,7 +270,7 @@ namespace OpenDental{
 		}
 
 		///<summary></summary>
-		public void InstantClasses(){
+		public void InitializeOnStartup(){
 			tbFamily.InstantClasses();
 			//cannot use Lan.F(this);
 			Lan.C(this,new Control[]
