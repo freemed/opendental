@@ -287,7 +287,7 @@ namespace OpenDental{
 				+"AND procedurelog.ProcDate >= " +POut.PDate(date1.SelectionStart)+" "
 				+"AND procedurelog.ProcDate <= " +POut.PDate(date2.SelectionStart)+" "
 				+"GROUP BY procedurelog.ProcNum "
-				+"ORDER BY procedurelog.ProcDate,plfname";
+				+"ORDER BY procedurelog.ProcDate,plfname,procedurecode.ProcCode";
 			FormQuery2=new FormQuery();
 			FormQuery2.IsReport=true;
 			FormQuery2.SubmitReportQuery();			
