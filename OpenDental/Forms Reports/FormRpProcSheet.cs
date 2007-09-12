@@ -273,7 +273,8 @@ namespace OpenDental{
 			//added Procnum to retrieve all codes
 			Queries.CurReport.Query="SELECT procedurelog.ProcDate,CONCAT(CONCAT(CONCAT(CONCAT"
 				+"(patient.LName,', '),patient.FName),' '),patient.MiddleI) AS plfname, procedurecode.ProcCode,"
-				+"procedurelog.ToothNum,procedurecode.Descript,provider.Abbr,"
+				+"CASE WHEN (SELECT procedurelog.ToothNum REGEXP '^[0-9]$')=1 THEN CONCAT('0',procedurelog.ToothNum) "
+				+"ELSE procedurelog.ToothNum END as ToothNum,procedurecode.Descript,provider.Abbr,"
 				+"procedurelog.ProcFee-IFNULL(SUM(claimproc.WriteOff),0) $fee "//if no writeoff, then subtract 0
 				+"FROM patient,procedurecode,provider,procedurelog "
 				+"LEFT JOIN claimproc ON procedurelog.ProcNum=claimproc.ProcNum "
@@ -287,7 +288,7 @@ namespace OpenDental{
 				+"AND procedurelog.ProcDate >= " +POut.PDate(date1.SelectionStart)+" "
 				+"AND procedurelog.ProcDate <= " +POut.PDate(date2.SelectionStart)+" "
 				+"GROUP BY procedurelog.ProcNum "
-				+"ORDER BY procedurelog.ProcDate,plfname,procedurecode.ProcCode";
+				+"ORDER BY procedurelog.ProcDate,plfname,procedurecode.ProcCode,ToothNum";
 			FormQuery2=new FormQuery();
 			FormQuery2.IsReport=true;
 			FormQuery2.SubmitReportQuery();			
