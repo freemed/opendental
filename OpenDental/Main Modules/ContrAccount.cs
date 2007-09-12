@@ -10,6 +10,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Data;
 using System.Globalization;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using OpenDental.UI;
 using OpenDentBusiness;
@@ -19,7 +20,7 @@ namespace OpenDental {
 
 	///<summary></summary>
 	public class ContrAccount:System.Windows.Forms.UserControl {
-		private System.Windows.Forms.Label label1;
+		private System.Windows.Forms.Label labelFamFinancial;
 		private System.ComponentModel.IContainer components=null;// Required designer variable.
 		private Procedure[] arrayProc;
 		///<summary>Public because used by FormRpStatement</summary>
@@ -35,7 +36,6 @@ namespace OpenDental {
 		//public static string[,] StatementA;
 		private System.Windows.Forms.Label labelUrgFinNote;
 		private OpenDental.ODtextBox textUrgFinNote;
-		private System.Windows.Forms.Panel panelTotal;
 		///<summary>Set to true if this control is placed in the recall edit window. This affects the control behavior.</summary>
 		public bool ViewingInRecall=false;
 		//private double FamTotBal;
@@ -51,6 +51,7 @@ namespace OpenDental {
 		private bool UrgFinNoteChanged;
 		private System.Windows.Forms.CheckBox checkShowAll;
 		private bool FinNoteChanged;
+		private bool CCChanged;
 		private OpenDental.UI.ODToolBar ToolBarMain;
 		private System.Windows.Forms.ImageList imageListMain;
 		private System.Windows.Forms.Panel panelSplitter;
@@ -147,6 +148,11 @@ namespace OpenDental {
 		private OpenDental.UI.Button buttonLabelxray;
 		private OpenDental.UI.Button butCommLog;
 		private OpenDental.UI.Button butTrojan;
+		private TextBox textCC;
+		private Panel panelCC;
+		private Label labelCC;
+		private Label label1;
+		private TextBox textCCexp;
 		public static bool PrintingStatement = false;
 
 
@@ -172,10 +178,9 @@ namespace OpenDental {
 		private void InitializeComponent() {
 			this.components = new System.ComponentModel.Container();
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ContrAccount));
-			this.label1 = new System.Windows.Forms.Label();
+			this.labelFamFinancial = new System.Windows.Forms.Label();
 			this.labelUrgFinNote = new System.Windows.Forms.Label();
 			this.textUrgFinNote = new OpenDental.ODtextBox();
-			this.panelTotal = new System.Windows.Forms.Panel();
 			this.checkShowAll = new System.Windows.Forms.CheckBox();
 			this.contextMenuIns = new System.Windows.Forms.ContextMenu();
 			this.menuInsPri = new System.Windows.Forms.MenuItem();
@@ -185,6 +190,7 @@ namespace OpenDental {
 			this.imageListMain = new System.Windows.Forms.ImageList(this.components);
 			this.panelSplitter = new System.Windows.Forms.Panel();
 			this.panelCommButs = new System.Windows.Forms.Panel();
+			this.butTrojan = new OpenDental.UI.Button();
 			this.butCommLog = new OpenDental.UI.Button();
 			this.groupBoxChartLabels = new System.Windows.Forms.GroupBox();
 			this.buttonLabelChart = new OpenDental.UI.Button();
@@ -250,8 +256,11 @@ namespace OpenDental {
 			this.gridComm = new OpenDental.UI.ODGrid();
 			this.textFinNotes = new OpenDental.ODtextBox();
 			this.ToolBarMain = new OpenDental.UI.ODToolBar();
-			this.butTrojan = new OpenDental.UI.Button();
-			this.panelTotal.SuspendLayout();
+			this.textCC = new System.Windows.Forms.TextBox();
+			this.panelCC = new System.Windows.Forms.Panel();
+			this.label1 = new System.Windows.Forms.Label();
+			this.textCCexp = new System.Windows.Forms.TextBox();
+			this.labelCC = new System.Windows.Forms.Label();
 			this.panelCommButs.SuspendLayout();
 			this.groupBoxChartLabels.SuspendLayout();
 			this.panelProgNotes.SuspendLayout();
@@ -259,17 +268,18 @@ namespace OpenDental {
 			this.groupBox6.SuspendLayout();
 			this.panelBoldBalance.SuspendLayout();
 			this.panelAging.SuspendLayout();
+			this.panelCC.SuspendLayout();
 			this.SuspendLayout();
 			// 
-			// label1
+			// labelFamFinancial
 			// 
-			this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif",9.75F,System.Drawing.FontStyle.Bold,System.Drawing.GraphicsUnit.Point,((byte)(0)));
-			this.label1.Location = new System.Drawing.Point(-2,2);
-			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(154,16);
-			this.label1.TabIndex = 9;
-			this.label1.Text = "Family Financial Notes";
-			this.label1.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
+			this.labelFamFinancial.Font = new System.Drawing.Font("Microsoft Sans Serif",9.75F,System.Drawing.FontStyle.Bold,System.Drawing.GraphicsUnit.Point,((byte)(0)));
+			this.labelFamFinancial.Location = new System.Drawing.Point(769,287);
+			this.labelFamFinancial.Name = "labelFamFinancial";
+			this.labelFamFinancial.Size = new System.Drawing.Size(154,16);
+			this.labelFamFinancial.TabIndex = 9;
+			this.labelFamFinancial.Text = "Family Financial Notes";
+			this.labelFamFinancial.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
 			// 
 			// labelUrgFinNote
 			// 
@@ -287,23 +297,15 @@ namespace OpenDental {
 			this.textUrgFinNote.BackColor = System.Drawing.Color.White;
 			this.textUrgFinNote.Font = new System.Drawing.Font("Microsoft Sans Serif",8.25F,System.Drawing.FontStyle.Regular,System.Drawing.GraphicsUnit.Point,((byte)(0)));
 			this.textUrgFinNote.ForeColor = System.Drawing.Color.Red;
-			this.textUrgFinNote.Location = new System.Drawing.Point(768,53);
+			this.textUrgFinNote.Location = new System.Drawing.Point(769,53);
 			this.textUrgFinNote.Multiline = true;
 			this.textUrgFinNote.Name = "textUrgFinNote";
 			this.textUrgFinNote.QuickPasteType = OpenDentBusiness.QuickPasteType.None;
 			this.textUrgFinNote.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-			this.textUrgFinNote.Size = new System.Drawing.Size(163,36);
+			this.textUrgFinNote.Size = new System.Drawing.Size(163,46);
 			this.textUrgFinNote.TabIndex = 11;
 			this.textUrgFinNote.Leave += new System.EventHandler(this.textUrgFinNote_Leave);
 			this.textUrgFinNote.TextChanged += new System.EventHandler(this.textUrgFinNote_TextChanged);
-			// 
-			// panelTotal
-			// 
-			this.panelTotal.Controls.Add(this.label1);
-			this.panelTotal.Location = new System.Drawing.Point(768,234);
-			this.panelTotal.Name = "panelTotal";
-			this.panelTotal.Size = new System.Drawing.Size(163,21);
-			this.panelTotal.TabIndex = 26;
 			// 
 			// checkShowAll
 			// 
@@ -365,7 +367,7 @@ namespace OpenDental {
 			this.panelSplitter.Cursor = System.Windows.Forms.Cursors.SizeNS;
 			this.panelSplitter.Location = new System.Drawing.Point(0,425);
 			this.panelSplitter.Name = "panelSplitter";
-			this.panelSplitter.Size = new System.Drawing.Size(769,4);
+			this.panelSplitter.Size = new System.Drawing.Size(769,5);
 			this.panelSplitter.TabIndex = 49;
 			this.panelSplitter.MouseDown += new System.Windows.Forms.MouseEventHandler(this.panelSplitter_MouseDown);
 			this.panelSplitter.MouseMove += new System.Windows.Forms.MouseEventHandler(this.panelSplitter_MouseMove);
@@ -382,6 +384,20 @@ namespace OpenDental {
 			this.panelCommButs.Name = "panelCommButs";
 			this.panelCommButs.Size = new System.Drawing.Size(163,242);
 			this.panelCommButs.TabIndex = 69;
+			// 
+			// butTrojan
+			// 
+			this.butTrojan.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butTrojan.Autosize = true;
+			this.butTrojan.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butTrojan.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butTrojan.CornerRadius = 4F;
+			this.butTrojan.Location = new System.Drawing.Point(3,89);
+			this.butTrojan.Name = "butTrojan";
+			this.butTrojan.Size = new System.Drawing.Size(146,25);
+			this.butTrojan.TabIndex = 93;
+			this.butTrojan.Text = "Send Transaction to Trojan";
+			this.butTrojan.Click += new System.EventHandler(this.butTrojan_Click);
 			// 
 			// butCommLog
 			// 
@@ -1063,7 +1079,7 @@ namespace OpenDental {
 			// gridAcctPat
 			// 
 			this.gridAcctPat.HScrollVisible = false;
-			this.gridAcctPat.Location = new System.Drawing.Point(768,90);
+			this.gridAcctPat.Location = new System.Drawing.Point(769,142);
 			this.gridAcctPat.Name = "gridAcctPat";
 			this.gridAcctPat.ScrollValue = 0;
 			this.gridAcctPat.SelectedRowColor = System.Drawing.Color.DarkSalmon;
@@ -1088,12 +1104,12 @@ namespace OpenDental {
 			// textFinNotes
 			// 
 			this.textFinNotes.AcceptsReturn = true;
-			this.textFinNotes.Location = new System.Drawing.Point(768,254);
+			this.textFinNotes.Location = new System.Drawing.Point(769,306);
 			this.textFinNotes.Multiline = true;
 			this.textFinNotes.Name = "textFinNotes";
 			this.textFinNotes.QuickPasteType = OpenDentBusiness.QuickPasteType.FinancialNotes;
 			this.textFinNotes.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-			this.textFinNotes.Size = new System.Drawing.Size(162,168);
+			this.textFinNotes.Size = new System.Drawing.Size(162,116);
 			this.textFinNotes.TabIndex = 70;
 			this.textFinNotes.Leave += new System.EventHandler(this.textFinNotes_Leave);
 			this.textFinNotes.TextChanged += new System.EventHandler(this.textFinNotes_TextChanged);
@@ -1108,22 +1124,58 @@ namespace OpenDental {
 			this.ToolBarMain.TabIndex = 47;
 			this.ToolBarMain.ButtonClick += new OpenDental.UI.ODToolBarButtonClickEventHandler(this.ToolBarMain_ButtonClick);
 			// 
-			// butTrojan
+			// textCC
 			// 
-			this.butTrojan.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butTrojan.Autosize = true;
-			this.butTrojan.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butTrojan.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butTrojan.CornerRadius = 4F;
-			this.butTrojan.Location = new System.Drawing.Point(3,89);
-			this.butTrojan.Name = "butTrojan";
-			this.butTrojan.Size = new System.Drawing.Size(146,25);
-			this.butTrojan.TabIndex = 93;
-			this.butTrojan.Text = "Send Transaction to Trojan";
-			this.butTrojan.Click += new System.EventHandler(this.butTrojan_Click);
+			this.textCC.Location = new System.Drawing.Point(31,0);
+			this.textCC.Name = "textCC";
+			this.textCC.Size = new System.Drawing.Size(131,20);
+			this.textCC.TabIndex = 214;
+			this.textCC.Text = "1234-5678-1234-5678";
+			this.textCC.Leave += new System.EventHandler(this.textCC_Leave);
+			this.textCC.TextChanged += new System.EventHandler(this.textCC_TextChanged);
+			// 
+			// panelCC
+			// 
+			this.panelCC.Controls.Add(this.label1);
+			this.panelCC.Controls.Add(this.textCCexp);
+			this.panelCC.Controls.Add(this.labelCC);
+			this.panelCC.Controls.Add(this.textCC);
+			this.panelCC.Location = new System.Drawing.Point(769,100);
+			this.panelCC.Name = "panelCC";
+			this.panelCC.Size = new System.Drawing.Size(162,41);
+			this.panelCC.TabIndex = 215;
+			// 
+			// label1
+			// 
+			this.label1.Location = new System.Drawing.Point(0,23);
+			this.label1.Name = "label1";
+			this.label1.Size = new System.Drawing.Size(70,15);
+			this.label1.TabIndex = 217;
+			this.label1.Text = "CC Expire";
+			this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// textCCexp
+			// 
+			this.textCCexp.Location = new System.Drawing.Point(71,20);
+			this.textCCexp.Name = "textCCexp";
+			this.textCCexp.Size = new System.Drawing.Size(91,20);
+			this.textCCexp.TabIndex = 216;
+			this.textCCexp.Leave += new System.EventHandler(this.textCCexp_Leave);
+			this.textCCexp.TextChanged += new System.EventHandler(this.textCCexp_TextChanged);
+			// 
+			// labelCC
+			// 
+			this.labelCC.Location = new System.Drawing.Point(0,3);
+			this.labelCC.Name = "labelCC";
+			this.labelCC.Size = new System.Drawing.Size(30,15);
+			this.labelCC.TabIndex = 215;
+			this.labelCC.Text = "CC#";
+			this.labelCC.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// ContrAccount
 			// 
+			this.Controls.Add(this.panelCC);
+			this.Controls.Add(this.labelFamFinancial);
 			this.Controls.Add(this.checkShowNotes);
 			this.Controls.Add(this.checkShowAll);
 			this.Controls.Add(this.panelBoldBalance);
@@ -1137,14 +1189,13 @@ namespace OpenDental {
 			this.Controls.Add(this.panelSplitter);
 			this.Controls.Add(this.panelCommButs);
 			this.Controls.Add(this.ToolBarMain);
-			this.Controls.Add(this.panelTotal);
 			this.Controls.Add(this.textUrgFinNote);
 			this.Controls.Add(this.labelUrgFinNote);
 			this.Name = "ContrAccount";
 			this.Size = new System.Drawing.Size(939,732);
 			this.Layout += new System.Windows.Forms.LayoutEventHandler(this.ContrAccount_Layout);
 			this.Load += new System.EventHandler(this.ContrAccount_Load);
-			this.panelTotal.ResumeLayout(false);
+			this.Resize += new System.EventHandler(this.ContrAccount_Resize);
 			this.panelCommButs.ResumeLayout(false);
 			this.groupBoxChartLabels.ResumeLayout(false);
 			this.panelProgNotes.ResumeLayout(false);
@@ -1154,6 +1205,8 @@ namespace OpenDental {
 			this.panelBoldBalance.PerformLayout();
 			this.panelAging.ResumeLayout(false);
 			this.panelAging.PerformLayout();
+			this.panelCC.ResumeLayout(false);
+			this.panelCC.PerformLayout();
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -1175,7 +1228,7 @@ namespace OpenDental {
 					labelAgeInsEst,
 					label10,
 					labelUrgFinNote,
-					label1,
+					labelFamFinancial,
 					butComm,
 					//butLetterSimple,
 					//butLetterMerge,
@@ -1189,6 +1242,7 @@ namespace OpenDental {
 			if(ViewingInRecall) {
 				panelSplitter.Top=300;//start the splitter higher for recall window.
 			}
+			LayoutPanels();
 		}
 
 		private void ContrAccount_Load(object sender,System.EventArgs e) {
@@ -1233,6 +1287,18 @@ namespace OpenDental {
 		}
 
 		private void ContrAccount_Layout(object sender,System.Windows.Forms.LayoutEventArgs e) {
+			//see LayoutPanels()
+		}
+
+		private void ContrAccount_Resize(object sender,EventArgs e) {
+			if(PrefB.HList==null){
+				return;//helps on startup.
+			}
+			LayoutPanels();
+		}
+
+		///<summary>This used to be a layout event, but that was making it get called far too frequently.  Now, this must explicitly and intelligently be called.</summary>
+		private void LayoutPanels(){
 			gridAccount.Height=panelSplitter.Top-gridAccount.Location.Y+1;
 			gridComm.Top=panelSplitter.Bottom-1;
 			gridComm.Height=Height-gridComm.Top;
@@ -1243,18 +1309,19 @@ namespace OpenDental {
 			gridProg.Height=panelProgNotes.Height;
 			panelBoldBalance.Left=329;
 			panelBoldBalance.Top=29;
-			if(panelSplitter.Top>=400) {//Height>=446){
-				textUrgFinNote.Height=86;//6 lines
+			int left=textUrgFinNote.Left;//769;
+			if(PrefB.GetBool("StoreCCnumbers")){
+				panelCC.Visible=true;
+				panelCC.Location=new Point(left,textUrgFinNote.Bottom);
+				gridAcctPat.Location=new Point(left,panelCC.Bottom);
 			}
-			else {
-				textUrgFinNote.Height=46;//3 lines
+			else{
+				panelCC.Visible=false;
+				gridAcctPat.Location=new Point(left,textUrgFinNote.Bottom);
 			}
-			//tbAcctPat.InstantClasses();
-			gridAcctPat.Location=new Point(768,textUrgFinNote.Location.Y+textUrgFinNote.Height);
-			panelTotal.Location=new Point(768,gridAcctPat.Location.Y+gridAcctPat.Height);
-			textFinNotes.Location=new Point(768,panelTotal.Location.Y+panelTotal.Height);
+			labelFamFinancial.Location=new Point(left,gridAcctPat.Bottom);
+			textFinNotes.Location=new Point(left,labelFamFinancial.Bottom);
 			textFinNotes.Height=panelSplitter.Top-textFinNotes.Top;
-
 		}
 
 		///<summary></summary>
@@ -1294,6 +1361,10 @@ namespace OpenDental {
 				PatientNoteCur.FamFinancial=textFinNotes.Text;
 				PatientNotes.Update(PatientNoteCur, PatCur.Guarantor);
 				FinNoteChanged=false;
+			}
+			if(CCChanged){
+				CCSave();
+				CCChanged=false;
 			}
 			FamCur=null;
 			Claims.List=null;
@@ -1335,8 +1406,6 @@ namespace OpenDental {
 				textFinNotes.Enabled=true;
 				butTask.Enabled=true;
 				butComm.Enabled=true;
-				//butEditUrg.Enabled=true;
-				//butEditFin.Enabled=true;
 			}
 			else {
 				gridAccount.Enabled=false;
@@ -1350,38 +1419,34 @@ namespace OpenDental {
 				textFinNotes.Enabled=false;
 				butTask.Enabled=false;
 				butComm.Enabled=false;
-
-
-				//butEditUrg.Enabled=false;
-				//butEditFin.Enabled=false;
 			}
-				if (PrefB.GetBool("BoldFamilyAccountBalanceView")){
-					if (!panelBoldBalance.Visible){
-					panelBoldBalance.Visible=true;
-					panelAging.Left=0;
-					checkShowAll.Left=3;
-					checkShowAll.Top=67;
-					checkShowNotes.Left=85;
-					checkShowNotes.Top=67;
-					}
+			if (PrefB.GetBool("BoldFamilyAccountBalanceView")){
+				if (!panelBoldBalance.Visible){
+				panelBoldBalance.Visible=true;
+				panelAging.Left=0;
+				checkShowAll.Left=3;
+				checkShowAll.Top=67;
+				checkShowNotes.Left=85;
+				checkShowNotes.Top=67;
 				}
-				else{
-					if (panelBoldBalance.Visible){
-					panelBoldBalance.Visible=false;
-					panelAging.Left=90;
-					checkShowAll.Left=3;
-					checkShowAll.Top=32;
-					checkShowNotes.Left=3;
-					checkShowNotes.Top=48;
-					}
+			}
+			else{
+				if (panelBoldBalance.Visible){
+				panelBoldBalance.Visible=false;
+				panelAging.Left=90;
+				checkShowAll.Left=3;
+				checkShowAll.Top=32;
+				checkShowNotes.Left=3;
+				checkShowNotes.Top=48;
 				}
-			
+			}
 			FillPatientButton();
 			FillMain();
 			FillPats();
 			FillMisc();
 			FillAging();
 			FillRepeatCharges();
+			LayoutPanels();
 			if (ViewingInRecall){
 				panelProgNotes.Visible = true;
 				FillProgNotes();
@@ -1435,20 +1500,38 @@ namespace OpenDental {
 		}
 
 		private void FillMisc() {
-			if(PatCur!=null) {
+			textCC.Text="";
+			textCCexp.Text="";
+			if(PatCur==null) {
+				textUrgFinNote.Text="";
+				textFinNotes.Text="";
+			}
+			else{
 				textUrgFinNote.Text=FamCur.List[0].FamFinUrgNote;
 				textFinNotes.Text=PatientNoteCur.FamFinancial;
 				textFinNotes.Select(textFinNotes.Text.Length+2,1);
 				textFinNotes.ScrollToCaret();
 				textUrgFinNote.SelectionStart=0;
 				textUrgFinNote.ScrollToCaret();
-			}
-			else {
-				textUrgFinNote.Text="";
-				textFinNotes.Text="";
+				if(PrefB.GetBool("StoreCCnumbers")) {
+					string cc=PatientNoteCur.CCNumber;
+					if(Regex.IsMatch(cc,@"^\d{16}$")){
+						textCC.Text=cc.Substring(0,4)+"-"+cc.Substring(4,4)+"-"+cc.Substring(8,4)+"-"+cc.Substring(12,4);
+					}
+					else{
+						textCC.Text=cc;
+					}
+					if(PatientNoteCur.CCExpiration.Year>2000){
+						textCCexp.Text=PatientNoteCur.CCExpiration.ToString("MM/yy");
+					}
+					else{
+						textCCexp.Text="";
+					}
+				}
 			}
 			UrgFinNoteChanged=false;
 			FinNoteChanged=false;
+			CCChanged=false;
 			if(ViewingInRecall) {
 				textUrgFinNote.ReadOnly=true;
 				textFinNotes.ReadOnly=true;
@@ -1457,6 +1540,7 @@ namespace OpenDental {
 				textUrgFinNote.ReadOnly=false;
 				textFinNotes.ReadOnly=false;
 			}
+			
 		}
 
 		private void FillAging() {
@@ -3151,6 +3235,21 @@ namespace OpenDental {
 			FinNoteChanged=true;
 		}
 
+		private void textCC_TextChanged(object sender,EventArgs e) {
+			CCChanged=true;
+			if(Regex.IsMatch(textCC.Text,@"^\d{4}$")
+				|| Regex.IsMatch(textCC.Text,@"^\d{4}-\d{4}$")
+				|| Regex.IsMatch(textCC.Text,@"^\d{4}-\d{4}-\d{4}$")) 
+			{
+				textCC.Text=textCC.Text+"-";
+				textCC.Select(textCC.Text.Length,0);
+			}
+		}
+
+		private void textCCexp_TextChanged(object sender,EventArgs e) {
+			CCChanged=true;
+		}
+
 		private void textUrgFinNote_Leave(object sender, System.EventArgs e) {
 			//need to skip this if selecting another module. Handled in ModuleUnselected due to click event
 			if(FamCur==null)
@@ -3175,6 +3274,47 @@ namespace OpenDental {
 			}
 		}
 
+		private void textCC_Leave(object sender,EventArgs e) {
+			if(FamCur==null)
+				return;
+			if(CCChanged) {
+				CCSave();
+				CCChanged=false;
+				ModuleSelected(PatCur.PatNum);
+			}
+		}
+
+		private void textCCexp_Leave(object sender,EventArgs e) {
+			if(FamCur==null)
+				return;
+			if(CCChanged){
+				CCSave();
+				CCChanged=false;
+				ModuleSelected(PatCur.PatNum);
+			}
+		}
+
+		private void CCSave(){
+			string cc=textCC.Text;
+			if(Regex.IsMatch(cc,@"^\d{4}-\d{4}-\d{4}-\d{4}$")){
+				PatientNoteCur.CCNumber=cc.Substring(0,4)+cc.Substring(5,4)+cc.Substring(10,4)+cc.Substring(15,4);
+			}
+			else{
+				PatientNoteCur.CCNumber=cc;
+			}
+			string exp=textCCexp.Text;
+			if(Regex.IsMatch(exp,@"^\d\d[/\- ]\d\d$")){//08/07 or 08-07 or 08 07
+				PatientNoteCur.CCExpiration=new DateTime(Convert.ToInt32(exp.Substring(3,2)),Convert.ToInt32(exp.Substring(0,2)),1);
+			}
+			else if(Regex.IsMatch(exp,@"^\d{4}$")){//0807
+				PatientNoteCur.CCExpiration=new DateTime(Convert.ToInt32(exp.Substring(2,2)),Convert.ToInt32(exp.Substring(0,2)),1);
+			}
+			else if(exp!=""){
+				MsgBox.Show(this,"Expiration format invalid.");
+			}
+			PatientNotes.Update(PatientNoteCur,PatCur.Guarantor);
+		}
+
 		private void checkShowAll_Click(object sender, System.EventArgs e) {
 			RefreshModuleScreen();
 		}
@@ -3194,6 +3334,7 @@ namespace OpenDental {
 			if(splitterNewLoc>Height)
 				splitterNewLoc=Height-panelSplitter.Height;//keeps it from going off the bottom edge
 			panelSplitter.Top=splitterNewLoc;
+			LayoutPanels();
 		}
 
 		private void panelSplitter_MouseUp(object sender, System.Windows.Forms.MouseEventArgs e) {
@@ -3659,6 +3800,14 @@ namespace OpenDental {
 			if (FormCI.DialogResult == DialogResult.OK)
 				ModuleSelected(PatCur.PatNum);
 		}
+
+		
+
+		
+
+		
+
+		
 
 		
 

@@ -5743,7 +5743,9 @@ namespace OpenDental{
 				General.NonQEx(command);
 				command="ALTER TABLE patientnote ADD CCExpiration date NOT NULL default '0001-01-01'";
 				General.NonQEx(command);
-
+				command="INSERT INTO preference VALUES('StoreCCnumbers','0')";
+				General.NonQEx(command);
+				
 
 
 

@@ -18,7 +18,7 @@ namespace OpenDental{
 			if(table.Rows[0][0].ToString()=="0"){
 				InsertRow(patNum);
 			}
-			command ="SELECT PatNum,ApptPhone,Medical,Service,MedicalComp,Treatment "
+			command ="SELECT PatNum,ApptPhone,Medical,Service,MedicalComp,Treatment,CCNumber,CCExpiration "
 				+"FROM patientnote WHERE patnum ='"+POut.PInt(patNum)+"'";
 			table=General.GetTable(command);
 			PatientNote Cur=new PatientNote();
@@ -55,7 +55,7 @@ namespace OpenDental{
 				+ ",MedicalComp = '" +POut.PString(Cur.MedicalComp)+"'"
 				+ ",Treatment = '"   +POut.PString(Cur.Treatment)+"'"
 				+ ",CCNumber = '"    +POut.PString(Cur.CCNumber)+"'"
-				+ ",CCExpiration = '"+POut.PDate  (Cur.CCExpiration)+"'"
+				+ ",CCExpiration = "+POut.PDate  (Cur.CCExpiration)
 				+" WHERE patnum = '"+POut.PInt   (Cur.PatNum)+"'";
 			//MessageBox.Show(command);
 			General.NonQ(command);

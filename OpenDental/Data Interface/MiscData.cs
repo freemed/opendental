@@ -6,7 +6,7 @@ using OpenDentBusiness;
 using System.Net;
 
 namespace OpenDental{
-
+	
 	///<summary>Miscellaneous database functions.</summary>
 	public class MiscData{
 

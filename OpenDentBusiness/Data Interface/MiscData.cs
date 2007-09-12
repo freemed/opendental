@@ -5,7 +5,7 @@ using OpenDentBusiness;
 using OpenDental.DataAccess;
 using System.Net;
 
-namespace OpenDental {
+namespace OpenDentBusiness {
 
 	///<summary>Miscellaneous database functions.</summary>
 	public class MiscData {
@@ -14,6 +14,32 @@ namespace OpenDental {
 		private static int myComputerNum=0;//One-based unique computer number index. Used to decide which key-partition to use for this computer.
 		private static int myPartitionStart=0;
 		private static int myPartitionEnd=0;
+		/*
+		///<summary>This throws an exception if it fails for any reason.</summary>
+		public static void MakeABackup() {
+			//try {
+			if(RemotingClient.OpenDentBusinessIsLocal) {
+				MiscDataB.MakeABackup();
+			}
+			else {
+				DtoMiscDataMakeABackup dto=new DtoMiscDataMakeABackup();
+				RemotingClient.ProcessCommand(dto);
+			}
+			//}
+			//catch(Exception e) {
+			//	MessageBox.Show(e.Message);
+			//}
+		}
+
+		///<summary>Gets the current date/Time direcly from the server.  Mostly used to prevent uesr from altering the workstation date to bypass security.</summary>
+		public static DateTime GetNowDateTime() {
+			string command="SELECT NOW()";
+			if(FormChooseDatabase.DBtype==DatabaseType.Oracle) {
+				command="SELECT CURRENT_TIMESTAMP FROM DUAL";
+			}
+			DataTable table=General2.GetTable(command);
+			return PIn.PDateT(table.Rows[0][0].ToString());
+		}*/
 
 		///<summary>Generates a random primary key.  Tests to see if that key already exists before returning it for use.  Currently, the range of returned values is greater than 0, and less than or equal to 16777215, the limit for mysql medium int.  This will eventually change to a max of 18446744073709551615.  Then, the return value would have to be a ulong and the mysql type would have to be bigint.</summary>
 		public static int GetKey(string tablename, string field) {
