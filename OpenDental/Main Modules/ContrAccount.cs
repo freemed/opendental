@@ -3304,10 +3304,10 @@ namespace OpenDental {
 			}
 			string exp=textCCexp.Text;
 			if(Regex.IsMatch(exp,@"^\d\d[/\- ]\d\d$")){//08/07 or 08-07 or 08 07
-				PatientNoteCur.CCExpiration=new DateTime(Convert.ToInt32(exp.Substring(3,2)),Convert.ToInt32(exp.Substring(0,2)),1);
+				PatientNoteCur.CCExpiration=new DateTime(Convert.ToInt32("20"+exp.Substring(3,2)),Convert.ToInt32(exp.Substring(0,2)),1);
 			}
 			else if(Regex.IsMatch(exp,@"^\d{4}$")){//0807
-				PatientNoteCur.CCExpiration=new DateTime(Convert.ToInt32(exp.Substring(2,2)),Convert.ToInt32(exp.Substring(0,2)),1);
+				PatientNoteCur.CCExpiration=new DateTime(Convert.ToInt32("20"+exp.Substring(2,2)),Convert.ToInt32(exp.Substring(0,2)),1);
 			}
 			else if(exp!=""){
 				MsgBox.Show(this,"Expiration format invalid.");

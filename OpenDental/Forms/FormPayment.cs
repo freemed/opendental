@@ -69,10 +69,6 @@ namespace OpenDental{
 		private ContextMenu contextMenuXcharge;
 		private MenuItem menuXcharge;
 		private TextBox textDepositAccount;
-		private TextBox textCCexp;
-		private Label label14;
-		private TextBox textCC;
-		private Label label13;
 		private int[] DepositAccounts;
 
 		///<summary>PatCur and FamCur are not for the PatCur of the payment.  They are for the patient and family from which this window was accessed.</summary>
@@ -138,10 +134,6 @@ namespace OpenDental{
 			this.butDeleteAll = new OpenDental.UI.Button();
 			this.butAdd = new OpenDental.UI.Button();
 			this.textDepositAccount = new System.Windows.Forms.TextBox();
-			this.textCCexp = new System.Windows.Forms.TextBox();
-			this.label14 = new System.Windows.Forms.Label();
-			this.textCC = new System.Windows.Forms.TextBox();
-			this.label13 = new System.Windows.Forms.Label();
 			this.SuspendLayout();
 			// 
 			// label1
@@ -477,50 +469,10 @@ namespace OpenDental{
 			this.textDepositAccount.Size = new System.Drawing.Size(260,20);
 			this.textDepositAccount.TabIndex = 119;
 			// 
-			// textCCexp
-			// 
-			this.textCCexp.Location = new System.Drawing.Point(665,42);
-			this.textCCexp.Name = "textCCexp";
-			this.textCCexp.Size = new System.Drawing.Size(91,20);
-			this.textCCexp.TabIndex = 126;
-			this.textCCexp.Visible = false;
-			// 
-			// label14
-			// 
-			this.label14.Location = new System.Drawing.Point(627,46);
-			this.label14.Name = "label14";
-			this.label14.Size = new System.Drawing.Size(36,16);
-			this.label14.TabIndex = 127;
-			this.label14.Text = "Exp";
-			this.label14.TextAlign = System.Drawing.ContentAlignment.TopRight;
-			this.label14.Visible = false;
-			// 
-			// textCC
-			// 
-			this.textCC.Location = new System.Drawing.Point(665,16);
-			this.textCC.Name = "textCC";
-			this.textCC.Size = new System.Drawing.Size(154,20);
-			this.textCC.TabIndex = 124;
-			this.textCC.Visible = false;
-			// 
-			// label13
-			// 
-			this.label13.Location = new System.Drawing.Point(627,20);
-			this.label13.Name = "label13";
-			this.label13.Size = new System.Drawing.Size(36,16);
-			this.label13.TabIndex = 125;
-			this.label13.Text = "CC";
-			this.label13.TextAlign = System.Drawing.ContentAlignment.TopRight;
-			this.label13.Visible = false;
-			// 
 			// FormPayment
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.ClientSize = new System.Drawing.Size(840,588);
-			this.Controls.Add(this.textCCexp);
-			this.Controls.Add(this.label14);
-			this.Controls.Add(this.textCC);
-			this.Controls.Add(this.label13);
 			this.Controls.Add(this.textDepositAccount);
 			this.Controls.Add(this.panelXcharge);
 			this.Controls.Add(this.gridMain);
