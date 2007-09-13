@@ -82,7 +82,7 @@ namespace CodeBase {
 
 		///<summary>Log a message to the log text file and add a description of the sender (for debugging purposes). If sender is null then a description of the sender is not printed. Always returns false so that a calling boolean function can return at the same time that it logs an error message.</summary>
 		public bool Log(Object sender,string sendingFunctionName,string message,bool msgBox,Severity severity){
-			if(severity<level){//Only log messages with a severity matches the current level. This will even skip message boxes.
+			if(severity>level){//Only log messages with a severity matches the current level. This will even skip message boxes.
 				return false;
 			}
 			try{
