@@ -27,7 +27,7 @@ namespace CodeBase {
 #if(DEBUG)
 		public Severity level=Severity.DEBUG;
 #else
-		public Severity level=Severity.INFO;
+		public Severity level=Severity.NONE;
 #endif
 
 		public Logger(string pLogFile){
