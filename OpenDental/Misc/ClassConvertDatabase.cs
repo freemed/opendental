@@ -5745,8 +5745,11 @@ namespace OpenDental{
 				General.NonQEx(command);
 				command="INSERT INTO preference VALUES('StoreCCnumbers','0')";
 				General.NonQEx(command);
-				
-
+				//after r767
+				command="ALTER TABLE payplancharge ADD ProvNum int NOT NULL";
+				General.NonQEx(command);
+				command="UPDATE payplancharge SET ProvNum=(SELECT PriProv FROM patient WHERE patient.PatNum=payplancharge.PatNum)";
+				General.NonQEx(command);
 
 
 

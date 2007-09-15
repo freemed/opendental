@@ -471,18 +471,16 @@ namespace OpenDental{
 				//" > tempCompNames.txt" tells dos to put the results in a file called tempCompNames.txt
 				psi.WindowStyle=ProcessWindowStyle.Hidden;//Hide the window
 				Process.Start(psi);
-				StreamReader sr;
+				StreamReader sr=null;
 				string filename=ODFileUtils.CombinePaths(Application.StartupPath,"tempCompNames.txt");
-				while(true){
-					Thread.Sleep(200);//sleep for 1/5 second
-					if(File.Exists(filename)){
-						try{
-							sr=new StreamReader(filename);
-							break;
-						}
-						catch{
-						}
-					}
+				Thread.Sleep(200);//sleep for 1/5 second
+				if(!File.Exists(filename)) {
+					return new string[0];
+				}
+				try {
+					sr=new StreamReader(filename);
+				}
+				catch {
 				}
 				while(!sr.ReadLine().StartsWith("--")){
 					//The line just before the data looks like: --------------------------

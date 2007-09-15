@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Data;
 using System.Windows.Forms;
 using OpenDentBusiness;
@@ -14,41 +15,38 @@ namespace OpenDental{
 				+"WHERE paysplit.PayNum=payment.PayNum "
 				+"AND (paysplit.PatNum = '"+POut.PInt(patNum)+"' OR payment.PatNum = '"+POut.PInt(patNum)+"') "
 				+"ORDER BY ProcDate";
-			return RefreshAndFill(command);
+			return RefreshAndFill(command).ToArray();
 		}
 
-		private static PaySplit[] RefreshAndFill(string command) {
+		private static List<PaySplit> RefreshAndFill(string command) {
 			DataTable table=General.GetTable(command);
-			PaySplit[] List=new PaySplit[table.Rows.Count];
+			List<PaySplit> retVal=new List<PaySplit>();
+			PaySplit split;
 			for(int i=0;i<table.Rows.Count;i++) {
-				List[i]=new PaySplit();
-				List[i].SplitNum    = PIn.PInt(table.Rows[i][0].ToString());
-				List[i].SplitAmt    = PIn.PDouble(table.Rows[i][1].ToString());
-				List[i].PatNum      = PIn.PInt(table.Rows[i][2].ToString());
-				List[i].ProcDate    = PIn.PDate(table.Rows[i][3].ToString());
-				List[i].PayNum      = PIn.PInt(table.Rows[i][4].ToString());
+				split=new PaySplit();
+				split.SplitNum    = PIn.PInt(table.Rows[i][0].ToString());
+				split.SplitAmt    = PIn.PDouble(table.Rows[i][1].ToString());
+				split.PatNum      = PIn.PInt(table.Rows[i][2].ToString());
+				split.ProcDate    = PIn.PDate(table.Rows[i][3].ToString());
+				split.PayNum      = PIn.PInt(table.Rows[i][4].ToString());
 				//List[i].IsDiscount  = PIn.PBool  (table.Rows[i][5].ToString());
 				//List[i].DiscountType= PIn.PInt   (table.Rows[i][6].ToString());
-				List[i].ProvNum     = PIn.PInt(table.Rows[i][7].ToString());
-				List[i].PayPlanNum  = PIn.PInt(table.Rows[i][8].ToString());
-				List[i].DatePay     = PIn.PDate(table.Rows[i][9].ToString());
-				List[i].ProcNum     = PIn.PInt(table.Rows[i][10].ToString());
-				List[i].DateEntry   = PIn.PDate(table.Rows[i][11].ToString());
+				split.ProvNum     = PIn.PInt(table.Rows[i][7].ToString());
+				split.PayPlanNum  = PIn.PInt(table.Rows[i][8].ToString());
+				split.DatePay     = PIn.PDate(table.Rows[i][9].ToString());
+				split.ProcNum     = PIn.PInt(table.Rows[i][10].ToString());
+				split.DateEntry   = PIn.PDate(table.Rows[i][11].ToString());
+				retVal.Add(split);
 			}
-			return List;
+			return retVal;
 		}
 
 		///<summary>Used from payment window to get all paysplits for the payment.</summary>
-		public static ArrayList GetForPayment(int payNum) {
+		public static List<PaySplit> GetForPayment(int payNum) {
 			string command=
 				"SELECT * FROM paysplit "
 				+"WHERE PayNum="+POut.PInt(payNum);
-			PaySplit[] List=RefreshAndFill(command);
-			ArrayList retVal=new ArrayList();
-			for(int i=0;i<List.Length;i++) {
-				retVal.Add(List[i]);
-			}
-			return retVal;
+			return RefreshAndFill(command);
 		}
 
 		///<summary></summary>
@@ -231,34 +229,35 @@ namespace OpenDental{
 		}
 
 		///<summary>Used in FormPayment to sych database with changes user made to the paySplit list for a payment.  Must supply an old list for comparison.  Only the differences are saved.</summary>
-		public static void UpdateList(ArrayList oldSplitList,ArrayList newSplitList) {
+		public static void UpdateList(List<PaySplit> oldSplitList,List<PaySplit> newSplitList) {
 			PaySplit newPaySplit;
 			for(int i=0;i<oldSplitList.Count;i++) {//loop through the old list
 				newPaySplit=null;
 				for(int j=0;j<newSplitList.Count;j++) {
-					if(newSplitList[j]==null || ((PaySplit)newSplitList[j]).SplitNum==0) {
+					if(newSplitList[j]==null || newSplitList[j].SplitNum==0) {
 						continue;
 					}
 					if(((PaySplit)oldSplitList[i]).SplitNum==((PaySplit)newSplitList[j]).SplitNum) {
-						newPaySplit=(PaySplit)newSplitList[j];
+						newPaySplit=newSplitList[j];
 						break;
 					}
 				}
 				if(newPaySplit==null) {
 					//PaySplit with matching SplitNum was not found, so it must have been deleted
-					PaySplits.Delete(((PaySplit)oldSplitList[i]));
+					PaySplits.Delete(oldSplitList[i]);
 					continue;
 				}
 				//PaySplit was found with matching SplitNum, so check for changes
-				if(newPaySplit.DateEntry != ((PaySplit)oldSplitList[i]).DateEntry
-					|| newPaySplit.DatePay != ((PaySplit)oldSplitList[i]).DatePay
-					|| newPaySplit.PatNum != ((PaySplit)oldSplitList[i]).PatNum
-					|| newPaySplit.PayNum != ((PaySplit)oldSplitList[i]).PayNum
-					|| newPaySplit.PayPlanNum != ((PaySplit)oldSplitList[i]).PayPlanNum
-					|| newPaySplit.ProcDate != ((PaySplit)oldSplitList[i]).ProcDate
-					|| newPaySplit.ProcNum != ((PaySplit)oldSplitList[i]).ProcNum
-					|| newPaySplit.ProvNum != ((PaySplit)oldSplitList[i]).ProvNum
-					|| newPaySplit.SplitAmt != ((PaySplit)oldSplitList[i]).SplitAmt) {
+				if(newPaySplit.DateEntry != oldSplitList[i].DateEntry
+					|| newPaySplit.DatePay != oldSplitList[i].DatePay
+					|| newPaySplit.PatNum != oldSplitList[i].PatNum
+					|| newPaySplit.PayNum != oldSplitList[i].PayNum
+					|| newPaySplit.PayPlanNum != oldSplitList[i].PayPlanNum
+					|| newPaySplit.ProcDate != oldSplitList[i].ProcDate
+					|| newPaySplit.ProcNum != oldSplitList[i].ProcNum
+					|| newPaySplit.ProvNum != oldSplitList[i].ProvNum
+					|| newPaySplit.SplitAmt != oldSplitList[i].SplitAmt) 
+				{
 					PaySplits.Update(newPaySplit);
 				}
 			}
@@ -266,11 +265,11 @@ namespace OpenDental{
 				if(newSplitList[i]==null) {
 					continue;
 				}
-				if(((PaySplit)newSplitList[i]).SplitNum!=0) {
+				if(newSplitList[i].SplitNum!=0) {
 					continue;
 				}
 				//entry with SplitNum=0, so it's new
-				PaySplits.Insert(((PaySplit)newSplitList[i]));
+				PaySplits.Insert(newSplitList[i]);
 			}
 		}
 

@@ -8,6 +8,7 @@ using System.ComponentModel;
 using System.Globalization;
 using System.Windows.Forms;
 using OpenDental.ReportingOld2;
+using OpenDental.UI;
 using OpenDentBusiness;
 
 namespace OpenDental{
@@ -583,18 +584,11 @@ namespace OpenDental{
 			// 
 			// gridCharges
 			// 
-			this.gridCharges.Columns.Add(new OpenDental.UI.ODGridColumn("#",25,System.Windows.Forms.HorizontalAlignment.Center));
-			this.gridCharges.Columns.Add(new OpenDental.UI.ODGridColumn("Date",65,System.Windows.Forms.HorizontalAlignment.Right));
-			this.gridCharges.Columns.Add(new OpenDental.UI.ODGridColumn("Principal",60,System.Windows.Forms.HorizontalAlignment.Right));
-			this.gridCharges.Columns.Add(new OpenDental.UI.ODGridColumn("Interest",60,System.Windows.Forms.HorizontalAlignment.Right));
-			this.gridCharges.Columns.Add(new OpenDental.UI.ODGridColumn("Payment",60,System.Windows.Forms.HorizontalAlignment.Right));
-			this.gridCharges.Columns.Add(new OpenDental.UI.ODGridColumn("Balance",60,System.Windows.Forms.HorizontalAlignment.Right));
-			this.gridCharges.Columns.Add(new OpenDental.UI.ODGridColumn("Note",147,System.Windows.Forms.HorizontalAlignment.Left));
 			this.gridCharges.HScrollVisible = false;
-			this.gridCharges.Location = new System.Drawing.Point(457,31);
+			this.gridCharges.Location = new System.Drawing.Point(435,31);
 			this.gridCharges.Name = "gridCharges";
 			this.gridCharges.ScrollValue = 0;
-			this.gridCharges.Size = new System.Drawing.Size(496,379);
+			this.gridCharges.Size = new System.Drawing.Size(536,379);
 			this.gridCharges.TabIndex = 41;
 			this.gridCharges.Title = "Amortization Schedule";
 			this.gridCharges.TranslationName = "PayPlanAmortization";
@@ -654,22 +648,22 @@ namespace OpenDental{
 			this.textStartBal.Location = new System.Drawing.Point(729,9);
 			this.textStartBal.Name = "textStartBal";
 			this.textStartBal.ReadOnly = true;
-			this.textStartBal.Size = new System.Drawing.Size(63,18);
+			this.textStartBal.Size = new System.Drawing.Size(63,20);
 			this.textStartBal.TabIndex = 48;
 			this.textStartBal.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
 			// 
 			// textTotPrinc
 			// 
-			this.textTotPrinc.Location = new System.Drawing.Point(552,416);
+			this.textTotPrinc.Location = new System.Drawing.Point(541,416);
 			this.textTotPrinc.Name = "textTotPrinc";
 			this.textTotPrinc.ReadOnly = true;
-			this.textTotPrinc.Size = new System.Drawing.Size(60,18);
+			this.textTotPrinc.Size = new System.Drawing.Size(60,20);
 			this.textTotPrinc.TabIndex = 50;
 			this.textTotPrinc.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
 			// 
 			// label3
 			// 
-			this.label3.Location = new System.Drawing.Point(460,416);
+			this.label3.Location = new System.Drawing.Point(449,416);
 			this.label3.Name = "label3";
 			this.label3.Size = new System.Drawing.Size(88,17);
 			this.label3.TabIndex = 49;
@@ -678,19 +672,19 @@ namespace OpenDental{
 			// 
 			// textTotInt
 			// 
-			this.textTotInt.Location = new System.Drawing.Point(611,416);
+			this.textTotInt.Location = new System.Drawing.Point(600,416);
 			this.textTotInt.Name = "textTotInt";
 			this.textTotInt.ReadOnly = true;
-			this.textTotInt.Size = new System.Drawing.Size(60,18);
+			this.textTotInt.Size = new System.Drawing.Size(60,20);
 			this.textTotInt.TabIndex = 51;
 			this.textTotInt.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
 			// 
 			// textTotPay
 			// 
-			this.textTotPay.Location = new System.Drawing.Point(670,416);
+			this.textTotPay.Location = new System.Drawing.Point(659,416);
 			this.textTotPay.Name = "textTotPay";
 			this.textTotPay.ReadOnly = true;
-			this.textTotPay.Size = new System.Drawing.Size(60,18);
+			this.textTotPay.Size = new System.Drawing.Size(60,20);
 			this.textTotPay.TabIndex = 52;
 			this.textTotPay.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
 			// 
@@ -829,6 +823,21 @@ namespace OpenDental{
 			PayPlanCharge[] ChargeListAll=PayPlanCharges.Refresh(PayPlanCur.Guarantor);
 			ChargeList=PayPlanCharges.GetForPayPlan(PayPlanCur.PayPlanNum,ChargeListAll);
 			gridCharges.BeginUpdate();
+			gridCharges.Columns.Clear();
+			ODGridColumn col=new ODGridColumn(Lan.g("PayPlanAmortization","#"),25,HorizontalAlignment.Center);
+			gridCharges.Columns.Add(col);
+			col=new ODGridColumn(Lan.g("PayPlanAmortization","Date"),65,HorizontalAlignment.Right);
+			gridCharges.Columns.Add(col);
+			col=new ODGridColumn(Lan.g("PayPlanAmortization","Principal"),60,HorizontalAlignment.Right);
+			gridCharges.Columns.Add(col);
+			col=new ODGridColumn(Lan.g("PayPlanAmortization","Interest"),60,HorizontalAlignment.Right);
+			gridCharges.Columns.Add(col);
+			col=new ODGridColumn(Lan.g("PayPlanAmortization","Payment"),60,HorizontalAlignment.Right);
+			gridCharges.Columns.Add(col);
+			col=new ODGridColumn(Lan.g("PayPlanAmortization","Balance"),60,HorizontalAlignment.Right);
+			gridCharges.Columns.Add(col);
+			col=new ODGridColumn(Lan.g("PayPlanAmortization","Note"),147);
+			gridCharges.Columns.Add(col);
 			gridCharges.Rows.Clear();
 			UI.ODGridRow row;
 			//double totPrinc=0;
@@ -1029,6 +1038,7 @@ namespace OpenDental{
 				ppCharge.Interest=0;
 				ppCharge.Principal=downpayment;
 				ppCharge.Note=Lan.g(this,"Downpayment");
+				ppCharge.ProvNum=PatCur.PriProv;
 				try{
 					PayPlanCharges.InsertOrUpdate(ppCharge,true);
 				}
@@ -1138,6 +1148,7 @@ namespace OpenDental{
 			ppCharge.PayPlanNum=PayPlanCur.PayPlanNum;
 			ppCharge.Guarantor=PayPlanCur.Guarantor;
 			ppCharge.ChargeDate=DateTime.Today;
+			ppCharge.ProvNum=PatCur.PriProv;
 			FormPayPlanChargeEdit FormP=new FormPayPlanChargeEdit(ppCharge);
 			FormP.IsNew=true;
 			FormP.ShowDialog();

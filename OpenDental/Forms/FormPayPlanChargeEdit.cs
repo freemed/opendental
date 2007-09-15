@@ -26,6 +26,8 @@ namespace OpenDental{
 		private System.Windows.Forms.Label label1;
 		private System.Windows.Forms.Label label2;
 		private OpenDental.ValidDouble textInterest;
+		private ComboBox comboProvNum;
+		private Label label9;
 		private OpenDental.ValidDate textDate;
 
 		///<summary></summary>
@@ -60,11 +62,13 @@ namespace OpenDental{
 			this.label1 = new System.Windows.Forms.Label();
 			this.textDate = new OpenDental.ValidDate();
 			this.label2 = new System.Windows.Forms.Label();
+			this.comboProvNum = new System.Windows.Forms.ComboBox();
+			this.label9 = new System.Windows.Forms.Label();
 			this.SuspendLayout();
 			// 
 			// label4
 			// 
-			this.label4.Location = new System.Drawing.Point(5,76);
+			this.label4.Location = new System.Drawing.Point(5,101);
 			this.label4.Name = "label4";
 			this.label4.Size = new System.Drawing.Size(100,16);
 			this.label4.TabIndex = 3;
@@ -73,7 +77,7 @@ namespace OpenDental{
 			// 
 			// label5
 			// 
-			this.label5.Location = new System.Drawing.Point(6,31);
+			this.label5.Location = new System.Drawing.Point(6,56);
 			this.label5.Name = "label5";
 			this.label5.Size = new System.Drawing.Size(100,16);
 			this.label5.TabIndex = 4;
@@ -88,7 +92,7 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(437,126);
+			this.butOK.Location = new System.Drawing.Point(437,150);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75,26);
 			this.butOK.TabIndex = 6;
@@ -104,7 +108,7 @@ namespace OpenDental{
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
 			this.butCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.butCancel.Location = new System.Drawing.Point(437,164);
+			this.butCancel.Location = new System.Drawing.Point(437,188);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75,26);
 			this.butCancel.TabIndex = 7;
@@ -121,7 +125,7 @@ namespace OpenDental{
 			this.butDelete.CornerRadius = 4F;
 			this.butDelete.Image = global::OpenDental.Properties.Resources.deleteX;
 			this.butDelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butDelete.Location = new System.Drawing.Point(24,162);
+			this.butDelete.Location = new System.Drawing.Point(24,186);
 			this.butDelete.Name = "butDelete";
 			this.butDelete.Size = new System.Drawing.Size(78,26);
 			this.butDelete.TabIndex = 17;
@@ -130,7 +134,7 @@ namespace OpenDental{
 			// 
 			// textPrincipal
 			// 
-			this.textPrincipal.Location = new System.Drawing.Point(108,28);
+			this.textPrincipal.Location = new System.Drawing.Point(108,53);
 			this.textPrincipal.Name = "textPrincipal";
 			this.textPrincipal.Size = new System.Drawing.Size(100,20);
 			this.textPrincipal.TabIndex = 1;
@@ -138,7 +142,7 @@ namespace OpenDental{
 			// textNote
 			// 
 			this.textNote.AcceptsReturn = true;
-			this.textNote.Location = new System.Drawing.Point(108,76);
+			this.textNote.Location = new System.Drawing.Point(108,101);
 			this.textNote.Multiline = true;
 			this.textNote.Name = "textNote";
 			this.textNote.QuickPasteType = OpenDentBusiness.QuickPasteType.Adjustment;
@@ -148,14 +152,14 @@ namespace OpenDental{
 			// 
 			// textInterest
 			// 
-			this.textInterest.Location = new System.Drawing.Point(108,52);
+			this.textInterest.Location = new System.Drawing.Point(108,77);
 			this.textInterest.Name = "textInterest";
 			this.textInterest.Size = new System.Drawing.Size(100,20);
 			this.textInterest.TabIndex = 20;
 			// 
 			// label1
 			// 
-			this.label1.Location = new System.Drawing.Point(6,54);
+			this.label1.Location = new System.Drawing.Point(6,79);
 			this.label1.Name = "label1";
 			this.label1.Size = new System.Drawing.Size(100,16);
 			this.label1.TabIndex = 21;
@@ -178,11 +182,31 @@ namespace OpenDental{
 			this.label2.Text = "Date";
 			this.label2.TextAlign = System.Drawing.ContentAlignment.TopRight;
 			// 
+			// comboProvNum
+			// 
+			this.comboProvNum.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboProvNum.Location = new System.Drawing.Point(108,28);
+			this.comboProvNum.MaxDropDownItems = 30;
+			this.comboProvNum.Name = "comboProvNum";
+			this.comboProvNum.Size = new System.Drawing.Size(136,21);
+			this.comboProvNum.TabIndex = 102;
+			// 
+			// label9
+			// 
+			this.label9.Location = new System.Drawing.Point(7,32);
+			this.label9.Name = "label9";
+			this.label9.Size = new System.Drawing.Size(100,14);
+			this.label9.TabIndex = 101;
+			this.label9.Text = "Provider";
+			this.label9.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
 			// FormPayPlanChargeEdit
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.CancelButton = this.butCancel;
-			this.ClientSize = new System.Drawing.Size(541,212);
+			this.ClientSize = new System.Drawing.Size(541,236);
+			this.Controls.Add(this.comboProvNum);
+			this.Controls.Add(this.label9);
 			this.Controls.Add(this.label2);
 			this.Controls.Add(this.textDate);
 			this.Controls.Add(this.textInterest);
@@ -210,6 +234,12 @@ namespace OpenDental{
 
 		private void FormPayPlanCharge_Load(object sender, System.EventArgs e) {
 			textDate.Text=PayPlanChargeCur.ChargeDate.ToShortDateString();
+			comboProvNum.Items.Clear();
+			for(int i=0;i<Providers.List.Length;i++) {
+				comboProvNum.Items.Add(Providers.List[i].Abbr);
+				if(Providers.List[i].ProvNum==PayPlanChargeCur.ProvNum)
+					comboProvNum.SelectedIndex=i;
+			}
 			textPrincipal.Text=PayPlanChargeCur.Principal.ToString("n");
 			textInterest.Text=PayPlanChargeCur.Interest.ToString("n");
 			textNote.Text=PayPlanChargeCur.Note;
@@ -223,6 +253,10 @@ namespace OpenDental{
 				MessageBox.Show(Lan.g(this,"Please fix data entry errors first."));
 				return;
 			}
+			if(comboProvNum.SelectedIndex==-1){
+				MsgBox.Show(this,"Please select a provider first.");
+				return;
+			}
 			if(textPrincipal.Text==""){
 				textPrincipal.Text="0";
 			}
@@ -231,6 +265,7 @@ namespace OpenDental{
 			}
 			//todo: test dates?  The day of the month should be the same as all others
 			PayPlanChargeCur.ChargeDate=PIn.PDate(textDate.Text);
+			PayPlanChargeCur.ProvNum=Providers.List[comboProvNum.SelectedIndex].ProvNum;
 			PayPlanChargeCur.Principal=PIn.PDouble(textPrincipal.Text);
 			PayPlanChargeCur.Interest=PIn.PDouble(textInterest.Text);
 			PayPlanChargeCur.Note=textNote.Text;

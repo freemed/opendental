@@ -214,14 +214,14 @@ namespace OpenDental{
 			return false;
 		}
 
-		/// <summary>Returns an array list of PaySplits.  Only Called only from FormPayment.butOK click.  Only called if the user did not enter any splits.  Usually just adds one split for the current patient.  But if that would take the balance negative, then it loops through all other family members and creates splits for them.  It might still take the current patient negative once all other family members are zeroed out.</summary>
-		public static ArrayList Allocate(Payment pay){//double amtTot,int patNum,Payment payNum){
+		/// <summary>Only Called only from FormPayment.butOK click.  Only called if the user did not enter any splits.  Usually just adds one split for the current patient.  But if that would take the balance negative, then it loops through all other family members and creates splits for them.  It might still take the current patient negative once all other family members are zeroed out.</summary>
+		public static List<PaySplit> Allocate(Payment pay){//double amtTot,int patNum,Payment payNum){
 			string command= 
 				"SELECT Guarantor FROM patient "
 				+"WHERE PatNum = "+POut.PInt(pay.PatNum);
  			DataTable table=General.GetTable(command);
 			if(table.Rows.Count==0){
-				return new ArrayList();
+				return new List<PaySplit>();
 			}
 			command= 
 				"SELECT PatNum,EstBalance,PriProv FROM patient "
@@ -273,7 +273,7 @@ namespace OpenDental{
 			amtSplits[0]+=amtRemain;
 			//now create a split for each non-zero amount
 			PaySplit PaySplitCur;
-			ArrayList retVal=new ArrayList();
+			List<PaySplit> retVal=new List<PaySplit>();
 			for(int i=0;i<pats.Count;i++){
 				if(amtSplits[i]==0){
 					continue;

@@ -894,6 +894,88 @@ namespace OpenDental{
 			return Lim;
 		}
 
+		///<summary>Gets the patient and provider balances for all patients in the family.  Used from the payment window to help visualize and automate the family splits.</summary>
+		public static DataTable GetPaymentStartingBalances(int guarNum,int excludePayNum){
+			/*command=@"SELECT (SELECT EstBalance FROM patient WHERE PatNum="+POut.PInt(patNum)+" GROUP BY PatNum) EstBalance, "
+				+"IFNULL((SELECT SUM(ProcFee) FROM procedurelog WHERE PatNum="+POut.PInt(patNum)+" AND ProcStatus=2 GROUP BY PatNum),0)"//complete
+				+"+IFNULL((SELECT SUM(InsPayAmt) FROM claimproc WHERE PatNum="+POut.PInt(patNum)
+				+" AND (Status=1 OR Status=4 OR Status=5) GROUP BY PatNum),0) "//received,supplemental,capclaim"
+				+"+IFNULL((SELECT SUM(AdjAmt) FROM adjustment WHERE PatNum="+POut.PInt(patNum)+" GROUP BY PatNum),0) "
+				+"-IFNULL((SELECT SUM(SplitAmt) FROM paysplit WHERE PatNum="+POut.PInt(patNum)+" GROUP BY PatNum),0) CalcBalance, "
+				+"IFNULL((SELECT SUM(InsPayEst) FROM claimproc WHERE PatNum="+POut.PInt(patNum)+" GROUP BY PatNum),0) Estimate ";
+			DataTable table=General.GetTable(command);
+				+" GROUP BY PatNum,"
+				+" ORDER BY Guarantor!=PatNum,Birthdate,";
+			*/
+			string command="SET @GuarNum="+POut.PInt(guarNum)+";"
+				+"SET @ExcludePayNum="+POut.PInt(excludePayNum)+";";
+			command+=@"
+				DROP TABLE IF EXISTS tempfambal;
+				CREATE TABLE tempfambal( 
+					FamBalNum int NOT NULL auto_increment,
+					PatNum int NOT NULL,
+					ProvNum int NOT NULL,
+					AmtBal double NOT NULL,
+					PRIMARY KEY (FamBalNum));
+				
+				INSERT INTO tempfambal (PatNum,ProvNum,AmtBal)
+				SELECT patient.PatNum,procedurelog.ProvNum,SUM(ProcFee)
+				FROM procedurelog,patient
+				WHERE patient.PatNum=procedurelog.PatNum
+				AND ProcStatus=2
+				AND patient.Guarantor=@GuarNum
+				GROUP BY patient.PatNum,ProvNum;
+			
+				INSERT INTO tempfambal (PatNum,ProvNum,AmtBal)
+				SELECT patient.PatNum,claimproc.ProvNum,-SUM(InsPayAmt)
+				FROM claimproc,patient
+				WHERE patient.PatNum=claimproc.PatNum
+				AND (Status=1 OR Status=4 OR Status=5)/*received,supplemental,capclaim*/
+				AND patient.Guarantor=@GuarNum
+				GROUP BY patient.PatNum,ProvNum;
+
+				INSERT INTO tempfambal (PatNum,ProvNum,AmtBal)
+				SELECT patient.PatNum,adjustment.ProvNum,SUM(AdjAmt)
+				FROM adjustment,patient
+				WHERE patient.PatNum=adjustment.PatNum
+				AND patient.Guarantor=@GuarNum
+				GROUP BY patient.PatNum,ProvNum;
+
+				INSERT INTO tempfambal (PatNum,ProvNum,AmtBal)
+				SELECT patient.PatNum,paysplit.ProvNum,-SUM(SplitAmt)
+				FROM paysplit,patient
+				WHERE patient.PatNum=paysplit.PatNum
+				AND paysplit.PayNum!=@ExcludePayNum
+				AND patient.Guarantor=@GuarNum
+				GROUP BY patient.PatNum,ProvNum;
+
+				/*payplan amount due*/
+				INSERT INTO tempfambal (PatNum,ProvNum,AmtBal)
+				SELECT patient.PatNum,payplancharge.ProvNum,SUM(Principal+Interest)
+				FROM payplancharge,patient
+				WHERE patient.PatNum=payplancharge.Guarantor
+				AND ChargeDate <= NOW()
+				AND patient.Guarantor=@GuarNum
+				GROUP BY patient.PatNum,ProvNum;
+
+				/*payplan princ reduction*/
+				INSERT INTO tempfambal (PatNum,ProvNum,AmtBal)
+				SELECT patient.PatNum,payplancharge.ProvNum,-SUM(Principal)
+				FROM payplancharge,patient
+				WHERE patient.PatNum=payplancharge.PatNum
+				AND patient.Guarantor=@GuarNum
+				GROUP BY patient.PatNum,ProvNum;
+
+				SELECT tempfambal.PatNum,tempfambal.ProvNum,SUM(AmtBal) StartBal,FName,Preferred,'0' EndBal
+				FROM tempfambal,patient
+				WHERE tempfambal.PatNum=patient.PatNum
+				GROUP BY PatNum,ProvNum
+				ORDER BY Guarantor!=patient.PatNum,Birthdate,ProvNum";
+			return General.GetTable(command);
+			command="DROP TABLE IF EXISTS tempfambal";
+			//General.NonQ(command);
+		}
+
 		///<summary></summary>
 		public static void ChangeGuarantorToCur(Family Fam,Patient Pat){
 			//Move famfinurgnote to current patient:

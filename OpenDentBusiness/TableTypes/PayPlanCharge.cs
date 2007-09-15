@@ -21,19 +21,12 @@ namespace OpenDentBusiness{
 		public double Interest;
 		///<summary>Any note about this particular payment plan charge</summary>
 		public string Note;
+		///<Summary>The ProvNum will be assigned according to what the patient owes.  This same provnum is used to show amount due in guarantor.  Payments applied should be to this provnum.</Summary>
+		public int ProvNum;
 		
 		///<summary></summary>
 		public PayPlanCharge Copy(){
-			PayPlanCharge p=new PayPlanCharge();
-			p.PayPlanChargeNum=PayPlanChargeNum;
-			p.PayPlanNum=PayPlanNum;
-			p.Guarantor=Guarantor;
-			p.PatNum=PatNum;
-			p.ChargeDate=ChargeDate;
-			p.Principal=Principal;
-			p.Interest=Interest;
-			p.Note=Note;
-			return p;
+			return (PayPlanCharge)this.MemberwiseClone();
 		}
 
 	

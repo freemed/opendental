@@ -26,6 +26,7 @@ namespace OpenDental{
 				List[i].Principal       = PIn.PDouble(table.Rows[i][5].ToString());
 				List[i].Interest        = PIn.PDouble(table.Rows[i][6].ToString());
 				List[i].Note            = PIn.PString(table.Rows[i][7].ToString());
+				List[i].ProvNum         = PIn.PInt(table.Rows[i][8].ToString());
 			}
 			return List;
 		}
@@ -41,6 +42,7 @@ namespace OpenDental{
 				+",Principal = '"      +POut.PDouble(charge.Principal)+"'"
 				+",Interest = '"       +POut.PDouble(charge.Interest)+"'"
 				+",Note = '"           +POut.PString(charge.Note)+"'"
+				+",ProvNum = '"        +POut.PInt   (charge.ProvNum)+"'"
 				+" WHERE PayPlanChargeNum = '"+POut.PInt(charge.PayPlanChargeNum)+"'";
  			General.NonQ(command);
 		}
@@ -54,7 +56,7 @@ namespace OpenDental{
 			if(PrefB.RandomKeys){
 				command+="PayPlanChargeNum,";
 			}
-			command+="PayPlanNum,Guarantor,PatNum,ChargeDate,Principal,Interest,Note) VALUES(";
+			command+="PayPlanNum,Guarantor,PatNum,ChargeDate,Principal,Interest,Note,ProvNum) VALUES(";
 			if(PrefB.RandomKeys){
 				command+="'"+POut.PInt(charge.PayPlanChargeNum)+"', ";
 			}
@@ -65,7 +67,8 @@ namespace OpenDental{
 				+POut.PDate  (charge.ChargeDate)+", "
 				+"'"+POut.PDouble(charge.Principal)+"', "
 				+"'"+POut.PDouble(charge.Interest)+"', "
-				+"'"+POut.PString(charge.Note)+"')";
+				+"'"+POut.PString(charge.Note)+"', "
+				+"'"+POut.PInt   (charge.ProvNum)+"')";
  			if(PrefB.RandomKeys){
 				General.NonQ(command);
 			}
