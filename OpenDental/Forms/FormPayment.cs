@@ -62,7 +62,7 @@ namespace OpenDental{
 		private ComboBox comboDepositAccount;
 		///<summary>Set this value to a PaySplitNum if you want one of the splits highlighted when opening this form.</summary>
 		public int InitialPaySplit;
-		///<summary>An array list of PaySplits</summary>
+		///<summary></summary>
 		private List<PaySplit> SplitList;
 		private OpenDental.UI.ODGrid gridMain;
 		private List<PaySplit> SplitListOld;

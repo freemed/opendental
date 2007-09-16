@@ -300,8 +300,11 @@ namespace OpenDental.UI{
 
 		private void DrawButton(Graphics g,ODToolBarButton button){
 			if(button.Style==ODToolBarButtonStyle.Separator){
-				g.DrawLine(Pens.SlateGray,button.Bounds.X+1,button.Bounds.Y+3
-					,button.Bounds.X+1,button.Bounds.Y+button.Bounds.Height-3);
+				//was 112,128,144
+				g.DrawLine(new Pen(Color.FromArgb(190,200,210)),button.Bounds.Left,button.Bounds.Top+1,
+					button.Bounds.Left,button.Bounds.Bottom-2);
+				g.DrawLine(new Pen(Color.FromArgb(130,140,160)),button.Bounds.Left+1,button.Bounds.Top+1,
+					button.Bounds.Left+1,button.Bounds.Bottom-2);
 				return;
 			}
 			//draw background
@@ -391,21 +394,24 @@ namespace OpenDental.UI{
 				format.LineAlignment=StringAlignment.Center;
 				g.DrawString(button.Text,Font,new SolidBrush(textColor),textRect,format);
 			}
-			
 			//draw outline
+			Pen penR=new Pen(Color.FromArgb(180,180,180));
 			if(!button.Enabled){
 				//no outline
+				g.DrawLine(penR,button.Bounds.Right-1,button.Bounds.Top,button.Bounds.Right-1,button.Bounds.Bottom-1);
 			}
 			else if(button.Style==ODToolBarButtonStyle.ToggleButton && button.Pushed){
 				g.DrawRectangle(Pens.SlateGray,new Rectangle(button.Bounds.X,button.Bounds.Y
-						,button.Bounds.Width-1,button.Bounds.Height-1));
+					,button.Bounds.Width-1,button.Bounds.Height-1));
 			}
 			else if(button.Style==ODToolBarButtonStyle.Label){
 				//no outline
+				g.DrawLine(penR,button.Bounds.Right-1,button.Bounds.Top,button.Bounds.Right-1,button.Bounds.Bottom-1);
 			}
 			else switch(button.State){
 				case ToolBarButtonState.Normal:
 					//no outline
+					g.DrawLine(penR,button.Bounds.Right-1,button.Bounds.Top,button.Bounds.Right-1,button.Bounds.Bottom-1);
 					break;
 				case ToolBarButtonState.Hover:
 					g.DrawRectangle(Pens.SlateGray,new Rectangle(button.Bounds.X,button.Bounds.Y

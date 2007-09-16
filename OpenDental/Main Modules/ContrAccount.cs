@@ -153,6 +153,8 @@ namespace OpenDental {
 		private Label labelCC;
 		private Label label1;
 		private TextBox textCCexp;
+		private ContextMenu contextMenuPayment;
+		private MenuItem menuItemProvIncTrans;
 		public static bool PrintingStatement = false;
 
 
@@ -261,6 +263,8 @@ namespace OpenDental {
 			this.label1 = new System.Windows.Forms.Label();
 			this.textCCexp = new System.Windows.Forms.TextBox();
 			this.labelCC = new System.Windows.Forms.Label();
+			this.contextMenuPayment = new System.Windows.Forms.ContextMenu();
+			this.menuItemProvIncTrans = new System.Windows.Forms.MenuItem();
 			this.panelCommButs.SuspendLayout();
 			this.groupBoxChartLabels.SuspendLayout();
 			this.panelProgNotes.SuspendLayout();
@@ -1172,6 +1176,17 @@ namespace OpenDental {
 			this.labelCC.Text = "CC#";
 			this.labelCC.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
+			// contextMenuPayment
+			// 
+			this.contextMenuPayment.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
+            this.menuItemProvIncTrans});
+			// 
+			// menuItemProvIncTrans
+			// 
+			this.menuItemProvIncTrans.Index = 0;
+			this.menuItemProvIncTrans.Text = "Provider Income Transfer";
+			this.menuItemProvIncTrans.Click += new System.EventHandler(this.menuItemProvIncTrans_Click);
+			// 
 			// ContrAccount
 			// 
 			this.Controls.Add(this.panelCC);
@@ -1258,7 +1273,10 @@ namespace OpenDental {
 			button.DropDownMenu=menuPatient;
 			ToolBarMain.Buttons.Add(button);
 			ToolBarMain.Buttons.Add(new ODToolBarButton(ODToolBarButtonStyle.Separator));
-			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Payment"),1,"","Payment"));
+			button=new ODToolBarButton(Lan.g(this,"Payment"),1,"","Payment");
+			button.Style=ODToolBarButtonStyle.DropDownButton;
+			button.DropDownMenu=contextMenuPayment;
+			ToolBarMain.Buttons.Add(button);
 			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Adjustment"),2,"","Adjustment"));
 			button=new ODToolBarButton(Lan.g(this,"New Claim"),3,"","Insurance");
 			button.Style=ODToolBarButtonStyle.DropDownButton;
@@ -2682,6 +2700,20 @@ namespace OpenDental {
 			ModuleSelected(PatCur.PatNum);
 		}
 
+		private void menuItemProvIncTrans_Click(object sender,EventArgs e) {
+			Payment PaymentCur=new Payment();
+			PaymentCur.PayDate=DateTime.Today;
+			//PaymentCur.PatNum=PatCur.PatNum;
+			//PaymentCur.ClinicNum=PatCur.ClinicNum;
+			Payments.Insert(PaymentCur);
+			FormProviderIncTrans FormP=new FormProviderIncTrans();
+			FormP.IsNew=true;
+			FormP.PaymentCur=PaymentCur;
+			FormP.PatNum=PatCur.PatNum;
+			FormP.ShowDialog();
+			ModuleSelected(PatCur.PatNum);
+		}
+
 		private void OnAdj_Click() {
 			Adjustment AdjustmentCur=new Adjustment();
 			AdjustmentCur.DateEntry=DateTime.Today;//cannot be changed. Handled automatically
@@ -3801,6 +3833,7 @@ namespace OpenDental {
 				ModuleSelected(PatCur.PatNum);
 		}
 
+		
 		
 
 		

@@ -899,7 +899,7 @@ namespace OpenDental
 				return;
 			}
 			if(textAmount.Text==""){
-				MessageBox.Show(Lan.g(this,"Please enter an amount."));	
+				MsgBox.Show(this,"Please enter an amount.");	
 				return;
 			}
 			PaySplitCur.DatePay=PIn.PDate(textDatePay.Text);//gets overwritten anyway
