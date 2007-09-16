@@ -42,6 +42,7 @@
 			</resources>
 			<references>
 				<include name="System.dll"/>
+				<include name="System.Windows.Forms.dll"/>
 				<include name="System.Data.dll"/>
 				<include name="System.Drawing.dll"/>
 				<include name="System.Xml.dll"/>
