@@ -32,6 +32,10 @@ namespace OpenDental{
 		private OpenDental.UI.Button butDropTo;
 		private MonthCalendar calendarTo;
 		private bool isPrinting;
+		private ValidDouble textAmt;
+		private Label label3;
+		private Label label4;
+		private TextBox textFindText;
 		//set this externally so that the ending balances will match what's showing in the Chart of Accounts.
 		public DateTime InitialAsOfDate;
 
@@ -82,6 +86,10 @@ namespace OpenDental{
 			this.butDropFrom = new OpenDental.UI.Button();
 			this.butDropTo = new OpenDental.UI.Button();
 			this.calendarTo = new System.Windows.Forms.MonthCalendar();
+			this.textAmt = new OpenDental.ValidDouble();
+			this.label3 = new System.Windows.Forms.Label();
+			this.label4 = new System.Windows.Forms.Label();
+			this.textFindText = new System.Windows.Forms.TextBox();
 			this.SuspendLayout();
 			// 
 			// imageListMain
@@ -155,7 +163,7 @@ namespace OpenDental{
 			this.butRefresh.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butRefresh.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butRefresh.CornerRadius = 4F;
-			this.butRefresh.Location = new System.Drawing.Point(398,30);
+			this.butRefresh.Location = new System.Drawing.Point(711,31);
 			this.butRefresh.Name = "butRefresh";
 			this.butRefresh.Size = new System.Drawing.Size(75,23);
 			this.butRefresh.TabIndex = 6;
@@ -211,10 +219,47 @@ namespace OpenDental{
 			this.calendarTo.Visible = false;
 			this.calendarTo.DateSelected += new System.Windows.Forms.DateRangeEventHandler(this.calendarTo_DateSelected);
 			// 
+			// textAmt
+			// 
+			this.textAmt.ForeColor = System.Drawing.SystemColors.WindowText;
+			this.textAmt.Location = new System.Drawing.Point(450,32);
+			this.textAmt.Name = "textAmt";
+			this.textAmt.Size = new System.Drawing.Size(81,20);
+			this.textAmt.TabIndex = 11;
+			// 
+			// label3
+			// 
+			this.label3.Location = new System.Drawing.Point(387,32);
+			this.label3.Name = "label3";
+			this.label3.Size = new System.Drawing.Size(63,18);
+			this.label3.TabIndex = 12;
+			this.label3.Text = "Find Amt";
+			this.label3.TextAlign = System.Drawing.ContentAlignment.BottomRight;
+			// 
+			// label4
+			// 
+			this.label4.Location = new System.Drawing.Point(537,32);
+			this.label4.Name = "label4";
+			this.label4.Size = new System.Drawing.Size(68,18);
+			this.label4.TabIndex = 13;
+			this.label4.Text = "Find Text";
+			this.label4.TextAlign = System.Drawing.ContentAlignment.BottomRight;
+			// 
+			// textFindText
+			// 
+			this.textFindText.Location = new System.Drawing.Point(605,32);
+			this.textFindText.Name = "textFindText";
+			this.textFindText.Size = new System.Drawing.Size(78,20);
+			this.textFindText.TabIndex = 14;
+			// 
 			// FormJournal
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.ClientSize = new System.Drawing.Size(844,671);
+			this.Controls.Add(this.textFindText);
+			this.Controls.Add(this.label4);
+			this.Controls.Add(this.label3);
+			this.Controls.Add(this.textAmt);
 			this.Controls.Add(this.calendarTo);
 			this.Controls.Add(this.butDropTo);
 			this.Controls.Add(this.butDropFrom);
@@ -299,6 +344,10 @@ namespace OpenDental{
 			}
 			else{
 				dateTo=PIn.PDate(textDateTo.Text);
+			}
+			double filterAmt=0;
+			if(textAmt.errorProvider1.GetError(textAmt)==""){
+				filterAmt=PIn.PDouble(textAmt.Text);
 			}
 			JournalList=JournalEntries.GetForAccount(AccountCur.AccountNum);
 			int scroll=gridMain.ScrollValue;
@@ -385,6 +434,16 @@ namespace OpenDental{
 						continue;
 						//for asset, liability, and equity accounts, older entries do affect the current balance.
 					}
+				}
+				if(filterAmt!=0 && filterAmt!=JournalList[i].CreditAmt && filterAmt!=JournalList[i].DebitAmt){
+					continue;
+				}
+				if(textFindText.Text!="" 
+					&& !JournalList[i].Memo.ToUpper().Contains(textFindText.Text.ToUpper()) 
+					&& !JournalList[i].CheckNumber.ToUpper().Contains(textFindText.Text.ToUpper())
+					&& !JournalList[i].Splits.ToUpper().Contains(textFindText.Text.ToUpper()))
+				{
+					continue;
 				}
 				row=new ODGridRow();
 				row.Cells.Add(JournalList[i].CheckNumber);
@@ -570,6 +629,7 @@ namespace OpenDental{
 		private void butRefresh_Click(object sender,EventArgs e) {
 			if(textDateFrom.errorProvider1.GetError(textDateFrom)!=""
 				|| textDateTo.errorProvider1.GetError(textDateTo)!=""
+				|| textAmt.errorProvider1.GetError(textAmt)!=""
 				)
 			{
 				MsgBox.Show(this,"Please fix data entry errors first.");
