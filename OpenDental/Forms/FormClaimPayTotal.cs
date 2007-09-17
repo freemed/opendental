@@ -407,6 +407,7 @@ namespace OpenDental
 		}
 
 		private void butOK_Click(object sender, System.EventArgs e) {
+
 			DialogResult=DialogResult.OK;
 		}
 

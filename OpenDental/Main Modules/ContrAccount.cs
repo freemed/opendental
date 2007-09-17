@@ -1722,7 +1722,12 @@ namespace OpenDental {
 				if(PaymentList[i].CheckNum!="") {
 					payInfo.Description+="#"+PaymentList[i].CheckNum+" ";
 				}
-				payInfo.Description+=PaymentList[i].PayAmt.ToString("c");
+				if(PaymentList[i].PayType==0){//provider income transfer
+					payInfo.Description+=Lan.g(this,"(internal provider income transfer $0)");
+				}
+				else{
+					payInfo.Description+=PaymentList[i].PayAmt.ToString("c");
+				}
 				//if(PaymentList[i].IsSplit){
 				//	payInfo.Description+=" "+Lan.g(this,"(split)");
 				//}
@@ -1787,6 +1792,7 @@ namespace OpenDental {
 			int[] otherPayNums=new int[neededPayNums.Count];
 			neededPayNums.CopyTo(otherPayNums);
 			Payment[] otherPayList=Payments.GetPayments(otherPayNums);
+			Payment payment;
 			for(int i=0;i<PaySplitList.Length;i++){
 				//if(PaySplitList[i].SplitAmt==38){
 				//	MessageBox.Show("");
@@ -1817,10 +1823,17 @@ namespace OpenDental {
 				payInfo=new PayInfo();
 				payInfo.Type=PayInfoType.PaySplit;
 				payInfo.Date=PaySplitList[i].ProcDate;
-				payInfo.Description=Lan.g(this,"Split of")+" "+Payments.GetFromList(PaySplitList[i].PayNum,otherPayList).PayAmt.ToString("c")
-					+" "+Lan.g(this,"payment by")+"\r\n"
-					+FamCur.GetNameInFamFL(Payments.GetFromList(PaySplitList[i].PayNum,otherPayList).PatNum)//formatted name
-					+" "+PaySplitList[i].DatePay.ToShortDateString();
+				payment=Payments.GetFromList(PaySplitList[i].PayNum,otherPayList);
+				if(payment.PayType==0){//provider transfer
+					payInfo.Description=Lan.g(this,"Provider transfer");//+" "
+						//+" "+PaySplitList[i].DatePay.ToShortDateString();
+				}
+				else{
+					payInfo.Description=Lan.g(this,"Split of")+" "+payment.PayAmt.ToString("c")
+						+" "+Lan.g(this,"payment by")+"\r\n"
+						+FamCur.GetNameInFamFL(payment.PatNum)//formatted name
+						+" "+PaySplitList[i].DatePay.ToShortDateString();
+				}
 				payInfo.Amount=PaySplitList[i].SplitAmt;
 				payInfo.PayNum=PaySplitList[i].PayNum;
 				payInfo.PayPlanNum=PaySplitList[i].PayPlanNum;
@@ -2563,9 +2576,18 @@ namespace OpenDental {
 					break;
 				case AcctModType.Pay:
 					Payment PaymentCur=Payments.GetPayment(arrayPay[((AcctLine)AcctLineAL[e.Row]).Index].PayNum);
-					FormPayment2=new FormPayment(PatCur,FamCur,PaymentCur);
-					FormPayment2.IsNew=false;
-					FormPayment2.ShowDialog();
+					if(PaymentCur.PayType==0){//provider income transfer
+						FormProviderIncTrans FormPIT=new FormProviderIncTrans();
+						FormPIT.PatNum=PatCur.PatNum;
+						FormPIT.PaymentCur=PaymentCur;
+						FormPIT.IsNew=false;
+						FormPIT.ShowDialog();
+					}
+					else{
+						FormPayment2=new FormPayment(PatCur,FamCur,PaymentCur);
+						FormPayment2.IsNew=false;
+						FormPayment2.ShowDialog();
+					}
 					break;
 				case AcctModType.Comm:
 					Commlog CommlogCur=arrayComm[((AcctLine)AcctLineAL[e.Row]).Index];
@@ -2703,7 +2725,7 @@ namespace OpenDental {
 		private void menuItemProvIncTrans_Click(object sender,EventArgs e) {
 			Payment PaymentCur=new Payment();
 			PaymentCur.PayDate=DateTime.Today;
-			//PaymentCur.PatNum=PatCur.PatNum;
+			PaymentCur.PatNum=PatCur.PatNum;
 			//PaymentCur.ClinicNum=PatCur.ClinicNum;
 			Payments.Insert(PaymentCur);
 			FormProviderIncTrans FormP=new FormProviderIncTrans();

@@ -3353,6 +3353,17 @@ namespace OpenDental{
 				//	Eclaims.Eclaims.SendBatches(queueItems);//this also calls SetClaimSentOrPrinted which creates the etrans entry.
 				//}
 			}
+			if(listClaimStatus.SelectedIndex==5){//Received
+				Payment PaymentCur=new Payment();
+				PaymentCur.PayDate=DateTime.Today;
+				PaymentCur.PatNum=PatCur.PatNum;
+				Payments.Insert(PaymentCur);
+				FormProviderIncTrans FormPIT=new FormProviderIncTrans();
+				FormPIT.IsNew=true;
+				FormPIT.PaymentCur=PaymentCur;
+				FormPIT.PatNum=PatCur.PatNum;
+				FormPIT.ShowDialog();
+			}
 			DialogResult=DialogResult.OK;
 		}
 		
