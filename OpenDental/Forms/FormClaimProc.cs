@@ -73,7 +73,7 @@ namespace OpenDental
 		private System.Windows.Forms.Label labelInsInsPayAmt;
 		private System.Windows.Forms.Label labelPatOverrideInsEstt;
 		//public bool IsNew;
-		///<summary>Set to true if this claimProc is accessed from within a claim. This changes the behavior of the form, allowing more freedom with fields that are also totalled for entire claim.  This freedom is normally restricted so that claim totals will stay synchronized with individual claimprocs.</summary>
+		///<summary>Set to true if this claimProc is accessed from within a claim or from within FormClaimPayTotal. This changes the behavior of the form, allowing more freedom with fields that are also totalled for entire claim.  This freedom is normally restricted so that claim totals will stay synchronized with individual claimprocs.  If true, it will still save changes to db, even though this is duplicated effort in FormClaimPayTotal.</summary>
 		public bool IsInClaim;
 		private System.Windows.Forms.Label labelDedBeforePerc;
 		private System.Windows.Forms.Label labelDedApplied;
@@ -2079,7 +2079,9 @@ namespace OpenDental
 					ClaimProcCur.DateEntry=DateTime.Now;
 				}
 			}
+			//if(!IsInClaim){//this can't be used because user might double click from within claim.
 			ClaimProcs.Update(ClaimProcCur);
+			//}
 			//there is no functionality here for insert cur, because all claimprocs are
 			//created before editing.
 			DialogResult=DialogResult.OK;

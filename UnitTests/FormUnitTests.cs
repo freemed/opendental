@@ -8,6 +8,7 @@ using System.Text;
 using System.Windows.Forms;
 using OpenDentBusiness;
 using OpenDental;
+using OpenDental.UI;
 
 namespace UnitTests {
 	public partial class FormUnitTests:Form {
@@ -107,6 +108,7 @@ namespace UnitTests {
 			}
 			//we still haven't tested really bad input.
 		}
+
 
 		/*
 		private void LabDueDate(){

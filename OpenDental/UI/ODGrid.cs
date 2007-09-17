@@ -23,6 +23,9 @@ namespace OpenDental.UI{
 		///<summary></summary>
 		[Category("Action"),Description("Occurs when a cell is single clicked.")]
 		public event ODGridClickEventHandler CellClick=null;
+		///<summary></summary>
+		[Category("Property Changed"),Description("Event raised when user types in a textbox.")]
+		public event EventHandler CellTextChanged=null;
 		private string title;
 		private Font titleFont=new Font(FontFamily.GenericSansSerif,10,FontStyle.Bold);
 		private Font headerFont=new Font(FontFamily.GenericSansSerif,8.5f,FontStyle.Bold);
@@ -69,6 +72,7 @@ namespace OpenDental.UI{
 		private bool wrapText;
 		private int noteSpanStart;
 		private int noteSpanStop;
+		private TextBox editBox;
 
 		///<summary></summary>
 		public ODGrid(){
@@ -180,6 +184,9 @@ namespace OpenDental.UI{
 					vScroll.Value=vScroll.Minimum;
 				else
 					vScroll.Value=value;
+				if(editBox!=null){
+					editBox.Dispose();
+				}
 				Invalidate();
 			}
 		}
@@ -491,20 +498,25 @@ namespace OpenDental.UI{
 						format.Alignment=StringAlignment.Far;
 						break;
 				}
+				int vertical=-vScroll.Value+1+titleHeight+headerHeight+RowLocs[rowI]+1;
+				int horizontal=-hScroll.Value+1+ColPos[i]+1;
+				int cellW=columns[i].ColWidth;
+				int cellH=RowHeights[rowI];
+				if(rows[rowI].Height!=0){//eg 19 for handling textbox
+					vertical+=2;
+					cellH-=3;
+				}
 				if(columns[i].TextAlign==HorizontalAlignment.Right){
-					textRect=new RectangleF(
-						-hScroll.Value+1+ColPos[i]-1,
-						-vScroll.Value+1+titleHeight+headerHeight+RowLocs[rowI]+1,
-						columns[i].ColWidth+2,
-						RowHeights[rowI]);
+					if(rows[rowI].Height!=0){//eg 19 for handling textbox
+						horizontal-=4;
+						cellW+=2;
+					}
+					else{
+						horizontal-=2;
+						cellW+=2;
+					}
 				}
-				else{
-					textRect=new RectangleF(
-						-hScroll.Value+1+ColPos[i]+1,
-						-vScroll.Value+1+titleHeight+headerHeight+RowLocs[rowI]+1,
-						columns[i].ColWidth,
-						RowHeights[rowI]);
-				}
+				textRect=new RectangleF(horizontal,vertical,cellW,cellH);
 				if(rows[rowI].Cells[i].ColorText==Color.Empty){
 					textBrush=new SolidBrush(rows[rowI].ColorText);
 				}
@@ -588,8 +600,9 @@ namespace OpenDental.UI{
 		///<summary></summary>
 		protected void OnCellDoubleClick(int col,int row){
 			ODGridClickEventArgs gArgs=new ODGridClickEventArgs(col,row);
-			if(CellDoubleClick!=null)
+			if(CellDoubleClick!=null){
 				CellDoubleClick(this,gArgs);
+			}
 		}
 
 		///<summary></summary>
@@ -609,6 +622,12 @@ namespace OpenDental.UI{
 			ODGridClickEventArgs gArgs=new ODGridClickEventArgs(col,row);
 			if(CellClick!=null)
 				CellClick(this,gArgs);
+		}
+
+		protected void OnCellTextChanged() {
+			if(CellTextChanged!=null){
+				CellTextChanged(this,new EventArgs());
+			}
 		}
 
 		///<summary></summary>
@@ -666,14 +685,24 @@ namespace OpenDental.UI{
 				if(wrapText){
 					//find the tallest row
 					for(int j=0;j<rows[i].Cells.Count;j++) {
-						cellH=(int)g.MeasureString(rows[i].Cells[j].Text,this.cellFont,columns[j].ColWidth).Height+1;
+						if(rows[i].Height==0){//not set
+							cellH=(int)g.MeasureString(rows[i].Cells[j].Text,this.cellFont,columns[j].ColWidth).Height+1;
+						}
+						else{
+							cellH=rows[i].Height;
+						}
 						if(cellH>RowHeights[i]) {
 							RowHeights[i]=cellH;
 						}
 					}
 				}
 				else{
-					RowHeights[i]=(int)g.MeasureString("Any",this.cellFont).Height+1;
+					if(rows[i].Height==0){//not set
+						RowHeights[i]=(int)g.MeasureString("Any",this.cellFont).Height+1;
+					}
+					else{
+						RowHeights[i]=rows[i].Height;
+					}
 				}
 				if(noteW>0 && rows[i].Note!=""){
 					NoteHeights[i]=(int)g.MeasureString(rows[i].Note,this.cellFont,noteW).Height;
@@ -816,6 +845,12 @@ namespace OpenDental.UI{
 				throw new Exception("Selection mode must be OneCell.");
 			}
 			selectedCell=setCell;
+			if(editBox!=null) {
+				editBox.Dispose();
+			}
+			if(Columns[selectedCell.X].IsEditable) {
+				CreateEditBox();
+			}
 			Invalidate();
 		}
 
@@ -1062,6 +1097,9 @@ namespace OpenDental.UI{
 
 		#region ScrollEvents
 		private void vScroll_Scroll(object sender,System.Windows.Forms.ScrollEventArgs e){
+			if(editBox!=null) {
+				editBox.Dispose();
+			}
 			Invalidate();
 			this.Focus();
 		}
@@ -1105,7 +1143,16 @@ namespace OpenDental.UI{
 					break;
 				case GridSelectionMode.OneCell:
 					selectedIndices.Clear();
+					//Point oldSelectedCell=selectedCell;
 					selectedCell=new Point(MouseDownCol,MouseDownRow);
+					//if(oldSelectedCell.X!=selectedCell.X || oldSelectedCell.Y!=selectedCell.Y){
+					if(editBox!=null){
+						editBox.Dispose();
+					}
+					if(Columns[selectedCell.X].IsEditable){
+						CreateEditBox();
+					}
+					//}
 					break;
 				case GridSelectionMode.MultiExtended:
 					if(ControlIsDown){
@@ -1142,6 +1189,54 @@ namespace OpenDental.UI{
 					break;
 			}
 			Invalidate();
+		}
+
+		///<summary>When selection mode is OneCell, and user clicks in a column that isEditable, then this edit box will appear.  Pass in the location from the click event so that we can determine where to place the text cursor in the box.</summary>
+		private void CreateEditBox(){
+			editBox=new TextBox();
+			//The problem is that it ignores the height.
+			editBox.Size=new Size(Columns[selectedCell.X].ColWidth+1,RowHeights[selectedCell.Y]+1);//+NoteHeights[rowI]-1);
+			//editBox.Multiline=true;
+			editBox.Location=new Point(-hScroll.Value+1+ColPos[selectedCell.X],
+				-vScroll.Value+1+titleHeight+headerHeight+RowLocs[selectedCell.Y]);
+			editBox.Text=Rows[selectedCell.Y].Cells[selectedCell.X].Text;
+			editBox.TextChanged+=new EventHandler(editBox_TextChanged);
+			editBox.KeyDown+=new KeyEventHandler(editBox_KeyDown);
+			if(Columns[selectedCell.X].TextAlign==HorizontalAlignment.Right){
+				editBox.TextAlign=HorizontalAlignment.Right;
+			}
+			this.Controls.Add(editBox);
+			editBox.SelectAll();
+			editBox.Focus();
+		}
+
+		void editBox_KeyDown(object sender,KeyEventArgs e) {
+			if(e.KeyCode==Keys.Enter){
+				editBox.Dispose();
+				if(selectedCell.Y<rows.Count-1) {
+					selectedCell=new Point(selectedCell.X,selectedCell.Y+1);
+					CreateEditBox();
+				}
+			}
+			if(e.KeyCode==Keys.Down) {
+				if(selectedCell.Y<rows.Count-1) {
+					editBox.Dispose();
+					selectedCell=new Point(selectedCell.X,selectedCell.Y+1);
+					CreateEditBox();
+				}
+			}
+			if(e.KeyCode==Keys.Up) {
+				if(selectedCell.Y>0) {
+					editBox.Dispose();
+					selectedCell=new Point(selectedCell.X,selectedCell.Y-1);
+					CreateEditBox();
+				}
+			}
+		}
+
+		void editBox_TextChanged(object sender,EventArgs e) {
+			Rows[selectedCell.Y].Cells[selectedCell.X].Text=editBox.Text;
+			OnCellTextChanged();
 		}
 
 		///<summary>The purpose of this is to allow dragging to select multiple rows.  Only makes sense if selectionMode==MultiExtended.  Doesn't matter whether ctrl is down, because that only affects the mouse down event.</summary>
