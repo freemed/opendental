@@ -70,9 +70,6 @@ namespace OpenDental{
 			// 
 			// textMain
 			// 
-#if !MONO
-			this.textMain.EnableAutoDragDrop = true;
-#endif
 			this.textMain.Location = new System.Drawing.Point(12,12);
 			this.textMain.Name = "textMain";
 			this.textMain.Size = new System.Drawing.Size(592,350);
