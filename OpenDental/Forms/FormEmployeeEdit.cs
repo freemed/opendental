@@ -21,6 +21,7 @@ namespace OpenDental{
 		private System.Windows.Forms.CheckBox checkIsHidden;
 		///<summary></summary>
 		public bool IsNew;
+		private OpenDental.UI.Button butDelete;
 		public Employee EmployeeCur;
 
 		///<summary></summary>
@@ -52,6 +53,7 @@ namespace OpenDental{
 			this.checkIsHidden = new System.Windows.Forms.CheckBox();
 			this.butCancel = new OpenDental.UI.Button();
 			this.butOK = new OpenDental.UI.Button();
+			this.butDelete = new OpenDental.UI.Button();
 			this.SuspendLayout();
 			// 
 			// textLName
@@ -145,12 +147,30 @@ namespace OpenDental{
 			this.butOK.Text = "&OK";
 			this.butOK.Click += new System.EventHandler(this.butOK_Click);
 			// 
+			// butDelete
+			// 
+			this.butDelete.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butDelete.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.butDelete.Autosize = true;
+			this.butDelete.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butDelete.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butDelete.CornerRadius = 4F;
+			this.butDelete.Image = global::OpenDental.Properties.Resources.deleteX;
+			this.butDelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butDelete.Location = new System.Drawing.Point(45,208);
+			this.butDelete.Name = "butDelete";
+			this.butDelete.Size = new System.Drawing.Size(81,25);
+			this.butDelete.TabIndex = 36;
+			this.butDelete.Text = "Delete";
+			this.butDelete.Click += new System.EventHandler(this.butDelete_Click);
+			// 
 			// FormEmployeeEdit
 			// 
 			this.AcceptButton = this.butOK;
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.CancelButton = this.butCancel;
 			this.ClientSize = new System.Drawing.Size(500,250);
+			this.Controls.Add(this.butDelete);
 			this.Controls.Add(this.butCancel);
 			this.Controls.Add(this.butOK);
 			this.Controls.Add(this.checkIsHidden);
@@ -183,6 +203,21 @@ namespace OpenDental{
 			checkIsHidden.Checked=EmployeeCur.IsHidden;
 		}
 
+		private void butDelete_Click(object sender,EventArgs e) {
+			if(IsNew){
+				DialogResult=DialogResult.Cancel;
+				return;
+			}
+			//not new:
+			try{
+				Employees.Delete(EmployeeCur.EmployeeNum);
+				DialogResult=DialogResult.OK;
+			}
+			catch(ApplicationException ex){
+				MessageBox.Show(ex.Message);
+			}
+		}
+
 		private void butOK_Click(object sender, System.EventArgs e) {
 			EmployeeCur.LName=textLName.Text;
 			EmployeeCur.FName=textFName.Text;
@@ -202,13 +237,10 @@ namespace OpenDental{
 		}
 
 		private void FormEmployeeEdit_Closing(object sender, System.ComponentModel.CancelEventArgs e) {
-			if(DialogResult==DialogResult.OK)
-				return;
-			//if(IsNew){
-				//UserPermissions.DeleteAllForEmp(EmployeeCur.EmployeeNum);
-			//	Employees.Delete(EmployeeCur);
-			//}
+			
 		}
+
+		
 
 		
 		

@@ -74,6 +74,9 @@ namespace OpenDental{
 			this.checkHardwareAccel = new System.Windows.Forms.CheckBox();
 			this.checkDoubleBuffering = new System.Windows.Forms.CheckBox();
 			this.group3DToothChart = new System.Windows.Forms.GroupBox();
+			this.label4 = new System.Windows.Forms.Label();
+			this.textSelected = new System.Windows.Forms.TextBox();
+			this.label3 = new System.Windows.Forms.Label();
 			this.label2 = new System.Windows.Forms.Label();
 			this.label1 = new System.Windows.Forms.Label();
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
@@ -83,9 +86,6 @@ namespace OpenDental{
 			this.butCancel = new OpenDental.UI.Button();
 			this.radioSimpleChart = new System.Windows.Forms.RadioButton();
 			this.radio3DChart = new System.Windows.Forms.RadioButton();
-			this.label3 = new System.Windows.Forms.Label();
-			this.textSelected = new System.Windows.Forms.TextBox();
-			this.label4 = new System.Windows.Forms.Label();
 			this.group3DToothChart.SuspendLayout();
 			this.groupBox1.SuspendLayout();
 			this.SuspendLayout();
@@ -106,7 +106,7 @@ namespace OpenDental{
 			this.checkDoubleBuffering.Name = "checkDoubleBuffering";
 			this.checkDoubleBuffering.Size = new System.Drawing.Size(282,17);
 			this.checkDoubleBuffering.TabIndex = 4;
-			this.checkDoubleBuffering.Text = "Use Double-Buffering (checked by default)";
+			this.checkDoubleBuffering.Text = "Use Double-Buffering";
 			this.checkDoubleBuffering.UseVisualStyleBackColor = true;
 			this.checkDoubleBuffering.Click += new System.EventHandler(this.checkDoubleBuffering_Click);
 			// 
@@ -125,6 +125,31 @@ namespace OpenDental{
 			this.group3DToothChart.TabIndex = 5;
 			this.group3DToothChart.TabStop = false;
 			this.group3DToothChart.Text = "Options For 3D Tooth Chart";
+			// 
+			// label4
+			// 
+			this.label4.Location = new System.Drawing.Point(60,195);
+			this.label4.Name = "label4";
+			this.label4.Size = new System.Drawing.Size(608,16);
+			this.label4.TabIndex = 15;
+			this.label4.Text = " To reset to the one that the software thinks is best, click the radio button abo" +
+    "ve for the 3D tooth chart.";
+			// 
+			// textSelected
+			// 
+			this.textSelected.Location = new System.Drawing.Point(6,192);
+			this.textSelected.Name = "textSelected";
+			this.textSelected.ReadOnly = true;
+			this.textSelected.Size = new System.Drawing.Size(53,20);
+			this.textSelected.TabIndex = 14;
+			// 
+			// label3
+			// 
+			this.label3.Location = new System.Drawing.Point(3,174);
+			this.label3.Name = "label3";
+			this.label3.Size = new System.Drawing.Size(159,16);
+			this.label3.TabIndex = 13;
+			this.label3.Text = "Currently selected format number";
 			// 
 			// label2
 			// 
@@ -228,31 +253,6 @@ namespace OpenDental{
 			this.radio3DChart.Text = "Use 3D Tooth Chart";
 			this.radio3DChart.UseVisualStyleBackColor = true;
 			this.radio3DChart.Click += new System.EventHandler(this.radio3DChart_Click);
-			// 
-			// label3
-			// 
-			this.label3.Location = new System.Drawing.Point(3,174);
-			this.label3.Name = "label3";
-			this.label3.Size = new System.Drawing.Size(159,16);
-			this.label3.TabIndex = 13;
-			this.label3.Text = "Currently selected format number";
-			// 
-			// textSelected
-			// 
-			this.textSelected.Location = new System.Drawing.Point(6,192);
-			this.textSelected.Name = "textSelected";
-			this.textSelected.ReadOnly = true;
-			this.textSelected.Size = new System.Drawing.Size(53,20);
-			this.textSelected.TabIndex = 14;
-			// 
-			// label4
-			// 
-			this.label4.Location = new System.Drawing.Point(60,195);
-			this.label4.Name = "label4";
-			this.label4.Size = new System.Drawing.Size(608,16);
-			this.label4.TabIndex = 15;
-			this.label4.Text = " To reset to the one that the software thinks is best, click the radio button abo" +
-    "ve for the 3D tooth chart.";
 			// 
 			// FormGraphics
 			// 

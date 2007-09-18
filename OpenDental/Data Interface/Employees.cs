@@ -63,9 +63,30 @@ namespace OpenDental{
 			Cur.EmployeeNum=General.NonQ(command,true);
 		}
 
-		///<summary></summary>
-		public static void Delete(Employee Cur){
-			string command= "DELETE from employee WHERE EmployeeNum = '"+Cur.EmployeeNum.ToString()+"'";
+		///<summary>Surround with try-catch</summary>
+		public static void Delete(int employeeNum){
+			//appointment.Assistant will not block deletion
+			//schedule.EmployeeNum will not block deletion
+			string command="SELECT COUNT(*) FROM clockevent WHERE EmployeeNum="+POut.PInt(employeeNum);
+			if(General.GetCount(command)!="0"){
+				throw new ApplicationException(Lan.g("FormEmployeeSelect",
+					"Not allowed to delete employee because of attached clock events."));
+			}
+			command="SELECT COUNT(*) FROM timeadjust WHERE EmployeeNum="+POut.PInt(employeeNum);
+			if(General.GetCount(command)!="0") {
+				throw new ApplicationException(Lan.g("FormEmployeeSelect",
+					"Not allowed to delete employee because of attached time adjustments."));
+			}
+			command="SELECT COUNT(*) FROM userod WHERE EmployeeNum="+POut.PInt(employeeNum);
+			if(General.GetCount(command)!="0") {
+				throw new ApplicationException(Lan.g("FormEmployeeSelect",
+					"Not allowed to delete employee because of attached user."));
+			}
+			command="UPDATE appointment SET Assistant=0 WHERE Assistant="+POut.PInt(employeeNum);
+			General.NonQ(command);
+			command="DELETE FROM schedule WHERE EmployeeNum="+POut.PInt(employeeNum);
+			General.NonQ(command);
+			command= "DELETE FROM employee WHERE EmployeeNum ="+POut.PInt(employeeNum);
 			General.NonQ(command);
 		}
 

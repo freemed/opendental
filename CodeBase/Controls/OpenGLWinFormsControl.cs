@@ -382,19 +382,19 @@ namespace CodeBase {
 		public static PixelFormatValue ChoosePixelFormatEx(System.IntPtr hdc) {
 			Gdi.PIXELFORMATDESCRIPTOR[] saneformats=GetPixelFormats(hdc);
 			PixelFormatValue[] formats=null;
-			formats=PrioritizePixelFormats(saneformats,true,true);//Buffered and accelerated.
-			if(formats.Length>0) {
-				return formats[0];
-			}
 			formats=PrioritizePixelFormats(saneformats,false,true);//Non-buffered and accelerated.
 			if(formats.Length>0) {
 				return formats[0];
 			}
-			formats=PrioritizePixelFormats(saneformats,true,false);//Buffered and non-accelerated.
+			formats=PrioritizePixelFormats(saneformats,true,true);//Buffered and accelerated.
 			if(formats.Length>0) {
 				return formats[0];
 			}
 			formats=PrioritizePixelFormats(saneformats,false,false);//Non-buffered and non-accelerated.
+			if(formats.Length>0) {
+				return formats[0];
+			}
+			formats=PrioritizePixelFormats(saneformats,true,false);//Buffered and non-accelerated.
 			if(formats.Length>0) {
 				return formats[0];
 			}
