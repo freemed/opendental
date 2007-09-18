@@ -50,12 +50,13 @@ namespace OpenDental{
 				|| FromVersion.ToString()=="4.8.0.0"
 				|| FromVersion.ToString()=="4.9.0.0"
 				|| FromVersion.ToString()=="5.0.0.0"
-				|| FromVersion.ToString()=="5.1.0.0")
+				|| FromVersion.ToString()=="5.1.0.0"
+				|| FromVersion.ToString()=="5.2.0.0")
 			{
 				MsgBox.Show(this,"Cannot convert this database version which was only for development purposes.");
 				return false;
 			}
-			if(FromVersion < new Version("5.2.0.0")){
+			if(FromVersion < new Version("5.3.0.0")){
 				if(MessageBox.Show(Lan.g(this,"Your database will now be converted")+"\r"
 					+Lan.g(this,"from version")+" "+FromVersion.ToString()+"\r"
 					+Lan.g(this,"to version")+" "+ToVersion.ToString()+"\r"
@@ -5719,6 +5720,17 @@ namespace OpenDental{
 				command="UPDATE preference SET ValueString = '5.1.18.0' WHERE PrefName = 'DataBaseVersion'";
 				General.NonQEx(command);
 			}
+			To5_1_19();
+		}
+
+		private void To5_1_19() {
+			if(FromVersion<new Version("5.1.19.0")) {
+				string command="";
+				command="UPDATE computerpref SET GraphicsDoubleBuffering=0, PreferredPixelFormatNum=0";//again (last time, hopefully)
+				General.NonQEx(command);
+				command="UPDATE preference SET ValueString = '5.1.19.0' WHERE PrefName = 'DataBaseVersion'";
+				General.NonQEx(command);
+			}
 			To5_2_0();
 		}
 
@@ -5737,7 +5749,6 @@ namespace OpenDental{
 				General.NonQEx(command);
 				command="INSERT INTO preference VALUES('PracticeBillingZip','')";
 				General.NonQEx(command);
-				//after r749
 				command="INSERT INTO preference VALUES('TrojanExpressCollectPath','')";
 				General.NonQEx(command);
 				command="INSERT INTO preference VALUES('TrojanExpressCollectPassword','')";
@@ -5746,30 +5757,38 @@ namespace OpenDental{
 				General.NonQEx(command);
 				command="INSERT INTO preference VALUES('TrojanExpressCollectPreviousFileNumber','0')";
 				General.NonQEx(command);
-				//after 752
 				command="ALTER TABLE userod ADD IsHidden BOOL NOT NULL";
 				General.NonQEx(command);
-				//after 755
 				command="ALTER TABLE patientnote ADD CCNumber VARCHAR(255)";
 				General.NonQEx(command);
 				command="ALTER TABLE patientnote ADD CCExpiration date NOT NULL default '0001-01-01'";
 				General.NonQEx(command);
 				command="INSERT INTO preference VALUES('StoreCCnumbers','0')";
 				General.NonQEx(command);
-				//after r767
 				command="ALTER TABLE payplancharge ADD ProvNum int NOT NULL";
 				General.NonQEx(command);
 				command="UPDATE payplancharge SET ProvNum=(SELECT PriProv FROM patient WHERE patient.PatNum=payplancharge.PatNum)";
 				General.NonQEx(command);
-				//after r783
 				command="INSERT INTO preference VALUES('AppointmentBubblesDisabled','0')";
 				General.NonQEx(command);
-
-
 				command="UPDATE preference SET ValueString = '5.2.0.0' WHERE PrefName = 'DataBaseVersion'";
 				General.NonQEx(command);
 			}
-			//To5_2_?();
+			To5_3_0();
+		}
+
+		private void To5_3_0() {
+			if(FromVersion<new Version("5.3.0.0")) {
+				string command;
+				
+
+
+
+
+				command="UPDATE preference SET ValueString = '5.3.0.0' WHERE PrefName = 'DataBaseVersion'";
+				General.NonQEx(command);
+			}
+			//To5_3_?();
 		}
 
 
