@@ -62,6 +62,7 @@ namespace OpenDental{
 		private Label label9;
 		private CheckBox checkApptBubbleDelay;
 		private CheckBox checkStoreCCnumbers;
+		private CheckBox checkAppointmentBubblesDisabled;
 		private System.Windows.Forms.Label label1;// Required designer variable.
 
 		///<summary></summary>
@@ -118,6 +119,7 @@ namespace OpenDental{
 			this.label4 = new System.Windows.Forms.Label();
 			this.checkSolidBlockouts = new System.Windows.Forms.CheckBox();
 			this.groupBox4 = new System.Windows.Forms.GroupBox();
+			this.checkStoreCCnumbers = new System.Windows.Forms.CheckBox();
 			this.checkBoldBalance = new System.Windows.Forms.CheckBox();
 			this.checkShowAccountNotes = new System.Windows.Forms.CheckBox();
 			this.groupBox6 = new System.Windows.Forms.GroupBox();
@@ -138,7 +140,7 @@ namespace OpenDental{
 			this.textSigInterval = new OpenDental.ValidNumber();
 			this.butCancel = new OpenDental.UI.Button();
 			this.butOK = new OpenDental.UI.Button();
-			this.checkStoreCCnumbers = new System.Windows.Forms.CheckBox();
+			this.checkAppointmentBubblesDisabled = new System.Windows.Forms.CheckBox();
 			this.groupBox1.SuspendLayout();
 			this.groupBox5.SuspendLayout();
 			this.groupBox2.SuspendLayout();
@@ -482,6 +484,16 @@ namespace OpenDental{
 			this.groupBox4.TabStop = false;
 			this.groupBox4.Text = "Display Options";
 			// 
+			// checkStoreCCnumbers
+			// 
+			this.checkStoreCCnumbers.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.checkStoreCCnumbers.Location = new System.Drawing.Point(16,79);
+			this.checkStoreCCnumbers.Name = "checkStoreCCnumbers";
+			this.checkStoreCCnumbers.Size = new System.Drawing.Size(346,18);
+			this.checkStoreCCnumbers.TabIndex = 67;
+			this.checkStoreCCnumbers.Text = "Store credit card numbers (this is a security risk)";
+			this.checkStoreCCnumbers.UseVisualStyleBackColor = true;
+			// 
 			// checkBoldBalance
 			// 
 			this.checkBoldBalance.FlatStyle = System.Windows.Forms.FlatStyle.System;
@@ -502,6 +514,7 @@ namespace OpenDental{
 			// 
 			// groupBox6
 			// 
+			this.groupBox6.Controls.Add(this.checkAppointmentBubblesDisabled);
 			this.groupBox6.Controls.Add(this.checkApptBubbleDelay);
 			this.groupBox6.Controls.Add(this.checkBrokenApptNote);
 			this.groupBox6.Location = new System.Drawing.Point(436,272);
@@ -689,15 +702,15 @@ namespace OpenDental{
 			this.butOK.Text = "&OK";
 			this.butOK.Click += new System.EventHandler(this.butOK_Click);
 			// 
-			// checkStoreCCnumbers
+			// checkAppointmentBubblesDisabled
 			// 
-			this.checkStoreCCnumbers.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkStoreCCnumbers.Location = new System.Drawing.Point(16,79);
-			this.checkStoreCCnumbers.Name = "checkStoreCCnumbers";
-			this.checkStoreCCnumbers.Size = new System.Drawing.Size(346,18);
-			this.checkStoreCCnumbers.TabIndex = 67;
-			this.checkStoreCCnumbers.Text = "Store credit card numbers (this is a security risk)";
-			this.checkStoreCCnumbers.UseVisualStyleBackColor = true;
+			this.checkAppointmentBubblesDisabled.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.checkAppointmentBubblesDisabled.Location = new System.Drawing.Point(19,57);
+			this.checkAppointmentBubblesDisabled.Name = "checkAppointmentBubblesDisabled";
+			this.checkAppointmentBubblesDisabled.Size = new System.Drawing.Size(297,18);
+			this.checkAppointmentBubblesDisabled.TabIndex = 70;
+			this.checkAppointmentBubblesDisabled.Text = "Appointment bubble popup disabled";
+			this.checkAppointmentBubblesDisabled.UseVisualStyleBackColor = true;
 			// 
 			// FormMisc
 			// 
@@ -805,7 +818,7 @@ namespace OpenDental{
 			textBoxLogo.Text = PrefB.GetString("StationaryImage");
 			textBoxStationary.Text = PrefB.GetString("StationaryDocument");
 			checkApptBubbleDelay.Checked = PrefB.GetBool("ApptBubbleDelay");
-
+			checkAppointmentBubblesDisabled.Checked=PrefB.GetBool("AppointmentBubblesDisabled");
 		}
 
 		private void checkRandomPrimaryKeys_Click(object sender, System.EventArgs e) {
@@ -861,7 +874,8 @@ namespace OpenDental{
 				| Prefs.UpdateBool("BrokenApptCommLogNotAdjustment", checkBrokenApptNote.Checked)
 				| Prefs.UpdateString("StationaryImage", textBoxLogo.Text)
 				| Prefs.UpdateString("StationaryDocument", textBoxStationary.Text)
-				| Prefs.UpdateBool("ApptBubbleDelay", checkApptBubbleDelay.Checked))
+				| Prefs.UpdateBool("ApptBubbleDelay", checkApptBubbleDelay.Checked)
+				| Prefs.UpdateBool("AppointmentBubblesDisabled", checkAppointmentBubblesDisabled.Checked))
 					
 			{
 				changed=true;

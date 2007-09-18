@@ -5761,7 +5761,9 @@ namespace OpenDental{
 				General.NonQEx(command);
 				command="UPDATE payplancharge SET ProvNum=(SELECT PriProv FROM patient WHERE patient.PatNum=payplancharge.PatNum)";
 				General.NonQEx(command);
-
+				//after r783
+				command="INSERT INTO preference VALUES('AppointmentBubblesDisabled','0')";
+				General.NonQEx(command);
 
 
 				command="UPDATE preference SET ValueString = '5.2.0.0' WHERE PrefName = 'DataBaseVersion'";

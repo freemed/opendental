@@ -2147,6 +2147,11 @@ namespace OpenDental{
 		///<summary>Does a hit test to determine if over an appointment.  Fills the bubble with data and then positions it.</summary>
 		private void InfoBubbleDraw(Point p){
 			//remember where to draw for hover effect
+			if(PrefB.GetBool("AppointmentBubblesDisabled")){
+				infoBubble.Visible=false;
+				timerInfoBubble.Enabled=false;
+				return;
+			}
 			bubbleLocation=p;
 			int aptNum=HitTestAppt(p);
 			if(aptNum==0 || HitTestApptBottom(p)) {
