@@ -390,11 +390,11 @@ namespace CodeBase {
 			if(formats.Length>0) {
 				return formats[0];
 			}
-			formats=PrioritizePixelFormats(saneformats,false,false);//Non-buffered and non-accelerated.
+			formats=PrioritizePixelFormats(saneformats,true,false);//Buffered and non-accelerated.
 			if(formats.Length>0) {
 				return formats[0];
 			}
-			formats=PrioritizePixelFormats(saneformats,true,false);//Buffered and non-accelerated.
+			formats=PrioritizePixelFormats(saneformats,false,false);//Non-buffered and non-accelerated.
 			if(formats.Length>0) {
 				return formats[0];
 			}
