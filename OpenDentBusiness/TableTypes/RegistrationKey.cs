@@ -15,12 +15,7 @@ namespace OpenDentBusiness {
 		public string Note;
 
 		public RegistrationKey Copy(){
-			RegistrationKey rk=new RegistrationKey();
-			rk.RegistrationKeyNum=RegistrationKeyNum;
-			rk.PatNum=PatNum;
-			rk.RegKey=RegKey;
-			rk.Note=Note;
-			return rk;
+			return (RegistrationKey)this.MemberwiseClone();
 		}
 	}
 }

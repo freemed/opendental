@@ -468,7 +468,6 @@ namespace OpenDental{
 			row.Cells.Add(Lan.g("TablePatient","Last"));
 			row.Cells.Add(PatCur.LName);
 			gridPat.Rows.Add(row);
-			
 			//First
 			row=new ODGridRow();
 			row.Cells.Add(Lan.g("TablePatient","First"));
@@ -509,7 +508,6 @@ namespace OpenDental{
 			row.Cells.Add(Lan.g("enum PatientPosition",PatCur.Position.ToString()));
 			//row.ColorLborder=Color.Black;
 			gridPat.Rows.Add(row);
-			
 			//Birthdate
 			row=new ODGridRow();
 			row.Cells.Add(Lan.g("TablePatient","Birthdate"));

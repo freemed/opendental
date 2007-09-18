@@ -390,6 +390,12 @@ namespace OpenDental{
 			this.butAllPrimary = new OpenDental.UI.Button();
 			this.butAllPerm = new OpenDental.UI.Button();
 			this.tabPlanned = new System.Windows.Forms.TabPage();
+			this.panelApptLinked = new System.Windows.Forms.Panel();
+			this.picCheck = new System.Windows.Forms.PictureBox();
+			this.label3 = new System.Windows.Forms.Label();
+			this.labelApptDate = new System.Windows.Forms.Label();
+			this.labelApptStatus = new System.Windows.Forms.Label();
+			this.label2 = new System.Windows.Forms.Label();
 			this.butPin = new OpenDental.UI.Button();
 			this.butClear = new OpenDental.UI.Button();
 			this.butNew = new OpenDental.UI.Button();
@@ -409,12 +415,6 @@ namespace OpenDental{
 			this.button1 = new OpenDental.UI.Button();
 			this.textTreatmentNotes = new OpenDental.ODtextBox();
 			this.gridPtInfo = new OpenDental.UI.ODGrid();
-			this.label2 = new System.Windows.Forms.Label();
-			this.panelApptLinked = new System.Windows.Forms.Panel();
-			this.picCheck = new System.Windows.Forms.PictureBox();
-			this.label3 = new System.Windows.Forms.Label();
-			this.labelApptDate = new System.Windows.Forms.Label();
-			this.labelApptStatus = new System.Windows.Forms.Label();
 			this.groupBox2.SuspendLayout();
 			this.tabControlImages.SuspendLayout();
 			this.panelImages.SuspendLayout();
@@ -429,11 +429,11 @@ namespace OpenDental{
 			this.tabPrimary.SuspendLayout();
 			this.groupBox5.SuspendLayout();
 			this.tabPlanned.SuspendLayout();
+			this.panelApptLinked.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.picCheck)).BeginInit();
 			this.tabShow.SuspendLayout();
 			this.groupBox7.SuspendLayout();
 			this.groupBox6.SuspendLayout();
-			this.panelApptLinked.SuspendLayout();
-			((System.ComponentModel.ISupportInitialize)(this.picCheck)).BeginInit();
 			this.SuspendLayout();
 			// 
 			// textSurf
@@ -2052,6 +2052,67 @@ namespace OpenDental{
 			this.tabPlanned.TabIndex = 4;
 			this.tabPlanned.Text = "Planned Appointment";
 			// 
+			// panelApptLinked
+			// 
+			this.panelApptLinked.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.panelApptLinked.Controls.Add(this.picCheck);
+			this.panelApptLinked.Controls.Add(this.label3);
+			this.panelApptLinked.Controls.Add(this.labelApptDate);
+			this.panelApptLinked.Controls.Add(this.labelApptStatus);
+			this.panelApptLinked.ForeColor = System.Drawing.SystemColors.ControlText;
+			this.panelApptLinked.Location = new System.Drawing.Point(216,3);
+			this.panelApptLinked.Name = "panelApptLinked";
+			this.panelApptLinked.Size = new System.Drawing.Size(200,66);
+			this.panelApptLinked.TabIndex = 13;
+			// 
+			// picCheck
+			// 
+			this.picCheck.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+			this.picCheck.Image = global::OpenDental.Properties.Resources.Check_mark_23x20_02;
+			this.picCheck.Location = new System.Drawing.Point(176,0);
+			this.picCheck.Name = "picCheck";
+			this.picCheck.Size = new System.Drawing.Size(23,23);
+			this.picCheck.TabIndex = 12;
+			this.picCheck.TabStop = false;
+			this.picCheck.Visible = false;
+			// 
+			// label3
+			// 
+			this.label3.BackColor = System.Drawing.Color.Transparent;
+			this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif",8.25F,System.Drawing.FontStyle.Underline,System.Drawing.GraphicsUnit.Point,((byte)(0)));
+			this.label3.Location = new System.Drawing.Point(3,3);
+			this.label3.Name = "label3";
+			this.label3.Size = new System.Drawing.Size(167,17);
+			this.label3.TabIndex = 11;
+			this.label3.Text = "Linked Appointment";
+			// 
+			// labelApptDate
+			// 
+			this.labelApptDate.ForeColor = System.Drawing.Color.Black;
+			this.labelApptDate.Location = new System.Drawing.Point(3,44);
+			this.labelApptDate.Name = "labelApptDate";
+			this.labelApptDate.Size = new System.Drawing.Size(180,19);
+			this.labelApptDate.TabIndex = 10;
+			this.labelApptDate.Text = "DateTime";
+			// 
+			// labelApptStatus
+			// 
+			this.labelApptStatus.Font = new System.Drawing.Font("Microsoft Sans Serif",8F,System.Drawing.FontStyle.Regular,System.Drawing.GraphicsUnit.Point,((byte)(0)));
+			this.labelApptStatus.ForeColor = System.Drawing.Color.Black;
+			this.labelApptStatus.Location = new System.Drawing.Point(3,23);
+			this.labelApptStatus.Name = "labelApptStatus";
+			this.labelApptStatus.Size = new System.Drawing.Size(180,18);
+			this.labelApptStatus.TabIndex = 9;
+			this.labelApptStatus.Text = "Status";
+			// 
+			// label2
+			// 
+			this.label2.Location = new System.Drawing.Point(122,103);
+			this.label2.Name = "label2";
+			this.label2.Size = new System.Drawing.Size(66,14);
+			this.label2.TabIndex = 7;
+			this.label2.Text = "minutes";
+			// 
 			// butPin
 			// 
 			this.butPin.AdjustImageLocation = new System.Drawing.Point(0,0);
@@ -2315,67 +2376,6 @@ namespace OpenDental{
 			this.gridPtInfo.TranslationName = "TableChartPtInfo";
 			this.gridPtInfo.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridPtInfo_CellDoubleClick);
 			// 
-			// label2
-			// 
-			this.label2.Location = new System.Drawing.Point(122,103);
-			this.label2.Name = "label2";
-			this.label2.Size = new System.Drawing.Size(66,14);
-			this.label2.TabIndex = 7;
-			this.label2.Text = "minutes";
-			// 
-			// panelApptLinked
-			// 
-			this.panelApptLinked.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.panelApptLinked.Controls.Add(this.picCheck);
-			this.panelApptLinked.Controls.Add(this.label3);
-			this.panelApptLinked.Controls.Add(this.labelApptDate);
-			this.panelApptLinked.Controls.Add(this.labelApptStatus);
-			this.panelApptLinked.ForeColor = System.Drawing.SystemColors.ControlText;
-			this.panelApptLinked.Location = new System.Drawing.Point(216,3);
-			this.panelApptLinked.Name = "panelApptLinked";
-			this.panelApptLinked.Size = new System.Drawing.Size(200,66);
-			this.panelApptLinked.TabIndex = 13;
-			// 
-			// picCheck
-			// 
-			this.picCheck.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
-			this.picCheck.Image = global::OpenDental.Properties.Resources.Check_mark_23x20_02;
-			this.picCheck.Location = new System.Drawing.Point(176,0);
-			this.picCheck.Name = "picCheck";
-			this.picCheck.Size = new System.Drawing.Size(23,23);
-			this.picCheck.TabIndex = 12;
-			this.picCheck.TabStop = false;
-			this.picCheck.Visible = false;
-			// 
-			// label3
-			// 
-			this.label3.BackColor = System.Drawing.Color.Transparent;
-			this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif",8.25F,System.Drawing.FontStyle.Underline,System.Drawing.GraphicsUnit.Point,((byte)(0)));
-			this.label3.Location = new System.Drawing.Point(3,3);
-			this.label3.Name = "label3";
-			this.label3.Size = new System.Drawing.Size(167,17);
-			this.label3.TabIndex = 11;
-			this.label3.Text = "Linked Appointment";
-			// 
-			// labelApptDate
-			// 
-			this.labelApptDate.ForeColor = System.Drawing.Color.Black;
-			this.labelApptDate.Location = new System.Drawing.Point(3,44);
-			this.labelApptDate.Name = "labelApptDate";
-			this.labelApptDate.Size = new System.Drawing.Size(180,19);
-			this.labelApptDate.TabIndex = 10;
-			this.labelApptDate.Text = "DateTime";
-			// 
-			// labelApptStatus
-			// 
-			this.labelApptStatus.Font = new System.Drawing.Font("Microsoft Sans Serif",8F,System.Drawing.FontStyle.Regular,System.Drawing.GraphicsUnit.Point,((byte)(0)));
-			this.labelApptStatus.ForeColor = System.Drawing.Color.Black;
-			this.labelApptStatus.Location = new System.Drawing.Point(3,23);
-			this.labelApptStatus.Name = "labelApptStatus";
-			this.labelApptStatus.Size = new System.Drawing.Size(180,18);
-			this.labelApptStatus.TabIndex = 9;
-			this.labelApptStatus.Text = "Status";
-			// 
 			// ContrChart
 			// 
 			this.Controls.Add(this.addKeyBut);
@@ -2411,11 +2411,11 @@ namespace OpenDental{
 			this.tabPrimary.ResumeLayout(false);
 			this.groupBox5.ResumeLayout(false);
 			this.tabPlanned.ResumeLayout(false);
+			this.panelApptLinked.ResumeLayout(false);
+			((System.ComponentModel.ISupportInitialize)(this.picCheck)).EndInit();
 			this.tabShow.ResumeLayout(false);
 			this.groupBox7.ResumeLayout(false);
 			this.groupBox6.ResumeLayout(false);
-			this.panelApptLinked.ResumeLayout(false);
-			((System.ComponentModel.ISupportInitialize)(this.picCheck)).EndInit();
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -2917,15 +2917,23 @@ namespace OpenDental{
 				return;
 			}
 			ODGridRow row;
+			//Age
+			row=new ODGridRow();
+			row.Cells.Add(Lan.g("TableChartPtInfo","Age"));
+			row.Cells.Add(PatientB.DateToAgeString(PatCur.Birthdate));
+			row.Tag=null;
+			gridPtInfo.Rows.Add(row);
 			//Credit type
 			row=new ODGridRow();
 			row.Cells.Add(Lan.g("TableChartPtInfo","ABC0"));
 			row.Cells.Add(PatCur.CreditType);
+			row.Tag=null;
 			gridPtInfo.Rows.Add(row);
 			//Billing type
 			row=new ODGridRow();
 			row.Cells.Add(Lan.g("TableChartPtInfo","Billing Type"));
 			row.Cells.Add(DefB.GetName(DefCat.BillingTypes,PatCur.BillingType));
+			row.Tag=null;
 			gridPtInfo.Rows.Add(row);
 			//Referral
 			RefAttach[] RefAttachList=RefAttaches.Refresh(PatCur.PatNum);
@@ -2942,6 +2950,7 @@ namespace OpenDental{
 			row=new ODGridRow();
 			row.Cells.Add(Lan.g("TableChartPtInfo","Referred From"));
 			row.Cells.Add(referral);
+			row.Tag=null;
 			gridPtInfo.Rows.Add(row);
 			//Date First Visit
 			row=new ODGridRow();
@@ -2952,6 +2961,7 @@ namespace OpenDental{
 				row.Cells.Add(Lan.g("TableChartPtInfo","NEW PAT"));
 			else
 				row.Cells.Add(PatCur.DateFirstVisit.ToShortDateString());
+			row.Tag=null;
 			gridPtInfo.Rows.Add(row);
 			//PriIns
 			row=new ODGridRow();
@@ -2966,6 +2976,7 @@ namespace OpenDental{
 			else{
 				row.Cells.Add("");
 			}
+			row.Tag=null;
 			gridPtInfo.Rows.Add(row);
 			//SecIns
 			row=new ODGridRow();
@@ -2979,13 +2990,9 @@ namespace OpenDental{
 			else {
 				row.Cells.Add("");
 			}
+			row.Tag=null;
 			gridPtInfo.Rows.Add(row);
-			//Create row for registration keys. 6
-
-
-
-
-
+			//Registration keys.
 			RegistrationKey[] keys=RegistrationKeys.GetForPatient(PatCur.PatNum);
 			for(int i=0;i<keys.Length;i++) {
 				row=new ODGridRow();
@@ -2993,10 +3000,12 @@ namespace OpenDental{
 				string visRegKey=keys[i].RegKey.Substring(0,4)+"-"+keys[i].RegKey.Substring(4,4)+"-"+
 					keys[i].RegKey.Substring(8,4)+"-"+keys[i].RegKey.Substring(12,4);
 				row.Cells.Add(visRegKey+":  "+keys[i].Note);
+				row.Tag=keys[i].Copy();
 				gridPtInfo.Rows.Add(row);
 			}
 			ODGridCell cell;
-			//premed flag. Row 6+(# registration keys)
+			//medical fields-----------------------------------------------------------------
+			//premed flag.
 			if(PatCur.Premed){
 				row=new ODGridRow();
 				row.Cells.Add("");
@@ -3006,6 +3015,7 @@ namespace OpenDental{
 				cell.Bold=YN.Yes;
 				row.Cells.Add(cell);
 				row.ColorBackG=DefB.Long[(int)DefCat.MiscColors][3].ItemColor;
+				row.Tag="med";
 				gridPtInfo.Rows.Add(row);
 			}
 			//diseases
@@ -3021,6 +3031,7 @@ namespace OpenDental{
 				row.Cells.Add(Lan.g("TableChartPtInfo","none"));
 			}
 			row.ColorBackG=DefB.Long[(int)DefCat.MiscColors][3].ItemColor;
+			row.Tag="med";
 			gridPtInfo.Rows.Add(row);
 			for(int i=0;i<DiseaseList.Length;i++) {
 				row=new ODGridRow();
@@ -3030,6 +3041,7 @@ namespace OpenDental{
 				row.Cells.Add(cell);
 				row.Cells.Add(DiseaseList[i].PatNote);
 				row.ColorBackG=DefB.Long[(int)DefCat.MiscColors][3].ItemColor;
+				row.Tag="med";
 				gridPtInfo.Rows.Add(row);
 			}
 			//MedUrgNote 
@@ -3041,18 +3053,21 @@ namespace OpenDental{
 			cell.Bold=YN.Yes;
 			row.Cells.Add(cell);
 			row.ColorBackG=DefB.Long[(int)DefCat.MiscColors][3].ItemColor;
+			row.Tag="med";
 			gridPtInfo.Rows.Add(row);
 			//Medical
 			row=new ODGridRow();
 			row.Cells.Add(Lan.g("TableChartPtInfo","Medical Summary"));
 			row.Cells.Add(PatientNoteCur.Medical);
 			row.ColorBackG=DefB.Long[(int)DefCat.MiscColors][3].ItemColor;
+			row.Tag="med";
 			gridPtInfo.Rows.Add(row);
 			//Service
 			row=new ODGridRow();
 			row.Cells.Add(Lan.g("TableChartPtInfo","Service Notes"));
 			row.Cells.Add(PatientNoteCur.Service);
 			row.ColorBackG=DefB.Long[(int)DefCat.MiscColors][3].ItemColor;
+			row.Tag="med";
 			gridPtInfo.Rows.Add(row);
 			//medications
 			Medications.Refresh();
@@ -3068,6 +3083,7 @@ namespace OpenDental{
 				row.Cells.Add(Lan.g("TableChartPtInfo","none"));
 			}
 			row.ColorBackG=DefB.Long[(int)DefCat.MiscColors][3].ItemColor;
+			row.Tag="med";
 			gridPtInfo.Rows.Add(row);
 			string text;
 			Medication med;
@@ -3083,6 +3099,7 @@ namespace OpenDental{
 					+"("+Medications.GetGeneric(MedicationPats.List[i].MedicationNum).Notes+")";
 				row.Cells.Add(text);
 				row.ColorBackG=DefB.Long[(int)DefCat.MiscColors][3].ItemColor;
+				row.Tag="med";
 				gridPtInfo.Rows.Add(row);
 			}
 			gridPtInfo.EndUpdate();
@@ -5029,27 +5046,21 @@ namespace OpenDental{
 		}
 
 		private void gridPtInfo_CellDoubleClick(object sender,ODGridClickEventArgs e) {
-			RegistrationKey[] registrationKeys=RegistrationKeys.GetForPatient(PatCur.PatNum);
-			if(e.Row>=6+registrationKeys.Length) {
+			if(gridPtInfo.Rows[e.Row].Tag==null){//pt info
+				return;
+			}
+			if(gridPtInfo.Rows[e.Row].Tag.ToString()=="med"){
 				FormMedical FormM=new FormMedical(PatientNoteCur,PatCur);
 				FormM.ShowDialog();
 				ModuleSelected(PatCur.PatNum);
+				return;
 			}
-			else if(e.Row>=6) {//Registration key list click.
-				ODGridRow row=gridPtInfo.Rows[e.Row];
-				//Key is grabbed from cell text using regex, so that if key formats change, this code will not be buggy.
-				Match m=Regex.Match(row.Cells[1].Text,"^(.*):.*$");
-				if(m.Success) {
-					string registrationKey=m.Result("$1").Replace("-","");
-					for(int i=0;i<registrationKeys.Length;i++) {
-						if(registrationKeys[i].RegKey==registrationKey) {
-							FormRegistrationKeyEdit frke=new FormRegistrationKeyEdit(registrationKeys[i]);
-							frke.ShowDialog();
-							FillPtInfo();
-							return;
-						}
-					}
-				}
+			//this is untested, but should work:
+			if(gridPtInfo.Rows[e.Row].Tag.GetType()==typeof(RegistrationKey)){
+				FormRegistrationKeyEdit frke=new FormRegistrationKeyEdit((RegistrationKey)gridPtInfo.Rows[e.Row].Tag);
+				frke.ShowDialog();
+				FillPtInfo();
+				return;
 			}
 		}
 
