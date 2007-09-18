@@ -14,7 +14,7 @@ namespace OpenDental{
 
 		///<summary></summary>
 		public static void Refresh(){
-			string command="SELECT * FROM employee ORDER BY FName";
+			string command="SELECT * FROM employee ORDER BY IsHidden,FName,LName";
 			DataTable table=General.GetTable(command);
 			ListLong=new Employee[table.Rows.Count];
 			ArrayList tempList=new ArrayList();

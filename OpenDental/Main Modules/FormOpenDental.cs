@@ -2249,7 +2249,7 @@ namespace OpenDental{
 			if(!Security.IsAuthorized(Permissions.Setup)){
 				return;
 			}
-			FormEmployee FormEmp=new FormEmployee();
+			FormEmployeeSelect FormEmp=new FormEmployeeSelect();
 			FormEmp.ShowDialog();
 			SecurityLogs.MakeLogEntry(Permissions.Setup,0,"Employees");	
 		}
