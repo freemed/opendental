@@ -57,6 +57,8 @@ namespace OpenDentBusiness{
 		public InsFilingCode FilingCode;
 		///<summary>Canadian e-claim field. D11 and E07.  Mandatory for Dentaide.  Value must be greater than 0.  Not used for all others.  2 digit.</summary>
 		public int DentaideCardSequence;
+		///<summary>If checked, the units Qty will show the base units assigned to a procedure on the claim form.</summary>
+		public bool ShowBaseUnits;
 		///<summary>This is not a database column.  It is just used to display the number of plans with the same info.</summary>
 		public int NumberPlans;
 
@@ -108,6 +110,7 @@ namespace OpenDentBusiness{
 			p.SubscNote=SubscNote;
 			p.FilingCode=FilingCode;
 			p.DentaideCardSequence=DentaideCardSequence;
+			p.ShowBaseUnits=ShowBaseUnits;
 			p.NumberPlans=NumberPlans;
 			return p;
 		}

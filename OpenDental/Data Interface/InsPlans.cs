@@ -23,7 +23,7 @@ namespace OpenDental {
 				+"FeeSched,ReleaseInfo,AssignBen,PlanType,ClaimFormNum,UseAltCode,"
 				+"ClaimsUseUCR,CopayFeeSched,SubscriberID,"
 				+"EmployerNum,CarrierNum,AllowedFeeSched,TrojanID,DivisionNo,BenefitNotes,IsMedical,SubscNote,FilingCode,"
-				+"DentaideCardSequence) VALUES(";
+				+"DentaideCardSequence,ShowBaseUnits) VALUES(";
 			if(PrefB.RandomKeys) {
 				command+="'"+POut.PInt(plan.PlanNum)+"', ";
 			}
@@ -52,7 +52,8 @@ namespace OpenDental {
 				+"'"+POut.PBool(plan.IsMedical)+"', "
 				+"'"+POut.PString(plan.SubscNote)+"', "
 				+"'"+POut.PInt((int)plan.FilingCode)+"', "
-				+"'"+POut.PInt((int)plan.DentaideCardSequence)+"')";
+				+"'"+POut.PInt((int)plan.DentaideCardSequence)+"', "
+			    +"'"+POut.PBool(plan.ShowBaseUnits)+"')";
 			if(PrefB.RandomKeys) {
 				General.NonQ(command);
 			}
@@ -133,6 +134,7 @@ namespace OpenDental {
 				+",SubscNote='"      +POut.PString(plan.SubscNote)+"'"
 				+",FilingCode='"     +POut.PInt((int)plan.FilingCode)+"'"
 				+",DentaideCardSequence='" +POut.PInt(plan.DentaideCardSequence)+"'"
+				+",ShowBaseUnits='"  +POut.PBool(plan.ShowBaseUnits)+"'"
 				+" WHERE PlanNum = '"+POut.PInt   (plan.PlanNum)+"'";
 			General.NonQ(command);
 		}
@@ -155,6 +157,7 @@ namespace OpenDental {
 				+",AllowedFeeSched= '" +POut.PInt   (plan.AllowedFeeSched)+"'"
 				+",TrojanID = '"       +POut.PString(plan.TrojanID)+"'"
 				+",FilingCode = '"     +POut.PInt   ((int)plan.FilingCode)+"'"
+				+",ShowBaseUnits = '"  +POut.PBool   (plan.ShowBaseUnits)+"'"
 				+" WHERE "
 				+"EmployerNum = '"        +POut.PInt   (like.EmployerNum)+"' "
 				+"AND GroupName = '"      +POut.PString(like.GroupName)+"' "
@@ -271,6 +274,7 @@ namespace OpenDental {
 				PlanList[i].SubscNote      = PIn.PString(table.Rows[i][23].ToString());
 				PlanList[i].FilingCode     = (InsFilingCode)PIn.PInt(table.Rows[i][24].ToString());
 				PlanList[i].DentaideCardSequence= PIn.PInt(table.Rows[i][25].ToString());
+				PlanList[i].ShowBaseUnits  = PIn.PBool   (table.Rows[i][26].ToString());
 			}
 			return PlanList;
 		}

@@ -52,6 +52,7 @@ namespace OpenDental{
 				tempCode.LaymanTerm    =PIn.PString(tableStat.Rows[i][19].ToString());
 				tempCode.IsCanadianLab =PIn.PBool  (tableStat.Rows[i][20].ToString());
 				tempCode.PreExisting	 =PIn.PBool  (tableStat.Rows[i][21].ToString());
+				tempCode.BaseUnits		=PIn.PString(tableStat.Rows[i][22].ToString());
 				HList.Add(tempCode.ProcCode,tempCode.Copy());
 				List[i]=tempCode.Copy();
 				if(tempCode.SetRecall) {
@@ -66,7 +67,7 @@ namespace OpenDental{
 			string command="INSERT INTO procedurecode (CodeNum,ProcCode,descript,abbrdesc,"
 				+"proctime,proccat,treatarea,RemoveTooth,setrecall,"
 				+"nobillins,isprosth,defaultnote,ishygiene,gtypenum,alternatecode1,MedicalCode,IsTaxed,"
-				+"PaintType,GraphicColor,LaymanTerm,IsCanadianLab,PreExisting) VALUES("
+				+"PaintType,GraphicColor,LaymanTerm,IsCanadianLab,PreExisting,BaseUnits) VALUES("
 				+"'"+POut.PInt(code.CodeNum)+"', "
 				+"'"+POut.PString(code.ProcCode)+"', "
 				+"'"+POut.PString(code.Descript)+"', "
@@ -89,7 +90,8 @@ namespace OpenDental{
 				+"'"+POut.PInt   (code.GraphicColor.ToArgb())+"', "
 				+"'"+POut.PString(code.LaymanTerm)+"', "
 				+"'"+POut.PBool  (code.IsCanadianLab)+"', "
-				+"'"+POut.PBool  (code.PreExisting)+"')";
+				+"'"+POut.PBool  (code.PreExisting)+"', "
+				+"'"+POut.PString   (code.BaseUnits)+"')";
 			code.CodeNum=General.NonQ(command,true);
 			ProcedureCodes.Refresh();
 			//Cur already set
@@ -121,6 +123,7 @@ namespace OpenDental{
 				+ ",LaymanTerm = '"    +POut.PString(code.LaymanTerm)+"'"
 				+ ",IsCanadianLab = '" +POut.PBool  (code.IsCanadianLab)+"'"
 				+ ",PreExisting = '"	 +POut.PBool(code.PreExisting)+"'"
+				+ ",BaseUnits = '"     +POut.PString(code.BaseUnits)+"'"
 				+" WHERE CodeNum = '"+POut.PInt(code.CodeNum)+"'";
 			General.NonQ(command);
 		}

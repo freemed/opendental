@@ -63,6 +63,9 @@ namespace OpenDentBusiness{
 		///<summary>This is true if this procedure code existed before ADA code distribution changed at version 4.8, false otherwise.</summary>
 		[XmlIgnore]
 		public bool PreExisting;
+		///<summary>Support for Base Units for a Code (like anesthesia)</summary>
+		[XmlIgnore]
+		public string BaseUnits;
 		
 		///<summary>Not a database column.  Only used for xml import function.</summary>
 		private string procCatDescript;
@@ -111,6 +114,7 @@ namespace OpenDentBusiness{
 			p.LaymanTerm=LaymanTerm;
 			p.IsCanadianLab=IsCanadianLab;
 			p.PreExisting=PreExisting;
+			p.BaseUnits=BaseUnits;
 			return p;
 		}
 
