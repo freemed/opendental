@@ -2487,6 +2487,19 @@ namespace OpenDental{
 							}
 							break;
 						case "MedInsAOtherProvID":
+							ProviderIdent AltID;
+							string CarrierElectID = Carriers.GetCarrier(MedPlanList[0].CarrierNum).ElectID.ToString();
+							Provider P = Providers.ListLong[Providers.GetIndexLong(ClaimCur.ProvBill)];
+							if (P.ProvNum > 0 && CarrierElectID != ""){
+								AltID = ProviderIdents.GetForPayor(P.ProvNum, CarrierElectID)[0];
+								if (AltID.IDNumber != ""){
+									displayStrings[i]=AltID.IDNumber.ToString();
+								} else {
+									displayStrings[i] = "";
+								}
+							} else {
+								displayStrings[i]="";
+							}
 							break;
 						case "MedInsAInsuredName":
 							Patient pTemp = Patients.GetPat(Int16.Parse((MedPlanList[0].Subscriber.ToString())));
@@ -2540,6 +2553,25 @@ namespace OpenDental{
 							}
 							break;
 						case "MedInsBOtherProvID":
+							ProviderIdent AltID;
+							string CarrierElectID = Carriers.GetCarrier(MedPlanList[1].CarrierNum).ElectID.ToString();
+							Provider P = Providers.ListLong[Providers.GetIndexLong(ClaimCur.ProvBill)];
+							if (P.ProvNum > 0 && CarrierElectID != "")
+							{
+								AltID = ProviderIdents.GetForPayor(P.ProvNum, CarrierElectID)[0];
+								if (AltID.IDNumber != "")
+								{
+									displayStrings[i] = AltID.IDNumber.ToString();
+								}
+								else
+								{
+									displayStrings[i] = "";
+								}
+							}
+							else
+							{
+								displayStrings[i] = "";
+							}
 							break;
 						case "MedInsBInsuredName":
 							Patient pTemp = Patients.GetPat(Int16.Parse((MedPlanList[1].Subscriber.ToString())));
@@ -2593,6 +2625,25 @@ namespace OpenDental{
 							}
 							break;
 						case "MedInsCOtherProvID":
+							ProviderIdent AltID;
+							string CarrierElectID = Carriers.GetCarrier(MedPlanList[2].CarrierNum).ElectID.ToString();
+							Provider P = Providers.ListLong[Providers.GetIndexLong(ClaimCur.ProvBill)];
+							if (P.ProvNum > 0 && CarrierElectID != "")
+							{
+								AltID = ProviderIdents.GetForPayor(P.ProvNum, CarrierElectID)[0];
+								if (AltID.IDNumber != "")
+								{
+									displayStrings[i] = AltID.IDNumber.ToString();
+								}
+								else
+								{
+									displayStrings[i] = "";
+								}
+							}
+							else
+							{
+								displayStrings[i] = "";
+							}
 							break;
 						case "MedInsCInsuredName":
 							Patient pTemp = Patients.GetPat(Int16.Parse((MedPlanList[2].Subscriber.ToString())));
