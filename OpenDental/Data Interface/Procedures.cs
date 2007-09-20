@@ -741,6 +741,18 @@ namespace OpenDental{
 			return 0;
 		}
 
+		///<summary>Gets allowed for this procedure based on supplied claimprocs. Includes all claimproc types.  Only used in main TP module when calculating PPOs. The claimProc array typically includes all claimProcs for the patient, but must at least include all claimprocs for this proc.</summary>
+		public static double GetAllowed(Procedure proc,ClaimProc[] claimProcs,int priPlanNum) {
+			//double retVal=0;
+			for(int i=0;i<claimProcs.Length;i++) {
+				if(claimProcs[i].ProcNum==proc.ProcNum && claimProcs[i].PlanNum==priPlanNum) {
+					return claimProcs[i].AllowedAmt;
+					//retVal+=claimProcs[i].WriteOff;
+				}
+			}
+			return 0;//retVal;
+		}
+
 		///<summary>Gets total writeoff for this procedure based on supplied claimprocs. Includes all claimproc types.  Only used in main TP module. The claimProc array typically includes all claimProcs for the patient, but must at least include all claimprocs for this proc.</summary>
 		public static double GetWriteOff(Procedure proc,ClaimProc[] claimProcs) {
 			double retVal=0;

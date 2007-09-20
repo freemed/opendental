@@ -1078,6 +1078,9 @@ namespace OpenDental{
 					subsecIns+=secIns;
 					totSecIns+=secIns;
 					pat=fee-priIns-secIns-Procedures.GetWriteOff(ProcListTP[i],ClaimProcList);
+					if(PriPlanCur!=null && PriPlanCur.PlanType=="p"){//PPO
+						pat-=(fee-Procedures.GetAllowed(ProcListTP[i],ClaimProcList,PriPlanCur.PlanNum));
+					}
 					if(pat<0){
 						pat=0;
 					}
@@ -2098,12 +2101,20 @@ namespace OpenDental{
         return;   
       }
 			Procedure procCur;
-			//Procedure procOld;
+			//Procedure procOld
+			//Find the primary plan------------------------------------------------------------------
+			int priPlanNum=PatPlans.GetPlanNum(PatPlanList,1);
+			InsPlan priplan=InsPlans.GetPlan(priPlanNum,InsPlanList);//can handle a plannum=0
       for(int i=0;i<ProcListTP.Length;i++){
 				procCur=ProcListTP[i];
 				//procOld=procCur.Copy();
 				//first the fees
-				procCur.ProcFee=Fees.GetAmount0(procCur.CodeNum,Fees.GetFeeSched(PatCur,InsPlanList,PatPlanList));
+				if(priplan.PlanType=="p"){//PPO
+					procCur.ProcFee=Fees.GetAmount0(procCur.CodeNum,Providers.GetProv(Patients.GetProvNum(PatCur)).FeeSched);
+				}
+				else{
+					procCur.ProcFee=Fees.GetAmount0(procCur.CodeNum,Fees.GetFeeSched(PatCur,InsPlanList,PatPlanList));
+				}
 				Procedures.ComputeEstimates(procCur,PatCur.PatNum,ClaimProcList,false,InsPlanList,PatPlanList,BenefitList);
 				Procedures.UpdateFee(procCur.ProcNum,procCur.ProcFee);
 				//Procedures.Update(procCur,procOld);//no recall synch required 

@@ -188,6 +188,13 @@ namespace OpenDental{
 			//actually, this is a bad place for altering AllowedAmt.
 			//Best to set it at the same time as the fee.
 			//}
+			InsPlan plan=null;
+			if(pst==PriSecTot.Pri) {
+				plan=InsPlans.GetPlan(patPlans[0].PlanNum,PlanList);
+			}
+			else if(pst==PriSecTot.Sec) {
+				plan=InsPlans.GetPlan(patPlans[1].PlanNum,PlanList);
+			}
 			if(cp.AllowedAmt==-1) {//If allowedAmt is blank, try to find an allowed amount.
 				cp.AllowedAmt=InsPlans.GetAllowed(ProcedureCodes.GetProcCode(proc.CodeNum).ProcCode,cp.PlanNum,PlanList);
 				//later add posterior composite functionality. Needs to go here because the substitute fee changes.
@@ -203,13 +210,6 @@ namespace OpenDental{
 			}
 			//copayAmt
 			//copayOverride never recalculated
-			InsPlan plan=null;
-			if(pst==PriSecTot.Pri) {
-				plan=InsPlans.GetPlan(patPlans[0].PlanNum,PlanList);
-			}
-			else if(pst==PriSecTot.Sec) {
-				plan=InsPlans.GetPlan(patPlans[1].PlanNum,PlanList);
-			}
 			if(resetAll) {
 				if(pst==PriSecTot.Pri) {
 					cp.CopayAmt=InsPlans.GetCopay(ProcedureCodes.GetProcCode(proc.CodeNum).ProcCode,plan);

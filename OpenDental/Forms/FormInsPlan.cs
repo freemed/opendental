@@ -1640,13 +1640,16 @@ namespace OpenDental{
 			comboPlanType.Items.Add(Lan.g(this,"Category Percentage"));
 			if(PlanCur.PlanType=="")
 				comboPlanType.SelectedIndex=0;
+			comboPlanType.Items.Add(Lan.g(this,"PPO Percentage"));
+			if(PlanCur.PlanType=="p")
+				comboPlanType.SelectedIndex=1;
 			comboPlanType.Items.Add(Lan.g(this,"Medicaid or Flat Co-pay"));
 			if(PlanCur.PlanType=="f")
-				comboPlanType.SelectedIndex=1;
+				comboPlanType.SelectedIndex=2;
 			if(!PrefB.GetBool("EasyHideCapitation")) {
 				comboPlanType.Items.Add(Lan.g(this,"Capitation"));
 				if(PlanCur.PlanType=="c")
-					comboPlanType.SelectedIndex=2;
+					comboPlanType.SelectedIndex=3;
 			}
 			checkAlternateCode.Checked=PlanCur.UseAltCode;
 			checkIsMedical.Checked=PlanCur.IsMedical;
@@ -1785,9 +1788,16 @@ namespace OpenDental{
 
 		private void comboPlanType_SelectionChangeCommitted(object sender,System.EventArgs e) {
 			//MessageBox.Show(InsPlans.Cur.PlanType+","+listPlanType.SelectedIndex.ToString());
-			if(PlanCur.PlanType=="" && (comboPlanType.SelectedIndex==1 || comboPlanType.SelectedIndex==2)) {
+			if((PlanCur.PlanType=="" || PlanCur.PlanType=="p")
+				&& (comboPlanType.SelectedIndex==2 || comboPlanType.SelectedIndex==3)) 
+			{
 				if(!MsgBox.Show(this,true,"This will clear all percentages. Continue?")) {
-					comboPlanType.SelectedIndex=0;
+					if(PlanCur.PlanType==""){
+						comboPlanType.SelectedIndex=0;
+					}
+					if(PlanCur.PlanType=="p") {
+						comboPlanType.SelectedIndex=1;
+					}
 					return;
 				}
 				//Loop through the list backwards so i will be valid.
@@ -1804,9 +1814,12 @@ namespace OpenDental{
 					PlanCur.PlanType="";
 					break;
 				case 1:
-					PlanCur.PlanType="f";
+					PlanCur.PlanType="p";
 					break;
 				case 2:
+					PlanCur.PlanType="f";
+					break;
+				case 3:
 					PlanCur.PlanType="c";
 					break;
 			}

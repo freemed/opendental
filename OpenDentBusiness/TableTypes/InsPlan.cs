@@ -25,7 +25,7 @@ namespace OpenDentBusiness{
 		public bool ReleaseInfo;
 		///<summary>Assignment of benefits signature is on file.</summary>
 		public bool AssignBen;
-		///<summary>""=percentage(the default),"f"=flatCopay,"c"=capitation.</summary>
+		///<summary>""=percentage(the default),"p"=ppo_percentage,"f"=flatCopay,"c"=capitation.</summary>
 		public string PlanType;
 		///<summary>FK to claimform.ClaimFormNum. eg. "1" for ADA2002.  For ADA2006, it varies by office.</summary>
 		public int ClaimFormNum;

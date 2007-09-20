@@ -1158,8 +1158,39 @@ namespace OpenDental{
 			for(int i=0;i<PatPlanList.Length;i++) {
 				row.Cells.Add(InsPlans.GetCarrierName(PatPlanList[i].PlanNum,planArray));
 			}
+			gridIns.Rows.Add(row);
+			//plan type
+			row=new ODGridRow();
+			row.Cells.Add(Lan.g("TableCoverage","Type"));
+			for(int i=0;i<planArray.Length;i++) {
+				switch(planArray[i].PlanType){
+					default://malfunction
+						row.Cells.Add("");
+						break;
+					case "":
+						row.Cells.Add(Lan.g(this,"Category Percentage"));
+						break;
+					case "p":
+						row.Cells.Add(Lan.g(this,"PPO Percentage"));
+						break;
+					case "f":
+						row.Cells.Add(Lan.g(this,"Medicaid or Flat Co-pay"));
+						break;
+					case "c":
+						row.Cells.Add(Lan.g(this,"Capitation"));
+						break;
+				}
+			}
+			gridIns.Rows.Add(row);
+			//fee schedule
+			row=new ODGridRow();
+			row.Cells.Add(Lan.g("TableCoverage","Fee Schedule"));
+			for(int i=0;i<planArray.Length;i++) {
+				row.Cells.Add(DefB.GetName(DefCat.FeeSchedNames,planArray[i].FeeSched));
+			}
 			row.ColorLborder=Color.Black;
 			gridIns.Rows.Add(row);
+			//Benefits-----------------------------------------------------------------------------------------------------
 			Benefit[] bensForPat=Benefits.Refresh(PatPlanList);
 			Benefit[,] benMatrix=Benefits.GetDisplayMatrix(bensForPat,PatPlanList);
 			string desc;
