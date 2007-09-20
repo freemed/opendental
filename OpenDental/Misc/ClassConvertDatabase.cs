@@ -5782,7 +5782,10 @@ namespace OpenDental{
 				string command;
 				command = "ALTER TABLE procedurecode ADD BaseUnits VARCHAR(5)";
 				General.NonQEx(command);
-				command = "ALTER TABLE insplan ADD ShowBaseUnits TINYINT(1)";
+				command = "ALTER TABLE insplan ADD ShowBaseUnits TINYINT(1) NOT NULL";
+				General.NonQEx(command);
+				//after r798
+				command = "ALTER TABLE proctp ADD Discount double NOT NULL";
 				General.NonQEx(command);
 
 

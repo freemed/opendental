@@ -33,6 +33,8 @@ namespace OpenDentBusiness{
 		public double SecInsAmt;
 		///<summary>The amount the patient is expected to pay. Never gets automatically updated.</summary>
 		public double PatAmt;
+		///<Summary>The amount of discount.  Currently only used for PPOs.</Summary>
+		public double Discount;
 		
 		///<summary></summary>
 		public ProcTP Copy(){
@@ -51,6 +53,7 @@ namespace OpenDentBusiness{
 			t.PriInsAmt=PriInsAmt;
 			t.SecInsAmt=SecInsAmt;
 			t.PatAmt=PatAmt;
+			t.Discount=Discount;
 			return t;
 		}
 

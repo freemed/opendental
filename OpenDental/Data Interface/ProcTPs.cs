@@ -30,6 +30,7 @@ namespace OpenDental{
 				List[i].PriInsAmt   = PIn.PDouble(table.Rows[i][11].ToString());
 				List[i].SecInsAmt   = PIn.PDouble(table.Rows[i][12].ToString());
 				List[i].PatAmt      = PIn.PDouble(table.Rows[i][13].ToString());
+				List[i].Discount    = PIn.PDouble(table.Rows[i][14].ToString());
 			}
 			return List;
 		}
@@ -50,6 +51,7 @@ namespace OpenDental{
 				+",PriInsAmt = '"  +POut.PDouble(proc.PriInsAmt)+"'"
 				+",SecInsAmt = '"  +POut.PDouble(proc.SecInsAmt)+"'"
 				+",PatAmt = '"     +POut.PDouble(proc.PatAmt)+"'"
+				+",Discount = '"   +POut.PDouble(proc.Discount)+"'"
 				+" WHERE ProcTPNum = '"+POut.PInt(proc.ProcTPNum)+"'";
  			General.NonQ(command);
 		}
@@ -64,7 +66,7 @@ namespace OpenDental{
 				command+="ProcTPNum,";
 			}
 			command+="TreatPlanNum,PatNum,ProcNumOrig,ItemOrder,Priority,ToothNumTP,Surf,ProcCode,Descript,FeeAmt,"
-				+"PriInsAmt,SecInsAmt,PatAmt) VALUES(";
+				+"PriInsAmt,SecInsAmt,PatAmt,Discount) VALUES(";
 			if(PrefB.RandomKeys){
 				command+="'"+POut.PInt(proc.ProcTPNum)+"', ";
 			}
@@ -81,7 +83,8 @@ namespace OpenDental{
 				+"'"+POut.PDouble(proc.FeeAmt)+"', "
 				+"'"+POut.PDouble(proc.PriInsAmt)+"', "
 				+"'"+POut.PDouble(proc.SecInsAmt)+"', "
-				+"'"+POut.PDouble(proc.PatAmt)+"')";
+				+"'"+POut.PDouble(proc.PatAmt)+"', "
+				+"'"+POut.PDouble(proc.Discount)+"')";
  			if(PrefB.RandomKeys){
 				General.NonQ(command);
 			}
@@ -106,10 +109,6 @@ namespace OpenDental{
  			General.NonQ(command);
 		}
 
-
-	
-	
-	
 		///<summary>Gets a list for just one tp.  Used in TP module.  Supply a list of all ProcTPs for pt.</summary>
 		public static ProcTP[] GetListForTP(int treatPlanNum, ProcTP[] listAll){
 			ArrayList AL=new ArrayList();

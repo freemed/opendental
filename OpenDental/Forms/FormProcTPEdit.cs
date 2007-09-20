@@ -35,6 +35,8 @@ namespace OpenDental{
 		private OpenDental.ValidDouble textFeeAmt;
 		private OpenDental.ValidDouble textPriInsAmt;
 		private OpenDental.ValidDouble textSecInsAmt;
+		private ValidDouble textDiscount;
+		private Label label2;
 		private OpenDental.ValidDouble textPatAmt;
 
 		///<summary></summary>
@@ -92,6 +94,8 @@ namespace OpenDental{
 			this.textPriInsAmt = new OpenDental.ValidDouble();
 			this.textSecInsAmt = new OpenDental.ValidDouble();
 			this.textPatAmt = new OpenDental.ValidDouble();
+			this.textDiscount = new OpenDental.ValidDouble();
+			this.label2 = new System.Windows.Forms.Label();
 			this.SuspendLayout();
 			// 
 			// butCancel
@@ -102,7 +106,7 @@ namespace OpenDental{
 			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
-			this.butCancel.Location = new System.Drawing.Point(480,323);
+			this.butCancel.Location = new System.Drawing.Point(480,330);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75,26);
 			this.butCancel.TabIndex = 0;
@@ -117,7 +121,7 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(480,285);
+			this.butOK.Location = new System.Drawing.Point(480,292);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75,26);
 			this.butOK.TabIndex = 1;
@@ -141,7 +145,7 @@ namespace OpenDental{
 			this.butDelete.CornerRadius = 4F;
 			this.butDelete.Image = global::OpenDental.Properties.Resources.deleteX;
 			this.butDelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butDelete.Location = new System.Drawing.Point(24,323);
+			this.butDelete.Location = new System.Drawing.Point(24,330);
 			this.butDelete.Name = "butDelete";
 			this.butDelete.Size = new System.Drawing.Size(86,26);
 			this.butDelete.TabIndex = 8;
@@ -222,7 +226,7 @@ namespace OpenDental{
 			// 
 			// label11
 			// 
-			this.label11.Location = new System.Drawing.Point(43,262);
+			this.label11.Location = new System.Drawing.Point(43,286);
 			this.label11.Name = "label11";
 			this.label11.Size = new System.Drawing.Size(128,16);
 			this.label11.TabIndex = 17;
@@ -284,15 +288,33 @@ namespace OpenDental{
 			// 
 			// textPatAmt
 			// 
-			this.textPatAmt.Location = new System.Drawing.Point(175,260);
+			this.textPatAmt.Location = new System.Drawing.Point(175,284);
 			this.textPatAmt.Name = "textPatAmt";
 			this.textPatAmt.Size = new System.Drawing.Size(81,20);
 			this.textPatAmt.TabIndex = 66;
 			// 
+			// textDiscount
+			// 
+			this.textDiscount.Location = new System.Drawing.Point(175,260);
+			this.textDiscount.Name = "textDiscount";
+			this.textDiscount.Size = new System.Drawing.Size(81,20);
+			this.textDiscount.TabIndex = 68;
+			// 
+			// label2
+			// 
+			this.label2.Location = new System.Drawing.Point(43,262);
+			this.label2.Name = "label2";
+			this.label2.Size = new System.Drawing.Size(128,16);
+			this.label2.TabIndex = 67;
+			this.label2.Text = "Discount";
+			this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
 			// FormProcTPEdit
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
-			this.ClientSize = new System.Drawing.Size(607,377);
+			this.ClientSize = new System.Drawing.Size(607,384);
+			this.Controls.Add(this.textDiscount);
+			this.Controls.Add(this.label2);
 			this.Controls.Add(this.textPatAmt);
 			this.Controls.Add(this.textSecInsAmt);
 			this.Controls.Add(this.textPriInsAmt);
@@ -344,6 +366,7 @@ namespace OpenDental{
 			textFeeAmt.Text=ProcCur.FeeAmt.ToString("F");
 			textPriInsAmt.Text=ProcCur.PriInsAmt.ToString("F");
 			textSecInsAmt.Text=ProcCur.SecInsAmt.ToString("F");
+			textDiscount.Text=ProcCur.Discount.ToString("F");
 			textPatAmt.Text=ProcCur.PatAmt.ToString("F");
 		}
 
@@ -356,6 +379,7 @@ namespace OpenDental{
 			if( textFeeAmt.errorProvider1.GetError(textFeeAmt)!=""
 				|| textPriInsAmt.errorProvider1.GetError(textPriInsAmt)!=""
 				|| textSecInsAmt.errorProvider1.GetError(textSecInsAmt)!=""
+				|| textDiscount.errorProvider1.GetError(textDiscount)!=""
 				|| textPatAmt.errorProvider1.GetError(textPatAmt)!=""
 				){
 				MsgBox.Show(this,"Please fix data entry errors first.");
@@ -374,6 +398,7 @@ namespace OpenDental{
 			ProcCur.FeeAmt=PIn.PDouble(textFeeAmt.Text);
 			ProcCur.PriInsAmt=PIn.PDouble(textPriInsAmt.Text);
 			ProcCur.SecInsAmt=PIn.PDouble(textSecInsAmt.Text);
+			ProcCur.Discount=PIn.PDouble(textDiscount.Text);
 			ProcCur.PatAmt=PIn.PDouble(textPatAmt.Text);
 			ProcTPs.InsertOrUpdate(ProcCur,false);//IsNew not applicable here
 			DialogResult=DialogResult.OK;
