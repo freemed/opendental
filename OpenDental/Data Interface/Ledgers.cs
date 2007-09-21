@@ -208,12 +208,12 @@ namespace OpenDental{
 				ComputePayments(pairs);
 			}
 			//CLAIM ESTIMATES
-			command="SELECT inspayest FROM claimproc"
+			command="SELECT inspayest,writeoff FROM claimproc"
 				+" WHERE status = '0'"//not received
 				+" AND ("+wherePats+")";
 			table=General.GetTable(command);
 			for(int i=0;i<table.Rows.Count;i++){
-				InsEst+=PIn.PDouble(table.Rows[i][0].ToString());
+				InsEst+=PIn.PDouble(table.Rows[i][0].ToString())+PIn.PDouble(table.Rows[i][1].ToString());
 			}
 			//balance is sum of 4 aging periods
 			BalTotal=Bal[0]+Bal[1]+Bal[2]+Bal[3];

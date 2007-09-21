@@ -492,7 +492,7 @@ namespace OpenDental{
 					//fee x percentage:
 					baseEst=PIn.PDouble(procTable.Rows[i][8].ToString())*(double)percentage/100;
 					command="UPDATE claimproc SET "
-						//+"AllowedAmt='-1',"
+						//+"Allowed Amt='-1',"
 						+"Percentage='"+percentage.ToString()+"',"
 						//+"PercentOverride='-1',"
 						//+"CopayAmt='-1',"
@@ -546,7 +546,7 @@ namespace OpenDental{
 								+"'"+procTable.Rows[i][3].ToString()+"',"//priPlanNum
 								+POut.PDate(PIn.PDate(procTable.Rows[i][7].ToString()))+","//dateCP
 								//these -1's are unnecessary, but I already added them, so they are here.
-								+"'-1',"//allowedamt
+								+"'-1',"//allowed amt
 								+"'-1',"//percentage
 								+"'-1',"//percentoverride
 								+"'-1',"//copayamt
@@ -569,7 +569,7 @@ namespace OpenDental{
 								+"'6',"//status:Estimate
 								+"'"+procTable.Rows[i][4].ToString()+"',"//secPlanNum
 								+POut.PDate(PIn.PDate(procTable.Rows[i][7].ToString()))+","//dateCP
-								+"'-1',"//allowedamt
+								+"'-1',"//allowed amt
 								+"'-1',"//percentage
 								+"'-1',"//percentoverride
 								+"'-1',"//copayamt
@@ -606,7 +606,7 @@ namespace OpenDental{
 							+"'"+procTable.Rows[i][3].ToString()+"',"//priPlanNum
 							+POut.PDate(PIn.PDate(procTable.Rows[i][7].ToString()))+","//dateCP
 							+"'"+writeoff.ToString()+"',"//writeoff
-							+"'-1',"//allowedamt
+							+"'-1',"//allowed amt
 							+"'-1',"//percentage
 							+"'-1',"//percentoverride
 							+"'"+copay.ToString()+"',"//copayamt
@@ -638,7 +638,7 @@ namespace OpenDental{
 						+"'"+planNum.ToString()+"',"//plannum
 						+POut.PDate(PIn.PDate(procTable.Rows[i][7].ToString()))+","//dateCP
 						+"'0',"//writeoff
-						+"'-1',"//allowedamt
+						+"'-1',"//allowed amt
 						+"'"+percentage.ToString()+"',"//percentage
 						+"'-1',"//percentoverride
 						+"'-1',"//copayamt
@@ -672,7 +672,7 @@ namespace OpenDental{
 						+"'"+planNum.ToString()+"',"//plannum
 						+POut.PDate(PIn.PDate(procTable.Rows[i][7].ToString()))+","//dateCP
 						+"'0',"//writeoff
-						+"'-1',"//allowedamt
+						+"'-1',"//allowed amt
 						+"'"+percentage.ToString()+"',"//percentage
 						+"'-1',"//percentoverride
 						+"'-1',"//copayamt
@@ -5787,6 +5787,15 @@ namespace OpenDental{
 				//after r798
 				command = "ALTER TABLE proctp ADD Discount double NOT NULL";
 				General.NonQEx(command);
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE claimproc CHANGE AllowedAmt AllowedOverride double NOT NULL";
+					General.NonQEx(command);
+				}
+				else {//oracle.
+					//command="ALTER TABLE claimproc (RENAME??) MODIFY (AllowedOverride double NOT NULL)";
+					//General.NonQEx(command);
+				}
+				
 
 
 

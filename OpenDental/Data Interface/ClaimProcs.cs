@@ -34,7 +34,7 @@ namespace OpenDental{
 				List[i].DateCP         = PIn.PDate  (table.Rows[i][13].ToString());
 				List[i].WriteOff       = PIn.PDouble(table.Rows[i][14].ToString());
 				List[i].CodeSent       = PIn.PString(table.Rows[i][15].ToString());
-				List[i].AllowedAmt     = PIn.PDouble(table.Rows[i][16].ToString());
+				List[i].AllowedOverride= PIn.PDouble(table.Rows[i][16].ToString());
 				List[i].Percentage     = PIn.PInt   (table.Rows[i][17].ToString());
 				List[i].PercentOverride= PIn.PInt   (table.Rows[i][18].ToString());
 				List[i].CopayAmt       = PIn.PDouble(table.Rows[i][19].ToString());
@@ -63,7 +63,7 @@ namespace OpenDental{
 			}
 			command+="ProcNum,ClaimNum,PatNum,ProvNum"
 				+",FeeBilled,InsPayEst,DedApplied,Status,InsPayAmt,Remarks,ClaimPaymentNum"
-				+",PlanNum,DateCP,WriteOff,CodeSent,AllowedAmt,Percentage,PercentOverride"
+				+",PlanNum,DateCP,WriteOff,CodeSent,AllowedOverride,Percentage,PercentOverride"
 				+",CopayAmt,OverrideInsEst,NoBillIns,DedBeforePerc,OverAnnualMax"
 				+",PaidOtherIns,BaseEst,CopayOverride,ProcDate,DateEntry,LineNumber) VALUES(";
 			if(PrefB.RandomKeys) {
@@ -85,7 +85,7 @@ namespace OpenDental{
 				+POut.PDate(cp.DateCP)+", "
 				+"'"+POut.PDouble(cp.WriteOff)+"', "
 				+"'"+POut.PString(cp.CodeSent)+"', "
-				+"'"+POut.PDouble(cp.AllowedAmt)+"', "
+				+"'"+POut.PDouble(cp.AllowedOverride)+"', "
 				+"'"+POut.PInt(cp.Percentage)+"', "
 				+"'"+POut.PInt(cp.PercentOverride)+"', "
 				+"'"+POut.PDouble(cp.CopayAmt)+"', "
@@ -130,7 +130,7 @@ namespace OpenDental{
 				+",DateCP= "         +POut.PDate(cp.DateCP)
 				+",WriteOff= '"       +POut.PDouble(cp.WriteOff)+"'"
 				+",CodeSent= '"       +POut.PString(cp.CodeSent)+"'"
-				+",AllowedAmt= '"     +POut.PDouble(cp.AllowedAmt)+"'"
+				+",AllowedOverride= '"+POut.PDouble(cp.AllowedOverride)+"'"
 				+",Percentage= '"     +POut.PInt(cp.Percentage)+"'"
 				+",PercentOverride= '"+POut.PInt(cp.PercentOverride)+"'"
 				+",CopayAmt= '"       +POut.PDouble(cp.CopayAmt)+"'"
@@ -155,7 +155,7 @@ namespace OpenDental{
 			General.NonQ(command);
 		}
 
-		///<summary>Calculates the Base estimate for a procedure.  This is not done on the fly.  Use Procedure.GetEst to later retrieve the estimate. This function duplicates/replaces all of the upper estimating logic that is within FormClaimProc.  BaseEst=((fee or allowedAmt)-Copay) x (percentage or percentOverride). The result is now stored in a claimProc.  The claimProcs do get updated frequently depending on certain actions the user takes.  The calling class must have already created the claimProc, and this function simply updates the BaseEst field of that claimproc. pst.Tot not used.  For Estimate and CapEstimate, all the estimate fields will be recalculated except the three overrides.</summary>
+		///<summary>Calculates the Base estimate for a procedure.  This is not done on the fly.  Use Procedure.GetEst to later retrieve the estimate. This function duplicates/replaces all of the upper estimating logic that is within FormClaimProc.  BaseEst=((fee or allowedOverride)-Copay) x (percentage or percentOverride). The result is now stored in a claimProc.  The claimProcs do get updated frequently depending on certain actions the user takes.  The calling class must have already created the claimProc, and this function simply updates the BaseEst field of that claimproc. pst.Tot not used.  For Estimate and CapEstimate, all the estimate fields will be recalculated except the three overrides.</summary>
 		public static void ComputeBaseEst(ClaimProc cp, Procedure proc,PriSecTot pst,InsPlan[] PlanList,PatPlan[] patPlans,Benefit[] benList) {//,bool resetValues){ 
 			if(cp.Status==ClaimProcStatus.CapClaim
 				|| cp.Status==ClaimProcStatus.CapComplete
@@ -170,7 +170,7 @@ namespace OpenDental{
 			//NoBillIns is only calculated when creating the claimproc, even if resetAll is true.
 			//If user then changes a procCode, it does not cause an update of all procedures with that code.
 			if(cp.NoBillIns) {
-				cp.AllowedAmt=-1;
+				cp.AllowedOverride=-1;
 				cp.CopayAmt=0;
 				cp.CopayOverride=-1;
 				cp.DedApplied=0;
@@ -184,8 +184,8 @@ namespace OpenDental{
 			//so the BaseEst does reflect the new ProcFee.
 			cp.BaseEst=proc.ProcFee;
 			//if(resetAll){
-			//AllowedAmt=-1;
-			//actually, this is a bad place for altering AllowedAmt.
+			//AllowedOverride=-1;
+			//actually, this is a bad place for altering AllowedOverride.
 			//Best to set it at the same time as the fee.
 			//}
 			InsPlan plan=null;
@@ -195,12 +195,17 @@ namespace OpenDental{
 			else if(pst==PriSecTot.Sec) {
 				plan=InsPlans.GetPlan(patPlans[1].PlanNum,PlanList);
 			}
-			if(cp.AllowedAmt==-1) {//If allowedAmt is blank, try to find an allowed amount.
-				cp.AllowedAmt=InsPlans.GetAllowed(ProcedureCodes.GetProcCode(proc.CodeNum).ProcCode,cp.PlanNum,PlanList);
+			if(cp.AllowedOverride==-1) {//If allowedOverride is blank, try to find an allowed amount.
+//wrong:
+				cp.AllowedOverride=InsPlans.GetAllowed(ProcedureCodes.GetProcCode(proc.CodeNum).ProcCode,cp.PlanNum,PlanList);
 				//later add posterior composite functionality. Needs to go here because the substitute fee changes.
 			}
-			if(cp.AllowedAmt!=-1) {
-				cp.BaseEst=cp.AllowedAmt;
+			//we don't want to actually set an allowed amount.  But we do want to use it.
+			//if(plan){
+			
+			//}
+			if(cp.AllowedOverride!=-1) {
+				cp.BaseEst=cp.AllowedOverride;
 			}
 			//dedApplied is never recalculated here
 			//deductible is initially 0 anyway, so this calculation works.
@@ -238,7 +243,7 @@ namespace OpenDental{
 					if(cp.WriteOff<0) {
 						cp.WriteOff=0;
 					}
-					cp.AllowedAmt=-1;
+					cp.AllowedOverride=-1;
 					cp.DedApplied=0;
 					cp.Percentage=-1;
 					cp.PercentOverride=-1;
@@ -288,7 +293,7 @@ namespace OpenDental{
 			cp.PlanNum=plan.PlanNum;
 			cp.DateCP=proc.ProcDate;
 			//Writeoff=0
-			cp.AllowedAmt=-1;
+			cp.AllowedOverride=-1;
 			cp.Percentage=-1;
 			cp.PercentOverride=-1;
 			cp.CopayAmt=-1;

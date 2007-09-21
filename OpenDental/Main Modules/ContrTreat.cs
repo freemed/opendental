@@ -1073,11 +1073,12 @@ namespace OpenDental{
 					totSecIns+=secIns;
 					discount=0;
 					if(PriPlanCur!=null && PriPlanCur.PlanType=="p"){//PPO
-						discount=fee-Procedures.GetAllowed(ProcListTP[i],ClaimProcList,PriPlanCur.PlanNum);
+						discount=fee-Procedures.GetAllowedOverride(ProcListTP[i],ClaimProcList,PriPlanCur.PlanNum);
 					}
 					subdiscount+=discount;
 					totDiscount+=discount;
-					pat=fee-priIns-secIns-Procedures.GetWriteOff(ProcListTP[i],ClaimProcList)-discount;
+					//this writeoff had been in here for quite a while. Don't know why. Capitation?  Revisit:
+					pat=fee-priIns-secIns-discount;//-Procedures.GetWriteOff(ProcListTP[i],ClaimProcList);
 					if(pat<0){
 						pat=0;
 					}

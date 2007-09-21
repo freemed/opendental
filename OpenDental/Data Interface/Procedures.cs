@@ -741,12 +741,12 @@ namespace OpenDental{
 			return 0;
 		}
 
-		///<summary>Gets allowed for this procedure based on supplied claimprocs. Includes all claimproc types.  Only used in main TP module when calculating PPOs. The claimProc array typically includes all claimProcs for the patient, but must at least include all claimprocs for this proc.</summary>
-		public static double GetAllowed(Procedure proc,ClaimProc[] claimProcs,int priPlanNum) {
+		///<summary>Gets allowedOverride for this procedure based on supplied claimprocs. Includes all claimproc types.  Only used in main TP module when calculating PPOs. The claimProc array typically includes all claimProcs for the patient, but must at least include all claimprocs for this proc.</summary>
+		public static double GetAllowedOverride(Procedure proc,ClaimProc[] claimProcs,int priPlanNum) {
 			//double retVal=0;
 			for(int i=0;i<claimProcs.Length;i++) {
 				if(claimProcs[i].ProcNum==proc.ProcNum && claimProcs[i].PlanNum==priPlanNum) {
-					return claimProcs[i].AllowedAmt;
+					return claimProcs[i].AllowedOverride;
 					//retVal+=claimProcs[i].WriteOff;
 				}
 			}
@@ -764,16 +764,16 @@ namespace OpenDental{
 			return retVal;
 		}
 
-		///<summary>WriteOff'Complete'. Only used in main Account module. Gets writeoff for this procedure based on supplied claimprocs. Only includes claimprocs with status of CapComplete,CapClaim,NotReceived,Received,or Supplemental. BUT only includes Writeoffs not attached to claims, because those will display on the claim line.  In practice, this means only writeoffs with CapComplete status get returned because they are to be subtracted from the patient portion on the proc line. The claimProc array typically includes all claimProcs for the patient, but must at least include all claimprocs for this proc.</summary>
+		///<summary>WriteOff'Complete'. Only used in main Account module. Gets writeoff for this procedure based on supplied claimprocs. Only includes claimprocs with status of CapComplete,CapClaim,NotReceived,Received,or Supplemental. Used to ONLY include Writeoffs not attached to claims, because those would display on the claim line, but now they show on each procedure instead.  /*In practice, this means only writeoffs with CapComplete status get returned because they are to be subtracted from the patient portion on the proc line*/. The claimProc array typically includes all claimProcs for the patient, but must at least include all claimprocs for this proc.</summary>
 		public static double GetWriteOffC(Procedure proc,ClaimProc[] claimProcs) {
 			double retVal=0;
 			for(int i=0;i<claimProcs.Length;i++) {
 				if(claimProcs[i].ProcNum!=proc.ProcNum) {
 					continue;
 				}
-				if(claimProcs[i].ClaimNum>0) {
-					continue;
-				}
+				//if(claimProcs[i].ClaimNum>0) {
+				//	continue;
+				//}
 				if(
 					//adj skipped
 					claimProcs[i].Status==ClaimProcStatus.CapClaim
@@ -887,7 +887,7 @@ namespace OpenDental{
 				}
 				cp.PlanNum=PlanCur.PlanNum;
 				cp.DateCP=proc.ProcDate;
-				cp.AllowedAmt=-1;
+				cp.AllowedOverride=-1;
 				cp.PercentOverride=-1;
 				cp.OverrideInsEst=-1;
 				cp.NoBillIns=ProcedureCodes.GetProcCode(proc.CodeNum).NoBillIns;
@@ -895,7 +895,7 @@ namespace OpenDental{
 				cp.PaidOtherIns=-1;
 				cp.CopayOverride=-1;
 				cp.ProcDate=proc.ProcDate;
-				//ComputeBaseEst will fill AllowedAmt,Percentage,CopayAmt,BaseEst
+				//ComputeBaseEst will fill AllowedOverride,Percentage,CopayAmt,BaseEst
 				ClaimProcs.Insert(cp);
 				cpAdded=true;
 			}

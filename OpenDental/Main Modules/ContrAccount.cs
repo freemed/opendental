@@ -2001,13 +2001,15 @@ namespace OpenDental {
 					}
 					double insEst=ClaimProcs.ProcEstNotReceived(ClaimProcList,arrayProc[tempCountProc].ProcNum);
 					double insPay=ClaimProcs.ProcInsPay(ClaimProcList,arrayProc[tempCountProc].ProcNum);
-					double pat=fee
-						-Procedures.GetWriteOffC(arrayProc[tempCountProc],ClaimProcList)//this is for CapComplete
-						-insPay;
+					double discount=0;
+					if(!PrefB.GetBool("BalancesDontSubtractIns")){//this is the typical situation
+						discount=Procedures.GetWriteOffC(arrayProc[tempCountProc],ClaimProcList);//this is for CapComplete and all other writeoffs
+					}
+					double pat=fee-insPay;
 					if(!PrefB.GetBool("BalancesDontSubtractIns")){//this is the typical situation
 						pat-=insEst;
 					}			
-					double adj=Adjustments.GetTotForProc(arrayProc[tempCountProc].ProcNum,AdjustmentList);
+					double adj=Adjustments.GetTotForProc(arrayProc[tempCountProc].ProcNum,AdjustmentList)-discount;
 					double paid=PaySplits.GetTotForProc(arrayProc[tempCountProc].ProcNum,PaySplitList);
 					double subtot=pat+adj-paid;
 					tempAcctLine.Fee=fee.ToString("F");
@@ -2375,6 +2377,7 @@ namespace OpenDental {
 			gridAccount.Columns.Add(col);
 			gridAccount.Rows.Clear();
 			ODGridRow row;
+			ODGridCell cell;
 			for(int i=0;i<AcctLineAL.Count;i++){
 				//if (AcctLineAL[i].IsProc==true){
 				row=new ODGridRow();
@@ -2400,7 +2403,9 @@ namespace OpenDental {
 				row.Cells.Add(((AcctLine)AcctLineAL[i]).InsEst);
 				row.Cells.Add(((AcctLine)AcctLineAL[i]).InsPay);
 				row.Cells.Add(((AcctLine)AcctLineAL[i]).Patient);
-				row.Cells.Add(((AcctLine)AcctLineAL[i]).Adj);
+				cell=new ODGridCell(((AcctLine)AcctLineAL[i]).Adj);
+				cell.ColorText=DefB.Long[(int)DefCat.AccountColors][1].ItemColor;
+				row.Cells.Add(cell);
 				row.Cells.Add(((AcctLine)AcctLineAL[i]).Paid);
 				row.Cells.Add(((AcctLine)AcctLineAL[i]).Balance);
 				//}//end if

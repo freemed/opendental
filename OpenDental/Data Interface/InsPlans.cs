@@ -492,9 +492,9 @@ namespace OpenDental {
 			if(plan==null){
 				return -1;
 			}
-			if(plan.PlanType=="p"){
-				return Fees.GetAmount(ProcedureCodes.GetCodeNum(myCode),plan.FeeSched);
-			}
+			//if(plan.PlanType=="p"){
+			//	return Fees.GetAmount(ProcedureCodes.GetCodeNum(myCode),plan.FeeSched);
+			//}
 			if(plan.AllowedFeeSched==0){
 				return -1;
 			}

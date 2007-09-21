@@ -38,7 +38,7 @@ namespace OpenDentBusiness{
 		///<summary>The procedure code that was sent to insurance. This is not necessarily the usual procedure code.  It will already have been trimmed to 5 char if it started with "D", or it could be the alternate code.  Not allowed to be blank if it is procedure.</summary>
 		public string CodeSent;
 		///<summary>-1 if blank which indicates allowed is same as fee. This is the amount that the percentage is based on. Usually the same as the fee, unless this ins plan has lower UCR. Could also be different for ins substitutions, like posterior composites. If -1, then it might be changed during Procedure.ComputeEstimates/ClaimProc.ComputeBaseEst.  But once there is a value, it is guaranteed not to be changed unless user changes it.</summary>
-		public double AllowedAmt;
+		public double AllowedOverride;
 		///<summary>-1 if blank.  Otherwise a number between 0 and 100.  The percentage that insurance pays on this procedure, as determined from insurance categories. Not user editable.</summary>
 		public int Percentage;
 		///<summary>-1 if blank.  Otherwise a number between 0 and 100.  Can only be changed by user.</summary>
@@ -55,7 +55,7 @@ namespace OpenDentBusiness{
 		public double OverAnnualMax;
 		///<summary>-1 if blank. The amount paid by another insurance. This amount is then subtracted from what the current insurance would pay. So, always blank for primary claims.</summary>
 		public double PaidOtherIns;
-		///<summary>Always has a value. Used in TP, etc. The base estimate is the ((fee or allowedAmt)-Copay) x (percentage or percentOverride). Does not include all the extras like ded, annualMax,and paidOtherIns that InsPayEst will hold in future estimating.</summary>
+		///<summary>Always has a value. Used in TP, etc. The base estimate is the ((fee or allowedOverride)-Copay) x (percentage or percentOverride). Does not include all the extras like ded, annualMax,and paidOtherIns that InsPayEst will hold in future estimating.</summary>
 		public double BaseEst;
 		///<summary>-1 if blank.  See description of CopayAmt.  This lets the user set a copay that will never be overwritten by automatic calculations.</summary>
 		public double CopayOverride;
@@ -85,7 +85,7 @@ namespace OpenDentBusiness{
 			cp.DateCP=DateCP;
 			cp.WriteOff=WriteOff;
 			cp.CodeSent=CodeSent;
-			cp.AllowedAmt=AllowedAmt;
+			cp.AllowedOverride=AllowedOverride;
 			cp.Percentage=Percentage;
 			cp.PercentOverride=PercentOverride;
       cp.CopayAmt=CopayAmt;
