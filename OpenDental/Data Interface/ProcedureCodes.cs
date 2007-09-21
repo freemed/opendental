@@ -53,7 +53,11 @@ namespace OpenDental{
 				tempCode.IsCanadianLab =PIn.PBool  (tableStat.Rows[i][20].ToString());
 				tempCode.PreExisting	 =PIn.PBool  (tableStat.Rows[i][21].ToString());
 				tempCode.BaseUnits		=PIn.PString(tableStat.Rows[i][22].ToString());
-				HList.Add(tempCode.ProcCode,tempCode.Copy());
+				try {
+					HList.Add(tempCode.ProcCode,tempCode.Copy());
+				}
+				catch {
+				}
 				List[i]=tempCode.Copy();
 				if(tempCode.SetRecall) {
 					RecallAL.Add(tempCode);

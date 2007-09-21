@@ -741,6 +741,7 @@ namespace OpenDental{
 			return 0;
 		}
 
+		/*
 		///<summary>Gets allowedOverride for this procedure based on supplied claimprocs. Includes all claimproc types.  Only used in main TP module when calculating PPOs. The claimProc array typically includes all claimProcs for the patient, but must at least include all claimprocs for this proc.</summary>
 		public static double GetAllowedOverride(Procedure proc,ClaimProc[] claimProcs,int priPlanNum) {
 			//double retVal=0;
@@ -751,7 +752,7 @@ namespace OpenDental{
 				}
 			}
 			return 0;//retVal;
-		}
+		}*/
 
 		///<summary>Gets total writeoff for this procedure based on supplied claimprocs. Includes all claimproc types.  Only used in main TP module. The claimProc array typically includes all claimProcs for the patient, but must at least include all claimprocs for this proc.</summary>
 		public static double GetWriteOff(Procedure proc,ClaimProc[] claimProcs) {

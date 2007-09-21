@@ -187,6 +187,7 @@ namespace OpenDental{
 			//AllowedOverride=-1;
 			//actually, this is a bad place for altering AllowedOverride.
 			//Best to set it at the same time as the fee.
+			//Actually, AllowedOverride should almost never be altered by the program, only by the user.
 			//}
 			InsPlan plan=null;
 			if(pst==PriSecTot.Pri) {
@@ -195,17 +196,19 @@ namespace OpenDental{
 			else if(pst==PriSecTot.Sec) {
 				plan=InsPlans.GetPlan(patPlans[1].PlanNum,PlanList);
 			}
-			if(cp.AllowedOverride==-1) {//If allowedOverride is blank, try to find an allowed amount.
-//wrong:
-				cp.AllowedOverride=InsPlans.GetAllowed(ProcedureCodes.GetProcCode(proc.CodeNum).ProcCode,cp.PlanNum,PlanList);
+			//if(cp.AllowedOverride==-1) {//If allowedOverride is blank
+			//wrong:
+			//	cp.AllowedOverride=InsPlans.GetAllowed(ProcedureCodes.GetProcCode(proc.CodeNum).ProcCode,cp.PlanNum,PlanList);
 				//later add posterior composite functionality. Needs to go here because the substitute fee changes.
-			}
-			//we don't want to actually set an allowed amount.  But we do want to use it.
-			//if(plan){
-			
 			//}
 			if(cp.AllowedOverride!=-1) {
 				cp.BaseEst=cp.AllowedOverride;
+			}
+			else{
+				double carrierAllowed=InsPlans.GetAllowed(ProcedureCodes.GetProcCode(proc.CodeNum).ProcCode,cp.PlanNum,PlanList);
+				if(carrierAllowed!=-1){
+					cp.BaseEst=carrierAllowed;
+				}
 			}
 			//dedApplied is never recalculated here
 			//deductible is initially 0 anyway, so this calculation works.

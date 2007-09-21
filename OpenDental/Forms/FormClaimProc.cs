@@ -67,7 +67,7 @@ namespace OpenDental
 		private System.Windows.Forms.Label labelInsPaidOtherIns;
 		private System.Windows.Forms.Label labelInsCopay;
 		private System.Windows.Forms.Label labelInsPercentOverride;
-		private System.Windows.Forms.Label labelInsAllowed;
+		private System.Windows.Forms.Label labelInsAllowedOverride;
 		private System.Windows.Forms.Label labelInsInsPayEst;
 		private System.Windows.Forms.Label labelPatInsPayAmt;
 		private System.Windows.Forms.Label labelInsInsPayAmt;
@@ -126,6 +126,7 @@ namespace OpenDental
 		public bool NoPermission;
 		private OpenDental.ValidDate textDateEntry;
 		private System.Windows.Forms.Label labelDateEntry;
+		private Label labelInsCarrierAllowed;
 		private double CarrierAllowedAmount;
 
 		///<summary>procCur can be null if not editing from within an actual procedure.</summary>
@@ -252,7 +253,7 @@ namespace OpenDental
 			this.labelPaidOtherIns = new System.Windows.Forms.Label();
 			this.labelInsCopay = new System.Windows.Forms.Label();
 			this.labelInsPercentOverride = new System.Windows.Forms.Label();
-			this.labelInsAllowed = new System.Windows.Forms.Label();
+			this.labelInsAllowedOverride = new System.Windows.Forms.Label();
 			this.labelInsInsPayEst = new System.Windows.Forms.Label();
 			this.checkDedBeforePerc = new System.Windows.Forms.CheckBox();
 			this.labelPatInsPayAmt = new System.Windows.Forms.Label();
@@ -296,6 +297,7 @@ namespace OpenDental
 			this.butDelete = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
 			this.butOK = new OpenDental.UI.Button();
+			this.labelInsCarrierAllowed = new System.Windows.Forms.Label();
 			this.groupClaim.SuspendLayout();
 			this.panelClaimExtras.SuspendLayout();
 			this.panelEstimateInfo.SuspendLayout();
@@ -716,14 +718,14 @@ namespace OpenDental
 			this.labelInsPercentOverride.Text = "x  80%";
 			this.labelInsPercentOverride.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
-			// labelInsAllowed
+			// labelInsAllowedOverride
 			// 
-			this.labelInsAllowed.Location = new System.Drawing.Point(217,90);
-			this.labelInsAllowed.Name = "labelInsAllowed";
-			this.labelInsAllowed.Size = new System.Drawing.Size(67,16);
-			this.labelInsAllowed.TabIndex = 83;
-			this.labelInsAllowed.Text = "$500.00";
-			this.labelInsAllowed.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.labelInsAllowedOverride.Location = new System.Drawing.Point(217,90);
+			this.labelInsAllowedOverride.Name = "labelInsAllowedOverride";
+			this.labelInsAllowedOverride.Size = new System.Drawing.Size(67,16);
+			this.labelInsAllowedOverride.TabIndex = 83;
+			this.labelInsAllowedOverride.Text = "$500.00";
+			this.labelInsAllowedOverride.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// labelInsInsPayEst
 			// 
@@ -847,6 +849,7 @@ namespace OpenDental
 			// 
 			// panelEstimateInfo
 			// 
+			this.panelEstimateInfo.Controls.Add(this.labelInsCarrierAllowed);
 			this.panelEstimateInfo.Controls.Add(this.labelCarrierAllowed);
 			this.panelEstimateInfo.Controls.Add(this.textCarrierAllowed);
 			this.panelEstimateInfo.Controls.Add(this.labelInsCopayOverride);
@@ -861,7 +864,7 @@ namespace OpenDental
 			this.panelEstimateInfo.Controls.Add(this.labelPatPortion);
 			this.panelEstimateInfo.Controls.Add(this.labelInsDedBeforePerc);
 			this.panelEstimateInfo.Controls.Add(this.labelFee);
-			this.panelEstimateInfo.Controls.Add(this.labelInsAllowed);
+			this.panelEstimateInfo.Controls.Add(this.labelInsAllowedOverride);
 			this.panelEstimateInfo.Controls.Add(this.labelPatFee);
 			this.panelEstimateInfo.Controls.Add(this.checkDedBeforePerc);
 			this.panelEstimateInfo.Controls.Add(this.textDedBeforePerc);
@@ -1199,6 +1202,15 @@ namespace OpenDental
 			this.butOK.TabIndex = 1;
 			this.butOK.Text = "&OK";
 			this.butOK.Click += new System.EventHandler(this.butOK_Click);
+			// 
+			// labelInsCarrierAllowed
+			// 
+			this.labelInsCarrierAllowed.Location = new System.Drawing.Point(217,70);
+			this.labelInsCarrierAllowed.Name = "labelInsCarrierAllowed";
+			this.labelInsCarrierAllowed.Size = new System.Drawing.Size(67,16);
+			this.labelInsCarrierAllowed.TabIndex = 103;
+			this.labelInsCarrierAllowed.Text = "$500.00";
+			this.labelInsCarrierAllowed.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// FormClaimProc
 			// 
@@ -1594,17 +1606,25 @@ namespace OpenDental
 			else{
 				labelPatFee.Text="";
 			}
-			double allowedOverride=-1;
-			if(textAllowedOverride.Text==""){//Use fee.
-				labelInsFee.Text=ProcFee.ToString("c");
-				labelInsAllowed.Text="";
-				totalEstimate=ProcFee;
-			}
-			else{//Override the fee
-				allowedOverride=PIn.PDouble(textAllowedOverride.Text);
+			if(textAllowedOverride.Text!=""){//Allowed Override takes priority
+				double allowedOverride=PIn.PDouble(textAllowedOverride.Text);
 				labelInsFee.Text="";
-				labelInsAllowed.Text=allowedOverride.ToString("c");
+				labelInsCarrierAllowed.Text="";
+				labelInsAllowedOverride.Text=allowedOverride.ToString("c");
 				totalEstimate=allowedOverride;
+			}
+			else if(textCarrierAllowed.Text!=""){//Carrier Allowed takes priority
+				double allowedCarrier=PIn.PDouble(textCarrierAllowed.Text);
+				labelInsFee.Text="";
+				labelInsCarrierAllowed.Text=allowedCarrier.ToString("c");
+				labelInsAllowedOverride.Text="";
+				totalEstimate=allowedCarrier;
+			}
+			else{
+				labelInsFee.Text=ProcFee.ToString("c");
+				labelInsCarrierAllowed.Text="";
+				labelInsAllowedOverride.Text="";
+				totalEstimate=ProcFee;
 			}
 			double dedApplied=-1;
 			if(ClaimProcCur.Status==ClaimProcStatus.CapEstimate

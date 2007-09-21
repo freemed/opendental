@@ -37,7 +37,7 @@ namespace OpenDentBusiness{
 		public double WriteOff;
 		///<summary>The procedure code that was sent to insurance. This is not necessarily the usual procedure code.  It will already have been trimmed to 5 char if it started with "D", or it could be the alternate code.  Not allowed to be blank if it is procedure.</summary>
 		public string CodeSent;
-		///<summary>-1 if blank which indicates allowed is same as fee. This is the amount that the percentage is based on. Usually the same as the fee, unless this ins plan has lower UCR. Could also be different for ins substitutions, like posterior composites. If -1, then it might be changed during Procedure.ComputeEstimates/ClaimProc.ComputeBaseEst.  But once there is a value, it is guaranteed not to be changed unless user changes it.</summary>
+		///<summary>-1 if blank which indicates allowed is same as fee. This is the amount that the percentage is based on. Usually the same as the fee, unless this ins plan has lower UCR. Could also be different for ins substitutions, like posterior composites. It is never changed automatically except to sometimes set it to -1.  During Procedure.ComputeEstimates/ClaimProc.ComputeBaseEst, an allowed amount is calculated on the fly, but is no longer saved here.</summary>
 		public double AllowedOverride;
 		///<summary>-1 if blank.  Otherwise a number between 0 and 100.  The percentage that insurance pays on this procedure, as determined from insurance categories. Not user editable.</summary>
 		public int Percentage;

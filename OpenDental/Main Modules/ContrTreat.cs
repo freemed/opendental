@@ -1073,7 +1073,11 @@ namespace OpenDental{
 					totSecIns+=secIns;
 					discount=0;
 					if(PriPlanCur!=null && PriPlanCur.PlanType=="p"){//PPO
-						discount=fee-Procedures.GetAllowedOverride(ProcListTP[i],ClaimProcList,PriPlanCur.PlanNum);
+						double insplanAllowed=Fees.GetAmount(ProcListTP[i].CodeNum,PriPlanCur.FeeSched);
+						if(insplanAllowed!=-1){
+							discount=fee-insplanAllowed;
+						}
+						//else, if -1 fee not found, then do not show a discount. User can override estimate if they disagree.
 					}
 					subdiscount+=discount;
 					totDiscount+=discount;

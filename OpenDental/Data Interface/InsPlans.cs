@@ -484,7 +484,7 @@ namespace OpenDental {
 		}
 
 		///<summary>Returns -1 if no allowed feeschedule or fee unknown for this procCode. Otherwise, returns the allowed fee including 0. Can handle a planNum of 0.</summary>
-		public static double GetAllowed(string myCode,int planNum,InsPlan[] PlanList){
+		public static double GetAllowed(string procCode,int planNum,InsPlan[] PlanList){
 			if(planNum==0){
 				return -1;
 			}
@@ -492,14 +492,21 @@ namespace OpenDental {
 			if(plan==null){
 				return -1;
 			}
-			//if(plan.PlanType=="p"){
-			//	return Fees.GetAmount(ProcedureCodes.GetCodeNum(myCode),plan.FeeSched);
-			//}
+			if(plan.PlanType=="p"){
+				return Fees.GetAmount(ProcedureCodes.GetCodeNum(procCode),plan.FeeSched);
+			}
 			if(plan.AllowedFeeSched==0){
 				return -1;
 			}
-			return Fees.GetAmount(ProcedureCodes.GetCodeNum(myCode),plan.AllowedFeeSched);
+			return Fees.GetAmount(ProcedureCodes.GetCodeNum(procCode),plan.AllowedFeeSched);
 		}
+
+		/*
+		///<Summary>Only used in TP to calculate discount for PPO procedure.  Will return -1 if no fee found.</Summary>
+		public static double GetPPOAllowed(int codeNum,InsPlan plan){
+			//plan has already been tested to not be null and to be a PPO plan.
+			double fee=Fees.GetAmount(codeNum,plan.FeeSched);//could be -1
+		}*/
 
 		///<summary>This is used in FormQuery.SubmitQuery to allow display of carrier names.</summary>
 		public static Hashtable GetHListAll(){
