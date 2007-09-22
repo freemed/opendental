@@ -2736,10 +2736,10 @@ namespace OpenDental{
 				dedApplied+=ClaimProcsForClaim[i].DedApplied;
 				insPayEst+=ClaimProcsForClaim[i].InsPayEst;
 				insPayAmt+=ClaimProcsForClaim[i].InsPayAmt;
-				if(ClaimProcsForClaim[i].Status==ClaimProcStatus.Received
-					|| ClaimProcsForClaim[i].Status==ClaimProcStatus.Supplemental) {
+				//if(ClaimProcsForClaim[i].Status==ClaimProcStatus.Received
+				//	|| ClaimProcsForClaim[i].Status==ClaimProcStatus.Supplemental) {
 					writeOff+=ClaimProcsForClaim[i].WriteOff;
-				}
+				//}
 				gridProc.Rows.Add(row);
 			}
 			gridProc.EndUpdate();
@@ -2980,6 +2980,7 @@ namespace OpenDental{
 					FormCPT.ClaimProcsToEdit[i].DateEntry=DateTime.Now;//date is was set rec'd
 				}
 				FormCPT.ClaimProcsToEdit[i].InsPayAmt=FormCPT.ClaimProcsToEdit[i].InsPayEst;
+				FormCPT.ClaimProcsToEdit[i].DateCP=DateTime.Today;
 			}
 			FormCPT.ShowDialog();
 			if(FormCPT.DialogResult!=DialogResult.OK){
@@ -3070,7 +3071,8 @@ namespace OpenDental{
 			for(int i=0;i<ClaimProcsForClaim.Length;i++){
 				if((ClaimProcsForClaim[i].Status==ClaimProcStatus.Received
 					|| ClaimProcsForClaim[i].Status==ClaimProcStatus.Supplemental)
-					&& ClaimProcsForClaim[i].InsPayAmt!=0){
+					&& ClaimProcsForClaim[i].InsPayAmt!=0)
+				{
 					existsReceived=true;
 				}
 			}

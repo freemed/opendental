@@ -19,10 +19,7 @@ namespace OpenDental
 		private OpenDental.ValidDouble textInsPayAmt;
 		private System.Windows.Forms.TextBox textRemarks;
 		private System.Windows.Forms.ListBox listStatus;
-		/// <summary>
-		/// Required designer variable.
-		/// </summary>
-		private System.ComponentModel.Container components = null;
+		private IContainer components;
 		private OpenDental.ValidDouble textWriteOff;
 		private OpenDental.ValidDouble textInsPayEst;
 		private System.Windows.Forms.Label label1;
@@ -127,6 +124,7 @@ namespace OpenDental
 		private OpenDental.ValidDate textDateEntry;
 		private System.Windows.Forms.Label labelDateEntry;
 		private Label labelInsCarrierAllowed;
+		private ToolTip toolTip1;
 		private double CarrierAllowedAmount;
 
 		///<summary>procCur can be null if not editing from within an actual procedure.</summary>
@@ -206,6 +204,7 @@ namespace OpenDental
 		/// </summary>
 		private void InitializeComponent()
 		{
+			this.components = new System.ComponentModel.Container();
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormClaimProc));
 			this.labelDedBeforePerc = new System.Windows.Forms.Label();
 			this.labelInsPayAmt = new System.Windows.Forms.Label();
@@ -267,6 +266,7 @@ namespace OpenDental
 			this.textFeeBilled = new OpenDental.ValidDouble();
 			this.labelPatOverrideInsEstt = new System.Windows.Forms.Label();
 			this.panelEstimateInfo = new System.Windows.Forms.Panel();
+			this.labelInsCarrierAllowed = new System.Windows.Forms.Label();
 			this.labelCarrierAllowed = new System.Windows.Forms.Label();
 			this.textCarrierAllowed = new System.Windows.Forms.TextBox();
 			this.labelInsCopayOverride = new System.Windows.Forms.Label();
@@ -297,7 +297,7 @@ namespace OpenDental
 			this.butDelete = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
 			this.butOK = new OpenDental.UI.Button();
-			this.labelInsCarrierAllowed = new System.Windows.Forms.Label();
+			this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
 			this.groupClaim.SuspendLayout();
 			this.panelClaimExtras.SuspendLayout();
 			this.panelEstimateInfo.SuspendLayout();
@@ -890,6 +890,15 @@ namespace OpenDental
 			this.panelEstimateInfo.Size = new System.Drawing.Size(370,307);
 			this.panelEstimateInfo.TabIndex = 94;
 			// 
+			// labelInsCarrierAllowed
+			// 
+			this.labelInsCarrierAllowed.Location = new System.Drawing.Point(217,70);
+			this.labelInsCarrierAllowed.Name = "labelInsCarrierAllowed";
+			this.labelInsCarrierAllowed.Size = new System.Drawing.Size(67,16);
+			this.labelInsCarrierAllowed.TabIndex = 103;
+			this.labelInsCarrierAllowed.Text = "$500.00";
+			this.labelInsCarrierAllowed.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
 			// labelCarrierAllowed
 			// 
 			this.labelCarrierAllowed.Location = new System.Drawing.Point(8,70);
@@ -1142,6 +1151,7 @@ namespace OpenDental
 			this.butUpdateAllowed.Size = new System.Drawing.Size(75,26);
 			this.butUpdateAllowed.TabIndex = 98;
 			this.butUpdateAllowed.Text = "Update";
+			this.toolTip1.SetToolTip(this.butUpdateAllowed,"Edit the fee schedule that holds the fee showing in the Carrier Allowed Amt box.");
 			this.butUpdateAllowed.Click += new System.EventHandler(this.butUpdateAllowed_Click);
 			// 
 			// textProcDate
@@ -1202,15 +1212,6 @@ namespace OpenDental
 			this.butOK.TabIndex = 1;
 			this.butOK.Text = "&OK";
 			this.butOK.Click += new System.EventHandler(this.butOK_Click);
-			// 
-			// labelInsCarrierAllowed
-			// 
-			this.labelInsCarrierAllowed.Location = new System.Drawing.Point(217,70);
-			this.labelInsCarrierAllowed.Name = "labelInsCarrierAllowed";
-			this.labelInsCarrierAllowed.Size = new System.Drawing.Size(67,16);
-			this.labelInsCarrierAllowed.TabIndex = 103;
-			this.labelInsCarrierAllowed.Text = "$500.00";
-			this.labelInsCarrierAllowed.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// FormClaimProc
 			// 
@@ -1545,11 +1546,18 @@ namespace OpenDental
 			if(plan==null){
 				//this should never happen
 			}
-			if(plan.AllowedFeeSched==0){
-				MsgBox.Show(this,"Allowed fee schedule has not been set for this insurance plan");
+			if(plan.AllowedFeeSched==0 && plan.PlanType!="p"){
+				MsgBox.Show(this,"Plan must either be a PPO type or it must have an 'Allowed' fee schedule set.");
 				return;
 			}
-			int feeOrder=DefB.GetOrder(DefCat.FeeSchedNames,plan.AllowedFeeSched);
+			int feeSched=-1;
+			if(plan.AllowedFeeSched!=0) {
+				feeSched=plan.AllowedFeeSched;
+			}
+			else if(plan.PlanType=="p") {
+				feeSched=plan.FeeSched;
+			}
+			int feeOrder=DefB.GetOrder(DefCat.FeeSchedNames,feeSched);
 			if(feeOrder==-1){
 				MsgBox.Show(this,"Allowed fee schedule is hidden, so no changes can be made.");
 				return;
@@ -1558,7 +1566,7 @@ namespace OpenDental
 			FormFeeEdit FormFE=new FormFeeEdit();
 			if(FeeCur==null){
 				FeeCur=new Fee();
-				FeeCur.FeeSched=plan.AllowedFeeSched;
+				FeeCur.FeeSched=feeSched;
 				FeeCur.CodeNum=ProcCodeNum;
 				Fees.Insert(FeeCur);
 				FormFE.IsNew=true;

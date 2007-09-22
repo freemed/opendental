@@ -350,18 +350,16 @@ namespace OpenDental{
 
 		///<summary>Updates all claimproc estimates and also updates claim totals to db. Must supply all claimprocs for this patient.  Must supply procList which includes all procedures that this claim is linked to.  Will also need to refresh afterwards to see the results</summary>
 		public static void CalculateAndUpdate(ClaimProc[] ClaimProcList,Procedure[] procList,InsPlan[] PlanList,Claim ClaimCur,PatPlan[] patPlans,Benefit[] benefitList){
-			//Remember that this can be called externally also
-			//ClaimProcList=claimProcList;
 			ClaimProc[] ClaimProcsForClaim=ClaimProcs.GetForClaim(ClaimProcList,ClaimCur.ClaimNum);
 			double claimFee=0;
 			double dedApplied=0;
 			double insPayEst=0;
 			double insPayAmt=0;
+			double writeoff=0;
 			InsPlan PlanCur=InsPlans.GetPlan(ClaimCur.PlanNum,PlanList);
 			if(PlanCur==null){
 				return;
 			}
-			//InsPlans.Cur=(InsPlan)InsPlans.HList[ClaimCur.PlanNum];
 			int provNum;
 			double dedRem;
 			int patPlanNum=PatPlans.GetPatPlanNum(patPlans,ClaimCur.PlanNum);
@@ -397,20 +395,20 @@ namespace OpenDental{
 					continue;//ignores payments, etc
 				}
 				//fee:
-				int Qty = 1;
+				int qty = 1;
 				if(ProcCur.UnitQty != ""){
-					Qty = System.Convert.ToInt32( ProcCur.UnitQty );
+					qty = System.Convert.ToInt32( ProcCur.UnitQty );
 				}
 				if(PlanCur.ClaimsUseUCR){//use UCR for the provider of the procedure
 					provNum=ProcCur.ProvNum;
 					if(provNum==0){//if no prov set, then use practice default.
 						provNum=PrefB.GetInt("PracticeDefaultProv");
 					}
-					ClaimProcsForClaim[i].FeeBilled=Qty*(Fees.GetAmount0(//get the fee based on code and prov fee sched
+					ClaimProcsForClaim[i].FeeBilled=qty*(Fees.GetAmount0(//get the fee based on code and prov fee sched
 						ProcCur.CodeNum,Providers.ListLong[Providers.GetIndexLong(provNum)].FeeSched));
 				}
 				else{//don't use ucr.  Use the procedure fee instead.
-					ClaimProcsForClaim[i].FeeBilled=Qty*ProcCur.ProcFee;
+					ClaimProcsForClaim[i].FeeBilled=qty*ProcCur.ProcFee;
 				}
 				claimFee+=ClaimProcsForClaim[i].FeeBilled;
 				if(ClaimCur.ClaimType=="PreAuth" || ClaimCur.ClaimType=="Other"){
@@ -436,25 +434,9 @@ namespace OpenDental{
 				else{
 					ClaimProcsForClaim[i].DedApplied=dedRem;
 				}
-				//??obsolete: if dedApplied is too big, it might be adjusted in the next few lines.??
-				//insest:
-				//Unlike deductible, we do not need to take into account any of the received claimprocs when calculating insest.  So insRem takes care of annual max rather than received+est.
-				//if(patPlanNum==0){//patient does not have current coverage
-				//	insRem=0;
-				//}
-				//else{
-					//insRem-=insPayEst;//subtracts insest amounts already applied on this claim
-					//insRem=InsPlans.GetInsRem(ClaimProcList,ClaimProcsForClaim[i].ProcDate,ClaimCur.PlanNum,
-					//	patPlanNum,ClaimCur.ClaimNum,PlanList,benefitList)
-					//	-insPayEst;//subtracts insest amounts already applied on this claim
-				//	if(insRem<0) {
-				//		insRem=0;
-				//	}
-				//}
 				if(ClaimCur.ClaimType=="P"){//primary
 					ClaimProcs.ComputeBaseEst(ClaimProcsForClaim[i],ProcCur,PriSecTot.Pri,PlanList,patPlans,benefitList);//handles dedBeforePerc
 					ClaimProcsForClaim[i].InsPayEst=Procedures.GetEst(ProcCur,ClaimProcList,PriSecTot.Pri,patPlans,true);
-						//ClaimProcsForClaim[i].BaseEst;
 					if(!ClaimProcsForClaim[i].DedBeforePerc){
 						ClaimProcsForClaim[i].InsPayEst-=ClaimProcsForClaim[i].DedApplied;
 					}
@@ -462,7 +444,6 @@ namespace OpenDental{
 				else if(ClaimCur.ClaimType=="S"){//secondary
 					ClaimProcs.ComputeBaseEst(ClaimProcsForClaim[i],ProcCur,PriSecTot.Sec,PlanList,patPlans,benefitList);
 					ClaimProcsForClaim[i].InsPayEst=Procedures.GetEst(ProcCur,ClaimProcList,PriSecTot.Sec,patPlans,true);
-						//ClaimProcsForClaim[i].BaseEst;
 					if(!ClaimProcsForClaim[i].DedBeforePerc){
 						ClaimProcsForClaim[i].InsPayEst-=ClaimProcsForClaim[i].DedApplied;
 					}
@@ -480,6 +461,17 @@ namespace OpenDental{
 				else if(ClaimProcsForClaim[i].InsPayEst>insRem-insPayEst) {
 					ClaimProcsForClaim[i].InsPayEst=insRem-insPayEst;
 				}
+				if(ClaimProcsForClaim[i].Status==ClaimProcStatus.NotReceived){
+					ClaimProcsForClaim[i].WriteOff=0;
+					if(ClaimCur.ClaimType=="P" && PlanCur.PlanType=="p"){//Primary && PPO
+						double insplanAllowed=Fees.GetAmount(ProcCur.CodeNum,PlanCur.FeeSched);
+						if(insplanAllowed!=-1) {
+							ClaimProcsForClaim[i].WriteOff=ProcCur.ProcFee-insplanAllowed;
+						}
+						//else, if -1 fee not found, then do not show a writeoff. User can change writeoff if they disagree.
+					}
+					writeoff+=ClaimProcsForClaim[i].WriteOff;
+				}
 				dedApplied+=ClaimProcsForClaim[i].DedApplied;
 				insPayEst+=ClaimProcsForClaim[i].InsPayEst;
 				ClaimProcs.Update(ClaimProcsForClaim[i]);
@@ -489,6 +481,7 @@ namespace OpenDental{
 			ClaimCur.DedApplied=dedApplied;
 			ClaimCur.InsPayEst=insPayEst;
 			ClaimCur.InsPayAmt=insPayAmt;
+			ClaimCur.WriteOff=writeoff;
 			//Cur=ClaimCur;
 			Update(ClaimCur);
 		}

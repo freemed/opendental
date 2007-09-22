@@ -2117,8 +2117,11 @@ namespace OpenDental {
 					}
 					//runBal-=arrayClaim[tempCountClaim].WriteOff;
 					if(arrayClaim[tempCountClaim].WriteOff>0){
-						tempAcctLine.Adj="-"+arrayClaim[tempCountClaim].WriteOff.ToString("F");
-						subTotal-=arrayClaim[tempCountClaim].WriteOff;
+						double writeoff=ClaimProcs.ClaimWriteoffByTotalOnly(ClaimProcList,arrayClaim[tempCountClaim].ClaimNum);
+						if(writeoff>0){
+							tempAcctLine.Adj="-"+writeoff.ToString("F");
+							subTotal-=writeoff;
+						}
 					}
 					if(arrayClaim[tempCountClaim].ReasonUnderPaid!=""){
 						tempAcctLine.Description+="\r\n"+arrayClaim[tempCountClaim].ReasonUnderPaid;

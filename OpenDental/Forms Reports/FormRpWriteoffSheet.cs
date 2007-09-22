@@ -187,24 +187,24 @@ namespace OpenDental{
 			}
 			whereProv+=")";
 			Queries.CurReport=new ReportOld();
-			Queries.CurReport.Query="SELECT "
-				+"claimproc.DateCP,"//0
-				+"CONCAT(CONCAT(CONCAT(CONCAT(patient.LName,', '),patient.FName),' '),patient.MiddleI),"//1
-				+"carrier.CarrierName,"//2
-				+"provider.Abbr,"//3
-				+"SUM(claimproc.WriteOff),"//4
-				+"claimproc.ClaimNum "
-				+"FROM claimproc,insplan,patient,carrier,provider "
-				+"WHERE provider.ProvNum = claimproc.ProvNum "
-				+"AND claimproc.PlanNum = insplan.PlanNum "
-				+"AND claimproc.PatNum = patient.PatNum "
-				+"AND carrier.CarrierNum = insplan.CarrierNum "
-				+"AND "+whereProv+" "
-				+"AND (claimproc.Status=1 OR claimproc.Status=4) "//received or supplemental
-				+"AND claimproc.DateCP >= "+POut.PDate(date1.SelectionStart)+" "
-				+"AND claimproc.DateCP <= "+POut.PDate(date2.SelectionStart)+" "
-				+"GROUP BY claimproc.ClaimNum "
-				+"ORDER BY claimproc.DateCP";
+			Queries.CurReport.Query="SET @FromDate="+POut.PDate(date1.SelectionStart)+", @ToDate="+POut.PDate(date2.SelectionStart)+";";
+			Queries.CurReport.Query+=@"SELECT claimproc.DateCP,
+				CONCAT(CONCAT(CONCAT(CONCAT(patient.LName,', '),patient.FName),' '),patient.MiddleI),
+				carrier.CarrierName,
+				provider.Abbr,
+				SUM(claimproc.WriteOff),
+				claimproc.ClaimNum
+				FROM claimproc,insplan,patient,carrier,provider
+				WHERE provider.ProvNum = claimproc.ProvNum
+				AND claimproc.PlanNum = insplan.PlanNum
+				AND claimproc.PatNum = patient.PatNum
+				AND carrier.CarrierNum = insplan.CarrierNum
+				AND "+whereProv
+				+@" AND (claimproc.Status=1 OR claimproc.Status=4) /*received or supplemental*/
+				AND claimproc.DateCP >= @FromDate
+				AND claimproc.DateCP <= @ToDate
+				GROUP BY claimproc.ClaimNum 
+				ORDER BY claimproc.DateCP";
 			FormQuery2=new FormQuery();
 			FormQuery2.IsReport=true;
 			FormQuery2.SubmitReportQuery();			

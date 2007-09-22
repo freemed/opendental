@@ -209,7 +209,7 @@ namespace OpenDental{
 			this.listMonthly.Location = new System.Drawing.Point(12,300);
 			this.listMonthly.Name = "listMonthly";
 			this.listMonthly.SelectionMode = System.Windows.Forms.SelectionMode.None;
-			this.listMonthly.Size = new System.Drawing.Size(204,94);
+			this.listMonthly.Size = new System.Drawing.Size(204,109);
 			this.listMonthly.TabIndex = 8;
 			this.listMonthly.MouseDown += new System.Windows.Forms.MouseEventHandler(this.listMonthly_MouseDown);
 			// 
@@ -221,7 +221,7 @@ namespace OpenDental{
 			this.butClose.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butClose.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butClose.CornerRadius = 4F;
-			this.butClose.Location = new System.Drawing.Point(554,473);
+			this.butClose.Location = new System.Drawing.Point(554,491);
 			this.butClose.Name = "butClose";
 			this.butClose.Size = new System.Drawing.Size(75,26);
 			this.butClose.TabIndex = 0;
@@ -230,7 +230,7 @@ namespace OpenDental{
 			// 
 			// label6
 			// 
-			this.label6.Location = new System.Drawing.Point(12,414);
+			this.label6.Location = new System.Drawing.Point(11,426);
 			this.label6.Name = "label6";
 			this.label6.Size = new System.Drawing.Size(479,100);
 			this.label6.TabIndex = 17;
@@ -239,7 +239,7 @@ namespace OpenDental{
 			// FormReportsMore
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
-			this.ClientSize = new System.Drawing.Size(676,535);
+			this.ClientSize = new System.Drawing.Size(676,553);
 			this.Controls.Add(this.label6);
 			this.Controls.Add(this.listDaily);
 			this.Controls.Add(this.label5);
@@ -291,7 +291,8 @@ namespace OpenDental{
 				Lan.g(this,"Capitation Utilization"),
 				Lan.g(this,"Finance Charge Report"),
 				Lan.g(this,"Outstanding Insurance Claims"),
-				Lan.g(this,"Procedures Not Billed to Insurance") 
+				Lan.g(this,"Procedures Not Billed to Insurance"),
+				Lan.g(this,"PPO Writeoffs") 
 			});
 			listLists.Items.AddRange(new string[] {
 				Lan.g(this,"Appointments"),
@@ -447,6 +448,12 @@ namespace OpenDental{
 					FormRpProcNotBilledIns FormProc=new FormRpProcNotBilledIns();
 					FormProc.ShowDialog();
 					SecurityLogs.MakeLogEntry(Permissions.Reports,0,"Procedures not billed to insurance.");
+					break;
+				case 6://PPO Writeoffs
+					//FormRpProcNotBilledIns FormProc=new FormRpProcNotBilledIns();
+					//FormProc.ShowDialog();
+					//SecurityLogs.MakeLogEntry(Permissions.Reports,0,"Procedures not billed to insurance.");
+					MessageBox.Show("Not functional yet");
 					break;
 			}
 		}

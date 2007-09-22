@@ -462,16 +462,19 @@ namespace OpenDental{
 			return retVal;
 		}
 
-		/*
-		///<summary></summary>
-		public static void DetachAllFromCheckk(int claimPaymentNum){
-			string command= "UPDATE claimproc SET "
-				+"ClaimPaymentNum = '0' "
-				+"WHERE claimpaymentNum = '"+claimPaymentNum+"'";
-			//MessageBox.Show(string command);
-			DataConnection dcon=new DataConnection();
- 			General.NonQ(command);
-		}*/
+		///<summary>Used once in Account on the Claim line.  The writeoff amount on a claim only by total, not including by procedure.  The list can be all ClaimProcs for patient, or just those for this claim.</summary>
+		public static double ClaimWriteoffByTotalOnly(ClaimProc[] List,int claimNum) {
+			double retVal=0;
+			for(int i=0;i<List.Length;i++) {
+				if(List[i].ClaimNum==claimNum
+					&& List[i].ProcNum==0
+					&& List[i].Status!=ClaimProcStatus.Preauth)
+				{
+					retVal+=List[i].WriteOff;
+				}
+			}
+			return retVal;
+		}
 
 		///<summary>Attaches or detaches claimprocs from the specified claimPayment. Updates all claimprocs on a claim with one query.  It also updates their DateCP's to match the claimpayment date.</summary>
 		public static void SetForClaim(int claimNum,int claimPaymentNum,DateTime date,bool setAttached){

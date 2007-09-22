@@ -11,7 +11,7 @@ namespace OpenDental.ReportingOld2
 {
 
 
-	/// <summary>This class is now also outdated.  Only the new Report classes based on RDL will be used for reports.  This class is loosely modeled after CrystalReports.ReportDocument, but with less inheritence and heirarchy.</summary>
+	/// <summary>This class is loosely modeled after CrystalReports.ReportDocument, but with less inheritence and heirarchy.</summary>
 	public class ReportOld2{
 		private ArrayList dataFields;
 		private SectionCollection sections;
