@@ -1247,6 +1247,11 @@ namespace OpenDentBusiness{
 		Mail
 	}
 
+	///<summary></summary>
+	public enum ReferralToStatus{
+		None
+	}
+
 	
 
 

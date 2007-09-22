@@ -450,10 +450,9 @@ namespace OpenDental{
 					SecurityLogs.MakeLogEntry(Permissions.Reports,0,"Procedures not billed to insurance.");
 					break;
 				case 6://PPO Writeoffs
-					//FormRpProcNotBilledIns FormProc=new FormRpProcNotBilledIns();
-					//FormProc.ShowDialog();
-					//SecurityLogs.MakeLogEntry(Permissions.Reports,0,"Procedures not billed to insurance.");
-					MessageBox.Show("Not functional yet");
+					FormRpPPOwriteoffs FormPPO=new FormRpPPOwriteoffs();
+					FormPPO.ShowDialog();
+					SecurityLogs.MakeLogEntry(Permissions.Reports,0,"PPO Writeoffs.");
 					break;
 			}
 		}

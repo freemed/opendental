@@ -16,6 +16,8 @@ namespace OpenDentBusiness{
 		public DateTime RefDate;//
 		///<summary>true=from, false=to</summary>
 		public bool IsFrom;
+		//<summary>Enum:ReferralStatus 0=None,1=Declined,2=Scheduled,3=Consulted,4=InTreatment,5=Complete.</summary>
+		//public ReferralToStatus RefToStatus;
 
 		///<summary>Returns a copy of this RefAttach.</summary>
 		public RefAttach Copy(){
