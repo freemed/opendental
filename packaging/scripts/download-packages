@@ -12,13 +12,15 @@ cat distributions | while read line; do
 	for arch in all i386; do
 		echo "Downloading files for $distribution ($arch). This may take a while, please wait..."
 		mkdir $root/$arch
-		wget --no-verbose --directory-prefix=$root/$arch ftp://opensuse.mirrors.skynet.be/mirror2/opensuse.org/opensuse/repositories/home:/fcarlier/$repository/$arch/*.deb
+		wget --directory-prefix=$root/$arch ftp://opensuse.mirrors.skynet.be/mirror2/opensuse.org/opensuse/repositories/home:/fcarlier/$repository/$arch/*.deb
 
 		echo "Adding files to repository for $distribution ($arch)"
 		for file in $(ls $root/$arch/*.deb); do
-			reprepro --basedir /home/fcarlier/repository includedeb $distribution $file
+			reprepro --basedir /home/fcarlier/repository/$distribution includedeb $distribution $file
 		done
 	done
 done
+
+wput --basename=/home/fcarlier/repository/ ftp://opendental.carlier-online.be/httpdocs/apt/ /home/fcarlier/repository/
 
 
