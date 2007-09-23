@@ -12,7 +12,7 @@ namespace OpenDental{
 		public static RefAttach[] Refresh(int patNum) {
 			string command=
 				"SELECT * FROM refattach"
-				+" WHERE patnum = "+patNum.ToString()
+				+" WHERE PatNum = "+POut.PInt(patNum)
 				+" ORDER BY itemorder";
 			DataTable table=General.GetTable(command);
 			RefAttach[] List=new RefAttach[table.Rows.Count];
@@ -24,6 +24,8 @@ namespace OpenDental{
 				List[i].ItemOrder   = PIn.PInt(table.Rows[i][3].ToString());
 				List[i].RefDate     = PIn.PDate(table.Rows[i][4].ToString());
 				List[i].IsFrom      = PIn.PBool(table.Rows[i][5].ToString());
+				List[i].RefToStatus = (ReferralToStatus)PIn.PInt(table.Rows[i][6].ToString());
+				List[i].Note        = PIn.PString(table.Rows[i][7].ToString());
 			}
 			return List;
 		}
@@ -31,11 +33,13 @@ namespace OpenDental{
 		///<summary></summary>
 		public static void Update(RefAttach attach){
 			string command= "UPDATE refattach SET " 
-				+ "referralnum = '" +POut.PInt   (attach.ReferralNum)+"'"
-				+ ",patnum = '"     +POut.PInt   (attach.PatNum)+"'"
-				+ ",itemorder = '"  +POut.PInt   (attach.ItemOrder)+"'"
-				+ ",refdate = "    +POut.PDate  (attach.RefDate)
-				+ ",isfrom = '"     +POut.PBool  (attach.IsFrom)+"'"
+				+ "ReferralNum = '" +POut.PInt   (attach.ReferralNum)+"'"
+				+ ",PatNum = '"     +POut.PInt   (attach.PatNum)+"'"
+				+ ",ItemOrder = '"  +POut.PInt   (attach.ItemOrder)+"'"
+				+ ",RefDate = "    +POut.PDate  (attach.RefDate)
+				+ ",IsFrom = '"     +POut.PBool  (attach.IsFrom)+"'"
+				+ ",RefToStatus = '"+POut.PInt   ((int)attach.RefToStatus)+"'"
+				+ ",Note = '"       +POut.PString(attach.Note)+"'"
 				+" WHERE RefAttachNum = '" +POut.PInt(attach.RefAttachNum)+"'";
  			General.NonQ(command);
 		}
@@ -49,8 +53,7 @@ namespace OpenDental{
 			if(PrefB.RandomKeys){
 				command+="RefAttachNum,";
 			}			
-			command+="referralnum,patnum,"
-				+"itemorder,refdate,IsFrom) VALUES (";
+			command+="ReferralNum,PatNum,ItemOrder,RefDate,IsFrom,RefToStatus,Note) VALUES (";
 			if(PrefB.RandomKeys){
 				command+="'"+POut.PInt(attach.RefAttachNum)+"', ";
 			}
@@ -58,7 +61,9 @@ namespace OpenDental{
 				+"'"+POut.PInt(attach.PatNum)+"', "
 				+"'"+POut.PInt(attach.ItemOrder)+"', "
 				+POut.PDate(attach.RefDate)+", "
-				+"'"+POut.PBool(attach.IsFrom)+"')";
+				+"'"+POut.PBool(attach.IsFrom)+"', "
+				+"'"+POut.PInt ((int)attach.RefToStatus)+"', "
+				+"'"+POut.PString(attach.Note)+"')";
  			attach.RefAttachNum=General.NonQ(command,true);
 		}
 
@@ -73,7 +78,7 @@ namespace OpenDental{
 		public static bool IsReferralAttached(int referralNum){
 			string command =
 				"SELECT * FROM refattach"
-				+" WHERE referralnum = '"+referralNum+"'";
+				+" WHERE ReferralNum = '"+referralNum+"'";
  			DataTable table=General.GetTable(command);
 			if(table.Rows.Count > 0){
 				return true;

@@ -65,13 +65,10 @@ namespace OpenDental{
 		private System.Windows.Forms.GroupBox groupBox1;
 		private System.Windows.Forms.CheckBox checkSame;
 		private System.Windows.Forms.TextBox textBox1;
-		private OpenDental.TableRefList tbRefList;
 		private System.Windows.Forms.ComboBox comboZip;
 		private System.Windows.Forms.TextBox textZip;
 		private System.Windows.Forms.GroupBox groupNotes;
 		private System.Windows.Forms.CheckBox checkNotesSame;
-		private OpenDental.UI.Button butAdd;
-		private OpenDental.UI.Button butDelete;
 		private System.Windows.Forms.TextBox textPatNum;
 		private System.Windows.Forms.Label label19;
 		private System.Windows.Forms.Label label32;
@@ -162,7 +159,6 @@ namespace OpenDental{
 			listEmps.MouseLeave += new System.EventHandler(listEmps_MouseLeave);
 			Controls.Add(listEmps);
 			listEmps.BringToFront();
-			tbRefList.CellDoubleClicked += new OpenDental.ContrTable.CellEventHandler(tbRefList_CellDoubleClicked);
 			listSchools=new ListBox();
 			listSchools.Location=new Point(groupPH.Left+textGradeSchool.Left
 				,groupPH.Top+textGradeSchool.Bottom);
@@ -276,12 +272,9 @@ namespace OpenDental{
 			this.comboZip = new System.Windows.Forms.ComboBox();
 			this.textBox1 = new System.Windows.Forms.TextBox();
 			this.checkSame = new System.Windows.Forms.CheckBox();
-			this.tbRefList = new OpenDental.TableRefList();
 			this.groupNotes = new System.Windows.Forms.GroupBox();
 			this.textAddrNotes = new OpenDental.ODtextBox();
 			this.checkNotesSame = new System.Windows.Forms.CheckBox();
-			this.butAdd = new OpenDental.UI.Button();
-			this.butDelete = new OpenDental.UI.Button();
 			this.textPatNum = new System.Windows.Forms.TextBox();
 			this.label19 = new System.Windows.Forms.Label();
 			this.label32 = new System.Windows.Forms.Label();
@@ -947,17 +940,6 @@ namespace OpenDental{
 			this.checkSame.TabIndex = 11;
 			this.checkSame.TabStop = false;
 			// 
-			// tbRefList
-			// 
-			this.tbRefList.BackColor = System.Drawing.SystemColors.Window;
-			this.tbRefList.Location = new System.Drawing.Point(440,435);
-			this.tbRefList.Name = "tbRefList";
-			this.tbRefList.ScrollValue = 1;
-			this.tbRefList.SelectedIndices = new int[0];
-			this.tbRefList.SelectionMode = System.Windows.Forms.SelectionMode.One;
-			this.tbRefList.Size = new System.Drawing.Size(459,96);
-			this.tbRefList.TabIndex = 64;
-			// 
 			// groupNotes
 			// 
 			this.groupNotes.Controls.Add(this.textAddrNotes);
@@ -989,38 +971,6 @@ namespace OpenDental{
 			this.checkNotesSame.Size = new System.Drawing.Size(247,18);
 			this.checkNotesSame.TabIndex = 1;
 			this.checkNotesSame.Text = "Same for entire family";
-			// 
-			// butAdd
-			// 
-			this.butAdd.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butAdd.Autosize = true;
-			this.butAdd.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butAdd.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butAdd.CornerRadius = 4F;
-			this.butAdd.Image = global::OpenDental.Properties.Resources.Add;
-			this.butAdd.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butAdd.Location = new System.Drawing.Point(441,407);
-			this.butAdd.Name = "butAdd";
-			this.butAdd.Size = new System.Drawing.Size(75,26);
-			this.butAdd.TabIndex = 69;
-			this.butAdd.Text = "&Add";
-			this.butAdd.Click += new System.EventHandler(this.butAdd_Click);
-			// 
-			// butDelete
-			// 
-			this.butDelete.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butDelete.Autosize = true;
-			this.butDelete.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butDelete.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butDelete.CornerRadius = 4F;
-			this.butDelete.Image = global::OpenDental.Properties.Resources.deleteX;
-			this.butDelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butDelete.Location = new System.Drawing.Point(571,407);
-			this.butDelete.Name = "butDelete";
-			this.butDelete.Size = new System.Drawing.Size(83,26);
-			this.butDelete.TabIndex = 70;
-			this.butDelete.Text = "&Remove";
-			this.butDelete.Click += new System.EventHandler(this.butDelete_Click);
 			// 
 			// textPatNum
 			// 
@@ -1440,8 +1390,6 @@ namespace OpenDental{
 			this.Controls.Add(this.textFName);
 			this.Controls.Add(this.textLName);
 			this.Controls.Add(this.butAuto);
-			this.Controls.Add(this.butDelete);
-			this.Controls.Add(this.butAdd);
 			this.Controls.Add(this.butCancel);
 			this.Controls.Add(this.butOK);
 			this.Controls.Add(this.label36);
@@ -1455,7 +1403,6 @@ namespace OpenDental{
 			this.Controls.Add(this.label32);
 			this.Controls.Add(this.label19);
 			this.Controls.Add(this.groupNotes);
-			this.Controls.Add(this.tbRefList);
 			this.Controls.Add(this.groupBox1);
 			this.Controls.Add(this.label29);
 			this.Controls.Add(this.groupBox2);
@@ -1725,7 +1672,6 @@ namespace OpenDental{
 				textAdmitDate.Text=PatCur.AdmitDate.ToShortDateString();
 			}
 			textLName.Select();
-			FillTable();
 		}
 
 		private void FillComboZip(){
@@ -2199,85 +2145,6 @@ namespace OpenDental{
 		private void listCounties_MouseLeave(object sender, System.EventArgs e){
 			mouseIsInListCounties=false;
 		}
-		#endregion
-
-		#region Referrals
-		private void FillTable(){
-			//Referrals.Refresh();//faster to do this every time a referral is changed instead of here.
-			RefList=RefAttaches.Refresh(PatCur.PatNum);//for this patient only
-			tbRefList.ResetRows(RefList.Length);
-			tbRefList.SetGridColor(Color.Gray);
-			tbRefList.SetBackGColor(Color.White);
-			Referral referral;
-			for(int i=0;i<RefList.Length;i++){
-				if(RefList[i].IsFrom){ 
-					tbRefList.Cell[0,i]=Lan.g(this,"From");
-				}
-				else{
-					tbRefList.Cell[0,i]=Lan.g(this,"To");
-				}
-				referral=Referrals.GetReferral(RefList[i].ReferralNum);
-				if(referral!=null){
-					tbRefList.Cell[1,i]=referral.LName+", "+referral.FName +" "+referral.MName;
-				}
-				if(RefList[i].RefDate.Year < 1880)
-					tbRefList.Cell[2,i]="";
-				else
-					tbRefList.Cell[2,i]=RefList[i].RefDate.ToShortDateString();
-				if(referral!=null){
-					tbRefList.Cell[3,i]=referral.Note;
-				}
-			}
-			tbRefList.LayoutTables();
-		}
-
-		private void tbRefList_CellDoubleClicked(object sender, CellEventArgs e){
-			FormRefAttachEdit FormRAE2=new FormRefAttachEdit();
-			FormRAE2.RefAttachCur=RefList[e.Row];
-			FormRAE2.ShowDialog();
-			FillTable();  
-		}
-
-		private void butDelete_Click(object sender, System.EventArgs e){
-			if(tbRefList.SelectedRow==-1){
-				MessageBox.Show(Lan.g(this,"Please select item first."));
-				return;
-			}
-			if(!MsgBox.Show(this,true,"Delete Referral?")){
-				return;   
-			}
-			RefAttaches.Delete(RefList[tbRefList.SelectedRow]);
-			FillTable();		
-		}
-
-		private void butAdd_Click(object sender, System.EventArgs e){
-			FormReferralSelect FormRS=new FormReferralSelect();
-			FormRS.IsSelectionMode=true;
-			FormRS.ShowDialog();
-			if(FormRS.DialogResult!=DialogResult.OK){
-				return;
-			}
-			FormRefAttachEdit FormRA=new FormRefAttachEdit(); 
-			FormRA.RefAttachCur=new RefAttach();
-			FormRA.RefAttachCur.ReferralNum=FormRS.SelectedReferral.ReferralNum;
-			FormRA.RefAttachCur.PatNum=PatCur.PatNum;
-			FormRA.RefAttachCur.IsFrom=true;
-			FormRA.RefAttachCur.RefDate=DateTime.Today;
-			int order=0;
-      for(int i=0;i<RefList.Length;i++){
-        if(RefList[i].ItemOrder > order){
-          order=RefList[i].ItemOrder;
-        }
-      }
-      FormRA.RefAttachCur.ItemOrder=order+1;
-			FormRA.IsNew=true;
-			FormRA.ShowDialog();
-			if(FormRA.DialogResult!=DialogResult.OK){
-				return;
-			}
-			FillTable();
-		}
-
 		#endregion
 
 		/*private void butChangeEmp_Click(object sender, System.EventArgs e) {

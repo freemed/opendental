@@ -422,21 +422,29 @@ namespace OpenDental{
 				return;
 			}
 			if(gridPat.Rows[e.Row].Tag!=null){
-				string tag=gridPat.Rows[e.Row].Tag.ToString();
-				tag=tag.Substring(8);//strips off all but the number: PatField1
-				int index=PIn.PInt(tag);
-				PatField field=PatFields.GetByName(PatFieldDefs.List[index].FieldName,PatFieldList);
-				if(field==null) {
-					field=new PatField();
-					field.PatNum=PatCur.PatNum;
-					field.FieldName=PatFieldDefs.List[index].FieldName;
-					FormPatFieldEdit FormPF=new FormPatFieldEdit(field);
-					FormPF.IsNew=true;
-					FormPF.ShowDialog();
+				if(gridPat.Rows[e.Row].Tag.GetType()==typeof(RefAttach)){
+					//RefAttach refattach=(RefAttach)gridPat.Rows[e.Row].Tag;
+					FormReferralsPatient FormRE=new FormReferralsPatient();
+					FormRE.PatNum=PatCur.PatNum;
+					FormRE.ShowDialog();
 				}
-				else{
-					FormPatFieldEdit FormPF=new FormPatFieldEdit(field);
-					FormPF.ShowDialog();
+				else{//patfield
+					string tag=gridPat.Rows[e.Row].Tag.ToString();
+					tag=tag.Substring(8);//strips off all but the number: PatField1
+					int index=PIn.PInt(tag);
+					PatField field=PatFields.GetByName(PatFieldDefs.List[index].FieldName,PatFieldList);
+					if(field==null) {
+						field=new PatField();
+						field.PatNum=PatCur.PatNum;
+						field.FieldName=PatFieldDefs.List[index].FieldName;
+						FormPatFieldEdit FormPF=new FormPatFieldEdit(field);
+						FormPF.IsNew=true;
+						FormPF.ShowDialog();
+					}
+					else{
+						FormPatFieldEdit FormPF=new FormPatFieldEdit(field);
+						FormPF.ShowDialog();
+					}
 				}
 			}
 			else{
@@ -682,11 +690,13 @@ namespace OpenDental{
 				}
 				try{
 					row.Cells.Add(Referrals.GetNameLF(RefList[i].ReferralNum)+"\r\n"
-						+Referrals.GetPhone(RefList[i].ReferralNum));
+						+Referrals.GetPhone(RefList[i].ReferralNum)
+						+" "+RefList[i].Note);
 				}
 				catch{
 					row.Cells.Add("");//if referral is null because using random keys and had bug.
 				}
+				row.Tag=RefList[i].Copy();
 				gridPat.Rows.Add(row);
 			}
 			//AddrNote

@@ -5795,7 +5795,12 @@ namespace OpenDental{
 					//command="ALTER TABLE claimproc (RENAME??) MODIFY (AllowedOverride double NOT NULL)";
 					//General.NonQEx(command);
 				}
-				
+				//after r807
+				command="ALTER TABLE refattach ADD RefToStatus TINYINT unsigned NOT NULL";
+				General.NonQEx(command);
+				command="ALTER TABLE refattach ADD Note text";
+				General.NonQEx(command);
+
 
 
 

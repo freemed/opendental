@@ -1247,9 +1247,20 @@ namespace OpenDentBusiness{
 		Mail
 	}
 
-	///<summary></summary>
+	///<summary>0=None,1=Declined,2=Scheduled,3=Consulted,4=InTreatment,5=Complete</summary>
 	public enum ReferralToStatus{
-		None
+		///<summary>0</summary>
+		None,
+		///<summary>1</summary>
+		Declined,
+		///<summary>2</summary>
+		Scheduled,
+		///<summary>3</summary>
+		Consulted,
+		///<summary>4</summary>
+		InTreatment,
+		///<summary>5</summary>
+		Complete
 	}
 
 	
