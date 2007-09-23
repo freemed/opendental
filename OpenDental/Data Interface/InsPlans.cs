@@ -492,13 +492,20 @@ namespace OpenDental {
 			if(plan==null){
 				return -1;
 			}
+			int codeNum=ProcedureCodes.GetCodeNum(procCode);
+			int substCodeNum=ProcedureCodes.GetSubstituteCodeNum(procCode);//for posterior composites
 			if(plan.PlanType=="p"){
-				return Fees.GetAmount(ProcedureCodes.GetCodeNum(procCode),plan.FeeSched);
+				return Fees.GetAmount(codeNum,plan.FeeSched);
 			}
-			if(plan.AllowedFeeSched==0){
+			if(plan.AllowedFeeSched!=0){//if an allowed fee schedule exists
+				return Fees.GetAmount(substCodeNum,plan.AllowedFeeSched);//whether post composite or not
+			}
+			//ordinary fee schedule
+			if(codeNum==substCodeNum){
 				return -1;
 			}
-			return Fees.GetAmount(ProcedureCodes.GetCodeNum(procCode),plan.AllowedFeeSched);
+			//posterior composite
+			return Fees.GetAmount(substCodeNum,plan.FeeSched);
 		}
 
 		/*

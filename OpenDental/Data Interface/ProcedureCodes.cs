@@ -176,6 +176,23 @@ namespace OpenDental{
 			//}
 		}
 
+		///<summary>If a substitute exists for the given proc code, then it will give the CodeNum of that code.  Otherwise, it will return the codeNum for the given procCode.</summary>
+		public static int GetSubstituteCodeNum(string procCode) {
+			if(procCode==null || procCode=="") {
+				return 0;
+			}
+			if(!HList.Contains(procCode)) {
+				return 0;
+			}
+			ProcedureCode proc=(ProcedureCode)HList[procCode];
+			if(proc.SubstitutionCode!=""){
+				if(HList.Contains(proc.SubstitutionCode)){
+					proc=(ProcedureCode)HList[proc.SubstitutionCode];
+				}
+			}
+			return proc.CodeNum;
+		}
+
 		public static string GetStringProcCode(int codeNum) {
 			if(codeNum==0) {
 				return "";
