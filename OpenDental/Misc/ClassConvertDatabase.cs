@@ -5800,7 +5800,34 @@ namespace OpenDental{
 				General.NonQEx(command);
 				command="ALTER TABLE refattach ADD Note text";
 				General.NonQEx(command);
+				//after r808
+				command="ALTER TABLE procedurecode ADD SubstitutionCode VARCHAR(25)";
+				General.NonQEx(command);
+				//these 4 query groups are not critical to run unless testing this new feature:
+				command="SELECT COUNT(*) FROM procedurecode WHERE ProcCode='D2391'";
+				if(General.GetCountEx(command)=="1"){
+					command="UPDATE procedurecode SET SubstitutionCode='D2140' WHERE ProcCode='D2391'";//1 surf
+					General.NonQEx(command);
+				}
+				command="SELECT COUNT(*) FROM procedurecode WHERE ProcCode='D2392'";
+				if(General.GetCountEx(command)=="1"){
+					command="UPDATE procedurecode SET SubstitutionCode='D2150' WHERE ProcCode='D2392'";//2 surf
+					General.NonQEx(command);
+				}
+				command="SELECT COUNT(*) FROM procedurecode WHERE ProcCode='D2393'";
+				if(General.GetCountEx(command)=="1"){
+					command="UPDATE procedurecode SET SubstitutionCode='D2160' WHERE ProcCode='D2393'";//3 surf
+					General.NonQEx(command);
+				}
+				command="SELECT COUNT(*) FROM procedurecode WHERE ProcCode='D2394'";
+				if(General.GetCountEx(command)=="1"){
+					command="UPDATE procedurecode SET SubstitutionCode='D2161' WHERE ProcCode='D2394'";//4+ surf
+					General.NonQEx(command);
+				}
 
+
+				
+		
 
 
 

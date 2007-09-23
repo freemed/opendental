@@ -66,6 +66,10 @@ namespace OpenDentBusiness{
 		///<summary>Support for Base Units for a Code (like anesthesia)</summary>
 		[XmlIgnore]
 		public string BaseUnits;
+		///<summary>FK to procedurecode.ProcCode.  Used for posterior composites because insurance substitutes the amalgam code when figuring the coverage.</summary>
+		[XmlIgnore]
+		public string SubstitutionCode;
+
 		
 		///<summary>Not a database column.  Only used for xml import function.</summary>
 		private string procCatDescript;
@@ -115,6 +119,7 @@ namespace OpenDentBusiness{
 			p.IsCanadianLab=IsCanadianLab;
 			p.PreExisting=PreExisting;
 			p.BaseUnits=BaseUnits;
+			p.SubstitutionCode=SubstitutionCode;
 			return p;
 		}
 

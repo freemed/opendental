@@ -53,6 +53,7 @@ namespace OpenDental{
 				tempCode.IsCanadianLab =PIn.PBool  (tableStat.Rows[i][20].ToString());
 				tempCode.PreExisting	 =PIn.PBool  (tableStat.Rows[i][21].ToString());
 				tempCode.BaseUnits		=PIn.PString(tableStat.Rows[i][22].ToString());
+				tempCode.SubstitutionCode=PIn.PString(tableStat.Rows[i][23].ToString());
 				try {
 					HList.Add(tempCode.ProcCode,tempCode.Copy());
 				}
@@ -71,7 +72,7 @@ namespace OpenDental{
 			string command="INSERT INTO procedurecode (CodeNum,ProcCode,descript,abbrdesc,"
 				+"proctime,proccat,treatarea,RemoveTooth,setrecall,"
 				+"nobillins,isprosth,defaultnote,ishygiene,gtypenum,alternatecode1,MedicalCode,IsTaxed,"
-				+"PaintType,GraphicColor,LaymanTerm,IsCanadianLab,PreExisting,BaseUnits) VALUES("
+				+"PaintType,GraphicColor,LaymanTerm,IsCanadianLab,PreExisting,BaseUnits,SubstitutionCode) VALUES("
 				+"'"+POut.PInt(code.CodeNum)+"', "
 				+"'"+POut.PString(code.ProcCode)+"', "
 				+"'"+POut.PString(code.Descript)+"', "
@@ -95,7 +96,8 @@ namespace OpenDental{
 				+"'"+POut.PString(code.LaymanTerm)+"', "
 				+"'"+POut.PBool  (code.IsCanadianLab)+"', "
 				+"'"+POut.PBool  (code.PreExisting)+"', "
-				+"'"+POut.PString   (code.BaseUnits)+"')";
+				+"'"+POut.PString(code.BaseUnits)+"', "
+				+"'"+POut.PString(code.SubstitutionCode)+"')";
 			code.CodeNum=General.NonQ(command,true);
 			ProcedureCodes.Refresh();
 			//Cur already set
@@ -128,6 +130,7 @@ namespace OpenDental{
 				+ ",IsCanadianLab = '" +POut.PBool  (code.IsCanadianLab)+"'"
 				+ ",PreExisting = '"	 +POut.PBool(code.PreExisting)+"'"
 				+ ",BaseUnits = '"     +POut.PString(code.BaseUnits)+"'"
+				+ ",SubstitutionCode = '"+POut.PString(code.SubstitutionCode)+"'"
 				+" WHERE CodeNum = '"+POut.PInt(code.CodeNum)+"'";
 			General.NonQ(command);
 		}
@@ -199,7 +202,7 @@ namespace OpenDental{
 			}
 		}
 
-		///<summary>Grouped by Category.  Used in Procedures window and in FormRpProcCodes.</summary>
+		///<summary>Grouped by Category.  Used only in FormRpProcCodes.</summary>
 		public static ProcedureCode[] GetProcList(){
 			//ProcedureCode[] ProcList=new ProcedureCode[tableStat.Rows.Count];
 			//int i=0;
@@ -252,28 +255,11 @@ namespace OpenDental{
 				}
 				whereCat+=")";
 			}
-/*			string command="SELECT ProcCat,Descript,AbbrDesc,procedurecode.ProcCode,"
-				+"IFNULL(fee1.Amount,'-1') AS FeeAmt1, "
-				+"IFNULL(fee2.Amount,'-1') AS FeeAmt2, "
-				+"IFNULL(fee3.Amount,'-1') AS FeeAmt3 "
-				+"FROM procedurecode "
-				+"LEFT JOIN fee AS fee1 ON fee1.CodeNum=procedurecode.CodeNum "
-				+"AND fee1.FeeSched="+POut.PInt(feeSched)
-				+" LEFT JOIN fee AS fee2 ON fee2.CodeNum=procedurecode.CodeNum "
-				+"AND fee2.FeeSched="+POut.PInt(feeSchedComp1)
-				+" LEFT JOIN fee AS fee3 ON fee3.CodeNum=procedurecode.CodeNum "
-				+"AND fee3.FeeSched="+POut.PInt(feeSchedComp2)
-				+" WHERE "+whereCat
-				+" AND Descript LIKE '%"+POut.PString(desc)+"%' "
-				+"AND AbbrDesc LIKE '%"+POut.PString(abbr)+"%' "
-				+"AND procedurecode.ProcCode LIKE '%"+POut.PString(code)+"%' "
-				+"ORDER BY ProcCat,procedurecode.ProcCode";*/
-
-			//Query changed to be compatible with both MySQL and Oracle.
+			//Query changed to be compatible with both MySQL and Oracle (not tested).
 			string command="SELECT ProcCat,Descript,AbbrDesc,procedurecode.ProcCode,"
-				+"CASE WHEN (fee1.Amount IS NULL) THEN -1 ELSE fee1.Amount END AS FeeAmt1,"
-				+"CASE WHEN (fee2.Amount IS NULL) THEN -1 ELSE fee2.Amount END AS FeeAmt2,"
-				+"CASE WHEN (fee3.Amount IS NULL) THEN -1 ELSE fee3.Amount END AS FeeAmt3, "
+				+"CASE WHEN (fee1.Amount IS NULL) THEN -1 ELSE fee1.Amount END FeeAmt1,"
+				+"CASE WHEN (fee2.Amount IS NULL) THEN -1 ELSE fee2.Amount END FeeAmt2,"
+				+"CASE WHEN (fee3.Amount IS NULL) THEN -1 ELSE fee3.Amount END FeeAmt3, "
 				+"procedurecode.CodeNum "
 				+"FROM procedurecode "
 				+"LEFT JOIN fee fee1 ON fee1.CodeNum=procedurecode.CodeNum "
@@ -438,120 +424,9 @@ namespace OpenDental{
 			}
 		}
 
-/*
-		///<summary>Used by FormUpdate when converting from T codes to D codes.  It's not converting the actual codes.  It's converting the autocodes and procbuttons from T to D.</summary>
-		public static void TcodesAlter(){
-			//string command="UPDATE autocodeitem SET Code = REPLACE(Code,'T','D') WHERE Code LIKE 'T%'";
-			//General.NonQ(command);
-			string command="UPDATE preference SET ValueString = REPLACE(ValueString,'T','D') "
-				+"WHERE PrefName ='RecallProcedures' OR PrefName='RecallBW'";
-			General.NonQ(command);
-			//command="UPDATE procbuttonitem SET Code = REPLACE(Code,'T','D') WHERE Code LIKE 'T%'";
-			//General.NonQ(command);
-		}
 
-		///<summary>Deletes unused codes.  Returns the number of rows affected.</summary>
-		public static int DeleteUnusedCodes() {
-			string command=@"SELECT CodeNum,ProcCode FROM procedurecode
-				WHERE NOT EXISTS(SELECT * FROM procedurelog WHERE procedurelog.CodeNum=procedurecode.CodeNum)";
-			DataTable table=General.GetTable(command);
-			int codenum;
-			string proccode;
-			int rowsaffected=0;
-			for(int i=0;i<table.Rows.Count;i++) {
-				codenum=PIn.PInt(table.Rows[i]["CodeNum"].ToString());
-				proccode=PIn.PString(table.Rows[i]["ProcCode"].ToString());
-				if(!Regex.IsMatch(proccode,"^D([0-9]{4})$")) {
-					continue;//ignore anything but D####
-				}
-				//make sure it's not used in fees
-				command="SELECT COUNT(*) FROM fee WHERE CodeNum="+POut.PInt(codenum);
-				if(General.GetCount(command)!="0") {
-					continue;
-				}
-				command="DELETE FROM procedurecode WHERE CodeNum="+POut.PInt(codenum);
-				rowsaffected+=General.NonQ(command);
-			}
-			return rowsaffected;
-		}
 
-		///<summary>Checks other tables which use ProcCodes elsewhere in the database and deletes codes from the procedurecode table which are not referenced in any of the other tables. This is used in FormLicenseMissing.cs.</summary>
-		public static void DeleteUnusedProcCodes(){
-			//First collect the individual proc codes currently in use from the various different tables.
-			const string CodePattern="^D([0-9]{4})$";
-			bool[] ProcCodesUsed=new bool[10000];//All elements start out as false automatically (C# feature).
-			string command="SELECT CodeStart,CodeEnd from appointmentrule";
-			DataTable table=General.GetTable(command);
-			for(int i=0;i<table.Rows.Count;i++){
-				Match mStart=(new Regex(procCodePattern,RegexOptions.IgnoreCase)).Match(
-					PIn.PString(table.Rows[i]["CodeStart"].ToString()));
-				Match mEnd=(new Regex(CodePattern,RegexOptions.IgnoreCase)).Match(
-					PIn.PString(table.Rows[i]["CodeEnd"].ToString()));
-				if(mStart.Success && mEnd.Success){
-					int startNum=Convert.ToInt32(mStart.Result("$1"));
-					int endNum=Convert.ToInt32(mEnd.Result("$1"));
-					for(int j=startNum;j<=endNum;j++){
-						CodesUsed[j]=true;
-					}
-				}
-			}
-			//References to Codes which should be directly kept (as opposed to ranges shown above).
-			string[] simpleCodeReferenceTables=new string[] {
-				"autocodeitem",
-				"benefit",
-				"fee",
-				"procbuttonitem",
-				"procedurelog",
-				//"proctp",
-				//"repeatcharge",
-			};
-			for(int i=0;i<simpleCodeReferenceTables.Length;i++){
-			string command="SELECT DISTINCT Code FROM procedurelog";
-			DataTable table=General.GetTable(command);
-			for(int j=0;j<table.Rows.Count;j++){
-				if(!Regex.IsMatch(PIn.PString(table.Rows[j][0].ToString()),"^D([0-9]{4})$")){
-					continue;
-				}
-					//Match m=(new Regex(CodePattern,RegexOptions.IgnoreCase)).Match(
-					//	PIn.PString(table.Rows[j]["Code"].ToString()));
-					//if(m.Success){
-				int codenum=Convert.ToInt32(m.Result("$1"));
-				CodesUsed[adanum]=true;
-					//}
-				//}
-			}
-			//Now remove unused codes (those marked false in the CodesUsed array).
-			command="";
-			for(int i=0;i<CodesUsed.Length;i++){
-				if(!CodesUsed[i]){
-					string Code="D"+i.ToString().PadLeft(4,'0');
-					if(command==""){//We only construct the command if there are codes to be deleted.
-						command="DELETE FROM procedurecode WHERE Code='"+Code+"'";
-					}else{
-						command+=" OR Code='"+Code+"'";
-					}
-				}
-			}
-			General.NonQEx(command);
-		}
 
-		///<summary>Returns the list of all Codes which are in the form D####.</summary>
-		public static string[] GetAllStandardCodes(){
-			//Get all values currently in the Cocde column.
-			string command="SELECT Code from procedurecode";
-			DataTable table=General.GetTableEx(command);
-			//Now weed-out values not in the actual code form (D####).
-			ArrayList resultList=new ArrayList();
-			for(int i=0;i<table.Rows.Count;i++){
-				string Code=PIn.PString(table.Rows[i]["Code"].ToString());
-				Match m=(new Regex("^D[0-9]{4}$",RegexOptions.IgnoreCase)).Match(Code);
-				if(m.Success){
-					resultList.Add(Code);
-				}
-			}
-			//Finally, convert the list into an array.
-			return (string[])resultList.ToArray(typeof(string));
-		}*/
 
 	}
 
