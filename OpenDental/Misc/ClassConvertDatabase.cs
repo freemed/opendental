@@ -5824,7 +5824,18 @@ namespace OpenDental{
 					command="UPDATE procedurecode SET SubstitutionCode='D2161' WHERE ProcCode='D2394'";//4+ surf
 					General.NonQEx(command);
 				}
-
+				//after r811
+				command="DROP TABLE IF EXISTS proccodenote";
+				General.NonQEx(command);
+				command=@"CREATE TABLE proccodenote (
+					ProcCodeNoteNum int NOT NULL auto_increment,
+					CodeNum int NOT NULL,
+					ProvNum int NOT NULL,
+					Note text,
+					ProcTime varchar(255),				
+					PRIMARY KEY (ProcCodeNoteNum)
+					) DEFAULT CHARSET=utf8";
+				General.NonQEx(command);
 
 				
 		

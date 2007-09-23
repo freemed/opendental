@@ -173,6 +173,7 @@
     <Compile Include="Data Interface\CanadianExtracts.cs" />
     <Compile Include="Data Interface\ChartModule.cs" />
     <Compile Include="Data Interface\CanadianNetworks.cs" />
+    <Compile Include="Data Interface\ProcCodeNotes.cs" />
     <Compile Include="Data Interface\MiscData.cs">
       <SubType>Code</SubType>
     </Compile>
