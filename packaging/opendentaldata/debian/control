@@ -7,8 +7,7 @@ Standards-Version: 3.5.9
 
 Package: opendentaldata
 Architecture: all
-Depends: dbconfig-common
-Recommends: mysql-server
+Depends: dbconfig-common, mysql-server
 Description: Open Dental Database
  *** Unofficial package from frederik.carlier@carlier-online.be ***
  .
