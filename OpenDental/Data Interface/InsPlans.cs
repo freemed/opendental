@@ -23,7 +23,7 @@ namespace OpenDental {
 				+"FeeSched,ReleaseInfo,AssignBen,PlanType,ClaimFormNum,UseAltCode,"
 				+"ClaimsUseUCR,CopayFeeSched,SubscriberID,"
 				+"EmployerNum,CarrierNum,AllowedFeeSched,TrojanID,DivisionNo,BenefitNotes,IsMedical,SubscNote,FilingCode,"
-				+"DentaideCardSequence,ShowBaseUnits) VALUES(";
+				+"DentaideCardSequence,ShowBaseUnits,DedBeforePerc) VALUES(";
 			if(PrefB.RandomKeys) {
 				command+="'"+POut.PInt(plan.PlanNum)+"', ";
 			}
@@ -53,7 +53,8 @@ namespace OpenDental {
 				+"'"+POut.PString(plan.SubscNote)+"', "
 				+"'"+POut.PInt((int)plan.FilingCode)+"', "
 				+"'"+POut.PInt((int)plan.DentaideCardSequence)+"', "
-			    +"'"+POut.PBool(plan.ShowBaseUnits)+"')";
+				+"'"+POut.PBool(plan.ShowBaseUnits)+"', "
+				+"'"+POut.PBool(plan.DedBeforePerc)+"')";
 			if(PrefB.RandomKeys) {
 				General.NonQ(command);
 			}
@@ -135,6 +136,7 @@ namespace OpenDental {
 				+",FilingCode='"     +POut.PInt((int)plan.FilingCode)+"'"
 				+",DentaideCardSequence='" +POut.PInt(plan.DentaideCardSequence)+"'"
 				+",ShowBaseUnits='"  +POut.PBool(plan.ShowBaseUnits)+"'"
+				+",DedBeforePerc='"  +POut.PBool(plan.DedBeforePerc)+"'"
 				+" WHERE PlanNum = '"+POut.PInt   (plan.PlanNum)+"'";
 			General.NonQ(command);
 		}
@@ -157,7 +159,8 @@ namespace OpenDental {
 				+",AllowedFeeSched= '" +POut.PInt   (plan.AllowedFeeSched)+"'"
 				+",TrojanID = '"       +POut.PString(plan.TrojanID)+"'"
 				+",FilingCode = '"     +POut.PInt   ((int)plan.FilingCode)+"'"
-				+",ShowBaseUnits = '"  +POut.PBool   (plan.ShowBaseUnits)+"'"
+				+",ShowBaseUnits = '"  +POut.PBool  (plan.ShowBaseUnits)+"'"
+				+",ShowBaseUnits = '"  +POut.PBool  (plan.DedBeforePerc)+"'"
 				+" WHERE "
 				+"EmployerNum = '"        +POut.PInt   (like.EmployerNum)+"' "
 				+"AND GroupName = '"      +POut.PString(like.GroupName)+"' "
@@ -274,7 +277,8 @@ namespace OpenDental {
 				PlanList[i].SubscNote      = PIn.PString(table.Rows[i][23].ToString());
 				PlanList[i].FilingCode     = (InsFilingCode)PIn.PInt(table.Rows[i][24].ToString());
 				PlanList[i].DentaideCardSequence= PIn.PInt(table.Rows[i][25].ToString());
-				PlanList[i].ShowBaseUnits  = PIn.PBool   (table.Rows[i][26].ToString());
+				PlanList[i].ShowBaseUnits  = PIn.PBool  (table.Rows[i][26].ToString());
+				PlanList[i].DedBeforePerc  = PIn.PBool  (table.Rows[i][27].ToString());
 			}
 			return PlanList;
 		}

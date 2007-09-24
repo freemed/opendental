@@ -5836,7 +5836,9 @@ namespace OpenDental{
 					PRIMARY KEY (ProcCodeNoteNum)
 					) DEFAULT CHARSET=utf8";
 				General.NonQEx(command);
-
+				//after r819
+				command="ALTER TABLE insplan ADD DedBeforePerc TINYINT(1) NOT NULL";
+				General.NonQEx(command);
 				
 		
 

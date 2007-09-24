@@ -59,6 +59,8 @@ namespace OpenDentBusiness{
 		public int DentaideCardSequence;
 		///<summary>If checked, the units Qty will show the base units assigned to a procedure on the claim form.</summary>
 		public bool ShowBaseUnits;
+		///<Summary>Apply deductible before percentage when calculating estimates.</Summary>
+		public bool DedBeforePerc;
 		///<summary>This is not a database column.  It is just used to display the number of plans with the same info.</summary>
 		public int NumberPlans;
 
@@ -83,36 +85,7 @@ namespace OpenDentBusiness{
 
 		///<summary>Returns a copy of this InsPlan.</summary>
 		public InsPlan Copy(){
-			InsPlan p=new InsPlan();
-			p.PlanNum=PlanNum;
-			p.Subscriber=Subscriber;
-			p.DateEffective=DateEffective;
-			p.DateTerm=DateTerm;
-			p.GroupName=GroupName;
-			p.GroupNum=GroupNum;
-			p.PlanNote=PlanNote;
-			p.FeeSched=FeeSched;
-			p.ReleaseInfo=ReleaseInfo;
-			p.AssignBen=AssignBen;
-			p.PlanType=PlanType;
-			p.ClaimFormNum=ClaimFormNum;
-			p.UseAltCode=UseAltCode;
-			p.ClaimsUseUCR=ClaimsUseUCR;
-			p.CopayFeeSched=CopayFeeSched;
-			p.SubscriberID=SubscriberID;
-			p.EmployerNum=EmployerNum;
-			p.CarrierNum=CarrierNum;
-			p.AllowedFeeSched=AllowedFeeSched;
-			p.TrojanID=TrojanID;
-			p.DivisionNo=DivisionNo;
-			p.BenefitNotes=BenefitNotes;
-			p.IsMedical=IsMedical;
-			p.SubscNote=SubscNote;
-			p.FilingCode=FilingCode;
-			p.DentaideCardSequence=DentaideCardSequence;
-			p.ShowBaseUnits=ShowBaseUnits;
-			p.NumberPlans=NumberPlans;
-			return p;
+			return (InsPlan)this.MemberwiseClone();
 		}
 
 		
