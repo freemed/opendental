@@ -1756,18 +1756,12 @@ namespace OpenDental{
 			if(aptCur.AptStatus==ApptStatus.UnschedList){
 				aptCur.AptStatus=ApptStatus.Scheduled;
 			}
-			if(curOp.ProvDentist!=0){//dentist assigned to op
+			if(curOp.ProvDentist!=0) {//if no dentist is assigned to op, then keep the original dentist.  All appts must have prov.
 				aptCur.ProvNum=curOp.ProvDentist;
 			}
-			if(curOp.ProvHygienist!=0){//hygienist assigned to op
-				aptCur.ProvHyg=curOp.ProvHygienist;
-			}
-			if((curOp.ProvHygienist!=0 && curOp.IsHygiene) || (curOp.ProvDentist!=0 && !curOp.IsHygiene)){
-				aptCur.IsHygiene=curOp.IsHygiene;
-			}
-			if(curOp.ClinicNum!=0) {
-				aptCur.ClinicNum=curOp.ClinicNum;
-			}
+			aptCur.ProvHyg=curOp.ProvHygienist;
+			aptCur.IsHygiene=curOp.IsHygiene;
+			aptCur.ClinicNum=curOp.ClinicNum;
 			if(aptCur.AptStatus==ApptStatus.Planned){//if Planned appt is on pinboard
 				LabCase lab=LabCases.GetForPlanned(aptCur.AptNum);
 				aptCur.NextAptNum=aptCur.AptNum;
@@ -1819,6 +1813,7 @@ namespace OpenDental{
 					return;
 				}
 			}
+			Procedures.SetProvidersInAppointment(aptCur,Procedures.GetProcsForSingle(aptCur.AptNum,false));
 			TempApptSingle.Dispose();
 			PinApptSingle.Visible=false;
 			ContrApptSingle.PinBoardIsSelected=false;
@@ -2511,24 +2506,19 @@ namespace OpenDental{
 			if(apt.AptStatus==ApptStatus.Broken && timeWasMoved){
 				apt.AptStatus=ApptStatus.Scheduled;
 			}
-			if(curOp.ProvDentist!=0){//dentist assigned to op
+			if(curOp.ProvDentist!=0){//if no dentist is assigned to op, then keep the original dentist.  All appts must have prov.
 				apt.ProvNum=curOp.ProvDentist;
 			}
-			if(curOp.ProvHygienist!=0){//hygienist assigned to op
-				apt.ProvHyg=curOp.ProvHygienist;
-			}
-			if((curOp.ProvHygienist!=0 && curOp.IsHygiene) || (curOp.ProvDentist!=0 && !curOp.IsHygiene)){
-				apt.IsHygiene=curOp.IsHygiene;
-			}
-			if(curOp.ClinicNum!=0) {
-				apt.ClinicNum=curOp.ClinicNum;
-			}
+			apt.ProvHyg=curOp.ProvHygienist;
+			apt.IsHygiene=curOp.IsHygiene;
+			apt.ClinicNum=curOp.ClinicNum;
 			try{
 				Appointments.InsertOrUpdate(apt,aptOld,false);
 			}
 			catch(ApplicationException ex){
 				MessageBox.Show(ex.Message);
 			}
+			Procedures.SetProvidersInAppointment(apt,Procedures.GetProcsForSingle(apt.AptNum,false));
 			SecurityLogs.MakeLogEntry(Permissions.AppointmentMove,PatCurNum,
 				PatCurName+", "
 				+apt.ProcDescript
@@ -2599,9 +2589,10 @@ namespace OpenDental{
 				if(FormPS.SelectedPatNum!=PatCurNum){//if the patient was changed
 					RefreshModulePatient(FormPS.SelectedPatNum);
 				}
+				Appointment apt;
 				if(FormPS.NewPatientAdded){
 					Patient pat=Patients.GetPat(PatCurNum);
-					Appointment apt=new Appointment();
+					apt=new Appointment();
 					apt.PatNum=PatCurNum;
 					apt.IsNewPatient=true;
 					apt.Pattern="/X/";
@@ -2622,6 +2613,13 @@ namespace OpenDental{
 					int minutes=(int)(ContrAppt.SheetClickedonMin/ContrApptSheet.MinPerIncr)*ContrApptSheet.MinPerIncr;
 					apt.AptDateTime=new DateTime(d.Year,d.Month,d.Day,ContrAppt.SheetClickedonHour,minutes,0);
 					apt.Op=SheetClickedonOp;
+					Operatory curOp=Operatories.GetOperatory(apt.Op);
+					if(curOp.ProvDentist!=0) {//if no dentist is assigned to op, then keep the original dentist.  All appts must have prov.
+						apt.ProvNum=curOp.ProvDentist;
+					}
+					apt.ProvHyg=curOp.ProvHygienist;
+					apt.IsHygiene=curOp.IsHygiene;
+					apt.ClinicNum=curOp.ClinicNum;
 					try{
 						Appointments.InsertOrUpdate(apt,null,true);
 					}
@@ -3196,8 +3194,14 @@ namespace OpenDental{
 			Patient pat = fam.GetPatient(apt.PatNum);
 			InsPlan[] PlanList = InsPlans.Refresh(fam);
 			PatPlan[] PatPlanList = PatPlans.Refresh(apt.PatNum);
-
-			if (apt.AptStatus != ApptStatus.PtNote) {//shouldn't ever happen, but don't allow procedures to be completed from notes
+			if (apt.AptStatus == ApptStatus.PtNote) {
+				Appointments.SetAptStatus(apt.AptNum,ApptStatus.PtNoteCompleted);
+				SecurityLogs.MakeLogEntry(Permissions.AppointmentEdit,apt.PatNum,
+					pat.GetNameLF() + ", "
+					+ apt.AptDateTime.ToString() + ", "
+					+ "Pt NOTE Set Complete");
+			}
+			else {//shouldn't ever happen, but don't allow procedures to be completed from notes
 				Appointments.SetAptStatus(apt.AptNum, ApptStatus.Complete);
 				Procedures.SetCompleteInAppt(apt, PlanList, PatPlanList);//loops through each proc
 				SecurityLogs.MakeLogEntry(Permissions.AppointmentEdit, apt.PatNum,
@@ -3206,15 +3210,6 @@ namespace OpenDental{
 					+ apt.AptDateTime.ToString() + ", "
 					+ "Set Complete");
 			}
-			else {
-				Appointments.SetAptStatus(apt.AptNum, ApptStatus.PtNoteCompleted);
-				SecurityLogs.MakeLogEntry(Permissions.AppointmentEdit, apt.PatNum,
-					pat.GetNameLF() + ", "
-					+ apt.AptDateTime.ToString() + ", "
-					+ "Pt NOTE Set Complete");
-			
-			}
-
 			ModuleSelected(pat.PatNum);
 			SetInvalid();
 			SecurityLogs.MakeLogEntry(Permissions.ProcComplCreate,pat.PatNum,

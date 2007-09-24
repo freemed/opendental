@@ -1070,18 +1070,39 @@ namespace OpenDental{
 			strBTime=new StringBuilder("");
 			string procTime="";
 			int codeNum;
-			int provNum;
+			int dentNum=Patients.GetProvNum(pat);
+			int hygNum=Patients.GetProvNum(pat);
+			if(comboProvNum.SelectedIndex!=-1){
+				dentNum=Providers.List[comboProvNum.SelectedIndex].ProvNum;
+				hygNum=Providers.List[comboProvNum.SelectedIndex].ProvNum;
+			}
+			if(comboProvHyg.SelectedIndex!=0) {
+				hygNum=Providers.List[comboProvHyg.SelectedIndex-1].ProvNum;
+			}
+			ProcedureCode procCode;
 			if(gridProc.SelectedIndices.Length==1) {
 				codeNum=PIn.PInt(DS.Tables["Procedure"].Rows[gridProc.SelectedIndices[0]]["CodeNum"].ToString());
-				provNum=PIn.PInt(DS.Tables["Procedure"].Rows[gridProc.SelectedIndices[0]]["ProvNum"].ToString());
-				procTime=ProcCodeNotes.GetTimePattern(provNum,codeNum);
+				//we're not going to use the actual procedure.ProvNum, but instead base it on the providers selected for this appt.
+				//The actual provNums will be reset on closing.
+				procCode=ProcedureCodes.GetProcCode(codeNum);
+				if(procCode.IsHygiene) {//hygiene proc
+					procTime=ProcCodeNotes.GetTimePattern(hygNum,codeNum);
+				}
+				else {//dentist proc
+					procTime=ProcCodeNotes.GetTimePattern(dentNum,codeNum);
+				}
 				strBTime.Append(procTime);
 			}
 			else {//multiple procs or no procs
 				for(int i=0;i<gridProc.SelectedIndices.Length;i++) {
 					codeNum=PIn.PInt(DS.Tables["Procedure"].Rows[gridProc.SelectedIndices[i]]["CodeNum"].ToString());
-					provNum=PIn.PInt(DS.Tables["Procedure"].Rows[gridProc.SelectedIndices[i]]["ProvNum"].ToString());
-					procTime=ProcCodeNotes.GetTimePattern(provNum,codeNum);
+					procCode=ProcedureCodes.GetProcCode(codeNum);
+					if(procCode.IsHygiene) {//hygiene proc
+						procTime=ProcCodeNotes.GetTimePattern(hygNum,codeNum);
+					}
+					else {//dentist proc
+						procTime=ProcCodeNotes.GetTimePattern(dentNum,codeNum);
+					}
 					if(procTime.Length<2){
 						continue;
 					}
@@ -1442,6 +1463,9 @@ namespace OpenDental{
 					SecurityLogs.MakeLogEntry(Permissions.ProcComplCreate,pat.PatNum,
 						pat.GetNameLF()+" "+AptCur.AptDateTime.ToShortDateString());
 				}
+			}
+			else{
+				Procedures.SetProvidersInAppointment(AptCur,Procedures.GetProcsForSingle(AptCur.AptNum,false));
 			}
 			return true;
 		}

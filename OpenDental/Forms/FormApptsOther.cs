@@ -649,6 +649,19 @@ namespace OpenDental{
 				AptCur.AptDateTime=new DateTime(d.Year,d.Month,d.Day
 					,ContrAppt.SheetClickedonHour,minutes,0);
 				AptCur.Op=ContrAppt.SheetClickedonOp;
+				Operatory curOp=Operatories.GetOperatory(AptCur.Op);
+				if(curOp.ProvDentist!=0) {
+					AptCur.ProvNum=curOp.ProvDentist;
+				}
+				AptCur.ProvHyg=curOp.ProvHygienist;
+				AptCur.IsHygiene=curOp.IsHygiene;
+				AptCur.ClinicNum=curOp.ClinicNum;
+				try {
+					Appointments.InsertOrUpdate(AptCur,null,true);
+				}
+				catch(ApplicationException ex) {
+					MessageBox.Show(ex.Message);
+				}
 			}
 			else{
 				//new appt will be placed on pinboard instead of specific time

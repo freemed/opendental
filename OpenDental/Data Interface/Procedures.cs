@@ -257,7 +257,7 @@ namespace OpenDental{
 			return List;
 		}
 
-		///<summary>Returns a ProcDesc(AptNum,ProcLines,Production) struct for a single appointment directly from the database</summary>
+		///<summary>Gets Procedures for a single appointment directly from the database</summary>
 		public static Procedure[] GetProcsForSingle(int aptNum, bool isPlanned){
 			string command;
 			if(isPlanned){
@@ -368,7 +368,7 @@ namespace OpenDental{
 			return new Procedure();
 		}
 
-		///<summary>Loops through each proc. Does not add notes to a procedure that already has notes. Used twice, security checked in both places before calling this.</summary>
+		///<summary>Loops through each proc. Does not add notes to a procedure that already has notes. Used twice, security checked in both places before calling this.  Also sets provider for each proc.</summary>
 		public static void SetCompleteInAppt(Appointment apt,InsPlan[] PlanList,PatPlan[] patPlans){
 			Procedure[] ProcList=Procedures.Refresh(apt.PatNum);
 			ClaimProc[] ClaimProcList=ClaimProcs.Refresh(apt.PatNum);
@@ -431,6 +431,29 @@ namespace OpenDental{
 			//	Recalls.Reset(apt.PatNum);//this also synchs recall
 			//}
 			Recalls.Synch(apt.PatNum);
+		}
+
+		///<Summary>Supply the list of procedures attached to the appointment.  It will loop through each and assign the correct provider.  Also sets clinic.</Summary>
+		public static void SetProvidersInAppointment(Appointment apt,Procedure[] procList){
+			ProcedureCode procCode;
+			Procedure changedProc;
+			for(int i=0;i<procList.Length;i++){
+				changedProc=procList[i].Copy();
+				if(apt.ProvHyg!=0) {//if the appointment has a hygiene provider
+					procCode=ProcedureCodes.GetProcCode(procList[i].CodeNum);
+					if(procCode.IsHygiene) {//hygiene proc
+						changedProc.ProvNum=apt.ProvHyg;
+					}
+					else{//dentist proc
+						changedProc.ProvNum=apt.ProvNum;
+					}
+				}
+				else {//same provider for every procedure
+					changedProc.ProvNum=apt.ProvNum;
+				}
+				changedProc.ClinicNum=apt.ClinicNum;
+				Procedures.Update(changedProc,procList[i]);//won't go to db unless a field has changed.
+			}
 		}
 
 		///<summary>Does not make any calls to db.</summary>
