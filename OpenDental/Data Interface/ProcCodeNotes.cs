@@ -10,10 +10,21 @@ using System.Text.RegularExpressions;
 namespace OpenDental{
 	///<summary></summary>
 	public class ProcCodeNotes{
+		///<summary>All notes for all procedurecodes.</summary>
+		public static List<ProcCodeNote> Listt;
+
+		public static void Refresh(){
+			string command="SELECT * FROM proccodenote";
+			Listt=RefreshAndFill(command);
+		}
 
 		///<summary></summary>
 		public static List<ProcCodeNote> GetList(int codeNum) {
 			string command="SELECT * FROM proccodenote WHERE CodeNum="+POut.PInt(codeNum);
+			return RefreshAndFill(command);
+		}
+
+		private static List<ProcCodeNote> RefreshAndFill(string command){
 			DataTable table=General.GetTable(command);
 			List<ProcCodeNote> retVal=new List<ProcCodeNote>();
 			ProcCodeNote note;
@@ -55,6 +66,19 @@ namespace OpenDental{
 			General.NonQ(command);
 		}
 
+		///<summary>Gets the note for the given provider, if one exists.  Otherwise, gets the proccode.defaultnote.</summary>
+		public static string GetNote(int provNum,int codeNum){
+			for(int i=0;i<Listt.Count;i++){
+				if(Listt[i].ProvNum!=provNum){
+					continue;
+				}
+				if(Listt[i].CodeNum!=codeNum){
+					continue;
+				}
+				return Listt[i].Note;
+			}
+			return ProcedureCodes.GetProcCode(codeNum).DefaultNote;
+		}
 
 
 

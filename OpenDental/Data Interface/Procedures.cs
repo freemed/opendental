@@ -407,10 +407,6 @@ namespace OpenDental{
 					ProcList[i].DateEntryC=DateTime.Now;//this triggers it to set to server time NOW().
 				}
 				ProcList[i].PlaceService=(PlaceOfService)PrefB.GetInt("DefaultProcedurePlaceService");
-				//if procedure was already complete, then don't add more notes.
-				if(oldProc.ProcStatus!=ProcStat.C){
-					ProcList[i].Note+=procCode.DefaultNote;
-				}
 				ProcList[i].ClinicNum=apt.ClinicNum;
 				ProcList[i].PlaceService=Clinics.GetPlaceService(apt.ClinicNum);
 				if(apt.ProvHyg!=0){//if the appointment has a hygiene provider
@@ -423,6 +419,10 @@ namespace OpenDental{
 				}
 				else{//same provider for every procedure
 					ProcList[i].ProvNum=apt.ProvNum;
+				}
+				//if procedure was already complete, then don't add more notes.
+				if(oldProc.ProcStatus!=ProcStat.C){
+					ProcList[i].Note+=ProcCodeNotes.GetNote(ProcList[i].ProvNum,ProcList[i].CodeNum);
 				}
 				Update(ProcList[i],oldProc);
 				ComputeEstimates(ProcList[i],apt.PatNum,ClaimProcList,false,PlanList,patPlans,benefitList);

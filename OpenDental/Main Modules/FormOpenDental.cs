@@ -1326,6 +1326,7 @@ namespace OpenDental{
 			}
 			if((itypes & InvalidTypes.ProcCodes)==InvalidTypes.ProcCodes){
 				ProcedureCodes.Refresh();
+				ProcCodeNotes.Refresh();
 			}
 			if((itypes & InvalidTypes.Programs)==InvalidTypes.Programs){
 				Programs.Refresh();

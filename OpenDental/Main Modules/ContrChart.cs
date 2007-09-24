@@ -3927,18 +3927,18 @@ namespace OpenDental{
 			else
 				ProcCur.Priority=DefB.Short[(int)DefCat.TxPriorities][comboPriority.SelectedIndex-1].DefNum;
 			ProcCur.ProcStatus=newStatus;
-			if(newStatus==ProcStat.C){
-				ProcCur.Note=ProcedureCodes.GetProcCode(ProcCur.CodeNum).DefaultNote;
-			}
-			else{
-				ProcCur.Note="";
-			}
 			if(ProcedureCodes.GetProcCode(ProcCur.CodeNum).IsHygiene
 				&& PatCur.SecProv != 0){
 				ProcCur.ProvNum=PatCur.SecProv;
 			}
 			else{
 				ProcCur.ProvNum=PatCur.PriProv;
+			}
+			if(newStatus==ProcStat.C) {
+				ProcCur.Note=ProcCodeNotes.GetNote(ProcCur.ProvNum,ProcCur.CodeNum);
+			}
+			else {
+				ProcCur.Note="";
 			}
 			ProcCur.ClinicNum=PatCur.ClinicNum;
 			if(listDx.SelectedIndex!=-1)
@@ -3996,18 +3996,18 @@ namespace OpenDental{
 			else
 				ProcCur.Priority=DefB.Short[(int)DefCat.TxPriorities][comboPriority.SelectedIndex-1].DefNum;
 			ProcCur.ProcStatus=newStatus;
-			if(newStatus==ProcStat.C) {
-				ProcCur.Note=ProcedureCodes.GetProcCode(ProcCur.CodeNum).DefaultNote;
-			}
-			else {
-				ProcCur.Note="";
-			}
 			if(ProcedureCodes.GetProcCode(ProcCur.CodeNum).IsHygiene
 				&& PatCur.SecProv != 0){
 				ProcCur.ProvNum=PatCur.SecProv;
 			}
 			else{
 				ProcCur.ProvNum=PatCur.PriProv;
+			}
+			if(newStatus==ProcStat.C) {
+				ProcCur.Note=ProcCodeNotes.GetNote(ProcCur.ProvNum,ProcCur.CodeNum);
+			}
+			else {
+				ProcCur.Note="";
 			}
 			ProcCur.ClinicNum=PatCur.ClinicNum;
 			if(listDx.SelectedIndex!=-1)
@@ -5289,7 +5289,7 @@ namespace OpenDental{
 				procCode=ProcedureCodes.GetProcCode(procCur.CodeNum);
 				if(procOld.ProcStatus!=ProcStat.C) {
 					//if procedure was already complete, then don't add more notes.
-					procCur.Note+=procCode.DefaultNote;//note wasn't complete, so add notes
+					procCur.Note+=ProcCodeNotes.GetNote(procCur.ProvNum,procCur.CodeNum);//note wasn't complete, so add notes
 				}
 				procCur.DateEntryC=DateTime.Now;
 				if(procCur.AptNum!=0) {//if attached to an appointment

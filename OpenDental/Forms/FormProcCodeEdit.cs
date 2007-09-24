@@ -306,7 +306,7 @@ namespace OpenDental{
 			this.label3.Name = "label3";
 			this.label3.Size = new System.Drawing.Size(388,29);
 			this.label3.TabIndex = 28;
-			this.label3.Text = "There is no way to delete a code once created because if might have been used som" +
+			this.label3.Text = "There is no way to delete a code once created because it might have been used som" +
     "eplace.  Instead, move it to a category like \"obsolete\"";
 			// 
 			// label9
@@ -398,7 +398,7 @@ namespace OpenDental{
 			this.textNote.Name = "textNote";
 			this.textNote.QuickPasteType = OpenDentBusiness.QuickPasteType.Procedure;
 			this.textNote.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-			this.textNote.Size = new System.Drawing.Size(540,104);
+			this.textNote.Size = new System.Drawing.Size(550,104);
 			this.textNote.TabIndex = 40;
 			// 
 			// checkIsProsth
@@ -585,7 +585,7 @@ namespace OpenDental{
 			this.butAddNote.CornerRadius = 4F;
 			this.butAddNote.Image = global::OpenDental.Properties.Resources.Add;
 			this.butAddNote.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butAddNote.Location = new System.Drawing.Point(590,450);
+			this.butAddNote.Location = new System.Drawing.Point(600,450);
 			this.butAddNote.Name = "butAddNote";
 			this.butAddNote.Size = new System.Drawing.Size(88,26);
 			this.butAddNote.TabIndex = 60;
