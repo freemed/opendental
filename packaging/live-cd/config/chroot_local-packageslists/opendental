@@ -4,4 +4,4 @@
 #<include> gnome-core
 
 # Mozilla
-libmono-oracle2.0-cil opendental
+libmono-oracle2.0-cil mysql-server opendental opendentaldata
