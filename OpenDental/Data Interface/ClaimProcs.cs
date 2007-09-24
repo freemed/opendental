@@ -210,6 +210,7 @@ namespace OpenDental{
 					cp.BaseEst=carrierAllowed;
 				}
 			}
+			cp.DedBeforePerc=plan.DedBeforePerc;
 			//dedApplied is never recalculated here
 			//deductible is initially 0 anyway, so this calculation works.
 			//Once there is a deductible included, this calculation would come out different, which is also ok.

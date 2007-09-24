@@ -165,7 +165,7 @@ namespace OpenDental{
 					proc.ProcStatus=ProcStat.C;
 					proc.ProvNum=PrefB.GetInt("PracticeDefaultProv");
 					proc.MedicalCode=ProcedureCodes.GetProcCode(proc.CodeNum).MedicalCode;
-					proc.MedicalCode = ProcedureCodes.GetProcCode(proc.CodeNum).BaseUnits;
+					proc.BaseUnits = ProcedureCodes.GetProcCode(proc.CodeNum).BaseUnits;
 					Procedures.Insert(proc);//no recall synch needed because dental offices don't use this feature
 					countAdded++;
 					possibleDate=possibleDate.AddMonths(1);

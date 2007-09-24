@@ -809,7 +809,7 @@ namespace OpenDental{
 				ProcCur.ClinicNum=patCur.ClinicNum;
 				//nextaptnum
 				ProcCur.MedicalCode=ProcedureCodes.GetProcCode(ProcCur.CodeNum).MedicalCode;
-				ProcCur.MedicalCode = ProcedureCodes.GetProcCode(ProcCur.CodeNum).BaseUnits;
+				ProcCur.BaseUnits = ProcedureCodes.GetProcCode(ProcCur.CodeNum).BaseUnits;
 				Procedures.Insert(ProcCur);//no recall synch required
 				Procedures.ComputeEstimates(ProcCur,patCur.PatNum,new ClaimProc[0],false,planList,patPlanList,benefitList);
 			}
