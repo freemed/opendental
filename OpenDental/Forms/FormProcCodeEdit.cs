@@ -65,7 +65,10 @@ namespace OpenDental{
 		private Label label18;
 		private TextBox textSubstitutionCode;
 		private Label label19;
+		private ODGrid gridNotes;
+		private OpenDental.UI.Button butAddNote;
 		private ProcedureCode ProcCode;
+		private List<ProcCodeNote> NoteList;
 
 		///<summary>The procedure code must have already been insterted into the database.</summary>
 		public FormProcCodeEdit(ProcedureCode procCode){
@@ -135,6 +138,8 @@ namespace OpenDental{
 			this.label18 = new System.Windows.Forms.Label();
 			this.textSubstitutionCode = new System.Windows.Forms.TextBox();
 			this.label19 = new System.Windows.Forms.Label();
+			this.gridNotes = new OpenDental.UI.ODGrid();
+			this.butAddNote = new OpenDental.UI.Button();
 			this.SuspendLayout();
 			// 
 			// label1
@@ -148,7 +153,7 @@ namespace OpenDental{
 			// 
 			// label4
 			// 
-			this.label4.Location = new System.Drawing.Point(474,261);
+			this.label4.Location = new System.Drawing.Point(474,234);
 			this.label4.Name = "label4";
 			this.label4.Size = new System.Drawing.Size(100,14);
 			this.label4.TabIndex = 3;
@@ -166,9 +171,9 @@ namespace OpenDental{
 			// 
 			// label6
 			// 
-			this.label6.Location = new System.Drawing.Point(2,16);
+			this.label6.Location = new System.Drawing.Point(2,58);
 			this.label6.Name = "label6";
-			this.label6.Size = new System.Drawing.Size(53,54);
+			this.label6.Size = new System.Drawing.Size(53,39);
 			this.label6.TabIndex = 5;
 			this.label6.Text = "Time Pattern";
 			this.label6.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
@@ -193,7 +198,7 @@ namespace OpenDental{
 			// 
 			// label10
 			// 
-			this.label10.Location = new System.Drawing.Point(54,377);
+			this.label10.Location = new System.Drawing.Point(43,354);
 			this.label10.Name = "label10";
 			this.label10.Size = new System.Drawing.Size(148,14);
 			this.label10.TabIndex = 9;
@@ -208,7 +213,7 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(830,569);
+			this.butOK.Location = new System.Drawing.Point(850,600);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75,26);
 			this.butOK.TabIndex = 10;
@@ -224,7 +229,7 @@ namespace OpenDental{
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
 			this.butCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.butCancel.Location = new System.Drawing.Point(830,611);
+			this.butCancel.Location = new System.Drawing.Point(850,636);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75,26);
 			this.butCancel.TabIndex = 11;
@@ -265,7 +270,7 @@ namespace OpenDental{
             "Sextant",
             "Arch",
             "Tooth Range"});
-			this.listTreatArea.Location = new System.Drawing.Point(476,279);
+			this.listTreatArea.Location = new System.Drawing.Point(476,252);
 			this.listTreatArea.Name = "listTreatArea";
 			this.listTreatArea.Size = new System.Drawing.Size(118,95);
 			this.listTreatArea.TabIndex = 2;
@@ -273,7 +278,7 @@ namespace OpenDental{
 			// checkSetRecall
 			// 
 			this.checkSetRecall.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkSetRecall.Location = new System.Drawing.Point(56,256);
+			this.checkSetRecall.Location = new System.Drawing.Point(45,251);
 			this.checkSetRecall.Name = "checkSetRecall";
 			this.checkSetRecall.Size = new System.Drawing.Size(284,18);
 			this.checkSetRecall.TabIndex = 5;
@@ -282,7 +287,7 @@ namespace OpenDental{
 			// checkNoBillIns
 			// 
 			this.checkNoBillIns.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkNoBillIns.Location = new System.Drawing.Point(56,279);
+			this.checkNoBillIns.Location = new System.Drawing.Point(45,271);
 			this.checkNoBillIns.Name = "checkNoBillIns";
 			this.checkNoBillIns.Size = new System.Drawing.Size(284,18);
 			this.checkNoBillIns.TabIndex = 6;
@@ -297,16 +302,16 @@ namespace OpenDental{
 			// 
 			// label3
 			// 
-			this.label3.Location = new System.Drawing.Point(262,612);
+			this.label3.Location = new System.Drawing.Point(184,669);
 			this.label3.Name = "label3";
-			this.label3.Size = new System.Drawing.Size(272,58);
+			this.label3.Size = new System.Drawing.Size(388,29);
 			this.label3.TabIndex = 28;
 			this.label3.Text = "There is no way to delete a code once created because if might have been used som" +
     "eplace.  Instead, move it to a category like \"obsolete\"";
 			// 
 			// label9
 			// 
-			this.label9.Location = new System.Drawing.Point(730,651);
+			this.label9.Location = new System.Drawing.Point(750,670);
 			this.label9.Name = "label9";
 			this.label9.Size = new System.Drawing.Size(178,28);
 			this.label9.TabIndex = 29;
@@ -316,7 +321,7 @@ namespace OpenDental{
 			// tbTime
 			// 
 			this.tbTime.BackColor = System.Drawing.SystemColors.Window;
-			this.tbTime.Location = new System.Drawing.Point(10,81);
+			this.tbTime.Location = new System.Drawing.Point(10,108);
 			this.tbTime.Name = "tbTime";
 			this.tbTime.ScrollValue = 150;
 			this.tbTime.SelectedIndices = new int[0];
@@ -327,7 +332,7 @@ namespace OpenDental{
 			// butSlider
 			// 
 			this.butSlider.BackColor = System.Drawing.SystemColors.ControlDark;
-			this.butSlider.Location = new System.Drawing.Point(12,86);
+			this.butSlider.Location = new System.Drawing.Point(12,113);
 			this.butSlider.Name = "butSlider";
 			this.butSlider.Size = new System.Drawing.Size(12,15);
 			this.butSlider.TabIndex = 31;
@@ -338,14 +343,14 @@ namespace OpenDental{
 			// 
 			// textTime2
 			// 
-			this.textTime2.Location = new System.Drawing.Point(10,647);
+			this.textTime2.Location = new System.Drawing.Point(10,674);
 			this.textTime2.Name = "textTime2";
 			this.textTime2.Size = new System.Drawing.Size(60,20);
 			this.textTime2.TabIndex = 32;
 			// 
 			// label11
 			// 
-			this.label11.Location = new System.Drawing.Point(76,651);
+			this.label11.Location = new System.Drawing.Point(76,678);
 			this.label11.Name = "label11";
 			this.label11.Size = new System.Drawing.Size(102,16);
 			this.label11.TabIndex = 33;
@@ -354,7 +359,7 @@ namespace OpenDental{
 			// checkIsHygiene
 			// 
 			this.checkIsHygiene.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkIsHygiene.Location = new System.Drawing.Point(56,302);
+			this.checkIsHygiene.Location = new System.Drawing.Point(45,291);
 			this.checkIsHygiene.Name = "checkIsHygiene";
 			this.checkIsHygiene.Size = new System.Drawing.Size(284,18);
 			this.checkIsHygiene.TabIndex = 7;
@@ -388,18 +393,18 @@ namespace OpenDental{
 			// textNote
 			// 
 			this.textNote.AcceptsReturn = true;
-			this.textNote.Location = new System.Drawing.Point(55,395);
+			this.textNote.Location = new System.Drawing.Point(44,372);
 			this.textNote.Multiline = true;
 			this.textNote.Name = "textNote";
 			this.textNote.QuickPasteType = OpenDentBusiness.QuickPasteType.Procedure;
 			this.textNote.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-			this.textNote.Size = new System.Drawing.Size(540,213);
+			this.textNote.Size = new System.Drawing.Size(540,104);
 			this.textNote.TabIndex = 40;
 			// 
 			// checkIsProsth
 			// 
 			this.checkIsProsth.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkIsProsth.Location = new System.Drawing.Point(56,325);
+			this.checkIsProsth.Location = new System.Drawing.Point(45,311);
 			this.checkIsProsth.Name = "checkIsProsth";
 			this.checkIsProsth.Size = new System.Drawing.Size(284,18);
 			this.checkIsProsth.TabIndex = 41;
@@ -428,7 +433,7 @@ namespace OpenDental{
 			this.gridFees.Location = new System.Drawing.Point(726,31);
 			this.gridFees.Name = "gridFees";
 			this.gridFees.ScrollValue = 0;
-			this.gridFees.Size = new System.Drawing.Size(199,463);
+			this.gridFees.Size = new System.Drawing.Size(199,445);
 			this.gridFees.TabIndex = 44;
 			this.gridFees.Title = "Fees";
 			this.gridFees.TranslationName = "TableProcFee";
@@ -452,7 +457,7 @@ namespace OpenDental{
 			// 
 			// labelColor
 			// 
-			this.labelColor.Location = new System.Drawing.Point(86,197);
+			this.labelColor.Location = new System.Drawing.Point(75,197);
 			this.labelColor.Name = "labelColor";
 			this.labelColor.Size = new System.Drawing.Size(293,16);
 			this.labelColor.TabIndex = 48;
@@ -462,7 +467,7 @@ namespace OpenDental{
 			// butColor
 			// 
 			this.butColor.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-			this.butColor.Location = new System.Drawing.Point(55,194);
+			this.butColor.Location = new System.Drawing.Point(44,194);
 			this.butColor.Name = "butColor";
 			this.butColor.Size = new System.Drawing.Size(30,20);
 			this.butColor.TabIndex = 47;
@@ -476,7 +481,7 @@ namespace OpenDental{
 			this.butColorClear.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butColorClear.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butColorClear.CornerRadius = 4F;
-			this.butColorClear.Location = new System.Drawing.Point(55,220);
+			this.butColorClear.Location = new System.Drawing.Point(44,220);
 			this.butColorClear.Name = "butColorClear";
 			this.butColorClear.Size = new System.Drawing.Size(75,20);
 			this.butColorClear.TabIndex = 49;
@@ -503,7 +508,7 @@ namespace OpenDental{
 			// checkIsCanadianLab
 			// 
 			this.checkIsCanadianLab.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkIsCanadianLab.Location = new System.Drawing.Point(56,348);
+			this.checkIsCanadianLab.Location = new System.Drawing.Point(45,331);
 			this.checkIsCanadianLab.Name = "checkIsCanadianLab";
 			this.checkIsCanadianLab.Size = new System.Drawing.Size(284,18);
 			this.checkIsCanadianLab.TabIndex = 52;
@@ -535,11 +540,11 @@ namespace OpenDental{
 			// 
 			// label18
 			// 
-			this.label18.Location = new System.Drawing.Point(45,78);
+			this.label18.Location = new System.Drawing.Point(56,78);
 			this.label18.Name = "label18";
-			this.label18.Size = new System.Drawing.Size(132,13);
+			this.label18.Size = new System.Drawing.Size(121,13);
 			this.label18.TabIndex = 56;
-			this.label18.Text = "Ins. Substitution Code";
+			this.label18.Text = "Ins. Subst Code";
 			this.label18.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// textSubstitutionCode
@@ -559,12 +564,42 @@ namespace OpenDental{
 			this.label19.Text = "(For posterior composites)";
 			this.label19.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
+			// gridNotes
+			// 
+			this.gridNotes.HScrollVisible = false;
+			this.gridNotes.Location = new System.Drawing.Point(44,482);
+			this.gridNotes.Name = "gridNotes";
+			this.gridNotes.ScrollValue = 0;
+			this.gridNotes.Size = new System.Drawing.Size(676,180);
+			this.gridNotes.TabIndex = 59;
+			this.gridNotes.Title = "Notes and Times for Specific Providers";
+			this.gridNotes.TranslationName = "TableProcedureNotes";
+			this.gridNotes.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridNotes_CellDoubleClick);
+			// 
+			// butAddNote
+			// 
+			this.butAddNote.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butAddNote.Autosize = true;
+			this.butAddNote.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butAddNote.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butAddNote.CornerRadius = 4F;
+			this.butAddNote.Image = global::OpenDental.Properties.Resources.Add;
+			this.butAddNote.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butAddNote.Location = new System.Drawing.Point(590,450);
+			this.butAddNote.Name = "butAddNote";
+			this.butAddNote.Size = new System.Drawing.Size(88,26);
+			this.butAddNote.TabIndex = 60;
+			this.butAddNote.Text = "Add Note";
+			this.butAddNote.Click += new System.EventHandler(this.butAddNote_Click);
+			// 
 			// FormProcCodeEdit
 			// 
 			this.AcceptButton = this.butOK;
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.CancelButton = this.butCancel;
 			this.ClientSize = new System.Drawing.Size(941,707);
+			this.Controls.Add(this.butAddNote);
+			this.Controls.Add(this.gridNotes);
 			this.Controls.Add(this.label19);
 			this.Controls.Add(this.textSubstitutionCode);
 			this.Controls.Add(this.butSlider);
@@ -674,6 +709,7 @@ namespace OpenDental{
 				listCategory.SelectedIndex=0;
 			FillTime();
 			FillFees();
+			FillNotes();
 		}
 
 		private void FillTime(){
@@ -740,6 +776,28 @@ namespace OpenDental{
 			FillFees();
 		}
 
+		private void FillNotes(){
+			NoteList=ProcCodeNotes.GetList(ProcCode.CodeNum);
+			gridNotes.BeginUpdate();
+			gridNotes.Columns.Clear();
+			ODGridColumn col=new ODGridColumn(Lan.g("TableProcedureNotes","Prov"),80);
+			gridNotes.Columns.Add(col);
+			col=new ODGridColumn(Lan.g("TableProcedureNotes","Time"),150);
+			gridNotes.Columns.Add(col);
+			col=new ODGridColumn(Lan.g("TableProcedureNotes","Note"),400);
+			gridNotes.Columns.Add(col);
+			gridNotes.Rows.Clear();
+			ODGridRow row;
+			for(int i=0;i<NoteList.Count;i++) {
+				row=new ODGridRow();
+				row.Cells.Add(Providers.GetAbbr(NoteList[i].ProvNum));
+				row.Cells.Add(NoteList[i].ProcTime);
+				row.Cells.Add(NoteList[i].Note);
+				gridNotes.Rows.Add(row);
+			}
+			gridNotes.EndUpdate();
+		}
+
 		private void tbTime_CellClicked(object sender, CellEventArgs e){
 			if(e.Row<strBTime.Length){
 				if(strBTime[e.Row]=='/'){
@@ -791,6 +849,24 @@ namespace OpenDental{
 
 		private void butColorClear_Click(object sender,EventArgs e) {
 			butColor.BackColor=Color.FromArgb(0);
+		}
+
+		private void butAddNote_Click(object sender,EventArgs e) {
+			FormProcCodeNoteEdit FormP=new FormProcCodeNoteEdit();
+			FormP.IsNew=true;
+			FormP.NoteCur=new ProcCodeNote();
+			FormP.NoteCur.CodeNum=ProcCode.CodeNum;
+			FormP.NoteCur.Note=textNote.Text;
+			FormP.NoteCur.ProcTime=strBTime.ToString();
+			FormP.ShowDialog();
+			FillNotes();
+		}
+
+		private void gridNotes_CellDoubleClick(object sender,ODGridClickEventArgs e) {
+			FormProcCodeNoteEdit FormP=new FormProcCodeNoteEdit();
+			FormP.NoteCur=NoteList[e.Row].Copy();
+			FormP.ShowDialog();
+			FillNotes();
 		}
 
 		private void butOK_Click(object sender, System.EventArgs e) {
@@ -855,5 +931,9 @@ namespace OpenDental{
 				DialogResult=DialogResult.OK;
 			}
 		}
+
+		
+
+		
 	}
 }

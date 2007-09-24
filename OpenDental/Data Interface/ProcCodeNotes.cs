@@ -50,7 +50,10 @@ namespace OpenDental{
 			General.NonQ(command);
 		}
 
-		
+		public static void Delete(int procCodeNoteNum){
+			string command="DELETE FROM proccodenote WHERE ProcCodeNoteNum = "+POut.PInt(procCodeNoteNum);
+			General.NonQ(command);
+		}
 
 
 
