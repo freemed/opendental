@@ -1070,15 +1070,18 @@ namespace OpenDental{
 			strBTime=new StringBuilder("");
 			string procTime="";
 			int codeNum;
+			int provNum;
 			if(gridProc.SelectedIndices.Length==1) {
 				codeNum=PIn.PInt(DS.Tables["Procedure"].Rows[gridProc.SelectedIndices[0]]["CodeNum"].ToString());
-				procTime=ProcedureCodes.GetProcCode(codeNum).ProcTime;
+				provNum=PIn.PInt(DS.Tables["Procedure"].Rows[gridProc.SelectedIndices[0]]["ProvNum"].ToString());
+				procTime=ProcCodeNotes.GetTimePattern(provNum,codeNum);
 				strBTime.Append(procTime);
 			}
 			else {//multiple procs or no procs
 				for(int i=0;i<gridProc.SelectedIndices.Length;i++) {
 					codeNum=PIn.PInt(DS.Tables["Procedure"].Rows[gridProc.SelectedIndices[i]]["CodeNum"].ToString());
-					procTime=ProcedureCodes.GetProcCode(codeNum).ProcTime;
+					provNum=PIn.PInt(DS.Tables["Procedure"].Rows[gridProc.SelectedIndices[i]]["ProvNum"].ToString());
+					procTime=ProcCodeNotes.GetTimePattern(provNum,codeNum);
 					if(procTime.Length<2){
 						continue;
 					}

@@ -80,6 +80,19 @@ namespace OpenDental{
 			return ProcedureCodes.GetProcCode(codeNum).DefaultNote;
 		}
 
+		///<summary>Gets the time pattern for the given provider, if one exists.  Otherwise, gets the proccode.ProcTime.</summary>
+		public static string GetTimePattern(int provNum,int codeNum) {
+			for(int i=0;i<Listt.Count;i++) {
+				if(Listt[i].ProvNum!=provNum) {
+					continue;
+				}
+				if(Listt[i].CodeNum!=codeNum) {
+					continue;
+				}
+				return Listt[i].ProcTime;
+			}
+			return ProcedureCodes.GetProcCode(codeNum).ProcTime;
+		}
 
 
 

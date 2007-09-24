@@ -540,11 +540,12 @@ namespace OpenDentBusiness{
 			table.Columns.Add("ProcCode");
 			table.Columns.Add("ProcNum");
 			table.Columns.Add("ProcStatus");
+			table.Columns.Add("ProvNum");
 			table.Columns.Add("status");
 			table.Columns.Add("toothNum");
 			table.Columns.Add("Surf");
 			string command="SELECT procedurecode.ProcCode,AptNum,PlannedAptNum,Priority,ProcFee,ProcNum,ProcStatus,Surf,ToothNum, "
-				+"procedurecode.Descript,procedurelog.CodeNum "
+				+"procedurecode.Descript,procedurelog.CodeNum,procedurelog.ProvNum "
 				+"FROM procedurelog LEFT JOIN procedurecode ON procedurelog.CodeNum=procedurecode.CodeNum "
 				+"WHERE PatNum="+patNum//sort later
 				+" AND (ProcStatus=1 OR ";//tp
@@ -575,6 +576,7 @@ namespace OpenDentBusiness{
 				row["ProcCode"]=rawProc.Rows[i]["ProcCode"].ToString();
 				row["ProcNum"]=rawProc.Rows[i]["ProcNum"].ToString();
 				row["ProcStatus"]=rawProc.Rows[i]["ProcStatus"].ToString();
+				row["ProvNum"]=rawProc.Rows[i]["ProvNum"].ToString();
 				row["status"]=((ProcStat)PIn.PInt(rawProc.Rows[i]["ProcStatus"].ToString())).ToString();
 				row["toothNum"]=Tooth.ToInternat(rawProc.Rows[i]["ToothNum"].ToString());
 				row["Surf"]=rawProc.Rows[i]["Surf"].ToString();
