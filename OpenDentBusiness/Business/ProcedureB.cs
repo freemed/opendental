@@ -52,7 +52,7 @@ namespace OpenDentBusiness {
 				+"ToothNum,ToothRange,Priority,ProcStatus,ProvNum,"
 				+"Dx,PlannedAptNum,PlaceService,Prosthesis,DateOriginalProsth,ClaimNote,"
 				+"DateEntryC,ClinicNum,MedicalCode,DiagnosticCode,IsPrincDiag,ProcNumLab,"
-				+"BillingTypeOne,BillingTypeTwo,CodeNum,CodeMod1,CodeMod2,CodeMod3,CodeMod4,RevCode,UnitCode,UnitQty) VALUES(";
+				+"BillingTypeOne,BillingTypeTwo,CodeNum,CodeMod1,CodeMod2,CodeMod3,CodeMod4,RevCode,UnitCode,UnitQty,BaseUnits) VALUES(";
 			if(PrefB.RandomKeys) {
 				command+="'"+POut.PInt(proc.ProcNum)+"', ";
 			}
@@ -94,7 +94,8 @@ namespace OpenDentBusiness {
 				+"'"+POut.PString(proc.CodeMod4)+"', "
 				+"'"+POut.PString(proc.RevCode)+"', "
 				+"'"+POut.PString(proc.UnitCode)+"', "
-			  +"'"+POut.PString(proc.UnitQty)+"')";
+				+"'"+POut.PString(proc.UnitQty)+"', "
+			    +"'"+POut.PInt(proc.BaseUnits)+"')";
 			//MessageBox.Show(cmd.CommandText);
 			DataConnection dcon=new DataConnection();
 			if(PrefB.RandomKeys) {
@@ -290,6 +291,11 @@ namespace OpenDentBusiness {
 			if(proc.UnitQty!=oldProc.UnitQty){
 				if(comma) c+=",";
 				c+="UnitQty = '"+POut.PString(proc.UnitQty)+"'";
+				comma=true;
+			}
+			if(proc.BaseUnits!=oldProc.BaseUnits){
+				if(comma) c+=",";
+				c+="BaseUnits = '"+POut.PInt(proc.BaseUnits)+"'";
 				comma=true;
 			}
 			int rowsChanged=0;

@@ -1294,6 +1294,7 @@ namespace OpenDental{
 				if(AptCur.AptStatus==ApptStatus.Planned)
 					ProcCur.PlannedAptNum=AptCur.AptNum;
 				ProcCur.MedicalCode=ProcedureCodes.GetProcCode(ProcCur.CodeNum).MedicalCode;
+				ProcCur.BaseUnits=ProcedureCodes.GetProcCode(ProcCur.CodeNum).BaseUnits;
 				Procedures.Insert(ProcCur);//recall synch not required
 				Procedures.ComputeEstimates(ProcCur,pat.PatNum,ClaimProcList,false,PlanList,PatPlanList,benefitList);
 			}

@@ -75,9 +75,10 @@ namespace OpenDentBusiness {
 		public string RevCode;
 		/// <summary>Unit support for things like anesthesia billing and such.-dt</summary>
 		public string UnitCode;
-		///<summary>For certain CPT codes.  Not used yet.</summary>
+		///<summary>For certain CPT codes.</summary>
 		public string UnitQty;
-		
+		///<summary>Base units used for some billing codes.</summary>
+		public int BaseUnits;		
 		///<summary>Not a database column.  Saved in database in the procnote table.  This note is only the most recent note from that table.  If user changes it, then the business layer handles adding another procnote to that table.</summary>
 		public string Note;
 		///<summary>Not a database column.  Just used for now to set the user so that it can be saved with the ProcNote.</summary>
@@ -124,6 +125,7 @@ namespace OpenDentBusiness {
 			proc.RevCode=RevCode;
 			proc.UnitCode=UnitCode;
 			proc.UnitQty=UnitQty;
+			proc.BaseUnits=BaseUnits;
 			//not database fields:
 			proc.Note=Note;
 			proc.UserNum=UserNum;

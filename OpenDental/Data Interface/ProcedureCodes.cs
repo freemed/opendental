@@ -52,7 +52,7 @@ namespace OpenDental{
 				tempCode.LaymanTerm    =PIn.PString(tableStat.Rows[i][19].ToString());
 				tempCode.IsCanadianLab =PIn.PBool  (tableStat.Rows[i][20].ToString());
 				tempCode.PreExisting	 =PIn.PBool  (tableStat.Rows[i][21].ToString());
-				tempCode.BaseUnits		=PIn.PString(tableStat.Rows[i][22].ToString());
+				tempCode.BaseUnits		=PIn.PInt(tableStat.Rows[i][22].ToString());
 				tempCode.SubstitutionCode=PIn.PString(tableStat.Rows[i][23].ToString());
 				try {
 					HList.Add(tempCode.ProcCode,tempCode.Copy());
@@ -96,7 +96,7 @@ namespace OpenDental{
 				+"'"+POut.PString(code.LaymanTerm)+"', "
 				+"'"+POut.PBool  (code.IsCanadianLab)+"', "
 				+"'"+POut.PBool  (code.PreExisting)+"', "
-				+"'"+POut.PString(code.BaseUnits)+"', "
+				+"'"+POut.PInt(code.BaseUnits)+"', "
 				+"'"+POut.PString(code.SubstitutionCode)+"')";
 			code.CodeNum=General.NonQ(command,true);
 			ProcedureCodes.Refresh();
@@ -129,7 +129,7 @@ namespace OpenDental{
 				+ ",LaymanTerm = '"    +POut.PString(code.LaymanTerm)+"'"
 				+ ",IsCanadianLab = '" +POut.PBool  (code.IsCanadianLab)+"'"
 				+ ",PreExisting = '"	 +POut.PBool(code.PreExisting)+"'"
-				+ ",BaseUnits = '"     +POut.PString(code.BaseUnits)+"'"
+				+ ",BaseUnits = '"     +POut.PInt(code.BaseUnits)+"'"
 				+ ",SubstitutionCode = '"+POut.PString(code.SubstitutionCode)+"'"
 				+" WHERE CodeNum = '"+POut.PInt(code.CodeNum)+"'";
 			General.NonQ(command);

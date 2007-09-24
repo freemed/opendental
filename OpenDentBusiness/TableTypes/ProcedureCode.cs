@@ -65,7 +65,7 @@ namespace OpenDentBusiness{
 		public bool PreExisting;
 		///<summary>Support for Base Units for a Code (like anesthesia)</summary>
 		[XmlIgnore]
-		public string BaseUnits;
+		public int BaseUnits;
 		///<summary>FK to procedurecode.ProcCode.  Used for posterior composites because insurance substitutes the amalgam code when figuring the coverage.</summary>
 		[XmlIgnore]
 		public string SubstitutionCode;

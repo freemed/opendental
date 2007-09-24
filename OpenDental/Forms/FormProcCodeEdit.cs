@@ -682,7 +682,7 @@ namespace OpenDental{
 			checkNoBillIns.Checked=ProcCode.NoBillIns;
 			checkIsHygiene.Checked=ProcCode.IsHygiene;
 			checkIsProsth.Checked=ProcCode.IsProsth;
-			textBaseUnits.Text=ProcCode.BaseUnits;
+			textBaseUnits.Text=ProcCode.BaseUnits.ToString();
 			if(CultureInfo.CurrentCulture.Name.Substring(3)!="CA"){//Canada
 				checkIsCanadianLab.Visible=false;
 			}
@@ -906,7 +906,7 @@ namespace OpenDental{
 			ProcCode.DefaultNote=textNote.Text;
 			ProcCode.PaintType=(ToothPaintingType)listPaintType.SelectedIndex;
 			ProcCode.TreatArea=(TreatmentArea)listTreatArea.SelectedIndex+1;
-			ProcCode.BaseUnits=textBaseUnits.Text;
+			ProcCode.BaseUnits=Int16.Parse(textBaseUnits.Text.ToString());
 			if(listCategory.SelectedIndex!=-1)
 				ProcCode.ProcCat=DefB.Short[(int)DefCat.ProcCodeCats][listCategory.SelectedIndex].DefNum;
 			ProcedureCodes.Update(ProcCode);//whether new or not.

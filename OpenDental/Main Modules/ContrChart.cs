@@ -3946,6 +3946,7 @@ namespace OpenDental{
 			//nextaptnum
 			ProcCur.DateEntryC=DateTime.Now;
 			ProcCur.MedicalCode=ProcedureCodes.GetProcCode(ProcCur.CodeNum).MedicalCode;
+			ProcCur.BaseUnits=ProcedureCodes.GetProcCode(ProcCur.CodeNum).BaseUnits;
 			Procedures.Insert(ProcCur);
 			if((ProcCur.ProcStatus==ProcStat.C || ProcCur.ProcStatus==ProcStat.EC || ProcCur.ProcStatus==ProcStat.EO)
 				&& ProcedureCodes.GetProcCode(ProcCur.CodeNum).PaintType==ToothPaintingType.Extraction) {
@@ -4013,6 +4014,7 @@ namespace OpenDental{
 			if(listDx.SelectedIndex!=-1)
 				ProcCur.Dx=DefB.Short[(int)DefCat.Diagnosis][listDx.SelectedIndex].DefNum;
 			ProcCur.MedicalCode=ProcedureCodes.GetProcCode(ProcCur.CodeNum).MedicalCode;
+			ProcCur.BaseUnits=ProcedureCodes.GetProcCode(ProcCur.CodeNum).BaseUnits;
 			//nextaptnum
 			//ProcCur.CapCoPay=-1;
 			//if(Patients.Cur.PriPlanNum!=0){//if patient has insurance

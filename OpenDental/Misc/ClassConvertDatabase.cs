@@ -5780,7 +5780,7 @@ namespace OpenDental{
 		private void To5_3_0() {
 			if(FromVersion<new Version("5.3.0.0")) {
 				string command;
-				command = "ALTER TABLE procedurecode ADD BaseUnits VARCHAR(5)";
+				command = "ALTER TABLE procedurecode ADD BaseUnits int NOT NULL";
 				General.NonQEx(command);
 				command = "ALTER TABLE insplan ADD ShowBaseUnits TINYINT(1) NOT NULL";
 				General.NonQEx(command);
@@ -5839,7 +5839,8 @@ namespace OpenDental{
 				//after r819
 				command="ALTER TABLE insplan ADD DedBeforePerc TINYINT(1) NOT NULL";
 				General.NonQEx(command);
-				
+				command = "ALTER TABLE procedurelog ADD BaseUnits int NOT NULL";
+				General.NonQEx(command);
 		
 
 
