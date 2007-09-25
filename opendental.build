@@ -28,7 +28,7 @@
 
 	<!-- global project settings -->
 	<property name="project.name" value="opendental" />
-	<property name="project.version" value="5.1" unless="${property::exists('project.version')}" />
+	<property name="project.version" value="5.3" unless="${property::exists('project.version')}" />
 	<property name="project.release.type" value="dev" unless="${property::exists('project.release.type')}" /> <!-- nightly / dev / alpha / beta# / rc# / release -->
 
 	<!-- global build settings -->
