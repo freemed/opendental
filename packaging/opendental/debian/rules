@@ -76,7 +76,10 @@ install-arch:
 
 	# Add here commands to install the arch part of the package into 
 	# debian/tmp.
-	$(MAKE) install prefix=$(CURDIR)/debian/opendental
+	$(MAKE)
+	cp -r build/mono-*/opendental-*/bin/* $(CURDIR)/debian/opendental/usr/lib/opendental
+	find $(CURDIR)/debian/opendental/usr/lib/opendental -type f -exec chmod a-x {} \;
+	install -c -m711 debian/opendental.sh $(CURDIR)/debian/opendental/usr/bin/opendental
 
 	dh_install -s
 # Must not depend on anything. This is to be called by

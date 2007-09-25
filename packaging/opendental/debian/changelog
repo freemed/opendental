@@ -1,3 +1,9 @@
+opendental (5.3-0opendental1) unstable; urgency=low
+
+  * Update to latest SVN revision
+
+ -- Frederik Carlier <frederik.carlier@carlier-online.be>  Tue, 25 Sep 2007 18:55:26 +0100
+
 opendental (5.1-0opendental1) unstable; urgency=low
 
   * Initial release
