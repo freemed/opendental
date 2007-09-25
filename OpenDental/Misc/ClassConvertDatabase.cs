@@ -5841,7 +5841,8 @@ namespace OpenDental{
 				General.NonQEx(command);
 				command = "ALTER TABLE procedurelog ADD BaseUnits int NOT NULL";
 				General.NonQEx(command);
-		
+				command="ALTER TABLE procedurelog MODIFY UnitQty int NOT NULL";
+				General.NonQEx(command);
 
 
 

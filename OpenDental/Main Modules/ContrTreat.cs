@@ -926,7 +926,10 @@ namespace OpenDental{
 					//	totStandard+=standard;
 					//	row.Cells.Add(standard.ToString("F"));//standard
 					//}
-					fee=ProcListTP[i].ProcFee;
+					fee = ProcListTP[i].ProcFee;
+					int qty=ProcListTP[i].BaseUnits + ProcListTP[i].UnitQty;
+					if(qty>0)
+						fee*=qty;
 					subfee+=fee;
 					totFee+=fee;
 					#region ShowMaxDed
