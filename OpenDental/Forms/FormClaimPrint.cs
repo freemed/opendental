@@ -1476,6 +1476,7 @@ namespace OpenDental{
 					continue;
 				}
 				InsPlan planCur = InsPlans.GetPlan(ClaimCur.PlanNum, PlanList);
+				int qty;
 				switch(ClaimFormCur.Items[i].FieldName){
 					//there is no default, because any non-matches will remain as ""
 					case "P1Date":
@@ -1542,7 +1543,6 @@ namespace OpenDental{
 						displayStrings[i]=GetProcInfo("UnitCode",1+startProc);
 						break;
 					case "P1UnitQty":
-						int qty;
 						if(planCur.ShowBaseUnits){
 							qty=Int16.Parse(GetProcInfo("UnitQty",1+startProc)) + Int16.Parse(GetProcInfo("BaseUnits",1+startProc));
 						} else {
@@ -1617,7 +1617,6 @@ namespace OpenDental{
 						displayStrings[i]=GetProcInfo("UnitCode",2+startProc);
 						break;
 					case "P2UnitQty":
-						int qty;
 						if(planCur.ShowBaseUnits){
 							qty=Int16.Parse(GetProcInfo("UnitQty",2+startProc)) + Int16.Parse(GetProcInfo("BaseUnits",2+startProc));
 						} else {
@@ -1696,7 +1695,6 @@ namespace OpenDental{
 						displayStrings[i]=GetProcInfo("UnitCode",3+startProc);
 						break;
 					case "P3UnitQty":
-						int qty;
 						if(planCur.ShowBaseUnits){
 							qty=Int16.Parse(GetProcInfo("UnitQty",3+startProc)) + Int16.Parse(GetProcInfo("BaseUnits",3+startProc));
 						} else {
@@ -1775,7 +1773,6 @@ namespace OpenDental{
 						displayStrings[i]=GetProcInfo("UnitCode",4+startProc);
 						break;
 					case "P4UnitQty":
-						int qty;
 						if(planCur.ShowBaseUnits){
 							qty=Int16.Parse(GetProcInfo("UnitQty",4+startProc)) + Int16.Parse(GetProcInfo("BaseUnits",4+startProc));
 						} else {
@@ -1854,7 +1851,6 @@ namespace OpenDental{
 						displayStrings[i]=GetProcInfo("UnitCode",5+startProc);
 						break;
 					case "P5UnitQty":
-						int qty;
 						if(planCur.ShowBaseUnits){
 							qty=Int16.Parse(GetProcInfo("UnitQty",5+startProc)) + Int16.Parse(GetProcInfo("BaseUnits",5+startProc));
 						} else {
@@ -1933,7 +1929,6 @@ namespace OpenDental{
 						displayStrings[i]=GetProcInfo("UnitCode",6+startProc);
 						break;
 					case "P6UnitQty":
-						int qty;
 						if(planCur.ShowBaseUnits){
 							qty=Int16.Parse(GetProcInfo("UnitQty",6+startProc)) + Int16.Parse(GetProcInfo("BaseUnits",6+startProc));
 						} else {
@@ -2009,7 +2004,6 @@ namespace OpenDental{
 						displayStrings[i]=GetProcInfo("UnitCode",7+startProc);
 						break;
 					case "P7UnitQty":
-						int qty;
 						if(planCur.ShowBaseUnits){
 							qty=Int16.Parse(GetProcInfo("UnitQty",7+startProc)) + Int16.Parse(GetProcInfo("BaseUnits",7+startProc));
 						} else {
@@ -2085,7 +2079,6 @@ namespace OpenDental{
 						displayStrings[i]=GetProcInfo("UnitCode",8+startProc);
 						break;
 					case "P8UnitQty":
-						int qty;
 						if(planCur.ShowBaseUnits){
 							qty=Int16.Parse(GetProcInfo("UnitQty",8+startProc)) + Int16.Parse(GetProcInfo("BaseUnits",8+startProc));
 						} else {
@@ -2161,7 +2154,6 @@ namespace OpenDental{
 						displayStrings[i]=GetProcInfo("UnitCode",9+startProc);
 						break;
 					case "P9UnitQty":
-						int qty;
 						if(planCur.ShowBaseUnits){
 							qty=Int16.Parse(GetProcInfo("UnitQty",9+startProc)) + Int16.Parse(GetProcInfo("BaseUnits",9+startProc));
 						} else {
@@ -2237,7 +2229,6 @@ namespace OpenDental{
 						displayStrings[i]=GetProcInfo("UnitCode",10+startProc);
 						break;
 					case "P10UnitQty":
-						int qty;
 						if(planCur.ShowBaseUnits){
 							qty=Int16.Parse(GetProcInfo("UnitQty",10+startProc)) + Int16.Parse(GetProcInfo("BaseUnits",10+startProc));
 						} else {
