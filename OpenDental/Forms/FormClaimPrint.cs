@@ -2760,7 +2760,7 @@ namespace OpenDental{
 				return ProcCur.UnitCode;
 			}
 			if(field=="UnitQty"){
-				return ProcCur.UnitQty;
+				return ProcCur.UnitQty.ToString();
 			}
 			if(field=="Desc")
 				if(procCode.TreatArea==TreatmentArea.Quad){

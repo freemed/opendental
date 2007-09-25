@@ -396,7 +396,7 @@ namespace OpenDental{
 				}
 				//fee:
 				int qty = 1;
-				if(ProcCur.UnitQty != ""){
+				if(ProcCur.UnitQty > 0){
 					qty = System.Convert.ToInt32( ProcCur.UnitQty );
 				}
 				if(PlanCur.ClaimsUseUCR){//use UCR for the provider of the procedure

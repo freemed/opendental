@@ -3912,10 +3912,12 @@ namespace OpenDental{
 			else{
 				ProcCur.ProcDate=PIn.PDate(textDate.Text);
 			}
-			if(newStatus==ProcStat.R || newStatus==ProcStat.EO || newStatus==ProcStat.EC)
+			if(newStatus==ProcStat.R || newStatus==ProcStat.EO || newStatus==ProcStat.EC){
 				ProcCur.ProcFee=0;
-			else
+			} else {
+				//int totUnits = ProcCur.BaseUnits + ProcCur.UnitQty;
 				ProcCur.ProcFee=Fees.GetAmount0(ProcCur.CodeNum,Fees.GetFeeSched(PatCur,PlanList,PatPlanList));
+			}
 			//ProcCur.OverridePri=-1;
 			//ProcCur.OverrideSec=-1;
 			//surf

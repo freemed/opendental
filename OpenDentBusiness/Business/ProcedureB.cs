@@ -94,7 +94,7 @@ namespace OpenDentBusiness {
 				+"'"+POut.PString(proc.CodeMod4)+"', "
 				+"'"+POut.PString(proc.RevCode)+"', "
 				+"'"+POut.PString(proc.UnitCode)+"', "
-				+"'"+POut.PString(proc.UnitQty)+"', "
+				+"'"+POut.PInt(proc.UnitQty)+"', "
 			    +"'"+POut.PInt(proc.BaseUnits)+"')";
 			//MessageBox.Show(cmd.CommandText);
 			DataConnection dcon=new DataConnection();
@@ -290,7 +290,7 @@ namespace OpenDentBusiness {
 			}
 			if(proc.UnitQty!=oldProc.UnitQty){
 				if(comma) c+=",";
-				c+="UnitQty = '"+POut.PString(proc.UnitQty)+"'";
+				c+="UnitQty = '"+POut.PInt(proc.UnitQty)+"'";
 				comma=true;
 			}
 			if(proc.BaseUnits!=oldProc.BaseUnits){

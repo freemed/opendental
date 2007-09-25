@@ -1698,7 +1698,7 @@ namespace OpenDental{
 			textCodeMod4.Text = ProcCur.CodeMod4;
 			textRevCode.Text = ProcCur.RevCode;
 			textUnitCode.Text = ProcCur.UnitCode;
-			textUnitQty.Text = ProcCur.UnitQty;
+			textUnitQty.Text = ProcCur.UnitQty.ToString();
 			switch (ProcedureCode2.TreatArea){
 				case TreatmentArea.Surf:
 					this.textTooth.Visible=true;
@@ -2415,7 +2415,7 @@ namespace OpenDental{
 			ProcCur.CodeMod4 = textCodeMod4.Text;
 			ProcCur.RevCode = textRevCode.Text;
 			ProcCur.UnitCode = textUnitCode.Text;
-			ProcCur.UnitQty = textUnitQty.Text;
+			ProcCur.UnitQty = Int16.Parse(textUnitQty.Text);
 			if(ProcOld.ProcStatus!=ProcStat.C && ProcCur.ProcStatus==ProcStat.C){
 				ProcCur.DateEntryC=DateTime.Now;//this triggers it to set to server time NOW().
 			}

@@ -245,7 +245,8 @@ namespace OpenDental{
 				List[i].CodeMod4        = PIn.PString(table.Rows[i][30].ToString());
 				List[i].RevCode         = PIn.PString(table.Rows[i][31].ToString());
 				List[i].UnitCode         = PIn.PString(table.Rows[i][32].ToString());
-				List[i].UnitQty        = PIn.PString(table.Rows[i][33].ToString());
+				List[i].UnitQty        = PIn.PInt(table.Rows[i][33].ToString());
+				List[i].BaseUnits       = PIn.PInt(table.Rows[i][34].ToString());
 				//only used sometimes:
 				/*if(table.Columns.Count>24){
 					List[i].UserNum       = PIn.PInt   (table.Rows[i][24].ToString());
@@ -463,10 +464,10 @@ namespace OpenDental{
 			double qty=0;
 			for(int i=0;i<List.Length;i++) {
 				if(List[i].ProcStatus==ProcStat.C) {//complete
-					procFee= List[i].ProcFee;
-					qty =PIn.PDouble(List[i].UnitQty);//handles 0 and blank
+					procFee=List[i].ProcFee;
+					qty=PIn.PInt(List[i].UnitQty.ToString()) + PIn.PInt(List[i].BaseUnits.ToString());//handles 0 and blank
 					if(qty > 0) {
-						procFee = procFee * qty;
+						procFee*=qty;
 					}
 					retVal+=procFee;//List[i].ProcFee;
 				}

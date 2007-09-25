@@ -76,7 +76,7 @@ namespace OpenDentBusiness {
 		/// <summary>Unit support for things like anesthesia billing and such.-dt</summary>
 		public string UnitCode;
 		///<summary>For certain CPT codes.</summary>
-		public string UnitQty;
+		public int UnitQty;
 		///<summary>Base units used for some billing codes.</summary>
 		public int BaseUnits;		
 		///<summary>Not a database column.  Saved in database in the procnote table.  This note is only the most recent note from that table.  If user changes it, then the business layer handles adding another procnote to that table.</summary>
