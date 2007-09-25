@@ -6,3 +6,4 @@ echo $LABEL
 rm rf opendental*
 svn export https://70.90.133.65:23793/svn/opendental/head opendental
 tar -cvzf "$LABEL.tar.gz" opendental/
+rm -rf opendental/
