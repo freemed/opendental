@@ -2992,15 +2992,17 @@ namespace OpenDental{
 			benefitList.Sort();
 			gridBenefits.BeginUpdate();
 			gridBenefits.Columns.Clear();
-			ODGridColumn col=new ODGridColumn("Pat",35);
+			ODGridColumn col=new ODGridColumn("Pat",28);
 			gridBenefits.Columns.Add(col);
-			col=new ODGridColumn("Type",80);
+			col=new ODGridColumn("Level",60);
 			gridBenefits.Columns.Add(col);
-			col=new ODGridColumn("Category",80);
+			col=new ODGridColumn("Type",70);
 			gridBenefits.Columns.Add(col);
-			col=new ODGridColumn("%",40);//,HorizontalAlignment.Right);
+			col=new ODGridColumn("Category",70);
 			gridBenefits.Columns.Add(col);
-			col=new ODGridColumn("Amt",50);//,HorizontalAlignment.Right);
+			col=new ODGridColumn("%",30);//,HorizontalAlignment.Right);
+			gridBenefits.Columns.Add(col);
+			col=new ODGridColumn("Amt",40);//,HorizontalAlignment.Right);
 			gridBenefits.Columns.Add(col);
 			col=new ODGridColumn("Time Period",80);
 			gridBenefits.Columns.Add(col);
@@ -3018,11 +3020,17 @@ namespace OpenDental{
 					allCalendarYear=false;
 				}*/
 				row=new ODGridRow();
-				if(((Benefit)benefitList[i]).PatPlanNum==0) {//attached to plan
+				if(benefitList[i].PatPlanNum==0) {//attached to plan
 					row.Cells.Add("");
 				}
 				else {
 					row.Cells.Add("X");
+				}
+				if(benefitList[i].CoverageLevel==BenefitCoverageLevel.Individual) {
+					row.Cells.Add("");
+				}
+				else {
+					row.Cells.Add(Lan.g("enumBenefitCoverageLevel",benefitList[i].CoverageLevel.ToString()));
 				}
 				if(((Benefit)benefitList[i]).BenefitType==InsBenefitType.Percentage) {
 					row.Cells.Add("%");

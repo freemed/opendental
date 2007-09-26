@@ -30,16 +30,18 @@ namespace OpenDentBusiness{
 		public InsBenefitType BenefitType;
 		///<summary>Only used if BenefitType=Percentage.  Valid values are 0 to 100.</summary>
 		public int Percent;
-		///<summary>Used for CoPayment, Limitations, and as deductible in PercentDeduct.</summary>
+		///<summary>Used for CoPayment, Limitations, and Deductible.</summary>
 		public double MonetaryAmt;
 		///<summary>Enum:BenefitTimePeriod Corresponds to X12 EB06, Time Period Qualifier.  Examples: 0=None,1=ServiceYear,2=CalendarYear,3=Lifetime,4=Years. Might add Visit and Remaining.</summary>
 		public BenefitTimePeriod TimePeriod;
 		///<summary>Enum:BenefitQuantity Corresponds to X12 EB09. Not used very much. Examples: 0=None,1=NumberOfServices,2=AgeLimit,3=Visits,4=Years,5=Months</summary>
 		public BenefitQuantity QuantityQualifier;
-		///<summary>Corresponds to X12 EB10. Qualify the quantity</summary>
+		///<summary>Corresponds to X12 EB10. Qualify the quantity using QuantityQualifier.</summary>
 		public int Quantity;
 		///<summary>FK to procedurecode.CodeNum.  Typical uses include fluoride, sealants, etc.  If a specific code is used here, then the CovCat is completely ignored.</summary>
 		public int CodeNum;
+		///<Summary>Enum:BenefitCoverageLevel Corresponds to X12 EB02.  Individual or Family.  Other options might be available later.</Summary>
+		public BenefitCoverageLevel CoverageLevel;
 
 		///<summary>IComparable.CompareTo implementation.  This is used to order benefit lists as well as to group benefits if the type is essentially equal.  It doesn't compare values such as percentages or amounts.  It only compares types.</summary>
 		public int CompareTo(object obj) {
@@ -47,7 +49,11 @@ namespace OpenDentBusiness{
 				throw new ArgumentException("object is not a Benefit");
 			}
 			Benefit ben=(Benefit)obj;
-			//first by type
+			//first by fam
+			if(CoverageLevel!=ben.CoverageLevel) {
+				return CoverageLevel.CompareTo(ben.CoverageLevel);
+			}
+			//then by type
 			if(BenefitType!=ben.BenefitType) {//if types are different
 				return BenefitType.CompareTo(ben.BenefitType);
 			}
@@ -86,20 +92,7 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public Benefit Copy() {
-			Benefit b=new Benefit();
-			b.BenefitNum=BenefitNum;
-			b.PlanNum=PlanNum;
-			b.PatPlanNum=PatPlanNum;
-			b.CovCatNum=CovCatNum;
-			b.OldCode=OldCode;
-			b.BenefitType=BenefitType;
-			b.Percent=Percent;
-			b.MonetaryAmt=MonetaryAmt;
-			b.TimePeriod=TimePeriod;
-			b.QuantityQualifier=QuantityQualifier;
-			b.Quantity=Quantity;
-			b.CodeNum=CodeNum;
-			return b;
+			return (Benefit)MemberwiseClone();
 		}
 
 		

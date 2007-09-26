@@ -63,6 +63,7 @@ namespace OpenDental{
 		private CheckBox checkApptBubbleDelay;
 		private CheckBox checkStoreCCnumbers;
 		private CheckBox checkAppointmentBubblesDisabled;
+		private CheckBox checkDeductibleBeforePercent;
 		private System.Windows.Forms.Label label1;// Required designer variable.
 
 		///<summary></summary>
@@ -123,6 +124,7 @@ namespace OpenDental{
 			this.checkBoldBalance = new System.Windows.Forms.CheckBox();
 			this.checkShowAccountNotes = new System.Windows.Forms.CheckBox();
 			this.groupBox6 = new System.Windows.Forms.GroupBox();
+			this.checkAppointmentBubblesDisabled = new System.Windows.Forms.CheckBox();
 			this.checkApptBubbleDelay = new System.Windows.Forms.CheckBox();
 			this.checkBrokenApptNote = new System.Windows.Forms.CheckBox();
 			this.groupBox7 = new System.Windows.Forms.GroupBox();
@@ -140,7 +142,7 @@ namespace OpenDental{
 			this.textSigInterval = new OpenDental.ValidNumber();
 			this.butCancel = new OpenDental.UI.Button();
 			this.butOK = new OpenDental.UI.Button();
-			this.checkAppointmentBubblesDisabled = new System.Windows.Forms.CheckBox();
+			this.checkDeductibleBeforePercent = new System.Windows.Forms.CheckBox();
 			this.groupBox1.SuspendLayout();
 			this.groupBox5.SuspendLayout();
 			this.groupBox2.SuspendLayout();
@@ -473,6 +475,7 @@ namespace OpenDental{
 			// 
 			// groupBox4
 			// 
+			this.groupBox4.Controls.Add(this.checkDeductibleBeforePercent);
 			this.groupBox4.Controls.Add(this.checkStoreCCnumbers);
 			this.groupBox4.Controls.Add(this.checkSolidBlockouts);
 			this.groupBox4.Controls.Add(this.checkBoldBalance);
@@ -482,7 +485,6 @@ namespace OpenDental{
 			this.groupBox4.Size = new System.Drawing.Size(381,128);
 			this.groupBox4.TabIndex = 67;
 			this.groupBox4.TabStop = false;
-			this.groupBox4.Text = "Display Options";
 			// 
 			// checkStoreCCnumbers
 			// 
@@ -522,7 +524,16 @@ namespace OpenDental{
 			this.groupBox6.Size = new System.Drawing.Size(393,128);
 			this.groupBox6.TabIndex = 68;
 			this.groupBox6.TabStop = false;
-			this.groupBox6.Text = "User Interactions";
+			// 
+			// checkAppointmentBubblesDisabled
+			// 
+			this.checkAppointmentBubblesDisabled.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.checkAppointmentBubblesDisabled.Location = new System.Drawing.Point(19,57);
+			this.checkAppointmentBubblesDisabled.Name = "checkAppointmentBubblesDisabled";
+			this.checkAppointmentBubblesDisabled.Size = new System.Drawing.Size(297,18);
+			this.checkAppointmentBubblesDisabled.TabIndex = 70;
+			this.checkAppointmentBubblesDisabled.Text = "Appointment bubble popup disabled";
+			this.checkAppointmentBubblesDisabled.UseVisualStyleBackColor = true;
 			// 
 			// checkApptBubbleDelay
 			// 
@@ -702,15 +713,16 @@ namespace OpenDental{
 			this.butOK.Text = "&OK";
 			this.butOK.Click += new System.EventHandler(this.butOK_Click);
 			// 
-			// checkAppointmentBubblesDisabled
+			// checkDeductibleBeforePercent
 			// 
-			this.checkAppointmentBubblesDisabled.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkAppointmentBubblesDisabled.Location = new System.Drawing.Point(19,57);
-			this.checkAppointmentBubblesDisabled.Name = "checkAppointmentBubblesDisabled";
-			this.checkAppointmentBubblesDisabled.Size = new System.Drawing.Size(297,18);
-			this.checkAppointmentBubblesDisabled.TabIndex = 70;
-			this.checkAppointmentBubblesDisabled.Text = "Appointment bubble popup disabled";
-			this.checkAppointmentBubblesDisabled.UseVisualStyleBackColor = true;
+			this.checkDeductibleBeforePercent.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.checkDeductibleBeforePercent.Location = new System.Drawing.Point(16,99);
+			this.checkDeductibleBeforePercent.Name = "checkDeductibleBeforePercent";
+			this.checkDeductibleBeforePercent.Size = new System.Drawing.Size(346,18);
+			this.checkDeductibleBeforePercent.TabIndex = 68;
+			this.checkDeductibleBeforePercent.Text = "Ins Plans default to apply deductible before percent.";
+			this.checkDeductibleBeforePercent.UseVisualStyleBackColor = true;
+			this.checkDeductibleBeforePercent.Click += new System.EventHandler(this.checkDeductibleBeforePercent_Click);
 			// 
 			// FormMisc
 			// 
@@ -807,6 +819,7 @@ namespace OpenDental{
 			checkInsurancePlansShared.Checked=PrefB.GetBool("InsurancePlansShared");
 			checkSolidBlockouts.Checked=PrefB.GetBool("SolidBlockouts");
 			checkStoreCCnumbers.Checked=PrefB.GetBool("StoreCCnumbers");
+			checkDeductibleBeforePercent.Checked=PrefB.GetBool("DeductibleBeforePercentAsDefault");
 			checkBoldBalance.Checked=PrefB.GetBool("BoldFamilyAccountBalanceView");
 			checkShowAccountNotes.Checked=PrefB.GetBool("ShowNotesInAccount");
 			checkSimpleStatement.Checked=PrefB.GetBool("PrintSimpleStatements");
@@ -844,6 +857,21 @@ namespace OpenDental{
 			}
 		}
 
+		private void checkDeductibleBeforePercent_Click(object sender,EventArgs e) {
+			if(!MsgBox.Show(this,true,"Change all insurance plans right now?")){
+				return;
+			}
+			string command="UPDATE insplan SET DedBeforePerc=";
+			if(checkDeductibleBeforePercent.Checked){
+				command+="1";
+			}
+			else{
+				command+="0";
+			}
+			int result=General.NonQ(command);
+			MessageBox.Show(Lan.g(this,"Plans changed: ")+result.ToString());
+		}
+
 		private void butOK_Click(object sender, System.EventArgs e) {
 			if(textStatementsCalcDueDate.errorProvider1.GetError(textStatementsCalcDueDate)!="")
 			{
@@ -868,6 +896,7 @@ namespace OpenDental{
 				| Prefs.UpdateBool("InsurancePlansShared",checkInsurancePlansShared.Checked)
 				| Prefs.UpdateBool("SolidBlockouts", checkSolidBlockouts.Checked)
 				| Prefs.UpdateBool("StoreCCnumbers", checkStoreCCnumbers.Checked)
+				| Prefs.UpdateBool("DeductibleBeforePercentAsDefault",checkDeductibleBeforePercent.Checked)
 				| Prefs.UpdateBool("BoldFamilyAccountBalanceView", checkBoldBalance.Checked)
 				| Prefs.UpdateBool("ShowNotesInAccount", checkShowAccountNotes.Checked)
 				| Prefs.UpdateBool("PrintSimpleStatements", checkSimpleStatement.Checked)
@@ -876,7 +905,6 @@ namespace OpenDental{
 				| Prefs.UpdateString("StationaryDocument", textBoxStationary.Text)
 				| Prefs.UpdateBool("ApptBubbleDelay", checkApptBubbleDelay.Checked)
 				| Prefs.UpdateBool("AppointmentBubblesDisabled", checkAppointmentBubblesDisabled.Checked))
-					
 			{
 				changed=true;
 			}
@@ -925,6 +953,8 @@ namespace OpenDental{
 		private void butCancel_Click(object sender, System.EventArgs e) {
 			DialogResult=DialogResult.Cancel;
 		}
+
+		
 
 		
 

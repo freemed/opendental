@@ -215,7 +215,8 @@ namespace OpenDental{
 			//deductible is initially 0 anyway, so this calculation works.
 			//Once there is a deductible included, this calculation would come out different, which is also ok.
 			if(cp.DedBeforePerc) {
-				cp.BaseEst-=cp.DedApplied;
+				//can't do this here.  Has to be done externally, just like when !DedBeforePerc
+				//cp.BaseEst-=cp.DedApplied;
 			}
 			//copayAmt
 			//copayOverride never recalculated

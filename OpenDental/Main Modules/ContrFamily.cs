@@ -1039,6 +1039,7 @@ namespace OpenDental{
 				}
 				plan.ReleaseInfo=true;
 				plan.AssignBen=true;
+				plan.DedBeforePerc=PrefB.GetBool("DeductibleBeforePercentAsDefault");
 				plan.PlanType="";
 				InsPlans.Insert(plan);
 				Benefit ben;
@@ -1216,6 +1217,9 @@ namespace OpenDental{
 					//create a description for the benefit
 					if(benMatrix[x,y].PatPlanNum!=0) {
 						desc+=Lan.g(this,"(pat)")+" ";
+					}
+					if(benMatrix[x,y].CoverageLevel==BenefitCoverageLevel.Family) {
+						desc+=Lan.g(this,"Fam")+" ";
 					}
 					if(benMatrix[x,y].BenefitType==InsBenefitType.Percentage){
 						desc+=CovCats.GetDesc(benMatrix[x,y].CovCatNum)+" % ";

@@ -90,6 +90,11 @@ namespace OpenDental{
 		private Panel panel1;
 		///<summary>This is the list of all benefits to display on this form.  Some will be in the simple view, and the rest will be transferred to benefitList for display in the grid.</summary>
 		private List<Benefit> benefitListAll;
+		private Label label13;
+		private Label label14;
+		private ValidDouble textAnnualMaxFam;
+		private ValidDouble textDeductibleFam;
+		private ValidDouble textDeductPrevFam;
 		private bool dontAllowSimplified;
 
 		///<summary></summary>
@@ -138,53 +143,58 @@ namespace OpenDental{
 			this.label6 = new System.Windows.Forms.Label();
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
 			this.comboExams = new System.Windows.Forms.ComboBox();
-			this.textExams = new OpenDental.ValidNumber();
 			this.label8 = new System.Windows.Forms.Label();
 			this.comboPano = new System.Windows.Forms.ComboBox();
-			this.textPano = new OpenDental.ValidNumber();
 			this.label7 = new System.Windows.Forms.Label();
 			this.comboBW = new System.Windows.Forms.ComboBox();
-			this.textBW = new OpenDental.ValidNumber();
 			this.groupBox3 = new System.Windows.Forms.GroupBox();
-			this.textOrthoPercent = new OpenDental.ValidNumber();
 			this.label11 = new System.Windows.Forms.Label();
-			this.textOrthoMax = new OpenDental.ValidDouble();
 			this.label10 = new System.Windows.Forms.Label();
 			this.groupBox4 = new System.Windows.Forms.GroupBox();
 			this.label12 = new System.Windows.Forms.Label();
 			this.panel3 = new System.Windows.Forms.Panel();
 			this.panel2 = new System.Windows.Forms.Panel();
 			this.panel1 = new System.Windows.Forms.Panel();
-			this.textStand4 = new OpenDental.ValidNumber();
-			this.textAccident = new OpenDental.ValidNumber();
 			this.label23 = new System.Windows.Forms.Label();
-			this.textStand2 = new OpenDental.ValidNumber();
-			this.textMaxProsth = new OpenDental.ValidNumber();
 			this.label22 = new System.Windows.Forms.Label();
-			this.textStand1 = new OpenDental.ValidNumber();
-			this.textProsth = new OpenDental.ValidNumber();
 			this.label21 = new System.Windows.Forms.Label();
-			this.textOralSurg = new OpenDental.ValidNumber();
 			this.label20 = new System.Windows.Forms.Label();
-			this.textPerio = new OpenDental.ValidNumber();
 			this.label19 = new System.Windows.Forms.Label();
-			this.textEndo = new OpenDental.ValidNumber();
 			this.label18 = new System.Windows.Forms.Label();
-			this.textRoutinePrev = new OpenDental.ValidNumber();
 			this.label9 = new System.Windows.Forms.Label();
-			this.textCrowns = new OpenDental.ValidNumber();
 			this.label15 = new System.Windows.Forms.Label();
-			this.textRestorative = new OpenDental.ValidNumber();
 			this.label16 = new System.Windows.Forms.Label();
-			this.textDiagnostic = new OpenDental.ValidNumber();
 			this.label17 = new System.Windows.Forms.Label();
 			this.checkCalYearMain = new System.Windows.Forms.CheckBox();
 			this.panelSimple = new System.Windows.Forms.Panel();
+			this.label24 = new System.Windows.Forms.Label();
+			this.label13 = new System.Windows.Forms.Label();
+			this.label14 = new System.Windows.Forms.Label();
+			this.textAnnualMaxFam = new OpenDental.ValidDouble();
+			this.textDeductibleFam = new OpenDental.ValidDouble();
+			this.textDeductPrevFam = new OpenDental.ValidDouble();
 			this.textAnnualMax = new OpenDental.ValidDouble();
 			this.textFlo = new OpenDental.ValidNumber();
+			this.textStand4 = new OpenDental.ValidNumber();
+			this.textAccident = new OpenDental.ValidNumber();
+			this.textStand2 = new OpenDental.ValidNumber();
+			this.textMaxProsth = new OpenDental.ValidNumber();
+			this.textStand1 = new OpenDental.ValidNumber();
+			this.textProsth = new OpenDental.ValidNumber();
+			this.textOralSurg = new OpenDental.ValidNumber();
+			this.textPerio = new OpenDental.ValidNumber();
+			this.textEndo = new OpenDental.ValidNumber();
+			this.textRoutinePrev = new OpenDental.ValidNumber();
+			this.textCrowns = new OpenDental.ValidNumber();
+			this.textRestorative = new OpenDental.ValidNumber();
+			this.textDiagnostic = new OpenDental.ValidNumber();
 			this.textDeductible = new OpenDental.ValidDouble();
+			this.textOrthoPercent = new OpenDental.ValidNumber();
+			this.textOrthoMax = new OpenDental.ValidDouble();
 			this.textDeductPrev = new OpenDental.ValidDouble();
-			this.label24 = new System.Windows.Forms.Label();
+			this.textExams = new OpenDental.ValidNumber();
+			this.textPano = new OpenDental.ValidNumber();
+			this.textBW = new OpenDental.ValidNumber();
 			this.textSubscNote = new OpenDental.ODtextBox();
 			this.gridBenefits = new OpenDental.UI.ODGrid();
 			this.butClear = new OpenDental.UI.Button();
@@ -211,12 +221,11 @@ namespace OpenDental{
 			// 
 			// checkSimplified
 			// 
-			this.checkSimplified.AutoSize = true;
 			this.checkSimplified.Checked = true;
 			this.checkSimplified.CheckState = System.Windows.Forms.CheckState.Checked;
 			this.checkSimplified.Location = new System.Drawing.Point(12,31);
 			this.checkSimplified.Name = "checkSimplified";
-			this.checkSimplified.Size = new System.Drawing.Size(96,17);
+			this.checkSimplified.Size = new System.Drawing.Size(123,17);
 			this.checkSimplified.TabIndex = 157;
 			this.checkSimplified.Text = "Simplified View";
 			this.checkSimplified.UseVisualStyleBackColor = true;
@@ -317,15 +326,6 @@ namespace OpenDental{
 			this.comboExams.Size = new System.Drawing.Size(136,21);
 			this.comboExams.TabIndex = 178;
 			// 
-			// textExams
-			// 
-			this.textExams.Location = new System.Drawing.Point(77,71);
-			this.textExams.MaxVal = 255;
-			this.textExams.MinVal = 0;
-			this.textExams.Name = "textExams";
-			this.textExams.Size = new System.Drawing.Size(39,20);
-			this.textExams.TabIndex = 177;
-			// 
 			// label8
 			// 
 			this.label8.Location = new System.Drawing.Point(5,70);
@@ -347,15 +347,6 @@ namespace OpenDental{
 			this.comboPano.Name = "comboPano";
 			this.comboPano.Size = new System.Drawing.Size(136,21);
 			this.comboPano.TabIndex = 175;
-			// 
-			// textPano
-			// 
-			this.textPano.Location = new System.Drawing.Point(77,50);
-			this.textPano.MaxVal = 255;
-			this.textPano.MinVal = 0;
-			this.textPano.Name = "textPano";
-			this.textPano.Size = new System.Drawing.Size(39,20);
-			this.textPano.TabIndex = 174;
 			// 
 			// label7
 			// 
@@ -379,15 +370,6 @@ namespace OpenDental{
 			this.comboBW.Size = new System.Drawing.Size(136,21);
 			this.comboBW.TabIndex = 172;
 			// 
-			// textBW
-			// 
-			this.textBW.Location = new System.Drawing.Point(77,29);
-			this.textBW.MaxVal = 255;
-			this.textBW.MinVal = 0;
-			this.textBW.Name = "textBW";
-			this.textBW.Size = new System.Drawing.Size(39,20);
-			this.textBW.TabIndex = 169;
-			// 
 			// groupBox3
 			// 
 			this.groupBox3.Controls.Add(this.textOrthoPercent);
@@ -401,15 +383,6 @@ namespace OpenDental{
 			this.groupBox3.TabStop = false;
 			this.groupBox3.Text = "Ortho";
 			// 
-			// textOrthoPercent
-			// 
-			this.textOrthoPercent.Location = new System.Drawing.Point(110,43);
-			this.textOrthoPercent.MaxVal = 255;
-			this.textOrthoPercent.MinVal = 0;
-			this.textOrthoPercent.Name = "textOrthoPercent";
-			this.textOrthoPercent.Size = new System.Drawing.Size(60,20);
-			this.textOrthoPercent.TabIndex = 175;
-			// 
 			// label11
 			// 
 			this.label11.Location = new System.Drawing.Point(38,42);
@@ -418,13 +391,6 @@ namespace OpenDental{
 			this.label11.TabIndex = 174;
 			this.label11.Text = "Percentage";
 			this.label11.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// textOrthoMax
-			// 
-			this.textOrthoMax.Location = new System.Drawing.Point(110,17);
-			this.textOrthoMax.Name = "textOrthoMax";
-			this.textOrthoMax.Size = new System.Drawing.Size(93,20);
-			this.textOrthoMax.TabIndex = 164;
 			// 
 			// label10
 			// 
@@ -464,7 +430,7 @@ namespace OpenDental{
 			this.groupBox4.Controls.Add(this.label16);
 			this.groupBox4.Controls.Add(this.textDiagnostic);
 			this.groupBox4.Controls.Add(this.label17);
-			this.groupBox4.Location = new System.Drawing.Point(317,3);
+			this.groupBox4.Location = new System.Drawing.Point(422,3);
 			this.groupBox4.Name = "groupBox4";
 			this.groupBox4.Size = new System.Drawing.Size(282,311);
 			this.groupBox4.TabIndex = 176;
@@ -505,25 +471,6 @@ namespace OpenDental{
 			this.panel1.Size = new System.Drawing.Size(246,1);
 			this.panel1.TabIndex = 196;
 			// 
-			// textStand4
-			// 
-			this.textStand4.Location = new System.Drawing.Point(189,178);
-			this.textStand4.MaxVal = 255;
-			this.textStand4.MinVal = 0;
-			this.textStand4.Name = "textStand4";
-			this.textStand4.Size = new System.Drawing.Size(60,20);
-			this.textStand4.TabIndex = 180;
-			this.textStand4.KeyUp += new System.Windows.Forms.KeyEventHandler(this.textStand4_KeyUp);
-			// 
-			// textAccident
-			// 
-			this.textAccident.Location = new System.Drawing.Point(123,233);
-			this.textAccident.MaxVal = 255;
-			this.textAccident.MinVal = 0;
-			this.textAccident.Name = "textAccident";
-			this.textAccident.Size = new System.Drawing.Size(60,20);
-			this.textAccident.TabIndex = 195;
-			// 
 			// label23
 			// 
 			this.label23.Location = new System.Drawing.Point(1,232);
@@ -532,25 +479,6 @@ namespace OpenDental{
 			this.label23.TabIndex = 194;
 			this.label23.Text = "Accident";
 			this.label23.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// textStand2
-			// 
-			this.textStand2.Location = new System.Drawing.Point(189,109);
-			this.textStand2.MaxVal = 255;
-			this.textStand2.MinVal = 0;
-			this.textStand2.Name = "textStand2";
-			this.textStand2.Size = new System.Drawing.Size(60,20);
-			this.textStand2.TabIndex = 179;
-			this.textStand2.KeyUp += new System.Windows.Forms.KeyEventHandler(this.textStand2_KeyUp);
-			// 
-			// textMaxProsth
-			// 
-			this.textMaxProsth.Location = new System.Drawing.Point(123,213);
-			this.textMaxProsth.MaxVal = 255;
-			this.textMaxProsth.MinVal = 0;
-			this.textMaxProsth.Name = "textMaxProsth";
-			this.textMaxProsth.Size = new System.Drawing.Size(60,20);
-			this.textMaxProsth.TabIndex = 193;
 			// 
 			// label22
 			// 
@@ -561,25 +489,6 @@ namespace OpenDental{
 			this.label22.Text = "Maxillofacial Prosth";
 			this.label22.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
-			// textStand1
-			// 
-			this.textStand1.Location = new System.Drawing.Point(189,42);
-			this.textStand1.MaxVal = 255;
-			this.textStand1.MinVal = 0;
-			this.textStand1.Name = "textStand1";
-			this.textStand1.Size = new System.Drawing.Size(60,20);
-			this.textStand1.TabIndex = 177;
-			this.textStand1.KeyUp += new System.Windows.Forms.KeyEventHandler(this.textStand1_KeyUp);
-			// 
-			// textProsth
-			// 
-			this.textProsth.Location = new System.Drawing.Point(123,186);
-			this.textProsth.MaxVal = 255;
-			this.textProsth.MinVal = 0;
-			this.textProsth.Name = "textProsth";
-			this.textProsth.Size = new System.Drawing.Size(60,20);
-			this.textProsth.TabIndex = 191;
-			// 
 			// label21
 			// 
 			this.label21.Location = new System.Drawing.Point(1,185);
@@ -588,15 +497,6 @@ namespace OpenDental{
 			this.label21.TabIndex = 190;
 			this.label21.Text = "Prosthodontics";
 			this.label21.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// textOralSurg
-			// 
-			this.textOralSurg.Location = new System.Drawing.Point(123,139);
-			this.textOralSurg.MaxVal = 255;
-			this.textOralSurg.MinVal = 0;
-			this.textOralSurg.Name = "textOralSurg";
-			this.textOralSurg.Size = new System.Drawing.Size(60,20);
-			this.textOralSurg.TabIndex = 189;
 			// 
 			// label20
 			// 
@@ -607,15 +507,6 @@ namespace OpenDental{
 			this.label20.Text = "Oral Surgery";
 			this.label20.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
-			// textPerio
-			// 
-			this.textPerio.Location = new System.Drawing.Point(123,119);
-			this.textPerio.MaxVal = 255;
-			this.textPerio.MinVal = 0;
-			this.textPerio.Name = "textPerio";
-			this.textPerio.Size = new System.Drawing.Size(60,20);
-			this.textPerio.TabIndex = 187;
-			// 
 			// label19
 			// 
 			this.label19.Location = new System.Drawing.Point(1,118);
@@ -624,15 +515,6 @@ namespace OpenDental{
 			this.label19.TabIndex = 186;
 			this.label19.Text = "Perio";
 			this.label19.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// textEndo
-			// 
-			this.textEndo.Location = new System.Drawing.Point(123,99);
-			this.textEndo.MaxVal = 255;
-			this.textEndo.MinVal = 0;
-			this.textEndo.Name = "textEndo";
-			this.textEndo.Size = new System.Drawing.Size(60,20);
-			this.textEndo.TabIndex = 185;
 			// 
 			// label18
 			// 
@@ -643,15 +525,6 @@ namespace OpenDental{
 			this.label18.Text = "Endo";
 			this.label18.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
-			// textRoutinePrev
-			// 
-			this.textRoutinePrev.Location = new System.Drawing.Point(123,52);
-			this.textRoutinePrev.MaxVal = 255;
-			this.textRoutinePrev.MinVal = 0;
-			this.textRoutinePrev.Name = "textRoutinePrev";
-			this.textRoutinePrev.Size = new System.Drawing.Size(60,20);
-			this.textRoutinePrev.TabIndex = 183;
-			// 
 			// label9
 			// 
 			this.label9.Location = new System.Drawing.Point(1,51);
@@ -660,15 +533,6 @@ namespace OpenDental{
 			this.label9.TabIndex = 182;
 			this.label9.Text = "Routine Preventive";
 			this.label9.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// textCrowns
-			// 
-			this.textCrowns.Location = new System.Drawing.Point(123,166);
-			this.textCrowns.MaxVal = 255;
-			this.textCrowns.MinVal = 0;
-			this.textCrowns.Name = "textCrowns";
-			this.textCrowns.Size = new System.Drawing.Size(60,20);
-			this.textCrowns.TabIndex = 181;
 			// 
 			// label15
 			// 
@@ -679,15 +543,6 @@ namespace OpenDental{
 			this.label15.Text = "Crowns";
 			this.label15.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
-			// textRestorative
-			// 
-			this.textRestorative.Location = new System.Drawing.Point(123,79);
-			this.textRestorative.MaxVal = 255;
-			this.textRestorative.MinVal = 0;
-			this.textRestorative.Name = "textRestorative";
-			this.textRestorative.Size = new System.Drawing.Size(60,20);
-			this.textRestorative.TabIndex = 179;
-			// 
 			// label16
 			// 
 			this.label16.Location = new System.Drawing.Point(1,78);
@@ -696,15 +551,6 @@ namespace OpenDental{
 			this.label16.TabIndex = 178;
 			this.label16.Text = "Restorative";
 			this.label16.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// textDiagnostic
-			// 
-			this.textDiagnostic.Location = new System.Drawing.Point(123,32);
-			this.textDiagnostic.MaxVal = 255;
-			this.textDiagnostic.MinVal = 0;
-			this.textDiagnostic.Name = "textDiagnostic";
-			this.textDiagnostic.Size = new System.Drawing.Size(60,20);
-			this.textDiagnostic.TabIndex = 177;
 			// 
 			// label17
 			// 
@@ -729,6 +575,11 @@ namespace OpenDental{
 			// 
 			// panelSimple
 			// 
+			this.panelSimple.Controls.Add(this.label14);
+			this.panelSimple.Controls.Add(this.textAnnualMaxFam);
+			this.panelSimple.Controls.Add(this.textDeductibleFam);
+			this.panelSimple.Controls.Add(this.textDeductPrevFam);
+			this.panelSimple.Controls.Add(this.label13);
 			this.panelSimple.Controls.Add(this.textAnnualMax);
 			this.panelSimple.Controls.Add(this.checkCalYearMain);
 			this.panelSimple.Controls.Add(this.label1);
@@ -743,8 +594,57 @@ namespace OpenDental{
 			this.panelSimple.Controls.Add(this.label4);
 			this.panelSimple.Location = new System.Drawing.Point(-2,24);
 			this.panelSimple.Name = "panelSimple";
-			this.panelSimple.Size = new System.Drawing.Size(608,321);
+			this.panelSimple.Size = new System.Drawing.Size(765,321);
 			this.panelSimple.TabIndex = 179;
+			// 
+			// label24
+			// 
+			this.label24.AutoSize = true;
+			this.label24.Location = new System.Drawing.Point(3,7);
+			this.label24.Name = "label24";
+			this.label24.Size = new System.Drawing.Size(735,13);
+			this.label24.TabIndex = 180;
+			this.label24.Text = "Please note that some fields are for informational purposes only, and do not affe" +
+    "ct estimate calculations.  This includes fluoride, frequencies, and ortho max.";
+			// 
+			// label13
+			// 
+			this.label13.Location = new System.Drawing.Point(193,10);
+			this.label13.Name = "label13";
+			this.label13.Size = new System.Drawing.Size(94,15);
+			this.label13.TabIndex = 179;
+			this.label13.Text = "Individual";
+			this.label13.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+			// 
+			// label14
+			// 
+			this.label14.Location = new System.Drawing.Point(290,10);
+			this.label14.Name = "label14";
+			this.label14.Size = new System.Drawing.Size(94,15);
+			this.label14.TabIndex = 183;
+			this.label14.Text = "Family";
+			this.label14.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+			// 
+			// textAnnualMaxFam
+			// 
+			this.textAnnualMaxFam.Location = new System.Drawing.Point(291,26);
+			this.textAnnualMaxFam.Name = "textAnnualMaxFam";
+			this.textAnnualMaxFam.Size = new System.Drawing.Size(93,20);
+			this.textAnnualMaxFam.TabIndex = 180;
+			// 
+			// textDeductibleFam
+			// 
+			this.textDeductibleFam.Location = new System.Drawing.Point(291,46);
+			this.textDeductibleFam.Name = "textDeductibleFam";
+			this.textDeductibleFam.Size = new System.Drawing.Size(93,20);
+			this.textDeductibleFam.TabIndex = 181;
+			// 
+			// textDeductPrevFam
+			// 
+			this.textDeductPrevFam.Location = new System.Drawing.Point(291,66);
+			this.textDeductPrevFam.Name = "textDeductPrevFam";
+			this.textDeductPrevFam.Size = new System.Drawing.Size(93,20);
+			this.textDeductPrevFam.TabIndex = 182;
 			// 
 			// textAnnualMax
 			// 
@@ -762,12 +662,148 @@ namespace OpenDental{
 			this.textFlo.Size = new System.Drawing.Size(39,20);
 			this.textFlo.TabIndex = 177;
 			// 
+			// textStand4
+			// 
+			this.textStand4.Location = new System.Drawing.Point(189,178);
+			this.textStand4.MaxVal = 255;
+			this.textStand4.MinVal = 0;
+			this.textStand4.Name = "textStand4";
+			this.textStand4.Size = new System.Drawing.Size(60,20);
+			this.textStand4.TabIndex = 180;
+			this.textStand4.KeyUp += new System.Windows.Forms.KeyEventHandler(this.textStand4_KeyUp);
+			// 
+			// textAccident
+			// 
+			this.textAccident.Location = new System.Drawing.Point(123,233);
+			this.textAccident.MaxVal = 255;
+			this.textAccident.MinVal = 0;
+			this.textAccident.Name = "textAccident";
+			this.textAccident.Size = new System.Drawing.Size(60,20);
+			this.textAccident.TabIndex = 195;
+			// 
+			// textStand2
+			// 
+			this.textStand2.Location = new System.Drawing.Point(189,109);
+			this.textStand2.MaxVal = 255;
+			this.textStand2.MinVal = 0;
+			this.textStand2.Name = "textStand2";
+			this.textStand2.Size = new System.Drawing.Size(60,20);
+			this.textStand2.TabIndex = 179;
+			this.textStand2.KeyUp += new System.Windows.Forms.KeyEventHandler(this.textStand2_KeyUp);
+			// 
+			// textMaxProsth
+			// 
+			this.textMaxProsth.Location = new System.Drawing.Point(123,213);
+			this.textMaxProsth.MaxVal = 255;
+			this.textMaxProsth.MinVal = 0;
+			this.textMaxProsth.Name = "textMaxProsth";
+			this.textMaxProsth.Size = new System.Drawing.Size(60,20);
+			this.textMaxProsth.TabIndex = 193;
+			// 
+			// textStand1
+			// 
+			this.textStand1.Location = new System.Drawing.Point(189,42);
+			this.textStand1.MaxVal = 255;
+			this.textStand1.MinVal = 0;
+			this.textStand1.Name = "textStand1";
+			this.textStand1.Size = new System.Drawing.Size(60,20);
+			this.textStand1.TabIndex = 177;
+			this.textStand1.KeyUp += new System.Windows.Forms.KeyEventHandler(this.textStand1_KeyUp);
+			// 
+			// textProsth
+			// 
+			this.textProsth.Location = new System.Drawing.Point(123,186);
+			this.textProsth.MaxVal = 255;
+			this.textProsth.MinVal = 0;
+			this.textProsth.Name = "textProsth";
+			this.textProsth.Size = new System.Drawing.Size(60,20);
+			this.textProsth.TabIndex = 191;
+			// 
+			// textOralSurg
+			// 
+			this.textOralSurg.Location = new System.Drawing.Point(123,139);
+			this.textOralSurg.MaxVal = 255;
+			this.textOralSurg.MinVal = 0;
+			this.textOralSurg.Name = "textOralSurg";
+			this.textOralSurg.Size = new System.Drawing.Size(60,20);
+			this.textOralSurg.TabIndex = 189;
+			// 
+			// textPerio
+			// 
+			this.textPerio.Location = new System.Drawing.Point(123,119);
+			this.textPerio.MaxVal = 255;
+			this.textPerio.MinVal = 0;
+			this.textPerio.Name = "textPerio";
+			this.textPerio.Size = new System.Drawing.Size(60,20);
+			this.textPerio.TabIndex = 187;
+			// 
+			// textEndo
+			// 
+			this.textEndo.Location = new System.Drawing.Point(123,99);
+			this.textEndo.MaxVal = 255;
+			this.textEndo.MinVal = 0;
+			this.textEndo.Name = "textEndo";
+			this.textEndo.Size = new System.Drawing.Size(60,20);
+			this.textEndo.TabIndex = 185;
+			// 
+			// textRoutinePrev
+			// 
+			this.textRoutinePrev.Location = new System.Drawing.Point(123,52);
+			this.textRoutinePrev.MaxVal = 255;
+			this.textRoutinePrev.MinVal = 0;
+			this.textRoutinePrev.Name = "textRoutinePrev";
+			this.textRoutinePrev.Size = new System.Drawing.Size(60,20);
+			this.textRoutinePrev.TabIndex = 183;
+			// 
+			// textCrowns
+			// 
+			this.textCrowns.Location = new System.Drawing.Point(123,166);
+			this.textCrowns.MaxVal = 255;
+			this.textCrowns.MinVal = 0;
+			this.textCrowns.Name = "textCrowns";
+			this.textCrowns.Size = new System.Drawing.Size(60,20);
+			this.textCrowns.TabIndex = 181;
+			// 
+			// textRestorative
+			// 
+			this.textRestorative.Location = new System.Drawing.Point(123,79);
+			this.textRestorative.MaxVal = 255;
+			this.textRestorative.MinVal = 0;
+			this.textRestorative.Name = "textRestorative";
+			this.textRestorative.Size = new System.Drawing.Size(60,20);
+			this.textRestorative.TabIndex = 179;
+			// 
+			// textDiagnostic
+			// 
+			this.textDiagnostic.Location = new System.Drawing.Point(123,32);
+			this.textDiagnostic.MaxVal = 255;
+			this.textDiagnostic.MinVal = 0;
+			this.textDiagnostic.Name = "textDiagnostic";
+			this.textDiagnostic.Size = new System.Drawing.Size(60,20);
+			this.textDiagnostic.TabIndex = 177;
+			// 
 			// textDeductible
 			// 
 			this.textDeductible.Location = new System.Drawing.Point(194,46);
 			this.textDeductible.Name = "textDeductible";
 			this.textDeductible.Size = new System.Drawing.Size(93,20);
 			this.textDeductible.TabIndex = 164;
+			// 
+			// textOrthoPercent
+			// 
+			this.textOrthoPercent.Location = new System.Drawing.Point(110,43);
+			this.textOrthoPercent.MaxVal = 255;
+			this.textOrthoPercent.MinVal = 0;
+			this.textOrthoPercent.Name = "textOrthoPercent";
+			this.textOrthoPercent.Size = new System.Drawing.Size(60,20);
+			this.textOrthoPercent.TabIndex = 175;
+			// 
+			// textOrthoMax
+			// 
+			this.textOrthoMax.Location = new System.Drawing.Point(110,17);
+			this.textOrthoMax.Name = "textOrthoMax";
+			this.textOrthoMax.Size = new System.Drawing.Size(93,20);
+			this.textOrthoMax.TabIndex = 164;
 			// 
 			// textDeductPrev
 			// 
@@ -776,15 +812,32 @@ namespace OpenDental{
 			this.textDeductPrev.Size = new System.Drawing.Size(93,20);
 			this.textDeductPrev.TabIndex = 166;
 			// 
-			// label24
+			// textExams
 			// 
-			this.label24.AutoSize = true;
-			this.label24.Location = new System.Drawing.Point(3,7);
-			this.label24.Name = "label24";
-			this.label24.Size = new System.Drawing.Size(735,13);
-			this.label24.TabIndex = 180;
-			this.label24.Text = "Please note that some fields are for informational purposes only, and do not affe" +
-    "ct estimate calculations.  This includes fluoride, frequencies, and ortho max.";
+			this.textExams.Location = new System.Drawing.Point(77,71);
+			this.textExams.MaxVal = 255;
+			this.textExams.MinVal = 0;
+			this.textExams.Name = "textExams";
+			this.textExams.Size = new System.Drawing.Size(39,20);
+			this.textExams.TabIndex = 177;
+			// 
+			// textPano
+			// 
+			this.textPano.Location = new System.Drawing.Point(77,50);
+			this.textPano.MaxVal = 255;
+			this.textPano.MinVal = 0;
+			this.textPano.Name = "textPano";
+			this.textPano.Size = new System.Drawing.Size(39,20);
+			this.textPano.TabIndex = 174;
+			// 
+			// textBW
+			// 
+			this.textBW.Location = new System.Drawing.Point(77,29);
+			this.textBW.MaxVal = 255;
+			this.textBW.MinVal = 0;
+			this.textBW.Name = "textBW";
+			this.textBW.Size = new System.Drawing.Size(39,20);
+			this.textBW.TabIndex = 169;
 			// 
 			// textSubscNote
 			// 
@@ -975,6 +1028,9 @@ namespace OpenDental{
 			textAnnualMax.Text="";
 			textDeductible.Text="";
 			textDeductPrev.Text="";
+			textAnnualMaxFam.Text="";
+			textDeductibleFam.Text="";
+			textDeductPrevFam.Text="";
 			textFlo.Text="";
 			checkCalYearMain.Checked=true;//default is calendar year unless a service year is found
 			textBW.Text="";
@@ -1004,56 +1060,94 @@ namespace OpenDental{
 			for(int i=0;i<benefitListAll.Count;i++){
 				#region Loop
 				ben=benefitListAll[i];
-				//annual max
+				//annual max individual
 				if(ben.CodeNum==0
 					&& ben.BenefitType==InsBenefitType.Limitations
 					&& ben.CovCatNum==CovCats.GetForEbenCat(EbenefitCategory.General).CovCatNum
 					&& ben.PatPlanNum==0
 					&& ben.Quantity==0
 					&& ben.QuantityQualifier==BenefitQuantity.None
-					&& (ben.TimePeriod==BenefitTimePeriod.CalendarYear	|| ben.TimePeriod==BenefitTimePeriod.ServiceYear))					
+					&& (ben.TimePeriod==BenefitTimePeriod.CalendarYear	|| ben.TimePeriod==BenefitTimePeriod.ServiceYear)
+					&& ben.CoverageLevel==BenefitCoverageLevel.Individual)
 				{
 					textAnnualMax.Text=ben.MonetaryAmt.ToString("n");
 					if(ben.TimePeriod==BenefitTimePeriod.ServiceYear){
 						checkCalYearMain.Checked=false;
 					}
 				}
-				//deductible
+				//annual max family
+				else if(ben.CodeNum==0
+					&& ben.BenefitType==InsBenefitType.Limitations
+					&& ben.CovCatNum==CovCats.GetForEbenCat(EbenefitCategory.General).CovCatNum
+					&& ben.PatPlanNum==0
+					&& ben.Quantity==0
+					&& ben.QuantityQualifier==BenefitQuantity.None
+					&& (ben.TimePeriod==BenefitTimePeriod.CalendarYear	|| ben.TimePeriod==BenefitTimePeriod.ServiceYear)
+					&& ben.CoverageLevel==BenefitCoverageLevel.Family) 
+				{
+					textAnnualMaxFam.Text=ben.MonetaryAmt.ToString("n");
+					if(ben.TimePeriod==BenefitTimePeriod.ServiceYear) {
+						checkCalYearMain.Checked=false;
+					}
+				}
+				//deductible individual
 				else if(ben.CodeNum==0
 					&& ben.BenefitType==InsBenefitType.Deductible
 					&& ben.CovCatNum==CovCats.GetForEbenCat(EbenefitCategory.General).CovCatNum
 					&& ben.PatPlanNum==0
 					&& ben.Quantity==0
 					&& ben.QuantityQualifier==BenefitQuantity.None
-					&& (ben.TimePeriod==BenefitTimePeriod.CalendarYear	|| ben.TimePeriod==BenefitTimePeriod.ServiceYear))
+					&& (ben.TimePeriod==BenefitTimePeriod.CalendarYear	|| ben.TimePeriod==BenefitTimePeriod.ServiceYear)
+					&& ben.CoverageLevel==BenefitCoverageLevel.Individual)
 				{
 					textDeductible.Text=ben.MonetaryAmt.ToString("n");
 					if(ben.TimePeriod==BenefitTimePeriod.ServiceYear) {
 						checkCalYearMain.Checked=false;
 					}
 				}
-				//deductible preventive
+				//deductible family
 				else if(ben.CodeNum==0
 					&& ben.BenefitType==InsBenefitType.Deductible
-					&& ben.CovCatNum==CovCats.GetForEbenCat(EbenefitCategory.Diagnostic).CovCatNum
+					&& ben.CovCatNum==CovCats.GetForEbenCat(EbenefitCategory.General).CovCatNum
 					&& ben.PatPlanNum==0
 					&& ben.Quantity==0
 					&& ben.QuantityQualifier==BenefitQuantity.None
-					&& (ben.TimePeriod==BenefitTimePeriod.CalendarYear	|| ben.TimePeriod==BenefitTimePeriod.ServiceYear))
+					&& (ben.TimePeriod==BenefitTimePeriod.CalendarYear	|| ben.TimePeriod==BenefitTimePeriod.ServiceYear)
+					&& ben.CoverageLevel==BenefitCoverageLevel.Family) 
+				{
+					textDeductibleFam.Text=ben.MonetaryAmt.ToString("n");
+					if(ben.TimePeriod==BenefitTimePeriod.ServiceYear) {
+						checkCalYearMain.Checked=false;
+					}
+				}
+				//deductible preventive individual
+				else if(ben.CodeNum==0
+					&& ben.BenefitType==InsBenefitType.Deductible
+					&& (ben.CovCatNum==CovCats.GetForEbenCat(EbenefitCategory.Diagnostic).CovCatNum
+					|| ben.CovCatNum==CovCats.GetForEbenCat(EbenefitCategory.RoutinePreventive).CovCatNum)
+					&& ben.PatPlanNum==0
+					&& ben.Quantity==0
+					&& ben.QuantityQualifier==BenefitQuantity.None
+					&& (ben.TimePeriod==BenefitTimePeriod.CalendarYear	|| ben.TimePeriod==BenefitTimePeriod.ServiceYear)
+					&& ben.CoverageLevel==BenefitCoverageLevel.Individual)
 				{
 					textDeductPrev.Text=ben.MonetaryAmt.ToString("n");
 					if(ben.TimePeriod==BenefitTimePeriod.ServiceYear) {
 						checkCalYearMain.Checked=false;
 					}
 				}
+				//deductible preventive family
 				else if(ben.CodeNum==0
 					&& ben.BenefitType==InsBenefitType.Deductible
-					&& ben.CovCatNum==CovCats.GetForEbenCat(EbenefitCategory.RoutinePreventive).CovCatNum
+					&& (ben.CovCatNum==CovCats.GetForEbenCat(EbenefitCategory.Diagnostic).CovCatNum
+					|| ben.CovCatNum==CovCats.GetForEbenCat(EbenefitCategory.RoutinePreventive).CovCatNum)
 					&& ben.PatPlanNum==0
 					&& ben.Quantity==0
 					&& ben.QuantityQualifier==BenefitQuantity.None
-					&& (ben.TimePeriod==BenefitTimePeriod.CalendarYear	|| ben.TimePeriod==BenefitTimePeriod.ServiceYear)) {
-					textDeductPrev.Text=ben.MonetaryAmt.ToString("n");
+					&& (ben.TimePeriod==BenefitTimePeriod.CalendarYear	|| ben.TimePeriod==BenefitTimePeriod.ServiceYear)
+					&& ben.CoverageLevel==BenefitCoverageLevel.Family) 
+				{
+					textDeductPrevFam.Text=ben.MonetaryAmt.ToString("n");
 					if(ben.TimePeriod==BenefitTimePeriod.ServiceYear) {
 						checkCalYearMain.Checked=false;
 					}
@@ -1356,13 +1450,15 @@ namespace OpenDental{
 			gridBenefits.Columns.Clear();
 			ODGridColumn col=new ODGridColumn("Pat",35);
 			gridBenefits.Columns.Add(col);
+			col=new ODGridColumn("Level",60);
+			gridBenefits.Columns.Add(col);
 			col=new ODGridColumn("Type",90);
 			gridBenefits.Columns.Add(col);
 			col=new ODGridColumn("Category",90);
 			gridBenefits.Columns.Add(col);
-			col=new ODGridColumn("%",40);//,HorizontalAlignment.Right);
+			col=new ODGridColumn("%",35);//,HorizontalAlignment.Right);
 			gridBenefits.Columns.Add(col);
-			col=new ODGridColumn("Amt",60);//,HorizontalAlignment.Right);
+			col=new ODGridColumn("Amt",50);//,HorizontalAlignment.Right);
 			gridBenefits.Columns.Add(col);
 			col=new ODGridColumn("Time Period",80);
 			gridBenefits.Columns.Add(col);
@@ -1385,6 +1481,12 @@ namespace OpenDental{
 				}
 				else {
 					row.Cells.Add("X");
+				}
+				if(benefitList[i].CoverageLevel==BenefitCoverageLevel.Individual){
+					row.Cells.Add("");
+				}
+				else{
+					row.Cells.Add(Lan.g("enumBenefitCoverageLevel",benefitList[i].CoverageLevel.ToString()));
 				}
 				if(((Benefit)benefitList[i]).BenefitType==InsBenefitType.Percentage) {
 					row.Cells.Add("%");
@@ -1511,6 +1613,9 @@ namespace OpenDental{
 			if(textAnnualMax.errorProvider1.GetError(textAnnualMax) != ""
 				|| textDeductible.errorProvider1.GetError(textDeductible) != ""
 				|| textDeductPrev.errorProvider1.GetError(textDeductPrev) != ""
+				|| textAnnualMaxFam.errorProvider1.GetError(textAnnualMaxFam) != ""
+				|| textDeductibleFam.errorProvider1.GetError(textDeductibleFam) != ""
+				|| textDeductPrevFam.errorProvider1.GetError(textDeductPrevFam) != ""
 				|| textFlo.errorProvider1.GetError(textFlo) != ""
 				|| textBW.errorProvider1.GetError(textBW) != ""
 				|| textPano.errorProvider1.GetError(textPano) != ""
@@ -1536,7 +1641,7 @@ namespace OpenDental{
 			}
 			benefitListAll=new List<Benefit>(benefitList);
 			Benefit ben;
-			//annual max
+			//annual max individual
 			if(textAnnualMax.Text !=""){
 				ben=new Benefit();
 				ben.CodeNum=0;
@@ -1550,9 +1655,27 @@ namespace OpenDental{
 					ben.TimePeriod=BenefitTimePeriod.ServiceYear;					
 				}
 				ben.MonetaryAmt=PIn.PDouble(textAnnualMax.Text);
+				ben.CoverageLevel=BenefitCoverageLevel.Individual;
 				benefitListAll.Add(ben);
 			}
-			//deductible
+			//annual max family
+			if(textAnnualMaxFam.Text !="") {
+				ben=new Benefit();
+				ben.CodeNum=0;
+				ben.BenefitType=InsBenefitType.Limitations;
+				ben.CovCatNum=CovCats.GetForEbenCat(EbenefitCategory.General).CovCatNum;
+				ben.PlanNum=PlanNum;
+				if(checkCalYearMain.Checked) {
+					ben.TimePeriod=BenefitTimePeriod.CalendarYear;
+				}
+				else {
+					ben.TimePeriod=BenefitTimePeriod.ServiceYear;
+				}
+				ben.MonetaryAmt=PIn.PDouble(textAnnualMaxFam.Text);
+				ben.CoverageLevel=BenefitCoverageLevel.Family;
+				benefitListAll.Add(ben);
+			}
+			//deductible individual
 			if(textDeductible.Text !=""){
 				ben=new Benefit();
 				ben.CodeNum=0;
@@ -1566,9 +1689,27 @@ namespace OpenDental{
 					ben.TimePeriod=BenefitTimePeriod.ServiceYear;					
 				}
 				ben.MonetaryAmt=PIn.PDouble(textDeductible.Text);
+				ben.CoverageLevel=BenefitCoverageLevel.Individual;
 				benefitListAll.Add(ben);
 			}
-			//deductible preventive
+			//deductible family
+			if(textDeductibleFam.Text !="") {
+				ben=new Benefit();
+				ben.CodeNum=0;
+				ben.BenefitType=InsBenefitType.Deductible;
+				ben.CovCatNum=CovCats.GetForEbenCat(EbenefitCategory.General).CovCatNum;
+				ben.PlanNum=PlanNum;
+				if(checkCalYearMain.Checked) {
+					ben.TimePeriod=BenefitTimePeriod.CalendarYear;
+				}
+				else {
+					ben.TimePeriod=BenefitTimePeriod.ServiceYear;
+				}
+				ben.MonetaryAmt=PIn.PDouble(textDeductibleFam.Text);
+				ben.CoverageLevel=BenefitCoverageLevel.Family;
+				benefitListAll.Add(ben);
+			}
+			//deductible preventive individual
 			if(textDeductPrev.Text !=""){
 				//diagnostic
 				ben=new Benefit();
@@ -1583,6 +1724,7 @@ namespace OpenDental{
 					ben.TimePeriod=BenefitTimePeriod.ServiceYear;					
 				}
 				ben.MonetaryAmt=PIn.PDouble(textDeductPrev.Text);
+				ben.CoverageLevel=BenefitCoverageLevel.Individual;
 				benefitListAll.Add(ben);
 				//preventive
 				ben=new Benefit();
@@ -1597,6 +1739,40 @@ namespace OpenDental{
 					ben.TimePeriod=BenefitTimePeriod.ServiceYear;
 				}
 				ben.MonetaryAmt=PIn.PDouble(textDeductPrev.Text);
+				ben.CoverageLevel=BenefitCoverageLevel.Individual;
+				benefitListAll.Add(ben);
+			}
+			//deductible preventive family
+			if(textDeductPrevFam.Text !="") {
+				//diagnostic
+				ben=new Benefit();
+				ben.CodeNum=0;
+				ben.BenefitType=InsBenefitType.Deductible;
+				ben.CovCatNum=CovCats.GetForEbenCat(EbenefitCategory.Diagnostic).CovCatNum;
+				ben.PlanNum=PlanNum;
+				if(checkCalYearMain.Checked) {
+					ben.TimePeriod=BenefitTimePeriod.CalendarYear;
+				}
+				else {
+					ben.TimePeriod=BenefitTimePeriod.ServiceYear;
+				}
+				ben.MonetaryAmt=PIn.PDouble(textDeductPrevFam.Text);
+				ben.CoverageLevel=BenefitCoverageLevel.Family;
+				benefitListAll.Add(ben);
+				//preventive
+				ben=new Benefit();
+				ben.CodeNum=0;
+				ben.BenefitType=InsBenefitType.Deductible;
+				ben.CovCatNum=CovCats.GetForEbenCat(EbenefitCategory.RoutinePreventive).CovCatNum;
+				ben.PlanNum=PlanNum;
+				if(checkCalYearMain.Checked) {
+					ben.TimePeriod=BenefitTimePeriod.CalendarYear;
+				}
+				else {
+					ben.TimePeriod=BenefitTimePeriod.ServiceYear;
+				}
+				ben.MonetaryAmt=PIn.PDouble(textDeductPrevFam.Text);
+				ben.CoverageLevel=BenefitCoverageLevel.Family;
 				benefitListAll.Add(ben);
 			}
 			//Flo

@@ -42,6 +42,7 @@ namespace OpenDental {
 				List[i].QuantityQualifier= (BenefitQuantity)PIn.PInt(table.Rows[i][9].ToString());
 				List[i].Quantity         = PIn.PInt(table.Rows[i][10].ToString());
 				List[i].CodeNum          = PIn.PInt(table.Rows[i][11].ToString());
+				List[i].CoverageLevel    = (BenefitCoverageLevel)PIn.PInt(table.Rows[i][12].ToString());
 			}
 			Array.Sort(List);
 			return List;
@@ -73,6 +74,7 @@ namespace OpenDental {
 				ben.QuantityQualifier= (BenefitQuantity)PIn.PInt(table.Rows[i][9].ToString());
 				ben.Quantity         = PIn.PInt(table.Rows[i][10].ToString());
 				ben.CodeNum          = PIn.PInt(table.Rows[i][11].ToString());
+				ben.CoverageLevel    = (BenefitCoverageLevel)PIn.PInt(table.Rows[i][12].ToString());
 				retVal.Add(ben);
 			}
 			return retVal;
@@ -121,6 +123,7 @@ namespace OpenDental {
 					benList[i].QuantityQualifier= (BenefitQuantity)PIn.PInt(table.Rows[i][9].ToString());
 					benList[i].Quantity         = PIn.PInt(table.Rows[i][10].ToString());
 					benList[i].CodeNum          = PIn.PInt(table.Rows[i][11].ToString());
+					benList[i].CoverageLevel    = (BenefitCoverageLevel)PIn.PInt(table.Rows[i][12].ToString());
 				}
 			}
 			List<Benefit> retVal=new List<Benefit>();
@@ -163,6 +166,7 @@ namespace OpenDental {
 				+",QuantityQualifier ='"+POut.PInt   ((int)ben.QuantityQualifier)+"'"
 				+",Quantity = '"        +POut.PInt   (ben.Quantity)+"'"
 				+",CodeNum = '"         +POut.PInt   (ben.CodeNum)+"'"
+				+",CoverageLevel = '"   +POut.PInt   ((int)ben.CoverageLevel)+"'"
 				+" WHERE BenefitNum  ='"+POut.PInt   (ben.BenefitNum)+"'";
 			General.NonQ(command);
 		}
@@ -177,7 +181,7 @@ namespace OpenDental {
 				command+="BenefitNum,";
 			}
 			command+="PlanNum,PatPlanNum,CovCatNum,OldCode,BenefitType,Percent,MonetaryAmt,TimePeriod,"
-				+"QuantityQualifier,Quantity,CodeNum) VALUES(";
+				+"QuantityQualifier,Quantity,CodeNum,CoverageLevel) VALUES(";
 			if(PrefB.RandomKeys) {
 				command+="'"+POut.PInt(ben.BenefitNum)+"', ";
 			}
@@ -192,7 +196,8 @@ namespace OpenDental {
 				+"'"+POut.PInt((int)ben.TimePeriod)+"', "
 				+"'"+POut.PInt((int)ben.QuantityQualifier)+"', "
 				+"'"+POut.PInt(ben.Quantity)+"', "
-				+"'"+POut.PInt(ben.CodeNum)+"')";
+				+"'"+POut.PInt(ben.CodeNum)+"', "
+				+"'"+POut.PInt((int)ben.CoverageLevel)+"')";
 			if(PrefB.RandomKeys) {
 				General.NonQ(command);
 			}
@@ -207,7 +212,7 @@ namespace OpenDental {
 			General.NonQ(command);
 		}
 		
-		///<summary>Gets an annual max from the supplied list of benefits.  Ignores benefits that do not match either the planNum or the patPlanNum.  Because it starts at the top of the benefit list, it will get the most general limitation first.  Returns -1 if none found.</summary>
+		///<summary>Gets an annual max from the supplied list of benefits.  Ignores benefits that do not match either the planNum or the patPlanNum.  Because it starts at the top of the benefit list, it will get the most general limitation first.  Returns -1 if none found.  It does not discriminate between family and individual.</summary>
 		public static double GetAnnualMax(Benefit[] list,int planNum,int patPlanNum) {
 			for(int i=0;i<list.Length;i++) {
 				if(list[i].PlanNum==0 && list[i].PatPlanNum!=patPlanNum) {
@@ -228,6 +233,29 @@ namespace OpenDental {
 				return list[i].MonetaryAmt;
 			}
 			return -1;
+		}
+
+		///<Summary>Returns true if there is a family max for the given plan.</Summary>
+		public static bool GetIsFamMax(Benefit[] list,int planNum) {
+			for(int i=0;i<list.Length;i++) {
+				if(list[i].PlanNum!=planNum) {
+					continue;
+				}
+				if(list[i].BenefitType!=InsBenefitType.Limitations) {
+					continue;
+				}
+				if(list[i].QuantityQualifier!=BenefitQuantity.None) {
+					continue;
+				}
+				if(list[i].TimePeriod!=BenefitTimePeriod.CalendarYear && list[i].TimePeriod!=BenefitTimePeriod.ServiceYear) {
+					continue;
+				}
+				if(list[i].CoverageLevel!=BenefitCoverageLevel.Family){
+					continue;
+				}
+				return true;
+			}
+			return false;
 		}
 
 		///<summary>Gets a deductible from the supplied list of benefits.  Ignores benefits that do not match either the planNum or the patPlanNum.  Because it starts at the top of the benefit list, it will get the most general deductible first.</summary>
@@ -251,6 +279,29 @@ namespace OpenDental {
 				return list[i].MonetaryAmt;
 			}
 			return -1;
+		}
+
+		///<Summary>Returns true if there is a family deductible for the given plan.</Summary>
+		public static bool GetIsFamDed(Benefit[] list,int planNum) {
+			for(int i=0;i<list.Length;i++) {
+				if(list[i].PlanNum!=planNum) {
+					continue;
+				}
+				if(list[i].BenefitType!=InsBenefitType.Deductible) {
+					continue;
+				}
+				if(list[i].QuantityQualifier!=BenefitQuantity.None) {
+					continue;
+				}
+				if(list[i].TimePeriod!=BenefitTimePeriod.CalendarYear && list[i].TimePeriod!=BenefitTimePeriod.ServiceYear) {
+					continue;
+				}
+				if(list[i].CoverageLevel!=BenefitCoverageLevel.Family) {
+					continue;
+				}
+				return true;
+			}
+			return false;
 		}
 
 		///<summary>Gets a deductible from the supplied list of benefits.  Ignores benefits that do not match either the planNum or the patPlanNum.  Because it starts at the bottom of the benefit list, it will get the most specific matching deductible first.</summary>
@@ -381,7 +432,8 @@ namespace OpenDental {
 					|| newBenefit.TimePeriod != oldBenefitList[i].TimePeriod
 					|| newBenefit.QuantityQualifier != oldBenefitList[i].QuantityQualifier
 					|| newBenefit.Quantity != oldBenefitList[i].Quantity
-					|| newBenefit.CodeNum != oldBenefitList[i].CodeNum)
+					|| newBenefit.CodeNum != oldBenefitList[i].CodeNum
+					|| newBenefit.CoverageLevel != oldBenefitList[i].CoverageLevel)
 				{
 					Benefits.Update(newBenefit);
 				}
@@ -437,7 +489,8 @@ namespace OpenDental {
 						|| newBenefit.TimePeriod        != oldBenefitList[i].TimePeriod
 						|| newBenefit.QuantityQualifier != oldBenefitList[i].QuantityQualifier
 						|| newBenefit.Quantity          != oldBenefitList[i].Quantity
-						|| newBenefit.CodeNum           != oldBenefitList[i].CodeNum) 
+						|| newBenefit.CodeNum           != oldBenefitList[i].CodeNum 
+						|| newBenefit.CoverageLevel     != oldBenefitList[i].CoverageLevel) 
 					{
 						changed=true;
 						break;

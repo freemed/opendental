@@ -5843,6 +5843,11 @@ namespace OpenDental{
 				General.NonQEx(command);
 				command="ALTER TABLE procedurelog MODIFY UnitQty int NOT NULL";
 				General.NonQEx(command);
+				//after r832
+				command="INSERT INTO preference VALUES('DeductibleBeforePercentAsDefault','0')";
+				General.NonQEx(command);
+				command = "ALTER TABLE benefit ADD CoverageLevel int NOT NULL";
+				General.NonQEx(command);
 
 
 

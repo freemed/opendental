@@ -109,6 +109,7 @@ namespace OpenDental{
 		private Bitmap chartBitmap;
 		private int headingPrintH;
 		private CheckBox checkShowTotals;
+		private Label labelFamily;
 		private int pagesPrinted;
 
 		///<summary></summary>
@@ -172,6 +173,7 @@ namespace OpenDental{
 			this.gridMain = new OpenDental.UI.ODGrid();
 			this.gridPreAuth = new OpenDental.UI.ODGrid();
 			this.gridPlans = new OpenDental.UI.ODGrid();
+			this.labelFamily = new System.Windows.Forms.Label();
 			this.groupShow.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -522,7 +524,7 @@ namespace OpenDental{
 			this.gridMain.Name = "gridMain";
 			this.gridMain.ScrollValue = 0;
 			this.gridMain.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
-			this.gridMain.Size = new System.Drawing.Size(698,447);
+			this.gridMain.Size = new System.Drawing.Size(745,447);
 			this.gridMain.TabIndex = 59;
 			this.gridMain.Title = "Procedures";
 			this.gridMain.TranslationName = "TableTP";
@@ -555,8 +557,19 @@ namespace OpenDental{
 			this.gridPlans.CellClick += new OpenDental.UI.ODGridClickEventHandler(this.gridPlans_CellClick);
 			this.gridPlans.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridPlans_CellDoubleClick);
 			// 
+			// labelFamily
+			// 
+			this.labelFamily.Font = new System.Drawing.Font("Microsoft Sans Serif",8.25F,System.Drawing.FontStyle.Bold,System.Drawing.GraphicsUnit.Point,((byte)(0)));
+			this.labelFamily.Location = new System.Drawing.Point(746,543);
+			this.labelFamily.Name = "labelFamily";
+			this.labelFamily.Size = new System.Drawing.Size(66,15);
+			this.labelFamily.TabIndex = 63;
+			this.labelFamily.Text = "Family";
+			this.labelFamily.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
 			// ContrTreat
 			// 
+			this.Controls.Add(this.labelFamily);
 			this.Controls.Add(this.listSetPr);
 			this.Controls.Add(this.ToolBarMain);
 			this.Controls.Add(this.label1);
@@ -972,7 +985,17 @@ namespace OpenDental{
 								}
 								ClaimProcs.ComputeBaseEst(claimproc,ProcListTP[i],PriSecTot.Pri,InsPlanList,PatPlanList,BenefitList);//handles dedBeforePerc
 								claimproc.InsPayEst=Procedures.GetEst(ProcListTP[i],ClaimProcList,PriSecTot.Pri,PatPlanList,false);
-								if(!claimproc.DedBeforePerc) {
+								if(claimproc.DedBeforePerc) {
+									int percent=100;
+									if(claimproc.Percentage!=-1){
+										percent=claimproc.Percentage;
+									}
+									if(claimproc.PercentOverride!=-1) {
+										percent=claimproc.PercentOverride;
+									}
+									claimproc.InsPayEst-=claimproc.DedApplied*(double)percent/100d;
+								}
+								else{
 									claimproc.InsPayEst-=claimproc.DedApplied;
 								}
 								if(claimproc.InsPayEst<0) {
@@ -1339,6 +1362,7 @@ namespace OpenDental{
 			textSecUsed.Text="";
 			textSecPend.Text="";
 			textSecRem.Text="";
+			labelFamily.Visible=false;
 			if(PatCur==null){
 				return;
 			}
@@ -1351,6 +1375,14 @@ namespace OpenDental{
 			InsPlan PlanCur;//=new InsPlan();
 			if(PatPlanList.Length>0){
 				PlanCur=InsPlans.GetPlan(PatPlanList[0].PlanNum,InsPlanList);
+				bool isFamMax=Benefits.GetIsFamMax(BenefitList,PlanCur.PlanNum);
+				bool isFamDed=Benefits.GetIsFamDed(BenefitList,PlanCur.PlanNum);
+				if(isFamMax || isFamDed){
+					labelFamily.Visible=true;
+				}
+				else{
+					labelFamily.Visible=false;
+				}
 				pend=InsPlans.GetPending
 					(ClaimProcList,DateTime.Today,PatPlanList[0].PlanNum,PatPlanList[0].PatPlanNum,-1,InsPlanList,BenefitList);
 				textPriPend.Text=pend.ToString("F");

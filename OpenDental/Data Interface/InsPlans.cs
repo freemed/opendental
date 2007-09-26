@@ -626,17 +626,20 @@ namespace OpenDental {
 		public static string[] GetSubscribersForSamePlans(string employerName, string groupName, string groupNum,
 				string divisionNo, string carrierName, bool isMedical, int excludePlan)
 		{
-			string command="SELECT CONCAT(CONCAT(LName,', '),FName) FROM patient,insplan "
-				+"LEFT JOIN employer ON employer.EmployerNum = insplan.EmployerNum "
+			string command="SELECT CONCAT(CONCAT(LName,', '),FName) "
+				+"FROM patient "
+				+"LEFT JOIN insplan ON patient.PatNum=insplan.Subscriber "
 				+"LEFT JOIN carrier ON carrier.CarrierNum = insplan.CarrierNum "
-				+"WHERE patient.PatNum=insplan.Subscriber "
-				+"AND employer.EmpName = '"   +POut.PString(employerName)+"' "
+				+"LEFT JOIN employer ON employer.EmployerNum = insplan.EmployerNum "
+				+"WHERE (employer.EmpName IS NULL OR "
+				+"    employer.EmpName = '"   +POut.PString(employerName)+"') "
 				+"AND insplan.GroupName = '"  +POut.PString(groupName)+"' "
 				+"AND insplan.GroupNum = '"   +POut.PString(groupNum)+"' "
 				+"AND insplan.DivisionNo = '" +POut.PString(divisionNo)+"' "
 				+"AND carrier.CarrierName = '"+POut.PString(carrierName)+"' "
 				+"AND insplan.IsMedical = '"  +POut.PBool(isMedical)+"' "
-				+"AND insplan.PlanNum != "    +POut.PInt(excludePlan);
+				+"AND insplan.PlanNum != "    +POut.PInt(excludePlan)
+				+" ORDER BY LName,FName";
 			DataTable table=General.GetTable(command);
 			string[] retStr=new string[table.Rows.Count];
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -649,9 +652,9 @@ namespace OpenDental {
 		public static List<int> GetPlanNumsOfSamePlans(string employerName, string groupName, string groupNum,
 				string divisionNo, string carrierName, bool isMedical, int planNum, bool includePlanNum) {
 			string command="SELECT PlanNum FROM insplan "
-				+"LEFT JOIN employer ON employer.EmployerNum = insplan.EmployerNum "
 				+"LEFT JOIN carrier ON carrier.CarrierNum = insplan.CarrierNum "
-				+"WHERE employer.EmpName = '" +POut.PString(employerName)+"' "
+				+"LEFT JOIN employer ON employer.EmployerNum = insplan.EmployerNum "
+				+"WHERE (employer.EmpName = '"+POut.PString(employerName)+"' OR employer.EmpName IS NULL) "
 				+"AND insplan.GroupName = '"  +POut.PString(groupName)+"' "
 				+"AND insplan.GroupNum = '"   +POut.PString(groupNum)+"' "
 				+"AND insplan.DivisionNo = '" +POut.PString(divisionNo)+"' "

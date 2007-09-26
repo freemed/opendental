@@ -997,6 +997,15 @@ namespace OpenDentBusiness{
 		Months
 	}
 
+	///<summary>Used in the benefit table </summary>
+	public enum BenefitCoverageLevel{
+		///<summary>0- Most common, and assumed if not supplied.</summary>
+		Individual,
+		///<summary>1- For example, family deductible or family maximum.</summary>
+		Family
+	}
+	
+
 	///<summary>The X12 benefit categories.  Used to link the user-defined CovCats to the corresponding X12 category.</summary>
 	public enum EbenefitCategory{
 		///<summary>0- Default</summary>
