@@ -101,8 +101,6 @@ namespace OpenDental{
 			this.label7 = new System.Windows.Forms.Label();
 			this.label8 = new System.Windows.Forms.Label();
 			this.label10 = new System.Windows.Forms.Label();
-			this.butOK = new OpenDental.UI.Button();
-			this.butCancel = new OpenDental.UI.Button();
 			this.textProcCode = new System.Windows.Forms.TextBox();
 			this.textAbbrev = new System.Windows.Forms.TextBox();
 			this.textDescription = new System.Windows.Forms.TextBox();
@@ -112,7 +110,6 @@ namespace OpenDental{
 			this.listCategory = new System.Windows.Forms.ListBox();
 			this.label3 = new System.Windows.Forms.Label();
 			this.label9 = new System.Windows.Forms.Label();
-			this.tbTime = new OpenDental.TableTimeBar();
 			this.butSlider = new System.Windows.Forms.Button();
 			this.textTime2 = new System.Windows.Forms.TextBox();
 			this.label11 = new System.Windows.Forms.Label();
@@ -120,16 +117,13 @@ namespace OpenDental{
 			this.textAlternateCode1 = new System.Windows.Forms.TextBox();
 			this.label12 = new System.Windows.Forms.Label();
 			this.label13 = new System.Windows.Forms.Label();
-			this.textNote = new OpenDental.ODtextBox();
 			this.checkIsProsth = new System.Windows.Forms.CheckBox();
 			this.textMedicalCode = new System.Windows.Forms.TextBox();
 			this.label14 = new System.Windows.Forms.Label();
-			this.gridFees = new OpenDental.UI.ODGrid();
 			this.label15 = new System.Windows.Forms.Label();
 			this.listPaintType = new System.Windows.Forms.ListBox();
 			this.labelColor = new System.Windows.Forms.Label();
 			this.butColor = new System.Windows.Forms.Button();
-			this.butColorClear = new OpenDental.UI.Button();
 			this.textLaymanTerm = new System.Windows.Forms.TextBox();
 			this.label2 = new System.Windows.Forms.Label();
 			this.checkIsCanadianLab = new System.Windows.Forms.CheckBox();
@@ -138,10 +132,16 @@ namespace OpenDental{
 			this.label17 = new System.Windows.Forms.Label();
 			this.label18 = new System.Windows.Forms.Label();
 			this.textSubstitutionCode = new System.Windows.Forms.TextBox();
-			this.gridNotes = new OpenDental.UI.ODGrid();
-			this.butAddNote = new OpenDental.UI.Button();
 			this.label19 = new System.Windows.Forms.Label();
 			this.comboSubstOnlyIf = new System.Windows.Forms.ComboBox();
+			this.butAddNote = new OpenDental.UI.Button();
+			this.gridNotes = new OpenDental.UI.ODGrid();
+			this.tbTime = new OpenDental.TableTimeBar();
+			this.butColorClear = new OpenDental.UI.Button();
+			this.gridFees = new OpenDental.UI.ODGrid();
+			this.textNote = new OpenDental.ODtextBox();
+			this.butCancel = new OpenDental.UI.Button();
+			this.butOK = new OpenDental.UI.Button();
 			this.SuspendLayout();
 			// 
 			// label1
@@ -206,37 +206,6 @@ namespace OpenDental{
 			this.label10.TabIndex = 9;
 			this.label10.Text = "Default Note";
 			this.label10.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
-			// 
-			// butOK
-			// 
-			this.butOK.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butOK.Autosize = true;
-			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(850,600);
-			this.butOK.Name = "butOK";
-			this.butOK.Size = new System.Drawing.Size(75,26);
-			this.butOK.TabIndex = 10;
-			this.butOK.Text = "&OK";
-			this.butOK.Click += new System.EventHandler(this.butOK_Click);
-			// 
-			// butCancel
-			// 
-			this.butCancel.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butCancel.Autosize = true;
-			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butCancel.CornerRadius = 4F;
-			this.butCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.butCancel.Location = new System.Drawing.Point(850,636);
-			this.butCancel.Name = "butCancel";
-			this.butCancel.Size = new System.Drawing.Size(75,26);
-			this.butCancel.TabIndex = 11;
-			this.butCancel.Text = "&Cancel";
-			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
 			// 
 			// textProcCode
 			// 
@@ -320,17 +289,6 @@ namespace OpenDental{
 			this.label9.Text = "Even if you press cancel, changes to fees will not be undone.";
 			this.label9.TextAlign = System.Drawing.ContentAlignment.TopRight;
 			// 
-			// tbTime
-			// 
-			this.tbTime.BackColor = System.Drawing.SystemColors.Window;
-			this.tbTime.Location = new System.Drawing.Point(10,108);
-			this.tbTime.Name = "tbTime";
-			this.tbTime.ScrollValue = 150;
-			this.tbTime.SelectedIndices = new int[0];
-			this.tbTime.SelectionMode = System.Windows.Forms.SelectionMode.None;
-			this.tbTime.Size = new System.Drawing.Size(15,561);
-			this.tbTime.TabIndex = 30;
-			// 
 			// butSlider
 			// 
 			this.butSlider.BackColor = System.Drawing.SystemColors.ControlDark;
@@ -392,17 +350,6 @@ namespace OpenDental{
 			this.label13.TabIndex = 39;
 			this.label13.Text = "(For some Medicaid)";
 			// 
-			// textNote
-			// 
-			this.textNote.AcceptsReturn = true;
-			this.textNote.Location = new System.Drawing.Point(44,372);
-			this.textNote.Multiline = true;
-			this.textNote.Name = "textNote";
-			this.textNote.QuickPasteType = OpenDentBusiness.QuickPasteType.Procedure;
-			this.textNote.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-			this.textNote.Size = new System.Drawing.Size(550,104);
-			this.textNote.TabIndex = 40;
-			// 
 			// checkIsProsth
 			// 
 			this.checkIsProsth.FlatStyle = System.Windows.Forms.FlatStyle.System;
@@ -428,18 +375,6 @@ namespace OpenDental{
 			this.label14.TabIndex = 42;
 			this.label14.Text = "Medical Code";
 			this.label14.TextAlign = System.Drawing.ContentAlignment.TopRight;
-			// 
-			// gridFees
-			// 
-			this.gridFees.HScrollVisible = false;
-			this.gridFees.Location = new System.Drawing.Point(726,31);
-			this.gridFees.Name = "gridFees";
-			this.gridFees.ScrollValue = 0;
-			this.gridFees.Size = new System.Drawing.Size(199,445);
-			this.gridFees.TabIndex = 44;
-			this.gridFees.Title = "Fees";
-			this.gridFees.TranslationName = "TableProcFee";
-			this.gridFees.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridFees_CellDoubleClick);
 			// 
 			// label15
 			// 
@@ -474,21 +409,6 @@ namespace OpenDental{
 			this.butColor.Size = new System.Drawing.Size(30,20);
 			this.butColor.TabIndex = 47;
 			this.butColor.Click += new System.EventHandler(this.butColor_Click);
-			// 
-			// butColorClear
-			// 
-			this.butColorClear.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butColorClear.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butColorClear.Autosize = true;
-			this.butColorClear.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butColorClear.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butColorClear.CornerRadius = 4F;
-			this.butColorClear.Location = new System.Drawing.Point(44,220);
-			this.butColorClear.Name = "butColorClear";
-			this.butColorClear.Size = new System.Drawing.Size(75,20);
-			this.butColorClear.TabIndex = 49;
-			this.butColorClear.Text = "Clear Color";
-			this.butColorClear.Click += new System.EventHandler(this.butColorClear_Click);
 			// 
 			// textLaymanTerm
 			// 
@@ -557,17 +477,23 @@ namespace OpenDental{
 			this.textSubstitutionCode.Size = new System.Drawing.Size(100,20);
 			this.textSubstitutionCode.TabIndex = 57;
 			// 
-			// gridNotes
+			// label19
 			// 
-			this.gridNotes.HScrollVisible = false;
-			this.gridNotes.Location = new System.Drawing.Point(44,482);
-			this.gridNotes.Name = "gridNotes";
-			this.gridNotes.ScrollValue = 0;
-			this.gridNotes.Size = new System.Drawing.Size(676,180);
-			this.gridNotes.TabIndex = 59;
-			this.gridNotes.Title = "Notes and Times for Specific Providers";
-			this.gridNotes.TranslationName = "TableProcedureNotes";
-			this.gridNotes.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridNotes_CellDoubleClick);
+			this.label19.Location = new System.Drawing.Point(280,76);
+			this.label19.Name = "label19";
+			this.label19.Size = new System.Drawing.Size(46,18);
+			this.label19.TabIndex = 58;
+			this.label19.Text = "Only if";
+			this.label19.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// comboSubstOnlyIf
+			// 
+			this.comboSubstOnlyIf.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboSubstOnlyIf.FormattingEnabled = true;
+			this.comboSubstOnlyIf.Location = new System.Drawing.Point(321,74);
+			this.comboSubstOnlyIf.Name = "comboSubstOnlyIf";
+			this.comboSubstOnlyIf.Size = new System.Drawing.Size(145,21);
+			this.comboSubstOnlyIf.TabIndex = 61;
 			// 
 			// butAddNote
 			// 
@@ -585,22 +511,97 @@ namespace OpenDental{
 			this.butAddNote.Text = "Add Note";
 			this.butAddNote.Click += new System.EventHandler(this.butAddNote_Click);
 			// 
-			// label19
+			// gridNotes
 			// 
-			this.label19.Location = new System.Drawing.Point(280,76);
-			this.label19.Name = "label19";
-			this.label19.Size = new System.Drawing.Size(46,18);
-			this.label19.TabIndex = 58;
-			this.label19.Text = "Only if";
-			this.label19.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.gridNotes.HScrollVisible = false;
+			this.gridNotes.Location = new System.Drawing.Point(44,482);
+			this.gridNotes.Name = "gridNotes";
+			this.gridNotes.ScrollValue = 0;
+			this.gridNotes.Size = new System.Drawing.Size(676,180);
+			this.gridNotes.TabIndex = 59;
+			this.gridNotes.Title = "Notes and Times for Specific Providers";
+			this.gridNotes.TranslationName = "TableProcedureNotes";
+			this.gridNotes.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridNotes_CellDoubleClick);
 			// 
-			// comboSubstOnlyIf
+			// tbTime
 			// 
-			this.comboSubstOnlyIf.FormattingEnabled = true;
-			this.comboSubstOnlyIf.Location = new System.Drawing.Point(321,74);
-			this.comboSubstOnlyIf.Name = "comboSubstOnlyIf";
-			this.comboSubstOnlyIf.Size = new System.Drawing.Size(145,21);
-			this.comboSubstOnlyIf.TabIndex = 61;
+			this.tbTime.BackColor = System.Drawing.SystemColors.Window;
+			this.tbTime.Location = new System.Drawing.Point(10,108);
+			this.tbTime.Name = "tbTime";
+			this.tbTime.ScrollValue = 150;
+			this.tbTime.SelectedIndices = new int[0];
+			this.tbTime.SelectionMode = System.Windows.Forms.SelectionMode.None;
+			this.tbTime.Size = new System.Drawing.Size(15,561);
+			this.tbTime.TabIndex = 30;
+			// 
+			// butColorClear
+			// 
+			this.butColorClear.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butColorClear.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.butColorClear.Autosize = true;
+			this.butColorClear.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butColorClear.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butColorClear.CornerRadius = 4F;
+			this.butColorClear.Location = new System.Drawing.Point(44,220);
+			this.butColorClear.Name = "butColorClear";
+			this.butColorClear.Size = new System.Drawing.Size(75,20);
+			this.butColorClear.TabIndex = 49;
+			this.butColorClear.Text = "Clear Color";
+			this.butColorClear.Click += new System.EventHandler(this.butColorClear_Click);
+			// 
+			// gridFees
+			// 
+			this.gridFees.HScrollVisible = false;
+			this.gridFees.Location = new System.Drawing.Point(726,31);
+			this.gridFees.Name = "gridFees";
+			this.gridFees.ScrollValue = 0;
+			this.gridFees.Size = new System.Drawing.Size(199,445);
+			this.gridFees.TabIndex = 44;
+			this.gridFees.Title = "Fees";
+			this.gridFees.TranslationName = "TableProcFee";
+			this.gridFees.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridFees_CellDoubleClick);
+			// 
+			// textNote
+			// 
+			this.textNote.AcceptsReturn = true;
+			this.textNote.Location = new System.Drawing.Point(44,372);
+			this.textNote.Multiline = true;
+			this.textNote.Name = "textNote";
+			this.textNote.QuickPasteType = OpenDentBusiness.QuickPasteType.Procedure;
+			this.textNote.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+			this.textNote.Size = new System.Drawing.Size(550,104);
+			this.textNote.TabIndex = 40;
+			// 
+			// butCancel
+			// 
+			this.butCancel.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.butCancel.Autosize = true;
+			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butCancel.CornerRadius = 4F;
+			this.butCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+			this.butCancel.Location = new System.Drawing.Point(850,636);
+			this.butCancel.Name = "butCancel";
+			this.butCancel.Size = new System.Drawing.Size(75,26);
+			this.butCancel.TabIndex = 11;
+			this.butCancel.Text = "&Cancel";
+			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
+			// 
+			// butOK
+			// 
+			this.butOK.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.butOK.Autosize = true;
+			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butOK.CornerRadius = 4F;
+			this.butOK.Location = new System.Drawing.Point(850,600);
+			this.butOK.Name = "butOK";
+			this.butOK.Size = new System.Drawing.Size(75,26);
+			this.butOK.TabIndex = 10;
+			this.butOK.Text = "&OK";
+			this.butOK.Click += new System.EventHandler(this.butOK_Click);
 			// 
 			// FormProcCodeEdit
 			// 
@@ -682,6 +683,10 @@ namespace OpenDental{
 			textAlternateCode1.Text=ProcCode.AlternateCode1;
 			textMedicalCode.Text=ProcCode.MedicalCode;
 			textSubstitutionCode.Text=ProcCode.SubstitutionCode;
+			for(int i=1;i<Enum.GetNames(typeof(SubstitutionCondition)).Length;i++) {
+				comboSubstOnlyIf.Items.Add(Lan.g("enumSubstitutionCondition",Enum.GetNames(typeof(SubstitutionCondition))[i]));
+			}
+			comboSubstOnlyIf.SelectedIndex=(int)ProcCode.SubstOnlyIf;
 			textDescription.Text=ProcCode.Descript;
 			textAbbrev.Text=ProcCode.AbbrDesc;
 			textLaymanTerm.Text=ProcCode.LaymanTerm;
@@ -699,7 +704,7 @@ namespace OpenDental{
 			textNote.Text=ProcCode.DefaultNote;
 			listTreatArea.Items.Clear();
 			for(int i=1;i<Enum.GetNames(typeof(TreatmentArea)).Length;i++){
-				listTreatArea.Items.Add(Lan.g(this,Enum.GetNames(typeof(TreatmentArea))[i]));
+				listTreatArea.Items.Add(Lan.g("enumTreatmentArea",Enum.GetNames(typeof(TreatmentArea))[i]));
 			}
 			listTreatArea.SelectedIndex=(int)ProcCode.TreatArea-1;
 			if(listTreatArea.SelectedIndex==-1) listTreatArea.SelectedIndex=2;
@@ -902,6 +907,7 @@ namespace OpenDental{
 			ProcCode.AlternateCode1=textAlternateCode1.Text;
 			ProcCode.MedicalCode=textMedicalCode.Text;
 			ProcCode.SubstitutionCode=textSubstitutionCode.Text;
+			ProcCode.SubstOnlyIf=(SubstitutionCondition)comboSubstOnlyIf.SelectedIndex;
 			ProcCode.Descript=textDescription.Text;
 			ProcCode.AbbrDesc=textAbbrev.Text;
 			ProcCode.LaymanTerm=textLaymanTerm.Text;

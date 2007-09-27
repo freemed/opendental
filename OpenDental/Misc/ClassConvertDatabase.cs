@@ -5849,7 +5849,7 @@ namespace OpenDental{
 				command = "ALTER TABLE benefit ADD CoverageLevel int NOT NULL";
 				General.NonQEx(command);
 				//after r835
-				command = "ALTER TABLE procedurelog ADD SubstOnlyIf int NOT NULL";
+				command = "ALTER TABLE procedurecode ADD SubstOnlyIf int NOT NULL";
 				General.NonQEx(command);
 				
 
