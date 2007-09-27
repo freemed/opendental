@@ -237,6 +237,7 @@ namespace OpenDental.Imaging {
 			doc.FileName = ".jpg";
 			doc.DateCreated = DateTime.Today;
 			doc.PatNum = Patient.PatNum;
+			doc.DocCategory=docCategory;
 			Documents.Insert(doc, Patient);//creates filename and saves to db
 
 			long qualityL = 0;

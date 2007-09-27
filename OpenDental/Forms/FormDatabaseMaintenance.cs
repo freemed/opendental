@@ -289,6 +289,8 @@ namespace OpenDental {
 			Application.DoEvents();
 			SchedulesDeleteShort();
 			Application.DoEvents();
+			SchedulesDeleteProvClosed();
+			Application.DoEvents();
 			SignalInFuture();
 			Application.DoEvents();
 			textLog.Text+=Lan.g(this,"Done");
@@ -1163,6 +1165,14 @@ namespace OpenDental {
 				textLog.Text+=Lan.g(this,"Schedule blocks fixed: ")+numberFixed.ToString()+"\r\n";
 			}
 			//DataValid.SetInvalid(InvalidTypes.Sched);
+		}
+
+		private void SchedulesDeleteProvClosed() {
+			command="DELETE FROM schedule WHERE SchedType=1 AND Status=1";//type=prov,status=closed
+			int numberFixed=General.NonQ(command);
+			if(numberFixed>0||checkShow.Checked) {
+				textLog.Text+=Lan.g(this,"Schedules deleted that were causing printing issues: ")+numberFixed.ToString()+"\r\n";
+			}
 		}
 
 		private void SignalInFuture() {
