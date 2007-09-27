@@ -435,12 +435,21 @@ namespace OpenDental
 				str=Lan.g(this,"Subscriber:")+" "+subscriber;
 				g.DrawString(str,font,brush,x,y);
 				y+=15;
-				str=Lan.g(this,"Annual Max:")+" ";
+				bool isFamMax=Benefits.GetIsFamMax(benefits,plan.PlanNum);
+				str="";
+				if(isFamMax){
+					str+=Lan.g(this,"Family ");
+				}
+				str+=Lan.g(this,"Annual Max:")+" ";
 				max=Benefits.GetAnnualMax(benefits,plan.PlanNum,patPlanList[i].PatPlanNum);
 				if(max!=-1){
 					str+=max.ToString("n0")+" ";
 				}
 				str+="   ";
+				bool isFamDed=Benefits.GetIsFamDed(benefits,plan.PlanNum);
+				if(isFamDed) {
+					str+=Lan.g(this,"Family ");
+				}
 				str+=Lan.g(this,"Deductible:")+" ";
 				deduct=Benefits.GetDeductible(benefits,plan.PlanNum,patPlanList[i].PatPlanNum);
 				if(deduct!=-1) {
@@ -465,12 +474,21 @@ namespace OpenDental
 					g.DrawString(str,font,brush,x,y);
 					y+=15;
 				}
-				str=Lan.g(this,"Ins Used:")+" "
-					+InsPlans.GetInsUsed(claimProcList,date,plan.PlanNum,patPlanList[i].PatPlanNum,-1,plans,benefits).ToString("n");
+				double pend=0;
+				double used=0;
+				if(isFamMax || isFamDed){
+					ClaimProc[] claimProcsFam=ClaimProcs.RefreshFam(plan.PlanNum);
+					used=InsPlans.GetInsUsed(claimProcsFam,date,plan.PlanNum,patPlanList[i].PatPlanNum,-1,plans,benefits);
+					pend=InsPlans.GetPending(claimProcsFam,date,plan,patPlanList[i].PatPlanNum,-1,benefits);
+				}
+				else{
+					used=InsPlans.GetInsUsed(claimProcList,date,plan.PlanNum,patPlanList[i].PatPlanNum,-1,plans,benefits);
+					pend=InsPlans.GetPending(claimProcList,date,plan,patPlanList[i].PatPlanNum,-1,benefits);
+				}
+				str=Lan.g(this,"Ins Used:")+" "+used.ToString("n");
 				g.DrawString(str,font,brush,x,y);
 				y+=15;
-				str=Lan.g(this,"Ins Pending:")+" "
-					+InsPlans.GetPending(claimProcList,date,plan,patPlanList[i].PatPlanNum,-1,benefits).ToString("n");
+				str=Lan.g(this,"Ins Pending:")+" "+pend.ToString("n");
 				g.DrawString(str,font,brush,x,y);
 				y+=15;
 			}

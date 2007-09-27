@@ -422,7 +422,7 @@ namespace OpenDental{
 				return;
 			}
 			if(gridPat.Rows[e.Row].Tag!=null){
-				if(gridPat.Rows[e.Row].Tag.GetType()==typeof(RefAttach)){
+				if(gridPat.Rows[e.Row].Tag.ToString()=="Referral"){
 					//RefAttach refattach=(RefAttach)gridPat.Rows[e.Row].Tag;
 					FormReferralsPatient FormRE=new FormReferralsPatient();
 					FormRE.PatNum=PatCur.PatNum;
@@ -680,6 +680,13 @@ namespace OpenDental{
 			}
 			//Referrals
 			RefAttach[] RefList=RefAttaches.Refresh(PatCur.PatNum);
+			if(RefList.Length==0){
+				row=new ODGridRow();
+				row.Cells.Add(Lan.g("TablePatient","Referrals"));
+				row.Cells.Add(Lan.g("TablePatient","None"));
+				row.Tag="Referral";
+				gridPat.Rows.Add(row);
+			}
 			for(int i=0;i<RefList.Length;i++) {
 				row=new ODGridRow();
 				if(RefList[i].IsFrom){
@@ -696,7 +703,7 @@ namespace OpenDental{
 				catch{
 					row.Cells.Add("");//if referral is null because using random keys and had bug.
 				}
-				row.Tag=RefList[i].Copy();
+				row.Tag="Referral";
 				gridPat.Rows.Add(row);
 			}
 			//AddrNote
