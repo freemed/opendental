@@ -52,8 +52,9 @@ namespace OpenDental{
 				tempCode.LaymanTerm    =PIn.PString(tableStat.Rows[i][19].ToString());
 				tempCode.IsCanadianLab =PIn.PBool  (tableStat.Rows[i][20].ToString());
 				tempCode.PreExisting	 =PIn.PBool  (tableStat.Rows[i][21].ToString());
-				tempCode.BaseUnits		=PIn.PInt(tableStat.Rows[i][22].ToString());
+				tempCode.BaseUnits     =PIn.PInt   (tableStat.Rows[i][22].ToString());
 				tempCode.SubstitutionCode=PIn.PString(tableStat.Rows[i][23].ToString());
+				tempCode.SubstOnlyIf   =(SubstitutionCondition)PIn.PInt(tableStat.Rows[i][24].ToString());
 				try {
 					HList.Add(tempCode.ProcCode,tempCode.Copy());
 				}
@@ -72,7 +73,8 @@ namespace OpenDental{
 			string command="INSERT INTO procedurecode (CodeNum,ProcCode,descript,abbrdesc,"
 				+"proctime,proccat,treatarea,RemoveTooth,setrecall,"
 				+"nobillins,isprosth,defaultnote,ishygiene,gtypenum,alternatecode1,MedicalCode,IsTaxed,"
-				+"PaintType,GraphicColor,LaymanTerm,IsCanadianLab,PreExisting,BaseUnits,SubstitutionCode) VALUES("
+				+"PaintType,GraphicColor,LaymanTerm,IsCanadianLab,PreExisting,BaseUnits,SubstitutionCode,"
+				+"SubstOnlyIf) VALUES("
 				+"'"+POut.PInt(code.CodeNum)+"', "
 				+"'"+POut.PString(code.ProcCode)+"', "
 				+"'"+POut.PString(code.Descript)+"', "
@@ -97,7 +99,8 @@ namespace OpenDental{
 				+"'"+POut.PBool  (code.IsCanadianLab)+"', "
 				+"'"+POut.PBool  (code.PreExisting)+"', "
 				+"'"+POut.PInt(code.BaseUnits)+"', "
-				+"'"+POut.PString(code.SubstitutionCode)+"')";
+				+"'"+POut.PString(code.SubstitutionCode)+"', "
+				+"'"+POut.PInt   ((int)code.SubstOnlyIf)+"')";
 			code.CodeNum=General.NonQ(command,true);
 			ProcedureCodes.Refresh();
 			//Cur already set
@@ -131,6 +134,7 @@ namespace OpenDental{
 				+ ",PreExisting = '"	 +POut.PBool(code.PreExisting)+"'"
 				+ ",BaseUnits = '"     +POut.PInt(code.BaseUnits)+"'"
 				+ ",SubstitutionCode = '"+POut.PString(code.SubstitutionCode)+"'"
+				+ ",SubstOnlyIf = '"   +POut.PInt   ((int)code.SubstOnlyIf)+"'"
 				+" WHERE CodeNum = '"+POut.PInt(code.CodeNum)+"'";
 			General.NonQ(command);
 		}

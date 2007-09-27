@@ -131,8 +131,10 @@ namespace OpenDental{
 					return age>18;
 				default:
 					return false;
-			}//switch
-		}//Condition is met
+			}
+		}
+
+
 
 	}
 

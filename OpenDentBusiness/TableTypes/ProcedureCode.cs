@@ -69,6 +69,9 @@ namespace OpenDentBusiness{
 		///<summary>FK to procedurecode.ProcCode.  Used for posterior composites because insurance substitutes the amalgam code when figuring the coverage.</summary>
 		[XmlIgnore]
 		public string SubstitutionCode;
+		///<Summary>Enum:SubstitutionCondition Used so that posterior composites only substitute if tooth is molar.  Ins usually pays for premolar composites.</Summary>
+		[XmlIgnore]
+		public SubstitutionCondition SubstOnlyIf;
 
 		
 		///<summary>Not a database column.  Only used for xml import function.</summary>
@@ -120,6 +123,7 @@ namespace OpenDentBusiness{
 			p.PreExisting=PreExisting;
 			p.BaseUnits=BaseUnits;
 			p.SubstitutionCode=SubstitutionCode;
+			p.SubstOnlyIf=SubstOnlyIf;
 			return p;
 		}
 

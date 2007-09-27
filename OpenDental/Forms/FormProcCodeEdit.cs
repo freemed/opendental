@@ -64,10 +64,11 @@ namespace OpenDental{
 		private Label label17;
 		private Label label18;
 		private TextBox textSubstitutionCode;
-		private Label label19;
 		private ODGrid gridNotes;
 		private OpenDental.UI.Button butAddNote;
 		private ProcedureCode ProcCode;
+		private Label label19;
+		private ComboBox comboSubstOnlyIf;
 		private List<ProcCodeNote> NoteList;
 
 		///<summary>The procedure code must have already been insterted into the database.</summary>
@@ -137,9 +138,10 @@ namespace OpenDental{
 			this.label17 = new System.Windows.Forms.Label();
 			this.label18 = new System.Windows.Forms.Label();
 			this.textSubstitutionCode = new System.Windows.Forms.TextBox();
-			this.label19 = new System.Windows.Forms.Label();
 			this.gridNotes = new OpenDental.UI.ODGrid();
 			this.butAddNote = new OpenDental.UI.Button();
+			this.label19 = new System.Windows.Forms.Label();
+			this.comboSubstOnlyIf = new System.Windows.Forms.ComboBox();
 			this.SuspendLayout();
 			// 
 			// label1
@@ -555,15 +557,6 @@ namespace OpenDental{
 			this.textSubstitutionCode.Size = new System.Drawing.Size(100,20);
 			this.textSubstitutionCode.TabIndex = 57;
 			// 
-			// label19
-			// 
-			this.label19.Location = new System.Drawing.Point(283,75);
-			this.label19.Name = "label19";
-			this.label19.Size = new System.Drawing.Size(161,18);
-			this.label19.TabIndex = 58;
-			this.label19.Text = "(For posterior composites)";
-			this.label19.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			// 
 			// gridNotes
 			// 
 			this.gridNotes.HScrollVisible = false;
@@ -592,12 +585,28 @@ namespace OpenDental{
 			this.butAddNote.Text = "Add Note";
 			this.butAddNote.Click += new System.EventHandler(this.butAddNote_Click);
 			// 
+			// label19
+			// 
+			this.label19.Location = new System.Drawing.Point(280,76);
+			this.label19.Name = "label19";
+			this.label19.Size = new System.Drawing.Size(46,18);
+			this.label19.TabIndex = 58;
+			this.label19.Text = "Only if";
+			this.label19.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// comboSubstOnlyIf
+			// 
+			this.comboSubstOnlyIf.FormattingEnabled = true;
+			this.comboSubstOnlyIf.Location = new System.Drawing.Point(321,74);
+			this.comboSubstOnlyIf.Name = "comboSubstOnlyIf";
+			this.comboSubstOnlyIf.Size = new System.Drawing.Size(145,21);
+			this.comboSubstOnlyIf.TabIndex = 61;
+			// 
 			// FormProcCodeEdit
 			// 
-			this.AcceptButton = this.butOK;
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
-			this.CancelButton = this.butCancel;
 			this.ClientSize = new System.Drawing.Size(941,707);
+			this.Controls.Add(this.comboSubstOnlyIf);
 			this.Controls.Add(this.butAddNote);
 			this.Controls.Add(this.gridNotes);
 			this.Controls.Add(this.label19);

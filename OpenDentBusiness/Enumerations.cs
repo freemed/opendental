@@ -513,6 +513,15 @@ namespace OpenDentBusiness{
 		Retainer,
 		///<summary>17</summary>
 		AgeOver18}
+	///<Summary>Used for insurance substitutions conditions of procedurecodes.  Mostly for posterior composites.</Summary>
+	public enum SubstitutionCondition{
+		///<Summary>0</Summary>
+		None,
+		///<Summary>1</Summary>
+		Molar,
+		///<Summary>2</Summary>
+		FirstMolar
+	}
 	///<summary>Claimproc Status.  The status must generally be the same as the claim, although it is sometimes not strictly enforced.</summary>
 	public enum ClaimProcStatus{
 		///<summary>0: For claims that have been created or sent, but have not been received.</summary>
