@@ -51,7 +51,7 @@ namespace OpenDentBusiness{
 			return IsPosterior(toothNum);
 		}
 
-		///<summary></summary>
+		///<summary>toothNum gets validated here.</summary>
 		public static bool IsMolar(string toothNum){
 			if(!IsValidDB(toothNum))
 				return false;
@@ -69,6 +69,17 @@ namespace OpenDentBusiness{
 		public static bool IsMolar(int intTooth){
 			string toothNum=FromInt(intTooth);
 			return IsMolar(toothNum);
+		}
+
+		///<summary>toothNum gets validated here. Used for FGC insurance substitutions.</summary>
+		public static bool IsSecondMolar(string toothNum) {
+			if(!IsValidDB(toothNum))
+				return false;
+			int intTooth=ToInt(toothNum);
+			if(intTooth==2 || intTooth==15 || intTooth==18 || intTooth==31){
+				return true;
+			}
+			return false;
 		}
 
 		///<summary></summary>

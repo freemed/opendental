@@ -181,7 +181,7 @@ namespace OpenDental{
 		}
 
 		///<summary>If a substitute exists for the given proc code, then it will give the CodeNum of that code.  Otherwise, it will return the codeNum for the given procCode.</summary>
-		public static int GetSubstituteCodeNum(string procCode) {
+		public static int GetSubstituteCodeNum(string procCode,string toothNum) {
 			if(procCode==null || procCode=="") {
 				return 0;
 			}
@@ -189,9 +189,15 @@ namespace OpenDental{
 				return 0;
 			}
 			ProcedureCode proc=(ProcedureCode)HList[procCode];
-			if(proc.SubstitutionCode!=""){
-				if(HList.Contains(proc.SubstitutionCode)){
-					proc=(ProcedureCode)HList[proc.SubstitutionCode];
+			if(proc.SubstitutionCode!="" && HList.Contains(proc.SubstitutionCode)){
+				if(proc.SubstOnlyIf==SubstitutionCondition.Always){
+					return ((ProcedureCode)HList[proc.SubstitutionCode]).CodeNum;
+				}
+				if(proc.SubstOnlyIf==SubstitutionCondition.Molar && Tooth.IsMolar(toothNum)){
+					return ((ProcedureCode)HList[proc.SubstitutionCode]).CodeNum;
+				}
+				if(proc.SubstOnlyIf==SubstitutionCondition.SecondMolar && Tooth.IsSecondMolar(toothNum)) {
+					return ((ProcedureCode)HList[proc.SubstitutionCode]).CodeNum;
 				}
 			}
 			return proc.CodeNum;

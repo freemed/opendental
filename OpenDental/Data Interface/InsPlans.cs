@@ -472,8 +472,8 @@ namespace OpenDental {
 			return retVal;
 		}
 
-		///<summary>Returns -1 if no allowed feeschedule or fee unknown for this procCode. Otherwise, returns the allowed fee including 0. Can handle a planNum of 0.</summary>
-		public static double GetAllowed(string procCode,int planNum,InsPlan[] PlanList){
+		///<summary>Returns -1 if no allowed feeschedule or fee unknown for this procCode. Otherwise, returns the allowed fee including 0. Can handle a planNum of 0.  Tooth num is used for posterior composites.  It can be left blank in some situations.  Provider must be supplied in case plan has no assigned fee schedule.  Then it will use the fee schedule for the provider.</summary>
+		public static double GetAllowed(string procCode,int planNum,InsPlan[] PlanList,string toothNum,int provNum){
 			if(planNum==0){
 				return -1;
 			}
@@ -482,7 +482,7 @@ namespace OpenDental {
 				return -1;
 			}
 			int codeNum=ProcedureCodes.GetCodeNum(procCode);
-			int substCodeNum=ProcedureCodes.GetSubstituteCodeNum(procCode);//for posterior composites
+			int substCodeNum=ProcedureCodes.GetSubstituteCodeNum(procCode,toothNum);//for posterior composites
 			if(plan.PlanType=="p"){
 				return Fees.GetAmount(codeNum,plan.FeeSched);
 			}
@@ -494,6 +494,10 @@ namespace OpenDental {
 				return -1;
 			}
 			//posterior composite
+			//we're going to make a little shortcut here.  If the fe
+			if(plan.FeeSched==0){
+				return Fees.GetAmount(substCodeNum,Providers.GetProv(provNum).FeeSched);
+			}
 			return Fees.GetAmount(substCodeNum,plan.FeeSched);
 		}
 

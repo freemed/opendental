@@ -683,7 +683,7 @@ namespace OpenDental{
 			textAlternateCode1.Text=ProcCode.AlternateCode1;
 			textMedicalCode.Text=ProcCode.MedicalCode;
 			textSubstitutionCode.Text=ProcCode.SubstitutionCode;
-			for(int i=1;i<Enum.GetNames(typeof(SubstitutionCondition)).Length;i++) {
+			for(int i=0;i<Enum.GetNames(typeof(SubstitutionCondition)).Length;i++) {
 				comboSubstOnlyIf.Items.Add(Lan.g("enumSubstitutionCondition",Enum.GetNames(typeof(SubstitutionCondition))[i]));
 			}
 			comboSubstOnlyIf.SelectedIndex=(int)ProcCode.SubstOnlyIf;

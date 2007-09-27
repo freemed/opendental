@@ -516,11 +516,11 @@ namespace OpenDentBusiness{
 	///<Summary>Used for insurance substitutions conditions of procedurecodes.  Mostly for posterior composites.</Summary>
 	public enum SubstitutionCondition{
 		///<Summary>0</Summary>
-		None,
+		Always,
 		///<Summary>1</Summary>
 		Molar,
 		///<Summary>2</Summary>
-		FirstMolar
+		SecondMolar
 	}
 	///<summary>Claimproc Status.  The status must generally be the same as the claim, although it is sometimes not strictly enforced.</summary>
 	public enum ClaimProcStatus{

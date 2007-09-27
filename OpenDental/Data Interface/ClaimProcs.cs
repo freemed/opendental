@@ -212,13 +212,13 @@ namespace OpenDental{
 			//if(cp.AllowedOverride==-1) {//If allowedOverride is blank
 			//wrong:
 			//	cp.AllowedOverride=InsPlans.GetAllowed(ProcedureCodes.GetProcCode(proc.CodeNum).ProcCode,cp.PlanNum,PlanList);
-				//later add posterior composite functionality. Needs to go here because the substitute fee changes.
 			//}
 			if(cp.AllowedOverride!=-1) {
 				cp.BaseEst=cp.AllowedOverride;
 			}
 			else{
-				double carrierAllowed=InsPlans.GetAllowed(ProcedureCodes.GetProcCode(proc.CodeNum).ProcCode,cp.PlanNum,PlanList);
+				double carrierAllowed=InsPlans.GetAllowed(ProcedureCodes.GetProcCode(proc.CodeNum).ProcCode,cp.PlanNum,PlanList,
+					proc.ToothNum,cp.ProvNum);
 				if(carrierAllowed!=-1){
 					cp.BaseEst=carrierAllowed;
 				}
