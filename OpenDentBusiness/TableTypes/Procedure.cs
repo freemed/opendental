@@ -78,7 +78,11 @@ namespace OpenDentBusiness {
 		///<summary>For certain CPT codes.</summary>
 		public int UnitQty;
 		///<summary>Base units used for some billing codes.</summary>
-		public int BaseUnits;		
+		public int BaseUnits;
+		///<summary>Start time in military</summary>
+		public int StartTime;
+		///<summary>Stop time in military</summary>
+		public int StopTime;
 		///<summary>Not a database column.  Saved in database in the procnote table.  This note is only the most recent note from that table.  If user changes it, then the business layer handles adding another procnote to that table.</summary>
 		public string Note;
 		///<summary>Not a database column.  Just used for now to set the user so that it can be saved with the ProcNote.</summary>
@@ -126,6 +130,8 @@ namespace OpenDentBusiness {
 			proc.UnitCode=UnitCode;
 			proc.UnitQty=UnitQty;
 			proc.BaseUnits=BaseUnits;
+			proc.StartTime=StartTime;
+			proc.StopTime=StopTime;
 			//not database fields:
 			proc.Note=Note;
 			proc.UserNum=UserNum;

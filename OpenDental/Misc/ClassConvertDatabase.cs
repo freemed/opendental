@@ -5851,7 +5851,10 @@ namespace OpenDental{
 				//after r835
 				command = "ALTER TABLE procedurecode ADD SubstOnlyIf int NOT NULL";
 				General.NonQEx(command);
-				
+				command = "ALTER TABLE procedurelog ADD StartTime int NOT NULL";
+				General.NonQEx(command);
+				command = "ALTER TABLE procedurelog ADD StopTime int NOT NULL";
+				General.NonQEx(command);
 
 
 

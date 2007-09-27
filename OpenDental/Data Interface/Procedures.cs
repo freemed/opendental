@@ -247,6 +247,8 @@ namespace OpenDental{
 				List[i].UnitCode         = PIn.PString(table.Rows[i][32].ToString());
 				List[i].UnitQty        = PIn.PInt(table.Rows[i][33].ToString());
 				List[i].BaseUnits       = PIn.PInt(table.Rows[i][34].ToString());
+				List[i].StartTime       = PIn.PInt(table.Rows[i][35].ToString());
+				List[i].StopTime        = PIn.PInt(table.Rows[i][36].ToString());
 				//only used sometimes:
 				/*if(table.Columns.Count>24){
 					List[i].UserNum       = PIn.PInt   (table.Rows[i][24].ToString());
