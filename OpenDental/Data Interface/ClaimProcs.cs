@@ -14,6 +14,19 @@ namespace OpenDental{
 			string command=
 				"SELECT * from claimproc "
 				+"WHERE PatNum = '"+patNum.ToString()+"' ORDER BY LineNumber";
+			return RefreshAndFill(command);
+		}
+
+		///<summary>When using family deduct or max, this gets all claimprocs for the given plan.  This info is needed to compute used and pending insurance.</summary>
+		public static ClaimProc[] RefreshFam(int planNum) {
+			string command=
+				"SELECT * FROM claimproc "
+				+"WHERE PlanNum = "+POut.PInt(planNum);
+				//+" OR PatPlanNum = "+POut.PInt(patPlanNum);
+			return RefreshAndFill(command);
+		}
+
+		private static ClaimProc[] RefreshAndFill(string command){
  			DataTable table=General.GetTable(command);
 			ClaimProc[] List=new ClaimProc[table.Rows.Count];
 			for(int i=0;i<List.Length;i++){

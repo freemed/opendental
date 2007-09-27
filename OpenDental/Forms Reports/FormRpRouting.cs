@@ -470,7 +470,7 @@ namespace OpenDental
 				g.DrawString(str,font,brush,x,y);
 				y+=15;
 				str=Lan.g(this,"Ins Pending:")+" "
-					+InsPlans.GetPending(claimProcList,date,plan.PlanNum,patPlanList[i].PatPlanNum,-1,plans,benefits).ToString("n");
+					+InsPlans.GetPending(claimProcList,date,plan,patPlanList[i].PatPlanNum,-1,benefits).ToString("n");
 				g.DrawString(str,font,brush,x,y);
 				y+=15;
 			}

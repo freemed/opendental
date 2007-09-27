@@ -2614,7 +2614,15 @@ namespace OpenDental{
 				return;
 			}
 			Benefit[] benefitList=Benefits.Refresh(PatPlanList);
-			Claims.CalculateAndUpdate(ClaimProcList,ProcList,PlanList,ClaimCur,PatPlanList,benefitList);
+			bool isFamMax=Benefits.GetIsFamMax(benefitList,ClaimCur.PlanNum);
+			bool isFamDed=Benefits.GetIsFamDed(benefitList,ClaimCur.PlanNum);
+			if(isFamMax || isFamDed){
+				ClaimProc[] claimProcsFam=ClaimProcs.RefreshFam(ClaimCur.PlanNum);
+				Claims.CalculateAndUpdate(claimProcsFam,ProcList,PlanList,ClaimCur,PatPlanList,benefitList);
+			}
+			else{
+				Claims.CalculateAndUpdate(ClaimProcList,ProcList,PlanList,ClaimCur,PatPlanList,benefitList);
+			}
 			ClaimProcList=ClaimProcs.Refresh(PatCur.PatNum);
 			FillGrids();
 		}

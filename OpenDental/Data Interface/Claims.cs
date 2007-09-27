@@ -348,7 +348,7 @@ namespace OpenDental{
 			return myA;
 		}
 
-		///<summary>Updates all claimproc estimates and also updates claim totals to db. Must supply all claimprocs for this patient.  Must supply procList which includes all procedures that this claim is linked to.  Will also need to refresh afterwards to see the results</summary>
+		///<summary>Updates all claimproc estimates and also updates claim totals to db. Must supply all claimprocs for this patient (or for this plan if fam max or ded).  Must supply procList which includes all procedures that this claim is linked to.  Will also need to refresh afterwards to see the results</summary>
 		public static void CalculateAndUpdate(ClaimProc[] ClaimProcList,Procedure[] procList,InsPlan[] PlanList,Claim ClaimCur,PatPlan[] patPlans,Benefit[] benefitList){
 			ClaimProc[] ClaimProcsForClaim=ClaimProcs.GetForClaim(ClaimProcList,ClaimCur.ClaimNum);
 			double claimFee=0;
@@ -436,19 +436,28 @@ namespace OpenDental{
 				}
 				if(ClaimCur.ClaimType=="P"){//primary
 					ClaimProcs.ComputeBaseEst(ClaimProcsForClaim[i],ProcCur,PriSecTot.Pri,PlanList,patPlans,benefitList);//handles dedBeforePerc
-					ClaimProcsForClaim[i].InsPayEst=Procedures.GetEst(ProcCur,ClaimProcList,PriSecTot.Pri,patPlans,true);
-					if(!ClaimProcsForClaim[i].DedBeforePerc){
-						ClaimProcsForClaim[i].InsPayEst-=ClaimProcsForClaim[i].DedApplied;
-					}
+					ClaimProcsForClaim[i].InsPayEst=Procedures.GetEst(ProcCur,ClaimProcList,PriSecTot.Pri,patPlans,true);	
 				}
 				else if(ClaimCur.ClaimType=="S"){//secondary
 					ClaimProcs.ComputeBaseEst(ClaimProcsForClaim[i],ProcCur,PriSecTot.Sec,PlanList,patPlans,benefitList);
 					ClaimProcsForClaim[i].InsPayEst=Procedures.GetEst(ProcCur,ClaimProcList,PriSecTot.Sec,patPlans,true);
-					if(!ClaimProcsForClaim[i].DedBeforePerc){
+				}
+				if(ClaimCur.ClaimType=="P" || ClaimCur.ClaimType=="S"){
+					if(ClaimProcsForClaim[i].DedBeforePerc) {
+						int percent=100;
+						if(ClaimProcsForClaim[i].Percentage!=-1) {
+							percent=ClaimProcsForClaim[i].Percentage;
+						}
+						if(ClaimProcsForClaim[i].PercentOverride!=-1) {
+							percent=ClaimProcsForClaim[i].PercentOverride;
+						}
+						ClaimProcsForClaim[i].InsPayEst-=ClaimProcsForClaim[i].DedApplied*(double)percent/100d;
+					}
+					else {
 						ClaimProcsForClaim[i].InsPayEst-=ClaimProcsForClaim[i].DedApplied;
 					}
 				}
-				//other claimtypes only changed manually
+				//claimtypes other than P and S only changed manually
 				if(ClaimProcsForClaim[i].InsPayEst < 0){
 					//example: if inspayest = 19 - 50(ded) for total of -31.
 					ClaimProcsForClaim[i].DedApplied+=ClaimProcsForClaim[i].InsPayEst;//eg. 50+(-31)=19

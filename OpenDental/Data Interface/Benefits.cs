@@ -212,7 +212,7 @@ namespace OpenDental {
 			General.NonQ(command);
 		}
 		
-		///<summary>Gets an annual max from the supplied list of benefits.  Ignores benefits that do not match either the planNum or the patPlanNum.  Because it starts at the top of the benefit list, it will get the most general limitation first.  Returns -1 if none found.  It does not discriminate between family and individual.</summary>
+		///<summary>Gets an annual max from the supplied list of benefits.  Ignores benefits that do not match either the planNum or the patPlanNum.  Because it starts at the top of the benefit list, it will get the most general limitation first.  Returns -1 if none found.  It does not discriminate between family and individual because it doesn't need to.</summary>
 		public static double GetAnnualMax(Benefit[] list,int planNum,int patPlanNum) {
 			for(int i=0;i<list.Length;i++) {
 				if(list[i].PlanNum==0 && list[i].PatPlanNum!=patPlanNum) {
@@ -258,7 +258,7 @@ namespace OpenDental {
 			return false;
 		}
 
-		///<summary>Gets a deductible from the supplied list of benefits.  Ignores benefits that do not match either the planNum or the patPlanNum.  Because it starts at the top of the benefit list, it will get the most general deductible first.</summary>
+		///<summary>Gets a deductible from the supplied list of benefits.  Ignores benefits that do not match either the planNum or the patPlanNum.  Because it starts at the top of the benefit list, it will get the most general deductible first.  Does not need to discriminate between family and individual.</summary>
 		public static double GetDeductible(Benefit[] list,int planNum,int patPlanNum) {
 			for(int i=0;i<list.Length;i++) {
 				if(list[i].PlanNum==0 && list[i].PatPlanNum!=patPlanNum) {
@@ -355,20 +355,6 @@ namespace OpenDental {
 				}
 				bool isCalendarYear=list[i].TimePeriod==BenefitTimePeriod.CalendarYear;
 				return OpenDentBusiness.BenefitB.ComputeRenewDate(asofDate,isCalendarYear,insStartDate);
-				/*
-				if(list[i].TimePeriod==BenefitTimePeriod.CalendarYear){
-					return new DateTime(asofDate.Year,1,1);
-				}
-				//now, for benefit year not beginning on Jan 1.
-				if(insStartDate.Year<1880){//if no start date was entered.
-					return new DateTime(DateTime.Today.Year,1,1);
-				}
-				if(insStartDate.Month<=DateTime.Today.Month && insStartDate.Day<=DateTime.Today.Day){//earlier this year, or today
-					return new DateTime(DateTime.Today.Year,insStartDate.Month,insStartDate.Day);
-				}
-				//late last year
-				return new DateTime(DateTime.Today.Year-1,insStartDate.Month,insStartDate.Day);
-				*/
 			}
 			return new DateTime(DateTime.Now.Year,1,1);
 		}

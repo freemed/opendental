@@ -2810,7 +2810,16 @@ namespace OpenDental {
 			//ClaimProc[] ClaimProcsForClaim=ClaimProcs.GetForClaim(ClaimProcList,ClaimCur.ClaimNum);
 			ClaimCur.ClaimStatus="W";
 			ClaimCur.DateSent=DateTime.Today;
-			Claims.CalculateAndUpdate(ClaimProcList,AccProcList,PlanList,ClaimCur,PatPlanList,BenefitList);
+			bool isFamMax=Benefits.GetIsFamMax(BenefitList,ClaimCur.PlanNum);
+			bool isFamDed=Benefits.GetIsFamDed(BenefitList,ClaimCur.PlanNum);
+			ClaimProc[] claimProcsFam=null;
+			if(isFamMax || isFamDed){
+				claimProcsFam=ClaimProcs.RefreshFam(ClaimCur.PlanNum);
+				Claims.CalculateAndUpdate(claimProcsFam,AccProcList,PlanList,ClaimCur,PatPlanList,BenefitList);
+			}
+			else{
+				Claims.CalculateAndUpdate(ClaimProcList,AccProcList,PlanList,ClaimCur,PatPlanList,BenefitList);
+			}
 			//Claims.Cur=ClaimCur;
 			FormClaimEdit FormCE=new FormClaimEdit(ClaimCur,PatCur,FamCur);
 			FormCE.IsNew=true;//this causes it to delete the claim if cancelling.
@@ -2830,7 +2839,15 @@ namespace OpenDental {
 					}
 					ClaimProcList=ClaimProcs.Refresh(PatCur.PatNum);
 					ClaimCur.ClaimStatus="H";
-					Claims.CalculateAndUpdate(ClaimProcList,AccProcList,PlanList,ClaimCur,PatPlanList,BenefitList);
+					isFamMax=Benefits.GetIsFamMax(BenefitList,ClaimCur.PlanNum);
+					isFamDed=Benefits.GetIsFamDed(BenefitList,ClaimCur.PlanNum);
+					if(isFamMax || isFamDed) {
+						claimProcsFam=ClaimProcs.RefreshFam(ClaimCur.PlanNum);
+						Claims.CalculateAndUpdate(claimProcsFam,AccProcList,PlanList,ClaimCur,PatPlanList,BenefitList);
+					}
+					else {
+						Claims.CalculateAndUpdate(ClaimProcList,AccProcList,PlanList,ClaimCur,PatPlanList,BenefitList);
+					}
 					//Claims.Cur=ClaimCur;
 				}
 			}
@@ -3050,7 +3067,15 @@ namespace OpenDental {
 			//Claims.Cur=ClaimCur;
 			//still have not saved some changes to the claim at this point
 			FormClaimEdit FormCE=new FormClaimEdit(ClaimCur,PatCur,FamCur);
-			Claims.CalculateAndUpdate(ClaimProcList,AccProcList,PlanList,ClaimCur,PatPlanList,BenefitList);
+			bool isFamMax=Benefits.GetIsFamMax(BenefitList,ClaimCur.PlanNum);
+			bool isFamDed=Benefits.GetIsFamDed(BenefitList,ClaimCur.PlanNum);
+			if(isFamMax || isFamDed) {
+				ClaimProc[] claimProcsFam=ClaimProcs.RefreshFam(ClaimCur.PlanNum);
+				Claims.CalculateAndUpdate(claimProcsFam,AccProcList,PlanList,ClaimCur,PatPlanList,BenefitList);
+			}
+			else {
+				Claims.CalculateAndUpdate(ClaimProcList,AccProcList,PlanList,ClaimCur,PatPlanList,BenefitList);
+			}
 			FormCE.IsNew=true;//this causes it to delete the claim if cancelling.
 			FormCE.ShowDialog();
 			ModuleSelected(PatCur.PatNum);
@@ -3084,7 +3109,15 @@ namespace OpenDental {
 			//ClaimProc[] ClaimProcsForClaim=ClaimProcs.GetForClaim(ClaimProcList,ClaimCur.ClaimNum);
 			ClaimCur.ClaimStatus="W";
 			ClaimCur.DateSent=DateTime.Today;
-			Claims.CalculateAndUpdate(ClaimProcList,AccProcList,PlanList,ClaimCur,PatPlanList,BenefitList);
+			bool isFamMax=Benefits.GetIsFamMax(BenefitList,ClaimCur.PlanNum);
+			bool isFamDed=Benefits.GetIsFamDed(BenefitList,ClaimCur.PlanNum);
+			if(isFamMax || isFamDed) {
+				ClaimProc[] claimProcsFam=ClaimProcs.RefreshFam(ClaimCur.PlanNum);
+				Claims.CalculateAndUpdate(claimProcsFam,AccProcList,PlanList,ClaimCur,PatPlanList,BenefitList);
+			}
+			else {
+				Claims.CalculateAndUpdate(ClaimProcList,AccProcList,PlanList,ClaimCur,PatPlanList,BenefitList);
+			}
 			FormClaimEdit FormCE=new FormClaimEdit(ClaimCur,PatCur,FamCur);
 			FormCE.IsNew=true;//this causes it to delete the claim if cancelling.
 			FormCE.ShowDialog();
@@ -3142,7 +3175,15 @@ namespace OpenDental {
 			ClaimProcList=ClaimProcs.Refresh(PatCur.PatNum);
 			ClaimCur.ClaimStatus="W";
 			ClaimCur.DateSent=DateTime.Today;
-			Claims.CalculateAndUpdate(ClaimProcList,AccProcList,PlanList,ClaimCur,PatPlanList,BenefitList);
+			bool isFamMax=Benefits.GetIsFamMax(BenefitList,ClaimCur.PlanNum);
+			bool isFamDed=Benefits.GetIsFamDed(BenefitList,ClaimCur.PlanNum);
+			if(isFamMax || isFamDed) {
+				ClaimProc[] claimProcsFam=ClaimProcs.RefreshFam(ClaimCur.PlanNum);
+				Claims.CalculateAndUpdate(claimProcsFam,AccProcList,PlanList,ClaimCur,PatPlanList,BenefitList);
+			}
+			else {
+				Claims.CalculateAndUpdate(ClaimProcList,AccProcList,PlanList,ClaimCur,PatPlanList,BenefitList);
+			}
 			//Claims.Cur=ClaimCur;
 			//still have not saved some changes to the claim at this point
 			FormClaimEdit FormCE=new FormClaimEdit(ClaimCur,PatCur,FamCur);
@@ -3173,7 +3214,15 @@ namespace OpenDental {
 			}
 			ClaimProcList=ClaimProcs.Refresh(PatCur.PatNum);
 			//ClaimProc[] ClaimProcsForClaim=ClaimProcs.GetForClaim(ClaimProcList,ClaimCur.ClaimNum);
-			Claims.CalculateAndUpdate(ClaimProcList,AccProcList,PlanList,ClaimCur,PatPlanList,BenefitList);
+			bool isFamMax=Benefits.GetIsFamMax(BenefitList,ClaimCur.PlanNum);
+			bool isFamDed=Benefits.GetIsFamDed(BenefitList,ClaimCur.PlanNum);
+			if(isFamMax || isFamDed) {
+				ClaimProc[] claimProcsFam=ClaimProcs.RefreshFam(ClaimCur.PlanNum);
+				Claims.CalculateAndUpdate(claimProcsFam,AccProcList,PlanList,ClaimCur,PatPlanList,BenefitList);
+			}
+			else {
+				Claims.CalculateAndUpdate(ClaimProcList,AccProcList,PlanList,ClaimCur,PatPlanList,BenefitList);
+			}
 			//Claims.Cur=ClaimCur;
 			//still have not saved some changes to the claim at this point
 			FormClaimEdit FormCE=new FormClaimEdit(ClaimCur,PatCur,FamCur);

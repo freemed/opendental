@@ -332,7 +332,8 @@ namespace OpenDental {
 		/// <summary>Only used once in Claims.cs.  Gets insurance benefits remaining for one benefit year.  Returns actual remaining insurance based on ClaimProc data, taking into account inspaid and ins pending. Must supply all claimprocs for the patient.  Date used to determine which benefit year to calc.  Usually today's date.  The insplan.PlanNum is the plan to get value for.  ExcludeClaim is the ClaimNum to exclude, or enter -1 to include all.  This does not yet handle calculations where ortho max is different from regular max.  Just takes the most general annual max, and subtracts all benefits used from all categories.</summary>
 		public static double GetInsRem(ClaimProc[] ClaimProcList,DateTime date,int planNum,int patPlanNum,int excludeClaim,InsPlan[] PlanList,Benefit[] benList) {
 			double insUsed=GetInsUsed(ClaimProcList,date,planNum,patPlanNum,excludeClaim,PlanList,benList);
-			double insPending=GetPending(ClaimProcList,date,planNum,patPlanNum,excludeClaim,PlanList,benList);
+			InsPlan plan=InsPlans.GetPlan(planNum,PlanList);
+			double insPending=GetPending(ClaimProcList,date,plan,patPlanNum,excludeClaim,benList);
 			double annualMax=Benefits.GetAnnualMax(benList,planNum,patPlanNum);
 			if(annualMax<0) {
 				return 999999;
@@ -422,33 +423,17 @@ namespace OpenDental {
 		}
 
 		///<summary>Get pending insurance for a given plan for one benefit year. Include a ClaimProcList which is all claimProcs for the patient.  Must supply all benefits for patient so that we know if it's a service year or a calendar year.  asofDate used to determine which benefit year to calc.  Usually the date of service for a claim.  The insplan.PlanNum is the plan to get value for.</summary>
-		public static double GetPending(ClaimProc[] ClaimProcList,DateTime asofDate,int planNum,int patPlanNum,int excludeClaim,InsPlan[] PlanList,Benefit[] benList) {
-			InsPlan curPlan=GetPlan(planNum,PlanList);
+		public static double GetPending(ClaimProc[] ClaimProcList,DateTime asofDate,InsPlan curPlan,int patPlanNum,int excludeClaim,Benefit[] benList) {
+			//InsPlan curPlan=GetPlan(planNum,PlanList);
 			if(curPlan==null) {
 				return 0;
 			}
 			//get the most recent renew date, possibly including today:
-			//MessageBox.Show("mark1");
-			DateTime renewDate=Benefits.GetRenewDate(benList,planNum,patPlanNum,curPlan.DateEffective,asofDate);
-			//MessageBox.Show("mark2");
-			//DateTime startDate;//for benefit year
+			DateTime renewDate=Benefits.GetRenewDate(benList,curPlan.PlanNum,patPlanNum,curPlan.DateEffective,asofDate);
 			DateTime stopDate=renewDate.AddYears(1);
-			//if renew date is earlier this year or is today(assuming typical situation of date being today)
-			//Debug.WriteLine(renewDate.Month);
-			//Debug.WriteLine(date.Month);
-			//MessageBox.Show((renewDate.Month <= date.Month).ToString());
-			//MessageBox.Show((renewDate.Day <= date.Day).ToString());
-			/*if(renewDate.Month <= date.Month && renewDate.Day <= date.Day) {
-				startDate=new DateTime(date.Year,renewDate.Month,renewDate.Day);
-				stopDate=new DateTime(date.Year+1,renewDate.Month,renewDate.Day);
-			}
-			else {//otherwise, renew date must be late last year
-				startDate=new DateTime(date.Year-1,renewDate.Month,renewDate.Day);
-				stopDate=new DateTime(date.Year,renewDate.Month,renewDate.Day);
-			}*/
 			double retVal=0;
 			for(int i=0;i<ClaimProcList.Length;i++) {
-				if(ClaimProcList[i].PlanNum==planNum
+				if(ClaimProcList[i].PlanNum==curPlan.PlanNum
 					&& ClaimProcList[i].ClaimNum != excludeClaim
 					&& ClaimProcList[i].ProcDate < stopDate
 					&& ClaimProcList[i].ProcDate >= renewDate
