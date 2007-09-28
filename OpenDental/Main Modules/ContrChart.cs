@@ -2685,10 +2685,12 @@ namespace OpenDental{
 			FillPtInfo();
 			FillDxProcImage();
 			FillImages();
-			//reset to TP status on every new patient selected
-			if(PrevPtNum != PatCur.PatNum) {
-				radioEntryTP.Select();
-				PrevPtNum = PatCur.PatNum;
+			if(PatCur != null) {
+				//reset to TP status on every new patient selected
+				if(PrevPtNum != PatCur.PatNum) {
+					radioEntryTP.Select();
+					PrevPtNum = PatCur.PatNum;
+				}
 			}
 		}
 
