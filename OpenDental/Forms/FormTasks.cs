@@ -74,16 +74,23 @@ namespace OpenDental{
 			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Tasks";
+			this.Load += new System.EventHandler(this.FormTasks_Load);
 			this.ResumeLayout(false);
 
 		}
 		#endregion
 
+		private void FormTasks_Load(object sender,EventArgs e) {
+			userControlTasks1.InitializeOnStartup();
+		}
+		
 		private void userControlTasks1_GoToChanged(object sender,EventArgs e) {
 			GotoType=userControlTasks1.GotoType;
 			GotoKeyNum=userControlTasks1.GotoKeyNum;
 			DialogResult=DialogResult.OK;
 		}
+
+		
 
 		
 

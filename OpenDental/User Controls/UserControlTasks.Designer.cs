@@ -33,6 +33,7 @@ namespace OpenDental {
 			this.tabMonth = new System.Windows.Forms.TabPage();
 			this.cal = new System.Windows.Forms.MonthCalendar();
 			this.tree = new System.Windows.Forms.TreeView();
+			this.imageListTree = new System.Windows.Forms.ImageList(this.components);
 			this.listMain = new System.Windows.Forms.ListView();
 			this.columnHeader1 = new System.Windows.Forms.ColumnHeader();
 			this.imageListMain = new System.Windows.Forms.ImageList(this.components);
@@ -45,7 +46,6 @@ namespace OpenDental {
 			this.menuItemDelete = new System.Windows.Forms.MenuItem();
 			this.menuItem2 = new System.Windows.Forms.MenuItem();
 			this.menuItemGoto = new System.Windows.Forms.MenuItem();
-			this.imageListTree = new System.Windows.Forms.ImageList(this.components);
 			this.ToolBarMain = new OpenDental.UI.ODToolBar();
 			this.tabContr.SuspendLayout();
 			this.SuspendLayout();
@@ -131,9 +131,18 @@ namespace OpenDental {
 			this.tree.TabIndex = 7;
 			this.tree.MouseDown += new System.Windows.Forms.MouseEventHandler(this.tree_MouseDown);
 			// 
+			// imageListTree
+			// 
+			this.imageListTree.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imageListTree.ImageStream")));
+			this.imageListTree.TransparentColor = System.Drawing.Color.Transparent;
+			this.imageListTree.Images.SetKeyName(0,"TaskList.gif");
+			this.imageListTree.Images.SetKeyName(1,"checkBoxChecked.gif");
+			this.imageListTree.Images.SetKeyName(2,"checkBoxUnchecked.gif");
+			// 
 			// listMain
 			// 
 			this.listMain.Activation = System.Windows.Forms.ItemActivation.TwoClick;
+			this.listMain.Alignment = System.Windows.Forms.ListViewAlignment.Default;
 			this.listMain.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
@@ -156,7 +165,7 @@ namespace OpenDental {
 			// columnHeader1
 			// 
 			this.columnHeader1.Text = "Description";
-			this.columnHeader1.Width = 825;
+			this.columnHeader1.Width = 270;
 			// 
 			// imageListMain
 			// 
@@ -222,14 +231,6 @@ namespace OpenDental {
 			this.menuItemGoto.Index = 7;
 			this.menuItemGoto.Text = "Go To";
 			this.menuItemGoto.Click += new System.EventHandler(this.menuItemGoto_Click);
-			// 
-			// imageListTree
-			// 
-			this.imageListTree.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imageListTree.ImageStream")));
-			this.imageListTree.TransparentColor = System.Drawing.Color.Transparent;
-			this.imageListTree.Images.SetKeyName(0,"TaskList.gif");
-			this.imageListTree.Images.SetKeyName(1,"checkBoxChecked.gif");
-			this.imageListTree.Images.SetKeyName(2,"checkBoxUnchecked.gif");
 			// 
 			// ToolBarMain
 			// 

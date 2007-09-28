@@ -5858,6 +5858,9 @@ namespace OpenDental{
 					command="UPDATE procedurecode SET SubstitutionCode='D2161',SubstOnlyIf=1 WHERE ProcCode='D2394'";//4+ surf
 					General.NonQEx(command);
 				}
+				//after r843
+				command="INSERT INTO preference VALUES('TaskListAlwaysShowsAtBottom','0')";
+				General.NonQEx(command);
 				
 
 

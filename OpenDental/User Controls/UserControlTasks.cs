@@ -48,7 +48,7 @@ namespace OpenDental {
 			}
 		}
 
-		private void UserControlTasks_Load(object sender,System.EventArgs e) {
+		public void InitializeOnStartup(){
 			LayoutToolBar();
 			if(Tasks.LastOpenList==null) {//first time openning
 				TreeHistory=new ArrayList();
@@ -65,6 +65,10 @@ namespace OpenDental {
 			FillTree();
 			FillMain();
 			SetMenusEnabled();
+		}
+
+		private void UserControlTasks_Load(object sender,System.EventArgs e) {
+			
 		}
 
 		///<summary></summary>
