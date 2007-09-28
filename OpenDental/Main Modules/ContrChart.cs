@@ -226,7 +226,9 @@ namespace OpenDental{
 		private Label label3;
 		private Label labelApptDate;
 		private Label labelApptStatus;
-    private MenuItem menuItemDeleteSelected;
+		private MenuItem menuItemDeleteSelected;
+		private int PrevPtNum;
+
 
 			
 		///<summary></summary>
@@ -2681,8 +2683,13 @@ namespace OpenDental{
 			FillProgNotes();
 			FillPlanned();
 			FillPtInfo();
-      FillDxProcImage();
+			FillDxProcImage();
 			FillImages();
+			//reset to TP status on every new patient selected
+			if(PrevPtNum != PatCur.PatNum) {
+				radioEntryTP.Select();
+				PrevPtNum = PatCur.PatNum;
+			}
 		}
 
 		private void FillPatientButton(){

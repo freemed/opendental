@@ -3312,6 +3312,9 @@ namespace OpenDental{
 				}
 			}
       Claims.Delete(ClaimCur);
+	  SecurityLogs.MakeLogEntry(Permissions.ClaimsSentEdit,ClaimCur.PatNum,
+		Lan.g(this,"Delete Ins Claim") + " - " + PatCur.GetNameLF());
+
       DialogResult=DialogResult.OK;
 		}
 

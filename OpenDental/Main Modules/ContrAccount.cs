@@ -1465,9 +1465,15 @@ namespace OpenDental {
 			FillAging();
 			FillRepeatCharges();
 			LayoutPanels();
-			if (ViewingInRecall){
+			if(ViewingInRecall | PrefB.GetBool("FuchsOptionsOn")) {
 				panelProgNotes.Visible = true;
 				FillProgNotes();
+				if(PrefB.GetBool("FuchsOptionsOn")) {//show prog note options
+					groupBox6.Visible = true;
+					groupBox7.Visible = true;
+					butShowAll.Visible = true;
+					butShowNone.Visible = true;
+				}
 			}
 			else{
 				panelProgNotes.Visible = false;
@@ -3633,7 +3639,15 @@ namespace OpenDental {
 			}
 			DataSetMain = null;
 			if (PatCur != null) {
-				DataSetMain = AccountModule.GetAll(PatCur.PatNum,ViewingInRecall);
+				//get the prognote data always for FuchsOptions
+				if(PrefB.GetBool("FuchsOptionsOn") & !ViewingInRecall) {
+					ViewingInRecall = true;
+					DataSetMain = AccountModule.GetAll(PatCur.PatNum,ViewingInRecall);
+					ViewingInRecall = false;
+				}
+				else {
+					DataSetMain = AccountModule.GetAll(PatCur.PatNum,ViewingInRecall);
+				}
 			}
 			gridProg.BeginUpdate();
 			gridProg.Columns.Clear();
