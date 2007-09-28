@@ -191,7 +191,7 @@ namespace OpenDentBusiness {
 				row["colorText"]=DefB.Long[(int)DefCat.ProgNoteColors][6].ItemColor.ToArgb().ToString();
 				row["CommlogNum"]=rawComm.Rows[i]["CommlogNum"].ToString();
 				row["description"]=Lan.g("ChartModule","Comm - ")
-					+Lan.g("enumCommItemType",((CommItemType)PIn.PInt(rawComm.Rows[i]["CommType"].ToString())).ToString());
+					+DefB.GetName(DefCat.CommLogTypes,PIn.PInt(rawComm.Rows[i]["CommType"].ToString()));
 				row["LabCaseNum"]=0;
 				row["note"]=rawComm.Rows[i]["Note"].ToString();
 				dateT=PIn.PDateT(rawComm.Rows[i]["CommDateTime"].ToString());

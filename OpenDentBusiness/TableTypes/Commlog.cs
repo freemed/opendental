@@ -11,8 +11,8 @@ namespace OpenDentBusiness{
 		public int PatNum;
 		///<summary>Date and time of entry</summary>
 		public DateTime CommDateTime;
-		///<summary>Enum:CommItemType . This will be 0 if IsStatementSent.</summary>
-		public CommItemType CommType;
+		///<summary>FK to definition.DefNum. This will be 0 if IsStatementSent.  Used to be an enumeration in previous versions.</summary>
+		public int CommType;
 		///<summary>Note for this commlog entry.</summary>
 		public string Note;
 		///<summary>Enum:CommItemMode Phone, email, etc.</summary>

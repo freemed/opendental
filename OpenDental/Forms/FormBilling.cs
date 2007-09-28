@@ -260,7 +260,7 @@ namespace OpenDental{
 				for(int i=0;i<guarNums.Length;i++){
 					commlog=new Commlog();
 					commlog.CommDateTime=DateTime.Now;
-					commlog.CommType=CommItemType.None;
+					commlog.CommType=0;
 					commlog.SentOrReceived=CommSentOrReceived.Sent;
 					commlog.Mode_=CommItemMode.Mail;
 					commlog.IsStatementSent=true;

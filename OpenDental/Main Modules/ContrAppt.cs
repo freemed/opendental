@@ -3232,7 +3232,7 @@ namespace OpenDental{
 						Commlog CommlogCur = new Commlog();
 						CommlogCur.PatNum = apt.PatNum;
 						CommlogCur.CommDateTime = apt.AptDateTime;
-						CommlogCur.CommType = CommItemType.ApptRelated;
+						CommlogCur.CommType =Commlogs.GetTypeAuto(CommItemTypeAuto.APPT);
 						CommlogCur.Note = "Deleted Pt NOTE from schedule, saved copy: ";
 						CommlogCur.Note += apt.Note;
 						//there is no dialog here because it is just a simple entry
@@ -3255,7 +3255,7 @@ namespace OpenDental{
 						Commlog CommlogCur = new Commlog();
 						CommlogCur.PatNum = apt.PatNum;
 						CommlogCur.CommDateTime = apt.AptDateTime;
-						CommlogCur.CommType = CommItemType.ApptRelated;
+						CommlogCur.CommType =Commlogs.GetTypeAuto(CommItemTypeAuto.APPT);
 						CommlogCur.Note = "Deleted Appointment & saved note: ";
 						if (apt.ProcDescript != "") {
 							CommlogCur.Note += apt.ProcDescript + ": ";
@@ -3724,7 +3724,7 @@ namespace OpenDental{
 			//CommLog entry---------------------------------------------------------------------------
 			Commlog CommlogCur=new Commlog();
 			CommlogCur.CommDateTime=DateTime.Now;
-			CommlogCur.CommType=CommItemType.Misc;
+			CommlogCur.CommType=Commlogs.GetTypeAuto(CommItemTypeAuto.MISC);
 			CommlogCur.Note="Appointment card sent";
 			CommlogCur.PatNum=pat.PatNum;
 			//there is no dialog here because it is just a simple entry

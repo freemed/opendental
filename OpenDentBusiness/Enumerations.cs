@@ -187,7 +187,7 @@ namespace OpenDentBusiness{
 		///<summary>26- Categories of procedure buttons in Chart module</summary>
 		ProcButtonCats,
 		///<Summary>27- Types of commlog entries.</Summary>
-		CommLogType
+		CommLogTypes
 	}
 	//public enum StudentStat{None,Full,Part};
 	///<summary>Used in procedurecode setup to specify the treatment area for a procedure.  This determines what fields are available when editing an appointment.</summary>
@@ -545,8 +545,8 @@ namespace OpenDentBusiness{
 		///<summary>8: For capitation procedures that are still estimates rather than complete.  When procedure is completed, this can be changed to CapComplete, but never to anything else.</summary>
 		CapEstimate
 	}
-	///<summary>CommItemType of 0 is reserved for later use with user defined types.</summary>
-	public enum CommItemType{
+	//<summary>CommItemType of 0 is reserved for later use with user defined types.</summary>
+	/*public enum CommItemType{
 		///<Summary>Used temporarily while we get rid of StatementSent.</Summary>
 		None=0,
 		///<summary>1- auto. </summary>
@@ -562,7 +562,7 @@ namespace OpenDentBusiness{
 		///<summary>6- </summary>
 		Misc//LetterSent used to be 6
 		//clinical not implemented yet.
-	}
+	}*/
 
 	///<summary></summary>
 	public enum CommItemMode{

@@ -3918,7 +3918,6 @@ namespace OpenDental {
 
 		///<summary>The supplied procedure row must include these columns: ProcDate,ProcStatus,ProcCode,Surf,ToothNum, and ToothRange, all in raw database format.</summary>
 		private bool ShouldDisplayProc(DataRow row) {
-
 			switch ((ProcStat)PIn.PInt(row["ProcStatus"].ToString())) {
 			case ProcStat.TP:
 			if (checkShowTP.Checked) {
@@ -3953,6 +3952,7 @@ namespace OpenDental {
 			}
 			return false;
 		}
+
 		private void FillInsInfo() {
 			textPriMax.Text = "";
 			textPriDed.Text = "";
@@ -4065,8 +4065,8 @@ namespace OpenDental {
 			//**only different lines from tx pl routine fillsummary
 			labelPriRem.Text = textPriRem.Text;
 			labelPriPend.Text = textPriPend.Text;
-
 		}
+
 		private void FillProgNotes() {
 			ArrayList selectedTeeth = new ArrayList();//integers 1-32
 			for (int i = 0; i < 32; i++) {
@@ -4353,9 +4353,9 @@ namespace OpenDental {
 			CommlogCur.PatNum = PatCur.PatNum;
 			CommlogCur.CommDateTime = DateTime.Now;
 			if (ViewingInRecall)
-				CommlogCur.CommType = CommItemType.Recall;
+				CommlogCur.CommType =Commlogs.GetTypeAuto(CommItemTypeAuto.RECALL);
 			else
-				CommlogCur.CommType = CommItemType.Financial;
+				CommlogCur.CommType =Commlogs.GetTypeAuto(CommItemTypeAuto.FIN);
 			FormCommItem FormCI = new FormCommItem(CommlogCur);
 			FormCI.IsNew = true;
 			FormCI.ShowDialog();

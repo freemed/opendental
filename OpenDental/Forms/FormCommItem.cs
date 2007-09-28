@@ -28,6 +28,7 @@ namespace OpenDental{
 		private System.Windows.Forms.Label label4;
 		private OpenDental.ODtextBox textNote;
 		private System.Windows.Forms.ListBox listType;
+		private CheckBox checkIsStatementSent;
 		private Commlog CommlogCur;
 
 		///<summary></summary>
@@ -64,6 +65,7 @@ namespace OpenDental{
 			this.listSentOrReceived = new System.Windows.Forms.ListBox();
 			this.label4 = new System.Windows.Forms.Label();
 			this.textNote = new OpenDental.ODtextBox();
+			this.checkIsStatementSent = new System.Windows.Forms.CheckBox();
 			this.SuspendLayout();
 			// 
 			// label1
@@ -131,7 +133,7 @@ namespace OpenDental{
 			// 
 			// label2
 			// 
-			this.label2.Location = new System.Drawing.Point(106,166);
+			this.label2.Location = new System.Drawing.Point(106,195);
 			this.label2.Name = "label2";
 			this.label2.Size = new System.Drawing.Size(82,16);
 			this.label2.TabIndex = 18;
@@ -187,7 +189,7 @@ namespace OpenDental{
 			// textNote
 			// 
 			this.textNote.AcceptsReturn = true;
-			this.textNote.Location = new System.Drawing.Point(107,186);
+			this.textNote.Location = new System.Drawing.Point(107,215);
 			this.textNote.Multiline = true;
 			this.textNote.Name = "textNote";
 			this.textNote.QuickPasteType = OpenDentBusiness.QuickPasteType.CommLog;
@@ -195,11 +197,22 @@ namespace OpenDental{
 			this.textNote.Size = new System.Drawing.Size(557,209);
 			this.textNote.TabIndex = 27;
 			// 
+			// checkIsStatementSent
+			// 
+			this.checkIsStatementSent.Location = new System.Drawing.Point(107,166);
+			this.checkIsStatementSent.Name = "checkIsStatementSent";
+			this.checkIsStatementSent.Size = new System.Drawing.Size(136,16);
+			this.checkIsStatementSent.TabIndex = 28;
+			this.checkIsStatementSent.Text = "Is Statement";
+			this.checkIsStatementSent.UseVisualStyleBackColor = true;
+			this.checkIsStatementSent.Click += new System.EventHandler(this.checkIsStatementSent_Click);
+			// 
 			// FormCommItem
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.CancelButton = this.butCancel;
 			this.ClientSize = new System.Drawing.Size(702,508);
+			this.Controls.Add(this.checkIsStatementSent);
 			this.Controls.Add(this.textNote);
 			this.Controls.Add(this.listSentOrReceived);
 			this.Controls.Add(this.label4);
@@ -245,11 +258,13 @@ namespace OpenDental{
 			}*/
 			textDateTime.Text=CommlogCur.CommDateTime.ToString();
 			//remember, this list is 1-based
-			//there will ALWAYS be a commtype set before this dialog is opened
-			for(int i=0;i<Enum.GetNames(typeof(CommItemType)).Length;i++){
-				listType.Items.Add(Lan.g("enumCommItemType",Enum.GetNames(typeof(CommItemType))[i]));
+			//there will usually be a commtype set before this dialog is opened
+			for(int i=0;i<DefB.Short[(int)DefCat.CommLogTypes].Length;i++){
+				listType.Items.Add(DefB.Short[(int)DefCat.CommLogTypes][i].ItemName);
+				if(DefB.Short[(int)DefCat.CommLogTypes][i].DefNum==CommlogCur.CommType){
+					listType.SelectedIndex=i;
+				}
 			}
-			listType.SelectedIndex=(int)CommlogCur.CommType-1;
 			for(int i=0;i<Enum.GetNames(typeof(CommItemMode)).Length;i++){
 				listMode.Items.Add(Lan.g("enumCommItemMode",Enum.GetNames(typeof(CommItemMode))[i]));
 			}
@@ -264,8 +279,7 @@ namespace OpenDental{
 			catch{
 				MessageBox.Show(((int)CommlogCur.SentOrReceived).ToString());
 			}
-			//if(CommlogCur.EmailMessageNum==0)
-			//	butEmail.Visible=false;
+			checkIsStatementSent.Checked=CommlogCur.IsStatementSent;
 			textNote.Text=CommlogCur.Note;
 			textNote.SelectionStart=textNote.Text.Length;
 			textNote.Select();
@@ -281,6 +295,12 @@ namespace OpenDental{
 			CommlogCur=Commlogs.GetOne(CommlogCur.CommlogNum);
 		}*/
 
+		private void checkIsStatementSent_Click(object sender,EventArgs e) {
+			if(checkIsStatementSent.Checked){
+				listType.SelectedIndex=-1;
+			}
+		}
+
 		private void butOK_Click(object sender, System.EventArgs e) {
 			if(textDateTime.Text==""
 				//|| textAmount.errorProvider1.GetError(textAmount)!=""
@@ -295,12 +315,22 @@ namespace OpenDental{
 				MessageBox.Show(Lan.g(this,"Date and time invalid."));
 				return;
 			}
+			if(!checkIsStatementSent.Checked && listType.SelectedIndex==-1){
+				MsgBox.Show(this,"Please select a type.");
+				return;
+			}
 			CommlogCur.CommDateTime=PIn.PDateT(textDateTime.Text);
-			//there will always be a commtype selected.
-			CommlogCur.CommType=(CommItemType)(listType.SelectedIndex+1);
+			//there may not be a commtype selected.
+			if(listType.SelectedIndex==-1){
+				CommlogCur.CommType=0;
+			}
+			else{
+				CommlogCur.CommType=DefB.Short[(int)DefCat.CommLogTypes][listType.SelectedIndex].DefNum;
+			}
 			CommlogCur.Mode_=(CommItemMode)listMode.SelectedIndex;
 			CommlogCur.SentOrReceived=(CommSentOrReceived)listSentOrReceived.SelectedIndex;
 			CommlogCur.Note=textNote.Text;
+			CommlogCur.IsStatementSent=checkIsStatementSent.Checked;
 			if(IsNew){
 				Commlogs.Insert(CommlogCur);
 			}
@@ -325,6 +355,8 @@ namespace OpenDental{
 		private void butCancel_Click(object sender, System.EventArgs e) {
 			DialogResult=DialogResult.Cancel;
 		}
+
+		
 
 		
 

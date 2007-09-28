@@ -474,7 +474,7 @@ namespace OpenDental{
 			}
 			Commlog CommlogCur=new Commlog();
 			CommlogCur.CommDateTime=DateTime.Now;
-			CommlogCur.CommType=CommItemType.Misc;
+			CommlogCur.CommType=Commlogs.GetTypeAuto(CommItemTypeAuto.MISC);
 			CommlogCur.PatNum=PatCur.PatNum;
 			CommlogCur.Note="Letter sent";
 			if(LetterCur!=null) {
@@ -596,7 +596,7 @@ namespace OpenDental{
 			}
 			Commlog CommlogCur = new Commlog();
 			CommlogCur.CommDateTime = DateTime.Now;
-			CommlogCur.CommType = CommItemType.Misc;
+			CommlogCur.CommType = Commlogs.GetTypeAuto(CommItemTypeAuto.MISC);
 			CommlogCur.Mode_ = CommItemMode.Mail;
 			CommlogCur.SentOrReceived = CommSentOrReceived.Sent;
 			CommlogCur.PatNum = PatCur.PatNum;
@@ -676,7 +676,7 @@ namespace OpenDental{
 			}
 			Commlog CommlogCur = new Commlog();
 			CommlogCur.CommDateTime = DateTime.Now;
-			CommlogCur.CommType = CommItemType.Misc;
+			CommlogCur.CommType = Commlogs.GetTypeAuto(CommItemTypeAuto.MISC);
 			CommlogCur.Mode_ = CommItemMode.Mail;
 			CommlogCur.SentOrReceived = CommSentOrReceived.Sent;
 			CommlogCur.PatNum = PatCur.PatNum;

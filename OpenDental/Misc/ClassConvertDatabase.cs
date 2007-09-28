@@ -5866,6 +5866,39 @@ namespace OpenDental{
 				General.NonQEx(command);
 				command="UPDATE commlog SET IsStatementSent=1 WHERE CommType=1";
 				General.NonQEx(command);
+				//after r853.  These are hard to do manually.  It's easier to just start with a new database.
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command = "ALTER TABLE commlog CHANGE CommType CommType int NOT NULL";
+					General.NonQEx(command);
+				}
+				else{//Oracle
+
+				}
+				command="INSERT INTO definition (Category,ItemOrder,ItemName,ItemValue) VALUES(27,0,'ApptRelated','APPT')";
+				int defNum=General.NonQ(command,true);
+				command="UPDATE commlog SET CommType="+POut.PInt(defNum)+" WHERE CommType=2";
+				General.NonQEx(command);
+				//-----------------
+				command="INSERT INTO definition (Category,ItemOrder,ItemName,ItemValue) VALUES(27,1,'Insurance','')";
+				defNum=General.NonQ(command,true);
+				command="UPDATE commlog SET CommType="+POut.PInt(defNum)+" WHERE CommType=3";
+				General.NonQEx(command);
+				//-----------------
+				command="INSERT INTO definition (Category,ItemOrder,ItemName,ItemValue) VALUES(27,2,'Financial','FIN')";
+				defNum=General.NonQ(command,true);
+				command="UPDATE commlog SET CommType="+POut.PInt(defNum)+" WHERE CommType=4";
+				General.NonQEx(command);
+				//-----------------
+				command="INSERT INTO definition (Category,ItemOrder,ItemName,ItemValue) VALUES(27,3,'Recall','RECALL')";
+				defNum=General.NonQ(command,true);
+				command="UPDATE commlog SET CommType="+POut.PInt(defNum)+" WHERE CommType=5";
+				General.NonQEx(command);
+				//-----------------
+				command="INSERT INTO definition (Category,ItemOrder,ItemName,ItemValue) VALUES(27,4,'Misc','MISC')";
+				defNum=General.NonQ(command,true);
+				command="UPDATE commlog SET CommType="+POut.PInt(defNum)+" WHERE CommType=6";
+				General.NonQEx(command);
+
 
 
 

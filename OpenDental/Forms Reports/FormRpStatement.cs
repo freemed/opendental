@@ -341,7 +341,7 @@ namespace OpenDental{
 				if(patNums.GetLength(0)==1){
 					commlog=new Commlog();
 					commlog.CommDateTime=DateTime.Now;
-					commlog.CommType=CommItemType.None;
+					commlog.CommType=0;
 					commlog.Note=Notes[i];
 					commlog.SentOrReceived=CommSentOrReceived.Sent;
 					if(isBill){

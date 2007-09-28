@@ -261,12 +261,14 @@ namespace OpenDental{
 					}
 					//test for not require tooth number if time
 					break;
-				//case DefCat.ClaimFormats:
-				//	if(textValue.Text!="ADA2002" && textValue.Text!="eclaim"){
-				//		MessageBox.Show(Lan.g(this,"Value must equal ADA2002 or eclaim"));
-				//		return;
-				//	}
-				//	break;
+				case DefCat.CommLogTypes:
+					if(textValue.Text!="" && textValue.Text!="MISC" && textValue.Text!="APPT" 
+						&& textValue.Text!="FIN" && textValue.Text!="RECALL") 
+					{
+						MessageBox.Show(Lan.g(this,"Valid values are blank,APPT,FIN,RECALL,or MISC."));
+						return;
+					}
+					break;
 				case DefCat.RecallUnschedStatus:
 					if(textValue.Text.Length > 7){
 						MessageBox.Show(Lan.g(this,"Maximum length is 7."));

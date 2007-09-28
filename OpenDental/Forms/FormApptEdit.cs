@@ -918,7 +918,7 @@ namespace OpenDental{
 				row=new ODGridRow();
 				row.Cells.Add(DS.Tables["Comm"].Rows[i]["commDateTime"].ToString());
 				row.Cells.Add(DS.Tables["Comm"].Rows[i]["Note"].ToString());
-				if(DS.Tables["Comm"].Rows[i]["CommType"].ToString()=="2"){//AppointmentRelated
+				if(DS.Tables["Comm"].Rows[i]["CommType"].ToString()==Commlogs.GetTypeAuto(CommItemTypeAuto.APPT).ToString()){
 					row.ColorBackG=DefB.Long[(int)DefCat.MiscColors][7].ItemColor;
 				}
 				gridComm.Rows.Add(row);
@@ -940,7 +940,7 @@ namespace OpenDental{
 			Commlog CommlogCur=new Commlog();
 			CommlogCur.PatNum=AptCur.PatNum;
 			CommlogCur.CommDateTime=DateTime.Now;
-			CommlogCur.CommType=CommItemType.ApptRelated;
+			CommlogCur.CommType=Commlogs.GetTypeAuto(CommItemTypeAuto.APPT);
 			FormCommItem FormCI=new FormCommItem(CommlogCur);
 			FormCI.IsNew=true;
 			FormCI.ShowDialog();
@@ -1503,7 +1503,7 @@ namespace OpenDental{
 						Commlog CommlogCur = new Commlog();
 						CommlogCur.PatNum = AptCur.PatNum;
 						CommlogCur.CommDateTime = DateTime.Now;
-						CommlogCur.CommType = CommItemType.ApptRelated;
+						CommlogCur.CommType = Commlogs.GetTypeAuto(CommItemTypeAuto.APPT);
 						CommlogCur.Note = "Deleted Pt NOTE from schedule, saved copy: ";
 						CommlogCur.Note += textNote.Text;
 						//there is no dialog here because it is just a simple entry
@@ -1521,7 +1521,7 @@ namespace OpenDental{
 						Commlog CommlogCur = new Commlog();
 						CommlogCur.PatNum = AptCur.PatNum;
 						CommlogCur.CommDateTime = DateTime.Now;
-						CommlogCur.CommType = CommItemType.ApptRelated;
+						CommlogCur.CommType = Commlogs.GetTypeAuto(CommItemTypeAuto.APPT);
 						CommlogCur.Note = "Deleted Appt. & saved note: ";
 						if (AptCur.ProcDescript != "") {
 							CommlogCur.Note += AptCur.ProcDescript + ": ";

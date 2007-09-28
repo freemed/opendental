@@ -664,14 +664,16 @@ namespace OpenDental{
 				bool recallEntryToday=false;
 				Commlog[] CommlogList=Commlogs.Refresh(PatCur.PatNum);
 				for(int i=0;i<CommlogList.Length;i++){
-					if(CommlogList[i].CommDateTime.Date==DateTime.Today	&& CommlogList[i].CommType==CommItemType.Recall){
+					if(CommlogList[i].CommDateTime.Date==DateTime.Today	
+						&& CommlogList[i].CommType==Commlogs.GetTypeAuto(CommItemTypeAuto.RECALL))
+					{
 						recallEntryToday=true;
 					}
 				}
 				if(!recallEntryToday){
 					Commlog CommlogCur=new Commlog();
 					CommlogCur.CommDateTime=DateTime.Now;
-					CommlogCur.CommType=CommItemType.Recall;
+					CommlogCur.CommType=Commlogs.GetTypeAuto(CommItemTypeAuto.RECALL);
 					CommlogCur.PatNum=PatCur.PatNum;
 					if(newStatus!=RecallCur.RecallStatus){
 						//Commlogs.Cur.Note+=Lan.g(this,"Status changed to")+" ";

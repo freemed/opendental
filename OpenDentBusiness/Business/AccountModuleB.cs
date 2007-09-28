@@ -48,7 +48,7 @@ namespace OpenDentBusiness {
 				row["CommDateTime"]=dateT;
 				row["commDate"]=dateT.ToShortDateString();
 				row["CommlogNum"]=rawComm.Rows[i]["CommlogNum"].ToString();
-				row["commType"]=Lan.g("enumCommItemType",((CommItemType)PIn.PInt(rawComm.Rows[i]["CommType"].ToString())).ToString());
+				row["commType"]=DefB.GetName(DefCat.CommLogTypes,PIn.PInt(rawComm.Rows[i]["CommType"].ToString()));
 				row["EmailMessageNum"]="0";
 				row["FormPatNum"]="0";
 				row["mode"]=Lan.g("enumCommItemMode",((CommItemMode)PIn.PInt(rawComm.Rows[i]["Mode_"].ToString())).ToString());
