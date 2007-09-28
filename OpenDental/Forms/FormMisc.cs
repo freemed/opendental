@@ -120,6 +120,7 @@ namespace OpenDental{
 			this.label4 = new System.Windows.Forms.Label();
 			this.checkSolidBlockouts = new System.Windows.Forms.CheckBox();
 			this.groupBox4 = new System.Windows.Forms.GroupBox();
+			this.checkDeductibleBeforePercent = new System.Windows.Forms.CheckBox();
 			this.checkStoreCCnumbers = new System.Windows.Forms.CheckBox();
 			this.checkBoldBalance = new System.Windows.Forms.CheckBox();
 			this.checkShowAccountNotes = new System.Windows.Forms.CheckBox();
@@ -142,7 +143,6 @@ namespace OpenDental{
 			this.textSigInterval = new OpenDental.ValidNumber();
 			this.butCancel = new OpenDental.UI.Button();
 			this.butOK = new OpenDental.UI.Button();
-			this.checkDeductibleBeforePercent = new System.Windows.Forms.CheckBox();
 			this.groupBox1.SuspendLayout();
 			this.groupBox5.SuspendLayout();
 			this.groupBox2.SuspendLayout();
@@ -328,7 +328,7 @@ namespace OpenDental{
 			this.label2.Size = new System.Drawing.Size(235,31);
 			this.label2.TabIndex = 53;
 			this.label2.Text = "Days to calculate due date.  Usually 10 or 15.  Leave blank to show \"Due on Recei" +
-    "pt\"";
+				"pt\"";
 			// 
 			// groupBox2
 			// 
@@ -400,7 +400,7 @@ namespace OpenDental{
 			this.checkInsurancePlansShared.Size = new System.Drawing.Size(617,18);
 			this.checkInsurancePlansShared.TabIndex = 58;
 			this.checkInsurancePlansShared.Text = "Many patients have identical insurance plans.  Change behavior of program slightl" +
-    "y to optimize for identical plans.";
+				"y to optimize for identical plans.";
 			// 
 			// checkMedicalEclaimsEnabled
 			// 
@@ -486,6 +486,17 @@ namespace OpenDental{
 			this.groupBox4.TabIndex = 67;
 			this.groupBox4.TabStop = false;
 			// 
+			// checkDeductibleBeforePercent
+			// 
+			this.checkDeductibleBeforePercent.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.checkDeductibleBeforePercent.Location = new System.Drawing.Point(16,99);
+			this.checkDeductibleBeforePercent.Name = "checkDeductibleBeforePercent";
+			this.checkDeductibleBeforePercent.Size = new System.Drawing.Size(346,18);
+			this.checkDeductibleBeforePercent.TabIndex = 68;
+			this.checkDeductibleBeforePercent.Text = "Ins Plans default to apply deductible before percent.";
+			this.checkDeductibleBeforePercent.UseVisualStyleBackColor = true;
+			this.checkDeductibleBeforePercent.Click += new System.EventHandler(this.checkDeductibleBeforePercent_Click);
+			// 
 			// checkStoreCCnumbers
 			// 
 			this.checkStoreCCnumbers.FlatStyle = System.Windows.Forms.FlatStyle.System;
@@ -504,6 +515,8 @@ namespace OpenDental{
 			this.checkBoldBalance.Size = new System.Drawing.Size(215,17);
 			this.checkBoldBalance.TabIndex = 57;
 			this.checkBoldBalance.Text = "Use bold balance view in account";
+			this.toolTip1.SetToolTip(this.checkBoldBalance,"Generally used with \"Balances don\'t subtract insurance estimate\"\r\nchecked to the " +
+					"upper right of this option in the \"Statements\" section.");
 			// 
 			// checkShowAccountNotes
 			// 
@@ -588,7 +601,7 @@ namespace OpenDental{
 			this.textBoxDocPath.Size = new System.Drawing.Size(338,20);
 			this.textBoxDocPath.TabIndex = 62;
 			this.toolTip1.SetToolTip(this.textBoxDocPath,"This shows you where you have your document path setup and where you should place" +
-        " your files specified below.");
+					" your files specified below.");
 			// 
 			// label8
 			// 
@@ -712,17 +725,6 @@ namespace OpenDental{
 			this.butOK.TabIndex = 7;
 			this.butOK.Text = "&OK";
 			this.butOK.Click += new System.EventHandler(this.butOK_Click);
-			// 
-			// checkDeductibleBeforePercent
-			// 
-			this.checkDeductibleBeforePercent.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkDeductibleBeforePercent.Location = new System.Drawing.Point(16,99);
-			this.checkDeductibleBeforePercent.Name = "checkDeductibleBeforePercent";
-			this.checkDeductibleBeforePercent.Size = new System.Drawing.Size(346,18);
-			this.checkDeductibleBeforePercent.TabIndex = 68;
-			this.checkDeductibleBeforePercent.Text = "Ins Plans default to apply deductible before percent.";
-			this.checkDeductibleBeforePercent.UseVisualStyleBackColor = true;
-			this.checkDeductibleBeforePercent.Click += new System.EventHandler(this.checkDeductibleBeforePercent_Click);
 			// 
 			// FormMisc
 			// 
