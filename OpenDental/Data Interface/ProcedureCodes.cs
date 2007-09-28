@@ -54,7 +54,7 @@ namespace OpenDental{
 				tempCode.PreExisting	 =PIn.PBool  (tableStat.Rows[i][21].ToString());
 				tempCode.BaseUnits     =PIn.PInt   (tableStat.Rows[i][22].ToString());
 				tempCode.SubstitutionCode=PIn.PString(tableStat.Rows[i][23].ToString());
-				tempCode.SubstOnlyIf   =(SubstitutionCondition)PIn.PInt(tableStat.Rows[i][24].ToString());
+				//tempCode.SubstOnlyIf   =(SubstitutionCondition)PIn.PInt(tableStat.Rows[i][24].ToString());
 				try {
 					HList.Add(tempCode.ProcCode,tempCode.Copy());
 				}
