@@ -594,7 +594,7 @@ namespace OpenDentBusiness{
 			table.Columns.Add("CommlogNum");
 			table.Columns.Add("CommType");
 			table.Columns.Add("Note");
-			string command="SELECT * FROM commlog WHERE PatNum="+patNum+" AND CommType !=1 "//don't include StatementSent
+			string command="SELECT * FROM commlog WHERE PatNum="+patNum+" AND IsStatementSent=0 "//don't include StatementSent
 				+"ORDER BY CommDateTime";
 			DataTable rawComm=dcon.GetTable(command);
 			for(int i=0;i<rawComm.Rows.Count;i++) {

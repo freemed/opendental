@@ -341,7 +341,7 @@ namespace OpenDental{
 				if(patNums.GetLength(0)==1){
 					commlog=new Commlog();
 					commlog.CommDateTime=DateTime.Now;
-					commlog.CommType=CommItemType.StatementSent;
+					commlog.CommType=CommItemType.None;
 					commlog.Note=Notes[i];
 					commlog.SentOrReceived=CommSentOrReceived.Sent;
 					if(isBill){
@@ -350,6 +350,7 @@ namespace OpenDental{
 					else{
 						commlog.Mode_=CommItemMode.None;//.InPerson;
 					}
+					commlog.IsStatementSent=true;
 					commlog.PatNum=patNums[i][0];//uaually the guarantor
 					//there is no dialog here because it is just a simple entry
 					Commlogs.Insert(commlog);

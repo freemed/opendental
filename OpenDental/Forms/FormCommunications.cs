@@ -291,7 +291,7 @@ namespace OpenDental{
 			}
 		}
 
-		private void butComm_Click(object sender,EventArgs e) {
+		/*private void butComm_Click(object sender,EventArgs e) {
 			Commlog CommlogCur=new Commlog();
 			CommlogCur.PatNum=PatCur.PatNum;
 			CommlogCur.CommDateTime=DateTime.Now;
@@ -305,7 +305,7 @@ namespace OpenDental{
 			if(FormCI.DialogResult==DialogResult.OK){
 				DialogResult=DialogResult.OK;
 			}
-		}
+		}*/
 
 		private void butLetterSimple_Click(object sender,EventArgs e) {
 			FormLetters FormL=new FormLetters(PatCur);

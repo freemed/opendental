@@ -35,12 +35,12 @@ namespace OpenDentBusiness {
 			//but we won't actually fill this table with rows until the very end.  It's more useful to use a List<> for now.
 			List<DataRow> rows=new List<DataRow>();
 			//Commlog------------------------------------------------------------------------------------------
-			string command="SELECT CommDateTime,CommType,Mode_,SentOrReceived,Note,CommlogNum "
+			string command="SELECT CommDateTime,CommType,Mode_,SentOrReceived,Note,CommlogNum,IsStatementSent "
 				+"FROM commlog WHERE PatNum ='"+POut.PInt(patNum)+"' ORDER BY CommDateTime";
 			DataTable rawComm=dcon.GetTable(command);
 			DateTime dateT;
 			for(int i=0;i<rawComm.Rows.Count;i++){
-				if((CommItemType)PIn.PInt(rawComm.Rows[i]["CommType"].ToString())==CommItemType.StatementSent){
+				if(rawComm.Rows[i]["IsStatementSent"].ToString()=="1"){
 					continue;
 				}
 				row=table.NewRow();

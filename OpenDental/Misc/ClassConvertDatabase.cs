@@ -5868,6 +5868,7 @@ namespace OpenDental{
 				General.NonQEx(command);
 
 
+
 				command="UPDATE preference SET ValueString = '5.3.0.0' WHERE PrefName = 'DataBaseVersion'";
 				General.NonQEx(command);
 			}

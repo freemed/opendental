@@ -111,7 +111,8 @@ namespace OpenDental{
 			}else{//Assume MySQL
 				command+="DATE(CommDateTime) = CURDATE()";
 			}
-			command+=" AND PatNum="+POut.PInt(patNum)+" AND CommType=5 AND Mode_=2 AND SentOrReceived=1";
+			command+=" AND PatNum="+POut.PInt(patNum)+" AND CommType="+POut.PInt((int)CommItemType.Recall)
+				+" AND Mode_=2 AND SentOrReceived=1";
 			if(General.GetCount(command)!="0"){
 				return;
 			}

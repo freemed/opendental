@@ -260,9 +260,10 @@ namespace OpenDental{
 				for(int i=0;i<guarNums.Length;i++){
 					commlog=new Commlog();
 					commlog.CommDateTime=DateTime.Now;
-					commlog.CommType=CommItemType.StatementSent;
+					commlog.CommType=CommItemType.None;
 					commlog.SentOrReceived=CommSentOrReceived.Sent;
 					commlog.Mode_=CommItemMode.Mail;
+					commlog.IsStatementSent=true;
 					commlog.PatNum=guarNums[i];//uaually the guarantor
 					Commlogs.Insert(commlog);
 				}

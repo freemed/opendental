@@ -3227,7 +3227,7 @@ namespace OpenDental{
 					return;
 				}
 				if (apt.Note != "") {
-					if (MessageBox.Show(Lan.g(this, "Save a copy of this note in CommLog? " + "\r\n" + "\r\n" + apt.Note), "Question...",
+					if (MessageBox.Show(Lan.g(this, "Save a copy of this note in CommLog? ") + "\r\n" + "\r\n" + apt.Note, "Question...",
 							MessageBoxButtons.YesNo) == DialogResult.Yes) {
 						Commlog CommlogCur = new Commlog();
 						CommlogCur.PatNum = apt.PatNum;
@@ -3250,7 +3250,7 @@ namespace OpenDental{
 					return;
 				}
 				if (apt.Note != "") {
-					if (MessageBox.Show(Lan.g(this, "Save appointment note in CommLog? " + "\r\n" + "\r\n" + apt.Note), "Question...",
+					if (MessageBox.Show(Lan.g(this, "Save appointment note in CommLog? ") + "\r\n" + "\r\n" + apt.Note, "Question...",
 							MessageBoxButtons.YesNo) == DialogResult.Yes){
 						Commlog CommlogCur = new Commlog();
 						CommlogCur.PatNum = apt.PatNum;

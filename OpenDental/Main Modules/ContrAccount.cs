@@ -1932,7 +1932,7 @@ namespace OpenDental {
 				countPay++;
 			}
 			for(int i=0;i<CommlogList.Length;i++){
-				if(CommlogList[i].CommType==CommItemType.StatementSent){//only show statementSents.
+				if(CommlogList[i].IsStatementSent){//only show statementSents.
 					arrayComm[countComm]=CommlogList[i];
 					countComm++;
 				}

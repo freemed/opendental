@@ -185,7 +185,9 @@ namespace OpenDentBusiness{
 		///<summary>25- Types of Schedule Blockouts.</summary>
 		BlockoutTypes,
 		///<summary>26- Categories of procedure buttons in Chart module</summary>
-		ProcButtonCats
+		ProcButtonCats,
+		///<Summary>27- Types of commlog entries.</Summary>
+		CommLogType
 	}
 	//public enum StudentStat{None,Full,Part};
 	///<summary>Used in procedurecode setup to specify the treatment area for a procedure.  This determines what fields are available when editing an appointment.</summary>
@@ -545,8 +547,10 @@ namespace OpenDentBusiness{
 	}
 	///<summary>CommItemType of 0 is reserved for later use with user defined types.</summary>
 	public enum CommItemType{
+		///<Summary>Used temporarily while we get rid of StatementSent.</Summary>
+		None=0,
 		///<summary>1- auto. </summary>
-		StatementSent=1,
+		StatementSentOld=1,
 		///<summary>2- Any activity related to appointment scheduling.</summary>
 		ApptRelated,
 		///<summary>3- </summary>
