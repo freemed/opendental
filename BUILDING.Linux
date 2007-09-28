@@ -1,7 +1,7 @@
 Building Open Dental on Linux
 =============================
 
-To build Open Dental on Linux, you'll need a recent version of Mono (> 1.2.3). To obtain such a version, currently (March 16, 2007), you will need to use the SVN version of Mono and build Mono yourself.
+To build Open Dental on Linux, you'll need a recent version of Mono (> 1.2.5). To obtain such a version, currently (Sep 28, 2007), you will need to use the SVN version of Mono and build Mono yourself.
 For more information on this subject, see http://lists.ximian.com/pipermail/mono-devel-list/2007-March/022784.html .
 
 Building Open Dental requires you to have a recent version of NAnt as well. You can download NAnt at http://nant.sourceforge.net. 
