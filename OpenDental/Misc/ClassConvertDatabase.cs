@@ -5861,8 +5861,11 @@ namespace OpenDental{
 				//after r843
 				command="INSERT INTO preference VALUES('TaskListAlwaysShowsAtBottom','0')";
 				General.NonQEx(command);
-				
-
+				//after r847
+				command = "ALTER TABLE commlog ADD IsStatementSent tinyint(1) NOT NULL";
+				General.NonQEx(command);
+				command="UPDATE commlog SET IsStatementSent=1 WHERE CommType=1";
+				General.NonQEx(command);
 
 
 				command="UPDATE preference SET ValueString = '5.3.0.0' WHERE PrefName = 'DataBaseVersion'";

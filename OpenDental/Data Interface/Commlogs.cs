@@ -41,6 +41,7 @@ namespace OpenDental{
 				List[i].Note           = PIn.PString(table.Rows[i][4].ToString());
 				List[i].Mode_          = (CommItemMode)PIn.PInt(table.Rows[i][5].ToString());
 				List[i].SentOrReceived = (CommSentOrReceived)PIn.PInt(table.Rows[i][6].ToString());
+				List[i].IsStatementSent= PIn.PBool(table.Rows[i][7].ToString());
 			}
 			return List;
 		}
@@ -54,7 +55,7 @@ namespace OpenDental{
 			if(PrefB.RandomKeys) {
 				command+="CommlogNum,";
 			}
-			command+="PatNum,CommDateTime,CommType,Note,Mode_,SentOrReceived) VALUES(";
+			command+="PatNum,CommDateTime,CommType,Note,Mode_,SentOrReceived,IsStatementSent) VALUES(";
 			if(PrefB.RandomKeys) {
 				command+="'"+POut.PInt(comm.CommlogNum)+"', ";
 			}
@@ -64,7 +65,8 @@ namespace OpenDental{
 				+"'"+POut.PInt   ((int)comm.CommType)+"', "
 				+"'"+POut.PString(comm.Note)+"', "
 				+"'"+POut.PInt   ((int)comm.Mode_)+"', "
-				+"'"+POut.PInt   ((int)comm.SentOrReceived)+"')";
+				+"'"+POut.PInt   ((int)comm.SentOrReceived)+"', "
+				+"'"+POut.PBool  (comm.IsStatementSent)+"')";
 			if(PrefB.RandomKeys) {
 				General.NonQ(command);
 			}
@@ -81,7 +83,8 @@ namespace OpenDental{
 				+"CommType = '"       +POut.PInt   ((int)comm.CommType)+"', "
 				+"Note = '"           +POut.PString(comm.Note)+"', "
 				+"Mode_ = '"          +POut.PInt   ((int)comm.Mode_)+"', "
-				+"SentOrReceived = '" +POut.PInt   ((int)comm.SentOrReceived)+"' "
+				+"SentOrReceived = '" +POut.PInt   ((int)comm.SentOrReceived)+"', "
+				+"IsStatementSent = '"+POut.PBool  (comm.IsStatementSent)+"' "
 				+"WHERE commlognum = '"+POut.PInt(comm.CommlogNum)+"'";
 			General.NonQ(command);
 		}

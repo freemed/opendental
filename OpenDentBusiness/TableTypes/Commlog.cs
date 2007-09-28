@@ -21,6 +21,8 @@ namespace OpenDentBusiness{
 		public CommSentOrReceived SentOrReceived;
 		//<summary>FK to emailmessage.EmailMessageNum, if there is an associated email. Otherwise 0.</summary>
 		//public int EmailMessageNum;
+		///<Summary>Replaces the old way of doing it where StatementSent was one of the types.</Summary>
+		public bool IsStatementSent;
 
 		///<summary></summary>
 		public Commlog Copy(){
@@ -32,6 +34,7 @@ namespace OpenDentBusiness{
 			c.Note=Note;
 			c.Mode_=Mode_;
 			c.SentOrReceived=SentOrReceived;
+			c.IsStatementSent=IsStatementSent;
 			return c;
 		}
 
