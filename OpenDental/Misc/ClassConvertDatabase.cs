@@ -5898,6 +5898,8 @@ namespace OpenDental{
 				defNum=General.NonQ(command,true);
 				command="UPDATE commlog SET CommType="+POut.PInt(defNum)+" WHERE CommType=6";
 				General.NonQEx(command);
+				command="UPDATE commlog SET CommType=0 WHERE CommType=1";
+				General.NonQEx(command);
 
 
 

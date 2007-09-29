@@ -227,6 +227,7 @@ namespace OpenDental{
 		private Label labelApptDate;
 		private Label labelApptStatus;
 		private MenuItem menuItemDeleteSelected;
+		private CheckBox checkCommFamily;
 		private int PrevPtNum;
 
 
@@ -403,6 +404,7 @@ namespace OpenDental{
 			this.butNew = new OpenDental.UI.Button();
 			this.tabShow = new System.Windows.Forms.TabPage();
 			this.groupBox7 = new System.Windows.Forms.GroupBox();
+			this.checkCommFamily = new System.Windows.Forms.CheckBox();
 			this.checkExtraNotes = new System.Windows.Forms.CheckBox();
 			this.checkAppt = new System.Windows.Forms.CheckBox();
 			this.checkLabCase = new System.Windows.Forms.CheckBox();
@@ -695,7 +697,7 @@ namespace OpenDental{
 			this.checkRx.Checked = true;
 			this.checkRx.CheckState = System.Windows.Forms.CheckState.Checked;
 			this.checkRx.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkRx.Location = new System.Drawing.Point(10,65);
+			this.checkRx.Location = new System.Drawing.Point(10,81);
 			this.checkRx.Name = "checkRx";
 			this.checkRx.Size = new System.Drawing.Size(102,13);
 			this.checkRx.TabIndex = 8;
@@ -2179,6 +2181,7 @@ namespace OpenDental{
 			// 
 			// groupBox7
 			// 
+			this.groupBox7.Controls.Add(this.checkCommFamily);
 			this.groupBox7.Controls.Add(this.checkExtraNotes);
 			this.groupBox7.Controls.Add(this.checkAppt);
 			this.groupBox7.Controls.Add(this.checkLabCase);
@@ -2186,10 +2189,22 @@ namespace OpenDental{
 			this.groupBox7.Controls.Add(this.checkComm);
 			this.groupBox7.Location = new System.Drawing.Point(145,4);
 			this.groupBox7.Name = "groupBox7";
-			this.groupBox7.Size = new System.Drawing.Size(126,104);
+			this.groupBox7.Size = new System.Drawing.Size(125,119);
 			this.groupBox7.TabIndex = 19;
 			this.groupBox7.TabStop = false;
 			this.groupBox7.Text = "Object Types";
+			// 
+			// checkCommFamily
+			// 
+			this.checkCommFamily.Checked = true;
+			this.checkCommFamily.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.checkCommFamily.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.checkCommFamily.Location = new System.Drawing.Point(26,49);
+			this.checkCommFamily.Name = "checkCommFamily";
+			this.checkCommFamily.Size = new System.Drawing.Size(88,13);
+			this.checkCommFamily.TabIndex = 20;
+			this.checkCommFamily.Text = "Family";
+			this.checkCommFamily.Click += new System.EventHandler(this.checkCommFamily_Click);
 			// 
 			// checkExtraNotes
 			// 
@@ -2197,7 +2212,7 @@ namespace OpenDental{
 			this.checkExtraNotes.Checked = true;
 			this.checkExtraNotes.CheckState = System.Windows.Forms.CheckState.Checked;
 			this.checkExtraNotes.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkExtraNotes.Location = new System.Drawing.Point(10,82);
+			this.checkExtraNotes.Location = new System.Drawing.Point(10,98);
 			this.checkExtraNotes.Name = "checkExtraNotes";
 			this.checkExtraNotes.Size = new System.Drawing.Size(102,13);
 			this.checkExtraNotes.TabIndex = 216;
@@ -2221,7 +2236,7 @@ namespace OpenDental{
 			this.checkLabCase.Checked = true;
 			this.checkLabCase.CheckState = System.Windows.Forms.CheckState.Checked;
 			this.checkLabCase.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkLabCase.Location = new System.Drawing.Point(10,49);
+			this.checkLabCase.Location = new System.Drawing.Point(10,65);
 			this.checkLabCase.Name = "checkLabCase";
 			this.checkLabCase.Size = new System.Drawing.Size(102,13);
 			this.checkLabCase.TabIndex = 17;
@@ -3314,6 +3329,11 @@ namespace OpenDental{
 				else if(table.Rows[i]["CommlogNum"].ToString()!="0"){//if this is a commlog
 					if(!checkComm.Checked) {
 						continue;
+					}
+					if(table.Rows[i]["PatNum"].ToString()!=PatCur.PatNum.ToString()){//if this is a different family member
+						if(!checkCommFamily.Checked) {
+							continue;
+						}
 					}
 				}
 				else if(table.Rows[i]["RxNum"].ToString()!="0") {//if this is an Rx
@@ -5019,26 +5039,15 @@ namespace OpenDental{
 			FillProgNotes();
 		}
 
+		private void checkCommFamily_Click(object sender,EventArgs e) {
+			FillProgNotes();
+		}	
+
 		private void checkLabCase_Click(object sender,EventArgs e) {
 			FillProgNotes();
 		}
 
 		private void checkRx_Click(object sender, System.EventArgs e) {
-		if (checkRx.Checked)//since there is no double click event...this allows almost the same thing
-            {
-                checkShowTP.Checked=false;
-                checkShowC.Checked=false;
-                checkShowE.Checked=false;
-                checkShowR.Checked=false;
-                checkNotes.Checked=false;
-                checkRx.Checked=true;
-                checkComm.Checked=false;
-                checkAppt.Checked=false;
-				checkLabCase.Checked=false;
-                checkExtraNotes.Checked=false;
-
-            }
-
 			FillProgNotes();
 		}
 
@@ -5058,6 +5067,7 @@ namespace OpenDental{
 			checkNotes.Checked=true;
 			checkAppt.Checked=true;
 			checkComm.Checked=true;
+			checkCommFamily.Checked=true;
 			checkLabCase.Checked=true;
 			checkRx.Checked=true;
 			checkShowTeeth.Checked=false;
@@ -5072,6 +5082,7 @@ namespace OpenDental{
 			checkNotes.Checked=false;
 			checkAppt.Checked=false;
 			checkComm.Checked=false;
+			checkCommFamily.Checked=false;
 			checkLabCase.Checked=false;
 			checkRx.Checked=false;
 			checkShowTeeth.Checked=false;
@@ -5847,7 +5858,9 @@ namespace OpenDental{
 			key.Note="";
 			RegistrationKeys.Create(key);
 			FillPtInfo();//Refresh registration key list in patient info grid.
-		}	
+		}
+
+		
 
 		
 

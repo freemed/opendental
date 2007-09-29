@@ -28,6 +28,7 @@ namespace OpenDentBusiness {
 			table.Columns.Add("Dx");
 			table.Columns.Add("LabCaseNum");
 			table.Columns.Add("note");
+			table.Columns.Add("PatNum");//only used for Commlog
 			table.Columns.Add("Priority");
 			table.Columns.Add("ProcCode");
 			table.Columns.Add("procDate");
@@ -181,19 +182,31 @@ namespace OpenDentBusiness {
 				}
 			}
 			//Commlog-----------------------------------------------------------------------------------------------------------
-			command="SELECT CommlogNum,CommDateTime,CommType,Note FROM commlog WHERE PatNum="+POut.PInt(patNum)
+			command="SELECT CommlogNum,CommDateTime,CommType,Note,commlog.PatNum,p1.FName "
+				+"FROM patient p1,patient p2,commlog "
+				+"WHERE commlog.PatNum=p1.PatNum "
+				+"AND p1.Guarantor=p2.Guarantor "
+				+"AND p2.PatNum="+POut.PInt(patNum)
 				+" AND IsStatementSent=0 ORDER BY CommDateTime";
 			DataTable rawComm=dcon.GetTable(command);
+			string txt;
 			for(int i=0;i<rawComm.Rows.Count;i++) {
 				row=table.NewRow();
 				row["AptNum"]=0;
 				row["colorBackG"]=Color.White.ToArgb();
 				row["colorText"]=DefB.Long[(int)DefCat.ProgNoteColors][6].ItemColor.ToArgb().ToString();
 				row["CommlogNum"]=rawComm.Rows[i]["CommlogNum"].ToString();
-				row["description"]=Lan.g("ChartModule","Comm - ")
+				if(rawComm.Rows[i]["PatNum"].ToString()==patNum.ToString()){
+					txt="";
+				}
+				else{
+					txt="("+rawComm.Rows[i]["FName"].ToString()+") ";
+				}
+				row["description"]=txt+Lan.g("ChartModule","Comm - ")
 					+DefB.GetName(DefCat.CommLogTypes,PIn.PInt(rawComm.Rows[i]["CommType"].ToString()));
 				row["LabCaseNum"]=0;
 				row["note"]=rawComm.Rows[i]["Note"].ToString();
+				row["PatNum"]=rawComm.Rows[i]["PatNum"].ToString();
 				dateT=PIn.PDateT(rawComm.Rows[i]["CommDateTime"].ToString());
 				if(dateT.Year<1880){
 					row["procDate"]="";

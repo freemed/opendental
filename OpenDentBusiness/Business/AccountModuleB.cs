@@ -30,13 +30,17 @@ namespace OpenDentBusiness {
 			table.Columns.Add("FormPatNum");
 			table.Columns.Add("mode");
 			table.Columns.Add("Note");
+			table.Columns.Add("patName");
 			table.Columns.Add("sentOrReceived");			
 			//table.Columns.Add("");
 			//but we won't actually fill this table with rows until the very end.  It's more useful to use a List<> for now.
 			List<DataRow> rows=new List<DataRow>();
 			//Commlog------------------------------------------------------------------------------------------
-			string command="SELECT CommDateTime,CommType,Mode_,SentOrReceived,Note,CommlogNum,IsStatementSent "
-				+"FROM commlog WHERE PatNum ='"+POut.PInt(patNum)+"' ORDER BY CommDateTime";
+			string command="SELECT CommDateTime,CommType,Mode_,SentOrReceived,Note,CommlogNum,IsStatementSent,p1.FName "
+				+"FROM commlog,patient p1,patient p2 "
+				+"WHERE commlog.PatNum=p1.PatNum "
+				+"AND p1.Guarantor=p2.Guarantor "
+				+"AND p2.PatNum ="+POut.PInt(patNum)+" ORDER BY CommDateTime";
 			DataTable rawComm=dcon.GetTable(command);
 			DateTime dateT;
 			for(int i=0;i<rawComm.Rows.Count;i++){
@@ -53,8 +57,9 @@ namespace OpenDentBusiness {
 				row["FormPatNum"]="0";
 				row["mode"]=Lan.g("enumCommItemMode",((CommItemMode)PIn.PInt(rawComm.Rows[i]["Mode_"].ToString())).ToString());
 				row["Note"]=rawComm.Rows[i]["Note"].ToString();
-				row["sentOrReceived"]=Lan.g("enumCommSentOrReceived",
-					((CommSentOrReceived)PIn.PInt(rawComm.Rows[i]["SentOrReceived"].ToString())).ToString());
+				row["patName"]=rawComm.Rows[i]["FName"].ToString();
+				//row["sentOrReceived"]=Lan.g("enumCommSentOrReceived",
+				//	((CommSentOrReceived)PIn.PInt(rawComm.Rows[i]["SentOrReceived"].ToString())).ToString());
 				rows.Add(row);
 			}
 			//emailmessage---------------------------------------------------------------------------------------
@@ -73,13 +78,13 @@ namespace OpenDentBusiness {
 				row["FormPatNum"]="0";
 				row["mode"]=Lan.g("enumCommItemMode",CommItemMode.Email.ToString());
 				row["Note"]=rawEmail.Rows[i]["Subject"].ToString();
-				if(rawEmail.Rows[i]["SentOrReceived"].ToString()=="0") {
-					row["sentOrReceived"]=Lan.g("AccountModule","Unsent");
-				}
-				else {
-					row["sentOrReceived"]=Lan.g("enumCommSentOrReceived",
-						((CommSentOrReceived)PIn.PInt(rawEmail.Rows[i]["SentOrReceived"].ToString())).ToString());
-				}
+				//if(rawEmail.Rows[i]["SentOrReceived"].ToString()=="0") {
+				//	row["sentOrReceived"]=Lan.g("AccountModule","Unsent");
+				//}
+				//else {
+				//	row["sentOrReceived"]=Lan.g("enumCommSentOrReceived",
+				//		((CommSentOrReceived)PIn.PInt(rawEmail.Rows[i]["SentOrReceived"].ToString())).ToString());
+				//}
 				rows.Add(row);
 			}
 			//formpat---------------------------------------------------------------------------------------
@@ -97,7 +102,7 @@ namespace OpenDentBusiness {
 				row["FormPatNum"]=rawForm.Rows[i]["FormPatNum"].ToString();
 				row["mode"]="";
 				row["Note"]="";
-				row["sentOrReceived"]="";
+				//row["sentOrReceived"]="";
 				rows.Add(row);
 			}
 			//Sorting
