@@ -4,6 +4,8 @@ using System.Collections;
 using System.ComponentModel;
 using System.Windows.Forms;
 using OpenDentBusiness;
+using OpenDental.UI;
+using System.Diagnostics;
 
 namespace OpenDental{
 	/// <summary>
@@ -12,9 +14,13 @@ namespace OpenDental{
 	public class FormReplication : System.Windows.Forms.Form{
 		private OpenDental.UI.Button butCancel;
 		private OpenDental.UI.Button butOK;
-		private OpenDental.UI.ODGrid odGrid1;
+		private OpenDental.UI.ODGrid gridReplicationComputers;
 		private Label label1;
-		private OpenDental.UI.Button butSelectAll;
+		private OpenDental.UI.Button butSelectServers;
+		private TextBox textMySQLPath;
+		private OpenDental.UI.Button butBrowse;
+		private TextBox textBox1;
+		private FolderBrowserDialog folderBrowserMySQL;
 		/// <summary>
 		/// Required designer variable.
 		/// </summary>
@@ -53,12 +59,87 @@ namespace OpenDental{
 		private void InitializeComponent()
 		{
 			System.ComponentModel.ComponentResourceManager resources=new System.ComponentModel.ComponentResourceManager(typeof(FormReplication));
+			this.label1=new System.Windows.Forms.Label();
+			this.textMySQLPath=new System.Windows.Forms.TextBox();
+			this.textBox1=new System.Windows.Forms.TextBox();
+			this.folderBrowserMySQL=new System.Windows.Forms.FolderBrowserDialog();
+			this.butBrowse=new OpenDental.UI.Button();
+			this.butSelectServers=new OpenDental.UI.Button();
+			this.gridReplicationComputers=new OpenDental.UI.ODGrid();
 			this.butOK=new OpenDental.UI.Button();
 			this.butCancel=new OpenDental.UI.Button();
-			this.odGrid1=new OpenDental.UI.ODGrid();
-			this.label1=new System.Windows.Forms.Label();
-			this.butSelectAll=new OpenDental.UI.Button();
 			this.SuspendLayout();
+			// 
+			// label1
+			// 
+			this.label1.AutoSize=true;
+			this.label1.Location=new System.Drawing.Point(47,63);
+			this.label1.Name="label1";
+			this.label1.Size=new System.Drawing.Size(407,13);
+			this.label1.TabIndex=3;
+			this.label1.Text="Select the complete list of known replication servers to merge with from the list"+
+					" below:";
+			// 
+			// textMySQLPath
+			// 
+			this.textMySQLPath.Location=new System.Drawing.Point(50,38);
+			this.textMySQLPath.Name="textMySQLPath";
+			this.textMySQLPath.Size=new System.Drawing.Size(506,20);
+			this.textMySQLPath.TabIndex=5;
+			this.textMySQLPath.Text="C:\\Program Files\\MySQL\\MySQL Server 5.0\\bin\\";
+			// 
+			// textBox1
+			// 
+			this.textBox1.BackColor=System.Drawing.SystemColors.Control;
+			this.textBox1.BorderStyle=System.Windows.Forms.BorderStyle.None;
+			this.textBox1.Location=new System.Drawing.Point(50,2);
+			this.textBox1.Multiline=true;
+			this.textBox1.Name="textBox1";
+			this.textBox1.Size=new System.Drawing.Size(506,33);
+			this.textBox1.TabIndex=8;
+			this.textBox1.Text="Path to local \'mysql\' program. It might help to add this path to your Operating S"+
+					"ystem path and just type mysql in the box below.";
+			// 
+			// butBrowse
+			// 
+			this.butBrowse.AdjustImageLocation=new System.Drawing.Point(0,0);
+			this.butBrowse.Anchor=((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom|System.Windows.Forms.AnchorStyles.Right)));
+			this.butBrowse.Autosize=true;
+			this.butBrowse.BtnShape=OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butBrowse.BtnStyle=OpenDental.UI.enumType.XPStyle.Silver;
+			this.butBrowse.CornerRadius=4F;
+			this.butBrowse.Location=new System.Drawing.Point(562,38);
+			this.butBrowse.Name="butBrowse";
+			this.butBrowse.Size=new System.Drawing.Size(75,20);
+			this.butBrowse.TabIndex=7;
+			this.butBrowse.Text="Browse";
+			this.butBrowse.Click+=new System.EventHandler(this.butBrowse_Click);
+			// 
+			// butSelectServers
+			// 
+			this.butSelectServers.AdjustImageLocation=new System.Drawing.Point(0,0);
+			this.butSelectServers.Anchor=((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom|System.Windows.Forms.AnchorStyles.Right)));
+			this.butSelectServers.Autosize=true;
+			this.butSelectServers.BtnShape=OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butSelectServers.BtnStyle=OpenDental.UI.enumType.XPStyle.Silver;
+			this.butSelectServers.CornerRadius=4F;
+			this.butSelectServers.Location=new System.Drawing.Point(50,363);
+			this.butSelectServers.Name="butSelectServers";
+			this.butSelectServers.Size=new System.Drawing.Size(142,26);
+			this.butSelectServers.TabIndex=4;
+			this.butSelectServers.Text="Select Replication Servers";
+			this.butSelectServers.Click+=new System.EventHandler(this.butSelectServers_Click);
+			// 
+			// gridReplicationComputers
+			// 
+			this.gridReplicationComputers.HScrollVisible=false;
+			this.gridReplicationComputers.Location=new System.Drawing.Point(50,80);
+			this.gridReplicationComputers.Name="gridReplicationComputers";
+			this.gridReplicationComputers.ScrollValue=0;
+			this.gridReplicationComputers.Size=new System.Drawing.Size(587,277);
+			this.gridReplicationComputers.TabIndex=2;
+			this.gridReplicationComputers.Title=null;
+			this.gridReplicationComputers.TranslationName=null;
 			// 
 			// butOK
 			// 
@@ -68,7 +149,7 @@ namespace OpenDental{
 			this.butOK.BtnShape=OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle=OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius=4F;
-			this.butOK.Location=new System.Drawing.Point(562,387);
+			this.butOK.Location=new System.Drawing.Point(562,365);
 			this.butOK.Name="butOK";
 			this.butOK.Size=new System.Drawing.Size(75,26);
 			this.butOK.TabIndex=1;
@@ -83,55 +164,23 @@ namespace OpenDental{
 			this.butCancel.BtnShape=OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butCancel.BtnStyle=OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius=4F;
-			this.butCancel.Location=new System.Drawing.Point(562,428);
+			this.butCancel.Location=new System.Drawing.Point(562,406);
 			this.butCancel.Name="butCancel";
 			this.butCancel.Size=new System.Drawing.Size(75,26);
 			this.butCancel.TabIndex=0;
 			this.butCancel.Text="&Cancel";
 			this.butCancel.Click+=new System.EventHandler(this.butCancel_Click);
 			// 
-			// odGrid1
-			// 
-			this.odGrid1.HScrollVisible=false;
-			this.odGrid1.Location=new System.Drawing.Point(50,40);
-			this.odGrid1.Name="odGrid1";
-			this.odGrid1.ScrollValue=0;
-			this.odGrid1.Size=new System.Drawing.Size(587,317);
-			this.odGrid1.TabIndex=2;
-			this.odGrid1.Title=null;
-			this.odGrid1.TranslationName=null;
-			// 
-			// label1
-			// 
-			this.label1.AutoSize=true;
-			this.label1.Location=new System.Drawing.Point(47,24);
-			this.label1.Name="label1";
-			this.label1.Size=new System.Drawing.Size(407,13);
-			this.label1.TabIndex=3;
-			this.label1.Text="Select the complete list of known replication servers to merge with from the list"+
-					" below:";
-			// 
-			// butSelectAll
-			// 
-			this.butSelectAll.AdjustImageLocation=new System.Drawing.Point(0,0);
-			this.butSelectAll.Anchor=((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom|System.Windows.Forms.AnchorStyles.Right)));
-			this.butSelectAll.Autosize=true;
-			this.butSelectAll.BtnShape=OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butSelectAll.BtnStyle=OpenDental.UI.enumType.XPStyle.Silver;
-			this.butSelectAll.CornerRadius=4F;
-			this.butSelectAll.Location=new System.Drawing.Point(50,363);
-			this.butSelectAll.Name="butSelectAll";
-			this.butSelectAll.Size=new System.Drawing.Size(75,26);
-			this.butSelectAll.TabIndex=4;
-			this.butSelectAll.Text="Select All";
-			// 
 			// FormReplication
 			// 
 			this.AutoScaleBaseSize=new System.Drawing.Size(5,13);
-			this.ClientSize=new System.Drawing.Size(689,479);
-			this.Controls.Add(this.butSelectAll);
+			this.ClientSize=new System.Drawing.Size(689,457);
+			this.Controls.Add(this.textBox1);
+			this.Controls.Add(this.butBrowse);
+			this.Controls.Add(this.textMySQLPath);
+			this.Controls.Add(this.butSelectServers);
 			this.Controls.Add(this.label1);
-			this.Controls.Add(this.odGrid1);
+			this.Controls.Add(this.gridReplicationComputers);
 			this.Controls.Add(this.butOK);
 			this.Controls.Add(this.butCancel);
 			this.Icon=((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -141,22 +190,48 @@ namespace OpenDental{
 			this.ShowInTaskbar=false;
 			this.StartPosition=System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text="Merge Replicating Databases";
+			this.Load+=new System.EventHandler(this.FormReplication_Load);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
 		}
 		#endregion
 
+		private void FormReplication_Load(object sender,EventArgs e) {
+			if(FormChooseDatabase.DBtype!=DatabaseType.MySql) {
+				MessageBox.Show(Lan.g(this,"This tool can only be used on MySQL databases."),"");
+				Close();
+			}
+			if(MessageBox.Show(Lan.g(this,"This feature is for advanced users only. Please do not use this feature if you do not know what it is for. Hit OK if you would like to continue, or hit Cancel to exit."),"",MessageBoxButtons.OKCancel)!=DialogResult.OK) {
+				Close();//exit the form.
+			}
+			gridReplicationComputers.BeginUpdate();
+			gridReplicationComputers.Columns.Clear();
+			ODGridColumn col=new ODGridColumn(Lan.g(this,"ComputerName"),80);
+			gridReplicationComputers.Columns.Add(col);
+			//col=new ODGridColumn(Lan.g(this,""),60);
+			//gridReplicationComputers.Columns.Add(col);
+			gridReplicationComputers.EndUpdate();
+			FillServerGrid();
+		}
+
+		private void FillServerGrid() {
+			Computer[] computers=Computers.GetList();
+			gridReplicationComputers.BeginUpdate();
+			gridReplicationComputers.Rows.Clear();
+			for(int i=0;i<computers.Length;i++) {
+				ODGridRow row=new ODGridRow();
+				row.Cells.Add(computers[i].CompName);
+				//row.Cells.Add();
+				gridReplicationComputers.Rows.Add(row);
+			}
+			gridReplicationComputers.EndUpdate();
+		}
 
 		private void butOK_Click(object sender, System.EventArgs e) {
-			//This tool can only be used for MySQL.
-			if(FormChooseDatabase.DBtype!=DatabaseType.MySql){
-				MessageBox.Show(Lan.g(this,"This tool can only be used on MySQL databases."),"");
-			}
-
-			//A server is considered a replication server if it is in the current list of computers for Open Dental, and it is possible to connect to mysql into a database by the current database name (use mysql function) using the Open Dental replication user.
-
-			//
+			
+			
+			
 
 
 
@@ -171,14 +246,40 @@ namespace OpenDental{
 			DialogResult=DialogResult.Cancel;
 		}
 
-/*		private void butForceReplication_Click(object sender,EventArgs e) {
-			//WE NEEED TO ADD IN HERE A CHECK THAT ALL COMPUTERS IN THE COMPUTER TABLE ARE VISIBLE BEFORE WE TRY TO MERGE DATABASES HERE.
-			//Restart the MySQL replication slave on the local computer. This will cause the local machine to accept updates from computers it is currently connected to.
-			string command="SLAVE STOP";
-			General.NonQ(command);
-			command="START SLAVE";
-			General.NonQ(command);
-		}*/
+		private void butBrowse_Click(object sender,EventArgs e) {
+			if(folderBrowserMySQL.ShowDialog()==DialogResult.OK){
+				textMySQLPath.Text=folderBrowserMySQL.SelectedPath;
+			}
+		}
+
+		private void butSelectServers_Click(object sender,EventArgs e) {
+			//A server is considered a replication server if it is selected in the server list, and it is possible to connect to mysql into a database by the current database name using the Open Dental replication user.
+			string command="SELECT DATABASE()";
+			string currentDatabaseName=PIn.PString(General.GetTable(command).Rows[0][0].ToString());
+			gridReplicationComputers.SetSelected(false);//Un-select all computers to start.
+			for(int i=0;i<gridReplicationComputers.Rows.Count;i++){
+				string mysqlArgs=" -h "+gridReplicationComputers.Rows[i].Cells[0].Text
+					+" -u repl --password=od1234 --connect_timeout=1 "+currentDatabaseName;
+				Process othermysql=Process.Start(textMySQLPath.Text+"mysql",mysqlArgs);
+				if(othermysql!=null) {
+					othermysql.WaitForExit(5000);//This wait allows for 4 seconds of lag in the process startup on a laggy system, as well as 1 second for network latency.
+					try{
+						if(othermysql.ExitCode!=0) {
+							//Do nothing. Performing this check will throw an exception if the process is still running.
+						}
+					}catch{
+						//The connection is assumed to have been successful.
+						gridReplicationComputers.SetSelected(i,true);
+					}
+					try{
+						othermysql.Kill();
+						othermysql.WaitForExit();
+					}catch{
+						//Sometimes the process exits before the Kill() or WaitForExit() gets called.
+					}
+				}
+			}			
+		}		
 
 	}
 }
