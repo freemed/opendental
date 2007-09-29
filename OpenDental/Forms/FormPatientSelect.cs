@@ -616,7 +616,7 @@ namespace OpenDental{
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn("Wk Phone",90);
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn("PatNum",50);
+			col=new ODGridColumn("PatNum",80);
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn("ChartNum",60);
 			gridMain.Columns.Add(col);
