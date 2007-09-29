@@ -757,6 +757,7 @@ namespace OpenDental{
 			this.imageListMain.Images.SetKeyName(0,"Pat.gif");
 			this.imageListMain.Images.SetKeyName(1,"Rx.gif");
 			this.imageListMain.Images.SetKeyName(2,"Probe.gif");
+			this.imageListMain.Images.SetKeyName(3,"commlog.gif");
 			// 
 			// label4
 			// 
@@ -848,7 +849,7 @@ namespace OpenDental{
 			// 
 			this.tabPage2.Location = new System.Drawing.Point(4,4);
 			this.tabPage2.Name = "tabPage2";
-			this.tabPage2.Size = new System.Drawing.Size(931,-3);
+			this.tabPage2.Size = new System.Drawing.Size(931,0);
 			this.tabPage2.TabIndex = 1;
 			this.tabPage2.Text = "Pano";
 			// 
@@ -856,7 +857,7 @@ namespace OpenDental{
 			// 
 			this.tabPage4.Location = new System.Drawing.Point(4,4);
 			this.tabPage4.Name = "tabPage4";
-			this.tabPage4.Size = new System.Drawing.Size(931,-3);
+			this.tabPage4.Size = new System.Drawing.Size(931,0);
 			this.tabPage4.TabIndex = 3;
 			this.tabPage4.Text = "tabPage4";
 			// 
@@ -2545,10 +2546,11 @@ namespace OpenDental{
 			ToolBarMain.Buttons.Add(button);
 			ToolBarMain.Buttons.Add(new ODToolBarButton(ODToolBarButtonStyle.Separator));
 			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"New Rx"),1,"","Rx"));
-			ToolBarMain.Buttons.Add(new ODToolBarButton(ODToolBarButtonStyle.Separator));
+			//ToolBarMain.Buttons.Add(new ODToolBarButton(ODToolBarButtonStyle.Separator));
 			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"LabCase"),-1,"","LabCase"));
-			ToolBarMain.Buttons.Add(new ODToolBarButton(ODToolBarButtonStyle.Separator));
+			//ToolBarMain.Buttons.Add(new ODToolBarButton(ODToolBarButtonStyle.Separator));
 			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Perio Chart"),2,"","Perio"));
+			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Commlog"),3,"","Commlog"));
 			ArrayList toolButItems=ToolButItems.GetForToolBar(ToolBarsAvail.ChartModule);
 			for(int i=0;i<toolButItems.Count;i++){
 				ToolBarMain.Buttons.Add(new ODToolBarButton(ODToolBarButtonStyle.Separator));
@@ -2754,6 +2756,9 @@ namespace OpenDental{
 					case "Perio":
 						OnPerio_Click();
 						break;
+					case "Commlog":
+						OnCommlog_Click();
+						break;
 				}
 			}
 			else if(e.Button.Tag.GetType()==typeof(int)){
@@ -2805,6 +2810,21 @@ namespace OpenDental{
 		private void OnPerio_Click(){
 			FormPerio FormP=new FormPerio(PatCur);
 			FormP.ShowDialog();
+		}
+
+		private void OnCommlog_Click(){
+			Commlog CommlogCur = new Commlog();
+			CommlogCur.PatNum = PatCur.PatNum;
+			CommlogCur.CommDateTime = DateTime.Now;
+			CommlogCur.CommType =Commlogs.GetTypeAuto(CommItemTypeAuto.MISC);
+			CommlogCur.Mode_=CommItemMode.Phone;
+			CommlogCur.SentOrReceived=CommSentOrReceived.Received;
+			FormCommItem FormCI = new FormCommItem(CommlogCur);
+			FormCI.IsNew = true;
+			FormCI.ShowDialog();
+			if(FormCI.DialogResult == DialogResult.OK){
+				ModuleSelected(PatCur.PatNum);
+			}
 		}
 
 		private void FillPlanned(){

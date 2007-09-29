@@ -118,14 +118,17 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="butPrintSmall" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\butPrintSmall.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="up" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\up.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="CDAErrorMessagesFr" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\CDAErrorMessagesFr.txt;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="butPrint" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\butPrint.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="butPaste" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\butPaste.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="ReportAccountingBalanceSheet" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\ReportAccountingBalanceSheet.txt;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
   <data name="CDT_Content_End_User_License" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\CDT Content End User License.rtf;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
@@ -139,14 +142,14 @@
   <data name="ReportAccountingGenLedger" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\ReportAccountingGenLedger.txt;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
-  <data name="ReportAccountingBalanceSheet" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ReportAccountingBalanceSheet.txt;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  <data name="butCopy" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\butCopy.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="butExportExcel" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\butExportExcel.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="Check_mark_23x20_02" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Check_mark_23x20_02.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="butPrint" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\butPrint.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="CDAErrorMessagesFr" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\CDAErrorMessagesFr.txt;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="Add" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Add.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -154,8 +157,8 @@
   <data name="editPencil" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\editPencil.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="stationary sample1" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\stationary sample1.jpg;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="butPaste" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\butPaste.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="butZoomOut" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\butZoomOut.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -187,11 +190,14 @@
   <data name="ClaimForm2006" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\ClaimForm.xml;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
-  <data name="butCopy" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\butCopy.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="butExportExcel" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\butExportExcel.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="canadiancarriers" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\canadiancarriers.txt;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="NoFeeProcCodes" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\NoFeeProcCodes.txt;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
   <data name="Left" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Left.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -205,13 +211,10 @@
   <data name="butLabel" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\butLabel.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="butPrintSmall" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\butPrintSmall.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="stationary sample1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\stationary sample1.jpg;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="Check_mark_23x20_02" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Check_mark_23x20_02.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="NoFeeProcCodes" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\NoFeeProcCodes.txt;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  <data name="commlog" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\commlog.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

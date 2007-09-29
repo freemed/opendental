@@ -1404,7 +1404,7 @@ namespace OpenDental {
 			this.butCommLog.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butCommLog.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCommLog.CornerRadius = 4F;
-			this.butCommLog.Image = ((System.Drawing.Image)(resources.GetObject("butCommLog.Image")));
+			this.butCommLog.Image = global::OpenDental.Properties.Resources.commlog;
 			this.butCommLog.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.butCommLog.Location = new System.Drawing.Point(3,3);
 			this.butCommLog.Name = "butCommLog";
@@ -4356,11 +4356,14 @@ namespace OpenDental {
 				CommlogCur.CommType =Commlogs.GetTypeAuto(CommItemTypeAuto.RECALL);
 			else
 				CommlogCur.CommType =Commlogs.GetTypeAuto(CommItemTypeAuto.FIN);
+			CommlogCur.Mode_=CommItemMode.Phone;
+			CommlogCur.SentOrReceived=CommSentOrReceived.Received;
 			FormCommItem FormCI = new FormCommItem(CommlogCur);
 			FormCI.IsNew = true;
 			FormCI.ShowDialog();
-			if (FormCI.DialogResult == DialogResult.OK)
+			if (FormCI.DialogResult == DialogResult.OK){
 				ModuleSelected(PatCur.PatNum);
+			}
 		}
 
 		private void panelInsInfo_Click(object sender,EventArgs e) {

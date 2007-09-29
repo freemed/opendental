@@ -182,7 +182,7 @@ namespace OpenDentBusiness {
 			}
 			//Commlog-----------------------------------------------------------------------------------------------------------
 			command="SELECT CommlogNum,CommDateTime,CommType,Note FROM commlog WHERE PatNum="+POut.PInt(patNum)
-				+" ORDER BY CommDateTime";
+				+" AND IsStatementSent=0 ORDER BY CommDateTime";
 			DataTable rawComm=dcon.GetTable(command);
 			for(int i=0;i<rawComm.Rows.Count;i++) {
 				row=table.NewRow();

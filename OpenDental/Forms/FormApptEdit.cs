@@ -500,7 +500,7 @@ namespace OpenDental{
 			this.butAddComm.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butAddComm.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butAddComm.CornerRadius = 4F;
-			this.butAddComm.Image = global::OpenDental.Properties.Resources.Add;
+			this.butAddComm.Image = global::OpenDental.Properties.Resources.commlog;
 			this.butAddComm.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.butAddComm.Location = new System.Drawing.Point(870,366);
 			this.butAddComm.Name = "butAddComm";
