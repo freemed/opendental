@@ -5902,6 +5902,18 @@ namespace OpenDental{
 				General.NonQEx(command);
 				command="INSERT INTO preference VALUES('ProgressNotesShowTime','0')";//this is a temporary solution, hidden from users.
 				General.NonQEx(command);
+				//after r860
+				command="DROP TABLE IF EXISTS displayfield";
+				General.NonQEx(command);
+				command=@"CREATE TABLE displayfield (
+					DisplayFieldNum int NOT NULL auto_increment,
+					InternalName varchar(255),
+					ItemOrder int NOT NULL,			
+					PRIMARY KEY (DisplayFieldNum)
+					) DEFAULT CHARSET=utf8";
+				General.NonQEx(command);
+
+
 
 
 

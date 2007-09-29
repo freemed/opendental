@@ -231,7 +231,7 @@ namespace OpenDentBusiness{
 		ClearHouses=128,
 		///<summary>256</summary>
 		Computers=256,
-		///<summary>512</summary>
+		///<summary>512- Also includes DisplayFields</summary>
 		InsCats=512,
 		///<summary>1024. Also includes payperiods.</summary>
 		Employees=1024,
@@ -1284,6 +1284,8 @@ namespace OpenDentBusiness{
 		///<summary>5</summary>
 		Complete
 	}
+
+	
 
 	
 

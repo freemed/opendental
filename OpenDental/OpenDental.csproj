@@ -175,6 +175,7 @@
     <Compile Include="Data Interface\CanadianExtracts.cs" />
     <Compile Include="Data Interface\ChartModule.cs" />
     <Compile Include="Data Interface\CanadianNetworks.cs" />
+    <Compile Include="Data Interface\DisplayFields.cs" />
     <Compile Include="Data Interface\ProcCodeNotes.cs" />
     <Compile Include="Data Interface\MiscData.cs">
       <SubType>Code</SubType>
@@ -404,6 +405,9 @@
     </Compile>
     <Compile Include="Forms Reports\Queries.cs" />
     <Compile Include="Forms\BasicTemplate.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormDisplayFields.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\FormProcCodeNoteEdit.cs">
@@ -1378,6 +1382,10 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\BasicTemplate.resx">
       <DependentUpon>BasicTemplate.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormDisplayFields.resx">
+      <DependentUpon>FormDisplayFields.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormProcCodeNoteEdit.resx">
