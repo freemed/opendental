@@ -38,6 +38,7 @@ namespace OpenDentBusiness {
 			table.Columns.Add("ProcNumLab");
 			table.Columns.Add("procStatus");
 			table.Columns.Add("ProcStatus");
+			table.Columns.Add("procTime");
 			table.Columns.Add("prov");
 			table.Columns.Add("RxNum");
 			table.Columns.Add("signature");
@@ -167,6 +168,9 @@ namespace OpenDentBusiness {
 				row["ProcNumLab"]=rawProcs.Rows[i]["ProcNumLab"].ToString();
 				row["procStatus"]=Lan.g("enumProcStat",((ProcStat)PIn.PInt(rawProcs.Rows[i]["ProcStatus"].ToString())).ToString());
 				row["ProcStatus"]=rawProcs.Rows[i]["ProcStatus"].ToString();
+				if(dateT.TimeOfDay!=TimeSpan.Zero) {
+					row["procTime"]=dateT.ToString("h:mm")+dateT.ToString("%t").ToLower();
+				}
 				row["prov"]=rawProcs.Rows[i]["Abbr"].ToString();
 				row["RxNum"]=0;
 				row["Surf"]=rawProcs.Rows[i]["Surf"].ToString();
@@ -215,6 +219,9 @@ namespace OpenDentBusiness {
 					row["procDate"]=dateT.ToShortDateString();
 				}
 				row["ProcDate"]=dateT;
+				if(dateT.TimeOfDay!=TimeSpan.Zero) {
+					row["procTime"]=dateT.ToString("h:mm")+dateT.ToString("%t").ToLower();
+				}
 				row["ProcNum"]=0;
 				row["RxNum"]=0;
 				rows.Add(row);
@@ -282,6 +289,9 @@ namespace OpenDentBusiness {
 				}
 				else {
 					row["procDate"]=dateT.ToShortDateString();
+				}
+				if(dateT.TimeOfDay!=TimeSpan.Zero) {
+					row["procTime"]=dateT.ToString("h:mm")+dateT.ToString("%t").ToLower();
 				}
 				row["ProcDate"]=dateT;
 				row["ProcNum"]=0;
@@ -355,6 +365,9 @@ namespace OpenDentBusiness {
 				}
 				else {
 					row["procDate"]=dateT.ToShortDateString();
+				}
+				if(dateT.TimeOfDay!=TimeSpan.Zero) {
+					row["procTime"]=dateT.ToString("h:mm")+dateT.ToString("%t").ToLower();
 				}
 				row["ProcDate"]=dateT;
 				row["ProcNum"]=0;

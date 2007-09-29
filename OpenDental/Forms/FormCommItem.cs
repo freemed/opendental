@@ -29,6 +29,8 @@ namespace OpenDental{
 		private OpenDental.ODtextBox textNote;
 		private System.Windows.Forms.ListBox listType;
 		private CheckBox checkIsStatementSent;
+		private TextBox textPatientName;
+		private Label label5;
 		private Commlog CommlogCur;
 
 		///<summary></summary>
@@ -66,11 +68,13 @@ namespace OpenDental{
 			this.label4 = new System.Windows.Forms.Label();
 			this.textNote = new OpenDental.ODtextBox();
 			this.checkIsStatementSent = new System.Windows.Forms.CheckBox();
+			this.textPatientName = new System.Windows.Forms.TextBox();
+			this.label5 = new System.Windows.Forms.Label();
 			this.SuspendLayout();
 			// 
 			// label1
 			// 
-			this.label1.Location = new System.Drawing.Point(11,16);
+			this.label1.Location = new System.Drawing.Point(11,38);
 			this.label1.Name = "label1";
 			this.label1.Size = new System.Drawing.Size(96,16);
 			this.label1.TabIndex = 0;
@@ -79,7 +83,7 @@ namespace OpenDental{
 			// 
 			// label6
 			// 
-			this.label6.Location = new System.Drawing.Point(105,47);
+			this.label6.Location = new System.Drawing.Point(105,69);
 			this.label6.Name = "label6";
 			this.label6.Size = new System.Drawing.Size(82,16);
 			this.label6.TabIndex = 5;
@@ -94,7 +98,7 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(591,430);
+			this.butOK.Location = new System.Drawing.Point(591,488);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75,25);
 			this.butOK.TabIndex = 6;
@@ -110,7 +114,7 @@ namespace OpenDental{
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
 			this.butCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.butCancel.Location = new System.Drawing.Point(591,463);
+			this.butCancel.Location = new System.Drawing.Point(591,521);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75,25);
 			this.butCancel.TabIndex = 7;
@@ -120,20 +124,23 @@ namespace OpenDental{
 			// butDelete
 			// 
 			this.butDelete.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butDelete.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.butDelete.Autosize = true;
 			this.butDelete.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butDelete.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butDelete.CornerRadius = 4F;
-			this.butDelete.Location = new System.Drawing.Point(23,462);
+			this.butDelete.Image = global::OpenDental.Properties.Resources.deleteX;
+			this.butDelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butDelete.Location = new System.Drawing.Point(14,521);
 			this.butDelete.Name = "butDelete";
-			this.butDelete.Size = new System.Drawing.Size(75,25);
+			this.butDelete.Size = new System.Drawing.Size(81,25);
 			this.butDelete.TabIndex = 17;
 			this.butDelete.Text = "&Delete";
 			this.butDelete.Click += new System.EventHandler(this.butDelete_Click);
 			// 
 			// label2
 			// 
-			this.label2.Location = new System.Drawing.Point(106,195);
+			this.label2.Location = new System.Drawing.Point(106,217);
 			this.label2.Name = "label2";
 			this.label2.Size = new System.Drawing.Size(82,16);
 			this.label2.TabIndex = 18;
@@ -142,28 +149,28 @@ namespace OpenDental{
 			// 
 			// listType
 			// 
-			this.listType.Location = new System.Drawing.Point(107,65);
+			this.listType.Location = new System.Drawing.Point(107,87);
 			this.listType.Name = "listType";
 			this.listType.Size = new System.Drawing.Size(120,95);
 			this.listType.TabIndex = 20;
 			// 
 			// textDateTime
 			// 
-			this.textDateTime.Location = new System.Drawing.Point(107,14);
+			this.textDateTime.Location = new System.Drawing.Point(107,36);
 			this.textDateTime.Name = "textDateTime";
 			this.textDateTime.Size = new System.Drawing.Size(205,20);
 			this.textDateTime.TabIndex = 21;
 			// 
 			// listMode
 			// 
-			this.listMode.Location = new System.Drawing.Point(241,65);
+			this.listMode.Location = new System.Drawing.Point(241,87);
 			this.listMode.Name = "listMode";
 			this.listMode.Size = new System.Drawing.Size(73,95);
 			this.listMode.TabIndex = 23;
 			// 
 			// label3
 			// 
-			this.label3.Location = new System.Drawing.Point(240,48);
+			this.label3.Location = new System.Drawing.Point(240,70);
 			this.label3.Name = "label3";
 			this.label3.Size = new System.Drawing.Size(82,16);
 			this.label3.TabIndex = 22;
@@ -172,14 +179,14 @@ namespace OpenDental{
 			// 
 			// listSentOrReceived
 			// 
-			this.listSentOrReceived.Location = new System.Drawing.Point(329,65);
+			this.listSentOrReceived.Location = new System.Drawing.Point(329,87);
 			this.listSentOrReceived.Name = "listSentOrReceived";
 			this.listSentOrReceived.Size = new System.Drawing.Size(87,43);
 			this.listSentOrReceived.TabIndex = 25;
 			// 
 			// label4
 			// 
-			this.label4.Location = new System.Drawing.Point(328,47);
+			this.label4.Location = new System.Drawing.Point(328,69);
 			this.label4.Name = "label4";
 			this.label4.Size = new System.Drawing.Size(142,16);
 			this.label4.TabIndex = 24;
@@ -189,7 +196,7 @@ namespace OpenDental{
 			// textNote
 			// 
 			this.textNote.AcceptsReturn = true;
-			this.textNote.Location = new System.Drawing.Point(107,215);
+			this.textNote.Location = new System.Drawing.Point(107,237);
 			this.textNote.Multiline = true;
 			this.textNote.Name = "textNote";
 			this.textNote.QuickPasteType = OpenDentBusiness.QuickPasteType.CommLog;
@@ -199,7 +206,7 @@ namespace OpenDental{
 			// 
 			// checkIsStatementSent
 			// 
-			this.checkIsStatementSent.Location = new System.Drawing.Point(107,166);
+			this.checkIsStatementSent.Location = new System.Drawing.Point(107,188);
 			this.checkIsStatementSent.Name = "checkIsStatementSent";
 			this.checkIsStatementSent.Size = new System.Drawing.Size(136,16);
 			this.checkIsStatementSent.TabIndex = 28;
@@ -207,11 +214,30 @@ namespace OpenDental{
 			this.checkIsStatementSent.UseVisualStyleBackColor = true;
 			this.checkIsStatementSent.Click += new System.EventHandler(this.checkIsStatementSent_Click);
 			// 
+			// textPatientName
+			// 
+			this.textPatientName.Location = new System.Drawing.Point(107,10);
+			this.textPatientName.Name = "textPatientName";
+			this.textPatientName.ReadOnly = true;
+			this.textPatientName.Size = new System.Drawing.Size(205,20);
+			this.textPatientName.TabIndex = 30;
+			// 
+			// label5
+			// 
+			this.label5.Location = new System.Drawing.Point(11,12);
+			this.label5.Name = "label5";
+			this.label5.Size = new System.Drawing.Size(96,16);
+			this.label5.TabIndex = 29;
+			this.label5.Text = "Patient";
+			this.label5.TextAlign = System.Drawing.ContentAlignment.TopRight;
+			// 
 			// FormCommItem
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.CancelButton = this.butCancel;
-			this.ClientSize = new System.Drawing.Size(702,508);
+			this.ClientSize = new System.Drawing.Size(702,566);
+			this.Controls.Add(this.textPatientName);
+			this.Controls.Add(this.label5);
 			this.Controls.Add(this.checkIsStatementSent);
 			this.Controls.Add(this.textNote);
 			this.Controls.Add(this.listSentOrReceived);
@@ -241,23 +267,8 @@ namespace OpenDental{
 		#endregion
 
 		private void FormCommItem_Load(object sender, System.EventArgs e) {
-			/*if(CommlogCur.EmailMessageNum!=0){
-				EmailMessage message=EmailMessages.Refresh(CommlogCur.EmailMessageNum);
-				//If a date is entered, user will not be able to click Send
-				FormEmailMessageEdit FormE=new FormEmailMessageEdit(message);
-				FormE.ShowDialog();
-				DialogResult=DialogResult.OK;
-				return;
-			}*/
-			/*{				
-				if(!UserPermissions.CheckUserPassword("Adjustment Edit",Adjustments.Cur.AdjDate)){
-					//MessageBox.Show(Lan.g(this,"You only have permission to view the Adjustment. No changes will be saved."));
-					butOK.Enabled=false;
-					butDelete.Enabled=false;
-				}					
-			}*/
+			textPatientName.Text=Patients.GetLim(CommlogCur.PatNum).GetNameFL();
 			textDateTime.Text=CommlogCur.CommDateTime.ToString();
-			//remember, this list is 1-based
 			//there will usually be a commtype set before this dialog is opened
 			for(int i=0;i<DefB.Short[(int)DefCat.CommLogTypes].Length;i++){
 				listType.Items.Add(DefB.Short[(int)DefCat.CommLogTypes][i].ItemName);

@@ -1990,11 +1990,13 @@ namespace OpenDental {
 			gridComm.Columns.Clear();
 			ODGridColumn col = new ODGridColumn(Lan.g("TableCommLogAccount", "Date"), 70);
 			gridComm.Columns.Add(col);
+			col = new ODGridColumn(Lan.g("TableCommLogAccount","Time"),42);//,HorizontalAlignment.Right);
+			gridComm.Columns.Add(col);
 			col = new ODGridColumn(Lan.g("TableCommLogAccount","Name"),80);
 			gridComm.Columns.Add(col);
 			col = new ODGridColumn(Lan.g("TableCommLogAccount", "Type"), 80);
 			gridComm.Columns.Add(col);
-			col = new ODGridColumn(Lan.g("TableCommLogAccount", "Mode"), 70);
+			col = new ODGridColumn(Lan.g("TableCommLogAccount", "Mode"), 55);
 			gridComm.Columns.Add(col);
 			//col = new ODGridColumn(Lan.g("TableCommLogAccount", "Sent/Recd"), 75);
 			//gridComm.Columns.Add(col);
@@ -2006,6 +2008,7 @@ namespace OpenDental {
 			for (int i = 0; i < table.Rows.Count; i++) {
 				row = new ODGridRow();
 				row.Cells.Add(table.Rows[i]["commDate"].ToString());
+				row.Cells.Add(table.Rows[i]["commTime"].ToString());
 				row.Cells.Add(table.Rows[i]["patName"].ToString());
 				row.Cells.Add(table.Rows[i]["commType"].ToString());
 				row.Cells.Add(table.Rows[i]["mode"].ToString());

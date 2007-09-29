@@ -5872,7 +5872,7 @@ namespace OpenDental{
 					General.NonQEx(command);
 				}
 				else{//Oracle
-
+					//I think it's already an int
 				}
 				command="INSERT INTO definition (Category,ItemOrder,ItemName,ItemValue) VALUES(27,0,'ApptRelated','APPT')";
 				int defNum=General.NonQ(command,true);
@@ -5900,7 +5900,8 @@ namespace OpenDental{
 				General.NonQEx(command);
 				command="UPDATE commlog SET CommType=0 WHERE CommType=1";
 				General.NonQEx(command);
-
+				command="INSERT INTO preference VALUES('ProgressNotesShowTime','0')";//this is a temporary solution, hidden from users.
+				General.NonQEx(command);
 
 
 

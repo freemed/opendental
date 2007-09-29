@@ -3284,6 +3284,10 @@ namespace OpenDental{
 			gridProg.Columns.Clear();
 			ODGridColumn col=new ODGridColumn(Lan.g("TableProg","Date"),67);
 			gridProg.Columns.Add(col);
+			if(PrefB.GetBool("ProgressNotesShowTime")){
+				col=new ODGridColumn(Lan.g("TableProg","Time"),40);
+				gridProg.Columns.Add(col);
+			}
 			col=new ODGridColumn(Lan.g("TableProg","Th"),27);
 			gridProg.Columns.Add(col);
 			col=new ODGridColumn(Lan.g("TableProg","Surf"),40);
@@ -3355,6 +3359,9 @@ namespace OpenDental{
 				row.ColorLborder=Color.Black;
 				//remember that columns that start with lowercase are already altered for display rather than being raw data.
 				row.Cells.Add(table.Rows[i]["procDate"].ToString());
+				if(PrefB.GetBool("ProgressNotesShowTime")){
+					row.Cells.Add(table.Rows[i]["procTime"].ToString());
+				}
 				row.Cells.Add(table.Rows[i]["toothNum"].ToString());
 				row.Cells.Add(table.Rows[i]["Surf"].ToString());
 				row.Cells.Add(table.Rows[i]["dx"].ToString());
