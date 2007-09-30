@@ -223,6 +223,7 @@ namespace OpenDental{
 			this.menuItemDataPath = new System.Windows.Forms.MenuItem();
 			this.menuItemDefinitions = new System.Windows.Forms.MenuItem();
 			this.menuItemDiseases = new System.Windows.Forms.MenuItem();
+			this.menuItemDisplayFields = new System.Windows.Forms.MenuItem();
 			this.menuItemEasy = new System.Windows.Forms.MenuItem();
 			this.menuItemEmail = new System.Windows.Forms.MenuItem();
 			this.menuItemImaging = new System.Windows.Forms.MenuItem();
@@ -301,7 +302,6 @@ namespace OpenDental{
 			this.ContrAppt2 = new OpenDental.ContrAppt();
 			this.lightSignalGrid1 = new OpenDental.UI.LightSignalGrid();
 			this.myOutlookBar = new OpenDental.OutlookBar();
-			this.menuItemDisplayFields = new System.Windows.Forms.MenuItem();
 			this.SuspendLayout();
 			// 
 			// timerTimeIndic
@@ -471,6 +471,12 @@ namespace OpenDental{
 			this.menuItemDiseases.Index = 9;
 			this.menuItemDiseases.Text = "Diseases";
 			this.menuItemDiseases.Click += new System.EventHandler(this.menuItemDiseases_Click);
+			// 
+			// menuItemDisplayFields
+			// 
+			this.menuItemDisplayFields.Index = 10;
+			this.menuItemDisplayFields.Text = "Display Fields";
+			this.menuItemDisplayFields.Click += new System.EventHandler(this.menuItemDisplayFields_Click);
 			// 
 			// menuItemEasy
 			// 
@@ -1015,12 +1021,6 @@ namespace OpenDental{
 			this.myOutlookBar.TabIndex = 18;
 			this.myOutlookBar.Text = "outlookBar1";
 			this.myOutlookBar.ButtonClicked += new OpenDental.ButtonClickedEventHandler(this.myOutlookBar_ButtonClicked);
-			// 
-			// menuItemDisplayFields
-			// 
-			this.menuItemDisplayFields.Index = 10;
-			this.menuItemDisplayFields.Text = "Display Fields";
-			this.menuItemDisplayFields.Click += new System.EventHandler(this.menuItemDisplayFields_Click);
 			// 
 			// FormOpenDental
 			// 

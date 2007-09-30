@@ -11,25 +11,33 @@ namespace OpenDentBusiness{
 		public string InternalName;
 		///<summary>Order to display in the grid or list. Every entry must have a unique itemorder.</summary>
 		public int ItemOrder;
+		///<summary>Optional alternate description to display for field.  Can be in another language.</summary>
+		public string Description;
+		///<summary>For grid columns, this lets user override the column width.  Especially useful for foreign languages.</summary>
+		public int ColumnWidth;
 		//<summary>Enum:DisplayFieldCategory Always ProgressNotes for now.</summary>
 		//public DisplayFieldCategory Category;
-		//<summary>Not used yet.  Optional alternate description to display for field.  Can be in another language.</summary>
-		//public string Description;
-		//<summary>Not used yet.  For grid columns, this lets user override the column width.</summary>
-		//public int ColumnWidth;
+
 
 		public DisplayField(){
 
 		}
 
-		public DisplayField(string internalName){
+		public DisplayField(string internalName,int columnWidth){
 			this.InternalName=internalName;
+			//this.Description=description;
+			this.ColumnWidth=columnWidth;
 		}
 
 		///<summary>Returns a copy.</summary>
 		public DisplayField Copy() {
 			return (DisplayField)this.MemberwiseClone();
 		}
+
+		public override string ToString(){
+			return this.InternalName;
+		}
+
 	}
 
 

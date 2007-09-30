@@ -10,7 +10,7 @@ using OpenDentBusiness;
 namespace OpenDental{
 	/// <summary></summary>
 	public class FormDisplayFields : System.Windows.Forms.Form{
-		private OpenDental.UI.Button butClose;
+		private OpenDental.UI.Button butCancel;
 		private Label label1;
 		private OpenDental.UI.ODGrid gridMain;
 		/// <summary>
@@ -28,6 +28,7 @@ namespace OpenDental{
 		private bool changed;
 		private OpenDental.UI.Button butOK;
 		private List<DisplayField> ListShowing;
+		//private List<DisplayField> ListAvailable;
 
 		///<summary></summary>
 		public FormDisplayFields()
@@ -62,34 +63,19 @@ namespace OpenDental{
 		private void InitializeComponent()
 		{
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormDisplayFields));
-			this.butClose = new OpenDental.UI.Button();
 			this.label1 = new System.Windows.Forms.Label();
-			this.gridMain = new OpenDental.UI.ODGrid();
-			this.butDefault = new OpenDental.UI.Button();
 			this.label2 = new System.Windows.Forms.Label();
-			this.butDown = new OpenDental.UI.Button();
-			this.butUp = new OpenDental.UI.Button();
 			this.listAvailable = new System.Windows.Forms.ListBox();
 			this.label3 = new System.Windows.Forms.Label();
+			this.butOK = new OpenDental.UI.Button();
 			this.butRight = new OpenDental.UI.Button();
 			this.butLeft = new OpenDental.UI.Button();
-			this.butOK = new OpenDental.UI.Button();
+			this.butDown = new OpenDental.UI.Button();
+			this.butUp = new OpenDental.UI.Button();
+			this.butDefault = new OpenDental.UI.Button();
+			this.gridMain = new OpenDental.UI.ODGrid();
+			this.butCancel = new OpenDental.UI.Button();
 			this.SuspendLayout();
-			// 
-			// butClose
-			// 
-			this.butClose.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butClose.Autosize = true;
-			this.butClose.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butClose.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butClose.CornerRadius = 4F;
-			this.butClose.Location = new System.Drawing.Point(565,512);
-			this.butClose.Name = "butClose";
-			this.butClose.Size = new System.Drawing.Size(75,26);
-			this.butClose.TabIndex = 0;
-			this.butClose.Text = "Cancel";
-			this.butClose.Click += new System.EventHandler(this.butClose_Click);
 			// 
 			// label1
 			// 
@@ -100,33 +86,6 @@ namespace OpenDental{
 			this.label1.Text = "This lets you select and reorder the columns that show in the Chart module Progre" +
     "ss Notes";
 			// 
-			// gridMain
-			// 
-			this.gridMain.HScrollVisible = false;
-			this.gridMain.Location = new System.Drawing.Point(15,66);
-			this.gridMain.Name = "gridMain";
-			this.gridMain.ScrollValue = 0;
-			this.gridMain.Size = new System.Drawing.Size(247,425);
-			this.gridMain.TabIndex = 3;
-			this.gridMain.Title = "Fields Showing";
-			this.gridMain.TranslationName = "FormDisplayFields";
-			// 
-			// butDefault
-			// 
-			this.butDefault.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butDefault.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.butDefault.Autosize = true;
-			this.butDefault.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butDefault.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butDefault.CornerRadius = 4F;
-			this.butDefault.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butDefault.Location = new System.Drawing.Point(15,32);
-			this.butDefault.Name = "butDefault";
-			this.butDefault.Size = new System.Drawing.Size(91,26);
-			this.butDefault.TabIndex = 4;
-			this.butDefault.Text = "Set to Default";
-			this.butDefault.Click += new System.EventHandler(this.butDefault_Click);
-			// 
 			// label2
 			// 
 			this.label2.Location = new System.Drawing.Point(114,38);
@@ -134,6 +93,68 @@ namespace OpenDental{
 			this.label2.Size = new System.Drawing.Size(213,25);
 			this.label2.TabIndex = 5;
 			this.label2.Text = "Sets entire list to the default.";
+			// 
+			// listAvailable
+			// 
+			this.listAvailable.FormattingEnabled = true;
+			this.listAvailable.IntegralHeight = false;
+			this.listAvailable.Location = new System.Drawing.Point(376,79);
+			this.listAvailable.Name = "listAvailable";
+			this.listAvailable.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
+			this.listAvailable.Size = new System.Drawing.Size(158,412);
+			this.listAvailable.TabIndex = 15;
+			// 
+			// label3
+			// 
+			this.label3.Location = new System.Drawing.Point(373,59);
+			this.label3.Name = "label3";
+			this.label3.Size = new System.Drawing.Size(213,17);
+			this.label3.TabIndex = 16;
+			this.label3.Text = "Available Fields";
+			this.label3.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
+			// 
+			// butOK
+			// 
+			this.butOK.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.butOK.Autosize = true;
+			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butOK.CornerRadius = 4F;
+			this.butOK.Location = new System.Drawing.Point(565,465);
+			this.butOK.Name = "butOK";
+			this.butOK.Size = new System.Drawing.Size(75,26);
+			this.butOK.TabIndex = 56;
+			this.butOK.Text = "OK";
+			this.butOK.Click += new System.EventHandler(this.butOK_Click);
+			// 
+			// butRight
+			// 
+			this.butRight.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butRight.Autosize = true;
+			this.butRight.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butRight.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butRight.CornerRadius = 4F;
+			this.butRight.Image = global::OpenDental.Properties.Resources.Right;
+			this.butRight.Location = new System.Drawing.Point(313,282);
+			this.butRight.Name = "butRight";
+			this.butRight.Size = new System.Drawing.Size(35,26);
+			this.butRight.TabIndex = 55;
+			this.butRight.Click += new System.EventHandler(this.butRight_Click);
+			// 
+			// butLeft
+			// 
+			this.butLeft.AdjustImageLocation = new System.Drawing.Point(-1,0);
+			this.butLeft.Autosize = true;
+			this.butLeft.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butLeft.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butLeft.CornerRadius = 4F;
+			this.butLeft.Image = global::OpenDental.Properties.Resources.Left;
+			this.butLeft.Location = new System.Drawing.Point(313,242);
+			this.butLeft.Name = "butLeft";
+			this.butLeft.Size = new System.Drawing.Size(35,26);
+			this.butLeft.TabIndex = 54;
+			this.butLeft.Click += new System.EventHandler(this.butLeft_Click);
 			// 
 			// butDown
 			// 
@@ -167,66 +188,48 @@ namespace OpenDental{
 			this.butUp.Text = "&Up";
 			this.butUp.Click += new System.EventHandler(this.butUp_Click);
 			// 
-			// listAvailable
+			// butDefault
 			// 
-			this.listAvailable.FormattingEnabled = true;
-			this.listAvailable.IntegralHeight = false;
-			this.listAvailable.Location = new System.Drawing.Point(331,79);
-			this.listAvailable.Name = "listAvailable";
-			this.listAvailable.Size = new System.Drawing.Size(210,412);
-			this.listAvailable.TabIndex = 15;
+			this.butDefault.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butDefault.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.butDefault.Autosize = true;
+			this.butDefault.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butDefault.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butDefault.CornerRadius = 4F;
+			this.butDefault.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butDefault.Location = new System.Drawing.Point(15,32);
+			this.butDefault.Name = "butDefault";
+			this.butDefault.Size = new System.Drawing.Size(91,26);
+			this.butDefault.TabIndex = 4;
+			this.butDefault.Text = "Set to Default";
+			this.butDefault.Click += new System.EventHandler(this.butDefault_Click);
 			// 
-			// label3
+			// gridMain
 			// 
-			this.label3.Location = new System.Drawing.Point(328,59);
-			this.label3.Name = "label3";
-			this.label3.Size = new System.Drawing.Size(213,17);
-			this.label3.TabIndex = 16;
-			this.label3.Text = "Available Fields";
-			this.label3.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
+			this.gridMain.HScrollVisible = false;
+			this.gridMain.Location = new System.Drawing.Point(15,66);
+			this.gridMain.Name = "gridMain";
+			this.gridMain.ScrollValue = 0;
+			this.gridMain.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
+			this.gridMain.Size = new System.Drawing.Size(273,425);
+			this.gridMain.TabIndex = 3;
+			this.gridMain.Title = "Fields Showing";
+			this.gridMain.TranslationName = "FormDisplayFields";
 			// 
-			// butRight
+			// butCancel
 			// 
-			this.butRight.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butRight.Autosize = true;
-			this.butRight.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butRight.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butRight.CornerRadius = 4F;
-			this.butRight.Image = global::OpenDental.Properties.Resources.Right;
-			this.butRight.Location = new System.Drawing.Point(277,282);
-			this.butRight.Name = "butRight";
-			this.butRight.Size = new System.Drawing.Size(35,26);
-			this.butRight.TabIndex = 55;
-			this.butRight.Click += new System.EventHandler(this.butRight_Click);
-			// 
-			// butLeft
-			// 
-			this.butLeft.AdjustImageLocation = new System.Drawing.Point(-1,0);
-			this.butLeft.Autosize = true;
-			this.butLeft.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butLeft.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butLeft.CornerRadius = 4F;
-			this.butLeft.Image = global::OpenDental.Properties.Resources.Left;
-			this.butLeft.Location = new System.Drawing.Point(277,242);
-			this.butLeft.Name = "butLeft";
-			this.butLeft.Size = new System.Drawing.Size(35,26);
-			this.butLeft.TabIndex = 54;
-			this.butLeft.Click += new System.EventHandler(this.butLeft_Click);
-			// 
-			// butOK
-			// 
-			this.butOK.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butOK.Autosize = true;
-			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(565,465);
-			this.butOK.Name = "butOK";
-			this.butOK.Size = new System.Drawing.Size(75,26);
-			this.butOK.TabIndex = 56;
-			this.butOK.Text = "OK";
-			this.butOK.Click += new System.EventHandler(this.butOK_Click);
+			this.butCancel.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.butCancel.Autosize = true;
+			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butCancel.CornerRadius = 4F;
+			this.butCancel.Location = new System.Drawing.Point(565,512);
+			this.butCancel.Name = "butCancel";
+			this.butCancel.Size = new System.Drawing.Size(75,26);
+			this.butCancel.TabIndex = 0;
+			this.butCancel.Text = "Cancel";
+			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
 			// 
 			// FormDisplayFields
 			// 
@@ -243,7 +246,7 @@ namespace OpenDental{
 			this.Controls.Add(this.butDefault);
 			this.Controls.Add(this.gridMain);
 			this.Controls.Add(this.label1);
-			this.Controls.Add(this.butClose);
+			this.Controls.Add(this.butCancel);
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.MaximizeBox = false;
 			this.MinimizeBox = false;
@@ -260,59 +263,135 @@ namespace OpenDental{
 
 		private void FormDisplayFields_Load(object sender,EventArgs e) {
 			DisplayFields.Refresh();
-			ListShowing=new List<DisplayField>(DisplayFields.Listt);
+			if(DisplayFields.Listt.Count==0){//default
+				ListShowing=DisplayFields.GetDefaultList();
+			}
+			else{
+				ListShowing=new List<DisplayField>(DisplayFields.Listt);
+			}
 			FillGrids();
 		}
 
 		private void FillGrids(){
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
-			ODGridColumn col=new ODGridColumn(Lan.g("FormDisplayFields","FieldName"),90);
+			ODGridColumn col=new ODGridColumn(Lan.g("FormDisplayFields","FieldName"),110);
+			gridMain.Columns.Add(col);
+			col=new ODGridColumn(Lan.g("FormDisplayFields","Override"),110);
+			gridMain.Columns.Add(col);
+			col=new ODGridColumn(Lan.g("FormDisplayFields","Width"),60);
 			gridMain.Columns.Add(col);
 			gridMain.Rows.Clear();
 			ODGridRow row;
 			for(int i=0;i<ListShowing.Count;i++){
 				row=new ODGridRow();
 				row.Cells.Add(ListShowing[i].InternalName);
+				row.Cells.Add(ListShowing[i].Description);
+				row.Cells.Add(ListShowing[i].ColumnWidth.ToString());
 				gridMain.Rows.Add(row);
 			}
 			gridMain.EndUpdate();
-
+			List<DisplayField> defaultList=DisplayFields.GetDefaultList();
+			for(int i=0;i<ListShowing.Count;i++){
+				for(int j=0;j<defaultList.Count;j++){
+					if(ListShowing[i].InternalName==defaultList[j].InternalName){
+						defaultList.RemoveAt(j);
+						break;
+					}
+				}
+			}
+			listAvailable.Items.Clear();
+			for(int i=0;i<defaultList.Count;i++){
+				listAvailable.Items.Add(defaultList[i]);
+			}
 		}
 
 		private void butDefault_Click(object sender,EventArgs e) {
 			ListShowing=DisplayFields.GetDefaultList();
 			FillGrids();
+			changed=true;
 		}
 
 		private void butLeft_Click(object sender,EventArgs e) {
-
+			if(listAvailable.SelectedItems.Count==0){
+				MsgBox.Show(this,"Please select an item in the list on the right first.");
+				return;
+			}
+			DisplayField field;
+			for(int i=0;i<listAvailable.SelectedItems.Count;i++){
+				field=(DisplayField)listAvailable.SelectedItems[i];
+				ListShowing.Add(field);
+			}
+			FillGrids();
 		}
 
 		private void butRight_Click(object sender,EventArgs e) {
-
+			if(gridMain.SelectedIndices.Length==0) {
+				MsgBox.Show(this,"Please select an item in the grid on the left first.");
+				return;
+			}
+			for(int i=gridMain.SelectedIndices.Length-1;i>=0;i--){//go backwards
+				ListShowing.RemoveAt(gridMain.SelectedIndices[i]);
+			}
+			FillGrids();
 		}
 
 		private void butUp_Click(object sender,EventArgs e) {
-
+			if(gridMain.SelectedIndices.Length==0) {
+				MsgBox.Show(this,"Please select an item in the grid first.");
+				return;
+			}
+			int[] selected=new int[gridMain.SelectedIndices.Length];
+			for(int i=0;i<gridMain.SelectedIndices.Length;i++){
+				selected[i]=gridMain.SelectedIndices[i];
+			}
+			if(selected[0]==0){
+				return;
+			}
+			for(int i=0;i<selected.Length;i++){
+				ListShowing.Reverse(selected[i]-1,2);
+			}
+			FillGrids();
+			for(int i=0;i<selected.Length;i++){
+				gridMain.SetSelected(selected[i]-1,true);
+			}
 		}
 
 		private void butDown_Click(object sender,EventArgs e) {
-
+			if(gridMain.SelectedIndices.Length==0) {
+				MsgBox.Show(this,"Please select an item in the grid first.");
+				return;
+			}
+			int[] selected=new int[gridMain.SelectedIndices.Length];
+			for(int i=0;i<gridMain.SelectedIndices.Length;i++) {
+				selected[i]=gridMain.SelectedIndices[i];
+			}
+			if(selected[selected.Length-1]==ListShowing.Count-1) {
+				return;
+			}
+			for(int i=selected.Length-1;i>=0;i--) {//go backwards
+				ListShowing.Reverse(selected[i],2);
+			}
+			FillGrids();
+			for(int i=0;i<selected.Length;i++) {
+				gridMain.SetSelected(selected[i]+1,true);
+			}
 		}
 
 		private void butOK_Click(object sender,EventArgs e) {
 
+
+			if(changed) {
+				DataValid.SetInvalid(InvalidTypes.InsCats);
+			}
 		}
 
-		private void butClose_Click(object sender, System.EventArgs e) {
-			Close();
+		private void butCancel_Click(object sender, System.EventArgs e) {
+			DialogResult=DialogResult.Cancel;
 		}
 
 		private void FormDisplayFields_FormClosing(object sender,FormClosingEventArgs e) {
-			if(changed){
-				DataValid.SetInvalid(InvalidTypes.InsCats);
-			}
+
 		}
 
 		

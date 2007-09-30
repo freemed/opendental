@@ -19,18 +19,22 @@ namespace OpenDental {
 			DisplayField field;
 			for(int i=0;i<table.Rows.Count;i++){
 				field = new DisplayField();
-				field.DisplayFieldNum = PIn.PInt(table.Rows[i][0].ToString());
+				field.DisplayFieldNum = PIn.PInt   (table.Rows[i][0].ToString());
 				field.InternalName    = PIn.PString(table.Rows[i][1].ToString());
-				field.ItemOrder       = PIn.PInt(table.Rows[i][2].ToString());
+				field.ItemOrder       = PIn.PInt   (table.Rows[i][2].ToString());
+				field.Description     = PIn.PString(table.Rows[i][3].ToString());
+				field.ColumnWidth     = PIn.PInt   (table.Rows[i][4].ToString());
 				Listt.Add(field);
 			}
 		}
 
 		///<summary></summary>
 		public static void Insert(DisplayField field) {		
-			string command = "INSERT INTO displayfield (InternalName,ItemOrder) VALUES ("			
+			string command = "INSERT INTO displayfield (InternalName,ItemOrder,Description,ColumnWidth) VALUES ("			
 				+"'"+POut.PString(field.InternalName)+"'," 
-				+"'"+POut.PInt   (field.ItemOrder)+"')";
+				+"'"+POut.PInt   (field.ItemOrder)+"',"
+				+"'"+POut.PString(field.Description)+"'," 
+				+"'"+POut.PInt   (field.ColumnWidth)+"')";
 			General.NonQ(command);
 		}
 		/*
@@ -58,18 +62,18 @@ namespace OpenDental {
 
 		public static List<DisplayField> GetDefaultList(){
 			List<DisplayField> list=new List<DisplayField>();
-			list.Add(new DisplayField("Date"));
-			list.Add(new DisplayField("Time"));
-			list.Add(new DisplayField("Th"));
-			list.Add(new DisplayField("Surf"));
-			list.Add(new DisplayField("Dx"));
-			list.Add(new DisplayField("Description"));
-			list.Add(new DisplayField("Stat"));
-			list.Add(new DisplayField("Prov"));
-			list.Add(new DisplayField("Amount"));
-			list.Add(new DisplayField("ADA Code"));
-			list.Add(new DisplayField("User"));
-			list.Add(new DisplayField("Signed"));
+			list.Add(new DisplayField("Date",67));
+			list.Add(new DisplayField("Time",40));
+			list.Add(new DisplayField("Th",27));
+			list.Add(new DisplayField("Surf",40));
+			list.Add(new DisplayField("Dx",28));
+			list.Add(new DisplayField("Description",218));
+			list.Add(new DisplayField("Stat",25));
+			list.Add(new DisplayField("Prov",42));
+			list.Add(new DisplayField("Amount",48));
+			list.Add(new DisplayField("ADA Code",62));
+			list.Add(new DisplayField("User",62));
+			list.Add(new DisplayField("Signed",55));
 			return list;
 		}
 
