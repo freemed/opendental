@@ -36,6 +36,7 @@
 			</nowarn>
 			<sources>
 				<include name="**/*.cs"/>
+				<exclude name="Business/ModulesB.cs"/>
 			</sources>
       			<resources dynamicprefix="true" prefix="OpenDentBusiness">
 				<include name="**/*.resx"/>
@@ -46,10 +47,10 @@
 				<include name="System.Data.dll"/>
 				<include name="System.Drawing.dll"/>
 				<include name="System.Xml.dll"/>
-                <include name="System.Data.OracleClient.dll"/>
-                <!-- Note: we should use MySql.Data.dll that lives in the GAC --> 
-                <include name="../Required dlls/MySql.Data.dll"/>
-                <include name="${build.dir}/bin/CodeBase.dll"/>
+				<include name="System.Data.OracleClient.dll"/>
+				<!-- Note: we should use MySql.Data.dll that lives in the GAC --> 
+				<include name="../Required dlls/MySql.Data.dll"/>
+				<include name="${build.dir}/bin/CodeBase.dll"/>
 			</references>
 		</csc>
         <copy file="../Required dlls/MySql.Data.dll" todir="${build.dir}/bin"/>
