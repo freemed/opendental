@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 using System.Threading;
 using System.ComponentModel;
 
-namespace ConsoleApplication1 {
+namespace OpenDental.SmartCards  {
 	class WindowsSmartCardManager : ISmartCardManager {
 		#region P/Invokes
 		[DllImport("winscard.dll", EntryPoint = "SCardEstablishContext", SetLastError = true, CharSet = CharSet.Unicode)]

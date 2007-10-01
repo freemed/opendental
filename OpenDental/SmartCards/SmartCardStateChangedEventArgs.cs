@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace ConsoleApplication1 {
+namespace OpenDental.SmartCards  {
 	public class SmartCardStateChangedEventArgs : EventArgs {
 		public SmartCardStateChangedEventArgs(string reader, SmartCardState state, byte[] atr) {
 			this.reader = reader;

@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace ConsoleApplication1 {
+namespace OpenDental.SmartCards  {
 	enum SmartCardErrors : uint {
 		SCARD_S_SUCCESS = 0x00000000,
 		SCARD_F_INTERNAL_ERROR = 0x80100001,

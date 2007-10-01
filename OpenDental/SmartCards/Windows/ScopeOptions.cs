@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace ConsoleApplication1 {
+namespace OpenDental.SmartCards  {
 	enum ScopeOptions {
 		User = 0, // The context is a user context, and any
 		// database operations are performed within the

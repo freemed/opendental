@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Drawing;
 
-namespace ConsoleApplication1.SmartCard {
+namespace OpenDental.SmartCards {
 	public class Identity {
 		private string firstName;
 		public string FirstName {

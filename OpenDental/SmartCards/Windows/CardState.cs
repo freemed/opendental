@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace ConsoleApplication1 {
+namespace OpenDental.SmartCards {
 	[Flags]
 	enum CardState : uint {
 		Unaware = 0x00000000,

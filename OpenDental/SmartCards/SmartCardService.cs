@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Collections.ObjectModel;
 
-namespace ConsoleApplication1 {
+namespace OpenDental.SmartCards  {
 	public abstract class SmartCardService {
 		public SmartCardService(ISmartCardManager manager) {
 			this.supportedAtrs = new Collection<byte[]>();

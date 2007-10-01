@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Runtime.InteropServices;
 
-namespace ConsoleApplication1 {
+namespace OpenDental.SmartCards  {
 	[StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
 	struct ReaderState {
 		public string Reader;

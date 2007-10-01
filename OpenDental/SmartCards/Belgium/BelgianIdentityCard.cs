@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Runtime.InteropServices;
 
-namespace ConsoleApplication1 {
+namespace OpenDental.SmartCards.Belgium {
 	public class BelgianIdentityCard : SmartCardService {
 		public BelgianIdentityCard(ISmartCardManager manager) 
 			: base(manager) {
