@@ -136,7 +136,7 @@ namespace OpenDental{
 			this.butRight.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butRight.CornerRadius = 4F;
 			this.butRight.Image = global::OpenDental.Properties.Resources.Right;
-			this.butRight.Location = new System.Drawing.Point(313,282);
+			this.butRight.Location = new System.Drawing.Point(323,282);
 			this.butRight.Name = "butRight";
 			this.butRight.Size = new System.Drawing.Size(35,26);
 			this.butRight.TabIndex = 55;
@@ -150,7 +150,7 @@ namespace OpenDental{
 			this.butLeft.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butLeft.CornerRadius = 4F;
 			this.butLeft.Image = global::OpenDental.Properties.Resources.Left;
-			this.butLeft.Location = new System.Drawing.Point(313,242);
+			this.butLeft.Location = new System.Drawing.Point(323,242);
 			this.butLeft.Name = "butLeft";
 			this.butLeft.Size = new System.Drawing.Size(35,26);
 			this.butLeft.TabIndex = 54;
@@ -211,10 +211,11 @@ namespace OpenDental{
 			this.gridMain.Name = "gridMain";
 			this.gridMain.ScrollValue = 0;
 			this.gridMain.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
-			this.gridMain.Size = new System.Drawing.Size(273,425);
+			this.gridMain.Size = new System.Drawing.Size(292,425);
 			this.gridMain.TabIndex = 3;
 			this.gridMain.Title = "Fields Showing";
 			this.gridMain.TranslationName = "FormDisplayFields";
+			this.gridMain.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellDoubleClick);
 			// 
 			// butCancel
 			// 
@@ -277,7 +278,7 @@ namespace OpenDental{
 			gridMain.Columns.Clear();
 			ODGridColumn col=new ODGridColumn(Lan.g("FormDisplayFields","FieldName"),110);
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("FormDisplayFields","Override"),110);
+			col=new ODGridColumn(Lan.g("FormDisplayFields","New Descript"),110);
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn(Lan.g("FormDisplayFields","Width"),60);
 			gridMain.Columns.Add(col);
@@ -291,19 +292,26 @@ namespace OpenDental{
 				gridMain.Rows.Add(row);
 			}
 			gridMain.EndUpdate();
-			List<DisplayField> defaultList=DisplayFields.GetDefaultList();
+			List<DisplayField> availList=DisplayFields.GetAllAvailableList();
 			for(int i=0;i<ListShowing.Count;i++){
-				for(int j=0;j<defaultList.Count;j++){
-					if(ListShowing[i].InternalName==defaultList[j].InternalName){
-						defaultList.RemoveAt(j);
+				for(int j=0;j<availList.Count;j++){
+					if(ListShowing[i].InternalName==availList[j].InternalName){
+						availList.RemoveAt(j);
 						break;
 					}
 				}
 			}
 			listAvailable.Items.Clear();
-			for(int i=0;i<defaultList.Count;i++){
-				listAvailable.Items.Add(defaultList[i]);
+			for(int i=0;i<availList.Count;i++){
+				listAvailable.Items.Add(availList[i]);
 			}
+		}
+
+		private void gridMain_CellDoubleClick(object sender,ODGridClickEventArgs e) {
+			FormDisplayFieldEdit formD=new FormDisplayFieldEdit();
+			formD.FieldCur=ListShowing[e.Row];
+			formD.ShowDialog();
+			FillGrids();
 		}
 
 		private void butDefault_Click(object sender,EventArgs e) {
@@ -323,6 +331,7 @@ namespace OpenDental{
 				ListShowing.Add(field);
 			}
 			FillGrids();
+			changed=true;
 		}
 
 		private void butRight_Click(object sender,EventArgs e) {
@@ -334,6 +343,7 @@ namespace OpenDental{
 				ListShowing.RemoveAt(gridMain.SelectedIndices[i]);
 			}
 			FillGrids();
+			changed=true;
 		}
 
 		private void butUp_Click(object sender,EventArgs e) {
@@ -355,6 +365,7 @@ namespace OpenDental{
 			for(int i=0;i<selected.Length;i++){
 				gridMain.SetSelected(selected[i]-1,true);
 			}
+			changed=true;
 		}
 
 		private void butDown_Click(object sender,EventArgs e) {
@@ -376,14 +387,17 @@ namespace OpenDental{
 			for(int i=0;i<selected.Length;i++) {
 				gridMain.SetSelected(selected[i]+1,true);
 			}
+			changed=true;
 		}
 
 		private void butOK_Click(object sender,EventArgs e) {
-
-
-			if(changed) {
-				DataValid.SetInvalid(InvalidTypes.InsCats);
+			if(!changed) {
+				DialogResult=DialogResult.OK;
+				return;
 			}
+			DisplayFields.SaveListForCategory(ListShowing);
+			DataValid.SetInvalid(InvalidTypes.InsCats);
+			DialogResult=DialogResult.OK;
 		}
 
 		private void butCancel_Click(object sender, System.EventArgs e) {
@@ -393,6 +407,8 @@ namespace OpenDental{
 		private void FormDisplayFields_FormClosing(object sender,FormClosingEventArgs e) {
 
 		}
+
+		
 
 		
 

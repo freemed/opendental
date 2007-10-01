@@ -37,6 +37,7 @@ namespace OpenDental {
 				+"'"+POut.PInt   (field.ColumnWidth)+"')";
 			General.NonQ(command);
 		}
+
 		/*
 		///<summary></summary>
 		public static void Update(DisplayField field) {			
@@ -46,21 +47,26 @@ namespace OpenDental {
 			+"WHERE DisplayFieldNum = '"+POut.PInt(DisplayField.DisplayFieldNum)+"'";
 			General.NonQ(command);
 		}
-
-		public static bool DisplayFieldNameUsed(string DisplayFieldName, string OriginalDisplayFieldName) {
-			string command="SELECT DisplayFieldName FROM DisplayField WHERE "
-			+"DisplayFieldName = '"+DisplayFieldName+"'"+" AND DisplayFieldName != '"+OriginalDisplayFieldName+"'";
-			DataTable table=General.GetTable(command);
-			bool IsUsed=false;
-			if (table.Rows.Count!=0) {//found duplicate control name				
-				IsUsed=true;
-			}
-			return IsUsed;
-		}
-
 		*/
 
 		public static List<DisplayField> GetDefaultList(){
+			List<DisplayField> list=new List<DisplayField>();
+			list.Add(new DisplayField("Date",67));
+			//list.Add(new DisplayField("Time",40));
+			list.Add(new DisplayField("Th",27));
+			list.Add(new DisplayField("Surf",40));
+			list.Add(new DisplayField("Dx",28));
+			list.Add(new DisplayField("Description",218));
+			list.Add(new DisplayField("Stat",25));
+			list.Add(new DisplayField("Prov",42));
+			list.Add(new DisplayField("Amount",48));
+			list.Add(new DisplayField("ADA Code",62));
+			list.Add(new DisplayField("User",62));
+			list.Add(new DisplayField("Signed",55));
+			return list;
+		}
+
+		public static List<DisplayField> GetAllAvailableList(){
 			List<DisplayField> list=new List<DisplayField>();
 			list.Add(new DisplayField("Date",67));
 			list.Add(new DisplayField("Time",40));
@@ -75,6 +81,39 @@ namespace OpenDental {
 			list.Add(new DisplayField("User",62));
 			list.Add(new DisplayField("Signed",55));
 			return list;
+		}
+
+		public static void SaveListForCategory(List<DisplayField> ListShowing){
+			bool isDefault=true;
+			List<DisplayField> defaultList=GetDefaultList();
+			if(ListShowing.Count!=defaultList.Count){
+				isDefault=false;
+			}
+			else{
+				for(int i=0;i<ListShowing.Count;i++){
+					if(ListShowing[i].Description!=""){
+						isDefault=false;
+						break;
+					}
+					if(ListShowing[i].InternalName!=defaultList[i].InternalName){
+						isDefault=false;
+						break;
+					}
+					if(ListShowing[i].ColumnWidth!=defaultList[i].ColumnWidth) {
+						isDefault=false;
+						break;
+					}
+				}
+			}
+			string command="DELETE FROM displayfield";
+			General.NonQ(command);
+			if(isDefault){
+				return;
+			}
+			for(int i=0;i<ListShowing.Count;i++){
+				ListShowing[i].ItemOrder=i;
+				Insert(ListShowing[i]);
+			}
 		}
 
 	}

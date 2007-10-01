@@ -407,6 +407,9 @@
     <Compile Include="Forms\BasicTemplate.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Forms\FormDisplayFieldEdit.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Forms\FormDisplayFields.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -1382,6 +1385,10 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\BasicTemplate.resx">
       <DependentUpon>BasicTemplate.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormDisplayFieldEdit.resx">
+      <DependentUpon>FormDisplayFieldEdit.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormDisplayFields.resx">
