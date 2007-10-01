@@ -259,24 +259,18 @@ namespace OpenDental{
 			gridReplicationComputers.SetSelected(false);//Un-select all computers to start.
 			for(int i=0;i<gridReplicationComputers.Rows.Count;i++){
 				string mysqlArgs=" -h "+gridReplicationComputers.Rows[i].Cells[0].Text
-					+" -u repl --password=od1234 --connect_timeout=1 "+currentDatabaseName;
-				Process othermysql=Process.Start(textMySQLPath.Text+"mysql",mysqlArgs);
-				if(othermysql!=null) {
-					othermysql.WaitForExit(5000);//This wait allows for 4 seconds of lag in the process startup on a laggy system, as well as 1 second for network latency.
-					try{
-						if(othermysql.ExitCode!=0) {
-							//Do nothing. Performing this check will throw an exception if the process is still running.
-						}
-					}catch{
-						//The connection is assumed to have been successful.
+					+" -u repl --password=od1234 -b -D "+currentDatabaseName+" -e \"exit\"";
+				ProcessStartInfo psi=new ProcessStartInfo(textMySQLPath.Text+"mysql",mysqlArgs);
+				psi.CreateNoWindow=true;
+				psi.WindowStyle=ProcessWindowStyle.Hidden;
+				Process othermysql=Process.Start(psi);
+				try{
+					othermysql.WaitForExit(5000);
+					if(othermysql.ExitCode==0) {//The connection was a success.
 						gridReplicationComputers.SetSelected(i,true);
 					}
-					try{
-						othermysql.Kill();
-						othermysql.WaitForExit();
-					}catch{
-						//Sometimes the process exits before the Kill() or WaitForExit() gets called.
-					}
+				}catch{
+					//The connection failed, so even when waiting for 5 seconds, the mysql process does not exit, and the call to othermysql.ExitCode throws and exception because the process had not exited.
 				}
 			}			
 		}		
