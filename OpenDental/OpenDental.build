@@ -36,7 +36,8 @@
 			</nowarn>
 			<sources>
 				<include name="**/*.cs"/>
-                <exclude name="Forms/FormApptEditOld.cs"/>
+                		<exclude name="Forms/FormApptEditOld.cs"/>
+                		<exclude name="Data Interface/Modules.cs"/>
 			</sources>
       			<resources dynamicprefix="true" prefix="OpenDental">
 				<include name="**/*.resx"/>
