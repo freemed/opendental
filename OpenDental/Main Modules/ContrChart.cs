@@ -3282,34 +3282,39 @@ namespace OpenDental{
 			}
 			gridProg.BeginUpdate();
 			gridProg.Columns.Clear();
-			ODGridColumn col=new ODGridColumn(Lan.g("TableProg","Date"),67);
-			gridProg.Columns.Add(col);
-			if(PrefB.GetBool("ProgressNotesShowTime")){
-				col=new ODGridColumn(Lan.g("TableProg","Time"),40);
+			ODGridColumn col;
+			List<DisplayField> fields=DisplayFields.GetForCategory();
+			for(int i=0;i<fields.Count;i++){
+				if(fields[i].Description==""){
+					col=new ODGridColumn(fields[i].InternalName,fields[i].ColumnWidth);
+				}
+				else{
+					col=new ODGridColumn(fields[i].Description,fields[i].ColumnWidth);
+				}
+				if(fields[i].InternalName=="Amount"){
+					col.TextAlign=HorizontalAlignment.Right;
+				}
+				if(fields[i].InternalName=="ADA Code"
+					|| fields[i].InternalName=="User"
+					|| fields[i].InternalName=="Signed")
+				{
+					col.TextAlign=HorizontalAlignment.Center;
+				}
 				gridProg.Columns.Add(col);
 			}
-			col=new ODGridColumn(Lan.g("TableProg","Th"),27);
-			gridProg.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TableProg","Surf"),40);
-			gridProg.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TableProg","Dx"),28);
-			gridProg.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TableProg","Description"),218);
-			gridProg.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TableProg","Stat"),25);
-			gridProg.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TableProg","Prov"),42);
-			gridProg.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TableProg","Amount"),48,HorizontalAlignment.Right);
-			gridProg.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TableProg","ADA Code"),62,HorizontalAlignment.Center);
-			gridProg.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TableProg","User"),62,HorizontalAlignment.Center);
-			gridProg.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TableProg","Signed"),55,HorizontalAlignment.Center);
-			gridProg.Columns.Add(col);
-			gridProg.NoteSpanStart=2;
-			gridProg.NoteSpanStop=7;
+			if(gridProg.Columns.Count<3){//0 wouldn't be possible.
+				gridProg.NoteSpanStart=0;
+				gridProg.NoteSpanStop=gridProg.Columns.Count-1;
+			}
+			else{
+				gridProg.NoteSpanStart=2;
+				if(gridProg.Columns.Count>7) {
+					gridProg.NoteSpanStop=7;
+				}
+				else{
+					gridProg.NoteSpanStop=gridProg.Columns.Count-1;
+				}
+			}
 			gridProg.Rows.Clear();
 			ODGridRow row;
 			//Type type;
@@ -3358,20 +3363,46 @@ namespace OpenDental{
 				row=new ODGridRow();
 				row.ColorLborder=Color.Black;
 				//remember that columns that start with lowercase are already altered for display rather than being raw data.
-				row.Cells.Add(table.Rows[i]["procDate"].ToString());
-				if(PrefB.GetBool("ProgressNotesShowTime")){
-					row.Cells.Add(table.Rows[i]["procTime"].ToString());
-				}
-				row.Cells.Add(table.Rows[i]["toothNum"].ToString());
-				row.Cells.Add(table.Rows[i]["Surf"].ToString());
-				row.Cells.Add(table.Rows[i]["dx"].ToString());
-				row.Cells.Add(table.Rows[i]["description"].ToString());
-				row.Cells.Add(table.Rows[i]["procStatus"].ToString());
-				row.Cells.Add(table.Rows[i]["prov"].ToString());
-				row.Cells.Add(table.Rows[i]["procFee"].ToString());
-				row.Cells.Add(table.Rows[i]["ProcCode"].ToString());
-				row.Cells.Add(table.Rows[i]["user"].ToString());
-				row.Cells.Add(table.Rows[i]["signature"].ToString());
+				for(int f=0;f<fields.Count;f++) {
+					switch(fields[f].InternalName){
+						case "Date":
+							row.Cells.Add(table.Rows[i]["procDate"].ToString());
+							break;
+						case "Time":
+							row.Cells.Add(table.Rows[i]["procTime"].ToString());
+							break;
+						case "Th":
+							row.Cells.Add(table.Rows[i]["toothNum"].ToString());
+							break;
+						case "Surf":
+							row.Cells.Add(table.Rows[i]["Surf"].ToString());
+							break;
+						case "Dx":
+							row.Cells.Add(table.Rows[i]["dx"].ToString());
+							break;
+						case "Description":
+							row.Cells.Add(table.Rows[i]["description"].ToString());
+							break;
+						case "Stat":
+							row.Cells.Add(table.Rows[i]["procStatus"].ToString());
+							break;
+						case "Prov":
+							row.Cells.Add(table.Rows[i]["prov"].ToString());
+							break;
+						case "Amount":
+							row.Cells.Add(table.Rows[i]["procFee"].ToString());
+							break;
+						case "ADA Code":
+							row.Cells.Add(table.Rows[i]["ProcCode"].ToString());
+							break;
+						case "User":
+							row.Cells.Add(table.Rows[i]["user"].ToString());
+							break;
+						case "Signed":
+							row.Cells.Add(table.Rows[i]["signature"].ToString());
+							break;
+					}
+				}				
 				if(checkNotes.Checked){
 					row.Note=table.Rows[i]["note"].ToString();
 				}

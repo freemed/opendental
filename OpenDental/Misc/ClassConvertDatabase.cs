@@ -5900,8 +5900,6 @@ namespace OpenDental{
 				General.NonQEx(command);
 				command="UPDATE commlog SET CommType=0 WHERE CommType=1";
 				General.NonQEx(command);
-				command="INSERT INTO preference VALUES('ProgressNotesShowTime','0')";//this is a temporary solution, hidden from users.
-				General.NonQEx(command);
 				//after r860 (and again after r853)
 				command="DROP TABLE IF EXISTS displayfield";
 				General.NonQEx(command);

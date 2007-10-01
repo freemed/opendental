@@ -264,12 +264,7 @@ namespace OpenDental{
 
 		private void FormDisplayFields_Load(object sender,EventArgs e) {
 			DisplayFields.Refresh();
-			if(DisplayFields.Listt.Count==0){//default
-				ListShowing=DisplayFields.GetDefaultList();
-			}
-			else{
-				ListShowing=new List<DisplayField>(DisplayFields.Listt);
-			}
+			ListShowing=DisplayFields.GetForCategory();
 			FillGrids();
 		}
 
@@ -312,6 +307,7 @@ namespace OpenDental{
 			formD.FieldCur=ListShowing[e.Row];
 			formD.ShowDialog();
 			FillGrids();
+			changed=true;
 		}
 
 		private void butDefault_Click(object sender,EventArgs e) {

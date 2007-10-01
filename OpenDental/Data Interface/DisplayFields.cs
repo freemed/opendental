@@ -49,6 +49,14 @@ namespace OpenDental {
 		}
 		*/
 
+		///<Summary>There's only one category for now.  So this doesn't really do much.</Summary>
+		public static List<DisplayField> GetForCategory(){
+			if(DisplayFields.Listt.Count==0) {//default
+				return DisplayFields.GetDefaultList();
+			}
+			return DisplayFields.Listt;//later, filter by category
+		}
+
 		public static List<DisplayField> GetDefaultList(){
 			List<DisplayField> list=new List<DisplayField>();
 			list.Add(new DisplayField("Date",67));
@@ -115,6 +123,8 @@ namespace OpenDental {
 				Insert(ListShowing[i]);
 			}
 		}
+
+		
 
 	}
 }
