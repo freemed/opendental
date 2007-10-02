@@ -5785,7 +5785,6 @@ namespace OpenDental{
 				General.NonQEx(command);
 				command = "ALTER TABLE insplan ADD ShowBaseUnits TINYINT(1) NOT NULL";
 				General.NonQEx(command);
-				//after r798
 				command = "ALTER TABLE proctp ADD Discount double NOT NULL";
 				General.NonQEx(command);
 				if(DataConnection.DBtype==DatabaseType.MySql) {
@@ -5796,15 +5795,12 @@ namespace OpenDental{
 					//command="ALTER TABLE claimproc (RENAME??) MODIFY (AllowedOverride double NOT NULL)";
 					//General.NonQEx(command);
 				}
-				//after r807
 				command="ALTER TABLE refattach ADD RefToStatus TINYINT unsigned NOT NULL";
 				General.NonQEx(command);
 				command="ALTER TABLE refattach ADD Note text";
 				General.NonQEx(command);
-				//after r808
 				command="ALTER TABLE procedurecode ADD SubstitutionCode VARCHAR(25)";
 				General.NonQEx(command);
-				//after r811
 				command="DROP TABLE IF EXISTS proccodenote";
 				General.NonQEx(command);
 				command=@"CREATE TABLE proccodenote (
@@ -5816,29 +5812,22 @@ namespace OpenDental{
 					PRIMARY KEY (ProcCodeNoteNum)
 					) DEFAULT CHARSET=utf8";
 				General.NonQEx(command);
-				//after r819
 				command="ALTER TABLE insplan ADD DedBeforePerc TINYINT(1) NOT NULL";
 				General.NonQEx(command);
 				command = "ALTER TABLE procedurelog ADD BaseUnits int NOT NULL";
 				General.NonQEx(command);
 				command="ALTER TABLE procedurelog MODIFY UnitQty int NOT NULL";
 				General.NonQEx(command);
-				//after r832
 				command="INSERT INTO preference VALUES('DeductibleBeforePercentAsDefault','0')";
 				General.NonQEx(command);
 				command = "ALTER TABLE benefit ADD CoverageLevel int NOT NULL";
 				General.NonQEx(command);
-				//after r835
 				command = "ALTER TABLE procedurecode ADD SubstOnlyIf int NOT NULL";
 				General.NonQEx(command);
-				//after r838
 				command = "ALTER TABLE procedurelog ADD StartTime int NOT NULL";
 				General.NonQEx(command);
 				command = "ALTER TABLE procedurelog ADD StopTime int NOT NULL";
 				General.NonQEx(command);
-				//after r839
-				//moved down from further up:
-				//this set of query groups are not critical to run unless testing this new feature:
 				command="SELECT COUNT(*) FROM procedurecode WHERE ProcCode='D2391'";
 				if(General.GetCountEx(command)=="1") {
 					command="UPDATE procedurecode SET SubstitutionCode='D2140',SubstOnlyIf=1 WHERE ProcCode='D2391'";//1 surf
@@ -5859,20 +5848,17 @@ namespace OpenDental{
 					command="UPDATE procedurecode SET SubstitutionCode='D2161',SubstOnlyIf=1 WHERE ProcCode='D2394'";//4+ surf
 					General.NonQEx(command);
 				}
-				//after r843
 				command="INSERT INTO preference VALUES('TaskListAlwaysShowsAtBottom','0')";
 				General.NonQEx(command);
-				//after r847
 				command = "ALTER TABLE commlog ADD IsStatementSent tinyint(1) NOT NULL";
 				General.NonQEx(command);
 				command="UPDATE commlog SET IsStatementSent=1 WHERE CommType=1";
 				General.NonQEx(command);
-				//after r853.  These are hard to do manually.  It's easier to just start with a new database.
 				if(DataConnection.DBtype==DatabaseType.MySql) {
 					command = "ALTER TABLE commlog CHANGE CommType CommType int NOT NULL";
 					General.NonQEx(command);
 				}
-				else{//Oracle
+				else {//Oracle
 					//I think it's already an int
 				}
 				command="INSERT INTO definition (Category,ItemOrder,ItemName,ItemValue) VALUES(27,0,'ApptRelated','APPT')";
@@ -5901,7 +5887,6 @@ namespace OpenDental{
 				General.NonQEx(command);
 				command="UPDATE commlog SET CommType=0 WHERE CommType=1";
 				General.NonQEx(command);
-				//after r860 (and again after r853)
 				command="DROP TABLE IF EXISTS displayfield";
 				General.NonQEx(command);
 				command=@"CREATE TABLE displayfield (
@@ -5913,7 +5898,6 @@ namespace OpenDental{
 					PRIMARY KEY (DisplayFieldNum)
 					) DEFAULT CHARSET=utf8";
 				General.NonQEx(command);
-				//table definition above was altered.
 				command="UPDATE preference SET ValueString = '5.3.0.0' WHERE PrefName = 'DataBaseVersion'";
 				General.NonQEx(command);
 			}
