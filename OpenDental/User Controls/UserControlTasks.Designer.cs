@@ -152,6 +152,7 @@ namespace OpenDental {
 			this.listMain.Location = new System.Drawing.Point(0,333);
 			this.listMain.MultiSelect = false;
 			this.listMain.Name = "listMain";
+			this.listMain.ShowItemToolTips = true;
 			this.listMain.Size = new System.Drawing.Size(941,174);
 			this.listMain.SmallImageList = this.imageListTree;
 			this.listMain.TabIndex = 8;
@@ -165,7 +166,7 @@ namespace OpenDental {
 			// columnHeader1
 			// 
 			this.columnHeader1.Text = "Description";
-			this.columnHeader1.Width = 270;
+			this.columnHeader1.Width = 600;
 			// 
 			// imageListMain
 			// 

@@ -243,6 +243,7 @@ namespace OpenDental {
 					}
 				}
 				item=new ListViewItem(dateStr+TaskListsList[i].Descript,0);
+				item.ToolTipText=item.Text;
 				listMain.Items.Add(item);
 			}
 			string objDesc="";
@@ -289,6 +290,7 @@ namespace OpenDental {
 				else {
 					item=new ListViewItem(dateStr+objDesc+TasksList[i].Descript,2);
 				}
+				item.ToolTipText=item.Text;
 				listMain.Items.Add(item);
 			}
 		}

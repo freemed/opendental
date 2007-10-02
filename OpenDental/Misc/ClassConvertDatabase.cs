@@ -5924,7 +5924,14 @@ namespace OpenDental{
 					  PRIMARY KEY(DocNum)
 					)";
 				General.NonQEx(command);
-				//Other alpha version queries go here:
+				
+
+
+
+
+
+
+
 
 				command="UPDATE preference SET ValueString = '5.4.0.0' WHERE PrefName = 'DataBaseVersion'";
 				General.NonQEx(command);
