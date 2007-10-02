@@ -654,10 +654,12 @@ namespace OpenDental{
 			Appointment AptCur=new Appointment();
 			AptCur.PatNum=patCur.PatNum;
 			AptCur.AptStatus=ApptStatus.Scheduled;
-			if(patCur.PriProv==0)
+			if(patCur.PriProv==0){
 				AptCur.ProvNum=PrefB.GetInt("PracticeDefaultProv");
-			else
+			}
+			else{
 				AptCur.ProvNum=patCur.PriProv;
+			}
 			AptCur.ProvHyg=patCur.SecProv;
 			if(AptCur.ProvHyg!=0){
 				AptCur.IsHygiene=true;
@@ -666,10 +668,16 @@ namespace OpenDental{
 			bool perioPt=false;
 			StringBuilder savePattern=new StringBuilder();
 			string[] procs;
-			if (patCur.Birthdate.AddYears(12) < recallCur.DateDue) {//pt is over 12 at recall date)
-				if (!PrefB.GetBool("RecallDisablePerioAlt")) {
+			if(patCur.Birthdate.AddYears(12) < recallCur.DateDue) {//pt is over 12 at recall date)
+				if(!PrefB.GetBool("RecallDisablePerioAlt")) {
 					//if pt is perio pt RecallPerioTriggerProcs
-					string[] PerioProc=PrefB.GetString("RecallPerioTriggerProcs").Split(',');
+					string[] PerioProc;
+					if(PrefB.GetString("RecallPerioTriggerProcs")==""){
+						PerioProc=new string[0];
+					}
+					else{
+						PerioProc=PrefB.GetString("RecallPerioTriggerProcs").Split(',');
+					}
 					for (int q=0;q<PerioProc.Length;q++) {//see if pt has had any perio procs in the past
 						for (int i=0;i<procList.Length;i++) {
 							if (PerioProc[q]==ProcedureCodes.GetStringProcCode(procList[i].CodeNum)
@@ -679,8 +687,13 @@ namespace OpenDental{
 						}
 					}
 				}
-				if (perioPt) {
-					procs=PrefB.GetString("RecallProceduresPerio").Split(',');
+				if(perioPt) {
+					if(PrefB.GetString("RecallProceduresPerio")==""){
+						procs=new string[0];
+					}
+					else{
+						procs=PrefB.GetString("RecallProceduresPerio").Split(',');
+					}
 					//convert time pattern to 5 minute increment
 					for(int i=0;i<PrefB.GetString("RecallPatternPerio").Length;i++){
 						savePattern.Append(PrefB.GetString("RecallPatternPerio").Substring(i,1));
@@ -691,7 +704,12 @@ namespace OpenDental{
 					}
 				}
 				else {//not perio pt
-					procs=PrefB.GetString("RecallProcedures").Split(',');
+					if(PrefB.GetString("RecallProcedures")=="") {
+						procs=new string[0];
+					}
+					else {
+						procs=PrefB.GetString("RecallProcedures").Split(',');
+					}
 					//convert time pattern to 5 minute increment
 					for(int i=0;i<PrefB.GetString("RecallPattern").Length;i++){
 						savePattern.Append(PrefB.GetString("RecallPattern").Substring(i,1));
@@ -703,7 +721,12 @@ namespace OpenDental{
 				}
 			}
 			else {//child under 12 years
-				procs=PrefB.GetString("RecallProceduresChild").Split(',');
+				if(PrefB.GetString("RecallProceduresChild")=="") {
+					procs=new string[0];
+				}
+				else {
+					procs=PrefB.GetString("RecallProceduresChild").Split(',');
+				}
 				for (int i=0;i<PrefB.GetString("RecallPatternChild").Length;i++) {
 					savePattern.Append(PrefB.GetString("RecallPatternChild").Substring(i, 1));
 					savePattern.Append(PrefB.GetString("RecallPatternChild").Substring(i, 1));
@@ -712,9 +735,16 @@ namespace OpenDental{
 					}
 				}
 			}
+			if(savePattern.ToString()==""){
+				if(PrefB.GetInt("AppointmentTimeIncrement")==15){
+					savePattern.Append("///XXX///");
+				}
+				else{
+					savePattern.Append("//XX//");
+				}
+			}
 			AptCur.Pattern=savePattern.ToString();
-
-			if (PrefB.GetBool("RecallDisableAutoFilms")==false) {//Add Films
+			if(!PrefB.GetBool("RecallDisableAutoFilms")) {//Add Films
 				bool dueBW=true;
 				bool dueFMXPano=true;
 				bool dueBW_w_FMXPano=false;
@@ -729,7 +759,8 @@ namespace OpenDental{
 						if (PrefB.GetString("RecallFMXPanoProc") == ProcedureCodes.GetStringProcCode(procList[i].CodeNum)
 							&& (procList[i].ProcStatus.ToString() == "C" | procList[i].ProcStatus.ToString() == "EO")
 							&& recallCur.DateDue.Year > 1880
-							&& procList[i].ProcDate > recallCur.DateDue.AddYears(-(PrefB.GetInt("RecallFMXPanoYrInterval")))) {
+							&& procList[i].ProcDate > recallCur.DateDue.AddYears(-(PrefB.GetInt("RecallFMXPanoYrInterval")))) 
+						{
 							dueFMXPano=false;
 							if (procList[i].ProcDate > recallCur.DateDue.AddYears(-1)) {//if FMX was taken w/ year, then we don't need BW's either
 								dueBW=false;
@@ -752,24 +783,32 @@ namespace OpenDental{
 							dueBW=false;
 							dueBW_w_FMXPano=false;
 					}
-
-					
 				}
 				//if FMXPano has been taken instead of BW, then we don't need any new films
-				if (dueFMXPano==true | (!dueBW_w_FMXPano && !skipFMXPano)){
+				if (dueFMXPano | (!dueBW_w_FMXPano && !skipFMXPano)){
 					dueBW=false;
 				}
-				if (dueBW_w_FMXPano){
+				if(dueBW_w_FMXPano){
 					dueBW=true;
 					dueFMXPano=false;
 				}
-				if(dueBW | dueFMXPano){
-					string[] procs2=new string[procs.Length+1];
-					procs.CopyTo(procs2,0);
-					if (dueBW) procs2[procs2.Length-1]=PrefB.GetString("RecallBW");
-					else procs2[procs2.Length-1]=PrefB.GetString("RecallFMXPanoProc");
-					procs=new string[procs2.Length];
-					procs2.CopyTo(procs,0);
+				if(dueBW){
+					if(PrefB.GetString("RecallBW")!=""){
+						string[] procs2=new string[procs.Length+1];
+						procs.CopyTo(procs2,0);
+						procs2[procs2.Length-1]=PrefB.GetString("RecallBW");
+						procs=new string[procs2.Length];
+						procs2.CopyTo(procs,0);
+					}
+				}
+				if(dueFMXPano) {
+					if(PrefB.GetString("RecallFMXPanoProc")!=""){
+						string[] procs2=new string[procs.Length+1];
+						procs.CopyTo(procs2,0);
+						procs2[procs2.Length-1]=PrefB.GetString("RecallFMXPanoProc");
+						procs=new string[procs2.Length];
+						procs2.CopyTo(procs,0);
+					}
 				}
 			}
 			AptCur.ProcDescript="";
