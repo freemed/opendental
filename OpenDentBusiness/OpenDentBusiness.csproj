@@ -73,6 +73,7 @@
     <Compile Include="Imaging\ImageHelper.cs" />
     <Compile Include="Imaging\ImageNotFoundException.cs" />
     <Compile Include="Imaging\ImageStore.cs" />
+    <Compile Include="Imaging\ImageStoreBase.cs" />
     <Compile Include="Imaging\ImageStoreCreationException.cs" />
     <Compile Include="Imaging\ImageStoreRemovalException.cs" />
     <Compile Include="Imaging\NoActivePatientException.cs" />
