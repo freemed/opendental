@@ -113,6 +113,7 @@
     <Compile Include="DataConnection.cs" />
     <Compile Include="DataTransferObject.cs" />
     <Compile Include="Enumerations.cs" />
+    <Compile Include="Imaging\SqlStore.cs" />
     <Compile Include="Lan.cs" />
     <Compile Include="PIn.cs" />
     <Compile Include="POut.cs" />
