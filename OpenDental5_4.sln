@@ -1,0 +1,136 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 9.00
+# Visual Studio 2005
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenDental", "OpenDental\OpenDental.csproj", "{8136317D-C936-49B6-9E31-D90F02D2F207}"
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.Debug = "False"
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenDentBusiness", "OpenDentBusiness\OpenDentBusiness.csproj", "{3D0FC76E-803C-4DE2-BDB1-47D63A4E2357}"
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.Debug = "False"
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTests", "UnitTests\UnitTests.csproj", "{7069E361-5105-4A13-8D66-5D528B582BA6}"
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.Debug = "False"
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "xCodeBase", "CodeBase\xCodeBase.csproj", "{18F7BC78-4B99-48D3-A1F1-0D13A63E3CF9}"
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.Debug = "False"
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SparksToothChart", "SparksToothChart\SparksToothChart.csproj", "{033B77F4-2E98-49A7-901F-5F388DEDF83E}"
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.Debug = "False"
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RdlViewer", "RdlViewer\RdlViewer.csproj", "{D99145B1-CB6C-41F5-BA86-723325145FB5}"
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.Debug = "False"
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RdlEngine", "RdlEngine\RdlEngine.csproj", "{C97E91F4-B310-44E2-9B6C-96775395722D}"
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.Debug = "False"
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "xODR", "ODR\xODR.csproj", "{84688345-BB6A-4F2F-8672-A82B52FD433B}"
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.Debug = "False"
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReportDesigner", "RdlDesign\ReportDesigner.csproj", "{3E1D2C49-44A2-46A0-B107-9E8A87AE78A7}"
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.Debug = "False"
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "xDatabaseIntegrityCheck", "DatabaseIntegrityCheck\xDatabaseIntegrityCheck.csproj", "{3FB82BFD-6E2A-4CDD-987E-0AC199771BC8}"
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.Debug = "False"
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		LinuxRelease|Any CPU = LinuxRelease|Any CPU
+		Release|Any CPU = Release|Any CPU
+		Description = 
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{8136317D-C936-49B6-9E31-D90F02D2F207}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8136317D-C936-49B6-9E31-D90F02D2F207}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8136317D-C936-49B6-9E31-D90F02D2F207}.LinuxRelease|Any CPU.ActiveCfg = LinuxRelease|Any CPU
+		{8136317D-C936-49B6-9E31-D90F02D2F207}.LinuxRelease|Any CPU.Build.0 = LinuxRelease|Any CPU
+		{8136317D-C936-49B6-9E31-D90F02D2F207}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8136317D-C936-49B6-9E31-D90F02D2F207}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3D0FC76E-803C-4DE2-BDB1-47D63A4E2357}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3D0FC76E-803C-4DE2-BDB1-47D63A4E2357}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3D0FC76E-803C-4DE2-BDB1-47D63A4E2357}.LinuxRelease|Any CPU.ActiveCfg = LinuxRelease|Any CPU
+		{3D0FC76E-803C-4DE2-BDB1-47D63A4E2357}.LinuxRelease|Any CPU.Build.0 = LinuxRelease|Any CPU
+		{3D0FC76E-803C-4DE2-BDB1-47D63A4E2357}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3D0FC76E-803C-4DE2-BDB1-47D63A4E2357}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7069E361-5105-4A13-8D66-5D528B582BA6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7069E361-5105-4A13-8D66-5D528B582BA6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7069E361-5105-4A13-8D66-5D528B582BA6}.LinuxRelease|Any CPU.ActiveCfg = LinuxRelease|Any CPU
+		{7069E361-5105-4A13-8D66-5D528B582BA6}.LinuxRelease|Any CPU.Build.0 = LinuxRelease|Any CPU
+		{7069E361-5105-4A13-8D66-5D528B582BA6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7069E361-5105-4A13-8D66-5D528B582BA6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{18F7BC78-4B99-48D3-A1F1-0D13A63E3CF9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{18F7BC78-4B99-48D3-A1F1-0D13A63E3CF9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{18F7BC78-4B99-48D3-A1F1-0D13A63E3CF9}.LinuxRelease|Any CPU.ActiveCfg = LinuxRelease|Any CPU
+		{18F7BC78-4B99-48D3-A1F1-0D13A63E3CF9}.LinuxRelease|Any CPU.Build.0 = LinuxRelease|Any CPU
+		{18F7BC78-4B99-48D3-A1F1-0D13A63E3CF9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{18F7BC78-4B99-48D3-A1F1-0D13A63E3CF9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{033B77F4-2E98-49A7-901F-5F388DEDF83E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{033B77F4-2E98-49A7-901F-5F388DEDF83E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{033B77F4-2E98-49A7-901F-5F388DEDF83E}.LinuxRelease|Any CPU.ActiveCfg = LinuxRelease|Any CPU
+		{033B77F4-2E98-49A7-901F-5F388DEDF83E}.LinuxRelease|Any CPU.Build.0 = LinuxRelease|Any CPU
+		{033B77F4-2E98-49A7-901F-5F388DEDF83E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{033B77F4-2E98-49A7-901F-5F388DEDF83E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D99145B1-CB6C-41F5-BA86-723325145FB5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D99145B1-CB6C-41F5-BA86-723325145FB5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D99145B1-CB6C-41F5-BA86-723325145FB5}.LinuxRelease|Any CPU.ActiveCfg = LinuxRelease|Any CPU
+		{D99145B1-CB6C-41F5-BA86-723325145FB5}.LinuxRelease|Any CPU.Build.0 = LinuxRelease|Any CPU
+		{D99145B1-CB6C-41F5-BA86-723325145FB5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D99145B1-CB6C-41F5-BA86-723325145FB5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C97E91F4-B310-44E2-9B6C-96775395722D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C97E91F4-B310-44E2-9B6C-96775395722D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C97E91F4-B310-44E2-9B6C-96775395722D}.LinuxRelease|Any CPU.ActiveCfg = LinuxRelease|Any CPU
+		{C97E91F4-B310-44E2-9B6C-96775395722D}.LinuxRelease|Any CPU.Build.0 = LinuxRelease|Any CPU
+		{C97E91F4-B310-44E2-9B6C-96775395722D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C97E91F4-B310-44E2-9B6C-96775395722D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{84688345-BB6A-4F2F-8672-A82B52FD433B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{84688345-BB6A-4F2F-8672-A82B52FD433B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{84688345-BB6A-4F2F-8672-A82B52FD433B}.LinuxRelease|Any CPU.ActiveCfg = LinuxRelease|Any CPU
+		{84688345-BB6A-4F2F-8672-A82B52FD433B}.LinuxRelease|Any CPU.Build.0 = LinuxRelease|Any CPU
+		{84688345-BB6A-4F2F-8672-A82B52FD433B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{84688345-BB6A-4F2F-8672-A82B52FD433B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3E1D2C49-44A2-46A0-B107-9E8A87AE78A7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3E1D2C49-44A2-46A0-B107-9E8A87AE78A7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3E1D2C49-44A2-46A0-B107-9E8A87AE78A7}.LinuxRelease|Any CPU.ActiveCfg = LinuxRelease|Any CPU
+		{3E1D2C49-44A2-46A0-B107-9E8A87AE78A7}.LinuxRelease|Any CPU.Build.0 = LinuxRelease|Any CPU
+		{3E1D2C49-44A2-46A0-B107-9E8A87AE78A7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3E1D2C49-44A2-46A0-B107-9E8A87AE78A7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3FB82BFD-6E2A-4CDD-987E-0AC199771BC8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3FB82BFD-6E2A-4CDD-987E-0AC199771BC8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3FB82BFD-6E2A-4CDD-987E-0AC199771BC8}.LinuxRelease|Any CPU.ActiveCfg = LinuxRelease|Any CPU
+		{3FB82BFD-6E2A-4CDD-987E-0AC199771BC8}.LinuxRelease|Any CPU.Build.0 = LinuxRelease|Any CPU
+		{3FB82BFD-6E2A-4CDD-987E-0AC199771BC8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3FB82BFD-6E2A-4CDD-987E-0AC199771BC8}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
