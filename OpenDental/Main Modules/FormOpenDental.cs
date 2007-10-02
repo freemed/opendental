@@ -168,7 +168,11 @@ namespace OpenDental{
 		private UserControlTasks userControlTasks1;
 		private MenuItem menuItemMergeDatabases;
 		private MenuItem menuItemDisplayFields;
+		private Panel panelSplitter;
 		private string dconnStr;
+		private bool MouseIsDownOnSplitter;
+		private int SplitterOriginalY;
+		private int OriginalMousePos;
 
 		///<summary></summary>
 		public FormOpenDental(){
@@ -292,6 +296,7 @@ namespace OpenDental{
 			this.menuItemUpdate = new System.Windows.Forms.MenuItem();
 			this.imageList32 = new System.Windows.Forms.ImageList(this.components);
 			this.timerSignals = new System.Windows.Forms.Timer(this.components);
+			this.panelSplitter = new System.Windows.Forms.Panel();
 			this.userControlTasks1 = new OpenDental.UserControlTasks();
 			this.ContrManage2 = new OpenDental.ContrStaff();
 			this.ContrChart2 = new OpenDental.ContrChart();
@@ -936,9 +941,21 @@ namespace OpenDental{
 			// 
 			this.timerSignals.Tick += new System.EventHandler(this.timerSignals_Tick);
 			// 
+			// panelSplitter
+			// 
+			this.panelSplitter.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.panelSplitter.Cursor = System.Windows.Forms.Cursors.SizeNS;
+			this.panelSplitter.Location = new System.Drawing.Point(71,542);
+			this.panelSplitter.Name = "panelSplitter";
+			this.panelSplitter.Size = new System.Drawing.Size(769,7);
+			this.panelSplitter.TabIndex = 50;
+			this.panelSplitter.MouseDown += new System.Windows.Forms.MouseEventHandler(this.panelSplitter_MouseDown);
+			this.panelSplitter.MouseMove += new System.Windows.Forms.MouseEventHandler(this.panelSplitter_MouseMove);
+			this.panelSplitter.MouseUp += new System.Windows.Forms.MouseEventHandler(this.panelSplitter_MouseUp);
+			// 
 			// userControlTasks1
 			// 
-			this.userControlTasks1.Location = new System.Drawing.Point(97,620);
+			this.userControlTasks1.Location = new System.Drawing.Point(57,498);
 			this.userControlTasks1.Name = "userControlTasks1";
 			this.userControlTasks1.Size = new System.Drawing.Size(783,139);
 			this.userControlTasks1.TabIndex = 28;
@@ -1017,14 +1034,15 @@ namespace OpenDental{
 			this.myOutlookBar.ImageList = this.imageList32;
 			this.myOutlookBar.Location = new System.Drawing.Point(0,0);
 			this.myOutlookBar.Name = "myOutlookBar";
-			this.myOutlookBar.Size = new System.Drawing.Size(51,652);
+			this.myOutlookBar.Size = new System.Drawing.Size(51,566);
 			this.myOutlookBar.TabIndex = 18;
 			this.myOutlookBar.Text = "outlookBar1";
 			this.myOutlookBar.ButtonClicked += new OpenDental.ButtonClickedEventHandler(this.myOutlookBar_ButtonClicked);
 			// 
 			// FormOpenDental
 			// 
-			this.ClientSize = new System.Drawing.Size(982,652);
+			this.ClientSize = new System.Drawing.Size(982,566);
+			this.Controls.Add(this.panelSplitter);
 			this.Controls.Add(this.userControlTasks1);
 			this.Controls.Add(this.ContrManage2);
 			this.Controls.Add(this.ContrChart2);
@@ -1463,7 +1481,16 @@ namespace OpenDental{
 			int width=this.ClientSize.Width-position.X;
 			int height=this.ClientSize.Height;
 			if(userControlTasks1.Visible){
-				height=516;
+				panelSplitter.Location=new Point(position.X,panelSplitter.Location.Y);
+				panelSplitter.Width=width;
+				panelSplitter.Visible=true;
+				userControlTasks1.Location=new Point(position.X,panelSplitter.Bottom);
+				userControlTasks1.Width=width;
+				userControlTasks1.Height=this.ClientSize.Height-userControlTasks1.Top;
+				height=ClientSize.Height-panelSplitter.Height-userControlTasks1.Height;
+			}
+			else{
+				panelSplitter.Visible=false;
 			}
 			ContrAccount2.Location=position;
 			ContrAccount2.Width=width;
@@ -1486,11 +1513,30 @@ namespace OpenDental{
 			ContrTreat2.Location=position;
 			ContrTreat2.Width=width;
 			ContrTreat2.Height=height;
-			if(userControlTasks1.Visible){
-				userControlTasks1.Location=new Point(position.X,height+2);
-				userControlTasks1.Width=width;
-				userControlTasks1.Height=this.ClientSize.Height-userControlTasks1.Location.Y;
+		}
+
+		private void panelSplitter_MouseDown(object sender,System.Windows.Forms.MouseEventArgs e) {
+			MouseIsDownOnSplitter=true;
+			SplitterOriginalY=panelSplitter.Top;
+			OriginalMousePos=panelSplitter.Top+e.Y;
+		}
+
+		private void panelSplitter_MouseMove(object sender,System.Windows.Forms.MouseEventArgs e) {
+			if(!MouseIsDownOnSplitter){
+				return;
 			}
+			int splitterNewLoc=SplitterOriginalY+(panelSplitter.Top+e.Y)-OriginalMousePos;
+			//if(splitterNewLoc<gridAcctPat.Bottom)
+			//	splitterNewLoc=gridAcctPat.Bottom;//keeps it from going too high
+			if(splitterNewLoc>Height){
+				splitterNewLoc=Height-panelSplitter.Height;//keeps it from going off the bottom edge
+			}
+			panelSplitter.Top=splitterNewLoc;
+			LayoutControls();
+		}
+
+		private void panelSplitter_MouseUp(object sender,System.Windows.Forms.MouseEventArgs e) {
+			MouseIsDownOnSplitter=false;
 		}
 
 		
