@@ -5916,11 +5916,15 @@ namespace OpenDental{
 		private void To5_4_0() {
 			if(FromVersion<new Version("5.4.0.0")) {
 				string command;
-				//alpha version queries go here:
-
-
-
-
+				command = @"CREATE TABLE files
+					(
+					  DocNum    int        NOT NULL,
+					  Data      longblob   NOT NULL,
+					  Thumbnail longblob   NULL,
+					  PRIMARY KEY(DocNum)
+					)";
+				General.NonQEx(command);
+				//Other alpha version queries go here:
 
 				command="UPDATE preference SET ValueString = '5.4.0.0' WHERE PrefName = 'DataBaseVersion'";
 				General.NonQEx(command);
