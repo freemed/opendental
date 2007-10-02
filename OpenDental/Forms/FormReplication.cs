@@ -6,6 +6,8 @@ using System.Windows.Forms;
 using OpenDentBusiness;
 using OpenDental.UI;
 using System.Diagnostics;
+using MySql.Data.MySqlClient;
+using System.Data;
 
 namespace OpenDental{
 	/// <summary>
@@ -17,9 +19,6 @@ namespace OpenDental{
 		private OpenDental.UI.ODGrid gridReplicationComputers;
 		private Label label1;
 		private OpenDental.UI.Button butSelectServers;
-		private TextBox textMySQLPath;
-		private OpenDental.UI.Button butBrowse;
-		private TextBox textBox1;
 		private FolderBrowserDialog folderBrowserMySQL;
 		/// <summary>
 		/// Required designer variable.
@@ -60,10 +59,7 @@ namespace OpenDental{
 		{
 			System.ComponentModel.ComponentResourceManager resources=new System.ComponentModel.ComponentResourceManager(typeof(FormReplication));
 			this.label1=new System.Windows.Forms.Label();
-			this.textMySQLPath=new System.Windows.Forms.TextBox();
-			this.textBox1=new System.Windows.Forms.TextBox();
 			this.folderBrowserMySQL=new System.Windows.Forms.FolderBrowserDialog();
-			this.butBrowse=new OpenDental.UI.Button();
 			this.butSelectServers=new OpenDental.UI.Button();
 			this.gridReplicationComputers=new OpenDental.UI.ODGrid();
 			this.butOK=new OpenDental.UI.Button();
@@ -73,47 +69,12 @@ namespace OpenDental{
 			// label1
 			// 
 			this.label1.AutoSize=true;
-			this.label1.Location=new System.Drawing.Point(47,63);
+			this.label1.Location=new System.Drawing.Point(47,9);
 			this.label1.Name="label1";
 			this.label1.Size=new System.Drawing.Size(407,13);
 			this.label1.TabIndex=3;
 			this.label1.Text="Select the complete list of known replication servers to merge with from the list"+
 					" below:";
-			// 
-			// textMySQLPath
-			// 
-			this.textMySQLPath.Location=new System.Drawing.Point(50,38);
-			this.textMySQLPath.Name="textMySQLPath";
-			this.textMySQLPath.Size=new System.Drawing.Size(506,20);
-			this.textMySQLPath.TabIndex=5;
-			this.textMySQLPath.Text="C:\\Program Files\\MySQL\\MySQL Server 5.0\\bin\\";
-			// 
-			// textBox1
-			// 
-			this.textBox1.BackColor=System.Drawing.SystemColors.Control;
-			this.textBox1.BorderStyle=System.Windows.Forms.BorderStyle.None;
-			this.textBox1.Location=new System.Drawing.Point(50,2);
-			this.textBox1.Multiline=true;
-			this.textBox1.Name="textBox1";
-			this.textBox1.Size=new System.Drawing.Size(506,33);
-			this.textBox1.TabIndex=8;
-			this.textBox1.Text="Path to local \'mysql\' program. It might help to add this path to your Operating S"+
-					"ystem path and just type mysql in the box below.";
-			// 
-			// butBrowse
-			// 
-			this.butBrowse.AdjustImageLocation=new System.Drawing.Point(0,0);
-			this.butBrowse.Anchor=((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom|System.Windows.Forms.AnchorStyles.Right)));
-			this.butBrowse.Autosize=true;
-			this.butBrowse.BtnShape=OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butBrowse.BtnStyle=OpenDental.UI.enumType.XPStyle.Silver;
-			this.butBrowse.CornerRadius=4F;
-			this.butBrowse.Location=new System.Drawing.Point(562,38);
-			this.butBrowse.Name="butBrowse";
-			this.butBrowse.Size=new System.Drawing.Size(75,20);
-			this.butBrowse.TabIndex=7;
-			this.butBrowse.Text="Browse";
-			this.butBrowse.Click+=new System.EventHandler(this.butBrowse_Click);
 			// 
 			// butSelectServers
 			// 
@@ -133,10 +94,10 @@ namespace OpenDental{
 			// gridReplicationComputers
 			// 
 			this.gridReplicationComputers.HScrollVisible=false;
-			this.gridReplicationComputers.Location=new System.Drawing.Point(50,80);
+			this.gridReplicationComputers.Location=new System.Drawing.Point(50,33);
 			this.gridReplicationComputers.Name="gridReplicationComputers";
 			this.gridReplicationComputers.ScrollValue=0;
-			this.gridReplicationComputers.Size=new System.Drawing.Size(587,277);
+			this.gridReplicationComputers.Size=new System.Drawing.Size(587,324);
 			this.gridReplicationComputers.TabIndex=2;
 			this.gridReplicationComputers.Title=null;
 			this.gridReplicationComputers.TranslationName=null;
@@ -175,9 +136,6 @@ namespace OpenDental{
 			// 
 			this.AutoScaleBaseSize=new System.Drawing.Size(5,13);
 			this.ClientSize=new System.Drawing.Size(689,457);
-			this.Controls.Add(this.textBox1);
-			this.Controls.Add(this.butBrowse);
-			this.Controls.Add(this.textMySQLPath);
 			this.Controls.Add(this.butSelectServers);
 			this.Controls.Add(this.label1);
 			this.Controls.Add(this.gridReplicationComputers);
@@ -229,27 +187,50 @@ namespace OpenDental{
 		}
 
 		private void butOK_Click(object sender, System.EventArgs e) {
-			
-			
-			
-
-
-
-
-
-
-
+			string command="SELECT DATABASE()";
+			string currentDatabaseName=PIn.PString(General.GetTable(command).Rows[0][0].ToString());
+			//Loop through each of the selected computers and restart the slave service to force replication to start, then wait until replication is completed.
+			for(int i=0;i<gridReplicationComputers.SelectedIndices.Length;i++) {
+				string compName=gridReplicationComputers.Rows[gridReplicationComputers.SelectedIndices[i]].Cells[0].Text;
+				DataConnection dc=new DataConnection();
+				try {
+					try {
+						dc.SetDb(compName,currentDatabaseName,"repl","od1234","","",DataConnection.DBtype);
+					} catch(MySqlException ex) {
+						if(ex.Number==1042) {//The error 1042 is issued when the connection could not be made. 
+							throw ex;//Pass the exception along.
+						}
+						dc.cmd.Connection.Close();
+					}
+					//Connection is considered to be successfull at this point. Now restart the slave process to force replication.
+					command="SLAVE STOP";
+					dc.NonQ(command);
+					command="START SLAVE";
+					dc.NonQ(command);
+					//Now wait for the replication slave process to finish replication before moving to the next computer in the list.
+					command="SHOW SLAVE STATUS";
+					DataTable slaveStatus=dc.GetTable(command);
+					if(slaveStatus.Rows[0]["Slave_IO_Running"].ToString().ToLower()!="yes") {
+						throw new Exception("Slave IO is not running on computer "+compName);
+					}
+					if(slaveStatus.Rows[0]["Slave_SQL_Running"].ToString().ToLower()!="yes") {
+						throw new Exception("Slave SQL is not running on computer "+compName);
+					}
+					//Wait for replication to complete.
+					while(slaveStatus.Rows[0]["Slave_IO_State"].ToString().ToLower()!="waiting to send" || 
+						slaveStatus.Rows[0]["Seconds_Behind_Master"].ToString()!="0") {
+						slaveStatus=dc.GetTable(command);
+					}
+				} catch(Exception ex) {
+					MessageBox.Show(Lan.g(this,"Error forcing replication on computer")+" "+compName+": "+ex.Message);
+					return;//Cancel operation.
+				}
+			}
 			DialogResult=DialogResult.OK;
 		}
 
 		private void butCancel_Click(object sender, System.EventArgs e) {
 			DialogResult=DialogResult.Cancel;
-		}
-
-		private void butBrowse_Click(object sender,EventArgs e) {
-			if(folderBrowserMySQL.ShowDialog()==DialogResult.OK){
-				textMySQLPath.Text=folderBrowserMySQL.SelectedPath;
-			}
 		}
 
 		private void butSelectServers_Click(object sender,EventArgs e) {
@@ -258,19 +239,15 @@ namespace OpenDental{
 			string currentDatabaseName=PIn.PString(General.GetTable(command).Rows[0][0].ToString());
 			gridReplicationComputers.SetSelected(false);//Un-select all computers to start.
 			for(int i=0;i<gridReplicationComputers.Rows.Count;i++){
-				string mysqlArgs=" -h "+gridReplicationComputers.Rows[i].Cells[0].Text
-					+" -u repl --password=od1234 -b -D "+currentDatabaseName+" -e \"exit\"";
-				ProcessStartInfo psi=new ProcessStartInfo(textMySQLPath.Text+"mysql",mysqlArgs);
-				psi.CreateNoWindow=true;
-				psi.WindowStyle=ProcessWindowStyle.Hidden;
-				Process othermysql=Process.Start(psi);
 				try{
-					othermysql.WaitForExit(5000);
-					if(othermysql.ExitCode==0) {//The connection was a success.
-						gridReplicationComputers.SetSelected(i,true);
-					}
+					string connectStr="Server="+gridReplicationComputers.Rows[i].Cells[0].Text
+					+";Database="+currentDatabaseName
+					+";Port=3306;Connect Timeout=1;User ID=repl;Password=od1234;CharSet=utf8";
+					MySqlConnection con=new MySqlConnection(connectStr);
+					con.Open();
+					//Select the computer in the list if a successfull connection was made.
+					gridReplicationComputers.SetSelected(i,true);
 				}catch{
-					//The connection failed, so even when waiting for 5 seconds, the mysql process does not exit, and the call to othermysql.ExitCode throws and exception because the process had not exited.
 				}
 			}			
 		}		
