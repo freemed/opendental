@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Collections.ObjectModel;
+using OpenDental.SmartCards.Belgium;
 
 namespace OpenDental.SmartCards {
 	public class SmartCardWatcher {
