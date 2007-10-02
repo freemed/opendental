@@ -10,6 +10,7 @@ using System.Collections.ObjectModel;
 using System.Windows.Forms;
 using System.Security.Cryptography;
 using OpenDentBusiness.Imaging;
+using System.Diagnostics;
 
 namespace OpenDental.Imaging {
 	/// <summary>
@@ -20,6 +21,11 @@ namespace OpenDental.Imaging {
 		private Patient patient;
 		public Patient Patient {
 			get { return patient; }
+		}
+
+		private bool verbose = false;
+		protected bool Verbose {
+			get { return verbose; }
 		}
 		#endregion
 
@@ -133,7 +139,6 @@ namespace OpenDental.Imaging {
 		#endregion
 
 		#region Import methods
-
 		public Document Import(string path, int docCategory) {
 			Document doc = new Document();
 			//Document.Insert will use this extension when naming:
@@ -338,10 +343,28 @@ namespace OpenDental.Imaging {
 		public void DeleteThumbnailImage(Document doc) {
 			DeleteThumbnailImageInternal(doc);
 		}
+
+		public void DeleteImage(IList<Document> documents) {
+			for(int i = 0; i < documents.Count; i++) {
+				if(documents[i] == null) {
+					continue;
+				}
+				try {
+					DeleteDocument(documents[i]);
+				}
+				catch {
+					if(verbose) {
+						Debug.WriteLine(Lan.g("ContrDocs", "Could not delete file. It may be in use elsewhere, or may have already been deleted."));
+					}
+				}
+				Documents.Delete(documents[i]);
+			}
+		}
 		#endregion
 
 		#region Abstract delete methods
 		protected abstract void DeleteThumbnailImageInternal(Document doc);
+		protected abstract void DeleteDocument(Document doc);
 		#endregion
 
 		#region Static methods

@@ -16,7 +16,6 @@ namespace OpenDental.Imaging {
 	public class FileStore : ImageStoreBase, IImageStore {
 		public delegate int UpdatePatientDelegate(Patient patCur, Patient patOld);
 		private UpdatePatientDelegate updatePatient;
-		private bool verbose = false;
 
 		private string storeIdentifier;
 		public object StoreIdentifier {
@@ -36,29 +35,6 @@ namespace OpenDental.Imaging {
 
 		public void SetUpdatePatientDelegate(UpdatePatientDelegate updatePatient) {
 			this.updatePatient = updatePatient;
-		}
-
-		public void DeleteImage(IList<Document> documents) {
-			for(int i = 0; i < documents.Count; i++) {
-				if(documents[i] == null) {
-					continue;
-				}
-				try {
-					string srcFile = ODFileUtils.CombinePaths(patFolder, documents[i].FileName);
-					if(File.Exists(srcFile)) {
-						File.Delete(srcFile);
-					}
-					else if(verbose) {
-						Debug.WriteLine(Lan.g("ContrDocs", "File could not be found. It may have already been deleted."));
-					}
-				}
-				catch {
-					if(verbose) {
-						Debug.WriteLine(Lan.g("ContrDocs", "Could not delete file. It may be in use elsewhere, or may have already been deleted."));
-					}
-				}
-				Documents.Delete(documents[i]);
-			}
 		}
 
 		public bool OpenFolderSupported {
@@ -197,6 +173,16 @@ namespace OpenDental.Imaging {
 				catch {
 					//Two users *might* edit the same image at the same time, so the image might already be deleted.
 				}
+			}
+		}
+
+		protected override void DeleteDocument(Document doc) {
+			string srcFile = ODFileUtils.CombinePaths(patFolder, doc.FileName);
+			if(File.Exists(srcFile)) {
+				File.Delete(srcFile);
+			}
+			else if(Verbose) {
+				Debug.WriteLine(Lan.g("ContrDocs", "File could not be found. It may have already been deleted."));
 			}
 		}
 		#endregion
