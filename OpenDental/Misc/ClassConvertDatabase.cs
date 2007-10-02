@@ -51,12 +51,13 @@ namespace OpenDental{
 				|| FromVersion.ToString()=="4.9.0.0"
 				|| FromVersion.ToString()=="5.0.0.0"
 				|| FromVersion.ToString()=="5.1.0.0"
-				|| FromVersion.ToString()=="5.2.0.0")
+				|| FromVersion.ToString()=="5.2.0.0"
+				|| FromVersion.ToString()=="5.3.0.0")
 			{
 				MsgBox.Show(this,"Cannot convert this database version which was only for development purposes.");
 				return false;
 			}
-			if(FromVersion < new Version("5.3.0.0")){
+			if(FromVersion < new Version("5.4.0.0")){
 				if(MessageBox.Show(Lan.g(this,"Your database will now be converted")+"\r"
 					+Lan.g(this,"from version")+" "+FromVersion.ToString()+"\r"
 					+Lan.g(this,"to version")+" "+ToVersion.ToString()+"\r"
@@ -5913,17 +5914,35 @@ namespace OpenDental{
 					) DEFAULT CHARSET=utf8";
 				General.NonQEx(command);
 				//table definition above was altered.
-
-
-
-
 				command="UPDATE preference SET ValueString = '5.3.0.0' WHERE PrefName = 'DataBaseVersion'";
 				General.NonQEx(command);
 			}
-			//To5_3_?();
+			To5_3_1();
 		}
 
+		private void To5_3_1() {
+			if(FromVersion<new Version("5.3.1.0")) {
+				string command;
+				command="UPDATE preference SET ValueString = '5.3.1.0' WHERE PrefName = 'DataBaseVersion'";
+				General.NonQEx(command);
+			}
+			To5_4_0();
+		}
 
+		private void To5_4_0() {
+			if(FromVersion<new Version("5.4.0.0")) {
+				string command;
+				//alpha version queries go here:
+
+
+
+
+
+				command="UPDATE preference SET ValueString = '5.4.0.0' WHERE PrefName = 'DataBaseVersion'";
+				General.NonQEx(command);
+			}
+			//To5_4_?();
+		}
 
 	}
 
