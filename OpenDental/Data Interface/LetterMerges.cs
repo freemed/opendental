@@ -9,6 +9,8 @@ namespace OpenDental{
 	public class LetterMerges {
 		///<summary>List of all lettermerges.</summary>
 		public static LetterMerge[] List;
+
+#if !DISABLE_MICROSOFT_OFFICE
 		private static Word.Application wordApp;
 
 		///<summary>This is a static reference to a word application.  That way, we can reuse it instead of having to reopen Word each time.</summary>
@@ -29,7 +31,8 @@ namespace OpenDental{
 				return wordApp;
 			}
 		}
-
+#endif
+		
 		///<summary>Must have run LetterMergeFields first.</summary>
 		public static void Refresh() {
 			string command=

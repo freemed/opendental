@@ -501,6 +501,7 @@ namespace OpenDental{
 		}
 
 		private void butNew_Click(object sender, System.EventArgs e) {
+#if !DISABLE_MICROSOFT_OFFICE
 			if(!Directory.Exists(PrefB.GetString("LetterMergePath"))){
 				MsgBox.Show(this,"Letter merge path invalid");
 				return;
@@ -538,6 +539,9 @@ namespace OpenDental{
 			WrdApp.WindowState=Word.WdWindowState.wdWindowStateMinimize;
 			wrdDoc=null;
 			MsgBox.Show(this,"Done. You can edit the new template after closing this window.");
+#else
+			MessageBox.Show(this, "This version of Open Dental does not support Microsoft Word.");
+#endif
 		}
 
 		private void butDelete_Click(object sender, System.EventArgs e) {

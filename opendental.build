@@ -28,7 +28,7 @@
 
 	<!-- global project settings -->
 	<property name="project.name" value="opendental" />
-	<property name="project.version" value="5.3" unless="${property::exists('project.version')}" />
+	<property name="project.version" value="5.4" unless="${property::exists('project.version')}" />
 	<property name="project.release.type" value="dev" unless="${property::exists('project.release.type')}" /> <!-- nightly / dev / alpha / beta# / rc# / release -->
 
 	<!-- global build settings -->
@@ -38,7 +38,7 @@
 
 	<!-- default configuration -->
 	<property name="project.config" value="debug" /> <!-- debug|release -->
-	<property name="build.defines" value="LINUX" />
+	<property name="build.defines" value="LINUX;DISABLE_MICROSOFT_OFFICE" />
 	<property name="build.number" value="${math::abs(math::floor(timespan::get-total-days(datetime::now() - datetime::parse('01/01/2000'))))}" />
 
 	<fileset id="ext.core">

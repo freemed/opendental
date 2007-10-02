@@ -55,8 +55,6 @@
 				<!-- Note: we should use MySql.Data.dll that lives in the GAC --> 
 				<include name="../Required dlls/MySql.Data.dll"/>
 		                <!-- Building on Linux requires the Linux equivalent, of course -->
-		                <include name="../Required dlls/Interop.Microsoft.Office.Core.dll"/>
-		                <include name="../Required dlls/Interop.Word.dll"/>
 		                <include name="../Required dlls/NDde.dll"/>
 		                <include name="../Required dlls/RS232.dll"/>
 		                <include name="../Required dlls/SigPlusNET.dll"/>
@@ -75,8 +73,6 @@
 		</csc>
         <copy todir="${build.dir}/bin">
             <fileset basedir="../Required dlls">
-                <include name="Interop.Microsoft.Office.Core.dll"/>
-                <include name="Interop.Word.dll"/>
                 <include name="NDde.dll"/>
                 <include name="RS232.dll"/>
                 <include name="SigPlusNET.dll"/>

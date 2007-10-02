@@ -36,15 +36,17 @@ namespace OpenDental{
 		private LetterMerge[] ListForCat;
 		private bool changed;
 		private string mergePath;
+#if !DISABLE_MICROSOFT_OFFICE
 		//private Word.Application wrdApp;
 		private Word._Document wrdDoc;
 		private Object oMissing = System.Reflection.Missing.Value;
+		private Object oFalse = false;
+#endif
 		private OpenDental.UI.Button butMerge;
 		private OpenDental.UI.Button butCreateData;
 		private OpenDental.UI.Button butEditTemplate;
 		private System.Windows.Forms.GroupBox groupBox1;
 		private OpenDental.UI.Button butPreview;
-		private Object oFalse = false;
 
 
 		///<summary></summary>
@@ -443,6 +445,7 @@ namespace OpenDental{
 		}
 
 		private void butPrint_Click(object sender, System.EventArgs e) {
+#if !DISABLE_MICROSOFT_OFFICE
 			if(listLetters.SelectedIndex==-1){
 				MsgBox.Show(this,"Please select a letter first.");
 				return;
@@ -461,6 +464,7 @@ namespace OpenDental{
 			if(!CreateDataFile(dataFile,letterCur)){
 				return;
 			}
+			
 			Word.MailMerge wrdMailMerge;
 			//Create an instance of Word.
 			Word.Application WrdApp=LetterMerges.WordApp;
@@ -493,10 +497,14 @@ namespace OpenDental{
 			CommlogCur.PatNum=PatCur.PatNum;
 			CommlogCur.Note="Letter sent: "+letterCur.Description+". ";
 			Commlogs.Insert(CommlogCur);
+#else
+			MessageBox.Show(this, "This version of Open Dental does not support Microsoft Word.");
+#endif
 			DialogResult=DialogResult.OK;
 		}
 
 		private void butPreview_Click(object sender, System.EventArgs e) {
+#if !DISABLE_MICROSOFT_OFFICE
 			if(listLetters.SelectedIndex==-1){
 				MsgBox.Show(this,"Please select a letter first.");
 				return;
@@ -552,11 +560,15 @@ namespace OpenDental{
 			CommlogCur.PatNum=PatCur.PatNum;
 			CommlogCur.Note="Letter sent: "+letterCur.Description+". ";
 			Commlogs.Insert(CommlogCur);
+#else
+			MessageBox.Show(this, "This version of Open Dental does not support Microsoft Word.");
+#endif
 			//this window now closes regardless of whether the user saved the comm item.
 			DialogResult=DialogResult.OK;
 		}
 
 		private void butEditTemplate_Click(object sender, System.EventArgs e) {
+#if !DISABLE_MICROSOFT_OFFICE
 			if(listLetters.SelectedIndex==-1){
 				MsgBox.Show(this,"Please select a letter first.");
 				return;
@@ -588,6 +600,9 @@ namespace OpenDental{
 				WrdApp.WindowState=Word.WdWindowState.wdWindowStateMaximize;
 			}
 			wrdDoc=null;
+#else
+			MessageBox.Show(this, "This version of Open Dental does not support Microsoft Word.");
+#endif
 		}
 
 		private void butCancel_Click(object sender, System.EventArgs e) {
