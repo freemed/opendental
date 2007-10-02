@@ -52,6 +52,8 @@
 				<include name="System.ServiceProcess.dll"/>
 				<include name="System.Windows.Forms.dll"/>
 				<include name="System.Xml.dll"/>
+				<!-- Note: we should use MySql.Data.dll that lives in the GAC --> 
+				<include name="../Required dlls/MySql.Data.dll"/>
 		                <!-- Building on Linux requires the Linux equivalent, of course -->
 		                <include name="../Required dlls/Interop.Microsoft.Office.Core.dll"/>
 		                <include name="../Required dlls/Interop.Word.dll"/>
