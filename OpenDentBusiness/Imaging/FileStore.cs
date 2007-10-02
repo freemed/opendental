@@ -38,40 +38,6 @@ namespace OpenDental.Imaging {
 			this.updatePatient = updatePatient;
 		}
 
-		public Document Import(string path, int docCategory) {
-			Document doc = new Document();
-			//Document.Insert will use this extension when naming:
-			doc.FileName = Path.GetExtension(path);
-			doc.DateCreated = DateTime.Today;
-			doc.PatNum = Patient.PatNum;
-			doc.ImgType = (HasImageExtension(path) || Path.GetExtension(path) == "") ? ImageType.Photo : ImageType.Document;
-			doc.DocCategory = docCategory;
-			Documents.Insert(doc, Patient);//this assigns a filename and saves to db
-			try {
-				string destinationFile = ODFileUtils.CombinePaths(patFolder, doc.FileName);
-				if(Path.GetExtension(path) == "") {
-					try {//Find out if the file is actually an image.
-						Bitmap testImage = new Bitmap(path);
-						testImage.Save(destinationFile + ".jpg", ImageFormat.Jpeg);
-						testImage.Dispose();
-						doc.FileName += ".jpg";
-						Documents.Update(doc);
-					}
-					catch {
-						File.Copy(path, destinationFile);
-					}
-				}
-				else {
-					File.Copy(path, destinationFile);
-				}
-			}
-			catch {
-				Documents.Delete(doc);
-				throw;
-			}
-			return doc;
-		}
-
 		public void DeleteImage(IList<Document> documents) {
 			for(int i = 0; i < documents.Count; i++) {
 				if(documents[i] == null) {

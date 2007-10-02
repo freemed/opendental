@@ -133,6 +133,37 @@ namespace OpenDental.Imaging {
 		#endregion
 
 		#region Import methods
+
+		public Document Import(string path, int docCategory) {
+			Document doc = new Document();
+			//Document.Insert will use this extension when naming:
+			doc.FileName = Path.GetExtension(path);
+			doc.DateCreated = DateTime.Today;
+			doc.PatNum = Patient.PatNum;
+			doc.ImgType = (HasImageExtension(path) || Path.GetExtension(path) == "") ? ImageType.Photo : ImageType.Document;
+			doc.DocCategory = docCategory;
+			Documents.Insert(doc, Patient);//this assigns a filename and saves to db
+			try {
+				// If the file has no extension, try to open it as a image. If it is an image,
+				// save it as a JPEG file.
+				if(Path.GetExtension(path) == string.Empty && IsImageFile(path)) {
+					Bitmap testImage = new Bitmap(path);
+					doc.FileName += ".jpg";
+					Documents.Update(doc);
+					SaveDocument(doc, testImage, ImageFormat.Jpeg);
+				}
+				else {
+					// Just copy the file.
+					SaveDocument(doc, path);
+				}
+			}
+			catch {
+				Documents.Delete(doc);
+				throw;
+			}
+			return doc;
+		}
+
 		public Document Import(Bitmap image, int docCategory) {
 			Document doc = new Document();
 			doc.FileName = ".jpg";
@@ -314,6 +345,17 @@ namespace OpenDental.Imaging {
 		#endregion
 
 		#region Static methods
+		public static bool IsImageFile(string filename) {
+			try {
+				Bitmap bitmap = new Bitmap(filename);
+				bitmap.Dispose();
+				return true;
+			}
+			catch {
+				return false;
+			}
+		}
+
 		///<summary>Returns true if the given filename contains a supported file image extension.</summary>
 		public static bool HasImageExtension(string fileName) {
 			string ext = Path.GetExtension(fileName).ToLower();
