@@ -171,8 +171,11 @@ namespace OpenDental{
 		private Panel panelSplitter;
 		private string dconnStr;
 		private bool MouseIsDownOnSplitter;
-		private int SplitterOriginalY;
-		private int OriginalMousePos;
+		private Point SplitterOriginalLocation;
+		private ContextMenu menuSplitter;
+		private MenuItem menuItemDockBottom;
+		private MenuItem menuItemDockRight;
+		private Point OriginalMousePos;
 
 		///<summary></summary>
 		public FormOpenDental(){
@@ -189,6 +192,8 @@ namespace OpenDental{
 			ContrManage2.PatientSelected+=new PatientSelectedEventHandler(Contr_PatientSelected);
 			GotoModule.ModuleSelected+=new ModuleEventHandler(GotoModule_ModuleSelected);
 			Logger.openlog.Log("Open Dental initialization complete.",Logger.Severity.INFO);
+			panelSplitter.ContextMenu=menuSplitter;
+			menuItemDockBottom.Checked=true;
 		}
 
 		///<summary></summary>
@@ -297,6 +302,9 @@ namespace OpenDental{
 			this.imageList32 = new System.Windows.Forms.ImageList(this.components);
 			this.timerSignals = new System.Windows.Forms.Timer(this.components);
 			this.panelSplitter = new System.Windows.Forms.Panel();
+			this.menuSplitter = new System.Windows.Forms.ContextMenu();
+			this.menuItemDockBottom = new System.Windows.Forms.MenuItem();
+			this.menuItemDockRight = new System.Windows.Forms.MenuItem();
 			this.userControlTasks1 = new OpenDental.UserControlTasks();
 			this.ContrManage2 = new OpenDental.ContrStaff();
 			this.ContrChart2 = new OpenDental.ContrChart();
@@ -944,7 +952,7 @@ namespace OpenDental{
 			// panelSplitter
 			// 
 			this.panelSplitter.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.panelSplitter.Cursor = System.Windows.Forms.Cursors.SizeNS;
+			this.panelSplitter.Cursor = System.Windows.Forms.Cursors.HSplit;
 			this.panelSplitter.Location = new System.Drawing.Point(71,542);
 			this.panelSplitter.Name = "panelSplitter";
 			this.panelSplitter.Size = new System.Drawing.Size(769,7);
@@ -952,6 +960,24 @@ namespace OpenDental{
 			this.panelSplitter.MouseDown += new System.Windows.Forms.MouseEventHandler(this.panelSplitter_MouseDown);
 			this.panelSplitter.MouseMove += new System.Windows.Forms.MouseEventHandler(this.panelSplitter_MouseMove);
 			this.panelSplitter.MouseUp += new System.Windows.Forms.MouseEventHandler(this.panelSplitter_MouseUp);
+			// 
+			// menuSplitter
+			// 
+			this.menuSplitter.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
+            this.menuItemDockBottom,
+            this.menuItemDockRight});
+			// 
+			// menuItemDockBottom
+			// 
+			this.menuItemDockBottom.Index = 0;
+			this.menuItemDockBottom.Text = "Dock to Bottom";
+			this.menuItemDockBottom.Click += new System.EventHandler(this.menuItemDockBottom_Click);
+			// 
+			// menuItemDockRight
+			// 
+			this.menuItemDockRight.Index = 1;
+			this.menuItemDockRight.Text = "Dock to Right";
+			this.menuItemDockRight.Click += new System.EventHandler(this.menuItemDockRight_Click);
 			// 
 			// userControlTasks1
 			// 
@@ -1034,14 +1060,14 @@ namespace OpenDental{
 			this.myOutlookBar.ImageList = this.imageList32;
 			this.myOutlookBar.Location = new System.Drawing.Point(0,0);
 			this.myOutlookBar.Name = "myOutlookBar";
-			this.myOutlookBar.Size = new System.Drawing.Size(51,566);
+			this.myOutlookBar.Size = new System.Drawing.Size(51,591);
 			this.myOutlookBar.TabIndex = 18;
 			this.myOutlookBar.Text = "outlookBar1";
 			this.myOutlookBar.ButtonClicked += new OpenDental.ButtonClickedEventHandler(this.myOutlookBar_ButtonClicked);
 			// 
 			// FormOpenDental
 			// 
-			this.ClientSize = new System.Drawing.Size(982,566);
+			this.ClientSize = new System.Drawing.Size(982,591);
 			this.Controls.Add(this.panelSplitter);
 			this.Controls.Add(this.userControlTasks1);
 			this.Controls.Add(this.ContrManage2);
@@ -1481,13 +1507,32 @@ namespace OpenDental{
 			int width=this.ClientSize.Width-position.X;
 			int height=this.ClientSize.Height;
 			if(userControlTasks1.Visible){
-				panelSplitter.Location=new Point(position.X,panelSplitter.Location.Y);
-				panelSplitter.Width=width;
-				panelSplitter.Visible=true;
-				userControlTasks1.Location=new Point(position.X,panelSplitter.Bottom);
-				userControlTasks1.Width=width;
-				userControlTasks1.Height=this.ClientSize.Height-userControlTasks1.Top;
-				height=ClientSize.Height-panelSplitter.Height-userControlTasks1.Height;
+				if(menuItemDockBottom.Checked){
+					if(panelSplitter.Height>10){//docking needs to be changed.
+						panelSplitter.Height=7;
+						panelSplitter.Location=new Point(position.X,540);
+					}
+					panelSplitter.Location=new Point(position.X,panelSplitter.Location.Y);
+					panelSplitter.Width=width;
+					panelSplitter.Visible=true;
+					userControlTasks1.Location=new Point(position.X,panelSplitter.Bottom);
+					userControlTasks1.Width=width;
+					userControlTasks1.Height=this.ClientSize.Height-userControlTasks1.Top;
+					height=ClientSize.Height-panelSplitter.Height-userControlTasks1.Height;
+				}
+				else{//docked Right
+					if(panelSplitter.Width>10){//docking needs to be changed.
+						panelSplitter.Width=7;
+						panelSplitter.Location=new Point(900,position.Y);
+					}
+					panelSplitter.Location=new Point(panelSplitter.Location.X,position.Y);
+					panelSplitter.Height=height;
+					panelSplitter.Visible=true;
+					userControlTasks1.Location=new Point(panelSplitter.Right,position.Y);
+					userControlTasks1.Height=height;
+					userControlTasks1.Width=this.ClientSize.Width-userControlTasks1.Left;
+					width=ClientSize.Width-panelSplitter.Width-userControlTasks1.Width-position.X;
+				}
 			}
 			else{
 				panelSplitter.Visible=false;
@@ -1517,21 +1562,34 @@ namespace OpenDental{
 
 		private void panelSplitter_MouseDown(object sender,System.Windows.Forms.MouseEventArgs e) {
 			MouseIsDownOnSplitter=true;
-			SplitterOriginalY=panelSplitter.Top;
-			OriginalMousePos=panelSplitter.Top+e.Y;
+			SplitterOriginalLocation=panelSplitter.Location;
+			OriginalMousePos=new Point(panelSplitter.Left+e.X,panelSplitter.Top+e.Y);
 		}
 
 		private void panelSplitter_MouseMove(object sender,System.Windows.Forms.MouseEventArgs e) {
 			if(!MouseIsDownOnSplitter){
 				return;
 			}
-			int splitterNewLoc=SplitterOriginalY+(panelSplitter.Top+e.Y)-OriginalMousePos;
-			//if(splitterNewLoc<gridAcctPat.Bottom)
-			//	splitterNewLoc=gridAcctPat.Bottom;//keeps it from going too high
-			if(splitterNewLoc>Height){
-				splitterNewLoc=Height-panelSplitter.Height;//keeps it from going off the bottom edge
+			if(menuItemDockBottom.Checked){
+				int splitterNewY=SplitterOriginalLocation.Y+(panelSplitter.Top+e.Y)-OriginalMousePos.Y;
+				if(splitterNewY<300){
+					splitterNewY=300;//keeps it from going too high
+				}
+				if(splitterNewY>ClientSize.Height){
+					splitterNewY=ClientSize.Height-panelSplitter.Height;//keeps it from going off the bottom edge
+				}
+				panelSplitter.Top=splitterNewY;
 			}
-			panelSplitter.Top=splitterNewLoc;
+			else{//docked right
+				int splitterNewX=SplitterOriginalLocation.X+(panelSplitter.Left+e.X)-OriginalMousePos.X;
+				if(splitterNewX<300) {
+					splitterNewX=300;//keeps it from going too far to the left
+				}
+				if(splitterNewX>ClientSize.Width) {
+					splitterNewX=ClientSize.Width-panelSplitter.Width;//keeps it from going off the right edge
+				}
+				panelSplitter.Left=splitterNewX;
+			}
 			LayoutControls();
 		}
 
@@ -1539,6 +1597,19 @@ namespace OpenDental{
 			MouseIsDownOnSplitter=false;
 		}
 
+		private void menuItemDockBottom_Click(object sender,EventArgs e) {
+			menuItemDockBottom.Checked=true;
+			menuItemDockRight.Checked=false;
+			panelSplitter.Cursor=Cursors.HSplit;
+			LayoutControls();
+		}
+
+		private void menuItemDockRight_Click(object sender,EventArgs e) {
+			menuItemDockBottom.Checked=false;
+			menuItemDockRight.Checked=true;
+			panelSplitter.Cursor=Cursors.VSplit;
+			LayoutControls();
+		}
 		
 		///<summary>This is called when any local data becomes outdated.  It's purpose is to tell the other computers to update certain local data.</summary>
 		private void DataValid_BecameInvalid(OpenDental.ValidEventArgs e){
@@ -2819,6 +2890,8 @@ namespace OpenDental{
 			//}
 			//Application.Exit();
 		}
+
+		
 
 	
 
