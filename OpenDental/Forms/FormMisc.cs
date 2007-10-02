@@ -516,7 +516,8 @@ namespace OpenDental{
 			this.checkBoldBalance.TabIndex = 57;
 			this.checkBoldBalance.Text = "Use bold balance view in account";
 			this.toolTip1.SetToolTip(this.checkBoldBalance,"Generally used with \"Balances don\'t subtract insurance estimate\"\r\nchecked to the " +
-					"upper right of this option in the \"Statements\" section.");
+					"upper right of this option in the \"Statements\" section.\r\nHowever, it will work w" +
+					"ell either way.");
 			// 
 			// checkShowAccountNotes
 			// 
