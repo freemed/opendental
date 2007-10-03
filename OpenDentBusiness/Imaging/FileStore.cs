@@ -13,7 +13,7 @@ using System.Drawing.Imaging;
 using System.Windows.Forms;
 
 namespace OpenDental.Imaging {
-	public class FileStore : ImageStoreBase, IImageStore {
+	public class FileStore : ImageStoreBase {
 		public delegate int UpdatePatientDelegate(Patient patCur, Patient patOld);
 		private UpdatePatientDelegate updatePatient;
 
@@ -37,24 +37,19 @@ namespace OpenDental.Imaging {
 			this.updatePatient = updatePatient;
 		}
 
-		public bool OpenFolderSupported {
+		public override bool OpenFolderSupported {
 			get { return true; }
 		}
 
-		public string FolderPath {
+		public override string FolderPath {
 			get { return patFolder; }
 		}
 
-		public string GetExtension(Document doc) {
-			string srcFileName = ODFileUtils.CombinePaths(patFolder, doc.FileName);
-			return Path.GetExtension(srcFileName).ToLower();
-		}
-
-		public bool FilePathSupported {
+		public override bool FilePathSupported {
 			get { return true; }
 		}
 
-		public string GetFilePath(Document doc) {
+		public override string GetFilePath(Document doc) {
 			return ODFileUtils.CombinePaths(patFolder, doc.FileName);
 		}
 

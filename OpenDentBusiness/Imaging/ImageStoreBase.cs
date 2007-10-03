@@ -16,7 +16,7 @@ namespace OpenDental.Imaging {
 	/// <summary>
 	/// Provide a standard base class for image (and file) stores.
 	/// </summary>
-	public abstract class ImageStoreBase {
+	public abstract class ImageStoreBase : IImageStore {
 		#region Properties
 		private Patient patient;
 		public Patient Patient {
@@ -367,6 +367,31 @@ namespace OpenDental.Imaging {
 		protected abstract void DeleteDocument(Document doc);
 		#endregion
 
+		#region Misc methods
+		public string GetExtension(Document doc) {
+			return Path.GetExtension(doc.FileName).ToLower();
+		}
+
+		public virtual bool OpenFolderSupported {
+			get { return false; }
+		}
+
+		public virtual string FolderPath {
+			get { throw new NotSupportedException(); }
+		}
+
+		public virtual bool FolderPathSupported {
+			get { return false; }
+		}
+
+		public virtual bool FilePathSupported {
+			get { return false; }
+		}
+
+		public virtual string GetFilePath(Document doc) {
+			throw new NotSupportedException();
+		}
+		#endregion
 		#region Static methods
 		public static bool IsImageFile(string filename) {
 			try {

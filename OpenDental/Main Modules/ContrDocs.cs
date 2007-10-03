@@ -160,7 +160,7 @@ namespace OpenDental{
 		///<summary>List of documents currently loaded into the currently selected mount (if any).</summary>
 		Document[] mountDocs=null;
 
-		public FileStore imageStore;
+		public IImageStore imageStore;
 
 		///<summary>The only reason this is public is for NewPatientForm.com functionality.</summary>
 		public Patient PatCur { get { return imageStore == null ? null : imageStore.Patient; } }
@@ -723,7 +723,7 @@ namespace OpenDental{
 		}
 
 		///<summary>This is public for NewPatientForm functionality.</summary>
-  	public void RefreshModuleData(int patNum){
+  		public void RefreshModuleData(int patNum){
 			SelectTreeNode(null);//Clear selection and image and reset visibilities.
 			if(patNum==0){
 				imageStore=null;
@@ -731,10 +731,10 @@ namespace OpenDental{
 				return;
 			}
 			FamCur=Patients.GetFamily(patNum);
-			imageStore = new FileStore();
-			// This is a temporary HACK;
-			imageStore.SetUpdatePatientDelegate(new FileStore.UpdatePatientDelegate(Patients.Update));
-			imageStore.OpenPatientStore(FamCur.GetPatient(patNum));
+			if(ImageStore.UpdatePatient == null)
+				ImageStore.UpdatePatient = new FileStore.UpdatePatientDelegate(Patients.Update);
+			imageStore = ImageStore.GetImageStore(FamCur.GetPatient(patNum));
+
 			if(ParentForm!=null){
 				//Added so NewPatientform can have access without showing
 				ParentForm.Text=Patients.GetMainTitle(PatCur);
