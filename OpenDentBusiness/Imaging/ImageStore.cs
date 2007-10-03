@@ -8,9 +8,12 @@ namespace OpenDental.Imaging {
 		public static FileStore.UpdatePatientDelegate UpdatePatient;
 
 		public static IImageStore GetImageStore(Patient patient) {
-			// For now, always use the file store
-			FileStore store = new FileStore();
-			store.SetUpdatePatientDelegate(UpdatePatient);
+			string imageStoreTypeName = PrefB.GetString("ImageStore");
+			Type imageStoreType = Type.GetType(imageStoreTypeName, false);
+			if(imageStoreType == null || !imageStoreType.IsSubclassOf(typeof(IImageStore)))
+				imageStoreType = typeof(FileStore);
+
+			IImageStore store = (IImageStore)Activator.CreateInstance(imageStoreType);
 			store.OpenPatientStore(patient);
 			return store;
 		}

@@ -107,7 +107,7 @@ namespace OpenDental.Imaging {
 			using(IDbConnection connection = DataSettings.GetConnection())
 			using(IDbCommand command = connection.CreateCommand()) {
 				command.CommandText =
-					@"DELETE Files WHERE DocNum = ?DocNum";
+					@"DELETE FROM files WHERE DocNum = ?DocNum";
 
 				IDataParameter docNumParameter = command.CreateParameter();
 				docNumParameter.ParameterName = "DocNum";

@@ -15,7 +15,6 @@ using System.Windows.Forms;
 namespace OpenDental.Imaging {
 	public class FileStore : ImageStoreBase {
 		public delegate int UpdatePatientDelegate(Patient patCur, Patient patOld);
-		private UpdatePatientDelegate updatePatient;
 
 		private string storeIdentifier;
 		public object StoreIdentifier {
@@ -31,10 +30,6 @@ namespace OpenDental.Imaging {
 			get {
 				return File.Exists(PatFolder);
 			}
-		}
-
-		public void SetUpdatePatientDelegate(UpdatePatientDelegate updatePatient) {
-			this.updatePatient = updatePatient;
 		}
 
 		public override bool OpenFolderSupported {
@@ -71,7 +66,7 @@ namespace OpenDental.Imaging {
 																		Patient.ImageFolder.Substring(0,1).ToUpper(),
 																		Patient.ImageFolder});
 					Directory.CreateDirectory(patFolder);
-					updatePatient(Patient, PatOld);
+					ImageStore.UpdatePatient(Patient, PatOld);
 				}
 				catch {
 					throw new Exception(Lan.g("ContrDocs", "Error.  Could not create folder for patient. "));

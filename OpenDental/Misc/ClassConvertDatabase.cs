@@ -5924,8 +5924,8 @@ namespace OpenDental{
 					  PRIMARY KEY(DocNum)
 					)";
 				General.NonQEx(command);
-				
-
+				command = "INSERT INTO preference VALUES('ImageStore', 'OpenDental.Imaging.FileStore')";
+				General.NonQEx(command);
 
 
 
