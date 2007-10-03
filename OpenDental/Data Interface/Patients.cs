@@ -927,7 +927,7 @@ namespace OpenDental{
 				GROUP BY patient.PatNum,ProvNum;
 			
 				INSERT INTO tempfambal (PatNum,ProvNum,AmtBal)
-				SELECT patient.PatNum,claimproc.ProvNum,-SUM(InsPayAmt)
+				SELECT patient.PatNum,claimproc.ProvNum,-SUM(InsPayAmt)-SUM(Writeoff)
 				FROM claimproc,patient
 				WHERE patient.PatNum=claimproc.PatNum
 				AND (Status=1 OR Status=4 OR Status=5)/*received,supplemental,capclaim*/
