@@ -125,26 +125,32 @@ namespace OpenDental{
 				DBSWin.SendData(Cur,pat);
 				return;
 			}
+#if !DISABLE_WINDOWS_BRIDGES
 			else if(Cur.ProgName=="DentalEye") {
 				DentalEye.SendData(Cur,pat);
 				return;
 			}
+#endif
 			else if(Cur.ProgName=="DentForms") {
 				DentForms.SendData(Cur,pat);
 				return;
 			}
+#if !DISABLE_WINDOWS_BRIDGES
 			else if(Cur.ProgName=="DentX") {
 				DentX.SendData(Cur,pat);
 				return;
 			}
+#endif
 			else if(Cur.ProgName=="Dexis") {
 				Dexis.SendData(Cur,pat);
 				return;
 			}
+#if !DISABLE_WINDOWS_BRIDGES
 			else if(Cur.ProgName=="DrCeph") {
 				DrCeph.SendData(Cur,pat);
 				return;
 			}
+#endif
 			else if(Cur.ProgName=="Dxis") {
 				Dxis.SendData(Cur,pat);
 				return;
@@ -188,10 +194,12 @@ namespace OpenDental{
 				Planmeca.SendData(Cur,pat);
 				return;
 			}
+#if !DISABLE_WINDOWS_BRIDGES
 			else if(Cur.ProgName=="Schick") {
 				Schick.SendData(Cur,pat);
 				return;
 			}
+#endif
 			else if(Cur.ProgName=="Sirona") {
 				Sirona.SendData(Cur,pat);
 				return;
@@ -208,10 +216,12 @@ namespace OpenDental{
 				TrophyEnhanced.SendData(Cur,pat);
 				return;
 			}
+#if !DISABLE_WINDOWS_BRIDGES
 			else if(Cur.ProgName=="Vipersoft") {
 				Vipersoft.SendData(Cur,pat);
 				return;
 			}
+#endif
 			else if(Cur.ProgName=="VixWin") {
 				VixWin.SendData(Cur,pat);
 				return;
