@@ -643,7 +643,8 @@ namespace OpenDental{
 			str.Append(Clip(guarCur.Zip,5)+"*");//validated
 			str.Append(amtDebt.ToString("F2")+"*");//validated
 			str.Append(dateDelinquency.ToString("MM/dd/yyyy")+"*");//validated
-			str.Append(textPassword.Text+"\r\n");//validated
+			str.Append(textPassword.Text+"*");//validated
+			str.Append(Clip(Security.CurUser.UserName,25)+"\r\n");//There is always a logged in user
 			string command="SELECT ValueString FROM preference WHERE PrefName='TrojanExpressCollectPreviousFileNumber'";
 			DataTable table=General.GetTable(command);
 			int previousNum=PIn.PInt(table.Rows[0][0].ToString());
