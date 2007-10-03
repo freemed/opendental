@@ -275,7 +275,7 @@ namespace OpenDental {
 			Application.DoEvents();
 			PreferencePracticeProv();
 			Application.DoEvents();
-			ProceduresWithCodeNumZero();
+			ProcedurelogCodeNumZero();
 			Application.DoEvents();
 			ProcedurelogAttachedToWrongAppts();
 			Application.DoEvents();
