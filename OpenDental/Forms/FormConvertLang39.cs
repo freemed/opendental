@@ -19,7 +19,7 @@ namespace OpenDental{
 		/// </summary>
 		private System.ComponentModel.Container components = null;
 		///<summary></summary>
-		public string OldDisplayName;
+		public CultureInfo OldCulture;
 		private System.Windows.Forms.ListBox listCulture;
 		///<summary></summary>
 		public string NewName;
@@ -139,14 +139,22 @@ namespace OpenDental{
 		#endregion
 
 		private void FormConvertLang39_Load(object sender, System.EventArgs e) {
-			textOldCode.Text=OldDisplayName;
+			textOldCode.Text=OldCulture.DisplayName;
+			string suggestedName = string.Format("{0}-{0}", OldCulture.Name);
 			ciList=CultureInfo.GetCultures(CultureTypes.SpecificCultures);
+			string suggestedItem = null;
 
             listCulture.BeginUpdate();
 			for(int i=0;i<ciList.Length;i++){
-				listCulture.Items.Add(ciList[i].DisplayName);
+				string item = ciList[i].DisplayName;
+				listCulture.Items.Add(item);
+				if(ciList[i].Name.ToLowerInvariant() == suggestedName)
+					suggestedItem = item;
 			}
             listCulture.EndUpdate();
+
+			if(suggestedItem != null)
+				listCulture.SelectedItem = suggestedItem;
 		}
 
 		private void UpdateLanguageCode(object sender, System.EventArgs e) {
