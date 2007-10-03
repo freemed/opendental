@@ -542,7 +542,7 @@ namespace OpenDental{
 
 		private void butOK_Click(object sender,EventArgs e) {
 			Schedules.SetForDay(SchedList,SchedCurDate);
-			if(Providers.List[comboProv.SelectedIndex]!=null
+			if(comboProv.SelectedIndex!=-1
 				&& Prefs.UpdateInt("ScheduleProvUnassigned",Providers.List[comboProv.SelectedIndex].ProvNum))
 			{
 				DataValid.SetInvalid(InvalidTypes.Prefs);
