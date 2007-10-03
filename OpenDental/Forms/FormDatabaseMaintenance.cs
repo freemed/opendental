@@ -219,6 +219,8 @@ namespace OpenDental {
 			DecimalValues();
 			Application.DoEvents();
 			//Now, methods that apply to specific tables----------------------------------------------------------------------------
+			AppointmentsNoPattern();
+			Application.DoEvents();
 			ClaimPlanNum2NotValid();
 			Application.DoEvents();
 			ClaimDeleteWithInvalidPlanNums();
@@ -273,7 +275,7 @@ namespace OpenDental {
 			Application.DoEvents();
 			PreferencePracticeProv();
 			Application.DoEvents();
-			ProcedureCodesAddMissing();
+			ProceduresWithCodeNumZero();
 			Application.DoEvents();
 			ProcedurelogAttachedToWrongAppts();
 			Application.DoEvents();
@@ -622,6 +624,24 @@ namespace OpenDental {
 		}
 
 		//Methods that apply to specific tables----------------------------------------------------------------------------------
+
+		private void AppointmentsNoPattern() {
+			command=@"SELECT AptNum FROM appointment WHERE Pattern=''";
+			table=General.GetTable(command);
+			for(int i=0;i<table.Rows.Count;i++) {
+				//detach all procedures
+				command="UPDATE procedurelog SET AptNum=0 WHERE AptNum="+table.Rows[i][0].ToString();
+				General.NonQ(command);
+				command="UPDATE procedurelog SET PlannedAptNum=0 WHERE PlannedAptNum="+table.Rows[i][0].ToString();
+				General.NonQ(command);
+				command="DELETE FROM appointment WHERE AptNum="+table.Rows[i][0].ToString();
+				General.NonQ(command);
+			}
+			int numberFixed=table.Rows.Count;
+			if(numberFixed!=0 && !checkShow.Checked) {
+				textLog.Text+=Lan.g(this,"Appointments deleted with zero length: ")+numberFixed.ToString()+"\r\n";
+			}
+		}
 
 		private void ClaimPlanNum2NotValid() {
 			//This fixes a slight database inconsistency that might cause an error when trying to open the send claims window. 
@@ -1018,9 +1038,12 @@ namespace OpenDental {
 			textLog.Text+="  "+Lan.g(this,"Fixed.")+"\r\n";
 		}
 
-		private void ProcedureCodesAddMissing() {
-			//this no longer makes sense.  We could, however, validate all the keys and make sure every procedurelog
-			//has a non-zero key.  Maybe later.
+		private void ProcedurelogCodeNumZero() {
+			command="DELETE FROM procedurelog WHERE CodeNum=0";
+			int numberFixed=General.NonQ(command);
+			if(numberFixed>0 || checkShow.Checked) {
+				textLog.Text+=Lan.g(this,"Procedures deleted with CodeNum=0: ")+numberFixed.ToString()+"\r\n";
+			}
 		}
 
 		private void ProcedurelogAttachedToWrongAppts() {
