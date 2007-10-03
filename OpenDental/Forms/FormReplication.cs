@@ -8,6 +8,7 @@ using OpenDental.UI;
 using System.Diagnostics;
 using MySql.Data.MySqlClient;
 using System.Data;
+using System.Threading;
 
 namespace OpenDental{
 	/// <summary>
@@ -97,6 +98,7 @@ namespace OpenDental{
 			this.gridReplicationComputers.Location=new System.Drawing.Point(50,33);
 			this.gridReplicationComputers.Name="gridReplicationComputers";
 			this.gridReplicationComputers.ScrollValue=0;
+			this.gridReplicationComputers.SelectionMode=OpenDental.UI.GridSelectionMode.MultiExtended;
 			this.gridReplicationComputers.Size=new System.Drawing.Size(587,324);
 			this.gridReplicationComputers.TabIndex=2;
 			this.gridReplicationComputers.Title=null;
@@ -203,13 +205,14 @@ namespace OpenDental{
 						dc.cmd.Connection.Close();
 					}
 					//Connection is considered to be successfull at this point. Now restart the slave process to force replication.
-					command="SLAVE STOP";
-					dc.NonQ(command);
-					command="START SLAVE";
-					dc.NonQ(command);
-					//Now wait for the replication slave process to finish replication before moving to the next computer in the list.
-					command="SHOW SLAVE STATUS";
+					command="SLAVE STOP; START SLAVE; SHOW SLAVE STATUS;";
 					DataTable slaveStatus=dc.GetTable(command);
+					//Wait for the slave process to become active again.
+					for(int j=0;j<40 && slaveStatus.Rows[0]["Slave_IO_Running"].ToString().ToLower()!="yes";j++){
+						Thread.Sleep(1000);
+						command="SHOW SLAVE STATUS";
+						slaveStatus=dc.GetTable(command);
+					}
 					if(slaveStatus.Rows[0]["Slave_IO_Running"].ToString().ToLower()!="yes") {
 						throw new Exception("Slave IO is not running on computer "+compName);
 					}
@@ -217,7 +220,7 @@ namespace OpenDental{
 						throw new Exception("Slave SQL is not running on computer "+compName);
 					}
 					//Wait for replication to complete.
-					while(slaveStatus.Rows[0]["Slave_IO_State"].ToString().ToLower()!="waiting to send" || 
+					while(slaveStatus.Rows[0]["Slave_IO_State"].ToString().ToLower()!="waiting for master to send event" || 
 						slaveStatus.Rows[0]["Seconds_Behind_Master"].ToString()!="0") {
 						slaveStatus=dc.GetTable(command);
 					}
@@ -226,6 +229,7 @@ namespace OpenDental{
 					return;//Cancel operation.
 				}
 			}
+			MessageBox.Show(Lan.g(this,"Database merge completed successfully"));
 			DialogResult=DialogResult.OK;
 		}
 
