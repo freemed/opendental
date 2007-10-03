@@ -67,57 +67,58 @@ namespace OpenDental{
 			// 
 			// butOK
 			// 
-			this.butOK.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butOK.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.butOK.Autosize = true;
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(422,457);
+			this.butOK.Location = new System.Drawing.Point(422, 457);
 			this.butOK.Name = "butOK";
-			this.butOK.Size = new System.Drawing.Size(75,26);
+			this.butOK.Size = new System.Drawing.Size(75, 26);
 			this.butOK.TabIndex = 1;
 			this.butOK.Text = "&OK";
-			this.butOK.Click += new System.EventHandler(this.butOK_Click);
+			this.butOK.Click += new System.EventHandler(this.UpdateLanguageCode);
 			// 
 			// textOldCode
 			// 
-			this.textOldCode.Location = new System.Drawing.Point(31,37);
+			this.textOldCode.Location = new System.Drawing.Point(31, 37);
 			this.textOldCode.Name = "textOldCode";
-			this.textOldCode.Size = new System.Drawing.Size(344,20);
+			this.textOldCode.Size = new System.Drawing.Size(344, 20);
 			this.textOldCode.TabIndex = 4;
 			// 
 			// label2
 			// 
-			this.label2.Location = new System.Drawing.Point(30,12);
+			this.label2.Location = new System.Drawing.Point(30, 12);
 			this.label2.Name = "label2";
-			this.label2.Size = new System.Drawing.Size(152,22);
+			this.label2.Size = new System.Drawing.Size(152, 22);
 			this.label2.TabIndex = 5;
 			this.label2.Text = "Old neutral culture";
 			this.label2.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
 			// 
 			// label3
 			// 
-			this.label3.Location = new System.Drawing.Point(30,64);
+			this.label3.Location = new System.Drawing.Point(30, 64);
 			this.label3.Name = "label3";
-			this.label3.Size = new System.Drawing.Size(189,20);
+			this.label3.Size = new System.Drawing.Size(189, 20);
 			this.label3.TabIndex = 7;
 			this.label3.Text = "New specific culture";
 			this.label3.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
 			// 
 			// listCulture
 			// 
-			this.listCulture.Location = new System.Drawing.Point(31,89);
+			this.listCulture.Location = new System.Drawing.Point(31, 89);
 			this.listCulture.Name = "listCulture";
 			this.listCulture.ScrollAlwaysVisible = true;
-			this.listCulture.Size = new System.Drawing.Size(345,394);
+			this.listCulture.Size = new System.Drawing.Size(345, 394);
 			this.listCulture.Sorted = true;
 			this.listCulture.TabIndex = 8;
+			this.listCulture.DoubleClick += new System.EventHandler(this.UpdateLanguageCode);
 			// 
 			// FormConvertLang39
 			// 
-			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
-			this.ClientSize = new System.Drawing.Size(539,509);
+			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
+			this.ClientSize = new System.Drawing.Size(539, 509);
 			this.Controls.Add(this.listCulture);
 			this.Controls.Add(this.label3);
 			this.Controls.Add(this.label2);
@@ -148,7 +149,7 @@ namespace OpenDental{
             listCulture.EndUpdate();
 		}
 
-		private void butOK_Click(object sender, System.EventArgs e) {
+		private void UpdateLanguageCode(object sender, System.EventArgs e) {
 			if(listCulture.SelectedIndex==-1){
 				MessageBox.Show("Please select a new culture first.");
 				return;
