@@ -1831,7 +1831,7 @@ namespace OpenDental{
 							continue;
 						}
 						FormConvertLang39 FormC=new FormConvertLang39();
-						FormC.OldDisplayName=ci.DisplayName;
+						FormC.OldCulture=ci;
 						FormC.ShowDialog();
 						if(FormC.DialogResult!=DialogResult.OK) {
 							continue;
