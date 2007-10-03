@@ -38,7 +38,7 @@
 
 	<!-- default configuration -->
 	<property name="project.config" value="debug" /> <!-- debug|release -->
-	<property name="build.defines" value="LINUX;DISABLE_MICROSOFT_OFFICE" />
+	<property name="build.defines" value="LINUX;DISABLE_MICROSOFT_OFFICE;DISABLE_WINDOWS_BRIDGES" />
 	<property name="build.number" value="${math::abs(math::floor(timespan::get-total-days(datetime::now() - datetime::parse('01/01/2000'))))}" />
 
 	<fileset id="ext.core">
