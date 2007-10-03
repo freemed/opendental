@@ -26,6 +26,7 @@ namespace OpenDental.Imaging {
 				IDataParameter docNumParameter = command.CreateParameter();
 				docNumParameter.ParameterName = "DocNum";
 				docNumParameter.Value = doc.DocNum;
+				command.Parameters.Add(docNumParameter);
 
 				connection.Open();
 				buffer = (byte[])command.ExecuteScalar();
@@ -72,10 +73,12 @@ namespace OpenDental.Imaging {
 				IDataParameter docNumParameter = command.CreateParameter();
 				docNumParameter.ParameterName = "DocNum";
 				docNumParameter.Value = doc.DocNum;
+				command.Parameters.Add(docNumParameter);
 
 				IDataParameter dataParameter = command.CreateParameter();
 				dataParameter.ParameterName = "Data";
 				dataParameter.Value = buffer;
+				command.Parameters.Add(dataParameter);
 
 				connection.Open();
 				command.ExecuteNonQuery();
@@ -92,6 +95,7 @@ namespace OpenDental.Imaging {
 				IDataParameter docNumParameter = command.CreateParameter();
 				docNumParameter.ParameterName = "DocNum";
 				docNumParameter.Value = doc.DocNum;
+				command.Parameters.Add(docNumParameter);
 
 				connection.Open();
 				command.ExecuteNonQuery();
@@ -103,11 +107,12 @@ namespace OpenDental.Imaging {
 			using(IDbConnection connection = DataSettings.GetConnection())
 			using(IDbCommand command = connection.CreateCommand()) {
 				command.CommandText =
-					@"DELETE Thumbnail WHERE DocNum = ?DocNum";
+					@"DELETE Files WHERE DocNum = ?DocNum";
 
 				IDataParameter docNumParameter = command.CreateParameter();
 				docNumParameter.ParameterName = "DocNum";
 				docNumParameter.Value = doc.DocNum;
+				command.Parameters.Add(docNumParameter);
 
 				connection.Open();
 				command.ExecuteNonQuery();
