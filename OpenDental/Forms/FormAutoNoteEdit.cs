@@ -92,28 +92,7 @@ namespace OpenDental {
 			FormAutoNoteControlEdit form=new FormAutoNoteControlEdit();
 			form.IsNew=true;
 			form.ControlCur=new AutoNoteControl();
-			form.ShowDialog();
-		}
-
-		private void butEditControl_Click(object sender, EventArgs e) {
-			//should launch FormAutoNoteControlEdit
-			//I did not have time to look closely at this:
-			/*
-			ControlsToInc=new string[listBoxControlsToIncl.Items.Count];
-			for (int i=0; i<listBoxControlsToIncl.Items.Count; i++) {
-				if (listBoxControlsToIncl.Items[i].ToString()!="") {
-					ControlsList=AutoNoteControls.ControlNameToNum(listBoxControlsToIncl.Items[i].ToString());
-					ControlsToInc[i]=ControlsList[0].AutoNoteControlNum.ToString();
-				}
-			}
-			RefreshControlsToIncEdit=true;*/
-			if (listBoxControls.SelectedIndex==-1) {
-				return;
-			}
-			FormAutoNoteControlEdit form = new FormAutoNoteControlEdit();
-			form.IsNew=false;
-			form.ControlCur=AutoNoteControls.Listt[listBoxControls.SelectedIndex];//this needs work.  Use SelectedIndex, not SelectedItem.ToString to isolate the needed control. 
-			form.ShowDialog();
+			form.ShowDialog();			
 		}
 
 		/// <summary>
@@ -140,20 +119,40 @@ namespace OpenDental {
 			}
 		}
 
-
-		private void FormAutoNoteEdit_Activated(object sender, EventArgs e) {
-			if (RefreshControlsToIncEdit==true) {
-				listBoxControlsToIncl.Items.Clear();
-				for (int i=0; i<ControlsToInc.Length; i++) {
-					if (ControlsToInc[i].ToString()!=null) {
-						ControlsList=AutoNoteControls.ControlNumToName(ControlsToInc[i].ToString());
-						listBoxControlsToIncl.Items.Add(ControlsList[0].Descript);
-					}
+		private void butEditControl_Click(object sender, EventArgs e) {
+			//should launch FormAutoNoteControlEdit
+			//I did not have time to look closely at this:
+			/*
+			ControlsToInc=new string[listBoxControlsToIncl.Items.Count];
+			for (int i=0; i<listBoxControlsToIncl.Items.Count; i++) {
+				if (listBoxControlsToIncl.Items[i].ToString()!="") {
+					ControlsList=AutoNoteControls.ControlNameToNum(listBoxControlsToIncl.Items[i].ToString());
+					ControlsToInc[i]=ControlsList[0].AutoNoteControlNum.ToString();
 				}
-				RefreshControlsToIncEdit=false;
-				ControlsToInc=null;
 			}
-			fillListBoxControls();
+			RefreshControlsToIncEdit=true;*/
+			if (listBoxControls.SelectedIndex==-1) {
+				return;
+			}
+			FormAutoNoteControlEdit form = new FormAutoNoteControlEdit();
+			form.IsNew=false;
+			form.ControlCur=AutoNoteControls.Listt[listBoxControls.SelectedIndex];
+			form.ShowDialog();	
+			if (form.DialogResult==DialogResult.OK) {
+			
+					listBoxControlsToIncl.Items.Clear();
+					for (int i=0; i<listBoxControlToIncNum.Items.Count; i++) {
+						ControlsList=AutoNoteControls.ControlNumToName(listBoxControlToIncNum.Items[i].ToString());
+							listBoxControlsToIncl.Items.Add(ControlsList[0].Descript);
+					}				
+			}			
+		}
+
+		
+
+
+		private void FormAutoNoteEdit_Activated(object sender, EventArgs e) {			
+	
 		}
 
 		private void listBoxControls_MouseDoubleClick(object sender, MouseEventArgs e) {//Adds the selected item to the ListboxControlToInc

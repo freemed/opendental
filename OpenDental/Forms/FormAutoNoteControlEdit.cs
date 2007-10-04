@@ -137,6 +137,7 @@ namespace OpenDental {
 			else {
 				AutoNoteControls.ControlUpdate(ControlCur);
 			}
+			this.DialogResult=DialogResult.OK;
 			this.Close();
 		}		
 		

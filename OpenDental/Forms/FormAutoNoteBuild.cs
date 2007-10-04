@@ -91,7 +91,8 @@ namespace OpenDental {
 						for (int i=0; i<lines.Length; i++) {
 							comboBox[CurCombo].Items.Add(lines[i]);
 						}
-
+						comboBox[CurCombo].AutoCompleteMode=AutoCompleteMode.SuggestAppend;
+						comboBox[CurCombo].AutoCompleteSource=AutoCompleteSource.ListItems;
 						this.Controls.Add(comboBox[CurCombo]);
 						label[l].Location=new Point(10, spacing);
 						comboBox[CurCombo].Location=new Point(label[l].Text.Length * 6 + 15, spacing);
