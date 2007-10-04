@@ -58,6 +58,7 @@ namespace OpenDental {
 			//AutoNoteControls.RefreshControlEdit(listBoxControls.SelectedIndex.ToString());
 			AutoNoteControls.Refresh();
 			ControlCur=AutoNoteControls.Listt[listBoxControls.SelectedIndex];
+			textBoxTypeControl.Text=ControlCur.ControlType;
 			textBoxDescriptControl.Text=ControlCur.Descript;
 			textBoxLabelControl.Text=ControlCur.ControlLabel;
 			textBoxTextControl.Text=ControlCur.MultiLineText;
@@ -73,10 +74,12 @@ namespace OpenDental {
 
 		private void ControlContentViewerVisible(bool visible) {			
 				labelControl.Visible=visible;
+				labelTypeControl.Visible=visible;
 				labelNameControl.Visible=visible;
 				labelLabelControl.Visible=visible;
 				labelPrefaceText.Visible=visible;
 				labelText.Visible=visible;
+				textBoxTypeControl.Visible=visible;
 				textBoxDescriptControl.Visible=visible;
 				textBoxLabelControl.Visible=visible;
 				textBoxTextPrefaceControl.Visible=visible;
@@ -189,8 +192,10 @@ namespace OpenDental {
 			//Saves the items in the listboxControlsToIncl in a array that will be passed on 
 			string controlsToIncText="";
 			for (int i=0; i<listBoxControlToIncNum.Items.Count; i++) {
-				controlsToIncText = controlsToIncText + listBoxControlToIncNum.Items[i].ToString()+",";
-			}
+				if (listBoxControlsToIncl.Items[i].ToString()!="") {
+					controlsToIncText = controlsToIncText + listBoxControlToIncNum.Items[i].ToString()+",";
+				}
+				}
 			AutoNoteCur.ControlsToInc=controlsToIncText;
 			AutoNoteCur.AutoNoteName=textBoxAutoNoteName.Text.ToString();
 			if(IsNew) {

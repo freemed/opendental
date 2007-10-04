@@ -11,6 +11,8 @@ namespace OpenDental {
 	public class AutoNotes {
 		///<summary>A list of all Auto Notes</summary>
 		public static List<AutoNote> Listt;
+		/// <summary>This is what is used to store the output of the Auto Note</summary>
+		public string autoNoteOutput;
 
 		public static void Refresh() {
 			string command = "SELECT * FROM autonote ORDER BY AutoNoteNum";

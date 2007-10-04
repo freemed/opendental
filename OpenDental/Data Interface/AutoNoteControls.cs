@@ -38,22 +38,24 @@ namespace OpenDental {
 		/// <param name="ControlToShow"></param>
 		/// The control info to return
 		/// <returns></returns>
-		public static void RefreshControlEdit(string ControlToShow) {
+		public static void RefreshControl(string ControlNumToShow) {
 			string command = "SELECT * FROM autonotecontrol "
-				+"WHERE AutoNoteControlNum = "+"'"+ControlToShow+"'";
+				+"WHERE AutoNoteControlNum = "+"'"+ControlNumToShow+"'";
 			DataTable table = General.GetTable(command);
 			Listt=new List<AutoNoteControl>();
 			//List = new AutoNote[table.Rows.Count];
 			AutoNoteControl noteCont;
 			noteCont = new AutoNoteControl();
-			noteCont.AutoNoteControlNum = PIn.PInt(table.Rows[0][0].ToString());
-			noteCont.Descript = PIn.PString(table.Rows[0]["Descript"].ToString());
-			noteCont.ControlType = PIn.PString(table.Rows[0]["ControlType"].ToString());
-			noteCont.ControlLabel = PIn.PString(table.Rows[0]["ControlLabel"].ToString());
-			noteCont.PrefaceText = PIn.PString(table.Rows[0]["PrefaceText"].ToString());
-			noteCont.MultiLineText = PIn.PString(table.Rows[0]["MultiLineText"].ToString());
-			noteCont.ControlOptions = PIn.PString(table.Rows[0]["ControlOptions"].ToString());
-			Listt.Add(noteCont);
+			for (int i = 0; i < table.Rows.Count; i++) {
+				noteCont.AutoNoteControlNum = PIn.PInt(table.Rows[i][0].ToString());
+				noteCont.Descript = PIn.PString(table.Rows[i]["Descript"].ToString());
+				noteCont.ControlType = PIn.PString(table.Rows[i]["ControlType"].ToString());
+				noteCont.ControlLabel = PIn.PString(table.Rows[i]["ControlLabel"].ToString());
+				noteCont.PrefaceText = PIn.PString(table.Rows[i]["PrefaceText"].ToString());
+				noteCont.MultiLineText = PIn.PString(table.Rows[i]["MultiLineText"].ToString());
+				noteCont.ControlOptions = PIn.PString(table.Rows[i]["ControlOptions"].ToString());
+				Listt.Add(noteCont);
+			}
 
 		}
 

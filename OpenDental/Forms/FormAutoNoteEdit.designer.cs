@@ -50,6 +50,8 @@ namespace OpenDental
 			this.butOK = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
 			this.listBoxControlToIncNum = new System.Windows.Forms.ListBox();
+			this.textBoxTypeControl = new System.Windows.Forms.TextBox();
+			this.labelTypeControl = new System.Windows.Forms.Label();
 			this.SuspendLayout();
 			// 
 			// textBoxAutoNoteName
@@ -77,7 +79,7 @@ namespace OpenDental
 			// 
 			// labelLabelControl
 			// 
-			this.labelLabelControl.Location = new System.Drawing.Point(431, 143);
+			this.labelLabelControl.Location = new System.Drawing.Point(430, 174);
 			this.labelLabelControl.Name = "labelLabelControl";
 			this.labelLabelControl.Size = new System.Drawing.Size(48, 13);
 			this.labelLabelControl.TabIndex = 75;
@@ -87,7 +89,7 @@ namespace OpenDental
 			// 
 			// labelNameControl
 			// 
-			this.labelNameControl.Location = new System.Drawing.Point(429, 114);
+			this.labelNameControl.Location = new System.Drawing.Point(428, 145);
 			this.labelNameControl.Name = "labelNameControl";
 			this.labelNameControl.Size = new System.Drawing.Size(50, 13);
 			this.labelNameControl.TabIndex = 74;
@@ -99,7 +101,7 @@ namespace OpenDental
 			// 
 			this.listBoxOptionsControl.Enabled = false;
 			this.listBoxOptionsControl.FormattingEnabled = true;
-			this.listBoxOptionsControl.Location = new System.Drawing.Point(480, 278);
+			this.listBoxOptionsControl.Location = new System.Drawing.Point(479, 309);
 			this.listBoxOptionsControl.Name = "listBoxOptionsControl";
 			this.listBoxOptionsControl.Size = new System.Drawing.Size(120, 108);
 			this.listBoxOptionsControl.TabIndex = 11;
@@ -108,7 +110,7 @@ namespace OpenDental
 			// 
 			// textBoxLabelControl
 			// 
-			this.textBoxLabelControl.Location = new System.Drawing.Point(480, 140);
+			this.textBoxLabelControl.Location = new System.Drawing.Point(479, 171);
 			this.textBoxLabelControl.Name = "textBoxLabelControl";
 			this.textBoxLabelControl.ReadOnly = true;
 			this.textBoxLabelControl.Size = new System.Drawing.Size(177, 20);
@@ -117,7 +119,7 @@ namespace OpenDental
 			// 
 			// textBoxDescriptControl
 			// 
-			this.textBoxDescriptControl.Location = new System.Drawing.Point(480, 114);
+			this.textBoxDescriptControl.Location = new System.Drawing.Point(479, 145);
 			this.textBoxDescriptControl.Name = "textBoxDescriptControl";
 			this.textBoxDescriptControl.ReadOnly = true;
 			this.textBoxDescriptControl.Size = new System.Drawing.Size(177, 20);
@@ -131,8 +133,8 @@ namespace OpenDental
 			this.listBoxControlsToIncl.Name = "listBoxControlsToIncl";
 			this.listBoxControlsToIncl.Size = new System.Drawing.Size(120, 277);
 			this.listBoxControlsToIncl.TabIndex = 2;
-			this.listBoxControlsToIncl.DoubleClick += new System.EventHandler(this.listBoxControlsToIncl_DoubleClick);
 			this.listBoxControlsToIncl.SelectedIndexChanged += new System.EventHandler(this.listBoxControlsToIncl_SelectedIndexChanged);
+			this.listBoxControlsToIncl.DoubleClick += new System.EventHandler(this.listBoxControlsToIncl_DoubleClick);
 			// 
 			// listBoxControls
 			// 
@@ -163,7 +165,7 @@ namespace OpenDental
 			// 
 			// textBoxTextPrefaceControl
 			// 
-			this.textBoxTextPrefaceControl.Location = new System.Drawing.Point(480, 166);
+			this.textBoxTextPrefaceControl.Location = new System.Drawing.Point(479, 197);
 			this.textBoxTextPrefaceControl.Multiline = true;
 			this.textBoxTextPrefaceControl.Name = "textBoxTextPrefaceControl";
 			this.textBoxTextPrefaceControl.ReadOnly = true;
@@ -173,7 +175,7 @@ namespace OpenDental
 			// 
 			// textBoxTextControl
 			// 
-			this.textBoxTextControl.Location = new System.Drawing.Point(480, 215);
+			this.textBoxTextControl.Location = new System.Drawing.Point(479, 246);
 			this.textBoxTextControl.Multiline = true;
 			this.textBoxTextControl.Name = "textBoxTextControl";
 			this.textBoxTextControl.ReadOnly = true;
@@ -183,7 +185,7 @@ namespace OpenDental
 			// 
 			// labelText
 			// 
-			this.labelText.Location = new System.Drawing.Point(436, 215);
+			this.labelText.Location = new System.Drawing.Point(435, 246);
 			this.labelText.Name = "labelText";
 			this.labelText.Size = new System.Drawing.Size(43, 13);
 			this.labelText.TabIndex = 98;
@@ -193,7 +195,7 @@ namespace OpenDental
 			// 
 			// labelPrefaceText
 			// 
-			this.labelPrefaceText.Location = new System.Drawing.Point(396, 166);
+			this.labelPrefaceText.Location = new System.Drawing.Point(395, 197);
 			this.labelPrefaceText.Name = "labelPrefaceText";
 			this.labelPrefaceText.Size = new System.Drawing.Size(83, 13);
 			this.labelPrefaceText.TabIndex = 99;
@@ -269,11 +271,32 @@ namespace OpenDental
 			this.listBoxControlToIncNum.TabIndex = 100;
 			this.listBoxControlToIncNum.Visible = false;
 			// 
+			// textBoxTypeControl
+			// 
+			this.textBoxTypeControl.Location = new System.Drawing.Point(479, 119);
+			this.textBoxTypeControl.Name = "textBoxTypeControl";
+			this.textBoxTypeControl.ReadOnly = true;
+			this.textBoxTypeControl.Size = new System.Drawing.Size(177, 20);
+			this.textBoxTypeControl.TabIndex = 101;
+			this.textBoxTypeControl.Visible = false;
+			// 
+			// labelTypeControl
+			// 
+			this.labelTypeControl.AutoSize = true;
+			this.labelTypeControl.Location = new System.Drawing.Point(442, 122);
+			this.labelTypeControl.Name = "labelTypeControl";
+			this.labelTypeControl.Size = new System.Drawing.Size(31, 13);
+			this.labelTypeControl.TabIndex = 102;
+			this.labelTypeControl.Text = "Type";
+			this.labelTypeControl.Visible = false;
+			// 
 			// FormAutoNoteEdit
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(704, 495);
+			this.Controls.Add(this.labelTypeControl);
+			this.Controls.Add(this.textBoxTypeControl);
 			this.Controls.Add(this.listBoxControlToIncNum);
 			this.Controls.Add(this.labelPrefaceText);
 			this.Controls.Add(this.labelText);
@@ -300,8 +323,8 @@ namespace OpenDental
 			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Auto Note Edit";
-			this.Activated += new System.EventHandler(this.FormAutoNoteEdit_Activated);
 			this.Load += new System.EventHandler(this.FormAutoNoteEdit_Load);
+			this.Activated += new System.EventHandler(this.FormAutoNoteEdit_Activated);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -330,5 +353,7 @@ namespace OpenDental
 		private System.Windows.Forms.Label labelText;
 		private System.Windows.Forms.Label labelPrefaceText;
 		private System.Windows.Forms.ListBox listBoxControlToIncNum;
+		private System.Windows.Forms.TextBox textBoxTypeControl;
+		private System.Windows.Forms.Label labelTypeControl;
     }
 }
