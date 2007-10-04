@@ -132,9 +132,9 @@ namespace OpenDental.Eclaims{
 			Fill(96,"IsOtherAccident");
 			Fill(97,"IsNotAccident");
 			Fill(98,"");//description of accident
-			Fill(99,"");//diag code index
+			Fill(99,"TreatingDentistNPI");//Individual NPI
 			Fill(100,"");//''
-			Fill(101,"");//''
+			Fill(101,"BillingDentistNPI");//Group NPI
 			Fill(102,"");//''
 			Fill(103,"");//''
 			Fill(104,"");//''
