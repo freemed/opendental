@@ -1635,6 +1635,10 @@ namespace OpenDental{
 			FeeSchedsStandard=DefB.GetFeeSchedList("");
 			FeeSchedsCopay=DefB.GetFeeSchedList("C");
 			FeeSchedsAllowed=DefB.GetFeeSchedList("A");
+			Clearinghouse clearhouse=Clearinghouses.GetDefault();
+			if(clearhouse==null || clearhouse.CommBridge!=EclaimsCommBridge.ClaimConnect) {
+				butEligibility.Visible=false;
+			}
 			FillFormWithPlanCur();
 			FillBenefits();
 			Cursor=Cursors.Default;
