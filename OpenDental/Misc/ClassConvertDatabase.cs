@@ -5926,6 +5926,37 @@ namespace OpenDental{
 				General.NonQEx(command);
 				command = "INSERT INTO preference VALUES('ImageStore', 'OpenDental.Imaging.FileStore')";
 				General.NonQEx(command);
+				//PT Dental Bridge---------------------------------------------------------------------------
+				command = "INSERT INTO program (ProgName,ProgDesc,Enabled,Path,CommandLine,Note"
+					+ ") VALUES("
+					+ "'PT', "
+					+ "'PT Dental from gopaperlessnow.com', "
+					+ "'0', "
+					+ "'', "
+					+ "'', "
+					+ "'" + POut.PString(@"No path is needed.  It is hard coded.") + "')";
+				int programNum =General.NonQEx(command,true);//we now have a ProgramNum to work with
+				command = "INSERT INTO toolbutitem (ProgramNum,ToolBar,ButtonText) "
+					+ "VALUES ("
+					+ "'" + POut.PInt(programNum) + "', "
+					+ "'" + POut.PInt((int)ToolBarsAvail.FamilyModule) + "', "
+					+ "'PT Dental')";
+				General.NonQEx(command);
+				command = "INSERT INTO program (ProgName,ProgDesc,Enabled,Path,CommandLine,Note"
+					+ ") VALUES("
+					+ "'PTupdate', "
+					+ "'PT Dental update (2nd button)', "
+					+ "'0', "
+					+ "'', "
+					+ "'', "
+					+ "'" + POut.PString(@"This is the second part of the PT Dental bridge.  It allows the 'update' button to be customized separately.") + "')";
+				programNum =General.NonQEx(command,true);
+				command = "INSERT INTO toolbutitem (ProgramNum,ToolBar,ButtonText) "
+					+ "VALUES ("
+					+ "'" + POut.PInt(programNum) + "', "
+					+ "'" + POut.PInt((int)ToolBarsAvail.FamilyModule) + "', "
+					+ "'PT Update')";
+				General.NonQEx(command);
 
 
 

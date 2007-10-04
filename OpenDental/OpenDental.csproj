@@ -106,6 +106,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Bridges\Apteryx.cs" />
+    <Compile Include="Bridges\PaperlessTechnology.cs" />
     <Compile Include="Bridges\Dxis.cs" />
     <Compile Include="Bridges\eztwain.cs" />
     <Compile Include="Bridges\Vipersoft.cs" />
