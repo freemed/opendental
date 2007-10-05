@@ -5,6 +5,7 @@ using System.Collections.ObjectModel;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.ComponentModel;
+using System.Windows.Forms;
 
 namespace OpenDental.SmartCards  {
 	class WindowsSmartCardManager : ISmartCardManager {
@@ -29,7 +30,7 @@ namespace OpenDental.SmartCards  {
 		private Collection<string> readers;
 		ReaderState[] states;
 		// A thread that watches for new smart cards
-		private Thread watchThread;
+		private BackgroundWorker worker;
 
 		public ReadOnlyCollection<string> Readers {
 			get { return new ReadOnlyCollection<string>(readers); }
@@ -73,12 +74,13 @@ namespace OpenDental.SmartCards  {
 			states = new ReaderState[readers.Count];
 			for(int i = 0; i < readers.Count; i++)
 				states[i].Reader = readers[i];
-			
-			// Register a thread that will call when a new reader is found (or a reader is removed);
-			watchThread = new Thread(new ThreadStart(WaitChangeStatus));
-			// Set Apartment Model for COM interaction.
-			watchThread.ApartmentState = ApartmentState.STA;
-			watchThread.Start();
+
+            if (readers.Count > 0) {
+                worker = new BackgroundWorker();
+                worker.WorkerSupportsCancellation = true;
+                worker.DoWork += new DoWorkEventHandler(WaitChangeStatus);
+                worker.RunWorkerAsync();
+            }
 		}
 		#endregion
 
@@ -86,18 +88,40 @@ namespace OpenDental.SmartCards  {
 		public event SmartCardStateChangedEventHandler SmartCardChanged;
 		#endregion
 
-		#region Methods
-		public void Dispose() {
-			if(context != IntPtr.Zero) {
-				SmartCardErrors result = ReleaseContext(context);
-				CheckResult(result);
-				context = IntPtr.Zero;
-			}
+        #region Methods
+        public void Dispose() {
+            worker.CancelAsync();
+
+            // Obtaina lock when we use the context pointer, which may be used (is used every 1s!) by
+            // WaitChangeStatus.
+            lock (this) {
+                if (context != IntPtr.Zero) {
+                    SmartCardErrors result = ReleaseContext(context);
+                    CheckResult(result);
+                    context = IntPtr.Zero;
+                }
+            }
 		}
 
-		private void WaitChangeStatus() {
-			while(true) {
-				SmartCardErrors result = GetStatusChange(context, Timeout.Infinite, states, readers.Count);
+        private void WaitChangeStatus(object sender, DoWorkEventArgs e) {
+			while(!e.Cancel) {
+                SmartCardErrors result;
+
+                // Obtain a lock when we use the context pointer, which may be modified in the Dispose() method.
+                lock (this) {
+                    if (context == IntPtr.Zero)
+                        return;
+
+                    // This thread will be executed every 1000ms. The thread also blocks for 1000ms, meaning that the application
+                    // may keep on running for one extra second after the user has closed the Main Form.
+                    result = GetStatusChange(context, 1000, states, readers.Count);
+                }
+
+                if (result == SmartCardErrors.SCARD_E_TIMEOUT) {
+                    // Time out has passed, but there is no new info. Just go on with the loop
+                    continue;
+                }
+
 				CheckResult(result);
 				for(int i = 0; i < states.Length; i++) {
 					// Check if the state changed from the last time
