@@ -92,7 +92,15 @@ namespace OpenDental {
 			FormAutoNoteControlEdit form=new FormAutoNoteControlEdit();
 			form.IsNew=true;
 			form.ControlCur=new AutoNoteControl();
-			form.ShowDialog();			
+			form.ShowDialog();
+			if (form.DialogResult==DialogResult.OK) {
+				ControlContentViewerVisible(false);
+				AutoNoteControls.Refresh();
+				listBoxControls.Items.Clear();
+				for (int i=0; i<AutoNoteControls.Listt.Count; i++) {
+					listBoxControls.Items.Add(AutoNoteControls.Listt[i].Descript);
+				}
+			}
 		}
 
 		/// <summary>
@@ -139,7 +147,12 @@ namespace OpenDental {
 			form.ControlCur=AutoNoteControls.Listt[listBoxControls.SelectedIndex];
 			form.ShowDialog();	
 			if (form.DialogResult==DialogResult.OK) {
-			
+				ControlContentViewerVisible(false);
+				AutoNoteControls.Refresh();
+				listBoxControls.Items.Clear();
+				for (int i=0; i<AutoNoteControls.Listt.Count; i++) {
+					listBoxControls.Items.Add(AutoNoteControls.Listt[i].Descript);
+				}
 					listBoxControlsToIncl.Items.Clear();
 					for (int i=0; i<listBoxControlToIncNum.Items.Count; i++) {
 						ControlsList=AutoNoteControls.ControlNumToName(listBoxControlToIncNum.Items[i].ToString());

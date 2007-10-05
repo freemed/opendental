@@ -28,7 +28,11 @@ namespace OpenDental {
 
 		private void butAdd_Click(object sender,EventArgs e) {
 			if (textBoxControlOptions.Text.ToString()!="") {
-				
+			int indexOf=textBoxControlOptions.Text.IndexOf(",");
+				if(indexOf!=-1){
+					MessageBox.Show(Lan.g(this, "The character ',' is not allowed. Please use ';' instead"));
+					return;
+				}				
 				listBoxControlOptions.Items.Add(textBoxControlOptions.Text);
 				textBoxControlOptions.Clear();
 				textBoxControlOptions.Select();
@@ -139,7 +143,6 @@ namespace OpenDental {
 			}
 			this.DialogResult=DialogResult.OK;
 			this.Close();
-		}		
-		
+		}
 	}
 }

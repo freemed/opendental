@@ -180,7 +180,7 @@ namespace OpenDental {
 			// labelControlOptions
 			// 
 			this.labelControlOptions.AutoSize = true;
-			this.labelControlOptions.Location = new System.Drawing.Point(33, 364);
+			this.labelControlOptions.Location = new System.Drawing.Point(38, 355);
 			this.labelControlOptions.Name = "labelControlOptions";
 			this.labelControlOptions.Size = new System.Drawing.Size(314, 13);
 			this.labelControlOptions.TabIndex = 109;
@@ -255,7 +255,7 @@ namespace OpenDental {
 			// labelTextPreface
 			// 
 			this.labelTextPreface.AutoSize = true;
-			this.labelTextPreface.Location = new System.Drawing.Point(33, 143);
+			this.labelTextPreface.Location = new System.Drawing.Point(33, 133);
 			this.labelTextPreface.Name = "labelTextPreface";
 			this.labelTextPreface.Size = new System.Drawing.Size(342, 13);
 			this.labelTextPreface.TabIndex = 118;
@@ -272,7 +272,7 @@ namespace OpenDental {
 			// labelControlTextMultiLineText
 			// 
 			this.labelControlTextMultiLineText.AutoSize = true;
-			this.labelControlTextMultiLineText.Location = new System.Drawing.Point(75, 246);
+			this.labelControlTextMultiLineText.Location = new System.Drawing.Point(75, 236);
 			this.labelControlTextMultiLineText.Name = "labelControlTextMultiLineText";
 			this.labelControlTextMultiLineText.Size = new System.Drawing.Size(207, 13);
 			this.labelControlTextMultiLineText.TabIndex = 120;
@@ -315,7 +315,7 @@ namespace OpenDental {
 			this.butAdd.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butAdd.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butAdd.CornerRadius = 4F;
-			this.butAdd.Location = new System.Drawing.Point(272, 380);
+			this.butAdd.Location = new System.Drawing.Point(261, 380);
 			this.butAdd.Name = "butAdd";
 			this.butAdd.Size = new System.Drawing.Size(91, 25);
 			this.butAdd.TabIndex = 6;

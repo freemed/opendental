@@ -147,6 +147,9 @@ namespace OpenDental{
 
 		///<summary>Gets an employer based on the employerNum. This will work even if the list has not been refreshed recently, but if you are going to need a lot of names all at once, then it is faster to refresh first.</summary>
 		public static Employer GetEmployer(int employerNum){
+			if(employerNum==0){
+				return new Employer();
+			}
 			if(HList.ContainsKey(employerNum)){
 				return (Employer)HList[employerNum];
 			}
@@ -157,7 +160,6 @@ namespace OpenDental{
 			}
 			//this could only happen if corrupted:
 			return new Employer();
-			
 		}
 
 		///<summary>Gets an employerNum from the database based on the supplied name.  If that empName does not exist, then a new employer is created, and the employerNum for the new employer is returned.</summary>

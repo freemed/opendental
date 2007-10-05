@@ -130,27 +130,23 @@ namespace OpenDental{
 				DentalEye.SendData(Cur,pat);
 				return;
 			}
-#endif
-			else if(Cur.ProgName=="DentForms") {
-				DentForms.SendData(Cur,pat);
-				return;
-			}
-#if !DISABLE_WINDOWS_BRIDGES
 			else if(Cur.ProgName=="DentX") {
 				DentX.SendData(Cur,pat);
 				return;
 			}
-#endif
-			else if(Cur.ProgName=="Dexis") {
-				Dexis.SendData(Cur,pat);
-				return;
-			}
-#if !DISABLE_WINDOWS_BRIDGES
 			else if(Cur.ProgName=="DrCeph") {
 				DrCeph.SendData(Cur,pat);
 				return;
 			}
 #endif
+			else if(Cur.ProgName=="DentForms") {
+				DentForms.SendData(Cur,pat);
+				return;
+			}
+			else if(Cur.ProgName=="Dexis") {
+				Dexis.SendData(Cur,pat);
+				return;
+			}
 			else if(Cur.ProgName=="Dxis") {
 				Dxis.SendData(Cur,pat);
 				return;
@@ -192,6 +188,14 @@ namespace OpenDental{
 			}
 			else if(Cur.ProgName=="Planmeca") {
 				Planmeca.SendData(Cur,pat);
+				return;
+			}
+			else if(Cur.ProgName=="PT") {
+				PaperlessTechnology.SendData(Cur,pat,false);
+				return;
+			}
+			else if(Cur.ProgName=="PTupdate") {
+				PaperlessTechnology.SendData(Cur,pat,true);
 				return;
 			}
 #if !DISABLE_WINDOWS_BRIDGES
