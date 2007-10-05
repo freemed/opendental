@@ -551,6 +551,19 @@ namespace OpenDental{
 		}
 		#endregion
 
+        private Patient preselectedPatient;
+        public Patient PreselectedPatient {
+            get { return preselectedPatient; }
+        }
+
+        public void PreselectPatient(Patient value) {
+            preselectedPatient = value;
+            textLName.Text = value.LName;
+            textFName.Text = value.FName;
+            textCity.Text = value.City;
+            butSearch_Click(this, EventArgs.Empty);
+        }
+
 		///<summary></summary>
 		public void FormSelectPatient_Load(object sender, System.EventArgs e){
 			if(SelectionModeOnly){
@@ -940,33 +953,5 @@ namespace OpenDental{
 				gridMain_KeyDown(sender, e);
 				gridMain.Refresh();
 		}
-
-		
-
-		
-
-		
-
-		
-
-		
-
-		
-
-		
-
-	
-
-		
-
-		
-
-		
-	
-
-		
-
-		
-
 	}
 }

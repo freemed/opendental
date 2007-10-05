@@ -2777,6 +2777,30 @@
     <Compile Include="Reporting\FormReport.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="SmartCards\Belgium\BelgianIdentityCard.cs" />
+    <Compile Include="SmartCards\Belgium\CertifCheck.cs" />
+    <Compile Include="SmartCards\Belgium\CRLPolicyOptions.cs" />
+    <Compile Include="SmartCards\Belgium\ErrorCodeOptions.cs" />
+    <Compile Include="SmartCards\Belgium\IDData.cs" />
+    <Compile Include="SmartCards\Belgium\OCSPPolicyOptions.cs" />
+    <Compile Include="SmartCards\Belgium\Status.cs" />
+    <Compile Include="SmartCards\Identity.cs" />
+    <Compile Include="SmartCards\ISmartCardManager.cs" />
+    <Compile Include="SmartCards\PatientCardInsertedEventArgs.cs" />
+    <Compile Include="SmartCards\PatientCardInsertedEventHandler.cs" />
+    <Compile Include="SmartCards\SmartCardManager.cs" />
+    <Compile Include="SmartCards\SmartCardService.cs" />
+    <Compile Include="SmartCards\SmartCardState.cs" />
+    <Compile Include="SmartCards\SmartCardStateChangedEventArgs.cs" />
+    <Compile Include="SmartCards\SmartCardStateChangedEventHandler.cs" />
+    <Compile Include="SmartCards\SmartCardWatcher.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="SmartCards\Windows\CardState.cs" />
+    <Compile Include="SmartCards\Windows\ReaderState.cs" />
+    <Compile Include="SmartCards\Windows\ScopeOptions.cs" />
+    <Compile Include="SmartCards\Windows\SmartCardErrors.cs" />
+    <Compile Include="SmartCards\Windows\WindowsSmartCardManager.cs" />
     <Compile Include="Tables Old Grids\ContrPanelTable.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -3091,6 +3115,9 @@
       <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
       <CachedSettingsPropName>OpenDental_com_dentalxchange_webservices_WebServiceService</CachedSettingsPropName>
     </WebReferenceUrl>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="SmartCards\Linux\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
