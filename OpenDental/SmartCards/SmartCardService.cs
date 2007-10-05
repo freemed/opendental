@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Collections.ObjectModel;
+using OpenDentBusiness;
 
 namespace OpenDental.SmartCards  {
 	public abstract class SmartCardService {
@@ -43,6 +44,6 @@ namespace OpenDental.SmartCards  {
 			return retValue;
 		}
 
-		public abstract void Test(string reader);
+		public abstract Patient GetPatientInfo(string reader);
 	}
 }
