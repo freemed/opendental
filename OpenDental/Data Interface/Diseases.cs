@@ -8,12 +8,26 @@ using OpenDentBusiness;
 namespace OpenDental {
 	///<summary></summary>
 	public class Diseases {
+		public static Disease GetSpecificDiseaseForPatient(int patNum,int diseaseDefNum) {
+			string command="SELECT * FROM disease WHERE PatNum="+POut.PInt(patNum)
+				+" AND DiseaseDefNum="+POut.PInt(diseaseDefNum);
+			Disease[] disList=RefreshAndFill(command);
+			if(disList.Length==0){
+				return null;
+			}
+			return disList[0].Copy();
+		}
+
 		///<summary>Gets a list of all Diseases for a given patient.  Includes hidden. Sorted by diseasedef.ItemOrder.</summary>
 		public static Disease[] Refresh(int patNum) {
 			string command="SELECT disease.* FROM disease,diseasedef "
 				+"WHERE disease.DiseaseDefNum=diseasedef.DiseaseDefNum "
 				+"AND PatNum="+POut.PInt(patNum)
 				+" ORDER BY diseasedef.ItemOrder";
+			return RefreshAndFill(command);
+		}
+
+		private static Disease[] RefreshAndFill(string command){
 			DataTable table=General.GetTable(command);
 			Disease[] List=new Disease[table.Rows.Count];
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -73,6 +87,8 @@ namespace OpenDental {
 			string command="DELETE FROM disease WHERE PatNum ="+POut.PInt(patNum);
 			General.NonQ(command);
 		}
+
+		
 		
 		
 		

@@ -1375,7 +1375,7 @@ namespace OpenDental{
 			}
 			
 			if((itypes & InvalidTypes.ClearHouses)==InvalidTypes.ClearHouses){
-//kh until we add an EasyHideClearHouses				Clearinghouses.Refresh();
+//kh until we add an EasyHideClearHouses						Clearinghouses.Refresh();
 				SigElementDefs.Refresh();
 				SigButDefs.Refresh();//includes SigButDefElements.Refresh()
 				FillSignalButtons(null);
@@ -1430,6 +1430,9 @@ namespace OpenDental{
 			if((itypes & InvalidTypes.Programs)==InvalidTypes.Programs){
 				Programs.Refresh();
 				ProgramProperties.Refresh();
+				if(Programs.GetCur("PT").Enabled){
+					Bridges.PaperlessTechnology.InitializeFileWatcher();
+				}
 			}
 			if((itypes & InvalidTypes.Providers)==InvalidTypes.Providers){
 				Providers.Refresh();

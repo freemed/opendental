@@ -263,7 +263,7 @@ namespace OpenDental{
 	///<summary></summary>
 	public class TelephoneNumbers{
 
-		///<summary>Used in the tool that loops through the database fixing telephone numbers.  Also used in the patient import from XML tool.</summary>
+		///<summary>Used in the tool that loops through the database fixing telephone numbers.  Also used in the patient import from XML tool, and PT Dental bridge.</summary>
 		public static string ReFormat(string phoneNum){
 			if(CultureInfo.CurrentCulture.Name!="en-US" && CultureInfo.CurrentCulture.Name.Substring(3)!="CA"){
 				return phoneNum;
@@ -331,8 +331,27 @@ namespace OpenDental{
 			return phoneNum;
 		}
 
+		///<Summary>Also truncates if more than two non-numbers in a row.  This is to avoid the notes that can follow phone numbers.</Summary>
+		public static string FormatNumbersOnly(string phoneStr){
+			string retVal="";
+			int nonnumcount=0;
+			for(int i=0;i<phoneStr.Length;i++) {
+				if(nonnumcount==2){
+					return retVal;
+				}
+				if(Char.IsNumber(phoneStr,i)) {
+					retVal+=phoneStr.Substring(i,1);
+					nonnumcount=0;
+				}
+				else{
+					nonnumcount++;
+				}
+			}
+			return retVal;
+		}
+
 		///<summary></summary>
-		public static string FormatNumbersOnly(string phoneNum){
+		public static string FormatNumbersExactTen(string phoneNum){
 			string newPhoneNum="";
 			for(int i=0;i<phoneNum.Length;i++){
 				if(Char.IsNumber(phoneNum,i)){

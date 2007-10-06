@@ -160,8 +160,8 @@ namespace OpenDental.SmartCards  {
 
 
 		private void CheckResult(SmartCardErrors result) {
-			if(result != SmartCardErrors.SCARD_S_SUCCESS)
-				throw new Win32Exception((int)result);
+			if(result != SmartCardErrors.SCARD_S_SUCCESS);
+				//throw new Win32Exception((int)result);
 		}
 		#endregion
 

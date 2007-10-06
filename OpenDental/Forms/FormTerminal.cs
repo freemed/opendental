@@ -1309,7 +1309,7 @@ namespace OpenDental{
 					Referrals.List[i].ST=PatCur.State;
 					Referrals.List[i].SSN=PatCur.SSN;
 					Referrals.List[i].Zip=PatCur.Zip;
-					Referrals.List[i].Telephone=TelephoneNumbers.FormatNumbersOnly(PatCur.HmPhone);
+					Referrals.List[i].Telephone=TelephoneNumbers.FormatNumbersExactTen(PatCur.HmPhone);
 					Referrals.List[i].EMail=PatCur.Email;
 					Referrals.Update(Referrals.List[i]);
 					Referrals.Refresh();

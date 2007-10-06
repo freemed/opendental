@@ -746,7 +746,7 @@ namespace OpenDental{
 					RefCur.MName=PatCur.MiddleI;	
 					//RefCur.PatNum=Patients.Cur.PatNum;//already handled
 					RefCur.SSN=PatCur.SSN;
-					RefCur.Telephone=TelephoneNumbers.FormatNumbersOnly(PatCur.HmPhone);
+					RefCur.Telephone=TelephoneNumbers.FormatNumbersExactTen(PatCur.HmPhone);
 					if(PatCur.WkPhone==""){
 						RefCur.Phone2=PatCur.WirelessPhone;
 					}

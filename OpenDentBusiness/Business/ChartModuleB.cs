@@ -302,15 +302,14 @@ namespace OpenDentBusiness {
 			command="SELECT * FROM appointment WHERE PatNum="+POut.PInt(patNum)
 				+" ORDER BY AptDateTime";
 			//+" AND AptStatus != 6"//do not include planned appts.
-
 			DataTable rawApt=dcon.GetTable(command);
-			Int32 apptS;
+			int apptStatus;
 			for(int i=0;i<rawApt.Rows.Count;i++) {
 				row=table.NewRow();
 				row["AptNum"]=rawApt.Rows[i]["AptNum"].ToString();
 				row["colorBackG"]=Color.White.ToArgb();
 				dateT=PIn.PDateT(rawApt.Rows[i]["AptDateTime"].ToString());
-				apptS=PIn.PInt(rawApt.Rows[i]["AptStatus"].ToString());
+				apptStatus=PIn.PInt(rawApt.Rows[i]["AptStatus"].ToString());
 				row["colorText"]=DefB.Long[(int)DefCat.ProgNoteColors][8].ItemColor.ToArgb().ToString();
 				row["CommlogNum"]=0;
 				row["description"]=Lan.g("ChartModule","Appointment - ")+dateT.ToShortTimeString()+"\r\n"
@@ -328,32 +327,32 @@ namespace OpenDentBusiness {
 					row["colorBackG"]=DefB.Long[(int)DefCat.ProgNoteColors][13].ItemColor.ToArgb().ToString(); //at a glace, you see green...the pt is good to go as they have a future appt scheduled
 					row["colorText"]=DefB.Long[(int)DefCat.ProgNoteColors][12].ItemColor.ToArgb().ToString();
 				}
-				if (apptS==5){ //broken
+				if (apptStatus==(int)ApptStatus.Broken){
 					row["colorText"]=DefB.Long[(int)DefCat.ProgNoteColors][14].ItemColor.ToArgb().ToString(); 
 					row["colorBackG"]=DefB.Long[(int)DefCat.ProgNoteColors][15].ItemColor.ToArgb().ToString();
 					row["description"]=Lan.g("ChartModule","BROKEN Appointment - ")+dateT.ToShortTimeString()+"\r\n"
 					+rawApt.Rows[i]["ProcDescript"].ToString();
 
 				}
-				else if (apptS==3){ //unscheduled
+				else if (apptStatus==(int)ApptStatus.UnschedList){
 					row["colorText"]=DefB.Long[(int)DefCat.ProgNoteColors][14].ItemColor.ToArgb().ToString(); 
 					row["colorBackG"]=DefB.Long[(int)DefCat.ProgNoteColors][15].ItemColor.ToArgb().ToString();
 					row["description"]=Lan.g("ChartModule","UNSCHEDULED Appointment - ")+dateT.ToShortTimeString()+"\r\n"
 					+rawApt.Rows[i]["ProcDescript"].ToString();
 
 				}
-				else if (apptS==6){ //Planned Appt
+				else if (apptStatus==(int)ApptStatus.Planned){
 					row["colorText"]=DefB.Long[(int)DefCat.ProgNoteColors][16].ItemColor.ToArgb().ToString(); 
 					row["colorBackG"]=DefB.Long[(int)DefCat.ProgNoteColors][17].ItemColor.ToArgb().ToString();
 					row["description"]=Lan.g("ChartModule","PLANNED Appointment")+"\r\n"
 					+rawApt.Rows[i]["ProcDescript"].ToString();
 				}
-				else if(apptS==7){//Patient Note
+				else if(apptStatus==(int)ApptStatus.PtNote){
 					row["colorText"]=DefB.Long[(int)DefCat.ProgNoteColors][18].ItemColor.ToArgb().ToString(); 
 					row["colorBackG"]=DefB.Long[(int)DefCat.ProgNoteColors][19].ItemColor.ToArgb().ToString();
 					row["description"] = Lan.g("ChartModule", "*** Patient NOTE  *** - ") + dateT.ToShortTimeString();
 				}
-				else if (apptS == 8) {//Complete Patient Note
+				else if (apptStatus ==(int)ApptStatus.PtNoteCompleted) {
 					row["colorText"] = DefB.Long[(int)DefCat.ProgNoteColors][20].ItemColor.ToArgb().ToString();
 					row["colorBackG"] = DefB.Long[(int)DefCat.ProgNoteColors][21].ItemColor.ToArgb().ToString();
 					row["description"] = Lan.g("ChartModule", "** Complete Patient NOTE ** - ") + dateT.ToShortTimeString();
@@ -390,8 +389,7 @@ namespace OpenDentBusiness {
 			return table;
 		}
 
-		///<summary>The supplied DataRows must include the following columns: ProcNum,ProcDate,Priority,ToothRange,ToothNum,ProcCode.
-		///This sorts all objects in Chart module based on their dates, times, priority, and toothnum.</summary>
+		///<summary>The supplied DataRows must include the following columns: ProcNum,ProcDate,Priority,ToothRange,ToothNum,ProcCode. This sorts all objects in Chart module based on their dates, times, priority, and toothnum.  For time comparisons, procs are not included.  But if other types such as comm have a time component in ProcDate, then they will be sorted by time as well.</summary>
 		public static int CompareChartRows(DataRow x,DataRow y){
 			if(x["ProcNum"].ToString()!="0" && y["ProcNum"].ToString()!="0") {//if both are procedures
 				if(((DateTime)x["ProcDate"]).Date==((DateTime)y["ProcDate"]).Date) {//and the dates are the same
@@ -401,8 +399,8 @@ namespace OpenDentBusiness {
 					//return 0;
 				}
 			}
-			//In all other situations, all we care about is the dates.
-			return ((DateTime)x["ProcDate"]).Date.CompareTo(((DateTime)y["ProcDate"]).Date);
+			//In all other situations, all we care about is the date/time.
+			return ((DateTime)x["ProcDate"]).CompareTo(((DateTime)y["ProcDate"]));
 			//IComparer myComparer = new ObjectDateComparer();
 			//return myComparer.Compare(x,y);
 		}

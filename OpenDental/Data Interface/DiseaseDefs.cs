@@ -141,6 +141,16 @@ namespace OpenDental {
 			}
 			return null;
 		}
+
+		///<summary>Returns the diseaseDefNum that exactly matches the specified string.  Used in import functions when you only have the name to work with.  Can return 0 if no match.  Does not match hidden diseases.</summary>
+		public static int GetNumFromName(string diseaseName){
+			for(int i=0;i<List.Length;i++){
+				if(diseaseName==List[i].DiseaseName){
+					return List[i].DiseaseDefNum;
+				}
+			}
+			return 0;
+		}
 		
 		
 	}
