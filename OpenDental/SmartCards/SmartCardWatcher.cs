@@ -10,6 +10,12 @@ namespace OpenDental.SmartCards {
 	public class SmartCardWatcher : Component {
 		public SmartCardWatcher() {
 			manager = SmartCardManager.Load();
+			
+			// This returns null on operation systems which are not supported. If the current OS is not supported,
+			// we don't hook up the event handlers.
+			if(manager == null)
+				return;
+			
 			manager.SmartCardChanged += new SmartCardStateChangedEventHandler(OnSmartCardChanged);
 			// Register all known Smart Cards
 			smartCardServices = new Collection<SmartCardService>();
