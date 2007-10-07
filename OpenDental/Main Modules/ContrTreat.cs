@@ -2203,7 +2203,7 @@ namespace OpenDental{
 				procCur=ProcListTP[i];
 				//procOld=procCur.Copy();
 				//first the fees
-				if(priplan.PlanType=="p"){//PPO
+				if(priplan!=null && priplan.PlanType=="p"){//PPO
 					procCur.ProcFee=Fees.GetAmount0(procCur.CodeNum,Providers.GetProv(Patients.GetProvNum(PatCur)).FeeSched);
 				}
 				else{
