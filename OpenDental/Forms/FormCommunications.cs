@@ -107,7 +107,7 @@ namespace OpenDental{
 			this.butStationary.Name = "butStationary";
 			this.butStationary.Size = new System.Drawing.Size(90,25);
 			this.butStationary.TabIndex = 54;
-			this.butStationary.Text = "Stationary";
+			this.butStationary.Text = "Stationery";
 			this.toolTip1.SetToolTip(this.butStationary,resources.GetString("butStationary.ToolTip"));
 			this.butStationary.Click += new System.EventHandler(this.butStationary_Click);
 			// 
