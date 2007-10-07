@@ -83,7 +83,7 @@ namespace OpenDental{
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
 			this.butCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.butCancel.Location = new System.Drawing.Point(673,396);
+			this.butCancel.Location = new System.Drawing.Point(637,396);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75,26);
 			this.butCancel.TabIndex = 4;
@@ -98,7 +98,7 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(673,362);
+			this.butOK.Location = new System.Drawing.Point(637,362);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75,26);
 			this.butOK.TabIndex = 3;
@@ -175,7 +175,7 @@ namespace OpenDental{
 			// 
 			// listBillType
 			// 
-			this.listBillType.Location = new System.Drawing.Point(381,69);
+			this.listBillType.Location = new System.Drawing.Point(335,69);
 			this.listBillType.Name = "listBillType";
 			this.listBillType.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
 			this.listBillType.Size = new System.Drawing.Size(158,186);
@@ -183,7 +183,7 @@ namespace OpenDental{
 			// 
 			// label2
 			// 
-			this.label2.Location = new System.Drawing.Point(378,25);
+			this.label2.Location = new System.Drawing.Point(332,25);
 			this.label2.Name = "label2";
 			this.label2.Size = new System.Drawing.Size(176,16);
 			this.label2.TabIndex = 14;
@@ -233,7 +233,7 @@ namespace OpenDental{
 			// 
 			// listProv
 			// 
-			this.listProv.Location = new System.Drawing.Point(590,69);
+			this.listProv.Location = new System.Drawing.Point(544,69);
 			this.listProv.Name = "listProv";
 			this.listProv.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
 			this.listProv.Size = new System.Drawing.Size(163,186);
@@ -241,7 +241,7 @@ namespace OpenDental{
 			// 
 			// label3
 			// 
-			this.label3.Location = new System.Drawing.Point(587,25);
+			this.label3.Location = new System.Drawing.Point(541,25);
 			this.label3.Name = "label3";
 			this.label3.Size = new System.Drawing.Size(104,16);
 			this.label3.TabIndex = 38;
@@ -251,7 +251,7 @@ namespace OpenDental{
 			// checkProvAll
 			// 
 			this.checkProvAll.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkProvAll.Location = new System.Drawing.Point(590,46);
+			this.checkProvAll.Location = new System.Drawing.Point(544,46);
 			this.checkProvAll.Name = "checkProvAll";
 			this.checkProvAll.Size = new System.Drawing.Size(145,18);
 			this.checkProvAll.TabIndex = 40;
@@ -261,7 +261,7 @@ namespace OpenDental{
 			// checkBillTypesAll
 			// 
 			this.checkBillTypesAll.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkBillTypesAll.Location = new System.Drawing.Point(381,46);
+			this.checkBillTypesAll.Location = new System.Drawing.Point(335,46);
 			this.checkBillTypesAll.Name = "checkBillTypesAll";
 			this.checkBillTypesAll.Size = new System.Drawing.Size(145,18);
 			this.checkBillTypesAll.TabIndex = 41;
@@ -273,7 +273,7 @@ namespace OpenDental{
 			this.AcceptButton = this.butOK;
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.CancelButton = this.butCancel;
-			this.ClientSize = new System.Drawing.Size(778,450);
+			this.ClientSize = new System.Drawing.Size(742,450);
 			this.Controls.Add(this.checkBillTypesAll);
 			this.Controls.Add(this.checkProvAll);
 			this.Controls.Add(this.listProv);
