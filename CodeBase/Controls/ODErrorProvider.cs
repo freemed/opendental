@@ -9,13 +9,17 @@ namespace CodeBase {
 	public class ODErrorProvider {
 
 		///<summary>Made public so an owning control or form can set the desired error color.</summary>
-		public Color errorColor=Color.Red;
+		public Color errorForeColor=Color.Black;
+		///<summary>Made public so an owning control or form can set the desired error color.</summary>
+		public Color errorBackColor=Color.Yellow;
 		///<summary>Our list of controls and their associated errors.</summary>
 		private ArrayList controls=new ArrayList();
 		///<summary>List of associated error messages for the controls.</summary>
 		private ArrayList controlMessages=new ArrayList();
+		///<summary>Stores old foreground colors for text-boxes, so that when the error is cleared, the box can be returned to its original state.</summary>
+		private ArrayList controlForeColors=new ArrayList();
 		///<summary>Stores old background colors for text-boxes, so that when the error is cleared, the box can be returned to its original state.</summary>
-		private ArrayList controlColors=new ArrayList();
+		private ArrayList controlBackColors=new ArrayList();
 
 		///<summary>Sets the error description string for the specified control. If the string length is greater than zero, then an error is visually indicated to the user. If the string length is zero or null, there is considered to be no error associated with the given control. </summary>
 		public void SetError(Control control,string value){
@@ -24,22 +28,28 @@ namespace CodeBase {
 				//Add the control and the error text.
 				controls.Add(control);
 				controlMessages.Add(value);
-				if(control!=null){
-					controlColors.Add(control.ForeColor);
-				}else{
-					controlColors.Add(Color.White);
+				if(control==null){
+					controlForeColors.Add(Color.White);
+					controlBackColors.Add(Color.White);
+				}
+				else{
+					controlForeColors.Add(control.ForeColor);
+					controlBackColors.Add(control.BackColor);
 				}
 				controlIndex=controls.Count-1;
-			}else{//Control was found.
-				//Update the error text.
-				controlMessages[controlIndex]=value;
+			}
+			else{//Control was found.
+				controlMessages[controlIndex]=value;//Update the error text.
 			}
 			//At this point, controlIndex is always set to a valid index.
 			if(control!=null){
 				if(value==null || value==""){//Clear the error condition.
-					control.ForeColor=(Color)controlColors[controlIndex];
-				}else{//Set the error condition.
-					control.ForeColor=errorColor;
+					control.ForeColor=(Color)controlForeColors[controlIndex];
+					control.BackColor=(Color)controlBackColors[controlIndex];
+				}
+				else{//Set the error condition.
+					control.ForeColor=errorForeColor;
+					control.BackColor=errorBackColor;
 				}
 			}
 		}
