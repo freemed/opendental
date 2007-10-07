@@ -1185,7 +1185,7 @@ namespace OpenDental{
 			command+=
 				"FROM patient "//actually only gets guarantors since others are 0.
 				+"LEFT JOIN commlog ON patient.PatNum=commlog.PatNum "
-				+"AND CommType='1' ";
+				+"AND IsStatementSent=1 ";
 			if(includeChanged){
 				command+="LEFT JOIN templastproc ON patient.PatNum=templastproc.Guarantor "
 					+"LEFT JOIN templastpay ON patient.PatNum=templastpay.Guarantor ";
