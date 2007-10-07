@@ -1,3 +1,4 @@
+
 using System;
 using System.Collections;
 using System.Drawing;
@@ -80,6 +81,11 @@ namespace OpenDentBusiness{
 			p.NationalProvID=NationalProvID;
 			p.CanadianOfficeNum=CanadianOfficeNum;
 			return p;
+		}
+
+		///<summary></summary>
+		public string GetNameLF() {
+			return LName+", "+FName;
 		}
 
 	}

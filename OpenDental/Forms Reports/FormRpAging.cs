@@ -21,11 +21,14 @@ namespace OpenDental{
 		private System.Windows.Forms.RadioButton radio30;
 		private System.Windows.Forms.RadioButton radio90;
 		private System.Windows.Forms.RadioButton radio60;
-		private OpenDental.UI.Button butAll;
 		private System.Windows.Forms.CheckBox checkIncludeNeg;
 		private System.Windows.Forms.GroupBox groupBox2;
 		private System.Windows.Forms.CheckBox checkOnlyNeg;
 		private System.Windows.Forms.CheckBox checkExcludeInactive;
+		private ListBox listProv;
+		private Label label3;
+		private CheckBox checkProvAll;
+		private CheckBox checkBillTypesAll;
 		private System.Windows.Forms.RadioButton radioAny;
 
 		///<summary></summary>
@@ -59,11 +62,14 @@ namespace OpenDental{
 			this.textDate = new OpenDental.ValidDate();
 			this.listBillType = new System.Windows.Forms.ListBox();
 			this.label2 = new System.Windows.Forms.Label();
-			this.butAll = new OpenDental.UI.Button();
 			this.checkIncludeNeg = new System.Windows.Forms.CheckBox();
 			this.groupBox2 = new System.Windows.Forms.GroupBox();
 			this.checkOnlyNeg = new System.Windows.Forms.CheckBox();
 			this.checkExcludeInactive = new System.Windows.Forms.CheckBox();
+			this.listProv = new System.Windows.Forms.ListBox();
+			this.label3 = new System.Windows.Forms.Label();
+			this.checkProvAll = new System.Windows.Forms.CheckBox();
+			this.checkBillTypesAll = new System.Windows.Forms.CheckBox();
 			this.groupBox1.SuspendLayout();
 			this.groupBox2.SuspendLayout();
 			this.SuspendLayout();
@@ -71,12 +77,13 @@ namespace OpenDental{
 			// butCancel
 			// 
 			this.butCancel.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.butCancel.Autosize = true;
 			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
 			this.butCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.butCancel.Location = new System.Drawing.Point(466,375);
+			this.butCancel.Location = new System.Drawing.Point(673,396);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75,26);
 			this.butCancel.TabIndex = 4;
@@ -86,11 +93,12 @@ namespace OpenDental{
 			// butOK
 			// 
 			this.butOK.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.butOK.Autosize = true;
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(466,341);
+			this.butOK.Location = new System.Drawing.Point(673,362);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75,26);
 			this.butOK.TabIndex = 3;
@@ -167,7 +175,7 @@ namespace OpenDental{
 			// 
 			// listBillType
 			// 
-			this.listBillType.Location = new System.Drawing.Point(380,45);
+			this.listBillType.Location = new System.Drawing.Point(381,69);
 			this.listBillType.Name = "listBillType";
 			this.listBillType.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
 			this.listBillType.Size = new System.Drawing.Size(158,186);
@@ -179,22 +187,8 @@ namespace OpenDental{
 			this.label2.Name = "label2";
 			this.label2.Size = new System.Drawing.Size(176,16);
 			this.label2.TabIndex = 14;
-			this.label2.Text = "Billing Types:";
+			this.label2.Text = "Billing Types";
 			this.label2.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
-			// 
-			// butAll
-			// 
-			this.butAll.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butAll.Autosize = true;
-			this.butAll.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butAll.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butAll.CornerRadius = 4F;
-			this.butAll.Location = new System.Drawing.Point(380,237);
-			this.butAll.Name = "butAll";
-			this.butAll.Size = new System.Drawing.Size(75,26);
-			this.butAll.TabIndex = 16;
-			this.butAll.Text = "&All";
-			this.butAll.Click += new System.EventHandler(this.butAll_Click);
 			// 
 			// checkIncludeNeg
 			// 
@@ -237,15 +231,55 @@ namespace OpenDental{
 			this.checkExcludeInactive.TabIndex = 19;
 			this.checkExcludeInactive.Text = "Exclude inactive patients";
 			// 
+			// listProv
+			// 
+			this.listProv.Location = new System.Drawing.Point(590,69);
+			this.listProv.Name = "listProv";
+			this.listProv.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
+			this.listProv.Size = new System.Drawing.Size(163,186);
+			this.listProv.TabIndex = 39;
+			// 
+			// label3
+			// 
+			this.label3.Location = new System.Drawing.Point(587,25);
+			this.label3.Name = "label3";
+			this.label3.Size = new System.Drawing.Size(104,16);
+			this.label3.TabIndex = 38;
+			this.label3.Text = "Providers";
+			this.label3.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
+			// 
+			// checkProvAll
+			// 
+			this.checkProvAll.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.checkProvAll.Location = new System.Drawing.Point(590,46);
+			this.checkProvAll.Name = "checkProvAll";
+			this.checkProvAll.Size = new System.Drawing.Size(145,18);
+			this.checkProvAll.TabIndex = 40;
+			this.checkProvAll.Text = "All";
+			this.checkProvAll.Click += new System.EventHandler(this.checkProvAll_Click);
+			// 
+			// checkBillTypesAll
+			// 
+			this.checkBillTypesAll.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.checkBillTypesAll.Location = new System.Drawing.Point(381,46);
+			this.checkBillTypesAll.Name = "checkBillTypesAll";
+			this.checkBillTypesAll.Size = new System.Drawing.Size(145,18);
+			this.checkBillTypesAll.TabIndex = 41;
+			this.checkBillTypesAll.Text = "All";
+			this.checkBillTypesAll.Click += new System.EventHandler(this.checkBillTypesAll_Click);
+			// 
 			// FormRpAging
 			// 
 			this.AcceptButton = this.butOK;
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.CancelButton = this.butCancel;
-			this.ClientSize = new System.Drawing.Size(573,421);
+			this.ClientSize = new System.Drawing.Size(778,450);
+			this.Controls.Add(this.checkBillTypesAll);
+			this.Controls.Add(this.checkProvAll);
+			this.Controls.Add(this.listProv);
+			this.Controls.Add(this.label3);
 			this.Controls.Add(this.checkExcludeInactive);
 			this.Controls.Add(this.groupBox2);
-			this.Controls.Add(this.butAll);
 			this.Controls.Add(this.textDate);
 			this.Controls.Add(this.butCancel);
 			this.Controls.Add(this.butOK);
@@ -283,12 +317,36 @@ namespace OpenDental{
 			for(int i=0;i<DefB.Short[(int)DefCat.BillingTypes].Length;i++){
 				listBillType.Items.Add(DefB.Short[(int)DefCat.BillingTypes][i].ItemName);
 			}
-			listBillType.SelectedIndex=0;
+			if(listBillType.Items.Count>0){
+				listBillType.SelectedIndex=0;
+			}
+			listBillType.Visible=false;
+			checkBillTypesAll.Checked=true;
+			for(int i=0;i<Providers.List.Length;i++){
+				listProv.Items.Add(Providers.List[i].GetNameLF());
+			}
+			if(listProv.Items.Count>0) {
+				listProv.SelectedIndex=0;
+			}
+			checkProvAll.Checked=true;
+			listProv.Visible=false;
 		}
 
-		private void butAll_Click(object sender, System.EventArgs e) {
-			for(int i=0;i<listBillType.Items.Count;i++){
-				listBillType.SetSelected(i,true);
+		private void checkBillTypesAll_Click(object sender,EventArgs e) {
+			if(checkBillTypesAll.Checked){
+				listBillType.Visible=false;
+			}
+			else{
+				listBillType.Visible=true;
+			}
+		}
+
+		private void checkProvAll_Click(object sender,EventArgs e) {
+			if(checkProvAll.Checked) {
+				listProv.Visible=false;
+			}
+			else {
+				listProv.Visible=true;
 			}
 		}
 
@@ -305,8 +363,12 @@ namespace OpenDental{
 		}
 
 		private void butOK_Click(object sender, System.EventArgs e) {
-			if(listBillType.SelectedIndices.Count==0){
-				MessageBox.Show(Lan.g(this,"At least one billing type must be selected."));
+			if(!checkBillTypesAll.Checked && listBillType.SelectedIndices.Count==0){
+				MsgBox.Show(this,"At least one billing type must be selected.");
+				return;
+			}
+			if(!checkProvAll.Checked && listProv.SelectedIndices.Count==0) {
+				MsgBox.Show(this,"At least one provider must be selected.");
 				return;
 			}
 			Queries.CurReport=new ReportOld();
@@ -345,21 +407,31 @@ namespace OpenDental{
 				}
 				Queries.CurReport.Query+=") ";
 			}
-			for(int i=0;i<listBillType.SelectedIndices.Count;i++){
-				if(i==0){
-					Queries.CurReport.Query+=" AND (billingtype = '";
+			if(!checkBillTypesAll.Checked){
+				for(int i=0;i<listBillType.SelectedIndices.Count;i++) {
+					if(i==0) {
+						Queries.CurReport.Query+=" AND (billingtype = ";
+					}
+					else {
+						Queries.CurReport.Query+=" OR billingtype = ";
+					}
+					Queries.CurReport.Query+=POut.PInt(DefB.Short[(int)DefCat.BillingTypes][listBillType.SelectedIndices[i]].DefNum);
 				}
-				else{
-					Queries.CurReport.Query+=" OR billingtype = '";
-				}
-				Queries.CurReport.Query+=
-					DefB.Short[(int)DefCat.BillingTypes][listBillType.SelectedIndices[i]].DefNum.ToString()+"'";
+				Queries.CurReport.Query+=") ";
 			}
-			Queries.CurReport.Query+=") ";
-			
+			if(!checkProvAll.Checked) {
+				for(int i=0;i<listProv.SelectedIndices.Count;i++) {
+					if(i==0) {
+						Queries.CurReport.Query+=" AND (PriProv = ";
+					}
+					else {
+						Queries.CurReport.Query+=" OR PriProv = ";
+					}
+					Queries.CurReport.Query+=POut.PInt(Providers.List[listProv.SelectedIndices[i]].ProvNum);
+				}
+				Queries.CurReport.Query+=") ";
+			}
 			Queries.CurReport.Query+="ORDER BY LName,FName";
-
-
 			FormQuery2=new FormQuery();
 			FormQuery2.IsReport=true;
 			FormQuery2.SubmitReportQuery();		
@@ -427,6 +499,8 @@ namespace OpenDental{
 		private void butCancel_Click(object sender, System.EventArgs e) {
 		
 		}
+
+		
 
 		
 
