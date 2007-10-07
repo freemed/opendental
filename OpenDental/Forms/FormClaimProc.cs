@@ -1492,8 +1492,15 @@ namespace OpenDental
 		///<summary>Fills the carrier allowed amount.  Called from FillInitialAmounts and from butUpdateAllowed_Click</summary>
 		private void FillAllowed(){
 			if(IsProc){
+				string toothnum;
+				if(proc==null){
+					toothnum=Procedures.GetToothNum(ClaimProcCur.ProcNum);
+				}
+				else{
+					toothnum=proc.ToothNum;
+				}
 				CarrierAllowedAmount=InsPlans.GetAllowed(ProcedureCodes.GetStringProcCode(ProcCodeNum),ClaimProcCur.PlanNum,PlanList,
-					proc.ToothNum,ClaimProcCur.ProvNum);
+					toothnum,ClaimProcCur.ProvNum);
 				if(CarrierAllowedAmount==-1){
 					textCarrierAllowed.Text="";
 				}

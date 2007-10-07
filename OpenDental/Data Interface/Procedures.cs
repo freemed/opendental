@@ -581,6 +581,16 @@ namespace OpenDental{
 			return PIn.PDouble(table.Rows[0][0].ToString());
 		}
 
+		///<summary>Used once in FormClaimProc.</summary>
+		public static string GetToothNum(int procNum){
+			string command="SELECT ToothNum FROM procedurelog WHERE ProcNum="+POut.PInt(procNum);
+			DataTable table=General.GetTable(command);
+			if(table.Rows.Count==0) {
+				return "";
+			}
+			return PIn.PString(table.Rows[0][0].ToString());
+		}
+
 		///<summary>After changing important coverage plan info, this is called to recompute estimates for all procedures for this patient.</summary>
 		public static void ComputeEstimatesForAll(int patNum,ClaimProc[] claimProcs,Procedure[] procs,InsPlan[] PlanList,PatPlan[] patPlans,Benefit[] benefitList)
 		{
