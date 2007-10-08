@@ -5957,7 +5957,9 @@ namespace OpenDental{
 					+ "'" + POut.PInt((int)ToolBarsAvail.FamilyModule) + "', "
 					+ "'PT Update')";
 				General.NonQEx(command);
-
+				//after r929
+				command="ALTER TABLE patient ADD Title VARCHAR(15)";
+				General.NonQEx(command);
 
 
 

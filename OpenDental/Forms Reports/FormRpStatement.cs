@@ -602,7 +602,7 @@ namespace OpenDental{
 				yPos=225 + 1;//+10
 				xPos=62.5F+12.5F;
 				//We do not show the preferred name on statements, just the actual name.
-				g.DrawString(PatGuar.FName+" "+PatGuar.LName,font,brush,xPos,yPos);
+				g.DrawString(PatGuar.GetNameFLFormal(),font,brush,xPos,yPos);
 				yPos+=19;
 				g.DrawString(PatGuar.Address,font,brush,xPos,yPos);	    
 				yPos+=19;

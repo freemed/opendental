@@ -38,26 +38,10 @@ namespace OpenDental{
 					"SELECT patient.*,CASE WHEN PatNum=Guarantor THEN 0 ELSE 1 END AS isguarantor "
 					+"FROM patient "
 					+"WHERE Guarantor = '"+table.Rows[0][0].ToString()+"'"
-					+" ORDER BY 67,Birthdate";//just asking for bugs
+					+" ORDER BY 68,Birthdate";//just asking for bugs
 			}
 			Family fam=new Family();
-			//MessageBox.Show(command);
 			fam.List=SubmitAndFill(command);
-			//sort the list. This is required due to limitations in Oracle.
-			/*for(int i=0;i<fam.List.Length;i++){
-				if(i==0){
-					continue;
-				}
-				if(fam.List[i].PatNum==fam.List[i].Guarantor){
-					Patient guarantor=fam.List[i].Copy();
-					//move all the other patients down.  Work from the bottom up.
-					for(int j=i-1;j>=0;j--){
-						fam.List[j+1]=fam.List[j].Copy();
-					}
-					//then put the guar on top
-					fam.List[0]=guarantor.Copy();
-				}
-			}*/
 			return fam;
 		}
 
@@ -143,6 +127,7 @@ namespace OpenDental{
 				retVal[i].SchedDayOfWeek= PIn.PInt(table.Rows[i][63].ToString());
 				retVal[i].Language     = PIn.PString(table.Rows[i][64].ToString());
 				retVal[i].AdmitDate    = PIn.PDate  (table.Rows[i][65].ToString());
+				retVal[i].Title        = PIn.PString(table.Rows[i][66].ToString());
 				//WARNING.  If you add any rows, you MUST change the number in GetFamily(). Always last num above +2.
 			}
 			return retVal;
@@ -167,7 +152,7 @@ namespace OpenDental{
 				+",EmployerNum,EmploymentNote,Race,County,GradeSchool,GradeLevel,Urgency,DateFirstVisit"
 				+",ClinicNum,HasIns,TrophyFolder,PlannedIsDone,Premed,Ward,PreferConfirmMethod,PreferContactMethod,PreferRecallMethod"
 				+",SchedBeforeTime,SchedAfterTime"
-				+",SchedDayOfWeek,Language,AdmitDate) VALUES(";
+				+",SchedDayOfWeek,Language,AdmitDate,Title) VALUES(";
 			if(includePatNum || PrefB.RandomKeys) {
 				command+="'"+POut.PInt(pat.PatNum)+"', ";
 			}
@@ -234,7 +219,8 @@ namespace OpenDental{
 				+POut.PDateT(pat.SchedAfterTime)+", "
 				+"'"+POut.PInt(pat.SchedDayOfWeek)+"', "
 				+"'"+POut.PString(pat.Language)+"', "
-				+POut.PDate(pat.AdmitDate)+")";
+				+POut.PDate(pat.AdmitDate)+", "
+				+"'"+POut.PString(pat.Title)+"')";
 			if(PrefB.RandomKeys) {
 				General.NonQ(command);
 			}
@@ -629,6 +615,12 @@ namespace OpenDental{
 				c+="AdmitDate = "     +POut.PDate(pat.AdmitDate);
 				comma=true;
 			}
+			if(pat.Title!=CurOld.Title) {
+				if(comma)
+					c+=",";
+				c+="Title = '"     +POut.PString(pat.Title)+"'";
+				comma=true;
+			}
 			if(!comma)
 				return 0;//this means no change is actually required.
 			c+=" WHERE PatNum = '"   +POut.PInt(pat.PatNum)+"'";
@@ -745,22 +737,6 @@ namespace OpenDental{
 				r[14]=table.Rows[i][14].ToString();//State
 				r[15]=Providers.GetNameLF(PIn.PInt(table.Rows[i][15].ToString()));//PriProv
 				PtDataTable.Rows.Add(r);
-
-				/*
-				PtList[i].PatNum     = PIn.PInt   (table.Rows[i][0].ToString());
-				PtList[i].LName      = PIn.PString(table.Rows[i][1].ToString());
-				PtList[i].FName      = PIn.PString(table.Rows[i][2].ToString());
-				PtList[i].MiddleI    = PIn.PString(table.Rows[i][3].ToString());
-				PtList[i].Preferred  = PIn.PString(table.Rows[i][4].ToString());
-				PtList[i].Age        = Shared.DateToAge(PIn.PDate  (table.Rows[i][5].ToString()));
-				PtList[i].SSN        = PIn.PString(table.Rows[i][6].ToString());
-				PtList[i].HmPhone    = PIn.PString(table.Rows[i][7].ToString());
-				PtList[i].Address    = PIn.PString(table.Rows[i][8].ToString());
-				PtList[i].PatStatus  = (PatientStatus)PIn.PInt(table.Rows[i][9].ToString());
-				PtList[i].BillingType= PIn.PInt(table.Rows[i][10].ToString());
-				//chartnumber
-				//city
-				//state*/
 			}
 			return PtDataTable;//retval;//if true, there are more rows.
 		}
@@ -853,7 +829,8 @@ namespace OpenDental{
 				multPats[i].SchedAfterTime= PIn.PDateT(table.Rows[i][62].ToString());
 				multPats[i].SchedDayOfWeek= PIn.PInt(table.Rows[i][63].ToString());
 				multPats[i].Language     = PIn.PString(table.Rows[i][64].ToString());
-				multPats[i].AdmitDate    = PIn.PDate  (table.Rows[i][65].ToString());
+				multPats[i].AdmitDate    = PIn.PDate(table.Rows[i][65].ToString());
+				multPats[i].Title        = PIn.PString(table.Rows[i][66].ToString());
 			}
 			return multPats;
 		}

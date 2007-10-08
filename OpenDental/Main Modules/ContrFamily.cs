@@ -491,6 +491,11 @@ namespace OpenDental{
 			row.Cells.Add(Lan.g("TablePatient","Preferred"));
 			row.Cells.Add(PatCur.Preferred);
 			gridPat.Rows.Add(row);
+			//Title
+			row=new ODGridRow();
+			row.Cells.Add(Lan.g("TablePatient","Title"));
+			row.Cells.Add(PatCur.Title);
+			gridPat.Rows.Add(row);
 			//Salutation
 			row=new ODGridRow();
 			row.Cells.Add(Lan.g("TablePatient","Salutation"));

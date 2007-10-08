@@ -139,104 +139,62 @@ namespace OpenDentBusiness{
 		public string Language;
 		///<summary>Used in hospitals.  It can be before the first visit date.  It typically gets set automatically by the hospital system.</summary>
 		public DateTime AdmitDate;
+		///<summary>Includes any punctuation.  For example, Mr., Mrs., Miss, Dr., etc.  There is no selection mechanism yet for user; they must simply type it in.</summary>
+		public string Title;
 
 		//<summary>Decided not to add since this data is already available and synchronizing would take too much time.  Will add later.  Not editable. If the patient happens to have a future appointment, this will contain the date of that appointment.  Once appointment is set complete, this date is deleted.  If there is more than one appointment scheduled, this will only contain the earliest one.  Used mostly to exclude patients from recall lists.  If you want all future appointments, use Appointments.GetForPat() instead. You can loop through that list and exclude appointments with dates earlier than today.</summary>
 		//public DateTime DateScheduled;
 
 		///<summary>Returns a copy of this Patient.</summary>
 		public Patient Copy(){
-			Patient p=new Patient();
-			p.PatNum=PatNum;
-			p.LName=LName;
-			p.FName=FName;
-			p.MiddleI=MiddleI;
-			p.Preferred=Preferred;
-			p.PatStatus=PatStatus;
-			p.Gender=Gender;
-			p.Position=Position;
-			p.Birthdate=Birthdate;
-			p.SSN=SSN;
-			p.Address=Address;
-			p.Address2=Address2;
-			p.City=City;
-			p.State=State;
-			p.Zip=Zip;
-			p.HmPhone=HmPhone;
-			p.WkPhone=WkPhone;
-			p.WirelessPhone=WirelessPhone;
-			p.Guarantor=Guarantor;
-			p.Age=Age;
-			p.CreditType=CreditType;
-			p.Email=Email;
-			p.Salutation=Salutation;
-			p.EstBalance=EstBalance;
-			p.NextAptNum=NextAptNum;
-			p.PriProv=PriProv;
-			p.SecProv=SecProv;
-			p.FeeSched=FeeSched;
-			p.BillingType=BillingType;
-			p.ImageFolder=ImageFolder;
-			p.AddrNote=AddrNote;
-			p.FamFinUrgNote=FamFinUrgNote;
-			p.MedUrgNote=MedUrgNote;
-			p.ApptModNote=ApptModNote;
-			p.StudentStatus=StudentStatus;
-			p.SchoolName=SchoolName;
-			p.ChartNumber=ChartNumber;
-			p.MedicaidID=MedicaidID;
-			p.Bal_0_30=Bal_0_30;
-			p.Bal_31_60=Bal_31_60;
-			p.Bal_61_90=Bal_61_90;
-			p.BalOver90=BalOver90;
-			p.InsEst=InsEst;
-			//p.PrimaryTeeth=PrimaryTeeth;
-			p.BalTotal=BalTotal;
-			p.EmployerNum=EmployerNum;
-			p.EmploymentNote=EmploymentNote;
-			p.Race=Race;
-			p.County=County;
-			p.GradeSchool=GradeSchool;
-			p.GradeLevel=GradeLevel;
-			p.Urgency=Urgency;
-			p.DateFirstVisit=DateFirstVisit;
-			p.ClinicNum=ClinicNum;
-			p.HasIns=HasIns;
-			p.TrophyFolder=TrophyFolder;
-			p.PlannedIsDone=PlannedIsDone;
-			p.Premed=Premed;
-			p.Ward=Ward;
-			p.PreferConfirmMethod=PreferConfirmMethod;
-			p.PreferContactMethod=PreferContactMethod;
-			p.PreferRecallMethod=PreferRecallMethod;
-			p.SchedBeforeTime=SchedBeforeTime;
-			p.SchedAfterTime=SchedAfterTime;
-			p.SchedDayOfWeek=SchedDayOfWeek;
-			p.Language=Language;
-			p.AdmitDate=AdmitDate;
-			return p;
+			return (Patient)this.MemberwiseClone();
 		}
 
 		///<summary>Returns a formatted name, Last, First.</summary>
 		public string GetNameLF(){
-			if(Preferred=="")
-				return LName+", "+FName+" "+MiddleI;
-			else
-				return LName+", '"+Preferred+"' "+FName+" "+MiddleI;
+			string retVal="";
+			if(Title!=""){
+			//	retVal+=Title+" ";
+			}
+			retVal+=LName+", ";
+			if(Preferred!=""){
+				retVal+="'"+Preferred+"' ";
+			}
+			retVal+=FName;
+			if(MiddleI!=""){
+				retVal+=" "+MiddleI;
+			}
+			return retVal;
 		}
 
 		///<summary></summary>
 		public string GetNameFL(){
-			if(Preferred=="")
-				return FName+" "+MiddleI+" "+LName;
-			else
-				return FName+" '"+Preferred+"' "+MiddleI+" "+LName;
+			string retVal="";
+			if(Title!="") {
+				//retVal+=Title+" ";
+			}
+			retVal+=FName+" ";
+			if(Preferred!="") {
+				retVal+="'"+Preferred+"' ";
+			}
+			if(MiddleI!=""){
+				retVal+=MiddleI+" ";
+			}
+			retVal+=LName;
+			return retVal;
 		}
 
 		///<summary></summary>
 		public string GetNameFLFormal() {
-			return FName+" "+MiddleI+" "+LName;
+			string retVal="";
+			if(Title!="") {
+				retVal+=Title+" ";
+			}
+			retVal+=FName+" "+MiddleI+" "+LName;
+			return retVal;
 		}
 
+		/*
 		///<summary></summary>
 		public string GetCreditIns(){
 			string retStr="";
@@ -245,7 +203,7 @@ namespace OpenDentBusiness{
 			else retStr+=CreditType;
 			retStr+=HasIns;
 			return retStr;
-		}
+		}*/
 
 		
 
