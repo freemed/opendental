@@ -196,11 +196,34 @@ namespace OpenDental{
 				MsgBox.Show(this,"At least one provider must be selected.");
 				return;
 			}
-			//if(listPayType.SelectedIndices.Count==0 && !checkIncludeIns.Checked) {
-			//	MsgBox.Show(this,"Must either select a payment type and/or include insurance checks.");
-			//	return;
-			//}
 			string whereProv;
+			if(checkAllProv.Checked) {
+				whereProv="";
+			}
+			else {
+				whereProv="AND (";
+				for(int i=0;i<listProv.SelectedIndices.Count;i++) {
+					if(i>0) {
+						whereProv+="OR ";
+					}
+					whereProv+="claimproc.ProvNum = '"
+					+POut.PInt(Providers.List[listProv.SelectedIndices[i]].ProvNum)+"' ";
+				}
+				whereProv+=")";
+			}
+			string queryIns=@"SELECT claimproc.DateCP,CONCAT(CONCAT(CONCAT(CONCAT(patient.LName,', '),patient.FName),' '),patient.MiddleI) lfname,
+				carrier.CarrierName,provider.Abbr,claimpayment.CheckNum,SUM(claimproc.InsPayAmt) amt,claimproc.ClaimNum 
+				FROM claimproc,insplan,patient,carrier,provider,claimpayment 
+				WHERE claimproc.ClaimPaymentNum = claimpayment.ClaimPaymentNum 
+				AND provider.ProvNum=claimproc.ProvNum 
+				AND claimproc.PlanNum = insplan.PlanNum 
+				AND claimproc.PatNum = patient.PatNum 
+				AND carrier.CarrierNum = insplan.CarrierNum "
+				+whereProv+" "
+				+"AND (claimproc.Status=1 OR claimproc.Status=4) " //received or supplemental
+				+"AND claimpayment.CheckDate >= "+POut.PDate(date1.SelectionStart)+" "
+				+"AND claimpayment.CheckDate <= "+POut.PDate(date2.SelectionStart)+" "
+				+"GROUP BY claimproc.ClaimPaymentNum,provider.ProvNum";
 			if(checkAllProv.Checked){
 				whereProv="";
 			}
@@ -215,154 +238,25 @@ namespace OpenDental{
 				}
 				whereProv+=")";
 			}
-			/*string whereType="(";
-			for(int i=0;i<listPayType.SelectedIndices.Count;i++) {
-				if(i>0) {
-					whereType+="OR ";
-				}
-				whereType+="payment.PayType = '"
-					+POut.PInt(DefB.Short[(int)DefCat.PaymentTypes][listPayType.SelectedIndices[i]].DefNum)+"' ";
-			}
-			whereType+=")";*/
-			Queries.CurReport=new ReportOld();
-			Queries.CurReport.Query="(SELECT "
-				+"paysplit.DatePay AS mydate,"//0. Date
-				+"CONCAT(CONCAT(CONCAT(CONCAT(patient.LName,', '),patient.FName),' '),patient.MiddleI) AS plfname,"//1. name
-				+"'                                                 ',"//2. Carrier. this is long so union won't get trunc.
-				+"payment.PayType,"//3. paytype
-				+"provider.Abbr,"//4. Prov
-				+"payment.CheckNum,"//5. CheckNum
-				+"SUM(paysplit.SplitAmt) $amt, "//6. amt
-				+"payment.PayNum "//7. PayNum. Not visible
-				+"FROM payment,patient,provider,paysplit "
-				+"WHERE ";
-			//if(listPayType.SelectedIndices.Count==0){ 
-			//	Queries.CurReport.Query+="1=0 ";//none
-			//}
-			//else{
-				Queries.CurReport.Query+=
-					"payment.PayNum=paysplit.PayNum "
-					+"AND patient.PatNum=paysplit.PatNum "
-					+"AND provider.ProvNum=paysplit.ProvNum "
-					+whereProv+" "
-					//+"AND "+whereType+" "
-					+"AND paysplit.DatePay >= "+POut.PDate(date1.SelectionStart)+" "
-					+"AND paysplit.DatePay <= "+POut.PDate(date2.SelectionStart)+" ";
-			//}
-			Queries.CurReport.Query+="GROUP BY payment.PayNum,patient.PatNum,provider.ProvNum)";
-			//if(checkIncludeIns.Checked){
-				if(checkAllProv.Checked) {
-					whereProv="";
-				}
-				else {
-					whereProv="AND (";
-					for(int i=0;i<listProv.SelectedIndices.Count;i++) {
-						if(i>0) {
-							whereProv+="OR ";
-						}
-						whereProv+="claimproc.ProvNum = '"
-						+POut.PInt(Providers.List[listProv.SelectedIndices[i]].ProvNum)+"' ";
-					}
-					whereProv+=")";
-				}
-				Queries.CurReport.Query+=
-					" UNION ("
-					+"SELECT claimproc.DateCP AS mydate,"//0. Date
-					+"CONCAT(CONCAT(CONCAT(CONCAT(patient.LName,', '),patient.FName),' '),patient.MiddleI) AS plfname,"//1. Name
-					+"carrier.CarrierName,"//2. Carrier
-					+"'',"//3. PayType
-					+"provider.Abbr,"//4. Prov
-					+"claimpayment.CheckNum,"//5. CheckNum
-					+"SUM(claimproc.InsPayAmt), "//6. Amt
-					+"claimproc.ClaimNum "//7. Num(not visible)
-					+"FROM claimproc,insplan,patient,carrier,provider,claimpayment "
-					+"WHERE claimproc.ClaimPaymentNum = claimpayment.ClaimPaymentNum "
-					+"AND provider.ProvNum=claimproc.ProvNum "
-					+"AND claimproc.PlanNum = insplan.PlanNum "
-					+"AND claimproc.PatNum = patient.PatNum "
-					+"AND carrier.CarrierNum = insplan.CarrierNum "
-					+whereProv+" "
-					+"AND (claimproc.Status=1 OR claimproc.Status=4) "//received or supplemental
-					+"AND claimpayment.CheckDate >= "+POut.PDate(date1.SelectionStart)+" "
-					+"AND claimpayment.CheckDate <= "+POut.PDate(date2.SelectionStart)+" ";
-				//if(radioPatient.Checked){//by patient
-				//	Queries.CurReport.Query+="GROUP BY claimproc.ClaimNum,patient.PatNum,provider.ProvNum ";
-				//}
-				//else{//by check
-					Queries.CurReport.Query+="GROUP BY claimproc.ClaimPaymentNum,provider.ProvNum ";
-				//}
-				Queries.CurReport.Query+=
-					")";//end of union
-			//}//insurance section
-			Queries.CurReport.Query+=
-				//" ORDER BY mydate,PayType,plfname";//FIXME:UNION-ORDER-BY
-				" ORDER BY 1,4,2";
-			FormQuery2=new FormQuery();
-			FormQuery2.IsReport=true;
-			FormQuery2.SubmitReportQuery();			
-			Queries.CurReport.Title="Daily Payments";
-			Queries.CurReport.SubTitle=new string[5];
-			Queries.CurReport.SubTitle[0]=((Pref)PrefB.HList["PracticeTitle"]).ValueString;
-			Queries.CurReport.SubTitle[1]=date1.SelectionStart.ToString("d")+" - "+date2.SelectionStart.ToString("d");
-			//Queries.CurReport.SubTitle[2]=Lan.g(this,"Patient Payment Type(s): ");
-			//if(listPayType.SelectedIndices.Count==listPayType.Items.Count){
-			//	Queries.CurReport.SubTitle[2]+=Lan.g(this,"All");
-			//}
-			//else if(listPayType.SelectedIndices.Count==0){
-			//	Queries.CurReport.SubTitle[2]+=Lan.g(this,"None");
-			//}
-			//else{
-			/*	for(int i=0;i<listPayType.SelectedIndices.Count;i++) {
-					if(i>0){
-						Queries.CurReport.SubTitle[2]+=", ";
-					}
-					Queries.CurReport.SubTitle[2]
-						+=DefB.Short[(int)DefCat.PaymentTypes][listPayType.SelectedIndices[i]].ItemName;
-				}*/
-			//}
-			/*Queries.CurReport.SubTitle[3]=Lan.g(this,"Insurance Payments: ");
-			if(checkIncludeIns.Checked) {
-				Queries.CurReport.SubTitle[3]+="Included";
-			}
-			else{
-				Queries.CurReport.SubTitle[3]+="Not included";
-			}*/
-			Queries.CurReport.SubTitle[4]=Lan.g(this,"Providers: ");
-			if(listProv.SelectedIndices.Count==listProv.Items.Count) {
-				Queries.CurReport.SubTitle[4]+=Lan.g(this,"All");
-			}
-			else{
-				for(int i=0;i<listProv.SelectedIndices.Count;i++) {
-					if(i>0) {
-						Queries.CurReport.SubTitle[4]+=", ";
-					}
-					Queries.CurReport.SubTitle[4]+=Providers.List[listProv.SelectedIndices[i]].Abbr;
-				}
-			}
-			Queries.CurReport.ColPos=new int[9];
-			Queries.CurReport.ColCaption=new string[8];
-			Queries.CurReport.ColAlign=new HorizontalAlignment[8];
-			Queries.CurReport.ColPos[0]=20;
-			Queries.CurReport.ColPos[1]=100;
-			Queries.CurReport.ColPos[2]=200;
-			Queries.CurReport.ColPos[3]=380;
-			Queries.CurReport.ColPos[4]=470;
-			Queries.CurReport.ColPos[5]=540;
-			Queries.CurReport.ColPos[6]=640;
-			Queries.CurReport.ColPos[7]=700;
-			Queries.CurReport.ColPos[8]=900;//off the right edge
-			Queries.CurReport.ColCaption[0]="Date";
-			Queries.CurReport.ColCaption[1]="Patient Name";
-			Queries.CurReport.ColCaption[2]="Carrier";
-			Queries.CurReport.ColCaption[3]="Payment Type";
-			Queries.CurReport.ColCaption[4]="Provider";
-			Queries.CurReport.ColCaption[5]="Check #";
-			Queries.CurReport.ColCaption[6]="Amount";
-			Queries.CurReport.ColCaption[7]="Payment #";//not shown
-			Queries.CurReport.ColAlign[6]=HorizontalAlignment.Right;
-			Queries.CurReport.ColAlign[7]=HorizontalAlignment.Right;
-			Queries.CurReport.Summary=new string[0];
-			FormQuery2.ShowDialog();
+			string queryPat=@"SELECT paysplit.DatePay,CONCAT(CONCAT(CONCAT(CONCAT(patient.LName,', '),patient.FName),' '),patient.MiddleI) AS lfname,
+				payment.PayType,provider.Abbr,payment.CheckNum,
+				SUM(paysplit.SplitAmt) amt, payment.PayNum,ItemName 
+				FROM payment,patient,provider,paysplit,definition
+				WHERE payment.PayNum=paysplit.PayNum 
+				AND patient.PatNum=paysplit.PatNum 
+				AND provider.ProvNum=paysplit.ProvNum
+				AND definition.DefNum=payment.PayType "
+				+whereProv+" "
+				+"AND paysplit.DatePay >= "+POut.PDate(date1.SelectionStart)+" "
+				+"AND paysplit.DatePay <= "+POut.PDate(date2.SelectionStart)+" "
+				+"GROUP BY payment.PayNum,patient.PatNum,provider.ProvNum)";
+			string sourceRDL=Properties.Resources.PaymentsRDL;
+			
+			//more code to go here
+
+			FormReport FormR=new FormReport();
+			FormR.SourceRdlString=sourceRDL;
+			FormR.ShowDialog();
 			DialogResult=DialogResult.OK;		
 		}
 

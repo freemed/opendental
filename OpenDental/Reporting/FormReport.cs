@@ -30,7 +30,7 @@ namespace OpenDental{
 		private System.ComponentModel.IContainer components;
 		///<summary>Either this or SourceRdlString should be set before opening the form.</summary>
 		public string SourceFilePath;
-		///<summary>Either this or SourceRdlString should be set before opening the form.</summary>
+		///<summary>Either this or SourceFilePath should be set before opening the form.</summary>
 		public string SourceRdlString;
 
 		///<summary></summary>
