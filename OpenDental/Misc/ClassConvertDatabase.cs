@@ -5910,6 +5910,26 @@ namespace OpenDental{
 				command="UPDATE preference SET ValueString = '5.3.1.0' WHERE PrefName = 'DataBaseVersion'";
 				General.NonQEx(command);
 			}
+			To5_3_9();
+		}
+
+		private void To5_3_9() {
+			if(FromVersion<new Version("5.3.9.0")) {
+				string command;
+				command=@"SELECT AptNum FROM appointment WHERE Pattern=''";
+				DataTable table=General.GetTable(command);
+				for(int i=0;i<table.Rows.Count;i++) {
+					//detach all procedures
+					command="UPDATE procedurelog SET AptNum=0 WHERE AptNum="+table.Rows[i][0].ToString();
+					General.NonQ(command);
+					command="UPDATE procedurelog SET PlannedAptNum=0 WHERE PlannedAptNum="+table.Rows[i][0].ToString();
+					General.NonQ(command);
+					command="DELETE FROM appointment WHERE AptNum="+table.Rows[i][0].ToString();
+					General.NonQ(command);
+				}
+				command="UPDATE preference SET ValueString = '5.3.9.0' WHERE PrefName = 'DataBaseVersion'";
+				General.NonQEx(command);
+			}
 			To5_4_0();
 		}
 

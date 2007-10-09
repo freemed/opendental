@@ -2375,6 +2375,9 @@ namespace OpenDental{
 						pattern=pattern.Substring(0,newpatternL);
 					}
 				}
+				if(pattern==""){
+					pattern="///";
+				}
 				Appointments.SetPattern(PIn.PInt(TempApptSingle.DataRoww["AptNum"].ToString()),pattern);
 				ResizingAppt=false;
 				mouseIsDown=false;
