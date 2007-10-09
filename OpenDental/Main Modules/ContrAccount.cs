@@ -2340,9 +2340,10 @@ namespace OpenDental {
 					double insEst=ClaimProcs.ProcEstNotReceived(ClaimProcList,arrayProc[tempCountProc].ProcNum);
 					double insPay=ClaimProcs.ProcInsPay(ClaimProcList,arrayProc[tempCountProc].ProcNum);
 					double discount=0;
-					if(!PrefB.GetBool("BalancesDontSubtractIns")){//this is the typical situation
-						discount=Procedures.GetWriteOffC(arrayProc[tempCountProc],ClaimProcList);//this is for CapComplete and all other writeoffs
-					}
+					//if(!PrefB.GetBool("BalancesDontSubtractIns")){//this is the typical situation
+					//this applies to everyone regardless of 'balancesDontSubtractIns', because it's not an insurance item.
+					discount=Procedures.GetWriteOffC(arrayProc[tempCountProc],ClaimProcList);//this is for CapComplete and all other writeoffs
+					//}
 					double pat=fee-insPay;
 					if(!PrefB.GetBool("BalancesDontSubtractIns")){//this is the typical situation
 						pat-=insEst;
