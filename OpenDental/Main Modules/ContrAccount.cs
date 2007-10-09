@@ -3758,8 +3758,11 @@ namespace OpenDental {
 			}
 			else if(Regex.IsMatch(exp,@"^\d{4}$")){//0807
 				PatientNoteCur.CCExpiration=new DateTime(Convert.ToInt32("20"+exp.Substring(2,2)),Convert.ToInt32(exp.Substring(0,2)),1);
-			}
-			else if(exp!=""){
+			} 
+			else if(exp=="") {
+				PatientNoteCur.CCExpiration=new DateTime();//Allow the experation date to be deleted.
+			} 
+			else {
 				MsgBox.Show(this,"Expiration format invalid.");
 			}
 			PatientNotes.Update(PatientNoteCur,PatCur.Guarantor);
