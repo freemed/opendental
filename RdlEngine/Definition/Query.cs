@@ -211,9 +211,9 @@ namespace fyiReporting.RDL
 				cmSQL.CommandText = AddParametersAsLiterals(rpt, cnSQL, sql, true);
                 if (this._QueryCommandType == QueryCommandTypeEnum.StoredProcedure)
                     cmSQL.CommandType = CommandType.StoredProcedure;
-                if (this._Timeout > 0)
+                if (this._Timeout > 0){
 					//cmSQL.CommandTimeout = this._Timeout;
-				
+								}
 				AddParameters(rpt, cnSQL, cmSQL, true);
 				dr = cmSQL.ExecuteReader(CommandBehavior.SingleResult);
 

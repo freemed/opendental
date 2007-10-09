@@ -112,6 +112,7 @@
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Aggregate.cs" />
+    <Compile Include="MakeReadableDefNum.cs" />
     <Compile Include="GetData.cs" />
     <Compile Include="Format.cs" />
     <Compile Include="TestValue.cs" />

@@ -71,6 +71,11 @@ namespace OpenDentBusiness{
 			}
 		}
 
+		///<Summary>This is only meaningful if local connection instead of through server.  This might be added to be able to access from ODR when users start customizing their RDL reports.  But for now, we should build the connection string programmatically</Summary>
+		public static string GetCurrentConnectionString(){
+			return "";
+		}
+
 		public static string BuildSimpleConnectionString(DatabaseType pDbType,string pServer,string pDatabase,string pPort,string pUserID,string pPassword){
 			string connectStr="";
 			if(DBtype==DatabaseType.Oracle){

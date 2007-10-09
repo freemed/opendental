@@ -11,6 +11,9 @@ using fyiReporting.RDL;
 using OpenDental.UI;
 using OpenDentBusiness;
 
+//SEE THE BOTTOM OF THIS FILE FOR INFO ON HOW TO EDIT THE ORIGINAL RDL FILES TO MAKE THEM WORK BETTER WITH OPEN DENTAL.
+//THIS WILL ALLOW US TO UPDATE VERSIONS OF RDL WITHOUT 'BREAKING' THE EXISTING FUNCTIONALITY
+
 namespace OpenDental{
 	/// <summary>
 	/// Summary description for FormBasicTemplate.
@@ -381,7 +384,24 @@ namespace OpenDental{
 
 
 
+/*
+Things to keep in mind the next time we upgrade to a new version of RDL.
+These details may also need to be fine tuned to support various features that we want in OD.
 
+Definition\Query.cs in an important class.
+Query.GetData() is important where it sets the timeout.  Setting timeout is not allowed on the MySQL connector.  They might have fixed this bug.
+
+Runtime\RdlEngineConfig.cs, must make sure there is a datasource like this:
+		<DataSource>
+			<DataProvider>MySQL.NET</DataProvider>
+			<CodeModule>MySql.Data.dll</CodeModule>
+			<ClassName>MySql.Data.MySqlClient.MySqlConnection</ClassName>
+			<TableSelect>show tables</TableSelect>
+			<Interface>SQL</Interface>
+			<ReplaceParameters>true</ReplaceParameters>
+		</DataSource>
+Must also have MySQL.Data.dll in the same folder as RdlDesigner.exe.
+ */
 
 
 

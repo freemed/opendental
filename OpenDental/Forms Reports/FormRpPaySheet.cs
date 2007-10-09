@@ -14,17 +14,9 @@ namespace OpenDental{
 		private System.Windows.Forms.MonthCalendar date1;
 		private System.Windows.Forms.Label labelTO;
 		private System.ComponentModel.Container components = null;
-		private OpenDental.UI.Button butAllProv;
 		private ListBox listProv;
 		private Label label1;
-		private OpenDental.UI.Button butAllTypes;
-		private OpenDental.UI.Button butNone;
-		private CheckBox checkIncludeIns;
-		private ListBox listPayType;
-		private Label label2;
-		private RadioButton radioPatient;
-		private RadioButton radioCheck;
-		private GroupBox groupBox1;
+		private CheckBox checkAllProv;
 		private FormQuery FormQuery2;
 
 		///<summary></summary>
@@ -56,18 +48,9 @@ namespace OpenDental{
 			this.date2 = new System.Windows.Forms.MonthCalendar();
 			this.date1 = new System.Windows.Forms.MonthCalendar();
 			this.labelTO = new System.Windows.Forms.Label();
-			this.butAllProv = new OpenDental.UI.Button();
 			this.listProv = new System.Windows.Forms.ListBox();
 			this.label1 = new System.Windows.Forms.Label();
-			this.butAllTypes = new OpenDental.UI.Button();
-			this.butNone = new OpenDental.UI.Button();
-			this.checkIncludeIns = new System.Windows.Forms.CheckBox();
-			this.listPayType = new System.Windows.Forms.ListBox();
-			this.label2 = new System.Windows.Forms.Label();
-			this.radioPatient = new System.Windows.Forms.RadioButton();
-			this.radioCheck = new System.Windows.Forms.RadioButton();
-			this.groupBox1 = new System.Windows.Forms.GroupBox();
-			this.groupBox1.SuspendLayout();
+			this.checkAllProv = new System.Windows.Forms.CheckBox();
 			this.SuspendLayout();
 			// 
 			// butCancel
@@ -79,7 +62,7 @@ namespace OpenDental{
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
 			this.butCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.butCancel.Location = new System.Drawing.Point(602,433);
+			this.butCancel.Location = new System.Drawing.Point(602,344);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75,26);
 			this.butCancel.TabIndex = 4;
@@ -93,7 +76,7 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(602,398);
+			this.butOK.Location = new System.Drawing.Point(602,309);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75,26);
 			this.butOK.TabIndex = 3;
@@ -121,23 +104,9 @@ namespace OpenDental{
 			this.labelTO.Text = "TO";
 			this.labelTO.TextAlign = System.Drawing.ContentAlignment.TopCenter;
 			// 
-			// butAllProv
-			// 
-			this.butAllProv.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butAllProv.Autosize = true;
-			this.butAllProv.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butAllProv.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butAllProv.CornerRadius = 4F;
-			this.butAllProv.Location = new System.Drawing.Point(515,191);
-			this.butAllProv.Name = "butAllProv";
-			this.butAllProv.Size = new System.Drawing.Size(75,26);
-			this.butAllProv.TabIndex = 37;
-			this.butAllProv.Text = "&All";
-			this.butAllProv.Click += new System.EventHandler(this.butAllProv_Click);
-			// 
 			// listProv
 			// 
-			this.listProv.Location = new System.Drawing.Point(514,36);
+			this.listProv.Location = new System.Drawing.Point(516,55);
 			this.listProv.Name = "listProv";
 			this.listProv.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
 			this.listProv.Size = new System.Drawing.Size(163,147);
@@ -152,105 +121,23 @@ namespace OpenDental{
 			this.label1.Text = "Providers";
 			this.label1.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
 			// 
-			// butAllTypes
+			// checkAllProv
 			// 
-			this.butAllTypes.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butAllTypes.Autosize = true;
-			this.butAllTypes.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butAllTypes.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butAllTypes.CornerRadius = 4F;
-			this.butAllTypes.Location = new System.Drawing.Point(287,433);
-			this.butAllTypes.Name = "butAllTypes";
-			this.butAllTypes.Size = new System.Drawing.Size(66,26);
-			this.butAllTypes.TabIndex = 42;
-			this.butAllTypes.Text = "&All";
-			this.butAllTypes.Click += new System.EventHandler(this.butAllTypes_Click);
-			// 
-			// butNone
-			// 
-			this.butNone.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butNone.Autosize = true;
-			this.butNone.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butNone.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butNone.CornerRadius = 4F;
-			this.butNone.Location = new System.Drawing.Point(355,433);
-			this.butNone.Name = "butNone";
-			this.butNone.Size = new System.Drawing.Size(66,26);
-			this.butNone.TabIndex = 41;
-			this.butNone.Text = "&None";
-			this.butNone.Click += new System.EventHandler(this.butNone_Click);
-			// 
-			// checkIncludeIns
-			// 
-			this.checkIncludeIns.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkIncludeIns.Location = new System.Drawing.Point(50,255);
-			this.checkIncludeIns.Name = "checkIncludeIns";
-			this.checkIncludeIns.Size = new System.Drawing.Size(154,24);
-			this.checkIncludeIns.TabIndex = 38;
-			this.checkIncludeIns.Text = "Include Insurance Checks";
-			// 
-			// listPayType
-			// 
-			this.listPayType.Location = new System.Drawing.Point(287,255);
-			this.listPayType.Name = "listPayType";
-			this.listPayType.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
-			this.listPayType.Size = new System.Drawing.Size(134,173);
-			this.listPayType.TabIndex = 39;
-			// 
-			// label2
-			// 
-			this.label2.Location = new System.Drawing.Point(284,229);
-			this.label2.Name = "label2";
-			this.label2.Size = new System.Drawing.Size(154,23);
-			this.label2.TabIndex = 40;
-			this.label2.Text = "Patient Payment Types";
-			this.label2.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
-			// 
-			// radioPatient
-			// 
-			this.radioPatient.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.radioPatient.Location = new System.Drawing.Point(19,19);
-			this.radioPatient.Name = "radioPatient";
-			this.radioPatient.Size = new System.Drawing.Size(123,18);
-			this.radioPatient.TabIndex = 0;
-			this.radioPatient.Text = "Patient";
-			// 
-			// radioCheck
-			// 
-			this.radioCheck.Checked = true;
-			this.radioCheck.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.radioCheck.Location = new System.Drawing.Point(19,40);
-			this.radioCheck.Name = "radioCheck";
-			this.radioCheck.Size = new System.Drawing.Size(133,18);
-			this.radioCheck.TabIndex = 1;
-			this.radioCheck.TabStop = true;
-			this.radioCheck.Text = "Check";
-			// 
-			// groupBox1
-			// 
-			this.groupBox1.Controls.Add(this.radioCheck);
-			this.groupBox1.Controls.Add(this.radioPatient);
-			this.groupBox1.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.groupBox1.Location = new System.Drawing.Point(31,297);
-			this.groupBox1.Name = "groupBox1";
-			this.groupBox1.Size = new System.Drawing.Size(176,65);
-			this.groupBox1.TabIndex = 24;
-			this.groupBox1.TabStop = false;
-			this.groupBox1.Text = "Group Insurance Checks By";
+			this.checkAllProv.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.checkAllProv.Location = new System.Drawing.Point(517,35);
+			this.checkAllProv.Name = "checkAllProv";
+			this.checkAllProv.Size = new System.Drawing.Size(95,16);
+			this.checkAllProv.TabIndex = 43;
+			this.checkAllProv.Text = "All";
+			this.checkAllProv.Click += new System.EventHandler(this.checkAllProv_Click);
 			// 
 			// FormRpPaySheet
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
-			this.ClientSize = new System.Drawing.Size(717,472);
-			this.Controls.Add(this.butAllTypes);
-			this.Controls.Add(this.butNone);
-			this.Controls.Add(this.checkIncludeIns);
-			this.Controls.Add(this.listPayType);
-			this.Controls.Add(this.label2);
-			this.Controls.Add(this.butAllProv);
+			this.ClientSize = new System.Drawing.Size(717,383);
+			this.Controls.Add(this.checkAllProv);
 			this.Controls.Add(this.listProv);
 			this.Controls.Add(this.label1);
-			this.Controls.Add(this.groupBox1);
 			this.Controls.Add(this.butCancel);
 			this.Controls.Add(this.butOK);
 			this.Controls.Add(this.date2);
@@ -264,7 +151,6 @@ namespace OpenDental{
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Daily Payments Report";
 			this.Load += new System.EventHandler(this.FormPaymentSheet_Load);
-			this.groupBox1.ResumeLayout(false);
 			this.ResumeLayout(false);
 
 		}
@@ -275,21 +161,26 @@ namespace OpenDental{
 			date2.SelectionStart=DateTime.Today;
 			for(int i=0;i<Providers.List.Length;i++) {
 				listProv.Items.Add(Providers.List[i].Abbr+" - "+Providers.List[i].LName+", "+Providers.List[i].FName);
-				listProv.SetSelected(i,true);
+				//listProv.SetSelected(i,true);
 			}
-			for(int i=0;i<DefB.Short[(int)DefCat.PaymentTypes].Length;i++) {
-				listPayType.Items.Add(DefB.Short[(int)DefCat.PaymentTypes][i].ItemName);
-				listPayType.SetSelected(i,true);
-			}
-			checkIncludeIns.Checked=true;
+			checkAllProv.Checked=true;
+			listProv.Visible=false;
+			//for(int i=0;i<DefB.Short[(int)DefCat.PaymentTypes].Length;i++) {
+			//	listPayType.Items.Add(DefB.Short[(int)DefCat.PaymentTypes][i].ItemName);
+			//	listPayType.SetSelected(i,true);
+			//}
+			//checkIncludeIns.Checked=true;
 		}
 
-		private void butAllProv_Click(object sender,EventArgs e) {
-			for(int i=0;i<listProv.Items.Count;i++) {
-				listProv.SetSelected(i,true);
+		private void checkAllProv_Click(object sender,EventArgs e) {
+			if(checkAllProv.Checked){
+				listProv.Visible=false;
+			}
+			else{
+				listProv.Visible=true;
 			}
 		}
-
+		/*
 		private void butAllTypes_Click(object sender,EventArgs e) {
 			for(int i=0;i<listPayType.Items.Count;i++) {
 				listPayType.SetSelected(i,true);
@@ -298,27 +189,33 @@ namespace OpenDental{
 
 		private void butNone_Click(object sender,EventArgs e) {
 			listPayType.SelectedIndex=-1;
-		}
+		}*/
 
 		private void butOK_Click(object sender, System.EventArgs e) {
-			if(listProv.SelectedIndices.Count==0) {
+			if(!checkAllProv.Checked && listProv.SelectedIndices.Count==0) {
 				MsgBox.Show(this,"At least one provider must be selected.");
 				return;
 			}
-			if(listPayType.SelectedIndices.Count==0 && !checkIncludeIns.Checked) {
-				MsgBox.Show(this,"Must either select a payment type and/or include insurance checks.");
-				return;
+			//if(listPayType.SelectedIndices.Count==0 && !checkIncludeIns.Checked) {
+			//	MsgBox.Show(this,"Must either select a payment type and/or include insurance checks.");
+			//	return;
+			//}
+			string whereProv;
+			if(checkAllProv.Checked){
+				whereProv="";
 			}
-			string whereProv="(";
-			for(int i=0;i<listProv.SelectedIndices.Count;i++) {
-				if(i>0) {
-					whereProv+="OR ";
+			else{
+				whereProv="AND (";
+				for(int i=0;i<listProv.SelectedIndices.Count;i++) {
+					if(i>0) {
+						whereProv+="OR ";
+					}
+					whereProv+="paysplit.ProvNum = '"
+						+POut.PInt(Providers.List[listProv.SelectedIndices[i]].ProvNum)+"' ";
 				}
-				whereProv+="paysplit.ProvNum = '"
-					+POut.PInt(Providers.List[listProv.SelectedIndices[i]].ProvNum)+"' ";
+				whereProv+=")";
 			}
-			whereProv+=")";
-			string whereType="(";
+			/*string whereType="(";
 			for(int i=0;i<listPayType.SelectedIndices.Count;i++) {
 				if(i>0) {
 					whereType+="OR ";
@@ -326,7 +223,7 @@ namespace OpenDental{
 				whereType+="payment.PayType = '"
 					+POut.PInt(DefB.Short[(int)DefCat.PaymentTypes][listPayType.SelectedIndices[i]].DefNum)+"' ";
 			}
-			whereType+=")";
+			whereType+=")";*/
 			Queries.CurReport=new ReportOld();
 			Queries.CurReport.Query="(SELECT "
 				+"paysplit.DatePay AS mydate,"//0. Date
@@ -339,30 +236,35 @@ namespace OpenDental{
 				+"payment.PayNum "//7. PayNum. Not visible
 				+"FROM payment,patient,provider,paysplit "
 				+"WHERE ";
-			if(listPayType.SelectedIndices.Count==0){ 
-				Queries.CurReport.Query+="1=0 ";//none
-			}
-			else{
+			//if(listPayType.SelectedIndices.Count==0){ 
+			//	Queries.CurReport.Query+="1=0 ";//none
+			//}
+			//else{
 				Queries.CurReport.Query+=
 					"payment.PayNum=paysplit.PayNum "
 					+"AND patient.PatNum=paysplit.PatNum "
 					+"AND provider.ProvNum=paysplit.ProvNum "
-					+"AND "+whereProv+" "
-					+"AND "+whereType+" "
+					+whereProv+" "
+					//+"AND "+whereType+" "
 					+"AND paysplit.DatePay >= "+POut.PDate(date1.SelectionStart)+" "
 					+"AND paysplit.DatePay <= "+POut.PDate(date2.SelectionStart)+" ";
-			}
+			//}
 			Queries.CurReport.Query+="GROUP BY payment.PayNum,patient.PatNum,provider.ProvNum)";
-			if(checkIncludeIns.Checked){
-				whereProv="(";
-				for(int i=0;i<listProv.SelectedIndices.Count;i++) {
-					if(i>0) {
-						whereProv+="OR ";
-					}
-					whereProv+="claimproc.ProvNum = '"
-						+POut.PInt(Providers.List[listProv.SelectedIndices[i]].ProvNum)+"' ";
+			//if(checkIncludeIns.Checked){
+				if(checkAllProv.Checked) {
+					whereProv="";
 				}
-				whereProv+=")";
+				else {
+					whereProv="AND (";
+					for(int i=0;i<listProv.SelectedIndices.Count;i++) {
+						if(i>0) {
+							whereProv+="OR ";
+						}
+						whereProv+="claimproc.ProvNum = '"
+						+POut.PInt(Providers.List[listProv.SelectedIndices[i]].ProvNum)+"' ";
+					}
+					whereProv+=")";
+				}
 				Queries.CurReport.Query+=
 					" UNION ("
 					+"SELECT claimproc.DateCP AS mydate,"//0. Date
@@ -379,19 +281,19 @@ namespace OpenDental{
 					+"AND claimproc.PlanNum = insplan.PlanNum "
 					+"AND claimproc.PatNum = patient.PatNum "
 					+"AND carrier.CarrierNum = insplan.CarrierNum "
-					+"AND "+whereProv+" "
+					+whereProv+" "
 					+"AND (claimproc.Status=1 OR claimproc.Status=4) "//received or supplemental
 					+"AND claimpayment.CheckDate >= "+POut.PDate(date1.SelectionStart)+" "
 					+"AND claimpayment.CheckDate <= "+POut.PDate(date2.SelectionStart)+" ";
-				if(radioPatient.Checked){//by patient
-					Queries.CurReport.Query+="GROUP BY claimproc.ClaimNum,patient.PatNum,provider.ProvNum ";
-				}
-				else{//by check
+				//if(radioPatient.Checked){//by patient
+				//	Queries.CurReport.Query+="GROUP BY claimproc.ClaimNum,patient.PatNum,provider.ProvNum ";
+				//}
+				//else{//by check
 					Queries.CurReport.Query+="GROUP BY claimproc.ClaimPaymentNum,provider.ProvNum ";
-				}
+				//}
 				Queries.CurReport.Query+=
 					")";//end of union
-			}//insurance section
+			//}//insurance section
 			Queries.CurReport.Query+=
 				//" ORDER BY mydate,PayType,plfname";//FIXME:UNION-ORDER-BY
 				" ORDER BY 1,4,2";
@@ -402,29 +304,29 @@ namespace OpenDental{
 			Queries.CurReport.SubTitle=new string[5];
 			Queries.CurReport.SubTitle[0]=((Pref)PrefB.HList["PracticeTitle"]).ValueString;
 			Queries.CurReport.SubTitle[1]=date1.SelectionStart.ToString("d")+" - "+date2.SelectionStart.ToString("d");
-			Queries.CurReport.SubTitle[2]=Lan.g(this,"Patient Payment Type(s): ");
-			if(listPayType.SelectedIndices.Count==listPayType.Items.Count){
-				Queries.CurReport.SubTitle[2]+=Lan.g(this,"All");
-			}
-			else if(listPayType.SelectedIndices.Count==0){
-				Queries.CurReport.SubTitle[2]+=Lan.g(this,"None");
-			}
-			else{
-				for(int i=0;i<listPayType.SelectedIndices.Count;i++) {
+			//Queries.CurReport.SubTitle[2]=Lan.g(this,"Patient Payment Type(s): ");
+			//if(listPayType.SelectedIndices.Count==listPayType.Items.Count){
+			//	Queries.CurReport.SubTitle[2]+=Lan.g(this,"All");
+			//}
+			//else if(listPayType.SelectedIndices.Count==0){
+			//	Queries.CurReport.SubTitle[2]+=Lan.g(this,"None");
+			//}
+			//else{
+			/*	for(int i=0;i<listPayType.SelectedIndices.Count;i++) {
 					if(i>0){
 						Queries.CurReport.SubTitle[2]+=", ";
 					}
 					Queries.CurReport.SubTitle[2]
 						+=DefB.Short[(int)DefCat.PaymentTypes][listPayType.SelectedIndices[i]].ItemName;
-				}
-			}
-			Queries.CurReport.SubTitle[3]=Lan.g(this,"Insurance Payments: ");
+				}*/
+			//}
+			/*Queries.CurReport.SubTitle[3]=Lan.g(this,"Insurance Payments: ");
 			if(checkIncludeIns.Checked) {
 				Queries.CurReport.SubTitle[3]+="Included";
 			}
 			else{
 				Queries.CurReport.SubTitle[3]+="Not included";
-			}
+			}*/
 			Queries.CurReport.SubTitle[4]=Lan.g(this,"Providers: ");
 			if(listProv.SelectedIndices.Count==listProv.Items.Count) {
 				Queries.CurReport.SubTitle[4]+=Lan.g(this,"All");
@@ -463,6 +365,8 @@ namespace OpenDental{
 			FormQuery2.ShowDialog();
 			DialogResult=DialogResult.OK;		
 		}
+
+		
 
 		
 

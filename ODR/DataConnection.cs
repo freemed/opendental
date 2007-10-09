@@ -87,8 +87,9 @@ namespace ODR{
 				+";CharSet=utf8";
 		}
 
-		///<summary></summary>
+		///<summary>The problem with this is that if multiple copies of OD are open at the same time, it might get data from only the most recently opened database.  This won't work for some users, so we will normally dynamically alter the connection string.</summary>
 		public static string GetODConnStr() {
+			//return "Server=localhost;Database=development54;User ID=root;Password=;CharSet=utf8";
 			XmlDocument document=new XmlDocument();
 			string path=ODFileUtils.CombinePaths(Application.StartupPath,"FreeDentalConfig.xml");
 			if(!File.Exists(path)) {

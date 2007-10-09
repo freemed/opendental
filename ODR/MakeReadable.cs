@@ -10,6 +10,10 @@ namespace ODR{
 			return Enum.GetName(typeof(PatientStatus),Convert.ToInt32(patStatus));
 		}
 
+		//public static string DefNumPaymentType(string defNum){
+		//	return DefB.GetName(DefCat.PaymentTypes,PIn.PInt(defNum));
+		//}
+
 		public static string Query(string query,string parameters){
 			MessageBox.Show("query: "+query);
 			MessageBox.Show("parameter info: "+parameters);
