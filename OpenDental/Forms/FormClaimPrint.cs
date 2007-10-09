@@ -745,6 +745,9 @@ namespace OpenDental{
 					case "GroupNum":
 						displayStrings[i]=planCur.GroupNum;
 						break;
+					case "DivisionNo":
+						displayStrings[i]=planCur.DivisionNo;
+						break;
 					case "EmployerName":
 						displayStrings[i]=Employers.GetEmployer(planCur.EmployerNum).EmpName;;
 						break;
@@ -783,6 +786,9 @@ namespace OpenDental{
 					case "IsStudent":
 						if(PatCur.StudentStatus=="P" || PatCur.StudentStatus=="F")
 							displayStrings[i]="X";
+						break;
+					case "CollegeName":
+						displayStrings[i]=PatCur.SchoolName;
 						break;
 					case "PatientLastFirst":
 						displayStrings[i]=PatCur.LName+", "+PatCur.FName+", "+PatCur.MiddleI;
