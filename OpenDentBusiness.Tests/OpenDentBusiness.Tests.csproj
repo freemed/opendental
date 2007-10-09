@@ -35,6 +35,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DataAccess\PatientTest.cs" />
     <Compile Include="DataAccess\DataTests.cs" />
     <Compile Include="DataAccess\DocumentTest.cs" />
     <Compile Include="DataAccess\MountDefTest.cs" />

@@ -235,16 +235,11 @@ namespace OpenDentBusiness{
 			get { return guarantorChanged; }
 		}
 
-		[DataField("Age")]
 		private int age;
-		bool ageChanged;
 		/// <summary>Derived from Birthdate.  Not in the database table.</summary>
 		public int Age {
 			get { return age; }
-			set { age = value; MarkDirty(); ageChanged = true; }
-		}
-		public bool AgeChanged {
-			get { return ageChanged; }
+			set { age = value; }
 		}
 
 		[DataField("CreditType")]
@@ -523,16 +518,12 @@ namespace OpenDentBusiness{
 			get { return insEstChanged; }
 		}
 
-		[DataField("PrimaryTeethOld")]
+		[Obsolete("No longer used.  See toothinital table instead.")]
 		private string primaryTeethOld;
-		bool primaryTeethOldChanged;
 		/// <summary>No longer used.  See toothinital table instead.</summary>
 		public string PrimaryTeethOld {
 			get { return primaryTeethOld; }
-			set { primaryTeethOld = value; MarkDirty(); primaryTeethOldChanged = true; }
-		}
-		public bool PrimaryTeethOldChanged {
-			get { return primaryTeethOldChanged; }
+			set { primaryTeethOld = value; }
 		}
 
 		[DataField("BalTotal")]
