@@ -5980,8 +5980,9 @@ namespace OpenDental{
 				//after r929
 				command="ALTER TABLE patient ADD Title VARCHAR(15)";
 				General.NonQEx(command);
-
-
+				//after r943
+				command="DELETE FROM reqstudent WHERE DateCompleted < '1900-01-01' AND AptNum=0";
+				General.NonQEx(command);
 
 
 

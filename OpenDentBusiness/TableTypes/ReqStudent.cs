@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Text;
 
 namespace OpenDentBusiness{
-		///<summary>For Dental Schools.  One requirement for one student, whether completed or not.  Copied from reqneeded, and usually kept synchronized.  Future improvements might include allowing extra requirements that are not synched with reqneeded.</summary>
+		///<summary>For Dental Schools.  The purpose of this table changed significantly in version 4.5.  This now only stores completed requirements.  There can be multiple completed requirements of each ReqNeededNum.  No need to synchronize any longer.</summary>
 	public class ReqStudent{
 		///<summary>Primary key.</summary>
 		public int ReqStudentNum;
-		///<summary>FK to reqneeded.ReqNeededNum.  Used for synchronization.</summary>
+		///<summary>FK to reqneeded.ReqNeededNum.</summary>
 		public int ReqNeededNum;
 		///<summary>.</summary>
 		public string Descript;

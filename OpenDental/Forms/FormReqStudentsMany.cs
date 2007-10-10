@@ -182,8 +182,8 @@ namespace OpenDental{
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn(Lan.g("TableReqStudentMany","First"),100);
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TableReqStudentMany","Total"),50);
-			gridMain.Columns.Add(col);
+			//col=new ODGridColumn(Lan.g("TableReqStudentMany","Total"),50);
+			//gridMain.Columns.Add(col);
 			col=new ODGridColumn(Lan.g("TableReqStudentMany","Done"),50);
 			gridMain.Columns.Add(col);
 			gridMain.Rows.Clear();
@@ -192,7 +192,7 @@ namespace OpenDental{
 				row=new ODGridRow();
 				row.Cells.Add(table.Rows[i]["LName"].ToString());
 				row.Cells.Add(table.Rows[i]["FName"].ToString());
-				row.Cells.Add(table.Rows[i]["totalreq"].ToString());
+				//row.Cells.Add(table.Rows[i]["totalreq"].ToString());
 				row.Cells.Add(table.Rows[i]["donereq"].ToString());
 				gridMain.Rows.Add(row);
 			}

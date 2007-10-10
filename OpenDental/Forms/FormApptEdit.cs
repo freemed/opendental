@@ -1352,6 +1352,7 @@ namespace OpenDental{
 		private void butRequirement_Click(object sender,EventArgs e) {
 			FormReqAppt FormR=new FormReqAppt();
 			FormR.AptNum=AptCur.AptNum;
+			FormR.PatNum=AptCur.PatNum;
 			FormR.ShowDialog();
 			if(FormR.DialogResult!=DialogResult.OK){
 				return;

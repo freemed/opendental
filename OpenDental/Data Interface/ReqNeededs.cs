@@ -73,6 +73,7 @@ namespace OpenDental{
 			General.NonQ(command);
 		}
 
+		/*
 		///<summary></summary>
 		public static void Synch(int schoolClassNum,int schoolCourseNum){
 			//get list of all reqneededs for the given class and course.
@@ -108,7 +109,7 @@ namespace OpenDental{
 					ReqStudents.Insert(req);
 				}
 			}
-		}
+		}*/
 
 
 		

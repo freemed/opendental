@@ -9,6 +9,96 @@ namespace OpenDental{
 ///<summary></summary>
 	public class ReqStudents{
 
+		public static List<ReqStudent> GetForAppt(int aptNum) {
+			string command="SELECT * FROM reqstudent WHERE AptNum="+POut.PInt(aptNum)+" ORDER BY ProvNum,Descript";
+			return RefreshAndFill(command);
+		}
+
+		public static ReqStudent GetOne(int ReqStudentNum) {
+			string command="SELECT * FROM reqstudent WHERE ReqStudentNum="+POut.PInt(ReqStudentNum);
+			List<ReqStudent> reqList=RefreshAndFill(command);
+			if(reqList.Count==0) {
+				return null;
+			}
+			return reqList[0];
+		}
+
+		private static List<ReqStudent> RefreshAndFill(string command) {
+			DataTable table=General.GetTable(command);
+			List<ReqStudent> reqList=new List<ReqStudent>();
+			ReqStudent req;
+			for(int i=0;i<table.Rows.Count;i++) {
+				req=new ReqStudent();
+				req.ReqStudentNum  = PIn.PInt(table.Rows[i][0].ToString());
+				req.ReqNeededNum   = PIn.PInt(table.Rows[i][1].ToString());
+				req.Descript       = PIn.PString(table.Rows[i][2].ToString());
+				req.SchoolCourseNum= PIn.PInt(table.Rows[i][3].ToString());
+				req.ProvNum        = PIn.PInt(table.Rows[i][4].ToString());
+				req.AptNum         = PIn.PInt(table.Rows[i][5].ToString());
+				req.PatNum         = PIn.PInt(table.Rows[i][6].ToString());
+				req.InstructorNum  = PIn.PInt(table.Rows[i][7].ToString());
+				req.DateCompleted  = PIn.PDate(table.Rows[i][8].ToString());
+				reqList.Add(req);
+			}
+			return reqList;
+		}
+
+		///<summary></summary>
+		public static void Update(ReqStudent req) {
+			string command = "UPDATE reqstudent SET "
+				+ " ReqNeededNum = '"   +POut.PInt(req.ReqNeededNum)+"'"
+				+ ",Descript = '"       +POut.PString(req.Descript)+"'"
+				+ ",SchoolCourseNum = '"+POut.PInt(req.SchoolCourseNum)+"'"
+				+ ",ProvNum = '"        +POut.PInt(req.ProvNum)+"'"
+				+ ",AptNum = '"         +POut.PInt(req.AptNum)+"'"   
+				+ ",PatNum = '"         +POut.PInt(req.PatNum)+"'"   
+				+ ",InstructorNum = '"  +POut.PInt(req.InstructorNum)+"'"   
+				+ ",DateCompleted = "   +POut.PDate(req.DateCompleted)      
+				+" WHERE ReqStudentNum = '" +POut.PInt(req.ReqStudentNum)+"'";
+			General.NonQ(command);
+		}
+
+		///<summary></summary>
+		public static void Insert(ReqStudent req) {
+			if(PrefB.RandomKeys) {
+				req.ReqStudentNum=MiscData.GetKey("reqstudent","ReqStudentNum");
+			}
+			string command= "INSERT INTO reqstudent (";
+			if(PrefB.RandomKeys) {
+				command+="ReqStudentNum,";
+			}
+			command+="ReqNeededNum,Descript,SchoolCourseNum,ProvNum,AptNum,PatNum,InstructorNum,DateCompleted) VALUES(";
+			if(PrefB.RandomKeys) {
+				command+="'"+POut.PInt(req.ReqStudentNum)+"', ";
+			}
+			command+=
+				 "'"+POut.PInt(req.ReqNeededNum)+"', "
+				+"'"+POut.PString(req.Descript)+"', "
+				+"'"+POut.PInt(req.SchoolCourseNum)+"', "
+				+"'"+POut.PInt(req.ProvNum)+"', "
+				+"'"+POut.PInt(req.AptNum)+"', "
+				+"'"+POut.PInt(req.PatNum)+"', "
+				+"'"+POut.PInt(req.InstructorNum)+"', "
+				    +POut.PDate(req.DateCompleted)+")";
+			if(PrefB.RandomKeys) {
+				General.NonQ(command);
+			}
+			else {
+				req.ReqStudentNum=General.NonQ(command,true);
+			}
+		}
+
+		///<summary>Surround with try/catch.</summary>
+		public static void Delete(int reqStudentNum) {
+			ReqStudent req=GetOne(reqStudentNum);
+			//if a reqneeded exists, then disallow deletion.
+			if(ReqNeededs.GetReq(req.ReqNeededNum)==null) {
+				throw new Exception(Lan.g("ReqStudents","Cannot delete requirement.  Delete the requirement needed instead."));
+			}
+			string command= "DELETE FROM reqstudent WHERE ReqStudentNum = "+POut.PInt(reqStudentNum);
+			General.NonQ(command);
+		}
+
 		public static DataTable RefreshOneStudent(int provNum){
 			DataTable table=new DataTable();
 			DataRow row;
@@ -60,7 +150,7 @@ namespace OpenDental{
 			table.Columns.Add("FName");
 			table.Columns.Add("LName");
 			table.Columns.Add("studentNum");//ProvNum
-			table.Columns.Add("totalreq");
+			table.Columns.Add("totalreq");//not used yet.  It will be changed to be based upon reqneeded. Or not used at all.
 			string command="SELECT COUNT(DISTINCT req2.ReqStudentNum) donereq,FName,LName,provider.ProvNum,"
 				+"COUNT(DISTINCT req1.ReqStudentNum) totalreq "
 				+"FROM provider "
@@ -93,68 +183,39 @@ namespace OpenDental{
 			return retVal;
 		}
 
-		///<summary>Provider(student) is required. Course could be 0</summary>
-		public static DataTable GetForStudent(int provNum,int schoolCourse){
-			string command="SELECT Descript,ReqStudentNum "
-				+"FROM reqstudent ";
-			if(schoolCourse==0){
-				command+="WHERE ProvNum="+POut.PInt(provNum);
-			}
-			else{
+		///<summary>Provider(student) is required.</summary>
+		public static DataTable GetForCourseClass(int schoolCourse,int schoolClass){
+			string command="SELECT Descript,ReqNeededNum "
+				+"FROM reqneeded ";
+			//if(schoolCourse==0){
+			//	command+="WHERE ProvNum="+POut.PInt(provNum);
+			//}
+			//else{
 				command+="WHERE SchoolCourseNum="+POut.PInt(schoolCourse)
-					+" AND ProvNum="+POut.PInt(provNum);
-			}
+					//+" AND ProvNum="+POut.PInt(provNum);
+			//}
+			+" AND SchoolClassNum="+POut.PInt(schoolClass);
 			command+=" ORDER BY Descript";
 			return General.GetTable(command);
 		}
 
-		public static DataTable GetForAppt(int aptNum){
-			DataTable table=new DataTable();
-			DataRow row;
-			//columns that start with lowercase are altered for display rather than being raw data.
-			table.Columns.Add("lFName");
-			table.Columns.Add("Descript");
-			table.Columns.Add("ReqStudentNum");
-			table.Columns.Add("completed");
-			string command="SELECT LName,FName,Descript,ReqStudentNum,DateCompleted "
-				+"FROM reqstudent,provider "
-				+"WHERE reqstudent.ProvNum=provider.ProvNum "
-				+"AND AptNum="+POut.PInt(aptNum);
-			DataTable raw=General.GetTable(command);
-			DateTime date;
-			for(int i=0;i<raw.Rows.Count;i++) {
-				row=table.NewRow();
-				row["lFName"]=raw.Rows[i]["LName"].ToString()+", "+raw.Rows[i]["FName"].ToString();
-				row["Descript"]=raw.Rows[i]["Descript"].ToString();
-				row["ReqStudentNum"]=raw.Rows[i]["ReqStudentNum"].ToString();
-				date=PIn.PDate(raw.Rows[i]["DateCompleted"].ToString());
-				if(date.Year<1880){
-					row["completed"]="";
-				}
-				else{
-					row["completed"]="X";
-				}
-				table.Rows.Add(row);
-			}
-			return table;
-		}
-
-		public static void SynchApt(int aptNum,List<int> reqNums){
+		
+		///<summary>All fields for all reqs will have already been set.  All except for reqstudent.ReqStudentNum if new.  Now, they just have to be persisted to the database.</summary>
+		public static void SynchApt(List<ReqStudent> reqsAttached,int aptNum){
 			//first, detach all from this appt
 			string command="UPDATE reqstudent SET AptNum=0 WHERE AptNum="+POut.PInt(aptNum);
 			General.NonQ(command);
-			//then, attach all in the supplied list
-			if(reqNums.Count==0){
+			if(reqsAttached.Count==0) {
 				return;
 			}
-			command="UPDATE reqstudent SET AptNum="+POut.PInt(aptNum)+" WHERE";
-			for(int i=0;i<reqNums.Count;i++){
-				if(i!=0){
-					command+=" OR";
+			for(int i=0;i<reqsAttached.Count;i++){
+				if(reqsAttached[i].ReqStudentNum==0){
+					ReqStudents.Insert(reqsAttached[i]);
 				}
-				command+=" ReqStudentNum="+POut.PInt(reqNums[i]);
+				else{
+					ReqStudents.Update(reqsAttached[i]);
+				}
 			}
-			General.NonQ(command);
 		}
 
 		///<summary>Before reqneeded.Delete, this checks to make sure that req is not in use by students.  Used to prompt user.</summary>
@@ -171,78 +232,7 @@ namespace OpenDental{
 			return retVal;
 		}
 
-		public static ReqStudent GetOne(int ReqStudentNum){
-			string command="SELECT * FROM reqstudent WHERE ReqStudentNum="+POut.PInt(ReqStudentNum);
- 			DataTable table=General.GetTable(command);
-			ReqStudent req=new ReqStudent();
-			req.ReqStudentNum  = PIn.PInt   (table.Rows[0][0].ToString());
-			req.ReqNeededNum   = PIn.PInt   (table.Rows[0][1].ToString());
-			req.Descript       = PIn.PString(table.Rows[0][2].ToString());
-			req.SchoolCourseNum= PIn.PInt   (table.Rows[0][3].ToString());
-			req.ProvNum        = PIn.PInt   (table.Rows[0][4].ToString());
-			req.AptNum         = PIn.PInt   (table.Rows[0][5].ToString());
-			req.PatNum         = PIn.PInt   (table.Rows[0][6].ToString());
-			req.InstructorNum  = PIn.PInt   (table.Rows[0][7].ToString());
-			req.DateCompleted  = PIn.PDate  (table.Rows[0][8].ToString());
-			return req;
-		}
-
-		///<summary></summary>
-		public static void Update(ReqStudent req) {
-			string command = "UPDATE reqstudent SET "
-				+ " ReqNeededNum = '"   +POut.PInt   (req.ReqNeededNum)+"'"
-				+ ",Descript = '"       +POut.PString(req.Descript)+"'"
-				+ ",SchoolCourseNum = '"+POut.PInt   (req.SchoolCourseNum)+"'"
-				+ ",ProvNum = '"        +POut.PInt   (req.ProvNum)+"'"
-				+ ",AptNum = '"         +POut.PInt   (req.AptNum)+"'"   
-				+ ",PatNum = '"         +POut.PInt   (req.PatNum)+"'"   
-				+ ",InstructorNum = '"  +POut.PInt   (req.InstructorNum)+"'"   
-				+ ",DateCompleted = "   +POut.PDate  (req.DateCompleted)      
-				+" WHERE ReqStudentNum = '" +POut.PInt(req.ReqStudentNum)+"'";
-			General.NonQ(command);
-		}
-
-		///<summary></summary>
-		public static void Insert(ReqStudent req) {
-			if(PrefB.RandomKeys) {
-				req.ReqStudentNum=MiscData.GetKey("reqstudent","ReqStudentNum");
-			}
-			string command= "INSERT INTO reqstudent (";
-			if(PrefB.RandomKeys) {
-				command+="ReqStudentNum,";
-			}
-			command+="ReqNeededNum,Descript,SchoolCourseNum,ProvNum,AptNum,PatNum,InstructorNum,DateCompleted) VALUES(";
-			if(PrefB.RandomKeys) {
-				command+="'"+POut.PInt(req.ReqStudentNum)+"', ";
-			}
-			command+=
-				 "'"+POut.PInt   (req.ReqNeededNum)+"', "
-				+"'"+POut.PString(req.Descript)+"', "
-				+"'"+POut.PInt   (req.SchoolCourseNum)+"', "
-				+"'"+POut.PInt   (req.ProvNum)+"', "
-				+"'"+POut.PInt   (req.AptNum)+"', "
-				+"'"+POut.PInt   (req.PatNum)+"', "
-				+"'"+POut.PInt   (req.InstructorNum)+"', "
-				    +POut.PDate  (req.DateCompleted)+")";
-			if(PrefB.RandomKeys) {
-				General.NonQ(command);
-			}
-			else {
-				req.ReqStudentNum=General.NonQ(command,true);
-			}
-		}
-
-		///<summary>Surround with try/catch.</summary>
-		public static void Delete(int reqStudentNum) {
-			ReqStudent req=GetOne(reqStudentNum);
-			//if a reqneeded exists, then disallow deletion.
-			if(ReqNeededs.GetReq(req.ReqNeededNum)==null){
-				throw new Exception(Lan.g("ReqStudents","Cannot delete requirement.  Delete the requirement needed instead."));
-			}
-			string command= "DELETE FROM reqstudent WHERE ReqStudentNum = "+POut.PInt(reqStudentNum);
-			General.NonQ(command);
-		}
-
+		/*
 		///<summary>Attaches a req to an appointment.  Importantly, it also sets the patNum to match the apt.</summary>
 		public static void AttachToApt(int reqStudentNum,int aptNum) {
 			string command="SELECT PatNum FROM appointment WHERE AptNum="+POut.PInt(aptNum);
@@ -251,7 +241,7 @@ namespace OpenDental{
 				+", PatNum="+patNum
 				+" WHERE ReqStudentNum="+POut.PInt(reqStudentNum);
 			General.NonQ(command);
-		}
+		}*/
 
 
 

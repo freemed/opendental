@@ -29,12 +29,14 @@ namespace OpenDental{
 		private ODGrid gridReqs;
 		private OpenDental.UI.Button butOK;
 		//private DataTable table;
-		private Label label3;
 		private List<Provider> StudentList;
 		private DataTable ReqTable;
-		private DataTable TableAttached;
+		private List<ReqStudent> reqsAttached;
 		public int AptNum;
+		private Label label3;
+		private ComboBox comboInstructor;
 		private bool hasChanged;
+		public int PatNum;
 
 		///<summary></summary>
 		public FormReqAppt()
@@ -74,6 +76,7 @@ namespace OpenDental{
 			this.label1 = new System.Windows.Forms.Label();
 			this.comboClass = new System.Windows.Forms.ComboBox();
 			this.label3 = new System.Windows.Forms.Label();
+			this.comboInstructor = new System.Windows.Forms.ComboBox();
 			this.butOK = new OpenDental.UI.Button();
 			this.gridReqs = new OpenDental.UI.ODGrid();
 			this.butAdd = new OpenDental.UI.Button();
@@ -123,11 +126,22 @@ namespace OpenDental{
 			// 
 			// label3
 			// 
-			this.label3.Location = new System.Drawing.Point(494,118);
+			this.label3.Location = new System.Drawing.Point(497,66);
 			this.label3.Name = "label3";
-			this.label3.Size = new System.Drawing.Size(212,39);
-			this.label3.TabIndex = 28;
-			this.label3.Text = "(requirements that are already attached to other appointments will not show)";
+			this.label3.Size = new System.Drawing.Size(146,18);
+			this.label3.TabIndex = 29;
+			this.label3.Text = "Instructor";
+			this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// comboInstructor
+			// 
+			this.comboInstructor.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboInstructor.FormattingEnabled = true;
+			this.comboInstructor.Location = new System.Drawing.Point(647,66);
+			this.comboInstructor.Name = "comboInstructor";
+			this.comboInstructor.Size = new System.Drawing.Size(234,21);
+			this.comboInstructor.TabIndex = 28;
+			this.comboInstructor.SelectionChangeCommitted += new System.EventHandler(this.comboInstructor_SelectionChangeCommitted);
 			// 
 			// butOK
 			// 
@@ -233,6 +247,7 @@ namespace OpenDental{
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.ClientSize = new System.Drawing.Size(893,661);
 			this.Controls.Add(this.label3);
+			this.Controls.Add(this.comboInstructor);
 			this.Controls.Add(this.butOK);
 			this.Controls.Add(this.gridReqs);
 			this.Controls.Add(this.butAdd);
@@ -270,9 +285,20 @@ namespace OpenDental{
 			if(comboCourse.Items.Count>0) {
 				comboCourse.SelectedIndex=0;
 			}
+			comboInstructor.Items.Add(Lan.g(this,"None"));
+			comboInstructor.SelectedIndex=0;
+			for(int i=0;i<Providers.List.Length;i++) {
+				comboInstructor.Items.Add(Providers.GetNameLF(Providers.List[i].ProvNum));
+				//if(Providers.List[i].ProvNum==ReqCur.InstructorNum) {
+				//	comboInstructor.SelectedIndex=i+1;
+				//}
+			}
 			FillStudents();
 			FillReqs();
-			TableAttached=ReqStudents.GetForAppt(AptNum);
+			reqsAttached=ReqStudents.GetForAppt(AptNum);
+			if(reqsAttached.Count>0){
+				comboInstructor.SelectedIndex=Providers.GetIndex(reqsAttached[0].ProvNum)+1;//this will turn a -1 into a 0.
+			}
 			FillAttached();
 		}
 
@@ -302,6 +328,10 @@ namespace OpenDental{
 			if(comboCourse.SelectedIndex!=-1){
 				schoolCourse=SchoolCourses.List[comboCourse.SelectedIndex].SchoolCourseNum;
 			}
+			int schoolClass=0;
+			if(comboClass.SelectedIndex!=-1) {
+				schoolClass=SchoolClasses.List[comboClass.SelectedIndex].SchoolClassNum;
+			}
 			gridReqs.BeginUpdate();
 			gridReqs.Columns.Clear();
 			ODGridColumn col=new ODGridColumn("",100);
@@ -311,7 +341,7 @@ namespace OpenDental{
 				gridReqs.EndUpdate();
 				return;
 			}
-			ReqTable=ReqStudents.GetForStudent(StudentList[gridStudents.GetSelectedIndex()].ProvNum,schoolCourse);
+			ReqTable=ReqStudents.GetForCourseClass(schoolCourse,schoolClass);
 			ODGridRow row;
 			for(int i=0;i<ReqTable.Rows.Count;i++) {
 				row=new ODGridRow();
@@ -333,11 +363,16 @@ namespace OpenDental{
 			gridAttached.Columns.Add(col);
 			gridAttached.Rows.Clear();
 			ODGridRow row;
-			for(int i=0;i<TableAttached.Rows.Count;i++) {
+			for(int i=0;i<reqsAttached.Count;i++) {
 				row=new ODGridRow();
-				row.Cells.Add(TableAttached.Rows[i]["lFName"].ToString());
-				row.Cells.Add(TableAttached.Rows[i]["Descript"].ToString());
-				row.Cells.Add(TableAttached.Rows[i]["completed"].ToString());
+				row.Cells.Add(Providers.GetNameLF(reqsAttached[i].ProvNum));
+				row.Cells.Add(reqsAttached[i].Descript);
+				if(reqsAttached[i].DateCompleted.Year<1880){
+					row.Cells.Add("");
+				}
+				else{
+					row.Cells.Add("X");
+				}
 				gridAttached.Rows.Add(row);
 			}
 			gridAttached.EndUpdate();
@@ -349,12 +384,12 @@ namespace OpenDental{
 				return;
 			}
 			FormReqStudentEdit FormRSE=new FormReqStudentEdit();
-			FormRSE.ReqCur=ReqStudents.GetOne(PIn.PInt(TableAttached.Rows[e.Row]["ReqStudentNum"].ToString()));
+			FormRSE.ReqCur=reqsAttached[e.Row];
 			FormRSE.ShowDialog();
 			if(FormRSE.DialogResult!=DialogResult.OK) {
 				return;
 			}
-			TableAttached=ReqStudents.GetForAppt(AptNum);
+			reqsAttached=ReqStudents.GetForAppt(AptNum);
 			FillAttached();
 		}
 
@@ -371,27 +406,41 @@ namespace OpenDental{
 			FillReqs();
 		}
 
+
+		private void comboInstructor_SelectionChangeCommitted(object sender,EventArgs e) {
+			for(int i=0;i<reqsAttached.Count;i++){
+				if(reqsAttached[i].DateCompleted.Year>1880){
+					continue;//don't alter instructor of completed reqs.
+				}
+				if(comboInstructor.SelectedIndex==0){
+					reqsAttached[i].InstructorNum=0;
+				}
+				else{
+					reqsAttached[i].InstructorNum=Providers.List[comboInstructor.SelectedIndex-1].ProvNum;
+				}
+			}
+		}
+
 		private void butAdd_Click(object sender,EventArgs e) {
 			if(gridReqs.SelectedIndices.Length==0){
 				MsgBox.Show(this,"Please select at least one requirement from the list at the left first.");
 				return;
 			}
-			bool alreadyAttached;
+			ReqStudent req;
 			for(int i=0;i<gridReqs.SelectedIndices.Length;i++){
-				alreadyAttached=false;
-				for(int j=0;j<TableAttached.Rows.Count;j++){
-					if(TableAttached.Rows[j]["ReqStudentNum"].ToString()==ReqTable.Rows[gridReqs.SelectedIndices[i]]["ReqStudentNum"].ToString()){
-						alreadyAttached=true;
-					}
+				req=new ReqStudent();
+				req.AptNum=AptNum;
+				//req.DateCompleted
+				req.Descript=ReqTable.Rows[gridReqs.SelectedIndices[i]]["Descript"].ToString();
+				if(comboInstructor.SelectedIndex>0){
+					req.InstructorNum=Providers.List[comboInstructor.SelectedIndex-1].ProvNum;
 				}
-				if(alreadyAttached){
-					continue;
-				}
-				DataRow row=TableAttached.NewRow();
-				row["lFName"]=StudentList[gridStudents.GetSelectedIndex()].LName+", "+StudentList[gridStudents.GetSelectedIndex()].FName;
-				row["Descript"]=ReqTable.Rows[gridReqs.SelectedIndices[i]]["Descript"].ToString();
-				row["ReqStudentNum"]=ReqTable.Rows[gridReqs.SelectedIndices[i]]["ReqStudentNum"].ToString();
-				TableAttached.Rows.Add(row);
+				req.PatNum=PatNum;
+				req.ProvNum=StudentList[gridStudents.GetSelectedIndex()].ProvNum;
+				req.ReqNeededNum=PIn.PInt(ReqTable.Rows[gridReqs.SelectedIndices[i]]["ReqNeededNum"].ToString());
+				//req.ReqStudentNum=0 until synch on OK.
+				req.SchoolCourseNum=SchoolCourses.List[comboCourse.SelectedIndex].SchoolCourseNum;
+				reqsAttached.Add(req);
 				hasChanged=true;
 			}
 			FillAttached();
@@ -403,24 +452,22 @@ namespace OpenDental{
 				return;
 			}
 			for(int i=gridAttached.SelectedIndices.Length-1;i>=0;i--){//go backwards to remove from end of list
-				TableAttached.Rows.RemoveAt(gridAttached.SelectedIndices[i]);
+				reqsAttached.RemoveAt(gridAttached.SelectedIndices[i]);
 				hasChanged=true;
 			}
 			FillAttached();
 		}
 
 		private void butOK_Click(object sender,EventArgs e) {
-			List<int> reqNums=new List<int>();
-			for(int i=0;i<TableAttached.Rows.Count;i++){
-				reqNums.Add(PIn.PInt(TableAttached.Rows[i]["ReqStudentNum"].ToString()));
-			}
-			ReqStudents.SynchApt(AptNum,reqNums);
+			ReqStudents.SynchApt(reqsAttached,AptNum);
 			DialogResult=DialogResult.OK;
 		}
 
 		private void butCancel_Click(object sender,System.EventArgs e) {
 			DialogResult=DialogResult.Cancel;
 		}
+
+		
 
 		
 
