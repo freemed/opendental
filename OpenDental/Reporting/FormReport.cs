@@ -28,10 +28,6 @@ namespace OpenDental{
 		private System.Windows.Forms.MenuItem menuItemFacing;
 		private System.Windows.Forms.MenuItem menuItemSinglePage;
 		private System.ComponentModel.IContainer components;
-		///<summary>Either this or SourceRdlString should be set before opening the form.</summary>
-		public string SourceFilePath;
-		///<summary>Either this or SourceFilePath should be set before opening the form.</summary>
-		public string SourceRdlString;
 
 		///<summary></summary>
 		public FormReport()
@@ -173,13 +169,26 @@ namespace OpenDental{
 
 		private void FormRDLreport_Load(object sender, System.EventArgs e) {
 			LayoutToolBar();
-			if(SourceFilePath!=null){
-				viewer.SourceFile=SourceFilePath;
+			viewer.ShowParameterPanel=false;
+			viewer.Rebuild();
+		}
+
+		///<summary>Either this or SourceRdlString should be set before opening the form.</summary>
+		public string SourceFilePath{
+			get{return viewer.SourceFile;}
+			set{viewer.SourceFile=value;}
+		}
+
+		///<summary>Either this or SourceFilePath should be set before opening the form.</summary>
+		public string SourceRdlString{
+			get {return viewer.SourceRdl;}
+			set {viewer.SourceRdl=value;}
+		}
+
+		public fyiReporting.RDL.Report RdlReport{
+			get{
+				return viewer.Report;
 			}
-			if(SourceRdlString!=null){
-				viewer.SourceRdl=SourceRdlString;
-			}
-			//ODFileUtils.CombinePaths(new string[] {FormPath.GetPreferredImagePath(),"Reports","test.rdl"});
 		}
 
 		private void FormReport_Layout(object sender, System.Windows.Forms.LayoutEventArgs e) {

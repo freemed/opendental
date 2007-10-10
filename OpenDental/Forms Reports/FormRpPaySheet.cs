@@ -1,4 +1,5 @@
 using System;
+using System.Data;
 using System.Drawing;
 using System.Collections;
 using System.ComponentModel;
@@ -109,7 +110,7 @@ namespace OpenDental{
 			this.listProv.Location = new System.Drawing.Point(516,55);
 			this.listProv.Name = "listProv";
 			this.listProv.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
-			this.listProv.Size = new System.Drawing.Size(163,147);
+			this.listProv.Size = new System.Drawing.Size(163,199);
 			this.listProv.TabIndex = 36;
 			// 
 			// label1
@@ -161,15 +162,9 @@ namespace OpenDental{
 			date2.SelectionStart=DateTime.Today;
 			for(int i=0;i<Providers.List.Length;i++) {
 				listProv.Items.Add(Providers.List[i].Abbr+" - "+Providers.List[i].LName+", "+Providers.List[i].FName);
-				//listProv.SetSelected(i,true);
 			}
 			checkAllProv.Checked=true;
 			listProv.Visible=false;
-			//for(int i=0;i<DefB.Short[(int)DefCat.PaymentTypes].Length;i++) {
-			//	listPayType.Items.Add(DefB.Short[(int)DefCat.PaymentTypes][i].ItemName);
-			//	listPayType.SetSelected(i,true);
-			//}
-			//checkIncludeIns.Checked=true;
 		}
 
 		private void checkAllProv_Click(object sender,EventArgs e) {
@@ -180,16 +175,6 @@ namespace OpenDental{
 				listProv.Visible=true;
 			}
 		}
-		/*
-		private void butAllTypes_Click(object sender,EventArgs e) {
-			for(int i=0;i<listPayType.Items.Count;i++) {
-				listPayType.SetSelected(i,true);
-			}
-		}
-
-		private void butNone_Click(object sender,EventArgs e) {
-			listPayType.SelectedIndex=-1;
-		}*/
 
 		private void butOK_Click(object sender, System.EventArgs e) {
 			if(!checkAllProv.Checked && listProv.SelectedIndices.Count==0) {
@@ -211,7 +196,8 @@ namespace OpenDental{
 				}
 				whereProv+=")";
 			}
-			string queryIns=@"SELECT claimproc.DateCP,CONCAT(CONCAT(CONCAT(CONCAT(patient.LName,', '),patient.FName),' '),patient.MiddleI) lfname,
+			string queryIns=
+				@"SELECT claimproc.DateCP,CONCAT(CONCAT(CONCAT(CONCAT(patient.LName,', '),patient.FName),' '),patient.MiddleI) lfname,
 				carrier.CarrierName,provider.Abbr,claimpayment.CheckNum,SUM(claimproc.InsPayAmt) amt,claimproc.ClaimNum 
 				FROM claimproc,insplan,patient,carrier,provider,claimpayment 
 				WHERE claimproc.ClaimPaymentNum = claimpayment.ClaimPaymentNum 
@@ -238,7 +224,8 @@ namespace OpenDental{
 				}
 				whereProv+=")";
 			}
-			string queryPat=@"SELECT paysplit.DatePay,CONCAT(CONCAT(CONCAT(CONCAT(patient.LName,', '),patient.FName),' '),patient.MiddleI) AS lfname,
+			string queryPat=
+				@"SELECT paysplit.DatePay,CONCAT(CONCAT(CONCAT(CONCAT(patient.LName,', '),patient.FName),' '),patient.MiddleI) AS lfname,
 				payment.PayType,provider.Abbr,payment.CheckNum,
 				SUM(paysplit.SplitAmt) amt, payment.PayNum,ItemName 
 				FROM payment,patient,provider,paysplit,definition
@@ -249,13 +236,13 @@ namespace OpenDental{
 				+whereProv+" "
 				+"AND paysplit.DatePay >= "+POut.PDate(date1.SelectionStart)+" "
 				+"AND paysplit.DatePay <= "+POut.PDate(date2.SelectionStart)+" "
-				+"GROUP BY payment.PayNum,patient.PatNum,provider.ProvNum)";
-			string sourceRDL=Properties.Resources.PaymentsRDL;
-			
-			//more code to go here
-
+				+"GROUP BY payment.PayNum,patient.PatNum,provider.ProvNum";
+			DataTable tableIns=General.GetTable(queryIns);
+			DataTable tablePat=General.GetTable(queryPat);
 			FormReport FormR=new FormReport();
-			FormR.SourceRdlString=sourceRDL;
+			FormR.SourceRdlString=Properties.Resources.PaymentsRDL;
+			FormR.RdlReport.DataSets["Data"].SetData(tableIns);
+			FormR.RdlReport.DataSets["DataPatPay"].SetData(tablePat);
 			FormR.ShowDialog();
 			DialogResult=DialogResult.OK;		
 		}
