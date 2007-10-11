@@ -636,10 +636,10 @@ namespace OpenDental{
 			//}
 			SplitList=PaySplits.GetForPayment(PaymentCur.PayNum);//Count might be 0
 			SplitListOld=new List<PaySplit>();
-			SplitListOld.AddRange(SplitList);
-			//for(int i=0;i<SplitList.Count;i++) {
-			//	SplitListOld.Add(((PaySplit)SplitList[i]).Copy());
-			//}
+			//SplitListOld.AddRange(SplitList);//Do NOT do this.  It's a shallow copy only.  Not what we want.
+			for(int i=0;i<SplitList.Count;i++) {
+				SplitListOld.Add(SplitList[i].Copy());
+			}
 			if(IsNew) {
 				PayPlan payPlanCur=PayPlans.GetValidPlan(PatCur.PatNum,false);
 				if(payPlanCur!=null) {//a valid payPlan was located
