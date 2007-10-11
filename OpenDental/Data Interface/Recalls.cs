@@ -48,8 +48,8 @@ namespace OpenDental{
 			return GetList(patNums);
 		}
 
-		///<summary>Only used in FormRecallList to get a list of patients with recall.  Supply a date range, using min(-1 day) and max values if user left blank.</summary>
-		public static DataTable GetRecallList(DateTime fromDate,DateTime toDate,bool groupByFamilies){
+		///<summary>Only used in FormRecallList to get a list of patients with recall.  Supply a date range, using min(-1 day) and max values if user left blank.  If provNum=0, then it will get all provnums.</summary>
+		public static DataTable GetRecallList(DateTime fromDate,DateTime toDate,bool groupByFamilies,int provNum){
 			DataTable table=new DataTable();
 			DataRow row;
 			//columns that start with lowercase are altered for display rather than being raw data.
@@ -72,8 +72,12 @@ namespace OpenDental{
 				+"patient.HmPhone,patient.WkPhone,patient.WirelessPhone,patient.Email, "
 				+"patient.Guarantor, patient.PreferRecallMethod "
 				+"FROM recall,patient "
-				+"WHERE recall.PatNum=patient.PatNum "
-				+"AND NOT EXISTS("//test for future appt.
+				+"WHERE recall.PatNum=patient.PatNum ";
+			if(provNum>0){
+				command+="AND patient.PriProv="+POut.PInt(provNum)+" ";
+			}
+			command+=
+				"AND NOT EXISTS("//test for future appt.
 				+"SELECT * FROM appointment,procedurelog,procedurecode "
 				+"WHERE procedurelog.PatNum = recall.PatNum "
 				+"AND appointment.PatNum = recall.PatNum "

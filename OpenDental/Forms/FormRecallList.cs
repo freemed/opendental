@@ -49,7 +49,7 @@ namespace OpenDental{
 		DataTable table;
 		private bool headingPrinted;
 		private int headingPrintH;
-		private ComboBox comboBox1;
+		private ComboBox comboProv;
 		private Label label4;
 		///<summary>Only used if PinClicked=true</summary>
 		public int AptSelected;
@@ -82,6 +82,8 @@ namespace OpenDental{
 			this.butClose = new OpenDental.UI.Button();
 			this.butRefresh = new OpenDental.UI.Button();
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
+			this.comboProv = new System.Windows.Forms.ComboBox();
+			this.label4 = new System.Windows.Forms.Label();
 			this.checkGroupFamilies = new System.Windows.Forms.CheckBox();
 			this.textDateEnd = new OpenDental.ValidDate();
 			this.textDateStart = new OpenDental.ValidDate();
@@ -97,8 +99,6 @@ namespace OpenDental{
 			this.butPostcards = new OpenDental.UI.Button();
 			this.gridMain = new OpenDental.UI.ODGrid();
 			this.butPrint = new OpenDental.UI.Button();
-			this.label4 = new System.Windows.Forms.Label();
-			this.comboBox1 = new System.Windows.Forms.ComboBox();
 			this.groupBox1.SuspendLayout();
 			this.groupBox3.SuspendLayout();
 			this.SuspendLayout();
@@ -137,7 +137,7 @@ namespace OpenDental{
 			// groupBox1
 			// 
 			this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.groupBox1.Controls.Add(this.comboBox1);
+			this.groupBox1.Controls.Add(this.comboProv);
 			this.groupBox1.Controls.Add(this.label4);
 			this.groupBox1.Controls.Add(this.checkGroupFamilies);
 			this.groupBox1.Controls.Add(this.textDateEnd);
@@ -153,6 +153,24 @@ namespace OpenDental{
 			this.groupBox1.TabIndex = 1;
 			this.groupBox1.TabStop = false;
 			this.groupBox1.Text = "View";
+			// 
+			// comboProv
+			// 
+			this.comboProv.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboProv.Location = new System.Drawing.Point(17,125);
+			this.comboProv.MaxDropDownItems = 40;
+			this.comboProv.Name = "comboProv";
+			this.comboProv.Size = new System.Drawing.Size(160,21);
+			this.comboProv.TabIndex = 21;
+			// 
+			// label4
+			// 
+			this.label4.Location = new System.Drawing.Point(14,108);
+			this.label4.Name = "label4";
+			this.label4.Size = new System.Drawing.Size(91,14);
+			this.label4.TabIndex = 20;
+			this.label4.Text = "Provider";
+			this.label4.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
 			// 
 			// checkGroupFamilies
 			// 
@@ -327,24 +345,6 @@ namespace OpenDental{
 			this.butPrint.Text = "Print List";
 			this.butPrint.Click += new System.EventHandler(this.butPrint_Click);
 			// 
-			// label4
-			// 
-			this.label4.Location = new System.Drawing.Point(14,108);
-			this.label4.Name = "label4";
-			this.label4.Size = new System.Drawing.Size(91,14);
-			this.label4.TabIndex = 20;
-			this.label4.Text = "Provider";
-			this.label4.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
-			// 
-			// comboBox1
-			// 
-			this.comboBox1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboBox1.Location = new System.Drawing.Point(17,125);
-			this.comboBox1.MaxDropDownItems = 40;
-			this.comboBox1.Name = "comboBox1";
-			this.comboBox1.Size = new System.Drawing.Size(160,21);
-			this.comboBox1.TabIndex = 21;
-			// 
 			// FormRecallList
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
@@ -390,6 +390,11 @@ namespace OpenDental{
 			else {
 				textDateEnd.Text=DateTime.Today.AddDays(daysFuture).ToShortDateString();
 			}
+			comboProv.Items.Add(Lan.g(this,"All"));
+			comboProv.SelectedIndex=0;
+			for(int i=0;i<Providers.List.Length;i++) {
+				comboProv.Items.Add(Providers.GetNameLF(Providers.List[i].ProvNum));
+			}
 			//textPostcardMessage.Text=PrefB.GetString("RecallPostcardMessage");
 			//textFamilyMessage.Text=PrefB.GetString("RecallPostcardFamMsg");
 			comboStatus.Items.Clear();
@@ -428,7 +433,11 @@ namespace OpenDental{
 			else {
 				toDate=PIn.PDate(textDateEnd.Text);
 			}
-			table=Recalls.GetRecallList(fromDate,toDate,checkGroupFamilies.Checked);
+			int provNum=0;
+			if(comboProv.SelectedIndex!=0){
+				provNum=Providers.List[comboProv.SelectedIndex-1].ProvNum;
+			}
+			table=Recalls.GetRecallList(fromDate,toDate,checkGroupFamilies.Checked,provNum);
 			int scrollval=gridMain.ScrollValue;
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
