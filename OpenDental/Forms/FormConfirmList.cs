@@ -360,7 +360,11 @@ namespace OpenDental{
 		private void FillMain(){
 			DateTime dateFrom=PIn.PDate(textDateFrom.Text);
 			DateTime dateTo=PIn.PDate(textDateTo.Text);
-			table=Appointments.GetConfirmList(dateFrom,dateTo);
+			int provNum=0;
+			if(comboProv.SelectedIndex!=0) {
+				provNum=Providers.List[comboProv.SelectedIndex-1].ProvNum;
+			}
+			table=Appointments.GetConfirmList(dateFrom,dateTo,provNum);
 			int scrollVal=grid.ScrollValue;
 			grid.BeginUpdate();
 			grid.Columns.Clear();

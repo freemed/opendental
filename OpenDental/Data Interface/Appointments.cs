@@ -395,7 +395,7 @@ namespace OpenDental{
 
 
 		///<summary>Used in FormConfirmList</summary>
-		public static DataTable GetConfirmList(DateTime dateFrom,DateTime dateTo){
+		public static DataTable GetConfirmList(DateTime dateFrom,DateTime dateTo,int provNum){
 			DataTable table=new DataTable();
 			DataRow row;
 			//columns that start with lowercase are altered for display rather than being raw data.
@@ -423,8 +423,11 @@ namespace OpenDental{
 				+"AND AptDateTime > "+POut.PDate(dateFrom)+" "
 				+"AND AptDateTime < "+POut.PDate(dateTo.AddDays(1))+" "
 				+"AND (AptStatus=1 "//scheduled
-				+"OR AptStatus=4) "//ASAP
-				+"ORDER BY AptDateTime";
+				+"OR AptStatus=4) ";//ASAP
+			if(provNum>0){
+				command+="AND (appointment.ProvNum="+POut.PInt(provNum)+" OR appointment.ProvHyg="+POut.PInt(provNum)+") ";
+			}
+			command+="ORDER BY AptDateTime";
 			DataTable rawtable=General.GetTable(command);
 			DateTime dateT;
 			Patient pat;
