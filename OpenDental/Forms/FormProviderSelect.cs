@@ -75,7 +75,7 @@ namespace OpenDental{
 			this.butClose.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butClose.CornerRadius = 4F;
 			this.butClose.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.butClose.Location = new System.Drawing.Point(587,628);
+			this.butClose.Location = new System.Drawing.Point(669,628);
 			this.butClose.Name = "butClose";
 			this.butClose.Size = new System.Drawing.Size(82,26);
 			this.butClose.TabIndex = 3;
@@ -92,7 +92,7 @@ namespace OpenDental{
 			this.butDown.CornerRadius = 4F;
 			this.butDown.Image = global::OpenDental.Properties.Resources.down;
 			this.butDown.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butDown.Location = new System.Drawing.Point(587,450);
+			this.butDown.Location = new System.Drawing.Point(669,450);
 			this.butDown.Name = "butDown";
 			this.butDown.Size = new System.Drawing.Size(82,26);
 			this.butDown.TabIndex = 12;
@@ -109,7 +109,7 @@ namespace OpenDental{
 			this.butUp.CornerRadius = 4F;
 			this.butUp.Image = global::OpenDental.Properties.Resources.up;
 			this.butUp.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butUp.Location = new System.Drawing.Point(587,411);
+			this.butUp.Location = new System.Drawing.Point(669,411);
 			this.butUp.Name = "butUp";
 			this.butUp.Size = new System.Drawing.Size(82,26);
 			this.butUp.TabIndex = 11;
@@ -126,7 +126,7 @@ namespace OpenDental{
 			this.butAdd.CornerRadius = 4F;
 			this.butAdd.Image = global::OpenDental.Properties.Resources.Add;
 			this.butAdd.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butAdd.Location = new System.Drawing.Point(587,522);
+			this.butAdd.Location = new System.Drawing.Point(669,522);
 			this.butAdd.Name = "butAdd";
 			this.butAdd.Size = new System.Drawing.Size(82,26);
 			this.butAdd.TabIndex = 10;
@@ -140,7 +140,7 @@ namespace OpenDental{
 			this.gridMain.Name = "gridMain";
 			this.gridMain.ScrollValue = 0;
 			this.gridMain.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
-			this.gridMain.Size = new System.Drawing.Size(466,642);
+			this.gridMain.Size = new System.Drawing.Size(538,642);
 			this.gridMain.TabIndex = 13;
 			this.gridMain.Title = "Providers";
 			this.gridMain.TranslationName = null;
@@ -151,7 +151,7 @@ namespace OpenDental{
 			this.groupDentalSchools.Controls.Add(this.checkAlphabetical);
 			this.groupDentalSchools.Controls.Add(this.label1);
 			this.groupDentalSchools.Controls.Add(this.comboClass);
-			this.groupDentalSchools.Location = new System.Drawing.Point(494,6);
+			this.groupDentalSchools.Location = new System.Drawing.Point(567,12);
 			this.groupDentalSchools.Name = "groupDentalSchools";
 			this.groupDentalSchools.Size = new System.Drawing.Size(184,100);
 			this.groupDentalSchools.TabIndex = 14;
@@ -209,7 +209,7 @@ namespace OpenDental{
 			this.groupCreateUsers.Controls.Add(this.label3);
 			this.groupCreateUsers.Controls.Add(this.comboUserGroup);
 			this.groupCreateUsers.Controls.Add(this.butCreateUsers);
-			this.groupCreateUsers.Location = new System.Drawing.Point(494,114);
+			this.groupCreateUsers.Location = new System.Drawing.Point(567,120);
 			this.groupCreateUsers.Name = "groupCreateUsers";
 			this.groupCreateUsers.Size = new System.Drawing.Size(184,100);
 			this.groupCreateUsers.TabIndex = 18;
@@ -238,7 +238,7 @@ namespace OpenDental{
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.CancelButton = this.butClose;
-			this.ClientSize = new System.Drawing.Size(690,670);
+			this.ClientSize = new System.Drawing.Size(772,670);
 			this.Controls.Add(this.groupCreateUsers);
 			this.Controls.Add(this.butAdd);
 			this.Controls.Add(this.butDown);
@@ -304,13 +304,13 @@ namespace OpenDental{
 			table=Providers.Refresh(schoolClass,isAlph);
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
-			ODGridColumn col=new ODGridColumn(Lan.g("TableProviders","Abbrev"),60);
+			ODGridColumn col=new ODGridColumn(Lan.g("TableProviders","Abbrev"),90);
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TableProviders","Last Name"),80);
+			col=new ODGridColumn(Lan.g("TableProviders","Last Name"),90);
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TableProviders","First Name"),80);
+			col=new ODGridColumn(Lan.g("TableProviders","First Name"),90);
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TableProviders","User Name"),80);
+			col=new ODGridColumn(Lan.g("TableProviders","User Name"),90);
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn(Lan.g("TableProviders","Hidden"),50,HorizontalAlignment.Center);
 			gridMain.Columns.Add(col);
@@ -524,6 +524,15 @@ namespace OpenDental{
 		}
 
 		private void FormProviderSelect_Closing(object sender, System.ComponentModel.CancelEventArgs e) {
+			string duplicates=Providers.GetDuplicateAbbrs();
+			if(duplicates!="") {
+				if(MessageBox.Show(Lan.g(this,"Warning.  The following abbreviations are duplicates.  Continue anyway?\r\n")+duplicates,
+					"",MessageBoxButtons.OKCancel)!=DialogResult.OK)
+				{
+					e.Cancel=true;
+					return;
+				}
+			}
 			if(changed){
 				DataValid.SetInvalid(InvalidTypes.Providers | InvalidTypes.Security);
 			}

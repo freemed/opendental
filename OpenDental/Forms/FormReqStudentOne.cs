@@ -118,7 +118,7 @@ namespace OpenDental{
 				//butCancel.Text=Lan.g(this,"Close");
 			//}
 			prov=Providers.GetProv(ProvNum);
-			Text=Lan.g(this,"Student Requirements - ")+Providers.GetNameLF(ProvNum);
+			Text=Lan.g(this,"Student Requirements - ")+Providers.GetLongDesc(ProvNum);
 			FillGrid();
 		}
 

@@ -416,7 +416,7 @@ namespace OpenDental{
 				row.Cells.Add(userdesc);
 				row.Cells.Add(UserGroups.GetGroup(PIn.PInt(table.Rows[i]["UserGroupNum"].ToString())).Description);
 				row.Cells.Add(Employees.GetNameFL(PIn.PInt(table.Rows[i]["EmployeeNum"].ToString())));
-				row.Cells.Add(Providers.GetNameLF(PIn.PInt(table.Rows[i]["ProvNum"].ToString())));
+				row.Cells.Add(Providers.GetLongDesc(PIn.PInt(table.Rows[i]["ProvNum"].ToString())));
 				row.Cells.Add(Clinics.GetDesc(PIn.PInt(table.Rows[i]["ClinicNum"].ToString())));
 				gridMain.Rows.Add(row);
 			}

@@ -161,7 +161,7 @@ namespace OpenDental{
 			date1.SelectionStart=DateTime.Today;
 			date2.SelectionStart=DateTime.Today;
 			for(int i=0;i<Providers.List.Length;i++) {
-				listProv.Items.Add(Providers.List[i].Abbr+" - "+Providers.List[i].LName+", "+Providers.List[i].FName);
+				listProv.Items.Add(Providers.List[i].GetLongDesc());
 			}
 			checkAllProv.Checked=true;
 			listProv.Visible=false;

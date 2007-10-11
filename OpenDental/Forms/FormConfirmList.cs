@@ -46,6 +46,8 @@ namespace OpenDental{
 		private OpenDental.UI.PrintPreview printPreview;
 		private bool headingPrinted;
 		private int headingPrintH;
+		private ComboBox comboProv;
+		private Label label4;
 		///<summary>Only used if PinClicked=true</summary>
 		public int AptSelected;
 
@@ -73,6 +75,8 @@ namespace OpenDental{
 			this.butClose = new OpenDental.UI.Button();
 			this.butRefresh = new OpenDental.UI.Button();
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
+			this.comboProv = new System.Windows.Forms.ComboBox();
+			this.label4 = new System.Windows.Forms.Label();
 			this.textDateTo = new OpenDental.ValidDate();
 			this.textDateFrom = new OpenDental.ValidDate();
 			this.label2 = new System.Windows.Forms.Label();
@@ -113,7 +117,7 @@ namespace OpenDental{
 			this.butRefresh.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butRefresh.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butRefresh.CornerRadius = 4F;
-			this.butRefresh.Location = new System.Drawing.Point(98,62);
+			this.butRefresh.Location = new System.Drawing.Point(379,43);
 			this.butRefresh.Name = "butRefresh";
 			this.butRefresh.Size = new System.Drawing.Size(84,26);
 			this.butRefresh.TabIndex = 2;
@@ -123,6 +127,8 @@ namespace OpenDental{
 			// groupBox1
 			// 
 			this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.groupBox1.Controls.Add(this.comboProv);
+			this.groupBox1.Controls.Add(this.label4);
 			this.groupBox1.Controls.Add(this.textDateTo);
 			this.groupBox1.Controls.Add(this.textDateFrom);
 			this.groupBox1.Controls.Add(this.label2);
@@ -131,10 +137,28 @@ namespace OpenDental{
 			this.groupBox1.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.groupBox1.Location = new System.Drawing.Point(5,4);
 			this.groupBox1.Name = "groupBox1";
-			this.groupBox1.Size = new System.Drawing.Size(188,93);
+			this.groupBox1.Size = new System.Drawing.Size(475,77);
 			this.groupBox1.TabIndex = 1;
 			this.groupBox1.TabStop = false;
 			this.groupBox1.Text = "View";
+			// 
+			// comboProv
+			// 
+			this.comboProv.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboProv.Location = new System.Drawing.Point(282,16);
+			this.comboProv.MaxDropDownItems = 40;
+			this.comboProv.Name = "comboProv";
+			this.comboProv.Size = new System.Drawing.Size(181,21);
+			this.comboProv.TabIndex = 23;
+			// 
+			// label4
+			// 
+			this.label4.Location = new System.Drawing.Point(189,20);
+			this.label4.Name = "label4";
+			this.label4.Size = new System.Drawing.Size(91,14);
+			this.label4.TabIndex = 22;
+			this.label4.Text = "Provider";
+			this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// textDateTo
 			// 
@@ -208,9 +232,9 @@ namespace OpenDental{
 			// 
 			this.groupBox3.Controls.Add(this.comboStatus);
 			this.groupBox3.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.groupBox3.Location = new System.Drawing.Point(203,4);
+			this.groupBox3.Location = new System.Drawing.Point(504,4);
 			this.groupBox3.Name = "groupBox3";
-			this.groupBox3.Size = new System.Drawing.Size(143,93);
+			this.groupBox3.Size = new System.Drawing.Size(143,77);
 			this.groupBox3.TabIndex = 15;
 			this.groupBox3.TabStop = false;
 			this.groupBox3.Text = "Set Status";
@@ -246,11 +270,11 @@ namespace OpenDental{
 			// grid
 			// 
 			this.grid.HScrollVisible = false;
-			this.grid.Location = new System.Drawing.Point(4,103);
+			this.grid.Location = new System.Drawing.Point(4,87);
 			this.grid.Name = "grid";
 			this.grid.ScrollValue = 0;
 			this.grid.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
-			this.grid.Size = new System.Drawing.Size(963,546);
+			this.grid.Size = new System.Drawing.Size(963,562);
 			this.grid.TabIndex = 0;
 			this.grid.Title = "Confirmation List";
 			this.grid.TranslationName = "TableConfirmList";
@@ -307,6 +331,11 @@ namespace OpenDental{
 		private void FormConfirmList_Load(object sender, System.EventArgs e) {
 			textDateFrom.Text=AddWorkDays(1,DateTime.Today).ToShortDateString();
 			textDateTo.Text=AddWorkDays(2,DateTime.Today).ToShortDateString();
+			comboProv.Items.Add(Lan.g(this,"All"));
+			comboProv.SelectedIndex=0;
+			for(int i=0;i<Providers.List.Length;i++) {
+				comboProv.Items.Add(Providers.List[i].GetLongDesc());
+			}
 			//textPostcardMessage.Text=PrefB.GetString("ConfirmPostcardMessage");
 			comboStatus.Items.Clear();
 			for(int i=0;i<DefB.Short[(int)DefCat.ApptConfirmed].Length;i++){

@@ -327,7 +327,7 @@ namespace OpenDental{
 				textAmount.Text=(-AdjustmentCur.AdjAmt).ToString("F");//shows without the neg sign
 			}
 			for(int i=0;i<Providers.List.Length;i++){
-				this.listProvider.Items.Add(Providers.List[i].Abbr);
+				this.listProvider.Items.Add(Providers.List[i].GetLongDesc());
 				if(Providers.List[i].ProvNum==AdjustmentCur.ProvNum)
 					listProvider.SelectedIndex=i;
 			}				

@@ -384,7 +384,7 @@ namespace OpenDental{
 			}
 			for(int i=0;i<Providers.List.Length;i++){
 				listProv.Items.Add
-					(Providers.List[i].Abbr+" - "+Providers.List[i].LName+", "+Providers.List[i].FName);
+					(Providers.List[i].GetLongDesc());
 				if(ApptViewItems.ProvIsInView(Providers.List[i].ProvNum)){
 					listProv.SetSelected(i,true);
 				}

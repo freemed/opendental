@@ -288,7 +288,7 @@ namespace OpenDental{
 			comboInstructor.Items.Add(Lan.g(this,"None"));
 			comboInstructor.SelectedIndex=0;
 			for(int i=0;i<Providers.List.Length;i++) {
-				comboInstructor.Items.Add(Providers.GetNameLF(Providers.List[i].ProvNum));
+				comboInstructor.Items.Add(Providers.List[i].GetLongDesc());
 				//if(Providers.List[i].ProvNum==ReqCur.InstructorNum) {
 				//	comboInstructor.SelectedIndex=i+1;
 				//}
@@ -365,7 +365,7 @@ namespace OpenDental{
 			ODGridRow row;
 			for(int i=0;i<reqsAttached.Count;i++) {
 				row=new ODGridRow();
-				row.Cells.Add(Providers.GetNameLF(reqsAttached[i].ProvNum));
+				row.Cells.Add(Providers.GetAbbr(reqsAttached[i].ProvNum));
 				row.Cells.Add(reqsAttached[i].Descript);
 				if(reqsAttached[i].DateCompleted.Year<1880){
 					row.Cells.Add("");

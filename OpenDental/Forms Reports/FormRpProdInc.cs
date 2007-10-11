@@ -356,8 +356,7 @@ namespace OpenDental{
 		private void FormProduction_Load(object sender, System.EventArgs e) {
 			textToday.Text=DateTime.Today.ToShortDateString();
 			for(int i=0;i<Providers.List.Length;i++){
-				listProv.Items.Add(Providers.List[i].Abbr+" - "+Providers.List[i].LName+", "
-					+Providers.List[i].FName);
+				listProv.Items.Add(Providers.List[i].GetLongDesc());
 				listProv.SetSelected(i,true);
 			}
 			//if(PrefB.GetBool("EasyNoClinics")){

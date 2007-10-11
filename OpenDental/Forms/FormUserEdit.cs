@@ -288,7 +288,7 @@ namespace OpenDental{
 			listProv.Items.Add(Lan.g(this,"none"));
 			listProv.SelectedIndex=0;
 			for(int i=0;i<Providers.List.Length;i++) {
-				listProv.Items.Add(Providers.GetNameLF(Providers.List[i].ProvNum));
+				listProv.Items.Add(Providers.List[i].GetLongDesc());
 				if(UserCur.ProvNum==Providers.List[i].ProvNum) {
 					listProv.SelectedIndex=i+1;
 				}

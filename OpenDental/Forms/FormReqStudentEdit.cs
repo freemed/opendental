@@ -376,7 +376,7 @@ namespace OpenDental{
 					butOK.Enabled=false;
 				}
 			}
-			textStudent.Text=Providers.GetNameLF(ReqCur.ProvNum);
+			textStudent.Text=Providers.GetLongDesc(ReqCur.ProvNum);
 			textCourse.Text=SchoolCourses.GetDescript(ReqCur.SchoolCourseNum);
 			textDescription.Text=ReqCur.Descript;
 			if(ReqCur.DateCompleted.Year>1880){
@@ -400,7 +400,7 @@ namespace OpenDental{
 			comboInstructor.Items.Add(Lan.g(this,"None"));
 			comboInstructor.SelectedIndex=0;
 			for(int i=0;i<Providers.List.Length;i++) {
-				comboInstructor.Items.Add(Providers.GetNameLF(Providers.List[i].ProvNum));
+				comboInstructor.Items.Add(Providers.List[i].GetLongDesc());
 				if(Providers.List[i].ProvNum==ReqCur.InstructorNum) {
 					comboInstructor.SelectedIndex=i+1;
 				}

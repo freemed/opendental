@@ -9,7 +9,7 @@ namespace OpenDentBusiness{
 	public class Provider{
 		///<summary>Primary key.</summary>
 		public int ProvNum;
-		///<summary>Abbreviation.</summary>
+		///<summary>Abbreviation.  There was a limit of 5 char before version 5.4.  The new limit is 255 char.  This will allow more elegant solutions to various problems.  Providers will no longer be referred to by FName and LName.  Abbr is used as a human readable primary key.</summary>
 		public string Abbr;
 		///<summary>Order that provider will show in lists.</summary>
 		public int ItemOrder;
@@ -83,11 +83,16 @@ namespace OpenDentBusiness{
 			return p;
 		}
 
-		///<summary></summary>
-		public string GetNameLF() {
-			return LName+", "+FName;
+		///<Summary>For use in areas of the program where we have more room than just simple abbr.  Such as pick boxes in reports.  This will give Abbr - LName, FName (hidden).</Summary>
+		public string GetLongDesc(){
+			string retval=Abbr+" - "+LName+", "+FName;
+			if(IsHidden){
+				retval+=" "+Lan.g("Providers","(hidden)");
+			}
+			return retval;
 		}
 
+		
 	}
 	
 	

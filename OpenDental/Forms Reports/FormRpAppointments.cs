@@ -240,8 +240,7 @@ namespace OpenDental
 
 		private void FormRpApptWithPhones_Load(object sender, System.EventArgs e){
 			for(int i=0;i<Providers.List.Length;i++){
-				listProv.Items.Add(Providers.List[i].Abbr+" - "+Providers.List[i].LName+", "
-					+Providers.List[i].FName);
+				listProv.Items.Add(Providers.List[i].GetLongDesc());
 				listProv.SetSelected(i,true);
 			}
 			SetTomorrow();

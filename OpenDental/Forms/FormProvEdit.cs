@@ -318,9 +318,9 @@ namespace OpenDental{
 			// textAbbr
 			// 
 			this.textAbbr.Location = new System.Drawing.Point(136,8);
-			this.textAbbr.MaxLength = 5;
+			this.textAbbr.MaxLength = 255;
 			this.textAbbr.Name = "textAbbr";
-			this.textAbbr.Size = new System.Drawing.Size(58,20);
+			this.textAbbr.Size = new System.Drawing.Size(121,20);
 			this.textAbbr.TabIndex = 0;
 			// 
 			// textStateLicense
@@ -783,6 +783,16 @@ namespace OpenDental{
 			if(textSSN.Text.Contains("-")){
 				MsgBox.Show(this,"SSN/TIN not allowed to have dash.");
 				return;
+			}
+			for(int i=0;i<Providers.ListLong.Length;i++){
+				if(Providers.ListLong[i].ProvNum==ProvCur.ProvNum){
+					continue;
+				}
+				if(Providers.ListLong[i].Abbr==textAbbr.Text){
+					if(!MsgBox.Show(this,true,"This abbreviation is already in use by another provider.  Continue anyway?")){
+						return;
+					}
+				}
 			}
 			ProvCur.Abbr=textAbbr.Text;
 			ProvCur.LName=textLName.Text;

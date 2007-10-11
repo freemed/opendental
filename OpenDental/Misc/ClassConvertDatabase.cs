@@ -5983,6 +5983,14 @@ namespace OpenDental{
 				//after r943
 				command="DELETE FROM reqstudent WHERE DateCompleted < '1900-01-01' AND AptNum=0";
 				General.NonQEx(command);
+				//after r945, but low priority
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE provider CHANGE Abbr Abbr VARCHAR(255)";
+					General.NonQEx(command);
+				}
+				else{//oracle
+
+				}
 
 
 

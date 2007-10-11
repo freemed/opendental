@@ -393,7 +393,7 @@ namespace OpenDental{
 			comboProv.Items.Add(Lan.g(this,"All"));
 			comboProv.SelectedIndex=0;
 			for(int i=0;i<Providers.List.Length;i++) {
-				comboProv.Items.Add(Providers.GetNameLF(Providers.List[i].ProvNum));
+				comboProv.Items.Add(Providers.List[i].GetLongDesc());
 			}
 			//textPostcardMessage.Text=PrefB.GetString("RecallPostcardMessage");
 			//textFamilyMessage.Text=PrefB.GetString("RecallPostcardFamMsg");

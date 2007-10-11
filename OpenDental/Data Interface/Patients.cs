@@ -735,7 +735,7 @@ namespace OpenDental{
 				r[12]=table.Rows[i][12].ToString();//ChartNumber
 				r[13]=table.Rows[i][13].ToString();//City
 				r[14]=table.Rows[i][14].ToString();//State
-				r[15]=Providers.GetNameLF(PIn.PInt(table.Rows[i][15].ToString()));//PriProv
+				r[15]=Providers.GetAbbr(PIn.PInt(table.Rows[i][15].ToString()));//PriProv
 				PtDataTable.Rows.Add(r);
 			}
 			return PtDataTable;//retval;//if true, there are more rows.

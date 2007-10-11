@@ -156,11 +156,11 @@ namespace OpenDental{
 			return retStr;
 		}
 
-		///<summary></summary>
-		public static string GetNameLF(int provNum) {
+		///<summary>Abbr - LName, FName (hidden).</summary>
+		public static string GetLongDesc(int provNum) {
 			for(int i=0;i<ListLong.Length;i++) {
 				if(ListLong[i].ProvNum==provNum) {
-					return ListLong[i].LName+", "+ListLong[i].FName;
+					return ListLong[i].GetLongDesc();
 				}
 			}
 			return "";
@@ -255,6 +255,24 @@ namespace OpenDental{
 				return 1;
 			}
 			return PIn.PInt(table.Rows[0][0].ToString())+1;
+		}
+
+		///<Summary>Used once in the Provider Select window to warn user of duplicate Abbrs.</Summary>
+		public static string GetDuplicateAbbrs(){
+			string command="SELECT Abbr FROM provider p1 WHERE EXISTS"
+				+"(SELECT * FROM provider p2 WHERE p1.ProvNum!=p2.ProvNum AND p1.Abbr=p2.Abbr) GROUP BY Abbr";
+			DataTable table=General.GetTable(command);
+			if(table.Rows.Count==0) {
+				return "";
+			}
+			string retVal="";
+			for(int i=0;i<table.Rows.Count;i++){
+				if(i>0){
+					retVal+=",";
+				}
+				retVal+=table.Rows[i][0].ToString();
+			}
+			return retVal;
 		}
 
 

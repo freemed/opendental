@@ -674,7 +674,7 @@ namespace OpenDental{
 			//Primary provider (very useful in dental schools)
 			row=new ODGridRow();
 			row.Cells.Add(Lan.g("TablePatient","Primary Provider"));
-			row.Cells.Add(Providers.GetNameLF(Patients.GetProvNum(PatCur)));
+			row.Cells.Add(Providers.GetLongDesc(Patients.GetProvNum(PatCur)));
 			gridPat.Rows.Add(row);
 			//Language
 			if(PatCur.Language!=""){

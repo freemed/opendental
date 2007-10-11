@@ -85,7 +85,7 @@ namespace OpenDental{
 			this.listProv.FormattingEnabled = true;
 			this.listProv.Location = new System.Drawing.Point(92,51);
 			this.listProv.Name = "listProv";
-			this.listProv.Size = new System.Drawing.Size(120,199);
+			this.listProv.Size = new System.Drawing.Size(176,199);
 			this.listProv.TabIndex = 2;
 			// 
 			// label15
@@ -244,7 +244,7 @@ namespace OpenDental{
 		private void FormProcCodeNoteEdit_Load(object sender,EventArgs e) {
 			strBTime=new StringBuilder(NoteCur.ProcTime);
 			for(int i=0;i<Providers.List.Length;i++){
-				listProv.Items.Add(Providers.GetNameLF(Providers.List[i].ProvNum));
+				listProv.Items.Add(Providers.List[i].GetLongDesc());
 				if(NoteCur.ProvNum==Providers.List[i].ProvNum){
 					listProv.SelectedIndex=i;
 				}

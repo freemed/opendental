@@ -250,6 +250,8 @@ namespace OpenDental{
 			// 
 			// checkProvAll
 			// 
+			this.checkProvAll.Checked = true;
+			this.checkProvAll.CheckState = System.Windows.Forms.CheckState.Checked;
 			this.checkProvAll.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.checkProvAll.Location = new System.Drawing.Point(544,46);
 			this.checkProvAll.Name = "checkProvAll";
@@ -260,6 +262,8 @@ namespace OpenDental{
 			// 
 			// checkBillTypesAll
 			// 
+			this.checkBillTypesAll.Checked = true;
+			this.checkBillTypesAll.CheckState = System.Windows.Forms.CheckState.Checked;
 			this.checkBillTypesAll.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.checkBillTypesAll.Location = new System.Drawing.Point(335,46);
 			this.checkBillTypesAll.Name = "checkBillTypesAll";
@@ -323,7 +327,7 @@ namespace OpenDental{
 			listBillType.Visible=false;
 			checkBillTypesAll.Checked=true;
 			for(int i=0;i<Providers.List.Length;i++){
-				listProv.Items.Add(Providers.List[i].GetNameLF());
+				listProv.Items.Add(Providers.List[i].GetLongDesc());
 			}
 			if(listProv.Items.Count>0) {
 				listProv.SelectedIndex=0;
