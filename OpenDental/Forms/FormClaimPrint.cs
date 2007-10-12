@@ -2545,6 +2545,9 @@ namespace OpenDental{
 			MedClaimsArray = new Claim[3];
 			int ii=0;
 			for(int i=0;i<ClaimsArray.Length;i++){
+				if(ii>2) {//this fixes a bug.  Can we please get some comments in this section regarding what's happening?
+					break;
+				}
 				InsPlan tmpPlan = InsPlans.GetPlan(ClaimsArray[i].PlanNum,PlanList);
 				if(tmpPlan.IsMedical && (ClaimsArray[i].ClaimNum <= ClaimCur.ClaimNum)){
 					MedPlanList[ii] = tmpPlan.Copy();

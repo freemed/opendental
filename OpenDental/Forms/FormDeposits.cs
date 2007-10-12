@@ -22,6 +22,8 @@ namespace OpenDental{
 		private OpenDental.UI.Button butOK;
 		///<summary>Use this from Transaction screen when attaching a source document.</summary>
 		public bool IsSelectionMode;
+		private ListBox listProv;
+		private Label label3;
 		///<summary>In selection mode, when closing form with OK, this contains selected deposit.</summary>
 		public Deposit SelectedDeposit;
 
@@ -62,6 +64,8 @@ namespace OpenDental{
 			this.grid = new OpenDental.UI.ODGrid();
 			this.butAdd = new OpenDental.UI.Button();
 			this.butOK = new OpenDental.UI.Button();
+			this.listProv = new System.Windows.Forms.ListBox();
+			this.label3 = new System.Windows.Forms.Label();
 			this.SuspendLayout();
 			// 
 			// butClose
@@ -123,11 +127,30 @@ namespace OpenDental{
 			this.butOK.Text = "&OK";
 			this.butOK.Click += new System.EventHandler(this.butOK_Click);
 			// 
+			// listProv
+			// 
+			this.listProv.Location = new System.Drawing.Point(295,32);
+			this.listProv.Name = "listProv";
+			this.listProv.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
+			this.listProv.Size = new System.Drawing.Size(163,186);
+			this.listProv.TabIndex = 101;
+			// 
+			// label3
+			// 
+			this.label3.Location = new System.Drawing.Point(292,13);
+			this.label3.Name = "label3";
+			this.label3.Size = new System.Drawing.Size(104,16);
+			this.label3.TabIndex = 100;
+			this.label3.Text = "Providers";
+			this.label3.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
+			// 
 			// FormDeposits
 			// 
 			this.AcceptButton = this.butOK;
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.ClientSize = new System.Drawing.Size(486,613);
+			this.Controls.Add(this.listProv);
+			this.Controls.Add(this.label3);
 			this.Controls.Add(this.butOK);
 			this.Controls.Add(this.grid);
 			this.Controls.Add(this.butClose);
@@ -152,10 +175,19 @@ namespace OpenDental{
 			else{
 				butOK.Visible=false;
 			}
+			comboProv.Items.Add(Lan.g(this,"All"));
+			comboProv.SelectedIndex=0;
+			for(int i=0;i<Providers.List.Length;i++) {
+				comboProv.Items.Add(Providers.List[i].GetLongDesc());
+			}
 			FillGrid();
 		}
 
 		private void FillGrid(){
+			int provNum=0;
+			if(comboProv.SelectedIndex!=0) {
+				provNum=Providers.List[comboProv.SelectedIndex-1].ProvNum;
+			}
 			if(IsSelectionMode){
 				DList=Deposits.GetUnattached();
 			}
