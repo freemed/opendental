@@ -5930,6 +5930,39 @@ namespace OpenDental{
 				command="UPDATE preference SET ValueString = '5.3.9.0' WHERE PrefName = 'DataBaseVersion'";
 				General.NonQEx(command);
 			}
+			To5_3_11();
+		}
+
+		private void To5_3_11() {
+			if(FromVersion<new Version("5.3.11.0")) {
+				string command="";
+				command="ALTER TABLE appointment ADD INDEX indexProvNum (ProvNum)";
+				try {
+					General.NonQEx(command);
+				}
+				catch {
+				}
+				command="ALTER TABLE appointment ADD INDEX indexProvHyg (ProvHyg)";
+				try {
+					General.NonQEx(command);
+				}
+				catch {
+				}
+				command="ALTER TABLE labcase ADD INDEX indexAptNum (AptNum)";
+				try {
+					General.NonQEx(command);
+				}
+				catch {
+				}
+				command="ALTER TABLE appointment ADD INDEX indexAptDateTime (AptDateTime)";
+				try {
+					General.NonQEx(command);
+				}
+				catch {
+				}
+				command="UPDATE preference SET ValueString = '5.3.11.0' WHERE PrefName = 'DataBaseVersion'";
+				General.NonQEx(command);
+			}
 			To5_4_0();
 		}
 
