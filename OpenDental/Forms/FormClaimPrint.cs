@@ -533,14 +533,6 @@ namespace OpenDental{
 				ClaimFormCur=ClaimForms.GetClaimForm(planCur.ClaimFormNum);
 				}
 			}
-			//else{//usually only for batch generic e-claims and Renaissance
-			//	ClaimFormCur=ClaimForms.GetClaimForm(ClaimFormNum);
-			//}
-			//if(!IsRenaissance){
-				//for renaissance, this is skipped because the ListForForm will have already been filled.
-			//must fix this line:
-			//	ClaimFormItems.GetListForForm(ClaimFormCur.ClaimFormNum);
-			//}
 			displayStrings=new string[ClaimFormCur.Items.Length];
 			//a value is set for every item, but not every case will have a matching claimform item.
 			for(int i=0;i<ClaimFormCur.Items.Length;i++){
@@ -732,7 +724,14 @@ namespace OpenDental{
 							displayStrings[i]="X";
 						break;
 					case "SubscrID":
-						displayStrings[i]=planCur.SubscriberID;
+						PatPlan[] patPlans=PatPlans.Refresh(ThisPatNum);
+						string patID=PatPlans.GetPatID(patPlans,planCur.PlanNum);
+						if(patID==""){
+							displayStrings[i]=planCur.SubscriberID;
+						}
+						else{
+							displayStrings[i]=patID;
+						}
 						break;
 					case "SubscrIsFTStudent":
 						if(subsc.StudentStatus=="F")
