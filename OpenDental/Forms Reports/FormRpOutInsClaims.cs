@@ -16,6 +16,9 @@ namespace OpenDental{
 		//private int daysOld=0;
 		private OpenDental.ValidNum textDaysOld;
 		private System.Windows.Forms.Label label1;
+		private CheckBox checkProvAll;
+		private ListBox listProv;
+		private Label label3;
 		private System.ComponentModel.Container components = null;
 
 		///<summary></summary>
@@ -42,6 +45,9 @@ namespace OpenDental{
 			this.labelDaysOld = new System.Windows.Forms.Label();
 			this.textDaysOld = new OpenDental.ValidNum();
 			this.label1 = new System.Windows.Forms.Label();
+			this.checkProvAll = new System.Windows.Forms.CheckBox();
+			this.listProv = new System.Windows.Forms.ListBox();
+			this.label3 = new System.Windows.Forms.Label();
 			this.SuspendLayout();
 			// 
 			// butOK
@@ -51,7 +57,7 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(365,144);
+			this.butOK.Location = new System.Drawing.Point(510,281);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75,26);
 			this.butOK.TabIndex = 1;
@@ -66,7 +72,7 @@ namespace OpenDental{
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
 			this.butCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.butCancel.Location = new System.Drawing.Point(365,184);
+			this.butCancel.Location = new System.Drawing.Point(510,321);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75,26);
 			this.butCancel.TabIndex = 2;
@@ -74,7 +80,7 @@ namespace OpenDental{
 			// 
 			// labelDaysOld
 			// 
-			this.labelDaysOld.Location = new System.Drawing.Point(31,69);
+			this.labelDaysOld.Location = new System.Drawing.Point(30,90);
 			this.labelDaysOld.Name = "labelDaysOld";
 			this.labelDaysOld.Size = new System.Drawing.Size(98,18);
 			this.labelDaysOld.TabIndex = 3;
@@ -83,7 +89,7 @@ namespace OpenDental{
 			// 
 			// textDaysOld
 			// 
-			this.textDaysOld.Location = new System.Drawing.Point(133,68);
+			this.textDaysOld.Location = new System.Drawing.Point(132,89);
 			this.textDaysOld.MaxVal = 255;
 			this.textDaysOld.MinVal = 0;
 			this.textDaysOld.Name = "textDaysOld";
@@ -93,18 +99,50 @@ namespace OpenDental{
 			// 
 			// label1
 			// 
-			this.label1.Location = new System.Drawing.Point(37,16);
+			this.label1.Location = new System.Drawing.Point(31,9);
 			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(406,23);
+			this.label1.Size = new System.Drawing.Size(533,56);
 			this.label1.TabIndex = 5;
-			this.label1.Text = "Report on all insurance claims that have been sent but not received.";
+			this.label1.Text = resources.GetString("label1.Text");
+			// 
+			// checkProvAll
+			// 
+			this.checkProvAll.Checked = true;
+			this.checkProvAll.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.checkProvAll.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.checkProvAll.Location = new System.Drawing.Point(273,91);
+			this.checkProvAll.Name = "checkProvAll";
+			this.checkProvAll.Size = new System.Drawing.Size(145,18);
+			this.checkProvAll.TabIndex = 43;
+			this.checkProvAll.Text = "All";
+			this.checkProvAll.Click += new System.EventHandler(this.checkProvAll_Click);
+			// 
+			// listProv
+			// 
+			this.listProv.Location = new System.Drawing.Point(273,114);
+			this.listProv.Name = "listProv";
+			this.listProv.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
+			this.listProv.Size = new System.Drawing.Size(163,186);
+			this.listProv.TabIndex = 42;
+			// 
+			// label3
+			// 
+			this.label3.Location = new System.Drawing.Point(270,70);
+			this.label3.Name = "label3";
+			this.label3.Size = new System.Drawing.Size(104,16);
+			this.label3.TabIndex = 41;
+			this.label3.Text = "Providers";
+			this.label3.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
 			// 
 			// FormRpOutInsClaims
 			// 
 			this.AcceptButton = this.butOK;
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.CancelButton = this.butCancel;
-			this.ClientSize = new System.Drawing.Size(464,233);
+			this.ClientSize = new System.Drawing.Size(597,359);
+			this.Controls.Add(this.checkProvAll);
+			this.Controls.Add(this.listProv);
+			this.Controls.Add(this.label3);
 			this.Controls.Add(this.label1);
 			this.Controls.Add(this.textDaysOld);
 			this.Controls.Add(this.labelDaysOld);
@@ -125,12 +163,32 @@ namespace OpenDental{
 		#endregion
 
 		private void FormOutstandingInsuranceClaims_Load(object sender, System.EventArgs e) {
-			
+			for(int i=0;i<Providers.List.Length;i++) {
+				listProv.Items.Add(Providers.List[i].GetLongDesc());
+			}
+			if(listProv.Items.Count>0) {
+				listProv.SelectedIndex=0;
+			}
+			checkProvAll.Checked=true;
+			listProv.Visible=false;
+		}
+
+		private void checkProvAll_Click(object sender,EventArgs e) {
+			if(checkProvAll.Checked) {
+				listProv.Visible=false;
+			}
+			else {
+				listProv.Visible=true;
+			}
 		}
 
 		private void butOK_Click(object sender, System.EventArgs e) {
 			if(textDaysOld.errorProvider1.GetError(textDaysOld) != ""){
 				MessageBox.Show(Lan.g("All","Please correct data entry errors first."));
+				return;
+			}
+			if(!checkProvAll.Checked && listProv.SelectedIndices.Count==0) {
+				MsgBox.Show(this,"At least one provider must be selected.");
 				return;
 			}
 			int daysOld=PIn.PInt(textDaysOld.Text);
@@ -145,11 +203,23 @@ namespace OpenDental{
 				+"WHERE claim.PlanNum = insplan.PlanNum "
 				+"AND claim.PatNum = patient.PatNum "
 				+"AND carrier.CarrierNum = insplan.CarrierNum "
-				+"AND claim.ClaimStatus='S' && claim.DateSent < "+POut.PDate(startQDate)+" "
-				+"ORDER BY carrier.Phone,insplan.PlanNum";
+				+"AND claim.ClaimStatus='S' && claim.DateSent <= "+POut.PDate(startQDate)+" ";
+			if(!checkProvAll.Checked){
+				for(int i=0;i<listProv.SelectedIndices.Count;i++) {
+					if(i==0) {
+						Queries.CurReport.Query+=" AND (";
+					}
+					else {
+						Queries.CurReport.Query+=" OR ";
+					}
+					Queries.CurReport.Query+=	"(claim.ProvBill="+POut.PInt(Providers.List[listProv.SelectedIndices[i]].ProvNum)
+						+" OR claim.ProvTreat="+POut.PInt(Providers.List[listProv.SelectedIndices[i]].ProvNum)+")";
+				}
+				Queries.CurReport.Query+=") ";
+			}
+			Queries.CurReport.Query+="ORDER BY carrier.Phone,insplan.PlanNum";
 			FormQuery2=new FormQuery();
 			FormQuery2.IsReport=true;
-
 			Queries.SubmitTemp();//create TableTemp
 			Queries.TableQ=new DataTable(null);//new table no name
 			for(int i=0;i<6;i++){//add columns
@@ -208,5 +278,7 @@ namespace OpenDental{
 			FormQuery2.ShowDialog();
 			DialogResult=DialogResult.OK;
 		}
+
+		
 	}
 }
