@@ -4367,6 +4367,7 @@ namespace OpenDental {
 				CommlogCur.CommType =Commlogs.GetTypeAuto(CommItemTypeAuto.FIN);
 			CommlogCur.Mode_=CommItemMode.Phone;
 			CommlogCur.SentOrReceived=CommSentOrReceived.Received;
+			CommlogCur.UserNum=Security.CurUser.UserNum;
 			FormCommItem FormCI = new FormCommItem(CommlogCur);
 			FormCI.IsNew = true;
 			FormCI.ShowDialog();

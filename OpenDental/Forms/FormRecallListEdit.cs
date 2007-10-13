@@ -688,6 +688,7 @@ namespace OpenDental{
 						CommlogCur.Note+=textNote.Text;
 					}
 					CommlogCur.Note+=".  ";
+					CommlogCur.UserNum=Security.CurUser.UserNum;
 					FormCommItem FormCI=new FormCommItem(CommlogCur);
 					FormCI.IsNew=true;
 					//forces user to at least consider a commlog entry

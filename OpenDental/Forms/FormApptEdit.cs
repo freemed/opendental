@@ -941,6 +941,7 @@ namespace OpenDental{
 			CommlogCur.PatNum=AptCur.PatNum;
 			CommlogCur.CommDateTime=DateTime.Now;
 			CommlogCur.CommType=Commlogs.GetTypeAuto(CommItemTypeAuto.APPT);
+			CommlogCur.UserNum=Security.CurUser.UserNum;
 			FormCommItem FormCI=new FormCommItem(CommlogCur);
 			FormCI.IsNew=true;
 			FormCI.ShowDialog();

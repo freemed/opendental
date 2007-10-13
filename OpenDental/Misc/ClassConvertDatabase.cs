@@ -6024,6 +6024,10 @@ namespace OpenDental{
 				else{//oracle
 
 				}
+				//after r953
+				command="ALTER TABLE commlog ADD UserNum INT NOT NULL";
+				General.NonQEx(command);
+
 
 
 

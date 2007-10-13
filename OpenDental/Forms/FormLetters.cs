@@ -476,7 +476,8 @@ namespace OpenDental{
 			CommlogCur.CommDateTime=DateTime.Now;
 			CommlogCur.CommType=Commlogs.GetTypeAuto(CommItemTypeAuto.MISC);
 			CommlogCur.PatNum=PatCur.PatNum;
-			CommlogCur.Note="Letter sent";
+			CommlogCur.Note=Lan.g(this,"Letter sent");
+			CommlogCur.UserNum=Security.CurUser.UserNum;
 			if(LetterCur!=null) {
 				CommlogCur.Note+=": "+LetterCur.Description+". ";
 			}
@@ -601,6 +602,7 @@ namespace OpenDental{
 			CommlogCur.SentOrReceived = CommSentOrReceived.Sent;
 			CommlogCur.PatNum = PatCur.PatNum;
 			CommlogCur.Note = "'Hand Written' Generic Thank You letter from DMF sent by: ";
+			CommlogCur.UserNum=Security.CurUser.UserNum;
 			FormCommItem FormCI = new FormCommItem(CommlogCur);
 			FormCI.IsNew = true;
 			FormCI.ShowDialog();
@@ -681,6 +683,7 @@ namespace OpenDental{
 			CommlogCur.SentOrReceived = CommSentOrReceived.Sent;
 			CommlogCur.PatNum = PatCur.PatNum;
 			CommlogCur.Note = "'Hand Written' Generic Thank You letter from REF sent by: ";
+			CommlogCur.UserNum=Security.CurUser.UserNum;
 			FormCommItem FormCI = new FormCommItem(CommlogCur);
 			FormCI.IsNew = true;
 			FormCI.ShowDialog();

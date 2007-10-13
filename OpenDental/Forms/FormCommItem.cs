@@ -31,6 +31,8 @@ namespace OpenDental{
 		private CheckBox checkIsStatementSent;
 		private TextBox textPatientName;
 		private Label label5;
+		private TextBox textUser;
+		private Label label16;
 		private Commlog CommlogCur;
 
 		///<summary></summary>
@@ -70,6 +72,8 @@ namespace OpenDental{
 			this.checkIsStatementSent = new System.Windows.Forms.CheckBox();
 			this.textPatientName = new System.Windows.Forms.TextBox();
 			this.label5 = new System.Windows.Forms.Label();
+			this.textUser = new System.Windows.Forms.TextBox();
+			this.label16 = new System.Windows.Forms.Label();
 			this.SuspendLayout();
 			// 
 			// label1
@@ -231,11 +235,30 @@ namespace OpenDental{
 			this.label5.Text = "Patient";
 			this.label5.TextAlign = System.Drawing.ContentAlignment.TopRight;
 			// 
+			// textUser
+			// 
+			this.textUser.Location = new System.Drawing.Point(427,10);
+			this.textUser.Name = "textUser";
+			this.textUser.ReadOnly = true;
+			this.textUser.Size = new System.Drawing.Size(119,20);
+			this.textUser.TabIndex = 103;
+			// 
+			// label16
+			// 
+			this.label16.Location = new System.Drawing.Point(352,11);
+			this.label16.Name = "label16";
+			this.label16.Size = new System.Drawing.Size(73,16);
+			this.label16.TabIndex = 102;
+			this.label16.Text = "User";
+			this.label16.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
 			// FormCommItem
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.CancelButton = this.butCancel;
 			this.ClientSize = new System.Drawing.Size(702,566);
+			this.Controls.Add(this.textUser);
+			this.Controls.Add(this.label16);
 			this.Controls.Add(this.textPatientName);
 			this.Controls.Add(this.label5);
 			this.Controls.Add(this.checkIsStatementSent);
@@ -268,6 +291,7 @@ namespace OpenDental{
 
 		private void FormCommItem_Load(object sender, System.EventArgs e) {
 			textPatientName.Text=Patients.GetLim(CommlogCur.PatNum).GetNameFL();
+			textUser.Text=UserodB.GetName(CommlogCur.UserNum);//might be blank. 
 			textDateTime.Text=CommlogCur.CommDateTime.ToString();
 			//there will usually be a commtype set before this dialog is opened
 			for(int i=0;i<DefB.Short[(int)DefCat.CommLogTypes].Length;i++){

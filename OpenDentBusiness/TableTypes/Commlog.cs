@@ -23,19 +23,12 @@ namespace OpenDentBusiness{
 		//public int EmailMessageNum;
 		///<Summary>Replaces the old way of doing it where StatementSent was one of the types.</Summary>
 		public bool IsStatementSent;
+		///<summary>FK to user.UserNum.</summary>
+		public int UserNum;
 
 		///<summary></summary>
 		public Commlog Copy(){
-			Commlog c=new Commlog();
-			c.CommlogNum=CommlogNum;
-			c.PatNum=PatNum;
-			c.CommDateTime=CommDateTime;
-			c.CommType=CommType;
-			c.Note=Note;
-			c.Mode_=Mode_;
-			c.SentOrReceived=SentOrReceived;
-			c.IsStatementSent=IsStatementSent;
-			return c;
+			return (Commlog)this.MemberwiseClone();
 		}
 
 	}

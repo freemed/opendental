@@ -13,7 +13,7 @@ namespace OpenDentBusiness {
 		public int ProcNum;
 		///<summary>The server time that this note was entered.</summary>
 		public DateTime EntryDateTime;
-		///<summary>FK to user.UserNum.</summary>
+		///<summary>FK to userod.UserNum.</summary>
 		public int UserNum;
 		///<summary>The actual note.</summary>
 		public string Note;
