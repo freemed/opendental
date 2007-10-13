@@ -221,7 +221,7 @@ namespace OpenDental{
 			{
 				"FixedText",
 				"IsPreAuth",
-        "IsStandardClaim",
+				"IsStandardClaim",
 				"IsMedicaidClaim",
 				"PreAuthString",
 				"PriInsCarrierName",
@@ -630,6 +630,8 @@ namespace OpenDental{
 				"BillingDentistPh78910",
 				"BillingDentistPhoneFormatted",
 				"BillingDentistPhoneRaw",
+				"TreatingDentistFName",
+				"TreatingDentistLName",
 				"TreatingDentistSignature",
 				"TreatingDentistSigDate",
 				"DateService",

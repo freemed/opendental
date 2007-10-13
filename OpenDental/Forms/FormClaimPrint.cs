@@ -1331,6 +1331,12 @@ namespace OpenDental{
 						else
 							displayStrings[i]=clinic.Phone;
 						break;
+					case "TreatingDentistFName":
+						displayStrings[i]=treatDent.FName;
+						break;
+					case "TreatingDentistLName":
+						displayStrings[i]=treatDent.LName;
+						break;
 					case "TreatingDentistSignature":
 						if(treatDent.SigOnFile){
 							displayStrings[i]=treatDent.FName+" "+treatDent.MI+" "+treatDent.LName+" "
