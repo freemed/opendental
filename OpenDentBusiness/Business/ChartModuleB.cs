@@ -186,7 +186,7 @@ namespace OpenDentBusiness {
 				}
 			}
 			//Commlog-----------------------------------------------------------------------------------------------------------
-			command="SELECT CommlogNum,CommDateTime,CommType,Note,commlog.PatNum,p1.FName "
+			command="SELECT CommlogNum,CommDateTime,CommType,Note,commlog.PatNum,UserNum,p1.FName "
 				+"FROM patient p1,patient p2,commlog "
 				+"WHERE commlog.PatNum=p1.PatNum "
 				+"AND p1.Guarantor=p2.Guarantor "
@@ -224,6 +224,7 @@ namespace OpenDentBusiness {
 				}
 				row["ProcNum"]=0;
 				row["RxNum"]=0;
+				row["user"]=UserodB.GetName(PIn.PInt(rawComm.Rows[i]["UserNum"].ToString()));
 				rows.Add(row);
 			}
 			//Rx------------------------------------------------------------------------------------------------------------------
