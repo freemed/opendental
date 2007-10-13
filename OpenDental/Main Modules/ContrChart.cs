@@ -228,6 +228,8 @@ namespace OpenDental{
 		private Label labelApptStatus;
 		private MenuItem menuItemDeleteSelected;
 		private CheckBox checkCommFamily;
+		private ContextMenu menuEmail;
+		private MenuItem menuItemEmail;
 		private int PrevPtNum;
 
 
@@ -419,6 +421,8 @@ namespace OpenDental{
 			this.button1 = new OpenDental.UI.Button();
 			this.textTreatmentNotes = new OpenDental.ODtextBox();
 			this.gridPtInfo = new OpenDental.UI.ODGrid();
+			this.menuEmail = new System.Windows.Forms.ContextMenu();
+			this.menuItemEmail = new System.Windows.Forms.MenuItem();
 			this.groupBox2.SuspendLayout();
 			this.tabControlImages.SuspendLayout();
 			this.panelImages.SuspendLayout();
@@ -2394,6 +2398,17 @@ namespace OpenDental{
 			this.gridPtInfo.TranslationName = "TableChartPtInfo";
 			this.gridPtInfo.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridPtInfo_CellDoubleClick);
 			// 
+			// menuEmail
+			// 
+			this.menuEmail.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
+            this.menuItemEmail});
+			// 
+			// menuItemEmail
+			// 
+			this.menuItemEmail.Index = 0;
+			this.menuItemEmail.Text = "Email";
+			this.menuItemEmail.Click += new System.EventHandler(this.menuItemEmail_Click);
+			// 
 			// ContrChart
 			// 
 			this.Controls.Add(this.addKeyBut);
@@ -2565,7 +2580,10 @@ namespace OpenDental{
 			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"LabCase"),-1,"","LabCase"));
 			//ToolBarMain.Buttons.Add(new ODToolBarButton(ODToolBarButtonStyle.Separator));
 			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Perio Chart"),2,"","Perio"));
-			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Commlog"),3,"","Commlog"));
+			button=new ODToolBarButton(Lan.g(this,"Commlog"),3,"","Commlog");
+			button.Style=ODToolBarButtonStyle.DropDownButton;
+			button.DropDownMenu=menuEmail;
+			ToolBarMain.Buttons.Add(button);
 			ArrayList toolButItems=ToolButItems.GetForToolBar(ToolBarsAvail.ChartModule);
 			for(int i=0;i<toolButItems.Count;i++){
 				ToolBarMain.Buttons.Add(new ODToolBarButton(ODToolBarButtonStyle.Separator));
@@ -2680,6 +2698,7 @@ namespace OpenDental{
 				ToolBarMain.Buttons["Perio"].Enabled=false;
 				tabProc.Enabled=false;
 				addKeyBut.Enabled=false;
+				menuItemEmail.Enabled=false;
 			}
 			else {
 				//groupShow.Enabled=true;
@@ -2693,6 +2712,16 @@ namespace OpenDental{
 				ToolBarMain.Buttons["Perio"].Enabled=true;
 				tabProc.Enabled=true;
 				addKeyBut.Enabled=true;
+				if(PrevPtNum != PatCur.PatNum) {//reset to TP status on every new patient selected
+					radioEntryTP.Select();
+					PrevPtNum = PatCur.PatNum;
+				}
+				if(PatCur.Email==""){
+					menuItemEmail.Enabled=false;
+				}
+				else{
+					menuItemEmail.Enabled=true;
+				}
 			}
 			FillPatientButton();
 			ToolBarMain.Invalidate();
@@ -2702,13 +2731,6 @@ namespace OpenDental{
 			FillPtInfo();
 			FillDxProcImage();
 			FillImages();
-			if(PatCur != null) {
-				//reset to TP status on every new patient selected
-				if(PrevPtNum != PatCur.PatNum) {
-					radioEntryTP.Select();
-					PrevPtNum = PatCur.PatNum;
-				}
-			}
 		}
 
 		private void FillPatientButton(){
@@ -2839,6 +2861,20 @@ namespace OpenDental{
 			FormCI.IsNew = true;
 			FormCI.ShowDialog();
 			if(FormCI.DialogResult == DialogResult.OK){
+				ModuleSelected(PatCur.PatNum);
+			}
+		}
+
+		private void menuItemEmail_Click(object sender,EventArgs e) {
+			//this menu item will be disabled if pat does not have email address
+			EmailMessage message=new EmailMessage();
+			message.PatNum=PatCur.PatNum;
+			message.ToAddress=PatCur.Email;
+			message.FromAddress=PrefB.GetString("EmailSenderAddress");
+			FormEmailMessageEdit FormE=new FormEmailMessageEdit(message);
+			FormE.IsNew=true;
+			FormE.ShowDialog();
+			if(FormE.DialogResult==DialogResult.OK) {
 				ModuleSelected(PatCur.PatNum);
 			}
 		}
@@ -3978,6 +4014,14 @@ namespace OpenDental{
 				//PinIsVisible=false
 				FormA.ShowDialog();
 				if(FormA.DialogResult!=DialogResult.OK) {
+					return;
+				}
+			}
+			else if(row["EmailMessageNum"].ToString()!="0") {
+				EmailMessage msg=EmailMessages.GetOne(PIn.PInt(row["EmailMessageNum"].ToString()));
+				FormEmailMessageEdit FormE=new FormEmailMessageEdit(msg);
+				FormE.ShowDialog();
+				if(FormE.DialogResult!=DialogResult.OK) {
 					return;
 				}
 			}
@@ -5898,6 +5942,8 @@ namespace OpenDental{
 			RegistrationKeys.Create(key);
 			FillPtInfo();//Refresh registration key list in patient info grid.
 		}
+
+		
 
 		
 

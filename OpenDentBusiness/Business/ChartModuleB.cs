@@ -26,6 +26,7 @@ namespace OpenDentBusiness {
 			table.Columns.Add("description");
 			table.Columns.Add("dx");
 			table.Columns.Add("Dx");
+			table.Columns.Add("EmailMessageNum");
 			table.Columns.Add("LabCaseNum");
 			table.Columns.Add("note");
 			table.Columns.Add("PatNum");//only used for Commlog
@@ -114,6 +115,7 @@ namespace OpenDentBusiness {
 				}
 				row["dx"]=DefB.GetValue(DefCat.Diagnosis,PIn.PInt(rawProcs.Rows[i]["Dx"].ToString()));
 				row["Dx"]=rawProcs.Rows[i]["Dx"].ToString();
+				row["EmailMessageNum"]=0;
 				row["LabCaseNum"]=0;
 				//note-----------------------------------------------------------------------------------------------------------
 				if(isAuditMode){//we will include all notes for each proc.  We will concat and make readable.
@@ -208,6 +210,7 @@ namespace OpenDentBusiness {
 				}
 				row["description"]=txt+Lan.g("ChartModule","Comm - ")
 					+DefB.GetName(DefCat.CommLogTypes,PIn.PInt(rawComm.Rows[i]["CommType"].ToString()));
+				row["EmailMessageNum"]=0;
 				row["LabCaseNum"]=0;
 				row["note"]=rawComm.Rows[i]["Note"].ToString();
 				row["PatNum"]=rawComm.Rows[i]["PatNum"].ToString();
@@ -238,6 +241,7 @@ namespace OpenDentBusiness {
 				row["colorText"]=DefB.Long[(int)DefCat.ProgNoteColors][5].ItemColor.ToArgb().ToString();
 				row["CommlogNum"]=0;
 				row["description"]=Lan.g("ChartModule","Rx - ")+rawRx.Rows[i]["Drug"].ToString()+" - #"+rawRx.Rows[i]["Disp"].ToString();
+				row["EmailMessageNum"]=0;
 				row["LabCaseNum"]=0;
 				row["note"]=rawRx.Rows[i]["Notes"].ToString();
 				dateT=PIn.PDate(rawRx.Rows[i]["RxDate"].ToString());
@@ -282,6 +286,7 @@ namespace OpenDentBusiness {
 				else if(PIn.PDate(rawLab.Rows[i]["DateTimeSent"].ToString()).Year>1880) {
 					row["description"]+="\r\n"+Lan.g("ChartModule","Sent");
 				}
+				row["EmailMessageNum"]=0;
 				row["LabCaseNum"]=rawLab.Rows[i]["LabCaseNum"].ToString();
 				row["note"]=rawLab.Rows[i]["Instructions"].ToString();
 				dateT=PIn.PDateT(rawLab.Rows[i]["DateTimeCreated"].ToString());
@@ -358,6 +363,7 @@ namespace OpenDentBusiness {
 					row["colorBackG"] = DefB.Long[(int)DefCat.ProgNoteColors][21].ItemColor.ToArgb().ToString();
 					row["description"] = Lan.g("ChartModule", "** Complete Patient NOTE ** - ") + dateT.ToShortTimeString();
 				}
+				row["EmailMessageNum"]=0;
 				row["LabCaseNum"]=0;
 				row["note"]=rawApt.Rows[i]["Note"].ToString();
 				if(dateT.Year<1880) {
@@ -373,7 +379,45 @@ namespace OpenDentBusiness {
 				row["ProcNum"]=0;
 				row["RxNum"]=0;
 				rows.Add(row);
-			}			//Sorting
+			}			
+			//email
+			command="SELECT EmailMessageNum,MsgDateTime,Subject,BodyText,PatNum,SentOrReceived "
+				+"FROM emailmessage "
+				+"WHERE PatNum="+POut.PInt(patNum)
+				+" ORDER BY MsgDateTime";
+			DataTable rawEmail=dcon.GetTable(command);
+			for(int i=0;i<rawEmail.Rows.Count;i++) {
+				row=table.NewRow();
+				row["AptNum"]=0;
+				row["colorBackG"]=Color.White.ToArgb();
+				row["colorText"]=DefB.Long[(int)DefCat.ProgNoteColors][6].ItemColor.ToArgb().ToString();//needs to change
+				row["CommlogNum"]=0;
+				txt="";
+				if(rawEmail.Rows[i]["SentOrReceived"].ToString()=="0"){
+					txt=Lan.g("ChartModule","(unsent) ");
+				}
+				row["description"]=Lan.g("ChartModule","Email - ")+txt+rawEmail.Rows[i]["Subject"].ToString();
+				row["EmailMessageNum"]=rawEmail.Rows[i]["EmailMessageNum"].ToString();
+				row["LabCaseNum"]=0;
+				row["note"]=rawEmail.Rows[i]["BodyText"].ToString();
+				//row["PatNum"]=rawEmail.Rows[i]["PatNum"].ToString();
+				dateT=PIn.PDateT(rawEmail.Rows[i]["msgDateTime"].ToString());
+				if(dateT.Year<1880) {
+					row["procDate"]="";
+				}
+				else {
+					row["procDate"]=dateT.ToShortDateString();
+				}
+				row["ProcDate"]=dateT;
+				if(dateT.TimeOfDay!=TimeSpan.Zero) {
+					row["procTime"]=dateT.ToString("h:mm")+dateT.ToString("%t").ToLower();
+				}
+				row["ProcNum"]=0;
+				row["RxNum"]=0;
+				row["user"]="";
+				rows.Add(row);
+			}
+			//Sorting
 			rows.Sort(CompareChartRows);
 			//Canadian lab procedures need to come immediately after their corresponding proc---------------------------------
 			for(int i=0;i<labRows.Count;i++) {
