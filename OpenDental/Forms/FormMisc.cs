@@ -21,9 +21,6 @@ namespace OpenDental{
 		private System.Windows.Forms.GroupBox groupBox1;
 		private System.Windows.Forms.CheckBox checkTreatPlanShowIns;
 		private System.Windows.Forms.GroupBox groupBox5;
-		private System.Windows.Forms.GroupBox groupBox2;
-		private System.Windows.Forms.RadioButton radioUsePatNum;
-		private System.Windows.Forms.RadioButton radioUseChartNumber;
 		private System.Windows.Forms.Label label2;
 		private OpenDental.ValidNumber textStatementsCalcDueDate;
 		private System.Windows.Forms.CheckBox checkEclaimsSeparateTreatProv;
@@ -34,10 +31,6 @@ namespace OpenDental{
 		private System.Windows.Forms.CheckBox checkInsurancePlansShared;
 		private CheckBox checkMedicalEclaimsEnabled;
 		private CheckBox checkStatementShowReturnAddress;
-		private GroupBox groupBox3;
-		private RadioButton radioShowIDpatNum;
-		private RadioButton radioShowIDchartNum;
-		private RadioButton radioShowIDnone;
 		private OpenDental.UI.Button butLanguages;
 		private Label label4;
         private CheckBox checkSolidBlockouts;
@@ -47,14 +40,12 @@ namespace OpenDental{
 		private CheckBox checkShowAccountNotes;
 		private CheckBox checkSimpleStatement;
 		private CheckBox checkBox5;
-		private GroupBox groupBox6;
 		private CheckBox checkBrokenApptNote;
 		private GroupBox groupBox7;
 		private Label label5;
 		private TextBox textBoxStationary;
 		private TextBox textBoxLogo;
 		private Label label6;
-		private Label label7;
 		private Label label8;
 		private TextBox textBoxDocPath;
 		private ToolTip toolTip1;
@@ -64,6 +55,10 @@ namespace OpenDental{
 		private CheckBox checkStoreCCnumbers;
 		private CheckBox checkAppointmentBubblesDisabled;
 		private CheckBox checkDeductibleBeforePercent;
+		private ComboBox comboUseChartNum;
+		private Label label10;
+		private Label label11;
+		private ComboBox comboShowID;
 		private System.Windows.Forms.Label label1;// Required designer variable.
 
 		///<summary></summary>
@@ -103,20 +98,12 @@ namespace OpenDental{
 			this.checkAgingMonthly = new System.Windows.Forms.CheckBox();
 			this.checkStatementShowReturnAddress = new System.Windows.Forms.CheckBox();
 			this.checkBalancesDontSubtractIns = new System.Windows.Forms.CheckBox();
-			this.textStatementsCalcDueDate = new OpenDental.ValidNumber();
 			this.label2 = new System.Windows.Forms.Label();
-			this.groupBox2 = new System.Windows.Forms.GroupBox();
-			this.radioUsePatNum = new System.Windows.Forms.RadioButton();
-			this.radioUseChartNumber = new System.Windows.Forms.RadioButton();
 			this.checkEclaimsSeparateTreatProv = new System.Windows.Forms.CheckBox();
 			this.checkRandomPrimaryKeys = new System.Windows.Forms.CheckBox();
 			this.label3 = new System.Windows.Forms.Label();
 			this.checkInsurancePlansShared = new System.Windows.Forms.CheckBox();
 			this.checkMedicalEclaimsEnabled = new System.Windows.Forms.CheckBox();
-			this.groupBox3 = new System.Windows.Forms.GroupBox();
-			this.radioShowIDnone = new System.Windows.Forms.RadioButton();
-			this.radioShowIDpatNum = new System.Windows.Forms.RadioButton();
-			this.radioShowIDchartNum = new System.Windows.Forms.RadioButton();
 			this.label4 = new System.Windows.Forms.Label();
 			this.checkSolidBlockouts = new System.Windows.Forms.CheckBox();
 			this.groupBox4 = new System.Windows.Forms.GroupBox();
@@ -124,7 +111,6 @@ namespace OpenDental{
 			this.checkStoreCCnumbers = new System.Windows.Forms.CheckBox();
 			this.checkBoldBalance = new System.Windows.Forms.CheckBox();
 			this.checkShowAccountNotes = new System.Windows.Forms.CheckBox();
-			this.groupBox6 = new System.Windows.Forms.GroupBox();
 			this.checkAppointmentBubblesDisabled = new System.Windows.Forms.CheckBox();
 			this.checkApptBubbleDelay = new System.Windows.Forms.CheckBox();
 			this.checkBrokenApptNote = new System.Windows.Forms.CheckBox();
@@ -136,19 +122,20 @@ namespace OpenDental{
 			this.textBoxLogo = new System.Windows.Forms.TextBox();
 			this.label6 = new System.Windows.Forms.Label();
 			this.label5 = new System.Windows.Forms.Label();
-			this.label7 = new System.Windows.Forms.Label();
 			this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
 			this.pictureBox1 = new System.Windows.Forms.PictureBox();
+			this.comboUseChartNum = new System.Windows.Forms.ComboBox();
+			this.label10 = new System.Windows.Forms.Label();
+			this.label11 = new System.Windows.Forms.Label();
+			this.comboShowID = new System.Windows.Forms.ComboBox();
 			this.butLanguages = new OpenDental.UI.Button();
 			this.textSigInterval = new OpenDental.ValidNumber();
 			this.butCancel = new OpenDental.UI.Button();
 			this.butOK = new OpenDental.UI.Button();
+			this.textStatementsCalcDueDate = new OpenDental.ValidNumber();
 			this.groupBox1.SuspendLayout();
 			this.groupBox5.SuspendLayout();
-			this.groupBox2.SuspendLayout();
-			this.groupBox3.SuspendLayout();
 			this.groupBox4.SuspendLayout();
-			this.groupBox6.SuspendLayout();
 			this.groupBox7.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
 			this.SuspendLayout();
@@ -156,40 +143,42 @@ namespace OpenDental{
 			// textTreatNote
 			// 
 			this.textTreatNote.AcceptsReturn = true;
-			this.textTreatNote.Location = new System.Drawing.Point(17,40);
+			this.textTreatNote.Location = new System.Drawing.Point(16,35);
 			this.textTreatNote.Multiline = true;
 			this.textTreatNote.Name = "textTreatNote";
-			this.textTreatNote.Size = new System.Drawing.Size(346,114);
+			this.textTreatNote.Size = new System.Drawing.Size(371,67);
 			this.textTreatNote.TabIndex = 3;
 			// 
 			// label1
 			// 
-			this.label1.Location = new System.Drawing.Point(18,22);
+			this.label1.Location = new System.Drawing.Point(120,17);
 			this.label1.Name = "label1";
 			this.label1.Size = new System.Drawing.Size(268,15);
 			this.label1.TabIndex = 35;
 			this.label1.Text = "Default Note";
-			this.label1.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
+			this.label1.TextAlign = System.Drawing.ContentAlignment.BottomRight;
 			// 
 			// checkShowCC
 			// 
+			this.checkShowCC.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.checkShowCC.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkShowCC.Location = new System.Drawing.Point(19,43);
+			this.checkShowCC.Location = new System.Drawing.Point(19,39);
 			this.checkShowCC.Name = "checkShowCC";
-			this.checkShowCC.Size = new System.Drawing.Size(216,17);
+			this.checkShowCC.Size = new System.Drawing.Size(368,17);
 			this.checkShowCC.TabIndex = 36;
-			this.checkShowCC.Text = "Show Credit Card Info";
+			this.checkShowCC.Text = "Show credit card info on statements";
+			this.checkShowCC.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// textMainWindowTitle
 			// 
-			this.textMainWindowTitle.Location = new System.Drawing.Point(128,413);
+			this.textMainWindowTitle.Location = new System.Drawing.Point(416,329);
 			this.textMainWindowTitle.Name = "textMainWindowTitle";
 			this.textMainWindowTitle.Size = new System.Drawing.Size(431,20);
 			this.textMainWindowTitle.TabIndex = 38;
 			// 
 			// label14
 			// 
-			this.label14.Location = new System.Drawing.Point(-23,415);
+			this.label14.Location = new System.Drawing.Point(265,331);
 			this.label14.Name = "label14";
 			this.label14.Size = new System.Drawing.Size(149,17);
 			this.label14.TabIndex = 39;
@@ -198,30 +187,36 @@ namespace OpenDental{
 			// 
 			// checkITooth
 			// 
+			this.checkITooth.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.checkITooth.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkITooth.Location = new System.Drawing.Point(448,463);
+			this.checkITooth.Location = new System.Drawing.Point(500,418);
 			this.checkITooth.Name = "checkITooth";
-			this.checkITooth.Size = new System.Drawing.Size(239,18);
+			this.checkITooth.Size = new System.Drawing.Size(346,17);
 			this.checkITooth.TabIndex = 42;
 			this.checkITooth.Text = "Use International Tooth Numbers (11-48)";
+			this.checkITooth.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// checkTreatPlanShowGraphics
 			// 
+			this.checkTreatPlanShowGraphics.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.checkTreatPlanShowGraphics.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkTreatPlanShowGraphics.Location = new System.Drawing.Point(16,159);
+			this.checkTreatPlanShowGraphics.Location = new System.Drawing.Point(28,108);
 			this.checkTreatPlanShowGraphics.Name = "checkTreatPlanShowGraphics";
-			this.checkTreatPlanShowGraphics.Size = new System.Drawing.Size(339,17);
+			this.checkTreatPlanShowGraphics.Size = new System.Drawing.Size(359,17);
 			this.checkTreatPlanShowGraphics.TabIndex = 46;
 			this.checkTreatPlanShowGraphics.Text = "Show Graphical Tooth Chart";
+			this.checkTreatPlanShowGraphics.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// checkTreatPlanShowCompleted
 			// 
+			this.checkTreatPlanShowCompleted.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.checkTreatPlanShowCompleted.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkTreatPlanShowCompleted.Location = new System.Drawing.Point(16,178);
+			this.checkTreatPlanShowCompleted.Location = new System.Drawing.Point(28,125);
 			this.checkTreatPlanShowCompleted.Name = "checkTreatPlanShowCompleted";
-			this.checkTreatPlanShowCompleted.Size = new System.Drawing.Size(334,17);
+			this.checkTreatPlanShowCompleted.Size = new System.Drawing.Size(359,17);
 			this.checkTreatPlanShowCompleted.TabIndex = 47;
 			this.checkTreatPlanShowCompleted.Text = "Show Completed Work on Graphical Tooth Chart";
+			this.checkTreatPlanShowCompleted.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// groupBox1
 			// 
@@ -232,341 +227,286 @@ namespace OpenDental{
 			this.groupBox1.Controls.Add(this.checkTreatPlanShowGraphics);
 			this.groupBox1.Controls.Add(this.checkTreatPlanShowCompleted);
 			this.groupBox1.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.groupBox1.Location = new System.Drawing.Point(32,26);
+			this.groupBox1.Location = new System.Drawing.Point(26,26);
 			this.groupBox1.Name = "groupBox1";
-			this.groupBox1.Size = new System.Drawing.Size(381,240);
+			this.groupBox1.Size = new System.Drawing.Size(408,181);
 			this.groupBox1.TabIndex = 48;
 			this.groupBox1.TabStop = false;
-			this.groupBox1.Text = "Treatment Plans";
+			this.groupBox1.Text = "Treatment Plan module";
 			// 
 			// checkBox5
 			// 
+			this.checkBox5.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.checkBox5.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkBox5.Location = new System.Drawing.Point(16,216);
+			this.checkBox5.Location = new System.Drawing.Point(28,159);
 			this.checkBox5.Name = "checkBox5";
-			this.checkBox5.Size = new System.Drawing.Size(334,17);
+			this.checkBox5.Size = new System.Drawing.Size(359,17);
 			this.checkBox5.TabIndex = 49;
 			this.checkBox5.Text = "Show Tx Plan colors in chart module graphical tooth chart";
+			this.checkBox5.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.checkBox5.Visible = false;
 			// 
 			// checkTreatPlanShowIns
 			// 
+			this.checkTreatPlanShowIns.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.checkTreatPlanShowIns.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkTreatPlanShowIns.Location = new System.Drawing.Point(16,197);
+			this.checkTreatPlanShowIns.Location = new System.Drawing.Point(28,142);
 			this.checkTreatPlanShowIns.Name = "checkTreatPlanShowIns";
-			this.checkTreatPlanShowIns.Size = new System.Drawing.Size(334,17);
+			this.checkTreatPlanShowIns.Size = new System.Drawing.Size(359,17);
 			this.checkTreatPlanShowIns.TabIndex = 48;
 			this.checkTreatPlanShowIns.Text = "Show Insurance Estimates";
+			this.checkTreatPlanShowIns.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// groupBox5
 			// 
+			this.groupBox5.Controls.Add(this.label10);
+			this.groupBox5.Controls.Add(this.checkStoreCCnumbers);
+			this.groupBox5.Controls.Add(this.comboUseChartNum);
 			this.groupBox5.Controls.Add(this.checkSimpleStatement);
 			this.groupBox5.Controls.Add(this.checkAgingMonthly);
 			this.groupBox5.Controls.Add(this.checkStatementShowReturnAddress);
+			this.groupBox5.Controls.Add(this.checkBoldBalance);
 			this.groupBox5.Controls.Add(this.checkBalancesDontSubtractIns);
+			this.groupBox5.Controls.Add(this.checkShowAccountNotes);
 			this.groupBox5.Controls.Add(this.textStatementsCalcDueDate);
 			this.groupBox5.Controls.Add(this.label2);
-			this.groupBox5.Controls.Add(this.groupBox2);
 			this.groupBox5.Controls.Add(this.checkShowCC);
 			this.groupBox5.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.groupBox5.Location = new System.Drawing.Point(436,26);
+			this.groupBox5.Location = new System.Drawing.Point(459,26);
 			this.groupBox5.Name = "groupBox5";
-			this.groupBox5.Size = new System.Drawing.Size(339,240);
+			this.groupBox5.Size = new System.Drawing.Size(408,276);
 			this.groupBox5.TabIndex = 52;
 			this.groupBox5.TabStop = false;
-			this.groupBox5.Text = "Statements";
+			this.groupBox5.Text = "Account module";
 			// 
 			// checkSimpleStatement
 			// 
+			this.checkSimpleStatement.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.checkSimpleStatement.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkSimpleStatement.Location = new System.Drawing.Point(19,214);
+			this.checkSimpleStatement.Location = new System.Drawing.Point(19,117);
 			this.checkSimpleStatement.Name = "checkSimpleStatement";
-			this.checkSimpleStatement.Size = new System.Drawing.Size(288,17);
+			this.checkSimpleStatement.Size = new System.Drawing.Size(368,17);
 			this.checkSimpleStatement.TabIndex = 58;
-			this.checkSimpleStatement.Text = "Print simiple statements with less detail ";
+			this.checkSimpleStatement.Text = "Print simple statements with less detail ";
+			this.checkSimpleStatement.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// checkAgingMonthly
 			// 
+			this.checkAgingMonthly.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.checkAgingMonthly.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkAgingMonthly.Location = new System.Drawing.Point(19,194);
+			this.checkAgingMonthly.Location = new System.Drawing.Point(19,151);
 			this.checkAgingMonthly.Name = "checkAgingMonthly";
-			this.checkAgingMonthly.Size = new System.Drawing.Size(288,17);
+			this.checkAgingMonthly.Size = new System.Drawing.Size(368,17);
 			this.checkAgingMonthly.TabIndex = 57;
 			this.checkAgingMonthly.Text = "Aging calculated monthly instead of daily";
+			this.checkAgingMonthly.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// checkStatementShowReturnAddress
 			// 
+			this.checkStatementShowReturnAddress.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.checkStatementShowReturnAddress.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.checkStatementShowReturnAddress.Location = new System.Drawing.Point(19,22);
 			this.checkStatementShowReturnAddress.Name = "checkStatementShowReturnAddress";
-			this.checkStatementShowReturnAddress.Size = new System.Drawing.Size(216,17);
+			this.checkStatementShowReturnAddress.Size = new System.Drawing.Size(368,17);
 			this.checkStatementShowReturnAddress.TabIndex = 56;
-			this.checkStatementShowReturnAddress.Text = "Show return address";
+			this.checkStatementShowReturnAddress.Text = "Show return address on statements";
+			this.checkStatementShowReturnAddress.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// checkBalancesDontSubtractIns
 			// 
+			this.checkBalancesDontSubtractIns.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.checkBalancesDontSubtractIns.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkBalancesDontSubtractIns.Location = new System.Drawing.Point(19,174);
+			this.checkBalancesDontSubtractIns.Location = new System.Drawing.Point(19,134);
 			this.checkBalancesDontSubtractIns.Name = "checkBalancesDontSubtractIns";
-			this.checkBalancesDontSubtractIns.Size = new System.Drawing.Size(288,17);
+			this.checkBalancesDontSubtractIns.Size = new System.Drawing.Size(368,17);
 			this.checkBalancesDontSubtractIns.TabIndex = 55;
 			this.checkBalancesDontSubtractIns.Text = "Balances don\'t subtract insurance estimate";
-			// 
-			// textStatementsCalcDueDate
-			// 
-			this.textStatementsCalcDueDate.Location = new System.Drawing.Point(19,138);
-			this.textStatementsCalcDueDate.MaxVal = 255;
-			this.textStatementsCalcDueDate.MinVal = 0;
-			this.textStatementsCalcDueDate.Name = "textStatementsCalcDueDate";
-			this.textStatementsCalcDueDate.Size = new System.Drawing.Size(60,20);
-			this.textStatementsCalcDueDate.TabIndex = 54;
+			this.checkBalancesDontSubtractIns.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// label2
 			// 
-			this.label2.Location = new System.Drawing.Point(80,137);
+			this.label2.Location = new System.Drawing.Point(7,87);
 			this.label2.Name = "label2";
-			this.label2.Size = new System.Drawing.Size(235,31);
+			this.label2.Size = new System.Drawing.Size(318,27);
 			this.label2.TabIndex = 53;
 			this.label2.Text = "Days to calculate due date.  Usually 10 or 15.  Leave blank to show \"Due on Recei" +
     "pt\"";
-			// 
-			// groupBox2
-			// 
-			this.groupBox2.Controls.Add(this.radioUsePatNum);
-			this.groupBox2.Controls.Add(this.radioUseChartNumber);
-			this.groupBox2.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.groupBox2.Location = new System.Drawing.Point(12,71);
-			this.groupBox2.Name = "groupBox2";
-			this.groupBox2.Size = new System.Drawing.Size(200,61);
-			this.groupBox2.TabIndex = 52;
-			this.groupBox2.TabStop = false;
-			this.groupBox2.Text = "Account Numbers Use";
-			// 
-			// radioUsePatNum
-			// 
-			this.radioUsePatNum.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.radioUsePatNum.Location = new System.Drawing.Point(7,17);
-			this.radioUsePatNum.Name = "radioUsePatNum";
-			this.radioUsePatNum.Size = new System.Drawing.Size(144,19);
-			this.radioUsePatNum.TabIndex = 1;
-			this.radioUsePatNum.Text = "Patient Number";
-			// 
-			// radioUseChartNumber
-			// 
-			this.radioUseChartNumber.Checked = true;
-			this.radioUseChartNumber.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.radioUseChartNumber.Location = new System.Drawing.Point(7,36);
-			this.radioUseChartNumber.Name = "radioUseChartNumber";
-			this.radioUseChartNumber.Size = new System.Drawing.Size(144,19);
-			this.radioUseChartNumber.TabIndex = 0;
-			this.radioUseChartNumber.TabStop = true;
-			this.radioUseChartNumber.Text = "Chart Number";
+			this.label2.TextAlign = System.Drawing.ContentAlignment.TopRight;
 			// 
 			// checkEclaimsSeparateTreatProv
 			// 
-			this.checkEclaimsSeparateTreatProv.CheckAlign = System.Drawing.ContentAlignment.TopLeft;
+			this.checkEclaimsSeparateTreatProv.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.checkEclaimsSeparateTreatProv.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkEclaimsSeparateTreatProv.Location = new System.Drawing.Point(448,486);
+			this.checkEclaimsSeparateTreatProv.Location = new System.Drawing.Point(500,435);
 			this.checkEclaimsSeparateTreatProv.Name = "checkEclaimsSeparateTreatProv";
-			this.checkEclaimsSeparateTreatProv.Size = new System.Drawing.Size(394,18);
+			this.checkEclaimsSeparateTreatProv.Size = new System.Drawing.Size(346,17);
 			this.checkEclaimsSeparateTreatProv.TabIndex = 53;
 			this.checkEclaimsSeparateTreatProv.Text = "On e-claims, send treating provider info for each separate procedure";
-			this.checkEclaimsSeparateTreatProv.TextAlign = System.Drawing.ContentAlignment.TopLeft;
+			this.checkEclaimsSeparateTreatProv.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// checkRandomPrimaryKeys
 			// 
+			this.checkRandomPrimaryKeys.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.checkRandomPrimaryKeys.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkRandomPrimaryKeys.Location = new System.Drawing.Point(39,483);
+			this.checkRandomPrimaryKeys.Location = new System.Drawing.Point(500,469);
 			this.checkRandomPrimaryKeys.Name = "checkRandomPrimaryKeys";
-			this.checkRandomPrimaryKeys.Size = new System.Drawing.Size(403,21);
+			this.checkRandomPrimaryKeys.Size = new System.Drawing.Size(346,17);
 			this.checkRandomPrimaryKeys.TabIndex = 55;
 			this.checkRandomPrimaryKeys.Text = "Use Random Primary Keys (BE VERY CAREFUL.  IRREVERSIBLE)";
+			this.checkRandomPrimaryKeys.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.checkRandomPrimaryKeys.Click += new System.EventHandler(this.checkRandomPrimaryKeys_Click);
 			// 
 			// label3
 			// 
-			this.label3.Location = new System.Drawing.Point(36,434);
+			this.label3.Location = new System.Drawing.Point(214,379);
 			this.label3.Name = "label3";
-			this.label3.Size = new System.Drawing.Size(377,18);
+			this.label3.Size = new System.Drawing.Size(558,18);
 			this.label3.TabIndex = 56;
-			this.label3.Text = "Process Signal Interval in seconds.  Usually every 6 to 20 seconds. ";
-			this.label3.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
+			this.label3.Text = "Process Signal Interval in seconds.  Usually every 6 to 20 seconds.  Leave blank " +
+    "to disable autorefresh";
+			this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// checkInsurancePlansShared
 			// 
+			this.checkInsurancePlansShared.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.checkInsurancePlansShared.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkInsurancePlansShared.Location = new System.Drawing.Point(39,507);
+			this.checkInsurancePlansShared.Location = new System.Drawing.Point(217,486);
 			this.checkInsurancePlansShared.Name = "checkInsurancePlansShared";
-			this.checkInsurancePlansShared.Size = new System.Drawing.Size(617,18);
+			this.checkInsurancePlansShared.Size = new System.Drawing.Size(629,17);
 			this.checkInsurancePlansShared.TabIndex = 58;
 			this.checkInsurancePlansShared.Text = "Many patients have identical insurance plans.  Change behavior of program slightl" +
     "y to optimize for identical plans.";
+			this.checkInsurancePlansShared.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// checkMedicalEclaimsEnabled
 			// 
-			this.checkMedicalEclaimsEnabled.CheckAlign = System.Drawing.ContentAlignment.TopLeft;
+			this.checkMedicalEclaimsEnabled.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.checkMedicalEclaimsEnabled.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkMedicalEclaimsEnabled.Location = new System.Drawing.Point(448,442);
+			this.checkMedicalEclaimsEnabled.Location = new System.Drawing.Point(500,401);
 			this.checkMedicalEclaimsEnabled.Name = "checkMedicalEclaimsEnabled";
-			this.checkMedicalEclaimsEnabled.Size = new System.Drawing.Size(142,18);
+			this.checkMedicalEclaimsEnabled.Size = new System.Drawing.Size(346,17);
 			this.checkMedicalEclaimsEnabled.TabIndex = 60;
 			this.checkMedicalEclaimsEnabled.Text = "Enable medical e-claims";
-			this.checkMedicalEclaimsEnabled.TextAlign = System.Drawing.ContentAlignment.TopLeft;
-			// 
-			// groupBox3
-			// 
-			this.groupBox3.Controls.Add(this.radioShowIDnone);
-			this.groupBox3.Controls.Add(this.radioShowIDpatNum);
-			this.groupBox3.Controls.Add(this.radioShowIDchartNum);
-			this.groupBox3.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.groupBox3.Location = new System.Drawing.Point(693,406);
-			this.groupBox3.Name = "groupBox3";
-			this.groupBox3.Size = new System.Drawing.Size(172,77);
-			this.groupBox3.TabIndex = 62;
-			this.groupBox3.TabStop = false;
-			this.groupBox3.Text = "Show ID in title bar";
-			// 
-			// radioShowIDnone
-			// 
-			this.radioShowIDnone.Checked = true;
-			this.radioShowIDnone.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.radioShowIDnone.Location = new System.Drawing.Point(9,16);
-			this.radioShowIDnone.Name = "radioShowIDnone";
-			this.radioShowIDnone.Size = new System.Drawing.Size(121,19);
-			this.radioShowIDnone.TabIndex = 2;
-			this.radioShowIDnone.TabStop = true;
-			this.radioShowIDnone.Text = "None";
-			// 
-			// radioShowIDpatNum
-			// 
-			this.radioShowIDpatNum.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.radioShowIDpatNum.Location = new System.Drawing.Point(9,35);
-			this.radioShowIDpatNum.Name = "radioShowIDpatNum";
-			this.radioShowIDpatNum.Size = new System.Drawing.Size(121,19);
-			this.radioShowIDpatNum.TabIndex = 1;
-			this.radioShowIDpatNum.Text = "Patient Number";
-			// 
-			// radioShowIDchartNum
-			// 
-			this.radioShowIDchartNum.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.radioShowIDchartNum.Location = new System.Drawing.Point(9,54);
-			this.radioShowIDchartNum.Name = "radioShowIDchartNum";
-			this.radioShowIDchartNum.Size = new System.Drawing.Size(121,19);
-			this.radioShowIDchartNum.TabIndex = 0;
-			this.radioShowIDchartNum.Text = "Chart Number";
+			this.checkMedicalEclaimsEnabled.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// label4
 			// 
-			this.label4.Location = new System.Drawing.Point(142,674);
+			this.label4.Location = new System.Drawing.Point(457,513);
 			this.label4.Name = "label4";
 			this.label4.Size = new System.Drawing.Size(298,17);
 			this.label4.TabIndex = 64;
 			this.label4.Text = "Languages used by patients.";
+			this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// checkSolidBlockouts
 			// 
+			this.checkSolidBlockouts.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.checkSolidBlockouts.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkSolidBlockouts.Location = new System.Drawing.Point(16,59);
+			this.checkSolidBlockouts.Location = new System.Drawing.Point(25,49);
 			this.checkSolidBlockouts.Name = "checkSolidBlockouts";
-			this.checkSolidBlockouts.Size = new System.Drawing.Size(346,18);
+			this.checkSolidBlockouts.Size = new System.Drawing.Size(362,17);
 			this.checkSolidBlockouts.TabIndex = 66;
 			this.checkSolidBlockouts.Text = "Use solid blockouts instead of outlines on the appointment book";
+			this.checkSolidBlockouts.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.checkSolidBlockouts.UseVisualStyleBackColor = true;
 			// 
 			// groupBox4
 			// 
-			this.groupBox4.Controls.Add(this.checkDeductibleBeforePercent);
-			this.groupBox4.Controls.Add(this.checkStoreCCnumbers);
+			this.groupBox4.Controls.Add(this.checkBrokenApptNote);
+			this.groupBox4.Controls.Add(this.checkApptBubbleDelay);
+			this.groupBox4.Controls.Add(this.checkAppointmentBubblesDisabled);
 			this.groupBox4.Controls.Add(this.checkSolidBlockouts);
-			this.groupBox4.Controls.Add(this.checkBoldBalance);
-			this.groupBox4.Controls.Add(this.checkShowAccountNotes);
-			this.groupBox4.Location = new System.Drawing.Point(32,272);
+			this.groupBox4.Location = new System.Drawing.Point(26,212);
 			this.groupBox4.Name = "groupBox4";
-			this.groupBox4.Size = new System.Drawing.Size(381,128);
+			this.groupBox4.Size = new System.Drawing.Size(408,90);
 			this.groupBox4.TabIndex = 67;
 			this.groupBox4.TabStop = false;
+			this.groupBox4.Text = "Appointment module";
 			// 
 			// checkDeductibleBeforePercent
 			// 
+			this.checkDeductibleBeforePercent.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.checkDeductibleBeforePercent.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkDeductibleBeforePercent.Location = new System.Drawing.Point(16,99);
+			this.checkDeductibleBeforePercent.Location = new System.Drawing.Point(500,452);
 			this.checkDeductibleBeforePercent.Name = "checkDeductibleBeforePercent";
-			this.checkDeductibleBeforePercent.Size = new System.Drawing.Size(346,18);
+			this.checkDeductibleBeforePercent.Size = new System.Drawing.Size(346,17);
 			this.checkDeductibleBeforePercent.TabIndex = 68;
 			this.checkDeductibleBeforePercent.Text = "Ins Plans default to apply deductible before percent.";
+			this.checkDeductibleBeforePercent.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.checkDeductibleBeforePercent.UseVisualStyleBackColor = true;
 			this.checkDeductibleBeforePercent.Click += new System.EventHandler(this.checkDeductibleBeforePercent_Click);
 			// 
 			// checkStoreCCnumbers
 			// 
+			this.checkStoreCCnumbers.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.checkStoreCCnumbers.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkStoreCCnumbers.Location = new System.Drawing.Point(16,79);
+			this.checkStoreCCnumbers.Location = new System.Drawing.Point(19,202);
 			this.checkStoreCCnumbers.Name = "checkStoreCCnumbers";
-			this.checkStoreCCnumbers.Size = new System.Drawing.Size(346,18);
+			this.checkStoreCCnumbers.Size = new System.Drawing.Size(368,17);
 			this.checkStoreCCnumbers.TabIndex = 67;
-			this.checkStoreCCnumbers.Text = "Store credit card numbers (this is a security risk)";
+			this.checkStoreCCnumbers.Text = "Allow storing credit card numbers (this is a security risk)";
+			this.checkStoreCCnumbers.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.checkStoreCCnumbers.UseVisualStyleBackColor = true;
 			// 
 			// checkBoldBalance
 			// 
+			this.checkBoldBalance.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.checkBoldBalance.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkBoldBalance.Location = new System.Drawing.Point(16,39);
+			this.checkBoldBalance.Location = new System.Drawing.Point(19,185);
 			this.checkBoldBalance.Name = "checkBoldBalance";
-			this.checkBoldBalance.Size = new System.Drawing.Size(215,17);
+			this.checkBoldBalance.Size = new System.Drawing.Size(368,17);
 			this.checkBoldBalance.TabIndex = 57;
-			this.checkBoldBalance.Text = "Use bold balance view in account";
+			this.checkBoldBalance.Text = "Use bold balance view";
+			this.checkBoldBalance.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.toolTip1.SetToolTip(this.checkBoldBalance,"Generally used with \"Balances don\'t subtract insurance estimate\"\r\nchecked to the " +
         "upper right of this option in the \"Statements\" section.\r\nHowever, it will work w" +
         "ell either way.");
 			// 
 			// checkShowAccountNotes
 			// 
+			this.checkShowAccountNotes.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.checkShowAccountNotes.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkShowAccountNotes.Location = new System.Drawing.Point(16,20);
+			this.checkShowAccountNotes.Location = new System.Drawing.Point(19,168);
 			this.checkShowAccountNotes.Name = "checkShowAccountNotes";
-			this.checkShowAccountNotes.Size = new System.Drawing.Size(239,17);
+			this.checkShowAccountNotes.Size = new System.Drawing.Size(368,17);
 			this.checkShowAccountNotes.TabIndex = 56;
-			this.checkShowAccountNotes.Text = "Show item notes in Account module grid ";
-			// 
-			// groupBox6
-			// 
-			this.groupBox6.Controls.Add(this.checkAppointmentBubblesDisabled);
-			this.groupBox6.Controls.Add(this.checkApptBubbleDelay);
-			this.groupBox6.Controls.Add(this.checkBrokenApptNote);
-			this.groupBox6.Location = new System.Drawing.Point(436,272);
-			this.groupBox6.Name = "groupBox6";
-			this.groupBox6.Size = new System.Drawing.Size(429,128);
-			this.groupBox6.TabIndex = 68;
-			this.groupBox6.TabStop = false;
+			this.checkShowAccountNotes.Text = "Show item notes in main grid ";
+			this.checkShowAccountNotes.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// checkAppointmentBubblesDisabled
 			// 
+			this.checkAppointmentBubblesDisabled.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.checkAppointmentBubblesDisabled.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkAppointmentBubblesDisabled.Location = new System.Drawing.Point(19,57);
+			this.checkAppointmentBubblesDisabled.Location = new System.Drawing.Point(25,15);
 			this.checkAppointmentBubblesDisabled.Name = "checkAppointmentBubblesDisabled";
-			this.checkAppointmentBubblesDisabled.Size = new System.Drawing.Size(297,18);
+			this.checkAppointmentBubblesDisabled.Size = new System.Drawing.Size(362,17);
 			this.checkAppointmentBubblesDisabled.TabIndex = 70;
 			this.checkAppointmentBubblesDisabled.Text = "Appointment bubble popup disabled";
+			this.checkAppointmentBubblesDisabled.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.checkAppointmentBubblesDisabled.UseVisualStyleBackColor = true;
 			// 
 			// checkApptBubbleDelay
 			// 
+			this.checkApptBubbleDelay.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.checkApptBubbleDelay.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkApptBubbleDelay.Location = new System.Drawing.Point(19,38);
+			this.checkApptBubbleDelay.Location = new System.Drawing.Point(25,32);
 			this.checkApptBubbleDelay.Name = "checkApptBubbleDelay";
-			this.checkApptBubbleDelay.Size = new System.Drawing.Size(297,18);
+			this.checkApptBubbleDelay.Size = new System.Drawing.Size(362,17);
 			this.checkApptBubbleDelay.TabIndex = 69;
 			this.checkApptBubbleDelay.Text = "Appointment bubble popup delay";
+			this.checkApptBubbleDelay.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.checkApptBubbleDelay.UseVisualStyleBackColor = true;
 			// 
 			// checkBrokenApptNote
 			// 
+			this.checkBrokenApptNote.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.checkBrokenApptNote.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkBrokenApptNote.Location = new System.Drawing.Point(19,19);
+			this.checkBrokenApptNote.Location = new System.Drawing.Point(25,66);
 			this.checkBrokenApptNote.Name = "checkBrokenApptNote";
-			this.checkBrokenApptNote.Size = new System.Drawing.Size(404,18);
+			this.checkBrokenApptNote.Size = new System.Drawing.Size(362,17);
 			this.checkBrokenApptNote.TabIndex = 67;
 			this.checkBrokenApptNote.Text = "Put broken appt note in Commlog instead of Adj (not recommended)";
+			this.checkBrokenApptNote.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.checkBrokenApptNote.UseVisualStyleBackColor = true;
 			// 
 			// groupBox7
@@ -578,7 +518,7 @@ namespace OpenDental{
 			this.groupBox7.Controls.Add(this.textBoxLogo);
 			this.groupBox7.Controls.Add(this.label6);
 			this.groupBox7.Controls.Add(this.label5);
-			this.groupBox7.Location = new System.Drawing.Point(39,537);
+			this.groupBox7.Location = new System.Drawing.Point(26,551);
 			this.groupBox7.Name = "groupBox7";
 			this.groupBox7.Size = new System.Drawing.Size(476,124);
 			this.groupBox7.TabIndex = 69;
@@ -647,14 +587,6 @@ namespace OpenDental{
 			this.label5.Text = "Letter Background (*.jpg)";
 			this.label5.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
-			// label7
-			// 
-			this.label7.Location = new System.Drawing.Point(117,458);
-			this.label7.Name = "label7";
-			this.label7.Size = new System.Drawing.Size(286,20);
-			this.label7.TabIndex = 70;
-			this.label7.Text = "Leave blank to disable autorefresh.";
-			// 
 			// toolTip1
 			// 
 			this.toolTip1.AutomaticDelay = 0;
@@ -667,11 +599,47 @@ namespace OpenDental{
 			// 
 			this.pictureBox1.BackgroundImage = global::OpenDental.Properties.Resources.stationary_sample1;
 			this.pictureBox1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-			this.pictureBox1.Location = new System.Drawing.Point(521,539);
+			this.pictureBox1.Location = new System.Drawing.Point(521,553);
 			this.pictureBox1.Name = "pictureBox1";
 			this.pictureBox1.Size = new System.Drawing.Size(101,124);
 			this.pictureBox1.TabIndex = 71;
 			this.pictureBox1.TabStop = false;
+			// 
+			// comboUseChartNum
+			// 
+			this.comboUseChartNum.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboUseChartNum.FormattingEnabled = true;
+			this.comboUseChartNum.Location = new System.Drawing.Point(258,60);
+			this.comboUseChartNum.Name = "comboUseChartNum";
+			this.comboUseChartNum.Size = new System.Drawing.Size(130,21);
+			this.comboUseChartNum.TabIndex = 68;
+			// 
+			// label10
+			// 
+			this.label10.Location = new System.Drawing.Point(61,64);
+			this.label10.Name = "label10";
+			this.label10.Size = new System.Drawing.Size(195,15);
+			this.label10.TabIndex = 69;
+			this.label10.Text = "Account Numbers use";
+			this.label10.TextAlign = System.Drawing.ContentAlignment.TopRight;
+			// 
+			// label11
+			// 
+			this.label11.Location = new System.Drawing.Point(520,356);
+			this.label11.Name = "label11";
+			this.label11.Size = new System.Drawing.Size(195,15);
+			this.label11.TabIndex = 73;
+			this.label11.Text = "Show ID in title bar";
+			this.label11.TextAlign = System.Drawing.ContentAlignment.TopRight;
+			// 
+			// comboShowID
+			// 
+			this.comboShowID.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboShowID.FormattingEnabled = true;
+			this.comboShowID.Location = new System.Drawing.Point(717,352);
+			this.comboShowID.Name = "comboShowID";
+			this.comboShowID.Size = new System.Drawing.Size(130,21);
+			this.comboShowID.TabIndex = 72;
 			// 
 			// butLanguages
 			// 
@@ -680,21 +648,22 @@ namespace OpenDental{
 			this.butLanguages.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butLanguages.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butLanguages.CornerRadius = 4F;
-			this.butLanguages.Location = new System.Drawing.Point(48,667);
+			this.butLanguages.Location = new System.Drawing.Point(758,509);
 			this.butLanguages.Name = "butLanguages";
-			this.butLanguages.Size = new System.Drawing.Size(88,26);
+			this.butLanguages.Size = new System.Drawing.Size(88,24);
 			this.butLanguages.TabIndex = 63;
 			this.butLanguages.Text = "Edit Languages";
 			this.butLanguages.Click += new System.EventHandler(this.butLanguages_Click);
 			// 
 			// textSigInterval
 			// 
-			this.textSigInterval.Location = new System.Drawing.Point(37,455);
+			this.textSigInterval.Location = new System.Drawing.Point(773,378);
 			this.textSigInterval.MaxVal = 1000000;
 			this.textSigInterval.MinVal = 1;
 			this.textSigInterval.Name = "textSigInterval";
 			this.textSigInterval.Size = new System.Drawing.Size(74,20);
 			this.textSigInterval.TabIndex = 57;
+			this.textSigInterval.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
 			// 
 			// butCancel
 			// 
@@ -705,7 +674,7 @@ namespace OpenDental{
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
 			this.butCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.butCancel.Location = new System.Drawing.Point(772,653);
+			this.butCancel.Location = new System.Drawing.Point(771,649);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75,26);
 			this.butCancel.TabIndex = 8;
@@ -720,25 +689,35 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(772,615);
+			this.butOK.Location = new System.Drawing.Point(771,611);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75,26);
 			this.butOK.TabIndex = 7;
 			this.butOK.Text = "&OK";
 			this.butOK.Click += new System.EventHandler(this.butOK_Click);
 			// 
+			// textStatementsCalcDueDate
+			// 
+			this.textStatementsCalcDueDate.Location = new System.Drawing.Point(328,87);
+			this.textStatementsCalcDueDate.MaxVal = 255;
+			this.textStatementsCalcDueDate.MinVal = 0;
+			this.textStatementsCalcDueDate.Name = "textStatementsCalcDueDate";
+			this.textStatementsCalcDueDate.Size = new System.Drawing.Size(60,20);
+			this.textStatementsCalcDueDate.TabIndex = 54;
+			this.textStatementsCalcDueDate.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+			// 
 			// FormMisc
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.ClientSize = new System.Drawing.Size(893,699);
+			this.Controls.Add(this.label11);
+			this.Controls.Add(this.comboShowID);
 			this.Controls.Add(this.pictureBox1);
-			this.Controls.Add(this.label7);
+			this.Controls.Add(this.checkDeductibleBeforePercent);
 			this.Controls.Add(this.groupBox7);
-			this.Controls.Add(this.groupBox6);
 			this.Controls.Add(this.groupBox4);
 			this.Controls.Add(this.label4);
 			this.Controls.Add(this.butLanguages);
-			this.Controls.Add(this.groupBox3);
 			this.Controls.Add(this.checkMedicalEclaimsEnabled);
 			this.Controls.Add(this.checkInsurancePlansShared);
 			this.Controls.Add(this.textSigInterval);
@@ -764,10 +743,7 @@ namespace OpenDental{
 			this.groupBox1.PerformLayout();
 			this.groupBox5.ResumeLayout(false);
 			this.groupBox5.PerformLayout();
-			this.groupBox2.ResumeLayout(false);
-			this.groupBox3.ResumeLayout(false);
 			this.groupBox4.ResumeLayout(false);
-			this.groupBox6.ResumeLayout(false);
 			this.groupBox7.ResumeLayout(false);
 			this.groupBox7.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
@@ -784,11 +760,13 @@ namespace OpenDental{
 			checkTreatPlanShowIns.Checked=PrefB.GetBool("TreatPlanShowIns");
 			checkStatementShowReturnAddress.Checked=PrefB.GetBool("StatementShowReturnAddress");
 			checkShowCC.Checked=PrefB.GetBool("StatementShowCreditCard");
+			comboUseChartNum.Items.Add(Lan.g(this,"PatNum"));
+			comboUseChartNum.Items.Add(Lan.g(this,"ChartNumber"));
 			if(PrefB.GetBool("StatementAccountsUseChartNumber")){
-				radioUseChartNumber.Checked=true;
+				comboUseChartNum.SelectedIndex=1;
 			}
 			else{
-				radioUsePatNum.Checked=true;
+				comboUseChartNum.SelectedIndex=0;
 			}
 			if(PrefB.GetInt("StatementsCalcDueDate")!=-1){
 				textStatementsCalcDueDate.Text=PrefB.GetInt("StatementsCalcDueDate").ToString();
@@ -807,15 +785,10 @@ namespace OpenDental{
 				checkRandomPrimaryKeys.Enabled=false;
 			}
 			textMainWindowTitle.Text=PrefB.GetString("MainWindowTitle");
-			if(PrefB.GetInt("ShowIDinTitleBar")==0){
-				radioShowIDnone.Checked=true;
-			}
-			else if(PrefB.GetInt("ShowIDinTitleBar")==1){
-				radioShowIDpatNum.Checked=true;
-			}
-			else if(PrefB.GetInt("ShowIDinTitleBar")==2) {
-				radioShowIDchartNum.Checked=true;
-			}
+			comboShowID.Items.Add(Lan.g(this,"None"));
+			comboShowID.Items.Add(Lan.g(this,"PatNum"));
+			comboShowID.Items.Add(Lan.g(this,"ChartNumber"));
+			comboShowID.SelectedIndex=PrefB.GetInt("ShowIDinTitleBar");
 			checkEclaimsSeparateTreatProv.Checked=PrefB.GetBool("EclaimsSeparateTreatProv");
 			checkMedicalEclaimsEnabled.Checked=PrefB.GetBool("MedicalEclaimsEnabled");
 			checkITooth.Checked=PrefB.GetBool("UseInternationalToothNumbers");
@@ -888,7 +861,7 @@ namespace OpenDental{
 				| Prefs.UpdateBool("TreatPlanShowIns",checkTreatPlanShowIns.Checked)
 				| Prefs.UpdateBool("StatementShowReturnAddress",checkStatementShowReturnAddress.Checked)
 				| Prefs.UpdateBool("StatementShowCreditCard",checkShowCC.Checked)
-				| Prefs.UpdateBool("StatementAccountsUseChartNumber",radioUseChartNumber.Checked)
+				| Prefs.UpdateBool("StatementAccountsUseChartNumber",comboUseChartNum.SelectedIndex==1)
 				| Prefs.UpdateBool("BalancesDontSubtractIns",checkBalancesDontSubtractIns.Checked)
 				| Prefs.UpdateBool("AgingCalculatedMonthlyInsteadOfDaily",checkAgingMonthly.Checked)
 				| Prefs.UpdateBool("RandomPrimaryKeys",checkRandomPrimaryKeys.Checked)
@@ -907,7 +880,8 @@ namespace OpenDental{
 				| Prefs.UpdateString("StationaryImage", textBoxLogo.Text)
 				| Prefs.UpdateString("StationaryDocument", textBoxStationary.Text)
 				| Prefs.UpdateBool("ApptBubbleDelay", checkApptBubbleDelay.Checked)
-				| Prefs.UpdateBool("AppointmentBubblesDisabled", checkAppointmentBubblesDisabled.Checked))
+				| Prefs.UpdateBool("AppointmentBubblesDisabled", checkAppointmentBubblesDisabled.Checked)
+				| Prefs.UpdateInt("ShowIDinTitleBar",comboShowID.SelectedIndex))
 			{
 				changed=true;
 			}
@@ -928,22 +902,6 @@ namespace OpenDental{
 			}
 			else{
 				if(Prefs.UpdateInt("ProcessSigsIntervalInSecs",PIn.PInt(textSigInterval.Text))){
-					changed=true;
-				}
-			}
-			//ShowIDinTitleBar
-			if(radioShowIDnone.Checked){
-				if(Prefs.UpdateInt("ShowIDinTitleBar",0)) {
-					changed=true;
-				}
-			}
-			else if(radioShowIDpatNum.Checked) {
-				if(Prefs.UpdateInt("ShowIDinTitleBar",1)) {
-					changed=true;
-				}
-			}
-			else if(radioShowIDchartNum.Checked) {
-				if(Prefs.UpdateInt("ShowIDinTitleBar",2)) {
 					changed=true;
 				}
 			}
