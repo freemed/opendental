@@ -135,6 +135,14 @@ namespace OpenDental{
 			}
 			return retVal;
 		}
+
+		///<summary>Returns the number of adjustments deleted.</summary>
+		public static int UndoFinanceCharges(DateTime dateUndo){
+			string command="DELETE FROM adjustment WHERE AdjDate="+POut.PDate(dateUndo);
+			return General.NonQ(command);
+		}
+
+
 	}
 
 	

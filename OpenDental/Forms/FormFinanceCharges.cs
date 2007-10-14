@@ -24,6 +24,10 @@ namespace OpenDental{
 		private ArrayList ALPosIndices;
 		private ValidDate textDateLastRun;
 		private Label label5;
+		private OpenDental.UI.Button butUndo;
+		private GroupBox groupBox2;
+		private ValidDate textDateUndo;
+		private Label label6;
 		private int adjType;
 
 		///<summary></summary>
@@ -60,7 +64,12 @@ namespace OpenDental{
 			this.textAPR = new OpenDental.ValidNum();
 			this.textDateLastRun = new OpenDental.ValidDate();
 			this.label5 = new System.Windows.Forms.Label();
+			this.butUndo = new OpenDental.UI.Button();
+			this.groupBox2 = new System.Windows.Forms.GroupBox();
+			this.textDateUndo = new OpenDental.ValidDate();
+			this.label6 = new System.Windows.Forms.Label();
 			this.groupBox1.SuspendLayout();
+			this.groupBox2.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// textDate
@@ -204,12 +213,56 @@ namespace OpenDental{
 			this.label5.Text = "Date last run";
 			this.label5.TextAlign = System.Drawing.ContentAlignment.TopRight;
 			// 
+			// butUndo
+			// 
+			this.butUndo.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butUndo.Autosize = true;
+			this.butUndo.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butUndo.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butUndo.CornerRadius = 4F;
+			this.butUndo.Location = new System.Drawing.Point(113,48);
+			this.butUndo.Name = "butUndo";
+			this.butUndo.Size = new System.Drawing.Size(78,25);
+			this.butUndo.TabIndex = 30;
+			this.butUndo.Text = "Undo";
+			this.butUndo.Click += new System.EventHandler(this.butUndo_Click);
+			// 
+			// groupBox2
+			// 
+			this.groupBox2.Controls.Add(this.textDateUndo);
+			this.groupBox2.Controls.Add(this.label6);
+			this.groupBox2.Controls.Add(this.butUndo);
+			this.groupBox2.Location = new System.Drawing.Point(58,318);
+			this.groupBox2.Name = "groupBox2";
+			this.groupBox2.Size = new System.Drawing.Size(263,87);
+			this.groupBox2.TabIndex = 31;
+			this.groupBox2.TabStop = false;
+			this.groupBox2.Text = "Undo finance charges";
+			// 
+			// textDateUndo
+			// 
+			this.textDateUndo.Location = new System.Drawing.Point(113,19);
+			this.textDateUndo.Name = "textDateUndo";
+			this.textDateUndo.ReadOnly = true;
+			this.textDateUndo.Size = new System.Drawing.Size(78,20);
+			this.textDateUndo.TabIndex = 31;
+			// 
+			// label6
+			// 
+			this.label6.Location = new System.Drawing.Point(16,23);
+			this.label6.Name = "label6";
+			this.label6.Size = new System.Drawing.Size(95,14);
+			this.label6.TabIndex = 32;
+			this.label6.Text = "Date to undo";
+			this.label6.TextAlign = System.Drawing.ContentAlignment.TopRight;
+			// 
 			// FormFinanceCharges
 			// 
 			this.AcceptButton = this.butOK;
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.CancelButton = this.butCancel;
 			this.ClientSize = new System.Drawing.Size(692,440);
+			this.Controls.Add(this.groupBox2);
 			this.Controls.Add(this.textDateLastRun);
 			this.Controls.Add(this.label5);
 			this.Controls.Add(this.textAPR);
@@ -230,6 +283,8 @@ namespace OpenDental{
 			this.Text = "Finance Charges";
 			this.Load += new System.EventHandler(this.FormFinanceCharges_Load);
 			this.groupBox1.ResumeLayout(false);
+			this.groupBox2.ResumeLayout(false);
+			this.groupBox2.PerformLayout();
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -253,10 +308,26 @@ namespace OpenDental{
 				}
 			}
 			textDateLastRun.Text=PrefB.GetDate("FinanceChargeLastRun").ToShortDateString();
+			textDateUndo.Text=PrefB.GetDate("FinanceChargeLastRun").ToShortDateString();
 			textDate.Text=DateTime.Today.ToShortDateString();		
 			textAPR.MaxVal=100;
 			textAPR.MinVal=0;
 			textAPR.Text=PrefB.GetString("FinanceChargeAPR");
+		}
+
+		private void butUndo_Click(object sender,EventArgs e) {
+			if(MessageBox.Show(Lan.g(this,"Undo all finance charges for ")+textDateUndo.Text+"?","",MessageBoxButtons.OKCancel)
+				!=DialogResult.OK) 
+			{
+				return;
+			}
+			int rowsAffected=Adjustments.UndoFinanceCharges(PIn.PDate(textDateUndo.Text));
+			MessageBox.Show(Lan.g(this,"Adjustments deleted: ")+rowsAffected.ToString());
+			FormAging FormA=new FormAging();
+			FormA.SupressSameDateWarning=true;
+			FormA.ShowDialog();
+			SecurityLogs.MakeLogEntry(Permissions.Setup,0,"Finance Charges undo. Date "+textDateUndo.Text);
+			DialogResult=DialogResult.OK;
 		}
 
 		private void butOK_Click(object sender, System.EventArgs e) {
@@ -312,12 +383,17 @@ namespace OpenDental{
 				DataValid.SetInvalid(InvalidTypes.Prefs);
 			}
 			MessageBox.Show(Lan.g(this,"Finance Charges Added: ")+rowsAffected.ToString());
+			FormAging FormA=new FormAging();
+			FormA.SupressSameDateWarning=true;
+			FormA.ShowDialog();
 			DialogResult=DialogResult.OK;
 		}
 
 		private void butCancel_Click(object sender, System.EventArgs e) {
 			DialogResult=DialogResult.Cancel;
 		}
+
+		
 
 	}
 }

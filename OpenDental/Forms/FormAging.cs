@@ -16,6 +16,7 @@ namespace OpenDental{
 		private OpenDental.ValidDate textDateCalc;
 		private System.Windows.Forms.Label label2;
 		private System.ComponentModel.Container components = null;
+		public bool SupressSameDateWarning;
 
 		///<summary></summary>
 		public FormAging(){
@@ -50,7 +51,7 @@ namespace OpenDental{
 			// 
 			// textDateLast
 			// 
-			this.textDateLast.Location = new System.Drawing.Point(172,183);
+			this.textDateLast.Location = new System.Drawing.Point(171,136);
 			this.textDateLast.Name = "textDateLast";
 			this.textDateLast.ReadOnly = true;
 			this.textDateLast.Size = new System.Drawing.Size(94,20);
@@ -58,7 +59,7 @@ namespace OpenDental{
 			// 
 			// label1
 			// 
-			this.label1.Location = new System.Drawing.Point(22,187);
+			this.label1.Location = new System.Drawing.Point(21,140);
 			this.label1.Name = "label1";
 			this.label1.Size = new System.Drawing.Size(146,16);
 			this.label1.TabIndex = 13;
@@ -99,7 +100,7 @@ namespace OpenDental{
 			// 
 			this.textBox1.BackColor = System.Drawing.SystemColors.Control;
 			this.textBox1.BorderStyle = System.Windows.Forms.BorderStyle.None;
-			this.textBox1.Location = new System.Drawing.Point(28,12);
+			this.textBox1.Location = new System.Drawing.Point(25,12);
 			this.textBox1.Multiline = true;
 			this.textBox1.Name = "textBox1";
 			this.textBox1.Size = new System.Drawing.Size(476,114);
@@ -108,14 +109,14 @@ namespace OpenDental{
 			// 
 			// textDateCalc
 			// 
-			this.textDateCalc.Location = new System.Drawing.Point(172,143);
+			this.textDateCalc.Location = new System.Drawing.Point(171,168);
 			this.textDateCalc.Name = "textDateCalc";
 			this.textDateCalc.Size = new System.Drawing.Size(94,20);
 			this.textDateCalc.TabIndex = 0;
 			// 
 			// label2
 			// 
-			this.label2.Location = new System.Drawing.Point(22,147);
+			this.label2.Location = new System.Drawing.Point(21,172);
 			this.label2.Name = "label2";
 			this.label2.Size = new System.Drawing.Size(146,16);
 			this.label2.TabIndex = 18;
@@ -170,7 +171,7 @@ namespace OpenDental{
 				MsgBox.Show(this,"Please fix data entry errors first.");
 				return;
 			}
-			if(textDateCalc.Text==textDateLast.Text){
+			if(!SupressSameDateWarning && textDateCalc.Text==textDateLast.Text){
 				if(!MsgBox.Show(this,true,"Date is same as previous date.  Continue anyway?")){
 					return;
 				}
