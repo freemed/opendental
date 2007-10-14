@@ -59,6 +59,8 @@ namespace OpenDental{
 		private Label label10;
 		private Label label11;
 		private ComboBox comboShowID;
+		private Label label7;
+		private ComboBox comboBox1;
 		private System.Windows.Forms.Label label1;// Required designer variable.
 
 		///<summary></summary>
@@ -133,6 +135,8 @@ namespace OpenDental{
 			this.butCancel = new OpenDental.UI.Button();
 			this.butOK = new OpenDental.UI.Button();
 			this.textStatementsCalcDueDate = new OpenDental.ValidNumber();
+			this.label7 = new System.Windows.Forms.Label();
+			this.comboBox1 = new System.Windows.Forms.ComboBox();
 			this.groupBox1.SuspendLayout();
 			this.groupBox5.SuspendLayout();
 			this.groupBox4.SuspendLayout();
@@ -259,6 +263,8 @@ namespace OpenDental{
 			// 
 			// groupBox5
 			// 
+			this.groupBox5.Controls.Add(this.label7);
+			this.groupBox5.Controls.Add(this.comboBox1);
 			this.groupBox5.Controls.Add(this.label10);
 			this.groupBox5.Controls.Add(this.checkStoreCCnumbers);
 			this.groupBox5.Controls.Add(this.comboUseChartNum);
@@ -705,6 +711,24 @@ namespace OpenDental{
 			this.textStatementsCalcDueDate.Size = new System.Drawing.Size(60,20);
 			this.textStatementsCalcDueDate.TabIndex = 54;
 			this.textStatementsCalcDueDate.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+			// 
+			// label7
+			// 
+			this.label7.Location = new System.Drawing.Point(2,229);
+			this.label7.Name = "label7";
+			this.label7.Size = new System.Drawing.Size(221,15);
+			this.label7.TabIndex = 71;
+			this.label7.Text = "Finance charge adjustment type";
+			this.label7.TextAlign = System.Drawing.ContentAlignment.TopRight;
+			// 
+			// comboBox1
+			// 
+			this.comboBox1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboBox1.FormattingEnabled = true;
+			this.comboBox1.Location = new System.Drawing.Point(224,225);
+			this.comboBox1.Name = "comboBox1";
+			this.comboBox1.Size = new System.Drawing.Size(163,21);
+			this.comboBox1.TabIndex = 70;
 			// 
 			// FormMisc
 			// 
