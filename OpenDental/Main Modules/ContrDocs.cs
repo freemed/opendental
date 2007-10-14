@@ -23,7 +23,6 @@ using System.Security.Cryptography;
 using System.Text; 
 using System.Threading;
 using System.Windows.Forms;
-//using WIALib;
 using OpenDental.UI;
 using OpenDentBusiness;
 using Tao.OpenGl;
@@ -75,22 +74,6 @@ namespace OpenDental{
 		///<summary></summary>
 		[Category("Data"),Description("Occurs when user changes current patient, usually by clicking on the Select Patient button.")]
 		public event PatientSelectedEventHandler PatientSelected=null;
-		// declarations
-		///<summary></summary>
-		[System.Runtime.InteropServices.DllImport("EZTW32.DLL")]
-		public static extern int TWAIN_AcquireToFilename(IntPtr hwndApp, string bmpFileName); 
-		///<summary></summary>
-		[System.Runtime.InteropServices.DllImport("EZTW32.DLL")] 
-		public static extern int TWAIN_SelectImageSource(IntPtr hwndApp); 
-		///<summary></summary>
-		[System.Runtime.InteropServices.DllImport("EZTW32.DLL")] 
-		public static extern int TWAIN_AcquireToClipboard(IntPtr hwndApp, long wPixTypes); 
-		///<summary></summary>
-		[System.Runtime.InteropServices.DllImport("EZTW32.DLL")] 
-		public static extern int TWAIN_IsAvailable(); 
-		///<summary></summary>
-		[System.Runtime.InteropServices.DllImport("EZTW32.DLL")] 
-		public static extern int TWAIN_EasyVersion();// spk 10/05/04
 		private ContextMenu menuForms;
 
 		#endregion
@@ -168,19 +151,19 @@ namespace OpenDental{
 
 		///<summary></summary>
 		public ContrDocs(){
-            Logger.openlog.Log("Initializing Document Module...", Logger.Severity.INFO);
+			Logger.openlog.Log("Initializing Document Module...", Logger.Severity.INFO);
 			InitializeComponent();
 			//The context menu causes strange bugs in MONO when performing selections on the tree.
 			//Perhaps when MONO is more developed we can remove this check.
-            //Also, the SigPlusNet() object cannot be instantiated on 64-bit machines, because
-            //the code for instantiation exists in a 32-bit native dll. Therefore, we have put
-            //the creation code for the topaz box in CodeBase.TopazWrapper.GetTopaz() so that
-            //the native code does not exist or get called anywhere in the program unless we are running on a 
-            //32-bit version of Windows.
+			//Also, the SigPlusNet() object cannot be instantiated on 64-bit machines, because
+			//the code for instantiation exists in a 32-bit native dll. Therefore, we have put
+			//the creation code for the topaz box in CodeBase.TopazWrapper.GetTopaz() so that
+			//the native code does not exist or get called anywhere in the program unless we are running on a 
+			//32-bit version of Windows.
 			if(Environment.OSVersion.Platform==PlatformID.Unix || CodeBase.ODEnvironment.Is64BitOperatingSystem()){
 				TreeDocuments.ContextMenu=null;
 			}else{//Windows OS
-                sigBoxTopaz=CodeBase.TopazWrapper.GetTopaz();
+				sigBoxTopaz=CodeBase.TopazWrapper.GetTopaz();
 				panelNote.Controls.Add(sigBoxTopaz);
 				sigBoxTopaz.Location=new System.Drawing.Point(437,15);
 				sigBoxTopaz.Name="sigBoxTopaz";
@@ -196,7 +179,7 @@ namespace OpenDental{
 			this.xRayImageController.OnCaptureReady+=new System.EventHandler(this.OnCaptureReady);
 			this.xRayImageController.OnCaptureComplete+=new System.EventHandler(this.OnCaptureComplete);
 			this.xRayImageController.OnCaptureFinalize+=new System.EventHandler(this.OnCaptureFinalize);
-            Logger.openlog.Log("Document Module initialization complete.", Logger.Severity.INFO);
+			Logger.openlog.Log("Document Module initialization complete.", Logger.Severity.INFO);
 		}
 
 		///<summary></summary>
@@ -604,8 +587,7 @@ namespace OpenDental{
 			int panelNoteHeight=(panelNote.Visible?panelNote.Height:0);
 			PictureBox1.Height=Height-panelNoteHeight-PictureBox1.Location.Y;
 			panelNote.Location=new Point(PictureBox1.Left,Height-panelNoteHeight-1);
-			paintTools.Location=new Point(brightnessContrastSlider.Location.X+brightnessContrastSlider.Width+4,
-				paintTools.Location.Y);
+			paintTools.Location=new Point(brightnessContrastSlider.Location.X+brightnessContrastSlider.Width+4,paintTools.Location.Y);
 			paintTools.Size=new Size(PictureBox1.Width-brightnessContrastSlider.Width-4,paintTools.Height);
 			paintToolsUnderline.Location=new Point(PictureBox1.Location.X,paintToolsUnderline.Location.Y);
 			paintToolsUnderline.Width=Width-paintToolsUnderline.Location.X;
@@ -691,7 +673,6 @@ namespace OpenDental{
 			paintTools.Buttons.Add(new ODToolBarButton("",11,Lan.g(this,"Flip"),"Flip"));
 			paintTools.Buttons.Add(new ODToolBarButton("",12,Lan.g(this,"Rotate Left"),"RotateL"));
 			paintTools.Buttons.Add(new ODToolBarButton("",13,Lan.g(this,"Rotate Right"),"RotateR"));
-
 			ArrayList toolButItems=ToolButItems.GetForToolBar(ToolBarsAvail.ImagesModule);
 			for(int i=0;i<toolButItems.Count;i++){
 				ToolBarMain.Buttons.Add(new ODToolBarButton(ODToolBarButtonStyle.Separator));
@@ -1255,11 +1236,12 @@ namespace OpenDental{
 			try{
 				//A user may have more than one scanning device. 
 				//The code below will allow the user to select one.
-				long wPIXTypes=TWAIN_SelectImageSource(this.Handle);
+				EZTwain.ApplicationLicense("Open Dental",12345);//This key is currently a dummy.  We need to obscure the real one somehow.
+				int wPIXTypes=EZTwain.SelectImageSource(this.Handle);
 				if(wPIXTypes==0) {//user clicked Cancel
 					return;
 				}
-				TWAIN_AcquireToClipboard(this.Handle,wPIXTypes);
+				EZTwain.AcquireToClipboard(this.Handle,wPIXTypes);
 				IDataObject oDataObject=Clipboard.GetDataObject();
 				if(oDataObject.GetDataPresent(DataFormats.Bitmap,true)) {
 					scannedImage=(Bitmap)oDataObject.GetData(DataFormats.Bitmap);

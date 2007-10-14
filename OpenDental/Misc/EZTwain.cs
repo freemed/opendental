@@ -1,4 +1,4 @@
-/*using System.Runtime.InteropServices;
+using System.Runtime.InteropServices;
 using System.Text;
 
 namespace OpenDental
@@ -10,6 +10,10 @@ namespace OpenDental
 		//  This file is an automatic translation of \EZTwain\VC\eztwain.h
 		//  Generated 2004.09.09 22:19 Pacific Daylight Time by XDefs 1.21
 
+		///<summary>This must be called before any other method.  It activates the license.  AppTitle and numeric key must exactly match the values given to us by Dosadi.</summary>
+		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_ApplicationLicense")]
+		public static extern
+		void ApplicationLicense(string pzAppTitle,int nAppKey);
 
 		///<summary></summary>
 		[DllImport("Eztwain3.dll", CharSet=CharSet.Ansi, ExactSpelling=true, EntryPoint="TWAIN_Testing123")] public static extern
@@ -1195,4 +1199,3 @@ namespace OpenDental
 
     }
 } // namespace
-*/
