@@ -119,7 +119,7 @@ namespace OpenDental{
 			this.group3DToothChart.Controls.Add(this.label1);
 			this.group3DToothChart.Controls.Add(this.groupBox1);
 			this.group3DToothChart.Controls.Add(this.gridFormats);
-			this.group3DToothChart.Location = new System.Drawing.Point(47,67);
+			this.group3DToothChart.Location = new System.Drawing.Point(28,67);
 			this.group3DToothChart.Name = "group3DToothChart";
 			this.group3DToothChart.Size = new System.Drawing.Size(833,455);
 			this.group3DToothChart.TabIndex = 5;
@@ -210,7 +210,7 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(678,543);
+			this.butOK.Location = new System.Drawing.Point(684,543);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75,26);
 			this.butOK.TabIndex = 1;
@@ -225,7 +225,7 @@ namespace OpenDental{
 			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
-			this.butCancel.Location = new System.Drawing.Point(780,543);
+			this.butCancel.Location = new System.Drawing.Point(786,543);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75,26);
 			this.butCancel.TabIndex = 0;
@@ -234,7 +234,7 @@ namespace OpenDental{
 			// 
 			// radioSimpleChart
 			// 
-			this.radioSimpleChart.Location = new System.Drawing.Point(53,15);
+			this.radioSimpleChart.Location = new System.Drawing.Point(34,15);
 			this.radioSimpleChart.Name = "radioSimpleChart";
 			this.radioSimpleChart.Size = new System.Drawing.Size(146,19);
 			this.radioSimpleChart.TabIndex = 6;
@@ -245,7 +245,7 @@ namespace OpenDental{
 			// 
 			// radio3DChart
 			// 
-			this.radio3DChart.Location = new System.Drawing.Point(53,36);
+			this.radio3DChart.Location = new System.Drawing.Point(34,36);
 			this.radio3DChart.Name = "radio3DChart";
 			this.radio3DChart.Size = new System.Drawing.Size(146,19);
 			this.radio3DChart.TabIndex = 7;
