@@ -6030,6 +6030,9 @@ namespace OpenDental{
 				//after r956
 				command="ALTER TABLE computerpref ADD AtoZpath VARCHAR(255)";
 				General.NonQEx(command);
+				//after r963
+				command = "INSERT INTO preference VALUES('BrokenAppointmentAdjustmentType','0')";
+				General.NonQEx(command);
 
 
 

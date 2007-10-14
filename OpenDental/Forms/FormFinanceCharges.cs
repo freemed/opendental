@@ -20,10 +20,10 @@ namespace OpenDental{
 		private System.Windows.Forms.Label label3;
 		private System.Windows.Forms.Label label4;
 		private OpenDental.ValidNum textAPR;
-		private System.Windows.Forms.ListBox listAdjType;
 		private System.ComponentModel.Container components = null;
 		private ArrayList ALPosIndices;
-		private System.Windows.Forms.Label label6;
+		private ValidDate textDateLastRun;
+		private Label label5;
 		private int adjType;
 
 		///<summary></summary>
@@ -58,26 +58,25 @@ namespace OpenDental{
 			this.label3 = new System.Windows.Forms.Label();
 			this.label4 = new System.Windows.Forms.Label();
 			this.textAPR = new OpenDental.ValidNum();
-			this.listAdjType = new System.Windows.Forms.ListBox();
-			this.label6 = new System.Windows.Forms.Label();
+			this.textDateLastRun = new OpenDental.ValidDate();
+			this.label5 = new System.Windows.Forms.Label();
 			this.groupBox1.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// textDate
 			// 
-			this.textDate.Location = new System.Drawing.Point(86,28);
+			this.textDate.Location = new System.Drawing.Point(171,42);
 			this.textDate.Name = "textDate";
-			this.textDate.ReadOnly = true;
 			this.textDate.Size = new System.Drawing.Size(78,20);
 			this.textDate.TabIndex = 15;
 			// 
 			// label1
 			// 
-			this.label1.Location = new System.Drawing.Point(4,32);
+			this.label1.Location = new System.Drawing.Point(15,46);
 			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(80,14);
+			this.label1.Size = new System.Drawing.Size(154,14);
 			this.label1.TabIndex = 20;
-			this.label1.Text = "Date";
+			this.label1.Text = "Date of new charges";
 			this.label1.TextAlign = System.Drawing.ContentAlignment.TopRight;
 			// 
 			// groupBox1
@@ -86,9 +85,9 @@ namespace OpenDental{
 			this.groupBox1.Controls.Add(this.radio90);
 			this.groupBox1.Controls.Add(this.radio60);
 			this.groupBox1.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.groupBox1.Location = new System.Drawing.Point(50,90);
+			this.groupBox1.Location = new System.Drawing.Point(154,98);
 			this.groupBox1.Name = "groupBox1";
-			this.groupBox1.Size = new System.Drawing.Size(144,98);
+			this.groupBox1.Size = new System.Drawing.Size(167,98);
 			this.groupBox1.TabIndex = 16;
 			this.groupBox1.TabStop = false;
 			this.groupBox1.Text = "Age of Account";
@@ -96,7 +95,7 @@ namespace OpenDental{
 			// radio30
 			// 
 			this.radio30.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.radio30.Location = new System.Drawing.Point(12,24);
+			this.radio30.Location = new System.Drawing.Point(16,24);
 			this.radio30.Name = "radio30";
 			this.radio30.Size = new System.Drawing.Size(104,16);
 			this.radio30.TabIndex = 1;
@@ -106,7 +105,7 @@ namespace OpenDental{
 			// 
 			this.radio90.Checked = true;
 			this.radio90.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.radio90.Location = new System.Drawing.Point(12,70);
+			this.radio90.Location = new System.Drawing.Point(16,70);
 			this.radio90.Name = "radio90";
 			this.radio90.Size = new System.Drawing.Size(104,18);
 			this.radio90.TabIndex = 3;
@@ -116,7 +115,7 @@ namespace OpenDental{
 			// radio60
 			// 
 			this.radio60.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.radio60.Location = new System.Drawing.Point(12,46);
+			this.radio60.Location = new System.Drawing.Point(16,46);
 			this.radio60.Name = "radio60";
 			this.radio60.Size = new System.Drawing.Size(104,18);
 			this.radio60.TabIndex = 2;
@@ -155,7 +154,7 @@ namespace OpenDental{
 			// 
 			// label2
 			// 
-			this.label2.Location = new System.Drawing.Point(4,62);
+			this.label2.Location = new System.Drawing.Point(89,76);
 			this.label2.Name = "label2";
 			this.label2.Size = new System.Drawing.Size(80,14);
 			this.label2.TabIndex = 22;
@@ -164,7 +163,7 @@ namespace OpenDental{
 			// 
 			// label3
 			// 
-			this.label3.Location = new System.Drawing.Point(130,62);
+			this.label3.Location = new System.Drawing.Point(215,76);
 			this.label3.Name = "label3";
 			this.label3.Size = new System.Drawing.Size(12,14);
 			this.label3.TabIndex = 23;
@@ -173,7 +172,7 @@ namespace OpenDental{
 			// 
 			// label4
 			// 
-			this.label4.Location = new System.Drawing.Point(148,62);
+			this.label4.Location = new System.Drawing.Point(233,76);
 			this.label4.Name = "label4";
 			this.label4.Size = new System.Drawing.Size(144,14);
 			this.label4.TabIndex = 24;
@@ -181,30 +180,29 @@ namespace OpenDental{
 			// 
 			// textAPR
 			// 
-			this.textAPR.Location = new System.Drawing.Point(86,58);
+			this.textAPR.Location = new System.Drawing.Point(171,72);
 			this.textAPR.MaxVal = 255;
 			this.textAPR.MinVal = 0;
 			this.textAPR.Name = "textAPR";
 			this.textAPR.Size = new System.Drawing.Size(42,20);
 			this.textAPR.TabIndex = 26;
 			// 
-			// listAdjType
+			// textDateLastRun
 			// 
-			this.listAdjType.Location = new System.Drawing.Point(312,94);
-			this.listAdjType.Name = "listAdjType";
-			this.listAdjType.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
-			this.listAdjType.Size = new System.Drawing.Size(158,186);
-			this.listAdjType.TabIndex = 27;
+			this.textDateLastRun.Location = new System.Drawing.Point(171,16);
+			this.textDateLastRun.Name = "textDateLastRun";
+			this.textDateLastRun.ReadOnly = true;
+			this.textDateLastRun.Size = new System.Drawing.Size(78,20);
+			this.textDateLastRun.TabIndex = 27;
 			// 
-			// label6
+			// label5
 			// 
-			this.label6.Location = new System.Drawing.Point(310,12);
-			this.label6.Name = "label6";
-			this.label6.Size = new System.Drawing.Size(192,72);
-			this.label6.TabIndex = 29;
-			this.label6.Text = "Finance charges are entered into the guarantor\'s account as an adjustment.  Pleas" +
-    "e choose which type of positive adjustment to use.";
-			this.label6.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
+			this.label5.Location = new System.Drawing.Point(12,20);
+			this.label5.Name = "label5";
+			this.label5.Size = new System.Drawing.Size(157,14);
+			this.label5.TabIndex = 28;
+			this.label5.Text = "Date last run";
+			this.label5.TextAlign = System.Drawing.ContentAlignment.TopRight;
 			// 
 			// FormFinanceCharges
 			// 
@@ -212,8 +210,8 @@ namespace OpenDental{
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.CancelButton = this.butCancel;
 			this.ClientSize = new System.Drawing.Size(692,440);
-			this.Controls.Add(this.label6);
-			this.Controls.Add(this.listAdjType);
+			this.Controls.Add(this.textDateLastRun);
+			this.Controls.Add(this.label5);
 			this.Controls.Add(this.textAPR);
 			this.Controls.Add(this.textDate);
 			this.Controls.Add(this.label4);
@@ -239,6 +237,11 @@ namespace OpenDental{
 		#endregion
 
 		private void FormFinanceCharges_Load(object sender, System.EventArgs e) {
+			if(PrefB.GetInt("FinanceChargeAdjustmentType")==0){
+				MsgBox.Show(this,"No finance charge adjustment type has been set.  Please go to Setup | Misc to fix this.");
+				DialogResult=DialogResult.Cancel;
+				return;
+			}
 			if(PIn.PDate(PrefB.GetString("DateLastAging")) < DateTime.Today){
 				if(MsgBox.Show(this,true,"You must update aging first.")){//OK
 					FormAging FormA=new FormAging();
@@ -249,32 +252,11 @@ namespace OpenDental{
 					return;
 				}
 			}
-			if(PIn.PDate(PrefB.GetString("FinanceChargeLastRun")).AddDays(25)>DateTime.Today){
-				MessageBox.Show(Lan.g(this,"You cannot run finance charges again this month."));
-				DialogResult=DialogResult.Cancel;
-				return;
-			}
+			textDateLastRun.Text=PrefB.GetDate("FinanceChargeLastRun").ToShortDateString();
+			textDate.Text=DateTime.Today.ToShortDateString();		
 			textAPR.MaxVal=100;
 			textAPR.MinVal=0;
-			FillList();
 			textAPR.Text=PrefB.GetString("FinanceChargeAPR");
-			textDate.Text=DateTime.Today.ToShortDateString();		
-		}
-
-		private void FillList(){
-			adjType=PrefB.GetInt("FinanceChargeAdjustmentType");
-			ALPosIndices=new ArrayList();
-			listAdjType.Items.Clear();
-			for(int i=0;i<DefB.Short[(int)DefCat.AdjTypes].Length;i++){
-				if(DefB.Short[(int)DefCat.AdjTypes][i].ItemValue=="+"){
-					ALPosIndices.Add(i);
-					listAdjType.Items.Add(DefB.Short[(int)DefCat.AdjTypes][i].ItemName);
-					if(DefB.Short[(int)DefCat.AdjTypes][i].DefNum==adjType)
-						listAdjType.SelectedIndex=ALPosIndices.Count-1;
-				}
-			}
-			if(listAdjType.SelectedIndex==-1)
-				listAdjType.SelectedIndex=0;
 		}
 
 		private void butOK_Click(object sender, System.EventArgs e) {
@@ -283,9 +265,14 @@ namespace OpenDental{
 				MessageBox.Show(Lan.g(this,"Please fix data entry errors first."));
 				return;
 			}
-
+			DateTime date=PIn.PDate(textDate.Text);
+			if(PrefB.GetDate("FinanceChargeLastRun").AddDays(25)>date) {
+				if(!MsgBox.Show(this,true,"Warning.  Finance charges should not be run more than once per month.  Continue?")){
+					return;
+				}
+			}
 			if(PIn.PInt(textAPR.Text) < 2){
-				if(MessageBox.Show(Lan.g(this,"The APR is much lower than normal. Do you wish to proceed?"),"",MessageBoxButtons.OKCancel)!=DialogResult.OK){
+				if(!MsgBox.Show(this,true,"The APR is much lower than normal. Do you wish to proceed?")){
 					return;   
 				}
 			}			
@@ -293,6 +280,7 @@ namespace OpenDental{
 			//Ledgers.UpdateFinanceCharges(PIn.PDate(textDate.Text));
 			PatAging[] AgingList=Patients.GetAgingList();
 			double OverallBalance;
+			int rowsAffected=0;
 			for(int i=0;i<AgingList.Length;i++){
 				OverallBalance=0;//this WILL NOT be the same as the patient's total balance
 				if(radio30.Checked){
@@ -308,22 +296,22 @@ namespace OpenDental{
 					Adjustment AdjustmentCur=new Adjustment();
 					AdjustmentCur.PatNum=AgingList[i].PatNum;
 					//AdjustmentCur.DateEntry=PIn.PDate(textDate.Text);//automatically handled
-					AdjustmentCur.AdjDate=PIn.PDate(textDate.Text);
-					AdjustmentCur.ProcDate=PIn.PDate(textDate.Text);
-					AdjustmentCur.AdjType=DefB.Short[(int)DefCat.AdjTypes]
-						[(int)ALPosIndices[listAdjType.SelectedIndex]].DefNum;
+					AdjustmentCur.AdjDate=date;
+					AdjustmentCur.ProcDate=date;
+					AdjustmentCur.AdjType=PrefB.GetInt("FinanceChargeAdjustmentType");
 					AdjustmentCur.AdjNote="Finance Charge";
 					AdjustmentCur.AdjAmt=Math.Round(((PIn.PDouble(textAPR.Text) * .01 / 12) * OverallBalance),2);
 					AdjustmentCur.ProvNum=AgingList[i].PriProv;
 					Adjustments.InsertOrUpdate(AdjustmentCur,true);
+					rowsAffected++;
 				}
 			}
-			Prefs.UpdateString("FinanceChargeAPR",textAPR.Text);
-			Prefs.UpdateInt("FinanceChargeAdjustmentType",
-				DefB.Short[(int)DefCat.AdjTypes][(int)ALPosIndices[listAdjType.SelectedIndex]].DefNum);
-			Prefs.UpdateString("FinanceChargeLastRun",POut.PDate(DateTime.Today,false));
-			DataValid.SetInvalid(InvalidTypes.Prefs);
-			MessageBox.Show(Lan.g(this,"Finance Charges Added."));
+			if(Prefs.UpdateString("FinanceChargeAPR",textAPR.Text)
+				| Prefs.UpdateString("FinanceChargeLastRun",POut.PDate(date,false)))
+			{
+				DataValid.SetInvalid(InvalidTypes.Prefs);
+			}
+			MessageBox.Show(Lan.g(this,"Finance Charges Added: ")+rowsAffected.ToString());
 			DialogResult=DialogResult.OK;
 		}
 

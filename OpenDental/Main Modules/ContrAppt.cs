@@ -3131,6 +3131,10 @@ namespace OpenDental{
 		}
 
 		private void OnBreak_Click(){
+			if(!PrefB.GetBool("BrokenApptCommLogNotAdjustment") && PrefB.GetInt("BrokenAppointmentAdjustmentType")==0){
+				MsgBox.Show(this,"Broken appointment adjustment type is not setup yet.  Please go to Setup | Misc to fix this.");
+				return;
+			}
 			Appointment apt = Appointments.GetOneApt(ContrApptSingle.SelectedAptNum);
 			int thisI=GetIndex(ContrApptSingle.SelectedAptNum);
 			Patient pat=Patients.GetPat(PIn.PInt(ContrApptSingle3[thisI].DataRoww["PatNum"].ToString()));
@@ -3172,6 +3176,7 @@ namespace OpenDental{
 				AdjustmentCur.ProcDate=DateTime.Today;
 				AdjustmentCur.ProvNum=provNum;
 				AdjustmentCur.PatNum=pat.PatNum;
+				AdjustmentCur.AdjType=PrefB.GetInt("BrokenAppointmentAdjustmentType");
 				FormAdjust FormA=new FormAdjust(pat,AdjustmentCur);
 				FormA.IsNew=true;
 				FormA.ShowDialog();

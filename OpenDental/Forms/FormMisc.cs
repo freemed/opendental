@@ -1,6 +1,7 @@
 using System;
 using System.Drawing;
 using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows.Forms;
 using OpenDentBusiness;
@@ -60,8 +61,11 @@ namespace OpenDental{
 		private Label label11;
 		private ComboBox comboShowID;
 		private Label label7;
-		private ComboBox comboBox1;
+		private ComboBox comboBrokenApptAdjType;
+		private Label label12;
+		private ComboBox comboFinanceChargeAdjType;
 		private System.Windows.Forms.Label label1;// Required designer variable.
+		private List<Def> posAdjTypes;
 
 		///<summary></summary>
 		public FormMisc(){
@@ -130,13 +134,15 @@ namespace OpenDental{
 			this.label10 = new System.Windows.Forms.Label();
 			this.label11 = new System.Windows.Forms.Label();
 			this.comboShowID = new System.Windows.Forms.ComboBox();
+			this.label7 = new System.Windows.Forms.Label();
+			this.comboBrokenApptAdjType = new System.Windows.Forms.ComboBox();
+			this.label12 = new System.Windows.Forms.Label();
+			this.comboFinanceChargeAdjType = new System.Windows.Forms.ComboBox();
 			this.butLanguages = new OpenDental.UI.Button();
 			this.textSigInterval = new OpenDental.ValidNumber();
 			this.butCancel = new OpenDental.UI.Button();
 			this.butOK = new OpenDental.UI.Button();
 			this.textStatementsCalcDueDate = new OpenDental.ValidNumber();
-			this.label7 = new System.Windows.Forms.Label();
-			this.comboBox1 = new System.Windows.Forms.ComboBox();
 			this.groupBox1.SuspendLayout();
 			this.groupBox5.SuspendLayout();
 			this.groupBox4.SuspendLayout();
@@ -231,7 +237,7 @@ namespace OpenDental{
 			this.groupBox1.Controls.Add(this.checkTreatPlanShowGraphics);
 			this.groupBox1.Controls.Add(this.checkTreatPlanShowCompleted);
 			this.groupBox1.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.groupBox1.Location = new System.Drawing.Point(26,26);
+			this.groupBox1.Location = new System.Drawing.Point(26,9);
 			this.groupBox1.Name = "groupBox1";
 			this.groupBox1.Size = new System.Drawing.Size(408,181);
 			this.groupBox1.TabIndex = 48;
@@ -263,8 +269,8 @@ namespace OpenDental{
 			// 
 			// groupBox5
 			// 
-			this.groupBox5.Controls.Add(this.label7);
-			this.groupBox5.Controls.Add(this.comboBox1);
+			this.groupBox5.Controls.Add(this.label12);
+			this.groupBox5.Controls.Add(this.comboFinanceChargeAdjType);
 			this.groupBox5.Controls.Add(this.label10);
 			this.groupBox5.Controls.Add(this.checkStoreCCnumbers);
 			this.groupBox5.Controls.Add(this.comboUseChartNum);
@@ -278,9 +284,9 @@ namespace OpenDental{
 			this.groupBox5.Controls.Add(this.label2);
 			this.groupBox5.Controls.Add(this.checkShowCC);
 			this.groupBox5.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.groupBox5.Location = new System.Drawing.Point(459,26);
+			this.groupBox5.Location = new System.Drawing.Point(459,9);
 			this.groupBox5.Name = "groupBox5";
-			this.groupBox5.Size = new System.Drawing.Size(408,276);
+			this.groupBox5.Size = new System.Drawing.Size(408,297);
 			this.groupBox5.TabIndex = 52;
 			this.groupBox5.TabStop = false;
 			this.groupBox5.Text = "Account module";
@@ -418,13 +424,15 @@ namespace OpenDental{
 			// 
 			// groupBox4
 			// 
+			this.groupBox4.Controls.Add(this.label7);
 			this.groupBox4.Controls.Add(this.checkBrokenApptNote);
+			this.groupBox4.Controls.Add(this.comboBrokenApptAdjType);
 			this.groupBox4.Controls.Add(this.checkApptBubbleDelay);
 			this.groupBox4.Controls.Add(this.checkAppointmentBubblesDisabled);
 			this.groupBox4.Controls.Add(this.checkSolidBlockouts);
-			this.groupBox4.Location = new System.Drawing.Point(26,212);
+			this.groupBox4.Location = new System.Drawing.Point(26,195);
 			this.groupBox4.Name = "groupBox4";
-			this.groupBox4.Size = new System.Drawing.Size(408,90);
+			this.groupBox4.Size = new System.Drawing.Size(408,111);
 			this.groupBox4.TabIndex = 67;
 			this.groupBox4.TabStop = false;
 			this.groupBox4.Text = "Appointment module";
@@ -647,6 +655,44 @@ namespace OpenDental{
 			this.comboShowID.Size = new System.Drawing.Size(130,21);
 			this.comboShowID.TabIndex = 72;
 			// 
+			// label7
+			// 
+			this.label7.Location = new System.Drawing.Point(3,89);
+			this.label7.Name = "label7";
+			this.label7.Size = new System.Drawing.Size(221,15);
+			this.label7.TabIndex = 71;
+			this.label7.Text = "Broken appt default adj type";
+			this.label7.TextAlign = System.Drawing.ContentAlignment.TopRight;
+			// 
+			// comboBrokenApptAdjType
+			// 
+			this.comboBrokenApptAdjType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboBrokenApptAdjType.FormattingEnabled = true;
+			this.comboBrokenApptAdjType.Location = new System.Drawing.Point(225,85);
+			this.comboBrokenApptAdjType.MaxDropDownItems = 30;
+			this.comboBrokenApptAdjType.Name = "comboBrokenApptAdjType";
+			this.comboBrokenApptAdjType.Size = new System.Drawing.Size(163,21);
+			this.comboBrokenApptAdjType.TabIndex = 70;
+			// 
+			// label12
+			// 
+			this.label12.Location = new System.Drawing.Point(3,226);
+			this.label12.Name = "label12";
+			this.label12.Size = new System.Drawing.Size(221,15);
+			this.label12.TabIndex = 73;
+			this.label12.Text = "Finance charge adj type";
+			this.label12.TextAlign = System.Drawing.ContentAlignment.TopRight;
+			// 
+			// comboFinanceChargeAdjType
+			// 
+			this.comboFinanceChargeAdjType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboFinanceChargeAdjType.FormattingEnabled = true;
+			this.comboFinanceChargeAdjType.Location = new System.Drawing.Point(225,222);
+			this.comboFinanceChargeAdjType.MaxDropDownItems = 30;
+			this.comboFinanceChargeAdjType.Name = "comboFinanceChargeAdjType";
+			this.comboFinanceChargeAdjType.Size = new System.Drawing.Size(163,21);
+			this.comboFinanceChargeAdjType.TabIndex = 72;
+			// 
 			// butLanguages
 			// 
 			this.butLanguages.AdjustImageLocation = new System.Drawing.Point(0,0);
@@ -711,24 +757,6 @@ namespace OpenDental{
 			this.textStatementsCalcDueDate.Size = new System.Drawing.Size(60,20);
 			this.textStatementsCalcDueDate.TabIndex = 54;
 			this.textStatementsCalcDueDate.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-			// 
-			// label7
-			// 
-			this.label7.Location = new System.Drawing.Point(2,229);
-			this.label7.Name = "label7";
-			this.label7.Size = new System.Drawing.Size(221,15);
-			this.label7.TabIndex = 71;
-			this.label7.Text = "Finance charge adjustment type";
-			this.label7.TextAlign = System.Drawing.ContentAlignment.TopRight;
-			// 
-			// comboBox1
-			// 
-			this.comboBox1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboBox1.FormattingEnabled = true;
-			this.comboBox1.Location = new System.Drawing.Point(224,225);
-			this.comboBox1.Name = "comboBox1";
-			this.comboBox1.Size = new System.Drawing.Size(163,21);
-			this.comboBox1.TabIndex = 70;
 			// 
 			// FormMisc
 			// 
@@ -832,6 +860,17 @@ namespace OpenDental{
 			textBoxStationary.Text = PrefB.GetString("StationaryDocument");
 			checkApptBubbleDelay.Checked = PrefB.GetBool("ApptBubbleDelay");
 			checkAppointmentBubblesDisabled.Checked=PrefB.GetBool("AppointmentBubblesDisabled");
+			posAdjTypes=DefB.GetPositiveAdjTypes();
+			for(int i=0;i<posAdjTypes.Count;i++){
+				comboFinanceChargeAdjType.Items.Add(posAdjTypes[i].ItemName);
+				if(PrefB.GetInt("FinanceChargeAdjustmentType")==posAdjTypes[i].DefNum){
+					comboFinanceChargeAdjType.SelectedIndex=i;
+				}
+				comboBrokenApptAdjType.Items.Add(posAdjTypes[i].ItemName);
+				if(PrefB.GetInt("BrokenAppointmentAdjustmentType")==posAdjTypes[i].DefNum) {
+					comboBrokenApptAdjType.SelectedIndex=i;
+				}
+			}
 		}
 
 		private void checkRandomPrimaryKeys_Click(object sender, System.EventArgs e) {
@@ -873,6 +912,14 @@ namespace OpenDental{
 		}
 
 		private void butOK_Click(object sender, System.EventArgs e) {
+			if(comboBrokenApptAdjType.SelectedIndex==-1){
+				MsgBox.Show(this,"Please enter an adjustment type for broken appointments.");
+				return;
+			}
+			if(comboFinanceChargeAdjType.SelectedIndex==-1) {
+				MsgBox.Show(this,"Please enter an adjustment type for finance charges.");
+				return;
+			}
 			if(textStatementsCalcDueDate.errorProvider1.GetError(textStatementsCalcDueDate)!="")
 			{
 				MessageBox.Show(Lan.g(this,"Please fix data entry errors first."));
@@ -905,7 +952,10 @@ namespace OpenDental{
 				| Prefs.UpdateString("StationaryDocument", textBoxStationary.Text)
 				| Prefs.UpdateBool("ApptBubbleDelay", checkApptBubbleDelay.Checked)
 				| Prefs.UpdateBool("AppointmentBubblesDisabled", checkAppointmentBubblesDisabled.Checked)
-				| Prefs.UpdateInt("ShowIDinTitleBar",comboShowID.SelectedIndex))
+				| Prefs.UpdateInt("ShowIDinTitleBar",comboShowID.SelectedIndex)
+				| Prefs.UpdateInt("FinanceChargeAdjustmentType",posAdjTypes[comboFinanceChargeAdjType.SelectedIndex].DefNum)
+				| Prefs.UpdateInt("BrokenAppointmentAdjustmentType",posAdjTypes[comboBrokenApptAdjType.SelectedIndex].DefNum)
+				)
 			{
 				changed=true;
 			}

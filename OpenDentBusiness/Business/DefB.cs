@@ -188,6 +188,17 @@ namespace OpenDentBusiness {
 			AL.CopyTo(retVal);
 			return retVal;
 		}
+
+		///<summary></summary>
+		public static List<Def> GetPositiveAdjTypes() {
+			List<Def> retVal=new List<Def>();
+			for(int i=0;i<Short[(int)DefCat.AdjTypes].Length;i++) {
+				if(Short[(int)DefCat.AdjTypes][i].ItemValue=="+") {
+					retVal.Add(Short[(int)DefCat.AdjTypes][i]);
+				}
+			}
+			return retVal;
+		}
 		
 
 	}
