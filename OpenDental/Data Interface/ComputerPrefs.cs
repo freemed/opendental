@@ -24,6 +24,7 @@ namespace OpenDental {
 			computerPref.SensorPort=0;
 			computerPref.SensorExposure=1;
 			computerPref.SensorBinned=false;
+			computerPref.AtoZpath="";
 			try{
 				table=General.GetTableEx(command);
 			}catch{
@@ -51,7 +52,8 @@ namespace OpenDental {
 			computerPref.SensorPort=								PIn.PInt		(table.Rows[0][6].ToString());
 			computerPref.SensorExposure=						PIn.PInt		(table.Rows[0][7].ToString());
 			computerPref.GraphicsDoubleBuffering=		PIn.PBool		(table.Rows[0][8].ToString());
-			computerPref.PreferredPixelFormatNum=		PIn.PInt		(table.Rows[0][9].ToString());
+			computerPref.PreferredPixelFormatNum=		PIn.PInt    (table.Rows[0][9].ToString());
+			computerPref.AtoZpath=                  PIn.PString (table.Rows[0][10].ToString());
 			return computerPref;
 		}
 
@@ -64,7 +66,8 @@ namespace OpenDental {
 			if(PrefB.RandomKeys){
 				command+="ComputerPrefNum,";
 			}			
-			command+="ComputerName,GraphicsUseHardware,GraphicsSimple,SensorType,SensorPort,SensorExposure,SensorBinned,GraphicsDoubleBuffering,PreferredPixelFormatNum) VALUES(";
+			command+="ComputerName,GraphicsUseHardware,GraphicsSimple,SensorType,SensorPort,SensorExposure,SensorBinned,"
+				+"GraphicsDoubleBuffering,PreferredPixelFormatNum,AtoZpath) VALUES(";
 			if(PrefB.RandomKeys){
 				command+="'"+POut.PInt(computerPref.ComputerPrefNum)+"',";
 			}
@@ -76,7 +79,8 @@ namespace OpenDental {
 				+"'"+POut.PInt(computerPref.SensorPort)+"',"
 				+"'"+POut.PInt(computerPref.SensorExposure)+"',"
 				+"'"+POut.PBool(computerPref.GraphicsDoubleBuffering)+"',"
-				+"'"+POut.PInt(computerPref.PreferredPixelFormatNum)+"')";
+				+"'"+POut.PInt(computerPref.PreferredPixelFormatNum)+"',"
+				+"'"+POut.PString(computerPref.AtoZpath)+"')";
 			if(PrefB.RandomKeys){
 				General.NonQ(command);
 			}else{
@@ -94,7 +98,8 @@ namespace OpenDental {
 				+"SensorPort='"+POut.PInt(computerPref.SensorPort)+"',"
 				+"SensorExposure='"+POut.PInt(computerPref.SensorExposure)+"',"
 				+"GraphicsDoubleBuffering='"+POut.PBool(computerPref.GraphicsDoubleBuffering)+"',"
-				+"PreferredPixelFormatNum='"+POut.PInt(computerPref.PreferredPixelFormatNum)+"' "
+				+"PreferredPixelFormatNum='"+POut.PInt(computerPref.PreferredPixelFormatNum)+"', "
+				+"AtoZpath='"+POut.PString(computerPref.AtoZpath)+"' "
 				+"WHERE ComputerPrefNum='"+POut.PInt(computerPref.ComputerPrefNum)+"'";
 			return General.NonQ(command);
 		}

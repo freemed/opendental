@@ -26,20 +26,11 @@ namespace OpenDentBusiness {
 		public bool GraphicsDoubleBuffering;
 		///<summary>Indicates the current pixel format by number which the user prefers.</summary>
 		public int PreferredPixelFormatNum;
+		///<summary>The path of the A-Z folder for the specified computer.  Overrides the officewide default.  Used when multiple locations are on a single virtual database and they each want to look to the local data folder for images.</summary>
+		public string AtoZpath;
 
 		public ComputerPref Copy(){
-			ComputerPref cp=new ComputerPref();
-			cp.ComputerPrefNum=ComputerPrefNum;
-			cp.ComputerName=ComputerName;
-			cp.GraphicsUseHardware=GraphicsUseHardware;
-			cp.GraphicsSimple=GraphicsSimple;
-			cp.SensorType=SensorType;
-			cp.SensorBinned=SensorBinned;
-			cp.SensorPort=SensorPort;
-			cp.SensorExposure=SensorExposure;
-			cp.GraphicsDoubleBuffering=GraphicsDoubleBuffering;
-			cp.PreferredPixelFormatNum=PreferredPixelFormatNum;
-			return cp;
+			return (ComputerPref)MemberwiseClone();
 		}
 	}
 

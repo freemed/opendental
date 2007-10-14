@@ -6027,7 +6027,9 @@ namespace OpenDental{
 				//after r953
 				command="ALTER TABLE commlog ADD UserNum INT NOT NULL";
 				General.NonQEx(command);
-
+				//after r956
+				command="ALTER TABLE computerpref ADD AtoZpath VARCHAR(255)";
+				General.NonQEx(command);
 
 
 
