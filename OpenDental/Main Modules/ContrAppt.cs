@@ -3134,14 +3134,14 @@ namespace OpenDental{
 			Appointment apt = Appointments.GetOneApt(ContrApptSingle.SelectedAptNum);
 			int thisI=GetIndex(ContrApptSingle.SelectedAptNum);
 			Patient pat=Patients.GetPat(PIn.PInt(ContrApptSingle3[thisI].DataRoww["PatNum"].ToString()));
-			if (!Security.IsAuthorized(Permissions.AppointmentEdit)) {
+			if(!Security.IsAuthorized(Permissions.AppointmentEdit)) {
 				return;
 			}
-			if (apt.AptStatus == ApptStatus.PtNote | apt.AptStatus == ApptStatus.PtNoteCompleted) {
+			if(apt.AptStatus == ApptStatus.PtNote || apt.AptStatus == ApptStatus.PtNoteCompleted) {
+				MsgBox.Show(this,"Only appointments may be broken, not notes.");
 				return;
 			}
-			if (MessageBox.Show(Lan.g(this, "Are you sure you want to break appointment for: " + "\r\n" + "\r\n" + pat.GetNameFL()), "Question...",
-					MessageBoxButtons.YesNo) != DialogResult.Yes) {
+			if(!MsgBox.Show(this,true,"Break appointment?")) {
 				return;
 			}
 			Appointments.SetAptStatus(ContrApptSingle.SelectedAptNum,ApptStatus.Broken);
@@ -3153,7 +3153,19 @@ namespace OpenDental{
 			int provNum=PIn.PInt(ContrApptSingle3[thisI].DataRoww["ProvNum"].ToString());//remember before ModuleSelected
 			ModuleSelected(pat.PatNum);
 			SetInvalid();		
-			if(!PrefB.GetBool("BrokenApptCommLogNotAdjustment")){
+			if(PrefB.GetBool("BrokenApptCommLogNotAdjustment")){
+				Commlog CommlogCur=new Commlog();
+				CommlogCur.PatNum=pat.PatNum;
+				CommlogCur.CommDateTime=DateTime.Now;
+				CommlogCur.CommType=Commlogs.GetTypeAuto(CommItemTypeAuto.APPT);
+				CommlogCur.Note=Lan.g(this,"Appt BROKEN for ")+apt.ProcDescript+"  "+apt.AptDateTime.ToString();
+				CommlogCur.Mode_=CommItemMode.None;
+				CommlogCur.UserNum=Security.CurUser.UserNum;
+				FormCommItem FormCI=new FormCommItem(CommlogCur);
+				FormCI.IsNew=true;
+				FormCI.ShowDialog();
+			}
+			else {
 				Adjustment AdjustmentCur=new Adjustment();
 				AdjustmentCur.DateEntry=DateTime.Today;
 				AdjustmentCur.AdjDate=DateTime.Today;
@@ -3163,21 +3175,6 @@ namespace OpenDental{
 				FormAdjust FormA=new FormAdjust(pat,AdjustmentCur);
 				FormA.IsNew=true;
 				FormA.ShowDialog();
-			}
-			else{
-				/* //will fill in here sometime for other dialog
-				Commlog CommlogCur=new Commlog();
-				CommlogCur.PatNum=pat.PatNum;
-				CommlogCur.CommDateTime=DateTime.Now;
-				CommlogCur.CommType=CommItemType.ApptRelated;
-				CommlogCur.Note="Appt BROKEN for " + apt.ProcDescript + " on " +apt.AptDateTime; 
-				FormCommItem FormCI=new FormCommItem(CommlogCur);
-				FormCI.IsNew=true;
-				FormCI.ShowDialog();
-				if(FormCI.DialogResult==DialogResult.OK){
-					DialogResult=DialogResult.OK;
-				}
-			*/
 			}
 		}
 

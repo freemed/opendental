@@ -421,7 +421,7 @@ namespace OpenDental{
 			this.groupBox3.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.groupBox3.Location = new System.Drawing.Point(693,406);
 			this.groupBox3.Name = "groupBox3";
-			this.groupBox3.Size = new System.Drawing.Size(136,77);
+			this.groupBox3.Size = new System.Drawing.Size(172,77);
 			this.groupBox3.TabIndex = 62;
 			this.groupBox3.TabStop = false;
 			this.groupBox3.Text = "Show ID in title bar";
@@ -526,7 +526,7 @@ namespace OpenDental{
 			this.checkShowAccountNotes.Name = "checkShowAccountNotes";
 			this.checkShowAccountNotes.Size = new System.Drawing.Size(239,17);
 			this.checkShowAccountNotes.TabIndex = 56;
-			this.checkShowAccountNotes.Text = "Show item notes in account module grid ";
+			this.checkShowAccountNotes.Text = "Show item notes in Account module grid ";
 			// 
 			// groupBox6
 			// 
@@ -535,7 +535,7 @@ namespace OpenDental{
 			this.groupBox6.Controls.Add(this.checkBrokenApptNote);
 			this.groupBox6.Location = new System.Drawing.Point(436,272);
 			this.groupBox6.Name = "groupBox6";
-			this.groupBox6.Size = new System.Drawing.Size(393,128);
+			this.groupBox6.Size = new System.Drawing.Size(429,128);
 			this.groupBox6.TabIndex = 68;
 			this.groupBox6.TabStop = false;
 			// 
@@ -564,9 +564,9 @@ namespace OpenDental{
 			this.checkBrokenApptNote.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.checkBrokenApptNote.Location = new System.Drawing.Point(19,19);
 			this.checkBrokenApptNote.Name = "checkBrokenApptNote";
-			this.checkBrokenApptNote.Size = new System.Drawing.Size(297,18);
+			this.checkBrokenApptNote.Size = new System.Drawing.Size(404,18);
 			this.checkBrokenApptNote.TabIndex = 67;
-			this.checkBrokenApptNote.Text = "Place broken appt. note in Comm. Log,  not account";
+			this.checkBrokenApptNote.Text = "Put broken appt note in Commlog instead of Adj (not recommended)";
 			this.checkBrokenApptNote.UseVisualStyleBackColor = true;
 			// 
 			// groupBox7
@@ -705,7 +705,7 @@ namespace OpenDental{
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
 			this.butCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.butCancel.Location = new System.Drawing.Point(742,653);
+			this.butCancel.Location = new System.Drawing.Point(772,653);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75,26);
 			this.butCancel.TabIndex = 8;
@@ -720,7 +720,7 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(742,615);
+			this.butOK.Location = new System.Drawing.Point(772,615);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75,26);
 			this.butOK.TabIndex = 7;
@@ -730,7 +730,7 @@ namespace OpenDental{
 			// FormMisc
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
-			this.ClientSize = new System.Drawing.Size(863,699);
+			this.ClientSize = new System.Drawing.Size(893,699);
 			this.Controls.Add(this.pictureBox1);
 			this.Controls.Add(this.label7);
 			this.Controls.Add(this.groupBox7);
