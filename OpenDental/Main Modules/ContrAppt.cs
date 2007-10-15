@@ -1097,15 +1097,21 @@ namespace OpenDental{
 		///<summary>Was RefreshModuleData and FillPatientButton.  Gets the data for the specified patient. Does not refresh any appointment data.  This function should always be called when the patient changes since that's all this function is responsible for.</summary>
 		private void RefreshModulePatient(int patNum){//
 			PatCurNum=patNum;//might be zero
+			bool hasEmail;
+			string chartNumber;
 			if(PatCurNum==0){
 				PatCurName="";
 				PatCurChartNumber="";
 				butOther.Enabled=false;
+				hasEmail=false;
+				chartNumber="";
 			}
 			else{
 				Patient pat=Patients.GetPat(PatCurNum);
 				PatCurName=pat.GetNameLF();
 				PatCurChartNumber=pat.ChartNumber;
+				hasEmail=pat.Email!="";
+				chartNumber=pat.ChartNumber;
 				//family can wait until user clicks on downarrow.
 				Patients.AddPatsToMenu(menuPatient,new EventHandler(menuPatient_Click),PatCurName,PatCurNum);
 				butOther.Enabled=true;
@@ -1114,7 +1120,7 @@ namespace OpenDental{
 			butBreak.Enabled=butOther.Enabled;
 			butComplete.Enabled=butOther.Enabled;
 			butDelete.Enabled=butOther.Enabled;
-			ParentForm.Text=Patients.GetMainTitle(PatCurName,PatCurNum,PatCurChartNumber);
+			//ParentForm.Text=Patients.GetMainTitle(PatCurName,PatCurNum,PatCurChartNumber);
 			if(panelAptInfo.Enabled && DS!=null) {
 				int aptconfirmed=0;
 				for(int i=0;i<DS.Tables["Appointments"].Rows.Count;i++) {
@@ -1128,12 +1134,12 @@ namespace OpenDental{
 			else {
 				listConfirmed.SelectedIndex=-1;
 			}
-			OnPatientSelected(PatCurNum,PatCurName);
+			OnPatientSelected(PatCurNum,PatCurName,hasEmail,chartNumber);
 		}
 
 		///<summary>Sends the PatientSelected event on up to the main form.  The only result is that the main window now knows the new patNum and patName.  Does nothing else.  Does not trigger any other methods to run which might cause a loop.  Only called from RefreshModulePatient, but it's separate so that it's the same as in the other modules.</summary>
-		private void OnPatientSelected(int patNum,string patName) {
-			PatientSelectedEventArgs eArgs=new OpenDental.PatientSelectedEventArgs(patNum,patName);
+		private void OnPatientSelected(int patNum,string patName,bool hasEmail,string chartNumber) {
+			PatientSelectedEventArgs eArgs=new OpenDental.PatientSelectedEventArgs(patNum,patName,hasEmail,chartNumber);
 			if(PatientSelected!=null){
 				PatientSelected(this,eArgs);
 			}

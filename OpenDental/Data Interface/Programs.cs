@@ -173,11 +173,11 @@ namespace OpenDental{
 				MediaDent.SendData(Cur,pat);
 				return;
 			}
-			else if(Cur.ProgName=="NewPatientForm.com") {
-				NewPatientForm npf=new NewPatientForm();
-				npf.ShowDownload(Cur.Path);//NewPatientForm.com
-				return;
-			}
+			//else if(Cur.ProgName=="NewPatientForm.com") {
+			//	NewPatientForm npf=new NewPatientForm();
+			//	npf.ShowDownload(Cur.Path);//NewPatientForm.com
+			//	return;
+			//}
 			else if(Cur.ProgName=="Owandy") {
 				Owandy.SendData(Cur,pat);
 				return;

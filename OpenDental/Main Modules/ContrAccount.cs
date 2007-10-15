@@ -145,7 +145,6 @@ namespace OpenDental {
 		private GroupBox groupBoxChartLabels;
 		private OpenDental.UI.Button buttonLabelChart;
 		private OpenDental.UI.Button buttonLabelxray;
-		private OpenDental.UI.Button butCommLog;
 		private OpenDental.UI.Button butTrojan;
 		private TextBox textCC;
 		private Panel panelCC;
@@ -216,7 +215,6 @@ namespace OpenDental {
 			this.panelSplitter = new System.Windows.Forms.Panel();
 			this.panelCommButs = new System.Windows.Forms.Panel();
 			this.butTrojan = new OpenDental.UI.Button();
-			this.butCommLog = new OpenDental.UI.Button();
 			this.groupBoxChartLabels = new System.Windows.Forms.GroupBox();
 			this.buttonLabelChart = new OpenDental.UI.Button();
 			this.buttonLabelxray = new OpenDental.UI.Button();
@@ -412,7 +410,6 @@ namespace OpenDental {
 			// panelCommButs
 			// 
 			this.panelCommButs.Controls.Add(this.butTrojan);
-			this.panelCommButs.Controls.Add(this.butCommLog);
 			this.panelCommButs.Controls.Add(this.groupBoxChartLabels);
 			this.panelCommButs.Controls.Add(this.butTask);
 			this.panelCommButs.Controls.Add(this.butComm);
@@ -428,34 +425,18 @@ namespace OpenDental {
 			this.butTrojan.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butTrojan.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butTrojan.CornerRadius = 4F;
-			this.butTrojan.Location = new System.Drawing.Point(3,89);
+			this.butTrojan.Location = new System.Drawing.Point(3,62);
 			this.butTrojan.Name = "butTrojan";
 			this.butTrojan.Size = new System.Drawing.Size(146,25);
 			this.butTrojan.TabIndex = 93;
 			this.butTrojan.Text = "Send Transaction to Trojan";
 			this.butTrojan.Click += new System.EventHandler(this.butTrojan_Click);
 			// 
-			// butCommLog
-			// 
-			this.butCommLog.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butCommLog.Autosize = true;
-			this.butCommLog.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butCommLog.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butCommLog.CornerRadius = 4F;
-			this.butCommLog.Image = global::OpenDental.Properties.Resources.commlog;
-			this.butCommLog.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butCommLog.Location = new System.Drawing.Point(3,3);
-			this.butCommLog.Name = "butCommLog";
-			this.butCommLog.Size = new System.Drawing.Size(98,26);
-			this.butCommLog.TabIndex = 87;
-			this.butCommLog.Text = "Commlog";
-			this.butCommLog.Click += new System.EventHandler(this.butCommLog_Click);
-			// 
 			// groupBoxChartLabels
 			// 
 			this.groupBoxChartLabels.Controls.Add(this.buttonLabelChart);
 			this.groupBoxChartLabels.Controls.Add(this.buttonLabelxray);
-			this.groupBoxChartLabels.Location = new System.Drawing.Point(1,120);
+			this.groupBoxChartLabels.Location = new System.Drawing.Point(1,93);
 			this.groupBoxChartLabels.Name = "groupBoxChartLabels";
 			this.groupBoxChartLabels.Size = new System.Drawing.Size(161,52);
 			this.groupBoxChartLabels.TabIndex = 85;
@@ -502,7 +483,7 @@ namespace OpenDental {
 			this.butTask.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butTask.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butTask.CornerRadius = 4F;
-			this.butTask.Location = new System.Drawing.Point(3,61);
+			this.butTask.Location = new System.Drawing.Point(3,34);
 			this.butTask.Name = "butTask";
 			this.butTask.Size = new System.Drawing.Size(98,25);
 			this.butTask.TabIndex = 84;
@@ -517,7 +498,7 @@ namespace OpenDental {
 			this.butComm.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butComm.CornerRadius = 4F;
 			this.butComm.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butComm.Location = new System.Drawing.Point(3,32);
+			this.butComm.Location = new System.Drawing.Point(3,5);
 			this.butComm.Name = "butComm";
 			this.butComm.Size = new System.Drawing.Size(98,26);
 			this.butComm.TabIndex = 68;
@@ -1723,7 +1704,7 @@ namespace OpenDental {
 		}
 
 		private void RefreshModuleScreen() {
-			ParentForm.Text=Patients.GetMainTitle(PatCur);
+			//ParentForm.Text=Patients.GetMainTitle(PatCur);
 			if(PatCur!=null) {
 				gridAccount.Enabled=true;
 				ToolBarMain.Buttons["Payment"].Enabled=true;
@@ -2994,7 +2975,8 @@ namespace OpenDental {
 		private void gridAcctPat_CellClick(object sender,ODGridClickEventArgs e) {
 			if(ViewingInRecall)
 				return;
-			OnPatientSelected(FamCur.List[e.Row].PatNum,FamCur.List[e.Row].GetNameLF());
+			OnPatientSelected(FamCur.List[e.Row].PatNum,FamCur.List[e.Row].GetNameLF(),FamCur.List[e.Row].Email!="",
+				FamCur.List[e.Row].ChartNumber);
 			ModuleSelected(FamCur.List[e.Row].PatNum);
 		}
 
@@ -3031,8 +3013,8 @@ namespace OpenDental {
 		}
 
 		///<summary></summary>
-		private void OnPatientSelected(int patNum,string patName){
-			PatientSelectedEventArgs eArgs=new OpenDental.PatientSelectedEventArgs(patNum,patName);
+		private void OnPatientSelected(int patNum,string patName,bool hasEmail,string chartNumber){
+			PatientSelectedEventArgs eArgs=new OpenDental.PatientSelectedEventArgs(patNum,patName,hasEmail,chartNumber);
 			if(PatientSelected!=null){
 				PatientSelected(this,eArgs);
 			}
@@ -4338,7 +4320,7 @@ namespace OpenDental {
 
 		}
 
-		private void butCommLog_Click(object sender, EventArgs e) {
+		/*private void butCommLog_Click(object sender, EventArgs e) {
 			Commlog CommlogCur = new Commlog();
 			CommlogCur.PatNum = PatCur.PatNum;
 			CommlogCur.CommDateTime = DateTime.Now;
@@ -4355,7 +4337,7 @@ namespace OpenDental {
 			if (FormCI.DialogResult == DialogResult.OK){
 				ModuleSelected(PatCur.PatNum);
 			}
-		}
+		}*/
 
 		private void panelInsInfo_Click(object sender,EventArgs e) {
 			panelInsInfo.Visible = false;

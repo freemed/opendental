@@ -997,6 +997,7 @@ namespace OpenDental{
 			this.imageListMain.TransparentColor = System.Drawing.Color.Transparent;
 			this.imageListMain.Images.SetKeyName(0,"Pat.gif");
 			this.imageListMain.Images.SetKeyName(1,"commlog.gif");
+			this.imageListMain.Images.SetKeyName(2,"email.gif");
 			// 
 			// menuPatient
 			// 
@@ -1544,8 +1545,12 @@ namespace OpenDental{
 			button.Style=ODToolBarButtonStyle.DropDownButton;
 			button.DropDownMenu=menuPatient;
 			ToolBarMain.Buttons.Add(button);
-			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Commlog"),1,"","Commlog"));
-			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"E-mail"),-1,"","Email"));
+			button=new ODToolBarButton("",1,Lan.g(this,"Commlog"),"Commlog");
+			button.Enabled=false;
+			ToolBarMain.Buttons.Add(button);
+			button=new ODToolBarButton("",2,Lan.g(this,"E-mail"),"Email");
+			button.Enabled=false;
+			ToolBarMain.Buttons.Add(button);
 			/*
 			ToolBarMain.Buttons.Add(new ODToolBarButton(ODToolBarButtonStyle.Separator));
 			//ToolBarMain.Buttons.Add(new ODToolBarButton(ODToolBarButtonStyle.Separator));
@@ -1602,12 +1607,38 @@ namespace OpenDental{
 		private void menuPatient_Click(object sender,System.EventArgs e) {
 			Family fam=Patients.GetFamily(CurPatNum);
 			CurPatNum=Patients.ButtonSelect(menuPatient,sender,fam);
+			Patient pat=fam.GetPatient(CurPatNum);
 			RefreshCurrentModule();
-			FillPatientButton(CurPatNum,fam.GetPatient(CurPatNum).GetNameLF());
+			FillPatientButton(CurPatNum,fam.GetPatient(CurPatNum).GetNameLF(),pat.Email!="",pat.ChartNumber);
 		}
 
-		private void FillPatientButton(int patNum,string patName) {
+		///<summary>Happens when any of the modules changes the current patient.  The calling module should then refresh itself.  The current patNum is stored here in the parent form so that when switching modules, the parent form knows which patient to call up for that module.</summary>
+		private void Contr_PatientSelected(object sender,PatientSelectedEventArgs e) {
+			CurPatNum=e.PatNum;
+			FillPatientButton(CurPatNum,e.PatName,e.HasEmail,e.ChartNumber);
+		}
+
+		///<Summary>Serves three functions.  1. Sends the new patient to the dropdown menu for select patient.  2. Changes which toolbar buttons are enabled.  3. Sets main form text.</Summary>
+		private void FillPatientButton(int patNum,string patName,bool hasEmail,string chartNumber) {
 			Patients.AddPatsToMenu(menuPatient,new EventHandler(menuPatient_Click),patName,patNum);
+			if(ToolBarMain.Buttons==null || ToolBarMain.Buttons.Count<2){
+				return;
+			}
+			if(CurPatNum==0){//I don't think this can happen, but you never know.
+				ToolBarMain.Buttons["Email"].Enabled=false;
+				ToolBarMain.Buttons["Commlog"].Enabled=false;
+			}
+			else{
+				if(hasEmail){
+					ToolBarMain.Buttons["Email"].Enabled=true;
+				}
+				else{
+					ToolBarMain.Buttons["Email"].Enabled=false;
+				}
+				ToolBarMain.Buttons["Commlog"].Enabled=true;
+			}
+			ToolBarMain.Invalidate();
+			Text=Patients.GetMainTitle(patName,patNum,chartNumber);
 		}
 
 		private void OnCommlog_Click() {
@@ -1647,7 +1678,7 @@ namespace OpenDental{
 
 		///<summary>This used to be called much more frequently when it was an actual layout event.</summary>
 		private void LayoutControls(){
-			Debug.WriteLine("layout");
+			//Debug.WriteLine("layout");
 			if(Width<200){
 				Width=200;
 			}
@@ -1774,12 +1805,6 @@ namespace OpenDental{
 			sig.DateViewing=Appointments.DateSelected;//ignored if ITypes not InvalidTypes.Date
 			sig.SigType=SignalType.Invalid;
 			Signals.Insert(sig);
-		}
-
-		///<summary>Happens when any of the modules changes the current patient.  The calling module should then refresh itself.  The current patNum is stored here in the parent form so that when switching modules, the parent form knows which patient to call up for that module.</summary>
-		private void Contr_PatientSelected(object sender, PatientSelectedEventArgs e){
-			CurPatNum=e.PatNum;
-			FillPatientButton(CurPatNum,e.PatName);
 		}
 
 		private void GotoModule_ModuleSelected(ModuleEventArgs e){

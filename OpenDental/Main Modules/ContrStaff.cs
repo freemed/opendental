@@ -638,17 +638,18 @@ namespace OpenDental{
 		}
 
 		private void RefreshModuleScreen(){
-			ParentForm.Text=Patients.GetMainTitle(null);
+			//ParentForm.Text=Patients.GetMainTitle(null);
 			textTime.Text=(DateTime.Now+TimeDelta).ToLongTimeString();
 			FillEmps();
 			FillMessageDefs();
 		}
 
 		///<summary></summary>
-		private void OnPatientSelected(int patNum,string patName){
-			PatientSelectedEventArgs eArgs=new OpenDental.PatientSelectedEventArgs(patNum,patName);
-			if(PatientSelected!=null)
+		private void OnPatientSelected(int patNum,string patName,bool hasEmail,string chartNumber){
+			PatientSelectedEventArgs eArgs=new OpenDental.PatientSelectedEventArgs(patNum,patName,hasEmail,chartNumber);
+			if(PatientSelected!=null){
 				PatientSelected(this,eArgs);
+			}
 		}
 
 		private void butSendClaims_Click(object sender, System.EventArgs e) {
@@ -656,8 +657,8 @@ namespace OpenDental{
 			FormClaimsSend FormCS=new FormClaimsSend();
 			FormCS.ShowDialog();
 			if(FormCS.GotoPatNum!=0 && FormCS.GotoClaimNum!=0) {
-				//Patient pat
-				OnPatientSelected(FormCS.GotoPatNum,Patients.GetLim(FormCS.GotoPatNum).GetNameLF());
+				Patient pat=Patients.GetPat(FormCS.GotoPatNum);
+				OnPatientSelected(FormCS.GotoPatNum,pat.GetNameLF(),pat.Email!="",pat.ChartNumber);
 				GotoModule.GotoClaim(FormCS.GotoClaimNum);
 			}
 			Cursor=Cursors.Default;
@@ -700,8 +701,8 @@ namespace OpenDental{
 				return;
 			}
 			//ok signifies that a database was restored
-			OnPatientSelected(0,"");
-			ParentForm.Text=PrefB.GetString("MainWindowTitle");
+			OnPatientSelected(0,"",false,"");
+			//ParentForm.Text=PrefB.GetString("MainWindowTitle");
 			DataValid.SetInvalid(true);
 			ModuleSelected();
 		}
@@ -711,7 +712,8 @@ namespace OpenDental{
 			FormT.ShowDialog();
 			if(FormT.GotoType==TaskObjectType.Patient){
 				if(FormT.GotoKeyNum!=0){
-					OnPatientSelected(FormT.GotoKeyNum,Patients.GetLim(FormT.GotoKeyNum).GetNameLF());
+					Patient pat=Patients.GetPat(FormT.GotoKeyNum);
+					OnPatientSelected(FormT.GotoKeyNum,pat.GetNameLF(),pat.Email!="",pat.ChartNumber);
 					GotoModule.GotoAccount();
 				}
 			}
@@ -732,7 +734,8 @@ namespace OpenDental{
 					else{
 						dateSelected=apt.AptDateTime;
 					}
-					OnPatientSelected(apt.PatNum,Patients.GetLim(apt.PatNum).GetNameLF());
+					Patient pat=Patients.GetPat(apt.PatNum);
+					OnPatientSelected(apt.PatNum,pat.GetNameLF(),pat.Email!="",pat.ChartNumber);
 					GotoModule.GotoAppointment(dateSelected,apt.AptNum);
 				}
 			}

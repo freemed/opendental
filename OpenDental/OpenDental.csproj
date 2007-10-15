@@ -127,12 +127,6 @@
     <Compile Include="Bridges\ImageFX.cs" />
     <Compile Include="Bridges\Lightyear.cs" />
     <Compile Include="Bridges\MediaDent.cs" />
-    <Compile Include="Bridges\NewPatientForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Bridges\NewPatientForm.Designer.cs">
-      <DependentUpon>NewPatientForm.cs</DependentUpon>
-    </Compile>
     <Compile Include="Bridges\Owandy.cs" />
     <Compile Include="Bridges\PerioPal.cs" />
     <Compile Include="Bridges\Planmeca.cs" />
@@ -1252,10 +1246,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Bridges\FormIap.resx">
       <DependentUpon>FormIap.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Bridges\NewPatientForm.resx">
-      <DependentUpon>NewPatientForm.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Eclaims\FormCCDPrint.resx">

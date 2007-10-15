@@ -709,7 +709,7 @@ namespace OpenDental{
 		}
 
 		private void RefreshModuleScreen(){
-			ParentForm.Text=Patients.GetMainTitle(PatCur);
+			//ParentForm.Text=Patients.GetMainTitle(PatCur);
 			if(PatCur!=null){
 				gridMain.Enabled=true;
 				groupShow.Enabled=true;
@@ -774,10 +774,11 @@ namespace OpenDental{
 		}
 
 		///<summary></summary>
-		private void OnPatientSelected(int patNum,string patName){
-			PatientSelectedEventArgs eArgs=new OpenDental.PatientSelectedEventArgs(patNum,patName);
-			if(PatientSelected!=null)
+		private void OnPatientSelected(int patNum,string patName,bool hasEmail,string chartNumber){
+			PatientSelectedEventArgs eArgs=new OpenDental.PatientSelectedEventArgs(patNum,patName,hasEmail,chartNumber);
+			if(PatientSelected!=null){
 				PatientSelected(this,eArgs);
+			}
 		}
 
 		private void FillPlans(){

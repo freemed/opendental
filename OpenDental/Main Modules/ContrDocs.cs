@@ -696,8 +696,8 @@ namespace OpenDental{
 			xRayImageController.KillXRayThread();
 		}
 
-		///<summary>This is public for NewPatientForm functionality.</summary>
-  		public void RefreshModuleData(int patNum){
+		///<summary></summary>
+		private void RefreshModuleData(int patNum){
 			SelectTreeNode(null);//Clear selection and image and reset visibilities.
 			if(patNum==0){
 				imageStore=null;
@@ -708,15 +708,11 @@ namespace OpenDental{
 			if(ImageStore.UpdatePatient == null)
 				ImageStore.UpdatePatient = new FileStore.UpdatePatientDelegate(Patients.Update);
 			imageStore = ImageStore.GetImageStore(FamCur.GetPatient(patNum));
-
-			if(ParentForm!=null){
-				//Added so NewPatientform can have access without showing
-				ParentForm.Text=Patients.GetMainTitle(PatCur);
-			}
+			//ParentForm.Text=Patients.GetMainTitle(PatCur);
 		}
 
 		private void RefreshModuleScreen(){
-			ParentForm.Text=Patients.GetMainTitle(PatCur);
+			//ParentForm.Text=Patients.GetMainTitle(PatCur);
 			if(this.Enabled && PatCur!=null){
 				//Enable tools which must always be accessible when a valid patient is selected.
 				EnableAllTools(true);
@@ -734,10 +730,11 @@ namespace OpenDental{
 		}
 
 		///<summary></summary>
-		private void OnPatientSelected(int patNum,string patName){
-			PatientSelectedEventArgs eArgs=new OpenDental.PatientSelectedEventArgs(patNum,patName);
-			if(PatientSelected!=null)
+		private void OnPatientSelected(int patNum,string patName,bool hasEmail,string chartNumber){
+			PatientSelectedEventArgs eArgs=new OpenDental.PatientSelectedEventArgs(patNum,patName,hasEmail,chartNumber);
+			if(PatientSelected!=null){
 				PatientSelected(this,eArgs);
+			}
 		}
 
 		///<summary>Applies to all tools and excludes patient selection button.</summary>

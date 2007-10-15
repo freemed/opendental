@@ -1541,11 +1541,15 @@ namespace OpenDental{
 	public class PatientSelectedEventArgs{
 		private int patNum;
 		private string patName;
+		private bool hasEmail;
+		private string chartNumber;
 
 		///<summary></summary>
-		public PatientSelectedEventArgs(int patNum,string patName){
+		public PatientSelectedEventArgs(int patNum,string patName,bool hasEmail,string chartNumber){
 			this.patNum=patNum;
 			this.patName=patName;
+			this.hasEmail=hasEmail;
+			this.chartNumber=chartNumber;
 		}
 
 		///<summary></summary>
@@ -1559,6 +1563,20 @@ namespace OpenDental{
 		public string PatName {
 			get {
 				return patName;
+			}
+		}
+
+		///<summary>This is required in order to enable/disable the email button intelligently.</summary>
+		public bool HasEmail {
+			get {
+				return hasEmail;
+			}
+		}
+
+		///<summary>This is required in order to properly set the form title when user wants to see chart numbers.</summary>
+		public string ChartNumber {
+			get {
+				return chartNumber;
 			}
 		}
 

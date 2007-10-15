@@ -200,7 +200,7 @@ namespace OpenDental{
 		}
 
 		private void RefreshModuleScreen(){
-			ParentForm.Text=Patients.GetMainTitle(PatCur);
+			//ParentForm.Text=Patients.GetMainTitle(PatCur);
 			if(PatCur!=null){
 				ToolBarMain.Buttons["Recall"].Enabled=true;
 				ToolBarMain.Buttons["Add"].Enabled=true;
@@ -355,10 +355,11 @@ namespace OpenDental{
 		}
 
 		///<summary></summary>
-		private void OnPatientSelected(int patNum,string patName){
-			PatientSelectedEventArgs eArgs=new OpenDental.PatientSelectedEventArgs(patNum,patName);
-			if(PatientSelected!=null)
+		private void OnPatientSelected(int patNum,string patName,bool hasEmail,string chartNumber){
+			PatientSelectedEventArgs eArgs=new OpenDental.PatientSelectedEventArgs(patNum,patName,hasEmail,chartNumber);
+			if(PatientSelected!=null){
 				PatientSelected(this,eArgs);
+			}
 		}
 
 		private void OnRecall_Click() {
@@ -755,7 +756,8 @@ namespace OpenDental{
 			}
 			tbFamily.SelectedRow=e.Row;
 			tbFamily.ColorRow(e.Row,Color.DarkSalmon);
-			OnPatientSelected(FamCur.List[e.Row].PatNum,FamCur.List[e.Row].GetNameLF());
+			OnPatientSelected(FamCur.List[e.Row].PatNum,FamCur.List[e.Row].GetNameLF(),FamCur.List[e.Row].Email!="",
+				FamCur.List[e.Row].ChartNumber);
 			ModuleSelected(FamCur.List[e.Row].PatNum);
 		}
 
@@ -782,7 +784,7 @@ namespace OpenDental{
 			FormPE.IsNew=true;
 			FormPE.ShowDialog();
 			if(FormPE.DialogResult==DialogResult.OK){
-				OnPatientSelected(tempPat.PatNum,tempPat.GetNameLF());
+				OnPatientSelected(tempPat.PatNum,tempPat.GetNameLF(),tempPat.Email!="",tempPat.ChartNumber);
 				ModuleSelected(tempPat.PatNum);
 			}
 			else{
