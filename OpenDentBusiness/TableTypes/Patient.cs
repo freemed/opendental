@@ -743,10 +743,10 @@ namespace OpenDentBusiness{
 		}
 
 		[DataField("SchedBeforeTime")]
-		private DateTime schedBeforeTime;
+		private TimeSpan schedBeforeTime;
 		bool schedBeforeTimeChanged;
-		/// <summary>Only the time portion of the DateTime is used.</summary>
-		public DateTime SchedBeforeTime {
+		/// <summary>Only the time portion of the TimeSpan is used.</summary>
+		public TimeSpan SchedBeforeTime {
 			get { return schedBeforeTime; }
 			set { schedBeforeTime = value; MarkDirty(); schedBeforeTimeChanged = true; }
 		}
@@ -755,10 +755,10 @@ namespace OpenDentBusiness{
 		}
 
 		[DataField("SchedAfterTime")]
-		private DateTime schedAfterTime;
+		private TimeSpan schedAfterTime;
 		bool schedAfterTimeChanged;
 		/// <summary></summary>
-		public DateTime SchedAfterTime {
+		public TimeSpan SchedAfterTime {
 			get { return schedAfterTime; }
 			set { schedAfterTime = value; MarkDirty(); schedAfterTimeChanged = true; }
 		}
@@ -767,10 +767,10 @@ namespace OpenDentBusiness{
 		}
 
 		[DataField("SchedDayOfWeek")]
-		private int schedDayOfWeek;
+		private byte schedDayOfWeek;
 		bool schedDayOfWeekChanged;
 		/// <summary>We do not use this, but some users do, so here it is. 0=none. Otherwise, 1-7 for day.</summary>
-		public int SchedDayOfWeek {
+		public byte SchedDayOfWeek {
 			get { return schedDayOfWeek; }
 			set { schedDayOfWeek = value; MarkDirty(); schedDayOfWeekChanged = true; }
 		}

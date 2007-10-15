@@ -54,6 +54,18 @@ namespace OpenDentBusiness{
 			}
 		}
 
+		public static TimeSpan PTimeSpan(string myString) {
+			if (string.IsNullOrEmpty(myString)) {
+				return TimeSpan.MinValue;
+			}
+			try {
+				return (TimeSpan.Parse(myString));
+			}
+			catch {
+				return TimeSpan.MinValue;
+			}
+		}
+
 		///<summary>If blank or invalid, returns 0. Otherwise, parses.</summary>
 		public static double PDouble (string myString){
 			if(myString==""){

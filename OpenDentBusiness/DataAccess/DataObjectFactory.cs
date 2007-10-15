@@ -6,6 +6,8 @@ using System.Data;
 using OpenDentBusiness;
 using OpenDentBusiness.Properties;
 using System.Drawing;
+using MySql.Data.Types;
+using MySql.Data.MySqlClient;
 
 namespace OpenDental.DataAccess {
 	/// <summary>
@@ -170,7 +172,11 @@ namespace OpenDental.DataAccess {
 					try {
 						dataField.Field.SetValue(value, reader.GetDateTime(ordinal));
 					}
-					catch {
+					// Warning: If compiled against MySql.Data.dll from the SVN repository, this will fail, because
+					// the MySqlConversionException refers to the class in that particular Dll. However, the Data
+					// Framework uses the MySql.Data.dll in the GAC. Hence, this class should be compiled
+					// using the GAC version of MySql.Data.dll.
+					catch (MySqlConversionException) {
 						dataField.Field.SetValue(value, DateTime.MinValue);
 					}
 				}

@@ -122,9 +122,9 @@ namespace OpenDental{
 				retVal[i].PreferConfirmMethod=(ContactMethod)PIn.PInt(table.Rows[i][58].ToString());
 				retVal[i].PreferContactMethod=(ContactMethod)PIn.PInt(table.Rows[i][59].ToString());
 				retVal[i].PreferRecallMethod=(ContactMethod)PIn.PInt(table.Rows[i][60].ToString());
-				retVal[i].SchedBeforeTime= PIn.PDateT(table.Rows[i][61].ToString());
-				retVal[i].SchedAfterTime= PIn.PDateT(table.Rows[i][62].ToString());
-				retVal[i].SchedDayOfWeek= PIn.PInt(table.Rows[i][63].ToString());
+				retVal[i].SchedBeforeTime= PIn.PTimeSpan(table.Rows[i][61].ToString());
+				retVal[i].SchedAfterTime = PIn.PTimeSpan(table.Rows[i][62].ToString());
+				retVal[i].SchedDayOfWeek= PIn.PByte(table.Rows[i][63].ToString());
 				retVal[i].Language     = PIn.PString(table.Rows[i][64].ToString());
 				retVal[i].AdmitDate    = PIn.PDate  (table.Rows[i][65].ToString());
 				retVal[i].Title        = PIn.PString(table.Rows[i][66].ToString());
@@ -215,8 +215,8 @@ namespace OpenDental{
 				+"'"+POut.PInt((int)pat.PreferConfirmMethod)+"', "
 				+"'"+POut.PInt((int)pat.PreferContactMethod)+"', "
 				+"'"+POut.PInt((int)pat.PreferRecallMethod)+"', "
-				+POut.PDateT(pat.SchedBeforeTime)+", "
-				+POut.PDateT(pat.SchedAfterTime)+", "
+				+POut.PTimeSpan(pat.SchedBeforeTime)+", "
+				+POut.PTimeSpan(pat.SchedAfterTime)+", "
 				+"'"+POut.PInt(pat.SchedDayOfWeek)+"', "
 				+"'"+POut.PString(pat.Language)+"', "
 				+POut.PDate(pat.AdmitDate)+", "
@@ -588,13 +588,13 @@ namespace OpenDental{
 			if(pat.SchedBeforeTime!=CurOld.SchedBeforeTime) {
 				if(comma)
 					c+=",";
-				c+="SchedBeforeTime = "     +POut.PDateT(pat.SchedBeforeTime);
+				c+="SchedBeforeTime = "     +POut.PTimeSpan(pat.SchedBeforeTime);
 				comma=true;
 			}
 			if(pat.SchedAfterTime!=CurOld.SchedAfterTime) {
 				if(comma)
 					c+=",";
-				c+="SchedAfterTime = "     +POut.PDateT(pat.SchedAfterTime);
+				c+="SchedAfterTime = "     +POut.PTimeSpan(pat.SchedAfterTime);
 				comma=true;
 			}
 			if(pat.SchedDayOfWeek!=CurOld.SchedDayOfWeek) {
@@ -825,9 +825,9 @@ namespace OpenDental{
 				multPats[i].PreferConfirmMethod=(ContactMethod)PIn.PInt(table.Rows[i][58].ToString());
 				multPats[i].PreferContactMethod=(ContactMethod)PIn.PInt(table.Rows[i][59].ToString());
 				multPats[i].PreferRecallMethod=(ContactMethod)PIn.PInt(table.Rows[i][60].ToString());
-				multPats[i].SchedBeforeTime= PIn.PDateT(table.Rows[i][61].ToString());
-				multPats[i].SchedAfterTime= PIn.PDateT(table.Rows[i][62].ToString());
-				multPats[i].SchedDayOfWeek= PIn.PInt(table.Rows[i][63].ToString());
+				multPats[i].SchedBeforeTime= PIn.PTimeSpan(table.Rows[i][61].ToString());
+				multPats[i].SchedAfterTime= PIn.PTimeSpan(table.Rows[i][62].ToString());
+				multPats[i].SchedDayOfWeek= PIn.PByte(table.Rows[i][63].ToString());
 				multPats[i].Language     = PIn.PString(table.Rows[i][64].ToString());
 				multPats[i].AdmitDate    = PIn.PDate(table.Rows[i][65].ToString());
 				multPats[i].Title        = PIn.PString(table.Rows[i][66].ToString());
