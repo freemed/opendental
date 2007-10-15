@@ -74,7 +74,6 @@ namespace OpenDental {
 		private System.Windows.Forms.ContextMenu contextMenuStatement;
 		private System.Windows.Forms.MenuItem menuItemStatementWalkout;
 		private System.Windows.Forms.MenuItem menuItemStatementMore;
-		private OpenDental.UI.Button butTask;
 		//private OpenDental.TableCommLogAccount tbComm;
 		private OpenDental.UI.ODGrid gridComm;
 		private OpenDental.UI.ODGrid gridAcctPat;
@@ -218,7 +217,6 @@ namespace OpenDental {
 			this.groupBoxChartLabels = new System.Windows.Forms.GroupBox();
 			this.buttonLabelChart = new OpenDental.UI.Button();
 			this.buttonLabelxray = new OpenDental.UI.Button();
-			this.butTask = new OpenDental.UI.Button();
 			this.butComm = new OpenDental.UI.Button();
 			this.contextMenuStatement = new System.Windows.Forms.ContextMenu();
 			this.menuItemStatementWalkout = new System.Windows.Forms.MenuItem();
@@ -411,7 +409,6 @@ namespace OpenDental {
 			// 
 			this.panelCommButs.Controls.Add(this.butTrojan);
 			this.panelCommButs.Controls.Add(this.groupBoxChartLabels);
-			this.panelCommButs.Controls.Add(this.butTask);
 			this.panelCommButs.Controls.Add(this.butComm);
 			this.panelCommButs.Location = new System.Drawing.Point(769,429);
 			this.panelCommButs.Name = "panelCommButs";
@@ -425,7 +422,7 @@ namespace OpenDental {
 			this.butTrojan.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butTrojan.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butTrojan.CornerRadius = 4F;
-			this.butTrojan.Location = new System.Drawing.Point(3,62);
+			this.butTrojan.Location = new System.Drawing.Point(3,29);
 			this.butTrojan.Name = "butTrojan";
 			this.butTrojan.Size = new System.Drawing.Size(146,25);
 			this.butTrojan.TabIndex = 93;
@@ -436,7 +433,7 @@ namespace OpenDental {
 			// 
 			this.groupBoxChartLabels.Controls.Add(this.buttonLabelChart);
 			this.groupBoxChartLabels.Controls.Add(this.buttonLabelxray);
-			this.groupBoxChartLabels.Location = new System.Drawing.Point(1,93);
+			this.groupBoxChartLabels.Location = new System.Drawing.Point(1,60);
 			this.groupBoxChartLabels.Name = "groupBoxChartLabels";
 			this.groupBoxChartLabels.Size = new System.Drawing.Size(161,52);
 			this.groupBoxChartLabels.TabIndex = 85;
@@ -475,21 +472,6 @@ namespace OpenDental {
 			this.buttonLabelxray.Text = "X-Ray";
 			this.buttonLabelxray.Click += new System.EventHandler(this.buttonLabelxray_Click);
 			// 
-			// butTask
-			// 
-			this.butTask.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butTask.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butTask.Autosize = true;
-			this.butTask.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butTask.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butTask.CornerRadius = 4F;
-			this.butTask.Location = new System.Drawing.Point(3,34);
-			this.butTask.Name = "butTask";
-			this.butTask.Size = new System.Drawing.Size(98,25);
-			this.butTask.TabIndex = 84;
-			this.butTask.Text = "To Task List";
-			this.butTask.Click += new System.EventHandler(this.butTask_Click);
-			// 
 			// butComm
 			// 
 			this.butComm.AdjustImageLocation = new System.Drawing.Point(0,0);
@@ -498,7 +480,7 @@ namespace OpenDental {
 			this.butComm.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butComm.CornerRadius = 4F;
 			this.butComm.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butComm.Location = new System.Drawing.Point(3,5);
+			this.butComm.Location = new System.Drawing.Point(3,2);
 			this.butComm.Name = "butComm";
 			this.butComm.Size = new System.Drawing.Size(98,26);
 			this.butComm.TabIndex = 68;
@@ -1715,7 +1697,6 @@ namespace OpenDental {
 				ToolBarMain.Invalidate();
 				textUrgFinNote.Enabled=true;
 				textFinNotes.Enabled=true;
-				butTask.Enabled=true;
 				butComm.Enabled=true;
 			}
 			else {
@@ -1728,7 +1709,6 @@ namespace OpenDental {
 				ToolBarMain.Invalidate();
 				textUrgFinNote.Enabled=false;
 				textFinNotes.Enabled=false;
-				butTask.Enabled=false;
 				butComm.Enabled=false;
 			}
 			if (PrefB.GetBool("BoldFamilyAccountBalanceView")){
@@ -3832,8 +3812,8 @@ namespace OpenDental {
 		}*/
 
 		private void butTask_Click(object sender, System.EventArgs e) {
-			FormTaskListSelect FormT=new FormTaskListSelect(TaskObjectType.Patient,PatCur.PatNum);
-			FormT.ShowDialog();
+			//FormTaskListSelect FormT=new FormTaskListSelect(TaskObjectType.Patient,PatCur.PatNum);
+			//FormT.ShowDialog();
 		}
 
 		private void butTrojan_Click(object sender,EventArgs e) {

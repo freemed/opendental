@@ -998,6 +998,8 @@ namespace OpenDental{
 			this.imageListMain.Images.SetKeyName(0,"Pat.gif");
 			this.imageListMain.Images.SetKeyName(1,"commlog.gif");
 			this.imageListMain.Images.SetKeyName(2,"email.gif");
+			this.imageListMain.Images.SetKeyName(3,"tasksNicer.gif");
+			this.imageListMain.Images.SetKeyName(4,"label.gif");
 			// 
 			// menuPatient
 			// 
@@ -1094,7 +1096,7 @@ namespace OpenDental{
 			this.myOutlookBar.ImageList = this.imageList32;
 			this.myOutlookBar.Location = new System.Drawing.Point(0,0);
 			this.myOutlookBar.Name = "myOutlookBar";
-			this.myOutlookBar.Size = new System.Drawing.Size(51,642);
+			this.myOutlookBar.Size = new System.Drawing.Size(51,600);
 			this.myOutlookBar.TabIndex = 18;
 			this.myOutlookBar.Text = "outlookBar1";
 			this.myOutlookBar.ButtonClicked += new OpenDental.ButtonClickedEventHandler(this.myOutlookBar_ButtonClicked);
@@ -1105,7 +1107,7 @@ namespace OpenDental{
 			// 
 			// FormOpenDental
 			// 
-			this.ClientSize = new System.Drawing.Size(982,642);
+			this.ClientSize = new System.Drawing.Size(982,600);
 			this.Controls.Add(this.ToolBarMain);
 			this.Controls.Add(this.panelSplitter);
 			this.Controls.Add(this.userControlTasks1);
@@ -1545,22 +1547,10 @@ namespace OpenDental{
 			button.Style=ODToolBarButtonStyle.DropDownButton;
 			button.DropDownMenu=menuPatient;
 			ToolBarMain.Buttons.Add(button);
-			button=new ODToolBarButton("",1,Lan.g(this,"Commlog"),"Commlog");
-			button.Enabled=false;
-			ToolBarMain.Buttons.Add(button);
-			button=new ODToolBarButton("",2,Lan.g(this,"E-mail"),"Email");
-			button.Enabled=false;
-			ToolBarMain.Buttons.Add(button);
-			/*
-			ToolBarMain.Buttons.Add(new ODToolBarButton(ODToolBarButtonStyle.Separator));
-			//ToolBarMain.Buttons.Add(new ODToolBarButton(ODToolBarButtonStyle.Separator));
-			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"LabCase"),-1,"","LabCase"));
-			//ToolBarMain.Buttons.Add(new ODToolBarButton(ODToolBarButtonStyle.Separator));
-			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Perio Chart"),2,"","Perio"));
-			button=new ODToolBarButton(Lan.g(this,"Commlog"),3,"","Commlog");
-			button.Style=ODToolBarButtonStyle.DropDownButton;
-			button.DropDownMenu=menuEmail;
-			ToolBarMain.Buttons.Add(button);*/
+			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Commlog"),1,Lan.g(this,"New Commlog Entry"),"Commlog"));
+			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"E-mail"),2,Lan.g(this,"Send E-mail"),"Email"));
+			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"To Task List"),3,Lan.g(this,"Send to Task List"),"Tasklist"));
+			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Label"),4,Lan.g(this,"Print Label"),"Label"));
 			ArrayList toolButItems=ToolButItems.GetForToolBar(ToolBarsAvail.AllModules);
 			for(int i=0;i<toolButItems.Count;i++) {
 				//ToolBarMain.Buttons.Add(new ODToolBarButton(ODToolBarButtonStyle.Separator));
@@ -1587,6 +1577,12 @@ namespace OpenDental{
 						break;
 					case "Email":
 						OnEmail_Click();
+						break;
+					case "Tasklist":
+						OnTasklist_Click();
+						break;
+					case "Label":
+						OnLabel_Click();
 						break;
 				}
 			}
@@ -1627,6 +1623,8 @@ namespace OpenDental{
 			if(CurPatNum==0){//I don't think this can happen, but you never know.
 				ToolBarMain.Buttons["Email"].Enabled=false;
 				ToolBarMain.Buttons["Commlog"].Enabled=false;
+				ToolBarMain.Buttons["Tasklist"].Enabled=false;
+				ToolBarMain.Buttons["Label"].Enabled=false;
 			}
 			else{
 				if(hasEmail){
@@ -1636,6 +1634,8 @@ namespace OpenDental{
 					ToolBarMain.Buttons["Email"].Enabled=false;
 				}
 				ToolBarMain.Buttons["Commlog"].Enabled=true;
+				ToolBarMain.Buttons["Tasklist"].Enabled=true;
+				ToolBarMain.Buttons["Label"].Enabled=true;
 			}
 			ToolBarMain.Invalidate();
 			Text=Patients.GetMainTitle(patName,patNum,chartNumber);
@@ -1670,6 +1670,18 @@ namespace OpenDental{
 			if(FormE.DialogResult==DialogResult.OK) {
 				RefreshCurrentModule();
 			}
+		}
+
+		private void OnTasklist_Click(){
+			FormTaskListSelect FormT=new FormTaskListSelect(TaskObjectType.Patient,CurPatNum);
+			FormT.Location=new Point(50,50);
+			FormT.ShowDialog();
+		}
+
+		private void OnLabel_Click() {
+			LabelSingle label=new LabelSingle();
+			Patient pat=Patients.GetPat(CurPatNum);
+			label.PrintPat(pat);
 		}
 
 		private void FormOpenDental_Resize(object sender,EventArgs e) {
