@@ -1244,7 +1244,7 @@ namespace OpenDental{
 		///<summary>Used only to run finance charges, so it ignores negative balances.</summary>
 		public static PatAging[] GetAgingList(){
 			string command =
-				"SELECT patnum,Bal_0_30,Bal_31_60,Bal_61_90,BalOver90,BalTotal,InsEst,LName,FName,MiddleI,priprov "
+				"SELECT patnum,Bal_0_30,Bal_31_60,Bal_61_90,BalOver90,BalTotal,InsEst,LName,FName,MiddleI,PriProv,BillingType "
 				+"FROM patient "//actually only gets guarantors since others are 0.
 				+" WHERE Bal_0_30 + Bal_31_60 + Bal_61_90 + BalOver90 - InsEst > '0.005'"//more that 1/2 cent
 				+" ORDER BY LName,FName";
@@ -1266,6 +1266,7 @@ namespace OpenDental{
 				//	+AgingList[i].Bal_61_90+AgingList[i].BalOver90;
 				AgingList[i].AmountDue=AgingList[i].BalTotal-AgingList[i].InsEst;
 				AgingList[i].PriProv=PIn.PInt(table.Rows[i][10].ToString());
+				AgingList[i].BillingType=PIn.PInt(table.Rows[i][11].ToString());
 			}
 			return AgingList;
 		}
@@ -1549,6 +1550,8 @@ namespace OpenDental{
 		public int PriProv;
 		///<summary>The date of the last statement.</summary>
 		public DateTime DateLastStatement;
+		///<summary>FK to defNum.</summary>
+		public int BillingType;
 	}
 
 	///<summary></summary>

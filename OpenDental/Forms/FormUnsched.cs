@@ -117,6 +117,7 @@ namespace OpenDental{
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Unscheduled List";
 			this.Closing += new System.ComponentModel.CancelEventHandler(this.FormUnsched_Closing);
+			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormUnsched_FormClosing);
 			this.Load += new System.EventHandler(this.FormUnsched_Load);
 			this.ResumeLayout(false);
 
@@ -256,6 +257,12 @@ namespace OpenDental{
 
 		private void FormUnsched_Closing(object sender, System.ComponentModel.CancelEventArgs e) {
 			Patients.HList=null;
+		}
+
+		private void FormUnsched_FormClosing(object sender,FormClosingEventArgs e) {
+			if(grid.SelectedIndices.Length==1) {
+				SelectedPatNum=ListUn[grid.SelectedIndices[0]].PatNum;
+			}
 		}
 
 		

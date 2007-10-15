@@ -28,6 +28,8 @@ namespace OpenDental{
 		private GroupBox groupBox2;
 		private ValidDate textDateUndo;
 		private Label label6;
+		private ListBox listBillType;
+		private Label label7;
 		private int adjType;
 
 		///<summary></summary>
@@ -68,6 +70,8 @@ namespace OpenDental{
 			this.groupBox2 = new System.Windows.Forms.GroupBox();
 			this.textDateUndo = new OpenDental.ValidDate();
 			this.label6 = new System.Windows.Forms.Label();
+			this.listBillType = new System.Windows.Forms.ListBox();
+			this.label7 = new System.Windows.Forms.Label();
 			this.groupBox1.SuspendLayout();
 			this.groupBox2.SuspendLayout();
 			this.SuspendLayout();
@@ -256,12 +260,30 @@ namespace OpenDental{
 			this.label6.Text = "Date to undo";
 			this.label6.TextAlign = System.Drawing.ContentAlignment.TopRight;
 			// 
+			// listBillType
+			// 
+			this.listBillType.Location = new System.Drawing.Point(388,34);
+			this.listBillType.Name = "listBillType";
+			this.listBillType.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
+			this.listBillType.Size = new System.Drawing.Size(158,186);
+			this.listBillType.TabIndex = 32;
+			// 
+			// label7
+			// 
+			this.label7.Location = new System.Drawing.Point(387,16);
+			this.label7.Name = "label7";
+			this.label7.Size = new System.Drawing.Size(214,16);
+			this.label7.TabIndex = 33;
+			this.label7.Text = "Only apply to these Billing Types";
+			// 
 			// FormFinanceCharges
 			// 
 			this.AcceptButton = this.butOK;
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.CancelButton = this.butCancel;
 			this.ClientSize = new System.Drawing.Size(692,440);
+			this.Controls.Add(this.listBillType);
+			this.Controls.Add(this.label7);
 			this.Controls.Add(this.groupBox2);
 			this.Controls.Add(this.textDateLastRun);
 			this.Controls.Add(this.label5);
@@ -307,12 +329,21 @@ namespace OpenDental{
 					return;
 				}
 			}
+			if(DefB.Short[(int)DefCat.BillingTypes].Length==0){//highly unlikely that this would happen
+				MsgBox.Show(this,"No billing types have been set up or are visible.");
+				DialogResult=DialogResult.Cancel;
+				return;
+			}
 			textDateLastRun.Text=PrefB.GetDate("FinanceChargeLastRun").ToShortDateString();
 			textDateUndo.Text=PrefB.GetDate("FinanceChargeLastRun").ToShortDateString();
 			textDate.Text=DateTime.Today.ToShortDateString();		
 			textAPR.MaxVal=100;
 			textAPR.MinVal=0;
 			textAPR.Text=PrefB.GetString("FinanceChargeAPR");
+			for(int i=0;i<DefB.Short[(int)DefCat.BillingTypes].Length;i++) {
+				listBillType.Items.Add(DefB.Short[(int)DefCat.BillingTypes][i].ItemName);
+				listBillType.SetSelected(i,true);
+			}
 		}
 
 		private void butUndo_Click(object sender,EventArgs e) {
@@ -342,6 +373,10 @@ namespace OpenDental{
 					return;
 				}
 			}
+			if(listBillType.SelectedIndices.Count==0){
+				MsgBox.Show(this,"Please select at least one billing type first.");
+				return;
+			}
 			if(PIn.PInt(textAPR.Text) < 2){
 				if(!MsgBox.Show(this,true,"The APR is much lower than normal. Do you wish to proceed?")){
 					return;   
@@ -352,6 +387,7 @@ namespace OpenDental{
 			PatAging[] AgingList=Patients.GetAgingList();
 			double OverallBalance;
 			int rowsAffected=0;
+			bool billingMatch;
 			for(int i=0;i<AgingList.Length;i++){
 				OverallBalance=0;//this WILL NOT be the same as the patient's total balance
 				if(radio30.Checked){
@@ -363,19 +399,30 @@ namespace OpenDental{
 				if(radio90.Checked){
 					OverallBalance=AgingList[i].BalOver90;
 				}
-				if(OverallBalance > 0){
-					Adjustment AdjustmentCur=new Adjustment();
-					AdjustmentCur.PatNum=AgingList[i].PatNum;
-					//AdjustmentCur.DateEntry=PIn.PDate(textDate.Text);//automatically handled
-					AdjustmentCur.AdjDate=date;
-					AdjustmentCur.ProcDate=date;
-					AdjustmentCur.AdjType=PrefB.GetInt("FinanceChargeAdjustmentType");
-					AdjustmentCur.AdjNote="Finance Charge";
-					AdjustmentCur.AdjAmt=Math.Round(((PIn.PDouble(textAPR.Text) * .01 / 12) * OverallBalance),2);
-					AdjustmentCur.ProvNum=AgingList[i].PriProv;
-					Adjustments.InsertOrUpdate(AdjustmentCur,true);
-					rowsAffected++;
+				if(OverallBalance <= 0){
+					continue;
 				}
+				billingMatch=false;
+				for(int b=0;b<listBillType.SelectedIndices.Count;b++){
+					if(DefB.Short[(int)DefCat.BillingTypes][listBillType.SelectedIndices[b]].DefNum==AgingList[i].BillingType){
+						billingMatch=true;
+						break;
+					}
+				}
+				if(!billingMatch){
+					continue;
+				}
+				Adjustment AdjustmentCur=new Adjustment();
+				AdjustmentCur.PatNum=AgingList[i].PatNum;
+				//AdjustmentCur.DateEntry=PIn.PDate(textDate.Text);//automatically handled
+				AdjustmentCur.AdjDate=date;
+				AdjustmentCur.ProcDate=date;
+				AdjustmentCur.AdjType=PrefB.GetInt("FinanceChargeAdjustmentType");
+				AdjustmentCur.AdjNote="Finance Charge";
+				AdjustmentCur.AdjAmt=Math.Round(((PIn.PDouble(textAPR.Text) * .01d / 12d) * OverallBalance),2);
+				AdjustmentCur.ProvNum=AgingList[i].PriProv;
+				Adjustments.InsertOrUpdate(AdjustmentCur,true);
+				rowsAffected++;
 			}
 			if(Prefs.UpdateString("FinanceChargeAPR",textAPR.Text)
 				| Prefs.UpdateString("FinanceChargeLastRun",POut.PDate(date,false)))

@@ -96,6 +96,7 @@ namespace OpenDental{
 			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Track Planned Appointments";
+			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormTrackNext_FormClosing);
 			this.Load += new System.EventHandler(this.FormTrackNext_Load);
 			this.ResumeLayout(false);
 
@@ -155,6 +156,12 @@ namespace OpenDental{
 
 		private void FormUnsched_Closing(object sender, System.ComponentModel.CancelEventArgs e) {
 			Patients.HList=null;
+		}
+
+		private void FormTrackNext_FormClosing(object sender,FormClosingEventArgs e) {
+			if(tbApts.SelectedRow!=-1) {
+				SelectedPatNum=ListUn[tbApts.SelectedRow].PatNum;
+			}
 		}
 		
 
