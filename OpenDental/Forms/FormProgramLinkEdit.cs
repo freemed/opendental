@@ -218,7 +218,7 @@ namespace OpenDental{
 			this.listToolBars.Location = new System.Drawing.Point(15,231);
 			this.listToolBars.Name = "listToolBars";
 			this.listToolBars.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
-			this.listToolBars.Size = new System.Drawing.Size(147,95);
+			this.listToolBars.Size = new System.Drawing.Size(147,108);
 			this.listToolBars.TabIndex = 53;
 			// 
 			// listProperties

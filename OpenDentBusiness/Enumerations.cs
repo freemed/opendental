@@ -605,7 +605,9 @@ namespace OpenDentBusiness{
 		///<summary>5</summary>
 		TreatmentPlanModule,
 		///<summary>6</summary>
-		ClaimsSend
+		ClaimsSend,
+		///<summary>7 Shows in the toolbar at the top that is common to all modules.</summary>
+		AllModules
 	}
 
 	///<summary></summary>

@@ -74,7 +74,6 @@ namespace OpenDental{
 		private Procedure[] ProcList;
 		///<summary>This is a filtered list containing only TP procedures.  It's also already sorted by priority and tooth number.</summary>
 		private Procedure[] ProcListTP;
-		private System.Windows.Forms.ContextMenu menuPatient;
 		private System.Windows.Forms.CheckBox checkShowCompleted;
 		private System.Windows.Forms.GroupBox groupShow;
 		private System.Windows.Forms.CheckBox checkShowIns;
@@ -168,7 +167,6 @@ namespace OpenDental{
 			this.label3 = new System.Windows.Forms.Label();
 			this.textNote = new System.Windows.Forms.TextBox();
 			this.imageListMain = new System.Windows.Forms.ImageList(this.components);
-			this.menuPatient = new System.Windows.Forms.ContextMenu();
 			this.ToolBarMain = new OpenDental.UI.ODToolBar();
 			this.gridMain = new OpenDental.UI.ODGrid();
 			this.gridPreAuth = new OpenDental.UI.ODGrid();
@@ -662,11 +660,6 @@ namespace OpenDental{
 		public void LayoutToolBar(){
 			ToolBarMain.Buttons.Clear();
 			ODToolBarButton button;
-			button=new ODToolBarButton(Lan.g(this,"Select Patient"),0,"","Patient");
-			button.Style=ODToolBarButtonStyle.DropDownButton;
-			button.DropDownMenu=menuPatient;
-			ToolBarMain.Buttons.Add(button);
-			ToolBarMain.Buttons.Add(new ODToolBarButton(ODToolBarButtonStyle.Separator));
 			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"PreAuthorization"),-1,"","PreAuth"));
 			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Update Fees"),1,"","Update"));
 			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Save TP"),3,"","Create"));
@@ -750,33 +743,17 @@ namespace OpenDental{
 				ToolBarMain.Invalidate();
         //listPreAuth.Enabled=false;
 			}
-			
-			FillPatientButton();
 			FillPlans();
 			FillMain();
 			FillSummary();
       FillPreAuth();
 			//FillMisc();
-
-		}
-
-		private void FillPatientButton(){
-			Patients.AddPatsToMenu(menuPatient,new EventHandler(menuPatient_Click),PatCur,FamCur);
-		}
-
-		private void menuPatient_Click(object sender,System.EventArgs e) {
-			int newPatNum=Patients.ButtonSelect(menuPatient,sender,FamCur);
-			OnPatientSelected(newPatNum);
-			ModuleSelected(newPatNum);
 		}
 
 		private void ToolBarMain_ButtonClick(object sender, OpenDental.UI.ODToolBarButtonClickEventArgs e) {
 			if(e.Button.Tag.GetType()==typeof(string)){
 				//standard predefined button
 				switch(e.Button.Tag.ToString()){
-					case "Patient":
-						OnPat_Click();
-						break;
 					case "PreAuth":
 						OnPreAuth_Click();
 						break;
@@ -796,18 +773,9 @@ namespace OpenDental{
 			}
 		}
 
-		private void OnPat_Click() {
-			FormPatientSelect formPS=new FormPatientSelect();
-			formPS.ShowDialog();
-			if(formPS.DialogResult==DialogResult.OK){
-				OnPatientSelected(formPS.SelectedPatNum);
-				ModuleSelected(formPS.SelectedPatNum);
-			}
-		}
-
 		///<summary></summary>
-		private void OnPatientSelected(int patNum){
-			PatientSelectedEventArgs eArgs=new OpenDental.PatientSelectedEventArgs(patNum);
+		private void OnPatientSelected(int patNum,string patName){
+			PatientSelectedEventArgs eArgs=new OpenDental.PatientSelectedEventArgs(patNum,patName);
 			if(PatientSelected!=null)
 				PatientSelected(this,eArgs);
 		}

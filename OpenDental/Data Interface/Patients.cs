@@ -1353,25 +1353,8 @@ namespace OpenDental{
 			return PIn.PInt(table.Rows[0][0].ToString());
 		}
 
-		///<summary>Adds the current patient to the button. Can handle null values for pat and fam. Also resets the family list on the button appropriately. Need to supply the menu to fill as well as the EventHandler to set for each item (all the same).</summary>
-		public static void AddPatsToMenu(ContextMenu menu,EventHandler onClick,Patient pat,Family fam){
-			//add current patient
-			if(buttonLastFivePatNums==null){
-				buttonLastFivePatNums=new ArrayList();
-			}
-			if(buttonLastFiveNames==null) {
-				buttonLastFiveNames=new ArrayList();
-			}
-			if(pat!=null){
-				if(buttonLastFivePatNums.Count==0	|| pat.PatNum!=(int)buttonLastFivePatNums[0]){//different patient selected
-					buttonLastFivePatNums.Insert(0,pat.PatNum);
-					buttonLastFiveNames.Insert(0,pat.GetNameLF());
-					if(buttonLastFivePatNums.Count>5){
-						buttonLastFivePatNums.RemoveAt(5);
-						buttonLastFiveNames.RemoveAt(5);
-					}
-				}
-			}
+		///<summary>The current patient will already be on the button.  This adds the family members when user clicks dropdown arrow. Can handle null values for pat and fam.  Need to supply the menu to fill as well as the EventHandler to set for each item (all the same).</summary>
+		public static void AddFamilyToMenu(ContextMenu menu,EventHandler onClick,int patNum,Family fam){
 			//fill menu
 			menu.MenuItems.Clear();
 			for(int i=0;i<buttonLastFiveNames.Count;i++){
@@ -1379,14 +1362,14 @@ namespace OpenDental{
 			}
 			menu.MenuItems.Add("-");
 			menu.MenuItems.Add("FAMILY");
-			if(pat!=null){
+			if(patNum!=0 && fam!=null){
 				for(int i=0;i<fam.List.Length;i++){
 					menu.MenuItems.Add(fam.List[i].GetNameLF(),onClick);
 				}
 			}
 		}
 
-		///<summary>A newer alternative which requires fewer calls to the database.  Does not handle null values. Use zero.</summary>
+		///<summary>A newer alternative which requires fewer calls to the database.  Does not handle null values. Use zero.  Does not handle adding family members.</summary>
 		public static void AddPatsToMenu(ContextMenu menu,EventHandler onClick,string nameLF,int patNum) {
 			//add current patient
 			if(buttonLastFivePatNums==null) {
@@ -1556,17 +1539,26 @@ namespace OpenDental{
 
 	///<summary></summary>
 	public class PatientSelectedEventArgs{
-		private int myPatNum;
+		private int patNum;
+		private string patName;
 
 		///<summary></summary>
-		public PatientSelectedEventArgs(int patNum){
-			myPatNum=patNum;
+		public PatientSelectedEventArgs(int patNum,string patName){
+			this.patNum=patNum;
+			this.patName=patName;
 		}
 
 		///<summary></summary>
 		public int PatNum{
 			get{ 
-				return myPatNum;
+				return patNum;
+			}
+		}
+
+		///<summary></summary>
+		public string PatName {
+			get {
+				return patName;
 			}
 		}
 

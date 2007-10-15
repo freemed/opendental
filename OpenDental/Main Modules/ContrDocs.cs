@@ -54,7 +54,6 @@ namespace OpenDental{
 		private System.Windows.Forms.ContextMenu contextTree;
 		private System.Windows.Forms.MenuItem menuItem3;
 		private System.Windows.Forms.MenuItem menuItem4;
-		private System.Windows.Forms.ContextMenu menuPatient;
 		private Panel panelNote;
 		private Label label1;
 		private TextBox textNote;
@@ -212,9 +211,9 @@ namespace OpenDental{
 			this.menuItem1 = new System.Windows.Forms.MenuItem();
 			this.menuExit = new System.Windows.Forms.MenuItem();
 			this.menuPrefs = new System.Windows.Forms.MenuItem();
-			this.menuPatient = new System.Windows.Forms.ContextMenu();
 			this.panelNote = new System.Windows.Forms.Panel();
 			this.labelInvalidSig = new System.Windows.Forms.Label();
+			this.sigBox = new OpenDental.UI.SignatureBox();
 			this.label15 = new System.Windows.Forms.Label();
 			this.label1 = new System.Windows.Forms.Label();
 			this.textNote = new System.Windows.Forms.TextBox();
@@ -228,7 +227,6 @@ namespace OpenDental{
 			this.ToolBarMain = new OpenDental.UI.ODToolBar();
 			this.paintTools = new OpenDental.UI.ODToolBar();
 			this.brightnessContrastSlider = new OpenDental.UI.ContrWindowingSlider();
-			this.sigBox = new OpenDental.UI.SignatureBox();
 			((System.ComponentModel.ISupportInitialize)(this.PictureBox1)).BeginInit();
 			this.panelNote.SuspendLayout();
 			this.panelDrTech.SuspendLayout();
@@ -387,6 +385,14 @@ namespace OpenDental{
 			this.labelInvalidSig.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			this.labelInvalidSig.DoubleClick += new System.EventHandler(this.labelInvalidSig_DoubleClick);
 			// 
+			// sigBox
+			// 
+			this.sigBox.Location = new System.Drawing.Point(308,20);
+			this.sigBox.Name = "sigBox";
+			this.sigBox.Size = new System.Drawing.Size(394,91);
+			this.sigBox.TabIndex = 90;
+			this.sigBox.DoubleClick += new System.EventHandler(this.sigBox_DoubleClick);
+			// 
 			// label15
 			// 
 			this.label15.Location = new System.Drawing.Point(305,0);
@@ -543,14 +549,6 @@ namespace OpenDental{
 			this.brightnessContrastSlider.Scroll += new System.EventHandler(this.brightnessContrastSlider_Scroll);
 			this.brightnessContrastSlider.ScrollComplete += new System.EventHandler(this.brightnessContrastSlider_ScrollComplete);
 			// 
-			// sigBox
-			// 
-			this.sigBox.Location = new System.Drawing.Point(308,20);
-			this.sigBox.Name = "sigBox";
-			this.sigBox.Size = new System.Drawing.Size(394,91);
-			this.sigBox.TabIndex = 90;
-			this.sigBox.DoubleClick += new System.EventHandler(this.sigBox_DoubleClick);
-			// 
 			// ContrDocs
 			// 
 			this.Controls.Add(this.panelDrTech);
@@ -617,11 +615,6 @@ namespace OpenDental{
 			ToolBarMain.Buttons.Clear();
 			paintTools.Buttons.Clear();
 			ODToolBarButton button;
-			button=new ODToolBarButton(Lan.g(this,"Select Patient"),0,"","Patient");
-			button.Style=ODToolBarButtonStyle.DropDownButton;
-			button.DropDownMenu=menuPatient;
-			ToolBarMain.Buttons.Add(button);
-			ToolBarMain.Buttons.Add(new ODToolBarButton(ODToolBarButtonStyle.Separator));
 			ToolBarMain.Buttons.Add(new ODToolBarButton("",1,Lan.g(this,"Print"),"Print"));
 			ToolBarMain.Buttons.Add(new ODToolBarButton("",2,Lan.g(this,"Delete"),"Delete"));
 			ToolBarMain.Buttons.Add(new ODToolBarButton("",3,Lan.g(this,"Item Info"),"Info"));
@@ -735,26 +728,14 @@ namespace OpenDental{
 			if (((Pref)PrefB.HList["FuchsOptionsOn"]).ValueString == "1") {
 				panelDrTech.Visible = true;
 			}
-
-			FillPatientButton();
 			ToolBarMain.Invalidate();
 			paintTools.Invalidate();
 			FillDocList(false);
 		}
 
-		private void FillPatientButton(){
-			Patients.AddPatsToMenu(menuPatient,new EventHandler(menuPatient_Click),PatCur,FamCur);
-		}
-
-		private void menuPatient_Click(object sender,System.EventArgs e) {
-			int newPatNum=Patients.ButtonSelect(menuPatient,sender,FamCur);
-			OnPatientSelected(newPatNum);
-			ModuleSelected(newPatNum);
-		}
-
 		///<summary></summary>
-		private void OnPatientSelected(int patNum){
-			PatientSelectedEventArgs eArgs=new OpenDental.PatientSelectedEventArgs(patNum);
+		private void OnPatientSelected(int patNum,string patName){
+			PatientSelectedEventArgs eArgs=new OpenDental.PatientSelectedEventArgs(patNum,patName);
 			if(PatientSelected!=null)
 				PatientSelected(this,eArgs);
 		}
@@ -764,7 +745,6 @@ namespace OpenDental{
 			for(int i=0;i<ToolBarMain.Buttons.Count;i++){
 				ToolBarMain.Buttons[i].Enabled=enable;			
 			}
-			ToolBarMain.Buttons["Patient"].Enabled=true;
 			ToolBarMain.Buttons["Capture"].Enabled=(ToolBarMain.Buttons["Capture"].Enabled &&
 				Environment.OSVersion.Platform!=PlatformID.Unix);
 			ToolBarMain.Invalidate();
@@ -970,9 +950,6 @@ namespace OpenDental{
 		private void ToolBarMain_ButtonClick(object sender, OpenDental.UI.ODToolBarButtonClickEventArgs e) {
 			if(e.Button.Tag.GetType()==typeof(string)){
 				switch(e.Button.Tag.ToString()){
-					case "Patient":
-						OnPat_Click();
-						break;
 					case "Print":
 						OnPrint_Click();
 						break;
@@ -1045,16 +1022,6 @@ namespace OpenDental{
 			else if(e.Button.Tag.GetType()==typeof(int)) {
 				Programs.Execute((int)e.Button.Tag,PatCur);
 			}
-		}
-
-		private void OnPat_Click() {
-			FormPatientSelect formPS=new FormPatientSelect();
-			formPS.ShowDialog();
-			if(formPS.DialogResult==DialogResult.OK){
-				OnPatientSelected(formPS.SelectedPatNum);
-				ModuleSelected(formPS.SelectedPatNum);
-			}
-			FillDocList(false);
 		}
 
 		private void OnPrint_Click(){

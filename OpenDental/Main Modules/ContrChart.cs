@@ -90,7 +90,6 @@ namespace OpenDental{
 		///<summary>Full path to the patient folder, including \ on the end</summary>
 		private string patFolder;
 		private OpenDental.ODtextBox textTreatmentNotes;
-		private System.Windows.Forms.ContextMenu menuPatient;
 		private OpenDental.ValidDate textDate;
 		private System.Windows.Forms.Label label6;
 		private System.Windows.Forms.CheckBox checkToday;
@@ -228,12 +227,8 @@ namespace OpenDental{
 		private Label labelApptStatus;
 		private MenuItem menuItemDeleteSelected;
 		private CheckBox checkCommFamily;
-		private ContextMenu menuEmail;
-		private MenuItem menuItemEmail;
 		private int PrevPtNum;
-
-
-			
+	
 		///<summary></summary>
 		public ContrChart(){
 			Logger.openlog.Log("Initializing chart module...",Logger.Severity.INFO);
@@ -311,7 +306,6 @@ namespace OpenDental{
 			this.panelImages = new System.Windows.Forms.Panel();
 			this.listViewImages = new System.Windows.Forms.ListView();
 			this.imageListThumbnails = new System.Windows.Forms.ImageList(this.components);
-			this.menuPatient = new System.Windows.Forms.ContextMenu();
 			this.pd2 = new System.Drawing.Printing.PrintDocument();
 			this.tabProc = new System.Windows.Forms.TabControl();
 			this.tabEnterTx = new System.Windows.Forms.TabPage();
@@ -421,8 +415,6 @@ namespace OpenDental{
 			this.button1 = new OpenDental.UI.Button();
 			this.textTreatmentNotes = new OpenDental.ODtextBox();
 			this.gridPtInfo = new OpenDental.UI.ODGrid();
-			this.menuEmail = new System.Windows.Forms.ContextMenu();
-			this.menuItemEmail = new System.Windows.Forms.MenuItem();
 			this.groupBox2.SuspendLayout();
 			this.tabControlImages.SuspendLayout();
 			this.panelImages.SuspendLayout();
@@ -855,7 +847,7 @@ namespace OpenDental{
 			// 
 			this.tabPage2.Location = new System.Drawing.Point(4,4);
 			this.tabPage2.Name = "tabPage2";
-			this.tabPage2.Size = new System.Drawing.Size(931,0);
+			this.tabPage2.Size = new System.Drawing.Size(931,-3);
 			this.tabPage2.TabIndex = 1;
 			this.tabPage2.Text = "Pano";
 			// 
@@ -863,7 +855,7 @@ namespace OpenDental{
 			// 
 			this.tabPage4.Location = new System.Drawing.Point(4,4);
 			this.tabPage4.Name = "tabPage4";
-			this.tabPage4.Size = new System.Drawing.Size(931,0);
+			this.tabPage4.Size = new System.Drawing.Size(931,-3);
 			this.tabPage4.TabIndex = 3;
 			this.tabPage4.Text = "tabPage4";
 			// 
@@ -2398,17 +2390,6 @@ namespace OpenDental{
 			this.gridPtInfo.TranslationName = "TableChartPtInfo";
 			this.gridPtInfo.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridPtInfo_CellDoubleClick);
 			// 
-			// menuEmail
-			// 
-			this.menuEmail.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
-            this.menuItemEmail});
-			// 
-			// menuItemEmail
-			// 
-			this.menuItemEmail.Index = 0;
-			this.menuItemEmail.Text = "Email";
-			this.menuItemEmail.Click += new System.EventHandler(this.menuItemEmail_Click);
-			// 
 			// ContrChart
 			// 
 			this.Controls.Add(this.addKeyBut);
@@ -2570,20 +2551,15 @@ namespace OpenDental{
 		public void LayoutToolBar(){
 			ToolBarMain.Buttons.Clear();
 			ODToolBarButton button;
-			button=new ODToolBarButton(Lan.g(this,"Select Patient"),0,"","Patient");
-			button.Style=ODToolBarButtonStyle.DropDownButton;
-			button.DropDownMenu=menuPatient;
-			ToolBarMain.Buttons.Add(button);
-			ToolBarMain.Buttons.Add(new ODToolBarButton(ODToolBarButtonStyle.Separator));
 			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"New Rx"),1,"","Rx"));
 			//ToolBarMain.Buttons.Add(new ODToolBarButton(ODToolBarButtonStyle.Separator));
 			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"LabCase"),-1,"","LabCase"));
 			//ToolBarMain.Buttons.Add(new ODToolBarButton(ODToolBarButtonStyle.Separator));
 			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Perio Chart"),2,"","Perio"));
-			button=new ODToolBarButton(Lan.g(this,"Commlog"),3,"","Commlog");
-			button.Style=ODToolBarButtonStyle.DropDownButton;
-			button.DropDownMenu=menuEmail;
-			ToolBarMain.Buttons.Add(button);
+			//button=new ODToolBarButton(Lan.g(this,"Commlog"),3,"","Commlog");
+			//button.Style=ODToolBarButtonStyle.DropDownButton;
+			//button.DropDownMenu=menuEmail;
+			//ToolBarMain.Buttons.Add(button);
 			ArrayList toolButItems=ToolButItems.GetForToolBar(ToolBarsAvail.ChartModule);
 			for(int i=0;i<toolButItems.Count;i++){
 				ToolBarMain.Buttons.Add(new ODToolBarButton(ODToolBarButtonStyle.Separator));
@@ -2698,7 +2674,6 @@ namespace OpenDental{
 				ToolBarMain.Buttons["Perio"].Enabled=false;
 				tabProc.Enabled=false;
 				addKeyBut.Enabled=false;
-				menuItemEmail.Enabled=false;
 			}
 			else {
 				//groupShow.Enabled=true;
@@ -2716,14 +2691,7 @@ namespace OpenDental{
 					radioEntryTP.Select();
 					PrevPtNum = PatCur.PatNum;
 				}
-				if(PatCur.Email==""){
-					menuItemEmail.Enabled=false;
-				}
-				else{
-					menuItemEmail.Enabled=true;
-				}
 			}
-			FillPatientButton();
 			ToolBarMain.Invalidate();
 			ClearButtons();
 			FillProgNotes();
@@ -2731,16 +2699,6 @@ namespace OpenDental{
 			FillPtInfo();
 			FillDxProcImage();
 			FillImages();
-		}
-
-		private void FillPatientButton(){
-			Patients.AddPatsToMenu(menuPatient,new EventHandler(menuPatient_Click),PatCur,FamCur);
-		}
-
-		private void menuPatient_Click(object sender,System.EventArgs e) {
-			int newPatNum=Patients.ButtonSelect(menuPatient,sender,FamCur);
-			OnPatientSelected(newPatNum);
-			ModuleSelected(newPatNum);
 		}
 
 		private void EasyHideClinicalData(){
@@ -2781,9 +2739,6 @@ namespace OpenDental{
 			if(e.Button.Tag.GetType()==typeof(string)){
 				//standard predefined button
 				switch(e.Button.Tag.ToString()){
-					case "Patient":
-						OnPatient_Click();
-						break;
 					case "Rx":
 						OnRx_Click();
 						break;
@@ -2793,9 +2748,9 @@ namespace OpenDental{
 					case "Perio":
 						OnPerio_Click();
 						break;
-					case "Commlog":
-						OnCommlog_Click();
-						break;
+					//case "Commlog":
+					//	OnCommlog_Click();
+					//	break;
 				}
 			}
 			else if(e.Button.Tag.GetType()==typeof(int)){
@@ -2803,18 +2758,9 @@ namespace OpenDental{
 			}
 		}
 
-		private void OnPatient_Click(){
-			FormPatientSelect formPS=new FormPatientSelect();
-			formPS.ShowDialog();
-			if(formPS.DialogResult==DialogResult.OK){
-				OnPatientSelected(formPS.SelectedPatNum);
-				ModuleSelected(formPS.SelectedPatNum);
-			}
-		}
-
 		///<summary></summary>
-		private void OnPatientSelected(int patNum){
-			PatientSelectedEventArgs eArgs=new OpenDental.PatientSelectedEventArgs(patNum);
+		private void OnPatientSelected(int patNum,string patName){
+			PatientSelectedEventArgs eArgs=new OpenDental.PatientSelectedEventArgs(patNum,patName);
 			if(PatientSelected!=null)
 				PatientSelected(this,eArgs);
 		}
@@ -2847,36 +2793,6 @@ namespace OpenDental{
 		private void OnPerio_Click(){
 			FormPerio FormP=new FormPerio(PatCur);
 			FormP.ShowDialog();
-		}
-
-		private void OnCommlog_Click(){
-			Commlog CommlogCur = new Commlog();
-			CommlogCur.PatNum = PatCur.PatNum;
-			CommlogCur.CommDateTime = DateTime.Now;
-			CommlogCur.CommType =Commlogs.GetTypeAuto(CommItemTypeAuto.MISC);
-			CommlogCur.Mode_=CommItemMode.Phone;
-			CommlogCur.SentOrReceived=CommSentOrReceived.Received;
-			CommlogCur.UserNum=Security.CurUser.UserNum;
-			FormCommItem FormCI = new FormCommItem(CommlogCur);
-			FormCI.IsNew = true;
-			FormCI.ShowDialog();
-			if(FormCI.DialogResult == DialogResult.OK){
-				ModuleSelected(PatCur.PatNum);
-			}
-		}
-
-		private void menuItemEmail_Click(object sender,EventArgs e) {
-			//this menu item will be disabled if pat does not have email address
-			EmailMessage message=new EmailMessage();
-			message.PatNum=PatCur.PatNum;
-			message.ToAddress=PatCur.Email;
-			message.FromAddress=PrefB.GetString("EmailSenderAddress");
-			FormEmailMessageEdit FormE=new FormEmailMessageEdit(message);
-			FormE.IsNew=true;
-			FormE.ShowDialog();
-			if(FormE.DialogResult==DialogResult.OK) {
-				ModuleSelected(PatCur.PatNum);
-			}
 		}
 
 		private void FillPlanned(){

@@ -111,6 +111,8 @@ namespace OpenDental{
 		//private Image buttonsShadow;
 		///<summary>The only reason this is public static is so that it can be seen from the terminal manager.  Otherwise, it's passed around properly.</summary>
 		public static int CurPatNum;
+		//<Summary>Not sure if this is needed.  PatName is part of PatientSelectedEventArgs so that the patient select dropdown menu can be filled without another call to the database.  But we might only need to use it once, then forget it.  So this might soon be eliminated.</Summary>
+		//private static int CurPatName;
 		private System.Windows.Forms.MenuItem menuItemClearinghouses;
 		private System.Windows.Forms.MenuItem menuItemUpdate;
 		private System.Windows.Forms.MenuItem menuItemHelpWindows;
@@ -180,6 +182,7 @@ namespace OpenDental{
 		private OpenDental.SmartCards.SmartCardWatcher smartCardWatcher1;
 		private OpenDental.UI.ODToolBar ToolBarMain;
 		private ImageList imageListMain;
+		private ContextMenu menuPatient;
 		private Point OriginalMousePos;
 
 		///<summary></summary>
@@ -311,6 +314,7 @@ namespace OpenDental{
 			this.menuItemDockBottom = new System.Windows.Forms.MenuItem();
 			this.menuItemDockRight = new System.Windows.Forms.MenuItem();
 			this.imageListMain = new System.Windows.Forms.ImageList(this.components);
+			this.menuPatient = new System.Windows.Forms.ContextMenu();
 			this.ToolBarMain = new OpenDental.UI.ODToolBar();
 			this.userControlTasks1 = new OpenDental.UserControlTasks();
 			this.ContrManage2 = new OpenDental.ContrStaff();
@@ -992,6 +996,11 @@ namespace OpenDental{
 			this.imageListMain.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imageListMain.ImageStream")));
 			this.imageListMain.TransparentColor = System.Drawing.Color.Transparent;
 			this.imageListMain.Images.SetKeyName(0,"Pat.gif");
+			this.imageListMain.Images.SetKeyName(1,"commlog.gif");
+			// 
+			// menuPatient
+			// 
+			this.menuPatient.Popup += new System.EventHandler(this.menuPatient_Popup);
 			// 
 			// ToolBarMain
 			// 
@@ -1084,7 +1093,7 @@ namespace OpenDental{
 			this.myOutlookBar.ImageList = this.imageList32;
 			this.myOutlookBar.Location = new System.Drawing.Point(0,0);
 			this.myOutlookBar.Name = "myOutlookBar";
-			this.myOutlookBar.Size = new System.Drawing.Size(51,423);
+			this.myOutlookBar.Size = new System.Drawing.Size(51,663);
 			this.myOutlookBar.TabIndex = 18;
 			this.myOutlookBar.Text = "outlookBar1";
 			this.myOutlookBar.ButtonClicked += new OpenDental.ButtonClickedEventHandler(this.myOutlookBar_ButtonClicked);
@@ -1095,7 +1104,7 @@ namespace OpenDental{
 			// 
 			// FormOpenDental
 			// 
-			this.ClientSize = new System.Drawing.Size(982,423);
+			this.ClientSize = new System.Drawing.Size(982,663);
 			this.Controls.Add(this.ToolBarMain);
 			this.Controls.Add(this.panelSplitter);
 			this.Controls.Add(this.userControlTasks1);
@@ -1133,6 +1142,7 @@ namespace OpenDental{
 			Application.Run(new FormOpenDental());
 		}
 
+		/*
 		///<summary>Overrides the default Windows unhandled exception functionality.</summary>
 		static void OnUnhandeledExceptionPolicy(Object Sender,UnhandledExceptionEventArgs e) {
 			Exception ex=e.ExceptionObject as Exception;
@@ -1153,7 +1163,7 @@ namespace OpenDental{
 				//Exception occurred in managed thread. Debugger will automatically launch in visual studio.
 				Logger.openlog.LogMB(message,Logger.Severity.FATAL_ERROR);
 			}
-		}
+		}*/
 
 		private void FormOpenDental_Load(object sender, System.EventArgs e){
 			Splash.Dispose();
@@ -1528,16 +1538,16 @@ namespace OpenDental{
 
 		///<summary>Causes the toolbar to be laid out again.</summary>
 		public void LayoutToolBar() {
-			ToolBarMain.BringToFront();
 			ToolBarMain.Buttons.Clear();
 			ODToolBarButton button;
 			button=new ODToolBarButton(Lan.g(this,"Select Patient"),0,"","Patient");
-			//button.Style=ODToolBarButtonStyle.DropDownButton;
-			//button.DropDownMenu=menuPatient;
+			button.Style=ODToolBarButtonStyle.DropDownButton;
+			button.DropDownMenu=menuPatient;
 			ToolBarMain.Buttons.Add(button);
+			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Commlog"),1,"","Commlog"));
+			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"E-mail"),-1,"","Email"));
 			/*
 			ToolBarMain.Buttons.Add(new ODToolBarButton(ODToolBarButtonStyle.Separator));
-			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"New Rx"),1,"","Rx"));
 			//ToolBarMain.Buttons.Add(new ODToolBarButton(ODToolBarButtonStyle.Separator));
 			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"LabCase"),-1,"","LabCase"));
 			//ToolBarMain.Buttons.Add(new ODToolBarButton(ODToolBarButtonStyle.Separator));
@@ -1545,18 +1555,90 @@ namespace OpenDental{
 			button=new ODToolBarButton(Lan.g(this,"Commlog"),3,"","Commlog");
 			button.Style=ODToolBarButtonStyle.DropDownButton;
 			button.DropDownMenu=menuEmail;
-			ToolBarMain.Buttons.Add(button);
-			ArrayList toolButItems=ToolButItems.GetForToolBar(ToolBarsAvail.ChartModule);
+			ToolBarMain.Buttons.Add(button);*/
+			ArrayList toolButItems=ToolButItems.GetForToolBar(ToolBarsAvail.AllModules);
 			for(int i=0;i<toolButItems.Count;i++) {
-				ToolBarMain.Buttons.Add(new ODToolBarButton(ODToolBarButtonStyle.Separator));
+				//ToolBarMain.Buttons.Add(new ODToolBarButton(ODToolBarButtonStyle.Separator));
 				ToolBarMain.Buttons.Add(new ODToolBarButton(((ToolButItem)toolButItems[i]).ButtonText
 					,-1,"",((ToolButItem)toolButItems[i]).ProgramNum));
-			}*/
+			}
 			ToolBarMain.Invalidate();
 		}
 
+		private void menuPatient_Popup(object sender,EventArgs e) {
+			Family fam=Patients.GetFamily(CurPatNum);
+			Patients.AddFamilyToMenu(menuPatient,new EventHandler(menuPatient_Click),CurPatNum,fam);
+		}
+
 		private void ToolBarMain_ButtonClick(object sender,ODToolBarButtonClickEventArgs e) {
-			//MessageBox.Show(ToolBarMain.Height.ToString());
+			if(e.Button.Tag.GetType()==typeof(string)) {
+				//standard predefined button
+				switch(e.Button.Tag.ToString()) {
+					case "Patient":
+						OnPatient_Click();
+						break;
+					case "Commlog":
+						OnCommlog_Click();
+						break;
+					case "Email":
+						OnEmail_Click();
+						break;
+				}
+			}
+			else if(e.Button.Tag.GetType()==typeof(int)) {
+				Programs.Execute((int)e.Button.Tag,Patients.GetPat(CurPatNum));
+			}
+		}
+
+		private void OnPatient_Click() {
+			FormPatientSelect formPS=new FormPatientSelect();
+			formPS.ShowDialog();
+			if(formPS.DialogResult==DialogResult.OK) {
+				CurPatNum=formPS.SelectedPatNum;
+				RefreshCurrentModule();
+			}
+		}
+
+		private void menuPatient_Click(object sender,System.EventArgs e) {
+			Family fam=Patients.GetFamily(CurPatNum);
+			CurPatNum=Patients.ButtonSelect(menuPatient,sender,fam);
+			RefreshCurrentModule();
+			FillPatientButton(CurPatNum,fam.GetPatient(CurPatNum).GetNameLF());
+		}
+
+		private void FillPatientButton(int patNum,string patName) {
+			Patients.AddPatsToMenu(menuPatient,new EventHandler(menuPatient_Click),patName,patNum);
+		}
+
+		private void OnCommlog_Click() {
+			Commlog CommlogCur = new Commlog();
+			CommlogCur.PatNum = CurPatNum;
+			CommlogCur.CommDateTime = DateTime.Now;
+			CommlogCur.CommType =Commlogs.GetTypeAuto(CommItemTypeAuto.MISC);
+			CommlogCur.Mode_=CommItemMode.Phone;
+			CommlogCur.SentOrReceived=CommSentOrReceived.Received;
+			CommlogCur.UserNum=Security.CurUser.UserNum;
+			FormCommItem FormCI = new FormCommItem(CommlogCur);
+			FormCI.IsNew = true;
+			FormCI.ShowDialog();
+			if(FormCI.DialogResult == DialogResult.OK) {
+				RefreshCurrentModule();
+			}
+		}
+
+		private void OnEmail_Click() {
+			//this button item will be disabled if pat does not have email address
+			EmailMessage message=new EmailMessage();
+			message.PatNum=CurPatNum;
+			Patient pat=Patients.GetPat(CurPatNum);
+			message.ToAddress=pat.Email;
+			message.FromAddress=PrefB.GetString("EmailSenderAddress");
+			FormEmailMessageEdit FormE=new FormEmailMessageEdit(message);
+			FormE.IsNew=true;
+			FormE.ShowDialog();
+			if(FormE.DialogResult==DialogResult.OK) {
+				RefreshCurrentModule();
+			}
 		}
 
 		private void FormOpenDental_Resize(object sender,EventArgs e) {
@@ -1697,6 +1779,7 @@ namespace OpenDental{
 		///<summary>Happens when any of the modules changes the current patient.  The calling module should then refresh itself.  The current patNum is stored here in the parent form so that when switching modules, the parent form knows which patient to call up for that module.</summary>
 		private void Contr_PatientSelected(object sender, PatientSelectedEventArgs e){
 			CurPatNum=e.PatNum;
+			FillPatientButton(CurPatNum,e.PatName);
 		}
 
 		private void GotoModule_ModuleSelected(ModuleEventArgs e){
@@ -2040,6 +2123,7 @@ namespace OpenDental{
 				ContrDocs2.ModuleUnselected();
 		}
 
+		///<Summary>This also passes CurPatNum down to the currently selected module (except the Manage module).</Summary>
 		private void RefreshCurrentModule(){
 			if(ContrAppt2.Visible)
 				ContrAppt2.ModuleSelected(CurPatNum);
@@ -2053,6 +2137,8 @@ namespace OpenDental{
 				ContrChart2.ModuleSelected(CurPatNum);
 			if(ContrDocs2.Visible)
 				ContrDocs2.ModuleSelected(CurPatNum);
+			if(ContrManage2.Visible)
+				ContrManage2.ModuleSelected();
 		}
 
 		/// <summary>sends function key presses to the appointment module</summary>
@@ -2882,61 +2968,6 @@ namespace OpenDental{
 			SecurityLogs.MakeLogEntry(Permissions.Setup,0,"Update Version");
 		}
 
-		
-
-		
-
-		
-
-		
-
-		
-
-		
-
-		
-
-		
-
-		
-
-		
-
-	
-
-		
-
-		
-
-		
-
-		
-
-		
-
-		
-
-		
-
-		
-
-		
-
-	
-		
-
-		
-
-		
-
-		
-
-		
-
-		
-
-
-
 		/*private void menuItemDaily_DrawItem(object sender, System.Windows.Forms.DrawItemEventArgs e) {
 			//MessageBox.Show(e.Bounds.ToString());
 			e.Graphics.DrawString("Dailyyyy",new Font("Microsoft Sans Serif",8),Brushes.Black,e.Bounds.X,e.Bounds.Y);
@@ -2957,24 +2988,25 @@ namespace OpenDental{
 			//Application.Exit();
 		}
 
-        private void OnPatientCardInserted(object sender, PatientCardInsertedEventArgs e) {
-            if (InvokeRequired) {
-                Invoke(new PatientCardInsertedEventHandler(OnPatientCardInserted), new object[] { sender, e });
-                return;
-            }
+		private void OnPatientCardInserted(object sender, PatientCardInsertedEventArgs e) {
+			if (InvokeRequired) {
+				Invoke(new PatientCardInsertedEventHandler(OnPatientCardInserted), new object[] { sender, e });
+				return;
+			}
+			if (MessageBox.Show(this, string.Format(Lan.g(this, "A card belonging to {0} has been inserted. Do you wish to search for this patient now?"), e.Patient.GetNameFL()), "Open Dental", MessageBoxButtons.YesNo) != DialogResult.Yes)
+			{
+				return;
+			}
+			using (FormPatientSelect formPS = new FormPatientSelect()) {
+				formPS.PreselectPatient(e.Patient);
+				if(formPS.ShowDialog() == DialogResult.OK) {
+					// OnPatientSelected(formPS.SelectedPatNum);
+					// ModuleSelected(formPS.SelectedPatNum);
+				}
+			}
+		}
 
-            if (MessageBox.Show(this, string.Format(Lan.g(this, "A card belonging to {0} has been inserted. Do you wish to search for this patient now?"), e.Patient.GetNameFL()), "Open Dental", MessageBoxButtons.YesNo) != DialogResult.Yes)
-                return;
-
-
-            using (FormPatientSelect formPS = new FormPatientSelect()) {
-                formPS.PreselectPatient(e.Patient);
-                if(formPS.ShowDialog() == DialogResult.OK) {
-                    // OnPatientSelected(formPS.SelectedPatNum);
-                    // ModuleSelected(formPS.SelectedPatNum);
-                }
-            }
-        }
+		
 
 		
 	}

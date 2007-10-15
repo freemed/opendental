@@ -1128,12 +1128,12 @@ namespace OpenDental{
 			else {
 				listConfirmed.SelectedIndex=-1;
 			}
-			OnPatientSelected(PatCurNum);
+			OnPatientSelected(PatCurNum,PatCurName);
 		}
 
-		///<summary>Sends the PatientSelected event on up to the main form.  The only result is that the main window now knows the new patNum.  Does nothing else.  Does not trigger any other methods to run which might cause a loop.  Only called from RefreshModulePatient, but it's separate so that it's the same as in the other modules.</summary>
-		private void OnPatientSelected(int patNum) {
-			PatientSelectedEventArgs eArgs=new OpenDental.PatientSelectedEventArgs(patNum);
+		///<summary>Sends the PatientSelected event on up to the main form.  The only result is that the main window now knows the new patNum and patName.  Does nothing else.  Does not trigger any other methods to run which might cause a loop.  Only called from RefreshModulePatient, but it's separate so that it's the same as in the other modules.</summary>
+		private void OnPatientSelected(int patNum,string patName) {
+			PatientSelectedEventArgs eArgs=new OpenDental.PatientSelectedEventArgs(patNum,patName);
 			if(PatientSelected!=null){
 				PatientSelected(this,eArgs);
 			}

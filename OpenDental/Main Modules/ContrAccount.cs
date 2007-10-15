@@ -65,7 +65,6 @@ namespace OpenDental {
 		private int OriginalMousePos;
 		private ClaimProc[] ClaimProcList;
 		private OpenDental.ODtextBox textFinNotes;
-		private System.Windows.Forms.ContextMenu menuPatient;
 		private Procedure[] AccProcList;
 		///<summary>Indices of the items within CommLogs.List of items to actually show in the commlog list on this page. Right now, does not include Statement Sent entries.</summary>
 		//private ArrayList CommIndices;
@@ -223,7 +222,6 @@ namespace OpenDental {
 			this.buttonLabelxray = new OpenDental.UI.Button();
 			this.butTask = new OpenDental.UI.Button();
 			this.butComm = new OpenDental.UI.Button();
-			this.menuPatient = new System.Windows.Forms.ContextMenu();
 			this.contextMenuStatement = new System.Windows.Forms.ContextMenu();
 			this.menuItemStatementWalkout = new System.Windows.Forms.MenuItem();
 			this.menuItemStatementMore = new System.Windows.Forms.MenuItem();
@@ -1585,11 +1583,6 @@ namespace OpenDental {
 		public void LayoutToolBar() {
 			ToolBarMain.Buttons.Clear();
 			ODToolBarButton button;
-			button=new ODToolBarButton(Lan.g(this,"Select Patient"),0,"","Patient");
-			button.Style=ODToolBarButtonStyle.DropDownButton;
-			button.DropDownMenu=menuPatient;
-			ToolBarMain.Buttons.Add(button);
-			ToolBarMain.Buttons.Add(new ODToolBarButton(ODToolBarButtonStyle.Separator));
 			button=new ODToolBarButton(Lan.g(this,"Payment"),1,"","Payment");
 			button.Style=ODToolBarButtonStyle.DropDownButton;
 			button.DropDownMenu=contextMenuPayment;
@@ -1777,8 +1770,10 @@ namespace OpenDental {
 				checkShowNotes.Top=48;
 				}
 			}
-			if(checkShowNotes.Tag!="JustClicked") checkShowNotes.Checked=PrefB.GetBool("ShowNotesInAccount");
-			FillPatientButton();
+			if(checkShowNotes.Tag!=null && checkShowNotes.Tag.ToString()!="JustClicked"){
+				checkShowNotes.Checked=PrefB.GetBool("ShowNotesInAccount");
+			}
+			//FillPatientButton();
 			FillMain();
 			FillPats();
 			FillMisc();
@@ -1802,15 +1797,9 @@ namespace OpenDental {
 			}
 		}
 
-		private void FillPatientButton() {
-			Patients.AddPatsToMenu(menuPatient,new EventHandler(menuPatient_Click),PatCur,FamCur);
-		}
-
-		private void menuPatient_Click(object sender,System.EventArgs e) {
-			int newPatNum=Patients.ButtonSelect(menuPatient,sender,FamCur);
-			OnPatientSelected(newPatNum);
-			ModuleSelected(newPatNum);
-		}
+		//private void FillPatientButton() {
+		//	Patients.AddPatsToMenu(menuPatient,new EventHandler(menuPatient_Click),PatCur,FamCur);
+		//}
 
 		private void FillPats() {
 			if(PatCur==null) {
@@ -3005,7 +2994,7 @@ namespace OpenDental {
 		private void gridAcctPat_CellClick(object sender,ODGridClickEventArgs e) {
 			if(ViewingInRecall)
 				return;
-			OnPatientSelected(FamCur.List[e.Row].PatNum);
+			OnPatientSelected(FamCur.List[e.Row].PatNum,FamCur.List[e.Row].GetNameLF());
 			ModuleSelected(FamCur.List[e.Row].PatNum);
 		}
 
@@ -3013,9 +3002,9 @@ namespace OpenDental {
 			if(e.Button.Tag.GetType()==typeof(string)){
 				//standard predefined button
 				switch(e.Button.Tag.ToString()){
-					case "Patient":
-						OnPat_Click();
-						break;
+					//case "Patient":
+					//	OnPat_Click();
+					//	break;
 					case "Payment":
 						OnPay_Click();
 						break;
@@ -3041,20 +3030,12 @@ namespace OpenDental {
 			}
 		}
 
-		private void OnPat_Click(){
-			FormPatientSelect FormPS=new FormPatientSelect();
-			FormPS.ShowDialog();
-			if(FormPS.DialogResult==DialogResult.OK){
-				OnPatientSelected(FormPS.SelectedPatNum);
-				ModuleSelected(FormPS.SelectedPatNum);
-			}
-		}
-
 		///<summary></summary>
-		private void OnPatientSelected(int patNum){
-			PatientSelectedEventArgs eArgs=new OpenDental.PatientSelectedEventArgs(patNum);
-			if(PatientSelected!=null)
+		private void OnPatientSelected(int patNum,string patName){
+			PatientSelectedEventArgs eArgs=new OpenDental.PatientSelectedEventArgs(patNum,patName);
+			if(PatientSelected!=null){
 				PatientSelected(this,eArgs);
+			}
 		}
 
 		private void OnPay_Click() {

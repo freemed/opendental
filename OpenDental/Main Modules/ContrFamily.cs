@@ -25,7 +25,6 @@ namespace OpenDental{
 		private System.ComponentModel.IContainer components;
 		private OpenDental.TableFamily tbFamily;
 		private OpenDental.UI.ODToolBar ToolBarMain;
-		private System.Windows.Forms.ContextMenu menuPatient;
 		///<summary>All recalls for this entire family.</summary>
 		private Recall[] RecallList;
 		///<summary></summary>
@@ -66,7 +65,6 @@ namespace OpenDental{
 			this.components = new System.ComponentModel.Container();
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ContrFamily));
 			this.imageListToolBar = new System.Windows.Forms.ImageList(this.components);
-			this.menuPatient = new System.Windows.Forms.ContextMenu();
 			this.gridPat = new OpenDental.UI.ODGrid();
 			this.gridIns = new OpenDental.UI.ODGrid();
 			this.picturePat = new OpenDental.UI.PictureBox();
@@ -232,16 +230,11 @@ namespace OpenDental{
 			else{
 				gridIns.Visible=true;
 			}
-			FillPatientButton();
 			FillPatientPicture();
 			FillPatientData();
 			FillFamilyData();
 			FillInsData();
 		} 
-
-		private void FillPatientButton(){
-			Patients.AddPatsToMenu(menuPatient,new EventHandler(menuPatient_Click),PatCur,FamCur);
-		}
 
 		private void FillPatientPicture(){
 			picturePat.Image=null;
@@ -261,12 +254,6 @@ namespace OpenDental{
 			}
 			catch{
 			}
-		}
-
-		private void menuPatient_Click(object sender,System.EventArgs e) {
-			int newPatNum=Patients.ButtonSelect(menuPatient,sender,FamCur);
-			OnPatientSelected(newPatNum);
-			ModuleSelected(newPatNum);
 		}
 
 		///<summary></summary>
@@ -289,11 +276,6 @@ namespace OpenDental{
 		public void LayoutToolBar(){
 			ToolBarMain.Buttons.Clear();
 			ODToolBarButton button;
-			button=new ODToolBarButton(Lan.g(this,"Select Patient"),0,"","Patient");
-			button.Style=ODToolBarButtonStyle.DropDownButton;
-			button.DropDownMenu=menuPatient;
-			ToolBarMain.Buttons.Add(button);
-			ToolBarMain.Buttons.Add(new ODToolBarButton(ODToolBarButtonStyle.Separator));
 			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Recall"),1,"","Recall"));
 			ToolBarMain.Buttons.Add(new ODToolBarButton(ODToolBarButtonStyle.Separator));
 			button=new ODToolBarButton(Lan.g(this,"Family Members:"),-1,"","");
@@ -347,9 +329,6 @@ namespace OpenDental{
 			if(e.Button.Tag.GetType()==typeof(string)){
 				//standard predefined button
 				switch(e.Button.Tag.ToString()){
-					case "Patient":
-						OnPat_Click();
-						break;
 					case "Recall":
 						OnRecall_Click();
 						break;
@@ -375,18 +354,9 @@ namespace OpenDental{
 			}
 		}
 
-		private void OnPat_Click() {
-			FormPatientSelect formPS=new FormPatientSelect();
-			formPS.ShowDialog();
-			if(formPS.DialogResult==DialogResult.OK){
-				OnPatientSelected(formPS.SelectedPatNum);
-				ModuleSelected(formPS.SelectedPatNum);
-			}
-		}
-
 		///<summary></summary>
-		private void OnPatientSelected(int patNum){
-			PatientSelectedEventArgs eArgs=new OpenDental.PatientSelectedEventArgs(patNum);
+		private void OnPatientSelected(int patNum,string patName){
+			PatientSelectedEventArgs eArgs=new OpenDental.PatientSelectedEventArgs(patNum,patName);
 			if(PatientSelected!=null)
 				PatientSelected(this,eArgs);
 		}
@@ -785,7 +755,7 @@ namespace OpenDental{
 			}
 			tbFamily.SelectedRow=e.Row;
 			tbFamily.ColorRow(e.Row,Color.DarkSalmon);
-			OnPatientSelected(FamCur.List[e.Row].PatNum);
+			OnPatientSelected(FamCur.List[e.Row].PatNum,FamCur.List[e.Row].GetNameLF());
 			ModuleSelected(FamCur.List[e.Row].PatNum);
 		}
 
@@ -812,7 +782,7 @@ namespace OpenDental{
 			FormPE.IsNew=true;
 			FormPE.ShowDialog();
 			if(FormPE.DialogResult==DialogResult.OK){
-				OnPatientSelected(tempPat.PatNum);
+				OnPatientSelected(tempPat.PatNum,tempPat.GetNameLF());
 				ModuleSelected(tempPat.PatNum);
 			}
 			else{
