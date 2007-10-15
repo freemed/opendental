@@ -41,7 +41,7 @@ namespace OpenDentBusiness{
 				return PTimeSpan((TimeSpan)value);
 			}
 			else if (dataType == typeof(double)) {
-				return PDouble((double)value);
+				return '\'' + PDouble((double)value) + '\'';
 			}
 			else if (dataType == typeof(float)) {
 				return PFloat((float)value);

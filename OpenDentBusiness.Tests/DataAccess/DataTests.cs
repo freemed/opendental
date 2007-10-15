@@ -14,6 +14,11 @@ namespace OpenDentBusiness.Tests {
 	public abstract class DataTests<T>
 			where T : DataObjectBase, new() {
 		private const int DatabaseMaxInteger = short.MaxValue;
+		// For types like double and float, saving the max value will not work:
+		// http://bugs.mysql.com/bug.php?id=9262
+		// That's why we use a haircut, to save a large (but not too large) value to the
+		// database. Right now we go up to 5 nine's.
+		private const double LargeValuesHaircut = 0.99999;
 
 		Random random;
 		AppDomain domain;
@@ -189,7 +194,11 @@ namespace OpenDentBusiness.Tests {
 			foreach(DataFieldInfo field in dataFields) {
 				Type fieldType = field.Field.FieldType;
 
-				if(fieldType.IsValueType && fieldType.IsPrimitive) {
+				if (fieldType == typeof(double)) {
+					object storedValue = field.Field.GetValue(value);
+					Assert.AreEqual((double)Extremum(fieldType, extremumType), (double)storedValue, 1E-10 * (double)storedValue, string.Format("#17 - {0}: Maximum value should store correctly.", FormatFieldName(field)));
+				}
+				else if (fieldType.IsValueType && fieldType.IsPrimitive) {
 					object storedValue = field.Field.GetValue(value);
 					Assert.AreEqual(Extremum(fieldType, extremumType), storedValue, string.Format("#17 - {0}: Maximum value should store correctly.", FormatFieldName(field)));
 				}
@@ -257,9 +266,9 @@ namespace OpenDentBusiness.Tests {
 			else if(dataType == typeof(double)) {
 				switch(extremumType) {
 					case ExtremumType.Maximum:
-						return double.MaxValue;
+						return LargeValuesHaircut * double.MaxValue;
 					case ExtremumType.Minimum:
-						return double.MinValue;
+						return LargeValuesHaircut * double.MinValue;
 				}
 			}
 			else if(dataType == typeof(decimal)) {
