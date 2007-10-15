@@ -1369,7 +1369,7 @@ namespace OpenDental{
 			}
 		}
 
-		///<summary>A newer alternative which requires fewer calls to the database.  Does not handle null values. Use zero.  Does not handle adding family members.</summary>
+		///<summary>Does not handle null values. Use zero.  Does not handle adding family members.</summary>
 		public static void AddPatsToMenu(ContextMenu menu,EventHandler onClick,string nameLF,int patNum) {
 			//add current patient
 			if(buttonLastFivePatNums==null) {
@@ -1389,10 +1389,10 @@ namespace OpenDental{
 				}
 			}
 			//fill menu
-			menu.MenuItems.Clear();
-			for(int i=0;i<buttonLastFiveNames.Count;i++) {
-				menu.MenuItems.Add(buttonLastFiveNames[i].ToString(),onClick);
-			}
+			//menu.MenuItems.Clear();
+			//for(int i=0;i<buttonLastFiveNames.Count;i++) {
+			//	menu.MenuItems.Add(buttonLastFiveNames[i].ToString(),onClick);
+			//}
 		}
 
 		///<summary>Determines which menu Item was selected from the Patient dropdown list and returns the patNum for that patient. This will not be activated when click on 'FAMILY' or on separator, because they do not have events attached.  Calling class then does a ModuleSelected.</summary>

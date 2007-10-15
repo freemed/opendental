@@ -62,8 +62,9 @@ namespace OpenDental.UI{
 		#endregion
 
 		private void ODToolBar_Load(object sender, System.EventArgs e) {
-			if(imageList!=null)
-				Height=imageList.ImageSize.Height+7;
+			if(imageList!=null){
+				Height=imageList.ImageSize.Height+3;
+			}
 		}
 
 		///<summary>Gets the collection of ODToolBarButton controls assigned to the toolbar control.</summary>
@@ -256,7 +257,7 @@ namespace OpenDental.UI{
 				height=(int)g.MeasureString("anystring",Font).Height+10;
 			}
 			else{
-				height=imageList.ImageSize.Height+6;
+				height=imageList.ImageSize.Height+2;
 			}
 			foreach(ODToolBarButton button in buttons){
 				if(button.Style==ODToolBarButtonStyle.Separator){
@@ -351,17 +352,17 @@ namespace OpenDental.UI{
 			if(imageList!=null && button.ImageIndex!=-1){//draw image and text
 				if(!button.Enabled){
 					System.Windows.Forms.ControlPaint.DrawImageDisabled(g,imageList.Images[button.ImageIndex]
-						,button.Bounds.X+3,button.Bounds.Y+3,SystemColors.Control);
+						,button.Bounds.X+3,button.Bounds.Y+1,SystemColors.Control);
 					textRect=new Rectangle(button.Bounds.X+imageList.ImageSize.Width+3
 						,button.Bounds.Y,textWidth-imageList.ImageSize.Width-3,button.Bounds.Height);
 				}
 				else if(button.State==ToolBarButtonState.Pressed){//draw slightly down and right
-					g.DrawImage(imageList.Images[button.ImageIndex],button.Bounds.X+4,button.Bounds.Y+4);
+					g.DrawImage(imageList.Images[button.ImageIndex],button.Bounds.X+4,button.Bounds.Y+2);
 					textRect=new Rectangle(button.Bounds.X+1+imageList.ImageSize.Width+3
 						,button.Bounds.Y+1,textWidth-imageList.ImageSize.Width-3,button.Bounds.Height);
 				}
 				else{
-					g.DrawImage(imageList.Images[button.ImageIndex],button.Bounds.X+3,button.Bounds.Y+3);
+					g.DrawImage(imageList.Images[button.ImageIndex],button.Bounds.X+3,button.Bounds.Y+1);
 					textRect=new Rectangle(button.Bounds.X+imageList.ImageSize.Width+3
 						,button.Bounds.Y,textWidth-imageList.ImageSize.Width-3,button.Bounds.Height);
 				}

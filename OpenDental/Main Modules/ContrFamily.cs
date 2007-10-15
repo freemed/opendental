@@ -89,7 +89,7 @@ namespace OpenDental{
 			// gridPat
 			// 
 			this.gridPat.HScrollVisible = false;
-			this.gridPat.Location = new System.Drawing.Point(0,133);
+			this.gridPat.Location = new System.Drawing.Point(0,129);
 			this.gridPat.Name = "gridPat";
 			this.gridPat.ScrollValue = 0;
 			this.gridPat.SelectionMode = OpenDental.UI.GridSelectionMode.None;
@@ -102,7 +102,7 @@ namespace OpenDental{
 			// gridIns
 			// 
 			this.gridIns.HScrollVisible = true;
-			this.gridIns.Location = new System.Drawing.Point(256,133);
+			this.gridIns.Location = new System.Drawing.Point(256,129);
 			this.gridIns.Name = "gridIns";
 			this.gridIns.ScrollValue = 0;
 			this.gridIns.SelectionMode = OpenDental.UI.GridSelectionMode.None;
@@ -114,7 +114,7 @@ namespace OpenDental{
 			// 
 			// picturePat
 			// 
-			this.picturePat.Location = new System.Drawing.Point(1,31);
+			this.picturePat.Location = new System.Drawing.Point(1,27);
 			this.picturePat.Name = "picturePat";
 			this.picturePat.Size = new System.Drawing.Size(100,100);
 			this.picturePat.TabIndex = 28;
@@ -127,14 +127,14 @@ namespace OpenDental{
 			this.ToolBarMain.ImageList = this.imageListToolBar;
 			this.ToolBarMain.Location = new System.Drawing.Point(0,0);
 			this.ToolBarMain.Name = "ToolBarMain";
-			this.ToolBarMain.Size = new System.Drawing.Size(939,29);
+			this.ToolBarMain.Size = new System.Drawing.Size(939,25);
 			this.ToolBarMain.TabIndex = 19;
 			this.ToolBarMain.ButtonClick += new OpenDental.UI.ODToolBarButtonClickEventHandler(this.ToolBarMain_ButtonClick);
 			// 
 			// tbFamily
 			// 
 			this.tbFamily.BackColor = System.Drawing.SystemColors.Window;
-			this.tbFamily.Location = new System.Drawing.Point(104,31);
+			this.tbFamily.Location = new System.Drawing.Point(104,27);
 			this.tbFamily.Name = "tbFamily";
 			this.tbFamily.ScrollValue = 1;
 			this.tbFamily.SelectedIndices = new int[0];

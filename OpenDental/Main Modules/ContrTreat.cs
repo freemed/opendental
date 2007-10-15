@@ -178,7 +178,7 @@ namespace OpenDental{
 			// label1
 			// 
 			this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif",8F,System.Drawing.FontStyle.Regular,System.Drawing.GraphicsUnit.Point,((byte)(0)));
-			this.label1.Location = new System.Drawing.Point(755,171);
+			this.label1.Location = new System.Drawing.Point(755,167);
 			this.label1.Name = "label1";
 			this.label1.Size = new System.Drawing.Size(97,15);
 			this.label1.TabIndex = 4;
@@ -187,7 +187,7 @@ namespace OpenDental{
 			// 
 			// listSetPr
 			// 
-			this.listSetPr.Location = new System.Drawing.Point(757,188);
+			this.listSetPr.Location = new System.Drawing.Point(757,184);
 			this.listSetPr.Name = "listSetPr";
 			this.listSetPr.SelectionMode = System.Windows.Forms.SelectionMode.None;
 			this.listSetPr.Size = new System.Drawing.Size(70,212);
@@ -203,7 +203,7 @@ namespace OpenDental{
 			this.groupShow.Controls.Add(this.checkShowIns);
 			this.groupShow.Controls.Add(this.checkShowCompleted);
 			this.groupShow.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.groupShow.Location = new System.Drawing.Point(466,29);
+			this.groupShow.Location = new System.Drawing.Point(466,25);
 			this.groupShow.Name = "groupShow";
 			this.groupShow.Size = new System.Drawing.Size(173,138);
 			this.groupShow.TabIndex = 59;
@@ -489,7 +489,7 @@ namespace OpenDental{
 			// textNote
 			// 
 			this.textNote.BackColor = System.Drawing.Color.White;
-			this.textNote.Location = new System.Drawing.Point(0,626);
+			this.textNote.Location = new System.Drawing.Point(0,622);
 			this.textNote.Multiline = true;
 			this.textNote.Name = "textNote";
 			this.textNote.ReadOnly = true;
@@ -511,14 +511,14 @@ namespace OpenDental{
 			this.ToolBarMain.ImageList = this.imageListMain;
 			this.ToolBarMain.Location = new System.Drawing.Point(0,0);
 			this.ToolBarMain.Name = "ToolBarMain";
-			this.ToolBarMain.Size = new System.Drawing.Size(939,29);
+			this.ToolBarMain.Size = new System.Drawing.Size(939,25);
 			this.ToolBarMain.TabIndex = 58;
 			this.ToolBarMain.ButtonClick += new OpenDental.UI.ODToolBarButtonClickEventHandler(this.ToolBarMain_ButtonClick);
 			// 
 			// gridMain
 			// 
 			this.gridMain.HScrollVisible = false;
-			this.gridMain.Location = new System.Drawing.Point(0,173);
+			this.gridMain.Location = new System.Drawing.Point(0,169);
 			this.gridMain.Name = "gridMain";
 			this.gridMain.ScrollValue = 0;
 			this.gridMain.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
@@ -532,7 +532,7 @@ namespace OpenDental{
 			// gridPreAuth
 			// 
 			this.gridPreAuth.HScrollVisible = false;
-			this.gridPreAuth.Location = new System.Drawing.Point(659,33);
+			this.gridPreAuth.Location = new System.Drawing.Point(659,29);
 			this.gridPreAuth.Name = "gridPreAuth";
 			this.gridPreAuth.ScrollValue = 0;
 			this.gridPreAuth.Size = new System.Drawing.Size(252,134);
@@ -545,7 +545,7 @@ namespace OpenDental{
 			// gridPlans
 			// 
 			this.gridPlans.HScrollVisible = false;
-			this.gridPlans.Location = new System.Drawing.Point(0,33);
+			this.gridPlans.Location = new System.Drawing.Point(0,29);
 			this.gridPlans.Name = "gridPlans";
 			this.gridPlans.ScrollValue = 0;
 			this.gridPlans.Size = new System.Drawing.Size(460,134);

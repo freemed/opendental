@@ -241,7 +241,7 @@ namespace OpenDental{
 			this.TreeDocuments.ImageIndex = 2;
 			this.TreeDocuments.ImageList = this.imageListTree;
 			this.TreeDocuments.Indent = 20;
-			this.TreeDocuments.Location = new System.Drawing.Point(0,33);
+			this.TreeDocuments.Location = new System.Drawing.Point(0,29);
 			this.TreeDocuments.Name = "TreeDocuments";
 			this.TreeDocuments.SelectedImageIndex = 2;
 			this.TreeDocuments.Size = new System.Drawing.Size(228,519);
@@ -325,7 +325,7 @@ namespace OpenDental{
 			this.PictureBox1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
 			this.PictureBox1.Cursor = System.Windows.Forms.Cursors.Hand;
 			this.PictureBox1.InitialImage = null;
-			this.PictureBox1.Location = new System.Drawing.Point(233,63);
+			this.PictureBox1.Location = new System.Drawing.Point(233,54);
 			this.PictureBox1.Name = "PictureBox1";
 			this.PictureBox1.Size = new System.Drawing.Size(703,370);
 			this.PictureBox1.TabIndex = 6;
@@ -366,7 +366,7 @@ namespace OpenDental{
 			this.panelNote.Controls.Add(this.label15);
 			this.panelNote.Controls.Add(this.label1);
 			this.panelNote.Controls.Add(this.textNote);
-			this.panelNote.Location = new System.Drawing.Point(234,489);
+			this.panelNote.Location = new System.Drawing.Point(234,485);
 			this.panelNote.Name = "panelNote";
 			this.panelNote.Size = new System.Drawing.Size(705,64);
 			this.panelNote.TabIndex = 11;
@@ -428,7 +428,7 @@ namespace OpenDental{
 			// paintToolsUnderline
 			// 
 			this.paintToolsUnderline.BackColor = System.Drawing.SystemColors.ControlDark;
-			this.paintToolsUnderline.Location = new System.Drawing.Point(236,56);
+			this.paintToolsUnderline.Location = new System.Drawing.Point(236,48);
 			this.paintToolsUnderline.Name = "paintToolsUnderline";
 			this.paintToolsUnderline.Size = new System.Drawing.Size(702,2);
 			this.paintToolsUnderline.TabIndex = 15;
@@ -436,9 +436,9 @@ namespace OpenDental{
 			// panel1
 			// 
 			this.panel1.BackColor = System.Drawing.SystemColors.ControlDark;
-			this.panel1.Location = new System.Drawing.Point(233,29);
+			this.panel1.Location = new System.Drawing.Point(233,25);
 			this.panel1.Name = "panel1";
-			this.panel1.Size = new System.Drawing.Size(2,29);
+			this.panel1.Size = new System.Drawing.Size(2,25);
 			this.panel1.TabIndex = 16;
 			// 
 			// panelDrTech
@@ -523,23 +523,23 @@ namespace OpenDental{
 			this.ToolBarMain.ImageList = this.imageListTools2;
 			this.ToolBarMain.Location = new System.Drawing.Point(0,0);
 			this.ToolBarMain.Name = "ToolBarMain";
-			this.ToolBarMain.Size = new System.Drawing.Size(939,29);
+			this.ToolBarMain.Size = new System.Drawing.Size(939,25);
 			this.ToolBarMain.TabIndex = 10;
 			this.ToolBarMain.ButtonClick += new OpenDental.UI.ODToolBarButtonClickEventHandler(this.ToolBarMain_ButtonClick);
 			// 
 			// paintTools
 			// 
 			this.paintTools.ImageList = this.imageListTools2;
-			this.paintTools.Location = new System.Drawing.Point(440,28);
+			this.paintTools.Location = new System.Drawing.Point(440,24);
 			this.paintTools.Name = "paintTools";
-			this.paintTools.Size = new System.Drawing.Size(499,29);
+			this.paintTools.Size = new System.Drawing.Size(499,25);
 			this.paintTools.TabIndex = 14;
 			this.paintTools.ButtonClick += new OpenDental.UI.ODToolBarButtonClickEventHandler(this.paintTools_ButtonClick);
 			// 
 			// brightnessContrastSlider
 			// 
 			this.brightnessContrastSlider.Enabled = false;
-			this.brightnessContrastSlider.Location = new System.Drawing.Point(240,36);
+			this.brightnessContrastSlider.Location = new System.Drawing.Point(240,32);
 			this.brightnessContrastSlider.MaxVal = 255;
 			this.brightnessContrastSlider.MinVal = 0;
 			this.brightnessContrastSlider.Name = "brightnessContrastSlider";
