@@ -14,7 +14,7 @@ redistributed.
 ===============================================================================================================*/
 //For now, all screens are assumed to have available 990x734.  That would be a screen resolution of 1024x768 with a single width taskbar docked to any one of the four sides of the screen.  Screens can be optimized to the larger 1280x1024 (1246x990 to allow for docked taskbar) as long as scrollbars appear when user is at 1024x768.  This can be visualized for design purposes by placing hash lines radiating from 982,700.
 
-//The 7 main controls are slightly narrower due to menu bar on left of 51. Max size 939x708, or the larger 1195x964 as long as it still functions acceptably at 939x708.
+//The 7 main controls are slightly smaller due to menu bar on left of 51 and the toolbar on the top of 29. Max size 939x679, or the larger 1195x935 as long as it still functions acceptably at 939x679.
 
 //#define ORA_DB
 using System;
@@ -43,6 +43,7 @@ using System.Xml;
 using System.Xml.XPath;
 using SparksToothChart;
 using OpenDental.SmartCards;
+using OpenDental.UI;
 
 #if(ORA_DB)
 using OD_CRYPTO;
@@ -177,6 +178,7 @@ namespace OpenDental{
 		private MenuItem menuItemDockBottom;
 		private MenuItem menuItemDockRight;
 		private OpenDental.SmartCards.SmartCardWatcher smartCardWatcher1;
+		private OpenDental.UI.ODToolBar ToolBarMain;
 		private Point OriginalMousePos;
 
 		///<summary></summary>
@@ -318,6 +320,7 @@ namespace OpenDental{
 			this.lightSignalGrid1 = new OpenDental.UI.LightSignalGrid();
 			this.myOutlookBar = new OpenDental.OutlookBar();
 			this.smartCardWatcher1 = new OpenDental.SmartCards.SmartCardWatcher();
+			this.ToolBarMain = new OpenDental.UI.ODToolBar();
 			this.SuspendLayout();
 			// 
 			// timerTimeIndic
@@ -1002,7 +1005,7 @@ namespace OpenDental{
 			// ContrChart2
 			// 
 			this.ContrChart2.DataValid = false;
-			this.ContrChart2.Location = new System.Drawing.Point(77,12);
+			this.ContrChart2.Location = new System.Drawing.Point(77,49);
 			this.ContrChart2.Name = "ContrChart2";
 			this.ContrChart2.Size = new System.Drawing.Size(865,589);
 			this.ContrChart2.TabIndex = 26;
@@ -1010,7 +1013,7 @@ namespace OpenDental{
 			// 
 			// ContrDocs2
 			// 
-			this.ContrDocs2.Location = new System.Drawing.Point(97,31);
+			this.ContrDocs2.Location = new System.Drawing.Point(97,41);
 			this.ContrDocs2.Name = "ContrDocs2";
 			this.ContrDocs2.Size = new System.Drawing.Size(845,606);
 			this.ContrDocs2.TabIndex = 25;
@@ -1018,7 +1021,7 @@ namespace OpenDental{
 			// 
 			// ContrTreat2
 			// 
-			this.ContrTreat2.Location = new System.Drawing.Point(97,25);
+			this.ContrTreat2.Location = new System.Drawing.Point(97,47);
 			this.ContrTreat2.Name = "ContrTreat2";
 			this.ContrTreat2.Size = new System.Drawing.Size(857,612);
 			this.ContrTreat2.TabIndex = 24;
@@ -1042,7 +1045,7 @@ namespace OpenDental{
 			// 
 			// ContrAppt2
 			// 
-			this.ContrAppt2.Location = new System.Drawing.Point(97,12);
+			this.ContrAppt2.Location = new System.Drawing.Point(97,42);
 			this.ContrAppt2.Name = "ContrAppt2";
 			this.ContrAppt2.Size = new System.Drawing.Size(857,643);
 			this.ContrAppt2.TabIndex = 21;
@@ -1072,9 +1075,19 @@ namespace OpenDental{
 			// 
 			this.smartCardWatcher1.PatientCardInserted += new OpenDental.SmartCards.PatientCardInsertedEventHandler(this.OnPatientCardInserted);
 			// 
+			// ToolBarMain
+			// 
+			this.ToolBarMain.Dock = System.Windows.Forms.DockStyle.Top;
+			this.ToolBarMain.ImageList = null;
+			this.ToolBarMain.Location = new System.Drawing.Point(51,0);
+			this.ToolBarMain.Name = "ToolBarMain";
+			this.ToolBarMain.Size = new System.Drawing.Size(931,29);
+			this.ToolBarMain.TabIndex = 178;
+			// 
 			// FormOpenDental
 			// 
 			this.ClientSize = new System.Drawing.Size(982,570);
+			this.Controls.Add(this.ToolBarMain);
 			this.Controls.Add(this.panelSplitter);
 			this.Controls.Add(this.userControlTasks1);
 			this.Controls.Add(this.ContrManage2);
@@ -1184,6 +1197,7 @@ namespace OpenDental{
 			ContrFamily2.InitializeOnStartup();
 			ContrManage2.InitializeOnStartup();
 			ContrTreat2.InitializeOnStartup();
+			LayoutToolBar();
 			timerTimeIndic.Enabled=true;
 			myOutlookBar.Buttons[0].Caption=Lan.g(this,"Appts");
 			myOutlookBar.Buttons[1].Caption=Lan.g(this,"Family");
@@ -1503,6 +1517,34 @@ namespace OpenDental{
 			}
 		}
 
+		///<summary>Causes the toolbar to be laid out again.</summary>
+		public void LayoutToolBar() {
+			ToolBarMain.Buttons.Clear();
+			ODToolBarButton button;
+			button=new ODToolBarButton(Lan.g(this,"Select Patient"),-1,"","Patient");
+			//button.Style=ODToolBarButtonStyle.DropDownButton;
+			//button.DropDownMenu=menuPatient;
+			ToolBarMain.Buttons.Add(button);
+			/*
+			ToolBarMain.Buttons.Add(new ODToolBarButton(ODToolBarButtonStyle.Separator));
+			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"New Rx"),1,"","Rx"));
+			//ToolBarMain.Buttons.Add(new ODToolBarButton(ODToolBarButtonStyle.Separator));
+			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"LabCase"),-1,"","LabCase"));
+			//ToolBarMain.Buttons.Add(new ODToolBarButton(ODToolBarButtonStyle.Separator));
+			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Perio Chart"),2,"","Perio"));
+			button=new ODToolBarButton(Lan.g(this,"Commlog"),3,"","Commlog");
+			button.Style=ODToolBarButtonStyle.DropDownButton;
+			button.DropDownMenu=menuEmail;
+			ToolBarMain.Buttons.Add(button);
+			ArrayList toolButItems=ToolButItems.GetForToolBar(ToolBarsAvail.ChartModule);
+			for(int i=0;i<toolButItems.Count;i++) {
+				ToolBarMain.Buttons.Add(new ODToolBarButton(ODToolBarButtonStyle.Separator));
+				ToolBarMain.Buttons.Add(new ODToolBarButton(((ToolButItem)toolButItems[i]).ButtonText
+					,-1,"",((ToolButItem)toolButItems[i]).ProgramNum));
+			}*/
+			ToolBarMain.Invalidate();
+		}
+
 		private void FormOpenDental_Resize(object sender,EventArgs e) {
 			LayoutControls();
 		}
@@ -1513,7 +1555,7 @@ namespace OpenDental{
 			if(Width<200){
 				Width=200;
 			}
-			Point position=new Point(myOutlookBar.Width,0);
+			Point position=new Point(myOutlookBar.Width,ToolBarMain.Height);
 			int width=this.ClientSize.Width-position.X;
 			int height=this.ClientSize.Height;
 			if(userControlTasks1.Visible){
