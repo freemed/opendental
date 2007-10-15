@@ -30,7 +30,7 @@ namespace OpenDental{
 		private System.Windows.Forms.CheckBox checkHidePayment;
 		///<summary></summary>
 		public int[] PatNums;
-		///<summary>This is the only parameter that gets passed to this form. But all the parameters are sent back out from this form.</summary>
+		///<summary>Dates are the only parameters that get passed to this form. But all the parameters are sent back out from this form.</summary>
 		public DateTime FromDate;
 		///<summary></summary>
 		public DateTime ToDate;
@@ -44,7 +44,7 @@ namespace OpenDental{
 		public bool NextAppt;
 		///<summary></summary>
 		public bool SimpleStatement;
-		///<summary></summary>
+		///<summary>When user checks box in this form for Mailing, then this gets set to true.  This results in the commlog entry having mode=mail instead of none.</summary>
 		public bool IsBill;
 		///<summary></summary>
 		public string Note;
@@ -482,21 +482,23 @@ namespace OpenDental{
 		#endregion
 
 		private void FormStatementOptions_Load(object sender, System.EventArgs e) {
-			if(FromDate.Year<1880)
+			if(FromDate.Year<1880){
 				textDateFrom.Text="";
-			else
+			}
+			else{
 				textDateFrom.Text=FromDate.ToShortDateString();
-			if(ToDate.Year>2100)
+			}
+			if(ToDate.Year>2100){
 				textDateTo.Text="";
-			else
+			}
+			else{
 				textDateTo.Text=ToDate.ToShortDateString();
-			
+			}
 			//default to last 45 days if dates are blank
 			/*if (textDateTo.Text=="" && textDateFrom.Text==""){
 				textDateFrom.Text=DateTime.Today.AddDays(-45).ToShortDateString();
 				textDateTo.Text=DateTime.Today.ToShortDateString();
 			}*/
-			
 			checkSimpleStatement.Checked=(PrefB.GetBool("PrintSimpleStatements"));
 		}
 
