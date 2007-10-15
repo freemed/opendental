@@ -179,6 +179,7 @@ namespace OpenDental{
 		private MenuItem menuItemDockRight;
 		private OpenDental.SmartCards.SmartCardWatcher smartCardWatcher1;
 		private OpenDental.UI.ODToolBar ToolBarMain;
+		private ImageList imageListMain;
 		private Point OriginalMousePos;
 
 		///<summary></summary>
@@ -309,6 +310,8 @@ namespace OpenDental{
 			this.menuSplitter = new System.Windows.Forms.ContextMenu();
 			this.menuItemDockBottom = new System.Windows.Forms.MenuItem();
 			this.menuItemDockRight = new System.Windows.Forms.MenuItem();
+			this.imageListMain = new System.Windows.Forms.ImageList(this.components);
+			this.ToolBarMain = new OpenDental.UI.ODToolBar();
 			this.userControlTasks1 = new OpenDental.UserControlTasks();
 			this.ContrManage2 = new OpenDental.ContrStaff();
 			this.ContrChart2 = new OpenDental.ContrChart();
@@ -320,7 +323,6 @@ namespace OpenDental{
 			this.lightSignalGrid1 = new OpenDental.UI.LightSignalGrid();
 			this.myOutlookBar = new OpenDental.OutlookBar();
 			this.smartCardWatcher1 = new OpenDental.SmartCards.SmartCardWatcher();
-			this.ToolBarMain = new OpenDental.UI.ODToolBar();
 			this.SuspendLayout();
 			// 
 			// timerTimeIndic
@@ -985,6 +987,22 @@ namespace OpenDental{
 			this.menuItemDockRight.Text = "Dock to Right";
 			this.menuItemDockRight.Click += new System.EventHandler(this.menuItemDockRight_Click);
 			// 
+			// imageListMain
+			// 
+			this.imageListMain.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imageListMain.ImageStream")));
+			this.imageListMain.TransparentColor = System.Drawing.Color.Transparent;
+			this.imageListMain.Images.SetKeyName(0,"Pat.gif");
+			// 
+			// ToolBarMain
+			// 
+			this.ToolBarMain.Dock = System.Windows.Forms.DockStyle.Top;
+			this.ToolBarMain.ImageList = this.imageListMain;
+			this.ToolBarMain.Location = new System.Drawing.Point(51,0);
+			this.ToolBarMain.Name = "ToolBarMain";
+			this.ToolBarMain.Size = new System.Drawing.Size(931,29);
+			this.ToolBarMain.TabIndex = 178;
+			this.ToolBarMain.ButtonClick += new OpenDental.UI.ODToolBarButtonClickEventHandler(this.ToolBarMain_ButtonClick);
+			// 
 			// userControlTasks1
 			// 
 			this.userControlTasks1.Location = new System.Drawing.Point(57,498);
@@ -1066,7 +1084,7 @@ namespace OpenDental{
 			this.myOutlookBar.ImageList = this.imageList32;
 			this.myOutlookBar.Location = new System.Drawing.Point(0,0);
 			this.myOutlookBar.Name = "myOutlookBar";
-			this.myOutlookBar.Size = new System.Drawing.Size(51,570);
+			this.myOutlookBar.Size = new System.Drawing.Size(51,423);
 			this.myOutlookBar.TabIndex = 18;
 			this.myOutlookBar.Text = "outlookBar1";
 			this.myOutlookBar.ButtonClicked += new OpenDental.ButtonClickedEventHandler(this.myOutlookBar_ButtonClicked);
@@ -1075,18 +1093,9 @@ namespace OpenDental{
 			// 
 			this.smartCardWatcher1.PatientCardInserted += new OpenDental.SmartCards.PatientCardInsertedEventHandler(this.OnPatientCardInserted);
 			// 
-			// ToolBarMain
-			// 
-			this.ToolBarMain.Dock = System.Windows.Forms.DockStyle.Top;
-			this.ToolBarMain.ImageList = null;
-			this.ToolBarMain.Location = new System.Drawing.Point(51,0);
-			this.ToolBarMain.Name = "ToolBarMain";
-			this.ToolBarMain.Size = new System.Drawing.Size(931,29);
-			this.ToolBarMain.TabIndex = 178;
-			// 
 			// FormOpenDental
 			// 
-			this.ClientSize = new System.Drawing.Size(982,570);
+			this.ClientSize = new System.Drawing.Size(982,423);
 			this.Controls.Add(this.ToolBarMain);
 			this.Controls.Add(this.panelSplitter);
 			this.Controls.Add(this.userControlTasks1);
@@ -1197,7 +1206,6 @@ namespace OpenDental{
 			ContrFamily2.InitializeOnStartup();
 			ContrManage2.InitializeOnStartup();
 			ContrTreat2.InitializeOnStartup();
-			LayoutToolBar();
 			timerTimeIndic.Enabled=true;
 			myOutlookBar.Buttons[0].Caption=Lan.g(this,"Appts");
 			myOutlookBar.Buttons[1].Caption=Lan.g(this,"Family");
@@ -1246,6 +1254,7 @@ namespace OpenDental{
 			}
 			myOutlookBar.SelectedIndex=Security.GetModule(0);
 			myOutlookBar.Invalidate();
+			LayoutToolBar();
 			SetModuleSelected();
 			Cursor=Cursors.Default;
 			if(myOutlookBar.SelectedIndex==-1){
@@ -1519,9 +1528,10 @@ namespace OpenDental{
 
 		///<summary>Causes the toolbar to be laid out again.</summary>
 		public void LayoutToolBar() {
+			ToolBarMain.BringToFront();
 			ToolBarMain.Buttons.Clear();
 			ODToolBarButton button;
-			button=new ODToolBarButton(Lan.g(this,"Select Patient"),-1,"","Patient");
+			button=new ODToolBarButton(Lan.g(this,"Select Patient"),0,"","Patient");
 			//button.Style=ODToolBarButtonStyle.DropDownButton;
 			//button.DropDownMenu=menuPatient;
 			ToolBarMain.Buttons.Add(button);
@@ -1543,6 +1553,10 @@ namespace OpenDental{
 					,-1,"",((ToolButItem)toolButItems[i]).ProgramNum));
 			}*/
 			ToolBarMain.Invalidate();
+		}
+
+		private void ToolBarMain_ButtonClick(object sender,ODToolBarButtonClickEventArgs e) {
+			//MessageBox.Show(ToolBarMain.Height.ToString());
 		}
 
 		private void FormOpenDental_Resize(object sender,EventArgs e) {
@@ -2961,5 +2975,7 @@ namespace OpenDental{
                 }
             }
         }
+
+		
 	}
 }
