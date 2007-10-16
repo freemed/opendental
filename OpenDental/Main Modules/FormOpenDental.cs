@@ -183,6 +183,7 @@ namespace OpenDental{
 		private OpenDental.UI.ODToolBar ToolBarMain;
 		private ImageList imageListMain;
 		private ContextMenu menuPatient;
+		private ContextMenu menuLabel;
 		private Point OriginalMousePos;
 
 		///<summary></summary>
@@ -327,6 +328,7 @@ namespace OpenDental{
 			this.lightSignalGrid1 = new OpenDental.UI.LightSignalGrid();
 			this.myOutlookBar = new OpenDental.OutlookBar();
 			this.smartCardWatcher1 = new OpenDental.SmartCards.SmartCardWatcher();
+			this.menuLabel = new System.Windows.Forms.ContextMenu();
 			this.SuspendLayout();
 			// 
 			// timerTimeIndic
@@ -1105,6 +1107,10 @@ namespace OpenDental{
 			// 
 			this.smartCardWatcher1.PatientCardInserted += new OpenDental.SmartCards.PatientCardInsertedEventHandler(this.OnPatientCardInserted);
 			// 
+			// menuLabel
+			// 
+			this.menuLabel.Popup += new System.EventHandler(this.menuLabel_Popup);
+			// 
 			// FormOpenDental
 			// 
 			this.ClientSize = new System.Drawing.Size(982,600);
@@ -1550,7 +1556,10 @@ namespace OpenDental{
 			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Commlog"),1,Lan.g(this,"New Commlog Entry"),"Commlog"));
 			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"E-mail"),2,Lan.g(this,"Send E-mail"),"Email"));
 			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"To Task List"),3,Lan.g(this,"Send to Task List"),"Tasklist"));
-			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Label"),4,Lan.g(this,"Print Label"),"Label"));
+			button=new ODToolBarButton(Lan.g(this,"Label"),4,Lan.g(this,"Print Label"),"Label");
+			button.Style=ODToolBarButtonStyle.DropDownButton;
+			button.DropDownMenu=menuLabel;
+			ToolBarMain.Buttons.Add(button);
 			ArrayList toolButItems=ToolButItems.GetForToolBar(ToolBarsAvail.AllModules);
 			for(int i=0;i<toolButItems.Count;i++) {
 				//ToolBarMain.Buttons.Add(new ODToolBarButton(ODToolBarButtonStyle.Separator));
@@ -1563,6 +1572,23 @@ namespace OpenDental{
 		private void menuPatient_Popup(object sender,EventArgs e) {
 			Family fam=Patients.GetFamily(CurPatNum);
 			Patients.AddFamilyToMenu(menuPatient,new EventHandler(menuPatient_Click),CurPatNum,fam);
+		}
+
+		private void menuLabel_Popup(object sender,EventArgs e) {
+			Family fam=Patients.GetFamily(CurPatNum);
+			PatPlan[] PatPlanList=PatPlans.Refresh(CurPatNum);
+			InsPlan[] PlanList=InsPlans.Refresh(fam);
+			menuLabel.MenuItems.Clear();
+			MenuItem menuItem;
+			Carrier carrier;
+			InsPlan plan;
+			for(int i=0;i<PatPlanList.Length;i++){
+				plan=InsPlans.GetPlan(PatPlanList[i].PlanNum,PlanList);
+				carrier=Carriers.GetCarrier(plan.CarrierNum);
+				menuItem=new MenuItem(carrier.CarrierName,menuLabel_Click);
+				menuItem.Tag=carrier;
+				menuLabel.MenuItems.Add(menuItem);
+			}
 		}
 
 		private void ToolBarMain_ButtonClick(object sender,ODToolBarButtonClickEventArgs e) {
@@ -1606,6 +1632,12 @@ namespace OpenDental{
 			Patient pat=fam.GetPatient(CurPatNum);
 			RefreshCurrentModule();
 			FillPatientButton(CurPatNum,fam.GetPatient(CurPatNum).GetNameLF(),pat.Email!="",pat.ChartNumber);
+		}
+
+		private void menuLabel_Click(object sender,System.EventArgs e) {
+			LabelSingle label=new LabelSingle();
+			Carrier carrier=(Carrier)((MenuItem)sender).Tag;
+			label.PrintIns(carrier,"");
 		}
 
 		///<summary>Happens when any of the modules changes the current patient.  The calling module should then refresh itself.  The current patNum is stored here in the parent form so that when switching modules, the parent form knows which patient to call up for that module.</summary>
@@ -3042,6 +3074,8 @@ namespace OpenDental{
 				}
 			}
 		}
+
+		
 
 		
 

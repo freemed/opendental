@@ -54,7 +54,6 @@ namespace OpenDental{
 		private System.Windows.Forms.Button butUnsched;
 		private System.Windows.Forms.Button butDelete;
 		private System.Windows.Forms.Button butBreak;
-		private System.Windows.Forms.ImageList imageList1;
 		///<summary>The actual operatoryNum of the clicked op.</summary>
 		public static int SheetClickedonOp;
 		///<summary></summary>
@@ -179,21 +178,30 @@ namespace OpenDental{
 			this.labelDate = new System.Windows.Forms.Label();
 			this.labelDate2 = new System.Windows.Forms.Label();
 			this.panelArrows = new System.Windows.Forms.Panel();
+			this.butTodayWk = new OpenDental.UI.Button();
+			this.butToday = new OpenDental.UI.Button();
+			this.butBack = new OpenDental.UI.Button();
+			this.butFwd = new OpenDental.UI.Button();
+			this.butBackWk = new OpenDental.UI.Button();
+			this.butFwdWk = new OpenDental.UI.Button();
 			this.panelSheet = new System.Windows.Forms.Panel();
 			this.vScrollBar1 = new System.Windows.Forms.VScrollBar();
+			this.ContrApptSheet2 = new OpenDental.ContrApptSheet();
 			this.panelAptInfo = new System.Windows.Forms.Panel();
 			this.listConfirmed = new System.Windows.Forms.ListBox();
 			this.butComplete = new System.Windows.Forms.Button();
 			this.butUnsched = new System.Windows.Forms.Button();
 			this.butDelete = new System.Windows.Forms.Button();
 			this.butBreak = new System.Windows.Forms.Button();
-			this.imageList1 = new System.Windows.Forms.ImageList(this.components);
 			this.panelCalendar = new System.Windows.Forms.Panel();
+			this.butLab = new OpenDental.UI.Button();
+			this.butSearch = new OpenDental.UI.Button();
 			this.textProduction = new System.Windows.Forms.TextBox();
 			this.label7 = new System.Windows.Forms.Label();
 			this.textLab = new System.Windows.Forms.TextBox();
 			this.comboView = new System.Windows.Forms.ComboBox();
 			this.label2 = new System.Windows.Forms.Label();
+			this.butClearPin = new OpenDental.UI.Button();
 			this.panelOps = new System.Windows.Forms.Panel();
 			this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
 			this.pd2 = new System.Drawing.Printing.PrintDocument();
@@ -202,8 +210,10 @@ namespace OpenDental{
 			this.menuPatient = new System.Windows.Forms.ContextMenu();
 			this.menuBlockout = new System.Windows.Forms.ContextMenu();
 			this.groupSearch = new System.Windows.Forms.GroupBox();
+			this.butRefresh = new OpenDental.UI.Button();
 			this.listSearchResults = new System.Windows.Forms.ListBox();
 			this.listProviders = new System.Windows.Forms.ListBox();
+			this.butSearchClose = new OpenDental.UI.Button();
 			this.groupBox2 = new System.Windows.Forms.GroupBox();
 			this.textAfter = new System.Windows.Forms.TextBox();
 			this.label11 = new System.Windows.Forms.Label();
@@ -218,23 +228,11 @@ namespace OpenDental{
 			this.label9 = new System.Windows.Forms.Label();
 			this.label8 = new System.Windows.Forms.Label();
 			this.butSearchCloseX = new System.Windows.Forms.Button();
-			this.timerInfoBubble = new System.Windows.Forms.Timer(this.components);
-			this.butRefresh = new OpenDental.UI.Button();
-			this.butSearchClose = new OpenDental.UI.Button();
 			this.butSearchNext = new OpenDental.UI.Button();
+			this.timerInfoBubble = new System.Windows.Forms.Timer(this.components);
 			this.gridEmpSched = new OpenDental.UI.ODGrid();
 			this.butOther = new OpenDental.UI.Button();
 			this.ToolBarMain = new OpenDental.UI.ODToolBar();
-			this.butLab = new OpenDental.UI.Button();
-			this.butSearch = new OpenDental.UI.Button();
-			this.butClearPin = new OpenDental.UI.Button();
-			this.butTodayWk = new OpenDental.UI.Button();
-			this.butToday = new OpenDental.UI.Button();
-			this.butBack = new OpenDental.UI.Button();
-			this.butFwd = new OpenDental.UI.Button();
-			this.butBackWk = new OpenDental.UI.Button();
-			this.butFwdWk = new OpenDental.UI.Button();
-			this.ContrApptSheet2 = new OpenDental.ContrApptSheet();
 			this.panelPinBoard.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
 			this.panelArrows.SuspendLayout();
@@ -268,9 +266,9 @@ namespace OpenDental{
 			// 
 			this.imageListMain.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imageListMain.ImageStream")));
 			this.imageListMain.TransparentColor = System.Drawing.Color.Transparent;
-			this.imageListMain.Images.SetKeyName(0,"");
-			this.imageListMain.Images.SetKeyName(1,"");
-			this.imageListMain.Images.SetKeyName(2,"");
+			this.imageListMain.Images.SetKeyName(0,"Pat.gif");
+			this.imageListMain.Images.SetKeyName(1,"print.gif");
+			this.imageListMain.Images.SetKeyName(2,"apptLists.gif");
 			// 
 			// Calendar2
 			// 
@@ -311,6 +309,92 @@ namespace OpenDental{
 			this.panelArrows.Size = new System.Drawing.Size(100,45);
 			this.panelArrows.TabIndex = 32;
 			// 
+			// butTodayWk
+			// 
+			this.butTodayWk.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butTodayWk.Autosize = false;
+			this.butTodayWk.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butTodayWk.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butTodayWk.CornerRadius = 4F;
+			this.butTodayWk.Font = new System.Drawing.Font("Microsoft Sans Serif",8.25F,System.Drawing.FontStyle.Bold,System.Drawing.GraphicsUnit.Point,((byte)(0)));
+			this.butTodayWk.Location = new System.Drawing.Point(17,22);
+			this.butTodayWk.Name = "butTodayWk";
+			this.butTodayWk.Size = new System.Drawing.Size(65,22);
+			this.butTodayWk.TabIndex = 31;
+			this.butTodayWk.Text = "Week";
+			this.butTodayWk.Click += new System.EventHandler(this.butTodayWk_Click);
+			// 
+			// butToday
+			// 
+			this.butToday.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butToday.Autosize = false;
+			this.butToday.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butToday.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butToday.CornerRadius = 4F;
+			this.butToday.Font = new System.Drawing.Font("Microsoft Sans Serif",8.25F,System.Drawing.FontStyle.Bold,System.Drawing.GraphicsUnit.Point,((byte)(0)));
+			this.butToday.Location = new System.Drawing.Point(17,0);
+			this.butToday.Name = "butToday";
+			this.butToday.Size = new System.Drawing.Size(65,22);
+			this.butToday.TabIndex = 29;
+			this.butToday.Text = "Today";
+			this.butToday.Click += new System.EventHandler(this.butToday_Click);
+			// 
+			// butBack
+			// 
+			this.butBack.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butBack.Autosize = true;
+			this.butBack.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butBack.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butBack.CornerRadius = 4F;
+			this.butBack.Image = ((System.Drawing.Image)(resources.GetObject("butBack.Image")));
+			this.butBack.Location = new System.Drawing.Point(-1,0);
+			this.butBack.Name = "butBack";
+			this.butBack.Size = new System.Drawing.Size(19,22);
+			this.butBack.TabIndex = 51;
+			this.butBack.Click += new System.EventHandler(this.butBack_Click);
+			// 
+			// butFwd
+			// 
+			this.butFwd.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butFwd.Autosize = true;
+			this.butFwd.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butFwd.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butFwd.CornerRadius = 4F;
+			this.butFwd.Image = ((System.Drawing.Image)(resources.GetObject("butFwd.Image")));
+			this.butFwd.Location = new System.Drawing.Point(81,0);
+			this.butFwd.Name = "butFwd";
+			this.butFwd.Size = new System.Drawing.Size(19,22);
+			this.butFwd.TabIndex = 53;
+			this.butFwd.Click += new System.EventHandler(this.butFwd_Click);
+			// 
+			// butBackWk
+			// 
+			this.butBackWk.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butBackWk.Autosize = true;
+			this.butBackWk.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butBackWk.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butBackWk.CornerRadius = 4F;
+			this.butBackWk.Image = ((System.Drawing.Image)(resources.GetObject("butBackWk.Image")));
+			this.butBackWk.Location = new System.Drawing.Point(-1,22);
+			this.butBackWk.Name = "butBackWk";
+			this.butBackWk.Size = new System.Drawing.Size(19,22);
+			this.butBackWk.TabIndex = 51;
+			this.butBackWk.Click += new System.EventHandler(this.butBackWk_Click);
+			// 
+			// butFwdWk
+			// 
+			this.butFwdWk.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butFwdWk.Autosize = true;
+			this.butFwdWk.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butFwdWk.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butFwdWk.CornerRadius = 4F;
+			this.butFwdWk.Image = ((System.Drawing.Image)(resources.GetObject("butFwdWk.Image")));
+			this.butFwdWk.Location = new System.Drawing.Point(81,22);
+			this.butFwdWk.Name = "butFwdWk";
+			this.butFwdWk.Size = new System.Drawing.Size(19,22);
+			this.butFwdWk.TabIndex = 52;
+			this.butFwdWk.Click += new System.EventHandler(this.butFwdWk_Click);
+			// 
 			// panelSheet
 			// 
 			this.panelSheet.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
@@ -330,6 +414,18 @@ namespace OpenDental{
 			this.vScrollBar1.Size = new System.Drawing.Size(17,724);
 			this.vScrollBar1.TabIndex = 23;
 			this.vScrollBar1.Scroll += new System.Windows.Forms.ScrollEventHandler(this.vScrollBar1_Scroll);
+			// 
+			// ContrApptSheet2
+			// 
+			this.ContrApptSheet2.Location = new System.Drawing.Point(2,-550);
+			this.ContrApptSheet2.Name = "ContrApptSheet2";
+			this.ContrApptSheet2.Size = new System.Drawing.Size(60,1728);
+			this.ContrApptSheet2.TabIndex = 22;
+			this.ContrApptSheet2.DoubleClick += new System.EventHandler(this.ContrApptSheet2_DoubleClick);
+			this.ContrApptSheet2.MouseDown += new System.Windows.Forms.MouseEventHandler(this.ContrApptSheet2_MouseDown);
+			this.ContrApptSheet2.MouseMove += new System.Windows.Forms.MouseEventHandler(this.ContrApptSheet2_MouseMove);
+			this.ContrApptSheet2.MouseLeave += new System.EventHandler(this.ContrApptSheet2_MouseLeave);
+			this.ContrApptSheet2.MouseUp += new System.Windows.Forms.MouseEventHandler(this.ContrApptSheet2_MouseUp);
 			// 
 			// panelAptInfo
 			// 
@@ -403,12 +499,6 @@ namespace OpenDental{
 			this.butBreak.UseVisualStyleBackColor = false;
 			this.butBreak.Click += new System.EventHandler(this.butBreak_Click);
 			// 
-			// imageList1
-			// 
-			this.imageList1.ColorDepth = System.Windows.Forms.ColorDepth.Depth8Bit;
-			this.imageList1.ImageSize = new System.Drawing.Size(22,22);
-			this.imageList1.TransparentColor = System.Drawing.Color.Transparent;
-			// 
 			// panelCalendar
 			// 
 			this.panelCalendar.Controls.Add(this.butLab);
@@ -428,6 +518,38 @@ namespace OpenDental{
 			this.panelCalendar.Name = "panelCalendar";
 			this.panelCalendar.Size = new System.Drawing.Size(219,351);
 			this.panelCalendar.TabIndex = 46;
+			// 
+			// butLab
+			// 
+			this.butLab.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butLab.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.butLab.Autosize = true;
+			this.butLab.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butLab.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butLab.CornerRadius = 4F;
+			this.butLab.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butLab.Location = new System.Drawing.Point(2,309);
+			this.butLab.Name = "butLab";
+			this.butLab.Size = new System.Drawing.Size(67,21);
+			this.butLab.TabIndex = 77;
+			this.butLab.Text = "LabCases";
+			this.butLab.Click += new System.EventHandler(this.butLab_Click);
+			// 
+			// butSearch
+			// 
+			this.butSearch.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butSearch.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.butSearch.Autosize = true;
+			this.butSearch.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butSearch.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butSearch.CornerRadius = 4F;
+			this.butSearch.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butSearch.Location = new System.Drawing.Point(28,259);
+			this.butSearch.Name = "butSearch";
+			this.butSearch.Size = new System.Drawing.Size(75,26);
+			this.butSearch.TabIndex = 40;
+			this.butSearch.Text = "Search";
+			this.butSearch.Click += new System.EventHandler(this.butSearch_Click);
 			// 
 			// textProduction
 			// 
@@ -479,6 +601,23 @@ namespace OpenDental{
 			this.label2.Text = "View";
 			this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
+			// butClearPin
+			// 
+			this.butClearPin.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butClearPin.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.butClearPin.Autosize = true;
+			this.butClearPin.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butClearPin.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butClearPin.CornerRadius = 4F;
+			this.butClearPin.Image = ((System.Drawing.Image)(resources.GetObject("butClearPin.Image")));
+			this.butClearPin.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butClearPin.Location = new System.Drawing.Point(28,233);
+			this.butClearPin.Name = "butClearPin";
+			this.butClearPin.Size = new System.Drawing.Size(75,26);
+			this.butClearPin.TabIndex = 33;
+			this.butClearPin.Text = "Clear";
+			this.butClearPin.Click += new System.EventHandler(this.butClearPin_Click);
+			// 
 			// panelOps
 			// 
 			this.panelOps.Location = new System.Drawing.Point(0,0);
@@ -515,6 +654,22 @@ namespace OpenDental{
 			this.groupSearch.Text = "Search For Opening";
 			this.groupSearch.Visible = false;
 			// 
+			// butRefresh
+			// 
+			this.butRefresh.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butRefresh.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.butRefresh.Autosize = true;
+			this.butRefresh.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butRefresh.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butRefresh.CornerRadius = 4F;
+			this.butRefresh.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butRefresh.Location = new System.Drawing.Point(6,374);
+			this.butRefresh.Name = "butRefresh";
+			this.butRefresh.Size = new System.Drawing.Size(62,22);
+			this.butRefresh.TabIndex = 88;
+			this.butRefresh.Text = "Refresh";
+			this.butRefresh.Click += new System.EventHandler(this.butRefresh_Click);
+			// 
 			// listSearchResults
 			// 
 			this.listSearchResults.IntegralHeight = false;
@@ -533,6 +688,22 @@ namespace OpenDental{
 			this.listProviders.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
 			this.listProviders.Size = new System.Drawing.Size(193,95);
 			this.listProviders.TabIndex = 86;
+			// 
+			// butSearchClose
+			// 
+			this.butSearchClose.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butSearchClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.butSearchClose.Autosize = true;
+			this.butSearchClose.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butSearchClose.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butSearchClose.CornerRadius = 4F;
+			this.butSearchClose.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butSearchClose.Location = new System.Drawing.Point(161,374);
+			this.butSearchClose.Name = "butSearchClose";
+			this.butSearchClose.Size = new System.Drawing.Size(54,22);
+			this.butSearchClose.TabIndex = 85;
+			this.butSearchClose.Text = "Close";
+			this.butSearchClose.Click += new System.EventHandler(this.butSearchClose_Click);
 			// 
 			// groupBox2
 			// 
@@ -671,43 +842,6 @@ namespace OpenDental{
 			this.butSearchCloseX.TabIndex = 0;
 			this.butSearchCloseX.Click += new System.EventHandler(this.butSearchCloseX_Click);
 			// 
-			// timerInfoBubble
-			// 
-			this.timerInfoBubble.Interval = 300;
-			this.timerInfoBubble.Tick += new System.EventHandler(this.timerInfoBubble_Tick);
-			// 
-			// butRefresh
-			// 
-			this.butRefresh.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butRefresh.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.butRefresh.Autosize = true;
-			this.butRefresh.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butRefresh.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butRefresh.CornerRadius = 4F;
-			this.butRefresh.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butRefresh.Location = new System.Drawing.Point(6,374);
-			this.butRefresh.Name = "butRefresh";
-			this.butRefresh.Size = new System.Drawing.Size(62,22);
-			this.butRefresh.TabIndex = 88;
-			this.butRefresh.Text = "Refresh";
-			this.butRefresh.Click += new System.EventHandler(this.butRefresh_Click);
-			// 
-			// butSearchClose
-			// 
-			this.butSearchClose.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butSearchClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butSearchClose.Autosize = true;
-			this.butSearchClose.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butSearchClose.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butSearchClose.CornerRadius = 4F;
-			this.butSearchClose.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butSearchClose.Location = new System.Drawing.Point(161,374);
-			this.butSearchClose.Name = "butSearchClose";
-			this.butSearchClose.Size = new System.Drawing.Size(54,22);
-			this.butSearchClose.TabIndex = 85;
-			this.butSearchClose.Text = "Close";
-			this.butSearchClose.Click += new System.EventHandler(this.butSearchClose_Click);
-			// 
 			// butSearchNext
 			// 
 			this.butSearchNext.AdjustImageLocation = new System.Drawing.Point(0,0);
@@ -723,6 +857,11 @@ namespace OpenDental{
 			this.butSearchNext.TabIndex = 77;
 			this.butSearchNext.Text = "More";
 			this.butSearchNext.Click += new System.EventHandler(this.butSearchMore_Click);
+			// 
+			// timerInfoBubble
+			// 
+			this.timerInfoBubble.Interval = 300;
+			this.timerInfoBubble.Tick += new System.EventHandler(this.timerInfoBubble_Tick);
 			// 
 			// gridEmpSched
 			// 
@@ -760,153 +899,6 @@ namespace OpenDental{
 			this.ToolBarMain.Size = new System.Drawing.Size(203,25);
 			this.ToolBarMain.TabIndex = 73;
 			this.ToolBarMain.ButtonClick += new OpenDental.UI.ODToolBarButtonClickEventHandler(this.ToolBarMain_ButtonClick);
-			// 
-			// butLab
-			// 
-			this.butLab.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butLab.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.butLab.Autosize = true;
-			this.butLab.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butLab.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butLab.CornerRadius = 4F;
-			this.butLab.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butLab.Location = new System.Drawing.Point(2,309);
-			this.butLab.Name = "butLab";
-			this.butLab.Size = new System.Drawing.Size(67,21);
-			this.butLab.TabIndex = 77;
-			this.butLab.Text = "LabCases";
-			this.butLab.Click += new System.EventHandler(this.butLab_Click);
-			// 
-			// butSearch
-			// 
-			this.butSearch.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butSearch.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.butSearch.Autosize = true;
-			this.butSearch.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butSearch.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butSearch.CornerRadius = 4F;
-			this.butSearch.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butSearch.Location = new System.Drawing.Point(28,259);
-			this.butSearch.Name = "butSearch";
-			this.butSearch.Size = new System.Drawing.Size(75,26);
-			this.butSearch.TabIndex = 40;
-			this.butSearch.Text = "Search";
-			this.butSearch.Click += new System.EventHandler(this.butSearch_Click);
-			// 
-			// butClearPin
-			// 
-			this.butClearPin.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butClearPin.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.butClearPin.Autosize = true;
-			this.butClearPin.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butClearPin.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butClearPin.CornerRadius = 4F;
-			this.butClearPin.Image = ((System.Drawing.Image)(resources.GetObject("butClearPin.Image")));
-			this.butClearPin.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butClearPin.Location = new System.Drawing.Point(28,233);
-			this.butClearPin.Name = "butClearPin";
-			this.butClearPin.Size = new System.Drawing.Size(75,26);
-			this.butClearPin.TabIndex = 33;
-			this.butClearPin.Text = "Clear";
-			this.butClearPin.Click += new System.EventHandler(this.butClearPin_Click);
-			// 
-			// butTodayWk
-			// 
-			this.butTodayWk.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butTodayWk.Autosize = false;
-			this.butTodayWk.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butTodayWk.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butTodayWk.CornerRadius = 4F;
-			this.butTodayWk.Font = new System.Drawing.Font("Microsoft Sans Serif",8.25F,System.Drawing.FontStyle.Bold,System.Drawing.GraphicsUnit.Point,((byte)(0)));
-			this.butTodayWk.Location = new System.Drawing.Point(17,22);
-			this.butTodayWk.Name = "butTodayWk";
-			this.butTodayWk.Size = new System.Drawing.Size(65,22);
-			this.butTodayWk.TabIndex = 31;
-			this.butTodayWk.Text = "Week";
-			this.butTodayWk.Click += new System.EventHandler(this.butTodayWk_Click);
-			// 
-			// butToday
-			// 
-			this.butToday.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butToday.Autosize = false;
-			this.butToday.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butToday.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butToday.CornerRadius = 4F;
-			this.butToday.Font = new System.Drawing.Font("Microsoft Sans Serif",8.25F,System.Drawing.FontStyle.Bold,System.Drawing.GraphicsUnit.Point,((byte)(0)));
-			this.butToday.Location = new System.Drawing.Point(17,0);
-			this.butToday.Name = "butToday";
-			this.butToday.Size = new System.Drawing.Size(65,22);
-			this.butToday.TabIndex = 29;
-			this.butToday.Text = "Today";
-			this.butToday.Click += new System.EventHandler(this.butToday_Click);
-			// 
-			// butBack
-			// 
-			this.butBack.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butBack.Autosize = true;
-			this.butBack.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butBack.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butBack.CornerRadius = 4F;
-			this.butBack.Image = ((System.Drawing.Image)(resources.GetObject("butBack.Image")));
-			this.butBack.Location = new System.Drawing.Point(-1,0);
-			this.butBack.Name = "butBack";
-			this.butBack.Size = new System.Drawing.Size(19,22);
-			this.butBack.TabIndex = 51;
-			this.butBack.Click += new System.EventHandler(this.butBack_Click);
-			// 
-			// butFwd
-			// 
-			this.butFwd.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butFwd.Autosize = true;
-			this.butFwd.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butFwd.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butFwd.CornerRadius = 4F;
-			this.butFwd.Image = ((System.Drawing.Image)(resources.GetObject("butFwd.Image")));
-			this.butFwd.Location = new System.Drawing.Point(81,0);
-			this.butFwd.Name = "butFwd";
-			this.butFwd.Size = new System.Drawing.Size(19,22);
-			this.butFwd.TabIndex = 53;
-			this.butFwd.Click += new System.EventHandler(this.butFwd_Click);
-			// 
-			// butBackWk
-			// 
-			this.butBackWk.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butBackWk.Autosize = true;
-			this.butBackWk.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butBackWk.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butBackWk.CornerRadius = 4F;
-			this.butBackWk.Image = ((System.Drawing.Image)(resources.GetObject("butBackWk.Image")));
-			this.butBackWk.Location = new System.Drawing.Point(-1,22);
-			this.butBackWk.Name = "butBackWk";
-			this.butBackWk.Size = new System.Drawing.Size(19,22);
-			this.butBackWk.TabIndex = 51;
-			this.butBackWk.Click += new System.EventHandler(this.butBackWk_Click);
-			// 
-			// butFwdWk
-			// 
-			this.butFwdWk.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butFwdWk.Autosize = true;
-			this.butFwdWk.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butFwdWk.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butFwdWk.CornerRadius = 4F;
-			this.butFwdWk.Image = ((System.Drawing.Image)(resources.GetObject("butFwdWk.Image")));
-			this.butFwdWk.Location = new System.Drawing.Point(81,22);
-			this.butFwdWk.Name = "butFwdWk";
-			this.butFwdWk.Size = new System.Drawing.Size(19,22);
-			this.butFwdWk.TabIndex = 52;
-			this.butFwdWk.Click += new System.EventHandler(this.butFwdWk_Click);
-			// 
-			// ContrApptSheet2
-			// 
-			this.ContrApptSheet2.Location = new System.Drawing.Point(2,-550);
-			this.ContrApptSheet2.Name = "ContrApptSheet2";
-			this.ContrApptSheet2.Size = new System.Drawing.Size(60,1728);
-			this.ContrApptSheet2.TabIndex = 22;
-			this.ContrApptSheet2.DoubleClick += new System.EventHandler(this.ContrApptSheet2_DoubleClick);
-			this.ContrApptSheet2.MouseDown += new System.Windows.Forms.MouseEventHandler(this.ContrApptSheet2_MouseDown);
-			this.ContrApptSheet2.MouseMove += new System.Windows.Forms.MouseEventHandler(this.ContrApptSheet2_MouseMove);
-			this.ContrApptSheet2.MouseLeave += new System.EventHandler(this.ContrApptSheet2_MouseLeave);
-			this.ContrApptSheet2.MouseUp += new System.Windows.Forms.MouseEventHandler(this.ContrApptSheet2_MouseUp);
 			// 
 			// ContrAppt
 			// 
@@ -1255,10 +1247,10 @@ namespace OpenDental{
 		public void LayoutToolBar(){
 			ToolBarMain.Buttons.Clear();
 			ODToolBarButton button;
-			button=new ODToolBarButton("",0,Lan.g(this,"Select Patient"),"Patient");
-			button.Style=ODToolBarButtonStyle.DropDownButton;
-			button.DropDownMenu=menuPatient;
-			ToolBarMain.Buttons.Add(button);
+			//button=new ODToolBarButton("",0,Lan.g(this,"Select Patient"),"Patient");
+			//button.Style=ODToolBarButtonStyle.DropDownButton;
+			//button.DropDownMenu=menuPatient;
+			//ToolBarMain.Buttons.Add(button);
 			ToolBarMain.Buttons.Add(new ODToolBarButton("",2,Lan.g(this,"Appointment Lists"),"Lists"));
 			ToolBarMain.Buttons.Add(new ODToolBarButton("",1,Lan.g(this,"Print Schedule"),"Print"));
 			ArrayList toolButItems=ToolButItems.GetForToolBar(ToolBarsAvail.ApptModule);
@@ -2702,9 +2694,6 @@ namespace OpenDental{
 			if(e.Button.Tag.GetType()==typeof(string)){
 				//standard predefined button
 				switch(e.Button.Tag.ToString()){
-					case "Patient":
-						OnPat_Click();
-						break;
 					case "Lists":
 						OnLists_Click();
 						break;
@@ -2719,7 +2708,7 @@ namespace OpenDental{
 			}
 		}
 
-		private void OnPat_Click() {
+		/*private void OnPat_Click() {
 			FormPatientSelect formPS = new FormPatientSelect();
 			formPS.ShowDialog();
 			if(formPS.DialogResult!=DialogResult.OK){
@@ -2727,7 +2716,7 @@ namespace OpenDental{
 			}
 			RefreshModulePatient(formPS.SelectedPatNum);
 			DisplayOtherDlg(false);
-		}
+		}*/
 
 		private void OnUnschedList_Click() {
 			Cursor=Cursors.WaitCursor;
