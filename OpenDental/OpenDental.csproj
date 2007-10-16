@@ -2768,6 +2768,8 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="SheetFramework\Sheet.cs" />
+    <Compile Include="SheetFramework\SheetFieldsAvailable.cs" />
+    <Compile Include="SheetFramework\SheetsInternal.cs" />
     <Compile Include="SmartCards\Belgium\BelgianIdentityCard.cs" />
     <Compile Include="SmartCards\Belgium\CertifCheck.cs" />
     <Compile Include="SmartCards\Belgium\CRLPolicyOptions.cs" />

@@ -18,7 +18,16 @@ namespace OpenDental{
 		}
 
 		///<summary></summary>
-		public void PrintPat(Patient pat){
+		public void PrintPat(int patNum){
+			Sheet sheet=SheetsInternal.LabelPatientMail;
+			sheet.SetParameter("PatNum",patNum);
+			try{
+				sheet.Print();
+			}
+			catch(Exception ex){
+				MessageBox.Show(ex.Message);
+			}
+			/*
 			Pat=pat.Copy();
 			pd=new PrintDocument();
 			pd.PrintPage+=new PrintPageEventHandler(pd_PrintPagePat);
@@ -33,7 +42,7 @@ namespace OpenDental{
 			}
 			catch{
 				MessageBox.Show(Lan.g("Label","Printer not available"));
-			}
+			}*/
 		}
 
 		public void PrintPatXRay(Patient pat) {
@@ -127,7 +136,7 @@ namespace OpenDental{
 			//e.HasMorePages=false;
 		}
 
-		private void pd_PrintPagePat(object sender, System.Drawing.Printing.PrintPageEventArgs e) {
+		/*private void pd_PrintPagePat(object sender, System.Drawing.Printing.PrintPageEventArgs e) {
 			float xPos=25;
 			float yPos=10;//22;
 			Graphics g=e.Graphics;
@@ -146,7 +155,7 @@ namespace OpenDental{
 			g.DrawString(Pat.City+", "+Pat.State+"  "+Pat.Zip
 				,mainFont,Brushes.Black,xPos,yPos);
 			//e.HasMorePages=false;
-		}
+		}*/
 
 		private void pd_PrintPagePatLF(object sender, System.Drawing.Printing.PrintPageEventArgs e) {
 			float xPos = 25;

@@ -325,7 +325,7 @@ namespace OpenDental{
 
 		private void butLabel_Click(object sender,EventArgs e) {
 			LabelSingle label=new LabelSingle();
-			label.PrintPat(PatCur);
+			label.PrintPat(PatCur.PatNum);
 			DialogResult=DialogResult.Cancel;//because there's no need to refresh ContrAccount
 		}
 
