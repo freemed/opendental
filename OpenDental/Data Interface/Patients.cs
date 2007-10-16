@@ -5,6 +5,8 @@ using System.Diagnostics;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using OpenDentBusiness;
+using OpenDental.DataAccess;
+using System.Collections.ObjectModel;
 
 namespace OpenDental{
 	
@@ -55,81 +57,12 @@ namespace OpenDental{
 		}
 
 		private static Patient[] SubmitAndFill(string command){
- 			DataTable table=General.GetTable(command);
-			Patient[] retVal=new Patient[table.Rows.Count];
-			for(int i=0;i<table.Rows.Count;i++){
-				retVal[i]=new Patient();
-				retVal[i].PatNum       = PIn.PInt   (table.Rows[i][0].ToString());
-				retVal[i].LName        = PIn.PString(table.Rows[i][1].ToString());
-				retVal[i].FName        = PIn.PString(table.Rows[i][2].ToString());
-				retVal[i].MiddleI      = PIn.PString(table.Rows[i][3].ToString());
-				retVal[i].Preferred    = PIn.PString(table.Rows[i][4].ToString());
-				retVal[i].PatStatus    = (PatientStatus)PIn.PInt   (table.Rows[i][5].ToString());
-				retVal[i].Gender       = (PatientGender)PIn.PInt   (table.Rows[i][6].ToString());
-				retVal[i].Position     = (PatientPosition)PIn.PInt   (table.Rows[i][7].ToString());
-				retVal[i].Birthdate    = PIn.PDate  (table.Rows[i][8].ToString());
-				retVal[i].Age=Shared.DateToAge(retVal[i].Birthdate);
-				//Debug.WriteLine("*"+retVal[i].Age+"*");
-				retVal[i].SSN          = PIn.PString(table.Rows[i][9].ToString());
-				retVal[i].Address      = PIn.PString(table.Rows[i][10].ToString());
-				retVal[i].Address2     = PIn.PString(table.Rows[i][11].ToString());
-				retVal[i].City         = PIn.PString(table.Rows[i][12].ToString());
-				retVal[i].State        = PIn.PString(table.Rows[i][13].ToString());
-				retVal[i].Zip          = PIn.PString(table.Rows[i][14].ToString());
-				retVal[i].HmPhone      = PIn.PString(table.Rows[i][15].ToString());
-				retVal[i].WkPhone      = PIn.PString(table.Rows[i][16].ToString());
-				retVal[i].WirelessPhone= PIn.PString(table.Rows[i][17].ToString());
-				retVal[i].Guarantor    = PIn.PInt   (table.Rows[i][18].ToString());
-				retVal[i].CreditType   = PIn.PString(table.Rows[i][19].ToString());
-				retVal[i].Email        = PIn.PString(table.Rows[i][20].ToString());
-				retVal[i].Salutation   = PIn.PString(table.Rows[i][21].ToString());
-				retVal[i].EstBalance   = PIn.PDouble(table.Rows[i][22].ToString());
-				retVal[i].NextAptNum   = PIn.PInt   (table.Rows[i][23].ToString());
-				retVal[i].PriProv      = PIn.PInt   (table.Rows[i][24].ToString());
-				retVal[i].SecProv      = PIn.PInt   (table.Rows[i][25].ToString());
-				retVal[i].FeeSched     = PIn.PInt   (table.Rows[i][26].ToString());
-				retVal[i].BillingType  = PIn.PInt   (table.Rows[i][27].ToString());
-				retVal[i].ImageFolder  = PIn.PString(table.Rows[i][28].ToString());
-				retVal[i].AddrNote     = PIn.PString(table.Rows[i][29].ToString());
-				retVal[i].FamFinUrgNote= PIn.PString(table.Rows[i][30].ToString());
-				retVal[i].MedUrgNote   = PIn.PString(table.Rows[i][31].ToString());
-				retVal[i].ApptModNote  = PIn.PString(table.Rows[i][32].ToString());
-				retVal[i].StudentStatus= PIn.PString(table.Rows[i][33].ToString());
-				retVal[i].SchoolName   = PIn.PString(table.Rows[i][34].ToString());
-				retVal[i].ChartNumber  = PIn.PString(table.Rows[i][35].ToString());
-				retVal[i].MedicaidID   = PIn.PString(table.Rows[i][36].ToString());
-				retVal[i].Bal_0_30     = PIn.PDouble(table.Rows[i][37].ToString());
-				retVal[i].Bal_31_60    = PIn.PDouble(table.Rows[i][38].ToString());
-				retVal[i].Bal_61_90    = PIn.PDouble(table.Rows[i][39].ToString());
-				retVal[i].BalOver90    = PIn.PDouble(table.Rows[i][40].ToString());
-				retVal[i].InsEst       = PIn.PDouble(table.Rows[i][41].ToString());
-				//retVal[i].PrimaryTeeth = PIn.PString(table.Rows[i][42].ToString());
-				retVal[i].BalTotal     = PIn.PDouble(table.Rows[i][43].ToString());
-				retVal[i].EmployerNum  = PIn.PInt   (table.Rows[i][44].ToString());
-				retVal[i].EmploymentNote=PIn.PString(table.Rows[i][45].ToString());
-				retVal[i].Race         = (PatientRace)PIn.PInt(table.Rows[i][46].ToString());
-				retVal[i].County       = PIn.PString(table.Rows[i][47].ToString());
-				retVal[i].GradeSchool  = PIn.PString(table.Rows[i][48].ToString());
-				retVal[i].GradeLevel   = (PatientGrade)PIn.PInt(table.Rows[i][49].ToString());
-				retVal[i].Urgency      = (TreatmentUrgency)PIn.PInt(table.Rows[i][50].ToString());
-				retVal[i].DateFirstVisit=PIn.PDate  (table.Rows[i][51].ToString());
-				retVal[i].ClinicNum    = PIn.PInt   (table.Rows[i][52].ToString());
-				retVal[i].HasIns       = PIn.PString(table.Rows[i][53].ToString());
-				retVal[i].TrophyFolder = PIn.PString(table.Rows[i][54].ToString());
-				retVal[i].PlannedIsDone= PIn.PBool  (table.Rows[i][55].ToString());
-				retVal[i].Premed       = PIn.PBool  (table.Rows[i][56].ToString());
-				retVal[i].Ward         = PIn.PString(table.Rows[i][57].ToString());
-				retVal[i].PreferConfirmMethod=(ContactMethod)PIn.PInt(table.Rows[i][58].ToString());
-				retVal[i].PreferContactMethod=(ContactMethod)PIn.PInt(table.Rows[i][59].ToString());
-				retVal[i].PreferRecallMethod=(ContactMethod)PIn.PInt(table.Rows[i][60].ToString());
-				retVal[i].SchedBeforeTime= PIn.PTimeSpan(table.Rows[i][61].ToString());
-				retVal[i].SchedAfterTime = PIn.PTimeSpan(table.Rows[i][62].ToString());
-				retVal[i].SchedDayOfWeek= PIn.PByte(table.Rows[i][63].ToString());
-				retVal[i].Language     = PIn.PString(table.Rows[i][64].ToString());
-				retVal[i].AdmitDate    = PIn.PDate  (table.Rows[i][65].ToString());
-				retVal[i].Title        = PIn.PString(table.Rows[i][66].ToString());
-				//WARNING.  If you add any rows, you MUST change the number in GetFamily(). Always last num above +2.
+			Collection<Patient> patients = DataObjectFactory<Patient>.CreateObjects(command);
+			foreach (Patient patient in patients) {
+				patient.Age = Shared.DateToAge(patient.Birthdate);
 			}
+			Patient[] retVal = new Patient[patients.Count];
+			patients.CopyTo(retVal, 0);
 			return retVal;
 		}
 
