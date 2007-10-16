@@ -93,6 +93,9 @@ namespace OpenDentBusiness {
 			}
 			try{
 				netStream.Write(data,0,data.Length);
+				// Terminate with a null character
+				netStream.Write(new byte[] { 0 }, 0, 1);
+				netStream.Flush();
 			}
 			catch (Exception e){
 				netStream.Close();

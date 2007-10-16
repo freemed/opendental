@@ -6,6 +6,7 @@ using System.Text;
 using System.Xml;
 using System.Xml.Serialization;
 using OpenDental.DataAccess;
+using System.Diagnostics;
 
 namespace OpenDentBusiness {
 	///<summary>Provides a base class for the hundreds of DTO classes that we will need.  A DTO class is a simple data storage type.  A DTO is the only format accepted by OpenDentBusiness.dll.</summary>
@@ -13,14 +14,17 @@ namespace OpenDentBusiness {
 			
 		public byte[] Serialize(){
 			XmlSerializer serializer = new XmlSerializer(this.GetType());
-			MemoryStream memStream=new MemoryStream();
-			serializer.Serialize(memStream,this);
-			byte[] retVal=memStream.ToArray();
-			memStream.Close();
+			byte[] retVal = null;
+			using(MemoryStream memStream=new MemoryStream()){
+				serializer.Serialize(memStream,this);
+				retVal=memStream.ToArray();
+			}
+			Debug.Assert(retVal[retVal.Length - 1] != '\0', "The serialized data cannot contain NULL characters.");
 			return retVal;
 		}
 
 		public static DataTransferObject Deserialize(byte[] data) {
+			Debug.Assert(data[data.Length - 1] != '\0', "The serialized data cannot contain NULL characters.");
 			MemoryStream memStream=new MemoryStream(data);
 			XmlDocument doc=new XmlDocument();
 			doc.Load(memStream);

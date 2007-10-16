@@ -175,22 +175,27 @@ namespace OpenDentServer {
 				Byte[] buffer = new Byte[1024];// Buffer for reading data
 				MemoryStream memStream=new MemoryStream();
 				int numberOfBytesRead = 0;
+				bool nullCharacterRetrieved = false;
 				try {
 					do {
-						numberOfBytesRead = netStream.Read(buffer,0,buffer.Length);
-						//myCompleteMessage.AppendFormat("{0}",Encoding.UTF8.GetString(buffer,0,numberOfBytesRead));
+						numberOfBytesRead = netStream.Read(buffer, 0, buffer.Length);
+						// Was the last byte sent a null byte?
+						nullCharacterRetrieved = numberOfBytesRead > 0 && buffer[numberOfBytesRead - 1] == 0;
+						// If so, we don't process this byte as a "read" byte.
+						if (nullCharacterRetrieved)
+							numberOfBytesRead--;
 						memStream.Write(buffer,0,numberOfBytesRead);
 					}
-					while(netStream.DataAvailable);
+					while(!nullCharacterRetrieved);
 				}
 				catch {//if connection was closed by client.
 					break;
 				}
-				if(numberOfBytesRead == 0) {
-					// The connection was closed by the client
-					break;
-				}
-				DataTransferObject dto=DataTransferObject.Deserialize(memStream.GetBuffer());//myCompleteMessage.ToString());
+				// The case of having read zero bytes is no longer valid: at least the null byte has to be read
+				// before we exit the loop above.
+				// Time-outs will be handled as exceptions and handled in the catch above.
+				buffer = memStream.ToArray();
+				DataTransferObject dto=DataTransferObject.Deserialize(buffer);//myCompleteMessage.ToString());
 				memStream.Close();
 				//Process and send response to client--------------------------------------------------------------
 				byte[] data;
