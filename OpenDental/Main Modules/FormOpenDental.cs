@@ -20,6 +20,7 @@ redistributed.
 using System;
 using System.Drawing;
 using System.Drawing.Imaging;
+using System.Drawing.Printing;
 using System.Data;
 using System.Diagnostics;
 using System.Collections;
@@ -1636,8 +1637,16 @@ namespace OpenDental{
 
 		private void menuLabel_Click(object sender,System.EventArgs e) {
 			LabelSingle label=new LabelSingle();
+			//if carrier
+
+			PrintDocument pd=new PrintDocument();//only used to pass printerName
+			if(!Printers.SetPrinter(pd,PrintSituation.LabelSingle)) {
+				return;
+			}
 			Carrier carrier=(Carrier)((MenuItem)sender).Tag;
-			label.PrintIns(carrier,"");
+			label.PrintIns(carrier,pd.PrinterSettings.PrinterName);
+
+			//else
 		}
 
 		///<summary>Happens when any of the modules changes the current patient.  The calling module should then refresh itself.  The current patNum is stored here in the parent form so that when switching modules, the parent form knows which patient to call up for that module.</summary>

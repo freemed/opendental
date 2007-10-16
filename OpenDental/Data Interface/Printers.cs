@@ -100,12 +100,12 @@ namespace OpenDental{
 			//string winDefault=pSet.PrinterName;
 			//1. If a default printer is set in OD,
 			//and it is in the list of installed printers, use it.
-			bool prompt=false;
+			bool doPrompt=false;
 			Printer printerForSit=GetForSit(PrintSituation.Default);//warning: this changes
 			string printerName="";
 			if(printerForSit!=null){
 				printerName=printerForSit.PrinterName;
-				prompt=printerForSit.DisplayPrompt;
+				doPrompt=printerForSit.DisplayPrompt;
 				if(PrinterIsInstalled(printerName)){
 					pSet.PrinterName=printerName;
 				}
@@ -117,14 +117,14 @@ namespace OpenDental{
 				printerName="";
 				if(printerForSit!=null){
 					printerName=printerForSit.PrinterName;
-					prompt=printerForSit.DisplayPrompt;
+					doPrompt=printerForSit.DisplayPrompt;
 					if(PrinterIsInstalled(printerName)){
 						pSet.PrinterName=printerName;
 					}
 				}
 			}
 			//4. Present the dialog
-			if(!prompt){
+			if(!doPrompt){
 				return true;
 			}
 			PrintDialog dialog=new PrintDialog();

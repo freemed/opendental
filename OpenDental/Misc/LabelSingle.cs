@@ -35,6 +35,7 @@ namespace OpenDental{
 				MessageBox.Show(Lan.g("Label","Printer not available"));
 			}
 		}
+
 		public void PrintPatXRay(Patient pat) {
 			Pat = pat.Copy();
 			pd = new PrintDocument();
@@ -125,6 +126,7 @@ namespace OpenDental{
 			yPos += smlineH;
 			//e.HasMorePages=false;
 		}
+
 		private void pd_PrintPagePat(object sender, System.Drawing.Printing.PrintPageEventArgs e) {
 			float xPos=25;
 			float yPos=10;//22;
@@ -145,6 +147,7 @@ namespace OpenDental{
 				,mainFont,Brushes.Black,xPos,yPos);
 			//e.HasMorePages=false;
 		}
+
 		private void pd_PrintPagePatLF(object sender, System.Drawing.Printing.PrintPageEventArgs e) {
 			float xPos = 25;
 			float yPos = 10;//22;
@@ -165,6 +168,7 @@ namespace OpenDental{
 				, mainFont, Brushes.Black, xPos, yPos);
 			//e.HasMorePages=false;
 		}
+
 		private void pd_PrintPageIns(object sender, System.Drawing.Printing.PrintPageEventArgs e) {
 			float xPos=25;
 			float yPos=10;

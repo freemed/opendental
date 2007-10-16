@@ -2767,6 +2767,7 @@
     <Compile Include="Reporting\FormReport.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="SheetFramework\Sheet.cs" />
     <Compile Include="SmartCards\Belgium\BelgianIdentityCard.cs" />
     <Compile Include="SmartCards\Belgium\CertifCheck.cs" />
     <Compile Include="SmartCards\Belgium\CRLPolicyOptions.cs" />
