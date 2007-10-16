@@ -5,6 +5,8 @@ using System.Security;
 using System.Data;
 using System.Data.Common;
 using OpenDentBusiness;
+using MySql.Data.MySqlClient;
+using Oracle.DataAccess.Client;
 
 namespace OpenDental.DataAccess {
 	public static class DataSettings {
@@ -71,10 +73,20 @@ namespace OpenDental.DataAccess {
 		}
 
 		public static IDbConnection GetConnection() {
+			switch (DbType) {
+				case DatabaseType.MySql:
+					return new MySqlConnection(ConnectionString);
+				case DatabaseType.Oracle:
+					return new OracleConnection(ConnectionString);
+				default:
+					throw new NotSupportedException();
+			}
+			/*
 			DbProviderFactory factory = DbProviderFactories.GetFactory(ProviderInvariantName);
 			DbConnection connection = factory.CreateConnection();
 			connection.ConnectionString = ConnectionString;
 			return connection;
+			 */
 		}
 	}
 }

@@ -6033,8 +6033,17 @@ namespace OpenDental{
 				//after r963
 				command = "INSERT INTO preference VALUES('BrokenAppointmentAdjustmentType','0')";
 				General.NonQEx(command);
-
-
+				// after r???
+				command = @"ALTER TABLE patient MODIFY PriProv INTEGER NOT NULL";
+				General.NonQEx(command);
+				command = @"ALTER TABLE patient MODIFY SecProv INTEGER NOT NULL";
+				General.NonQEx(command);
+				command = @"ALTER TABLE patient MODIFY FeeSched INTEGER NOT NULL";
+				General.NonQEx(command);
+				command = @"ALTER TABLE patient MODIFY BillingType INTEGER NOT NULL";
+				General.NonQEx(command);
+				command = @"ALTER TABLE patient MODIFY ClinicNum INTEGER NOT NULL";
+				General.NonQEx(command);
 
 
 				command="UPDATE preference SET ValueString = '5.4.0.0' WHERE PrefName = 'DataBaseVersion'";

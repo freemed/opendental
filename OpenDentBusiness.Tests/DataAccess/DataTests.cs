@@ -196,7 +196,7 @@ namespace OpenDentBusiness.Tests {
 
 				if (fieldType == typeof(double)) {
 					object storedValue = field.Field.GetValue(value);
-					Assert.AreEqual((double)Extremum(fieldType, extremumType), (double)storedValue, 1E-10 * (double)storedValue, string.Format("#17 - {0}: Maximum value should store correctly.", FormatFieldName(field)));
+					Assert.AreEqual((double)Extremum(fieldType, extremumType), (double)storedValue, Math.Abs(1E-5 * (double)storedValue), string.Format("#17 - {0}: Maximum value should store correctly.", FormatFieldName(field)));
 				}
 				else if (fieldType.IsValueType && fieldType.IsPrimitive) {
 					object storedValue = field.Field.GetValue(value);
