@@ -13,7 +13,7 @@ namespace OpenDental{
 	-static text
 	-text generated from database
 	-user input
-	Some of these elements would remain part of the sheet definition, while others would be saved as part of the data for the specific print job.  Therefore, such things as background images and static text would not need to be saved repeatedly with each printout.  But for this to function as a reliable archive, whenever a user "changes" a sheet definition or layout, it must result in the creation of a brand new sheet.  In other words, and sheet that has already been used for any printout is forever locked.  Because of this restriction, we will not be altering our internally defined sheets.  The internally defined sheets must instead be numbered, and with each "change", a brand new sheet created.  The same will hold true once the user is allowed to copy and customize our supplied sheets.  The extra sheets, the garbage, must be elegantly hidden from the user so they will not be tempted to try to alter it.
+	Some of these elements would remain part of the sheet definition, while others would be saved as part of the data for the specific print job.  Therefore, such things as background images and static text would not need to be saved repeatedly with each printout.  But for this to function as a reliable archive, whenever a user "changes" a sheet definition or layout, it must result in the creation of a brand new sheet.  In other words, and sheet that has already been used for any printout is forever locked.  Because of this restriction, we will not be altering our internally defined sheets.  The internally defined sheets must instead be numbered, and with each "change", a brand new sheet created.  The same will hold true once the user is allowed to copy and customize our supplied sheets.  The extra sheets, the garbage, must be elegantly hidden from the user so they will not be tempted to try to alter it. But until we start saving data, it's OK to alter existing sheets.
 	Possible future class names:
 	Internal: Sheet, SheetField(input or output. this is what gets saved as data), SheetObject(static text, lines, images, boxes, etc.)
 	Custom: SheetDef, SheetFieldDef, SheetObjectDef
@@ -24,7 +24,7 @@ namespace OpenDental{
 	b) It did not start with a simpler framework and build iteratively.
 	c) It was modeled after Crystal Reports, which was only designed for reports, not forms.
 	*/
-	///<summary>See comments in the code file above.  Nobody is EVER allowed to alter an internal sheet which has already been released into production.  Instead, more sheets are added.</summary>
+	///<summary>See comments in the code file above.</summary>
 	class Sheet {
 		///<Summary>Every single sheet must have a type, and only the types listed in the enum will be supported as part of the Sheet framework.</Summary>
 		public EnumSheetType SheetType;
