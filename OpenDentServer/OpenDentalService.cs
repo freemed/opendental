@@ -153,77 +153,58 @@ namespace OpenDentServer {
 
 		public void DoWork() {
 			while(true) {//Each loop gets and returns one message pair.
-				Byte[] buffer = new Byte[1024];// Buffer for reading data
-				MemoryStream memStream=new MemoryStream();
-				int numberOfBytesRead = 0;
-				bool nullCharacterRetrieved = false;
+				byte[] data =  null;
+				// Retrieve data from client
 				try {
-					do {
-						numberOfBytesRead = netStream.Read(buffer, 0, buffer.Length);
-						// Was the last byte sent a null byte?
-						nullCharacterRetrieved = numberOfBytesRead > 0 && buffer[numberOfBytesRead - 1] == 0;
-						// If so, we don't process this byte as a "read" byte.
-						if (nullCharacterRetrieved)
-							numberOfBytesRead--;
-						memStream.Write(buffer,0,numberOfBytesRead);
-					}
-					while(!nullCharacterRetrieved);
+					data = RemotingClient.ReadDataFromStream(netStream);
 				}
 				catch {//if connection was closed by client.
 					break;
 				}
-				// The case of having read zero bytes is no longer valid: at least the null byte has to be read
-				// before we exit the loop above.
-				// Time-outs will be handled as exceptions and handled in the catch above.
-				buffer = memStream.ToArray();
-				DataTransferObject dto=DataTransferObject.Deserialize(buffer);//myCompleteMessage.ToString());
-				memStream.Close();
+				DataTransferObject dto=DataTransferObject.Deserialize(data);
 				//Process and send response to client--------------------------------------------------------------
-				byte[] data;
 				XmlSerializer serializer;
-				memStream=new MemoryStream();
-				try {
-					Type type = dto.GetType();
-					if(type==typeof(DtoGetDS)){
-						DataSet ds=GeneralB.GetDS(((DtoGetDS)dto).MethodName,((DtoGetDS)dto).Parameters);
-						serializer=new XmlSerializer(typeof(DataSet));
-						serializer.Serialize(memStream,ds);
-					}
-					else if(type.BaseType==typeof(DtoCommandBase)) {
-						int result=BusinessLayer.ProcessCommand((DtoCommandBase)dto);
-						DtoServerAck ack=new DtoServerAck();
-						ack.IDorRows=result;
-						serializer=new XmlSerializer(typeof(DtoServerAck));
-						serializer.Serialize(memStream,ack);
-					}
-					else if(type.BaseType==typeof(DtoQueryBase)) {
-						DataSet ds=BusinessLayer.ProcessQuery((DtoQueryBase)dto);
-						serializer=new XmlSerializer(typeof(DataSet));
-						serializer.Serialize(memStream,ds);
-					}
-					else if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(FactoryTransferObject<>)) {
-						// Pass the DTO to the FactoryServer<T>
-						Type factoryServerType = typeof(FactoryServer<>);
-						factoryServerType = factoryServerType.MakeGenericType(type.GetGenericArguments());
+				using (MemoryStream memStream = new MemoryStream()) {
+					try {
+						Type type = dto.GetType();
+						if (type == typeof(DtoGetDS)) {
+							DataSet ds = GeneralB.GetDS(((DtoGetDS)dto).MethodName, ((DtoGetDS)dto).Parameters);
+							serializer = new XmlSerializer(typeof(DataSet));
+							serializer.Serialize(memStream, ds);
+						}
+						else if (type.BaseType == typeof(DtoCommandBase)) {
+							int result = BusinessLayer.ProcessCommand((DtoCommandBase)dto);
+							DtoServerAck ack = new DtoServerAck();
+							ack.IDorRows = result;
+							serializer = new XmlSerializer(typeof(DtoServerAck));
+							serializer.Serialize(memStream, ack);
+						}
+						else if (type.BaseType == typeof(DtoQueryBase)) {
+							DataSet ds = BusinessLayer.ProcessQuery((DtoQueryBase)dto);
+							serializer = new XmlSerializer(typeof(DataSet));
+							serializer.Serialize(memStream, ds);
+						}
+						else if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(FactoryTransferObject<>)) {
+							// Pass the DTO to the FactoryServer<T>
+							Type factoryServerType = typeof(FactoryServer<>);
+							factoryServerType = factoryServerType.MakeGenericType(type.GetGenericArguments());
 
-						MethodInfo processCommandMethod = factoryServerType.GetMethod("ProcessCommand", BindingFlags.Public | BindingFlags.Static);
-						processCommandMethod.Invoke(null, new object[] { memStream, dto });
+							MethodInfo processCommandMethod = factoryServerType.GetMethod("ProcessCommand", BindingFlags.Public | BindingFlags.Static);
+							processCommandMethod.Invoke(null, new object[] { memStream, dto });
+						}
+						else {
+							throw new NotSupportedException(string.Format(Resources.DtoNotSupportedException, type.FullName));
+						}
 					}
-					else {
-						throw new NotSupportedException(string.Format(Resources.DtoNotSupportedException, type.FullName));
+					catch (Exception e) {
+						DtoException exception = new DtoException();
+						exception.Message = e.Message;
+						serializer = new XmlSerializer(typeof(DtoException));
+						serializer.Serialize(memStream, exception);
 					}
+					data = memStream.ToArray();
+					RemotingClient.WriteDataToStream(netStream, data);
 				}
-				catch(Exception e) {
-					DtoException exception=new DtoException();
-					exception.Message=e.Message;
-					serializer=new XmlSerializer(typeof(DtoException));
-					serializer.Serialize(memStream,exception);
-				}
-				data=Encoding.UTF8.GetBytes("<EOF>");
-				memStream.Write(data,0,data.Length);
-				data=memStream.ToArray();
-				memStream.Close();
-				netStream.Write(data,0,data.Length);
 			}//wait for the next message
 			//connection was lost.  Client probably closed program
 			netStream.Close();

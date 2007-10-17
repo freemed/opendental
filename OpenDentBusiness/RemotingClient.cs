@@ -16,6 +16,7 @@ namespace OpenDentBusiness {
 		private static NetworkStream netStream;
 		public static string ServerName;
 		public static int ServerPort;
+		private const int BufferSize = 1024;
 
 		public static DataSet ProcessQuery(DtoQueryBase dto){
 			byte[] buffer=SendAndReceive(dto);//this might throw an exception if server unavailable
@@ -78,10 +79,6 @@ namespace OpenDentBusiness {
 
 		internal static byte[] SendAndReceive(DataTransferObject dto){
 			byte[] data=dto.Serialize();
-			//#if DEBUG
-			//	string xmlString=Encoding.UTF8.GetString(data);
-			//	Debug.WriteLine("Client Sent: "+xmlString);
-			//#endif
 			if(client==null){
 				try{
 					client = new TcpClient(ServerName,ServerPort);
@@ -92,10 +89,7 @@ namespace OpenDentBusiness {
 				}
 			}
 			try{
-				netStream.Write(data,0,data.Length);
-				// Terminate with a null character
-				netStream.Write(new byte[] { 0 }, 0, 1);
-				netStream.Flush();
+				WriteDataToStream(netStream, data);
 			}
 			catch (Exception e){
 				netStream.Close();
@@ -104,32 +98,8 @@ namespace OpenDentBusiness {
 				throw e;
 			}
 			//Receive the TcpServer.response-------------------------------------
-			Byte[] buffer = new Byte[16384];//a power of 2 that will easily cover average size result sets.
-			//MemoryStream memStream=new MemoryStream();
-			int numberOfBytesRead = 0;
-			StringBuilder strBuild = new StringBuilder();
-			//int readValue;
-			Decoder decoder = Encoding.UTF8.GetDecoder();
-			char[] chars;
-			do{
-				//this next line blocks until the response comes back
-				numberOfBytesRead=netStream.Read(buffer,0,buffer.Length);
-				//readValue=netStream.ReadByte();
-				// Use Decoder class to convert from bytes to UTF8
-				// in case a character spans two buffers.
-				chars = new char[decoder.GetCharCount(buffer,0,numberOfBytesRead)];
-				decoder.GetChars(buffer,0,numberOfBytesRead,chars,0);
-				strBuild.Append(chars);
-				// Check for EOF or an empty message.
-				if(strBuild.ToString().IndexOf("<EOF>") != -1) {
-					break;
-				}
-			}
-			while(numberOfBytesRead!=0);//netStream.DataAvailable);
-			strBuild.Replace("<EOF>","");
-			//memStream must be decoupled by converting to byte[] and then back to memStream.
-			buffer=Encoding.UTF8.GetBytes(strBuild.ToString());//memStream.ToArray();
-			return buffer;		
+			data = ReadDataFromStream(netStream);
+			return data;
 		}
 
 		public static void Disconnect() {
@@ -141,6 +111,41 @@ namespace OpenDentBusiness {
 				client.Close();
 				client = null;
 			}
+		}
+
+		public static byte[] ReadDataFromStream(Stream stream) {
+			byte[] value = null;
+
+			using (MemoryStream memoryStream = new MemoryStream()) {
+				byte[] buffer = new byte[BufferSize];
+				// The number of bytes read from the stream to the buffer
+				int bytesRead = 0;	
+				// A boolean indicating if the message has ending (i.e. no more data available; indicated by
+				// a '\0' charater at the end of the data
+				bool messageEnded = false;
+
+				while (!messageEnded) {
+					bytesRead = stream.Read(buffer, 0, BufferSize);
+					
+					// Check for a '\0' character at the end of the data
+					messageEnded = bytesRead > 0 && buffer[bytesRead - 1] == '\0';
+					// The terminating character doesn't really count as data.
+					if (messageEnded)
+						bytesRead--;
+
+					memoryStream.Write(buffer, 0, bytesRead);
+				}
+
+				value = memoryStream.ToArray();
+			}
+
+			return value;
+		}
+
+		public static void WriteDataToStream(Stream stream, byte[] data) {
+			stream.Write(data, 0, data.Length);
+			stream.WriteByte((byte)'\0');
+			stream.Flush();
 		}
 	}
 }
