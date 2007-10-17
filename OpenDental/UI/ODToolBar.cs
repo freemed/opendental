@@ -273,6 +273,9 @@ namespace OpenDental.UI{
 						width=imageList.ImageSize.Width+(int)g.MeasureString(button.Text,Font).Width+12;
 				}
 				if(button.Style==ODToolBarButtonStyle.DropDownButton){
+					if(button.Text==""){
+						width-=10;//this way the main button part can be zero width if we just want the dropdown and nothing else.
+					}
 					width+=15;
 				}
 				button.Bounds=new Rectangle(new Point(xPos,0),new Size(width,height));

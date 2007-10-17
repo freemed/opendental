@@ -185,6 +185,7 @@ namespace OpenDental{
 		private ImageList imageListMain;
 		private ContextMenu menuPatient;
 		private ContextMenu menuLabel;
+		private ContextMenu menuEmail;
 		private Point OriginalMousePos;
 
 		///<summary></summary>
@@ -330,6 +331,7 @@ namespace OpenDental{
 			this.myOutlookBar = new OpenDental.OutlookBar();
 			this.smartCardWatcher1 = new OpenDental.SmartCards.SmartCardWatcher();
 			this.menuLabel = new System.Windows.Forms.ContextMenu();
+			this.menuEmail = new System.Windows.Forms.ContextMenu();
 			this.SuspendLayout();
 			// 
 			// timerTimeIndic
@@ -1112,6 +1114,10 @@ namespace OpenDental{
 			// 
 			this.menuLabel.Popup += new System.EventHandler(this.menuLabel_Popup);
 			// 
+			// menuEmail
+			// 
+			this.menuEmail.Popup += new System.EventHandler(this.menuEmail_Popup);
+			// 
 			// FormOpenDental
 			// 
 			this.ClientSize = new System.Drawing.Size(982,600);
@@ -1555,7 +1561,12 @@ namespace OpenDental{
 			button.DropDownMenu=menuPatient;
 			ToolBarMain.Buttons.Add(button);
 			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Commlog"),1,Lan.g(this,"New Commlog Entry"),"Commlog"));
-			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"E-mail"),2,Lan.g(this,"Send E-mail"),"Email"));
+			button=new ODToolBarButton(Lan.g(this,"E-mail"),2,Lan.g(this,"Send E-mail"),"Email");
+			ToolBarMain.Buttons.Add(button);
+			button=new ODToolBarButton("",-1,"","EmailDropdown");
+			button.Style=ODToolBarButtonStyle.DropDownButton;
+			button.DropDownMenu=menuEmail;
+			ToolBarMain.Buttons.Add(button);
 			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"To Task List"),3,Lan.g(this,"Send to Task List"),"Tasklist"));
 			button=new ODToolBarButton(Lan.g(this,"Label"),4,Lan.g(this,"Print Label"),"Label");
 			button.Style=ODToolBarButtonStyle.DropDownButton;
@@ -1630,8 +1641,9 @@ namespace OpenDental{
 			if(ToolBarMain.Buttons==null || ToolBarMain.Buttons.Count<2){
 				return;
 			}
-			if(CurPatNum==0){//I don't think this can happen, but you never know.
+			if(CurPatNum==0){//Only on startup, I think.
 				ToolBarMain.Buttons["Email"].Enabled=false;
+				ToolBarMain.Buttons["EmailDropdown"].Enabled=false;
 				ToolBarMain.Buttons["Commlog"].Enabled=false;
 				ToolBarMain.Buttons["Tasklist"].Enabled=false;
 				ToolBarMain.Buttons["Label"].Enabled=false;
@@ -1643,6 +1655,7 @@ namespace OpenDental{
 				else{
 					ToolBarMain.Buttons["Email"].Enabled=false;
 				}
+				ToolBarMain.Buttons["EmailDropdown"].Enabled=true;
 				ToolBarMain.Buttons["Commlog"].Enabled=true;
 				ToolBarMain.Buttons["Tasklist"].Enabled=true;
 				ToolBarMain.Buttons["Label"].Enabled=true;
@@ -1682,6 +1695,57 @@ namespace OpenDental{
 			}
 		}
 
+		private void menuEmail_Popup(object sender,EventArgs e) {
+			menuEmail.MenuItems.Clear();
+			MenuItem menuItem;
+			RefAttach[] refAttaches=RefAttaches.Refresh(CurPatNum);
+			Referral refer;
+			string str;
+			for(int i=0;i<refAttaches.Length;i++) {
+				refer=Referrals.GetReferral(refAttaches[i].ReferralNum);
+				if(refAttaches[i].IsFrom) {
+					str=Lan.g(this,"From ");
+				}
+				else {
+					str=Lan.g(this,"To ");
+				}
+				str+=Referrals.GetNameFL(refer.ReferralNum)+" <";
+				if(refer.EMail==""){
+					str+=Lan.g(this,"no email");
+				}
+				else{
+					str+=refer.EMail;
+				}
+				str+=">";
+				menuItem=new MenuItem(str,menuEmail_Click);
+				menuItem.Tag=refer;
+				menuEmail.MenuItems.Add(menuItem);
+			}
+		}
+
+		private void menuEmail_Click(object sender,System.EventArgs e) {
+			LabelSingle label=new LabelSingle();
+			if(((MenuItem)sender).Tag.GetType()==typeof(Referral)) {
+				Referral refer=(Referral)((MenuItem)sender).Tag;
+				if(refer.EMail==""){
+					return;
+					//MsgBox.Show(this,"");
+				}
+				EmailMessage message=new EmailMessage();
+				message.PatNum=CurPatNum;
+				Patient pat=Patients.GetPat(CurPatNum);
+				message.ToAddress=refer.EMail;//pat.Email;
+				message.FromAddress=PrefB.GetString("EmailSenderAddress");
+				message.Subject=Lan.g(this,"RE: ")+pat.GetNameFL();
+				FormEmailMessageEdit FormE=new FormEmailMessageEdit(message);
+				FormE.IsNew=true;
+				FormE.ShowDialog();
+				if(FormE.DialogResult==DialogResult.OK) {
+					RefreshCurrentModule();
+				}
+			}
+		}
+
 		private void OnTasklist_Click(){
 			FormTaskListSelect FormT=new FormTaskListSelect(TaskObjectType.Patient,CurPatNum);
 			FormT.Location=new Point(50,50);
@@ -1710,7 +1774,7 @@ namespace OpenDental{
 			menuItem.Tag="PatRadiograph";
 			menuLabel.MenuItems.Add(menuItem);
 			menuLabel.MenuItems.Add("-");
-			//---------------------------------------------------------------------------------------
+			//Carriers---------------------------------------------------------------------------------------
 			Family fam=Patients.GetFamily(CurPatNum);
 			PatPlan[] PatPlanList=PatPlans.Refresh(CurPatNum);
 			InsPlan[] PlanList=InsPlans.Refresh(fam);
@@ -1724,7 +1788,7 @@ namespace OpenDental{
 				menuLabel.MenuItems.Add(menuItem);
 			}
 			menuLabel.MenuItems.Add("-");
-			//---------------------------------------------------------------------------------------
+			//Referrals---------------------------------------------------------------------------------------
 			RefAttach[] refAttaches=RefAttaches.Refresh(CurPatNum);
 			Referral refer;
 			string str;
@@ -3127,6 +3191,8 @@ namespace OpenDental{
 				}
 			}
 		}
+
+		
 
 		
 
