@@ -136,10 +136,6 @@ namespace OpenDentServer {
 						server.Stop();
 						Console.WriteLine("Server stopped");
 					}
-
-					//Console.WriteLine("\nHit enter to exit...");
-					//Console.Read();
-					//goto StartingPoint;
 				}
 				while(true);
 			}
@@ -148,10 +144,6 @@ namespace OpenDentServer {
 				// thread must terminate.  Typically, this occurs when
 				// the main service thread receives a service stop 
 				// command.
-
-				// Write a trace line indicating that the worker thread
-				// is exiting.  Notice that this simple thread does
-				// not have any local objects or data to clean up.
 			}
 		}
 	}
@@ -235,10 +227,6 @@ namespace OpenDentServer {
 				data=Encoding.UTF8.GetBytes("<EOF>");
 				memStream.Write(data,0,data.Length);
 				data=memStream.ToArray();
-				//#if DEBUG
-				//	string dataString=Encoding.UTF8.GetString(data);
-				//	Debug.WriteLine("Server Sent: "+dataString);
-				//#endif
 				memStream.Close();
 				netStream.Write(data,0,data.Length);
 			}//wait for the next message
