@@ -23,6 +23,12 @@ namespace OpenDental{
 			if(sheetType==SheetTypeEnum.LabelPatient) {
 				list.Add(new SheetParameter(true,"PatNum"));
 			}
+			if(sheetType==SheetTypeEnum.LabelCarrier) {
+				list.Add(new SheetParameter(true,"CarrierNum"));
+			}
+			if(sheetType==SheetTypeEnum.LabelReferral) {
+				list.Add(new SheetParameter(true,"ReferralNum"));
+			}
 			return list;
 		}
 

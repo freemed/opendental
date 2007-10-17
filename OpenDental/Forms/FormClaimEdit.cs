@@ -3182,7 +3182,7 @@ namespace OpenDental{
 			//ask if print secondary?
 			InsPlan planCur=InsPlans.GetPlan(ClaimCur.PlanNum,PlanList);
 			Carrier carrierCur=Carriers.GetCarrier(planCur.CarrierNum);
-			label.PrintIns(carrierCur,pd.PrinterSettings.PrinterName);
+			label.PrintCarrier(carrierCur.CarrierNum);//pd.PrinterSettings.PrinterName);
 		}
 
 		private void butPreview_Click(object sender, System.EventArgs e) {

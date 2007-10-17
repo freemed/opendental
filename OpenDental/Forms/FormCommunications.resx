@@ -127,18 +127,6 @@ when the document opens. This will be saved in patient's images.
 Setup what document to use for this process in Setup--&gt;Misc.</value>
   </data>
   <assembly alias="System.Drawing" name="System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
-  <data name="butLabelRef.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
-    <value>
-        R0lGODlhFgAWAPEAAExMTPfyr////wAAACH5BAEAAAEALAAAAAAWABYAAAI4jI+py+0Po5wS2IszSED4
-        D4bCdnTXeIqk0YmutwbmjKlI+9olavE+fMu5YjKN0UJJKpfMpvNpKAAAOw==
-</value>
-  </data>
-  <data name="butLabel.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
-    <value>
-        R0lGODlhFgAWAPEAAExMTPfyr////wAAACH5BAEAAAEALAAAAAAWABYAAAI4jI+py+0Po5wS2IszSED4
-        D4bCdnTXeIqk0YmutwbmjKlI+9olavE+fMu5YjKN0UJJKpfMpvNpKAAAOw==
-</value>
-  </data>
   <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         AAABAAMAEBAQAAAAAAAoAQAANgAAACAgEAAAAAAA6AIAAF4BAAAQEAAAAAAAAGgFAABGBAAAKAAAABAA

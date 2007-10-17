@@ -15,13 +15,11 @@ namespace OpenDental{
 	/// </summary>
 	public class FormCommunications:System.Windows.Forms.Form {
 		private OpenDental.UI.Button butQuest;
-		private OpenDental.UI.Button butLabel;
 		private GroupBox groupBox1;
 		private OpenDental.UI.Button butLetterMerge;
 		private OpenDental.UI.Button butLetterSimple;
 		private OpenDental.UI.Button butEmail;
 		private GroupBox groupBox2;
-		private OpenDental.UI.Button butLabelRef;
 		private OpenDental.UI.Button butEmailRef;
 		private OpenDental.UI.Button butLetterSimpleRef;
 		private IContainer components;
@@ -73,12 +71,10 @@ namespace OpenDental{
 			this.butLetterSimple = new OpenDental.UI.Button();
 			this.groupBox2 = new System.Windows.Forms.GroupBox();
 			this.textReferral = new System.Windows.Forms.TextBox();
-			this.butLabelRef = new OpenDental.UI.Button();
 			this.butEmailRef = new OpenDental.UI.Button();
 			this.butLetterSimpleRef = new OpenDental.UI.Button();
 			this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
 			this.butQuest = new OpenDental.UI.Button();
-			this.butLabel = new OpenDental.UI.Button();
 			this.butEmail = new OpenDental.UI.Button();
 			this.groupBox1.SuspendLayout();
 			this.groupBox2.SuspendLayout();
@@ -142,7 +138,6 @@ namespace OpenDental{
 			// groupBox2
 			// 
 			this.groupBox2.Controls.Add(this.textReferral);
-			this.groupBox2.Controls.Add(this.butLabelRef);
 			this.groupBox2.Controls.Add(this.butEmailRef);
 			this.groupBox2.Controls.Add(this.butLetterSimpleRef);
 			this.groupBox2.Location = new System.Drawing.Point(134,25);
@@ -159,22 +154,6 @@ namespace OpenDental{
 			this.textReferral.ReadOnly = true;
 			this.textReferral.Size = new System.Drawing.Size(174,20);
 			this.textReferral.TabIndex = 92;
-			// 
-			// butLabelRef
-			// 
-			this.butLabelRef.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butLabelRef.Autosize = true;
-			this.butLabelRef.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butLabelRef.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butLabelRef.CornerRadius = 4F;
-			this.butLabelRef.Image = ((System.Drawing.Image)(resources.GetObject("butLabelRef.Image")));
-			this.butLabelRef.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butLabelRef.Location = new System.Drawing.Point(6,124);
-			this.butLabelRef.Name = "butLabelRef";
-			this.butLabelRef.Size = new System.Drawing.Size(90,25);
-			this.butLabelRef.TabIndex = 91;
-			this.butLabelRef.Text = "Label";
-			this.butLabelRef.Click += new System.EventHandler(this.butLabelRef_Click);
 			// 
 			// butEmailRef
 			// 
@@ -218,22 +197,6 @@ namespace OpenDental{
 			this.butQuest.Text = "Questionnaire";
 			this.butQuest.Click += new System.EventHandler(this.butQuest_Click);
 			// 
-			// butLabel
-			// 
-			this.butLabel.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butLabel.Autosize = true;
-			this.butLabel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butLabel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butLabel.CornerRadius = 4F;
-			this.butLabel.Image = ((System.Drawing.Image)(resources.GetObject("butLabel.Image")));
-			this.butLabel.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butLabel.Location = new System.Drawing.Point(20,141);
-			this.butLabel.Name = "butLabel";
-			this.butLabel.Size = new System.Drawing.Size(90,25);
-			this.butLabel.TabIndex = 89;
-			this.butLabel.Text = "Label";
-			this.butLabel.Click += new System.EventHandler(this.butLabel_Click);
-			// 
 			// butEmail
 			// 
 			this.butEmail.AdjustImageLocation = new System.Drawing.Point(0,0);
@@ -254,7 +217,6 @@ namespace OpenDental{
 			this.ClientSize = new System.Drawing.Size(332,267);
 			this.Controls.Add(this.groupBox2);
 			this.Controls.Add(this.butQuest);
-			this.Controls.Add(this.butLabel);
 			this.Controls.Add(this.groupBox1);
 			this.Controls.Add(this.butEmail);
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -277,7 +239,7 @@ namespace OpenDental{
 			ReferralCur=Referrals.GetReferralForPat(PatCur.PatNum);
 			if(ReferralCur==null){
 				butLetterSimpleRef.Enabled=false;
-				butLabelRef.Enabled=false;
+				//butLabelRef.Enabled=false;
 				butEmailRef.Enabled=false;
 			}
 			else{
@@ -290,22 +252,6 @@ namespace OpenDental{
 				butEmail.Enabled=false;
 			}
 		}
-
-		/*private void butComm_Click(object sender,EventArgs e) {
-			Commlog CommlogCur=new Commlog();
-			CommlogCur.PatNum=PatCur.PatNum;
-			CommlogCur.CommDateTime=DateTime.Now;
-			if(ViewingInRecall)
-				CommlogCur.CommType=CommItemType.Recall;
-			else
-				CommlogCur.CommType=CommItemType.Financial;
-			FormCommItem FormCI=new FormCommItem(CommlogCur);
-			FormCI.IsNew=true;
-			FormCI.ShowDialog();
-			if(FormCI.DialogResult==DialogResult.OK){
-				DialogResult=DialogResult.OK;
-			}
-		}*/
 
 		private void butLetterSimple_Click(object sender,EventArgs e) {
 			FormLetters FormL=new FormLetters(PatCur);
@@ -321,12 +267,6 @@ namespace OpenDental{
 			if(FormL.DialogResult==DialogResult.OK) {
 				DialogResult=DialogResult.OK;
 			}
-		}
-
-		private void butLabel_Click(object sender,EventArgs e) {
-			LabelSingle label=new LabelSingle();
-			label.PrintPat(PatCur.PatNum);
-			DialogResult=DialogResult.Cancel;//because there's no need to refresh ContrAccount
 		}
 
 		private void butEmail_Click(object sender,EventArgs e) {
@@ -362,12 +302,6 @@ namespace OpenDental{
 			if(FormL.DialogResult==DialogResult.OK) {
 				DialogResult=DialogResult.OK;
 			}
-		}
-
-		private void butLabelRef_Click(object sender,EventArgs e) {
-			LabelSingle label=new LabelSingle();
-			label.PrintReferral(ReferralCur);
-			DialogResult=DialogResult.Cancel;//because there's no need to refresh ContrAccount
 		}
 
 		private void butEmailRef_Click(object sender,EventArgs e) {

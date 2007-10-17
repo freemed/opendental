@@ -529,22 +529,24 @@ namespace OpenDental{
 				MessageBox.Show(Lan.g(this,"Please select a claim first."));
 				return;
 			}
-			PrintDocument pd=new PrintDocument();//only used to pass printerName
-			if(!Printers.SetPrinter(pd,PrintSituation.LabelSingle)){
-				return;
-			}
+			//PrintDocument pd=new PrintDocument();//only used to pass printerName
+			//if(!Printers.SetPrinter(pd,PrintSituation.LabelSingle)){
+			//	return;
+			//}
 			Carrier carrier;
 			Claim claim;
 			InsPlan plan;
+			List<int> carrierNums=new List<int>();
 			for(int i=0;i<gridMain.SelectedIndices.Length;i++){
 				claim=Claims.GetClaim(listQueue[gridMain.SelectedIndices[i]].ClaimNum);
 				plan=InsPlans.GetPlan(claim.PlanNum,new InsPlan[] {});
-				carrier=Carriers.GetCarrier(plan.CarrierNum);
-				LabelSingle label=new LabelSingle();
-				if(!label.PrintIns(carrier,pd.PrinterSettings.PrinterName)){
-					return;
-				}
+				carrierNums.Add(plan.CarrierNum);
 			}
+			//carrier=Carriers.GetCarrier(plan.CarrierNum);
+			LabelSingle label=new LabelSingle();
+			label.PrintCarriers(carrierNums);//,pd.PrinterSettings.PrinterName)){
+			//	return;
+			//}
 		}
 
 		private void OnEclaims_Click(){

@@ -141,8 +141,6 @@ namespace OpenDental {
 		private Label label2;
 		///<summary>This will eventually hold all data needed for display.  It will be retrieved in one call to the database.</summary>
 		private DataSet DataSetMain;
-		private GroupBox groupBoxChartLabels;
-		private OpenDental.UI.Button buttonLabelxray;
 		private OpenDental.UI.Button butTrojan;
 		private TextBox textCC;
 		private Panel panelCC;
@@ -213,8 +211,6 @@ namespace OpenDental {
 			this.panelSplitter = new System.Windows.Forms.Panel();
 			this.panelCommButs = new System.Windows.Forms.Panel();
 			this.butTrojan = new OpenDental.UI.Button();
-			this.groupBoxChartLabels = new System.Windows.Forms.GroupBox();
-			this.buttonLabelxray = new OpenDental.UI.Button();
 			this.butComm = new OpenDental.UI.Button();
 			this.contextMenuStatement = new System.Windows.Forms.ContextMenu();
 			this.menuItemStatementWalkout = new System.Windows.Forms.MenuItem();
@@ -307,7 +303,6 @@ namespace OpenDental {
 			this.ToolBarMain = new OpenDental.UI.ODToolBar();
 			this.textUrgFinNote = new OpenDental.ODtextBox();
 			this.panelCommButs.SuspendLayout();
-			this.groupBoxChartLabels.SuspendLayout();
 			this.panelProgNotes.SuspendLayout();
 			this.groupBox7.SuspendLayout();
 			this.groupBox6.SuspendLayout();
@@ -406,7 +401,6 @@ namespace OpenDental {
 			// panelCommButs
 			// 
 			this.panelCommButs.Controls.Add(this.butTrojan);
-			this.panelCommButs.Controls.Add(this.groupBoxChartLabels);
 			this.panelCommButs.Controls.Add(this.butComm);
 			this.panelCommButs.Location = new System.Drawing.Point(769,429);
 			this.panelCommButs.Name = "panelCommButs";
@@ -426,32 +420,6 @@ namespace OpenDental {
 			this.butTrojan.TabIndex = 93;
 			this.butTrojan.Text = "Send Transaction to Trojan";
 			this.butTrojan.Click += new System.EventHandler(this.butTrojan_Click);
-			// 
-			// groupBoxChartLabels
-			// 
-			this.groupBoxChartLabels.Controls.Add(this.buttonLabelxray);
-			this.groupBoxChartLabels.Location = new System.Drawing.Point(1,60);
-			this.groupBoxChartLabels.Name = "groupBoxChartLabels";
-			this.groupBoxChartLabels.Size = new System.Drawing.Size(161,52);
-			this.groupBoxChartLabels.TabIndex = 85;
-			this.groupBoxChartLabels.TabStop = false;
-			this.groupBoxChartLabels.Text = "Chart Labels";
-			// 
-			// buttonLabelxray
-			// 
-			this.buttonLabelxray.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.buttonLabelxray.Autosize = true;
-			this.buttonLabelxray.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.buttonLabelxray.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.buttonLabelxray.CornerRadius = 4F;
-			this.buttonLabelxray.Image = ((System.Drawing.Image)(resources.GetObject("buttonLabelxray.Image")));
-			this.buttonLabelxray.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.buttonLabelxray.Location = new System.Drawing.Point(86,19);
-			this.buttonLabelxray.Name = "buttonLabelxray";
-			this.buttonLabelxray.Size = new System.Drawing.Size(72,25);
-			this.buttonLabelxray.TabIndex = 87;
-			this.buttonLabelxray.Text = "X-Ray";
-			this.buttonLabelxray.Click += new System.EventHandler(this.buttonLabelxray_Click);
 			// 
 			// butComm
 			// 
@@ -1469,7 +1437,6 @@ namespace OpenDental {
 			this.Load += new System.EventHandler(this.ContrAccount_Load);
 			this.Resize += new System.EventHandler(this.ContrAccount_Resize);
 			this.panelCommButs.ResumeLayout(false);
-			this.groupBoxChartLabels.ResumeLayout(false);
 			this.panelProgNotes.ResumeLayout(false);
 			this.groupBox7.ResumeLayout(false);
 			this.groupBox6.ResumeLayout(false);
@@ -4270,10 +4237,10 @@ namespace OpenDental {
 		}
 
 
-		private void buttonLabelxray_Click(object sender, EventArgs e) {
-			LabelSingle label = new LabelSingle();
-			label.PrintPatXRay(PatCur);
-		}
+		//private void buttonLabelxray_Click(object sender, EventArgs e) {
+		//	LabelSingle label = new LabelSingle();
+		//	label.PrintPatXRay(PatCur);
+		//}
 
 		//private void buttonLabelChart_Click(object sender, EventArgs e) {
 		//	LabelSingle label = new LabelSingle();

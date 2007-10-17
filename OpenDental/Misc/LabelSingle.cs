@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Printing;
 using System.Windows.Forms;
@@ -51,141 +52,72 @@ namespace OpenDental{
 			}
 		}
 
-		public void PrintPatXRay(Patient pat) {
-			Pat = pat.Copy();
-			pd = new PrintDocument();
-			pd.PrintPage += new PrintPageEventHandler(pd_PrintPageXRay);
-			pd.DefaultPageSettings.Margins = new Margins(0, 0, 0, 0);
-			pd.OriginAtMargins = true;
-			pd.DefaultPageSettings.Landscape = false;
-			if (!Printers.SetPrinter(pd, PrintSituation.LabelSingle)) {
+		public void PrintPatientLFPatNum(int patNum) {
+			Sheet sheet=SheetsInternal.LabelPatientLFChartNumber;
+			sheet.SetParameter("PatNum",patNum);
+			try {
+				sheet.Print();
+			}
+			catch(Exception ex) {
+				MessageBox.Show(ex.Message);
+			}
+		}
+
+		public void PrintPatRadiograph(int patNum) {
+			Sheet sheet=SheetsInternal.LabelPatientRadiograph;
+			sheet.SetParameter("PatNum",patNum);
+			try {
+				sheet.Print();
+			}
+			catch(Exception ex) {
+				MessageBox.Show(ex.Message);
+			}
+		}
+
+		///<summary></summary>
+		public void PrintCarriers(List<int> carrierNums){
+			PrintDocument pd=new PrintDocument();//only used to pass printerName
+			if(!Printers.SetPrinter(pd,PrintSituation.LabelSingle)) {
 				return;
 			}
-			try {
-				pd.Print();
+			Sheet sheet;
+			try{
+				foreach(int carrierNum in carrierNums){
+					sheet=SheetsInternal.LabelCarrier;
+					sheet.SetParameter("CarrierNum",carrierNum);
+					sheet.Print(pd.PrinterSettings.PrinterName);
+				}
 			}
-			catch {
-				MessageBox.Show(Lan.g("Label", "Printer not available"));
+			catch(Exception ex){
+				MessageBox.Show(ex.Message);
 			}
 		}
 
 		///<summary>Have to supply printer name because this can be called multiple times in a loop. Returns false if fails.</summary>
-		public bool PrintIns(Carrier carrierCur,string printerName){
-			CarrierCur=carrierCur;
-			pd=new PrintDocument();
-			pd.PrintPage+=new PrintPageEventHandler(pd_PrintPageIns);
-			pd.DefaultPageSettings.Margins=new Margins(0,0,0,0);
-			pd.OriginAtMargins=true;
-			pd.DefaultPageSettings.Landscape=false;
-			pd.PrinterSettings.PrinterName=printerName;
-			try{
-				pd.Print();
+		public void PrintCarrier(int carrierNum){//Carrier carrierCur,string printerName){
+			Sheet sheet=SheetsInternal.LabelCarrier;
+			sheet.SetParameter("CarrierNum",carrierNum);
+			try {
+				sheet.Print();
 			}
-			catch{
-				MessageBox.Show(Lan.g("Label","Printer not available"));
-				return false;
+			catch(Exception ex) {
+				MessageBox.Show(ex.Message);
 			}
-			return true;
 		}
 
 		///<summary></summary>
-		public void PrintReferral(Referral referralCur) {
-			ReferralCur=referralCur.Copy();
-			pd=new PrintDocument();
-			pd.PrintPage+=new PrintPageEventHandler(pd_PrintPageReferral);
-			pd.DefaultPageSettings.Margins=new Margins(0,0,0,0);
-			pd.OriginAtMargins=true;
-			pd.DefaultPageSettings.Landscape=false;
-			if(!Printers.SetPrinter(pd,PrintSituation.LabelSingle)) {
-				return;
-			}
+		public void PrintReferral(int referralNum) {
+			Sheet sheet=SheetsInternal.LabelCarrier;
+			sheet.SetParameter("ReferralNum",referralNum);
 			try {
-				pd.Print();
+				sheet.Print();
 			}
-			catch {
-				MessageBox.Show(Lan.g("Label","Printer not available"));
+			catch(Exception ex) {
+				MessageBox.Show(ex.Message);
 			}
 		}
 
-		private void pd_PrintPageXRay(object sender, System.Drawing.Printing.PrintPageEventArgs e) {
-			float xPos = 25;
-			float yPos = 50;
-			Graphics g = e.Graphics;
-			g.TranslateTransform(100, 0);
-			g.RotateTransform(90);
-			Font mainFont = new Font(FontFamily.GenericSansSerif, 14);
-			Font smallFont = new Font(FontFamily.GenericSansSerif, 9);
-			float lineH = e.Graphics.MeasureString("any", mainFont).Height;
-			float smlineH = e.Graphics.MeasureString("any", smallFont).Height;
-			g.DrawString(Pat.GetNameFL() + " - " + DateTime.Now.ToShortDateString(), mainFont, Brushes.Black, xPos, yPos);
-			yPos += lineH;
-			g.DrawString(Lan.g(this,"BDay:") + Pat.Birthdate.ToShortDateString() + Lan.g(this," - Dr. ") + Providers.GetLName(Pat.PriProv) + " - " + Providers.GetAbbr(Pat.PriProv), smallFont, Brushes.Black, xPos, yPos);
-			yPos += smlineH;
-			//e.HasMorePages=false;
-		}
-
-		private void pd_PrintPagePatLF(object sender, System.Drawing.Printing.PrintPageEventArgs e) {
-			float xPos = 25;
-			float yPos = 10;//22;
-			Graphics g = e.Graphics;
-			g.TranslateTransform(100, 0);
-			g.RotateTransform(90);
-			Font mainFont = new Font(FontFamily.GenericSansSerif, 12);
-			float lineH = e.Graphics.MeasureString("any", mainFont).Height;
-			g.DrawString(Pat.GetNameLF(), mainFont, Brushes.Black, xPos, yPos);
-			yPos += lineH;
-			g.DrawString(Pat.Address, mainFont, Brushes.Black, xPos, yPos);
-			yPos += lineH;
-			if (Pat.Address2 != "") {
-				g.DrawString(Pat.Address2, mainFont, Brushes.Black, xPos, yPos);
-				yPos += lineH;
-			}
-			g.DrawString(Pat.City + ", " + Pat.State + "  " + Pat.Zip
-				, mainFont, Brushes.Black, xPos, yPos);
-			//e.HasMorePages=false;
-		}
-
-		private void pd_PrintPageIns(object sender, System.Drawing.Printing.PrintPageEventArgs e) {
-			float xPos=25;
-			float yPos=10;
-			Graphics g=e.Graphics;
-			g.TranslateTransform(100,0);
-			g.RotateTransform(90);
-			Font mainFont=new Font(FontFamily.GenericSansSerif,12);
-			float lineH=e.Graphics.MeasureString("any",mainFont).Height;
-			g.DrawString(CarrierCur.CarrierName,mainFont,Brushes.Black,xPos,yPos);
-			yPos+=lineH;
-			g.DrawString(CarrierCur.Address,mainFont,Brushes.Black,xPos,yPos);
-			yPos+=lineH;
-			if(CarrierCur.Address2!=""){
-				g.DrawString(CarrierCur.Address2,mainFont,Brushes.Black,xPos,yPos);
-				yPos+=lineH;
-			}
-			g.DrawString(CarrierCur.City+", "+CarrierCur.State+"  "+CarrierCur.Zip
-				,mainFont,Brushes.Black,xPos,yPos);
-			//e.HasMorePages=false;
-		}
-
-		private void pd_PrintPageReferral(object sender,System.Drawing.Printing.PrintPageEventArgs e) {
-			float xPos=25;
-			float yPos=10;
-			Graphics g=e.Graphics;
-			g.TranslateTransform(100,0);
-			g.RotateTransform(90);
-			Font mainFont=new Font(FontFamily.GenericSansSerif,12);
-			float lineH=e.Graphics.MeasureString("any",mainFont).Height;
-			g.DrawString(Referrals.GetNameFL(ReferralCur.ReferralNum),mainFont,Brushes.Black,xPos,yPos);
-			yPos+=lineH;
-			g.DrawString(ReferralCur.Address,mainFont,Brushes.Black,xPos,yPos);
-			yPos+=lineH;
-			if(ReferralCur.Address2!="") {
-				g.DrawString(ReferralCur.Address2,mainFont,Brushes.Black,xPos,yPos);
-				yPos+=lineH;
-			}
-			g.DrawString(ReferralCur.City+", "+ReferralCur.ST+"  "+ReferralCur.Zip
-				,mainFont,Brushes.Black,xPos,yPos);
-			//e.HasMorePages=false;
-		}
+		
 
 	}
 

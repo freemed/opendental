@@ -1696,14 +1696,21 @@ namespace OpenDental{
 
 		private void menuLabel_Popup(object sender,EventArgs e) {
 			menuLabel.MenuItems.Clear();
-			MenuItem menuItem=new MenuItem(Lan.g(this,"LName, FName, Address"),menuLabel_Click);
+			MenuItem menuItem;
+			menuItem=new MenuItem(Lan.g(this,"LName, FName, Address"),menuLabel_Click);
 			menuItem.Tag="PatientLFAddress";
 			menuLabel.MenuItems.Add(menuItem);
-			menuItem=new MenuItem(Lan.g(this,"LName, FName, ChartNumber"),menuLabel_Click);
+			menuItem=new MenuItem(Lan.g(this,"Name, ChartNumber"),menuLabel_Click);
 			menuItem.Tag="PatientLFChartNumber";
 			menuLabel.MenuItems.Add(menuItem);
-
-
+			menuItem=new MenuItem(Lan.g(this,"Name, PatNum"),menuLabel_Click);
+			menuItem.Tag="PatientLFPatNum";
+			menuLabel.MenuItems.Add(menuItem);
+			menuItem=new MenuItem(Lan.g(this,"Radiograph"),menuLabel_Click);
+			menuItem.Tag="PatRadiograph";
+			menuLabel.MenuItems.Add(menuItem);
+			menuLabel.MenuItems.Add("-");
+			//---------------------------------------------------------------------------------------
 			Family fam=Patients.GetFamily(CurPatNum);
 			PatPlan[] PatPlanList=PatPlans.Refresh(CurPatNum);
 			InsPlan[] PlanList=InsPlans.Refresh(fam);
@@ -1716,6 +1723,9 @@ namespace OpenDental{
 				menuItem.Tag=carrier;
 				menuLabel.MenuItems.Add(menuItem);
 			}
+			menuLabel.MenuItems.Add("-");
+			//---------------------------------------------------------------------------------------
+
 		}
 
 		private void menuLabel_Click(object sender,System.EventArgs e) {
@@ -1727,18 +1737,19 @@ namespace OpenDental{
 				if(((MenuItem)sender).Tag.ToString()=="PatientLFChartNumber") {
 					label.PrintPatientLFChartNumber(CurPatNum);
 				}
+				if(((MenuItem)sender).Tag.ToString()=="PatientLFPatNum") {
+					label.PrintPatientLFPatNum(CurPatNum);
+				}
+				if(((MenuItem)sender).Tag.ToString()=="PatRadiograph") {
+					label.PrintPatRadiograph(CurPatNum);
+				}
+			}
+			if(((MenuItem)sender).Tag.GetType()==typeof(Carrier)){
+				Carrier carrier=(Carrier)((MenuItem)sender).Tag;
+				label.PrintCarrier(carrier.CarrierNum);
 			}
 
-			//if carrier
-
-			PrintDocument pd=new PrintDocument();//only used to pass printerName
-			if(!Printers.SetPrinter(pd,PrintSituation.LabelSingle)) {
-				return;
-			}
-			Carrier carrier=(Carrier)((MenuItem)sender).Tag;
-			label.PrintIns(carrier,pd.PrinterSettings.PrinterName);
-
-			//else
+			
 		}
 
 		private void FormOpenDental_Resize(object sender,EventArgs e) {

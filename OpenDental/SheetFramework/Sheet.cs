@@ -65,8 +65,13 @@ namespace OpenDental{
 			param.ParamValue=paramValue;
 		}
 
-		///<Summary>Surround with try/catch.</Summary>
+		///<Summary>Surround with try/catch. This override is used when printing a batch.  Printer is figured externally so that only one dialog will come up.</Summary>
 		public void Print(){
+			Print("");
+		}
+
+		///<Summary>Surround with try/catch.  If printerName is blank, then it will display a dialog.</Summary>
+		public void Print(string printerName){
 			foreach(SheetField field in SheetFields) {
 				if(field.Font==null) {
 					field.Font=Font;
@@ -87,6 +92,14 @@ namespace OpenDental{
 					Patient pat=Patients.GetPat((int)GetParamByName("PatNum").ParamValue);
 					FillFieldsForLabelPatient(pat);
 					break;
+				case SheetTypeEnum.LabelCarrier:
+					Carrier carrier=Carriers.GetCarrier((int)GetParamByName("CarrierNum").ParamValue);
+					FillFieldsForLabelCarrier(carrier);
+					break;
+				case SheetTypeEnum.LabelReferral:
+					Referral refer=Referrals.GetReferral((int)GetParamByName("ReferralNum").ParamValue);
+					FillFieldsForLabelReferral(refer);
+					break;
 			}
 			heightsCalculated=false;	
 			PrintDocument pd=new PrintDocument();
@@ -94,17 +107,24 @@ namespace OpenDental{
 			pd.DefaultPageSettings.Margins=new Margins(0,0,0,0);
 			pd.OriginAtMargins=true;
 			PrintSituation sit=PrintSituation.Default;
-			switch(this.SheetType){
-				case SheetTypeEnum.LabelPatient:
-					sit=PrintSituation.LabelSingle;
-					break;
+			if(printerName==null || printerName==""){
+				switch(this.SheetType){
+					case SheetTypeEnum.LabelPatient:
+						sit=PrintSituation.LabelSingle;
+						break;
+				}
+				if(!Printers.SetPrinter(pd,sit)) {
+					return;
+				}
 			}
-			if(!Printers.SetPrinter(pd,sit)) {
-				return;
+			else{
+				pd.PrinterSettings.PrinterName=printerName;
 			}
 			#if DEBUG
-				UI.PrintPreview printPreview=new UI.PrintPreview(sit,pd,1);
-				printPreview.ShowDialog();
+				if(printerName==""){//only show if this is a single print item, not a batch.
+					UI.PrintPreview printPreview=new UI.PrintPreview(sit,pd,1);
+					printPreview.ShowDialog();
+				}
 			#else
 				try {
 					pd.Print();
@@ -136,6 +156,56 @@ namespace OpenDental{
 						break;
 					case "ChartNumber":
 						field.FieldValue=pat.ChartNumber;
+						break;
+					case "PatNum":
+						field.FieldValue=pat.PatNum.ToString();
+						break;
+					case "dateTime.Today":
+						field.FieldValue=DateTime.Today.ToShortDateString();
+						break;
+					case "birthdate":
+						field.FieldValue=Lan.g(this,"BD: ")+pat.Birthdate.ToShortDateString();
+						break;
+					case "priProvName":
+						field.FieldValue=Providers.GetLongDesc(pat.PriProv);
+						break;
+				}
+			}
+		}
+
+		private void FillFieldsForLabelCarrier(Carrier carrier) {
+			foreach(SheetField field in SheetFields) {
+				switch(field.FieldName) {
+					case "CarrierName":
+						field.FieldValue=carrier.CarrierName;
+						break;
+					case "address":
+						field.FieldValue=carrier.Address;
+						if(carrier.Address2!="") {
+							field.FieldValue+="\r\n"+carrier.Address2;
+						}
+						break;
+					case "cityStateZip":
+						field.FieldValue=carrier.City+", "+carrier.State+" "+carrier.Zip;
+						break;
+				}
+			}
+		}
+
+		private void FillFieldsForLabelReferral(Referral refer) {
+			foreach(SheetField field in SheetFields) {
+				switch(field.FieldName) {
+					case "nameLF":
+						field.FieldValue=Referrals.GetNameFL(refer.ReferralNum);
+						break;
+					case "address":
+						field.FieldValue=refer.Address;
+						if(refer.Address2!="") {
+							field.FieldValue+="\r\n"+refer.Address2;
+						}
+						break;
+					case "cityStateZip":
+						field.FieldValue=refer.City+", "+refer.ST+" "+refer.Zip;
 						break;
 				}
 			}

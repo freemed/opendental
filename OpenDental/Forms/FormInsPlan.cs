@@ -2988,7 +2988,7 @@ namespace OpenDental{
 			carrier.City=textCity.Text;
 			carrier.State=textState.Text;
 			carrier.Zip=textZip.Text;
-			label.PrintIns(carrier,pd.PrinterSettings.PrinterName);
+			label.PrintCarrier(carrier.CarrierNum);//,pd.PrinterSettings.PrinterName);
 		}
 
 		///<summary>This only fills the grid on the screen.  It does not get any data from the database.</summary>
