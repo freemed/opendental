@@ -272,7 +272,8 @@ namespace OpenDental{
 			this.label10.Name = "label10";
 			this.label10.Size = new System.Drawing.Size(550,23);
 			this.label10.TabIndex = 44;
-			this.label10.Text = "This program Copyright 2003-2007, Jordan S. Sparks, D.M.D.";
+			this.label10.Text = "This program Copyright 2003-2007, Jordan S. Sparks, D.M.D., Frederik Carlier, and" +
+    " others.";
 			this.label10.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// label7
