@@ -27,46 +27,34 @@ namespace OpenDental{
 			catch(Exception ex){
 				MessageBox.Show(ex.Message);
 			}
-			/*
-			Pat=pat.Copy();
-			pd=new PrintDocument();
-			pd.PrintPage+=new PrintPageEventHandler(pd_PrintPagePat);
-			pd.DefaultPageSettings.Margins=new Margins(0,0,0,0);
-			pd.OriginAtMargins=true;
-			pd.DefaultPageSettings.Landscape=false;
-			if(!Printers.SetPrinter(pd,PrintSituation.LabelSingle)){
-				return;
+		}
+
+		public void PrintPatientLFAddress(int patNum) {
+			Sheet sheet=SheetsInternal.LabelPatientLFAddress;
+			sheet.SetParameter("PatNum",patNum);
+			try {
+				sheet.Print();
 			}
-			try{
-				pd.Print();
+			catch(Exception ex) {
+				MessageBox.Show(ex.Message);
 			}
-			catch{
-				MessageBox.Show(Lan.g("Label","Printer not available"));
-			}*/
+		}
+
+		public void PrintPatientLFChartNumber(int patNum) {
+			Sheet sheet=SheetsInternal.LabelPatientLFChartNumber;
+			sheet.SetParameter("PatNum",patNum);
+			try {
+				sheet.Print();
+			}
+			catch(Exception ex) {
+				MessageBox.Show(ex.Message);
+			}
 		}
 
 		public void PrintPatXRay(Patient pat) {
 			Pat = pat.Copy();
 			pd = new PrintDocument();
 			pd.PrintPage += new PrintPageEventHandler(pd_PrintPageXRay);
-			pd.DefaultPageSettings.Margins = new Margins(0, 0, 0, 0);
-			pd.OriginAtMargins = true;
-			pd.DefaultPageSettings.Landscape = false;
-			if (!Printers.SetPrinter(pd, PrintSituation.LabelSingle)) {
-				return;
-			}
-			try {
-				pd.Print();
-			}
-			catch {
-				MessageBox.Show(Lan.g("Label", "Printer not available"));
-			}
-		}
-
-		public void PrintPatLF(Patient pat) {
-			Pat = pat.Copy();
-			pd = new PrintDocument();
-			pd.PrintPage += new PrintPageEventHandler(pd_PrintPagePatLF);
 			pd.DefaultPageSettings.Margins = new Margins(0, 0, 0, 0);
 			pd.OriginAtMargins = true;
 			pd.DefaultPageSettings.Landscape = false;
@@ -135,27 +123,6 @@ namespace OpenDental{
 			yPos += smlineH;
 			//e.HasMorePages=false;
 		}
-
-		/*private void pd_PrintPagePat(object sender, System.Drawing.Printing.PrintPageEventArgs e) {
-			float xPos=25;
-			float yPos=10;//22;
-			Graphics g=e.Graphics;
-			g.TranslateTransform(100,0);
-			g.RotateTransform(90);
-			Font mainFont=new Font(FontFamily.GenericSansSerif,12);
-			float lineH=e.Graphics.MeasureString("any",mainFont).Height;
-			g.DrawString(Pat.GetNameFL(),mainFont,Brushes.Black,xPos,yPos);
-			yPos+=lineH;
-			g.DrawString(Pat.Address,mainFont,Brushes.Black,xPos,yPos);
-			yPos+=lineH;
-			if(Pat.Address2!=""){
-				g.DrawString(Pat.Address2,mainFont,Brushes.Black,xPos,yPos);
-				yPos+=lineH;
-			}
-			g.DrawString(Pat.City+", "+Pat.State+"  "+Pat.Zip
-				,mainFont,Brushes.Black,xPos,yPos);
-			//e.HasMorePages=false;
-		}*/
 
 		private void pd_PrintPagePatLF(object sender, System.Drawing.Printing.PrintPageEventArgs e) {
 			float xPos = 25;

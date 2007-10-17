@@ -142,7 +142,6 @@ namespace OpenDental {
 		///<summary>This will eventually hold all data needed for display.  It will be retrieved in one call to the database.</summary>
 		private DataSet DataSetMain;
 		private GroupBox groupBoxChartLabels;
-		private OpenDental.UI.Button buttonLabelChart;
 		private OpenDental.UI.Button buttonLabelxray;
 		private OpenDental.UI.Button butTrojan;
 		private TextBox textCC;
@@ -215,7 +214,6 @@ namespace OpenDental {
 			this.panelCommButs = new System.Windows.Forms.Panel();
 			this.butTrojan = new OpenDental.UI.Button();
 			this.groupBoxChartLabels = new System.Windows.Forms.GroupBox();
-			this.buttonLabelChart = new OpenDental.UI.Button();
 			this.buttonLabelxray = new OpenDental.UI.Button();
 			this.butComm = new OpenDental.UI.Button();
 			this.contextMenuStatement = new System.Windows.Forms.ContextMenu();
@@ -431,7 +429,6 @@ namespace OpenDental {
 			// 
 			// groupBoxChartLabels
 			// 
-			this.groupBoxChartLabels.Controls.Add(this.buttonLabelChart);
 			this.groupBoxChartLabels.Controls.Add(this.buttonLabelxray);
 			this.groupBoxChartLabels.Location = new System.Drawing.Point(1,60);
 			this.groupBoxChartLabels.Name = "groupBoxChartLabels";
@@ -439,22 +436,6 @@ namespace OpenDental {
 			this.groupBoxChartLabels.TabIndex = 85;
 			this.groupBoxChartLabels.TabStop = false;
 			this.groupBoxChartLabels.Text = "Chart Labels";
-			// 
-			// buttonLabelChart
-			// 
-			this.buttonLabelChart.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.buttonLabelChart.Autosize = true;
-			this.buttonLabelChart.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.buttonLabelChart.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.buttonLabelChart.CornerRadius = 4F;
-			this.buttonLabelChart.Image = ((System.Drawing.Image)(resources.GetObject("buttonLabelChart.Image")));
-			this.buttonLabelChart.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.buttonLabelChart.Location = new System.Drawing.Point(8,19);
-			this.buttonLabelChart.Name = "buttonLabelChart";
-			this.buttonLabelChart.Size = new System.Drawing.Size(72,25);
-			this.buttonLabelChart.TabIndex = 88;
-			this.buttonLabelChart.Text = "Chart";
-			this.buttonLabelChart.Click += new System.EventHandler(this.buttonLabelChart_Click);
 			// 
 			// buttonLabelxray
 			// 
@@ -4294,11 +4275,10 @@ namespace OpenDental {
 			label.PrintPatXRay(PatCur);
 		}
 
-		private void buttonLabelChart_Click(object sender, EventArgs e) {
-			LabelSingle label = new LabelSingle();
-			label.PrintPatLF(PatCur);
-
-		}
+		//private void buttonLabelChart_Click(object sender, EventArgs e) {
+		//	LabelSingle label = new LabelSingle();
+		//	label.PrintPatLF(PatCur);
+		//}
 
 		/*private void butCommLog_Click(object sender, EventArgs e) {
 			Commlog CommlogCur = new Commlog();

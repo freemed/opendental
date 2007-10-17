@@ -134,6 +134,9 @@ namespace OpenDental{
 					case "cityStateZip":
 						field.FieldValue=pat.City+", "+pat.State+" "+pat.Zip;
 						break;
+					case "ChartNumber":
+						field.FieldValue=pat.ChartNumber;
+						break;
 				}
 			}
 		}

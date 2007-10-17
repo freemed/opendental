@@ -1575,23 +1575,6 @@ namespace OpenDental{
 			Patients.AddFamilyToMenu(menuPatient,new EventHandler(menuPatient_Click),CurPatNum,fam);
 		}
 
-		private void menuLabel_Popup(object sender,EventArgs e) {
-			Family fam=Patients.GetFamily(CurPatNum);
-			PatPlan[] PatPlanList=PatPlans.Refresh(CurPatNum);
-			InsPlan[] PlanList=InsPlans.Refresh(fam);
-			menuLabel.MenuItems.Clear();
-			MenuItem menuItem;
-			Carrier carrier;
-			InsPlan plan;
-			for(int i=0;i<PatPlanList.Length;i++){
-				plan=InsPlans.GetPlan(PatPlanList[i].PlanNum,PlanList);
-				carrier=Carriers.GetCarrier(plan.CarrierNum);
-				menuItem=new MenuItem(carrier.CarrierName,menuLabel_Click);
-				menuItem.Tag=carrier;
-				menuLabel.MenuItems.Add(menuItem);
-			}
-		}
-
 		private void ToolBarMain_ButtonClick(object sender,ODToolBarButtonClickEventArgs e) {
 			if(e.Button.Tag.GetType()==typeof(string)) {
 				//standard predefined button
@@ -1633,20 +1616,6 @@ namespace OpenDental{
 			Patient pat=fam.GetPatient(CurPatNum);
 			RefreshCurrentModule();
 			FillPatientButton(CurPatNum,fam.GetPatient(CurPatNum).GetNameLF(),pat.Email!="",pat.ChartNumber);
-		}
-
-		private void menuLabel_Click(object sender,System.EventArgs e) {
-			LabelSingle label=new LabelSingle();
-			//if carrier
-
-			PrintDocument pd=new PrintDocument();//only used to pass printerName
-			if(!Printers.SetPrinter(pd,PrintSituation.LabelSingle)) {
-				return;
-			}
-			Carrier carrier=(Carrier)((MenuItem)sender).Tag;
-			label.PrintIns(carrier,pd.PrinterSettings.PrinterName);
-
-			//else
 		}
 
 		///<summary>Happens when any of the modules changes the current patient.  The calling module should then refresh itself.  The current patNum is stored here in the parent form so that when switching modules, the parent form knows which patient to call up for that module.</summary>
@@ -1723,6 +1692,53 @@ namespace OpenDental{
 			LabelSingle label=new LabelSingle();
 			//Patient pat=Patients.GetPat(CurPatNum);
 			label.PrintPat(CurPatNum);
+		}
+
+		private void menuLabel_Popup(object sender,EventArgs e) {
+			menuLabel.MenuItems.Clear();
+			MenuItem menuItem=new MenuItem(Lan.g(this,"LName, FName, Address"),menuLabel_Click);
+			menuItem.Tag="PatientLFAddress";
+			menuLabel.MenuItems.Add(menuItem);
+			menuItem=new MenuItem(Lan.g(this,"LName, FName, ChartNumber"),menuLabel_Click);
+			menuItem.Tag="PatientLFChartNumber";
+			menuLabel.MenuItems.Add(menuItem);
+
+
+			Family fam=Patients.GetFamily(CurPatNum);
+			PatPlan[] PatPlanList=PatPlans.Refresh(CurPatNum);
+			InsPlan[] PlanList=InsPlans.Refresh(fam);
+			Carrier carrier;
+			InsPlan plan;
+			for(int i=0;i<PatPlanList.Length;i++) {
+				plan=InsPlans.GetPlan(PatPlanList[i].PlanNum,PlanList);
+				carrier=Carriers.GetCarrier(plan.CarrierNum);
+				menuItem=new MenuItem(carrier.CarrierName,menuLabel_Click);
+				menuItem.Tag=carrier;
+				menuLabel.MenuItems.Add(menuItem);
+			}
+		}
+
+		private void menuLabel_Click(object sender,System.EventArgs e) {
+			LabelSingle label=new LabelSingle();
+			if(((MenuItem)sender).Tag.GetType()==typeof(string)){
+				if(((MenuItem)sender).Tag.ToString()=="PatientLFAddress"){
+					label.PrintPatientLFAddress(CurPatNum);
+				}
+				if(((MenuItem)sender).Tag.ToString()=="PatientLFChartNumber") {
+					label.PrintPatientLFChartNumber(CurPatNum);
+				}
+			}
+
+			//if carrier
+
+			PrintDocument pd=new PrintDocument();//only used to pass printerName
+			if(!Printers.SetPrinter(pd,PrintSituation.LabelSingle)) {
+				return;
+			}
+			Carrier carrier=(Carrier)((MenuItem)sender).Tag;
+			label.PrintIns(carrier,pd.PrinterSettings.PrinterName);
+
+			//else
 		}
 
 		private void FormOpenDental_Resize(object sender,EventArgs e) {
