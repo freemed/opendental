@@ -180,6 +180,17 @@ namespace OpenDental.DataAccess {
 						dataField.Field.SetValue(value, DateTime.MinValue);
 					}
 				}
+				else if(dataField.Field.FieldType == typeof(string)) {
+					// String fields can be null or empty in the database.
+					// There is no distinction in Oracle.  In MySQL, we must allow null for Oracle conversion compatibility.
+					// But this results in the unfortunate situation sometimes encountering null strings.
+					if(reader.IsDBNull(ordinal)){
+						dataField.Field.SetValue(value, "");
+					}
+					else{
+						dataField.Field.SetValue(value, reader.GetString(ordinal));
+					}
+				}
 				else {
 					dataField.Field.SetValue(value, reader.GetValue(ordinal));
 				}
