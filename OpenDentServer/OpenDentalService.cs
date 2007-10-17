@@ -43,12 +43,6 @@ namespace OpenDentServer {
 			}
 		}
 
-		protected override void OnStop() {
-			// TODO: Add code here to perform any tear-down necessary to stop your service.
-			//EventLog.WriteEntry("SimpleService.OnStop");
-			base.OnStop();
-		}
-
 		public static int Login(string database,string oduser,string odpasshash) {
 			//Get the database server, user, and password from the config file
 			//make sure there's an entry for the requested database:
