@@ -32,6 +32,7 @@ namespace OpenDental {
 			// listBoxAutoNotes
 			// 
 			this.listBoxAutoNotes.FormattingEnabled = true;
+			this.listBoxAutoNotes.HorizontalScrollbar = true;
 			this.listBoxAutoNotes.Location = new System.Drawing.Point(108, 12);
 			this.listBoxAutoNotes.Name = "listBoxAutoNotes";
 			this.listBoxAutoNotes.Size = new System.Drawing.Size(197, 108);

@@ -196,6 +196,7 @@ namespace OpenDental {
 			// listBoxControlOptions
 			// 
 			this.listBoxControlOptions.FormattingEnabled = true;
+			this.listBoxControlOptions.HorizontalScrollbar = true;
 			this.listBoxControlOptions.Location = new System.Drawing.Point(100, 409);
 			this.listBoxControlOptions.Name = "listBoxControlOptions";
 			this.listBoxControlOptions.Size = new System.Drawing.Size(120, 147);

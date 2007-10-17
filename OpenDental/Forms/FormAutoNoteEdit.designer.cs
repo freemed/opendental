@@ -63,9 +63,9 @@ namespace OpenDental
 			// 
 			// labelName
 			// 
-			this.labelName.Location = new System.Drawing.Point(92, 24);
+			this.labelName.Location = new System.Drawing.Point(82, 27);
 			this.labelName.Name = "labelName";
-			this.labelName.Size = new System.Drawing.Size(142, 13);
+			this.labelName.Size = new System.Drawing.Size(152, 13);
 			this.labelName.TabIndex = 1;
 			this.labelName.Text = "Change the Auto Note name";
 			// 
@@ -129,6 +129,7 @@ namespace OpenDental
 			// listBoxControlsToIncl
 			// 
 			this.listBoxControlsToIncl.FormattingEnabled = true;
+			this.listBoxControlsToIncl.HorizontalScrollbar = true;
 			this.listBoxControlsToIncl.Location = new System.Drawing.Point(240, 114);
 			this.listBoxControlsToIncl.Name = "listBoxControlsToIncl";
 			this.listBoxControlsToIncl.Size = new System.Drawing.Size(120, 277);
@@ -139,6 +140,7 @@ namespace OpenDental
 			// listBoxControls
 			// 
 			this.listBoxControls.FormattingEnabled = true;
+			this.listBoxControls.HorizontalScrollbar = true;
 			this.listBoxControls.Location = new System.Drawing.Point(32, 114);
 			this.listBoxControls.Name = "listBoxControls";
 			this.listBoxControls.Size = new System.Drawing.Size(120, 277);
