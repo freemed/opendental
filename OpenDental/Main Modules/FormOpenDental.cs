@@ -1725,7 +1725,22 @@ namespace OpenDental{
 			}
 			menuLabel.MenuItems.Add("-");
 			//---------------------------------------------------------------------------------------
-
+			RefAttach[] refAttaches=RefAttaches.Refresh(CurPatNum);
+			Referral refer;
+			string str;
+			for(int i=0;i<refAttaches.Length;i++){
+				refer=Referrals.GetReferral(refAttaches[i].ReferralNum);
+				if(refAttaches[i].IsFrom){
+					str=Lan.g(this,"From ");
+				}
+				else{
+					str=Lan.g(this,"To ");
+				}
+				str+=Referrals.GetNameFL(refer.ReferralNum);
+				menuItem=new MenuItem(str,menuLabel_Click);
+				menuItem.Tag=refer;
+				menuLabel.MenuItems.Add(menuItem);
+			}
 		}
 
 		private void menuLabel_Click(object sender,System.EventArgs e) {
@@ -1748,8 +1763,10 @@ namespace OpenDental{
 				Carrier carrier=(Carrier)((MenuItem)sender).Tag;
 				label.PrintCarrier(carrier.CarrierNum);
 			}
-
-			
+			if(((MenuItem)sender).Tag.GetType()==typeof(Referral)) {
+				Referral refer=(Referral)((MenuItem)sender).Tag;
+				label.PrintReferral(refer.ReferralNum);
+			}
 		}
 
 		private void FormOpenDental_Resize(object sender,EventArgs e) {

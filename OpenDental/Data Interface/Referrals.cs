@@ -141,7 +141,7 @@ namespace OpenDental{
 			return "";
 		}
 
-		///<summary></summary>
+		///<summary>Includes title, such as DMD.</summary>
 		public static string GetNameFL(int referralNum) {
 			if(referralNum==0)
 				return "";
@@ -150,7 +150,10 @@ namespace OpenDental{
 					//Referral refer=List[i];
 					string retVal="";
 					if(List[i].FName!="") {
-						retVal+=List[i].FName+" "+List[i].MName;
+						retVal+=List[i].FName+" ";
+					}
+					if(List[i].MName!=""){
+						retVal+=List[i].MName+" ";
 					}
 					retVal+=List[i].LName;
 					if(List[i].Title!="") {

@@ -107,7 +107,7 @@ namespace OpenDental{
 
 		///<summary></summary>
 		public void PrintReferral(int referralNum) {
-			Sheet sheet=SheetsInternal.LabelCarrier;
+			Sheet sheet=SheetsInternal.LabelReferral;
 			sheet.SetParameter("ReferralNum",referralNum);
 			try {
 				sheet.Print();
