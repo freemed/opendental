@@ -110,11 +110,9 @@ namespace OpenDentServer {
 					try {
 						server = new TcpListener(port);//localAddr,port);//but this is the only way that works!
 						server.Start();
-						//String datablock = null;
 						Console.Write("Waiting...");
 						while(true) {// Enter the listening loop.
 							//Each loop will pick up a new client computer, and pass off the connection to a worker thread. 
-							//Console.Write("Waiting...");
 							// Perform a blocking call to accept requests.
 							// You could also use server.AcceptSocket() here.
 							TcpClient client = server.AcceptTcpClient();
@@ -123,9 +121,6 @@ namespace OpenDentServer {
 							WorkerClass worker = new WorkerClass(netStream);
 							Thread workerThread = new Thread(new ThreadStart(worker.DoWork));
 							workerThread.Start();
-							//
-							//client.Close();
-							//Console.WriteLine("Closed.");
 						}
 					}
 					catch(SocketException e) {
