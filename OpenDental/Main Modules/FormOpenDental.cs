@@ -186,6 +186,7 @@ namespace OpenDental{
 		private ContextMenu menuPatient;
 		private ContextMenu menuLabel;
 		private ContextMenu menuEmail;
+		private ContextMenu menuLetter;
 		private Point OriginalMousePos;
 
 		///<summary></summary>
@@ -332,6 +333,7 @@ namespace OpenDental{
 			this.smartCardWatcher1 = new OpenDental.SmartCards.SmartCardWatcher();
 			this.menuLabel = new System.Windows.Forms.ContextMenu();
 			this.menuEmail = new System.Windows.Forms.ContextMenu();
+			this.menuLetter = new System.Windows.Forms.ContextMenu();
 			this.SuspendLayout();
 			// 
 			// timerTimeIndic
@@ -1118,6 +1120,10 @@ namespace OpenDental{
 			// 
 			this.menuEmail.Popup += new System.EventHandler(this.menuEmail_Popup);
 			// 
+			// menuLetter
+			// 
+			this.menuLetter.Popup += new System.EventHandler(this.menuLetter_Popup);
+			// 
 			// FormOpenDental
 			// 
 			this.ClientSize = new System.Drawing.Size(982,600);
@@ -1567,11 +1573,16 @@ namespace OpenDental{
 			button.Style=ODToolBarButtonStyle.DropDownButton;
 			button.DropDownMenu=menuEmail;
 			ToolBarMain.Buttons.Add(button);
+			button=new ODToolBarButton(Lan.g(this,"Letter"),-1,Lan.g(this,"Quick Letter"),"Letter");
+			button.Style=ODToolBarButtonStyle.DropDownButton;
+			button.DropDownMenu=menuLetter;
+			ToolBarMain.Buttons.Add(button);
 			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"To Task List"),3,Lan.g(this,"Send to Task List"),"Tasklist"));
 			button=new ODToolBarButton(Lan.g(this,"Label"),4,Lan.g(this,"Print Label"),"Label");
 			button.Style=ODToolBarButtonStyle.DropDownButton;
 			button.DropDownMenu=menuLabel;
 			ToolBarMain.Buttons.Add(button);
+			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Popups"),-1,Lan.g(this,"Edit popups for this patient"),"Popups"));
 			ArrayList toolButItems=ToolButItems.GetForToolBar(ToolBarsAvail.AllModules);
 			for(int i=0;i<toolButItems.Count;i++) {
 				//ToolBarMain.Buttons.Add(new ODToolBarButton(ODToolBarButtonStyle.Separator));
@@ -1599,11 +1610,17 @@ namespace OpenDental{
 					case "Email":
 						OnEmail_Click();
 						break;
+					case "Letter":
+						OnLetter_Click();
+						break;
 					case "Tasklist":
 						OnTasklist_Click();
 						break;
 					case "Label":
 						OnLabel_Click();
+						break;
+					case "Popups":
+						OnPopups_Click();
 						break;
 				}
 			}
@@ -1645,8 +1662,10 @@ namespace OpenDental{
 				ToolBarMain.Buttons["Email"].Enabled=false;
 				ToolBarMain.Buttons["EmailDropdown"].Enabled=false;
 				ToolBarMain.Buttons["Commlog"].Enabled=false;
+				ToolBarMain.Buttons["Letter"].Enabled=false;
 				ToolBarMain.Buttons["Tasklist"].Enabled=false;
 				ToolBarMain.Buttons["Label"].Enabled=false;
+				ToolBarMain.Buttons["Popups"].Enabled=false;
 			}
 			else{
 				if(hasEmail){
@@ -1657,27 +1676,13 @@ namespace OpenDental{
 				}
 				ToolBarMain.Buttons["EmailDropdown"].Enabled=true;
 				ToolBarMain.Buttons["Commlog"].Enabled=true;
+				ToolBarMain.Buttons["Letter"].Enabled=true;
 				ToolBarMain.Buttons["Tasklist"].Enabled=true;
 				ToolBarMain.Buttons["Label"].Enabled=true;
+				ToolBarMain.Buttons["Popups"].Enabled=true;
 			}
 			ToolBarMain.Invalidate();
 			Text=Patients.GetMainTitle(patName,patNum,chartNumber);
-		}
-
-		private void OnCommlog_Click() {
-			Commlog CommlogCur = new Commlog();
-			CommlogCur.PatNum = CurPatNum;
-			CommlogCur.CommDateTime = DateTime.Now;
-			CommlogCur.CommType =Commlogs.GetTypeAuto(CommItemTypeAuto.MISC);
-			CommlogCur.Mode_=CommItemMode.Phone;
-			CommlogCur.SentOrReceived=CommSentOrReceived.Received;
-			CommlogCur.UserNum=Security.CurUser.UserNum;
-			FormCommItem FormCI = new FormCommItem(CommlogCur);
-			FormCI.IsNew = true;
-			FormCI.ShowDialog();
-			if(FormCI.DialogResult == DialogResult.OK) {
-				RefreshCurrentModule();
-			}
 		}
 
 		private void OnEmail_Click() {
@@ -1743,6 +1748,76 @@ namespace OpenDental{
 				if(FormE.DialogResult==DialogResult.OK) {
 					RefreshCurrentModule();
 				}
+			}
+		}
+
+		private void OnCommlog_Click() {
+			Commlog CommlogCur = new Commlog();
+			CommlogCur.PatNum = CurPatNum;
+			CommlogCur.CommDateTime = DateTime.Now;
+			CommlogCur.CommType =Commlogs.GetTypeAuto(CommItemTypeAuto.MISC);
+			CommlogCur.Mode_=CommItemMode.Phone;
+			CommlogCur.SentOrReceived=CommSentOrReceived.Received;
+			CommlogCur.UserNum=Security.CurUser.UserNum;
+			FormCommItem FormCI = new FormCommItem(CommlogCur);
+			FormCI.IsNew = true;
+			FormCI.ShowDialog();
+			if(FormCI.DialogResult == DialogResult.OK) {
+				RefreshCurrentModule();
+			}
+		}
+
+		private void OnLetter_Click() {
+			Patient pat=Patients.GetPat(CurPatNum);
+			FormLetters FormL=new FormLetters(pat);
+			FormL.ShowDialog();
+		}
+
+		private void menuLetter_Popup(object sender,EventArgs e) {
+			menuLetter.MenuItems.Clear();
+			MenuItem menuItem;
+			menuItem=new MenuItem(Lan.g(this,"Merge"),menuLetter_Click);
+			menuItem.Tag="Merge";
+			menuLetter.MenuItems.Add(menuItem);
+			menuItem=new MenuItem(Lan.g(this,"Stationery"),menuLetter_Click);
+			menuItem.Tag="Stationery";
+			menuLetter.MenuItems.Add(menuItem);
+			menuLetter.MenuItems.Add("-");
+			//Referrals---------------------------------------------------------------------------------------
+			RefAttach[] refAttaches=RefAttaches.Refresh(CurPatNum);
+			Referral refer;
+			string str;
+			for(int i=0;i<refAttaches.Length;i++) {
+				refer=Referrals.GetReferral(refAttaches[i].ReferralNum);
+				if(refAttaches[i].IsFrom) {
+					str=Lan.g(this,"From ");
+				}
+				else {
+					str=Lan.g(this,"To ");
+				}
+				str+=Referrals.GetNameFL(refer.ReferralNum);
+				menuItem=new MenuItem(str,menuLetter_Click);
+				menuItem.Tag=refer;
+				menuLetter.MenuItems.Add(menuItem);
+			}
+		}
+
+		private void menuLetter_Click(object sender,System.EventArgs e) {
+			Patient pat=Patients.GetPat(CurPatNum);
+			if(((MenuItem)sender).Tag.GetType()==typeof(string)) {
+				if(((MenuItem)sender).Tag.ToString()=="Merge") {
+					FormLetterMerges FormL=new FormLetterMerges(pat);
+					FormL.ShowDialog();
+				}
+				if(((MenuItem)sender).Tag.ToString()=="Stationery") {
+					FormCommunications.PrintStationery(pat);
+				}
+			}
+			if(((MenuItem)sender).Tag.GetType()==typeof(Referral)) {
+				Referral refer=(Referral)((MenuItem)sender).Tag;
+				FormLetters FormL=new FormLetters(pat);
+				FormL.ReferralCur=refer;
+				FormL.ShowDialog();
 			}
 		}
 
@@ -1831,6 +1906,10 @@ namespace OpenDental{
 				Referral refer=(Referral)((MenuItem)sender).Tag;
 				label.PrintReferral(refer.ReferralNum);
 			}
+		}
+
+		private void OnPopups_Click() {
+			MessageBox.Show("Incomplete");
 		}
 
 		private void FormOpenDental_Resize(object sender,EventArgs e) {
@@ -3191,6 +3270,8 @@ namespace OpenDental{
 				}
 			}
 		}
+
+	
 
 		
 

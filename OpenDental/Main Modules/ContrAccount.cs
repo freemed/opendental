@@ -3705,13 +3705,13 @@ namespace OpenDental {
 		}
 
 		private void butComm_Click(object sender, System.EventArgs e) {
-			FormCommunications FormC=new FormCommunications();
+			/*FormCommunications FormC=new FormCommunications();
 			FormC.PatCur=PatCur.Copy();
 			FormC.ViewingInRecall=ViewingInRecall;
 			FormC.ShowDialog();
 			if(FormC.DialogResult==DialogResult.OK){
 				ModuleSelected(PatCur.PatNum);
-			}
+			}*/
 		}
 
 		/*private void butLetterSimple_Click(object sender, System.EventArgs e) {
