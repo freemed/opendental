@@ -191,6 +191,15 @@ namespace OpenDental.DataAccess {
 						dataField.Field.SetValue(value, reader.GetString(ordinal));
 					}
 				}
+				else if(dataField.Field.FieldType==typeof(TimeSpan)){
+					//For timespan values that are allowed to be null in the database, we should consider those timespan values
+					//to be the minimum possible value, so that we don't have to handle null values in the code.
+					try{
+						dataField.Field.SetValue(value,reader.GetValue(ordinal));
+					}catch{
+						dataField.Field.SetValue(value,TimeSpan.MinValue);
+					}
+				}
 				else {
 					dataField.Field.SetValue(value, reader.GetValue(ordinal));
 				}
