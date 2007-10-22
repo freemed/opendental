@@ -2760,7 +2760,9 @@ namespace OpenDental{
 		}
 
 		private void updateTotalMin(){
-			int total=Int16.Parse(textStop.Text)-Int16.Parse(textStart.Text);
+			int startTime = Int16.Parse(textStart.Text);
+			int stopTime = Int16.Parse(textStop.Text);
+			int total=(((stopTime/100)*60)+(stopTime%100))-(((startTime/100)*60)+(startTime%100));
 			textTotal.Text=total.ToString();
 		}
 
