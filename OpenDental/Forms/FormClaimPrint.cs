@@ -1840,7 +1840,7 @@ namespace OpenDental{
 						displayStrings[i]=GetProcInfo("Fee",5+startProc,ClaimFormCur.Items[i].FormatString);
 						break;
 					case "P5TreatDentMedicaidID":
-						displayStrings[i]=GetProcInfo("TreatDentMedicaidID",5);
+						displayStrings[i]=GetProcInfo("TreatDentMedicaidID",5+startProc);
 						break;
 					case "P5PlaceNumericCode":
 						displayStrings[i]=GetProcInfo("PlaceNumericCode",5+startProc);
