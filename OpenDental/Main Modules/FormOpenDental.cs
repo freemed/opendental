@@ -1636,20 +1636,21 @@ namespace OpenDental{
 			formPS.ShowDialog();
 			if(formPS.DialogResult==DialogResult.OK) {
 				CurPatNum=formPS.SelectedPatNum;
+				Patient pat=Patients.GetPat(CurPatNum);
 				RefreshCurrentModule();
+				FillPatientButton(CurPatNum,pat.GetNameLF(),pat.Email!="",pat.ChartNumber);
 			}
 		}
 
 		private void menuPatient_Click(object sender,System.EventArgs e) {
 			Family fam=Patients.GetFamily(CurPatNum);
 			CurPatNum=Patients.ButtonSelect(menuPatient,sender,fam);
-			//Patient pat=fam.GetPatient(CurPatNum);
+			Patient pat=fam.GetPatient(CurPatNum);
 			RefreshCurrentModule();
-			//This next line is done automatically already:
-			//FillPatientButton(CurPatNum,fam.GetPatient(CurPatNum).GetNameLF(),pat.Email!="",pat.ChartNumber);
+			FillPatientButton(CurPatNum,pat.GetNameLF(),pat.Email!="",pat.ChartNumber);
 		}
 
-		///<summary>Happens when any of the modules changes the current patient.  The calling module should then refresh itself.  The current patNum is stored here in the parent form so that when switching modules, the parent form knows which patient to call up for that module.</summary>
+		///<summary>Happens when any of the modules changes the current patient or when this main form changes the patient.  The calling module should refresh itself.  The current patNum is stored here in the parent form so that when switching modules, the parent form knows which patient to call up for that module.</summary>
 		private void Contr_PatientSelected(object sender,PatientSelectedEventArgs e) {
 			CurPatNum=e.PatNum;
 			FillPatientButton(CurPatNum,e.PatName,e.HasEmail,e.ChartNumber);
@@ -2002,7 +2003,7 @@ namespace OpenDental{
 					userControlTasks1.Location=new Point(position.X,panelSplitter.Bottom);
 					userControlTasks1.Width=width;
 					userControlTasks1.Height=this.ClientSize.Height-userControlTasks1.Top;
-					height=ClientSize.Height-panelSplitter.Height-userControlTasks1.Height;
+					height=ClientSize.Height-panelSplitter.Height-userControlTasks1.Height-ToolBarMain.Height;
 				}
 				else{//docked Right
 					if(panelSplitter.Width>10){//docking needs to be changed.
@@ -2017,6 +2018,8 @@ namespace OpenDental{
 					userControlTasks1.Width=this.ClientSize.Width-userControlTasks1.Left;
 					width=ClientSize.Width-panelSplitter.Width-userControlTasks1.Width-position.X;
 				}
+				panelSplitter.BringToFront();
+				panelSplitter.Invalidate();
 			}
 			else{
 				panelSplitter.Visible=false;
@@ -2538,7 +2541,10 @@ namespace OpenDental{
 			if(userControlTasks1.GotoType==TaskObjectType.Patient) {
 				if(userControlTasks1.GotoKeyNum!=0) {
 					CurPatNum=userControlTasks1.GotoKeyNum;//OnPatientSelected(FormT.GotoKeyNum);
-					GotoModule.GotoAccount();
+					//GotoModule.GotoAccount();
+					Patient pat=Patients.GetPat(CurPatNum);
+					RefreshCurrentModule();
+					FillPatientButton(CurPatNum,pat.GetNameLF(),pat.Email!="",pat.ChartNumber);
 				}
 			}
 			if(userControlTasks1.GotoType==TaskObjectType.Appointment) {

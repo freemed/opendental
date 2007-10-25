@@ -64,7 +64,8 @@ namespace OpenDental{
 		private ComboBox comboBrokenApptAdjType;
 		private Label label12;
 		private ComboBox comboFinanceChargeAdjType;
-		private System.Windows.Forms.Label label1;// Required designer variable.
+		private System.Windows.Forms.Label label1;
+		private CheckBox checkTaskListAlwaysShow;// Required designer variable.
 		private List<Def> posAdjTypes;
 
 		///<summary></summary>
@@ -100,10 +101,18 @@ namespace OpenDental{
 			this.checkBox5 = new System.Windows.Forms.CheckBox();
 			this.checkTreatPlanShowIns = new System.Windows.Forms.CheckBox();
 			this.groupBox5 = new System.Windows.Forms.GroupBox();
+			this.label12 = new System.Windows.Forms.Label();
+			this.comboFinanceChargeAdjType = new System.Windows.Forms.ComboBox();
+			this.label10 = new System.Windows.Forms.Label();
+			this.checkStoreCCnumbers = new System.Windows.Forms.CheckBox();
+			this.comboUseChartNum = new System.Windows.Forms.ComboBox();
 			this.checkSimpleStatement = new System.Windows.Forms.CheckBox();
 			this.checkAgingMonthly = new System.Windows.Forms.CheckBox();
 			this.checkStatementShowReturnAddress = new System.Windows.Forms.CheckBox();
+			this.checkBoldBalance = new System.Windows.Forms.CheckBox();
 			this.checkBalancesDontSubtractIns = new System.Windows.Forms.CheckBox();
+			this.checkShowAccountNotes = new System.Windows.Forms.CheckBox();
+			this.textStatementsCalcDueDate = new OpenDental.ValidNumber();
 			this.label2 = new System.Windows.Forms.Label();
 			this.checkEclaimsSeparateTreatProv = new System.Windows.Forms.CheckBox();
 			this.checkRandomPrimaryKeys = new System.Windows.Forms.CheckBox();
@@ -113,13 +122,12 @@ namespace OpenDental{
 			this.label4 = new System.Windows.Forms.Label();
 			this.checkSolidBlockouts = new System.Windows.Forms.CheckBox();
 			this.groupBox4 = new System.Windows.Forms.GroupBox();
-			this.checkDeductibleBeforePercent = new System.Windows.Forms.CheckBox();
-			this.checkStoreCCnumbers = new System.Windows.Forms.CheckBox();
-			this.checkBoldBalance = new System.Windows.Forms.CheckBox();
-			this.checkShowAccountNotes = new System.Windows.Forms.CheckBox();
-			this.checkAppointmentBubblesDisabled = new System.Windows.Forms.CheckBox();
-			this.checkApptBubbleDelay = new System.Windows.Forms.CheckBox();
+			this.label7 = new System.Windows.Forms.Label();
 			this.checkBrokenApptNote = new System.Windows.Forms.CheckBox();
+			this.comboBrokenApptAdjType = new System.Windows.Forms.ComboBox();
+			this.checkApptBubbleDelay = new System.Windows.Forms.CheckBox();
+			this.checkAppointmentBubblesDisabled = new System.Windows.Forms.CheckBox();
+			this.checkDeductibleBeforePercent = new System.Windows.Forms.CheckBox();
 			this.groupBox7 = new System.Windows.Forms.GroupBox();
 			this.label9 = new System.Windows.Forms.Label();
 			this.textBoxDocPath = new System.Windows.Forms.TextBox();
@@ -130,19 +138,13 @@ namespace OpenDental{
 			this.label5 = new System.Windows.Forms.Label();
 			this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
 			this.pictureBox1 = new System.Windows.Forms.PictureBox();
-			this.comboUseChartNum = new System.Windows.Forms.ComboBox();
-			this.label10 = new System.Windows.Forms.Label();
 			this.label11 = new System.Windows.Forms.Label();
 			this.comboShowID = new System.Windows.Forms.ComboBox();
-			this.label7 = new System.Windows.Forms.Label();
-			this.comboBrokenApptAdjType = new System.Windows.Forms.ComboBox();
-			this.label12 = new System.Windows.Forms.Label();
-			this.comboFinanceChargeAdjType = new System.Windows.Forms.ComboBox();
 			this.butLanguages = new OpenDental.UI.Button();
 			this.textSigInterval = new OpenDental.ValidNumber();
 			this.butCancel = new OpenDental.UI.Button();
 			this.butOK = new OpenDental.UI.Button();
-			this.textStatementsCalcDueDate = new OpenDental.ValidNumber();
+			this.checkTaskListAlwaysShow = new System.Windows.Forms.CheckBox();
 			this.groupBox1.SuspendLayout();
 			this.groupBox5.SuspendLayout();
 			this.groupBox4.SuspendLayout();
@@ -181,14 +183,14 @@ namespace OpenDental{
 			// 
 			// textMainWindowTitle
 			// 
-			this.textMainWindowTitle.Location = new System.Drawing.Point(416,329);
+			this.textMainWindowTitle.Location = new System.Drawing.Point(416,317);
 			this.textMainWindowTitle.Name = "textMainWindowTitle";
 			this.textMainWindowTitle.Size = new System.Drawing.Size(431,20);
 			this.textMainWindowTitle.TabIndex = 38;
 			// 
 			// label14
 			// 
-			this.label14.Location = new System.Drawing.Point(265,331);
+			this.label14.Location = new System.Drawing.Point(265,319);
 			this.label14.Name = "label14";
 			this.label14.Size = new System.Drawing.Size(149,17);
 			this.label14.TabIndex = 39;
@@ -199,7 +201,7 @@ namespace OpenDental{
 			// 
 			this.checkITooth.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.checkITooth.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkITooth.Location = new System.Drawing.Point(500,418);
+			this.checkITooth.Location = new System.Drawing.Point(500,399);
 			this.checkITooth.Name = "checkITooth";
 			this.checkITooth.Size = new System.Drawing.Size(346,17);
 			this.checkITooth.TabIndex = 42;
@@ -291,6 +293,55 @@ namespace OpenDental{
 			this.groupBox5.TabStop = false;
 			this.groupBox5.Text = "Account module";
 			// 
+			// label12
+			// 
+			this.label12.Location = new System.Drawing.Point(3,226);
+			this.label12.Name = "label12";
+			this.label12.Size = new System.Drawing.Size(221,15);
+			this.label12.TabIndex = 73;
+			this.label12.Text = "Finance charge adj type";
+			this.label12.TextAlign = System.Drawing.ContentAlignment.TopRight;
+			// 
+			// comboFinanceChargeAdjType
+			// 
+			this.comboFinanceChargeAdjType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboFinanceChargeAdjType.FormattingEnabled = true;
+			this.comboFinanceChargeAdjType.Location = new System.Drawing.Point(225,222);
+			this.comboFinanceChargeAdjType.MaxDropDownItems = 30;
+			this.comboFinanceChargeAdjType.Name = "comboFinanceChargeAdjType";
+			this.comboFinanceChargeAdjType.Size = new System.Drawing.Size(163,21);
+			this.comboFinanceChargeAdjType.TabIndex = 72;
+			// 
+			// label10
+			// 
+			this.label10.Location = new System.Drawing.Point(61,64);
+			this.label10.Name = "label10";
+			this.label10.Size = new System.Drawing.Size(195,15);
+			this.label10.TabIndex = 69;
+			this.label10.Text = "Account Numbers use";
+			this.label10.TextAlign = System.Drawing.ContentAlignment.TopRight;
+			// 
+			// checkStoreCCnumbers
+			// 
+			this.checkStoreCCnumbers.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkStoreCCnumbers.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.checkStoreCCnumbers.Location = new System.Drawing.Point(19,202);
+			this.checkStoreCCnumbers.Name = "checkStoreCCnumbers";
+			this.checkStoreCCnumbers.Size = new System.Drawing.Size(368,17);
+			this.checkStoreCCnumbers.TabIndex = 67;
+			this.checkStoreCCnumbers.Text = "Allow storing credit card numbers (this is a security risk)";
+			this.checkStoreCCnumbers.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkStoreCCnumbers.UseVisualStyleBackColor = true;
+			// 
+			// comboUseChartNum
+			// 
+			this.comboUseChartNum.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboUseChartNum.FormattingEnabled = true;
+			this.comboUseChartNum.Location = new System.Drawing.Point(258,60);
+			this.comboUseChartNum.Name = "comboUseChartNum";
+			this.comboUseChartNum.Size = new System.Drawing.Size(130,21);
+			this.comboUseChartNum.TabIndex = 68;
+			// 
 			// checkSimpleStatement
 			// 
 			this.checkSimpleStatement.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -324,6 +375,20 @@ namespace OpenDental{
 			this.checkStatementShowReturnAddress.Text = "Show return address on statements";
 			this.checkStatementShowReturnAddress.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
+			// checkBoldBalance
+			// 
+			this.checkBoldBalance.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkBoldBalance.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.checkBoldBalance.Location = new System.Drawing.Point(19,185);
+			this.checkBoldBalance.Name = "checkBoldBalance";
+			this.checkBoldBalance.Size = new System.Drawing.Size(368,17);
+			this.checkBoldBalance.TabIndex = 57;
+			this.checkBoldBalance.Text = "Use bold balance view";
+			this.checkBoldBalance.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.toolTip1.SetToolTip(this.checkBoldBalance,"Generally used with \"Balances don\'t subtract insurance estimate\"\r\nchecked to the " +
+        "upper right of this option in the \"Statements\" section.\r\nHowever, it will work w" +
+        "ell either way.");
+			// 
 			// checkBalancesDontSubtractIns
 			// 
 			this.checkBalancesDontSubtractIns.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -334,6 +399,27 @@ namespace OpenDental{
 			this.checkBalancesDontSubtractIns.TabIndex = 55;
 			this.checkBalancesDontSubtractIns.Text = "Balances don\'t subtract insurance estimate";
 			this.checkBalancesDontSubtractIns.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// checkShowAccountNotes
+			// 
+			this.checkShowAccountNotes.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkShowAccountNotes.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.checkShowAccountNotes.Location = new System.Drawing.Point(19,168);
+			this.checkShowAccountNotes.Name = "checkShowAccountNotes";
+			this.checkShowAccountNotes.Size = new System.Drawing.Size(368,17);
+			this.checkShowAccountNotes.TabIndex = 56;
+			this.checkShowAccountNotes.Text = "Show item notes in main grid ";
+			this.checkShowAccountNotes.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// textStatementsCalcDueDate
+			// 
+			this.textStatementsCalcDueDate.Location = new System.Drawing.Point(328,87);
+			this.textStatementsCalcDueDate.MaxVal = 255;
+			this.textStatementsCalcDueDate.MinVal = 0;
+			this.textStatementsCalcDueDate.Name = "textStatementsCalcDueDate";
+			this.textStatementsCalcDueDate.Size = new System.Drawing.Size(60,20);
+			this.textStatementsCalcDueDate.TabIndex = 54;
+			this.textStatementsCalcDueDate.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
 			// 
 			// label2
 			// 
@@ -349,7 +435,7 @@ namespace OpenDental{
 			// 
 			this.checkEclaimsSeparateTreatProv.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.checkEclaimsSeparateTreatProv.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkEclaimsSeparateTreatProv.Location = new System.Drawing.Point(500,435);
+			this.checkEclaimsSeparateTreatProv.Location = new System.Drawing.Point(500,416);
 			this.checkEclaimsSeparateTreatProv.Name = "checkEclaimsSeparateTreatProv";
 			this.checkEclaimsSeparateTreatProv.Size = new System.Drawing.Size(346,17);
 			this.checkEclaimsSeparateTreatProv.TabIndex = 53;
@@ -360,7 +446,7 @@ namespace OpenDental{
 			// 
 			this.checkRandomPrimaryKeys.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.checkRandomPrimaryKeys.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkRandomPrimaryKeys.Location = new System.Drawing.Point(500,469);
+			this.checkRandomPrimaryKeys.Location = new System.Drawing.Point(500,450);
 			this.checkRandomPrimaryKeys.Name = "checkRandomPrimaryKeys";
 			this.checkRandomPrimaryKeys.Size = new System.Drawing.Size(346,17);
 			this.checkRandomPrimaryKeys.TabIndex = 55;
@@ -370,7 +456,7 @@ namespace OpenDental{
 			// 
 			// label3
 			// 
-			this.label3.Location = new System.Drawing.Point(214,379);
+			this.label3.Location = new System.Drawing.Point(214,361);
 			this.label3.Name = "label3";
 			this.label3.Size = new System.Drawing.Size(558,18);
 			this.label3.TabIndex = 56;
@@ -382,7 +468,7 @@ namespace OpenDental{
 			// 
 			this.checkInsurancePlansShared.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.checkInsurancePlansShared.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkInsurancePlansShared.Location = new System.Drawing.Point(217,486);
+			this.checkInsurancePlansShared.Location = new System.Drawing.Point(217,467);
 			this.checkInsurancePlansShared.Name = "checkInsurancePlansShared";
 			this.checkInsurancePlansShared.Size = new System.Drawing.Size(629,17);
 			this.checkInsurancePlansShared.TabIndex = 58;
@@ -394,7 +480,7 @@ namespace OpenDental{
 			// 
 			this.checkMedicalEclaimsEnabled.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.checkMedicalEclaimsEnabled.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkMedicalEclaimsEnabled.Location = new System.Drawing.Point(500,401);
+			this.checkMedicalEclaimsEnabled.Location = new System.Drawing.Point(500,382);
 			this.checkMedicalEclaimsEnabled.Name = "checkMedicalEclaimsEnabled";
 			this.checkMedicalEclaimsEnabled.Size = new System.Drawing.Size(346,17);
 			this.checkMedicalEclaimsEnabled.TabIndex = 60;
@@ -403,7 +489,7 @@ namespace OpenDental{
 			// 
 			// label4
 			// 
-			this.label4.Location = new System.Drawing.Point(457,513);
+			this.label4.Location = new System.Drawing.Point(457,506);
 			this.label4.Name = "label4";
 			this.label4.Size = new System.Drawing.Size(298,17);
 			this.label4.TabIndex = 64;
@@ -437,67 +523,36 @@ namespace OpenDental{
 			this.groupBox4.TabStop = false;
 			this.groupBox4.Text = "Appointment module";
 			// 
-			// checkDeductibleBeforePercent
+			// label7
 			// 
-			this.checkDeductibleBeforePercent.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.checkDeductibleBeforePercent.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkDeductibleBeforePercent.Location = new System.Drawing.Point(500,452);
-			this.checkDeductibleBeforePercent.Name = "checkDeductibleBeforePercent";
-			this.checkDeductibleBeforePercent.Size = new System.Drawing.Size(346,17);
-			this.checkDeductibleBeforePercent.TabIndex = 68;
-			this.checkDeductibleBeforePercent.Text = "Ins Plans default to apply deductible before percent.";
-			this.checkDeductibleBeforePercent.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.checkDeductibleBeforePercent.UseVisualStyleBackColor = true;
-			this.checkDeductibleBeforePercent.Click += new System.EventHandler(this.checkDeductibleBeforePercent_Click);
+			this.label7.Location = new System.Drawing.Point(3,89);
+			this.label7.Name = "label7";
+			this.label7.Size = new System.Drawing.Size(221,15);
+			this.label7.TabIndex = 71;
+			this.label7.Text = "Broken appt default adj type";
+			this.label7.TextAlign = System.Drawing.ContentAlignment.TopRight;
 			// 
-			// checkStoreCCnumbers
+			// checkBrokenApptNote
 			// 
-			this.checkStoreCCnumbers.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.checkStoreCCnumbers.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkStoreCCnumbers.Location = new System.Drawing.Point(19,202);
-			this.checkStoreCCnumbers.Name = "checkStoreCCnumbers";
-			this.checkStoreCCnumbers.Size = new System.Drawing.Size(368,17);
-			this.checkStoreCCnumbers.TabIndex = 67;
-			this.checkStoreCCnumbers.Text = "Allow storing credit card numbers (this is a security risk)";
-			this.checkStoreCCnumbers.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.checkStoreCCnumbers.UseVisualStyleBackColor = true;
+			this.checkBrokenApptNote.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkBrokenApptNote.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.checkBrokenApptNote.Location = new System.Drawing.Point(25,66);
+			this.checkBrokenApptNote.Name = "checkBrokenApptNote";
+			this.checkBrokenApptNote.Size = new System.Drawing.Size(362,17);
+			this.checkBrokenApptNote.TabIndex = 67;
+			this.checkBrokenApptNote.Text = "Put broken appt note in Commlog instead of Adj (not recommended)";
+			this.checkBrokenApptNote.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkBrokenApptNote.UseVisualStyleBackColor = true;
 			// 
-			// checkBoldBalance
+			// comboBrokenApptAdjType
 			// 
-			this.checkBoldBalance.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.checkBoldBalance.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkBoldBalance.Location = new System.Drawing.Point(19,185);
-			this.checkBoldBalance.Name = "checkBoldBalance";
-			this.checkBoldBalance.Size = new System.Drawing.Size(368,17);
-			this.checkBoldBalance.TabIndex = 57;
-			this.checkBoldBalance.Text = "Use bold balance view";
-			this.checkBoldBalance.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.toolTip1.SetToolTip(this.checkBoldBalance,"Generally used with \"Balances don\'t subtract insurance estimate\"\r\nchecked to the " +
-        "upper right of this option in the \"Statements\" section.\r\nHowever, it will work w" +
-        "ell either way.");
-			// 
-			// checkShowAccountNotes
-			// 
-			this.checkShowAccountNotes.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.checkShowAccountNotes.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkShowAccountNotes.Location = new System.Drawing.Point(19,168);
-			this.checkShowAccountNotes.Name = "checkShowAccountNotes";
-			this.checkShowAccountNotes.Size = new System.Drawing.Size(368,17);
-			this.checkShowAccountNotes.TabIndex = 56;
-			this.checkShowAccountNotes.Text = "Show item notes in main grid ";
-			this.checkShowAccountNotes.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// checkAppointmentBubblesDisabled
-			// 
-			this.checkAppointmentBubblesDisabled.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.checkAppointmentBubblesDisabled.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkAppointmentBubblesDisabled.Location = new System.Drawing.Point(25,15);
-			this.checkAppointmentBubblesDisabled.Name = "checkAppointmentBubblesDisabled";
-			this.checkAppointmentBubblesDisabled.Size = new System.Drawing.Size(362,17);
-			this.checkAppointmentBubblesDisabled.TabIndex = 70;
-			this.checkAppointmentBubblesDisabled.Text = "Appointment bubble popup disabled";
-			this.checkAppointmentBubblesDisabled.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.checkAppointmentBubblesDisabled.UseVisualStyleBackColor = true;
+			this.comboBrokenApptAdjType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboBrokenApptAdjType.FormattingEnabled = true;
+			this.comboBrokenApptAdjType.Location = new System.Drawing.Point(225,85);
+			this.comboBrokenApptAdjType.MaxDropDownItems = 30;
+			this.comboBrokenApptAdjType.Name = "comboBrokenApptAdjType";
+			this.comboBrokenApptAdjType.Size = new System.Drawing.Size(163,21);
+			this.comboBrokenApptAdjType.TabIndex = 70;
 			// 
 			// checkApptBubbleDelay
 			// 
@@ -511,17 +566,30 @@ namespace OpenDental{
 			this.checkApptBubbleDelay.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.checkApptBubbleDelay.UseVisualStyleBackColor = true;
 			// 
-			// checkBrokenApptNote
+			// checkAppointmentBubblesDisabled
 			// 
-			this.checkBrokenApptNote.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.checkBrokenApptNote.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkBrokenApptNote.Location = new System.Drawing.Point(25,66);
-			this.checkBrokenApptNote.Name = "checkBrokenApptNote";
-			this.checkBrokenApptNote.Size = new System.Drawing.Size(362,17);
-			this.checkBrokenApptNote.TabIndex = 67;
-			this.checkBrokenApptNote.Text = "Put broken appt note in Commlog instead of Adj (not recommended)";
-			this.checkBrokenApptNote.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.checkBrokenApptNote.UseVisualStyleBackColor = true;
+			this.checkAppointmentBubblesDisabled.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkAppointmentBubblesDisabled.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.checkAppointmentBubblesDisabled.Location = new System.Drawing.Point(25,15);
+			this.checkAppointmentBubblesDisabled.Name = "checkAppointmentBubblesDisabled";
+			this.checkAppointmentBubblesDisabled.Size = new System.Drawing.Size(362,17);
+			this.checkAppointmentBubblesDisabled.TabIndex = 70;
+			this.checkAppointmentBubblesDisabled.Text = "Appointment bubble popup disabled";
+			this.checkAppointmentBubblesDisabled.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkAppointmentBubblesDisabled.UseVisualStyleBackColor = true;
+			// 
+			// checkDeductibleBeforePercent
+			// 
+			this.checkDeductibleBeforePercent.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkDeductibleBeforePercent.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.checkDeductibleBeforePercent.Location = new System.Drawing.Point(500,433);
+			this.checkDeductibleBeforePercent.Name = "checkDeductibleBeforePercent";
+			this.checkDeductibleBeforePercent.Size = new System.Drawing.Size(346,17);
+			this.checkDeductibleBeforePercent.TabIndex = 68;
+			this.checkDeductibleBeforePercent.Text = "Ins Plans default to apply deductible before percent.";
+			this.checkDeductibleBeforePercent.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkDeductibleBeforePercent.UseVisualStyleBackColor = true;
+			this.checkDeductibleBeforePercent.Click += new System.EventHandler(this.checkDeductibleBeforePercent_Click);
 			// 
 			// groupBox7
 			// 
@@ -619,27 +687,9 @@ namespace OpenDental{
 			this.pictureBox1.TabIndex = 71;
 			this.pictureBox1.TabStop = false;
 			// 
-			// comboUseChartNum
-			// 
-			this.comboUseChartNum.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboUseChartNum.FormattingEnabled = true;
-			this.comboUseChartNum.Location = new System.Drawing.Point(258,60);
-			this.comboUseChartNum.Name = "comboUseChartNum";
-			this.comboUseChartNum.Size = new System.Drawing.Size(130,21);
-			this.comboUseChartNum.TabIndex = 68;
-			// 
-			// label10
-			// 
-			this.label10.Location = new System.Drawing.Point(61,64);
-			this.label10.Name = "label10";
-			this.label10.Size = new System.Drawing.Size(195,15);
-			this.label10.TabIndex = 69;
-			this.label10.Text = "Account Numbers use";
-			this.label10.TextAlign = System.Drawing.ContentAlignment.TopRight;
-			// 
 			// label11
 			// 
-			this.label11.Location = new System.Drawing.Point(520,356);
+			this.label11.Location = new System.Drawing.Point(520,342);
 			this.label11.Name = "label11";
 			this.label11.Size = new System.Drawing.Size(195,15);
 			this.label11.TabIndex = 73;
@@ -650,48 +700,10 @@ namespace OpenDental{
 			// 
 			this.comboShowID.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.comboShowID.FormattingEnabled = true;
-			this.comboShowID.Location = new System.Drawing.Point(717,352);
+			this.comboShowID.Location = new System.Drawing.Point(717,338);
 			this.comboShowID.Name = "comboShowID";
 			this.comboShowID.Size = new System.Drawing.Size(130,21);
 			this.comboShowID.TabIndex = 72;
-			// 
-			// label7
-			// 
-			this.label7.Location = new System.Drawing.Point(3,89);
-			this.label7.Name = "label7";
-			this.label7.Size = new System.Drawing.Size(221,15);
-			this.label7.TabIndex = 71;
-			this.label7.Text = "Broken appt default adj type";
-			this.label7.TextAlign = System.Drawing.ContentAlignment.TopRight;
-			// 
-			// comboBrokenApptAdjType
-			// 
-			this.comboBrokenApptAdjType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboBrokenApptAdjType.FormattingEnabled = true;
-			this.comboBrokenApptAdjType.Location = new System.Drawing.Point(225,85);
-			this.comboBrokenApptAdjType.MaxDropDownItems = 30;
-			this.comboBrokenApptAdjType.Name = "comboBrokenApptAdjType";
-			this.comboBrokenApptAdjType.Size = new System.Drawing.Size(163,21);
-			this.comboBrokenApptAdjType.TabIndex = 70;
-			// 
-			// label12
-			// 
-			this.label12.Location = new System.Drawing.Point(3,226);
-			this.label12.Name = "label12";
-			this.label12.Size = new System.Drawing.Size(221,15);
-			this.label12.TabIndex = 73;
-			this.label12.Text = "Finance charge adj type";
-			this.label12.TextAlign = System.Drawing.ContentAlignment.TopRight;
-			// 
-			// comboFinanceChargeAdjType
-			// 
-			this.comboFinanceChargeAdjType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboFinanceChargeAdjType.FormattingEnabled = true;
-			this.comboFinanceChargeAdjType.Location = new System.Drawing.Point(225,222);
-			this.comboFinanceChargeAdjType.MaxDropDownItems = 30;
-			this.comboFinanceChargeAdjType.Name = "comboFinanceChargeAdjType";
-			this.comboFinanceChargeAdjType.Size = new System.Drawing.Size(163,21);
-			this.comboFinanceChargeAdjType.TabIndex = 72;
 			// 
 			// butLanguages
 			// 
@@ -700,16 +712,16 @@ namespace OpenDental{
 			this.butLanguages.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butLanguages.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butLanguages.CornerRadius = 4F;
-			this.butLanguages.Location = new System.Drawing.Point(758,509);
+			this.butLanguages.Location = new System.Drawing.Point(758,503);
 			this.butLanguages.Name = "butLanguages";
-			this.butLanguages.Size = new System.Drawing.Size(88,24);
+			this.butLanguages.Size = new System.Drawing.Size(88,23);
 			this.butLanguages.TabIndex = 63;
 			this.butLanguages.Text = "Edit Languages";
 			this.butLanguages.Click += new System.EventHandler(this.butLanguages_Click);
 			// 
 			// textSigInterval
 			// 
-			this.textSigInterval.Location = new System.Drawing.Point(773,378);
+			this.textSigInterval.Location = new System.Drawing.Point(773,360);
 			this.textSigInterval.MaxVal = 1000000;
 			this.textSigInterval.MinVal = 1;
 			this.textSigInterval.Name = "textSigInterval";
@@ -748,20 +760,22 @@ namespace OpenDental{
 			this.butOK.Text = "&OK";
 			this.butOK.Click += new System.EventHandler(this.butOK_Click);
 			// 
-			// textStatementsCalcDueDate
+			// checkTaskListAlwaysShow
 			// 
-			this.textStatementsCalcDueDate.Location = new System.Drawing.Point(328,87);
-			this.textStatementsCalcDueDate.MaxVal = 255;
-			this.textStatementsCalcDueDate.MinVal = 0;
-			this.textStatementsCalcDueDate.Name = "textStatementsCalcDueDate";
-			this.textStatementsCalcDueDate.Size = new System.Drawing.Size(60,20);
-			this.textStatementsCalcDueDate.TabIndex = 54;
-			this.textStatementsCalcDueDate.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+			this.checkTaskListAlwaysShow.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkTaskListAlwaysShow.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.checkTaskListAlwaysShow.Location = new System.Drawing.Point(589,484);
+			this.checkTaskListAlwaysShow.Name = "checkTaskListAlwaysShow";
+			this.checkTaskListAlwaysShow.Size = new System.Drawing.Size(257,17);
+			this.checkTaskListAlwaysShow.TabIndex = 74;
+			this.checkTaskListAlwaysShow.Text = "Always show Task List";
+			this.checkTaskListAlwaysShow.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// FormMisc
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.ClientSize = new System.Drawing.Size(893,699);
+			this.Controls.Add(this.checkTaskListAlwaysShow);
 			this.Controls.Add(this.label11);
 			this.Controls.Add(this.comboShowID);
 			this.Controls.Add(this.pictureBox1);
@@ -871,6 +885,7 @@ namespace OpenDental{
 					comboBrokenApptAdjType.SelectedIndex=i;
 				}
 			}
+			checkTaskListAlwaysShow.Checked=PrefB.GetBool("TaskListAlwaysShowsAtBottom");
 		}
 
 		private void checkRandomPrimaryKeys_Click(object sender, System.EventArgs e) {
@@ -955,6 +970,7 @@ namespace OpenDental{
 				| Prefs.UpdateInt("ShowIDinTitleBar",comboShowID.SelectedIndex)
 				| Prefs.UpdateInt("FinanceChargeAdjustmentType",posAdjTypes[comboFinanceChargeAdjType.SelectedIndex].DefNum)
 				| Prefs.UpdateInt("BrokenAppointmentAdjustmentType",posAdjTypes[comboBrokenApptAdjType.SelectedIndex].DefNum)
+				| Prefs.UpdateBool("TaskListAlwaysShowsAtBottom", checkTaskListAlwaysShow.Checked)
 				)
 			{
 				changed=true;
