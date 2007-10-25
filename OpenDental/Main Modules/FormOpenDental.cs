@@ -189,6 +189,7 @@ namespace OpenDental{
 		private ContextMenu menuEmail;
 		private ContextMenu menuLetter;
 		private Point OriginalMousePos;
+		private List<PopupEvent> PopupEventList;
 
 		///<summary></summary>
 		public FormOpenDental(){
@@ -1685,12 +1686,32 @@ namespace OpenDental{
 			}
 			ToolBarMain.Invalidate();
 			Text=Patients.GetMainTitle(patName,patNum,chartNumber);
-			List<Popup> popList=Popups.CreateObjects(CurPatNum);
-			if(popList.Count>0){
-				if(ContrAppt2.Visible){
-					ContrAppt2.MouseUpForced();
+			if(PopupEventList==null){
+				PopupEventList=new List<PopupEvent>();
+			}
+			bool didPopupRecently=false;
+			for(int i=PopupEventList.Count-1;i>=0;i--){//go backwards
+				if(PopupEventList[i].PopTime<DateTime.Now.AddMinutes(-10)){
+					PopupEventList.RemoveAt(i);
+					continue;
 				}
-				MessageBox.Show(popList[0].Description,Lan.g(this,"Popup"));
+				if(PopupEventList[i].PatNum==patNum){
+					didPopupRecently=true;
+					break;
+				}
+			}
+			if(!didPopupRecently){
+				List<Popup> popList=Popups.CreateObjects(patNum);
+				if(popList.Count>0 && !popList[0].IsDisabled) {
+					PopupEvent popevent=new PopupEvent();
+					popevent.PatNum=patNum;
+					popevent.PopTime=DateTime.Now;
+					PopupEventList.Add(popevent);
+					if(ContrAppt2.Visible) {
+						ContrAppt2.MouseUpForced();
+					}
+					MessageBox.Show(popList[0].Description,Lan.g(this,"Popup"));
+				}
 			}
 		}
 
@@ -1919,17 +1940,22 @@ namespace OpenDental{
 
 		private void OnPopups_Click() {
 			List<Popup> popList=Popups.CreateObjects(CurPatNum);
+			FormPopupEdit FormP=new FormPopupEdit();
 			if(popList.Count==0) {
 				Popup pop=new Popup();
 				pop.PatNum=CurPatNum;
-				FormPopupEdit FormP=new FormPopupEdit();
 				FormP.PopupCur=pop;
-				FormP.ShowDialog();
 			}
 			else{
-				FormPopupEdit FormP=new FormPopupEdit();
-				FormP.PopupCur=popList[0];
-				FormP.ShowDialog();
+				FormP.PopupCur=popList[0];	
+			}
+			FormP.ShowDialog();
+			if(FormP.DialogResult==DialogResult.OK){
+				for(int i=PopupEventList.Count-1;i>=0;i--){
+					if(PopupEventList[i].PatNum==CurPatNum){
+						PopupEventList.RemoveAt(i);
+					}
+				}
 			}
 		}
 
@@ -3301,5 +3327,10 @@ namespace OpenDental{
 		
 
 		
+	}
+
+	class PopupEvent{
+		public DateTime PopTime;
+		public int PatNum;
 	}
 }
