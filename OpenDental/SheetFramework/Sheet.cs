@@ -250,8 +250,13 @@ namespace OpenDental{
 				}
 				heightsCalculated=true;
 			}
-			g.TranslateTransform(100,0);
-			g.RotateTransform(90);
+			if(SheetType==SheetTypeEnum.LabelCarrier
+				|| SheetType==SheetTypeEnum.LabelPatient
+				|| SheetType==SheetTypeEnum.LabelReferral)
+			{
+				g.TranslateTransform(100,0);
+				g.RotateTransform(90);
+			}
 			foreach(SheetField field in SheetFields){
 				g.DrawString(field.FieldValue,field.Font,Brushes.Black,field.BoundsF);
 			}

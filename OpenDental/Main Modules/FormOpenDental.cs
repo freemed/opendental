@@ -1733,6 +1733,9 @@ namespace OpenDental{
 		private void menuEmail_Popup(object sender,EventArgs e) {
 			menuEmail.MenuItems.Clear();
 			MenuItem menuItem;
+			menuItem=new MenuItem(Lan.g(this,"Referrals:"));
+			menuItem.Tag=null;
+			menuEmail.MenuItems.Add(menuItem);
 			RefAttach[] refAttaches=RefAttaches.Refresh(CurPatNum);
 			Referral refer;
 			string str;
@@ -1759,6 +1762,9 @@ namespace OpenDental{
 		}
 
 		private void menuEmail_Click(object sender,System.EventArgs e) {
+			if(((MenuItem)sender).Tag==null){
+				return;
+			}
 			LabelSingle label=new LabelSingle();
 			if(((MenuItem)sender).Tag.GetType()==typeof(Referral)) {
 				Referral refer=(Referral)((MenuItem)sender).Tag;
@@ -1814,6 +1820,9 @@ namespace OpenDental{
 			menuLetter.MenuItems.Add(menuItem);
 			menuLetter.MenuItems.Add("-");
 			//Referrals---------------------------------------------------------------------------------------
+			menuItem=new MenuItem(Lan.g(this,"Referrals:"));
+			menuItem.Tag=null;
+			menuLetter.MenuItems.Add(menuItem);
 			RefAttach[] refAttaches=RefAttaches.Refresh(CurPatNum);
 			Referral refer;
 			string str;
@@ -1833,6 +1842,9 @@ namespace OpenDental{
 		}
 
 		private void menuLetter_Click(object sender,System.EventArgs e) {
+			if(((MenuItem)sender).Tag==null) {
+				return;
+			}
 			Patient pat=Patients.GetPat(CurPatNum);
 			if(((MenuItem)sender).Tag.GetType()==typeof(string)) {
 				if(((MenuItem)sender).Tag.ToString()=="Merge") {
@@ -1894,6 +1906,9 @@ namespace OpenDental{
 			}
 			menuLabel.MenuItems.Add("-");
 			//Referrals---------------------------------------------------------------------------------------
+			menuItem=new MenuItem(Lan.g(this,"Referrals:"));
+			menuItem.Tag=null;
+			menuLabel.MenuItems.Add(menuItem);
 			RefAttach[] refAttaches=RefAttaches.Refresh(CurPatNum);
 			Referral refer;
 			string str;
@@ -1913,6 +1928,9 @@ namespace OpenDental{
 		}
 
 		private void menuLabel_Click(object sender,System.EventArgs e) {
+			if(((MenuItem)sender).Tag==null) {
+				return;
+			}
 			LabelSingle label=new LabelSingle();
 			if(((MenuItem)sender).Tag.GetType()==typeof(string)){
 				if(((MenuItem)sender).Tag.ToString()=="PatientLFAddress"){
