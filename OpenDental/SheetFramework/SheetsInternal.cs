@@ -10,6 +10,8 @@ namespace OpenDental{
 			get{
 				Sheet sheet=new Sheet(SheetTypeEnum.LabelPatient);
 				sheet.Font=new Font(FontFamily.GenericSansSerif,12f);
+				sheet.Width=108;
+				sheet.Height=346;
 				int rowH=sheet.Font.Height;
 				int yPos=10;
 				sheet.SheetFields.Add(new SheetField(InOutEnum.Out,"nameFL",25,yPos,300,sheet.Font,GrowthBehaviorEnum.None));
@@ -82,6 +84,8 @@ namespace OpenDental{
 			get {
 				Sheet sheet=new Sheet(SheetTypeEnum.LabelCarrier);
 				sheet.Font=new Font(FontFamily.GenericSansSerif,12f);
+				sheet.Width=108;
+				sheet.Height=346;
 				int rowH=sheet.Font.Height;
 				int yPos=10;
 				sheet.SheetFields.Add(new SheetField(InOutEnum.Out,"CarrierName",25,yPos,300,sheet.Font,GrowthBehaviorEnum.None));

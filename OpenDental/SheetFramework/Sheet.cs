@@ -32,14 +32,24 @@ namespace OpenDental{
 	class Sheet {
 		///<Summary>Every single sheet must have a type, and only the types listed in the enum will be supported as part of the Sheet framework.</Summary>
 		public SheetTypeEnum SheetType;
-		///<Summary>A collection of all parameters for this sheet.</Summary>
+		///<Summary>A collection of all parameters for this sheet.  The first parameter will be a List int if it's a batch.</Summary>
 		public List<SheetParameter> Parameters;
 		///<Summary></Summary>
 		public List<SheetField> SheetFields;
 		///<Summary></Summary>
 		public Font Font;
+		public int Width;
+		public int Height;
+
 		private Font fontDefault=new Font(FontFamily.GenericSansSerif,8.5f);
+		///<Summary>For the current sheet in the batch.  Reset for each new sheet in a batch.</Summary>
 		private bool heightsCalculated;
+		///<Summary>For the current sheet in the batch.  Reset for each new sheet in a batch.</Summary>
+		private bool valuesFilled;
+		///<Summary>Based off of the first parameter.  The list of primary keys representing sheets in a batch.</Summary>
+		private List<int> ParamVals;
+		///<Summary>If there is only one "sheet" in the batch, then this will be 0.</Summary>
+		private int SheetsPrintedInBatch;
 
 		public Sheet(SheetTypeEnum sheetType){
 			SheetType=sheetType;
@@ -65,68 +75,54 @@ namespace OpenDental{
 			param.ParamValue=paramValue;
 		}
 
-		///<Summary>Surround with try/catch. This override is used when printing a batch.  Printer is figured externally so that only one dialog will come up.</Summary>
+		///<Summary>Surround with try/catch. If isBatch, then the first parameter is an array.  This same logic can't be constructed externally, because then the print preview and (future) progress indicator would only show one sheet in the batch at a time.</Summary>
 		public void Print(){
-			Print("");
+			Print(false);
 		}
 
-		///<Summary>Surround with try/catch.  If printerName is blank, then it will display a dialog.</Summary>
-		public void Print(string printerName){
-			foreach(SheetField field in SheetFields) {
-				if(field.Font==null) {
-					field.Font=Font;
-				}
-				if(field.Height==0) {
-					field.Height=field.Font.Height;
-				}
-			}
+		///<Summary>Surround with try/catch. If isBatch, then the first parameter is an array.  This same logic can't be constructed externally, because then the print preview and (future) progress indicator would only show one sheet in the batch at a time.</Summary>
+		public void Print(bool isBatch){
 			foreach(SheetParameter param in Parameters){
 				if(param.IsRequired && param.ParamValue==null){
 					throw new ApplicationException(Lan.g("Sheet","Parameter not specified for sheet: ")+param.ParamName);
 				}
 			}
 			//could validate field names here later.
-			//get the data, and fill the fields.
-			switch(this.SheetType){
-				case SheetTypeEnum.LabelPatient:
-					Patient pat=Patients.GetPat((int)GetParamByName("PatNum").ParamValue);
-					FillFieldsForLabelPatient(pat);
-					break;
-				case SheetTypeEnum.LabelCarrier:
-					Carrier carrier=Carriers.GetCarrier((int)GetParamByName("CarrierNum").ParamValue);
-					FillFieldsForLabelCarrier(carrier);
-					break;
-				case SheetTypeEnum.LabelReferral:
-					Referral refer=Referrals.GetReferral((int)GetParamByName("ReferralNum").ParamValue);
-					FillFieldsForLabelReferral(refer);
-					break;
-			}
-			heightsCalculated=false;	
-			PrintDocument pd=new PrintDocument();
-			pd.PrintPage+=new PrintPageEventHandler(pd_PrintPage);
-			pd.DefaultPageSettings.Margins=new Margins(0,0,0,0);
-			pd.OriginAtMargins=true;
-			PrintSituation sit=PrintSituation.Default;
-			if(printerName==null || printerName==""){
-				switch(this.SheetType){
-					case SheetTypeEnum.LabelPatient:
-						sit=PrintSituation.LabelSingle;
-						break;
-				}
-				if(!Printers.SetPrinter(pd,sit)) {
-					return;
-				}
+			if(isBatch){
+				ParamVals=(List<int>)Parameters[0].ParamValue;
 			}
 			else{
-				pd.PrinterSettings.PrinterName=printerName;
+				ParamVals=new List<int>();
+				ParamVals.Add((int)Parameters[0].ParamValue);
 			}
+			valuesFilled=false;
+			heightsCalculated=false;
+			SheetsPrintedInBatch=0;
+			PrintDocument pd=new PrintDocument();
+			pd.OriginAtMargins=true;
+			pd.PrintPage+=new PrintPageEventHandler(pd_PrintPage);
+			if(Width>0 && Height>0){
+				pd.DefaultPageSettings.PaperSize=new PaperSize("Default",Width,Height);
+			}
+			PrintSituation sit=PrintSituation.Default;
+			switch(this.SheetType){
+				case SheetTypeEnum.LabelPatient:
+				case SheetTypeEnum.LabelCarrier:
+				case SheetTypeEnum.LabelReferral:
+					sit=PrintSituation.LabelSingle;
+					break;
+			}
+			//later: add a check here for print preview.
 			#if DEBUG
-				if(printerName==""){//only show if this is a single print item, not a batch.
-					UI.PrintPreview printPreview=new UI.PrintPreview(sit,pd,1);
-					printPreview.ShowDialog();
-				}
+				pd.DefaultPageSettings.Margins=new Margins(20,20,0,0);
+				UI.PrintPreview printPreview=new UI.PrintPreview(sit,pd,ParamVals.Count);
+				printPreview.ShowDialog();
 			#else
 				try {
+					if(!Printers.SetPrinter(pd,sit)) {
+						return;
+					}
+					pd.DefaultPageSettings.Margins=new Margins(0,0,0,0);
 					pd.Print();
 				}
 				catch(Exception ex){
@@ -228,9 +224,30 @@ namespace OpenDental{
 		}
 
 		private void pd_PrintPage(object sender,System.Drawing.Printing.PrintPageEventArgs e) {
+			if(!valuesFilled){
+				//get the data, and fill the fields.
+				switch(this.SheetType) {
+					case SheetTypeEnum.LabelPatient:
+						Patient pat=Patients.GetPat((int)GetParamByName("PatNum").ParamValue);
+						FillFieldsForLabelPatient(pat);
+						break;
+					case SheetTypeEnum.LabelCarrier:
+						Carrier carrier=Carriers.GetCarrier(ParamVals[SheetsPrintedInBatch]);
+						FillFieldsForLabelCarrier(carrier);
+						break;
+					case SheetTypeEnum.LabelReferral:
+						Referral refer=Referrals.GetReferral((int)GetParamByName("ReferralNum").ParamValue);
+						FillFieldsForLabelReferral(refer);
+						break;
+				}
+				valuesFilled=true;
+			}
 			Graphics g=e.Graphics;
 			if(!heightsCalculated){
 				int oldH;
+				foreach(SheetField field in SheetFields) {
+					field.ResetHeightAndYPosToOriginal();
+				}
 				foreach(SheetField field in SheetFields) {
 					oldH=field.Height;
 					field.Height=(int)g.MeasureString(field.FieldValue,field.Font).Height;
@@ -254,18 +271,25 @@ namespace OpenDental{
 				|| SheetType==SheetTypeEnum.LabelPatient
 				|| SheetType==SheetTypeEnum.LabelReferral)
 			{
-				g.TranslateTransform(100,0);
+				g.TranslateTransform(110,0);
 				g.RotateTransform(90);
 			}
 			foreach(SheetField field in SheetFields){
 				g.DrawString(field.FieldValue,field.Font,Brushes.Black,field.BoundsF);
 			}
 			g.Dispose();
-			//no logic yet for multiple pages
-			//e.HasMorePages=true;
+			//no logic yet for multiple pages on one sheet.
+			SheetsPrintedInBatch++;
+			valuesFilled=false;
+			heightsCalculated=false;
+			if(SheetsPrintedInBatch<ParamVals.Count){
+				e.HasMorePages=true;
+			}
+			else{
+				e.HasMorePages=false;
+				SheetsPrintedInBatch=0;
+			}	
 		}
-
-
 
 	}
 

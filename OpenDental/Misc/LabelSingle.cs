@@ -76,17 +76,19 @@ namespace OpenDental{
 
 		///<summary></summary>
 		public void PrintCarriers(List<int> carrierNums){
-			PrintDocument pd=new PrintDocument();//only used to pass printerName
-			if(!Printers.SetPrinter(pd,PrintSituation.LabelSingle)) {
-				return;
-			}
-			Sheet sheet;
+			//PrintDocument pd=new PrintDocument();//only used to pass printerName
+			//if(!Printers.SetPrinter(pd,PrintSituation.LabelSingle)) {
+			//	return;
+			//}
+			Sheet sheet=SheetsInternal.LabelCarrier;
+			sheet.SetParameter("CarrierNum",carrierNums);
 			try{
-				foreach(int carrierNum in carrierNums){
-					sheet=SheetsInternal.LabelCarrier;
-					sheet.SetParameter("CarrierNum",carrierNum);
-					sheet.Print(pd.PrinterSettings.PrinterName);
-				}
+				sheet.Print(true);
+				//foreach(int carrierNum in carrierNums){
+				//	sheet=SheetsInternal.LabelCarrier;
+				//	sheet.SetParameter("CarrierNum",carrierNum);
+				//	sheet.Print(pd.PrinterSettings.PrinterName);
+				//}
 			}
 			catch(Exception ex){
 				MessageBox.Show(ex.Message);

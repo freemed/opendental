@@ -176,11 +176,17 @@ namespace OpenDental.UI{
 			if(!Printers.SetPrinter(Document,Sit)){
 				return;
 			}
+			if(Document.OriginAtMargins){
+				//In the sheets framework,we had to set margins to 20 because of a bug in their preview control.
+				//We now need to set it back to 0 for the actual printing.
+				//Hopefully, this doesn't break anything else.
+				Document.DefaultPageSettings.Margins=new Margins(0,0,0,0);
+			}
 			try{
 				Document.Print();
 			}
-			catch{
-				MessageBox.Show(Lan.g(this,"Printer not available"));
+			catch(Exception e){
+				MessageBox.Show(Lan.g(this,"Error: ")+e.Message);
 			}
 			DialogResult=DialogResult.OK;
 		}

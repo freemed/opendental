@@ -15,16 +15,21 @@ namespace OpenDental{
 		///<Summary>In pixels.</Summary>
 		public int XPos;
 		///<Summary>In pixels.</Summary>
-		public int YPos;
+		private int yPos;
+		///<Summary>Before printing, this will be the same as YPos.  But during printing, YPos will get changed with each sheet due to growthBehavior.  YPosOriginal allows us to return YPos to it's original setting.</Summary>
+		private int yPosOriginal;
 		///<Summary>The field will be constrained horizontally to this size.  Not allowed to be zero.</Summary>
 		public int Width;
 		///<Summary>The Sheet constructor makes sure that if this is 0, then it will default to the size dictated by the font.  Once we build a sheet designer, the designer will handle the default size.  So it's not allowed to be zero so that it will be visible on the designer.</Summary>
-		public int Height;
+		private int height;
+		///<Summary></Summary>
+		private int heightOriginal;
 		///<Summary></Summary>
 		public GrowthBehaviorEnum GrowthBehavior;
 		///<Summary>For Out types, this value is set during printing.  This is the data obtained from the database and ready to print.</Summary>
 		public string FieldValue;
 
+		///<Summary>This overload is only for SheetFieldsAvailable.</Summary>
 		public SheetField(InOutEnum inOut,string fieldName) {
 			InOut=inOut;
 			FieldName=fieldName;
@@ -33,25 +38,55 @@ namespace OpenDental{
 		public SheetField(InOutEnum inOut,string fieldName,int xPos,int yPos,int width,Font font,GrowthBehaviorEnum growthBehavior) {
 			InOut=inOut;
 			FieldName=fieldName;
-			Font=font;
+			Font=font;//there must always be a font.
 			XPos=xPos;
-			YPos=yPos;
+			this.yPos=yPos;//this constructor is currently the only way to set yPosOriginal
+			yPosOriginal=yPos;
 			Width=width;
-			Height=font.Height;
+			height=font.Height;//Height is automatic
+			heightOriginal=height;
 			GrowthBehavior=growthBehavior;
+		}
+
+		public int YPos{
+			get{
+				return yPos;
+			}
+			set{
+				yPos=value;//but not YPosOriginal
+			}
+		}
+
+		public void SetHeightAndOriginal(int newH){
+			height=newH;
+			heightOriginal=newH;
+		}
+
+		public int Height {
+			get {
+				return height;
+			}
+			set {
+				height=value;//but not heightOriginal
+			}
+		}
+
+		public void ResetHeightAndYPosToOriginal(){
+			yPos=yPosOriginal;
+			height=heightOriginal;
 		}
 
 		///<Summary>Should only be called after FieldValue has been set, due to GrowthBehavior.</Summary>
 		public Rectangle Bounds {
 			get {
-				return new Rectangle(XPos,YPos,Width,Height);
+				return new Rectangle(XPos,yPos,Width,height);
 			}
 		}
 
 		///<Summary>Should only be called after FieldValue has been set, due to GrowthBehavior.</Summary>
 		public RectangleF BoundsF {
 			get {
-				return new RectangleF(XPos,YPos,Width,Height);
+				return new RectangleF(XPos,yPos,Width,height);
 			}
 		}
 	}

@@ -9,7 +9,7 @@ namespace OpenDental{
 		public bool IsRequired;
 		///<Summary>Usually, a columnName.</Summary>
 		public string ParamName;
-		///<Summary>This is the value which must be set in order to obtain data from the database. It is usually an int primary key.</Summary>
+		///<Summary>This is the value which must be set in order to obtain data from the database. It is usually an int primary key.  If running a batch, this may be an array of int.</Summary>
 		public object ParamValue;
 
 		public SheetParameter(bool isRequired,string paramName) {
