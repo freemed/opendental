@@ -1,12 +1,12 @@
 using System;
 using System.Collections;
+using System.Collections.ObjectModel;
 using System.Data;
 using System.Diagnostics;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using OpenDentBusiness;
 using OpenDental.DataAccess;
-using System.Collections.ObjectModel;
 
 namespace OpenDental{
 	

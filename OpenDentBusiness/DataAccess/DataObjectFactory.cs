@@ -370,6 +370,7 @@ namespace OpenDental.DataAccess {
 		///  If the object contains a single PrimaryKey field, with AutoNumber set to true, a new primary key 
 		///  will be generated. Depending on the current settings, this may be a new, random key or an incremental
 		///  key.
+		///  </para>
 		/// </summary>
 		/// <remarks>
 		///  <para>
@@ -394,6 +395,7 @@ namespace OpenDental.DataAccess {
 		///  If the object contains a single PrimaryKey field, with AutoNumber set to true, a new primary key 
 		///  will be generated. Depending on the current settings, this may be a new, random key or an incremental
 		///  key.
+		///  </para>
 		/// </summary>
 		/// <remarks>
 		///  <para>

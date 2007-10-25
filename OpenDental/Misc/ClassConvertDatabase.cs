@@ -5969,6 +5969,8 @@ namespace OpenDental{
 		private void To5_4_0() {
 			if(FromVersion<new Version("5.4.0.0")) {
 				string command;
+				command="DROP TABLE IF EXISTS files";
+				General.NonQEx(command);
 				command = @"CREATE TABLE files
 					(
 					  DocNum    int        NOT NULL,
@@ -6033,17 +6035,35 @@ namespace OpenDental{
 				//after r963
 				command = "INSERT INTO preference VALUES('BrokenAppointmentAdjustmentType','0')";
 				General.NonQEx(command);
-				// after r???
-				command = @"ALTER TABLE patient MODIFY PriProv INTEGER NOT NULL";
+				//after r???
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command = @"ALTER TABLE patient MODIFY PriProv INTEGER NOT NULL";
+					General.NonQEx(command);
+					command = @"ALTER TABLE patient MODIFY SecProv INTEGER NOT NULL";
+					General.NonQEx(command);
+					command = @"ALTER TABLE patient MODIFY FeeSched INTEGER NOT NULL";
+					General.NonQEx(command);
+					command = @"ALTER TABLE patient MODIFY BillingType INTEGER NOT NULL";
+					General.NonQEx(command);
+					command = @"ALTER TABLE patient MODIFY ClinicNum INTEGER NOT NULL";
+					General.NonQEx(command);
+				}
+				else {//oracle
+					//
+				}
+				//after r1006
+				command="DROP TABLE IF EXISTS popup";
 				General.NonQEx(command);
-				command = @"ALTER TABLE patient MODIFY SecProv INTEGER NOT NULL";
+				command=@"CREATE TABLE popup(
+					PopupNum int NOT NULL auto_increment,
+					PatNum int NOT NULL,
+					Description text,
+					IsDisabled tinyint(1) NOT NULL,		
+					PRIMARY KEY (PopupNum)
+					) DEFAULT CHARSET=utf8";
 				General.NonQEx(command);
-				command = @"ALTER TABLE patient MODIFY FeeSched INTEGER NOT NULL";
-				General.NonQEx(command);
-				command = @"ALTER TABLE patient MODIFY BillingType INTEGER NOT NULL";
-				General.NonQEx(command);
-				command = @"ALTER TABLE patient MODIFY ClinicNum INTEGER NOT NULL";
-				General.NonQEx(command);
+
+
 
 
 				command="UPDATE preference SET ValueString = '5.4.0.0' WHERE PrefName = 'DataBaseVersion'";
