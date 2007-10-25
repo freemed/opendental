@@ -11,40 +11,20 @@ namespace OpenDental{
 	///<summary></summary>
 	public class Popups {
 
-		///<summary>Gets all Popups for a single patient.  There will only be one for now.</summary>
-		public static List<Popup> Refresh(int patNum) {
+		///<summary>Gets all Popups for a single patient.  There will actually only be one or zero for now.</summary>
+		public static List<Popup> CreateObjects(int patNum) {
 			string command="SELECT * FROM popup WHERE PatNum = "+POut.PInt(patNum);
 			return new List<Popup>(DataObjectFactory<Popup>.CreateObjects(command));
 		}
 
 		///<summary></summary>
-		public static void Update(Popup popup){
-			try{
-				DataObjectFactory<Popup>.WriteObject(popup);
-			}
-			catch(Exception e){
-				MessageBox.Show(e.Message);
-			}
+		public static void WriteObject(Popup popup){
+			DataObjectFactory<Popup>.WriteObject(popup);
 		}
 
 		///<summary></summary>
-		public static void Insert(Popup popup){
-			try {
-				DataObjectFactory<Popup>.WriteObject(popup);
-			}
-			catch(Exception e) {
-				MessageBox.Show(e.Message);
-			}
-		}
-
-		///<summary></summary>
-		public static void Delete(Popup popup){
-			try {
-				DataObjectFactory<Popup>.DeleteObject(popup);
-			}
-			catch(Exception e) {
-				MessageBox.Show(e.Message);
-			}
+		public static void DeleteObject(Popup popup){
+			DataObjectFactory<Popup>.DeleteObject(popup);
 		}
 
 

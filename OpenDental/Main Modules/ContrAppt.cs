@@ -1983,6 +1983,9 @@ namespace OpenDental{
 			Graphics grfx=ContrApptSheet2.CreateGraphics();
 			//if clicked on an appt-----------------------------------------------------------------------------------------------
 			if(ContrApptSingle.ClickedAptNum!=0){
+				if(e.Button==MouseButtons.Left){
+					mouseIsDown = true;
+				}
 				int thisIndex=GetIndex(ContrApptSingle.ClickedAptNum);
 				ContrApptSingle.PinBoardIsSelected=false;
 				if(ContrApptSingle.SelectedAptNum!=-1//unselects previously selected unless it's the same appt
@@ -2011,7 +2014,6 @@ namespace OpenDental{
 					//}
 				}
 				else{
-					mouseIsDown = true;
 					TempApptSingle=new ContrApptSingle();
 					TempApptSingle.Visible=false;//otherwise I get a phantom appt while holding mouse down
 					TempApptSingle.DataRoww=ContrApptSingle3[thisIndex].DataRoww;
@@ -2119,6 +2121,249 @@ namespace OpenDental{
 				contOrigin.X+e.X-mouseOrigin.X+ContrApptSheet2.Location.X+panelSheet.Location.X,
 				contOrigin.Y+e.Y-mouseOrigin.Y+ContrApptSheet2.Location.Y+panelSheet.Location.Y);
 			TempApptSingle.Visible=true;
+		}
+
+		///<summary>Used by parent form when a dialog needs to be displayed on the mouse down.</summary>
+		public void MouseUpForced(){
+			if(!mouseIsDown)
+				return;
+			mouseIsDown=false;
+			if(TempApptSingle!=null){
+				TempApptSingle.Dispose();
+			}
+		}
+
+		///<summary>Usually dropping an appointment to a new location.</summary>
+		private void ContrApptSheet2_MouseUp(object sender,System.Windows.Forms.MouseEventArgs e) {
+			if(!mouseIsDown)
+				return;
+			/*if(ContrApptSheet.IsWeeklyView) {
+				ResizingAppt=false;
+				mouseIsDown=false;
+				TempApptSingle.Dispose();
+				return;
+			}*/
+			int thisIndex=GetIndex(ContrApptSingle.SelectedAptNum);
+			Appointment aptOld;
+			//Resizing-------------------------------------------------------------------------------------------------------------
+			if(ResizingAppt) {
+				if(!TempApptSingle.Visible) {//click with no drag
+					ResizingAppt=false;
+					mouseIsDown=false;
+					TempApptSingle.Dispose();
+					return;
+				}
+				//convert Bottom to a time
+				int hr=ContrApptSheet2.ConvertToHour
+					(TempApptSingle.Bottom-ContrApptSheet2.Location.Y-panelSheet.Location.Y);
+				int minute=ContrApptSheet2.ConvertToMin
+					(TempApptSingle.Bottom-ContrApptSheet2.Location.Y-panelSheet.Location.Y);
+				TimeSpan bottomSpan=new TimeSpan(hr,minute,0);
+				//subtract to get the new length of appt
+				TimeSpan newspan=bottomSpan-PIn.PDateT(TempApptSingle.DataRoww["AptDateTime"].ToString()).TimeOfDay;
+				int newpatternL=(int)newspan.TotalMinutes/5;
+				if(newpatternL < ContrApptSheet.MinPerIncr/5) {//eg. if 1 < 10/5, would make appt too short. 
+					newpatternL=ContrApptSheet.MinPerIncr/5;//sets new pattern length at one increment, typically 2 or 3 5min blocks
+				}
+				else if(newpatternL>78) {//max length of 390 minutes
+					newpatternL=78;
+				}
+				string pattern=TempApptSingle.DataRoww["Pattern"].ToString();
+				if(newpatternL<pattern.Length) {//shorten to match new pattern length
+					pattern=pattern.Substring(0,newpatternL);
+				}
+				else if(newpatternL>pattern.Length) {//make pattern longer.
+					pattern=pattern.PadRight(newpatternL,'/');
+				}
+				//Now, check for overlap with other appts.
+				DateTime aptDateTime;
+				DateTime aptDateTimeCur=PIn.PDateT(TempApptSingle.DataRoww["AptDateTime"].ToString());
+				for(int i=0;i<DS.Tables["Appointments"].Rows.Count;i++) {
+					if(DS.Tables["Appointments"].Rows[i]["AptNum"].ToString()==TempApptSingle.DataRoww["AptNum"].ToString()) {
+						continue;
+					}
+					if(DS.Tables["Appointments"].Rows[i]["Op"].ToString()!=TempApptSingle.DataRoww["Op"].ToString()) {
+						continue;
+					}
+					aptDateTime=PIn.PDateT(DS.Tables["Appointments"].Rows[i]["AptDateTime"].ToString());
+					if(ContrApptSheet.IsWeeklyView && aptDateTime.Date!=aptDateTimeCur.Date) {
+						continue;
+					}
+					if(aptDateTime<aptDateTimeCur) {
+						continue;//we don't care about appointments that are earlier than this one
+					}
+					if(aptDateTime.TimeOfDay < aptDateTimeCur.TimeOfDay+TimeSpan.FromMinutes(5*pattern.Length)) {
+						newspan=aptDateTime.TimeOfDay-aptDateTimeCur.TimeOfDay;
+						newpatternL=(int)newspan.TotalMinutes/5;
+						pattern=pattern.Substring(0,newpatternL);
+					}
+				}
+				if(pattern=="") {
+					pattern="///";
+				}
+				Appointments.SetPattern(PIn.PInt(TempApptSingle.DataRoww["AptNum"].ToString()),pattern);
+				ResizingAppt=false;
+				mouseIsDown=false;
+				TempApptSingle.Dispose();
+				RefreshModulePatient(PatCurNum);
+				RefreshPeriod();
+				bubbleAptNum=0;
+				SetInvalid();
+				return;
+			}
+			if((Math.Abs(e.X-mouseOrigin.X)<7)
+				&&(Math.Abs(e.Y-mouseOrigin.Y)<7)) {
+				boolAptMoved=false;
+			}
+			//it was a click with no drag-----------------------------------------------------------------------------------------
+			if(!boolAptMoved) {
+				mouseIsDown=false;
+				TempApptSingle.Dispose();
+				return;
+			}
+			//dragging to pinboard, so place a copy there---------------------------------------------------------------------------
+			if(TempApptSingle.Location.X>ContrApptSheet2.Width) {
+				if(!Security.IsAuthorized(Permissions.AppointmentMove)) {
+					mouseIsDown=false;
+					TempApptSingle.Dispose();
+					return;
+				}
+				int prevSel=GetIndex(ContrApptSingle.SelectedAptNum);
+				CurToPinBoard(ContrApptSingle.SelectedAptNum);//sets selectedAptNum=-1. do before refresh prev
+				if(prevSel!=-1) {
+					CreateAptShadows();
+					ContrApptSheet2.DrawShadow();
+				}
+				RefreshModulePatient(PatCurNum);
+				TempApptSingle.Dispose();
+				return;
+			}
+			//moving to a new location-----------------------------------------------------------------------------------------------
+			Appointment apt=Appointments.GetOneApt(ContrApptSingle.SelectedAptNum);
+			aptOld=apt.Copy();
+			int tHr=ContrApptSheet2.ConvertToHour
+				(TempApptSingle.Location.Y-ContrApptSheet2.Location.Y-panelSheet.Location.Y);
+			int tMin=ContrApptSheet2.ConvertToMin
+				(TempApptSingle.Location.Y-ContrApptSheet2.Location.Y-panelSheet.Location.Y);
+			bool timeWasMoved=tHr!=apt.AptDateTime.Hour
+				|| tMin!=apt.AptDateTime.Minute;
+			if(timeWasMoved) {//no question for notes
+				if(apt.AptStatus == ApptStatus.PtNote | apt.AptStatus == ApptStatus.PtNoteCompleted) {
+					if(!Security.IsAuthorized(Permissions.AppointmentMove)) {
+						mouseIsDown = false;
+						boolAptMoved = false;
+						TempApptSingle.Dispose();
+						return;
+					}
+				}
+				else {
+					if(!Security.IsAuthorized(Permissions.AppointmentMove) || !MsgBox.Show(this,true,"Move Appointment?")) {
+						mouseIsDown = false;
+						boolAptMoved = false;
+						TempApptSingle.Dispose();
+						return;
+					}
+				}
+			}
+			//convert loc to new date/time
+			DateTime tDate=apt.AptDateTime.Date;
+			if(ContrApptSheet.IsWeeklyView) {
+				tDate=WeekStartDate.AddDays(ContrApptSheet2.ConvertToDay(TempApptSingle.Location.X-ContrApptSheet2.Location.X));
+			}
+			apt.AptDateTime=new DateTime(tDate.Year,tDate.Month,tDate.Day,tHr,tMin,0);
+			Procedure[] procsMultApts=null;
+			Procedure[] procsForOne=null;
+			if(AppointmentRules.List.Length>0) {
+				int[] aptNums=new int[DS.Tables["Appointments"].Rows.Count];
+				for(int i=0;i<DS.Tables["Appointments"].Rows.Count;i++) {
+					aptNums[i]=PIn.PInt(DS.Tables["Appointments"].Rows[i]["AptNum"].ToString());//ListDay[i].AptNum;
+				}
+				procsMultApts=Procedures.GetProcsMultApts(aptNums);
+			}
+			if(AppointmentRules.List.Length>0) {
+				int[] aptNums=new int[DS.Tables["Appointments"].Rows.Count];
+				for(int i=0;i<DS.Tables["Appointments"].Rows.Count;i++) {
+					aptNums[i]=PIn.PInt(DS.Tables["Appointments"].Rows[i]["AptNum"].ToString());//ListDay[i].AptNum;
+				}
+				procsForOne=Procedures.GetProcsOneApt(apt.AptNum,procsMultApts);
+				ArrayList doubleBookedCodes=
+					Appointments.GetDoubleBookedCodes(apt,DS.Tables["Appointments"].Copy(),procsMultApts,procsForOne);
+				if(doubleBookedCodes.Count>0) {//if some codes would be double booked
+					if(AppointmentRules.IsBlocked(doubleBookedCodes)) {
+						MessageBox.Show(Lan.g(this,"Not allowed to double book:")+" "
+							+AppointmentRules.GetBlockedDescription(doubleBookedCodes));
+						mouseIsDown = false;
+						boolAptMoved=false;
+						TempApptSingle.Dispose();
+						return;
+					}
+				}
+			}
+			Operatory curOp=Operatories.ListShort
+				[ApptViewItems.VisOps[ContrApptSheet2.ConvertToOp(TempApptSingle.Location.X-ContrApptSheet2.Location.X)]];
+			apt.Op=curOp.OperatoryNum;
+			if(DoesOverlap(apt)) {
+				int startingOp=ApptViewItems.GetIndexOp(apt.Op);
+				bool stillOverlaps=true;
+				for(int i=startingOp;i<ApptViewItems.VisOps.Length;i++) {
+					apt.Op=Operatories.ListShort[ApptViewItems.VisOps[i]].OperatoryNum;
+					if(!DoesOverlap(apt)) {
+						stillOverlaps=false;
+						break;
+					}
+				}
+				if(stillOverlaps) {
+					for(int i=startingOp;i>=0;i--) {
+						apt.Op=Operatories.ListShort[ApptViewItems.VisOps[i]].OperatoryNum;
+						if(!DoesOverlap(apt)) {
+							stillOverlaps=false;
+							break;
+						}
+					}
+				}
+				if(stillOverlaps) {
+					MessageBox.Show(Lan.g(this,"Appointment overlaps existing appointment."));
+					mouseIsDown=false;
+					boolAptMoved=false;
+					TempApptSingle.Dispose();
+					return;
+				}
+			}//end if DoesOverlap
+			if(apt.AptStatus==ApptStatus.Broken && timeWasMoved) {
+				apt.AptStatus=ApptStatus.Scheduled;
+			}
+			if(curOp.ProvDentist!=0) {//if no dentist is assigned to op, then keep the original dentist.  All appts must have prov.
+				apt.ProvNum=curOp.ProvDentist;
+			}
+			apt.ProvHyg=curOp.ProvHygienist;
+			apt.IsHygiene=curOp.IsHygiene;
+			apt.ClinicNum=curOp.ClinicNum;
+			try {
+				Appointments.InsertOrUpdate(apt,aptOld,false);
+			}
+			catch(ApplicationException ex) {
+				MessageBox.Show(ex.Message);
+			}
+			Procedures.SetProvidersInAppointment(apt,Procedures.GetProcsForSingle(apt.AptNum,false));
+			SecurityLogs.MakeLogEntry(Permissions.AppointmentMove,PatCurNum,
+				PatCurName+", "
+				+apt.ProcDescript
+				+" From "
+				+aptOld.AptDateTime.ToString()+", "
+				+" To "
+				+apt.AptDateTime.ToString());
+			RefreshModulePatient(PatCurNum);
+			RefreshPeriod();
+			SetInvalid();
+			mouseIsDown = false;
+			boolAptMoved=false;
+			TempApptSingle.Dispose();
+		}
+
+		private void ContrApptSheet2_MouseLeave(object sender,EventArgs e) {
+			InfoBubbleDraw(new Point(-1,-1));
+			timerInfoBubble.Enabled=false;//redundant?
+			Cursor=Cursors.Default;
 		}
 
 		///<summary></summary>
@@ -2307,238 +2552,6 @@ namespace OpenDental{
 			else{
 				infoBubble.Visible=false;
 			}
-		}
-
-		///<summary>Usually dropping an appointment to a new location.</summary>
-		private void ContrApptSheet2_MouseUp(object sender, System.Windows.Forms.MouseEventArgs e) {
-			if(!mouseIsDown) return;
-			/*if(ContrApptSheet.IsWeeklyView) {
-				ResizingAppt=false;
-				mouseIsDown=false;
-				TempApptSingle.Dispose();
-				return;
-			}*/
-			int thisIndex=GetIndex(ContrApptSingle.SelectedAptNum);
-			Appointment aptOld;
-			//Resizing-------------------------------------------------------------------------------------------------------------
-			if(ResizingAppt){
-				if(!TempApptSingle.Visible) {//click with no drag
-					ResizingAppt=false;
-					mouseIsDown=false;
-					TempApptSingle.Dispose();
-					return;
-				}
-				//convert Bottom to a time
-				int hr=ContrApptSheet2.ConvertToHour
-					(TempApptSingle.Bottom-ContrApptSheet2.Location.Y-panelSheet.Location.Y);
-				int minute=ContrApptSheet2.ConvertToMin
-					(TempApptSingle.Bottom-ContrApptSheet2.Location.Y-panelSheet.Location.Y);
-				TimeSpan bottomSpan=new TimeSpan(hr,minute,0);
-				//subtract to get the new length of appt
-				TimeSpan newspan=bottomSpan-PIn.PDateT(TempApptSingle.DataRoww["AptDateTime"].ToString()).TimeOfDay;
-				int newpatternL=(int)newspan.TotalMinutes/5;
-				if(newpatternL < ContrApptSheet.MinPerIncr/5){//eg. if 1 < 10/5, would make appt too short. 
-					newpatternL=ContrApptSheet.MinPerIncr/5;//sets new pattern length at one increment, typically 2 or 3 5min blocks
-				}
-				else if(newpatternL>78){//max length of 390 minutes
-					newpatternL=78;
-				}
-				string pattern=TempApptSingle.DataRoww["Pattern"].ToString();
-				if(newpatternL<pattern.Length){//shorten to match new pattern length
-					pattern=pattern.Substring(0,newpatternL);
-				}
-				else if(newpatternL>pattern.Length){//make pattern longer.
-					pattern=pattern.PadRight(newpatternL,'/');
-				}
-				//Now, check for overlap with other appts.
-				DateTime aptDateTime;
-				DateTime aptDateTimeCur=PIn.PDateT(TempApptSingle.DataRoww["AptDateTime"].ToString());
-				for(int i=0;i<DS.Tables["Appointments"].Rows.Count;i++) {
-					if(DS.Tables["Appointments"].Rows[i]["AptNum"].ToString()==TempApptSingle.DataRoww["AptNum"].ToString()){
-						continue;
-					}
-					if(DS.Tables["Appointments"].Rows[i]["Op"].ToString()!=TempApptSingle.DataRoww["Op"].ToString()){
-						continue;
-					}
-					aptDateTime=PIn.PDateT(DS.Tables["Appointments"].Rows[i]["AptDateTime"].ToString());
-					if(ContrApptSheet.IsWeeklyView && aptDateTime.Date!=aptDateTimeCur.Date){
-						continue;
-					}
-					if(aptDateTime<aptDateTimeCur){
-						continue;//we don't care about appointments that are earlier than this one
-					}
-					if(aptDateTime.TimeOfDay < aptDateTimeCur.TimeOfDay+TimeSpan.FromMinutes(5*pattern.Length)){
-						newspan=aptDateTime.TimeOfDay-aptDateTimeCur.TimeOfDay;
-						newpatternL=(int)newspan.TotalMinutes/5;
-						pattern=pattern.Substring(0,newpatternL);
-					}
-				}
-				if(pattern==""){
-					pattern="///";
-				}
-				Appointments.SetPattern(PIn.PInt(TempApptSingle.DataRoww["AptNum"].ToString()),pattern);
-				ResizingAppt=false;
-				mouseIsDown=false;
-				TempApptSingle.Dispose();
-				RefreshModulePatient(PatCurNum);
-				RefreshPeriod();
-				bubbleAptNum=0;
-				SetInvalid();
-				return;
-			}
-			if((Math.Abs(e.X-mouseOrigin.X)<7)
-				&&(Math.Abs(e.Y-mouseOrigin.Y)<7)){
-				boolAptMoved=false;
-			}
-			//it was a click with no drag-----------------------------------------------------------------------------------------
-			if(!boolAptMoved){
-				mouseIsDown=false;
-				TempApptSingle.Dispose();
-				return;
-			}
-			//dragging to pinboard, so place a copy there---------------------------------------------------------------------------
-			if(TempApptSingle.Location.X>ContrApptSheet2.Width){
-				if(!Security.IsAuthorized(Permissions.AppointmentMove)){
-					mouseIsDown=false;
-					TempApptSingle.Dispose();
-					return;
-				}
-				int prevSel=GetIndex(ContrApptSingle.SelectedAptNum);
-				CurToPinBoard(ContrApptSingle.SelectedAptNum);//sets selectedAptNum=-1. do before refresh prev
-				if(prevSel!=-1){
-					CreateAptShadows();
-					ContrApptSheet2.DrawShadow();
-				}
-				RefreshModulePatient(PatCurNum);
-				TempApptSingle.Dispose();
-				return;
-			}
-			//moving to a new location-----------------------------------------------------------------------------------------------
-			Appointment apt=Appointments.GetOneApt(ContrApptSingle.SelectedAptNum);
-			aptOld=apt.Copy();
-			int tHr=ContrApptSheet2.ConvertToHour
-				(TempApptSingle.Location.Y-ContrApptSheet2.Location.Y-panelSheet.Location.Y);
-			int tMin=ContrApptSheet2.ConvertToMin
-				(TempApptSingle.Location.Y-ContrApptSheet2.Location.Y-panelSheet.Location.Y);
-			bool timeWasMoved=tHr!=apt.AptDateTime.Hour
-				|| tMin!=apt.AptDateTime.Minute;
-			if(timeWasMoved){//no question for notes
-				if (apt.AptStatus == ApptStatus.PtNote | apt.AptStatus == ApptStatus.PtNoteCompleted) {
-					if (!Security.IsAuthorized(Permissions.AppointmentMove)) {
-						mouseIsDown = false;
-						boolAptMoved = false;
-						TempApptSingle.Dispose();
-						return;
-					}
-				}
-				else {
-					if (!Security.IsAuthorized(Permissions.AppointmentMove) || !MsgBox.Show(this, true, "Move Appointment?")) {
-						mouseIsDown = false;
-						boolAptMoved = false;
-						TempApptSingle.Dispose();
-						return;
-					}
-				}
-			}
-			//convert loc to new date/time
-			DateTime tDate=apt.AptDateTime.Date;
-			if(ContrApptSheet.IsWeeklyView){
-				tDate=WeekStartDate.AddDays(ContrApptSheet2.ConvertToDay(TempApptSingle.Location.X-ContrApptSheet2.Location.X));
-			}
-			apt.AptDateTime=new DateTime(tDate.Year,tDate.Month,tDate.Day,tHr,tMin,0);
-			Procedure[] procsMultApts=null;
-			Procedure[] procsForOne=null;
-			if(AppointmentRules.List.Length>0){
-				int[] aptNums=new int[DS.Tables["Appointments"].Rows.Count];
-				for(int i=0;i<DS.Tables["Appointments"].Rows.Count;i++){
-					aptNums[i]=PIn.PInt(DS.Tables["Appointments"].Rows[i]["AptNum"].ToString());//ListDay[i].AptNum;
-				}
-				procsMultApts=Procedures.GetProcsMultApts(aptNums);
-			}
-			if(AppointmentRules.List.Length>0) {
-				int[] aptNums=new int[DS.Tables["Appointments"].Rows.Count];
-				for(int i=0;i<DS.Tables["Appointments"].Rows.Count;i++) {
-					aptNums[i]=PIn.PInt(DS.Tables["Appointments"].Rows[i]["AptNum"].ToString());//ListDay[i].AptNum;
-				}
-				procsForOne=Procedures.GetProcsOneApt(apt.AptNum,procsMultApts);
-				ArrayList doubleBookedCodes=
-					Appointments.GetDoubleBookedCodes(apt,DS.Tables["Appointments"].Copy(),procsMultApts,procsForOne);
-				if(doubleBookedCodes.Count>0) {//if some codes would be double booked
-					if(AppointmentRules.IsBlocked(doubleBookedCodes)) {
-						MessageBox.Show(Lan.g(this,"Not allowed to double book:")+" "
-							+AppointmentRules.GetBlockedDescription(doubleBookedCodes));
-						mouseIsDown = false;
-						boolAptMoved=false;
-						TempApptSingle.Dispose();
-						return;
-					}
-				}
-			}
-			Operatory curOp=Operatories.ListShort
-				[ApptViewItems.VisOps[ContrApptSheet2.ConvertToOp(TempApptSingle.Location.X-ContrApptSheet2.Location.X)]];
-			apt.Op=curOp.OperatoryNum;
-			if(DoesOverlap(apt)){
-				int startingOp=ApptViewItems.GetIndexOp(apt.Op);
-				bool stillOverlaps=true;
-				for(int i=startingOp;i<ApptViewItems.VisOps.Length;i++){
-					apt.Op=Operatories.ListShort[ApptViewItems.VisOps[i]].OperatoryNum;
-					if(!DoesOverlap(apt)){
-						stillOverlaps=false;
-						break;
-					}
-				}
-				if(stillOverlaps){
-					for(int i=startingOp;i>=0;i--){
-						apt.Op=Operatories.ListShort[ApptViewItems.VisOps[i]].OperatoryNum;
-						if(!DoesOverlap(apt)){
-							stillOverlaps=false;
-							break;
-						}
-					}
-				}
-				if(stillOverlaps){
-					MessageBox.Show(Lan.g(this,"Appointment overlaps existing appointment."));
-					mouseIsDown=false;
-					boolAptMoved=false;
-					TempApptSingle.Dispose();
-					return;
-				}
-			}//end if DoesOverlap
-			if(apt.AptStatus==ApptStatus.Broken && timeWasMoved){
-				apt.AptStatus=ApptStatus.Scheduled;
-			}
-			if(curOp.ProvDentist!=0){//if no dentist is assigned to op, then keep the original dentist.  All appts must have prov.
-				apt.ProvNum=curOp.ProvDentist;
-			}
-			apt.ProvHyg=curOp.ProvHygienist;
-			apt.IsHygiene=curOp.IsHygiene;
-			apt.ClinicNum=curOp.ClinicNum;
-			try{
-				Appointments.InsertOrUpdate(apt,aptOld,false);
-			}
-			catch(ApplicationException ex){
-				MessageBox.Show(ex.Message);
-			}
-			Procedures.SetProvidersInAppointment(apt,Procedures.GetProcsForSingle(apt.AptNum,false));
-			SecurityLogs.MakeLogEntry(Permissions.AppointmentMove,PatCurNum,
-				PatCurName+", "
-				+apt.ProcDescript
-				+" From "
-				+aptOld.AptDateTime.ToString()+", "
-				+" To "
-				+apt.AptDateTime.ToString());
-			RefreshModulePatient(PatCurNum);
-			RefreshPeriod();
-			SetInvalid();
-			mouseIsDown = false;
-			boolAptMoved=false;
-			TempApptSingle.Dispose();
-		}
-
-		private void ContrApptSheet2_MouseLeave(object sender,EventArgs e) {
-			InfoBubbleDraw(new Point(-1,-1));
-			timerInfoBubble.Enabled=false;
-			Cursor=Cursors.Default;
 		}
 
 		///<summary>Double click on appt sheet or on a single appointment.</summary>

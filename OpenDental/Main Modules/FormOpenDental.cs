@@ -24,6 +24,7 @@ using System.Drawing.Printing;
 using System.Data;
 using System.Diagnostics;
 using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
 using System.Media;
@@ -1641,9 +1642,10 @@ namespace OpenDental{
 		private void menuPatient_Click(object sender,System.EventArgs e) {
 			Family fam=Patients.GetFamily(CurPatNum);
 			CurPatNum=Patients.ButtonSelect(menuPatient,sender,fam);
-			Patient pat=fam.GetPatient(CurPatNum);
+			//Patient pat=fam.GetPatient(CurPatNum);
 			RefreshCurrentModule();
-			FillPatientButton(CurPatNum,fam.GetPatient(CurPatNum).GetNameLF(),pat.Email!="",pat.ChartNumber);
+			//This next line is done automatically already:
+			//FillPatientButton(CurPatNum,fam.GetPatient(CurPatNum).GetNameLF(),pat.Email!="",pat.ChartNumber);
 		}
 
 		///<summary>Happens when any of the modules changes the current patient.  The calling module should then refresh itself.  The current patNum is stored here in the parent form so that when switching modules, the parent form knows which patient to call up for that module.</summary>
@@ -1652,7 +1654,7 @@ namespace OpenDental{
 			FillPatientButton(CurPatNum,e.PatName,e.HasEmail,e.ChartNumber);
 		}
 
-		///<Summary>Serves three functions.  1. Sends the new patient to the dropdown menu for select patient.  2. Changes which toolbar buttons are enabled.  3. Sets main form text.</Summary>
+		///<Summary>Serves four functions.  1. Sends the new patient to the dropdown menu for select patient.  2. Changes which toolbar buttons are enabled.  3. Sets main form text. 4. Displays any popup.</Summary>
 		private void FillPatientButton(int patNum,string patName,bool hasEmail,string chartNumber) {
 			Patients.AddPatsToMenu(menuPatient,new EventHandler(menuPatient_Click),patName,patNum);
 			if(ToolBarMain.Buttons==null || ToolBarMain.Buttons.Count<2){
@@ -1683,6 +1685,13 @@ namespace OpenDental{
 			}
 			ToolBarMain.Invalidate();
 			Text=Patients.GetMainTitle(patName,patNum,chartNumber);
+			List<Popup> popList=Popups.CreateObjects(CurPatNum);
+			if(popList.Count>0){
+				if(ContrAppt2.Visible){
+					ContrAppt2.MouseUpForced();
+				}
+				MessageBox.Show(popList[0].Description,Lan.g(this,"Popup"));
+			}
 		}
 
 		private void OnEmail_Click() {
@@ -1909,7 +1918,19 @@ namespace OpenDental{
 		}
 
 		private void OnPopups_Click() {
-			MessageBox.Show("Incomplete");
+			List<Popup> popList=Popups.CreateObjects(CurPatNum);
+			if(popList.Count==0) {
+				Popup pop=new Popup();
+				pop.PatNum=CurPatNum;
+				FormPopupEdit FormP=new FormPopupEdit();
+				FormP.PopupCur=pop;
+				FormP.ShowDialog();
+			}
+			else{
+				FormPopupEdit FormP=new FormPopupEdit();
+				FormP.PopupCur=popList[0];
+				FormP.ShowDialog();
+			}
 		}
 
 		private void FormOpenDental_Resize(object sender,EventArgs e) {
