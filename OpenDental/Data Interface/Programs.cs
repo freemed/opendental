@@ -241,11 +241,13 @@ namespace OpenDental{
 			//all remaining programs:
 			try{
 				string cmdline=Cur.CommandLine;
-				cmdline=cmdline.Replace("[PatNum]",pat.PatNum.ToString());
-				cmdline=cmdline.Replace("[ChartNumber]",pat.ChartNumber);
 				string path=Cur.Path;
-				path=path.Replace("[PatNum]",pat.PatNum.ToString());
-				path=path.Replace("[ChartNumber]",pat.ChartNumber);
+				if(pat!=null) {
+					cmdline=cmdline.Replace("[PatNum]",pat.PatNum.ToString());
+					cmdline=cmdline.Replace("[ChartNumber]",pat.ChartNumber);
+					path=path.Replace("[PatNum]",pat.PatNum.ToString());
+					path=path.Replace("[ChartNumber]",pat.ChartNumber);
+				}
 				Process.Start(path,cmdline);
 			}
 			catch{
