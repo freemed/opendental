@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 
 namespace OpenDentBusiness {
-	///<summary>Keeps track of which product keys have been assigned to which customers. This datatype is only used if the program is being run from a distributor installation. A single customer is allowed to have more than one key, to accomadate for various circumstances, including having multiple physical business locations.</summary>
+	///<summary>Keeps track of which product keys have been assigned to which customers. This datatype is only used if the program is being run from a distributor installation. A single customer is allowed to have more than one key, to accommodate for various circumstances, including having multiple physical business locations.</summary>
 	public class RegistrationKey {
 		///<summary>Primary Key.</summary>
 		public int RegistrationKeyNum;
@@ -13,6 +13,14 @@ namespace OpenDentBusiness {
 		public string RegKey;
 		///<summary>General note about the registration key. Specifically, the note must include information about the location to which this key pertains, since once at least one key must be assigned to each location to be legal.</summary>
 		public string Note;
+		///<summary>This will help later with tracking for licensing.</summary>
+		public DateTime DateStarted;
+		///<summary>This is used to completely disable a key.  Might possibly even cripple the user's program.  Usually only used if reassigning another key due to abuse or error.  If no date specified, then this key is still valid.</summary>
+		public DateTime DateDisabled;
+		///<summary>This is used when the customer cancels monthly support.  This still allows the customer to get downloads for bug fixes, but only up through a certain version.  Our web server program will use this date to deduce which version they are allowed to have.  Any version that was released as a beta before this date is allowed to be downloaded.</summary>
+		public DateTime DateEnded;
+		///<summary>This is assigned automatically based on whether the registration key is a US version vs. a foreign version.  The foreign version is not able to unlock the procedure codes.  There are muliple layers of safeguards in place.</summary>
+		public bool IsForeign;
 
 		public RegistrationKey Copy(){
 			return (RegistrationKey)this.MemberwiseClone();

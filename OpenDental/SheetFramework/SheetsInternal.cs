@@ -27,6 +27,8 @@ namespace OpenDental{
 			get {
 				Sheet sheet=new Sheet(SheetTypeEnum.LabelPatient);
 				sheet.Font=new Font(FontFamily.GenericSansSerif,12f);
+				sheet.Width=108;
+				sheet.Height=346;
 				int rowH=sheet.Font.Height;
 				int yPos=10;
 				sheet.SheetFields.Add(new SheetField(InOutEnum.Out,"nameLF",25,yPos,300,sheet.Font,GrowthBehaviorEnum.None));
@@ -42,6 +44,8 @@ namespace OpenDental{
 			get {
 				Sheet sheet=new Sheet(SheetTypeEnum.LabelPatient);
 				sheet.Font=new Font(FontFamily.GenericSansSerif,12f);
+				sheet.Width=108;
+				sheet.Height=346;
 				int rowH=sheet.Font.Height;
 				int yPos=30;
 				sheet.SheetFields.Add(new SheetField(InOutEnum.Out,"nameLF",25,yPos,300,sheet.Font,GrowthBehaviorEnum.None));
@@ -55,6 +59,8 @@ namespace OpenDental{
 			get {
 				Sheet sheet=new Sheet(SheetTypeEnum.LabelPatient);
 				sheet.Font=new Font(FontFamily.GenericSansSerif,12f);
+				sheet.Width=108;
+				sheet.Height=346;
 				int rowH=sheet.Font.Height;
 				int yPos=30;
 				sheet.SheetFields.Add(new SheetField(InOutEnum.Out,"nameLF",25,yPos,300,sheet.Font,GrowthBehaviorEnum.None));
@@ -68,6 +74,8 @@ namespace OpenDental{
 			get {
 				Sheet sheet=new Sheet(SheetTypeEnum.LabelPatient);
 				sheet.Font=new Font(FontFamily.GenericSansSerif,12f);
+				sheet.Width=108;
+				sheet.Height=346;
 				Font smallFont=new Font(FontFamily.GenericSansSerif, 9);
 				int rowH=sheet.Font.Height;
 				int yPos=30;
@@ -101,6 +109,8 @@ namespace OpenDental{
 			get {
 				Sheet sheet=new Sheet(SheetTypeEnum.LabelReferral);
 				sheet.Font=new Font(FontFamily.GenericSansSerif,12f);
+				sheet.Width=108;
+				sheet.Height=346;
 				int rowH=sheet.Font.Height;
 				int yPos=10;
 				sheet.SheetFields.Add(new SheetField(InOutEnum.Out,"nameLF",25,yPos,300,sheet.Font,GrowthBehaviorEnum.None));
@@ -111,6 +121,24 @@ namespace OpenDental{
 				return sheet;
 			}
 		}
+
+		/*
+		public static Sheet ReferralSlip {
+			get {
+				Sheet sheet=new Sheet(SheetTypeEnum.ReferralSlip);
+				sheet.Font=new Font(FontFamily.GenericSansSerif,9f);
+				sheet.Width=500;
+				sheet.Height=800;
+				int rowH=sheet.Font.Height;
+				int yPos=50;
+				sheet.SheetFields.Add(new SheetField(InOutEnum.Out,"nameLF",25,yPos,300,sheet.Font,GrowthBehaviorEnum.None));
+				yPos+=rowH;
+				sheet.SheetFields.Add(new SheetField(InOutEnum.Out,"address",25,yPos,300,sheet.Font,GrowthBehaviorEnum.DownLocal));
+				yPos+=rowH;
+				sheet.SheetFields.Add(new SheetField(InOutEnum.Out,"cityStateZip",25,yPos,300,sheet.Font,GrowthBehaviorEnum.None));
+				return sheet;
+			}
+		}*/
 		
 
 	}

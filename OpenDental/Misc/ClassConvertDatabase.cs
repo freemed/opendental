@@ -6062,7 +6062,32 @@ namespace OpenDental{
 					PRIMARY KEY (PopupNum)
 					) DEFAULT CHARSET=utf8";
 				General.NonQEx(command);
-
+				//after r1012
+				command="ALTER TABLE registrationkey ADD DateStarted DATE NOT NULL";
+				General.NonQEx(command);
+				command="ALTER TABLE registrationkey ADD DateDisabled DATE NOT NULL";
+				General.NonQEx(command);
+				command="ALTER TABLE registrationkey ADD DateEnded DATE NOT NULL";
+				General.NonQEx(command);
+				command="ALTER TABLE registrationkey ADD IsForeign BOOL NOT NULL";
+				General.NonQEx(command);
+				if(FormChooseDatabase.DBtype==DatabaseType.Oracle) {
+					command="UPDATE registrationkey SET DateStarted="+POut.PDateT(MiscData.GetNowDateTime());
+					General.NonQEx(command);
+					command="UPDATE registrationkey SET DateEnded='0001-01-01'";
+					General.NonQEx(command);
+					command="UPDATE registrationkey SET DateDisabled='0001-01-01'";
+					General.NonQEx(command);
+				}
+				else {//MySQL
+					command="UPDATE registrationkey SET DateStarted=NOW()";
+					General.NonQEx(command);
+					command="UPDATE registrationkey SET DateEnded='0001-01-01'";
+					General.NonQEx(command);
+					command="UPDATE registrationkey SET DateDisabled='0001-01-01'";
+					General.NonQEx(command);
+				}
+				
 
 
 

@@ -17,7 +17,7 @@ namespace OpenDental {
 			string command="SELECT * FROM registrationkey WHERE ";
 			Family fam=Patients.GetFamily(patNum);
 			for(int i=0;i<fam.List.Length;i++){
-				command+="PatNum='"+fam.List[i].PatNum+"' ";
+				command+="PatNum="+POut.PInt(fam.List[i].PatNum)+" ";
 				if(i<fam.List.Length-1){
 					command+="OR ";
 				}
@@ -30,6 +30,10 @@ namespace OpenDental {
 				keys[i].PatNum							=PIn.PInt(table.Rows[i][1].ToString());
 				keys[i].RegKey							=PIn.PString(table.Rows[i][2].ToString());
 				keys[i].Note								=PIn.PString(table.Rows[i][3].ToString());
+				keys[i].DateStarted 				=PIn.PDate(table.Rows[i][4].ToString());
+				keys[i].DateDisabled				=PIn.PDate(table.Rows[i][5].ToString());
+				keys[i].DateEnded   				=PIn.PDate(table.Rows[i][6].ToString());
+				keys[i].IsForeign   				=PIn.PBool(table.Rows[i][7].ToString());
 			}
 			return keys;
 		}
@@ -37,9 +41,13 @@ namespace OpenDental {
 		///<summary>Updates the given key data to the database.</summary>
 		public static void Update(RegistrationKey registrationKey){
 			string command="UPDATE registrationkey SET "
-				+"PatNum='"+POut.PInt(registrationKey.PatNum)+"',"
-				+"RegKey='"+POut.PString(registrationKey.RegKey)+"',"
-				+"Note='"+POut.PString(registrationKey.Note)+"'"
+				+"PatNum='"+POut.PInt(registrationKey.PatNum)+"' "
+				+",RegKey='"+POut.PString(registrationKey.RegKey)+"' "
+				+",Note='"+POut.PString(registrationKey.Note)+"' "
+				+",DateStarted="+POut.PDate(registrationKey.DateStarted)+" "
+				+",DateDisabled="+POut.PDate(registrationKey.DateDisabled)+" "
+				+",DateEnded="+POut.PDate(registrationKey.DateEnded)+" "
+				+",IsForeign='"+POut.PBool(registrationKey.IsForeign)+"' "
 				+" WHERE RegistrationKeyNum='"+POut.PInt(registrationKey.RegistrationKeyNum)+"'";
 			General.NonQ(command);
 		}
@@ -47,22 +55,43 @@ namespace OpenDental {
 		///<summary>Inserts a new and unique registration key into the database.</summary>
 		public static void Create(RegistrationKey registrationKey){
 			do{
-				registrationKey.RegKey=CDT.Class1.GenerateRandKey();
+				if(registrationKey.IsForeign){
+					Random rand=new Random();
+					StringBuilder strBuild=new StringBuilder();
+					for(int i=0;i<16;i++){
+						int r=rand.Next(0,35);
+						if(r<10){
+							strBuild.Append((char)('0'+r));
+						}
+						else{
+							strBuild.Append((char)('A'+r-10));
+						}
+					}
+					registrationKey.RegKey=strBuild.ToString();
+				}
+				else{
+					registrationKey.RegKey=CDT.Class1.GenerateRandKey();
+				}
 				if(registrationKey.RegKey==""){
 					//Don't loop forever when software is unverified.
 					return;
 				}
 			} while(KeyIsInUse(registrationKey.RegKey));
-			string command="INSERT INTO registrationkey (PatNum,RegKey,Note) VALUES ("+
-				"'"+POut.PInt(registrationKey.PatNum)+"',"+
-				"'"+POut.PString(registrationKey.RegKey)+"',"+
-				"'"+POut.PString(registrationKey.Note)+"')";
+			string command="INSERT INTO registrationkey (PatNum,RegKey,Note,DateStarted,DateDisabled,DateEnded,"
+				+"IsForeign) VALUES ("
+				+"'"+POut.PInt(registrationKey.PatNum)+"',"
+				+"'"+POut.PString(registrationKey.RegKey)+"',"
+				+"'"+POut.PString(registrationKey.Note)+"',"
+				+POut.PDate(registrationKey.DateStarted)+","
+				+POut.PDate(registrationKey.DateDisabled)+","
+				+POut.PDate(registrationKey.DateEnded)+","
+				+"'"+POut.PBool(registrationKey.IsForeign)+"')";
 			General.NonQ(command);
 		}
 
-		public static void Delete(RegistrationKey registrationKey){
+		public static void Delete(int registrationKeyNum){
 			string command="DELETE FROM registrationkey WHERE RegistrationKeyNum='"
-				+POut.PInt(registrationKey.RegistrationKeyNum)+"'";
+				+POut.PInt(registrationKeyNum)+"'";
 			General.NonQ(command);
 		}
 

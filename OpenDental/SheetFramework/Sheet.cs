@@ -16,7 +16,7 @@ namespace OpenDental{
 	-static text
 	-text generated from database
 	-user input
-	Some of these elements would remain part of the sheet definition, while others would be saved as part of the data for the specific print job.  Therefore, such things as background images and static text would not need to be saved repeatedly with each printout.  But for this to function as a reliable archive, whenever a user "changes" a sheet definition or layout, it must result in the creation of a brand new sheet.  In other words, and sheet that has already been used for any printout is forever locked.  Because of this restriction, we will not be altering our internally defined sheets.  The internally defined sheets must instead be numbered, and with each "change", a brand new sheet created.  The same will hold true once the user is allowed to copy and customize our supplied sheets.  The extra sheets, the garbage, must be elegantly hidden from the user so they will not be tempted to try to alter it. But until we start saving data, it's OK to alter existing sheets.
+	Some of these elements would remain part of the sheet definition, while others would be saved as part of the data for the specific print job.  Therefore, such things as background images and static text would not need to be saved repeatedly with each printout.  But for this to function as a reliable archive, whenever a user "changes" a sheet definition or layout, it must result in the creation of a brand new sheet.  In other words, any sheet that has already been used for any printout is forever locked.  Because of this restriction, our internally defined sheets must be clearly named/numbered.  Every time even the smallest change is made to an internal sheet, it will be assigned a new name/number.  This will trigger the database to archive a copy of the new sheet.  The same will hold true once the user is allowed to copy and customize our supplied sheets.  The extra sheets, the garbage, must be elegantly hidden from the user so they will not be tempted to try to alter them. But until we start saving data, it's OK to alter existing sheets.
 	Possible future class names:
 	Internal: Sheet, SheetParameter, SheetField(input or output. this is what gets saved as data), SheetObject(static text, lines, images, boxes, etc.)
 	Custom: SheetDef, SheetParameterDef, SheetFieldDef, SheetObjectDef
@@ -32,7 +32,7 @@ namespace OpenDental{
 	class Sheet {
 		///<Summary>Every single sheet must have a type, and only the types listed in the enum will be supported as part of the Sheet framework.</Summary>
 		public SheetTypeEnum SheetType;
-		///<Summary>A collection of all parameters for this sheet.  The first parameter will be a List int if it's a batch.</Summary>
+		///<Summary>A collection of all parameters for this sheet.  There's usually only one parameter.  The first parameter will be a List int if it's a batch.</Summary>
 		public List<SheetParameter> Parameters;
 		///<Summary></Summary>
 		public List<SheetField> SheetFields;
@@ -271,7 +271,7 @@ namespace OpenDental{
 				|| SheetType==SheetTypeEnum.LabelPatient
 				|| SheetType==SheetTypeEnum.LabelReferral)
 			{
-				g.TranslateTransform(110,0);
+				g.TranslateTransform(100,0);
 				g.RotateTransform(90);
 			}
 			foreach(SheetField field in SheetFields){
@@ -299,12 +299,12 @@ namespace OpenDental{
 		LabelPatient,
 		LabelCarrier,
 		LabelReferral
+		//ReferralSlip
 		/*Statement,
 		TxPlan,
 		Rx,
 		LabSlip,
 		Postcard,
-		ReferralSlip,
 		RegistrationForm,
 		MedHistory,
 		ConsentForm*/
