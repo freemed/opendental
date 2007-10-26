@@ -522,7 +522,6 @@ namespace OpenDental{
 			// butLab
 			// 
 			this.butLab.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butLab.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.butLab.Autosize = true;
 			this.butLab.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butLab.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
@@ -538,7 +537,6 @@ namespace OpenDental{
 			// butSearch
 			// 
 			this.butSearch.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butSearch.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.butSearch.Autosize = true;
 			this.butSearch.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butSearch.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
@@ -604,7 +602,6 @@ namespace OpenDental{
 			// butClearPin
 			// 
 			this.butClearPin.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butClearPin.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.butClearPin.Autosize = true;
 			this.butClearPin.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butClearPin.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
@@ -1168,6 +1165,10 @@ namespace OpenDental{
 
 		///<summary>This might not be getting called frequently enough.  Done on resize and when refreshing the period.  But it used to be done very very frequently.</summary>
 		private void LayoutPanels(){
+			if(Calendar2.Width>panelCalendar.Width) {//for example, Chinese calendar
+				panelCalendar.Width=Calendar2.Width+1;
+				panelAptInfo.Width=Calendar2.Width+1;
+			}
 			//Assumes widths of the first 3 panels were set the same in the designer,
 			ToolBarMain.Location=new Point(ClientSize.Width-panelAptInfo.Width-2,0);
 			panelCalendar.Location=new Point(ClientSize.Width-panelAptInfo.Width-2,ToolBarMain.Height);
