@@ -41,7 +41,7 @@ namespace OpenDental{
 				user.EmployeeNum   = PIn.PInt(UserodB.RawData.Rows[i][4].ToString());
 				user.ClinicNum     = PIn.PInt(UserodB.RawData.Rows[i][5].ToString());
 				user.ProvNum       = PIn.PInt(UserodB.RawData.Rows[i][6].ToString());
-				//user.IsHidden      = PIn.PBool  (UserodB.RawData.Rows[i][7].ToString());
+				user.IsHidden      = PIn.PBool  (UserodB.RawData.Rows[i][7].ToString());
 				Listt.Add(user);
 			}
 		}
