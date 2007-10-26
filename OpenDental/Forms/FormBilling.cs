@@ -21,6 +21,7 @@ namespace OpenDental{
 		private OpenDental.UI.ODGrid gridBill;
 		///<summary>Set this list externally before openning the billing window.</summary>
 		public PatAging[] AgingList;
+		private Label labelCount;
 		///<summary></summary>
 		public string GeneralNote;
 
@@ -53,6 +54,7 @@ namespace OpenDental{
 			this.label1 = new System.Windows.Forms.Label();
 			this.label3 = new System.Windows.Forms.Label();
 			this.gridBill = new OpenDental.UI.ODGrid();
+			this.labelCount = new System.Windows.Forms.Label();
 			this.SuspendLayout();
 			// 
 			// butCancel
@@ -141,12 +143,12 @@ namespace OpenDental{
 			// 
 			// label3
 			// 
-			this.label3.Location = new System.Drawing.Point(568,518);
+			this.label3.Location = new System.Drawing.Point(658,548);
 			this.label3.Name = "label3";
-			this.label3.Size = new System.Drawing.Size(102,102);
+			this.label3.Size = new System.Drawing.Size(91,73);
 			this.label3.TabIndex = 27;
 			this.label3.Text = "This will immediately print all selected bills";
-			this.label3.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
+			this.label3.TextAlign = System.Drawing.ContentAlignment.BottomRight;
 			// 
 			// gridBill
 			// 
@@ -160,12 +162,22 @@ namespace OpenDental{
 			this.gridBill.Title = "Billing";
 			this.gridBill.TranslationName = "TableBilling";
 			// 
+			// labelCount
+			// 
+			this.labelCount.Location = new System.Drawing.Point(504,660);
+			this.labelCount.Name = "labelCount";
+			this.labelCount.Size = new System.Drawing.Size(130,16);
+			this.labelCount.TabIndex = 29;
+			this.labelCount.Text = "Count=20";
+			this.labelCount.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
 			// FormBilling
 			// 
 			this.AcceptButton = this.butPrint;
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.CancelButton = this.butCancel;
 			this.ClientSize = new System.Drawing.Size(758,692);
+			this.Controls.Add(this.labelCount);
 			this.Controls.Add(this.gridBill);
 			this.Controls.Add(this.label3);
 			this.Controls.Add(this.label1);
@@ -226,6 +238,7 @@ namespace OpenDental{
 				gridBill.Rows.Add(row);
 			}
 			gridBill.EndUpdate();
+			labelCount.Text=Lan.g(this,"Count=")+AgingList.Length.ToString();
 		}
 
 		private void butAll_Click(object sender, System.EventArgs e) {

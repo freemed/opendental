@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data;
 using System.Diagnostics;
@@ -896,7 +897,7 @@ namespace OpenDental{
 				ORDER BY Guarantor!=patient.PatNum,Birthdate,ProvNum";
 			return General.GetTable(command);
 			command="DROP TABLE IF EXISTS tempfambal";
-			//General.NonQ(command);
+			General.NonQ(command);
 		}
 
 		///<summary></summary>
@@ -1070,13 +1071,13 @@ namespace OpenDental{
 
 		///<summary>This is only used in the Billing dialog</summary>
 		public static PatAging[] GetAgingList(string age,DateTime lastStatement,int[] billingIndices,bool excludeAddr
-			,bool excludeNeg,double excludeLessThan,bool excludeInactive,bool includeChanged)
+			,bool excludeNeg,double excludeLessThan,bool excludeInactive,bool includeChanged,bool excludeInsPending)
 		{
 			string command="";
 			if(includeChanged){
 				command+=@"DROP TABLE IF EXISTS templastproc;
 					CREATE TABLE templastproc(
-					Guarantor mediumint unsigned NOT NULL,
+					Guarantor int unsigned NOT NULL,
 					LastProc date NOT NULL,
 					PRIMARY KEY (Guarantor));
 					INSERT INTO templastproc
@@ -1089,7 +1090,7 @@ namespace OpenDental{
 					
 					DROP TABLE IF EXISTS templastpay;
 					CREATE TABLE templastpay(
-					Guarantor mediumint unsigned NOT NULL,
+					Guarantor int unsigned NOT NULL,
 					LastPay date NOT NULL,
 					PRIMARY KEY (Guarantor));
 					INSERT INTO templastpay
@@ -1097,14 +1098,31 @@ namespace OpenDental{
 					FROM claimproc,patient
 					WHERE claimproc.PatNum=patient.PatNum
 					AND claimproc.InsPayAmt>0
-					GROUP BY patient.Guarantor;";
+					GROUP BY patient.Guarantor;";					
 			}
+			/*if(excludeInsPending){
+				command+=@"DROP TABLE IF EXISTS tempclaimspending;
+					CREATE TABLE tempclaimspending(
+					Guarantor int unsigned NOT NULL,
+					PendingClaimCount int NOT NULL,
+					PRIMARY KEY (Guarantor));
+					INSERT INTO tempclaimspending
+					SELECT patient.Guarantor,COUNT(*)
+					FROM claim,patient
+					WHERE claim.PatNum=patient.PatNum
+					AND (ClaimStatus='U' OR ClaimStatus='H' OR ClaimStatus='W' OR ClaimStatus='S')
+					AND (ClaimType='P' OR ClaimType='S' OR ClaimType='Other')
+					GROUP BY patient.Guarantor;";
+			}*/
 			command+="SELECT patient.PatNum,Bal_0_30,Bal_31_60,Bal_61_90,BalOver90,BalTotal,InsEst,LName,FName,MiddleI, "
 				+"IFNULL(MAX(commlog.CommDateTime),'0001-01-01') AS LastStatement ";
 			if(includeChanged){
 				command+=",IFNULL(templastproc.LastProc,'0001-01-01') AS LastChange,"
 					+"IFNULL(templastpay.LastPay,'0001-01-01') AS LastPayment ";
 			}
+			//if(excludeInsPending){
+			//	command+=",IFNULL(tempclaimspending.PendingClaimCount,'0') AS ClaimCount ";
+			//}
 			command+=
 				"FROM patient "//actually only gets guarantors since others are 0.
 				+"LEFT JOIN commlog ON patient.PatNum=commlog.PatNum "
@@ -1113,6 +1131,9 @@ namespace OpenDental{
 				command+="LEFT JOIN templastproc ON patient.PatNum=templastproc.Guarantor "
 					+"LEFT JOIN templastpay ON patient.PatNum=templastpay.Guarantor ";
 			}
+			//if(excludeInsPending){
+			//	command+="LEFT JOIN tempclaimspending ON patient.PatNum=tempclaimspending.Guarantor ";
+			//}
 			command+="WHERE ";
 			if(excludeInactive){
 				command+="(patstatus != '2') AND ";
@@ -1150,38 +1171,57 @@ namespace OpenDental{
 			if(excludeAddr){
 				command+=" AND (zip !='')";
 			}	
-			command+=" GROUP BY patient.PatNum ";
+			command+=" GROUP BY patient.PatNum "
+				+"HAVING (LastStatement < "+POut.PDate(lastStatement.AddDays(1))+" ";//<midnight of lastStatement date
 			if(includeChanged){
-				command+="HAVING LastStatement < "+POut.PDate(lastStatement.AddDays(1))+" "//<midnight of lastStatement date
-					+"OR LastChange > LastStatement "//eg '2005-10-25' > '2005-10-24 15:00:00'
-					+"OR LastPayment > LastStatement ";
+				command+=
+					 "OR LastChange > LastStatement "//eg '2005-10-25' > '2005-10-24 15:00:00'
+					+"OR LastPayment > LastStatement) ";
 			}
 			else{
-				command+="HAVING LastStatement < "+POut.PDate(lastStatement.AddDays(1))+" ";//<midnight of lastStatement date
+				command+=") ";
 			}
+			//if(excludeInsPending){
+			//	command+="AND ClaimCount=0 ";
+			//}
 			command+="ORDER BY LName,FName";
 			//Debug.WriteLine(command);
 			DataTable table=General.GetTable(command);
-			PatAging[] retVal=new PatAging[table.Rows.Count];
+			List<PatAging> agingList=new List<PatAging>();
+			PatAging patage;
 			for(int i=0;i<table.Rows.Count;i++){
-				retVal[i]=new PatAging();
-				retVal[i].PatNum   = PIn.PInt   (table.Rows[i][0].ToString());
-				retVal[i].Bal_0_30 = PIn.PDouble(table.Rows[i][1].ToString());
-				retVal[i].Bal_31_60= PIn.PDouble(table.Rows[i][2].ToString());
-				retVal[i].Bal_61_90= PIn.PDouble(table.Rows[i][3].ToString());
-				retVal[i].BalOver90= PIn.PDouble(table.Rows[i][4].ToString());
-				retVal[i].BalTotal = PIn.PDouble(table.Rows[i][5].ToString());
-				retVal[i].InsEst   = PIn.PDouble(table.Rows[i][6].ToString());
-				retVal[i].PatName=PIn.PString(table.Rows[i][7].ToString())
+				patage=new PatAging();
+				patage.PatNum   = PIn.PInt   (table.Rows[i][0].ToString());
+				patage.Bal_0_30 = PIn.PDouble(table.Rows[i][1].ToString());
+				patage.Bal_31_60= PIn.PDouble(table.Rows[i][2].ToString());
+				patage.Bal_61_90= PIn.PDouble(table.Rows[i][3].ToString());
+				patage.BalOver90= PIn.PDouble(table.Rows[i][4].ToString());
+				patage.BalTotal = PIn.PDouble(table.Rows[i][5].ToString());
+				patage.InsEst   = PIn.PDouble(table.Rows[i][6].ToString());
+				patage.PatName=PIn.PString(table.Rows[i][7].ToString())
 					+", "+PIn.PString(table.Rows[i][8].ToString())
 					+" "+PIn.PString(table.Rows[i][9].ToString());
-				retVal[i].AmountDue=retVal[i].BalTotal-retVal[i].InsEst;
-				retVal[i].DateLastStatement=PIn.PDate(table.Rows[i][10].ToString());
+				patage.AmountDue=patage.BalTotal-patage.InsEst;
+				patage.DateLastStatement=PIn.PDate(table.Rows[i][10].ToString());
+				if(excludeInsPending && patage.InsEst>0){
+					//don't add
+				}
+				else{
+					agingList.Add(patage);
+				}
+			}
+			PatAging[] retVal=new PatAging[agingList.Count];
+			for(int i=0;i<retVal.Length;i++){
+				retVal[i]=agingList[i];
 			}
 			if(includeChanged){
 				command="DROP TABLE IF EXISTS templastproc";
 				General.NonQ(command);
 				command="DROP TABLE IF EXISTS templastpay";
+				General.NonQ(command);
+			}
+			if(excludeInsPending){
+				command="DROP TABLE IF EXISTS tempclaimspending";
 				General.NonQ(command);
 			}
 			return retVal;

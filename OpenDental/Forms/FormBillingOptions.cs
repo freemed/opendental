@@ -38,6 +38,7 @@ namespace OpenDental{
 		private OpenDental.ValidDate textLastStatement;
 		private OpenDental.UI.Button butCreate;
 		private OpenDental.UI.Button butUndo;
+		private CheckBox checkExcludeInsPending;
 		private Dunning[] dunningList;
 
 		///<summary></summary>
@@ -86,6 +87,7 @@ namespace OpenDental{
 			this.label4 = new System.Windows.Forms.Label();
 			this.textNote = new OpenDental.ODtextBox();
 			this.butUndo = new OpenDental.UI.Button();
+			this.checkExcludeInsPending = new System.Windows.Forms.CheckBox();
 			this.groupBox2.SuspendLayout();
 			this.groupBox1.SuspendLayout();
 			this.SuspendLayout();
@@ -123,7 +125,7 @@ namespace OpenDental{
 			// 
 			// listBillType
 			// 
-			this.listBillType.Location = new System.Drawing.Point(21,342);
+			this.listBillType.Location = new System.Drawing.Point(21,346);
 			this.listBillType.Name = "listBillType";
 			this.listBillType.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
 			this.listBillType.Size = new System.Drawing.Size(158,186);
@@ -131,11 +133,12 @@ namespace OpenDental{
 			// 
 			// label2
 			// 
-			this.label2.Location = new System.Drawing.Point(20,324);
+			this.label2.Location = new System.Drawing.Point(19,328);
 			this.label2.Name = "label2";
 			this.label2.Size = new System.Drawing.Size(147,16);
 			this.label2.TabIndex = 14;
-			this.label2.Text = "Billing Types:";
+			this.label2.Text = "Billing Types";
+			this.label2.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
 			// 
 			// butAll
 			// 
@@ -144,7 +147,7 @@ namespace OpenDental{
 			this.butAll.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butAll.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butAll.CornerRadius = 4F;
-			this.butAll.Location = new System.Drawing.Point(21,532);
+			this.butAll.Location = new System.Drawing.Point(21,536);
 			this.butAll.Name = "butAll";
 			this.butAll.Size = new System.Drawing.Size(68,26);
 			this.butAll.TabIndex = 15;
@@ -153,9 +156,9 @@ namespace OpenDental{
 			// 
 			// label1
 			// 
-			this.label1.Location = new System.Drawing.Point(19,272);
+			this.label1.Location = new System.Drawing.Point(19,286);
 			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(232,18);
+			this.label1.Size = new System.Drawing.Size(232,16);
 			this.label1.TabIndex = 18;
 			this.label1.Text = "Exclude if Balance is less than:";
 			this.label1.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
@@ -176,7 +179,7 @@ namespace OpenDental{
 			// 
 			// textExcludeLessThan
 			// 
-			this.textExcludeLessThan.Location = new System.Drawing.Point(21,293);
+			this.textExcludeLessThan.Location = new System.Drawing.Point(21,303);
 			this.textExcludeLessThan.Name = "textExcludeLessThan";
 			this.textExcludeLessThan.Size = new System.Drawing.Size(77,20);
 			this.textExcludeLessThan.TabIndex = 22;
@@ -184,14 +187,15 @@ namespace OpenDental{
 			// checkExcludeInactive
 			// 
 			this.checkExcludeInactive.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkExcludeInactive.Location = new System.Drawing.Point(22,228);
+			this.checkExcludeInactive.Location = new System.Drawing.Point(22,223);
 			this.checkExcludeInactive.Name = "checkExcludeInactive";
-			this.checkExcludeInactive.Size = new System.Drawing.Size(229,22);
+			this.checkExcludeInactive.Size = new System.Drawing.Size(231,18);
 			this.checkExcludeInactive.TabIndex = 23;
 			this.checkExcludeInactive.Text = "Exclude inactive patients";
 			// 
 			// groupBox2
 			// 
+			this.groupBox2.Controls.Add(this.checkExcludeInsPending);
 			this.groupBox2.Controls.Add(this.checkIncludeChanged);
 			this.groupBox2.Controls.Add(this.textLastStatement);
 			this.groupBox2.Controls.Add(this.label5);
@@ -216,7 +220,7 @@ namespace OpenDental{
 			// checkIncludeChanged
 			// 
 			this.checkIncludeChanged.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkIncludeChanged.Location = new System.Drawing.Point(21,63);
+			this.checkIncludeChanged.Location = new System.Drawing.Point(21,61);
 			this.checkIncludeChanged.Name = "checkIncludeChanged";
 			this.checkIncludeChanged.Size = new System.Drawing.Size(238,28);
 			this.checkIncludeChanged.TabIndex = 26;
@@ -245,7 +249,7 @@ namespace OpenDental{
 			this.groupBox1.Controls.Add(this.radio60);
 			this.groupBox1.Controls.Add(this.radioAny);
 			this.groupBox1.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.groupBox1.Location = new System.Drawing.Point(21,97);
+			this.groupBox1.Location = new System.Drawing.Point(21,94);
 			this.groupBox1.Name = "groupBox1";
 			this.groupBox1.Size = new System.Drawing.Size(144,106);
 			this.groupBox1.TabIndex = 1;
@@ -293,18 +297,18 @@ namespace OpenDental{
 			// checkExcludeNegative
 			// 
 			this.checkExcludeNegative.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkExcludeNegative.Location = new System.Drawing.Point(22,249);
+			this.checkExcludeNegative.Location = new System.Drawing.Point(22,243);
 			this.checkExcludeNegative.Name = "checkExcludeNegative";
-			this.checkExcludeNegative.Size = new System.Drawing.Size(231,22);
+			this.checkExcludeNegative.Size = new System.Drawing.Size(231,18);
 			this.checkExcludeNegative.TabIndex = 17;
 			this.checkExcludeNegative.Text = "Exclude negative balances (credits)";
 			// 
 			// checkBadAddress
 			// 
 			this.checkBadAddress.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkBadAddress.Location = new System.Drawing.Point(22,207);
+			this.checkBadAddress.Location = new System.Drawing.Point(22,203);
 			this.checkBadAddress.Name = "checkBadAddress";
-			this.checkBadAddress.Size = new System.Drawing.Size(231,22);
+			this.checkBadAddress.Size = new System.Drawing.Size(231,18);
 			this.checkBadAddress.TabIndex = 16;
 			this.checkBadAddress.Text = "Exclude bad addresses (no zipcode)";
 			// 
@@ -380,6 +384,15 @@ namespace OpenDental{
 			this.butUndo.TabIndex = 29;
 			this.butUndo.Text = "Undo a Billing";
 			this.butUndo.Click += new System.EventHandler(this.butUndo_Click);
+			// 
+			// checkExcludeInsPending
+			// 
+			this.checkExcludeInsPending.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.checkExcludeInsPending.Location = new System.Drawing.Point(22,263);
+			this.checkExcludeInsPending.Name = "checkExcludeInsPending";
+			this.checkExcludeInsPending.Size = new System.Drawing.Size(231,18);
+			this.checkExcludeInsPending.TabIndex = 27;
+			this.checkExcludeInsPending.Text = "Exclude if insurance pending";
 			// 
 			// FormBillingOptions
 			// 
@@ -460,6 +473,7 @@ namespace OpenDental{
 			if(((Pref)PrefB.HList["BillingExcludeNegative"]).ValueString=="1"){
 				checkExcludeNegative.Checked=true;
 			}
+			checkExcludeInsPending.Checked=PrefB.GetBool("BillingExcludeInsPending");
 			textExcludeLessThan.Text=((Pref)PrefB.HList["BillingExcludeLessThan"]).ValueString;
 			//blank is allowed
 			FillDunning();
@@ -507,6 +521,8 @@ namespace OpenDental{
 			Prefs.UpdateBool("BillingExcludeInactive",checkExcludeInactive.Checked);
 	
 			Prefs.UpdateBool("BillingExcludeNegative",checkExcludeNegative.Checked);
+
+			Prefs.UpdateBool("BillingExcludeInsPending",checkExcludeInsPending.Checked);
 			
 			Prefs.UpdateString("BillingExcludeLessThan",textExcludeLessThan.Text);
 
@@ -600,7 +616,7 @@ namespace OpenDental{
 			FormBilling FormB=new FormBilling();
 			FormB.AgingList=Patients.GetAgingList(getAge,lastStatement,billingIndices,checkBadAddress.Checked
 				,checkExcludeNegative.Checked,PIn.PDouble(textExcludeLessThan.Text)
-				,checkExcludeInactive.Checked,checkIncludeChanged.Checked);
+				,checkExcludeInactive.Checked,checkIncludeChanged.Checked,checkExcludeInsPending.Checked);
 			FormB.GeneralNote=textNote.Text;
 			Cursor=Cursors.Default;
 			FormB.ShowDialog();

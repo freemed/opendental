@@ -6090,7 +6090,11 @@ namespace OpenDental{
 				//after r1014
 				command = "INSERT INTO preference VALUES('UpdateWindowShowsClassicView','0')";
 				General.NonQEx(command);
-				
+				//after r1020
+				command = "INSERT INTO preference VALUES('BillingExcludeInsPending','0')";
+				General.NonQEx(command);
+
+
 
 
 
