@@ -569,7 +569,7 @@ namespace OpenDental{
  		///<summary>Only used for the Select Patient dialog</summary>
 		public static DataTable GetPtDataTable(bool limit,string lname,string fname,string phone,//string wkphone,
 			string address,bool hideInactive,string city,string state,string ssn,string patnum,string chartnumber,
-			int[] billingtypes,bool guarOnly,bool showArchived,int clinicNum)
+			int[] billingtypes,bool guarOnly,bool showArchived,int clinicNum,DateTime birthdate)
 		{
 			//bool retval=false;
 			string billingsnippet="";
@@ -616,8 +616,11 @@ namespace OpenDental{
 				+"AND State LIKE '"      +POut.PString(state)+"%' "
 				+"AND SSN LIKE '"        +POut.PString(ssn)+"%' "
 				+"AND PatNum LIKE '"     +POut.PString(patnum)+"%' "
-				+"AND ChartNumber LIKE '"+POut.PString(chartnumber)+"%' "
-				+billingsnippet;
+				+"AND ChartNumber LIKE '"+POut.PString(chartnumber)+"%' ";
+			if(birthdate.Year>1880 && birthdate.Year<2100){
+				command+="AND Birthdate ="+POut.PDate(birthdate)+" ";
+			}
+			command+=billingsnippet;
 			if(hideInactive){
 				command+="AND PatStatus != '2' ";
 			}
@@ -642,6 +645,7 @@ namespace OpenDental{
 			//MessageBox.Show(command);
  			DataTable table=General.GetTable(command);
 			DataTable PtDataTable=table.Clone();//does not copy any data
+			PtDataTable.Columns.Add("age");
 			for(int i=0;i<PtDataTable.Columns.Count;i++){
 				PtDataTable.Columns[i].DataType=typeof(string);
 			}
@@ -649,26 +653,35 @@ namespace OpenDental{
 			//	retval=true;
 			//}
 			DataRow r;
+			DateTime date;
 			for(int i=0;i<table.Rows.Count;i++){//table.Rows.Count && i<44;i++){
 				r=PtDataTable.NewRow();
 				//PatNum,LName,FName,MiddleI,Preferred,Birthdate,SSN,HmPhone,WkPhone,Address,PatStatus"
 				//+",BillingType,ChartNumber,City,State
-				r[0]=table.Rows[i][0].ToString();//PatNum
-				r[1]=table.Rows[i][1].ToString();//LName
-				r[2]=table.Rows[i][2].ToString();//FName
-				r[3]=table.Rows[i][3].ToString();//MiddleI
-				r[4]=table.Rows[i][4].ToString();//Preferred
-				r[5]=Shared.DateToAge(PIn.PDate(table.Rows[i][5].ToString()));//Birthdate
-				r[6]=table.Rows[i][6].ToString();//SSN
-				r[7]=table.Rows[i][7].ToString();//HmPhone
-				r[8]=table.Rows[i][8].ToString();//WkPhone
-				r[9]=table.Rows[i][9].ToString();//Address
-				r[10]=((PatientStatus)PIn.PInt(table.Rows[i][10].ToString())).ToString();//PatStatus
-				r[11]=DefB.GetName(DefCat.BillingTypes,PIn.PInt(table.Rows[i][11].ToString()));//BillingType
-				r[12]=table.Rows[i][12].ToString();//ChartNumber
-				r[13]=table.Rows[i][13].ToString();//City
-				r[14]=table.Rows[i][14].ToString();//State
-				r[15]=Providers.GetAbbr(PIn.PInt(table.Rows[i][15].ToString()));//PriProv
+				r["PatNum"]=table.Rows[i]["PatNum"].ToString();
+				r["LName"]=table.Rows[i]["LName"].ToString();
+				r["FName"]=table.Rows[i]["FName"].ToString();
+				r["MiddleI"]=table.Rows[i]["MiddleI"].ToString();
+				r["Preferred"]=table.Rows[i]["Preferred"].ToString();
+				date=PIn.PDate(table.Rows[i]["Birthdate"].ToString());
+				if(date.Year>1880){
+					r["age"]=Shared.DateToAge(date);
+					r["Birthdate"]=date.ToShortDateString();
+				}
+				else{
+					r["age"]="";
+					r["Birthdate"]="";
+				}				
+				r["SSN"]=table.Rows[i]["SSN"].ToString();
+				r["HmPhone"]=table.Rows[i]["HmPhone"].ToString();
+				r["WkPhone"]=table.Rows[i]["WkPhone"].ToString();
+				r["Address"]=table.Rows[i]["Address"].ToString();
+				r["PatStatus"]=((PatientStatus)PIn.PInt(table.Rows[i]["PatStatus"].ToString())).ToString();
+				r["BillingType"]=DefB.GetName(DefCat.BillingTypes,PIn.PInt(table.Rows[i]["BillingType"].ToString()));
+				r["ChartNumber"]=table.Rows[i]["ChartNumber"].ToString();
+				r["City"]=table.Rows[i]["City"].ToString();
+				r["State"]=table.Rows[i]["State"].ToString();
+				r["PriProv"]=Providers.GetAbbr(PIn.PInt(table.Rows[i]["PriProv"].ToString()));
 				PtDataTable.Rows.Add(r);
 			}
 			return PtDataTable;//retval;//if true, there are more rows.

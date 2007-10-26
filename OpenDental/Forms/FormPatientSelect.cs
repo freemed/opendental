@@ -61,6 +61,8 @@ namespace OpenDental{
 		///<summary>When closing the form, this will hold the value of the newly selected PatNum.</summary>
 		public int SelectedPatNum;
 		private CheckBox checkShowArchived;
+		private TextBox textBirthdate;
+		private Label label2;
 		private TextBox selectedTxtBox;
 
 		///<summary></summary>
@@ -97,6 +99,8 @@ namespace OpenDental{
 			this.butOK = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
 			this.groupBox2 = new System.Windows.Forms.GroupBox();
+			this.textBirthdate = new System.Windows.Forms.TextBox();
+			this.label2 = new System.Windows.Forms.Label();
 			this.checkShowArchived = new System.Windows.Forms.CheckBox();
 			this.textChartNumber = new System.Windows.Forms.TextBox();
 			this.listBillingTypes = new System.Windows.Forms.ListBox();
@@ -207,6 +211,8 @@ namespace OpenDental{
 			// 
 			// groupBox2
 			// 
+			this.groupBox2.Controls.Add(this.textBirthdate);
+			this.groupBox2.Controls.Add(this.label2);
 			this.groupBox2.Controls.Add(this.checkShowArchived);
 			this.groupBox2.Controls.Add(this.textChartNumber);
 			this.groupBox2.Controls.Add(this.listBillingTypes);
@@ -239,6 +245,25 @@ namespace OpenDental{
 			this.groupBox2.TabStop = false;
 			this.groupBox2.Text = "Search by:";
 			// 
+			// textBirthdate
+			// 
+			this.textBirthdate.Location = new System.Drawing.Point(135,218);
+			this.textBirthdate.Name = "textBirthdate";
+			this.textBirthdate.Size = new System.Drawing.Size(90,20);
+			this.textBirthdate.TabIndex = 26;
+			this.textBirthdate.Enter += new System.EventHandler(this.textBox_Enter);
+			this.textBirthdate.TextChanged += new System.EventHandler(this.textBirthdate_TextChanged);
+			this.textBirthdate.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textBirthdate_KeyDown);
+			// 
+			// label2
+			// 
+			this.label2.Location = new System.Drawing.Point(37,222);
+			this.label2.Name = "label2";
+			this.label2.Size = new System.Drawing.Size(99,12);
+			this.label2.TabIndex = 27;
+			this.label2.Text = "Birthdate";
+			this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
 			// checkShowArchived
 			// 
 			this.checkShowArchived.FlatStyle = System.Windows.Forms.FlatStyle.System;
@@ -261,7 +286,7 @@ namespace OpenDental{
 			// 
 			// listBillingTypes
 			// 
-			this.listBillingTypes.Location = new System.Drawing.Point(86,220);
+			this.listBillingTypes.Location = new System.Drawing.Point(86,243);
 			this.listBillingTypes.Name = "listBillingTypes";
 			this.listBillingTypes.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
 			this.listBillingTypes.Size = new System.Drawing.Size(138,56);
@@ -289,7 +314,7 @@ namespace OpenDental{
 			// 
 			// label11
 			// 
-			this.label11.Location = new System.Drawing.Point(30,226);
+			this.label11.Location = new System.Drawing.Point(30,249);
 			this.label11.Name = "label11";
 			this.label11.Size = new System.Drawing.Size(52,46);
 			this.label11.TabIndex = 21;
@@ -645,6 +670,8 @@ namespace OpenDental{
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn("Pri Prov",85);
 			gridMain.Columns.Add(col);
+			col=new ODGridColumn("Birthdate",70);
+			gridMain.Columns.Add(col);
 			gridMain.EndUpdate();
 		}
 
@@ -740,6 +767,10 @@ namespace OpenDental{
 			OnDataEntered();
 		}
 
+		private void textBirthdate_TextChanged(object sender,EventArgs e) {
+			OnDataEntered();
+		}
+
 		private void listBillingTypes_SelectedIndexChanged(object sender, System.EventArgs e) {
 			OnDataEntered();
 		}
@@ -754,6 +785,90 @@ namespace OpenDental{
 
 		private void checkShowArchived_CheckedChanged(object sender,EventArgs e) {
 			OnDataEntered();
+		}
+
+		private void textLName_KeyDown(object sender,KeyEventArgs e) {
+			if(e.KeyCode==Keys.Up || e.KeyCode==Keys.Down){
+				gridMain_KeyDown(sender,e);
+				gridMain.Invalidate();
+				e.Handled=true;
+			}
+		}
+
+		private void textFName_KeyDown(object sender,KeyEventArgs e) {
+			if(e.KeyCode==Keys.Up || e.KeyCode==Keys.Down) {
+				gridMain_KeyDown(sender,e);
+				gridMain.Invalidate();
+				e.Handled=true;
+			}
+		}
+
+		private void gridMain_KeyDown(object sender,KeyEventArgs e) {
+		}
+
+
+		private void textHmPhone_KeyDown(object sender,KeyEventArgs e) {
+			if(e.KeyCode==Keys.Up || e.KeyCode==Keys.Down) {
+				gridMain_KeyDown(sender,e);
+				gridMain.Invalidate();
+				e.Handled=true;
+			}
+		}
+
+		private void textAddress_KeyDown(object sender,KeyEventArgs e) {
+			if(e.KeyCode==Keys.Up || e.KeyCode==Keys.Down) {
+				gridMain_KeyDown(sender,e);
+				gridMain.Invalidate();
+				e.Handled=true;
+			}
+		}
+
+		private void textCity_KeyDown(object sender,KeyEventArgs e) {
+			if(e.KeyCode==Keys.Up || e.KeyCode==Keys.Down) {
+				gridMain_KeyDown(sender,e);
+				gridMain.Invalidate();
+				e.Handled=true;
+			}
+		}
+
+		private void textState_KeyDown(object sender,KeyEventArgs e) {
+			if(e.KeyCode==Keys.Up || e.KeyCode==Keys.Down) {
+				gridMain_KeyDown(sender,e);
+				gridMain.Invalidate();
+				e.Handled=true;
+			}
+		}
+
+		private void textSSN_KeyDown(object sender,KeyEventArgs e) {
+			if(e.KeyCode==Keys.Up || e.KeyCode==Keys.Down) {
+				gridMain_KeyDown(sender,e);
+				gridMain.Invalidate();
+				e.Handled=true;
+			}
+		}
+
+		private void textPatNum_KeyDown(object sender,KeyEventArgs e) {
+			if(e.KeyCode==Keys.Up || e.KeyCode==Keys.Down) {
+				gridMain_KeyDown(sender,e);
+				gridMain.Invalidate();
+				e.Handled=true;
+			}
+		}
+
+		private void textChartNumber_KeyDown(object sender,KeyEventArgs e) {
+			if(e.KeyCode==Keys.Up || e.KeyCode==Keys.Down) {
+				gridMain_KeyDown(sender,e);
+				gridMain.Invalidate();
+				e.Handled=true;
+			}
+		}
+
+		private void textBirthdate_KeyDown(object sender,KeyEventArgs e) {
+			if(e.KeyCode==Keys.Up || e.KeyCode==Keys.Down) {
+				gridMain_KeyDown(sender,e);
+				gridMain.Invalidate();
+				e.Handled=true;
+			}
 		}
 
 		private void checkUseSearch_Click(object sender, System.EventArgs e) {
@@ -781,10 +896,11 @@ namespace OpenDental{
 				selectedBillingTypes[i]
 					=DefB.Short[(int)DefCat.BillingTypes][listBillingTypes.SelectedIndices[i]].DefNum;
 			}
+			DateTime birthdate=PIn.PDate(textBirthdate.Text);//this will frequently be minval.
 			PtDataTable=Patients.GetPtDataTable(!checkUseSearch.Checked,textLName.Text,textFName.Text,textHmPhone.Text,
 				textAddress.Text,checkHideInactive.Checked,textCity.Text,textState.Text,
 				textSSN.Text,textPatNum.Text,textChartNumber.Text,selectedBillingTypes,
-				checkGuarantors.Checked,checkShowArchived.Checked,Security.CurUser.ClinicNum);
+				checkGuarantors.Checked,checkShowArchived.Checked,Security.CurUser.ClinicNum,birthdate);
 			if(!checkUseSearch.Checked && PtDataTable.Rows.Count==36){
 				//if limit and there are more rows
 				labelMore.Visible=true;
@@ -801,25 +917,24 @@ namespace OpenDental{
 			gridMain.Rows.Clear();
 			ODGridRow row;
 			for(int i=0;i<PtDataTable.Rows.Count;i++){
-				//Order in PtDataTable: PatNum,LName,FName,MiddleI,Preferred,Birthdate,SSN,HmPhone,WkPhone 0-8
-				//,Address,PatStatus,BillingType,ChartNumber,City,State,PriProv 9-15
 				row=new ODGridRow();				
-				row.Cells.Add(PtDataTable.Rows[i][1].ToString());//LastName				
-				row.Cells.Add(PtDataTable.Rows[i][2].ToString());//First Name			
-				row.Cells.Add(PtDataTable.Rows[i][3].ToString());//MI
-				row.Cells.Add(PtDataTable.Rows[i][4].ToString());//Pref Name			
-				row.Cells.Add(PtDataTable.Rows[i][5].ToString());//Age
-				row.Cells.Add(PtDataTable.Rows[i][6].ToString());//SSN
-				row.Cells.Add(PtDataTable.Rows[i][7].ToString());//Hm Phone
-				row.Cells.Add(PtDataTable.Rows[i][8].ToString());//Wk Phone
-				row.Cells.Add(PtDataTable.Rows[i][0].ToString());//PatNum
-				row.Cells.Add(PtDataTable.Rows[i][12].ToString());//ChartNum
-				row.Cells.Add(PtDataTable.Rows[i][9].ToString());//Address
-				row.Cells.Add(PtDataTable.Rows[i][10].ToString());//Status
-				row.Cells.Add(PtDataTable.Rows[i][11].ToString());//Bill Type
-				row.Cells.Add(PtDataTable.Rows[i][13].ToString());//City
-				row.Cells.Add(PtDataTable.Rows[i][14].ToString());//State
-				row.Cells.Add(PtDataTable.Rows[i][15].ToString());//PriProv
+				row.Cells.Add(PtDataTable.Rows[i]["LName"].ToString());				
+				row.Cells.Add(PtDataTable.Rows[i]["FName"].ToString());		
+				row.Cells.Add(PtDataTable.Rows[i]["MiddleI"].ToString());
+				row.Cells.Add(PtDataTable.Rows[i]["Preferred"].ToString());		
+				row.Cells.Add(PtDataTable.Rows[i]["Age"].ToString());
+				row.Cells.Add(PtDataTable.Rows[i]["SSN"].ToString());
+				row.Cells.Add(PtDataTable.Rows[i]["HmPhone"].ToString());
+				row.Cells.Add(PtDataTable.Rows[i]["WkPhone"].ToString());
+				row.Cells.Add(PtDataTable.Rows[i]["PatNum"].ToString());
+				row.Cells.Add(PtDataTable.Rows[i]["ChartNumber"].ToString());
+				row.Cells.Add(PtDataTable.Rows[i]["Address"].ToString());
+				row.Cells.Add(PtDataTable.Rows[i]["PatStatus"].ToString());
+				row.Cells.Add(PtDataTable.Rows[i]["BillingType"].ToString());
+				row.Cells.Add(PtDataTable.Rows[i]["City"].ToString());
+				row.Cells.Add(PtDataTable.Rows[i]["State"].ToString());
+				row.Cells.Add(PtDataTable.Rows[i]["PriProv"].ToString());
+				row.Cells.Add(PtDataTable.Rows[i]["Birthdate"].ToString());
 				gridMain.Rows.Add(row);
 			}
 			gridMain.EndUpdate();
@@ -829,12 +944,16 @@ namespace OpenDental{
 		private void gridMain_CellDoubleClick(object sender,ODGridClickEventArgs e) {
 			PatSelected();
 		}
+
 		private void OnArrowsUpDown(System.Windows.Forms.KeyEventArgs e){
-			if (e.KeyCode == Keys.Up){
+			//I don't know if this is doing anything.
+			if(e.KeyCode==Keys.Up || e.KeyCode==Keys.Down) {
 				gridMain_KeyDown(this,e);
-				//gridMain.KeyDown;
+				gridMain.Invalidate();
+				e.Handled=true;
 			}
 		}
+
 		private void FormSelectPatient_KeyDown(object sender, System.Windows.Forms.KeyEventArgs e) {
 			OnArrowsUpDown(e);
 		}
@@ -895,63 +1014,11 @@ namespace OpenDental{
 			DialogResult=DialogResult.Cancel;
 		}
 
-
-		private void textLName_KeyDown(object sender,KeyEventArgs e) {
-			if(e.KeyCode==Keys.Up | e.KeyCode==Keys.Down) 
-				gridMain_KeyDown(sender, e);
-				gridMain.Refresh();
-		}
-
-		private void textFName_KeyDown(object sender,KeyEventArgs e) {
-			if(e.KeyCode==Keys.Up | e.KeyCode==Keys.Down) 
-				gridMain_KeyDown(sender, e);
-				gridMain.Refresh();
-		}
-
-		private void gridMain_KeyDown(object sender,KeyEventArgs e) {
-		}
+		
 
 
-		private void textHmPhone_KeyDown(object sender,KeyEventArgs e) {
-			if(e.KeyCode==Keys.Up | e.KeyCode==Keys.Down) 
-				gridMain_KeyDown(sender, e);
-				gridMain.Refresh();
-		}
+		
 
-		private void textAddress_KeyDown(object sender,KeyEventArgs e) {
-			if(e.KeyCode==Keys.Up | e.KeyCode==Keys.Down) 
-				gridMain_KeyDown(sender, e);
-				gridMain.Refresh();
-		}
-
-		private void textCity_KeyDown(object sender,KeyEventArgs e) {
-			if(e.KeyCode==Keys.Up | e.KeyCode==Keys.Down) 
-				gridMain_KeyDown(sender, e);
-				gridMain.Refresh();
-		}
-
-		private void textState_KeyDown(object sender,KeyEventArgs e) {
-			if(e.KeyCode==Keys.Up | e.KeyCode==Keys.Down) 
-				gridMain_KeyDown(sender, e);
-				gridMain.Refresh();
-		}
-
-		private void textSSN_KeyDown(object sender,KeyEventArgs e) {
-			if(e.KeyCode==Keys.Up | e.KeyCode==Keys.Down) 
-				gridMain_KeyDown(sender, e);
-				gridMain.Refresh();
-		}
-
-		private void textPatNum_KeyDown(object sender,KeyEventArgs e) {
-			if(e.KeyCode==Keys.Up | e.KeyCode==Keys.Down) 
-				gridMain_KeyDown(sender, e);
-				gridMain.Refresh();
-		}
-
-		private void textChartNumber_KeyDown(object sender,KeyEventArgs e) {
-			if(e.KeyCode==Keys.Up | e.KeyCode==Keys.Down) 
-				gridMain_KeyDown(sender, e);
-				gridMain.Refresh();
-		}
+		
 	}
 }
