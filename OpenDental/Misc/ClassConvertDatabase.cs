@@ -6087,6 +6087,9 @@ namespace OpenDental{
 					command="UPDATE registrationkey SET DateDisabled='0001-01-01'";
 					General.NonQEx(command);
 				}
+				//after r1014
+				command = "INSERT INTO preference VALUES('UpdateWindowShowsClassicView','0')";
+				General.NonQEx(command);
 				
 
 

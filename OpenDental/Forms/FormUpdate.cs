@@ -26,10 +26,7 @@ namespace OpenDental{
 		private System.Windows.Forms.TextBox textWebsitePath;
 		private System.Windows.Forms.Label label3;
 		private System.Windows.Forms.Label label1;
-		/// <summary>
-		/// Required designer variable.
-		/// </summary>
-		private System.ComponentModel.Container components = null;
+		private IContainer components;
 		//private WebClient myWebClient;
 		private string myStringWebResource;
 		private TextBox textResult;
@@ -43,7 +40,10 @@ namespace OpenDental{
 		private Label label9;
 		private Label label10;
 		private Label label7;
-		private Label label8;//OD1
+		private Label label8;
+		private MainMenu mainMenu1;
+		private MenuItem menuItemSetup;
+		private Panel panelClassic;//OD1
 		///<summary>Includes path</summary>
 		string WriteToFile;
 
@@ -79,6 +79,7 @@ namespace OpenDental{
 		/// </summary>
 		private void InitializeComponent()
 		{
+			this.components = new System.ComponentModel.Container();
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormUpdate));
 			this.butReset = new System.Windows.Forms.Button();
 			this.labelVersion = new System.Windows.Forms.Label();
@@ -99,6 +100,10 @@ namespace OpenDental{
 			this.label10 = new System.Windows.Forms.Label();
 			this.label7 = new System.Windows.Forms.Label();
 			this.label8 = new System.Windows.Forms.Label();
+			this.mainMenu1 = new System.Windows.Forms.MainMenu(this.components);
+			this.menuItemSetup = new System.Windows.Forms.MenuItem();
+			this.panelClassic = new System.Windows.Forms.Panel();
+			this.panelClassic.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// butReset
@@ -106,7 +111,7 @@ namespace OpenDental{
 			this.butReset.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.butReset.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this.butReset.ForeColor = System.Drawing.SystemColors.Control;
-			this.butReset.Location = new System.Drawing.Point(589,0);
+			this.butReset.Location = new System.Drawing.Point(830,0);
 			this.butReset.Name = "butReset";
 			this.butReset.Size = new System.Drawing.Size(13,12);
 			this.butReset.TabIndex = 6;
@@ -130,21 +135,21 @@ namespace OpenDental{
 			// 
 			// textRegMain
 			// 
-			this.textRegMain.Location = new System.Drawing.Point(163,120);
+			this.textRegMain.Location = new System.Drawing.Point(131,26);
 			this.textRegMain.Name = "textRegMain";
 			this.textRegMain.Size = new System.Drawing.Size(113,20);
 			this.textRegMain.TabIndex = 19;
 			// 
 			// textWebsitePath
 			// 
-			this.textWebsitePath.Location = new System.Drawing.Point(163,97);
+			this.textWebsitePath.Location = new System.Drawing.Point(131,3);
 			this.textWebsitePath.Name = "textWebsitePath";
 			this.textWebsitePath.Size = new System.Drawing.Size(388,20);
 			this.textWebsitePath.TabIndex = 24;
 			// 
 			// label3
 			// 
-			this.label3.Location = new System.Drawing.Point(58,98);
+			this.label3.Location = new System.Drawing.Point(26,4);
 			this.label3.Name = "label3";
 			this.label3.Size = new System.Drawing.Size(105,19);
 			this.label3.TabIndex = 26;
@@ -155,7 +160,7 @@ namespace OpenDental{
 			// 
 			this.textResult.AcceptsReturn = true;
 			this.textResult.BackColor = System.Drawing.SystemColors.Window;
-			this.textResult.Location = new System.Drawing.Point(163,176);
+			this.textResult.Location = new System.Drawing.Point(131,82);
 			this.textResult.Name = "textResult";
 			this.textResult.ReadOnly = true;
 			this.textResult.Size = new System.Drawing.Size(388,20);
@@ -165,7 +170,7 @@ namespace OpenDental{
 			// 
 			this.textResult2.AcceptsReturn = true;
 			this.textResult2.BackColor = System.Drawing.SystemColors.Window;
-			this.textResult2.Location = new System.Drawing.Point(163,199);
+			this.textResult2.Location = new System.Drawing.Point(131,105);
 			this.textResult2.Multiline = true;
 			this.textResult2.Name = "textResult2";
 			this.textResult2.ReadOnly = true;
@@ -174,7 +179,7 @@ namespace OpenDental{
 			// 
 			// label4
 			// 
-			this.label4.Location = new System.Drawing.Point(40,120);
+			this.label4.Location = new System.Drawing.Point(8,26);
 			this.label4.Name = "label4";
 			this.label4.Size = new System.Drawing.Size(120,19);
 			this.label4.TabIndex = 34;
@@ -194,9 +199,9 @@ namespace OpenDental{
 			this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.panel1.Location = new System.Drawing.Point(9,308);
+			this.panel1.Location = new System.Drawing.Point(5,557);
 			this.panel1.Name = "panel1";
-			this.panel1.Size = new System.Drawing.Size(583,4);
+			this.panel1.Size = new System.Drawing.Size(824,4);
 			this.panel1.TabIndex = 42;
 			// 
 			// butDownload
@@ -206,7 +211,7 @@ namespace OpenDental{
 			this.butDownload.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butDownload.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butDownload.CornerRadius = 4F;
-			this.butDownload.Location = new System.Drawing.Point(163,271);
+			this.butDownload.Location = new System.Drawing.Point(131,177);
 			this.butDownload.Name = "butDownload";
 			this.butDownload.Size = new System.Drawing.Size(83,25);
 			this.butDownload.TabIndex = 20;
@@ -220,7 +225,7 @@ namespace OpenDental{
 			this.butCheck.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butCheck.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCheck.CornerRadius = 4F;
-			this.butCheck.Location = new System.Drawing.Point(163,145);
+			this.butCheck.Location = new System.Drawing.Point(131,51);
 			this.butCheck.Name = "butCheck";
 			this.butCheck.Size = new System.Drawing.Size(117,25);
 			this.butCheck.TabIndex = 21;
@@ -235,7 +240,7 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(382,422);
+			this.butOK.Location = new System.Drawing.Point(623,626);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75,25);
 			this.butOK.TabIndex = 1;
@@ -250,7 +255,7 @@ namespace OpenDental{
 			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
-			this.butCancel.Location = new System.Drawing.Point(475,422);
+			this.butCancel.Location = new System.Drawing.Point(716,626);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75,25);
 			this.butCancel.TabIndex = 0;
@@ -259,7 +264,7 @@ namespace OpenDental{
 			// 
 			// label9
 			// 
-			this.label9.Location = new System.Drawing.Point(12,374);
+			this.label9.Location = new System.Drawing.Point(12,607);
 			this.label9.Name = "label9";
 			this.label9.Size = new System.Drawing.Size(550,23);
 			this.label9.TabIndex = 47;
@@ -268,7 +273,7 @@ namespace OpenDental{
 			// 
 			// label10
 			// 
-			this.label10.Location = new System.Drawing.Point(12,352);
+			this.label10.Location = new System.Drawing.Point(12,585);
 			this.label10.Name = "label10";
 			this.label10.Size = new System.Drawing.Size(550,23);
 			this.label10.TabIndex = 44;
@@ -278,7 +283,7 @@ namespace OpenDental{
 			// 
 			// label7
 			// 
-			this.label7.Location = new System.Drawing.Point(12,333);
+			this.label7.Location = new System.Drawing.Point(12,566);
 			this.label7.Name = "label7";
 			this.label7.Size = new System.Drawing.Size(549,20);
 			this.label7.TabIndex = 46;
@@ -288,60 +293,88 @@ namespace OpenDental{
 			// 
 			// label8
 			// 
-			this.label8.Location = new System.Drawing.Point(12,396);
+			this.label8.Location = new System.Drawing.Point(12,629);
 			this.label8.Name = "label8";
 			this.label8.Size = new System.Drawing.Size(549,20);
 			this.label8.TabIndex = 45;
 			this.label8.Text = "MySQL - Copyright 1995-2007, www.mysql.com";
 			this.label8.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
+			// mainMenu1
+			// 
+			this.mainMenu1.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
+            this.menuItemSetup});
+			// 
+			// menuItemSetup
+			// 
+			this.menuItemSetup.Index = 0;
+			this.menuItemSetup.Text = "Setup";
+			this.menuItemSetup.Click += new System.EventHandler(this.menuItemSetup_Click);
+			// 
+			// panelClassic
+			// 
+			this.panelClassic.Controls.Add(this.textWebsitePath);
+			this.panelClassic.Controls.Add(this.textRegMain);
+			this.panelClassic.Controls.Add(this.butCheck);
+			this.panelClassic.Controls.Add(this.label3);
+			this.panelClassic.Controls.Add(this.textResult);
+			this.panelClassic.Controls.Add(this.label4);
+			this.panelClassic.Controls.Add(this.textResult2);
+			this.panelClassic.Controls.Add(this.butDownload);
+			this.panelClassic.Location = new System.Drawing.Point(142,175);
+			this.panelClassic.Name = "panelClassic";
+			this.panelClassic.Size = new System.Drawing.Size(523,206);
+			this.panelClassic.TabIndex = 48;
+			this.panelClassic.Visible = false;
+			// 
 			// FormUpdate
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
-			this.ClientSize = new System.Drawing.Size(600,465);
+			this.ClientSize = new System.Drawing.Size(841,669);
+			this.Controls.Add(this.panelClassic);
 			this.Controls.Add(this.label9);
 			this.Controls.Add(this.label10);
 			this.Controls.Add(this.label7);
 			this.Controls.Add(this.label8);
 			this.Controls.Add(this.panel1);
 			this.Controls.Add(this.label6);
-			this.Controls.Add(this.butDownload);
-			this.Controls.Add(this.textResult2);
-			this.Controls.Add(this.label4);
-			this.Controls.Add(this.textResult);
-			this.Controls.Add(this.label3);
-			this.Controls.Add(this.butCheck);
-			this.Controls.Add(this.textWebsitePath);
-			this.Controls.Add(this.textRegMain);
 			this.Controls.Add(this.butOK);
 			this.Controls.Add(this.butCancel);
 			this.Controls.Add(this.labelVersion);
 			this.Controls.Add(this.butReset);
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.MaximizeBox = false;
+			this.Menu = this.mainMenu1;
 			this.MinimizeBox = false;
 			this.Name = "FormUpdate";
 			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Update";
 			this.Load += new System.EventHandler(this.FormUpdate_Load);
+			this.panelClassic.ResumeLayout(false);
+			this.panelClassic.PerformLayout();
 			this.ResumeLayout(false);
-			this.PerformLayout();
 
 		}
 		#endregion
 
 		private void FormUpdate_Load(object sender, System.EventArgs e) {
 			labelVersion.Text=Lan.g(this,"Using Version:")+" "+Application.ProductVersion;
-			textRegMain.Text=PrefB.GetString("RegistrationNumber");
-			//textRegClaimform.Text=PrefB.GetString("RegistrationNumberClaim");
-			textWebsitePath.Text=PrefB.GetString("UpdateWebsitePath");//should include trailing /
-			butDownload.Enabled=false;
-			//butDownloadClaimform.Enabled=false;
+			if(PrefB.GetBool("UpdateWindowShowsClassicView")){
+				panelClassic.Visible=true;
+				panelClassic.Location=new Point(142,175);
+				textRegMain.Text=PrefB.GetString("RegistrationNumber");
+				textWebsitePath.Text=PrefB.GetString("UpdateWebsitePath");//should include trailing /
+				butDownload.Enabled=false;
+			}
 			if(!Security.IsAuthorized(Permissions.Setup)) {
 				butCheck.Enabled=false;
 				butOK.Enabled=false;
 			}
+		}
+
+		private void menuItemSetup_Click(object sender,EventArgs e) {
+
 		}
 
 		private void butReset_Click(object sender, System.EventArgs e) {
@@ -439,39 +472,6 @@ namespace OpenDental{
 			}
 			return shouldDownload;
 		}
-
-		/*
-		private void CheckClaimForm() {
-			butDownloadClaimform.Enabled=false;
-			textResultClaimform.Text="";
-			if(textRegClaimform.Text.Length==0) {
-				return;
-			}
-			string remoteUri=textWebsitePath.Text+textRegClaimform.Text+"/";
-			string fileName="Manifest.txt";
-			WebClient myWebClient=new WebClient();
-			string myStringWebResource=remoteUri+fileName;
-			string description;
-			try {
-				using(StreamReader sr=new StreamReader(myWebClient.OpenRead(myStringWebResource))) {
-					description=sr.ReadLine();
-					BackgroundImg=sr.ReadLine();
-					OldClaimFormID=sr.ReadLine();
-				}
-			}
-			catch {
-				textResultClaimform.Text+=Lan.g(this,"Registration number not valid, or internet connection failed.");
-				return;
-			}
-			if(BackgroundImg==null) {
-				BackgroundImg="";
-			}
-			if(OldClaimFormID==null) {
-				OldClaimFormID="";
-			}
-			textResultClaimform.Text+=description;
-			butDownloadClaimform.Enabled=true;
-		}*/
 
 		private void butDownload_Click(object sender, System.EventArgs e){
 			string patchName="Setup.exe";
@@ -680,9 +680,6 @@ namespace OpenDental{
 			if(Prefs.UpdateString("RegistrationNumber",textRegMain.Text)){
 				changed=true;
 			}
-			//if(Prefs.UpdateString("RegistrationNumberClaim",textRegClaimform.Text)) {
-			//	changed=true;
-			//}
 			if(Prefs.UpdateString("UpdateWebsitePath",textWebsitePath.Text)){
 				changed=true;
 			}
@@ -699,6 +696,8 @@ namespace OpenDental{
 		private void butCancel_Click(object sender, System.EventArgs e) {
 			DialogResult=DialogResult.Cancel;
 		}
+
+		
 
 		
 
