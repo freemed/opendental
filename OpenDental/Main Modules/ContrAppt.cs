@@ -3145,15 +3145,16 @@ namespace OpenDental{
 			}
 			Appointment apt = Appointments.GetOneApt(ContrApptSingle.SelectedAptNum);
 			int thisI=GetIndex(ContrApptSingle.SelectedAptNum);
+			if(thisI==-1) {//selected appt is on a different day
+				MsgBox.Show(this,"Please select an appointment first.");
+				return;
+			}
 			Patient pat=Patients.GetPat(PIn.PInt(ContrApptSingle3[thisI].DataRoww["PatNum"].ToString()));
 			if(!Security.IsAuthorized(Permissions.AppointmentEdit)) {
 				return;
 			}
 			if(apt.AptStatus == ApptStatus.PtNote || apt.AptStatus == ApptStatus.PtNoteCompleted) {
 				MsgBox.Show(this,"Only appointments may be broken, not notes.");
-				return;
-			}
-			if(!MsgBox.Show(this,true,"Break appointment?")) {
 				return;
 			}
 			Appointments.SetAptStatus(ContrApptSingle.SelectedAptNum,ApptStatus.Broken);
