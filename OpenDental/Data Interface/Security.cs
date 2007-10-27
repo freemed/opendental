@@ -25,6 +25,11 @@ namespace OpenDental{
 		}
 
 		///<summary>Checks to see if current user is authorized.  It also checks any date restrictions.  If not authorized, it gives a Message box saying so and returns false.</summary>
+		public static bool IsAuthorized(Permissions perm,bool suppressMessage){
+			return IsAuthorized(perm,DateTime.MinValue,suppressMessage);
+		}
+
+		///<summary>Checks to see if current user is authorized.  It also checks any date restrictions.  If not authorized, it gives a Message box saying so and returns false.</summary>
 		public static bool IsAuthorized(Permissions perm,DateTime date,bool suppressMessage){
 			if(Security.CurUser==null || !GroupPermissions.HasPermission(Security.CurUser.UserGroupNum,perm)){
 				if(!suppressMessage){
@@ -108,17 +113,16 @@ namespace OpenDental{
 			return Permissions.None;
 		}
 
-		///<summary></summary>
-		public static void ResetPassword(){
+		//<summary>Obsolete</summary>
+		//public static void ResetPassword(){
 			//FIXME:UPDATE-MULTIPLE-TABLES
 			/*string command="UPDATE userod,grouppermissions SET userod.Password='' "
 				+"WHERE grouppermissions.UserGroupNum=userod.UserGroupNum "
 				+"AND grouppermissions.PermType=24";
  			General.NonQ(command);
 			 */
-
 			//Code updated to be compatible with Oracle as well as MySQL.
-
+			/*
 			string command="SELECT userod.UserNum FROM userod,grouppermissions "
 				+"WHERE grouppermissions.UserGroupNum=userod.UserGroupNum "
 				+"AND grouppermissions.PermType=24";
@@ -128,7 +132,7 @@ namespace OpenDental{
 			}
 			command="UPDATE userod SET Password='' WHERE UserNum="+POut.PString(table.Rows[0][0].ToString());
 			General.NonQ(command);
-		}
+		}*/
 
 	}
 }

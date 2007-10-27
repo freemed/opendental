@@ -14,6 +14,7 @@ namespace OpenDental{
 		private System.ComponentModel.Container components = null;
 		private System.Windows.Forms.TextBox textMasterPass;
 		private OpenDental.UI.Button butCancel;
+		private Label label2;
 		private string masterHash;
 
 		///<summary></summary>
@@ -40,11 +41,12 @@ namespace OpenDental{
 			this.butOK = new OpenDental.UI.Button();
 			this.label1 = new System.Windows.Forms.Label();
 			this.butCancel = new OpenDental.UI.Button();
+			this.label2 = new System.Windows.Forms.Label();
 			this.SuspendLayout();
 			// 
 			// textMasterPass
 			// 
-			this.textMasterPass.Location = new System.Drawing.Point(120,24);
+			this.textMasterPass.Location = new System.Drawing.Point(120,58);
 			this.textMasterPass.MaxLength = 100;
 			this.textMasterPass.Name = "textMasterPass";
 			this.textMasterPass.Size = new System.Drawing.Size(212,20);
@@ -66,7 +68,7 @@ namespace OpenDental{
 			// 
 			// label1
 			// 
-			this.label1.Location = new System.Drawing.Point(18,26);
+			this.label1.Location = new System.Drawing.Point(18,60);
 			this.label1.Name = "label1";
 			this.label1.Size = new System.Drawing.Size(100,50);
 			this.label1.TabIndex = 38;
@@ -88,12 +90,22 @@ namespace OpenDental{
 			this.butCancel.Text = "&Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
 			// 
+			// label2
+			// 
+			this.label2.Location = new System.Drawing.Point(54,5);
+			this.label2.Name = "label2";
+			this.label2.Size = new System.Drawing.Size(406,26);
+			this.label2.TabIndex = 40;
+			this.label2.Text = "This form is obsolete and cannot be accessed from anywhere.";
+			this.label2.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+			// 
 			// FormPasswordReset
 			// 
 			this.AcceptButton = this.butOK;
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.CancelButton = this.butCancel;
 			this.ClientSize = new System.Drawing.Size(478,176);
+			this.Controls.Add(this.label2);
 			this.Controls.Add(this.butCancel);
 			this.Controls.Add(this.textMasterPass);
 			this.Controls.Add(this.label1);
@@ -125,7 +137,7 @@ namespace OpenDental{
 				MessageBox.Show(Lan.g(this,"Master password incorrect."));
 				return;
 			}
-			Security.ResetPassword();
+			//Security.ResetPassword();
 			//PermissionsOld.Refresh();
 			//MessageBox.Show(Lan.g(this,"Security Administration permission has been reset."));
 			//DialogResult=DialogResult.OK;

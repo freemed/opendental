@@ -3228,7 +3228,7 @@ namespace OpenDental{
 			doc.DocumentElement.SetAttributeNode(nameSpaceAttribute);
 			// Prepare noNamespace Schema Location Attribute
 			XmlAttribute noNameSpaceSchemaLocation = doc.CreateAttribute("xsi","noNamespaceSchemaLocation","http://www.w3.org/2001/XMLSchema-instance");
-			//dmg Note sure what this is for. This path will not exist on Unix and will fail. In fact, this path
+			//dmg Not sure what this is for. This path will not exist on Unix and will fail. In fact, this path
 			//will either not exist or be read-only on most Windows boxes, so this path specification is probably
 			//a bug, but has not caused any user complaints thus far.
 			noNameSpaceSchemaLocation.Value = @"D:\eligreq.xsd";
