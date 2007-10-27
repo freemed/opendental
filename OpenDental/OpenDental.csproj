@@ -403,6 +403,12 @@
     <Compile Include="Forms\BasicTemplate.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Forms\FormLicense.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormUpdateSetup.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Forms\FormPopupEdit.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -1386,6 +1392,14 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\BasicTemplate.resx">
       <DependentUpon>BasicTemplate.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormLicense.resx">
+      <DependentUpon>FormLicense.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormUpdateSetup.resx">
+      <DependentUpon>FormUpdateSetup.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormPopupEdit.resx">
@@ -3035,6 +3049,7 @@
     <None Include="bin\Debug\payments.txt" />
     <Content Include="Misc\App.ico" />
     <Content Include="Misc\TerminalMgr.ico" />
+    <None Include="Resources\GPL.txt" />
     <None Include="Resources\PaymentsRDL.txt" />
     <None Include="Resources\commlog.gif" />
     <None Include="Resources\NoFeeProcCodes.txt" />

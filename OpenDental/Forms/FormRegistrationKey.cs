@@ -215,7 +215,7 @@ namespace OpenDental{
 				textKey3.Text=key.Substring(8,4);
 				textKey4.Text=key.Substring(12,4);
 			}
-			richTextAgreement.Rtf=Properties.Resources.CDT_Content_End_User_License;  //LoadFile(
+			richTextAgreement.Rtf=Properties.Resources.CDT_Content_End_User_License;
 		}
 
 		public static bool ValidateKey(string keystr){
