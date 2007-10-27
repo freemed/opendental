@@ -21,7 +21,7 @@ namespace OpenDental{
 		private System.Windows.Forms.Label labelVersion;
 		private OpenDental.UI.Button butDownload;
 		private OpenDental.UI.Button butCheck;
-		private System.Windows.Forms.TextBox textRegMain;
+		private System.Windows.Forms.TextBox textUpdateCode;
 		private System.Windows.Forms.TextBox textWebsitePath;
 		private System.Windows.Forms.Label label3;
 		private System.Windows.Forms.Label label1;
@@ -84,7 +84,7 @@ namespace OpenDental{
 			this.butReset = new System.Windows.Forms.Button();
 			this.labelVersion = new System.Windows.Forms.Label();
 			this.label1 = new System.Windows.Forms.Label();
-			this.textRegMain = new System.Windows.Forms.TextBox();
+			this.textUpdateCode = new System.Windows.Forms.TextBox();
 			this.textWebsitePath = new System.Windows.Forms.TextBox();
 			this.label3 = new System.Windows.Forms.Label();
 			this.textResult = new System.Windows.Forms.TextBox();
@@ -133,12 +133,12 @@ namespace OpenDental{
 			this.label1.Size = new System.Drawing.Size(100,23);
 			this.label1.TabIndex = 0;
 			// 
-			// textRegMain
+			// textUpdateCode
 			// 
-			this.textRegMain.Location = new System.Drawing.Point(234,182);
-			this.textRegMain.Name = "textRegMain";
-			this.textRegMain.Size = new System.Drawing.Size(113,20);
-			this.textRegMain.TabIndex = 19;
+			this.textUpdateCode.Location = new System.Drawing.Point(234,182);
+			this.textUpdateCode.Name = "textUpdateCode";
+			this.textUpdateCode.Size = new System.Drawing.Size(113,20);
+			this.textUpdateCode.TabIndex = 19;
 			// 
 			// textWebsitePath
 			// 
@@ -299,7 +299,7 @@ namespace OpenDental{
 			// panelClassic
 			// 
 			this.panelClassic.Controls.Add(this.textWebsitePath);
-			this.panelClassic.Controls.Add(this.textRegMain);
+			this.panelClassic.Controls.Add(this.textUpdateCode);
 			this.panelClassic.Controls.Add(this.butCheck);
 			this.panelClassic.Controls.Add(this.label3);
 			this.panelClassic.Controls.Add(this.textResult);
@@ -325,7 +325,7 @@ namespace OpenDental{
 			this.butLicense.Name = "butLicense";
 			this.butLicense.Size = new System.Drawing.Size(88,25);
 			this.butLicense.TabIndex = 49;
-			this.butLicense.Text = "View License";
+			this.butLicense.Text = "View Licenses";
 			this.butLicense.Click += new System.EventHandler(this.butLicense_Click);
 			// 
 			// FormUpdate
@@ -364,7 +364,7 @@ namespace OpenDental{
 			if(PrefB.GetBool("UpdateWindowShowsClassicView")){
 				panelClassic.Visible=true;
 				panelClassic.Location=new Point(12,32);
-				textRegMain.Text=PrefB.GetString("RegistrationNumber");
+				textUpdateCode.Text=PrefB.GetString("UpdateCode");
 				textWebsitePath.Text=PrefB.GetString("UpdateWebsitePath");//should include trailing /
 				butDownload.Enabled=false;
 			}
@@ -404,13 +404,13 @@ namespace OpenDental{
 			butDownload.Enabled=false;
 			textResult.Text="";
 			textResult2.Text="";
-			if(textRegMain.Text.Length==0){
+			if(textUpdateCode.Text.Length==0){
 				textResult.Text+=Lan.g(this,"Registration number not valid.");
 				return;
 			}
 			string updateInfoMajor="";
 			string updateInfoMinor="";
-			butDownload.Enabled=ShouldDownloadUpdate(textWebsitePath.Text,textRegMain.Text,
+			butDownload.Enabled=ShouldDownloadUpdate(textWebsitePath.Text,textUpdateCode.Text,
 							out updateInfoMajor,out updateInfoMinor);
 			textResult.Text=updateInfoMajor;
 			textResult2.Text=updateInfoMinor;
@@ -484,7 +484,7 @@ namespace OpenDental{
 			if(destDir==null){//Not using A to Z folders?
 				destDir=Path.GetTempPath();
 			}
-			DownloadInstallPatchFromURI(textWebsitePath.Text+textRegMain.Text+"/"+patchName,//Source URI
+			DownloadInstallPatchFromURI(textWebsitePath.Text+textUpdateCode.Text+"/"+patchName,//Source URI
 				ODFileUtils.CombinePaths(destDir,patchName));//Local destination file.
 		}
 
@@ -682,7 +682,7 @@ namespace OpenDental{
 
 		private void SavePrefs(){
 			bool changed=false;
-			if(Prefs.UpdateString("RegistrationNumber",textRegMain.Text)){
+			if(Prefs.UpdateString("UpdateCode",textUpdateCode.Text)){
 				changed=true;
 			}
 			if(Prefs.UpdateString("UpdateWebsitePath",textWebsitePath.Text)){

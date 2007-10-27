@@ -6093,7 +6093,11 @@ namespace OpenDental{
 				//after r1020
 				command = "INSERT INTO preference VALUES('BillingExcludeInsPending','0')";
 				General.NonQEx(command);
-
+				//after r1022
+				command = "INSERT INTO preference VALUES('UpdateServerAddress','')";
+				General.NonQEx(command);
+				command = "UPDATE preference SET PrefName='UpdateCode' WHERE PrefName='RegistrationNumber'";
+				General.NonQEx(command);
 
 
 
