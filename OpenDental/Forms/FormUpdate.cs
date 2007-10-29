@@ -41,21 +41,27 @@ namespace OpenDental{
 		private Panel panelClassic;
 		private OpenDental.UI.Button butLicense;
 		private TextBox textConnectionMessage;
-		private GroupBox groupBuilds;
+		private GroupBox groupBuild;
 		private Label label2;
-		private TextBox textBox1;
-		private OpenDental.UI.Button button1;
-		private GroupBox groupBox1;
-		private TextBox textBox2;
-		private OpenDental.UI.Button button2;
+		private TextBox textBuild;
+		private OpenDental.UI.Button butInstallBuild;
+		private GroupBox groupBeta;
+		private TextBox textBeta;
+		private OpenDental.UI.Button butInstallBeta;
 		private Label label5;
-		private GroupBox groupBox2;
-		private TextBox textBox3;
-		private OpenDental.UI.Button button3;
+		private GroupBox groupStable;
+		private TextBox textStable;
+		private OpenDental.UI.Button butInstallStable;
 		private Label label11;
 		private OpenDental.UI.Button butCheck2;//OD1
 		///<summary>Includes path</summary>
 		string WriteToFile;
+		string buildAvailable;
+		string buildAvailableCode;
+		string stableAvailable;
+		string stableAvailableCode;
+		string betaAvailable;
+		string betaAvailableCode;
 
 		///<summary></summary>
 		public FormUpdate()
@@ -109,33 +115,33 @@ namespace OpenDental{
 			this.menuItemSetup = new System.Windows.Forms.MenuItem();
 			this.panelClassic = new System.Windows.Forms.Panel();
 			this.textConnectionMessage = new System.Windows.Forms.TextBox();
-			this.groupBuilds = new System.Windows.Forms.GroupBox();
+			this.groupBuild = new System.Windows.Forms.GroupBox();
+			this.textBuild = new System.Windows.Forms.TextBox();
 			this.label2 = new System.Windows.Forms.Label();
-			this.textBox1 = new System.Windows.Forms.TextBox();
-			this.groupBox1 = new System.Windows.Forms.GroupBox();
-			this.textBox2 = new System.Windows.Forms.TextBox();
+			this.groupBeta = new System.Windows.Forms.GroupBox();
+			this.textBeta = new System.Windows.Forms.TextBox();
 			this.label5 = new System.Windows.Forms.Label();
-			this.groupBox2 = new System.Windows.Forms.GroupBox();
-			this.textBox3 = new System.Windows.Forms.TextBox();
+			this.groupStable = new System.Windows.Forms.GroupBox();
+			this.textStable = new System.Windows.Forms.TextBox();
 			this.label11 = new System.Windows.Forms.Label();
-			this.button3 = new OpenDental.UI.Button();
-			this.button2 = new OpenDental.UI.Button();
-			this.button1 = new OpenDental.UI.Button();
+			this.butCheck2 = new OpenDental.UI.Button();
+			this.butInstallStable = new OpenDental.UI.Button();
+			this.butInstallBeta = new OpenDental.UI.Button();
+			this.butInstallBuild = new OpenDental.UI.Button();
 			this.butLicense = new OpenDental.UI.Button();
 			this.butCheck = new OpenDental.UI.Button();
 			this.butDownload = new OpenDental.UI.Button();
 			this.butClose = new OpenDental.UI.Button();
-			this.butCheck2 = new OpenDental.UI.Button();
 			this.panelClassic.SuspendLayout();
-			this.groupBuilds.SuspendLayout();
-			this.groupBox1.SuspendLayout();
-			this.groupBox2.SuspendLayout();
+			this.groupBuild.SuspendLayout();
+			this.groupBeta.SuspendLayout();
+			this.groupStable.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// labelVersion
 			// 
 			this.labelVersion.Font = new System.Drawing.Font("Microsoft Sans Serif",8.25F,System.Drawing.FontStyle.Bold,System.Drawing.GraphicsUnit.Point,((byte)(0)));
-			this.labelVersion.Location = new System.Drawing.Point(9,9);
+			this.labelVersion.Location = new System.Drawing.Point(74,9);
 			this.labelVersion.Name = "labelVersion";
 			this.labelVersion.Size = new System.Drawing.Size(176,20);
 			this.labelVersion.TabIndex = 10;
@@ -150,21 +156,21 @@ namespace OpenDental{
 			// 
 			// textUpdateCode
 			// 
-			this.textUpdateCode.Location = new System.Drawing.Point(234,182);
+			this.textUpdateCode.Location = new System.Drawing.Point(129,100);
 			this.textUpdateCode.Name = "textUpdateCode";
 			this.textUpdateCode.Size = new System.Drawing.Size(113,20);
 			this.textUpdateCode.TabIndex = 19;
 			// 
 			// textWebsitePath
 			// 
-			this.textWebsitePath.Location = new System.Drawing.Point(234,159);
+			this.textWebsitePath.Location = new System.Drawing.Point(129,77);
 			this.textWebsitePath.Name = "textWebsitePath";
 			this.textWebsitePath.Size = new System.Drawing.Size(388,20);
 			this.textWebsitePath.TabIndex = 24;
 			// 
 			// label3
 			// 
-			this.label3.Location = new System.Drawing.Point(129,160);
+			this.label3.Location = new System.Drawing.Point(24,78);
 			this.label3.Name = "label3";
 			this.label3.Size = new System.Drawing.Size(105,19);
 			this.label3.TabIndex = 26;
@@ -175,7 +181,7 @@ namespace OpenDental{
 			// 
 			this.textResult.AcceptsReturn = true;
 			this.textResult.BackColor = System.Drawing.SystemColors.Window;
-			this.textResult.Location = new System.Drawing.Point(234,238);
+			this.textResult.Location = new System.Drawing.Point(129,156);
 			this.textResult.Name = "textResult";
 			this.textResult.ReadOnly = true;
 			this.textResult.Size = new System.Drawing.Size(388,20);
@@ -185,7 +191,7 @@ namespace OpenDental{
 			// 
 			this.textResult2.AcceptsReturn = true;
 			this.textResult2.BackColor = System.Drawing.SystemColors.Window;
-			this.textResult2.Location = new System.Drawing.Point(234,261);
+			this.textResult2.Location = new System.Drawing.Point(129,179);
 			this.textResult2.Multiline = true;
 			this.textResult2.Name = "textResult2";
 			this.textResult2.ReadOnly = true;
@@ -194,7 +200,7 @@ namespace OpenDental{
 			// 
 			// label4
 			// 
-			this.label4.Location = new System.Drawing.Point(111,182);
+			this.label4.Location = new System.Drawing.Point(6,100);
 			this.label4.Name = "label4";
 			this.label4.Size = new System.Drawing.Size(120,19);
 			this.label4.TabIndex = 34;
@@ -203,9 +209,9 @@ namespace OpenDental{
 			// 
 			// label6
 			// 
-			this.label6.Location = new System.Drawing.Point(97,90);
+			this.label6.Location = new System.Drawing.Point(10,8);
 			this.label6.Name = "label6";
-			this.label6.Size = new System.Drawing.Size(586,48);
+			this.label6.Size = new System.Drawing.Size(555,58);
 			this.label6.TabIndex = 40;
 			this.label6.Text = resources.GetString("label6.Text");
 			// 
@@ -214,23 +220,23 @@ namespace OpenDental{
 			this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.panel1.Location = new System.Drawing.Point(5,557);
+			this.panel1.Location = new System.Drawing.Point(5,529);
 			this.panel1.Name = "panel1";
-			this.panel1.Size = new System.Drawing.Size(824,4);
+			this.panel1.Size = new System.Drawing.Size(630,4);
 			this.panel1.TabIndex = 42;
 			// 
 			// label9
 			// 
-			this.label9.Location = new System.Drawing.Point(12,607);
+			this.label9.Location = new System.Drawing.Point(12,579);
 			this.label9.Name = "label9";
-			this.label9.Size = new System.Drawing.Size(491,23);
+			this.label9.Size = new System.Drawing.Size(433,23);
 			this.label9.TabIndex = 47;
 			this.label9.Text = "All CDT codes are Copyrighted by the ADA.";
 			this.label9.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// label10
 			// 
-			this.label10.Location = new System.Drawing.Point(12,585);
+			this.label10.Location = new System.Drawing.Point(12,557);
 			this.label10.Name = "label10";
 			this.label10.Size = new System.Drawing.Size(550,23);
 			this.label10.TabIndex = 44;
@@ -240,7 +246,7 @@ namespace OpenDental{
 			// 
 			// label7
 			// 
-			this.label7.Location = new System.Drawing.Point(12,566);
+			this.label7.Location = new System.Drawing.Point(12,538);
 			this.label7.Name = "label7";
 			this.label7.Size = new System.Drawing.Size(549,20);
 			this.label7.TabIndex = 46;
@@ -250,9 +256,9 @@ namespace OpenDental{
 			// 
 			// label8
 			// 
-			this.label8.Location = new System.Drawing.Point(12,629);
+			this.label8.Location = new System.Drawing.Point(12,601);
 			this.label8.Name = "label8";
-			this.label8.Size = new System.Drawing.Size(491,20);
+			this.label8.Size = new System.Drawing.Size(433,20);
 			this.label8.TabIndex = 45;
 			this.label8.Text = "MySQL - Copyright 1995-2007, www.mysql.com";
 			this.label8.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -279,9 +285,9 @@ namespace OpenDental{
 			this.panelClassic.Controls.Add(this.label6);
 			this.panelClassic.Controls.Add(this.textResult2);
 			this.panelClassic.Controls.Add(this.butDownload);
-			this.panelClassic.Location = new System.Drawing.Point(487,32);
+			this.panelClassic.Location = new System.Drawing.Point(491,18);
 			this.panelClassic.Name = "panelClassic";
-			this.panelClassic.Size = new System.Drawing.Size(814,519);
+			this.panelClassic.Size = new System.Drawing.Size(568,494);
 			this.panelClassic.TabIndex = 48;
 			this.panelClassic.Visible = false;
 			// 
@@ -289,29 +295,39 @@ namespace OpenDental{
 			// 
 			this.textConnectionMessage.AcceptsReturn = true;
 			this.textConnectionMessage.BackColor = System.Drawing.SystemColors.Window;
-			this.textConnectionMessage.Location = new System.Drawing.Point(12,62);
+			this.textConnectionMessage.Location = new System.Drawing.Point(77,62);
 			this.textConnectionMessage.Multiline = true;
 			this.textConnectionMessage.Name = "textConnectionMessage";
 			this.textConnectionMessage.ReadOnly = true;
 			this.textConnectionMessage.Size = new System.Drawing.Size(388,66);
 			this.textConnectionMessage.TabIndex = 50;
 			// 
-			// groupBuilds
+			// groupBuild
 			// 
-			this.groupBuilds.Controls.Add(this.textBox1);
-			this.groupBuilds.Controls.Add(this.button1);
-			this.groupBuilds.Controls.Add(this.label2);
-			this.groupBuilds.Location = new System.Drawing.Point(12,141);
-			this.groupBuilds.Name = "groupBuilds";
-			this.groupBuilds.Size = new System.Drawing.Size(388,111);
-			this.groupBuilds.TabIndex = 51;
-			this.groupBuilds.TabStop = false;
-			this.groupBuilds.Text = "New builds available for current version";
-			this.groupBuilds.Visible = false;
+			this.groupBuild.Controls.Add(this.textBuild);
+			this.groupBuild.Controls.Add(this.butInstallBuild);
+			this.groupBuild.Controls.Add(this.label2);
+			this.groupBuild.Location = new System.Drawing.Point(77,141);
+			this.groupBuild.Name = "groupBuild";
+			this.groupBuild.Size = new System.Drawing.Size(388,111);
+			this.groupBuild.TabIndex = 51;
+			this.groupBuild.TabStop = false;
+			this.groupBuild.Text = "A new build is available for the current version";
+			this.groupBuild.Visible = false;
+			// 
+			// textBuild
+			// 
+			this.textBuild.AcceptsReturn = true;
+			this.textBuild.BackColor = System.Drawing.SystemColors.Window;
+			this.textBuild.Location = new System.Drawing.Point(6,54);
+			this.textBuild.Name = "textBuild";
+			this.textBuild.ReadOnly = true;
+			this.textBuild.Size = new System.Drawing.Size(376,20);
+			this.textBuild.TabIndex = 51;
 			// 
 			// label2
 			// 
-			this.label2.Location = new System.Drawing.Point(6,18);
+			this.label2.Location = new System.Drawing.Point(6,22);
 			this.label2.Name = "label2";
 			this.label2.Size = new System.Drawing.Size(374,29);
 			this.label2.TabIndex = 27;
@@ -319,122 +335,130 @@ namespace OpenDental{
     "le fixes.";
 			this.label2.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
 			// 
-			// textBox1
+			// groupBeta
 			// 
-			this.textBox1.AcceptsReturn = true;
-			this.textBox1.BackColor = System.Drawing.SystemColors.Window;
-			this.textBox1.Location = new System.Drawing.Point(6,50);
-			this.textBox1.Name = "textBox1";
-			this.textBox1.ReadOnly = true;
-			this.textBox1.Size = new System.Drawing.Size(376,20);
-			this.textBox1.TabIndex = 51;
+			this.groupBeta.Controls.Add(this.textBeta);
+			this.groupBeta.Controls.Add(this.butInstallBeta);
+			this.groupBeta.Controls.Add(this.label5);
+			this.groupBeta.Location = new System.Drawing.Point(77,393);
+			this.groupBeta.Name = "groupBeta";
+			this.groupBeta.Size = new System.Drawing.Size(388,119);
+			this.groupBeta.TabIndex = 52;
+			this.groupBeta.TabStop = false;
+			this.groupBeta.Text = "A new beta version is available";
+			this.groupBeta.Visible = false;
 			// 
-			// groupBox1
+			// textBeta
 			// 
-			this.groupBox1.Controls.Add(this.textBox2);
-			this.groupBox1.Controls.Add(this.button2);
-			this.groupBox1.Controls.Add(this.label5);
-			this.groupBox1.Location = new System.Drawing.Point(12,393);
-			this.groupBox1.Name = "groupBox1";
-			this.groupBox1.Size = new System.Drawing.Size(388,111);
-			this.groupBox1.TabIndex = 52;
-			this.groupBox1.TabStop = false;
-			this.groupBox1.Text = "Beta version available";
-			this.groupBox1.Visible = false;
-			// 
-			// textBox2
-			// 
-			this.textBox2.AcceptsReturn = true;
-			this.textBox2.BackColor = System.Drawing.SystemColors.Window;
-			this.textBox2.Location = new System.Drawing.Point(6,50);
-			this.textBox2.Name = "textBox2";
-			this.textBox2.ReadOnly = true;
-			this.textBox2.Size = new System.Drawing.Size(376,20);
-			this.textBox2.TabIndex = 51;
+			this.textBeta.AcceptsReturn = true;
+			this.textBeta.BackColor = System.Drawing.SystemColors.Window;
+			this.textBeta.Location = new System.Drawing.Point(6,62);
+			this.textBeta.Name = "textBeta";
+			this.textBeta.ReadOnly = true;
+			this.textBeta.Size = new System.Drawing.Size(376,20);
+			this.textBeta.TabIndex = 51;
 			// 
 			// label5
 			// 
-			this.label5.Location = new System.Drawing.Point(6,18);
+			this.label5.Location = new System.Drawing.Point(6,13);
 			this.label5.Name = "label5";
-			this.label5.Size = new System.Drawing.Size(374,29);
+			this.label5.Size = new System.Drawing.Size(374,46);
 			this.label5.TabIndex = 27;
-			this.label5.Text = "A beta version will be very functional, but will have some bugs.  Use a beta vers" +
-    "ion only if you demand the latest features.  Be sure to update regularly.";
+			this.label5.Text = "This beta version will be very functional, but will have some bugs.  Use a beta v" +
+    "ersion only if you demand the latest features.  Be sure to update regularly.";
 			this.label5.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
 			// 
-			// groupBox2
+			// groupStable
 			// 
-			this.groupBox2.Controls.Add(this.textBox3);
-			this.groupBox2.Controls.Add(this.button3);
-			this.groupBox2.Controls.Add(this.label11);
-			this.groupBox2.Location = new System.Drawing.Point(12,267);
-			this.groupBox2.Name = "groupBox2";
-			this.groupBox2.Size = new System.Drawing.Size(388,111);
-			this.groupBox2.TabIndex = 53;
-			this.groupBox2.TabStop = false;
-			this.groupBox2.Text = "Stable version available";
-			this.groupBox2.Visible = false;
+			this.groupStable.Controls.Add(this.textStable);
+			this.groupStable.Controls.Add(this.butInstallStable);
+			this.groupStable.Controls.Add(this.label11);
+			this.groupStable.Location = new System.Drawing.Point(77,267);
+			this.groupStable.Name = "groupStable";
+			this.groupStable.Size = new System.Drawing.Size(388,111);
+			this.groupStable.TabIndex = 53;
+			this.groupStable.TabStop = false;
+			this.groupStable.Text = "A new stable version is available";
+			this.groupStable.Visible = false;
 			// 
-			// textBox3
+			// textStable
 			// 
-			this.textBox3.AcceptsReturn = true;
-			this.textBox3.BackColor = System.Drawing.SystemColors.Window;
-			this.textBox3.Location = new System.Drawing.Point(6,50);
-			this.textBox3.Name = "textBox3";
-			this.textBox3.ReadOnly = true;
-			this.textBox3.Size = new System.Drawing.Size(376,20);
-			this.textBox3.TabIndex = 51;
+			this.textStable.AcceptsReturn = true;
+			this.textStable.BackColor = System.Drawing.SystemColors.Window;
+			this.textStable.Location = new System.Drawing.Point(6,54);
+			this.textStable.Name = "textStable";
+			this.textStable.ReadOnly = true;
+			this.textStable.Size = new System.Drawing.Size(376,20);
+			this.textStable.TabIndex = 51;
 			// 
 			// label11
 			// 
-			this.label11.Location = new System.Drawing.Point(6,18);
+			this.label11.Location = new System.Drawing.Point(6,22);
 			this.label11.Name = "label11";
 			this.label11.Size = new System.Drawing.Size(374,29);
 			this.label11.TabIndex = 27;
 			this.label11.Text = "Will have nearly zero bugs.  Will provide many useful enhanced features.";
 			this.label11.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
 			// 
-			// button3
+			// butCheck2
 			// 
-			this.button3.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.button3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.button3.Autosize = true;
-			this.button3.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.button3.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.button3.CornerRadius = 4F;
-			this.button3.Location = new System.Drawing.Point(309,80);
-			this.button3.Name = "button3";
-			this.button3.Size = new System.Drawing.Size(73,25);
-			this.button3.TabIndex = 28;
-			this.button3.Text = "Install";
+			this.butCheck2.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butCheck2.Autosize = true;
+			this.butCheck2.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butCheck2.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butCheck2.CornerRadius = 4F;
+			this.butCheck2.Location = new System.Drawing.Point(77,31);
+			this.butCheck2.Name = "butCheck2";
+			this.butCheck2.Size = new System.Drawing.Size(117,25);
+			this.butCheck2.TabIndex = 54;
+			this.butCheck2.Text = "Check for Updates";
+			this.butCheck2.Visible = false;
+			this.butCheck2.Click += new System.EventHandler(this.butCheck2_Click);
 			// 
-			// button2
+			// butInstallStable
 			// 
-			this.button2.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.button2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.button2.Autosize = true;
-			this.button2.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.button2.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.button2.CornerRadius = 4F;
-			this.button2.Location = new System.Drawing.Point(309,80);
-			this.button2.Name = "button2";
-			this.button2.Size = new System.Drawing.Size(73,25);
-			this.button2.TabIndex = 28;
-			this.button2.Text = "Install";
+			this.butInstallStable.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butInstallStable.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.butInstallStable.Autosize = true;
+			this.butInstallStable.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butInstallStable.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butInstallStable.CornerRadius = 4F;
+			this.butInstallStable.Location = new System.Drawing.Point(309,80);
+			this.butInstallStable.Name = "butInstallStable";
+			this.butInstallStable.Size = new System.Drawing.Size(73,25);
+			this.butInstallStable.TabIndex = 28;
+			this.butInstallStable.Text = "Install";
+			this.butInstallStable.Click += new System.EventHandler(this.butInstallStable_Click);
 			// 
-			// button1
+			// butInstallBeta
 			// 
-			this.button1.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.button1.Autosize = true;
-			this.button1.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.button1.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.button1.CornerRadius = 4F;
-			this.button1.Location = new System.Drawing.Point(309,80);
-			this.button1.Name = "button1";
-			this.button1.Size = new System.Drawing.Size(73,25);
-			this.button1.TabIndex = 28;
-			this.button1.Text = "Install";
+			this.butInstallBeta.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butInstallBeta.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.butInstallBeta.Autosize = true;
+			this.butInstallBeta.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butInstallBeta.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butInstallBeta.CornerRadius = 4F;
+			this.butInstallBeta.Location = new System.Drawing.Point(309,88);
+			this.butInstallBeta.Name = "butInstallBeta";
+			this.butInstallBeta.Size = new System.Drawing.Size(73,25);
+			this.butInstallBeta.TabIndex = 28;
+			this.butInstallBeta.Text = "Install";
+			this.butInstallBeta.Click += new System.EventHandler(this.butInstallBeta_Click);
+			// 
+			// butInstallBuild
+			// 
+			this.butInstallBuild.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butInstallBuild.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.butInstallBuild.Autosize = true;
+			this.butInstallBuild.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butInstallBuild.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butInstallBuild.CornerRadius = 4F;
+			this.butInstallBuild.Location = new System.Drawing.Point(309,80);
+			this.butInstallBuild.Name = "butInstallBuild";
+			this.butInstallBuild.Size = new System.Drawing.Size(73,25);
+			this.butInstallBuild.TabIndex = 28;
+			this.butInstallBuild.Text = "Install";
+			this.butInstallBuild.Click += new System.EventHandler(this.butInstallBuild_Click);
 			// 
 			// butLicense
 			// 
@@ -444,7 +468,7 @@ namespace OpenDental{
 			this.butLicense.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butLicense.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butLicense.CornerRadius = 4F;
-			this.butLicense.Location = new System.Drawing.Point(525,583);
+			this.butLicense.Location = new System.Drawing.Point(466,595);
 			this.butLicense.Name = "butLicense";
 			this.butLicense.Size = new System.Drawing.Size(88,25);
 			this.butLicense.TabIndex = 49;
@@ -458,7 +482,7 @@ namespace OpenDental{
 			this.butCheck.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butCheck.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCheck.CornerRadius = 4F;
-			this.butCheck.Location = new System.Drawing.Point(234,207);
+			this.butCheck.Location = new System.Drawing.Point(129,125);
 			this.butCheck.Name = "butCheck";
 			this.butCheck.Size = new System.Drawing.Size(117,25);
 			this.butCheck.TabIndex = 21;
@@ -472,7 +496,7 @@ namespace OpenDental{
 			this.butDownload.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butDownload.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butDownload.CornerRadius = 4F;
-			this.butDownload.Location = new System.Drawing.Point(234,333);
+			this.butDownload.Location = new System.Drawing.Point(129,251);
 			this.butDownload.Name = "butDownload";
 			this.butDownload.Size = new System.Drawing.Size(83,25);
 			this.butDownload.TabIndex = 20;
@@ -487,39 +511,24 @@ namespace OpenDental{
 			this.butClose.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butClose.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butClose.CornerRadius = 4F;
-			this.butClose.Location = new System.Drawing.Point(716,583);
+			this.butClose.Location = new System.Drawing.Point(560,595);
 			this.butClose.Name = "butClose";
 			this.butClose.Size = new System.Drawing.Size(75,25);
 			this.butClose.TabIndex = 0;
 			this.butClose.Text = "&Close";
 			this.butClose.Click += new System.EventHandler(this.butClose_Click);
 			// 
-			// butCheck2
-			// 
-			this.butCheck2.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butCheck2.Autosize = true;
-			this.butCheck2.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butCheck2.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butCheck2.CornerRadius = 4F;
-			this.butCheck2.Location = new System.Drawing.Point(12,31);
-			this.butCheck2.Name = "butCheck2";
-			this.butCheck2.Size = new System.Drawing.Size(117,25);
-			this.butCheck2.TabIndex = 54;
-			this.butCheck2.Text = "Check for Updates";
-			this.butCheck2.Visible = false;
-			this.butCheck2.Click += new System.EventHandler(this.butCheck2_Click);
-			// 
 			// FormUpdate
 			// 
-			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
-			this.ClientSize = new System.Drawing.Size(841,626);
+			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
+			this.ClientSize = new System.Drawing.Size(647,635);
+			this.Controls.Add(this.panelClassic);
 			this.Controls.Add(this.butCheck2);
-			this.Controls.Add(this.groupBox2);
-			this.Controls.Add(this.groupBox1);
-			this.Controls.Add(this.groupBuilds);
+			this.Controls.Add(this.groupStable);
+			this.Controls.Add(this.groupBeta);
+			this.Controls.Add(this.groupBuild);
 			this.Controls.Add(this.textConnectionMessage);
 			this.Controls.Add(this.butLicense);
-			this.Controls.Add(this.panelClassic);
 			this.Controls.Add(this.label9);
 			this.Controls.Add(this.label10);
 			this.Controls.Add(this.label7);
@@ -538,12 +547,12 @@ namespace OpenDental{
 			this.Load += new System.EventHandler(this.FormUpdate_Load);
 			this.panelClassic.ResumeLayout(false);
 			this.panelClassic.PerformLayout();
-			this.groupBuilds.ResumeLayout(false);
-			this.groupBuilds.PerformLayout();
-			this.groupBox1.ResumeLayout(false);
-			this.groupBox1.PerformLayout();
-			this.groupBox2.ResumeLayout(false);
-			this.groupBox2.PerformLayout();
+			this.groupBuild.ResumeLayout(false);
+			this.groupBuild.PerformLayout();
+			this.groupBeta.ResumeLayout(false);
+			this.groupBeta.PerformLayout();
+			this.groupStable.ResumeLayout(false);
+			this.groupStable.PerformLayout();
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -554,7 +563,7 @@ namespace OpenDental{
 			labelVersion.Text=Lan.g(this,"Using Version:")+" "+Application.ProductVersion;
 			if(PrefB.GetBool("UpdateWindowShowsClassicView")){
 				panelClassic.Visible=true;
-				panelClassic.Location=new Point(12,32);
+				panelClassic.Location=new Point(67,29);
 				textUpdateCode.Text=PrefB.GetString("UpdateCode");
 				textWebsitePath.Text=PrefB.GetString("UpdateWebsitePath");//should include trailing /
 				butDownload.Enabled=false;
@@ -616,11 +625,107 @@ namespace OpenDental{
 				MessageBox.Show("Error: "+ex.Message);
 				return;
 			}
-			textConnectionMessage.Text=Lan.g(this,"Connection successful");
-
-
+			textConnectionMessage.Text=Lan.g(this,"Connection successful.");
 			Cursor=Cursors.Default;
 			//MessageBox.Show(result);
+			XmlDocument doc=new XmlDocument();
+			doc.LoadXml(result);
+			XmlNode node=doc.SelectSingleNode("//Error");
+			if(node!=null) {
+				textConnectionMessage.Text=node.InnerText;
+				MessageBox.Show(node.InnerText,"Error");
+				return;
+			}
+			node=doc.SelectSingleNode("//BuildAvailable");
+			buildAvailable="";
+			buildAvailableCode="";
+			if(node!=null){
+				groupBuild.Visible=true;
+				node=doc.SelectSingleNode("//BuildAvailable/Display");
+				if(node!=null){
+					textBuild.Text=node.InnerText;
+				}
+				node=doc.SelectSingleNode("//BuildAvailable/MajMinBuildF");
+				if(node!=null){
+					buildAvailable=node.InnerText;
+				}
+				node=doc.SelectSingleNode("//BuildAvailable/UpdateCode");
+				if(node!=null) {
+					buildAvailableCode=node.InnerText;
+				}
+			}
+			node=doc.SelectSingleNode("//StableAvailable");
+			stableAvailable="";
+			stableAvailableCode="";
+			if(node!=null) {
+				groupStable.Visible=true;
+				node=doc.SelectSingleNode("//StableAvailable/Display");
+				if(node!=null) {
+					textStable.Text=node.InnerText;
+				}
+				node=doc.SelectSingleNode("//StableAvailable/MajMinBuildF");
+				if(node!=null) {
+					stableAvailable=node.InnerText;
+				}
+				node=doc.SelectSingleNode("//StableAvailable/UpdateCode");
+				if(node!=null) {
+					stableAvailableCode=node.InnerText;
+				}
+			}
+			node=doc.SelectSingleNode("//BetaAvailable");
+			betaAvailable="";
+			betaAvailableCode="";
+			if(node!=null) {
+				groupBeta.Visible=true;
+				node=doc.SelectSingleNode("//BetaAvailable/Display");
+				if(node!=null) {
+					textBeta.Text=node.InnerText;
+				}
+				node=doc.SelectSingleNode("//BetaAvailable/MajMinBuildF");
+				if(node!=null) {
+					betaAvailable=node.InnerText;
+				}
+				node=doc.SelectSingleNode("//BetaAvailable/UpdateCode");
+				if(node!=null) {
+					betaAvailableCode=node.InnerText;
+				}
+			}
+			if(betaAvailable=="" && stableAvailable=="" && buildAvailable==""){
+				textConnectionMessage.Text+=Lan.g(this,"  There are no downloads available.");
+			}
+			else{
+				textConnectionMessage.Text+=Lan.g(this,"  The following downloads are available.  Be sure to stop the program on all other computers in the office before installing.");
+			}
+		}
+
+		private void butInstallBuild_Click(object sender,EventArgs e) {
+			string patchName="Setup.exe";
+			string destDir=FormPath.GetPreferredImagePath();
+			if(destDir==null) {//Not using A to Z folders?
+				destDir=Path.GetTempPath();
+			}
+			DownloadInstallPatchFromURI(PrefB.GetString("UpdateWebsitePath")+buildAvailableCode+"/"+patchName,//Source URI
+				ODFileUtils.CombinePaths(destDir,patchName));//Local destination file.
+		}
+
+		private void butInstallStable_Click(object sender,EventArgs e) {
+			string patchName="Setup.exe";
+			string destDir=FormPath.GetPreferredImagePath();
+			if(destDir==null) {//Not using A to Z folders?
+				destDir=Path.GetTempPath();
+			}
+			DownloadInstallPatchFromURI(PrefB.GetString("UpdateWebsitePath")+stableAvailableCode+"/"+patchName,//Source URI
+				ODFileUtils.CombinePaths(destDir,patchName));//Local destination file.
+		}
+
+		private void butInstallBeta_Click(object sender,EventArgs e) {
+			string patchName="Setup.exe";
+			string destDir=FormPath.GetPreferredImagePath();
+			if(destDir==null) {//Not using A to Z folders?
+				destDir=Path.GetTempPath();
+			}
+			DownloadInstallPatchFromURI(PrefB.GetString("UpdateWebsitePath")+betaAvailableCode+"/"+patchName,//Source URI
+				ODFileUtils.CombinePaths(destDir,patchName));//Local destination file.
 		}
 
 		private void butCheck_Click(object sender, System.EventArgs e) {
@@ -781,132 +886,7 @@ namespace OpenDental{
 			//myWebClient.DownloadFile(downloadUri,ODFileUtils.CombinePaths(FormPath.GetPreferredImagePath(),"Setup.exe"));
 		}
 
-		/*
-		private void butDownloadClaimform_Click(object sender,EventArgs e) {
-			Cursor=Cursors.WaitCursor;
-			FormP=new FormProgress();//just so the InstanceMethod won't crash.  We won't be telling user about progress.
-			FormP.DisplayText="";
-			//Application.DoEvents();
-			string remoteUri=textWebsitePath.Text+textRegClaimform.Text+"/";
-			WebRequest wr;
-			WebResponse webResp;
-			//int fileSize;
-			//copy image file if one is specified-------------------------------------------------------------------------------
-			if(BackgroundImg!=""){
-				myStringWebResource=remoteUri+BackgroundImg;
-				WriteToFile=ODFileUtils.CombinePaths(FormPath.GetPreferredImagePath(),BackgroundImg);
-				if(File.Exists(WriteToFile)){
-					File.Delete(WriteToFile);
-				}
-				wr= WebRequest.Create(myStringWebResource);
-				int fileSize;
-				try{
-					webResp= wr.GetResponse();
-					fileSize=(int)webResp.ContentLength/1024;
-				}
-				catch(Exception ex){
-					Cursor=Cursors.Default;
-					MessageBox.Show("Error downloading "+BackgroundImg+". "+ex.Message);
-					return;
-					//fileSize=0;
-				}
-				if(fileSize>0){
-					//start the thread that will perform the download
-					System.Threading.ThreadStart downloadDelegate=
-						delegate { DownloadInstallPatchWorker(myStringWebResource,WriteToFile,ref FormP); };
-					Thread workerThread=new System.Threading.Thread(downloadDelegate);
-					workerThread.Start();
-					//display the progress dialog to the user:
-					FormP.MaxVal=(double)fileSize/1024;
-					FormP.NumberMultiplication=100;
-					FormP.DisplayText="?currentVal MB of ?maxVal MB copied";
-					FormP.NumberFormat="F";
-					FormP.ShowDialog();
-					if(FormP.DialogResult==DialogResult.Cancel) {
-						workerThread.Abort();
-						Cursor=Cursors.Default;
-						return;
-					}
-					MsgBox.Show(this,"Image file downloaded successfully.");
-				}
-			}
-			Cursor=Cursors.WaitCursor;//have to do this again for some reason.
-			//Import ClaimForm.xml----------------------------------------------------------------------------------
-			myStringWebResource=remoteUri+"ClaimForm.xml";
-			WriteToFile=ODFileUtils.CombinePaths(FormPath.GetPreferredImagePath(),"ClaimForm.xml");
-			if(File.Exists(WriteToFile)){
-				File.Delete(WriteToFile);
-			}
-			try{
-				DownloadInstallPatchWorker(myStringWebResource,WriteToFile,ref FormP);
-			}
-			catch{
-			}
-			int rowsAffected;
-			if(File.Exists(WriteToFile)){
-				int newclaimformnum=0;
-				try{
-					newclaimformnum=FormClaimForms.ImportForm(WriteToFile,true);
-				}
-				catch(ApplicationException ex){
-					Cursor=Cursors.Default;
-					MessageBox.Show(ex.Message);
-					return;
-				}
-				finally{
-					File.Delete(WriteToFile);
-				}
-				if(newclaimformnum!=0){
-					Prefs.UpdateInt("DefaultClaimForm",newclaimformnum);
-				}
-				//switch all insplans over to new claimform
-				ClaimForm oldform=null;
-				for(int i=0;i<ClaimForms.ListLong.Length;i++){
-					if(ClaimForms.ListLong[i].UniqueID==OldClaimFormID){
-						oldform=ClaimForms.ListLong[i];
-					}
-				}
-				if(oldform!=null){
-					rowsAffected=InsPlans.ConvertToNewClaimform(oldform.ClaimFormNum,newclaimformnum);
-					MessageBox.Show("Number of insurance plans changed to new form: "+rowsAffected.ToString());
-				}
-				DataValid.SetInvalid(InvalidTypes.ClaimForms | InvalidTypes.Prefs);
-			}
-			//Import ProcCodes.xml------------------------------------------------------------------------------------
-			myStringWebResource=remoteUri+"ProcCodes.xml";
-			WriteToFile=ODFileUtils.CombinePaths(FormPath.GetPreferredImagePath(),"ProcCodes.xml");
-			if(File.Exists(WriteToFile)) {
-				File.Delete(WriteToFile);
-			}
-			try {
-				DownloadInstallPatchWorker(myStringWebResource,WriteToFile,ref FormP);
-			}
-			catch {
-			}
-			if(File.Exists(WriteToFile)){
-				//move T codes over to a new "Obsolete" category which is hidden
-				ProcedureCodes.TcodesMove();
-				rowsAffected=0;
-				try {
-					rowsAffected=FormProcCodes.ImportProcCodes(WriteToFile,false);
-				}
-				catch(ApplicationException ex) {
-					Cursor=Cursors.Default;
-					MessageBox.Show(ex.Message);
-					return;
-				}
-				finally {
-					File.Delete(WriteToFile);
-				}
-				ProcedureCodes.Refresh();//?
-				MessageBox.Show("Procedure codes inserted: "+rowsAffected.ToString());
-				//Change all procbuttons and autocodes from T to D.
-				ProcedureCodes.TcodesAlter();
-				DataValid.SetInvalid(InvalidTypes.AutoCodes | InvalidTypes.Defs | InvalidTypes.ProcCodes | InvalidTypes.ProcButtons);
-			}
-			MsgBox.Show(this,"Done");
-			Cursor=Cursors.Default;
-		}*/
+		
 
 		private void SavePrefs(){
 			bool changed=false;
@@ -937,6 +917,8 @@ namespace OpenDental{
 				SavePrefs();
 			}
 		}
+
+		
 
 		
 
