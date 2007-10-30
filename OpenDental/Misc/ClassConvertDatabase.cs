@@ -52,12 +52,13 @@ namespace OpenDental{
 				|| FromVersion.ToString()=="5.0.0.0"
 				|| FromVersion.ToString()=="5.1.0.0"
 				|| FromVersion.ToString()=="5.2.0.0"
-				|| FromVersion.ToString()=="5.3.0.0")
+				|| FromVersion.ToString()=="5.3.0.0"
+				|| FromVersion.ToString()=="5.4.0.0")
 			{
 				MsgBox.Show(this,"Cannot convert this database version which was only for development purposes.");
 				return false;
 			}
-			if(FromVersion < new Version("5.4.0.0")){
+			if(FromVersion < new Version("5.5.0.0")){
 				if(MessageBox.Show(Lan.g(this,"Your database will now be converted")+"\r"
 					+Lan.g(this,"from version")+" "+FromVersion.ToString()+"\r"
 					+Lan.g(this,"to version")+" "+ToVersion.ToString()+"\r"
@@ -6012,13 +6013,10 @@ namespace OpenDental{
 					+ "'" + POut.PInt((int)ToolBarsAvail.FamilyModule) + "', "
 					+ "'PT Update')";
 				General.NonQEx(command);
-				//after r929
 				command="ALTER TABLE patient ADD Title VARCHAR(15)";
 				General.NonQEx(command);
-				//after r943
 				command="DELETE FROM reqstudent WHERE DateCompleted < '1900-01-01' AND AptNum=0";
 				General.NonQEx(command);
-				//after r945, but low priority
 				if(DataConnection.DBtype==DatabaseType.MySql) {
 					command="ALTER TABLE provider CHANGE Abbr Abbr VARCHAR(255)";
 					General.NonQEx(command);
@@ -6026,16 +6024,12 @@ namespace OpenDental{
 				else{//oracle
 
 				}
-				//after r953
 				command="ALTER TABLE commlog ADD UserNum INT NOT NULL";
 				General.NonQEx(command);
-				//after r956
 				command="ALTER TABLE computerpref ADD AtoZpath VARCHAR(255)";
 				General.NonQEx(command);
-				//after r963
 				command = "INSERT INTO preference VALUES('BrokenAppointmentAdjustmentType','0')";
 				General.NonQEx(command);
-				//after r???
 				if(DataConnection.DBtype==DatabaseType.MySql) {
 					command = @"ALTER TABLE patient MODIFY PriProv INTEGER NOT NULL";
 					General.NonQEx(command);
@@ -6051,7 +6045,6 @@ namespace OpenDental{
 				else {//oracle
 					//
 				}
-				//after r1006
 				command="DROP TABLE IF EXISTS popup";
 				General.NonQEx(command);
 				command=@"CREATE TABLE popup(
@@ -6062,7 +6055,6 @@ namespace OpenDental{
 					PRIMARY KEY (PopupNum)
 					) DEFAULT CHARSET=utf8";
 				General.NonQEx(command);
-				//after r1012
 				command="ALTER TABLE registrationkey ADD DateStarted DATE NOT NULL";
 				General.NonQEx(command);
 				command="ALTER TABLE registrationkey ADD DateDisabled DATE NOT NULL";
@@ -6087,26 +6079,53 @@ namespace OpenDental{
 					command="UPDATE registrationkey SET DateDisabled='0001-01-01'";
 					General.NonQEx(command);
 				}
-				//after r1014
 				command = "INSERT INTO preference VALUES('UpdateWindowShowsClassicView','0')";
 				General.NonQEx(command);
-				//after r1020
 				command = "INSERT INTO preference VALUES('BillingExcludeInsPending','0')";
 				General.NonQEx(command);
-				//after r1022
 				command = "INSERT INTO preference VALUES('UpdateServerAddress','')";
 				General.NonQEx(command);
 				command = "UPDATE preference SET PrefName='UpdateCode' WHERE PrefName='RegistrationNumber'";
 				General.NonQEx(command);
-				//after r1025
 				command="ALTER TABLE procedurelog ADD DateTP DATE NOT NULL";
 				General.NonQEx(command);
 				command="UPDATE procedurelog SET DateTP=ProcDate";
 				General.NonQEx(command);
-
-
-
 				command="UPDATE preference SET ValueString = '5.4.0.0' WHERE PrefName = 'DataBaseVersion'";
+				General.NonQEx(command);
+			}
+			To5_4_1();
+		}
+
+		private void To5_4_1() {
+			if(FromVersion<new Version("5.4.1.0")) {
+				string command;
+				command="UPDATE preference SET ValueString = '5.4.1.0' WHERE PrefName = 'DataBaseVersion'";
+				General.NonQEx(command);
+			}
+			To5_5_0();
+		}
+
+		private void To5_5_0() {
+			if(FromVersion<new Version("5.5.0.0")) {
+				string command;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+				command="UPDATE preference SET ValueString = '5.5.0.0' WHERE PrefName = 'DataBaseVersion'";
 				General.NonQEx(command);
 			}
 			//To5_4_?();
