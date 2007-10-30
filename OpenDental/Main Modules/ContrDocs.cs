@@ -1215,7 +1215,7 @@ namespace OpenDental{
 			try{
 				//A user may have more than one scanning device. 
 				//The code below will allow the user to select one.
-				EZTwain.ApplicationLicense("Open Dental",12345);//This key is currently a dummy.  We need to obscure the real one somehow.
+				xImageDeviceManager.Obfuscator.ActivateEZTwain();
 				int wPIXTypes=EZTwain.SelectImageSource(this.Handle);
 				if(wPIXTypes==0) {//user clicked Cancel
 					return;
