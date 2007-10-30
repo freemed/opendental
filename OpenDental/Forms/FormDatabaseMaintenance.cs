@@ -590,6 +590,7 @@ namespace OpenDental {
 				,"UPDATE procedurelog SET ProcDate='0001-01-01 00:00:00' WHERE ProcDate LIKE '0000-00-00%'"
 				,"UPDATE procedurelog SET DateOriginalProsth='0001-01-01' WHERE DateOriginalProsth='0000-00-00'"
 				,"UPDATE procedurelog SET DateEntryC='0001-01-01' WHERE DateEntryC='0000-00-00'"
+				,"UPDATE procedurelog SET DateTP='0001-01-01' WHERE DateTP='0000-00-00'"
 				,"UPDATE recall SET DateDueCalc='0001-01-01' WHERE DateDueCalc='0000-00-00'"
 				,"UPDATE recall SET DateDue='0001-01-01' WHERE DateDue='0000-00-00'"
 				,"UPDATE recall SET DatePrevious='0001-01-01' WHERE DatePrevious='0000-00-00'"

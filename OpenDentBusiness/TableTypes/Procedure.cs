@@ -97,50 +97,7 @@ namespace OpenDentBusiness {
 
 		///<summary>Returns a copy of the procedure.</summary>
 		public Procedure Copy() {
-			Procedure proc=new Procedure();
-			proc.ProcNum=ProcNum;
-			proc.PatNum=PatNum;
-			proc.AptNum=AptNum;
-			proc.OldCode=OldCode;
-			proc.ProcDate=ProcDate;
-			proc.ProcFee=ProcFee;
-			proc.Surf=Surf;
-			proc.ToothNum=ToothNum;
-			proc.ToothRange=ToothRange;
-			proc.Priority=Priority;
-			proc.ProcStatus=ProcStatus;
-			proc.ProvNum=ProvNum;
-			proc.Dx=Dx;
-			proc.PlannedAptNum=PlannedAptNum;
-			proc.PlaceService=PlaceService;
-			proc.Prosthesis=Prosthesis;
-			proc.DateOriginalProsth=DateOriginalProsth;
-			proc.ClaimNote=ClaimNote;
-			proc.DateEntryC=DateEntryC;
-			proc.ClinicNum=ClinicNum;
-			proc.MedicalCode=MedicalCode;
-			proc.DiagnosticCode=DiagnosticCode;
-			proc.IsPrincDiag=IsPrincDiag;
-			proc.ProcNumLab=ProcNumLab;
-			proc.BillingTypeOne=BillingTypeOne;
-			proc.BillingTypeTwo=BillingTypeTwo;
-			proc.CodeNum=CodeNum;
-			proc.CodeMod1=CodeMod1;
-			proc.CodeMod2=CodeMod2;
-			proc.CodeMod3=CodeMod3;
-			proc.CodeMod4=CodeMod4;
-			proc.RevCode=RevCode;
-			proc.UnitCode=UnitCode;
-			proc.UnitQty=UnitQty;
-			proc.BaseUnits=BaseUnits;
-			proc.StartTime=StartTime;
-			proc.StopTime=StopTime;
-			//not database fields:
-			proc.Note=Note;
-			proc.UserNum=UserNum;
-			proc.Signature=Signature;
-			proc.SigIsTopaz=SigIsTopaz;
-			return proc;
+			return (Procedure)this.MemberwiseClone();
 		}
 	}
 

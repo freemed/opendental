@@ -244,11 +244,12 @@ namespace OpenDental{
 				List[i].CodeMod3        = PIn.PString(table.Rows[i][29].ToString());
 				List[i].CodeMod4        = PIn.PString(table.Rows[i][30].ToString());
 				List[i].RevCode         = PIn.PString(table.Rows[i][31].ToString());
-				List[i].UnitCode         = PIn.PString(table.Rows[i][32].ToString());
-				List[i].UnitQty        = PIn.PInt(table.Rows[i][33].ToString());
+				List[i].UnitCode        = PIn.PString(table.Rows[i][32].ToString());
+				List[i].UnitQty         = PIn.PInt(table.Rows[i][33].ToString());
 				List[i].BaseUnits       = PIn.PInt(table.Rows[i][34].ToString());
 				List[i].StartTime       = PIn.PInt(table.Rows[i][35].ToString());
 				List[i].StopTime        = PIn.PInt(table.Rows[i][36].ToString());
+				List[i].DateTP          = PIn.PDate(table.Rows[i][37].ToString());
 				//only used sometimes:
 				/*if(table.Columns.Count>24){
 					List[i].UserNum       = PIn.PInt   (table.Rows[i][24].ToString());

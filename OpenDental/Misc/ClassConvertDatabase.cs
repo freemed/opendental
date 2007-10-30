@@ -6101,7 +6101,8 @@ namespace OpenDental{
 				//after r1025
 				command="ALTER TABLE procedurelog ADD DateTP DATE NOT NULL";
 				General.NonQEx(command);
-
+				command="UPDATE procedurelog SET DateTP=ProcDate";
+				General.NonQEx(command);
 
 
 
