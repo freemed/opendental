@@ -6098,6 +6098,9 @@ namespace OpenDental{
 				General.NonQEx(command);
 				command = "UPDATE preference SET PrefName='UpdateCode' WHERE PrefName='RegistrationNumber'";
 				General.NonQEx(command);
+				//after r1025
+				command="ALTER TABLE procedurelog ADD DateTP DATE NOT NULL";
+				General.NonQEx(command);
 
 
 

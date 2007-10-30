@@ -161,6 +161,7 @@ namespace OpenDental{
 					proc.DateEntryC=DateTime.Today;
 					proc.PatNum=chargeList[i].PatNum;
 					proc.ProcDate=possibleDate;
+					proc.DateTP=possibleDate;
 					proc.ProcFee=chargeList[i].ChargeAmt;
 					proc.ProcStatus=ProcStat.C;
 					proc.ProvNum=PrefB.GetInt("PracticeDefaultProv");

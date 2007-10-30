@@ -1282,6 +1282,7 @@ namespace OpenDental{
 					ProcCur.AptNum=AptCur.AptNum;
 				ProcCur.CodeNum=ProcedureCodes.GetProcCode(codes[i]).CodeNum;
 				ProcCur.ProcDate=AptCur.AptDateTime.Date;
+				ProcCur.DateTP=AptCur.AptDateTime.Date;
 				ProcCur.ProcFee=Fees.GetAmount0(ProcCur.CodeNum,Fees.GetFeeSched(pat,PlanList,PatPlanList));
 				//surf
 				//toothnum

@@ -83,6 +83,9 @@ namespace OpenDentBusiness {
 		public int StartTime;
 		///<summary>Stop time in military</summary>
 		public int StopTime;
+		///<summary>The date that the procedure was originally treatment planned.  Does not change when marked complete.</summary>
+		public DateTime DateTP;
+
 		///<summary>Not a database column.  Saved in database in the procnote table.  This note is only the most recent note from that table.  If user changes it, then the business layer handles adding another procnote to that table.</summary>
 		public string Note;
 		///<summary>Not a database column.  Just used for now to set the user so that it can be saved with the ProcNote.</summary>

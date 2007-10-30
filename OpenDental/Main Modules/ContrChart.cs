@@ -4002,6 +4002,7 @@ namespace OpenDental{
 			else{
 				ProcCur.ProcDate=PIn.PDate(textDate.Text);
 			}
+			ProcCur.DateTP=ProcCur.ProcDate;
 			if(newStatus==ProcStat.R || newStatus==ProcStat.EO || newStatus==ProcStat.EC){
 				ProcCur.ProcFee=0;
 			} else {
@@ -4074,6 +4075,7 @@ namespace OpenDental{
 			else{
 				ProcCur.ProcDate=PIn.PDate(textDate.Text);
 			}
+			ProcCur.DateTP=ProcCur.ProcDate;
 			if(newStatus==ProcStat.R || newStatus==ProcStat.EO || newStatus==ProcStat.EC)
 				ProcCur.ProcFee=0;
 			else

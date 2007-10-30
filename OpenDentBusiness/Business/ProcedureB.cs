@@ -8,35 +8,10 @@ namespace OpenDentBusiness {
 		///<summary></summary>
 		public static DataSet Refresh(int patNum){
 			string command="SELECT * FROM procedurelog WHERE PatNum="+POut.PInt(patNum);
-			//if(!includeDeletedAndNotes){
-				command+=" AND ProcStatus !=6";//don't include deleted
-			//}
+			command+=" AND ProcStatus !=6";//don't include deleted
 			command+=" ORDER BY ProcDate";//,OldCode
-				//notes:
-			/*	+";SELECT * FROM procnote WHERE PatNum="+POut.PInt(patNum)
-				+" ORDER BY EntryDateTime";*/
 			DataConnection dcon=new DataConnection();
 			DataSet ds=dcon.GetDs(command);
-			//add a note column to the proc table.
-			//ds.Tables[0].Columns.Add("UserNum");
-			//ds.Tables[0].Columns.Add("Note");//,,typeof(string));
-			//ds.Tables[0].Columns.Add("SigIsTopaz");//,typeof(string));
-			//ds.Tables[0].Columns.Add("Signature");//,typeof(string));
-			/*
-			for(int i=0;i<ds.Tables[0].Rows.Count;i++){//loop through each proc
-				for(int n=ds.Tables[1].Rows.Count-1;n>=0;n--){//loop through each note, backwards.
-					if(ds.Tables[0].Rows[i]["ProcNum"].ToString() != ds.Tables[1].Rows[n]["ProcNum"].ToString()) {
-						continue;
-					}
-					//userNum=PIn.PInt(ds.Tables[1].Rows[n]["UserNum"].ToString());
-					ds.Tables[0].Rows[i]["UserNum"]   =ds.Tables[1].Rows[n]["UserNum"].ToString();
-					ds.Tables[0].Rows[i]["Note"]      =ds.Tables[1].Rows[n]["Note"].ToString();
-					ds.Tables[0].Rows[i]["SigIsTopaz"]=ds.Tables[1].Rows[n]["SigIsTopaz"].ToString();
-					ds.Tables[0].Rows[i]["Signature"] =ds.Tables[1].Rows[n]["Signature"].ToString();
-					break;//out of note loop.
-				}
-			}*/
-			//ds.Tables.RemoveAt(1);
 			return ds;
 		}
 
@@ -52,7 +27,8 @@ namespace OpenDentBusiness {
 				+"ToothNum,ToothRange,Priority,ProcStatus,ProvNum,"
 				+"Dx,PlannedAptNum,PlaceService,Prosthesis,DateOriginalProsth,ClaimNote,"
 				+"DateEntryC,ClinicNum,MedicalCode,DiagnosticCode,IsPrincDiag,ProcNumLab,"
-				+"BillingTypeOne,BillingTypeTwo,CodeNum,CodeMod1,CodeMod2,CodeMod3,CodeMod4,RevCode,UnitCode,UnitQty,BaseUnits,StartTime,StopTime) VALUES(";
+				+"BillingTypeOne,BillingTypeTwo,CodeNum,CodeMod1,CodeMod2,CodeMod3,CodeMod4,RevCode,UnitCode,"
+				+"UnitQty,BaseUnits,StartTime,StopTime,DateTP) VALUES(";
 			if(PrefB.RandomKeys) {
 				command+="'"+POut.PInt(proc.ProcNum)+"', ";
 			}
@@ -95,9 +71,10 @@ namespace OpenDentBusiness {
 				+"'"+POut.PString(proc.RevCode)+"', "
 				+"'"+POut.PString(proc.UnitCode)+"', "
 				+"'"+POut.PInt(proc.UnitQty)+"', "
-			    +"'"+POut.PInt(proc.BaseUnits)+"', "
-			    +"'"+POut.PInt(proc.StartTime)+"', "
-			    +"'"+POut.PInt(proc.StopTime)+"')";
+				+"'"+POut.PInt(proc.BaseUnits)+"', "
+				+"'"+POut.PInt(proc.StartTime)+"', "
+				+"'"+POut.PInt(proc.StopTime)+"', "
+				+POut.PDate(proc.DateTP)+")";
 			//MessageBox.Show(cmd.CommandText);
 			DataConnection dcon=new DataConnection();
 			if(PrefB.RandomKeys) {
@@ -300,16 +277,19 @@ namespace OpenDentBusiness {
 				c+="BaseUnits = '"+POut.PInt(proc.BaseUnits)+"'";
 				comma=true;
 			}
-			if (proc.StartTime != oldProc.StartTime)
-			{
+			if (proc.StartTime != oldProc.StartTime){
 				if (comma) c += ",";
 				c += "StartTime = '" + POut.PInt(proc.StartTime) + "'";
 				comma = true;
 			}
-			if (proc.StopTime != oldProc.StopTime)
-			{
+			if (proc.StopTime != oldProc.StopTime){
 				if (comma) c += ",";
 				c += "StopTime = '" + POut.PInt(proc.StopTime) + "'";
+				comma = true;
+			}
+			if(proc.DateTP != oldProc.DateTP) {
+				if(comma) c += ",";
+				c += "DateTP = " + POut.PDate(proc.DateTP);
 				comma = true;
 			}
 			int rowsChanged=0;
