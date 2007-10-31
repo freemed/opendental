@@ -105,7 +105,8 @@ namespace OpenDental {
 				}
 			}
 			butOK.Visible=true;
-			butOK.Location=new Point(330, spacing);
+			butOK.Location=new Point(330,spacing);
+			
 		}
 
 		private void listBoxAutoNotes_SelectedIndexChanged(object sender, EventArgs e) {
