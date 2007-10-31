@@ -433,7 +433,7 @@ namespace OpenDental {
 			this.butComm.Name = "butComm";
 			this.butComm.Size = new System.Drawing.Size(98,26);
 			this.butComm.TabIndex = 68;
-			this.butComm.Text = "Communications";
+			this.butComm.Text = "Questionnaire";
 			this.butComm.Click += new System.EventHandler(this.butComm_Click);
 			// 
 			// contextMenuStatement
@@ -3705,6 +3705,16 @@ namespace OpenDental {
 		}
 
 		private void butComm_Click(object sender, System.EventArgs e) {
+			FormPat form=new FormPat();
+			form.PatNum=PatCur.PatNum;
+			form.FormDateTime=DateTime.Now;
+			FormFormPatEdit FormP=new FormFormPatEdit();
+			FormP.FormPatCur=form;
+			FormP.IsNew=true;
+			FormP.ShowDialog();
+			if(FormP.DialogResult==DialogResult.OK) {
+				ModuleSelected(PatCur.PatNum);
+			}
 			/*FormCommunications FormC=new FormCommunications();
 			FormC.PatCur=PatCur.Copy();
 			FormC.ViewingInRecall=ViewingInRecall;
