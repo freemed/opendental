@@ -42,5 +42,15 @@ namespace OpenDental.Properties {
                 return ((string)(this["OpenDental_localhost_Service1"]));
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.WebServiceUrl)]
+        [global::System.Configuration.DefaultSettingValueAttribute("http://70.90.133.65:1942/WebServiceCustomerUpdates/Service1.asmx")]
+        public string OpenDental_customerUpdates_Service1 {
+            get {
+                return ((string)(this["OpenDental_customerUpdates_Service1"]));
+            }
+        }
     }
 }

@@ -614,8 +614,11 @@ namespace OpenDental{
 				writer.WriteEndElement();
 				writer.WriteEndElement();
 			}
-			//MessageBox.Show(strbuild.ToString());
-			OpenDental.localhost.Service1 updateService=new OpenDental.localhost.Service1();
+			#if DEBUG
+				OpenDental.localhost.Service1 updateService=new OpenDental.localhost.Service1();
+			#else
+				OpenDental.customerUpdates.Service1 updateService=new OpenDental.customerUpdates.Service1();
+			#endif
 			string result="";
 			try {
 				result=updateService.RequestUpdate(strbuild.ToString());
