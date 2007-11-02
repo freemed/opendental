@@ -102,5 +102,84 @@ namespace OpenDental {
 			return (table.Rows.Count>0);
 		}
 
+		///<Summary></Summary>
+		public static DataTable GetAll() {
+			DataTable table=new DataTable();
+			table.Columns.Add("dateStop");
+			table.Columns.Add("family");
+			table.Columns.Add("PatNum");
+			table.Columns.Add("RegKey");
+			string command=@"
+				DROP TABLE IF EXISTS tempRegKeys;
+				CREATE TABLE tempRegKeys(
+					tempRegKeyId int auto_increment NOT NULL,
+					PatNum int NOT NULL,
+					RegKey VARCHAR(255) NOT NULL,
+					IsMissing tinyint NOT NULL,
+					Date_ DATE NOT NULL DEFAULT '0001-01-01',
+					PRIMARY KEY(tempRegKeyId),
+					KEY(PatNum));
+				/*Fill table with patnums for all guarantors of regkeys that are still active.*/
+				INSERT INTO tempRegKeys (PatNum,RegKey,Date_) 
+				SELECT patient.Guarantor,RegKey,'0001-01-01'
+				FROM registrationkey
+				LEFT JOIN patient ON registrationkey.PatNum=patient.PatNum
+				WHERE DateDisabled='0001-01-01'
+				AND DateEnded='0001-01-01';
+				/*Set indicators on keys with missing repeatcharges*/
+				UPDATE tempRegKeys
+				SET IsMissing=1
+				WHERE NOT EXISTS(SELECT * FROM repeatcharge WHERE repeatcharge.PatNum=tempRegKeys.PatNum);
+
+				/*Now, look for expired repeating charges.  This is done in two steps.*/
+				/*Step 1: Mark all keys that have expired repeating charges.*/
+				/*Step 2: Then, remove those markings for all keys that also have unexpired repeating charges.*/
+				UPDATE tempRegKeys
+				SET Date_=(
+				SELECT IFNULL(MAX(DateStop),'0001-01-01')
+				FROM repeatcharge
+				WHERE repeatcharge.PatNum=tempRegKeys.PatNum
+				AND DateStop < NOW() AND DateStop > '0001-01-01');
+				/*Step 2:*/
+				UPDATE tempRegKeys
+				SET Date_='0001-01-01'
+				WHERE EXISTS(
+				SELECT * FROM repeatcharge
+				WHERE repeatcharge.PatNum=tempRegKeys.PatNum
+				AND DateStop = '0001-01-01');
+
+				SELECT LName,FName,tempRegKeys.PatNum,tempRegKeys.RegKey,IsMissing,Date_
+				FROM tempRegKeys
+				LEFT JOIN patient ON patient.PatNum=tempRegKeys.PatNum
+				WHERE IsMissing=1
+				OR Date_ > '0001-01-01'
+				ORDER BY tempRegKeys.PatNum;";
+			//DROP TABLE IF EXISTS tempRegKeys;
+			DataTable raw=General.GetTable(command);
+			DataRow row;
+			DateTime dateRepeatStop;
+			for(int i=0;i<raw.Rows.Count;i++) {
+				row=table.NewRow();
+				if(raw.Rows[i]["IsMissing"].ToString()=="1") {
+					row["dateStop"]="Missing Repeat Charge";
+				}
+				else {
+					row["dateStop"]="";
+				}
+				dateRepeatStop=PIn.PDate(raw.Rows[i]["Date_"].ToString());
+				if(dateRepeatStop.Year>1880) {
+					if(row["dateStop"].ToString()!="") {
+						row["dateStop"]+="\r\n";
+					}
+					row["dateStop"]+="Expired Repeat Charge:"+dateRepeatStop.ToShortDateString();
+				}
+				row["family"]=raw.Rows[i]["LName"].ToString()+", "+raw.Rows[i]["FName"].ToString();
+				row["PatNum"]=raw.Rows[i]["PatNum"].ToString();
+				row["RegKey"]=raw.Rows[i]["RegKey"].ToString();
+				table.Rows.Add(row);
+			}
+			return table;
+		}
+
 	}
 }

@@ -306,6 +306,9 @@
     <Compile Include="Eclaims\X12object.cs" />
     <Compile Include="Eclaims\X277U.cs" />
     <Compile Include="Eclaims\X997.cs" />
+    <Compile Include="Forms\FormCustomerManagement.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Forms Reports\FormRpPPOwriteoffs.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -1264,6 +1267,10 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Eclaims\FormTerminal.resx">
       <DependentUpon>FormTerminal.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormCustomerManagement.resx">
+      <DependentUpon>FormCustomerManagement.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms Reports\FormRpPPOwriteoffs.resx">

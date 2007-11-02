@@ -189,6 +189,7 @@ namespace OpenDental{
 		private ContextMenu menuEmail;
 		private ContextMenu menuLetter;
 		private Point OriginalMousePos;
+		private MenuItem menuItemCustomerManage;
 		private List<PopupEvent> PopupEventList;
 
 		///<summary></summary>
@@ -307,6 +308,7 @@ namespace OpenDental{
 			this.menuItemTerminalManager = new System.Windows.Forms.MenuItem();
 			this.menuItemReqStudents = new System.Windows.Forms.MenuItem();
 			this.menuItemMergeDatabases = new System.Windows.Forms.MenuItem();
+			this.menuItemCustomerManage = new System.Windows.Forms.MenuItem();
 			this.menuItemHelp = new System.Windows.Forms.MenuItem();
 			this.menuItemHelpWindows = new System.Windows.Forms.MenuItem();
 			this.menuItemHelpContents = new System.Windows.Forms.MenuItem();
@@ -790,7 +792,8 @@ namespace OpenDental{
             this.menuItemTerminal,
             this.menuItemTerminalManager,
             this.menuItemReqStudents,
-            this.menuItemMergeDatabases});
+            this.menuItemMergeDatabases,
+            this.menuItemCustomerManage});
 			this.menuItemTools.Shortcut = System.Windows.Forms.Shortcut.CtrlU;
 			this.menuItemTools.Text = "&Tools";
 			// 
@@ -911,6 +914,12 @@ namespace OpenDental{
 			this.menuItemMergeDatabases.Text = "Merge Replicating Databases";
 			this.menuItemMergeDatabases.Visible = false;
 			this.menuItemMergeDatabases.Click += new System.EventHandler(this.menuItemMergeDatabases_Click);
+			// 
+			// menuItemCustomerManage
+			// 
+			this.menuItemCustomerManage.Index = 15;
+			this.menuItemCustomerManage.Text = "Customer Management";
+			this.menuItemCustomerManage.Click += new System.EventHandler(this.menuItemCustomerManage_Click);
 			// 
 			// menuItemHelp
 			// 
@@ -1404,6 +1413,13 @@ namespace OpenDental{
 				}
 				else{
 					menuItemRepeatingCharges.Visible=true;
+				}
+
+				if(PrefB.GetString("DistributorKey")=="") {
+					menuItemCustomerManage.Visible=false;
+				}
+				else {
+					menuItemCustomerManage.Visible=true;
 				}
 				ContrDocs2.Enabled=PrefB.UsingAtoZfolder;
 				menuItemClaimForms.Visible=PrefB.UsingAtoZfolder;
@@ -3253,6 +3269,17 @@ namespace OpenDental{
 		private void menuItemScreening_Click(object sender, System.EventArgs e) {
 			FormScreenings FormS=new FormScreenings();
 			FormS.ShowDialog();
+		}
+
+		private void menuItemCustomerManage_Click(object sender,EventArgs e) {
+			FormCustomerManagement FormC=new FormCustomerManagement();
+			FormC.ShowDialog();
+			if(FormC.SelectedPatNum!=0) {
+				CurPatNum=FormC.SelectedPatNum;
+				Patient pat=Patients.GetPat(CurPatNum);
+				RefreshCurrentModule();
+				FillPatientButton(CurPatNum,pat.GetNameLF(),pat.Email!="",pat.ChartNumber);
+			}
 		}
 
 		//Help
