@@ -1870,6 +1870,17 @@ namespace OpenDental{
 				return;
 			}			
 			selectionDoc.IsFlipped=!selectionDoc.IsFlipped;
+			//Since the document is always flipped and then rotated in the mathematical functions below, and since we
+			//always want the selected image to rotate left to right no matter what orientation the image is in,
+			//we must modify the document settings so that the document will always be flipped left to right, but
+			//in such a way that the flipping always happens before the rotation.
+			if(selectionDoc.DegreesRotated==90||selectionDoc.DegreesRotated==270) {
+				selectionDoc.DegreesRotated*=-1;
+				while(selectionDoc.DegreesRotated<0) {
+					selectionDoc.DegreesRotated+=360;
+				}
+				selectionDoc.DegreesRotated=(short)(selectionDoc.DegreesRotated%360);
+			}
 			Documents.Update(selectionDoc);
 			DeleteThumbnailImage(selectionDoc);
 			InvalidateSettings(ApplySettings.FLIP,false);//Refresh display.
