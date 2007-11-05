@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="Windows-1252"?>
+<VisualStudioProject
+	ProjectType="Visual C++"
+	Version="7.10"
+	Name="MigraDoc.Rendering.Resources"
+	ProjectGUID="{3CF44A9C-D03F-4EEB-B486-B2133BF1EC3C}"
+	RootNamespace="MigraDoc.Rendering.Resources"
+	Keyword="MakeFileProj">
+	<Platforms>
+		<Platform
+			Name="Win32"/>
+	</Platforms>
+	<Configurations>
+		<Configuration
+			Name="Debug|Win32"
+			OutputDirectory="Debug"
+			IntermediateDirectory="Debug"
+			ConfigurationType="10"
+			DeleteExtensionsOnClean="*.resources,*.obj;*.ilk;*.pdb;*.tlb;*.tli;*.tlh;*.tmp;*.rsp;*.bat;$(TargetPath)">
+			<Tool
+				Name="VCCustomBuildTool"/>
+			<Tool
+				Name="VCMIDLTool"/>
+			<Tool
+				Name="VCPostBuildEventTool"/>
+			<Tool
+				Name="VCPreBuildEventTool"/>
+		</Configuration>
+		<Configuration
+			Name="Release|Win32"
+			OutputDirectory="Release"
+			IntermediateDirectory="Release"
+			ConfigurationType="10"
+			DeleteExtensionsOnClean="*.resources,*.obj;*.ilk;*.pdb;*.tlb;*.tli;*.tlh;*.tmp;*.rsp;*.bat;$(TargetPath)">
+			<Tool
+				Name="VCCustomBuildTool"/>
+			<Tool
+				Name="VCMIDLTool"/>
+			<Tool
+				Name="VCPostBuildEventTool"/>
+			<Tool
+				Name="VCPreBuildEventTool"/>
+		</Configuration>
+	</Configurations>
+	<References>
+	</References>
+	<Files>
+		<Filter
+			Name="Messages"
+			Filter="">
+			<File
+				RelativePath=".\Messages.de.txt">
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Compiling $(InputFileName)"
+						CommandLine="resgen &quot;$(InputPath)&quot;
+"
+						Outputs="$(ProjectDir)$(InputName).resources"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Compiling $(InputFileName)"
+						CommandLine="resgen &quot;$(InputPath)&quot;
+"
+						Outputs="$(ProjectDir)$(InputName).resources"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\Messages.txt">
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Compiling $(InputFileName)"
+						CommandLine="resgen &quot;$(InputPath)&quot;
+"
+						Outputs="$(ProjectDir)$(InputName).resources"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Compiling $(InputFileName)"
+						CommandLine="resgen &quot;$(InputPath)&quot;
+"
+						Outputs="$(ProjectDir)$(InputName).resources"/>
+				</FileConfiguration>
+			</File>
+		</Filter>
+	</Files>
+	<Globals>
+	</Globals>
+</VisualStudioProject>

@@ -1247,6 +1247,7 @@
     <Compile Include="Misc\ClassesShared.cs" />
     <Compile Include="Misc\DataConnectionOld.cs" />
     <Compile Include="Misc\EZTwain.cs" />
+    <Compile Include="Misc\MigraDocHelper.cs" />
     <Compile Include="Misc\LabelSingle.cs" />
     <Compile Include="Misc\ObjectDateComparer.cs" />
     <Compile Include="Misc\Pop3.cs" />
@@ -3129,6 +3130,18 @@
       <Project>{18F7BC78-4B99-48D3-A1F1-0D13A63E3CF9}</Project>
       <Name>xCodeBase</Name>
     </ProjectReference>
+    <ProjectReference Include="..\MigraDoc.DocumentObjectModel\xMigraDocLite.DocumentObjectModel.csproj">
+      <Project>{4666ABF3-EFE5-49BD-B2E8-9E04F5949145}</Project>
+      <Name>xMigraDocLite.DocumentObjectModel</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MigraDoc.Rendering\xMigraDocLite.Rendering.csproj">
+      <Project>{FEBBE5BE-9F58-4967-BBCF-801F1CFCD774}</Project>
+      <Name>xMigraDocLite.Rendering</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MigraDoc.RtfRendering\xMigraDocLite.RtfRendering.csproj">
+      <Project>{22010032-52DC-464D-B8BB-6CD9BF230D1F}</Project>
+      <Name>xMigraDocLite.RtfRendering</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ODR\xODR.csproj">
       <Project>{84688345-BB6A-4F2F-8672-A82B52FD433B}</Project>
       <Name>xODR</Name>
@@ -3136,6 +3149,10 @@
     <ProjectReference Include="..\OpenDentBusiness\OpenDentBusiness.csproj">
       <Project>{3D0FC76E-803C-4DE2-BDB1-47D63A4E2357}</Project>
       <Name>OpenDentBusiness</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\PdfSharp\PdfSharp.csproj">
+      <Project>{5384CE57-1F94-4D22-860D-2E9C1AC12DDF}</Project>
+      <Name>PdfSharp</Name>
     </ProjectReference>
     <ProjectReference Include="..\RdlEngine\RdlEngine.csproj">
       <Project>{C97E91F4-B310-44E2-9B6C-96775395722D}</Project>

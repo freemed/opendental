@@ -301,6 +301,17 @@ namespace OpenDental.UI{
 			}
 		}
 
+		///<summary>Used when drawing to PDF. We need the width of all columns summed.</summary>
+		public int WidthAllColumns{
+			get{
+				int retVal=0;
+				for(int i=0;i<columns.Count;i++){
+					retVal+=columns[i].ColWidth;
+				}
+				return retVal;
+			}
+		}
+
 		#endregion
 
 		///<summary></summary>

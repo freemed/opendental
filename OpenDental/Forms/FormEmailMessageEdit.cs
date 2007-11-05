@@ -128,14 +128,14 @@ namespace OpenDental{
 			this.textSubject.Location = new System.Drawing.Point(278,62);
 			this.textSubject.Name = "textSubject";
 			this.textSubject.Size = new System.Drawing.Size(328,20);
-			this.textSubject.TabIndex = 0;
+			this.textSubject.TabIndex = 1;
 			// 
 			// textToAddress
 			// 
 			this.textToAddress.Location = new System.Drawing.Point(278,41);
 			this.textToAddress.Name = "textToAddress";
 			this.textToAddress.Size = new System.Drawing.Size(328,20);
-			this.textToAddress.TabIndex = 8;
+			this.textToAddress.TabIndex = 2;
 			// 
 			// label1
 			// 
@@ -349,7 +349,7 @@ namespace OpenDental{
 			this.textBodyText.QuickPasteType = OpenDentBusiness.QuickPasteType.Email;
 			this.textBodyText.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
 			this.textBodyText.Size = new System.Drawing.Size(649,537);
-			this.textBodyText.TabIndex = 22;
+			this.textBodyText.TabIndex = 0;
 			this.textBodyText.TextChanged += new System.EventHandler(this.textBodyText_TextChanged);
 			// 
 			// butSend
@@ -518,7 +518,7 @@ namespace OpenDental{
 			messageChanged=true;
 		}
 
-		private string GetAttachPath(){
+		public static string GetAttachPath(){
 			string attachPath;
 			if(PrefB.UsingAtoZfolder) {
 				attachPath=ODFileUtils.CombinePaths(FormPath.GetPreferredImagePath(),@"EmailAttachments");
@@ -655,8 +655,8 @@ namespace OpenDental{
 			//placed in the temporary directory.
 			string attachPath=GetAttachPath();
 			try{
-				string tempFile=ODFileUtils.CombinePaths(	Path.GetTempPath(),
-																									MessageCur.Attachments[listAttachments.SelectedIndex].DisplayedFileName);
+				string tempFile
+					=ODFileUtils.CombinePaths(Path.GetTempPath(),MessageCur.Attachments[listAttachments.SelectedIndex].DisplayedFileName);
 				File.Copy(
 					ODFileUtils.CombinePaths(attachPath,MessageCur.Attachments[listAttachments.SelectedIndex].ActualFileName),
 					tempFile,

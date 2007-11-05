@@ -5,6 +5,7 @@ See header in FormOpenDental.cs for complete text.  Redistributions must retain 
 using System;
 using System.Collections;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Drawing;
 using System.Data;
 using System.Windows.Forms;
@@ -13,11 +14,17 @@ using System.Drawing.Design;
 using System.Drawing.Imaging;
 using System.Drawing.Text;
 using System.Drawing.Printing;
+using System.IO;
 using System.Threading;
 using OpenDental.UI;
 using SparksToothChart;
 using OpenDentBusiness;
 using CodeBase;
+using PdfSharp.Drawing;
+using PdfSharp.Pdf;
+using MigraDoc.DocumentObjectModel;
+using MigraDoc.DocumentObjectModel.Shapes;
+using MigraDoc.DocumentObjectModel.Tables;
 
 namespace OpenDental{
 ///<summary></summary>
@@ -46,12 +53,12 @@ namespace OpenDental{
 		private bool benefitsPrinted;
 		private bool notePrinted;
 		private double[] ColTotal;
-		private Font bodyFont=new Font("Arial",9);
-		private Font nameFont=new Font("Arial",9,FontStyle.Bold);
-		private Font headingFont=new Font("Arial",13,FontStyle.Bold);
-		private Font subHeadingFont=new Font("Arial",10,FontStyle.Bold);
+		private System.Drawing.Font bodyFont=new System.Drawing.Font("Arial",9);
+		private System.Drawing.Font nameFont=new System.Drawing.Font("Arial",9,FontStyle.Bold);
+		//private Font headingFont=new Font("Arial",13,FontStyle.Bold);
+		private System.Drawing.Font subHeadingFont=new System.Drawing.Font("Arial",10,FontStyle.Bold);
 		private System.Drawing.Printing.PrintDocument pd2;
-		private Font totalFont=new Font("Arial",9,FontStyle.Bold);
+		private System.Drawing.Font totalFont=new System.Drawing.Font("Arial",9,FontStyle.Bold);
 		//private int yPos=938;
 	  //private	int xPos=25;
 		private System.Windows.Forms.TextBox textPriMax;
@@ -444,10 +451,6 @@ namespace OpenDental{
 			this.textSecPend.TabIndex = 47;
 			this.textSecPend.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
 			// 
-			// pd2
-			// 
-			this.pd2.PrintPage += new System.Drawing.Printing.PrintPageEventHandler(this.pd2_PrintPage);
-			// 
 			// textPriDedRem
 			// 
 			this.textPriDedRem.BackColor = System.Drawing.Color.White;
@@ -664,6 +667,7 @@ namespace OpenDental{
 			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Update Fees"),1,"","Update"));
 			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Save TP"),3,"","Create"));
 			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Print TP"),2,"","Print"));
+			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Email TP"),-1,"","Email"));
 			ArrayList toolButItems=ToolButItems.GetForToolBar(ToolBarsAvail.TreatmentPlanModule);
 			for(int i=0;i<toolButItems.Count;i++){
 				ToolBarMain.Buttons.Add(new ODToolBarButton(ODToolBarButtonStyle.Separator));
@@ -718,6 +722,7 @@ namespace OpenDental{
 				ToolBarMain.Buttons["PreAuth"].Enabled=true;
 				ToolBarMain.Buttons["Update"].Enabled=true;
 				ToolBarMain.Buttons["Print"].Enabled=true;
+				ToolBarMain.Buttons["Email"].Enabled=true;
 				ToolBarMain.Invalidate();
 				if(PatPlanList.Length==0){//patient doesn't have insurance
 					checkShowIns.Checked=false;
@@ -740,6 +745,7 @@ namespace OpenDental{
 				ToolBarMain.Buttons["PreAuth"].Enabled=false;
 				ToolBarMain.Buttons["Update"].Enabled=false;
 				ToolBarMain.Buttons["Print"].Enabled=false;
+				ToolBarMain.Buttons["Email"].Enabled=false;
 				ToolBarMain.Invalidate();
         //listPreAuth.Enabled=false;
 			}
@@ -765,6 +771,9 @@ namespace OpenDental{
 						break;
 					case "Print":
 						OnPrint_Click();
+						break;
+					case "Email":
+						OnEmail_Click();
 						break;
 				}
 			}
@@ -1117,8 +1126,8 @@ namespace OpenDental{
 						row.Cells.Add(pat.ToString("F"));
 					}
 					row.ColorText=DefB.GetColor(DefCat.TxPriorities,ProcListTP[i].Priority);
-					if(row.ColorText==Color.White){
-						row.ColorText=Color.Black;
+					if(row.ColorText==System.Drawing.Color.White){
+						row.ColorText=System.Drawing.Color.Black;
 					}
 					row.Tag=ProcListTP[i].Copy();
 					gridMain.Rows.Add(row);
@@ -1187,11 +1196,11 @@ namespace OpenDental{
 							row.Cells.Add(subpat.ToString("F"));//pat portion
 						}
 						row.ColorText=DefB.GetColor(DefCat.TxPriorities,ProcListTP[i].Priority);
-						if(row.ColorText==Color.White) {
-							row.ColorText=Color.Black;
+						if(row.ColorText==System.Drawing.Color.White) {
+							row.ColorText=System.Drawing.Color.Black;
 						}
 						row.Bold=true;
-						row.ColorLborder=Color.Black;
+						row.ColorLborder=System.Drawing.Color.Black;
 						gridMain.Rows.Add(row);
 						//substandard=0;
 						subfee=0;
@@ -1256,8 +1265,8 @@ namespace OpenDental{
 						totPat+=ProcTPSelectList[i].PatAmt;						
 					}
 					row.ColorText=DefB.GetColor(DefCat.TxPriorities,ProcTPSelectList[i].Priority);
-					if(row.ColorText==Color.White){
-						row.ColorText=Color.Black;
+					if(row.ColorText==System.Drawing.Color.White){
+						row.ColorText=System.Drawing.Color.Black;
 					}
 					row.Tag=ProcTPSelectList[i].Copy();
 					gridMain.Rows.Add(row);
@@ -1286,11 +1295,11 @@ namespace OpenDental{
 							row.Cells.Add(subpat.ToString("F"));//pat portion
 						}
 						row.ColorText=DefB.GetColor(DefCat.TxPriorities,ProcTPSelectList[i].Priority);
-						if(row.ColorText==Color.White) {
-							row.ColorText=Color.Black;
+						if(row.ColorText==System.Drawing.Color.White) {
+							row.ColorText=System.Drawing.Color.Black;
 						}
 						row.Bold=true;
-						row.ColorLborder=Color.Black;
+						row.ColorLborder=System.Drawing.Color.Black;
 						gridMain.Rows.Add(row);
 						//substandard=0;
 						subfee=0;
@@ -1630,34 +1639,57 @@ namespace OpenDental{
 			FillMain();
 		}
 
-		///<summary>Preview is only used for debugging.</summary>
-		public void PrintReport(bool justPreview){
-			pd2=new PrintDocument();
-			pd2.PrintPage += new PrintPageEventHandler(this.pd2_PrintPage);
-			pd2.DefaultPageSettings.Margins=new Margins(0,0,0,0);
-			//if(pd2.DefaultPageSettings.PaperSize.Height==0) {
-			//	pd2.DefaultPageSettings.PaperSize=new PaperSize("default",850,1100);
-			//}
-			pd2.OriginAtMargins=true;
-			try{
-				if(justPreview){
-					pd2.DefaultPageSettings.PaperSize=new PaperSize("default",850,1100);
-					pView = new FormRpPrintPreview();
-					pView.printPreviewControl2.Document=pd2;
-					pView.ShowDialog();				
-			  }
-				else{
-					if(Printers.SetPrinter(pd2,PrintSituation.TPPerio)){
-						pd2.Print();
-					}
+		private void OnPrint_Click() {
+			PrepImageForPrinting();
+			MigraDoc.DocumentObjectModel.Document doc=CreateDocument();
+			MigraDoc.Rendering.Printing.MigraDocPrintDocument printdoc=new MigraDoc.Rendering.Printing.MigraDocPrintDocument();
+			MigraDoc.Rendering.DocumentRenderer renderer=new MigraDoc.Rendering.DocumentRenderer(doc);
+			renderer.PrepareDocument();
+			printdoc.Renderer=renderer;
+			//we might want to surround some of this with a try-catch
+			#if DEBUG
+				pView = new FormRpPrintPreview();
+				pView.printPreviewControl2.Document=printdoc;
+				pView.ShowDialog();			
+			#else
+				if(Printers.SetPrinter(pd2,PrintSituation.TPPerio)){
+					printdoc.Print();
 				}
-			}
-			catch{
-				MessageBox.Show(Lan.g(this,"Printer not available"));
-			}
+			#endif
 		}
 
-		private void OnPrint_Click() {
+		private void OnEmail_Click() {
+			PrepImageForPrinting();
+			string attachPath=FormEmailMessageEdit.GetAttachPath();
+			if(!Directory.Exists(attachPath)) {
+				Directory.CreateDirectory(attachPath);
+			}
+			Random rnd=new Random();
+			string fileName=DateTime.Now.ToString("yyyyMMdd")+"_"+DateTime.Now.TimeOfDay.Ticks.ToString()+rnd.Next(1000).ToString()+".pdf";
+			string filePathAndName=ODFileUtils.CombinePaths(attachPath,fileName);
+			MigraDoc.Rendering.PdfDocumentRenderer pdfRenderer=new MigraDoc.Rendering.PdfDocumentRenderer(true,PdfFontEmbedding.Always);
+			pdfRenderer.Document=CreateDocument();
+			pdfRenderer.RenderDocument();
+			pdfRenderer.PdfDocument.Save(filePathAndName);
+			//Process.Start(filePathAndName);
+			EmailMessage message=new EmailMessage();
+			message.PatNum=PatCur.PatNum;
+			message.ToAddress=PatCur.Email;
+			message.FromAddress=PrefB.GetString("EmailSenderAddress");
+			message.Subject=Lan.g(this,"Treatment Plan");
+			EmailAttach attach=new EmailAttach();
+			attach.DisplayedFileName="TreatmentPlan.pdf";
+			attach.ActualFileName=fileName;
+			message.Attachments.Add(attach);
+			FormEmailMessageEdit FormE=new FormEmailMessageEdit(message);
+			FormE.IsNew=true;
+			FormE.ShowDialog();
+			//if(FormE.DialogResult==DialogResult.OK) {
+			//	RefreshCurrentModule();
+			//}
+		}
+
+		private void PrepImageForPrinting(){
 			//linesPrinted=0;
 			ColTotal = new double[10];
 			headingPrinted=false;
@@ -1739,227 +1771,175 @@ namespace OpenDental{
 				chartBitmap=toothChart.GetBitmap();
 				toothChart.Dispose();
 			}
-			#if DEBUG
-				PrintReport(true);
-			#else
-				PrintReport(false);	
-			#endif
 		}
 
-		private void pd2_PrintPage(object sender, System.Drawing.Printing.PrintPageEventArgs e) {
-			Rectangle bounds=new Rectangle(50,50,750,1020);//Some printers can handle up to 1042 if upper bound is 40
-			Graphics g=e.Graphics;
+		private MigraDoc.DocumentObjectModel.Document CreateDocument(){
+			MigraDoc.DocumentObjectModel.Document doc= new MigraDoc.DocumentObjectModel.Document();
+			doc.DefaultPageSetup.PageWidth=Unit.FromInch(8.5);
+			doc.DefaultPageSetup.PageHeight=Unit.FromInch(11);
+			doc.DefaultPageSetup.TopMargin=Unit.FromInch(.5);
+			doc.DefaultPageSetup.LeftMargin=Unit.FromInch(.5);
+			doc.DefaultPageSetup.RightMargin=Unit.FromInch(.5);
+			MigraDoc.DocumentObjectModel.Section section=doc.AddSection();
 			string text;
-			int yPos=bounds.Top;
-			int xPos=bounds.Left;
+			MigraDoc.DocumentObjectModel.Font headingFont=MigraDocHelper.CreateFont(13,true);
+			MigraDoc.DocumentObjectModel.Font bodyFontx=MigraDocHelper.CreateFont(9,false);
+			MigraDoc.DocumentObjectModel.Font nameFontx=MigraDocHelper.CreateFont(9,true);
+			MigraDoc.DocumentObjectModel.Font totalFontx=MigraDocHelper.CreateFont(9,true);
+			//Heading---------------------------------------------------------------------------------------------------------------
 			#region printHeading
-			if(!headingPrinted){
-				//Heading
-				if(gridPlans.SelectedIndices[0]==0){//current TP
-					text=Lan.g(this,"Proposed Treatment Plan");
-				}
-				else{
-					text=PlanList[gridPlans.SelectedIndices[0]-1].Heading;
-				}
-				g.DrawString(text,headingFont,Brushes.Black,
-					xPos+bounds.Width/2-g.MeasureString(text,headingFont).Width/2,yPos);
-				yPos+=(int)g.MeasureString(text,headingFont).Height;
-				//Practice Name
-				text=PrefB.GetString("PracticeTitle");
-				g.DrawString(text,subHeadingFont,Brushes.Black,
-					xPos+bounds.Width/2-g.MeasureString(text,subHeadingFont).Width/2,yPos);
-				yPos+=(int)g.MeasureString(text,subHeadingFont).Height;
-				//Practice Phone
-				text=PrefB.GetString("PracticePhone");
-				if(text.Length==10 && Application.CurrentCulture.Name=="en-US") {
-					text="("+text.Substring(0,3)+")"+text.Substring(3,3)+"-"+text.Substring(6);
-				}
-				g.DrawString(text,subHeadingFont,Brushes.Black,
-					xPos+bounds.Width/2-g.MeasureString(text,subHeadingFont).Width/2,yPos);
-				yPos+=(int)g.MeasureString(text,subHeadingFont).Height;
-				//Patient name
-				text=PatCur.GetNameFL();
-				g.DrawString(text,subHeadingFont,Brushes.Black,
-					xPos+bounds.Width/2-g.MeasureString(text,subHeadingFont).Width/2,yPos);
-				yPos+=(int)g.MeasureString(text,subHeadingFont).Height;
-				//Date
-				if(gridPlans.SelectedIndices[0]==0) {//default TP
-					text=DateTime.Today.ToShortDateString();
-				}
-				else {
-					text=PlanList[gridPlans.SelectedIndices[0]-1].DateTP.ToShortDateString();
-				}
-				g.DrawString(text,subHeadingFont,Brushes.Black,
-					xPos+bounds.Width/2-g.MeasureString(text,subHeadingFont).Width/2,yPos);
-				yPos+=(int)g.MeasureString(text,subHeadingFont).Height;
-				headingPrinted=true;
+			Paragraph par=section.AddParagraph();
+			ParagraphFormat parformat=new ParagraphFormat();
+			parformat.Alignment=ParagraphAlignment.Center;
+			parformat.Font=MigraDocHelper.CreateFont(10,true);
+			par.Format=parformat;
+			if(gridPlans.SelectedIndices[0]==0) {//current TP
+				text=Lan.g(this,"Proposed Treatment Plan");
 			}
+			else {
+				text=PlanList[gridPlans.SelectedIndices[0]-1].Heading;
+			}
+			par.AddFormattedText(text,headingFont);
+			par.AddLineBreak();
+			text=PrefB.GetString("PracticeTitle");
+			par.AddText(text);
+			par.AddLineBreak();
+			text=PrefB.GetString("PracticePhone");
+			if(text.Length==10 && Application.CurrentCulture.Name=="en-US") {
+				text="("+text.Substring(0,3)+")"+text.Substring(3,3)+"-"+text.Substring(6);
+			}
+			par.AddText(text);
+			par.AddLineBreak();
+			text=PatCur.GetNameFL();
+			par.AddText(text);
+			par.AddLineBreak();
+			if(gridPlans.SelectedIndices[0]==0) {//default TP
+				text=DateTime.Today.ToShortDateString();
+			}
+			else {
+				text=PlanList[gridPlans.SelectedIndices[0]-1].DateTP.ToShortDateString();
+			}
+			par.AddText(text);
 			#endregion
+			//Graphics---------------------------------------------------------------------------------------------------------------
 			#region PrintGraphics
-			if(headingPrinted && !graphicsPrinted){
-				if(PrefB.GetBool("TreatPlanShowGraphics")){
-					//xPos and yPos will be the upper left of this entire section.
-					e.Graphics.DrawString(Lan.g(this,"Your Right"),bodyFont,Brushes.Black,
-						new RectangleF(xPos+bounds.Width/2-toothChart.Width/2-50,(float)yPos+toothChart.Height/2-10,50,200));
-					e.Graphics.DrawImageUnscaled(chartBitmap,xPos+bounds.Width/2-chartBitmap.Width/2-10,yPos);
-					e.Graphics.DrawString(Lan.g(this,"Your Left"),bodyFont,Brushes.Black,
-						new RectangleF(xPos+bounds.Width/2+toothChart.Width/2+17,(float)yPos+toothChart.Height/2-10,50,200));
-					yPos+=toothChart.Height;
-					if(checkShowCompleted.Checked){
-						yPos+=15;
-						xPos=225;
-						e.Graphics.FillRectangle
-							(new SolidBrush(DefB.Short[(int)DefCat.ChartGraphicColors][3].ItemColor),xPos,yPos,14,14);
-						xPos+=15;
-						e.Graphics.DrawString(Lan.g(this,"Existing"),bodyFont,Brushes.Black,xPos,yPos);
-						xPos+=(int)e.Graphics.MeasureString(Lan.g(this,"Existing"),bodyFont).Width+23;
-						//The Complete work is actually a combination of EC and C. Usually same color.
-						//But just in case they are different, this will show it.
-						e.Graphics.FillRectangle
-							(new SolidBrush(DefB.Short[(int)DefCat.ChartGraphicColors][2].ItemColor),xPos,yPos,7,14);
-						xPos+=7;
-						e.Graphics.FillRectangle
-							(new SolidBrush(DefB.Short[(int)DefCat.ChartGraphicColors][1].ItemColor),xPos,yPos,7,14);
-						xPos+=8;
-						e.Graphics.DrawString(Lan.g(this,"Complete"),bodyFont,Brushes.Black,xPos,yPos);
-						xPos+=(int)e.Graphics.MeasureString(Lan.g(this,"Complete"),bodyFont).Width+23;
-						e.Graphics.FillRectangle
-							(new SolidBrush(DefB.Short[(int)DefCat.ChartGraphicColors][4].ItemColor),xPos,yPos,14,14);
-						xPos+=15;
-						e.Graphics.DrawString(Lan.g(this,"Referred Out"),bodyFont,Brushes.Black,xPos,yPos);
-						xPos+=(int)e.Graphics.MeasureString(Lan.g(this,"Referred Out"),bodyFont).Width+23;
-						e.Graphics.FillRectangle
-							(new SolidBrush(DefB.Short[(int)DefCat.ChartGraphicColors][0].ItemColor),xPos,yPos,14,14);
-						xPos+=15;
-						e.Graphics.DrawString(Lan.g(this,"Treatment Planned"),bodyFont,Brushes.Black,xPos,yPos);
-					}
-					yPos+=40;
-					xPos=25;
-				}//if(PrefB.GetBool("TreatPlanShowGraphics"))
-				graphicsPrinted=true;
-				headingPrintH=yPos;
-			}
+			int widthDoc=MigraDocHelper.GetDocWidth();
+			if(PrefB.GetBool("TreatPlanShowGraphics")) {	
+				TextFrame frame=MigraDocHelper.CreateContainer(section);
+				MigraDocHelper.DrawString(frame,Lan.g(this,"Your")+"\r\n"+Lan.g(this,"Right"),bodyFontx,
+					new RectangleF(widthDoc/2-toothChart.Width/2-50,toothChart.Height/2-10,50,100));
+				MigraDocHelper.DrawBitmap(frame,chartBitmap,widthDoc/2-toothChart.Width/2,0);
+				MigraDocHelper.DrawString(frame,Lan.g(this,"Your")+"\r\n"+Lan.g(this,"Left"),bodyFontx,
+					new RectangleF(widthDoc/2+toothChart.Width/2+17,toothChart.Height/2-10,50,100));
+				if(checkShowCompleted.Checked) {
+					float yPos=toothChart.Height+15;
+					float xPos=225;
+					MigraDocHelper.FillRectangle(frame,DefB.Short[(int)DefCat.ChartGraphicColors][3].ItemColor,xPos,yPos,14,14);
+					xPos+=16;
+					MigraDocHelper.DrawString(frame,Lan.g(this,"Existing"),bodyFontx,xPos,yPos);
+					Graphics g=this.CreateGraphics();//for measuring strings.
+					xPos+=(int)g.MeasureString(Lan.g(this,"Existing"),bodyFont).Width+23;
+					//The Complete work is actually a combination of EC and C. Usually same color.
+					//But just in case they are different, this will show it.
+					MigraDocHelper.FillRectangle(frame,DefB.Short[(int)DefCat.ChartGraphicColors][2].ItemColor,xPos,yPos,7,14);
+					xPos+=7;
+					MigraDocHelper.FillRectangle(frame,DefB.Short[(int)DefCat.ChartGraphicColors][1].ItemColor,xPos,yPos,7,14);
+					xPos+=9;
+					MigraDocHelper.DrawString(frame,Lan.g(this,"Complete"),bodyFontx,xPos,yPos);
+					xPos+=(int)g.MeasureString(Lan.g(this,"Complete"),bodyFont).Width+23;
+					MigraDocHelper.FillRectangle(frame,DefB.Short[(int)DefCat.ChartGraphicColors][4].ItemColor,xPos,yPos,14,14);
+					xPos+=16;
+					MigraDocHelper.DrawString(frame,Lan.g(this,"Referred Out"),bodyFontx,xPos,yPos);
+					xPos+=(int)g.MeasureString(Lan.g(this,"Referred Out"),bodyFont).Width+23;
+					MigraDocHelper.FillRectangle(frame,DefB.Short[(int)DefCat.ChartGraphicColors][0].ItemColor,xPos,yPos,14,14);
+					xPos+=16;
+					MigraDocHelper.DrawString(frame,Lan.g(this,"Treatment Planned"),bodyFontx,xPos,yPos);
+					g.Dispose();
+				}
+			}	
 			#endregion
-			//this would be the number of pages except for the benefits and the note. Used to print grid properly.
-			int totalPages=gridMain.GetNumberOfPages(bounds,headingPrintH);
-			//grid gets printed on each page, unless current page is more than total pages.
-			if(!mainPrinted){
-				yPos=gridMain.PrintPage(g,pagesPrinted,bounds,headingPrintH);
-				yPos+=15;
-			}
-			if(pagesPrinted==totalPages-1) {
-				mainPrinted=true;
-			}
+			MigraDocHelper.InsertSpacer(section,10);
+			MigraDocHelper.DrawGrid(section,gridMain);
+			//Print benefits----------------------------------------------------------------------------------------------------
 			#region printBenefits
-			if(mainPrinted && !benefitsPrinted && yPos < bounds.Bottom-16*8){//1037
-				if(checkShowIns.Checked){
-					int[] insColX=new int[4];
-					insColX[0]=275;
-					insColX[1]=425;
-					insColX[2]=500;
-					insColX[3]=575;//right edge
-					int lineSpacing=16;
-					g.FillRectangle(Brushes.LightGray,insColX[0],yPos,insColX[3]-insColX[0],16);
-					g.DrawRectangle(new Pen(Color.Black),insColX[0],yPos-1,insColX[3]-insColX[0],16); 
-					string insTitle="Dental Insurance Benefits";
-					g.DrawString(Lan.g(this,insTitle),totalFont,Brushes.Black
-							,insColX[1]-g.MeasureString(insTitle,totalFont).Width/2,yPos);
-					yPos+=lineSpacing;
-					for(int i=0;i<4;i++) 
-						g.DrawLine(new Pen(Color.Gray),insColX[i],yPos,insColX[i],yPos+lineSpacing*7);
-					g.DrawLine(new Pen(Color.Gray),insColX[0],yPos+lineSpacing
-						,insColX[3],yPos+lineSpacing);
-					g.DrawLine(new Pen(Color.Gray),insColX[0],yPos+lineSpacing*7
-						,insColX[3],yPos+lineSpacing*7);
-					Font insFont=new Font("Arial",9);
-					string insHead="";
-					string insPri="";
-					string insSec="";
-					for(int i=0;i<7;i++){
-						switch(i)  {
-							case 0:
-								insHead="";
-								insPri="Primary";
-								insSec="Secondary";
-								break;
-							case 1:
-								insHead="Annual Maximum";
-								insPri=textPriMax.Text;
-								insSec=textSecMax.Text;
-								break;
-							case 2:
-								insHead="Deductible";
-								insPri=textPriDed.Text;
-								insSec=textSecDed.Text;
-								break;
-							case 3:
-								insHead="Deductible Remaining";
-								insPri=textPriDedRem.Text;
-								insSec=textSecDedRem.Text;
-								break;
-							case 4:
-								insHead="Insurance Used";
-								insPri=textPriUsed.Text;
-								insSec=textSecUsed.Text;
-								break;
-							case 5:
-								insHead="Pending";
-								insPri=textPriPend.Text;
-								insSec=textSecPend.Text;
-								break;
-							case 6:
-								insHead="Remaining";
-								insPri=textPriRem.Text;
-								insSec=textSecRem.Text;
-    						break;
-						}//end switch
-						g.DrawString(Lan.g(this,insHead),insFont,Brushes.Black,insColX[0]+2,yPos+1);
-						if(i==0){
-							//float xHead=(float)();
-							g.DrawString(Lan.g(this,insPri),insFont,Brushes.Black,insColX[2]
-								-g.MeasureString(insPri,insFont).Width-1,yPos+1);
-							//xHead=(float)();
-							g.DrawString(Lan.g(this,insSec),insFont,Brushes.Black,insColX[3]
-								-g.MeasureString(insSec,insFont).Width-1,yPos+1);					
-						}
-						else{
-							g.DrawString(Lan.g(this,insPri),insFont,Brushes.Black,insColX[2]
-								-g.MeasureString(insPri,insFont).Width-1,yPos+1);
-							g.DrawString(Lan.g(this,insSec),insFont,Brushes.Black,insColX[3]
-								-g.MeasureString(insSec,insFont).Width-1,yPos+1);
-						}
-						yPos+=lineSpacing;
-					}//end for 0-7
-					yPos+=20;
-				}//if(checkShowIns.checked)
-				benefitsPrinted=true;	
+			if(checkShowIns.Checked) {
+				ODGrid gridIns=new ODGrid();
+				this.Controls.Add(gridIns);
+				gridIns.BeginUpdate();
+				gridIns.Columns.Clear();
+				ODGridColumn col=new ODGridColumn("",140);
+				gridIns.Columns.Add(col);
+				col=new ODGridColumn(Lan.g(this,"Primary"),70,HorizontalAlignment.Right);
+				gridIns.Columns.Add(col);
+				col=new ODGridColumn(Lan.g(this,"Secondary"),70,HorizontalAlignment.Right);
+				gridIns.Columns.Add(col);
+				gridIns.Rows.Clear();
+				ODGridRow row;
+				//Annual max--------------------------
+				row=new ODGridRow();
+				row.Cells.Add(Lan.g(this,"Annual Maximum"));
+				row.Cells.Add(textPriMax.Text);
+				row.Cells.Add(textSecMax.Text);
+				gridIns.Rows.Add(row);
+				//Deductible--------------------------
+				row=new ODGridRow();
+				row.Cells.Add(Lan.g(this,"Deductible"));
+				row.Cells.Add(textPriDed.Text);
+				row.Cells.Add(textSecDed.Text);
+				gridIns.Rows.Add(row);
+				//Deductible Remaining--------------------------
+				row=new ODGridRow();
+				row.Cells.Add(Lan.g(this,"Deductible Remaining"));
+				row.Cells.Add(textPriDedRem.Text);
+				row.Cells.Add(textSecDedRem.Text);
+				gridIns.Rows.Add(row);
+				//Insurance Used--------------------------
+				row=new ODGridRow();
+				row.Cells.Add(Lan.g(this,"Insurance Used"));
+				row.Cells.Add(textPriUsed.Text);
+				row.Cells.Add(textSecUsed.Text);
+				gridIns.Rows.Add(row);
+				//Pending--------------------------
+				row=new ODGridRow();
+				row.Cells.Add(Lan.g(this,"Pending"));
+				row.Cells.Add(textPriPend.Text);
+				row.Cells.Add(textSecPend.Text);
+				gridIns.Rows.Add(row);
+				//Remaining--------------------------
+				row=new ODGridRow();
+				row.Cells.Add(Lan.g(this,"Remaining"));
+				row.Cells.Add(textPriRem.Text);
+				row.Cells.Add(textSecRem.Text);
+				gridIns.Rows.Add(row);
+				gridIns.EndUpdate();
+				MigraDocHelper.InsertSpacer(section,15);
+				par=section.AddParagraph();
+				par.Format.Alignment=ParagraphAlignment.Center;
+				par.AddFormattedText(Lan.g(this,"Dental Insurance Benefits"),totalFontx);
+				MigraDocHelper.InsertSpacer(section,2);
+				MigraDocHelper.DrawGrid(section,gridIns);
+				gridIns.Dispose();
 			}
 			#endregion
+			//Note------------------------------------------------------------------------------------------------------------
 			#region printNote
-			if(benefitsPrinted && !notePrinted){
-				string note="";
-				if(gridPlans.SelectedIndices[0]==0){//current TP
-					note=PrefB.GetString("TreatmentPlanNote");
-				}
-				else{
-					note=PlanList[gridPlans.SelectedIndices[0]-1].Note;
-				}
-				float noteH=g.MeasureString(note,bodyFont,bounds.Width-10).Height;
-				if(yPos < bounds.Bottom-noteH){//if there is room for the note
-					g.DrawRectangle(Pens.Gray,bounds.Left,yPos,bounds.Width,noteH+8);
-					g.DrawString(note,bodyFont,Brushes.Black,new RectangleF(bounds.Left+5,yPos+5,bounds.Width-10,noteH));
-					notePrinted=true;
-				}
+			string note="";
+			if(gridPlans.SelectedIndices[0]==0) {//current TP
+				note=PrefB.GetString("TreatmentPlanNote");
 			}
+			else {
+				note=PlanList[gridPlans.SelectedIndices[0]-1].Note;
+			}
+			MigraDocHelper.InsertSpacer(section,20);
+			par=section.AddParagraph(note);
+			par.Format.Font=bodyFontx;
+			par.Format.Borders.Color=Colors.Gray;
+			par.Format.Borders.DistanceFromLeft=Unit.FromInch(.05);
+			par.Format.Borders.DistanceFromRight=Unit.FromInch(.05);
+			par.Format.Borders.DistanceFromTop=Unit.FromInch(.05);
+			par.Format.Borders.DistanceFromBottom=Unit.FromInch(.05);
 			#endregion
-			pagesPrinted++;
-			if(!notePrinted){
-				e.HasMorePages=true;
-			}
-			else{
-				e.HasMorePages=false;
-			}
-			g.Dispose();
+			return doc;
 		}
 
 		///<summary>Just used for printing the 3D chart.</summary>
@@ -2011,8 +1991,8 @@ namespace OpenDental{
 		private void DrawProcsOfStatus(ProcStat procStat) {
 			Procedure proc;
 			string[] teeth;
-			Color cLight=Color.White;
-			Color cDark=Color.White;
+			System.Drawing.Color cLight=System.Drawing.Color.White;
+			System.Drawing.Color cDark=System.Drawing.Color.White;
 			for(int i=0;i<ProcAL.Count;i++) {
 				proc=(Procedure)ProcAL[i];
 				if(proc.ProcStatus!=procStat) {
@@ -2029,7 +2009,7 @@ namespace OpenDental{
 					)) {
 					continue;//prevents the red X. Missing teeth already handled.
 				}
-				if(ProcedureCodes.GetProcCode(proc.CodeNum).GraphicColor==Color.FromArgb(0)) {
+				if(ProcedureCodes.GetProcCode(proc.CodeNum).GraphicColor==System.Drawing.Color.FromArgb(0)) {
 					switch(proc.ProcStatus) {
 						case ProcStat.C:
 							cDark=DefB.Short[(int)DefCat.ChartGraphicColors][1].ItemColor;
@@ -2415,6 +2395,7 @@ namespace OpenDental{
 			}
 		}
 
+	
 		
 	
 
