@@ -127,6 +127,9 @@ namespace OpenDental{
 			if(!doPrompt){
 				return true;
 			}
+			#if DEBUG
+				return true;
+			#endif
 			PrintDialog dialog=new PrintDialog();
 			dialog.PrinterSettings=pSet;
 			if(dialog.ShowDialog()!=DialogResult.OK){

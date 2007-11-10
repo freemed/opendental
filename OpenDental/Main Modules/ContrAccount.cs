@@ -10,6 +10,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Data;
 using System.Globalization;
+using System.IO;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using OpenDental.UI;
@@ -24,7 +25,7 @@ namespace OpenDental {
 		private System.ComponentModel.IContainer components=null;// Required designer variable.
 		private Procedure[] arrayProc;
 		///<summary>Public because used by FormRpStatement</summary>
-		public ArrayList AcctLineAL;
+		public List<AcctLine> AcctLineList;
 		///<summary>A single line of payment info in the Account.  Might be an actual payment, or an unattached paysplit, or a daily summary of attached paysplits.</summary>
 		private PayInfo[] arrayPay;
 		private Adjustment[] arrayAdj;
@@ -173,10 +174,8 @@ namespace OpenDental {
 		private Label label11;
 		private Label label17;
 		private Label label19;
+		private MenuItem menuItemStatementEmail;
 		public static bool PrintingStatement = false;
-
-
-
 
 		///<summary></summary>
 		public ContrAccount() {
@@ -302,6 +301,7 @@ namespace OpenDental {
 			this.textFinNotes = new OpenDental.ODtextBox();
 			this.ToolBarMain = new OpenDental.UI.ODToolBar();
 			this.textUrgFinNote = new OpenDental.ODtextBox();
+			this.menuItemStatementEmail = new System.Windows.Forms.MenuItem();
 			this.panelCommButs.SuspendLayout();
 			this.panelProgNotes.SuspendLayout();
 			this.groupBox7.SuspendLayout();
@@ -440,6 +440,7 @@ namespace OpenDental {
 			// 
 			this.contextMenuStatement.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
             this.menuItemStatementWalkout,
+            this.menuItemStatementEmail,
             this.menuItemStatementMore});
 			// 
 			// menuItemStatementWalkout
@@ -450,7 +451,7 @@ namespace OpenDental {
 			// 
 			// menuItemStatementMore
 			// 
-			this.menuItemStatementMore.Index = 1;
+			this.menuItemStatementMore.Index = 2;
 			this.menuItemStatementMore.Text = "More Options";
 			this.menuItemStatementMore.Click += new System.EventHandler(this.menuItemStatementMore_Click);
 			// 
@@ -1410,6 +1411,12 @@ namespace OpenDental {
 			this.textUrgFinNote.Leave += new System.EventHandler(this.textUrgFinNote_Leave);
 			this.textUrgFinNote.TextChanged += new System.EventHandler(this.textUrgFinNote_TextChanged);
 			// 
+			// menuItemStatementEmail
+			// 
+			this.menuItemStatementEmail.Index = 1;
+			this.menuItemStatementEmail.Text = "Email";
+			this.menuItemStatementEmail.Click += new System.EventHandler(this.menuItemStatementEmail_Click);
+			// 
 			// ContrAccount
 			// 
 			this.Controls.Add(this.panelBoldBalance);
@@ -1574,11 +1581,11 @@ namespace OpenDental {
 		///<summary>Used when jumping to this module and directly to a claim.</summary>
 		public void ModuleSelected(int patNum,int claimNum) {
 			ModuleSelected(patNum);
-			for(int i=0;i<AcctLineAL.Count;i++){
-				if(((AcctLine)AcctLineAL[i]).Type != AcctModType.Claim){
+			for(int i=0;i<AcctLineList.Count;i++){
+				if(AcctLineList[i].Type != AcctModType.Claim){
 					continue;
 				}
-				if(arrayClaim[((AcctLine)AcctLineAL[i]).Index].ClaimNum!=claimNum){
+				if(arrayClaim[AcctLineList[i].Index].ClaimNum!=claimNum){
 					continue;
 				}
 				gridAccount.SetSelected(i,true);
@@ -1931,7 +1938,7 @@ namespace OpenDental {
 				gridAccount.EndUpdate();
 				return;
 			}
-			FillAcctLineAL(fromDate,toDate,includeClaims,subtotalsOnly,false);
+			FillAcctLineList(fromDate,toDate,includeClaims,subtotalsOnly,false);
 			FillgridAccount();
 		}
 
@@ -2088,7 +2095,7 @@ namespace OpenDental {
 		}
 
 		///<summary>Public because used by FormRpStatement</summary>
-		public void FillAcctLineAL(DateTime fromDate, DateTime toDate,bool includeClaims,bool subtotalsOnly, bool simpleStatement){
+		public void FillAcctLineList(DateTime fromDate, DateTime toDate,bool includeClaims,bool subtotalsOnly, bool simpleStatement){
 			AccProcList=Procedures.Refresh(PatCur.PatNum);
 			Claims.Refresh(PatCur.PatNum);
 			Adjustment[] AdjustmentList=Adjustments.Refresh(PatCur.PatNum);
@@ -2177,7 +2184,7 @@ namespace OpenDental {
 			int tempCountPay=0;
 			int tempCountComm=0;
 			int tempCountPayPlan=0;
-			AcctLineAL=new ArrayList();
+			AcctLineList=new List<AcctLine>();
 			AcctLine tempAcctLine=new AcctLine();
 			//This is where to transfer arrays to AcctLineAL:
 			DateTime lineDate=DateTime.MinValue;
@@ -2285,7 +2292,7 @@ namespace OpenDental {
 								tempAcctLine.Balance="";
 							}
    
-						AcctLineAL.Add(tempAcctLine);
+						AcctLineList.Add(tempAcctLine);
 					}
 					else if(!subtotalsOnly){//out of date range, but show normal totals
 						runBal+=subtot;//add to the running balance, but do not display it.
@@ -2375,7 +2382,7 @@ namespace OpenDental {
 								tempAcctLine.Patient="";
 								tempAcctLine.Balance="";
 							}
- 						AcctLineAL.Add(tempAcctLine);
+ 						AcctLineList.Add(tempAcctLine);
 					}
 					else if(!subtotalsOnly){//out of date range, but show normal totals
 						runBal+=subTotal;//add to the running balance, but do not display it.
@@ -2390,7 +2397,7 @@ namespace OpenDental {
 								tempAcctLine.Patient="";
 								tempAcctLine.Balance="";
 							}
-						AcctLineAL.Add(tempAcctLine);
+						AcctLineList.Add(tempAcctLine);
 					}
 					if(tempCountClaim<countClaim) tempCountClaim++;
 				}//end Claim
@@ -2425,7 +2432,7 @@ namespace OpenDental {
 								tempAcctLine.Patient="";
 								tempAcctLine.Balance="";
 							}
-						AcctLineAL.Add(tempAcctLine);
+						AcctLineList.Add(tempAcctLine);
 					}
 					else if(!subtotalsOnly){//out of date range, but show normal totals
 						runBal+=arrayAdj[tempCountAdj].AdjAmt;//add to the running balance, but do not display it.
@@ -2471,7 +2478,7 @@ namespace OpenDental {
 								tempAcctLine.Patient="";
 								tempAcctLine.Balance="";
 							}
-						AcctLineAL.Add(tempAcctLine);
+						AcctLineList.Add(tempAcctLine);
 					}
 					else if(!subtotalsOnly){//out of date range, but show normal totals
 						runBal-=arrayPay[tempCountPay].Amount;//add to the running balance, but do not display it.
@@ -2512,7 +2519,7 @@ namespace OpenDental {
 								tempAcctLine.Patient="";
 								tempAcctLine.Balance="";
 							}
-						AcctLineAL.Add(tempAcctLine);
+						AcctLineList.Add(tempAcctLine);
 					}
 					if(tempCountComm<countComm) tempCountComm++;
 				}//end Comm
@@ -2574,7 +2581,7 @@ namespace OpenDental {
 								tempAcctLine.Patient="";
 								tempAcctLine.Balance="";
 							}
-						AcctLineAL.Add(tempAcctLine);
+						AcctLineList.Add(tempAcctLine);
 					}
 					else if(!subtotalsOnly){//out of date range, but show normal totals
 						runBal+=subTotal;//add to the running balance, but do not display it.
@@ -2618,16 +2625,16 @@ namespace OpenDental {
 			gridAccount.Rows.Clear();
 			ODGridRow row;
 			ODGridCell cell;
-			for(int i=0;i<AcctLineAL.Count;i++){
+			for(int i=0;i<AcctLineList.Count;i++){
 				//if (AcctLineAL[i].IsProc==true){
 				row=new ODGridRow();
 				try{//error catch bad dates
-					if(DateTime.Parse(((AcctLine)AcctLineAL[i]).Date)>lineDate){
-						row.Cells.Add(((AcctLine)AcctLineAL[i]).Date);
+					if(DateTime.Parse(AcctLineList[i].Date)>lineDate){
+						row.Cells.Add(AcctLineList[i].Date);
 						if(i>0){
 							gridAccount.Rows[i-1].ColorLborder=Color.Black;
 						}
-						lineDate=DateTime.Parse(((AcctLine)AcctLineAL[i]).Date);
+						lineDate=DateTime.Parse(AcctLineList[i].Date);
 					}
 					else 
 						row.Cells.Add("");
@@ -2635,21 +2642,21 @@ namespace OpenDental {
 				catch{
 					row.Cells.Add("");
 				}
-				row.Cells.Add(((AcctLine)AcctLineAL[i]).Provider);
-				row.Cells.Add(((AcctLine)AcctLineAL[i]).Code);
-				row.Cells.Add(((AcctLine)AcctLineAL[i]).Tooth);
-				row.Cells.Add(((AcctLine)AcctLineAL[i]).Description);
-				row.Cells.Add(((AcctLine)AcctLineAL[i]).Fee);
-				row.Cells.Add(((AcctLine)AcctLineAL[i]).InsEst);
-				row.Cells.Add(((AcctLine)AcctLineAL[i]).InsPay);
-				row.Cells.Add(((AcctLine)AcctLineAL[i]).Patient);
-				cell=new ODGridCell(((AcctLine)AcctLineAL[i]).Adj);
+				row.Cells.Add(AcctLineList[i].Provider);
+				row.Cells.Add(AcctLineList[i].Code);
+				row.Cells.Add(AcctLineList[i].Tooth);
+				row.Cells.Add(AcctLineList[i].Description);
+				row.Cells.Add(AcctLineList[i].Fee);
+				row.Cells.Add(AcctLineList[i].InsEst);
+				row.Cells.Add(AcctLineList[i].InsPay);
+				row.Cells.Add(AcctLineList[i].Patient);
+				cell=new ODGridCell(AcctLineList[i].Adj);
 				cell.ColorText=DefB.Long[(int)DefCat.AccountColors][1].ItemColor;
 				row.Cells.Add(cell);
-				row.Cells.Add(((AcctLine)AcctLineAL[i]).Paid);
-				row.Cells.Add(((AcctLine)AcctLineAL[i]).Balance);
+				row.Cells.Add(AcctLineList[i].Paid);
+				row.Cells.Add(AcctLineList[i].Balance);
 				//}//end if
-				switch(((AcctLine)AcctLineAL[i]).Type){
+				switch(AcctLineList[i].Type){
 					default:
 						row.ColorText=DefB.Long[(int)DefCat.AccountColors][0].ItemColor;
 						break;
@@ -2742,22 +2749,22 @@ namespace OpenDental {
 
 		private void gridAccount_CellClick(object sender, OpenDental.UI.ODGridClickEventArgs e) {
 			//this seems to fire after a doubleclick, so this prevents error:
-			if(e.Row>=AcctLineAL.Count){
+			if(e.Row>=AcctLineList.Count){
 				return;
 			}
 			if(ViewingInRecall) return;
-			switch (((AcctLine)AcctLineAL[e.Row]).Type){
+			switch (AcctLineList[e.Row].Type){
 				default://procedure
 					break;
 				case AcctModType.Claim:
-					Claim ClaimCur=arrayClaim[((AcctLine)AcctLineAL[e.Row]).Index];
-					for(int i=0;i<AcctLineAL.Count;i++){//loop through all rows
-						if(((AcctLine)AcctLineAL[i]).Type!=AcctModType.Proc)
+					Claim ClaimCur=arrayClaim[AcctLineList[e.Row].Index];
+					for(int i=0;i<AcctLineList.Count;i++){//loop through all rows
+						if(AcctLineList[i].Type!=AcctModType.Proc)
 							//if not a procedure, then skip
 							continue;
 						for(int j=0;j<ClaimProcList.Length;j++){//loop through all claimprocs
 							//if there is a claim proc for this procedure that matches
-							if(arrayProc[((AcctLine)AcctLineAL[i]).Index].ProcNum==ClaimProcList[j].ProcNum
+							if(arrayProc[AcctLineList[i].Index].ProcNum==ClaimProcList[j].ProcNum
 								&& ClaimProcList[j].ClaimNum==ClaimCur.ClaimNum)
 							{
 								gridAccount.SetSelected(i,true);
@@ -2770,14 +2777,14 @@ namespace OpenDental {
 					break;
 				case AcctModType.Pay:
 					PaySplit[] PaySplitList=PaySplits.Refresh(PatCur.PatNum);
-					for(int i=0;i<AcctLineAL.Count;i++){//loop through all rows
-						if(((AcctLine)AcctLineAL[i]).Type!=AcctModType.Proc) {
+					for(int i=0;i<AcctLineList.Count;i++){//loop through all rows
+						if(AcctLineList[i].Type!=AcctModType.Proc) {
 							continue;//if not a procedure, then skip
 						}
 						for(int j=0;j<PaySplitList.Length;j++) {//loop through all paysplits
 							//if there is a paysplit for this procedure that matches
-							if(arrayProc[((AcctLine)AcctLineAL[i]).Index].ProcNum==PaySplitList[j].ProcNum
-								&& PaySplitList[j].PayNum==arrayPay[((AcctLine)AcctLineAL[e.Row]).Index].PayNum) {
+							if(arrayProc[AcctLineList[i].Index].ProcNum==PaySplitList[j].ProcNum
+								&& PaySplitList[j].PayNum==arrayPay[AcctLineList[e.Row].Index].PayNum) {
 								gridAccount.SetSelected(i,true);
 							}
 						}
@@ -2787,11 +2794,11 @@ namespace OpenDental {
 					//Commlogs.Cur=arrayComm[((AcctLine)AcctLineAL[e.Row]).Index];
 					break;
 				case AcctModType.PayPlan:
-					PayPlan payPlanCur=arrayPayPlan[((AcctLine)AcctLineAL[e.Row]).Index];
+					PayPlan payPlanCur=arrayPayPlan[AcctLineList[e.Row].Index];
 					//ArrayList payPlanRows=new ArrayList();
-					for(int i=0;i<AcctLineAL.Count;i++){
-						if(((AcctLine)AcctLineAL[i]).Type==AcctModType.Pay
-							&& arrayPay[((AcctLine)AcctLineAL[i]).Index].PayPlanNum==payPlanCur.PayPlanNum)
+					for(int i=0;i<AcctLineList.Count;i++){
+						if(AcctLineList[i].Type==AcctModType.Pay
+							&& arrayPay[AcctLineList[i].Index].PayPlanNum==payPlanCur.PayPlanNum)
 						{
 							gridAccount.SetSelected(i,true);
 						}
@@ -2802,25 +2809,25 @@ namespace OpenDental {
 
 		private void gridAccount_CellDoubleClick(object sender, OpenDental.UI.ODGridClickEventArgs e) {
 			if(ViewingInRecall) return;
-			switch (((AcctLine)AcctLineAL[e.Row]).Type){
+			switch (AcctLineList[e.Row].Type){
 				default:
-					Procedure ProcCur=Procedures.GetOneProc(arrayProc[((AcctLine)AcctLineAL[e.Row]).Index].ProcNum,true);
+					Procedure ProcCur=Procedures.GetOneProc(arrayProc[AcctLineList[e.Row].Index].ProcNum,true);
 					FormProcEdit FormPE=new FormProcEdit(ProcCur,PatCur,FamCur,InsPlanList);
 					FormPE.ShowDialog();
 					break;
 				case AcctModType.Claim:
-					Claim ClaimCur=arrayClaim[((AcctLine)AcctLineAL[e.Row]).Index];
+					Claim ClaimCur=arrayClaim[AcctLineList[e.Row].Index];
 					FormClaimEdit FormClaimEdit2=new FormClaimEdit(ClaimCur,PatCur,FamCur);
 					FormClaimEdit2.IsNew=false;
 					FormClaimEdit2.ShowDialog();
 					break;
 				case AcctModType.Adj:
-					Adjustment AdjustmentCur=arrayAdj[((AcctLine)AcctLineAL[e.Row]).Index];
+					Adjustment AdjustmentCur=arrayAdj[AcctLineList[e.Row].Index];
 					FormAdjust FormAdj=new FormAdjust(PatCur,AdjustmentCur);
 					FormAdj.ShowDialog();
 					break;
 				case AcctModType.Pay:
-					Payment PaymentCur=Payments.GetPayment(arrayPay[((AcctLine)AcctLineAL[e.Row]).Index].PayNum);
+					Payment PaymentCur=Payments.GetPayment(arrayPay[AcctLineList[e.Row].Index].PayNum);
 					if(PaymentCur.PayType==0){//provider income transfer
 						FormProviderIncTrans FormPIT=new FormProviderIncTrans();
 						FormPIT.PatNum=PatCur.PatNum;
@@ -2835,13 +2842,13 @@ namespace OpenDental {
 					}
 					break;
 				case AcctModType.Comm:
-					Commlog CommlogCur=arrayComm[((AcctLine)AcctLineAL[e.Row]).Index];
+					Commlog CommlogCur=arrayComm[AcctLineList[e.Row].Index];
 					FormCommItem2=new FormCommItem(CommlogCur);
 					FormCommItem2.IsNew=false;
 					FormCommItem2.ShowDialog();
 					break;				
 				case AcctModType.PayPlan:
-					FormPayPlan2=new FormPayPlan(PatCur,arrayPayPlan[((AcctLine)AcctLineAL[e.Row]).Index]);
+					FormPayPlan2=new FormPayPlan(PatCur,arrayPayPlan[AcctLineList[e.Row].Index]);
 					FormPayPlan2.ShowDialog();
 					if(FormPayPlan2.GotoPatNum!=0){
 						PatCur.PatNum=FormPayPlan2.GotoPatNum;//switches to other patient.
@@ -2997,14 +3004,14 @@ namespace OpenDental {
 			bool countIsOverMax=false;
 			if(gridAccount.SelectedIndices.Length==0){
 				//autoselect procedures
-				for(int i=0;i<AcctLineAL.Count;i++){//loop through every line showing on screen
-					if(((AcctLine)AcctLineAL[i]).Type!=AcctModType.Proc){
+				for(int i=0;i<AcctLineList.Count;i++){//loop through every line showing on screen
+					if(AcctLineList[i].Type!=AcctModType.Proc){
 						continue;//ignore non-procedures
 					}
-					if(arrayProc[((AcctLine)AcctLineAL[i]).Index].ProcFee==0){
+					if(arrayProc[AcctLineList[i].Index].ProcFee==0){
 						continue;//ignore zero fee procedures, but user can explicitly select them
 					}
-					if(Procedures.NeedsSent(arrayProc[((AcctLine)AcctLineAL[i]).Index],ClaimProcList,PatPlans.GetPlanNum(PatPlanList,1))){
+					if(Procedures.NeedsSent(arrayProc[AcctLineList[i].Index],ClaimProcList,PatPlans.GetPlanNum(PatPlanList,1))){
 						if(CultureInfo.CurrentCulture.Name.Substring(3)=="CA" && countSelected==7){//en-CA or fr-CA
 							countIsOverMax=true;
 							continue;//only send 7.
@@ -3020,7 +3027,7 @@ namespace OpenDental {
 			}
 			bool allAreProcedures=true;
 			for(int i=0;i<gridAccount.SelectedIndices.Length;i++){
-				if(((AcctLine)AcctLineAL[gridAccount.SelectedIndices[i]]).Type!=AcctModType.Proc){
+				if(AcctLineList[gridAccount.SelectedIndices[i]].Type!=AcctModType.Proc){
 					allAreProcedures=false;
 				}
 			}
@@ -3120,20 +3127,20 @@ namespace OpenDental {
 					break;
 			}
 			for(int i=0;i<gridAccount.SelectedIndices.Length;i++){
-				if(Procedures.NoBillIns(arrayProc[((AcctLine)AcctLineAL[gridAccount.SelectedIndices[i]]).Index],ClaimProcList,PlanCur.PlanNum)){
+				if(Procedures.NoBillIns(arrayProc[AcctLineList[gridAccount.SelectedIndices[i]].Index],ClaimProcList,PlanCur.PlanNum)){
 					MsgBox.Show(this,"Not allowed to send procedures to insurance that are marked 'Do not bill to ins'.");
 					return new Claim();
 				}
 			}
 			for(int i=0;i<gridAccount.SelectedIndices.Length;i++){
-				if(Procedures.IsAlreadyAttachedToClaim(arrayProc[((AcctLine)AcctLineAL[gridAccount.SelectedIndices[i]]).Index],ClaimProcList,PlanCur.PlanNum)){
+				if(Procedures.IsAlreadyAttachedToClaim(arrayProc[AcctLineList[gridAccount.SelectedIndices[i]].Index],ClaimProcList,PlanCur.PlanNum)){
 					MsgBox.Show(this,"Not allowed to send a procedure to the same insurance company twice.");
 					return new Claim();
 				}
 			}
-			int clinic=arrayProc[((AcctLine)AcctLineAL[gridAccount.SelectedIndices[0]]).Index].ClinicNum;
+			int clinic=arrayProc[AcctLineList[gridAccount.SelectedIndices[0]].Index].ClinicNum;
 			for(int i=1;i<gridAccount.SelectedIndices.Length;i++){//skips 0
-				if(clinic!=arrayProc[((AcctLine)AcctLineAL[gridAccount.SelectedIndices[i]]).Index].ClinicNum){
+				if(clinic!=arrayProc[AcctLineList[gridAccount.SelectedIndices[i]].Index].ClinicNum){
 					MsgBox.Show(this,"All procedures do not have the same clinic.");
 					return new Claim();
 				}
@@ -3141,13 +3148,13 @@ namespace OpenDental {
 			ClaimProc[] claimProcs=new ClaimProc[gridAccount.SelectedIndices.Length];
 			for(int i=0;i<gridAccount.SelectedIndices.Length;i++){//loop through selected procs
 				//and try to find an estimate that can be used
-				claimProcs[i]=Procedures.GetClaimProcEstimate(arrayProc[((AcctLine)AcctLineAL[gridAccount.SelectedIndices[i]]).Index],ClaimProcList,PlanCur);
+				claimProcs[i]=Procedures.GetClaimProcEstimate(arrayProc[AcctLineList[gridAccount.SelectedIndices[i]].Index],ClaimProcList,PlanCur);
 			}
 			for(int i=0;i<claimProcs.Length;i++){//loop through each claimProc
 				//and create any missing estimates. This handles claims to 3rd and 4th ins co's.
 				if(claimProcs[i]==null){
 					claimProcs[i]=new ClaimProc();
-					ClaimProcs.CreateEst(claimProcs[i],arrayProc[((AcctLine)AcctLineAL[gridAccount.SelectedIndices[i]]).Index],PlanCur);
+					ClaimProcs.CreateEst(claimProcs[i],arrayProc[AcctLineList[gridAccount.SelectedIndices[i]].Index],PlanCur);
 				}
 			}
 			//now, all claimProcs have a valid value
@@ -3204,13 +3211,13 @@ namespace OpenDental {
 			if(PlanCur.PlanType=="c"){//if capitation
 				ClaimCur.ClaimType="Cap";
 			}
-			ClaimCur.ProvTreat=arrayProc[((AcctLine)AcctLineAL[gridAccount.SelectedIndices[0]]).Index].ProvNum;
+			ClaimCur.ProvTreat=arrayProc[AcctLineList[gridAccount.SelectedIndices[0]].Index].ProvNum;
 			for(int i=0;i<gridAccount.SelectedIndices.Length;i++){
 				if(!Providers.GetIsSec//if not a hygienist
-					(arrayProc[((AcctLine)AcctLineAL[gridAccount.SelectedIndices[i]]).Index].ProvNum))
+					(arrayProc[AcctLineList[gridAccount.SelectedIndices[i]].Index].ProvNum))
 				{
 					ClaimCur.ProvTreat
-						=arrayProc[((AcctLine)AcctLineAL[gridAccount.SelectedIndices[i]]).Index].ProvNum;
+						=arrayProc[AcctLineList[gridAccount.SelectedIndices[i]].Index].ProvNum;
 				}
 			}
 			if(Providers.GetIsSec(ClaimCur.ProvTreat)){
@@ -3229,7 +3236,7 @@ namespace OpenDental {
 			Procedure ProcCur;
 			//for(int i=0;i<tbAccount.SelectedIndices.Length;i++){
 			for(int i=0;i<claimProcs.Length;i++){
-				ProcCur=arrayProc[((AcctLine)AcctLineAL[gridAccount.SelectedIndices[i]]).Index];
+				ProcCur=arrayProc[AcctLineList[gridAccount.SelectedIndices[i]].Index];
 				//ClaimProc ClaimProcCur=new ClaimProc();
 				//ClaimProcCur.ProcNum=ProcCur.ProcNum;
 				claimProcs[i].ClaimNum=ClaimCur.ClaimNum;
@@ -3277,7 +3284,7 @@ namespace OpenDental {
 			}
 			bool allAreProcedures=true;
 			for(int i=0;i<gridAccount.SelectedIndices.Length;i++){
-				if(((AcctLine)AcctLineAL[gridAccount.SelectedIndices[i]]).Type!=AcctModType.Proc){
+				if(AcctLineList[gridAccount.SelectedIndices[i]].Type!=AcctModType.Proc){
 					allAreProcedures=false;
 				}
 			}
@@ -3322,7 +3329,7 @@ namespace OpenDental {
 			}
 			bool allAreProcedures=true;
 			for(int i=0;i<gridAccount.SelectedIndices.Length;i++){
-				if(((AcctLine)AcctLineAL[gridAccount.SelectedIndices[i]]).Type!=AcctModType.Proc){
+				if(AcctLineList[gridAccount.SelectedIndices[i]].Type!=AcctModType.Proc){
 					allAreProcedures=false;
 				}
 			}
@@ -3368,17 +3375,17 @@ namespace OpenDental {
 			}
 			if(gridAccount.SelectedIndices.Length==0){
 				//autoselect procedures
-				for(int i=0;i<AcctLineAL.Count;i++){//loop through every line showing on screen
-					if(((AcctLine)AcctLineAL[i]).Type!=AcctModType.Proc){
+				for(int i=0;i<AcctLineList.Count;i++){//loop through every line showing on screen
+					if(AcctLineList[i].Type!=AcctModType.Proc){
 						continue;//ignore non-procedures
 					}
-					if(arrayProc[((AcctLine)AcctLineAL[i]).Index].ProcFee==0){
+					if(arrayProc[AcctLineList[i].Index].ProcFee==0){
 						continue;//ignore zero fee procedures, but user can explicitly select them
 					}
-					if(arrayProc[((AcctLine)AcctLineAL[i]).Index].MedicalCode==""){
+					if(arrayProc[AcctLineList[i].Index].MedicalCode==""){
 						continue;//ignore non-medical procedures
 					}
-					if(Procedures.NeedsSent(arrayProc[((AcctLine)AcctLineAL[i]).Index],ClaimProcList,medPlanNum)){
+					if(Procedures.NeedsSent(arrayProc[AcctLineList[i].Index],ClaimProcList,medPlanNum)){
 						gridAccount.SetSelected(i,true);
 					}
 				}
@@ -3389,7 +3396,7 @@ namespace OpenDental {
 			}
 			bool allAreProcedures=true;
 			for(int i=0;i<gridAccount.SelectedIndices.Length;i++){
-				if(((AcctLine)AcctLineAL[gridAccount.SelectedIndices[i]]).Type!=AcctModType.Proc){
+				if(AcctLineList[gridAccount.SelectedIndices[i]].Type!=AcctModType.Proc){
 					allAreProcedures=false;
 				}
 			}
@@ -3429,7 +3436,7 @@ namespace OpenDental {
 			}
 			bool allAreProcedures=true;
 			for(int i=0;i<gridAccount.SelectedIndices.Length;i++){
-				if(((AcctLine)AcctLineAL[gridAccount.SelectedIndices[i]]).Type!=AcctModType.Proc){
+				if(AcctLineList[gridAccount.SelectedIndices[i]].Type!=AcctModType.Proc){
 					allAreProcedures=false;
 				}
 			}
@@ -3502,7 +3509,7 @@ namespace OpenDental {
 			RepeatCharge repeat=new RepeatCharge();
 			repeat.PatNum=PatCur.PatNum;
 			repeat.ProcCode="001";
-			repeat.ChargeAmt=139;
+			repeat.ChargeAmt=149;
 			repeat.DateStart=DateTime.Today;
 			repeat.DateStop=DateTime.Today.AddMonths(11);
 			RepeatCharges.Insert(repeat);
@@ -3540,12 +3547,54 @@ namespace OpenDental {
 			else{
 				fromDate=DateTime.Today.AddDays(-45);
 			}
-			PrintStatement(patNums,fromDate,DateTime.MaxValue,true,false,false,false,"",false,(PrefB.GetBool("PrintSimpleStatements")));
+			PrintStatement(patNums,fromDate,DateTime.MaxValue,true,false,false,false,"",false,
+				PrefB.GetBool("PrintSimpleStatements"),"");
 			ModuleSelected(PatCur.PatNum);
 		}
 		
 		private void menuItemStatementWalkout_Click(object sender, System.EventArgs e) {
-			PrintStatement(new int[] {PatCur.PatNum},DateTime.Today,DateTime.Today,false,false,true,true,"",false,(PrefB.GetBool("PrintSimpleStatements")));
+			PrintStatement(new int[] {PatCur.PatNum},DateTime.Today,DateTime.Today,false,false,true,true,"",false,
+				PrefB.GetBool("PrintSimpleStatements"),"");
+			ModuleSelected(PatCur.PatNum);
+		}
+
+		private void menuItemStatementEmail_Click(object sender,EventArgs e) {
+			int[] patNums=new int[FamCur.List.Length];
+			for(int i=0;i<FamCur.List.Length;i++) {
+				patNums[i]=FamCur.List[i].PatNum;
+			}
+			DateTime fromDate;
+			if(checkShowAll.Checked) {
+				fromDate=DateTime.MinValue;
+			}
+			else {
+				fromDate=DateTime.Today.AddDays(-45);
+			}
+			string attachPath=FormEmailMessageEdit.GetAttachPath();
+			if(!Directory.Exists(attachPath)) {
+				Directory.CreateDirectory(attachPath);
+			}
+			Random rnd=new Random();
+			string fileName=DateTime.Now.ToString("yyyyMMdd")+"_"+DateTime.Now.TimeOfDay.Ticks.ToString()+rnd.Next(1000).ToString()+".pdf";
+			string filePathAndName=ODFileUtils.CombinePaths(attachPath,fileName);
+			PrintStatement(patNums,fromDate,DateTime.MaxValue,true,false,false,false,"",false,PrefB.GetBool("PrintSimpleStatements"),
+				filePathAndName);
+			//Process.Start(filePathAndName);
+			EmailMessage message=new EmailMessage();
+			message.PatNum=PatCur.PatNum;
+			message.ToAddress=PatCur.Email;
+			message.FromAddress=PrefB.GetString("EmailSenderAddress");
+			message.Subject=Lan.g(this,"Statement");
+			EmailAttach attach=new EmailAttach();
+			attach.DisplayedFileName="Statement.pdf";
+			attach.ActualFileName=fileName;
+			message.Attachments.Add(attach);
+			FormEmailMessageEdit FormE=new FormEmailMessageEdit(message);
+			FormE.IsNew=true;
+			FormE.ShowDialog();
+			//if(FormE.DialogResult==DialogResult.OK) {
+			//	RefreshCurrentModule();
+			//}
 			ModuleSelected(PatCur.PatNum);
 		}
 
@@ -3564,7 +3613,7 @@ namespace OpenDental {
 			}
 			//FillMain(FormSO.FromDate,FormSO.ToDate,FormSO.IncludeClaims,FormSO.SubtotalsOnly);
 			PrintStatement(FormSO.PatNums,FormSO.FromDate,FormSO.ToDate,FormSO.IncludeClaims
-				,FormSO.SubtotalsOnly,FormSO.HidePayment,FormSO.NextAppt,FormSO.Note,FormSO.IsBill,FormSO.SimpleStatement);
+				,FormSO.SubtotalsOnly,FormSO.HidePayment,FormSO.NextAppt,FormSO.Note,FormSO.IsBill,FormSO.SimpleStatement,"");
 			ModuleSelected(PatCur.PatNum);
 		}
 
@@ -3686,8 +3735,10 @@ namespace OpenDental {
 			//tbAccount.LayoutTables();
 		}
 
-		/// <summary>Prints a single statement.</summary>
-		private void PrintStatement(int[] famPatNums,DateTime fromDate,DateTime toDate,bool includeClaims, bool subtotalsOnly,bool hidePayment,bool nextAppt,string note, bool isBill, bool simpleStatement){
+		/// <summary>Prints a single statement.  Or, if pdfFullFileName is specified (including full path), then it saves as pdf to that file.</summary>
+		private void PrintStatement(int[] famPatNums,DateTime fromDate,DateTime toDate,bool includeClaims, bool subtotalsOnly,
+			bool hidePayment,bool nextAppt,string note, bool isBill, bool simpleStatement,string pdfFullFileName)
+		{
 			FormRpStatement FormST=new FormRpStatement();
 			int[][] patNums=new int[1][];
 			patNums[0]=new int[famPatNums.Length];
@@ -3696,12 +3747,13 @@ namespace OpenDental {
 			}
 			PrintingStatement = true; 
 			FormST.PrintStatements(patNums,fromDate,toDate,includeClaims,subtotalsOnly,hidePayment,nextAppt,
-				new string[] {note}, isBill, simpleStatement);
-			#if DEBUG
-				FormST.ShowDialog();
-			#endif
+				new string[] {note}, isBill, simpleStatement,pdfFullFileName);
+			if(pdfFullFileName==""){
+				#if DEBUG
+					FormST.ShowDialog();
+				#endif
+			}
 			PrintingStatement = false; 
-
 		}
 
 		private void butComm_Click(object sender, System.EventArgs e) {
@@ -4321,6 +4373,8 @@ namespace OpenDental {
 		}
 
 		
+
+		
 		
 
 		
@@ -4379,8 +4433,8 @@ namespace OpenDental {
 
 	}//end class
 
-	///<summary>A single line of data in ContrAccount.  This will soon be replaced by a DataSetMain.</summary>
-	public struct AcctLine{
+	///<summary>A single line of data in ContrAccount.</summary>
+	public class AcctLine{
 		///<summary></summary>
 		public AcctModType Type;
 		//public bool IsProc;
@@ -4410,8 +4464,56 @@ namespace OpenDental {
 		public string Paid;
 		///<summary></summary>
 		public string Balance;
-		///<summary>only used for statements</summary>
-		public string StateType;
+		//<summary>only used for statements</summary>
+		//public string StateType;
+
+		///<summary>Set all fields to "".  Nulls mess up the printing framework.</summary>
+		public AcctLine(){
+			Date="";
+			Provider="";
+			Code="";
+			Tooth="";
+			Description="";
+			Fee="";
+			InsEst="";
+			InsPay="";
+			Patient="";
+			Adj="";
+			Paid="";
+			Balance="";
+			//StateType="";
+		}
+	}
+
+	///<summary>A set of data representing a statement for one family.  Could also be represented by a Dataset at a lower level in the program.  One table would have general fields for the statement.  One table would have a row for each patient in the family with data about that patient, like name, balance, appt.  The remaining tables would be named similar to this: "pat234", where 234 would be the patNum.  Those tables would hold the data for the actual grids for each patient.</summary>
+	public class FamilyStatementData{
+		///<summary>PatNum of the guarantor.</summary>
+		public int GuarNum;
+		public List<PatStatementData> PatDataList;
+		public List<PatStatementAbout> PatAboutList;
+
+		public FamilyStatementData(){
+			PatDataList=new List<PatStatementData>();
+			PatAboutList=new List<PatStatementAbout>();
+		}
+	}
+
+	///<summary>Used in FamilyStatementData.  Essentially, a collection of named tables.  But strongly typed.</summary>
+	public class PatStatementData{
+		public int PatNum;
+		public List<AcctLine> PatData;
+
+		public PatStatementData(){
+			PatData=new List<AcctLine>();
+		}
+	}
+
+	///<summary>Used in FamilyStatementData.  Data about one patient in the family which would not be part of the grid for that patient.</summary>
+	public class PatStatementAbout{
+		public int PatNum;
+		public string PatName;
+		public double Balance;
+		public string ApptDescript;
 	}
 
 	///<summary>Account line type used when displaying lines in the Account module.</summary>

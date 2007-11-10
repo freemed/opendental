@@ -15,6 +15,7 @@ using OpenDentBusiness;
 namespace OpenDental {
 	///<summary>Used to add functionality to the MigraDoc framework.  Specifically, it helps with absolute positioning.</summary>
 	class MigraDocHelper {
+		///<Summary>Creates a container frame in a section.  This allows other objects to be placed absolutely within a given area by adding more textframes within this one.  This frame is full width and is automatically placed after previous elements.</Summary>
 		public static TextFrame CreateContainer(Section section){
 			TextFrame framebig=section.AddTextFrame();
 			framebig.RelativeVertical=RelativeVertical.Line;
@@ -36,6 +37,20 @@ namespace OpenDental {
 			return framebig;
 		}
 
+		///<summary>Creates a somewhat smaller container at an absolute position on the page</summary>
+		public static TextFrame CreateContainer(Section section,float xPos,float yPos,float width,float height) {
+			TextFrame framebig=section.AddTextFrame();
+			framebig.RelativeVertical=RelativeVertical.Page;
+			framebig.RelativeHorizontal=RelativeHorizontal.Page;
+			framebig.MarginLeft=Unit.Zero;
+			framebig.MarginTop=Unit.Zero;
+			framebig.Top=TopPosition.Parse((yPos/100).ToString()+" in");
+			framebig.Left=LeftPosition.Parse((xPos/100).ToString()+" in");
+			framebig.Width=Unit.FromInch(width/100);
+			framebig.Height=Unit.FromInch(height/100);
+			return framebig;
+		}
+
 		///<summary>In 100ths of an inch</summary>
 		public static int GetDocWidth(){
 			if(CultureInfo.CurrentCulture.Name=="en-US") {
@@ -49,9 +64,17 @@ namespace OpenDental {
 
 		///<summary></summary>
 		public static void DrawString(TextFrame frameContainer,string text,MigraDoc.DocumentObjectModel.Font font,RectangleF rectF){
+			DrawString(frameContainer,text,font,rectF,ParagraphAlignment.Left);
+		}
+
+		///<summary></summary>
+		public static void DrawString(TextFrame frameContainer,string text,MigraDoc.DocumentObjectModel.Font font,RectangleF rectF,
+			ParagraphAlignment alignment) 
+		{
 			TextFrame frame=new TextFrame();
 			Paragraph par=frame.AddParagraph();
 			par.Format.Font=font.Clone();
+			par.Format.Alignment=alignment;
 			par.AddText(text);
 			frame.RelativeVertical=RelativeVertical.Page;
 			frame.RelativeHorizontal=RelativeHorizontal.Page;
@@ -59,8 +82,8 @@ namespace OpenDental {
 			frame.MarginTop=Unit.FromInch(rectF.Top/100);
 			frame.Top=TopPosition.Parse("0 in");
 			frame.Left=LeftPosition.Parse("0 in");
-			frame.Width=frameContainer.Width;
-			Unit bottom=Unit.FromInch(rectF.Bottom/100);
+			frame.Width=Unit.FromInch(rectF.Right/100f);//    frameContainer.Width;
+			Unit bottom=Unit.FromInch(rectF.Bottom/100f);
 			if(frameContainer.Height<bottom) {
 				frameContainer.Height=bottom;
 			}
@@ -126,6 +149,13 @@ namespace OpenDental {
 			frameContainer.Elements.Add(frame);
 		}
 
+		public static MigraDoc.DocumentObjectModel.Font CreateFont(float fsize) {
+			MigraDoc.DocumentObjectModel.Font font=new MigraDoc.DocumentObjectModel.Font();
+			font.Name="Arial";
+			font.Size=Unit.FromPoint(fsize);
+			return font;
+		}
+
 		public static MigraDoc.DocumentObjectModel.Font CreateFont(float fsize,bool isBold){
 			MigraDoc.DocumentObjectModel.Font font=new MigraDoc.DocumentObjectModel.Font();
 			//if(fontFamily==FontFamily.GenericSansSerif){
@@ -140,10 +170,7 @@ namespace OpenDental {
 		}
 
 		public static MigraDoc.DocumentObjectModel.Font CreateFont(float fsize,bool isBold,System.Drawing.Color color) {
-			byte a=color.A;
-			byte r=color.R;
-			byte g=color.G;
-			byte b=color.B;
+			MigraDoc.DocumentObjectModel.Color colorx=ConvertColor(color);
 			MigraDoc.DocumentObjectModel.Font font=new MigraDoc.DocumentObjectModel.Font();
 			//if(fontFamily.==FontFamily.GenericSansSerif) {
 			font.Name="Arial";
@@ -153,11 +180,11 @@ namespace OpenDental {
 			//}
 			font.Size=Unit.FromPoint(fsize);
 			font.Bold=isBold;
-			font.Color=new MigraDoc.DocumentObjectModel.Color(a,r,g,b);
+			font.Color=colorx;
 			return font;
 		}
 
-		public static new MigraDoc.DocumentObjectModel.Color ConvertColor(System.Drawing.Color color){
+		public static MigraDoc.DocumentObjectModel.Color ConvertColor(System.Drawing.Color color){
 			byte a=color.A;
 			byte r=color.R;
 			byte g=color.G;
@@ -166,11 +193,7 @@ namespace OpenDental {
 		}
 
 		public static void FillRectangle(TextFrame frameContainer,System.Drawing.Color color,float xPos,float yPos,float width,float height) {
-			byte a=color.A;
-			byte r=color.R;
-			byte g=color.G;
-			byte b=color.B;
-			MigraDoc.DocumentObjectModel.Color colorx=new MigraDoc.DocumentObjectModel.Color(a,r,g,b);
+			MigraDoc.DocumentObjectModel.Color colorx=ConvertColor(color);
 			TextFrame frameRect=new TextFrame();
 			frameRect.FillFormat.Visible=true;
 			frameRect.FillFormat.Color=colorx;
@@ -196,6 +219,103 @@ namespace OpenDental {
 			frameContainer.Elements.Add(frame);
 		}
 
+		public static void DrawRectangle(TextFrame frameContainer,System.Drawing.Color color,float xPos,float yPos,float width,float height) {
+			MigraDoc.DocumentObjectModel.Color colorx=ConvertColor(color);
+			TextFrame frameRect=new TextFrame();
+			frameRect.LineFormat.Color=colorx;
+			frameRect.Height=Unit.FromInch(height/100);
+			frameRect.Width=Unit.FromInch(width/100);
+			TextFrame frame=new TextFrame();
+			frame.Elements.Add(frameRect);
+			frame.RelativeVertical=RelativeVertical.Page;
+			frame.RelativeHorizontal=RelativeHorizontal.Page;
+			frame.MarginLeft=Unit.FromInch(xPos/100);
+			frame.MarginTop=Unit.FromInch(yPos/100);
+			frame.Top=TopPosition.Parse("0 in");
+			frame.Left=LeftPosition.Parse("0 in");
+			frame.Width=frameContainer.Width;
+			Unit bottom=Unit.FromInch((yPos+height)/100);
+			if(frameContainer.Height<bottom) {
+				frameContainer.Height=bottom;
+			}
+			frame.Height=frameContainer.Height;
+			frameContainer.Elements.Add(frame);
+		}
+
+		///<summary>Only supports horizontal and vertical lines.  Assumes single width, no dashes.</summary>
+		public static void DrawLine(TextFrame frameContainer,System.Drawing.Color color,float x1,float y1,float x2,float y2) {
+			MigraDoc.DocumentObjectModel.Color colorx=ConvertColor(color);
+			TextFrame frameRect=new TextFrame();
+			TextFrame frame=new TextFrame();//nearly as big as frameContainer.  Its margins will position the line.
+			frameRect.LineFormat.Color=colorx;
+			if(x1==x2){//vertical
+				frameRect.Width=Unit.FromPoint(.01);
+				frame.MarginLeft=Unit.FromInch(x1/100);
+				if(y2>y1){//draw down
+					frameRect.Height=Unit.FromInch((y2-y1)/100);
+					frame.MarginTop=Unit.FromInch(y1/100);
+				}
+				else{//draw up
+					frameRect.Height=Unit.FromInch((y1-y2)/100);
+					frame.MarginTop=Unit.FromInch(y2/100);
+				}
+			}
+			else if(y1==y2){//horizontal
+				frameRect.Height=Unit.FromPoint(.01);
+				frame.MarginTop=Unit.FromInch(y1/100);
+				if(x2>x1) {//right
+					frameRect.Width=Unit.FromInch((x2-x1)/100);
+					frame.MarginLeft=Unit.FromInch(x1/100);
+				}
+				else {//draw left
+					frameRect.Width=Unit.FromInch((x1-x2)/100);
+					frame.MarginLeft=Unit.FromInch(x2/100);
+				}
+			}
+			else{
+				return;//diagonal lines not supported.
+			}
+			frame.Elements.Add(frameRect);
+			frame.RelativeVertical=RelativeVertical.Page;
+			frame.RelativeHorizontal=RelativeHorizontal.Page;
+			frame.Top=TopPosition.Parse("0 in");
+			frame.Left=LeftPosition.Parse("0 in");
+			frame.Width=frameContainer.Width;
+			Unit bottom=Unit.Zero;
+			if(y1>y2){
+				bottom=Unit.FromInch(y1/100);
+			}
+			else{
+				bottom=Unit.FromInch(y2/100);
+			}
+			if(frameContainer.Height<bottom) {
+				frameContainer.Height=bottom;
+			}
+			frame.Height=frameContainer.Height;
+			frameContainer.Elements.Add(frame);
+		}
+
+		///<summary>Draws a small simple table at a fixed location within a frame container.  Not intended for tables with variable number of rows.</summary>
+		public static Table DrawTable(TextFrame frameContainer,float xPos,float yPos,float height) {
+			Table table=new Table();
+			TextFrame frame=new TextFrame();
+			frame.Elements.Add(table);
+			frame.RelativeVertical=RelativeVertical.Page;
+			frame.RelativeHorizontal=RelativeHorizontal.Page;
+			frame.MarginLeft=Unit.FromInch(xPos/100);
+			frame.MarginTop=Unit.FromInch(yPos/100);
+			frame.Top=TopPosition.Parse("0 in");
+			frame.Left=LeftPosition.Parse("0 in");
+			frame.Width=frameContainer.Width;
+			Unit bottom=Unit.FromInch((yPos+height)/100);
+			if(frameContainer.Height<bottom) {
+				frameContainer.Height=bottom;
+			}
+			frame.Height=frameContainer.Height;
+			frameContainer.Elements.Add(frame);
+			return table;
+		}
+
 		///<summary>Vertical spacer.</summary>
 		public static void InsertSpacer(Section section,int space){
 			TextFrame frame=section.AddTextFrame();
@@ -204,7 +324,7 @@ namespace OpenDental {
 
 		public static void DrawGrid(Section section,ODGrid grid){
 			//first, calculate width of dummy column that will push the grid over just enough to center it on the page.
-			int pageW=0;
+			double pageW=0;
 			if(CultureInfo.CurrentCulture.Name=="en-US") {
 				pageW=850;
 			}
@@ -213,7 +333,9 @@ namespace OpenDental {
 				pageW=830;
 			}
 			//in 100ths/inch
-			double dummyColW=((double)pageW-(double)grid.WidthAllColumns/.96)/2-section.Document.DefaultPageSetup.LeftMargin.Inch*100;
+			double widthAllColumns=(double)grid.WidthAllColumns/.96;
+			double lmargin=section.Document.DefaultPageSetup.LeftMargin.Inch*100;
+			double dummyColW=(pageW-widthAllColumns)/2-lmargin;
 			Table table=new Table();
 			Column col;
 			col=table.AddColumn(Unit.FromInch(dummyColW/100));
