@@ -1,11 +1,14 @@
 using System;
+using System.Collections;
 using System.Data;
-using System.Collections.Generic;
-using System.Text;
+using System.Windows.Forms;
+using OpenDentBusiness;
 
-namespace OpenDentBusiness {
-	internal class EmailAttachB{
-		internal static void Insert(EmailAttach attach){
+namespace OpenDental{
+	///<summary></summary>
+	public class EmailAttaches{
+
+		public static void Insert(EmailAttach attach) {
 			if(PrefB.RandomKeys) {
 				attach.EmailAttachNum=MiscDataB.GetKey("emailattach","EmailAttachNum");
 			}
@@ -18,20 +21,25 @@ namespace OpenDentBusiness {
 				command+="'"+POut.PInt(attach.EmailAttachNum)+"', ";
 			}
 			command+=
-				 "'"+POut.PInt   (attach.EmailMessageNum)+"', "
+				 "'"+POut.PInt(attach.EmailMessageNum)+"', "
 				+"'"+POut.PString(attach.DisplayedFileName)+"', "
 				+"'"+POut.PString(attach.ActualFileName)+"')";
-			//MessageBox.Show(cmd.CommandText);
-			DataConnection dcon=new DataConnection();
-			dcon.NonQ(command);
+			General.NonQ(command);
 		}
-		
-	
-
 
 
 	}
 
+	
 
 
 }
+
+
+
+
+
+
+
+
+

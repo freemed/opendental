@@ -118,18 +118,6 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <assembly alias="System.Drawing" name="System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
-  <data name="butSend.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
-    <value>
-        R0lGODlhFgAWAPQAAGkSEpFjY1oVFdTBwWIODvXw8FUICN/R0WUkJL2ionwbG5AlJaeCgurh4bA1NXA0
-        NHtERIMfH1wLC5xzc3YYGKMvL28VFaoyMokiIsiysk8FBbc5Of///wAAAAAAAAAAACH5BAEAABwALAAA
-        AAAWABYAAAV8ICeO5FCQaIpCjOqSjYG89EQRCe0K1TLrqARhs5EMgKTHgoiBIEUHA3HjMByRAcV0Ewkg
-        C4LL1qFpAIXaKcHi1T00gK3GIDi9DhpBfKoJaFovAQgZe0QaHAECNAMHBRpyIlc6j3xPIpSGlhyYG4eW
-        nJ5PoJqjnwCnAKEoIQA7
-</value>
-  </data>
-  <metadata name="contextMenuAttachments.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>17, 17</value>
-  </metadata>
   <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         AAABAAMAEBAQAAAAAAAoAQAANgAAACAgEAAAAAAA6AIAAF4BAAAQEAAAAAAAAGgFAABGBAAAKAAAABAA

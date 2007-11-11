@@ -97,9 +97,6 @@ namespace OpenDental{
 			this.label4 = new System.Windows.Forms.Label();
 			this.listTemplates = new System.Windows.Forms.ListBox();
 			this.panelTemplates = new System.Windows.Forms.Panel();
-			this.butInsert = new OpenDental.UI.Button();
-			this.butDeleteTemplate = new OpenDental.UI.Button();
-			this.butAdd = new OpenDental.UI.Button();
 			this.listAttachments = new System.Windows.Forms.ListBox();
 			this.contextMenuAttachments = new System.Windows.Forms.ContextMenu();
 			this.menuItemOpen = new System.Windows.Forms.MenuItem();
@@ -108,6 +105,9 @@ namespace OpenDental{
 			this.butAttach = new OpenDental.UI.Button();
 			this.butDelete = new OpenDental.UI.Button();
 			this.butSave = new OpenDental.UI.Button();
+			this.butInsert = new OpenDental.UI.Button();
+			this.butDeleteTemplate = new OpenDental.UI.Button();
+			this.butAdd = new OpenDental.UI.Button();
 			this.textBodyText = new OpenDental.ODtextBox();
 			this.butSend = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
@@ -209,6 +209,88 @@ namespace OpenDental{
 			this.panelTemplates.Size = new System.Drawing.Size(180,370);
 			this.panelTemplates.TabIndex = 24;
 			// 
+			// listAttachments
+			// 
+			this.listAttachments.Location = new System.Drawing.Point(612,26);
+			this.listAttachments.Name = "listAttachments";
+			this.listAttachments.Size = new System.Drawing.Size(315,56);
+			this.listAttachments.TabIndex = 28;
+			this.listAttachments.DoubleClick += new System.EventHandler(this.listAttachments_DoubleClick);
+			this.listAttachments.MouseDown += new System.Windows.Forms.MouseEventHandler(this.listAttachments_MouseDown);
+			// 
+			// contextMenuAttachments
+			// 
+			this.contextMenuAttachments.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
+            this.menuItemOpen,
+            this.menuItemRename,
+            this.menuItemRemove});
+			this.contextMenuAttachments.Popup += new System.EventHandler(this.contextMenuAttachments_Popup);
+			// 
+			// menuItemOpen
+			// 
+			this.menuItemOpen.Index = 0;
+			this.menuItemOpen.Text = "Open";
+			this.menuItemOpen.Click += new System.EventHandler(this.menuItemOpen_Click);
+			// 
+			// menuItemRename
+			// 
+			this.menuItemRename.Index = 1;
+			this.menuItemRename.Text = "Rename";
+			this.menuItemRename.Click += new System.EventHandler(this.menuItemRename_Click);
+			// 
+			// menuItemRemove
+			// 
+			this.menuItemRemove.Index = 2;
+			this.menuItemRemove.Text = "Remove";
+			this.menuItemRemove.Click += new System.EventHandler(this.menuItemRemove_Click);
+			// 
+			// butAttach
+			// 
+			this.butAttach.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butAttach.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.butAttach.Autosize = true;
+			this.butAttach.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butAttach.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butAttach.CornerRadius = 4F;
+			this.butAttach.Location = new System.Drawing.Point(612,-271);
+			this.butAttach.Name = "butAttach";
+			this.butAttach.Size = new System.Drawing.Size(75,22);
+			this.butAttach.TabIndex = 27;
+			this.butAttach.Text = "Attach...";
+			this.butAttach.Click += new System.EventHandler(this.butAttach_Click);
+			// 
+			// butDelete
+			// 
+			this.butDelete.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butDelete.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.butDelete.Autosize = true;
+			this.butDelete.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butDelete.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butDelete.CornerRadius = 4F;
+			this.butDelete.Image = global::OpenDental.Properties.Resources.deleteX;
+			this.butDelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butDelete.Location = new System.Drawing.Point(8,355);
+			this.butDelete.Name = "butDelete";
+			this.butDelete.Size = new System.Drawing.Size(75,26);
+			this.butDelete.TabIndex = 26;
+			this.butDelete.Text = "Delete";
+			this.butDelete.Click += new System.EventHandler(this.butDelete_Click);
+			// 
+			// butSave
+			// 
+			this.butSave.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butSave.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.butSave.Autosize = true;
+			this.butSave.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butSave.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butSave.CornerRadius = 4F;
+			this.butSave.Location = new System.Drawing.Point(278,356);
+			this.butSave.Name = "butSave";
+			this.butSave.Size = new System.Drawing.Size(75,25);
+			this.butSave.TabIndex = 25;
+			this.butSave.Text = "Save";
+			this.butSave.Click += new System.EventHandler(this.butSave_Click);
+			// 
 			// butInsert
 			// 
 			this.butInsert.AdjustImageLocation = new System.Drawing.Point(0,0);
@@ -258,88 +340,6 @@ namespace OpenDental{
 			this.butAdd.Text = "&Add";
 			this.butAdd.Click += new System.EventHandler(this.butAdd_Click);
 			// 
-			// listAttachments
-			// 
-			this.listAttachments.Location = new System.Drawing.Point(612,26);
-			this.listAttachments.Name = "listAttachments";
-			this.listAttachments.Size = new System.Drawing.Size(315,56);
-			this.listAttachments.TabIndex = 28;
-			this.listAttachments.DoubleClick += new System.EventHandler(this.listAttachments_DoubleClick);
-			this.listAttachments.MouseDown += new System.Windows.Forms.MouseEventHandler(this.listAttachments_MouseDown);
-			// 
-			// contextMenuAttachments
-			// 
-			this.contextMenuAttachments.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
-            this.menuItemOpen,
-            this.menuItemRename,
-            this.menuItemRemove});
-			this.contextMenuAttachments.Popup += new System.EventHandler(this.contextMenuAttachments_Popup);
-			// 
-			// menuItemOpen
-			// 
-			this.menuItemOpen.Index = 0;
-			this.menuItemOpen.Text = "Open";
-			this.menuItemOpen.Click += new System.EventHandler(this.menuItemOpen_Click);
-			// 
-			// menuItemRename
-			// 
-			this.menuItemRename.Index = 1;
-			this.menuItemRename.Text = "Rename";
-			this.menuItemRename.Click += new System.EventHandler(this.menuItemRename_Click);
-			// 
-			// menuItemRemove
-			// 
-			this.menuItemRemove.Index = 2;
-			this.menuItemRemove.Text = "Remove";
-			this.menuItemRemove.Click += new System.EventHandler(this.menuItemRemove_Click);
-			// 
-			// butAttach
-			// 
-			this.butAttach.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butAttach.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.butAttach.Autosize = true;
-			this.butAttach.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butAttach.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butAttach.CornerRadius = 4F;
-			this.butAttach.Location = new System.Drawing.Point(612,2);
-			this.butAttach.Name = "butAttach";
-			this.butAttach.Size = new System.Drawing.Size(75,22);
-			this.butAttach.TabIndex = 27;
-			this.butAttach.Text = "Attach...";
-			this.butAttach.Click += new System.EventHandler(this.butAttach_Click);
-			// 
-			// butDelete
-			// 
-			this.butDelete.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butDelete.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.butDelete.Autosize = true;
-			this.butDelete.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butDelete.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butDelete.CornerRadius = 4F;
-			this.butDelete.Image = global::OpenDental.Properties.Resources.deleteX;
-			this.butDelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butDelete.Location = new System.Drawing.Point(8,628);
-			this.butDelete.Name = "butDelete";
-			this.butDelete.Size = new System.Drawing.Size(75,26);
-			this.butDelete.TabIndex = 26;
-			this.butDelete.Text = "Delete";
-			this.butDelete.Click += new System.EventHandler(this.butDelete_Click);
-			// 
-			// butSave
-			// 
-			this.butSave.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butSave.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.butSave.Autosize = true;
-			this.butSave.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butSave.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butSave.CornerRadius = 4F;
-			this.butSave.Location = new System.Drawing.Point(278,629);
-			this.butSave.Name = "butSave";
-			this.butSave.Size = new System.Drawing.Size(75,25);
-			this.butSave.TabIndex = 25;
-			this.butSave.Text = "Save";
-			this.butSave.Click += new System.EventHandler(this.butSave_Click);
-			// 
 			// textBodyText
 			// 
 			this.textBodyText.AcceptsReturn = true;
@@ -360,7 +360,7 @@ namespace OpenDental{
 			this.butSend.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butSend.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butSend.CornerRadius = 4F;
-			this.butSend.Location = new System.Drawing.Point(764,629);
+			this.butSend.Location = new System.Drawing.Point(764,356);
 			this.butSend.Name = "butSend";
 			this.butSend.Size = new System.Drawing.Size(75,25);
 			this.butSend.TabIndex = 2;
@@ -376,7 +376,7 @@ namespace OpenDental{
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
 			this.butCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.butCancel.Location = new System.Drawing.Point(852,629);
+			this.butCancel.Location = new System.Drawing.Point(852,356);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75,25);
 			this.butCancel.TabIndex = 3;
@@ -386,7 +386,7 @@ namespace OpenDental{
 			// FormEmailMessageEdit
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
-			this.ClientSize = new System.Drawing.Size(941,670);
+			this.ClientSize = new System.Drawing.Size(941,397);
 			this.Controls.Add(this.listAttachments);
 			this.Controls.Add(this.butAttach);
 			this.Controls.Add(this.butDelete);
@@ -518,10 +518,14 @@ namespace OpenDental{
 			messageChanged=true;
 		}
 
+		///<summary>This is a stupid place for this, but keeping it around because it's used from many places.</summary>
 		public static string GetAttachPath(){
 			string attachPath;
 			if(PrefB.UsingAtoZfolder) {
-				attachPath=ODFileUtils.CombinePaths(FormPath.GetPreferredImagePath(),@"EmailAttachments");
+				attachPath=ODFileUtils.CombinePaths(FormPath.GetPreferredImagePath(),"EmailAttachments");
+				if(!Directory.Exists(attachPath)) {
+					Directory.CreateDirectory(attachPath);
+				}
 			}else{
 				//For users which have the A to Z folders disabled, there is no defined image path, so we
 				//have to use another path. Since we have chosen the temporary directory, this means that
@@ -553,9 +557,6 @@ namespace OpenDental{
 			string newName;
 			EmailAttach attach;
 			string attachPath=GetAttachPath();
-			if(!Directory.Exists(attachPath)){ 
-				Directory.CreateDirectory(attachPath);
-			}
 			try{
 				for(int i=0;i<dlg.FileNames.Length;i++){
 					//copy the file
@@ -612,34 +613,6 @@ namespace OpenDental{
 			MessageCur.Attachments.RemoveAt(listAttachments.SelectedIndex);
 			FillAttachments();
 		}
-
-		/*
-		private void butRemove_Click(object sender,EventArgs e) {
-			if(listAttachments.SelectedIndex==-1){
-				MsgBox.Show(this,"Please select an item first.");
-				return;
-			}
-
-			FillAttachments();
-		}
-
-		private void butRename_Click(object sender,EventArgs e) {
-			if(listAttachments.SelectedIndex==-1) {
-				MsgBox.Show(this,"Please select an item first.");
-				return;
-			}
-			InputBox input=new InputBox(Lan.g(this,"Filename"));
-			input.textResult.Text=
-			FillAttachments();
-		}
-
-		private void butOpen_Click(object sender,EventArgs e) {
-			if(listAttachments.SelectedIndex==-1) {
-				MsgBox.Show(this,"Please select an item first.");
-				return;
-			}
-			OpenFile();
-		}*/
 
 		private void listAttachments_DoubleClick(object sender,EventArgs e) {
 			if(listAttachments.SelectedIndex==-1) {

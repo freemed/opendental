@@ -295,14 +295,6 @@ namespace OpenDentBusiness{
 		}
 	}
 
-	public class DtoDocumentInsert:DtoCommandBase {
-		public Document Doc;
-		public string PatLF;
-		public int PatNum;
-	}
-
-	public class DtoDocumentUpdate:DtoCommandBase {
-		public Document Doc;
-	}
+	
 
 }

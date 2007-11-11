@@ -1661,9 +1661,6 @@ namespace OpenDental{
 		private void OnEmail_Click() {
 			PrepImageForPrinting();
 			string attachPath=FormEmailMessageEdit.GetAttachPath();
-			if(!Directory.Exists(attachPath)) {
-				Directory.CreateDirectory(attachPath);
-			}
 			Random rnd=new Random();
 			string fileName=DateTime.Now.ToString("yyyyMMdd")+"_"+DateTime.Now.TimeOfDay.Ticks.ToString()+rnd.Next(1000).ToString()+".pdf";
 			string filePathAndName=ODFileUtils.CombinePaths(attachPath,fileName);

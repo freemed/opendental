@@ -4,30 +4,15 @@ using System.Collections.Generic;
 using System.Data;
 using System.IO;
 using System.Windows.Forms;
-using OpenDentBusiness;
 
-namespace OpenDental{
+namespace OpenDentBusiness{
 	///<summary></summary>
 	public class DocAttaches{
 
 		///<summary>For one patient. This should be followed by Documents.Refresh</summary>
 		public static List<DocAttach> Refresh(int patNum){
 			string command="SELECT * FROM docattach WHERE PatNum = "+POut.PInt(patNum);
-			DataSet ds=null;
-			try {
-				if(RemotingClient.OpenDentBusinessIsLocal) {
-					ds=GeneralB.GetTable(command);
-				}
-				else {
-					DtoGeneralGetTable dto=new DtoGeneralGetTable();
-					dto.Command=command;
-					ds=RemotingClient.ProcessQuery(dto);
-				}
-			}
-			catch(Exception e) {
-				MessageBox.Show(e.Message);
-			}
-			DataTable table=ds.Tables[0];
+			DataTable table=General2.GetTable(command);
 			List<DocAttach> list=new List<DocAttach>();//[table.Rows.Count];
 			DocAttach attach;
 			for (int i=0;i<table.Rows.Count;i++){
@@ -38,6 +23,30 @@ namespace OpenDental{
 				list.Add(attach);
 			}
 			return list;
+		}
+
+		///<summary></summary>
+		public static void Insert(DocAttach attach) {
+			if(PrefB.RandomKeys) {
+				attach.DocAttachNum=MiscDataB.GetKey("docattach","DocAttachNum");
+			}
+			string command="INSERT INTO docattach (";
+			if(PrefB.RandomKeys) {
+				command+="DocAttachNum,";
+			}
+			command+="PatNum, DocNum) VALUES(";
+			if(PrefB.RandomKeys) {
+				command+="'"+POut.PInt(attach.DocAttachNum)+"', ";
+			}
+			command+=
+				 "'"+POut.PInt(attach.PatNum)+"', "
+				+"'"+POut.PInt(attach.DocNum)+"')";
+			if(PrefB.RandomKeys) {
+				General2.NonQ(command);
+			}
+			else {
+				attach.DocAttachNum=General2.NonQ(command,true);
+			}
 		}
 
 		/*

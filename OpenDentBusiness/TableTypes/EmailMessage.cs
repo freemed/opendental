@@ -30,27 +30,15 @@ namespace OpenDentBusiness {
 		}
 
 		public EmailMessage Copy() {
-			EmailMessage e=new EmailMessage();
-			e.EmailMessageNum=EmailMessageNum;
-			e.PatNum=PatNum;
-			e.ToAddress=ToAddress;
-			e.FromAddress=FromAddress;
-			e.Subject=Subject;
-			e.BodyText=BodyText;
-			e.MsgDateTime=MsgDateTime;
-			e.SentOrReceived=SentOrReceived;
-			e.Attachments=new List<EmailAttach>(Attachments);
+			EmailMessage e=(EmailMessage)this.MemberwiseClone();
+			e.Attachments=new List<EmailAttach>();
+			for(int i=0;i<Attachments.Count;i++) {
+				e.Attachments.Add(Attachments[i].Copy());
+			}
 			return e;
 		}
 	}
 
-	public class DtoEmailMessageUpdate:DtoCommandBase {
-		public EmailMessage Message;
-	}
-
-	public class DtoEmailMessageInsert:DtoCommandBase {
-		public EmailMessage Message;
-	}
 
 
 }

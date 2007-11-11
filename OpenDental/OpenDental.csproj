@@ -170,6 +170,7 @@
     <Compile Include="Data Interface\CanadianExtracts.cs" />
     <Compile Include="Data Interface\ChartModule.cs" />
     <Compile Include="Data Interface\CanadianNetworks.cs" />
+    <Compile Include="Data Interface\EmailAttaches.cs" />
     <Compile Include="Data Interface\Popups.cs" />
     <Compile Include="Data Interface\DisplayFields.cs" />
     <Compile Include="Data Interface\ProcCodeNotes.cs" />
@@ -190,7 +191,6 @@
     <Compile Include="Data Interface\Deposits.cs" />
     <Compile Include="Data Interface\DiseaseDefs.cs" />
     <Compile Include="Data Interface\Diseases.cs" />
-    <Compile Include="Data Interface\DocAttaches.cs" />
     <Compile Include="Data Interface\Dunnings.cs" />
     <Compile Include="Data Interface\ElectIDs.cs" />
     <Compile Include="Data Interface\EmailMessages.cs" />
@@ -306,6 +306,9 @@
     <Compile Include="Eclaims\X12object.cs" />
     <Compile Include="Eclaims\X277U.cs" />
     <Compile Include="Eclaims\X997.cs" />
+    <Compile Include="Forms\FormImageSelect.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Forms\FormCustomerManagement.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -1268,6 +1271,10 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Eclaims\FormTerminal.resx">
       <DependentUpon>FormTerminal.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormImageSelect.resx">
+      <DependentUpon>FormImageSelect.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormCustomerManagement.resx">

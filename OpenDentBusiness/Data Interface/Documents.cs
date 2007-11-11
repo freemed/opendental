@@ -16,7 +16,7 @@ namespace OpenDentBusiness {
 
 		///<summary></summary>
 		public static Document[] GetAllWithPat(int patNum) {
-			string command="SELECT * FROM document WHERE PatNum='"+POut.PInt(patNum)+"'";
+			string command="SELECT * FROM document WHERE PatNum="+POut.PInt(patNum)+" ORDER BY DateCreated";
 			return RefreshAndFill(command);
 		}
 
@@ -75,33 +75,107 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary>Inserts a new document into db, creates a filename based on Cur.DocNum, and then updates the db with this filename.  Also attaches the document to the current patient.</summary>
-		[Obsolete("This method now throws an exception!")]
 		public static void Insert(Document doc,Patient pat){
-			int insertID=0;
-				if(RemotingClient.OpenDentBusinessIsLocal) {
-					insertID=DocumentB.Insert(doc,pat.LName+pat.FName,pat.PatNum);
+			if(PrefB.RandomKeys) {
+				doc.DocNum=MiscDataB.GetKey("document","DocNum");
+			}
+			string command="INSERT INTO document (";
+			if(PrefB.RandomKeys) {
+				command+="DocNum,";
+			}
+			command+="Description,DateCreated,DocCategory,PatNum,FileName,ImgType,"
+				+"IsFlipped,DegreesRotated,ToothNumbers,Note,SigIsTopaz,Signature,CropX,CropY,CropW,CropH,"
+				+"WindowingMin,WindowingMax,MountItemNum) VALUES(";
+			if(PrefB.RandomKeys) {
+				command+="'"+POut.PInt(doc.DocNum)+"', ";
+			}
+			command+=
+				 "'"+POut.PString(doc.Description)+"', "
+				+POut.PDate(doc.DateCreated)+", "
+				+"'"+POut.PInt(doc.DocCategory)+"', "
+				+"'"+POut.PInt(doc.PatNum)+"', "
+				+"'"+POut.PString(doc.FileName)+"', "//this may simply be the extension at this point, or it may be the full filename.
+				+"'"+POut.PInt((int)doc.ImgType)+"', "
+				+"'"+POut.PBool(doc.IsFlipped)+"', "
+				+"'"+POut.PInt(doc.DegreesRotated)+"', "
+				+"'"+POut.PString(doc.ToothNumbers)+"', "
+				+"'"+POut.PString(doc.Note)+"', "
+				+"'"+POut.PBool(doc.SigIsTopaz)+"', "
+				+"'"+POut.PString(doc.Signature)+"',"
+				+"'"+POut.PInt(doc.CropX)+"',"
+				+"'"+POut.PInt(doc.CropY)+"',"
+				+"'"+POut.PInt(doc.CropW)+"',"
+				+"'"+POut.PInt(doc.CropH)+"',"
+				+"'"+POut.PInt(doc.WindowingMin)+"',"
+				+"'"+POut.PInt(doc.WindowingMax)+"',"
+				+"'"+POut.PInt(doc.MountItemNum)+"')";
+			/*+"'"+POut.PDate  (LastAltered)+"', "//will later be used in backups
+					+"'"+POut.PBool  (IsDeleted)+"')";//ditto*/
+			//MessageBox.Show(cmd.CommandText);
+			if(PrefB.RandomKeys) {
+				General2.NonQ(command);
+			}
+			else {
+				doc.DocNum=General2.NonQ(command,true);
+			}
+			//If the current filename is just an extension, then assign it a unique name.
+			if(doc.FileName==Path.GetExtension(doc.FileName)) {
+				string extension=doc.FileName;
+				doc.FileName="";
+				string s=pat.LName+pat.FName;
+				for(int i=0;i<s.Length;i++) {
+					if(Char.IsLetter(s,i)) {
+						doc.FileName+=s.Substring(i,1);
+					}
 				}
-				else {
-					DtoDocumentInsert dto=new DtoDocumentInsert();
-					dto.Doc=doc;
-					dto.PatLF=pat.LName+pat.FName;
-					dto.PatNum=pat.PatNum;
-					insertID=RemotingClient.ProcessCommand(dto);
+				doc.FileName+=doc.DocNum.ToString()+extension;//ensures unique name
+				//there is still a slight chance that someone manually added a file with this name, so quick fix:
+				command="SELECT FileName FROM document WHERE PatNum="+POut.PInt(doc.PatNum);
+				DataTable table=General2.GetTable(command);
+				string[] usedNames=new string[table.Rows.Count];
+				for(int i=0;i<table.Rows.Count;i++) {
+					usedNames[i]=PIn.PString(table.Rows[i][0].ToString());
 				}
-			doc.DocNum=insertID;
+				while(IsFileNameInList(doc.FileName,usedNames)) {
+					doc.FileName="x"+doc.FileName;
+				}
+				/*Document[] docList=GetAllWithPat(doc.PatNum);
+				while(IsFileNameInList(doc.FileName,docList)) {
+					doc.FileName="x"+doc.FileName;
+				}*/
+				Update(doc);
+			}
+			DocAttach docAttach=new DocAttach();
+			docAttach.DocNum=doc.DocNum;
+			docAttach.PatNum=pat.PatNum;
+			DocAttaches.Insert(docAttach);
 		}
 
 		///<summary></summary>
-		[Obsolete("This method now throws an exception!")]
 		public static void Update(Document doc){
-				if(RemotingClient.OpenDentBusinessIsLocal) {
-					DocumentB.Update(doc);
-				}
-				else {
-					DtoDocumentUpdate dto=new DtoDocumentUpdate();
-					dto.Doc=doc;
-					RemotingClient.ProcessCommand(dto);
-				}
+			string command="UPDATE document SET " 
+				+ "Description = '"      +POut.PString(doc.Description)+"'"
+				+ ",DateCreated = "     +POut.PDate(doc.DateCreated)
+				+ ",DocCategory = '"     +POut.PInt(doc.DocCategory)+"'"
+				+ ",PatNum = '"         +POut.PInt(doc.PatNum)+"'"
+				+ ",FileName    = '"     +POut.PString(doc.FileName)+"'"
+				+ ",ImgType    = '"      +POut.PInt((int)doc.ImgType)+"'"
+				+ ",IsFlipped   = '"     +POut.PBool(doc.IsFlipped)+"'"
+				+ ",DegreesRotated   = '"+POut.PInt(doc.DegreesRotated)+"'"
+				+ ",ToothNumbers   = '"  +POut.PString(doc.ToothNumbers)+"'"
+				+ ",Note   = '"          +POut.PString(doc.Note)+"'"
+				+ ",SigIsTopaz    = '"   +POut.PBool(doc.SigIsTopaz)+"'"
+				+ ",Signature   = '"     +POut.PString(doc.Signature)+"'"
+				+ ",CropX       ='"			 +POut.PInt(doc.CropX)+"'"
+				+ ",CropY       ='"			 +POut.PInt(doc.CropY)+"'"
+				+ ",CropW       ='"			 +POut.PInt(doc.CropW)+"'"
+				+ ",CropH       ='"			 +POut.PInt(doc.CropH)+"'"
+				+ ",WindowingMin ='"		 +POut.PInt(doc.WindowingMin)+"'"
+				+ ",WindowingMax ='"		 +POut.PInt(doc.WindowingMax)+"'"
+				+ ",MountItemNum ='"		 +POut.PInt(doc.MountItemNum)+"'"
+				+" WHERE DocNum = '"     +POut.PInt(doc.DocNum)+"'";
+			//MessageBox.Show(cmd.CommandText);
+			General2.NonQ(command);
 		}
 
 		///<summary></summary>
@@ -364,7 +438,7 @@ namespace OpenDentBusiness {
 				row["ImgType"]=PIn.PInt(raw.Rows[i]["ImgType"].ToString());
 				resultSet.Add(row);
 			}
-			//We must soft the results after they are returned from the database, because the database software (i.e. MySQL)
+			//We must sort the results after they are returned from the database, because the database software (i.e. MySQL)
 			//cannot return sorted results from two or more result sets like we have here.
 			resultSet.Sort(delegate(Object o1,Object o2) {
 				DataRow r1=(DataRow)o1;
@@ -398,6 +472,15 @@ namespace OpenDentBusiness {
 				}
 			}
 			return true;
+		}
+
+		///<summary>When first opening the image module, this tests to see whether a given filename is in the database. Also used when naming a new document to ensure unique name.</summary>
+		public static bool IsFileNameInList(string fileName,string[] usedNames) {
+			for(int i=0;i<usedNames.Length;i++) {
+				if(usedNames[i]==fileName)
+					return true;
+			}
+			return false;
 		}
 
 	}	

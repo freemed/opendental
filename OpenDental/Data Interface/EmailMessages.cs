@@ -11,23 +11,8 @@ namespace OpenDental{
 	public class EmailMessages{
 		///<summary>Gets one email message from the database.</summary>
 		public static EmailMessage GetOne(int msgNum){
-			string commands="SELECT * FROM emailmessage WHERE EmailMessageNum = "+POut.PInt(msgNum)
-				+";SELECT * FROM emailattach WHERE EmailMessageNum = "+POut.PInt(msgNum);
-			DataSet ds=null;
-			try {
-				if(RemotingClient.OpenDentBusinessIsLocal) {
-					ds=GeneralB.GetDataSet(commands);
-				}
-				else {
-					DtoGeneralGetDataSet dto=new DtoGeneralGetDataSet();
-					dto.Commands=commands;
-					ds=RemotingClient.ProcessQuery(dto);
-				}
-			}
-			catch(Exception e) {
-				MessageBox.Show(e.Message);
-			}
-			DataTable table=ds.Tables[0];
+			string command="SELECT * FROM emailmessage WHERE EmailMessageNum = "+POut.PInt(msgNum);
+			DataTable table=General.GetTable(command);
 			EmailMessage Cur=new EmailMessage();
 			if(table.Rows.Count==0)
 				return null;
@@ -40,7 +25,8 @@ namespace OpenDental{
 			Cur.BodyText       =PIn.PString(table.Rows[0][5].ToString());
 			Cur.MsgDateTime    =PIn.PDateT (table.Rows[0][6].ToString());
 			Cur.SentOrReceived =(CommSentOrReceived)PIn.PInt(table.Rows[0][7].ToString());
-			table=ds.Tables[1];
+			command="SELECT * FROM emailattach WHERE EmailMessageNum = "+POut.PInt(msgNum);
+			table=General.GetTable(command);
 			Cur.Attachments=new List<EmailAttach>();
 			EmailAttach attach;
 			for(int i=0;i<table.Rows.Count;i++){
@@ -56,67 +42,61 @@ namespace OpenDental{
 
 		///<summary></summary>
 		public static void Update(EmailMessage message){
-			try {
-				if(RemotingClient.OpenDentBusinessIsLocal) {
-					EmailMessageB.Update(message);
-				}
-				else {
-					DtoEmailMessageUpdate dto=new DtoEmailMessageUpdate();
-					dto.Message=message;
-					RemotingClient.ProcessCommand(dto);
-				}
-			}
-			catch(Exception e) {
-				MessageBox.Show(e.Message);
+			string command="UPDATE emailmessage SET "
+				+ "PatNum = '"      +POut.PInt(message.PatNum)+"' "
+				+ ",ToAddress = '"  +POut.PString(message.ToAddress)+"' "
+				+ ",FromAddress = '"+POut.PString(message.FromAddress)+"' "
+				+ ",Subject = '"    +POut.PString(message.Subject)+"' "
+				+ ",BodyText = '"   +POut.PString(message.BodyText)+"' "
+				+ ",MsgDateTime = "+POut.PDateT(message.MsgDateTime)+" "
+				+ ",SentOrReceived = '"+POut.PInt((int)message.SentOrReceived)+"' "
+				+"WHERE EmailMessageNum = "+POut.PInt(message.EmailMessageNum);
+			DataConnection dcon=new DataConnection();
+			dcon.NonQ(command);
+			//now, delete all attachments and recreate.
+			command="DELETE FROM emailattach WHERE EmailMessageNum="+POut.PInt(message.EmailMessageNum);
+			dcon.NonQ(command);
+			for(int i=0;i<message.Attachments.Count;i++) {
+				message.Attachments[i].EmailMessageNum=message.EmailMessageNum;
+				EmailAttaches.Insert(message.Attachments[i]);
 			}
 		}
 
 		///<summary></summary>
 		public static void Insert(EmailMessage message){
-			int insertID=0;
-			try {
-				if(RemotingClient.OpenDentBusinessIsLocal) {
-					insertID=EmailMessageB.Insert(message);
-				}
-				else {
-					DtoEmailMessageInsert dto=new DtoEmailMessageInsert();
-					dto.Message=message;
-					insertID=RemotingClient.ProcessCommand(dto);
-				}
+			if(PrefB.RandomKeys) {
+				message.EmailMessageNum=MiscDataB.GetKey("emailmessage","EmailMessageNum");
 			}
-			catch(Exception e) {
-				MessageBox.Show(e.Message);
+			string command="INSERT INTO emailmessage (";
+			if(PrefB.RandomKeys) {
+				command+="EmailMessageNum,";
 			}
-			message.EmailMessageNum=insertID;
-			/*
-			int insertID=0;
-			try {
-				if(RemotingClient.OpenDentBusinessIsLocal) {
-					if(PrefB.RandomKeys) {
-						GeneralB.NonQ(command);
-					}
-					else {
-						insertID=GeneralB.NonQ(command,true);
-						message.EmailMessageNum=insertID;
-					}
-				}
-				else {
-					DtoGeneralNonQ dto=new DtoGeneralNonQ();
-					dto.Command=command;
-					if(PrefB.RandomKeys) {
-						RemotingClient.ProcessCommand(dto);
-					}
-					else {
-						dto.GetInsertID=true;
-						insertID=RemotingClient.ProcessCommand(dto);
-						message.EmailMessageNum=insertID;
-					}
-				}
+			command+="PatNum,ToAddress,FromAddress,Subject,BodyText,"
+				+"MsgDateTime,SentOrReceived) VALUES(";
+			if(PrefB.RandomKeys) {
+				command+="'"+POut.PInt(message.EmailMessageNum)+"', ";
 			}
-			catch(Exception e) {
-				MessageBox.Show(e.Message);
-				return;
-			}*/
+			command+=
+				 "'"+POut.PInt(message.PatNum)+"', "
+				+"'"+POut.PString(message.ToAddress)+"', "
+				+"'"+POut.PString(message.FromAddress)+"', "
+				+"'"+POut.PString(message.Subject)+"', "
+				+"'"+POut.PString(message.BodyText)+"', "
+				+POut.PDateT(message.MsgDateTime)+", "
+				+"'"+POut.PInt((int)message.SentOrReceived)+"')";
+			DataConnection dcon=new DataConnection();
+			if(PrefB.RandomKeys) {
+				dcon.NonQ(command);
+			}
+			else {
+				dcon.NonQ(command,true);
+				message.EmailMessageNum=dcon.InsertID;
+			}
+			//now, insert all the attaches.
+			for(int i=0;i<message.Attachments.Count;i++) {
+				message.Attachments[i].EmailMessageNum=message.EmailMessageNum;
+				EmailAttaches.Insert(message.Attachments[i]);
+			}
 		}
 
 		///<summary></summary>
@@ -124,21 +104,8 @@ namespace OpenDental{
 			if(message.EmailMessageNum==0){
 				return;//this prevents deletion of all commlog entries of something goes wrong.
 			}
-			string command="DELETE FROM emailmessage WHERE EmailMessageNum="+POut.PInt(message.EmailMessageNum);//+";"
-				//+"DELETE FROM commlog WHERE EmailMessageNum="+POut.PInt(message.EmailMessageNum);
-			try {
-				if(RemotingClient.OpenDentBusinessIsLocal) {
-					GeneralB.NonQ(command);
-				}
-				else {
-					DtoGeneralNonQ dto=new DtoGeneralNonQ();
-					dto.Command=command;
-					RemotingClient.ProcessCommand(dto);
-				}
-			}
-			catch(Exception e) {
-				MessageBox.Show(e.Message);
-			}
+			string command="DELETE FROM emailmessage WHERE EmailMessageNum="+POut.PInt(message.EmailMessageNum);
+			General.NonQ(command);
 		}
 
 		

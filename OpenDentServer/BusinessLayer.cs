@@ -56,15 +56,6 @@ namespace OpenDentServer {
 			else if(type==typeof(DtoDefUpdate)) {
 				return DefB.Update(((DtoDefUpdate)dto).DefCur);
 			}
-			else if(type==typeof(DtoDocumentInsert)) {
-				return DocumentB.Insert(((DtoDocumentInsert)dto).Doc,((DtoDocumentInsert)dto).PatLF,((DtoDocumentInsert)dto).PatNum);
-			}
-			else if(type==typeof(DtoDocumentUpdate)) {
-				return DocumentB.Update(((DtoDocumentUpdate)dto).Doc);
-			}
-			else if(type==typeof(DtoEmailMessageUpdate)) {
-				return EmailMessageB.Update(((DtoEmailMessageUpdate)dto).Message);
-			}
 			else if(type==typeof(DtoGeneralNonQ)) {
 				return GeneralB.NonQ(((DtoGeneralNonQ)dto).Command,((DtoGeneralNonQ)dto).GetInsertID);
 			}

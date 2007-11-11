@@ -1,4 +1,4 @@
-/*using System;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -9,8 +9,10 @@ namespace OpenDentBusiness {
 		public int ClaimAttachNum;
 		///<summary>FK to claim.ClaimNum</summary>
 		public int ClaimNum;
-		///<summary>The actual file is stored in the patient's A-Z folder.  This field stores the name of the file rather than using a FK to the document object, because we need to refer to the unaltered image, as it was actually sent.  So it will become common to include an 'export' function of sorts before attaching.</summary>
-		public string FileName;
+		///<summary>The name of the file that shows on the claim.  For example: tooth2.jpg.</summary>
+		public string DisplayedFileName;
+		///<summary>The actual file is stored in the A-Z folder in EmailAttachments.  (yes, even though it's not actually an email attachment)  The files are named automatically based on Date/time along with a random number.  This ensures that they will be sequential as well as unique.</summary>
+		public string ActualFileName;
 
 		public ClaimAttach Copy(){
 			return (ClaimAttach)this.MemberwiseClone();
@@ -21,4 +23,3 @@ namespace OpenDentBusiness {
 
 
 }
-*/

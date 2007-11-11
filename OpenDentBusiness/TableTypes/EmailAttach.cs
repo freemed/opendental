@@ -14,17 +14,9 @@ namespace OpenDentBusiness {
 		///<summary>The actual file is stored in the A-Z folder in EmailAttachments.  This field stores the name of the file.  The files are named automatically based on Date/time along with a random number.  This ensures that they will be sequential as well as unique.</summary>
 		public string ActualFileName;
 
-		/*public EmailMessage Copy() {
-			EmailMessage e=new EmailMessage();
-			e.EmailMessageNum=EmailMessageNum;
-			e.PatNum=PatNum;
-			e.ToAddress=ToAddress;
-			e.FromAddress=FromAddress;
-			e.Subject=Subject;
-			e.BodyText=BodyText;
-			e.MsgDateTime=MsgDateTime;
-			return e;
-		}*/
+		public EmailAttach Copy() {
+			return (EmailAttach)MemberwiseClone();
+		}
 	}
 
 

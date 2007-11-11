@@ -60,6 +60,7 @@
     <Compile Include="Business\DefB.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Data Interface\DocAttaches.cs" />
     <Compile Include="Data Interface\Documents.cs" />
     <Compile Include="Data Interface\General.cs" />
     <Compile Include="Data Interface\MountDefs.cs" />
@@ -79,10 +80,6 @@
     <Compile Include="Imaging\NoActivePatientException.cs" />
     <Compile Include="Business\PatientB.cs" />
     <Compile Include="Business\CovCatB.cs" />
-    <Compile Include="Business\DocAttachB.cs" />
-    <Compile Include="Business\DocumentB.cs" />
-    <Compile Include="Business\EmailAttachB.cs" />
-    <Compile Include="Business\EmailMessageB.cs" />
     <Compile Include="Business\GeneralB.cs" />
     <Compile Include="Business\InsPlanB.cs" />
     <Compile Include="Business\MiscDataB.cs" />

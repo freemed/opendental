@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Data;
 using System.Text;
 
@@ -81,47 +82,20 @@ namespace OpenDentBusiness{
 		public int ClaimForm;
 		///<summary>Enum:EtransType to define a specific version of an e-claim.  Only used for medical claims right now.</summary>
 		public EtransType EFormat;
+		///<summary>Not a data column.</summary>
+		public List<ClaimAttach> Attachments;
+
+		public Claim(){
+			Attachments=new List<ClaimAttach>();
+		}
 
 		///<summary>Returns a copy of the claim.</summary>
 		public Claim Copy() {
-			Claim c=new Claim();
-			c.ClaimNum=ClaimNum;
-			c.PatNum=PatNum;
-			c.DateService=DateService;
-			c.DateSent=DateSent;
-			c.ClaimStatus=ClaimStatus;
-			c.DateReceived=DateReceived;
-			c.PlanNum=PlanNum;
-			c.ProvTreat=ProvTreat;
-			c.ClaimFee=ClaimFee;
-			c.InsPayEst=InsPayEst;
-			c.InsPayAmt=InsPayAmt;
-			c.DedApplied=DedApplied;
-			c.PreAuthString=PreAuthString;
-			c.IsProsthesis=IsProsthesis;
-			c.PriorDate=PriorDate;
-			c.ReasonUnderPaid=ReasonUnderPaid;
-			c.ClaimNote=ClaimNote;
-			c.ClaimType=ClaimType;
-			c.ProvBill=ProvBill;
-			c.ReferringProv=ReferringProv;
-			c.RefNumString=RefNumString;
-			c.PlaceService=PlaceService;
-			c.AccidentRelated=AccidentRelated;
-			c.AccidentDate=AccidentDate;
-			c.AccidentST=AccidentST;
-			c.EmployRelated=EmployRelated;
-			c.IsOrtho=IsOrtho;
-			c.OrthoRemainM=OrthoRemainM;
-			c.OrthoDate=OrthoDate;
-			c.PatRelat=PatRelat;
-			c.PlanNum2=PlanNum2;
-			c.PatRelat2=PatRelat2;
-			c.WriteOff=WriteOff;
-			c.Radiographs=Radiographs;
-			c.ClinicNum=ClinicNum;
-			c.ClaimForm=ClaimForm;
-			c.EFormat=EFormat;
+			Claim c=(Claim)MemberwiseClone();
+			c.Attachments=new List<ClaimAttach>();
+			for(int i=0;i<Attachments.Count;i++){
+				c.Attachments.Add(Attachments[i].Copy());
+			}
 			return c;
 		}
 	
