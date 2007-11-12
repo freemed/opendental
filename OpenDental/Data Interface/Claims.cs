@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Data;
 using System.Text;
 using System.Windows.Forms;
@@ -8,8 +9,8 @@ using OpenDentBusiness;
 namespace OpenDental{
 	///<summary></summary>
 	public class Claims{
-		///<summary></summary>
-		public static Claim[] List;
+		//<summary></summary>
+		//public static Claim[] List;
 		///<summary></summary>
 		public static Hashtable HList;
 		
@@ -56,37 +57,40 @@ namespace OpenDental{
 		public static Claim GetClaim(int claimNum){
 			string command="SELECT * FROM claim"
 				+" WHERE ClaimNum = "+claimNum.ToString();
-			Claim retClaim=SubmitAndFill(command,true);
+			Claim retClaim=SubmitAndFill(command)[0];
+			command="SELECT * FROM claimattach WHERE ClaimNum = "+POut.PInt(claimNum);
+			DataTable table=General.GetTable(command);
+			retClaim.Attachments=new List<ClaimAttach>();
+			ClaimAttach attach;
+			for(int i=0;i<table.Rows.Count;i++){
+				attach=new ClaimAttach();
+				attach.ClaimAttachNum   =PIn.PInt   (table.Rows[i][0].ToString());
+				attach.ClaimNum         =PIn.PInt   (table.Rows[i][1].ToString());
+				attach.DisplayedFileName=PIn.PString(table.Rows[i][2].ToString());
+				attach.ActualFileName   =PIn.PString(table.Rows[i][3].ToString());
+				retClaim.Attachments.Add(attach);
+			}
 			return retClaim;
 		}
 
-		///<summary>Gets all claims for the specified patient.</summary>
-		public static void Refresh(int patNum){
+		///<summary>Gets all claims for the specified patient. But without any attachments.</summary>
+		public static List<Claim> Refresh(int patNum){
 			string command=
 				"SELECT * FROM claim"
 				+" WHERE PatNum = "+patNum.ToString()
 				+" ORDER BY dateservice";
-			SubmitAndFill(command,false);
+			return SubmitAndFill(command);
 		}
 
-		public static Claim[] GetAllClaims(int patNum){
-		  string command=
-		    "SELECT * FROM claim"
-		    +" WHERE PatNum = '"+patNum.ToString()+"'";
-			//DataTable table=General.NonQ(command);
-			//Claim tempClaim;
-			SubmitAndFill(command,false);
-			return List;
-		}
-
-		private static Claim SubmitAndFill(string command,bool single){
+		private static List<Claim> SubmitAndFill(string command){
 			DataTable table=General.GetTable(command);
 			Claim tempClaim;
-			if(!single){
-				List=new Claim[table.Rows.Count];
-				HList=new Hashtable();
-			}
-			Claim retVal=new Claim();
+			//if(!single){
+			List<Claim> claims=new List<Claim>();
+				//Claim[table.Rows.Count];
+			HList=new Hashtable();
+			//}
+			//Claim retVal=new Claim();
 			for(int i=0;i<table.Rows.Count;i++){
 				tempClaim=new Claim();
 				tempClaim.ClaimNum     =		PIn.PInt   (table.Rows[i][0].ToString());
@@ -126,15 +130,16 @@ namespace OpenDental{
 				tempClaim.ClinicNum     =   PIn.PInt   (table.Rows[i][34].ToString());
 				tempClaim.ClaimForm     =   PIn.PInt   (table.Rows[i][35].ToString());
 				tempClaim.EFormat       =(EtransType)PIn.PInt(table.Rows[i][36].ToString());
-				if(single){
-					retVal=tempClaim;
-				}
-				else{
-					List[i]=tempClaim.Copy();
-					HList.Add(tempClaim.ClaimNum,tempClaim.Copy());
-				}
-			}//end for
-			return retVal;//only really used if single
+				claims.Add(tempClaim);
+				//if(single){
+				//	retVal=tempClaim;
+				//}
+				//else{
+					//List[i]=tempClaim.Copy();
+				HList.Add(tempClaim.ClaimNum,tempClaim.Copy());
+				//}
+			}
+			return claims;
 		}
 
 		///<summary></summary>
@@ -242,6 +247,13 @@ namespace OpenDental{
 				+",EFormat = '"      +  POut.PInt   ((int)Cur.EFormat)+"' "
 				+"WHERE claimnum = '"+	POut.PInt   (Cur.ClaimNum)+"'";
 			General.NonQ(command);
+			//now, delete all attachments and recreate.
+			command="DELETE FROM claimattach WHERE ClaimNum="+POut.PInt(Cur.ClaimNum);
+			General.NonQ(command);
+			for(int i=0;i<Cur.Attachments.Count;i++) {
+				Cur.Attachments[i].ClaimNum=Cur.ClaimNum;
+				ClaimAttaches.Insert(Cur.Attachments[i]);
+			}
 		}
 
 		///<summary></summary>

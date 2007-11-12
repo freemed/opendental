@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
@@ -547,6 +548,7 @@ namespace OpenDental
 
 		private void DrawText(System.Windows.Forms.PaintEventArgs e){
 			//Graphics g=e.Graphics;
+			int dataL=DataArray.GetLength(1);
 			for(int i=0;i<DataArray.GetLength(1);i++){//loop through all rows in the table
 				//test for clip later
 				DrawRow(i,e);
@@ -567,17 +569,17 @@ namespace OpenDental
 			int cellValue=0;
 			for(int i=0;i<DataArray.GetLength(0);i++){//loop through all columns in the row
 				rect=GetBounds(i,row);
-				font=Font;
+				font=(Font)Font.Clone();
+				//font=new Font("Arial",8,FontStyle.Regular);
 				textColor=Color.Black;
 				//test for clip later
 				if(i==0){//first column
 					format.Alignment=StringAlignment.Far;//align right
-					e.Graphics.DrawString(DataArray[i,row].Text,font,
-						new SolidBrush(textColor),rect,format);
-					//e.Graphics.DrawString("test",new Font("Arial",8),Brushes.Black,rect);
+					e.Graphics.DrawString(DataArray[i,row].Text,font,new SolidBrush(textColor),rect,format);
 					continue;
 				}
 				else if(GetSection(row)==-1){//tooth row
+					//Debug.WriteLine("row:"+row+" col:"+i);
 					font=new Font(Font,FontStyle.Bold);
 					format.Alignment=StringAlignment.Center;
 					rect=new RectangleF(rect.X,rect.Y+2,rect.Width,rect.Height);
@@ -1802,6 +1804,7 @@ namespace OpenDental
 		///<summary>Uses this control to draw onto the specified graphics object (the printer).</summary>
 		public void DrawChart(Graphics g) {
 			PaintEventArgs e=new PaintEventArgs(g,ClientRectangle);
+			g.Clear(Color.White);
 			DrawBackground(e);
 			DrawSkippedTeeth(e);
 			//DrawSelectedTeeth(e);

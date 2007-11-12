@@ -189,7 +189,6 @@ namespace OpenDental{
 				else{
 					File.Copy(oldPath,newPath);
 				}
-				DialogResult=DialogResult.OK;
 				ClaimAttachNew=new ClaimAttach();
 				ClaimAttachNew.DisplayedFileName=Docs[gridMain.GetSelectedIndex()].FileName;
 				ClaimAttachNew.ActualFileName=newName;

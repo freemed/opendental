@@ -170,6 +170,7 @@
     <Compile Include="Data Interface\CanadianExtracts.cs" />
     <Compile Include="Data Interface\ChartModule.cs" />
     <Compile Include="Data Interface\CanadianNetworks.cs" />
+    <Compile Include="Data Interface\ClaimAttaches.cs" />
     <Compile Include="Data Interface\EmailAttaches.cs" />
     <Compile Include="Data Interface\Popups.cs" />
     <Compile Include="Data Interface\DisplayFields.cs" />

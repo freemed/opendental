@@ -4,6 +4,7 @@ See header in FormOpenDental.cs for complete text.  Redistributions must retain 
 ===============================================================================================================*/
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
@@ -798,7 +799,7 @@ namespace OpenDental{
 			//and they will never show again in the patient selection list.
 			//check for plans, appointments, procedures, etc.
 			Procedure[] procList=Procedures.Refresh(PatCur.PatNum);
-			Claims.Refresh(PatCur.PatNum);
+			List<Claim> claimList=Claims.Refresh(PatCur.PatNum);
 			Adjustment[] AdjustmentList=Adjustments.Refresh(PatCur.PatNum);
 			PaySplit[] PaySplitList=PaySplits.Refresh(PatCur.PatNum);//
 			ClaimProc[] claimProcList=ClaimProcs.Refresh(PatCur.PatNum);
@@ -809,7 +810,7 @@ namespace OpenDental{
 			//CovPats.Refresh(planList,PatPlanList);
 			RefAttach[] RefAttachList=RefAttaches.Refresh(PatCur.PatNum);
 			bool hasProcs=procList.Length>0;
-			bool hasClaims=Claims.List.Length>0;
+			bool hasClaims=claimList.Count>0;
 			bool hasAdj=AdjustmentList.Length>0;
 			bool hasPay=PaySplitList.Length>0;
 			bool hasClaimProcs=claimProcList.Length>0;

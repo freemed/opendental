@@ -6,29 +6,29 @@ using OpenDentBusiness;
 
 namespace OpenDental{
 	///<summary></summary>
-	public class EmailAttaches{
+	public class ClaimAttaches{
 
-		public static void Insert(EmailAttach attach) {
+		public static void Insert(ClaimAttach attach) {
 			if(PrefB.RandomKeys) {
-				attach.EmailAttachNum=MiscData.GetKey("emailattach","EmailAttachNum");
+				attach.ClaimAttachNum=MiscData.GetKey("claimattach","ClaimAttachNum");
 			}
-			string command= "INSERT INTO emailattach (";
+			string command= "INSERT INTO claimattach (";
 			if(PrefB.RandomKeys) {
-				command+="EmailAttachNum,";
+				command+="ClaimAttachNum,";
 			}
-			command+="EmailMessageNum, DisplayedFileName, ActualFileName) VALUES(";
+			command+="ClaimNum, DisplayedFileName, ActualFileName) VALUES(";
 			if(PrefB.RandomKeys) {
-				command+="'"+POut.PInt(attach.EmailAttachNum)+"', ";
+				command+="'"+POut.PInt(attach.ClaimAttachNum)+"', ";
 			}
 			command+=
-				 "'"+POut.PInt(attach.EmailMessageNum)+"', "
+				 "'"+POut.PInt(attach.ClaimNum)+"', "
 				+"'"+POut.PString(attach.DisplayedFileName)+"', "
 				+"'"+POut.PString(attach.ActualFileName)+"')";
 			if(PrefB.RandomKeys) {
 				General.NonQ(command);
 			}
-			else{
-				attach.EmailAttachNum=General.NonQ(command,true);
+			else {
+				attach.ClaimAttachNum=General.NonQ(command,true);
 			}
 		}
 

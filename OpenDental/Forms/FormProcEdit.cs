@@ -6,6 +6,7 @@ using System;
 using System.Diagnostics;
 using System.Drawing;
 using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
 using System.Runtime.InteropServices;
@@ -156,6 +157,7 @@ namespace OpenDental{
 		private Label label26;
 		///<summary>This keeps the noteChanged event from erasing the signature when first loading.</summary>
 		private bool IsStartingUp;
+		private List<Claim> ClaimList;
 
 		///<summary>Inserts are no longer done within this dialog, but must be done ahead of time from outside.You must specify a procedure to edit, and only the changes that are made in this dialog get saved.  Only used when double click in Account, Chart, TP, and in ContrChart.AddProcedure().  The procedure may be deleted if new, and user hits Cancel.</summary>
 		public FormProcEdit(Procedure proc,Patient patCur,Family famCur,InsPlan[] planList){
@@ -1558,7 +1560,7 @@ namespace OpenDental{
 				listBoxTeeth2.Items.Clear();
 				listBoxTeeth2.Items.AddRange(new string[] {"48","47","46","45","44","43","42","41","31","32","33","34","35","36","37","38"});
 			}
-			Claims.Refresh(PatCur.PatNum);
+			ClaimList=Claims.Refresh(PatCur.PatNum);
 			ProcedureCode2=ProcedureCodes.GetProcCode(ProcCur.CodeNum);
 			if(IsNew){
 				if(ProcCur.ProcStatus==ProcStat.C){

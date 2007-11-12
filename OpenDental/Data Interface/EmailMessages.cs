@@ -51,11 +51,10 @@ namespace OpenDental{
 				+ ",MsgDateTime = "+POut.PDateT(message.MsgDateTime)+" "
 				+ ",SentOrReceived = '"+POut.PInt((int)message.SentOrReceived)+"' "
 				+"WHERE EmailMessageNum = "+POut.PInt(message.EmailMessageNum);
-			DataConnection dcon=new DataConnection();
-			dcon.NonQ(command);
+			General.NonQ(command);
 			//now, delete all attachments and recreate.
 			command="DELETE FROM emailattach WHERE EmailMessageNum="+POut.PInt(message.EmailMessageNum);
-			dcon.NonQ(command);
+			General.NonQ(command);
 			for(int i=0;i<message.Attachments.Count;i++) {
 				message.Attachments[i].EmailMessageNum=message.EmailMessageNum;
 				EmailAttaches.Insert(message.Attachments[i]);
@@ -84,13 +83,11 @@ namespace OpenDental{
 				+"'"+POut.PString(message.BodyText)+"', "
 				+POut.PDateT(message.MsgDateTime)+", "
 				+"'"+POut.PInt((int)message.SentOrReceived)+"')";
-			DataConnection dcon=new DataConnection();
 			if(PrefB.RandomKeys) {
-				dcon.NonQ(command);
+				General.NonQ(command);
 			}
 			else {
-				dcon.NonQ(command,true);
-				message.EmailMessageNum=dcon.InsertID;
+				message.EmailMessageNum=General.NonQ(command,true);
 			}
 			//now, insert all the attaches.
 			for(int i=0;i<message.Attachments.Count;i++) {

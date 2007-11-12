@@ -1615,7 +1615,7 @@ namespace OpenDental {
 				CCChanged=false;
 			}
 			FamCur=null;
-			Claims.List=null;
+			//Claims.List=null;
 			//Commlogs.List=null;
 			ClaimProcList=null;
 			RepeatChargeList=null;
@@ -2097,7 +2097,7 @@ namespace OpenDental {
 		///<summary>Public because used by FormRpStatement</summary>
 		public void FillAcctLineList(DateTime fromDate, DateTime toDate,bool includeClaims,bool subtotalsOnly, bool simpleStatement){
 			AccProcList=Procedures.Refresh(PatCur.PatNum);
-			Claims.Refresh(PatCur.PatNum);
+			List<Claim> ClaimList=Claims.Refresh(PatCur.PatNum);
 			Adjustment[] AdjustmentList=Adjustments.Refresh(PatCur.PatNum);
 			PaySplit[] PaySplitListAll=PaySplits.Refresh(PatCur.PatNum);//Also contains splits that are not for this patient
 			PaySplit[] PaySplitList=PaySplits.GetForPatient(PatCur.PatNum,PaySplitListAll);
@@ -2126,7 +2126,7 @@ namespace OpenDental {
 				PatCur=FamCur.GetPatient(PatCur.PatNum);
 			//}
 			arrayProc = new Procedure[AccProcList.Length];
-			arrayClaim=new Claim[Claims.List.Length];
+			arrayClaim=new Claim[ClaimList.Count];
 			arrayAdj = new Adjustment[AdjustmentList.Length];
 			arrayPay =new PayInfo[PayInfoList.Length];
 			arrayComm =new Commlog[CommlogList.Length];
@@ -2149,11 +2149,11 @@ namespace OpenDental {
 					countProc++;
 				}
 			}
-			for(int i=0;i<Claims.List.Length;i++){
-				if(Claims.List[i].ClaimStatus!="A"//don't show ins adjustments
-					&& Claims.List[i].ClaimType!="PreAuth")//don't show preauthorizations.
+			for(int i=0;i<ClaimList.Count;i++){
+				if(ClaimList[i].ClaimStatus!="A"//don't show ins adjustments
+					&& ClaimList[i].ClaimType!="PreAuth")//don't show preauthorizations.
 				{
-					arrayClaim[countClaim]=Claims.List[i];
+					arrayClaim[countClaim]=ClaimList[i];
 					countClaim++;
 				}
 			}
@@ -2816,8 +2816,8 @@ namespace OpenDental {
 					FormPE.ShowDialog();
 					break;
 				case AcctModType.Claim:
-					Claim ClaimCur=arrayClaim[AcctLineList[e.Row].Index];
-					FormClaimEdit FormClaimEdit2=new FormClaimEdit(ClaimCur,PatCur,FamCur);
+					Claim claim=Claims.GetClaim(arrayClaim[AcctLineList[e.Row].Index].ClaimNum);//because we also need the attachments
+					FormClaimEdit FormClaimEdit2=new FormClaimEdit(claim,PatCur,FamCur);
 					FormClaimEdit2.IsNew=false;
 					FormClaimEdit2.ShowDialog();
 					break;

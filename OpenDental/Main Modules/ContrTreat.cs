@@ -4,6 +4,7 @@ See header in FormOpenDental.cs for complete text.  Redistributions must retain 
 ===============================================================================================================*/
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
@@ -117,6 +118,7 @@ namespace OpenDental{
 		private CheckBox checkShowTotals;
 		private Label labelFamily;
 		private int pagesPrinted;
+		private List<Claim> ClaimList;
 
 		///<summary></summary>
 		public ContrTreat(){
@@ -688,7 +690,7 @@ namespace OpenDental{
 			FamCur=null;
 			PatCur=null;
 			InsPlanList=null;
-			Claims.List=null;
+			//Claims.List=null;
 			Claims.HList=null;
 			//ClaimProcs.List=null;
 			//from FillMain:
@@ -706,7 +708,7 @@ namespace OpenDental{
 				PatPlanList=PatPlans.Refresh(patNum);
 				BenefitList=Benefits.Refresh(PatPlanList);
 				//CovPats.Refresh(InsPlanList,PatPlanList);
-				Claims.Refresh(PatCur.PatNum);
+				ClaimList=Claims.Refresh(PatCur.PatNum);
         //Fees.Refresh();
         ClaimProcList=ClaimProcs.Refresh(PatCur.PatNum);
 			}
@@ -1473,9 +1475,9 @@ namespace OpenDental{
 				return;
 			}
       ALPreAuth=new ArrayList();			
-      for(int i=0;i<Claims.List.Length;i++){
-        if(Claims.List[i].ClaimType=="PreAuth"){
-          ALPreAuth.Add(Claims.List[i]);
+      for(int i=0;i<ClaimList.Count;i++){
+        if(ClaimList[i].ClaimType=="PreAuth"){
+          ALPreAuth.Add(ClaimList[i]);
         }
       }
 			OpenDental.UI.ODGridRow row;

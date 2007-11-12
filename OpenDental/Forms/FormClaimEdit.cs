@@ -7,6 +7,7 @@ using System.Data;
 using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Printing;
+using System.Drawing.Drawing2D;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -227,6 +228,7 @@ namespace OpenDental{
 		private MenuItem menuItemRename;
 		private MenuItem menuItemRemove;
 		private ClaimCondCodes CurCondCodes;
+		private List<Claim> ClaimList;
 
 		///<summary></summary>
 		public FormClaimEdit(Claim claimCur, Patient patCur,Family famCur){
@@ -243,6 +245,7 @@ namespace OpenDental{
 			//tbProc.CellClicked += new OpenDental.ContrTable.CellEventHandler(tbProc_CellClicked);
 			//tbPay.CellClicked += new OpenDental.ContrTable.CellEventHandler(tbPay_CellClicked);
 			Lan.F(this);
+			listAttachments.ContextMenu=contextMenuAttachments;
     }
 
 		///<summary></summary>
@@ -2501,7 +2504,7 @@ namespace OpenDental{
 				comboPatRelat.Items.Add(Lan.g("enumRelat",enumRelat[i]));
 				comboPatRelat2.Items.Add(Lan.g("enumRelat",enumRelat[i]));
 			}
-      Claims.Refresh(PatCur.PatNum); 
+      ClaimList=Claims.Refresh(PatCur.PatNum); 
       ClaimProcList=ClaimProcs.Refresh(PatCur.PatNum);
 			ProcList=Procedures.Refresh(PatCur.PatNum);
 			PlanList=InsPlans.Refresh(FamCur);
@@ -2689,6 +2692,7 @@ namespace OpenDental{
 				textOrthoDate.Text=ClaimCur.OrthoDate.ToShortDateString();
 			textRadiographs.Text=ClaimCur.Radiographs.ToString();
 			FillGrids();
+			FillAttachments();
 		}
 
 		private void listClaimType_MouseUp(object sender, System.Windows.Forms.MouseEventArgs e) {
@@ -2938,7 +2942,7 @@ namespace OpenDental{
 			FormClaimPayEdit FormCPE=new FormClaimPayEdit(claimPaymentCur);
 			FormCPE.OriginatingClaimNum=ClaimCur.ClaimNum;
 			FormCPE.ShowDialog();
-			Claims.Refresh(PatCur.PatNum);
+			ClaimList=Claims.Refresh(PatCur.PatNum);
 			ClaimCur=((Claim)Claims.HList[tempClaimNum]);
 			ClaimProcList=ClaimProcs.Refresh(PatCur.PatNum);
 			FillGrids();
@@ -3201,7 +3205,7 @@ namespace OpenDental{
 			FormCPE.OriginatingClaimNum=ClaimCur.ClaimNum;
 			FormCPE.IsNew=true;
 			FormCPE.ShowDialog();
-			Claims.Refresh(PatCur.PatNum);
+			ClaimList=Claims.Refresh(PatCur.PatNum);
 			ClaimCur=((Claim)Claims.HList[tempClaimNum]);
 			ClaimProcList=ClaimProcs.Refresh(PatCur.PatNum);
 			FillGrids();
@@ -3292,10 +3296,57 @@ namespace OpenDental{
 			}
 			ClaimCur.Attachments.Add(FormI.ClaimAttachNew);
 			FillAttachments();
+			if(textRadiographs.errorProvider1.GetError(textRadiographs)==""){
+				int radiographs=PIn.PInt(textRadiographs.Text);
+				radiographs++;
+				textRadiographs.Text=radiographs.ToString();
+			}
 		}
 
 		private void butAttachPerio_Click(object sender,EventArgs e) {
-
+			//Patient PatCur=Patients.GetPat(PatNum);
+			if(!PrefB.UsingAtoZfolder) {
+				MsgBox.Show(this,"Error. Not using AtoZ images folder.");
+				return;
+			}
+			ContrPerio gridP=new ContrPerio();
+			gridP.BackColor = System.Drawing.SystemColors.Window;
+			gridP.Size = new System.Drawing.Size(595,665);
+			PerioExams.Refresh(PatCur.PatNum);
+			PerioMeasures.Refresh(PatCur.PatNum);
+			gridP.SelectedExam=PerioExams.List.Length-1;
+			gridP.LoadData();
+			Bitmap bitmap=new Bitmap(595,665);
+			Graphics g=Graphics.FromImage(bitmap);
+			gridP.DrawChart(g);
+			g.Dispose();
+			Bitmap bitmapBig=new Bitmap(595,715);
+			g=Graphics.FromImage(bitmapBig);
+			g.Clear(Color.White);
+			string text=PatCur.GetNameFL();
+			Font font=new Font("Microsoft Sans Serif",12,FontStyle.Bold);
+			g.DrawString(text,font,Brushes.Black,595/2-g.MeasureString(text,font).Width/2,5);
+			text=PrefB.GetString("PracticeTitle");
+			font=new Font("Microsoft Sans Serif",9,FontStyle.Bold);
+			g.DrawString(text,font,Brushes.Black,595/2-g.MeasureString(text,font).Width/2,28);
+			g.DrawImage(bitmap,0,50);
+			g.Dispose();
+			Random rnd=new Random();
+			string newName=DateTime.Now.ToString("yyyyMMdd")+"_"+DateTime.Now.TimeOfDay.Ticks.ToString()+rnd.Next(1000).ToString()+".jpg";
+			string attachPath=FormEmailMessageEdit.GetAttachPath();
+			string newPath=ODFileUtils.CombinePaths(attachPath,newName);
+			try {
+				bitmapBig.Save(newPath);
+			}
+			catch(Exception ex) {
+				MessageBox.Show(ex.Message);
+				return;
+			}
+			ClaimAttach claimAttach=new ClaimAttach();
+			claimAttach.DisplayedFileName=Lan.g(this,"PerioChart.jpg");
+			claimAttach.ActualFileName=newName;
+			ClaimCur.Attachments.Add(claimAttach);
+			FillAttachments();
 		}
 
 		private void contextMenuAttachments_Popup(object sender,EventArgs e) {
@@ -3393,7 +3444,7 @@ namespace OpenDental{
 				//status will have changed to sent.
 				ClaimCur=Claims.GetClaim(ClaimCur.ClaimNum);
 			}
-			Claims.Refresh(PatCur.PatNum); 
+			ClaimList=Claims.Refresh(PatCur.PatNum); 
       ClaimProcList=ClaimProcs.Refresh(PatCur.PatNum);
 			FillForm();		
 		}

@@ -53,7 +53,7 @@ namespace OpenDental{
 		private Claim ClaimCur;
 		///<summary>Always length of 4.</summary>
 		private string[] diagnoses;
-		private Claim[] ClaimsArray;
+		//private Claim[] ClaimsArray;
 		private Claim[] MedClaimsArray;
 		private ArrayList MedValueCodes;
 		private Referral ClaimReferral;
@@ -429,7 +429,7 @@ namespace OpenDental{
 			}
 			Family FamCur=Patients.GetFamily(ThisPatNum);
 			Patient PatCur=FamCur.GetPatient(ThisPatNum);
-			Claims.Refresh(PatCur.PatNum);
+			List<Claim> ClaimList=Claims.Refresh(PatCur.PatNum);
 			ClaimCur=((Claim)Claims.HList[ThisClaimNum]).Copy();
 			PlanList=InsPlans.Refresh(FamCur);
 			InsPlan otherPlan=InsPlans.GetPlan(ClaimCur.PlanNum2,PlanList);
@@ -2546,17 +2546,17 @@ namespace OpenDental{
 
 		private void FillMedInsStrings(){
 			MedPlanList = new InsPlan[3];
-			ClaimsArray = Claims.GetAllClaims(ThisPatNum);
+			List<Claim> claimlist=Claims.Refresh(ThisPatNum);
 			MedClaimsArray = new Claim[3];
 			int ii=0;
-			for(int i=0;i<ClaimsArray.Length;i++){
+			for(int i=0;i<claimlist.Count;i++){
 				if(ii>2) {//this fixes a bug.  Can we please get some comments in this section regarding what's happening?
 					break;
 				}
-				InsPlan tmpPlan = InsPlans.GetPlan(ClaimsArray[i].PlanNum,PlanList);
-				if(tmpPlan.IsMedical && (ClaimsArray[i].ClaimNum <= ClaimCur.ClaimNum)){
+				InsPlan tmpPlan = InsPlans.GetPlan(claimlist[i].PlanNum,PlanList);
+				if(tmpPlan.IsMedical && (claimlist[i].ClaimNum <= ClaimCur.ClaimNum)){
 					MedPlanList[ii] = tmpPlan.Copy();
-					MedClaimsArray[ii] = ClaimsArray[i].Copy();
+					MedClaimsArray[ii] =claimlist[i].Copy();
 					ii++;
 				}
 			}

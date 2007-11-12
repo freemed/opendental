@@ -6109,7 +6109,16 @@ namespace OpenDental{
 		private void To5_5_0() {
 			if(FromVersion<new Version("5.5.0.0")) {
 				string command;
-
+				command="DROP TABLE IF EXISTS claimattach";
+				General.NonQEx(command);
+				command=@"CREATE TABLE claimattach (
+					ClaimAttachNum int NOT NULL auto_increment,
+					ClaimNum int NOT NULL,
+					DisplayedFileName varchar(255),
+					ActualFileName varchar(255),
+					PRIMARY KEY (ClaimAttachNum)
+					) DEFAULT CHARSET=utf8";
+				General.NonQEx(command);
 
 
 
