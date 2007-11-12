@@ -1223,6 +1223,9 @@
     <Compile Include="Forms\InputBox.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Forms\FormTPsign.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Main Modules\ContrAccount.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -2476,6 +2479,10 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\InputBox.resx">
       <DependentUpon>InputBox.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormTPsign.resx">
+      <DependentUpon>FormTPsign.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Main Modules\ContrAccount.resx">

@@ -670,6 +670,7 @@ namespace OpenDental{
 			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Save TP"),3,"","Create"));
 			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Print TP"),2,"","Print"));
 			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Email TP"),-1,"","Email"));
+			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Sign TP"),-1,"","Sign"));
 			ArrayList toolButItems=ToolButItems.GetForToolBar(ToolBarsAvail.TreatmentPlanModule);
 			for(int i=0;i<toolButItems.Count;i++){
 				ToolBarMain.Buttons.Add(new ODToolBarButton(ODToolBarButtonStyle.Separator));
@@ -776,6 +777,9 @@ namespace OpenDental{
 						break;
 					case "Email":
 						OnEmail_Click();
+						break;
+					case "Sign":
+						OnSign_Click();
 						break;
 				}
 			}
@@ -2253,6 +2257,21 @@ namespace OpenDental{
 					FillMain();
 				}
 			}
+		}
+
+		private void OnSign_Click() {
+			if(gridPlans.SelectedIndices[0]==0) {
+				MsgBox.Show(this,"You may only sign a saved TP, not the default TP.");
+				return;
+			}
+			PrepImageForPrinting();
+			MigraDoc.DocumentObjectModel.Document doc=CreateDocument();
+			MigraDoc.Rendering.Printing.MigraDocPrintDocument printdoc=new MigraDoc.Rendering.Printing.MigraDocPrintDocument();
+			MigraDoc.Rendering.DocumentRenderer renderer=new MigraDoc.Rendering.DocumentRenderer(doc);
+			renderer.PrepareDocument();
+			printdoc.Renderer=renderer;
+			FormTPsign FormT=new FormTPsign(printdoc,renderer.FormattedDocument.PageCount,PlanList[gridPlans.SelectedIndices[0]-1]);
+			FormT.ShowDialog();
 		}
 
 		private void OnPreAuth_Click() {
