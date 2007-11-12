@@ -596,7 +596,6 @@ namespace OpenDental{
 				}
 				return;
 			}
-			
 			XmlDocument document=new XmlDocument();
 			try{
 				
@@ -646,7 +645,6 @@ namespace OpenDental{
 					textUser2.Select();
 					return;
 				}
-				
 			}catch(Exception) {
 				//Common error: root element is missing
 				//MessageBox.Show(e.Message);
@@ -669,8 +667,10 @@ namespace OpenDental{
 			//Try to connect to the database directly
 			try {
 				if(textConnectionString.Text.Length>0){
-						dcon.SetDb(textConnectionString.Text,"",DBtype);
+					DataSettings.ConnectionString = textConnectionString.Text; 
+					dcon.SetDb(textConnectionString.Text,"",DBtype);
 				}else{
+					DataSettings.CreateConnectionString(comboComputerName.Text, comboDatabase.Text, textUser.Text, textPassword.Text);
 					dcon.SetDb(comboComputerName.Text,comboDatabase.Text,textUser.Text,textPassword.Text,"","",DBtype);
 				}
 				//a direct connection does not utilize lower privileges.
