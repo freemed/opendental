@@ -379,8 +379,10 @@ namespace OpenDental{
 			double insRem;//no changes get made to insRem in the loop.
 			if(patPlanNum==0){//patient does not have current coverage
 				insRem=0;
-			}
-			else{
+			} else if(ClaimProcsForClaim[0].ProcDate.Year<1880) {
+				insRem=InsPlans.GetInsRem(ClaimProcList,DateTime.Today,ClaimCur.PlanNum,
+						patPlanNum,ClaimCur.ClaimNum,PlanList,benefitList);
+			} else {
 				insRem=InsPlans.GetInsRem(ClaimProcList,ClaimProcsForClaim[0].ProcDate,ClaimCur.PlanNum,
 						patPlanNum,ClaimCur.ClaimNum,PlanList,benefitList);
 			}
