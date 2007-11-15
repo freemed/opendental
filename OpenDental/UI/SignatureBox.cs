@@ -63,13 +63,13 @@ namespace OpenDental.UI {
 			encryptionMode=encryptMode;
 		}*/
 
-		///<summary>Set it to "0000000000000000" (16 zeros) to indicate no key string to be used for encryption.</summary>
+		///<summary>Set it to "0000000000000000" (16 zeros) to indicate no key string to be used for encryption.  Use this OR SetAutoKeyData.</summary>
 		public void SetKeyString(string keyStr){
 			UTF8Encoding enc=new UTF8Encoding();
 			hash=enc.GetBytes(keyStr);
 		}
 
-		///<summary>The data that's begin signed.  A 16 byte hash will be created off this data, and used to encrypt the signature.</summary>
+		///<summary>The data that's begin signed.  A 16 byte hash will be created off this data, and used to encrypt the signature.  Use this OR SetKeyString.  But once the choice is made for a particular data type, it may never be changed.</summary>
 		public void SetAutoKeyData(string keyData){
 			byte[] data=Encoding.UTF8.GetBytes(keyData);
 			HashAlgorithm algorithm=MD5.Create();
@@ -115,36 +115,62 @@ namespace OpenDental.UI {
 			if(sigString==""){
 				return;
 			}
-			//convert base64 string to bytes
-			byte[] encryptedBytes=Convert.FromBase64String(sigString);
-			//create the streams
-			MemoryStream ms=new MemoryStream();
-			//ms.Write(encryptedBytes,0,(int)encryptedBytes.Length);
-			//create a crypto stream
-			Rijndael crypt=Rijndael.Create();
-			crypt.KeySize=128;//16 bytes;
-			crypt.Key=hash;
-			crypt.IV=new byte[16];
-			CryptoStream cs=new CryptoStream(ms,crypt.CreateDecryptor(),CryptoStreamMode.Write);
-			cs.Write(encryptedBytes,0,encryptedBytes.Length);
-			cs.FlushFinalBlock();
-			byte[] sigBytes=new byte[ms.Length];
-			ms.Position=0;
-			ms.Read(sigBytes,0,(int)ms.Length);
-			cs.Dispose();
-			ms.Dispose();
-			//now convert the bytes into a string.
-			string rawString=Encoding.UTF8.GetString(sigBytes);
-			//convert the raw string into a series of points
-			string[] pointArray=rawString.Split(new char[] {';'});
-			Point pt;
-			string[] coords;
-			for(int i=0;i<pointArray.Length;i++){
-				coords=pointArray[i].Split(new char[] {','});
-				pt=new Point(Convert.ToInt32(coords[0]),Convert.ToInt32(coords[1]));
-				pointList.Add(pt);
+			try{
+				//convert base64 string to bytes
+				byte[] encryptedBytes=Convert.FromBase64String(sigString);
+				//create the streams
+				MemoryStream ms=new MemoryStream();
+				//ms.Write(encryptedBytes,0,(int)encryptedBytes.Length);
+				//create a crypto stream
+				Rijndael crypt=Rijndael.Create();
+				crypt.KeySize=128;//16 bytes;
+				crypt.Key=hash;
+				crypt.IV=new byte[16];
+				CryptoStream cs=new CryptoStream(ms,crypt.CreateDecryptor(),CryptoStreamMode.Write);
+				cs.Write(encryptedBytes,0,encryptedBytes.Length);
+				cs.FlushFinalBlock();
+				byte[] sigBytes=new byte[ms.Length];
+				ms.Position=0;
+				ms.Read(sigBytes,0,(int)ms.Length);
+				cs.Dispose();
+				ms.Dispose();
+				//now convert the bytes into a string.
+				string rawString=Encoding.UTF8.GetString(sigBytes);
+				//convert the raw string into a series of points
+				string[] pointArray=rawString.Split(new char[] {';'});
+				Point pt;
+				string[] coords;
+				for(int i=0;i<pointArray.Length;i++){
+					coords=pointArray[i].Split(new char[] {','});
+					pt=new Point(Convert.ToInt32(coords[0]),Convert.ToInt32(coords[1]));
+					pointList.Add(pt);
+				}
+				Invalidate();
 			}
-			Invalidate();
+			catch{
+				//this will leave the list with zero points
+			}
+		}
+
+		///<Summary>Also includes a surrounding box.</Summary>
+		public Image GetSigImage(){
+			Image img=new Bitmap(Width,Height);
+			Graphics g=Graphics.FromImage(img);
+			g.FillRectangle(Brushes.White,0,0,this.Width,this.Height);
+			Pen pen=new Pen(Color.Black,2f);
+			g.SmoothingMode=SmoothingMode.HighQuality;
+			for(int i=1;i<pointList.Count;i++) {//skip the first point
+				if(pointList[i-1].X==0 && pointList[i-1].Y==0) {
+					continue;
+				}
+				if(pointList[i].X==0 && pointList[i].Y==0) {
+					continue;
+				}
+				g.DrawLine(pen,pointList[i-1],pointList[i]);
+			}
+			g.DrawRectangle(Pens.Black,0,0,Width-1,Height-1);			
+			g.Dispose();
+			return img;
 		}
 
 		///<summary></summary>

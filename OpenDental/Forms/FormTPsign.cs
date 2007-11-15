@@ -291,12 +291,7 @@ namespace OpenDental{
 					//sigBox.SetAutoKeyData(ProcCur.Note+ProcCur.UserNum.ToString());
 					//sigBox.SetEncryptionMode(2);//high encryption
 					//sigBox.SetSigCompressionMode(2);//high compression
-					try{
-						sigBox.SetSigString(TPcur.Signature);
-					}
-					catch{
-						//do nothing
-					}
+					sigBox.SetSigString(TPcur.Signature);
 					if(sigBox.NumberOfTabletPoints()==0) {
 						labelInvalidSig.Visible=true;
 					}

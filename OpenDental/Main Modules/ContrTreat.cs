@@ -801,7 +801,9 @@ namespace OpenDental{
 			gridPlans.Columns.Clear();
 			ODGridColumn col=new ODGridColumn(Lan.g("TableTPList","Date"),80);
 			gridPlans.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TableTPList","Heading"),360);
+			col=new ODGridColumn(Lan.g("TableTPList","Heading"),310);
+			gridPlans.Columns.Add(col);
+			col=new ODGridColumn(Lan.g("TableTPList","Signed"),80,HorizontalAlignment.Center);
 			gridPlans.Columns.Add(col);
 			gridPlans.Rows.Clear();
 			if(PatCur==null){
@@ -821,6 +823,12 @@ namespace OpenDental{
 				row=new ODGridRow();
 				row.Cells.Add(PlanList[i].DateTP.ToShortDateString());
 				row.Cells.Add(PlanList[i].Heading);
+				if(PlanList[i].Signature==""){
+					row.Cells.Add("");
+				}
+				else{
+					row.Cells.Add("X");
+				}
 				gridPlans.Rows.Add(row);
 			}
 			gridPlans.EndUpdate();
@@ -1826,9 +1834,10 @@ namespace OpenDental{
 			#endregion
 			//Graphics---------------------------------------------------------------------------------------------------------------
 			#region PrintGraphics
+			TextFrame frame;
 			int widthDoc=MigraDocHelper.GetDocWidth();
 			if(PrefB.GetBool("TreatPlanShowGraphics")) {	
-				TextFrame frame=MigraDocHelper.CreateContainer(section);
+				frame=MigraDocHelper.CreateContainer(section);
 				MigraDocHelper.DrawString(frame,Lan.g(this,"Your")+"\r\n"+Lan.g(this,"Right"),bodyFontx,
 					new RectangleF(widthDoc/2-toothChart.Width/2-50,toothChart.Height/2-10,50,100));
 				MigraDocHelper.DrawBitmap(frame,chartBitmap,widthDoc/2-toothChart.Width/2,0);
@@ -1941,6 +1950,54 @@ namespace OpenDental{
 			par.Format.Borders.DistanceFromRight=Unit.FromInch(.05);
 			par.Format.Borders.DistanceFromTop=Unit.FromInch(.05);
 			par.Format.Borders.DistanceFromBottom=Unit.FromInch(.05);
+			#endregion
+			//Signature-----------------------------------------------------------------------------------------------------------
+			#region signature
+			if(gridPlans.SelectedIndices[0]!=0//can't be default TP
+				&& PlanList[gridPlans.SelectedIndices[0]-1].Signature!="")
+			{
+				System.Drawing.Bitmap sigBitmap=null;
+				List<ProcTP> proctpList=ProcTPs.RefreshForTP(PlanList[gridPlans.SelectedIndices[0]-1].TreatPlanNum);
+				if(PlanList[gridPlans.SelectedIndices[0]-1].SigIsTopaz){
+					Topaz.SigPlusNET sigBoxTopaz=new Topaz.SigPlusNET();
+					sigBoxTopaz.Size=new System.Drawing.Size(394,91);
+					sigBoxTopaz.ClearTablet();
+					sigBoxTopaz.SetSigCompressionMode(0);
+					sigBoxTopaz.SetEncryptionMode(0);
+					sigBoxTopaz.SetKeyString(TreatPlans.GetHashString(PlanList[gridPlans.SelectedIndices[0]-1],proctpList));
+					//"0000000000000000");
+					//sigBoxTopaz.SetAutoKeyData(ProcCur.Note+ProcCur.UserNum.ToString());
+					sigBoxTopaz.SetEncryptionMode(2);//high encryption
+					sigBoxTopaz.SetSigCompressionMode(2);//high compression
+					sigBoxTopaz.SetSigString(PlanList[gridPlans.SelectedIndices[0]-1].Signature);
+					//if(sigBoxTopaz.NumberOfTabletPoints()==0) {
+					//	labelInvalidSig.Visible=true;
+					//}
+					sigBitmap=(Bitmap)sigBoxTopaz.GetSigImage();
+				}
+				else{
+					SignatureBox sigBox=new SignatureBox();
+					sigBox.Size=new System.Drawing.Size(394,91);
+					sigBox.ClearTablet();
+					//sigBox.SetSigCompressionMode(0);
+					//sigBox.SetEncryptionMode(0);
+					sigBox.SetKeyString(TreatPlans.GetHashString(PlanList[gridPlans.SelectedIndices[0]-1],proctpList));
+					//"0000000000000000");
+					//sigBox.SetAutoKeyData(ProcCur.Note+ProcCur.UserNum.ToString());
+					//sigBox.SetEncryptionMode(2);//high encryption
+					//sigBox.SetSigCompressionMode(2);//high compression
+					sigBox.SetSigString(PlanList[gridPlans.SelectedIndices[0]-1].Signature);
+					//if(sigBox.NumberOfTabletPoints()==0) {
+					//	labelInvalidSig.Visible=true;
+					//}
+					//sigBox.SetTabletState(0);//not accepting input.  To accept input, change the note, or clear the sig.
+					sigBitmap=(Bitmap)sigBox.GetSigImage();
+				}
+				if(sigBitmap!=null){
+					frame=MigraDocHelper.CreateContainer(section);
+					MigraDocHelper.DrawBitmap(frame,sigBitmap,widthDoc/2-sigBitmap.Width/2,20);
+				}
+			}
 			#endregion
 			return doc;
 		}
@@ -2275,6 +2332,14 @@ namespace OpenDental{
 			FormT.TotalPages=renderer.FormattedDocument.PageCount;
 			FormT.TPcur=PlanList[gridPlans.SelectedIndices[0]-1];
 			FormT.ShowDialog();
+			int tpNum=PlanList[gridPlans.SelectedIndices[0]-1].TreatPlanNum;
+			ModuleSelected(PatCur.PatNum);
+			for(int i=0;i<PlanList.Length;i++) {
+				if(PlanList[i].TreatPlanNum==tpNum) {
+					gridPlans.SetSelected(i+1,true);
+				}
+			}
+			FillMain();
 		}
 
 		private void OnPreAuth_Click() {
