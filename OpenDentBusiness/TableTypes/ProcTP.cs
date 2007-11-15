@@ -38,23 +38,7 @@ namespace OpenDentBusiness{
 		
 		///<summary></summary>
 		public ProcTP Copy(){
-			ProcTP t=new ProcTP();
-			t.ProcTPNum=ProcTPNum;
-			t.TreatPlanNum=TreatPlanNum;
-			t.PatNum=PatNum;
-			t.ProcNumOrig=ProcNumOrig;
-			t.ItemOrder=ItemOrder;
-			t.Priority=Priority;
-			t.ToothNumTP=ToothNumTP;
-			t.Surf=Surf;
-			t.ProcCode=ProcCode;
-			t.Descript=Descript;
-			t.FeeAmt=FeeAmt;
-			t.PriInsAmt=PriInsAmt;
-			t.SecInsAmt=SecInsAmt;
-			t.PatAmt=PatAmt;
-			t.Discount=Discount;
-			return t;
+			return (ProcTP)MemberwiseClone();
 		}
 
 	

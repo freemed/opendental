@@ -6119,8 +6119,11 @@ namespace OpenDental{
 					PRIMARY KEY (ClaimAttachNum)
 					) DEFAULT CHARSET=utf8";
 				General.NonQEx(command);
-
-
+				//after r1050
+				command="ALTER TABLE treatplan ADD Signature text";
+				General.NonQEx(command);
+				command="ALTER TABLE treatplan ADD SigIsTopaz tinyint(1) not null";
+				General.NonQEx(command);
 
 
 

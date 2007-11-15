@@ -229,7 +229,7 @@ namespace OpenDental{
 			PlanCur.DateTP=PIn.PDate(textDateTP.Text);
 			PlanCur.Heading=textHeading.Text;
 			PlanCur.Note=textNote.Text;
-			TreatPlans.InsertOrUpdate(PlanCur,false);//IsNew not applicable here.
+			TreatPlans.Update(PlanCur);
 			DialogResult=DialogResult.OK;
 		}
 

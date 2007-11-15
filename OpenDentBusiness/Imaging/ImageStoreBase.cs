@@ -64,10 +64,8 @@ namespace OpenDental.Imaging {
 			else {
 				textbytes = Encoding.UTF8.GetBytes(doc.Note);
 			}
-
 			byte[] filebytes = GetBytes(doc);
 			int fileLength = filebytes.Length;
-
 			byte[] buffer = new byte[textbytes.Length + filebytes.Length];
 			Array.Copy(filebytes, 0, buffer, 0, fileLength);
 			Array.Copy(textbytes, 0, buffer, fileLength, textbytes.Length);

@@ -40,7 +40,6 @@ namespace OpenDental{
 		private bool SigChanged;
 		///<summary>To allow tablet signatures on Windows. Must be added dynamically when the program is not running on Unix so that MONO does not crash.</summary>
 		private Topaz.SigPlusNET sigBoxTopaz;
-		///<summary>To allow tablet signatures on Windows. Must be added dynamically when the program is not running on Unix so that MONO does not crash.</summary>
 		private OpenDental.UI.Button butTopazSign;
 		
 		///<summary></summary>
@@ -58,20 +57,7 @@ namespace OpenDental{
 				sigBoxTopaz.Visible=false;
 				Controls.Add(sigBoxTopaz);
 				sigBox.SetTabletState(1);//It starts out accepting input. It will be set to 0 if a sig is already present.  It will be set back to 1 if note changes or if user clicks Clear.
-				//Add button to initiate a Topaz signature.
-				butTopazSign=new OpenDental.UI.Button();
-				butTopazSign.AdjustImageLocation=new System.Drawing.Point(0,0);
-				butTopazSign.Autosize=true;
-				butTopazSign.BtnShape=OpenDental.UI.enumType.BtnShape.Rectangle;
-				butTopazSign.BtnStyle=OpenDental.UI.enumType.XPStyle.Silver;
-				butTopazSign.CornerRadius=4F;
-				butTopazSign.Location=new System.Drawing.Point(370,61);
-				butTopazSign.Name="butTopazSign";
-				butTopazSign.Size=new System.Drawing.Size(81,25);
-				butTopazSign.TabIndex=89;
-				butTopazSign.Text="Sign Topaz";
-				butTopazSign.Click+=new System.EventHandler(this.butTopazSign_Click);
-				Controls.Add(butTopazSign);
+				butTopazSign.Visible=false;
 			}
 			DocCur=docCur;
 			this.imageStore=imageStore;
@@ -103,6 +89,7 @@ namespace OpenDental{
 			this.butClearSig = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
 			this.butOK = new OpenDental.UI.Button();
+			this.butTopazSign = new OpenDental.UI.Button();
 			this.SuspendLayout();
 			// 
 			// textNote
@@ -197,11 +184,27 @@ namespace OpenDental{
 			this.butOK.Text = "OK";
 			this.butOK.Click += new System.EventHandler(this.butOK_Click);
 			// 
+			// butTopazSign
+			// 
+			this.butTopazSign.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butTopazSign.Autosize = true;
+			this.butTopazSign.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butTopazSign.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butTopazSign.CornerRadius = 4F;
+			this.butTopazSign.Location = new System.Drawing.Point(370,61);
+			this.butTopazSign.Name = "butTopazSign";
+			this.butTopazSign.Size = new System.Drawing.Size(81,25);
+			this.butTopazSign.TabIndex = 96;
+			this.butTopazSign.Text = "Topaz";
+			this.butTopazSign.UseVisualStyleBackColor = true;
+			this.butTopazSign.Click += new System.EventHandler(this.butTopazSign_Click);
+			// 
 			// FormDocSign
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.BackColor = System.Drawing.SystemColors.Control;
 			this.ClientSize = new System.Drawing.Size(929,90);
+			this.Controls.Add(this.butTopazSign);
 			this.Controls.Add(this.butCancel);
 			this.Controls.Add(this.butOK);
 			this.Controls.Add(this.labelInvalidSig);
@@ -237,7 +240,7 @@ namespace OpenDental{
 					sigBoxTopaz.ClearTablet();
 					sigBoxTopaz.SetSigCompressionMode(0);
 					sigBoxTopaz.SetEncryptionMode(0);
-					sigBoxTopaz.SetKeyString(GetHashString());
+					sigBoxTopaz.SetKeyString(imageStore.GetHashString(DocCur));
 						//"0000000000000000");
 					//sigBoxTopaz.SetAutoKeyData(ProcCur.Note+ProcCur.UserNum.ToString());
 					sigBoxTopaz.SetEncryptionMode(2);//high encryption
@@ -255,7 +258,7 @@ namespace OpenDental{
 					sigBox.ClearTablet();
 					//sigBox.SetSigCompressionMode(0);
 					//sigBox.SetEncryptionMode(0);
-					sigBox.SetKeyString(GetHashString());
+					sigBox.SetKeyString(imageStore.GetHashString(DocCur));
 						//"0000000000000000");
 					//sigBox.SetAutoKeyData(ProcCur.Note+ProcCur.UserNum.ToString());
 					//sigBox.SetEncryptionMode(2);//high encryption
@@ -268,10 +271,6 @@ namespace OpenDental{
 				}
 			}
 			IsStartingUp=false;
-		}
-
-		private string GetHashString(){
-			return imageStore.GetHashString(DocCur);
 		}
 
 		private void butClearSig_Click(object sender,EventArgs e) {
@@ -332,7 +331,7 @@ namespace OpenDental{
 					}
 					sigBoxTopaz.SetSigCompressionMode(0);
 					sigBoxTopaz.SetEncryptionMode(0);
-					sigBoxTopaz.SetKeyString(GetHashString());
+					sigBoxTopaz.SetKeyString(imageStore.GetHashString(DocCur));
 						//"0000000000000000");
 					//sigBoxTopaz.SetAutoKeyData(ProcCur.Note+ProcCur.UserNum.ToString());
 					sigBoxTopaz.SetEncryptionMode(2);
@@ -347,7 +346,7 @@ namespace OpenDental{
 					}
 					//sigBox.SetSigCompressionMode(0);
 					//sigBox.SetEncryptionMode(0);
-					sigBox.SetKeyString(GetHashString());
+					sigBox.SetKeyString(imageStore.GetHashString(DocCur));
 						//"0000000000000000");
 					//sigBox.SetAutoKeyData(ProcCur.Note+ProcCur.UserNum.ToString());
 					//sigBox.SetEncryptionMode(2);

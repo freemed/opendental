@@ -14,17 +14,17 @@ namespace OpenDentBusiness{
 		public string Heading;
 		///<summary>A note specific to this treatment plan that shows at the bottom.</summary>
 		public string Note;
+		///<summary>The encrypted and bound signature in base64 format.  The signature is bound to the byte sequence of the original image.</summary>
+		public string Signature;
+		///<summary>True if the signature is in Topaz format rather than OD format.</summary>
+		public bool SigIsTopaz;
 		
 		///<summary></summary>
 		public TreatPlan Copy(){
-			TreatPlan t=new TreatPlan();
-			t.TreatPlanNum=TreatPlanNum;
-			t.PatNum=PatNum;
-			t.DateTP=DateTP;
-			t.Heading=Heading;
-			t.Note=Note;
-			return t;
+			return (TreatPlan)MemberwiseClone();
 		}
+
+		
 
 	
 	}

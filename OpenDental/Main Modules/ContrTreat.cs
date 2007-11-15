@@ -2181,7 +2181,7 @@ namespace OpenDental{
 			tp.DateTP=DateTime.Today;
 			tp.PatNum=PatCur.PatNum;
 			tp.Note=PrefB.GetString("TreatmentPlanNote");
-			TreatPlans.InsertOrUpdate(tp,true);
+			TreatPlans.Insert(tp);
 			ProcTP procTP;
 			Procedure proc;
 			int itemNo=0;
@@ -2270,7 +2270,10 @@ namespace OpenDental{
 			MigraDoc.Rendering.DocumentRenderer renderer=new MigraDoc.Rendering.DocumentRenderer(doc);
 			renderer.PrepareDocument();
 			printdoc.Renderer=renderer;
-			FormTPsign FormT=new FormTPsign(printdoc,renderer.FormattedDocument.PageCount,PlanList[gridPlans.SelectedIndices[0]-1]);
+			FormTPsign FormT=new FormTPsign();
+			FormT.Document=printdoc;
+			FormT.TotalPages=renderer.FormattedDocument.PageCount;
+			FormT.TPcur=PlanList[gridPlans.SelectedIndices[0]-1];
 			FormT.ShowDialog();
 		}
 

@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Data;
 using System.Windows.Forms;
 using OpenDentBusiness;
@@ -12,27 +13,41 @@ namespace OpenDental{
 			string command="SELECT * FROM proctp "
 				+"WHERE PatNum="+POut.PInt(patNum)
 				+" ORDER BY ItemOrder";
+			return RefreshAndFill(command).ToArray();
+		}
+
+		///<summary>Only used when obtaining the signature data.  Ordered by ItemOrder.</summary>
+		public static List<ProcTP> RefreshForTP(int tpNum){
+			string command="SELECT * FROM proctp "
+				+"WHERE TreatPlanNum="+POut.PInt(tpNum)
+				+" ORDER BY ItemOrder";
+			return RefreshAndFill(command);
+		}
+
+		private static List<ProcTP> RefreshAndFill(string command){
 			DataTable table=General.GetTable(command);
-			ProcTP[] List=new ProcTP[table.Rows.Count];
+			List<ProcTP> retVal=new List<ProcTP>();
+			ProcTP proc;
 			for(int i=0;i<table.Rows.Count;i++) {
-				List[i]=new ProcTP();
-				List[i].ProcTPNum   = PIn.PInt(table.Rows[i][0].ToString());
-				List[i].TreatPlanNum= PIn.PInt(table.Rows[i][1].ToString());
-				List[i].PatNum      = PIn.PInt(table.Rows[i][2].ToString());
-				List[i].ProcNumOrig = PIn.PInt(table.Rows[i][3].ToString());
-				List[i].ItemOrder   = PIn.PInt(table.Rows[i][4].ToString());
-				List[i].Priority    = PIn.PInt(table.Rows[i][5].ToString());
-				List[i].ToothNumTP  = PIn.PString(table.Rows[i][6].ToString());
-				List[i].Surf        = PIn.PString(table.Rows[i][7].ToString());
-				List[i].ProcCode    = PIn.PString(table.Rows[i][8].ToString());
-				List[i].Descript    = PIn.PString(table.Rows[i][9].ToString());
-				List[i].FeeAmt      = PIn.PDouble(table.Rows[i][10].ToString());
-				List[i].PriInsAmt   = PIn.PDouble(table.Rows[i][11].ToString());
-				List[i].SecInsAmt   = PIn.PDouble(table.Rows[i][12].ToString());
-				List[i].PatAmt      = PIn.PDouble(table.Rows[i][13].ToString());
-				List[i].Discount    = PIn.PDouble(table.Rows[i][14].ToString());
+				proc=new ProcTP();
+				proc.ProcTPNum   = PIn.PInt(table.Rows[i][0].ToString());
+				proc.TreatPlanNum= PIn.PInt(table.Rows[i][1].ToString());
+				proc.PatNum      = PIn.PInt(table.Rows[i][2].ToString());
+				proc.ProcNumOrig = PIn.PInt(table.Rows[i][3].ToString());
+				proc.ItemOrder   = PIn.PInt(table.Rows[i][4].ToString());
+				proc.Priority    = PIn.PInt(table.Rows[i][5].ToString());
+				proc.ToothNumTP  = PIn.PString(table.Rows[i][6].ToString());
+				proc.Surf        = PIn.PString(table.Rows[i][7].ToString());
+				proc.ProcCode    = PIn.PString(table.Rows[i][8].ToString());
+				proc.Descript    = PIn.PString(table.Rows[i][9].ToString());
+				proc.FeeAmt      = PIn.PDouble(table.Rows[i][10].ToString());
+				proc.PriInsAmt   = PIn.PDouble(table.Rows[i][11].ToString());
+				proc.SecInsAmt   = PIn.PDouble(table.Rows[i][12].ToString());
+				proc.PatAmt      = PIn.PDouble(table.Rows[i][13].ToString());
+				proc.Discount    = PIn.PDouble(table.Rows[i][14].ToString());
+				retVal.Add(proc);
 			}
-			return List;
+			return retVal;
 		}
 		
 		///<summary></summary>
@@ -122,6 +137,8 @@ namespace OpenDental{
 			AL.CopyTo(retVal);
 			return retVal;
 		}
+
+		
 
 		///<summary>No dependencies to worry about.</summary>
 		public static void DeleteForTP(int treatPlanNum){
