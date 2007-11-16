@@ -21,6 +21,11 @@ namespace OpenDental{
 		///<summary>When this form closes, this will be the patNum of the last patient viewed.  The calling form should then make use of this to refresh to that patient.  If 0, then calling form should not refresh.</summary>
 		public int SelectedPatNum;
 		private OpenDental.UI.ODGrid gridMain;
+		private ComboBox comboProv;
+		private Label label4;
+		private OpenDental.UI.Button butRefresh;
+		private ComboBox comboOrder;
+		private Label label1;
 		///<summary>Only used if PinClicked=true</summary>
 		public int AptSelected;
 
@@ -55,6 +60,11 @@ namespace OpenDental{
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormTrackNext));
 			this.butClose = new OpenDental.UI.Button();
 			this.gridMain = new OpenDental.UI.ODGrid();
+			this.comboProv = new System.Windows.Forms.ComboBox();
+			this.label4 = new System.Windows.Forms.Label();
+			this.butRefresh = new OpenDental.UI.Button();
+			this.comboOrder = new System.Windows.Forms.ComboBox();
+			this.label1 = new System.Windows.Forms.Label();
 			this.SuspendLayout();
 			// 
 			// butClose
@@ -76,20 +86,76 @@ namespace OpenDental{
 			// gridMain
 			// 
 			this.gridMain.HScrollVisible = false;
-			this.gridMain.Location = new System.Drawing.Point(12,63);
+			this.gridMain.Location = new System.Drawing.Point(12,35);
 			this.gridMain.Name = "gridMain";
 			this.gridMain.ScrollValue = 0;
-			this.gridMain.Size = new System.Drawing.Size(734,561);
+			this.gridMain.Size = new System.Drawing.Size(734,589);
 			this.gridMain.TabIndex = 2;
 			this.gridMain.Title = "Planned Appointments";
 			this.gridMain.TranslationName = "FormTrackNext";
 			this.gridMain.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellDoubleClick);
+			// 
+			// comboProv
+			// 
+			this.comboProv.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboProv.Location = new System.Drawing.Point(331,5);
+			this.comboProv.MaxDropDownItems = 40;
+			this.comboProv.Name = "comboProv";
+			this.comboProv.Size = new System.Drawing.Size(181,21);
+			this.comboProv.TabIndex = 26;
+			// 
+			// label4
+			// 
+			this.label4.Location = new System.Drawing.Point(238,9);
+			this.label4.Name = "label4";
+			this.label4.Size = new System.Drawing.Size(91,14);
+			this.label4.TabIndex = 25;
+			this.label4.Text = "Provider";
+			this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// butRefresh
+			// 
+			this.butRefresh.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butRefresh.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.butRefresh.Autosize = true;
+			this.butRefresh.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butRefresh.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butRefresh.CornerRadius = 4F;
+			this.butRefresh.Location = new System.Drawing.Point(531,3);
+			this.butRefresh.Name = "butRefresh";
+			this.butRefresh.Size = new System.Drawing.Size(84,26);
+			this.butRefresh.TabIndex = 24;
+			this.butRefresh.Text = "&Refresh";
+			this.butRefresh.Click += new System.EventHandler(this.butRefresh_Click);
+			// 
+			// comboOrder
+			// 
+			this.comboOrder.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboOrder.Location = new System.Drawing.Point(104,5);
+			this.comboOrder.MaxDropDownItems = 40;
+			this.comboOrder.Name = "comboOrder";
+			this.comboOrder.Size = new System.Drawing.Size(133,21);
+			this.comboOrder.TabIndex = 30;
+			// 
+			// label1
+			// 
+			this.label1.Location = new System.Drawing.Point(11,9);
+			this.label1.Name = "label1";
+			this.label1.Size = new System.Drawing.Size(91,14);
+			this.label1.TabIndex = 29;
+			this.label1.Text = "Order by";
+			this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// FormTrackNext
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.CancelButton = this.butClose;
 			this.ClientSize = new System.Drawing.Size(771,683);
+			this.Controls.Add(this.comboOrder);
+			this.Controls.Add(this.label1);
+			this.Controls.Add(this.comboProv);
+			this.Controls.Add(this.label4);
+			this.Controls.Add(this.butRefresh);
 			this.Controls.Add(this.gridMain);
 			this.Controls.Add(this.butClose);
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -108,11 +174,37 @@ namespace OpenDental{
 
 		private void FormTrackNext_Load(object sender, System.EventArgs e) {
 			Patients.GetHList();
+			comboOrder.Items.Add(Lan.g(this,"Status"));
+			comboOrder.Items.Add(Lan.g(this,"Alphabetical"));
+			comboOrder.Items.Add(Lan.g(this,"Date"));
+			comboOrder.SelectedIndex=0;
+			comboProv.Items.Add(Lan.g(this,"All"));
+			comboProv.SelectedIndex=0;
+			for(int i=0;i<Providers.List.Length;i++) {
+				comboProv.Items.Add(Providers.List[i].GetLongDesc());
+			}
 			FillGrid();
 		}
 
 		private void FillGrid(){
 			Cursor=Cursors.WaitCursor;
+			string order="";
+			switch(comboOrder.SelectedIndex){
+				case 0:
+					order="status";
+					break;
+				case 1:
+					order="alph";
+					break;
+				case 2:
+					order="date";
+					break;
+			}
+			int provNum=0;
+			if(comboProv.SelectedIndex!=0) {
+				provNum=Providers.List[comboProv.SelectedIndex-1].ProvNum;
+			}
+			AptList=Appointments.RefreshPlannedTracker(order,provNum);
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
 			ODGridColumn col=new ODGridColumn(Lan.g(this,"Patient"),140);
@@ -129,7 +221,6 @@ namespace OpenDental{
 			gridMain.Columns.Add(col);
 			gridMain.Rows.Clear();
 			ODGridRow row;
-			AptList=Appointments.RefreshPlannedTracker();
 			for(int i=0;i<AptList.Count;i++){
 				row=new ODGridRow();
 				row.Cells.Add((string)Patients.HList[AptList[i].PatNum]);
@@ -172,6 +263,10 @@ namespace OpenDental{
 			}
 		}
 
+		private void butRefresh_Click(object sender,EventArgs e) {
+			FillGrid();
+		}
+
 		private void butClose_Click(object sender, System.EventArgs e) {
 			Close();
 		}
@@ -186,6 +281,8 @@ namespace OpenDental{
 				SelectedPatNum=AptList[gridMain.GetSelectedIndex()].PatNum;
 			}
 		}
+
+		
 
 		
 		

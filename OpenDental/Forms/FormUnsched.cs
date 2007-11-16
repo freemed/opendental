@@ -25,6 +25,11 @@ namespace OpenDental{
 		private int pagesPrinted;
 		///<summary>Only used if PinClicked=true</summary>
 		public int AptSelected;
+		private RadioButton radioByDate;
+		private RadioButton radioAlphabetical;
+		private ComboBox comboProv;
+		private Label label4;
+		private OpenDental.UI.Button butRefresh;
 		///<summary>When this form closes, this will be the patNum of the last patient viewed.  The calling form should then make use of this to refresh to that patient.  If 0, then calling form should not refresh.</summary>
 		public int SelectedPatNum;
 
@@ -55,6 +60,11 @@ namespace OpenDental{
 			this.butClose = new OpenDental.UI.Button();
 			this.grid = new OpenDental.UI.ODGrid();
 			this.butPrint = new OpenDental.UI.Button();
+			this.radioByDate = new System.Windows.Forms.RadioButton();
+			this.radioAlphabetical = new System.Windows.Forms.RadioButton();
+			this.comboProv = new System.Windows.Forms.ComboBox();
+			this.label4 = new System.Windows.Forms.Label();
+			this.butRefresh = new OpenDental.UI.Button();
 			this.SuspendLayout();
 			// 
 			// butClose
@@ -75,10 +85,10 @@ namespace OpenDental{
 			// grid
 			// 
 			this.grid.HScrollVisible = false;
-			this.grid.Location = new System.Drawing.Point(10,12);
+			this.grid.Location = new System.Drawing.Point(10,71);
 			this.grid.Name = "grid";
 			this.grid.ScrollValue = 0;
-			this.grid.Size = new System.Drawing.Size(734,643);
+			this.grid.Size = new System.Drawing.Size(734,584);
 			this.grid.TabIndex = 8;
 			this.grid.Title = "Unscheduled List";
 			this.grid.TranslationName = "TableUnsched";
@@ -101,11 +111,68 @@ namespace OpenDental{
 			this.butPrint.Text = "Print List";
 			this.butPrint.Click += new System.EventHandler(this.butPrint_Click);
 			// 
+			// radioByDate
+			// 
+			this.radioByDate.Checked = true;
+			this.radioByDate.Location = new System.Drawing.Point(319,36);
+			this.radioByDate.Name = "radioByDate";
+			this.radioByDate.Size = new System.Drawing.Size(117,20);
+			this.radioByDate.TabIndex = 23;
+			this.radioByDate.TabStop = true;
+			this.radioByDate.Text = "By Date";
+			this.radioByDate.UseVisualStyleBackColor = true;
+			// 
+			// radioAlphabetical
+			// 
+			this.radioAlphabetical.Location = new System.Drawing.Point(319,16);
+			this.radioAlphabetical.Name = "radioAlphabetical";
+			this.radioAlphabetical.Size = new System.Drawing.Size(117,20);
+			this.radioAlphabetical.TabIndex = 22;
+			this.radioAlphabetical.Text = "Alphabetical";
+			this.radioAlphabetical.UseVisualStyleBackColor = true;
+			// 
+			// comboProv
+			// 
+			this.comboProv.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboProv.Location = new System.Drawing.Point(102,12);
+			this.comboProv.MaxDropDownItems = 40;
+			this.comboProv.Name = "comboProv";
+			this.comboProv.Size = new System.Drawing.Size(181,21);
+			this.comboProv.TabIndex = 26;
+			// 
+			// label4
+			// 
+			this.label4.Location = new System.Drawing.Point(9,16);
+			this.label4.Name = "label4";
+			this.label4.Size = new System.Drawing.Size(91,14);
+			this.label4.TabIndex = 25;
+			this.label4.Text = "Provider";
+			this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// butRefresh
+			// 
+			this.butRefresh.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butRefresh.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.butRefresh.Autosize = true;
+			this.butRefresh.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butRefresh.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butRefresh.CornerRadius = 4F;
+			this.butRefresh.Location = new System.Drawing.Point(199,39);
+			this.butRefresh.Name = "butRefresh";
+			this.butRefresh.Size = new System.Drawing.Size(84,26);
+			this.butRefresh.TabIndex = 24;
+			this.butRefresh.Text = "&Refresh";
+			// 
 			// FormUnsched
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.CancelButton = this.butClose;
 			this.ClientSize = new System.Drawing.Size(858,672);
+			this.Controls.Add(this.comboProv);
+			this.Controls.Add(this.label4);
+			this.Controls.Add(this.butRefresh);
+			this.Controls.Add(this.radioByDate);
+			this.Controls.Add(this.radioAlphabetical);
 			this.Controls.Add(this.butPrint);
 			this.Controls.Add(this.grid);
 			this.Controls.Add(this.butClose);

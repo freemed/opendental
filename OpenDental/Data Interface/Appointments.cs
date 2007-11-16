@@ -32,12 +32,28 @@ namespace OpenDental{
 			return FillList(command).ToArray();
 		}
 
-		public static List<Appointment> RefreshPlannedTracker(){
-			string command="SELECT Tplanned.*,Tregular.aptnum FROM appointment Tplanned "
-				+"LEFT JOIN appointment Tregular ON Tplanned.aptnum = Tregular.nextaptnum "
-				+"WHERE Tplanned.aptstatus = '"+(int)ApptStatus.Planned+"' "
-				+"AND Tregular.aptnum IS NULL "
-				+"ORDER BY Tplanned.UnschedStatus,Tplanned.AptDateTime";
+		///<summary>Allowed orderby: status, alph, date</summary>
+		public static List<Appointment> RefreshPlannedTracker(string orderby,int provNum){
+			string command="SELECT tplanned.*,tregular.aptnum "
+				+"FROM appointment tplanned "
+				+"LEFT JOIN appointment tregular ON tplanned.aptnum = tregular.nextaptnum ";
+			if(orderby=="alph"){
+				command+="LEFT JOIN patient ON patient.PatNum=tplanned.PatNum ";
+			}
+			command+="WHERE tplanned.aptstatus = "+POut.PInt((int)ApptStatus.Planned)
+				+" AND tregular.aptnum IS NULL ";
+			if(provNum>0) {
+				command+="AND (tplanned.ProvNum="+POut.PInt(provNum)+" OR tplanned.ProvHyg="+POut.PInt(provNum)+") ";
+			}
+			if(orderby=="status"){
+				command+="ORDER BY tplanned.UnschedStatus,tplanned.AptDateTime";
+			}
+			else if(orderby=="alph"){
+				command+="ORDER BY LName,FName";
+			}
+			else{ //if(orderby=="date"){
+				command+="ORDER BY tplanned.AptDateTime";
+			}
 			return FillList(command);
 		}
 
