@@ -934,7 +934,9 @@ namespace OpenDental{
 		///<summary>Includes RefreshModulePatient.  One overload is used when jumping here from another module, and you want to place an appointment on the pinboard.</summary>
 		public void ModuleSelected(int patNum,int pinAptNum){
 			ModuleSelected(patNum);
-			SendToPinBoard(pinAptNum);
+			List<int> list=new List<int>();
+			list.Add(pinAptNum);
+			SendToPinBoard(list);
 		}
 
 		///<summary></summary>
@@ -1564,30 +1566,45 @@ namespace OpenDental{
 			return retVal;
 		}
 
-		///<summary>Loads all info for for specified appointment into the control that displays the pinboard appointment. Runs RefreshModulePatient.  Sets pinboard appointment as selected.</summary>
 		private void SendToPinBoard(int aptNum){
+			List<int> list=new List<int>();
+			list.Add(aptNum);
+			SendToPinBoard(list);
+		}
+
+		///<summary>Loads all info for for specified appointment into the control that displays the pinboard appointment. Runs RefreshModulePatient.  Sets pinboard appointment as selected.</summary>
+		private void SendToPinBoard(List<int> aptNums){
+			if(aptNums.Count==0){
+				return;
+			}
 			DataRow row=null;
-			for(int i=0;i<DS.Tables["Appointments"].Rows.Count;i++){
-				if(DS.Tables["Appointments"].Rows[i]["AptNum"].ToString()==aptNum.ToString()){
-					row=DS.Tables["Appointments"].Rows[i];
-					break;
+			for(int a=0;a<aptNums.Count;a++){
+				row=null;
+				for(int i=0;i<DS.Tables["Appointments"].Rows.Count;i++){
+					if(DS.Tables["Appointments"].Rows[i]["AptNum"].ToString()==aptNums[a].ToString()){
+						row=DS.Tables["Appointments"].Rows[i];
+						break;
+					}
 				}
-			}
-			if(row==null){
-				row=Appointments.RefreshOneApt(aptNum,false).Rows[0];
-				if(row["AptStatus"].ToString()=="6") {//planned
-					//then do it again the right way
-					row=Appointments.RefreshOneApt(aptNum,true).Rows[0];
+				if(row==null){
+					row=Appointments.RefreshOneApt(aptNums[a],false).Rows[0];
+					if(row["AptStatus"].ToString()=="6") {//planned
+						//then do it again the right way
+						row=Appointments.RefreshOneApt(aptNums[a],true).Rows[0];
+					}
 				}
-			}
-			try{
 				pinBoard.AddAppointment(row);
 			}
-			catch(ApplicationException ex){
-				MessageBox.Show(ex.Message);//more of a notification really.  It will still highlight that appointment.
+			//deal with this later:
+			//try{
+			//	
+			//}
+			//catch(ApplicationException ex){
+			//	MessageBox.Show(ex.Message);//more of a notification really.  It will still highlight that appointment.
 				//return;
-			}
+			//}
 			//if aptNum is already in DS, then use that row.  Otherwise, get a new row.
+			//it will set pt to the last appt on the pinboard.
 			RefreshModulePatient(PIn.PInt(row["PatNum"].ToString()));
 			mouseIsDown=false;
 			boolAptMoved=false;
@@ -2226,7 +2243,9 @@ namespace OpenDental{
 					return;
 				}
 				int prevSel=GetIndex(ContrApptSingle.SelectedAptNum);
-				SendToPinBoard(ContrApptSingle.SelectedAptNum);//sets selectedAptNum=-1. do before refresh prev
+				List<int> list=new List<int>();
+				list.Add(ContrApptSingle.SelectedAptNum);
+				SendToPinBoard(list);//sets selectedAptNum=-1. do before refresh prev
 				if(prevSel!=-1) {
 					CreateAptShadows();
 					ContrApptSheet2.DrawShadow();
@@ -2665,17 +2684,17 @@ namespace OpenDental{
 			}
 			switch(FormAO.OResult){
 				case OtherResult.CopyToPinBoard:
-					SendToPinBoard(FormAO.AptSelected);
+					SendToPinBoard(FormAO.AptNumsSelected);
 					RefreshModulePatient(FormAO.SelectedPatNum);
 					RefreshPeriod();
 					break;
 				case OtherResult.NewToPinBoard:
-					SendToPinBoard(FormAO.AptSelected);
+					SendToPinBoard(FormAO.AptNumsSelected);
 					RefreshModulePatient(FormAO.SelectedPatNum);
 					RefreshPeriod();
 					break;
 				case OtherResult.PinboardAndSearch:
-					SendToPinBoard(FormAO.AptSelected);
+					SendToPinBoard(FormAO.AptNumsSelected);
 					if(ContrApptSheet.IsWeeklyView) {
 						break;
 					}
@@ -2686,13 +2705,13 @@ namespace OpenDental{
 					DoSearch();
 					break;
 				case OtherResult.CreateNew:
-					ContrApptSingle.SelectedAptNum=FormAO.AptSelected;
+					ContrApptSingle.SelectedAptNum=FormAO.AptNumsSelected[0];
 					RefreshModulePatient(FormAO.SelectedPatNum);
 					RefreshPeriod();
 					SetInvalid();
 					break;
 				case OtherResult.GoTo:
-					ContrApptSingle.SelectedAptNum=FormAO.AptSelected;
+					ContrApptSingle.SelectedAptNum=FormAO.AptNumsSelected[0];
 					Appointments.DateSelected=PIn.PDate(FormAO.DateJumpToString);
 					RefreshModulePatient(FormAO.SelectedPatNum);
 					RefreshPeriod();

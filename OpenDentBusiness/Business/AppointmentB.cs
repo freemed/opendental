@@ -122,10 +122,10 @@ namespace OpenDentBusiness{
 				+"patient.PreferRecallMethod,patient.Premed,"
 				+"(SELECT SUM(ProcFee) FROM procedurelog ";
 			if(isPlanned){
-				command+="WHERE procedurelog.PlannedAptNum=appointment.AptNum AND procedurelog.PlannedAptNum NOT IN (0, NULL)) Production, ";
+				command+="WHERE procedurelog.PlannedAptNum=appointment.AptNum AND procedurelog.PlannedAptNum!=0) Production, ";
 			}
 			else{
-				command+="WHERE procedurelog.AptNum=appointment.AptNum AND procedurelog.AptNum NOT IN (0, NULL)) Production, ";
+				command+="WHERE procedurelog.AptNum=appointment.AptNum AND procedurelog.AptNum!=0) Production, ";
 			}
 			command+="ProvHyg,appointment.ProvNum,patient.WirelessPhone,patient.WkPhone "
 				+"FROM appointment LEFT JOIN patient ON patient.PatNum=appointment.PatNum "
@@ -152,10 +152,10 @@ namespace OpenDentBusiness{
 			command="SELECT AbbrDesc,procedurelog.AptNum,procedurelog.CodeNum,PlannedAptNum,Surf,ToothNum,TreatArea "
 				+"FROM procedurelog,appointment,procedurecode ";
 			if(isPlanned){
-				command+="WHERE procedurelog.PlannedAptNum=appointment.AptNum AND procedurelog.PlannedAptNum NOT IN (0, NULL) ";
+				command+="WHERE procedurelog.PlannedAptNum=appointment.AptNum AND procedurelog.PlannedAptNum!=0 ";
 			}
 			else{
-				command+="WHERE procedurelog.AptNum=appointment.AptNum AND procedurelog.AptNum NOT IN (0, NULL) ";
+				command+="WHERE procedurelog.AptNum=appointment.AptNum AND procedurelog.AptNum!=0 ";
 			}
 			command+="AND procedurelog.CodeNum=procedurecode.CodeNum ";
 			if(aptNum==0) {

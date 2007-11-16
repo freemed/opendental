@@ -866,7 +866,9 @@ namespace OpenDental{
 			FillComm();
 			textNote.Focus();
 			textNote.SelectionStart = 0;
-
+			#if DEBUG
+				Text="AptNum"+AptCur.AptNum;
+			#endif
 		}
 
 		private void FillPatient(){

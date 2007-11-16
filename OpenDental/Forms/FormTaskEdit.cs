@@ -474,7 +474,7 @@ namespace OpenDental{
 				if(FormA.DialogResult==DialogResult.Cancel){
 					return;
 				}
-				Cur.KeyNum=FormA.AptSelected;
+				Cur.KeyNum=FormA.AptNumsSelected[0];
 			}
 			FillObject();
 		}

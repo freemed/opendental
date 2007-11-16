@@ -1,6 +1,7 @@
 using System;
 using System.Drawing;
 using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows.Forms;
 using OpenDentBusiness;
@@ -36,13 +37,16 @@ namespace OpenDental{
 		///<summary>Almost always false.  Only set to true from TaskList to allow selecting one appointment for a patient.</summary>
 		public bool SelectOnly;
 		private OpenDental.UI.Button butRecall;
-		///<summary>This will contain a selected appointment upon closing of the form in some situations.  Used when picking an appointment for task lists.  Also used if the GoTo or Create new buttons are clicked.</summary>
-		public int AptSelected;
+		//<summary>This will contain a selected appointment upon closing of the form in some situations.  Used when picking an appointment for task lists.  Also used if the GoTo or Create new buttons are clicked.</summary>
+		//public int AptSelected;
+		///<summary>After closing, this may contain aptNums of appointments that should be placed on the pinboard. Used when picking an appointment for task lists.  Also used if the GoTo, Create new, or Recall buttons are pushed.</summary>
+		public List<int> AptNumsSelected;
 		///<summary>When this form closes, this will be the patNum of the last patient viewed.  The calling form should then make use of this to refresh to that patient.  If 0, then calling form should not refresh.</summary>
 		public int SelectedPatNum;
 		private TextBox textFinUrg;
 		private Label label3;
 		private OpenDental.UI.Button butNote;
+		private OpenDental.UI.Button butRecallFamily;
 		///<summary>If oResult=PinboardAndSearch, then when closing this form, this will contain the date to jump to when beginning the search.  If oResult=GoTo, then this will also contain the date.  Can't use DateTime type because C# complains about marshal by reference.</summary>
 		public string DateJumpToString;
 
@@ -92,6 +96,7 @@ namespace OpenDental{
 			this.textFinUrg = new System.Windows.Forms.TextBox();
 			this.label3 = new System.Windows.Forms.Label();
 			this.butNote = new OpenDental.UI.Button();
+			this.butRecallFamily = new OpenDental.UI.Button();
 			this.SuspendLayout();
 			// 
 			// checkDone
@@ -329,11 +334,28 @@ namespace OpenDental{
 			this.butNote.Text = "NO&TE for Patient";
 			this.butNote.Click += new System.EventHandler(this.butNote_Click);
 			// 
+			// butRecallFamily
+			// 
+			this.butRecallFamily.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butRecallFamily.Autosize = true;
+			this.butRecallFamily.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butRecallFamily.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butRecallFamily.CornerRadius = 4F;
+			this.butRecallFamily.Image = global::OpenDental.Properties.Resources.butRecall;
+			this.butRecallFamily.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butRecallFamily.Location = new System.Drawing.Point(308,586);
+			this.butRecallFamily.Name = "butRecallFamily";
+			this.butRecallFamily.Size = new System.Drawing.Size(125,26);
+			this.butRecallFamily.TabIndex = 66;
+			this.butRecallFamily.Text = "Entire Family";
+			this.butRecallFamily.Click += new System.EventHandler(this.butRecallFamily_Click);
+			// 
 			// FormApptsOther
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.CancelButton = this.butCancel;
 			this.ClientSize = new System.Drawing.Size(924,658);
+			this.Controls.Add(this.butRecallFamily);
 			this.Controls.Add(this.butNote);
 			this.Controls.Add(this.label3);
 			this.Controls.Add(this.textFinUrg);
@@ -370,6 +392,7 @@ namespace OpenDental{
 		}
 
 		private void FormApptsOther_Load(object sender, System.EventArgs e) {
+			AptNumsSelected=new List<int>();
 			Text=Lan.g(this,"Appointments for")+" "+PatCur.GetNameLF();
 			textApptModNote.Text=PatCur.ApptModNote;
 			if(SelectOnly){
@@ -528,7 +551,7 @@ namespace OpenDental{
 			FormRLE.ShowDialog();
 			if(FormRLE.PinClicked){
 				oResult=OtherResult.CopyToPinBoard;
-				AptSelected=FormRLE.AptSelected;
+				AptNumsSelected.Add(FormRLE.AptSelected);
 				DialogResult=DialogResult.OK;
 			}
 			else{
@@ -548,7 +571,7 @@ namespace OpenDental{
 			Recall recallCur=recallList[0];
 			InsPlan[] planList=InsPlans.Refresh(FamCur);
 			Appointment apt=Appointments.CreateRecallApt(PatCur,procList,recallCur,planList);
-			AptSelected=apt.AptNum;
+			AptNumsSelected.Add(apt.AptNum);
 			oResult=OtherResult.PinboardAndSearch;
 			if(recallCur.DateDue<DateTime.Today){
 				DateJumpToString=DateTime.Today.ToShortDateString();//they are overdue
@@ -557,6 +580,10 @@ namespace OpenDental{
 				DateJumpToString=recallCur.DateDue.ToShortDateString();
 			}
 			DialogResult=DialogResult.OK;
+		}
+
+		private void butRecallFamily_Click(object sender,EventArgs e) {
+
 		}
 
 		private void butNote_Click(object sender,EventArgs e) {
@@ -607,7 +634,7 @@ namespace OpenDental{
 			if(FormApptEdit2.DialogResult!=DialogResult.OK) {
 				return;
 			}
-			AptSelected=AptCur.AptNum;
+			AptNumsSelected.Add(AptCur.AptNum);
 			if(InitialClick) {
 				oResult=OtherResult.CreateNew;
 			}
@@ -672,7 +699,7 @@ namespace OpenDental{
 			if(FormApptEdit2.DialogResult!=DialogResult.OK){
 				return;
 			}
-			AptSelected=AptCur.AptNum;
+			AptNumsSelected.Add(AptCur.AptNum);
 			if(InitialClick){
 				oResult=OtherResult.CreateNew;
 			}
@@ -690,7 +717,7 @@ namespace OpenDental{
 			if(!OKtoSendToPinboard(ListOth[tbApts.SelectedRow])){
 				return;
 			}
-			AptSelected=ListOth[tbApts.SelectedRow].AptNum;
+			AptNumsSelected.Add(ListOth[tbApts.SelectedRow].AptNum);
 			oResult=OtherResult.CopyToPinBoard;
 			DialogResult=DialogResult.OK;
 		}
@@ -740,9 +767,10 @@ namespace OpenDental{
 			if(FormAE.DialogResult!=DialogResult.OK)
 				return;
 			if(FormAE.PinClicked){
-				if(!OKtoSendToPinboard(ListOth[e.Row]))
+				if(!OKtoSendToPinboard(ListOth[e.Row])){
 					return;
-				AptSelected=ListOth[e.Row].AptNum;
+				}
+				AptNumsSelected.Add(ListOth[e.Row].AptNum);
 				oResult=OtherResult.CopyToPinBoard;
 				DialogResult=DialogResult.OK;
 			}
@@ -783,7 +811,7 @@ namespace OpenDental{
 				MessageBox.Show(Lan.g(this,"Unable to go to unscheduled appointment."));
 				return;
 			}
-			AptSelected=ListOth[tbApts.SelectedRow].AptNum;
+			AptNumsSelected.Add(ListOth[tbApts.SelectedRow].AptNum);
 			DateJumpToString=ListOth[tbApts.SelectedRow].AptDateTime.Date.ToShortDateString();
 			oResult=OtherResult.GoTo;
 			DialogResult=DialogResult.OK;
@@ -796,7 +824,7 @@ namespace OpenDental{
 				MessageBox.Show(Lan.g(this,"Please select appointment first."));
 				return;
 			}
-			AptSelected=ListOth[tbApts.SelectedRow].AptNum;
+			AptNumsSelected.Add(ListOth[tbApts.SelectedRow].AptNum);
 			DialogResult=DialogResult.OK;
 		}
 
@@ -810,6 +838,8 @@ namespace OpenDental{
 			}
 			oResult=OtherResult.Cancel;
 		}
+
+		
 
 		
 

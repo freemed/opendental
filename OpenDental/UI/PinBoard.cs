@@ -69,14 +69,14 @@ namespace OpenDental.UI {
 
 		///<Summary>Supply a datarow that contains all the database values needed for the appointment that is being added.</Summary>
 		public void AddAppointment(DataRow row){
-			//if appointment is already on the pinboard, throw an exception.
+			//if appointment is already on the pinboard, just select it.
 			for(int i=0;i<apptList.Count;i++){
 				if(apptList[i].DataRoww["AptNum"].ToString()==row["AptNum"].ToString()){
 					//Highlight it
 					selectedIndex=i;
 					apptList[i].IsSelected=true;
 					Invalidate();
-					throw new ApplicationException(Lan.g(this,"Appointment is already on the pinboard."));
+					//throw new ApplicationException(Lan.g(this,"Appointment is already on the pinboard."));
 				}
 			}
 			ContrApptSingle PinApptSingle=new ContrApptSingle();
