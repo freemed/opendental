@@ -629,13 +629,13 @@ namespace OpenDental {
 		private void AppointmentsNoPattern() {
 			command=@"SELECT AptNum FROM appointment WHERE Pattern=''";
 			table=General.GetTable(command);
-			for(int i=0;i<table.Rows.Count;i++) {
+			if(table.Rows.Count>0) {
 				//detach all procedures
-				command="UPDATE procedurelog SET AptNum=0 WHERE AptNum="+table.Rows[i][0].ToString();
+				command="UPDATE procedurelog P, appointment A SET P.AptNum = 0 WHERE P.AptNum = A.AptNum AND A.Pattern = ''";
 				General.NonQ(command);
-				command="UPDATE procedurelog SET PlannedAptNum=0 WHERE PlannedAptNum="+table.Rows[i][0].ToString();
+				command="UPDATE procedurelog P, appointment A SET P.PlannedAptNum = 0 WHERE P.PlannedAptNum = A.AptNum AND A.Pattern = ''";
 				General.NonQ(command);
-				command="DELETE FROM appointment WHERE AptNum="+table.Rows[i][0].ToString();
+				command="DELETE FROM appointment WHERE Pattern = ''";
 				General.NonQ(command);
 			}
 			int numberFixed=table.Rows.Count;
