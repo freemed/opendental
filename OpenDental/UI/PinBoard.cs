@@ -21,7 +21,7 @@ namespace OpenDental.UI {
 			apptList=new List<ContrApptSingle>();
 		}
 
-		///<Summary>Do not make changes her to the list.  This is for read-only purposes.</Summary>
+		///<Summary>Do not make changes here to the list.  This is for read-only purposes.</Summary>
 		public List<ContrApptSingle> ApptList{
 			get{
 				return apptList;
@@ -37,16 +37,20 @@ namespace OpenDental.UI {
 			}
 		}
 
+		///<Summary>Gets or sets the selected </Summary>
 		public int SelectedIndex{
 			get{
 				return selectedIndex;
 			}
-		}
-		/*
 			set{
-				selectedIndex=value;
-				for(int i=0;i<apptList.Count;i++){
-					if(i==selectedIndex){
+				if(selectedIndex>apptList.Count-1){
+					selectedIndex=-1;
+				}
+				else{
+					selectedIndex=value;
+				}
+				for(int i=0;i<apptList.Count;i++) {
+					if(i==value){
 						apptList[i].IsSelected=true;
 					}
 					else{
@@ -55,7 +59,7 @@ namespace OpenDental.UI {
 				}
 				Invalidate();
 			}
-		}*/
+		}
 
 		protected void OnSelectedIndexChanged() {
 			if(SelectedIndexChanged!=null) {
@@ -63,16 +67,18 @@ namespace OpenDental.UI {
 			}
 		}
 
-		public void SelectedSetNone(){
-			selectedIndex=-1;
-			for(int i=0;i<apptList.Count;i++) {
-				apptList[i].IsSelected=false;
-			}
-			Invalidate();
-		}
-
 		///<Summary>Supply a datarow that contains all the database values needed for the appointment that is being added.</Summary>
 		public void AddAppointment(DataRow row){
+			//if appointment is already on the pinboard, throw an exception.
+			for(int i=0;i<apptList.Count;i++){
+				if(apptList[i].DataRoww["AptNum"].ToString()==row["AptNum"].ToString()){
+					//Highlight it
+					selectedIndex=i;
+					apptList[i].IsSelected=true;
+					Invalidate();
+					throw new ApplicationException(Lan.g(this,"Appointment is already on the pinboard."));
+				}
+			}
 			ContrApptSingle PinApptSingle=new ContrApptSingle();
 			PinApptSingle.ThisIsPinBoard=true;
 			PinApptSingle.DataRoww=row;

@@ -1174,14 +1174,6 @@ namespace OpenDental{
 
 		///<summary>Called from FormOpenDental upon startup.</summary>
 		public void InitializeOnStartup(){
-			/*
-			PinApptSingle=new ContrApptSingle();
-			PinApptSingle.Visible=false;
-			PinApptSingle.ThisIsPinBoard=true;
-			this.Controls.Add(PinApptSingle);
-			PinApptSingle.MouseDown += new System.Windows.Forms.MouseEventHandler(PinApptSingle_MouseDown);
-			PinApptSingle.MouseUp += new System.Windows.Forms.MouseEventHandler(PinApptSingle_MouseUp);
-			PinApptSingle.MouseMove += new System.Windows.Forms.MouseEventHandler(PinApptSingle_MouseMove);*/
 			ContrApptSheet.RowsPerIncr=1;
 			Appointments.DateSelected=DateTime.Now;
 			ContrApptSingle.SelectedAptNum=-1;
@@ -1588,7 +1580,13 @@ namespace OpenDental{
 					row=Appointments.RefreshOneApt(aptNum,true).Rows[0];
 				}
 			}
-			pinBoard.AddAppointment(row);
+			try{
+				pinBoard.AddAppointment(row);
+			}
+			catch(ApplicationException ex){
+				MessageBox.Show(ex.Message);//more of a notification really.  It will still highlight that appointment.
+				//return;
+			}
 			//if aptNum is already in DS, then use that row.  Otherwise, get a new row.
 			RefreshModulePatient(PIn.PInt(row["PatNum"].ToString()));
 			mouseIsDown=false;
@@ -1822,22 +1820,6 @@ namespace OpenDental{
 			mouseIsDown = false;
 			boolAptMoved=false;
 		}
-
-		/*No longer used
-		///<summary>Mouse down event for the pinboard appointment. </summary>
-		private void PinApptSingle_MouseDown(object sender, System.Windows.Forms.MouseEventArgs e){
-			
-		}
-
-		///<summary>Mouse move event for pinboard appt.</summary>
-		private void PinApptSingle_MouseMove(object sender, System.Windows.Forms.MouseEventArgs e){
-			
-		}
-
-		///<summary>Mouse up event for pinboard appt.</summary>
-		private void PinApptSingle_MouseUp(object sender, System.Windows.Forms.MouseEventArgs e){
-			
-		}*/
 		
 		///<summary>Called when releasing an appointment to make sure it does not overlap any other appointment.  Tests all appts for the day, even if not visible.</summary>
 		private bool DoesOverlap(Appointment aptCur){
@@ -2000,7 +1982,7 @@ namespace OpenDental{
 					mouseIsDown = true;
 				}
 				int thisIndex=GetIndex(ContrApptSingle.ClickedAptNum);
-				pinBoard.SelectedSetNone();
+				pinBoard.SelectedIndex=-1;
 				//ContrApptSingle.PinBoardIsSelected=false;
 				if(ContrApptSingle.SelectedAptNum!=-1//unselects previously selected unless it's the same appt
 					&& ContrApptSingle.SelectedAptNum!=ContrApptSingle.ClickedAptNum){
@@ -3315,7 +3297,7 @@ namespace OpenDental{
 			}
 			Appointments.Delete(ContrApptSingle.SelectedAptNum);
 			ContrApptSingle.SelectedAptNum=-1;
-			pinBoard.SelectedSetNone();
+			pinBoard.SelectedIndex=-1;
 			//ContrApptSingle.PinBoardIsSelected=false;
 			PatCurNum=0;
 			ModuleSelected(PatCurNum);
@@ -3522,45 +3504,51 @@ namespace OpenDental{
 		}
 
 		private void butSearch_Click(object sender, System.EventArgs e) {
-			/*
-			if(!PinApptSingle.Visible){
+			if(pinBoard.ApptList.Count==0){
 				MsgBox.Show(this,"An appointment must be placed on the pinboard before a search can be done.");
 				return;
+			}
+			if(pinBoard.SelectedIndex==-1){
+				if(pinBoard.ApptList.Count==1){
+					pinBoard.SelectedIndex=0;
+				}
+				else{
+					MsgBox.Show(this,"An appointment on the pinboard must be selected before a search can be done.");
+					return;
+				}
 			}
 			if(!groupSearch.Visible){//if search not already visible
 				dateSearch.Text=DateTime.Today.ToShortDateString();
 				ShowSearch();
 			}
-			DoSearch();*/
+			DoSearch();
 		}
 
 		///<summary>Positions the search box, fills it with initial data except date, and makes it visible.</summary>
 		private void ShowSearch(){
-			/*
-			groupSearch.Location=new Point(panelCalendar.Location.X,panelCalendar.Location.Y+282);
+			groupSearch.Location=new Point(panelCalendar.Location.X,panelCalendar.Location.Y+pinBoard.Bottom+2);
 			//if(!groupSearch.Visible){//if search not already visible, 
 			textBefore.Text="";
 			textAfter.Text="";
 			listProviders.Items.Clear();
 			for(int i=0;i<Providers.List.Length;i++){
 				listProviders.Items.Add(Providers.List[i].Abbr);
-				if(PinApptSingle.DataRoww["IsHygiene"].ToString()=="1"
-					&& Providers.List[i].ProvNum.ToString()==PinApptSingle.DataRoww["ProvHyg"].ToString())
+				if(pinBoard.SelectedAppt.DataRoww["IsHygiene"].ToString()=="1"
+					&& Providers.List[i].ProvNum.ToString()==pinBoard.SelectedAppt.DataRoww["ProvHyg"].ToString())
 				{
 					listProviders.SetSelected(i,true);
 				}
-				else if(PinApptSingle.DataRoww["IsHygiene"].ToString()=="0"
-					&& Providers.List[i].ProvNum.ToString()==PinApptSingle.DataRoww["ProvNum"].ToString())
+				else if(pinBoard.SelectedAppt.DataRoww["IsHygiene"].ToString()=="0"
+					&& Providers.List[i].ProvNum.ToString()==pinBoard.SelectedAppt.DataRoww["ProvNum"].ToString())
 				{
 					listProviders.SelectedIndex=i;
 				}
 			}
 			//}
-			groupSearch.Visible=true;*/
+			groupSearch.Visible=true;
 		}
 
 		private void DoSearch(){
-			/*
 			Cursor=Cursors.WaitCursor;
 			DateTime afterDate;
 			try{
@@ -3612,7 +3600,7 @@ namespace OpenDental{
 				providers[i]=Providers.List[listProviders.SelectedIndices[i]].ProvNum;
 			}
 			//the result might be empty
-			SearchResults=Appointments.GetSearchResults(PIn.PInt(PinApptSingle.DataRoww["AptNum"].ToString()),
+			SearchResults=Appointments.GetSearchResults(PIn.PInt(pinBoard.SelectedAppt.DataRoww["AptNum"].ToString()),
 				afterDate,providers,10,beforeTime,afterTime);
 			listSearchResults.Items.Clear();
 			for(int i=0;i<SearchResults.Length;i++){
