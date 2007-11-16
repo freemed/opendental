@@ -11,7 +11,7 @@ namespace OpenDental.UI {
 	public partial class PinBoard:Control {
 		private List<ContrApptSingle> apptList;
 		private int selectedIndex;
-		private bool MouseIsDown;
+		//private bool MouseIsDown;
 		///<summary></summary>
 		[Category("Property Changed"),Description("Event raised when user _clicks_ to select a different appointment.")]
 		public event EventHandler SelectedIndexChanged=null;
@@ -25,6 +25,15 @@ namespace OpenDental.UI {
 		public List<ContrApptSingle> ApptList{
 			get{
 				return apptList;
+			}
+		}
+
+		public ContrApptSingle SelectedAppt{
+			get{
+				if(selectedIndex==-1){
+					return null;
+				}
+				return apptList[selectedIndex];
 			}
 		}
 
@@ -124,6 +133,12 @@ namespace OpenDental.UI {
 				apptList[i].CreateShadow();
 				g.DrawImage(apptList[i].Shadow,0,i*13);
 			}
+			if(apptList.Count==0){
+				StringFormat format=new StringFormat();
+				format.Alignment=StringAlignment.Center;
+				format.LineAlignment=StringAlignment.Center;
+				g.DrawString(Lan.g(this,"Drag Appointments to this PinBoard"),Font,Brushes.Gray,new RectangleF(0,0,Width,Height),format);
+			}
 			base.OnPaint(pe);
 		}
 
@@ -139,13 +154,13 @@ namespace OpenDental.UI {
 				break;
 			}
 			if(index==-1){
-				MouseIsDown=false;
+				base.OnMouseDown(e);
 				return;
 			}
 			if(index==selectedIndex){//no change
+				base.OnMouseDown(e);
 				return;//for now.
 			}
-			MouseIsDown=true;
 			selectedIndex=index;
 			for(int i=0;i<apptList.Count;i++){
 				if(i==selectedIndex){
@@ -157,34 +172,16 @@ namespace OpenDental.UI {
 			}			
 			Invalidate();
 			OnSelectedIndexChanged();
-			/*
-			TempApptSingle=new ContrApptSingle();
-			TempApptSingle.DataRoww=PinApptSingle.DataRoww;
-			TempApptSingle.Visible=false;
-			Controls.Add(TempApptSingle);
-			TempApptSingle.SetLocation();
-			TempApptSingle.CreateShadow();
-			TempApptSingle.BringToFront();
-			ContrApptSingle.SelectedAptNum=-1;
-			RefreshModulePatient(PIn.PInt(PinApptSingle.DataRoww["PatNum"].ToString()));
-			PinApptSingle.CreateShadow();
-			PinApptSingle.Refresh();
-			CreateAptShadows();
-			ContrApptSheet2.DrawShadow();
-			//mouseOrigin is in ContrAppt coordinates (essentially, the entire window)
-			mouseOrigin.X=e.X+PinApptSingle.Location.X;
-			mouseOrigin.Y=e.Y+PinApptSingle.Location.Y;
-			contOrigin=PinApptSingle.Location;*/
 			base.OnMouseDown(e);
 		}
 
 		protected override void OnMouseLeave(EventArgs e) {
-			MouseIsDown=false;
+			//MouseIsDown=false;
 			base.OnMouseLeave(e);
 		}
 
 		protected override void OnMouseUp(MouseEventArgs e) {
-			MouseIsDown=false;
+			//MouseIsDown=false;
 			base.OnMouseUp(e);
 		}
 		#endregion
