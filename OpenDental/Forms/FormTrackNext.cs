@@ -271,10 +271,6 @@ namespace OpenDental{
 			Close();
 		}
 
-		//private void FormUnsched_Closing(object sender, System.ComponentModel.CancelEventArgs e) {
-		//	
-		//}
-
 		private void FormTrackNext_FormClosing(object sender,FormClosingEventArgs e) {
 			Patients.HList=null;
 			if(gridMain.GetSelectedIndex()!=-1) {

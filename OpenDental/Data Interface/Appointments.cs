@@ -24,11 +24,25 @@ namespace OpenDental{
 			return FillList(command).ToArray();
 		}
 
-		///<summary>Gets list of unscheduled appointments.</summary>
-		public static Appointment[] RefreshUnsched() {
-			string command="SELECT * FROM appointment "
-				+"WHERE AptStatus = "+POut.PInt((int)ApptStatus.UnschedList)
-				+" ORDER BY AptDateTime";
+		///<summary>Gets list of unscheduled appointments.  Allowed orderby: status, alph, date</summary>
+		public static Appointment[] RefreshUnsched(string orderby,int provNum) {
+			string command="SELECT * FROM appointment ";
+			if(orderby=="alph") {
+				command+="LEFT JOIN patient ON patient.PatNum=appointment.PatNum ";
+			}
+			command+="WHERE AptStatus = "+POut.PInt((int)ApptStatus.UnschedList)+" ";
+			if(provNum>0) {
+				command+="AND (appointment.ProvNum="+POut.PInt(provNum)+" OR appointment.ProvHyg="+POut.PInt(provNum)+") ";
+			}
+			if(orderby=="status") {
+				command+="ORDER BY UnschedStatus,AptDateTime";
+			}
+			else if(orderby=="alph") {
+				command+="ORDER BY LName,FName";
+			}
+			else { //if(orderby=="date"){
+				command+="ORDER BY AptDateTime";
+			}
 			return FillList(command).ToArray();
 		}
 

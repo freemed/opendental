@@ -25,8 +25,8 @@ namespace OpenDental{
 		private int pagesPrinted;
 		///<summary>Only used if PinClicked=true</summary>
 		public int AptSelected;
-		private RadioButton radioByDate;
-		private RadioButton radioAlphabetical;
+		private ComboBox comboOrder;
+		private Label label1;
 		private ComboBox comboProv;
 		private Label label4;
 		private OpenDental.UI.Button butRefresh;
@@ -60,8 +60,8 @@ namespace OpenDental{
 			this.butClose = new OpenDental.UI.Button();
 			this.grid = new OpenDental.UI.ODGrid();
 			this.butPrint = new OpenDental.UI.Button();
-			this.radioByDate = new System.Windows.Forms.RadioButton();
-			this.radioAlphabetical = new System.Windows.Forms.RadioButton();
+			this.comboOrder = new System.Windows.Forms.ComboBox();
+			this.label1 = new System.Windows.Forms.Label();
 			this.comboProv = new System.Windows.Forms.ComboBox();
 			this.label4 = new System.Windows.Forms.Label();
 			this.butRefresh = new OpenDental.UI.Button();
@@ -85,10 +85,10 @@ namespace OpenDental{
 			// grid
 			// 
 			this.grid.HScrollVisible = false;
-			this.grid.Location = new System.Drawing.Point(10,71);
+			this.grid.Location = new System.Drawing.Point(10,38);
 			this.grid.Name = "grid";
 			this.grid.ScrollValue = 0;
-			this.grid.Size = new System.Drawing.Size(734,584);
+			this.grid.Size = new System.Drawing.Size(734,617);
 			this.grid.TabIndex = 8;
 			this.grid.Title = "Unscheduled List";
 			this.grid.TranslationName = "TableUnsched";
@@ -111,41 +111,39 @@ namespace OpenDental{
 			this.butPrint.Text = "Print List";
 			this.butPrint.Click += new System.EventHandler(this.butPrint_Click);
 			// 
-			// radioByDate
+			// comboOrder
 			// 
-			this.radioByDate.Checked = true;
-			this.radioByDate.Location = new System.Drawing.Point(319,36);
-			this.radioByDate.Name = "radioByDate";
-			this.radioByDate.Size = new System.Drawing.Size(117,20);
-			this.radioByDate.TabIndex = 23;
-			this.radioByDate.TabStop = true;
-			this.radioByDate.Text = "By Date";
-			this.radioByDate.UseVisualStyleBackColor = true;
+			this.comboOrder.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboOrder.Location = new System.Drawing.Point(102,8);
+			this.comboOrder.MaxDropDownItems = 40;
+			this.comboOrder.Name = "comboOrder";
+			this.comboOrder.Size = new System.Drawing.Size(133,21);
+			this.comboOrder.TabIndex = 35;
 			// 
-			// radioAlphabetical
+			// label1
 			// 
-			this.radioAlphabetical.Location = new System.Drawing.Point(319,16);
-			this.radioAlphabetical.Name = "radioAlphabetical";
-			this.radioAlphabetical.Size = new System.Drawing.Size(117,20);
-			this.radioAlphabetical.TabIndex = 22;
-			this.radioAlphabetical.Text = "Alphabetical";
-			this.radioAlphabetical.UseVisualStyleBackColor = true;
+			this.label1.Location = new System.Drawing.Point(9,12);
+			this.label1.Name = "label1";
+			this.label1.Size = new System.Drawing.Size(91,14);
+			this.label1.TabIndex = 34;
+			this.label1.Text = "Order by";
+			this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// comboProv
 			// 
 			this.comboProv.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboProv.Location = new System.Drawing.Point(102,12);
+			this.comboProv.Location = new System.Drawing.Point(329,8);
 			this.comboProv.MaxDropDownItems = 40;
 			this.comboProv.Name = "comboProv";
 			this.comboProv.Size = new System.Drawing.Size(181,21);
-			this.comboProv.TabIndex = 26;
+			this.comboProv.TabIndex = 33;
 			// 
 			// label4
 			// 
-			this.label4.Location = new System.Drawing.Point(9,16);
+			this.label4.Location = new System.Drawing.Point(236,12);
 			this.label4.Name = "label4";
 			this.label4.Size = new System.Drawing.Size(91,14);
-			this.label4.TabIndex = 25;
+			this.label4.TabIndex = 32;
 			this.label4.Text = "Provider";
 			this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
@@ -157,22 +155,23 @@ namespace OpenDental{
 			this.butRefresh.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butRefresh.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butRefresh.CornerRadius = 4F;
-			this.butRefresh.Location = new System.Drawing.Point(199,39);
+			this.butRefresh.Location = new System.Drawing.Point(529,6);
 			this.butRefresh.Name = "butRefresh";
 			this.butRefresh.Size = new System.Drawing.Size(84,26);
-			this.butRefresh.TabIndex = 24;
+			this.butRefresh.TabIndex = 31;
 			this.butRefresh.Text = "&Refresh";
+			this.butRefresh.Click += new System.EventHandler(this.butRefresh_Click);
 			// 
 			// FormUnsched
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.CancelButton = this.butClose;
 			this.ClientSize = new System.Drawing.Size(858,672);
+			this.Controls.Add(this.comboOrder);
+			this.Controls.Add(this.label1);
 			this.Controls.Add(this.comboProv);
 			this.Controls.Add(this.label4);
 			this.Controls.Add(this.butRefresh);
-			this.Controls.Add(this.radioByDate);
-			this.Controls.Add(this.radioAlphabetical);
 			this.Controls.Add(this.butPrint);
 			this.Controls.Add(this.grid);
 			this.Controls.Add(this.butClose);
@@ -193,12 +192,37 @@ namespace OpenDental{
 
 		private void FormUnsched_Load(object sender, System.EventArgs e) {
 			Patients.GetHList();
+			comboOrder.Items.Add(Lan.g(this,"Status"));
+			comboOrder.Items.Add(Lan.g(this,"Alphabetical"));
+			comboOrder.Items.Add(Lan.g(this,"Date"));
+			comboOrder.SelectedIndex=0;
+			comboProv.Items.Add(Lan.g(this,"All"));
+			comboProv.SelectedIndex=0;
+			for(int i=0;i<Providers.List.Length;i++) {
+				comboProv.Items.Add(Providers.List[i].GetLongDesc());
+			}
 			FillGrid();
 		}
 
 		private void FillGrid(){
 			this.Cursor=Cursors.WaitCursor;
-			ListUn=Appointments.RefreshUnsched();
+			string order="";
+			switch(comboOrder.SelectedIndex) {
+				case 0:
+					order="status";
+					break;
+				case 1:
+					order="alph";
+					break;
+				case 2:
+					order="date";
+					break;
+			}
+			int provNum=0;
+			if(comboProv.SelectedIndex!=0) {
+				provNum=Providers.List[comboProv.SelectedIndex-1].ProvNum;
+			}
+			ListUn=Appointments.RefreshUnsched(order,provNum);
 			int scrollVal=grid.ScrollValue;
 			grid.BeginUpdate();
 			grid.Columns.Clear();
@@ -234,10 +258,6 @@ namespace OpenDental{
 			Cursor=Cursors.Default;
 		}
 
-		//private void tbApts_CellDoubleClicked(object sender, CellEventArgs e){
-			
-		//}
-
 		private void grid_CellDoubleClick(object sender,ODGridClickEventArgs e) {
 			int currentSelection=e.Row;//tbApts.SelectedRow;
 			int currentScroll=grid.ScrollValue;//tbApts.ScrollValue;
@@ -257,6 +277,10 @@ namespace OpenDental{
 				grid.SetSelected(currentSelection,true);
 				grid.ScrollValue=currentScroll;
 			}
+		}
+
+		private void butRefresh_Click(object sender,EventArgs e) {
+			FillGrid();
 		}
 
 		private void butPrint_Click(object sender,EventArgs e) {
@@ -331,6 +355,8 @@ namespace OpenDental{
 				SelectedPatNum=ListUn[grid.SelectedIndices[0]].PatNum;
 			}
 		}
+
+		
 
 		
 
