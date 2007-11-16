@@ -36,13 +36,10 @@ namespace OpenDental{
 		///<summary>Control origin.  If moving an appointment, this is the location where the appointment was at the beginning of the drag.</summary>
 		private Point contOrigin = new Point();
 		private ContrApptSingle TempApptSingle;
-		private ContrApptSingle PinApptSingle;
 		private System.Windows.Forms.ImageList imageListMain;
-		private System.Windows.Forms.PictureBox pictureBox1;
 		private bool boolAptMoved=false;
 		private OpenDental.UI.Button butToday;
 		private OpenDental.UI.Button butTodayWk;
-		private System.Windows.Forms.Panel panelPinBoard;
 		private System.Windows.Forms.Panel panelSheet;
 		private System.Windows.Forms.Panel panelCalendar;
 		private System.Windows.Forms.Panel panelArrows;
@@ -62,8 +59,6 @@ namespace OpenDental{
 		public static int SheetClickedonMin;
 		private System.Drawing.Printing.PrintDocument pd2;
 		private System.Windows.Forms.PrintDialog printDialog2;
-		///<summary></summary>
-		public static Size PinboardSize=new Size(106,92);
 		private OpenDental.UI.Button butBack;
 		private OpenDental.UI.Button butClearPin;
 		private OpenDental.UI.Button butBackWk;
@@ -134,6 +129,10 @@ namespace OpenDental{
 		private int PatCurNum;
 		private Timer timerInfoBubble;
 		private string PatCurChartNumber;
+		//<summary></summary>
+		//public static Size PinboardSize=new Size(106,92);
+		private PinBoard pinBoard;
+		//private ContrApptSingle PinApptSingle;
 
 		///<summary></summary>
 		public ContrAppt(){
@@ -171,8 +170,6 @@ namespace OpenDental{
 		private void InitializeComponent(){
 			this.components = new System.ComponentModel.Container();
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ContrAppt));
-			this.panelPinBoard = new System.Windows.Forms.Panel();
-			this.pictureBox1 = new System.Windows.Forms.PictureBox();
 			this.imageListMain = new System.Windows.Forms.ImageList(this.components);
 			this.Calendar2 = new System.Windows.Forms.MonthCalendar();
 			this.labelDate = new System.Windows.Forms.Label();
@@ -194,6 +191,7 @@ namespace OpenDental{
 			this.butDelete = new System.Windows.Forms.Button();
 			this.butBreak = new System.Windows.Forms.Button();
 			this.panelCalendar = new System.Windows.Forms.Panel();
+			this.pinBoard = new OpenDental.UI.PinBoard();
 			this.butLab = new OpenDental.UI.Button();
 			this.butSearch = new OpenDental.UI.Button();
 			this.textProduction = new System.Windows.Forms.TextBox();
@@ -233,8 +231,6 @@ namespace OpenDental{
 			this.gridEmpSched = new OpenDental.UI.ODGrid();
 			this.butOther = new OpenDental.UI.Button();
 			this.ToolBarMain = new OpenDental.UI.ODToolBar();
-			this.panelPinBoard.SuspendLayout();
-			((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
 			this.panelArrows.SuspendLayout();
 			this.panelSheet.SuspendLayout();
 			this.panelAptInfo.SuspendLayout();
@@ -243,24 +239,6 @@ namespace OpenDental{
 			this.groupBox2.SuspendLayout();
 			this.panel1.SuspendLayout();
 			this.SuspendLayout();
-			// 
-			// panelPinBoard
-			// 
-			this.panelPinBoard.BackColor = System.Drawing.SystemColors.Window;
-			this.panelPinBoard.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-			this.panelPinBoard.Controls.Add(this.pictureBox1);
-			this.panelPinBoard.Location = new System.Drawing.Point(101,187);
-			this.panelPinBoard.Name = "panelPinBoard";
-			this.panelPinBoard.Size = new System.Drawing.Size(101,98);
-			this.panelPinBoard.TabIndex = 6;
-			// 
-			// pictureBox1
-			// 
-			this.pictureBox1.Location = new System.Drawing.Point(80,2);
-			this.pictureBox1.Name = "pictureBox1";
-			this.pictureBox1.Size = new System.Drawing.Size(20,20);
-			this.pictureBox1.TabIndex = 0;
-			this.pictureBox1.TabStop = false;
 			// 
 			// imageListMain
 			// 
@@ -501,6 +479,7 @@ namespace OpenDental{
 			// 
 			// panelCalendar
 			// 
+			this.panelCalendar.Controls.Add(this.pinBoard);
 			this.panelCalendar.Controls.Add(this.butLab);
 			this.panelCalendar.Controls.Add(this.butSearch);
 			this.panelCalendar.Controls.Add(this.textProduction);
@@ -512,12 +491,20 @@ namespace OpenDental{
 			this.panelCalendar.Controls.Add(this.Calendar2);
 			this.panelCalendar.Controls.Add(this.labelDate);
 			this.panelCalendar.Controls.Add(this.labelDate2);
-			this.panelCalendar.Controls.Add(this.panelPinBoard);
 			this.panelCalendar.Controls.Add(this.panelArrows);
 			this.panelCalendar.Location = new System.Drawing.Point(665,28);
 			this.panelCalendar.Name = "panelCalendar";
 			this.panelCalendar.Size = new System.Drawing.Size(219,351);
 			this.panelCalendar.TabIndex = 46;
+			// 
+			// pinBoard
+			// 
+			this.pinBoard.Location = new System.Drawing.Point(104,189);
+			this.pinBoard.Name = "pinBoard";
+			this.pinBoard.Size = new System.Drawing.Size(99,96);
+			this.pinBoard.TabIndex = 78;
+			this.pinBoard.Text = "pinBoard";
+			this.pinBoard.SelectedIndexChanged += new System.EventHandler(this.pinBoard_SelectedIndexChanged);
 			// 
 			// butLab
 			// 
@@ -912,8 +899,6 @@ namespace OpenDental{
 			this.Layout += new System.Windows.Forms.LayoutEventHandler(this.ContrAppt_Layout);
 			this.Load += new System.EventHandler(this.ContrAppt_Load);
 			this.Resize += new System.EventHandler(this.ContrAppt_Resize);
-			this.panelPinBoard.ResumeLayout(false);
-			((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
 			this.panelArrows.ResumeLayout(false);
 			this.panelSheet.ResumeLayout(false);
 			this.panelAptInfo.ResumeLayout(false);
@@ -946,7 +931,7 @@ namespace OpenDental{
 		///<summary>Includes RefreshModulePatient.  One overload is used when jumping here from another module, and you want to place an appointment on the pinboard.</summary>
 		public void ModuleSelected(int patNum,int pinAptNum){
 			ModuleSelected(patNum);
-			CurToPinBoard(pinAptNum);
+			SendToPinBoard(pinAptNum);
 		}
 
 		///<summary></summary>
@@ -1186,13 +1171,14 @@ namespace OpenDental{
 
 		///<summary>Called from FormOpenDental upon startup.</summary>
 		public void InitializeOnStartup(){
+			/*
 			PinApptSingle=new ContrApptSingle();
 			PinApptSingle.Visible=false;
 			PinApptSingle.ThisIsPinBoard=true;
 			this.Controls.Add(PinApptSingle);
 			PinApptSingle.MouseDown += new System.Windows.Forms.MouseEventHandler(PinApptSingle_MouseDown);
 			PinApptSingle.MouseUp += new System.Windows.Forms.MouseEventHandler(PinApptSingle_MouseUp);
-			PinApptSingle.MouseMove += new System.Windows.Forms.MouseEventHandler(PinApptSingle_MouseMove);
+			PinApptSingle.MouseMove += new System.Windows.Forms.MouseEventHandler(PinApptSingle_MouseMove);*/
 			ContrApptSheet.RowsPerIncr=1;
 			Appointments.DateSelected=DateTime.Now;
 			ContrApptSingle.SelectedAptNum=-1;
@@ -1421,7 +1407,8 @@ namespace OpenDental{
 				ContrApptSingle3[i].SetLocation();
 				ContrApptSheet2.Controls.Add(ContrApptSingle3[i]);
 			}//end for
-			PinApptSingle.Refresh();
+			//PinApptSingle.Refresh();
+			pinBoard.Invalidate();
 			ContrApptSheet2.SchedListPeriod=SchedListPeriod;
 			ContrApptSheet2.CreateShadow();
 			CreateAptShadows();
@@ -1583,9 +1570,7 @@ namespace OpenDental{
 		}
 
 		///<summary>Loads all info for for specified appointment into the control that displays the pinboard appointment. Runs RefreshModulePatient.  Sets pinboard appointment as selected.</summary>
-		private void CurToPinBoard(int aptNum){
-			PinApptSingle.Visible=false;
-			//if aptNum is already in DS, then use that row.  Otherwise, get a new row.
+		private void SendToPinBoard(int aptNum){
 			DataRow row=null;
 			for(int i=0;i<DS.Tables["Appointments"].Rows.Count;i++){
 				if(DS.Tables["Appointments"].Rows[i]["AptNum"].ToString()==aptNum.ToString()){
@@ -1600,25 +1585,28 @@ namespace OpenDental{
 					row=Appointments.RefreshOneApt(aptNum,true).Rows[0];
 				}
 			}
+			pinBoard.AddAppointment(row);
+			//PinApptSingle.Visible=false;
+			//if aptNum is already in DS, then use that row.  Otherwise, get a new row.
 			RefreshModulePatient(PIn.PInt(row["PatNum"].ToString()));
-			PinApptSingle.DataRoww=row;
-			PinApptSingle.SetLocation();//MUST come before next line
-			PinApptSingle.Location=new Point(panelCalendar.Location.X+panelPinBoard.Location.X+2
-				,panelCalendar.Location.Y+panelPinBoard.Location.Y+2);
-			PinApptSingle.SetSize();
-			PinApptSingle.Visible=true;
-			PinApptSingle.BringToFront();
+			//PinApptSingle.DataRoww=row;
+			//PinApptSingle.SetLocation();//MUST come before next line
+			//PinApptSingle.Location=new Point(panelCalendar.Location.X+pinBoard.Location.X+2
+			//	,panelCalendar.Location.Y+pinBoard.Location.Y+2);
+			//PinApptSingle.SetSize();
+			//PinApptSingle.Visible=true;
+			//PinApptSingle.BringToFront();
 			mouseIsDown=false;
 			boolAptMoved=false;
-			ContrApptSingle.PinBoardIsSelected=true;
+			//ContrApptSingle.PinBoardIsSelected=true;
 			ContrApptSingle.SelectedAptNum=-1;
-			PinApptSingle.CreateShadow();
-			PinApptSingle.Refresh();
+			//PinApptSingle.CreateShadow();
+			//PinApptSingle.Refresh();*/
 		}
 
 		///<summary>Mouse down event for the pinboard appointment. Sets selected and prepares for drag.</summary>
 		private void PinApptSingle_MouseDown(object sender, System.Windows.Forms.MouseEventArgs e){
-			mouseIsDown = true;
+			/*mouseIsDown = true;
 			ContrApptSingle.PinBoardIsSelected=true;
 			TempApptSingle=new ContrApptSingle();
 			TempApptSingle.DataRoww=PinApptSingle.DataRoww;
@@ -1636,12 +1624,16 @@ namespace OpenDental{
 			//mouseOrigin is in ContrAppt coordinates (essentially, the entire window)
 			mouseOrigin.X=e.X+PinApptSingle.Location.X;
 			mouseOrigin.Y=e.Y+PinApptSingle.Location.Y;
-			contOrigin=PinApptSingle.Location;
+			contOrigin=PinApptSingle.Location;*/
+		}
+
+		private void pinBoard_SelectedIndexChanged(object sender,EventArgs e) {
+			RefreshModulePatient(PIn.PInt(pinBoard.ApptList[pinBoard.SelectedIndex].DataRoww["PatNum"].ToString()));
 		}
 
 		///<summary>Mouse move event for pinboard appt. Moves pinboard appt if mouse is down.</summary>
 		private void PinApptSingle_MouseMove(object sender, System.Windows.Forms.MouseEventArgs e){
-			if(mouseIsDown==false) return;
+			/*if(mouseIsDown==false) return;
 			if((Math.Abs(e.X+PinApptSingle.Location.X-mouseOrigin.X)<1)
 				&&(Math.Abs(e.Y+PinApptSingle.Location.Y-mouseOrigin.Y)<1)){
 				return;
@@ -1655,12 +1647,12 @@ namespace OpenDental{
 				contOrigin.X+(e.X+PinApptSingle.Location.X)-mouseOrigin.X,contOrigin.Y+(e.Y+PinApptSingle.Location.Y)-mouseOrigin.Y);
 			if(TempApptSingle.Height==1){
 				TempApptSingle.SetSize();
-			}
+			}*/
 		}
 
 		///<summary>Mouse up event for pinboard appt.  Usually happens after pinboard appt has been dragged onto main appt sheet.</summary>
 		private void PinApptSingle_MouseUp(object sender, System.Windows.Forms.MouseEventArgs e){
-			if(!boolAptMoved){
+			/*if(!boolAptMoved){
 				mouseIsDown=false;
 				TempApptSingle.Dispose();
 				return;
@@ -1824,7 +1816,7 @@ namespace OpenDental{
 			SetInvalid();//for date moved from for other computers.
 			Appointments.DateSelected=aptCur.AptDateTime;
 			mouseIsDown = false;
-			boolAptMoved=false;
+			boolAptMoved=false;*/
 		}//end PinApptSingle_mouseup
 		
 		///<summary>Called when releasing an appointment to make sure it does not overlap any other appointment.  Tests all appts for the day, even if not visible.</summary>
@@ -1988,7 +1980,8 @@ namespace OpenDental{
 					mouseIsDown = true;
 				}
 				int thisIndex=GetIndex(ContrApptSingle.ClickedAptNum);
-				ContrApptSingle.PinBoardIsSelected=false;
+				pinBoard.SelectedSetNone();
+				//ContrApptSingle.PinBoardIsSelected=false;
 				if(ContrApptSingle.SelectedAptNum!=-1//unselects previously selected unless it's the same appt
 					&& ContrApptSingle.SelectedAptNum!=ContrApptSingle.ClickedAptNum){
 					int prevSel=GetIndex(ContrApptSingle.SelectedAptNum);
@@ -2076,10 +2069,11 @@ namespace OpenDental{
 				}
 			}
 			grfx.Dispose();
-			if(PinApptSingle.Visible){
-				PinApptSingle.CreateShadow();
-				PinApptSingle.Refresh();
-			}
+			pinBoard.Invalidate();
+			//if(PinApptSingle.Visible){
+			//	PinApptSingle.CreateShadow();
+			//	PinApptSingle.Refresh();
+			//}
 			CreateAptShadows();
 		}
 
@@ -2230,7 +2224,7 @@ namespace OpenDental{
 					return;
 				}
 				int prevSel=GetIndex(ContrApptSingle.SelectedAptNum);
-				CurToPinBoard(ContrApptSingle.SelectedAptNum);//sets selectedAptNum=-1. do before refresh prev
+				SendToPinBoard(ContrApptSingle.SelectedAptNum);//sets selectedAptNum=-1. do before refresh prev
 				if(prevSel!=-1) {
 					CreateAptShadows();
 					ContrApptSheet2.DrawShadow();
@@ -2669,17 +2663,17 @@ namespace OpenDental{
 			}
 			switch(FormAO.OResult){
 				case OtherResult.CopyToPinBoard:
-					CurToPinBoard(FormAO.AptSelected);
+					SendToPinBoard(FormAO.AptSelected);
 					RefreshModulePatient(FormAO.SelectedPatNum);
 					RefreshPeriod();
 					break;
 				case OtherResult.NewToPinBoard:
-					CurToPinBoard(FormAO.AptSelected);
+					SendToPinBoard(FormAO.AptSelected);
 					RefreshModulePatient(FormAO.SelectedPatNum);
 					RefreshPeriod();
 					break;
 				case OtherResult.PinboardAndSearch:
-					CurToPinBoard(FormAO.AptSelected);
+					SendToPinBoard(FormAO.AptSelected);
 					if(ContrApptSheet.IsWeeklyView) {
 						break;
 					}
@@ -2737,7 +2731,7 @@ namespace OpenDental{
 			FormUnsched FormUnsched2=new FormUnsched();
 			FormUnsched2.ShowDialog();
 			if(FormUnsched2.PinClicked){
-				CurToPinBoard(FormUnsched2.AptSelected);
+				SendToPinBoard(FormUnsched2.AptSelected);
 			}
 			if(FormUnsched2.SelectedPatNum!=0){
 				RefreshModulePatient(FormUnsched2.SelectedPatNum);
@@ -2750,7 +2744,7 @@ namespace OpenDental{
 			FormRecallList FormRL=new FormRecallList();
 			FormRL.ShowDialog();
 			if(FormRL.PinClicked){
-				CurToPinBoard(FormRL.AptSelected);
+				SendToPinBoard(FormRL.AptSelected);
 			}
 			if(FormRL.SelectedPatNum!=0){
 				RefreshModulePatient(FormRL.SelectedPatNum);
@@ -2763,7 +2757,7 @@ namespace OpenDental{
 			FormConfirmList FormC=new FormConfirmList();
 			FormC.ShowDialog();
 			if(FormC.PinClicked) {
-				CurToPinBoard(FormC.AptSelected);
+				SendToPinBoard(FormC.AptSelected);
 			}
 			if(FormC.SelectedPatNum!=0){
 				RefreshModulePatient(FormC.SelectedPatNum);
@@ -2776,7 +2770,7 @@ namespace OpenDental{
 			FormTrackNext FormTN=new FormTrackNext();
 			FormTN.ShowDialog();
 			if(FormTN.PinClicked){
-				CurToPinBoard(FormTN.AptSelected);
+				SendToPinBoard(FormTN.AptSelected);
 			}
 			if(FormTN.SelectedPatNum!=0) {
 				RefreshModulePatient(FormTN.SelectedPatNum);
@@ -2974,26 +2968,39 @@ namespace OpenDental{
 
 		///<summary>Clears the pinboard.</summary>
 		private void butClearPin_Click(object sender, System.EventArgs e) {
-			if(!PinApptSingle.Visible){
+			if(pinBoard.ApptList.Count==0) {
+				MsgBox.Show(this,"There are no appointments on the pinboard to clear.");
 				return;
 			}
-			PinApptSingle.Visible=false;
+			if(pinBoard.SelectedIndex==-1){
+				MsgBox.Show(this,"Please select an appointment first.");
+				return;
+			}
+			DataRow row=pinBoard.ApptList[pinBoard.SelectedIndex].DataRoww;
+			pinBoard.ClearSelected();
 			ContrApptSingle.SelectedAptNum=-1;
-			ContrApptSingle.PinBoardIsSelected=false;
-			if(PinApptSingle.DataRoww["AptStatus"].ToString()==((int)ApptStatus.UnschedList).ToString()){//on unscheduled list
+			if(row["AptStatus"].ToString()==((int)ApptStatus.UnschedList).ToString()){//on unscheduled list
 				//do nothing to database
 			}
-			else if(PIn.PDateT(PinApptSingle.DataRoww["AptDateTime"].ToString()).Year<1880){//not already scheduled
-				Patient pat=Patients.GetPat(PIn.PInt(PinApptSingle.DataRoww["PatNum"].ToString()));//so we can test for next apt.
-				if(PinApptSingle.DataRoww["AptNum"].ToString()==pat.NextAptNum.ToString()){//if is planned apt
+			else if(PIn.PDateT(row["AptDateTime"].ToString()).Year>1880){//already scheduled
+				//do nothing to database
+			}
+			else{
+				Patient pat=Patients.GetPat(PIn.PInt(row["PatNum"].ToString()));//so we can test for planned apt.
+				if(row["AptNum"].ToString()==pat.NextAptNum.ToString()){//if is planned apt
 					//do nothing except remove it from pinboard
 				}
 				else{//for normal appt:
 					//this gets rid of new appointments that never made it off the pinboard
-					Appointments.Delete(PIn.PInt(PinApptSingle.DataRoww["AptNum"].ToString()));
+					Appointments.Delete(PIn.PInt(row["AptNum"].ToString()));
 				}
 			}
-			RefreshModulePatient(0);
+			if(pinBoard.SelectedIndex==-1){
+				RefreshModulePatient(0);
+			}
+			else{
+				RefreshModulePatient(PIn.PInt(pinBoard.ApptList[pinBoard.SelectedIndex].DataRoww["PatNum"].ToString()));
+			}
 		}
 
 		///<summary>The scrollbar has been moved by the user.</summary>
@@ -3287,9 +3294,9 @@ namespace OpenDental{
 					+ "Deleted");
 			}
 			Appointments.Delete(ContrApptSingle.SelectedAptNum);
-
 			ContrApptSingle.SelectedAptNum=-1;
-			ContrApptSingle.PinBoardIsSelected=false;
+			pinBoard.SelectedSetNone();
+			//ContrApptSingle.PinBoardIsSelected=false;
 			PatCurNum=0;
 			ModuleSelected(PatCurNum);
 			SetInvalid();
@@ -3475,7 +3482,7 @@ namespace OpenDental{
 				return;
 			}
 			int prevSel=GetIndex(ContrApptSingle.SelectedAptNum);
-			CurToPinBoard(ContrApptSingle.SelectedAptNum);//sets selectedAptNum=-1. do before refresh prev
+			SendToPinBoard(ContrApptSingle.SelectedAptNum);//sets selectedAptNum=-1. do before refresh prev
 			if(prevSel!=-1) {
 				CreateAptShadows();
 				ContrApptSheet2.DrawShadow();
@@ -3495,6 +3502,7 @@ namespace OpenDental{
 		}
 
 		private void butSearch_Click(object sender, System.EventArgs e) {
+			/*
 			if(!PinApptSingle.Visible){
 				MsgBox.Show(this,"An appointment must be placed on the pinboard before a search can be done.");
 				return;
@@ -3503,11 +3511,12 @@ namespace OpenDental{
 				dateSearch.Text=DateTime.Today.ToShortDateString();
 				ShowSearch();
 			}
-			DoSearch();
+			DoSearch();*/
 		}
 
 		///<summary>Positions the search box, fills it with initial data except date, and makes it visible.</summary>
 		private void ShowSearch(){
+			/*
 			groupSearch.Location=new Point(panelCalendar.Location.X,panelCalendar.Location.Y+282);
 			//if(!groupSearch.Visible){//if search not already visible, 
 			textBefore.Text="";
@@ -3527,10 +3536,11 @@ namespace OpenDental{
 				}
 			}
 			//}
-			groupSearch.Visible=true;
+			groupSearch.Visible=true;*/
 		}
 
 		private void DoSearch(){
+			/*
 			Cursor=Cursors.WaitCursor;
 			DateTime afterDate;
 			try{
@@ -3596,7 +3606,7 @@ namespace OpenDental{
 			SetWeeklyView(false);//jump to that day.
 			Cursor=Cursors.Default;
 			//scroll to make visible?
-			//highlight schedule?
+			//highlight schedule?*/
 		}
 
 		private void butSearchMore_Click(object sender, System.EventArgs e) {
@@ -3752,6 +3762,8 @@ namespace OpenDental{
 			InfoBubbleDraw(bubbleLocation);
 			timerInfoBubble.Enabled =false;
 		}
+
+		
 
 		
 

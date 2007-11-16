@@ -3003,6 +3003,12 @@
     <Compile Include="UI\PictureBox.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="UI\PinBoard.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="UI\PinBoard.Designer.cs">
+      <DependentUpon>PinBoard.cs</DependentUpon>
+    </Compile>
     <Compile Include="UI\PrintPreview.cs">
       <SubType>Form</SubType>
     </Compile>
