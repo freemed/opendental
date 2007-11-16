@@ -6124,7 +6124,8 @@ namespace OpenDental{
 				General.NonQEx(command);
 				command="ALTER TABLE treatplan ADD SigIsTopaz tinyint(1) not null";
 				General.NonQEx(command);
-
+				command = "INSERT INTO preference VALUES('TreatPlanPriorityForDeclined','0')";
+				General.NonQEx(command);
 
 
 

@@ -131,7 +131,7 @@ namespace OpenDental{
 
 		private void FillGrid(){
 			this.Cursor=Cursors.WaitCursor;
-			ListUn=Appointments.RefreshUnsched(false);
+			ListUn=Appointments.RefreshUnsched();
 			int scrollVal=grid.ScrollValue;
 			grid.BeginUpdate();
 			grid.Columns.Clear();

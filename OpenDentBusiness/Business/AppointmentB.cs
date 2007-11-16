@@ -12,33 +12,35 @@ namespace OpenDentBusiness{
 			return TableToObjects(table)[0];
 		}
 
-		public static Appointment[] TableToObjects(DataTable table) {
-			Appointment[] list=new Appointment[table.Rows.Count];
+		public static List<Appointment> TableToObjects(DataTable table) {
+			List<Appointment> list=new List<Appointment>();
+			Appointment apt;
 			for(int i=0;i<table.Rows.Count;i++) {
-				list[i]=new Appointment();
-				list[i].AptNum         =PIn.PInt(table.Rows[i][0].ToString());
-				list[i].PatNum         =PIn.PInt(table.Rows[i][1].ToString());
-				list[i].AptStatus      =(ApptStatus)PIn.PInt(table.Rows[i][2].ToString());
-				list[i].Pattern        =PIn.PString(table.Rows[i][3].ToString());
-				list[i].Confirmed      =PIn.PInt(table.Rows[i][4].ToString());
-				list[i].AddTime        =PIn.PInt(table.Rows[i][5].ToString());
-				list[i].Op             =PIn.PInt(table.Rows[i][6].ToString());
-				list[i].Note           =PIn.PString(table.Rows[i][7].ToString());
-				list[i].ProvNum        =PIn.PInt(table.Rows[i][8].ToString());
-				list[i].ProvHyg        =PIn.PInt(table.Rows[i][9].ToString());
-				list[i].AptDateTime    =PIn.PDateT(table.Rows[i][10].ToString());
-				list[i].NextAptNum     =PIn.PInt(table.Rows[i][11].ToString());
-				list[i].UnschedStatus  =PIn.PInt(table.Rows[i][12].ToString());
-				//list[i].Lab            =PIn.PInt(table.Rows[i][13].ToString());
-				list[i].IsNewPatient   =PIn.PBool(table.Rows[i][14].ToString());
-				list[i].ProcDescript   =PIn.PString(table.Rows[i][15].ToString());
-				list[i].Assistant      =PIn.PInt(table.Rows[i][16].ToString());
-				list[i].InstructorNum  =PIn.PInt(table.Rows[i][17].ToString());
-				list[i].SchoolClassNum =PIn.PInt(table.Rows[i][18].ToString());
-				list[i].SchoolCourseNum=PIn.PInt(table.Rows[i][19].ToString());
-				list[i].GradePoint     =PIn.PFloat(table.Rows[i][20].ToString());
-				list[i].ClinicNum      =PIn.PInt(table.Rows[i][21].ToString());
-				list[i].IsHygiene      =PIn.PBool(table.Rows[i][22].ToString());
+				apt=new Appointment();
+				apt.AptNum         =PIn.PInt(table.Rows[i][0].ToString());
+				apt.PatNum         =PIn.PInt(table.Rows[i][1].ToString());
+				apt.AptStatus      =(ApptStatus)PIn.PInt(table.Rows[i][2].ToString());
+				apt.Pattern        =PIn.PString(table.Rows[i][3].ToString());
+				apt.Confirmed      =PIn.PInt(table.Rows[i][4].ToString());
+				apt.AddTime        =PIn.PInt(table.Rows[i][5].ToString());
+				apt.Op             =PIn.PInt(table.Rows[i][6].ToString());
+				apt.Note           =PIn.PString(table.Rows[i][7].ToString());
+				apt.ProvNum        =PIn.PInt(table.Rows[i][8].ToString());
+				apt.ProvHyg        =PIn.PInt(table.Rows[i][9].ToString());
+				apt.AptDateTime    =PIn.PDateT(table.Rows[i][10].ToString());
+				apt.NextAptNum     =PIn.PInt(table.Rows[i][11].ToString());
+				apt.UnschedStatus  =PIn.PInt(table.Rows[i][12].ToString());
+				//apt.Lab            =PIn.PInt(table.Rows[i][13].ToString());
+				apt.IsNewPatient   =PIn.PBool(table.Rows[i][14].ToString());
+				apt.ProcDescript   =PIn.PString(table.Rows[i][15].ToString());
+				apt.Assistant      =PIn.PInt(table.Rows[i][16].ToString());
+				apt.InstructorNum  =PIn.PInt(table.Rows[i][17].ToString());
+				apt.SchoolClassNum =PIn.PInt(table.Rows[i][18].ToString());
+				apt.SchoolCourseNum=PIn.PInt(table.Rows[i][19].ToString());
+				apt.GradePoint     =PIn.PFloat(table.Rows[i][20].ToString());
+				apt.ClinicNum      =PIn.PInt(table.Rows[i][21].ToString());
+				apt.IsHygiene      =PIn.PBool(table.Rows[i][22].ToString());
+				list.Add(apt);
 			}
 			return list;
 		}

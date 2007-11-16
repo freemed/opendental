@@ -65,7 +65,9 @@ namespace OpenDental{
 		private Label label12;
 		private ComboBox comboFinanceChargeAdjType;
 		private System.Windows.Forms.Label label1;
-		private CheckBox checkTaskListAlwaysShow;// Required designer variable.
+		private CheckBox checkTaskListAlwaysShow;
+		private Label label13;
+		private ComboBox comboPriority;// Required designer variable.
 		private List<Def> posAdjTypes;
 
 		///<summary></summary>
@@ -145,6 +147,8 @@ namespace OpenDental{
 			this.butCancel = new OpenDental.UI.Button();
 			this.butOK = new OpenDental.UI.Button();
 			this.checkTaskListAlwaysShow = new System.Windows.Forms.CheckBox();
+			this.label13 = new System.Windows.Forms.Label();
+			this.comboPriority = new System.Windows.Forms.ComboBox();
 			this.groupBox1.SuspendLayout();
 			this.groupBox5.SuspendLayout();
 			this.groupBox4.SuspendLayout();
@@ -155,17 +159,17 @@ namespace OpenDental{
 			// textTreatNote
 			// 
 			this.textTreatNote.AcceptsReturn = true;
-			this.textTreatNote.Location = new System.Drawing.Point(16,35);
+			this.textTreatNote.Location = new System.Drawing.Point(16,28);
 			this.textTreatNote.Multiline = true;
 			this.textTreatNote.Name = "textTreatNote";
-			this.textTreatNote.Size = new System.Drawing.Size(371,67);
+			this.textTreatNote.Size = new System.Drawing.Size(371,53);
 			this.textTreatNote.TabIndex = 3;
 			// 
 			// label1
 			// 
-			this.label1.Location = new System.Drawing.Point(120,17);
+			this.label1.Location = new System.Drawing.Point(225,10);
 			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(268,15);
+			this.label1.Size = new System.Drawing.Size(163,15);
 			this.label1.TabIndex = 35;
 			this.label1.Text = "Default Note";
 			this.label1.TextAlign = System.Drawing.ContentAlignment.BottomRight;
@@ -212,7 +216,7 @@ namespace OpenDental{
 			// 
 			this.checkTreatPlanShowGraphics.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.checkTreatPlanShowGraphics.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkTreatPlanShowGraphics.Location = new System.Drawing.Point(28,108);
+			this.checkTreatPlanShowGraphics.Location = new System.Drawing.Point(28,83);
 			this.checkTreatPlanShowGraphics.Name = "checkTreatPlanShowGraphics";
 			this.checkTreatPlanShowGraphics.Size = new System.Drawing.Size(359,17);
 			this.checkTreatPlanShowGraphics.TabIndex = 46;
@@ -223,7 +227,7 @@ namespace OpenDental{
 			// 
 			this.checkTreatPlanShowCompleted.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.checkTreatPlanShowCompleted.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkTreatPlanShowCompleted.Location = new System.Drawing.Point(28,125);
+			this.checkTreatPlanShowCompleted.Location = new System.Drawing.Point(28,100);
 			this.checkTreatPlanShowCompleted.Name = "checkTreatPlanShowCompleted";
 			this.checkTreatPlanShowCompleted.Size = new System.Drawing.Size(359,17);
 			this.checkTreatPlanShowCompleted.TabIndex = 47;
@@ -232,6 +236,8 @@ namespace OpenDental{
 			// 
 			// groupBox1
 			// 
+			this.groupBox1.Controls.Add(this.label13);
+			this.groupBox1.Controls.Add(this.comboPriority);
 			this.groupBox1.Controls.Add(this.checkBox5);
 			this.groupBox1.Controls.Add(this.checkTreatPlanShowIns);
 			this.groupBox1.Controls.Add(this.label1);
@@ -250,7 +256,7 @@ namespace OpenDental{
 			// 
 			this.checkBox5.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.checkBox5.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkBox5.Location = new System.Drawing.Point(28,159);
+			this.checkBox5.Location = new System.Drawing.Point(28,134);
 			this.checkBox5.Name = "checkBox5";
 			this.checkBox5.Size = new System.Drawing.Size(359,17);
 			this.checkBox5.TabIndex = 49;
@@ -262,7 +268,7 @@ namespace OpenDental{
 			// 
 			this.checkTreatPlanShowIns.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.checkTreatPlanShowIns.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkTreatPlanShowIns.Location = new System.Drawing.Point(28,142);
+			this.checkTreatPlanShowIns.Location = new System.Drawing.Point(28,117);
 			this.checkTreatPlanShowIns.Name = "checkTreatPlanShowIns";
 			this.checkTreatPlanShowIns.Size = new System.Drawing.Size(359,17);
 			this.checkTreatPlanShowIns.TabIndex = 48;
@@ -771,6 +777,25 @@ namespace OpenDental{
 			this.checkTaskListAlwaysShow.Text = "Always show Task List";
 			this.checkTaskListAlwaysShow.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
+			// label13
+			// 
+			this.label13.Location = new System.Drawing.Point(3,158);
+			this.label13.Name = "label13";
+			this.label13.Size = new System.Drawing.Size(221,15);
+			this.label13.TabIndex = 75;
+			this.label13.Text = "Priority indicating \"declined\"";
+			this.label13.TextAlign = System.Drawing.ContentAlignment.TopRight;
+			// 
+			// comboPriority
+			// 
+			this.comboPriority.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboPriority.FormattingEnabled = true;
+			this.comboPriority.Location = new System.Drawing.Point(225,154);
+			this.comboPriority.MaxDropDownItems = 30;
+			this.comboPriority.Name = "comboPriority";
+			this.comboPriority.Size = new System.Drawing.Size(163,21);
+			this.comboPriority.TabIndex = 74;
+			// 
 			// FormMisc
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
@@ -886,6 +911,12 @@ namespace OpenDental{
 				}
 			}
 			checkTaskListAlwaysShow.Checked=PrefB.GetBool("TaskListAlwaysShowsAtBottom");
+			for(int i=0;i<DefB.Short[(int)DefCat.TxPriorities].Length;i++){
+				comboPriority.Items.Add(DefB.Short[(int)DefCat.TxPriorities][i].ItemName);
+				if(PrefB.GetInt("TreatPlanPriorityForDeclined")==DefB.Short[(int)DefCat.TxPriorities][i].DefNum){
+					comboPriority.SelectedIndex=i;
+				}
+			}
 		}
 
 		private void checkRandomPrimaryKeys_Click(object sender, System.EventArgs e) {
@@ -935,6 +966,10 @@ namespace OpenDental{
 				MsgBox.Show(this,"Please enter an adjustment type for finance charges.");
 				return;
 			}
+			if(comboPriority.SelectedIndex==-1) {
+				MsgBox.Show(this,"Please enter priority for declined treatment.");
+				return;
+			}
 			if(textStatementsCalcDueDate.errorProvider1.GetError(textStatementsCalcDueDate)!="")
 			{
 				MessageBox.Show(Lan.g(this,"Please fix data entry errors first."));
@@ -971,6 +1006,7 @@ namespace OpenDental{
 				| Prefs.UpdateInt("FinanceChargeAdjustmentType",posAdjTypes[comboFinanceChargeAdjType.SelectedIndex].DefNum)
 				| Prefs.UpdateInt("BrokenAppointmentAdjustmentType",posAdjTypes[comboBrokenApptAdjType.SelectedIndex].DefNum)
 				| Prefs.UpdateBool("TaskListAlwaysShowsAtBottom", checkTaskListAlwaysShow.Checked)
+				| Prefs.UpdateInt("TreatPlanPriorityForDeclined",DefB.Short[(int)DefCat.TxPriorities][comboPriority.SelectedIndex].DefNum)
 				)
 			{
 				changed=true;

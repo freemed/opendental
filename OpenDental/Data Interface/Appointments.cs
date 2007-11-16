@@ -21,24 +21,23 @@ namespace OpenDental{
 				+"WHERE AptDateTime BETWEEN '"+POut.PDate(startDate,false)+"' AND '"+POut.PDate(endDate.AddDays(1),false)+"'"
 				+"AND aptstatus != '"+(int)ApptStatus.UnschedList+"' "
 				+"AND aptstatus != '"+(int)ApptStatus.Planned+"'";
-			return FillList(command);
+			return FillList(command).ToArray();
 		}
 
-		///<summary>Gets ListUn for both the unscheduled list and for planned appt tracker.  This is in transition, since the unscheduled list will probably eventually be phased out.  Set true if getting Planned appointments, false if getting Unscheduled appointments.</summary>
-		public static Appointment[] RefreshUnsched(bool doGetPlanned) {
-			string command="";
-			if(doGetPlanned) {
-				command="SELECT Tplanned.*,Tregular.aptnum FROM appointment Tplanned "
-					+"LEFT JOIN appointment Tregular ON Tplanned.aptnum = Tregular.nextaptnum "
-					+"WHERE Tplanned.aptstatus = '"+(int)ApptStatus.Planned+"' "
-					+"AND Tregular.aptnum IS NULL "
-					+"ORDER BY Tplanned.UnschedStatus,Tplanned.AptDateTime";
-			}
-			else {//unsched
-				command="SELECT * FROM appointment "
-					+"WHERE aptstatus = '"+(int)ApptStatus.UnschedList+"' "
-					+"ORDER BY AptDateTime";
-			}
+		///<summary>Gets list of unscheduled appointments.</summary>
+		public static Appointment[] RefreshUnsched() {
+			string command="SELECT * FROM appointment "
+				+"WHERE AptStatus = "+POut.PInt((int)ApptStatus.UnschedList)
+				+" ORDER BY AptDateTime";
+			return FillList(command).ToArray();
+		}
+
+		public static List<Appointment> RefreshPlannedTracker(){
+			string command="SELECT Tplanned.*,Tregular.aptnum FROM appointment Tplanned "
+				+"LEFT JOIN appointment Tregular ON Tplanned.aptnum = Tregular.nextaptnum "
+				+"WHERE Tplanned.aptstatus = '"+(int)ApptStatus.Planned+"' "
+				+"AND Tregular.aptnum IS NULL "
+				+"ORDER BY Tplanned.UnschedStatus,Tplanned.AptDateTime";
 			return FillList(command);
 		}
 
@@ -48,7 +47,7 @@ namespace OpenDental{
 				"SELECT * FROM appointment "
 				+"WHERE patnum = '"+patNum.ToString()+"' "
 				+"ORDER BY AptDateTime";
-			return FillList(command);
+			return FillList(command).ToArray();
 		}
 
 		///<summary>Gets one appointment from db.  Returns null if not found.</summary>
@@ -58,8 +57,8 @@ namespace OpenDental{
 			}
 			string command="SELECT * FROM appointment "
 				+"WHERE AptNum = '"+POut.PInt(aptNum)+"'";
-			Appointment[] list=FillList(command);
-			if(list.Length==0) {
+			List<Appointment> list=FillList(command);
+			if(list.Count==0) {
 				return null;
 			}
 			return list[0];
@@ -70,8 +69,8 @@ namespace OpenDental{
 			}
 			string command="SELECT * FROM appointment "
 				+"WHERE NextAptNum = '"+POut.PInt(aptNum)+"'";
-			Appointment[] list=FillList(command);
-			if(list.Length==0) {
+			List<Appointment> list=FillList(command);
+			if(list.Count==0) {
 				return null;
 			}
 			return list[0];
@@ -93,11 +92,11 @@ namespace OpenDental{
 					+" OR ProvHyg="+POut.PInt(provNums[i]);
 			}
 			command+=") ORDER BY AptDateTime";
-			return FillList(command);
+			return FillList(command).ToArray();
 		}
 
-		///<summary>Fills the specified array of Appointments using the supplied SQL command.</summary>
-		private static Appointment[] FillList(string command) {
+		///<summary>Returns a list of Appointments using the supplied SQL command.</summary>
+		private static List<Appointment> FillList(string command) {
 			DataTable table=General.GetTable(command);
 			return AppointmentB.TableToObjects(table);
 		}

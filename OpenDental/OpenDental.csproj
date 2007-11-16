@@ -2666,10 +2666,6 @@
       <DependentUpon>TableTreat.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Tables Old Grids\TableUnsched.resx">
-      <DependentUpon>TableUnsched.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
     <EmbeddedResource Include="Tables Old Grids\TableUserPermissions.resx">
       <DependentUpon>TableUserPermissions.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -2939,9 +2935,6 @@
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Tables Old Grids\TableTreat.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Tables Old Grids\TableUnsched.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Tables Old Grids\TableUserPermissions.cs">
