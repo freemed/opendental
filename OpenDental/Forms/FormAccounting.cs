@@ -69,6 +69,7 @@ namespace OpenDental{
 			this.checkInactive = new System.Windows.Forms.CheckBox();
 			this.mainMenu1 = new System.Windows.Forms.MainMenu(this.components);
 			this.menuItemSetup = new System.Windows.Forms.MenuItem();
+			this.menuItemLock = new System.Windows.Forms.MenuItem();
 			this.menuItem1 = new System.Windows.Forms.MenuItem();
 			this.menuItemGL = new System.Windows.Forms.MenuItem();
 			this.menuItemBalSheet = new System.Windows.Forms.MenuItem();
@@ -78,7 +79,6 @@ namespace OpenDental{
 			this.textDate = new OpenDental.ValidDate();
 			this.gridMain = new OpenDental.UI.ODGrid();
 			this.ToolBarMain = new OpenDental.UI.ODToolBar();
-			this.menuItemLock = new System.Windows.Forms.MenuItem();
 			this.SuspendLayout();
 			// 
 			// imageListMain
@@ -111,6 +111,12 @@ namespace OpenDental{
 			this.menuItemSetup.Index = 0;
 			this.menuItemSetup.Text = "Setup";
 			this.menuItemSetup.Click += new System.EventHandler(this.menuItemSetup_Click);
+			// 
+			// menuItemLock
+			// 
+			this.menuItemLock.Index = 1;
+			this.menuItemLock.Text = "Lock";
+			this.menuItemLock.Click += new System.EventHandler(this.menuItemLock_Click);
 			// 
 			// menuItem1
 			// 
@@ -187,7 +193,7 @@ namespace OpenDental{
 			this.gridMain.Location = new System.Drawing.Point(0,57);
 			this.gridMain.Name = "gridMain";
 			this.gridMain.ScrollValue = 0;
-			this.gridMain.Size = new System.Drawing.Size(492,597);
+			this.gridMain.Size = new System.Drawing.Size(492,576);
 			this.gridMain.TabIndex = 1;
 			this.gridMain.Title = "Chart of Accounts";
 			this.gridMain.TranslationName = "TableChartOfAccounts";
@@ -199,20 +205,14 @@ namespace OpenDental{
 			this.ToolBarMain.ImageList = this.imageListMain;
 			this.ToolBarMain.Location = new System.Drawing.Point(0,0);
 			this.ToolBarMain.Name = "ToolBarMain";
-			this.ToolBarMain.Size = new System.Drawing.Size(492,29);
+			this.ToolBarMain.Size = new System.Drawing.Size(492,25);
 			this.ToolBarMain.TabIndex = 0;
 			this.ToolBarMain.ButtonClick += new OpenDental.UI.ODToolBarButtonClickEventHandler(this.ToolBarMain_ButtonClick);
-			// 
-			// menuItemLock
-			// 
-			this.menuItemLock.Index = 1;
-			this.menuItemLock.Text = "Lock";
-			this.menuItemLock.Click += new System.EventHandler(this.menuItemLock_Click);
 			// 
 			// FormAccounting
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
-			this.ClientSize = new System.Drawing.Size(492,654);
+			this.ClientSize = new System.Drawing.Size(492,633);
 			this.Controls.Add(this.butToday);
 			this.Controls.Add(this.butRefresh);
 			this.Controls.Add(this.textDate);

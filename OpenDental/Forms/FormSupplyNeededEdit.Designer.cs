@@ -30,6 +30,7 @@ namespace OpenDental{
 			this.butDelete = new OpenDental.UI.Button();
 			this.butOK = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
+			this.label3 = new System.Windows.Forms.Label();
 			this.SuspendLayout();
 			// 
 			// label1
@@ -112,11 +113,20 @@ namespace OpenDental{
 			this.butCancel.Text = "&Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
 			// 
+			// label3
+			// 
+			this.label3.Location = new System.Drawing.Point(114,240);
+			this.label3.Name = "label3";
+			this.label3.Size = new System.Drawing.Size(217,33);
+			this.label3.TabIndex = 9;
+			this.label3.Text = "Once the supply is added to an order, delete it from this list.";
+			// 
 			// FormSupplyNeededEdit
 			// 
 			this.AcceptButton = this.butOK;
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
 			this.ClientSize = new System.Drawing.Size(628,291);
+			this.Controls.Add(this.label3);
 			this.Controls.Add(this.label2);
 			this.Controls.Add(this.textDate);
 			this.Controls.Add(this.butDelete);
@@ -142,5 +152,6 @@ namespace OpenDental{
 		private OpenDental.UI.Button butDelete;
 		private ValidDate textDate;
 		private System.Windows.Forms.Label label2;
+		private System.Windows.Forms.Label label3;
 	}
 }

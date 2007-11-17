@@ -65,7 +65,6 @@ namespace OpenDental{
 			this.Controls.Add(this.butCancel);
 			this.Name = "BasicTemplate";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-			this.Load += new System.EventHandler(this.BasicTemplate_Load);
 			this.ResumeLayout(false);
 
 		}

@@ -20,9 +20,5 @@ namespace OpenDental {
 		private void butCancel_Click(object sender,EventArgs e) {
 			DialogResult=DialogResult.Cancel;
 		}
-
-		private void BasicTemplate_Load(object sender,EventArgs e) {
-
-		}
 	}
 }

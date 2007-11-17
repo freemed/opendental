@@ -61,9 +61,16 @@ namespace OpenDental {
 			}
 		}
 
+		private void menuItemSetupSuppliers_Click(object sender,EventArgs e) {
+			FormSuppliers FormS=new FormSuppliers();
+			FormS.ShowDialog();
+		}
+
 		private void butClose_Click(object sender,EventArgs e) {
 			Close();
 		}
+
+		
 
 		
 
