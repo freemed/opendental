@@ -1044,7 +1044,7 @@ namespace OpenDental{
 			// 
 			// ContrManage2
 			// 
-			this.ContrManage2.Location = new System.Drawing.Point(77,38);
+			this.ContrManage2.Location = new System.Drawing.Point(77,31);
 			this.ContrManage2.Name = "ContrManage2";
 			this.ContrManage2.Size = new System.Drawing.Size(877,547);
 			this.ContrManage2.TabIndex = 27;
@@ -1979,6 +1979,7 @@ namespace OpenDental{
 			if(popList.Count==0) {
 				Popup pop=new Popup();
 				pop.PatNum=CurPatNum;
+				pop.IsNew=true;
 				FormP.PopupCur=pop;
 			}
 			else{
@@ -3368,6 +3369,8 @@ namespace OpenDental{
 				}
 			}
 		}
+
+		
 
 	
 

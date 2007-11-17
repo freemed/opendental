@@ -6126,7 +6126,15 @@ namespace OpenDental{
 				General.NonQEx(command);
 				command = "INSERT INTO preference VALUES('TreatPlanPriorityForDeclined','0')";
 				General.NonQEx(command);
-
+				command="DROP TABLE IF EXISTS supplyneeded";
+				General.NonQEx(command);
+				command=@"CREATE TABLE supplyneeded (
+					SupplyNeededNum int NOT NULL auto_increment,
+					Description text,
+					DateAdded DATE NOT NULL,
+					PRIMARY KEY (SupplyNeededNum)
+					) DEFAULT CHARSET=utf8";
+				General.NonQEx(command);
 
 
 

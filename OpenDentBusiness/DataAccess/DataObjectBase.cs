@@ -50,6 +50,7 @@ namespace OpenDental.DataAccess {
 			OnModified(EventArgs.Empty);
 		}
 
+		///<summary>Deep MemberwiseClone.</summary>
 		public virtual object Clone() {
 			return this.MemberwiseClone();
 		}

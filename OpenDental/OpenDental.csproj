@@ -171,6 +171,7 @@
     <Compile Include="Data Interface\ChartModule.cs" />
     <Compile Include="Data Interface\CanadianNetworks.cs" />
     <Compile Include="Data Interface\ClaimAttaches.cs" />
+    <Compile Include="Data Interface\SupplyNeededs.cs" />
     <Compile Include="Data Interface\EmailAttaches.cs" />
     <Compile Include="Data Interface\Popups.cs" />
     <Compile Include="Data Interface\DisplayFields.cs" />
@@ -307,6 +308,24 @@
     <Compile Include="Eclaims\X12object.cs" />
     <Compile Include="Eclaims\X277U.cs" />
     <Compile Include="Eclaims\X997.cs" />
+    <Compile Include="Forms\BasicTemplate.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\BasicTemplate.Designer.cs">
+      <DependentUpon>BasicTemplate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\FormSupplyNeededEdit.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormSupplyNeededEdit.Designer.cs">
+      <DependentUpon>FormSupplyNeededEdit.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\FormSupplyInventory.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormSupplyInventory.Designer.cs">
+      <DependentUpon>FormSupplyInventory.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\FormImageSelect.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -407,9 +426,6 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms Reports\Queries.cs" />
-    <Compile Include="Forms\BasicTemplate.cs">
-      <SubType>Form</SubType>
-    </Compile>
     <Compile Include="Forms\FormLicense.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -1277,6 +1293,18 @@
       <DependentUpon>FormTerminal.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\BasicTemplate.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>BasicTemplate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormSupplyNeededEdit.resx">
+      <DependentUpon>FormSupplyNeededEdit.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormSupplyInventory.resx">
+      <DependentUpon>FormSupplyInventory.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormImageSelect.resx">
       <DependentUpon>FormImageSelect.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -1407,10 +1435,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms Reports\FormRpStatement.resx">
       <DependentUpon>FormRpStatement.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\BasicTemplate.resx">
-      <DependentUpon>BasicTemplate.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormLicense.resx">
