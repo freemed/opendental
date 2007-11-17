@@ -583,7 +583,36 @@ namespace OpenDental{
 		}
 
 		private void butRecallFamily_Click(object sender,EventArgs e) {
-
+			Procedure[] procList;
+			Recall[] recallList;
+			InsPlan[] planList;
+			Appointment apt;
+			for(int i=0;i<FamCur.List.Length;i++){
+				procList=Procedures.Refresh(FamCur.List[i].PatNum);
+				recallList=Recalls.GetList(new int[] { FamCur.List[i].PatNum });//get the recall for this pt
+				if(recallList.Length==0) {
+					//MsgBox.Show(this,"This patient does not have any recall due.");
+					continue;
+				}
+				//if(recallList[0].){
+				
+				//}
+				planList=InsPlans.Refresh(FamCur);
+				apt=Appointments.CreateRecallApt(FamCur.List[i],procList,recallList[0],planList);
+				AptNumsSelected.Add(apt.AptNum);
+				oResult=OtherResult.PinboardAndSearch;
+				if(recallList[0].DateDue<DateTime.Today) {
+					DateJumpToString=DateTime.Today.ToShortDateString();//they are overdue
+				}
+				else {
+					DateJumpToString=recallList[0].DateDue.ToShortDateString();
+				}
+			}
+			if(AptNumsSelected.Count==0){
+				MsgBox.Show(this,"No recall is due.");
+				return;
+			}
+			DialogResult=DialogResult.OK;
 		}
 
 		private void butNote_Click(object sender,EventArgs e) {

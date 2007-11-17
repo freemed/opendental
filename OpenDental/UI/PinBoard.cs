@@ -143,7 +143,7 @@ namespace OpenDental.UI {
 				StringFormat format=new StringFormat();
 				format.Alignment=StringAlignment.Center;
 				format.LineAlignment=StringAlignment.Center;
-				g.DrawString(Lan.g(this,"Drag Appointments to this PinBoard"),Font,Brushes.Gray,new RectangleF(0,0,Width,Height),format);
+				g.DrawString(Lan.g(this,"Drag Appointments to this PinBoard"),Font,Brushes.Gray,new RectangleF(0,0,Width,Height-20),format);
 			}
 			base.OnPaint(pe);
 		}

@@ -2765,7 +2765,7 @@ namespace OpenDental{
 			FormRecallList FormRL=new FormRecallList();
 			FormRL.ShowDialog();
 			if(FormRL.PinClicked){
-				SendToPinBoard(FormRL.AptSelected);
+				SendToPinBoard(FormRL.AptNumsSelected);
 			}
 			if(FormRL.SelectedPatNum!=0){
 				RefreshModulePatient(FormRL.SelectedPatNum);
