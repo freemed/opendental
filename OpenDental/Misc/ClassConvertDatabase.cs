@@ -6149,7 +6149,25 @@ namespace OpenDental{
 					PRIMARY KEY (SupplierNum)
 					) DEFAULT CHARSET=utf8";
 				General.NonQEx(command);
-
+				command="DROP TABLE IF EXISTS supply";
+				General.NonQEx(command);
+				command=@"CREATE TABLE supply (
+					SupplyNum int NOT NULL auto_increment,
+					SupplierNum int NOT NULL,
+					CatalogNumber varchar(255),
+					CatalogName varchar(255),
+					CommonName varchar(255),
+					Category int NOT NULL,
+					ItemOrder int NOT NULL,
+					LevelDesired float NOT NULL,
+					IsHidden tinyint(1) NOT NULL,
+					Price double NOT NULL,
+					UnitType varchar(255),
+					Note text,
+					PRIMARY KEY (SupplierNum),
+					INDEX (SupplyNum)
+					) DEFAULT CHARSET=utf8";
+				General.NonQEx(command);
 
 
 

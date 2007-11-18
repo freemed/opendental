@@ -63,37 +63,6 @@ namespace OpenDentBusiness {
 			return list.ToArray();
 		}
 
-		///<summary>Returns the new DefNum</summary>
-		public static int Insert(Def def){
-			string command= "INSERT INTO definition (category,itemorder,"
-				+"itemname,itemvalue,itemcolor,ishidden) VALUES("
-				+"'"+POut.PInt((int)def.Category)+"', "
-				+"'"+POut.PInt(def.ItemOrder)+"', "
-				+"'"+POut.PString(def.ItemName)+"', "
-				+"'"+POut.PString(def.ItemValue)+"', "
-				+"'"+POut.PInt(def.ItemColor.ToArgb())+"', "
-				+"'"+POut.PBool(def.IsHidden)+"')";
-			DataConnection dcon=new DataConnection();
-			dcon.NonQ(command,true);
-			int defNum=dcon.InsertID;//used in conversion
-			return defNum;
-		}
-
-		///<summary></summary>
-		public static int Update(Def def) {
-			string command = "UPDATE definition SET "
-				+ "category = '"  +POut.PInt((int)def.Category)+"'"
-				+",itemorder = '" +POut.PInt(def.ItemOrder)+"'"
-				+",itemname = '"  +POut.PString(def.ItemName)+"'"
-				+",itemvalue = '" +POut.PString(def.ItemValue)+"'"
-				+",itemcolor = '" +POut.PInt(def.ItemColor.ToArgb())+"'"
-				+",ishidden = '"  +POut.PBool(def.IsHidden)+"'"
-				+"WHERE defnum = '"+POut.PInt(def.DefNum)+"'";
-			DataConnection dcon=new DataConnection();
-			int rowsChanged=dcon.NonQ(command);
-			return rowsChanged;
-		}
-
 		///<summary>Get one def from Long.  Returns null if not found.  Only used for very limited situations.  Other Get functions tend to be much more useful since they don't return null.  There is also BIG potential for silent bugs if you use this.ItemOrder instead of GetOrder().</summary>
 		public static Def GetDef(DefCat myCat,int myDefNum) {
 			for(int i=0;i<Long[(int)myCat].GetLength(0);i++) {

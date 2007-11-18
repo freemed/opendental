@@ -65,40 +65,28 @@ namespace OpenDental{
 
 		///<summary></summary>
 		public static void Update(Def def) {
-			try {
-				if(RemotingClient.OpenDentBusinessIsLocal) {
-					DefB.Update(def);
-				}
-				else {
-					DtoDefUpdate dto=new DtoDefUpdate();
-					dto.DefCur=def;
-					RemotingClient.ProcessCommand(dto);
-				}
-			}
-			catch(Exception e) {
-				MessageBox.Show(e.Message);
-				return;
-			}
+			string command = "UPDATE definition SET "
+				+ "Category = '"  +POut.PInt((int)def.Category)+"'"
+				+",ItemOrder = '" +POut.PInt(def.ItemOrder)+"'"
+				+",ItemName = '"  +POut.PString(def.ItemName)+"'"
+				+",ItemValue = '" +POut.PString(def.ItemValue)+"'"
+				+",ItemColor = '" +POut.PInt(def.ItemColor.ToArgb())+"'"
+				+",IsHidden = '"  +POut.PBool(def.IsHidden)+"'"
+				+"WHERE defnum = '"+POut.PInt(def.DefNum)+"'";
+			General.NonQ(command);
 		}
 
 		///<summary></summary>
 		public static void Insert(Def def) {
-			int defNum;
-			try {
-				if(RemotingClient.OpenDentBusinessIsLocal) {
-					defNum=DefB.Insert(def);
-				}
-				else {
-					DtoDefInsert dto=new DtoDefInsert();
-					dto.DefCur=def;
-					defNum=RemotingClient.ProcessCommand(dto);
-				}
-			}
-			catch(Exception e) {
-				MessageBox.Show(e.Message);
-				return;
-			}
-			def.DefNum=defNum;			
+			string command= "INSERT INTO definition (Category,ItemOrder,"
+				+"ItemName,ItemValue,ItemColor,IsHidden) VALUES("
+				+"'"+POut.PInt((int)def.Category)+"', "
+				+"'"+POut.PInt(def.ItemOrder)+"', "
+				+"'"+POut.PString(def.ItemName)+"', "
+				+"'"+POut.PString(def.ItemValue)+"', "
+				+"'"+POut.PInt(def.ItemColor.ToArgb())+"', "
+				+"'"+POut.PBool(def.IsHidden)+"')";
+			def.DefNum=General.NonQ(command,true);//used in conversion
 		}
 
 		///<summary></summary>

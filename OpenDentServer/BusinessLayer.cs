@@ -49,14 +49,7 @@ namespace OpenDentServer {
 
 		public static int ProcessCommand(DtoCommandBase dto) {
 			Type type = dto.GetType();
-
-			if(type==typeof(DtoDefInsert)) {
-				return DefB.Insert(((DtoDefInsert)dto).DefCur);
-			}
-			else if(type==typeof(DtoDefUpdate)) {
-				return DefB.Update(((DtoDefUpdate)dto).DefCur);
-			}
-			else if(type==typeof(DtoGeneralNonQ)) {
+			if(type==typeof(DtoGeneralNonQ)) {
 				return GeneralB.NonQ(((DtoGeneralNonQ)dto).Command,((DtoGeneralNonQ)dto).GetInsertID);
 			}
 			else if(type==typeof(DtoLogin)) {

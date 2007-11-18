@@ -23,27 +23,11 @@ namespace OpenDentBusiness {
 
 		///<summary>Returns a copy of the def.</summary>
 		public Def Copy() {
-			Def def=new Def();
-			def.DefNum=DefNum;
-			def.Category=Category;
-			def.ItemOrder=ItemOrder;
-			def.ItemName=ItemName;
-			def.ItemValue=ItemValue;
-			def.ItemColor=ItemColor;
-			def.IsHidden=IsHidden;
-			return def;
+			return (Def)MemberwiseClone();
 		}
 	}
 
 	public class DtoDefRefresh:DtoQueryBase {
-	}
-
-	public class DtoDefInsert:DtoCommandBase {
-		public Def DefCur;
-	}
-
-	public class DtoDefUpdate:DtoCommandBase {
-		public Def DefCur;
 	}
 
 	

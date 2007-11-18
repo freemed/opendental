@@ -187,7 +187,9 @@ namespace OpenDentBusiness{
 		///<summary>26- Categories of procedure buttons in Chart module</summary>
 		ProcButtonCats,
 		///<Summary>27- Types of commlog entries.</Summary>
-		CommLogTypes
+		CommLogTypes,
+		///<summary>28- Categories of Supplies</summary>
+		SupplyCats
 	}
 	//public enum StudentStat{None,Full,Part};
 	///<summary>Used in procedurecode setup to specify the treatment area for a procedure.  This determines what fields are available when editing an appointment.</summary>
