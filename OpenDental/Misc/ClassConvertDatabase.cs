@@ -6168,7 +6168,17 @@ namespace OpenDental{
 					INDEX (SupplierNum)
 					) DEFAULT CHARSET=utf8";
 				General.NonQEx(command);
-
+				command="DROP TABLE IF EXISTS supplyorder";
+				General.NonQEx(command);
+				command=@"CREATE TABLE supplyorder (
+					SupplyOrderNum int NOT NULL auto_increment,
+					SupplierNum int NOT NULL,
+					DatePlaced date NOT NULL,
+					Note text,
+					PRIMARY KEY (SupplyOrderNum),
+					INDEX (SupplierNum)
+					) DEFAULT CHARSET=utf8";
+				General.NonQEx(command);
 
 
 

@@ -13,6 +13,7 @@ namespace OpenDental {
 		private List<SupplyNeeded> listNeeded;
 		private List<Supply> listSupply;
 		private List<Supplier> listSupplier;
+		private List<SupplyOrder> listOrder;
 
 		public FormSupplyInventory() {
 			InitializeComponent();
@@ -25,6 +26,7 @@ namespace OpenDental {
 			if(comboSupplier.Items.Count>0){
 				comboSupplier.SelectedIndex=0;
 			}
+			FillGridOrder();
 			FillGridSupply();
 		}
 
@@ -74,6 +76,50 @@ namespace OpenDental {
 			if(FormS.DialogResult==DialogResult.OK){
 				FillGridNeeded();
 			}
+		}
+
+		private void FillGridOrder() {
+			int supplier=0;
+			if(comboSupplier.SelectedIndex!=-1) {
+				supplier=listSupplier[comboSupplier.SelectedIndex].SupplierNum;
+			}
+			listOrder=SupplyOrders.CreateObjects(supplier);
+			gridOrder.BeginUpdate();
+			gridOrder.Columns.Clear();
+			/*ODGridColumn col=new ODGridColumn(Lan.g(this,"Date Added"),90);
+			gridOrder.Columns.Add(col);
+			col=new ODGridColumn(Lan.g(this,"Description"),300);
+			gridOrder.Columns.Add(col);
+			gridOrder.Rows.Clear();
+			ODGridRow row;
+			for(int i=0;i<listNeeded.Count;i++) {
+				row=new ODGridRow();
+				row.Cells.Add(listNeeded[i].DateAdded.ToShortDateString());
+				row.Cells.Add(listNeeded[i].Description);
+				gridOrder.Rows.Add(row);
+			}*/
+			gridOrder.EndUpdate();
+		}
+
+		private void gridOrder_CellDoubleClick(object sender,ODGridClickEventArgs e) {
+			/*FormSupplyNeededEdit FormS=new FormSupplyNeededEdit();
+			FormS.Supp=listNeeded[e.Row];
+			FormS.ShowDialog();
+			if(FormS.DialogResult==DialogResult.OK) {
+				FillGridNeeded();
+			}*/
+		}
+
+		private void butNewOrder_Click(object sender,EventArgs e) {
+			/*SupplyNeeded supp=new SupplyNeeded();
+			supp.IsNew=true;
+			supp.DateAdded=DateTime.Today;
+			FormSupplyNeededEdit FormS=new FormSupplyNeededEdit();
+			FormS.Supp=supp;
+			FormS.ShowDialog();
+			if(FormS.DialogResult==DialogResult.OK) {
+				FillGridNeeded();
+			}*/
 		}
 
 		private void FillGridSupply(){
@@ -199,6 +245,8 @@ namespace OpenDental {
 		private void butClose_Click(object sender,EventArgs e) {
 			Close();
 		}
+
+		
 
 	
 

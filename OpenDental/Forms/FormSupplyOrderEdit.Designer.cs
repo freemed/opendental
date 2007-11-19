@@ -1,5 +1,5 @@
 namespace OpenDental{
-	partial class FormSupplyEdit {
+	partial class FormSupplyOrderEdit {
 		/// <summary>
 		/// Required designer variable.
 		/// </summary>
@@ -267,7 +267,7 @@ namespace OpenDental{
 			this.butCancel.Text = "&Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
 			// 
-			// FormSupplyEdit
+			// FormSupplyOrderEdit
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
 			this.ClientSize = new System.Drawing.Size(682,421);
@@ -294,10 +294,10 @@ namespace OpenDental{
 			this.Controls.Add(this.label1);
 			this.Controls.Add(this.butOK);
 			this.Controls.Add(this.butCancel);
-			this.Name = "FormSupplyEdit";
+			this.Name = "FormSupplyOrderEdit";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-			this.Text = "Supply";
-			this.Load += new System.EventHandler(this.FormSupplyEdit_Load);
+			this.Text = "Supply Order";
+			this.Load += new System.EventHandler(this.FormSupplyOrderEdit_Load);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
