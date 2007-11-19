@@ -110,19 +110,24 @@ namespace OpenDental {
 				MsgBox.Show(this,"Please add suppliers first.  Use the menu at the top of this window.");
 				return;
 			}
+			if(DefB.Short[(int)DefCat.SupplyCats].Length==0) {
+				MsgBox.Show(this,"Please add supply categories first.  Use the menu at the top of this window.");
+				return;
+			}
 			if(comboSupplier.SelectedIndex==-1) {
 				MsgBox.Show(this,"Please select a supplier first.");
 				return;
 			}
-			/*SupplyNeeded supp=new SupplyNeeded();
+			Supply supp=new Supply();
 			supp.IsNew=true;
-			supp.DateAdded=DateTime.Today;
-			FormSupplyNeededEdit FormS=new FormSupplyNeededEdit();
+			supp.SupplierNum=listSupplier[comboSupplier.SelectedIndex].SupplierNum;
+			FormSupplyEdit FormS=new FormSupplyEdit();
 			FormS.Supp=supp;
+			FormS.ListSupplier=listSupplier;
 			FormS.ShowDialog();
 			if(FormS.DialogResult==DialogResult.OK) {
-				FillGridNeeded();
-			}*/
+				FillGridSupply();
+			}
 		}
 
 		private void checkShowHidden_Click(object sender,EventArgs e) {
@@ -133,14 +138,24 @@ namespace OpenDental {
 			FillGridSupply();
 		}
 
-		private void menuItemSetupSuppliers_Click(object sender,EventArgs e) {
+		private void menuItemSuppliers_Click(object sender,EventArgs e) {
 			FormSuppliers FormS=new FormSuppliers();
 			FormS.ShowDialog();
+			FillSuppliers();
+			FillGridSupply();//clears main supply grid.
+		}
+
+		private void menuItemCategories_Click(object sender,EventArgs e) {
+			FormDefinitions FormD=new FormDefinitions(DefCat.SupplyCats);
+			FormD.ShowDialog();
+			FillGridSupply();
 		}
 
 		private void butClose_Click(object sender,EventArgs e) {
 			Close();
 		}
+
+	
 
 		
 

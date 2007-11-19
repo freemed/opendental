@@ -133,6 +133,22 @@ namespace OpenDental{
 			Update(def);
 		}
 
+		///<summary>CAUTION.  This does not perform all validations.  It only properly validates for one def type right now.</summary>
+		public static void Delete(Def def) {
+			if(def.Category!=DefCat.SupplyCats){
+				throw new ApplicationException("NOT Allowed to delete this type of def.");
+			}
+			string command="SELECT COUNT(*) FROM supply WHERE Category="+POut.PInt(def.DefNum);
+			if(General.GetCount(command)!="0"){
+				throw new ApplicationException(Lan.g("Defs","Def is in use.  Not allowed to delete."));
+			}
+			command="DELETE FROM definition WHERE DefNum="+POut.PInt(def.DefNum);
+			General.NonQ(command);
+			command="UPDATE definition SET ItemOrder=ItemOrder-1 "
+				+"WHERE Category="+POut.PInt((int)def.Category)
+				+" AND ItemOrder > "+POut.PInt(def.ItemOrder);
+			General.NonQ(command);
+		}
 
 		
 

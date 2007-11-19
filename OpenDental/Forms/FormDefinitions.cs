@@ -216,10 +216,11 @@ namespace OpenDental{
             "Proc Code Categories",
             "Prog Notes Colors",
             "Recall/Unsch Status",
+            "Supply Categories",
             "Treat\' Plan Priorities"});
 			this.listCategory.Location = new System.Drawing.Point(22,36);
 			this.listCategory.Name = "listCategory";
-			this.listCategory.Size = new System.Drawing.Size(133,277);
+			this.listCategory.Size = new System.Drawing.Size(133,290);
 			this.listCategory.TabIndex = 0;
 			this.listCategory.MouseDown += new System.Windows.Forms.MouseEventHandler(this.listCategory_MouseDown);
 			// 
@@ -297,7 +298,8 @@ namespace OpenDental{
 			lookupCat[18]=DefCat.ProgNoteColors;
 			lookupCat[19]=DefCat.RecallUnschedStatus;
 			//lookupCat[25]=DefCat.ServiceNotes;
-			lookupCat[20]=DefCat.TxPriorities;
+			lookupCat[20]=DefCat.SupplyCats;
+			lookupCat[21]=DefCat.TxPriorities;
 			for(int i=0;i<listCategory.Items.Count;i++){
 				listCategory.Items[i]=Lan.g(this,(string)listCategory.Items[i]);
 				if((int)lookupCat[i]==SelectedCat){
@@ -319,9 +321,12 @@ namespace OpenDental{
 			DefsIsSelected=false;
 			FormDefEdit.EnableColor=false;
 			FormDefEdit.EnableValue=false;
-			FormDefEdit.CanEditName=true;//false;
+			FormDefEdit.CanEditName=true;
+			FormDefEdit.CanDelete=false;
+			FormDefEdit.CanHide=true;
 			tbDefs.Fields[1]="";
 			FormDefEdit.ValueText="";
+			butHide.Visible=true;
 			switch(listCategory.SelectedIndex){
 				case 0://"Account Colors":
 					//SelectedCat=0;
@@ -430,7 +435,13 @@ namespace OpenDental{
 					FormDefEdit.ValueText=Lan.g(this,"Abbreviation");
 					FormDefEdit.HelpText=Lan.g(this,"Recall/Unsched Status.  Abbreviation must be 7 characters or less.  Changes affect all patients.");
 					break;
-				case 20://"Treat' Plan Priorities":
+				case 20://Supply Categories
+					butHide.Visible=false;
+					FormDefEdit.CanDelete=true;
+					FormDefEdit.CanHide=false;
+					FormDefEdit.HelpText=Lan.g(this,"The categories for inventory supplies.");
+					break;
+				case 21://"Treat' Plan Priorities":
 					//SelectedCat=20;
 					FormDefEdit.EnableColor=true;
 					FormDefEdit.HelpText=Lan.g(this,"Priorities available for selection in the Treatment Plan module.  They can be simple numbers or descriptive abbreviations 7 letters or less.  Changes affect all procedures where the definition is used.");
@@ -451,9 +462,14 @@ namespace OpenDental{
 				if(FormDefEdit.EnableColor){
 					tbDefs.BackGColor[2,i]=DefsList[i].ItemColor;
 				}
-				if(DefsList[i].IsHidden)
+				if(DefsList[i].IsHidden){
 					tbDefs.Cell[3,i]="X";
+				}
 				//else tbDefs.Cell[3,i]="";
+			}
+			if(DefsSelected>DefsList.Length-1){
+				DefsSelected=-1;
+				DefsIsSelected=false;
 			}
 			if(DefsIsSelected){
 				tbDefs.BackGColor[0,DefsSelected]=Color.LightGray;

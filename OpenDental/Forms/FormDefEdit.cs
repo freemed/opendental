@@ -36,6 +36,9 @@ namespace OpenDental{
 		///<summary></summary>
 		public static string ValueText;
 		private Def DefCur;
+		public static bool CanHide;
+		private OpenDental.UI.Button butDelete;
+		public static bool CanDelete;
 		
 		///<summary></summary>
 		public FormDefEdit(Def defCur){
@@ -72,6 +75,7 @@ namespace OpenDental{
 			this.butOK = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
 			this.checkHidden = new System.Windows.Forms.CheckBox();
+			this.butDelete = new OpenDental.UI.Button();
 			this.SuspendLayout();
 			// 
 			// labelName
@@ -169,12 +173,29 @@ namespace OpenDental{
 			this.checkHidden.TabIndex = 3;
 			this.checkHidden.Text = "Hidden";
 			// 
+			// butDelete
+			// 
+			this.butDelete.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butDelete.Autosize = true;
+			this.butDelete.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butDelete.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butDelete.CornerRadius = 4F;
+			this.butDelete.Image = global::OpenDental.Properties.Resources.deleteX;
+			this.butDelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butDelete.Location = new System.Drawing.Point(32,131);
+			this.butDelete.Name = "butDelete";
+			this.butDelete.Size = new System.Drawing.Size(79,25);
+			this.butDelete.TabIndex = 6;
+			this.butDelete.Text = "Delete";
+			this.butDelete.Click += new System.EventHandler(this.butDelete_Click);
+			// 
 			// FormDefEdit
 			// 
 			this.AcceptButton = this.butOK;
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.CancelButton = this.butCancel;
 			this.ClientSize = new System.Drawing.Size(558,176);
+			this.Controls.Add(this.butDelete);
 			this.Controls.Add(this.checkHidden);
 			this.Controls.Add(this.butCancel);
 			this.Controls.Add(this.butOK);
@@ -221,6 +242,12 @@ namespace OpenDental{
 				labelColor.Visible=false;
 				butColor.Visible=false;
 			}
+			if(!CanHide){
+				checkHidden.Visible=false;
+			}
+			if(!CanDelete){
+				butDelete.Visible=false;
+			}
 			textName.Text=DefCur.ItemName;
 			textValue.Text=DefCur.ItemValue;
 			butColor.BackColor=DefCur.ItemColor;
@@ -235,8 +262,19 @@ namespace OpenDental{
 			//textColor.Text=colorDialog1.Color.Name;
 		}
 
-		private void butCancel_Click(object sender, System.EventArgs e) {
-			DialogResult=DialogResult.Cancel;
+		private void butDelete_Click(object sender,EventArgs e) {
+			//This is VERY new.  Only allowed and visible for one category so far: supply cats.
+			if(IsNew){
+				DialogResult=DialogResult.Cancel;
+				return;
+			}
+			try{
+				Defs.Delete(DefCur);
+				DialogResult=DialogResult.OK;
+			}
+			catch(ApplicationException ex){
+				MessageBox.Show(ex.Message);
+			}
 		}
 
 		private void butOK_Click(object sender, System.EventArgs e) {
@@ -338,12 +376,15 @@ namespace OpenDental{
 				Defs.Update(DefCur);
 			}
 			DialogResult=DialogResult.OK;
-			Close();
 		}
 
-		private void button1_Click(object sender, System.EventArgs e) {
-			MessageBox.Show(Lan.g(this,EnableColor.ToString()));
+		private void butCancel_Click(object sender,System.EventArgs e) {
+			DialogResult=DialogResult.Cancel;
 		}
+
+		
+
+	
 
 	}
 }

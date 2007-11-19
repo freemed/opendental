@@ -34,7 +34,7 @@ namespace OpenDentBusiness{
 		[DataField("CatalogNumber")]
 		private string catalogNumber;
 		bool catalogNumberChanged;
-		/// <summary>The catalog number that the vendor uses to identify the supply.</summary>
+		/// <summary>The catalog item number that the supplier uses to identify the supply.</summary>
 		public string CatalogNumber {
 			get { return catalogNumber; }
 			set { catalogNumber = value; MarkDirty(); catalogNumberChanged = true; }
@@ -43,16 +43,16 @@ namespace OpenDentBusiness{
 			get { return catalogNumberChanged; }
 		}
 
-		[DataField("CatalogName")]
-		private string catalogName;
-		bool catalogNameChanged;
-		/// <summary>The name as found in the catalog or online.  Typically includes qty per box/case, etc.</summary>
-		public string CatalogName {
-			get { return catalogName; }
-			set { catalogName = value; MarkDirty(); catalogNameChanged = true; }
+		[DataField("CatalogDescript")]
+		private string catalogDescript;
+		bool catalogDescriptChanged;
+		/// <summary>The description as found in the catalog or online.  Typically includes qty per box/case, etc.</summary>
+		public string CatalogDescript {
+			get { return catalogDescript; }
+			set { catalogDescript = value; MarkDirty(); catalogDescriptChanged = true; }
 		}
-		public bool CatalogNameChanged {
-			get { return catalogNameChanged; }
+		public bool CatalogDescriptChanged {
+			get { return catalogDescriptChanged; }
 		}
 
 		[DataField("CommonName")]
@@ -94,7 +94,7 @@ namespace OpenDentBusiness{
 		[DataField("LevelDesired")]
 		private float levelDesired;
 		bool levelDesiredChanged;
-		/// <summary>The level that a fresh order should bring item back up to.  Can include fractions.</summary>
+		/// <summary>The level that a fresh order should bring item back up to.  Can include fractions.  If this is 0, then it will be displayed as having this field blank rather than showing 0.  This simply gives a cleaner look.</summary>
 		public float LevelDesired {
 			get { return levelDesired; }
 			set { levelDesired = value; MarkDirty(); levelDesiredChanged = true; }
@@ -118,7 +118,7 @@ namespace OpenDentBusiness{
 		[DataField("Price")]
 		private double price;
 		bool priceChanged;
-		/// <summary>The price per unit that the supplier charges for this supply.</summary>
+		/// <summary>The price per unit that the supplier charges for this supply.  If this is 0.00, then no price will be displayed.</summary>
 		public double Price {
 			get { return price; }
 			set { price = value; MarkDirty(); priceChanged = true; }

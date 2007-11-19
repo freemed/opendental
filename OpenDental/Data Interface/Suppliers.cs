@@ -29,6 +29,15 @@ namespace OpenDental{
 			DataObjectFactory<Supplier>.DeleteObject(supp);
 		}
 
+		public static string GetName(List<Supplier> listSupplier,int supplierNum){
+			for(int i=0;i<listSupplier.Count;i++){
+				if(listSupplier[i].SupplierNum==supplierNum){
+					return listSupplier[i].Name;
+				}
+			}
+			return "";
+		}
+
 
 	}
 

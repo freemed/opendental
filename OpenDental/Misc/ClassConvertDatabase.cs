@@ -6155,7 +6155,7 @@ namespace OpenDental{
 					SupplyNum int NOT NULL auto_increment,
 					SupplierNum int NOT NULL,
 					CatalogNumber varchar(255),
-					CatalogName varchar(255),
+					CatalogDescript varchar(255),
 					CommonName varchar(255),
 					Category int NOT NULL,
 					ItemOrder int NOT NULL,

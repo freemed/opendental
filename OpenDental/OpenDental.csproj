@@ -316,6 +316,12 @@
     <Compile Include="Forms\BasicTemplate.Designer.cs">
       <DependentUpon>BasicTemplate.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\FormSupplyEdit.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormSupplyEdit.Designer.cs">
+      <DependentUpon>FormSupplyEdit.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\FormSupplierEdit.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -1310,6 +1316,10 @@
     <EmbeddedResource Include="Forms\BasicTemplate.resx">
       <SubType>Designer</SubType>
       <DependentUpon>BasicTemplate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormSupplyEdit.resx">
+      <DependentUpon>FormSupplyEdit.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormSupplierEdit.resx">
       <DependentUpon>FormSupplierEdit.cs</DependentUpon>
