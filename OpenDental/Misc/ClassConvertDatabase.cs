@@ -6164,8 +6164,8 @@ namespace OpenDental{
 					Price double NOT NULL,
 					UnitType varchar(255),
 					Note text,
-					PRIMARY KEY (SupplierNum),
-					INDEX (SupplyNum)
+					PRIMARY KEY (SupplyNum),
+					INDEX (SupplierNum)
 					) DEFAULT CHARSET=utf8";
 				General.NonQEx(command);
 

@@ -23,14 +23,10 @@ namespace OpenDental {
 		/// the contents of this method with the code editor.
 		/// </summary>
 		private void InitializeComponent() {
-			this.components = new System.ComponentModel.Container();
-			this.mainMenu1 = new System.Windows.Forms.MainMenu(this.components);
-			this.menuItemSuppliers = new System.Windows.Forms.MenuItem();
-			this.menuItemCategories = new System.Windows.Forms.MenuItem();
 			this.splitContainer = new System.Windows.Forms.SplitContainer();
 			this.label3 = new System.Windows.Forms.Label();
-			this.checkShowHidden = new System.Windows.Forms.CheckBox();
 			this.comboSupplier = new System.Windows.Forms.ComboBox();
+			this.checkShowHidden = new System.Windows.Forms.CheckBox();
 			this.button1 = new OpenDental.UI.Button();
 			this.gridOrder = new OpenDental.UI.ODGrid();
 			this.butAddNeeded = new OpenDental.UI.Button();
@@ -38,33 +34,19 @@ namespace OpenDental {
 			this.butAddSupply = new OpenDental.UI.Button();
 			this.gridSupply = new OpenDental.UI.ODGrid();
 			this.butClose = new OpenDental.UI.Button();
+			this.menuStrip1 = new System.Windows.Forms.MenuStrip();
+			this.menuItemSuppliers = new System.Windows.Forms.ToolStripMenuItem();
+			this.menuItemCategories = new System.Windows.Forms.ToolStripMenuItem();
 			this.splitContainer.Panel1.SuspendLayout();
 			this.splitContainer.Panel2.SuspendLayout();
 			this.splitContainer.SuspendLayout();
+			this.menuStrip1.SuspendLayout();
 			this.SuspendLayout();
-			// 
-			// mainMenu1
-			// 
-			this.mainMenu1.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
-            this.menuItemSuppliers,
-            this.menuItemCategories});
-			// 
-			// menuItemSuppliers
-			// 
-			this.menuItemSuppliers.Index = 0;
-			this.menuItemSuppliers.Text = "Suppliers";
-			this.menuItemSuppliers.Click += new System.EventHandler(this.menuItemSuppliers_Click);
-			// 
-			// menuItemCategories
-			// 
-			this.menuItemCategories.Index = 1;
-			this.menuItemCategories.Text = "Categories";
-			this.menuItemCategories.Click += new System.EventHandler(this.menuItemCategories_Click);
 			// 
 			// splitContainer
 			// 
 			this.splitContainer.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.splitContainer.Location = new System.Drawing.Point(0,0);
+			this.splitContainer.Location = new System.Drawing.Point(0,24);
 			this.splitContainer.Name = "splitContainer";
 			this.splitContainer.Orientation = System.Windows.Forms.Orientation.Horizontal;
 			// 
@@ -83,8 +65,8 @@ namespace OpenDental {
 			this.splitContainer.Panel2.Controls.Add(this.butAddSupply);
 			this.splitContainer.Panel2.Controls.Add(this.gridSupply);
 			this.splitContainer.Panel2.Controls.Add(this.butClose);
-			this.splitContainer.Size = new System.Drawing.Size(883,582);
-			this.splitContainer.SplitterDistance = 218;
+			this.splitContainer.Size = new System.Drawing.Size(883,516);
+			this.splitContainer.SplitterDistance = 193;
 			this.splitContainer.TabIndex = 11;
 			// 
 			// label3
@@ -96,16 +78,6 @@ namespace OpenDental {
 			this.label3.Text = "Supplier";
 			this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
-			// checkShowHidden
-			// 
-			this.checkShowHidden.Location = new System.Drawing.Point(124,9);
-			this.checkShowHidden.Name = "checkShowHidden";
-			this.checkShowHidden.Size = new System.Drawing.Size(95,18);
-			this.checkShowHidden.TabIndex = 7;
-			this.checkShowHidden.Text = "Show Hidden";
-			this.checkShowHidden.UseVisualStyleBackColor = true;
-			this.checkShowHidden.Click += new System.EventHandler(this.checkShowHidden_Click);
-			// 
 			// comboSupplier
 			// 
 			this.comboSupplier.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
@@ -115,6 +87,16 @@ namespace OpenDental {
 			this.comboSupplier.Size = new System.Drawing.Size(173,21);
 			this.comboSupplier.TabIndex = 8;
 			this.comboSupplier.SelectionChangeCommitted += new System.EventHandler(this.comboSupplier_SelectionChangeCommitted);
+			// 
+			// checkShowHidden
+			// 
+			this.checkShowHidden.Location = new System.Drawing.Point(124,9);
+			this.checkShowHidden.Name = "checkShowHidden";
+			this.checkShowHidden.Size = new System.Drawing.Size(95,18);
+			this.checkShowHidden.TabIndex = 7;
+			this.checkShowHidden.Text = "Show Hidden";
+			this.checkShowHidden.UseVisualStyleBackColor = true;
+			this.checkShowHidden.Click += new System.EventHandler(this.checkShowHidden_Click);
 			// 
 			// button1
 			// 
@@ -140,7 +122,7 @@ namespace OpenDental {
 			this.gridOrder.Location = new System.Drawing.Point(455,31);
 			this.gridOrder.Name = "gridOrder";
 			this.gridOrder.ScrollValue = 0;
-			this.gridOrder.Size = new System.Drawing.Size(425,187);
+			this.gridOrder.Size = new System.Drawing.Size(425,162);
 			this.gridOrder.TabIndex = 11;
 			this.gridOrder.Title = "Order History";
 			this.gridOrder.TranslationName = null;
@@ -170,7 +152,7 @@ namespace OpenDental {
 			this.gridNeeded.Location = new System.Drawing.Point(3,31);
 			this.gridNeeded.Name = "gridNeeded";
 			this.gridNeeded.ScrollValue = 0;
-			this.gridNeeded.Size = new System.Drawing.Size(446,187);
+			this.gridNeeded.Size = new System.Drawing.Size(446,162);
 			this.gridNeeded.TabIndex = 4;
 			this.gridNeeded.Title = "Supplies Needed";
 			this.gridNeeded.TranslationName = null;
@@ -194,14 +176,13 @@ namespace OpenDental {
 			// 
 			// gridSupply
 			// 
-			this.gridSupply.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+			this.gridSupply.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
 			this.gridSupply.HScrollVisible = false;
 			this.gridSupply.Location = new System.Drawing.Point(3,30);
 			this.gridSupply.Name = "gridSupply";
 			this.gridSupply.ScrollValue = 0;
-			this.gridSupply.Size = new System.Drawing.Size(877,297);
+			this.gridSupply.Size = new System.Drawing.Size(877,256);
 			this.gridSupply.TabIndex = 5;
 			this.gridSupply.Title = "Supplies";
 			this.gridSupply.TranslationName = null;
@@ -215,19 +196,45 @@ namespace OpenDental {
 			this.butClose.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butClose.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butClose.CornerRadius = 4F;
-			this.butClose.Location = new System.Drawing.Point(805,331);
+			this.butClose.Location = new System.Drawing.Point(805,290);
 			this.butClose.Name = "butClose";
 			this.butClose.Size = new System.Drawing.Size(75,26);
 			this.butClose.TabIndex = 2;
 			this.butClose.Text = "Close";
 			this.butClose.Click += new System.EventHandler(this.butClose_Click);
 			// 
+			// menuStrip1
+			// 
+			this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.menuItemSuppliers,
+            this.menuItemCategories});
+			this.menuStrip1.Location = new System.Drawing.Point(0,0);
+			this.menuStrip1.Name = "menuStrip1";
+			this.menuStrip1.Size = new System.Drawing.Size(883,24);
+			this.menuStrip1.TabIndex = 12;
+			this.menuStrip1.Text = "menuStrip1";
+			// 
+			// menuItemSuppliers
+			// 
+			this.menuItemSuppliers.Name = "menuItemSuppliers";
+			this.menuItemSuppliers.Size = new System.Drawing.Size(62,20);
+			this.menuItemSuppliers.Text = "Suppliers";
+			this.menuItemSuppliers.Click += new System.EventHandler(this.menuItemSuppliers_Click);
+			// 
+			// menuItemCategories
+			// 
+			this.menuItemCategories.Name = "menuItemCategories";
+			this.menuItemCategories.Size = new System.Drawing.Size(71,20);
+			this.menuItemCategories.Text = "Categories";
+			this.menuItemCategories.Click += new System.EventHandler(this.menuItemCategories_Click);
+			// 
 			// FormSupplyInventory
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-			this.ClientSize = new System.Drawing.Size(883,582);
+			this.ClientSize = new System.Drawing.Size(883,540);
 			this.Controls.Add(this.splitContainer);
-			this.Menu = this.mainMenu1;
+			this.Controls.Add(this.menuStrip1);
+			this.MainMenuStrip = this.menuStrip1;
 			this.Name = "FormSupplyInventory";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Supply Inventory";
@@ -236,7 +243,10 @@ namespace OpenDental {
 			this.splitContainer.Panel1.ResumeLayout(false);
 			this.splitContainer.Panel2.ResumeLayout(false);
 			this.splitContainer.ResumeLayout(false);
+			this.menuStrip1.ResumeLayout(false);
+			this.menuStrip1.PerformLayout();
 			this.ResumeLayout(false);
+			this.PerformLayout();
 
 		}
 
@@ -245,8 +255,6 @@ namespace OpenDental {
 		private OpenDental.UI.Button butClose;
 		private OpenDental.UI.ODGrid gridNeeded;
 		private OpenDental.UI.Button butAddNeeded;
-		private System.Windows.Forms.MainMenu mainMenu1;
-		private System.Windows.Forms.MenuItem menuItemSuppliers;
 		private System.Windows.Forms.SplitContainer splitContainer;
 		private OpenDental.UI.ODGrid gridSupply;
 		private OpenDental.UI.Button button1;
@@ -254,7 +262,9 @@ namespace OpenDental {
 		private OpenDental.UI.Button butAddSupply;
 		private System.Windows.Forms.CheckBox checkShowHidden;
 		private System.Windows.Forms.Label label3;
-		private System.Windows.Forms.MenuItem menuItemCategories;
 		private System.Windows.Forms.ComboBox comboSupplier;
+		private System.Windows.Forms.MenuStrip menuStrip1;
+		private System.Windows.Forms.ToolStripMenuItem menuItemSuppliers;
+		private System.Windows.Forms.ToolStripMenuItem menuItemCategories;
 	}
 }

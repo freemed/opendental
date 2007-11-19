@@ -20,9 +20,12 @@ namespace OpenDental {
 		}
 
 		private void FormInventory_Load(object sender,EventArgs e) {
-			FillSuppliers();
 			FillGridNeeded();
-			//FillGridSupply();User will have to pick a supplier to fill this grid
+			FillSuppliers();
+			if(comboSupplier.Items.Count>0){
+				comboSupplier.SelectedIndex=0;
+			}
+			FillGridSupply();
 		}
 
 		private void FillSuppliers(){
@@ -81,28 +84,70 @@ namespace OpenDental {
 			listSupply=Supplies.CreateObjects(checkShowHidden.Checked,supplier);
 			gridSupply.BeginUpdate();
 			gridSupply.Columns.Clear();
-			//ODGridColumn col=new ODGridColumn(Lan.g(this,"Date Added"),90);
-			//gridSupply.Columns.Add(col);
-			//col=new ODGridColumn(Lan.g(this,"Description"),300);
-			//gridSupply.Columns.Add(col);
+			ODGridColumn col=new ODGridColumn(Lan.g(this,"Category"),100);
+			gridSupply.Columns.Add(col);
+			col=new ODGridColumn(Lan.g(this,"Catalog #"),60);
+			gridSupply.Columns.Add(col);
+			col=new ODGridColumn(Lan.g(this,"Catalog Description"),190);
+			gridSupply.Columns.Add(col);
+			col=new ODGridColumn(Lan.g(this,"Common Name"),140);
+			gridSupply.Columns.Add(col);
+			col=new ODGridColumn(Lan.g(this,"Unit"),50);
+			gridSupply.Columns.Add(col);
+			col=new ODGridColumn(Lan.g(this,"Level"),40,HorizontalAlignment.Right);
+			gridSupply.Columns.Add(col);
+			col=new ODGridColumn(Lan.g(this,"Price"),50,HorizontalAlignment.Right);
+			gridSupply.Columns.Add(col);
+			col=new ODGridColumn(Lan.g(this,"Note"),170);
+			gridSupply.Columns.Add(col);
+			col=new ODGridColumn(Lan.g(this,"Hidden"),40,HorizontalAlignment.Center);
+			gridSupply.Columns.Add(col);
 			gridSupply.Rows.Clear();
-			/*ODGridRow row;
-			for(int i=0;i<listNeeded.Count;i++){
+			ODGridRow row;
+			for(int i=0;i<listSupply.Count;i++){
 				row=new ODGridRow();
-				row.Cells.Add(listNeeded[i].DateAdded.ToShortDateString());
-				row.Cells.Add(listNeeded[i].Description);
+				if(i==0 || listSupply[i].Category!=listSupply[i-1].Category){
+					row.Cells.Add(DefB.GetName(DefCat.SupplyCats,listSupply[i].Category));
+				}
+				else{
+					row.Cells.Add("");
+				}
+				row.Cells.Add(listSupply[i].CatalogNumber);
+				row.Cells.Add(listSupply[i].CatalogDescript);
+				row.Cells.Add(listSupply[i].CommonName);
+				row.Cells.Add(listSupply[i].UnitType);
+				if(listSupply[i].LevelDesired==0){
+					row.Cells.Add("");
+				}
+				else{
+					row.Cells.Add(listSupply[i].LevelDesired.ToString());
+				}
+				if(listSupply[i].Price==0){
+					row.Cells.Add("");
+				}
+				else{
+					row.Cells.Add(listSupply[i].Price.ToString("n"));
+				}
+				row.Cells.Add(listSupply[i].Note);
+				if(listSupply[i].IsHidden){
+					row.Cells.Add("X");
+				}
+				else{
+					row.Cells.Add("");
+				}
 				gridSupply.Rows.Add(row);
-			}*/
+			}
 			gridSupply.EndUpdate();
 		}
 
 		private void gridSupply_CellDoubleClick(object sender,ODGridClickEventArgs e) {
-			/*FormSupplyNeededEdit FormS=new FormSupplyNeededEdit();
-			FormS.Supp=listNeeded[e.Row];
+			FormSupplyEdit FormS=new FormSupplyEdit();
+			FormS.Supp=listSupply[e.Row];
+			FormS.ListSupplier=listSupplier;
 			FormS.ShowDialog();
 			if(FormS.DialogResult==DialogResult.OK) {
-				FillGridNeeded();
-			}*/
+				FillGridSupply();
+			}
 		}
 
 		private void butAddSupply_Click(object sender,EventArgs e) {
