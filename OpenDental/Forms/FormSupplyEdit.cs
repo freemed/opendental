@@ -34,7 +34,7 @@ namespace OpenDental {
 				textLevelDesired.Text=Supp.LevelDesired.ToString();
 			}
 			if(Supp.Price!=0){
-				textPrice.Text=Supp.Price.ToString("c");
+				textPrice.Text=Supp.Price.ToString("n");
 			}
 			checkIsHidden.Checked=Supp.IsHidden;
 		}

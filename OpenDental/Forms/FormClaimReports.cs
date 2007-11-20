@@ -194,7 +194,7 @@ namespace OpenDental{
 				return;
 			}
 			Cursor=Cursors.WaitCursor;
-			if(Clearinghouses.List[comboClearhouse.SelectedIndex].CommBridge==EclaimsCommBridge.Tesia) {
+			/*if(Clearinghouses.List[comboClearhouse.SelectedIndex].CommBridge==EclaimsCommBridge.Tesia) {
 				try{
 					DateTime curtime=DateTime.Now;
 					while (DateTime.Now<curtime.AddSeconds(2)){
@@ -208,8 +208,8 @@ namespace OpenDental{
 					MessageBox.Show(ex.Message);
 					return;
 				}
-			}
-			else if(Clearinghouses.List[comboClearhouse.SelectedIndex].CommBridge==EclaimsCommBridge.WebMD){
+			}*/
+			if(Clearinghouses.List[comboClearhouse.SelectedIndex].CommBridge==EclaimsCommBridge.WebMD){
 				if(!WebMD.Launch(Clearinghouses.List[comboClearhouse.SelectedIndex],0)){
 					Cursor=Cursors.Default;
 					MessageBox.Show(Lan.g(this,"Error retrieving."));

@@ -11,7 +11,7 @@ using OpenDental.UI;
 namespace OpenDental {
 	public partial class FormSupplyInventory:Form {
 		private List<SupplyNeeded> listNeeded;
-		private List<Supply> listSupply;
+		//private List<Supply> listSupply;
 		private List<Supplier> listSupplier;
 		private List<SupplyOrder> listOrder;
 
@@ -106,19 +106,23 @@ namespace OpenDental {
 			gridOrder.EndUpdate();
 		}
 
+		private void gridOrder_CellClick(object sender,ODGridClickEventArgs e) {
+			FillGridSupply();
+		}
+
 		private void gridOrder_CellDoubleClick(object sender,ODGridClickEventArgs e) {
 			FormSupplyOrderEdit FormS=new FormSupplyOrderEdit();
 			FormS.Order=listOrder[e.Row];
-			//int selectedOrder=
+			int selectedOrderNum=listOrder[e.Row].SupplyOrderNum;
 			FormS.ListSupplier=listSupplier;
 			FormS.ShowDialog();
 			if(FormS.DialogResult==DialogResult.OK) {
 				FillGridOrder();
 			}
 			for(int i=0;i<listOrder.Count;i++){
-				//if(listOrder[i].){
-				
-				//}
+				if(listOrder[i].SupplyOrderNum==selectedOrderNum){
+					gridOrder.SetSelected(i,true);
+				}
 			}
 		}
 
@@ -148,28 +152,32 @@ namespace OpenDental {
 		}
 
 		private void FillGridSupply(){
+			int orderNum=0;
+			if(gridOrder.GetSelectedIndex()!=-1){//an order is selected
+				orderNum=listOrder[gridOrder.GetSelectedIndex()].SupplyOrderNum;
+			}
 			int supplier=0;
 			if(comboSupplier.SelectedIndex!=-1){
 				supplier=listSupplier[comboSupplier.SelectedIndex].SupplierNum;
 			}
-			listSupply=Supplies.CreateObjects(checkShowHidden.Checked,supplier);
+			//listSupply=Supplies.CreateObjects(false,supplier);
 			gridSupply.BeginUpdate();
 			gridSupply.Columns.Clear();
-			ODGridColumn col=new ODGridColumn(Lan.g(this,"Category"),120);
+			ODGridColumn col=new ODGridColumn(Lan.g(this,"Category"),130);
 			gridSupply.Columns.Add(col);
-			col=new ODGridColumn(Lan.g(this,"Catalog #"),60);
+			col=new ODGridColumn(Lan.g(this,"Catalog #"),80);
 			gridSupply.Columns.Add(col);
-			col=new ODGridColumn(Lan.g(this,"Description"),300);
+			col=new ODGridColumn(Lan.g(this,"Description"),320);
 			gridSupply.Columns.Add(col);
-			col=new ODGridColumn(Lan.g(this,"Level"),40,HorizontalAlignment.Right);
+			col=new ODGridColumn(Lan.g(this,"Price"),60,HorizontalAlignment.Right);
 			gridSupply.Columns.Add(col);
-			col=new ODGridColumn(Lan.g(this,"Price"),50,HorizontalAlignment.Right);
+			col=new ODGridColumn(Lan.g(this,"StockQty"),60,HorizontalAlignment.Center);
 			gridSupply.Columns.Add(col);
-			col=new ODGridColumn(Lan.g(this,"Hidden"),40,HorizontalAlignment.Center);
+			col=new ODGridColumn(Lan.g(this,"OrderQty"),60,HorizontalAlignment.Center);
 			gridSupply.Columns.Add(col);
 			gridSupply.Rows.Clear();
 			ODGridRow row;
-			for(int i=0;i<listSupply.Count;i++){
+			/*for(int i=0;i<listSupply.Count;i++){
 				row=new ODGridRow();
 				if(i==0 || listSupply[i].Category!=listSupply[i-1].Category){
 					row.Cells.Add(DefB.GetName(DefCat.SupplyCats,listSupply[i].Category));
@@ -179,40 +187,35 @@ namespace OpenDental {
 				}
 				row.Cells.Add(listSupply[i].CatalogNumber);
 				row.Cells.Add(listSupply[i].Descript);
+				if(listSupply[i].Price==0) {
+					row.Cells.Add("");
+				}
+				else {
+					row.Cells.Add(listSupply[i].Price.ToString("n"));
+				}
 				if(listSupply[i].LevelDesired==0){
 					row.Cells.Add("");
 				}
 				else{
 					row.Cells.Add(listSupply[i].LevelDesired.ToString());
 				}
-				if(listSupply[i].Price==0){
-					row.Cells.Add("");
-				}
-				else{
-					row.Cells.Add(listSupply[i].Price.ToString("n"));
-				}
-				if(listSupply[i].IsHidden){
-					row.Cells.Add("X");
-				}
-				else{
-					row.Cells.Add("");
-				}
+				row.Cells.Add("");
 				gridSupply.Rows.Add(row);
-			}
+			}*/
 			gridSupply.EndUpdate();
 		}
 
 		private void gridSupply_CellDoubleClick(object sender,ODGridClickEventArgs e) {
-			FormSupplyEdit FormS=new FormSupplyEdit();
+			/*FormSupplyEdit FormS=new FormSupplyEdit();
 			FormS.Supp=listSupply[e.Row];
 			FormS.ListSupplier=listSupplier;
 			FormS.ShowDialog();
 			if(FormS.DialogResult==DialogResult.OK) {
 				FillGridSupply();
-			}
+			}*/
 		}
 
-		private void butAddSupply_Click(object sender,EventArgs e) {
+		private void butManageSupplies_Click(object sender,EventArgs e) {
 			if(listSupplier.Count==0){
 				MsgBox.Show(this,"Please add suppliers first.  Use the menu at the top of this window.");
 				return;
@@ -221,27 +224,18 @@ namespace OpenDental {
 				MsgBox.Show(this,"Please add supply categories first.  Use the menu at the top of this window.");
 				return;
 			}
-			if(comboSupplier.SelectedIndex==-1) {
-				MsgBox.Show(this,"Please select a supplier first.");
-				return;
-			}
-			Supply supp=new Supply();
-			supp.IsNew=true;
-			supp.SupplierNum=listSupplier[comboSupplier.SelectedIndex].SupplierNum;
-			FormSupplyEdit FormS=new FormSupplyEdit();
-			FormS.Supp=supp;
+			FormSupplies FormS=new FormSupplies();
 			FormS.ListSupplier=listSupplier;
-			FormS.ShowDialog();
-			if(FormS.DialogResult==DialogResult.OK) {
-				FillGridSupply();
+			FormS.SupplierNum=0;
+			if(comboSupplier.SelectedIndex!=-1){
+				FormS.SupplierNum=listSupplier[comboSupplier.SelectedIndex].SupplierNum;
 			}
-		}
-
-		private void checkShowHidden_Click(object sender,EventArgs e) {
+			FormS.ShowDialog();
 			FillGridSupply();
 		}
 
 		private void comboSupplier_SelectionChangeCommitted(object sender,EventArgs e) {
+			FillGridOrder();
 			FillGridSupply();
 		}
 
@@ -261,6 +255,9 @@ namespace OpenDental {
 		private void butClose_Click(object sender,EventArgs e) {
 			Close();
 		}
+
+		
+		
 
 		
 

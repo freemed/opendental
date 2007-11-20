@@ -112,12 +112,12 @@ namespace OpenDental.Eclaims
 						//continue;
 					//}
 				}
-				else if(Clearinghouses.List[i].CommBridge==EclaimsCommBridge.Tesia) {
+				/*else if(Clearinghouses.List[i].CommBridge==EclaimsCommBridge.Tesia) {
 					if(!Tesia.Launch(Clearinghouses.List[i],batchNum)) {
 						MessageBox.Show(Lan.g("Eclaims","Error sending."));
 						continue;
 					}
-				}
+				}*/
 				//----------------------------------------------------------------------------------------
 				//finally, mark the claims sent. (only if not Canadian)
 				EtransType etype=EtransType.ClaimSent;

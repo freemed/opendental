@@ -15,7 +15,7 @@ namespace OpenDental.Eclaims
 		public Tesia(){
 			
 		}
-
+		/*
 		///<summary>Returns true if the communications were successful, and false if they failed. If they failed, a rollback will happen automatically by deleting the previously created X12 file. The batchnum is supplied for the possible rollback.</summary>
 		public static bool Launch(Clearinghouse clearhouse,int batchNum){
 			if(!Directory.Exists(clearhouse.ExportPath)){
@@ -86,7 +86,7 @@ namespace OpenDental.Eclaims
 				return false;
 			}
 			return true;
-		}
+		}*/
 
 		public static void Eligibility270(){
 
