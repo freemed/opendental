@@ -10,82 +10,68 @@ using OpenDentBusiness;
 namespace OpenDental {
 	public partial class FormSupplyOrderEdit:Form {
 		public SupplyOrder Order;
-		//public List<Supplier> ListSupplier;
+		public List<Supplier> ListSupplier;
 
+		///<Summary>This form is only going to be used to edit existing supplyOrders, not to add new ones.</Summary>
 		public FormSupplyOrderEdit() {
 			InitializeComponent();
 			Lan.F(this);
 		}
 
 		private void FormSupplyOrderEdit_Load(object sender,EventArgs e) {
-			/*textSupplier.Text=Suppliers.GetName(ListSupplier,Supp.SupplierNum);
-			for(int i=0;i<DefB.Short[(int)DefCat.SupplyCats].Length;i++){
-				comboCategory.Items.Add(DefB.Short[(int)DefCat.SupplyCats][i].ItemName);
-				if(Supp.Category==DefB.Short[(int)DefCat.SupplyCats][i].DefNum){
-					comboCategory.SelectedIndex=i;
-				}
+			textSupplier.Text=Suppliers.GetName(ListSupplier,Order.SupplierNum);
+			if(Order.DatePlaced.Year>2200){
+				textDatePlaced.Text="";
 			}
-			if(comboCategory.SelectedIndex==-1){
-				comboCategory.SelectedIndex=0;//There are no hidden cats, and presence of cats is checked before allowing user to add new.
+			else{
+				textDatePlaced.Text=Order.DatePlaced.ToShortDateString();
 			}
-			textCatalogNumber.Text=Supp.CatalogNumber;
-			textCatalogDescript.Text=Supp.CatalogDescript;
-			textCommonName.Text=Supp.CommonName;
-			textUnitType.Text=Supp.UnitType;
-			if(Supp.LevelDesired!=0){
-				textLevelDesired.Text=Supp.LevelDesired.ToString();
-			}
-			if(Supp.Price!=0){
-				textPrice.Text=Supp.Price.ToString("c");
-			}
-			textNote.Text=Supp.Note;
-			checkIsHidden.Checked=Supp.IsHidden;*/
+			textNote.Text=Order.Note;
+		}
+
+		private void butToday_Click(object sender,EventArgs e) {
+			textDatePlaced.Text=DateTime.Today.ToShortDateString();
 		}
 
 		private void butDelete_Click(object sender,EventArgs e) {
-			/*if(Supp.IsNew){
-				DialogResult=DialogResult.Cancel;
-			}
-			if(!MsgBox.Show(this,true,"Delete?")){
+			//if(Order.IsNew){//never
+			//	DialogResult=DialogResult.Cancel;
+			//}
+			if(!MsgBox.Show(this,true,"Delete entire order?")){
 				return;
 			}
 			try{
-				Supplies.DeleteObject(Supp);
+				SupplyOrders.DeleteObject(Order);
 			}
 			catch(ApplicationException ex){
 				MessageBox.Show(ex.Message);
 				return;
 			}
-			DialogResult=DialogResult.OK;*/
+			DialogResult=DialogResult.OK;
 		}
 
 		private void butOK_Click(object sender,EventArgs e) {
-			/*if(textLevelDesired.errorProvider1.GetError(textLevelDesired)!=""
-				|| textPrice.errorProvider1.GetError(textPrice)!="")
+			if(textDatePlaced.errorProvider1.GetError(textDatePlaced)!="")
 			{
 				MsgBox.Show(this,"Please fix data entry errors first.");
 				return;
 			}
-			if(textCatalogDescript.Text=="" && textCommonName.Text==""){
-				MsgBox.Show(this,"Please enter a catalog description or a common name.");
-				return;
+			if(textDatePlaced.Text==""){
+				Order.DatePlaced=new DateTime(2500,1,1);
 			}
-			Supp.Category=DefB.Short[(int)DefCat.SupplyCats][comboCategory.SelectedIndex].DefNum;
-			Supp.CatalogNumber=textCatalogNumber.Text;
-			Supp.CatalogDescript=textCatalogDescript.Text;
-			Supp.CommonName=textCommonName.Text;
-			Supp.UnitType=textUnitType.Text;
-			Supp.LevelDesired=PIn.PFloat(textLevelDesired.Text);
-			Supp.Price=PIn.PDouble(textPrice.Text);
-			Supp.Note=textNote.Text;
-			Supp.IsHidden=checkIsHidden.Checked;
-			Supplies.WriteObject(Supp);
-			DialogResult=DialogResult.OK;*/
+			else{
+				Order.DatePlaced=PIn.PDate(textDatePlaced.Text);
+			}
+			Order.Note=textNote.Text;
+			SupplyOrders.WriteObject(Order);
+			DialogResult=DialogResult.OK;
 		}
 
 		private void butCancel_Click(object sender,EventArgs e) {
 			DialogResult=DialogResult.Cancel;
 		}
+
+	
 
 		
 	}

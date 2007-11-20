@@ -86,40 +86,65 @@ namespace OpenDental {
 			listOrder=SupplyOrders.CreateObjects(supplier);
 			gridOrder.BeginUpdate();
 			gridOrder.Columns.Clear();
-			/*ODGridColumn col=new ODGridColumn(Lan.g(this,"Date Added"),90);
+			ODGridColumn col=new ODGridColumn(Lan.g(this,"Date Placed"),90);
 			gridOrder.Columns.Add(col);
-			col=new ODGridColumn(Lan.g(this,"Description"),300);
+			col=new ODGridColumn(Lan.g(this,"Note"),300);
 			gridOrder.Columns.Add(col);
 			gridOrder.Rows.Clear();
 			ODGridRow row;
-			for(int i=0;i<listNeeded.Count;i++) {
+			for(int i=0;i<listOrder.Count;i++) {
 				row=new ODGridRow();
-				row.Cells.Add(listNeeded[i].DateAdded.ToShortDateString());
-				row.Cells.Add(listNeeded[i].Description);
+				if(listOrder[i].DatePlaced.Year>2200){
+					row.Cells.Add(Lan.g(this,"pending"));
+				}
+				else{
+					row.Cells.Add(listOrder[i].DatePlaced.ToShortDateString());
+				}
+				row.Cells.Add(listOrder[i].Note);
 				gridOrder.Rows.Add(row);
-			}*/
+			}
 			gridOrder.EndUpdate();
 		}
 
 		private void gridOrder_CellDoubleClick(object sender,ODGridClickEventArgs e) {
-			/*FormSupplyNeededEdit FormS=new FormSupplyNeededEdit();
-			FormS.Supp=listNeeded[e.Row];
+			FormSupplyOrderEdit FormS=new FormSupplyOrderEdit();
+			FormS.Order=listOrder[e.Row];
+			//int selectedOrder=
+			FormS.ListSupplier=listSupplier;
 			FormS.ShowDialog();
 			if(FormS.DialogResult==DialogResult.OK) {
-				FillGridNeeded();
-			}*/
+				FillGridOrder();
+			}
+			for(int i=0;i<listOrder.Count;i++){
+				//if(listOrder[i].){
+				
+				//}
+			}
 		}
 
 		private void butNewOrder_Click(object sender,EventArgs e) {
-			/*SupplyNeeded supp=new SupplyNeeded();
-			supp.IsNew=true;
-			supp.DateAdded=DateTime.Today;
-			FormSupplyNeededEdit FormS=new FormSupplyNeededEdit();
-			FormS.Supp=supp;
-			FormS.ShowDialog();
-			if(FormS.DialogResult==DialogResult.OK) {
-				FillGridNeeded();
-			}*/
+			if(listSupplier.Count==0) {
+				MsgBox.Show(this,"Please add suppliers first.  Use the menu at the top of this window.");
+				return;
+			}
+			if(comboSupplier.SelectedIndex==-1) {
+				MsgBox.Show(this,"Please select a supplier first.");
+				return;
+			}
+			for(int i=0;i<listOrder.Count;i++){
+				if(listOrder[i].DatePlaced.Year>2200){
+					MsgBox.Show(this,"Not allowed to add a new order when there is already one pending.  Please finish the other order instead.");
+					return;
+				}
+			}
+			SupplyOrder order=new SupplyOrder();
+			order.SupplierNum=listSupplier[comboSupplier.SelectedIndex].SupplierNum;
+			order.IsNew=true;
+			order.DatePlaced=new DateTime(2500,1,1);
+			order.Note="";
+			SupplyOrders.WriteObject(order);
+			FillGridOrder();
+			gridOrder.SetSelected(listOrder.Count-1,true);
 		}
 
 		private void FillGridSupply(){
@@ -130,21 +155,15 @@ namespace OpenDental {
 			listSupply=Supplies.CreateObjects(checkShowHidden.Checked,supplier);
 			gridSupply.BeginUpdate();
 			gridSupply.Columns.Clear();
-			ODGridColumn col=new ODGridColumn(Lan.g(this,"Category"),100);
+			ODGridColumn col=new ODGridColumn(Lan.g(this,"Category"),120);
 			gridSupply.Columns.Add(col);
 			col=new ODGridColumn(Lan.g(this,"Catalog #"),60);
 			gridSupply.Columns.Add(col);
-			col=new ODGridColumn(Lan.g(this,"Catalog Description"),190);
-			gridSupply.Columns.Add(col);
-			col=new ODGridColumn(Lan.g(this,"Common Name"),140);
-			gridSupply.Columns.Add(col);
-			col=new ODGridColumn(Lan.g(this,"Unit"),50);
+			col=new ODGridColumn(Lan.g(this,"Description"),300);
 			gridSupply.Columns.Add(col);
 			col=new ODGridColumn(Lan.g(this,"Level"),40,HorizontalAlignment.Right);
 			gridSupply.Columns.Add(col);
 			col=new ODGridColumn(Lan.g(this,"Price"),50,HorizontalAlignment.Right);
-			gridSupply.Columns.Add(col);
-			col=new ODGridColumn(Lan.g(this,"Note"),170);
 			gridSupply.Columns.Add(col);
 			col=new ODGridColumn(Lan.g(this,"Hidden"),40,HorizontalAlignment.Center);
 			gridSupply.Columns.Add(col);
@@ -159,9 +178,7 @@ namespace OpenDental {
 					row.Cells.Add("");
 				}
 				row.Cells.Add(listSupply[i].CatalogNumber);
-				row.Cells.Add(listSupply[i].CatalogDescript);
-				row.Cells.Add(listSupply[i].CommonName);
-				row.Cells.Add(listSupply[i].UnitType);
+				row.Cells.Add(listSupply[i].Descript);
 				if(listSupply[i].LevelDesired==0){
 					row.Cells.Add("");
 				}
@@ -174,7 +191,6 @@ namespace OpenDental {
 				else{
 					row.Cells.Add(listSupply[i].Price.ToString("n"));
 				}
-				row.Cells.Add(listSupply[i].Note);
 				if(listSupply[i].IsHidden){
 					row.Cells.Add("X");
 				}

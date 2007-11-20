@@ -6155,18 +6155,16 @@ namespace OpenDental{
 					SupplyNum int NOT NULL auto_increment,
 					SupplierNum int NOT NULL,
 					CatalogNumber varchar(255),
-					CatalogDescript varchar(255),
-					CommonName varchar(255),
+					Descript varchar(255),
 					Category int NOT NULL,
 					ItemOrder int NOT NULL,
 					LevelDesired float NOT NULL,
 					IsHidden tinyint(1) NOT NULL,
 					Price double NOT NULL,
-					UnitType varchar(255),
-					Note text,
 					PRIMARY KEY (SupplyNum),
 					INDEX (SupplierNum)
 					) DEFAULT CHARSET=utf8";
+				//the above definition has changed repeatedly.  You might need to drop the table and do it again:
 				General.NonQEx(command);
 				command="DROP TABLE IF EXISTS supplyorder";
 				General.NonQEx(command);

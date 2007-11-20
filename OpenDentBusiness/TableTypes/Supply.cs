@@ -43,28 +43,16 @@ namespace OpenDentBusiness{
 			get { return catalogNumberChanged; }
 		}
 
-		[DataField("CatalogDescript")]
-		private string catalogDescript;
-		bool catalogDescriptChanged;
-		/// <summary>The description as found in the catalog or online.  Typically includes qty per box/case, etc.</summary>
-		public string CatalogDescript {
-			get { return catalogDescript; }
-			set { catalogDescript = value; MarkDirty(); catalogDescriptChanged = true; }
+		[DataField("Descript")]
+		private string descript;
+		bool descriptChanged;
+		/// <summary>The description can be similar to the catalog, but not required.  Typically includes qty per box/case, etc.</summary>
+		public string Descript {
+			get { return descript; }
+			set { descript = value; MarkDirty(); descriptChanged = true; }
 		}
-		public bool CatalogDescriptChanged {
-			get { return catalogDescriptChanged; }
-		}
-
-		[DataField("CommonName")]
-		private string commonName;
-		bool commonNameChanged;
-		/// <summary>Optional alternate name that this office prefers to use.  Usually simpler.</summary>
-		public string CommonName {
-			get { return commonName; }
-			set { commonName = value; MarkDirty(); commonNameChanged = true; }
-		}
-		public bool CommonNameChanged {
-			get { return commonNameChanged; }
+		public bool DescriptChanged {
+			get { return descriptChanged; }
 		}
 
 		[DataField("Category")]
@@ -126,34 +114,6 @@ namespace OpenDentBusiness{
 		public bool PriceChanged {
 			get { return priceChanged; }
 		}
-
-		[DataField("UnitType")]
-		private string unitType;
-		bool unitTypeChanged;
-		/// <summary>Pk, box, etc.  The qty per unit will be in the description.  This is just a text field for now.</summary>
-		public string UnitType {
-			get { return unitType; }
-			set { unitType = value; MarkDirty(); unitTypeChanged = true; }
-		}
-		public bool UnitTypeChanged {
-			get { return unitTypeChanged; }
-		}
-
-		[DataField("Note")]
-		private string note;
-		bool noteChanged;
-		/// <summary>Any note regarding this supply.</summary>
-		public string Note {
-			get { return note; }
-			set { note = value; MarkDirty(); noteChanged = true; }
-		}
-		public bool NoteChanged {
-			get { return noteChanged; }
-		}
-		
-		
-
-		
 
 		
 

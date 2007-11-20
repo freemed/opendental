@@ -29,16 +29,13 @@ namespace OpenDental {
 				comboCategory.SelectedIndex=0;//There are no hidden cats, and presence of cats is checked before allowing user to add new.
 			}
 			textCatalogNumber.Text=Supp.CatalogNumber;
-			textCatalogDescript.Text=Supp.CatalogDescript;
-			textCommonName.Text=Supp.CommonName;
-			textUnitType.Text=Supp.UnitType;
+			textDescript.Text=Supp.Descript;
 			if(Supp.LevelDesired!=0){
 				textLevelDesired.Text=Supp.LevelDesired.ToString();
 			}
 			if(Supp.Price!=0){
 				textPrice.Text=Supp.Price.ToString("c");
 			}
-			textNote.Text=Supp.Note;
 			checkIsHidden.Checked=Supp.IsHidden;
 		}
 
@@ -66,18 +63,15 @@ namespace OpenDental {
 				MsgBox.Show(this,"Please fix data entry errors first.");
 				return;
 			}
-			if(textCatalogDescript.Text=="" && textCommonName.Text==""){
-				MsgBox.Show(this,"Please enter a catalog description or a common name.");
+			if(textDescript.Text==""){
+				MsgBox.Show(this,"Please enter a description.");
 				return;
 			}
 			Supp.Category=DefB.Short[(int)DefCat.SupplyCats][comboCategory.SelectedIndex].DefNum;
 			Supp.CatalogNumber=textCatalogNumber.Text;
-			Supp.CatalogDescript=textCatalogDescript.Text;
-			Supp.CommonName=textCommonName.Text;
-			Supp.UnitType=textUnitType.Text;
+			Supp.Descript=textDescript.Text;
 			Supp.LevelDesired=PIn.PFloat(textLevelDesired.Text);
 			Supp.Price=PIn.PDouble(textPrice.Text);
-			Supp.Note=textNote.Text;
 			Supp.IsHidden=checkIsHidden.Checked;
 			Supplies.WriteObject(Supp);
 			DialogResult=DialogResult.OK;
