@@ -173,7 +173,7 @@ namespace OpenDentBusiness{
 			return myFloat.ToString();
 		}
 
-		///<summary></summary>
+		///<summary>Escapes all necessary characters.</summary>
 		public static string PString(string myString){
 			if(myString==null) {
 				return "";
