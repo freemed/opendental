@@ -11,9 +11,10 @@ namespace OpenDental{
 	///<summary></summary>
 	public class SupplyOrders {
 
-		///<summary>Gets all SupplyOrders for one supplier, ordered by date.</summary>
-		public static List<SupplyOrder> CreateObjects(int supplierNum) {
-			string command="SELECT * FROM supplyorder WHERE SupplierNum="+POut.PInt(supplierNum)+" ORDER BY DatePlaced";
+		///<summary>Gets all SupplyOrders, ordered by date.</summary>
+		public static List<SupplyOrder> CreateObjects(){
+			string command="SELECT * FROM supplyorder "
+				+"ORDER BY DatePlaced";
 			return new List<SupplyOrder>(DataObjectFactory<SupplyOrder>.CreateObjects(command));
 		}
 

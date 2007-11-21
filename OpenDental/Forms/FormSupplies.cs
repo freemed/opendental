@@ -53,7 +53,7 @@ namespace OpenDental {
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn(Lan.g(this,"StockQty"),60,HorizontalAlignment.Center);
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g(this,"Order"),40,HorizontalAlignment.Center);
+			col=new ODGridColumn(Lan.g(this,"IsHidden"),40,HorizontalAlignment.Center);
 			gridMain.Columns.Add(col);
 			gridMain.Rows.Clear();
 			ODGridRow row;
@@ -79,13 +79,13 @@ namespace OpenDental {
 				else {
 					row.Cells.Add(listSupply[i].LevelDesired.ToString());
 				}
-				/*if(listSupply[i].IsHidden) {
+				if(listSupply[i].IsHidden) {
 					row.Cells.Add("X");
 				}
 				else {
 					row.Cells.Add("");
-				}*/
-				row.Cells.Add(listSupply[i].ItemOrder.ToString());
+				}
+				//row.Cells.Add(listSupply[i].ItemOrder.ToString());
 				gridMain.Rows.Add(row);
 			}
 			gridMain.EndUpdate();

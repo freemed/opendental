@@ -27,11 +27,11 @@ namespace OpenDental{
 			this.comboSupplier = new System.Windows.Forms.ComboBox();
 			this.checkShowHidden = new System.Windows.Forms.CheckBox();
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
+			this.butUp = new OpenDental.UI.Button();
+			this.butDown = new OpenDental.UI.Button();
 			this.label1 = new System.Windows.Forms.Label();
 			this.textFind = new System.Windows.Forms.TextBox();
 			this.butRefresh = new OpenDental.UI.Button();
-			this.butUp = new OpenDental.UI.Button();
-			this.butDown = new OpenDental.UI.Button();
 			this.butAdd = new OpenDental.UI.Button();
 			this.gridMain = new OpenDental.UI.ODGrid();
 			this.butClose = new OpenDental.UI.Button();
@@ -78,6 +78,34 @@ namespace OpenDental{
 			this.groupBox1.TabStop = false;
 			this.groupBox1.Text = "Move";
 			// 
+			// butUp
+			// 
+			this.butUp.AdjustImageLocation = new System.Drawing.Point(0,1);
+			this.butUp.Autosize = true;
+			this.butUp.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butUp.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butUp.CornerRadius = 4F;
+			this.butUp.Image = global::OpenDental.Properties.Resources.up;
+			this.butUp.Location = new System.Drawing.Point(10,14);
+			this.butUp.Name = "butUp";
+			this.butUp.Size = new System.Drawing.Size(24,24);
+			this.butUp.TabIndex = 15;
+			this.butUp.Click += new System.EventHandler(this.butUp_Click);
+			// 
+			// butDown
+			// 
+			this.butDown.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butDown.Autosize = true;
+			this.butDown.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butDown.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butDown.CornerRadius = 4F;
+			this.butDown.Image = global::OpenDental.Properties.Resources.down;
+			this.butDown.Location = new System.Drawing.Point(40,14);
+			this.butDown.Name = "butDown";
+			this.butDown.Size = new System.Drawing.Size(24,24);
+			this.butDown.TabIndex = 16;
+			this.butDown.Click += new System.EventHandler(this.butDown_Click);
+			// 
 			// label1
 			// 
 			this.label1.Location = new System.Drawing.Point(268,17);
@@ -110,34 +138,6 @@ namespace OpenDental{
 			this.butRefresh.Text = "Refresh";
 			this.butRefresh.Click += new System.EventHandler(this.butRefresh_Click);
 			// 
-			// butUp
-			// 
-			this.butUp.AdjustImageLocation = new System.Drawing.Point(0,1);
-			this.butUp.Autosize = true;
-			this.butUp.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butUp.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butUp.CornerRadius = 4F;
-			this.butUp.Image = global::OpenDental.Properties.Resources.up;
-			this.butUp.Location = new System.Drawing.Point(10,14);
-			this.butUp.Name = "butUp";
-			this.butUp.Size = new System.Drawing.Size(24,24);
-			this.butUp.TabIndex = 15;
-			this.butUp.Click += new System.EventHandler(this.butUp_Click);
-			// 
-			// butDown
-			// 
-			this.butDown.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butDown.Autosize = true;
-			this.butDown.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butDown.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butDown.CornerRadius = 4F;
-			this.butDown.Image = global::OpenDental.Properties.Resources.down;
-			this.butDown.Location = new System.Drawing.Point(40,14);
-			this.butDown.Name = "butDown";
-			this.butDown.Size = new System.Drawing.Size(24,24);
-			this.butDown.TabIndex = 16;
-			this.butDown.Click += new System.EventHandler(this.butDown_Click);
-			// 
 			// butAdd
 			// 
 			this.butAdd.AdjustImageLocation = new System.Drawing.Point(0,0);
@@ -163,7 +163,7 @@ namespace OpenDental{
 			this.gridMain.Name = "gridMain";
 			this.gridMain.ScrollValue = 0;
 			this.gridMain.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
-			this.gridMain.Size = new System.Drawing.Size(750,501);
+			this.gridMain.Size = new System.Drawing.Size(750,115);
 			this.gridMain.TabIndex = 5;
 			this.gridMain.Title = "Supplies";
 			this.gridMain.TranslationName = null;
