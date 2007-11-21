@@ -214,13 +214,14 @@ namespace OpenDental {
 		}
 
 		private void gridOrderItem_CellDoubleClick(object sender,ODGridClickEventArgs e) {
-			/*FormSupplyEdit FormS=new FormSupplyEdit();
-			FormS.Supp=listSupply[e.Row];
+			FormSupplyOrderItemEdit FormS=new FormSupplyOrderItemEdit();
+			FormS.ItemCur=SupplyOrderItems.CreateObject(PIn.PInt(tableOrderItem.Rows[e.Row]["SupplyOrderItemNum"].ToString()));
 			FormS.ListSupplier=listSupplier;
 			FormS.ShowDialog();
 			if(FormS.DialogResult==DialogResult.OK) {
-				FillGridSupply();
-			}*/
+				FillGridOrderItem();
+			}
+			//still need to reselect item
 		}
 
 		private void FillGridSupplyMain(){

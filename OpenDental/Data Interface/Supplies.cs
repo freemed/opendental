@@ -26,6 +26,12 @@ namespace OpenDental{
 			return new List<Supply>(DataObjectFactory<Supply>.CreateObjects(command));
 		}
 
+		///<Summary>Gets one supply from the database.  Used for display in SupplyOrderItemEdit window.</Summary>
+		public static Supply CreateObject(int supplyNum){
+			//string command="SELECT * FROM supply WHERE SupplyNum="+POut.PInt(supplyNum);
+			return DataObjectFactory<Supply>.CreateObject(supplyNum);
+		}
+
 		///<summary></summary>
 		public static void WriteObject(Supply supp){
 			DataObjectFactory<Supply>.WriteObject(supp);
