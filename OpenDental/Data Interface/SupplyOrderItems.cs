@@ -13,7 +13,7 @@ namespace OpenDental{
 	public class SupplyOrderItems {
 
 		public static DataTable GetItemsForOrder(int orderNum){
-			string command="SELECT CatalogNumber,Descript,Qty,supplyorderitem.Price "
+			string command="SELECT CatalogNumber,Descript,Qty,supplyorderitem.Price,SupplyOrderItemNum,supplyorderitem.SupplyNum "
 				+"FROM supplyorderitem,definition,supply "
 				+"WHERE definition.DefNum=supply.Category "
 				+"AND supply.SupplyNum=supplyorderitem.SupplyNum "

@@ -96,6 +96,8 @@ namespace OpenDental {
 			this.splitContainer.Panel1.Controls.Add(this.gridOrder);
 			this.splitContainer.Panel1.Controls.Add(this.butAddNeeded);
 			this.splitContainer.Panel1.Controls.Add(this.gridNeeded);
+			this.splitContainer.Panel1.Controls.Add(this.comboSupplier);
+			this.splitContainer.Panel1.Controls.Add(this.label3);
 			// 
 			// splitContainer.Panel2
 			// 
@@ -190,8 +192,6 @@ namespace OpenDental {
 			this.tabSupplies.Controls.Add(this.textFind);
 			this.tabSupplies.Controls.Add(this.label2);
 			this.tabSupplies.Controls.Add(this.gridSupplyMain);
-			this.tabSupplies.Controls.Add(this.label3);
-			this.tabSupplies.Controls.Add(this.comboSupplier);
 			this.tabSupplies.Location = new System.Drawing.Point(4,22);
 			this.tabSupplies.Name = "tabSupplies";
 			this.tabSupplies.Padding = new System.Windows.Forms.Padding(3);
@@ -201,7 +201,7 @@ namespace OpenDental {
 			// 
 			// label3
 			// 
-			this.label3.Location = new System.Drawing.Point(529,4);
+			this.label3.Location = new System.Drawing.Point(154,6);
 			this.label3.Name = "label3";
 			this.label3.Size = new System.Drawing.Size(75,18);
 			this.label3.TabIndex = 10;
@@ -212,7 +212,7 @@ namespace OpenDental {
 			// 
 			this.comboSupplier.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.comboSupplier.FormattingEnabled = true;
-			this.comboSupplier.Location = new System.Drawing.Point(605,2);
+			this.comboSupplier.Location = new System.Drawing.Point(231,4);
 			this.comboSupplier.Name = "comboSupplier";
 			this.comboSupplier.Size = new System.Drawing.Size(144,21);
 			this.comboSupplier.TabIndex = 8;
@@ -402,7 +402,6 @@ namespace OpenDental {
 			this.Name = "FormSupplyInventory";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Supply Inventory";
-			this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
 			this.Load += new System.EventHandler(this.FormInventory_Load);
 			this.menuStrip1.ResumeLayout(false);
 			this.menuStrip1.PerformLayout();

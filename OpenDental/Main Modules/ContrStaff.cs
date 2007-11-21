@@ -761,6 +761,8 @@ namespace OpenDental{
 
 		private void butSupply_Click(object sender,EventArgs e) {
 			FormSupplyInventory FormS=new FormSupplyInventory();
+			FormS.Height=Parent.Height-5;
+			FormS.Location=new Point(Width/2-FormS.Width/2,0);
 			FormS.ShowDialog();
 		}
 

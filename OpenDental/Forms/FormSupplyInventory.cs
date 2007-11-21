@@ -18,6 +18,7 @@ namespace OpenDental {
 		private DataTable tableOrderItem;
 		///<Summary>Will be true if the data displayed in gridSupplyMain was obtained with the find text empty.</Summary>
 		private bool IsCleanRefresh;
+		//public int displayH
 
 		public FormSupplyInventory() {
 			InitializeComponent();
@@ -25,6 +26,9 @@ namespace OpenDental {
 		}
 
 		private void FormInventory_Load(object sender,EventArgs e) {
+			//Width=tabControl.Width+12;
+			//Height=DesktopBounds.Height;
+			//DesktopLocation=new Point(DesktopBounds.Width/2-Width/2,0);
 			FillGridNeeded();
 			FillSuppliers();
 			if(comboSupplier.Items.Count>0){
@@ -39,6 +43,7 @@ namespace OpenDental {
 		private void FillSuppliers(){
 			listSupplier=Suppliers.CreateObjects();
 			comboSupplier.Items.Clear();
+			//comboSupplier.Items.Add(Lan.g(this,"All"));//just too complicated
 			for(int i=0;i<listSupplier.Count;i++){
 				comboSupplier.Items.Add(listSupplier[i].Name);
 			}
@@ -85,7 +90,11 @@ namespace OpenDental {
 		}
 
 		private void FillGridOrder() {
-			listOrder=SupplyOrders.CreateObjects();
+			int supplier=0;
+			if(comboSupplier.SelectedIndex!=-1){
+				supplier=listSupplier[comboSupplier.SelectedIndex].SupplierNum;
+			}
+			listOrder=SupplyOrders.CreateObjects(supplier);
 			gridOrder.BeginUpdate();
 			gridOrder.Columns.Clear();
 			ODGridColumn col=new ODGridColumn(Lan.g(this,"Date Placed"),90);
@@ -113,13 +122,15 @@ namespace OpenDental {
 
 		private void gridOrder_CellClick(object sender,ODGridClickEventArgs e) {
 			FillGridOrderItem();
-			comboSupplier.SelectedIndex=-1;//probably not necessary since no hidden suppliers
-			for(int i=0;i<listSupplier.Count;i++){
-				if(listSupplier[i].SupplierNum==listOrder[gridOrder.GetSelectedIndex()].SupplierNum){
-					comboSupplier.SelectedIndex=i;
-					break;
+			/*
+			if(comboSupplier.SelectedIndex==0){//All orders from all suppliers are showing.
+				for(int i=0;i<listSupplier.Count;i++) {
+					if(listSupplier[i].SupplierNum==listOrder[gridOrder.GetSelectedIndex()].SupplierNum) {
+						comboSupplier.SelectedIndex=i;
+						break;
+					}
 				}
-			}
+			}*/
 			FillGridSupplyMain();
 		}
 
@@ -190,7 +201,7 @@ namespace OpenDental {
 			for(int i=0;i<tableOrderItem.Rows.Count;i++){
 				row=new ODGridRow();
 				row.Cells.Add(tableOrderItem.Rows[i]["CatalogNumber"].ToString());
-				row.Cells.Add(tableOrderItem.Rows[i]["Description"].ToString());
+				row.Cells.Add(tableOrderItem.Rows[i]["Descript"].ToString());
 				qty=PIn.PInt(tableOrderItem.Rows[i]["Qty"].ToString());
 				row.Cells.Add(qty.ToString());
 				price=PIn.PDouble(tableOrderItem.Rows[i]["Price"].ToString());
@@ -330,6 +341,48 @@ namespace OpenDental {
 				MsgBox.Show(this,"Please select one or more supplies first.");
 				return;
 			}
+			SupplyOrderItem item;
+			List<int> itemNums=new List<int>();
+			List<Supply> skippedSupplies=new List<Supply>();
+			bool isSkipped;
+			for(int i=0;i<gridSupplyMain.SelectedIndices.Length;i++){
+				isSkipped=false;
+				for(int t=0;t<tableOrderItem.Rows.Count;t++){
+					if(listSupply[gridSupplyMain.SelectedIndices[i]].SupplyNum.ToString()==tableOrderItem.Rows[t]["SupplyNum"].ToString()) {
+						isSkipped=true;
+						break;;
+					}
+				}
+				if(isSkipped){
+					skippedSupplies.Add(listSupply[gridSupplyMain.SelectedIndices[i]]);
+					continue;
+				}
+				item=new SupplyOrderItem();
+				item.SupplyOrderNum=listOrder[gridOrder.GetSelectedIndex()].SupplyOrderNum;
+				item.SupplyNum=listSupply[gridSupplyMain.SelectedIndices[i]].SupplyNum;
+				item.Qty=1;
+				item.Price=listSupply[gridSupplyMain.SelectedIndices[i]].Price;
+				SupplyOrderItems.WriteObject(item);
+				itemNums.Add(item.SupplyOrderItemNum);
+			}
+			if(gridSupplyMain.SelectedIndices.Length==1 && skippedSupplies.Count==1){
+				MsgBox.Show(this,"Selected supply is already on the order.");
+				return;
+			}
+			else if(skippedSupplies.Count==gridSupplyMain.SelectedIndices.Length){
+				MsgBox.Show(this,"Selected supplies are already on the order.");
+				return;
+			}
+			else if(skippedSupplies.Count>0){
+				MessageBox.Show(skippedSupplies.Count.ToString()+" "+Lan.g(this,"supplies were skipped because they are already on the order."));
+			}
+			FillGridOrderItem();
+			tabControl.SelectedIndex=1;
+			for(int i=0;i<tableOrderItem.Rows.Count;i++){
+				if(itemNums.Contains(PIn.PInt(tableOrderItem.Rows[i]["SupplyOrderItemNum"].ToString()))){
+					gridOrderItem.SetSelected(i,true);
+				}
+			}
 		}
 
 		private void butUp_Click(object sender,EventArgs e) {
@@ -455,7 +508,8 @@ namespace OpenDental {
 		}
 
 		private void comboSupplier_SelectionChangeCommitted(object sender,EventArgs e) {
-			gridOrder.SetSelected(false);
+			//gridOrder.SetSelected(false);
+			FillGridOrder();
 			FillGridOrderItem();
 			FillGridSupplyMain();
 		}
@@ -480,6 +534,8 @@ namespace OpenDental {
 		private void butClose_Click(object sender,EventArgs e) {
 			Close();
 		}
+
+		
 
 		
 
