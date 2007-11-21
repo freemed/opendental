@@ -13,7 +13,7 @@ namespace OpenDentBusiness{
 		/// <summary>Primary key.</summary>
 		public int SupplyNum {
 			get { return supplyNum; }
-			set { supplyNum = value; MarkDirty(); supplyNumChanged = true; }
+			set { if(supplyNum!=value){supplyNum = value; MarkDirty(); supplyNumChanged = true; }}
 		}
 		public bool SupplyNumChanged {
 			get { return supplyNumChanged; }
@@ -25,7 +25,7 @@ namespace OpenDentBusiness{
 		/// <summary>FK to supplier.SupplierNum</summary>
 		public int SupplierNum {
 			get { return supplierNum; }
-			set { supplierNum = value; MarkDirty(); supplierNumChanged = true; }
+			set { if(supplierNum!=value){supplierNum = value; MarkDirty(); supplierNumChanged = true;} }
 		}
 		public bool SupplierNumChanged {
 			get { return supplierNumChanged; }
@@ -37,7 +37,7 @@ namespace OpenDentBusiness{
 		/// <summary>The catalog item number that the supplier uses to identify the supply.</summary>
 		public string CatalogNumber {
 			get { return catalogNumber; }
-			set { catalogNumber = value; MarkDirty(); catalogNumberChanged = true; }
+			set { if(catalogNumber!=value){catalogNumber = value; MarkDirty(); catalogNumberChanged = true; }}
 		}
 		public bool CatalogNumberChanged {
 			get { return catalogNumberChanged; }
@@ -49,7 +49,7 @@ namespace OpenDentBusiness{
 		/// <summary>The description can be similar to the catalog, but not required.  Typically includes qty per box/case, etc.</summary>
 		public string Descript {
 			get { return descript; }
-			set { descript = value; MarkDirty(); descriptChanged = true; }
+			set { if(descript!=value){descript = value; MarkDirty(); descriptChanged = true; }}
 		}
 		public bool DescriptChanged {
 			get { return descriptChanged; }
@@ -61,7 +61,7 @@ namespace OpenDentBusiness{
 		/// <summary>FK to definition.DefNum.  User can define their own categories for supplies.</summary>
 		public int Category {
 			get { return category; }
-			set { category = value; MarkDirty(); categoryChanged = true; }
+			set { if(category!=value){category = value; MarkDirty(); categoryChanged = true;} }
 		}
 		public bool CategoryChanged {
 			get { return categoryChanged; }
@@ -73,7 +73,7 @@ namespace OpenDentBusiness{
 		///<summary>The zero-based order of this supply within it's category.</summary>
 		public int ItemOrder {
 			get { return itemOrder; }
-			set { itemOrder = value; MarkDirty(); itemOrderChanged = true; }
+			set { if(itemOrder!=value){itemOrder = value; MarkDirty(); itemOrderChanged = true; }}
 		}
 		public bool ItemOrderChanged {
 			get { return itemOrderChanged; }
@@ -85,7 +85,7 @@ namespace OpenDentBusiness{
 		/// <summary>The level that a fresh order should bring item back up to.  Can include fractions.  If this is 0, then it will be displayed as having this field blank rather than showing 0.  This simply gives a cleaner look.</summary>
 		public float LevelDesired {
 			get { return levelDesired; }
-			set { levelDesired = value; MarkDirty(); levelDesiredChanged = true; }
+			set { if(levelDesired!=value){levelDesired = value; MarkDirty(); levelDesiredChanged = true;} }
 		}
 		public bool LevelDesiredChanged {
 			get { return levelDesiredChanged; }
@@ -97,7 +97,7 @@ namespace OpenDentBusiness{
 		/// <summary>If hidden, then this supply item won't normally show in the main list.</summary>
 		public bool IsHidden {
 			get { return isHidden; }
-			set { isHidden = value; MarkDirty(); isHiddenChanged = true; }
+			set { if(isHidden!=value){isHidden = value; MarkDirty(); isHiddenChanged = true;} }
 		}
 		public bool IsHiddenChanged {
 			get { return isHiddenChanged; }
@@ -109,7 +109,7 @@ namespace OpenDentBusiness{
 		/// <summary>The price per unit that the supplier charges for this supply.  If this is 0.00, then no price will be displayed.</summary>
 		public double Price {
 			get { return price; }
-			set { price = value; MarkDirty(); priceChanged = true; }
+			set { if(price!=value){price = value; MarkDirty(); priceChanged = true;} }
 		}
 		public bool PriceChanged {
 			get { return priceChanged; }

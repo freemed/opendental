@@ -58,6 +58,17 @@ namespace OpenDental{
 			return retVal;
 		}
 
+		///<Summary>Gets from the database the last itemOrder for the specified category.  Used to send un unhidden supply to the end of the list.</Summary>
+		public static int GetLastItemOrder(int supplierNum,int catNum){
+			string command="SELECT MAX(ItemOrder) FROM supply WHERE SupplierNum="+POut.PInt(supplierNum)
+				+" AND Category="+POut.PInt(catNum)+" AND IsHidden=0";
+			DataTable table=General.GetTable(command);
+			if(table.Rows.Count==0){
+				return -1;
+			}
+			return PIn.PInt(table.Rows[0][0].ToString());
+		}
+
 		
 
 		

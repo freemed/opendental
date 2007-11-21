@@ -322,7 +322,14 @@ namespace OpenDental {
 		}
 
 		private void butAddToOrder_Click(object sender,EventArgs e) {
-
+			if(gridOrder.GetSelectedIndex()==-1){
+				MsgBox.Show(this,"Please select an order first.");
+				return;
+			}
+			if(gridSupplyMain.SelectedIndices.Length==0){
+				MsgBox.Show(this,"Please select one or more supplies first.");
+				return;
+			}
 		}
 
 		private void butUp_Click(object sender,EventArgs e) {

@@ -42,11 +42,9 @@ namespace OpenDental.DataAccess {
 		}
 
 		protected void MarkDirty() {
-			if (isDirty)
+			if(isDirty)
 				return;
-
 			isDirty = true;
-
 			OnModified(EventArgs.Empty);
 		}
 
@@ -56,14 +54,13 @@ namespace OpenDental.DataAccess {
 		}
 
 		public void OnModified(EventArgs e) {
-			if (Modified != null)
+			if(Modified != null)
 				Modified(this, e);
 		}
 
 		public void OnSaved(EventArgs e) {
 			isDirty = false;
 			isNew = false;
-
 			if (Saved != null)
 				Saved(this, e);
 		}
@@ -72,7 +69,6 @@ namespace OpenDental.DataAccess {
 			isDirty = true;
 			isNew = false;
 			isDeleted = true;
-
 			if (Deleted != null)
 				Deleted(this, e);
 		}
@@ -81,7 +77,6 @@ namespace OpenDental.DataAccess {
 		public event EventHandler Modified;
 		public event EventHandler Deleted;
 
-
 		public XmlSchema GetSchema() {
 			return null;
 		}
@@ -89,15 +84,13 @@ namespace OpenDental.DataAccess {
 		public void ReadXml(XmlReader reader) {
 			// Move to the first value
 			reader.Read();
-
 			// Go over all fields
 			Type type = GetType();
-			while (type != typeof(object)) {
+			while(type != typeof(object)) {
 				FieldInfo[] fields = type.GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.FlattenHierarchy);
 				foreach (FieldInfo field in fields) {
 					if (field.FieldType == typeof(EventHandler))
 						continue;
-
 					if (field.FieldType == typeof(TimeSpan)) {
 						TimeSpanSerializer serializer = new TimeSpanSerializer();
 						field.SetValue(this, serializer.Deserialize(reader));
@@ -107,7 +100,6 @@ namespace OpenDental.DataAccess {
 						field.SetValue(this, serializer.Deserialize(reader));
 					}
 				}
-
 				type = type.BaseType;
 			}
 			// Move to the next node
@@ -122,7 +114,6 @@ namespace OpenDental.DataAccess {
 				foreach (FieldInfo field in fields) {
 					if (field.FieldType == typeof(EventHandler))
 						continue;
-
 					if (field.FieldType == typeof(TimeSpan)) {
 						TimeSpanSerializer serializer = new TimeSpanSerializer();
 						serializer.Serialize(writer, (TimeSpan)field.GetValue(this));

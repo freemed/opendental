@@ -73,7 +73,19 @@ namespace OpenDental {
 			Supp.LevelDesired=PIn.PFloat(textLevelDesired.Text);
 			Supp.Price=PIn.PDouble(textPrice.Text);
 			Supp.IsHidden=checkIsHidden.Checked;
+			if(Supp.IsHiddenChanged) {
+				if(Supp.IsHidden) {
+					Supp.ItemOrder=0;
+				}
+				else {
+					Supp.ItemOrder=Supplies.GetLastItemOrder(Supp.SupplierNum,Supp.Category)+1;
+				}
+			}
 			Supplies.WriteObject(Supp);
+			if(Supp.IsHiddenChanged || Supp.CategoryChanged){
+				List<Supply> listSupply=Supplies.CreateObjects(false,Supp.SupplierNum,"");
+				Supplies.CleanupItemOrders(listSupply);
+			}
 			DialogResult=DialogResult.OK;
 		}
 
