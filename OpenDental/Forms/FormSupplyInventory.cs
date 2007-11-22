@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Drawing.Printing;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
@@ -18,7 +19,10 @@ namespace OpenDental {
 		private DataTable tableOrderItem;
 		///<Summary>Will be true if the data displayed in gridSupplyMain was obtained with the find text empty.</Summary>
 		private bool IsCleanRefresh;
-		//public int displayH
+		PrintDocument pd2;
+		private int pagesPrinted;
+		private bool headingPrinted;
+		private int headingPrintH;
 
 		public FormSupplyInventory() {
 			InitializeComponent();
@@ -549,9 +553,129 @@ namespace OpenDental {
 			FillGridOrderItem();
 		}
 
+		private void butPrint_Click(object sender,EventArgs e) {
+			if(tabControl.SelectedIndex==1 && gridOrder.GetSelectedIndex()==-1){
+				MsgBox.Show(this,"Please select an order first.");
+				return;
+			}
+			if(tabControl.SelectedIndex==0 && gridSupplyMain.Rows.Count==0){
+				MsgBox.Show(this,"The list is empty.");
+				return;
+			}
+			pagesPrinted=0;
+			headingPrinted=false;
+			pd2=new PrintDocument();
+			pd2.DefaultPageSettings.Margins=new Margins(50,50,40,30);
+			if(tabControl.SelectedIndex==0){//main list
+				pd2.PrintPage += new PrintPageEventHandler(pd2_PrintPageMain);
+			}
+			else{//one order
+				pd2.PrintPage += new PrintPageEventHandler(pd2_PrintPageOrder);
+			}
+			if(pd2.DefaultPageSettings.PaperSize.Height==0) {
+				pd2.DefaultPageSettings.PaperSize=new PaperSize("default",850,1100);
+			}
+			#if DEBUG
+				FormRpPrintPreview pView = new FormRpPrintPreview();
+				pView.printPreviewControl2.Document=pd2;
+				pView.ShowDialog();
+			#else
+				if(Printers.SetPrinter(pd2,PrintSituation.Default)) {
+					try{
+						pd2.Print();
+					}
+					catch{
+						MsgBox.Show(this,"Printer not available");
+					}
+				}
+			#endif
+		}
+
+		private void pd2_PrintPageMain(object sender,System.Drawing.Printing.PrintPageEventArgs e) {
+			Rectangle bounds=e.MarginBounds;
+			Graphics g=e.Graphics;
+			string text;
+			Font headingFont=new Font("Arial",13,FontStyle.Bold);
+			Font subHeadingFont=new Font("Arial",10,FontStyle.Bold);
+			Font mainFont=new Font("Arial",9);
+			int yPos=bounds.Top;
+			#region printHeading
+			if(!headingPrinted) {
+				text="Supply List";
+				g.DrawString(text,headingFont,Brushes.Black,425-g.MeasureString(text,headingFont).Width/2,yPos);
+				yPos+=(int)g.MeasureString(text,headingFont).Height;
+				text=listSupplier[comboSupplier.SelectedIndex].Name;
+				g.DrawString(text,subHeadingFont,Brushes.Black,425-g.MeasureString(text,subHeadingFont).Width/2,yPos);
+				yPos+=(int)g.MeasureString(text,subHeadingFont).Height;
+				text=listSupplier[comboSupplier.SelectedIndex].Phone;
+				g.DrawString(text,subHeadingFont,Brushes.Black,425-g.MeasureString(text,subHeadingFont).Width/2,yPos);
+				yPos+=(int)g.MeasureString(text,subHeadingFont).Height;
+				text=listSupplier[comboSupplier.SelectedIndex].Note;
+				g.DrawString(text,subHeadingFont,Brushes.Black,425-g.MeasureString(text,mainFont,bounds.Width).Width/2,yPos);
+				yPos+=(int)g.MeasureString(text,mainFont,bounds.Width).Height+15;
+				headingPrinted=true;
+				headingPrintH=yPos;
+			}
+			#endregion
+			int totalPages=gridSupplyMain.GetNumberOfPages(bounds,headingPrintH);
+			yPos=gridSupplyMain.PrintPage(g,pagesPrinted,bounds,headingPrintH);
+			pagesPrinted++;
+			if(pagesPrinted < totalPages) {
+				e.HasMorePages=true;
+			}
+			else {
+				e.HasMorePages=false;
+			}
+			g.Dispose();
+		}
+
+		private void pd2_PrintPageOrder(object sender,System.Drawing.Printing.PrintPageEventArgs e) {
+			Rectangle bounds=e.MarginBounds;
+			Graphics g=e.Graphics;
+			string text;
+			Font headingFont=new Font("Arial",13,FontStyle.Bold);
+			Font subHeadingFont=new Font("Arial",10,FontStyle.Bold);
+			Font mainFont=new Font("Arial",9);
+			int yPos=bounds.Top;
+			#region printHeading
+			if(!headingPrinted) {
+				text="Order";
+				g.DrawString(text,headingFont,Brushes.Black,425-g.MeasureString(text,headingFont).Width/2,yPos);
+				yPos+=(int)g.MeasureString(text,headingFont).Height;
+				text=listOrder[gridOrder.GetSelectedIndex()].DatePlaced.ToShortDateString()
+					+"  "+listOrder[gridOrder.GetSelectedIndex()].AmountTotal.ToString("c");
+				g.DrawString(text,subHeadingFont,Brushes.Black,425-g.MeasureString(text,subHeadingFont).Width/2,yPos);
+				yPos+=(int)g.MeasureString(text,subHeadingFont).Height;
+				text=listSupplier[comboSupplier.SelectedIndex].Name;
+				g.DrawString(text,subHeadingFont,Brushes.Black,425-g.MeasureString(text,subHeadingFont).Width/2,yPos);
+				yPos+=(int)g.MeasureString(text,subHeadingFont).Height;
+				text=listSupplier[comboSupplier.SelectedIndex].Phone;
+				g.DrawString(text,subHeadingFont,Brushes.Black,425-g.MeasureString(text,subHeadingFont).Width/2,yPos);
+				yPos+=(int)g.MeasureString(text,subHeadingFont).Height;
+				text=listSupplier[comboSupplier.SelectedIndex].Note;
+				g.DrawString(text,subHeadingFont,Brushes.Black,425-g.MeasureString(text,mainFont,bounds.Width).Width/2,yPos);
+				yPos+=(int)g.MeasureString(text,mainFont,bounds.Width).Height+15;
+				headingPrinted=true;
+				headingPrintH=yPos;
+			}
+			#endregion
+			int totalPages=gridOrderItem.GetNumberOfPages(bounds,headingPrintH);
+			yPos=gridOrderItem.PrintPage(g,pagesPrinted,bounds,headingPrintH);
+			pagesPrinted++;
+			if(pagesPrinted < totalPages) {
+				e.HasMorePages=true;
+			}
+			else {
+				e.HasMorePages=false;
+			}
+			g.Dispose();
+		}
+		
 		private void butClose_Click(object sender,EventArgs e) {
 			Close();
 		}
+
+		
 
 		
 
