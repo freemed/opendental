@@ -26,6 +26,7 @@ namespace OpenDental {
 			else{
 				textDatePlaced.Text=Order.DatePlaced.ToShortDateString();
 			}
+			textAmountTotal.Text=Order.AmountTotal.ToString("n");
 			textNote.Text=Order.Note;
 		}
 
@@ -51,7 +52,8 @@ namespace OpenDental {
 		}
 
 		private void butOK_Click(object sender,EventArgs e) {
-			if(textDatePlaced.errorProvider1.GetError(textDatePlaced)!="")
+			if(textDatePlaced.errorProvider1.GetError(textDatePlaced)!=""
+				|| textAmountTotal.errorProvider1.GetError(textAmountTotal)!="")
 			{
 				MsgBox.Show(this,"Please fix data entry errors first.");
 				return;
@@ -62,6 +64,7 @@ namespace OpenDental {
 			else{
 				Order.DatePlaced=PIn.PDate(textDatePlaced.Text);
 			}
+			Order.AmountTotal=PIn.PDouble(textAmountTotal.Text);
 			Order.Note=textNote.Text;
 			SupplyOrders.WriteObject(Order);
 			DialogResult=DialogResult.OK;

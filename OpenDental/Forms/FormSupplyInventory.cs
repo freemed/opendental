@@ -26,9 +26,6 @@ namespace OpenDental {
 		}
 
 		private void FormInventory_Load(object sender,EventArgs e) {
-			//Width=tabControl.Width+12;
-			//Height=DesktopBounds.Height;
-			//DesktopLocation=new Point(DesktopBounds.Width/2-Width/2,0);
 			FillGridNeeded();
 			FillSuppliers();
 			if(comboSupplier.Items.Count>0){
@@ -53,7 +50,7 @@ namespace OpenDental {
 			listNeeded=SupplyNeededs.CreateObjects();
 			gridNeeded.BeginUpdate();
 			gridNeeded.Columns.Clear();
-			ODGridColumn col=new ODGridColumn(Lan.g(this,"Date Added"),90);
+			ODGridColumn col=new ODGridColumn(Lan.g(this,"Date Added"),80);
 			gridNeeded.Columns.Add(col);
 			col=new ODGridColumn(Lan.g(this,"Description"),300);
 			gridNeeded.Columns.Add(col);
@@ -97,11 +94,11 @@ namespace OpenDental {
 			listOrder=SupplyOrders.CreateObjects(supplier);
 			gridOrder.BeginUpdate();
 			gridOrder.Columns.Clear();
-			ODGridColumn col=new ODGridColumn(Lan.g(this,"Date Placed"),90);
+			ODGridColumn col=new ODGridColumn(Lan.g(this,"Date Placed"),80);
 			gridOrder.Columns.Add(col);
-			col=new ODGridColumn(Lan.g(this,"Supplier"),120);
+			col=new ODGridColumn(Lan.g(this,"Amount"),70,HorizontalAlignment.Right);
 			gridOrder.Columns.Add(col);
-			col=new ODGridColumn(Lan.g(this,"Note"),180);
+			col=new ODGridColumn(Lan.g(this,"Note"),200);
 			gridOrder.Columns.Add(col);
 			gridOrder.Rows.Clear();
 			ODGridRow row;
@@ -113,7 +110,7 @@ namespace OpenDental {
 				else{
 					row.Cells.Add(listOrder[i].DatePlaced.ToShortDateString());
 				}
-				row.Cells.Add(Suppliers.GetName(listSupplier,listOrder[i].SupplierNum));
+				row.Cells.Add(listOrder[i].AmountTotal.ToString("c"));
 				row.Cells.Add(listOrder[i].Note);
 				gridOrder.Rows.Add(row);
 			}
@@ -198,6 +195,8 @@ namespace OpenDental {
 			double price;
 			int qty;
 			double subtotal;
+			double total=0;
+			bool autocalcTotal=true;
 			for(int i=0;i<tableOrderItem.Rows.Count;i++){
 				row=new ODGridRow();
 				row.Cells.Add(tableOrderItem.Rows[i]["CatalogNumber"].ToString());
@@ -209,8 +208,26 @@ namespace OpenDental {
 				subtotal=((double)qty)*price;
 				row.Cells.Add(subtotal.ToString("n"));
 				gridOrderItem.Rows.Add(row);
+				if(subtotal==0){
+					autocalcTotal=false;
+				}
+				total+=subtotal;
 			}
 			gridOrderItem.EndUpdate();
+			if(gridOrder.GetSelectedIndex()!=-1 
+				&& autocalcTotal
+				&& total!=listOrder[gridOrder.GetSelectedIndex()].AmountTotal)
+			{
+				SupplyOrder order=listOrder[gridOrder.GetSelectedIndex()].Copy();
+				order.AmountTotal=total;
+				SupplyOrders.WriteObject(order);
+				FillGridOrder();
+				for(int i=0;i<listOrder.Count;i++){
+					if(listOrder[i].SupplyOrderNum==order.SupplyOrderNum){
+						gridOrder.SetSelected(i,true);
+					}
+				}
+			}
 		}
 
 		private void gridOrderItem_CellDoubleClick(object sender,ODGridClickEventArgs e) {
@@ -236,7 +253,7 @@ namespace OpenDental {
 			gridSupplyMain.Columns.Add(col);
 			col=new ODGridColumn(Lan.g(this,"Catalog #"),80);
 			gridSupplyMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g(this,"Description"),320);
+			col=new ODGridColumn(Lan.g(this,"Description"),340);
 			gridSupplyMain.Columns.Add(col);
 			col=new ODGridColumn(Lan.g(this,"Price"),60,HorizontalAlignment.Right);
 			gridSupplyMain.Columns.Add(col);

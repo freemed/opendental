@@ -6173,6 +6173,7 @@ namespace OpenDental{
 					SupplierNum int NOT NULL,
 					DatePlaced date NOT NULL,
 					Note text,
+					AmountTotal double NOT NULL,
 					PRIMARY KEY (SupplyOrderNum),
 					INDEX (SupplierNum)
 					) DEFAULT CHARSET=utf8";
@@ -6190,7 +6191,7 @@ namespace OpenDental{
 					INDEX (SupplyNum)
 					) DEFAULT CHARSET=utf8";
 				General.NonQEx(command);
-
+				//supplyorder was altered later.
 
 
 

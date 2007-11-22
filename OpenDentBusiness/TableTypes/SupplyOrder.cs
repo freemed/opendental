@@ -55,7 +55,21 @@ namespace OpenDentBusiness{
 			get { return noteChanged; }
 		}
 
+		[DataField("AmountTotal")]
+		private double amountTotal;
+		bool amountTotalChanged;
+		/// <summary>The sum of all the amounts of each item on the order.  If any of the item prices are zero, then it won't auto calculate this total.  This will allow the user to manually put in the total without having it get deleted.</summary>
+		public double AmountTotal {
+			get { return amountTotal; }
+			set { amountTotal = value; MarkDirty(); amountTotalChanged = true; }
+		}
+		public bool AmountTotalChanged {
+			get { return amountTotalChanged; }
+		}
 
+		public SupplyOrder Copy(){
+			return (SupplyOrder)Clone();
+		}
 		
 		
 
