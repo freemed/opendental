@@ -25,7 +25,7 @@ namespace OpenDental.Eclaims
 		///<summary>Gets the filename for this batch. Used when saving or when rolling back.</summary>
 		private static string GetFileName(Clearinghouse clearhouse,int batchNum){
 			string saveFolder=clearhouse.ExportPath;
-			if(!Directory.Exists(saveFolder)){
+			if(!Directory.Exists(saveFolder)) {
 				MessageBox.Show(saveFolder+" not found.");
 				return "";
 			}
@@ -403,6 +403,20 @@ namespace OpenDental.Eclaims
 				claimProcs=ClaimProcs.GetForSendClaim(claimProcList,claim.ClaimNum);
 				procList=Procedures.Refresh(claim.PatNum);
 				initialList=ToothInitials.Refresh(claim.PatNum);
+				#region Attachments
+				if(clearhouse.ISA08=="113504607" && claim.Attachments.Count>0){//If Tesia and has attachments
+					claim.ClaimNote="TESIA#"+claim.ClaimNum.ToString()+" "+claim.ClaimNote;
+					string saveFolder=clearhouse.ExportPath;//we've already tested to make sure this exists.
+					string saveFile;
+					string storedFile;
+					for(int c=0;c<claim.Attachments.Count;c++){
+						saveFile=ODFileUtils.CombinePaths(saveFolder,
+							claim.ClaimNum.ToString()+"_"+(c+1).ToString()+Path.GetExtension(claim.Attachments[c].DisplayedFileName)+".IMG");
+						storedFile=ODFileUtils.CombinePaths(FormEmailMessageEdit.GetAttachPath(),claim.Attachments[c].ActualFileName);
+						File.Copy(storedFile,saveFile,true);
+					}					
+				}
+				#endregion
 				#region Subscriber
 				//if(i==0 || claimAr[2,i].ToString() != claimAr[2,i-1].ToString()){//if subscriber changed
 				if(i==0 || claimAr[3,i].ToString() != claimAr[3,i-1].ToString()){//if patient changed
@@ -741,6 +755,15 @@ namespace OpenDental.Eclaims
 					}
 				}
 				//2300 PWK: Paperwork. Used to identify attachments.
+				if(clearhouse.ISA08=="113504607" && claim.Attachments.Count>0) {//If Tesia and has attachments
+					seg++;
+					sw.WriteLine("PWK*"
+						+"OZ*"//PWK01: ReportTypeCode. OZ=Support data for claim.
+						+"EL*"//PWK02: Report Transmission Code. EL=Electronic
+						+"**"//PWK03 and 04: not used
+						+"AC*"//PWK05: Identification Code Qualifier. AC=Attachment Control Number
+						+"TES"+claim.ClaimNum.ToString()+"~");//PWK06: Identification Code.
+				}
 				//2300 CN1: Contract Info (medical)
 				//2300 AMT: Patient amount paid
 				//2300 AMT: Total Purchased Service Amt (medical)

@@ -175,6 +175,10 @@ namespace OpenDental{
 				return;
 			}
 			Document doc=Docs[gridMain.GetSelectedIndex()];
+			if(!ImageHelper.HasImageExtension(doc.FileName)){
+				MsgBox.Show(this,"Invalid file.  Only images may be attached, no other file format.");
+				return;
+			}
 			string oldPath=ODFileUtils.CombinePaths(patfolder,doc.FileName);
 			Random rnd=new Random();
 			string newName=DateTime.Now.ToString("yyyyMMdd")+"_"+DateTime.Now.TimeOfDay.Ticks.ToString()+rnd.Next(1000).ToString();
