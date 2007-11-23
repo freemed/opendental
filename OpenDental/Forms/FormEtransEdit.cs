@@ -5,6 +5,7 @@ using System.Collections;
 using System.ComponentModel;
 using System.Windows.Forms;
 using OpenDentBusiness;
+using OpenDental.Eclaims;
 
 namespace OpenDental{
 	/// <summary>
@@ -41,6 +42,7 @@ namespace OpenDental{
 		private Etrans AckCur;
 		private PrintDocument pd2;
 		private bool headingPrinted;
+		private CheckBox checkAttachments;
 		private int linesPrinted;
 
 		///<summary></summary>
@@ -89,15 +91,16 @@ namespace OpenDental{
 			this.label6 = new System.Windows.Forms.Label();
 			this.textNote = new System.Windows.Forms.TextBox();
 			this.groupAck = new System.Windows.Forms.GroupBox();
+			this.label9 = new System.Windows.Forms.Label();
+			this.textAckDateTime = new System.Windows.Forms.TextBox();
 			this.label7 = new System.Windows.Forms.Label();
 			this.textAckMessage = new System.Windows.Forms.RichTextBox();
 			this.label8 = new System.Windows.Forms.Label();
 			this.textDateTimeTrans = new System.Windows.Forms.TextBox();
-			this.label9 = new System.Windows.Forms.Label();
-			this.textAckDateTime = new System.Windows.Forms.TextBox();
 			this.butPrint = new OpenDental.UI.Button();
 			this.butOK = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
+			this.checkAttachments = new System.Windows.Forms.CheckBox();
 			this.groupAck.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -191,7 +194,7 @@ namespace OpenDental{
 			// 
 			// label6
 			// 
-			this.label6.Location = new System.Drawing.Point(11,573);
+			this.label6.Location = new System.Drawing.Point(11,590);
 			this.label6.Name = "label6";
 			this.label6.Size = new System.Drawing.Size(100,17);
 			this.label6.TabIndex = 13;
@@ -200,7 +203,7 @@ namespace OpenDental{
 			// 
 			// textNote
 			// 
-			this.textNote.Location = new System.Drawing.Point(112,572);
+			this.textNote.Location = new System.Drawing.Point(112,589);
 			this.textNote.Multiline = true;
 			this.textNote.Name = "textNote";
 			this.textNote.Size = new System.Drawing.Size(355,40);
@@ -218,6 +221,23 @@ namespace OpenDental{
 			this.groupAck.TabIndex = 14;
 			this.groupAck.TabStop = false;
 			this.groupAck.Text = "Acknowledgement 997";
+			// 
+			// label9
+			// 
+			this.label9.Location = new System.Drawing.Point(15,423);
+			this.label9.Name = "label9";
+			this.label9.Size = new System.Drawing.Size(100,17);
+			this.label9.TabIndex = 18;
+			this.label9.Text = "DateTime Ack";
+			this.label9.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
+			// 
+			// textAckDateTime
+			// 
+			this.textAckDateTime.Location = new System.Drawing.Point(15,443);
+			this.textAckDateTime.Name = "textAckDateTime";
+			this.textAckDateTime.ReadOnly = true;
+			this.textAckDateTime.Size = new System.Drawing.Size(214,20);
+			this.textAckDateTime.TabIndex = 17;
 			// 
 			// label7
 			// 
@@ -255,23 +275,6 @@ namespace OpenDental{
 			this.textDateTimeTrans.ReadOnly = true;
 			this.textDateTimeTrans.Size = new System.Drawing.Size(214,20);
 			this.textDateTimeTrans.TabIndex = 15;
-			// 
-			// label9
-			// 
-			this.label9.Location = new System.Drawing.Point(15,423);
-			this.label9.Name = "label9";
-			this.label9.Size = new System.Drawing.Size(100,17);
-			this.label9.TabIndex = 18;
-			this.label9.Text = "DateTime Ack";
-			this.label9.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
-			// 
-			// textAckDateTime
-			// 
-			this.textAckDateTime.Location = new System.Drawing.Point(15,443);
-			this.textAckDateTime.Name = "textAckDateTime";
-			this.textAckDateTime.ReadOnly = true;
-			this.textAckDateTime.Size = new System.Drawing.Size(214,20);
-			this.textAckDateTime.TabIndex = 17;
 			// 
 			// butPrint
 			// 
@@ -320,10 +323,22 @@ namespace OpenDental{
 			this.butCancel.Text = "&Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
 			// 
+			// checkAttachments
+			// 
+			this.checkAttachments.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkAttachments.Location = new System.Drawing.Point(1,569);
+			this.checkAttachments.Name = "checkAttachments";
+			this.checkAttachments.Size = new System.Drawing.Size(125,18);
+			this.checkAttachments.TabIndex = 19;
+			this.checkAttachments.Text = "Attachments Sent";
+			this.checkAttachments.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkAttachments.UseVisualStyleBackColor = true;
+			// 
 			// FormEtransEdit
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.ClientSize = new System.Drawing.Size(889,672);
+			this.Controls.Add(this.checkAttachments);
 			this.Controls.Add(this.butPrint);
 			this.Controls.Add(this.label8);
 			this.Controls.Add(this.textDateTimeTrans);
@@ -367,6 +382,10 @@ namespace OpenDental{
 			textAckCode.Text=EtransCur.AckCode;
 			textNote.Text=EtransCur.Note;
 			if(EtransCur.Etype==EtransType.ClaimSent){
+				if(X837.IsX12(EtransCur.MessageText)) {
+					X837 x837=new X837(EtransCur.MessageText);
+					checkAttachments.Checked=x837.AttachmentsWereSent(EtransCur.ClaimNum);
+				}
 				AckCur=Etranss.GetAckForTrans(EtransCur.EtransNum);
 				if(AckCur!=null){
 					textAckMessage.Text=AckCur.MessageText;

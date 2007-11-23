@@ -31,6 +31,25 @@ namespace OpenDental.Eclaims
 			}
 			return 0;
 		}
+
+		///<summary>Loops through the 837 to see if attachments were sent.</summary>
+		public bool AttachmentsWereSent(int claimNum) {
+			bool isCurrentClaim=false;
+			for(int i=0;i<Segments.Count;i++) {
+				if(Segments[i].SegmentID=="CLM") {
+					if(Segments[i].Get(1).TrimStart(new char[] { '0' })==claimNum.ToString()) {//if for specified claim
+						isCurrentClaim=true;
+					}
+					else{
+						isCurrentClaim=false;
+					}
+				}
+				if(Segments[i].SegmentID=="PWK" && isCurrentClaim) {
+					return true;
+				}
+			}
+			return false;
+		}
 		
 
 

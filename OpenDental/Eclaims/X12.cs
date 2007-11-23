@@ -1874,6 +1874,18 @@ namespace OpenDental.Eclaims
 					retVal+=",";
 				retVal+="Auto accident State";
 			}
+			if(clearhouse.ISA08=="113504607" && claim.Attachments.Count>0) {//If Tesia and has attachments
+				string storedFile;
+				for(int c=0;c<claim.Attachments.Count;c++) {
+					storedFile=ODFileUtils.CombinePaths(FormEmailMessageEdit.GetAttachPath(),claim.Attachments[c].ActualFileName);
+					if(!File.Exists(storedFile)){
+						if(retVal!="")
+							retVal+=",";
+						retVal+="attachments missing";
+						break;
+					}
+				}
+			}
 			ClaimProc[] claimProcList=ClaimProcs.Refresh(patient.PatNum);
 			ClaimProc[] claimProcs=ClaimProcs.GetForSendClaim(claimProcList,claim.ClaimNum);
 			Procedure[] procList=Procedures.Refresh(claim.PatNum);

@@ -181,7 +181,8 @@ namespace OpenDental{
 			}
 			string oldPath=ODFileUtils.CombinePaths(patfolder,doc.FileName);
 			Random rnd=new Random();
-			string newName=DateTime.Now.ToString("yyyyMMdd")+"_"+DateTime.Now.TimeOfDay.Ticks.ToString()+rnd.Next(1000).ToString();
+			string newName=DateTime.Now.ToString("yyyyMMdd")+"_"+DateTime.Now.TimeOfDay.Ticks.ToString()+rnd.Next(1000).ToString()
+				+Path.GetExtension(oldPath);
 			string attachPath=FormEmailMessageEdit.GetAttachPath();
 			string newPath=ODFileUtils.CombinePaths(attachPath,newName);
 			try {
