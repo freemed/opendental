@@ -85,7 +85,7 @@ namespace OpenDental{
 		///<summary>Only called from Printers.GetForSit</summary>
 		public static Computer GetCur(){
 			for(int i=0;i<List.Length;i++){
-				if(SystemInformation.ComputerName==List[i].CompName){
+				if(SystemInformation.ComputerName.ToUpper()==List[i].CompName.ToUpper()){
 					return List[i];
 				}
 			}
