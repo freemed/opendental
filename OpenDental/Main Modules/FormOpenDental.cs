@@ -1727,7 +1727,10 @@ namespace OpenDental{
 					if(ContrAppt2.Visible) {
 						ContrAppt2.MouseUpForced();
 					}
-					MessageBox.Show(popList[0].Description,Lan.g(this,"Popup"));
+					//MessageBox.Show(popList[0].Description,Lan.g(this,"Popup"));
+					FormPopupDisplay FormP=new FormPopupDisplay();
+					FormP.PopupCur=popList[0];
+					FormP.ShowDialog();
 				}
 			}
 		}
