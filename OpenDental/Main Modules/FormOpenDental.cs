@@ -190,6 +190,7 @@ namespace OpenDental{
 		private ContextMenu menuLetter;
 		private Point OriginalMousePos;
 		private MenuItem menuItemCustomerManage;
+		///<summary>This list will only contain events for this computer where the users clicked to disable a popup for a specified period of time.  So it won't typically have many items in it.</summary>
 		private List<PopupEvent> PopupEventList;
 
 		///<summary></summary>
@@ -1661,7 +1662,8 @@ namespace OpenDental{
 		private void menuPatient_Click(object sender,System.EventArgs e) {
 			Family fam=Patients.GetFamily(CurPatNum);
 			CurPatNum=Patients.ButtonSelect(menuPatient,sender,fam);
-			Patient pat=fam.GetPatient(CurPatNum);
+			//new family now
+			Patient pat=Patients.GetPat(CurPatNum);
 			RefreshCurrentModule();
 			FillPatientButton(CurPatNum,pat.GetNameLF(),pat.Email!="",pat.ChartNumber);
 		}
@@ -1706,24 +1708,20 @@ namespace OpenDental{
 			if(PopupEventList==null){
 				PopupEventList=new List<PopupEvent>();
 			}
-			bool didPopupRecently=false;
+			bool popupIsDisabled=false;
 			for(int i=PopupEventList.Count-1;i>=0;i--){//go backwards
-				if(PopupEventList[i].PopTime<DateTime.Now.AddMinutes(-10)){
+				if(PopupEventList[i].DisableUntil<DateTime.Now){//expired
 					PopupEventList.RemoveAt(i);
 					continue;
 				}
 				if(PopupEventList[i].PatNum==patNum){
-					didPopupRecently=true;
+					popupIsDisabled=true;
 					break;
 				}
 			}
-			if(!didPopupRecently){
+			if(!popupIsDisabled){
 				List<Popup> popList=Popups.CreateObjects(patNum);
 				if(popList.Count>0 && !popList[0].IsDisabled) {
-					PopupEvent popevent=new PopupEvent();
-					popevent.PatNum=patNum;
-					popevent.PopTime=DateTime.Now;
-					PopupEventList.Add(popevent);
 					if(ContrAppt2.Visible) {
 						ContrAppt2.MouseUpForced();
 					}
@@ -1731,6 +1729,13 @@ namespace OpenDental{
 					FormPopupDisplay FormP=new FormPopupDisplay();
 					FormP.PopupCur=popList[0];
 					FormP.ShowDialog();
+					if(FormP.MinutesDisabled>0){
+						PopupEvent popevent=new PopupEvent();
+						popevent.PatNum=patNum;
+						popevent.DisableUntil=DateTime.Now+TimeSpan.FromMinutes(FormP.MinutesDisabled);
+						PopupEventList.Add(popevent);
+						PopupEventList.Sort();
+					}
 				}
 			}
 		}
@@ -1995,6 +2000,13 @@ namespace OpenDental{
 						PopupEventList.RemoveAt(i);
 					}
 				}
+			}
+			if(FormP.MinutesDisabled>0) {
+				PopupEvent popevent=new PopupEvent();
+				popevent.PatNum=CurPatNum;
+				popevent.DisableUntil=DateTime.Now+TimeSpan.FromMinutes(FormP.MinutesDisabled);
+				PopupEventList.Add(popevent);
+				PopupEventList.Sort();
 			}
 		}
 
@@ -3386,8 +3398,18 @@ namespace OpenDental{
 		
 	}
 
-	class PopupEvent{
-		public DateTime PopTime;
+	class PopupEvent:IComparable{
 		public int PatNum;
+		///<summary>Disable popup for this patient until this time.</summary>
+		public DateTime DisableUntil;
+
+		public int CompareTo(object obj) {
+			PopupEvent pop=(PopupEvent)obj;
+			return DisableUntil.CompareTo(pop.DisableUntil);
+		}
+
+		public override string ToString() {
+			return PatNum.ToString()+", "+DisableUntil.ToString();
+		}
 	}
 }
