@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Data;
 using System.Windows.Forms;
 using OpenDentBusiness;
@@ -14,68 +15,100 @@ namespace OpenDental{
 		///<summary></summary>
 		public static DateTime LastOpenDate;
 
-		///<summary>Gets all tasks for a given taskList.  But the 5 trunks don't have parents: For main trunk use date.Min and TaskListNum=0.  For Repeating trunk use date.Min isRepeating and TaskListNum=0.  For the 3 dated trunks, use a date and a dateType.  Date and TaskListNum are mutually exclusive.  Also used to get all repeating tasks for one dateType without any heirarchy: supply listNum=-1.</summary>
-		public static Task[] Refresh(int listNum,DateTime date,TaskDateType dateType,bool isRepeating) {
+			
+		///<summary>Gets all tasks for the trunk of the user tab.</summary>
+		public static List<Task> RefreshUserTrunk(int userNum) {
+
+
+
+			return new List<Task>();
+		}
+
+		///<summary>Gets all tasks for the main trunk.</summary>
+		public static List<Task> RefreshMainTrunk() {
+			string command="SELECT * FROM task "
+				+"WHERE TaskListNum=0 "
+				+"AND DateTask < '1880-01-01' "
+				+"AND IsRepeating=0 "
+				+"ORDER BY DateTimeEntry";
+			return RefreshAndFill(command);
+		}
+
+		///<summary>Gets all tasks for the repeating trunk.</summary>
+		public static List<Task> RefreshRepeatingTrunk() {
+			string command="SELECT * FROM task "
+				+"WHERE TaskListNum=0 "
+				+"AND DateTask < '1880-01-01' "
+				+"AND IsRepeating=1 "
+				+"ORDER BY DateTimeEntry";
+			return RefreshAndFill(command);
+		}
+
+		///<summary>0 is not allowed, because that would be a trunk.</summary>
+		public static List<Task> RefreshChildren(int listNum) {
+			string command=
+				"SELECT * FROM task "
+				+"WHERE TaskListNum="+POut.PInt(listNum)
+				+" ORDER BY DateTimeEntry";
+			return RefreshAndFill(command);
+		}
+
+		///<summary>All repeating items for one date type with no heirarchy.</summary>
+		public static List<Task> RefreshRepeating(TaskDateType dateType) {
+			string command=
+				"SELECT * FROM task "
+				+"WHERE IsRepeating=1 "
+				+"AND DateType="+POut.PInt((int)dateType)+" "
+				+"ORDER BY DateTimeEntry";
+			return RefreshAndFill(command);
+		}
+
+		///<summary>Gets all tasks for one of the 3 dated trunks.</summary>
+		public static List<Task> RefreshDatedTrunk(DateTime date,TaskDateType dateType) {
 			DateTime dateFrom=DateTime.MinValue;
 			DateTime dateTo=DateTime.MaxValue;
-			string where="";
-			if(date.Year>1880) {
-				//date supplied always indicates one of 3 dated trunks.
-				//the value of listNum is completely ignored
-				if(dateType==TaskDateType.Day) {
-					dateFrom=date;
-					dateTo=date;
-				}
-				else if(dateType==TaskDateType.Week) {
-					dateFrom=date.AddDays(-(int)date.DayOfWeek);
-					dateTo=dateFrom.AddDays(6);
-				}
-				else if(dateType==TaskDateType.Month) {
-					dateFrom=new DateTime(date.Year,date.Month,1);
-					dateTo=dateFrom.AddMonths(1).AddDays(-1);
-				}
-				where="DateTask >= "+POut.PDate(dateFrom)
-					+" AND DateTask <= "+POut.PDate(dateTo)+" "
-					+"AND DateType="+POut.PInt((int)dateType)+" ";
+			if(dateType==TaskDateType.Day) {
+				dateFrom=date;
+				dateTo=date;
 			}
-			else {//no date supplied.
-				if(listNum==0) {//main trunk or repeating trunk
-					where="TaskListNum="+POut.PInt(listNum)
-						+" AND DateTask < '1880-01-01'"
-						+" AND IsRepeating="+POut.PBool(isRepeating)+" ";
-				}
-				else if(listNum==-1 && isRepeating) {//all repeating items with no heirarchy
-					where="IsRepeating=1 "
-						+"AND DateType="+POut.PInt((int)dateType)+" ";
-				}
-				else {//any child
-					where="TaskListNum="+POut.PInt(listNum)+" ";
-					//+" AND IsRepeating="+POut.PBool(isRepeating)+" ";
-				}
+			else if(dateType==TaskDateType.Week) {
+				dateFrom=date.AddDays(-(int)date.DayOfWeek);
+				dateTo=dateFrom.AddDays(6);
+			}
+			else if(dateType==TaskDateType.Month) {
+				dateFrom=new DateTime(date.Year,date.Month,1);
+				dateTo=dateFrom.AddMonths(1).AddDays(-1);
 			}
 			string command=
 				"SELECT * FROM task "
-				+"WHERE "+where
-				+"ORDER BY DateTimeEntry";
-			DataTable table=General.GetTable(command);
-			Task[] List=new Task[table.Rows.Count];
-			for(int i=0;i<table.Rows.Count;i++) {
-				List[i]=new Task();
-				List[i].TaskNum        = PIn.PInt(table.Rows[i][0].ToString());
-				List[i].TaskListNum    = PIn.PInt(table.Rows[i][1].ToString());
-				List[i].DateTask       = PIn.PDate(table.Rows[i][2].ToString());
-				List[i].KeyNum         = PIn.PInt(table.Rows[i][3].ToString());
-				List[i].Descript       = PIn.PString(table.Rows[i][4].ToString());
-				List[i].TaskStatus     = PIn.PBool(table.Rows[i][5].ToString());
-				List[i].IsRepeating    = PIn.PBool(table.Rows[i][6].ToString());
-				List[i].DateType       = (TaskDateType)PIn.PInt(table.Rows[i][7].ToString());
-				List[i].FromNum        = PIn.PInt(table.Rows[i][8].ToString());
-				List[i].ObjectType     = (TaskObjectType)PIn.PInt(table.Rows[i][9].ToString());
-				List[i].DateTimeEntry  = PIn.PDateT(table.Rows[i][10].ToString());
-			}
-			return List;
+				+"WHERE DateTask >= "+POut.PDate(dateFrom)
+				+" AND DateTask <= "+POut.PDate(dateTo)
+				+" AND DateType="+POut.PInt((int)dateType)
+				+" ORDER BY DateTimeEntry";
+			return RefreshAndFill(command);
 		}
-	
+
+		private static List<Task> RefreshAndFill(string command){
+			DataTable table=General.GetTable(command);
+			List<Task> retVal=new List<Task>();
+			Task task;
+			for(int i=0;i<table.Rows.Count;i++) {
+				task=new Task();
+				task.TaskNum        = PIn.PInt(table.Rows[i][0].ToString());
+				task.TaskListNum    = PIn.PInt(table.Rows[i][1].ToString());
+				task.DateTask       = PIn.PDate(table.Rows[i][2].ToString());
+				task.KeyNum         = PIn.PInt(table.Rows[i][3].ToString());
+				task.Descript       = PIn.PString(table.Rows[i][4].ToString());
+				task.TaskStatus     = PIn.PBool(table.Rows[i][5].ToString());
+				task.IsRepeating    = PIn.PBool(table.Rows[i][6].ToString());
+				task.DateType       = (TaskDateType)PIn.PInt(table.Rows[i][7].ToString());
+				task.FromNum        = PIn.PInt(table.Rows[i][8].ToString());
+				task.ObjectType     = (TaskObjectType)PIn.PInt(table.Rows[i][9].ToString());
+				task.DateTimeEntry  = PIn.PDateT(table.Rows[i][10].ToString());
+				retVal.Add(task);
+			}
+			return retVal;
+		}
 
 		///<summary></summary>
 		private static void Update(Task task){

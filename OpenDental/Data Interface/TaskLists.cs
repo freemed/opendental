@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Data;
 using System.Globalization;
 using System.Windows.Forms;
@@ -9,64 +10,96 @@ namespace OpenDental{
 	///<summary></summary>
 	public class TaskLists {
 
-		///<summary>Gets all tasklists for a given parent.  But the 5 trunks don't have parents: For main trunk use date.Min and Parent=0.  For Repeating trunk use date.Min isRepeating and Parent=0.  For the 3 dated trunks, use a date and a dateType.  Date and parent are mutually exclusive.  Also used to get all repeating lists for one dateType without any heirarchy: supply parent=-1.</summary>
-		public static TaskList[] Refresh(int parent,DateTime date,TaskDateType dateType,bool isRepeating) {
+		///<summary>Gets all task lists for the trunk of the user tab.</summary>
+		public static List<TaskList> RefreshUserTrunk(int userNum){
+
+
+
+			return new List<TaskList>();
+		}
+
+		///<summary>Gets all task lists for the main trunk.</summary>
+		public static List<TaskList> RefreshMainTrunk() {
+			string command="SELECT * FROM tasklist "
+				+"WHERE Parent=0 "
+				+"AND DateTL < '1880-01-01' "
+				+"AND IsRepeating=0 "
+				+"ORDER BY DateTimeEntry";
+			return RefreshAndFill(command);
+		}
+
+		///<summary>Gets all task lists for the repeating trunk.</summary>
+		public static List<TaskList> RefreshRepeatingTrunk() {
+			string command="SELECT * FROM tasklist "
+				+"WHERE Parent=0 "
+				+"AND DateTL < '1880-01-01' "
+				+"AND IsRepeating=1 "
+				+"ORDER BY DateTimeEntry";
+			return RefreshAndFill(command);
+		}
+
+		///<summary>0 is not allowed, because that would be a trunk.</summary>
+		public static List<TaskList> RefreshChildren(int parent){
+			string command=
+				"SELECT * FROM tasklist "
+				+"WHERE Parent="+POut.PInt(parent)
+				+" ORDER BY DateTimeEntry";
+			return RefreshAndFill(command);
+		}
+
+		///<summary>All repeating items for one date type with no heirarchy.</summary>
+		public static List<TaskList> RefreshRepeating(TaskDateType dateType){
+			string command=
+				"SELECT * FROM tasklist "
+				+"WHERE IsRepeating=1 "
+				+"AND DateType="+POut.PInt((int)dateType)+" "
+				+"ORDER BY DateTimeEntry";
+			return RefreshAndFill(command);
+		}
+
+		///<summary>Gets all task lists for one of the 3 dated trunks.</summary>
+		public static List<TaskList> RefreshDatedTrunk(DateTime date,TaskDateType dateType){
 			DateTime dateFrom=DateTime.MinValue;
 			DateTime dateTo=DateTime.MaxValue;
-			string where="";
-			if(date.Year>1880) {
-				//date supplied always indicates one of 3 dated trunks.
-				//the value of parent is completely ignored
-				if(dateType==TaskDateType.Day) {
-					dateFrom=date;
-					dateTo=date;
-				}
-				else if(dateType==TaskDateType.Week) {
-					dateFrom=date.AddDays(-(int)date.DayOfWeek);
-					dateTo=dateFrom.AddDays(6);
-				}
-				else if(dateType==TaskDateType.Month) {
-					dateFrom=new DateTime(date.Year,date.Month,1);
-					dateTo=dateFrom.AddMonths(1).AddDays(-1);
-				}
-				where="DateTL >= "+POut.PDate(dateFrom)
-					+" AND DateTL <= "+POut.PDate(dateTo)+" "
-					+"AND DateType="+POut.PInt((int)dateType)+" ";
+			if(dateType==TaskDateType.Day) {
+				dateFrom=date;
+				dateTo=date;
 			}
-			else {//no date supplied.
-				if(parent==0) {//main trunk or repeating trunk
-					where="Parent="+POut.PInt(parent)
-						+" AND DateTL < '1880-01-01'"
-						+" AND IsRepeating="+POut.PBool(isRepeating)+" ";
-				}
-				else if(parent==-1 && isRepeating) {//all repeating items with no heirarchy
-					where="IsRepeating=1 "
-						+"AND DateType="+POut.PInt((int)dateType)+" ";
-				}
-				else {//any child
-					where="Parent="+POut.PInt(parent)+" ";
-					//+" AND IsRepeating="+POut.PBool(isRepeating)+" ";
-				}
+			else if(dateType==TaskDateType.Week) {
+				dateFrom=date.AddDays(-(int)date.DayOfWeek);
+				dateTo=dateFrom.AddDays(6);
+			}
+			else if(dateType==TaskDateType.Month) {
+				dateFrom=new DateTime(date.Year,date.Month,1);
+				dateTo=dateFrom.AddMonths(1).AddDays(-1);
 			}
 			string command=
 				"SELECT * FROM tasklist "
-				+"WHERE "+where
-				+"ORDER BY DateTimeEntry";
+				+"WHERE DateTL >= "+POut.PDate(dateFrom)
+				+" AND DateTL <= "+POut.PDate(dateTo)
+				+" AND DateType="+POut.PInt((int)dateType)
+				+" ORDER BY DateTimeEntry";
+			return RefreshAndFill(command);
+		}
+
+		private static List<TaskList> RefreshAndFill(string command){
 			DataTable table=General.GetTable(command);
-			TaskList[] List=new TaskList[table.Rows.Count];
+			List<TaskList> retVal=new List<TaskList>();
+			TaskList tasklist;
 			for(int i=0;i<table.Rows.Count;i++) {
-				List[i]=new TaskList();
-				List[i].TaskListNum    = PIn.PInt(table.Rows[i][0].ToString());
-				List[i].Descript       = PIn.PString(table.Rows[i][1].ToString());
-				List[i].Parent         = PIn.PInt(table.Rows[i][2].ToString());
-				List[i].DateTL         = PIn.PDate(table.Rows[i][3].ToString());
-				List[i].IsRepeating    = PIn.PBool(table.Rows[i][4].ToString());
-				List[i].DateType       = (TaskDateType)PIn.PInt(table.Rows[i][5].ToString());
-				List[i].FromNum        = PIn.PInt(table.Rows[i][6].ToString());
-				List[i].ObjectType     = (TaskObjectType)PIn.PInt(table.Rows[i][7].ToString());
-				List[i].DateTimeEntry  = PIn.PDateT(table.Rows[i][8].ToString());
+				tasklist=new TaskList();
+				tasklist.TaskListNum    = PIn.PInt(table.Rows[i][0].ToString());
+				tasklist.Descript       = PIn.PString(table.Rows[i][1].ToString());
+				tasklist.Parent         = PIn.PInt(table.Rows[i][2].ToString());
+				tasklist.DateTL         = PIn.PDate(table.Rows[i][3].ToString());
+				tasklist.IsRepeating    = PIn.PBool(table.Rows[i][4].ToString());
+				tasklist.DateType       = (TaskDateType)PIn.PInt(table.Rows[i][5].ToString());
+				tasklist.FromNum        = PIn.PInt(table.Rows[i][6].ToString());
+				tasklist.ObjectType     = (TaskObjectType)PIn.PInt(table.Rows[i][7].ToString());
+				tasklist.DateTimeEntry  = PIn.PDateT(table.Rows[i][8].ToString());
+				retVal.Add(tasklist);
 			}
-			return List;
+			return retVal;
 		}
 
 		/// <summary>Gets all task lists with the give object type.  Used in TaskListSelect when assigning an object to a task list.</summary>

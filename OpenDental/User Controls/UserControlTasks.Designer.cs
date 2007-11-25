@@ -46,6 +46,7 @@ namespace OpenDental {
 			this.menuItemDelete = new System.Windows.Forms.MenuItem();
 			this.menuItem2 = new System.Windows.Forms.MenuItem();
 			this.menuItemGoto = new System.Windows.Forms.MenuItem();
+			this.tabUser = new System.Windows.Forms.TabPage();
 			this.ToolBarMain = new OpenDental.UI.ODToolBar();
 			this.tabContr.SuspendLayout();
 			this.SuspendLayout();
@@ -54,6 +55,7 @@ namespace OpenDental {
 			// 
 			this.tabContr.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+			this.tabContr.Controls.Add(this.tabUser);
 			this.tabContr.Controls.Add(this.tabMain);
 			this.tabContr.Controls.Add(this.tabRepeating);
 			this.tabContr.Controls.Add(this.tabDate);
@@ -73,6 +75,7 @@ namespace OpenDental {
 			this.tabMain.Size = new System.Drawing.Size(933,0);
 			this.tabMain.TabIndex = 0;
 			this.tabMain.Text = "Main";
+			this.tabMain.UseVisualStyleBackColor = true;
 			// 
 			// tabRepeating
 			// 
@@ -80,7 +83,8 @@ namespace OpenDental {
 			this.tabRepeating.Name = "tabRepeating";
 			this.tabRepeating.Size = new System.Drawing.Size(933,0);
 			this.tabRepeating.TabIndex = 2;
-			this.tabRepeating.Text = "Repeating";
+			this.tabRepeating.Text = "Repeating (setup)";
+			this.tabRepeating.UseVisualStyleBackColor = true;
 			// 
 			// tabDate
 			// 
@@ -89,6 +93,7 @@ namespace OpenDental {
 			this.tabDate.Size = new System.Drawing.Size(933,0);
 			this.tabDate.TabIndex = 1;
 			this.tabDate.Text = "By Date";
+			this.tabDate.UseVisualStyleBackColor = true;
 			// 
 			// tabWeek
 			// 
@@ -97,6 +102,7 @@ namespace OpenDental {
 			this.tabWeek.Size = new System.Drawing.Size(933,0);
 			this.tabWeek.TabIndex = 3;
 			this.tabWeek.Text = "By Week";
+			this.tabWeek.UseVisualStyleBackColor = true;
 			// 
 			// tabMonth
 			// 
@@ -105,6 +111,7 @@ namespace OpenDental {
 			this.tabMonth.Size = new System.Drawing.Size(933,0);
 			this.tabMonth.TabIndex = 4;
 			this.tabMonth.Text = "By Month";
+			this.tabMonth.UseVisualStyleBackColor = true;
 			// 
 			// cal
 			// 
@@ -233,13 +240,22 @@ namespace OpenDental {
 			this.menuItemGoto.Text = "Go To";
 			this.menuItemGoto.Click += new System.EventHandler(this.menuItemGoto_Click);
 			// 
+			// tabUser
+			// 
+			this.tabUser.Location = new System.Drawing.Point(4,22);
+			this.tabUser.Name = "tabUser";
+			this.tabUser.Size = new System.Drawing.Size(933,0);
+			this.tabUser.TabIndex = 5;
+			this.tabUser.Text = "for User";
+			this.tabUser.UseVisualStyleBackColor = true;
+			// 
 			// ToolBarMain
 			// 
 			this.ToolBarMain.Dock = System.Windows.Forms.DockStyle.Top;
 			this.ToolBarMain.ImageList = this.imageListMain;
 			this.ToolBarMain.Location = new System.Drawing.Point(0,0);
 			this.ToolBarMain.Name = "ToolBarMain";
-			this.ToolBarMain.Size = new System.Drawing.Size(941,29);
+			this.ToolBarMain.Size = new System.Drawing.Size(941,25);
 			this.ToolBarMain.TabIndex = 2;
 			this.ToolBarMain.ButtonClick += new OpenDental.UI.ODToolBarButtonClickEventHandler(this.ToolBarMain_ButtonClick);
 			// 
@@ -284,5 +300,6 @@ namespace OpenDental {
 		private System.Windows.Forms.MenuItem menuItem2;
 		private System.Windows.Forms.MenuItem menuItemGoto;
 		private System.Windows.Forms.ImageList imageListTree;
+		private System.Windows.Forms.TabPage tabUser;
 	}
 }

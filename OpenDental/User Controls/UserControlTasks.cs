@@ -12,9 +12,9 @@ using OpenDentBusiness;
 namespace OpenDental {
 	public partial class UserControlTasks:UserControl {
 		///<summary>List of all TastLists that are to be displayed in the main window. Combine with TasksList.</summary>
-		private TaskList[] TaskListsList;
+		private List<TaskList> TaskListsList;
 		///<summary>List of all Tasks that are to be displayed in the main window.  Combine with TaskListsList.</summary>
-		private Task[] TasksList;
+		private List<Task> TasksList;
 		///<summary>An arraylist of TaskLists beginning from the trunk and adding on branches.  If the count is 0, then we are in the trunk of one of the five categories.  The last TaskList in the TreeHistory is the one that is open in the main window.</summary>
 		private ArrayList TreeHistory;
 		///<summary>A TaskList that is on the 'clipboard' waiting to be pasted.  Will be null if nothing has been copied yet.</summary>
@@ -49,6 +49,7 @@ namespace OpenDental {
 		}
 
 		public void InitializeOnStartup(){
+			tabUser.Text=Lan.g(this,"for ")+Security.CurUser.UserName;
 			LayoutToolBar();
 			if(Tasks.LastOpenList==null) {//first time openning
 				TreeHistory=new ArrayList();
@@ -65,6 +66,11 @@ namespace OpenDental {
 			FillTree();
 			FillMain();
 			SetMenusEnabled();
+		}
+
+		public void ResetUser(){
+			//tabContr.TabPages[
+			tabUser.Text=Lan.g(this,"for ")+Security.CurUser.UserName;
 		}
 
 		private void UserControlTasks_Load(object sender,System.EventArgs e) {
@@ -103,10 +109,14 @@ namespace OpenDental {
 			Tasks.LastOpenGroup=tabContr.SelectedIndex;
 			Tasks.LastOpenDate=cal.SelectionStart;
 			//layout
-			if(tabContr.SelectedIndex==0) {//main
+
+			if(tabContr.SelectedIndex==0) {//user
 				tree.Top=tabContr.Bottom;
 			}
-			else if(tabContr.SelectedIndex==1) {//repeating
+			else if(tabContr.SelectedIndex==1) {//main
+				tree.Top=tabContr.Bottom;
+			}
+			else if(tabContr.SelectedIndex==2) {//repeating
 				tree.Top=tabContr.Bottom;
 			}
 			else {//by date
@@ -131,11 +141,11 @@ namespace OpenDental {
 			}
 			RefreshMainLists(parent,date);
 			if(TreeHistory.Count==0//main trunk
-				&& (tabContr.SelectedIndex==2	|| tabContr.SelectedIndex==3 || tabContr.SelectedIndex==4))//any of the dated groups
+				&& (tabContr.SelectedIndex==3	|| tabContr.SelectedIndex==4 || tabContr.SelectedIndex==5))//any of the dated groups
 			{
 				//clear any lists which are derived from a repeating list and which do not have any itmes checked off
 				bool changeMade=false;
-				for(int i=0;i<TaskListsList.Length;i++) {
+				for(int i=0;i<TaskListsList.Count;i++) {
 					if(TaskListsList[i].FromNum==0) {//ignore because not derived from a repeating list
 						continue;
 					}
@@ -145,7 +155,7 @@ namespace OpenDental {
 					}
 				}
 				//clear any tasks which are derived from a repeating tast and which are not checked off
-				for(int i=0;i<TasksList.Length;i++) {
+				for(int i=0;i<TasksList.Count;i++) {
 					if(TasksList[i].FromNum==0) {
 						continue;
 					}
@@ -159,29 +169,29 @@ namespace OpenDental {
 				}
 				//now add back any repeating lists and tasks that meet the criteria
 				//Get lists of all repeating lists and tasks of one type.  We will pick items from these two lists.
-				TaskList[] repeatingLists=new TaskList[0];
-				Task[] repeatingTasks=new Task[0];
+				List<TaskList> repeatingLists=new List<TaskList>();
+				List<Task> repeatingTasks=new List<Task>();
 				switch(tabContr.SelectedIndex) {
-					case 2:
-						repeatingLists=TaskLists.Refresh(-1,DateTime.MinValue,TaskDateType.Day,true);
-						repeatingTasks=Tasks.Refresh(-1,DateTime.MinValue,TaskDateType.Day,true);
-						break;
 					case 3:
-						repeatingLists=TaskLists.Refresh(-1,DateTime.MinValue,TaskDateType.Week,true);
-						repeatingTasks=Tasks.Refresh(-1,DateTime.MinValue,TaskDateType.Week,true);
+						repeatingLists=TaskLists.RefreshRepeating(TaskDateType.Day);
+						repeatingTasks=Tasks.RefreshRepeating(TaskDateType.Day);
 						break;
 					case 4:
-						repeatingLists=TaskLists.Refresh(-1,DateTime.MinValue,TaskDateType.Month,true);
-						repeatingTasks=Tasks.Refresh(-1,DateTime.MinValue,TaskDateType.Month,true);
+						repeatingLists=TaskLists.RefreshRepeating(TaskDateType.Week);
+						repeatingTasks=Tasks.RefreshRepeating(TaskDateType.Week);
+						break;
+					case 5:
+						repeatingLists=TaskLists.RefreshRepeating(TaskDateType.Month);
+						repeatingTasks=Tasks.RefreshRepeating(TaskDateType.Month);
 						break;
 				}
 				//loop through list and add back any that meet criteria.
 				changeMade=false;
 				bool alreadyExists;
-				for(int i=0;i<repeatingLists.Length;i++) {
+				for(int i=0;i<repeatingLists.Count;i++) {
 					//if already exists, skip
 					alreadyExists=false;
-					for(int j=0;j<TaskListsList.Length;j++) {//loop through Main list
+					for(int j=0;j<TaskListsList.Count;j++) {//loop through Main list
 						if(TaskListsList[j].FromNum==repeatingLists[i].TaskListNum) {
 							alreadyExists=true;
 							break;
@@ -199,10 +209,10 @@ namespace OpenDental {
 					DuplicateExistingList(repeatingLists[i],true);
 					changeMade=true;
 				}
-				for(int i=0;i<repeatingTasks.Length;i++) {
+				for(int i=0;i<repeatingTasks.Count;i++) {
 					//if already exists, skip
 					alreadyExists=false;
-					for(int j=0;j<TasksList.Length;j++) {//loop through Main list
+					for(int j=0;j<TasksList.Count;j++) {//loop through Main list
 						if(TasksList[j].FromNum==repeatingTasks[i].TaskNum) {
 							alreadyExists=true;
 							break;
@@ -226,10 +236,10 @@ namespace OpenDental {
 			listMain.Items.Clear();
 			ListViewItem item;
 			string dateStr="";
-			for(int i=0;i<TaskListsList.Length;i++) {
+			for(int i=0;i<TaskListsList.Count;i++) {
 				dateStr="";
 				if(TaskListsList[i].DateTL.Year>1880
-					&& tabContr.SelectedIndex==0)//main
+					&& (tabContr.SelectedIndex==0 || tabContr.SelectedIndex==1))//user or main
 				{
 					//dateStr=TaskListsList[i].DateTL.ToShortDateString()+" - ";
 					if(TaskListsList[i].DateType==TaskDateType.Day) {
@@ -247,10 +257,10 @@ namespace OpenDental {
 				listMain.Items.Add(item);
 			}
 			string objDesc="";
-			for(int i=0;i<TasksList.Length;i++) {
+			for(int i=0;i<TasksList.Count;i++) {
 				//checked=1, unchecked=2
 				dateStr="";
-				if(tabContr.SelectedIndex==0) {//main
+				if(tabContr.SelectedIndex==0 || tabContr.SelectedIndex==1) {//user or main
 					if(TasksList[i].DateTask.Year>1880) {
 						if(TasksList[i].DateType==TaskDateType.Day) {
 							dateStr=TasksList[i].DateTask.ToShortDateString()+" - ";
@@ -298,14 +308,14 @@ namespace OpenDental {
 		///<summary>A recursive function that checks every child in a list IsFromRepeating.  If any are marked complete, then it returns true, signifying that this list should be immune from being deleted since it's already in use.</summary>
 		private bool AnyAreMarkedComplete(TaskList list) {
 			//get all children:
-			TaskList[] childLists=TaskLists.Refresh(list.TaskListNum,DateTime.MinValue,TaskDateType.None,false);
-			Task[] childTasks=Tasks.Refresh(list.TaskListNum,DateTime.MinValue,TaskDateType.None,false);
-			for(int i=0;i<childLists.Length;i++) {
+			List<TaskList> childLists=TaskLists.RefreshChildren(list.TaskListNum);
+			List<Task> childTasks=Tasks.RefreshChildren(list.TaskListNum);
+			for(int i=0;i<childLists.Count;i++) {
 				if(AnyAreMarkedComplete(childLists[i])) {
 					return true;
 				}
 			}
-			for(int i=0;i<childTasks.Length;i++) {
+			for(int i=0;i<childTasks.Count;i++) {
 				if(childTasks[i].TaskStatus) {
 					return true;
 				}
@@ -313,31 +323,40 @@ namespace OpenDental {
 			return false;
 		}
 
+		///<summary>If parent=0, then this is a trunk.</summary>
 		private void RefreshMainLists(int parent,DateTime date) {
 			if(this.DesignMode){
-				TaskListsList=new TaskList[0];
-				TasksList=new Task[0];
+				TaskListsList=new List<TaskList>();
+				TasksList=new List<Task>();
 				return;
 			}
-			if(tabContr.SelectedIndex==0) {//main
-				TaskListsList=TaskLists.Refresh(parent,DateTime.MinValue,TaskDateType.None,false);
-				TasksList=Tasks.Refresh(parent,DateTime.MinValue,TaskDateType.None,false);
+			if(parent!=0){//not a trunk
+				TaskListsList=TaskLists.RefreshChildren(parent);
+				TasksList=Tasks.RefreshChildren(parent);
 			}
-			else if(tabContr.SelectedIndex==1) {//repeating
-				TaskListsList=TaskLists.Refresh(parent,DateTime.MinValue,TaskDateType.None,true);
-				TasksList=Tasks.Refresh(parent,DateTime.MinValue,TaskDateType.None,true);
+			else if(tabContr.SelectedIndex==0) {//user
+				TaskListsList=TaskLists.RefreshUserTrunk(Security.CurUser.UserNum);
+				TasksList=Tasks.RefreshUserTrunk(Security.CurUser.UserNum);
 			}
-			else if(tabContr.SelectedIndex==2) {//date
-				TaskListsList=TaskLists.Refresh(parent,date,TaskDateType.Day,false);
-				TasksList=Tasks.Refresh(parent,date,TaskDateType.Day,false);
+			else if(tabContr.SelectedIndex==1) {//main
+				TaskListsList=TaskLists.RefreshMainTrunk();
+				TasksList=Tasks.RefreshMainTrunk();
 			}
-			else if(tabContr.SelectedIndex==3) {//week
-				TaskListsList=TaskLists.Refresh(parent,date,TaskDateType.Week,false);
-				TasksList=Tasks.Refresh(parent,date,TaskDateType.Week,false);
+			else if(tabContr.SelectedIndex==2) {//repeating
+				TaskListsList=TaskLists.RefreshRepeatingTrunk();
+				TasksList=Tasks.RefreshRepeatingTrunk();
 			}
-			else if(tabContr.SelectedIndex==4) {//month
-				TaskListsList=TaskLists.Refresh(parent,date,TaskDateType.Month,false);
-				TasksList=Tasks.Refresh(parent,date,TaskDateType.Month,false);
+			else if(tabContr.SelectedIndex==3) {//date
+				TaskListsList=TaskLists.RefreshDatedTrunk(date,TaskDateType.Day);
+				TasksList=Tasks.RefreshDatedTrunk(date,TaskDateType.Day);
+			}
+			else if(tabContr.SelectedIndex==4) {//week
+				TaskListsList=TaskLists.RefreshDatedTrunk(date,TaskDateType.Week);
+				TasksList=Tasks.RefreshDatedTrunk(date,TaskDateType.Week);
+			}
+			else if(tabContr.SelectedIndex==5) {//month
+				TaskListsList=TaskLists.RefreshDatedTrunk(date,TaskDateType.Month);
+				TasksList=Tasks.RefreshDatedTrunk(date,TaskDateType.Month);
 			}
 		}
 
@@ -377,22 +396,23 @@ namespace OpenDental {
 			}
 			else {
 				cur.Parent=0;
-				if(tabContr.SelectedIndex==2) {//by date
+				if(tabContr.SelectedIndex==3) {//by date
 					cur.DateTL=cal.SelectionStart;
 					cur.DateType=TaskDateType.Day;
 				}
-				else if(tabContr.SelectedIndex==3) {//by week
+				else if(tabContr.SelectedIndex==4) {//by week
 					cur.DateTL=cal.SelectionStart;
 					cur.DateType=TaskDateType.Week;
 				}
-				else if(tabContr.SelectedIndex==4) {//by month
+				else if(tabContr.SelectedIndex==5) {//by month
 					cur.DateTL=cal.SelectionStart;
 					cur.DateType=TaskDateType.Month;
 				}
 			}
-			if(tabContr.SelectedIndex==1) {//repeating
+			if(tabContr.SelectedIndex==2) {//repeating
 				cur.IsRepeating=true;
 			}
+//todo: user tasklist
 			FormTaskListEdit FormT=new FormTaskListEdit(cur);
 			FormT.IsNew=true;
 			FormT.ShowDialog();
@@ -407,22 +427,23 @@ namespace OpenDental {
 			}
 			else {
 				cur.TaskListNum=0;
-				if(tabContr.SelectedIndex==2) {//by date
+				if(tabContr.SelectedIndex==3) {//by date
 					cur.DateTask=cal.SelectionStart;
 					cur.DateType=TaskDateType.Day;
 				}
-				else if(tabContr.SelectedIndex==3) {//by week
+				else if(tabContr.SelectedIndex==4) {//by week
 					cur.DateTask=cal.SelectionStart;
 					cur.DateType=TaskDateType.Week;
 				}
-				else if(tabContr.SelectedIndex==4) {//by month
+				else if(tabContr.SelectedIndex==5) {//by month
 					cur.DateTask=cal.SelectionStart;
 					cur.DateType=TaskDateType.Month;
 				}
 			}
-			if(tabContr.SelectedIndex==1) {//repeating
+			if(tabContr.SelectedIndex==2) {//repeating
 				cur.IsRepeating=true;
 			}
+//todo: user task
 			FormTaskEdit FormT=new FormTaskEdit(cur);
 			FormT.IsNew=true;
 			FormT.ShowDialog();
@@ -437,13 +458,12 @@ namespace OpenDental {
 		}
 
 		private void OnEdit_Click() {
-			if(clickedI < TaskListsList.Length) {//is list
+			if(clickedI < TaskListsList.Count) {//is list
 				FormTaskListEdit FormT=new FormTaskListEdit(TaskListsList[clickedI]);
 				FormT.ShowDialog();
 			}
 			else {//task
-				FormTaskEdit FormT
-					=new FormTaskEdit(TasksList[clickedI-TaskListsList.Length]);
+				FormTaskEdit FormT=new FormTaskEdit(TasksList[clickedI-TaskListsList.Count]);
 				FormT.ShowDialog();
 				if(FormT.GotoType!=TaskObjectType.None) {
 					GotoType=FormT.GotoType;
@@ -457,25 +477,25 @@ namespace OpenDental {
 		}
 
 		private void OnCut_Click() {
-			if(clickedI < TaskListsList.Length) {//is list
+			if(clickedI < TaskListsList.Count) {//is list
 				ClipTaskList=TaskListsList[clickedI].Copy();
 				ClipTask=null;
 			}
 			else {//task
 				ClipTaskList=null;
-				ClipTask=TasksList[clickedI-TaskListsList.Length].Copy();
+				ClipTask=TasksList[clickedI-TaskListsList.Count].Copy();
 			}
 			WasCut=true;
 		}
 
 		private void OnCopy_Click() {
-			if(clickedI < TaskListsList.Length) {//is list
+			if(clickedI < TaskListsList.Count) {//is list
 				ClipTaskList=TaskListsList[clickedI].Copy();
 				ClipTask=null;
 			}
 			else {//task
 				ClipTaskList=null;
-				ClipTask=TasksList[clickedI-TaskListsList.Length].Copy();
+				ClipTask=TasksList[clickedI-TaskListsList.Count].Copy();
 			}
 			WasCut=false;
 		}
@@ -486,17 +506,20 @@ namespace OpenDental {
 				if(TreeHistory.Count>0) {//not on main trunk
 					newTL.Parent=((TaskList)TreeHistory[TreeHistory.Count-1]).TaskListNum;
 					switch(tabContr.SelectedIndex) {
-						case 0://main
+						case 0://user
+							
+							break;
+						case 1://main
 							//even though usually only trunks are dated, we will leave the date alone in main
 							//category since user may wish to preserve it. All other children get date cleared.
 							break;
-						case 1://repeating
+						case 2://repeating
 							newTL.DateTL=DateTime.MinValue;//never a date
 							//leave dateType alone, since that affects how it repeats
 							break;
-						case 2://day
-						case 3://week
-						case 4://month
+						case 3://day
+						case 4://week
+						case 5://month
 							newTL.DateTL=DateTime.MinValue;//children do not get dated
 							newTL.DateType=TaskDateType.None;//this doesn't matter either for children
 							break;
@@ -505,36 +528,40 @@ namespace OpenDental {
 				else {//one of the main trunks
 					newTL.Parent=0;
 					switch(tabContr.SelectedIndex) {
-						case 0://main
+						case 0://user
+							
+							break;
+						case 1://main
 							newTL.DateTL=DateTime.MinValue;
 							newTL.DateType=TaskDateType.None;
 							break;
-						case 1://repeating
+						case 2://repeating
 							newTL.DateTL=DateTime.MinValue;//never a date
 							//newTL.DateType=TaskDateType.None;//leave alone
 							break;
-						case 2://day
+						case 3://day
 							newTL.DateTL=cal.SelectionStart;
 							newTL.DateType=TaskDateType.Day;
 							break;
-						case 3://week
+						case 4://week
 							newTL.DateTL=cal.SelectionStart;
 							newTL.DateType=TaskDateType.Week;
 							break;
-						case 4://month
+						case 5://month
 							newTL.DateTL=cal.SelectionStart;
 							newTL.DateType=TaskDateType.Month;
 							break;
 					}
 				}
-				if(tabContr.SelectedIndex==1) {//repeating
+				if(tabContr.SelectedIndex==2) {//repeating
 					newTL.IsRepeating=true;
 				}
 				else {
 					newTL.IsRepeating=false;
 				}
 				newTL.FromNum=0;//always
-				if(tabContr.SelectedIndex==0) {
+				if(tabContr.SelectedIndex==1) {
+//or 0?
 					DuplicateExistingList(newTL,true);
 				}
 				else {
@@ -546,17 +573,20 @@ namespace OpenDental {
 				if(TreeHistory.Count>0) {//not on main trunk
 					newT.TaskListNum=((TaskList)TreeHistory[TreeHistory.Count-1]).TaskListNum;
 					switch(tabContr.SelectedIndex) {
-						case 0://main
+						case 0://user
+							
+							break;
+						case 1://main
 							//even though usually only trunks are dated, we will leave the date alone in main
 							//category since user may wish to preserve it. All other children get date cleared.
 							break;
-						case 1://repeating
+						case 2://repeating
 							newT.DateTask=DateTime.MinValue;//never a date
 							//leave dateType alone, since that affects how it repeats
 							break;
-						case 2://day
-						case 3://week
-						case 4://month
+						case 3://day
+						case 4://week
+						case 5://month
 							newT.DateTask=DateTime.MinValue;//children do not get dated
 							newT.DateType=TaskDateType.None;//this doesn't matter either for children
 							break;
@@ -565,29 +595,32 @@ namespace OpenDental {
 				else {//one of the main trunks
 					newT.TaskListNum=0;
 					switch(tabContr.SelectedIndex) {
-						case 0://main
+						case 0://user
+							
+							break;
+						case 1://main
 							newT.DateTask=DateTime.MinValue;
 							newT.DateType=TaskDateType.None;
 							break;
-						case 1://repeating
+						case 2://repeating
 							newT.DateTask=DateTime.MinValue;//never a date
 							//newTL.DateType=TaskDateType.None;//leave alone
 							break;
-						case 2://day
+						case 3://day
 							newT.DateTask=cal.SelectionStart;
 							newT.DateType=TaskDateType.Day;
 							break;
-						case 3://week
+						case 4://week
 							newT.DateTask=cal.SelectionStart;
 							newT.DateType=TaskDateType.Week;
 							break;
-						case 4://month
+						case 5://month
 							newT.DateTask=cal.SelectionStart;
 							newT.DateType=TaskDateType.Month;
 							break;
 					}
 				}
-				if(tabContr.SelectedIndex==1) {//repeating
+				if(tabContr.SelectedIndex==2) {//repeating
 					newT.IsRepeating=true;
 				}
 				else {
@@ -609,7 +642,7 @@ namespace OpenDental {
 
 		private void OnGoto_Click() {
 			//not even allowed to get to this point unless a valid task
-			Task task=TasksList[clickedI-TaskListsList.Length];
+			Task task=TasksList[clickedI-TaskListsList.Count];
 			GotoType=task.ObjectType;
 			GotoKeyNum=task.KeyNum;
 			OnGoToChanged();
@@ -619,11 +652,12 @@ namespace OpenDental {
 		///<summary>A recursive function that duplicates an entire existing TaskList.  For the initial loop, make changes to the original taskList before passing it in.  That way, Date and type are only set in initial loop.  All children preserve original dates and types.  The isRepeating value will be applied in all loops.  Also, make sure to change the parent num to the new one before calling this function.  The taskListNum will always change, because we are inserting new record into database.</summary>
 		private void DuplicateExistingList(TaskList newList,bool isInMain) {
 			//get all children:
-			TaskList[] childLists=TaskLists.Refresh(newList.TaskListNum,DateTime.MinValue,TaskDateType.None,newList.IsRepeating);
-			Task[] childTasks=Tasks.Refresh(newList.TaskListNum,DateTime.MinValue,TaskDateType.None,newList.IsRepeating);
+//todo: analyze these two functions for user tab:
+			List<TaskList> childLists=TaskLists.RefreshChildren(newList.TaskListNum);
+			List<Task> childTasks=Tasks.RefreshChildren(newList.TaskListNum);
 			TaskLists.InsertOrUpdate(newList,true);
 			//now we have a new taskListNum to work with
-			for(int i=0;i<childLists.Length;i++) {
+			for(int i=0;i<childLists.Count;i++) {
 				childLists[i].Parent=newList.TaskListNum;
 				if(newList.IsRepeating) {
 					childLists[i].IsRepeating=true;
@@ -639,7 +673,7 @@ namespace OpenDental {
 				}
 				DuplicateExistingList(childLists[i],isInMain);
 			}
-			for(int i=0;i<childTasks.Length;i++) {
+			for(int i=0;i<childTasks.Count;i++) {
 				childTasks[i].TaskListNum=newList.TaskListNum;
 				if(newList.IsRepeating) {
 					childTasks[i].IsRepeating=true;
@@ -658,7 +692,7 @@ namespace OpenDental {
 		}
 
 		private void OnDelete_Click() {
-			if(clickedI < TaskListsList.Length) {//is list
+			if(clickedI < TaskListsList.Count) {//is list
 				if(!MsgBox.Show(this,true,"Delete list including all sublists and tasks?")) {
 					return;
 				}
@@ -668,7 +702,7 @@ namespace OpenDental {
 				if(!MsgBox.Show(this,true,"Delete?")) {
 					return;
 				}
-				Tasks.Delete(TasksList[clickedI-TaskListsList.Length]);
+				Tasks.Delete(TasksList[clickedI-TaskListsList.Count]);
 			}
 			FillMain();
 		}
@@ -676,12 +710,13 @@ namespace OpenDental {
 		///<summary>A recursive function that deletes the specified list and all children.</summary>
 		private void DeleteEntireList(TaskList list) {
 			//get all children:
-			TaskList[] childLists=TaskLists.Refresh(list.TaskListNum,DateTime.MinValue,TaskDateType.None,list.IsRepeating);
-			Task[] childTasks=Tasks.Refresh(list.TaskListNum,DateTime.MinValue,TaskDateType.None,list.IsRepeating);
-			for(int i=0;i<childLists.Length;i++) {
+//todo: analyze these two functions for user tab:
+			List<TaskList> childLists=TaskLists.RefreshChildren(list.TaskListNum);
+			List<Task> childTasks=Tasks.RefreshChildren(list.TaskListNum);
+			for(int i=0;i<childLists.Count;i++) {
 				DeleteEntireList(childLists[i]);
 			}
-			for(int i=0;i<childTasks.Length;i++) {
+			for(int i=0;i<childTasks.Count;i++) {
 				Tasks.Delete(childTasks[i]);
 			}
 			try {
@@ -707,8 +742,8 @@ namespace OpenDental {
 			if(clickedI==-1) {
 				return;
 			}
-			if(clickedI >= TaskListsList.Length) {//is task
-				FormTaskEdit FormT=new FormTaskEdit(TasksList[clickedI-TaskListsList.Length]);
+			if(clickedI >= TaskListsList.Count) {//is task
+				FormTaskEdit FormT=new FormTaskEdit(TasksList[clickedI-TaskListsList.Count]);
 				FormT.ShowDialog();
 				if(FormT.GotoType!=TaskObjectType.None) {
 					GotoType=FormT.GotoType;
@@ -730,7 +765,7 @@ namespace OpenDental {
 			if(e.Button!=MouseButtons.Left) {
 				return;
 			}
-			if(clickedI < TaskListsList.Length) {//is list
+			if(clickedI < TaskListsList.Count) {//is list
 				TreeHistory.Add(TaskListsList[clickedI]);
 				FillTree();
 				FillMain();
@@ -740,7 +775,7 @@ namespace OpenDental {
 			if(e.X>16) {
 				return;
 			}
-			Task task=TasksList[clickedI-TaskListsList.Length].Copy();
+			Task task=TasksList[clickedI-TaskListsList.Count].Copy();
 			task.TaskStatus= !task.TaskStatus;
 			try {
 				Tasks.InsertOrUpdate(task,false);
@@ -776,9 +811,9 @@ namespace OpenDental {
 				menuItemPaste.Enabled=true;
 			}
 			if(listMain.SelectedIndices.Count>0
-				&& clickedI >= TaskListsList.Length)//is task
+				&& clickedI >= TaskListsList.Count)//is task
 			{
-				Task task=TasksList[clickedI-TaskListsList.Length];
+				Task task=TasksList[clickedI-TaskListsList.Count];
 				if(task.ObjectType==TaskObjectType.None) {
 					menuItemGoto.Enabled=false;
 				}
