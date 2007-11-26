@@ -15,8 +15,10 @@ namespace OpenDental {
 		private List<TaskList> TaskListsList;
 		///<summary>List of all Tasks that are to be displayed in the main window.  Combine with TaskListsList.</summary>
 		private List<Task> TasksList;
+		//<Summary>Only used if viewing user tab.  This is a list of all task lists in the general tab.  It is used to generate full path heirarchy info for each task list in the user tab.</Summary>
+		//private List<TaskList> TaskListsAllGeneral;
 		///<summary>An arraylist of TaskLists beginning from the trunk and adding on branches.  If the count is 0, then we are in the trunk of one of the five categories.  The last TaskList in the TreeHistory is the one that is open in the main window.</summary>
-		private ArrayList TreeHistory;
+		private List<TaskList> TreeHistory;
 		///<summary>A TaskList that is on the 'clipboard' waiting to be pasted.  Will be null if nothing has been copied yet.</summary>
 		private TaskList ClipTaskList;
 		///<summary>A Task that is on the 'clipboard' waiting to be pasted.  Will be null if nothing has been copied yet.</summary>
@@ -52,12 +54,12 @@ namespace OpenDental {
 			tabUser.Text=Lan.g(this,"for ")+Security.CurUser.UserName;
 			LayoutToolBar();
 			if(Tasks.LastOpenList==null) {//first time openning
-				TreeHistory=new ArrayList();
+				TreeHistory=new List<TaskList>();
 				cal.SelectionStart=DateTime.Today;
 			}
 			else {//reopening
 				tabContr.SelectedIndex=Tasks.LastOpenGroup;
-				TreeHistory=new ArrayList();
+				TreeHistory=new List<TaskList>();
 				for(int i=0;i<Tasks.LastOpenList.Count;i++) {
 					TreeHistory.Add(((TaskList)Tasks.LastOpenList[i]).Copy());
 				}
@@ -90,9 +92,14 @@ namespace OpenDental {
 			tree.Nodes.Clear();
 			TreeNode node;
 			//TreeNode lastNode=null;
+			string nodedesc;
 			for(int i=0;i<TreeHistory.Count;i++) {
-				node=new TreeNode(((TaskList)TreeHistory[i]).Descript);
-				node.Tag=((TaskList)TreeHistory[i]).TaskListNum;
+				nodedesc=TreeHistory[i].Descript;
+				if(tabContr.SelectedIndex==0){//user tab
+					nodedesc=TreeHistory[i].ParentDesc+nodedesc;
+				}
+				node=new TreeNode(nodedesc);
+				node.Tag=TreeHistory[i].TaskListNum;
 				if(tree.SelectedNode==null) {
 					tree.Nodes.Add(node);
 				}
@@ -104,7 +111,7 @@ namespace OpenDental {
 			//remember this position for the next time we open tasks
 			Tasks.LastOpenList=new ArrayList();
 			for(int i=0;i<TreeHistory.Count;i++) {
-				Tasks.LastOpenList.Add(((TaskList)TreeHistory[i]).Copy());
+				Tasks.LastOpenList.Add(TreeHistory[i].Copy());
 			}
 			Tasks.LastOpenGroup=tabContr.SelectedIndex;
 			Tasks.LastOpenDate=cal.SelectionStart;
@@ -132,7 +139,7 @@ namespace OpenDental {
 			int parent;
 			DateTime date;
 			if(TreeHistory.Count>0) {//not on main trunk
-				parent=((TaskList)TreeHistory[TreeHistory.Count-1]).TaskListNum;
+				parent=TreeHistory[TreeHistory.Count-1].TaskListNum;
 				date=DateTime.MinValue;
 			}
 			else {//one of the main trunks
@@ -254,10 +261,10 @@ namespace OpenDental {
 					}
 				}
 				objDesc="";
-				if(tabContr.SelectedIndex==0){
-//todo: indicate fullpath
+				if(tabContr.SelectedIndex==0){//user tab
+					objDesc=TaskListsList[i].ParentDesc;
 				}
-				item=new ListViewItem(dateStr+TaskListsList[i].Descript,0);
+				item=new ListViewItem(dateStr+objDesc+TaskListsList[i].Descript,0);
 				item.ToolTipText=item.Text;
 				listMain.Items.Add(item);
 			}
@@ -334,6 +341,9 @@ namespace OpenDental {
 				TasksList=new List<Task>();
 				return;
 			}
+			if(tabContr.SelectedIndex==0){//user
+				//TaskListsAllGeneral=TaskLists.GetAllGeneral();
+			}
 			if(parent!=0){//not a trunk
 				TaskListsList=TaskLists.RefreshChildren(parent);
 				TasksList=Tasks.RefreshChildren(parent);
@@ -366,13 +376,13 @@ namespace OpenDental {
 		}
 
 		private void tabContr_Click(object sender,System.EventArgs e) {
-			TreeHistory=new ArrayList();//clear the tree no matter which tab clicked.
+			TreeHistory=new List<TaskList>();//clear the tree no matter which tab clicked.
 			FillTree();
 			FillMain();
 		}
 
 		private void cal_DateSelected(object sender,System.Windows.Forms.DateRangeEventArgs e) {
-			TreeHistory=new ArrayList();//clear the tree
+			TreeHistory=new List<TaskList>();//clear the tree
 			FillTree();
 			FillMain();
 		}
@@ -397,7 +407,7 @@ namespace OpenDental {
 			TaskList cur=new TaskList();
 			//if this is a child of any other taskList
 			if(TreeHistory.Count>0) {
-				cur.Parent=((TaskList)TreeHistory[TreeHistory.Count-1]).TaskListNum;
+				cur.Parent=TreeHistory[TreeHistory.Count-1].TaskListNum;
 			}
 			else {
 				cur.Parent=0;
@@ -428,7 +438,7 @@ namespace OpenDental {
 			Task cur=new Task();
 			//if this is a child of any taskList
 			if(TreeHistory.Count>0) {
-				cur.TaskListNum=((TaskList)TreeHistory[TreeHistory.Count-1]).TaskListNum;
+				cur.TaskListNum=TreeHistory[TreeHistory.Count-1].TaskListNum;
 			}
 			else {
 				cur.TaskListNum=0;
@@ -509,7 +519,7 @@ namespace OpenDental {
 			if(ClipTaskList!=null) {//a taskList is on the clipboard
 				TaskList newTL=ClipTaskList.Copy();
 				if(TreeHistory.Count>0) {//not on main trunk
-					newTL.Parent=((TaskList)TreeHistory[TreeHistory.Count-1]).TaskListNum;
+					newTL.Parent=TreeHistory[TreeHistory.Count-1].TaskListNum;
 					switch(tabContr.SelectedIndex) {
 						case 0://user
 							//treat pasting just like it's the main tab, because not on the trunk.
@@ -576,7 +586,7 @@ namespace OpenDental {
 			if(ClipTask!=null) {//a task is on the clipboard
 				Task newT=ClipTask.Copy();
 				if(TreeHistory.Count>0) {//not on main trunk
-					newT.TaskListNum=((TaskList)TreeHistory[TreeHistory.Count-1]).TaskListNum;
+					newT.TaskListNum=TreeHistory[TreeHistory.Count-1].TaskListNum;
 					switch(tabContr.SelectedIndex) {
 						case 0://user
 							//treat pasting just like it's the main tab, because not on the trunk.
@@ -920,7 +930,7 @@ namespace OpenDental {
 
 		private void tree_MouseDown(object sender,System.Windows.Forms.MouseEventArgs e) {
 			for(int i=TreeHistory.Count-1;i>0;i--) {
-				if(((TaskList)TreeHistory[i]).TaskListNum==(int)tree.GetNodeAt(e.X,e.Y).Tag) {
+				if(TreeHistory[i].TaskListNum==(int)tree.GetNodeAt(e.X,e.Y).Tag) {
 					break;//don't remove the node click on or any higher node
 				}
 				TreeHistory.RemoveAt(i);

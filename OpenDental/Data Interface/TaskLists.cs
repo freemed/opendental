@@ -12,8 +12,10 @@ namespace OpenDental{
 
 		///<summary>Gets all task lists for the trunk of the user tab.</summary>
 		public static List<TaskList> RefreshUserTrunk(int userNum){
-			string command="SELECT tasklist.* FROM tasksubscription "
+			string command="SELECT tasklist.*,t2.Descript,t3.Descript FROM tasksubscription "
 				+"LEFT JOIN tasklist ON tasklist.TaskListNum=tasksubscription.TaskListNum "
+				+"LEFT JOIN tasklist t2 ON t2.TaskListNum=tasklist.Parent "
+				+"LEFT JOIN tasklist t3 ON t3.TaskListNum=t2.Parent "
 				+"WHERE tasksubscription.UserNum="+POut.PInt(userNum)
 				+" AND tasksubscription.TaskListNum!=0 "
 				+"ORDER BY DateTimeEntry";
@@ -84,10 +86,18 @@ namespace OpenDental{
 			return RefreshAndFill(command);
 		}
 
+		/*
+		///<Summary>Gets all task lists in the general tab with no heirarchy.  This allows us to loop through the list to grab useful heirarchy info.  Only used when viewing user tab.  Not guaranteed to get all tasklists, because we exclude those with a DateType.</Summary>
+		public static List<TaskList> GetAllGeneral(){
+//THIS WON'T WORK BECAUSE THERE ARE TOO MANY REPEATING TASKLISTS.
+			string command="SELECT * FROM tasklist WHERE DateType=0 ";
+		}*/
+
 		private static List<TaskList> RefreshAndFill(string command){
 			DataTable table=General.GetTable(command);
 			List<TaskList> retVal=new List<TaskList>();
 			TaskList tasklist;
+			string desc;
 			for(int i=0;i<table.Rows.Count;i++) {
 				tasklist=new TaskList();
 				tasklist.TaskListNum    = PIn.PInt(table.Rows[i][0].ToString());
@@ -99,6 +109,17 @@ namespace OpenDental{
 				tasklist.FromNum        = PIn.PInt(table.Rows[i][6].ToString());
 				tasklist.ObjectType     = (TaskObjectType)PIn.PInt(table.Rows[i][7].ToString());
 				tasklist.DateTimeEntry  = PIn.PDateT(table.Rows[i][8].ToString());
+				tasklist.ParentDesc="";
+				if(table.Columns.Count>9){
+					desc=PIn.PString(table.Rows[i][9].ToString());
+					if(desc!=""){
+						tasklist.ParentDesc=desc+"/";
+					}
+					desc=PIn.PString(table.Rows[i][10].ToString());
+					if(desc!="") {
+						tasklist.ParentDesc=desc+"/"+tasklist.ParentDesc;
+					}
+				}
 				retVal.Add(tasklist);
 			}
 			return retVal;

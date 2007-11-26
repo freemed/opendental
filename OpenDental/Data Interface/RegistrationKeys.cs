@@ -153,8 +153,8 @@ namespace OpenDental {
 				LEFT JOIN patient ON patient.PatNum=tempRegKeys.PatNum
 				WHERE IsMissing=1
 				OR Date_ > '0001-01-01'
-				ORDER BY tempRegKeys.PatNum;";
-			//DROP TABLE IF EXISTS tempRegKeys;
+				ORDER BY tempRegKeys.PatNum;
+				DROP TABLE IF EXISTS tempRegKeys;";
 			DataTable raw=General.GetTable(command);
 			DataRow row;
 			DateTime dateRepeatStop;

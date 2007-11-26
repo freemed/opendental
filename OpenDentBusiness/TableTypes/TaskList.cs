@@ -23,20 +23,12 @@ namespace OpenDentBusiness{
 		public TaskObjectType ObjectType;
 		///<summary>The date and time that this list was added.  Used to sort the list by the order entered.</summary>
 		public DateTime DateTimeEntry;
+		///<Summary>Not a database table.  A string description of the parents of this list.  Might look like this: MegaParent/Parent/  This string may then be tacked on before the Descript to indicate the heirarchy.  It will extend a max of 3 levels.  Only useful in the User tab.</Summary>
+		public string ParentDesc;
 
 		///<summary></summary>
 		public TaskList Copy(){
-			TaskList t=new TaskList();
-			t.TaskListNum=TaskListNum;
-			t.Descript=Descript;
-			t.Parent=Parent;
-			t.DateTL=DateTL;
-			t.IsRepeating=IsRepeating;
-			t.DateType=DateType;
-			t.FromNum=FromNum;
-			t.ObjectType=ObjectType;
-			t.DateTimeEntry=DateTimeEntry;
-			return t;
+			return (TaskList)MemberwiseClone();
 		}
 
 
