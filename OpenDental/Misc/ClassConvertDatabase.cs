@@ -6192,7 +6192,16 @@ namespace OpenDental{
 					) DEFAULT CHARSET=utf8";
 				General.NonQEx(command);
 				//supplyorder was altered later.
-
+				command="DROP TABLE IF EXISTS tasksubscription";
+				General.NonQEx(command);
+				command=@"CREATE TABLE tasksubscription (
+					TaskSubscriptionNum int NOT NULL auto_increment,
+					UserNum int NOT NULL,
+					TaskListNum int NOT NULL,
+					PRIMARY KEY (TaskSubscriptionNum),
+					INDEX (UserNum)
+					) DEFAULT CHARSET=utf8";
+				General.NonQEx(command);
 
 
 

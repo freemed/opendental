@@ -26,6 +26,7 @@ namespace OpenDental {
 			this.components = new System.ComponentModel.Container();
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(UserControlTasks));
 			this.tabContr = new System.Windows.Forms.TabControl();
+			this.tabUser = new System.Windows.Forms.TabPage();
 			this.tabMain = new System.Windows.Forms.TabPage();
 			this.tabRepeating = new System.Windows.Forms.TabPage();
 			this.tabDate = new System.Windows.Forms.TabPage();
@@ -46,7 +47,9 @@ namespace OpenDental {
 			this.menuItemDelete = new System.Windows.Forms.MenuItem();
 			this.menuItem2 = new System.Windows.Forms.MenuItem();
 			this.menuItemGoto = new System.Windows.Forms.MenuItem();
-			this.tabUser = new System.Windows.Forms.TabPage();
+			this.menuItemSubscribe = new System.Windows.Forms.MenuItem();
+			this.menuItem3 = new System.Windows.Forms.MenuItem();
+			this.menuItemUnsubscribe = new System.Windows.Forms.MenuItem();
 			this.ToolBarMain = new OpenDental.UI.ODToolBar();
 			this.tabContr.SuspendLayout();
 			this.SuspendLayout();
@@ -67,6 +70,15 @@ namespace OpenDental {
 			this.tabContr.Size = new System.Drawing.Size(941,23);
 			this.tabContr.TabIndex = 5;
 			this.tabContr.Click += new System.EventHandler(this.tabContr_Click);
+			// 
+			// tabUser
+			// 
+			this.tabUser.Location = new System.Drawing.Point(4,22);
+			this.tabUser.Name = "tabUser";
+			this.tabUser.Size = new System.Drawing.Size(933,0);
+			this.tabUser.TabIndex = 5;
+			this.tabUser.Text = "for User";
+			this.tabUser.UseVisualStyleBackColor = true;
 			// 
 			// tabMain
 			// 
@@ -192,7 +204,11 @@ namespace OpenDental {
             this.menuItemPaste,
             this.menuItemDelete,
             this.menuItem2,
+            this.menuItemSubscribe,
+            this.menuItemUnsubscribe,
+            this.menuItem3,
             this.menuItemGoto});
+			this.menuEdit.Popup += new System.EventHandler(this.menuEdit_Popup);
 			// 
 			// menuItemEdit
 			// 
@@ -236,18 +252,26 @@ namespace OpenDental {
 			// 
 			// menuItemGoto
 			// 
-			this.menuItemGoto.Index = 7;
+			this.menuItemGoto.Index = 10;
 			this.menuItemGoto.Text = "Go To";
 			this.menuItemGoto.Click += new System.EventHandler(this.menuItemGoto_Click);
 			// 
-			// tabUser
+			// menuItemSubscribe
 			// 
-			this.tabUser.Location = new System.Drawing.Point(4,22);
-			this.tabUser.Name = "tabUser";
-			this.tabUser.Size = new System.Drawing.Size(933,0);
-			this.tabUser.TabIndex = 5;
-			this.tabUser.Text = "for User";
-			this.tabUser.UseVisualStyleBackColor = true;
+			this.menuItemSubscribe.Index = 7;
+			this.menuItemSubscribe.Text = "Subscribe";
+			this.menuItemSubscribe.Click += new System.EventHandler(this.menuItemSubscribe_Click);
+			// 
+			// menuItem3
+			// 
+			this.menuItem3.Index = 9;
+			this.menuItem3.Text = "-";
+			// 
+			// menuItemUnsubscribe
+			// 
+			this.menuItemUnsubscribe.Index = 8;
+			this.menuItemUnsubscribe.Text = "Unsubscribe";
+			this.menuItemUnsubscribe.Click += new System.EventHandler(this.menuItemUnsubscribe_Click);
 			// 
 			// ToolBarMain
 			// 
@@ -301,5 +325,8 @@ namespace OpenDental {
 		private System.Windows.Forms.MenuItem menuItemGoto;
 		private System.Windows.Forms.ImageList imageListTree;
 		private System.Windows.Forms.TabPage tabUser;
+		private System.Windows.Forms.MenuItem menuItemSubscribe;
+		private System.Windows.Forms.MenuItem menuItemUnsubscribe;
+		private System.Windows.Forms.MenuItem menuItem3;
 	}
 }

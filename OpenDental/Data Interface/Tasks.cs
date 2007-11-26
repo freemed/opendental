@@ -15,14 +15,16 @@ namespace OpenDental{
 		///<summary></summary>
 		public static DateTime LastOpenDate;
 
-			
+		/*
 		///<summary>Gets all tasks for the trunk of the user tab.</summary>
 		public static List<Task> RefreshUserTrunk(int userNum) {
-
-
-
-			return new List<Task>();
-		}
+			string command="SELECT task.* FROM tasksubscription "
+				+"LEFT JOIN task ON task.TaskNum=tasksubscription.TaskNum "
+				+"WHERE tasksubscription.UserNum="+POut.PInt(userNum)
+				+" AND tasksubscription.TaskNum!=0 "
+				+"ORDER BY DateTimeEntry";
+			return RefreshAndFill(command);
+		}*/
 
 		///<summary>Gets all tasks for the main trunk.</summary>
 		public static List<Task> RefreshMainTrunk() {

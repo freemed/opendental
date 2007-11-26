@@ -171,6 +171,7 @@
     <Compile Include="Data Interface\ChartModule.cs" />
     <Compile Include="Data Interface\CanadianNetworks.cs" />
     <Compile Include="Data Interface\ClaimAttaches.cs" />
+    <Compile Include="Data Interface\TaskSubscriptions.cs" />
     <Compile Include="Data Interface\SupplyOrderItems.cs" />
     <Compile Include="Data Interface\SupplyOrders.cs" />
     <Compile Include="Data Interface\Supplies.cs" />

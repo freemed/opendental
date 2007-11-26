@@ -236,6 +236,7 @@ namespace OpenDental {
 			listMain.Items.Clear();
 			ListViewItem item;
 			string dateStr="";
+			string objDesc="";
 			for(int i=0;i<TaskListsList.Count;i++) {
 				dateStr="";
 				if(TaskListsList[i].DateTL.Year>1880
@@ -252,11 +253,14 @@ namespace OpenDental {
 						dateStr=TaskListsList[i].DateTL.ToString("MMMM")+" - ";
 					}
 				}
+				objDesc="";
+				if(tabContr.SelectedIndex==0){
+//todo: indicate fullpath
+				}
 				item=new ListViewItem(dateStr+TaskListsList[i].Descript,0);
 				item.ToolTipText=item.Text;
 				listMain.Items.Add(item);
 			}
-			string objDesc="";
 			for(int i=0;i<TasksList.Count;i++) {
 				//checked=1, unchecked=2
 				dateStr="";
@@ -336,7 +340,8 @@ namespace OpenDental {
 			}
 			else if(tabContr.SelectedIndex==0) {//user
 				TaskListsList=TaskLists.RefreshUserTrunk(Security.CurUser.UserNum);
-				TasksList=Tasks.RefreshUserTrunk(Security.CurUser.UserNum);
+				TasksList=new List<Task>();//no tasks in the user trunk
+					//Tasks.RefreshUserTrunk(Security.CurUser.UserNum);
 			}
 			else if(tabContr.SelectedIndex==1) {//main
 				TaskListsList=TaskLists.RefreshMainTrunk();
@@ -507,7 +512,7 @@ namespace OpenDental {
 					newTL.Parent=((TaskList)TreeHistory[TreeHistory.Count-1]).TaskListNum;
 					switch(tabContr.SelectedIndex) {
 						case 0://user
-							
+							//treat pasting just like it's the main tab, because not on the trunk.
 							break;
 						case 1://main
 							//even though usually only trunks are dated, we will leave the date alone in main
@@ -529,8 +534,9 @@ namespace OpenDental {
 					newTL.Parent=0;
 					switch(tabContr.SelectedIndex) {
 						case 0://user
-							
-							break;
+							//this should be treated like a subscription rather than a paste.  Implement later.  But for now:
+							MsgBox.Show(this,"Not allowed to paste directly to the trunk of this tab.  Try using the subscription feature instead.");
+							return;
 						case 1://main
 							newTL.DateTL=DateTime.MinValue;
 							newTL.DateType=TaskDateType.None;
@@ -560,8 +566,7 @@ namespace OpenDental {
 					newTL.IsRepeating=false;
 				}
 				newTL.FromNum=0;//always
-				if(tabContr.SelectedIndex==1) {
-//or 0?
+				if(tabContr.SelectedIndex==0 || tabContr.SelectedIndex==1) {//user or main
 					DuplicateExistingList(newTL,true);
 				}
 				else {
@@ -574,7 +579,7 @@ namespace OpenDental {
 					newT.TaskListNum=((TaskList)TreeHistory[TreeHistory.Count-1]).TaskListNum;
 					switch(tabContr.SelectedIndex) {
 						case 0://user
-							
+							//treat pasting just like it's the main tab, because not on the trunk.
 							break;
 						case 1://main
 							//even though usually only trunks are dated, we will leave the date alone in main
@@ -596,7 +601,9 @@ namespace OpenDental {
 					newT.TaskListNum=0;
 					switch(tabContr.SelectedIndex) {
 						case 0://user
-							
+							//this should be treated like a subscription rather than a paste.  Implement later.  But for now:
+							MsgBox.Show(this,"Tasks may not be pasted directly to the trunk of this tab.  Try pasting within a list instead.");
+							return;
 							break;
 						case 1://main
 							newT.DateTask=DateTime.MinValue;
@@ -650,9 +657,8 @@ namespace OpenDental {
 		}
 
 		///<summary>A recursive function that duplicates an entire existing TaskList.  For the initial loop, make changes to the original taskList before passing it in.  That way, Date and type are only set in initial loop.  All children preserve original dates and types.  The isRepeating value will be applied in all loops.  Also, make sure to change the parent num to the new one before calling this function.  The taskListNum will always change, because we are inserting new record into database.</summary>
-		private void DuplicateExistingList(TaskList newList,bool isInMain) {
+		private void DuplicateExistingList(TaskList newList,bool isInMainOrUser) {
 			//get all children:
-//todo: analyze these two functions for user tab:
 			List<TaskList> childLists=TaskLists.RefreshChildren(newList.TaskListNum);
 			List<Task> childTasks=Tasks.RefreshChildren(newList.TaskListNum);
 			TaskLists.InsertOrUpdate(newList,true);
@@ -667,11 +673,11 @@ namespace OpenDental {
 					childLists[i].IsRepeating=false;
 				}
 				childLists[i].FromNum=0;
-				if(!isInMain) {
+				if(!isInMainOrUser) {
 					childLists[i].DateTL=DateTime.MinValue;
 					childLists[i].DateType=TaskDateType.None;
 				}
-				DuplicateExistingList(childLists[i],isInMain);
+				DuplicateExistingList(childLists[i],isInMainOrUser);
 			}
 			for(int i=0;i<childTasks.Count;i++) {
 				childTasks[i].TaskListNum=newList.TaskListNum;
@@ -683,7 +689,7 @@ namespace OpenDental {
 					childTasks[i].IsRepeating=false;
 				}
 				childTasks[i].FromNum=0;
-				if(!isInMain) {
+				if(!isInMainOrUser) {
 					childTasks[i].DateTask=DateTime.MinValue;
 					childTasks[i].DateType=TaskDateType.None;
 				}
@@ -710,7 +716,6 @@ namespace OpenDental {
 		///<summary>A recursive function that deletes the specified list and all children.</summary>
 		private void DeleteEntireList(TaskList list) {
 			//get all children:
-//todo: analyze these two functions for user tab:
 			List<TaskList> childLists=TaskLists.RefreshChildren(list.TaskListNum);
 			List<Task> childTasks=Tasks.RefreshChildren(list.TaskListNum);
 			for(int i=0;i<childLists.Count;i++) {
@@ -810,6 +815,24 @@ namespace OpenDental {
 			else {//there is an item on our clipboard
 				menuItemPaste.Enabled=true;
 			}
+			//Subscriptions----------------------------------------------------------
+			if(listMain.SelectedIndices.Count==0) {
+				menuItemSubscribe.Enabled=false;
+				menuItemUnsubscribe.Enabled=false;
+			}
+			else if(tabContr.SelectedIndex==0){//user
+				menuItemSubscribe.Enabled=false;
+				menuItemUnsubscribe.Enabled=true;
+			}
+			else if(tabContr.SelectedIndex==1 && clickedI < TaskListsList.Count) {//main and tasklist
+				menuItemSubscribe.Enabled=true;
+				menuItemUnsubscribe.Enabled=false;
+			}
+			else{//either any other tab, or a task on the main list
+				menuItemSubscribe.Enabled=false;
+				menuItemUnsubscribe.Enabled=false;
+			}
+			//Goto---------------------------------------------------------------
 			if(listMain.SelectedIndices.Count>0
 				&& clickedI >= TaskListsList.Count)//is task
 			{
@@ -824,6 +847,39 @@ namespace OpenDental {
 			else {
 				menuItemGoto.Enabled=false;//not a task
 			}
+		}
+
+		private void OnSubscribe_Click(){
+			//won't even get to this point unless it is a list
+			//if(clickedI < TaskListsList.Count) {//is list
+			try{
+				TaskSubscriptions.SubscList(TaskListsList[clickedI].TaskListNum,Security.CurUser.UserNum);
+			}
+			catch(ApplicationException ex){//for example, if already subscribed.
+				MessageBox.Show(ex.Message);
+				return;
+			}
+			/*}
+			else {//Is task
+				try {
+					TaskSubscriptions.SubscTask(TasksList[clickedI-TaskListsList.Count].TaskNum,Security.CurUser.UserNum);
+				}
+				catch(ApplicationException ex) {
+					MessageBox.Show(ex.Message);
+					return;
+				}
+			}*/
+			MsgBox.Show(this,"Done");
+		}
+
+		private void OnUnsubscribe_Click() {
+			//if(clickedI < TaskListsList.Count) {//is list
+			TaskSubscriptions.UnsubscList(TaskListsList[clickedI].TaskListNum,Security.CurUser.UserNum);
+			//}
+			//else {//Is task
+			//	TaskSubscriptions.UnsubscTask(TasksList[clickedI-TaskListsList.Count].TaskNum,Security.CurUser.UserNum);
+			//}
+			FillMain();
 		}
 
 		private void menuItemEdit_Click(object sender,System.EventArgs e) {
@@ -846,6 +902,14 @@ namespace OpenDental {
 			OnDelete_Click();
 		}
 
+		private void menuItemSubscribe_Click(object sender,EventArgs e) {
+			OnSubscribe_Click();
+		}
+
+		private void menuItemUnsubscribe_Click(object sender,EventArgs e) {
+			OnUnsubscribe_Click();
+		}
+
 		private void menuItemGoto_Click(object sender,System.EventArgs e) {
 			OnGoto_Click();
 		}
@@ -864,6 +928,8 @@ namespace OpenDental {
 			FillTree();
 			FillMain();
 		}
+
+		
 
 		
 

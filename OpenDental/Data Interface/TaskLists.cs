@@ -12,10 +12,12 @@ namespace OpenDental{
 
 		///<summary>Gets all task lists for the trunk of the user tab.</summary>
 		public static List<TaskList> RefreshUserTrunk(int userNum){
-
-
-
-			return new List<TaskList>();
+			string command="SELECT tasklist.* FROM tasksubscription "
+				+"LEFT JOIN tasklist ON tasklist.TaskListNum=tasksubscription.TaskListNum "
+				+"WHERE tasksubscription.UserNum="+POut.PInt(userNum)
+				+" AND tasksubscription.TaskListNum!=0 "
+				+"ORDER BY DateTimeEntry";
+			return RefreshAndFill(command);
 		}
 
 		///<summary>Gets all task lists for the main trunk.</summary>
