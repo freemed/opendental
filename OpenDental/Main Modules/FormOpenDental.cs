@@ -325,6 +325,10 @@ namespace OpenDental{
 			this.menuItemDockRight = new System.Windows.Forms.MenuItem();
 			this.imageListMain = new System.Windows.Forms.ImageList(this.components);
 			this.menuPatient = new System.Windows.Forms.ContextMenu();
+			this.menuLabel = new System.Windows.Forms.ContextMenu();
+			this.menuEmail = new System.Windows.Forms.ContextMenu();
+			this.menuLetter = new System.Windows.Forms.ContextMenu();
+			this.timerDisabledKey = new System.Windows.Forms.Timer(this.components);
 			this.ToolBarMain = new OpenDental.UI.ODToolBar();
 			this.userControlTasks1 = new OpenDental.UserControlTasks();
 			this.ContrManage2 = new OpenDental.ContrStaff();
@@ -337,10 +341,6 @@ namespace OpenDental{
 			this.lightSignalGrid1 = new OpenDental.UI.LightSignalGrid();
 			this.myOutlookBar = new OpenDental.OutlookBar();
 			this.smartCardWatcher1 = new OpenDental.SmartCards.SmartCardWatcher();
-			this.menuLabel = new System.Windows.Forms.ContextMenu();
-			this.menuEmail = new System.Windows.Forms.ContextMenu();
-			this.menuLetter = new System.Windows.Forms.ContextMenu();
-			this.timerDisabledKey = new System.Windows.Forms.Timer(this.components);
 			this.SuspendLayout();
 			// 
 			// timerTimeIndic
@@ -1026,6 +1026,24 @@ namespace OpenDental{
 			// 
 			this.menuPatient.Popup += new System.EventHandler(this.menuPatient_Popup);
 			// 
+			// menuLabel
+			// 
+			this.menuLabel.Popup += new System.EventHandler(this.menuLabel_Popup);
+			// 
+			// menuEmail
+			// 
+			this.menuEmail.Popup += new System.EventHandler(this.menuEmail_Popup);
+			// 
+			// menuLetter
+			// 
+			this.menuLetter.Popup += new System.EventHandler(this.menuLetter_Popup);
+			// 
+			// timerDisabledKey
+			// 
+			this.timerDisabledKey.Enabled = true;
+			this.timerDisabledKey.Interval = 600000;
+			this.timerDisabledKey.Tick += new System.EventHandler(this.timerDisabledKey_Tick);
+			// 
 			// ToolBarMain
 			// 
 			this.ToolBarMain.Dock = System.Windows.Forms.DockStyle.Top;
@@ -1117,7 +1135,7 @@ namespace OpenDental{
 			this.myOutlookBar.ImageList = this.imageList32;
 			this.myOutlookBar.Location = new System.Drawing.Point(0,0);
 			this.myOutlookBar.Name = "myOutlookBar";
-			this.myOutlookBar.Size = new System.Drawing.Size(51,600);
+			this.myOutlookBar.Size = new System.Drawing.Size(51,579);
 			this.myOutlookBar.TabIndex = 18;
 			this.myOutlookBar.Text = "outlookBar1";
 			this.myOutlookBar.ButtonClicked += new OpenDental.ButtonClickedEventHandler(this.myOutlookBar_ButtonClicked);
@@ -1126,27 +1144,9 @@ namespace OpenDental{
 			// 
 			this.smartCardWatcher1.PatientCardInserted += new OpenDental.SmartCards.PatientCardInsertedEventHandler(this.OnPatientCardInserted);
 			// 
-			// menuLabel
-			// 
-			this.menuLabel.Popup += new System.EventHandler(this.menuLabel_Popup);
-			// 
-			// menuEmail
-			// 
-			this.menuEmail.Popup += new System.EventHandler(this.menuEmail_Popup);
-			// 
-			// menuLetter
-			// 
-			this.menuLetter.Popup += new System.EventHandler(this.menuLetter_Popup);
-			// 
-			// timerDisabledKey
-			// 
-			this.timerDisabledKey.Enabled = true;
-			this.timerDisabledKey.Interval = 600000;
-			this.timerDisabledKey.Tick += new System.EventHandler(this.timerDisabledKey_Tick);
-			// 
 			// FormOpenDental
 			// 
-			this.ClientSize = new System.Drawing.Size(982,600);
+			this.ClientSize = new System.Drawing.Size(982,579);
 			this.Controls.Add(this.ToolBarMain);
 			this.Controls.Add(this.panelSplitter);
 			this.Controls.Add(this.userControlTasks1);
