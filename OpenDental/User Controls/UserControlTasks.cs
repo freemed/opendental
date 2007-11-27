@@ -404,6 +404,10 @@ namespace OpenDental {
 		}
 
 		private void OnAddList_Click() {
+			if(tabContr.SelectedIndex==0 && TreeHistory.Count==0){//trunk of user tab
+				MsgBox.Show(this,"Not allowed to add a task list to the trunk of the user tab.  Either use the subscription feature, or add it to a child list.");
+				return;
+			}
 			TaskList cur=new TaskList();
 			//if this is a child of any other taskList
 			if(TreeHistory.Count>0) {
@@ -427,7 +431,6 @@ namespace OpenDental {
 			if(tabContr.SelectedIndex==2) {//repeating
 				cur.IsRepeating=true;
 			}
-//todo: user tasklist
 			FormTaskListEdit FormT=new FormTaskListEdit(cur);
 			FormT.IsNew=true;
 			FormT.ShowDialog();
@@ -435,6 +438,10 @@ namespace OpenDental {
 		}
 
 		private void OnAddTask_Click() {
+			if(tabContr.SelectedIndex==0 && TreeHistory.Count==0) {//trunk of user tab
+				MsgBox.Show(this,"Not allowed to add a task to the trunk of the user tab.  Add it to a child list instead.");
+				return;
+			}
 			Task cur=new Task();
 			//if this is a child of any taskList
 			if(TreeHistory.Count>0) {
@@ -458,7 +465,6 @@ namespace OpenDental {
 			if(tabContr.SelectedIndex==2) {//repeating
 				cur.IsRepeating=true;
 			}
-//todo: user task
 			FormTaskEdit FormT=new FormTaskEdit(cur);
 			FormT.IsNew=true;
 			FormT.ShowDialog();
@@ -544,7 +550,7 @@ namespace OpenDental {
 					newTL.Parent=0;
 					switch(tabContr.SelectedIndex) {
 						case 0://user
-							//this should be treated like a subscription rather than a paste.  Implement later.  But for now:
+							//maybe we should treat this like a subscription rather than a paste.  Implement later.  For now:
 							MsgBox.Show(this,"Not allowed to paste directly to the trunk of this tab.  Try using the subscription feature instead.");
 							return;
 						case 1://main
@@ -611,10 +617,9 @@ namespace OpenDental {
 					newT.TaskListNum=0;
 					switch(tabContr.SelectedIndex) {
 						case 0://user
-							//this should be treated like a subscription rather than a paste.  Implement later.  But for now:
+							//never allowed to have a task on the user trunk.
 							MsgBox.Show(this,"Tasks may not be pasted directly to the trunk of this tab.  Try pasting within a list instead.");
 							return;
-							break;
 						case 1://main
 							newT.DateTask=DateTime.MinValue;
 							newT.DateType=TaskDateType.None;
@@ -861,7 +866,6 @@ namespace OpenDental {
 
 		private void OnSubscribe_Click(){
 			//won't even get to this point unless it is a list
-			//if(clickedI < TaskListsList.Count) {//is list
 			try{
 				TaskSubscriptions.SubscList(TaskListsList[clickedI].TaskListNum,Security.CurUser.UserNum);
 			}
@@ -869,26 +873,11 @@ namespace OpenDental {
 				MessageBox.Show(ex.Message);
 				return;
 			}
-			/*}
-			else {//Is task
-				try {
-					TaskSubscriptions.SubscTask(TasksList[clickedI-TaskListsList.Count].TaskNum,Security.CurUser.UserNum);
-				}
-				catch(ApplicationException ex) {
-					MessageBox.Show(ex.Message);
-					return;
-				}
-			}*/
 			MsgBox.Show(this,"Done");
 		}
 
 		private void OnUnsubscribe_Click() {
-			//if(clickedI < TaskListsList.Count) {//is list
 			TaskSubscriptions.UnsubscList(TaskListsList[clickedI].TaskListNum,Security.CurUser.UserNum);
-			//}
-			//else {//Is task
-			//	TaskSubscriptions.UnsubscTask(TasksList[clickedI-TaskListsList.Count].TaskNum,Security.CurUser.UserNum);
-			//}
 			FillMain();
 		}
 
