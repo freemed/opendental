@@ -67,7 +67,8 @@ namespace OpenDental{
 		private System.Windows.Forms.Label label1;
 		private CheckBox checkTaskListAlwaysShow;
 		private Label label13;
-		private ComboBox comboPriority;// Required designer variable.
+		private ComboBox comboPriority;
+		private CheckBox checkTasksCheckOnStartup;// Required designer variable.
 		private List<Def> posAdjTypes;
 
 		///<summary></summary>
@@ -100,6 +101,8 @@ namespace OpenDental{
 			this.checkTreatPlanShowGraphics = new System.Windows.Forms.CheckBox();
 			this.checkTreatPlanShowCompleted = new System.Windows.Forms.CheckBox();
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
+			this.label13 = new System.Windows.Forms.Label();
+			this.comboPriority = new System.Windows.Forms.ComboBox();
 			this.checkBox5 = new System.Windows.Forms.CheckBox();
 			this.checkTreatPlanShowIns = new System.Windows.Forms.CheckBox();
 			this.groupBox5 = new System.Windows.Forms.GroupBox();
@@ -147,8 +150,7 @@ namespace OpenDental{
 			this.butCancel = new OpenDental.UI.Button();
 			this.butOK = new OpenDental.UI.Button();
 			this.checkTaskListAlwaysShow = new System.Windows.Forms.CheckBox();
-			this.label13 = new System.Windows.Forms.Label();
-			this.comboPriority = new System.Windows.Forms.ComboBox();
+			this.checkTasksCheckOnStartup = new System.Windows.Forms.CheckBox();
 			this.groupBox1.SuspendLayout();
 			this.groupBox5.SuspendLayout();
 			this.groupBox4.SuspendLayout();
@@ -251,6 +253,25 @@ namespace OpenDental{
 			this.groupBox1.TabIndex = 48;
 			this.groupBox1.TabStop = false;
 			this.groupBox1.Text = "Treatment Plan module";
+			// 
+			// label13
+			// 
+			this.label13.Location = new System.Drawing.Point(3,158);
+			this.label13.Name = "label13";
+			this.label13.Size = new System.Drawing.Size(221,15);
+			this.label13.TabIndex = 75;
+			this.label13.Text = "Priority indicating \"declined\"";
+			this.label13.TextAlign = System.Drawing.ContentAlignment.TopRight;
+			// 
+			// comboPriority
+			// 
+			this.comboPriority.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboPriority.FormattingEnabled = true;
+			this.comboPriority.Location = new System.Drawing.Point(225,154);
+			this.comboPriority.MaxDropDownItems = 30;
+			this.comboPriority.Name = "comboPriority";
+			this.comboPriority.Size = new System.Drawing.Size(163,21);
+			this.comboPriority.TabIndex = 74;
 			// 
 			// checkBox5
 			// 
@@ -495,7 +516,7 @@ namespace OpenDental{
 			// 
 			// label4
 			// 
-			this.label4.Location = new System.Drawing.Point(457,506);
+			this.label4.Location = new System.Drawing.Point(457,523);
 			this.label4.Name = "label4";
 			this.label4.Size = new System.Drawing.Size(298,17);
 			this.label4.TabIndex = 64;
@@ -718,7 +739,7 @@ namespace OpenDental{
 			this.butLanguages.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butLanguages.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butLanguages.CornerRadius = 4F;
-			this.butLanguages.Location = new System.Drawing.Point(758,503);
+			this.butLanguages.Location = new System.Drawing.Point(758,520);
 			this.butLanguages.Name = "butLanguages";
 			this.butLanguages.Size = new System.Drawing.Size(88,23);
 			this.butLanguages.TabIndex = 63;
@@ -777,29 +798,22 @@ namespace OpenDental{
 			this.checkTaskListAlwaysShow.Text = "Always show Task List";
 			this.checkTaskListAlwaysShow.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
-			// label13
+			// checkTasksCheckOnStartup
 			// 
-			this.label13.Location = new System.Drawing.Point(3,158);
-			this.label13.Name = "label13";
-			this.label13.Size = new System.Drawing.Size(221,15);
-			this.label13.TabIndex = 75;
-			this.label13.Text = "Priority indicating \"declined\"";
-			this.label13.TextAlign = System.Drawing.ContentAlignment.TopRight;
-			// 
-			// comboPriority
-			// 
-			this.comboPriority.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboPriority.FormattingEnabled = true;
-			this.comboPriority.Location = new System.Drawing.Point(225,154);
-			this.comboPriority.MaxDropDownItems = 30;
-			this.comboPriority.Name = "comboPriority";
-			this.comboPriority.Size = new System.Drawing.Size(163,21);
-			this.comboPriority.TabIndex = 74;
+			this.checkTasksCheckOnStartup.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkTasksCheckOnStartup.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.checkTasksCheckOnStartup.Location = new System.Drawing.Point(514,501);
+			this.checkTasksCheckOnStartup.Name = "checkTasksCheckOnStartup";
+			this.checkTasksCheckOnStartup.Size = new System.Drawing.Size(332,17);
+			this.checkTasksCheckOnStartup.TabIndex = 75;
+			this.checkTasksCheckOnStartup.Text = "Check for new user tasks on startup";
+			this.checkTasksCheckOnStartup.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// FormMisc
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.ClientSize = new System.Drawing.Size(893,699);
+			this.Controls.Add(this.checkTasksCheckOnStartup);
 			this.Controls.Add(this.checkTaskListAlwaysShow);
 			this.Controls.Add(this.label11);
 			this.Controls.Add(this.comboShowID);
@@ -911,6 +925,7 @@ namespace OpenDental{
 				}
 			}
 			checkTaskListAlwaysShow.Checked=PrefB.GetBool("TaskListAlwaysShowsAtBottom");
+			checkTasksCheckOnStartup.Checked=PrefB.GetBool("TasksCheckOnStartup");
 			for(int i=0;i<DefB.Short[(int)DefCat.TxPriorities].Length;i++){
 				comboPriority.Items.Add(DefB.Short[(int)DefCat.TxPriorities][i].ItemName);
 				if(PrefB.GetInt("TreatPlanPriorityForDeclined")==DefB.Short[(int)DefCat.TxPriorities][i].DefNum){
@@ -1006,6 +1021,7 @@ namespace OpenDental{
 				| Prefs.UpdateInt("FinanceChargeAdjustmentType",posAdjTypes[comboFinanceChargeAdjType.SelectedIndex].DefNum)
 				| Prefs.UpdateInt("BrokenAppointmentAdjustmentType",posAdjTypes[comboBrokenApptAdjType.SelectedIndex].DefNum)
 				| Prefs.UpdateBool("TaskListAlwaysShowsAtBottom", checkTaskListAlwaysShow.Checked)
+				| Prefs.UpdateBool("TasksCheckOnStartup", checkTasksCheckOnStartup.Checked)
 				| Prefs.UpdateInt("TreatPlanPriorityForDeclined",DefB.Short[(int)DefCat.TxPriorities][comboPriority.SelectedIndex].DefNum)
 				)
 			{

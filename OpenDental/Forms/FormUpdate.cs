@@ -591,6 +591,9 @@ namespace OpenDental{
 
 		private void butCheck2_Click(object sender,EventArgs e) {
 			Cursor=Cursors.WaitCursor;
+			groupBuild.Visible=false;
+			groupStable.Visible=false;
+			groupBeta.Visible=false;
 			textConnectionMessage.Text=Lan.g(this,"Attempting to connect to web service......");
 			Application.DoEvents();
 			//prepare the xml document to send--------------------------------------------------------------------------------------
@@ -637,6 +640,21 @@ namespace OpenDental{
 			if(node!=null) {
 				textConnectionMessage.Text=node.InnerText;
 				MessageBox.Show(node.InnerText,"Error");
+				return;
+			}
+			node=doc.SelectSingleNode("//KeyDisabled");
+			if(node==null) {
+				//no error, and no disabled message
+				if(Prefs.UpdateBool("RegistrationKeyIsDisabled",false)) {//this is the only place in the program where this happens.
+					DataValid.SetInvalid(InvalidTypes.Prefs);
+				}
+			}
+			else {
+				textConnectionMessage.Text=node.InnerText;
+				MessageBox.Show(node.InnerText);
+				if(Prefs.UpdateBool("RegistrationKeyIsDisabled",true)) {//this is the only place in the program where this happens.
+					DataValid.SetInvalid(InvalidTypes.Prefs);
+				}
 				return;
 			}
 			node=doc.SelectSingleNode("//BuildAvailable");

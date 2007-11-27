@@ -190,6 +190,7 @@ namespace OpenDental{
 		private ContextMenu menuLetter;
 		private Point OriginalMousePos;
 		private MenuItem menuItemCustomerManage;
+		private System.Windows.Forms.Timer timerDisabledKey;
 		///<summary>This list will only contain events for this computer where the users clicked to disable a popup for a specified period of time.  So it won't typically have many items in it.</summary>
 		private List<PopupEvent> PopupEventList;
 
@@ -311,10 +312,10 @@ namespace OpenDental{
 			this.menuItemMergeDatabases = new System.Windows.Forms.MenuItem();
 			this.menuItemCustomerManage = new System.Windows.Forms.MenuItem();
 			this.menuItemHelp = new System.Windows.Forms.MenuItem();
+			this.menuItemRemote = new System.Windows.Forms.MenuItem();
 			this.menuItemHelpWindows = new System.Windows.Forms.MenuItem();
 			this.menuItemHelpContents = new System.Windows.Forms.MenuItem();
 			this.menuItemHelpIndex = new System.Windows.Forms.MenuItem();
-			this.menuItemRemote = new System.Windows.Forms.MenuItem();
 			this.menuItemUpdate = new System.Windows.Forms.MenuItem();
 			this.imageList32 = new System.Windows.Forms.ImageList(this.components);
 			this.timerSignals = new System.Windows.Forms.Timer(this.components);
@@ -339,6 +340,7 @@ namespace OpenDental{
 			this.menuLabel = new System.Windows.Forms.ContextMenu();
 			this.menuEmail = new System.Windows.Forms.ContextMenu();
 			this.menuLetter = new System.Windows.Forms.ContextMenu();
+			this.timerDisabledKey = new System.Windows.Forms.Timer(this.components);
 			this.SuspendLayout();
 			// 
 			// timerTimeIndic
@@ -926,37 +928,37 @@ namespace OpenDental{
 			// 
 			this.menuItemHelp.Index = 7;
 			this.menuItemHelp.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
+            this.menuItemRemote,
             this.menuItemHelpWindows,
             this.menuItemHelpContents,
             this.menuItemHelpIndex,
-            this.menuItemRemote,
             this.menuItemUpdate});
 			this.menuItemHelp.Text = "&Help";
 			// 
+			// menuItemRemote
+			// 
+			this.menuItemRemote.Index = 0;
+			this.menuItemRemote.Text = "Online Support";
+			this.menuItemRemote.Click += new System.EventHandler(this.menuItemRemote_Click);
+			// 
 			// menuItemHelpWindows
 			// 
-			this.menuItemHelpWindows.Index = 0;
+			this.menuItemHelpWindows.Index = 1;
 			this.menuItemHelpWindows.Text = "Local Help-Windows";
 			this.menuItemHelpWindows.Click += new System.EventHandler(this.menuItemHelpWindows_Click);
 			// 
 			// menuItemHelpContents
 			// 
-			this.menuItemHelpContents.Index = 1;
+			this.menuItemHelpContents.Index = 2;
 			this.menuItemHelpContents.Text = "Online Help - Contents";
 			this.menuItemHelpContents.Click += new System.EventHandler(this.menuItemHelpContents_Click);
 			// 
 			// menuItemHelpIndex
 			// 
-			this.menuItemHelpIndex.Index = 2;
+			this.menuItemHelpIndex.Index = 3;
 			this.menuItemHelpIndex.Shortcut = System.Windows.Forms.Shortcut.ShiftF1;
 			this.menuItemHelpIndex.Text = "Online Help - Index";
 			this.menuItemHelpIndex.Click += new System.EventHandler(this.menuItemHelpIndex_Click);
-			// 
-			// menuItemRemote
-			// 
-			this.menuItemRemote.Index = 3;
-			this.menuItemRemote.Text = "Remote Support Now";
-			this.menuItemRemote.Click += new System.EventHandler(this.menuItemRemote_Click);
 			// 
 			// menuItemUpdate
 			// 
@@ -1135,6 +1137,12 @@ namespace OpenDental{
 			// menuLetter
 			// 
 			this.menuLetter.Popup += new System.EventHandler(this.menuLetter_Popup);
+			// 
+			// timerDisabledKey
+			// 
+			this.timerDisabledKey.Enabled = true;
+			this.timerDisabledKey.Interval = 600000;
+			this.timerDisabledKey.Tick += new System.EventHandler(this.timerDisabledKey_Tick);
 			// 
 			// FormOpenDental
 			// 
@@ -2523,6 +2531,13 @@ namespace OpenDental{
 			ProcessSignals();
 		}
 
+		private void timerDisabledKey_Tick(object sender,EventArgs e) {
+			if(PrefB.GetBoolSilent("RegistrationKeyIsDisabled",false)) {
+				MessageBox.Show("Registration key has been disabled.  You are using an unauthorized version of this program.","Warning",
+					MessageBoxButtons.OK,MessageBoxIcon.Warning);
+			}
+		}
+
 		///<summary>Gets the encrypted connection string for the Oracle database from a config file.</summary>
 		public bool GetOraConfig() {
 			if(!File.Exists("ODOraConfig.xml")) {
@@ -3299,6 +3314,26 @@ namespace OpenDental{
 		}
 
 		//Help
+		private void menuItemRemote_Click(object sender,System.EventArgs e) {
+			try {
+				Process.Start("http://www.open-dent.com/contact.html");
+			}
+			catch {
+				MsgBox.Show(this,"Could not find file.");
+			}
+			/*
+			if(!MsgBox.Show(this,true,"A remote connection will now be attempted. Do NOT continue unless you are already on the phone with us.  Do you want to continue?"))
+			{
+				return;
+			}
+			try{
+				Process.Start("remoteclient.exe");//Network streaming remote client or any other similar client
+			}
+			catch{
+				MsgBox.Show(this,"Could not find file.");
+			}*/
+		}
+
 		private void menuItemHelpWindows_Click(object sender, System.EventArgs e) {
 			try{
 				Process.Start("Help.chm");
@@ -3323,19 +3358,6 @@ namespace OpenDental{
 			}
 			catch{
 				MessageBox.Show("Could not find file.");
-			}
-		}
-
-		private void menuItemRemote_Click(object sender, System.EventArgs e) {
-			if(!MsgBox.Show(this,true,"A remote connection will now be attempted. Do NOT continue unless you are already on the phone with us.  Do you want to continue?"))
-			{
-				return;
-			}
-			try{
-				Process.Start("remoteclient.exe");//Network streaming remote client or any other similar client
-			}
-			catch{
-				MsgBox.Show(this,"Could not find file.");
 			}
 		}
 
@@ -3384,6 +3406,8 @@ namespace OpenDental{
 				}
 			}
 		}
+
+		
 
 		
 

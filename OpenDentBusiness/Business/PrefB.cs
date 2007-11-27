@@ -86,6 +86,17 @@ namespace OpenDentBusiness {
 			return PIn.PBool(((Pref)HList[prefName]).ValueString);
 		}
 
+		///<Summary>Gets a pref of type bool, but will not throw an exception if null or not found.  Indicate whether the silent default is true or false.</Summary>
+		public static bool GetBoolSilent(string prefName,bool silentDefault) {
+			if(HList==null) {
+				return silentDefault;
+			}
+			if(!HList.ContainsKey(prefName)) {
+				return silentDefault;
+			}
+			return PIn.PBool(((Pref)HList[prefName]).ValueString);
+		}
+
 		///<summary>Gets a pref of type string.</summary>
 		public static string GetString(string prefName) {
 			if(!HList.ContainsKey(prefName)) {

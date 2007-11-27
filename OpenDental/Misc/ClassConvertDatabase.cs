@@ -6103,6 +6103,17 @@ namespace OpenDental{
 				command="UPDATE preference SET ValueString = '5.4.1.0' WHERE PrefName = 'DataBaseVersion'";
 				General.NonQEx(command);
 			}
+			To5_4_7();
+		}
+
+		private void To5_4_7() {
+			if(FromVersion<new Version("5.4.7.0")) {
+				string command;
+				command = "INSERT INTO preference VALUES('RegistrationKeyIsDisabled','0')";
+				General.NonQEx(command);
+				command="UPDATE preference SET ValueString = '5.4.7.0' WHERE PrefName = 'DataBaseVersion'";
+				General.NonQEx(command);
+			}
 			To5_5_0();
 		}
 
@@ -6202,7 +6213,8 @@ namespace OpenDental{
 					INDEX (UserNum)
 					) DEFAULT CHARSET=utf8";
 				General.NonQEx(command);
-
+				command = "INSERT INTO preference VALUES('TasksCheckOnStartup','0')";
+				General.NonQEx(command);
 
 
 
