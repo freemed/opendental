@@ -153,6 +153,7 @@
     <Compile Include="TableTypes\CanadianExtract.cs" />
     <Compile Include="TableTypes\CanadianNetwork.cs" />
     <Compile Include="TableTypes\ClaimAttach.cs" />
+    <Compile Include="TableTypes\TaskAncestor.cs" />
     <Compile Include="TableTypes\TaskSubscription.cs" />
     <Compile Include="TableTypes\SupplyOrderItem.cs" />
     <Compile Include="TableTypes\SupplyOrder.cs" />

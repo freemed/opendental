@@ -6215,6 +6215,17 @@ namespace OpenDental{
 				General.NonQEx(command);
 				command = "INSERT INTO preference VALUES('TasksCheckOnStartup','0')";
 				General.NonQEx(command);
+				command="DROP TABLE IF EXISTS taskancestor";
+				General.NonQEx(command);
+				command=@"CREATE TABLE taskancestor (
+					TaskAncestorNum int NOT NULL auto_increment,
+					TaskNum int NOT NULL,
+					TaskListNum int NOT NULL,
+					PRIMARY KEY (TaskAncestorNum),
+					INDEX (TaskNum),
+					INDEX (TaskListNum)
+					) DEFAULT CHARSET=utf8";
+				General.NonQEx(command);
 
 
 
