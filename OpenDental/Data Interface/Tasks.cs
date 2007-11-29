@@ -90,6 +90,12 @@ namespace OpenDental{
 			return RefreshAndFill(command);
 		}
 
+		///<summary>Only used once when first synching all the tasks for taskAncestors.  Then, never used again.</summary>
+		public static List<Task> RefreshAll(){
+			string command="SELECT * FROM task WHERE TaskListNum != 0";
+			return RefreshAndFill(command);
+		}
+
 		private static List<Task> RefreshAndFill(string command){
 			DataTable table=General.GetTable(command);
 			List<Task> retVal=new List<Task>();
@@ -180,13 +186,16 @@ namespace OpenDental{
 			else{
 				Update(task);
 			}
+			//need to optimize this later to skip unless Insert or TaskListNumChanged
+			TaskAncestors.Synch(task);
 		}
 
 		///<summary>Deleting a task never causes a problem, so no dependencies are checked.</summary>
 		public static void Delete(Task task){
-			string command= "DELETE from task WHERE TaskNum = '"
-				+POut.PInt(task.TaskNum)+"'";
+			string command= "DELETE from task WHERE TaskNum = "+POut.PInt(task.TaskNum);
  			General.NonQ(command);
+			command="DELETE from taskancestor WHERE TaskNum = "+POut.PInt(task.TaskNum);
+			General.NonQ(command);
 		}
 
 

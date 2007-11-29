@@ -46,10 +46,10 @@ namespace OpenDental {
 			this.menuItemPaste = new System.Windows.Forms.MenuItem();
 			this.menuItemDelete = new System.Windows.Forms.MenuItem();
 			this.menuItem2 = new System.Windows.Forms.MenuItem();
-			this.menuItemGoto = new System.Windows.Forms.MenuItem();
 			this.menuItemSubscribe = new System.Windows.Forms.MenuItem();
-			this.menuItem3 = new System.Windows.Forms.MenuItem();
 			this.menuItemUnsubscribe = new System.Windows.Forms.MenuItem();
+			this.menuItem3 = new System.Windows.Forms.MenuItem();
+			this.menuItemGoto = new System.Windows.Forms.MenuItem();
 			this.ToolBarMain = new OpenDental.UI.ODToolBar();
 			this.tabContr.SuspendLayout();
 			this.SuspendLayout();
@@ -157,6 +157,7 @@ namespace OpenDental {
 			this.imageListTree.Images.SetKeyName(0,"TaskList.gif");
 			this.imageListTree.Images.SetKeyName(1,"checkBoxChecked.gif");
 			this.imageListTree.Images.SetKeyName(2,"checkBoxUnchecked.gif");
+			this.imageListTree.Images.SetKeyName(3,"TaskListHighlight.gif");
 			// 
 			// listMain
 			// 
@@ -250,28 +251,28 @@ namespace OpenDental {
 			this.menuItem2.Index = 6;
 			this.menuItem2.Text = "-";
 			// 
-			// menuItemGoto
-			// 
-			this.menuItemGoto.Index = 10;
-			this.menuItemGoto.Text = "Go To";
-			this.menuItemGoto.Click += new System.EventHandler(this.menuItemGoto_Click);
-			// 
 			// menuItemSubscribe
 			// 
 			this.menuItemSubscribe.Index = 7;
 			this.menuItemSubscribe.Text = "Subscribe";
 			this.menuItemSubscribe.Click += new System.EventHandler(this.menuItemSubscribe_Click);
 			// 
-			// menuItem3
-			// 
-			this.menuItem3.Index = 9;
-			this.menuItem3.Text = "-";
-			// 
 			// menuItemUnsubscribe
 			// 
 			this.menuItemUnsubscribe.Index = 8;
 			this.menuItemUnsubscribe.Text = "Unsubscribe";
 			this.menuItemUnsubscribe.Click += new System.EventHandler(this.menuItemUnsubscribe_Click);
+			// 
+			// menuItem3
+			// 
+			this.menuItem3.Index = 9;
+			this.menuItem3.Text = "-";
+			// 
+			// menuItemGoto
+			// 
+			this.menuItemGoto.Index = 10;
+			this.menuItemGoto.Text = "Go To";
+			this.menuItemGoto.Click += new System.EventHandler(this.menuItemGoto_Click);
 			// 
 			// ToolBarMain
 			// 

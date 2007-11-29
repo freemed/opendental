@@ -76,7 +76,16 @@ namespace OpenDental {
 		}
 
 		private void UserControlTasks_Load(object sender,System.EventArgs e) {
-			
+			if(!PrefB.GetBool("TaskAncestorsAllSetInVersion55")) {
+				if(!MsgBox.Show(this,true,"A one-time routine needs to be run.  It will take a few minutes.  Do you have time right now?")){
+					return;
+				}
+				Cursor=Cursors.WaitCursor;
+				TaskAncestors.SynchAll();
+				Prefs.UpdateBool("TaskAncestorsAllSetInVersion55",true);
+				DataValid.SetInvalid(InvalidTypes.Prefs);
+				Cursor=Cursors.Default;
+			}
 		}
 
 		///<summary></summary>
@@ -244,6 +253,7 @@ namespace OpenDental {
 			ListViewItem item;
 			string dateStr="";
 			string objDesc="";
+			int imageindex;
 			for(int i=0;i<TaskListsList.Count;i++) {
 				dateStr="";
 				if(TaskListsList[i].DateTL.Year>1880
@@ -264,7 +274,11 @@ namespace OpenDental {
 				if(tabContr.SelectedIndex==0){//user tab
 					objDesc=TaskListsList[i].ParentDesc;
 				}
-				item=new ListViewItem(dateStr+objDesc+TaskListsList[i].Descript,0);
+				imageindex=0;
+				if(TaskListsList[i].NewTaskCount>0){
+					imageindex=3;//orange
+				}
+				item=new ListViewItem(dateStr+objDesc+TaskListsList[i].Descript,imageindex);
 				item.ToolTipText=item.Text;
 				listMain.Items.Add(item);
 			}

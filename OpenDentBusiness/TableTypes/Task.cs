@@ -30,19 +30,7 @@ namespace OpenDentBusiness{
 		
 		///<summary></summary>
 		public Task Copy(){
-			Task t=new Task();
-			t.TaskNum=TaskNum;
-			t.TaskListNum=TaskListNum;
-			t.DateTask=DateTask;
-			t.KeyNum=KeyNum;
-			t.Descript=Descript;
-			t.TaskStatus=TaskStatus;
-			t.IsRepeating=IsRepeating;
-			t.DateType=DateType;
-			t.FromNum=FromNum;
-			t.ObjectType=ObjectType;
-			t.DateTimeEntry=DateTimeEntry;
-			return t;
+			return (Task)MemberwiseClone();
 		}
 
 	

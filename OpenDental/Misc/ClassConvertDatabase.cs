@@ -6226,6 +6226,8 @@ namespace OpenDental{
 					INDEX (TaskListNum)
 					) DEFAULT CHARSET=utf8";
 				General.NonQEx(command);
+				command = "INSERT INTO preference VALUES('TaskAncestorsAllSetInVersion55','0')";
+				General.NonQEx(command);
 
 
 

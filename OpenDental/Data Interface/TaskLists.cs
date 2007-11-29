@@ -12,12 +12,18 @@ namespace OpenDental{
 
 		///<summary>Gets all task lists for the trunk of the user tab.</summary>
 		public static List<TaskList> RefreshUserTrunk(int userNum){
-			string command="SELECT tasklist.*,t2.Descript,t3.Descript FROM tasksubscription "
+			string command="SELECT tasklist.*,"
+				+"(SELECT COUNT(*) FROM taskancestor,task WHERE taskancestor.TaskListNum=tasklist.TaskListNum "
+				+"AND task.TaskNum=taskancestor.TaskNum AND task.TaskStatus=0),"
+				+"t2.Descript,t3.Descript FROM tasksubscription "
 				+"LEFT JOIN tasklist ON tasklist.TaskListNum=tasksubscription.TaskListNum "
 				+"LEFT JOIN tasklist t2 ON t2.TaskListNum=tasklist.Parent "
 				+"LEFT JOIN tasklist t3 ON t3.TaskListNum=t2.Parent "
+				//+"LEFT JOIN taskancestor ON taskancestor.TaskList=tasklist.TaskList "
+				//+"LEFT JOIN task ON task.TaskNum=taskancestor.TaskNum AND task.TaskStatus=0 "
 				+"WHERE tasksubscription.UserNum="+POut.PInt(userNum)
 				+" AND tasksubscription.TaskListNum!=0 "
+				+"GROUP BY tasklist.TaskListNum "
 				+"ORDER BY DateTimeEntry";
 			return RefreshAndFill(command);
 		}
@@ -110,12 +116,14 @@ namespace OpenDental{
 				tasklist.ObjectType     = (TaskObjectType)PIn.PInt(table.Rows[i][7].ToString());
 				tasklist.DateTimeEntry  = PIn.PDateT(table.Rows[i][8].ToString());
 				tasklist.ParentDesc="";
+				tasklist.NewTaskCount=0;
 				if(table.Columns.Count>9){
-					desc=PIn.PString(table.Rows[i][9].ToString());
+					tasklist.NewTaskCount=PIn.PInt(table.Rows[i][9].ToString());
+					desc=PIn.PString(table.Rows[i][10].ToString());
 					if(desc!=""){
 						tasklist.ParentDesc=desc+"/";
 					}
-					desc=PIn.PString(table.Rows[i][10].ToString());
+					desc=PIn.PString(table.Rows[i][11].ToString());
 					if(desc!="") {
 						tasklist.ParentDesc=desc+"/"+tasklist.ParentDesc;
 					}
