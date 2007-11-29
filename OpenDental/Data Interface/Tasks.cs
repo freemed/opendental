@@ -198,7 +198,15 @@ namespace OpenDental{
 			General.NonQ(command);
 		}
 
-
+		public static int UserTasksCount(int userNum){
+			string command="SELECT COUNT(*) FROM taskancestor,task,tasklist,tasksubscription "
+				+"WHERE taskancestor.TaskListNum=tasklist.TaskListNum "
+				+"AND task.TaskNum=taskancestor.TaskNum "
+				+"AND tasksubscription.TaskListNum=tasklist.TaskListNum "
+				+"AND tasksubscription.UserNum="+POut.PInt(userNum)
+				+" AND task.TaskStatus=0";
+			return PIn.PInt(General.GetCount(command));
+		}
 	
 	
 
