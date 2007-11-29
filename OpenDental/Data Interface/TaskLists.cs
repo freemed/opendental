@@ -30,7 +30,10 @@ namespace OpenDental{
 
 		///<summary>Gets all task lists for the main trunk.</summary>
 		public static List<TaskList> RefreshMainTrunk() {
-			string command="SELECT * FROM tasklist "
+			string command="SELECT tasklist.*,"
+				+"(SELECT COUNT(*) FROM taskancestor,task WHERE taskancestor.TaskListNum=tasklist.TaskListNum "
+				+"AND task.TaskNum=taskancestor.TaskNum AND task.TaskStatus=0) "
+				+"FROM tasklist "
 				+"WHERE Parent=0 "
 				+"AND DateTL < '1880-01-01' "
 				+"AND IsRepeating=0 "
@@ -40,7 +43,10 @@ namespace OpenDental{
 
 		///<summary>Gets all task lists for the repeating trunk.</summary>
 		public static List<TaskList> RefreshRepeatingTrunk() {
-			string command="SELECT * FROM tasklist "
+			string command="SELECT tasklist.*,"
+				+"(SELECT COUNT(*) FROM taskancestor,task WHERE taskancestor.TaskListNum=tasklist.TaskListNum "
+				+"AND task.TaskNum=taskancestor.TaskNum AND task.TaskStatus=0) "
+				+"FROM tasklist "
 				+"WHERE Parent=0 "
 				+"AND DateTL < '1880-01-01' "
 				+"AND IsRepeating=1 "
@@ -51,7 +57,10 @@ namespace OpenDental{
 		///<summary>0 is not allowed, because that would be a trunk.</summary>
 		public static List<TaskList> RefreshChildren(int parent){
 			string command=
-				"SELECT * FROM tasklist "
+				"SELECT tasklist.*,"
+				+"(SELECT COUNT(*) FROM taskancestor,task WHERE taskancestor.TaskListNum=tasklist.TaskListNum "
+				+"AND task.TaskNum=taskancestor.TaskNum AND task.TaskStatus=0) "
+				+"FROM tasklist "
 				+"WHERE Parent="+POut.PInt(parent)
 				+" ORDER BY DateTimeEntry";
 			return RefreshAndFill(command);
@@ -60,7 +69,10 @@ namespace OpenDental{
 		///<summary>All repeating items for one date type with no heirarchy.</summary>
 		public static List<TaskList> RefreshRepeating(TaskDateType dateType){
 			string command=
-				"SELECT * FROM tasklist "
+				"SELECT tasklist.*,"
+				+"(SELECT COUNT(*) FROM taskancestor,task WHERE taskancestor.TaskListNum=tasklist.TaskListNum "
+				+"AND task.TaskNum=taskancestor.TaskNum AND task.TaskStatus=0) "
+				+"FROM tasklist "
 				+"WHERE IsRepeating=1 "
 				+"AND DateType="+POut.PInt((int)dateType)+" "
 				+"ORDER BY DateTimeEntry";
@@ -84,7 +96,10 @@ namespace OpenDental{
 				dateTo=dateFrom.AddMonths(1).AddDays(-1);
 			}
 			string command=
-				"SELECT * FROM tasklist "
+				"SELECT tasklist.*,"
+				+"(SELECT COUNT(*) FROM taskancestor,task WHERE taskancestor.TaskListNum=tasklist.TaskListNum "
+				+"AND task.TaskNum=taskancestor.TaskNum AND task.TaskStatus=0) "
+				+"FROM tasklist "
 				+"WHERE DateTL >= "+POut.PDate(dateFrom)
 				+" AND DateTL <= "+POut.PDate(dateTo)
 				+" AND DateType="+POut.PInt((int)dateType)
@@ -119,6 +134,8 @@ namespace OpenDental{
 				tasklist.NewTaskCount=0;
 				if(table.Columns.Count>9){
 					tasklist.NewTaskCount=PIn.PInt(table.Rows[i][9].ToString());
+				}
+				if(table.Columns.Count>10){
 					desc=PIn.PString(table.Rows[i][10].ToString());
 					if(desc!=""){
 						tasklist.ParentDesc=desc+"/";
