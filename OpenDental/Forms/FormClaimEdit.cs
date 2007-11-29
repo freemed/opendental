@@ -3474,7 +3474,7 @@ namespace OpenDental{
 			if(!ClaimIsValid())
 				return;
 			UpdateClaim();
-			ClaimSendQueueItem[] listQueue=Claims.GetQueueList(ClaimCur.ClaimNum);
+			ClaimSendQueueItem[] listQueue=Claims.GetQueueList(ClaimCur.ClaimNum,ClaimCur.ClinicNum);
 			if(listQueue[0].NoSendElect) {
 				MsgBox.Show(this,"This carrier is marked to not receive e-claims.");
 				//Later: we need to let user send anyway, using all 0's for electronic id.
@@ -3595,7 +3595,7 @@ namespace OpenDental{
 			}
 			UpdateClaim();
 			if(listClaimStatus.SelectedIndex==2){//waiting to send
-				ClaimSendQueueItem[] listQueue=Claims.GetQueueList(ClaimCur.ClaimNum);
+				ClaimSendQueueItem[] listQueue=Claims.GetQueueList(ClaimCur.ClaimNum,ClaimCur.ClinicNum);
 				if(listQueue[0].NoSendElect) {
 					DialogResult=DialogResult.OK;
 					return;
@@ -3613,15 +3613,17 @@ namespace OpenDental{
 				//}
 			}
 			if(listClaimStatus.SelectedIndex==5){//Received
-				Payment PaymentCur=new Payment();
-				PaymentCur.PayDate=DateTime.Today;
-				PaymentCur.PatNum=PatCur.PatNum;
-				Payments.Insert(PaymentCur);
-				FormProviderIncTrans FormPIT=new FormProviderIncTrans();
-				FormPIT.IsNew=true;
-				FormPIT.PaymentCur=PaymentCur;
-				FormPIT.PatNum=PatCur.PatNum;
-				FormPIT.ShowDialog();
+				if(PrefB.GetBool("ProviderIncomeTransferShows")){
+					Payment PaymentCur=new Payment();
+					PaymentCur.PayDate=DateTime.Today;
+					PaymentCur.PatNum=PatCur.PatNum;
+					Payments.Insert(PaymentCur);
+					FormProviderIncTrans FormPIT=new FormProviderIncTrans();
+					FormPIT.IsNew=true;
+					FormPIT.PaymentCur=PaymentCur;
+					FormPIT.PatNum=PatCur.PatNum;
+					FormPIT.ShowDialog();
+				}
 			}
 			DialogResult=DialogResult.OK;
 		}

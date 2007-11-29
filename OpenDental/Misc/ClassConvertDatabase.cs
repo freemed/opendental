@@ -6230,7 +6230,7 @@ namespace OpenDental{
 				General.NonQEx(command);
 				command = "INSERT INTO preference VALUES('ApptExclamationShowForUnsentIns','0')";
 				General.NonQEx(command);
-				command = "INSERT INTO preference VALUES('TreatPlanShowDiscount','1')";
+				command = "INSERT INTO preference VALUES('ProviderIncomeTransferShows','0')";
 				General.NonQEx(command);
 
 

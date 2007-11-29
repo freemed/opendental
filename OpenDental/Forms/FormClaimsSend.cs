@@ -52,6 +52,9 @@ namespace OpenDental{
 		int OriginalMouseY;
 		bool headingPrinted;
 		int headingPrintH;
+		private ComboBox comboClinic;
+		private Label labelClinic;
+		private ContextMenu contextMenuEclaims;
 		private ContextMenu contextMenuHist;
 
 		///<summary></summary>
@@ -85,15 +88,18 @@ namespace OpenDental{
 			this.label1 = new System.Windows.Forms.Label();
 			this.panelSplitter = new System.Windows.Forms.Panel();
 			this.panelHistory = new System.Windows.Forms.Panel();
-			this.gridHistory = new OpenDental.UI.ODGrid();
 			this.panel1 = new System.Windows.Forms.Panel();
+			this.comboClinic = new System.Windows.Forms.ComboBox();
+			this.labelClinic = new System.Windows.Forms.Label();
+			this.gridMain = new OpenDental.UI.ODGrid();
+			this.gridHistory = new OpenDental.UI.ODGrid();
 			this.ToolBarHistory = new OpenDental.UI.ODToolBar();
 			this.butDropTo = new OpenDental.UI.Button();
 			this.butDropFrom = new OpenDental.UI.Button();
 			this.textDateFrom = new OpenDental.ValidDate();
 			this.textDateTo = new OpenDental.ValidDate();
-			this.gridMain = new OpenDental.UI.ODGrid();
 			this.ToolBarMain = new OpenDental.UI.ODToolBar();
+			this.contextMenuEclaims = new System.Windows.Forms.ContextMenu();
 			this.panelHistory.SuspendLayout();
 			this.panel1.SuspendLayout();
 			this.SuspendLayout();
@@ -184,6 +190,47 @@ namespace OpenDental{
 			this.panelHistory.Size = new System.Drawing.Size(972,286);
 			this.panelHistory.TabIndex = 51;
 			// 
+			// panel1
+			// 
+			this.panel1.BackColor = System.Drawing.SystemColors.ControlDark;
+			this.panel1.Controls.Add(this.ToolBarHistory);
+			this.panel1.Location = new System.Drawing.Point(387,0);
+			this.panel1.Name = "panel1";
+			this.panel1.Size = new System.Drawing.Size(576,27);
+			this.panel1.TabIndex = 44;
+			// 
+			// comboClinic
+			// 
+			this.comboClinic.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboClinic.Location = new System.Drawing.Point(74,26);
+			this.comboClinic.MaxDropDownItems = 40;
+			this.comboClinic.Name = "comboClinic";
+			this.comboClinic.Size = new System.Drawing.Size(160,21);
+			this.comboClinic.TabIndex = 53;
+			this.comboClinic.SelectionChangeCommitted += new System.EventHandler(this.comboClinic_SelectionChangeCommitted);
+			// 
+			// labelClinic
+			// 
+			this.labelClinic.Location = new System.Drawing.Point(7,29);
+			this.labelClinic.Name = "labelClinic";
+			this.labelClinic.Size = new System.Drawing.Size(65,14);
+			this.labelClinic.TabIndex = 52;
+			this.labelClinic.Text = "Clinic";
+			this.labelClinic.TextAlign = System.Drawing.ContentAlignment.BottomRight;
+			// 
+			// gridMain
+			// 
+			this.gridMain.HScrollVisible = false;
+			this.gridMain.Location = new System.Drawing.Point(4,49);
+			this.gridMain.Name = "gridMain";
+			this.gridMain.ScrollValue = 0;
+			this.gridMain.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
+			this.gridMain.Size = new System.Drawing.Size(959,350);
+			this.gridMain.TabIndex = 32;
+			this.gridMain.Title = "Claims Waiting to Send";
+			this.gridMain.TranslationName = "TableQueue";
+			this.gridMain.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellDoubleClick);
+			// 
 			// gridHistory
 			// 
 			this.gridHistory.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -199,22 +246,13 @@ namespace OpenDental{
 			this.gridHistory.TranslationName = "TableClaimHistory";
 			this.gridHistory.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridHistory_CellDoubleClick);
 			// 
-			// panel1
-			// 
-			this.panel1.BackColor = System.Drawing.SystemColors.ControlDark;
-			this.panel1.Controls.Add(this.ToolBarHistory);
-			this.panel1.Location = new System.Drawing.Point(387,0);
-			this.panel1.Name = "panel1";
-			this.panel1.Size = new System.Drawing.Size(591,30);
-			this.panel1.TabIndex = 44;
-			// 
 			// ToolBarHistory
 			// 
 			this.ToolBarHistory.BackColor = System.Drawing.SystemColors.Control;
 			this.ToolBarHistory.ImageList = this.imageList1;
 			this.ToolBarHistory.Location = new System.Drawing.Point(1,1);
 			this.ToolBarHistory.Name = "ToolBarHistory";
-			this.ToolBarHistory.Size = new System.Drawing.Size(584,29);
+			this.ToolBarHistory.Size = new System.Drawing.Size(575,25);
 			this.ToolBarHistory.TabIndex = 43;
 			this.ToolBarHistory.ButtonClick += new OpenDental.UI.ODToolBarButtonClickEventHandler(this.ToolBarHistory_ButtonClick);
 			// 
@@ -262,26 +300,13 @@ namespace OpenDental{
 			this.textDateTo.Size = new System.Drawing.Size(81,20);
 			this.textDateTo.TabIndex = 37;
 			// 
-			// gridMain
-			// 
-			this.gridMain.HScrollVisible = false;
-			this.gridMain.Location = new System.Drawing.Point(4,31);
-			this.gridMain.Name = "gridMain";
-			this.gridMain.ScrollValue = 0;
-			this.gridMain.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
-			this.gridMain.Size = new System.Drawing.Size(959,368);
-			this.gridMain.TabIndex = 32;
-			this.gridMain.Title = "Claims Waiting to Send";
-			this.gridMain.TranslationName = "TableQueue";
-			this.gridMain.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellDoubleClick);
-			// 
 			// ToolBarMain
 			// 
 			this.ToolBarMain.Dock = System.Windows.Forms.DockStyle.Top;
 			this.ToolBarMain.ImageList = this.imageList1;
 			this.ToolBarMain.Location = new System.Drawing.Point(0,0);
 			this.ToolBarMain.Name = "ToolBarMain";
-			this.ToolBarMain.Size = new System.Drawing.Size(971,29);
+			this.ToolBarMain.Size = new System.Drawing.Size(971,25);
 			this.ToolBarMain.TabIndex = 31;
 			this.ToolBarMain.ButtonClick += new OpenDental.UI.ODToolBarButtonClickEventHandler(this.ToolBarMain_ButtonClick);
 			// 
@@ -289,6 +314,8 @@ namespace OpenDental{
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.ClientSize = new System.Drawing.Size(971,691);
+			this.Controls.Add(this.comboClinic);
+			this.Controls.Add(this.labelClinic);
 			this.Controls.Add(this.gridMain);
 			this.Controls.Add(this.panelHistory);
 			this.Controls.Add(this.panelSplitter);
@@ -325,7 +352,21 @@ namespace OpenDental{
 			//contextMenuHist=new ContextMenu();
 			//contextMenuHist.MenuItems.Add(Lan.g(this,"Show Raw Message"),new EventHandler(ShowRawMessage_Clicked));
 			//gridHistory.ContextMenu=contextMenuHist;
+			for(int i=0;i<Clearinghouses.List.Length;i++){
+				contextMenuEclaims.MenuItems.Add(Clearinghouses.List[i].Description,new EventHandler(Clearinghouse_Clicked));
+			}
 			LayoutToolBars();
+			if(PrefB.GetBool("EasyNoClinics")) {
+				comboClinic.Visible=false;
+				labelClinic.Visible=false;
+			}
+			else {
+				comboClinic.Items.Add(Lan.g(this,"All"));
+				comboClinic.SelectedIndex=0;
+				for(int i=0;i<Clinics.List.Length;i++) {
+					comboClinic.Items.Add(Clinics.List[i].Description);
+				}
+			}
 			FormClaimReports FormC=new FormClaimReports();
 			FormC.AutomaticMode=true;
 			FormC.ShowDialog();
@@ -348,7 +389,10 @@ namespace OpenDental{
 			button.DropDownMenu=contextMenuStatus;
 			ToolBarMain.Buttons.Add(button);*/
 			ToolBarMain.Buttons.Add(new ODToolBarButton(ODToolBarButtonStyle.Separator));
-			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Send E-Claims"),4,Lan.g(this,"Send claims Electronically"),"Eclaims"));
+			ODToolBarButton button=new ODToolBarButton(Lan.g(this,"Send E-Claims"),4,Lan.g(this,"Send claims Electronically"),"Eclaims");
+			button.Style=ODToolBarButtonStyle.DropDownButton;
+			button.DropDownMenu=contextMenuEclaims;
+			ToolBarMain.Buttons.Add(button);
 			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Get Reports"),5,Lan.g(this,"Get Reports from Other Clearinghouses"),"Reports"));
 			ToolBarMain.Buttons.Add(new ODToolBarButton(ODToolBarButtonStyle.Separator));
 			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Close"),-1,"","Close"));
@@ -388,8 +432,17 @@ namespace OpenDental{
 			DialogResult=DialogResult.OK;
 		}
 
+		private void Clearinghouse_Clicked(object sender, System.EventArgs e){
+			MenuItem menuitem=(MenuItem)sender;
+			OnEclaims_Click(Clearinghouses.List[menuitem.Index].ClearinghouseNum);
+		}
+
 		private void FillGrid(){
-			listQueue=Claims.GetQueueList();
+			int clinicNum=0;
+			if(!PrefB.GetBool("EasyNoClinics") && comboClinic.SelectedIndex!=0) {
+				clinicNum=Clinics.List[comboClinic.SelectedIndex-1].ClinicNum;
+			}
+			listQueue=Claims.GetQueueList(0,clinicNum);
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
 			ODGridColumn col=new ODGridColumn(Lan.g("TableQueue","Patient Name"),130);
@@ -453,7 +506,7 @@ namespace OpenDental{
 					OnLabels_Click();
 					break;
 				case "Eclaims":
-					OnEclaims_Click();
+					OnEclaims_Click(0);
 					break;
 				case "Reports":
 					OnReports_Click();
@@ -549,8 +602,19 @@ namespace OpenDental{
 			//}
 		}
 
-		private void OnEclaims_Click(){
-			Clearinghouse clearDefault=Clearinghouses.GetDefault();
+		///<Summary>Use clearinghouseNum of 0 to indicate automatic calculation of clearinghouses.</Summary>
+		private void OnEclaims_Click(int clearinghouseNum){
+			if(clearinghouseNum==0 && !PrefB.GetBool("EasyNoClinics")) {
+				MsgBox.Show(this,"When the Clinics option is enabled, you must use the dropdown list to select the clearinghouse to send to.");
+				return;
+			}
+			Clearinghouse clearDefault;
+			if(clearinghouseNum==0){
+				clearDefault=Clearinghouses.GetDefault();
+			}
+			else{
+				clearDefault=Clearinghouses.GetClearinghouse(clearinghouseNum);
+			}
 			if(clearDefault!=null && clearDefault.ISA08=="113504607" && Process.GetProcessesByName("TesiaLink").Length==0){
 				#if DEBUG
 					if(!MsgBox.Show(this,true,"TesiaLink is not started.  Create file anyway?")){
@@ -564,9 +628,7 @@ namespace OpenDental{
 			List<ClaimSendQueueItem> queueItems=new List<ClaimSendQueueItem>();//a list of queue items to send
 			if(gridMain.SelectedIndices.Length==0){
 				for(int i=0;i<listQueue.Length;i++){
-					if(//(listQueue[i].ClaimStatus=="W" || listQueue[i].ClaimStatus=="P")
-						!listQueue[i].NoSendElect
-						&& gridMain.Rows[i].Cells[3].Text=="")//no Missing Info
+					if(!listQueue[i].NoSendElect && gridMain.Rows[i].Cells[3].Text=="")//no Missing Info
 					{
 						gridMain.SetSelected(i,true);
 					}	
@@ -575,13 +637,20 @@ namespace OpenDental{
 					MsgBox.Show(this,"No claims to send.");
 					return;
 				}
+				if(clearinghouseNum!=0){
+					int[] selectedindices=(int[])gridMain.SelectedIndices.Clone();
+					for(int i=0;i<selectedindices.Length;i++) {
+						gridMain.Rows[selectedindices[i]].Cells[2].Text=clearDefault.Description;
+					}
+					gridMain.Invalidate();
+				}
 				if(!MsgBox.Show(this,true,"Send all selected e-claims?")){
+					FillGrid();
 					return;
 				}
 			}
 			for(int i=0;i<gridMain.SelectedIndices.Length;i++){
 				if(gridMain.Rows[gridMain.SelectedIndices[i]].Cells[3].Text!=""){
-					//tbQueue.Cell[4,tbQueue.SelectedIndices[i]]!=""){
 					MsgBox.Show(this,"Not allowed to send e-claims with missing information.");
 					return;
 				}
@@ -590,8 +659,13 @@ namespace OpenDental{
 					return;
 				}
 			}
+			ClaimSendQueueItem queueitem;
 			for(int i=0;i<gridMain.SelectedIndices.Length;i++){
-				queueItems.Add(listQueue[gridMain.SelectedIndices[i]]);
+				queueitem=listQueue[gridMain.SelectedIndices[i]].Copy();
+				if(clearinghouseNum!=0){
+					queueitem.ClearinghouseNum=clearinghouseNum;
+				}
+				queueItems.Add(queueitem);
 			}
 			Eclaims.Eclaims.SendBatches(queueItems);
 			//statuses changed to S in SendBatches
@@ -612,6 +686,10 @@ namespace OpenDental{
 		private void OnReports_Click(){
 			FormClaimReports FormC=new FormClaimReports();
 			FormC.ShowDialog();
+		}
+
+		private void comboClinic_SelectionChangeCommitted(object sender,EventArgs e) {
+			FillGrid();
 		}
 
 		private void FillHistory(){
@@ -939,6 +1017,8 @@ namespace OpenDental{
 			FormP.Print();
 			//MessageBox.Show(etrans.MessageText);
 		}
+
+		
 		
 
 	

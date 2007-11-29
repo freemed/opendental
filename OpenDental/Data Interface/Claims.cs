@@ -275,13 +275,14 @@ namespace OpenDental{
 			General.NonQ(command);
 		}
 
-		///<summary>Called from claimsend window and from Claim edit window.  Use -1 to get all waiting claims, or an actual claimnum to get just one claim.</summary>
+		/*
+		///<summary>Called from claimsend window and from Claim edit window.  Use 0 to get all waiting claims, or an actual claimnum to get just one claim.</summary>
 		public static ClaimSendQueueItem[] GetQueueList(){
-			return GetQueueList(0);
-		}
+			return GetQueueList(0,0);
+		}*/
 
-		///<summary>Called from claimsend window and from Claim edit window.  Use -1 to get all waiting claims, or an actual claimnum to get just one claim.</summary>
-		public static ClaimSendQueueItem[] GetQueueList(int claimNum){
+		///<summary>Called from claimsend window and from Claim edit window.  Use 0 to get all waiting claims, or an actual claimnum to get just one claim.</summary>
+		public static ClaimSendQueueItem[] GetQueueList(int claimNum,int clinicNum){
 			string command=
 				"SELECT claim.ClaimNum,carrier.NoSendElect"
 				+",CONCAT(CONCAT(CONCAT(concat(patient.LName,', '),patient.FName),' '),patient.MiddleI)"
@@ -291,10 +292,13 @@ namespace OpenDental{
 				+"Left join carrier on insplan.CarrierNum = carrier.CarrierNum "
 				+"Left join patient on patient.PatNum = claim.PatNum ";
 			if(claimNum==0){
-				command+="WHERE claim.ClaimStatus = 'W' OR claim.ClaimStatus = 'P' ";
+				command+="WHERE (claim.ClaimStatus = 'W' OR claim.ClaimStatus = 'P') ";
 			}
 			else{
 				command+="WHERE claim.ClaimNum="+POut.PInt(claimNum)+" ";
+			}
+			if(clinicNum>0) {
+				command+="AND claim.ClinicNum="+POut.PInt(clinicNum)+" ";
 			}
 			command+="ORDER BY insplan.IsMedical";//this puts the medical claims at the end, helping with the looping in X12.
 			//MessageBox.Show(string command);
@@ -531,6 +535,10 @@ namespace OpenDental{
 		public int ClearinghouseNum;
 		///<summary>True if the plan is a medical plan.</summary>
 		public bool IsMedical;
+
+		public ClaimSendQueueItem Copy(){
+			return (ClaimSendQueueItem)MemberwiseClone();
+		}
 	}
 
 	///<summary>Holds a list of claims to show in the Claim Check Edit window.</summary>

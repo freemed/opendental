@@ -65,7 +65,8 @@ namespace OpenDental{
 		private System.Windows.Forms.Label label1;
 		private CheckBox checkTaskListAlwaysShow;
 		private CheckBox checkTasksCheckOnStartup;
-		private CheckBox checkApptExclamation;// Required designer variable.
+		private CheckBox checkApptExclamation;
+		private CheckBox checkProviderIncomeShows;// Required designer variable.
 		private List<Def> posAdjTypes;
 
 		///<summary></summary>
@@ -145,6 +146,7 @@ namespace OpenDental{
 			this.butCancel = new OpenDental.UI.Button();
 			this.butOK = new OpenDental.UI.Button();
 			this.textStatementsCalcDueDate = new OpenDental.ValidNumber();
+			this.checkProviderIncomeShows = new System.Windows.Forms.CheckBox();
 			this.groupBox1.SuspendLayout();
 			this.groupBox5.SuspendLayout();
 			this.groupBox4.SuspendLayout();
@@ -246,6 +248,7 @@ namespace OpenDental{
 			// 
 			// groupBox5
 			// 
+			this.groupBox5.Controls.Add(this.checkProviderIncomeShows);
 			this.groupBox5.Controls.Add(this.label12);
 			this.groupBox5.Controls.Add(this.comboFinanceChargeAdjType);
 			this.groupBox5.Controls.Add(this.label10);
@@ -770,6 +773,20 @@ namespace OpenDental{
 			this.textStatementsCalcDueDate.TabIndex = 54;
 			this.textStatementsCalcDueDate.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
 			// 
+			// checkProviderIncomeShows
+			// 
+			this.checkProviderIncomeShows.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkProviderIncomeShows.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.checkProviderIncomeShows.Location = new System.Drawing.Point(6,245);
+			this.checkProviderIncomeShows.Name = "checkProviderIncomeShows";
+			this.checkProviderIncomeShows.Size = new System.Drawing.Size(381,17);
+			this.checkProviderIncomeShows.TabIndex = 74;
+			this.checkProviderIncomeShows.Text = "Show provider income transfer window after entering insurance payment";
+			this.checkProviderIncomeShows.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.toolTip1.SetToolTip(this.checkProviderIncomeShows,"Generally used with \"Balances don\'t subtract insurance estimate\"\r\nchecked to the " +
+        "upper right of this option in the \"Statements\" section.\r\nHowever, it will work w" +
+        "ell either way.");
+			// 
 			// FormMisc
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
@@ -895,6 +912,7 @@ namespace OpenDental{
 				}
 			}*/
 			checkApptExclamation.Checked=PrefB.GetBool("ApptExclamationShowForUnsentIns");
+			checkProviderIncomeShows.Checked=PrefB.GetBool("ProviderIncomeTransferShows");
 		}
 
 		private void checkRandomPrimaryKeys_Click(object sender, System.EventArgs e) {
@@ -988,6 +1006,7 @@ namespace OpenDental{
 				| Prefs.UpdateBool("TasksCheckOnStartup", checkTasksCheckOnStartup.Checked)
 				//| Prefs.UpdateInt("TreatPlanPriorityForDeclined",DefB.Short[(int)DefCat.TxPriorities][comboPriority.SelectedIndex].DefNum)
 				| Prefs.UpdateBool("ApptExclamationShowForUnsentIns", checkApptExclamation.Checked)
+				| Prefs.UpdateBool("ProviderIncomeTransferShows", checkProviderIncomeShows.Checked)
 				)
 			{
 				changed=true;
