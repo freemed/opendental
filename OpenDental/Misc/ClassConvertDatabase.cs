@@ -6228,7 +6228,8 @@ namespace OpenDental{
 				General.NonQEx(command);
 				command = "INSERT INTO preference VALUES('TaskAncestorsAllSetInVersion55','0')";
 				General.NonQEx(command);
-
+				command = "INSERT INTO preference VALUES('ApptExclamationShowForUnsentIns','0')";
+				General.NonQEx(command);
 
 
 

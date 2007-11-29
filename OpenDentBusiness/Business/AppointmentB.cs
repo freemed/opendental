@@ -166,21 +166,23 @@ namespace OpenDentBusiness{
 				command+="AND appointment.AptNum="+POut.PInt(aptNum);
 			}
 			DataTable rawProc=dcon.GetTable(command);
-			//procs for flag, InsNotSent
-			/*
-			command ="SELECT patient.PatNum, patient.Guarantor "
-				+"FROM patient,procedurecode,procedurelog,claimproc "
-				+"WHERE claimproc.procnum=procedurelog.procnum "
-				+"AND patient.PatNum=procedurelog.PatNum "
-				+"AND procedurelog.CodeNum=procedurecode.CodeNum "
-				+"AND claimproc.NoBillIns=0 "
-				+"AND procedurelog.ProcFee>0 "
-				+"AND claimproc.Status=6 "//estimate
-				+"AND procedurelog.procstatus=2 "
-				+"AND procedurelog.ProcDate >= "+POut.PDate(DateTime.Now.AddYears(-1))+" "
-				+"AND procedurelog.ProcDate <= "+POut.PDate(DateTime.Now)+ " "
-				+"GROUP BY patient.Guarantor"; 
-			DataTable rawInsProc=dcon.GetTable(command);*/
+			DataTable rawInsProc=null;
+			if(PrefB.GetBool("ApptExclamationShowForUnsentIns")){
+				//procs for flag, InsNotSent
+				command ="SELECT patient.PatNum, patient.Guarantor "
+					+"FROM patient,procedurecode,procedurelog,claimproc "
+					+"WHERE claimproc.procnum=procedurelog.procnum "
+					+"AND patient.PatNum=procedurelog.PatNum "
+					+"AND procedurelog.CodeNum=procedurecode.CodeNum "
+					+"AND claimproc.NoBillIns=0 "
+					+"AND procedurelog.ProcFee>0 "
+					+"AND claimproc.Status=6 "//estimate
+					+"AND procedurelog.procstatus=2 "
+					+"AND procedurelog.ProcDate >= "+POut.PDate(DateTime.Now.AddYears(-1))+" "
+					+"AND procedurelog.ProcDate <= "+POut.PDate(DateTime.Now)+ " "
+					+"GROUP BY patient.Guarantor"; 
+				rawInsProc=dcon.GetTable(command);
+			}
 			DateTime aptDate;
 			TimeSpan span;
 			int hours;
@@ -259,23 +261,23 @@ namespace OpenDentBusiness{
 						+((ContactMethod)PIn.PInt(raw.Rows[i]["PreferRecallMethod"].ToString())).ToString();
 				}
 				row["creditIns"]=raw.Rows[i]["CreditType"].ToString();
-				//figure out if pt's family has ins claims that need to be created
-				/*
 				bool InsToSend=false;
-				for(int j=0;j<rawInsProc.Rows.Count;j++){
-					if(raw.Rows[i]["PlanNum"].ToString()!="" && raw.Rows[i]["PlanNum"].ToString()!="0") {
-						if (raw.Rows[i]["Guarantor"].ToString()==rawInsProc.Rows[j]["Guarantor"].ToString() 
-							|| raw.Rows[i]["Guarantor"].ToString()==rawInsProc.Rows[j]["PatNum"].ToString())
-						{
-							InsToSend=true;
+				if(rawInsProc!=null){
+					//figure out if pt's family has ins claims that need to be created
+					for(int j=0;j<rawInsProc.Rows.Count;j++){
+						if(raw.Rows[i]["PlanNum"].ToString()!="" && raw.Rows[i]["PlanNum"].ToString()!="0") {
+							if (raw.Rows[i]["Guarantor"].ToString()==rawInsProc.Rows[j]["Guarantor"].ToString() 
+								|| raw.Rows[i]["Guarantor"].ToString()==rawInsProc.Rows[j]["PatNum"].ToString())
+							{
+								InsToSend=true;
+							}
 						}
 					}
 				}
-				if (InsToSend){
+				if(InsToSend){
 					row["creditIns"]+="!";
-				}*/
-				//else 
-				if(raw.Rows[i]["PlanNum"].ToString()!="" && raw.Rows[i]["PlanNum"].ToString()!="0"){
+				}
+				else if(raw.Rows[i]["PlanNum"].ToString()!="" && raw.Rows[i]["PlanNum"].ToString()!="0") {
 					row["creditIns"]+="I";
 				}
 				if(raw.Rows[i]["FamFinUrgNote"].ToString()!="") {
