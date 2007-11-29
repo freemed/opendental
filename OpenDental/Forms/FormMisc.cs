@@ -20,7 +20,6 @@ namespace OpenDental{
 		private System.Windows.Forms.CheckBox checkTreatPlanShowGraphics;
 		private System.Windows.Forms.CheckBox checkTreatPlanShowCompleted;
 		private System.Windows.Forms.GroupBox groupBox1;
-		private System.Windows.Forms.CheckBox checkTreatPlanShowIns;
 		private System.Windows.Forms.GroupBox groupBox5;
 		private System.Windows.Forms.Label label2;
 		private OpenDental.ValidNumber textStatementsCalcDueDate;
@@ -65,8 +64,6 @@ namespace OpenDental{
 		private ComboBox comboFinanceChargeAdjType;
 		private System.Windows.Forms.Label label1;
 		private CheckBox checkTaskListAlwaysShow;
-		private Label label13;
-		private ComboBox comboPriorityOld;
 		private CheckBox checkTasksCheckOnStartup;
 		private CheckBox checkApptExclamation;// Required designer variable.
 		private List<Def> posAdjTypes;
@@ -101,9 +98,6 @@ namespace OpenDental{
 			this.checkTreatPlanShowGraphics = new System.Windows.Forms.CheckBox();
 			this.checkTreatPlanShowCompleted = new System.Windows.Forms.CheckBox();
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
-			this.label13 = new System.Windows.Forms.Label();
-			this.comboPriorityOld = new System.Windows.Forms.ComboBox();
-			this.checkTreatPlanShowIns = new System.Windows.Forms.CheckBox();
 			this.groupBox5 = new System.Windows.Forms.GroupBox();
 			this.label12 = new System.Windows.Forms.Label();
 			this.comboFinanceChargeAdjType = new System.Windows.Forms.ComboBox();
@@ -125,6 +119,7 @@ namespace OpenDental{
 			this.label4 = new System.Windows.Forms.Label();
 			this.checkSolidBlockouts = new System.Windows.Forms.CheckBox();
 			this.groupBox4 = new System.Windows.Forms.GroupBox();
+			this.checkApptExclamation = new System.Windows.Forms.CheckBox();
 			this.label7 = new System.Windows.Forms.Label();
 			this.checkBrokenApptNote = new System.Windows.Forms.CheckBox();
 			this.comboBrokenApptAdjType = new System.Windows.Forms.ComboBox();
@@ -145,7 +140,6 @@ namespace OpenDental{
 			this.comboShowID = new System.Windows.Forms.ComboBox();
 			this.checkTaskListAlwaysShow = new System.Windows.Forms.CheckBox();
 			this.checkTasksCheckOnStartup = new System.Windows.Forms.CheckBox();
-			this.checkApptExclamation = new System.Windows.Forms.CheckBox();
 			this.butLanguages = new OpenDental.UI.Button();
 			this.textSigInterval = new OpenDental.ValidNumber();
 			this.butCancel = new OpenDental.UI.Button();
@@ -238,7 +232,6 @@ namespace OpenDental{
 			// 
 			// groupBox1
 			// 
-			this.groupBox1.Controls.Add(this.checkTreatPlanShowIns);
 			this.groupBox1.Controls.Add(this.label1);
 			this.groupBox1.Controls.Add(this.textTreatNote);
 			this.groupBox1.Controls.Add(this.checkTreatPlanShowGraphics);
@@ -246,42 +239,10 @@ namespace OpenDental{
 			this.groupBox1.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.groupBox1.Location = new System.Drawing.Point(26,9);
 			this.groupBox1.Name = "groupBox1";
-			this.groupBox1.Size = new System.Drawing.Size(408,146);
+			this.groupBox1.Size = new System.Drawing.Size(408,162);
 			this.groupBox1.TabIndex = 48;
 			this.groupBox1.TabStop = false;
 			this.groupBox1.Text = "Treatment Plan module";
-			// 
-			// label13
-			// 
-			this.label13.Location = new System.Drawing.Point(-5,399);
-			this.label13.Name = "label13";
-			this.label13.Size = new System.Drawing.Size(221,15);
-			this.label13.TabIndex = 75;
-			this.label13.Text = "Priority indicating \"declined\"";
-			this.label13.TextAlign = System.Drawing.ContentAlignment.TopRight;
-			this.label13.Visible = false;
-			// 
-			// comboPriorityOld
-			// 
-			this.comboPriorityOld.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboPriorityOld.FormattingEnabled = true;
-			this.comboPriorityOld.Location = new System.Drawing.Point(217,395);
-			this.comboPriorityOld.MaxDropDownItems = 30;
-			this.comboPriorityOld.Name = "comboPriorityOld";
-			this.comboPriorityOld.Size = new System.Drawing.Size(163,21);
-			this.comboPriorityOld.TabIndex = 74;
-			this.comboPriorityOld.Visible = false;
-			// 
-			// checkTreatPlanShowIns
-			// 
-			this.checkTreatPlanShowIns.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.checkTreatPlanShowIns.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkTreatPlanShowIns.Location = new System.Drawing.Point(28,117);
-			this.checkTreatPlanShowIns.Name = "checkTreatPlanShowIns";
-			this.checkTreatPlanShowIns.Size = new System.Drawing.Size(359,17);
-			this.checkTreatPlanShowIns.TabIndex = 48;
-			this.checkTreatPlanShowIns.Text = "Show Insurance Estimates";
-			this.checkTreatPlanShowIns.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// groupBox5
 			// 
@@ -528,6 +489,18 @@ namespace OpenDental{
 			this.groupBox4.TabStop = false;
 			this.groupBox4.Text = "Appointment module";
 			// 
+			// checkApptExclamation
+			// 
+			this.checkApptExclamation.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkApptExclamation.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.checkApptExclamation.Location = new System.Drawing.Point(2,107);
+			this.checkApptExclamation.Name = "checkApptExclamation";
+			this.checkApptExclamation.Size = new System.Drawing.Size(385,17);
+			this.checkApptExclamation.TabIndex = 72;
+			this.checkApptExclamation.Text = "Show ! at upper right of appts for ins not sent (might cause slowdown)";
+			this.checkApptExclamation.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkApptExclamation.UseVisualStyleBackColor = true;
+			// 
 			// label7
 			// 
 			this.label7.Location = new System.Drawing.Point(3,89);
@@ -732,18 +705,6 @@ namespace OpenDental{
 			this.checkTasksCheckOnStartup.Text = "Check for new user tasks on startup";
 			this.checkTasksCheckOnStartup.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
-			// checkApptExclamation
-			// 
-			this.checkApptExclamation.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.checkApptExclamation.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkApptExclamation.Location = new System.Drawing.Point(2,107);
-			this.checkApptExclamation.Name = "checkApptExclamation";
-			this.checkApptExclamation.Size = new System.Drawing.Size(385,17);
-			this.checkApptExclamation.TabIndex = 72;
-			this.checkApptExclamation.Text = "Show ! at upper right of appts for ins not sent (might cause slowdown)";
-			this.checkApptExclamation.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.checkApptExclamation.UseVisualStyleBackColor = true;
-			// 
 			// butLanguages
 			// 
 			this.butLanguages.AdjustImageLocation = new System.Drawing.Point(0,0);
@@ -813,9 +774,7 @@ namespace OpenDental{
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.ClientSize = new System.Drawing.Size(893,699);
-			this.Controls.Add(this.label13);
 			this.Controls.Add(this.checkTasksCheckOnStartup);
-			this.Controls.Add(this.comboPriorityOld);
 			this.Controls.Add(this.checkTaskListAlwaysShow);
 			this.Controls.Add(this.label11);
 			this.Controls.Add(this.comboShowID);
@@ -864,7 +823,8 @@ namespace OpenDental{
 			textTreatNote.Text=PrefB.GetString("TreatmentPlanNote");
 			checkTreatPlanShowGraphics.Checked=PrefB.GetBool("TreatPlanShowGraphics");
 			checkTreatPlanShowCompleted.Checked=PrefB.GetBool("TreatPlanShowCompleted");
-			checkTreatPlanShowIns.Checked=PrefB.GetBool("TreatPlanShowIns");
+			//checkTreatPlanShowIns.Checked=PrefB.GetBool("TreatPlanShowIns");
+			//checkTreatPlanShowDiscount.Checked=PrefB.GetBool("TreatPlanShowDiscount");
 			checkStatementShowReturnAddress.Checked=PrefB.GetBool("StatementShowReturnAddress");
 			checkShowCC.Checked=PrefB.GetBool("StatementShowCreditCard");
 			comboUseChartNum.Items.Add(Lan.g(this,"PatNum"));
@@ -997,7 +957,8 @@ namespace OpenDental{
 			if( Prefs.UpdateString("TreatmentPlanNote",textTreatNote.Text)
 				| Prefs.UpdateBool("TreatPlanShowGraphics",checkTreatPlanShowGraphics.Checked)
 				| Prefs.UpdateBool("TreatPlanShowCompleted",checkTreatPlanShowCompleted.Checked)
-				| Prefs.UpdateBool("TreatPlanShowIns",checkTreatPlanShowIns.Checked)
+				//| Prefs.UpdateBool("TreatPlanShowIns",checkTreatPlanShowIns.Checked)
+				//| Prefs.UpdateBool("TreatPlanShowDiscount",checkTreatPlanShowDiscount.Checked)
 				| Prefs.UpdateBool("StatementShowReturnAddress",checkStatementShowReturnAddress.Checked)
 				| Prefs.UpdateBool("StatementShowCreditCard",checkShowCC.Checked)
 				| Prefs.UpdateBool("StatementAccountsUseChartNumber",comboUseChartNum.SelectedIndex==1)

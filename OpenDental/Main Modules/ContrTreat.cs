@@ -118,6 +118,7 @@ namespace OpenDental{
 		private CheckBox checkShowTotals;
 		private Label labelFamily;
 		private int pagesPrinted;
+		private CheckBox checkShowDiscount;
 		private List<Claim> ClaimList;
 
 		///<summary></summary>
@@ -181,6 +182,7 @@ namespace OpenDental{
 			this.gridPreAuth = new OpenDental.UI.ODGrid();
 			this.gridPlans = new OpenDental.UI.ODGrid();
 			this.labelFamily = new System.Windows.Forms.Label();
+			this.checkShowDiscount = new System.Windows.Forms.CheckBox();
 			this.groupShow.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -205,6 +207,7 @@ namespace OpenDental{
 			// 
 			// groupShow
 			// 
+			this.groupShow.Controls.Add(this.checkShowDiscount);
 			this.groupShow.Controls.Add(this.checkShowTotals);
 			this.groupShow.Controls.Add(this.checkShowMaxDed);
 			this.groupShow.Controls.Add(this.checkShowSubtotals);
@@ -224,7 +227,7 @@ namespace OpenDental{
 			this.checkShowTotals.Checked = true;
 			this.checkShowTotals.CheckState = System.Windows.Forms.CheckState.Checked;
 			this.checkShowTotals.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkShowTotals.Location = new System.Drawing.Point(31,115);
+			this.checkShowTotals.Location = new System.Drawing.Point(31,118);
 			this.checkShowTotals.Name = "checkShowTotals";
 			this.checkShowTotals.Size = new System.Drawing.Size(128,15);
 			this.checkShowTotals.TabIndex = 24;
@@ -236,7 +239,7 @@ namespace OpenDental{
 			this.checkShowMaxDed.Checked = true;
 			this.checkShowMaxDed.CheckState = System.Windows.Forms.CheckState.Checked;
 			this.checkShowMaxDed.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkShowMaxDed.Location = new System.Drawing.Point(15,38);
+			this.checkShowMaxDed.Location = new System.Drawing.Point(15,33);
 			this.checkShowMaxDed.Name = "checkShowMaxDed";
 			this.checkShowMaxDed.Size = new System.Drawing.Size(154,17);
 			this.checkShowMaxDed.TabIndex = 23;
@@ -248,7 +251,7 @@ namespace OpenDental{
 			this.checkShowSubtotals.Checked = true;
 			this.checkShowSubtotals.CheckState = System.Windows.Forms.CheckState.Checked;
 			this.checkShowSubtotals.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkShowSubtotals.Location = new System.Drawing.Point(31,96);
+			this.checkShowSubtotals.Location = new System.Drawing.Point(31,101);
 			this.checkShowSubtotals.Name = "checkShowSubtotals";
 			this.checkShowSubtotals.Size = new System.Drawing.Size(128,17);
 			this.checkShowSubtotals.TabIndex = 22;
@@ -260,7 +263,7 @@ namespace OpenDental{
 			this.checkShowFees.Checked = true;
 			this.checkShowFees.CheckState = System.Windows.Forms.CheckState.Checked;
 			this.checkShowFees.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkShowFees.Location = new System.Drawing.Point(15,57);
+			this.checkShowFees.Location = new System.Drawing.Point(15,50);
 			this.checkShowFees.Name = "checkShowFees";
 			this.checkShowFees.Size = new System.Drawing.Size(146,17);
 			this.checkShowFees.TabIndex = 20;
@@ -272,7 +275,7 @@ namespace OpenDental{
 			this.checkShowIns.Checked = true;
 			this.checkShowIns.CheckState = System.Windows.Forms.CheckState.Checked;
 			this.checkShowIns.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkShowIns.Location = new System.Drawing.Point(31,77);
+			this.checkShowIns.Location = new System.Drawing.Point(31,67);
 			this.checkShowIns.Name = "checkShowIns";
 			this.checkShowIns.Size = new System.Drawing.Size(131,17);
 			this.checkShowIns.TabIndex = 19;
@@ -284,7 +287,7 @@ namespace OpenDental{
 			this.checkShowCompleted.Checked = true;
 			this.checkShowCompleted.CheckState = System.Windows.Forms.CheckState.Checked;
 			this.checkShowCompleted.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkShowCompleted.Location = new System.Drawing.Point(15,19);
+			this.checkShowCompleted.Location = new System.Drawing.Point(15,16);
 			this.checkShowCompleted.Name = "checkShowCompleted";
 			this.checkShowCompleted.Size = new System.Drawing.Size(154,17);
 			this.checkShowCompleted.TabIndex = 18;
@@ -570,6 +573,18 @@ namespace OpenDental{
 			this.labelFamily.Text = "Family";
 			this.labelFamily.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
+			// checkShowDiscount
+			// 
+			this.checkShowDiscount.Checked = true;
+			this.checkShowDiscount.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.checkShowDiscount.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.checkShowDiscount.Location = new System.Drawing.Point(31,84);
+			this.checkShowDiscount.Name = "checkShowDiscount";
+			this.checkShowDiscount.Size = new System.Drawing.Size(131,17);
+			this.checkShowDiscount.TabIndex = 25;
+			this.checkShowDiscount.Text = "Discount (PPO)";
+			this.checkShowDiscount.Click += new System.EventHandler(this.checkShowDiscount_Click);
+			// 
 			// ContrTreat
 			// 
 			this.Controls.Add(this.labelFamily);
@@ -614,7 +629,8 @@ namespace OpenDental{
 		///<summary>Only called on startup, but after local data loaded from db.</summary>
 		public void InitializeOnStartup(){
 			checkShowCompleted.Checked=PrefB.GetBool("TreatPlanShowCompleted");
-			checkShowIns.Checked=PrefB.GetBool("TreatPlanShowIns");
+			//checkShowIns.Checked=PrefB.GetBool("TreatPlanShowIns");
+			//checkShowDiscount.Checked=PrefB.GetBool("TreatPlanShowDiscount");
 			//showHidden=true;//shows hidden priorities
 			//can't use Lan.F(this);
 			Lan.C(this,new Control[]
@@ -623,6 +639,7 @@ namespace OpenDental{
 				groupShow,
 				checkShowCompleted,
 				checkShowIns,
+				checkShowDiscount,
 				checkShowMaxDed,
 				checkShowFees,
 				//checkShowStandard,
@@ -652,11 +669,14 @@ namespace OpenDental{
 			if(PrefB.GetBool("EasyHideInsurance")){
 				checkShowIns.Visible=false;
 				checkShowIns.Checked=false;
+				checkShowDiscount.Visible=false;
+				checkShowDiscount.Checked=false;
 				checkShowMaxDed.Visible=false;
 				//checkShowMaxDed.Checked=false;
 			}
 			else{
 				checkShowIns.Visible=true;
+				checkShowDiscount.Visible=true;
 				checkShowMaxDed.Visible=true;
 			}
 		}
@@ -729,6 +749,7 @@ namespace OpenDental{
 				ToolBarMain.Invalidate();
 				if(PatPlanList.Length==0){//patient doesn't have insurance
 					checkShowIns.Checked=false;
+					checkShowDiscount.Checked=false;
 					checkShowMaxDed.Visible=false;
 				}
 				else{//patient has insurance
@@ -736,6 +757,12 @@ namespace OpenDental{
 						checkShowMaxDed.Visible=true;
 						if(checkShowFees.Checked){//if fees are showing
 							checkShowIns.Checked=true;
+							if(InsPlans.GetPlan(PatPlanList[0].PlanNum,InsPlanList).PlanType=="p"){//ppo
+								checkShowDiscount.Checked=true;
+							}
+							else{
+								checkShowDiscount.Checked=false;
+							}
 						}
 					}
 				}
@@ -867,9 +894,11 @@ namespace OpenDental{
 				col=new ODGridColumn(Lan.g("TableTP","Sec Ins"),50,HorizontalAlignment.Right);
 				gridMain.Columns.Add(col);
 			}
-			if(checkShowFees.Checked){
+			if(checkShowDiscount.Checked){
 				col=new ODGridColumn(Lan.g("TableTP","Discount"),55,HorizontalAlignment.Right);
 				gridMain.Columns.Add(col);
+			}
+			if(checkShowFees.Checked){
 				col=new ODGridColumn(Lan.g("TableTP","Pat"),50,HorizontalAlignment.Right);
 				gridMain.Columns.Add(col);
 			}
@@ -1135,8 +1164,10 @@ namespace OpenDental{
 						row.Cells.Add(priIns.ToString("F"));
 						row.Cells.Add(secIns.ToString("F"));
 					}
-					if(checkShowFees.Checked){
+					if(checkShowDiscount.Checked){
 						row.Cells.Add(discount.ToString("F"));
+					}
+					if(checkShowFees.Checked){	
 						row.Cells.Add(pat.ToString("F"));
 					}
 					row.ColorText=DefB.GetColor(DefCat.TxPriorities,ProcListTP[i].Priority);
@@ -1205,8 +1236,10 @@ namespace OpenDental{
 							row.Cells.Add(subpriIns.ToString("F"));//pri
 							row.Cells.Add(subsecIns.ToString("F"));//sec
 						}
-						if(checkShowFees.Checked){
+						if(checkShowDiscount.Checked){
 							row.Cells.Add(subdiscount.ToString("F"));//
+						}
+						if(checkShowFees.Checked){
 							row.Cells.Add(subpat.ToString("F"));//pat portion
 						}
 						row.ColorText=DefB.GetColor(DefCat.TxPriorities,ProcListTP[i].Priority);
@@ -1270,11 +1303,13 @@ namespace OpenDental{
 						subsecIns+=ProcTPSelectList[i].SecInsAmt;
 						totSecIns+=ProcTPSelectList[i].SecInsAmt;
 					}
-					if(checkShowFees.Checked){
+					if(checkShowDiscount.Checked){
 						row.Cells.Add(ProcTPSelectList[i].Discount.ToString("F"));
-						row.Cells.Add(ProcTPSelectList[i].PatAmt.ToString("F"));
 						subdiscount+=ProcTPSelectList[i].Discount;
 						totDiscount+=ProcTPSelectList[i].Discount;
+					}
+					if(checkShowFees.Checked){
+						row.Cells.Add(ProcTPSelectList[i].PatAmt.ToString("F"));
 						subpat+=ProcTPSelectList[i].PatAmt;
 						totPat+=ProcTPSelectList[i].PatAmt;						
 					}
@@ -1304,8 +1339,11 @@ namespace OpenDental{
 							row.Cells.Add(subpriIns.ToString("F"));//pri
 							row.Cells.Add(subsecIns.ToString("F"));//sec
 						}
-						if(checkShowFees.Checked) {
+						if(checkShowDiscount.Checked){
 							row.Cells.Add(subdiscount.ToString("F"));
+						}
+						if(checkShowFees.Checked) {
+							
 							row.Cells.Add(subpat.ToString("F"));//pat portion
 						}
 						row.ColorText=DefB.GetColor(DefCat.TxPriorities,ProcTPSelectList[i].Priority);
@@ -1346,8 +1384,11 @@ namespace OpenDental{
 					row.Cells.Add(totPriIns.ToString("F"));//pri
 					row.Cells.Add(totSecIns.ToString("F"));//sec
 				}
-				if(checkShowFees.Checked) {
+				if(checkShowDiscount.Checked){
 					row.Cells.Add(totDiscount.ToString("F"));
+				}
+				if(checkShowFees.Checked) {
+					
 					row.Cells.Add(totPat.ToString("F"));//pat portion
 				}
 				row.Bold=true;
@@ -1625,12 +1666,16 @@ namespace OpenDental{
 			if(checkShowFees.Checked){
 				//checkShowStandard.Checked=true;
 				checkShowIns.Checked=true;
+				//if(PrefB.GetBool("TreatPlanShowDiscount")){
+				checkShowDiscount.Checked=true;
+				//}
 				checkShowSubtotals.Checked=true;
 				checkShowTotals.Checked=true;
 			}
 			else{
 				//checkShowStandard.Checked=false;
 				checkShowIns.Checked=false;
+				checkShowDiscount.Checked=false;
 				checkShowSubtotals.Checked=false;
 				checkShowTotals.Checked=false;
 			}
@@ -1642,6 +1687,10 @@ namespace OpenDental{
 		}
 
 		private void checkShowIns_Click(object sender,EventArgs e) {
+			FillMain();
+		}
+
+		private void checkShowDiscount_Click(object sender,EventArgs e) {
 			FillMain();
 		}
 
@@ -2269,9 +2318,11 @@ namespace OpenDental{
 					procTP.SecInsAmt=PIn.PDouble(gridMain.Rows[gridMain.SelectedIndices[i]]
 						.Cells[gridMain.Columns.GetIndex(Lan.g("TableTP","Sec Ins"))].Text);
 				}
-				if(checkShowFees.Checked){
+				if(checkShowDiscount.Checked){
 					procTP.Discount=PIn.PDouble(gridMain.Rows[gridMain.SelectedIndices[i]]
-						.Cells[gridMain.Columns.GetIndex(Lan.g("TableTP","Discount"))].Text);
+							.Cells[gridMain.Columns.GetIndex(Lan.g("TableTP","Discount"))].Text);
+				}
+				if(checkShowFees.Checked){
 					procTP.PatAmt=PIn.PDouble(gridMain.Rows[gridMain.SelectedIndices[i]]
 						.Cells[gridMain.Columns.GetIndex(Lan.g("TableTP","Pat"))].Text);
 				}
@@ -2480,6 +2531,8 @@ namespace OpenDental{
 				}
 			}
 		}
+
+	
 
 	
 		
