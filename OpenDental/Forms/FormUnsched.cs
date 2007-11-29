@@ -293,20 +293,21 @@ namespace OpenDental{
 				pd.DefaultPageSettings.PaperSize=new PaperSize("default",850,1100);
 			}
 			headingPrinted=false;
-			try {
-#if DEBUG
+			#if DEBUG
 				FormRpPrintPreview pView = new FormRpPrintPreview();
 				pView.printPreviewControl2.Document=pd;
 				pView.ShowDialog();
-#else
-					if(Printers.SetPrinter(pd,PrintSituation.Default)) {
-						pd.Print();
-					}
-#endif
-			}
-			catch {
-				MessageBox.Show(Lan.g(this,"Printer not available"));
-			}
+			#else
+				if(!Printers.SetPrinter(pd,PrintSituation.Default)) {
+					return;
+				}
+				try{
+					pd.Print();
+				}
+				catch {
+					MsgBox.Show(this,"Printer not available");
+				}
+			#endif			
 		}
 
 		private void pd_PrintPage(object sender,System.Drawing.Printing.PrintPageEventArgs e) {

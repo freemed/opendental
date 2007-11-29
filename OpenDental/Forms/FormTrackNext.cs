@@ -1,5 +1,6 @@
 using System;
 using System.Drawing;
+using System.Drawing.Printing;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -26,8 +27,13 @@ namespace OpenDental{
 		private OpenDental.UI.Button butRefresh;
 		private ComboBox comboOrder;
 		private Label label1;
+		private OpenDental.UI.Button butPrint;
 		///<summary>Only used if PinClicked=true</summary>
 		public int AptSelected;
+		private int pagesPrinted;
+		private bool headingPrinted;
+		private PrintDocument pd;
+		private int headingPrintH;
 
 		///<summary></summary>
 		public FormTrackNext(){
@@ -65,6 +71,7 @@ namespace OpenDental{
 			this.butRefresh = new OpenDental.UI.Button();
 			this.comboOrder = new System.Windows.Forms.ComboBox();
 			this.label1 = new System.Windows.Forms.Label();
+			this.butPrint = new OpenDental.UI.Button();
 			this.SuspendLayout();
 			// 
 			// butClose
@@ -146,11 +153,29 @@ namespace OpenDental{
 			this.label1.Text = "Order by";
 			this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
+			// butPrint
+			// 
+			this.butPrint.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butPrint.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.butPrint.Autosize = true;
+			this.butPrint.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butPrint.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butPrint.CornerRadius = 4F;
+			this.butPrint.Image = global::OpenDental.Properties.Resources.butPrintSmall;
+			this.butPrint.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butPrint.Location = new System.Drawing.Point(559,641);
+			this.butPrint.Name = "butPrint";
+			this.butPrint.Size = new System.Drawing.Size(87,26);
+			this.butPrint.TabIndex = 31;
+			this.butPrint.Text = "Print List";
+			this.butPrint.Click += new System.EventHandler(this.butPrint_Click);
+			// 
 			// FormTrackNext
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.CancelButton = this.butClose;
 			this.ClientSize = new System.Drawing.Size(771,683);
+			this.Controls.Add(this.butPrint);
 			this.Controls.Add(this.comboOrder);
 			this.Controls.Add(this.label1);
 			this.Controls.Add(this.comboProv);
@@ -267,6 +292,66 @@ namespace OpenDental{
 			FillGrid();
 		}
 
+		private void butPrint_Click(object sender,EventArgs e) {
+			pagesPrinted=0;
+			pd=new PrintDocument();
+			pd.PrintPage += new PrintPageEventHandler(this.pd_PrintPage);
+			pd.DefaultPageSettings.Margins=new Margins(25,25,40,40);
+			//pd.OriginAtMargins=true;
+			if(pd.DefaultPageSettings.PaperSize.Height==0) {
+				pd.DefaultPageSettings.PaperSize=new PaperSize("default",850,1100);
+			}
+			headingPrinted=false;
+			#if DEBUG
+				FormRpPrintPreview pView = new FormRpPrintPreview();
+				pView.printPreviewControl2.Document=pd;
+				pView.ShowDialog();
+			#else
+				if(!Printers.SetPrinter(pd,PrintSituation.Default)) {
+					return;
+				}
+				try{
+					pd.Print();
+				}
+				catch {
+					MsgBox.Show(this,"Printer not available");
+				}
+			#endif	
+		}
+
+		private void pd_PrintPage(object sender,System.Drawing.Printing.PrintPageEventArgs e) {
+			Rectangle bounds=e.MarginBounds;
+			//new Rectangle(50,40,800,1035);//Some printers can handle up to 1042
+			Graphics g=e.Graphics;
+			string text;
+			Font headingFont=new Font("Arial",13,FontStyle.Bold);
+			Font subHeadingFont=new Font("Arial",10,FontStyle.Bold);
+			int yPos=bounds.Top;
+			int center=bounds.X+bounds.Width/2;
+			#region printHeading
+			if(!headingPrinted) {
+				text=Lan.g(this,"Planned Appointment Tracker");
+				g.DrawString(text,headingFont,Brushes.Black,center-g.MeasureString(text,headingFont).Width/2,yPos);
+				//yPos+=(int)g.MeasureString(text,headingFont).Height;
+				//text=textDateFrom.Text+" "+Lan.g(this,"to")+" "+textDateTo.Text;
+				//g.DrawString(text,subHeadingFont,Brushes.Black,center-g.MeasureString(text,subHeadingFont).Width/2,yPos);
+				yPos+=25;
+				headingPrinted=true;
+				headingPrintH=yPos;
+			}
+			#endregion
+			int totalPages=gridMain.GetNumberOfPages(bounds,headingPrintH);
+			yPos=gridMain.PrintPage(g,pagesPrinted,bounds,headingPrintH);
+			pagesPrinted++;
+			if(pagesPrinted < totalPages) {
+				e.HasMorePages=true;
+			}
+			else {
+				e.HasMorePages=false;
+			}
+			g.Dispose();
+		}
+
 		private void butClose_Click(object sender, System.EventArgs e) {
 			Close();
 		}
@@ -278,6 +363,7 @@ namespace OpenDental{
 			}
 		}
 
+		
 		
 
 		
