@@ -922,6 +922,7 @@ group by claimpayment.checkdate order by procdate
 			Queries.CurReport.Query= "SELECT claimpayment.CheckDate,SUM(claimproc.InsPayamt) "
 				+"FROM claimpayment,claimproc WHERE "
 				+"claimproc.ClaimPaymentNum = claimpayment.ClaimPaymentNum "
+				+"AND (claimproc.Status=1 OR claimproc.Status=4) "//received or supplemental
 				+"AND claimpayment.CheckDate >= " + POut.PDate(dateFrom)+" "
 				+"AND claimpayment.CheckDate <= " + POut.PDate(dateTo)+" "
 				+whereProv
