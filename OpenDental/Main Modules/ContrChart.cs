@@ -2984,7 +2984,16 @@ namespace OpenDental{
 				row.Cells.Add(PatCur.DateFirstVisit.ToShortDateString());
 			row.Tag=null;
 			gridPtInfo.Rows.Add(row);
-			//PriIns
+            //Prov - Pri & Sec
+            row = new ODGridRow();
+            row.Cells.Add(Lan.g("TableChartPtInfo", "Prov. (Pri, Sec)"));
+            if (PatCur.SecProv != 0)
+                row.Cells.Add(Providers.GetAbbr(PatCur.PriProv) + ", " + Providers.GetAbbr(PatCur.SecProv));
+            else
+                row.Cells.Add(Providers.GetAbbr(PatCur.PriProv) + ", " + "None");
+            row.Tag = null;
+            gridPtInfo.Rows.Add(row);
+            //PriIns
 			row=new ODGridRow();
 			row.Cells.Add(Lan.g("TableChartPtInfo","Pri Ins"));
 			string name;

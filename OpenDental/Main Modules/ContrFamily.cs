@@ -648,7 +648,15 @@ namespace OpenDental{
 			row.Cells.Add(Lan.g("TablePatient","Primary Provider"));
 			row.Cells.Add(Providers.GetLongDesc(Patients.GetProvNum(PatCur)));
 			gridPat.Rows.Add(row);
-			//Language
+            //Secondary provider
+            row = new ODGridRow();
+            row.Cells.Add(Lan.g("TablePatient", "Sec. Provider"));
+            if (PatCur.SecProv != 0)
+                row.Cells.Add(Providers.GetLongDesc(PatCur.SecProv));
+            else
+                row.Cells.Add("None");
+            gridPat.Rows.Add(row);
+            //Language
 			if(PatCur.Language!=""){
 				row=new ODGridRow();
 				row.Cells.Add(Lan.g("TablePatient","Language"));
