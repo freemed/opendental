@@ -142,6 +142,7 @@ namespace OpenDental{
 		private Label labelAdmitDate;
 		private TextBox textTitle;
 		private Label label26;
+        private OpenDental.UI.Button butReferral;
 		///<summary>Will include the languages setup in the settings, and also the language of this patient if that language is not on the selection list.</summary>
 		private List<CultureInfo> languageList;
 
@@ -211,1256 +212,1272 @@ namespace OpenDental{
 		#region Windows Form Designer generated code
 
 		private void InitializeComponent(){
-			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormPatientEdit));
-			this.label2 = new System.Windows.Forms.Label();
-			this.label3 = new System.Windows.Forms.Label();
-			this.label4 = new System.Windows.Forms.Label();
-			this.label5 = new System.Windows.Forms.Label();
-			this.label6 = new System.Windows.Forms.Label();
-			this.label7 = new System.Windows.Forms.Label();
-			this.label8 = new System.Windows.Forms.Label();
-			this.label9 = new System.Windows.Forms.Label();
-			this.labelSSN = new System.Windows.Forms.Label();
-			this.label11 = new System.Windows.Forms.Label();
-			this.label12 = new System.Windows.Forms.Label();
-			this.labelCity = new System.Windows.Forms.Label();
-			this.labelST = new System.Windows.Forms.Label();
-			this.labelZip = new System.Windows.Forms.Label();
-			this.label16 = new System.Windows.Forms.Label();
-			this.label17 = new System.Windows.Forms.Label();
-			this.label18 = new System.Windows.Forms.Label();
-			this.textLName = new System.Windows.Forms.TextBox();
-			this.textFName = new System.Windows.Forms.TextBox();
-			this.textMiddleI = new System.Windows.Forms.TextBox();
-			this.textPreferred = new System.Windows.Forms.TextBox();
-			this.textSSN = new System.Windows.Forms.TextBox();
-			this.textAddress = new System.Windows.Forms.TextBox();
-			this.textAddress2 = new System.Windows.Forms.TextBox();
-			this.textCity = new System.Windows.Forms.TextBox();
-			this.textState = new System.Windows.Forms.TextBox();
-			this.textHmPhone = new System.Windows.Forms.TextBox();
-			this.textWkPhone = new System.Windows.Forms.TextBox();
-			this.textWirelessPhone = new System.Windows.Forms.TextBox();
-			this.butOK = new OpenDental.UI.Button();
-			this.butCancel = new OpenDental.UI.Button();
-			this.label20 = new System.Windows.Forms.Label();
-			this.textAge = new System.Windows.Forms.TextBox();
-			this.textSalutation = new System.Windows.Forms.TextBox();
-			this.label21 = new System.Windows.Forms.Label();
-			this.textEmail = new System.Windows.Forms.TextBox();
-			this.label22 = new System.Windows.Forms.Label();
-			this.label27 = new System.Windows.Forms.Label();
-			this.textCreditType = new System.Windows.Forms.TextBox();
-			this.label1 = new System.Windows.Forms.Label();
-			this.groupBox2 = new System.Windows.Forms.GroupBox();
-			this.textSchool = new System.Windows.Forms.TextBox();
-			this.radioStudentN = new System.Windows.Forms.RadioButton();
-			this.radioStudentP = new System.Windows.Forms.RadioButton();
-			this.radioStudentF = new System.Windows.Forms.RadioButton();
-			this.label30 = new System.Windows.Forms.Label();
-			this.label29 = new System.Windows.Forms.Label();
-			this.textChartNumber = new System.Windows.Forms.TextBox();
-			this.textBirthdate = new OpenDental.ValidDate();
-			this.groupBox1 = new System.Windows.Forms.GroupBox();
-			this.label40 = new System.Windows.Forms.Label();
-			this.label39 = new System.Windows.Forms.Label();
-			this.label38 = new System.Windows.Forms.Label();
-			this.comboFeeSched = new System.Windows.Forms.ComboBox();
-			this.comboSecProv = new System.Windows.Forms.ComboBox();
-			this.comboPriProv = new System.Windows.Forms.ComboBox();
-			this.comboBillType = new System.Windows.Forms.ComboBox();
-			this.butEditZip = new OpenDental.UI.Button();
-			this.textZip = new System.Windows.Forms.TextBox();
-			this.comboZip = new System.Windows.Forms.ComboBox();
-			this.textBox1 = new System.Windows.Forms.TextBox();
-			this.checkSame = new System.Windows.Forms.CheckBox();
-			this.groupNotes = new System.Windows.Forms.GroupBox();
-			this.textAddrNotes = new OpenDental.ODtextBox();
-			this.checkNotesSame = new System.Windows.Forms.CheckBox();
-			this.textPatNum = new System.Windows.Forms.TextBox();
-			this.label19 = new System.Windows.Forms.Label();
-			this.label32 = new System.Windows.Forms.Label();
-			this.butAuto = new OpenDental.UI.Button();
-			this.textMedicaidID = new System.Windows.Forms.TextBox();
-			this.label31 = new System.Windows.Forms.Label();
-			this.listStatus = new System.Windows.Forms.ListBox();
-			this.listGender = new System.Windows.Forms.ListBox();
-			this.listPosition = new System.Windows.Forms.ListBox();
-			this.textEmployer = new System.Windows.Forms.TextBox();
-			this.label33 = new System.Windows.Forms.Label();
-			this.groupPH = new System.Windows.Forms.GroupBox();
-			this.comboUrgency = new System.Windows.Forms.ComboBox();
-			this.comboGradeLevel = new System.Windows.Forms.ComboBox();
-			this.textGradeSchool = new System.Windows.Forms.TextBox();
-			this.label35 = new System.Windows.Forms.Label();
-			this.comboRace = new System.Windows.Forms.ComboBox();
-			this.textCounty = new System.Windows.Forms.TextBox();
-			this.label15 = new System.Windows.Forms.Label();
-			this.label14 = new System.Windows.Forms.Label();
-			this.label13 = new System.Windows.Forms.Label();
-			this.label10 = new System.Windows.Forms.Label();
-			this.textDateFirstVisit = new OpenDental.ValidDate();
-			this.label36 = new System.Windows.Forms.Label();
-			this.label37 = new System.Windows.Forms.Label();
-			this.labelClinic = new System.Windows.Forms.Label();
-			this.comboClinic = new System.Windows.Forms.ComboBox();
-			this.textTrophyFolder = new System.Windows.Forms.TextBox();
-			this.labelTrophyFolder = new System.Windows.Forms.Label();
-			this.textWard = new System.Windows.Forms.TextBox();
-			this.labelWard = new System.Windows.Forms.Label();
-			this.label28 = new System.Windows.Forms.Label();
-			this.comboLanguage = new System.Windows.Forms.ComboBox();
-			this.comboContact = new System.Windows.Forms.ComboBox();
-			this.label23 = new System.Windows.Forms.Label();
-			this.comboConfirm = new System.Windows.Forms.ComboBox();
-			this.label24 = new System.Windows.Forms.Label();
-			this.comboRecall = new System.Windows.Forms.ComboBox();
-			this.label25 = new System.Windows.Forms.Label();
-			this.textAdmitDate = new OpenDental.ValidDate();
-			this.labelAdmitDate = new System.Windows.Forms.Label();
-			this.textTitle = new System.Windows.Forms.TextBox();
-			this.label26 = new System.Windows.Forms.Label();
-			this.groupBox2.SuspendLayout();
-			this.groupBox1.SuspendLayout();
-			this.groupNotes.SuspendLayout();
-			this.groupPH.SuspendLayout();
-			this.SuspendLayout();
-			// 
-			// label2
-			// 
-			this.label2.Location = new System.Drawing.Point(8,31);
-			this.label2.Name = "label2";
-			this.label2.Size = new System.Drawing.Size(125,16);
-			this.label2.TabIndex = 1;
-			this.label2.Text = "Last Name";
-			this.label2.TextAlign = System.Drawing.ContentAlignment.TopRight;
-			// 
-			// label3
-			// 
-			this.label3.Location = new System.Drawing.Point(6,53);
-			this.label3.Name = "label3";
-			this.label3.Size = new System.Drawing.Size(127,16);
-			this.label3.TabIndex = 2;
-			this.label3.Text = "First Name";
-			this.label3.TextAlign = System.Drawing.ContentAlignment.TopRight;
-			// 
-			// label4
-			// 
-			this.label4.Location = new System.Drawing.Point(9,74);
-			this.label4.Name = "label4";
-			this.label4.Size = new System.Drawing.Size(124,16);
-			this.label4.TabIndex = 3;
-			this.label4.Text = "Middle Initial";
-			this.label4.TextAlign = System.Drawing.ContentAlignment.TopRight;
-			// 
-			// label5
-			// 
-			this.label5.Location = new System.Drawing.Point(4,95);
-			this.label5.Name = "label5";
-			this.label5.Size = new System.Drawing.Size(129,16);
-			this.label5.TabIndex = 4;
-			this.label5.Text = "Preferred Name";
-			this.label5.TextAlign = System.Drawing.ContentAlignment.TopRight;
-			// 
-			// label6
-			// 
-			this.label6.Location = new System.Drawing.Point(62,160);
-			this.label6.Name = "label6";
-			this.label6.Size = new System.Drawing.Size(114,17);
-			this.label6.TabIndex = 5;
-			this.label6.Text = "Status";
-			this.label6.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
-			// 
-			// label7
-			// 
-			this.label7.Location = new System.Drawing.Point(180,161);
-			this.label7.Name = "label7";
-			this.label7.Size = new System.Drawing.Size(106,16);
-			this.label7.TabIndex = 6;
-			this.label7.Text = "Gender";
-			this.label7.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
-			// 
-			// label8
-			// 
-			this.label8.Location = new System.Drawing.Point(298,162);
-			this.label8.Name = "label8";
-			this.label8.Size = new System.Drawing.Size(100,16);
-			this.label8.TabIndex = 7;
-			this.label8.Text = "Position";
-			this.label8.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
-			// 
-			// label9
-			// 
-			this.label9.Location = new System.Drawing.Point(28,257);
-			this.label9.Name = "label9";
-			this.label9.Size = new System.Drawing.Size(105,14);
-			this.label9.TabIndex = 8;
-			this.label9.Text = "Birthdate";
-			this.label9.TextAlign = System.Drawing.ContentAlignment.TopRight;
-			// 
-			// labelSSN
-			// 
-			this.labelSSN.Location = new System.Drawing.Point(19,279);
-			this.labelSSN.Name = "labelSSN";
-			this.labelSSN.Size = new System.Drawing.Size(113,14);
-			this.labelSSN.TabIndex = 9;
-			this.labelSSN.Text = "SS#";
-			this.labelSSN.TextAlign = System.Drawing.ContentAlignment.TopRight;
-			// 
-			// label11
-			// 
-			this.label11.Location = new System.Drawing.Point(49,58);
-			this.label11.Name = "label11";
-			this.label11.Size = new System.Drawing.Size(98,14);
-			this.label11.TabIndex = 10;
-			this.label11.Text = "Address";
-			this.label11.TextAlign = System.Drawing.ContentAlignment.TopRight;
-			// 
-			// label12
-			// 
-			this.label12.Location = new System.Drawing.Point(49,79);
-			this.label12.Name = "label12";
-			this.label12.Size = new System.Drawing.Size(99,14);
-			this.label12.TabIndex = 11;
-			this.label12.Text = "Address2";
-			this.label12.TextAlign = System.Drawing.ContentAlignment.TopRight;
-			// 
-			// labelCity
-			// 
-			this.labelCity.Location = new System.Drawing.Point(48,99);
-			this.labelCity.Name = "labelCity";
-			this.labelCity.Size = new System.Drawing.Size(98,14);
-			this.labelCity.TabIndex = 12;
-			this.labelCity.Text = "City";
-			this.labelCity.TextAlign = System.Drawing.ContentAlignment.TopRight;
-			// 
-			// labelST
-			// 
-			this.labelST.Location = new System.Drawing.Point(51,119);
-			this.labelST.Name = "labelST";
-			this.labelST.Size = new System.Drawing.Size(96,14);
-			this.labelST.TabIndex = 13;
-			this.labelST.Text = "ST";
-			this.labelST.TextAlign = System.Drawing.ContentAlignment.TopRight;
-			// 
-			// labelZip
-			// 
-			this.labelZip.Location = new System.Drawing.Point(51,140);
-			this.labelZip.Name = "labelZip";
-			this.labelZip.Size = new System.Drawing.Size(96,14);
-			this.labelZip.TabIndex = 14;
-			this.labelZip.Text = "Zip";
-			this.labelZip.TextAlign = System.Drawing.ContentAlignment.TopRight;
-			// 
-			// label16
-			// 
-			this.label16.Location = new System.Drawing.Point(51,37);
-			this.label16.Name = "label16";
-			this.label16.Size = new System.Drawing.Size(98,14);
-			this.label16.TabIndex = 15;
-			this.label16.Text = "Home Phone";
-			this.label16.TextAlign = System.Drawing.ContentAlignment.TopRight;
-			// 
-			// label17
-			// 
-			this.label17.Location = new System.Drawing.Point(16,425);
-			this.label17.Name = "label17";
-			this.label17.Size = new System.Drawing.Size(118,14);
-			this.label17.TabIndex = 16;
-			this.label17.Text = "Work Phone";
-			this.label17.TextAlign = System.Drawing.ContentAlignment.TopRight;
-			// 
-			// label18
-			// 
-			this.label18.Location = new System.Drawing.Point(10,404);
-			this.label18.Name = "label18";
-			this.label18.Size = new System.Drawing.Size(124,14);
-			this.label18.TabIndex = 17;
-			this.label18.Text = "Wireless Phone";
-			this.label18.TextAlign = System.Drawing.ContentAlignment.TopRight;
-			// 
-			// textLName
-			// 
-			this.textLName.Location = new System.Drawing.Point(135,29);
-			this.textLName.MaxLength = 100;
-			this.textLName.Name = "textLName";
-			this.textLName.Size = new System.Drawing.Size(228,20);
-			this.textLName.TabIndex = 0;
-			this.textLName.TextChanged += new System.EventHandler(this.textLName_TextChanged);
-			// 
-			// textFName
-			// 
-			this.textFName.Location = new System.Drawing.Point(135,50);
-			this.textFName.MaxLength = 100;
-			this.textFName.Name = "textFName";
-			this.textFName.Size = new System.Drawing.Size(228,20);
-			this.textFName.TabIndex = 1;
-			this.textFName.TextChanged += new System.EventHandler(this.textFName_TextChanged);
-			// 
-			// textMiddleI
-			// 
-			this.textMiddleI.Location = new System.Drawing.Point(135,71);
-			this.textMiddleI.MaxLength = 100;
-			this.textMiddleI.Name = "textMiddleI";
-			this.textMiddleI.Size = new System.Drawing.Size(75,20);
-			this.textMiddleI.TabIndex = 2;
-			this.textMiddleI.TextChanged += new System.EventHandler(this.textMiddleI_TextChanged);
-			// 
-			// textPreferred
-			// 
-			this.textPreferred.Location = new System.Drawing.Point(135,92);
-			this.textPreferred.MaxLength = 100;
-			this.textPreferred.Name = "textPreferred";
-			this.textPreferred.Size = new System.Drawing.Size(228,20);
-			this.textPreferred.TabIndex = 3;
-			this.textPreferred.TextChanged += new System.EventHandler(this.textPreferred_TextChanged);
-			// 
-			// textSSN
-			// 
-			this.textSSN.Location = new System.Drawing.Point(135,274);
-			this.textSSN.MaxLength = 100;
-			this.textSSN.Name = "textSSN";
-			this.textSSN.Size = new System.Drawing.Size(82,20);
-			this.textSSN.TabIndex = 9;
-			this.textSSN.Validating += new System.ComponentModel.CancelEventHandler(this.textSSN_Validating);
-			// 
-			// textAddress
-			// 
-			this.textAddress.Location = new System.Drawing.Point(149,55);
-			this.textAddress.MaxLength = 100;
-			this.textAddress.Name = "textAddress";
-			this.textAddress.Size = new System.Drawing.Size(254,20);
-			this.textAddress.TabIndex = 13;
-			this.textAddress.TextChanged += new System.EventHandler(this.textAddress_TextChanged);
-			// 
-			// textAddress2
-			// 
-			this.textAddress2.Location = new System.Drawing.Point(149,75);
-			this.textAddress2.MaxLength = 100;
-			this.textAddress2.Name = "textAddress2";
-			this.textAddress2.Size = new System.Drawing.Size(253,20);
-			this.textAddress2.TabIndex = 21;
-			this.textAddress2.TextChanged += new System.EventHandler(this.textAddress2_TextChanged);
-			// 
-			// textCity
-			// 
-			this.textCity.Location = new System.Drawing.Point(149,95);
-			this.textCity.MaxLength = 100;
-			this.textCity.Name = "textCity";
-			this.textCity.Size = new System.Drawing.Size(191,20);
-			this.textCity.TabIndex = 22;
-			this.textCity.TabStop = false;
-			this.textCity.TextChanged += new System.EventHandler(this.textCity_TextChanged);
-			// 
-			// textState
-			// 
-			this.textState.Location = new System.Drawing.Point(149,115);
-			this.textState.MaxLength = 100;
-			this.textState.Name = "textState";
-			this.textState.Size = new System.Drawing.Size(61,20);
-			this.textState.TabIndex = 23;
-			this.textState.TabStop = false;
-			this.textState.TextChanged += new System.EventHandler(this.textState_TextChanged);
-			// 
-			// textHmPhone
-			// 
-			this.textHmPhone.Location = new System.Drawing.Point(149,35);
-			this.textHmPhone.MaxLength = 30;
-			this.textHmPhone.Name = "textHmPhone";
-			this.textHmPhone.Size = new System.Drawing.Size(174,20);
-			this.textHmPhone.TabIndex = 12;
-			this.textHmPhone.TextChanged += new System.EventHandler(this.textHmPhone_TextChanged);
-			// 
-			// textWkPhone
-			// 
-			this.textWkPhone.Location = new System.Drawing.Point(135,421);
-			this.textWkPhone.MaxLength = 30;
-			this.textWkPhone.Name = "textWkPhone";
-			this.textWkPhone.Size = new System.Drawing.Size(174,20);
-			this.textWkPhone.TabIndex = 16;
-			this.textWkPhone.TextChanged += new System.EventHandler(this.textWkPhone_TextChanged);
-			// 
-			// textWirelessPhone
-			// 
-			this.textWirelessPhone.Location = new System.Drawing.Point(135,400);
-			this.textWirelessPhone.MaxLength = 30;
-			this.textWirelessPhone.Name = "textWirelessPhone";
-			this.textWirelessPhone.Size = new System.Drawing.Size(174,20);
-			this.textWirelessPhone.TabIndex = 15;
-			this.textWirelessPhone.TextChanged += new System.EventHandler(this.textWirelessPhone_TextChanged);
-			// 
-			// butOK
-			// 
-			this.butOK.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butOK.Autosize = true;
-			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(874,597);
-			this.butOK.Name = "butOK";
-			this.butOK.Size = new System.Drawing.Size(75,26);
-			this.butOK.TabIndex = 26;
-			this.butOK.Text = "&OK";
-			this.butOK.Click += new System.EventHandler(this.butOK_Click);
-			// 
-			// butCancel
-			// 
-			this.butCancel.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butCancel.Autosize = true;
-			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butCancel.CornerRadius = 4F;
-			this.butCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.butCancel.Location = new System.Drawing.Point(874,637);
-			this.butCancel.Name = "butCancel";
-			this.butCancel.Size = new System.Drawing.Size(75,26);
-			this.butCancel.TabIndex = 27;
-			this.butCancel.Text = "&Cancel";
-			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
-			// 
-			// label20
-			// 
-			this.label20.Location = new System.Drawing.Point(215,257);
-			this.label20.Name = "label20";
-			this.label20.Size = new System.Drawing.Size(61,16);
-			this.label20.TabIndex = 40;
-			this.label20.Text = "Age";
-			this.label20.TextAlign = System.Drawing.ContentAlignment.TopRight;
-			// 
-			// textAge
-			// 
-			this.textAge.Location = new System.Drawing.Point(276,253);
-			this.textAge.Name = "textAge";
-			this.textAge.ReadOnly = true;
-			this.textAge.Size = new System.Drawing.Size(68,20);
-			this.textAge.TabIndex = 0;
-			// 
-			// textSalutation
-			// 
-			this.textSalutation.Location = new System.Drawing.Point(135,134);
-			this.textSalutation.MaxLength = 100;
-			this.textSalutation.Name = "textSalutation";
-			this.textSalutation.Size = new System.Drawing.Size(228,20);
-			this.textSalutation.TabIndex = 4;
-			this.textSalutation.TextChanged += new System.EventHandler(this.textSalutation_TextChanged);
-			// 
-			// label21
-			// 
-			this.label21.Location = new System.Drawing.Point(6,138);
-			this.label21.Name = "label21";
-			this.label21.Size = new System.Drawing.Size(127,16);
-			this.label21.TabIndex = 42;
-			this.label21.Text = "Salutation (Dear __)";
-			this.label21.TextAlign = System.Drawing.ContentAlignment.TopRight;
-			// 
-			// textEmail
-			// 
-			this.textEmail.Location = new System.Drawing.Point(135,316);
-			this.textEmail.MaxLength = 100;
-			this.textEmail.Name = "textEmail";
-			this.textEmail.Size = new System.Drawing.Size(226,20);
-			this.textEmail.TabIndex = 11;
-			// 
-			// label22
-			// 
-			this.label22.Location = new System.Drawing.Point(29,321);
-			this.label22.Name = "label22";
-			this.label22.Size = new System.Drawing.Size(104,14);
-			this.label22.TabIndex = 44;
-			this.label22.Text = "E-mail";
-			this.label22.TextAlign = System.Drawing.ContentAlignment.TopRight;
-			// 
-			// label27
-			// 
-			this.label27.Location = new System.Drawing.Point(50,159);
-			this.label27.Name = "label27";
-			this.label27.Size = new System.Drawing.Size(97,16);
-			this.label27.TabIndex = 55;
-			this.label27.Text = "Credit Type";
-			this.label27.TextAlign = System.Drawing.ContentAlignment.TopRight;
-			// 
-			// textCreditType
-			// 
-			this.textCreditType.Location = new System.Drawing.Point(149,156);
-			this.textCreditType.MaxLength = 1;
-			this.textCreditType.Name = "textCreditType";
-			this.textCreditType.Size = new System.Drawing.Size(18,20);
-			this.textCreditType.TabIndex = 15;
-			this.textCreditType.TextChanged += new System.EventHandler(this.textCreditType_TextChanged);
-			// 
-			// label1
-			// 
-			this.label1.Location = new System.Drawing.Point(26,178);
-			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(121,16);
-			this.label1.TabIndex = 57;
-			this.label1.Text = "Billing Type";
-			this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// groupBox2
-			// 
-			this.groupBox2.Controls.Add(this.textSchool);
-			this.groupBox2.Controls.Add(this.radioStudentN);
-			this.groupBox2.Controls.Add(this.radioStudentP);
-			this.groupBox2.Controls.Add(this.radioStudentF);
-			this.groupBox2.Controls.Add(this.label30);
-			this.groupBox2.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.groupBox2.Location = new System.Drawing.Point(440,418);
-			this.groupBox2.Name = "groupBox2";
-			this.groupBox2.Size = new System.Drawing.Size(382,65);
-			this.groupBox2.TabIndex = 24;
-			this.groupBox2.TabStop = false;
-			this.groupBox2.Text = "Student Status if Dependent Over 19 (for Ins)";
-			// 
-			// textSchool
-			// 
-			this.textSchool.Location = new System.Drawing.Point(123,37);
-			this.textSchool.MaxLength = 30;
-			this.textSchool.Name = "textSchool";
-			this.textSchool.Size = new System.Drawing.Size(226,20);
-			this.textSchool.TabIndex = 3;
-			// 
-			// radioStudentN
-			// 
-			this.radioStudentN.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.radioStudentN.Location = new System.Drawing.Point(52,18);
-			this.radioStudentN.Name = "radioStudentN";
-			this.radioStudentN.Size = new System.Drawing.Size(108,16);
-			this.radioStudentN.TabIndex = 0;
-			this.radioStudentN.Text = "Nonstudent";
-			this.radioStudentN.Click += new System.EventHandler(this.radioStudentN_Click);
-			// 
-			// radioStudentP
-			// 
-			this.radioStudentP.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.radioStudentP.Location = new System.Drawing.Point(262,18);
-			this.radioStudentP.Name = "radioStudentP";
-			this.radioStudentP.Size = new System.Drawing.Size(104,16);
-			this.radioStudentP.TabIndex = 2;
-			this.radioStudentP.Text = "Parttime";
-			this.radioStudentP.Click += new System.EventHandler(this.radioStudentP_Click);
-			// 
-			// radioStudentF
-			// 
-			this.radioStudentF.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.radioStudentF.Location = new System.Drawing.Point(164,18);
-			this.radioStudentF.Name = "radioStudentF";
-			this.radioStudentF.Size = new System.Drawing.Size(98,16);
-			this.radioStudentF.TabIndex = 1;
-			this.radioStudentF.Text = "Fulltime";
-			this.radioStudentF.Click += new System.EventHandler(this.radioStudentF_Click);
-			// 
-			// label30
-			// 
-			this.label30.Location = new System.Drawing.Point(5,41);
-			this.label30.Name = "label30";
-			this.label30.Size = new System.Drawing.Size(116,16);
-			this.label30.TabIndex = 9;
-			this.label30.Text = "College Name";
-			this.label30.TextAlign = System.Drawing.ContentAlignment.TopRight;
-			// 
-			// label29
-			// 
-			this.label29.Location = new System.Drawing.Point(18,341);
-			this.label29.Name = "label29";
-			this.label29.Size = new System.Drawing.Size(116,16);
-			this.label29.TabIndex = 62;
-			this.label29.Text = "ChartNumber";
-			this.label29.TextAlign = System.Drawing.ContentAlignment.TopRight;
-			// 
-			// textChartNumber
-			// 
-			this.textChartNumber.Location = new System.Drawing.Point(135,337);
-			this.textChartNumber.MaxLength = 20;
-			this.textChartNumber.Name = "textChartNumber";
-			this.textChartNumber.Size = new System.Drawing.Size(99,20);
-			this.textChartNumber.TabIndex = 12;
-			// 
-			// textBirthdate
-			// 
-			this.textBirthdate.Location = new System.Drawing.Point(135,253);
-			this.textBirthdate.Name = "textBirthdate";
-			this.textBirthdate.Size = new System.Drawing.Size(82,20);
-			this.textBirthdate.TabIndex = 8;
-			this.textBirthdate.Validated += new System.EventHandler(this.textBirthdate_Validated);
-			// 
-			// groupBox1
-			// 
-			this.groupBox1.Controls.Add(this.label40);
-			this.groupBox1.Controls.Add(this.label39);
-			this.groupBox1.Controls.Add(this.label38);
-			this.groupBox1.Controls.Add(this.comboFeeSched);
-			this.groupBox1.Controls.Add(this.comboSecProv);
-			this.groupBox1.Controls.Add(this.comboPriProv);
-			this.groupBox1.Controls.Add(this.comboBillType);
-			this.groupBox1.Controls.Add(this.textHmPhone);
-			this.groupBox1.Controls.Add(this.butEditZip);
-			this.groupBox1.Controls.Add(this.textZip);
-			this.groupBox1.Controls.Add(this.comboZip);
-			this.groupBox1.Controls.Add(this.textBox1);
-			this.groupBox1.Controls.Add(this.checkSame);
-			this.groupBox1.Controls.Add(this.textState);
-			this.groupBox1.Controls.Add(this.labelST);
-			this.groupBox1.Controls.Add(this.textAddress);
-			this.groupBox1.Controls.Add(this.label27);
-			this.groupBox1.Controls.Add(this.textCreditType);
-			this.groupBox1.Controls.Add(this.label12);
-			this.groupBox1.Controls.Add(this.labelCity);
-			this.groupBox1.Controls.Add(this.textAddress2);
-			this.groupBox1.Controls.Add(this.labelZip);
-			this.groupBox1.Controls.Add(this.label16);
-			this.groupBox1.Controls.Add(this.textCity);
-			this.groupBox1.Controls.Add(this.label11);
-			this.groupBox1.Controls.Add(this.label1);
-			this.groupBox1.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.groupBox1.Location = new System.Drawing.Point(440,8);
-			this.groupBox1.Name = "groupBox1";
-			this.groupBox1.Size = new System.Drawing.Size(424,278);
-			this.groupBox1.TabIndex = 25;
-			this.groupBox1.TabStop = false;
-			this.groupBox1.Text = "Address and Phone";
-			// 
-			// label40
-			// 
-			this.label40.Location = new System.Drawing.Point(1,242);
-			this.label40.Name = "label40";
-			this.label40.Size = new System.Drawing.Size(147,18);
-			this.label40.TabIndex = 69;
-			this.label40.Text = "Fee Schedule (rarely used)";
-			this.label40.TextAlign = System.Drawing.ContentAlignment.TopRight;
-			// 
-			// label39
-			// 
-			this.label39.Location = new System.Drawing.Point(26,222);
-			this.label39.Name = "label39";
-			this.label39.Size = new System.Drawing.Size(121,16);
-			this.label39.TabIndex = 68;
-			this.label39.Text = "Secondary Provider";
-			this.label39.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// label38
-			// 
-			this.label38.Location = new System.Drawing.Point(26,199);
-			this.label38.Name = "label38";
-			this.label38.Size = new System.Drawing.Size(121,16);
-			this.label38.TabIndex = 67;
-			this.label38.Text = "Primary Provider";
-			this.label38.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// comboFeeSched
-			// 
-			this.comboFeeSched.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboFeeSched.FormattingEnabled = true;
-			this.comboFeeSched.Location = new System.Drawing.Point(149,239);
-			this.comboFeeSched.MaxDropDownItems = 30;
-			this.comboFeeSched.Name = "comboFeeSched";
-			this.comboFeeSched.Size = new System.Drawing.Size(198,21);
-			this.comboFeeSched.TabIndex = 20;
-			// 
-			// comboSecProv
-			// 
-			this.comboSecProv.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboSecProv.FormattingEnabled = true;
-			this.comboSecProv.Location = new System.Drawing.Point(149,218);
-			this.comboSecProv.MaxDropDownItems = 30;
-			this.comboSecProv.Name = "comboSecProv";
-			this.comboSecProv.Size = new System.Drawing.Size(198,21);
-			this.comboSecProv.TabIndex = 19;
-			// 
-			// comboPriProv
-			// 
-			this.comboPriProv.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboPriProv.FormattingEnabled = true;
-			this.comboPriProv.Location = new System.Drawing.Point(149,197);
-			this.comboPriProv.MaxDropDownItems = 30;
-			this.comboPriProv.Name = "comboPriProv";
-			this.comboPriProv.Size = new System.Drawing.Size(198,21);
-			this.comboPriProv.TabIndex = 17;
-			// 
-			// comboBillType
-			// 
-			this.comboBillType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboBillType.FormattingEnabled = true;
-			this.comboBillType.Location = new System.Drawing.Point(149,176);
-			this.comboBillType.MaxDropDownItems = 30;
-			this.comboBillType.Name = "comboBillType";
-			this.comboBillType.Size = new System.Drawing.Size(198,21);
-			this.comboBillType.TabIndex = 16;
-			// 
-			// butEditZip
-			// 
-			this.butEditZip.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butEditZip.Autosize = true;
-			this.butEditZip.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butEditZip.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butEditZip.CornerRadius = 4F;
-			this.butEditZip.Location = new System.Drawing.Point(349,134);
-			this.butEditZip.Name = "butEditZip";
-			this.butEditZip.Size = new System.Drawing.Size(76,23);
-			this.butEditZip.TabIndex = 62;
-			this.butEditZip.TabStop = false;
-			this.butEditZip.Text = "&Edit Zip";
-			this.butEditZip.Click += new System.EventHandler(this.butEditZip_Click);
-			// 
-			// textZip
-			// 
-			this.textZip.Location = new System.Drawing.Point(149,135);
-			this.textZip.MaxLength = 100;
-			this.textZip.Name = "textZip";
-			this.textZip.Size = new System.Drawing.Size(179,20);
-			this.textZip.TabIndex = 14;
-			this.textZip.Validating += new System.ComponentModel.CancelEventHandler(this.textZip_Validating);
-			this.textZip.TextChanged += new System.EventHandler(this.textZip_TextChanged);
-			// 
-			// comboZip
-			// 
-			this.comboZip.DropDownWidth = 198;
-			this.comboZip.Location = new System.Drawing.Point(149,135);
-			this.comboZip.Name = "comboZip";
-			this.comboZip.Size = new System.Drawing.Size(198,21);
-			this.comboZip.TabIndex = 60;
-			this.comboZip.TabStop = false;
-			this.comboZip.SelectionChangeCommitted += new System.EventHandler(this.comboZip_SelectionChangeCommitted);
-			// 
-			// textBox1
-			// 
-			this.textBox1.BackColor = System.Drawing.SystemColors.Control;
-			this.textBox1.BorderStyle = System.Windows.Forms.BorderStyle.None;
-			this.textBox1.Location = new System.Drawing.Point(167,17);
-			this.textBox1.Multiline = true;
-			this.textBox1.Name = "textBox1";
-			this.textBox1.ReadOnly = true;
-			this.textBox1.Size = new System.Drawing.Size(230,16);
-			this.textBox1.TabIndex = 57;
-			this.textBox1.TabStop = false;
-			this.textBox1.Text = "Same for entire family";
-			// 
-			// checkSame
-			// 
-			this.checkSame.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkSame.Location = new System.Drawing.Point(149,14);
-			this.checkSame.Name = "checkSame";
-			this.checkSame.Size = new System.Drawing.Size(18,21);
-			this.checkSame.TabIndex = 11;
-			this.checkSame.TabStop = false;
-			// 
-			// groupNotes
-			// 
-			this.groupNotes.Controls.Add(this.textAddrNotes);
-			this.groupNotes.Controls.Add(this.checkNotesSame);
-			this.groupNotes.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.groupNotes.Location = new System.Drawing.Point(440,291);
-			this.groupNotes.Name = "groupNotes";
-			this.groupNotes.Size = new System.Drawing.Size(424,107);
-			this.groupNotes.TabIndex = 26;
-			this.groupNotes.TabStop = false;
-			this.groupNotes.Text = "Address and Phone Notes";
-			// 
-			// textAddrNotes
-			// 
-			this.textAddrNotes.AcceptsReturn = true;
-			this.textAddrNotes.Location = new System.Drawing.Point(128,40);
-			this.textAddrNotes.Multiline = true;
-			this.textAddrNotes.Name = "textAddrNotes";
-			this.textAddrNotes.QuickPasteType = OpenDentBusiness.QuickPasteType.PatAddressNote;
-			this.textAddrNotes.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-			this.textAddrNotes.Size = new System.Drawing.Size(237,59);
-			this.textAddrNotes.TabIndex = 0;
-			// 
-			// checkNotesSame
-			// 
-			this.checkNotesSame.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkNotesSame.Location = new System.Drawing.Point(129,20);
-			this.checkNotesSame.Name = "checkNotesSame";
-			this.checkNotesSame.Size = new System.Drawing.Size(247,18);
-			this.checkNotesSame.TabIndex = 1;
-			this.checkNotesSame.Text = "Same for entire family";
-			// 
-			// textPatNum
-			// 
-			this.textPatNum.Location = new System.Drawing.Point(135,8);
-			this.textPatNum.MaxLength = 100;
-			this.textPatNum.Name = "textPatNum";
-			this.textPatNum.ReadOnly = true;
-			this.textPatNum.Size = new System.Drawing.Size(75,20);
-			this.textPatNum.TabIndex = 71;
-			// 
-			// label19
-			// 
-			this.label19.Location = new System.Drawing.Point(9,11);
-			this.label19.Name = "label19";
-			this.label19.Size = new System.Drawing.Size(125,16);
-			this.label19.TabIndex = 72;
-			this.label19.Text = "Patient Number";
-			this.label19.TextAlign = System.Drawing.ContentAlignment.TopRight;
-			// 
-			// label32
-			// 
-			this.label32.Location = new System.Drawing.Point(303,341);
-			this.label32.Name = "label32";
-			this.label32.Size = new System.Drawing.Size(88,17);
-			this.label32.TabIndex = 73;
-			this.label32.Text = "(if used)";
-			// 
-			// butAuto
-			// 
-			this.butAuto.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butAuto.Autosize = true;
-			this.butAuto.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butAuto.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butAuto.CornerRadius = 4F;
-			this.butAuto.Location = new System.Drawing.Point(236,336);
-			this.butAuto.Name = "butAuto";
-			this.butAuto.Size = new System.Drawing.Size(62,22);
-			this.butAuto.TabIndex = 74;
-			this.butAuto.Text = "Auto";
-			this.butAuto.Click += new System.EventHandler(this.butAuto_Click);
-			// 
-			// textMedicaidID
-			// 
-			this.textMedicaidID.Location = new System.Drawing.Point(135,295);
-			this.textMedicaidID.MaxLength = 20;
-			this.textMedicaidID.Name = "textMedicaidID";
-			this.textMedicaidID.Size = new System.Drawing.Size(99,20);
-			this.textMedicaidID.TabIndex = 10;
-			// 
-			// label31
-			// 
-			this.label31.Location = new System.Drawing.Point(26,300);
-			this.label31.Name = "label31";
-			this.label31.Size = new System.Drawing.Size(106,14);
-			this.label31.TabIndex = 75;
-			this.label31.Text = "Medicaid ID";
-			this.label31.TextAlign = System.Drawing.ContentAlignment.TopRight;
-			// 
-			// listStatus
-			// 
-			this.listStatus.Location = new System.Drawing.Point(62,177);
-			this.listStatus.Name = "listStatus";
-			this.listStatus.Size = new System.Drawing.Size(105,69);
-			this.listStatus.TabIndex = 5;
-			// 
-			// listGender
-			// 
-			this.listGender.Location = new System.Drawing.Point(180,177);
-			this.listGender.Name = "listGender";
-			this.listGender.Size = new System.Drawing.Size(105,43);
-			this.listGender.TabIndex = 6;
-			// 
-			// listPosition
-			// 
-			this.listPosition.Location = new System.Drawing.Point(298,178);
-			this.listPosition.Name = "listPosition";
-			this.listPosition.Size = new System.Drawing.Size(105,69);
-			this.listPosition.TabIndex = 7;
-			// 
-			// textEmployer
-			// 
-			this.textEmployer.Location = new System.Drawing.Point(135,379);
-			this.textEmployer.MaxLength = 30;
-			this.textEmployer.Name = "textEmployer";
-			this.textEmployer.Size = new System.Drawing.Size(226,20);
-			this.textEmployer.TabIndex = 14;
-			this.textEmployer.Leave += new System.EventHandler(this.textEmployer_Leave);
-			this.textEmployer.KeyUp += new System.Windows.Forms.KeyEventHandler(this.textEmployer_KeyUp);
-			// 
-			// label33
-			// 
-			this.label33.Location = new System.Drawing.Point(10,383);
-			this.label33.Name = "label33";
-			this.label33.Size = new System.Drawing.Size(124,14);
-			this.label33.TabIndex = 83;
-			this.label33.Text = "Employer";
-			this.label33.TextAlign = System.Drawing.ContentAlignment.TopRight;
-			// 
-			// groupPH
-			// 
-			this.groupPH.Controls.Add(this.comboUrgency);
-			this.groupPH.Controls.Add(this.comboGradeLevel);
-			this.groupPH.Controls.Add(this.textGradeSchool);
-			this.groupPH.Controls.Add(this.label35);
-			this.groupPH.Controls.Add(this.comboRace);
-			this.groupPH.Controls.Add(this.textCounty);
-			this.groupPH.Controls.Add(this.label15);
-			this.groupPH.Controls.Add(this.label14);
-			this.groupPH.Controls.Add(this.label13);
-			this.groupPH.Controls.Add(this.label10);
-			this.groupPH.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.groupPH.Location = new System.Drawing.Point(440,536);
-			this.groupPH.Name = "groupPH";
-			this.groupPH.Size = new System.Drawing.Size(378,123);
-			this.groupPH.TabIndex = 23;
-			this.groupPH.TabStop = false;
-			this.groupPH.Text = "Public Health";
-			// 
-			// comboUrgency
-			// 
-			this.comboUrgency.BackColor = System.Drawing.SystemColors.Window;
-			this.comboUrgency.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboUrgency.Location = new System.Drawing.Point(161,97);
-			this.comboUrgency.Name = "comboUrgency";
-			this.comboUrgency.Size = new System.Drawing.Size(155,21);
-			this.comboUrgency.TabIndex = 4;
-			// 
-			// comboGradeLevel
-			// 
-			this.comboGradeLevel.BackColor = System.Drawing.SystemColors.Window;
-			this.comboGradeLevel.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboGradeLevel.Location = new System.Drawing.Point(161,76);
-			this.comboGradeLevel.MaxDropDownItems = 25;
-			this.comboGradeLevel.Name = "comboGradeLevel";
-			this.comboGradeLevel.Size = new System.Drawing.Size(155,21);
-			this.comboGradeLevel.TabIndex = 3;
-			// 
-			// textGradeSchool
-			// 
-			this.textGradeSchool.AcceptsReturn = true;
-			this.textGradeSchool.Location = new System.Drawing.Point(161,56);
-			this.textGradeSchool.Name = "textGradeSchool";
-			this.textGradeSchool.Size = new System.Drawing.Size(213,20);
-			this.textGradeSchool.TabIndex = 2;
-			this.textGradeSchool.Leave += new System.EventHandler(this.textGradeSchool_Leave);
-			this.textGradeSchool.KeyUp += new System.Windows.Forms.KeyEventHandler(this.textGradeSchool_KeyUp);
-			// 
-			// label35
-			// 
-			this.label35.Location = new System.Drawing.Point(10,96);
-			this.label35.Name = "label35";
-			this.label35.Size = new System.Drawing.Size(149,17);
-			this.label35.TabIndex = 6;
-			this.label35.Text = "Treatment Urgency";
-			this.label35.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// comboRace
-			// 
-			this.comboRace.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboRace.Location = new System.Drawing.Point(161,15);
-			this.comboRace.MaxDropDownItems = 20;
-			this.comboRace.Name = "comboRace";
-			this.comboRace.Size = new System.Drawing.Size(156,21);
-			this.comboRace.TabIndex = 0;
-			// 
-			// textCounty
-			// 
-			this.textCounty.AcceptsReturn = true;
-			this.textCounty.Location = new System.Drawing.Point(161,36);
-			this.textCounty.Name = "textCounty";
-			this.textCounty.Size = new System.Drawing.Size(213,20);
-			this.textCounty.TabIndex = 1;
-			this.textCounty.Leave += new System.EventHandler(this.textCounty_Leave);
-			this.textCounty.KeyUp += new System.Windows.Forms.KeyEventHandler(this.textCounty_KeyUp);
-			// 
-			// label15
-			// 
-			this.label15.Location = new System.Drawing.Point(19,76);
-			this.label15.Name = "label15";
-			this.label15.Size = new System.Drawing.Size(140,17);
-			this.label15.TabIndex = 3;
-			this.label15.Text = "Grade Level";
-			this.label15.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// label14
-			// 
-			this.label14.Location = new System.Drawing.Point(8,56);
-			this.label14.Name = "label14";
-			this.label14.Size = new System.Drawing.Size(151,17);
-			this.label14.TabIndex = 2;
-			this.label14.Text = "Site (or Grade School)";
-			this.label14.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// label13
-			// 
-			this.label13.Location = new System.Drawing.Point(16,36);
-			this.label13.Name = "label13";
-			this.label13.Size = new System.Drawing.Size(143,17);
-			this.label13.TabIndex = 1;
-			this.label13.Text = "County";
-			this.label13.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// label10
-			// 
-			this.label10.Location = new System.Drawing.Point(18,16);
-			this.label10.Name = "label10";
-			this.label10.Size = new System.Drawing.Size(141,17);
-			this.label10.TabIndex = 0;
-			this.label10.Text = "Race/Ethnicity";
-			this.label10.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// textDateFirstVisit
-			// 
-			this.textDateFirstVisit.Location = new System.Drawing.Point(135,358);
-			this.textDateFirstVisit.Name = "textDateFirstVisit";
-			this.textDateFirstVisit.Size = new System.Drawing.Size(82,20);
-			this.textDateFirstVisit.TabIndex = 13;
-			// 
-			// label36
-			// 
-			this.label36.Location = new System.Drawing.Point(8,362);
-			this.label36.Name = "label36";
-			this.label36.Size = new System.Drawing.Size(125,14);
-			this.label36.TabIndex = 86;
-			this.label36.Text = "Date of First Visit";
-			this.label36.TextAlign = System.Drawing.ContentAlignment.TopRight;
-			// 
-			// label37
-			// 
-			this.label37.Location = new System.Drawing.Point(239,299);
-			this.label37.Name = "label37";
-			this.label37.Size = new System.Drawing.Size(179,14);
-			this.label37.TabIndex = 88;
-			this.label37.Text = "(put in InsPlan too)";
-			this.label37.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			// 
-			// labelClinic
-			// 
-			this.labelClinic.Location = new System.Drawing.Point(45,554);
-			this.labelClinic.Name = "labelClinic";
-			this.labelClinic.Size = new System.Drawing.Size(86,14);
-			this.labelClinic.TabIndex = 89;
-			this.labelClinic.Text = "Clinic";
-			this.labelClinic.TextAlign = System.Drawing.ContentAlignment.TopRight;
-			// 
-			// comboClinic
-			// 
-			this.comboClinic.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboClinic.Location = new System.Drawing.Point(135,551);
-			this.comboClinic.MaxDropDownItems = 30;
-			this.comboClinic.Name = "comboClinic";
-			this.comboClinic.Size = new System.Drawing.Size(198,21);
-			this.comboClinic.TabIndex = 22;
-			// 
-			// textTrophyFolder
-			// 
-			this.textTrophyFolder.Location = new System.Drawing.Point(135,508);
-			this.textTrophyFolder.MaxLength = 30;
-			this.textTrophyFolder.Name = "textTrophyFolder";
-			this.textTrophyFolder.Size = new System.Drawing.Size(226,20);
-			this.textTrophyFolder.TabIndex = 20;
-			// 
-			// labelTrophyFolder
-			// 
-			this.labelTrophyFolder.Location = new System.Drawing.Point(16,511);
-			this.labelTrophyFolder.Name = "labelTrophyFolder";
-			this.labelTrophyFolder.Size = new System.Drawing.Size(118,14);
-			this.labelTrophyFolder.TabIndex = 90;
-			this.labelTrophyFolder.Text = "Trophy Folder";
-			this.labelTrophyFolder.TextAlign = System.Drawing.ContentAlignment.TopRight;
-			// 
-			// textWard
-			// 
-			this.textWard.Location = new System.Drawing.Point(135,573);
-			this.textWard.MaxLength = 100;
-			this.textWard.Name = "textWard";
-			this.textWard.Size = new System.Drawing.Size(55,20);
-			this.textWard.TabIndex = 23;
-			// 
-			// labelWard
-			// 
-			this.labelWard.Location = new System.Drawing.Point(79,578);
-			this.labelWard.Name = "labelWard";
-			this.labelWard.Size = new System.Drawing.Size(53,14);
-			this.labelWard.TabIndex = 92;
-			this.labelWard.Text = "Ward";
-			this.labelWard.TextAlign = System.Drawing.ContentAlignment.TopRight;
-			// 
-			// label28
-			// 
-			this.label28.Location = new System.Drawing.Point(15,532);
-			this.label28.Name = "label28";
-			this.label28.Size = new System.Drawing.Size(118,14);
-			this.label28.TabIndex = 94;
-			this.label28.Text = "Language";
-			this.label28.TextAlign = System.Drawing.ContentAlignment.TopRight;
-			// 
-			// comboLanguage
-			// 
-			this.comboLanguage.BackColor = System.Drawing.SystemColors.Window;
-			this.comboLanguage.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboLanguage.Location = new System.Drawing.Point(135,529);
-			this.comboLanguage.MaxDropDownItems = 25;
-			this.comboLanguage.Name = "comboLanguage";
-			this.comboLanguage.Size = new System.Drawing.Size(226,21);
-			this.comboLanguage.TabIndex = 21;
-			// 
-			// comboContact
-			// 
-			this.comboContact.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboContact.FormattingEnabled = true;
-			this.comboContact.Location = new System.Drawing.Point(135,442);
-			this.comboContact.MaxDropDownItems = 30;
-			this.comboContact.Name = "comboContact";
-			this.comboContact.Size = new System.Drawing.Size(174,21);
-			this.comboContact.TabIndex = 17;
-			// 
-			// label23
-			// 
-			this.label23.Location = new System.Drawing.Point(1,444);
-			this.label23.Name = "label23";
-			this.label23.Size = new System.Drawing.Size(132,16);
-			this.label23.TabIndex = 96;
-			this.label23.Text = "Prefer Contact Method";
-			this.label23.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// comboConfirm
-			// 
-			this.comboConfirm.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboConfirm.FormattingEnabled = true;
-			this.comboConfirm.Location = new System.Drawing.Point(135,464);
-			this.comboConfirm.MaxDropDownItems = 30;
-			this.comboConfirm.Name = "comboConfirm";
-			this.comboConfirm.Size = new System.Drawing.Size(174,21);
-			this.comboConfirm.TabIndex = 18;
-			// 
-			// label24
-			// 
-			this.label24.Location = new System.Drawing.Point(1,466);
-			this.label24.Name = "label24";
-			this.label24.Size = new System.Drawing.Size(132,16);
-			this.label24.TabIndex = 98;
-			this.label24.Text = "Prefer Confirm Method";
-			this.label24.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// comboRecall
-			// 
-			this.comboRecall.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboRecall.FormattingEnabled = true;
-			this.comboRecall.Location = new System.Drawing.Point(135,486);
-			this.comboRecall.MaxDropDownItems = 30;
-			this.comboRecall.Name = "comboRecall";
-			this.comboRecall.Size = new System.Drawing.Size(174,21);
-			this.comboRecall.TabIndex = 19;
-			// 
-			// label25
-			// 
-			this.label25.Location = new System.Drawing.Point(1,488);
-			this.label25.Name = "label25";
-			this.label25.Size = new System.Drawing.Size(132,16);
-			this.label25.TabIndex = 100;
-			this.label25.Text = "Prefer Recall Method";
-			this.label25.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// textAdmitDate
-			// 
-			this.textAdmitDate.Location = new System.Drawing.Point(312,573);
-			this.textAdmitDate.Name = "textAdmitDate";
-			this.textAdmitDate.Size = new System.Drawing.Size(82,20);
-			this.textAdmitDate.TabIndex = 102;
-			// 
-			// labelAdmitDate
-			// 
-			this.labelAdmitDate.Location = new System.Drawing.Point(206,577);
-			this.labelAdmitDate.Name = "labelAdmitDate";
-			this.labelAdmitDate.Size = new System.Drawing.Size(104,14);
-			this.labelAdmitDate.TabIndex = 101;
-			this.labelAdmitDate.Text = "Admit Date";
-			this.labelAdmitDate.TextAlign = System.Drawing.ContentAlignment.TopRight;
-			// 
-			// textTitle
-			// 
-			this.textTitle.Location = new System.Drawing.Point(135,113);
-			this.textTitle.MaxLength = 100;
-			this.textTitle.Name = "textTitle";
-			this.textTitle.Size = new System.Drawing.Size(75,20);
-			this.textTitle.TabIndex = 103;
-			// 
-			// label26
-			// 
-			this.label26.Location = new System.Drawing.Point(9,116);
-			this.label26.Name = "label26";
-			this.label26.Size = new System.Drawing.Size(124,16);
-			this.label26.TabIndex = 104;
-			this.label26.Text = "Title";
-			this.label26.TextAlign = System.Drawing.ContentAlignment.TopRight;
-			// 
-			// FormPatientEdit
-			// 
-			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
-			this.CancelButton = this.butCancel;
-			this.ClientSize = new System.Drawing.Size(962,673);
-			this.Controls.Add(this.textTitle);
-			this.Controls.Add(this.label26);
-			this.Controls.Add(this.textAdmitDate);
-			this.Controls.Add(this.labelAdmitDate);
-			this.Controls.Add(this.comboRecall);
-			this.Controls.Add(this.label25);
-			this.Controls.Add(this.comboConfirm);
-			this.Controls.Add(this.label24);
-			this.Controls.Add(this.comboContact);
-			this.Controls.Add(this.label23);
-			this.Controls.Add(this.comboLanguage);
-			this.Controls.Add(this.label28);
-			this.Controls.Add(this.textWard);
-			this.Controls.Add(this.labelWard);
-			this.Controls.Add(this.textTrophyFolder);
-			this.Controls.Add(this.labelTrophyFolder);
-			this.Controls.Add(this.comboClinic);
-			this.Controls.Add(this.labelClinic);
-			this.Controls.Add(this.label37);
-			this.Controls.Add(this.textDateFirstVisit);
-			this.Controls.Add(this.textEmployer);
-			this.Controls.Add(this.textMedicaidID);
-			this.Controls.Add(this.textPatNum);
-			this.Controls.Add(this.textBirthdate);
-			this.Controls.Add(this.textChartNumber);
-			this.Controls.Add(this.textEmail);
-			this.Controls.Add(this.textSalutation);
-			this.Controls.Add(this.textAge);
-			this.Controls.Add(this.textWirelessPhone);
-			this.Controls.Add(this.textWkPhone);
-			this.Controls.Add(this.textSSN);
-			this.Controls.Add(this.textPreferred);
-			this.Controls.Add(this.textMiddleI);
-			this.Controls.Add(this.textFName);
-			this.Controls.Add(this.textLName);
-			this.Controls.Add(this.butAuto);
-			this.Controls.Add(this.butCancel);
-			this.Controls.Add(this.butOK);
-			this.Controls.Add(this.label36);
-			this.Controls.Add(this.groupPH);
-			this.Controls.Add(this.label33);
-			this.Controls.Add(this.label7);
-			this.Controls.Add(this.listPosition);
-			this.Controls.Add(this.listGender);
-			this.Controls.Add(this.listStatus);
-			this.Controls.Add(this.label31);
-			this.Controls.Add(this.label32);
-			this.Controls.Add(this.label19);
-			this.Controls.Add(this.groupNotes);
-			this.Controls.Add(this.groupBox1);
-			this.Controls.Add(this.label29);
-			this.Controls.Add(this.groupBox2);
-			this.Controls.Add(this.label22);
-			this.Controls.Add(this.label6);
-			this.Controls.Add(this.label21);
-			this.Controls.Add(this.label20);
-			this.Controls.Add(this.label18);
-			this.Controls.Add(this.label17);
-			this.Controls.Add(this.labelSSN);
-			this.Controls.Add(this.label9);
-			this.Controls.Add(this.label8);
-			this.Controls.Add(this.label5);
-			this.Controls.Add(this.label4);
-			this.Controls.Add(this.label3);
-			this.Controls.Add(this.label2);
-			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-			this.MaximizeBox = false;
-			this.MinimizeBox = false;
-			this.Name = "FormPatientEdit";
-			this.ShowInTaskbar = false;
-			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-			this.Text = "Edit Patient Information";
-			this.Closing += new System.ComponentModel.CancelEventHandler(this.FormPatientEdit_Closing);
-			this.Load += new System.EventHandler(this.FormPatientEdit_Load);
-			this.groupBox2.ResumeLayout(false);
-			this.groupBox2.PerformLayout();
-			this.groupBox1.ResumeLayout(false);
-			this.groupBox1.PerformLayout();
-			this.groupNotes.ResumeLayout(false);
-			this.groupNotes.PerformLayout();
-			this.groupPH.ResumeLayout(false);
-			this.groupPH.PerformLayout();
-			this.ResumeLayout(false);
-			this.PerformLayout();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormPatientEdit));
+            this.label2 = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
+            this.label4 = new System.Windows.Forms.Label();
+            this.label5 = new System.Windows.Forms.Label();
+            this.label6 = new System.Windows.Forms.Label();
+            this.label7 = new System.Windows.Forms.Label();
+            this.label8 = new System.Windows.Forms.Label();
+            this.label9 = new System.Windows.Forms.Label();
+            this.labelSSN = new System.Windows.Forms.Label();
+            this.label11 = new System.Windows.Forms.Label();
+            this.label12 = new System.Windows.Forms.Label();
+            this.labelCity = new System.Windows.Forms.Label();
+            this.labelST = new System.Windows.Forms.Label();
+            this.labelZip = new System.Windows.Forms.Label();
+            this.label16 = new System.Windows.Forms.Label();
+            this.label17 = new System.Windows.Forms.Label();
+            this.label18 = new System.Windows.Forms.Label();
+            this.textLName = new System.Windows.Forms.TextBox();
+            this.textFName = new System.Windows.Forms.TextBox();
+            this.textMiddleI = new System.Windows.Forms.TextBox();
+            this.textPreferred = new System.Windows.Forms.TextBox();
+            this.textSSN = new System.Windows.Forms.TextBox();
+            this.textAddress = new System.Windows.Forms.TextBox();
+            this.textAddress2 = new System.Windows.Forms.TextBox();
+            this.textCity = new System.Windows.Forms.TextBox();
+            this.textState = new System.Windows.Forms.TextBox();
+            this.textHmPhone = new System.Windows.Forms.TextBox();
+            this.textWkPhone = new System.Windows.Forms.TextBox();
+            this.textWirelessPhone = new System.Windows.Forms.TextBox();
+            this.butOK = new OpenDental.UI.Button();
+            this.butCancel = new OpenDental.UI.Button();
+            this.label20 = new System.Windows.Forms.Label();
+            this.textAge = new System.Windows.Forms.TextBox();
+            this.textSalutation = new System.Windows.Forms.TextBox();
+            this.label21 = new System.Windows.Forms.Label();
+            this.textEmail = new System.Windows.Forms.TextBox();
+            this.label22 = new System.Windows.Forms.Label();
+            this.label27 = new System.Windows.Forms.Label();
+            this.textCreditType = new System.Windows.Forms.TextBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.textSchool = new System.Windows.Forms.TextBox();
+            this.radioStudentN = new System.Windows.Forms.RadioButton();
+            this.radioStudentP = new System.Windows.Forms.RadioButton();
+            this.radioStudentF = new System.Windows.Forms.RadioButton();
+            this.label30 = new System.Windows.Forms.Label();
+            this.label29 = new System.Windows.Forms.Label();
+            this.textChartNumber = new System.Windows.Forms.TextBox();
+            this.textBirthdate = new OpenDental.ValidDate();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.label40 = new System.Windows.Forms.Label();
+            this.label39 = new System.Windows.Forms.Label();
+            this.label38 = new System.Windows.Forms.Label();
+            this.comboFeeSched = new System.Windows.Forms.ComboBox();
+            this.comboSecProv = new System.Windows.Forms.ComboBox();
+            this.comboPriProv = new System.Windows.Forms.ComboBox();
+            this.comboBillType = new System.Windows.Forms.ComboBox();
+            this.butEditZip = new OpenDental.UI.Button();
+            this.textZip = new System.Windows.Forms.TextBox();
+            this.comboZip = new System.Windows.Forms.ComboBox();
+            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.checkSame = new System.Windows.Forms.CheckBox();
+            this.groupNotes = new System.Windows.Forms.GroupBox();
+            this.textAddrNotes = new OpenDental.ODtextBox();
+            this.checkNotesSame = new System.Windows.Forms.CheckBox();
+            this.textPatNum = new System.Windows.Forms.TextBox();
+            this.label19 = new System.Windows.Forms.Label();
+            this.label32 = new System.Windows.Forms.Label();
+            this.butAuto = new OpenDental.UI.Button();
+            this.textMedicaidID = new System.Windows.Forms.TextBox();
+            this.label31 = new System.Windows.Forms.Label();
+            this.listStatus = new System.Windows.Forms.ListBox();
+            this.listGender = new System.Windows.Forms.ListBox();
+            this.listPosition = new System.Windows.Forms.ListBox();
+            this.textEmployer = new System.Windows.Forms.TextBox();
+            this.label33 = new System.Windows.Forms.Label();
+            this.groupPH = new System.Windows.Forms.GroupBox();
+            this.comboUrgency = new System.Windows.Forms.ComboBox();
+            this.comboGradeLevel = new System.Windows.Forms.ComboBox();
+            this.textGradeSchool = new System.Windows.Forms.TextBox();
+            this.label35 = new System.Windows.Forms.Label();
+            this.comboRace = new System.Windows.Forms.ComboBox();
+            this.textCounty = new System.Windows.Forms.TextBox();
+            this.label15 = new System.Windows.Forms.Label();
+            this.label14 = new System.Windows.Forms.Label();
+            this.label13 = new System.Windows.Forms.Label();
+            this.label10 = new System.Windows.Forms.Label();
+            this.textDateFirstVisit = new OpenDental.ValidDate();
+            this.label36 = new System.Windows.Forms.Label();
+            this.label37 = new System.Windows.Forms.Label();
+            this.labelClinic = new System.Windows.Forms.Label();
+            this.comboClinic = new System.Windows.Forms.ComboBox();
+            this.textTrophyFolder = new System.Windows.Forms.TextBox();
+            this.labelTrophyFolder = new System.Windows.Forms.Label();
+            this.textWard = new System.Windows.Forms.TextBox();
+            this.labelWard = new System.Windows.Forms.Label();
+            this.label28 = new System.Windows.Forms.Label();
+            this.comboLanguage = new System.Windows.Forms.ComboBox();
+            this.comboContact = new System.Windows.Forms.ComboBox();
+            this.label23 = new System.Windows.Forms.Label();
+            this.comboConfirm = new System.Windows.Forms.ComboBox();
+            this.label24 = new System.Windows.Forms.Label();
+            this.comboRecall = new System.Windows.Forms.ComboBox();
+            this.label25 = new System.Windows.Forms.Label();
+            this.textAdmitDate = new OpenDental.ValidDate();
+            this.labelAdmitDate = new System.Windows.Forms.Label();
+            this.textTitle = new System.Windows.Forms.TextBox();
+            this.label26 = new System.Windows.Forms.Label();
+            this.butReferral = new OpenDental.UI.Button();
+            this.groupBox2.SuspendLayout();
+            this.groupBox1.SuspendLayout();
+            this.groupNotes.SuspendLayout();
+            this.groupPH.SuspendLayout();
+            this.SuspendLayout();
+            // 
+            // label2
+            // 
+            this.label2.Location = new System.Drawing.Point(8, 31);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(125, 16);
+            this.label2.TabIndex = 1;
+            this.label2.Text = "Last Name";
+            this.label2.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            // 
+            // label3
+            // 
+            this.label3.Location = new System.Drawing.Point(6, 53);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(127, 16);
+            this.label3.TabIndex = 2;
+            this.label3.Text = "First Name";
+            this.label3.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            // 
+            // label4
+            // 
+            this.label4.Location = new System.Drawing.Point(9, 74);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(124, 16);
+            this.label4.TabIndex = 3;
+            this.label4.Text = "Middle Initial";
+            this.label4.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            // 
+            // label5
+            // 
+            this.label5.Location = new System.Drawing.Point(4, 95);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(129, 16);
+            this.label5.TabIndex = 4;
+            this.label5.Text = "Preferred Name";
+            this.label5.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            // 
+            // label6
+            // 
+            this.label6.Location = new System.Drawing.Point(62, 160);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(114, 17);
+            this.label6.TabIndex = 5;
+            this.label6.Text = "Status";
+            this.label6.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
+            // 
+            // label7
+            // 
+            this.label7.Location = new System.Drawing.Point(180, 161);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(106, 16);
+            this.label7.TabIndex = 6;
+            this.label7.Text = "Gender";
+            this.label7.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
+            // 
+            // label8
+            // 
+            this.label8.Location = new System.Drawing.Point(298, 162);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(100, 16);
+            this.label8.TabIndex = 7;
+            this.label8.Text = "Position";
+            this.label8.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
+            // 
+            // label9
+            // 
+            this.label9.Location = new System.Drawing.Point(28, 257);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(105, 14);
+            this.label9.TabIndex = 8;
+            this.label9.Text = "Birthdate";
+            this.label9.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            // 
+            // labelSSN
+            // 
+            this.labelSSN.Location = new System.Drawing.Point(19, 279);
+            this.labelSSN.Name = "labelSSN";
+            this.labelSSN.Size = new System.Drawing.Size(113, 14);
+            this.labelSSN.TabIndex = 9;
+            this.labelSSN.Text = "SS#";
+            this.labelSSN.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            // 
+            // label11
+            // 
+            this.label11.Location = new System.Drawing.Point(49, 58);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(98, 14);
+            this.label11.TabIndex = 10;
+            this.label11.Text = "Address";
+            this.label11.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            // 
+            // label12
+            // 
+            this.label12.Location = new System.Drawing.Point(49, 79);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(99, 14);
+            this.label12.TabIndex = 11;
+            this.label12.Text = "Address2";
+            this.label12.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            // 
+            // labelCity
+            // 
+            this.labelCity.Location = new System.Drawing.Point(48, 99);
+            this.labelCity.Name = "labelCity";
+            this.labelCity.Size = new System.Drawing.Size(98, 14);
+            this.labelCity.TabIndex = 12;
+            this.labelCity.Text = "City";
+            this.labelCity.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            // 
+            // labelST
+            // 
+            this.labelST.Location = new System.Drawing.Point(51, 119);
+            this.labelST.Name = "labelST";
+            this.labelST.Size = new System.Drawing.Size(96, 14);
+            this.labelST.TabIndex = 13;
+            this.labelST.Text = "ST";
+            this.labelST.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            // 
+            // labelZip
+            // 
+            this.labelZip.Location = new System.Drawing.Point(51, 140);
+            this.labelZip.Name = "labelZip";
+            this.labelZip.Size = new System.Drawing.Size(96, 14);
+            this.labelZip.TabIndex = 14;
+            this.labelZip.Text = "Zip";
+            this.labelZip.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            // 
+            // label16
+            // 
+            this.label16.Location = new System.Drawing.Point(51, 37);
+            this.label16.Name = "label16";
+            this.label16.Size = new System.Drawing.Size(98, 14);
+            this.label16.TabIndex = 15;
+            this.label16.Text = "Home Phone";
+            this.label16.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            // 
+            // label17
+            // 
+            this.label17.Location = new System.Drawing.Point(16, 425);
+            this.label17.Name = "label17";
+            this.label17.Size = new System.Drawing.Size(118, 14);
+            this.label17.TabIndex = 16;
+            this.label17.Text = "Work Phone";
+            this.label17.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            // 
+            // label18
+            // 
+            this.label18.Location = new System.Drawing.Point(10, 404);
+            this.label18.Name = "label18";
+            this.label18.Size = new System.Drawing.Size(124, 14);
+            this.label18.TabIndex = 17;
+            this.label18.Text = "Wireless Phone";
+            this.label18.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            // 
+            // textLName
+            // 
+            this.textLName.Location = new System.Drawing.Point(135, 29);
+            this.textLName.MaxLength = 100;
+            this.textLName.Name = "textLName";
+            this.textLName.Size = new System.Drawing.Size(228, 20);
+            this.textLName.TabIndex = 0;
+            this.textLName.TextChanged += new System.EventHandler(this.textLName_TextChanged);
+            // 
+            // textFName
+            // 
+            this.textFName.Location = new System.Drawing.Point(135, 50);
+            this.textFName.MaxLength = 100;
+            this.textFName.Name = "textFName";
+            this.textFName.Size = new System.Drawing.Size(228, 20);
+            this.textFName.TabIndex = 1;
+            this.textFName.TextChanged += new System.EventHandler(this.textFName_TextChanged);
+            // 
+            // textMiddleI
+            // 
+            this.textMiddleI.Location = new System.Drawing.Point(135, 71);
+            this.textMiddleI.MaxLength = 100;
+            this.textMiddleI.Name = "textMiddleI";
+            this.textMiddleI.Size = new System.Drawing.Size(75, 20);
+            this.textMiddleI.TabIndex = 2;
+            this.textMiddleI.TextChanged += new System.EventHandler(this.textMiddleI_TextChanged);
+            // 
+            // textPreferred
+            // 
+            this.textPreferred.Location = new System.Drawing.Point(135, 92);
+            this.textPreferred.MaxLength = 100;
+            this.textPreferred.Name = "textPreferred";
+            this.textPreferred.Size = new System.Drawing.Size(228, 20);
+            this.textPreferred.TabIndex = 3;
+            this.textPreferred.TextChanged += new System.EventHandler(this.textPreferred_TextChanged);
+            // 
+            // textSSN
+            // 
+            this.textSSN.Location = new System.Drawing.Point(135, 274);
+            this.textSSN.MaxLength = 100;
+            this.textSSN.Name = "textSSN";
+            this.textSSN.Size = new System.Drawing.Size(82, 20);
+            this.textSSN.TabIndex = 9;
+            this.textSSN.Validating += new System.ComponentModel.CancelEventHandler(this.textSSN_Validating);
+            // 
+            // textAddress
+            // 
+            this.textAddress.Location = new System.Drawing.Point(149, 55);
+            this.textAddress.MaxLength = 100;
+            this.textAddress.Name = "textAddress";
+            this.textAddress.Size = new System.Drawing.Size(254, 20);
+            this.textAddress.TabIndex = 13;
+            this.textAddress.TextChanged += new System.EventHandler(this.textAddress_TextChanged);
+            // 
+            // textAddress2
+            // 
+            this.textAddress2.Location = new System.Drawing.Point(149, 75);
+            this.textAddress2.MaxLength = 100;
+            this.textAddress2.Name = "textAddress2";
+            this.textAddress2.Size = new System.Drawing.Size(253, 20);
+            this.textAddress2.TabIndex = 21;
+            this.textAddress2.TextChanged += new System.EventHandler(this.textAddress2_TextChanged);
+            // 
+            // textCity
+            // 
+            this.textCity.Location = new System.Drawing.Point(149, 95);
+            this.textCity.MaxLength = 100;
+            this.textCity.Name = "textCity";
+            this.textCity.Size = new System.Drawing.Size(191, 20);
+            this.textCity.TabIndex = 22;
+            this.textCity.TabStop = false;
+            this.textCity.TextChanged += new System.EventHandler(this.textCity_TextChanged);
+            // 
+            // textState
+            // 
+            this.textState.Location = new System.Drawing.Point(149, 115);
+            this.textState.MaxLength = 100;
+            this.textState.Name = "textState";
+            this.textState.Size = new System.Drawing.Size(61, 20);
+            this.textState.TabIndex = 23;
+            this.textState.TabStop = false;
+            this.textState.TextChanged += new System.EventHandler(this.textState_TextChanged);
+            // 
+            // textHmPhone
+            // 
+            this.textHmPhone.Location = new System.Drawing.Point(149, 35);
+            this.textHmPhone.MaxLength = 30;
+            this.textHmPhone.Name = "textHmPhone";
+            this.textHmPhone.Size = new System.Drawing.Size(174, 20);
+            this.textHmPhone.TabIndex = 12;
+            this.textHmPhone.TextChanged += new System.EventHandler(this.textHmPhone_TextChanged);
+            // 
+            // textWkPhone
+            // 
+            this.textWkPhone.Location = new System.Drawing.Point(135, 421);
+            this.textWkPhone.MaxLength = 30;
+            this.textWkPhone.Name = "textWkPhone";
+            this.textWkPhone.Size = new System.Drawing.Size(174, 20);
+            this.textWkPhone.TabIndex = 16;
+            this.textWkPhone.TextChanged += new System.EventHandler(this.textWkPhone_TextChanged);
+            // 
+            // textWirelessPhone
+            // 
+            this.textWirelessPhone.Location = new System.Drawing.Point(135, 400);
+            this.textWirelessPhone.MaxLength = 30;
+            this.textWirelessPhone.Name = "textWirelessPhone";
+            this.textWirelessPhone.Size = new System.Drawing.Size(174, 20);
+            this.textWirelessPhone.TabIndex = 15;
+            this.textWirelessPhone.TextChanged += new System.EventHandler(this.textWirelessPhone_TextChanged);
+            // 
+            // butOK
+            // 
+            this.butOK.AdjustImageLocation = new System.Drawing.Point(0, 0);
+            this.butOK.Autosize = true;
+            this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+            this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+            this.butOK.CornerRadius = 4F;
+            this.butOK.Location = new System.Drawing.Point(874, 597);
+            this.butOK.Name = "butOK";
+            this.butOK.Size = new System.Drawing.Size(75, 26);
+            this.butOK.TabIndex = 26;
+            this.butOK.Text = "&OK";
+            this.butOK.Click += new System.EventHandler(this.butOK_Click);
+            // 
+            // butCancel
+            // 
+            this.butCancel.AdjustImageLocation = new System.Drawing.Point(0, 0);
+            this.butCancel.Autosize = true;
+            this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+            this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+            this.butCancel.CornerRadius = 4F;
+            this.butCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.butCancel.Location = new System.Drawing.Point(874, 637);
+            this.butCancel.Name = "butCancel";
+            this.butCancel.Size = new System.Drawing.Size(75, 26);
+            this.butCancel.TabIndex = 27;
+            this.butCancel.Text = "&Cancel";
+            this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
+            // 
+            // label20
+            // 
+            this.label20.Location = new System.Drawing.Point(215, 257);
+            this.label20.Name = "label20";
+            this.label20.Size = new System.Drawing.Size(61, 16);
+            this.label20.TabIndex = 40;
+            this.label20.Text = "Age";
+            this.label20.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            // 
+            // textAge
+            // 
+            this.textAge.Location = new System.Drawing.Point(276, 253);
+            this.textAge.Name = "textAge";
+            this.textAge.ReadOnly = true;
+            this.textAge.Size = new System.Drawing.Size(68, 20);
+            this.textAge.TabIndex = 0;
+            // 
+            // textSalutation
+            // 
+            this.textSalutation.Location = new System.Drawing.Point(135, 134);
+            this.textSalutation.MaxLength = 100;
+            this.textSalutation.Name = "textSalutation";
+            this.textSalutation.Size = new System.Drawing.Size(228, 20);
+            this.textSalutation.TabIndex = 4;
+            this.textSalutation.TextChanged += new System.EventHandler(this.textSalutation_TextChanged);
+            // 
+            // label21
+            // 
+            this.label21.Location = new System.Drawing.Point(6, 138);
+            this.label21.Name = "label21";
+            this.label21.Size = new System.Drawing.Size(127, 16);
+            this.label21.TabIndex = 42;
+            this.label21.Text = "Salutation (Dear __)";
+            this.label21.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            // 
+            // textEmail
+            // 
+            this.textEmail.Location = new System.Drawing.Point(135, 316);
+            this.textEmail.MaxLength = 100;
+            this.textEmail.Name = "textEmail";
+            this.textEmail.Size = new System.Drawing.Size(226, 20);
+            this.textEmail.TabIndex = 11;
+            // 
+            // label22
+            // 
+            this.label22.Location = new System.Drawing.Point(29, 321);
+            this.label22.Name = "label22";
+            this.label22.Size = new System.Drawing.Size(104, 14);
+            this.label22.TabIndex = 44;
+            this.label22.Text = "E-mail";
+            this.label22.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            // 
+            // label27
+            // 
+            this.label27.Location = new System.Drawing.Point(50, 159);
+            this.label27.Name = "label27";
+            this.label27.Size = new System.Drawing.Size(97, 16);
+            this.label27.TabIndex = 55;
+            this.label27.Text = "Credit Type";
+            this.label27.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            // 
+            // textCreditType
+            // 
+            this.textCreditType.Location = new System.Drawing.Point(149, 156);
+            this.textCreditType.MaxLength = 1;
+            this.textCreditType.Name = "textCreditType";
+            this.textCreditType.Size = new System.Drawing.Size(18, 20);
+            this.textCreditType.TabIndex = 15;
+            this.textCreditType.TextChanged += new System.EventHandler(this.textCreditType_TextChanged);
+            // 
+            // label1
+            // 
+            this.label1.Location = new System.Drawing.Point(26, 178);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(121, 16);
+            this.label1.TabIndex = 57;
+            this.label1.Text = "Billing Type";
+            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // groupBox2
+            // 
+            this.groupBox2.Controls.Add(this.textSchool);
+            this.groupBox2.Controls.Add(this.radioStudentN);
+            this.groupBox2.Controls.Add(this.radioStudentP);
+            this.groupBox2.Controls.Add(this.radioStudentF);
+            this.groupBox2.Controls.Add(this.label30);
+            this.groupBox2.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.groupBox2.Location = new System.Drawing.Point(440, 418);
+            this.groupBox2.Name = "groupBox2";
+            this.groupBox2.Size = new System.Drawing.Size(382, 65);
+            this.groupBox2.TabIndex = 24;
+            this.groupBox2.TabStop = false;
+            this.groupBox2.Text = "Student Status if Dependent Over 19 (for Ins)";
+            // 
+            // textSchool
+            // 
+            this.textSchool.Location = new System.Drawing.Point(123, 37);
+            this.textSchool.MaxLength = 30;
+            this.textSchool.Name = "textSchool";
+            this.textSchool.Size = new System.Drawing.Size(226, 20);
+            this.textSchool.TabIndex = 3;
+            // 
+            // radioStudentN
+            // 
+            this.radioStudentN.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.radioStudentN.Location = new System.Drawing.Point(52, 18);
+            this.radioStudentN.Name = "radioStudentN";
+            this.radioStudentN.Size = new System.Drawing.Size(108, 16);
+            this.radioStudentN.TabIndex = 0;
+            this.radioStudentN.Text = "Nonstudent";
+            this.radioStudentN.Click += new System.EventHandler(this.radioStudentN_Click);
+            // 
+            // radioStudentP
+            // 
+            this.radioStudentP.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.radioStudentP.Location = new System.Drawing.Point(262, 18);
+            this.radioStudentP.Name = "radioStudentP";
+            this.radioStudentP.Size = new System.Drawing.Size(104, 16);
+            this.radioStudentP.TabIndex = 2;
+            this.radioStudentP.Text = "Parttime";
+            this.radioStudentP.Click += new System.EventHandler(this.radioStudentP_Click);
+            // 
+            // radioStudentF
+            // 
+            this.radioStudentF.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.radioStudentF.Location = new System.Drawing.Point(164, 18);
+            this.radioStudentF.Name = "radioStudentF";
+            this.radioStudentF.Size = new System.Drawing.Size(98, 16);
+            this.radioStudentF.TabIndex = 1;
+            this.radioStudentF.Text = "Fulltime";
+            this.radioStudentF.Click += new System.EventHandler(this.radioStudentF_Click);
+            // 
+            // label30
+            // 
+            this.label30.Location = new System.Drawing.Point(5, 41);
+            this.label30.Name = "label30";
+            this.label30.Size = new System.Drawing.Size(116, 16);
+            this.label30.TabIndex = 9;
+            this.label30.Text = "College Name";
+            this.label30.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            // 
+            // label29
+            // 
+            this.label29.Location = new System.Drawing.Point(18, 341);
+            this.label29.Name = "label29";
+            this.label29.Size = new System.Drawing.Size(116, 16);
+            this.label29.TabIndex = 62;
+            this.label29.Text = "ChartNumber";
+            this.label29.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            // 
+            // textChartNumber
+            // 
+            this.textChartNumber.Location = new System.Drawing.Point(135, 337);
+            this.textChartNumber.MaxLength = 20;
+            this.textChartNumber.Name = "textChartNumber";
+            this.textChartNumber.Size = new System.Drawing.Size(99, 20);
+            this.textChartNumber.TabIndex = 12;
+            // 
+            // textBirthdate
+            // 
+            this.textBirthdate.Location = new System.Drawing.Point(135, 253);
+            this.textBirthdate.Name = "textBirthdate";
+            this.textBirthdate.Size = new System.Drawing.Size(82, 20);
+            this.textBirthdate.TabIndex = 8;
+            this.textBirthdate.Validated += new System.EventHandler(this.textBirthdate_Validated);
+            // 
+            // groupBox1
+            // 
+            this.groupBox1.Controls.Add(this.label40);
+            this.groupBox1.Controls.Add(this.label39);
+            this.groupBox1.Controls.Add(this.label38);
+            this.groupBox1.Controls.Add(this.comboFeeSched);
+            this.groupBox1.Controls.Add(this.comboSecProv);
+            this.groupBox1.Controls.Add(this.comboPriProv);
+            this.groupBox1.Controls.Add(this.comboBillType);
+            this.groupBox1.Controls.Add(this.textHmPhone);
+            this.groupBox1.Controls.Add(this.butEditZip);
+            this.groupBox1.Controls.Add(this.textZip);
+            this.groupBox1.Controls.Add(this.comboZip);
+            this.groupBox1.Controls.Add(this.textBox1);
+            this.groupBox1.Controls.Add(this.checkSame);
+            this.groupBox1.Controls.Add(this.textState);
+            this.groupBox1.Controls.Add(this.labelST);
+            this.groupBox1.Controls.Add(this.textAddress);
+            this.groupBox1.Controls.Add(this.label27);
+            this.groupBox1.Controls.Add(this.textCreditType);
+            this.groupBox1.Controls.Add(this.label12);
+            this.groupBox1.Controls.Add(this.labelCity);
+            this.groupBox1.Controls.Add(this.textAddress2);
+            this.groupBox1.Controls.Add(this.labelZip);
+            this.groupBox1.Controls.Add(this.label16);
+            this.groupBox1.Controls.Add(this.textCity);
+            this.groupBox1.Controls.Add(this.label11);
+            this.groupBox1.Controls.Add(this.label1);
+            this.groupBox1.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.groupBox1.Location = new System.Drawing.Point(440, 8);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(424, 278);
+            this.groupBox1.TabIndex = 25;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "Address and Phone";
+            // 
+            // label40
+            // 
+            this.label40.Location = new System.Drawing.Point(1, 242);
+            this.label40.Name = "label40";
+            this.label40.Size = new System.Drawing.Size(147, 18);
+            this.label40.TabIndex = 69;
+            this.label40.Text = "Fee Schedule (rarely used)";
+            this.label40.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            // 
+            // label39
+            // 
+            this.label39.Location = new System.Drawing.Point(26, 222);
+            this.label39.Name = "label39";
+            this.label39.Size = new System.Drawing.Size(121, 16);
+            this.label39.TabIndex = 68;
+            this.label39.Text = "Secondary Provider";
+            this.label39.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // label38
+            // 
+            this.label38.Location = new System.Drawing.Point(26, 199);
+            this.label38.Name = "label38";
+            this.label38.Size = new System.Drawing.Size(121, 16);
+            this.label38.TabIndex = 67;
+            this.label38.Text = "Primary Provider";
+            this.label38.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // comboFeeSched
+            // 
+            this.comboFeeSched.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboFeeSched.FormattingEnabled = true;
+            this.comboFeeSched.Location = new System.Drawing.Point(149, 239);
+            this.comboFeeSched.MaxDropDownItems = 30;
+            this.comboFeeSched.Name = "comboFeeSched";
+            this.comboFeeSched.Size = new System.Drawing.Size(198, 21);
+            this.comboFeeSched.TabIndex = 20;
+            // 
+            // comboSecProv
+            // 
+            this.comboSecProv.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboSecProv.FormattingEnabled = true;
+            this.comboSecProv.Location = new System.Drawing.Point(149, 218);
+            this.comboSecProv.MaxDropDownItems = 30;
+            this.comboSecProv.Name = "comboSecProv";
+            this.comboSecProv.Size = new System.Drawing.Size(198, 21);
+            this.comboSecProv.TabIndex = 19;
+            // 
+            // comboPriProv
+            // 
+            this.comboPriProv.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboPriProv.FormattingEnabled = true;
+            this.comboPriProv.Location = new System.Drawing.Point(149, 197);
+            this.comboPriProv.MaxDropDownItems = 30;
+            this.comboPriProv.Name = "comboPriProv";
+            this.comboPriProv.Size = new System.Drawing.Size(198, 21);
+            this.comboPriProv.TabIndex = 17;
+            // 
+            // comboBillType
+            // 
+            this.comboBillType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBillType.FormattingEnabled = true;
+            this.comboBillType.Location = new System.Drawing.Point(149, 176);
+            this.comboBillType.MaxDropDownItems = 30;
+            this.comboBillType.Name = "comboBillType";
+            this.comboBillType.Size = new System.Drawing.Size(198, 21);
+            this.comboBillType.TabIndex = 16;
+            // 
+            // butEditZip
+            // 
+            this.butEditZip.AdjustImageLocation = new System.Drawing.Point(0, 0);
+            this.butEditZip.Autosize = true;
+            this.butEditZip.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+            this.butEditZip.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+            this.butEditZip.CornerRadius = 4F;
+            this.butEditZip.Location = new System.Drawing.Point(349, 134);
+            this.butEditZip.Name = "butEditZip";
+            this.butEditZip.Size = new System.Drawing.Size(76, 23);
+            this.butEditZip.TabIndex = 62;
+            this.butEditZip.TabStop = false;
+            this.butEditZip.Text = "&Edit Zip";
+            this.butEditZip.Click += new System.EventHandler(this.butEditZip_Click);
+            // 
+            // textZip
+            // 
+            this.textZip.Location = new System.Drawing.Point(149, 135);
+            this.textZip.MaxLength = 100;
+            this.textZip.Name = "textZip";
+            this.textZip.Size = new System.Drawing.Size(179, 20);
+            this.textZip.TabIndex = 14;
+            this.textZip.Validating += new System.ComponentModel.CancelEventHandler(this.textZip_Validating);
+            this.textZip.TextChanged += new System.EventHandler(this.textZip_TextChanged);
+            // 
+            // comboZip
+            // 
+            this.comboZip.DropDownWidth = 198;
+            this.comboZip.Location = new System.Drawing.Point(149, 135);
+            this.comboZip.Name = "comboZip";
+            this.comboZip.Size = new System.Drawing.Size(198, 21);
+            this.comboZip.TabIndex = 60;
+            this.comboZip.TabStop = false;
+            this.comboZip.SelectionChangeCommitted += new System.EventHandler(this.comboZip_SelectionChangeCommitted);
+            // 
+            // textBox1
+            // 
+            this.textBox1.BackColor = System.Drawing.SystemColors.Control;
+            this.textBox1.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.textBox1.Location = new System.Drawing.Point(167, 17);
+            this.textBox1.Multiline = true;
+            this.textBox1.Name = "textBox1";
+            this.textBox1.ReadOnly = true;
+            this.textBox1.Size = new System.Drawing.Size(230, 16);
+            this.textBox1.TabIndex = 57;
+            this.textBox1.TabStop = false;
+            this.textBox1.Text = "Same for entire family";
+            // 
+            // checkSame
+            // 
+            this.checkSame.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.checkSame.Location = new System.Drawing.Point(149, 14);
+            this.checkSame.Name = "checkSame";
+            this.checkSame.Size = new System.Drawing.Size(18, 21);
+            this.checkSame.TabIndex = 11;
+            this.checkSame.TabStop = false;
+            // 
+            // groupNotes
+            // 
+            this.groupNotes.Controls.Add(this.textAddrNotes);
+            this.groupNotes.Controls.Add(this.checkNotesSame);
+            this.groupNotes.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.groupNotes.Location = new System.Drawing.Point(440, 291);
+            this.groupNotes.Name = "groupNotes";
+            this.groupNotes.Size = new System.Drawing.Size(424, 107);
+            this.groupNotes.TabIndex = 26;
+            this.groupNotes.TabStop = false;
+            this.groupNotes.Text = "Address and Phone Notes";
+            // 
+            // textAddrNotes
+            // 
+            this.textAddrNotes.AcceptsReturn = true;
+            this.textAddrNotes.Location = new System.Drawing.Point(128, 40);
+            this.textAddrNotes.Multiline = true;
+            this.textAddrNotes.Name = "textAddrNotes";
+            this.textAddrNotes.QuickPasteType = OpenDentBusiness.QuickPasteType.PatAddressNote;
+            this.textAddrNotes.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.textAddrNotes.Size = new System.Drawing.Size(237, 59);
+            this.textAddrNotes.TabIndex = 0;
+            // 
+            // checkNotesSame
+            // 
+            this.checkNotesSame.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.checkNotesSame.Location = new System.Drawing.Point(129, 20);
+            this.checkNotesSame.Name = "checkNotesSame";
+            this.checkNotesSame.Size = new System.Drawing.Size(247, 18);
+            this.checkNotesSame.TabIndex = 1;
+            this.checkNotesSame.Text = "Same for entire family";
+            // 
+            // textPatNum
+            // 
+            this.textPatNum.Location = new System.Drawing.Point(135, 8);
+            this.textPatNum.MaxLength = 100;
+            this.textPatNum.Name = "textPatNum";
+            this.textPatNum.ReadOnly = true;
+            this.textPatNum.Size = new System.Drawing.Size(75, 20);
+            this.textPatNum.TabIndex = 71;
+            // 
+            // label19
+            // 
+            this.label19.Location = new System.Drawing.Point(9, 11);
+            this.label19.Name = "label19";
+            this.label19.Size = new System.Drawing.Size(125, 16);
+            this.label19.TabIndex = 72;
+            this.label19.Text = "Patient Number";
+            this.label19.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            // 
+            // label32
+            // 
+            this.label32.Location = new System.Drawing.Point(303, 341);
+            this.label32.Name = "label32";
+            this.label32.Size = new System.Drawing.Size(88, 17);
+            this.label32.TabIndex = 73;
+            this.label32.Text = "(if used)";
+            // 
+            // butAuto
+            // 
+            this.butAuto.AdjustImageLocation = new System.Drawing.Point(0, 0);
+            this.butAuto.Autosize = true;
+            this.butAuto.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+            this.butAuto.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+            this.butAuto.CornerRadius = 4F;
+            this.butAuto.Location = new System.Drawing.Point(236, 336);
+            this.butAuto.Name = "butAuto";
+            this.butAuto.Size = new System.Drawing.Size(62, 22);
+            this.butAuto.TabIndex = 74;
+            this.butAuto.Text = "Auto";
+            this.butAuto.Click += new System.EventHandler(this.butAuto_Click);
+            // 
+            // textMedicaidID
+            // 
+            this.textMedicaidID.Location = new System.Drawing.Point(135, 295);
+            this.textMedicaidID.MaxLength = 20;
+            this.textMedicaidID.Name = "textMedicaidID";
+            this.textMedicaidID.Size = new System.Drawing.Size(99, 20);
+            this.textMedicaidID.TabIndex = 10;
+            // 
+            // label31
+            // 
+            this.label31.Location = new System.Drawing.Point(26, 300);
+            this.label31.Name = "label31";
+            this.label31.Size = new System.Drawing.Size(106, 14);
+            this.label31.TabIndex = 75;
+            this.label31.Text = "Medicaid ID";
+            this.label31.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            // 
+            // listStatus
+            // 
+            this.listStatus.Location = new System.Drawing.Point(62, 177);
+            this.listStatus.Name = "listStatus";
+            this.listStatus.Size = new System.Drawing.Size(105, 69);
+            this.listStatus.TabIndex = 5;
+            // 
+            // listGender
+            // 
+            this.listGender.Location = new System.Drawing.Point(180, 177);
+            this.listGender.Name = "listGender";
+            this.listGender.Size = new System.Drawing.Size(105, 43);
+            this.listGender.TabIndex = 6;
+            // 
+            // listPosition
+            // 
+            this.listPosition.Location = new System.Drawing.Point(298, 178);
+            this.listPosition.Name = "listPosition";
+            this.listPosition.Size = new System.Drawing.Size(105, 69);
+            this.listPosition.TabIndex = 7;
+            // 
+            // textEmployer
+            // 
+            this.textEmployer.Location = new System.Drawing.Point(135, 379);
+            this.textEmployer.MaxLength = 30;
+            this.textEmployer.Name = "textEmployer";
+            this.textEmployer.Size = new System.Drawing.Size(226, 20);
+            this.textEmployer.TabIndex = 14;
+            this.textEmployer.Leave += new System.EventHandler(this.textEmployer_Leave);
+            this.textEmployer.KeyUp += new System.Windows.Forms.KeyEventHandler(this.textEmployer_KeyUp);
+            // 
+            // label33
+            // 
+            this.label33.Location = new System.Drawing.Point(10, 383);
+            this.label33.Name = "label33";
+            this.label33.Size = new System.Drawing.Size(124, 14);
+            this.label33.TabIndex = 83;
+            this.label33.Text = "Employer";
+            this.label33.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            // 
+            // groupPH
+            // 
+            this.groupPH.Controls.Add(this.comboUrgency);
+            this.groupPH.Controls.Add(this.comboGradeLevel);
+            this.groupPH.Controls.Add(this.textGradeSchool);
+            this.groupPH.Controls.Add(this.label35);
+            this.groupPH.Controls.Add(this.comboRace);
+            this.groupPH.Controls.Add(this.textCounty);
+            this.groupPH.Controls.Add(this.label15);
+            this.groupPH.Controls.Add(this.label14);
+            this.groupPH.Controls.Add(this.label13);
+            this.groupPH.Controls.Add(this.label10);
+            this.groupPH.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.groupPH.Location = new System.Drawing.Point(440, 536);
+            this.groupPH.Name = "groupPH";
+            this.groupPH.Size = new System.Drawing.Size(378, 123);
+            this.groupPH.TabIndex = 23;
+            this.groupPH.TabStop = false;
+            this.groupPH.Text = "Public Health";
+            // 
+            // comboUrgency
+            // 
+            this.comboUrgency.BackColor = System.Drawing.SystemColors.Window;
+            this.comboUrgency.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboUrgency.Location = new System.Drawing.Point(161, 97);
+            this.comboUrgency.Name = "comboUrgency";
+            this.comboUrgency.Size = new System.Drawing.Size(155, 21);
+            this.comboUrgency.TabIndex = 4;
+            // 
+            // comboGradeLevel
+            // 
+            this.comboGradeLevel.BackColor = System.Drawing.SystemColors.Window;
+            this.comboGradeLevel.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboGradeLevel.Location = new System.Drawing.Point(161, 76);
+            this.comboGradeLevel.MaxDropDownItems = 25;
+            this.comboGradeLevel.Name = "comboGradeLevel";
+            this.comboGradeLevel.Size = new System.Drawing.Size(155, 21);
+            this.comboGradeLevel.TabIndex = 3;
+            // 
+            // textGradeSchool
+            // 
+            this.textGradeSchool.AcceptsReturn = true;
+            this.textGradeSchool.Location = new System.Drawing.Point(161, 56);
+            this.textGradeSchool.Name = "textGradeSchool";
+            this.textGradeSchool.Size = new System.Drawing.Size(213, 20);
+            this.textGradeSchool.TabIndex = 2;
+            this.textGradeSchool.Leave += new System.EventHandler(this.textGradeSchool_Leave);
+            this.textGradeSchool.KeyUp += new System.Windows.Forms.KeyEventHandler(this.textGradeSchool_KeyUp);
+            // 
+            // label35
+            // 
+            this.label35.Location = new System.Drawing.Point(10, 96);
+            this.label35.Name = "label35";
+            this.label35.Size = new System.Drawing.Size(149, 17);
+            this.label35.TabIndex = 6;
+            this.label35.Text = "Treatment Urgency";
+            this.label35.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // comboRace
+            // 
+            this.comboRace.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboRace.Location = new System.Drawing.Point(161, 15);
+            this.comboRace.MaxDropDownItems = 20;
+            this.comboRace.Name = "comboRace";
+            this.comboRace.Size = new System.Drawing.Size(156, 21);
+            this.comboRace.TabIndex = 0;
+            // 
+            // textCounty
+            // 
+            this.textCounty.AcceptsReturn = true;
+            this.textCounty.Location = new System.Drawing.Point(161, 36);
+            this.textCounty.Name = "textCounty";
+            this.textCounty.Size = new System.Drawing.Size(213, 20);
+            this.textCounty.TabIndex = 1;
+            this.textCounty.Leave += new System.EventHandler(this.textCounty_Leave);
+            this.textCounty.KeyUp += new System.Windows.Forms.KeyEventHandler(this.textCounty_KeyUp);
+            // 
+            // label15
+            // 
+            this.label15.Location = new System.Drawing.Point(19, 76);
+            this.label15.Name = "label15";
+            this.label15.Size = new System.Drawing.Size(140, 17);
+            this.label15.TabIndex = 3;
+            this.label15.Text = "Grade Level";
+            this.label15.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // label14
+            // 
+            this.label14.Location = new System.Drawing.Point(8, 56);
+            this.label14.Name = "label14";
+            this.label14.Size = new System.Drawing.Size(151, 17);
+            this.label14.TabIndex = 2;
+            this.label14.Text = "Site (or Grade School)";
+            this.label14.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // label13
+            // 
+            this.label13.Location = new System.Drawing.Point(16, 36);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(143, 17);
+            this.label13.TabIndex = 1;
+            this.label13.Text = "County";
+            this.label13.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // label10
+            // 
+            this.label10.Location = new System.Drawing.Point(18, 16);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(141, 17);
+            this.label10.TabIndex = 0;
+            this.label10.Text = "Race/Ethnicity";
+            this.label10.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // textDateFirstVisit
+            // 
+            this.textDateFirstVisit.Location = new System.Drawing.Point(135, 358);
+            this.textDateFirstVisit.Name = "textDateFirstVisit";
+            this.textDateFirstVisit.Size = new System.Drawing.Size(82, 20);
+            this.textDateFirstVisit.TabIndex = 13;
+            // 
+            // label36
+            // 
+            this.label36.Location = new System.Drawing.Point(8, 362);
+            this.label36.Name = "label36";
+            this.label36.Size = new System.Drawing.Size(125, 14);
+            this.label36.TabIndex = 86;
+            this.label36.Text = "Date of First Visit";
+            this.label36.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            // 
+            // label37
+            // 
+            this.label37.Location = new System.Drawing.Point(239, 299);
+            this.label37.Name = "label37";
+            this.label37.Size = new System.Drawing.Size(179, 14);
+            this.label37.TabIndex = 88;
+            this.label37.Text = "(put in InsPlan too)";
+            this.label37.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // labelClinic
+            // 
+            this.labelClinic.Location = new System.Drawing.Point(45, 554);
+            this.labelClinic.Name = "labelClinic";
+            this.labelClinic.Size = new System.Drawing.Size(86, 14);
+            this.labelClinic.TabIndex = 89;
+            this.labelClinic.Text = "Clinic";
+            this.labelClinic.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            // 
+            // comboClinic
+            // 
+            this.comboClinic.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboClinic.Location = new System.Drawing.Point(135, 551);
+            this.comboClinic.MaxDropDownItems = 30;
+            this.comboClinic.Name = "comboClinic";
+            this.comboClinic.Size = new System.Drawing.Size(198, 21);
+            this.comboClinic.TabIndex = 22;
+            // 
+            // textTrophyFolder
+            // 
+            this.textTrophyFolder.Location = new System.Drawing.Point(135, 508);
+            this.textTrophyFolder.MaxLength = 30;
+            this.textTrophyFolder.Name = "textTrophyFolder";
+            this.textTrophyFolder.Size = new System.Drawing.Size(226, 20);
+            this.textTrophyFolder.TabIndex = 20;
+            // 
+            // labelTrophyFolder
+            // 
+            this.labelTrophyFolder.Location = new System.Drawing.Point(16, 511);
+            this.labelTrophyFolder.Name = "labelTrophyFolder";
+            this.labelTrophyFolder.Size = new System.Drawing.Size(118, 14);
+            this.labelTrophyFolder.TabIndex = 90;
+            this.labelTrophyFolder.Text = "Trophy Folder";
+            this.labelTrophyFolder.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            // 
+            // textWard
+            // 
+            this.textWard.Location = new System.Drawing.Point(135, 573);
+            this.textWard.MaxLength = 100;
+            this.textWard.Name = "textWard";
+            this.textWard.Size = new System.Drawing.Size(55, 20);
+            this.textWard.TabIndex = 23;
+            // 
+            // labelWard
+            // 
+            this.labelWard.Location = new System.Drawing.Point(79, 578);
+            this.labelWard.Name = "labelWard";
+            this.labelWard.Size = new System.Drawing.Size(53, 14);
+            this.labelWard.TabIndex = 92;
+            this.labelWard.Text = "Ward";
+            this.labelWard.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            // 
+            // label28
+            // 
+            this.label28.Location = new System.Drawing.Point(15, 532);
+            this.label28.Name = "label28";
+            this.label28.Size = new System.Drawing.Size(118, 14);
+            this.label28.TabIndex = 94;
+            this.label28.Text = "Language";
+            this.label28.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            // 
+            // comboLanguage
+            // 
+            this.comboLanguage.BackColor = System.Drawing.SystemColors.Window;
+            this.comboLanguage.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboLanguage.Location = new System.Drawing.Point(135, 529);
+            this.comboLanguage.MaxDropDownItems = 25;
+            this.comboLanguage.Name = "comboLanguage";
+            this.comboLanguage.Size = new System.Drawing.Size(226, 21);
+            this.comboLanguage.TabIndex = 21;
+            // 
+            // comboContact
+            // 
+            this.comboContact.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboContact.FormattingEnabled = true;
+            this.comboContact.Location = new System.Drawing.Point(135, 442);
+            this.comboContact.MaxDropDownItems = 30;
+            this.comboContact.Name = "comboContact";
+            this.comboContact.Size = new System.Drawing.Size(174, 21);
+            this.comboContact.TabIndex = 17;
+            // 
+            // label23
+            // 
+            this.label23.Location = new System.Drawing.Point(1, 444);
+            this.label23.Name = "label23";
+            this.label23.Size = new System.Drawing.Size(132, 16);
+            this.label23.TabIndex = 96;
+            this.label23.Text = "Prefer Contact Method";
+            this.label23.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // comboConfirm
+            // 
+            this.comboConfirm.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboConfirm.FormattingEnabled = true;
+            this.comboConfirm.Location = new System.Drawing.Point(135, 464);
+            this.comboConfirm.MaxDropDownItems = 30;
+            this.comboConfirm.Name = "comboConfirm";
+            this.comboConfirm.Size = new System.Drawing.Size(174, 21);
+            this.comboConfirm.TabIndex = 18;
+            // 
+            // label24
+            // 
+            this.label24.Location = new System.Drawing.Point(1, 466);
+            this.label24.Name = "label24";
+            this.label24.Size = new System.Drawing.Size(132, 16);
+            this.label24.TabIndex = 98;
+            this.label24.Text = "Prefer Confirm Method";
+            this.label24.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // comboRecall
+            // 
+            this.comboRecall.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboRecall.FormattingEnabled = true;
+            this.comboRecall.Location = new System.Drawing.Point(135, 486);
+            this.comboRecall.MaxDropDownItems = 30;
+            this.comboRecall.Name = "comboRecall";
+            this.comboRecall.Size = new System.Drawing.Size(174, 21);
+            this.comboRecall.TabIndex = 19;
+            // 
+            // label25
+            // 
+            this.label25.Location = new System.Drawing.Point(1, 488);
+            this.label25.Name = "label25";
+            this.label25.Size = new System.Drawing.Size(132, 16);
+            this.label25.TabIndex = 100;
+            this.label25.Text = "Prefer Recall Method";
+            this.label25.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // textAdmitDate
+            // 
+            this.textAdmitDate.Location = new System.Drawing.Point(312, 573);
+            this.textAdmitDate.Name = "textAdmitDate";
+            this.textAdmitDate.Size = new System.Drawing.Size(82, 20);
+            this.textAdmitDate.TabIndex = 102;
+            // 
+            // labelAdmitDate
+            // 
+            this.labelAdmitDate.Location = new System.Drawing.Point(206, 577);
+            this.labelAdmitDate.Name = "labelAdmitDate";
+            this.labelAdmitDate.Size = new System.Drawing.Size(104, 14);
+            this.labelAdmitDate.TabIndex = 101;
+            this.labelAdmitDate.Text = "Admit Date";
+            this.labelAdmitDate.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            // 
+            // textTitle
+            // 
+            this.textTitle.Location = new System.Drawing.Point(135, 113);
+            this.textTitle.MaxLength = 100;
+            this.textTitle.Name = "textTitle";
+            this.textTitle.Size = new System.Drawing.Size(75, 20);
+            this.textTitle.TabIndex = 103;
+            // 
+            // label26
+            // 
+            this.label26.Location = new System.Drawing.Point(9, 116);
+            this.label26.Name = "label26";
+            this.label26.Size = new System.Drawing.Size(124, 16);
+            this.label26.TabIndex = 104;
+            this.label26.Text = "Title";
+            this.label26.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            // 
+            // butReferral
+            // 
+            this.butReferral.AdjustImageLocation = new System.Drawing.Point(0, 0);
+            this.butReferral.Autosize = true;
+            this.butReferral.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+            this.butReferral.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+            this.butReferral.CornerRadius = 4F;
+            this.butReferral.Location = new System.Drawing.Point(301, 5);
+            this.butReferral.Name = "butReferral";
+            this.butReferral.Size = new System.Drawing.Size(62, 22);
+            this.butReferral.TabIndex = 105;
+            this.butReferral.Text = "Referral";
+            this.butReferral.Click += new System.EventHandler(this.butReferral_Click);
+            // 
+            // FormPatientEdit
+            // 
+            this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
+            this.CancelButton = this.butCancel;
+            this.ClientSize = new System.Drawing.Size(962, 673);
+            this.Controls.Add(this.butReferral);
+            this.Controls.Add(this.textTitle);
+            this.Controls.Add(this.label26);
+            this.Controls.Add(this.textAdmitDate);
+            this.Controls.Add(this.labelAdmitDate);
+            this.Controls.Add(this.comboRecall);
+            this.Controls.Add(this.label25);
+            this.Controls.Add(this.comboConfirm);
+            this.Controls.Add(this.label24);
+            this.Controls.Add(this.comboContact);
+            this.Controls.Add(this.label23);
+            this.Controls.Add(this.comboLanguage);
+            this.Controls.Add(this.label28);
+            this.Controls.Add(this.textWard);
+            this.Controls.Add(this.labelWard);
+            this.Controls.Add(this.textTrophyFolder);
+            this.Controls.Add(this.labelTrophyFolder);
+            this.Controls.Add(this.comboClinic);
+            this.Controls.Add(this.labelClinic);
+            this.Controls.Add(this.label37);
+            this.Controls.Add(this.textDateFirstVisit);
+            this.Controls.Add(this.textEmployer);
+            this.Controls.Add(this.textMedicaidID);
+            this.Controls.Add(this.textPatNum);
+            this.Controls.Add(this.textBirthdate);
+            this.Controls.Add(this.textChartNumber);
+            this.Controls.Add(this.textEmail);
+            this.Controls.Add(this.textSalutation);
+            this.Controls.Add(this.textAge);
+            this.Controls.Add(this.textWirelessPhone);
+            this.Controls.Add(this.textWkPhone);
+            this.Controls.Add(this.textSSN);
+            this.Controls.Add(this.textPreferred);
+            this.Controls.Add(this.textMiddleI);
+            this.Controls.Add(this.textFName);
+            this.Controls.Add(this.textLName);
+            this.Controls.Add(this.butAuto);
+            this.Controls.Add(this.butCancel);
+            this.Controls.Add(this.butOK);
+            this.Controls.Add(this.label36);
+            this.Controls.Add(this.groupPH);
+            this.Controls.Add(this.label33);
+            this.Controls.Add(this.label7);
+            this.Controls.Add(this.listPosition);
+            this.Controls.Add(this.listGender);
+            this.Controls.Add(this.listStatus);
+            this.Controls.Add(this.label31);
+            this.Controls.Add(this.label32);
+            this.Controls.Add(this.label19);
+            this.Controls.Add(this.groupNotes);
+            this.Controls.Add(this.groupBox1);
+            this.Controls.Add(this.label29);
+            this.Controls.Add(this.groupBox2);
+            this.Controls.Add(this.label22);
+            this.Controls.Add(this.label6);
+            this.Controls.Add(this.label21);
+            this.Controls.Add(this.label20);
+            this.Controls.Add(this.label18);
+            this.Controls.Add(this.label17);
+            this.Controls.Add(this.labelSSN);
+            this.Controls.Add(this.label9);
+            this.Controls.Add(this.label8);
+            this.Controls.Add(this.label5);
+            this.Controls.Add(this.label4);
+            this.Controls.Add(this.label3);
+            this.Controls.Add(this.label2);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
+            this.Name = "FormPatientEdit";
+            this.ShowInTaskbar = false;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            this.Text = "Edit Patient Information";
+            this.Closing += new System.ComponentModel.CancelEventHandler(this.FormPatientEdit_Closing);
+            this.Load += new System.EventHandler(this.FormPatientEdit_Load);
+            this.groupBox2.ResumeLayout(false);
+            this.groupBox2.PerformLayout();
+            this.groupBox1.ResumeLayout(false);
+            this.groupBox1.PerformLayout();
+            this.groupNotes.ResumeLayout(false);
+            this.groupNotes.PerformLayout();
+            this.groupPH.ResumeLayout(false);
+            this.groupPH.PerformLayout();
+            this.ResumeLayout(false);
+            this.PerformLayout();
 
 		}
 		#endregion
@@ -2489,6 +2506,14 @@ namespace OpenDental{
 				Patients.Delete(PatCur);
 			}
 		}
+
+        private void butReferral_Click(object sender, EventArgs e)
+        {
+            FormReferralsPatient FormRE = new FormReferralsPatient();
+            FormRE.PatNum = PatCur.PatNum;
+            FormRE.ShowDialog();
+
+        }
 
 		
 
