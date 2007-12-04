@@ -275,13 +275,15 @@ namespace OpenDental {
 			Application.DoEvents();
 			PreferencePracticeProv();
 			Application.DoEvents();
-			ProcedurelogCodeNumZero();
-			Application.DoEvents();
 			ProcedurelogAttachedToWrongAppts();
+			Application.DoEvents();
+			ProcedurelogCodeNumZero();
 			Application.DoEvents();
 			ProcedurelogProvNumMissing();
 			Application.DoEvents();
 			ProcedurelogToothNums();
+			Application.DoEvents();
+			ProcedurelogTpAttachedToClaim();
 			Application.DoEvents();
 			ProcedurelogUndeleteAttachedToClaim();
 			Application.DoEvents();
@@ -1039,14 +1041,6 @@ namespace OpenDental {
 			textLog.Text+="  "+Lan.g(this,"Fixed.")+"\r\n";
 		}
 
-		private void ProcedurelogCodeNumZero() {
-			command="DELETE FROM procedurelog WHERE CodeNum=0";
-			int numberFixed=General.NonQ(command);
-			if(numberFixed>0 || checkShow.Checked) {
-				textLog.Text+=Lan.g(this,"Procedures deleted with CodeNum=0: ")+numberFixed.ToString()+"\r\n";
-			}
-		}
-
 		private void ProcedurelogAttachedToWrongAppts() {
 			if(FormChooseDatabase.DBtype==DatabaseType.Oracle) {
 				return;
@@ -1056,6 +1050,14 @@ namespace OpenDental {
 			int numberFixed=General.NonQ(command);
 			if(numberFixed>0 || checkShow.Checked) {
 				textLog.Text+=Lan.g(this,"Procedures detached from appointments: ")+numberFixed.ToString()+"\r\n";
+			}
+		}
+
+		private void ProcedurelogCodeNumZero() {
+			command="DELETE FROM procedurelog WHERE CodeNum=0";
+			int numberFixed=General.NonQ(command);
+			if(numberFixed>0 || checkShow.Checked) {
+				textLog.Text+=Lan.g(this,"Procedures deleted with CodeNum=0: ")+numberFixed.ToString()+"\r\n";
 			}
 		}
 
@@ -1103,6 +1105,25 @@ namespace OpenDental {
 			if(numberFixed!=0 || checkShow.Checked) {
 				textLog.Text+=Lan.g(this,"Check for invalid tooth numbers complete.  Records checked: ")
 					+table.Rows.Count.ToString()+". "+Lan.g(this,"Records fixed: ")+numberFixed.ToString()+"\r\n";
+			}
+		}
+
+		private void ProcedurelogTpAttachedToClaim(){
+			command="SELECT procedurelog.ProcNum FROM procedurelog,claim,claimproc "
+				+"WHERE procedurelog.ProcNum=claimproc.ProcNum "
+				+"AND claim.ClaimNum=claimproc.ClaimNum "
+				+"AND procedurelog.ProcStatus!="+POut.PInt((int)ProcStat.C)+" "//procedure not complete
+				+"AND (claim.ClaimStatus='W' OR claim.ClaimStatus='S' OR claim.ClaimStatus='R') "//waiting, sent, or received
+				+"AND (claim.ClaimType='P' OR claim.ClaimType='S' OR claim.ClaimType='Other')";//pri, sec, or other.  Eliminates preauths.
+			table=General.GetTable(command);
+			for(int i=0;i<table.Rows.Count;i++) {
+				command="UPDATE procedurelog SET ProcStatus=2 WHERE ProcNum="+table.Rows[i][0].ToString();
+				General.NonQ(command);
+			}
+			int numberFixed=table.Rows.Count;
+			if(numberFixed>0 || checkShow.Checked) {
+				textLog.Text+=Lan.g(this,"Procedures attached to claims, but with status of TP.  Status changed back to C: ")
+					+numberFixed.ToString()+"\r\n";
 			}
 		}
 

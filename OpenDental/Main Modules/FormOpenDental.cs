@@ -2668,7 +2668,7 @@ namespace OpenDental{
 				return;
 			}
 			CurPatNum=0;
-			//RefreshCurrentModule();//clumsy but necessary. Sets local PatNums to null.
+			RefreshCurrentModule();//clumsy but necessary. Sets child PatNums to 0.
 			RefreshLocalData(InvalidTypes.AllLocal,true);
 			//RefreshCurrentModule();
 			menuItemLogOff_Click(this,e);//this is a quick shortcut.

@@ -54,7 +54,8 @@ namespace OpenDental{
 				return null;
 			}
 			string command="SELECT * FROM patient WHERE PatNum="+POut.PInt(patNum);
-			return SubmitAndFill(command)[0];
+			Patient[] patarray=SubmitAndFill(command);
+			return patarray[0];
 		}
 
 		private static Patient[] SubmitAndFill(string command){
@@ -894,10 +895,10 @@ namespace OpenDental{
 				FROM tempfambal,patient
 				WHERE tempfambal.PatNum=patient.PatNum
 				GROUP BY PatNum,ProvNum
-				ORDER BY Guarantor!=patient.PatNum,Birthdate,ProvNum";
+				ORDER BY Guarantor!=patient.PatNum,Birthdate,ProvNum;
+
+				DROP TABLE IF EXISTS tempfambal";
 			return General.GetTable(command);
-			command="DROP TABLE IF EXISTS tempfambal";
-			General.NonQ(command);
 		}
 
 		///<summary></summary>

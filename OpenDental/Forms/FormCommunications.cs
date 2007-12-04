@@ -126,7 +126,7 @@ namespace OpenDental{
 
 		public static void PrintStationery(Patient PatCur){
 			if(PrefB.GetString("StationaryDocument")==""){
-				MsgBox.Show("Stationery","Please setup your stationary document first in Setup | Misc");
+				MsgBox.Show("Stationery","Please setup your stationery document first in Setup | Misc");
 				return;
 			}
 			StringBuilder str = new StringBuilder();

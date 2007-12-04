@@ -40,7 +40,11 @@ namespace OpenDental{
 		///<summary>Surround with try-catch.</summary>
 		public static void DeleteObject(Supply supp){
 			//validate that not already in use.
-
+			string command="SELECT COUNT(*) FROM supplyorderitem WHERE SupplyNum="+POut.PInt(supp.SupplyNum);
+			int count=PIn.PInt(General.GetCount(command));
+			if(count>0){
+				throw new ApplicationException(Lan.g("Supplies","Supply is already in use. Not allowed to delete."));
+			}
 			DataObjectFactory<Supply>.DeleteObject(supp);
 		}
 
