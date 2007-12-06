@@ -1348,7 +1348,7 @@ namespace OpenDental{
 			ApptViewItems.GetForCurView(comboView.SelectedIndex-1);
 			ContrApptSingle.ProvBar=new int[ApptViewItems.VisProvs.Length][];
 			for(int i=0;i<ApptViewItems.VisProvs.Length;i++){
-				ContrApptSingle.ProvBar[i]=new int[24*ContrApptSheet.RowsPerHr];//[144]; or 24*6
+				ContrApptSingle.ProvBar[i]=new int[24*ContrApptSheet.RowsPerHr]; //[144]; or 24*6
 			}
 			if(ContrApptSingle3!=null){//I think this is not needed.
 				for(int i=0;i<ContrApptSingle3.Length;i++){
