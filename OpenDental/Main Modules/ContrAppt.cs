@@ -1363,7 +1363,7 @@ namespace OpenDental{
 			labelDate.Text=startDate.ToString("ddd");
 			labelDate2.Text=startDate.ToString("-  MMM d");
 			ContrApptSheet2.Controls.Clear();
-			ContrApptSingle3=new ContrApptSingle[DS.Tables["Appointments"].Rows.Count];//ListDay.Length];
+			ContrApptSingle3=new ContrApptSingle[DS.Tables["Appointments"].Rows.Count];
 			int indexProv;
 			DataRow row;
 			for(int i=0;i<DS.Tables["Appointments"].Rows.Count;i++){
