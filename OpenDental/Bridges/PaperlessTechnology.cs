@@ -52,12 +52,13 @@ namespace OpenDental.Bridges{
 			Thread.Sleep(200);//just to make sure the other process is done writing.
 			string[] lines=File.ReadAllLines(e.FullPath);
 			File.Delete(e.FullPath);
-			if(lines.Length!=2){
-				MessageBox.Show(e.FullPath+" was supposed to have exactly two lines.  Invalid file.");
+			if(lines.Length!=1){
+				MessageBox.Show(e.FullPath+" was supposed to have exactly one line.  Invalid file.");
 				return;
 			}
-			fieldNames=lines[0].Split(',');
-			fieldVals=lines[1].Split(',');
+			string rawFieldNames="PAT_PK,PAT_LOGFK,PAT_LANFK,PAT_TITLE,PAT_FNAME,PAT_MI,PAT_LNAME,PAT_CALLED,PAT_ADDR1,PAT_ADDR2,PAT_CITY,PAT_ST,PAT_ZIP,PAT_HPHN,PAT_WPHN,PAT_EXT,PAT_FAX,PAT_PAGER,PAT_CELL,PAT_EMAIL,PAT_SEX,PAT_EDOCS,PAT_STATUS,PAT_TYPE,PAT_BIRTH,PAT_SSN,PAT_NOCALL,PAT_NOCORR,PAT_DISRES,PAT_LSTUPD,PAT_INSNM,PAT_INSGPL,PAT_INSAD1,PAT_INSAD2,PAT_INSCIT,PAT_INSST,PAT_INSZIP,PAT_INSPHN,PAT_INSEXT,PAT_INSCON,PAT_INSGNO,PAT_EMPNM,PAT_EMPAD1,PAT_EMPAD2,PAT_EMPCIT,PAT_EMPST,PAT_EMPZIP,PAT_EMPPHN,PAT_REFLNM,PAT_REFFNM,PAT_REFMI,PAT_REFPHN,PAT_REFEML,PAT_REFSPE,PAT_NOTES,PAT_FPSCAN,PAT_PREMED,PAT_MEDS,PAT_FTSTUD,PAT_PTSTUD,PAT_COLLEG,PAT_CHRTNO,PAT_OTHID,PAT_RESPRT,PAT_POLHLD,PAT_CUSCD,PAT_PMPID";
+			fieldNames=rawFieldNames.Split(',');
+			fieldVals=lines[0].Split(',');
 			if(fieldNames.Length!=fieldVals.Length){
 				MessageBox.Show(e.FullPath+" contains "+fieldNames.Length.ToString()+" field names, but "+fieldVals.Length.ToString()+" field values.  Invalid file.");
 				return;
@@ -414,17 +415,17 @@ namespace OpenDental.Bridges{
 				sw.Write(TelephoneNumbers.FormatNumbersOnly(pat.WirelessPhone)+",");//PAT_CELL
 				sw.Write(Tidy(pat.Email)+",");//PAT_EMAIL
 				if(pat.Gender==PatientGender.Female){
-					sw.Write("F");
+					sw.Write("Female");
 				}
 				else if(pat.Gender==PatientGender.Male) {
-					sw.Write("M");
+					sw.Write("Male");
 				}
 				sw.Write(",");//PAT_SEX might be blank if unknown
 				sw.Write(",");//PAT_EDOCS Internal PT logical, it can be ignored.
 				sw.Write(pat.PatStatus.ToString()+",");//PAT_STATUS Any text allowed
 				sw.Write(pat.Position.ToString()+",");//PAT_TYPE Any text allowed
 				if(pat.Birthdate.Year>1880){
-					sw.Write(pat.Birthdate.ToString("yyyyMMdd"));//PAT_BIRTH yyyyMMdd
+					sw.Write(pat.Birthdate.ToString("MM/dd/yyyy"));//PAT_BIRTH MM/dd/yyyy
 				}
 				sw.Write(",");
 				sw.Write(Tidy(pat.SSN)+",");//PAT_SSN No punct
@@ -432,7 +433,7 @@ namespace OpenDental.Bridges{
 					|| pat.PreferConfirmMethod==ContactMethod.DoNotCall
 					|| pat.PreferRecallMethod==ContactMethod.DoNotCall)
 				{
-					sw.Write("T");
+					sw.Write("1");
 				}
 				sw.Write(",");//PAT_NOCALL T if no call
 				sw.Write(",");//PAT_NOCORR No correspondence HIPAA
@@ -524,42 +525,42 @@ namespace OpenDental.Bridges{
 				//sw.Write(",");//PAT_NOTE1-PAT_NOTE10 skipped
 				sw.Write(",");//PAT_FPSCAN Internal PT logical, it can be ignored.
 				if(pat.Premed){
-					sw.Write("T");
+					sw.Write("1");
 				}
 				else{
-					sw.Write("F");
+					sw.Write("0");
 				}
 				sw.Write(",");//PAT_PREMED F or T
 				sw.Write(Tidy(pat.MedUrgNote)+",");//PAT_MEDS The meds that they must premedicate with.
 				if(pat.StudentStatus=="F"){//fulltime
-					sw.Write("T");
+					sw.Write("1");
 				}
 				else{
-					sw.Write("F");
+					sw.Write("0");
 				}
 				sw.Write(",");//PAT_FTSTUD T/F
 				if(pat.StudentStatus=="P") {//parttime
-					sw.Write("T");
+					sw.Write("1");
 				}
 				else {
-					sw.Write("F");
+					sw.Write("0");
 				}
 				sw.Write(",");//PAT_PTSTUD
 				sw.Write(Tidy(pat.SchoolName)+",");//PAT_COLLEG Name of college
 				sw.Write(Tidy(pat.ChartNumber)+",");//PAT_CHRTNO
 				sw.Write(pat.PatNum.ToString()+",");//PAT_OTHID The primary key in Open Dental ************IMPORTANT***************
 				if(pat.PatNum==pat.Guarantor){
-					sw.Write("T");
+					sw.Write("1");
 				}
 				else {
-					sw.Write("F");
+					sw.Write("0");
 				}
 				sw.Write(",");//PAT_RESPRT Responsible party checkbox T/F
 				if(plan!=null && pat.PatNum==plan.Subscriber) {//if current patient is the subscriber on their primary plan
-					sw.Write("T");
+					sw.Write("1");
 				}
 				else {
-					sw.Write("F");
+					sw.Write("0");
 				}
 				sw.Write(",");//PAT_POLHLD Policy holder checkbox T/F
 				sw.Write(",");//PAT_CUSCD Web sync folder, used internally this can be ignored.

@@ -641,8 +641,10 @@ namespace OpenDental{
 		private void pdCards_PrintPage(object sender, PrintPageEventArgs ev){
 			int totalPages=(int)Math.Ceiling((double)AddrTable.Rows.Count/(double)PrefB.GetInt("RecallPostcardsPerSheet"));
 			Graphics g=ev.Graphics;
-			float yPos=0;//these refer to the upper left origin of each postcard
-			float xPos=0;
+			int yAdj=(int)(PrefB.GetDouble("RecallAdjustDown")*100);
+			int xAdj=(int)(PrefB.GetDouble("RecallAdjustRight")*100);
+			float yPos=0+yAdj;//these refer to the upper left origin of each postcard
+			float xPos=0+xAdj;
 			string str;
 			while(yPos<ev.PageBounds.Height-100 && patientsPrinted<AddrTable.Rows.Count){
 				//Return Address--------------------------------------------------------------------------
@@ -690,7 +692,7 @@ namespace OpenDental{
 				else{//4
 					xPos+=550;
 					if(xPos>1000){
-						xPos=0;
+						xPos=0+xAdj;
 						yPos+=425;
 					}
 				}
