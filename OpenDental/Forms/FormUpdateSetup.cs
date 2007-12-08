@@ -203,12 +203,17 @@ namespace OpenDental{
 				MsgBox.Show(this,"Invalid registration key format.");
 				return;
 			}
-			string regkey=textRegKey.Text.Substring(0,4)+textRegKey.Text.Substring(5,4)
-				+textRegKey.Text.Substring(10,4)+textRegKey.Text.Substring(15,4);
+			string regkey="";
+			if(textRegKey.Text!=""){
+				regkey=textRegKey.Text.Substring(0,4)+textRegKey.Text.Substring(5,4)
+					+textRegKey.Text.Substring(10,4)+textRegKey.Text.Substring(15,4);
+			}
 			if(Prefs.UpdateString("UpdateWebsitePath",textWebsitePath.Text)
 				| Prefs.UpdateString("RegistrationKey",regkey))
 			{
+				Cursor=Cursors.WaitCursor;
 				DataValid.SetInvalid(InvalidTypes.Prefs);
+				Cursor=Cursors.Default;
 			}
 			DialogResult=DialogResult.OK;
 		}
