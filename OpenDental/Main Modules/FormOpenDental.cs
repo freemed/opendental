@@ -2030,7 +2030,7 @@ namespace OpenDental{
 			}
 			Point position=new Point(myOutlookBar.Width,ToolBarMain.Height);
 			int width=this.ClientSize.Width-position.X;
-			int height=this.ClientSize.Height;
+			int height=this.ClientSize.Height-position.Y;
 			if(userControlTasks1.Visible){
 				if(menuItemDockBottom.Checked){
 					if(panelSplitter.Height>10){//docking needs to be changed.

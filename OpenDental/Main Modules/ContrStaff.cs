@@ -184,6 +184,8 @@ namespace OpenDental{
 			// 
 			// groupBox2
 			// 
+			this.groupBox2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
 			this.groupBox2.Controls.Add(this.listMessages);
 			this.groupBox2.Controls.Add(this.butSend);
 			this.groupBox2.Controls.Add(this.butAck);
@@ -213,6 +215,8 @@ namespace OpenDental{
 			// 
 			// listMessages
 			// 
+			this.listMessages.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
 			this.listMessages.FormattingEnabled = true;
 			this.listMessages.Location = new System.Drawing.Point(252,35);
 			this.listMessages.Name = "listMessages";
@@ -222,6 +226,7 @@ namespace OpenDental{
 			// 
 			// labelSending
 			// 
+			this.labelSending.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.labelSending.Font = new System.Drawing.Font("Microsoft Sans Serif",9.5F,System.Drawing.FontStyle.Bold,System.Drawing.GraphicsUnit.Point,((byte)(0)));
 			this.labelSending.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))),((int)(((byte)(0)))),((int)(((byte)(0)))));
 			this.labelSending.Location = new System.Drawing.Point(251,404);
@@ -284,6 +289,7 @@ namespace OpenDental{
 			// 
 			// label7
 			// 
+			this.label7.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.label7.Location = new System.Drawing.Point(6,413);
 			this.label7.Name = "label7";
 			this.label7.Size = new System.Drawing.Size(100,16);
@@ -302,6 +308,8 @@ namespace OpenDental{
 			// 
 			// listExtras
 			// 
+			this.listExtras.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
 			this.listExtras.FormattingEnabled = true;
 			this.listExtras.Location = new System.Drawing.Point(171,35);
 			this.listExtras.Name = "listExtras";
@@ -320,6 +328,8 @@ namespace OpenDental{
 			// 
 			// listFrom
 			// 
+			this.listFrom.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
 			this.listFrom.FormattingEnabled = true;
 			this.listFrom.Location = new System.Drawing.Point(90,35);
 			this.listFrom.Name = "listFrom";
@@ -337,6 +347,8 @@ namespace OpenDental{
 			// 
 			// listTo
 			// 
+			this.listTo.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
 			this.listTo.FormattingEnabled = true;
 			this.listTo.Location = new System.Drawing.Point(9,35);
 			this.listTo.Name = "listTo";
@@ -355,6 +367,7 @@ namespace OpenDental{
 			// 
 			// textMessage
 			// 
+			this.textMessage.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.textMessage.Location = new System.Drawing.Point(9,432);
 			this.textMessage.Name = "textMessage";
 			this.textMessage.Size = new System.Drawing.Size(237,20);
@@ -494,6 +507,7 @@ namespace OpenDental{
 			// butSend
 			// 
 			this.butSend.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butSend.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.butSend.Autosize = true;
 			this.butSend.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butSend.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
@@ -521,6 +535,8 @@ namespace OpenDental{
 			// 
 			// gridMessages
 			// 
+			this.gridMessages.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
 			this.gridMessages.HScrollVisible = false;
 			this.gridMessages.Location = new System.Drawing.Point(356,35);
 			this.gridMessages.Name = "gridMessages";
