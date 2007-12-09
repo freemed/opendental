@@ -1594,6 +1594,7 @@ namespace OpenDental{
 				butDelete.Enabled=false;
 				butEditAnyway.Visible=true;
 				labelClaim.Visible=true;
+				butSetComplete.Enabled=false;
 			}
 			if(PrefB.GetBool("EasyHideClinical")){
 				labelDx.Visible=false;
@@ -2286,6 +2287,11 @@ namespace OpenDental{
 		}
 
 		private void butSetComplete_Click(object sender, System.EventArgs e) {
+			//can't get to here if attached to a claim, even if use the Edit Anyway button.
+			if(ProcOld.ProcStatus==ProcStat.C){
+				MsgBox.Show(this,"Procedure was already set complete.");
+				return;
+			}
 			if(!Security.IsAuthorized(Permissions.ProcComplCreate)){
 				return;
 			}
@@ -2305,8 +2311,7 @@ namespace OpenDental{
 			listProcStatus.SelectedIndex=-1;
 			//radioStatusC.Checked=true;
 			ProcCur.ProcStatus=ProcStat.C;
-			comboPlaceService.SelectedIndex
-				=PIn.PInt(((Pref)PrefB.HList["DefaultProcedurePlaceService"]).ValueString);
+			comboPlaceService.SelectedIndex=PrefB.GetInt("DefaultProcedurePlaceService");
 			if(EntriesAreValid()){
 				SaveAndClose();
 			}

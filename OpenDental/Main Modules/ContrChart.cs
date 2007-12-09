@@ -5373,14 +5373,16 @@ namespace OpenDental{
 				//The next few lines are contentious.  Some users want it one way, and some users want it the other way.
 				//Behavior #1: Include lines to prevent setting a procedure complete again.  Reasoning is that it's already been set
 				//complete, and should therefore be locked in a sense.  Would never make sense to set it complete again.
-				//Behavior #2: Do not include lines to allow setting a procedure complete again.  Reasoning is that user wants to
+				//Behavior #2: Do not include lines.  Allows setting a procedure complete again.  Reasoning is that user wants to
 				//be able to update the date on multiple procedures at once.  Now this only makes sense if you don't attach procs
 				//to appointments, because otherwise, the date always follows that of the appointment.
-				//Behavior #2 was selected as a stop-gap until such time as we add editing properties of multiple procs at once.
-				//But at least setting it complete again won't add more notes.  That's addressed 3 lines down.
-				//if(procCur.ProcStatus==ProcStat.C){
-				//	continue;//don't allow setting a procedure complete again.
-				//}
+				//Behavior #2 was used for quite a while, but we got too many complaints about the security of such a strategy.
+				//Starting with version 5.4, we had to switch to behavior #1.  This will generate complaints from people who were using
+				//this button to update the date.  Hopefully, we will have a new feature to allow editing the date of multiple procs
+				//at once, and it will be in place before they complain too loudly.
+				if(procCur.ProcStatus==ProcStat.C){
+					continue;//don't allow setting a procedure complete again.
+				}
 				procOld=procCur.Copy();
 				procCode=ProcedureCodes.GetProcCode(procCur.CodeNum);
 				if(procOld.ProcStatus!=ProcStat.C) {
