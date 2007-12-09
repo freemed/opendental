@@ -420,9 +420,13 @@ namespace OpenDental{
 				}
 			}
 			else{
+				string email=PatCur.Email;
 				FormPatientEdit FormP=new FormPatientEdit(PatCur,FamCur);
 				FormP.IsNew=false;
 				FormP.ShowDialog();
+				if(email!=PatCur.Email){//PatCur.EmailChanged){//do it this way later
+					OnPatientSelected(PatCur.PatNum,PatCur.GetNameLF(),PatCur.Email!="",PatCur.ChartNumber);
+				}
 			}
 			ModuleSelected(PatCur.PatNum);
 		}
