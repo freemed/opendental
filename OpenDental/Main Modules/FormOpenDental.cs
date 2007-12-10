@@ -1280,10 +1280,10 @@ namespace OpenDental{
 			if(!File.Exists("Help.chm")){
 				menuItemHelpWindows.Visible=false;
 			}
-			if(!File.Exists("remoteclient.exe")){
-				menuItemRemote.Visible=false;
-			}
-			menuItemClaimForms.Visible=PrefB.UsingAtoZfolder;
+			//if(!File.Exists("remoteclient.exe")){
+			//	menuItemRemote.Visible=false;
+			//}
+			//menuItemClaimForms.Visible=PrefB.UsingAtoZfolder;
 			if(Environment.OSVersion.Platform==PlatformID.Unix){//Create A to Z unsupported on Unix for now.
 				menuItemCreateAtoZFolders.Visible=false;
 			}
@@ -1431,7 +1431,7 @@ namespace OpenDental{
 					menuItemCustomerManage.Visible=true;
 				}
 				ContrDocs2.Enabled=PrefB.UsingAtoZfolder;
-				menuItemClaimForms.Visible=PrefB.UsingAtoZfolder;
+				//menuItemClaimForms.Visible=PrefB.UsingAtoZfolder;
 				CheckCustomReports();
 				ContrChart2.InitializeLocalData();
 				if(PrefB.GetBool("TaskListAlwaysShowsAtBottom")){
@@ -2724,6 +2724,10 @@ namespace OpenDental{
 		}
 
 		private void menuItemClaimForms_Click(object sender, System.EventArgs e) {
+			if(!PrefB.UsingAtoZfolder){
+				MsgBox.Show(this,"Claim Forms feature is unavailable when data path A to Z folder is disabled.");
+				return;
+			}
 			if(!Security.IsAuthorized(Permissions.Setup)){
 				return;
 			}
@@ -2757,7 +2761,7 @@ namespace OpenDental{
 			FormPath FormP=new FormPath();
 			FormP.ShowDialog();
 			ContrDocs2.Enabled=PrefB.UsingAtoZfolder;
-			menuItemClaimForms.Visible=PrefB.UsingAtoZfolder;
+			//menuItemClaimForms.Visible=PrefB.UsingAtoZfolder;
 			CheckCustomReports();
 			this.RefreshCurrentModule();
 			SecurityLogs.MakeLogEntry(Permissions.Setup,0,"Data Path");	
@@ -3319,7 +3323,7 @@ namespace OpenDental{
 				Process.Start("http://www.open-dent.com/contact.html");
 			}
 			catch {
-				MsgBox.Show(this,"Could not find file.");
+				MessageBox.Show(Lan.g(this,"Could not find")+" http://www.open-dent.com/contact.html");
 			}
 			/*
 			if(!MsgBox.Show(this,true,"A remote connection will now be attempted. Do NOT continue unless you are already on the phone with us.  Do you want to continue?"))

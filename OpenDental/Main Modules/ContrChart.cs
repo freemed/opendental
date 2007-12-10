@@ -3453,15 +3453,16 @@ namespace OpenDental{
 				Cursor=Cursors.Default;
 				return;
 			}
+			//primary teeth need to be set before resetting selected teeth, because some of them might be primary.
+			//primary teeth also need to be set before initial list so that we can set a primary tooth missing.
+			for(int i=0;i<ToothInitialList.Length;i++) {
+				if(ToothInitialList[i].InitialType==ToothInitialType.Primary) {
+					toothChart.SetToPrimary(ToothInitialList[i].ToothNum);
+				}
+			}
 			if(checkShowTeeth.Checked || retainSelection) {
 				for(int i=0;i<selectedTeeth.Count;i++) {
 					toothChart.SetSelected((int)selectedTeeth[i],true);
-				}
-			}
-			//first, primary.  That way, you can still set a primary tooth missing afterwards.
-			for(int i=0;i<ToothInitialList.Length;i++){
-				if(ToothInitialList[i].InitialType==ToothInitialType.Primary){
-					toothChart.SetToPrimary(ToothInitialList[i].ToothNum);
 				}
 			}
 			for(int i=0;i<ToothInitialList.Length;i++){
