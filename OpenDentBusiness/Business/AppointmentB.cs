@@ -441,7 +441,9 @@ namespace OpenDentBusiness{
 			retVal.Tables.Add(GetApptTable(parameters[0]));
 			retVal.Tables.Add(GetPatTable(retVal.Tables["Appointment"].Rows[0]["PatNum"].ToString()));
 			retVal.Tables.Add(GetProcTable(retVal.Tables["Appointment"].Rows[0]["PatNum"].ToString(),parameters[0],
-				retVal.Tables["Appointment"].Rows[0]["AptStatus"].ToString()));
+				retVal.Tables["Appointment"].Rows[0]["AptStatus"].ToString(),
+				retVal.Tables["Appointment"].Rows[0]["AptDateTime"].ToString()
+				));
 			retVal.Tables.Add(GetCommTable(retVal.Tables["Appointment"].Rows[0]["PatNum"].ToString()));
 			retVal.Tables.Add(GetMiscTable(parameters[0],retVal.Tables["Appointment"].Rows[0]["AptStatus"].ToString()));
 			return retVal;
@@ -534,7 +536,7 @@ namespace OpenDentBusiness{
 			return table;
 		}
 
-		private static DataTable GetProcTable(string patNum,string aptNum,string apptStatus) {
+		private static DataTable GetProcTable(string patNum,string aptNum,string apptStatus,string aptDateTime) {
 			DataConnection dcon=new DataConnection();
 			DataTable table=new DataTable("Procedure");
 			DataRow row;
@@ -555,14 +557,25 @@ namespace OpenDentBusiness{
 				+"procedurecode.Descript,procedurelog.CodeNum,procedurelog.ProvNum "
 				+"FROM procedurelog LEFT JOIN procedurecode ON procedurelog.CodeNum=procedurecode.CodeNum "
 				+"WHERE PatNum="+patNum//sort later
+			//1. All TP procs
 				+" AND (ProcStatus=1 OR ";//tp
+			//2. All attached procs
 			if(apptStatus=="6"){//planned
-				command+="PlannedAptNum="+aptNum+")";
+				command+="PlannedAptNum="+aptNum;
 			}
 			else{
-				command+="AptNum="+aptNum+") ";
-					//+"AND (AptNum=0 OR AptNum="+aptNum+")";//exclude procs attached to other appts.
+				command+="AptNum="+aptNum;
+				//+"AND (AptNum=0 OR AptNum="+aptNum+")";//exclude procs attached to other appts.
 			}
+			//3. All unattached completed procs with same date as appt.
+			//but only if one of these types
+			if(apptStatus=="1" || apptStatus=="2" || apptStatus=="4" || apptStatus=="5"){//sched,C,ASAP,broken
+				DateTime aptDate=PIn.PDateT(aptDateTime);
+				command+=" OR (AptNum=0 "//unattached
+					+"AND ProcStatus=2 "//complete
+					+"AND Date(ProcDate)="+POut.PDate(aptDate)+")";//same date
+			}
+			command+=")";
 			DataTable rawProc=dcon.GetTable(command);
 			for(int i=0;i<rawProc.Rows.Count;i++) {
 				row=table.NewRow();
