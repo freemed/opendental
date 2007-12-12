@@ -19,6 +19,7 @@ namespace OpenDental{
 		private CheckBox checkProvAll;
 		private ListBox listProv;
 		private Label label3;
+		private CheckBox checkPreauth;
 		private System.ComponentModel.Container components = null;
 
 		///<summary></summary>
@@ -48,6 +49,7 @@ namespace OpenDental{
 			this.checkProvAll = new System.Windows.Forms.CheckBox();
 			this.listProv = new System.Windows.Forms.ListBox();
 			this.label3 = new System.Windows.Forms.Label();
+			this.checkPreauth = new System.Windows.Forms.CheckBox();
 			this.SuspendLayout();
 			// 
 			// butOK
@@ -134,12 +136,26 @@ namespace OpenDental{
 			this.label3.Text = "Providers";
 			this.label3.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
 			// 
+			// checkPreauth
+			// 
+			this.checkPreauth.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkPreauth.Checked = true;
+			this.checkPreauth.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.checkPreauth.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.checkPreauth.Location = new System.Drawing.Point(0,123);
+			this.checkPreauth.Name = "checkPreauth";
+			this.checkPreauth.Size = new System.Drawing.Size(145,18);
+			this.checkPreauth.TabIndex = 44;
+			this.checkPreauth.Text = "Include Preauths";
+			this.checkPreauth.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
 			// FormRpOutInsClaims
 			// 
 			this.AcceptButton = this.butOK;
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.CancelButton = this.butCancel;
 			this.ClientSize = new System.Drawing.Size(597,359);
+			this.Controls.Add(this.checkPreauth);
 			this.Controls.Add(this.checkProvAll);
 			this.Controls.Add(this.listProv);
 			this.Controls.Add(this.label3);
@@ -204,6 +220,9 @@ namespace OpenDental{
 				+"AND claim.PatNum = patient.PatNum "
 				+"AND carrier.CarrierNum = insplan.CarrierNum "
 				+"AND claim.ClaimStatus='S' && claim.DateSent <= "+POut.PDate(startQDate)+" ";
+			if(!checkPreauth.Checked){
+				Queries.CurReport.Query+="AND claim.ClaimType != 'PreAuth' ";
+			}
 			if(!checkProvAll.Checked){
 				for(int i=0;i<listProv.SelectedIndices.Count;i++) {
 					if(i==0) {
