@@ -573,6 +573,9 @@ namespace OpenDental {
 
 		///<summary>Called when closing FormInsPlan to set the PlanNote for multiple plans at once.</summary>
 		public static void UpdateNoteForPlans(List<int> planNums,string newNote){
+			if(planNums.Count==0){
+				return;
+			}
 			string s="";
 			for(int i=0;i<planNums.Count;i++){
 				if(i>0){

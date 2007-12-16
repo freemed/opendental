@@ -462,6 +462,7 @@ namespace OpenDental{
 			InsPlan[] listSelected=new InsPlan[gridMain.SelectedIndices.Length];
 			for(int i=0;i<listSelected.Length;i++){
 				listSelected[i]=InsPlans.GetPlan(PIn.PInt(table.Rows[gridMain.SelectedIndices[i]]["PlanNum"].ToString()),null);
+				listSelected[i].NumberPlans=PIn.PInt(table.Rows[gridMain.SelectedIndices[i]]["plans"].ToString());
 			}
 			FormInsPlansMerge FormI=new FormInsPlansMerge();
 			FormI.ListAll=listSelected;
