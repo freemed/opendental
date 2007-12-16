@@ -241,6 +241,8 @@ namespace OpenDental {
 			Application.DoEvents();
 			ClaimProcProvNumMissing();
 			Application.DoEvents();
+			ClaimProcPreauthNotMatchClaim();
+			Application.DoEvents();
 			ClaimProcStatusNotMatchClaim();
 			Application.DoEvents();
 			ClaimProcWithInvalidClaimPaymentNum();
@@ -809,6 +811,20 @@ namespace OpenDental {
 			}
 		}
 
+		private void ClaimProcPreauthNotMatchClaim() {
+			if(FormChooseDatabase.DBtype==DatabaseType.Oracle) {
+				return;
+			}
+			command=@"UPDATE claimproc,claim
+				SET claimproc.Status=2
+				WHERE claimproc.ClaimNum=claim.ClaimNum
+				AND claim.ClaimType='PreAuth'";
+			int numberFixed=General.NonQ(command);
+			if(numberFixed>0 || checkShow.Checked) {
+				textLog.Text+=Lan.g(this,"ClaimProcs for preauths with status not preauth fixed: ")+numberFixed.ToString()+"\r\n";
+			}
+		}
+
 		private void ClaimProcStatusNotMatchClaim() {
 			if(FormChooseDatabase.DBtype==DatabaseType.Oracle) {
 				return;
@@ -822,7 +838,7 @@ namespace OpenDental {
 			if(numberFixed>0 || checkShow.Checked) {
 				textLog.Text+=Lan.g(this,"ClaimProcs with status not matching claim fixed: ")+numberFixed.ToString()+"\r\n";
 			}
-		}
+		}		
 
 		private void ClaimProcWithInvalidClaimPaymentNum() {
 			command=@"UPDATE claimproc SET ClaimPaymentNum=0 WHERE claimpaymentnum !=0 AND NOT EXISTS(

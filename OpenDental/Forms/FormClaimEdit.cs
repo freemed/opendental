@@ -3646,6 +3646,22 @@ namespace OpenDental{
 				MsgBox.Show(this,"Please enter a date of service");
 				return false;
 			}
+			if(ClaimCur.ClaimType=="PreAuth"){
+				bool preauthChanged=false;
+				for(int i=0;i<ClaimProcsForClaim.Length;i++){
+					if(ClaimProcsForClaim[i].Status!=ClaimProcStatus.Preauth){
+						ClaimProcsForClaim[i].Status=ClaimProcStatus.Preauth;
+						ClaimProcs.Update(ClaimProcsForClaim[i]);
+						preauthChanged=true;
+					}
+				}
+				if(preauthChanged){
+					//don't bother to refresh
+					FillGrids();
+					MsgBox.Show(this,"Status of procedures was changed back to preauth to match status of claim.");
+					return false;
+				}
+			}
 			return true;
 		}
 
