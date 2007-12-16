@@ -64,15 +64,14 @@ namespace OpenDental{
 			// 
 			this.label1.Location = new System.Drawing.Point(21,9);
 			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(485,35);
+			this.label1.Size = new System.Drawing.Size(485,48);
 			this.label1.TabIndex = 12;
-			this.label1.Text = "For now, each rule in the list simply prevents users from double booking appointm" +
-    "ents of that type.";
+			this.label1.Text = resources.GetString("label1.Text");
 			// 
 			// gridMain
 			// 
 			this.gridMain.HScrollVisible = false;
-			this.gridMain.Location = new System.Drawing.Point(21,47);
+			this.gridMain.Location = new System.Drawing.Point(21,59);
 			this.gridMain.Name = "gridMain";
 			this.gridMain.ScrollValue = 0;
 			this.gridMain.Size = new System.Drawing.Size(485,369);
@@ -91,7 +90,7 @@ namespace OpenDental{
 			this.butAdd.CornerRadius = 4F;
 			this.butAdd.Image = global::OpenDental.Properties.Resources.Add;
 			this.butAdd.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butAdd.Location = new System.Drawing.Point(19,432);
+			this.butAdd.Location = new System.Drawing.Point(19,451);
 			this.butAdd.Name = "butAdd";
 			this.butAdd.Size = new System.Drawing.Size(80,26);
 			this.butAdd.TabIndex = 10;
@@ -106,7 +105,7 @@ namespace OpenDental{
 			this.butClose.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butClose.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butClose.CornerRadius = 4F;
-			this.butClose.Location = new System.Drawing.Point(432,432);
+			this.butClose.Location = new System.Drawing.Point(432,451);
 			this.butClose.Name = "butClose";
 			this.butClose.Size = new System.Drawing.Size(75,26);
 			this.butClose.TabIndex = 0;
@@ -116,7 +115,7 @@ namespace OpenDental{
 			// FormApptRules
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
-			this.ClientSize = new System.Drawing.Size(539,481);
+			this.ClientSize = new System.Drawing.Size(539,500);
 			this.Controls.Add(this.label1);
 			this.Controls.Add(this.gridMain);
 			this.Controls.Add(this.butAdd);
