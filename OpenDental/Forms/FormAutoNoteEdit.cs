@@ -51,7 +51,7 @@ namespace OpenDental {
 
 		private void listBoxControls_SelectedIndexChanged(object sender, EventArgs e) {
 			//Loads all the control info into the control viewer
-			if (listBoxControls.SelectedItem.ToString()=="") {
+			if (listBoxControls.SelectedIndex==-1) {
 				return;
 			}
 			string controlOptions;
