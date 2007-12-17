@@ -4013,11 +4013,21 @@ namespace OpenDental{
 				ProcCur.ProcDate=PIn.PDate(textDate.Text);
 			}
 			ProcCur.DateTP=ProcCur.ProcDate;
-			if(newStatus==ProcStat.R || newStatus==ProcStat.EO || newStatus==ProcStat.EC){
+			if(newStatus==ProcStat.R || newStatus==ProcStat.EO || newStatus==ProcStat.EC) {
 				ProcCur.ProcFee=0;
-			} else {
+			}
+			else {
 				//int totUnits = ProcCur.BaseUnits + ProcCur.UnitQty;
-				ProcCur.ProcFee=Fees.GetAmount0(ProcCur.CodeNum,Fees.GetFeeSched(PatCur,PlanList,PatPlanList));
+				InsPlan priplan=null;
+				if(PatPlanList.Length>0) {
+					priplan=InsPlans.GetPlan(PatPlanList[0].PlanNum,PlanList);
+				}
+				if(priplan!=null && priplan.PlanType=="p") {//PPO
+					ProcCur.ProcFee=Fees.GetAmount0(ProcCur.CodeNum,Providers.GetProv(Patients.GetProvNum(PatCur)).FeeSched);
+				}
+				else {
+					ProcCur.ProcFee=Fees.GetAmount0(ProcCur.CodeNum,Fees.GetFeeSched(PatCur,PlanList,PatPlanList));
+				}
 			}
 			//ProcCur.OverridePri=-1;
 			//ProcCur.OverrideSec=-1;
@@ -4086,10 +4096,21 @@ namespace OpenDental{
 				ProcCur.ProcDate=PIn.PDate(textDate.Text);
 			}
 			ProcCur.DateTP=ProcCur.ProcDate;
-			if(newStatus==ProcStat.R || newStatus==ProcStat.EO || newStatus==ProcStat.EC)
+			if(newStatus==ProcStat.R || newStatus==ProcStat.EO || newStatus==ProcStat.EC) {
 				ProcCur.ProcFee=0;
-			else
-				ProcCur.ProcFee=Fees.GetAmount0(ProcCur.CodeNum,Fees.GetFeeSched(PatCur,PlanList,PatPlanList));
+			}
+			else {
+				InsPlan priplan=null;
+				if(PatPlanList.Length>0) {
+					priplan=InsPlans.GetPlan(PatPlanList[0].PlanNum,PlanList);
+				}
+				if(priplan!=null && priplan.PlanType=="p") {//PPO
+					ProcCur.ProcFee=Fees.GetAmount0(ProcCur.CodeNum,Providers.GetProv(Patients.GetProvNum(PatCur)).FeeSched);
+				}
+				else {
+					ProcCur.ProcFee=Fees.GetAmount0(ProcCur.CodeNum,Fees.GetFeeSched(PatCur,PlanList,PatPlanList));
+				}
+			}
 			//ProcCur.OverridePri=-1;
 			//ProcCur.OverrideSec=-1;
 			//surf
