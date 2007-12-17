@@ -1285,7 +1285,16 @@ namespace OpenDental{
 				ProcCur.CodeNum=ProcedureCodes.GetProcCode(codes[i]).CodeNum;
 				ProcCur.ProcDate=AptCur.AptDateTime.Date;
 				ProcCur.DateTP=AptCur.AptDateTime.Date;
-				ProcCur.ProcFee=Fees.GetAmount0(ProcCur.CodeNum,Fees.GetFeeSched(pat,PlanList,PatPlanList));
+				InsPlan priplan=null;
+				if(PatPlanList.Length>0) {
+					priplan=InsPlans.GetPlan(PatPlanList[0].PlanNum,PlanList);
+				}
+				if(priplan!=null && priplan.PlanType=="p") {//PPO
+					ProcCur.ProcFee=Fees.GetAmount0(ProcCur.CodeNum,Providers.GetProv(Patients.GetProvNum(pat)).FeeSched);
+				}
+				else {
+					ProcCur.ProcFee=Fees.GetAmount0(ProcCur.CodeNum,Fees.GetFeeSched(pat,PlanList,PatPlanList));
+				}
 				//surf
 				//toothnum
 				//toothrange
