@@ -6114,6 +6114,17 @@ namespace OpenDental{
 				command="UPDATE preference SET ValueString = '5.4.7.0' WHERE PrefName = 'DataBaseVersion'";
 				General.NonQEx(command);
 			}
+			To5_4_14();
+		}
+
+		private void To5_4_14() {
+			if(FromVersion<new Version("5.4.14.0")) {
+				string command=@"UPDATE task SET ObjectType=2 WHERE ObjectType=1 AND task.KeyNum!=0
+					AND NOT EXISTS(SELECT * FROM patient WHERE PatNum=KeyNum)";
+				General.NonQEx(command);
+				command="UPDATE preference SET ValueString = '5.4.14.0' WHERE PrefName = 'DataBaseVersion'";
+				General.NonQEx(command);
+			}
 			To5_5_0();
 		}
 

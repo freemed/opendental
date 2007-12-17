@@ -1486,7 +1486,7 @@ namespace OpenDental{
 		private void butTask_Click(object sender,EventArgs e) {
 			if(!UpdateToDB())
 				return;
-			FormTaskListSelect FormT=new FormTaskListSelect(TaskObjectType.Patient,AptCur.AptNum);
+			FormTaskListSelect FormT=new FormTaskListSelect(TaskObjectType.Appointment,AptCur.AptNum);
 			FormT.ShowDialog();
 		}
 
