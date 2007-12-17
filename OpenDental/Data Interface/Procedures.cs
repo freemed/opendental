@@ -1103,7 +1103,7 @@ namespace OpenDental{
 		public static int GlobalUpdateFees(){
 			string command=@"SELECT procedurecode.CodeNum,ProcNum,patient.PatNum,procedurelog.PatNum,
 				insplan.FeeSched AS PlanFeeSched,patient.FeeSched AS PatFeeSched,patient.PriProv,
-				procedurelog.ProcFee
+				procedurelog.ProcFee,insplan.PlanType
 				FROM procedurelog
 				LEFT JOIN patient ON patient.PatNum=procedurelog.PatNum
 				LEFT JOIN patplan ON patplan.PatNum=procedurelog.PatNum
@@ -1125,6 +1125,7 @@ namespace OpenDental{
 			int feeSchedNum;
 			int patFeeSched;
 			int patProv;
+			string planType;
 			double newFee;
 			double oldFee;
 			int rowsChanged=0;
@@ -1132,10 +1133,16 @@ namespace OpenDental{
 				priPlanFeeSched=PIn.PInt(table.Rows[i]["PlanFeeSched"].ToString());
 				patFeeSched=PIn.PInt(table.Rows[i]["PatFeeSched"].ToString());
 				patProv=PIn.PInt(table.Rows[i]["PriProv"].ToString());
-				feeSchedNum=Fees.GetFeeSched(priPlanFeeSched,patFeeSched,patProv);
+				planType=PIn.PString(table.Rows[i]["PlanType"].ToString());
+				if(planType=="p") {//PPO
+					feeSchedNum=Providers.GetProv(patProv).FeeSched;
+				}
+				else {
+					feeSchedNum=Fees.GetFeeSched(priPlanFeeSched,patFeeSched,patProv);
+				}
 				newFee=Fees.GetAmount0(PIn.PInt(table.Rows[i]["CodeNum"].ToString()),feeSchedNum);
 				oldFee=PIn.PDouble(table.Rows[i]["ProcFee"].ToString());
-				if(newFee==oldFee){
+				if(newFee==oldFee) {
 					continue;
 				}
 				command="UPDATE procedurelog SET ProcFee='"+POut.PDouble(newFee)+"' "
