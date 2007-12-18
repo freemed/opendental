@@ -484,7 +484,7 @@ namespace OpenDental {
 			int codeNum=ProcedureCodes.GetCodeNum(procCode);
 			int substCodeNum=ProcedureCodes.GetSubstituteCodeNum(procCode,toothNum);//for posterior composites
 			if(plan.PlanType=="p"){
-				return Fees.GetAmount(codeNum,plan.FeeSched);
+				return Fees.GetAmount(substCodeNum,plan.FeeSched);
 			}
 			if(plan.AllowedFeeSched!=0){//if an allowed fee schedule exists
 				return Fees.GetAmount(substCodeNum,plan.AllowedFeeSched);//whether post composite or not
