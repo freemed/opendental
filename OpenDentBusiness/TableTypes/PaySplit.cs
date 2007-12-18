@@ -32,18 +32,7 @@ namespace OpenDentBusiness{
 
 		///<summary>Returns a copy of this PaySplit.</summary>
 		public PaySplit Copy(){
-			PaySplit p=new PaySplit();
-			p.SplitNum=SplitNum;
-			p.SplitAmt=SplitAmt;
-			p.PatNum=PatNum;
-			p.ProcDate=ProcDate;
-			p.PayNum=PayNum;
-			p.ProvNum=ProvNum;
-			p.PayPlanNum=PayPlanNum;
-			p.DatePay=DatePay;
-			p.ProcNum=ProcNum;
-			p.DateEntry=DateEntry;
-			return p;
+			return (PaySplit)this.MemberwiseClone();
 		}
 
 		
