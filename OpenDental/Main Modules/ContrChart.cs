@@ -4022,11 +4022,18 @@ namespace OpenDental{
 				if(PatPlanList.Length>0) {
 					priplan=InsPlans.GetPlan(PatPlanList[0].PlanNum,PlanList);
 				}
+				double insfee=Fees.GetAmount0(ProcCur.CodeNum,Fees.GetFeeSched(PatCur,PlanList,PatPlanList));
 				if(priplan!=null && priplan.PlanType=="p") {//PPO
-					ProcCur.ProcFee=Fees.GetAmount0(ProcCur.CodeNum,Providers.GetProv(Patients.GetProvNum(PatCur)).FeeSched);
+					double standardfee=Fees.GetAmount0(ProcCur.CodeNum,Providers.GetProv(Patients.GetProvNum(PatCur)).FeeSched);
+					if(standardfee>insfee) {
+						ProcCur.ProcFee=standardfee;
+					}
+					else {
+						ProcCur.ProcFee=insfee;
+					}
 				}
 				else {
-					ProcCur.ProcFee=Fees.GetAmount0(ProcCur.CodeNum,Fees.GetFeeSched(PatCur,PlanList,PatPlanList));
+					ProcCur.ProcFee=insfee;
 				}
 			}
 			//ProcCur.OverridePri=-1;
@@ -4104,11 +4111,18 @@ namespace OpenDental{
 				if(PatPlanList.Length>0) {
 					priplan=InsPlans.GetPlan(PatPlanList[0].PlanNum,PlanList);
 				}
+				double insfee=Fees.GetAmount0(ProcCur.CodeNum,Fees.GetFeeSched(PatCur,PlanList,PatPlanList));
 				if(priplan!=null && priplan.PlanType=="p") {//PPO
-					ProcCur.ProcFee=Fees.GetAmount0(ProcCur.CodeNum,Providers.GetProv(Patients.GetProvNum(PatCur)).FeeSched);
+					double standardfee=Fees.GetAmount0(ProcCur.CodeNum,Providers.GetProv(Patients.GetProvNum(PatCur)).FeeSched);
+					if(standardfee>insfee) {
+						ProcCur.ProcFee=standardfee;
+					}
+					else {
+						ProcCur.ProcFee=insfee;
+					}
 				}
 				else {
-					ProcCur.ProcFee=Fees.GetAmount0(ProcCur.CodeNum,Fees.GetFeeSched(PatCur,PlanList,PatPlanList));
+					ProcCur.ProcFee=insfee;
 				}
 			}
 			//ProcCur.OverridePri=-1;

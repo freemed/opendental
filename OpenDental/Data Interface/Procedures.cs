@@ -1122,10 +1122,12 @@ namespace OpenDental{
 			";*/
 			DataTable table=General.GetTable(command);
 			int priPlanFeeSched;
-			int feeSchedNum;
+			//int feeSchedNum;
 			int patFeeSched;
 			int patProv;
 			string planType;
+			double insfee;
+			double standardfee;
 			double newFee;
 			double oldFee;
 			int rowsChanged=0;
@@ -1134,13 +1136,19 @@ namespace OpenDental{
 				patFeeSched=PIn.PInt(table.Rows[i]["PatFeeSched"].ToString());
 				patProv=PIn.PInt(table.Rows[i]["PriProv"].ToString());
 				planType=PIn.PString(table.Rows[i]["PlanType"].ToString());
+				insfee=Fees.GetAmount0(PIn.PInt(table.Rows[i]["CodeNum"].ToString()),Fees.GetFeeSched(priPlanFeeSched,patFeeSched,patProv));
 				if(planType=="p") {//PPO
-					feeSchedNum=Providers.GetProv(patProv).FeeSched;
+					standardfee=Fees.GetAmount0(PIn.PInt(table.Rows[i]["CodeNum"].ToString()),Providers.GetProv(patProv).FeeSched);
+					if(standardfee>insfee) {
+						newFee=standardfee;
+					}
+					else {
+						newFee=insfee;
+					}
 				}
 				else {
-					feeSchedNum=Fees.GetFeeSched(priPlanFeeSched,patFeeSched,patProv);
+					newFee=insfee;
 				}
-				newFee=Fees.GetAmount0(PIn.PInt(table.Rows[i]["CodeNum"].ToString()),feeSchedNum);
 				oldFee=PIn.PDouble(table.Rows[i]["ProcFee"].ToString());
 				if(newFee==oldFee) {
 					continue;

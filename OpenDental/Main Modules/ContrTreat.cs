@@ -2260,15 +2260,24 @@ namespace OpenDental{
 			//Find the primary plan------------------------------------------------------------------
 			int priPlanNum=PatPlans.GetPlanNum(PatPlanList,1);
 			InsPlan priplan=InsPlans.GetPlan(priPlanNum,InsPlanList);//can handle a plannum=0
+			double standardfee;
+			double insfee;
       for(int i=0;i<ProcListTP.Length;i++){
 				procCur=ProcListTP[i];
 				//procOld=procCur.Copy();
 				//first the fees
-				if(priplan!=null && priplan.PlanType=="p"){//PPO
-					procCur.ProcFee=Fees.GetAmount0(procCur.CodeNum,Providers.GetProv(Patients.GetProvNum(PatCur)).FeeSched);
+				insfee=Fees.GetAmount0(procCur.CodeNum,Fees.GetFeeSched(PatCur,InsPlanList,PatPlanList));
+				if(priplan!=null && priplan.PlanType=="p") {//PPO
+					standardfee=Fees.GetAmount0(procCur.CodeNum,Providers.GetProv(Patients.GetProvNum(PatCur)).FeeSched);
+					if(standardfee>insfee) {
+						procCur.ProcFee=standardfee;
+					}
+					else {
+						procCur.ProcFee=insfee;
+					}
 				}
-				else{
-					procCur.ProcFee=Fees.GetAmount0(procCur.CodeNum,Fees.GetFeeSched(PatCur,InsPlanList,PatPlanList));
+				else {
+					procCur.ProcFee=insfee;
 				}
 				Procedures.ComputeEstimates(procCur,PatCur.PatNum,ClaimProcList,false,InsPlanList,PatPlanList,BenefitList);
 				Procedures.UpdateFee(procCur.ProcNum,procCur.ProcFee);
