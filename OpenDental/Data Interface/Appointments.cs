@@ -854,6 +854,12 @@ namespace OpenDental{
 			Procedure ProcCur;
 			PatPlan[] patPlanList=PatPlans.Refresh(patCur.PatNum);
 			Benefit[] benefitList=Benefits.Refresh(patPlanList);
+			InsPlan priplan=null;
+			if(patPlanList.Length>0) {
+				priplan=InsPlans.GetPlan(patPlanList[0].PlanNum,planList);
+			}
+			double insfee;
+			double standardfee;
 			//ClaimProc[] claimProcs=ClaimProcs.Refresh(Patients.Cur.PatNum);
 			for(int i=0;i<procs.Length;i++){
 				ProcCur=new Procedure();//this will be an insert
@@ -863,7 +869,19 @@ namespace OpenDental{
 				ProcCur.CodeNum=ProcedureCodes.GetCodeNum(procs[i]);
 				ProcCur.ProcDate=DateTime.Now;
 				ProcCur.DateTP=DateTime.Now;
-				ProcCur.ProcFee=Fees.GetAmount0(ProcCur.CodeNum,Fees.GetFeeSched(patCur,planList,patPlanList));
+				insfee=Fees.GetAmount0(ProcCur.CodeNum,Fees.GetFeeSched(patCur,planList,patPlanList));
+				if(priplan!=null && priplan.PlanType=="p") {//PPO
+					standardfee=Fees.GetAmount0(ProcCur.CodeNum,Providers.GetProv(Patients.GetProvNum(patCur)).FeeSched);
+					if(standardfee>insfee) {
+						ProcCur.ProcFee=standardfee;
+					}
+					else {
+						ProcCur.ProcFee=insfee;
+					}
+				}
+				else {
+					ProcCur.ProcFee=insfee;
+				}
 				//ProcCur.OverridePri=-1;
 				//ProcCur.OverrideSec=-1;
 				//surf

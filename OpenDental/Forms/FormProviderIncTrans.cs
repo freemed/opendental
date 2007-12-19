@@ -395,7 +395,9 @@ namespace OpenDental{
 			textNote.Text=PaymentCur.PayNote;
 			SplitList=PaySplits.GetForPayment(PaymentCur.PayNum);//Count might be 0
 			SplitListOld=new List<PaySplit>();
-			SplitListOld.AddRange(SplitList);
+			for(int i=0;i<SplitList.Count;i++) {
+				SplitListOld.Add(SplitList[i].Copy());
+			}
 			FillMain();
 		}
 
