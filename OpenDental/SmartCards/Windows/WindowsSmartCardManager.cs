@@ -90,6 +90,7 @@ namespace OpenDental.SmartCards  {
 
         #region Methods
         public void Dispose() {
+					try{
             worker.CancelAsync();
 
             // Obtaina lock when we use the context pointer, which may be used (is used every 1s!) by
@@ -101,6 +102,10 @@ namespace OpenDental.SmartCards  {
                     context = IntPtr.Zero;
                 }
             }
+					}
+					catch{
+						//This is to catch an error message that many users were getting on shutdown of the program
+					}
 		}
 
         private void WaitChangeStatus(object sender, DoWorkEventArgs e) {
