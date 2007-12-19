@@ -818,11 +818,19 @@ namespace OpenDental{
 					|| claimProcs[i].Status==ClaimProcStatus.CapComplete
 					//capEstimate would never happen because procedure is C.
 					//estimate means not attached to claim, so don't count
-					|| claimProcs[i].Status==ClaimProcStatus.NotReceived
+					//|| claimProcs[i].Status==ClaimProcStatus.NotReceived//see below
 					//preAuth -no
 					|| claimProcs[i].Status==ClaimProcStatus.Received
 					|| claimProcs[i].Status==ClaimProcStatus.Supplemental
-					) {
+					) 
+				{
+					retVal+=claimProcs[i].WriteOff;
+				}
+				if(!PrefB.GetBool("BalancesDontSubtractIns")//this is the typical situation
+					&& claimProcs[i].Status==ClaimProcStatus.NotReceived) 
+				{
+					//so, if user IS using "balances don't subtract ins", and a proc as been sent but not received,
+					//then we do not subtract the writeoff because it's considered part of the estimate.
 					retVal+=claimProcs[i].WriteOff;
 				}
 			}

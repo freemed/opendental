@@ -522,15 +522,17 @@ namespace OpenDental{
 				}
 				if(List[i].Status==ClaimProcStatus.Received
 					|| List[i].Status==ClaimProcStatus.Supplemental//because supplemental are always received
-					|| List[i].Status==ClaimProcStatus.CapClaim){//would only have a payamt if received
+					|| List[i].Status==ClaimProcStatus.CapClaim)//would only have a payamt if received
+				{
 					retVal-=List[i].InsPayAmt;
+					retVal-=List[i].WriteOff;
 				}
-				else if(List[i].Status==ClaimProcStatus.NotReceived){
-					if(!PrefB.GetBool("BalancesDontSubtractIns")){
-						retVal-=List[i].InsPayEst;//this typically happens
+				else if(List[i].Status==ClaimProcStatus.NotReceived) {
+					if(!PrefB.GetBool("BalancesDontSubtractIns")) {//this typically happens
+						retVal-=List[i].InsPayEst;
+						retVal-=List[i].WriteOff;
 					}
 				}
-				retVal-=List[i].WriteOff;
 			}
 			return retVal;
 		}
