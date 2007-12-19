@@ -148,10 +148,15 @@ namespace OpenDentBusiness{
 			if(myString==null || myString.Length<0x32) {//Bitmaps require a minimum length for header info.
 				return null;
 			}
-			byte[] rawData=Convert.FromBase64String(myString);
-			MemoryStream stream=new MemoryStream(rawData);
-			Bitmap image=new Bitmap(stream);
-			return image;
+			try {
+				byte[] rawData=Convert.FromBase64String(myString);
+				MemoryStream stream=new MemoryStream(rawData);
+				Bitmap image=new Bitmap(stream);
+				return image;
+			}
+			catch {
+				return null;
+			}
 		}
 
 		///<summary>Saves the string representation of a sound into a .wav file.  The timing of this is different than with the other "P" functions, and is only used by the export button in FormSigElementDefEdit</summary>
