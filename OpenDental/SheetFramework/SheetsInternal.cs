@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Text;
+using OpenDentBusiness;
+
 
 namespace OpenDental{
 	partial class SheetsInternal {
@@ -48,7 +50,8 @@ namespace OpenDental{
 				sheet.Height=346;
 				int rowH=sheet.Font.Height;
 				int yPos=30;
-				sheet.SheetFields.Add(new SheetField(InOutEnum.Out,"nameLF",25,yPos,300,sheet.Font,GrowthBehaviorEnum.None));
+				if(PrefB.GetBool("FuchsOptionsOn")) yPos = 50;
+				sheet.SheetFields.Add(new SheetField(InOutEnum.Out, "nameLF", 25, yPos, 300, sheet.Font, GrowthBehaviorEnum.None));
 				yPos+=rowH;
 				sheet.SheetFields.Add(new SheetField(InOutEnum.Out,"ChartNumber",25,yPos,300,sheet.Font,GrowthBehaviorEnum.None));
 				return sheet;
@@ -63,7 +66,8 @@ namespace OpenDental{
 				sheet.Height=346;
 				int rowH=sheet.Font.Height;
 				int yPos=30;
-				sheet.SheetFields.Add(new SheetField(InOutEnum.Out,"nameLF",25,yPos,300,sheet.Font,GrowthBehaviorEnum.None));
+				if(PrefB.GetBool("FuchsOptionsOn")) yPos = 50;
+				sheet.SheetFields.Add(new SheetField(InOutEnum.Out, "nameLF", 25, yPos, 300, sheet.Font, GrowthBehaviorEnum.None));
 				yPos+=rowH;
 				sheet.SheetFields.Add(new SheetField(InOutEnum.Out,"PatNum",25,yPos,300,sheet.Font,GrowthBehaviorEnum.None));
 				return sheet;
@@ -79,11 +83,12 @@ namespace OpenDental{
 				Font smallFont=new Font(FontFamily.GenericSansSerif, 9);
 				int rowH=sheet.Font.Height;
 				int yPos=30;
-				sheet.SheetFields.Add(new SheetField(InOutEnum.Out,"nameLF",10,yPos,150,sheet.Font,GrowthBehaviorEnum.None));
-				sheet.SheetFields.Add(new SheetField(InOutEnum.Out,"dateTime.Today",165,yPos,100,sheet.Font,GrowthBehaviorEnum.None));
-				yPos+=rowH;
-				sheet.SheetFields.Add(new SheetField(InOutEnum.Out,"birthdate",10,yPos,105,smallFont,GrowthBehaviorEnum.None));
-				sheet.SheetFields.Add(new SheetField(InOutEnum.Out,"priProvName",115,yPos,150,smallFont,GrowthBehaviorEnum.None));
+				if(PrefB.GetBool("FuchsOptionsOn")) yPos = 50;
+				sheet.SheetFields.Add(new SheetField(InOutEnum.Out, "nameLF", 25, yPos, 150, sheet.Font, GrowthBehaviorEnum.None));
+				sheet.SheetFields.Add(new SheetField(InOutEnum.Out, "dateTime.Today", 180, yPos, 100, sheet.Font, GrowthBehaviorEnum.None));
+				yPos += rowH;
+				sheet.SheetFields.Add(new SheetField(InOutEnum.Out, "birthdate", 25, yPos, 105, smallFont, GrowthBehaviorEnum.None));
+				sheet.SheetFields.Add(new SheetField(InOutEnum.Out, "priProvName", 130, yPos, 150, smallFont, GrowthBehaviorEnum.None));
 				return sheet;
 			}
 		}
