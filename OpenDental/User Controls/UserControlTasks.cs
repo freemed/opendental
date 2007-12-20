@@ -51,6 +51,9 @@ namespace OpenDental {
 		}
 
 		public void InitializeOnStartup(){
+			if(Security.CurUser==null) {
+				return;
+			}
 			tabUser.Text=Lan.g(this,"for ")+Security.CurUser.UserName;
 			LayoutToolBar();
 			if(Tasks.LastOpenList==null) {//first time openning

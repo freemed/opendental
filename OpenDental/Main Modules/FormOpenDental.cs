@@ -1304,6 +1304,9 @@ namespace OpenDental{
 					return;
 				}
 			}
+			if(userControlTasks1.Visible) {
+				userControlTasks1.InitializeOnStartup();
+			}
 			myOutlookBar.SelectedIndex=Security.GetModule(0);
 			myOutlookBar.Invalidate();
 			LayoutToolBar();

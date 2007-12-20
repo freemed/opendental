@@ -53,12 +53,13 @@ namespace OpenDental{
 				|| FromVersion.ToString()=="5.1.0.0"
 				|| FromVersion.ToString()=="5.2.0.0"
 				|| FromVersion.ToString()=="5.3.0.0"
-				|| FromVersion.ToString()=="5.4.0.0")
+				|| FromVersion.ToString()=="5.4.0.0"
+				|| FromVersion.ToString()=="5.5.0.0")
 			{
 				MsgBox.Show(this,"Cannot convert this database version which was only for development purposes.");
 				return false;
 			}
-			if(FromVersion < new Version("5.5.0.0")){
+			if(FromVersion < new Version("5.6.0.0")){
 				if(MessageBox.Show(Lan.g(this,"Your database will now be converted")+"\r"
 					+Lan.g(this,"from version")+" "+FromVersion.ToString()+"\r"
 					+Lan.g(this,"to version")+" "+ToVersion.ToString()+"\r"
@@ -6125,11 +6126,11 @@ namespace OpenDental{
 				command="UPDATE preference SET ValueString = '5.4.14.0' WHERE PrefName = 'DataBaseVersion'";
 				General.NonQEx(command);
 			}
-			To5_5_0();
+			To5_5_1();
 		}
 
-		private void To5_5_0() {
-			if(FromVersion<new Version("5.5.0.0")) {
+		private void To5_5_1() {
+			if(FromVersion<new Version("5.5.1.0")) {
 				string command;
 				command="DROP TABLE IF EXISTS claimattach";
 				General.NonQEx(command);
@@ -6243,14 +6244,23 @@ namespace OpenDental{
 				General.NonQEx(command);
 				command = "INSERT INTO preference VALUES('ProviderIncomeTransferShows','0')";
 				General.NonQEx(command);
-
-
-
-
-				command="UPDATE preference SET ValueString = '5.5.0.0' WHERE PrefName = 'DataBaseVersion'";
+				command="UPDATE preference SET ValueString = '5.5.1.0' WHERE PrefName = 'DataBaseVersion'";
 				General.NonQEx(command);
 			}
-			//To5_4_?();
+			To5_6_0();
+		}
+
+		private void To5_6_0() {
+			if(FromVersion<new Version("5.6.0.0")) {
+				string command;
+				
+
+
+
+				command="UPDATE preference SET ValueString = '5.6.0.0' WHERE PrefName = 'DataBaseVersion'";
+				General.NonQEx(command);
+			}
+			//To5_6_?();
 		}
 
 	}
