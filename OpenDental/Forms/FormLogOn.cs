@@ -159,6 +159,7 @@ namespace OpenDental{
 			this.Name = "FormLogOn";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Log On";
+			this.TopMost = true;
 			this.Load += new System.EventHandler(this.FormLogOn_Load);
 			this.ResumeLayout(false);
 			this.PerformLayout();

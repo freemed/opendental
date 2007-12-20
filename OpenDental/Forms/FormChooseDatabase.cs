@@ -430,9 +430,9 @@ namespace OpenDental{
 			this.MaximizeBox = false;
 			this.MinimizeBox = false;
 			this.Name = "FormChooseDatabase";
-			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Choose Database";
+			this.TopMost = true;
 			this.Closing += new System.ComponentModel.CancelEventHandler(this.FormConfig_Closing);
 			this.Load += new System.EventHandler(this.FormConfig_Load);
 			this.groupDirect.ResumeLayout(false);

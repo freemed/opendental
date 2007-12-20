@@ -322,9 +322,9 @@ namespace OpenDental{
 			this.MaximizeBox = false;
 			this.MinimizeBox = false;
 			this.Name = "FormPath";
-			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Edit Paths";
+			this.TopMost = true;
 			this.Closing += new System.ComponentModel.CancelEventHandler(this.FormPath_Closing);
 			this.Load += new System.EventHandler(this.FormPath_Load);
 			this.groupbox1.ResumeLayout(false);
