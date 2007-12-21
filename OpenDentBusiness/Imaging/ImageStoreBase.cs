@@ -75,45 +75,45 @@ namespace OpenDental.Imaging {
 		}
 
 		public Bitmap RetrieveImage(Document document) {
-			if(Patient == null)
+			if(Patient == null) {
 				throw new NoActivePatientException();
-
-			if(document == null)
+			}
+			if(document == null) {
 				throw new ArgumentNullException("document");
-
+			}
 			try {
 				return OpenImage(document);
 			}
 			catch {
-				MessageBox.Show(Lan.g("ContrDocs", "File not found") + document.FileName);
+				//This is a terrible place for this.  Also, it causes an error when loading non-image types. 
+				//MessageBox.Show(Lan.g("ContrDocs", "File not found") + document.FileName);
 				return null;
 			}
 		}
 
 		public Collection<Bitmap> RetrieveImage(IList<Document> documents) {
-			if(Patient == null)
+			if(Patient == null) {
 				throw new NoActivePatientException();
-
-			if(documents == null)
+			}
+			if(documents == null) {
 				throw new ArgumentNullException("documents");
-
+			}
 			Collection<Bitmap> bitmaps = new Collection<Bitmap>();
-
 			foreach(Document document in documents) {
-				if(document == null)
+				if(document == null) {
 					bitmaps.Add(null);
+				}
 				else {
 					bitmaps.Add(RetrieveImage(document));
 				}
 			}
-
 			return bitmaps;
 		}
 
 		public Bitmap[] RetrieveImage(Document[] documents) {
-			if(documents == null)
+			if(documents == null){
 				throw new ArgumentNullException("documents");
-
+			}
 			Bitmap[] values = new Bitmap[documents.Length];
 			Collection<Bitmap> bitmaps = RetrieveImage(new Collection<Document>(documents));
 			bitmaps.CopyTo(values, 0);

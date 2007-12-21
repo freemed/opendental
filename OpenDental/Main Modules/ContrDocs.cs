@@ -843,7 +843,10 @@ namespace OpenDental{
 					//more stale with age if the program is left open in the image module for long periods of time.
 					selectionDoc=Documents.GetByNum(docNum);
 					hotDocument=0;
-					currentImages=imageStore.RetrieveImage(new Document[] {selectionDoc});
+					currentImages=imageStore.RetrieveImage(new Document[] { selectionDoc });
+					if(currentImages[0]==null && ImageHelper.HasImageExtension(selectionDoc.FileName)) {
+						MessageBox.Show(Lan.g(this,"File not found: ") + selectionDoc.FileName);
+					}
 					SetBrightnessAndContrast();
 					EnableAllTools(true);
 				}
