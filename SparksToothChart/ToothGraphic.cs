@@ -178,11 +178,11 @@ namespace SparksToothChart {
 		///<summary>Used in constructor and also in Reset.  Also sets visibility of all groups to true except RCT visible false.</summary>
 		private void SetDefaultColors(){
 			for(int i=0;i<Groups.Count;i++){
-				if(((ToothGroup)Groups[i]).GroupType==ToothGroupType.Cementum){
-					((ToothGroup)Groups[i]).PaintColor=Color.FromArgb(255,243,234,176);//230,214,143);
+				if(((ToothGroup)Groups[i]).GroupType==ToothGroupType.Cementum) {
+					((ToothGroup)Groups[i]).PaintColor=Color.FromArgb(255,255,250,230);//243,234,176);//230,214,143);
 				}
-				else{//enamel
-					((ToothGroup)Groups[i]).PaintColor=Color.FromArgb(255,255,253,209);
+				else {//enamel
+					((ToothGroup)Groups[i]).PaintColor=Color.FromArgb(255,255,255,245);//255,255,253,209);
 				}
 				if(((ToothGroup)Groups[i]).GroupType==ToothGroupType.Canals
 					|| ((ToothGroup)Groups[i]).GroupType==ToothGroupType.Buildup)
