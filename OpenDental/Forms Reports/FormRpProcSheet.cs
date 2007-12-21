@@ -186,7 +186,7 @@ namespace OpenDental{
 			this.label2.Name = "label2";
 			this.label2.Size = new System.Drawing.Size(290,20);
 			this.label2.TabIndex = 37;
-			this.label2.Text = "Only for procedure codes simiilar to:";
+			this.label2.Text = "Only for procedure codes similar to:";
 			this.label2.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
 			// 
 			// textCode
