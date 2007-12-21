@@ -614,7 +614,7 @@ namespace OpenDental {
 			return PIn.PString(table.Rows[0][0].ToString());
 		}
 
-		///<summary>Gets a list of subscriber names from the database that have identical plan info as this one. Used to display in the insplan window.  The returned list never includes the plan that we're viewing.  Use excludePlan for this purpose; it's more consistent, because we have no way of knowing if the current plan will be picked up or not.</summary>
+		///<summary>Only used once.  Gets a list of subscriber names from the database that have identical plan info as this one. Used to display in the insplan window.  The returned list never includes the plan that we're viewing.  Use excludePlan for this purpose; it's more consistent, because we have no way of knowing if the current plan will be picked up or not.</summary>
 		public static string[] GetSubscribersForSamePlans(string employerName, string groupName, string groupNum,
 				string divisionNo, string carrierName, bool isMedical, int excludePlan)
 		{
@@ -622,10 +622,14 @@ namespace OpenDental {
 				+"FROM patient "
 				+"LEFT JOIN insplan ON patient.PatNum=insplan.Subscriber "
 				+"LEFT JOIN carrier ON carrier.CarrierNum = insplan.CarrierNum "
-				+"LEFT JOIN employer ON employer.EmployerNum = insplan.EmployerNum "
-				+"WHERE (employer.EmpName IS NULL OR "
-				+"    employer.EmpName = '"   +POut.PString(employerName)+"') "
-				+"AND insplan.GroupName = '"  +POut.PString(groupName)+"' "
+				+"LEFT JOIN employer ON employer.EmployerNum = insplan.EmployerNum ";
+			if(employerName==""){
+				command+="WHERE employer.EmpName IS NULL ";
+			}
+			else{
+				command+="WHERE employer.EmpName = '"+POut.PString(employerName)+"' ";
+			}
+			command+="AND insplan.GroupName = '"  +POut.PString(groupName)+"' "
 				+"AND insplan.GroupNum = '"   +POut.PString(groupNum)+"' "
 				+"AND insplan.DivisionNo = '" +POut.PString(divisionNo)+"' "
 				+"AND carrier.CarrierName = '"+POut.PString(carrierName)+"' "
@@ -645,9 +649,14 @@ namespace OpenDental {
 				string divisionNo, string carrierName, bool isMedical, int planNum, bool includePlanNum) {
 			string command="SELECT PlanNum FROM insplan "
 				+"LEFT JOIN carrier ON carrier.CarrierNum = insplan.CarrierNum "
-				+"LEFT JOIN employer ON employer.EmployerNum = insplan.EmployerNum "
-				+"WHERE (employer.EmpName = '"+POut.PString(employerName)+"' OR employer.EmpName IS NULL) "
-				+"AND insplan.GroupName = '"  +POut.PString(groupName)+"' "
+				+"LEFT JOIN employer ON employer.EmployerNum = insplan.EmployerNum ";
+			if(employerName==""){
+				command+="WHERE employer.EmpName IS NULL ";
+			}
+			else{
+				command+="WHERE employer.EmpName = '"+POut.PString(employerName)+"' ";
+			}
+			command+="AND insplan.GroupName = '"  +POut.PString(groupName)+"' "
 				+"AND insplan.GroupNum = '"   +POut.PString(groupNum)+"' "
 				+"AND insplan.DivisionNo = '" +POut.PString(divisionNo)+"' "
 				+"AND carrier.CarrierName = '"+POut.PString(carrierName)+"' "
