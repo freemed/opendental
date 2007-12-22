@@ -200,6 +200,9 @@ namespace OpenDental.DataAccess {
 						dataField.Field.SetValue(value,TimeSpan.MinValue);
 					}
 				}
+				else if(dataField.Field.FieldType.IsEnum){
+					dataField.Field.SetValue(value,Enum.Parse(dataField.Field.FieldType,reader.GetValue(ordinal).ToString()));
+				}
 				else {
 					dataField.Field.SetValue(value, reader.GetValue(ordinal));
 				}
