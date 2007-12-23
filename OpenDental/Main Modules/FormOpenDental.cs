@@ -181,6 +181,8 @@ namespace OpenDental{
 		private ContextMenu menuSplitter;
 		private MenuItem menuItemDockBottom;
 		private MenuItem menuItemDockRight;
+		private MenuItem menuItemDockSavePos;
+		private MenuItem menuItem3;
 		private OpenDental.SmartCards.SmartCardWatcher smartCardWatcher1;
 		private OpenDental.UI.ODToolBar ToolBarMain;
 		private ImageList imageListMain;
@@ -323,6 +325,8 @@ namespace OpenDental{
 			this.menuSplitter = new System.Windows.Forms.ContextMenu();
 			this.menuItemDockBottom = new System.Windows.Forms.MenuItem();
 			this.menuItemDockRight = new System.Windows.Forms.MenuItem();
+			this.menuItemDockSavePos = new System.Windows.Forms.MenuItem();
+			this.menuItem3 = new System.Windows.Forms.MenuItem();
 			this.imageListMain = new System.Windows.Forms.ImageList(this.components);
 			this.menuPatient = new System.Windows.Forms.ContextMenu();
 			this.menuLabel = new System.Windows.Forms.ContextMenu();
@@ -970,13 +974,13 @@ namespace OpenDental{
 			// 
 			this.imageList32.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imageList32.ImageStream")));
 			this.imageList32.TransparentColor = System.Drawing.Color.Transparent;
-			this.imageList32.Images.SetKeyName(0,"Appt32.gif");
-			this.imageList32.Images.SetKeyName(1,"Family32b.gif");
-			this.imageList32.Images.SetKeyName(2,"Account32b.gif");
-			this.imageList32.Images.SetKeyName(3,"TreatPlan3D.gif");
-			this.imageList32.Images.SetKeyName(4,"chart32.gif");
-			this.imageList32.Images.SetKeyName(5,"Images32.gif");
-			this.imageList32.Images.SetKeyName(6,"Manage32.gif");
+			this.imageList32.Images.SetKeyName(0, "Appt32.gif");
+			this.imageList32.Images.SetKeyName(1, "Family32b.gif");
+			this.imageList32.Images.SetKeyName(2, "Account32b.gif");
+			this.imageList32.Images.SetKeyName(3, "TreatPlan3D.gif");
+			this.imageList32.Images.SetKeyName(4, "chart32.gif");
+			this.imageList32.Images.SetKeyName(5, "Images32.gif");
+			this.imageList32.Images.SetKeyName(6, "Manage32.gif");
 			// 
 			// timerSignals
 			// 
@@ -986,9 +990,9 @@ namespace OpenDental{
 			// 
 			this.panelSplitter.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.panelSplitter.Cursor = System.Windows.Forms.Cursors.HSplit;
-			this.panelSplitter.Location = new System.Drawing.Point(71,542);
+			this.panelSplitter.Location = new System.Drawing.Point(71, 542);
 			this.panelSplitter.Name = "panelSplitter";
-			this.panelSplitter.Size = new System.Drawing.Size(769,7);
+			this.panelSplitter.Size = new System.Drawing.Size(769, 7);
 			this.panelSplitter.TabIndex = 50;
 			this.panelSplitter.MouseDown += new System.Windows.Forms.MouseEventHandler(this.panelSplitter_MouseDown);
 			this.panelSplitter.MouseMove += new System.Windows.Forms.MouseEventHandler(this.panelSplitter_MouseMove);
@@ -998,7 +1002,9 @@ namespace OpenDental{
 			// 
 			this.menuSplitter.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
             this.menuItemDockBottom,
-            this.menuItemDockRight});
+            this.menuItemDockRight,
+            this.menuItem3,
+            this.menuItemDockSavePos});
 			// 
 			// menuItemDockBottom
 			// 
@@ -1012,15 +1018,26 @@ namespace OpenDental{
 			this.menuItemDockRight.Text = "Dock to Right";
 			this.menuItemDockRight.Click += new System.EventHandler(this.menuItemDockRight_Click);
 			// 
+			// menuItemDockSavePos
+			// 
+			this.menuItemDockSavePos.Index = 3;
+			this.menuItemDockSavePos.Text = "Save Current Position";
+			this.menuItemDockSavePos.Click += new System.EventHandler(this.menuItemDockSavePos_Click);
+			// 
+			// menuItem3
+			// 
+			this.menuItem3.Index = 2;
+			this.menuItem3.Text = "-";
+			// 
 			// imageListMain
 			// 
 			this.imageListMain.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imageListMain.ImageStream")));
 			this.imageListMain.TransparentColor = System.Drawing.Color.Transparent;
-			this.imageListMain.Images.SetKeyName(0,"Pat.gif");
-			this.imageListMain.Images.SetKeyName(1,"commlog.gif");
-			this.imageListMain.Images.SetKeyName(2,"email.gif");
-			this.imageListMain.Images.SetKeyName(3,"tasksNicer.gif");
-			this.imageListMain.Images.SetKeyName(4,"label.gif");
+			this.imageListMain.Images.SetKeyName(0, "Pat.gif");
+			this.imageListMain.Images.SetKeyName(1, "commlog.gif");
+			this.imageListMain.Images.SetKeyName(2, "email.gif");
+			this.imageListMain.Images.SetKeyName(3, "tasksNicer.gif");
+			this.imageListMain.Images.SetKeyName(4, "label.gif");
 			// 
 			// menuPatient
 			// 
@@ -1048,83 +1065,83 @@ namespace OpenDental{
 			// 
 			this.ToolBarMain.Dock = System.Windows.Forms.DockStyle.Top;
 			this.ToolBarMain.ImageList = this.imageListMain;
-			this.ToolBarMain.Location = new System.Drawing.Point(51,0);
+			this.ToolBarMain.Location = new System.Drawing.Point(51, 0);
 			this.ToolBarMain.Name = "ToolBarMain";
-			this.ToolBarMain.Size = new System.Drawing.Size(931,25);
+			this.ToolBarMain.Size = new System.Drawing.Size(931, 25);
 			this.ToolBarMain.TabIndex = 178;
 			this.ToolBarMain.ButtonClick += new OpenDental.UI.ODToolBarButtonClickEventHandler(this.ToolBarMain_ButtonClick);
 			// 
 			// userControlTasks1
 			// 
-			this.userControlTasks1.Location = new System.Drawing.Point(57,498);
+			this.userControlTasks1.Location = new System.Drawing.Point(57, 498);
 			this.userControlTasks1.Name = "userControlTasks1";
-			this.userControlTasks1.Size = new System.Drawing.Size(783,139);
+			this.userControlTasks1.Size = new System.Drawing.Size(783, 139);
 			this.userControlTasks1.TabIndex = 28;
 			this.userControlTasks1.Visible = false;
 			this.userControlTasks1.GoToChanged += new System.EventHandler(this.userControlTasks1_GoToChanged);
 			// 
 			// ContrManage2
 			// 
-			this.ContrManage2.Location = new System.Drawing.Point(77,31);
+			this.ContrManage2.Location = new System.Drawing.Point(77, 31);
 			this.ContrManage2.Name = "ContrManage2";
-			this.ContrManage2.Size = new System.Drawing.Size(877,547);
+			this.ContrManage2.Size = new System.Drawing.Size(877, 547);
 			this.ContrManage2.TabIndex = 27;
 			this.ContrManage2.Visible = false;
 			// 
 			// ContrChart2
 			// 
 			this.ContrChart2.DataValid = false;
-			this.ContrChart2.Location = new System.Drawing.Point(77,49);
+			this.ContrChart2.Location = new System.Drawing.Point(77, 49);
 			this.ContrChart2.Name = "ContrChart2";
-			this.ContrChart2.Size = new System.Drawing.Size(865,589);
+			this.ContrChart2.Size = new System.Drawing.Size(865, 589);
 			this.ContrChart2.TabIndex = 26;
 			this.ContrChart2.Visible = false;
 			// 
 			// ContrDocs2
 			// 
-			this.ContrDocs2.Location = new System.Drawing.Point(97,41);
+			this.ContrDocs2.Location = new System.Drawing.Point(97, 41);
 			this.ContrDocs2.Name = "ContrDocs2";
-			this.ContrDocs2.Size = new System.Drawing.Size(845,606);
+			this.ContrDocs2.Size = new System.Drawing.Size(845, 606);
 			this.ContrDocs2.TabIndex = 25;
 			this.ContrDocs2.Visible = false;
 			// 
 			// ContrTreat2
 			// 
-			this.ContrTreat2.Location = new System.Drawing.Point(97,47);
+			this.ContrTreat2.Location = new System.Drawing.Point(97, 47);
 			this.ContrTreat2.Name = "ContrTreat2";
-			this.ContrTreat2.Size = new System.Drawing.Size(857,612);
+			this.ContrTreat2.Size = new System.Drawing.Size(857, 612);
 			this.ContrTreat2.TabIndex = 24;
 			this.ContrTreat2.Visible = false;
 			// 
 			// ContrAccount2
 			// 
-			this.ContrAccount2.Location = new System.Drawing.Point(109,38);
+			this.ContrAccount2.Location = new System.Drawing.Point(109, 38);
 			this.ContrAccount2.Name = "ContrAccount2";
-			this.ContrAccount2.Size = new System.Drawing.Size(796,599);
+			this.ContrAccount2.Size = new System.Drawing.Size(796, 599);
 			this.ContrAccount2.TabIndex = 23;
 			this.ContrAccount2.Visible = false;
 			// 
 			// ContrFamily2
 			// 
-			this.ContrFamily2.Location = new System.Drawing.Point(109,38);
+			this.ContrFamily2.Location = new System.Drawing.Point(109, 38);
 			this.ContrFamily2.Name = "ContrFamily2";
-			this.ContrFamily2.Size = new System.Drawing.Size(845,599);
+			this.ContrFamily2.Size = new System.Drawing.Size(845, 599);
 			this.ContrFamily2.TabIndex = 22;
 			this.ContrFamily2.Visible = false;
 			// 
 			// ContrAppt2
 			// 
-			this.ContrAppt2.Location = new System.Drawing.Point(97,42);
+			this.ContrAppt2.Location = new System.Drawing.Point(97, 42);
 			this.ContrAppt2.Name = "ContrAppt2";
-			this.ContrAppt2.Size = new System.Drawing.Size(857,643);
+			this.ContrAppt2.Size = new System.Drawing.Size(857, 643);
 			this.ContrAppt2.TabIndex = 21;
 			this.ContrAppt2.Visible = false;
 			// 
 			// lightSignalGrid1
 			// 
-			this.lightSignalGrid1.Location = new System.Drawing.Point(0,463);
+			this.lightSignalGrid1.Location = new System.Drawing.Point(0, 463);
 			this.lightSignalGrid1.Name = "lightSignalGrid1";
-			this.lightSignalGrid1.Size = new System.Drawing.Size(50,206);
+			this.lightSignalGrid1.Size = new System.Drawing.Size(50, 206);
 			this.lightSignalGrid1.TabIndex = 20;
 			this.lightSignalGrid1.Text = "lightSignalGrid1";
 			this.lightSignalGrid1.ButtonClick += new OpenDental.UI.ODLightSignalGridClickEventHandler(this.lightSignalGrid1_ButtonClick);
@@ -1133,9 +1150,9 @@ namespace OpenDental{
 			// 
 			this.myOutlookBar.Dock = System.Windows.Forms.DockStyle.Left;
 			this.myOutlookBar.ImageList = this.imageList32;
-			this.myOutlookBar.Location = new System.Drawing.Point(0,0);
+			this.myOutlookBar.Location = new System.Drawing.Point(0, 0);
 			this.myOutlookBar.Name = "myOutlookBar";
-			this.myOutlookBar.Size = new System.Drawing.Size(51,579);
+			this.myOutlookBar.Size = new System.Drawing.Size(51, 579);
 			this.myOutlookBar.TabIndex = 18;
 			this.myOutlookBar.Text = "outlookBar1";
 			this.myOutlookBar.ButtonClicked += new OpenDental.ButtonClickedEventHandler(this.myOutlookBar_ButtonClicked);
@@ -1146,7 +1163,7 @@ namespace OpenDental{
 			// 
 			// FormOpenDental
 			// 
-			this.ClientSize = new System.Drawing.Size(982,579);
+			this.ClientSize = new System.Drawing.Size(982, 579);
 			this.Controls.Add(this.ToolBarMain);
 			this.Controls.Add(this.panelSplitter);
 			this.Controls.Add(this.userControlTasks1);
@@ -1438,11 +1455,31 @@ namespace OpenDental{
 				CheckCustomReports();
 				ContrChart2.InitializeLocalData();
 				if(PrefB.GetBool("TaskListAlwaysShowsAtBottom")){
-					userControlTasks1.InitializeOnStartup();
-					userControlTasks1.Visible=true;
+					//seperate if statement to prevent database call if not showing task list at bottom to begin with
+					ComputerPref computerPrefs = ComputerPrefs.GetForLocalComputer();
+					if(!computerPrefs.TaskKeepListHidden)
+					{
+						userControlTasks1.InitializeOnStartup();
+						userControlTasks1.Visible = true;
+						if(computerPrefs.TaskDock == 0)
+						{
+							menuItemDockBottom.Checked = true;
+							menuItemDockRight.Checked = false;
+						}
+						else
+						{
+							menuItemDockRight.Checked = true;
+							menuItemDockBottom.Checked = false;
+						}
+					}
+					else
+					{
+						userControlTasks1.Visible = false;
+					}
 				}
-				else{
-					userControlTasks1.Visible=false;
+				else
+				{
+					userControlTasks1.Visible = false;
 				}
 				LayoutControls();
 			}//if(InvalidTypes.Prefs)
@@ -2035,10 +2072,13 @@ namespace OpenDental{
 			int width=this.ClientSize.Width-position.X;
 			int height=this.ClientSize.Height-position.Y;
 			if(userControlTasks1.Visible){
-				if(menuItemDockBottom.Checked){
+				ComputerPref computerPrefs = ComputerPrefs.GetForLocalComputer();
+				if(menuItemDockBottom.Checked)
+				{
 					if(panelSplitter.Height>10){//docking needs to be changed.
 						panelSplitter.Height=7;
-						panelSplitter.Location=new Point(position.X,540);
+						panelSplitter.Location = new Point(position.X, computerPrefs.TaskY);
+						panelSplitter.Cursor = Cursors.HSplit;
 					}
 					panelSplitter.Location=new Point(position.X,panelSplitter.Location.Y);
 					panelSplitter.Width=width;
@@ -2051,7 +2091,8 @@ namespace OpenDental{
 				else{//docked Right
 					if(panelSplitter.Width>10){//docking needs to be changed.
 						panelSplitter.Width=7;
-						panelSplitter.Location=new Point(900,position.Y);
+						panelSplitter.Location = new Point(computerPrefs.TaskX, position.Y);
+						panelSplitter.Cursor = Cursors.VSplit;
 					}
 					panelSplitter.Location=new Point(panelSplitter.Location.X,position.Y);
 					panelSplitter.Height=height;
@@ -2130,15 +2171,33 @@ namespace OpenDental{
 		private void menuItemDockBottom_Click(object sender,EventArgs e) {
 			menuItemDockBottom.Checked=true;
 			menuItemDockRight.Checked=false;
-			panelSplitter.Cursor=Cursors.HSplit;
+			//panelSplitter.Cursor=Cursors.HSplit;
 			LayoutControls();
 		}
 
 		private void menuItemDockRight_Click(object sender,EventArgs e) {
 			menuItemDockBottom.Checked=false;
 			menuItemDockRight.Checked=true;
-			panelSplitter.Cursor=Cursors.VSplit;
+			//included now with layoutcontrols
+			//panelSplitter.Cursor=Cursors.VSplit;
 			LayoutControls();
+		}
+		private void menuItemDockSavePos_Click(object sender, EventArgs e)
+		{
+
+			ComputerPref computerPref = ComputerPrefs.GetForLocalComputer();
+			if(menuItemDockBottom.Checked)
+			{
+				computerPref.TaskY = panelSplitter.Top;
+				computerPref.TaskDock = 0;
+			}
+			else
+			{
+				computerPref.TaskX = panelSplitter.Left;
+				computerPref.TaskDock = 1;
+			}
+			ComputerPrefs.Update(computerPref);
+
 		}
 		
 		///<summary>This is called when any local data becomes outdated.  It's purpose is to tell the other computers to update certain local data.</summary>

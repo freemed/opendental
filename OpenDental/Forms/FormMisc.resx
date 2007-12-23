@@ -138,6 +138,41 @@ Specifications:
 2" margin on top to place letterhead
 2.25" margin on left side for practice info</value>
   </data>
+  <data name="label6.ToolTip" xml:space="preserve">
+    <value>This is the document you want to use for the Stationary button in communications with patients or doctors.
+It should be placed in the folder specified above with the rest of your A-Z images.
+
+Example: "stationary.doc" (without the quotes)
+</value>
+  </data>
+  <data name="label5.ToolTip" xml:space="preserve">
+    <value>This should be just the filename of the image to use on your letter backgrounds.
+It should be placed in the folder specified above with the rest of your A-Z images.
+
+Example: "stationary.jpg" (without the quotes)
+
+Specifications:
+13.5x17.47@75dpi  
+2" margin on top to place letterhead
+2.25" margin on left side for practice info</value>
+  </data>
+  <data name="checkTaskListAlwaysShow.ToolTip" xml:space="preserve">
+    <value>This will show the task list on either the bottom or right hand side of your Open Dental screen to keep you up to date with tasks.
+This is very useful if you have large enough screen with a high resolution set. If you have some smaller screens in your office, use
+the option below to hide the list on individual computers.</value>
+  </data>
+  <data name="checkBoxTaskKeepListHidden.ToolTip" xml:space="preserve">
+    <value>This will hide the task list from this particular computer. You may still access it normally through the "Manage Module."
+This is helpful on computers with limited screen space (e.g. 15" &amp; 17") to customize the always show task list option. </value>
+  </data>
+  <data name="validNumY.ToolTip" xml:space="preserve">
+    <value>This is the "Vartical Position" in pixels for the division betwen the main program and the task list when docked at the bottom. It needs to be a value usually between 500-1000.
+You may also adjust and save this position directly from the main window by right clicking on the splitter between the task list and main window.</value>
+  </data>
+  <data name="validNumX.ToolTip" xml:space="preserve">
+    <value>This is the "Horizontal Position" in pixels for the division betwen the main program and the task list when docked to the right side of the screen. It needs to be a value usually between 700-1200.
+You may also adjust and save this position directly from the main window by right clicking on the splitter between the task list and main window.</value>
+  </data>
   <assembly alias="System.Drawing" name="System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
   <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>

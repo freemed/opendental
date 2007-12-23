@@ -28,6 +28,14 @@ namespace OpenDentBusiness {
 		public int PreferredPixelFormatNum;
 		///<summary>The path of the A-Z folder for the specified computer.  Overrides the officewide default.  Used when multiple locations are on a single virtual database and they each want to look to the local data folder for images.</summary>
 		public string AtoZpath;
+		///<summary>If the global setting for showing the Task List is on, this controls if it should be hidden on this specified computer</summary>
+		public bool TaskKeepListHidden;
+		///<summary>Dock task bar on bottom (0) or right (1).</summary>
+		public int TaskDock;
+		///<summary>X pos for right docked task list.</summary>
+		public int TaskX;
+		///<summary>Y pos for bottom docked task list.</summary>
+		public int TaskY;
 
 		public ComputerPref Copy(){
 			return (ComputerPref)MemberwiseClone();

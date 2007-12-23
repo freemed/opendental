@@ -6253,8 +6253,22 @@ namespace OpenDental{
 		private void To5_6_0() {
 			if(FromVersion<new Version("5.6.0.0")) {
 				string command;
-				
-
+				if(DataConnection.DBtype == DatabaseType.MySql)
+				{
+					command = "ALTER TABLE computerpref ADD TaskKeepListHidden varchar(1) default '0'";
+					General.NonQEx(command);
+				}
+				else
+				{//oracle.
+					command = "ALTER TABLE computerpref ADD TaskKeepListHidden varchar2(1) default '0'";
+					General.NonQEx(command);
+				}
+				command = "ALTER TABLE computerpref ADD TaskDock int default '0'";
+				General.NonQEx(command);
+				command = "ALTER TABLE computerpref ADD TaskX int default '900'";
+				General.NonQEx(command);
+				command = "ALTER TABLE computerpref ADD TaskY int default '625'";
+				General.NonQEx(command);
 
 
 				command="UPDATE preference SET ValueString = '5.6.0.0' WHERE PrefName = 'DataBaseVersion'";

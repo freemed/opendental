@@ -24,7 +24,12 @@ namespace OpenDental {
 			computerPref.SensorPort=0;
 			computerPref.SensorExposure=1;
 			computerPref.SensorBinned=false;
+			//Default values to start
 			computerPref.AtoZpath="";
+			computerPref.TaskKeepListHidden=false; //show docked task list on this computer 
+			computerPref.TaskDock=0; //bottom
+			computerPref.TaskX=900;
+			computerPref.TaskY=625;
 			try{
 				table=General.GetTableEx(command);
 			}catch{
@@ -43,17 +48,21 @@ namespace OpenDental {
 					+"database maintenance tool, then call us for help if you still get this message.",
 					Logger.Severity.WARNING);
 			}
-			computerPref.ComputerPrefNum=						PIn.PInt		(table.Rows[0][0].ToString());
-			computerPref.ComputerName=							PIn.PString	(table.Rows[0][1].ToString());
-			computerPref.GraphicsUseHardware=				PIn.PBool		(table.Rows[0][2].ToString());
-			computerPref.GraphicsSimple=						PIn.PBool		(table.Rows[0][3].ToString());
-			computerPref.SensorType=								PIn.PString	(table.Rows[0][4].ToString());
-			computerPref.SensorBinned=							PIn.PBool		(table.Rows[0][5].ToString());
-			computerPref.SensorPort=								PIn.PInt		(table.Rows[0][6].ToString());
-			computerPref.SensorExposure=						PIn.PInt		(table.Rows[0][7].ToString());
+			computerPref.ComputerPrefNum=				PIn.PInt		(table.Rows[0][0].ToString());
+			computerPref.ComputerName=					PIn.PString		(table.Rows[0][1].ToString());
+			computerPref.GraphicsUseHardware=			PIn.PBool		(table.Rows[0][2].ToString());
+			computerPref.GraphicsSimple=				PIn.PBool		(table.Rows[0][3].ToString());
+			computerPref.SensorType=					PIn.PString		(table.Rows[0][4].ToString());
+			computerPref.SensorBinned=					PIn.PBool		(table.Rows[0][5].ToString());
+			computerPref.SensorPort=					PIn.PInt		(table.Rows[0][6].ToString());
+			computerPref.SensorExposure=				PIn.PInt		(table.Rows[0][7].ToString());
 			computerPref.GraphicsDoubleBuffering=		PIn.PBool		(table.Rows[0][8].ToString());
-			computerPref.PreferredPixelFormatNum=		PIn.PInt    (table.Rows[0][9].ToString());
-			computerPref.AtoZpath=                  PIn.PString (table.Rows[0][10].ToString());
+			computerPref.PreferredPixelFormatNum=		PIn.PInt		(table.Rows[0][9].ToString());
+			computerPref.AtoZpath=						PIn.PString		(table.Rows[0][10].ToString());
+			computerPref.TaskKeepListHidden=			PIn.PBool		(table.Rows[0][11].ToString());
+			computerPref.TaskDock=						PIn.PInt		(table.Rows[0][12].ToString());
+			computerPref.TaskX=							PIn.PInt		(table.Rows[0][13].ToString());
+			computerPref.TaskY=							PIn.PInt		(table.Rows[0][14].ToString());
 			return computerPref;
 		}
 
@@ -67,7 +76,7 @@ namespace OpenDental {
 				command+="ComputerPrefNum,";
 			}			
 			command+="ComputerName,GraphicsUseHardware,GraphicsSimple,SensorType,SensorPort,SensorExposure,SensorBinned,"
-				+"GraphicsDoubleBuffering,PreferredPixelFormatNum,AtoZpath) VALUES(";
+				+ "GraphicsDoubleBuffering,PreferredPixelFormatNum,AtoZpath,TaskKeepListHidden,TaskDock,TaskX,TaskY) VALUES(";
 			if(PrefB.RandomKeys){
 				command+="'"+POut.PInt(computerPref.ComputerPrefNum)+"',";
 			}
@@ -80,8 +89,13 @@ namespace OpenDental {
 				+"'"+POut.PInt(computerPref.SensorExposure)+"',"
 				+"'"+POut.PBool(computerPref.GraphicsDoubleBuffering)+"',"
 				+"'"+POut.PInt(computerPref.PreferredPixelFormatNum)+"',"
-				+"'"+POut.PString(computerPref.AtoZpath)+"')";
-			if(PrefB.RandomKeys){
+				+"'"+POut.PString(computerPref.AtoZpath)+"',"
+				+"'"+POut.PBool(computerPref.TaskKeepListHidden)+"',"
+				+"'"+POut.PInt(computerPref.TaskDock)+"',"
+				+"'"+POut.PInt(computerPref.TaskX)+"',"
+				+"'"+POut.PInt(computerPref.TaskY)+"')";
+			if(PrefB.RandomKeys)
+			{
 				General.NonQ(command);
 			}else{
 				computerPref.ComputerPrefNum=General.NonQ(command,true);
@@ -98,8 +112,12 @@ namespace OpenDental {
 				+"SensorPort='"+POut.PInt(computerPref.SensorPort)+"',"
 				+"SensorExposure='"+POut.PInt(computerPref.SensorExposure)+"',"
 				+"GraphicsDoubleBuffering='"+POut.PBool(computerPref.GraphicsDoubleBuffering)+"',"
-				+"PreferredPixelFormatNum='"+POut.PInt(computerPref.PreferredPixelFormatNum)+"', "
-				+"AtoZpath='"+POut.PString(computerPref.AtoZpath)+"' "
+				+"PreferredPixelFormatNum='"+POut.PInt(computerPref.PreferredPixelFormatNum)+"',"
+				+"AtoZpath='"+POut.PString(computerPref.AtoZpath)+"',"
+				+"TaskKeepListHidden='"+POut.PBool(computerPref.TaskKeepListHidden)+"',"
+				+"TaskDock='"+POut.PInt(computerPref.TaskDock)+"',"
+				+"TaskX='"+POut.PInt(computerPref.TaskX)+"',"
+				+"TaskY='"+POut.PInt(computerPref.TaskY)+"' "
 				+"WHERE ComputerPrefNum='"+POut.PInt(computerPref.ComputerPrefNum)+"'";
 			return General.NonQ(command);
 		}
