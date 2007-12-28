@@ -2071,14 +2071,13 @@ namespace OpenDental{
 			Point position=new Point(myOutlookBar.Width,ToolBarMain.Height);
 			int width=this.ClientSize.Width-position.X;
 			int height=this.ClientSize.Height-position.Y;
-			if(userControlTasks1.Visible){
-				ComputerPref computerPrefs = ComputerPrefs.GetForLocalComputer();
-				if(menuItemDockBottom.Checked)
-				{
-					if(panelSplitter.Height>10){//docking needs to be changed.
+			if(userControlTasks1.Visible) {
+				ComputerPref computerPrefs=ComputerPrefs.GetForLocalComputer();
+				if(menuItemDockBottom.Checked) {
+					if(panelSplitter.Height>8) {//docking needs to be changed, or setting just reloaded
 						panelSplitter.Height=7;
-						panelSplitter.Location = new Point(position.X, computerPrefs.TaskY);
-						panelSplitter.Cursor = Cursors.HSplit;
+						panelSplitter.Location=new Point(position.X,computerPrefs.TaskY);
+						panelSplitter.Cursor=Cursors.HSplit;
 					}
 					panelSplitter.Location=new Point(position.X,panelSplitter.Location.Y);
 					panelSplitter.Width=width;
@@ -2088,11 +2087,11 @@ namespace OpenDental{
 					userControlTasks1.Height=this.ClientSize.Height-userControlTasks1.Top;
 					height=ClientSize.Height-panelSplitter.Height-userControlTasks1.Height-ToolBarMain.Height;
 				}
-				else{//docked Right
-					if(panelSplitter.Width>10){//docking needs to be changed.
+				else {//docked Right
+					if(panelSplitter.Width>8) {//docking needs to be changed, or setting just reloaded
 						panelSplitter.Width=7;
-						panelSplitter.Location = new Point(computerPrefs.TaskX, position.Y);
-						panelSplitter.Cursor = Cursors.VSplit;
+						panelSplitter.Location=new Point(computerPrefs.TaskX,position.Y);
+						panelSplitter.Cursor=Cursors.VSplit;
 					}
 					panelSplitter.Location=new Point(panelSplitter.Location.X,position.Y);
 					panelSplitter.Height=height;
@@ -2105,7 +2104,7 @@ namespace OpenDental{
 				panelSplitter.BringToFront();
 				panelSplitter.Invalidate();
 			}
-			else{
+			else {
 				panelSplitter.Visible=false;
 			}
 			ContrAccount2.Location=position;
@@ -2949,6 +2948,13 @@ namespace OpenDental{
 			else{
 				timerSignals.Interval=PrefB.GetInt("ProcessSigsIntervalInSecs")*1000;
 				timerSignals.Enabled=true;
+			}
+			//signal for resetting position of splitter bar...tells it to reload info since not the normal size
+			if(panelSplitter.Height==7) {
+				panelSplitter.Height=9;
+			}
+			else {
+				panelSplitter.Width=9;
 			}
 			SecurityLogs.MakeLogEntry(Permissions.Setup,0,"Misc");
 		}
