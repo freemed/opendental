@@ -3609,9 +3609,49 @@ namespace OpenDental {
 				return;
 			}
 			//FillMain(FormSO.FromDate,FormSO.ToDate,FormSO.IncludeClaims,FormSO.SubtotalsOnly);
-			PrintStatement(FormSO.PatNums,FormSO.FromDate,FormSO.ToDate,FormSO.IncludeClaims
-				,FormSO.SubtotalsOnly,FormSO.HidePayment,FormSO.NextAppt,FormSO.Note,FormSO.IsBill,FormSO.SimpleStatement,"");
-			ModuleSelected(PatCur.PatNum);
+			//if Email button pushed then make statement to email
+			if(FormSO.Email) {
+				int[] patNums=new int[FamCur.List.Length];
+				for(int i=0;i<FamCur.List.Length;i++) {
+					patNums[i]=FamCur.List[i].PatNum;
+				}
+				DateTime fromDate;
+				if(checkShowAll.Checked) {
+					fromDate=DateTime.MinValue;
+				}
+				else {
+					fromDate=DateTime.Today.AddDays(-45);
+				}
+				string attachPath=FormEmailMessageEdit.GetAttachPath();
+				Random rnd=new Random();
+				string fileName=DateTime.Now.ToString("yyyyMMdd")+"_"+DateTime.Now.TimeOfDay.Ticks.ToString()+rnd.Next(1000).ToString()+".pdf";
+				string filePathAndName=ODFileUtils.CombinePaths(attachPath,fileName);
+				//PrintStatement(patNums,fromDate,DateTime.MaxValue,true,false,false,false,"",false,PrefB.GetBool("PrintSimpleStatements"),
+				//	filePathAndName);
+				PrintStatement(FormSO.PatNums,FormSO.FromDate,FormSO.ToDate,FormSO.IncludeClaims,
+				FormSO.SubtotalsOnly,FormSO.HidePayment,FormSO.NextAppt,FormSO.Note,FormSO.IsBill,FormSO.SimpleStatement,
+				filePathAndName);
+
+				//Process.Start(filePathAndName);
+				EmailMessage message=new EmailMessage();
+				message.PatNum=PatCur.PatNum;
+				message.ToAddress=PatCur.Email;
+				message.FromAddress=PrefB.GetString("EmailSenderAddress");
+				message.Subject=Lan.g(this,"Statement");
+				EmailAttach attach=new EmailAttach();
+				attach.DisplayedFileName="Statement.pdf";
+				attach.ActualFileName=fileName;
+				message.Attachments.Add(attach);
+				FormEmailMessageEdit FormE=new FormEmailMessageEdit(message);
+				FormE.IsNew=true;
+				FormE.ShowDialog();
+
+			}
+			else {
+				PrintStatement(FormSO.PatNums,FormSO.FromDate,FormSO.ToDate,FormSO.IncludeClaims
+					,FormSO.SubtotalsOnly,FormSO.HidePayment,FormSO.NextAppt,FormSO.Note,FormSO.IsBill,FormSO.SimpleStatement,"");
+				ModuleSelected(PatCur.PatNum);
+			}
 		}
 
 		private void textUrgFinNote_TextChanged(object sender, System.EventArgs e) {
