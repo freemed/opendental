@@ -1417,7 +1417,7 @@ namespace OpenDental {
 			this.menuItemStatementEmail.Text = "Email";
 			this.menuItemStatementEmail.Click += new System.EventHandler(this.menuItemStatementEmail_Click);
 			// 
-			// ContrAccount
+			//  ContrAccount
 			// 
 			this.Controls.Add(this.panelBoldBalance);
 			this.Controls.Add(this.panelInsInfo);
