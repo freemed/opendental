@@ -367,6 +367,7 @@ namespace OpenDental{
 				totalPages=renderer.FormattedDocument.PageCount;
 				labelTotPages.Text="1 / "+totalPages.ToString();
 				printdoc.Renderer=renderer;
+				printdoc.PrinterSettings=pd.PrinterSettings;
 				#if DEBUG
 					printPreviewControl2.Document=printdoc;
 				#else
