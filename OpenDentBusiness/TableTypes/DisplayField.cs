@@ -27,6 +27,7 @@ namespace OpenDentBusiness{
 			this.InternalName=internalName;
 			//this.Description=description;
 			this.ColumnWidth=columnWidth;
+			this.Description="";
 		}
 
 		///<summary>Returns a copy.</summary>
