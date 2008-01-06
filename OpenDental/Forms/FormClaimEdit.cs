@@ -2943,7 +2943,9 @@ namespace OpenDental{
 			FormCPE.OriginatingClaimNum=ClaimCur.ClaimNum;
 			FormCPE.ShowDialog();
 			ClaimList=Claims.Refresh(PatCur.PatNum);
-			ClaimCur=((Claim)Claims.HList[tempClaimNum]);
+			//this line was causing bugs.  And I don't know why it's necessary.
+			//ClaimCur=Claims.GetClaim(
+			//	((Claim)Claims.HList[tempClaimNum]);
 			ClaimProcList=ClaimProcs.Refresh(PatCur.PatNum);
 			FillGrids();
 		}
@@ -3206,7 +3208,8 @@ namespace OpenDental{
 			FormCPE.IsNew=true;
 			FormCPE.ShowDialog();
 			ClaimList=Claims.Refresh(PatCur.PatNum);
-			ClaimCur=((Claim)Claims.HList[tempClaimNum]);
+			//why:?
+			//ClaimCur=((Claim)Claims.HList[tempClaimNum]);
 			ClaimProcList=ClaimProcs.Refresh(PatCur.PatNum);
 			FillGrids();
 		}
