@@ -1369,7 +1369,7 @@ namespace OpenDental{
 			this.label26.Name = "label26";
 			this.label26.Size = new System.Drawing.Size(124,16);
 			this.label26.TabIndex = 104;
-			this.label26.Text = "Title";
+			this.label26.Text = "Title (Mr., Ms.)";
 			this.label26.TextAlign = System.Drawing.ContentAlignment.TopRight;
 			// 
 			// FormPatientEdit
