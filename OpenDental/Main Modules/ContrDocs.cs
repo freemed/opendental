@@ -1,4 +1,4 @@
-/*=============================================================================================================
+ /*=============================================================================================================
 Open Dental GPL license Copyright (C) 2003  Jordan Sparks, DMD.  http://www.open-dent.com,  www.docsparks.com
 See header in FormOpenDental.cs for complete text.  Redistributions must retain this text.
 ===============================================================================================================*/
@@ -1265,6 +1265,68 @@ namespace OpenDental{
 					FillDocList(true);//Update tree, in case the new document's icon or category were modified in formDocInfo.
 				}
 			}
+		}
+
+		private void OnScanMultipage_Click() {  
+			xImageDeviceManager.Obfuscator.ActivateEZTwain(); 
+			// Display TWAIN Select Source dialog 
+			int wPIXTypes = EZTwain.SelectImageSource(this.Handle); 
+			if (wPIXTypes == 0){//user clicked Cancel 
+				return; 
+			} 
+			int j; 
+			System.IntPtr hdib; 
+			int N;
+			N = 2; // Change this to your value
+			EZTwain.SetHideUI(0); 
+			EZTwain.SetJpegQuality(75); 
+			string filename=Path.GetTempFileName();
+			if (EZTwain.OpenDefaultSource()==1){ 
+				EZTwain.SetResolution(100); 
+				EZTwain.SetXferCount(N); //js: I don't know what this is
+				EZTwain.SetMultiTransfer(1); 
+				if (EZTwain.BeginMultipageFile(filename) == 0) { 
+					for (j = 1; j <= N; j++) { 
+						// If you can't get a Window handle, use IntPtr.Zero: 
+						hdib = EZTwain.Acquire(this.Handle); 
+						if (hdib == IntPtr.Zero) { 
+							break; 
+						} 
+						// <your image processing here> 
+						EZTwain.DibWritePage(hdib); 
+						EZTwain.DIB_Free(hdib); 
+					} 
+					EZTwain.EndMultipageFile(); 
+				} 
+				EZTwain.CloseSource(); 
+			} 
+			if(EZTwain.LastErrorCode() != 0)	{ 
+				EZTwain.ReportLastError("Unable to scan."); 
+			} 
+			string nodeId=""; 
+			Document doc=null; 
+			try { 
+				doc = imageStore.Import(filename, GetCurrentCategory()); 
+			} 
+			catch(Exception ex) { 
+				MessageBox.Show(Lan.g(this, "Unable to copy file, May be in use: ") + ex.Message + ": " + filename); 
+				return;
+			} 
+			FillDocList(false); 
+			SelectTreeNode(GetNodeById(MakeIdentifier(doc.DocNum.ToString(),"0"))); 
+			FormDocInfo FormD=new FormDocInfo(PatCur,doc,GetCurrentFolderName(TreeDocuments.SelectedNode)); 
+			FormD.ShowDialog();//some of the fields might get changed, but not the filename 
+			if(FormD.DialogResult!=DialogResult.OK){ 
+				DeleteSelection(false); 
+			}
+			else{ 
+				nodeId=MakeIdentifier(doc.DocNum.ToString(),"0"); 
+			} 
+			//Reselect the last successfully added node when necessary.
+			if(doc!=null && MakeIdentifier(doc.DocNum.ToString(),"0")!=nodeId) {
+				SelectTreeNode(GetNodeById(MakeIdentifier(doc.DocNum.ToString(),"0")));
+			}
+			FillDocList(true);
 		}
 
 		private void OnImport_Click() {
