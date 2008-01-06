@@ -86,7 +86,7 @@ namespace OpenDental{
 			// 
 			this.label3.Location = new System.Drawing.Point(351,36);
 			this.label3.Name = "label3";
-			this.label3.Size = new System.Drawing.Size(319,18);
+			this.label3.Size = new System.Drawing.Size(376,18);
 			this.label3.TabIndex = 21;
 			this.label3.Text = "Leave date blank to indicate order not placed yet and is pending";
 			this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
