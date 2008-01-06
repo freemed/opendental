@@ -195,19 +195,22 @@ namespace OpenDentBusiness{
 			}
 			return "";//should never happen
 		}
-		
+
 		///<summary>The supplied toothNumbers will be a series of tooth numbers separated by commas.  They will be in american format..  For display purposes, ranges will use dashes, and international numbers will be used.</summary>
-		public static string FormatRangeForDisplay(string toothNumbers){
+		public static string FormatRangeForDisplay(string toothNumbers) {
 			if(toothNumbers==null) {
 				return "";
 			}
 			toothNumbers=toothNumbers.Replace(" ","");//remove all spaces
-			if(toothNumbers==""){
+			if(toothNumbers=="") {
 				return "";
 			}
 			string[] toothArray=toothNumbers.Split(',');
-			if(toothArray.Length<=2){
-				return toothNumbers;//just two numbers separated by comma
+			if(toothArray.Length==1) {
+				return Tooth.ToInternat(toothArray[0]);
+			}
+			else if(toothArray.Length==2) {
+				return Tooth.ToInternat(toothArray[0])+","+Tooth.ToInternat(toothArray[1]);//just two numbers separated by comma
 			}
 			Array.Sort(toothArray,CompareTeethOrdinal);
 			StringBuilder strbuild=new StringBuilder();
@@ -216,23 +219,23 @@ namespace OpenDentBusiness{
 			int currentNum;
 			int nextNum;
 			int numberInaRow=1;//must have 3 in a row to trigger dash
-			for(int i=0;i<toothArray.Length-1;i++){
+			for(int i=0;i<toothArray.Length-1;i++) {
 				//in each loop, we are comparing the current number with the next number
 				currentNum=Tooth.ToOrdinal(toothArray[i]);
 				nextNum=Tooth.ToOrdinal(toothArray[i+1]);
-				if(nextNum-currentNum==1 && currentNum!=16 && currentNum!=32){//if sequential (sequences always break at end of arch)
+				if(nextNum-currentNum==1 && currentNum!=16 && currentNum!=32) {//if sequential (sequences always break at end of arch)
 					numberInaRow++;
 				}
-				else{
+				else {
 					numberInaRow=1;
 				}
-				if(numberInaRow<3){//the next number is not sequential,or if it was a sequence, and it's now broken
-					if(strbuild.Length>0 && strbuild[strbuild.Length-1]!='-'){
+				if(numberInaRow<3) {//the next number is not sequential,or if it was a sequence, and it's now broken
+					if(strbuild.Length>0 && strbuild[strbuild.Length-1]!='-') {
 						strbuild.Append(",");
 					}
 					strbuild.Append(Tooth.ToInternat(toothArray[i]));
 				}
-				else if(numberInaRow==3){//this way, the dash only gets added exactly once
+				else if(numberInaRow==3) {//this way, the dash only gets added exactly once
 					strbuild.Append("-");
 				}
 				//else do nothing
@@ -240,7 +243,7 @@ namespace OpenDentBusiness{
 			if(strbuild.Length>0 && strbuild[strbuild.Length-1]!='-') {
 				strbuild.Append(",");
 			}
-			strbuild.Append(toothArray[toothArray.Length-1]);//always show the last number
+			strbuild.Append(Tooth.ToInternat(toothArray[toothArray.Length-1]));//always show the last number
 			return strbuild.ToString();
 		}
 
