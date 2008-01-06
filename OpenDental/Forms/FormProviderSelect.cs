@@ -166,7 +166,7 @@ namespace OpenDental{
 			this.checkAlphabetical.Name = "checkAlphabetical";
 			this.checkAlphabetical.Size = new System.Drawing.Size(165,18);
 			this.checkAlphabetical.TabIndex = 17;
-			this.checkAlphabetical.Text = "Alphabetical";
+			this.checkAlphabetical.Text = "Alph by class";
 			this.checkAlphabetical.UseVisualStyleBackColor = true;
 			this.checkAlphabetical.Click += new System.EventHandler(this.checkAlphabetical_Click);
 			// 
