@@ -347,6 +347,7 @@ namespace OpenDental{
 
 		private void FormReport_Layout(object sender, System.Windows.Forms.LayoutEventArgs e) {
 			previewContr.Width=ClientSize.Width;	
+			previewContr.Height=ClientSize.Height-panelSig.Height-ToolBarMain.Height;
 		}
 
 		/*//I don't think we need this:

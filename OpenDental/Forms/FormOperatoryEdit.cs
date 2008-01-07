@@ -211,7 +211,7 @@ namespace OpenDental{
 			this.label9.Name = "label9";
 			this.label9.Size = new System.Drawing.Size(363,16);
 			this.label9.TabIndex = 117;
-			this.label9.Text = "The hygeinist will be considered the main provider for this op.";
+			this.label9.Text = "The hygienist will be considered the main provider for this op.";
 			// 
 			// checkIsHygiene
 			// 
