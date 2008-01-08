@@ -98,7 +98,13 @@ namespace OpenDentBusiness{
 			}
 			return c;
 		}
-	
-	}
 
+		public override bool Equals(object obj){
+			if(obj == null || GetType() != obj.GetType()){
+				return false;
+			}
+			Claim c = (Claim)obj;
+			return (ClaimNum == c.ClaimNum);
+		}
+	}
 }

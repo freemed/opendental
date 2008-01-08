@@ -50,11 +50,13 @@ namespace OpenDental{
 		public ClaimForm ClaimFormCur;
 		private InsPlan[] PlanList;
 		private InsPlan[] MedPlanList;
+		private ArrayList MedPlanArrayList;
 		private Claim ClaimCur;
 		///<summary>Always length of 4.</summary>
 		private string[] diagnoses;
 		//private Claim[] ClaimsArray;
 		private Claim[] MedClaimsArray;
+		private ArrayList MedClaimsArrayList;
 		private ArrayList MedValueCodes;
 		private Referral ClaimReferral;
 
@@ -232,7 +234,7 @@ namespace OpenDental{
 			try{
 				pd2.Print();
 			}
-			catch{
+			catch(Exception ex){
 				MessageBox.Show(Lan.g("Printer","Printer not available"));
 				return false;
 			}
@@ -2543,31 +2545,77 @@ namespace OpenDental{
 
 		}
 
-
+		//The function below was written with the UB04 in mind any ?'s email:david@dentalasc.com as I don't always see the forum
 		private void FillMedInsStrings(){
-			MedPlanList = new InsPlan[3];
-			List<Claim> claimlist=Claims.Refresh(ThisPatNum);
-			MedClaimsArray = new Claim[3];
-			int ii=0;
-			for(int i=0;i<claimlist.Count;i++){
-				if(ii>2) {//this fixes a bug.  Can we please get some comments in this section regarding what's happening?
-					break;
+			InsPlan MedInsA = new InsPlan(); //Primary Insurance
+			InsPlan MedInsB = new InsPlan(); //Secondary Insurance
+			InsPlan MedInsC = new InsPlan(); //Tertiary Insurance
+			Claim Primary = new Claim(); //Pri Claim
+			Claim Secondary = new Claim(); //Secondary Claim
+			Claim Tertiary = new Claim(); //Tertiary Claim
+			bool isPrimary = false;
+			bool isSecondary = false;
+			bool isTertiary = false;
+			PatPlan[] PatInsPlans = PatPlans.Refresh(ThisPatNum); //get this patients ins plans
+			MedClaimsArrayList = new ArrayList(); //list of medical claims for patient
+			MedPlanArrayList = new ArrayList(); //list of medical ins plans for patient and family
+			for(int i=0;i<PatInsPlans.Length;i++){ //fill med ins plans
+				PatPlan tempPatPlan = (PatPlan)PatInsPlans[i];
+				InsPlan tempInsPlan = InsPlans.GetPlan(tempPatPlan.PlanNum, PlanList);
+				if(tempInsPlan.IsMedical)
+					MedPlanArrayList.Add(tempInsPlan);
+			}
+			ClaimProc[] ClaimProcList=ClaimProcs.Refresh(ThisPatNum); //get all claimprocs for patient
+			ArrayList tmpPlansBilled = new ArrayList();
+			for(int i=0;i<ClaimProcList.Length;i++){ //compare each claimproc on this claim to all claimprocs
+				for(int j=0;j<claimprocs.Count;j++){
+					if((claimprocs[j].ProcNum==ClaimProcList[i].ProcNum) && (ClaimProcList[i].Status==ClaimProcStatus.Received)){
+						bool inList = true;
+						Claim receivedClaim = Claims.GetClaim(ClaimProcList[i].ClaimNum);
+						inList = MedClaimsArrayList.Contains(receivedClaim);
+						if(!inList){
+							MedClaimsArrayList.Add(receivedClaim); //fill with claim already sent and received for procs on current(this) claim
+						}
+					}
 				}
-				InsPlan tmpPlan = InsPlans.GetPlan(claimlist[i].PlanNum,PlanList);
-				if(tmpPlan.IsMedical && (claimlist[i].ClaimNum <= ClaimCur.ClaimNum)){
-					MedPlanList[ii] = tmpPlan.Copy();
-					MedClaimsArray[ii] =claimlist[i].Copy();
-					ii++;
-				}
+			}
+			//Set Primary through Tertiary Claims
+			if (MedClaimsArrayList.Count == 0){
+				Primary = ClaimCur;
+				isPrimary = true;
+			}
+			if (MedClaimsArrayList.Count == 1){
+				Primary = (Claim)MedClaimsArrayList[0];
+				Secondary = ClaimCur;
+				isPrimary = true;
+				isSecondary = true;
+			}
+			if (MedClaimsArrayList.Count == 2){
+				Primary = (Claim)MedClaimsArrayList[0];
+				Secondary = (Claim)MedClaimsArrayList[1];
+				Tertiary = ClaimCur;
+				isPrimary = true;
+				isSecondary = true;
+				isTertiary = true;
+			}
+			//Set Primary through Tertiary Insurance Plans
+			if (MedPlanArrayList.Count > 0){
+				MedInsA = (InsPlan)MedPlanArrayList[0];
+			}
+			if (MedPlanArrayList.Count > 1){
+				MedInsB = (InsPlan)MedPlanArrayList[1];
+			}
+			if (MedPlanArrayList.Count > 2){
+				MedInsC = (InsPlan)MedPlanArrayList[2];
 			}
 			double TotalValAmount = ClaimValCodeLog.GetValAmountTotal(ClaimCur,"23");
 			//MessageBox.Show(TotalValAmount.ToString());
 			double PriorPayments = 0;
-			if(MedPlanList[0]!=null){
+			if(isPrimary||isSecondary||isTertiary){
 				for(int i=0;i<ClaimFormCur.Items.Length;i++){
 					switch(ClaimFormCur.Items[i].FieldName){
 						case "MedInsAName":
-							displayStrings[i]=Carriers.GetName(MedPlanList[0].CarrierNum);
+							displayStrings[i] = Carriers.GetName(MedInsA.CarrierNum);
 							break;
 						case "MedInsAPlanID":
 							break;
@@ -2576,17 +2624,17 @@ namespace OpenDental{
 						case "MedInsAAssignBen":
 							break;
 						case "MedInsAPriorPmt":
-							if(ClaimCur.ClaimNum==MedClaimsArray[0].ClaimNum){
-								displayStrings[i]="";
+							if(ClaimCur.ClaimNum==Primary.ClaimNum){
+								displayStrings[i] = "";
 							} else {
-								PriorPayments+=MedClaimsArray[0].InsPayAmt;
-								double amt = MedClaimsArray[0].InsPayAmt * 100; //get rid of decimal
-								displayStrings[i]=amt.ToString();
+								PriorPayments += Primary.InsPayAmt;
+								double amt = Primary.InsPayAmt * 100; //get rid of decimal
+								displayStrings[i] = amt.ToString();
 							}
 							break;
 						case "MedInsAAmtDue":
 							double AmtDue;
-							if(ClaimCur.ClaimNum==MedClaimsArray[0].ClaimNum){
+							if (ClaimCur.ClaimNum == Primary.ClaimNum){
 								AmtDue = (ClaimCur.ClaimFee-PriorPayments-TotalValAmount) * 100;
 								displayStrings[i]=AmtDue.ToString();
 							} else {
@@ -2595,9 +2643,9 @@ namespace OpenDental{
 							break;
 						case "MedInsAOtherProvID":
 							ProviderIdent AltID;
-							string CarrierElectID = Carriers.GetCarrier(MedPlanList[0].CarrierNum).ElectID.ToString();
+							string CarrierElectID = Carriers.GetCarrier(MedInsA.CarrierNum).ElectID.ToString();
 							Provider P = Providers.ListLong[Providers.GetIndexLong(ClaimCur.ProvBill)];
-							if (P.ProvNum > 0 && CarrierElectID != ""){
+							if (P.ProvNum > 0 && CarrierElectID != "" && (ProviderIdents.GetForPayor(P.ProvNum, CarrierElectID).Length > 0)){
 								AltID = ProviderIdents.GetForPayor(P.ProvNum, CarrierElectID)[0];
 								if (AltID.IDNumber != ""){
 									displayStrings[i]=AltID.IDNumber.ToString();
@@ -2609,32 +2657,32 @@ namespace OpenDental{
 							}
 							break;
 						case "MedInsAInsuredName":
-							Patient pTemp = Patients.GetPat(Int16.Parse((MedPlanList[0].Subscriber.ToString())));
+							Patient pTemp = Patients.GetPat(Int16.Parse((MedInsA.Subscriber.ToString())));
 							displayStrings[i] = pTemp.FName.ToString() + " " + pTemp.MiddleI.ToString() + " " + pTemp.LName.ToString();
 							break;
 						case "MedInsAInsuredID":
-							displayStrings[i]=MedPlanList[0].SubscriberID.ToString();
+							displayStrings[i] = MedInsA.SubscriberID.ToString();
 							break;
 						case "MedInsAGroupName":
-							displayStrings[i]=MedPlanList[0].GroupName.ToString();
+							displayStrings[i] = MedInsA.GroupName.ToString();
 							break;
 						case "MedInsAGroupNum":
-							displayStrings[i]=MedPlanList[0].GroupNum.ToString();
+							displayStrings[i] = MedInsA.GroupNum.ToString();
 							break;
 						case "MedInsAAuthCode":
-							displayStrings[i]=MedClaimsArray[0].PreAuthString.ToString();
+							displayStrings[i] = Primary.PreAuthString.ToString();
 							break;
 						case "MedInsAEmployer":
-							displayStrings[i] = Employers.GetName(MedPlanList[0].EmployerNum);
+							displayStrings[i] = Employers.GetName(MedInsA.EmployerNum);
 							break;
 					}
 				}
 			}
-			if(MedPlanList[1]!=null){
+			if(isSecondary||isTertiary){
 				for(int i=0;i<ClaimFormCur.Items.Length;i++){
 					switch(ClaimFormCur.Items[i].FieldName){
 						case "MedInsBName":
-							displayStrings[i]=Carriers.GetName(MedPlanList[1].CarrierNum);
+							displayStrings[i] = Carriers.GetName(MedInsB.CarrierNum);
 							break;
 						case "MedInsBPlanID":
 							break;
@@ -2643,17 +2691,17 @@ namespace OpenDental{
 						case "MedInsBAssignBen":
 							break;
 						case "MedInsBPriorPmt":
-							if(ClaimCur.ClaimNum==MedClaimsArray[1].ClaimNum){
+							if(ClaimCur.ClaimNum==Secondary.ClaimNum){
 								displayStrings[i]="";
 							} else {
-								PriorPayments+=MedClaimsArray[1].InsPayAmt;
-								double amt = MedClaimsArray[1].InsPayAmt * 100; //get rid of decimal
+								PriorPayments+=Secondary.InsPayAmt;
+								double amt = Secondary.InsPayAmt * 100; //get rid of decimal
 								displayStrings[i]=amt.ToString();
 							}
 							break;
 						case "MedInsBAmtDue":
 							double AmtDue;
-							if(ClaimCur.ClaimNum==MedClaimsArray[1].ClaimNum){
+							if(ClaimCur.ClaimNum==Secondary.ClaimNum){
 								AmtDue = (ClaimCur.ClaimFee-PriorPayments-TotalValAmount) * 100;
 								displayStrings[i]=AmtDue.ToString();
 							} else {
@@ -2662,52 +2710,46 @@ namespace OpenDental{
 							break;
 						case "MedInsBOtherProvID":
 							ProviderIdent AltID;
-							string CarrierElectID = Carriers.GetCarrier(MedPlanList[1].CarrierNum).ElectID.ToString();
+							string CarrierElectID = Carriers.GetCarrier(MedInsB.CarrierNum).ElectID.ToString();
 							Provider P = Providers.ListLong[Providers.GetIndexLong(ClaimCur.ProvBill)];
-							if (P.ProvNum > 0 && CarrierElectID != "")
-							{
+							if (P.ProvNum > 0 && CarrierElectID != "" && (ProviderIdents.GetForPayor(P.ProvNum, CarrierElectID).Length > 0)){
 								AltID = ProviderIdents.GetForPayor(P.ProvNum, CarrierElectID)[0];
-								if (AltID.IDNumber != "")
-								{
+								if (AltID.IDNumber != ""){
 									displayStrings[i] = AltID.IDNumber.ToString();
-								}
-								else
-								{
+								} else {
 									displayStrings[i] = "";
 								}
-							}
-							else
-							{
+							} else {
 								displayStrings[i] = "";
 							}
 							break;
 						case "MedInsBInsuredName":
-							Patient pTemp = Patients.GetPat(Int16.Parse((MedPlanList[1].Subscriber.ToString())));
+							Patient pTemp = Patients.GetPat(Int16.Parse((MedInsB.Subscriber.ToString())));
 							displayStrings[i] = pTemp.FName.ToString() + " " + pTemp.MiddleI.ToString() + " " + pTemp.LName.ToString();
 							break;
 						case "MedInsBInsuredID":
-							displayStrings[i] = MedPlanList[1].SubscriberID.ToString();
+							displayStrings[i] = MedInsB.SubscriberID.ToString();
 							break;
 						case "MedInsBGroupName":
-							displayStrings[i]=MedPlanList[1].GroupName.ToString();
+							displayStrings[i] = MedInsB.GroupName.ToString();
 							break;
 						case "MedInsBGroupNum":
-							displayStrings[i]=MedPlanList[1].GroupNum.ToString();
+							displayStrings[i] = MedInsB.GroupNum.ToString();
 							break;
 						case "MedInsBAuthCode":
-							displayStrings[i] = MedClaimsArray[1].PreAuthString.ToString();
+							displayStrings[i] = Secondary.PreAuthString.ToString();
 							break;
 						case "MedInsBEmployer":
-							displayStrings[i]=Employers.GetName(MedPlanList[1].EmployerNum);
+							displayStrings[i] = Employers.GetName(MedInsB.EmployerNum);
 							break;
 					}
 				}
 			}
-			if(MedPlanList[2]!=null){
+			if(isTertiary){
 				for(int i=0;i<ClaimFormCur.Items.Length;i++){
 					switch(ClaimFormCur.Items[i].FieldName){
 						case "MedInsCName":
-							displayStrings[i]=Carriers.GetName(MedPlanList[2].CarrierNum);
+							displayStrings[i] = Carriers.GetName(MedInsC.CarrierNum);
 							break;
 						case "MedInsCPlanID":
 							break;
@@ -2716,17 +2758,17 @@ namespace OpenDental{
 						case "MedInsCAssignBen":
 							break;
 						case "MedInsCPriorPmt":
-							if(ClaimCur.ClaimNum==MedClaimsArray[2].ClaimNum){
+							if (ClaimCur.ClaimNum == Tertiary.ClaimNum){
 								displayStrings[i]="";
 							} else {
-								PriorPayments+=MedClaimsArray[2].InsPayAmt;
-								double amt = MedClaimsArray[2].InsPayAmt * 100; //get rid of decimal
+								PriorPayments += Tertiary.InsPayAmt;
+								double amt = Tertiary.InsPayAmt * 100; //get rid of decimal
 								displayStrings[i]=amt.ToString();
 							}
 							break;
 						case "MedInsCAmtDue":
 							double AmtDue;
-							if(ClaimCur.ClaimNum==MedClaimsArray[2].ClaimNum){
+							if(ClaimCur.ClaimNum==Tertiary.ClaimNum){
 								AmtDue = (ClaimCur.ClaimFee-PriorPayments-TotalValAmount) * 100;
 								displayStrings[i]=AmtDue.ToString();
 							} else {
@@ -2735,48 +2777,41 @@ namespace OpenDental{
 							break;
 						case "MedInsCOtherProvID":
 							ProviderIdent AltID;
-							string CarrierElectID = Carriers.GetCarrier(MedPlanList[2].CarrierNum).ElectID.ToString();
+							string CarrierElectID = Carriers.GetCarrier(MedInsC.CarrierNum).ElectID.ToString();
 							Provider P = Providers.ListLong[Providers.GetIndexLong(ClaimCur.ProvBill)];
-							if (P.ProvNum > 0 && CarrierElectID != "")
-							{
+							if (P.ProvNum > 0 && CarrierElectID != "" && (ProviderIdents.GetForPayor(P.ProvNum, CarrierElectID).Length > 0)){
 								AltID = ProviderIdents.GetForPayor(P.ProvNum, CarrierElectID)[0];
-								if (AltID.IDNumber != "")
-								{
+								if (AltID.IDNumber != ""){
 									displayStrings[i] = AltID.IDNumber.ToString();
-								}
-								else
-								{
+								} else {
 									displayStrings[i] = "";
 								}
-							}
-							else
-							{
+							} else {
 								displayStrings[i] = "";
 							}
 							break;
 						case "MedInsCInsuredName":
-							Patient pTemp = Patients.GetPat(Int16.Parse((MedPlanList[2].Subscriber.ToString())));
+							Patient pTemp = Patients.GetPat(Int16.Parse((MedInsC.Subscriber.ToString())));
 							displayStrings[i] = pTemp.FName.ToString() + " " + pTemp.MiddleI.ToString() + " " + pTemp.LName.ToString();
 							break;
 						case "MedInsCInsuredID":
-							displayStrings[i] = MedPlanList[2].SubscriberID.ToString();
+							displayStrings[i] = MedInsC.SubscriberID.ToString();
 							break;
 						case "MedInsCGroupName":
-							displayStrings[i]=MedPlanList[2].GroupName.ToString();
+							displayStrings[i] = MedInsC.GroupName.ToString();
 							break;
 						case "MedInsCGroupNum":
-							displayStrings[i]=MedPlanList[2].GroupNum.ToString();
+							displayStrings[i] = MedInsC.GroupNum.ToString();
 							break;
 						case "MedInsCAuthCode":
-							displayStrings[i] = MedClaimsArray[2].PreAuthString.ToString();
+							displayStrings[i] = Tertiary.PreAuthString.ToString();
 							break;
 						case "MedInsCEmployer":
-							displayStrings[i] = Employers.GetName(MedPlanList[2].EmployerNum);
+							displayStrings[i] = Employers.GetName(MedInsC.EmployerNum);
 							break;
 					}
 				}
 			}
-
 		}
 
 		/// <summary>Uses the fee field to determine how many procedures this claim will print.</summary>
