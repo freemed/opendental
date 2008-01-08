@@ -955,6 +955,9 @@ namespace OpenDental{
 			vScrollBar1.Minimum=0;
 			vScrollBar1.LargeChange=12*ContrApptSheet.Lh;//12 rows
 			vScrollBar1.Maximum=ContrApptSheet2.Height-panelSheet.Height+vScrollBar1.LargeChange;
+			if(vScrollBar1.Maximum<0) {
+				vScrollBar1.Maximum=0;
+			}
 			//Max is set again in Resize event
 			vScrollBar1.SmallChange=6*ContrApptSheet.Lh;//6 rows
 			if(vScrollBar1.Value==0 

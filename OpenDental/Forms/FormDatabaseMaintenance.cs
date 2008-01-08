@@ -231,6 +231,8 @@ namespace OpenDental {
 			Application.DoEvents();
 			ClaimPaymentDeleteWithNoSplits();
 			Application.DoEvents();
+			ClaimProcDateNotMatchPayment();
+			Application.DoEvents();
 			ClaimProcDeleteWithInvalidClaimNum();
 			Application.DoEvents();
 			ClaimProcDeleteWithInvalidPlanNum();
@@ -757,6 +759,24 @@ namespace OpenDental {
 			}
 		}
 
+		private void ClaimProcDateNotMatchPayment() {
+			command="SELECT claimproc.ClaimProcNum,claimpayment.CheckDate FROM claimproc,claimpayment "
+				+"WHERE claimproc.ClaimPaymentNum=claimpayment.ClaimPaymentNum "
+				+"AND claimproc.DateCP!=claimpayment.CheckDate";
+			table=General.GetTable(command);
+			DateTime datecp;
+			for(int i=0;i<table.Rows.Count;i++) {
+				datecp=PIn.PDate(table.Rows[i][1].ToString());
+				command="UPDATE claimproc SET DateCP="+POut.PDate(datecp)
+					+" WHERE ClaimProcNum="+table.Rows[i][0].ToString();
+				General.NonQ(command);
+			}
+			int numberFixed=table.Rows.Count;
+			if(numberFixed>0 || checkShow.Checked) {
+				textLog.Text+=Lan.g(this,"Claim payments with mismatched dates fixed: ")+numberFixed.ToString()+"\r\n";
+			}
+		}
+
 		private void ClaimProcDeleteWithInvalidClaimNum() {
 			command="DELETE FROM claimproc WHERE claimproc.ClaimNum!=0 "
 				+"AND NOT EXISTS(SELECT * FROM claim WHERE claim.ClaimNum=claimproc.ClaimNum)";
@@ -812,17 +832,26 @@ namespace OpenDental {
 		}
 
 		private void ClaimProcPreauthNotMatchClaim() {
-			if(FormChooseDatabase.DBtype==DatabaseType.Oracle) {
-				return;
-			}
-			command=@"UPDATE claimproc,claim
-				SET claimproc.Status=2
+			command=@"SELECT claimproc.ClaimProcNum 
+				FROM claimproc,claim 
 				WHERE claimproc.ClaimNum=claim.ClaimNum
-				AND claim.ClaimType='PreAuth'";
-			int numberFixed=General.NonQ(command);
+				AND claim.ClaimType='PreAuth'
+				AND claimproc.Status!=2";
+			table=General.GetTable(command);
+			for(int i=0;i<table.Rows.Count;i++) {
+				command="UPDATE claimproc SET Status=2"
+					+" WHERE ClaimProcNum="+table.Rows[i][0].ToString();
+				General.NonQ(command);
+			}
+			int numberFixed=table.Rows.Count;
 			if(numberFixed>0 || checkShow.Checked) {
 				textLog.Text+=Lan.g(this,"ClaimProcs for preauths with status not preauth fixed: ")+numberFixed.ToString()+"\r\n";
 			}
+			//this gives the wrong number of rows fixed, so we had to get more complicated:
+			//command=@"UPDATE claimproc,claim
+			//	SET claimproc.Status=2
+			//	WHERE claimproc.ClaimNum=claim.ClaimNum
+			//	AND claim.ClaimType='PreAuth'";
 		}
 
 		private void ClaimProcStatusNotMatchClaim() {
