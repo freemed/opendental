@@ -1359,6 +1359,7 @@ namespace OpenDental{
 						DeleteSelection(false);
 					}else{
 						nodeId=MakeIdentifier(doc.DocNum.ToString(),"0");
+						selectionDoc=doc.Copy();
 					}
 				}
 			}
