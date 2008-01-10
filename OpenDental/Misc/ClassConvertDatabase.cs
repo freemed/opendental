@@ -6263,12 +6263,14 @@ namespace OpenDental{
 					command = "ALTER TABLE computerpref ADD TaskKeepListHidden varchar2(1) default '0'";
 					General.NonQEx(command);
 				}
-				command = "ALTER TABLE computerpref ADD TaskDock int default '0'";
+				command = "ALTER TABLE computerpref ADD TaskDock int NOT NULL default '0'";
 				General.NonQEx(command);
-				command = "ALTER TABLE computerpref ADD TaskX int default '900'";
+				command = "ALTER TABLE computerpref ADD TaskX int NOT NULL default '900'";
 				General.NonQEx(command);
-				command = "ALTER TABLE computerpref ADD TaskY int default '625'";
+				command = "ALTER TABLE computerpref ADD TaskY int NOT NULL default '625'";
 				General.NonQEx(command);
+
+
 				
 
 				command="UPDATE preference SET ValueString = '5.6.0.0' WHERE PrefName = 'DataBaseVersion'";
