@@ -534,12 +534,14 @@ namespace OpenDental.Eclaims
 					}
 					sw.Write("****"//NM104-07 not used
 						+"PI*");//NM108: PI=PayorID
-					if(carrier.ElectID.Length<3){
-						sw.WriteLine("06126~");//NM109: PayorID
+					string electid=carrier.ElectID;
+					if(electid.Length<3){
+						electid="06126";
 					}
-					else{
-						sw.WriteLine(Sout(carrier.ElectID,80,2)+"~");//NM109: PayorID
+					if(electid=="06126" && clearhouse.ISA08=="113504607"){//only for Tesia
+						electid="00000";
 					}
+					sw.WriteLine(Sout(electid,80,2)+"~");//NM109: PayorID
 					//2010BB N3: Carrier Address
 					seg++;
 					sw.Write("N3*"+Sout(carrier.Address,55));//N301: address
