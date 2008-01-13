@@ -714,6 +714,7 @@ namespace OpenDental
 			// 
 			// checkDedBeforePerc
 			// 
+			this.checkDedBeforePerc.AutoCheck = false;
 			this.checkDedBeforePerc.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.checkDedBeforePerc.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.checkDedBeforePerc.Location = new System.Drawing.Point(28,14);
@@ -1210,8 +1211,8 @@ namespace OpenDental
 			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Edit Claim Procedure";
-			this.Closing += new System.ComponentModel.CancelEventHandler(this.FormClaimProc_Closing);
 			this.Load += new System.EventHandler(this.FormClaimProcEdit_Load);
+			this.Closing += new System.ComponentModel.CancelEventHandler(this.FormClaimProc_Closing);
 			this.groupClaim.ResumeLayout(false);
 			this.panelClaimExtras.ResumeLayout(false);
 			this.panelClaimExtras.PerformLayout();
@@ -1873,6 +1874,7 @@ namespace OpenDental
 			//	textDedApplied.Text=textDedBeforePerc.Text;
 			//}
 			//ComputeAmounts();
+			MsgBox.Show(this,"Set this from the Insurance Plan window.");
 		}
 
 		private void textDedBeforePerc_Leave(object sender, System.EventArgs e) {
