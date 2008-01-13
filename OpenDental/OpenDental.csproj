@@ -3183,32 +3183,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.map</DependentUpon>
     </Compile>
-    <Compile Include="Web References\customerUpdates\Reference.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Reference.map</DependentUpon>
-    </Compile>
-    <Compile Include="Web References\localhost\Reference.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Reference.map</DependentUpon>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
     <None Include="bin\Debug\payments.txt" />
     <Content Include="Misc\App.ico" />
     <Content Include="Misc\TerminalMgr.ico" />
-    <None Include="Web References\customerUpdates\Reference.map">
-      <Generator>MSDiscoCodeGenerator</Generator>
-      <LastGenOutput>Reference.cs</LastGenOutput>
-    </None>
-    <None Include="Web References\customerUpdates\Service1.disco" />
-    <None Include="Web References\customerUpdates\Service1.wsdl" />
-    <None Include="Web References\localhost\Reference.map">
-      <Generator>MSDiscoCodeGenerator</Generator>
-      <LastGenOutput>Reference.cs</LastGenOutput>
-    </None>
-    <None Include="Web References\localhost\Service1.disco" />
     <None Include="Resources\GPL.txt" />
     <None Include="Resources\PaymentsRDL.txt" />
     <None Include="Resources\commlog.gif" />
@@ -3254,7 +3233,6 @@
       <DependentUpon>Reference.map</DependentUpon>
     </None>
     <None Include="Web References\com.dentalxchange.webservices\wsdl.wsdl" />
-    <None Include="Web References\localhost\Service1.wsdl" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CodeBase\xCodeBase.csproj">
@@ -3302,28 +3280,6 @@
     <WebReferences Include="Web References\" />
   </ItemGroup>
   <ItemGroup>
-    <WebReferenceUrl Include="http://70.90.133.65:1942/WebServiceCustomerUpdates/">
-      <UrlBehavior>Dynamic</UrlBehavior>
-      <RelPath>Web References\customerUpdates\</RelPath>
-      <UpdateFromURL>http://70.90.133.65:1942/WebServiceCustomerUpdates/</UpdateFromURL>
-      <ServiceLocationURL>
-      </ServiceLocationURL>
-      <CachedDynamicPropName>
-      </CachedDynamicPropName>
-      <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
-      <CachedSettingsPropName>OpenDental_customerUpdates_Service1</CachedSettingsPropName>
-    </WebReferenceUrl>
-    <WebReferenceUrl Include="http://localhost:3824/Service1.asmx%3fop=RequestUpdate">
-      <UrlBehavior>Dynamic</UrlBehavior>
-      <RelPath>Web References\localhost\</RelPath>
-      <UpdateFromURL>http://localhost:3824/Service1.asmx%3fop=RequestUpdate</UpdateFromURL>
-      <ServiceLocationURL>
-      </ServiceLocationURL>
-      <CachedDynamicPropName>
-      </CachedDynamicPropName>
-      <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
-      <CachedSettingsPropName>OpenDental_localhost_Service1</CachedSettingsPropName>
-    </WebReferenceUrl>
     <WebReferenceUrl Include="https://webservices.dentalxchange.com/dws/webservice/wsdl.jsp">
       <UrlBehavior>Dynamic</UrlBehavior>
       <RelPath>Web References\com.dentalxchange.webservices\</RelPath>

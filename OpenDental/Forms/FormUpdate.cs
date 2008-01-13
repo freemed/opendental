@@ -617,14 +617,14 @@ namespace OpenDental{
 				writer.WriteEndElement();
 				writer.WriteEndElement();
 			}
-			#if DEBUG
-				OpenDental.localhost.Service1 updateService=new OpenDental.localhost.Service1();
-			#else
-				OpenDental.customerUpdates.Service1 updateService=new OpenDental.customerUpdates.Service1();
-			#endif
+			//#if DEBUG
+			//	OpenDental.localhost.Service1 updateService=new OpenDental.localhost.Service1();
+			//#else
+			//	OpenDental.customerUpdates.Service1 updateService=new OpenDental.customerUpdates.Service1();
+			//#endif
 			string result="";
 			try {
-				result=updateService.RequestUpdate(strbuild.ToString());
+				//result=updateService.RequestUpdate(strbuild.ToString());
 			}
 			catch(Exception ex) {
 				Cursor=Cursors.Default;
