@@ -22,7 +22,7 @@ namespace OpenDentBusiness{
 		[DataField("Name")]
 		private string name;
 		bool nameChanged;
-		/// <summary></summary>
+		/// <summary>.</summary>
 		public string Name {
 			get { return name; }
 			set { name = value; MarkDirty(); nameChanged = true; }
@@ -34,7 +34,7 @@ namespace OpenDentBusiness{
 		[DataField("Phone")]
 		private string phone;
 		bool phoneChanged;
-		/// <summary></summary>
+		/// <summary>.</summary>
 		public string Phone {
 			get { return phone; }
 			set { phone = value; MarkDirty(); phoneChanged = true; }

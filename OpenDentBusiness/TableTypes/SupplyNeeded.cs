@@ -22,7 +22,7 @@ namespace OpenDentBusiness{
 		[DataField("Description")]
 		private string description;
 		bool descriptionChanged;
-		/// <summary></summary>
+		/// <summary>.</summary>
 		public string Description {
 			get { return description; }
 			set { description = value; MarkDirty(); descriptionChanged = true; }
@@ -34,7 +34,7 @@ namespace OpenDentBusiness{
 		[DataField("DateAdded")]
 		private DateTime dateAdded;
 		bool dateAddedChanged;
-		/// <summary></summary>
+		/// <summary>.</summary>
 		public DateTime DateAdded {
 			get { return dateAdded; }
 			set { dateAdded = value; MarkDirty(); dateAddedChanged = true; }

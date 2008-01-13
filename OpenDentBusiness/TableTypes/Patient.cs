@@ -7,6 +7,9 @@ namespace OpenDentBusiness{
 	///<summary>One row for each patient.  Includes deleted patients.</summary>
 	[DataObject("patient")]
 	public class Patient : DataObjectBase {
+		///<summary>Obsolete.  See the toothinitial table.</summary>
+		private string PrimaryTeeth;
+
 		[DataField("PatNum", PrimaryKey=true, AutoNumber=true)]
 		private int patNum;
 		bool patNumChanged;

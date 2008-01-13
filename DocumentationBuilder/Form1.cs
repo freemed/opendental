@@ -73,7 +73,8 @@ namespace DocumentationBuilder {
 				return;
 			}
 			//ProcessStartInfo startInfo=new ProcessStartInfo();
-			Process.Start("Notepad.exe",outputFile);
+			//Process.Start("Notepad.exe",outputFile);
+			Process.Start(outputFile);
 			Application.Exit();
 		}
 
@@ -212,6 +213,7 @@ namespace DocumentationBuilder {
 				case "covspan": return "CovSpan";
 				case "definition": return "Def";
 				case "diseasedef": return "DiseaseDef";
+				case "displayfield": return "DisplayField";
 				case "docattach": return "DocAttach";
 				case "electid": return "ElectID";
 				case "emailattach": return "EmailAttach";
@@ -245,8 +247,10 @@ namespace DocumentationBuilder {
 				case "paysplit": return "PaySplit";
 				case "perioexam": return "PerioExam";
 				case "periomeasure": return "PerioMeasure";
+				case "preference": return "Pref";
 				case "procbutton": return "ProcButton";
 				case "procbuttonitem": return "ProcButtonItem";
+				case "proccodenote": return "ProcCodeNote";
 				case "procedurecode": return "ProcedureCode";
 				case "procedurelog": return "Procedure";
 				case "proclicense": return "proclicense not used";
@@ -274,7 +278,12 @@ namespace DocumentationBuilder {
 				case "sigbutdefelement": return "SigButDefElement";
 				case "sigelement": return "SigElement";
 				case "sigelementdef": return "SigElementDef";
+				case "supplyneeded": return "SupplyNeeded";
+				case "supplyorder": return "SupplyOrder";
+				case "supplyorderitem": return "SupplyOrderItem";
+				case "taskancestor": return "TaskAncestor";
 				case "tasklist": return "TaskList";
+				case "tasksubscription": return "TaskSubscription";
 				case "terminalactive": return "TerminalActive";
 				case "timeadjust": return "TimeAdjust";
 				case "toolbutitem": return "ToolButItem";

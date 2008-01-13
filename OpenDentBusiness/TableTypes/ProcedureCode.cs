@@ -25,7 +25,7 @@ namespace OpenDentBusiness{
 		public TreatmentArea TreatArea;
 		///<summary>No longer used. Extraction paint type is used instead to show missing teeth.</summary>
 		[XmlIgnore]
-		public bool RemoveToothOld;
+		public bool RemoveTooth;
 		///<summary>Triggers recall in 6 months or as defined.</summary>
 		public bool SetRecall;
 		///<summary>If true, do not usually bill this procedure to insurance.</summary>
@@ -69,7 +69,7 @@ namespace OpenDentBusiness{
 		///<summary>FK to procedurecode.ProcCode.  Used for posterior composites because insurance substitutes the amalgam code when figuring the coverage.</summary>
 		[XmlIgnore]
 		public string SubstitutionCode;
-		///<Summary>Enum:SubstitutionCondition Used so that posterior composites only substitute if tooth is molar.  Ins usually pays for premolar composites.</Summary>
+		///<summary>Enum:SubstitutionCondition Used so that posterior composites only substitute if tooth is molar.  Ins usually pays for premolar composites.</summary>
 		[XmlIgnore]
 		public SubstitutionCondition SubstOnlyIf;
 

@@ -2,7 +2,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>8.0.50727</ProductVersion>
+    <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{3D0FC76E-803C-4DE2-BDB1-47D63A4E2357}</ProjectGuid>
     <OutputType>Library</OutputType>
@@ -174,6 +174,7 @@
     <Compile Include="TableTypes\CanadianExtract.cs" />
     <Compile Include="TableTypes\CanadianNetwork.cs" />
     <Compile Include="TableTypes\ClaimAttach.cs" />
+    <Compile Include="TableTypes\Files.cs" />
     <Compile Include="TableTypes\TaskAncestor.cs" />
     <Compile Include="TableTypes\TaskSubscription.cs" />
     <Compile Include="TableTypes\SupplyOrderItem.cs" />

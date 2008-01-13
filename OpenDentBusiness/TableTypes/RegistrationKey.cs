@@ -7,7 +7,7 @@ namespace OpenDentBusiness {
 	public class RegistrationKey {
 		///<summary>Primary Key.</summary>
 		public int RegistrationKeyNum;
-		///<summary>The customer to which this registration key applies.</summary>
+		///<summary>FK to patient.PatNum. The customer to which this registration key applies.</summary>
 		public int PatNum;
 		///<summary>The registration key as stored in the customer database.</summary>
 		public string RegKey;

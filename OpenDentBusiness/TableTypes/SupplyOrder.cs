@@ -46,7 +46,7 @@ namespace OpenDentBusiness{
 		[DataField("Note")]
 		private string note;
 		bool noteChanged;
-		/// <summary></summary>
+		/// <summary>.</summary>
 		public string Note {
 			get { return note; }
 			set { note = value; MarkDirty(); noteChanged = true; }

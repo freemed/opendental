@@ -59,7 +59,7 @@ namespace OpenDentBusiness{
 		public int DentaideCardSequence;
 		///<summary>If checked, the units Qty will show the base units assigned to a procedure on the claim form.</summary>
 		public bool ShowBaseUnits;
-		///<Summary>Apply deductible before percentage when calculating estimates.</Summary>
+		///<summary>Apply deductible before percentage when calculating estimates.</summary>
 		public bool DedBeforePerc;
 		///<summary>This is not a database column.  It is just used to display the number of plans with the same info.</summary>
 		public int NumberPlans;

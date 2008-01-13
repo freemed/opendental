@@ -1,10 +1,14 @@
-/*using System;
+using System;
 using System.Collections;
 
 namespace OpenDentBusiness{
 
-	///<summary>Used by dental schools.</summary>
+	///<summary>Was used by dental schools.  Obsolete.</summary>
 	public class Instructor{
+
+	}
+}
+	/*
 		///<summary>Primary key.</summary>
 		public int InstructorNum;
 		///<summary>.</summary>

@@ -25,7 +25,7 @@ namespace OpenDentBusiness{
 		public int PayPlanNum;
 		///<summary>Date always in perfect synch with Payment date.</summary>
 		public DateTime DatePay;
-		/// <summary></summary>
+		///<summary>FK to procedurelog.ProcNum.  0 if not attached to a procedure.</summary>
 		public int ProcNum;
 		///<summary>Date this paysplit was created.  User not allowed to edit.</summary>
 		public DateTime DateEntry;

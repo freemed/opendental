@@ -9,7 +9,7 @@ namespace OpenDentBusiness{
 		public int TaskListNum;
 		///<summary>The description of this tasklist.  Might be very long, but not usually.</summary>
 		public string Descript;
-		///<summary>FK tasklist.TaskListNum  The parent task list to which this task list is assigned.  If zero, then this task list is on the main trunk of one of the sections.</summary>
+		///<summary>FK to tasklist.TaskListNum  The parent task list to which this task list is assigned.  If zero, then this task list is on the main trunk of one of the sections.</summary>
 		public int Parent;
 		///<summary>Optional. Set to 0001-01-01 for no date.  If a date is assigned, then this list will also be available from the date section.</summary>
 		public DateTime DateTL;

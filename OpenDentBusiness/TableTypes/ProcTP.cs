@@ -33,7 +33,7 @@ namespace OpenDentBusiness{
 		public double SecInsAmt;
 		///<summary>The amount the patient is expected to pay. Never gets automatically updated.</summary>
 		public double PatAmt;
-		///<Summary>The amount of discount.  Currently only used for PPOs.</Summary>
+		///<summary>The amount of discount.  Currently only used for PPOs.</summary>
 		public double Discount;
 		
 		///<summary></summary>

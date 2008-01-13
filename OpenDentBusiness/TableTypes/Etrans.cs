@@ -11,7 +11,7 @@ namespace OpenDentBusiness{
 		public DateTime DateTimeTrans;
 		///<summary>FK to clearinghouse.ClearinghouseNum .  Can be 0 if no clearinghouse was involved.</summary>
 		public int ClearinghouseNum;
-		///<summary></summary>
+		///<summary>Enum:EtransType</summary>
 		public EtransType Etype;
 		///<summary>FK to claim.ClaimNum if a claim. Otherwise 0.  Warning.  Original claim might have been deleted.  But if Canadian claim was successfully sent, then deletion will be blocked.</summary>
 		public int ClaimNum;

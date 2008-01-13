@@ -21,7 +21,7 @@ namespace OpenDentBusiness{
 		public double Interest;
 		///<summary>Any note about this particular payment plan charge</summary>
 		public string Note;
-		///<Summary>The ProvNum will be assigned according to what the patient owes.  This same provnum is used to show amount due in guarantor.  Payments applied should be to this provnum.</Summary>
+		///<summary>The ProvNum will be assigned according to what the patient owes.  This same provnum is used to show amount due in guarantor.  Payments applied should be to this provnum.</summary>
 		public int ProvNum;
 		
 		///<summary></summary>

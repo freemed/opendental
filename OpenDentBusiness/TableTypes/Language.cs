@@ -6,7 +6,7 @@ namespace OpenDentBusiness{
 	///<summary>This is a list of phrases that need to be translated.  The primary key is a combination of the ClassType and the English phrase.  This table is currently filled dynmically at run time, but the plan is to fill it using a tool that parses the code.</summary>
 	public class Language{
 		///<summary>No longer used.</summary>
-		public string EnglishCommentsOld;
+		public string EnglishComments;
 		///<summary>A string representing the class where the translation is used. Maximum length is 25 characters.</summary>
 		public string ClassType;
 		///<summary>The English version of the phrase, case sensitive.</summary>

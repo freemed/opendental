@@ -34,7 +34,7 @@ namespace OpenDentBusiness{
 		[DataField("Description")]
 		private string description;
 		bool descriptionChanged;
-		/// <summary></summary>
+		/// <summary>The text of the popup.</summary>
 		public string Description {
 			get { return description; }
 			set { description = value; MarkDirty(); descriptionChanged = true; }
@@ -46,7 +46,7 @@ namespace OpenDentBusiness{
 		[DataField("IsDisabled")]
 		private bool isDisabled;
 		bool isDisabledChanged;
-		/// <summary></summary>
+		/// <summary>If true, then the popup won't ever automatically show.</summary>
 		public bool IsDisabled {
 			get { return isDisabled; }
 			set { isDisabled = value; MarkDirty(); isDisabledChanged = true; }

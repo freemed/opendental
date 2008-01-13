@@ -21,7 +21,7 @@ namespace OpenDental.Imaging {
 			using(IDbConnection connection = DataSettings.GetConnection())
 			using(IDbCommand command = connection.CreateCommand()) {
 				command.CommandText =
-					@"SELECT Data FROM Files WHERE DocNum = ?DocNum";
+					@"SELECT Data FROM files WHERE DocNum = ?DocNum";
 
 				IDataParameter docNumParameter = command.CreateParameter();
 				docNumParameter.ParameterName = "DocNum";
@@ -68,7 +68,7 @@ namespace OpenDental.Imaging {
 			using(IDbConnection connection = DataSettings.GetConnection())
 			using(IDbCommand command = connection.CreateCommand()) {
 				command.CommandText =
-					@"INSERT INTO Files (DocNum, Data, Thumbnail) VALUES (?DocNum, ?Data, NULL)";
+					@"INSERT INTO files (DocNum, Data, Thumbnail) VALUES (?DocNum, ?Data, NULL)";
 
 				IDataParameter docNumParameter = command.CreateParameter();
 				docNumParameter.ParameterName = "DocNum";
@@ -90,7 +90,7 @@ namespace OpenDental.Imaging {
 			using(IDbConnection connection = DataSettings.GetConnection())
 			using(IDbCommand command = connection.CreateCommand()) {
 				command.CommandText =
-					@"UPDATE Files SET Thumbnail = NULL WHERE DocNum = ?DocNum";
+					@"UPDATE files SET Thumbnail = NULL WHERE DocNum = ?DocNum";
 
 				IDataParameter docNumParameter = command.CreateParameter();
 				docNumParameter.ParameterName = "DocNum";

@@ -40,7 +40,7 @@ namespace OpenDentBusiness{
 		///<summary>True if the SSN field is actually a Tax ID Num</summary>
 		public bool UsingTIN;
 		///<summary>No longer used since each state assigns a different ID.  Use the providerident instead which allows you to assign a different BCBS ID for each Payor ID.</summary>
-		public string BlueCrossIDOld;
+		public string BlueCrossID;
 		///<summary>Signature on file.</summary>
 		public bool SigOnFile;
 		///<summary>.</summary>
