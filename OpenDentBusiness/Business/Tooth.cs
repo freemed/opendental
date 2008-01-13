@@ -212,7 +212,7 @@ namespace OpenDentBusiness{
 			else if(toothArray.Length==2) {
 				return Tooth.ToInternat(toothArray[0])+","+Tooth.ToInternat(toothArray[1]);//just two numbers separated by comma
 			}
-			Array.Sort(toothArray,CompareTeethOrdinal);
+			Array.Sort<string>(toothArray, new ToothComparer());
 			StringBuilder strbuild=new StringBuilder();
 			//List<string> toothList=new List<string>();
 			//strbuild.Append(Tooth.ToInternat(toothArray[0]));//always show the first number
@@ -245,11 +245,6 @@ namespace OpenDentBusiness{
 			}
 			strbuild.Append(Tooth.ToInternat(toothArray[toothArray.Length-1]));//always show the last number
 			return strbuild.ToString();
-		}
-
-		///<summary>A generic comparison that puts primary teeth after perm teeth.</summary>
-		private static int CompareTeethOrdinal(string toothA,string toothB){
-			return ToOrdinal(toothA).CompareTo(ToOrdinal(toothB));
 		}
 
 		///<summary>Takes a user entered string and validates/formats it for the database.  Throws an ApplicationException if any formatting errors.  User string can contain spaces, dashes, and commas, too.</summary>
@@ -295,7 +290,7 @@ namespace OpenDentBusiness{
 					toothList.Add(Tooth.FromInternat(toothArray[i]));
 				}
 			}
-			toothList.Sort(CompareTeethOrdinal);
+			toothList.Sort(new ToothComparer());
 			string retVal="";
 			for(int i=0;i<toothList.Count;i++){
 				if(i>0){
