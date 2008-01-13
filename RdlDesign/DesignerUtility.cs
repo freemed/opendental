@@ -37,6 +37,24 @@ using Microsoft.Win32;
 using fyiReporting.RDL;
 
 
+//#if MONO
+namespace System.Data.OleDb
+{
+	public static class OleDbMetaDataCollectionNames
+	{
+		public static readonly string Catalogs = string.Empty;
+		public static readonly string Collations = string.Empty;
+		public static readonly string Columns = string.Empty;
+		public static readonly string Indexes = string.Empty;
+		public static readonly string ProcedureColumns = string.Empty;
+		public static readonly string ProcedureParameters = string.Empty;
+		public static readonly string Procedures = string.Empty;
+		public static readonly string Tables = string.Empty;
+		public static readonly string Views = string.Empty;
+	}
+}
+//#endif
+
 namespace fyiReporting.RdlDesign
 {
 	/// <summary>
