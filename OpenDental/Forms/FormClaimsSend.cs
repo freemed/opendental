@@ -367,9 +367,14 @@ namespace OpenDental{
 					comboClinic.Items.Add(Clinics.List[i].Description);
 				}
 			}
-			FormClaimReports FormC=new FormClaimReports();
-			FormC.AutomaticMode=true;
-			FormC.ShowDialog();
+			if(PrefB.RandomKeys && !PrefB.GetBool("EasyNoClinics")){//using random keys and clinics
+				//Does not pull in reports automatically, because they could easily get assigned to the wrong clearinghouse
+			}
+			else{
+				FormClaimReports FormC=new FormClaimReports();
+				FormC.AutomaticMode=true;
+				FormC.ShowDialog();
+			}
 			FillGrid();
 			textDateFrom.Text=DateTime.Today.AddDays(-7).ToShortDateString();
 			textDateTo.Text=DateTime.Today.ToShortDateString();

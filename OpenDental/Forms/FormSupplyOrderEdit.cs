@@ -38,16 +38,14 @@ namespace OpenDental {
 			//if(Order.IsNew){//never
 			//	DialogResult=DialogResult.Cancel;
 			//}
+			if(textDatePlaced.Text!=""){
+				MsgBox.Show(this,"Not allowed to delete unless date is blank.");
+				return;
+			}
 			if(!MsgBox.Show(this,true,"Delete entire order?")){
 				return;
 			}
-			try{
-				SupplyOrders.DeleteObject(Order);
-			}
-			catch(ApplicationException ex){
-				MessageBox.Show(ex.Message);
-				return;
-			}
+			SupplyOrders.DeleteObject(Order);
 			DialogResult=DialogResult.OK;
 		}
 

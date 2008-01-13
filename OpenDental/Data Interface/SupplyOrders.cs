@@ -24,10 +24,12 @@ namespace OpenDental{
 			DataObjectFactory<SupplyOrder>.WriteObject(order);
 		}
 
-		///<summary>Surround with try-catch.</summary>
+		///<summary>No need to surround with try-catch.</summary>
 		public static void DeleteObject(SupplyOrder order){
-			//validate that not already in use.
-
+			//validate that not already in use-no
+			//delete associated orderItems
+			string command="DELETE FROM supplyorderitem WHERE SupplyOrderNum="+POut.PInt(order.SupplyOrderNum);
+			General.NonQ(command);
 			DataObjectFactory<SupplyOrder>.DeleteObject(order);
 		}
 
