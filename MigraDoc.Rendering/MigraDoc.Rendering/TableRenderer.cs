@@ -165,7 +165,7 @@ namespace MigraDoc.Rendering
       if (verticalAlignment == VerticalAlignment.Bottom)
       {
         targetY = innerRect.Y + innerRect.Height;
-        targetY -= cell.Row.BottomPadding;
+        targetY -= (double)cell.Row.BottomPadding;
         targetY -= contentHeight;
       }
       else if (verticalAlignment == VerticalAlignment.Center)
@@ -210,7 +210,7 @@ namespace MigraDoc.Rendering
       XUnit x = this.startX;
       for (int clmIdx = 0; clmIdx < cell.Column.Index; ++clmIdx)
       {
-        x += this.table.Columns[clmIdx].Width;
+        x += (double)this.table.Columns[clmIdx].Width;
       }
       x += LeftBorderOffset;
 
@@ -312,7 +312,7 @@ namespace MigraDoc.Rendering
         this.startRow < this.table.Rows.Count) //!!!newTHHO 09.08.2006
         offset = (XUnit)this.bottomBorderMap[this.startRow] - topHeight;
       else
-        offset = -CalcMaxTopBorderWidth(0);
+        offset = -(double)CalcMaxTopBorderWidth(0);
 
       int probeRow = this.startRow;
       XUnit currentHeight = 0;
@@ -367,7 +367,7 @@ namespace MigraDoc.Rendering
         XUnit width = LeftBorderOffset;
         foreach (Column clm in this.table.Columns)
         {
-          width += clm.Width;
+          width += (double)clm.Width;
         }
         layoutInfo.ContentArea.Width = width;
       }
@@ -379,8 +379,8 @@ namespace MigraDoc.Rendering
       else if (this.table.Rows.Alignment == RowAlignment.Left)
       {
         XUnit leftOffset = LeftBorderOffset;
-        leftOffset += this.table.Columns[0].LeftPadding;
-        layoutInfo.Left = -leftOffset;
+        leftOffset += (double)this.table.Columns[0].LeftPadding;
+        layoutInfo.Left = -(double)leftOffset;
       }
 
       switch (this.table.Rows.Alignment)

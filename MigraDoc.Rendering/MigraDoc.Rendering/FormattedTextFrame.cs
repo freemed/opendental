@@ -110,8 +110,8 @@ namespace MigraDoc.Rendering
         this.textframe.Orientation == TextOrientation.HorizontalRotatedFarEast)
       {
         width = this.textframe.Width.Point;
-        xOffset += this.textframe.MarginLeft;
-        yOffset += this.textframe.MarginTop;
+        xOffset += (double)this.textframe.MarginLeft;
+        yOffset += (double)this.textframe.MarginTop;
         width -= xOffset;
         width -= this.textframe.MarginRight + lineWidth / 2;
       }
@@ -120,15 +120,15 @@ namespace MigraDoc.Rendering
         width = this.textframe.Height.Point;
         if (this.textframe.Orientation == TextOrientation.Upward)
         {
-          xOffset += this.textframe.MarginBottom;
-          yOffset += this.textframe.MarginLeft;
+          xOffset += (double)this.textframe.MarginBottom;
+          yOffset += (double)this.textframe.MarginLeft;
           width -= xOffset;
           width -= this.textframe.MarginTop + lineWidth / 2;
         }
         else
         {
-          xOffset += this.textframe.MarginTop;
-          yOffset += this.textframe.MarginRight;
+          xOffset += (double)this.textframe.MarginTop;
+          yOffset += (double)this.textframe.MarginRight;
           width -= xOffset;
           width -= this.textframe.MarginBottom + lineWidth / 2;
         }

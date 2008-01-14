@@ -126,7 +126,7 @@ namespace MigraDoc.Rendering
         for (int toRight = 0; toRight <= this.cell.MergeRight; ++toRight)
         {
           int columnIdx = cellColumnIdx + toRight;
-          width += this.cell.Table.Columns[columnIdx].Width;
+          width += (double)this.cell.Table.Columns[columnIdx].Width;
         }
         width -= this.bordersRenderer.GetWidth(BorderType.Right);
 
@@ -167,8 +167,8 @@ namespace MigraDoc.Rendering
       if (height == 0)
       {
         height = ParagraphRenderer.GetLineHeight(this.cell.Format, this.gfx);
-        height += this.cell.Format.SpaceBefore;
-        height += this.cell.Format.SpaceAfter;
+        height += (double)this.cell.Format.SpaceBefore;
+        height += (double)this.cell.Format.SpaceAfter;
       }
       return height;
     }

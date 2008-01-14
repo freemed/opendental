@@ -417,7 +417,7 @@ namespace MigraDoc.RtfRendering
         Unit leftPgMrg = (Unit)parentSec.PageSetup.GetValue("LeftMargin", GV.ReadOnly);
         leftInd = -leftPgMrg.Point;
         Unit rightPgMrg = (Unit)parentSec.PageSetup.GetValue("RightMargin", GV.ReadOnly);
-        rightInd = -rightPgMrg;
+        rightInd = -(double)rightPgMrg;
       }
 
       LeftPosition leftPos = (LeftPosition)GetValueOrDefault("Left", new LeftPosition());

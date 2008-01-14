@@ -1673,14 +1673,14 @@ namespace MigraDoc.Rendering
       Area contentArea = this.renderInfo.LayoutInfo.ContentArea;
       ParagraphFormat format = this.paragraph.Format;
       XUnit left = contentArea.X;
-      left += format.LeftIndent;
+      left += (double)format.LeftIndent;
       if (format.FirstLineIndent < 0)
-        left += format.FirstLineIndent;
+        left += (double)format.FirstLineIndent;
 
       XUnit top = contentArea.Y;
       XUnit bottom = contentArea.Y + contentArea.Height;
       XUnit right = contentArea.X + contentArea.Width;
-      right -= format.RightIndent;
+      right -= (double)format.RightIndent;
 
       if (!this.paragraph.Format.IsNull("Borders"))
       {
@@ -1692,8 +1692,8 @@ namespace MigraDoc.Rendering
         if (this.renderInfo.FormatInfo.IsEnding)
           bottom -= bordersRenderer.GetWidth(BorderType.Bottom);
 
-        left -= borders.DistanceFromLeft;
-        right += borders.DistanceFromRight;
+        left -= (double)borders.DistanceFromLeft;
+        right += (double)borders.DistanceFromRight;
       }
       return new Rectangle(left, top, right - left, bottom - top);
     }
@@ -2132,7 +2132,7 @@ namespace MigraDoc.Rendering
         XUnit offset = 0;
         if (this.isFirstLine && !this.paragraph.Format.IsNull("Borders"))
         {
-          offset += paragraph.Format.Borders.DistanceFromTop;
+          offset += (double)paragraph.Format.Borders.DistanceFromTop;
           if (!paragraph.Format.IsNull("Borders"))
           {
             BordersRenderer bordersRenderer = new BordersRenderer(paragraph.Format.Borders, this.gfx);
@@ -2168,7 +2168,7 @@ namespace MigraDoc.Rendering
         {
           if (!this.paragraph.Format.IsNull("Borders"))
           {
-            offset += paragraph.Format.Borders.DistanceFromBottom;
+            offset += (double)paragraph.Format.Borders.DistanceFromBottom;
             BordersRenderer bordersRenderer = new BordersRenderer(paragraph.Format.Borders, this.gfx);
             offset += bordersRenderer.GetWidth(BorderType.Bottom);
           }

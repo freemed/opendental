@@ -97,8 +97,8 @@ namespace MigraDoc.Rendering
           inherentWidth = Math.Max(renderer.RenderInfo.LayoutInfo.MinWidth, inherentWidth);
         }
       }
-      inherentWidth += this.textArea.LeftPadding;
-      inherentWidth += this.textArea.RightPadding;
+      inherentWidth += (double)this.textArea.LeftPadding;
+      inherentWidth += (double)this.textArea.RightPadding;
       return inherentWidth;
     }
 

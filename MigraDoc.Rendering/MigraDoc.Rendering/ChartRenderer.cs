@@ -299,13 +299,13 @@ namespace MigraDoc.Rendering
       fillFormatRenderer.Render(rect.X, rect.Y, rect.Width, rect.Height);
 
       XUnit top = rect.Y;
-      top += textArea.TopPadding;
+      top += (double)textArea.TopPadding;
       XUnit bottom = rect.Y + rect.Height;
-      bottom -= textArea.BottomPadding;
+      bottom -= (double)textArea.BottomPadding;
       top = AlignVertically(textArea.VerticalAlignment, top, bottom, area.ContentHeight);
 
       XUnit left = rect.X;
-      left += textArea.LeftPadding;
+      left += (double)textArea.LeftPadding;
 
       RenderInfo[] renderInfos = area.GetRenderInfos();
       RenderByInfos(left, top, renderInfos);
@@ -350,16 +350,16 @@ namespace MigraDoc.Rendering
       PdfSharp.Charting.ChartFrame chartFrame = ((ChartFormatInfo)this.renderInfo.FormatInfo).chartFrame;
 
       XUnit top = rect.Y;
-      top += area.TopPadding;
+      top += (double)area.TopPadding;
 
       XUnit bottom = rect.Y + rect.Height;
-      bottom -= area.BottomPadding;
+      bottom -= (double)area.BottomPadding;
 
       XUnit left = rect.X;
-      left += area.LeftPadding;
+      left += (double)area.LeftPadding;
 
       XUnit right = rect.X + rect.Width;
-      right -= area.RightPadding;
+      right -= (double)area.RightPadding;
 
       chartFrame.Location = new XPoint(left, top);
       chartFrame.Size = new XSize(right - left, bottom - top);
