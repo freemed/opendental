@@ -112,7 +112,7 @@ namespace OpenDental{
 			string command;
 			if(recallType!=0){
 				command="SELECT COUNT(*) FROM  commlog WHERE ";
-				if(FormChooseDatabase.DBtype==DatabaseType.Oracle){
+				if(DataConnection.DBtype==DatabaseType.Oracle){
 					command+="TO_DATE(CommDateTime) = "+POut.PDate(MiscData.GetNowDateTime());
 				}else{//Assume MySQL
 					command+="DATE(CommDateTime) = CURDATE()";

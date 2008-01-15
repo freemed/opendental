@@ -25,7 +25,7 @@ namespace OpenDentBusiness{
 
 	///<summary></summary>
 	public class DataConnection{//
-		///<summary>The value here is not reliable for public use.  Use FormChooseDatabase.DBtype instead.  Only use the public value if you are within OpenDentBusiness, NOT the main program.  Use FormChooseDatabase.DBtype instead for that.</summary>
+		///<summary>The value here is now reliable for public use.  FormChooseDatabase.DBtype, which used to be used for the client is now gone.</summary>
 		public static DatabaseType DBtype;
 		///<summary>This data adapter is used for all queries to the database.</summary>
 		private MySqlDataAdapter da;

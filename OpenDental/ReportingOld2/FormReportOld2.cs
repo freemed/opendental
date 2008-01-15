@@ -559,7 +559,7 @@ namespace OpenDental.ReportingOld2
 								[i][MyReport.DataFields.IndexOf(fieldObject.DataField)].ToString();
 							displayText=rawText;
 							if(fieldObject.ValueType==FieldValueType.Age){
-								displayText=Shared.AgeToString(Shared.DateToAge(PIn.PDate(MyReport.ReportTable.Rows[i][MyReport.DataFields.IndexOf(fieldObject.DataField)].ToString())));//(fieldObject.FormatString);
+								displayText=Patients.AgeToString(Patients.DateToAge(PIn.PDate(MyReport.ReportTable.Rows[i][MyReport.DataFields.IndexOf(fieldObject.DataField)].ToString())));//(fieldObject.FormatString);
 							}
 							else if(fieldObject.ValueType==FieldValueType.Boolean){
 								displayText=PIn.PBool(MyReport.ReportTable.Rows[i][MyReport.DataFields.IndexOf(fieldObject.DataField)].ToString()).ToString();//(fieldObject.FormatString);

@@ -6,10 +6,9 @@ using System.Data;
 using System.Diagnostics;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
-using OpenDentBusiness;
 using OpenDental.DataAccess;
 
-namespace OpenDental{
+namespace OpenDentBusiness{
 	
 	///<summary></summary>
 	public class Patients{
@@ -25,18 +24,18 @@ namespace OpenDental{
 			string command= 
 				"SELECT guarantor FROM patient "
 				+"WHERE patnum = '"+POut.PInt(patNum)+"'";
- 			DataTable table=General.GetTable(command);
+ 			DataTable table=General2.GetTable(command);
 			if(table.Rows.Count==0){
 				return null;
 			}
-			if(FormChooseDatabase.DBtype==DatabaseType.MySql){
+			if(DataConnection.DBtype==DatabaseType.MySql){
 				command= 
 					"SELECT patient.* "
 					+"FROM patient "
 					+"WHERE Guarantor = '"+table.Rows[0][0].ToString()+"'"
 					+" ORDER BY Guarantor!=PatNum,Birthdate";
 			}
-			else if(FormChooseDatabase.DBtype==DatabaseType.Oracle){
+			else if(DataConnection.DBtype==DatabaseType.Oracle){
 				command= 
 					"SELECT patient.*,CASE WHEN PatNum=Guarantor THEN 0 ELSE 1 END AS isguarantor "
 					+"FROM patient "
@@ -61,7 +60,7 @@ namespace OpenDental{
 		private static Patient[] SubmitAndFill(string command){
 			Collection<Patient> patients = DataObjectFactory<Patient>.CreateObjects(command);
 			foreach (Patient patient in patients) {
-				patient.Age = Shared.DateToAge(patient.Birthdate);
+				patient.Age = DateToAge(patient.Birthdate);
 			}
 			Patient[] retVal = new Patient[patients.Count];
 			patients.CopyTo(retVal, 0);
@@ -157,10 +156,10 @@ namespace OpenDental{
 				+POut.PDate(pat.AdmitDate)+", "
 				+"'"+POut.PString(pat.Title)+"')";
 			if(PrefB.RandomKeys) {
-				General.NonQ(command);
+				General2.NonQ(command);
 			}
 			else {
-				pat.PatNum=General.NonQ(command,true);
+				pat.PatNum=General2.NonQ(command,true);
 			}
 		}
 
@@ -559,13 +558,13 @@ namespace OpenDental{
 			if(!comma)
 				return 0;//this means no change is actually required.
 			c+=" WHERE PatNum = '"   +POut.PInt(pat.PatNum)+"'";
-			return General.NonQ(c);
+			return General2.NonQ(c);
 		}//end UpdatePatient
 
 		///<summary>Only used when entering a new patient and user clicks cancel. To delete an existing patient, the PatStatus is simply changed to 4.</summary>
 		public static void Delete(Patient pat) {
 			string command="DELETE FROM patient WHERE PatNum ="+pat.PatNum.ToString();
-			General.NonQ(command);
+			General2.NonQ(command);
 		}
 
  		///<summary>Only used for the Select Patient dialog</summary>
@@ -637,7 +636,7 @@ namespace OpenDental{
 			}
 			command+="ORDER BY LName,FName ";
 			if(limit){
-				if(FormChooseDatabase.DBtype==DatabaseType.Oracle){
+				if(DataConnection.DBtype==DatabaseType.Oracle){
 					command="SELECT * FROM ("+command+") WHERE ROWNUM<=";
 				}else{//Assume MySQL
 					command+="LIMIT ";
@@ -645,7 +644,7 @@ namespace OpenDental{
 				command+="36";//only need 35, but the extra will help indicate more rows
 			}
 			//MessageBox.Show(command);
- 			DataTable table=General.GetTable(command);
+ 			DataTable table=General2.GetTable(command);
 			DataTable PtDataTable=table.Clone();//does not copy any data
 			PtDataTable.Columns.Add("age");
 			for(int i=0;i<PtDataTable.Columns.Count;i++){
@@ -667,7 +666,7 @@ namespace OpenDental{
 				r["Preferred"]=table.Rows[i]["Preferred"].ToString();
 				date=PIn.PDate(table.Rows[i]["Birthdate"].ToString());
 				if(date.Year>1880){
-					r["age"]=Shared.DateToAge(date);
+					r["age"]=DateToAge(date);
 					r["Birthdate"]=date.ToShortDateString();
 				}
 				else{
@@ -703,7 +702,7 @@ namespace OpenDental{
 				}
 				string command="SELECT * from patient WHERE "+strPatNums;
 				//MessageBox.Show(string command);
- 				table=General.GetTable(command);
+ 				table=General2.GetTable(command);
 			}
 			else{
 				table=new DataTable();
@@ -720,7 +719,7 @@ namespace OpenDental{
 				multPats[i].Gender       = (PatientGender)PIn.PInt   (table.Rows[i][6].ToString());
 				multPats[i].Position     = (PatientPosition)PIn.PInt   (table.Rows[i][7].ToString());
 				multPats[i].Birthdate    = PIn.PDate  (table.Rows[i][8].ToString());
-				multPats[i].Age=Shared.DateToAge(multPats[i].Birthdate);
+				multPats[i].Age=DateToAge(multPats[i].Birthdate);
 				multPats[i].SSN          = PIn.PString(table.Rows[i][9].ToString());
 				multPats[i].Address      = PIn.PString(table.Rows[i][10].ToString());
 				multPats[i].Address2     = PIn.PString(table.Rows[i][11].ToString());
@@ -802,7 +801,7 @@ namespace OpenDental{
 				"SELECT PatNum,LName,FName,MiddleI,Preferred,CreditType,Guarantor,HasIns,SSN " 
 				+"FROM patient "
 				+"WHERE PatNum = '"+patNum.ToString()+"'";
- 			DataTable table=General.GetTable(command);
+ 			DataTable table=General2.GetTable(command);
 			if(table.Rows.Count==0){
 				return new Patient();
 			}
@@ -898,7 +897,7 @@ namespace OpenDental{
 				ORDER BY Guarantor!=patient.PatNum,Birthdate,ProvNum;
 
 				DROP TABLE IF EXISTS tempfambal";
-			return General.GetTable(command);
+			return General2.GetTable(command);
 		}
 
 		///<summary></summary>
@@ -907,28 +906,28 @@ namespace OpenDental{
 			string command= "UPDATE patient SET "
 				+"FamFinUrgNote = '"+POut.PString(Fam.List[0].FamFinUrgNote)+"' "
 				+"WHERE PatNum = "+POut.PInt(Pat.PatNum);
- 			General.NonQ(command);
+ 			General2.NonQ(command);
 			command= "UPDATE patient SET FamFinUrgNote = '' "
 				+"WHERE PatNum = '"+Pat.Guarantor.ToString()+"'";
-			General.NonQ(command);
+			General2.NonQ(command);
 			//Move family financial note to current patient:
 			command="SELECT FamFinancial FROM patientnote "
 				+"WHERE PatNum = "+POut.PInt(Pat.Guarantor);
-			DataTable table=General.GetTable(command);
+			DataTable table=General2.GetTable(command);
 			if(table.Rows.Count==1){
 				command= "UPDATE patientnote SET "
 					+"FamFinancial = '"+POut.PString(table.Rows[0][0].ToString())+"' "
 					+"WHERE PatNum = "+POut.PInt(Pat.PatNum);
-				General.NonQ(command);
+				General2.NonQ(command);
 			}
 			command= "UPDATE patientnote SET FamFinancial = '' "
 				+"WHERE PatNum = "+POut.PInt(Pat.Guarantor);
-			General.NonQ(command);
+			General2.NonQ(command);
 			//change guarantor of all family members:
 			command= "UPDATE patient SET "
 				+"Guarantor = "+POut.PInt(Pat.PatNum)
 				+" WHERE Guarantor = "+POut.PInt(Pat.Guarantor);
-			General.NonQ(command);
+			General2.NonQ(command);
 		}
 		
 		///<summary></summary>
@@ -941,14 +940,14 @@ namespace OpenDental{
 				+"famfinurgnote = '"+POut.PString(Fam.List[0].FamFinUrgNote)
 				+POut.PString(Pat.FamFinUrgNote)+"' "
 				+"WHERE patnum = '"+Pat.Guarantor.ToString()+"'";
- 			General.NonQ(command);
+ 			General2.NonQ(command);
 			//delete cur notes
 			command= 
 				"UPDATE patient SET "
 				//+"famaddrnote = '', "
 				+"famfinurgnote = '' "
 				+"WHERE patnum = '"+Pat.PatNum+"'";
-			General.NonQ(command);
+			General2.NonQ(command);
 			//concat family financial notes
 			PatientNote PatientNoteCur=PatientNotes.Refresh(Pat.PatNum,Pat.Guarantor);
 			//patientnote table must have been refreshed for this to work.
@@ -959,26 +958,26 @@ namespace OpenDental{
 				"SELECT famfinancial "
 				+"FROM patientnote WHERE patnum ='"+POut.PInt(Pat.PatNum)+"'";
 			//MessageBox.Show(string command);
-			DataTable table=General.GetTable(command);
+			DataTable table=General2.GetTable(command);
 			string strCur=PIn.PString(table.Rows[0][0].ToString());
 			command= 
 				"UPDATE patientnote SET "
 				+"famfinancial = '"+POut.PString(strGuar+strCur)+"' "
 				+"WHERE patnum = '"+Pat.Guarantor.ToString()+"'";
-			General.NonQ(command);
+			General2.NonQ(command);
 			//delete cur financial notes
 			command= 
 				"UPDATE patientnote SET "
 				+"famfinancial = ''"
 				+"WHERE patnum = '"+Pat.PatNum.ToString()+"'";
-			General.NonQ(command);
+			General2.NonQ(command);
 		}
 
 		///<summary>Gets names for all patients.  Used mostly to show paysplit info.  Also used for reports, FormTrackNext, and FormUnsched.</summary>
 		public static void GetHList(){
 			string command="SELECT patnum,lname,fname,middlei,preferred "
 				+"FROM patient";
-			DataTable table=General.GetTable(command);
+			DataTable table=General2.GetTable(command);
 			HList=new Hashtable(table.Rows.Count);
 			int patnum;
 			string lname,fname,middlei,preferred;
@@ -1012,7 +1011,7 @@ namespace OpenDental{
 				+",feesched = '"   +POut.PInt   (pat.FeeSched)+"'"
 				+",billingtype = '"+POut.PInt   (pat.BillingType)+"'"
 				+" WHERE guarantor = '"+POut.PDouble(pat.Guarantor)+"'";
-			General.NonQ(command);
+			General2.NonQ(command);
 		}
 
 		///<summary>Used in new patient terminal.  Synchs less fields than the normal synch.</summary>
@@ -1025,7 +1024,7 @@ namespace OpenDental{
 				+",Zip = '"        +POut.PString(pat.Zip)+"'"
 				+",HmPhone = '"    +POut.PString(pat.HmPhone)+"'"
 				+" WHERE guarantor = '"+POut.PDouble(pat.Guarantor)+"'";
-			General.NonQ(command);
+			General2.NonQ(command);
 		}
 
 		///<summary></summary>
@@ -1033,14 +1032,14 @@ namespace OpenDental{
 			string command= "UPDATE patient SET " 
 				+"addrnote = '"   +POut.PString(pat.AddrNote)+"'"
 				+" WHERE guarantor = '"+POut.PDouble(pat.Guarantor)+"'";
-			DataTable table=General.GetTable(command);
+			DataTable table=General2.GetTable(command);
 		}
 
 		///<summary>Only used from FormRecallListEdit.  Updates two fields for family if they are already the same for the entire family.  If they start out different for different family members, then it only changes the two fields for the single patient.</summary>
 		public static void UpdatePhoneAndNoteIfNeeded(string newphone, string newnote, int patNum){
 			string command="SELECT Guarantor,HmPhone,AddrNote FROM patient WHERE Guarantor="
 				+"(SELECT Guarantor FROM patient WHERE PatNum="+POut.PInt(patNum)+")";
-			DataTable table=General.GetTable(command);
+			DataTable table=General2.GetTable(command);
 			bool phoneIsSame=true;
 			bool noteIsSame=true;
 			int guar=PIn.PInt(table.Rows[0]["Guarantor"].ToString());
@@ -1059,7 +1058,7 @@ namespace OpenDental{
 			else{
 				command+="PatNum="+POut.PInt(patNum);
 			}
-			General.NonQ(command);
+			General2.NonQ(command);
 			command="UPDATE patient SET AddrNote='"+POut.PString(newnote)+"' WHERE ";
 			if(noteIsSame) {
 				command+="Guarantor="+POut.PInt(guar);
@@ -1067,7 +1066,7 @@ namespace OpenDental{
 			else {
 				command+="PatNum="+POut.PInt(patNum);
 			}
-			General.NonQ(command);
+			General2.NonQ(command);
 		}
 
 		///<summary>This is only used in the Billing dialog</summary>
@@ -1187,7 +1186,7 @@ namespace OpenDental{
 			//}
 			command+="ORDER BY LName,FName";
 			//Debug.WriteLine(command);
-			DataTable table=General.GetTable(command);
+			DataTable table=General2.GetTable(command);
 			List<PatAging> agingList=new List<PatAging>();
 			PatAging patage;
 			for(int i=0;i<table.Rows.Count;i++){
@@ -1217,13 +1216,13 @@ namespace OpenDental{
 			}
 			if(includeChanged){
 				command="DROP TABLE IF EXISTS templastproc";
-				General.NonQ(command);
+				General2.NonQ(command);
 				command="DROP TABLE IF EXISTS templastpay";
-				General.NonQ(command);
+				General2.NonQ(command);
 			}
 			if(excludeInsPending){
 				command="DROP TABLE IF EXISTS tempclaimspending";
-				General.NonQ(command);
+				General2.NonQ(command);
 			}
 			return retVal;
 		}
@@ -1235,7 +1234,7 @@ namespace OpenDental{
 				+"FROM patient "//actually only gets guarantors since others are 0.
 				+" WHERE Bal_0_30 + Bal_31_60 + Bal_61_90 + BalOver90 - InsEst > '0.005'"//more that 1/2 cent
 				+" ORDER BY LName,FName";
-			DataTable table=General.GetTable(command);
+			DataTable table=General2.GetTable(command);
 			PatAging[] AgingList=new PatAging[table.Rows.Count];
 			for(int i=0;i<table.Rows.Count;i++){
 				AgingList[i]=new PatAging();
@@ -1267,7 +1266,7 @@ namespace OpenDental{
 				+",BalOver90 = '0'"
 				+",InsEst    = '0'"
 				+",BalTotal  = '0'";
-			General.NonQ(command);
+			General2.NonQ(command);
 		}
 
 		///<summary></summary>
@@ -1280,7 +1279,7 @@ namespace OpenDental{
 				+",InsEst    = '0'"
 				+",BalTotal  = '0'"
 			  +" WHERE guarantor = '"+POut.PInt(guarantor)+"'";
-			General.NonQ(command);
+			General2.NonQ(command);
 		}
 
 		///<summary></summary>
@@ -1295,7 +1294,7 @@ namespace OpenDental{
 				+",BalTotal       = '" +POut.PDouble(BalTotal)+"'"
 				+" WHERE patnum   = '" +POut.PInt   (patnum)+"'";
 			//MessageBox.Show(string command);
-			General.NonQ(command);
+			General2.NonQ(command);
 		}
 
 		///<summary>Gets the next available integer chart number.  Will later add a where clause based on preferred format.</summary>
@@ -1303,12 +1302,12 @@ namespace OpenDental{
 			string command="SELECT ChartNumber from patient WHERE"
 				+" ChartNumber REGEXP '^[0-9]+$'"//matches any number of digits
 				+" ORDER BY (chartnumber+0) DESC ";//1/13/05 by Keyush Shaw-added 0.
-			if(FormChooseDatabase.DBtype==DatabaseType.Oracle){
+			if(DataConnection.DBtype==DatabaseType.Oracle){
 				command="SELECT * FROM ("+command+") WHERE ROWNUM<=1";
 			}else{//Assume MySQL
 				command+="LIMIT 1";
 			}
-			DataTable table=General.GetTable(command);
+			DataTable table=General2.GetTable(command);
 			if(table.Rows.Count==0){//no existing chart numbers
 				return "1";
 			}
@@ -1325,7 +1324,7 @@ namespace OpenDental{
 			string command="SELECT LName,FName from patient WHERE "
 				+"ChartNumber = '"+chartNum
 				+"' AND PatNum != '"+excludePatNum.ToString()+"'";
-			DataTable table=General.GetTable(command);
+			DataTable table=General2.GetTable(command);
 			string retVal="";
 			if(table.Rows.Count!=0){//found duplicate chart number
 				retVal=PIn.PString(table.Rows[0][1].ToString())+" "+PIn.PString(table.Rows[0][0].ToString());
@@ -1336,7 +1335,7 @@ namespace OpenDental{
 		///<summary>Used in the patient select window to determine if a trial version user is over their limit.</summary>
 		public static int GetNumberPatients(){
 			string command="SELECT Count(*) FROM patient";
-			DataTable table=General.GetTable(command);
+			DataTable table=General2.GetTable(command);
 			return PIn.PInt(table.Rows[0][0].ToString());
 		}
 
@@ -1401,7 +1400,7 @@ namespace OpenDental{
 				+"LEFT JOIN patplan ON patplan.PatNum=patient.PatNum"
 				+" WHERE patient.PatNum="+POut.PInt(patNum)
 				+" GROUP BY patplan.PatNum,patient.HasIns";
-			DataTable table=General.GetTable(command);
+			DataTable table=General2.GetTable(command);
 			string newVal="";
 			if(table.Rows[0][1].ToString()!="0"){
 				newVal="I";
@@ -1409,7 +1408,7 @@ namespace OpenDental{
 			if(newVal!=table.Rows[0][0].ToString()){
 				command="UPDATE patient SET HasIns='"+POut.PString(newVal)
 					+"' WHERE PatNum="+POut.PInt(patNum);
-				General.NonQ(command);
+				General2.NonQ(command);
 			}
 		}
 
@@ -1421,51 +1420,12 @@ namespace OpenDental{
 				+"AND SUBSTRING(Birthdate,6,5) <= '"+dateTo.ToString("MM-dd")+"' "
 				+"AND Birthdate > '1880-01-01' "
 				+"AND PatStatus=0	ORDER BY DATE_FORMAT(Birthdate,'%m/%d/%Y')";
-			DataTable table=General.GetTable(command);
+			DataTable table=General2.GetTable(command);
 			table.Columns.Add("Age");
 			for(int i=0;i<table.Rows.Count;i++){
-				table.Rows[i]["Age"]=Shared.DateToAge(PIn.PDate(table.Rows[i]["Birthdate"].ToString()),dateTo.AddDays(1)).ToString();
+				table.Rows[i]["Age"]=DateToAge(PIn.PDate(table.Rows[i]["Birthdate"].ToString()),dateTo.AddDays(1)).ToString();
 			}
 			return table;
-		}
-
-		///<summary>It is entirely acceptable to pass in a null value for PatCur.  In that case, no patient name will show.</summary>
-		public static string GetMainTitle(Patient PatCur){
-			string retVal=PrefB.GetString("MainWindowTitle");
-			if(Security.CurUser!=null) {
-				retVal+=" {"+Security.CurUser.UserName+"}";
-			}
-			if(PatCur==null){
-				return retVal;
-			}
-			retVal+=" - "+PatCur.GetNameLF();
-			//if(PrefB.GetInt("ShowIDinTitleBar")==0){//no action
-			if(PrefB.GetInt("ShowIDinTitleBar")==1){
-				retVal+=" - "+PatCur.PatNum.ToString();
-			}
-			else if(PrefB.GetInt("ShowIDinTitleBar")==2) {
-				retVal+=" - "+PatCur.ChartNumber;
-			}
-			return retVal;
-		}
-
-		///<summary>A simpler version which does not require as much data.</summary>
-		public static string GetMainTitle(string nameLF,int patNum,string chartNumber) {
-			string retVal=PrefB.GetString("MainWindowTitle");
-			if(Security.CurUser!=null){
-				retVal+=" {"+Security.CurUser.UserName+"}";
-			}
-			if(patNum==0 || patNum==-1){
-				return retVal;
-			}
-			retVal+=" - "+nameLF;
-			if(PrefB.GetInt("ShowIDinTitleBar")==1) {
-				retVal+=" - "+patNum.ToString();
-			}
-			else if(PrefB.GetInt("ShowIDinTitleBar")==2) {
-				retVal+=" - "+chartNumber;
-			}
-			return retVal;
 		}
 
 		///<summary>Gets the provider for this patient.  If provNum==0, then it gets the practice default prov.</summary>
@@ -1482,12 +1442,46 @@ namespace OpenDental{
 		///<summary>Gets the list of all valid patient primary keys. Used when checking for missing ADA procedure codes after a user has begun entering them manually. This function is necessary because not all patient numbers are necessarily consecutive (say if the database was created due to a conversion from another program and the customer wanted to keep their old patient ids after the conversion).</summary>
 		public static int[] GetAllPatNums(){
 			string command="SELECT PatNum From patient";
-			DataTable dt=General.GetTableEx(command);
+			DataTable dt=General2.GetTableEx(command);
 			int[] patnums=new int[dt.Rows.Count];
 			for(int i=0;i<patnums.Length;i++){
 				patnums[i]=PIn.PInt(dt.Rows[i]["PatNum"].ToString());
 			}
 			return patnums;
+		}
+
+		///<summary>Converts a date to an age. If age is over 115, then returns 0.</summary>
+		public static int DateToAge(DateTime date){
+			if(date.Year<1880)
+				return 0;
+			if(date.Month < DateTime.Now.Month){//birthday in previous month
+				return DateTime.Now.Year-date.Year;
+			}
+			if(date.Month == DateTime.Now.Month && date.Day <= DateTime.Now.Day){//birthday in this month
+				return DateTime.Now.Year-date.Year;
+			}
+			return DateTime.Now.Year-date.Year-1;
+		}
+
+		///<summary>Converts a date to an age. If age is over 115, then returns 0.</summary>
+		public static int DateToAge(DateTime birthdate,DateTime asofDate) {
+			if(birthdate.Year<1880)
+				return 0;
+			if(birthdate.Month < asofDate.Month) {//birthday in previous month
+				return asofDate.Year-birthdate.Year;
+			}
+			if(birthdate.Month == asofDate.Month && birthdate.Day <= asofDate.Day) {//birthday in this month
+				return asofDate.Year-birthdate.Year;
+			}
+			return asofDate.Year-birthdate.Year-1;
+		}
+
+		///<summary></summary>
+		public static string AgeToString(int age){
+			if(age==0)
+				return "";
+			else
+				return age.ToString();
 		}
 		
 
@@ -1524,53 +1518,7 @@ namespace OpenDental{
 		public int BillingType;
 	}
 
-	///<summary></summary>
-	public class PatientSelectedEventArgs{
-		private int patNum;
-		private string patName;
-		private bool hasEmail;
-		private string chartNumber;
-
-		///<summary></summary>
-		public PatientSelectedEventArgs(int patNum,string patName,bool hasEmail,string chartNumber){
-			this.patNum=patNum;
-			this.patName=patName;
-			this.hasEmail=hasEmail;
-			this.chartNumber=chartNumber;
-		}
-
-		///<summary></summary>
-		public int PatNum{
-			get{ 
-				return patNum;
-			}
-		}
-
-		///<summary></summary>
-		public string PatName {
-			get {
-				return patName;
-			}
-		}
-
-		///<summary>This is required in order to enable/disable the email button intelligently.</summary>
-		public bool HasEmail {
-			get {
-				return hasEmail;
-			}
-		}
-
-		///<summary>This is required in order to properly set the form title when user wants to see chart numbers.</summary>
-		public string ChartNumber {
-			get {
-				return chartNumber;
-			}
-		}
-
-	}
-
-	///<summary></summary>
-	public delegate void PatientSelectedEventHandler(object sender,PatientSelectedEventArgs e);
+	
 
 	
 

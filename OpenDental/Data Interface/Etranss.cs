@@ -19,11 +19,11 @@ namespace OpenDental{
 				+"LEFT JOIN carrier ON etrans.CarrierNum=carrier.CarrierNum "
 				+"LEFT JOIN patient ON patient.PatNum=etrans.PatNum "
 				+"LEFT JOIN clearinghouse ON clearinghouse.ClearinghouseNum=etrans.ClearinghouseNum WHERE ";
-				if(FormChooseDatabase.DBtype==DatabaseType.Oracle){
+				if(DataConnection.DBtype==DatabaseType.Oracle){
 					command+="TO_";
 				}
 				command+="DATE(DateTimeTrans) >= "+POut.PDate(dateFrom)+" AND ";
-				if(FormChooseDatabase.DBtype==DatabaseType.Oracle){
+				if(DataConnection.DBtype==DatabaseType.Oracle){
 					command+="TO_";
 				}
 				command+="DATE(DateTimeTrans) <= "+POut.PDate(dateTo.AddDays(1))+" "//because it's midnight
@@ -133,7 +133,7 @@ namespace OpenDental{
 				command+="'"+POut.PInt(etrans.EtransNum)+"', ";
 			}
 			if(etrans.DateTimeTrans.Year<1880) {
-				if(FormChooseDatabase.DBtype==DatabaseType.Oracle) {
+				if(DataConnection.DBtype==DatabaseType.Oracle) {
 					command+=POut.PDateT(MiscData.GetNowDateTime());
 				}
 				else {//Assume MySQL

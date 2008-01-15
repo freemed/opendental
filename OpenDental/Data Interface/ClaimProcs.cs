@@ -110,7 +110,7 @@ namespace OpenDental{
 				+"'"+POut.PDouble(cp.BaseEst)+"', "
 				+"'"+POut.PDouble(cp.CopayOverride)+"', "
 				+POut.PDate(cp.ProcDate)+", ";
-			if(FormChooseDatabase.DBtype==DatabaseType.Oracle) {
+			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				command+=POut.PDateT(MiscData.GetNowDateTime());
 			}else{//Assume MySQL
 				command+="NOW()";

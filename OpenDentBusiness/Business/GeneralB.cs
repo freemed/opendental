@@ -72,7 +72,10 @@ namespace OpenDentBusiness {
 					return AppointmentB.RefreshPeriod(parameters);
 				case "Appointment.RefreshOneApt":
 					return AppointmentB.RefreshOneApt(parameters);
-					
+				case "Definition.Refresh":
+					return DefB.Refresh();
+				case "Providers.RefreshOnServer":
+					return Providers.RefreshOnServer();
 			}
 
 		}

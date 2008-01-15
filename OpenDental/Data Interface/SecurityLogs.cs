@@ -53,7 +53,7 @@ namespace OpenDental{
 			command+=
 				 "'"+POut.PInt   ((int)log.PermType)+"', "
 				+"'"+POut.PInt   (log.UserNum)+"', ";
-			if(FormChooseDatabase.DBtype==DatabaseType.Oracle) {
+			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				command+=POut.PDateT(MiscData.GetNowDateTime());
 			}else{//Assume MySQL
 				command+="NOW()";

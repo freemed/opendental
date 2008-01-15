@@ -24,7 +24,7 @@ namespace OpenDental{
 		public Shared(){
 			
 		}
-
+		/*Moved to Patients
 		///<summary>Converts a date to an age. If age is over 115, then returns 0.</summary>
 		public static int DateToAge(DateTime date){
 			if(date.Year<1880)
@@ -57,7 +57,7 @@ namespace OpenDental{
 				return "";
 			else
 				return age.ToString();
-		}
+		}*/
 
 		///<summary>Converts numbers to ordinals.  For example, 120 to 120th, 73 to 73rd.  Probably doesn't work too well with foreign language translations.  Used in the Birthday postcards.</summary>
 		public static string NumberToOrdinal(int number){

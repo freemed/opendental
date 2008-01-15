@@ -308,7 +308,7 @@ namespace OpenDental {
 		}
 
 		private bool MySQLTables() {
-			if(FormChooseDatabase.DBtype!=DatabaseType.MySql) {
+			if(DataConnection.DBtype!=DatabaseType.MySql) {
 				return true;
 			}
 			command="SHOW TABLES";
@@ -353,7 +353,7 @@ namespace OpenDental {
 		}
 
 		private bool OracleSequences() {
-			if(FormChooseDatabase.DBtype!=DatabaseType.Oracle) {
+			if(DataConnection.DBtype!=DatabaseType.Oracle) {
 				return true;
 			}
 			bool changesWereMade=false;
@@ -571,7 +571,7 @@ namespace OpenDental {
 		}
 
 		private void DatesNoZeros() {
-			if(FormChooseDatabase.DBtype==DatabaseType.Oracle) {
+			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				return;//This check is not valid for Oracle, because each of the following fields are defined as non-null,
 				//and 0000-00-00 is not a valid Oracle date.
 			}
@@ -681,7 +681,7 @@ namespace OpenDental {
 
 		private void ClaimWriteoffSum() {
 			//Sums for each claim---------------------------------------------------------------------
-			if(FormChooseDatabase.DBtype==DatabaseType.Oracle) {
+			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				return;
 			}
 			command=@"SELECT claim.ClaimNum,SUM(claimproc.WriteOff) sumwo,claim.WriteOff
@@ -855,7 +855,7 @@ namespace OpenDental {
 		}
 
 		private void ClaimProcStatusNotMatchClaim() {
-			if(FormChooseDatabase.DBtype==DatabaseType.Oracle) {
+			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				return;
 			}
 			command=@"UPDATE claimproc,claim
@@ -888,7 +888,7 @@ namespace OpenDental {
 
 		private void ClockEventInFuture() {
 			command=@"UPDATE clockevent SET TimeDisplayed=TimeEntered WHERE TimeDisplayed > NOW()";
-			if(FormChooseDatabase.DBtype==DatabaseType.Oracle) {
+			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				command=@"UPDATE clockevent SET TimeDisplayed=TimeEntered WHERE TimeDisplayed > "
 					+POut.PDateT(MiscData.GetNowDateTime());
 			}
@@ -997,7 +997,7 @@ namespace OpenDental {
 		}
 
 		private void PayPlanChargeGuarantorMatch() {
-			if(FormChooseDatabase.DBtype==DatabaseType.Oracle) {
+			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				return;
 			}
 			int numberFixed=0;
@@ -1074,7 +1074,7 @@ namespace OpenDental {
 				return;
 			}
 			textLog.Text+=Lan.g(this,"No default provider set.");
-			if(FormChooseDatabase.DBtype==DatabaseType.Oracle) {
+			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				command="SELECT ProvNum FROM provider WHERE IsHidden=0 ORDER BY itemorder";
 			}
 			else {//MySQL
@@ -1087,7 +1087,7 @@ namespace OpenDental {
 		}
 
 		private void ProcedurelogAttachedToWrongAppts() {
-			if(FormChooseDatabase.DBtype==DatabaseType.Oracle) {
+			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				return;
 			}
 			command="UPDATE appointment,procedurelog SET procedurelog.AptNum=0 "
@@ -1173,7 +1173,7 @@ namespace OpenDental {
 		}
 
 		private void ProcedurelogUndeleteAttachedToClaim() {
-			if(FormChooseDatabase.DBtype==DatabaseType.Oracle) {
+			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				return;
 			}
 			command=@"UPDATE procedurelog,claimproc         
@@ -1267,7 +1267,7 @@ namespace OpenDental {
 
 		private void SignalInFuture() {
 			command=@"DELETE FROM signal WHERE SigDateTime > NOW() OR AckTime > NOW()";
-			if(FormChooseDatabase.DBtype==DatabaseType.Oracle) {
+			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				string nowDateTime=POut.PDateT(MiscData.GetNowDateTime());
 				command=@"DELETE FROM signal WHERE SigDateTime > "+nowDateTime+" OR AckTime > "+nowDateTime;
 			}

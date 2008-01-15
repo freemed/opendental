@@ -49,13 +49,13 @@ namespace OpenDental{
 		private CheckBox checkConnectServer;
 		private Label label5;
 		private ValidNumber textPort;
-		//<summary></summary>
 		public bool NoShow;
 		private Label label7;
 		private ListBox listType;
 		private Label label8;
 		private TextBox textConnectionString;
-		public static DatabaseType DBtype;
+		//<summary>There are notes about only using this variable for the client, and DataConnection.DBtype only if in the business layer.  Well, we are now going to get rid of this, and use DataConnection.DBtype no matter where we are.  We just have to remember to set it even if we are not going to use the same DataConnection.  In other words, we have to set both DataConnections.</summary>
+		//public static DatabaseType DBtype;
 
 		///<summary></summary>
 		public FormChooseDatabase(){
@@ -606,10 +606,10 @@ namespace OpenDental{
 				if(listType.Items.Count>0) {//not true on startup
 					listType.SelectedIndex=0;
 				}
-				DBtype=DatabaseType.MySql;	
+				DataConnection.DBtype=DatabaseType.MySql;	
 				if(nav!=null && nav.Value=="Oracle" && listType.Items.Count>0){
 					listType.SelectedIndex=1;
-					DBtype=DatabaseType.Oracle;
+					DataConnection.DBtype=DatabaseType.Oracle;
 				}
 				//See if there's a DatabaseConnection
 				nav=Navigator.SelectSingleNode("//DatabaseConnection");
@@ -657,7 +657,7 @@ namespace OpenDental{
 			if(listType.Items.Count>1){
 				listType.SelectedIndex=0;
 			}
-			DBtype=DatabaseType.MySql;
+			DataConnection.DBtype=DatabaseType.MySql;
 		}
 
 		///<summary>Only called at startup if this dialog is not supposed to be shown.  Must call GetConfig first.</summary>
@@ -667,10 +667,10 @@ namespace OpenDental{
 			try {
 				if(textConnectionString.Text.Length>0){
 					DataSettings.ConnectionString = textConnectionString.Text; 
-					dcon.SetDb(textConnectionString.Text,"",DBtype);
+					dcon.SetDb(textConnectionString.Text,"",DataConnection.DBtype);
 				}else{
 					DataSettings.CreateConnectionString(comboComputerName.Text, comboDatabase.Text, textUser.Text, textPassword.Text);
-					dcon.SetDb(comboComputerName.Text,comboDatabase.Text,textUser.Text,textPassword.Text,"","",DBtype);
+					dcon.SetDb(comboComputerName.Text,comboDatabase.Text,textUser.Text,textPassword.Text,"","",DataConnection.DBtype);
 				}
 				//a direct connection does not utilize lower privileges.
 				RemotingClient.OpenDentBusinessIsLocal=true;
@@ -710,18 +710,18 @@ namespace OpenDental{
 				OpenDentBusiness.DataConnection dcon;
 				//Try to connect to the database directly
 				try {
-					DBtype=DatabaseType.MySql;
+					DataConnection.DBtype=DatabaseType.MySql;
 					if(listType.SelectedIndex==1) {
-						DBtype=DatabaseType.Oracle;
+						DataConnection.DBtype=DatabaseType.Oracle;
 					}
-					DataSettings.DbType = DBtype;
-					dcon=new OpenDentBusiness.DataConnection(DBtype);
+					DataSettings.DbType = DataConnection.DBtype;
+					dcon=new OpenDentBusiness.DataConnection(DataConnection.DBtype);
 					if(textConnectionString.Text.Length>0){
 						DataSettings.ConnectionString = textConnectionString.Text; 
-						dcon.SetDb(textConnectionString.Text,"",DBtype);
+						dcon.SetDb(textConnectionString.Text,"",DataConnection.DBtype);
 					}else{
 						DataSettings.CreateConnectionString(comboComputerName.Text, comboDatabase.Text, textUser.Text, textPassword.Text);
-						dcon.SetDb(comboComputerName.Text,comboDatabase.Text,textUser.Text,textPassword.Text,"","",DBtype);
+						dcon.SetDb(comboComputerName.Text,comboDatabase.Text,textUser.Text,textPassword.Text,"","",DataConnection.DBtype);
 					}
 					//a direct connection does not utilize lower privileges.
 				}

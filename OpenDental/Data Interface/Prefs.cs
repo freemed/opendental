@@ -107,7 +107,7 @@ namespace OpenDental{
 			Version currentVersion=new Version(Application.ProductVersion);
 			string database="";
 			string command="";
-			if(FormChooseDatabase.DBtype==DatabaseType.MySql){
+			if(DataConnection.DBtype==DatabaseType.MySql){
 				command="SELECT database()";
 				DataTable table=General.GetTable(command);
 				database=PIn.PString(table.Rows[0][0].ToString());
@@ -190,7 +190,7 @@ namespace OpenDental{
 
 		///<summary>This ONLY runs when first opening the program.  Gets run early in the sequence. Returns false if the program should exit.</summary>
 		public static bool CheckMySqlVersion41() {
-			if(FormChooseDatabase.DBtype!=DatabaseType.MySql){
+			if(DataConnection.DBtype!=DatabaseType.MySql){
 				return true;
 			}
 			string command="SELECT @@version";

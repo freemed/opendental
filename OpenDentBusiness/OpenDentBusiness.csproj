@@ -89,6 +89,9 @@
     <Compile Include="Data Interface\MountItemDefs.cs" />
     <Compile Include="Data Interface\MountItems.cs" />
     <Compile Include="Data Interface\Mounts.cs" />
+    <Compile Include="Data Interface\PatientNotes.cs" />
+    <Compile Include="Data Interface\Patients.cs" />
+    <Compile Include="Data Interface\Providers.cs" />
     <Compile Include="Imaging\ApplySettings.cs" />
     <Compile Include="Imaging\FileStore.cs" />
     <Compile Include="Imaging\FileStoreSettings.cs" />

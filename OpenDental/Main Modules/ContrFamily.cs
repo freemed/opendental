@@ -747,7 +747,7 @@ namespace OpenDental{
 				tbFamily.Cell[1,i]=Lan.g("enumPatientPosition",FamCur.List[i].Position.ToString());
 				tbFamily.Cell[2,i]=Lan.g("enumPatientGender",FamCur.List[i].Gender.ToString());
 				tbFamily.Cell[3,i]=Lan.g("enumPatientStatus",FamCur.List[i].PatStatus.ToString());
-				tbFamily.Cell[4,i]=Shared.AgeToString(FamCur.List[i].Age);
+				tbFamily.Cell[4,i]=Patients.AgeToString(FamCur.List[i].Age);
 				for(int j=0;j<RecallList.Length;j++){
 					if(RecallList[j].PatNum==FamCur.List[i].PatNum){
 						if(RecallList[j].DateDue.Year>1880){

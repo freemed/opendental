@@ -2622,7 +2622,7 @@ namespace OpenDental{
 		#endregion
 
 		private void FormImport_Load(object sender, System.EventArgs e){
-			if(FormChooseDatabase.DBtype!=DatabaseType.MySql) {
+			if(DataConnection.DBtype!=DatabaseType.MySql) {
 				MessageBox.Show("This tool only works with MySQL.");
 				DialogResult=DialogResult.Cancel;
 				return;
@@ -3356,7 +3356,7 @@ namespace OpenDental{
 		}
 
 		private void butGuarantor_Click(object sender, System.EventArgs e) {
-			if(FormChooseDatabase.DBtype==DatabaseType.Oracle){
+			if(DataConnection.DBtype==DatabaseType.Oracle){
 				MessageBox.Show("Does not work with Oracle.");
 				return;
 			}
@@ -3982,7 +3982,7 @@ namespace OpenDental{
 								ProvCur.SigOnFile=true;
 								ProvCur.OutlineColor=Color.Gray;
 								Providers.Insert(ProvCur);
-								Providers.Refresh();//this is because SetInvalid might be too slow
+								Providers.RefreshOnClient();//this is because SetInvalid might be too slow
 								DataValid.SetInvalid(InvalidTypes.Providers);//also refreshes local
 								provNum=ProvCur.ProvNum;
 							}

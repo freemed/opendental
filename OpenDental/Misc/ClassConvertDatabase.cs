@@ -3946,7 +3946,7 @@ namespace OpenDental{
 					+"'"+((int)ToolBarsAvail.ChartModule).ToString()+"', "
 					+"'Vipersoft')";
 				General.NonQEx(command);
-				if(FormChooseDatabase.DBtype==DatabaseType.MySql){
+				if(DataConnection.DBtype==DatabaseType.MySql){
 					command="ALTER TABLE userod ADD ClinicNum mediumint NOT NULL";
 					General.NonQEx(command);
 				}
@@ -3964,7 +3964,7 @@ namespace OpenDental{
 		private void To4_6_22() {
 			if(FromVersion<new Version("4.6.22.0")) {
 				string command="";
-				if(FormChooseDatabase.DBtype==DatabaseType.MySql){
+				if(DataConnection.DBtype==DatabaseType.MySql){
 					command="ALTER TABLE sigelementdef CHANGE Sound Sound mediumtext";
 					General.NonQEx(command);
 				}
@@ -3978,7 +3978,7 @@ namespace OpenDental{
 		private void To4_7_1() {
 			if(FromVersion<new Version("4.7.1.0")) {
 				string command="";
-				if(FormChooseDatabase.DBtype==DatabaseType.MySql){
+				if(DataConnection.DBtype==DatabaseType.MySql){
 					command="ALTER TABLE document ADD CropX mediumint NOT NULL";
 					General.NonQEx(command);
 					command="ALTER TABLE document ADD CropY mediumint NOT NULL";
@@ -4010,7 +4010,7 @@ namespace OpenDental{
 				General.NonQEx(command);
 				command="INSERT INTO preference VALUES ('ImageWindowingMax','192')";
 				General.NonQEx(command);
-				if(FormChooseDatabase.DBtype==DatabaseType.MySql){
+				if(DataConnection.DBtype==DatabaseType.MySql){
 					command="DROP TABLE IF EXISTS mountdef";
 					General.NonQEx(command);
 					command=@"CREATE TABLE mountdef(
@@ -4035,7 +4035,7 @@ namespace OpenDental{
 						)";
 				}
 				General.NonQEx(command);
-				if(FormChooseDatabase.DBtype==DatabaseType.MySql) {
+				if(DataConnection.DBtype==DatabaseType.MySql) {
 					command="DROP TABLE IF EXISTS mountitemdef";
 					General.NonQEx(command);
 					command=@"CREATE TABLE mountitemdef(
@@ -4096,7 +4096,7 @@ namespace OpenDental{
 				command="INSERT INTO preference VALUES ('AgingCalculatedMonthlyInsteadOfDaily','0')";
 				General.NonQEx(command);
 				//Added after r141:
-				if(FormChooseDatabase.DBtype==DatabaseType.MySql) {
+				if(DataConnection.DBtype==DatabaseType.MySql) {
 					command="ALTER TABLE procedurelog ADD BillingTypeOne smallint NOT NULL";
 					General.NonQEx(command);
 					command="ALTER TABLE procedurelog ADD BillingTypeTwo smallint NOT NULL";
@@ -4138,7 +4138,7 @@ namespace OpenDental{
 			if(FromVersion<new Version("4.8.1.0")) {
 				string command="";
 				int practiceDefaultProv=PrefB.GetInt("PracticeDefaultProv");
-				if(FormChooseDatabase.DBtype==DatabaseType.MySql) {
+				if(DataConnection.DBtype==DatabaseType.MySql) {
 					//Turn all hardcoded clearinghouse fields into dynamic fields------------------------------------------------------
 					command="ALTER TABLE clearinghouse ADD ISA05 varchar(255) AFTER Eformat";
 					General.NonQEx(command);
@@ -4218,7 +4218,7 @@ namespace OpenDental{
 					General.NonQEx(command);
 				}
 				//added after r167:
-				if(FormChooseDatabase.DBtype==DatabaseType.MySql) {
+				if(DataConnection.DBtype==DatabaseType.MySql) {
 					command="DROP TABLE IF EXISTS laboratory";
 					General.NonQEx(command);
 					command=@"CREATE TABLE laboratory(
@@ -4241,7 +4241,7 @@ namespace OpenDental{
 				}
 				General.NonQEx(command);
 				//added after r168:
-				if(FormChooseDatabase.DBtype==DatabaseType.MySql) {
+				if(DataConnection.DBtype==DatabaseType.MySql) {
 					command="DROP TABLE IF EXISTS labcase";
 					General.NonQEx(command);
 					command=@"CREATE TABLE labcase(
@@ -4274,7 +4274,7 @@ namespace OpenDental{
 				}
 				General.NonQEx(command);
 				//Added after r180
-				if(FormChooseDatabase.DBtype==DatabaseType.MySql) {
+				if(DataConnection.DBtype==DatabaseType.MySql) {
 					command="ALTER TABLE document CHANGE WithPat PatNum mediumint(8) unsigned NOT NULL default '0'";
 					General.NonQEx(command);
 					command="ALTER TABLE document ADD MountItemNum int NOT NULL";
@@ -4326,7 +4326,7 @@ namespace OpenDental{
 					General.NonQEx(command);
 				}
 				//Added after r186
-				if(FormChooseDatabase.DBtype==DatabaseType.MySql) {
+				if(DataConnection.DBtype==DatabaseType.MySql) {
 					command="ALTER TABLE procedurecode ADD PreExisting tinyint(1) NOT NULL default '0'";
 					General.NonQEx(command);
 					command="DROP TABLE IF EXISTS proclicense";
@@ -4366,7 +4366,7 @@ namespace OpenDental{
 				//string command="DELETE FROM preference WHERE PrefName='ToothChartLowerQuality'";
 				//General.NonQEx(command);
 				string command;
-				if(FormChooseDatabase.DBtype==DatabaseType.MySql) {
+				if(DataConnection.DBtype==DatabaseType.MySql) {
 					command="DROP TABLE IF EXISTS computerpref";
 					General.NonQEx(command);
 					command=@"CREATE TABLE computerpref(
@@ -4396,7 +4396,7 @@ namespace OpenDental{
 		private void To4_8_8() {
 			if(FromVersion<new Version("4.8.8.0")) {
 				string command;
-				if(FormChooseDatabase.DBtype==DatabaseType.MySql) {
+				if(DataConnection.DBtype==DatabaseType.MySql) {
 					command="ALTER TABLE quickpastenote CHANGE QuickPasteCatNum QuickPasteCatNum mediumint NOT NULL";
 					General.NonQEx(command);
 				}
@@ -4656,7 +4656,7 @@ namespace OpenDental{
 				};
 				string command="";
 				for(int i=0;i<columns.Length;i+=3) {
-					if(FormChooseDatabase.DBtype==DatabaseType.MySql) {
+					if(DataConnection.DBtype==DatabaseType.MySql) {
 						command=@"ALTER TABLE "+columns[i]//table name
 						+@" CHANGE "+columns[i+1]+@" "+columns[i+1]+@" int NOT NULL ";//column name (all columns will be NOT NULL)
 						if(columns[i+2]!=" ") {
@@ -4684,7 +4684,7 @@ namespace OpenDental{
 			if(FromVersion<new Version("4.9.1.0")) {
 				string command;
 				DataTable table;
-				if(FormChooseDatabase.DBtype==DatabaseType.MySql) {
+				if(DataConnection.DBtype==DatabaseType.MySql) {
 					command="ALTER TABLE procedurecode ADD CodeNum int NOT NULL FIRST";//this column will be the new primary key
 					General.NonQEx(command);
 					command="ALTER TABLE procedurecode DROP PRIMARY KEY";
@@ -5040,7 +5040,7 @@ namespace OpenDental{
 				command = "INSERT INTO preference VALUES('StationaryDocument','0')";
 				General.NonQEx(command);
 				//Added after r271
-				if(FormChooseDatabase.DBtype==DatabaseType.MySql) {
+				if(DataConnection.DBtype==DatabaseType.MySql) {
 					command="ALTER TABLE schedule ADD EmployeeNum int NOT NULL";
 				}
 				else {
@@ -5048,7 +5048,7 @@ namespace OpenDental{
 				}
 				General.NonQEx(command);
 				//Added after r278
-				if(FormChooseDatabase.DBtype==DatabaseType.MySql) {
+				if(DataConnection.DBtype==DatabaseType.MySql) {
 					command="ALTER TABLE procedurelog DROP CPTModifier";
 					General.NonQEx(command);
 					command="ALTER TABLE procedurelog DROP RevenueCode";
@@ -5068,7 +5068,7 @@ namespace OpenDental{
 				General.NonQEx(command);
 				command="ALTER TABLE procedurelog ADD CodeMod4 char(2)";
 				General.NonQEx(command);
-				if(FormChooseDatabase.DBtype==DatabaseType.MySql) {
+				if(DataConnection.DBtype==DatabaseType.MySql) {
 					command="ALTER TABLE procedurelog ADD RevCode varchar(45)";
 					General.NonQEx(command);
 				}
@@ -5139,7 +5139,7 @@ namespace OpenDental{
 				//After r304
 				command="INSERT INTO preference VALUES('DistributorKey','')";
 				General.NonQEx(command);
-				if(FormChooseDatabase.DBtype==DatabaseType.MySql) {
+				if(DataConnection.DBtype==DatabaseType.MySql) {
 					command="DROP TABLE IF EXISTS registrationkey";
 					General.NonQEx(command);
 					command=@"CREATE TABLE registrationkey(
@@ -5161,7 +5161,7 @@ namespace OpenDental{
 				}
 				General.NonQEx(command);
 				//After r306
-				if(FormChooseDatabase.DBtype==DatabaseType.MySql) {
+				if(DataConnection.DBtype==DatabaseType.MySql) {
 					command="ALTER TABLE preference CHANGE ValueString ValueString text NOT NULL default ''";
 					General.NonQEx(command);
 				}
@@ -5179,7 +5179,7 @@ namespace OpenDental{
 		private void To4_9_2() {
 			if(FromVersion<new Version("4.9.2.0")) {
 				string command;
-				if(FormChooseDatabase.DBtype==DatabaseType.MySql) {
+				if(DataConnection.DBtype==DatabaseType.MySql) {
 					command="ALTER TABLE procedurelog DROP INDEX indexADACode";
 					General.NonQEx(command);
 					command="ALTER TABLE procedurelog ADD INDEX (CodeNum)";
@@ -5219,7 +5219,7 @@ namespace OpenDental{
 		private void To4_9_7() {
 			if(FromVersion<new Version("4.9.7.0")) {
 				string command;
-				if(FormChooseDatabase.DBtype==DatabaseType.MySql) {
+				if(DataConnection.DBtype==DatabaseType.MySql) {
 					//This step was performed in an earlier conversion, but is required here again, for
 					//customers who's data has been converted to using a varchar 4000 here. After this command is
 					//run, every MySQL user will be using text in the preference value column.
@@ -5250,7 +5250,7 @@ namespace OpenDental{
 				string command;
 				DataTable table;
 				//after r318
-				if(FormChooseDatabase.DBtype==DatabaseType.MySql) {
+				if(DataConnection.DBtype==DatabaseType.MySql) {
 					command="DROP TABLE IF EXISTS reqneeded";
 					General.NonQEx(command);
 					command=@"CREATE TABLE reqneeded(
@@ -5272,7 +5272,7 @@ namespace OpenDental{
 				}
 				General.NonQEx(command);
 				//after r320
-				if(FormChooseDatabase.DBtype==DatabaseType.MySql) {
+				if(DataConnection.DBtype==DatabaseType.MySql) {
 					command="ALTER TABLE userod ADD ProvNum int NOT NULL";
 				}
 				else {//Oracle.
@@ -5280,7 +5280,7 @@ namespace OpenDental{
 				}
 				General.NonQEx(command);
 				//after r337,r362,r378
-				if(FormChooseDatabase.DBtype==DatabaseType.MySql) {
+				if(DataConnection.DBtype==DatabaseType.MySql) {
 					command="ALTER TABLE mountitem ADD OrdinalPos int NOT NULL default '0'";
 					General.NonQEx(command);
 					command="ALTER TABLE mountitem ADD Width int default '0'";
@@ -5335,7 +5335,7 @@ namespace OpenDental{
 				command = "INSERT INTO preference VALUES('RecallDisablePerioAlt','1')";
 				General.NonQEx(command);
 				//After r366
-				if(FormChooseDatabase.DBtype==DatabaseType.MySql) {
+				if(DataConnection.DBtype==DatabaseType.MySql) {
 					command="DROP TABLE IF EXISTS reqstudent";
 					General.NonQEx(command);
 					command=@"CREATE TABLE reqstudent(
@@ -6064,7 +6064,7 @@ namespace OpenDental{
 				General.NonQEx(command);
 				command="ALTER TABLE registrationkey ADD IsForeign BOOL NOT NULL";
 				General.NonQEx(command);
-				if(FormChooseDatabase.DBtype==DatabaseType.Oracle) {
+				if(DataConnection.DBtype==DatabaseType.Oracle) {
 					command="UPDATE registrationkey SET DateStarted="+POut.PDateT(MiscData.GetNowDateTime());
 					General.NonQEx(command);
 					command="UPDATE registrationkey SET DateEnded='0001-01-01'";

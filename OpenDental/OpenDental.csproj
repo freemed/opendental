@@ -191,6 +191,7 @@
     <Compile Include="Data Interface\ChartModule.cs" />
     <Compile Include="Data Interface\CanadianNetworks.cs" />
     <Compile Include="Data Interface\ClaimAttaches.cs" />
+    <Compile Include="Data Interface\Patients2.cs" />
     <Compile Include="Data Interface\TaskAncestors.cs" />
     <Compile Include="Data Interface\TaskSubscriptions.cs" />
     <Compile Include="Data Interface\SupplyOrderItems.cs" />
@@ -243,8 +244,6 @@
     <Compile Include="Data Interface\Operatories.cs" />
     <Compile Include="Data Interface\PatFieldDefs.cs" />
     <Compile Include="Data Interface\PatFields.cs" />
-    <Compile Include="Data Interface\PatientNotes.cs" />
-    <Compile Include="Data Interface\Patients.cs" />
     <Compile Include="Data Interface\PatPlans.cs" />
     <Compile Include="Data Interface\Payments.cs" />
     <Compile Include="Data Interface\PayPeriods.cs" />
@@ -263,7 +262,6 @@
     <Compile Include="Data Interface\ProgramProperties.cs" />
     <Compile Include="Data Interface\Programs.cs" />
     <Compile Include="Data Interface\ProviderIdents.cs" />
-    <Compile Include="Data Interface\Providers.cs" />
     <Compile Include="Data Interface\QuestionDefs.cs" />
     <Compile Include="Data Interface\Questions.cs" />
     <Compile Include="Data Interface\QuickPasteCats.cs" />

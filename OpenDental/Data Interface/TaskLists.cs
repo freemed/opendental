@@ -210,7 +210,7 @@ namespace OpenDental{
 				+"'"+POut.PInt   ((int)tlist.DateType)+"', "
 				+"'"+POut.PInt   (tlist.FromNum)+"', "
 				+"'"+POut.PInt   ((int)tlist.ObjectType)+"', ";
-			if(FormChooseDatabase.DBtype==DatabaseType.Oracle) {
+			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				command+=POut.PDateT(MiscData.GetNowDateTime());
 			}
 			else {//Assume MySQL

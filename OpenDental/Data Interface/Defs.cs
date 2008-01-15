@@ -7,25 +7,12 @@ using System.Windows.Forms;
 using OpenDentBusiness;
 
 namespace OpenDental{
-	///<summary>Handles database commands related to the definition table in the db.  The related DefB class is referenced frequently from many different areas of the program.</summary>\
+	///<summary>Handles database commands related to the definition table in the db.  The related DefB class is referenced frequently from many different areas of the program.</summary>
 	public class Defs{
 		///<summary></summary>
 		public static void Refresh(){
-			DataSet ds=null;
-			try {
-				if(RemotingClient.OpenDentBusinessIsLocal) {
-					ds=DefB.Refresh();
-				}
-				else {
-					DtoDefRefresh dto=new DtoDefRefresh();
-					ds=RemotingClient.ProcessQuery(dto);
-				}
-			}
-			catch(Exception e) {
-				MessageBox.Show(e.Message);
-				return;
-			}
-			DefB.FillArrays(ds.Tables[0]);//now, we have an arrays on both the client and the server.
+			DataTable table=General.GetDS("Definition.Refresh").Tables[0];
+			DefB.FillArrays(table);//now, we have an arrays on both the client and the server.
 		}
 
 		///<summary>Only used in FormDefinitions</summary>
@@ -34,21 +21,7 @@ namespace OpenDental{
 				"SELECT * from definition"
 				+" WHERE category = '"+myCat+"'"
 				+" ORDER BY ItemOrder";
-			DataSet ds=null;
-			try {
-				if(RemotingClient.OpenDentBusinessIsLocal) {
-					ds=GeneralB.GetTable(command);
-				}
-				else {
-					DtoGeneralGetTable dto=new DtoGeneralGetTable();
-					dto.Command=command;
-					ds=RemotingClient.ProcessQuery(dto);
-				}
-			}
-			catch(Exception e) {
-				MessageBox.Show(e.Message);
-			}
-			DataTable table=ds.Tables[0];
+			DataTable table=General.GetTable(command);
 			Def[] List=new Def[table.Rows.Count];
 			for(int i=0;i<table.Rows.Count;i++){
 				List[i]=new Def();

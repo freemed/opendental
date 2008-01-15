@@ -172,7 +172,7 @@ namespace OpenDental{
 				return proc;
 			}
 			command="SELECT * FROM procnote WHERE ProcNum="+POut.PInt(procNum)+" ORDER BY EntryDateTime DESC ";
-			if(FormChooseDatabase.DBtype==DatabaseType.Oracle){
+			if(DataConnection.DBtype==DatabaseType.Oracle){
 				command="SELECT * FROM ("+command+") WHERE ROWNUM<=1";
 			}else{//Assume MySQL
 				command+="LIMIT 1";

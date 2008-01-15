@@ -27,8 +27,8 @@ namespace OpenDentBusiness {
 		}
 	}
 
-	public class DtoDefRefresh:DtoQueryBase {
-	}
+	//public class DtoDefRefresh:DtoQueryBase {
+	//}
 
 	
 

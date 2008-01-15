@@ -68,7 +68,7 @@ namespace OpenDental {
 			//first, check claims
 			string command="SELECT PatNum FROM claim "
 				+"WHERE plannum = '"+plan.PlanNum.ToString()+"' ";
-			if(FormChooseDatabase.DBtype==DatabaseType.Oracle){
+			if(DataConnection.DBtype==DatabaseType.Oracle){
 				command+="AND ROWNUM<=1";
 			}else{//Assume MySQL
 				command+="LIMIT 1";
@@ -81,7 +81,7 @@ namespace OpenDental {
 			command="SELECT PatNum FROM claimproc "
 				+"WHERE PlanNum = "+POut.PInt(plan.PlanNum)
 				+" AND Status != 6 ";//ignore estimates
-			if(FormChooseDatabase.DBtype==DatabaseType.Oracle){
+			if(DataConnection.DBtype==DatabaseType.Oracle){
 				command+="AND ROWNUM<=1";
 			}else{//Assume MySQL
 				command+="LIMIT 1";
@@ -601,7 +601,7 @@ namespace OpenDental {
 				s+=" PlanNum="+POut.PInt(planNums[i]);
 			}
 			string command="SELECT BenefitNotes FROM insplan WHERE BenefitNotes != '' AND ("+s+") ";
-			if(FormChooseDatabase.DBtype==DatabaseType.Oracle){
+			if(DataConnection.DBtype==DatabaseType.Oracle){
 				command+="AND ROWNUM<=1";
 			}else{//Assume MySQL
 				command+="LIMIT 1";
@@ -719,7 +719,7 @@ namespace OpenDental {
 			}
 			command+="GROUP BY insplan.EmployerNum,GroupName,GroupNum,DivisionNo,"
 				+"insplan.CarrierNum,insplan.IsMedical,TrojanID ";
-			if(FormChooseDatabase.DBtype==DatabaseType.Oracle){
+			if(DataConnection.DBtype==DatabaseType.Oracle){
 				command+=",carrier.Address,carrier.City,CarrierName,ElectID,EmpName,NoSendElect,carrier.Phone,carrier.State,carrier.Zip ";
 			}
 			if(byEmployer) {

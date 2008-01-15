@@ -88,7 +88,7 @@ namespace OpenDental{
 				+"AND procedurelog.CodeNum = procedurecode.CodeNum "
 				+"AND procedurelog.AptNum = appointment.AptNum "
 				+"AND appointment.AptDateTime >= ";//'"+DateTime.Today.ToString("yyyy-MM-dd")+"' "
-				if(FormChooseDatabase.DBtype==DatabaseType.Oracle){
+				if(DataConnection.DBtype==DatabaseType.Oracle){
 					command+=POut.PDate(MiscData.GetNowDateTime());
 				}else{//Assume MySQL
 					command+="CURDATE()";
@@ -109,7 +109,7 @@ namespace OpenDental{
 			ContactMethod contmeth;
 			for(int i=0;i<rawtable.Rows.Count;i++){
 				row=table.NewRow();
-				row["age"]=Shared.DateToAge(PIn.PDate(rawtable.Rows[i]["Birthdate"].ToString())).ToString();//we don't care about m/y.
+				row["age"]=Patients.DateToAge(PIn.PDate(rawtable.Rows[i]["Birthdate"].ToString())).ToString();//we don't care about m/y.
 				contmeth=(ContactMethod)PIn.PInt(rawtable.Rows[i]["PreferRecallMethod"].ToString());
 				if(contmeth==ContactMethod.None || contmeth==ContactMethod.HmPhone){
 					row["contactMethod"]=Lan.g("FormRecallList","Hm:")+rawtable.Rows[i]["HmPhone"].ToString();
@@ -319,7 +319,7 @@ namespace OpenDental{
 				+"patient.Address,patient.Address2,patient.City,patient.State,patient.Zip,recall.DateDue, "//4-9
 				+"patient.Guarantor,"//10
 				+"'' FamList ";//placeholder column: 11 for patient names and dates. If empty, then only single patient will print
-			if(FormChooseDatabase.DBtype==DatabaseType.Oracle){
+			if(DataConnection.DBtype==DatabaseType.Oracle){
 				command+=",CASE WHEN patient.PatNum=patient.Guarantor THEN 1 ELSE 0 END AS isguarantor ";
 			}
 			command+="FROM patient,recall "
@@ -334,7 +334,7 @@ namespace OpenDental{
 			command+=") ";
 			if(groupByFamily){
 				command+="ORDER BY patient.Guarantor,";
-				if(FormChooseDatabase.DBtype==DatabaseType.Oracle){
+				if(DataConnection.DBtype==DatabaseType.Oracle){
 					command+="13";//isguarantor column
 				}
 				else{

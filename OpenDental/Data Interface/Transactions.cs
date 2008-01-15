@@ -60,7 +60,7 @@ namespace OpenDental{
 			if(PrefB.RandomKeys) {
 				command+="'"+POut.PInt(trans.TransactionNum)+"', ";
 			}
-			if(FormChooseDatabase.DBtype==DatabaseType.Oracle) {
+			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				command+=POut.PDateT(MiscData.GetNowDateTime());
 			}
 			else {//Assume MySQL

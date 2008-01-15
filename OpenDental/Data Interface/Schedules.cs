@@ -19,7 +19,7 @@ namespace OpenDental{
 				+" AND ProvNum="+POut.PInt(provNum)
 				+" ORDER BY starttime";*/
 				"SELECT * FROM schedule WHERE ";
-			if(FormChooseDatabase.DBtype==DatabaseType.Oracle){
+			if(DataConnection.DBtype==DatabaseType.Oracle){
 				command+="TO_CHAR(SchedDate,'MM')='"+CurDate.Month.ToString()+"' AND TO_CHAR(SchedDate,'YYYY')";
 			}else{//Assume MySQL
 				command+="MONTH(SchedDate)='"+CurDate.Month.ToString()+"' AND YEAR(SchedDate)";

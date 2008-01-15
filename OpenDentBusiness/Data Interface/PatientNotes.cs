@@ -1,26 +1,23 @@
 using System;
 using System.Collections;
 using System.Data;
-using OpenDentBusiness;
 
-namespace OpenDental{
+namespace OpenDentBusiness{
 	
 	
 	///<summary></summary>
 	public class PatientNotes{
-		//<summary>We need to eliminate this global variable.</summary>
-		//public static PatientNote Cur;
 		
 		///<summary></summary>
 		public static PatientNote Refresh(int patNum,int guarantor){
 			string command="SELECT COUNT(*) FROM patientnote WHERE patnum = '"+POut.PInt(patNum)+"'";
-			DataTable table=General.GetTable(command);
+			DataTable table=General2.GetTable(command);
 			if(table.Rows[0][0].ToString()=="0"){
 				InsertRow(patNum);
 			}
 			command ="SELECT PatNum,ApptPhone,Medical,Service,MedicalComp,Treatment,CCNumber,CCExpiration "
 				+"FROM patientnote WHERE patnum ='"+POut.PInt(patNum)+"'";
-			table=General.GetTable(command);
+			table=General2.GetTable(command);
 			PatientNote Cur=new PatientNote();
 			Cur.PatNum      = PIn.PInt   (table.Rows[0][0].ToString());
 			Cur.ApptPhone   = PIn.PString(table.Rows[0][1].ToString());
@@ -33,7 +30,7 @@ namespace OpenDental{
 			//fam financial note:
 			command = 
 				"SELECT * FROM patientnote WHERE patnum ='"+POut.PInt(guarantor)+"'";
-			table=General.GetTable(command);
+			table=General2.GetTable(command);
 			if(table.Rows.Count==0){
 				InsertRow(guarantor);
 			}
@@ -41,7 +38,7 @@ namespace OpenDental{
 				"SELECT famfinancial "
 				+"FROM patientnote WHERE patnum ='"+POut.PInt(guarantor)+"'";
 			//MessageBox.Show(command);
-			table=General.GetTable(command);
+			table=General2.GetTable(command);
 			Cur.FamFinancial= PIn.PString(table.Rows[0][0].ToString());
 			return Cur;
 		}
@@ -58,12 +55,12 @@ namespace OpenDental{
 				+ ",CCExpiration = "+POut.PDate  (Cur.CCExpiration)
 				+" WHERE patnum = '"+POut.PInt   (Cur.PatNum)+"'";
 			//MessageBox.Show(command);
-			General.NonQ(command);
+			General2.NonQ(command);
 			command = "UPDATE patientnote SET "
 				+ "famfinancial = '"+POut.PString(Cur.FamFinancial)+"'"
 				+" WHERE patnum = '"+POut.PInt   (guarantor)+"'";
 			//MessageBox.Show(command);
-			General.NonQ(command);
+			General2.NonQ(command);
 		}
 
 		///<summary></summary>
@@ -71,18 +68,11 @@ namespace OpenDental{
 			string command = "INSERT INTO patientnote (patnum"
 				+") VALUES('"+patNum+"')";
 			//MessageBox.Show(command);
-			General.NonQ(command);
+			General2.NonQ(command);
 		}
 
-		//public static void ChangeGuarantor(int newGuarantor){
-		//	 command = "UPDATE familynote SET "
-		//		+ "guarantor = '"+POut.PInt(newGuarantor)+"'"
-		//		+" WHERE guarantor = '" +POut.PInt(Cur.Guarantor)+"'";
-		//	//MessageBox.Show(command);
-		//	General.NonQ(command);
-		//}
-
-	}//end class FamilyNote
+	
+	}
 
 	
 

@@ -30,7 +30,7 @@ namespace OpenDental{
 		private System.Windows.Forms.Label label13;
 		private System.Windows.Forms.TextBox textCreditType;
 		private System.Windows.Forms.TextBox textPriIns;
-		private PatientNotes PatientNotes=new PatientNotes();
+		//private PatientNotes PatientNotes=new PatientNotes();
 		///<summary>If Pin clicked, this allows FormRecall to know about it.</summary>
 		public bool PinClicked=false;
 		private System.Windows.Forms.TextBox textBillingType;
@@ -580,7 +580,7 @@ namespace OpenDental{
 				if(FamCur.List[i].PatNum==PatCur.PatNum){
 					item.BackColor=Color.Silver;
 				}
-				item.SubItems.Add(Shared.AgeToString(FamCur.List[i].Age));
+				item.SubItems.Add(Patients.AgeToString(FamCur.List[i].Age));
 				item.SubItems.Add(FamCur.List[i].Gender.ToString());
 				dateDue=DateTime.MinValue;
 				for(int j=0;j<recallList.Length;j++){

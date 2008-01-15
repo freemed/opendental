@@ -3,9 +3,8 @@ using System.Collections;
 using System.Data;
 using System.Drawing;
 using System.Windows.Forms;
-using OpenDentBusiness;
 
-namespace OpenDental{
+namespace OpenDentBusiness{
 
 	///<summary></summary>
 	public class Providers{
@@ -15,10 +14,23 @@ namespace OpenDental{
 		public static Provider[] List;
 
 		///<summary>Refreshes List with all providers.</summary>
-		public static void Refresh(){
-			ArrayList AL=new ArrayList();
+		public static void RefreshOnClient(){
+			DataTable table=General2.GetDS("Providers.RefreshOnServer").Tables[0];
+			FillArrays(table);//now, we have an arrays on both the client and the server.
+		}
+
+		///<summary>Does not get called directly from the UI.</summary>
+		public static DataSet RefreshOnServer(){
 			string command="SELECT * FROM provider ORDER BY ItemOrder";
-			DataTable table=General.GetTable(command);
+			DataTable table=General2.GetTable(command);
+			DataSet retVal=new DataSet();
+			retVal.Tables.Add(table);
+			FillArrays(table);
+			return retVal;
+		}
+
+		public static void FillArrays(DataTable table){
+			ArrayList AL=new ArrayList();
 			ListLong=new Provider[table.Rows.Count];
 			for(int i=0;i<table.Rows.Count;i++){
 				ListLong[i]=new Provider();
@@ -45,7 +57,9 @@ namespace OpenDental{
 				ListLong[i].SchoolClassNum= PIn.PInt   (table.Rows[i][20].ToString());
 				ListLong[i].NationalProvID= PIn.PString(table.Rows[i][21].ToString());
 				ListLong[i].CanadianOfficeNum= PIn.PString(table.Rows[i][22].ToString());
-				if(!ListLong[i].IsHidden) AL.Add(ListLong[i]);	
+				if(!ListLong[i].IsHidden){
+					AL.Add(ListLong[i]);	
+				}
 			}
 			List=new Provider[AL.Count];
 			AL.CopyTo(List);
@@ -77,7 +91,7 @@ namespace OpenDental{
 				+",NationalProvID = '"+POut.PString(prov.NationalProvID)+"'"
 				+",CanadianOfficeNum = '"+POut.PString(prov.CanadianOfficeNum)+"'"
 				+" WHERE provnum = '" +POut.PInt(prov.ProvNum)+"'";
- 			General.NonQ(command);
+ 			General2.NonQ(command);
 		}
 
 		///<summary></summary>
@@ -109,13 +123,13 @@ namespace OpenDental{
 				+"'"+POut.PString(prov.NationalProvID)+"', "
 				+"'"+POut.PString(prov.CanadianOfficeNum)+"')";
 			//MessageBox.Show(string command);
- 			prov.ProvNum=General.NonQ(command,true);
+ 			prov.ProvNum=General2.NonQ(command,true);
 		}
 
 		///<summary>Only used from FormProvEdit if user clicks cancel before finishing entering a new provider.</summary>
 		public static void Delete(Provider prov){
 			string command="DELETE from provider WHERE provnum = '"+prov.ProvNum.ToString()+"'";
- 			General.NonQ(command);
+ 			General2.NonQ(command);
 		}
 
 		///<summary>Gets table for main provider edit list.  SchoolClass is usually zero to indicate all providers.  IsAlph will sort aphabetically instead of by ItemOrder.</summary>
@@ -132,7 +146,7 @@ namespace OpenDental{
 			else {
 				command+="ORDER BY ItemOrder";
 			}
-			return General.GetTable(command);
+			return General2.GetTable(command);
 		}
 
 		///<summary></summary>
@@ -250,7 +264,7 @@ namespace OpenDental{
 		public static int GetNextItemOrder(){
 			//Is this valid in Oracle??
 			string command="SELECT MAX(ItemOrder) FROM provider";
-			DataTable table=General.GetTable(command);
+			DataTable table=General2.GetTable(command);
 			if(table.Rows.Count==0){
 				return 1;
 			}
@@ -261,7 +275,7 @@ namespace OpenDental{
 		public static string GetDuplicateAbbrs(){
 			string command="SELECT Abbr FROM provider p1 WHERE EXISTS"
 				+"(SELECT * FROM provider p2 WHERE p1.ProvNum!=p2.ProvNum AND p1.Abbr=p2.Abbr) GROUP BY Abbr";
-			DataTable table=General.GetTable(command);
+			DataTable table=General2.GetTable(command);
 			if(table.Rows.Count==0) {
 				return "";
 			}

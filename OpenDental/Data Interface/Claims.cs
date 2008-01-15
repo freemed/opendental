@@ -333,7 +333,7 @@ namespace OpenDental{
 				str.Append(" claim.ClaimNum="+POut.PInt(claimNums[i]));//((ClaimSendQueueItem)queueItems[i]).ClaimNum.ToString());
 			}
 			string command;
-			if(FormChooseDatabase.DBtype==DatabaseType.Oracle){//FIXME:ORDER-BY. Probably Fixed.  ??
+			if(DataConnection.DBtype==DatabaseType.Oracle){//FIXME:ORDER-BY. Probably Fixed.  ??
 				command="SELECT carrier.ElectID,claim.ProvBill,insplan.Subscriber,"
 				+"claim.PatNum,claim.ClaimNum, "
 				+"CASE WHEN claim.PatNum=insplan.Subscriber THEN 0 ELSE 1 END AS issubscriber "

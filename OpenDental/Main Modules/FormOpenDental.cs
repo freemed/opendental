@@ -1557,7 +1557,7 @@ namespace OpenDental{
 				}
 			}
 			if((itypes & InvalidTypes.Providers)==InvalidTypes.Providers){
-				Providers.Refresh();
+				Providers.RefreshOnClient();
 				ProviderIdents.Refresh();
 				Clinics.Refresh();
 			}
@@ -1752,7 +1752,7 @@ namespace OpenDental{
 				ToolBarMain.Buttons["Popups"].Enabled=true;
 			}
 			ToolBarMain.Invalidate();
-			Text=Patients.GetMainTitle(patName,patNum,chartNumber);
+			Text=Patients2.GetMainTitle(patName,patNum,chartNumber);
 			if(PopupEventList==null){
 				PopupEventList=new List<PopupEvent>();
 			}
@@ -2614,7 +2614,7 @@ namespace OpenDental{
 					connStr=nav.SelectSingleNode("ConnectionString").Value;
 					key=nav.SelectSingleNode("Key").Value;
 				}
-				FormChooseDatabase.DBtype=DatabaseType.Oracle;
+				DataConnection.DBtype=DatabaseType.Oracle;
 				return true;
 			}
 			catch(Exception ex) {

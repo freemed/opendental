@@ -465,7 +465,7 @@ namespace OpenDental{
 				row=table.NewRow();
 				row["AddrNote"]=rawtable.Rows[i]["AddrNote"].ToString();
 				row["AptNum"]=rawtable.Rows[i]["AptNum"].ToString();
-				row["age"]=Shared.DateToAge(PIn.PDate(rawtable.Rows[i]["Birthdate"].ToString())).ToString();//we don't care about m/y.
+				row["age"]=Patients.DateToAge(PIn.PDate(rawtable.Rows[i]["Birthdate"].ToString())).ToString();//we don't care about m/y.
 				dateT=PIn.PDateT(rawtable.Rows[i]["AptDateTime"].ToString());
 				row["aptDateTime"]=dateT.ToShortDateString()+"\r\n"+dateT.ToShortTimeString();
 				row["confirmed"]=DefB.GetName(DefCat.ApptConfirmed,PIn.PInt(rawtable.Rows[i]["Confirmed"].ToString()));

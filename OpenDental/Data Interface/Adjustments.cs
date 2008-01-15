@@ -48,7 +48,7 @@ namespace OpenDental{
 				+"'"+POut.PString(adj.AdjNote)+"', "
 				+POut.PDate  (adj.ProcDate)+", "
 				+"'"+POut.PInt   (adj.ProcNum)+"', ";
-			if(FormChooseDatabase.DBtype==DatabaseType.Oracle) {
+			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				command+=POut.PDateT(MiscData.GetNowDateTime());
 			}else{//Assume MySQL
 				command+="NOW()";//DateEntry set to server date

@@ -158,7 +158,7 @@ namespace OpenDental{
 		#endregion
 
 		private void FormReplication_Load(object sender,EventArgs e) {
-			if(FormChooseDatabase.DBtype!=DatabaseType.MySql) {
+			if(DataConnection.DBtype!=DatabaseType.MySql) {
 				MessageBox.Show(Lan.g(this,"This tool can only be used on MySQL databases."),"");
 				Close();
 			}

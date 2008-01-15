@@ -90,7 +90,7 @@ namespace OpenDental{
 				+"'"+POut.PInt   (split.PayPlanNum)+"', "
 				+POut.PDate  (split.DatePay)+", "
 				+"'"+POut.PInt   (split.ProcNum)+"', ";
-			if(FormChooseDatabase.DBtype==DatabaseType.Oracle) {
+			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				command+=POut.PDateT(MiscData.GetNowDateTime());
 			}else{//Assume MySQL
 				command+="NOW()";

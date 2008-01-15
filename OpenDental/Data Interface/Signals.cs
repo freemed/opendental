@@ -128,7 +128,7 @@ namespace OpenDental{
 				+"'"+POut.PInt   ((int)sig.SigType)+"', "
 				+"'"+POut.PString(sig.SigText)+"', ";
 				//+"'"+POut.PDateT (now)+"', "
-			if(FormChooseDatabase.DBtype==DatabaseType.Oracle) {
+			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				command+=POut.PDateT(MiscData.GetNowDateTime());
 			}else{//Assume MySQL
 				command+="NOW()";
@@ -223,7 +223,7 @@ namespace OpenDental{
 				return;
 			}
 			command="UPDATE signal SET AckTime = ";
-			if(FormChooseDatabase.DBtype==DatabaseType.Oracle){
+			if(DataConnection.DBtype==DatabaseType.Oracle){
 				command+=POut.PDateT(MiscData.GetNowDateTime());
 			}else {//Assume MySQL
 				command+="NOW()";

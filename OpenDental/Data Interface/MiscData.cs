@@ -34,7 +34,7 @@ namespace OpenDental{
 		///<summary>Gets the current date/Time direcly from the server.  Mostly used to prevent uesr from altering the workstation date to bypass security.</summary>
 		public static DateTime GetNowDateTime(){
 			string command="SELECT NOW()";
-			if(FormChooseDatabase.DBtype==DatabaseType.Oracle){
+			if(DataConnection.DBtype==DatabaseType.Oracle){
 				command="SELECT CURRENT_TIMESTAMP FROM DUAL";
 			}
 			DataTable table=General.GetTable(command);

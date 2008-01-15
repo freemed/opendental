@@ -89,7 +89,7 @@ namespace OpenDental{
 		public static bool IsClockedIn(int employeeNum){
 			string command="SELECT ClockIn FROM clockevent WHERE EmployeeNum="+POut.PInt(employeeNum)
 				+" ORDER BY TimeDisplayed DESC ";
-			if(FormChooseDatabase.DBtype==DatabaseType.Oracle){
+			if(DataConnection.DBtype==DatabaseType.Oracle){
 				command="SELECT * FROM ("+command+") WHERE ROWNUM<=1";
 			}else{//Assume MySQL
 				command+=" LIMIT 1";
@@ -107,7 +107,7 @@ namespace OpenDental{
 		public static TimeClockStatus GetLastStatus(int employeeNum){
 			string command="SELECT ClockStatus FROM clockevent WHERE EmployeeNum="+POut.PInt(employeeNum)
 				+" ORDER BY TimeDisplayed DESC ";
-			if(FormChooseDatabase.DBtype==DatabaseType.Oracle){
+			if(DataConnection.DBtype==DatabaseType.Oracle){
 				command="SELECT * FROM ("+command+") WHERE ROWNUM<=1";
 			}else{//Assum MySQL
 				command+="LIMIT 1";

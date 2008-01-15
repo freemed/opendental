@@ -66,6 +66,10 @@ namespace OpenDentBusiness {
 			}
 		}
 
+		public static DataSet GetDS(string methodName) {
+			return GetDS(methodName,new string[] {});
+		}
+
 		public static DataSet GetDS(string methodName, string parameter0) {
 			return GetDS(methodName,new string[] {parameter0});
 		}
