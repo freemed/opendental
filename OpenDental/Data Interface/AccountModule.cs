@@ -28,9 +28,9 @@ namespace OpenDental{
 			}
 		}*/
 
-		///<summary>This is just the first version of this function.  It only gets selected parts of the Account refresh.</summary>
-		public static DataSet GetAll(int patNum,bool viewingInRecall){
-			return General.GetDS("AccountModule.GetAll",patNum.ToString(),POut.PBool(viewingInRecall));
+		///<summary>Gets the Account table and the Commlog table.</summary>
+		public static DataSet GetAll(int patNum,bool viewingInRecall,DateTime fromDate,DateTime toDate){
+			return General.GetDS("AccountModule.GetAll",patNum.ToString(),POut.PBool(viewingInRecall),fromDate.ToShortDateString(),toDate.ToShortDateString());
 		}
 
 

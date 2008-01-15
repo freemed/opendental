@@ -66,19 +66,23 @@ namespace OpenDentBusiness {
 			}
 		}
 
-		public static DataSet GetDS(string methodName, string parameter1) {
-			return GetDS(methodName,new string[] {parameter1});
+		public static DataSet GetDS(string methodName, string parameter0) {
+			return GetDS(methodName,new string[] {parameter0});
 		}
 
-		public static DataSet GetDS(string methodName,string parameter1,string parameter2) {
-			return GetDS(methodName,new string[] { parameter1,parameter2 });
+		public static DataSet GetDS(string methodName,string parameter0,string parameter1) {
+			return GetDS(methodName,new string[] { parameter0,parameter1 });
 		}
 
-		public static DataSet GetDS(string methodName,string parameter1,string parameter2,string parameter3) {
-			return GetDS(methodName,new string[] { parameter1,parameter2,parameter3 });
+		public static DataSet GetDS(string methodName,string parameter0,string parameter1,string parameter2) {
+			return GetDS(methodName,new string[] { parameter0,parameter1,parameter2 });
 		}
 
-		///<summary>This is the new way.  If there are more than about 3 parameters, then we'll have to create a different DTO to pass them.  This has not been done yet.  A dataset would be used to pass the parameters up because the information can be better organized, and properly keyed.  But for typical cases with just one or a few parameters, this works great.</summary>
+		public static DataSet GetDS(string methodName,string parameter0,string parameter1,string parameter2,string parameter3) {
+			return GetDS(methodName,new string[] { parameter0,parameter1,parameter2,parameter3 });
+		}
+
+		///<summary>This is the new way.  If there are more than about 4 parameters, then we'll have to create a different DTO to pass them.  This has not been done yet.  A dataset would be used to pass the parameters up because the information can be better organized, and properly keyed.  But for typical cases with just one or a few parameters, this works great.</summary>
 		[Obsolete("This method now throws an exception!")]
 		public static DataSet GetDS(string methodName, string[] parameters) {
 			if(RemotingClient.OpenDentBusinessIsLocal) {

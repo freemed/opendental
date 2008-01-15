@@ -1171,24 +1171,20 @@ namespace OpenDental {
 			//CovPats.Refresh(InsPlanList,PatPlanList);
 			PatientNoteCur=PatientNotes.Refresh(PatCur.PatNum,PatCur.Guarantor);
 			//other tables are refreshed in FillAcctLineAL
-			DataSetMain=AccountModule.GetAll(patNum,ViewingInRecall);
+			DateTime fromDate=DateTime.MinValue;
+			if(!checkShowAll.Checked){
+				fromDate=DateTime.Today.AddDays(-45);
+			}
+			DateTime toDate=DateTime.MaxValue;
+			bool viewingInRecall=ViewingInRecall;
+			if(PrefB.GetBool("FuchsOptionsOn")) {
+				viewingInRecall=true;
+			}
+			DataSetMain=AccountModule.GetAll(patNum,viewingInRecall,fromDate,toDate);
 		}
 
 		private void RefreshModuleScreen() {
-			//ParentForm.Text=Patients.GetMainTitle(PatCur);
-			if(PatCur!=null) {
-				gridAccount.Enabled=true;
-				ToolBarMain.Buttons["Payment"].Enabled=true;
-				ToolBarMain.Buttons["Adjustment"].Enabled=true;
-				ToolBarMain.Buttons["Insurance"].Enabled=true;
-				ToolBarMain.Buttons["PayPlan"].Enabled=true;
-				ToolBarMain.Buttons["Statement"].Enabled=true;
-				ToolBarMain.Invalidate();
-				textUrgFinNote.Enabled=true;
-				textFinNotes.Enabled=true;
-				butComm.Enabled=true;
-			}
-			else {
+			if(PatCur==null) {
 				gridAccount.Enabled=false;
 				ToolBarMain.Buttons["Payment"].Enabled=false;
 				ToolBarMain.Buttons["Adjustment"].Enabled=false;
@@ -1200,26 +1196,18 @@ namespace OpenDental {
 				textFinNotes.Enabled=false;
 				butComm.Enabled=false;
 			}
-			/*if (PrefB.GetBool("BoldFamilyAccountBalanceView")){
-				if (!panelBoldBalance.Visible){
-				panelBoldBalance.Visible=true;
-				panelAging.Left=0;
-				checkShowAll.Left=3;
-				checkShowAll.Top=67;
-				checkShowNotes.Left=85;
-				checkShowNotes.Top=67;
-				}
-			}
 			else{
-				if (panelBoldBalance.Visible){
-				panelBoldBalance.Visible=false;
-				panelAging.Left=90;
-				checkShowAll.Left=3;
-				checkShowAll.Top=32;
-				checkShowNotes.Left=3;
-				checkShowNotes.Top=48;
-				}
-			}*/
+				gridAccount.Enabled=true;
+				ToolBarMain.Buttons["Payment"].Enabled=true;
+				ToolBarMain.Buttons["Adjustment"].Enabled=true;
+				ToolBarMain.Buttons["Insurance"].Enabled=true;
+				ToolBarMain.Buttons["PayPlan"].Enabled=true;
+				ToolBarMain.Buttons["Statement"].Enabled=true;
+				ToolBarMain.Invalidate();
+				textUrgFinNote.Enabled=true;
+				textFinNotes.Enabled=true;
+				butComm.Enabled=true;
+			}
 			if(checkShowNotes.Tag!=null && checkShowNotes.Tag.ToString()!="JustClicked"){
 				checkShowNotes.Checked=PrefB.GetBool("ShowNotesInAccount");
 			}
@@ -1230,7 +1218,7 @@ namespace OpenDental {
 			//FillInsInfo();
 			FillRepeatCharges();
 			LayoutPanels();
-			if(ViewingInRecall | PrefB.GetBool("FuchsOptionsOn")) {
+			if(ViewingInRecall || PrefB.GetBool("FuchsOptionsOn")) {
 				panelProgNotes.Visible = true;
 				FillProgNotes();
 				if(PrefB.GetBool("FuchsOptionsOn")) {//show prog note options
@@ -1461,7 +1449,7 @@ namespace OpenDental {
 			gridComm.EndUpdate();
 		}
 
-		private void FillMain(){//DateTime fromDate, DateTime toDate,bool includeClaims,bool subtotalsOnly){
+		/*private void FillMain(){
 			if(PatCur==null){
 				gridAccount.BeginUpdate();
 				gridAccount.Rows.Clear();
@@ -1475,8 +1463,9 @@ namespace OpenDental {
 				FillAcctLineList(DateTime.Today.AddDays(-45),DateTime.MaxValue,true,false);
 			}
 			FillgridAccount();
-		}
+		}*/
 
+		/*
 		///<summary>Used once in FillAcctLineAL. Returns a list of PayInfos organized by date.</summary>
 		private PayInfo[] GetPayInfoList(PaySplit[] PaySplitList,Payment[] PaymentList){
 			ArrayList retAL=new ArrayList();
@@ -1510,14 +1499,14 @@ namespace OpenDental {
 				}
 				payInfo.Amount=PaySplits.GetAmountForPayment(PaymentList[i].PayNum,PaymentList[i].PayDate,PatCur.PatNum,PaySplitList);
 				for(int j=0;j<splitsGroupedForPayment.Count;j++){
-					/*//Amount: only those amounts that have the same procDate and patNum as the payment, and are not attached to procedures.
+					//Amount: only those amounts that have the same procDate and patNum as the payment, and are not attached to procedures.
 					//(The payment total amount and split detail will show in the description)
-					if(((PaySplit)splitsGroupedForPayment[j]).ProcDate==PaymentList[i].PayDate 
-						&& ((PaySplit)splitsGroupedForPayment[j]).ProcNum==0
-						&& ((PaySplit)splitsGroupedForPayment[j]).PatNum==PatCur.PatNum)
-					{
-						payInfo.Amount+=((PaySplit)splitsGroupedForPayment[j]).SplitAmt;
-					}*/
+					//if(((PaySplit)splitsGroupedForPayment[j]).ProcDate==PaymentList[i].PayDate 
+					//	&& ((PaySplit)splitsGroupedForPayment[j]).ProcNum==0
+					//	&& ((PaySplit)splitsGroupedForPayment[j]).PatNum==PatCur.PatNum)
+					//{
+					//	payInfo.Amount+=((PaySplit)splitsGroupedForPayment[j]).SplitAmt;
+					//}
 					//then the description of each split, but don't include descriptions for splits with same date and patnum
 					if(((PaySplit)splitsGroupedForPayment[j]).ProcDate==PaymentList[i].PayDate 
 						&& ((PaySplit)splitsGroupedForPayment[j]).PatNum==PatCur.PatNum)
@@ -1618,11 +1607,11 @@ namespace OpenDental {
 			//order everything by date
 			Array.Sort(dateArray,retVal);
 			return retVal;
-		}
+		}*/
 
+		/*
 		///<summary></summary>
-		private void FillAcctLineList(DateTime fromDate, DateTime toDate,bool includeClaims,bool subtotalsOnly){
-			/*
+		private void FillAcctLineList(DateTime fromDate, DateTime toDate){//,bool includeUnclearedClaims,bool subtotalsOnly){
 			AccProcList=Procedures.Refresh(PatCur.PatNum);
 			List<Claim> ClaimList=Claims.Refresh(PatCur.PatNum);
 			Adjustment[] AdjustmentList=Adjustments.Refresh(PatCur.PatNum);
@@ -1914,8 +1903,8 @@ namespace OpenDental {
 					else if(!subtotalsOnly){//out of date range, but show normal totals
 						runBal+=subTotal;//add to the running balance, but do not display it.
 					}
-					//old claims that have been received only recently, or not at all:
-					else if(includeClaims && arrayClaim[tempCountClaim].ClaimStatus != "R"){
+					//uncleared claims that are not within the daterange
+					else if(includeUnclearedClaims && arrayClaim[tempCountClaim].ClaimStatus != "R"){
 						tempAcctLine.Balance="";//don't show running balance
 						if (simpleStatement)
 							{
@@ -2118,11 +2107,10 @@ namespace OpenDental {
 			}//end for line
 			SubTotal=runBal;
 			//for (int i=0;i<countProc;i++){
-			//}//end for i countProc*/
-		}
+			//}//end for i countProc
+		}*/
 
-		private void FillgridAccount(){
-			DateTime lineDate=DateTime.MinValue;
+		private void FillMain(){
 			gridAccount.BeginUpdate();
 			gridAccount.Columns.Clear();
 			ODGridColumn col=new ODGridColumn(Lan.g("TableAccount","Date"),65);
@@ -2144,10 +2132,23 @@ namespace OpenDental {
 			col=new ODGridColumn(Lan.g("TableAccount","Balance"),60,HorizontalAlignment.Right);
 			gridAccount.Columns.Add(col);
 			gridAccount.Rows.Clear();
-			/*
 			ODGridRow row;
-			ODGridCell cell;
-			for(int i=0;i<AcctLineList.Count;i++){
+			//ODGridCell cell;
+			DataTable table=DataSetMain.Tables["Account"];
+			for(int i=0;i<table.Rows.Count;i++) {
+				row = new ODGridRow();
+				row.Cells.Add(table.Rows[i]["date"].ToString());
+				row.Cells.Add(table.Rows[i]["patient"].ToString());
+				row.Cells.Add(table.Rows[i]["prov"].ToString());
+				row.Cells.Add(table.Rows[i]["ProcCode"].ToString());
+				row.Cells.Add(table.Rows[i]["tth"].ToString());
+				row.Cells.Add(table.Rows[i]["description"].ToString());
+				row.Cells.Add(table.Rows[i]["charges"].ToString());
+				row.Cells.Add(table.Rows[i]["credits"].ToString());
+				row.Cells.Add(table.Rows[i]["balance"].ToString());
+				gridAccount.Rows.Add(row);
+			}
+			/*for(int i=0;i<AcctLineList.Count;i++){
 				//if (AcctLineAL[i].IsProc==true){
 				row=new ODGridRow();
 				try{//error catch bad dates
@@ -2203,7 +2204,7 @@ namespace OpenDental {
 						break;
 				}
 				gridAccount.Rows.Add(row);
-			}//end for row*/
+			}// */
 			gridAccount.EndUpdate();
 			gridAccount.ScrollToEnd();
 		}
@@ -2373,8 +2374,9 @@ namespace OpenDental {
 		}*/
 
 		private void gridAcctPat_CellClick(object sender,ODGridClickEventArgs e) {
-			if(ViewingInRecall)
+			if(ViewingInRecall){
 				return;
+			}
 			OnPatientSelected(FamCur.List[e.Row].PatNum,FamCur.List[e.Row].GetNameLF(),FamCur.List[e.Row].Email!="",
 				FamCur.List[e.Row].ChartNumber);
 			ModuleSelected(FamCur.List[e.Row].PatNum);
@@ -3215,7 +3217,8 @@ namespace OpenDental {
 		}
 
 		private void checkShowAll_Click(object sender, System.EventArgs e) {
-			RefreshModuleScreen();
+			//RefreshModuleScreen();
+			ModuleSelected(PatCur.PatNum);
 		}
 
 		private void panelSplitter_MouseDown(object sender, System.Windows.Forms.MouseEventArgs e) {
@@ -3543,20 +3546,8 @@ namespace OpenDental {
 
 		private void FillProgNotes() {
 			ArrayList selectedTeeth = new ArrayList();//integers 1-32
-			for (int i = 0; i < 32; i++) {
+			for(int i = 0;i < 32;i++) {
 				selectedTeeth.Add(i);
-			}
-			DataSetMain = null;
-			if (PatCur != null) {
-				//get the prognote data always for FuchsOptions
-				if(PrefB.GetBool("FuchsOptionsOn") & !ViewingInRecall) {
-					ViewingInRecall = true;
-					DataSetMain = AccountModule.GetAll(PatCur.PatNum,ViewingInRecall);
-					ViewingInRecall = false;
-				}
-				else {
-					DataSetMain = AccountModule.GetAll(PatCur.PatNum,ViewingInRecall);
-				}
 			}
 			gridProg.BeginUpdate();
 			gridProg.Columns.Clear();
@@ -3799,10 +3790,10 @@ namespace OpenDental {
 		}
 
 		private void checkShowNotes_Click(object sender,EventArgs e) {
-			checkShowNotes.Tag="JustClicked";		
-			RefreshModuleScreen();
-			checkShowNotes.Tag = "";		
-
+			//checkShowNotes.Tag="JustClicked";		
+			//RefreshModuleScreen();
+			//checkShowNotes.Tag = "";		
+			ModuleSelected(PatCur.PatNum);
 		}
 
 

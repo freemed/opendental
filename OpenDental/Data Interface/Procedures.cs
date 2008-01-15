@@ -468,7 +468,7 @@ namespace OpenDental{
 			for(int i=0;i<List.Length;i++) {
 				if(List[i].ProcStatus==ProcStat.C) {//complete
 					procFee=List[i].ProcFee;
-					qty=PIn.PInt(List[i].UnitQty.ToString()) + PIn.PInt(List[i].BaseUnits.ToString());//handles 0 and blank
+					qty=List[i].UnitQty+List[i].BaseUnits;
 					if(qty > 0) {
 						procFee*=qty;
 					}

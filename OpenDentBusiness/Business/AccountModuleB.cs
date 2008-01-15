@@ -6,10 +6,12 @@ using System.Drawing;
 
 namespace OpenDentBusiness {
 	public class AccountModuleB {
-		///<summary>Parameters: 0:patNum, 1:viewingInRecall</summary>
-		public static DataSet GetAll(string[] parameters){//int patNum,bool viewingInRecall){
+		///<summary>Parameters: 0:patNum, 1:viewingInRecall, 2:fromDate, 3:toDate</summary>
+		public static DataSet GetAll(string[] parameters){
 			int patNum=PIn.PInt(parameters[0]);
-			bool viewingInRecall=PIn.PBool(parameters[1]);		
+			bool viewingInRecall=PIn.PBool(parameters[1]);
+			DateTime fromDate=PIn.PDate(parameters[2]);
+			DateTime toDate=PIn.PDate(parameters[3]);
 			DataSet retVal=new DataSet();
 			if(viewingInRecall) {
 				retVal.Tables.Add(ChartModuleB.GetProgNotes(patNum, false));
@@ -17,6 +19,7 @@ namespace OpenDentBusiness {
 			else {
 				retVal.Tables.Add(GetCommLog(patNum));
 			}
+			retVal.Tables.Add(GetAccount(patNum,fromDate,toDate));
 			return retVal;
 		}
 
@@ -133,6 +136,80 @@ namespace OpenDentBusiness {
 			}
 			DataView view = table.DefaultView;
 			view.Sort = "CommDateTime";
+			table = view.ToTable();
+			return table;
+		}
+
+		private static DataTable GetAccount(int patNum,DateTime fromDate,DateTime toDate) {
+			DataConnection dcon=new DataConnection();
+			DataTable table=new DataTable("Account");
+			DataRow row;
+			//columns that start with lowercase are altered for display rather than being raw data.
+			table.Columns.Add("AdjNum");
+			table.Columns.Add("balance");
+			table.Columns.Add("balanceDouble",typeof(double));
+			table.Columns.Add("charges");
+			table.Columns.Add("chargesDouble",typeof(double));
+			table.Columns.Add("ClaimNum");
+			table.Columns.Add("ClaimPaymentNum");//if this is set, also set ClaimNum
+			table.Columns.Add("credits");
+			table.Columns.Add("creditsDouble",typeof(double));
+			table.Columns.Add("date");
+			table.Columns.Add("DateTime",typeof(DateTime));
+			table.Columns.Add("description");
+			table.Columns.Add("patient");
+			table.Columns.Add("PayNum");//even though we only show split objects
+			table.Columns.Add("ProcCode");
+			table.Columns.Add("ProcNum");
+			table.Columns.Add("prov");
+			table.Columns.Add("tth");
+			//but we won't actually fill this table with rows until the very end.  It's more useful to use a List<> for now.
+			List<DataRow> rows=new List<DataRow>();
+			//Procedures------------------------------------------------------------------------------------------
+			string command="SELECT UnitQty,procedurelog.BaseUnits,ProcFee,ProcCode,ProcDate,ProcNum "
+				+"FROM procedurelog "
+				+"LEFT JOIN procedurecode ON procedurelog.CodeNum=procedurecode.CodeNum "
+				+"WHERE ProcStatus=2 "//complete
+				+"AND PatNum ="+POut.PInt(patNum)+" ORDER BY ProcDate";
+			DataTable rawProc=dcon.GetTable(command);
+			DateTime dateT;
+			double qty;
+			for(int i=0;i<rawProc.Rows.Count;i++){
+				row=table.NewRow();//but we won't necessarily add it to the collection
+				row["AdjNum"]="0";
+				row["balance"]="";//fill this later
+				row["balanceDouble"]=0;//fill this later
+				qty=PIn.PInt(rawProc.Rows[i]["UnitQty"].ToString()) + PIn.PInt(rawProc.Rows[i]["BaseUnits"].ToString());
+				if(qty==0){
+					qty=1;
+				}
+				row["chargesDouble"]=PIn.PDouble(rawProc.Rows[i]["ProcFee"].ToString())*qty;
+				row["charges"]=((double)row["chargesDouble"]).ToString("f");
+				row["ClaimNum"]="0";
+				row["ClaimPaymentNum"]="0";
+				row["creditsDouble"]="0";
+				row["credits"]="";
+				dateT=PIn.PDateT(rawProc.Rows[i]["ProcDate"].ToString());
+				row["DateTime"]=dateT;
+				row["date"]=dateT.ToShortDateString();
+				row["description"]="description";
+				row["patient"]="patient";
+				row["PayNum"]="0";
+				row["ProcCode"]=rawProc.Rows[i]["ProcCode"].ToString();
+				row["ProcNum"]=PIn.PInt(rawProc.Rows[i]["ProcNum"].ToString());
+				row["prov"]="prov";
+				row["tth"]="tth";
+				rows.Add(row);
+			}
+			//Other table types here--------------------------------------------------------------------------------
+
+			//Sorting
+			//rows.Sort(CompareCommRows);
+			for(int i=0;i<rows.Count;i++) {
+				table.Rows.Add(rows[i]);
+			}
+			DataView view = table.DefaultView;
+			view.Sort = "DateTime";
 			table = view.ToTable();
 			return table;
 		}
