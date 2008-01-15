@@ -2781,13 +2781,14 @@ namespace OpenDental{
 			}
 		}
 
+		/*
 		///<summary></summary>
 		private void OnPatientSelected(int patNum,string patName,bool hasEmail,string chartNumber){
 			PatientSelectedEventArgs eArgs=new OpenDental.PatientSelectedEventArgs(patNum,patName,hasEmail,chartNumber);
 			if(PatientSelected!=null){
 				PatientSelected(this,eArgs);
 			}
-		}
+		}*/
 
 		private void OnRx_Click(){
 			if(!Security.IsAuthorized(Permissions.RxCreate)){

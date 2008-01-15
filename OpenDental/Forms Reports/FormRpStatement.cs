@@ -43,8 +43,8 @@ namespace OpenDental{
 		private int[][] PatNums;
 		///<summary>The guarantor for the statement that is currently printing.</summary>
 		private Patient PatGuar;
-		///<summary>Remove the detail from the itemized grid and make the statement simple</summary>
-		private bool  SimpleStatement;
+		//<summary>Remove the detail from the itemized grid and make the statement simple</summary>
+		//private bool  SimpleStatement;
 
 		///<summary></summary>
 		public FormRpStatement(){
@@ -299,18 +299,17 @@ namespace OpenDental{
 				}
 				notes[i]+=generalNote;
 			}
-			PrintStatements(patNums,DateTime.Today.AddDays(-45),DateTime.Today,true,false,false,false,notes,true,
-				PrefB.GetBool("PrintSimpleStatements"),"");
+			PrintStatements(patNums,DateTime.Today.AddDays(-45),DateTime.Today,true,false,false,false,notes,true,"");
 		}
 
 		///<summary>This is called from ContrAccount about 3 times and also from FormRpStatement as part of the billing process.  This is what you call to print statements, either one or many.  For the patNum parameter, the first dim is for the family. Second dim is family members. The note array must have one element for every statement, so same number as dim one of patNums.  IsBill distinguishes bills sent by mail from statements handed to the patient.  SimpleStatement removes the detail of the itemized grid.  Instead of printing, if pdfFullFileName is specified (including full path), then it saves as pdf to that file.</summary>
-		public void PrintStatements(int[][] patNums,DateTime fromDate,DateTime toDate,bool includeClaims, bool subtotalsOnly,bool hidePayment,bool nextAppt,string[] notes,bool isBill, bool simpleStatement,string pdfFullFileName){
+		public void PrintStatements(int[][] patNums,DateTime fromDate,DateTime toDate,bool includeClaims, bool subtotalsOnly,bool hidePayment,bool nextAppt,string[] notes,bool isBill,string pdfFullFileName){
 			//these 5 variables are needed by the printing logic. The rest are not.
 			PatNums=(int[][])patNums.Clone();
 			Notes=(string[])notes.Clone();
 			SubtotalsOnly=subtotalsOnly;
 			HidePayment=hidePayment;
-			SimpleStatement=simpleStatement;
+			//SimpleStatement=simpleStatement;
 			PrintDocument pd=new PrintDocument();
 			if(pdfFullFileName==""){
 				if(!Printers.SetPrinter(pd,PrintSituation.Statement)){
@@ -333,8 +332,7 @@ namespace OpenDental{
 			Commlog commlog;
 			FamilyStatementData famData;
 			for(int i=0;i<patNums.GetLength(0);i++){//loop through each family
-				//StatementA[i]=AssembleStatementA(contrAccount,patNums[i],fromDate,toDate,includeClaims,nextAppt,simpleStatement);
-				famData=AssembleStatement(contrAccount,patNums[i],fromDate,toDate,includeClaims,nextAppt,simpleStatement);
+				famData=AssembleStatement(contrAccount,patNums[i],fromDate,toDate,includeClaims,nextAppt);
 				FamilyStatementDataList.Add(famData);
 				//This has all been moved externally for multiple billing statements
 				if(patNums.GetLength(0)==1){
@@ -388,7 +386,7 @@ namespace OpenDental{
 		}
 
 		/// <summary>Gets one FamilyStatementData for a single family.</summary>
-		private FamilyStatementData AssembleStatement(ContrAccount contrAccount,int[] famPatNums,DateTime fromDate,DateTime toDate,bool includeClaims,bool nextAppt, bool simpleStatement){
+		private FamilyStatementData AssembleStatement(ContrAccount contrAccount,int[] famPatNums,DateTime fromDate,DateTime toDate,bool includeClaims,bool nextAppt){
 			FamilyStatementData retVal=new FamilyStatementData();
 			retVal.GuarNum=famPatNums[0];
 			PatStatementAbout patAbout;
@@ -396,7 +394,7 @@ namespace OpenDental{
 			for(int i=0;i<famPatNums.Length;i++){
 				patAbout=new PatStatementAbout();
 				patAbout.PatNum=famPatNums[i];
-				contrAccount.RefreshModuleData(famPatNums[i]);
+			//	contrAccount.RefreshModuleData(famPatNums[i]);
 				patAbout.PatName=contrAccount.PatCur.GetNameLF();
 				patAbout.ApptDescript="";
 				if(nextAppt){
@@ -421,8 +419,8 @@ namespace OpenDental{
 				retVal.PatAboutList.Add(patAbout);
 				patData=new PatStatementData();
 				patData.PatNum=famPatNums[i];
-				contrAccount.FillAcctLineList(fromDate,toDate,includeClaims,SubtotalsOnly, simpleStatement);
-				patData.PatData=contrAccount.AcctLineList;
+			//	contrAccount.FillAcctLineList(fromDate,toDate,includeClaims,SubtotalsOnly);
+			//	patData.PatData=contrAccount.AcctLineList;
 				retVal.PatDataList.Add(patData);
 			}
 			return retVal;
@@ -679,7 +677,7 @@ namespace OpenDental{
 			MigraDocHelper.InsertSpacer(section,275);
 			ODGridColumn gcol;
 			ODGridRow grow;
-			if(!HidePayment && !SubtotalsOnly && !SimpleStatement) {
+			if(!HidePayment && !SubtotalsOnly ) {
 				ODGrid gridAging=new ODGrid();
 				this.Controls.Add(gridAging);
 				gridAging.BeginUpdate();
@@ -720,19 +718,19 @@ namespace OpenDental{
 				MigraDocHelper.DrawGrid(section,gridAging);
 				gridAging.Dispose();
 			}
-			else if(SimpleStatement) {
+			/*else if(SimpleStatement) {
 				text=Lan.g(this,"Account Balance: ")+PatGuar.BalTotal.ToString("c");
 				font=MigraDocHelper.CreateFont(12,true);
 				par=section.AddParagraph(text);
 				par.Format.Font=font;
 				par.Format.Alignment=ParagraphAlignment.Center;
-			}
+			}*/
 			//Body Tables-----------------------------------------------------------------------------------------------------------
 			ODGrid gridPat=new ODGrid();
 			this.Controls.Add(gridPat);
 			gridPat.BeginUpdate();
 			gridPat.Columns.Clear();
-			if(SimpleStatement) {
+			/*if(SimpleStatement) {
 				gcol=new ODGridColumn(Lan.g(this,"Date"),73);
 				gridPat.Columns.Add(gcol);
 				gcol=new ODGridColumn(Lan.g(this,"Code"),45);
@@ -756,7 +754,7 @@ namespace OpenDental{
 				gcol=new ODGridColumn(Lan.g(this,""),50,HorizontalAlignment.Right);
 				gridPat.Columns.Add(gcol);
 			}
-			else{
+			else{*/
 				gcol=new ODGridColumn(Lan.g(this,"Date"),73);
 				gridPat.Columns.Add(gcol);
 				gcol=new ODGridColumn(Lan.g(this,"Code"),45);
@@ -779,7 +777,7 @@ namespace OpenDental{
 				gridPat.Columns.Add(gcol);
 				gcol=new ODGridColumn(Lan.g(this,"Balance"),50,HorizontalAlignment.Right);
 				gridPat.Columns.Add(gcol);
-			}
+			//}
 			gridPat.Width=gridPat.WidthAllColumns+20;
 			gridPat.EndUpdate();
 			//Loop through each patient-----------------------------------------------------------------------------------------------
@@ -805,33 +803,18 @@ namespace OpenDental{
 					grow.Cells.Add(lineData[p].Tooth);
 					grow.Cells.Add(lineData[p].Description);
 					grow.Cells.Add(lineData[p].Fee);
-					if(SimpleStatement){
-						grow.Cells.Add("");
-					}
-					else{
-						grow.Cells.Add(lineData[p].InsEst);
-					}
+					grow.Cells.Add(lineData[p].InsEst);
 					grow.Cells.Add(lineData[p].InsPay);
-					if(SimpleStatement){
-						grow.Cells.Add("");
-					}
-					else{
-						grow.Cells.Add(lineData[p].Patient);
-					}
+					grow.Cells.Add(lineData[p].Patient);
 					grow.Cells.Add(lineData[p].Adj);
 					grow.Cells.Add(lineData[p].Paid);
-					if(SimpleStatement){
-						grow.Cells.Add("");
-					}
-					else{
-						grow.Cells.Add(lineData[p].Balance);
-					}
+					grow.Cells.Add(lineData[p].Balance);
 					gridPat.Rows.Add(grow);
 				}
 				gridPat.EndUpdate();
 				MigraDocHelper.DrawGrid(section,gridPat);
 				//Total
-				if(!SimpleStatement) {
+				//if(!SimpleStatement) {
 					frame=MigraDocHelper.CreateContainer(section);
 					font=MigraDocHelper.CreateFont(9,true);
 					float totalPos=((float)(doc.DefaultPageSetup.PageWidth.Inch//-doc.DefaultPageSetup.LeftMargin.Inch
@@ -840,7 +823,7 @@ namespace OpenDental{
 					RectangleF rectF=new RectangleF(0,0,totalPos,16);
 					MigraDocHelper.DrawString(frame,FamilyStatementDataList[famIndex].PatAboutList[i].Balance.ToString("F"),font,rectF,
 						ParagraphAlignment.Right);
-				}
+				//}
 			}
 			gridPat.Dispose();
 			//Note------------------------------------------------------------------------------------------------------------
