@@ -82,6 +82,7 @@ namespace OpenDental{
 			return "";//will never happen
 		}
 
+		/*
 		///<summary>Computes balance for a single patient without making any calls to the database. If the balance doesn't match the stored patient balance, then it makes one update to the database and returns true to trigger calculation of aging.</summary>
 		public static bool ComputeBalances(Procedure[] procList,ClaimProc[] claimProcList,Patient PatCur,PaySplit[] paySplitList,Adjustment[] AdjustmentList,PayPlan[] payPlanList,PayPlanCharge[] payPlanChargeList){
 			double calcBal
@@ -97,7 +98,7 @@ namespace OpenDental{
 				return true;
 			}
 			return false;
-		}
+		}*/
 
 	}
 

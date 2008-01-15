@@ -6,24 +6,26 @@ using System.Drawing;
 
 namespace OpenDentBusiness {
 	public class AccountModuleB {
+		private static DataSet retVal;
+
 		///<summary>Parameters: 0:patNum, 1:viewingInRecall, 2:fromDate, 3:toDate</summary>
 		public static DataSet GetAll(string[] parameters){
 			int patNum=PIn.PInt(parameters[0]);
 			bool viewingInRecall=PIn.PBool(parameters[1]);
 			DateTime fromDate=PIn.PDate(parameters[2]);
 			DateTime toDate=PIn.PDate(parameters[3]);
-			DataSet retVal=new DataSet();
+			retVal=new DataSet();
 			if(viewingInRecall) {
 				retVal.Tables.Add(ChartModuleB.GetProgNotes(patNum, false));
 			}
 			else {
-				retVal.Tables.Add(GetCommLog(patNum));
+				GetCommLog(patNum);
 			}
-			retVal.Tables.Add(GetAccount(patNum,fromDate,toDate));
+			GetAccount(patNum,fromDate,toDate);//Gets 2 tables: account(or account###,account###,etc) and patient
 			return retVal;
 		}
 
-		private static DataTable GetCommLog(int patNum) {
+		private static void GetCommLog(int patNum) {
 			DataConnection dcon=new DataConnection();
 			DataTable table=new DataTable("Commlog");
 			DataRow row;
@@ -137,12 +139,16 @@ namespace OpenDentBusiness {
 			DataView view = table.DefaultView;
 			view.Sort = "CommDateTime";
 			table = view.ToTable();
-			return table;
+			//return table;
+			retVal.Tables.Add(table);
 		}
 
-		private static DataTable GetAccount(int patNum,DateTime fromDate,DateTime toDate) {
+		///<summary>Also gets the patient table, which has one row for each family member.</summary>
+		private static void GetAccount(int patNum,DateTime fromDate,DateTime toDate) {
 			DataConnection dcon=new DataConnection();
-			DataTable table=new DataTable("Account");
+			DataTable table=new DataTable("account");
+			DataTable tablepat=new DataTable("patient");
+			//Family fam=
 			DataRow row;
 			//columns that start with lowercase are altered for display rather than being raw data.
 			table.Columns.Add("AdjNum");
@@ -152,6 +158,7 @@ namespace OpenDentBusiness {
 			table.Columns.Add("chargesDouble",typeof(double));
 			table.Columns.Add("ClaimNum");
 			table.Columns.Add("ClaimPaymentNum");//if this is set, also set ClaimNum
+			table.Columns.Add("colorText");
 			table.Columns.Add("credits");
 			table.Columns.Add("creditsDouble",typeof(double));
 			table.Columns.Add("date");
@@ -166,11 +173,14 @@ namespace OpenDentBusiness {
 			//but we won't actually fill this table with rows until the very end.  It's more useful to use a List<> for now.
 			List<DataRow> rows=new List<DataRow>();
 			//Procedures------------------------------------------------------------------------------------------
-			string command="SELECT UnitQty,procedurelog.BaseUnits,ProcFee,ProcCode,ProcDate,ProcNum "
+			string command="SELECT Abbr,procedurelog.BaseUnits,Descript,patient.FName,LaymanTerm,Preferred,ProcCode,"
+				+"ProcDate,ProcFee,ProcNum,ToothNum,UnitQty "
 				+"FROM procedurelog "
 				+"LEFT JOIN procedurecode ON procedurelog.CodeNum=procedurecode.CodeNum "
+				+"LEFT JOIN patient ON patient.PatNum=procedurelog.PatNum "
+				+"LEFT JOIN provider ON provider.ProvNum=procedurelog.ProvNum "
 				+"WHERE ProcStatus=2 "//complete
-				+"AND PatNum ="+POut.PInt(patNum)+" ORDER BY ProcDate";
+				+"AND procedurelog.PatNum ="+POut.PInt(patNum)+" ORDER BY ProcDate";
 			DataTable rawProc=dcon.GetTable(command);
 			DateTime dateT;
 			double qty;
@@ -187,32 +197,91 @@ namespace OpenDentBusiness {
 				row["charges"]=((double)row["chargesDouble"]).ToString("f");
 				row["ClaimNum"]="0";
 				row["ClaimPaymentNum"]="0";
+				row["colorText"]=DefB.Long[(int)DefCat.AccountColors][0].ItemColor.ToArgb().ToString();
 				row["creditsDouble"]="0";
 				row["credits"]="";
 				dateT=PIn.PDateT(rawProc.Rows[i]["ProcDate"].ToString());
 				row["DateTime"]=dateT;
 				row["date"]=dateT.ToShortDateString();
-				row["description"]="description";
-				row["patient"]="patient";
+				row["description"]=rawProc.Rows[i]["Descript"].ToString();
+				if(rawProc.Rows[i]["LaymanTerm"].ToString()!=""){
+					row["description"]=rawProc.Rows[i]["LaymanTerm"].ToString();
+				}
+				row["patient"]=rawProc.Rows[i]["FName"].ToString();
+				if(rawProc.Rows[i]["Preferred"].ToString()!=""){
+					row["patient"]+="("+rawProc.Rows[i]["Preferred"].ToString()+")";
+				}
 				row["PayNum"]="0";
 				row["ProcCode"]=rawProc.Rows[i]["ProcCode"].ToString();
 				row["ProcNum"]=PIn.PInt(rawProc.Rows[i]["ProcNum"].ToString());
-				row["prov"]="prov";
-				row["tth"]="tth";
+				row["prov"]=rawProc.Rows[i]["Abbr"].ToString();
+				row["tth"]=Tooth.ToInternat(rawProc.Rows[i]["ToothNum"].ToString());
 				rows.Add(row);
 			}
 			//Other table types here--------------------------------------------------------------------------------
 
 			//Sorting
+			rows.Sort(new AccountLineComparer());
 			//rows.Sort(CompareCommRows);
+			//Compute balances-------------------------------------------------------------------------------------
+			double bal=0;
+			for(int i=0;i<rows.Count;i++) {
+				bal+=(double)rows[i]["chargesDouble"];
+				bal-=(double)rows[i]["creditsDouble"];
+				rows[i]["balanceDouble"]=bal;
+				rows[i]["balance"]=bal.ToString("f");
+			}
+			//Remove rows outside of daterange and add starting balance row----------------------------------------
+			double balanceForward=0;
+			bool foundBalForward=false;
+			for(int i=rows.Count-1;i>=0;i--) {//go backwards and remove from end
+				if(((DateTime)rows[i]["DateTime"])>toDate){
+					rows.RemoveAt(i);
+				}
+				if(((DateTime)rows[i]["DateTime"])<fromDate){
+					if(!foundBalForward){
+						foundBalForward=true;
+						balanceForward=(double)rows[i]["balanceDouble"];
+					}
+					rows.RemoveAt(i);
+				}
+			}
+			if(foundBalForward){
+				//add a balance forward row
+				row=table.NewRow();
+				row["AdjNum"]="0";
+				row["balance"]=balanceForward.ToString("f");
+				row["balanceDouble"]=balanceForward;
+				row["chargesDouble"]=0;
+				row["charges"]="";
+				row["ClaimNum"]="0";
+				row["ClaimPaymentNum"]="0";
+				row["colorText"]=Color.Black.ToArgb().ToString();
+				row["creditsDouble"]="0";
+				row["credits"]="";
+				row["DateTime"]=DateTime.MinValue;
+				row["date"]="";
+				row["description"]=Lan.g("AccountModule","Balance Forward");
+				row["patient"]="";
+				row["PayNum"]="0";
+				row["ProcCode"]="";
+				row["ProcNum"]="0";
+				row["prov"]="";
+				row["tth"]="";
+				rows.Insert(0,row);
+			}
+			//Finally, add rows to new table-----------------------------------------------------------------------
 			for(int i=0;i<rows.Count;i++) {
 				table.Rows.Add(rows[i]);
 			}
-			DataView view = table.DefaultView;
-			view.Sort = "DateTime";
-			table = view.ToTable();
-			return table;
+			//DataView view = table.DefaultView;
+			//view.Sort = "DateTime";
+			//table = view.ToTable();
+			//return table;
+			retVal.Tables.Add(table);
 		}
+
+		
 
 		/*
 		///<summary>The supplied DataRows must include the following columns: ProcNum,ProcDate,Priority,ToothRange,ToothNum,ProcCode.
@@ -237,11 +306,20 @@ namespace OpenDentBusiness {
 
 	}
 
-	/*
-	public class DtoAccountModuleGetAll:DtoQueryBase {
-		public int PatNum;
-		public bool ViewingInRecall;
-	}*/
+	///<summary>A generic comparison that sorts the rows of the account table by date and type.</summary>
+	class AccountLineComparer : IComparer<DataRow>	{
+		public AccountLineComparer(){
+
+		}
+		
+		///<summary>A generic comparison that sorts the rows of the account table by date and type.</summary>
+		public int Compare (DataRow rowA,DataRow rowB){
+			//if different types
+
+			//if same type
+			return ((DateTime)rowA["DateTime"]).CompareTo((DateTime)rowB["DateTime"]);
+		}
+	}
 
 
 }

@@ -2146,6 +2146,7 @@ namespace OpenDental {
 				row.Cells.Add(table.Rows[i]["charges"].ToString());
 				row.Cells.Add(table.Rows[i]["credits"].ToString());
 				row.Cells.Add(table.Rows[i]["balance"].ToString());
+				row.ColorText=Color.FromArgb(PIn.PInt(table.Rows[i]["colorText"].ToString()));
 				gridAccount.Rows.Add(row);
 			}
 			/*for(int i=0;i<AcctLineList.Count;i++){
@@ -2272,10 +2273,14 @@ namespace OpenDental {
 		}
 
 		private void gridAccount_CellDoubleClick(object sender, OpenDental.UI.ODGridClickEventArgs e) {
-			/*
 			if(ViewingInRecall) return;
-			switch (AcctLineList[e.Row].Type){
-				default:
+			DataTable table=DataSetMain.Tables["Account"];
+			if(table.Rows[e.Row]["ProcNum"].ToString()!="0"){
+				Procedure ProcCur=Procedures.GetOneProc(PIn.PInt(table.Rows[e.Row]["ProcNum"].ToString()),true);
+				FormProcEdit FormPE=new FormProcEdit(ProcCur,PatCur,FamCur,InsPlanList);
+				FormPE.ShowDialog();
+			}
+			/*	default:
 					Procedure ProcCur=Procedures.GetOneProc(arrayProc[AcctLineList[e.Row].Index].ProcNum,true);
 					FormProcEdit FormPE=new FormProcEdit(ProcCur,PatCur,FamCur,InsPlanList);
 					FormPE.ShowDialog();
@@ -2319,10 +2324,9 @@ namespace OpenDental {
 						PatCur.PatNum=FormPayPlan2.GotoPatNum;//switches to other patient.
 					}
 					break;	
-			}//end switch
+			}//end switch*/
 			//Shared.ComputeBalances();//use whenever a change would affect the total
 			ModuleSelected(PatCur.PatNum);
-			*/
 		}
 
 		/*private void tbAccount_CellDoubleClicked(object sender, CellEventArgs e){
@@ -3980,7 +3984,7 @@ namespace OpenDental {
 		}
 	}
 
-	///<summary>A set of data representing a statement for one family.  Could also be represented by a Dataset at a lower level in the program.  One table would have general fields for the statement.  One table would have a row for each patient in the family with data about that patient, like name, balance, appt.  The remaining tables would be named similar to this: "pat234", where 234 would be the patNum.  Those tables would hold the data for the actual grids for each patient.</summary>
+	///<summary>A set of data representing a statement for one family.  Could also be represented by a Dataset at a lower level in the program.  "general" table would have general fields for the statement.  "patient" table would have a row for each patient in the family with data about that patient, like name, balance, appt.  The remaining tables would be named similar to this: "account234", where 234 would be the patNum.  Those tables would hold the data for the actual grids for each patient.  If the table is combined for the entire family, it would be called "account".</summary>
 	public class FamilyStatementData{
 		///<summary>PatNum of the guarantor.</summary>
 		public int GuarNum;

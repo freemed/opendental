@@ -1,7 +1,7 @@
 using System;
-using OpenDentBusiness;
+using System.Data;
 
-namespace OpenDental
+namespace OpenDentBusiness
 {
 	///<summary></summary>
 	public class Family{
@@ -20,7 +20,7 @@ namespace OpenDental
 					return List[i].GetNameLF();
 				}
 			}
-			return Patients.GetLim(myPatNum).GetNameLF();
+			return GetLim(myPatNum).GetNameLF();
 		}
 
 		///<summary>Gets last, (preferred) first middle</summary>
@@ -42,7 +42,7 @@ namespace OpenDental
 					return List[i].GetNameFL();
 				}
 			}
-			return Patients.GetLim(myPatNum).GetNameFL();
+			return GetLim(myPatNum).GetNameFL();
 		}
 
 		///<summary>Gets (preferred)first middle last</summary>
@@ -76,6 +76,32 @@ namespace OpenDental
 				}
 			}
 			return retVal;
+		}
+
+		/// <summary>Duplicate of the same class in Patients.  Gets nine of the most useful fields from the db for the given patnum.</summary>
+		public static Patient GetLim(int patNum){
+			if(patNum==0){
+				return new Patient();
+			}
+			string command= 
+				"SELECT PatNum,LName,FName,MiddleI,Preferred,CreditType,Guarantor,HasIns,SSN " 
+				+"FROM patient "
+				+"WHERE PatNum = '"+patNum.ToString()+"'";
+ 			DataTable table=General2.GetTable(command);
+			if(table.Rows.Count==0){
+				return new Patient();
+			}
+			Patient Lim=new Patient();
+			Lim.PatNum     = PIn.PInt   (table.Rows[0][0].ToString());
+			Lim.LName      = PIn.PString(table.Rows[0][1].ToString());
+			Lim.FName      = PIn.PString(table.Rows[0][2].ToString());
+			Lim.MiddleI    = PIn.PString(table.Rows[0][3].ToString());
+			Lim.Preferred  = PIn.PString(table.Rows[0][4].ToString());
+			Lim.CreditType = PIn.PString(table.Rows[0][5].ToString());
+			Lim.Guarantor  = PIn.PInt   (table.Rows[0][6].ToString());
+			Lim.HasIns     = PIn.PString(table.Rows[0][7].ToString());
+			Lim.SSN        = PIn.PString(table.Rows[0][8].ToString());
+			return Lim;
 		}
 
 	}

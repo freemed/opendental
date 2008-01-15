@@ -225,7 +225,6 @@
     <Compile Include="Data Interface\EmailTemplates.cs" />
     <Compile Include="Data Interface\Employees.cs" />
     <Compile Include="Data Interface\Employers.cs" />
-    <Compile Include="Data Interface\Family.cs" />
     <Compile Include="Data Interface\Fees.cs" />
     <Compile Include="Data Interface\General.cs" />
     <Compile Include="Data Interface\GroupPermissions.cs" />

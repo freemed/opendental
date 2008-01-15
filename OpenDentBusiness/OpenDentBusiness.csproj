@@ -83,6 +83,7 @@
     </Compile>
     <Compile Include="Data Interface\DocAttaches.cs" />
     <Compile Include="Data Interface\Documents.cs" />
+    <Compile Include="Data Interface\Family.cs" />
     <Compile Include="Data Interface\General2.cs" />
     <Compile Include="Data Interface\MountDefs.cs" />
     <Compile Include="Data Interface\MountItemDefs.cs" />

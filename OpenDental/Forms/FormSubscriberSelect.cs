@@ -3,6 +3,7 @@ using System.Drawing;
 using System.Collections;
 using System.ComponentModel;
 using System.Windows.Forms;
+using OpenDentBusiness;
 
 namespace OpenDental{
 	/// <summary>Only used when adding an insurance plan from ContrFamily.  Lets user select the subscriber from </summary>
