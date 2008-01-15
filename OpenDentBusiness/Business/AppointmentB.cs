@@ -60,7 +60,7 @@ namespace OpenDentBusiness{
 			return retVal;
 		}
 
-		///<summary>If aptnum is specified, then the dates are ignored.  If getting data for one planned appt, then pass isPlanned=true.  This changes which procedures are retrieved.</summary>
+		///<summary>If aptnum is specified, then the dates are ignored.  If getting data for one planned appt, then pass isPlanned=1.  This changes which procedures are retrieved.</summary>
 		private static DataTable GetPeriodApptsTable(string strDateStart,string strDateEnd,string strAptNum,string strIsPlanned) {
 			DateTime dateStart=PIn.PDate(strDateStart);
 			DateTime dateEnd=PIn.PDate(strDateEnd);

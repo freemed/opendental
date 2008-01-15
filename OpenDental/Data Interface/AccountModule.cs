@@ -8,6 +8,7 @@ using OpenDentBusiness;
 
 namespace OpenDental{
 	public class AccountModule{
+		/*
 		///<summary>This is just the first version of this function.  It only gets selected parts of the Account refresh.</summary>
 		public static DataSet GetAll(int patNum,bool viewingInRecall){
 			try {
@@ -25,9 +26,12 @@ namespace OpenDental{
 				MessageBox.Show(e.Message);
 				return new DataSet();//It might be better to return null.
 			}
+		}*/
+
+		///<summary>This is just the first version of this function.  It only gets selected parts of the Account refresh.</summary>
+		public static DataSet GetAll(int patNum,bool viewingInRecall){
+			return General.GetDS("AccountModule.GetAll",patNum.ToString(),POut.PBool(viewingInRecall));
 		}
-
-
 
 
 

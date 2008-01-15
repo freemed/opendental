@@ -6269,6 +6269,9 @@ namespace OpenDental{
 				General.NonQEx(command);
 				command = "ALTER TABLE computerpref ADD TaskY int NOT NULL default '625'";
 				General.NonQEx(command);
+				//added after r1182
+				command = "UPDATE preference SET ValueString = 'http://70.90.133.65:1942/WebServiceCustomerUpdates/Service1.asmx' WHERE PrefName = 'UpdateServerAddress'";
+				General.NonQEx(command);
 
 
 				

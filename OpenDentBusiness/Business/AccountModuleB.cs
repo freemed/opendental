@@ -6,9 +6,12 @@ using System.Drawing;
 
 namespace OpenDentBusiness {
 	public class AccountModuleB {
-		public static DataSet GetAll(int patNum,bool viewingInRecall){
+		///<summary>Parameters: 0:patNum, 1:viewingInRecall</summary>
+		public static DataSet GetAll(string[] parameters){//int patNum,bool viewingInRecall){
+			int patNum=PIn.PInt(parameters[0]);
+			bool viewingInRecall=PIn.PBool(parameters[1]);		
 			DataSet retVal=new DataSet();
-			if (viewingInRecall) {
+			if(viewingInRecall) {
 				retVal.Tables.Add(ChartModuleB.GetProgNotes(patNum, false));
 			}
 			else {
@@ -156,10 +159,11 @@ namespace OpenDentBusiness {
 
 	}
 
+	/*
 	public class DtoAccountModuleGetAll:DtoQueryBase {
 		public int PatNum;
 		public bool ViewingInRecall;
-	}
+	}*/
 
 
 }
