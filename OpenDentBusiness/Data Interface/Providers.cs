@@ -15,14 +15,14 @@ namespace OpenDentBusiness{
 
 		///<summary>Refreshes List with all providers.</summary>
 		public static void RefreshOnClient(){
-			DataTable table=General2.GetDS("Providers.RefreshOnServer").Tables[0];
+			DataTable table=General.GetDS("Providers.RefreshOnServer").Tables[0];
 			FillArrays(table);//now, we have an arrays on both the client and the server.
 		}
 
 		///<summary>Does not get called directly from the UI.</summary>
 		public static DataSet RefreshOnServer(){
 			string command="SELECT * FROM provider ORDER BY ItemOrder";
-			DataTable table=General2.GetTable(command);
+			DataTable table=General.GetTable(command);
 			DataSet retVal=new DataSet();
 			retVal.Tables.Add(table);
 			FillArrays(table);
@@ -91,7 +91,7 @@ namespace OpenDentBusiness{
 				+",NationalProvID = '"+POut.PString(prov.NationalProvID)+"'"
 				+",CanadianOfficeNum = '"+POut.PString(prov.CanadianOfficeNum)+"'"
 				+" WHERE provnum = '" +POut.PInt(prov.ProvNum)+"'";
- 			General2.NonQ(command);
+ 			General.NonQ(command);
 		}
 
 		///<summary></summary>
@@ -123,13 +123,13 @@ namespace OpenDentBusiness{
 				+"'"+POut.PString(prov.NationalProvID)+"', "
 				+"'"+POut.PString(prov.CanadianOfficeNum)+"')";
 			//MessageBox.Show(string command);
- 			prov.ProvNum=General2.NonQ(command,true);
+ 			prov.ProvNum=General.NonQ(command,true);
 		}
 
 		///<summary>Only used from FormProvEdit if user clicks cancel before finishing entering a new provider.</summary>
 		public static void Delete(Provider prov){
 			string command="DELETE from provider WHERE provnum = '"+prov.ProvNum.ToString()+"'";
- 			General2.NonQ(command);
+ 			General.NonQ(command);
 		}
 
 		///<summary>Gets table for main provider edit list.  SchoolClass is usually zero to indicate all providers.  IsAlph will sort aphabetically instead of by ItemOrder.</summary>
@@ -146,7 +146,7 @@ namespace OpenDentBusiness{
 			else {
 				command+="ORDER BY ItemOrder";
 			}
-			return General2.GetTable(command);
+			return General.GetTable(command);
 		}
 
 		///<summary></summary>
@@ -264,7 +264,7 @@ namespace OpenDentBusiness{
 		public static int GetNextItemOrder(){
 			//Is this valid in Oracle??
 			string command="SELECT MAX(ItemOrder) FROM provider";
-			DataTable table=General2.GetTable(command);
+			DataTable table=General.GetTable(command);
 			if(table.Rows.Count==0){
 				return 1;
 			}
@@ -275,7 +275,7 @@ namespace OpenDentBusiness{
 		public static string GetDuplicateAbbrs(){
 			string command="SELECT Abbr FROM provider p1 WHERE EXISTS"
 				+"(SELECT * FROM provider p2 WHERE p1.ProvNum!=p2.ProvNum AND p1.Abbr=p2.Abbr) GROUP BY Abbr";
-			DataTable table=General2.GetTable(command);
+			DataTable table=General.GetTable(command);
 			if(table.Rows.Count==0) {
 				return "";
 			}

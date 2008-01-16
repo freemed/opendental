@@ -15,7 +15,7 @@ namespace OpenDentBusiness {
 		///<summary>Gets a list of all MountItemDefs when program first opens.</summary>
 		public static void Refresh() {
 			string command="SELECT * FROM mountitemdef";
-			DataTable table=General2.GetTable(command);
+			DataTable table=General.GetTable(command);
 			Listt=new List<MountItemDef>();
 			MountItemDef mount;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -39,7 +39,7 @@ namespace OpenDentBusiness {
 				+",Width = '"     +POut.PInt(def.Width)+"'"
 				+",Height = '"    +POut.PInt(def.Height)+"'"
 				+" WHERE MountItemDefNum  ='"+POut.PInt (def.MountItemDefNum)+"'";
-			General2.NonQ(command);
+			General.NonQ(command);
 		}
 
 		///<summary></summary>
@@ -51,13 +51,13 @@ namespace OpenDentBusiness {
 				+"'"+POut.PInt(def.Ypos)+"', "
 				+"'"+POut.PInt(def.Width)+"', "
 				+"'"+POut.PInt(def.Height)+"')";
-			def.MountItemDefNum=General2.NonQ(command,true);
+			def.MountItemDefNum=General.NonQ(command,true);
 		}
 
 		///<summary>No need to surround with try/catch, because all deletions are allowed.</summary>
 		public static void Delete(int mountItemDefNum) {
 			string command="DELETE FROM mountitemdef WHERE MountItemDefNum="+POut.PInt(mountItemDefNum);
-			General2.NonQ(command);
+			General.NonQ(command);
 		}
 
 		

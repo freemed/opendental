@@ -12,7 +12,7 @@ namespace OpenDentBusiness{
 		///<summary>For one patient. This should be followed by Documents.Refresh</summary>
 		public static List<DocAttach> Refresh(int patNum){
 			string command="SELECT * FROM docattach WHERE PatNum = "+POut.PInt(patNum);
-			DataTable table=General2.GetTable(command);
+			DataTable table=General.GetTable(command);
 			List<DocAttach> list=new List<DocAttach>();//[table.Rows.Count];
 			DocAttach attach;
 			for (int i=0;i<table.Rows.Count;i++){
@@ -42,10 +42,10 @@ namespace OpenDentBusiness{
 				 "'"+POut.PInt(attach.PatNum)+"', "
 				+"'"+POut.PInt(attach.DocNum)+"')";
 			if(PrefB.RandomKeys) {
-				General2.NonQ(command);
+				General.NonQ(command);
 			}
 			else {
-				attach.DocAttachNum=General2.NonQ(command,true);
+				attach.DocAttachNum=General.NonQ(command,true);
 			}
 		}
 

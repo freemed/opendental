@@ -11,13 +11,13 @@ namespace OpenDentBusiness{
 		///<summary></summary>
 		public static PatientNote Refresh(int patNum,int guarantor){
 			string command="SELECT COUNT(*) FROM patientnote WHERE patnum = '"+POut.PInt(patNum)+"'";
-			DataTable table=General2.GetTable(command);
+			DataTable table=General.GetTable(command);
 			if(table.Rows[0][0].ToString()=="0"){
 				InsertRow(patNum);
 			}
 			command ="SELECT PatNum,ApptPhone,Medical,Service,MedicalComp,Treatment,CCNumber,CCExpiration "
 				+"FROM patientnote WHERE patnum ='"+POut.PInt(patNum)+"'";
-			table=General2.GetTable(command);
+			table=General.GetTable(command);
 			PatientNote Cur=new PatientNote();
 			Cur.PatNum      = PIn.PInt   (table.Rows[0][0].ToString());
 			Cur.ApptPhone   = PIn.PString(table.Rows[0][1].ToString());
@@ -30,7 +30,7 @@ namespace OpenDentBusiness{
 			//fam financial note:
 			command = 
 				"SELECT * FROM patientnote WHERE patnum ='"+POut.PInt(guarantor)+"'";
-			table=General2.GetTable(command);
+			table=General.GetTable(command);
 			if(table.Rows.Count==0){
 				InsertRow(guarantor);
 			}
@@ -38,7 +38,7 @@ namespace OpenDentBusiness{
 				"SELECT famfinancial "
 				+"FROM patientnote WHERE patnum ='"+POut.PInt(guarantor)+"'";
 			//MessageBox.Show(command);
-			table=General2.GetTable(command);
+			table=General.GetTable(command);
 			Cur.FamFinancial= PIn.PString(table.Rows[0][0].ToString());
 			return Cur;
 		}
@@ -55,12 +55,12 @@ namespace OpenDentBusiness{
 				+ ",CCExpiration = "+POut.PDate  (Cur.CCExpiration)
 				+" WHERE patnum = '"+POut.PInt   (Cur.PatNum)+"'";
 			//MessageBox.Show(command);
-			General2.NonQ(command);
+			General.NonQ(command);
 			command = "UPDATE patientnote SET "
 				+ "famfinancial = '"+POut.PString(Cur.FamFinancial)+"'"
 				+" WHERE patnum = '"+POut.PInt   (guarantor)+"'";
 			//MessageBox.Show(command);
-			General2.NonQ(command);
+			General.NonQ(command);
 		}
 
 		///<summary></summary>
@@ -68,7 +68,7 @@ namespace OpenDentBusiness{
 			string command = "INSERT INTO patientnote (patnum"
 				+") VALUES('"+patNum+"')";
 			//MessageBox.Show(command);
-			General2.NonQ(command);
+			General.NonQ(command);
 		}
 
 	
