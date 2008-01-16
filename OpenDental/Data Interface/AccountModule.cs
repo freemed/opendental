@@ -29,8 +29,8 @@ namespace OpenDental{
 		}*/
 
 		///<summary>Gets the Account table and the Commlog table.</summary>
-		public static DataSet GetAll(int patNum,bool viewingInRecall,DateTime fromDate,DateTime toDate){
-			return General.GetDS("AccountModule.GetAll",patNum.ToString(),POut.PBool(viewingInRecall),fromDate.ToShortDateString(),toDate.ToShortDateString());
+		public static DataSet GetAll(int patNum,bool viewingInRecall,DateTime fromDate,DateTime toDate,bool isFamily){
+			return General.GetDS("AccountModule.GetAll",patNum.ToString(),POut.PBool(viewingInRecall),fromDate.ToShortDateString(),toDate.ToShortDateString(),POut.PBool(isFamily));
 		}
 
 

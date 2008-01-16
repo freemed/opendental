@@ -62,7 +62,7 @@ namespace OpenDentBusiness {
 				return RemotingClient.ProcessQuery(dto);
 			}
 		}
-
+		/*
 		public static DataSet GetDS(string methodName) {
 			return GetDS(methodName,new string[] {});
 		}
@@ -83,8 +83,13 @@ namespace OpenDentBusiness {
 			return GetDS(methodName,new string[] { parameter0,parameter1,parameter2,parameter3 });
 		}
 
-		///<summary>This is the new way.  If there are more than about 4 parameters, then we'll have to create a different DTO to pass them.  This has not been done yet.  A dataset would be used to pass the parameters up because the information can be better organized, and properly keyed.  But for typical cases with just one or a few parameters, this works great.</summary>
-		public static DataSet GetDS(string methodName, string[] parameters) {
+		public static DataSet GetDS(string methodName,string parameter0,string parameter1,string parameter2,string parameter3,
+			string parameter4) {
+			return GetDS(methodName,new string[] { parameter0,parameter1,parameter2,parameter3,parameters4 });
+		}*/
+
+		///<summary>This is the new way.  If there are more than about 4 parameters, then we'll have to create a different DTO to pass them.  This has not been done yet.  We will probably use objects (like patient) is some situations, and dictionaries of some sort for other situations.  Either way, the complex information would be better organized and properly keyed.  But for typical cases with just one or a few parameters, this works great.</summary>
+		public static DataSet GetDS(string methodName, params string[] parameters) {
 			if(RemotingClient.OpenDentBusinessIsLocal) {
 				return GeneralB.GetDS(methodName,parameters);
 			}

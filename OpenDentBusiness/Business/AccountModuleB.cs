@@ -8,12 +8,13 @@ namespace OpenDentBusiness {
 	public class AccountModuleB {
 		private static DataSet retVal;
 
-		///<summary>Parameters: 0:patNum, 1:viewingInRecall, 2:fromDate, 3:toDate</summary>
+		///<summary>Parameters: 0:patNum, 1:viewingInRecall, 2:fromDate, 3:toDate, 4:isFamily.  If isFamily=1, also pass in a PatNum of guarantor to get entire family intermingled.</summary>
 		public static DataSet GetAll(string[] parameters){
 			int patNum=PIn.PInt(parameters[0]);
 			bool viewingInRecall=PIn.PBool(parameters[1]);
 			DateTime fromDate=PIn.PDate(parameters[2]);
 			DateTime toDate=PIn.PDate(parameters[3]);
+			bool isFamily=PIn.PBool(parameters[4]);
 			retVal=new DataSet();
 			if(viewingInRecall) {
 				retVal.Tables.Add(ChartModuleB.GetProgNotes(patNum, false));
@@ -21,7 +22,7 @@ namespace OpenDentBusiness {
 			else {
 				GetCommLog(patNum);
 			}
-			GetAccount(patNum,fromDate,toDate);//Gets 2 tables: account(or account###,account###,etc) and patient
+			GetAccount(patNum,fromDate,toDate,isFamily);//Gets 2 tables: account(or account###,account###,etc) and patient
 			return retVal;
 		}
 
@@ -144,7 +145,7 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary>Also gets the patient table, which has one row for each family member.</summary>
-		private static void GetAccount(int patNum,DateTime fromDate,DateTime toDate) {
+		private static void GetAccount(int patNum,DateTime fromDate,DateTime toDate,bool isFamily) {
 			DataConnection dcon=new DataConnection();
 			DataTable table=new DataTable("account");
 			Family fam=Patients.GetFamily(patNum);
@@ -213,7 +214,7 @@ namespace OpenDentBusiness {
 				if(rawProc.Rows[i]["LaymanTerm"].ToString()!=""){
 					row["description"]=rawProc.Rows[i]["LaymanTerm"].ToString();
 				}
-				row["patient"]=pat.GetNameFirst();
+				row["patient"]=fam.GetNameInFamFirst(PIn.PInt(rawProc.Rows[i]["PatNum"].ToString()));
 				row["PatNum"]=rawProc.Rows[i]["PatNum"].ToString();
 				row["PayNum"]="0";
 				row["ProcCode"]=rawProc.Rows[i]["ProcCode"].ToString();
@@ -230,7 +231,7 @@ namespace OpenDentBusiness {
 			//Pass off all the rows for the whole family in order to compute the patient balances----------------
 			GetPatientTable(fam,rows);
 			//Filter out patients that we are not interested in--------------------------------------------------
-			if(patNum!=0){//if it is 0, then we will be showing all patients with no filtering
+			if(!isFamily){//if isFamily, then we will be showing all patients with no filtering
 				for(int i=rows.Count-1;i>=0;i--) {//go backwards and remove from end
 					if(rows[i]["PatNum"].ToString()!=patNum.ToString()){
 						rows.RemoveAt(i);

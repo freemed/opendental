@@ -57,6 +57,16 @@ namespace OpenDentBusiness
 			return retStr;
 		}
 
+		///<summary>Gets first name from the family list.  If the patient is not in the family list, then it gets that info from the database.</summary>
+		public string GetNameInFamFirst(int myPatNum){
+			for(int i=0;i<List.Length;i++){
+				if(List[i].PatNum==myPatNum){
+					return List[i].GetNameFirst();
+				}
+			}
+			return GetLim(myPatNum).GetNameFirst();
+		}
+
 		///<summary>The index of the patient within the family.  Returns -1 if not found.</summary>
 		public int GetIndex(int patNum){
 			for(int i=0;i<List.Length;i++){

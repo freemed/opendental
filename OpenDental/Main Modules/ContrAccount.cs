@@ -324,7 +324,7 @@ namespace OpenDental {
 			// 
 			this.panelCommButs.Controls.Add(this.butTrojan);
 			this.panelCommButs.Controls.Add(this.butComm);
-			this.panelCommButs.Location = new System.Drawing.Point(769,429);
+			this.panelCommButs.Location = new System.Drawing.Point(749,429);
 			this.panelCommButs.Name = "panelCommButs";
 			this.panelCommButs.Size = new System.Drawing.Size(163,242);
 			this.panelCommButs.TabIndex = 69;
@@ -426,7 +426,7 @@ namespace OpenDental {
 			this.panelProgNotes.Controls.Add(this.gridProg);
 			this.panelProgNotes.Location = new System.Drawing.Point(0,461);
 			this.panelProgNotes.Name = "panelProgNotes";
-			this.panelProgNotes.Size = new System.Drawing.Size(769,227);
+			this.panelProgNotes.Size = new System.Drawing.Size(749,227);
 			this.panelProgNotes.TabIndex = 211;
 			// 
 			// butShowNone
@@ -436,7 +436,7 @@ namespace OpenDental {
 			this.butShowNone.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butShowNone.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butShowNone.CornerRadius = 4F;
-			this.butShowNone.Location = new System.Drawing.Point(695,207);
+			this.butShowNone.Location = new System.Drawing.Point(677,207);
 			this.butShowNone.Name = "butShowNone";
 			this.butShowNone.Size = new System.Drawing.Size(58,16);
 			this.butShowNone.TabIndex = 216;
@@ -451,7 +451,7 @@ namespace OpenDental {
 			this.butShowAll.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butShowAll.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butShowAll.CornerRadius = 4F;
-			this.butShowAll.Location = new System.Drawing.Point(632,207);
+			this.butShowAll.Location = new System.Drawing.Point(614,207);
 			this.butShowAll.Name = "butShowAll";
 			this.butShowAll.Size = new System.Drawing.Size(53,16);
 			this.butShowAll.TabIndex = 215;
@@ -465,7 +465,7 @@ namespace OpenDental {
 			this.checkNotes.Checked = true;
 			this.checkNotes.CheckState = System.Windows.Forms.CheckState.Checked;
 			this.checkNotes.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkNotes.Location = new System.Drawing.Point(642,191);
+			this.checkNotes.Location = new System.Drawing.Point(624,191);
 			this.checkNotes.Name = "checkNotes";
 			this.checkNotes.Size = new System.Drawing.Size(102,13);
 			this.checkNotes.TabIndex = 214;
@@ -482,7 +482,7 @@ namespace OpenDental {
 			this.groupBox7.Controls.Add(this.checkLabCase);
 			this.groupBox7.Controls.Add(this.checkRx);
 			this.groupBox7.Controls.Add(this.checkComm);
-			this.groupBox7.Location = new System.Drawing.Point(632,88);
+			this.groupBox7.Location = new System.Drawing.Point(614,88);
 			this.groupBox7.Name = "groupBox7";
 			this.groupBox7.Size = new System.Drawing.Size(121,101);
 			this.groupBox7.TabIndex = 213;
@@ -578,7 +578,7 @@ namespace OpenDental {
 			this.groupBox6.Controls.Add(this.checkShowR);
 			this.groupBox6.Controls.Add(this.checkShowC);
 			this.groupBox6.Controls.Add(this.checkShowTP);
-			this.groupBox6.Location = new System.Drawing.Point(632,1);
+			this.groupBox6.Location = new System.Drawing.Point(614,1);
 			this.groupBox6.Name = "groupBox6";
 			this.groupBox6.Size = new System.Drawing.Size(121,85);
 			this.groupBox6.TabIndex = 212;
@@ -641,7 +641,7 @@ namespace OpenDental {
 			this.gridProg.Name = "gridProg";
 			this.gridProg.ScrollValue = 0;
 			this.gridProg.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
-			this.gridProg.Size = new System.Drawing.Size(623,230);
+			this.gridProg.Size = new System.Drawing.Size(603,230);
 			this.gridProg.TabIndex = 211;
 			this.gridProg.Title = "Progress Notes";
 			this.gridProg.TranslationName = "TableProg";
@@ -871,7 +871,7 @@ namespace OpenDental {
 			this.gridRepeat.Location = new System.Drawing.Point(0,62);
 			this.gridRepeat.Name = "gridRepeat";
 			this.gridRepeat.ScrollValue = 0;
-			this.gridRepeat.Size = new System.Drawing.Size(769,75);
+			this.gridRepeat.Size = new System.Drawing.Size(749,75);
 			this.gridRepeat.TabIndex = 74;
 			this.gridRepeat.Title = "Repeating Charges";
 			this.gridRepeat.TranslationName = "TableRepeatCharges";
@@ -884,7 +884,7 @@ namespace OpenDental {
 			this.gridAccount.Name = "gridAccount";
 			this.gridAccount.ScrollValue = 0;
 			this.gridAccount.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
-			this.gridAccount.Size = new System.Drawing.Size(769,284);
+			this.gridAccount.Size = new System.Drawing.Size(749,284);
 			this.gridAccount.TabIndex = 73;
 			this.gridAccount.Title = "Patient Account";
 			this.gridAccount.TranslationName = "TableAccount";
@@ -894,11 +894,11 @@ namespace OpenDental {
 			// gridAcctPat
 			// 
 			this.gridAcctPat.HScrollVisible = false;
-			this.gridAcctPat.Location = new System.Drawing.Point(769,173);
+			this.gridAcctPat.Location = new System.Drawing.Point(749,173);
 			this.gridAcctPat.Name = "gridAcctPat";
 			this.gridAcctPat.ScrollValue = 0;
 			this.gridAcctPat.SelectedRowColor = System.Drawing.Color.DarkSalmon;
-			this.gridAcctPat.Size = new System.Drawing.Size(163,137);
+			this.gridAcctPat.Size = new System.Drawing.Size(183,137);
 			this.gridAcctPat.TabIndex = 72;
 			this.gridAcctPat.Title = "Select Patient";
 			this.gridAcctPat.TranslationName = "TableAccountPat";
@@ -910,7 +910,7 @@ namespace OpenDental {
 			this.gridComm.Location = new System.Drawing.Point(0,440);
 			this.gridComm.Name = "gridComm";
 			this.gridComm.ScrollValue = 0;
-			this.gridComm.Size = new System.Drawing.Size(769,226);
+			this.gridComm.Size = new System.Drawing.Size(749,226);
 			this.gridComm.TabIndex = 71;
 			this.gridComm.Title = "Communications Log";
 			this.gridComm.TranslationName = "TableCommLogAccount";
@@ -1106,8 +1106,14 @@ namespace OpenDental {
 
 		///<summary></summary>
 		public void ModuleSelected(int patNum) {
-			RefreshModuleData(patNum);
-			RefreshModuleScreen();
+			RefreshModuleData(patNum,false);
+			RefreshModuleScreen(false);
+		}
+
+		///<summary></summary>
+		public void ModuleSelected(int patNum,bool isSelectingFamily) {
+			RefreshModuleData(patNum,isSelectingFamily);
+			RefreshModuleScreen(isSelectingFamily);
 		}
 
 		///<summary>Used when jumping to this module and directly to a claim.</summary>
@@ -1156,7 +1162,7 @@ namespace OpenDental {
 		}
 
 		///<summary></summary>
-		private void RefreshModuleData(int patNum) {
+		private void RefreshModuleData(int patNum,bool isSelectingFamily) {
 			if(patNum==0) {
 				PatCur=null;
 				FamCur=null;
@@ -1180,10 +1186,10 @@ namespace OpenDental {
 			if(PrefB.GetBool("FuchsOptionsOn")) {
 				viewingInRecall=true;
 			}
-			DataSetMain=AccountModule.GetAll(patNum,viewingInRecall,fromDate,toDate);
+			DataSetMain=AccountModule.GetAll(patNum,viewingInRecall,fromDate,toDate,isSelectingFamily);
 		}
 
-		private void RefreshModuleScreen() {
+		private void RefreshModuleScreen(bool isSelectingFamily) {
 			if(PatCur==null) {
 				gridAccount.Enabled=false;
 				ToolBarMain.Buttons["Payment"].Enabled=false;
@@ -1212,7 +1218,7 @@ namespace OpenDental {
 				checkShowNotes.Checked=PrefB.GetBool("ShowNotesInAccount");
 			}
 			FillMain();
-			FillPats();
+			FillPats(isSelectingFamily);
 			FillMisc();
 			FillAging();
 			//FillInsInfo();
@@ -1238,7 +1244,7 @@ namespace OpenDental {
 		//	Patients.AddPatsToMenu(menuPatient,new EventHandler(menuPatient_Click),PatCur,FamCur);
 		//}
 
-		private void FillPats() {
+		private void FillPats(bool isSelectingFamily) {
 			if(PatCur==null) {
 				gridAcctPat.BeginUpdate();
 				gridAcctPat.Rows.Clear();
@@ -1247,14 +1253,16 @@ namespace OpenDental {
 			}
 			gridAcctPat.BeginUpdate();
 			gridAcctPat.Columns.Clear();
-			ODGridColumn col=new ODGridColumn(Lan.g("TableAccountPat","Patient"),95);
+			ODGridColumn col=new ODGridColumn(Lan.g("TableAccountPat","Patient"),105);
 			gridAcctPat.Columns.Add(col);
 			col=new ODGridColumn(Lan.g("TableAccountPat","Est Bal"),49,HorizontalAlignment.Right);
 			gridAcctPat.Columns.Add(col);
 			gridAcctPat.Rows.Clear();
 			ODGridRow row;
 			DataTable table=DataSetMain.Tables["patient"];
+			double bal=0;
 			for(int i=0;i<table.Rows.Count;i++) {
+				bal+=(double)table.Rows[i]["balanceDouble"];
 				row = new ODGridRow();
 				row.Cells.Add(table.Rows[i]["name"].ToString());
 				row.Cells.Add(table.Rows[i]["balance"].ToString());
@@ -1263,10 +1271,21 @@ namespace OpenDental {
 				}
 				gridAcctPat.Rows.Add(row);
 			}
+			//entire family
+			row = new ODGridRow();
+			row.Cells.Add(Lan.g(this,"Entire Family"));
+			row.Cells.Add(bal.ToString("f"));
+			row.Bold=true;
+			gridAcctPat.Rows.Add(row);
 			gridAcctPat.EndUpdate();
-			for(int i=0;i<FamCur.List.Length;i++) {
-				if(FamCur.List[i].PatNum==PatCur.PatNum) {
-					gridAcctPat.SetSelected(i,true);
+			if(isSelectingFamily){
+				gridAcctPat.SetSelected(FamCur.List.Length,true);
+			}
+			else{
+				for(int i=0;i<FamCur.List.Length;i++) {
+					if(FamCur.List[i].PatNum==PatCur.PatNum) {
+						gridAcctPat.SetSelected(i,true);
+					}
 				}
 			}
 		}
@@ -2107,7 +2126,7 @@ namespace OpenDental {
 			gridAccount.Columns.Add(col);
 			col=new ODGridColumn(Lan.g("TableAccount","Tth"),26);
 			gridAccount.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TableAccount","Description"),280);
+			col=new ODGridColumn(Lan.g("TableAccount","Description"),270);
 			gridAccount.Columns.Add(col);
 			col=new ODGridColumn(Lan.g("TableAccount","Charges"),60,HorizontalAlignment.Right);
 			gridAccount.Columns.Add(col);
@@ -2365,9 +2384,16 @@ namespace OpenDental {
 			if(ViewingInRecall){
 				return;
 			}
-			OnPatientSelected(FamCur.List[e.Row].PatNum,FamCur.List[e.Row].GetNameLF(),FamCur.List[e.Row].Email!="",
-				FamCur.List[e.Row].ChartNumber);
-			ModuleSelected(FamCur.List[e.Row].PatNum);
+			if(e.Row==FamCur.List.Length){//last row
+				OnPatientSelected(FamCur.List[0].PatNum,FamCur.List[0].GetNameLF(),FamCur.List[0].Email!="",
+					FamCur.List[0].ChartNumber);
+				ModuleSelected(FamCur.List[0].PatNum,true);
+			}
+			else{
+				OnPatientSelected(FamCur.List[e.Row].PatNum,FamCur.List[e.Row].GetNameLF(),FamCur.List[e.Row].Email!="",
+					FamCur.List[e.Row].ChartNumber);
+				ModuleSelected(FamCur.List[e.Row].PatNum);
+			}
 		}
 
 		private void ToolBarMain_ButtonClick(object sender, OpenDental.UI.ODToolBarButtonClickEventArgs e) {
