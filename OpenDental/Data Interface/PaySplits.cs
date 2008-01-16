@@ -219,6 +219,7 @@ namespace OpenDental{
 			return 0;
 		}
 
+		/*
 		///<summary>Used in ComputeBalances to compute balance for a single patient. Supply a list of all paysplits for the patient.</summary>
 		public static double ComputeBal(PaySplit[] list){//
 			double retVal=0;
@@ -226,7 +227,7 @@ namespace OpenDental{
 				retVal+=list[i].SplitAmt;
 			}
 			return retVal;
-		}
+		}*/
 
 		///<summary>Used in FormPayment to sych database with changes user made to the paySplit list for a payment.  Must supply an old list for comparison.  Only the differences are saved.</summary>
 		public static void UpdateList(List<PaySplit> oldSplitList,List<PaySplit> newSplitList) {

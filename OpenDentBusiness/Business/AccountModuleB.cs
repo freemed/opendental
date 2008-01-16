@@ -316,6 +316,112 @@ namespace OpenDentBusiness {
 				row["tth"]="";
 				rows.Add(row);
 			}
+			//claimpayments-------------------------------------------------------------------------------------
+			command="SELECT ClaimNum,ClaimPaymentNum,DateCP,SUM(InsPayAmt) _InsPayAmt,PatNum,ProcDate,"
+				+"ProvNum,SUM(WriteOff) _WriteOff "
+				+"FROM claimproc "
+				+"WHERE (Status=1 OR Status=4 OR Status=5) "//received,supplemental, or capclaim
+				+"AND (";
+			for(int i=0;i<fam.List.Length;i++){
+				if(i!=0){
+					command+="OR ";
+				}
+				command+="PatNum ="+POut.PInt(fam.List[i].PatNum)+" ";
+			}
+			command+=") GROUP BY ClaimNum ORDER BY DateCP";
+			DataTable rawClaimPay=dcon.GetTable(command);
+			DateTime procdate;
+			double writeoff;
+			for(int i=0;i<rawClaimPay.Rows.Count;i++){
+				row=table.NewRow();
+				row["AdjNum"]="0";
+				row["balance"]="";//fill this later
+				row["balanceDouble"]=0;//fill this later
+				row["chargesDouble"]=0;
+				row["charges"]="";
+				row["ClaimNum"]=rawClaimPay.Rows[i]["ClaimNum"].ToString();
+				row["ClaimPaymentNum"]=rawClaimPay.Rows[i]["ClaimPaymentNum"].ToString();
+//todo: change this color. 3 means payment. 4 means claim.  get a new color for inspayments.
+				row["colorText"]=DefB.Long[(int)DefCat.AccountColors][4].ItemColor.ToArgb().ToString();
+				amt=PIn.PDouble(rawClaimPay.Rows[i]["_InsPayAmt"].ToString());
+				writeoff=PIn.PDouble(rawClaimPay.Rows[i]["_WriteOff"].ToString());
+				row["creditsDouble"]=amt+writeoff;
+				row["credits"]=((double)row["creditsDouble"]).ToString("n");
+				dateT=PIn.PDateT(rawClaimPay.Rows[i]["DateCP"].ToString());
+				row["DateTime"]=dateT;
+				row["date"]=dateT.ToShortDateString();
+				procdate=PIn.PDateT(rawClaimPay.Rows[i]["ProcDate"].ToString());
+				row["description"]=Lan.g("AccountModule","Insurance Payment for Claim ")+procdate.ToShortDateString();
+				if(writeoff!=0){
+					row["description"]+="/r/n"+Lan.g("AccountModule","Payment: ")+amt.ToString("c")+"/r/n"
+						+Lan.g("AccountModule","Writeoff: ")+writeoff.ToString("c");
+				}
+				row["patient"]=fam.GetNameInFamFirst(PIn.PInt(rawClaimPay.Rows[i]["PatNum"].ToString()));
+				row["PatNum"]=rawClaimPay.Rows[i]["PatNum"].ToString();
+				row["PayNum"]="0";
+				row["ProcCode"]=Lan.g("AccountModule","InsPay");
+				row["ProcNum"]="0";
+				row["prov"]=Providers.GetAbbr(PIn.PInt(rawClaimPay.Rows[i]["ProvNum"].ToString()));
+				row["tth"]="";
+				rows.Add(row);
+			}
+			//claims (do not affect balance)-------------------------------------------------------------------------
+			command="SELECT CarrierName,ClaimFee,ClaimNum,ClaimStatus,ClaimType,DateService,PatNum,ProvTreat "
+				+"FROM claim "
+				+"LEFT JOIN insplan ON claim.PlanNum=insplan.PlanNum "
+				+"LEFT JOIN carrier ON carrier.CarrierNum=insplan.CarrierNum "
+				+"WHERE (";
+			for(int i=0;i<fam.List.Length;i++){
+				if(i!=0){
+					command+="OR ";
+				}
+				command+="PatNum ="+POut.PInt(fam.List[i].PatNum)+" ";
+			}
+			command+=") ORDER BY DateService";
+			DataTable rawClaim=dcon.GetTable(command);
+			for(int i=0;i<rawClaim.Rows.Count;i++){
+				row=table.NewRow();
+				row["AdjNum"]="0";
+				row["balance"]="";//fill this later
+				row["balanceDouble"]=0;//fill this later
+				row["chargesDouble"]=0;
+				row["charges"]="";
+				row["ClaimNum"]=rawClaim.Rows[i]["ClaimNum"].ToString();
+				row["ClaimPaymentNum"]="0";
+				row["colorText"]=DefB.Long[(int)DefCat.AccountColors][4].ItemColor.ToArgb().ToString();
+				row["creditsDouble"]=0;
+				row["credits"]="";
+				dateT=PIn.PDateT(rawClaim.Rows[i]["DateService"].ToString());
+				row["DateTime"]=dateT;
+				row["date"]=dateT.ToShortDateString();
+				//procdate=PIn.PDateT(rawClaim.Rows[i]["ProcDate"].ToString());
+				if(rawClaim.Rows[i]["ClaimType"].ToString()=="P"){
+					row["description"]=Lan.g("ContrAccount","Pri")+" ";
+				}
+				else if(rawClaim.Rows[i]["ClaimType"].ToString()=="S"){
+					row["description"]=Lan.g("ContrAccount","Sec")+" ";
+				}
+				else if(rawClaim.Rows[i]["ClaimType"].ToString()=="PreAuth"){
+					row["description"]=Lan.g("ContrAccount","PreAuth")+" ";
+				}
+				else if(rawClaim.Rows[i]["ClaimType"].ToString()=="Other"){
+					row["description"]="";
+				}
+				else if(rawClaim.Rows[i]["ClaimType"].ToString()=="Cap"){
+					row["description"]=Lan.g("ContrAccount","Cap")+" ";
+				}
+				amt=PIn.PDouble(rawClaim.Rows[i]["ClaimFee"].ToString());
+				row["description"]+=Lan.g("ContrAccount","Claim")+" "+amt.ToString("c")+" "
+					+rawClaim.Rows[i]["CarrierName"].ToString();
+				row["patient"]=fam.GetNameInFamFirst(PIn.PInt(rawClaim.Rows[i]["PatNum"].ToString()));
+				row["PatNum"]=rawClaim.Rows[i]["PatNum"].ToString();
+				row["PayNum"]="0";
+				row["ProcCode"]=Lan.g("AccountModule","Claim");
+				row["ProcNum"]="0";
+				row["prov"]=Providers.GetAbbr(PIn.PInt(rawClaim.Rows[i]["ProvTreat"].ToString()));
+				row["tth"]="";
+				rows.Add(row);
+			}
 
 
 
@@ -342,7 +448,12 @@ namespace OpenDentBusiness {
 				bal+=(double)rows[i]["chargesDouble"];
 				bal-=(double)rows[i]["creditsDouble"];
 				rows[i]["balanceDouble"]=bal;
-				rows[i]["balance"]=bal.ToString("n");
+				if(rows[i]["ClaimPaymentNum"].ToString()=="0" && rows[i]["ClaimNum"].ToString()!="0"){//claims
+					rows[i]["balance"]="";
+				}
+				else{
+					rows[i]["balance"]=bal.ToString("n");
+				}
 			}
 			//Remove rows outside of daterange-------------------------------------------------------------------
 			double balanceForward=0;

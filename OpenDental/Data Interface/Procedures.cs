@@ -460,6 +460,7 @@ namespace OpenDental{
 			}
 		}
 
+		/*
 		///<summary>Does not make any calls to db.</summary>
 		public static double ComputeBal(Procedure[] List){
 			double retVal=0;
@@ -476,7 +477,7 @@ namespace OpenDental{
 				}
 			}
 			return retVal;
-		}
+		}*/
 
 		///<summary>Sets the patient.DateFirstVisit if necessary. A visitDate is required to be passed in because it may not be today's date. This is triggered by:
 		///1. When any procedure is inserted regardless of status. From Chart or appointment. If no C procs and date blank, changes date.

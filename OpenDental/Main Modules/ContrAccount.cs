@@ -68,7 +68,6 @@ namespace OpenDental {
 		private CheckBox checkAudit;
 		private Panel panelAging;
 		private Label label10;
-		private TextBox textAgeBalance;
 		private Label labelAgeInsEst;
 		private TextBox textAgeInsEst;
 		private Label label8;
@@ -133,6 +132,7 @@ namespace OpenDental {
 		private InsPlan[] InsPlanList;
 		private FormPayment FormPayment2;
 		private FormCommItem FormCommItem2;
+		private Label labelAgeBalance;
 		private FormPayPlan FormPayPlan2;
 		#endregion
 
@@ -168,8 +168,6 @@ namespace OpenDental {
 			this.imageListMain = new System.Windows.Forms.ImageList(this.components);
 			this.panelSplitter = new System.Windows.Forms.Panel();
 			this.panelCommButs = new System.Windows.Forms.Panel();
-			this.butTrojan = new OpenDental.UI.Button();
-			this.butComm = new OpenDental.UI.Button();
 			this.contextMenuStatement = new System.Windows.Forms.ContextMenu();
 			this.menuItemStatementWalkout = new System.Windows.Forms.MenuItem();
 			this.menuItemStatementEmail = new System.Windows.Forms.MenuItem();
@@ -179,8 +177,6 @@ namespace OpenDental {
 			this.menuItemRepeatEmail = new System.Windows.Forms.MenuItem();
 			this.checkShowNotes = new System.Windows.Forms.CheckBox();
 			this.panelProgNotes = new System.Windows.Forms.Panel();
-			this.butShowNone = new OpenDental.UI.Button();
-			this.butShowAll = new OpenDental.UI.Button();
 			this.checkNotes = new System.Windows.Forms.CheckBox();
 			this.groupBox7 = new System.Windows.Forms.GroupBox();
 			this.checkShowTeeth = new System.Windows.Forms.CheckBox();
@@ -195,10 +191,8 @@ namespace OpenDental {
 			this.checkShowR = new System.Windows.Forms.CheckBox();
 			this.checkShowC = new System.Windows.Forms.CheckBox();
 			this.checkShowTP = new System.Windows.Forms.CheckBox();
-			this.gridProg = new OpenDental.UI.ODGrid();
 			this.panelAging = new System.Windows.Forms.Panel();
 			this.label10 = new System.Windows.Forms.Label();
-			this.textAgeBalance = new System.Windows.Forms.TextBox();
 			this.labelAgeInsEst = new System.Windows.Forms.Label();
 			this.textAgeInsEst = new System.Windows.Forms.TextBox();
 			this.label8 = new System.Windows.Forms.Label();
@@ -219,13 +213,19 @@ namespace OpenDental {
 			this.labelCC = new System.Windows.Forms.Label();
 			this.contextMenuPayment = new System.Windows.Forms.ContextMenu();
 			this.menuItemProvIncTrans = new System.Windows.Forms.MenuItem();
+			this.butShowNone = new OpenDental.UI.Button();
+			this.butShowAll = new OpenDental.UI.Button();
+			this.gridProg = new OpenDental.UI.ODGrid();
 			this.gridRepeat = new OpenDental.UI.ODGrid();
 			this.gridAccount = new OpenDental.UI.ODGrid();
 			this.gridAcctPat = new OpenDental.UI.ODGrid();
 			this.gridComm = new OpenDental.UI.ODGrid();
 			this.textFinNotes = new OpenDental.ODtextBox();
+			this.butTrojan = new OpenDental.UI.Button();
+			this.butComm = new OpenDental.UI.Button();
 			this.ToolBarMain = new OpenDental.UI.ODToolBar();
 			this.textUrgFinNote = new OpenDental.ODtextBox();
+			this.labelAgeBalance = new System.Windows.Forms.Label();
 			this.panelCommButs.SuspendLayout();
 			this.panelProgNotes.SuspendLayout();
 			this.groupBox7.SuspendLayout();
@@ -329,35 +329,6 @@ namespace OpenDental {
 			this.panelCommButs.Size = new System.Drawing.Size(163,242);
 			this.panelCommButs.TabIndex = 69;
 			// 
-			// butTrojan
-			// 
-			this.butTrojan.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butTrojan.Autosize = true;
-			this.butTrojan.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butTrojan.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butTrojan.CornerRadius = 4F;
-			this.butTrojan.Location = new System.Drawing.Point(3,29);
-			this.butTrojan.Name = "butTrojan";
-			this.butTrojan.Size = new System.Drawing.Size(146,25);
-			this.butTrojan.TabIndex = 93;
-			this.butTrojan.Text = "Send Transaction to Trojan";
-			this.butTrojan.Click += new System.EventHandler(this.butTrojan_Click);
-			// 
-			// butComm
-			// 
-			this.butComm.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butComm.Autosize = true;
-			this.butComm.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butComm.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butComm.CornerRadius = 4F;
-			this.butComm.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butComm.Location = new System.Drawing.Point(3,2);
-			this.butComm.Name = "butComm";
-			this.butComm.Size = new System.Drawing.Size(98,26);
-			this.butComm.TabIndex = 68;
-			this.butComm.Text = "Questionnaire";
-			this.butComm.Click += new System.EventHandler(this.butComm_Click);
-			// 
 			// contextMenuStatement
 			// 
 			this.contextMenuStatement.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
@@ -428,36 +399,6 @@ namespace OpenDental {
 			this.panelProgNotes.Name = "panelProgNotes";
 			this.panelProgNotes.Size = new System.Drawing.Size(749,227);
 			this.panelProgNotes.TabIndex = 211;
-			// 
-			// butShowNone
-			// 
-			this.butShowNone.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butShowNone.Autosize = true;
-			this.butShowNone.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butShowNone.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butShowNone.CornerRadius = 4F;
-			this.butShowNone.Location = new System.Drawing.Point(677,207);
-			this.butShowNone.Name = "butShowNone";
-			this.butShowNone.Size = new System.Drawing.Size(58,16);
-			this.butShowNone.TabIndex = 216;
-			this.butShowNone.Text = "None";
-			this.butShowNone.Visible = false;
-			this.butShowNone.Click += new System.EventHandler(this.butShowNone_Click);
-			// 
-			// butShowAll
-			// 
-			this.butShowAll.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butShowAll.Autosize = true;
-			this.butShowAll.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butShowAll.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butShowAll.CornerRadius = 4F;
-			this.butShowAll.Location = new System.Drawing.Point(614,207);
-			this.butShowAll.Name = "butShowAll";
-			this.butShowAll.Size = new System.Drawing.Size(53,16);
-			this.butShowAll.TabIndex = 215;
-			this.butShowAll.Text = "All";
-			this.butShowAll.Visible = false;
-			this.butShowAll.Click += new System.EventHandler(this.butShowAll_Click);
 			// 
 			// checkNotes
 			// 
@@ -634,23 +575,10 @@ namespace OpenDental {
 			this.checkShowTP.Text = "Treat Plan";
 			this.checkShowTP.Click += new System.EventHandler(this.checkShowTP_Click);
 			// 
-			// gridProg
-			// 
-			this.gridProg.HScrollVisible = true;
-			this.gridProg.Location = new System.Drawing.Point(3,0);
-			this.gridProg.Name = "gridProg";
-			this.gridProg.ScrollValue = 0;
-			this.gridProg.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
-			this.gridProg.Size = new System.Drawing.Size(603,230);
-			this.gridProg.TabIndex = 211;
-			this.gridProg.Title = "Progress Notes";
-			this.gridProg.TranslationName = "TableProg";
-			this.gridProg.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridProg_CellDoubleClick);
-			// 
 			// panelAging
 			// 
+			this.panelAging.Controls.Add(this.labelAgeBalance);
 			this.panelAging.Controls.Add(this.label10);
-			this.panelAging.Controls.Add(this.textAgeBalance);
 			this.panelAging.Controls.Add(this.labelAgeInsEst);
 			this.panelAging.Controls.Add(this.textAgeInsEst);
 			this.panelAging.Controls.Add(this.label8);
@@ -672,21 +600,12 @@ namespace OpenDental {
 			// label10
 			// 
 			this.label10.Font = new System.Drawing.Font("Microsoft Sans Serif",8.25F,System.Drawing.FontStyle.Regular,System.Drawing.GraphicsUnit.Point,((byte)(0)));
-			this.label10.Location = new System.Drawing.Point(452,2);
+			this.label10.Location = new System.Drawing.Point(460,2);
 			this.label10.Name = "label10";
 			this.label10.Size = new System.Drawing.Size(60,13);
 			this.label10.TabIndex = 59;
 			this.label10.Text = "= Balance";
 			this.label10.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-			// 
-			// textAgeBalance
-			// 
-			this.textAgeBalance.Location = new System.Drawing.Point(449,15);
-			this.textAgeBalance.Name = "textAgeBalance";
-			this.textAgeBalance.ReadOnly = true;
-			this.textAgeBalance.Size = new System.Drawing.Size(65,20);
-			this.textAgeBalance.TabIndex = 58;
-			this.textAgeBalance.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
 			// 
 			// labelAgeInsEst
 			// 
@@ -865,6 +784,49 @@ namespace OpenDental {
 			this.menuItemProvIncTrans.Text = "Provider Income Transfer";
 			this.menuItemProvIncTrans.Click += new System.EventHandler(this.menuItemProvIncTrans_Click);
 			// 
+			// butShowNone
+			// 
+			this.butShowNone.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butShowNone.Autosize = true;
+			this.butShowNone.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butShowNone.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butShowNone.CornerRadius = 4F;
+			this.butShowNone.Location = new System.Drawing.Point(677,207);
+			this.butShowNone.Name = "butShowNone";
+			this.butShowNone.Size = new System.Drawing.Size(58,16);
+			this.butShowNone.TabIndex = 216;
+			this.butShowNone.Text = "None";
+			this.butShowNone.Visible = false;
+			this.butShowNone.Click += new System.EventHandler(this.butShowNone_Click);
+			// 
+			// butShowAll
+			// 
+			this.butShowAll.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butShowAll.Autosize = true;
+			this.butShowAll.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butShowAll.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butShowAll.CornerRadius = 4F;
+			this.butShowAll.Location = new System.Drawing.Point(614,207);
+			this.butShowAll.Name = "butShowAll";
+			this.butShowAll.Size = new System.Drawing.Size(53,16);
+			this.butShowAll.TabIndex = 215;
+			this.butShowAll.Text = "All";
+			this.butShowAll.Visible = false;
+			this.butShowAll.Click += new System.EventHandler(this.butShowAll_Click);
+			// 
+			// gridProg
+			// 
+			this.gridProg.HScrollVisible = true;
+			this.gridProg.Location = new System.Drawing.Point(3,0);
+			this.gridProg.Name = "gridProg";
+			this.gridProg.ScrollValue = 0;
+			this.gridProg.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
+			this.gridProg.Size = new System.Drawing.Size(603,230);
+			this.gridProg.TabIndex = 211;
+			this.gridProg.Title = "Progress Notes";
+			this.gridProg.TranslationName = "TableProg";
+			this.gridProg.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridProg_CellDoubleClick);
+			// 
 			// gridRepeat
 			// 
 			this.gridRepeat.HScrollVisible = false;
@@ -929,6 +891,35 @@ namespace OpenDental {
 			this.textFinNotes.TextChanged += new System.EventHandler(this.textFinNotes_TextChanged);
 			this.textFinNotes.Leave += new System.EventHandler(this.textFinNotes_Leave);
 			// 
+			// butTrojan
+			// 
+			this.butTrojan.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butTrojan.Autosize = true;
+			this.butTrojan.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butTrojan.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butTrojan.CornerRadius = 4F;
+			this.butTrojan.Location = new System.Drawing.Point(3,29);
+			this.butTrojan.Name = "butTrojan";
+			this.butTrojan.Size = new System.Drawing.Size(146,25);
+			this.butTrojan.TabIndex = 93;
+			this.butTrojan.Text = "Send Transaction to Trojan";
+			this.butTrojan.Click += new System.EventHandler(this.butTrojan_Click);
+			// 
+			// butComm
+			// 
+			this.butComm.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butComm.Autosize = true;
+			this.butComm.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butComm.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butComm.CornerRadius = 4F;
+			this.butComm.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butComm.Location = new System.Drawing.Point(3,2);
+			this.butComm.Name = "butComm";
+			this.butComm.Size = new System.Drawing.Size(98,26);
+			this.butComm.TabIndex = 68;
+			this.butComm.Text = "Questionnaire";
+			this.butComm.Click += new System.EventHandler(this.butComm_Click);
+			// 
 			// ToolBarMain
 			// 
 			this.ToolBarMain.Dock = System.Windows.Forms.DockStyle.Top;
@@ -954,6 +945,17 @@ namespace OpenDental {
 			this.textUrgFinNote.TabIndex = 11;
 			this.textUrgFinNote.TextChanged += new System.EventHandler(this.textUrgFinNote_TextChanged);
 			this.textUrgFinNote.Leave += new System.EventHandler(this.textUrgFinNote_Leave);
+			// 
+			// labelAgeBalance
+			// 
+			this.labelAgeBalance.Font = new System.Drawing.Font("Microsoft Sans Serif",10F,System.Drawing.FontStyle.Bold,System.Drawing.GraphicsUnit.Point,((byte)(0)));
+			this.labelAgeBalance.ForeColor = System.Drawing.Color.Firebrick;
+			this.labelAgeBalance.Location = new System.Drawing.Point(452,15);
+			this.labelAgeBalance.Name = "labelAgeBalance";
+			this.labelAgeBalance.Size = new System.Drawing.Size(78,18);
+			this.labelAgeBalance.TabIndex = 60;
+			this.labelAgeBalance.Text = "100.00";
+			this.labelAgeBalance.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			// 
 			// ContrAccount
 			// 
@@ -1339,7 +1341,7 @@ namespace OpenDental {
 				if(PrefB.GetBool("BalancesDontSubtractIns")) {
 					labelAgeInsEst.Visible=false;
 					textAgeInsEst.Visible=false;
-					textAgeBalance.Text=total.ToString("F");
+					labelAgeBalance.Text=total.ToString("c");
 					//textBoldBalance.Text = textAgeBalance.Text;
 					//labelAfterIns.Text = (total - FamCur.List[0].InsEst).ToString("F");
 					//labelIns1.Text = "Est. After Ins:";
@@ -1348,7 +1350,7 @@ namespace OpenDental {
 					labelAgeInsEst.Visible=true;
 					textAgeInsEst.Visible=true;
 					textAgeInsEst.Text=FamCur.List[0].InsEst.ToString("F");
-					textAgeBalance.Text=(total-FamCur.List[0].InsEst).ToString("F");
+					labelAgeBalance.Text=(total-FamCur.List[0].InsEst).ToString("c");
 					//textBoldBalance.Text = textAgeBalance.Text;
 					//labelAfterIns.Text = total.ToString("F");
 					//labelIns1.Text = "Total w/o Ins:";
@@ -1361,7 +1363,7 @@ namespace OpenDental {
 				text0_30.Text="";
 				textAgeTotal.Text="";
 				textAgeInsEst.Text="";
-				textAgeBalance.Text="";
+				labelAgeBalance.Text="";
 			}
 		}
 
@@ -2302,12 +2304,15 @@ namespace OpenDental {
 					FormPayment2.ShowDialog();
 				}
 			}
+			else if(table.Rows[e.Row]["ClaimNum"].ToString()!="0"){//claims and claimpayments
+				Claim claim=Claims.GetClaim(PIn.PInt(table.Rows[e.Row]["ClaimNum"].ToString()));
+				FormClaimEdit FormClaimEdit2=new FormClaimEdit(claim,PatCur,FamCur);
+				FormClaimEdit2.IsNew=false;
+				FormClaimEdit2.ShowDialog();
+			}
 			/*	
 				case AcctModType.Claim:
-					Claim claim=Claims.GetClaim(arrayClaim[AcctLineList[e.Row].Index].ClaimNum);//because we also need the attachments
-					FormClaimEdit FormClaimEdit2=new FormClaimEdit(claim,PatCur,FamCur);
-					FormClaimEdit2.IsNew=false;
-					FormClaimEdit2.ShowDialog();
+					
 					break;
 				case AcctModType.Comm:
 					Commlog CommlogCur=arrayComm[AcctLineList[e.Row].Index];

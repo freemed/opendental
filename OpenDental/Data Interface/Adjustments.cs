@@ -142,6 +142,7 @@ namespace OpenDental{
 			return retVal;
 		}
 
+		/*
 		///<summary>Must make sure Refresh is done first.  Returns the sum of all adjustments for this patient.  Amount might be pos or neg.</summary>
 		public static double ComputeBal(Adjustment[] List){
 			double retVal=0;
@@ -149,7 +150,7 @@ namespace OpenDental{
 				retVal+=List[i].AdjAmt;
 			}
 			return retVal;
-		}
+		}*/
 
 		///<summary>Returns the number of adjustments deleted.</summary>
 		public static int UndoFinanceCharges(DateTime dateUndo){
