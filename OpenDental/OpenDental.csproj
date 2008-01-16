@@ -227,7 +227,6 @@
     <Compile Include="Data Interface\Employees.cs" />
     <Compile Include="Data Interface\Employers.cs" />
     <Compile Include="Data Interface\Fees.cs" />
-    <Compile Include="Data Interface\General.cs" />
     <Compile Include="Data Interface\GroupPermissions.cs" />
     <Compile Include="Data Interface\InsPlans.cs" />
     <Compile Include="Data Interface\Instructors.cs" />

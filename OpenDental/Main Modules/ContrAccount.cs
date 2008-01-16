@@ -1253,10 +1253,11 @@ namespace OpenDental {
 			gridAcctPat.Columns.Add(col);
 			gridAcctPat.Rows.Clear();
 			ODGridRow row;
-			for(int i=0;i<FamCur.List.Length;i++) {
-				row=new ODGridRow();
-				row.Cells.Add(FamCur.GetNameInFamLFI(i));
-				row.Cells.Add(FamCur.List[i].EstBalance.ToString("F"));
+			DataTable table=DataSetMain.Tables["patient"];
+			for(int i=0;i<table.Rows.Count;i++) {
+				row = new ODGridRow();
+				row.Cells.Add(table.Rows[i]["name"].ToString());
+				row.Cells.Add(table.Rows[i]["balance"].ToString());
 				if(i==0) {
 					row.Bold=true;
 				}
@@ -1322,24 +1323,23 @@ namespace OpenDental {
 				text0_30.Text=FamCur.List[0].Bal_0_30.ToString("F");
 				double total=FamCur.List[0].BalTotal;
 				textAgeTotal.Text=total.ToString("F");
-
-				/*if(PrefB.GetBool("BalancesDontSubtractIns")) {
+				if(PrefB.GetBool("BalancesDontSubtractIns")) {
 					labelAgeInsEst.Visible=false;
 					textAgeInsEst.Visible=false;
 					textAgeBalance.Text=total.ToString("F");
-					textBoldBalance.Text = textAgeBalance.Text;
-					labelAfterIns.Text = (total - FamCur.List[0].InsEst).ToString("F");
-					labelIns1.Text = "Est. After Ins:";
+					//textBoldBalance.Text = textAgeBalance.Text;
+					//labelAfterIns.Text = (total - FamCur.List[0].InsEst).ToString("F");
+					//labelIns1.Text = "Est. After Ins:";
 				}
 				else {//this is much more common
 					labelAgeInsEst.Visible=true;
 					textAgeInsEst.Visible=true;
 					textAgeInsEst.Text=FamCur.List[0].InsEst.ToString("F");
 					textAgeBalance.Text=(total-FamCur.List[0].InsEst).ToString("F");
-					textBoldBalance.Text = textAgeBalance.Text;
-					labelAfterIns.Text = total.ToString("F");
-					labelIns1.Text = "Total w/o Ins:";
-				}*/
+					//textBoldBalance.Text = textAgeBalance.Text;
+					//labelAfterIns.Text = total.ToString("F");
+					//labelIns1.Text = "Total w/o Ins:";
+				}
 			}
 			else {
 				textOver90.Text="";
@@ -1448,22 +1448,6 @@ namespace OpenDental {
 			}
 			gridComm.EndUpdate();
 		}
-
-		/*private void FillMain(){
-			if(PatCur==null){
-				gridAccount.BeginUpdate();
-				gridAccount.Rows.Clear();
-				gridAccount.EndUpdate();
-				return;
-			}
-			if(checkShowAll.Checked){
-				FillAcctLineList(DateTime.MinValue,DateTime.MaxValue,true,false);
-			}
-			else{
-				FillAcctLineList(DateTime.Today.AddDays(-45),DateTime.MaxValue,true,false);
-			}
-			FillgridAccount();
-		}*/
 
 		/*
 		///<summary>Used once in FillAcctLineAL. Returns a list of PayInfos organized by date.</summary>
@@ -1629,7 +1613,7 @@ namespace OpenDental {
 			Shared.ComputeBalances(AccProcList,ClaimProcList,PatCur,PaySplitList,AdjustmentList,PayPlanList,PayPlanChargeList);
 			//if(!PrefB.GetBool("SkipComputeAgingInAccount")){
 				//then recompute aging for family. This is time consuming, about 1/2 second.
-				//Compute aging involves about 10 to 12 database calls.  (Let's reduce this then)
+				//Compute aging involves about 10 to 12 database calls.  (We plan to reduce this later)
 				if(PrefB.GetBool("AgingCalculatedMonthlyInsteadOfDaily")){
 					Ledgers.ComputeAging(PatCur.Guarantor,PIn.PDate(PrefB.GetString("DateLastAging")));
 				}
@@ -2134,7 +2118,7 @@ namespace OpenDental {
 			gridAccount.Rows.Clear();
 			ODGridRow row;
 			//ODGridCell cell;
-			DataTable table=DataSetMain.Tables["Account"];
+			DataTable table=DataSetMain.Tables["account"];
 			for(int i=0;i<table.Rows.Count;i++) {
 				row = new ODGridRow();
 				row.Cells.Add(table.Rows[i]["date"].ToString());

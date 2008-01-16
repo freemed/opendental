@@ -869,6 +869,15 @@ namespace OpenDentBusiness{
 			retVal+=FName+" "+MiddleI+" "+LName;
 			return retVal;
 		}
+
+		///<summary></summary>
+		public string GetNameFirst() {
+			string retVal=FName;
+			if(Preferred!="") {
+				retVal+=" '"+Preferred+"'";
+			}
+			return retVal;
+		}
 	}
 
 }

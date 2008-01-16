@@ -147,8 +147,8 @@ namespace OpenDentBusiness {
 		private static void GetAccount(int patNum,DateTime fromDate,DateTime toDate) {
 			DataConnection dcon=new DataConnection();
 			DataTable table=new DataTable("account");
-			DataTable tablepat=new DataTable("patient");
-			//Family fam=
+			Family fam=Patients.GetFamily(patNum);
+			Patient pat=fam.GetPatient(patNum);
 			DataRow row;
 			//columns that start with lowercase are altered for display rather than being raw data.
 			table.Columns.Add("AdjNum");
@@ -165,6 +165,7 @@ namespace OpenDentBusiness {
 			table.Columns.Add("DateTime",typeof(DateTime));
 			table.Columns.Add("description");
 			table.Columns.Add("patient");
+			table.Columns.Add("PatNum");
 			table.Columns.Add("PayNum");//even though we only show split objects
 			table.Columns.Add("ProcCode");
 			table.Columns.Add("ProcNum");
@@ -173,19 +174,24 @@ namespace OpenDentBusiness {
 			//but we won't actually fill this table with rows until the very end.  It's more useful to use a List<> for now.
 			List<DataRow> rows=new List<DataRow>();
 			//Procedures------------------------------------------------------------------------------------------
-			string command="SELECT Abbr,procedurelog.BaseUnits,Descript,patient.FName,LaymanTerm,Preferred,ProcCode,"
-				+"ProcDate,ProcFee,ProcNum,ToothNum,UnitQty "
+			string command="SELECT procedurelog.BaseUnits,Descript,LaymanTerm,procedurelog.PatNum,ProcCode,"
+				+"ProcDate,ProcFee,ProcNum,ProvNum,ToothNum,UnitQty "
 				+"FROM procedurelog "
 				+"LEFT JOIN procedurecode ON procedurelog.CodeNum=procedurecode.CodeNum "
-				+"LEFT JOIN patient ON patient.PatNum=procedurelog.PatNum "
-				+"LEFT JOIN provider ON provider.ProvNum=procedurelog.ProvNum "
 				+"WHERE ProcStatus=2 "//complete
-				+"AND procedurelog.PatNum ="+POut.PInt(patNum)+" ORDER BY ProcDate";
+				+"AND (";
+			for(int i=0;i<fam.List.Length;i++){
+				if(i!=0){
+					command+="OR ";
+				}
+				command+="procedurelog.PatNum ="+POut.PInt(fam.List[i].PatNum)+" ";
+			}
+			command+=") ORDER BY ProcDate";
 			DataTable rawProc=dcon.GetTable(command);
 			DateTime dateT;
 			double qty;
 			for(int i=0;i<rawProc.Rows.Count;i++){
-				row=table.NewRow();//but we won't necessarily add it to the collection
+				row=table.NewRow();
 				row["AdjNum"]="0";
 				row["balance"]="";//fill this later
 				row["balanceDouble"]=0;//fill this later
@@ -207,14 +213,12 @@ namespace OpenDentBusiness {
 				if(rawProc.Rows[i]["LaymanTerm"].ToString()!=""){
 					row["description"]=rawProc.Rows[i]["LaymanTerm"].ToString();
 				}
-				row["patient"]=rawProc.Rows[i]["FName"].ToString();
-				if(rawProc.Rows[i]["Preferred"].ToString()!=""){
-					row["patient"]+="("+rawProc.Rows[i]["Preferred"].ToString()+")";
-				}
+				row["patient"]=pat.GetNameFirst();
+				row["PatNum"]=rawProc.Rows[i]["PatNum"].ToString();
 				row["PayNum"]="0";
 				row["ProcCode"]=rawProc.Rows[i]["ProcCode"].ToString();
 				row["ProcNum"]=PIn.PInt(rawProc.Rows[i]["ProcNum"].ToString());
-				row["prov"]=rawProc.Rows[i]["Abbr"].ToString();
+				row["prov"]=Providers.GetAbbr(PIn.PInt(rawProc.Rows[i]["ProvNum"].ToString()));
 				row["tth"]=Tooth.ToInternat(rawProc.Rows[i]["ToothNum"].ToString());
 				rows.Add(row);
 			}
@@ -223,6 +227,16 @@ namespace OpenDentBusiness {
 			//Sorting
 			rows.Sort(new AccountLineComparer());
 			//rows.Sort(CompareCommRows);
+			//Pass off all the rows for the whole family in order to compute the patient balances----------------
+			GetPatientTable(fam,rows);
+			//Filter out patients that we are not interested in--------------------------------------------------
+			if(patNum!=0){//if it is 0, then we will be showing all patients with no filtering
+				for(int i=rows.Count-1;i>=0;i--) {//go backwards and remove from end
+					if(rows[i]["PatNum"].ToString()!=patNum.ToString()){
+						rows.RemoveAt(i);
+					}
+				}
+			}
 			//Compute balances-------------------------------------------------------------------------------------
 			double bal=0;
 			for(int i=0;i<rows.Count;i++) {
@@ -231,7 +245,7 @@ namespace OpenDentBusiness {
 				rows[i]["balanceDouble"]=bal;
 				rows[i]["balance"]=bal.ToString("f");
 			}
-			//Remove rows outside of daterange and add starting balance row----------------------------------------
+			//Remove rows outside of daterange-------------------------------------------------------------------
 			double balanceForward=0;
 			bool foundBalForward=false;
 			for(int i=rows.Count-1;i>=0;i--) {//go backwards and remove from end
@@ -246,6 +260,7 @@ namespace OpenDentBusiness {
 					rows.RemoveAt(i);
 				}
 			}
+			//Add balance forward row-------------------------------------------------------------------------
 			if(foundBalForward){
 				//add a balance forward row
 				row=table.NewRow();
@@ -281,6 +296,38 @@ namespace OpenDentBusiness {
 			retVal.Tables.Add(table);
 		}
 
+		///<summary>All rows for the entire family are getting passed in here.  They have already been sorted.  Balances have not been computed, and we will do that here, separately for each patient.</summary>
+		private static void GetPatientTable(Family fam,List<DataRow> rows){
+			DataConnection dcon=new DataConnection();
+			DataTable table=new DataTable("patient");
+			DataRow row;
+			table.Columns.Add("balance");
+			table.Columns.Add("balanceDouble",typeof(double));
+			table.Columns.Add("name");
+			table.Columns.Add("PatNum");
+			List<DataRow> rowspat=new List<DataRow>();
+			double bal;
+			for(int p=0;p<fam.List.Length;p++){
+				row=table.NewRow();
+				bal=0;
+				for(int i=0;i<rows.Count;i++) {
+					if(fam.List[p].PatNum.ToString()==rows[i]["PatNum"].ToString()){
+						bal+=(double)rows[i]["chargesDouble"];
+						bal-=(double)rows[i]["creditsDouble"];
+					}
+				}
+				row["balanceDouble"]=bal;
+				row["balance"]=bal.ToString("f");
+				row["name"]=fam.List[p].GetNameLF();
+				row["PatNum"]=fam.List[p].PatNum.ToString();
+				rowspat.Add(row);
+			}
+			for(int i=0;i<rowspat.Count;i++) {
+				table.Rows.Add(rowspat[i]);
+			}
+			retVal.Tables.Add(table);
+		}
+
 		
 
 		/*
@@ -308,9 +355,9 @@ namespace OpenDentBusiness {
 
 	///<summary>A generic comparison that sorts the rows of the account table by date and type.</summary>
 	class AccountLineComparer : IComparer<DataRow>	{
-		public AccountLineComparer(){
+		//public AccountLineComparer(){
 
-		}
+		//}
 		
 		///<summary>A generic comparison that sorts the rows of the account table by date and type.</summary>
 		public int Compare (DataRow rowA,DataRow rowB){
