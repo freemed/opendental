@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Data;
 using System.Windows.Forms;
 using OpenDentBusiness;
@@ -86,23 +87,37 @@ namespace OpenDental{
 		public static Adjustment[] Refresh(int patNum){
 			string command=
 				"SELECT * FROM adjustment"
-				+" WHERE PatNum = '"+patNum.ToString()+"' ORDER BY AdjDate";
+				+" WHERE PatNum = "+POut.PInt(patNum)+" ORDER BY AdjDate";
+			return RefreshAndFill(command).ToArray();
+		}
+
+		///<summary>Gets one adjustment from the db.</summary>
+		public static Adjustment GetOne(int adjNum){
+			string command=
+				"SELECT * FROM adjustment"
+				+" WHERE AdjNum = "+POut.PInt(adjNum);
+			return RefreshAndFill(command)[0];
+		}
+
+		private static List<Adjustment> RefreshAndFill(string command){
  			DataTable table=General.GetTable(command);
-			Adjustment[] List=new Adjustment[table.Rows.Count];
+			List<Adjustment> retVal=new List<Adjustment>();
+			Adjustment adj;
 			for(int i=0;i<table.Rows.Count;i++){
-				List[i]=new Adjustment();
-				List[i].AdjNum   = PIn.PInt   (table.Rows[i][0].ToString());
-				List[i].AdjDate  = PIn.PDate  (table.Rows[i][1].ToString());
-				List[i].AdjAmt   = PIn.PDouble(table.Rows[i][2].ToString());
-				List[i].PatNum   = PIn.PInt   (table.Rows[i][3].ToString());
-				List[i].AdjType  = PIn.PInt   (table.Rows[i][4].ToString());
-				List[i].ProvNum  = PIn.PInt   (table.Rows[i][5].ToString());
-				List[i].AdjNote  = PIn.PString(table.Rows[i][6].ToString());
-				List[i].ProcDate = PIn.PDate  (table.Rows[i][7].ToString());
-				List[i].ProcNum  = PIn.PInt   (table.Rows[i][8].ToString());
-				List[i].DateEntry= PIn.PDate  (table.Rows[i][9].ToString());
+				adj=new Adjustment();
+				adj.AdjNum   = PIn.PInt   (table.Rows[i][0].ToString());
+				adj.AdjDate  = PIn.PDate  (table.Rows[i][1].ToString());
+				adj.AdjAmt   = PIn.PDouble(table.Rows[i][2].ToString());
+				adj.PatNum   = PIn.PInt   (table.Rows[i][3].ToString());
+				adj.AdjType  = PIn.PInt   (table.Rows[i][4].ToString());
+				adj.ProvNum  = PIn.PInt   (table.Rows[i][5].ToString());
+				adj.AdjNote  = PIn.PString(table.Rows[i][6].ToString());
+				adj.ProcDate = PIn.PDate  (table.Rows[i][7].ToString());
+				adj.ProcNum  = PIn.PInt   (table.Rows[i][8].ToString());
+				adj.DateEntry= PIn.PDate  (table.Rows[i][9].ToString());
+				retVal.Add(adj);
 			}
-			return List;
+			return retVal;
 		}
 
 		///<summary>Loops through the supplied list of adjustments and returns an ArrayList of adjustments for the given proc.</summary>

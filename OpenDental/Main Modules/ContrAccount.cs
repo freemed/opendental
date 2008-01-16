@@ -1266,17 +1266,11 @@ namespace OpenDental {
 				row = new ODGridRow();
 				row.Cells.Add(table.Rows[i]["name"].ToString());
 				row.Cells.Add(table.Rows[i]["balance"].ToString());
-				if(i==0) {
+				if(i==0 || i==table.Rows.Count-1) {
 					row.Bold=true;
 				}
 				gridAcctPat.Rows.Add(row);
 			}
-			//entire family
-			row = new ODGridRow();
-			row.Cells.Add(Lan.g(this,"Entire Family"));
-			row.Cells.Add(bal.ToString("f"));
-			row.Bold=true;
-			gridAcctPat.Rows.Add(row);
 			gridAcctPat.EndUpdate();
 			if(isSelectingFamily){
 				gridAcctPat.SetSelected(FamCur.List.Length,true);
@@ -2150,6 +2144,11 @@ namespace OpenDental {
 				row.Cells.Add(table.Rows[i]["credits"].ToString());
 				row.Cells.Add(table.Rows[i]["balance"].ToString());
 				row.ColorText=Color.FromArgb(PIn.PInt(table.Rows[i]["colorText"].ToString()));
+				if(i==table.Rows.Count-1//last row
+					|| (DateTime)table.Rows[i]["DateTime"]!=(DateTime)table.Rows[i+1]["DateTime"])
+				{
+					row.ColorLborder=Color.Black;
+				}
 				gridAccount.Rows.Add(row);
 			}
 			/*for(int i=0;i<AcctLineList.Count;i++){
@@ -2279,40 +2278,36 @@ namespace OpenDental {
 			if(ViewingInRecall) return;
 			DataTable table=DataSetMain.Tables["Account"];
 			if(table.Rows[e.Row]["ProcNum"].ToString()!="0"){
-				Procedure ProcCur=Procedures.GetOneProc(PIn.PInt(table.Rows[e.Row]["ProcNum"].ToString()),true);
-				FormProcEdit FormPE=new FormProcEdit(ProcCur,PatCur,FamCur,InsPlanList);
+				Procedure proc=Procedures.GetOneProc(PIn.PInt(table.Rows[e.Row]["ProcNum"].ToString()),true);
+				FormProcEdit FormPE=new FormProcEdit(proc,PatCur,FamCur,InsPlanList);
 				FormPE.ShowDialog();
 			}
-			/*	default:
-					Procedure ProcCur=Procedures.GetOneProc(arrayProc[AcctLineList[e.Row].Index].ProcNum,true);
-					FormProcEdit FormPE=new FormProcEdit(ProcCur,PatCur,FamCur,InsPlanList);
-					FormPE.ShowDialog();
-					break;
+			else if(table.Rows[e.Row]["AdjNum"].ToString()!="0"){
+				Adjustment adj=Adjustments.GetOne(PIn.PInt(table.Rows[e.Row]["AdjNum"].ToString()));
+				FormAdjust FormAdj=new FormAdjust(PatCur,adj);
+				FormAdj.ShowDialog();
+			}
+			else if(table.Rows[e.Row]["PayNum"].ToString()!="0"){
+				Payment PaymentCur=Payments.GetPayment(PIn.PInt(table.Rows[e.Row]["PayNum"].ToString()));
+				if(PaymentCur.PayType==0){//provider income transfer
+					FormProviderIncTrans FormPIT=new FormProviderIncTrans();
+					FormPIT.PatNum=PatCur.PatNum;
+					FormPIT.PaymentCur=PaymentCur;
+					FormPIT.IsNew=false;
+					FormPIT.ShowDialog();
+				}
+				else{
+					FormPayment2=new FormPayment(PatCur,FamCur,PaymentCur);
+					FormPayment2.IsNew=false;
+					FormPayment2.ShowDialog();
+				}
+			}
+			/*	
 				case AcctModType.Claim:
 					Claim claim=Claims.GetClaim(arrayClaim[AcctLineList[e.Row].Index].ClaimNum);//because we also need the attachments
 					FormClaimEdit FormClaimEdit2=new FormClaimEdit(claim,PatCur,FamCur);
 					FormClaimEdit2.IsNew=false;
 					FormClaimEdit2.ShowDialog();
-					break;
-				case AcctModType.Adj:
-					Adjustment AdjustmentCur=arrayAdj[AcctLineList[e.Row].Index];
-					FormAdjust FormAdj=new FormAdjust(PatCur,AdjustmentCur);
-					FormAdj.ShowDialog();
-					break;
-				case AcctModType.Pay:
-					Payment PaymentCur=Payments.GetPayment(arrayPay[AcctLineList[e.Row].Index].PayNum);
-					if(PaymentCur.PayType==0){//provider income transfer
-						FormProviderIncTrans FormPIT=new FormProviderIncTrans();
-						FormPIT.PatNum=PatCur.PatNum;
-						FormPIT.PaymentCur=PaymentCur;
-						FormPIT.IsNew=false;
-						FormPIT.ShowDialog();
-					}
-					else{
-						FormPayment2=new FormPayment(PatCur,FamCur,PaymentCur);
-						FormPayment2.IsNew=false;
-						FormPayment2.ShowDialog();
-					}
 					break;
 				case AcctModType.Comm:
 					Commlog CommlogCur=arrayComm[AcctLineList[e.Row].Index];
@@ -2329,7 +2324,8 @@ namespace OpenDental {
 					break;	
 			}//end switch*/
 			//Shared.ComputeBalances();//use whenever a change would affect the total
-			ModuleSelected(PatCur.PatNum);
+			bool isSelectingFamily=gridAcctPat.GetSelectedIndex()==this.DataSetMain.Tables["patient"].Rows.Count-1;
+			ModuleSelected(PatCur.PatNum,isSelectingFamily);
 		}
 
 		/*private void tbAccount_CellDoubleClicked(object sender, CellEventArgs e){
