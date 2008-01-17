@@ -144,12 +144,22 @@ namespace OpenDentBusiness {
 			retVal.Tables.Add(table);
 		}
 
-		///<summary>Also gets the patient table, which has one row for each family member.</summary>
+		///<summary>Also gets the patient table, which has one row for each family member. Also currently runs aging.</summary>
 		private static void GetAccount(int patNum,DateTime fromDate,DateTime toDate,bool isFamily) {
 			DataConnection dcon=new DataConnection();
 			DataTable table=new DataTable("account");
 			Family fam=Patients.GetFamily(patNum);
 			Patient pat=fam.GetPatient(patNum);
+			//run aging.  This need serious optimization-------------------------------------------------------
+			if(PrefB.GetBool("AgingCalculatedMonthlyInsteadOfDaily")){
+				Ledgers.ComputeAging(pat.Guarantor,PIn.PDate(PrefB.GetString("DateLastAging")));
+			}
+			else{
+				Ledgers.ComputeAging(pat.Guarantor,DateTime.Today);
+			}
+			Patients.UpdateAging(pat.Guarantor,Ledgers.Bal[0],Ledgers.Bal[1],Ledgers.Bal[2]
+				,Ledgers.Bal[3],Ledgers.InsEst,Ledgers.BalTotal);
+			//Now, back to getting the tables------------------------------------------------------------------
 			DataRow row;
 			//columns that start with lowercase are altered for display rather than being raw data.
 			table.Columns.Add("AdjNum");
@@ -275,7 +285,7 @@ namespace OpenDentBusiness {
 				rows.Add(row);
 			}
 			//paysplits-----------------------------------------------------------------------------------------
-			command="SELECT DatePay,paysplit.PatNum,PayAmt,paysplit.PayNum,PayType,ProcDate,ProvNum,SplitAmt "
+			command="SELECT CheckNum,DatePay,paysplit.PatNum,PayAmt,paysplit.PayNum,PayType,ProcDate,ProvNum,SplitAmt "
 				+"FROM paysplit "
 				+"LEFT JOIN payment ON paysplit.PayNum=payment.PayNum "
 				+"WHERE (";
@@ -305,9 +315,13 @@ namespace OpenDentBusiness {
 				row["DateTime"]=dateT;
 				row["date"]=dateT.ToShortDateString();
 				row["description"]=DefB.GetName(DefCat.PaymentTypes,PIn.PInt(rawPay.Rows[i]["PayType"].ToString()));
+				if(rawPay.Rows[i]["CheckNum"].ToString()!=""){
+					row["description"]+=" #"+rawPay.Rows[i]["CheckNum"].ToString();
+				}
 				payamt=PIn.PDouble(rawPay.Rows[i]["PayAmt"].ToString());
+				row["description"]+=" "+payamt.ToString("c");
 				if(payamt!=amt){
-					row["description"]+=" "+payamt.ToString("c")+" "+Lan.g("ContrAccount","(split)");
+					row["description"]+=" "+Lan.g("ContrAccount","(split)");
 				}
 				//we might use DatePay here to add to description
 				row["patient"]=fam.GetNameInFamFirst(PIn.PInt(rawPay.Rows[i]["PatNum"].ToString()));
@@ -345,7 +359,7 @@ namespace OpenDentBusiness {
 				row["charges"]="";
 				row["ClaimNum"]=rawClaimPay.Rows[i]["ClaimNum"].ToString();
 				row["ClaimPaymentNum"]=rawClaimPay.Rows[i]["ClaimPaymentNum"].ToString();
-//todo: change this color. 3 means payment. 4 means claim.  get a new color for inspayments.
+//todo(maybe): change this color. 3 means payment. 4 means claim.  get a new color for inspayments.
 				row["colorText"]=DefB.Long[(int)DefCat.AccountColors][4].ItemColor.ToArgb().ToString();
 				amt=PIn.PDouble(rawClaimPay.Rows[i]["_InsPayAmt"].ToString());
 				writeoff=PIn.PDouble(rawClaimPay.Rows[i]["_WriteOff"].ToString());
@@ -357,8 +371,8 @@ namespace OpenDentBusiness {
 				procdate=PIn.PDateT(rawClaimPay.Rows[i]["ProcDate"].ToString());
 				row["description"]=Lan.g("AccountModule","Insurance Payment for Claim ")+procdate.ToShortDateString();
 				if(writeoff!=0){
-					row["description"]+="\r\n"+Lan.g("AccountModule","Payment: ")+amt.ToString("c")+"\r\n"
-						+Lan.g("AccountModule","Writeoff: ")+writeoff.ToString("c");
+					row["description"]+="\r\n"+Lan.g("AccountModule","Payment:")+" "+amt.ToString("c")+"\r\n"
+						+Lan.g("AccountModule","Writeoff:")+" "+writeoff.ToString("c");
 				}
 				row["patient"]=fam.GetNameInFamFirst(PIn.PInt(rawClaimPay.Rows[i]["PatNum"].ToString()));
 				row["PatNum"]=rawClaimPay.Rows[i]["PatNum"].ToString();
@@ -372,7 +386,7 @@ namespace OpenDentBusiness {
 			}
 			//claims (do not affect balance)-------------------------------------------------------------------------
 			command="SELECT CarrierName,ClaimFee,claim.ClaimNum,ClaimStatus,ClaimType,DateReceived,DateService,"
-				+"claim.InsPayAmt,claim.PatNum,GROUP_CONCAT(claimproc.ProcNum) _ProcNums,ProvTreat "
+				+"claim.InsPayAmt,claim.PatNum,GROUP_CONCAT(claimproc.ProcNum) _ProcNums,ProvTreat,claim.WriteOff "
 				+"FROM claim "
 				+"LEFT JOIN insplan ON claim.PlanNum=insplan.PlanNum "
 				+"LEFT JOIN carrier ON carrier.CarrierNum=insplan.CarrierNum "
@@ -427,7 +441,11 @@ namespace OpenDentBusiness {
 				}
 				amtpaid=PIn.PDouble(rawClaim.Rows[i]["InsPayAmt"].ToString());
 				if(amtpaid!=0){
-					row["description"]+="\r\n"+Lan.g("ContrAccount","Paid")+" "+amtpaid.ToString("c");
+					row["description"]+="\r\n"+Lan.g("ContrAccount","Payment:")+" "+amtpaid.ToString("c");
+				}
+				writeoff=PIn.PDouble(rawClaim.Rows[i]["WriteOff"].ToString());
+				if(writeoff!=0){
+					row["description"]+="\r\n"+Lan.g("ContrAccount","Writeoff:")+" "+writeoff.ToString("c");
 				}
 				row["patient"]=fam.GetNameInFamFirst(PIn.PInt(rawClaim.Rows[i]["PatNum"].ToString()));
 				row["PatNum"]=rawClaim.Rows[i]["PatNum"].ToString();

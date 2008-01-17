@@ -233,7 +233,6 @@
     <Compile Include="Data Interface\JournalEntries.cs" />
     <Compile Include="Data Interface\Lan.cs" />
     <Compile Include="Data Interface\LanguageForeigns.cs" />
-    <Compile Include="Data Interface\Ledgers.cs" />
     <Compile Include="Data Interface\LetterMergeFields.cs" />
     <Compile Include="Data Interface\LetterMerges.cs" />
     <Compile Include="Data Interface\Letters.cs" />

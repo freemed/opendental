@@ -1341,7 +1341,7 @@ namespace OpenDental {
 				if(PrefB.GetBool("BalancesDontSubtractIns")) {
 					labelAgeInsEst.Visible=false;
 					textAgeInsEst.Visible=false;
-					labelAgeBalance.Text=total.ToString("c");
+					labelAgeBalance.Text=total.ToString("f");
 					//textBoldBalance.Text = textAgeBalance.Text;
 					//labelAfterIns.Text = (total - FamCur.List[0].InsEst).ToString("F");
 					//labelIns1.Text = "Est. After Ins:";
@@ -1350,7 +1350,7 @@ namespace OpenDental {
 					labelAgeInsEst.Visible=true;
 					textAgeInsEst.Visible=true;
 					textAgeInsEst.Text=FamCur.List[0].InsEst.ToString("F");
-					labelAgeBalance.Text=(total-FamCur.List[0].InsEst).ToString("c");
+					labelAgeBalance.Text=(total-FamCur.List[0].InsEst).ToString("f");
 					//textBoldBalance.Text = textAgeBalance.Text;
 					//labelAfterIns.Text = total.ToString("F");
 					//labelIns1.Text = "Total w/o Ins:";

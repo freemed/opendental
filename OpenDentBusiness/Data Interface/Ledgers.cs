@@ -4,7 +4,7 @@ using System.Data;
 using System.Windows.Forms;
 using OpenDentBusiness;
 
-namespace OpenDental{
+namespace OpenDentBusiness{
 
 	///<summary>This does not correspond to any table in the database.  It works with a variety of tables to calculate aging.</summary>
 	public class Ledgers{
@@ -17,10 +17,10 @@ namespace OpenDental{
 		private static DateTime AsOfDate;
 		///<summary></summary>
 		public struct DateValuePair{
-			///<summary></summary>
-			public DateTime Date;
-			///<summary></summary>
-			public double Value;
+		///<summary></summary>
+		public DateTime Date;
+		///<summary></summary>
+		public double Value;
 		}
 
 		///<summary></summary>
@@ -33,42 +33,6 @@ namespace OpenDental{
 			}
 			return AllGuarantors;
 		}
-
-		/*
-		///<summary></summary>
-		public static DateTime GetClosestFirst(DateTime date){ 
-			if(date.Day > 15){
-				if(date.Month!=12){
-					return new DateTime(date.Year,date.Month+1,1);		
-				}
-				else{ 
-					return new DateTime(date.Year+1,1,1);	
-				}
-			}
-			else{
-				return new DateTime(date.Year,date.Month,1);
-			}
-		}*/
-
-		/*
-		///<summary></summary>
-		public static void ComputeAging(int guarantor){
-			DateTime asOfDate;
-			if(DateTime.Today.Day > 15){
-				if(DateTime.Today.Month==12){
-					asOfDate=new DateTime(DateTime.Today.Year+1,1,1);
-				}
-				else{
-					asOfDate=new DateTime(DateTime.Today.Year,DateTime.Today.Month+1,1);	
-				}
-			}
-			else{
-				asOfDate=new DateTime(DateTime.Today.Year,DateTime.Today.Month,1);
-			}
-			ComputeAging(guarantor,asOfDate);
-			Patients.ResetAging(guarantor);
-			Patients.UpdateAging(guarantor,Bal[0],Bal[1],Bal[2],Bal[3],InsEst,BalTotal);
-		}*/
 
 		///<summary>Computes aging for entire family.  Gets all info from database.</summary>
 		public static void ComputeAging(int guarantor,DateTime asOfDate){
