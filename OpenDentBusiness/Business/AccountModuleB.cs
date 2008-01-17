@@ -170,6 +170,7 @@ namespace OpenDentBusiness {
 			table.Columns.Add("PayNum");//even though we only show split objects
 			table.Columns.Add("ProcCode");
 			table.Columns.Add("ProcNum");
+			table.Columns.Add("procsOnClaim");//for a claim, the ProcNums, comma delimited.
 			table.Columns.Add("prov");
 			table.Columns.Add("tth");
 			//but we won't actually fill this table with rows until the very end.  It's more useful to use a List<> for now.
@@ -221,6 +222,7 @@ namespace OpenDentBusiness {
 				row["PayNum"]="0";
 				row["ProcCode"]=rawProc.Rows[i]["ProcCode"].ToString();
 				row["ProcNum"]=rawProc.Rows[i]["ProcNum"].ToString();
+				row["procsOnClaim"]="";
 				row["prov"]=Providers.GetAbbr(PIn.PInt(rawProc.Rows[i]["ProvNum"].ToString()));
 				row["tth"]=Tooth.ToInternat(rawProc.Rows[i]["ToothNum"].ToString());
 				rows.Add(row);
@@ -267,6 +269,7 @@ namespace OpenDentBusiness {
 				row["PayNum"]="0";
 				row["ProcCode"]=Lan.g("AccountModule","Adjust");
 				row["ProcNum"]="0";
+				row["procsOnClaim"]="";
 				row["prov"]=Providers.GetAbbr(PIn.PInt(rawAdj.Rows[i]["ProvNum"].ToString()));
 				row["tth"]="";
 				rows.Add(row);
@@ -312,6 +315,7 @@ namespace OpenDentBusiness {
 				row["PayNum"]=rawPay.Rows[i]["PayNum"].ToString();
 				row["ProcCode"]=Lan.g("AccountModule","Pay");
 				row["ProcNum"]="0";
+				row["procsOnClaim"]="";
 				row["prov"]=Providers.GetAbbr(PIn.PInt(rawPay.Rows[i]["ProvNum"].ToString()));
 				row["tth"]="";
 				rows.Add(row);
@@ -353,7 +357,7 @@ namespace OpenDentBusiness {
 				procdate=PIn.PDateT(rawClaimPay.Rows[i]["ProcDate"].ToString());
 				row["description"]=Lan.g("AccountModule","Insurance Payment for Claim ")+procdate.ToShortDateString();
 				if(writeoff!=0){
-					row["description"]+="/r/n"+Lan.g("AccountModule","Payment: ")+amt.ToString("c")+"/r/n"
+					row["description"]+="\r\n"+Lan.g("AccountModule","Payment: ")+amt.ToString("c")+"\r\n"
 						+Lan.g("AccountModule","Writeoff: ")+writeoff.ToString("c");
 				}
 				row["patient"]=fam.GetNameInFamFirst(PIn.PInt(rawClaimPay.Rows[i]["PatNum"].ToString()));
@@ -361,24 +365,29 @@ namespace OpenDentBusiness {
 				row["PayNum"]="0";
 				row["ProcCode"]=Lan.g("AccountModule","InsPay");
 				row["ProcNum"]="0";
+				row["procsOnClaim"]="";
 				row["prov"]=Providers.GetAbbr(PIn.PInt(rawClaimPay.Rows[i]["ProvNum"].ToString()));
 				row["tth"]="";
 				rows.Add(row);
 			}
 			//claims (do not affect balance)-------------------------------------------------------------------------
-			command="SELECT CarrierName,ClaimFee,ClaimNum,ClaimStatus,ClaimType,DateService,PatNum,ProvTreat "
+			command="SELECT CarrierName,ClaimFee,claim.ClaimNum,ClaimStatus,ClaimType,DateReceived,DateService,"
+				+"claim.InsPayAmt,claim.PatNum,GROUP_CONCAT(claimproc.ProcNum) _ProcNums,ProvTreat "
 				+"FROM claim "
 				+"LEFT JOIN insplan ON claim.PlanNum=insplan.PlanNum "
 				+"LEFT JOIN carrier ON carrier.CarrierNum=insplan.CarrierNum "
+				+"INNER JOIN claimproc ON claimproc.ClaimNum=claim.ClaimNum "
 				+"WHERE (";
 			for(int i=0;i<fam.List.Length;i++){
 				if(i!=0){
 					command+="OR ";
 				}
-				command+="PatNum ="+POut.PInt(fam.List[i].PatNum)+" ";
+				command+="claim.PatNum ="+POut.PInt(fam.List[i].PatNum)+" ";
 			}
-			command+=") ORDER BY DateService";
+			command+=") GROUP BY claim.ClaimNum ORDER BY DateService";
 			DataTable rawClaim=dcon.GetTable(command);
+			DateTime daterec;
+			double amtpaid;
 			for(int i=0;i<rawClaim.Rows.Count;i++){
 				row=table.NewRow();
 				row["AdjNum"]="0";
@@ -394,7 +403,6 @@ namespace OpenDentBusiness {
 				dateT=PIn.PDateT(rawClaim.Rows[i]["DateService"].ToString());
 				row["DateTime"]=dateT;
 				row["date"]=dateT.ToShortDateString();
-				//procdate=PIn.PDateT(rawClaim.Rows[i]["ProcDate"].ToString());
 				if(rawClaim.Rows[i]["ClaimType"].ToString()=="P"){
 					row["description"]=Lan.g("ContrAccount","Pri")+" ";
 				}
@@ -413,11 +421,20 @@ namespace OpenDentBusiness {
 				amt=PIn.PDouble(rawClaim.Rows[i]["ClaimFee"].ToString());
 				row["description"]+=Lan.g("ContrAccount","Claim")+" "+amt.ToString("c")+" "
 					+rawClaim.Rows[i]["CarrierName"].ToString();
+				daterec=PIn.PDateT(rawClaim.Rows[i]["DateReceived"].ToString());
+				if(daterec.Year>1880){
+					row["description"]+="\r\n"+Lan.g("ContrAccount","Received")+" "+daterec.ToShortDateString();
+				}
+				amtpaid=PIn.PDouble(rawClaim.Rows[i]["InsPayAmt"].ToString());
+				if(amtpaid!=0){
+					row["description"]+="\r\n"+Lan.g("ContrAccount","Paid")+" "+amtpaid.ToString("c");
+				}
 				row["patient"]=fam.GetNameInFamFirst(PIn.PInt(rawClaim.Rows[i]["PatNum"].ToString()));
 				row["PatNum"]=rawClaim.Rows[i]["PatNum"].ToString();
 				row["PayNum"]="0";
 				row["ProcCode"]=Lan.g("AccountModule","Claim");
 				row["ProcNum"]="0";
+				row["procsOnClaim"]=PIn.PByteArray(rawClaim.Rows[i]["_ProcNums"]);
 				row["prov"]=Providers.GetAbbr(PIn.PInt(rawClaim.Rows[i]["ProvTreat"].ToString()));
 				row["tth"]="";
 				rows.Add(row);

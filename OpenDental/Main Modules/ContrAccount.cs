@@ -2215,12 +2215,31 @@ namespace OpenDental {
 		}
 
 		private void gridAccount_CellClick(object sender, OpenDental.UI.ODGridClickEventArgs e) {
+			DataTable table=DataSetMain.Tables["account"];
 			//this seems to fire after a doubleclick, so this prevents error:
-			/*
-			if(e.Row>=AcctLineList.Count){
+			if(e.Row>=table.Rows.Count){
 				return;
 			}
 			if(ViewingInRecall) return;
+			if(table.Rows[e.Row]["ClaimNum"].ToString()!="0"){//claims and claimpayments
+				//Claim ClaimCur=Claims.GetClaim(
+				//	arrayClaim[AcctLineList[e.Row].Index];
+				string[] procsOnClaim=table.Rows[e.Row]["procsOnClaim"].ToString().Split(',');
+				for(int i=0;i<table.Rows.Count;i++){//loop through all rows
+					if(table.Rows[i]["ClaimNum"].ToString()==table.Rows[e.Row]["ClaimNum"].ToString()){
+						gridAccount.SetSelected(i,true);//for the claim payments
+					}
+					else if(table.Rows[i]["ProcNum"].ToString()=="0"){//if not a procedure, then skip
+						continue;
+					}
+					for(int j=0;j<procsOnClaim.Length;j++){
+						if(table.Rows[i]["ProcNum"].ToString()==procsOnClaim[j]){
+							gridAccount.SetSelected(i,true);
+						}
+					}
+				}
+			}
+			/*
 			switch (AcctLineList[e.Row].Type){
 				default://procedure
 					break;
@@ -2272,8 +2291,8 @@ namespace OpenDental {
 						}
 					}
 					break;	
-			}//end switch
-			*/
+			}//end switch*/
+			
 		}
 
 		private void gridAccount_CellDoubleClick(object sender, OpenDental.UI.ODGridClickEventArgs e) {

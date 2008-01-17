@@ -326,7 +326,7 @@ namespace OpenDental.UI{
 		///<summary>Runs any time the control is invalidated.</summary>
 		protected override void OnPaint(System.Windows.Forms.PaintEventArgs e){
 			if(IsUpdating) return;
-			if(Width<1) {
+			if(Width<1 || Height<1) {
 				return;
 			}
 			ComputeColumns();//it's only here because I can't figure out how to do it when columns are added. It will be removed.

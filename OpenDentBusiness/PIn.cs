@@ -169,6 +169,21 @@ namespace OpenDentBusiness{
 			stream.Write(rawData,0,rawData.Length);
 		}
 
+		///<summary>Some versions of MySQL return a GROUP_CONCAT as a string, and other versions return it as a byte array.  This method handles either way, making it work smoothly with different versions.</summary>
+		public static string PByteArray(object obj){
+			if(obj.GetType()==typeof(Byte[])){
+				Byte[] bytes=(Byte[])obj;
+				StringBuilder strbuild=new StringBuilder();
+				for(int i=0;i<bytes.Length;i++){
+					strbuild.Append((char)bytes[i]);
+				}
+				return strbuild.ToString();
+			}
+			else{//string
+				return obj.ToString();
+			}
+		}
+
 
 	}
 
