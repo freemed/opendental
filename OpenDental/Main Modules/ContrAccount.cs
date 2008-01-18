@@ -2153,63 +2153,11 @@ namespace OpenDental {
 				}
 				gridAccount.Rows.Add(row);
 			}
-			/*for(int i=0;i<AcctLineList.Count;i++){
-				//if (AcctLineAL[i].IsProc==true){
-				row=new ODGridRow();
-				try{//error catch bad dates
-					if(DateTime.Parse(AcctLineList[i].Date)>lineDate){
-						row.Cells.Add(AcctLineList[i].Date);
-						if(i>0){
-							gridAccount.Rows[i-1].ColorLborder=Color.Black;
-						}
-						lineDate=DateTime.Parse(AcctLineList[i].Date);
-					}
-					else 
-						row.Cells.Add("");
-				}
-				catch{
-					row.Cells.Add("");
-				}
-				row.Cells.Add(AcctLineList[i].Provider);
-				row.Cells.Add(AcctLineList[i].Code);
-				row.Cells.Add(AcctLineList[i].Tooth);
-				row.Cells.Add(AcctLineList[i].Description);
-				row.Cells.Add(AcctLineList[i].Fee);
-				row.Cells.Add(AcctLineList[i].InsEst);
-				row.Cells.Add(AcctLineList[i].InsPay);
-				row.Cells.Add(AcctLineList[i].Patient);
-				cell=new ODGridCell(AcctLineList[i].Adj);
-				cell.ColorText=DefB.Long[(int)DefCat.AccountColors][1].ItemColor;
-				row.Cells.Add(cell);
-				row.Cells.Add(AcctLineList[i].Paid);
-				row.Cells.Add(AcctLineList[i].Balance);
-				//}//end if
-				switch(AcctLineList[i].Type){
-					default:
-						row.ColorText=DefB.Long[(int)DefCat.AccountColors][0].ItemColor;
-						break;
-					case AcctModType.Claim:
-						row.ColorText=DefB.Long[(int)DefCat.AccountColors][4].ItemColor;
-						break;
-					case AcctModType.Adj:
-						row.ColorText=DefB.Long[(int)DefCat.AccountColors][1].ItemColor;
-						break;
-					//case AcctType.Disc:
-					//	tbAccount.SetTextColorRow
-					//		(i,DefB.Long[(int)DefCat.AccountColors][2].ItemColor);
-					//	break;
-					case AcctModType.Pay:
-						row.ColorText=DefB.Long[(int)DefCat.AccountColors][3].ItemColor;
-						break;
-					case AcctModType.Comm:
-						row.ColorText=DefB.Long[(int)DefCat.AccountColors][5].ItemColor;
-						break;
+			/*
 					case AcctModType.PayPlan:
 						row.ColorText=DefB.Long[(int)DefCat.AccountColors][6].ItemColor;
 						break;
-				}
-				gridAccount.Rows.Add(row);
-			}// */
+			 */
 			gridAccount.EndUpdate();
 			gridAccount.ScrollToEnd();
 		}
@@ -2329,16 +2277,13 @@ namespace OpenDental {
 				FormClaimEdit2.IsNew=false;
 				FormClaimEdit2.ShowDialog();
 			}
-			/*	
-				case AcctModType.Claim:
-					
-					break;
-				case AcctModType.Comm:
-					Commlog CommlogCur=arrayComm[AcctLineList[e.Row].Index];
-					FormCommItem2=new FormCommItem(CommlogCur);
-					FormCommItem2.IsNew=false;
-					FormCommItem2.ShowDialog();
-					break;				
+			else if(table.Rows[e.Row]["CommlogNum"].ToString()!="0"){
+				Commlog CommlogCur=Commlogs.GetOne(PIn.PInt(table.Rows[e.Row]["CommlogNum"].ToString()));
+				FormCommItem2=new FormCommItem(CommlogCur);
+				FormCommItem2.IsNew=false;
+				FormCommItem2.ShowDialog();
+			}
+			/*			
 				case AcctModType.PayPlan:
 					FormPayPlan2=new FormPayPlan(PatCur,arrayPayPlan[AcctLineList[e.Row].Index]);
 					FormPayPlan2.ShowDialog();
