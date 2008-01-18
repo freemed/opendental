@@ -436,9 +436,21 @@ namespace OpenDentBusiness {
 				row["description"]+=Lan.g("ContrAccount","Claim")+" "+amt.ToString("c")+" "
 					+rawClaim.Rows[i]["CarrierName"].ToString();
 				daterec=PIn.PDateT(rawClaim.Rows[i]["DateReceived"].ToString());
-				if(daterec.Year>1880){
+				if(daterec.Year>1880){//and claimstatus=R
 					row["description"]+="\r\n"+Lan.g("ContrAccount","Received")+" "+daterec.ToShortDateString();
 				}
+				else if(rawClaim.Rows[i]["ClaimStatus"].ToString()=="U"){
+					row["description"]+="\r\n"+Lan.g("ContrAccount","Unsent");
+				}
+				else if(rawClaim.Rows[i]["ClaimStatus"].ToString()=="H"){
+					row["description"]+="\r\n"+Lan.g("ContrAccount","Hold until Pri received");
+				}
+				else if(rawClaim.Rows[i]["ClaimStatus"].ToString()=="W"){
+					row["description"]+="\r\n"+Lan.g("ContrAccount","Waiting to Send");
+				}
+				//else if(rawClaim.Rows[i]["ClaimStatus"].ToString()=="S"){
+				//	row["description"]+="\r\n"+Lan.g("ContrAccount","Sent");
+				//}
 				amtpaid=PIn.PDouble(rawClaim.Rows[i]["InsPayAmt"].ToString());
 				if(amtpaid!=0){
 					row["description"]+="\r\n"+Lan.g("ContrAccount","Payment:")+" "+amtpaid.ToString("c");
