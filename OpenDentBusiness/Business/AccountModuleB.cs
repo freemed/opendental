@@ -627,10 +627,18 @@ namespace OpenDentBusiness {
 		
 		///<summary>A generic comparison that sorts the rows of the account table by date and type.</summary>
 		public int Compare (DataRow rowA,DataRow rowB){
-			//if different types
-
-			//if same type
-			return ((DateTime)rowA["DateTime"]).CompareTo((DateTime)rowB["DateTime"]);
+			//if dates are different, then sort by date
+			if((DateTime)rowA["DateTime"]!=(DateTime)rowB["DateTime"]){
+				return ((DateTime)rowA["DateTime"]).CompareTo((DateTime)rowB["DateTime"]);
+			}
+			//Procedures come before other types
+			if(rowA["ProcNum"].ToString()!="0" && rowB["ProcNum"].ToString()=="0"){
+				return -1;
+			}
+			if(rowA["ProcNum"].ToString()=="0" && rowB["ProcNum"].ToString()!="0"){
+				return 1;
+			}
+			return 0;
 		}
 	}
 
