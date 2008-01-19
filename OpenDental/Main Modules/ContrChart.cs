@@ -2471,6 +2471,7 @@ namespace OpenDental{
 			if(panelImages.Visible){
 				gridProg.Height-=(panelImages.Height+2);
 			}
+			gridProg.Invalidate();
 		}
 
 		private void ContrChart_Resize(object sender,EventArgs e) {
