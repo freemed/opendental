@@ -267,6 +267,8 @@ namespace OpenDental {
 			Application.DoEvents();
 			PayPlanChargeGuarantorMatch();
 			Application.DoEvents();
+			PayPlanChargeProvNum();
+			Application.DoEvents();
 			PatPlanOrdinalTwoToOne();
 			Application.DoEvents();
 			PayPlanSetGuarantorToPatForIns();
@@ -914,18 +916,19 @@ namespace OpenDental {
 
 		private void InsPlanCheckNoCarrier() {
 			//Gets a list of insurance plans that do not have a carrier attached. The list should be blank. If not, then you need to go to the plan listed and add a carrier. Missing carriers will cause the send claims function to give an error.
-			command="SELECT Subscriber FROM insplan WHERE CarrierNum=0";
+			command="SELECT PlanNum FROM insplan WHERE CarrierNum=0";
 			table=General.GetTable(command);
-			if(table.Rows.Count==0) {
-				if(checkShow.Checked) {
-					textLog.Text+=Lan.g(this,"Insurance plans checked for missing CarrierNums.")+"\r\n";
-					return;
-				}
+			if(table.Rows.Count>0){
+				Carrier carrier=new Carrier();
+				carrier.CarrierName="unknown";
+				Carriers.Insert(carrier);
+				command="UPDATE insplan SET CarrierNum="+POut.PInt(carrier.CarrierNum)
+					+" WHERE CarrierNum=0";
+				General.NonQ(command);
 			}
-			Patient Lim;
-			for(int i=0;i<table.Rows.Count;i++) {
-				Lim=Patients.GetLim(PIn.PInt(table.Rows[i][0].ToString()));
-				textLog.Text+=Lan.g(this,"Warning!")+" "+Lim.GetNameFL()+" "+Lan.g(this,"has an insurance plan that does not have a carrier assigned.  Please fix this.")+"\r\n";
+			int numberFixed=table.Rows.Count;
+			if(numberFixed>0||checkShow.Checked) {
+				textLog.Text+=Lan.g(this,"Ins plans with carrier missing fixed: ")+numberFixed.ToString()+"\r\n";
 			}
 		}
 
@@ -1011,6 +1014,17 @@ namespace OpenDental {
 			numberFixed+=General.NonQ(command);
 			if(numberFixed>0 || checkShow.Checked) {
 				textLog.Text+=Lan.g(this,"PayPlanCharge guarantors and pats set to match payplan guarantors and pats: ")
+					+numberFixed.ToString()+"\r\n";
+			}
+		}
+		
+		private void PayPlanChargeProvNum() {
+			//I would rather set the provnum to that of the patient, but it's more complex.
+			command="UPDATE payplancharge SET ProvNum="+POut.PInt(PrefB.GetInt("PracticeDefaultProv"))
+				+" WHERE ProvNum=0";
+			int numberFixed=General.NonQ(command);
+			if(numberFixed>0 || checkShow.Checked) {
+				textLog.Text+=Lan.g(this,"Pay plan charge providers set if missing: ")
 					+numberFixed.ToString()+"\r\n";
 			}
 		}

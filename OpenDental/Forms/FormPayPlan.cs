@@ -1271,13 +1271,7 @@ namespace OpenDental{
 			PayPlanCur.APR=PIn.PDouble(textAPR.Text);
 			PayPlanCur.Note=textNote.Text;
 			//PlanNum set already
-			try{
-				PayPlans.InsertOrUpdate(PayPlanCur,false);//always saved to db before opening this form
-			}
-			catch(Exception ex){
-				MessageBox.Show(ex.Message);
-				return false;
-			}
+			PayPlans.Update(PayPlanCur);//always saved to db before opening this form
 			return true;
 		}
 

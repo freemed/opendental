@@ -1031,6 +1031,7 @@ namespace OpenDental {
 			this.gridPayPlan.TabIndex = 217;
 			this.gridPayPlan.Title = "Payment Plans";
 			this.gridPayPlan.TranslationName = "TablePaymentPlans";
+			this.gridPayPlan.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridPayPlan_CellDoubleClick);
 			// 
 			// ContrAccount
 			// 
@@ -1499,7 +1500,6 @@ namespace OpenDental {
 				gridPayPlan.Visible=false;
 				return;
 			}
-			//RepeatChargeList=RepeatCharges.Refresh(PatCur.PatNum);
 			//if(RepeatChargeList.Length==0) {
 			//	gridPayPlan.Visible=false;
 			//	return;
@@ -1514,39 +1514,19 @@ namespace OpenDental {
 			gridPayPlan.Height=75;
 			gridPayPlan.BeginUpdate();
 			gridPayPlan.Columns.Clear();
-			/*ODGridColumn col=new ODGridColumn(Lan.g("TableRepeatCharges","Description"),150);
+			ODGridColumn col=new ODGridColumn(Lan.g("TablePaymentPlans","Date"),150);
 			gridPayPlan.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TableRepeatCharges","Amount"),70,HorizontalAlignment.Right);
+			col=new ODGridColumn(Lan.g("TablePaymentPlans","Amount"),70,HorizontalAlignment.Right);
 			gridPayPlan.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TableRepeatCharges","Start Date"),90);
-			gridPayPlan.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TableRepeatCharges","Stop Date"),90);
-			gridPayPlan.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TableRepeatCharges","Note"),350);
-			gridPayPlan.Columns.Add(col);*/
 			gridPayPlan.Rows.Clear();
-			/*UI.ODGridRow row;
-			ProcedureCode procCode;
-			for(int i=0;i<RepeatChargeList.Length;i++) {
+			UI.ODGridRow row;
+			DataTable table=DataSetMain.Tables["payplan"];
+			for(int i=0;i<table.Rows.Count;i++) {
 				row=new ODGridRow();
-				procCode=ProcedureCodes.GetProcCode(RepeatChargeList[i].ProcCode);
-				row.Cells.Add(procCode.Descript);
-				row.Cells.Add(RepeatChargeList[i].ChargeAmt.ToString("F"));
-				if(RepeatChargeList[i].DateStart.Year>1880) {
-					row.Cells.Add(RepeatChargeList[i].DateStart.ToShortDateString());
-				}
-				else {
-					row.Cells.Add("");
-				}
-				if(RepeatChargeList[i].DateStop.Year>1880) {
-					row.Cells.Add(RepeatChargeList[i].DateStop.ToShortDateString());
-				}
-				else {
-					row.Cells.Add("");
-				}
-				row.Cells.Add(RepeatChargeList[i].Note);
+				row.Cells.Add(table.Rows[i]["date"].ToString());
+				row.Cells.Add(table.Rows[i]["principal"].ToString());
 				gridPayPlan.Rows.Add(row);
-			}*/
+			}
 			gridPayPlan.EndUpdate();
 		}
 
@@ -2291,11 +2271,6 @@ namespace OpenDental {
 				}
 				gridAccount.Rows.Add(row);
 			}
-			/*
-					case AcctModType.PayPlan:
-						row.ColorText=DefB.Long[(int)DefCat.AccountColors][6].ItemColor;
-						break;
-			 */
 			gridAccount.EndUpdate();
 			gridAccount.ScrollToEnd();
 		}
@@ -2383,7 +2358,7 @@ namespace OpenDental {
 
 		private void gridAccount_CellDoubleClick(object sender, OpenDental.UI.ODGridClickEventArgs e) {
 			if(ViewingInRecall) return;
-			DataTable table=DataSetMain.Tables["Account"];
+			DataTable table=DataSetMain.Tables["account"];
 			if(table.Rows[e.Row]["ProcNum"].ToString()!="0"){
 				Procedure proc=Procedures.GetOneProc(PIn.PInt(table.Rows[e.Row]["ProcNum"].ToString()),true);
 				FormProcEdit FormPE=new FormProcEdit(proc,PatCur,FamCur,InsPlanList);
@@ -2421,67 +2396,32 @@ namespace OpenDental {
 				FormCommItem2.IsNew=false;
 				FormCommItem2.ShowDialog();
 			}
-			/*			
-				case AcctModType.PayPlan:
-					FormPayPlan2=new FormPayPlan(PatCur,arrayPayPlan[AcctLineList[e.Row].Index]);
-					FormPayPlan2.ShowDialog();
-					if(FormPayPlan2.GotoPatNum!=0){
-						PatCur.PatNum=FormPayPlan2.GotoPatNum;//switches to other patient.
-					}
-					break;	
-			}//end switch*/
+			else if(table.Rows[e.Row]["PayPlanNum"].ToString()!="0"){
+				PayPlan payplan=PayPlans.GetOne(PIn.PInt(table.Rows[e.Row]["PayPlanNum"].ToString()));
+				FormPayPlan2=new FormPayPlan(PatCur,payplan);
+				FormPayPlan2.ShowDialog();
+				if(FormPayPlan2.GotoPatNum!=0){
+					ModuleSelected(FormPayPlan2.GotoPatNum,false);
+					return;
+				}
+			}
 			//Shared.ComputeBalances();//use whenever a change would affect the total
 			bool isSelectingFamily=gridAcctPat.GetSelectedIndex()==this.DataSetMain.Tables["patient"].Rows.Count-1;
 			ModuleSelected(PatCur.PatNum,isSelectingFamily);
 		}
 
-		/*private void tbAccount_CellDoubleClicked(object sender, CellEventArgs e){
-			if(ViewingInRecall) return;
-			switch (((AcctLine)AcctLineAL[e.Row]).Type){
-				default:
-					Procedure ProcCur=arrayProc[((AcctLine)AcctLineAL[e.Row]).Index];
-					FormProcEdit FormPE=new FormProcEdit(ProcCur,PatCur,FamCur,InsPlanList);
-					FormPE.ShowDialog();
-					break;
-				case AcctType.Claim:
-					Claims.Cur=arrayClaim[((AcctLine)AcctLineAL[e.Row]).Index];
-					FormClaimEdit FormClaimEdit2=new FormClaimEdit(PatCur,FamCur);
-					FormClaimEdit2.IsNew=false;
-					FormClaimEdit2.ShowDialog();
-					break;
-				case AcctType.Adj:
-					Adjustment AdjustmentCur=arrayAdj[((AcctLine)AcctLineAL[e.Row]).Index];
-					FormAdjust FormAdj=new FormAdjust(PatCur,AdjustmentCur);
-					FormAdj.ShowDialog();
-					break;
-				case AcctType.Pay:
-					Payment PaymentCur=Payments.GetPayment(arrayPay[((AcctLine)AcctLineAL[e.Row]).Index].PayNum);
-					FormPayment2=new FormPayment(PatCur,FamCur,PaymentCur);
-					FormPayment2.IsNew=false;
-					FormPayment2.ShowDialog();
-					break;
-				case AcctType.Comm:
-					Commlogs.Cur=arrayComm[((AcctLine)AcctLineAL[e.Row]).Index];
-					FormCommItem2=new FormCommItem();
-					FormCommItem2.IsNew=false;
-					FormCommItem2.ShowDialog();
-					break;				
-				case AcctType.PayPlan:
-					PayPlans.Cur=arrayPayPlan[((AcctLine)AcctLineAL[e.Row]).Index];
-					FormPayPlan2=new FormPayPlan(PatCur);
-					FormPayPlan2.IsNew=false;
-					FormPayPlan2.ShowDialog();
-					if(FormPayPlan2.GotoPatNum!=0){
-						//Patient PatCur=PatCur;
-						
-						PatCur.PatNum=FormPayPlan2.GotoPatNum;//switches to other patient.
-						//Patients.Cur=PatCur;
-					}
-					break;	
-			}//end switch
-			//Shared.ComputeBalances();//use whenever a change would affect the total
-			ModuleSelected(PatCur.PatNum);
-		}*/
+		private void gridPayPlan_CellDoubleClick(object sender,ODGridClickEventArgs e) {
+			DataTable table=DataSetMain.Tables["payplan"];
+			PayPlan payplan=PayPlans.GetOne(PIn.PInt(table.Rows[e.Row]["PayPlanNum"].ToString()));
+			FormPayPlan2=new FormPayPlan(PatCur,payplan);
+			FormPayPlan2.ShowDialog();
+			if(FormPayPlan2.GotoPatNum!=0){
+				ModuleSelected(FormPayPlan2.GotoPatNum,false);
+				return;
+			}
+			bool isSelectingFamily=gridAcctPat.GetSelectedIndex()==this.DataSetMain.Tables["patient"].Rows.Count-1;
+			ModuleSelected(PatCur.PatNum,isSelectingFamily);
+		}
 
 		private void gridAcctPat_CellClick(object sender,ODGridClickEventArgs e) {
 			if(ViewingInRecall){
@@ -3064,13 +3004,7 @@ namespace OpenDental {
 			payPlan.PatNum=PatCur.PatNum;
 			payPlan.Guarantor=PatCur.Guarantor;
 			payPlan.PayPlanDate=DateTime.Today;
-			try{
-				PayPlans.InsertOrUpdate(payPlan,true);
-			}
-			catch(Exception ex){
-				MessageBox.Show(ex.Message);
-				return;
-			}
+			PayPlans.Insert(payPlan);
 			FormPayPlan FormPP=new FormPayPlan(PatCur,payPlan);
 			FormPP.TotalAmt=PatCur.EstBalance;
 			FormPP.IsNew=true;
@@ -3912,6 +3846,8 @@ namespace OpenDental {
 			//checkShowNotes.Tag = "";		
 			ModuleSelected(PatCur.PatNum);
 		}
+
+	
 
 
 		//private void buttonLabelxray_Click(object sender, EventArgs e) {

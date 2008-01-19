@@ -1,6 +1,7 @@
 using System;
 using System.Data;
 using System.Collections;
+using System.Collections.Generic;
 using System.Windows.Forms;
 using OpenDentBusiness;
 
@@ -9,39 +10,39 @@ namespace OpenDental{
 	public class PayPlans {
 		///<summary>Gets a list of all payplans for a given patient, whether they are the guarantor or the patient.  This is also used in UpdateAll to store all payment plans in entire database.</summary>
 		public static PayPlan[] Refresh(int guarantor,int patNum) {
-			string command="SELECT * from payplan"
+			string command="SELECT * FROM payplan"
 				+" WHERE PatNum = "+patNum.ToString()
 				+" OR Guarantor = "+guarantor.ToString()+" ORDER BY payplandate";
+			return RefreshAndFill(command).ToArray();
+		}
+
+		public static PayPlan GetOne(int payPlanNum){
+			string command="SELECT * FROM payplan"
+				+" WHERE PayPlanNum = "+POut.PInt(payPlanNum);
+			return RefreshAndFill(command)[0];
+		}
+
+		private static List<PayPlan> RefreshAndFill(string command){
+			List<PayPlan> retVal=new List<PayPlan>();
 			DataTable table=General.GetTable(command);
-			PayPlan[] List=new PayPlan[table.Rows.Count];
+			//PayPlan[] List=new PayPlan[table.Rows.Count];
+			PayPlan payplan;
 			for(int i=0;i<table.Rows.Count;i++) {
-				List[i]=new PayPlan();
-				List[i].PayPlanNum    = PIn.PInt(table.Rows[i][0].ToString());
-				List[i].PatNum        = PIn.PInt(table.Rows[i][1].ToString());
-				List[i].Guarantor     = PIn.PInt(table.Rows[i][2].ToString());
-				List[i].PayPlanDate   = PIn.PDate(table.Rows[i][3].ToString());
-				List[i].APR           = PIn.PDouble(table.Rows[i][4].ToString());
-				List[i].Note          = PIn.PString(table.Rows[i][5].ToString());
-				List[i].PlanNum       = PIn.PInt(table.Rows[i][6].ToString());
+				payplan=new PayPlan();
+				payplan.PayPlanNum    = PIn.PInt(table.Rows[i][0].ToString());
+				payplan.PatNum        = PIn.PInt(table.Rows[i][1].ToString());
+				payplan.Guarantor     = PIn.PInt(table.Rows[i][2].ToString());
+				payplan.PayPlanDate   = PIn.PDate(table.Rows[i][3].ToString());
+				payplan.APR           = PIn.PDouble(table.Rows[i][4].ToString());
+				payplan.Note          = PIn.PString(table.Rows[i][5].ToString());
+				payplan.PlanNum       = PIn.PInt(table.Rows[i][6].ToString());
+				retVal.Add(payplan);
 			}
-			return List;
+			return retVal;
 		}
 
 		///<summary></summary>
-		public static void InsertOrUpdate(PayPlan plan, bool isNew){
-			//if(){
-			//	throw new Exception(Lan.g(this,""));
-			//}
-			if(isNew){
-				Insert(plan);
-			}
-			else{
-				Update(plan);
-			}
-		}
-
-		///<summary></summary>
-		private static void Update(PayPlan plan){
+		public static void Update(PayPlan plan){
 			string command="UPDATE payplan SET " 
 				+"PatNum = '"         +POut.PInt   (plan.PatNum)+"'"
 				+",Guarantor = '"     +POut.PInt   (plan.Guarantor)+"'"
@@ -54,7 +55,7 @@ namespace OpenDental{
 		}
 
 		///<summary></summary>
-		private static void Insert(PayPlan plan){
+		public static void Insert(PayPlan plan){
 			if(PrefB.RandomKeys){
 				plan.PayPlanNum=MiscData.GetKey("payplan","PayPlanNum");
 			}
