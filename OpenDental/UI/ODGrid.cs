@@ -191,6 +191,25 @@ namespace OpenDental.UI{
 			}
 		}
 
+		protected override void OnSizeChanged(EventArgs e) {
+			base.OnSizeChanged(e);
+			ScrollValue=vScroll.Value;
+			/*
+			if(!vScroll.Enabled){
+				return;
+			}
+			if(vScroll.Value>vScroll.Maximum-vScroll.LargeChange) 
+				vScroll.Value=vScroll.Maximum-vScroll.LargeChange;
+			else if(vScroll.Value<vScroll.Minimum)
+				vScroll.Value=vScroll.Minimum;
+			//else
+			//	vScroll.Value=value;
+			if(editBox!=null){
+				editBox.Dispose();
+			}
+			Invalidate();*/
+		}
+
 		///<summary>Holds the int values of the indices of the selected rows.  To set selected indices, use SetSelected().</summary>
     [Browsable(false)]
 		public int[] SelectedIndices{
