@@ -181,7 +181,8 @@ namespace OpenDental.Eclaims {
 //todo
 			txt+="0";
 			//C16 Eligibility date. 8 N.
-			txt+=FormElig.AsOfDate.ToString("yyyyMMdd");//validated
+			DateTime asofdate=FormElig.AsOfDate;
+			txt+=asofdate.ToString("yyyyMMdd");//validated
 			//D01 subscriber birthday 8 N
 			txt+=subscriber.Birthdate.ToString("yyyyMMdd");//validated
 			//D02 subscriber last name 25 AE

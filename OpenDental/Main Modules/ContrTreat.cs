@@ -48,11 +48,11 @@ namespace OpenDental{
 		///<summary></summary>
     public FormRpPrintPreview pView;
 //		private System.Windows.Forms.PrintDialog printDialog2;
-		private bool headingPrinted;
-		private bool graphicsPrinted;
-		private bool mainPrinted;
-		private bool benefitsPrinted;
-		private bool notePrinted;
+		//private bool headingPrinted;
+		//private bool graphicsPrinted;
+		//private bool mainPrinted;
+		//private bool benefitsPrinted;
+		//private bool notePrinted;
 		private double[] ColTotal;
 		private System.Drawing.Font bodyFont=new System.Drawing.Font("Arial",9);
 		private System.Drawing.Font nameFont=new System.Drawing.Font("Arial",9,FontStyle.Bold);
@@ -114,10 +114,10 @@ namespace OpenDental{
 		private CheckBox checkShowMaxDed;
 		///<summary>Only used for printing graphical chart.</summary>
 		private Bitmap chartBitmap;
-		private int headingPrintH;
+		//private int headingPrintH;
 		private CheckBox checkShowTotals;
 		private Label labelFamily;
-		private int pagesPrinted;
+		//private int pagesPrinted;
 		private CheckBox checkShowDiscount;
 		private List<Claim> ClaimList;
 
@@ -687,7 +687,7 @@ namespace OpenDental{
 		///<summary>Causes the toolbar to be laid out again.</summary>
 		public void LayoutToolBar(){
 			ToolBarMain.Buttons.Clear();
-			ODToolBarButton button;
+			//ODToolBarButton button;
 			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"PreAuthorization"),-1,"","PreAuth"));
 			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Update Fees"),1,"","Update"));
 			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Save TP"),3,"","Create"));
@@ -1755,12 +1755,12 @@ namespace OpenDental{
 		private void PrepImageForPrinting(){
 			//linesPrinted=0;
 			ColTotal = new double[10];
-			headingPrinted=false;
-			graphicsPrinted=false;
-			mainPrinted=false;
-			benefitsPrinted=false;
-			notePrinted=false;
-			pagesPrinted=0;
+			//headingPrinted=false;
+			//graphicsPrinted=false;
+			//mainPrinted=false;
+			//benefitsPrinted=false;
+			//notePrinted=false;
+			//pagesPrinted=0;
 			if(PrefB.GetBool("TreatPlanShowGraphics")){
 				//prints the graphical tooth chart and legend
 				//Panel panelHide=new Panel();

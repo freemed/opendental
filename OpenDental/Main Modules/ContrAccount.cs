@@ -110,7 +110,7 @@ namespace OpenDental {
 		private PatPlan[] PatPlanList;
 		//private Procedure[] AccProcList;
 		private int OriginalMousePos;
-		private ClaimProc[] ClaimProcList;
+		//private ClaimProc[] ClaimProcList;
 		///<summary>Used only in printing reports that show subtotal only.  Public because used by FormRpStatement</summary>
 		public double SubTotal;
 		private bool MouseIsDownOnSplitter;
@@ -1235,7 +1235,7 @@ namespace OpenDental {
 			FamCur=null;
 			//Claims.List=null;
 			//Commlogs.List=null;
-			ClaimProcList=null;
+			//ClaimProcList=null;
 			RepeatChargeList=null;
 		}
 
@@ -1499,10 +1499,11 @@ namespace OpenDental {
 				gridPayPlan.Visible=false;
 				return;
 			}
-			//if(RepeatChargeList.Length==0) {
-			//	gridPayPlan.Visible=false;
-			//	return;
-			//}
+			DataTable table=DataSetMain.Tables["payplan"];
+			if(table.Rows.Count==0) {
+				gridPayPlan.Visible=false;
+				return;
+			}
 			if(gridRepeat.Visible){
 				gridPayPlan.Location=new Point(0,gridRepeat.Bottom+3);
 			}
@@ -1529,13 +1530,14 @@ namespace OpenDental {
 			gridPayPlan.Columns.Add(col);
 			col=new ODGridColumn(Lan.g("TablePaymentPlans","PrincPaid"),70,HorizontalAlignment.Right);
 			gridPayPlan.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TablePaymentPlans","Due"),70,HorizontalAlignment.Right);
+			col=new ODGridColumn(Lan.g("TablePaymentPlans","Balance"),70,HorizontalAlignment.Right);
+			gridPayPlan.Columns.Add(col);
+			col=new ODGridColumn(Lan.g("TablePaymentPlans","Due Now"),70,HorizontalAlignment.Right);
 			gridPayPlan.Columns.Add(col);
 			col=new ODGridColumn("",70);//filler
 			gridPayPlan.Columns.Add(col);
 			gridPayPlan.Rows.Clear();
 			UI.ODGridRow row;
-			DataTable table=DataSetMain.Tables["payplan"];
 			for(int i=0;i<table.Rows.Count;i++) {
 				row=new ODGridRow();
 				row.Cells.Add(table.Rows[i]["date"].ToString());
@@ -1546,6 +1548,7 @@ namespace OpenDental {
 				row.Cells.Add(table.Rows[i]["totalCost"].ToString());
 				row.Cells.Add(table.Rows[i]["paid"].ToString());
 				row.Cells.Add(table.Rows[i]["princPaid"].ToString());
+				row.Cells.Add(table.Rows[i]["balance"].ToString());
 				row.Cells.Add(table.Rows[i]["due"].ToString());
 				row.Cells.Add("");
 				gridPayPlan.Rows.Add(row);

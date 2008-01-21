@@ -1236,7 +1236,7 @@ namespace OpenDental{
 		///<summary></summary>
 		public void LayoutToolBar(){
 			ToolBarMain.Buttons.Clear();
-			ODToolBarButton button;
+			//ODToolBarButton button;
 			//button=new ODToolBarButton("",0,Lan.g(this,"Select Patient"),"Patient");
 			//button.Style=ODToolBarButtonStyle.DropDownButton;
 			//button.DropDownMenu=menuPatient;

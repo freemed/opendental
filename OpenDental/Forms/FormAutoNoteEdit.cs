@@ -16,9 +16,9 @@ namespace OpenDental {
 		public AutoNoteControl ControlCur;
 		List<AutoNoteControl> ControlsList;
 		//List<AutoNote> AutoNoteList;
-		/// <summary>This is set to true if the user clicks on the edit control button</summary>
-		bool RefreshControlsToIncEdit=false;
-		string[] ControlsToInc;
+		// <summary>This is set to true if the user clicks on the edit control button</summary>
+		//bool RefreshControlsToIncEdit=false;
+		//string[] ControlsToInc;
 
 		public FormAutoNoteEdit() {
 			//

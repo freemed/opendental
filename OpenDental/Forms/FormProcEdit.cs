@@ -124,8 +124,8 @@ namespace OpenDental{
 		private ComboBox comboDx;
 		private ComboBox comboPriority;
 		private TextBox textUser;
-		private Label label17;
-		private Label label18;
+		//private Label label17;
+		//private Label label18;
 		private Label label19;
 		private TextBox textCodeMod1;
 		private ComboBox comboBillingTypeTwo;

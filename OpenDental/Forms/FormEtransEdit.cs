@@ -41,7 +41,7 @@ namespace OpenDental{
 		private OpenDental.UI.Button butPrint;
 		private Etrans AckCur;
 		private PrintDocument pd2;
-		private bool headingPrinted;
+		//private bool headingPrinted;
 		private CheckBox checkAttachments;
 		private int linesPrinted;
 

@@ -415,7 +415,7 @@ namespace OpenDental{
 			gridMain.Columns.Add(col);
 			gridMain.Rows.Clear();
 			ODGridRow row;
-			Procedure proc;
+			//Procedure proc;
 			for(int i=0;i<SplitList.Count;i++) {
 				row=new ODGridRow();
 				row.Cells.Add(SplitList[i].ProcDate.ToShortDateString());

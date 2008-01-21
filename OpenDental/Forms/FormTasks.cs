@@ -11,7 +11,7 @@ namespace OpenDental{
 	/// Summary description for FormBasicTemplate.
 	/// </summary>
 	public class FormTasks:System.Windows.Forms.Form {
-		private System.ComponentModel.IContainer components;
+		//private System.ComponentModel.IContainer components;
 		///<summary>After closing, if this is not zero, then it will jump to the object specified in GotoKeyNum.</summary>
 		public TaskObjectType GotoType;
 		private UserControlTasks userControlTasks1;
@@ -36,10 +36,10 @@ namespace OpenDental{
 		{
 			if( disposing )
 			{
-				if(components != null)
-				{
-					components.Dispose();
-				}
+				//if(components != null)
+				//{
+				//	components.Dispose();
+				//}
 			}
 			base.Dispose( disposing );
 		}

@@ -175,7 +175,7 @@ namespace OpenDental{
 		private MenuItem menuItemMergeDatabases;
 		private MenuItem menuItemDisplayFields;
 		private Panel panelSplitter;
-		private string dconnStr;
+		//private string dconnStr;
 		private bool MouseIsDownOnSplitter;
 		private Point SplitterOriginalLocation;
 		private ContextMenu menuSplitter;

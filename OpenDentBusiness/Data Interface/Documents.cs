@@ -221,7 +221,7 @@ namespace OpenDentBusiness {
 		}
 
 		/// <summary>Makes one call to the database to retrieve the document of the patient for the given patNum, then uses that document and the patFolder to load and process the patient picture so it appears the same way it did in the image module.  It first creates a 100x100 thumbnail if needed, then it uses the thumbnail so no scaling needed. Returns false if there is no patient picture, true otherwise. Sets the value of patientPict equal to a new instance of the patient's processed picture, but will be set to null on error. Assumes WithPat will always be same as patnum.</summary>
-		[Obsolete("This method now throws an exception!")]
+		//[Obsolete("This method now throws an exception!")]
 		public static bool GetPatPict(int patNum, string patFolder, out Bitmap patientPict) {
 			patientPict=null;
 			//first establish which category pat pics are in

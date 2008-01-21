@@ -128,35 +128,21 @@ namespace OpenDental{
 		private void InitializeComponent()
 		{
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormPayPlan));
-			this.butCancel = new OpenDental.UI.Button();
-			this.butOK = new OpenDental.UI.Button();
 			this.labelGuarantor = new System.Windows.Forms.Label();
 			this.textGuarantor = new System.Windows.Forms.TextBox();
-			this.butChangeGuar = new OpenDental.UI.Button();
 			this.label2 = new System.Windows.Forms.Label();
-			this.textDate = new OpenDental.ValidDate();
 			this.label4 = new System.Windows.Forms.Label();
-			this.textAmount = new OpenDental.ValidDouble();
-			this.textDateFirstPay = new OpenDental.ValidDate();
 			this.label5 = new System.Windows.Forms.Label();
-			this.textAPR = new OpenDental.ValidDouble();
 			this.label6 = new System.Windows.Forms.Label();
-			this.textPeriodPayment = new OpenDental.ValidDouble();
 			this.label7 = new System.Windows.Forms.Label();
-			this.textTerm = new OpenDental.ValidNum();
 			this.label8 = new System.Windows.Forms.Label();
-			this.butPrint = new OpenDental.UI.Button();
 			this.groupBox2 = new System.Windows.Forms.GroupBox();
 			this.radioQuarterly = new System.Windows.Forms.RadioButton();
 			this.radioMonthly = new System.Windows.Forms.RadioButton();
 			this.groupBox3 = new System.Windows.Forms.GroupBox();
-			this.textDownPayment = new OpenDental.ValidDouble();
 			this.label11 = new System.Windows.Forms.Label();
-			this.butCreateSched = new OpenDental.UI.Button();
 			this.textTotalCost = new System.Windows.Forms.TextBox();
 			this.label15 = new System.Windows.Forms.Label();
-			this.butGoToGuar = new OpenDental.UI.Button();
-			this.butGoToPat = new OpenDental.UI.Button();
 			this.textPatient = new System.Windows.Forms.TextBox();
 			this.label9 = new System.Windows.Forms.Label();
 			this.pd2 = new System.Drawing.Printing.PrintDocument();
@@ -166,12 +152,8 @@ namespace OpenDental{
 			this.textAccumulatedDue = new System.Windows.Forms.TextBox();
 			this.label13 = new System.Windows.Forms.Label();
 			this.label10 = new System.Windows.Forms.Label();
-			this.butDelete = new OpenDental.UI.Button();
-			this.textNote = new OpenDental.ODtextBox();
-			this.gridCharges = new OpenDental.UI.ODGrid();
 			this.textInsPlan = new System.Windows.Forms.TextBox();
 			this.labelInsPlan = new System.Windows.Forms.Label();
-			this.butChangePlan = new OpenDental.UI.Button();
 			this.checkIns = new System.Windows.Forms.CheckBox();
 			this.label1 = new System.Windows.Forms.Label();
 			this.textStartBal = new System.Windows.Forms.TextBox();
@@ -179,44 +161,31 @@ namespace OpenDental{
 			this.label3 = new System.Windows.Forms.Label();
 			this.textTotInt = new System.Windows.Forms.TextBox();
 			this.textTotPay = new System.Windows.Forms.TextBox();
-			this.butClear = new OpenDental.UI.Button();
-			this.butAdd = new OpenDental.UI.Button();
 			this.textPrincPaid = new System.Windows.Forms.TextBox();
 			this.label14 = new System.Windows.Forms.Label();
+			this.butAdd = new OpenDental.UI.Button();
+			this.butClear = new OpenDental.UI.Button();
+			this.butChangePlan = new OpenDental.UI.Button();
+			this.gridCharges = new OpenDental.UI.ODGrid();
+			this.textNote = new OpenDental.ODtextBox();
+			this.butDelete = new OpenDental.UI.Button();
+			this.butGoToPat = new OpenDental.UI.Button();
+			this.butGoToGuar = new OpenDental.UI.Button();
+			this.textDate = new OpenDental.ValidDate();
+			this.butChangeGuar = new OpenDental.UI.Button();
+			this.butOK = new OpenDental.UI.Button();
+			this.butCancel = new OpenDental.UI.Button();
+			this.textAPR = new OpenDental.ValidDouble();
+			this.textPeriodPayment = new OpenDental.ValidDouble();
+			this.textTerm = new OpenDental.ValidNum();
+			this.textDownPayment = new OpenDental.ValidDouble();
+			this.textDateFirstPay = new OpenDental.ValidDate();
+			this.textAmount = new OpenDental.ValidDouble();
+			this.butCreateSched = new OpenDental.UI.Button();
+			this.butPrint = new OpenDental.UI.Button();
 			this.groupBox2.SuspendLayout();
 			this.groupBox3.SuspendLayout();
 			this.SuspendLayout();
-			// 
-			// butCancel
-			// 
-			this.butCancel.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butCancel.Autosize = true;
-			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butCancel.CornerRadius = 4F;
-			this.butCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.butCancel.Location = new System.Drawing.Point(880,589);
-			this.butCancel.Name = "butCancel";
-			this.butCancel.Size = new System.Drawing.Size(75,26);
-			this.butCancel.TabIndex = 0;
-			this.butCancel.Text = "&Cancel";
-			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
-			// 
-			// butOK
-			// 
-			this.butOK.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butOK.Autosize = true;
-			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(787,589);
-			this.butOK.Name = "butOK";
-			this.butOK.Size = new System.Drawing.Size(75,26);
-			this.butOK.TabIndex = 1;
-			this.butOK.Text = "&OK";
-			this.butOK.Click += new System.EventHandler(this.butOK_Click);
 			// 
 			// labelGuarantor
 			// 
@@ -235,20 +204,6 @@ namespace OpenDental{
 			this.textGuarantor.Size = new System.Drawing.Size(199,20);
 			this.textGuarantor.TabIndex = 3;
 			// 
-			// butChangeGuar
-			// 
-			this.butChangeGuar.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butChangeGuar.Autosize = true;
-			this.butChangeGuar.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butChangeGuar.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butChangeGuar.CornerRadius = 4F;
-			this.butChangeGuar.Location = new System.Drawing.Point(354,53);
-			this.butChangeGuar.Name = "butChangeGuar";
-			this.butChangeGuar.Size = new System.Drawing.Size(75,22);
-			this.butChangeGuar.TabIndex = 4;
-			this.butChangeGuar.Text = "C&hange";
-			this.butChangeGuar.Click += new System.EventHandler(this.butChangeGuar_Click);
-			// 
 			// label2
 			// 
 			this.label2.Location = new System.Drawing.Point(21,128);
@@ -257,13 +212,6 @@ namespace OpenDental{
 			this.label2.TabIndex = 5;
 			this.label2.Text = "Date of Agreement";
 			this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// textDate
-			// 
-			this.textDate.Location = new System.Drawing.Point(156,127);
-			this.textDate.Name = "textDate";
-			this.textDate.Size = new System.Drawing.Size(85,20);
-			this.textDate.TabIndex = 7;
 			// 
 			// label4
 			// 
@@ -274,20 +222,6 @@ namespace OpenDental{
 			this.label4.Text = "Total Amount";
 			this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
-			// textAmount
-			// 
-			this.textAmount.Location = new System.Drawing.Point(142,13);
-			this.textAmount.Name = "textAmount";
-			this.textAmount.Size = new System.Drawing.Size(85,20);
-			this.textAmount.TabIndex = 11;
-			// 
-			// textDateFirstPay
-			// 
-			this.textDateFirstPay.Location = new System.Drawing.Point(142,34);
-			this.textDateFirstPay.Name = "textDateFirstPay";
-			this.textDateFirstPay.Size = new System.Drawing.Size(85,20);
-			this.textDateFirstPay.TabIndex = 13;
-			// 
 			// label5
 			// 
 			this.label5.Location = new System.Drawing.Point(5,36);
@@ -296,13 +230,6 @@ namespace OpenDental{
 			this.label5.TabIndex = 12;
 			this.label5.Text = "Date of First Payment";
 			this.label5.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// textAPR
-			// 
-			this.textAPR.Location = new System.Drawing.Point(142,78);
-			this.textAPR.Name = "textAPR";
-			this.textAPR.Size = new System.Drawing.Size(47,20);
-			this.textAPR.TabIndex = 15;
 			// 
 			// label6
 			// 
@@ -313,14 +240,6 @@ namespace OpenDental{
 			this.label6.Text = "APR (for example 0 or 18)";
 			this.label6.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
-			// textPeriodPayment
-			// 
-			this.textPeriodPayment.Location = new System.Drawing.Point(133,40);
-			this.textPeriodPayment.Name = "textPeriodPayment";
-			this.textPeriodPayment.Size = new System.Drawing.Size(85,20);
-			this.textPeriodPayment.TabIndex = 17;
-			this.textPeriodPayment.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textPeriodPayment_KeyPress);
-			// 
 			// label7
 			// 
 			this.label7.Location = new System.Drawing.Point(8,41);
@@ -330,16 +249,6 @@ namespace OpenDental{
 			this.label7.Text = "Payment Amt";
 			this.label7.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
-			// textTerm
-			// 
-			this.textTerm.Location = new System.Drawing.Point(133,17);
-			this.textTerm.MaxVal = 255;
-			this.textTerm.MinVal = 0;
-			this.textTerm.Name = "textTerm";
-			this.textTerm.Size = new System.Drawing.Size(47,20);
-			this.textTerm.TabIndex = 18;
-			this.textTerm.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textTerm_KeyPress);
-			// 
 			// label8
 			// 
 			this.label8.Location = new System.Drawing.Point(7,16);
@@ -348,23 +257,6 @@ namespace OpenDental{
 			this.label8.TabIndex = 19;
 			this.label8.Text = "Number of Payments";
 			this.label8.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// butPrint
-			// 
-			this.butPrint.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butPrint.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
-			this.butPrint.Autosize = true;
-			this.butPrint.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butPrint.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butPrint.CornerRadius = 4F;
-			this.butPrint.Image = global::OpenDental.Properties.Resources.butPrintSmall;
-			this.butPrint.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butPrint.Location = new System.Drawing.Point(563,589);
-			this.butPrint.Name = "butPrint";
-			this.butPrint.Size = new System.Drawing.Size(85,26);
-			this.butPrint.TabIndex = 20;
-			this.butPrint.Text = "&Print";
-			this.butPrint.Click += new System.EventHandler(this.butPrint_Click);
 			// 
 			// groupBox2
 			// 
@@ -420,13 +312,6 @@ namespace OpenDental{
 			this.groupBox3.TabStop = false;
 			this.groupBox3.Text = "Either";
 			// 
-			// textDownPayment
-			// 
-			this.textDownPayment.Location = new System.Drawing.Point(142,56);
-			this.textDownPayment.Name = "textDownPayment";
-			this.textDownPayment.Size = new System.Drawing.Size(85,20);
-			this.textDownPayment.TabIndex = 22;
-			// 
 			// label11
 			// 
 			this.label11.Location = new System.Drawing.Point(4,59);
@@ -435,20 +320,6 @@ namespace OpenDental{
 			this.label11.TabIndex = 21;
 			this.label11.Text = "Down Payment";
 			this.label11.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// butCreateSched
-			// 
-			this.butCreateSched.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butCreateSched.Autosize = true;
-			this.butCreateSched.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butCreateSched.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butCreateSched.CornerRadius = 4F;
-			this.butCreateSched.Location = new System.Drawing.Point(242,143);
-			this.butCreateSched.Name = "butCreateSched";
-			this.butCreateSched.Size = new System.Drawing.Size(99,25);
-			this.butCreateSched.TabIndex = 42;
-			this.butCreateSched.Text = "Create Schedule";
-			this.butCreateSched.Click += new System.EventHandler(this.butCreateSched_Click);
 			// 
 			// textTotalCost
 			// 
@@ -466,34 +337,6 @@ namespace OpenDental{
 			this.label15.TabIndex = 34;
 			this.label15.Text = "Total Cost of Loan";
 			this.label15.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// butGoToGuar
-			// 
-			this.butGoToGuar.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butGoToGuar.Autosize = true;
-			this.butGoToGuar.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butGoToGuar.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butGoToGuar.CornerRadius = 4F;
-			this.butGoToGuar.Location = new System.Drawing.Point(354,31);
-			this.butGoToGuar.Name = "butGoToGuar";
-			this.butGoToGuar.Size = new System.Drawing.Size(75,22);
-			this.butGoToGuar.TabIndex = 23;
-			this.butGoToGuar.Text = "Go &To";
-			this.butGoToGuar.Click += new System.EventHandler(this.butGoTo_Click);
-			// 
-			// butGoToPat
-			// 
-			this.butGoToPat.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butGoToPat.Autosize = true;
-			this.butGoToPat.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butGoToPat.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butGoToPat.CornerRadius = 4F;
-			this.butGoToPat.Location = new System.Drawing.Point(354,9);
-			this.butGoToPat.Name = "butGoToPat";
-			this.butGoToPat.Size = new System.Drawing.Size(75,22);
-			this.butGoToPat.TabIndex = 27;
-			this.butGoToPat.Text = "&Go To";
-			this.butGoToPat.Click += new System.EventHandler(this.butGoToPat_Click);
 			// 
 			// textPatient
 			// 
@@ -555,46 +398,6 @@ namespace OpenDental{
 			this.label10.Text = "Note";
 			this.label10.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
 			// 
-			// butDelete
-			// 
-			this.butDelete.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butDelete.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.butDelete.Autosize = true;
-			this.butDelete.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butDelete.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butDelete.CornerRadius = 4F;
-			this.butDelete.Image = global::OpenDental.Properties.Resources.deleteX;
-			this.butDelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butDelete.Location = new System.Drawing.Point(22,589);
-			this.butDelete.Name = "butDelete";
-			this.butDelete.Size = new System.Drawing.Size(84,26);
-			this.butDelete.TabIndex = 38;
-			this.butDelete.Text = "&Delete";
-			this.butDelete.Click += new System.EventHandler(this.butDelete_Click);
-			// 
-			// textNote
-			// 
-			this.textNote.AcceptsReturn = true;
-			this.textNote.Location = new System.Drawing.Point(22,445);
-			this.textNote.Multiline = true;
-			this.textNote.Name = "textNote";
-			this.textNote.QuickPasteType = OpenDentBusiness.QuickPasteType.PayPlan;
-			this.textNote.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-			this.textNote.Size = new System.Drawing.Size(392,121);
-			this.textNote.TabIndex = 40;
-			// 
-			// gridCharges
-			// 
-			this.gridCharges.HScrollVisible = false;
-			this.gridCharges.Location = new System.Drawing.Point(435,31);
-			this.gridCharges.Name = "gridCharges";
-			this.gridCharges.ScrollValue = 0;
-			this.gridCharges.Size = new System.Drawing.Size(536,379);
-			this.gridCharges.TabIndex = 41;
-			this.gridCharges.Title = "Amortization Schedule";
-			this.gridCharges.TranslationName = "PayPlanAmortization";
-			this.gridCharges.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridCharges_CellDoubleClick);
-			// 
 			// textInsPlan
 			// 
 			this.textInsPlan.Location = new System.Drawing.Point(156,100);
@@ -611,20 +414,6 @@ namespace OpenDental{
 			this.labelInsPlan.TabIndex = 42;
 			this.labelInsPlan.Text = "Insurance Plan";
 			this.labelInsPlan.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// butChangePlan
-			// 
-			this.butChangePlan.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butChangePlan.Autosize = true;
-			this.butChangePlan.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butChangePlan.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butChangePlan.CornerRadius = 4F;
-			this.butChangePlan.Location = new System.Drawing.Point(354,99);
-			this.butChangePlan.Name = "butChangePlan";
-			this.butChangePlan.Size = new System.Drawing.Size(75,22);
-			this.butChangePlan.TabIndex = 44;
-			this.butChangePlan.Text = "C&hange";
-			this.butChangePlan.Click += new System.EventHandler(this.butChangePlan_Click);
 			// 
 			// checkIns
 			// 
@@ -655,7 +444,7 @@ namespace OpenDental{
 			// 
 			// textTotPrinc
 			// 
-			this.textTotPrinc.Location = new System.Drawing.Point(541,416);
+			this.textTotPrinc.Location = new System.Drawing.Point(534,416);
 			this.textTotPrinc.Name = "textTotPrinc";
 			this.textTotPrinc.ReadOnly = true;
 			this.textTotPrinc.Size = new System.Drawing.Size(60,20);
@@ -664,7 +453,7 @@ namespace OpenDental{
 			// 
 			// label3
 			// 
-			this.label3.Location = new System.Drawing.Point(449,416);
+			this.label3.Location = new System.Drawing.Point(442,416);
 			this.label3.Name = "label3";
 			this.label3.Size = new System.Drawing.Size(88,17);
 			this.label3.TabIndex = 49;
@@ -673,7 +462,7 @@ namespace OpenDental{
 			// 
 			// textTotInt
 			// 
-			this.textTotInt.Location = new System.Drawing.Point(600,416);
+			this.textTotInt.Location = new System.Drawing.Point(593,416);
 			this.textTotInt.Name = "textTotInt";
 			this.textTotInt.ReadOnly = true;
 			this.textTotInt.Size = new System.Drawing.Size(60,20);
@@ -682,42 +471,12 @@ namespace OpenDental{
 			// 
 			// textTotPay
 			// 
-			this.textTotPay.Location = new System.Drawing.Point(659,416);
+			this.textTotPay.Location = new System.Drawing.Point(652,416);
 			this.textTotPay.Name = "textTotPay";
 			this.textTotPay.ReadOnly = true;
 			this.textTotPay.Size = new System.Drawing.Size(60,20);
 			this.textTotPay.TabIndex = 52;
 			this.textTotPay.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-			// 
-			// butClear
-			// 
-			this.butClear.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butClear.Autosize = true;
-			this.butClear.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butClear.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butClear.CornerRadius = 4F;
-			this.butClear.Location = new System.Drawing.Point(634,453);
-			this.butClear.Name = "butClear";
-			this.butClear.Size = new System.Drawing.Size(99,26);
-			this.butClear.TabIndex = 53;
-			this.butClear.Text = "Clear Schedule";
-			this.butClear.Click += new System.EventHandler(this.butClear_Click);
-			// 
-			// butAdd
-			// 
-			this.butAdd.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butAdd.Autosize = true;
-			this.butAdd.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butAdd.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butAdd.CornerRadius = 4F;
-			this.butAdd.Image = global::OpenDental.Properties.Resources.Add;
-			this.butAdd.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butAdd.Location = new System.Drawing.Point(535,453);
-			this.butAdd.Name = "butAdd";
-			this.butAdd.Size = new System.Drawing.Size(84,26);
-			this.butAdd.TabIndex = 54;
-			this.butAdd.Text = "Add";
-			this.butAdd.Click += new System.EventHandler(this.butAdd_Click);
 			// 
 			// textPrincPaid
 			// 
@@ -735,6 +494,247 @@ namespace OpenDental{
 			this.label14.TabIndex = 55;
 			this.label14.Text = "Principal paid so far";
 			this.label14.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// butAdd
+			// 
+			this.butAdd.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butAdd.Autosize = true;
+			this.butAdd.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butAdd.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butAdd.CornerRadius = 4F;
+			this.butAdd.Image = global::OpenDental.Properties.Resources.Add;
+			this.butAdd.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butAdd.Location = new System.Drawing.Point(535,453);
+			this.butAdd.Name = "butAdd";
+			this.butAdd.Size = new System.Drawing.Size(84,26);
+			this.butAdd.TabIndex = 54;
+			this.butAdd.Text = "Add";
+			this.butAdd.Click += new System.EventHandler(this.butAdd_Click);
+			// 
+			// butClear
+			// 
+			this.butClear.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butClear.Autosize = true;
+			this.butClear.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butClear.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butClear.CornerRadius = 4F;
+			this.butClear.Location = new System.Drawing.Point(634,453);
+			this.butClear.Name = "butClear";
+			this.butClear.Size = new System.Drawing.Size(99,26);
+			this.butClear.TabIndex = 53;
+			this.butClear.Text = "Clear Schedule";
+			this.butClear.Click += new System.EventHandler(this.butClear_Click);
+			// 
+			// butChangePlan
+			// 
+			this.butChangePlan.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butChangePlan.Autosize = true;
+			this.butChangePlan.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butChangePlan.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butChangePlan.CornerRadius = 4F;
+			this.butChangePlan.Location = new System.Drawing.Point(354,99);
+			this.butChangePlan.Name = "butChangePlan";
+			this.butChangePlan.Size = new System.Drawing.Size(75,22);
+			this.butChangePlan.TabIndex = 44;
+			this.butChangePlan.Text = "C&hange";
+			this.butChangePlan.Click += new System.EventHandler(this.butChangePlan_Click);
+			// 
+			// gridCharges
+			// 
+			this.gridCharges.HScrollVisible = false;
+			this.gridCharges.Location = new System.Drawing.Point(435,31);
+			this.gridCharges.Name = "gridCharges";
+			this.gridCharges.ScrollValue = 0;
+			this.gridCharges.Size = new System.Drawing.Size(536,379);
+			this.gridCharges.TabIndex = 41;
+			this.gridCharges.Title = "Amortization Schedule";
+			this.gridCharges.TranslationName = "PayPlanAmortization";
+			this.gridCharges.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridCharges_CellDoubleClick);
+			// 
+			// textNote
+			// 
+			this.textNote.AcceptsReturn = true;
+			this.textNote.Location = new System.Drawing.Point(22,445);
+			this.textNote.Multiline = true;
+			this.textNote.Name = "textNote";
+			this.textNote.QuickPasteType = OpenDentBusiness.QuickPasteType.PayPlan;
+			this.textNote.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+			this.textNote.Size = new System.Drawing.Size(392,121);
+			this.textNote.TabIndex = 40;
+			// 
+			// butDelete
+			// 
+			this.butDelete.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butDelete.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.butDelete.Autosize = true;
+			this.butDelete.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butDelete.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butDelete.CornerRadius = 4F;
+			this.butDelete.Image = global::OpenDental.Properties.Resources.deleteX;
+			this.butDelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butDelete.Location = new System.Drawing.Point(22,589);
+			this.butDelete.Name = "butDelete";
+			this.butDelete.Size = new System.Drawing.Size(84,26);
+			this.butDelete.TabIndex = 38;
+			this.butDelete.Text = "&Delete";
+			this.butDelete.Click += new System.EventHandler(this.butDelete_Click);
+			// 
+			// butGoToPat
+			// 
+			this.butGoToPat.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butGoToPat.Autosize = true;
+			this.butGoToPat.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butGoToPat.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butGoToPat.CornerRadius = 4F;
+			this.butGoToPat.Location = new System.Drawing.Point(354,9);
+			this.butGoToPat.Name = "butGoToPat";
+			this.butGoToPat.Size = new System.Drawing.Size(75,22);
+			this.butGoToPat.TabIndex = 27;
+			this.butGoToPat.Text = "&Go To";
+			this.butGoToPat.Click += new System.EventHandler(this.butGoToPat_Click);
+			// 
+			// butGoToGuar
+			// 
+			this.butGoToGuar.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butGoToGuar.Autosize = true;
+			this.butGoToGuar.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butGoToGuar.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butGoToGuar.CornerRadius = 4F;
+			this.butGoToGuar.Location = new System.Drawing.Point(354,31);
+			this.butGoToGuar.Name = "butGoToGuar";
+			this.butGoToGuar.Size = new System.Drawing.Size(75,22);
+			this.butGoToGuar.TabIndex = 23;
+			this.butGoToGuar.Text = "Go &To";
+			this.butGoToGuar.Click += new System.EventHandler(this.butGoTo_Click);
+			// 
+			// textDate
+			// 
+			this.textDate.Location = new System.Drawing.Point(156,127);
+			this.textDate.Name = "textDate";
+			this.textDate.Size = new System.Drawing.Size(85,20);
+			this.textDate.TabIndex = 7;
+			// 
+			// butChangeGuar
+			// 
+			this.butChangeGuar.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butChangeGuar.Autosize = true;
+			this.butChangeGuar.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butChangeGuar.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butChangeGuar.CornerRadius = 4F;
+			this.butChangeGuar.Location = new System.Drawing.Point(354,53);
+			this.butChangeGuar.Name = "butChangeGuar";
+			this.butChangeGuar.Size = new System.Drawing.Size(75,22);
+			this.butChangeGuar.TabIndex = 4;
+			this.butChangeGuar.Text = "C&hange";
+			this.butChangeGuar.Click += new System.EventHandler(this.butChangeGuar_Click);
+			// 
+			// butOK
+			// 
+			this.butOK.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.butOK.Autosize = true;
+			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butOK.CornerRadius = 4F;
+			this.butOK.Location = new System.Drawing.Point(787,589);
+			this.butOK.Name = "butOK";
+			this.butOK.Size = new System.Drawing.Size(75,26);
+			this.butOK.TabIndex = 1;
+			this.butOK.Text = "&OK";
+			this.butOK.Click += new System.EventHandler(this.butOK_Click);
+			// 
+			// butCancel
+			// 
+			this.butCancel.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.butCancel.Autosize = true;
+			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butCancel.CornerRadius = 4F;
+			this.butCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+			this.butCancel.Location = new System.Drawing.Point(880,589);
+			this.butCancel.Name = "butCancel";
+			this.butCancel.Size = new System.Drawing.Size(75,26);
+			this.butCancel.TabIndex = 0;
+			this.butCancel.Text = "&Cancel";
+			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
+			// 
+			// textAPR
+			// 
+			this.textAPR.Location = new System.Drawing.Point(142,78);
+			this.textAPR.Name = "textAPR";
+			this.textAPR.Size = new System.Drawing.Size(47,20);
+			this.textAPR.TabIndex = 15;
+			// 
+			// textPeriodPayment
+			// 
+			this.textPeriodPayment.Location = new System.Drawing.Point(133,40);
+			this.textPeriodPayment.Name = "textPeriodPayment";
+			this.textPeriodPayment.Size = new System.Drawing.Size(85,20);
+			this.textPeriodPayment.TabIndex = 17;
+			this.textPeriodPayment.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textPeriodPayment_KeyPress);
+			// 
+			// textTerm
+			// 
+			this.textTerm.Location = new System.Drawing.Point(133,17);
+			this.textTerm.MaxVal = 255;
+			this.textTerm.MinVal = 0;
+			this.textTerm.Name = "textTerm";
+			this.textTerm.Size = new System.Drawing.Size(47,20);
+			this.textTerm.TabIndex = 18;
+			this.textTerm.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textTerm_KeyPress);
+			// 
+			// textDownPayment
+			// 
+			this.textDownPayment.Location = new System.Drawing.Point(142,56);
+			this.textDownPayment.Name = "textDownPayment";
+			this.textDownPayment.Size = new System.Drawing.Size(85,20);
+			this.textDownPayment.TabIndex = 22;
+			// 
+			// textDateFirstPay
+			// 
+			this.textDateFirstPay.Location = new System.Drawing.Point(142,34);
+			this.textDateFirstPay.Name = "textDateFirstPay";
+			this.textDateFirstPay.Size = new System.Drawing.Size(85,20);
+			this.textDateFirstPay.TabIndex = 13;
+			// 
+			// textAmount
+			// 
+			this.textAmount.Location = new System.Drawing.Point(142,13);
+			this.textAmount.Name = "textAmount";
+			this.textAmount.Size = new System.Drawing.Size(85,20);
+			this.textAmount.TabIndex = 11;
+			// 
+			// butCreateSched
+			// 
+			this.butCreateSched.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butCreateSched.Autosize = true;
+			this.butCreateSched.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butCreateSched.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butCreateSched.CornerRadius = 4F;
+			this.butCreateSched.Location = new System.Drawing.Point(242,143);
+			this.butCreateSched.Name = "butCreateSched";
+			this.butCreateSched.Size = new System.Drawing.Size(99,25);
+			this.butCreateSched.TabIndex = 42;
+			this.butCreateSched.Text = "Create Schedule";
+			this.butCreateSched.Click += new System.EventHandler(this.butCreateSched_Click);
+			// 
+			// butPrint
+			// 
+			this.butPrint.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butPrint.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
+			this.butPrint.Autosize = true;
+			this.butPrint.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butPrint.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butPrint.CornerRadius = 4F;
+			this.butPrint.Image = global::OpenDental.Properties.Resources.butPrintSmall;
+			this.butPrint.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butPrint.Location = new System.Drawing.Point(563,589);
+			this.butPrint.Name = "butPrint";
+			this.butPrint.Size = new System.Drawing.Size(85,26);
+			this.butPrint.TabIndex = 20;
+			this.butPrint.Text = "&Print";
+			this.butPrint.Click += new System.EventHandler(this.butPrint_Click);
 			// 
 			// FormPayPlan
 			// 
@@ -784,8 +784,8 @@ namespace OpenDental{
 			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Payment Plan";
-			this.Closing += new System.ComponentModel.CancelEventHandler(this.FormPayPlan_Closing);
 			this.Load += new System.EventHandler(this.FormPayPlan_Load);
+			this.Closing += new System.ComponentModel.CancelEventHandler(this.FormPayPlan_Closing);
 			this.groupBox2.ResumeLayout(false);
 			this.groupBox2.PerformLayout();
 			this.groupBox3.ResumeLayout(false);
@@ -820,9 +820,7 @@ namespace OpenDental{
 			FillCharges();
 		}
 
-		/// <summary>
-		/// Called 5 times
-		/// </summary>
+		/// <summary>Called 5 times</summary>
 		private void FillCharges(){
 			List<PayPlanCharge> ChargeListAll=PayPlanCharges.Refresh(PayPlanCur.Guarantor);
 			ChargeList=PayPlanCharges.GetForPayPlan(PayPlanCur.PayPlanNum,ChargeListAll);

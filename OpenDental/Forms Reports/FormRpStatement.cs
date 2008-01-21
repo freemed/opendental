@@ -837,7 +837,7 @@ namespace OpenDental{
 			if(CultureInfo.CurrentCulture.Name.EndsWith("CH")){//CH is for switzerland. eg de-CH
 				//&& pagesPrinted==0)//only on the first page
 			//{
-				float yred=744;//768;//660 for testing
+				//float yred=744;//768;//660 for testing
 				//Red line (just temp)
 				//g.DrawLine(Pens.Red,0,yred,826,yred);
 				MigraDoc.DocumentObjectModel.Font swfont=MigraDocHelper.CreateFont(10);

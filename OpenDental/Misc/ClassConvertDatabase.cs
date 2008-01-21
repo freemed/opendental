@@ -5248,7 +5248,7 @@ namespace OpenDental{
 		private void To5_0_0() {
 			if(FromVersion<new Version("5.0.0.0")) {
 				string command;
-				DataTable table;
+				//DataTable table;
 				//after r318
 				if(DataConnection.DBtype==DatabaseType.MySql) {
 					command="DROP TABLE IF EXISTS reqneeded";

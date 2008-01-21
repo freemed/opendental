@@ -7,8 +7,8 @@ namespace OpenDentBusiness{
 	///<summary>One row for each patient.  Includes deleted patients.</summary>
 	[DataObject("patient")]
 	public class Patient : DataObjectBase {
-		///<summary>Obsolete.  See the toothinitial table.</summary>
-		private string PrimaryTeeth;
+		//<summary>Obsolete.  See the toothinitial table.</summary>
+		//private string PrimaryTeeth;
 
 		[DataField("PatNum", PrimaryKey=true, AutoNumber=true)]
 		private int patNum;
@@ -521,7 +521,7 @@ namespace OpenDentBusiness{
 			get { return insEstChanged; }
 		}
 
-		[Obsolete("No longer used.  See toothinital table instead.")]
+		//[Obsolete("No longer used.  See toothinital table instead.")]
 		private string primaryTeethOld;
 		/// <summary>No longer used.  See toothinital table instead.</summary>
 		public string PrimaryTeethOld {

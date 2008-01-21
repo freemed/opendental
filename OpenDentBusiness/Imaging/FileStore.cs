@@ -70,7 +70,6 @@ namespace OpenDental.Imaging {
 				}
 				catch {
 					throw new Exception(Lan.g("ContrDocs", "Error.  Could not create folder for patient. "));
-					return;
 				}
 			}
 			else {//patient folder already created once

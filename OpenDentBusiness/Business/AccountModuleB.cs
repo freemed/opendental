@@ -473,7 +473,9 @@ namespace OpenDentBusiness {
 				//	row["description"]+="\r\n"+Lan.g("ContrAccount","Sent");
 				//}
 				insest=PIn.PDouble(rawClaim.Rows[i]["InsPayEst"].ToString());
-				if(insest!=0){
+				if(rawClaim.Rows[i]["ClaimStatus"].ToString()=="W"
+					|| rawClaim.Rows[i]["ClaimStatus"].ToString()=="S")
+				{
 					row["description"]+="\r\n"+Lan.g("ContrAccount","Estimated Payment:")+" "+insest.ToString("c");
 				}
 				amtpaid=PIn.PDouble(rawClaim.Rows[i]["InsPayAmt"].ToString());
@@ -692,6 +694,7 @@ namespace OpenDentBusiness {
 			DataTable table=new DataTable("payplan");
 			DataRow row;
 			table.Columns.Add("accumDue");
+			table.Columns.Add("balance");
 			table.Columns.Add("date");
 			table.Columns.Add("DateTime",typeof(DateTime));
 			table.Columns.Add("due");
@@ -713,6 +716,7 @@ namespace OpenDentBusiness {
 			double princPaid;
 			double totCost;
 			double due;
+			double balance;
 			for(int i=0;i<rawPayPlan.Rows.Count;i++){
 				//first, calculate the numbers-------------------------------------------------------------
 				paid=0;
@@ -731,9 +735,11 @@ namespace OpenDentBusiness {
 				}
 				totCost=princ+PIn.PDouble(rawPayPlan.Rows[i]["_interest"].ToString());
 				due=accumDue-paid;
+				balance=princ-princPaid;
 				//then fill the row----------------------------------------------------------------------
 				row=table.NewRow();
 				row["accumDue"]=accumDue.ToString("n");
+				row["balance"]=balance.ToString("n");
 				dateT=PIn.PDateT(rawPayPlan.Rows[i]["PayPlanDate"].ToString());
 				row["DateTime"]=dateT;
 				row["date"]=dateT.ToShortDateString();

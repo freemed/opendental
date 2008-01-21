@@ -54,8 +54,8 @@ namespace OpenDental{
 		private OpenDental.UI.Button butInstallStable;
 		private Label label11;
 		private OpenDental.UI.Button butCheck2;//OD1
-		///<summary>Includes path</summary>
-		string WriteToFile;
+		//<summary>Includes path</summary>
+		//string WriteToFile;
 		string buildAvailable;
 		string buildAvailableCode;
 		string stableAvailable;

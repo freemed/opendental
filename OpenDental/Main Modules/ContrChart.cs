@@ -202,7 +202,7 @@ namespace OpenDental{
 		private OpenDental.UI.Button butDL;
 		///<summary>A subset of DataSetMain.  The procedures that need to be drawn in the graphical tooth chart.</summary>
 		List<DataRow> ProcList;
-		private int lastPatNum;
+		//private int lastPatNum;
 		private OpenDental.UI.Button butCMDL;
 		private Label label1;
 		private TabPage tabPlanned;
@@ -225,7 +225,7 @@ namespace OpenDental{
 		private Label label3;
 		private Label labelApptDate;
 		private Label labelApptStatus;
-		private MenuItem menuItemDeleteSelected;
+		//private MenuItem menuItemDeleteSelected;
 		private CheckBox checkCommFamily;
 		private OpenDental.UI.Button butForeignKey;
 		private int PrevPtNum;
@@ -2572,7 +2572,7 @@ namespace OpenDental{
 		///<summary>Causes the toolbars to be laid out again.</summary>
 		public void LayoutToolBar(){
 			ToolBarMain.Buttons.Clear();
-			ODToolBarButton button;
+			//ODToolBarButton button;
 			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"New Rx"),1,"","Rx"));
 			//ToolBarMain.Buttons.Add(new ODToolBarButton(ODToolBarButtonStyle.Separator));
 			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"LabCase"),-1,"","LabCase"));
@@ -2782,14 +2782,13 @@ namespace OpenDental{
 			}
 		}
 
-		/*
 		///<summary></summary>
 		private void OnPatientSelected(int patNum,string patName,bool hasEmail,string chartNumber){
 			PatientSelectedEventArgs eArgs=new OpenDental.PatientSelectedEventArgs(patNum,patName,hasEmail,chartNumber);
 			if(PatientSelected!=null){
 				PatientSelected(this,eArgs);
 			}
-		}*/
+		}
 
 		private void OnRx_Click(){
 			if(!Security.IsAuthorized(Permissions.RxCreate)){
@@ -3789,19 +3788,19 @@ namespace OpenDental{
 				//Documents.Cur=DocumentList[i];
 				string thumbFileName=ODFileUtils.CombinePaths(new string[] { patFolder,"Thumbnails",DocumentList[i].FileName });
 				//Thumbs.db has nothing to do with Open Dental. It is a hidden Windows file.
-				if(File.Exists(thumbFileName) && ContrDocs.HasImageExtension(thumbFileName))
+				if(File.Exists(thumbFileName) && ImageHelper.HasImageExtension(thumbFileName))
 				{//use existing thumbnail
 					imageListThumbnails.Images.Add(Bitmap.FromFile(thumbFileName));
 				}else{//add thumbnail or create generic "not available"
 					int thumbSize=imageListThumbnails.ImageSize.Width;//All thumbnails are square.
 					Bitmap thumbBitmap;
 					string sourceImagePath=ODFileUtils.CombinePaths(patFolder,DocumentList[i].FileName);
-					if(File.Exists(sourceImagePath) && ContrDocs.HasImageExtension(sourceImagePath)){//create and save thumbnail?
+					if(File.Exists(sourceImagePath) && ImageHelper.HasImageExtension(sourceImagePath)){//create and save thumbnail?
 						//Gets the cropped/flipped/rotated image with any color filtering applied.
 						Bitmap sourceImage=new Bitmap(sourceImagePath);
-						Bitmap fullImage=ContrDocs.ApplyDocumentSettingsToImage(DocumentList[i],sourceImage,ApplySettings.ALL);
+						Bitmap fullImage=ImageHelper.ApplyDocumentSettingsToImage(DocumentList[i],sourceImage,ApplySettings.ALL);
 						sourceImage.Dispose();
-						thumbBitmap=ContrDocs.GetThumbnail(fullImage,thumbSize);
+						thumbBitmap=ImageHelper.GetThumbnail(fullImage,thumbSize);
 						fullImage.Dispose();
 						try{
 							thumbBitmap.Save(thumbFileName);
@@ -5657,7 +5656,7 @@ namespace OpenDental{
 																										PatCur.ImageFolder}),
 						out picturePat);
 					if(picturePat!=null){//Successfully loaded a patient picture?
-						Bitmap thumbnail=ContrDocs.GetThumbnail(picturePat,80);
+						Bitmap thumbnail=ImageHelper.GetThumbnail(picturePat,80);
 						g.DrawImage(thumbnail,center-40,yPos);
 					}
 					if(patientPictExists){
@@ -5797,7 +5796,7 @@ namespace OpenDental{
 				return;//clicked on white space.
 			}
 			Document DocCur=DocumentList[(int)visImages[listViewImages.SelectedIndices[0]]];
-			if(!ContrDocs.HasImageExtension(DocCur.FileName)){
+			if(!ImageHelper.HasImageExtension(DocCur.FileName)){
 				try{
 					Process.Start(ODFileUtils.CombinePaths(patFolder,DocCur.FileName));
 				}

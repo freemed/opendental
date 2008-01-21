@@ -49,13 +49,13 @@ namespace OpenDental{
 		///<summary>This is set externally for Renaissance and generic e-claims.  If it was not set ahead of time, it will set in FillDisplayStrings according to the insPlan.</summary>
 		public ClaimForm ClaimFormCur;
 		private InsPlan[] PlanList;
-		private InsPlan[] MedPlanList;
+		//private InsPlan[] MedPlanList;
 		private ArrayList MedPlanArrayList;
 		private Claim ClaimCur;
 		///<summary>Always length of 4.</summary>
 		private string[] diagnoses;
 		//private Claim[] ClaimsArray;
-		private Claim[] MedClaimsArray;
+		//private Claim[] MedClaimsArray;
 		private ArrayList MedClaimsArrayList;
 		private ArrayList MedValueCodes;
 		private Referral ClaimReferral;
@@ -234,7 +234,7 @@ namespace OpenDental{
 			try{
 				pd2.Print();
 			}
-			catch(Exception ex){
+			catch{//(Exception ex){
 				MessageBox.Show(Lan.g("Printer","Printer not available"));
 				return false;
 			}

@@ -152,7 +152,8 @@ namespace OpenDental{
 				return;
 			}try{
 				ImageCurrent=new Bitmap(fileName);
-				renderImage=ContrDocs.ApplyDocumentSettingsToImage(thisDocument,ImageCurrent,
+				renderImage=ImageHelper.ApplyDocumentSettingsToImage(thisDocument,ImageCurrent,
+					//ContrDocs.ApplyDocumentSettingsToImage(thisDocument,ImageCurrent,
 					ApplySettings.CROP|ApplySettings.COLORFUNCTION);
 				if(renderImage==null) {
 					imageZoom=1;

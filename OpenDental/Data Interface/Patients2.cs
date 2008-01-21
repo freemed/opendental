@@ -13,10 +13,10 @@ namespace OpenDental{
 	
 	///<summary></summary>
 	public class Patients2{
-		///<summary>Collection of Patient Names. The last five patients. Gets displayed on dropdown button.</summary>
-		private static ArrayList buttonLastFiveNames;
-		///<summary>Collection of PatNums. The last five patients. Used when clicking on dropdown button.</summary>
-		private static ArrayList buttonLastFivePatNums;
+		//<summary>Collection of Patient Names. The last five patients. Gets displayed on dropdown button.</summary>
+		//private static ArrayList buttonLastFiveNames;
+		//<summary>Collection of PatNums. The last five patients. Used when clicking on dropdown button.</summary>
+		//private static ArrayList buttonLastFivePatNums;
 
 		///<summary>It is entirely acceptable to pass in a null value for PatCur.  In that case, no patient name will show.</summary>
 		public static string GetMainTitle(Patient PatCur){

@@ -8,10 +8,10 @@ using OpenDentBusiness;
 namespace OpenDental{
 	///<summary></summary>
 	public class LabelSingle{
-		private PrintDocument pd;
-		private Patient Pat;
-		private Carrier CarrierCur;
-		private Referral ReferralCur;
+		//private PrintDocument pd;
+		//private Patient Pat;
+		//private Carrier CarrierCur;
+		//private Referral ReferralCur;
 
 		///<summary></summary>
 		public LabelSingle(){

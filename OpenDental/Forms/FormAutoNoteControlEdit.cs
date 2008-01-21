@@ -14,7 +14,7 @@ namespace OpenDental {
 		public bool IsNew;
 		///<summary>The current AutoNoteControl that is being edited, whether new or not.</summary>
 		public AutoNoteControl ControlCur;
-		List<AutoNoteControl> ControlList;
+		//List<AutoNoteControl> ControlList;
 		//string controlToEdit;
 		//private List<AutoNote> AutoNoteList;
 		public FormAutoNoteControlEdit() {
@@ -40,7 +40,7 @@ namespace OpenDental {
 		}
 
 		private void FormAutoNoteControlEdit_Load(object sender, EventArgs e) {
-			string controlOptions;			
+			//string controlOptions;			
 			if (!IsNew) {
 				string ControlOptions;
 				comboBoxControlType.SelectedItem=ControlCur.ControlType;

@@ -404,7 +404,7 @@ namespace OpenDental
 			double insPayEst=0;
 			double insPayAmt=0;
 			double writeOff=0;
-			double amt;
+			//double amt;
 			for(int i=0;i<gridMain.Rows.Count;i++){
 				claimFee+=ClaimProcsToEdit[i].FeeBilled;//5
 				try{//6.deduct

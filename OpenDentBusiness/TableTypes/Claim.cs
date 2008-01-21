@@ -106,5 +106,9 @@ namespace OpenDentBusiness{
 			Claim c = (Claim)obj;
 			return (ClaimNum == c.ClaimNum);
 		}
+
+		public override int GetHashCode() {
+			return base.GetHashCode();
+		}
 	}
 }

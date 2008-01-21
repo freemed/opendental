@@ -18,7 +18,7 @@ namespace OpenDental{
 		private ListBox listProv;
 		private Label label1;
 		private CheckBox checkAllProv;
-		private FormQuery FormQuery2;
+		//private FormQuery FormQuery2;
 
 		///<summary></summary>
 		public FormRpPaySheet(){

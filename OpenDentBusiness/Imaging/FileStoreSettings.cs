@@ -8,7 +8,7 @@ using CodeBase;
 namespace OpenDental.Imaging {
 	public static class FileStoreSettings {
 		public static string GetPreferredImagePath {
-#warning Hard-coded path
+//#warning Hard-coded path
 			get { //return @"C:\OpenDentImages\"; }
 				if(!PrefB.UsingAtoZfolder) {
 					return null;

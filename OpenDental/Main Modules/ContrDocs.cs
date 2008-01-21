@@ -836,7 +836,7 @@ namespace OpenDental{
 					currentImages=imageStore.RetrieveImage(mountDocs);
 					selectionMount=Mounts.GetByNum(mountNum);
 					renderImage=new Bitmap(selectionMount.Width,selectionMount.Height);
-					RenderMountImage(renderImage,currentImages,selectionMountItems,mountDocs,hotDocument);
+					ImageHelper.RenderMountImage(renderImage,currentImages,selectionMountItems,mountDocs,hotDocument);
 					EnableTreeItemTools(true,true,true,true,false,false,false,true,true,true,false,false,false);
 				}else{//This is a document node.
 					//Reload the doc from the db. We don't just keep reusing the tree data, because it will become more and 
@@ -1382,13 +1382,13 @@ namespace OpenDental{
 			Bitmap copyImage;
 			if(mountNum!=0){//The current selection is a mount?
 				if(hotDocument>=0 && mountDocs[hotDocument]!=null){//A mount item is currently selected.
-					copyImage=ApplyDocumentSettingsToImage(mountDocs[hotDocument],currentImages[hotDocument],ApplySettings.ALL);
+					copyImage=ImageHelper.ApplyDocumentSettingsToImage(mountDocs[hotDocument],currentImages[hotDocument],ApplySettings.ALL);
 				}else{//Assume the copy is for the entire mount.
 					copyImage=(Bitmap)renderImage.Clone();
 				}
 			}else{//document
 				//Crop and color function has already been applied to the render image.
-				copyImage=ApplyDocumentSettingsToImage(Documents.GetByNum(docNum),renderImage,
+				copyImage=ImageHelper.ApplyDocumentSettingsToImage(Documents.GetByNum(docNum),renderImage,
 					ApplySettings.FLIP|ApplySettings.ROTATE);
 			}
 			if(copyImage!=null){
@@ -1497,14 +1497,14 @@ namespace OpenDental{
 			Bitmap printImage;
 			if(mountNum!=0){//Is this a mount object?
 				if(hotDocument>=0 && mountDocs[hotDocument]!=null) {//A mount item is currently selected.
-					printImage=ApplyDocumentSettingsToImage(mountDocs[hotDocument],currentImages[hotDocument],ApplySettings.ALL);
+					printImage=ImageHelper.ApplyDocumentSettingsToImage(mountDocs[hotDocument],currentImages[hotDocument],ApplySettings.ALL);
 				}else{//Assume the printout is for the entire mount.
 					printImage=prePrintImage;	//Just print the mount as is, since the mount is always in the same orientation, and
 																		//the images it houses are already flipped and rotated to generate the render image.
 				}
 			}else{//This is a document object.
 				//Crop and color function have already been applied to the render image, now do the rest.
-				printImage=ApplyDocumentSettingsToImage(Documents.GetByNum(docNum),
+				printImage=ImageHelper.ApplyDocumentSettingsToImage(Documents.GetByNum(docNum),
 					prePrintImage,ApplySettings.FLIP|ApplySettings.ROTATE);
 			}			
 			RectangleF rectf=e.MarginBounds;
@@ -1768,7 +1768,7 @@ namespace OpenDental{
 							//currentImages[] is guaranteed to exist and be the current. If currentImages gets updated, this thread 
 							//gets aborted with a call to KillMyThread(). The only place currentImages[] is invalid is in a call to 
 							//EraseCurrentImage(), but at that point, this thread has been terminated.
-							renderImage=ApplyDocumentSettingsToImage(curDocCopy,currentImages[hotDocument],
+							renderImage=ImageHelper.ApplyDocumentSettingsToImage(curDocCopy,currentImages[hotDocument],
 								ApplySettings.CROP|ApplySettings.COLORFUNCTION);
 						}
 						//Make the current renderImage visible in the picture box, and perform rotation, flip, zoom, and translation on
@@ -1776,13 +1776,13 @@ namespace OpenDental{
 						RenderCurrentImage(curDocCopy,curImageWidths[hotDocument],curImageHeights[hotDocument],
 							imageZoom*zoomFactor,imageTranslation);
 					}else{//The current selection is a mount.
-						RenderMountFrames(renderImage,selectionMountItems,hotDocument);
+						ImageHelper.RenderMountFrames(renderImage,selectionMountItems,hotDocument);
 						//Render only the modified image over the old mount image.
 						//A null document can happen when a new image frame is selected, but there is no image in that frame.
 						if(curDocCopy!=null&&applySettings!=ApplySettings.NONE) {
 							for(int i=0;i<docsToUpdate.Length;i++) {
 								if(docsToUpdate[i]) {
-									RenderImageIntoMount(renderImage,selectionMountItems[i],currentImages[i],curDocCopy);
+									ImageHelper.RenderImageIntoMount(renderImage,selectionMountItems[i],currentImages[i],curDocCopy);
 								}
 							}
 						}
@@ -2220,7 +2220,7 @@ namespace OpenDental{
 					brightnessContrastSlider.MaxVal=PrefB.GetInt("ImageWindowingMax");
 				}else {//A mount is currently selected. We must allow the user to insert new images into partially complete mounts.
 					//Clear the visible selection so that the user will know when the device is ready for xray exposure.
-					RenderMountFrames(renderImage,selectionMountItems,-1);
+					ImageHelper.RenderMountFrames(renderImage,selectionMountItems,-1);
 					RenderCurrentImage(new Document(),renderImage.Width,renderImage.Height,imageZoom*zoomFactor,imageTranslation);
 				}
 				//Here we can only allow access to the capture button during a capture, because it is too complicated and hard for a 
@@ -2451,11 +2451,12 @@ namespace OpenDental{
 			return new Rectangle(0,0,originalImageWidth,originalImageHeight);
 		}
 
+		/*
 		///<summary>Applies the document specified cropping, flip, rotation, brightness and contrast transformations to the image and returns the resulting image. Zoom and translation must be handled by the calling code. The returned image is always a new image that can be modified without affecting the original image. The change in the image's center point is returned into deltaCenter, so that rotation offsets can be properly calculated when displaying the returned image.</summary>
 		[Obsolete("Use ImageHelper.ApplyDocumentSettingsToImage instead.")]
 		public static Bitmap ApplyDocumentSettingsToImage(Document doc,Bitmap image,ApplySettings settings){
 			return ImageHelper.ApplyDocumentSettingsToImage(doc, image, settings);
-		}
+		}*/
 
 		///<summary>specify the size of the square to return</summary>
 		[Obsolete("Use ImageHelper.GetThumbnail instead.")]
@@ -2487,7 +2488,7 @@ namespace OpenDental{
 			Document[] documents=Documents.GetDocumentsForMountItems(mountItems);
 			Bitmap[] originalImages=imageStore.RetrieveImage(documents);
 			Bitmap mountImage=new Bitmap(mount.Width,mount.Height);
-			RenderMountImage(mountImage,originalImages,mountItems,documents,-1);
+			ImageHelper.RenderMountImage(mountImage,originalImages,mountItems,documents,-1);
 			return mountImage;
 		}
 

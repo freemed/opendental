@@ -17,7 +17,7 @@ namespace OpenDental{
 		private System.ComponentModel.IContainer components;
 		private Label label1;
 		private System.Windows.Forms.ToolTip toolTip1;
-		private List<AutoNote> AutoNoteList;
+		//private List<AutoNote> AutoNoteList;
 		public AutoNote AutoNoteCur;
 
 		///<summary></summary>

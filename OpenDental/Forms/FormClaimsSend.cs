@@ -55,7 +55,7 @@ namespace OpenDental{
 		private ComboBox comboClinic;
 		private Label labelClinic;
 		private ContextMenu contextMenuEclaims;
-		private ContextMenu contextMenuHist;
+		//private ContextMenu contextMenuHist;
 
 		///<summary></summary>
 		public FormClaimsSend(){
@@ -591,7 +591,7 @@ namespace OpenDental{
 			//if(!Printers.SetPrinter(pd,PrintSituation.LabelSingle)){
 			//	return;
 			//}
-			Carrier carrier;
+			//Carrier carrier;
 			Claim claim;
 			InsPlan plan;
 			List<int> carrierNums=new List<int>();

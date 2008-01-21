@@ -21,7 +21,7 @@ namespace OpenDental{
 		private System.Windows.Forms.Label label4;
 		private OpenDental.ValidNum textAPR;
 		private System.ComponentModel.Container components = null;
-		private ArrayList ALPosIndices;
+		//private ArrayList ALPosIndices;
 		private ValidDate textDateLastRun;
 		private Label label5;
 		private OpenDental.UI.Button butUndo;
@@ -30,7 +30,7 @@ namespace OpenDental{
 		private Label label6;
 		private ListBox listBillType;
 		private Label label7;
-		private int adjType;
+		//private int adjType;
 
 		///<summary></summary>
 		public FormFinanceCharges(){
