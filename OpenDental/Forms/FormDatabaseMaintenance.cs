@@ -257,6 +257,8 @@ namespace OpenDental {
 			Application.DoEvents();
 			InsPlanCheckNoCarrier();
 			Application.DoEvents();
+			InsPlanNoClaimForm();
+			Application.DoEvents();
 			MedicationPatDeleteWithInvalidMedNum();
 			Application.DoEvents();
 			PatientBadGuarantor();
@@ -929,6 +931,15 @@ namespace OpenDental {
 			int numberFixed=table.Rows.Count;
 			if(numberFixed>0||checkShow.Checked) {
 				textLog.Text+=Lan.g(this,"Ins plans with carrier missing fixed: ")+numberFixed.ToString()+"\r\n";
+			}
+		}
+
+		private void InsPlanNoClaimForm() {
+			command="UPDATE insplan SET ClaimFormNum="+POut.PInt(PrefB.GetInt("DefaultClaimForm"))
+				+" WHERE ClaimFormNum=0";
+			int numberFixed=General.NonQ(command);
+			if(numberFixed>0 || checkShow.Checked) {
+				textLog.Text+=Lan.g(this,"Insplan claimforms set if missing: ")+numberFixed.ToString()+"\r\n";
 			}
 		}
 
