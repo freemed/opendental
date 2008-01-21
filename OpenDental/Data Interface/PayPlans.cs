@@ -108,9 +108,9 @@ namespace OpenDental{
 		}
 
 		///<summary>Used from FormPayPlan, Account, and ComputeBal to get the accumulated amount due for a payment plan based on today's date.  Includes interest, but does not include payments made so far.  The chargelist must include all charges for this payplan, but it can include more as well.</summary>
-		public static double GetAccumDue(int payPlanNum, PayPlanCharge[] chargeList){
+		public static double GetAccumDue(int payPlanNum, List<PayPlanCharge> chargeList){
 			double retVal=0;
-			for(int i=0;i<chargeList.Length;i++){
+			for(int i=0;i<chargeList.Count;i++){
 				if(chargeList[i].PayPlanNum!=payPlanNum){
 					continue;
 				}
@@ -123,10 +123,10 @@ namespace OpenDental{
 		}
 
 		/// <summary>Used from Account window to get the amount paid so far on one payment plan.  Must pass in the total amount paid and the returned value will not be more than this.  The chargelist must include all charges for this payplan, but it can include more as well.  It will loop sequentially through the charges to get just the principal portion.</summary>
-		public static double GetPrincPaid(double amtPaid,int payPlanNum,PayPlanCharge[] chargeList){
+		public static double GetPrincPaid(double amtPaid,int payPlanNum,List<PayPlanCharge> chargeList){
 			//amtPaid gets reduced to 0 throughout this loop.
 			double retVal=0;
-			for(int i=0;i<chargeList.Length;i++){
+			for(int i=0;i<chargeList.Count;i++){
 				if(chargeList[i].PayPlanNum!=payPlanNum){
 					continue;
 				}
@@ -153,9 +153,9 @@ namespace OpenDental{
 		}
 
 		/// <summary>Used from Account and ComputeBal to get the total amount of the original principal for one payment plan.  Does not include any interest.The chargelist must include all charges for this payplan, but it can include more as well.</summary>
-		public static double GetTotalPrinc(int payPlanNum, PayPlanCharge[] chargeList){
+		public static double GetTotalPrinc(int payPlanNum, List<PayPlanCharge> chargeList){
 			double retVal=0;
-			for(int i=0;i<chargeList.Length;i++){
+			for(int i=0;i<chargeList.Count;i++){
 				if(chargeList[i].PayPlanNum!=payPlanNum){
 					continue;
 				}
@@ -165,7 +165,7 @@ namespace OpenDental{
 		}
 
 		///<summary>Returns the sum of all payment plan entries for guarantor and/or patient.</summary>
-		public static double ComputeBal(int patNum,PayPlan[] list,PayPlanCharge[] chargeList){
+		public static double ComputeBal(int patNum,PayPlan[] list,List<PayPlanCharge> chargeList){
 			double retVal=0;
 			for(int i=0;i<list.Length;i++){
 				//one or both of these conditions may be met:
@@ -189,7 +189,7 @@ namespace OpenDental{
 			if(PayPlanList.Length==1){ //if there is only one valid payplan
 				return PayPlanList[0].Copy();
 			}
-			PayPlanCharge[] ChargeList=PayPlanCharges.Refresh(guarNum);
+			List<PayPlanCharge> ChargeList=PayPlanCharges.Refresh(guarNum);
 			//enhancement needed to weed out payment plans that are all paid off
 			//more than one valid PayPlan
 			FormPayPlanSelect FormPPS=new FormPayPlanSelect(PayPlanList,ChargeList);

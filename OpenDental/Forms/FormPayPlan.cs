@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Printing;
 using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
 using System.Windows.Forms;
@@ -88,7 +89,7 @@ namespace OpenDental{
 		private System.Windows.Forms.TextBox textAmtPaid;
 		private System.Windows.Forms.TextBox textPrincPaid;
 		private System.Windows.Forms.Label label14;
-		private PayPlanCharge[] ChargeList;
+		private List<PayPlanCharge> ChargeList;
 		private double AmtPaid;
 
 		///<summary>The supplied payment plan should already have been saved in the database.</summary>
@@ -819,8 +820,11 @@ namespace OpenDental{
 			FillCharges();
 		}
 
+		/// <summary>
+		/// Called 5 times
+		/// </summary>
 		private void FillCharges(){
-			PayPlanCharge[] ChargeListAll=PayPlanCharges.Refresh(PayPlanCur.Guarantor);
+			List<PayPlanCharge> ChargeListAll=PayPlanCharges.Refresh(PayPlanCur.Guarantor);
 			ChargeList=PayPlanCharges.GetForPayPlan(PayPlanCur.PayPlanNum,ChargeListAll);
 			gridCharges.BeginUpdate();
 			gridCharges.Columns.Clear();
@@ -843,12 +847,12 @@ namespace OpenDental{
 			//double totPrinc=0;
 			double totInt=0;
 			double bal=0;
-			for(int i=0;i<ChargeList.Length;i++){
+			for(int i=0;i<ChargeList.Count;i++){
 				//totPrinc+=ChargeList[i].Principal;
 				totInt+=ChargeList[i].Interest;
 				bal+=ChargeList[i].Principal;
 			}
-			if(IsNew && ChargeList.Length==0){
+			if(IsNew && ChargeList.Count==0){
 				textAmount.Text=TotalAmt.ToString("n");
 			}
 			else{
@@ -859,13 +863,13 @@ namespace OpenDental{
 			textTotInt.Text=totInt.ToString("n");
 			textTotPay.Text=(bal+totInt).ToString("n");
 			textTotalCost.Text=(bal+totInt).ToString("n");
-			if(ChargeList.Length>0){
+			if(ChargeList.Count>0){
 				textDateFirstPay.Text=ChargeList[0].ChargeDate.ToShortDateString();
 			}
 			else{
 				textDateFirstPay.Text="";
 			}
-			for(int i=0;i<ChargeList.Length;i++){
+			for(int i=0;i<ChargeList.Count;i++){
 				row=new OpenDental.UI.ODGridRow();
 				row.Cells.Add((i+1).ToString());
 				row.Cells.Add(ChargeList[i].ChargeDate.ToShortDateString());
@@ -907,7 +911,7 @@ namespace OpenDental{
 				MsgBox.Show(this,"Not allowed to change the guarantor because payments are attached.");
 				return;
 			}
-			if(ChargeList.Length>0){
+			if(ChargeList.Count>0){
 				MsgBox.Show(this,"Not allowed to change the guarantor without first clearing the amortization schedule.");
 				return;
 			}
@@ -927,7 +931,7 @@ namespace OpenDental{
 				checkIns.Checked=!checkIns.Checked;
 				return;
 			}
-			if(ChargeList.Length>0){
+			if(ChargeList.Count>0){
 				MsgBox.Show(this,"Not allowed without first clearing the amortization schedule.");
 				checkIns.Checked=!checkIns.Checked;
 				return;
@@ -1020,7 +1024,7 @@ namespace OpenDental{
 				MsgBox.Show(this,"Term cannot be less than 1.");
 				return;
 			}
-			if(ChargeList.Length>0){
+			if(ChargeList.Count>0){
 				if(!MsgBox.Show(this,true,"Replace existing amortization schedule?")){
 					return;
 				}
@@ -1039,13 +1043,7 @@ namespace OpenDental{
 				ppCharge.Principal=downpayment;
 				ppCharge.Note=Lan.g(this,"Downpayment");
 				ppCharge.ProvNum=PatCur.PriProv;
-				try{
-					PayPlanCharges.InsertOrUpdate(ppCharge,true);
-				}
-				catch(ApplicationException ex){
-					MessageBox.Show(ex.Message);
-					return;
-				}
+				PayPlanCharges.Insert(ppCharge);
 			}
 			double principal=PIn.PDouble(textAmount.Text)-PIn.PDouble(textDownPayment.Text);
 			double APR=PIn.PDouble(textAPR.Text);
@@ -1092,19 +1090,14 @@ namespace OpenDental{
 				}
 				ppCharge.Interest=Math.Round((tempP*periodRate),roundDec);//2 decimals
 				ppCharge.Principal=periodPayment-ppCharge.Interest;//many decimals, but same on each payment, so rounding not noticeable.
-				
+				ppCharge.ProvNum=PatCur.PriProv;
 				if(tempP<-.03){//tempP is a significantly negative number, so this charge does not get added.
 					//the negative amount instead gets subtracted from the previous charge entered.
-					PayPlanCharge[] ChargeListAll=PayPlanCharges.Refresh(PayPlanCur.Guarantor);
+					List<PayPlanCharge> ChargeListAll=PayPlanCharges.Refresh(PayPlanCur.Guarantor);
 					ChargeList=PayPlanCharges.GetForPayPlan(PayPlanCur.PayPlanNum,ChargeListAll);
-					ppCharge=ChargeList[ChargeList.Length-1].Copy();
+					ppCharge=ChargeList[ChargeList.Count-1].Copy();
 					ppCharge.Principal+=tempP;
-					try{
-						PayPlanCharges.InsertOrUpdate(ppCharge,false);
-					}
-					catch(ApplicationException ex){
-						MessageBox.Show(ex.Message);
-					}
+					PayPlanCharges.Update(ppCharge);
 					break;
 				}
 				tempP-=ppCharge.Principal;  
@@ -1117,13 +1110,7 @@ namespace OpenDental{
 					ppCharge.Interest-=roundedP;
 					tempP=0;//this will prevent another loop
 				}
-				try{
-					PayPlanCharges.InsertOrUpdate(ppCharge,true);
-				}
-				catch(ApplicationException ex){
-					MessageBox.Show(ex.Message);
-					break;
-				}
+				PayPlanCharges.Insert(ppCharge);
 				countCharges++;
 			}
 			FillCharges();
@@ -1291,7 +1278,7 @@ namespace OpenDental{
 		}
 
 		private void butOK_Click(object sender, System.EventArgs e){
-			if(ChargeList.Length==0){
+			if(ChargeList.Count==0){
 				MsgBox.Show(this,"You must create an amortization schedule first.");
 				return;
 			}

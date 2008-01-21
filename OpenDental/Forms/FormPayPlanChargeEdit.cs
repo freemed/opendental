@@ -269,12 +269,11 @@ namespace OpenDental{
 			PayPlanChargeCur.Principal=PIn.PDouble(textPrincipal.Text);
 			PayPlanChargeCur.Interest=PIn.PDouble(textInterest.Text);
 			PayPlanChargeCur.Note=textNote.Text;
-			try{
-				PayPlanCharges.InsertOrUpdate(PayPlanChargeCur,IsNew);
+			if(IsNew){
+				PayPlanCharges.Insert(PayPlanChargeCur);
 			}
-			catch(ApplicationException ex){//even though it doesn't currently throw any exceptions
-				MessageBox.Show(ex.Message);
-				return;
+			else{
+				PayPlanCharges.Update(PayPlanChargeCur);
 			}
 			DialogResult=DialogResult.OK;
 		}

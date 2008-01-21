@@ -1,6 +1,7 @@
 using System;
 using System.Drawing;
 using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows.Forms;
 using OpenDentBusiness;
@@ -17,13 +18,13 @@ namespace OpenDental{
 		/// <summary>A list of plans passed to this form which are to be displayed.</summary>
 		private PayPlan[] ValidPlans;
 		/// <summary>A list of payPlanCharges passed to this form used to calculate princ for each payplan.</summary>
-		private PayPlanCharge[] ChargeList;
+		private List<PayPlanCharge> ChargeList;
 		private System.Windows.Forms.ListBox listPayPlans;
 		/// <summary>The index of the plan selected.</summary>
 		public int IndexSelected;
 
 		///<summary></summary>
-		public FormPayPlanSelect(PayPlan[] validPlans,PayPlanCharge[] chargeList)
+		public FormPayPlanSelect(PayPlan[] validPlans,List<PayPlanCharge> chargeList)
 		{
 			//
 			// Required for Windows Form Designer support

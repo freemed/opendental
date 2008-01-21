@@ -1247,14 +1247,6 @@ namespace OpenDental {
 				DataSetMain=null;
 				return;
 			}
-			FamCur=Patients.GetFamily(patNum);
-			PatCur=FamCur.GetPatient(patNum);
-			InsPlanList=InsPlans.Refresh(FamCur);
-			PatPlanList=PatPlans.Refresh(patNum);
-			BenefitList=Benefits.Refresh(PatPlanList);
-			//CovPats.Refresh(InsPlanList,PatPlanList);
-			PatientNoteCur=PatientNotes.Refresh(PatCur.PatNum,PatCur.Guarantor);
-			//other tables are refreshed in FillAcctLineAL
 			DateTime fromDate=DateTime.MinValue;
 			if(!checkShowAll.Checked){
 				fromDate=DateTime.Today.AddDays(-45);
@@ -1265,6 +1257,13 @@ namespace OpenDental {
 				viewingInRecall=true;
 			}
 			DataSetMain=AccountModule.GetAll(patNum,viewingInRecall,fromDate,toDate,isSelectingFamily);
+			FamCur=Patients.GetFamily(patNum);//for now, have to get family after dataset due to aging calc.
+			PatCur=FamCur.GetPatient(patNum);
+			InsPlanList=InsPlans.Refresh(FamCur);
+			PatPlanList=PatPlans.Refresh(patNum);
+			BenefitList=Benefits.Refresh(PatPlanList);
+			//CovPats.Refresh(InsPlanList,PatPlanList);
+			PatientNoteCur=PatientNotes.Refresh(PatCur.PatNum,PatCur.Guarantor);		
 		}
 
 		private void RefreshModuleScreen(bool isSelectingFamily) {
@@ -1514,9 +1513,25 @@ namespace OpenDental {
 			gridPayPlan.Height=75;
 			gridPayPlan.BeginUpdate();
 			gridPayPlan.Columns.Clear();
-			ODGridColumn col=new ODGridColumn(Lan.g("TablePaymentPlans","Date"),150);
+			ODGridColumn col=new ODGridColumn(Lan.g("TablePaymentPlans","Date"),65);
 			gridPayPlan.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TablePaymentPlans","Amount"),70,HorizontalAlignment.Right);
+			col=new ODGridColumn(Lan.g("TablePaymentPlans","Guarantor"),100);
+			gridPayPlan.Columns.Add(col);
+			col=new ODGridColumn(Lan.g("TablePaymentPlans","Patient"),100);
+			gridPayPlan.Columns.Add(col);
+			col=new ODGridColumn(Lan.g("TablePaymentPlans","Ins"),30,HorizontalAlignment.Center);
+			gridPayPlan.Columns.Add(col);
+			col=new ODGridColumn(Lan.g("TablePaymentPlans","Principal"),70,HorizontalAlignment.Right);
+			gridPayPlan.Columns.Add(col);
+			col=new ODGridColumn(Lan.g("TablePaymentPlans","Total Cost"),70,HorizontalAlignment.Right);
+			gridPayPlan.Columns.Add(col);
+			col=new ODGridColumn(Lan.g("TablePaymentPlans","Paid"),70,HorizontalAlignment.Right);
+			gridPayPlan.Columns.Add(col);
+			col=new ODGridColumn(Lan.g("TablePaymentPlans","PrincPaid"),70,HorizontalAlignment.Right);
+			gridPayPlan.Columns.Add(col);
+			col=new ODGridColumn(Lan.g("TablePaymentPlans","Due"),70,HorizontalAlignment.Right);
+			gridPayPlan.Columns.Add(col);
+			col=new ODGridColumn("",70);//filler
 			gridPayPlan.Columns.Add(col);
 			gridPayPlan.Rows.Clear();
 			UI.ODGridRow row;
@@ -1524,7 +1539,15 @@ namespace OpenDental {
 			for(int i=0;i<table.Rows.Count;i++) {
 				row=new ODGridRow();
 				row.Cells.Add(table.Rows[i]["date"].ToString());
+				row.Cells.Add(table.Rows[i]["guarantor"].ToString());
+				row.Cells.Add(table.Rows[i]["patient"].ToString());
+				row.Cells.Add(table.Rows[i]["isIns"].ToString());
 				row.Cells.Add(table.Rows[i]["principal"].ToString());
+				row.Cells.Add(table.Rows[i]["totalCost"].ToString());
+				row.Cells.Add(table.Rows[i]["paid"].ToString());
+				row.Cells.Add(table.Rows[i]["princPaid"].ToString());
+				row.Cells.Add(table.Rows[i]["due"].ToString());
+				row.Cells.Add("");
 				gridPayPlan.Rows.Add(row);
 			}
 			gridPayPlan.EndUpdate();

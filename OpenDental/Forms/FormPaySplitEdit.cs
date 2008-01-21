@@ -1,6 +1,7 @@
 using System;
 using System.Drawing;
 using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows.Forms;
 using OpenDentBusiness;
@@ -863,7 +864,7 @@ namespace OpenDental
 					return;
 				}
 				//more than one valid PayPlan
-				PayPlanCharge[] chargeList=PayPlanCharges.Refresh(FamCur.List[listPatient.SelectedIndex].PatNum);
+				List<PayPlanCharge> chargeList=PayPlanCharges.Refresh(FamCur.List[listPatient.SelectedIndex].PatNum);
 				FormPayPlanSelect FormPPS=new FormPayPlanSelect(payPlanList,chargeList);
 				//FormPPS.ValidPlans=payPlanList;
 				FormPPS.ShowDialog();

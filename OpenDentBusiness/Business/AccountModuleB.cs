@@ -294,7 +294,8 @@ namespace OpenDentBusiness {
 				rows.Add(row);
 			}
 			//paysplits-----------------------------------------------------------------------------------------
-			command="SELECT CheckNum,DatePay,paysplit.PatNum,PayAmt,paysplit.PayNum,PayType,ProcDate,ProvNum,SplitAmt "
+			command="SELECT CheckNum,DatePay,paysplit.PatNum,PayAmt,paysplit.PayNum,PayPlanNum,"
+				+"PayType,ProcDate,ProvNum,SplitAmt "
 				+"FROM paysplit "
 				+"LEFT JOIN payment ON paysplit.PayNum=payment.PayNum "
 				+"WHERE (";
@@ -308,6 +309,10 @@ namespace OpenDentBusiness {
 			DataTable rawPay=dcon.GetTable(command);
 			double payamt;
 			for(int i=0;i<rawPay.Rows.Count;i++){
+				//do not add rows that are attached to payment plans
+				if(rawPay.Rows[i]["PayPlanNum"].ToString()!="0"){
+					continue;
+				}
 				row=table.NewRow();
 				row["AdjNum"]="0";
 				row["balance"]="";//fill this later
@@ -399,6 +404,7 @@ namespace OpenDentBusiness {
 			}
 			//claims (do not affect balance)-------------------------------------------------------------------------
 			command="SELECT CarrierName,ClaimFee,claim.ClaimNum,ClaimStatus,ClaimType,DateReceived,DateService,"
+				+"claim.InsPayEst,"
 				+"claim.InsPayAmt,claim.PatNum,GROUP_CONCAT(claimproc.ProcNum) _ProcNums,ProvTreat,claim.WriteOff "
 				+"FROM claim "
 				+"LEFT JOIN insplan ON claim.PlanNum=insplan.PlanNum "
@@ -415,6 +421,7 @@ namespace OpenDentBusiness {
 			DataTable rawClaim=dcon.GetTable(command);
 			DateTime daterec;
 			double amtpaid;
+			double insest;
 			for(int i=0;i<rawClaim.Rows.Count;i++){
 				row=table.NewRow();
 				row["AdjNum"]="0";
@@ -465,6 +472,10 @@ namespace OpenDentBusiness {
 				//else if(rawClaim.Rows[i]["ClaimStatus"].ToString()=="S"){
 				//	row["description"]+="\r\n"+Lan.g("ContrAccount","Sent");
 				//}
+				insest=PIn.PDouble(rawClaim.Rows[i]["InsPayEst"].ToString());
+				if(insest!=0){
+					row["description"]+="\r\n"+Lan.g("ContrAccount","Estimated Payment:")+" "+insest.ToString("c");
+				}
 				amtpaid=PIn.PDouble(rawClaim.Rows[i]["InsPayAmt"].ToString());
 				if(amtpaid!=0){
 					row["description"]+="\r\n"+Lan.g("ContrAccount","Payment:")+" "+amtpaid.ToString("c");
@@ -531,10 +542,17 @@ namespace OpenDentBusiness {
 				rows.Add(row);
 			}
 			//Payment plans----------------------------------------------------------------------------------
-			command="SELECT CarrierName,payplan.Guarantor,payplan.PatNum,PayPlanDate,payplan.PayPlanNum,"
-				+"payplan.PlanNum,SUM(p1.Principal) _principal "
+			command="SELECT "
+				+"(SELECT SUM(Principal) FROM payplancharge WHERE payplancharge.PayPlanNum=payplan.PayPlanNum) _principal,"
+				+"(SELECT SUM(Interest) FROM payplancharge WHERE payplancharge.PayPlanNum=payplan.PayPlanNum) _interest,"
+				+"(SELECT SUM(Principal) FROM payplancharge WHERE payplancharge.PayPlanNum=payplan.PayPlanNum "
+					+"AND ChargeDate <= CURDATE()) _principalDue,"
+				+"(SELECT SUM(Interest) FROM payplancharge WHERE payplancharge.PayPlanNum=payplan.PayPlanNum "
+					+"AND ChargeDate <= CURDATE()) _interestDue,"
+				+"CarrierName,payplan.Guarantor,"
+				+"payplan.PatNum,PayPlanDate,payplan.PayPlanNum,"
+				+"payplan.PlanNum "
 				+"FROM payplan "
-				+"LEFT JOIN payplancharge p1 ON payplan.PayPlanNum=p1.PayPlanNum "
 				+"LEFT JOIN insplan ON insplan.PlanNum=payplan.PlanNum "
 				+"LEFT JOIN carrier ON carrier.CarrierNum=insplan.CarrierNum "
 				+"WHERE  (";
@@ -582,11 +600,7 @@ namespace OpenDentBusiness {
 				row["tth"]="";
 				rows.Add(row);
 			}
-			GetPayPlans(rawPayPlan);
-
-
-
-
+			GetPayPlans(rawPayPlan,rawPay);
 			//Sorting-----------------------------------------------------------------------------------------
 			rows.Sort(new AccountLineComparer());
 			//rows.Sort(CompareCommRows);
@@ -671,38 +685,72 @@ namespace OpenDentBusiness {
 			retVal.Tables.Add(table);
 		}
 
-		///<summary>Gets payment plans for only the specified family members.</summary>
-		private static void GetPayPlans(DataTable rawPayPlan){//,int patNum,DateTime fromDate,DateTime toDate,bool isFamily){
+		///<summary>Gets payment plans for only the specified family members.  RawPay will include any paysplits for anyone in the family, so it's guaranteed to include all paysplits for a given payplan since payplans only show in the guarantor's family.</summary>
+		private static void GetPayPlans(DataTable rawPayPlan,DataTable rawPay){
+			//,int patNum,DateTime fromDate,DateTime toDate,bool isFamily){
 			DataConnection dcon=new DataConnection();
 			DataTable table=new DataTable("payplan");
 			DataRow row;
+			table.Columns.Add("accumDue");
 			table.Columns.Add("date");
 			table.Columns.Add("DateTime",typeof(DateTime));
+			table.Columns.Add("due");
 			table.Columns.Add("guarantor");
+			table.Columns.Add("isIns");
+			table.Columns.Add("paid");
+			table.Columns.Add("patient");
 			table.Columns.Add("PayPlanNum");
 			table.Columns.Add("principal");
+			table.Columns.Add("princPaid");
+			table.Columns.Add("totalCost");
 			List<DataRow> rows=new List<DataRow>();
-			/*string command="SELECT PayPlanDate,PayPlanNum "
-				+"FROM payplan "
-				//+"LEFT JOIN procedurecode ON procedurelog.CodeNum=procedurecode.CodeNum "
-				+"WHERE  (";
-			for(int i=0;i<fam.List.Length;i++){
-				if(i!=0){
-					command+="OR ";
-				}
-				command+="Guarantor ="+POut.PInt(fam.List[i].PatNum)+" ";
-			}
-			command+=") ORDER BY PayPlanDate";
-			rawPayPlan=dcon.GetTable(command);*/
 			DateTime dateT;
+			double paid;
+			double princ;
+			double princDue;
+			double interestDue;
+			double accumDue;
+			double princPaid;
+			double totCost;
+			double due;
 			for(int i=0;i<rawPayPlan.Rows.Count;i++){
+				//first, calculate the numbers-------------------------------------------------------------
+				paid=0;
+				for(int p=0;p<rawPay.Rows.Count;p++){
+					if(rawPay.Rows[p]["PayPlanNum"].ToString()==rawPayPlan.Rows[i]["PayPlanNum"].ToString()){
+						paid+=PIn.PDouble(rawPay.Rows[p]["SplitAmt"].ToString());
+					}
+				}
+				princ=PIn.PDouble(rawPayPlan.Rows[i]["_principal"].ToString());
+				princDue=PIn.PDouble(rawPayPlan.Rows[i]["_principalDue"].ToString());
+				interestDue=PIn.PDouble(rawPayPlan.Rows[i]["_interestDue"].ToString());
+				accumDue=princDue+interestDue;
+				princPaid=paid-interestDue;
+				if(princPaid<0){
+					princPaid=0;
+				}
+				totCost=princ+PIn.PDouble(rawPayPlan.Rows[i]["_interest"].ToString());
+				due=accumDue-paid;
+				//then fill the row----------------------------------------------------------------------
 				row=table.NewRow();
+				row["accumDue"]=accumDue.ToString("n");
 				dateT=PIn.PDateT(rawPayPlan.Rows[i]["PayPlanDate"].ToString());
 				row["DateTime"]=dateT;
 				row["date"]=dateT.ToShortDateString();
+				row["due"]=due.ToString("n");
 				row["guarantor"]=fam.GetNameInFamLF(PIn.PInt(rawPayPlan.Rows[i]["Guarantor"].ToString()));
+				if(rawPayPlan.Rows[i]["PlanNum"].ToString()=="0"){
+					row["isIns"]="";
+				}
+				else{
+					row["isIns"]="X";
+				}
+				row["paid"]=paid.ToString("n");
+				row["patient"]=fam.GetNameInFamLF(PIn.PInt(rawPayPlan.Rows[i]["PatNum"].ToString()));
 				row["PayPlanNum"]=rawPayPlan.Rows[i]["PayPlanNum"].ToString();
-				row["principal"]=rawPayPlan.Rows[i]["_principal"].ToString();
+				row["principal"]=princ.ToString("n");
+				row["princPaid"]=princPaid.ToString("n");
+				row["totalCost"]=totCost.ToString("n");
 				rows.Add(row);
 			}
 			for(int i=0;i<rows.Count;i++) {
