@@ -836,6 +836,7 @@ namespace OpenDental{
 			checkDisableAutoFilms.Checked = PrefB.GetBool("RecallDisableAutoFilms");
 			checkDisablePerioAlt.Checked = PrefB.GetBool("RecallDisablePerioAlt");
 			textFMXPanoYrInterval.Text = PrefB.GetInt("RecallFMXPanoYrInterval").ToString();
+			if(textFMXPanoYrInterval.Text == "0") textFMXPanoYrInterval.Text = "";
 			checkGroupFamilies.Checked = PrefB.GetBool("RecallGroupByFamily");
 			textPostcardMessage.Text = PrefB.GetString("RecallPostcardMessage");
 			textPostcardFamMsg.Text=PrefB.GetString("RecallPostcardFamMsg");

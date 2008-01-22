@@ -787,7 +787,7 @@ namespace OpenDental{
 					//dueFMXPano=true and dueBW=false because we don't want to take both.
 					//also skip this is pt is less than 18 years old.
 					//later, might add here check for FMX freq based on ins information
-					if ((PrefB.GetInt("RecallFMXPanoYrInterval").ToString() != "") && (patCur.Birthdate.AddYears(18) < recallCur.DateDue)) {
+					if ((PrefB.GetInt("RecallFMXPanoYrInterval").ToString() != "0") && (patCur.Birthdate.AddYears(18) < recallCur.DateDue)) {
 						if (PrefB.GetString("RecallFMXPanoProc") == ProcedureCodes.GetStringProcCode(procList[i].CodeNum)
 							&& (procList[i].ProcStatus.ToString() == "C" | procList[i].ProcStatus.ToString() == "EO")
 							&& recallCur.DateDue.Year > 1880
