@@ -881,7 +881,7 @@ namespace OpenDental{
 			{
 				textFMXPanoYrInterval.Text="";
 				MsgBox.Show(this,"The value for FMX/Pano interval must be a single number between 1 and 7 years, or you may leave it blank to disable this and only use BW's.");
-				return;
+				return; 
 			}
 
 
