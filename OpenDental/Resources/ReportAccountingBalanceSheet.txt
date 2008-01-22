@@ -16,7 +16,7 @@
       <Query>
         <DataSourceName>DS1</DataSourceName>
         <Timeout>10</Timeout>
-        <CommandText>SELECT Description, SUM(DebitAmt-CreditAmt) SumTotal FROM account, journalentry WHERE account.AccountNum=journalentry.AccountNum AND DateDisplayed &lt;= '2006-12-31' AND AcctType=0 GROUP BY account.AccountNum ORDER BY Description, DateDisplayed</CommandText>
+        <CommandText>SELECT Description, SUM(DebitAmt-CreditAmt) SumTotal FROM account, journalentry WHERE account.AccountNum=journalentry.AccountNum AND DateDisplayed &gt;= '2007-01-01' AND DateDisplayed &lt;= '2007-12-31' AND AcctType=0 GROUP BY account.AccountNum ORDER BY Description, DateDisplayed</CommandText>
       </Query>
       <Fields>
         <Field Name="Description">
@@ -41,7 +41,7 @@
     <DataSet Name="Liabilities">
       <Query>
         <DataSourceName>DS1</DataSourceName>
-        <CommandText>SELECT Description, SUM(CreditAmt-DebitAmt) SumTotal FROM account, journalentry WHERE account.AccountNum=journalentry.AccountNum AND DateDisplayed &lt;= '2006-12-31' AND AcctType=1 GROUP BY account.AccountNum ORDER BY Description, DateDisplayed</CommandText>
+        <CommandText>SELECT Description, SUM(CreditAmt-DebitAmt) SumTotal FROM account, journalentry WHERE account.AccountNum=journalentry.AccountNum AND DateDisplayed &gt;= '2007-01-01' AND DateDisplayed &lt;= '2007-12-31' AND AcctType=1 GROUP BY account.AccountNum ORDER BY Description, DateDisplayed</CommandText>
       </Query>
       <Fields>
         <Field Name="Description">
@@ -55,7 +55,7 @@
     <DataSet Name="Equity">
       <Query>
         <DataSourceName>DS1</DataSourceName>
-        <CommandText>SELECT Description, SUM(CreditAmt-DebitAmt) SumTotal FROM account, journalentry WHERE account.AccountNum=journalentry.AccountNum AND DateDisplayed &lt;= '2006-12-31' AND AcctType=2 GROUP BY account.AccountNum ORDER BY Description, DateDisplayed</CommandText>
+        <CommandText>SELECT Description, SUM(CreditAmt-DebitAmt) SumTotal FROM account, journalentry WHERE account.AccountNum=journalentry.AccountNum AND DateDisplayed &gt;= '2007-01-01' AND DateDisplayed &lt;= '2007-12-31' AND AcctType=2 GROUP BY account.AccountNum ORDER BY Description, DateDisplayed</CommandText>
       </Query>
       <Fields>
         <Field Name="Description">
