@@ -230,7 +230,6 @@ namespace OpenDental{
 				+",referringprov = '"+	POut.PInt   (Cur.ReferringProv)+"' "
 				+",refnumstring = '" +	POut.PString(Cur.RefNumString)+"' "
 				+",placeservice = '" +	POut.PInt   ((int)Cur.PlaceService)+"' "
-				+",accidentrelated = '"+POut.PString(Cur.AccidentRelated)+"' "
 				+",accidentdate = " +	POut.PDate  (Cur.AccidentDate)+" "
 				+",accidentst = '"   +	POut.PString(Cur.AccidentST)+"' "
 				+",employrelated = '"+	POut.PInt   ((int)Cur.EmployRelated)+"' "
@@ -245,6 +244,7 @@ namespace OpenDental{
 				+",ClinicNum = '"    +  POut.PInt   (Cur.ClinicNum)+"' "
 				+",ClaimForm = '"    +  POut.PInt   (Cur.ClaimForm)+"' "
 				+",EFormat = '"      +  POut.PInt   ((int)Cur.EFormat)+"' "
+				+",accidentrelated = '"+POut.PString(Cur.AccidentRelated)+"' "
 				+"WHERE claimnum = '"+	POut.PInt   (Cur.ClaimNum)+"'";
 			General.NonQ(command);
 			//now, delete all attachments and recreate.
