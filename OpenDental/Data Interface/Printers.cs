@@ -127,18 +127,19 @@ namespace OpenDental{
 			if(!doPrompt){
 				return true;
 			}
-			#if DEBUG
-				return true;
-			#endif
 			PrintDialog dialog=new PrintDialog();
 			dialog.PrinterSettings=pSet;
-			if(dialog.ShowDialog()!=DialogResult.OK){
-				return false;
-			}
-			//if(!dialog.PrinterSettings.IsValid){//not needed since we have already checked each name.
+			#if DEBUG
+				return true;
+			#else
+				if(dialog.ShowDialog()!=DialogResult.OK){
+					return false;
+				}
+				//if(!dialog.PrinterSettings.IsValid){//not needed since we have already checked each name.
 				//pd2.PrinterSettings=printDialog2.PrinterSettings;
-			//}
-			return true;
+				//}
+				return true;
+			#endif
 		}
 
 		private static bool PrinterIsInstalled(string name){

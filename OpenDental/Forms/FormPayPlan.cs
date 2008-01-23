@@ -78,19 +78,17 @@ namespace OpenDental{
 		///<summary>Used to display insurance info.</summary>
 		private InsPlan[] InsPlanList;
 		private OpenDental.UI.ODGrid gridCharges;
-		private System.Windows.Forms.Label label1;
-		private System.Windows.Forms.TextBox textStartBal;
-		private System.Windows.Forms.TextBox textTotPrinc;
-		private System.Windows.Forms.Label label3;
-		private System.Windows.Forms.TextBox textTotInt;
-		private System.Windows.Forms.TextBox textTotPay;
 		private OpenDental.UI.Button butClear;
 		private OpenDental.UI.Button butAdd;
 		private System.Windows.Forms.TextBox textAmtPaid;
 		private System.Windows.Forms.TextBox textPrincPaid;
 		private System.Windows.Forms.Label label14;
-		private List<PayPlanCharge> ChargeList;
+		//private List<PayPlanCharge> ChargeList;
 		private double AmtPaid;
+		private DataTable table;
+		private double TotPrinc;
+		private double TotInt;
+		private double TotPrincInt;
 
 		///<summary>The supplied payment plan should already have been saved in the database.</summary>
 		public FormPayPlan(Patient patCur,PayPlan payPlanCur){
@@ -155,12 +153,6 @@ namespace OpenDental{
 			this.textInsPlan = new System.Windows.Forms.TextBox();
 			this.labelInsPlan = new System.Windows.Forms.Label();
 			this.checkIns = new System.Windows.Forms.CheckBox();
-			this.label1 = new System.Windows.Forms.Label();
-			this.textStartBal = new System.Windows.Forms.TextBox();
-			this.textTotPrinc = new System.Windows.Forms.TextBox();
-			this.label3 = new System.Windows.Forms.Label();
-			this.textTotInt = new System.Windows.Forms.TextBox();
-			this.textTotPay = new System.Windows.Forms.TextBox();
 			this.textPrincPaid = new System.Windows.Forms.TextBox();
 			this.label14 = new System.Windows.Forms.Label();
 			this.butAdd = new OpenDental.UI.Button();
@@ -423,60 +415,6 @@ namespace OpenDental{
 			this.checkIns.TabIndex = 46;
 			this.checkIns.Text = "Use for tracking expected insurance payments";
 			this.checkIns.Click += new System.EventHandler(this.checkIns_Click);
-			// 
-			// label1
-			// 
-			this.label1.Location = new System.Drawing.Point(578,9);
-			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(148,17);
-			this.label1.TabIndex = 47;
-			this.label1.Text = "Starting Balance";
-			this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// textStartBal
-			// 
-			this.textStartBal.Location = new System.Drawing.Point(729,9);
-			this.textStartBal.Name = "textStartBal";
-			this.textStartBal.ReadOnly = true;
-			this.textStartBal.Size = new System.Drawing.Size(63,20);
-			this.textStartBal.TabIndex = 48;
-			this.textStartBal.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-			// 
-			// textTotPrinc
-			// 
-			this.textTotPrinc.Location = new System.Drawing.Point(534,416);
-			this.textTotPrinc.Name = "textTotPrinc";
-			this.textTotPrinc.ReadOnly = true;
-			this.textTotPrinc.Size = new System.Drawing.Size(60,20);
-			this.textTotPrinc.TabIndex = 50;
-			this.textTotPrinc.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-			// 
-			// label3
-			// 
-			this.label3.Location = new System.Drawing.Point(442,416);
-			this.label3.Name = "label3";
-			this.label3.Size = new System.Drawing.Size(88,17);
-			this.label3.TabIndex = 49;
-			this.label3.Text = "Totals";
-			this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// textTotInt
-			// 
-			this.textTotInt.Location = new System.Drawing.Point(593,416);
-			this.textTotInt.Name = "textTotInt";
-			this.textTotInt.ReadOnly = true;
-			this.textTotInt.Size = new System.Drawing.Size(60,20);
-			this.textTotInt.TabIndex = 51;
-			this.textTotInt.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-			// 
-			// textTotPay
-			// 
-			this.textTotPay.Location = new System.Drawing.Point(652,416);
-			this.textTotPay.Name = "textTotPay";
-			this.textTotPay.ReadOnly = true;
-			this.textTotPay.Size = new System.Drawing.Size(60,20);
-			this.textTotPay.TabIndex = 52;
-			this.textTotPay.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
 			// 
 			// textPrincPaid
 			// 
@@ -744,12 +682,6 @@ namespace OpenDental{
 			this.Controls.Add(this.label14);
 			this.Controls.Add(this.butAdd);
 			this.Controls.Add(this.butClear);
-			this.Controls.Add(this.textTotPay);
-			this.Controls.Add(this.textTotInt);
-			this.Controls.Add(this.textTotPrinc);
-			this.Controls.Add(this.label3);
-			this.Controls.Add(this.textStartBal);
-			this.Controls.Add(this.label1);
 			this.Controls.Add(this.checkIns);
 			this.Controls.Add(this.butChangePlan);
 			this.Controls.Add(this.textInsPlan);
@@ -822,66 +754,56 @@ namespace OpenDental{
 
 		/// <summary>Called 5 times</summary>
 		private void FillCharges(){
-			List<PayPlanCharge> ChargeListAll=PayPlanCharges.Refresh(PayPlanCur.Guarantor);
-			ChargeList=PayPlanCharges.GetForPayPlan(PayPlanCur.PayPlanNum,ChargeListAll);
+			table=General.GetDS("AccountModule.GetPayPlanAmort",PayPlanCur.PayPlanNum.ToString()).Tables["payplanamort"];
 			gridCharges.BeginUpdate();
 			gridCharges.Columns.Clear();
-			ODGridColumn col=new ODGridColumn(Lan.g("PayPlanAmortization","#"),25,HorizontalAlignment.Center);
-			gridCharges.Columns.Add(col);
+			ODGridColumn col;
 			col=new ODGridColumn(Lan.g("PayPlanAmortization","Date"),65,HorizontalAlignment.Right);
 			gridCharges.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("PayPlanAmortization","Principal"),60,HorizontalAlignment.Right);
+			col=new ODGridColumn(Lan.g("PayPlanAmortization","Description"),220);
 			gridCharges.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("PayPlanAmortization","Interest"),60,HorizontalAlignment.Right);
+			col=new ODGridColumn(Lan.g("PayPlanAmortization","Charges"),60,HorizontalAlignment.Right);
 			gridCharges.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("PayPlanAmortization","Payment"),60,HorizontalAlignment.Right);
+			col=new ODGridColumn(Lan.g("PayPlanAmortization","Credits"),60,HorizontalAlignment.Right);
 			gridCharges.Columns.Add(col);
 			col=new ODGridColumn(Lan.g("PayPlanAmortization","Balance"),60,HorizontalAlignment.Right);
 			gridCharges.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("PayPlanAmortization","Note"),147);
+			col=new ODGridColumn("",147);//filler
 			gridCharges.Columns.Add(col);
 			gridCharges.Rows.Clear();
 			UI.ODGridRow row;
-			//double totPrinc=0;
-			double totInt=0;
-			double bal=0;
-			for(int i=0;i<ChargeList.Count;i++){
-				//totPrinc+=ChargeList[i].Principal;
-				totInt+=ChargeList[i].Interest;
-				bal+=ChargeList[i].Principal;
+			for(int i=0;i<table.Rows.Count;i++){
+				row=new ODGridRow();
+				row.Cells.Add(table.Rows[i]["date"].ToString());
+				row.Cells.Add(table.Rows[i]["description"].ToString());
+				row.Cells.Add(table.Rows[i]["charges"].ToString());
+				row.Cells.Add(table.Rows[i]["credits"].ToString());
+				row.Cells.Add(table.Rows[i]["balance"].ToString());
+				row.Cells.Add("");
+				gridCharges.Rows.Add(row);
 			}
+			//The code below is not very efficient, but it doesn't matter
+			//List<PayPlanCharge> ChargeListAll=PayPlanCharges.Refresh(PayPlanCur.Guarantor);
+			List<PayPlanCharge> ChargeList=PayPlanCharges.GetForPayPlan(PayPlanCur.PayPlanNum);
+			TotPrinc=0;
+			TotInt=0;
+			for(int i=0;i<ChargeList.Count;i++){
+				TotPrinc+=ChargeList[i].Principal;
+				TotInt+=ChargeList[i].Interest;
+			}
+			TotPrincInt=TotPrinc+TotInt;
 			if(IsNew && ChargeList.Count==0){
 				textAmount.Text=TotalAmt.ToString("n");
 			}
 			else{
-				textAmount.Text=bal.ToString("n");
+				textAmount.Text=TotPrinc.ToString("n");
 			}
-			textStartBal.Text=bal.ToString("n");
-			textTotPrinc.Text=bal.ToString("n");
-			textTotInt.Text=totInt.ToString("n");
-			textTotPay.Text=(bal+totInt).ToString("n");
-			textTotalCost.Text=(bal+totInt).ToString("n");
+			textTotalCost.Text=TotPrincInt.ToString("n");
 			if(ChargeList.Count>0){
 				textDateFirstPay.Text=ChargeList[0].ChargeDate.ToShortDateString();
 			}
 			else{
 				textDateFirstPay.Text="";
-			}
-			for(int i=0;i<ChargeList.Count;i++){
-				row=new OpenDental.UI.ODGridRow();
-				row.Cells.Add((i+1).ToString());
-				row.Cells.Add(ChargeList[i].ChargeDate.ToShortDateString());
-				row.Cells.Add(ChargeList[i].Principal.ToString("n"));
-				row.Cells.Add(ChargeList[i].Interest.ToString("n"));
-				row.Cells.Add((ChargeList[i].Principal+ChargeList[i].Interest).ToString("n"));
-				bal-=ChargeList[i].Principal;
-				row.Cells.Add(bal.ToString("n"));
-				row.Cells.Add(ChargeList[i].Note);
-				//draw a dark line above this row if dates correct
-				if(i>0 && ChargeList[i].ChargeDate > DateTime.Today && ChargeList[i-1].ChargeDate <= DateTime.Today){
-					gridCharges.Rows[i-1].ColorLborder=Color.Black;
-				}
-				gridCharges.Rows.Add(row);
 			}
 			gridCharges.EndUpdate();
 			textAccumulatedDue.Text=PayPlans.GetAccumDue(PayPlanCur.PayPlanNum,ChargeList).ToString("n");
@@ -909,7 +831,7 @@ namespace OpenDental{
 				MsgBox.Show(this,"Not allowed to change the guarantor because payments are attached.");
 				return;
 			}
-			if(ChargeList.Count>0){
+			if(table.Rows.Count>0){
 				MsgBox.Show(this,"Not allowed to change the guarantor without first clearing the amortization schedule.");
 				return;
 			}
@@ -929,7 +851,7 @@ namespace OpenDental{
 				checkIns.Checked=!checkIns.Checked;
 				return;
 			}
-			if(ChargeList.Count>0){
+			if(table.Rows.Count>0){
 				MsgBox.Show(this,"Not allowed without first clearing the amortization schedule.");
 				checkIns.Checked=!checkIns.Checked;
 				return;
@@ -1022,7 +944,7 @@ namespace OpenDental{
 				MsgBox.Show(this,"Term cannot be less than 1.");
 				return;
 			}
-			if(ChargeList.Count>0){
+			if(table.Rows.Count>0){
 				if(!MsgBox.Show(this,true,"Replace existing amortization schedule?")){
 					return;
 				}
@@ -1091,8 +1013,8 @@ namespace OpenDental{
 				ppCharge.ProvNum=PatCur.PriProv;
 				if(tempP<-.03){//tempP is a significantly negative number, so this charge does not get added.
 					//the negative amount instead gets subtracted from the previous charge entered.
-					List<PayPlanCharge> ChargeListAll=PayPlanCharges.Refresh(PayPlanCur.Guarantor);
-					ChargeList=PayPlanCharges.GetForPayPlan(PayPlanCur.PayPlanNum,ChargeListAll);
+					//List<PayPlanCharge> ChargeListAll=PayPlanCharges.Refresh(PayPlanCur.Guarantor);
+					List<PayPlanCharge> ChargeList=PayPlanCharges.GetForPayPlan(PayPlanCur.PayPlanNum);
 					ppCharge=ChargeList[ChargeList.Count-1].Copy();
 					ppCharge.Principal+=tempP;
 					PayPlanCharges.Update(ppCharge);
@@ -1120,10 +1042,16 @@ namespace OpenDental{
 		}
 
 		private void gridCharges_CellDoubleClick(object sender, OpenDental.UI.ODGridClickEventArgs e) {
-			FormPayPlanChargeEdit FormP=new FormPayPlanChargeEdit(ChargeList[e.Row]);
-			FormP.ShowDialog();
-			if(FormP.DialogResult==DialogResult.Cancel){
-				return;
+			if(table.Rows[e.Row]["PayPlanChargeNum"].ToString()!="0"){
+				PayPlanCharge charge=PayPlanCharges.GetOne(PIn.PInt(table.Rows[e.Row]["PayPlanChargeNum"].ToString()));
+				FormPayPlanChargeEdit FormP=new FormPayPlanChargeEdit(charge);
+				FormP.ShowDialog();
+				if(FormP.DialogResult==DialogResult.Cancel){
+					return;
+				}
+			}
+			else{
+
 			}
 			FillCharges();
 		}
@@ -1188,7 +1116,7 @@ namespace OpenDental{
 			report.ReportObjects.Add(new ReportObject
 				(sectName,new Point(x1,yPos),size,"Principal",font,alignL));
 			report.ReportObjects.Add(new ReportObject
-				(sectName,new Point(x2,yPos),size,textTotPrinc.Text,font,alignR));
+				(sectName,new Point(x2,yPos),size,TotPrinc.ToString("n"),font,alignR));
 			yPos+=space;
 			report.ReportObjects.Add(new ReportObject
 				(sectName,new Point(x1,yPos),size,"Annual Percentage Rate",font,alignL));
@@ -1198,12 +1126,12 @@ namespace OpenDental{
 			report.ReportObjects.Add(new ReportObject
 				(sectName,new Point(x1,yPos),size,"Total Finance Charges",font,alignL));
 			report.ReportObjects.Add(new ReportObject
-				(sectName,new Point(x2,yPos),size,textTotInt.Text,font,alignR));
+				(sectName,new Point(x2,yPos),size,TotInt.ToString("n"),font,alignR));
 			yPos+=space;
 			report.ReportObjects.Add(new ReportObject
 				(sectName,new Point(x1,yPos),size,"Total Cost of Loan",font,alignL));
 			report.ReportObjects.Add(new ReportObject
-				(sectName,new Point(x2,yPos),size,textTotPay.Text,font,alignR));
+				(sectName,new Point(x2,yPos),size,TotPrincInt.ToString("n"),font,alignR));
 			yPos+=space;
 			section.Height=yPos+30;
 			report.AddColumn("ChargeDate",80,FieldValueType.Date);
@@ -1276,7 +1204,7 @@ namespace OpenDental{
 		}
 
 		private void butOK_Click(object sender, System.EventArgs e){
-			if(ChargeList.Count==0){
+			if(table.Rows.Count==0){
 				MsgBox.Show(this,"You must create an amortization schedule first.");
 				return;
 			}

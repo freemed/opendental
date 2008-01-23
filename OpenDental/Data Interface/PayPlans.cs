@@ -22,6 +22,20 @@ namespace OpenDental{
 			return RefreshAndFill(command)[0];
 		}
 
+		///<summary>Refreshes the list for the specified guarantor, and then determines if there are any valid plans with that patient as the guarantor.  If more than one valid payment plan, displays list to select from.  If any valid plans, then it returns that plan, else returns null.</summary>
+		public static List<PayPlan> GetValidPlansNoIns(int guarNum){//,bool isIns){
+			string command="SELECT * FROM payplan"
+				+" WHERE Guarantor = "+POut.PInt(guarNum);
+			//if(isIns){
+			//	command+=" AND PlanNum != 0";
+			//}
+			//else{
+				command+=" AND PlanNum = 0";
+			//}
+			command+=" ORDER BY payplandate";
+			return RefreshAndFill(command);
+		}
+
 		private static List<PayPlan> RefreshAndFill(string command){
 			List<PayPlan> retVal=new List<PayPlan>();
 			DataTable table=General.GetTable(command);
@@ -179,44 +193,7 @@ namespace OpenDental{
 			return retVal;
 		}
 
-		///<summary>Refreshes the list for the specified guarantor, and then determines if there are any valid plans with that patient as the guarantor.  If more than one valid payment plan, displays list to select from.  If any valid plans, then it returns that plan, else returns null.</summary>
-		public static PayPlan GetValidPlan(int guarNum,bool isIns){
-			PayPlan[] PlanListAll=Refresh(guarNum,0);
-			PayPlan[] PayPlanList=GetListOneType(PlanListAll,isIns);
-			if(PayPlanList.Length==0){
-				return null;
-			}
-			if(PayPlanList.Length==1){ //if there is only one valid payplan
-				return PayPlanList[0].Copy();
-			}
-			List<PayPlanCharge> ChargeList=PayPlanCharges.Refresh(guarNum);
-			//enhancement needed to weed out payment plans that are all paid off
-			//more than one valid PayPlan
-			FormPayPlanSelect FormPPS=new FormPayPlanSelect(PayPlanList,ChargeList);
-			FormPPS.ShowDialog();
-			if(FormPPS.DialogResult==DialogResult.OK){
-				return PayPlanList[FormPPS.IndexSelected].Copy();
-			}
-			else{
-				return null;
-			}
-		}
-
-		///<summary>Supply a list of all payment plans for a guarantor.  Based on the isIns setting, it will either return a list of all regular payment plans or only those for ins.  Used just before displaying FormPayPlanSelect.</summary>
-		public static PayPlan[] GetListOneType(PayPlan[] payPlanList,bool isIns){
-			ArrayList AL=new ArrayList();
-			for(int i=0;i<payPlanList.Length;i++){
-				if(isIns && payPlanList[i].PlanNum>0){
-					AL.Add(payPlanList[i]);
-				}
-				else if(!isIns && payPlanList[i].PlanNum==0){
-					AL.Add(payPlanList[i]);
-				}
-			}
-			PayPlan[] retVal=new PayPlan[AL.Count];
-			AL.CopyTo(retVal);
-			return retVal;
-		}
+		
 
 
 	}

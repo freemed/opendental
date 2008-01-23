@@ -277,6 +277,8 @@ namespace OpenDental {
 			Application.DoEvents();
 			PaySplitDeleteWithInvalidPayNum();
 			Application.DoEvents();
+			PaySplitAttachedToPayPlan();
+			Application.DoEvents();
 			PreferenceDateDepositsStarted();
 			Application.DoEvents();
 			PreferencePracticeBillingType();
@@ -1046,6 +1048,22 @@ namespace OpenDental {
 			if(numberFixed>0 || checkShow.Checked) {
 				textLog.Text+=Lan.g(this,"PayPlan Guarantors set to PatNum if used for insurance tracking: ")
 					+numberFixed.ToString()+"\r\n";
+			}
+		}
+
+		private void PaySplitAttachedToPayPlan() {
+			command="SELECT SplitNum,payplan.Guarantor FROM paysplit,payplan "
+				+"WHERE paysplit.PayPlanNum=payplan.PayPlanNum "
+				+"AND paysplit.PatNum!=payplan.Guarantor";
+			DataTable table=General.GetTable(command);
+			for(int i=0;i<table.Rows.Count;i++) {
+				command="UPDATE paysplit SET PatNum="+table.Rows[i]["Guarantor"].ToString()
+					+" WHERE SplitNum="+table.Rows[i]["SplitNum"].ToString();
+				General.NonQ(command);
+			}
+			int numberFixed=table.Rows.Count;
+			if(numberFixed>0 || checkShow.Checked) {
+				textLog.Text+=Lan.g(this,"Paysplits changed patnum to match payplan guarantor: ")+numberFixed.ToString()+"\r\n";
 			}
 		}
 

@@ -15,10 +15,30 @@ namespace OpenDental{
 				+"WHERE Guarantor='"+POut.PInt(patNum)+"' "
 				+"OR PatNum='"+POut.PInt(patNum)+"' "
 				+"ORDER BY ChargeDate";
+			return RefreshAndFill(command);
+		}
+
+		///<summary></summary>
+		public static List<PayPlanCharge> GetForPayPlan(int payPlanNum){
+			string command=
+				"SELECT * FROM payplancharge "
+				+"WHERE PayPlanNum="+POut.PInt(payPlanNum)
+				+" ORDER BY ChargeDate";
+			return RefreshAndFill(command);
+		}
+
+		///<summary></summary>
+		public static PayPlanCharge GetOne(int payPlanChargeNum){
+			string command=
+				"SELECT * FROM payplancharge "
+				+"WHERE PayPlanChargeNum="+POut.PInt(payPlanChargeNum);
+			return RefreshAndFill(command)[0];
+		}
+
+		private static List<PayPlanCharge> RefreshAndFill(string command){
 			DataTable table=General.GetTable(command);
 			List<PayPlanCharge> retVal=new List<PayPlanCharge>();
 			PayPlanCharge ppcharge;
-			//PayPlanCharge[] List=new PayPlanCharge[table.Rows.Count];
 			for(int i=0;i<table.Rows.Count;i++) {
 				ppcharge=new PayPlanCharge();
 				ppcharge.PayPlanChargeNum= PIn.PInt(table.Rows[i][0].ToString());
@@ -88,19 +108,7 @@ namespace OpenDental{
  			General.NonQ(command);
 		}
 
-		///<summary>Must pass in a list of charges for the guarantor.  The ones for this particular payplan will be returned.</summary>
-		public static List<PayPlanCharge> GetForPayPlan(int payPlanNum,List<PayPlanCharge> ChargeList){
-			//ArrayList AL=new ArrayList();
-			List<PayPlanCharge> retVal=new List<PayPlanCharge>();
-			for(int i=0;i<ChargeList.Count;i++){
-				if(ChargeList[i].PayPlanNum==payPlanNum){
-					 retVal.Add(ChargeList[i]);
-				}
-			}
-			//PayPlanCharge[] retVal=new PayPlanCharge[AL.Count];
-			//AL.CopyTo(retVal);
-			return retVal;
-		}
+		
 
 		///<summary></summary>
 		public static void DeleteAllInPlan(int payPlanNum){

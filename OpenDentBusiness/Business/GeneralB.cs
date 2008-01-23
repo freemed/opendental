@@ -66,6 +66,8 @@ namespace OpenDentBusiness {
 					throw new ApplicationException("MethodName not found");
 				case "AccountModule.GetAll":
 					return AccountModuleB.GetAll(parameters);
+				case "AccountModule.GetPayPlanAmort":
+					return AccountModuleB.GetPayPlanAmort(parameters);
 				case "Appointment.GetApptEdit":
 					return AppointmentB.GetApptEdit(parameters);
 				case "Appointment.RefreshPeriod":

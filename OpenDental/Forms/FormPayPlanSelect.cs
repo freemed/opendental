@@ -16,7 +16,7 @@ namespace OpenDental{
 		/// </summary>
 		private System.ComponentModel.Container components = null;
 		/// <summary>A list of plans passed to this form which are to be displayed.</summary>
-		private PayPlan[] ValidPlans;
+		private List<PayPlan> ValidPlans;
 		/// <summary>A list of payPlanCharges passed to this form used to calculate princ for each payplan.</summary>
 		private List<PayPlanCharge> ChargeList;
 		private System.Windows.Forms.ListBox listPayPlans;
@@ -24,7 +24,7 @@ namespace OpenDental{
 		public int IndexSelected;
 
 		///<summary></summary>
-		public FormPayPlanSelect(PayPlan[] validPlans,List<PayPlanCharge> chargeList)
+		public FormPayPlanSelect(List<PayPlan> validPlans,List<PayPlanCharge> chargeList)
 		{
 			//
 			// Required for Windows Form Designer support
@@ -124,7 +124,7 @@ namespace OpenDental{
 		#endregion
 
 		private void FormPayPlanSelect_Load(object sender, System.EventArgs e) {
-			for(int i=0;i<ValidPlans.Length;i++){
+			for(int i=0;i<ValidPlans.Count;i++){
 				listPayPlans.Items.Add(ValidPlans[i].PayPlanDate.ToShortDateString()
 					+"  "+PayPlans.GetTotalPrinc(ValidPlans[i].PayPlanNum,ChargeList).ToString("F")
 					+"  "+Patients.GetPat(ValidPlans[i].PatNum).GetNameFL());

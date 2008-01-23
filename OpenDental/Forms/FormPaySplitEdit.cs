@@ -852,14 +852,14 @@ namespace OpenDental
 					checkPayPlan.Checked=false;
 					return;
 				}
-				PayPlan[] planListAll=PayPlans.Refresh(FamCur.List[listPatient.SelectedIndex].PatNum,0);
-				PayPlan[] payPlanList=PayPlans.GetListOneType(planListAll,false);
-				if(payPlanList.Length==0){//no valid plans
+				//PayPlan[] planListAll=PayPlans.Refresh(FamCur.List[listPatient.SelectedIndex].PatNum,0);
+				List<PayPlan> payPlanList=PayPlans.GetValidPlansNoIns(FamCur.List[listPatient.SelectedIndex].PatNum);
+				if(payPlanList.Count==0){//no valid plans
 					MsgBox.Show(this,"The selected patient is not the guarantor for any payment plans.");
 					checkPayPlan.Checked=false;
 					return;
 				}
-				if(payPlanList.Length==1){ //if there is only one valid payplan
+				if(payPlanList.Count==1){ //if there is only one valid payplan
 					PaySplitCur.PayPlanNum=payPlanList[0].PayPlanNum;
 					return;
 				}

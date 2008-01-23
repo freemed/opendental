@@ -641,11 +641,33 @@ namespace OpenDental{
 				SplitListOld.Add(SplitList[i].Copy());
 			}
 			if(IsNew) {
-				PayPlan payPlanCur=PayPlans.GetValidPlan(PatCur.PatNum,false);
+				List<PayPlan> payPlanList=PayPlans.GetValidPlansNoIns(PatCur.PatNum);
+				if(payPlanList.Count==0){
+					//
+				}
+				else if(payPlanList.Count==1){ //if there is only one valid payplan
+					//return PayPlanList[0].Copy();
+					AddOneSplit();//the amount and date will be updated upon closing
+					SplitList[SplitList.Count-1].PayPlanNum=payPlanList[0].PayPlanNum;
+				}
+				else{
+					List<PayPlanCharge> chargeList=PayPlanCharges.Refresh(PatCur.PatNum);
+					//enhancement needed to weed out payment plans that are all paid off
+					//more than one valid PayPlan
+					FormPayPlanSelect FormPPS=new FormPayPlanSelect(payPlanList,chargeList);
+					FormPPS.ShowDialog();
+					if(FormPPS.DialogResult==DialogResult.OK){
+						//return PayPlanList[FormPPS.IndexSelected].Copy();
+						AddOneSplit();//the amount and date will be updated upon closing
+						SplitList[SplitList.Count-1].PayPlanNum=payPlanList[FormPPS.IndexSelected].PayPlanNum;
+					}
+				}
+				/*
+				PayPlan payPlanCur=GetValidPlan(PatCur.PatNum,false);// PayPlans.GetValidPlan(PatCur.PatNum,false);
 				if(payPlanCur!=null) {//a valid payPlan was located
 					AddOneSplit();//the amount and date will be updated upon closing
 					SplitList[SplitList.Count-1].PayPlanNum=payPlanCur.PayPlanNum;
-				}
+				}*/
 			}
 			FillMain();
 			if(InitialPaySplit!=0){
@@ -868,19 +890,65 @@ namespace OpenDental{
 				//now there is exactly one.  The amount will be updated as the form closes.
 			}
 			if(checkPayPlan.Checked){
-				PayPlan payPlanCur=PayPlans.GetValidPlan(SplitList[0].PatNum,false);
+				//PayPlan payPlanCur=PayPlans.GetValidPlan(SplitList[0].PatNum);
+				List<PayPlan> payPlanList=PayPlans.GetValidPlansNoIns(SplitList[0].PatNum);
+				if(payPlanList.Count==0){
+					MsgBox.Show(this,"The selected patient is not the guarantor for any payment plans.");
+					checkPayPlan.Checked=false;
+					return;
+				}
+				else if(payPlanList.Count==1){ //if there is only one valid payplan
+					SplitList[0].PayPlanNum=payPlanList[0].PayPlanNum;
+				}
+				else{//multiple valid plans
+					List<PayPlanCharge> chargeList=PayPlanCharges.Refresh(SplitList[0].PatNum);
+					//enhancement needed to weed out payment plans that are all paid off
+					//more than one valid PayPlan
+					FormPayPlanSelect FormPPS=new FormPayPlanSelect(payPlanList,chargeList);
+					FormPPS.ShowDialog();
+					if(FormPPS.DialogResult==DialogResult.OK){
+						SplitList[0].PayPlanNum=payPlanList[FormPPS.IndexSelected].PayPlanNum;
+					}
+					else{
+						checkPayPlan.Checked=false;
+						return;
+					}
+				}
+				/*
 				if(payPlanCur==null){//no valid plans
 					MsgBox.Show(this,"The selected patient is not the guarantor for any payment plans.");
 					checkPayPlan.Checked=false;
 					return;
 				}
-				SplitList[0].PayPlanNum=payPlanCur.PayPlanNum;
+				SplitList[0].PayPlanNum=payPlanCur.PayPlanNum;*/
 			}
 			else{//payPlan unchecked
 				SplitList[0].PayPlanNum=0;
 			}
 			FillMain();
 		}
+
+		/*
+		private PayPlanNum GetValidPlan(int guarNum){
+			List<PayPlan> payPlanList=PayPlans.GetValidPlansNoIns(guarNum);
+			if(payPlanList.Length==0){
+				return null;
+			}
+			if(payPlanList.Count==1){ //if there is only one valid payplan
+				return PayPlanList[0].Copy();
+			}
+			List<PayPlanCharge> ChargeList=PayPlanCharges.Refresh(guarNum);
+			//enhancement needed to weed out payment plans that are all paid off
+			//more than one valid PayPlan
+			FormPayPlanSelect FormPPS=new FormPayPlanSelect(PayPlanList,ChargeList);
+			FormPPS.ShowDialog();
+			if(FormPPS.DialogResult==DialogResult.OK){
+				return PayPlanList[FormPPS.IndexSelected].Copy();
+			}
+			else{
+				return null;
+			}
+		}*/
 
 		/// <summary>Adds one split to work with.  Called when checkPayPlan click, or upon load if auto attaching to payplan.</summary>
 		private void AddOneSplit(){

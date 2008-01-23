@@ -31,6 +31,115 @@ namespace OpenDentBusiness {
 			return retVal;
 		}
 
+		///<summary>Gets a table of charges mixed with payments to show in the payplan edit window.  Parameters: 0:payPlanNum</summary>
+		public static DataSet GetPayPlanAmort(string[] parameters){
+			int payPlanNum=PIn.PInt(parameters[0]);
+			DataConnection dcon=new DataConnection();
+			DataTable table=new DataTable("payplanamort");
+			DataRow row;
+			SetTableColumns(table);
+			List<DataRow> rows=new List<DataRow>();
+			string command="SELECT ChargeDate,Interest,Note,PayPlanChargeNum,Principal,ProvNum "
+				+"FROM payplancharge WHERE PayPlanNum="+POut.PInt(payPlanNum);
+			DataTable rawCharge=dcon.GetTable(command);
+			DateTime dateT;
+			double principal;
+			double interest;
+			double total;
+			for(int i=0;i<rawCharge.Rows.Count;i++){
+				interest=PIn.PDouble(rawCharge.Rows[i]["Interest"].ToString());
+				principal=PIn.PDouble(rawCharge.Rows[i]["Principal"].ToString());
+				total=principal+interest;
+				row=table.NewRow();
+				row["AdjNum"]="0";
+				row["balance"]="";//fill this later
+				row["balanceDouble"]=0;//fill this later
+				row["chargesDouble"]=total;
+				row["charges"]=((double)row["chargesDouble"]).ToString("n");
+				row["ClaimNum"]="0";
+				row["ClaimPaymentNum"]="0";
+				row["colorText"]=Color.Black.ToArgb().ToString();
+				row["CommlogNum"]="0";
+				row["creditsDouble"]=0;
+				row["credits"]="";//((double)row["creditsDouble"]).ToString("n");
+				dateT=PIn.PDateT(rawCharge.Rows[i]["ChargeDate"].ToString());
+				row["DateTime"]=dateT;
+				row["date"]=dateT.ToShortDateString();
+				row["description"]="";//"Princ: "+principal.ToString("n")+
+				if(interest!=0){
+					row["description"]+="Interest: "+interest.ToString("n");//+"Princ: "+principal.ToString("n")+;
+				}
+				row["patient"]="";
+				row["PatNum"]="0";
+				row["PayNum"]="0";
+				row["PayPlanNum"]="0";
+				row["PayPlanChargeNum"]=rawCharge.Rows[i]["PayPlanChargeNum"].ToString();
+				row["ProcCode"]="PPcharge";
+				row["ProcNum"]="0";
+				row["procsOnClaim"]="";
+				row["prov"]=Providers.GetAbbr(PIn.PInt(rawCharge.Rows[i]["ProvNum"].ToString()));
+				row["tth"]="";
+				rows.Add(row);
+			}
+			//Sorting-----------------------------------------------------------------------------------------
+			rows.Sort(new AccountLineComparer());
+			//Add # indicators to charges
+			int num=1;
+			for(int i=0;i<rows.Count;i++) {
+				if(rows[i]["PayPlanChargeNum"].ToString()=="0"){//if not a payplancharge
+					continue;
+				}
+				rows[i]["description"]="#"+num.ToString()+" "+rows[i]["description"].ToString();
+				num++;
+			}
+			//Compute balances-------------------------------------------------------------------------------------
+			double bal=0;
+			for(int i=0;i<rows.Count;i++) {
+				bal+=(double)rows[i]["chargesDouble"];
+				bal-=(double)rows[i]["creditsDouble"];
+				rows[i]["balanceDouble"]=bal;
+				//if(rows[i]["ClaimPaymentNum"].ToString()=="0" && rows[i]["ClaimNum"].ToString()!="0"){//claims
+				//	rows[i]["balance"]="";
+				//}
+				//else{
+					rows[i]["balance"]=bal.ToString("n");
+				//}
+			}
+			retVal=new DataSet();
+			for(int i=0;i<rows.Count;i++) {
+				table.Rows.Add(rows[i]);
+			}
+			retVal.Tables.Add(table);
+			return retVal;
+		}
+
+		private static void GetPayPlanCharges(){
+			/*
+			string command="SELECT "
+				+"(SELECT SUM(Principal) FROM payplancharge WHERE payplancharge.PayPlanNum=payplan.PayPlanNum) _principal,"
+				+"(SELECT SUM(Interest) FROM payplancharge WHERE payplancharge.PayPlanNum=payplan.PayPlanNum) _interest,"
+				+"(SELECT SUM(Principal) FROM payplancharge WHERE payplancharge.PayPlanNum=payplan.PayPlanNum "
+					+"AND ChargeDate <= CURDATE()) _principalDue,"
+				+"(SELECT SUM(Interest) FROM payplancharge WHERE payplancharge.PayPlanNum=payplan.PayPlanNum "
+					+"AND ChargeDate <= CURDATE()) _interestDue,"
+				+"CarrierName,payplan.Guarantor,"
+				+"payplan.PatNum,PayPlanDate,payplan.PayPlanNum,"
+				+"payplan.PlanNum "
+				+"FROM payplan "
+				+"LEFT JOIN insplan ON insplan.PlanNum=payplan.PlanNum "
+				+"LEFT JOIN carrier ON carrier.CarrierNum=insplan.CarrierNum "
+				+"WHERE  (";
+			for(int i=0;i<fam.List.Length;i++){
+				if(i!=0){
+					command+="OR ";
+				}
+				command+="payplan.Guarantor ="+POut.PInt(fam.List[i].PatNum)+" "
+					+"OR payplan.PatNum ="+POut.PInt(fam.List[i].PatNum)+" ";
+			}
+			command+=") GROUP BY payplan.PayPlanNum ORDER BY PayPlanDate";
+			DataTable rawPayPlan=dcon.GetTable(command);*/
+		}
+
 		private static void GetCommLog(int patNum) {
 			DataConnection dcon=new DataConnection();
 			DataTable table=new DataTable("Commlog");
@@ -149,21 +258,7 @@ namespace OpenDentBusiness {
 			retVal.Tables.Add(table);
 		}
 
-		///<summary>Also gets the patient table, which has one row for each family member. Also currently runs aging.  Also gets payplan table.</summary>
-		private static void GetAccount(int patNum,DateTime fromDate,DateTime toDate,bool isFamily) {
-			DataConnection dcon=new DataConnection();
-			DataTable table=new DataTable("account");
-			//run aging.  This need serious optimization-------------------------------------------------------
-			if(PrefB.GetBool("AgingCalculatedMonthlyInsteadOfDaily")){
-				Ledgers.ComputeAging(pat.Guarantor,PIn.PDate(PrefB.GetString("DateLastAging")));
-			}
-			else{
-				Ledgers.ComputeAging(pat.Guarantor,DateTime.Today);
-			}
-			Patients.UpdateAging(pat.Guarantor,Ledgers.Bal[0],Ledgers.Bal[1],Ledgers.Bal[2]
-				,Ledgers.Bal[3],Ledgers.InsEst,Ledgers.BalTotal);
-			//Now, back to getting the tables------------------------------------------------------------------
-			DataRow row;
+		private static void SetTableColumns(DataTable table){
 			//columns that start with lowercase are altered for display rather than being raw data.
 			table.Columns.Add("AdjNum");
 			table.Columns.Add("balance");
@@ -183,11 +278,30 @@ namespace OpenDentBusiness {
 			table.Columns.Add("PatNum");
 			table.Columns.Add("PayNum");//even though we only show split objects
 			table.Columns.Add("PayPlanNum");
+			table.Columns.Add("PayPlanChargeNum");
 			table.Columns.Add("ProcCode");
 			table.Columns.Add("ProcNum");
 			table.Columns.Add("procsOnClaim");//for a claim, the ProcNums, comma delimited.
 			table.Columns.Add("prov");
 			table.Columns.Add("tth");
+		}
+		
+		///<summary>Also gets the patient table, which has one row for each family member. Also currently runs aging.  Also gets payplan table.</summary>
+		private static void GetAccount(int patNum,DateTime fromDate,DateTime toDate,bool isFamily) {
+			DataConnection dcon=new DataConnection();
+			DataTable table=new DataTable("account");
+			//run aging.  This need serious optimization-------------------------------------------------------
+			if(PrefB.GetBool("AgingCalculatedMonthlyInsteadOfDaily")){
+				Ledgers.ComputeAging(pat.Guarantor,PIn.PDate(PrefB.GetString("DateLastAging")));
+			}
+			else{
+				Ledgers.ComputeAging(pat.Guarantor,DateTime.Today);
+			}
+			Patients.UpdateAging(pat.Guarantor,Ledgers.Bal[0],Ledgers.Bal[1],Ledgers.Bal[2]
+				,Ledgers.Bal[3],Ledgers.InsEst,Ledgers.BalTotal);
+			//Now, back to getting the tables------------------------------------------------------------------
+			DataRow row;
+			SetTableColumns(table);
 			//but we won't actually fill this table with rows until the very end.  It's more useful to use a List<> for now.
 			List<DataRow> rows=new List<DataRow>();
 			//Procedures------------------------------------------------------------------------------------------
@@ -237,6 +351,7 @@ namespace OpenDentBusiness {
 				row["PatNum"]=rawProc.Rows[i]["PatNum"].ToString();
 				row["PayNum"]="0";
 				row["PayPlanNum"]="0";
+				row["PayPlanChargeNum"]="0";
 				row["ProcCode"]=rawProc.Rows[i]["ProcCode"].ToString();
 				row["ProcNum"]=rawProc.Rows[i]["ProcNum"].ToString();
 				row["procsOnClaim"]="";
@@ -286,6 +401,7 @@ namespace OpenDentBusiness {
 				row["PatNum"]=rawAdj.Rows[i]["PatNum"].ToString();
 				row["PayNum"]="0";
 				row["PayPlanNum"]="0";
+				row["PayPlanChargeNum"]="0";
 				row["ProcCode"]=Lan.g("AccountModule","Adjust");
 				row["ProcNum"]="0";
 				row["procsOnClaim"]="";
@@ -343,6 +459,7 @@ namespace OpenDentBusiness {
 				row["PatNum"]=rawPay.Rows[i]["PatNum"].ToString();
 				row["PayNum"]=rawPay.Rows[i]["PayNum"].ToString();
 				row["PayPlanNum"]="0";
+				row["PayPlanChargeNum"]="0";
 				row["ProcCode"]=Lan.g("AccountModule","Pay");
 				row["ProcNum"]="0";
 				row["procsOnClaim"]="";
@@ -395,6 +512,7 @@ namespace OpenDentBusiness {
 				row["PatNum"]=rawClaimPay.Rows[i]["PatNum"].ToString();
 				row["PayNum"]="0";
 				row["PayPlanNum"]="0";
+				row["PayPlanChargeNum"]="0";
 				row["ProcCode"]=Lan.g("AccountModule","InsPay");
 				row["ProcNum"]="0";
 				row["procsOnClaim"]="";
@@ -490,6 +608,7 @@ namespace OpenDentBusiness {
 				row["PatNum"]=rawClaim.Rows[i]["PatNum"].ToString();
 				row["PayNum"]="0";
 				row["PayPlanNum"]="0";
+				row["PayPlanChargeNum"]="0";
 				row["ProcCode"]=Lan.g("AccountModule","Claim");
 				row["ProcNum"]="0";
 				row["procsOnClaim"]=PIn.PByteArray(rawClaim.Rows[i]["_ProcNums"]);
@@ -536,6 +655,7 @@ namespace OpenDentBusiness {
 				row["PatNum"]=rawComm.Rows[i]["PatNum"].ToString();
 				row["PayNum"]="0";
 				row["PayPlanNum"]="0";
+				row["PayPlanChargeNum"]="0";
 				row["ProcCode"]=Lan.g("AccountModule","Comm");
 				row["ProcNum"]="0";
 				row["procsOnClaim"]="";
@@ -595,6 +715,7 @@ namespace OpenDentBusiness {
 				row["PatNum"]=rawPayPlan.Rows[i]["PatNum"].ToString();
 				row["PayNum"]="0";
 				row["PayPlanNum"]=rawPayPlan.Rows[i]["PayPlanNum"].ToString();
+				row["PayPlanChargeNum"]="0";
 				row["ProcCode"]=Lan.g("AccountModule","PayPln");
 				row["ProcNum"]="0";
 				row["procsOnClaim"]="";
@@ -687,7 +808,7 @@ namespace OpenDentBusiness {
 			retVal.Tables.Add(table);
 		}
 
-		///<summary>Gets payment plans for only the specified family members.  RawPay will include any paysplits for anyone in the family, so it's guaranteed to include all paysplits for a given payplan since payplans only show in the guarantor's family.</summary>
+		///<summary>Gets payment plans for the family.  RawPay will include any paysplits for anyone in the family, so it's guaranteed to include all paysplits for a given payplan since payplans only show in the guarantor's family.  Database maint tool enforces paysplit.patnum=payplan.guarantor just in case.</summary>
 		private static void GetPayPlans(DataTable rawPayPlan,DataTable rawPay){
 			//,int patNum,DateTime fromDate,DateTime toDate,bool isFamily){
 			DataConnection dcon=new DataConnection();
@@ -833,10 +954,6 @@ namespace OpenDentBusiness {
 
 	///<summary>A generic comparison that sorts the rows of the account table by date and type.</summary>
 	class AccountLineComparer : IComparer<DataRow>	{
-		//public AccountLineComparer(){
-
-		//}
-		
 		///<summary>A generic comparison that sorts the rows of the account table by date and type.</summary>
 		public int Compare (DataRow rowA,DataRow rowB){
 			//if dates are different, then sort by date
@@ -850,9 +967,36 @@ namespace OpenDentBusiness {
 			if(rowA["ProcNum"].ToString()=="0" && rowB["ProcNum"].ToString()!="0"){
 				return 1;
 			}
+			//PayPlanCharges come before other types on same date, but rare to be on same date anyway.
+			if(rowA["PayPlanChargeNum"].ToString()!="0" && rowB["PayNum"].ToString()=="0"){
+				return -1;
+			}
+			if(rowA["PayNum"].ToString()=="0" && rowB["PayPlanChargeNum"].ToString()!="0"){
+				return 1;
+			}
 			return 0;
 		}
 	}
+
+	/*
+	///<summary>A generic comparison that sorts the rows of the payplanamort table by date and type.</summary>
+	class PayPlanLineComparer : IComparer<DataRow>	{
+		///<summary>A generic comparison that sorts the rows of the payplanamort table by date and type.</summary>
+		public int Compare (DataRow rowA,DataRow rowB){
+			//if dates are different, then sort by date
+			if((DateTime)rowA["DateTime"]!=(DateTime)rowB["DateTime"]){
+				return ((DateTime)rowA["DateTime"]).CompareTo((DateTime)rowB["DateTime"]);
+			}
+			//Charges come before paysplits, but rare to be on same date anyway.
+			if(rowA["PayPlanChargeNum"].ToString()!="0" && rowB["PaySplitNum"].ToString()=="0"){
+				return -1;
+			}
+			if(rowA["PaySplitNum"].ToString()=="0" && rowB["PayPlanChargeNum"].ToString()!="0"){
+				return 1;
+			}
+			return 0;
+		}
+	}*/
 
 
 }
