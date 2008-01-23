@@ -74,10 +74,66 @@ namespace OpenDentBusiness {
 				row["PayNum"]="0";
 				row["PayPlanNum"]="0";
 				row["PayPlanChargeNum"]=rawCharge.Rows[i]["PayPlanChargeNum"].ToString();
-				row["ProcCode"]="PPcharge";
+				row["ProcCode"]=Lan.g("AccountModule","PPcharge");
 				row["ProcNum"]="0";
 				row["procsOnClaim"]="";
 				row["prov"]=Providers.GetAbbr(PIn.PInt(rawCharge.Rows[i]["ProvNum"].ToString()));
+				row["tth"]="";
+				rows.Add(row);
+			}
+			//Paysplits
+			command="SELECT CheckNum,DatePay,paysplit.PatNum,PayAmt,paysplit.PayNum,PayPlanNum,"
+				+"PayType,ProcDate,ProvNum,SplitAmt "
+				+"FROM paysplit "
+				+"LEFT JOIN payment ON paysplit.PayNum=payment.PayNum "
+				+"WHERE ("
+				+"paysplit.PayPlanNum="+POut.PInt(payPlanNum);
+			/*for(int i=0;i<fam.List.Length;i++){
+				if(i!=0){
+					command+="OR ";
+				}
+				command+="paysplit.PatNum ="+POut.PInt(fam.List[i].PatNum)+" ";
+			}*/
+			command+=") ORDER BY ProcDate";
+			DataTable rawPay=dcon.GetTable(command);
+			double payamt;
+			double amt;
+			for(int i=0;i<rawPay.Rows.Count;i++){
+				row=table.NewRow();
+				row["AdjNum"]="0";
+				row["balance"]="";//fill this later
+				row["balanceDouble"]=0;//fill this later
+				row["chargesDouble"]=0;
+				row["charges"]="";
+				row["ClaimNum"]="0";
+				row["ClaimPaymentNum"]="0";
+				row["colorText"]=DefB.Long[(int)DefCat.AccountColors][3].ItemColor.ToArgb().ToString();
+				row["CommlogNum"]="0";
+				amt=PIn.PDouble(rawPay.Rows[i]["SplitAmt"].ToString());
+				row["creditsDouble"]=amt;
+				row["credits"]=((double)row["creditsDouble"]).ToString("n");
+				dateT=PIn.PDateT(rawPay.Rows[i]["ProcDate"].ToString());
+				row["DateTime"]=dateT;
+				row["date"]=dateT.ToShortDateString();
+				row["description"]=DefB.GetName(DefCat.PaymentTypes,PIn.PInt(rawPay.Rows[i]["PayType"].ToString()));
+				if(rawPay.Rows[i]["CheckNum"].ToString()!=""){
+					row["description"]+=" #"+rawPay.Rows[i]["CheckNum"].ToString();
+				}
+				payamt=PIn.PDouble(rawPay.Rows[i]["PayAmt"].ToString());
+				row["description"]+=" "+payamt.ToString("c");
+				if(payamt!=amt){
+					row["description"]+=" "+Lan.g("ContrAccount","(split)");
+				}
+				//we might use DatePay here to add to description
+				row["patient"]="";
+				row["PatNum"]=rawPay.Rows[i]["PatNum"].ToString();
+				row["PayNum"]=rawPay.Rows[i]["PayNum"].ToString();
+				row["PayPlanNum"]="0";
+				row["PayPlanChargeNum"]="0";
+				row["ProcCode"]=Lan.g("AccountModule","Pay");
+				row["ProcNum"]="0";
+				row["procsOnClaim"]="";
+				row["prov"]=Providers.GetAbbr(PIn.PInt(rawPay.Rows[i]["ProvNum"].ToString()));
 				row["tth"]="";
 				rows.Add(row);
 			}

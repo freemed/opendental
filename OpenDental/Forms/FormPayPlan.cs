@@ -442,7 +442,7 @@ namespace OpenDental{
 			this.butAdd.CornerRadius = 4F;
 			this.butAdd.Image = global::OpenDental.Properties.Resources.Add;
 			this.butAdd.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butAdd.Location = new System.Drawing.Point(535,453);
+			this.butAdd.Location = new System.Drawing.Point(435,540);
 			this.butAdd.Name = "butAdd";
 			this.butAdd.Size = new System.Drawing.Size(84,26);
 			this.butAdd.TabIndex = 54;
@@ -456,7 +456,7 @@ namespace OpenDental{
 			this.butClear.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butClear.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butClear.CornerRadius = 4F;
-			this.butClear.Location = new System.Drawing.Point(634,453);
+			this.butClear.Location = new System.Drawing.Point(534,540);
 			this.butClear.Name = "butClear";
 			this.butClear.Size = new System.Drawing.Size(99,26);
 			this.butClear.TabIndex = 53;
@@ -480,10 +480,10 @@ namespace OpenDental{
 			// gridCharges
 			// 
 			this.gridCharges.HScrollVisible = false;
-			this.gridCharges.Location = new System.Drawing.Point(435,31);
+			this.gridCharges.Location = new System.Drawing.Point(435,9);
 			this.gridCharges.Name = "gridCharges";
 			this.gridCharges.ScrollValue = 0;
-			this.gridCharges.Size = new System.Drawing.Size(536,379);
+			this.gridCharges.Size = new System.Drawing.Size(536,525);
 			this.gridCharges.TabIndex = 41;
 			this.gridCharges.Title = "Amortization Schedule";
 			this.gridCharges.TranslationName = "PayPlanAmortization";
@@ -780,6 +780,14 @@ namespace OpenDental{
 				row.Cells.Add(table.Rows[i]["credits"].ToString());
 				row.Cells.Add(table.Rows[i]["balance"].ToString());
 				row.Cells.Add("");
+				row.ColorText=Color.FromArgb(PIn.PInt(table.Rows[i]["colorText"].ToString()));
+				if(i<table.Rows.Count-1//not the last row
+					&& ((DateTime)table.Rows[i]["DateTime"]).Date<=DateTime.Today
+					&& ((DateTime)table.Rows[i+1]["DateTime"]).Date>DateTime.Today)
+				{
+					row.ColorLborder=Color.Black;
+					row.Cells[4].Bold=YN.Yes;
+				}
 				gridCharges.Rows.Add(row);
 			}
 			//The code below is not very efficient, but it doesn't matter
@@ -1050,8 +1058,26 @@ namespace OpenDental{
 					return;
 				}
 			}
-			else{
-
+			else if(table.Rows[e.Row]["PayNum"].ToString()!="0"){
+				Payment pay=Payments.GetPayment(PIn.PInt(table.Rows[e.Row]["PayNum"].ToString()));
+				if(pay.PayType==0){//provider income transfer. I don't think this is possible, but you never know.
+					FormProviderIncTrans FormPIT=new FormProviderIncTrans();
+					FormPIT.PatNum=PatCur.PatNum;
+					FormPIT.PaymentCur=pay;
+					FormPIT.IsNew=false;
+					FormPIT.ShowDialog();
+					if(FormPIT.DialogResult==DialogResult.Cancel){
+						return;
+					}
+				}
+				else{
+					FormPayment FormPayment2=new FormPayment(PatCur,FamCur,pay);
+					FormPayment2.IsNew=false;
+					FormPayment2.ShowDialog();
+					if(FormPayment2.DialogResult==DialogResult.Cancel){
+						return;
+					}
+				}
 			}
 			FillCharges();
 		}
