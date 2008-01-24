@@ -29,7 +29,6 @@ namespace OpenDental {
 		private System.Windows.Forms.MenuItem menuInsOther;
 		private System.Windows.Forms.MenuItem menuInsPri;
 		private System.Windows.Forms.MenuItem menuInsSec;
-		private System.Windows.Forms.CheckBox checkShowAll;
 		private OpenDental.UI.ODToolBar ToolBarMain;
 		private System.Windows.Forms.ImageList imageListMain;
 		private System.Windows.Forms.Panel panelSplitter;
@@ -136,8 +135,16 @@ namespace OpenDental {
 		private TabControl tabControl1;
 		private TabPage tabMain;
 		private TabPage tabShow;
-		private TabPage tabIns;
 		private ODGrid gridPayPlan;
+		private ValidDate textDateEnd;
+		private ValidDate textDateStart;
+		private Label labelEndDate;
+		private Label labelStartDate;
+		private OpenDental.UI.Button butRefresh;
+		private Label labelDateHint;
+		private OpenDental.UI.Button but90days;
+		private OpenDental.UI.Button but45days;
+		private OpenDental.UI.Button butDatesAll;
 		private FormPayPlan FormPayPlan2;
 		#endregion
 
@@ -164,7 +171,6 @@ namespace OpenDental {
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ContrAccount));
 			this.labelFamFinancial = new System.Windows.Forms.Label();
 			this.labelUrgFinNote = new System.Windows.Forms.Label();
-			this.checkShowAll = new System.Windows.Forms.CheckBox();
 			this.contextMenuIns = new System.Windows.Forms.ContextMenu();
 			this.menuInsPri = new System.Windows.Forms.MenuItem();
 			this.menuInsSec = new System.Windows.Forms.MenuItem();
@@ -229,13 +235,21 @@ namespace OpenDental {
 			this.textUrgFinNote = new OpenDental.ODtextBox();
 			this.gridAcctPat = new OpenDental.UI.ODGrid();
 			this.textFinNotes = new OpenDental.ODtextBox();
-			this.tabIns = new System.Windows.Forms.TabPage();
 			this.tabShow = new System.Windows.Forms.TabPage();
+			this.but90days = new OpenDental.UI.Button();
+			this.but45days = new OpenDental.UI.Button();
+			this.labelDateHint = new System.Windows.Forms.Label();
+			this.butRefresh = new OpenDental.UI.Button();
+			this.textDateEnd = new OpenDental.ValidDate();
+			this.textDateStart = new OpenDental.ValidDate();
+			this.labelEndDate = new System.Windows.Forms.Label();
+			this.labelStartDate = new System.Windows.Forms.Label();
 			this.gridRepeat = new OpenDental.UI.ODGrid();
 			this.gridAccount = new OpenDental.UI.ODGrid();
 			this.gridComm = new OpenDental.UI.ODGrid();
 			this.ToolBarMain = new OpenDental.UI.ODToolBar();
 			this.gridPayPlan = new OpenDental.UI.ODGrid();
+			this.butDatesAll = new OpenDental.UI.Button();
 			this.panelCommButs.SuspendLayout();
 			this.panelProgNotes.SuspendLayout();
 			this.groupBox7.SuspendLayout();
@@ -266,19 +280,6 @@ namespace OpenDental {
 			this.labelUrgFinNote.TabIndex = 10;
 			this.labelUrgFinNote.Text = "Fam Urgent Fin Note";
 			this.labelUrgFinNote.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
-			// 
-			// checkShowAll
-			// 
-			this.checkShowAll.Checked = true;
-			this.checkShowAll.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.checkShowAll.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkShowAll.Font = new System.Drawing.Font("Microsoft Sans Serif",8F,System.Drawing.FontStyle.Regular,System.Drawing.GraphicsUnit.Point,((byte)(0)));
-			this.checkShowAll.Location = new System.Drawing.Point(3,6);
-			this.checkShowAll.Name = "checkShowAll";
-			this.checkShowAll.Size = new System.Drawing.Size(81,15);
-			this.checkShowAll.TabIndex = 29;
-			this.checkShowAll.Text = "History";
-			this.checkShowAll.Click += new System.EventHandler(this.checkShowAll_Click);
 			// 
 			// contextMenuIns
 			// 
@@ -416,12 +417,12 @@ namespace OpenDental {
 			// 
 			// checkShowNotes
 			// 
-			this.checkShowNotes.BackColor = System.Drawing.SystemColors.Control;
+			this.checkShowNotes.BackColor = System.Drawing.Color.Transparent;
 			this.checkShowNotes.Checked = true;
 			this.checkShowNotes.CheckState = System.Windows.Forms.CheckState.Checked;
 			this.checkShowNotes.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.checkShowNotes.Font = new System.Drawing.Font("Microsoft Sans Serif",8F,System.Drawing.FontStyle.Regular,System.Drawing.GraphicsUnit.Point,((byte)(0)));
-			this.checkShowNotes.Location = new System.Drawing.Point(3,27);
+			this.checkShowNotes.Location = new System.Drawing.Point(3,223);
 			this.checkShowNotes.Name = "checkShowNotes";
 			this.checkShowNotes.Size = new System.Drawing.Size(81,15);
 			this.checkShowNotes.TabIndex = 209;
@@ -883,7 +884,6 @@ namespace OpenDental {
 			// tabControl1
 			// 
 			this.tabControl1.Controls.Add(this.tabMain);
-			this.tabControl1.Controls.Add(this.tabIns);
 			this.tabControl1.Controls.Add(this.tabShow);
 			this.tabControl1.Location = new System.Drawing.Point(749,27);
 			this.tabControl1.Name = "tabControl1";
@@ -950,20 +950,18 @@ namespace OpenDental {
 			this.textFinNotes.TextChanged += new System.EventHandler(this.textFinNotes_TextChanged);
 			this.textFinNotes.Leave += new System.EventHandler(this.textFinNotes_Leave);
 			// 
-			// tabIns
-			// 
-			this.tabIns.BackColor = System.Drawing.Color.Transparent;
-			this.tabIns.Location = new System.Drawing.Point(4,22);
-			this.tabIns.Name = "tabIns";
-			this.tabIns.Size = new System.Drawing.Size(178,371);
-			this.tabIns.TabIndex = 2;
-			this.tabIns.Text = "Ins";
-			this.tabIns.UseVisualStyleBackColor = true;
-			// 
 			// tabShow
 			// 
 			this.tabShow.BackColor = System.Drawing.Color.Transparent;
-			this.tabShow.Controls.Add(this.checkShowAll);
+			this.tabShow.Controls.Add(this.butDatesAll);
+			this.tabShow.Controls.Add(this.but90days);
+			this.tabShow.Controls.Add(this.but45days);
+			this.tabShow.Controls.Add(this.labelDateHint);
+			this.tabShow.Controls.Add(this.butRefresh);
+			this.tabShow.Controls.Add(this.textDateEnd);
+			this.tabShow.Controls.Add(this.textDateStart);
+			this.tabShow.Controls.Add(this.labelEndDate);
+			this.tabShow.Controls.Add(this.labelStartDate);
 			this.tabShow.Controls.Add(this.checkShowNotes);
 			this.tabShow.Location = new System.Drawing.Point(4,22);
 			this.tabShow.Name = "tabShow";
@@ -972,6 +970,89 @@ namespace OpenDental {
 			this.tabShow.TabIndex = 1;
 			this.tabShow.Text = "Show";
 			this.tabShow.UseVisualStyleBackColor = true;
+			// 
+			// but90days
+			// 
+			this.but90days.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.but90days.Autosize = true;
+			this.but90days.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.but90days.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.but90days.CornerRadius = 4F;
+			this.but90days.Location = new System.Drawing.Point(95,104);
+			this.but90days.Name = "but90days";
+			this.but90days.Size = new System.Drawing.Size(77,24);
+			this.but90days.TabIndex = 217;
+			this.but90days.Text = "90 Days";
+			this.but90days.Click += new System.EventHandler(this.but90days_Click);
+			// 
+			// but45days
+			// 
+			this.but45days.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.but45days.Autosize = true;
+			this.but45days.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.but45days.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.but45days.CornerRadius = 4F;
+			this.but45days.Location = new System.Drawing.Point(95,74);
+			this.but45days.Name = "but45days";
+			this.but45days.Size = new System.Drawing.Size(77,24);
+			this.but45days.TabIndex = 216;
+			this.but45days.Text = "45 Days";
+			this.but45days.Click += new System.EventHandler(this.but45days_Click);
+			// 
+			// labelDateHint
+			// 
+			this.labelDateHint.Location = new System.Drawing.Point(10,54);
+			this.labelDateHint.Name = "labelDateHint";
+			this.labelDateHint.Size = new System.Drawing.Size(162,17);
+			this.labelDateHint.TabIndex = 215;
+			this.labelDateHint.Text = "(leave dates blank to view all)";
+			this.labelDateHint.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// butRefresh
+			// 
+			this.butRefresh.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butRefresh.Autosize = true;
+			this.butRefresh.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butRefresh.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butRefresh.CornerRadius = 4F;
+			this.butRefresh.Location = new System.Drawing.Point(95,164);
+			this.butRefresh.Name = "butRefresh";
+			this.butRefresh.Size = new System.Drawing.Size(77,24);
+			this.butRefresh.TabIndex = 214;
+			this.butRefresh.Text = "Refresh";
+			this.butRefresh.Click += new System.EventHandler(this.butRefresh_Click);
+			// 
+			// textDateEnd
+			// 
+			this.textDateEnd.Location = new System.Drawing.Point(95,31);
+			this.textDateEnd.Name = "textDateEnd";
+			this.textDateEnd.Size = new System.Drawing.Size(77,20);
+			this.textDateEnd.TabIndex = 213;
+			// 
+			// textDateStart
+			// 
+			this.textDateStart.Location = new System.Drawing.Point(95,8);
+			this.textDateStart.Name = "textDateStart";
+			this.textDateStart.Size = new System.Drawing.Size(77,20);
+			this.textDateStart.TabIndex = 212;
+			// 
+			// labelEndDate
+			// 
+			this.labelEndDate.Location = new System.Drawing.Point(2,34);
+			this.labelEndDate.Name = "labelEndDate";
+			this.labelEndDate.Size = new System.Drawing.Size(91,14);
+			this.labelEndDate.TabIndex = 211;
+			this.labelEndDate.Text = "End Date";
+			this.labelEndDate.TextAlign = System.Drawing.ContentAlignment.TopRight;
+			// 
+			// labelStartDate
+			// 
+			this.labelStartDate.Location = new System.Drawing.Point(8,11);
+			this.labelStartDate.Name = "labelStartDate";
+			this.labelStartDate.Size = new System.Drawing.Size(84,14);
+			this.labelStartDate.TabIndex = 210;
+			this.labelStartDate.Text = "Start Date";
+			this.labelStartDate.TextAlign = System.Drawing.ContentAlignment.TopRight;
 			// 
 			// gridRepeat
 			// 
@@ -1033,6 +1114,20 @@ namespace OpenDental {
 			this.gridPayPlan.TranslationName = "TablePaymentPlans";
 			this.gridPayPlan.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridPayPlan_CellDoubleClick);
 			// 
+			// butDatesAll
+			// 
+			this.butDatesAll.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butDatesAll.Autosize = true;
+			this.butDatesAll.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butDatesAll.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butDatesAll.CornerRadius = 4F;
+			this.butDatesAll.Location = new System.Drawing.Point(95,134);
+			this.butDatesAll.Name = "butDatesAll";
+			this.butDatesAll.Size = new System.Drawing.Size(77,24);
+			this.butDatesAll.TabIndex = 218;
+			this.butDatesAll.Text = "All Dates";
+			this.butDatesAll.Click += new System.EventHandler(this.butDatesAll_Click);
+			// 
 			// ContrAccount
 			// 
 			this.Controls.Add(this.gridPayPlan);
@@ -1062,6 +1157,7 @@ namespace OpenDental {
 			this.tabMain.ResumeLayout(false);
 			this.tabMain.PerformLayout();
 			this.tabShow.ResumeLayout(false);
+			this.tabShow.PerformLayout();
 			this.ResumeLayout(false);
 
 		}
@@ -1072,7 +1168,9 @@ namespace OpenDental {
 			//can't use Lan.F(this);
 			Lan.C(this,new Control[]
 				{
-          checkShowAll,
+          labelStartDate,
+					labelEndDate,
+					labelDateHint,
 					label2,
 					label7,
 					label6,
@@ -1084,10 +1182,7 @@ namespace OpenDental {
 					labelUrgFinNote,
 					labelFamFinancial,
 					butComm,
-					//butLetterSimple,
-					//butLetterMerge,
-					//butLabel,
-					//butEmail,
+					butRefresh,
 					gridAccount,
 					gridAcctPat,
 					gridComm
@@ -1248,10 +1343,17 @@ namespace OpenDental {
 				return;
 			}
 			DateTime fromDate=DateTime.MinValue;
-			if(!checkShowAll.Checked){
-				fromDate=DateTime.Today.AddDays(-45);
-			}
 			DateTime toDate=DateTime.MaxValue;
+			if(textDateStart.errorProvider1.GetError(textDateStart)==""
+				&& textDateEnd.errorProvider1.GetError(textDateEnd)=="")
+			{
+				if(textDateStart.Text!=""){
+					fromDate=PIn.PDate(textDateStart.Text);
+				}
+				if(textDateEnd.Text!=""){
+					toDate=PIn.PDate(textDateEnd.Text);
+				}
+			}
 			bool viewingInRecall=ViewingInRecall;
 			if(PrefB.GetBool("FuchsOptionsOn")) {
 				viewingInRecall=true;
@@ -1599,149 +1701,7 @@ namespace OpenDental {
 			gridComm.EndUpdate();
 		}
 
-		/*
-		///<summary>Used once in FillAcctLineAL. Returns a list of PayInfos organized by date.</summary>
-		private PayInfo[] GetPayInfoList(PaySplit[] PaySplitList,Payment[] PaymentList){
-			ArrayList retAL=new ArrayList();
-			PayInfo payInfo;
-			ArrayList splitsGroupedForPayment;
-			//first, loop through all payments.  All payments will be included, but only part of the amount might be included.
-			for(int i=0;i<PaymentList.Length;i++){
-				payInfo=new PayInfo();
-				payInfo.Type=PayInfoType.Payment;
-				payInfo.Date=PaymentList[i].PayDate;
-				payInfo.Description=DefB.GetName(DefCat.PaymentTypes,PaymentList[i].PayType)+" ";
-				if(PaymentList[i].CheckNum!="") {
-					payInfo.Description+="#"+PaymentList[i].CheckNum+" ";
-				}
-				if(PaymentList[i].PayType==0){//provider income transfer
-					payInfo.Description+=Lan.g(this,"(internal provider income transfer $0)");
-				}
-				else{
-					payInfo.Description+=PaymentList[i].PayAmt.ToString("c");
-				}
-				//if(PaymentList[i].IsSplit){
-				//	payInfo.Description+=" "+Lan.g(this,"(split)");
-				//}
-				payInfo.Amount=0;
-				payInfo.PayNum=PaymentList[i].PayNum;
-				payInfo.PayPlanNum=PaySplits.GetPayPlanNum(PaymentList[i].PayNum,PatCur.PatNum,PaySplitList);
-				//loop through all paysplits for this payment.
-				splitsGroupedForPayment=PaySplits.GetGroupedForPayment(PaymentList[i].PayNum,PaySplitList);
-				if(splitsGroupedForPayment.Count>1){
-					payInfo.Description+="  "+Lan.g(this,"Splits:");
-				}
-				payInfo.Amount=PaySplits.GetAmountForPayment(PaymentList[i].PayNum,PaymentList[i].PayDate,PatCur.PatNum,PaySplitList);
-				for(int j=0;j<splitsGroupedForPayment.Count;j++){
-					//Amount: only those amounts that have the same procDate and patNum as the payment, and are not attached to procedures.
-					//(The payment total amount and split detail will show in the description)
-					//if(((PaySplit)splitsGroupedForPayment[j]).ProcDate==PaymentList[i].PayDate 
-					//	&& ((PaySplit)splitsGroupedForPayment[j]).ProcNum==0
-					//	&& ((PaySplit)splitsGroupedForPayment[j]).PatNum==PatCur.PatNum)
-					//{
-					//	payInfo.Amount+=((PaySplit)splitsGroupedForPayment[j]).SplitAmt;
-					//}
-					//then the description of each split, but don't include descriptions for splits with same date and patnum
-					if(((PaySplit)splitsGroupedForPayment[j]).ProcDate==PaymentList[i].PayDate 
-						&& ((PaySplit)splitsGroupedForPayment[j]).PatNum==PatCur.PatNum)
-					{
-						continue;
-					}
-					payInfo.Description+="\r\n"+((PaySplit)splitsGroupedForPayment[j]).SplitAmt.ToString("c")//$ amount
-						+" "+((PaySplit)splitsGroupedForPayment[j]).ProcDate.ToShortDateString()
-						+" "+FamCur.GetNameInFamFL(((PaySplit)splitsGroupedForPayment[j]).PatNum);//formatted name
-				}
-				retAL.Add(payInfo);
-			}
-			//then, paysplits
-			//loop through to get all payments to find those needed for display
-			ArrayList neededPayNums=new ArrayList();
-			bool isOtherPat;
-			for(int i=0;i<PaySplitList.Length;i++){
-				//see the next loop for an explanation of these if statements
-				if(PaySplitList[i].PatNum!=PatCur.PatNum){
-					continue;
-				}
-				if(PaySplitList[i].ProcDate==PaySplitList[i].DatePay){
-					isOtherPat=true;
-					for(int j=0;j<PaymentList.Length;j++){
-						if(PaymentList[j].PayNum==PaySplitList[i].PayNum){
-							//if this split is attached to a payment by this pat
-							isOtherPat=false;
-						}
-					}
-					if(!isOtherPat){
-						continue;
-					}
-				}
-				if(PaySplitList[i].ProcNum>0){
-					continue;
-				}
-				if(!neededPayNums.Contains(PaySplitList[i].PayNum)){
-					neededPayNums.Add(PaySplitList[i].PayNum);
-				}
-			}
-			int[] otherPayNums=new int[neededPayNums.Count];
-			neededPayNums.CopyTo(otherPayNums);
-			Payment[] otherPayList=Payments.GetPayments(otherPayNums);
-			Payment payment;
-			for(int i=0;i<PaySplitList.Length;i++){
-				//if(PaySplitList[i].SplitAmt==38){
-				//	MessageBox.Show("");
-				//}
-				if(PaySplitList[i].PatNum!=PatCur.PatNum){
-					continue;
-				}
-				//don't include PaySplits with the same date as the payment.
-				//Those will either be proc line items or part of the payment
-				//UNLESS payment is in a different patient.
-				if(PaySplitList[i].ProcDate==PaySplitList[i].DatePay){
-					isOtherPat=true;
-					for(int j=0;j<PaymentList.Length;j++){
-						if(PaymentList[j].PayNum==PaySplitList[i].PayNum){
-							//if this split is attached to a payment by this pat
-							isOtherPat=false;
-						}
-					}
-					if(!isOtherPat){
-						continue;
-					}
-					//otherwise, if isOtherPat, then the payment will show
-				}
-				//don't include PaySplits that are attached to procs
-				if(PaySplitList[i].ProcNum>0){
-					continue;
-				}
-				payInfo=new PayInfo();
-				payInfo.Type=PayInfoType.PaySplit;
-				payInfo.Date=PaySplitList[i].ProcDate;
-				payment=Payments.GetFromList(PaySplitList[i].PayNum,otherPayList);
-				if(payment.PayType==0){//provider transfer
-					payInfo.Description=Lan.g(this,"Provider transfer");//+" "
-						//+" "+PaySplitList[i].DatePay.ToShortDateString();
-				}
-				else{
-					payInfo.Description=Lan.g(this,"Split of")+" "+payment.PayAmt.ToString("c")
-						+" "+Lan.g(this,"payment by")+"\r\n"
-						+FamCur.GetNameInFamFL(payment.PatNum)//formatted name
-						+" "+PaySplitList[i].DatePay.ToShortDateString();
-				}
-				payInfo.Amount=PaySplitList[i].SplitAmt;
-				payInfo.PayNum=PaySplitList[i].PayNum;
-				payInfo.PayPlanNum=PaySplitList[i].PayPlanNum;
-				retAL.Add(payInfo);
-			}
-			//convert to array
-			PayInfo[] retVal=new PayInfo[retAL.Count];
-			DateTime[] dateArray=new DateTime[retAL.Count];
-			for(int i=0;i<retVal.Length;i++){
-				retVal[i]=(PayInfo)retAL[i];
-				dateArray[i]=retVal[i].Date;
-			}
-			//order everything by date
-			Array.Sort(dateArray,retVal);
-			return retVal;
-		}*/
+		
 
 		/*
 		///<summary></summary>
@@ -1897,13 +1857,13 @@ namespace OpenDental {
 					double discount=0;
 					//if(!PrefB.GetBool("BalancesDontSubtractIns")){//this is the typical situation
 					//this applies to everyone regardless of 'balancesDontSubtractIns', because it's not an insurance item.
-					discount=Procedures.GetWriteOffC(arrayProc[tempCountProc],ClaimProcList);//this is for CapComplete and all other writeoffs
+discount=Procedures.GetWriteOffC(arrayProc[tempCountProc],ClaimProcList);//this is for CapComplete and all other writeoffs
 					//}
 					double pat=fee-insPay;
 					if(!PrefB.GetBool("BalancesDontSubtractIns")){//this is the typical situation
 						pat-=insEst;
 					}			
-					double adj=Adjustments.GetTotForProc(arrayProc[tempCountProc].ProcNum,AdjustmentList)-discount;
+double adj=Adjustments.GetTotForProc(arrayProc[tempCountProc].ProcNum,AdjustmentList)-discount;
 					double paid=PaySplits.GetTotForProc(arrayProc[tempCountProc].ProcNum,PaySplitList);
 					double subtot=pat+adj-paid;
 					tempAcctLine.Fee=fee.ToString("F");
@@ -3091,14 +3051,19 @@ namespace OpenDental {
 			for(int i=0;i<FamCur.List.Length;i++){
 				patNums[i]=FamCur.List[i].PatNum;
 			}
-			DateTime fromDate;
-			if(checkShowAll.Checked){
-				fromDate=DateTime.MinValue;
+			DateTime fromDate=DateTime.MinValue;
+			DateTime toDate=DateTime.MaxValue;
+			if(textDateStart.errorProvider1.GetError(textDateStart)==""
+				&& textDateEnd.errorProvider1.GetError(textDateEnd)=="")
+			{
+				if(textDateStart.Text!=""){
+					fromDate=PIn.PDate(textDateStart.Text);
+				}
+				if(textDateEnd.Text!=""){
+					toDate=PIn.PDate(textDateEnd.Text);
+				}
 			}
-			else{
-				fromDate=DateTime.Today.AddDays(-45);
-			}
-			PrintStatement(patNums,fromDate,DateTime.MaxValue,true,false,false,false,"",false,"");
+			PrintStatement(patNums,fromDate,toDate,true,false,false,false,"",false,"");
 			ModuleSelected(PatCur.PatNum);
 		}
 		
@@ -3112,18 +3077,23 @@ namespace OpenDental {
 			for(int i=0;i<FamCur.List.Length;i++) {
 				patNums[i]=FamCur.List[i].PatNum;
 			}
-			DateTime fromDate;
-			if(checkShowAll.Checked) {
-				fromDate=DateTime.MinValue;
-			}
-			else {
-				fromDate=DateTime.Today.AddDays(-45);
+			DateTime fromDate=DateTime.MinValue;
+			DateTime toDate=DateTime.MaxValue;
+			if(textDateStart.errorProvider1.GetError(textDateStart)==""
+				&& textDateEnd.errorProvider1.GetError(textDateEnd)=="")
+			{
+				if(textDateStart.Text!=""){
+					fromDate=PIn.PDate(textDateStart.Text);
+				}
+				if(textDateEnd.Text!=""){
+					toDate=PIn.PDate(textDateEnd.Text);
+				}
 			}
 			string attachPath=FormEmailMessageEdit.GetAttachPath();
 			Random rnd=new Random();
 			string fileName=DateTime.Now.ToString("yyyyMMdd")+"_"+DateTime.Now.TimeOfDay.Ticks.ToString()+rnd.Next(1000).ToString()+".pdf";
 			string filePathAndName=ODFileUtils.CombinePaths(attachPath,fileName);
-			PrintStatement(patNums,fromDate,DateTime.MaxValue,true,false,false,false,"",false,filePathAndName);
+			PrintStatement(patNums,fromDate,toDate,true,false,false,false,"",false,filePathAndName);
 			//Process.Start(filePathAndName);
 			EmailMessage message=new EmailMessage();
 			message.PatNum=PatCur.PatNum;
@@ -3145,41 +3115,35 @@ namespace OpenDental {
 
 		private void menuItemStatementMore_Click(object sender, System.EventArgs e) {
 			FormStatementOptions FormSO=new FormStatementOptions(PatCur,FamCur);
-			if(checkShowAll.Checked){
-				FormSO.FromDate=DateTime.MinValue;
+			DateTime fromDate=DateTime.MinValue;
+			DateTime toDate=DateTime.MaxValue;
+			if(textDateStart.errorProvider1.GetError(textDateStart)==""
+				&& textDateEnd.errorProvider1.GetError(textDateEnd)=="")
+			{
+				if(textDateStart.Text!=""){
+					fromDate=PIn.PDate(textDateStart.Text);
+				}
+				if(textDateEnd.Text!=""){
+					toDate=PIn.PDate(textDateEnd.Text);
+				}
 			}
-			else{
-				FormSO.FromDate=DateTime.Today.AddDays(-45);
-			}
-			FormSO.ToDate=DateTime.MaxValue;
+			FormSO.FromDate=fromDate;
+			FormSO.ToDate=toDate;
 			FormSO.ShowDialog();
 			if(FormSO.DialogResult!=DialogResult.OK){
 				return;
 			}
 			//FillMain(FormSO.FromDate,FormSO.ToDate,FormSO.IncludeClaims,FormSO.SubtotalsOnly);
 			//if Email button pushed then make statement to email
-			if(FormSO.Email) {
-				int[] patNums=new int[FamCur.List.Length];
-				for(int i=0;i<FamCur.List.Length;i++) {
-					patNums[i]=FamCur.List[i].PatNum;
-				}
-				DateTime fromDate;
-				if(checkShowAll.Checked) {
-					fromDate=DateTime.MinValue;
-				}
-				else {
-					fromDate=DateTime.Today.AddDays(-45);
-				}
+			if(FormSO.EmailOnClose) {
 				string attachPath=FormEmailMessageEdit.GetAttachPath();
 				Random rnd=new Random();
 				string fileName=DateTime.Now.ToString("yyyyMMdd")+"_"+DateTime.Now.TimeOfDay.Ticks.ToString()+rnd.Next(1000).ToString()+".pdf";
 				string filePathAndName=ODFileUtils.CombinePaths(attachPath,fileName);
 				//PrintStatement(patNums,fromDate,DateTime.MaxValue,true,false,false,false,"",false,PrefB.GetBool("PrintSimpleStatements"),
 				//	filePathAndName);
-				PrintStatement(FormSO.PatNums,FormSO.FromDate,FormSO.ToDate,FormSO.IncludeClaims,
-				FormSO.SubtotalsOnly,FormSO.HidePayment,FormSO.NextAppt,FormSO.Note,FormSO.IsBill,
-				filePathAndName);
-
+				PrintStatement(FormSO.PatNums,FormSO.FromDate,FormSO.ToDate,FormSO.IncludeClaims,FormSO.SubtotalsOnly,
+					FormSO.HidePayment,FormSO.NextAppt,FormSO.Note,FormSO.IsBill,filePathAndName);
 				//Process.Start(filePathAndName);
 				EmailMessage message=new EmailMessage();
 				message.PatNum=PatCur.PatNum;
@@ -3193,13 +3157,12 @@ namespace OpenDental {
 				FormEmailMessageEdit FormE=new FormEmailMessageEdit(message);
 				FormE.IsNew=true;
 				FormE.ShowDialog();
-
 			}
 			else {
 				PrintStatement(FormSO.PatNums,FormSO.FromDate,FormSO.ToDate,FormSO.IncludeClaims
 					,FormSO.SubtotalsOnly,FormSO.HidePayment,FormSO.NextAppt,FormSO.Note,FormSO.IsBill,"");
-				ModuleSelected(PatCur.PatNum);
 			}
+			ModuleSelected(PatCur.PatNum);
 		}
 
 		private void textUrgFinNote_TextChanged(object sender, System.EventArgs e) {
@@ -3293,8 +3256,37 @@ namespace OpenDental {
 			PatientNotes.Update(PatientNoteCur,PatCur.Guarantor);
 		}
 
-		private void checkShowAll_Click(object sender, System.EventArgs e) {
+		//private void checkShowAll_Click(object sender, System.EventArgs e) {
 			//RefreshModuleScreen();
+		//	ModuleSelected(PatCur.PatNum);
+		//}
+
+		private void but45days_Click(object sender,EventArgs e) {
+			textDateStart.Text=DateTime.Today.AddDays(-45).ToShortDateString();
+			textDateEnd.Text="";
+			ModuleSelected(PatCur.PatNum);
+		}
+
+		private void but90days_Click(object sender,EventArgs e) {
+			textDateStart.Text=DateTime.Today.AddDays(-90).ToShortDateString();
+			textDateEnd.Text="";
+			ModuleSelected(PatCur.PatNum);
+		}
+
+		private void butDatesAll_Click(object sender,EventArgs e) {
+			textDateStart.Text="";
+			textDateEnd.Text="";
+			ModuleSelected(PatCur.PatNum);
+		}
+
+		private void butRefresh_Click(object sender,EventArgs e) {
+			ModuleSelected(PatCur.PatNum);
+		}
+
+		private void checkShowNotes_Click(object sender,EventArgs e) {
+			//checkShowNotes.Tag="JustClicked";		
+			//RefreshModuleScreen();
+			//checkShowNotes.Tag = "";		
 			ModuleSelected(PatCur.PatNum);
 		}
 
@@ -3866,12 +3858,13 @@ namespace OpenDental {
 
 		}
 
-		private void checkShowNotes_Click(object sender,EventArgs e) {
-			//checkShowNotes.Tag="JustClicked";		
-			//RefreshModuleScreen();
-			//checkShowNotes.Tag = "";		
-			ModuleSelected(PatCur.PatNum);
-		}
+	
+
+	
+
+		
+
+		
 
 	
 

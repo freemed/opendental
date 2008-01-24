@@ -49,7 +49,7 @@ namespace OpenDental{
 		///<summary></summary>
 		public string Note;
 		///<summary></summary>
-		public bool Email;
+		public bool EmailOnClose;
 		private System.Windows.Forms.ToolTip toolTip1;
 		private System.Windows.Forms.Label label3;
 		private OpenDental.ODtextBox textNote;
@@ -571,7 +571,7 @@ namespace OpenDental{
 				buttonFuchs2.Visible=true;
 				buttonFuchs3.Visible=true;
 			}
-			Email=false;
+			EmailOnClose=false;
 			//checkSimpleStatement.Checked=(PrefB.GetBool("PrintSimpleStatements"));
 		}
 
@@ -638,7 +638,7 @@ namespace OpenDental{
 
 		}
 		private void buttonEmail_Click(object sender,EventArgs e) {
-			Email=true;
+			EmailOnClose=true;
 			SaveAndClose();
 		}
 

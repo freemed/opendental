@@ -361,7 +361,7 @@ namespace OpenDentBusiness {
 			//but we won't actually fill this table with rows until the very end.  It's more useful to use a List<> for now.
 			List<DataRow> rows=new List<DataRow>();
 			//Procedures------------------------------------------------------------------------------------------
-			string command="SELECT procedurelog.BaseUnits,Descript,LaymanTerm,procedurelog.PatNum,ProcCode,"
+			string command="SELECT procedurelog.BaseUnits,Descript,LaymanTerm,procedurelog.MedicalCode,procedurelog.PatNum,ProcCode,"
 				+"ProcDate,ProcFee,ProcNum,ProvNum,ToothNum,UnitQty "
 				+"FROM procedurelog "
 				+"LEFT JOIN procedurecode ON procedurelog.CodeNum=procedurecode.CodeNum "
@@ -399,7 +399,11 @@ namespace OpenDentBusiness {
 				dateT=PIn.PDateT(rawProc.Rows[i]["ProcDate"].ToString());
 				row["DateTime"]=dateT;
 				row["date"]=dateT.ToShortDateString();
-				row["description"]=rawProc.Rows[i]["Descript"].ToString();
+				row["description"]="";
+				if(rawProc.Rows[i]["MedicalCode"].ToString()!=""){
+					row["description"]+=Lan.g("ContrAccount","(medical)")+" ";
+				}
+				row["description"]+=rawProc.Rows[i]["Descript"].ToString();
 				if(rawProc.Rows[i]["LaymanTerm"].ToString()!=""){
 					row["description"]=rawProc.Rows[i]["LaymanTerm"].ToString();
 				}
