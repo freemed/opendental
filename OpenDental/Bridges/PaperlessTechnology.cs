@@ -583,7 +583,11 @@ namespace OpenDental.Bridges{
 
 		///<summary>removes commas.</summary>
 		private static string Tidy(string str){
-			return str.Replace(",","");
+			string retval=str.Replace(",","");
+			retval=retval.Replace("\r","");
+			retval=retval.Replace("\n","");
+			retval=retval.Replace("\t","");
+			return retval;
 		}
 
 		/*
