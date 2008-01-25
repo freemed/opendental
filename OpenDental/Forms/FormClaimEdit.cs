@@ -228,6 +228,7 @@ namespace OpenDental{
 		private MenuItem menuItemRename;
 		private MenuItem menuItemRemove;
 		private ClaimCondCodes CurCondCodes;
+		private OpenDental.UI.Button butExport;
 		private List<Claim> ClaimList;
 
 		///<summary></summary>
@@ -446,6 +447,7 @@ namespace OpenDental{
 			this.menuItemOpen = new System.Windows.Forms.MenuItem();
 			this.menuItemRename = new System.Windows.Forms.MenuItem();
 			this.menuItemRemove = new System.Windows.Forms.MenuItem();
+			this.butExport = new OpenDental.UI.Button();
 			this.groupProsth.SuspendLayout();
 			this.groupOrtho.SuspendLayout();
 			this.groupBox2.SuspendLayout();
@@ -1450,6 +1452,7 @@ namespace OpenDental{
 			// 
 			// groupAttachments
 			// 
+			this.groupAttachments.Controls.Add(this.butExport);
 			this.groupAttachments.Controls.Add(this.listAttachments);
 			this.groupAttachments.Controls.Add(this.butAttachAdd);
 			this.groupAttachments.Controls.Add(this.butAttachPerio);
@@ -1465,9 +1468,9 @@ namespace OpenDental{
 			// listAttachments
 			// 
 			this.listAttachments.FormattingEnabled = true;
-			this.listAttachments.Location = new System.Drawing.Point(13,51);
+			this.listAttachments.Location = new System.Drawing.Point(10,51);
 			this.listAttachments.Name = "listAttachments";
-			this.listAttachments.Size = new System.Drawing.Size(300,82);
+			this.listAttachments.Size = new System.Drawing.Size(305,82);
 			this.listAttachments.TabIndex = 149;
 			this.listAttachments.DoubleClick += new System.EventHandler(this.listAttachments_DoubleClick);
 			this.listAttachments.MouseDown += new System.Windows.Forms.MouseEventHandler(this.listAttachments_MouseDown);
@@ -1480,7 +1483,7 @@ namespace OpenDental{
 			this.butAttachAdd.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butAttachAdd.CornerRadius = 4F;
 			this.butAttachAdd.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-			this.butAttachAdd.Location = new System.Drawing.Point(125,17);
+			this.butAttachAdd.Location = new System.Drawing.Point(123,17);
 			this.butAttachAdd.Name = "butAttachAdd";
 			this.butAttachAdd.Size = new System.Drawing.Size(62,24);
 			this.butAttachAdd.TabIndex = 147;
@@ -1495,7 +1498,7 @@ namespace OpenDental{
 			this.butAttachPerio.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butAttachPerio.CornerRadius = 4F;
 			this.butAttachPerio.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-			this.butAttachPerio.Location = new System.Drawing.Point(193,17);
+			this.butAttachPerio.Location = new System.Drawing.Point(188,17);
 			this.butAttachPerio.Name = "butAttachPerio";
 			this.butAttachPerio.Size = new System.Drawing.Size(62,24);
 			this.butAttachPerio.TabIndex = 146;
@@ -1505,7 +1508,7 @@ namespace OpenDental{
 			// textRadiographs
 			// 
 			this.textRadiographs.ForeColor = System.Drawing.SystemColors.WindowText;
-			this.textRadiographs.Location = new System.Drawing.Point(82,19);
+			this.textRadiographs.Location = new System.Drawing.Point(81,19);
 			this.textRadiographs.MaxVal = 255;
 			this.textRadiographs.MinVal = 0;
 			this.textRadiographs.Name = "textRadiographs";
@@ -2326,6 +2329,21 @@ namespace OpenDental{
 			this.menuItemRemove.Text = "Remove";
 			this.menuItemRemove.Click += new System.EventHandler(this.menuItemRemove_Click);
 			// 
+			// butExport
+			// 
+			this.butExport.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butExport.Autosize = true;
+			this.butExport.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butExport.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butExport.CornerRadius = 4F;
+			this.butExport.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+			this.butExport.Location = new System.Drawing.Point(253,17);
+			this.butExport.Name = "butExport";
+			this.butExport.Size = new System.Drawing.Size(62,24);
+			this.butExport.TabIndex = 150;
+			this.butExport.Text = "Export";
+			this.butExport.Click += new System.EventHandler(this.butExport_Click);
+			// 
 			// FormClaimEdit
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
@@ -2385,9 +2403,9 @@ namespace OpenDental{
 			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Edit Claim";
+			this.Load += new System.EventHandler(this.FormClaimEdit_Load);
 			this.Shown += new System.EventHandler(this.FormClaimEdit_Shown);
 			this.Closing += new System.ComponentModel.CancelEventHandler(this.FormClaimEdit_Closing);
-			this.Load += new System.EventHandler(this.FormClaimEdit_Load);
 			this.groupProsth.ResumeLayout(false);
 			this.groupProsth.PerformLayout();
 			this.groupOrtho.ResumeLayout(false);
@@ -3352,6 +3370,10 @@ namespace OpenDental{
 			FillAttachments();
 		}
 
+		private void butExport_Click(object sender,EventArgs e) {
+
+		}
+
 		private void contextMenuAttachments_Popup(object sender,EventArgs e) {
 			if(listAttachments.SelectedIndex==-1) {
 				menuItemOpen.Enabled=false;
@@ -3799,6 +3821,8 @@ namespace OpenDental{
 				Claims.Delete(ClaimCur);//does not do any validation.  Also deletes the claimcanadian.
 			}
 		}
+
+	
 
 		
 
