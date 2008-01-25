@@ -46,7 +46,6 @@ namespace OpenDental {
 		private ContextMenu contextMenuRepeat;
 		private MenuItem menuItemRepeatStand;
 		private MenuItem menuItemRepeatEmail;
-		private CheckBox checkShowNotes;
 		private Panel panelProgNotes;
 		private ODGrid gridProg;
 		private GroupBox groupBox6;
@@ -141,10 +140,10 @@ namespace OpenDental {
 		private Label labelEndDate;
 		private Label labelStartDate;
 		private OpenDental.UI.Button butRefresh;
-		private Label labelDateHint;
 		private OpenDental.UI.Button but90days;
 		private OpenDental.UI.Button but45days;
 		private OpenDental.UI.Button butDatesAll;
+		private CheckBox checkShowDetail;
 		private FormPayPlan FormPayPlan2;
 		#endregion
 
@@ -188,7 +187,6 @@ namespace OpenDental {
 			this.contextMenuRepeat = new System.Windows.Forms.ContextMenu();
 			this.menuItemRepeatStand = new System.Windows.Forms.MenuItem();
 			this.menuItemRepeatEmail = new System.Windows.Forms.MenuItem();
-			this.checkShowNotes = new System.Windows.Forms.CheckBox();
 			this.panelProgNotes = new System.Windows.Forms.Panel();
 			this.butShowNone = new OpenDental.UI.Button();
 			this.butShowAll = new OpenDental.UI.Button();
@@ -236,20 +234,20 @@ namespace OpenDental {
 			this.gridAcctPat = new OpenDental.UI.ODGrid();
 			this.textFinNotes = new OpenDental.ODtextBox();
 			this.tabShow = new System.Windows.Forms.TabPage();
+			this.butDatesAll = new OpenDental.UI.Button();
 			this.but90days = new OpenDental.UI.Button();
 			this.but45days = new OpenDental.UI.Button();
-			this.labelDateHint = new System.Windows.Forms.Label();
 			this.butRefresh = new OpenDental.UI.Button();
 			this.textDateEnd = new OpenDental.ValidDate();
 			this.textDateStart = new OpenDental.ValidDate();
 			this.labelEndDate = new System.Windows.Forms.Label();
 			this.labelStartDate = new System.Windows.Forms.Label();
+			this.gridPayPlan = new OpenDental.UI.ODGrid();
 			this.gridRepeat = new OpenDental.UI.ODGrid();
 			this.gridAccount = new OpenDental.UI.ODGrid();
 			this.gridComm = new OpenDental.UI.ODGrid();
 			this.ToolBarMain = new OpenDental.UI.ODToolBar();
-			this.gridPayPlan = new OpenDental.UI.ODGrid();
-			this.butDatesAll = new OpenDental.UI.Button();
+			this.checkShowDetail = new System.Windows.Forms.CheckBox();
 			this.panelCommButs.SuspendLayout();
 			this.panelProgNotes.SuspendLayout();
 			this.groupBox7.SuspendLayout();
@@ -414,21 +412,6 @@ namespace OpenDental {
 			this.menuItemRepeatEmail.Index = 1;
 			this.menuItemRepeatEmail.Text = "Email Monthly";
 			this.menuItemRepeatEmail.Click += new System.EventHandler(this.MenuItemRepeatEmail_Click);
-			// 
-			// checkShowNotes
-			// 
-			this.checkShowNotes.BackColor = System.Drawing.Color.Transparent;
-			this.checkShowNotes.Checked = true;
-			this.checkShowNotes.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.checkShowNotes.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkShowNotes.Font = new System.Drawing.Font("Microsoft Sans Serif",8F,System.Drawing.FontStyle.Regular,System.Drawing.GraphicsUnit.Point,((byte)(0)));
-			this.checkShowNotes.Location = new System.Drawing.Point(3,223);
-			this.checkShowNotes.Name = "checkShowNotes";
-			this.checkShowNotes.Size = new System.Drawing.Size(81,15);
-			this.checkShowNotes.TabIndex = 209;
-			this.checkShowNotes.Text = "Notes";
-			this.checkShowNotes.UseVisualStyleBackColor = false;
-			this.checkShowNotes.Click += new System.EventHandler(this.checkShowNotes_Click);
 			// 
 			// panelProgNotes
 			// 
@@ -953,16 +936,15 @@ namespace OpenDental {
 			// tabShow
 			// 
 			this.tabShow.BackColor = System.Drawing.Color.Transparent;
+			this.tabShow.Controls.Add(this.checkShowDetail);
 			this.tabShow.Controls.Add(this.butDatesAll);
 			this.tabShow.Controls.Add(this.but90days);
 			this.tabShow.Controls.Add(this.but45days);
-			this.tabShow.Controls.Add(this.labelDateHint);
 			this.tabShow.Controls.Add(this.butRefresh);
 			this.tabShow.Controls.Add(this.textDateEnd);
 			this.tabShow.Controls.Add(this.textDateStart);
 			this.tabShow.Controls.Add(this.labelEndDate);
 			this.tabShow.Controls.Add(this.labelStartDate);
-			this.tabShow.Controls.Add(this.checkShowNotes);
 			this.tabShow.Location = new System.Drawing.Point(4,22);
 			this.tabShow.Name = "tabShow";
 			this.tabShow.Padding = new System.Windows.Forms.Padding(3);
@@ -971,6 +953,20 @@ namespace OpenDental {
 			this.tabShow.Text = "Show";
 			this.tabShow.UseVisualStyleBackColor = true;
 			// 
+			// butDatesAll
+			// 
+			this.butDatesAll.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butDatesAll.Autosize = true;
+			this.butDatesAll.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butDatesAll.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butDatesAll.CornerRadius = 4F;
+			this.butDatesAll.Location = new System.Drawing.Point(95,117);
+			this.butDatesAll.Name = "butDatesAll";
+			this.butDatesAll.Size = new System.Drawing.Size(77,24);
+			this.butDatesAll.TabIndex = 218;
+			this.butDatesAll.Text = "All Dates";
+			this.butDatesAll.Click += new System.EventHandler(this.butDatesAll_Click);
+			// 
 			// but90days
 			// 
 			this.but90days.AdjustImageLocation = new System.Drawing.Point(0,0);
@@ -978,7 +974,7 @@ namespace OpenDental {
 			this.but90days.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.but90days.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.but90days.CornerRadius = 4F;
-			this.but90days.Location = new System.Drawing.Point(95,104);
+			this.but90days.Location = new System.Drawing.Point(95,87);
 			this.but90days.Name = "but90days";
 			this.but90days.Size = new System.Drawing.Size(77,24);
 			this.but90days.TabIndex = 217;
@@ -992,21 +988,12 @@ namespace OpenDental {
 			this.but45days.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.but45days.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.but45days.CornerRadius = 4F;
-			this.but45days.Location = new System.Drawing.Point(95,74);
+			this.but45days.Location = new System.Drawing.Point(95,57);
 			this.but45days.Name = "but45days";
 			this.but45days.Size = new System.Drawing.Size(77,24);
 			this.but45days.TabIndex = 216;
 			this.but45days.Text = "45 Days";
 			this.but45days.Click += new System.EventHandler(this.but45days_Click);
-			// 
-			// labelDateHint
-			// 
-			this.labelDateHint.Location = new System.Drawing.Point(10,54);
-			this.labelDateHint.Name = "labelDateHint";
-			this.labelDateHint.Size = new System.Drawing.Size(162,17);
-			this.labelDateHint.TabIndex = 215;
-			this.labelDateHint.Text = "(leave dates blank to view all)";
-			this.labelDateHint.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// butRefresh
 			// 
@@ -1015,7 +1002,7 @@ namespace OpenDental {
 			this.butRefresh.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butRefresh.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butRefresh.CornerRadius = 4F;
-			this.butRefresh.Location = new System.Drawing.Point(95,164);
+			this.butRefresh.Location = new System.Drawing.Point(95,147);
 			this.butRefresh.Name = "butRefresh";
 			this.butRefresh.Size = new System.Drawing.Size(77,24);
 			this.butRefresh.TabIndex = 214;
@@ -1053,6 +1040,18 @@ namespace OpenDental {
 			this.labelStartDate.TabIndex = 210;
 			this.labelStartDate.Text = "Start Date";
 			this.labelStartDate.TextAlign = System.Drawing.ContentAlignment.TopRight;
+			// 
+			// gridPayPlan
+			// 
+			this.gridPayPlan.HScrollVisible = false;
+			this.gridPayPlan.Location = new System.Drawing.Point(0,144);
+			this.gridPayPlan.Name = "gridPayPlan";
+			this.gridPayPlan.ScrollValue = 0;
+			this.gridPayPlan.Size = new System.Drawing.Size(749,75);
+			this.gridPayPlan.TabIndex = 217;
+			this.gridPayPlan.Title = "Payment Plans";
+			this.gridPayPlan.TranslationName = "TablePaymentPlans";
+			this.gridPayPlan.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridPayPlan_CellDoubleClick);
 			// 
 			// gridRepeat
 			// 
@@ -1102,31 +1101,15 @@ namespace OpenDental {
 			this.ToolBarMain.TabIndex = 47;
 			this.ToolBarMain.ButtonClick += new OpenDental.UI.ODToolBarButtonClickEventHandler(this.ToolBarMain_ButtonClick);
 			// 
-			// gridPayPlan
+			// checkShowDetail
 			// 
-			this.gridPayPlan.HScrollVisible = false;
-			this.gridPayPlan.Location = new System.Drawing.Point(0,144);
-			this.gridPayPlan.Name = "gridPayPlan";
-			this.gridPayPlan.ScrollValue = 0;
-			this.gridPayPlan.Size = new System.Drawing.Size(749,75);
-			this.gridPayPlan.TabIndex = 217;
-			this.gridPayPlan.Title = "Payment Plans";
-			this.gridPayPlan.TranslationName = "TablePaymentPlans";
-			this.gridPayPlan.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridPayPlan_CellDoubleClick);
-			// 
-			// butDatesAll
-			// 
-			this.butDatesAll.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butDatesAll.Autosize = true;
-			this.butDatesAll.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butDatesAll.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butDatesAll.CornerRadius = 4F;
-			this.butDatesAll.Location = new System.Drawing.Point(95,134);
-			this.butDatesAll.Name = "butDatesAll";
-			this.butDatesAll.Size = new System.Drawing.Size(77,24);
-			this.butDatesAll.TabIndex = 218;
-			this.butDatesAll.Text = "All Dates";
-			this.butDatesAll.Click += new System.EventHandler(this.butDatesAll_Click);
+			this.checkShowDetail.Location = new System.Drawing.Point(8,185);
+			this.checkShowDetail.Name = "checkShowDetail";
+			this.checkShowDetail.Size = new System.Drawing.Size(164,18);
+			this.checkShowDetail.TabIndex = 219;
+			this.checkShowDetail.Text = "Show Extra Detail";
+			this.checkShowDetail.UseVisualStyleBackColor = true;
+			this.checkShowDetail.Click += new System.EventHandler(this.checkShowDetail_Click);
 			// 
 			// ContrAccount
 			// 
@@ -1170,7 +1153,6 @@ namespace OpenDental {
 				{
           labelStartDate,
 					labelEndDate,
-					labelDateHint,
 					label2,
 					label7,
 					label6,
@@ -1393,9 +1375,9 @@ namespace OpenDental {
 				textFinNotes.Enabled=true;
 				butComm.Enabled=true;
 			}
-			if(checkShowNotes.Tag!=null && checkShowNotes.Tag.ToString()!="JustClicked"){
-				checkShowNotes.Checked=PrefB.GetBool("ShowNotesInAccount");
-			}
+			//if(checkShowNotes.Tag!=null && checkShowNotes.Tag.ToString()!="JustClicked"){
+			//	checkShowNotes.Checked=PrefB.GetBool("ShowNotesInAccount");
+			//}
 			FillPats(isSelectingFamily);
 			FillMisc();
 			FillAging();
@@ -1700,8 +1682,6 @@ namespace OpenDental {
 			}
 			gridComm.EndUpdate();
 		}
-
-		
 
 		/*
 		///<summary></summary>
@@ -2238,6 +2218,7 @@ double adj=Adjustments.GetTotForProc(arrayProc[tempCountProc].ProcNum,Adjustment
 			ODGridRow row;
 			//ODGridCell cell;
 			DataTable table=DataSetMain.Tables["account"];
+			string description;
 			for(int i=0;i<table.Rows.Count;i++) {
 				row = new ODGridRow();
 				row.Cells.Add(table.Rows[i]["date"].ToString());
@@ -2245,7 +2226,11 @@ double adj=Adjustments.GetTotForProc(arrayProc[tempCountProc].ProcNum,Adjustment
 				row.Cells.Add(table.Rows[i]["prov"].ToString());
 				row.Cells.Add(table.Rows[i]["ProcCode"].ToString());
 				row.Cells.Add(table.Rows[i]["tth"].ToString());
-				row.Cells.Add(table.Rows[i]["description"].ToString());
+				description=table.Rows[i]["description"].ToString();
+				if(checkShowDetail.Checked){
+					description+="\r\n"+table.Rows[i]["extraDetail"].ToString();
+				}
+				row.Cells.Add(description);
 				row.Cells.Add(table.Rows[i]["charges"].ToString());
 				row.Cells.Add(table.Rows[i]["credits"].ToString());
 				row.Cells.Add(table.Rows[i]["balance"].ToString());
@@ -3256,11 +3241,6 @@ double adj=Adjustments.GetTotForProc(arrayProc[tempCountProc].ProcNum,Adjustment
 			PatientNotes.Update(PatientNoteCur,PatCur.Guarantor);
 		}
 
-		//private void checkShowAll_Click(object sender, System.EventArgs e) {
-			//RefreshModuleScreen();
-		//	ModuleSelected(PatCur.PatNum);
-		//}
-
 		private void but45days_Click(object sender,EventArgs e) {
 			textDateStart.Text=DateTime.Today.AddDays(-45).ToShortDateString();
 			textDateEnd.Text="";
@@ -3283,12 +3263,16 @@ double adj=Adjustments.GetTotForProc(arrayProc[tempCountProc].ProcNum,Adjustment
 			ModuleSelected(PatCur.PatNum);
 		}
 
-		private void checkShowNotes_Click(object sender,EventArgs e) {
+		private void checkShowDetail_Click(object sender,EventArgs e) {
+			ModuleSelected(PatCur.PatNum);
+		}
+
+		//private void checkShowNotes_Click(object sender,EventArgs e) {
 			//checkShowNotes.Tag="JustClicked";		
 			//RefreshModuleScreen();
 			//checkShowNotes.Tag = "";		
-			ModuleSelected(PatCur.PatNum);
-		}
+		//	ModuleSelected(PatCur.PatNum);
+		//}
 
 		private void panelSplitter_MouseDown(object sender, System.Windows.Forms.MouseEventArgs e) {
 			MouseIsDownOnSplitter=true;
@@ -3857,6 +3841,8 @@ double adj=Adjustments.GetTotForProc(arrayProc[tempCountProc].ProcNum,Adjustment
 		private void gridProg_MouseUp(object sender,MouseEventArgs e) {
 
 		}
+
+		
 
 	
 

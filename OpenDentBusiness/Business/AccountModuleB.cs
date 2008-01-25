@@ -69,6 +69,7 @@ namespace OpenDentBusiness {
 				if(interest!=0){
 					row["description"]+="Interest: "+interest.ToString("n");//+"Princ: "+principal.ToString("n")+;
 				}
+				row["extraDetail"]="";
 				row["patient"]="";
 				row["PatNum"]="0";
 				row["PayNum"]="0";
@@ -125,6 +126,7 @@ namespace OpenDentBusiness {
 					row["description"]+=" "+Lan.g("ContrAccount","(split)");
 				}
 				//we might use DatePay here to add to description
+				row["extraDetail"]="";
 				row["patient"]="";
 				row["PatNum"]=rawPay.Rows[i]["PatNum"].ToString();
 				row["PayNum"]=rawPay.Rows[i]["PayNum"].ToString();
@@ -330,6 +332,7 @@ namespace OpenDentBusiness {
 			table.Columns.Add("date");
 			table.Columns.Add("DateTime",typeof(DateTime));
 			table.Columns.Add("description");
+			table.Columns.Add("extraDetail");
 			table.Columns.Add("patient");
 			table.Columns.Add("PatNum");
 			table.Columns.Add("PayNum");//even though we only show split objects
@@ -407,6 +410,7 @@ namespace OpenDentBusiness {
 				if(rawProc.Rows[i]["LaymanTerm"].ToString()!=""){
 					row["description"]=rawProc.Rows[i]["LaymanTerm"].ToString();
 				}
+				row["extraDetail"]="extra detail";
 				row["patient"]=fam.GetNameInFamFirst(PIn.PInt(rawProc.Rows[i]["PatNum"].ToString()));
 				row["PatNum"]=rawProc.Rows[i]["PatNum"].ToString();
 				row["PayNum"]="0";
@@ -457,6 +461,7 @@ namespace OpenDentBusiness {
 				row["DateTime"]=dateT;
 				row["date"]=dateT.ToShortDateString();
 				row["description"]=DefB.GetName(DefCat.AdjTypes,PIn.PInt(rawAdj.Rows[i]["AdjType"].ToString()));
+				row["extraDetail"]="";
 				row["patient"]=fam.GetNameInFamFirst(PIn.PInt(rawAdj.Rows[i]["PatNum"].ToString()));
 				row["PatNum"]=rawAdj.Rows[i]["PatNum"].ToString();
 				row["PayNum"]="0";
@@ -515,6 +520,7 @@ namespace OpenDentBusiness {
 					row["description"]+=" "+Lan.g("ContrAccount","(split)");
 				}
 				//we might use DatePay here to add to description
+				row["extraDetail"]="";
 				row["patient"]=fam.GetNameInFamFirst(PIn.PInt(rawPay.Rows[i]["PatNum"].ToString()));
 				row["PatNum"]=rawPay.Rows[i]["PatNum"].ToString();
 				row["PayNum"]=rawPay.Rows[i]["PayNum"].ToString();
@@ -568,6 +574,7 @@ namespace OpenDentBusiness {
 					row["description"]+="\r\n"+Lan.g("AccountModule","Payment:")+" "+amt.ToString("c")+"\r\n"
 						+Lan.g("AccountModule","Writeoff:")+" "+writeoff.ToString("c");
 				}
+				row["extraDetail"]="";
 				row["patient"]=fam.GetNameInFamFirst(PIn.PInt(rawClaimPay.Rows[i]["PatNum"].ToString()));
 				row["PatNum"]=rawClaimPay.Rows[i]["PatNum"].ToString();
 				row["PayNum"]="0";
@@ -664,6 +671,7 @@ namespace OpenDentBusiness {
 				if(writeoff!=0){
 					row["description"]+="\r\n"+Lan.g("ContrAccount","Writeoff:")+" "+writeoff.ToString("c");
 				}
+				row["extraDetail"]="";
 				row["patient"]=fam.GetNameInFamFirst(PIn.PInt(rawClaim.Rows[i]["PatNum"].ToString()));
 				row["PatNum"]=rawClaim.Rows[i]["PatNum"].ToString();
 				row["PayNum"]="0";
@@ -711,6 +719,7 @@ namespace OpenDentBusiness {
 				if(_mode!=CommItemMode.None){
 					row["description"]+="-"+Lan.g("enumCommItemMode",_mode.ToString());
 				}
+				row["extraDetail"]="";
 				row["patient"]=fam.GetNameInFamFirst(PIn.PInt(rawComm.Rows[i]["PatNum"].ToString()));
 				row["PatNum"]=rawComm.Rows[i]["PatNum"].ToString();
 				row["PayNum"]="0";
@@ -771,6 +780,7 @@ namespace OpenDentBusiness {
 					row["description"]=Lan.g("ContrAccount","Expected payments from ")
 						+rawPayPlan.Rows[i]["CarrierName"].ToString();
 				}
+				row["extraDetail"]="";
 				row["patient"]=fam.GetNameInFamFirst(PIn.PInt(rawPayPlan.Rows[i]["PatNum"].ToString()));
 				row["PatNum"]=rawPayPlan.Rows[i]["PatNum"].ToString();
 				row["PayNum"]="0";
@@ -846,6 +856,7 @@ namespace OpenDentBusiness {
 				row["DateTime"]=DateTime.MinValue;
 				row["date"]="";
 				row["description"]=Lan.g("AccountModule","Balance Forward");
+				row["extraDetail"]="";
 				row["patient"]="";
 				row["PatNum"]="0";
 				row["PayNum"]="0";
