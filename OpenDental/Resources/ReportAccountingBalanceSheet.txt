@@ -16,7 +16,7 @@
       <Query>
         <DataSourceName>DS1</DataSourceName>
         <Timeout>10</Timeout>
-        <CommandText>SELECT Description, SUM(DebitAmt-CreditAmt) SumTotal FROM account, journalentry WHERE account.AccountNum=journalentry.AccountNum AND DateDisplayed &gt;= '2007-01-01' AND DateDisplayed &lt;= '2007-12-31' AND AcctType=0 GROUP BY account.AccountNum ORDER BY Description, DateDisplayed</CommandText>
+        <CommandText>SELECT Description, SUM(DebitAmt-CreditAmt) SumTotal FROM account, journalentry WHERE account.AccountNum=journalentry.AccountNum AND DateDisplayed &lt;= '2007-12-31' AND AcctType=0 GROUP BY account.AccountNum ORDER BY Description, DateDisplayed</CommandText>
       </Query>
       <Fields>
         <Field Name="Description">
@@ -41,7 +41,7 @@
     <DataSet Name="Liabilities">
       <Query>
         <DataSourceName>DS1</DataSourceName>
-        <CommandText>SELECT Description, SUM(CreditAmt-DebitAmt) SumTotal FROM account, journalentry WHERE account.AccountNum=journalentry.AccountNum AND DateDisplayed &gt;= '2007-01-01' AND DateDisplayed &lt;= '2007-12-31' AND AcctType=1 GROUP BY account.AccountNum ORDER BY Description, DateDisplayed</CommandText>
+        <CommandText>SELECT Description, SUM(CreditAmt-DebitAmt) SumTotal FROM account, journalentry WHERE account.AccountNum=journalentry.AccountNum AND DateDisplayed &lt;= '2007-12-31' AND AcctType=1 GROUP BY account.AccountNum ORDER BY Description, DateDisplayed</CommandText>
       </Query>
       <Fields>
         <Field Name="Description">
@@ -55,7 +55,7 @@
     <DataSet Name="Equity">
       <Query>
         <DataSourceName>DS1</DataSourceName>
-        <CommandText>SELECT Description, SUM(CreditAmt-DebitAmt) SumTotal FROM account, journalentry WHERE account.AccountNum=journalentry.AccountNum AND DateDisplayed &gt;= '2007-01-01' AND DateDisplayed &lt;= '2007-12-31' AND AcctType=2 GROUP BY account.AccountNum ORDER BY Description, DateDisplayed</CommandText>
+        <CommandText>SELECT Description, SUM(CreditAmt-DebitAmt) SumTotal FROM account, journalentry WHERE account.AccountNum=journalentry.AccountNum AND DateDisplayed &lt;= '2007-12-31' AND AcctType=2 GROUP BY account.AccountNum ORDER BY Description, DateDisplayed</CommandText>
       </Query>
       <Fields>
         <Field Name="Description">
@@ -573,7 +573,7 @@
                 <TableCell>
                   <ReportItems>
                     <Textbox Name="Textbox17">
-                      <Value>Retained Earnings</Value>
+                      <Value>Retained Earnings (auto)</Value>
                       <Style>
                         <BorderStyle>
                           <Default>None</Default>
@@ -594,8 +594,8 @@
                 </TableCell>
                 <TableCell>
                   <ReportItems>
-                    <Textbox Name="Textbox18">
-                      <Value>0.00</Value>
+                    <Textbox Name="TextboxRetainedEarnings">
+                      <Value>=ODR.GetData.RetainedEarningsAuto("12/31/2007")</Value>
                       <Style>
                         <BorderStyle>
                           <Default>None</Default>
@@ -624,7 +624,7 @@
                 <TableCell>
                   <ReportItems>
                     <Textbox Name="Textbox19">
-                      <Value>Net Income</Value>
+                      <Value>Net Income this year</Value>
                       <Style>
                         <BorderStyle>
                           <Default>None</Default>
@@ -647,7 +647,7 @@
                 <TableCell>
                   <ReportItems>
                     <Textbox Name="TextboxNetIncome">
-                      <Value>=ODR.GetData.NetIncome("12/31/2006")</Value>
+                      <Value>=ODR.GetData.NetIncomeThisYear("12/31/2007")</Value>
                       <Style>
                         <BorderStyle>
                           <Default>None</Default>
@@ -714,7 +714,7 @@
                         <FontWeight>Bold</FontWeight>
                         <VerticalAlign>Middle</VerticalAlign>
                       </Style>
-                      <Value>=SUM(Fields!SumTotal.Value)+ReportItems!TextboxNetIncome</Value>
+                      <Value>=SUM(Fields!SumTotal.Value)+ReportItems!TextboxRetainedEarnings+ReportItems!TextboxNetIncome</Value>
                     </Textbox>
                   </ReportItems>
                 </TableCell>
@@ -791,7 +791,7 @@
       <Textbox Name="Textbox24">
         <Height>14.26pt</Height>
         <Width>163.33pt</Width>
-        <Value>12/31/2006</Value>
+        <Value>12/31/2007</Value>
         <Left>203.9pt</Left>
         <Top>43.9pt</Top>
         <Style>
