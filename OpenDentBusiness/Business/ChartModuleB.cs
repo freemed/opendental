@@ -44,6 +44,7 @@ namespace OpenDentBusiness {
 			table.Columns.Add("RxNum");
 			table.Columns.Add("signature");
 			table.Columns.Add("Surf");
+			table.Columns.Add("TaskNum");
 			table.Columns.Add("toothNum");
 			table.Columns.Add("ToothNum");
 			table.Columns.Add("ToothRange");
@@ -176,6 +177,7 @@ namespace OpenDentBusiness {
 				row["prov"]=rawProcs.Rows[i]["Abbr"].ToString();
 				row["RxNum"]=0;
 				row["Surf"]=rawProcs.Rows[i]["Surf"].ToString();
+				row["TaskNum"]=0;
 				row["toothNum"]=Tooth.ToInternat(rawProcs.Rows[i]["ToothNum"].ToString());
 				row["ToothNum"]=rawProcs.Rows[i]["ToothNum"].ToString();
 				row["ToothRange"]=rawProcs.Rows[i]["ToothRange"].ToString();
@@ -227,6 +229,7 @@ namespace OpenDentBusiness {
 				}
 				row["ProcNum"]=0;
 				row["RxNum"]=0;
+				row["TaskNum"]=0;
 				row["user"]=UserodB.GetName(PIn.PInt(rawComm.Rows[i]["UserNum"].ToString()));
 				rows.Add(row);
 			}
@@ -254,6 +257,7 @@ namespace OpenDentBusiness {
 				row["ProcDate"]=dateT;
 				row["ProcNum"]=0;
 				//row["prov"]=ProviderB. PIn.PInt(rawRx.Rows[i]["ProvNum"].ToString());
+				row["TaskNum"]=0;
 				row["RxNum"]=rawRx.Rows[i]["RxNum"].ToString();
 				rows.Add(row);
 			}
@@ -301,6 +305,40 @@ namespace OpenDentBusiness {
 				}
 				row["ProcDate"]=dateT;
 				row["ProcNum"]=0;
+				row["TaskNum"]=0;
+				row["RxNum"]=0;
+				rows.Add(row);
+			}
+			//Task List------------------------------------------------------------------------------------------------------------------
+			command="SELECT task.*,tasklist.Descript As 'ListDisc' FROM task,tasklist "
+				+"WHERE task.TaskListNum=tasklist.TaskListNum "
+				+"AND task.KeyNum="+POut.PInt(patNum) 
+				+" AND task.ObjectType=1 "
+				+"ORDER BY DateTimeEntry"; 
+			DataTable rawTask=dcon.GetTable(command);
+			for(int i=0;i<rawTask.Rows.Count;i++) {
+				row=table.NewRow();
+				row["AptNum"]=0;
+				row["colorBackG"]=Color.White.ToArgb();
+				row["colorText"]=DefB.Long[(int)DefCat.ProgNoteColors][6].ItemColor.ToArgb().ToString();//same as commlog
+				row["CommlogNum"]=0;
+				row["description"]=Lan.g("ChartModule","Task - In List: ")+rawTask.Rows[i]["ListDisc"].ToString();
+				row["EmailMessageNum"]=0;
+				row["LabCaseNum"]=0;
+				row["note"]=rawTask.Rows[i]["Descript"].ToString();
+				dateT=PIn.PDateT(rawTask.Rows[i]["DateTimeEntry"].ToString());
+				if(dateT.Year<1880) {
+					row["procDate"]="";
+				}
+				else {
+					row["procDate"]=dateT.ToShortDateString();
+				}
+				if(dateT.TimeOfDay!=TimeSpan.Zero) {
+					row["procTime"]=dateT.ToString("h:mm")+dateT.ToString("%t").ToLower();
+				}
+				row["ProcDate"]=dateT;
+				row["ProcNum"]=0;
+				row["TaskNum"]=rawTask.Rows[i]["TaskNum"].ToString();
 				row["RxNum"]=0;
 				rows.Add(row);
 			}
@@ -377,6 +415,7 @@ namespace OpenDentBusiness {
 				}
 				row["ProcDate"]=dateT;
 				row["ProcNum"]=0;
+				row["TaskNum"]=0;
 				row["RxNum"]=0;
 				rows.Add(row);
 			}			
@@ -413,6 +452,7 @@ namespace OpenDentBusiness {
 					row["procTime"]=dateT.ToString("h:mm")+dateT.ToString("%t").ToLower();
 				}
 				row["ProcNum"]=0;
+				row["TaskNum"]=0;
 				row["RxNum"]=0;
 				row["user"]="";
 				rows.Add(row);
