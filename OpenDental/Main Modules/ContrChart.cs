@@ -3394,6 +3394,11 @@ namespace OpenDental{
 					if(!checkTasks.Checked) {
 						continue;
 					}
+					if(table.Rows[i]["PatNum"].ToString()!=PatCur.PatNum.ToString()){//if this is a different family member
+						if(!checkCommFamily.Checked) { //uses same check box as commlog
+							continue;
+						}
+					}
 				}
 				else if(table.Rows[i]["EmailMessageNum"].ToString()!="0") {//if this is an Email
 					if(!checkEmail.Checked) {

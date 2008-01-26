@@ -310,9 +310,12 @@ namespace OpenDentBusiness {
 				rows.Add(row);
 			}
 			//Task List------------------------------------------------------------------------------------------------------------------
-			command="SELECT task.*,tasklist.Descript As 'ListDisc' FROM task,tasklist "
-				+"WHERE task.TaskListNum=tasklist.TaskListNum "
-				+"AND task.KeyNum="+POut.PInt(patNum) 
+			command="SELECT task.*,tasklist.Descript ListDisc,p1.FName "
+				+"FROM patient p1,patient p2, task,tasklist "
+				+"WHERE task.KeyNum=p1.PatNum "
+				+"AND task.TaskListNum=tasklist.TaskListNum "
+				+"AND p1.Guarantor=p2.Guarantor "
+				+"AND p2.PatNum="+POut.PInt(patNum)
 				+" AND task.ObjectType=1 "
 				+"ORDER BY DateTimeEntry"; 
 			DataTable rawTask=dcon.GetTable(command);
@@ -322,10 +325,17 @@ namespace OpenDentBusiness {
 				row["colorBackG"]=Color.White.ToArgb();
 				row["colorText"]=DefB.Long[(int)DefCat.ProgNoteColors][6].ItemColor.ToArgb().ToString();//same as commlog
 				row["CommlogNum"]=0;
-				row["description"]=Lan.g("ChartModule","Task - In List: ")+rawTask.Rows[i]["ListDisc"].ToString();
+				if(rawTask.Rows[i]["KeyNum"].ToString()==patNum.ToString()){
+					txt="";
+				}
+				else{
+					txt="("+rawTask.Rows[i]["FName"].ToString()+") ";
+				}
+				row["description"]=txt+Lan.g("ChartModule","Task - In List: ")+rawTask.Rows[i]["ListDisc"].ToString();
 				row["EmailMessageNum"]=0;
 				row["LabCaseNum"]=0;
 				row["note"]=rawTask.Rows[i]["Descript"].ToString();
+				row["PatNum"]=rawTask.Rows[i]["KeyNum"].ToString();
 				dateT=PIn.PDateT(rawTask.Rows[i]["DateTimeEntry"].ToString());
 				if(dateT.Year<1880) {
 					row["procDate"]="";
