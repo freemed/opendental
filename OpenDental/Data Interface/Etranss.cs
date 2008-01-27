@@ -266,7 +266,9 @@ namespace OpenDental{
 		public static Etrans SetClaimSentOrPrinted(int claimNum, int patNum, int clearinghouseNum, EtransType etype,
 			string messageText,int batchNumber) 
 		{
-			string command= "UPDATE claim SET ClaimStatus = 'S' WHERE claimnum = "+POut.PInt(claimNum);
+			string command= "UPDATE claim SET ClaimStatus = 'S',"
+				+"DateSent= "+POut.PDate(MiscData.GetNowDateTime())
+				+" WHERE claimnum = "+POut.PInt(claimNum);
 			General.NonQ(command);
 			Etrans etrans=new Etrans();
 			//etrans.DateTimeTrans handled automatically
