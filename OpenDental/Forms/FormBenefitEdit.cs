@@ -483,6 +483,10 @@ namespace OpenDental{
 				MsgBox.Show(this,"Not allowed to enter a percentage unless type is Percentage.");
 				return;
 			}
+			if(textProcCode.Text!="" && ProcedureCodes.GetCodeNum(textProcCode.Text)==0){
+				MsgBox.Show(this,"Invalid procedure code.");
+				return;
+			}
 			if(checkPat.Checked){
 				BenCur.PatPlanNum=PatPlanNum;
 				BenCur.PlanNum=0;
