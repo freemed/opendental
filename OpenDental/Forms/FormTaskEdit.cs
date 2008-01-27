@@ -40,6 +40,7 @@ namespace OpenDental{
 		private Label label5;
 		private TextBox textDateTimeEntry;
 		private OpenDental.UI.Button butNow;
+		private OpenDental.UI.Button butDelete;
 		///<summary>After closing, if this is not zero, then it will jump to the specified patient.</summary>
 		public int GotoKeyNum;
 
@@ -98,6 +99,7 @@ namespace OpenDental{
 			this.label5 = new System.Windows.Forms.Label();
 			this.textDateTimeEntry = new System.Windows.Forms.TextBox();
 			this.butNow = new OpenDental.UI.Button();
+			this.butDelete = new OpenDental.UI.Button();
 			this.panelObject.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -109,9 +111,9 @@ namespace OpenDental{
 			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
-			this.butCancel.Location = new System.Drawing.Point(623,473);
+			this.butCancel.Location = new System.Drawing.Point(623,487);
 			this.butCancel.Name = "butCancel";
-			this.butCancel.Size = new System.Drawing.Size(75,26);
+			this.butCancel.Size = new System.Drawing.Size(91,26);
 			this.butCancel.TabIndex = 5;
 			this.butCancel.Text = "&Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
@@ -124,9 +126,9 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(623,440);
+			this.butOK.Location = new System.Drawing.Point(623,454);
 			this.butOK.Name = "butOK";
-			this.butOK.Size = new System.Drawing.Size(75,26);
+			this.butOK.Size = new System.Drawing.Size(91,26);
 			this.butOK.TabIndex = 4;
 			this.butOK.Text = "&OK";
 			this.butOK.Click += new System.EventHandler(this.butOK_Click);
@@ -142,9 +144,12 @@ namespace OpenDental{
 			// 
 			// textDescript
 			// 
+			this.textDescript.AcceptsReturn = true;
 			this.textDescript.Location = new System.Drawing.Point(127,62);
 			this.textDescript.Multiline = true;
 			this.textDescript.Name = "textDescript";
+			this.textDescript.QuickPasteType = OpenDentBusiness.QuickPasteType.None;
+			this.textDescript.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
 			this.textDescript.Size = new System.Drawing.Size(452,141);
 			this.textDescript.TabIndex = 0;
 			// 
@@ -314,10 +319,28 @@ namespace OpenDental{
 			this.butNow.Text = "Now";
 			this.butNow.Click += new System.EventHandler(this.butNow_Click);
 			// 
+			// butDelete
+			// 
+			this.butDelete.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butDelete.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.butDelete.Autosize = true;
+			this.butDelete.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butDelete.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butDelete.CornerRadius = 4F;
+			this.butDelete.Image = global::OpenDental.Properties.Resources.deleteX;
+			this.butDelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butDelete.Location = new System.Drawing.Point(11,487);
+			this.butDelete.Name = "butDelete";
+			this.butDelete.Size = new System.Drawing.Size(92,26);
+			this.butDelete.TabIndex = 124;
+			this.butDelete.Text = "&Delete";
+			this.butDelete.Click += new System.EventHandler(this.butDelete_Click);
+			// 
 			// FormTaskEdit
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.ClientSize = new System.Drawing.Size(726,525);
+			this.Controls.Add(this.butDelete);
 			this.Controls.Add(this.butNow);
 			this.Controls.Add(this.textDateTimeEntry);
 			this.Controls.Add(this.label5);
@@ -513,6 +536,13 @@ namespace OpenDental{
 			}
 			return true;
 		}
+		private void butDelete_Click(object sender,EventArgs e) {
+				if(!MsgBox.Show(this,true,"Delete?")) {
+					return;
+				}
+				Tasks.Delete(Cur);
+				DialogResult=DialogResult.OK;
+		}
 
 		private void butOK_Click(object sender, System.EventArgs e) {
 			if(!SaveCur()){
@@ -524,6 +554,7 @@ namespace OpenDental{
 		private void butCancel_Click(object sender, System.EventArgs e) {
 			DialogResult=DialogResult.Cancel;
 		}
+
 
 		
 

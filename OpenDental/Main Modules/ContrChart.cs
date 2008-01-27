@@ -4022,6 +4022,45 @@ namespace OpenDental{
 					return;
 				}
 			}
+			else if(row["TaskNum"].ToString()!="0") {
+			Task curTask=Task.GetOne(PIn.PInt(row["TaskNum"].ToString()));
+				FormTaskEdit FormT=new FormTaskEdit(curTask);
+				FormT.ShowDialog();
+				if(FormT.GotoType!=TaskObjectType.None) {
+					TaskObjectType GotoType=FormT.GotoType;
+					int GotoKeyNum=FormT.GotoKeyNum;
+					//OnGoToChanged();
+					if(GotoType==TaskObjectType.Patient) {
+						if(GotoKeyNum!=0) {
+							PatCur.PatNum=GotoKeyNum;						
+						}
+					}
+					if(GotoType==TaskObjectType.Appointment) {
+						if(GotoKeyNum!=0) {
+							Appointment apt=Appointments.GetOneApt(GotoKeyNum);
+							if(apt==null) {
+								MsgBox.Show(this,"Appointment has been deleted, so it's not available.");
+								return;
+							}
+							DateTime dateSelected=DateTime.MinValue;
+							if(apt.AptStatus==ApptStatus.Planned || apt.AptStatus==ApptStatus.UnschedList) {
+								//I did not add feature to put planned or unsched apt on pinboard.
+								MsgBox.Show(this,"Cannot navigate to appointment.  Use the Other Appointments button.");
+								//return;
+							}
+							else {
+								dateSelected=apt.AptDateTime;
+							}
+							PatCur.PatNum=apt.PatNum;//OnPatientSelected(apt.PatNum);
+						}
+						//DialogResult=DialogResult.OK;
+						return;
+					}
+				}
+				if(FormT.DialogResult!=DialogResult.OK) {
+					return;
+				}
+			}
 			else if(row["AptNum"].ToString()!="0") {
 				//Appointment apt=Appointments.GetOneApt(
 				FormApptEdit FormA=new FormApptEdit(PIn.PInt(row["AptNum"].ToString()));

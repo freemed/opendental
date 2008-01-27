@@ -1,10 +1,11 @@
 using System;
 using System.Collections;
+using System.Data;
 
 namespace OpenDentBusiness{
 
 	///<summary>A task is a single todo item.</summary>
-	public class Task{
+	public class Task {
 		///<summary>Primary key.</summary>
 		public int TaskNum;
 		///<summary>FK to tasklist.TaskListNum.  If 0, then it will show in the trunk of a section.  </summary>
@@ -27,17 +28,45 @@ namespace OpenDentBusiness{
 		public TaskObjectType ObjectType;
 		///<summary>The date and time that this task was added.  Used to sort the list by the order entered.</summary>
 		public DateTime DateTimeEntry;
-		
+
 		///<summary></summary>
-		public Task Copy(){
+		public Task Copy() {
 			return (Task)MemberwiseClone();
 		}
+		///<summary>Gets one Task item from database.</summary>
+		public static Task GetOne(int TaskNum) {
+			string command=
+				"SELECT * FROM task"
+				+" WHERE TaskNum = "+POut.PInt(TaskNum);
+			Task[] taskList=RefreshAndFill(command);
+			if(taskList.Length==0) {
+				return null;
+			}
+			return taskList[0];
+		}
+		private static Task[] RefreshAndFill(string command) {
+			DataTable table=General.GetTable(command);
+			Task[] List=new Task[table.Rows.Count];
+			for(int i=0;i<List.Length;i++) {
+				List[i]=new Task();
+				List[i].TaskNum     = PIn.PInt(table.Rows[i][0].ToString());
+				List[i].TaskListNum         = PIn.PInt(table.Rows[i][1].ToString());
+				List[i].DateTask   = PIn.PDate(table.Rows[i][2].ToString());
+				List[i].KeyNum       = PIn.PInt(table.Rows[i][3].ToString());
+				List[i].Descript           = PIn.PString(table.Rows[i][4].ToString());
+				List[i].TaskStatus          = PIn.PBool(table.Rows[i][5].ToString());
+				List[i].IsRepeating = PIn.PBool(table.Rows[i][6].ToString());
+				List[i].DateType= (TaskDateType)PIn.PInt(table.Rows[i][7].ToString());
+				List[i].FromNum        = PIn.PInt(table.Rows[i][8].ToString());
+				List[i].ObjectType        = (TaskObjectType)PIn.PInt(table.Rows[i][9].ToString());
+				List[i].DateTimeEntry        = PIn.PDate(table.Rows[i][10].ToString());
+			}
+			return List;
 
-	
+		}
+
+
 	}
-
-	
-
 	
 
 
