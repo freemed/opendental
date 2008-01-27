@@ -363,11 +363,73 @@ namespace OpenDentBusiness {
 			SetTableColumns(table);
 			//but we won't actually fill this table with rows until the very end.  It's more useful to use a List<> for now.
 			List<DataRow> rows=new List<DataRow>();
+			DateTime dateT;
+			double qty;
+			double amt;
+			string command;
+			//claimprocs (ins payments)----------------------------------------------------------------------------
+			command="SELECT ClaimNum,ClaimPaymentNum,DateCP,SUM(InsPayAmt) _InsPayAmt,PatNum,ProcDate,"
+				+"ProvNum,SUM(WriteOff) _WriteOff "
+				+"FROM claimproc "
+				+"WHERE (Status=1 OR Status=4 OR Status=5) "//received,supplemental, or capclaim
+				+"AND (";
+			for(int i=0;i<fam.List.Length;i++){
+				if(i!=0){
+					command+="OR ";
+				}
+				command+="PatNum ="+POut.PInt(fam.List[i].PatNum)+" ";
+			}
+			command+=") GROUP BY ClaimNum ORDER BY DateCP";
+			DataTable rawClaimPay=dcon.GetTable(command);
+			DateTime procdate;
+			double writeoff;
+			for(int i=0;i<rawClaimPay.Rows.Count;i++){
+				row=table.NewRow();
+				row["AdjNum"]="0";
+				row["balance"]="";//fill this later
+				row["balanceDouble"]=0;//fill this later
+				row["chargesDouble"]=0;
+				row["charges"]="";
+				row["ClaimNum"]=rawClaimPay.Rows[i]["ClaimNum"].ToString();
+				row["ClaimPaymentNum"]="1";//this is now just a boolean flag indicating that it is a payment.
+				//this is because it will frequently not be attached to an actual claim payment.
+//todo(maybe): change this color. 3 means payment. 4 means claim.  get a new color for inspayments.
+				row["colorText"]=DefB.Long[(int)DefCat.AccountColors][4].ItemColor.ToArgb().ToString();
+				row["CommlogNum"]="0";
+				amt=PIn.PDouble(rawClaimPay.Rows[i]["_InsPayAmt"].ToString());
+				writeoff=PIn.PDouble(rawClaimPay.Rows[i]["_WriteOff"].ToString());
+				row["creditsDouble"]=amt+writeoff;
+				row["credits"]=((double)row["creditsDouble"]).ToString("n");
+				dateT=PIn.PDateT(rawClaimPay.Rows[i]["DateCP"].ToString());
+				row["DateTime"]=dateT;
+				row["date"]=dateT.ToShortDateString();
+				procdate=PIn.PDateT(rawClaimPay.Rows[i]["ProcDate"].ToString());
+				row["description"]=Lan.g("AccountModule","Insurance Payment for Claim ")+procdate.ToShortDateString();
+				if(writeoff!=0){
+					row["description"]+="\r\n"+Lan.g("AccountModule","Payment:")+" "+amt.ToString("c")+"\r\n"
+						+Lan.g("AccountModule","Writeoff:")+" "+writeoff.ToString("c");
+				}
+				row["extraDetail"]="";
+				row["patient"]=fam.GetNameInFamFirst(PIn.PInt(rawClaimPay.Rows[i]["PatNum"].ToString()));
+				row["PatNum"]=rawClaimPay.Rows[i]["PatNum"].ToString();
+				row["PayNum"]="0";
+				row["PayPlanNum"]="0";
+				row["PayPlanChargeNum"]="0";
+				row["ProcCode"]=Lan.g("AccountModule","InsPay");
+				row["ProcNum"]="0";
+				row["procsOnClaim"]="";
+				row["prov"]=Providers.GetAbbr(PIn.PInt(rawClaimPay.Rows[i]["ProvNum"].ToString()));
+				row["tth"]="";
+				rows.Add(row);
+			}
 			//Procedures------------------------------------------------------------------------------------------
-			string command="SELECT procedurelog.BaseUnits,Descript,LaymanTerm,procedurelog.MedicalCode,procedurelog.PatNum,ProcCode,"
-				+"ProcDate,ProcFee,ProcNum,ProvNum,ToothNum,UnitQty "
+			command="SELECT procedurelog.BaseUnits,Descript,SUM(InsPayAmt) _insPayAmt,"
+				+"LaymanTerm,procedurelog.MedicalCode,procedurelog.PatNum,ProcCode,"
+				+"procedurelog.ProcDate,ProcFee,procedurelog.ProcNum,procedurelog.ProvNum,ToothNum,UnitQty,"
+				+"SUM(WriteOff) _writeOff "
 				+"FROM procedurelog "
 				+"LEFT JOIN procedurecode ON procedurelog.CodeNum=procedurecode.CodeNum "
+				+"LEFT JOIN claimproc ON procedurelog.ProcNum=claimproc.ProcNum "
 				+"WHERE ProcStatus=2 "//complete
 				+"AND (";
 			for(int i=0;i<fam.List.Length;i++){
@@ -376,11 +438,10 @@ namespace OpenDentBusiness {
 				}
 				command+="procedurelog.PatNum ="+POut.PInt(fam.List[i].PatNum)+" ";
 			}
-			command+=") ORDER BY ProcDate";
+			command+=") GROUP BY procedurelog.ProcNum ORDER BY ProcDate";
 			DataTable rawProc=dcon.GetTable(command);
-			DateTime dateT;
-			double qty;
-			double amt;
+			double insPayAmt;
+			double writeOff;
 			for(int i=0;i<rawProc.Rows.Count;i++){
 				row=table.NewRow();
 				row["AdjNum"]="0";
@@ -410,7 +471,15 @@ namespace OpenDentBusiness {
 				if(rawProc.Rows[i]["LaymanTerm"].ToString()!=""){
 					row["description"]=rawProc.Rows[i]["LaymanTerm"].ToString();
 				}
-				row["extraDetail"]="extra detail";
+				insPayAmt=PIn.PDouble(rawProc.Rows[i]["_insPayAmt"].ToString());
+				writeOff=PIn.PDouble(rawProc.Rows[i]["_writeOff"].ToString());
+				row["extraDetail"]="";
+				if(insPayAmt>0 || writeOff>0){
+					row["extraDetail"]+=Lan.g("AccountModule","Ins Paid: ")+insPayAmt.ToString("c");
+					if(writeOff>0){
+						row["extraDetail"]+=", "+Lan.g("AccountModule","Writeoff: ")+writeOff.ToString("c");
+					}
+				}
 				row["patient"]=fam.GetNameInFamFirst(PIn.PInt(rawProc.Rows[i]["PatNum"].ToString()));
 				row["PatNum"]=rawProc.Rows[i]["PatNum"].ToString();
 				row["PayNum"]="0";
@@ -530,60 +599,6 @@ namespace OpenDentBusiness {
 				row["ProcNum"]="0";
 				row["procsOnClaim"]="";
 				row["prov"]=Providers.GetAbbr(PIn.PInt(rawPay.Rows[i]["ProvNum"].ToString()));
-				row["tth"]="";
-				rows.Add(row);
-			}
-			//claimpayments-------------------------------------------------------------------------------------
-			command="SELECT ClaimNum,ClaimPaymentNum,DateCP,SUM(InsPayAmt) _InsPayAmt,PatNum,ProcDate,"
-				+"ProvNum,SUM(WriteOff) _WriteOff "
-				+"FROM claimproc "
-				+"WHERE (Status=1 OR Status=4 OR Status=5) "//received,supplemental, or capclaim
-				+"AND (";
-			for(int i=0;i<fam.List.Length;i++){
-				if(i!=0){
-					command+="OR ";
-				}
-				command+="PatNum ="+POut.PInt(fam.List[i].PatNum)+" ";
-			}
-			command+=") GROUP BY ClaimNum ORDER BY DateCP";
-			DataTable rawClaimPay=dcon.GetTable(command);
-			DateTime procdate;
-			double writeoff;
-			for(int i=0;i<rawClaimPay.Rows.Count;i++){
-				row=table.NewRow();
-				row["AdjNum"]="0";
-				row["balance"]="";//fill this later
-				row["balanceDouble"]=0;//fill this later
-				row["chargesDouble"]=0;
-				row["charges"]="";
-				row["ClaimNum"]=rawClaimPay.Rows[i]["ClaimNum"].ToString();
-				row["ClaimPaymentNum"]=rawClaimPay.Rows[i]["ClaimPaymentNum"].ToString();
-//todo(maybe): change this color. 3 means payment. 4 means claim.  get a new color for inspayments.
-				row["colorText"]=DefB.Long[(int)DefCat.AccountColors][4].ItemColor.ToArgb().ToString();
-				row["CommlogNum"]="0";
-				amt=PIn.PDouble(rawClaimPay.Rows[i]["_InsPayAmt"].ToString());
-				writeoff=PIn.PDouble(rawClaimPay.Rows[i]["_WriteOff"].ToString());
-				row["creditsDouble"]=amt+writeoff;
-				row["credits"]=((double)row["creditsDouble"]).ToString("n");
-				dateT=PIn.PDateT(rawClaimPay.Rows[i]["DateCP"].ToString());
-				row["DateTime"]=dateT;
-				row["date"]=dateT.ToShortDateString();
-				procdate=PIn.PDateT(rawClaimPay.Rows[i]["ProcDate"].ToString());
-				row["description"]=Lan.g("AccountModule","Insurance Payment for Claim ")+procdate.ToShortDateString();
-				if(writeoff!=0){
-					row["description"]+="\r\n"+Lan.g("AccountModule","Payment:")+" "+amt.ToString("c")+"\r\n"
-						+Lan.g("AccountModule","Writeoff:")+" "+writeoff.ToString("c");
-				}
-				row["extraDetail"]="";
-				row["patient"]=fam.GetNameInFamFirst(PIn.PInt(rawClaimPay.Rows[i]["PatNum"].ToString()));
-				row["PatNum"]=rawClaimPay.Rows[i]["PatNum"].ToString();
-				row["PayNum"]="0";
-				row["PayPlanNum"]="0";
-				row["PayPlanChargeNum"]="0";
-				row["ProcCode"]=Lan.g("AccountModule","InsPay");
-				row["ProcNum"]="0";
-				row["procsOnClaim"]="";
-				row["prov"]=Providers.GetAbbr(PIn.PInt(rawClaimPay.Rows[i]["ProvNum"].ToString()));
 				row["tth"]="";
 				rows.Add(row);
 			}
