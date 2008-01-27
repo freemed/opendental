@@ -16,7 +16,7 @@
       <Query>
         <DataSourceName>DS1</DataSourceName>
         <Timeout>10</Timeout>
-        <CommandText>SELECT account.AccountNum, DateDisplayed, DebitAmt, CreditAmt, Memo, Splits, CheckNumber, account.Description, AcctType FROM account LEFT JOIN journalentry ON account.AccountNum=journalentry.AccountNum AND DateDisplayed &gt;= '2007-01-01' AND DateDisplayed &lt;= '2007-12-31' ORDER BY AcctType,account.Description,DateDisplayed</CommandText>
+        <CommandText>SELECT account.AccountNum, DateDisplayed, DebitAmt, CreditAmt, Memo, Splits, CheckNumber, account.Description, AcctType FROM account LEFT JOIN journalentry ON account.AccountNum=journalentry.AccountNum AND DateDisplayed &lt;= '2007-12-31' WHERE account.AcctType= 0 OR account.AcctType=1 OR account.AcctType=2 UNION ALL SELECT account.AccountNum, DateDisplayed, DebitAmt, CreditAmt, Memo, Splits, CheckNumber, account.Description, AcctType FROM account LEFT JOIN journalentry ON account.AccountNum=journalentry.AccountNum AND DateDisplayed &gt;= '2007-01-01' AND DateDisplayed &lt;= '2007-12-31' WHERE account.AcctType= 3 OR account.AcctType=4 ORDER BY AcctType, Description, DateDisplayed</CommandText>
       </Query>
       <Fields>
         <Field Name="AccountNum">
