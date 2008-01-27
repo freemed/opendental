@@ -815,7 +815,7 @@ namespace OpenDental {
 				return;
 			}
 			//check tasks off
-			if(e.X>16) {
+			if(e.X>ClickedItem.Position.X+16) {
 				return;
 			}
 			Task task=TasksList[clickedI-TaskListsList.Count].Copy();
