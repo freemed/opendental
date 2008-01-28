@@ -2271,60 +2271,6 @@ double adj=Adjustments.GetTotForProc(arrayProc[tempCountProc].ProcNum,Adjustment
 					}
 				}
 			}
-			/*
-			switch (AcctLineList[e.Row].Type){
-				default://procedure
-					break;
-				case AcctModType.Claim:
-					Claim ClaimCur=arrayClaim[AcctLineList[e.Row].Index];
-					for(int i=0;i<AcctLineList.Count;i++){//loop through all rows
-						if(AcctLineList[i].Type!=AcctModType.Proc)
-							//if not a procedure, then skip
-							continue;
-						for(int j=0;j<ClaimProcList.Length;j++){//loop through all claimprocs
-							//if there is a claim proc for this procedure that matches
-							if(arrayProc[AcctLineList[i].Index].ProcNum==ClaimProcList[j].ProcNum
-								&& ClaimProcList[j].ClaimNum==ClaimCur.ClaimNum)
-							{
-								gridAccount.SetSelected(i,true);
-							}
-						}
-					}
-					break;
-				case AcctModType.Adj:
-					//Adjustments.Cur=arrayAdj[((AcctLine)AcctLineAL[e.Row]).Index];
-					break;
-				case AcctModType.Pay:
-					PaySplit[] PaySplitList=PaySplits.Refresh(PatCur.PatNum);
-					for(int i=0;i<AcctLineList.Count;i++){//loop through all rows
-						if(AcctLineList[i].Type!=AcctModType.Proc) {
-							continue;//if not a procedure, then skip
-						}
-						for(int j=0;j<PaySplitList.Length;j++) {//loop through all paysplits
-							//if there is a paysplit for this procedure that matches
-							if(arrayProc[AcctLineList[i].Index].ProcNum==PaySplitList[j].ProcNum
-								&& PaySplitList[j].PayNum==arrayPay[AcctLineList[e.Row].Index].PayNum) {
-								gridAccount.SetSelected(i,true);
-							}
-						}
-					}
-					break;
-				case AcctModType.Comm:
-					//Commlogs.Cur=arrayComm[((AcctLine)AcctLineAL[e.Row]).Index];
-					break;
-				case AcctModType.PayPlan:
-					PayPlan payPlanCur=arrayPayPlan[AcctLineList[e.Row].Index];
-					//ArrayList payPlanRows=new ArrayList();
-					for(int i=0;i<AcctLineList.Count;i++){
-						if(AcctLineList[i].Type==AcctModType.Pay
-							&& arrayPay[AcctLineList[i].Index].PayPlanNum==payPlanCur.PayPlanNum)
-						{
-							gridAccount.SetSelected(i,true);
-						}
-					}
-					break;	
-			}//end switch*/
-			
 		}
 
 		private void gridAccount_CellDoubleClick(object sender, OpenDental.UI.ODGridClickEventArgs e) {
@@ -2376,7 +2322,6 @@ double adj=Adjustments.GetTotForProc(arrayProc[tempCountProc].ProcNum,Adjustment
 					return;
 				}
 			}
-			//Shared.ComputeBalances();//use whenever a change would affect the total
 			bool isSelectingFamily=gridAcctPat.GetSelectedIndex()==this.DataSetMain.Tables["patient"].Rows.Count-1;
 			ModuleSelected(PatCur.PatNum,isSelectingFamily);
 		}
@@ -3989,6 +3934,7 @@ double adj=Adjustments.GetTotForProc(arrayProc[tempCountProc].ProcNum,Adjustment
 
 	}//end class
 
+	/*
 	///<summary>A single line of data in ContrAccount.</summary>
 	public class AcctLine{
 		///<summary></summary>
@@ -4121,7 +4067,7 @@ double adj=Adjustments.GetTotForProc(arrayProc[tempCountProc].ProcNum,Adjustment
 		//<summary>Depracated now that we have text wrap.  Informational only.  Does not affect balance. A group of all paysplits with the same date and patnum. All are attached to procedures.  Balance is affected by individual line item entries on the procedure lines.</summary>
 		//DailySummary
 	}
-
+	*/
 }
 
 

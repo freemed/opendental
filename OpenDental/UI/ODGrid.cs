@@ -1488,7 +1488,9 @@ namespace OpenDental.UI{
 
 /*This is a template of typical grid code which can be quickly pasted into any form.
  
-//using OpenDental.UI;
+		using OpenDental.UI;
+
+		FillGrid(){
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
 			ODGridColumn col=new ODGridColumn(Lan.g("Table",""),);
@@ -1506,6 +1508,6 @@ namespace OpenDental.UI{
 				gridMain.Rows.Add(row);
 			}
 			gridMain.EndUpdate();
-
+		}
 
 */
