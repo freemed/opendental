@@ -6272,9 +6272,8 @@ namespace OpenDental{
 				//added after r1182
 				command = "UPDATE preference SET ValueString = 'http://70.90.133.65:1942/WebServiceCustomerUpdates/Service1.asmx' WHERE PrefName = 'UpdateServerAddress'";
 				General.NonQEx(command);
-
-
-				
+				command="INSERT INTO preference (PrefName,ValueString) VALUES ('ClaimAttachExportPath','C:\\Program Files\\Open Dental\\ClaimAttachments\\')";
+				General.NonQEx(command);
 
 				command="UPDATE preference SET ValueString = '5.6.0.0' WHERE PrefName = 'DataBaseVersion'";
 				General.NonQEx(command);
