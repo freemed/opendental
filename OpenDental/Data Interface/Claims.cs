@@ -300,7 +300,7 @@ namespace OpenDental{
 			if(clinicNum>0) {
 				command+="AND claim.ClinicNum="+POut.PInt(clinicNum)+" ";
 			}
-			command+="ORDER BY insplan.IsMedical";//this puts the medical claims at the end, helping with the looping in X12.
+			command+="ORDER BY insplan.IsMedical, patient.LName";//this puts the medical claims at the end, helping with the looping in X12.
 			//MessageBox.Show(string command);
 			DataTable table=General.GetTable(command);
 			ClaimSendQueueItem[] listQueue=new ClaimSendQueueItem[table.Rows.Count];
