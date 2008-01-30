@@ -10,7 +10,7 @@
   <TopMargin>.25in</TopMargin>
   <LeftMargin>.25in</LeftMargin>
   <RightMargin>.25in</RightMargin>
-  <BottomMargin>.25in</BottomMargin>
+  <BottomMargin>.4in</BottomMargin>
   <DataSets>
     <DataSet Name="Data">
       <Query>
