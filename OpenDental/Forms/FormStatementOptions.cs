@@ -28,27 +28,35 @@ namespace OpenDental{
 		//public bool NextAppt;
 		//<summary></summary>
 		//public bool SimpleStatement;
-		///<summary>When user checks box in this form for Mailing, then this gets set to true.  This results in the commlog entry having mode=mail instead of none.</summary>
-		public bool IsBill;
+		//<summary>When user checks box in this form for Mailing, then this gets set to true.  This results in the commlog entry having mode=mail instead of none.</summary>
+		//public bool IsBill;
 		///<summary></summary>
 		public string Note;
-		///<summary></summary>
-		public bool EmailOnClose;
+		//<summary></summary>
+		//public bool EmailOnClose;
 		private System.Windows.Forms.ToolTip toolTip1;
 		private System.Windows.Forms.Label label3;
 		private OpenDental.ODtextBox textNote;
-		private Patient PatCur;
-		private CheckBox checkMailing;
-		private OpenDental.UI.Button buttonEmail;
+		//private Patient PatCur;
 		private OpenDental.UI.Button buttonFuchs1;
 		private OpenDental.UI.Button buttonFuchs2;
 		private OpenDental.UI.Button buttonFuchs3;
 		private GroupBox groupFuchs;
-		private GroupBox groupBox1;
-		private RadioButton radioFamIntermingled;
-		private RadioButton radioFamSeparate;
-		private RadioButton radioFamOne;
-		private Family FamCur;
+		private OpenDental.UI.Button butToday;
+		private OpenDental.UI.Button butDatesAll;
+		private OpenDental.UI.Button but90days;
+		private OpenDental.UI.Button but45days;
+		private ValidDate textDateEnd;
+		private ValidDate textDateStart;
+		private Label labelEndDate;
+		private Label labelStartDate;
+		private ODtextBox oDtextBox1;
+		private Label label1;
+		private Label label2;
+		private ListBox listMode;
+		private CheckBox checkSinglePatient;
+		private CheckBox checkIntermingled;
+		//private Family FamCur;
 
 		///<summary></summary>
 		public FormStatementOptions()//Patient patCur,Family famCur)
@@ -92,18 +100,25 @@ namespace OpenDental{
 			this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
 			this.label3 = new System.Windows.Forms.Label();
 			this.textNote = new OpenDental.ODtextBox();
-			this.checkMailing = new System.Windows.Forms.CheckBox();
-			this.buttonEmail = new OpenDental.UI.Button();
 			this.buttonFuchs1 = new OpenDental.UI.Button();
 			this.buttonFuchs2 = new OpenDental.UI.Button();
 			this.buttonFuchs3 = new OpenDental.UI.Button();
 			this.groupFuchs = new System.Windows.Forms.GroupBox();
-			this.groupBox1 = new System.Windows.Forms.GroupBox();
-			this.radioFamIntermingled = new System.Windows.Forms.RadioButton();
-			this.radioFamSeparate = new System.Windows.Forms.RadioButton();
-			this.radioFamOne = new System.Windows.Forms.RadioButton();
+			this.butToday = new OpenDental.UI.Button();
+			this.butDatesAll = new OpenDental.UI.Button();
+			this.but90days = new OpenDental.UI.Button();
+			this.but45days = new OpenDental.UI.Button();
+			this.textDateEnd = new OpenDental.ValidDate();
+			this.textDateStart = new OpenDental.ValidDate();
+			this.labelEndDate = new System.Windows.Forms.Label();
+			this.labelStartDate = new System.Windows.Forms.Label();
+			this.oDtextBox1 = new OpenDental.ODtextBox();
+			this.label1 = new System.Windows.Forms.Label();
+			this.label2 = new System.Windows.Forms.Label();
+			this.listMode = new System.Windows.Forms.ListBox();
+			this.checkIntermingled = new System.Windows.Forms.CheckBox();
+			this.checkSinglePatient = new System.Windows.Forms.CheckBox();
 			this.groupFuchs.SuspendLayout();
-			this.groupBox1.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// butCancel
@@ -115,7 +130,7 @@ namespace OpenDental{
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
 			this.butCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.butCancel.Location = new System.Drawing.Point(590,387);
+			this.butCancel.Location = new System.Drawing.Point(596,442);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75,26);
 			this.butCancel.TabIndex = 0;
@@ -130,7 +145,7 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(590,347);
+			this.butOK.Location = new System.Drawing.Point(596,402);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75,26);
 			this.butOK.TabIndex = 1;
@@ -140,15 +155,15 @@ namespace OpenDental{
 			// checkHidePayment
 			// 
 			this.checkHidePayment.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkHidePayment.Location = new System.Drawing.Point(12,51);
+			this.checkHidePayment.Location = new System.Drawing.Point(29,99);
 			this.checkHidePayment.Name = "checkHidePayment";
 			this.checkHidePayment.Size = new System.Drawing.Size(215,20);
 			this.checkHidePayment.TabIndex = 11;
-			this.checkHidePayment.Text = "Walkout (hide payment options)";
+			this.checkHidePayment.Text = "Hide payment options";
 			// 
 			// label3
 			// 
-			this.label3.Location = new System.Drawing.Point(13,174);
+			this.label3.Location = new System.Drawing.Point(30,206);
 			this.label3.Name = "label3";
 			this.label3.Size = new System.Drawing.Size(195,17);
 			this.label3.TabIndex = 13;
@@ -158,40 +173,13 @@ namespace OpenDental{
 			// textNote
 			// 
 			this.textNote.AcceptsReturn = true;
-			this.textNote.Location = new System.Drawing.Point(12,193);
+			this.textNote.Location = new System.Drawing.Point(29,225);
 			this.textNote.Multiline = true;
 			this.textNote.Name = "textNote";
 			this.textNote.QuickPasteType = OpenDentBusiness.QuickPasteType.Statement;
 			this.textNote.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
 			this.textNote.Size = new System.Drawing.Size(518,147);
 			this.textNote.TabIndex = 14;
-			// 
-			// checkMailing
-			// 
-			this.checkMailing.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.checkMailing.Checked = true;
-			this.checkMailing.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.checkMailing.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkMailing.Location = new System.Drawing.Point(590,320);
-			this.checkMailing.Name = "checkMailing";
-			this.checkMailing.Size = new System.Drawing.Size(93,20);
-			this.checkMailing.TabIndex = 16;
-			this.checkMailing.Text = "Mailing This";
-			// 
-			// buttonEmail
-			// 
-			this.buttonEmail.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.buttonEmail.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.buttonEmail.Autosize = true;
-			this.buttonEmail.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.buttonEmail.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.buttonEmail.CornerRadius = 4F;
-			this.buttonEmail.Location = new System.Drawing.Point(569,279);
-			this.buttonEmail.Name = "buttonEmail";
-			this.buttonEmail.Size = new System.Drawing.Size(96,26);
-			this.buttonEmail.TabIndex = 17;
-			this.buttonEmail.Text = "E-Mail This";
-			this.buttonEmail.Click += new System.EventHandler(this.buttonEmail_Click);
 			// 
 			// buttonFuchs1
 			// 
@@ -243,7 +231,7 @@ namespace OpenDental{
 			this.groupFuchs.Controls.Add(this.buttonFuchs1);
 			this.groupFuchs.Controls.Add(this.buttonFuchs3);
 			this.groupFuchs.Controls.Add(this.buttonFuchs2);
-			this.groupFuchs.Location = new System.Drawing.Point(121,141);
+			this.groupFuchs.Location = new System.Drawing.Point(138,173);
 			this.groupFuchs.Name = "groupFuchs";
 			this.groupFuchs.Size = new System.Drawing.Size(321,47);
 			this.groupFuchs.TabIndex = 21;
@@ -251,57 +239,176 @@ namespace OpenDental{
 			this.groupFuchs.Text = "Fuchs hidden options";
 			this.groupFuchs.Visible = false;
 			// 
-			// groupBox1
+			// butToday
 			// 
-			this.groupBox1.Controls.Add(this.radioFamIntermingled);
-			this.groupBox1.Controls.Add(this.radioFamSeparate);
-			this.groupBox1.Controls.Add(this.radioFamOne);
-			this.groupBox1.Location = new System.Drawing.Point(233,12);
-			this.groupBox1.Name = "groupBox1";
-			this.groupBox1.Size = new System.Drawing.Size(199,83);
-			this.groupBox1.TabIndex = 23;
-			this.groupBox1.TabStop = false;
-			this.groupBox1.Text = "Family";
+			this.butToday.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butToday.Autosize = true;
+			this.butToday.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butToday.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butToday.CornerRadius = 4F;
+			this.butToday.Location = new System.Drawing.Point(470,60);
+			this.butToday.Name = "butToday";
+			this.butToday.Size = new System.Drawing.Size(77,24);
+			this.butToday.TabIndex = 229;
+			this.butToday.Text = "Today";
+			this.butToday.Click += new System.EventHandler(this.butToday_Click);
 			// 
-			// radioFamIntermingled
+			// butDatesAll
 			// 
-			this.radioFamIntermingled.Location = new System.Drawing.Point(9,56);
-			this.radioFamIntermingled.Name = "radioFamIntermingled";
-			this.radioFamIntermingled.Size = new System.Drawing.Size(165,18);
-			this.radioFamIntermingled.TabIndex = 2;
-			this.radioFamIntermingled.TabStop = true;
-			this.radioFamIntermingled.Text = "Intermingled";
-			this.radioFamIntermingled.UseVisualStyleBackColor = true;
+			this.butDatesAll.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butDatesAll.Autosize = true;
+			this.butDatesAll.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butDatesAll.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butDatesAll.CornerRadius = 4F;
+			this.butDatesAll.Location = new System.Drawing.Point(470,138);
+			this.butDatesAll.Name = "butDatesAll";
+			this.butDatesAll.Size = new System.Drawing.Size(77,24);
+			this.butDatesAll.TabIndex = 228;
+			this.butDatesAll.Text = "All Dates";
+			this.butDatesAll.Click += new System.EventHandler(this.butDatesAll_Click);
 			// 
-			// radioFamSeparate
+			// but90days
 			// 
-			this.radioFamSeparate.Location = new System.Drawing.Point(9,37);
-			this.radioFamSeparate.Name = "radioFamSeparate";
-			this.radioFamSeparate.Size = new System.Drawing.Size(165,18);
-			this.radioFamSeparate.TabIndex = 1;
-			this.radioFamSeparate.TabStop = true;
-			this.radioFamSeparate.Text = "Separate family members";
-			this.radioFamSeparate.UseVisualStyleBackColor = true;
+			this.but90days.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.but90days.Autosize = true;
+			this.but90days.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.but90days.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.but90days.CornerRadius = 4F;
+			this.but90days.Location = new System.Drawing.Point(470,112);
+			this.but90days.Name = "but90days";
+			this.but90days.Size = new System.Drawing.Size(77,24);
+			this.but90days.TabIndex = 227;
+			this.but90days.Text = "Last 90 Days";
+			this.but90days.Click += new System.EventHandler(this.but90days_Click);
 			// 
-			// radioFamOne
+			// but45days
 			// 
-			this.radioFamOne.Location = new System.Drawing.Point(9,18);
-			this.radioFamOne.Name = "radioFamOne";
-			this.radioFamOne.Size = new System.Drawing.Size(165,18);
-			this.radioFamOne.TabIndex = 0;
-			this.radioFamOne.TabStop = true;
-			this.radioFamOne.Text = "One patient only";
-			this.radioFamOne.UseVisualStyleBackColor = true;
+			this.but45days.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.but45days.Autosize = true;
+			this.but45days.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.but45days.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.but45days.CornerRadius = 4F;
+			this.but45days.Location = new System.Drawing.Point(470,86);
+			this.but45days.Name = "but45days";
+			this.but45days.Size = new System.Drawing.Size(77,24);
+			this.but45days.TabIndex = 226;
+			this.but45days.Text = "Last 45 Days";
+			this.but45days.Click += new System.EventHandler(this.but45days_Click);
+			// 
+			// textDateEnd
+			// 
+			this.textDateEnd.Location = new System.Drawing.Point(470,37);
+			this.textDateEnd.Name = "textDateEnd";
+			this.textDateEnd.Size = new System.Drawing.Size(77,20);
+			this.textDateEnd.TabIndex = 224;
+			// 
+			// textDateStart
+			// 
+			this.textDateStart.BackColor = System.Drawing.SystemColors.Window;
+			this.textDateStart.ForeColor = System.Drawing.SystemColors.WindowText;
+			this.textDateStart.Location = new System.Drawing.Point(470,14);
+			this.textDateStart.Name = "textDateStart";
+			this.textDateStart.Size = new System.Drawing.Size(77,20);
+			this.textDateStart.TabIndex = 223;
+			// 
+			// labelEndDate
+			// 
+			this.labelEndDate.Location = new System.Drawing.Point(377,40);
+			this.labelEndDate.Name = "labelEndDate";
+			this.labelEndDate.Size = new System.Drawing.Size(91,14);
+			this.labelEndDate.TabIndex = 222;
+			this.labelEndDate.Text = "End Date";
+			this.labelEndDate.TextAlign = System.Drawing.ContentAlignment.TopRight;
+			// 
+			// labelStartDate
+			// 
+			this.labelStartDate.Location = new System.Drawing.Point(383,17);
+			this.labelStartDate.Name = "labelStartDate";
+			this.labelStartDate.Size = new System.Drawing.Size(84,14);
+			this.labelStartDate.TabIndex = 221;
+			this.labelStartDate.Text = "Start Date";
+			this.labelStartDate.TextAlign = System.Drawing.ContentAlignment.TopRight;
+			// 
+			// oDtextBox1
+			// 
+			this.oDtextBox1.AcceptsReturn = true;
+			this.oDtextBox1.Location = new System.Drawing.Point(29,394);
+			this.oDtextBox1.Multiline = true;
+			this.oDtextBox1.Name = "oDtextBox1";
+			this.oDtextBox1.QuickPasteType = OpenDentBusiness.QuickPasteType.Statement;
+			this.oDtextBox1.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+			this.oDtextBox1.Size = new System.Drawing.Size(518,74);
+			this.oDtextBox1.TabIndex = 231;
+			// 
+			// label1
+			// 
+			this.label1.Location = new System.Drawing.Point(30,375);
+			this.label1.Name = "label1";
+			this.label1.Size = new System.Drawing.Size(195,17);
+			this.label1.TabIndex = 230;
+			this.label1.Text = "Bold Note";
+			this.label1.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
+			// 
+			// label2
+			// 
+			this.label2.Location = new System.Drawing.Point(28,14);
+			this.label2.Name = "label2";
+			this.label2.Size = new System.Drawing.Size(84,14);
+			this.label2.TabIndex = 232;
+			this.label2.Text = "Mode";
+			this.label2.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
+			// 
+			// listMode
+			// 
+			this.listMode.FormattingEnabled = true;
+			this.listMode.Items.AddRange(new object[] {
+            "Unsent",
+            "Email",
+            "Mail",
+            "InPerson"});
+			this.listMode.Location = new System.Drawing.Point(29,30);
+			this.listMode.Name = "listMode";
+			this.listMode.Size = new System.Drawing.Size(113,56);
+			this.listMode.TabIndex = 233;
+			// 
+			// checkIntermingled
+			// 
+			this.checkIntermingled.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.checkIntermingled.Location = new System.Drawing.Point(29,149);
+			this.checkIntermingled.Name = "checkIntermingled";
+			this.checkIntermingled.Size = new System.Drawing.Size(215,20);
+			this.checkIntermingled.TabIndex = 234;
+			this.checkIntermingled.Text = "Intermingle family members";
+			// 
+			// checkSinglePatient
+			// 
+			this.checkSinglePatient.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.checkSinglePatient.Location = new System.Drawing.Point(29,124);
+			this.checkSinglePatient.Name = "checkSinglePatient";
+			this.checkSinglePatient.Size = new System.Drawing.Size(215,20);
+			this.checkSinglePatient.TabIndex = 235;
+			this.checkSinglePatient.Text = "Single patient only";
 			// 
 			// FormStatementOptions
 			// 
 			this.AcceptButton = this.butOK;
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
-			this.ClientSize = new System.Drawing.Size(686,436);
-			this.Controls.Add(this.groupBox1);
+			this.ClientSize = new System.Drawing.Size(702,502);
+			this.Controls.Add(this.checkSinglePatient);
+			this.Controls.Add(this.checkIntermingled);
+			this.Controls.Add(this.listMode);
+			this.Controls.Add(this.label2);
+			this.Controls.Add(this.oDtextBox1);
+			this.Controls.Add(this.label1);
+			this.Controls.Add(this.butToday);
+			this.Controls.Add(this.butDatesAll);
+			this.Controls.Add(this.but90days);
+			this.Controls.Add(this.but45days);
+			this.Controls.Add(this.textDateEnd);
+			this.Controls.Add(this.textDateStart);
+			this.Controls.Add(this.labelEndDate);
+			this.Controls.Add(this.labelStartDate);
 			this.Controls.Add(this.groupFuchs);
-			this.Controls.Add(this.buttonEmail);
-			this.Controls.Add(this.checkMailing);
 			this.Controls.Add(this.textNote);
 			this.Controls.Add(this.label3);
 			this.Controls.Add(this.checkHidePayment);
@@ -316,7 +423,6 @@ namespace OpenDental{
 			this.Text = "Statement";
 			this.Load += new System.EventHandler(this.FormStatementOptions_Load);
 			this.groupFuchs.ResumeLayout(false);
-			this.groupBox1.ResumeLayout(false);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -349,8 +455,28 @@ namespace OpenDental{
 				buttonFuchs2.Visible=true;
 				buttonFuchs3.Visible=true;
 			}
-			EmailOnClose=false;
+			//EmailOnClose=false;
 			//checkSimpleStatement.Checked=(PrefB.GetBool("PrintSimpleStatements"));
+		}
+
+		private void butToday_Click(object sender,EventArgs e) {
+			textDateStart.Text=DateTime.Today.ToShortDateString();
+			textDateEnd.Text=DateTime.Today.ToShortDateString();
+		}
+
+		private void but45days_Click(object sender,EventArgs e) {
+			textDateStart.Text=DateTime.Today.AddDays(-45).ToShortDateString();
+			textDateEnd.Text="";
+		}
+
+		private void but90days_Click(object sender,EventArgs e) {
+			textDateStart.Text=DateTime.Today.AddDays(-90).ToShortDateString();
+			textDateEnd.Text="";
+		}
+
+		private void butDatesAll_Click(object sender,EventArgs e) {
+			textDateStart.Text="";
+			textDateEnd.Text="";
 		}
 
 		/*private void butToday_Click(object sender, System.EventArgs e) {
@@ -415,10 +541,11 @@ namespace OpenDental{
 			textNote.Text="This credit is on your account. We look forward to seeing you on your next apptointment! "+textNote.Text;
 
 		}
-		private void buttonEmail_Click(object sender,EventArgs e) {
-			EmailOnClose=true;
-			SaveAndClose();
-		}
+
+		//private void buttonEmail_Click(object sender,EventArgs e) {
+		//	EmailOnClose=true;
+		//	SaveAndClose();
+		//}
 
 		private void butOK_Click(object sender, System.EventArgs e) {
 			SaveAndClose();
@@ -445,7 +572,7 @@ namespace OpenDental{
 			//NextAppt=checkNextAppt.Checked;
 			Note=textNote.Text;
 			//SimpleStatement=checkSimpleStatement.Checked;
-			IsBill=checkMailing.Checked;
+			//IsBill=checkMailing.Checked;
 			/*if(radioFamAll.Checked){
 				PatNums=new int[FamCur.List.Length];
 				for(int i=0;i<FamCur.List.Length;i++){
@@ -462,6 +589,8 @@ namespace OpenDental{
 		private void butCancel_Click(object sender, System.EventArgs e) {
 			DialogResult=DialogResult.Cancel;
 		}
+
+	
 
 		
 

@@ -3084,7 +3084,7 @@ double adj=Adjustments.GetTotForProc(arrayProc[tempCountProc].ProcNum,Adjustment
 			}
 			//FillMain(FormSO.FromDate,FormSO.ToDate,FormSO.IncludeClaims,FormSO.SubtotalsOnly);
 			//if Email button pushed then make statement to email
-			if(FormSO.EmailOnClose) {
+			//if(FormSO.EmailOnClose) {
 				string attachPath=FormEmailMessageEdit.GetAttachPath();
 				Random rnd=new Random();
 				string fileName=DateTime.Now.ToString("yyyyMMdd")+"_"+DateTime.Now.TimeOfDay.Ticks.ToString()+rnd.Next(1000).ToString()+".pdf";
@@ -3106,11 +3106,11 @@ double adj=Adjustments.GetTotForProc(arrayProc[tempCountProc].ProcNum,Adjustment
 				FormEmailMessageEdit FormE=new FormEmailMessageEdit(message);
 				FormE.IsNew=true;
 				FormE.ShowDialog();
-			}
-			else {
+			//}
+			//else {
 //				PrintStatement(FormSO.PatNums,fromDate,toDate,FormSO.IncludeClaims
 //					,FormSO.SubtotalsOnly,FormSO.HidePayment,FormSO.NextAppt,FormSO.Note,FormSO.IsBill,"");
-			}
+			//}
 			ModuleSelected(PatCur.PatNum);
 		}
 

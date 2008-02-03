@@ -70,7 +70,7 @@ namespace OpenDentBusiness{
 		[DataField("Note")]
 		private string note;
 		bool noteChanged;
-		/// <summary>Can include line breaks.  For now, entire note will be one single font.</summary>
+		/// <summary>Can include line breaks.  This ordinary note will be in the standard font.</summary>
 		public string Note {
 			get { return note; }
 			set { if(note!=value){note = value; MarkDirty(); noteChanged = true; }}
@@ -79,28 +79,16 @@ namespace OpenDentBusiness{
 			get { return noteChanged; }
 		}
 
-		[DataField("NoteFontSize")]
-		private int noteFontSize;
-		bool noteFontSizeChanged;
-		/// <summary>Typical is around 10.</summary>
-		public int NoteFontSize {
-			get { return noteFontSize; }
-			set { if(noteFontSize!=value){noteFontSize = value; MarkDirty(); noteFontSizeChanged = true; }}
+		[DataField("NoteBold")]
+		private string noteBold;
+		bool noteBoldChanged;
+		/// <summary>More important notes may go here.  Font will be bold.  Color and size of text will be customizable in setup.</summary>
+		public string NoteBold {
+			get { return noteBold; }
+			set { if(noteBold!=value){noteBold = value; MarkDirty(); noteBoldChanged = true; }}
 		}
-		public bool NoteFontSizeChanged {
-			get { return noteFontSizeChanged; }
-		}
-
-		[DataField("NoteFontColor")]
-		private int noteFontColor;
-		bool noteFontColorChanged;
-		/// <summary>For now, the entire note must be the same color.  There is no bold flag.</summary>
-		public int NoteFontColor {
-			get { return noteFontColor; }
-			set { if(noteFontColor!=value){noteFontColor = value; MarkDirty(); noteFontColorChanged = true; }}
-		}
-		public bool NoteFontColorChanged {
-			get { return noteFontColorChanged; }
+		public bool NoteBoldChanged {
+			get { return noteBoldChanged; }
 		}
 
 		[DataField("Mode_")]
@@ -113,6 +101,42 @@ namespace OpenDentBusiness{
 		}
 		public bool Mode_Changed {
 			get { return mode_Changed; }
+		}
+
+		[DataField("HidePayment")]
+		private bool hidePayment;
+		bool hidePaymentChanged;
+		/// <summary></summary>
+		public bool HidePayment {
+			get { return hidePayment; }
+			set { if(hidePayment!=value){hidePayment = value; MarkDirty(); hidePaymentChanged = true; }}
+		}
+		public bool HidePaymentChanged {
+			get { return hidePaymentChanged; }
+		}
+
+		[DataField("SinglePatient")]
+		private bool singlePatient;
+		bool singlePatientChanged;
+		/// <summary></summary>
+		public bool SinglePatient {
+			get { return singlePatient; }
+			set { if(singlePatient!=value){singlePatient = value; MarkDirty(); singlePatientChanged = true; }}
+		}
+		public bool SinglePatientChanged {
+			get { return singlePatientChanged; }
+		}
+
+		[DataField("Intermingled")]
+		private bool intermingled;
+		bool intermingledChanged;
+		/// <summary></summary>
+		public bool Intermingled {
+			get { return intermingled; }
+			set { if(intermingled!=value){intermingled = value; MarkDirty(); intermingledChanged = true; }}
+		}
+		public bool IntermingledChanged {
+			get { return intermingledChanged; }
 		}
 		
 		public Statement Copy(){

@@ -6285,9 +6285,11 @@ namespace OpenDental{
 						DateRangeFrom date NOT NULL,
 						DateRangeTo date NOT NULL,
 						Note text,
-						NoteFontSize int NOT NULL,
-						NoteFontColor int NOT NULL,
-						Mode_ int NOT NULL,
+						NoteBold text,
+						Mode_ tinyint unsigned NOT NULL,
+						HidePayment tinyint(1) NOT NULL,
+						SinglePatient tinyint(1) NOT NULL,
+						Intermingled tinyint(1) NOT NULL,
 						PRIMARY KEY (StatementNum),
 						INDEX (PatNum)
 						) DEFAULT CHARSET=utf8";
@@ -6302,9 +6304,11 @@ namespace OpenDental{
 						DateRangeFrom date NOT NULL,
 						DateRangeTo date NOT NULL,
 						Note text,
-						NoteFontSize int NOT NULL,
-						NoteFontColor int NOT NULL,
-						Mode_ int NOT NULL,
+						NoteBold text,
+						Mode_ tinyint unsigned NOT NULL,
+						HidePayment tinyint(1) NOT NULL,
+						SinglePatient tinyint(1) NOT NULL,
+						Intermingled tinyint(1) NOT NULL,
 						PRIMARY KEY (StatementNum),
 						INDEX (PatNum)
 						)";

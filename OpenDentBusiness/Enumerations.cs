@@ -1301,7 +1301,16 @@ namespace OpenDentBusiness{
 		InPerson
 	}
 
-	
+	/*
+	///<summary></summary>
+	public enum StatementFamilyMix{
+		///<summary>0- </summary>
+		OnePatient,
+		///<summary>1- </summary>
+		Separate,
+		///<summary>2</summary>
+		Intermingled
+	}*/
 
 }
 
