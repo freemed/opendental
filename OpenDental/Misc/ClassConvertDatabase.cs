@@ -6272,8 +6272,50 @@ namespace OpenDental{
 				//added after r1182
 				command = "UPDATE preference SET ValueString = 'http://70.90.133.65:1942/WebServiceCustomerUpdates/Service1.asmx' WHERE PrefName = 'UpdateServerAddress'";
 				General.NonQEx(command);
-				command="INSERT INTO preference (PrefName,ValueString) VALUES ('ClaimAttachExportPath','C:\\Program Files\\Open Dental\\ClaimAttachments\\')";
+				command="INSERT INTO preference (PrefName,ValueString) VALUES ('ClaimAttachExportPath','C:\\TempImages\\')";
 				General.NonQEx(command);
+				//added after r1239
+				if(DataConnection.DBtype == DatabaseType.MySql){
+					command="DROP TABLE IF EXISTS statement";
+					General.NonQEx(command);
+					command=@"CREATE TABLE statement (
+						StatementNum int NOT NULL auto_increment,
+						PatNum int NOT NULL,
+						DateSent date NOT NULL,
+						DateRangeFrom date NOT NULL,
+						DateRangeTo date NOT NULL,
+						Note text,
+						NoteFontSize int NOT NULL,
+						NoteFontColor int NOT NULL,
+						Mode_ int NOT NULL,
+						PRIMARY KEY (StatementNum),
+						INDEX (PatNum)
+						) DEFAULT CHARSET=utf8";
+					General.NonQEx(command);
+				}
+				else{//oracle
+					//needs work
+					command=@"CREATE TABLE statement (
+						StatementNum int NOT NULL auto_increment,
+						PatNum int NOT NULL,
+						DateSent date NOT NULL,
+						DateRangeFrom date NOT NULL,
+						DateRangeTo date NOT NULL,
+						Note text,
+						NoteFontSize int NOT NULL,
+						NoteFontColor int NOT NULL,
+						Mode_ int NOT NULL,
+						PRIMARY KEY (StatementNum),
+						INDEX (PatNum)
+						)";
+					General.NonQEx(command);
+				}
+
+
+
+
+
+
 
 				command="UPDATE preference SET ValueString = '5.6.0.0' WHERE PrefName = 'DataBaseVersion'";
 				General.NonQEx(command);

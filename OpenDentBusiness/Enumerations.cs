@@ -1289,11 +1289,19 @@ namespace OpenDentBusiness{
 		Complete
 	}
 
-	
+	///<summary></summary>
+	public enum StatementMode{
+		///<summary>0- </summary>
+		Unsent,
+		///<summary>1- </summary>
+		Email,
+		///<summary>2</summary>
+		Mail,
+		///<summary>3</summary>
+		InPerson
+	}
 
 	
-
-
 
 }
 

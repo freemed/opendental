@@ -92,12 +92,12 @@ namespace OpenDental {
 		#region user variables
 		///<summary>This will eventually hold all data needed for display.  It will be retrieved in one call to the database.</summary>
 		private DataSet DataSetMain;
-		public static bool PrintingStatement = false;
+		//public static bool PrintingStatement = false;
 		///<summary>Indices of the items within CommLogs.List of items to actually show in the commlog list on this page. Right now, does not include Statement Sent entries.</summary>
 		//private ArrayList CommIndices;
 		private Family FamCur;
 		///<summary>Public because used by FormRpStatement</summary>
-		public Patient PatCur;
+		private Patient PatCur;
 		private Benefit[] BenefitList;
 		//private Commlog[] CommlogList;
 		private PatientNote PatientNoteCur;
@@ -109,8 +109,8 @@ namespace OpenDental {
 		//private Procedure[] AccProcList;
 		private int OriginalMousePos;
 		//private ClaimProc[] ClaimProcList;
-		///<summary>Used only in printing reports that show subtotal only.  Public because used by FormRpStatement</summary>
-		public double SubTotal;
+		//<summary>Used only in printing reports that show subtotal only.  Public because used by FormRpStatement</summary>
+		//private double SubTotal;
 		private bool MouseIsDownOnSplitter;
 		private int SplitterOriginalY;
 		private bool FinNoteChanged;
@@ -144,6 +144,7 @@ namespace OpenDental {
 		private OpenDental.UI.Button but45days;
 		private OpenDental.UI.Button butDatesAll;
 		private CheckBox checkShowDetail;
+		private OpenDental.UI.Button butToday;
 		private FormPayPlan FormPayPlan2;
 		#endregion
 
@@ -234,6 +235,7 @@ namespace OpenDental {
 			this.gridAcctPat = new OpenDental.UI.ODGrid();
 			this.textFinNotes = new OpenDental.ODtextBox();
 			this.tabShow = new System.Windows.Forms.TabPage();
+			this.checkShowDetail = new System.Windows.Forms.CheckBox();
 			this.butDatesAll = new OpenDental.UI.Button();
 			this.but90days = new OpenDental.UI.Button();
 			this.but45days = new OpenDental.UI.Button();
@@ -247,7 +249,7 @@ namespace OpenDental {
 			this.gridAccount = new OpenDental.UI.ODGrid();
 			this.gridComm = new OpenDental.UI.ODGrid();
 			this.ToolBarMain = new OpenDental.UI.ODToolBar();
-			this.checkShowDetail = new System.Windows.Forms.CheckBox();
+			this.butToday = new OpenDental.UI.Button();
 			this.panelCommButs.SuspendLayout();
 			this.panelProgNotes.SuspendLayout();
 			this.groupBox7.SuspendLayout();
@@ -936,6 +938,7 @@ namespace OpenDental {
 			// tabShow
 			// 
 			this.tabShow.BackColor = System.Drawing.Color.Transparent;
+			this.tabShow.Controls.Add(this.butToday);
 			this.tabShow.Controls.Add(this.checkShowDetail);
 			this.tabShow.Controls.Add(this.butDatesAll);
 			this.tabShow.Controls.Add(this.but90days);
@@ -953,6 +956,16 @@ namespace OpenDental {
 			this.tabShow.Text = "Show";
 			this.tabShow.UseVisualStyleBackColor = true;
 			// 
+			// checkShowDetail
+			// 
+			this.checkShowDetail.Location = new System.Drawing.Point(8,196);
+			this.checkShowDetail.Name = "checkShowDetail";
+			this.checkShowDetail.Size = new System.Drawing.Size(164,18);
+			this.checkShowDetail.TabIndex = 219;
+			this.checkShowDetail.Text = "Show Extra Detail";
+			this.checkShowDetail.UseVisualStyleBackColor = true;
+			this.checkShowDetail.Click += new System.EventHandler(this.checkShowDetail_Click);
+			// 
 			// butDatesAll
 			// 
 			this.butDatesAll.AdjustImageLocation = new System.Drawing.Point(0,0);
@@ -960,7 +973,7 @@ namespace OpenDental {
 			this.butDatesAll.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butDatesAll.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butDatesAll.CornerRadius = 4F;
-			this.butDatesAll.Location = new System.Drawing.Point(95,117);
+			this.butDatesAll.Location = new System.Drawing.Point(95,132);
 			this.butDatesAll.Name = "butDatesAll";
 			this.butDatesAll.Size = new System.Drawing.Size(77,24);
 			this.butDatesAll.TabIndex = 218;
@@ -974,11 +987,11 @@ namespace OpenDental {
 			this.but90days.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.but90days.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.but90days.CornerRadius = 4F;
-			this.but90days.Location = new System.Drawing.Point(95,87);
+			this.but90days.Location = new System.Drawing.Point(95,106);
 			this.but90days.Name = "but90days";
 			this.but90days.Size = new System.Drawing.Size(77,24);
 			this.but90days.TabIndex = 217;
-			this.but90days.Text = "90 Days";
+			this.but90days.Text = "Last 90 Days";
 			this.but90days.Click += new System.EventHandler(this.but90days_Click);
 			// 
 			// but45days
@@ -988,11 +1001,11 @@ namespace OpenDental {
 			this.but45days.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.but45days.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.but45days.CornerRadius = 4F;
-			this.but45days.Location = new System.Drawing.Point(95,57);
+			this.but45days.Location = new System.Drawing.Point(95,80);
 			this.but45days.Name = "but45days";
 			this.but45days.Size = new System.Drawing.Size(77,24);
 			this.but45days.TabIndex = 216;
-			this.but45days.Text = "45 Days";
+			this.but45days.Text = "Last 45 Days";
 			this.but45days.Click += new System.EventHandler(this.but45days_Click);
 			// 
 			// butRefresh
@@ -1002,7 +1015,7 @@ namespace OpenDental {
 			this.butRefresh.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butRefresh.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butRefresh.CornerRadius = 4F;
-			this.butRefresh.Location = new System.Drawing.Point(95,147);
+			this.butRefresh.Location = new System.Drawing.Point(95,158);
 			this.butRefresh.Name = "butRefresh";
 			this.butRefresh.Size = new System.Drawing.Size(77,24);
 			this.butRefresh.TabIndex = 214;
@@ -1018,6 +1031,8 @@ namespace OpenDental {
 			// 
 			// textDateStart
 			// 
+			this.textDateStart.BackColor = System.Drawing.SystemColors.Window;
+			this.textDateStart.ForeColor = System.Drawing.SystemColors.WindowText;
 			this.textDateStart.Location = new System.Drawing.Point(95,8);
 			this.textDateStart.Name = "textDateStart";
 			this.textDateStart.Size = new System.Drawing.Size(77,20);
@@ -1101,15 +1116,19 @@ namespace OpenDental {
 			this.ToolBarMain.TabIndex = 47;
 			this.ToolBarMain.ButtonClick += new OpenDental.UI.ODToolBarButtonClickEventHandler(this.ToolBarMain_ButtonClick);
 			// 
-			// checkShowDetail
+			// butToday
 			// 
-			this.checkShowDetail.Location = new System.Drawing.Point(8,185);
-			this.checkShowDetail.Name = "checkShowDetail";
-			this.checkShowDetail.Size = new System.Drawing.Size(164,18);
-			this.checkShowDetail.TabIndex = 219;
-			this.checkShowDetail.Text = "Show Extra Detail";
-			this.checkShowDetail.UseVisualStyleBackColor = true;
-			this.checkShowDetail.Click += new System.EventHandler(this.checkShowDetail_Click);
+			this.butToday.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butToday.Autosize = true;
+			this.butToday.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butToday.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butToday.CornerRadius = 4F;
+			this.butToday.Location = new System.Drawing.Point(95,54);
+			this.butToday.Name = "butToday";
+			this.butToday.Size = new System.Drawing.Size(77,24);
+			this.butToday.TabIndex = 220;
+			this.butToday.Text = "Today";
+			this.butToday.Click += new System.EventHandler(this.butToday_Click);
 			// 
 			// ContrAccount
 			// 
@@ -2993,12 +3012,12 @@ double adj=Adjustments.GetTotForProc(arrayProc[tempCountProc].ProcNum,Adjustment
 					toDate=PIn.PDate(textDateEnd.Text);
 				}
 			}
-			PrintStatement(patNums,fromDate,toDate,true,false,false,false,"",false,"");
+			PrintStatement();//patNums,fromDate,toDate,true,false,false,false,"",false,"");
 			ModuleSelected(PatCur.PatNum);
 		}
 		
 		private void menuItemStatementWalkout_Click(object sender, System.EventArgs e) {
-			PrintStatement(new int[] {PatCur.PatNum},DateTime.Today,DateTime.Today,false,false,true,true,"",false,"");
+			PrintStatement();//new int[] {PatCur.PatNum},DateTime.Today,DateTime.Today,false,false,true,true,"",false,"");
 			ModuleSelected(PatCur.PatNum);
 		}
 
@@ -3023,7 +3042,7 @@ double adj=Adjustments.GetTotForProc(arrayProc[tempCountProc].ProcNum,Adjustment
 			Random rnd=new Random();
 			string fileName=DateTime.Now.ToString("yyyyMMdd")+"_"+DateTime.Now.TimeOfDay.Ticks.ToString()+rnd.Next(1000).ToString()+".pdf";
 			string filePathAndName=ODFileUtils.CombinePaths(attachPath,fileName);
-			PrintStatement(patNums,fromDate,toDate,true,false,false,false,"",false,filePathAndName);
+			PrintStatement();//patNums,fromDate,toDate,true,false,false,false,"",false,filePathAndName);
 			//Process.Start(filePathAndName);
 			EmailMessage message=new EmailMessage();
 			message.PatNum=PatCur.PatNum;
@@ -3044,7 +3063,7 @@ double adj=Adjustments.GetTotForProc(arrayProc[tempCountProc].ProcNum,Adjustment
 		}
 
 		private void menuItemStatementMore_Click(object sender, System.EventArgs e) {
-			FormStatementOptions FormSO=new FormStatementOptions(PatCur,FamCur);
+			FormStatementOptions FormSO=new FormStatementOptions();//PatCur,FamCur);
 			DateTime fromDate=DateTime.MinValue;
 			DateTime toDate=DateTime.MaxValue;
 			if(textDateStart.errorProvider1.GetError(textDateStart)==""
@@ -3057,8 +3076,8 @@ double adj=Adjustments.GetTotForProc(arrayProc[tempCountProc].ProcNum,Adjustment
 					toDate=PIn.PDate(textDateEnd.Text);
 				}
 			}
-			FormSO.FromDate=fromDate;
-			FormSO.ToDate=toDate;
+			//FormSO.FromDate=fromDate;
+			//FormSO.ToDate=toDate;
 			FormSO.ShowDialog();
 			if(FormSO.DialogResult!=DialogResult.OK){
 				return;
@@ -3072,8 +3091,8 @@ double adj=Adjustments.GetTotForProc(arrayProc[tempCountProc].ProcNum,Adjustment
 				string filePathAndName=ODFileUtils.CombinePaths(attachPath,fileName);
 				//PrintStatement(patNums,fromDate,DateTime.MaxValue,true,false,false,false,"",false,PrefB.GetBool("PrintSimpleStatements"),
 				//	filePathAndName);
-				PrintStatement(FormSO.PatNums,FormSO.FromDate,FormSO.ToDate,FormSO.IncludeClaims,FormSO.SubtotalsOnly,
-					FormSO.HidePayment,FormSO.NextAppt,FormSO.Note,FormSO.IsBill,filePathAndName);
+//PrintStatement(FormSO.PatNums,fromDate,toDate,FormSO.IncludeClaims,FormSO.SubtotalsOnly,
+//					FormSO.HidePayment,FormSO.NextAppt,FormSO.Note,FormSO.IsBill,filePathAndName);
 				//Process.Start(filePathAndName);
 				EmailMessage message=new EmailMessage();
 				message.PatNum=PatCur.PatNum;
@@ -3089,8 +3108,8 @@ double adj=Adjustments.GetTotForProc(arrayProc[tempCountProc].ProcNum,Adjustment
 				FormE.ShowDialog();
 			}
 			else {
-				PrintStatement(FormSO.PatNums,FormSO.FromDate,FormSO.ToDate,FormSO.IncludeClaims
-					,FormSO.SubtotalsOnly,FormSO.HidePayment,FormSO.NextAppt,FormSO.Note,FormSO.IsBill,"");
+//				PrintStatement(FormSO.PatNums,fromDate,toDate,FormSO.IncludeClaims
+//					,FormSO.SubtotalsOnly,FormSO.HidePayment,FormSO.NextAppt,FormSO.Note,FormSO.IsBill,"");
 			}
 			ModuleSelected(PatCur.PatNum);
 		}
@@ -3186,6 +3205,12 @@ double adj=Adjustments.GetTotForProc(arrayProc[tempCountProc].ProcNum,Adjustment
 			PatientNotes.Update(PatientNoteCur,PatCur.Guarantor);
 		}
 
+		private void butToday_Click(object sender,EventArgs e) {
+			textDateStart.Text=DateTime.Today.ToShortDateString();
+			textDateEnd.Text=DateTime.Today.ToShortDateString();
+			ModuleSelected(PatCur.PatNum);
+		}
+
 		private void but45days_Click(object sender,EventArgs e) {
 			textDateStart.Text=DateTime.Today.AddDays(-45).ToShortDateString();
 			textDateEnd.Text="";
@@ -3243,9 +3268,10 @@ double adj=Adjustments.GetTotForProc(arrayProc[tempCountProc].ProcNum,Adjustment
 		}
 
 		/// <summary>Prints a single statement.  Or, if pdfFullFileName is specified (including full path), then it saves as pdf to that file.</summary>
-		private void PrintStatement(int[] famPatNums,DateTime fromDate,DateTime toDate,bool includeClaims, bool subtotalsOnly,
-			bool hidePayment,bool nextAppt,string note, bool isBill,string pdfFullFileName)
-		{
+		private void PrintStatement(){
+			//int[] famPatNums,DateTime fromDate,DateTime toDate,bool includeClaims, bool subtotalsOnly,
+			//bool hidePayment,bool nextAppt,string note, bool isBill,string pdfFullFileName)
+			/*
 			FormRpStatement FormST=new FormRpStatement();
 			int[][] patNums=new int[1][];
 			patNums[0]=new int[famPatNums.Length];
@@ -3260,7 +3286,7 @@ double adj=Adjustments.GetTotForProc(arrayProc[tempCountProc].ProcNum,Adjustment
 					FormST.ShowDialog();
 				#endif
 			}
-			PrintingStatement = false; 
+			PrintingStatement = false; */
 		}
 
 		private void butComm_Click(object sender, System.EventArgs e) {
@@ -3786,6 +3812,8 @@ double adj=Adjustments.GetTotForProc(arrayProc[tempCountProc].ProcNum,Adjustment
 		private void gridProg_MouseUp(object sender,MouseEventArgs e) {
 
 		}
+
+	
 
 		
 

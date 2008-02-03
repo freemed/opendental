@@ -10,15 +10,18 @@ namespace OpenDentBusiness {
 		private static Family fam;
 		private static Patient pat;
 
-		///<summary>Parameters: 0:patNum, 1:viewingInRecall, 2:fromDate, 3:toDate, 4:isFamily.  If isFamily=1, also pass in a PatNum of guarantor to get entire family intermingled.</summary>
+		///<summary>Parameters: 0:patNum, 1:viewingInRecall, 2:fromDate, 3:toDate, 4:isFamily.  If isFamily=1, the patnum of any family member will get entire family intermingled.</summary>
 		public static DataSet GetAll(string[] parameters){
 			int patNum=PIn.PInt(parameters[0]);
 			fam=Patients.GetFamily(patNum);
+			bool isFamily=PIn.PBool(parameters[4]);
+			if(isFamily){
+				patNum=fam.List[0].PatNum;//guarantor
+			}
 			pat=fam.GetPatient(patNum);
 			bool viewingInRecall=PIn.PBool(parameters[1]);
 			DateTime fromDate=PIn.PDate(parameters[2]);
 			DateTime toDate=PIn.PDate(parameters[3]);
-			bool isFamily=PIn.PBool(parameters[4]);
 			retVal=new DataSet();
 			if(viewingInRecall) {
 				retVal.Tables.Add(ChartModuleB.GetProgNotes(patNum, false));

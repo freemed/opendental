@@ -34,14 +34,14 @@ namespace OpenDental{
 		private System.ComponentModel.Container components = null;
 		private System.Drawing.Printing.PrintDocument pd2;
 		private int totalPages;
-		private bool HidePayment;
-		private string[] Notes;
+		//private bool HidePayment;
+		//private string[] Notes;
 		//<summary>Holds the data for all the statements.  Each item in the collection is one statement.</summary>
 		//private List<FamilyStatementData> FamilyStatementDataList;
 		//private Family FamCur;
-		private bool SubtotalsOnly;
-		///<summary>First dim is for the family. Second dim is family members</summary>
-		private int[][] PatNums;
+		//private bool SubtotalsOnly;
+		//<summary>First dim is for the family. Second dim is family members</summary>
+		//private int[][] PatNums;
 		///<summary>The guarantor for the statement that is currently printing.</summary>
 		private Patient PatGuar;
 		///<summary>Holds the data for all the statements.  Each dataset in the list is one statement.</summary>
@@ -305,19 +305,20 @@ namespace OpenDental{
 		}
 
 		///<summary>This is called from ContrAccount about 3 times and also from FormRpStatement as part of the billing process.  This is what you call to print statements, either one or many.  For the patNum parameter, the first dim is for the family. Second dim is family members. The note array must have one element for every statement, so same number as dim one of patNums.  IsBill distinguishes bills sent by mail from statements handed to the patient.  SimpleStatement removes the detail of the itemized grid.  Instead of printing, if pdfFullFileName is specified (including full path), then it saves as pdf to that file.</summary>
-		public void PrintStatements(int[][] patNums,DateTime fromDate,DateTime toDate,bool includeClaims, bool subtotalsOnly,bool hidePayment,bool nextAppt,string[] notes,bool isBill,string pdfFullFileName){
+		public void PrintStatements(List<Statement> listStatements){
+			//patNums,DateTime fromDate,DateTime toDate,bool includeClaims, bool subtotalsOnly,bool hidePayment,bool nextAppt,string[] notes,bool isBill,string pdfFullFileName){
 			//these 5 variables are needed by the printing logic. The rest are not.
-			PatNums=(int[][])patNums.Clone();
+			/*PatNums=(int[][])patNums.Clone();
 			Notes=(string[])notes.Clone();
 			SubtotalsOnly=subtotalsOnly;
-			HidePayment=hidePayment;
+			HidePayment=hidePayment;*/
 			PrintDocument pd=new PrintDocument();
-			if(pdfFullFileName==""){
+			//if(pdfFullFileName==""){
 				if(!Printers.SetPrinter(pd,PrintSituation.Statement)){
 					return;
 				}
-				pd.PrintPage+=new PrintPageEventHandler(this.pd2_PrintPage);
-			}
+//				pd.PrintPage+=new PrintPageEventHandler(this.pd2_PrintPage);
+			//}
 			pd.DefaultPageSettings.Margins=new Margins(40,40,40,60);
 			if(CultureInfo.CurrentCulture.Name.EndsWith("CH")) {//CH is for switzerland. eg de-CH
 				//leave a big margin on the bottom for the routing slip
@@ -357,6 +358,7 @@ namespace OpenDental{
  */
 
 			MigraDoc.DocumentObjectModel.Document doc=CreateDocument(pd);
+	/*
 			if(pdfFullFileName==""){//print
 				MigraDoc.Rendering.Printing.MigraDocPrintDocument printdoc=new MigraDoc.Rendering.Printing.MigraDocPrintDocument();
 				MigraDoc.Rendering.DocumentRenderer renderer=new MigraDoc.Rendering.DocumentRenderer(doc);
@@ -382,6 +384,7 @@ namespace OpenDental{
 				pdfRenderer.RenderDocument();
 				pdfRenderer.PdfDocument.Save(pdfFullFileName);
 			}
+	*/
 		}
 
 		/*
@@ -445,9 +448,9 @@ namespace OpenDental{
 			doc.DefaultPageSetup.LeftMargin=Unit.FromInch((double)pd.DefaultPageSettings.Margins.Left/100);
 			doc.DefaultPageSetup.RightMargin=Unit.FromInch((double)pd.DefaultPageSettings.Margins.Right/100);
 			doc.DefaultPageSetup.BottomMargin=Unit.FromInch((double)pd.DefaultPageSettings.Margins.Bottom/100);
-			for(int i=0;i<PatNums.Length;i++){
-				AddOneFamily(i,doc);
-			}
+//for(int i=0;i<PatNums.Length;i++){
+//				AddOneFamily(i,doc);
+//			}
 			return doc;
 		}
 
@@ -457,7 +460,7 @@ namespace OpenDental{
 			MigraDoc.DocumentObjectModel.Section section=doc.AddSection();//so that Swiss will have different footer for each patient.
 			string text;
 			MigraDoc.DocumentObjectModel.Font font;
-			GetPatGuar(PatNums[famIndex][0]);
+			//GetPatGuar(PatNums[famIndex][0]);
 			//HEADING------------------------------------------------------------------------------
 			#region Heading
 			Paragraph par=section.AddParagraph();
@@ -557,7 +560,7 @@ namespace OpenDental{
 			Row row;
 			Cell cell;
 			frame=MigraDocHelper.CreateContainer(section,450,110,330,29);
-			if(!HidePayment && !SubtotalsOnly) {
+			//if(!HidePayment && !SubtotalsOnly) {
 				table=MigraDocHelper.DrawTable(frame,0,0,29);
 				col=table.AddColumn(Unit.FromInch(1.1));
 				col=table.AddColumn(Unit.FromInch(1.1));
@@ -602,11 +605,11 @@ namespace OpenDental{
 				cell=row.Cells[1];
 				par=cell.AddParagraph();
 				par.AddFormattedText(text,font);
-			}
+			//}
 			#endregion
 			//Credit Card Info--------------------------------------------------------------------------------------------------------
 			#region Credit Card Info
-			if(!HidePayment) {
+			//if(!HidePayment) {
 				if(PrefB.GetBool("StatementShowCreditCard")) {
 					float yPos=65;
 					font=MigraDocHelper.CreateFont(7,true);
@@ -653,7 +656,7 @@ namespace OpenDental{
 					font=MigraDocHelper.CreateFont(5);
 					MigraDocHelper.DrawString(frame,text,font,625-g.MeasureString(text,wfont).Width/2+5,yPos+13);
 				}
-			}
+			//}
 			#endregion
 			//Patient's Billing Address---------------------------------------------------------------------------------------------
 			#region Patient Billing Address and aging
@@ -678,7 +681,7 @@ namespace OpenDental{
 			//perforated line------------------------------------------------------------------------------------------------------
 			//yPos=350;//3.62 inches from top, 1/3 page down
 			frame=MigraDocHelper.CreateContainer(section,0,350,850,30);
-			if(!HidePayment) {
+			//if(!HidePayment) {
 				MigraDocHelper.DrawLine(frame,System.Drawing.Color.LightGray,0,0,850,0);
 				text=Lan.g(this,"PLEASE DETACH AND RETURN THE UPPER PORTION WITH YOUR PAYMENT");
 				font=MigraDocHelper.CreateFont(6,true,System.Drawing.Color.Gray);
@@ -686,12 +689,12 @@ namespace OpenDental{
 				par.Format.Alignment=ParagraphAlignment.Center;
 				par.Format.Font=font;
 				par.AddText(text);
-			}
+			//}
 			//Aging-----------------------------------------------------------------------------------
 			MigraDocHelper.InsertSpacer(section,275);
 			ODGridColumn gcol;
 			ODGridRow grow;
-			if(!HidePayment && !SubtotalsOnly ) {
+			//if(!HidePayment && !SubtotalsOnly ) {
 				ODGrid gridAging=new ODGrid();
 				this.Controls.Add(gridAging);
 				gridAging.BeginUpdate();
@@ -731,7 +734,7 @@ namespace OpenDental{
 				gridAging.EndUpdate();
 				MigraDocHelper.DrawGrid(section,gridAging);
 				gridAging.Dispose();
-			}
+			//}
 			#endregion
 			//Body Tables-----------------------------------------------------------------------------------------------------------
 			ODGrid gridPat=new ODGrid();
@@ -813,7 +816,7 @@ namespace OpenDental{
 			//MigraDocHelper.DrawString(frame,,font,0,0);
 			par=section.AddParagraph();
 			par.Format.Font=font;
-			par.AddText(Notes[famIndex]);
+//par.AddText(Notes[famIndex]);
 			#region SwissBanking
 			if(CultureInfo.CurrentCulture.Name.EndsWith("CH")){//CH is for switzerland. eg de-CH
 				//&& pagesPrinted==0)//only on the first page
@@ -937,7 +940,7 @@ namespace OpenDental{
 			//return doc;
 		}
 
-		private void pd2_PrintPage(object sender, PrintPageEventArgs ev){//raised for each page to be printed
+		//private void pd2_PrintPage(object sender, PrintPageEventArgs ev){//raised for each page to be printed
 			/*
 			Graphics g=ev.Graphics;
 			float yPos=0;
@@ -1531,7 +1534,7 @@ namespace OpenDental{
 					pagesPrinted=0;
 				}
 			}*/
-		}
+		//}
 
 		///<summary>data may only contain numbers between 0 und 9</summary>
 		private int Modulo10(string strNumber){
