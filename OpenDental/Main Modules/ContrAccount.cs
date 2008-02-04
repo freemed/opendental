@@ -2996,32 +2996,44 @@ double adj=Adjustments.GetTotForProc(arrayProc[tempCountProc].ProcNum,Adjustment
 		}
 
 		private void OnStatement_Click() {
-			int[] patNums=new int[FamCur.List.Length];
+			Statement stmt=new Statement();
+			stmt.PatNum=PatCur.Guarantor;
+			stmt.DateSent=DateTime.Today;
+			stmt.Mode_=StatementMode.InPerson;
+			stmt.HidePayment=false;
+			stmt.SinglePatient=false;
+			stmt.Intermingled=false;
+			stmt.DateRangeFrom=DateTime.MinValue;
+			if(textDateStart.errorProvider1.GetError(textDateStart)==""){
+				if(textDateStart.Text!=""){
+					stmt.DateRangeFrom=PIn.PDate(textDateStart.Text);
+				}
+			}
+			stmt.DateRangeTo=DateTime.MaxValue;//new DateTime(2200,1,1);
+			if(textDateEnd.errorProvider1.GetError(textDateEnd)==""){
+				if(textDateEnd.Text!=""){
+					stmt.DateRangeTo=PIn.PDate(textDateEnd.Text);
+				}
+			}
+			stmt.Note="";
+			stmt.NoteBold="";
+			Statements.WriteObject(stmt);
+			/*int[] patNums=new int[FamCur.List.Length];
 			for(int i=0;i<FamCur.List.Length;i++){
 				patNums[i]=FamCur.List[i].PatNum;
-			}
-			DateTime fromDate=DateTime.MinValue;
-			DateTime toDate=DateTime.MaxValue;
-			if(textDateStart.errorProvider1.GetError(textDateStart)==""
-				&& textDateEnd.errorProvider1.GetError(textDateEnd)=="")
-			{
-				if(textDateStart.Text!=""){
-					fromDate=PIn.PDate(textDateStart.Text);
-				}
-				if(textDateEnd.Text!=""){
-					toDate=PIn.PDate(textDateEnd.Text);
-				}
-			}
-			PrintStatement();//patNums,fromDate,toDate,true,false,false,false,"",false,"");
+			}*/
+			PrintStatement(stmt);//patNums,fromDate,toDate,true,false,false,false,"",false,"");
 			ModuleSelected(PatCur.PatNum);
 		}
 		
 		private void menuItemStatementWalkout_Click(object sender, System.EventArgs e) {
-			PrintStatement();//new int[] {PatCur.PatNum},DateTime.Today,DateTime.Today,false,false,true,true,"",false,"");
+			Statement stmt=new Statement();
+			PrintStatement(stmt);//new int[] {PatCur.PatNum},DateTime.Today,DateTime.Today,false,false,true,true,"",false,"");
 			ModuleSelected(PatCur.PatNum);
 		}
 
 		private void menuItemStatementEmail_Click(object sender,EventArgs e) {
+			Statement stmt=new Statement();
 			int[] patNums=new int[FamCur.List.Length];
 			for(int i=0;i<FamCur.List.Length;i++) {
 				patNums[i]=FamCur.List[i].PatNum;
@@ -3042,13 +3054,14 @@ double adj=Adjustments.GetTotForProc(arrayProc[tempCountProc].ProcNum,Adjustment
 			Random rnd=new Random();
 			string fileName=DateTime.Now.ToString("yyyyMMdd")+"_"+DateTime.Now.TimeOfDay.Ticks.ToString()+rnd.Next(1000).ToString()+".pdf";
 			string filePathAndName=ODFileUtils.CombinePaths(attachPath,fileName);
-			PrintStatement();//patNums,fromDate,toDate,true,false,false,false,"",false,filePathAndName);
+			PrintStatement(stmt);//patNums,fromDate,toDate,true,false,false,false,"",false,filePathAndName);
 			//Process.Start(filePathAndName);
 			EmailMessage message=new EmailMessage();
 			message.PatNum=PatCur.PatNum;
 			message.ToAddress=PatCur.Email;
 			message.FromAddress=PrefB.GetString("EmailSenderAddress");
 			message.Subject=Lan.g(this,"Statement");
+	//message.BodyText=Lan.g(this,"");
 			EmailAttach attach=new EmailAttach();
 			attach.DisplayedFileName="Statement.pdf";
 			attach.ActualFileName=fileName;
@@ -3063,6 +3076,7 @@ double adj=Adjustments.GetTotForProc(arrayProc[tempCountProc].ProcNum,Adjustment
 		}
 
 		private void menuItemStatementMore_Click(object sender, System.EventArgs e) {
+			Statement stmt=new Statement();
 			FormStatementOptions FormSO=new FormStatementOptions();//PatCur,FamCur);
 			DateTime fromDate=DateTime.MinValue;
 			DateTime toDate=DateTime.MaxValue;
@@ -3268,25 +3282,28 @@ double adj=Adjustments.GetTotForProc(arrayProc[tempCountProc].ProcNum,Adjustment
 		}
 
 		/// <summary>Prints a single statement.  Or, if pdfFullFileName is specified (including full path), then it saves as pdf to that file.</summary>
-		private void PrintStatement(){
+		private void PrintStatement(Statement stmt){
 			//int[] famPatNums,DateTime fromDate,DateTime toDate,bool includeClaims, bool subtotalsOnly,
 			//bool hidePayment,bool nextAppt,string note, bool isBill,string pdfFullFileName)
-			/*
+			//string pdfFullFileName;
 			FormRpStatement FormST=new FormRpStatement();
-			int[][] patNums=new int[1][];
+			/*int[][] patNums=new int[1][];
 			patNums[0]=new int[famPatNums.Length];
 			for(int i=0;i<famPatNums.Length;i++){
 				patNums[0][i]=famPatNums[i];
 			}
-			PrintingStatement = true; 
-			FormST.PrintStatements(patNums,fromDate,toDate,includeClaims,subtotalsOnly,hidePayment,nextAppt,
-				new string[] {note}, isBill,pdfFullFileName);
-			if(pdfFullFileName==""){
+			PrintingStatement = true; */
+			List<Statement> listStmts=new List<Statement>();
+			listStmts.Add(stmt);
+			FormST.PrintStatements(listStmts);
+				//patNums,fromDate,toDate,includeClaims,subtotalsOnly,hidePayment,nextAppt,
+				//new string[] {note}, isBill,pdfFullFileName);
+			if(stmt.Mode_!=StatementMode.Email){
 				#if DEBUG
 					FormST.ShowDialog();
 				#endif
 			}
-			PrintingStatement = false; */
+			//PrintingStatement = false; 
 		}
 
 		private void butComm_Click(object sender, System.EventArgs e) {

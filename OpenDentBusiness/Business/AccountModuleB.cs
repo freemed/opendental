@@ -10,12 +10,12 @@ namespace OpenDentBusiness {
 		private static Family fam;
 		private static Patient pat;
 
-		///<summary>Parameters: 0:patNum, 1:viewingInRecall, 2:fromDate, 3:toDate, 4:isFamily.  If isFamily=1, the patnum of any family member will get entire family intermingled.</summary>
+		///<summary>Parameters: 0:patNum, 1:viewingInRecall, 2:fromDate, 3:toDate, 4:intermingled.  If intermingled=1, the patnum of any family member will get entire family intermingled.</summary>
 		public static DataSet GetAll(string[] parameters){
 			int patNum=PIn.PInt(parameters[0]);
 			fam=Patients.GetFamily(patNum);
-			bool isFamily=PIn.PBool(parameters[4]);
-			if(isFamily){
+			bool intermingled=PIn.PBool(parameters[4]);
+			if(intermingled){
 				patNum=fam.List[0].PatNum;//guarantor
 			}
 			pat=fam.GetPatient(patNum);
@@ -29,7 +29,35 @@ namespace OpenDentBusiness {
 			else {
 				GetCommLog(patNum);
 			}
-			GetAccount(patNum,fromDate,toDate,isFamily);//Gets 2 tables: account(or account###,account###,etc), patient.
+			bool singlePatient=!intermingled;//so one or the other will be true
+			//Gets 3 tables: account(or account###,account###,etc), patient, payplan.
+			GetAccount(patNum,fromDate,toDate,intermingled,singlePatient);
+			//GetPayPlans(patNum,fromDate,toDate,isFamily);
+			return retVal;
+		}
+
+		///<summary>Parameters: 0:patNum, 1:singlePatient, 2:fromDate, 3:toDate, 4:intermingled,   If intermingled=1 the patnum of any family member will get entire family intermingled.</summary>
+		public static DataSet GetStatement(string[] parameters){
+			int patNum=PIn.PInt(parameters[0]);
+			fam=Patients.GetFamily(patNum);
+			bool intermingled=PIn.PBool(parameters[4]);
+			if(intermingled){
+				patNum=fam.List[0].PatNum;//guarantor
+			}
+			pat=fam.GetPatient(patNum);
+			//bool viewingInRecall=PIn.PBool(parameters[1]);
+			bool singlePatient=PIn.PBool(parameters[1]);
+			DateTime fromDate=PIn.PDate(parameters[2]);
+			DateTime toDate=PIn.PDate(parameters[3]);
+			retVal=new DataSet();
+			//if(viewingInRecall) {
+			//	retVal.Tables.Add(ChartModuleB.GetProgNotes(patNum, false));
+			//}
+			//else {
+			//	GetCommLog(patNum);
+			//}
+			//Gets 3 tables: account(or account###,account###,etc), patient, payplan.
+			GetAccount(patNum,fromDate,toDate,intermingled,singlePatient);
 			//GetPayPlans(patNum,fromDate,toDate,isFamily);
 			return retVal;
 		}
@@ -174,8 +202,7 @@ namespace OpenDentBusiness {
 			return retVal;
 		}
 
-		private static void GetPayPlanCharges(){
-			/*
+		/*private static void GetPayPlanCharges(){
 			string command="SELECT "
 				+"(SELECT SUM(Principal) FROM payplancharge WHERE payplancharge.PayPlanNum=payplan.PayPlanNum) _principal,"
 				+"(SELECT SUM(Interest) FROM payplancharge WHERE payplancharge.PayPlanNum=payplan.PayPlanNum) _interest,"
@@ -198,8 +225,8 @@ namespace OpenDentBusiness {
 					+"OR payplan.PatNum ="+POut.PInt(fam.List[i].PatNum)+" ";
 			}
 			command+=") GROUP BY payplan.PayPlanNum ORDER BY PayPlanDate";
-			DataTable rawPayPlan=dcon.GetTable(command);*/
-		}
+			DataTable rawPayPlan=dcon.GetTable(command);
+		}*/
 
 		private static void GetCommLog(int patNum) {
 			DataConnection dcon=new DataConnection();
@@ -349,7 +376,7 @@ namespace OpenDentBusiness {
 		}
 		
 		///<summary>Also gets the patient table, which has one row for each family member. Also currently runs aging.  Also gets payplan table.</summary>
-		private static void GetAccount(int patNum,DateTime fromDate,DateTime toDate,bool isFamily) {
+		private static void GetAccount(int patNum,DateTime fromDate,DateTime toDate,bool intermingled,bool singlePatient) {
 			DataConnection dcon=new DataConnection();
 			DataTable table=new DataTable("account");
 			//run aging.  This need serious optimization-------------------------------------------------------
@@ -817,84 +844,166 @@ namespace OpenDentBusiness {
 			//rows.Sort(CompareCommRows);
 			//Pass off all the rows for the whole family in order to compute the patient balances----------------
 			GetPatientTable(fam,rows);
-			//Filter out patients that we are not interested in--------------------------------------------------
-			if(!isFamily){//if isFamily, then we will be showing all patients with no filtering
+			//Regroup rows by patient---------------------------------------------------------------------------
+			List<DataRow>[] rowsByPat=null;//will only used if multiple patients not intermingled
+			if(singlePatient){//This is usually used for Account module grid.
 				for(int i=rows.Count-1;i>=0;i--) {//go backwards and remove from end
 					if(rows[i]["PatNum"].ToString()!=patNum.ToString()){
 						rows.RemoveAt(i);
 					}
 				}
 			}
+			else if(intermingled){
+				//leave the rows alone
+			}
+			else{//multiple patients not intermingled.  This is most common for an ordinary statement.
+				rowsByPat=new List<DataRow>[fam.List.Length];
+				for(int p=0;p<rowsByPat.Length;p++){
+					rowsByPat[p]=new List<DataRow>();
+					for(int i=0;i<rows.Count;i++){
+						if(rows[i]["PatNum"].ToString()==fam.List[p].PatNum.ToString()){
+							rowsByPat[p].Add(rows[i]);
+						}
+					}
+				}
+			}
 			//Compute balances-------------------------------------------------------------------------------------
-			double bal=0;
-			for(int i=0;i<rows.Count;i++) {
-				bal+=(double)rows[i]["chargesDouble"];
-				bal-=(double)rows[i]["creditsDouble"];
-				rows[i]["balanceDouble"]=bal;
-				if(rows[i]["ClaimPaymentNum"].ToString()=="0" && rows[i]["ClaimNum"].ToString()!="0"){//claims
-					rows[i]["balance"]="";
-				}
-				else if(rows[i]["CommlogNum"].ToString()!="0"){
+			double bal;
+			if(rowsByPat==null){//just one table
+				bal=0;
+				for(int i=0;i<rows.Count;i++) {
+					bal+=(double)rows[i]["chargesDouble"];
+					bal-=(double)rows[i]["creditsDouble"];
+					rows[i]["balanceDouble"]=bal;
+					if(rows[i]["ClaimPaymentNum"].ToString()=="0" && rows[i]["ClaimNum"].ToString()!="0"){//claims
+						rows[i]["balance"]="";
+					}
+					else if(rows[i]["CommlogNum"].ToString()!="0"){
 
+					}
+					else{
+						rows[i]["balance"]=bal.ToString("n");
+					}
 				}
-				else{
-					rows[i]["balance"]=bal.ToString("n");
+			}
+			else{
+				for(int p=0;p<rowsByPat.Length;p++){
+					bal=0;
+					for(int i=0;i<rowsByPat[p].Count;i++) {
+						bal+=(double)rowsByPat[p][i]["chargesDouble"];
+						bal-=(double)rowsByPat[p][i]["creditsDouble"];
+						rowsByPat[p][i]["balanceDouble"]=bal;
+						if(rowsByPat[p][i]["ClaimPaymentNum"].ToString()=="0" && rowsByPat[p][i]["ClaimNum"].ToString()!="0"){//claims
+							rowsByPat[p][i]["balance"]="";
+						}
+						else if(rowsByPat[p][i]["CommlogNum"].ToString()!="0"){
+
+						}
+						else{
+							rowsByPat[p][i]["balance"]=bal.ToString("n");
+						}
+					}
 				}
 			}
 			//Remove rows outside of daterange-------------------------------------------------------------------
 			double balanceForward=0;
-			bool foundBalForward=false;
-			for(int i=rows.Count-1;i>=0;i--) {//go backwards and remove from end
-				if(((DateTime)rows[i]["DateTime"])>toDate){
-					rows.RemoveAt(i);
-				}
-				if(((DateTime)rows[i]["DateTime"])<fromDate){
-					if(!foundBalForward){
-						foundBalForward=true;
-						balanceForward=(double)rows[i]["balanceDouble"];
+			bool foundBalForward;
+			if(rowsByPat==null){
+				balanceForward=0;
+				foundBalForward=false;
+				for(int i=rows.Count-1;i>=0;i--) {//go backwards and remove from end
+					if(((DateTime)rows[i]["DateTime"])>toDate){
+						rows.RemoveAt(i);
 					}
-					rows.RemoveAt(i);
+					if(((DateTime)rows[i]["DateTime"])<fromDate){
+						if(!foundBalForward){
+							foundBalForward=true;
+							balanceForward=(double)rows[i]["balanceDouble"];
+						}
+						rows.RemoveAt(i);
+					}
+				}
+				//Add balance forward row
+				if(foundBalForward){
+					//add a balance forward row
+					row=table.NewRow();
+					SetBalForwardRow(row,balanceForward);
+					rows.Insert(0,row);
 				}
 			}
-			//Add balance forward row-------------------------------------------------------------------------
-			if(foundBalForward){
-				//add a balance forward row
-				row=table.NewRow();
-				row["AdjNum"]="0";
-				row["balance"]=balanceForward.ToString("n");
-				row["balanceDouble"]=balanceForward;
-				row["chargesDouble"]=0;
-				row["charges"]="";
-				row["ClaimNum"]="0";
-				row["ClaimPaymentNum"]="0";
-				row["colorText"]=Color.Black.ToArgb().ToString();
-				row["CommlogNum"]="0";
-				row["creditsDouble"]="0";
-				row["credits"]="";
-				row["DateTime"]=DateTime.MinValue;
-				row["date"]="";
-				row["description"]=Lan.g("AccountModule","Balance Forward");
-				row["extraDetail"]="";
-				row["patient"]="";
-				row["PatNum"]="0";
-				row["PayNum"]="0";
-				row["PayPlanNum"]="0";
-				row["ProcCode"]="";
-				row["ProcNum"]="0";
-				row["procsOnClaim"]="";
-				row["prov"]="";
-				row["tth"]="";
-				rows.Insert(0,row);
+			else{
+				for(int p=0;p<rowsByPat.Length;p++){
+					balanceForward=0;
+					foundBalForward=false;
+					for(int i=rowsByPat[p].Count-1;i>=0;i--) {//go backwards and remove from end
+						if(((DateTime)rowsByPat[p][i]["DateTime"])>toDate){
+							rowsByPat[p].RemoveAt(i);
+						}
+						if(((DateTime)rowsByPat[p][i]["DateTime"])<fromDate){
+							if(!foundBalForward){
+								foundBalForward=true;
+								balanceForward=(double)rowsByPat[p][i]["balanceDouble"];
+							}
+							rowsByPat[p].RemoveAt(i);
+						}
+					}
+					//Add balance forward row
+					if(foundBalForward){
+						//add a balance forward row
+						row=table.NewRow();
+						SetBalForwardRow(row,balanceForward);
+						rowsByPat[p].Insert(0,row);
+					}
+				}
 			}
-			//Finally, add rows to new table-----------------------------------------------------------------------
-			for(int i=0;i<rows.Count;i++) {
-				table.Rows.Add(rows[i]);
+			//Finally, add rows to new table(s)-----------------------------------------------------------------------
+			if(rowsByPat==null){
+				for(int i=0;i<rows.Count;i++) {
+					table.Rows.Add(rows[i]);
+				}
+				retVal.Tables.Add(table);
+			}
+			else{
+				for(int p=0;p<rowsByPat.Length;p++){
+					DataTable tablep=new DataTable("account"+fam.List[p].PatNum.ToString());
+					SetTableColumns(tablep);
+					for(int i=0;i<rowsByPat[p].Count;i++) {
+						tablep.Rows.Add(rowsByPat[p][i]);
+					}
+					retVal.Tables.Add(tablep);
+				}
 			}
 			//DataView view = table.DefaultView;
 			//view.Sort = "DateTime";
 			//table = view.ToTable();
 			//return table;
-			retVal.Tables.Add(table);
+		}
+
+		private static void SetBalForwardRow(DataRow row,double amt){
+			row["AdjNum"]="0";
+			row["balance"]=amt.ToString("n");
+			row["balanceDouble"]=amt;
+			row["chargesDouble"]=0;
+			row["charges"]="";
+			row["ClaimNum"]="0";
+			row["ClaimPaymentNum"]="0";
+			row["colorText"]=Color.Black.ToArgb().ToString();
+			row["CommlogNum"]="0";
+			row["creditsDouble"]="0";
+			row["credits"]="";
+			row["DateTime"]=DateTime.MinValue;
+			row["date"]="";
+			row["description"]=Lan.g("AccountModule","Balance Forward");
+			row["extraDetail"]="";
+			row["patient"]="";
+			row["PatNum"]="0";
+			row["PayNum"]="0";
+			row["PayPlanNum"]="0";
+			row["ProcCode"]="";
+			row["ProcNum"]="0";
+			row["procsOnClaim"]="";
+			row["prov"]="";
+			row["tth"]="";
 		}
 
 		///<summary>Gets payment plans for the family.  RawPay will include any paysplits for anyone in the family, so it's guaranteed to include all paysplits for a given payplan since payplans only show in the guarantor's family.  Database maint tool enforces paysplit.patnum=payplan.guarantor just in case.</summary>
@@ -1015,8 +1124,6 @@ namespace OpenDentBusiness {
 			}
 			retVal.Tables.Add(table);
 		}
-
-		
 
 		/*
 		///<summary>The supplied DataRows must include the following columns: ProcNum,ProcDate,Priority,ToothRange,ToothNum,ProcCode.

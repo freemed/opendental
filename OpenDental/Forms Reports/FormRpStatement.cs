@@ -313,12 +313,19 @@ namespace OpenDental{
 			SubtotalsOnly=subtotalsOnly;
 			HidePayment=hidePayment;*/
 			PrintDocument pd=new PrintDocument();
-			//if(pdfFullFileName==""){
+			bool willprint=false;
+			for(int i=0;i<listStatements.Count;i++){
+				if(listStatements[i].Mode_==StatementMode.Mail
+					|| listStatements[i].Mode_==StatementMode.InPerson)
+				{
+					willprint=true;
+				}
+			}
+			if(willprint){ // pdfFullFileName==""){
 				if(!Printers.SetPrinter(pd,PrintSituation.Statement)){
 					return;
 				}
-//				pd.PrintPage+=new PrintPageEventHandler(this.pd2_PrintPage);
-			//}
+			}
 			pd.DefaultPageSettings.Margins=new Margins(40,40,40,60);
 			if(CultureInfo.CurrentCulture.Name.EndsWith("CH")) {//CH is for switzerland. eg de-CH
 				//leave a big margin on the bottom for the routing slip
@@ -328,16 +335,20 @@ namespace OpenDental{
 			if(pd.DefaultPageSettings.PaperSize.Height==0) {
 				pd.DefaultPageSettings.PaperSize=new PaperSize("default",850,1100);
 			}
-/*
-			ContrAccount contrAccount=new ContrAccount();
-			FamilyStatementDataList=new List<FamilyStatementData>();
-			Commlog commlog;
-			FamilyStatementData famData;
-			for(int i=0;i<patNums.GetLength(0);i++){//loop through each family
-				famData=AssembleStatement(contrAccount,patNums[i],fromDate,toDate,includeClaims,nextAppt);
-				FamilyStatementDataList.Add(famData);
+			DataSet dataMain=null;
+			for(int i=0;i<listStatements.Count;i++){
+				dataMain=AccountModule.GetStatement(listStatements[i].PatNum,listStatements[i].SinglePatient,
+					listStatements[i].DateRangeFrom,listStatements[i].DateRangeTo,listStatements[i].Intermingled);
+			}
+			//ContrAccount contrAccount=new ContrAccount();
+			//FamilyStatementDataList=new List<FamilyStatementData>();
+			//Commlog commlog;
+			//FamilyStatementData famData;
+			//for(int i=0;i<patNums.GetLength(0);i++){//loop through each family
+				//famData=AssembleStatement(contrAccount,patNums[i],fromDate,toDate,includeClaims,nextAppt);
+				//FamilyStatementDataList.Add(famData);
 				//This has all been moved externally for multiple billing statements
-				if(patNums.GetLength(0)==1){
+				/*if(patNums.GetLength(0)==1){
 					commlog=new Commlog();
 					commlog.CommDateTime=DateTime.Now;
 					commlog.CommType=0;
@@ -353,10 +364,8 @@ namespace OpenDental{
 					commlog.PatNum=patNums[i][0];//uaually the guarantor
 					//there is no dialog here because it is just a simple entry
 					Commlogs.Insert(commlog);
-				}
-			}
- */
-
+				}*/
+			//}
 			MigraDoc.DocumentObjectModel.Document doc=CreateDocument(pd);
 	/*
 			if(pdfFullFileName==""){//print
@@ -429,6 +438,7 @@ namespace OpenDental{
 			return retVal;
 		}*/
 
+		/*
 		private void GetPatGuar(int patNum){
 			if(PatGuar!=null
 				&& patNum==PatGuar.PatNum){//if PatGuar is already set
@@ -437,7 +447,7 @@ namespace OpenDental{
 			//but if the guarantor is not on the list of patients in the fam to print, it will also refresh
       Family FamCur=Patients.GetFamily(patNum);
 			PatGuar=FamCur.List[0].Copy();
-		}
+		}*/
 
 		///<summary>Supply pd so that we know the paper size and margins.</summary>
 		private MigraDoc.DocumentObjectModel.Document CreateDocument(PrintDocument pd){

@@ -8,32 +8,18 @@ using OpenDentBusiness;
 
 namespace OpenDental{
 	public class AccountModule{
-		/*
-		///<summary>This is just the first version of this function.  It only gets selected parts of the Account refresh.</summary>
-		public static DataSet GetAll(int patNum,bool viewingInRecall){
-			try {
-				if(RemotingClient.OpenDentBusinessIsLocal) {
-					return AccountModuleB.GetAll(patNum,viewingInRecall);
-				}
-				else {
-					DtoAccountModuleGetAll dto=new DtoAccountModuleGetAll();
-					dto.PatNum=patNum;
-					dto.ViewingInRecall=viewingInRecall;
-					return RemotingClient.ProcessQuery(dto);
-				}
-			}
-			catch(Exception e) {
-				MessageBox.Show(e.Message);
-				return new DataSet();//It might be better to return null.
-			}
-		}*/
 
 		///<summary>Gets the Account table and the Commlog table.</summary>
-		public static DataSet GetAll(int patNum,bool viewingInRecall,DateTime fromDate,DateTime toDate,bool isFamily){
-			return General.GetDS("AccountModule.GetAll",patNum.ToString(),POut.PBool(viewingInRecall),fromDate.ToShortDateString(),toDate.ToShortDateString(),POut.PBool(isFamily));
+		public static DataSet GetAll(int patNum,bool viewingInRecall,DateTime fromDate,DateTime toDate,bool intermingled)
+		{
+			return General.GetDS("AccountModule.GetAll",patNum.ToString(),POut.PBool(viewingInRecall),fromDate.ToShortDateString(),toDate.ToShortDateString(),POut.PBool(intermingled));
 		}
 
-
+		///<summary>Gets the Account table(s) for a statement.</summary>
+		public static DataSet GetStatement(int patNum,bool singlePatient,DateTime fromDate,DateTime toDate,bool intermingled)
+		{
+			return General.GetDS("AccountModule.GetAll",patNum.ToString(),POut.PBool(singlePatient),fromDate.ToShortDateString(),toDate.ToShortDateString(),POut.PBool(intermingled));
+		}
 
 	}
 }

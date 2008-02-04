@@ -58,7 +58,7 @@ namespace OpenDentBusiness{
 		[DataField("DateRangeTo")]
 		private DateTime dateRangeTo;
 		bool dateRangeToChanged;
-		/// <summary>Any date >= year 2200 is </summary>
+		/// <summary>Any date >= year 2200 is considered max val.</summary>
 		public DateTime DateRangeTo {
 			get { return dateRangeTo; }
 			set { if(dateRangeTo!=value){dateRangeTo = value; MarkDirty(); dateRangeToChanged = true; }}

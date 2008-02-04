@@ -11,12 +11,12 @@ using OpenDentBusiness.Properties;
 
 namespace OpenDentBusiness{
 
-	///<summary>Converts various datatypes into strings formatted correctly for MySQL. "P" was originally short for Parameter because this class was written specifically to replace parameters in the mysql queries. Using strings instead of parameters is much easier to debug.  This will later be rewritten as a System.IConvertible interface on custom mysql types.  I would rather not ever depend on the mysql connector for this so that this program remains very db independent.</summary>
+	///<summary>Converts various datatypes into strings formatted correctly for MySQL. "P" was originally short for Parameter because this class was written specifically to replace parameters in the mysql queries. Using strings instead of parameters is much easier to debug. I would rather not ever depend on the mysql connector for this because the authors of the connector have been known to suddenly change its behavior.</summary>
 	public class POut{
 		public static string PObject(object value) {
-			if (value == null)
-				return string.Empty;
-
+			//if (value == null)
+			//	return string.Empty;//this would cause obvious bugs due to outgoing strings without quotes
+			//It's better to just have it crash here:
 			Type dataType = value.GetType();
 
 			if (dataType == typeof(string)) {

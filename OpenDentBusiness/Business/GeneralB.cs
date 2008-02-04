@@ -68,6 +68,8 @@ namespace OpenDentBusiness {
 					return AccountModuleB.GetAll(parameters);
 				case "AccountModule.GetPayPlanAmort":
 					return AccountModuleB.GetPayPlanAmort(parameters);
+				case "AccountModule.GetStatement":
+					return AccountModuleB.GetStatement(parameters);
 				case "Appointment.GetApptEdit":
 					return AppointmentB.GetApptEdit(parameters);
 				case "Appointment.RefreshPeriod":
