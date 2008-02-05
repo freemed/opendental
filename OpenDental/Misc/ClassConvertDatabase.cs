@@ -6290,6 +6290,7 @@ namespace OpenDental{
 						HidePayment tinyint(1) NOT NULL,
 						SinglePatient tinyint(1) NOT NULL,
 						Intermingled tinyint(1) NOT NULL,
+						IsSent tinyint(1) NOT NULL,
 						PRIMARY KEY (StatementNum),
 						INDEX (PatNum)
 						) DEFAULT CHARSET=utf8";
@@ -6309,6 +6310,7 @@ namespace OpenDental{
 						HidePayment tinyint(1) NOT NULL,
 						SinglePatient tinyint(1) NOT NULL,
 						Intermingled tinyint(1) NOT NULL,
+						IsSent tinyint(1) NOT NULL,
 						PRIMARY KEY (StatementNum),
 						INDEX (PatNum)
 						)";

@@ -94,7 +94,7 @@ namespace OpenDentBusiness{
 		[DataField("Mode_")]
 		private StatementMode mode_;
 		bool mode_Changed;
-		/// <summary>Enum:StatementMode Unsent, Email, Mail, InPerson.</summary>
+		/// <summary>Enum:StatementMode Mail, InPerson, Email.</summary>
 		public StatementMode Mode_ {
 			get { return mode_; }
 			set { if(mode_!=value){mode_ = value; MarkDirty(); mode_Changed = true; }}
@@ -106,7 +106,7 @@ namespace OpenDentBusiness{
 		[DataField("HidePayment")]
 		private bool hidePayment;
 		bool hidePaymentChanged;
-		/// <summary></summary>
+		/// <summary>Set true to hide the credit card section, and the please pay box.</summary>
 		public bool HidePayment {
 			get { return hidePayment; }
 			set { if(hidePayment!=value){hidePayment = value; MarkDirty(); hidePaymentChanged = true; }}
@@ -118,7 +118,7 @@ namespace OpenDentBusiness{
 		[DataField("SinglePatient")]
 		private bool singlePatient;
 		bool singlePatientChanged;
-		/// <summary></summary>
+		/// <summary>One patient on statement instead of entire family.</summary>
 		public bool SinglePatient {
 			get { return singlePatient; }
 			set { if(singlePatient!=value){singlePatient = value; MarkDirty(); singlePatientChanged = true; }}
@@ -130,13 +130,25 @@ namespace OpenDentBusiness{
 		[DataField("Intermingled")]
 		private bool intermingled;
 		bool intermingledChanged;
-		/// <summary></summary>
+		/// <summary>If entire family, then this determines whether they are all intermingled into one big grid, or whether they are all listed in separate grids.</summary>
 		public bool Intermingled {
 			get { return intermingled; }
 			set { if(intermingled!=value){intermingled = value; MarkDirty(); intermingledChanged = true; }}
 		}
 		public bool IntermingledChanged {
 			get { return intermingledChanged; }
+		}
+
+		[DataField("IsSent")]
+		private bool isSent;
+		bool isSentChanged;
+		/// <summary>True</summary>
+		public bool IsSent {
+			get { return isSent; }
+			set { if(isSent!=value){isSent = value; MarkDirty(); isSentChanged = true; }}
+		}
+		public bool IsSentChanged {
+			get { return isSentChanged; }
 		}
 		
 		public Statement Copy(){

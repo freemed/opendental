@@ -8,7 +8,6 @@ namespace OpenDentBusiness{
 	[DataObject("document")]
 	public class Document : DataObjectBase {
 
-
 		///<summary>Primary key.</summary>
 		[DataField("DocNum", PrimaryKey=true, AutoNumber=true)]
 		private int docNum;
@@ -21,7 +20,6 @@ namespace OpenDentBusiness{
 		public bool DocNumChanged {
 			get { return docNumChanged; }
 		}
-
 
 		///<summary>Description of the document.</summary>
 		[DataField("Description")]
@@ -36,7 +34,6 @@ namespace OpenDentBusiness{
 			get { return descriptionChanged; }
 		}
 
-
 		///<summary>Date created.</summary>
 		[DataField("DateCreated")]
 		private DateTime dateCreated;
@@ -49,7 +46,6 @@ namespace OpenDentBusiness{
 		public bool DateCreatedChanged {
 			get { return dateCreatedChanged; }
 		}
-
 
 		///<summary>FK to definition.DefNum. Categories for documents.</summary>
 		[DataField("DocCategory")]
@@ -64,7 +60,6 @@ namespace OpenDentBusiness{
 			get { return docCategoryChanged; }
 		}
 
-
 		///<summary>FK to patient.PatNum.  Patient folder that document is in.(for sharing situations later)</summary>
 		[DataField("PatNum")]
 		private int patNum;
@@ -77,7 +72,6 @@ namespace OpenDentBusiness{
 		public bool PatNumChanged {
 			get { return patNumChanged; }
 		}
-
 
 		///<summary>The name of the file. Does not include any directory info.</summary>
 		[DataField("FileName")]
@@ -92,7 +86,6 @@ namespace OpenDentBusiness{
 			get { return fileNameChanged; }
 		}
 
-
 		///<summary>Enum:ImageType eg. document, radiograph, photo, file</summary>
 		[DataField("ImgType")]
 		private ImageType imgType;
@@ -105,7 +98,6 @@ namespace OpenDentBusiness{
 		public bool ImgTypeChanged {
 			get { return imgTypeChanged; }
 		}
-
 
 		///<summary>True if flipped horizontally. A vertical flip would be stored as a horizontal flip plus a 180 rotation.</summary>
 		[DataField("IsFlipped")]
@@ -120,7 +112,6 @@ namespace OpenDentBusiness{
 			get { return isFlippedChanged; }
 		}
 
-
 		///<summary>Only allowed 0,90,180, and 270.</summary>
 		[DataField("DegreesRotated")]
 		private short degreesRotated;
@@ -133,7 +124,6 @@ namespace OpenDentBusiness{
 		public bool DegreesRotatedChanged {
 			get { return degreesRotatedChanged; }
 		}
-
 
 		///<summary>Incomplete.  An optional list of tooth numbers separated by commas.  The tooth numbers will be in American format and must be processed for display.  When displayed, dashes will be used for sequences of 3 or more tooth numbers.</summary>
 		[DataField("ToothNumbers")]
@@ -148,7 +138,6 @@ namespace OpenDentBusiness{
 			get { return toothNumbersChanged; }
 		}
 
-
 		///<summary></summary>
 		[DataField("Note")]
 		private string note;
@@ -161,7 +150,6 @@ namespace OpenDentBusiness{
 		public bool NoteChanged {
 			get { return noteChanged; }
 		}
-
 
 		///<summary>True if the signature is in Topaz format rather than OD format.</summary>
 		[DataField("SigIsTopaz")]

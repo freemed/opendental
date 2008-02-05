@@ -2326,11 +2326,15 @@ double adj=Adjustments.GetTotForProc(arrayProc[tempCountProc].ProcNum,Adjustment
 				FormClaimEdit2.IsNew=false;
 				FormClaimEdit2.ShowDialog();
 			}
-			else if(table.Rows[e.Row]["CommlogNum"].ToString()!="0"){
-				Commlog CommlogCur=Commlogs.GetOne(PIn.PInt(table.Rows[e.Row]["CommlogNum"].ToString()));
-				FormCommItem2=new FormCommItem(CommlogCur);
-				FormCommItem2.IsNew=false;
-				FormCommItem2.ShowDialog();
+			else if(table.Rows[e.Row]["StatementNum"].ToString()!="0"){
+				Statement statement=Statements.CreateObject(PIn.PInt(table.Rows[e.Row]["StatementNum"].ToString()));
+				//Commlog CommlogCur=Commlogs.GetOne(
+				//FormCommItem2=new FormCommItem(CommlogCur);
+				//FormCommItem2.IsNew=false;
+				//FormCommItem2.ShowDialog();
+				FormStatementOptions FormS=new FormStatementOptions();
+				FormS.StmtCur=statement;
+				FormS.ShowDialog();
 			}
 			else if(table.Rows[e.Row]["PayPlanNum"].ToString()!="0"){
 				PayPlan payplan=PayPlans.GetOne(PIn.PInt(table.Rows[e.Row]["PayPlanNum"].ToString()));

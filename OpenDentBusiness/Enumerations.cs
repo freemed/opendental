@@ -1291,14 +1291,12 @@ namespace OpenDentBusiness{
 
 	///<summary></summary>
 	public enum StatementMode{
-		///<summary>0- </summary>
-		Unsent,
-		///<summary>1- </summary>
-		Email,
-		///<summary>2</summary>
+		///<summary>0</summary>
 		Mail,
-		///<summary>3</summary>
-		InPerson
+		///<summary>1</summary>
+		InPerson,
+		///<summary>2</summary>
+		Email
 	}
 
 	/*

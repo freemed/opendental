@@ -541,6 +541,7 @@ namespace OpenDental{
 			}
 			StmtCur.Note=textNote.Text;
 			StmtCur.NoteBold=textNoteBold.Text;
+			Statements.WriteObject(StmtCur);
 			DialogResult=DialogResult.OK;
 		}
 
