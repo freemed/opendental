@@ -1403,7 +1403,9 @@ namespace OpenDental {
 			//FillInsInfo();
 			FillRepeatCharges();//must be in this order. 1.
 			FillPaymentPlans();//2.
-			FillMain();//3.
+			if(PatCur!=null){
+				FillMain();//3.
+			}
 			LayoutPanels();
 			if(ViewingInRecall || PrefB.GetBool("FuchsOptionsOn")) {
 				panelProgNotes.Visible = true;
@@ -2476,7 +2478,7 @@ double adj=Adjustments.GetTotForProc(arrayProc[tempCountProc].ProcNum,Adjustment
 						continue;//ignore zero fee procedures, but user can explicitly select them
 					}
 					if(Procedures.NeedsSent(arrayProc[AcctLineList[i].Index],ClaimProcList,PatPlans.GetPlanNum(PatPlanList,1))){
-						if(CultureInfo.CurrentCulture.Name.Substring(3)=="CA" && countSelected==7){//en-CA or fr-CA
+						if(CultureInfo.CurrentCulture.Name.Length>=4 && CultureInfo.CurrentCulture.Name.Substring(3)=="CA" && countSelected==7){//en-CA or fr-CA
 							countIsOverMax=true;
 							continue;//only send 7.
 						}

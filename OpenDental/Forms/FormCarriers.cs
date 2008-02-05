@@ -180,7 +180,7 @@ namespace OpenDental{
 		#endregion
 
 		private void FormCarriers_Load(object sender, System.EventArgs e) {
-			if(CultureInfo.CurrentCulture.Name.Substring(3)=="CA"){
+			if(CultureInfo.CurrentCulture.Name.Length>=4 && CultureInfo.CurrentCulture.Name.Substring(3)=="CA"){
 				checkCDAnet.Checked=true;
 			}
 			else{

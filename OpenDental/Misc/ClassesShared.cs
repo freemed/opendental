@@ -265,7 +265,7 @@ namespace OpenDental{
 
 		///<summary>Used in the tool that loops through the database fixing telephone numbers.  Also used in the patient import from XML tool, and PT Dental bridge.</summary>
 		public static string ReFormat(string phoneNum){
-			if(CultureInfo.CurrentCulture.Name!="en-US" && CultureInfo.CurrentCulture.Name.Substring(3)!="CA"){
+			if(CultureInfo.CurrentCulture.Name!="en-US" && CultureInfo.CurrentCulture.Name.Length>=4 && CultureInfo.CurrentCulture.Name.Substring(3)!="CA"){
 				return phoneNum;
 			}
 			Regex regex;
@@ -307,7 +307,9 @@ namespace OpenDental{
 
 		///<summary>reformats initial entry with each keystroke</summary>
 		public static string AutoFormat(string phoneNum){
-			if(CultureInfo.CurrentCulture.Name!="en-US"	&& CultureInfo.CurrentCulture.Name.Substring(3)!="CA"){
+			if(CultureInfo.CurrentCulture.Name!="en-US" && 
+				CultureInfo.CurrentCulture.Name.Length>=4 && 
+				CultureInfo.CurrentCulture.Name.Substring(3)!="CA") {
 				return phoneNum;
 			}
 			if(Regex.IsMatch(phoneNum,@"^[2-9]$")){

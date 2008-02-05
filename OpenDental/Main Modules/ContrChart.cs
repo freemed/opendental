@@ -237,7 +237,7 @@ namespace OpenDental{
 			Logger.openlog.Log("Initializing chart module...",Logger.Severity.INFO);
 			InitializeComponent();
 			tabControlImages.DrawItem += new DrawItemEventHandler(OnDrawItem);
-			if(CultureInfo.CurrentCulture.Name.Length>=3 && CultureInfo.CurrentCulture.Name.Substring(3)!="CA") {//Canada
+			if(CultureInfo.CurrentCulture.Name.Length>=4 && CultureInfo.CurrentCulture.Name.Substring(3)!="CA") {//Canada
 				menuItemLabFee.Visible=false;
 				menuItemLabFeeDetach.Visible=false;
 			}

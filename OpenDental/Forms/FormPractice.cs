@@ -577,7 +577,8 @@ namespace OpenDental{
 			textZip.Text=PrefB.GetString("PracticeZip");
 			string phone=PrefB.GetString("PracticePhone");
 			if(phone.Length==10 
-				&& (CultureInfo.CurrentCulture.Name=="en-US" || CultureInfo.CurrentCulture.Name.Substring(3)=="CA"))
+				&& (CultureInfo.CurrentCulture.Name=="en-US" || 
+				(CultureInfo.CurrentCulture.Name.Length>=4 && CultureInfo.CurrentCulture.Name.Substring(3)=="CA")))
 			{
 				textPhone.Text="("+phone.Substring(0,3)+")"+phone.Substring(3,3)+"-"+phone.Substring(6);
 			}
@@ -652,7 +653,7 @@ namespace OpenDental{
 		private void butOK_Click(object sender, System.EventArgs e) {
 			string phone=textPhone.Text;
 			if(Application.CurrentCulture.Name=="en-US"
-				|| CultureInfo.CurrentCulture.Name.Substring(3)=="CA")
+				|| (CultureInfo.CurrentCulture.Name.Length>=4 && CultureInfo.CurrentCulture.Name.Substring(3)=="CA"))
 			{
 				phone=phone.Replace("(","");
 				phone=phone.Replace(")","");

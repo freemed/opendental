@@ -644,7 +644,7 @@ namespace OpenDental{
 			}
 			//textTemplates.Text=Carriers.DependentTemplates().ToString();
 			checkIsCDAnet.Checked=CarrierCur.IsCDA;//Can be checked but not visible.
-			if(CultureInfo.CurrentCulture.Name.Substring(3)=="CA"){//en-CA or fr-CA
+			if(CultureInfo.CurrentCulture.Name.Length>=4 && CultureInfo.CurrentCulture.Name.Substring(3)=="CA"){//en-CA or fr-CA
 				labelCitySt.Text="City,Province,PostalCode";
 				labelElectID.Text="Carrier ID";
 				groupCDAnet.Visible=checkIsCDAnet.Checked;

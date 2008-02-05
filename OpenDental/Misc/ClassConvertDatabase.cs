@@ -74,13 +74,13 @@ namespace OpenDental{
 				return true;//no conversion necessary
 			}
 #if !DEBUG
-			if(FormChooseDatabase.DBtype!=DatabaseType.MySql
+			if(DataConnection.DBtype!=DatabaseType.MySql
 				&& !MsgBox.Show(this,true,"If you have not made a backup, please Cancel and backup before continuing.  Continue?"))
 			{
 				return false;
 			}
 			try{
-				if(FormChooseDatabase.DBtype==DatabaseType.MySql){
+				if(DataConnection.DBtype==DatabaseType.MySql) {
 					MiscData.MakeABackup();//Does not work for Oracle, due to some MySQL specific commands inside.
 				}
 			}

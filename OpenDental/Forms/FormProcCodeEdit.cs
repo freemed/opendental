@@ -697,7 +697,7 @@ namespace OpenDental{
 			checkIsHygiene.Checked=ProcCode.IsHygiene;
 			checkIsProsth.Checked=ProcCode.IsProsth;
 			textBaseUnits.Text=ProcCode.BaseUnits.ToString();
-			if(CultureInfo.CurrentCulture.Name.Substring(3)!="CA"){//Canada
+			if(CultureInfo.CurrentCulture.Name.Length>=4 && CultureInfo.CurrentCulture.Name.Substring(3)!="CA"){//Canada
 				checkIsCanadianLab.Visible=false;
 			}
 			checkIsCanadianLab.Checked=ProcCode.IsCanadianLab;

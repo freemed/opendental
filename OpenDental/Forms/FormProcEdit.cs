@@ -1606,7 +1606,7 @@ namespace OpenDental{
 				comboBillingTypeTwo.Visible=false;
 				labelBillingTypeTwo.Visible=false;
 			}
-			/*if(CultureInfo.CurrentCulture.Name.Substring(3)=="CA"){//en-CA or fr-CA
+			/*if(CultureInfo.CurrentCulture.Name.Length>=4 && CultureInfo.CurrentCulture.Name.Substring(3)=="CA"){//en-CA or fr-CA
 				textLabFee.Text=ProcCur.LabFee.ToString("n");
 				textLabCode.Text=ProcCur.LabProcCode;
 			}
@@ -2502,7 +2502,7 @@ namespace OpenDental{
 				MsgBox.Show(this,"Invalid medical code.  It must refer to an existing procedure code.");
 				return false;
 			}
-			/*if(CultureInfo.CurrentCulture.Name.Substring(3)=="CA"){//en-CA or fr-CA
+			/*if(CultureInfo.CurrentCulture.Name.Length>=4 && CultureInfo.CurrentCulture.Name.Substring(3)=="CA"){//en-CA or fr-CA
 				if(textLabCode.Text!="" && !ProcedureCodes.HList.Contains(textLabCode.Text)) {
 					MsgBox.Show(this,"Invalid lab code.  It must refer to an existing procedure code.");
 					return false;

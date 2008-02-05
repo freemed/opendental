@@ -97,7 +97,7 @@ namespace OpenDental{
 		public static void Update(Carrier Cur){
 			string command;
 			DataTable table;
-			if(CultureInfo.CurrentCulture.Name.Substring(3)=="CA") {//en-CA or fr-CA
+			if(CultureInfo.CurrentCulture.Name.Length>=4 && CultureInfo.CurrentCulture.Name.Substring(3)=="CA") {//en-CA or fr-CA
 				if(Cur.IsCDA) {
 					if(Cur.ElectID=="") {
 						throw new ApplicationException(Lan.g("Carriers","EDI Code required."));
@@ -149,7 +149,7 @@ namespace OpenDental{
 		///<summary>Surround with try/catch if possibly adding a Canadian carrier.</summary>
 		public static void Insert(Carrier Cur){
 			string command;
-			if(CultureInfo.CurrentCulture.Name.Substring(3)=="CA"){//en-CA or fr-CA
+			if(CultureInfo.CurrentCulture.Name.Length>=4 && CultureInfo.CurrentCulture.Name.Substring(3)=="CA"){//en-CA or fr-CA
 				if(Cur.IsCDA){
 					if(Cur.ElectID==""){
 						throw new ApplicationException(Lan.g("Carriers","EDI Code required."));
@@ -311,7 +311,7 @@ namespace OpenDental{
 			}
 			//No match found.  Decide what to do.  Usually add carrier.--------------------------------------------------------------
 			//Canada:
-			if(CultureInfo.CurrentCulture.Name.Substring(3)=="CA"){//en-CA or fr-CA
+			if(CultureInfo.CurrentCulture.Name.Length>=4 && CultureInfo.CurrentCulture.Name.Substring(3)=="CA"){//en-CA or fr-CA
 				if(Cur.ElectID!=""){
 					command="SELECT CarrierNum FROM carrier WHERE "
 						+"ElectID = '"+POut.PString(Cur.ElectID)+"' "

@@ -184,13 +184,13 @@ namespace OpenDental{
 			Controls.Add(listCounties);
 			listCounties.BringToFront();
 			Lan.F(this);
-			if(CultureInfo.CurrentCulture.Name.Substring(3)=="CA"){//en-CA or fr-CA
+			if(CultureInfo.CurrentCulture.Name.Length>=4 && CultureInfo.CurrentCulture.Name.Substring(3)=="CA"){//en-CA or fr-CA
 				labelSSN.Text="SIN";
 				labelZip.Text="Postal Code";
 				labelST.Text="Province";
 				butEditZip.Text="Edit Postal Code";
 			}
-			if(CultureInfo.CurrentCulture.Name.Substring(3)=="GB"){//en-GB
+			if(CultureInfo.CurrentCulture.Name.Length>=4 && CultureInfo.CurrentCulture.Name.Substring(3)=="GB"){//en-GB
 				//labelSSN.Text="?";
 				labelZip.Text="Postcode";
 				labelST.Text="";//no such thing as state in GB
@@ -1969,7 +1969,7 @@ namespace OpenDental{
 
 		private void textState_TextChanged(object sender, System.EventArgs e) {
 			if(CultureInfo.CurrentCulture.Name=="en-US" //if USA or Canada, capitalize first 2 letters
-				|| CultureInfo.CurrentCulture.Name.Substring(3)=="CA"){
+				|| (CultureInfo.CurrentCulture.Name.Length>=4 && CultureInfo.CurrentCulture.Name.Substring(3)=="CA")){
 				if(textState.Text.Length==1 || textState.Text.Length==2){
 					textState.Text=textState.Text.ToUpper();
 					textState.SelectionStart=2;

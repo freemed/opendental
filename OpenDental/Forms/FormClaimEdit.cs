@@ -2437,7 +2437,7 @@ namespace OpenDental{
 			if(!IsNew) {
 				return;
 			}
-			if(CultureInfo.CurrentCulture.Name.Substring(3)!="CA") {//en-CA or fr-CA
+			if(CultureInfo.CurrentCulture.Name.Length>=4 && CultureInfo.CurrentCulture.Name.Substring(3)!="CA") {//en-CA or fr-CA
 				return;
 			}
 			//The rest is just Canadian.
@@ -2462,7 +2462,7 @@ namespace OpenDental{
 			if(System.Windows.Forms.Screen.PrimaryScreen.WorkingArea.Height<this.Height){
 				this.Height=System.Windows.Forms.Screen.PrimaryScreen.WorkingArea.Height;
 			}
-			if(CultureInfo.CurrentCulture.Name.Substring(3)=="CA"){//en-CA or fr-CA
+			if(CultureInfo.CurrentCulture.Name.Length>=4 && CultureInfo.CurrentCulture.Name.Substring(3)=="CA"){//en-CA or fr-CA
 				butSupp.Visible=true;
 				groupProsth.Visible=false;
 				labelMissingTeeth.Visible=false;

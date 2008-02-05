@@ -513,16 +513,17 @@ namespace OpenDental{
 			gridPat.Rows.Add(row);
 			//SS#
 			row=new ODGridRow();
-			if(CultureInfo.CurrentCulture.Name.Substring(3)=="CA") {
+			if(CultureInfo.CurrentCulture.Name.Length>=4 && CultureInfo.CurrentCulture.Name.Substring(3)=="CA") {
 				row.Cells.Add("SIN");
 			}
-			else if(CultureInfo.CurrentCulture.Name.Substring(3)=="GB") {
+			else if(CultureInfo.CurrentCulture.Name.Length>=4 && CultureInfo.CurrentCulture.Name.Substring(3)=="GB") {
 				row.Cells.Add("");
 			}
 			else{
 				row.Cells.Add(Lan.g("TablePatient","SS#"));
 			}
-			if(CultureInfo.CurrentCulture.Name.Substring(3)=="US" && PatCur.SSN !=null && PatCur.SSN.Length==9){
+			if(CultureInfo.CurrentCulture.Name.Length>=4 && CultureInfo.CurrentCulture.Name.Substring(3)=="US" 
+				&& PatCur.SSN !=null && PatCur.SSN.Length==9){
 				row.Cells.Add(PatCur.SSN.Substring(0,3)+"-"
 					+PatCur.SSN.Substring(3,2)+"-"+PatCur.SSN.Substring(5,4));
 			}
@@ -551,10 +552,10 @@ namespace OpenDental{
 			gridPat.Rows.Add(row);
 			//State
 			row=new ODGridRow();
-			if(CultureInfo.CurrentCulture.Name.Substring(3)=="CA") {
+			if(CultureInfo.CurrentCulture.Name.Length>=4 && CultureInfo.CurrentCulture.Name.Substring(3)=="CA") {
 				row.Cells.Add("Province");
 			}
-			else if(CultureInfo.CurrentCulture.Name.Substring(3)=="GB") {
+			else if(CultureInfo.CurrentCulture.Name.Length>=4 && CultureInfo.CurrentCulture.Name.Substring(3)=="GB") {
 				row.Cells.Add("");
 			}
 			else{
@@ -564,10 +565,10 @@ namespace OpenDental{
 			gridPat.Rows.Add(row);
 			//Zip
 			row=new ODGridRow();
-			if(CultureInfo.CurrentCulture.Name.Substring(3)=="CA") {
+			if(CultureInfo.CurrentCulture.Name.Length>=4 && CultureInfo.CurrentCulture.Name.Substring(3)=="CA") {
 				row.Cells.Add("Postal Code");
 			}
-			else if(CultureInfo.CurrentCulture.Name.Substring(3)=="GB") {
+			else if(CultureInfo.CurrentCulture.Name.Length>=4 && CultureInfo.CurrentCulture.Name.Substring(3)=="GB") {
 				row.Cells.Add("Postcode");
 			}
 			else{

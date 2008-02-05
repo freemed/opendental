@@ -195,7 +195,7 @@ namespace OpenDental{
 			//tbPercentPlan.CellClicked += new OpenDental.ContrTable.CellEventHandler(tbPercentPlan_CellClicked);
 			//tbPercentPat.CellClicked += new OpenDental.ContrTable.CellEventHandler(tbPercentPat_CellClicked);
 			Lan.F(this);
-			if(CultureInfo.CurrentCulture.Name.Substring(3)=="CA"){//en-CA or fr-CA
+			if(CultureInfo.CurrentCulture.Name.Length>=4 && CultureInfo.CurrentCulture.Name.Substring(3)=="CA"){//en-CA or fr-CA
 				labelCitySTZip.Text=Lan.g(this,"City,Prov,Post");   //Postal Code";
 				butSearch.Visible=false;
 				labelElectronicID.Text="EDI Code";
@@ -210,7 +210,7 @@ namespace OpenDental{
 				labelCanadaEligibility.Visible=false;
 				butCanadaEligibility.Visible=false;
 			}
-			if(CultureInfo.CurrentCulture.Name.Substring(3)=="GB"){//en-GB
+			if(CultureInfo.CurrentCulture.Name.Length>=4 && CultureInfo.CurrentCulture.Name.Substring(3)=="GB"){//en-GB
 				labelCitySTZip.Text=Lan.g(this,"City,Postcode");
 			}
 			panelPat.BackColor=DefB.Long[(int)DefCat.MiscColors][0].ItemColor;
@@ -2154,7 +2154,7 @@ namespace OpenDental{
 
 		private void textState_TextChanged(object sender,System.EventArgs e) {
 			if(CultureInfo.CurrentCulture.Name=="en-US" //if USA or Canada, capitalize first 2 letters
-				|| CultureInfo.CurrentCulture.Name.Substring(3)=="CA") {
+				|| (CultureInfo.CurrentCulture.Name.Length>=4 && CultureInfo.CurrentCulture.Name.Substring(3)=="CA")) {
 				if(textState.Text.Length==1 || textState.Text.Length==2) {
 					textState.Text=textState.Text.ToUpper();
 					textState.SelectionStart=2;
@@ -2172,7 +2172,7 @@ namespace OpenDental{
 			if(textElectID.Text=="") {
 				return;
 			}
-			if(CultureInfo.CurrentCulture.Name.Substring(3)=="CA"){//en-CA or fr-CA
+			if(CultureInfo.CurrentCulture.Name.Length>=4 && CultureInfo.CurrentCulture.Name.Substring(3)=="CA"){//en-CA or fr-CA
 				if(!Regex.IsMatch(textElectID.Text,@"^[0-9]{6}$")) {
 					if(!MsgBox.Show(this,true,"Carrier ID should be six digits long.  Continue anyway?")){
 						e.Cancel=true;
