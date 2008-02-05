@@ -2330,10 +2330,6 @@ double adj=Adjustments.GetTotForProc(arrayProc[tempCountProc].ProcNum,Adjustment
 			}
 			else if(table.Rows[e.Row]["StatementNum"].ToString()!="0"){
 				Statement statement=Statements.CreateObject(PIn.PInt(table.Rows[e.Row]["StatementNum"].ToString()));
-				//Commlog CommlogCur=Commlogs.GetOne(
-				//FormCommItem2=new FormCommItem(CommlogCur);
-				//FormCommItem2.IsNew=false;
-				//FormCommItem2.ShowDialog();
 				FormStatementOptions FormS=new FormStatementOptions();
 				FormS.StmtCur=statement;
 				FormS.ShowDialog();
@@ -3005,6 +3001,7 @@ double adj=Adjustments.GetTotForProc(arrayProc[tempCountProc].ProcNum,Adjustment
 			Statement stmt=new Statement();
 			stmt.PatNum=PatCur.Guarantor;
 			stmt.DateSent=DateTime.Today;
+			stmt.IsSent=true;
 			stmt.Mode_=StatementMode.InPerson;
 			stmt.HidePayment=false;
 			stmt.SinglePatient=false;

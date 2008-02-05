@@ -28,6 +28,7 @@ namespace OpenDental.DataAccess {
 		private bool isDirty;
 		public bool IsDirty {
 			get { return isDirty; }
+			set { isDirty=value; }
 		}
 
 		private bool isDeleted;

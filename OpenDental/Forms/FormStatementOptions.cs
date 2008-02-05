@@ -36,7 +36,12 @@ namespace OpenDental{
 		private GroupBox groupDateRange;
 		private ValidDate textDate;
 		private Label label4;
+		private CheckBox checkIsSent;
 		public Statement StmtCur;
+		private OpenDental.UI.Button butDelete;
+		private OpenDental.UI.Button butPrint;
+		private OpenDental.UI.Button butEmail;
+		private bool initiallySent;
 
 		///<summary></summary>
 		public FormStatementOptions()
@@ -99,6 +104,10 @@ namespace OpenDental{
 			this.groupDateRange = new System.Windows.Forms.GroupBox();
 			this.textDate = new OpenDental.ValidDate();
 			this.label4 = new System.Windows.Forms.Label();
+			this.checkIsSent = new System.Windows.Forms.CheckBox();
+			this.butDelete = new OpenDental.UI.Button();
+			this.butPrint = new OpenDental.UI.Button();
+			this.butEmail = new OpenDental.UI.Button();
 			this.groupFuchs.SuspendLayout();
 			this.groupDateRange.SuspendLayout();
 			this.SuspendLayout();
@@ -112,9 +121,9 @@ namespace OpenDental{
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
 			this.butCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.butCancel.Location = new System.Drawing.Point(639,400);
+			this.butCancel.Location = new System.Drawing.Point(603,475);
 			this.butCancel.Name = "butCancel";
-			this.butCancel.Size = new System.Drawing.Size(75,26);
+			this.butCancel.Size = new System.Drawing.Size(75,24);
 			this.butCancel.TabIndex = 0;
 			this.butCancel.Text = "&Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
@@ -127,9 +136,9 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(639,360);
+			this.butOK.Location = new System.Drawing.Point(511,475);
 			this.butOK.Name = "butOK";
-			this.butOK.Size = new System.Drawing.Size(75,26);
+			this.butOK.Size = new System.Drawing.Size(75,24);
 			this.butOK.TabIndex = 1;
 			this.butOK.Text = "&OK";
 			this.butOK.Click += new System.EventHandler(this.butOK_Click);
@@ -138,7 +147,7 @@ namespace OpenDental{
 			// 
 			this.checkHidePayment.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.checkHidePayment.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkHidePayment.Location = new System.Drawing.Point(-2,107);
+			this.checkHidePayment.Location = new System.Drawing.Point(-2,121);
 			this.checkHidePayment.Name = "checkHidePayment";
 			this.checkHidePayment.Size = new System.Drawing.Size(162,20);
 			this.checkHidePayment.TabIndex = 11;
@@ -174,7 +183,7 @@ namespace OpenDental{
 			this.buttonFuchs1.CornerRadius = 4F;
 			this.buttonFuchs1.Location = new System.Drawing.Point(6,19);
 			this.buttonFuchs1.Name = "buttonFuchs1";
-			this.buttonFuchs1.Size = new System.Drawing.Size(86,21);
+			this.buttonFuchs1.Size = new System.Drawing.Size(86,24);
 			this.buttonFuchs1.TabIndex = 18;
 			this.buttonFuchs1.Text = "Ins. Not Paid";
 			this.buttonFuchs1.Visible = false;
@@ -189,7 +198,7 @@ namespace OpenDental{
 			this.buttonFuchs2.CornerRadius = 4F;
 			this.buttonFuchs2.Location = new System.Drawing.Point(6,46);
 			this.buttonFuchs2.Name = "buttonFuchs2";
-			this.buttonFuchs2.Size = new System.Drawing.Size(102,21);
+			this.buttonFuchs2.Size = new System.Drawing.Size(103,24);
 			this.buttonFuchs2.TabIndex = 19;
 			this.buttonFuchs2.Text = "Ins. Paid, Bal. Left";
 			this.buttonFuchs2.Visible = false;
@@ -204,7 +213,7 @@ namespace OpenDental{
 			this.buttonFuchs3.CornerRadius = 4F;
 			this.buttonFuchs3.Location = new System.Drawing.Point(6,73);
 			this.buttonFuchs3.Name = "buttonFuchs3";
-			this.buttonFuchs3.Size = new System.Drawing.Size(112,21);
+			this.buttonFuchs3.Size = new System.Drawing.Size(117,24);
 			this.buttonFuchs3.TabIndex = 20;
 			this.buttonFuchs3.Text = "Ins. Paid, Credit Left";
 			this.buttonFuchs3.Visible = false;
@@ -335,7 +344,7 @@ namespace OpenDental{
 			// 
 			// label2
 			// 
-			this.label2.Location = new System.Drawing.Point(64,40);
+			this.label2.Location = new System.Drawing.Point(64,69);
 			this.label2.Name = "label2";
 			this.label2.Size = new System.Drawing.Size(81,14);
 			this.label2.TabIndex = 232;
@@ -345,21 +354,16 @@ namespace OpenDental{
 			// listMode
 			// 
 			this.listMode.FormattingEnabled = true;
-			this.listMode.Items.AddRange(new object[] {
-            "Unsent",
-            "Email",
-            "Mail",
-            "InPerson"});
-			this.listMode.Location = new System.Drawing.Point(146,40);
+			this.listMode.Location = new System.Drawing.Point(146,69);
 			this.listMode.Name = "listMode";
-			this.listMode.Size = new System.Drawing.Size(113,56);
+			this.listMode.Size = new System.Drawing.Size(113,43);
 			this.listMode.TabIndex = 233;
 			// 
 			// checkIntermingled
 			// 
 			this.checkIntermingled.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.checkIntermingled.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkIntermingled.Location = new System.Drawing.Point(-2,157);
+			this.checkIntermingled.Location = new System.Drawing.Point(-2,165);
 			this.checkIntermingled.Name = "checkIntermingled";
 			this.checkIntermingled.Size = new System.Drawing.Size(162,20);
 			this.checkIntermingled.TabIndex = 234;
@@ -370,7 +374,7 @@ namespace OpenDental{
 			// 
 			this.checkSinglePatient.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.checkSinglePatient.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkSinglePatient.Location = new System.Drawing.Point(-2,132);
+			this.checkSinglePatient.Location = new System.Drawing.Point(-2,143);
 			this.checkSinglePatient.Name = "checkSinglePatient";
 			this.checkSinglePatient.Size = new System.Drawing.Size(162,20);
 			this.checkSinglePatient.TabIndex = 235;
@@ -398,25 +402,91 @@ namespace OpenDental{
 			// 
 			this.textDate.BackColor = System.Drawing.SystemColors.Window;
 			this.textDate.ForeColor = System.Drawing.SystemColors.WindowText;
-			this.textDate.Location = new System.Drawing.Point(146,10);
+			this.textDate.Location = new System.Drawing.Point(146,19);
 			this.textDate.Name = "textDate";
 			this.textDate.Size = new System.Drawing.Size(77,20);
 			this.textDate.TabIndex = 238;
 			// 
 			// label4
 			// 
-			this.label4.Location = new System.Drawing.Point(67,13);
+			this.label4.Location = new System.Drawing.Point(67,22);
 			this.label4.Name = "label4";
 			this.label4.Size = new System.Drawing.Size(77,14);
 			this.label4.TabIndex = 237;
 			this.label4.Text = "Date";
 			this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
+			// checkIsSent
+			// 
+			this.checkIsSent.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkIsSent.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.checkIsSent.Location = new System.Drawing.Point(1,44);
+			this.checkIsSent.Name = "checkIsSent";
+			this.checkIsSent.Size = new System.Drawing.Size(159,20);
+			this.checkIsSent.TabIndex = 239;
+			this.checkIsSent.Text = "Sent";
+			this.checkIsSent.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// butDelete
+			// 
+			this.butDelete.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butDelete.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.butDelete.Autosize = true;
+			this.butDelete.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butDelete.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butDelete.CornerRadius = 4F;
+			this.butDelete.Image = global::OpenDental.Properties.Resources.deleteX;
+			this.butDelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butDelete.Location = new System.Drawing.Point(38,475);
+			this.butDelete.Name = "butDelete";
+			this.butDelete.Size = new System.Drawing.Size(79,24);
+			this.butDelete.TabIndex = 240;
+			this.butDelete.Text = "Delete";
+			this.butDelete.Click += new System.EventHandler(this.butDelete_Click);
+			// 
+			// butPrint
+			// 
+			this.butPrint.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butPrint.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.butPrint.Autosize = true;
+			this.butPrint.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butPrint.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butPrint.CornerRadius = 4F;
+			this.butPrint.Image = global::OpenDental.Properties.Resources.butPrint;
+			this.butPrint.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butPrint.Location = new System.Drawing.Point(220,475);
+			this.butPrint.Name = "butPrint";
+			this.butPrint.Size = new System.Drawing.Size(79,24);
+			this.butPrint.TabIndex = 241;
+			this.butPrint.Text = "Print";
+			this.butPrint.Click += new System.EventHandler(this.butPrint_Click);
+			// 
+			// butEmail
+			// 
+			this.butEmail.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butEmail.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.butEmail.Autosize = true;
+			this.butEmail.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butEmail.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butEmail.CornerRadius = 4F;
+			this.butEmail.Image = global::OpenDental.Properties.Resources.email1;
+			this.butEmail.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butEmail.Location = new System.Drawing.Point(310,475);
+			this.butEmail.Name = "butEmail";
+			this.butEmail.Size = new System.Drawing.Size(79,24);
+			this.butEmail.TabIndex = 242;
+			this.butEmail.Text = "E-mail";
+			this.butEmail.Click += new System.EventHandler(this.butEmail_Click);
+			// 
 			// FormStatementOptions
 			// 
 			this.AcceptButton = this.butOK;
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
-			this.ClientSize = new System.Drawing.Size(745,460);
+			this.ClientSize = new System.Drawing.Size(709,525);
+			this.Controls.Add(this.butEmail);
+			this.Controls.Add(this.butPrint);
+			this.Controls.Add(this.butDelete);
+			this.Controls.Add(this.checkIsSent);
 			this.Controls.Add(this.textDate);
 			this.Controls.Add(this.label4);
 			this.Controls.Add(this.groupDateRange);
@@ -451,6 +521,8 @@ namespace OpenDental{
 
 		private void FormStatementOptions_Load(object sender, System.EventArgs e) {
 			textDate.Text=StmtCur.DateSent.ToShortDateString();
+			checkIsSent.Checked=StmtCur.IsSent;
+			initiallySent=StmtCur.IsSent;
 			listMode.Items.Clear();
 			for(int i=0;i<Enum.GetNames(typeof(StatementMode)).Length;i++){
 				listMode.Items.Add(Lan.g("enumStatementMode",Enum.GetNames(typeof(StatementMode))[i]));
@@ -511,23 +583,63 @@ namespace OpenDental{
 			textNote.Text="This credit is on your account. We look forward to seeing you on your next apptointment! "+textNote.Text;
 		}
 
-		private void butOK_Click(object sender, System.EventArgs e) {
-			SaveAndClose();
+		private void butPrint_Click(object sender,EventArgs e) {
+			if(listMode.SelectedIndex==(int)StatementMode.Email){
+				listMode.SelectedIndex=(int)StatementMode.InPerson;
+			}
+			checkIsSent.Checked=true;
+			if(!SaveToDb()){
+				return;
+			}
+MsgBox.Show(this,"Not functional yet");
+			DialogResult=DialogResult.OK;
 		}
 
-		private void SaveAndClose(){
+		private void butEmail_Click(object sender,EventArgs e) {
+			if(listMode.SelectedIndex!=(int)StatementMode.Email){
+				listMode.SelectedIndex=(int)StatementMode.Email;
+			}
+			checkIsSent.Checked=true;
+			if(!SaveToDb()){
+				return;
+			}
+MsgBox.Show(this,"Not functional yet");
+			DialogResult=DialogResult.OK;
+		}
+
+		private void butDelete_Click(object sender,EventArgs e) {
+			if(StmtCur.IsNew){
+				DialogResult=DialogResult.Cancel;
+				return;
+			}
+			if(!MsgBox.Show(this,true,"Delete?")){
+				return;
+			}
+			Statements.DeleteObject(StmtCur);
+			DialogResult=DialogResult.OK;
+		}
+
+		private void butOK_Click(object sender, System.EventArgs e) {
+			if(!SaveToDb()){
+				return;
+			}
+			DialogResult=DialogResult.OK;
+		}
+
+		private bool SaveToDb(){
 			if(  textDateStart.errorProvider1.GetError(textDateStart)!=""
 				|| textDateEnd.errorProvider1.GetError(textDateEnd)!=""
 				|| textDate.errorProvider1.GetError(textDate)!="")
 			{
 				MsgBox.Show(this,"Please fix data entry errors first.");
-				return;
+				return false;
 			}
 			if(textDate.Text==""){
 				MsgBox.Show(this,"Please enter a date.");
-				return;
+				return false;
 			}
 			StmtCur.DateSent=PIn.PDate(textDate.Text);
+			StmtCur.IsSent=checkIsSent.Checked;
 			StmtCur.Mode_=(StatementMode)listMode.SelectedIndex;
 			StmtCur.HidePayment=checkHidePayment.Checked;
 			StmtCur.SinglePatient=checkSinglePatient.Checked;
@@ -541,13 +653,27 @@ namespace OpenDental{
 			}
 			StmtCur.Note=textNote.Text;
 			StmtCur.NoteBold=textNoteBold.Text;
+			if(initiallySent){
+				if(StmtCur.IsDirty){
+					if(!MsgBox.Show(this,true,"You should not be making changes to a statement that was already sent.  Continue anyway?")){
+						return false;
+					}
+				}
+				else{//no changes were made
+					return true;
+				}
+			}
 			Statements.WriteObject(StmtCur);
-			DialogResult=DialogResult.OK;
+			return true;
 		}
 
 		private void butCancel_Click(object sender, System.EventArgs e) {
 			DialogResult=DialogResult.Cancel;
 		}
+
+		
+
+		
 
 	
 

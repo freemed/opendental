@@ -207,7 +207,7 @@ namespace OpenDental.DataAccess {
 					dataField.Field.SetValue(value, reader.GetValue(ordinal));
 				}
 			}
-
+			value.IsDirty=false;
 			value.IsNew = false;
 			return value;
 		}

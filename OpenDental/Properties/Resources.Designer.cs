@@ -260,6 +260,20 @@ namespace OpenDental.Properties {
             }
         }
         
+        internal static System.Drawing.Bitmap email {
+            get {
+                object obj = ResourceManager.GetObject("email", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap email1 {
+            get {
+                object obj = ResourceManager.GetObject("email1", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         /// <summary>
         ///   Looks up a localized string similar to The GNU General Public License (GPL)
         ///
@@ -379,13 +393,13 @@ namespace OpenDental.Properties {
         ///  &lt;TopMargin&gt;.25in&lt;/TopMargin&gt;
         ///  &lt;LeftMargin&gt;.25in&lt;/LeftMargin&gt;
         ///  &lt;RightMargin&gt;.25in&lt;/RightMargin&gt;
-        ///  &lt;BottomMargin&gt;.25in&lt;/BottomMargin&gt;
+        ///  &lt;BottomMargin&gt;.4in&lt;/BottomMargin&gt;
         ///  &lt;DataSets&gt;
         ///    &lt;DataSet Name=&quot;Data&quot;&gt;
         ///      &lt;Query&gt;
         ///        &lt;DataSourceName&gt;DS1&lt;/DataSourceName&gt;
         ///        &lt;Timeout&gt;10&lt;/Timeout&gt;
-        ///        &lt;CommandText&gt;SELECT acco [rest of string was truncated]&quot;;.
+        ///        &lt;CommandText&gt;SELECT accou [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string ReportAccountingGenLedger {
             get {
