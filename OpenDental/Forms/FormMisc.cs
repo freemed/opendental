@@ -80,6 +80,8 @@ namespace OpenDental{
 		private RadioButton radioBottom;
 		private TextBox textClaimAttachPath;
 		private Label label13;
+		private GroupBox groupBox3;
+		private CheckBox checkAutoClearEntryStatus;
 		private List<Def> posAdjTypes;
 
 		///<summary></summary>
@@ -164,6 +166,8 @@ namespace OpenDental{
 			this.groupBoxTaskDefaults=new System.Windows.Forms.GroupBox();
 			this.textClaimAttachPath=new System.Windows.Forms.TextBox();
 			this.label13=new System.Windows.Forms.Label();
+			this.groupBox3=new System.Windows.Forms.GroupBox();
+			this.checkAutoClearEntryStatus=new System.Windows.Forms.CheckBox();
 			this.validNumY=new OpenDental.ValidNumber();
 			this.validNumX=new OpenDental.ValidNumber();
 			this.butLanguages=new OpenDental.UI.Button();
@@ -178,6 +182,7 @@ namespace OpenDental{
 			((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
 			this.groupBox2.SuspendLayout();
 			this.groupBoxTaskDefaults.SuspendLayout();
+			this.groupBox3.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// textTreatNote
@@ -267,7 +272,7 @@ namespace OpenDental{
 			this.groupBox1.FlatStyle=System.Windows.Forms.FlatStyle.System;
 			this.groupBox1.Location=new System.Drawing.Point(26,9);
 			this.groupBox1.Name="groupBox1";
-			this.groupBox1.Size=new System.Drawing.Size(408,162);
+			this.groupBox1.Size=new System.Drawing.Size(408,122);
 			this.groupBox1.TabIndex=48;
 			this.groupBox1.TabStop=false;
 			this.groupBox1.Text="Treatment Plan module";
@@ -525,7 +530,7 @@ namespace OpenDental{
 			this.groupBox4.Controls.Add(this.checkApptBubbleDelay);
 			this.groupBox4.Controls.Add(this.checkAppointmentBubblesDisabled);
 			this.groupBox4.Controls.Add(this.checkSolidBlockouts);
-			this.groupBox4.Location=new System.Drawing.Point(26,177);
+			this.groupBox4.Location=new System.Drawing.Point(26,135);
 			this.groupBox4.Name="groupBox4";
 			this.groupBox4.Size=new System.Drawing.Size(408,129);
 			this.groupBox4.TabIndex=67;
@@ -863,6 +868,30 @@ namespace OpenDental{
 			this.label13.TabIndex=190;
 			this.label13.Text="Claim Attachment Export Path";
 			// 
+			// groupBox3
+			// 
+			this.groupBox3.Controls.Add(this.checkAutoClearEntryStatus);
+			this.groupBox3.Location=new System.Drawing.Point(25,266);
+			this.groupBox3.Name="groupBox3";
+			this.groupBox3.Size=new System.Drawing.Size(409,40);
+			this.groupBox3.TabIndex=191;
+			this.groupBox3.TabStop=false;
+			this.groupBox3.Text="Chart module";
+			// 
+			// checkAutoClearEntryStatus
+			// 
+			this.checkAutoClearEntryStatus.CheckAlign=System.Drawing.ContentAlignment.MiddleRight;
+			this.checkAutoClearEntryStatus.Checked=true;
+			this.checkAutoClearEntryStatus.CheckState=System.Windows.Forms.CheckState.Checked;
+			this.checkAutoClearEntryStatus.FlatStyle=System.Windows.Forms.FlatStyle.System;
+			this.checkAutoClearEntryStatus.Location=new System.Drawing.Point(17,19);
+			this.checkAutoClearEntryStatus.Name="checkAutoClearEntryStatus";
+			this.checkAutoClearEntryStatus.Size=new System.Drawing.Size(372,15);
+			this.checkAutoClearEntryStatus.TabIndex=73;
+			this.checkAutoClearEntryStatus.Text="Automatically reset entry stats to TreatPlan after selecting a different patient";
+			this.checkAutoClearEntryStatus.TextAlign=System.Drawing.ContentAlignment.MiddleRight;
+			this.checkAutoClearEntryStatus.UseVisualStyleBackColor=true;
+			// 
 			// validNumY
 			// 
 			this.validNumY.Location=new System.Drawing.Point(192,75);
@@ -958,6 +987,7 @@ namespace OpenDental{
 			// 
 			this.AutoScaleBaseSize=new System.Drawing.Size(5,13);
 			this.ClientSize=new System.Drawing.Size(893,699);
+			this.Controls.Add(this.groupBox3);
 			this.Controls.Add(this.textClaimAttachPath);
 			this.Controls.Add(this.label13);
 			this.Controls.Add(this.groupBox2);
@@ -1001,6 +1031,7 @@ namespace OpenDental{
 			this.groupBox2.ResumeLayout(false);
 			this.groupBoxTaskDefaults.ResumeLayout(false);
 			this.groupBoxTaskDefaults.PerformLayout();
+			this.groupBox3.ResumeLayout(false);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -1099,8 +1130,9 @@ namespace OpenDental{
 						comboPriority.SelectedIndex=i;
 					}
 				}*/
-				checkApptExclamation.Checked=PrefB.GetBool("ApptExclamationShowForUnsentIns");
+			checkApptExclamation.Checked=PrefB.GetBool("ApptExclamationShowForUnsentIns");
 			checkProviderIncomeShows.Checked=PrefB.GetBool("ProviderIncomeTransferShows");
+			checkAutoClearEntryStatus.Checked=PrefB.GetBool("AutoResetTPEntryStatus");
 		}
 
 		private void checkRandomPrimaryKeys_Click(object sender, System.EventArgs e) {
@@ -1226,7 +1258,8 @@ namespace OpenDental{
 				//| Prefs.UpdateInt("TreatPlanPriorityForDeclined",DefB.Short[(int)DefCat.TxPriorities][comboPriority.SelectedIndex].DefNum)
 				| Prefs.UpdateBool("ApptExclamationShowForUnsentIns", checkApptExclamation.Checked)
 				| Prefs.UpdateBool("ProviderIncomeTransferShows", checkProviderIncomeShows.Checked)
-				| Prefs.UpdateString("ClaimAttachExportPath",this.textClaimAttachPath.Text)
+				| Prefs.UpdateString("ClaimAttachExportPath",textClaimAttachPath.Text)
+				| Prefs.UpdateBool("AutoResetTPEntryStatus",checkAutoClearEntryStatus.Checked)
 				)
 			{
 				changed=true;

@@ -6324,8 +6324,8 @@ namespace OpenDental{
 				command="INSERT INTO definition (Category,ItemOrder,ItemName,ItemValue,ItemColor,IsHidden) "
 					+"VALUES(18,"+POut.PInt(defnum+1)+",'Statements','S',0,0)";
 				General.NonQEx(command);
-
-
+				command="INSERT INTO preference (PrefName,ValueString) VALUES ('AutoResetTPEntryStatus','1')";
+				General.NonQEx(command);
 
 
 
@@ -6339,29 +6339,3 @@ namespace OpenDental{
 	}
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

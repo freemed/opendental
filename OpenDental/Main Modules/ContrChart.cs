@@ -2741,9 +2741,11 @@ namespace OpenDental{
 				tabProc.Enabled=true;
 				butAddKey.Enabled=true;
 				butForeignKey.Enabled=true;
-				if(PrevPtNum != PatCur.PatNum) {//reset to TP status on every new patient selected
-					radioEntryTP.Select();
-					PrevPtNum = PatCur.PatNum;
+				if(((Pref)PrefB.HList["AutoResetTPEntryStatus"]).ValueString=="1"){
+					if(PrevPtNum != PatCur.PatNum) {//reset to TP status on every new patient selected
+						radioEntryTP.Select();
+						PrevPtNum = PatCur.PatNum;
+					}
 				}
 			}
 			ToolBarMain.Invalidate();
