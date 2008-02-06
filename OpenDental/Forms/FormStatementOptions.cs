@@ -41,6 +41,7 @@ namespace OpenDental{
 		private OpenDental.UI.Button butDelete;
 		private OpenDental.UI.Button butPrint;
 		private OpenDental.UI.Button butEmail;
+		private OpenDental.UI.Button butPreview;
 		private bool initiallySent;
 
 		///<summary></summary>
@@ -108,6 +109,7 @@ namespace OpenDental{
 			this.butDelete = new OpenDental.UI.Button();
 			this.butPrint = new OpenDental.UI.Button();
 			this.butEmail = new OpenDental.UI.Button();
+			this.butPreview = new OpenDental.UI.Button();
 			this.groupFuchs.SuspendLayout();
 			this.groupDateRange.SuspendLayout();
 			this.SuspendLayout();
@@ -121,7 +123,7 @@ namespace OpenDental{
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
 			this.butCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.butCancel.Location = new System.Drawing.Point(603,475);
+			this.butCancel.Location = new System.Drawing.Point(606,453);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75,24);
 			this.butCancel.TabIndex = 0;
@@ -136,7 +138,7 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(511,475);
+			this.butOK.Location = new System.Drawing.Point(514,453);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75,24);
 			this.butOK.TabIndex = 1;
@@ -426,6 +428,7 @@ namespace OpenDental{
 			this.checkIsSent.TabIndex = 239;
 			this.checkIsSent.Text = "Sent";
 			this.checkIsSent.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkIsSent.Click += new System.EventHandler(this.checkIsSent_Click);
 			// 
 			// butDelete
 			// 
@@ -437,7 +440,7 @@ namespace OpenDental{
 			this.butDelete.CornerRadius = 4F;
 			this.butDelete.Image = global::OpenDental.Properties.Resources.deleteX;
 			this.butDelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butDelete.Location = new System.Drawing.Point(38,475);
+			this.butDelete.Location = new System.Drawing.Point(40,453);
 			this.butDelete.Name = "butDelete";
 			this.butDelete.Size = new System.Drawing.Size(79,24);
 			this.butDelete.TabIndex = 240;
@@ -454,7 +457,7 @@ namespace OpenDental{
 			this.butPrint.CornerRadius = 4F;
 			this.butPrint.Image = global::OpenDental.Properties.Resources.butPrint;
 			this.butPrint.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butPrint.Location = new System.Drawing.Point(220,475);
+			this.butPrint.Location = new System.Drawing.Point(195,453);
 			this.butPrint.Name = "butPrint";
 			this.butPrint.Size = new System.Drawing.Size(79,24);
 			this.butPrint.TabIndex = 241;
@@ -471,20 +474,38 @@ namespace OpenDental{
 			this.butEmail.CornerRadius = 4F;
 			this.butEmail.Image = global::OpenDental.Properties.Resources.email1;
 			this.butEmail.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butEmail.Location = new System.Drawing.Point(310,475);
+			this.butEmail.Location = new System.Drawing.Point(280,453);
 			this.butEmail.Name = "butEmail";
 			this.butEmail.Size = new System.Drawing.Size(79,24);
 			this.butEmail.TabIndex = 242;
 			this.butEmail.Text = "E-mail";
 			this.butEmail.Click += new System.EventHandler(this.butEmail_Click);
 			// 
+			// butPreview
+			// 
+			this.butPreview.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butPreview.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.butPreview.Autosize = true;
+			this.butPreview.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butPreview.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butPreview.CornerRadius = 4F;
+			this.butPreview.Image = global::OpenDental.Properties.Resources.printPreview20;
+			this.butPreview.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butPreview.Location = new System.Drawing.Point(365,453);
+			this.butPreview.Name = "butPreview";
+			this.butPreview.Size = new System.Drawing.Size(79,24);
+			this.butPreview.TabIndex = 243;
+			this.butPreview.Text = "View";
+			this.butPreview.Click += new System.EventHandler(this.butPreview_Click);
+			// 
 			// FormStatementOptions
 			// 
 			this.AcceptButton = this.butOK;
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
-			this.ClientSize = new System.Drawing.Size(709,525);
-			this.Controls.Add(this.butEmail);
+			this.ClientSize = new System.Drawing.Size(709,493);
 			this.Controls.Add(this.butPrint);
+			this.Controls.Add(this.butPreview);
+			this.Controls.Add(this.butEmail);
 			this.Controls.Add(this.butDelete);
 			this.Controls.Add(this.checkIsSent);
 			this.Controls.Add(this.textDate);
@@ -520,9 +541,12 @@ namespace OpenDental{
 		#endregion
 
 		private void FormStatementOptions_Load(object sender, System.EventArgs e) {
+			if(StmtCur.IsSent){
+				checkIsSent.Checked=true;
+				initiallySent=true;
+				SetEnabled(false);
+			}
 			textDate.Text=StmtCur.DateSent.ToShortDateString();
-			checkIsSent.Checked=StmtCur.IsSent;
-			initiallySent=StmtCur.IsSent;
 			listMode.Items.Clear();
 			for(int i=0;i<Enum.GetNames(typeof(StatementMode)).Length;i++){
 				listMode.Items.Add(Lan.g("enumStatementMode",Enum.GetNames(typeof(StatementMode))[i]));
@@ -583,28 +607,78 @@ namespace OpenDental{
 			textNote.Text="This credit is on your account. We look forward to seeing you on your next apptointment! "+textNote.Text;
 		}
 
-		private void butPrint_Click(object sender,EventArgs e) {
-			if(listMode.SelectedIndex==(int)StatementMode.Email){
-				listMode.SelectedIndex=(int)StatementMode.InPerson;
+		private void checkIsSent_Click(object sender,EventArgs e) {
+			if(initiallySent && !checkIsSent.Checked){//user unchecks the Sent box in order to edit
+				if(!MsgBox.Show(this,true,"Warning.  This will immediately delete the archived copy of the statement.  Continue anyway?")){
+					checkIsSent.Checked=true;
+					return;
+				}
+				SetEnabled(true);
+//Delete the archived copy of the statement
 			}
-			checkIsSent.Checked=true;
-			if(!SaveToDb()){
-				return;
+		}
+
+		private void SetEnabled(bool boolval){
+			textDate.Enabled=boolval;
+			listMode.Enabled=boolval;
+			checkHidePayment.Enabled=boolval;
+			checkSinglePatient.Enabled=boolval;
+			checkIntermingled.Enabled=boolval;
+			groupDateRange.Enabled=boolval;
+			textNote.Enabled=boolval;
+			textNoteBold.Enabled=boolval;
+		}
+
+		private void butPrint_Click(object sender,EventArgs e) {
+			if(initiallySent && checkIsSent.Checked){
+				//reprint existing archive pdf
+
+			}
+			else{//was not initially sent, or else user has unchecked the sent box
+				//So create an archive
+				if(listMode.SelectedIndex==(int)StatementMode.Email){
+					listMode.SelectedIndex=(int)StatementMode.InPerson;
+				}
+				checkIsSent.Checked=true;
+				if(!SaveToDb()){
+					return;
+				}
+
 			}
 MsgBox.Show(this,"Not functional yet");
 			DialogResult=DialogResult.OK;
 		}
 
 		private void butEmail_Click(object sender,EventArgs e) {
-			if(listMode.SelectedIndex!=(int)StatementMode.Email){
-				listMode.SelectedIndex=(int)StatementMode.Email;
+			if(initiallySent && checkIsSent.Checked){
+				//remail existing archive pdf
+
 			}
-			checkIsSent.Checked=true;
-			if(!SaveToDb()){
-				return;
+			else{//was not initially sent, or else user has unchecked the sent box
+				//So create an archive
+				if(listMode.SelectedIndex!=(int)StatementMode.Email){
+					listMode.SelectedIndex=(int)StatementMode.Email;
+				}
+				checkIsSent.Checked=true;
+				if(!SaveToDb()){
+					return;
+				}
+
 			}
 MsgBox.Show(this,"Not functional yet");
 			DialogResult=DialogResult.OK;
+		}
+
+		private void butPreview_Click(object sender,EventArgs e) {
+			if(initiallySent && checkIsSent.Checked){
+				//launch existing archive pdf
+
+			}
+			else{//was not initially sent, or else user has unchecked the sent box
+				//No archive to use, so generate a temporary file or else preview on the fly
+
+			}
+MsgBox.Show(this,"Not functional yet");
 		}
 
 		private void butDelete_Click(object sender,EventArgs e) {
@@ -653,7 +727,7 @@ MsgBox.Show(this,"Not functional yet");
 			}
 			StmtCur.Note=textNote.Text;
 			StmtCur.NoteBold=textNoteBold.Text;
-			if(initiallySent){
+			/*if(initiallySent){
 				if(StmtCur.IsDirty){
 					if(!MsgBox.Show(this,true,"You should not be making changes to a statement that was already sent.  Continue anyway?")){
 						return false;
@@ -662,7 +736,7 @@ MsgBox.Show(this,"Not functional yet");
 				else{//no changes were made
 					return true;
 				}
-			}
+			}*/
 			Statements.WriteObject(StmtCur);
 			return true;
 		}
@@ -670,6 +744,10 @@ MsgBox.Show(this,"Not functional yet");
 		private void butCancel_Click(object sender, System.EventArgs e) {
 			DialogResult=DialogResult.Cancel;
 		}
+
+		
+
+		
 
 		
 

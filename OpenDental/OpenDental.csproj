@@ -3200,6 +3200,7 @@
     <None Include="bin\Debug\payments.txt" />
     <Content Include="Misc\App.ico" />
     <Content Include="Misc\TerminalMgr.ico" />
+    <None Include="Resources\printPreview20.gif" />
     <None Include="Resources\email1.gif" />
     <None Include="Resources\email.gif" />
     <None Include="Web References\customerUpdates\Reference.map">
