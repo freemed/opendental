@@ -3296,9 +3296,9 @@ double adj=Adjustments.GetTotForProc(arrayProc[tempCountProc].ProcNum,Adjustment
 				patNums[0][i]=famPatNums[i];
 			}
 			PrintingStatement = true; */
-			List<Statement> listStmts=new List<Statement>();
-			listStmts.Add(stmt);
-			FormST.PrintStatements(listStmts);
+			//List<Statement> listStmts=new List<Statement>();
+			//listStmts.Add(stmt);
+			FormST.PrintStatement(stmt);
 				//patNums,fromDate,toDate,includeClaims,subtotalsOnly,hidePayment,nextAppt,
 				//new string[] {note}, isBill,pdfFullFileName);
 			if(stmt.Mode_!=StatementMode.Email){
