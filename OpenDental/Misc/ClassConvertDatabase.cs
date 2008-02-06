@@ -6288,8 +6288,10 @@ namespace OpenDental{
 						SinglePatient tinyint(1) NOT NULL,
 						Intermingled tinyint(1) NOT NULL,
 						IsSent tinyint(1) NOT NULL,
+						DocNum int NOT NULL,
 						PRIMARY KEY (StatementNum),
-						INDEX (PatNum)
+						INDEX (PatNum),
+						INDEX (DocNum)
 						) DEFAULT CHARSET=utf8";
 					General.NonQEx(command);
 				}
@@ -6308,8 +6310,10 @@ namespace OpenDental{
 						SinglePatient tinyint(1) NOT NULL,
 						Intermingled tinyint(1) NOT NULL,
 						IsSent tinyint(1) NOT NULL,
+						DocNum int NOT NULL,
 						PRIMARY KEY (StatementNum),
-						INDEX (PatNum)
+						INDEX (PatNum),
+						INDEX (DocNum)
 						)";
 					General.NonQEx(command);
 				}

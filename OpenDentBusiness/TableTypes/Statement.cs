@@ -151,7 +151,17 @@ namespace OpenDentBusiness{
 			get { return isSentChanged; }
 		}
 
-
+		[DataField("DocNum")]
+		private int docNum;
+		bool docNumChanged;
+		/// <summary>FK to document.DocNum when a pdf has been archived.</summary>
+		public int DocNum {
+			get { return docNum; }
+			set { if(docNum!=value){docNum = value; MarkDirty(); docNumChanged = true;} }
+		}
+		public bool DocNumChanged {
+			get { return docNumChanged; }
+		}
 		
 		public Statement Copy(){
 			return (Statement)Clone();
