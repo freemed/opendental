@@ -3217,7 +3217,7 @@ namespace OpenDental{
 		private void menuItemRDLReport_Click(object sender,System.EventArgs e) {
 			//This point in the code is only reached if the A to Z folders are enabled, thus
 			//the image path should exist.
-			FormReport FormR=new FormReport();
+			FormReportCustom FormR=new FormReportCustom();
 			FormR.SourceFilePath=ODFileUtils.CombinePaths(new string[]
 				{FormPath.GetPreferredImagePath(),PrefB.GetString("ReportFolderName"),((MenuItem)sender).Text+".rdl"}
 				);
