@@ -82,9 +82,9 @@ namespace OpenDental{
 			this.butClose.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butClose.CornerRadius = 4F;
 			this.butClose.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.butClose.Location = new System.Drawing.Point(671,637);
+			this.butClose.Location = new System.Drawing.Point(671,638);
 			this.butClose.Name = "butClose";
-			this.butClose.Size = new System.Drawing.Size(75,26);
+			this.butClose.Size = new System.Drawing.Size(75,24);
 			this.butClose.TabIndex = 3;
 			this.butClose.Text = "&Close";
 			this.butClose.Click += new System.EventHandler(this.butClose_Click);
@@ -103,6 +103,7 @@ namespace OpenDental{
 			this.textGuide.Location = new System.Drawing.Point(182,604);
 			this.textGuide.Multiline = true;
 			this.textGuide.Name = "textGuide";
+			this.textGuide.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
 			this.textGuide.Size = new System.Drawing.Size(460,63);
 			this.textGuide.TabIndex = 2;
 			// 
@@ -127,9 +128,9 @@ namespace OpenDental{
 			this.butHide.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butHide.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butHide.CornerRadius = 4F;
-			this.butHide.Location = new System.Drawing.Point(140,17);
+			this.butHide.Location = new System.Drawing.Point(138,18);
 			this.butHide.Name = "butHide";
-			this.butHide.Size = new System.Drawing.Size(75,26);
+			this.butHide.Size = new System.Drawing.Size(79,24);
 			this.butHide.TabIndex = 10;
 			this.butHide.Text = "&Hide";
 			this.butHide.Click += new System.EventHandler(this.butHide_Click);
@@ -143,9 +144,9 @@ namespace OpenDental{
 			this.butDown.CornerRadius = 4F;
 			this.butDown.Image = global::OpenDental.Properties.Resources.down;
 			this.butDown.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butDown.Location = new System.Drawing.Point(348,17);
+			this.butDown.Location = new System.Drawing.Point(346,18);
 			this.butDown.Name = "butDown";
-			this.butDown.Size = new System.Drawing.Size(79,26);
+			this.butDown.Size = new System.Drawing.Size(79,24);
 			this.butDown.TabIndex = 9;
 			this.butDown.Text = "&Down";
 			this.butDown.Click += new System.EventHandler(this.butDown_Click);
@@ -159,9 +160,9 @@ namespace OpenDental{
 			this.butUp.CornerRadius = 4F;
 			this.butUp.Image = global::OpenDental.Properties.Resources.up;
 			this.butUp.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butUp.Location = new System.Drawing.Point(242,17);
+			this.butUp.Location = new System.Drawing.Point(242,18);
 			this.butUp.Name = "butUp";
-			this.butUp.Size = new System.Drawing.Size(79,26);
+			this.butUp.Size = new System.Drawing.Size(79,24);
 			this.butUp.TabIndex = 8;
 			this.butUp.Text = "&Up";
 			this.butUp.Click += new System.EventHandler(this.butUp_Click);
@@ -175,9 +176,9 @@ namespace OpenDental{
 			this.butAdd.CornerRadius = 4F;
 			this.butAdd.Image = global::OpenDental.Properties.Resources.Add;
 			this.butAdd.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butAdd.Location = new System.Drawing.Point(34,17);
+			this.butAdd.Location = new System.Drawing.Point(34,18);
 			this.butAdd.Name = "butAdd";
-			this.butAdd.Size = new System.Drawing.Size(79,26);
+			this.butAdd.Size = new System.Drawing.Size(79,24);
 			this.butAdd.TabIndex = 6;
 			this.butAdd.Text = "&Add";
 			this.butAdd.Click += new System.EventHandler(this.butAdd_Click);
@@ -252,8 +253,8 @@ namespace OpenDental{
 			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Definitions";
-			this.Closing += new System.ComponentModel.CancelEventHandler(this.FormDefinitions_Closing);
 			this.Load += new System.EventHandler(this.FormDefinitions_Load);
+			this.Closing += new System.ComponentModel.CancelEventHandler(this.FormDefinitions_Closing);
 			this.groupEdit.ResumeLayout(false);
 			this.ResumeLayout(false);
 			this.PerformLayout();
@@ -399,8 +400,8 @@ namespace OpenDental{
 				case 12://"Image Categories":
 					//SelectedCat=18;
 					FormDefEdit.EnableValue=true;
-					FormDefEdit.ValueText=Lan.g(this,"X=Chart,P=Patient Picture");
-					FormDefEdit.HelpText=Lan.g(this,"These are the categories that will be available in the image and chart modules.  If you hide a category, images in that category will be hidden, so only hide a category if you are certain it has never been used.  If you want the category to show in the Chart module, enter an X in the second column.  One category can be used for patient pictures, marked with P.  Affects all patient records.");
+					FormDefEdit.ValueText=Lan.g(this,"X=Chart,P=PatPict,S=Stmt");
+					FormDefEdit.HelpText=Lan.g(this,"These are the categories that will be available in the image and chart modules.  If you hide a category, images in that category will be hidden, so only hide a category if you are certain it has never been used.  If you want the category to show in the Chart module, enter an X in the second column.  One category can be used for patient pictures, marked with P.  One category should be used for statements, marked with S. Affects all patient records.");
 					break;
 				case 13://"Letter Merge Cats"
 					//SelectedCat=(int)DefCat.LetterMergeCats;

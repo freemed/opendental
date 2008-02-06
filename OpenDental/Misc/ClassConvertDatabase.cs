@@ -6319,6 +6319,12 @@ namespace OpenDental{
 				}
 				command="DROP TABLE IF EXISTS docattach";
 				General.NonQEx(command);
+				command="SELECT MAX(ItemOrder) FROM definition WHERE Category=18";
+				int defnum=PIn.PInt(General.GetCount(command));
+				command="INSERT INTO definition (Category,ItemOrder,ItemName,ItemValue,ItemColor,IsHidden) "
+					+"VALUES(18,"+POut.PInt(defnum+1)+",'Statements','S',0,0)";
+				General.NonQEx(command);
+
 
 
 

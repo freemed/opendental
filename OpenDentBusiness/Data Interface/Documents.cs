@@ -1,9 +1,10 @@
 using System;
+using System.Data;
 using System.Drawing;
 using System.Collections;
 using System.Collections.Generic;
-using System.Data;
 using System.IO;
+using System.Text.RegularExpressions;
 using OpenDentBusiness;
 using CodeBase;
 using OpenDental.DataAccess;
@@ -221,7 +222,7 @@ namespace OpenDentBusiness {
 			//first establish which category pat pics are in
 			int defNumPicts=0;
 			for(int i=0;i<DefB.Short[(int)DefCat.ImageCats].Length;i++){
-				if(DefB.Short[(int)DefCat.ImageCats][i].ItemValue=="P" || DefB.Short[(int)DefCat.ImageCats][i].ItemValue=="XP"){
+				if(Regex.IsMatch(DefB.Short[(int)DefCat.ImageCats][i].ItemValue,@"P")){
 					defNumPicts=DefB.Short[(int)DefCat.ImageCats][i].DefNum;
 					break;
 				}

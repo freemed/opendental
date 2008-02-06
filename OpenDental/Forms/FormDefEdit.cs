@@ -6,6 +6,7 @@ using System;
 using System.Drawing;
 using System.Collections;
 using System.ComponentModel;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using OpenDentBusiness;
 
@@ -342,18 +343,10 @@ namespace OpenDental{
 					}
 					break;
 				case DefCat.ImageCats:
-					if(textValue.Text=="P" || textValue.Text=="p"){
-						textValue.Text="P";
+					textValue.Text=textValue.Text.ToUpper().Replace(",","");
+					if(!Regex.IsMatch(textValue.Text,@"^[XPS]*$")){
+						textValue.Text="";
 					}
-					else if(textValue.Text=="X" || textValue.Text=="x"){
-						textValue.Text="X";
-					}
-					else if(textValue.Text.ToUpper()=="XP" || textValue.Text.ToUpper()=="PX" 
-						|| textValue.Text.ToUpper()=="X,P" || textValue.Text.ToUpper()=="P,X")
-					{
-						textValue.Text="XP";
-					}
-					else textValue.Text="";
 					break;
 				case DefCat.FeeSchedNames:
 					if(textValue.Text=="C" || textValue.Text=="c") {

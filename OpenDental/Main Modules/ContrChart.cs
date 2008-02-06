@@ -3746,8 +3746,7 @@ namespace OpenDental{
 			tabControlImages.TabPages.Add(page);
 			visImageCats=new ArrayList();
 			for(int i=0;i<DefB.Short[(int)DefCat.ImageCats].Length;i++){
-				if(DefB.Short[(int)DefCat.ImageCats][i].ItemValue=="X" || DefB.Short[(int)DefCat.ImageCats][i].ItemValue=="XP"){
-					//if tagged to show in Chart
+				if(Regex.IsMatch(DefB.Short[(int)DefCat.ImageCats][i].ItemValue,@"X")){//if tagged to show in Chart
 					visImageCats.Add(i);
 					page=new TabPage();
 					page.Text=DefB.Short[(int)DefCat.ImageCats][i].ItemName;
