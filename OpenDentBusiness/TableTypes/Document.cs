@@ -4,7 +4,7 @@ using System.Text;
 using OpenDental.DataAccess;
 
 namespace OpenDentBusiness{
-	///<summary>It should be called image, but the name is for historical reasons.  Represents a single document in the images module.  This table indicates in which patient's folder the image can be found, but the actual attaching of the image to the patient is done by the docattach table.</summary>
+	///<summary>It should be called image, but the name is for historical reasons.  Represents a single document in the images module.</summary>
 	[DataObject("document")]
 	public class Document : DataObjectBase {
 

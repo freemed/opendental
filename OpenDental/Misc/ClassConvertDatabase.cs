@@ -4471,9 +4471,6 @@ namespace OpenDental{
 					@"disease",												@"PatNum",															@" ",
 					@"disease",												@"DiseaseDefNum",												@" ",
 					@"diseasedef",										@"DiseaseDefNum",												@"a",
-					@"docattach",											@"DocAttachNum",												@"a",
-					@"docattach",											@"PatNum",															@" ",
-					@"docattach",											@"DocNum",															@" ",
 					@"document",											@"DocNum",															@"a",
 					@"document",											@"PatNum",															@" ",
 					@"document",											@"CropX",																@" ",
@@ -6316,8 +6313,8 @@ namespace OpenDental{
 						)";
 					General.NonQEx(command);
 				}
-
-
+				command="DROP TABLE IF EXISTS docattach";
+				General.NonQEx(command);
 
 
 

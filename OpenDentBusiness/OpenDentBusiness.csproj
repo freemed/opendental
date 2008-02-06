@@ -82,7 +82,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Data Interface\Statements.cs" />
-    <Compile Include="Data Interface\DocAttaches.cs" />
     <Compile Include="Data Interface\Documents.cs" />
     <Compile Include="Data Interface\Family.cs" />
     <Compile Include="Data Interface\General.cs" />
@@ -210,7 +209,6 @@
     <Compile Include="TableTypes\Deposit.cs" />
     <Compile Include="TableTypes\Disease.cs" />
     <Compile Include="TableTypes\DiseaseDef.cs" />
-    <Compile Include="TableTypes\DocAttach.cs" />
     <Compile Include="TableTypes\Document.cs" />
     <Compile Include="TableTypes\Dunning.cs" />
     <Compile Include="TableTypes\ElectID.cs" />

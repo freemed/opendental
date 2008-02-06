@@ -150,6 +150,8 @@ namespace OpenDentBusiness{
 		public bool IsSentChanged {
 			get { return isSentChanged; }
 		}
+
+
 		
 		public Statement Copy(){
 			return (Statement)Clone();

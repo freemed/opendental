@@ -140,10 +140,7 @@ namespace OpenDental{
 			gridMain.Columns.Add(col);
 			gridMain.Rows.Clear();
 			ODGridRow row;
-			List<DocAttach> docAttachList=DocAttaches.Refresh(PatNum);//will be used in future version
-			//This is not the proper way to do it.
 			Docs=Documents.GetAllWithPat(PatNum);
-			//DocAttaches.Refresh(PatNum);
 			for(int i=0;i<Docs.Length;i++){
 				row=new ODGridRow();
 				row.Cells.Add(Docs[i].DateCreated.ToShortDateString());

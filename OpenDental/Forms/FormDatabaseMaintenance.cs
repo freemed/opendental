@@ -399,7 +399,6 @@ namespace OpenDental {
 				"deposit","DepositNum",
 				"disease","DiseaseNum",
 				"diseasedef","DiseaseDefNum",
-				"docattach","DocAttachNum",
 				"document","DocNum",
 				"dunning","DunningNum",
 				"electid","ElectIDNum",

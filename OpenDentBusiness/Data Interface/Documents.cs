@@ -74,7 +74,7 @@ namespace OpenDentBusiness {
 			return Fill(General.GetTable(command));
 		}
 
-		///<summary>Inserts a new document into db, creates a filename based on Cur.DocNum, and then updates the db with this filename.  Also attaches the document to the current patient.</summary>
+		///<summary>Inserts a new document into db, creates a filename based on Cur.DocNum, and then updates the db with this filename.</summary>
 		public static void Insert(Document doc,Patient pat){
 			if(PrefB.RandomKeys) {
 				doc.DocNum=MiscDataB.GetKey("document","DocNum");
@@ -145,10 +145,6 @@ namespace OpenDentBusiness {
 				}*/
 				Update(doc);
 			}
-			DocAttach docAttach=new DocAttach();
-			docAttach.DocNum=doc.DocNum;
-			docAttach.PatNum=pat.PatNum;
-			DocAttaches.Insert(docAttach);
 		}
 
 		///<summary></summary>
@@ -181,8 +177,6 @@ namespace OpenDentBusiness {
 		///<summary></summary>
 		public static void Delete(Document doc){
 			string command= "DELETE from document WHERE DocNum = '"+doc.DocNum.ToString()+"'";
-			General.NonQ(command);	
-			command= "DELETE from docattach WHERE DocNum = '"+doc.DocNum.ToString()+"'";
 			General.NonQ(command);	
 		}
 
@@ -236,9 +230,8 @@ namespace OpenDentBusiness {
 				return false;
 			}
 			//then find 
-			string command="SELECT document.* FROM document,docattach "
-				+"WHERE document.DocNum=docattach.DocNum "
-				+"AND docattach.PatNum="+POut.PInt(patNum)
+			string command="SELECT * FROM document "
+				+"WHERE document.PatNum="+POut.PInt(patNum)
 				+" AND document.DocCategory="+POut.PInt(defNumPicts)
 				+" ORDER BY DateCreated DESC ";
 			//gets the most recent
