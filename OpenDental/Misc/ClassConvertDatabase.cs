@@ -6269,7 +6269,7 @@ namespace OpenDental{
 				//added after r1182
 				command = "UPDATE preference SET ValueString = 'http://70.90.133.65:1942/WebServiceCustomerUpdates/Service1.asmx' WHERE PrefName = 'UpdateServerAddress'";
 				General.NonQEx(command);
-				command="INSERT INTO preference (PrefName,ValueString) VALUES ('ClaimAttachExportPath','C:\\TempImages\\')";
+				command="INSERT INTO preference (PrefName,ValueString) VALUES ('ClaimAttachExportPath','C:\\\\TempImages\\\\')";
 				General.NonQEx(command);
 				//added after r1239
 				if(DataConnection.DBtype == DatabaseType.MySql){
@@ -6326,7 +6326,8 @@ namespace OpenDental{
 				General.NonQEx(command);
 				command="INSERT INTO preference (PrefName,ValueString) VALUES ('AutoResetTPEntryStatus','1')";
 				General.NonQEx(command);
-
+				command="INSERT INTO preference (PrefName,ValueString) VALUES ('ShowAccountFamilyCommEntries','1')";
+				General.NonQEx(command);
 
 
 
