@@ -1559,7 +1559,10 @@ namespace OpenDental{
 			else {
 				benefitList=Benefits.RefreshForPlan(PlanCur.PlanNum,patPlanNum);
 			}
-			benefitListOld=new List<Benefit>(benefitList);
+			benefitListOld=new List<Benefit>();
+			for(int i=0;i<benefitList.Count;i++){
+				benefitListOld.Add(benefitList[i].Copy());
+			}
 #if DEBUG
 			textPlanNum.Text=PlanCur.PlanNum.ToString();
 #else
