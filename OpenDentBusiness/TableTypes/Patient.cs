@@ -284,7 +284,7 @@ namespace OpenDentBusiness{
 		[DataField("EstBalance")]
 		private double estBalance;
 		bool estBalanceChanged;
-		/// <summary>Current patient balance.(not family). If user has checked BalancesDontSubtractIns in setup, then this will not take into account insurance.  Otherwise, the insurance estimate pending will have already been subtracted.</summary>
+		/// <summary>Current patient balance.(not family). Never subtracts insurance estimates.</summary>
 		public double EstBalance {
 			get { return estBalance; }
 			set { estBalance = value; MarkDirty(); estBalanceChanged = true; }

@@ -18,7 +18,7 @@ namespace OpenDental{
 		///<summary>Gets the Account table(s) for a statement.</summary>
 		public static DataSet GetStatement(int patNum,bool singlePatient,DateTime fromDate,DateTime toDate,bool intermingled)
 		{
-			return General.GetDS("AccountModule.GetAll",patNum.ToString(),POut.PBool(singlePatient),fromDate.ToShortDateString(),toDate.ToShortDateString(),POut.PBool(intermingled));
+			return General.GetDS("AccountModule.GetStatement",patNum.ToString(),POut.PBool(singlePatient),fromDate.ToShortDateString(),toDate.ToShortDateString(),POut.PBool(intermingled));
 		}
 
 	}

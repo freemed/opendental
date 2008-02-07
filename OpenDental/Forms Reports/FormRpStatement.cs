@@ -399,7 +399,7 @@ namespace OpenDental{
 		}
 
 		///<summary>Prints one statement.  Does not generate pdf or print from existing pdf.</summary>
-		public void PrintStatement(Statement stmt){
+		public void PrintStatement(Statement stmt,bool previewOnly){
 			Stmt=stmt;
 			dataSet=AccountModule.GetStatement(stmt.PatNum,stmt.SinglePatient,stmt.DateRangeFrom,stmt.DateRangeTo,
 				stmt.Intermingled);
@@ -424,16 +424,20 @@ namespace OpenDental{
 			labelTotPages.Text="1 / "+totalPages.ToString();
 			printdoc.Renderer=renderer;
 			printdoc.PrinterSettings=pd.PrinterSettings;
-			#if DEBUG
+			//#if DEBUG
+			if(previewOnly){
 				printPreviewControl2.Document=printdoc;
-			#else
+			//#else
+			}
+			else{
 				try{
 					printdoc.Print();
 				}
 				catch{
 					MessageBox.Show(Lan.g(this,"Printer not available"));
 				}
-			#endif
+			}
+			//#endif
 		}
 
 		/*
@@ -573,7 +577,6 @@ namespace OpenDental{
 						text="("+text.Substring(0,3)+")"+text.Substring(3,3)+"-"+text.Substring(6);
 					}
 					par.AddText(text);
-					//Nintendo ES, BrainAge
 					par.AddLineBreak();
 				}
 				else {
@@ -661,11 +664,11 @@ namespace OpenDental{
 			#region Credit Card Info
 			if(!Stmt.HidePayment) {
 				if(PrefB.GetBool("StatementShowCreditCard")) {
-					float yPos=65;
+					float yPos=60;
 					font=MigraDocHelper.CreateFont(7,true);
 					text=Lan.g(this,"CREDIT CARD TYPE");
 					MigraDocHelper.DrawString(frame,text,font,0,yPos);
-					float rowHeight=30;
+					float rowHeight=26;
 					System.Drawing.Font wfont=new System.Drawing.Font("Arial",7,FontStyle.Bold);
 					Graphics g=this.CreateGraphics();//just to measure strings
 					MigraDocHelper.DrawLine(frame,System.Drawing.Color.Black,g.MeasureString(text,wfont).Width,
@@ -810,55 +813,63 @@ namespace OpenDental{
 			gridPat.Columns.Add(gcol);
 			gridPat.Width=gridPat.WidthAllColumns+20;
 			gridPat.EndUpdate();
-			//Loop through each patient-----------------------------------------------------------------------------------------------
-			//for(int i=0;i<){
-
-			//}
-			/*
-			List<AcctLine> lineData;
-			for(int i=0;i<FamilyStatementDataList[famIndex].PatAboutList.Count;i++){
+			//Loop through each table.  Could be one intermingled, or one for each patient-----------------------------------------
+			DataTable tableAccount;
+			string tablename;
+			int patnum;
+			for(int i=0;i<dataSet.Tables.Count;i++){
+				tableAccount=dataSet.Tables[i];
+				tablename=tableAccount.TableName;
+				if(!tablename.StartsWith("account")){
+					continue;
+				}
 				par=section.AddParagraph();
 				par.Format.Font=MigraDocHelper.CreateFont(10,true);
 				par.Format.SpaceBefore=Unit.FromInch(.05);
 				par.Format.SpaceAfter=Unit.FromInch(.05);
-				par.AddText(FamilyStatementDataList[famIndex].PatAboutList[i].PatName);
-				if(FamilyStatementDataList[famIndex].PatAboutList[i].ApptDescript!=""){
-					par=section.AddParagraph();
-					par.Format.Font=MigraDocHelper.CreateFont(9);//same as body font
-					par.AddText(FamilyStatementDataList[famIndex].PatAboutList[i].ApptDescript);
+				patnum=0;
+				if(tablename!="account"){//account123 etc.
+					patnum=PIn.PInt(tablename.Substring(7));
 				}
+				if(patnum!=0){
+					par.AddText(fam.GetNameInFamFL(patnum));
+				}
+				//if(FamilyStatementDataList[famIndex].PatAboutList[i].ApptDescript!=""){
+				//	par=section.AddParagraph();
+				//	par.Format.Font=MigraDocHelper.CreateFont(9);//same as body font
+				//	par.AddText(FamilyStatementDataList[famIndex].PatAboutList[i].ApptDescript);
+				//}
 				gridPat.BeginUpdate();
 				gridPat.Rows.Clear();
-				lineData=FamilyStatementDataList[famIndex].PatDataList[i].PatData;
-				for(int p=0;p<lineData.Count;p++){
+				//lineData=FamilyStatementDataList[famIndex].PatDataList[i].PatData;
+				for(int p=0;p<tableAccount.Rows.Count;p++){
 					grow=new ODGridRow();
-					grow.Cells.Add(lineData[p].Date);
-					grow.Cells.Add(lineData[p].Code);
-					grow.Cells.Add(lineData[p].Tooth);
-					grow.Cells.Add(lineData[p].Description);
-					grow.Cells.Add(lineData[p].Fee);
-					grow.Cells.Add(lineData[p].InsEst);
-					grow.Cells.Add(lineData[p].InsPay);
-					grow.Cells.Add(lineData[p].Patient);
-					grow.Cells.Add(lineData[p].Adj);
-					grow.Cells.Add(lineData[p].Paid);
-					grow.Cells.Add(lineData[p].Balance);
+					grow.Cells.Add(tableAccount.Rows[p]["date"].ToString());
+					grow.Cells.Add(tableAccount.Rows[p]["patient"].ToString());
+					grow.Cells.Add(tableAccount.Rows[p]["ProcCode"].ToString());
+					grow.Cells.Add(tableAccount.Rows[p]["tth"].ToString());
+					grow.Cells.Add(tableAccount.Rows[p]["description"].ToString());
+					grow.Cells.Add(tableAccount.Rows[p]["charges"].ToString());
+					grow.Cells.Add(tableAccount.Rows[p]["credits"].ToString());
+					grow.Cells.Add(tableAccount.Rows[p]["balance"].ToString());
 					gridPat.Rows.Add(grow);
 				}
 				gridPat.EndUpdate();
 				MigraDocHelper.DrawGrid(section,gridPat);
 				//Total
-				//if(!SimpleStatement) {
-					frame=MigraDocHelper.CreateContainer(section);
-					font=MigraDocHelper.CreateFont(9,true);
-					float totalPos=((float)(doc.DefaultPageSetup.PageWidth.Inch//-doc.DefaultPageSetup.LeftMargin.Inch
-						//-doc.DefaultPageSetup.RightMargin.Inch)
-						)*100f)/2f+(float)gridPat.WidthAllColumns/2f;
-					RectangleF rectF=new RectangleF(0,0,totalPos,16);
-					MigraDocHelper.DrawString(frame,FamilyStatementDataList[famIndex].PatAboutList[i].Balance.ToString("F"),font,rectF,
-						ParagraphAlignment.Right);
-				//}
-			}*/
+				frame=MigraDocHelper.CreateContainer(section);
+				font=MigraDocHelper.CreateFont(9,true);
+				float totalPos=((float)(doc.DefaultPageSetup.PageWidth.Inch//-doc.DefaultPageSetup.LeftMargin.Inch
+					//-doc.DefaultPageSetup.RightMargin.Inch)
+					)*100f)/2f+(float)gridPat.WidthAllColumns/2f;
+				RectangleF rectF=new RectangleF(0,0,totalPos,16);
+				if(patnum!=0){
+
+	
+					//MigraDocHelper.DrawString(frame,FamilyStatementDataList[famIndex].PatAboutList[i].Balance.ToString("F"),font,rectF,
+					//	ParagraphAlignment.Right);
+				}
+			}
 			gridPat.Dispose();
 			//Note------------------------------------------------------------------------------------------------------------
 			//frame=MigraDocHelper.CreateContainer(section);

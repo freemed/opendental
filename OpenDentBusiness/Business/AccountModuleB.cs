@@ -844,7 +844,7 @@ namespace OpenDentBusiness {
 			//Pass off all the rows for the whole family in order to compute the patient balances----------------
 			GetPatientTable(fam,rows);
 			//Regroup rows by patient---------------------------------------------------------------------------
-			List<DataRow>[] rowsByPat=null;//will only used if multiple patients not intermingled
+			DataTable[] rowsByPat=null;//will only used if multiple patients not intermingled
 			if(singlePatient){//This is usually used for Account module grid.
 				for(int i=rows.Count-1;i>=0;i--) {//go backwards and remove from end
 					if(rows[i]["PatNum"].ToString()!=patNum.ToString()){
@@ -856,12 +856,16 @@ namespace OpenDentBusiness {
 				//leave the rows alone
 			}
 			else{//multiple patients not intermingled.  This is most common for an ordinary statement.
-				rowsByPat=new List<DataRow>[fam.List.Length];
+				for(int i=0;i<rows.Count;i++){
+					table.Rows.Add(rows[i]);
+				}
+				rowsByPat=new DataTable[fam.List.Length];
 				for(int p=0;p<rowsByPat.Length;p++){
-					rowsByPat[p]=new List<DataRow>();
+					rowsByPat[p]=new DataTable();
+					SetTableColumns(rowsByPat[p]);
 					for(int i=0;i<rows.Count;i++){
 						if(rows[i]["PatNum"].ToString()==fam.List[p].PatNum.ToString()){
-							rowsByPat[p].Add(rows[i]);
+							rowsByPat[p].ImportRow(rows[i]);
 						}
 					}
 				}
@@ -888,18 +892,20 @@ namespace OpenDentBusiness {
 			else{
 				for(int p=0;p<rowsByPat.Length;p++){
 					bal=0;
-					for(int i=0;i<rowsByPat[p].Count;i++) {
-						bal+=(double)rowsByPat[p][i]["chargesDouble"];
-						bal-=(double)rowsByPat[p][i]["creditsDouble"];
-						rowsByPat[p][i]["balanceDouble"]=bal;
-						if(rowsByPat[p][i]["ClaimPaymentNum"].ToString()=="0" && rowsByPat[p][i]["ClaimNum"].ToString()!="0"){//claims
-							rowsByPat[p][i]["balance"]="";
+					for(int i=0;i<rowsByPat[p].Rows.Count;i++) {
+						bal+=(double)rowsByPat[p].Rows[i]["chargesDouble"];
+						bal-=(double)rowsByPat[p].Rows[i]["creditsDouble"];
+						rowsByPat[p].Rows[i]["balanceDouble"]=bal;
+						if(rowsByPat[p].Rows[i]["ClaimPaymentNum"].ToString()=="0" 
+							&& rowsByPat[p].Rows[i]["ClaimNum"].ToString()!="0")//claims
+						{
+							rowsByPat[p].Rows[i]["balance"]="";
 						}
-						else if(rowsByPat[p][i]["StatementNum"].ToString()!="0"){
+						else if(rowsByPat[p].Rows[i]["StatementNum"].ToString()!="0"){
 
 						}
 						else{
-							rowsByPat[p][i]["balance"]=bal.ToString("n");
+							rowsByPat[p].Rows[i]["balance"]=bal.ToString("n");
 						}
 					}
 				}
@@ -934,16 +940,16 @@ namespace OpenDentBusiness {
 				for(int p=0;p<rowsByPat.Length;p++){
 					balanceForward=0;
 					foundBalForward=false;
-					for(int i=rowsByPat[p].Count-1;i>=0;i--) {//go backwards and remove from end
-						if(((DateTime)rowsByPat[p][i]["DateTime"])>toDate){
-							rowsByPat[p].RemoveAt(i);
+					for(int i=rowsByPat[p].Rows.Count-1;i>=0;i--) {//go backwards and remove from end
+						if(((DateTime)rowsByPat[p].Rows[i]["DateTime"])>toDate){
+							rowsByPat[p].Rows.RemoveAt(i);
 						}
-						if(((DateTime)rowsByPat[p][i]["DateTime"])<fromDate){
+						if(((DateTime)rowsByPat[p].Rows[i]["DateTime"])<fromDate){
 							if(!foundBalForward){
 								foundBalForward=true;
-								balanceForward=(double)rowsByPat[p][i]["balanceDouble"];
+								balanceForward=(double)rowsByPat[p].Rows[i]["balanceDouble"];
 							}
-							rowsByPat[p].RemoveAt(i);
+							rowsByPat[p].Rows.RemoveAt(i);
 						}
 					}
 					//Add balance forward row
@@ -951,12 +957,13 @@ namespace OpenDentBusiness {
 						//add a balance forward row
 						row=table.NewRow();
 						SetBalForwardRow(row,balanceForward);
-						rowsByPat[p].Insert(0,row);
+						rowsByPat[p].Rows.InsertAt(row,0);
 					}
 				}
 			}
 			//Finally, add rows to new table(s)-----------------------------------------------------------------------
 			if(rowsByPat==null){
+				table.Rows.Clear();
 				for(int i=0;i<rows.Count;i++) {
 					table.Rows.Add(rows[i]);
 				}
@@ -966,8 +973,8 @@ namespace OpenDentBusiness {
 				for(int p=0;p<rowsByPat.Length;p++){
 					DataTable tablep=new DataTable("account"+fam.List[p].PatNum.ToString());
 					SetTableColumns(tablep);
-					for(int i=0;i<rowsByPat[p].Count;i++) {
-						tablep.Rows.Add(rowsByPat[p][i]);
+					for(int i=0;i<rowsByPat[p].Rows.Count;i++) {
+						tablep.ImportRow(rowsByPat[p].Rows[i]);
 					}
 					retVal.Tables.Add(tablep);
 				}
@@ -1110,6 +1117,11 @@ namespace OpenDentBusiness {
 				row["name"]=fam.List[p].GetNameLF();
 				row["PatNum"]=fam.List[p].PatNum.ToString();
 				rowspat.Add(row);
+				if(bal!=fam.List[p].EstBalance){
+					Patient patnew=fam.List[p].Copy();
+					patnew.EstBalance=bal;
+					Patients.Update(patnew,fam.List[p]);
+				}
 			}
 			//Row for entire family
 			row=table.NewRow();

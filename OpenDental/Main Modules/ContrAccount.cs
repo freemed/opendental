@@ -3286,27 +3286,15 @@ double adj=Adjustments.GetTotForProc(arrayProc[tempCountProc].ProcNum,Adjustment
 
 		/// <summary>Prints a single statement.  Or, if pdfFullFileName is specified (including full path), then it saves as pdf to that file.</summary>
 		private void PrintStatement(Statement stmt){
-			//int[] famPatNums,DateTime fromDate,DateTime toDate,bool includeClaims, bool subtotalsOnly,
-			//bool hidePayment,bool nextAppt,string note, bool isBill,string pdfFullFileName)
-			//string pdfFullFileName;
 			FormRpStatement FormST=new FormRpStatement();
-			/*int[][] patNums=new int[1][];
-			patNums[0]=new int[famPatNums.Length];
-			for(int i=0;i<famPatNums.Length;i++){
-				patNums[0][i]=famPatNums[i];
-			}
-			PrintingStatement = true; */
-			//List<Statement> listStmts=new List<Statement>();
-			//listStmts.Add(stmt);
-			FormST.PrintStatement(stmt);
-				//patNums,fromDate,toDate,includeClaims,subtotalsOnly,hidePayment,nextAppt,
-				//new string[] {note}, isBill,pdfFullFileName);
-			if(stmt.Mode_!=StatementMode.Email){
-				#if DEBUG
+			#if DEBUG
+				FormST.PrintStatement(stmt,true);
+				if(stmt.Mode_!=StatementMode.Email){
 					FormST.ShowDialog();
-				#endif
-			}
-			//PrintingStatement = false; 
+				}
+			#else
+				FormST.PrintStatement(stmt,false);
+			#endif
 		}
 
 		private void butComm_Click(object sender, System.EventArgs e) {

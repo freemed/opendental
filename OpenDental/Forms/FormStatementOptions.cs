@@ -672,13 +672,19 @@ MsgBox.Show(this,"Not functional yet");
 		private void butPreview_Click(object sender,EventArgs e) {
 			if(initiallySent && checkIsSent.Checked){
 				//launch existing archive pdf
-
+				MsgBox.Show(this,"Not functional yet");
 			}
 			else{//was not initially sent, or else user has unchecked the sent box
 				//No archive to use, so generate a temporary file or else preview on the fly
-
+				if(!SaveToDb()){
+					return;
+				}
+				Cursor=Cursors.WaitCursor;
+				FormRpStatement FormST=new FormRpStatement();
+				FormST.PrintStatement(StmtCur,true);
+				FormST.ShowDialog();
+				Cursor=Cursors.Default;
 			}
-MsgBox.Show(this,"Not functional yet");
 		}
 
 		private void butDelete_Click(object sender,EventArgs e) {
