@@ -1719,6 +1719,7 @@ namespace OpenDental{
 				pView.ShowDialog();			
 			#else
 				if(Printers.SetPrinter(pd2,PrintSituation.TPPerio)){
+					printdoc.PrinterSettings=pd2.PrinterSettings;
 					printdoc.Print();
 				}
 			#endif
