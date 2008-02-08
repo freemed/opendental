@@ -118,8 +118,20 @@ namespace OpenDental{
 			return retVal;
 		}
 
-		///<summary></summary>
-		private static void Update(Task task){
+		///<summary>Must supply the supposedly unaltered oldTask.  The update will fail if oldTask does not exactly match the database state.  Keeps users from overwriting each other's changes.</summary>
+		public static void Update(Task task,Task oldTask){
+			if(task.IsRepeating && task.DateTask.Year>1880) {
+				throw new Exception(Lan.g("Tasks","Task cannot be tagged repeating and also have a date."));
+			}
+			if(task.IsRepeating && task.TaskStatus) {//and complete
+				throw new Exception(Lan.g("Tasks","Task cannot be tagged repeating and also be marked complete."));
+			}
+			if(task.IsRepeating && task.TaskListNum!=0 && task.DateType!=TaskDateType.None) {//In repeating, children not allowed to repeat.
+				throw new Exception(Lan.g("Tasks","In repeating tasks, only the main parents can have a task status."));
+			}
+			if(WasTaskAltered(oldTask)){
+				throw new Exception(Lan.g("Tasks","Not allowed to save changes because the task has been altered by someone else."));
+			}
 			string command= "UPDATE task SET " 
 				+"TaskListNum = '"    +POut.PInt   (task.TaskListNum)+"'"
 				+",DateTask = "      +POut.PDate  (task.DateTask)
@@ -133,10 +145,21 @@ namespace OpenDental{
 				+",DateTimeEntry = " +POut.PDateT (task.DateTimeEntry)
 				+" WHERE TaskNum = '"+POut.PInt(task.TaskNum)+"'";
  			General.NonQ(command);
+			//need to optimize this later to skip unless TaskListNumChanged
+			TaskAncestors.Synch(task);
 		}
 
 		///<summary></summary>
-		private static void Insert(Task task){
+		public static void Insert(Task task){
+			if(task.IsRepeating && task.DateTask.Year>1880) {
+				throw new Exception(Lan.g("Tasks","Task cannot be tagged repeating and also have a date."));
+			}
+			if(task.IsRepeating && task.TaskStatus) {//and complete
+				throw new Exception(Lan.g("Tasks","Task cannot be tagged repeating and also be marked complete."));
+			}
+			if(task.IsRepeating && task.TaskListNum!=0 && task.DateType!=TaskDateType.None) {//In repeating, children not allowed to repeat.
+				throw new Exception(Lan.g("Tasks","In repeating tasks, only the main parents can have a task status."));
+			}
 			if(PrefB.RandomKeys){
 				task.TaskNum=MiscData.GetKey("task","TaskNum");
 			}
@@ -167,27 +190,26 @@ namespace OpenDental{
 			else{
  				task.TaskNum=General.NonQ(command,true);
 			}
+			TaskAncestors.Synch(task);
 		}
 
 		///<summary></summary>
-		public static void InsertOrUpdate(Task task, bool isNew){
-			if(task.IsRepeating && task.DateTask.Year>1880){
-				throw new Exception(Lan.g("Tasks","Task cannot be tagged repeating and also have a date."));
+		public static bool WasTaskAltered(Task task){
+			string command="SELECT * FROM task WHERE TaskNum="+POut.PInt(task.TaskNum);
+			Task oldtask=RefreshAndFill(command)[0];
+			if(oldtask.DateTask!=task.DateTask
+					|| oldtask.DateType!=task.DateType
+					|| oldtask.Descript!=task.Descript
+					|| oldtask.FromNum!=task.FromNum
+					|| oldtask.IsRepeating!=task.IsRepeating
+					|| oldtask.KeyNum!=task.KeyNum
+					|| oldtask.ObjectType!=task.ObjectType
+					|| oldtask.TaskListNum!=task.TaskListNum
+					|| oldtask.TaskStatus!=task.TaskStatus)
+			{
+				return true;
 			}
-			if(task.IsRepeating && task.TaskStatus){//and complete
-				throw new Exception(Lan.g("Tasks","Task cannot be tagged repeating and also be marked complete."));
-			}
-			if(task.IsRepeating && task.TaskListNum!=0 && task.DateType!=TaskDateType.None){//In repeating, children not allowed to repeat.
-				throw new Exception(Lan.g("Tasks","In repeating tasks, only the main parents can have a task status."));
-			}
-			if(isNew){
-				Insert(task);
-			}
-			else{
-				Update(task);
-			}
-			//need to optimize this later to skip unless Insert or TaskListNumChanged
-			TaskAncestors.Synch(task);
+			return false;
 		}
 
 		///<summary>Deleting a task never causes a problem, so no dependencies are checked.</summary>

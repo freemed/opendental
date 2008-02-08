@@ -23,6 +23,7 @@ namespace OpenDental{
 		private System.Windows.Forms.ListBox listDateType;
 		private OpenDental.ODtextBox textDescript;
 		private Task Cur;
+		private Task CurOld;
 		private OpenDental.ValidDate textDateTask;
 		private OpenDental.UI.Button butChange;
 		private System.Windows.Forms.CheckBox checkTaskStatus;
@@ -52,6 +53,7 @@ namespace OpenDental{
 			//
 			InitializeComponent();
 			Cur=cur;
+			CurOld=cur.Copy();
 			Lan.F(this);
 		}
 
@@ -111,9 +113,9 @@ namespace OpenDental{
 			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
-			this.butCancel.Location = new System.Drawing.Point(623,487);
+			this.butCancel.Location = new System.Drawing.Point(625,610);
 			this.butCancel.Name = "butCancel";
-			this.butCancel.Size = new System.Drawing.Size(91,26);
+			this.butCancel.Size = new System.Drawing.Size(75,24);
 			this.butCancel.TabIndex = 5;
 			this.butCancel.Text = "&Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
@@ -126,9 +128,9 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(623,454);
+			this.butOK.Location = new System.Drawing.Point(543,610);
 			this.butOK.Name = "butOK";
-			this.butOK.Size = new System.Drawing.Size(91,26);
+			this.butOK.Size = new System.Drawing.Size(75,24);
 			this.butOK.TabIndex = 4;
 			this.butOK.Text = "&OK";
 			this.butOK.Click += new System.EventHandler(this.butOK_Click);
@@ -150,12 +152,12 @@ namespace OpenDental{
 			this.textDescript.Name = "textDescript";
 			this.textDescript.QuickPasteType = OpenDentBusiness.QuickPasteType.None;
 			this.textDescript.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-			this.textDescript.Size = new System.Drawing.Size(452,141);
+			this.textDescript.Size = new System.Drawing.Size(452,258);
 			this.textDescript.TabIndex = 0;
 			// 
 			// label2
 			// 
-			this.label2.Location = new System.Drawing.Point(8,212);
+			this.label2.Location = new System.Drawing.Point(8,330);
 			this.label2.Name = "label2";
 			this.label2.Size = new System.Drawing.Size(116,19);
 			this.label2.TabIndex = 4;
@@ -164,7 +166,7 @@ namespace OpenDental{
 			// 
 			// label3
 			// 
-			this.label3.Location = new System.Drawing.Point(218,209);
+			this.label3.Location = new System.Drawing.Point(218,327);
 			this.label3.Name = "label3";
 			this.label3.Size = new System.Drawing.Size(185,32);
 			this.label3.TabIndex = 6;
@@ -172,7 +174,7 @@ namespace OpenDental{
 			// 
 			// label4
 			// 
-			this.label4.Location = new System.Drawing.Point(8,240);
+			this.label4.Location = new System.Drawing.Point(8,358);
 			this.label4.Name = "label4";
 			this.label4.Size = new System.Drawing.Size(116,19);
 			this.label4.TabIndex = 7;
@@ -181,7 +183,7 @@ namespace OpenDental{
 			// 
 			// listDateType
 			// 
-			this.listDateType.Location = new System.Drawing.Point(127,241);
+			this.listDateType.Location = new System.Drawing.Point(127,359);
 			this.listDateType.Name = "listDateType";
 			this.listDateType.Size = new System.Drawing.Size(120,56);
 			this.listDateType.TabIndex = 2;
@@ -190,7 +192,7 @@ namespace OpenDental{
 			// 
 			this.checkFromNum.CheckAlign = System.Drawing.ContentAlignment.TopRight;
 			this.checkFromNum.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkFromNum.Location = new System.Drawing.Point(8,303);
+			this.checkFromNum.Location = new System.Drawing.Point(8,421);
 			this.checkFromNum.Name = "checkFromNum";
 			this.checkFromNum.Size = new System.Drawing.Size(133,24);
 			this.checkFromNum.TabIndex = 3;
@@ -199,7 +201,7 @@ namespace OpenDental{
 			// 
 			// textDateTask
 			// 
-			this.textDateTask.Location = new System.Drawing.Point(127,212);
+			this.textDateTask.Location = new System.Drawing.Point(127,330);
 			this.textDateTask.Name = "textDateTask";
 			this.textDateTask.Size = new System.Drawing.Size(87,20);
 			this.textDateTask.TabIndex = 1;
@@ -230,7 +232,7 @@ namespace OpenDental{
 			this.butChange.CornerRadius = 4F;
 			this.butChange.Location = new System.Drawing.Point(123,71);
 			this.butChange.Name = "butChange";
-			this.butChange.Size = new System.Drawing.Size(75,26);
+			this.butChange.Size = new System.Drawing.Size(75,24);
 			this.butChange.TabIndex = 10;
 			this.butChange.Text = "Change";
 			this.butChange.Click += new System.EventHandler(this.butChange_Click);
@@ -255,14 +257,14 @@ namespace OpenDental{
 			this.butGoto.CornerRadius = 4F;
 			this.butGoto.Location = new System.Drawing.Point(200,71);
 			this.butGoto.Name = "butGoto";
-			this.butGoto.Size = new System.Drawing.Size(75,26);
+			this.butGoto.Size = new System.Drawing.Size(75,24);
 			this.butGoto.TabIndex = 12;
 			this.butGoto.Text = "Go To";
 			this.butGoto.Click += new System.EventHandler(this.butGoto_Click);
 			// 
 			// listObjectType
 			// 
-			this.listObjectType.Location = new System.Drawing.Point(127,324);
+			this.listObjectType.Location = new System.Drawing.Point(127,442);
 			this.listObjectType.Name = "listObjectType";
 			this.listObjectType.Size = new System.Drawing.Size(120,43);
 			this.listObjectType.TabIndex = 13;
@@ -270,7 +272,7 @@ namespace OpenDental{
 			// 
 			// label6
 			// 
-			this.label6.Location = new System.Drawing.Point(8,323);
+			this.label6.Location = new System.Drawing.Point(8,441);
 			this.label6.Name = "label6";
 			this.label6.Size = new System.Drawing.Size(116,19);
 			this.label6.TabIndex = 14;
@@ -283,7 +285,7 @@ namespace OpenDental{
 			this.panelObject.Controls.Add(this.labelObjectDesc);
 			this.panelObject.Controls.Add(this.butGoto);
 			this.panelObject.Controls.Add(this.butChange);
-			this.panelObject.Location = new System.Drawing.Point(3,373);
+			this.panelObject.Location = new System.Drawing.Point(3,491);
 			this.panelObject.Name = "panelObject";
 			this.panelObject.Size = new System.Drawing.Size(594,101);
 			this.panelObject.TabIndex = 15;
@@ -312,9 +314,9 @@ namespace OpenDental{
 			this.butNow.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butNow.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butNow.CornerRadius = 4F;
-			this.butNow.Location = new System.Drawing.Point(287,30);
+			this.butNow.Location = new System.Drawing.Point(284,31);
 			this.butNow.Name = "butNow";
-			this.butNow.Size = new System.Drawing.Size(75,26);
+			this.butNow.Size = new System.Drawing.Size(75,24);
 			this.butNow.TabIndex = 19;
 			this.butNow.Text = "Now";
 			this.butNow.Click += new System.EventHandler(this.butNow_Click);
@@ -329,9 +331,9 @@ namespace OpenDental{
 			this.butDelete.CornerRadius = 4F;
 			this.butDelete.Image = global::OpenDental.Properties.Resources.deleteX;
 			this.butDelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butDelete.Location = new System.Drawing.Point(11,487);
+			this.butDelete.Location = new System.Drawing.Point(21,610);
 			this.butDelete.Name = "butDelete";
-			this.butDelete.Size = new System.Drawing.Size(92,26);
+			this.butDelete.Size = new System.Drawing.Size(80,24);
 			this.butDelete.TabIndex = 124;
 			this.butDelete.Text = "&Delete";
 			this.butDelete.Click += new System.EventHandler(this.butDelete_Click);
@@ -339,7 +341,7 @@ namespace OpenDental{
 			// FormTaskEdit
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
-			this.ClientSize = new System.Drawing.Size(726,525);
+			this.ClientSize = new System.Drawing.Size(726,658);
 			this.Controls.Add(this.butDelete);
 			this.Controls.Add(this.butNow);
 			this.Controls.Add(this.textDateTimeEntry);
@@ -528,7 +530,12 @@ namespace OpenDental{
 			//ObjectType already handled
 			//Cur.KeyNum already handled
 			try{
-				Tasks.InsertOrUpdate(Cur,IsNew);
+				if(IsNew){
+					Tasks.Insert(Cur);
+				}
+				else{
+					Tasks.Update(Cur,CurOld);
+				}
 			}
 			catch(Exception ex){
 				MessageBox.Show(ex.Message);
@@ -536,12 +543,13 @@ namespace OpenDental{
 			}
 			return true;
 		}
+
 		private void butDelete_Click(object sender,EventArgs e) {
-				if(!MsgBox.Show(this,true,"Delete?")) {
-					return;
-				}
-				Tasks.Delete(Cur);
-				DialogResult=DialogResult.OK;
+			if(!MsgBox.Show(this,true,"Delete?")) {
+				return;
+			}
+			Tasks.Delete(Cur);
+			DialogResult=DialogResult.OK;
 		}
 
 		private void butOK_Click(object sender, System.EventArgs e) {

@@ -248,7 +248,7 @@ namespace OpenDental {
 					repeatingTasks[i].FromNum=repeatingTasks[i].TaskNum;
 					repeatingTasks[i].IsRepeating=false;
 					repeatingTasks[i].TaskListNum=0;
-					Tasks.InsertOrUpdate(repeatingTasks[i],true);
+					Tasks.Insert(repeatingTasks[i]);
 					changeMade=true;
 				}
 				if(changeMade) {
@@ -672,7 +672,12 @@ namespace OpenDental {
 					newT.IsRepeating=false;
 				}
 				newT.FromNum=0;//always
-				Tasks.InsertOrUpdate(newT,true);
+				if(WasCut && Tasks.WasTaskAltered(ClipTask)){
+					MsgBox.Show("Tasks","Not allowed to move because the task has been altered by someone else.");
+					FillMain();
+					return;
+				}
+				Tasks.Insert(newT);
 			}
 			if(WasCut) {
 				if(ClipTaskList!=null) {
@@ -731,7 +736,7 @@ namespace OpenDental {
 					childTasks[i].DateTask=DateTime.MinValue;
 					childTasks[i].DateType=TaskDateType.None;
 				}
-				Tasks.InsertOrUpdate(childTasks[i],true);
+				Tasks.Insert(childTasks[i]);
 			}
 		}
 
@@ -819,9 +824,10 @@ namespace OpenDental {
 				return;
 			}
 			Task task=TasksList[clickedI-TaskListsList.Count].Copy();
+			Task taskOld=task.Copy();
 			task.TaskStatus= !task.TaskStatus;
 			try {
-				Tasks.InsertOrUpdate(task,false);
+				Tasks.Update(task,taskOld);
 			}
 			catch(Exception ex) {
 				MessageBox.Show(ex.Message);
