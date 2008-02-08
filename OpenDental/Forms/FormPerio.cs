@@ -1496,20 +1496,25 @@ namespace OpenDental{
 		private void pd2_PrintPage(object sender, PrintPageEventArgs ev){//raised for each page to be printed.
 			Graphics grfx=ev.Graphics;
 			//MessageBox.Show(grfx.
-			float yPos=75;
+			float yPos=75+30+25;
 			float xPos=100;
+			grfx.TranslateTransform(xPos,yPos);
+			gridP.DrawChart(grfx);//have to print graphics first, or they cover up title.
+			grfx.TranslateTransform(-xPos,-yPos);
+			yPos=75;
+			xPos=100;
 			Font font=new Font("Arial",9);
 			StringFormat format=new StringFormat();
 			format.Alignment=StringAlignment.Center;
-			grfx.DrawString("Periodontal Charting",new Font("Arial",15),Brushes.Black
-				,new RectangleF(xPos,yPos,650,25),format);
+			grfx.DrawString("Periodontal Charting",new Font("Arial",15),Brushes.Black,
+				new RectangleF(xPos,yPos,650,25),format);			
 			yPos+=30;
-			grfx.DrawString(PatCur.GetNameFL(),font,Brushes.Black
+			grfx.DrawString(PatCur.GetNameFL(),new Font("Arial",11),Brushes.Black
 				,new RectangleF(xPos,yPos,650,25),format);
 			yPos+=25;
-			grfx.TranslateTransform(xPos,yPos);
-			gridP.DrawChart(grfx);
-			grfx.TranslateTransform(-xPos,-yPos);
+			//grfx.TranslateTransform(xPos,yPos);
+			//gridP.DrawChart(grfx);
+			//grfx.TranslateTransform(-xPos,-yPos);
 			yPos+=680;
 			grfx.FillEllipse(new SolidBrush(butColorPlaque.BackColor),xPos,yPos+3,8,8);
 			grfx.DrawString("Plaque Index: "+gridP.ComputeIndex(BleedingFlags.Plaque)+" %"

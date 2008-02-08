@@ -3039,12 +3039,7 @@ double adj=Adjustments.GetTotForProc(arrayProc[tempCountProc].ProcNum,Adjustment
 			}
 			stmt.Note="";
 			stmt.NoteBold="";
-			Statements.WriteObject(stmt);
-			/*int[] patNums=new int[FamCur.List.Length];
-			for(int i=0;i<FamCur.List.Length;i++){
-				patNums[i]=FamCur.List[i].PatNum;
-			}*/
-			PrintStatement(stmt);//patNums,fromDate,toDate,true,false,false,false,"",false,"");
+			PrintStatement(stmt);
 			ModuleSelected(PatCur.PatNum);
 		}
 		
@@ -3309,8 +3304,9 @@ double adj=Adjustments.GetTotForProc(arrayProc[tempCountProc].ProcNum,Adjustment
 			//tbAccount.LayoutTables();
 		}
 
-		/// <summary>Prints a single statement.  Or, if pdfFullFileName is specified (including full path), then it saves as pdf to that file.</summary>
+		/// <summary>Saves the statement.  Prints it or emails it.  Attaches a pdf to it by creating a doc object.</summary>
 		private void PrintStatement(Statement stmt){
+			Statements.WriteObject(stmt);
 			FormRpStatement FormST=new FormRpStatement();
 			#if DEBUG
 				FormST.PrintStatement(stmt,true);
