@@ -88,6 +88,8 @@ namespace OpenDental {
 		private ContextMenu contextMenuPayment;
 		private MenuItem menuItemProvIncTrans;
 		private MenuItem menuItemStatementEmail;
+		private int Actscrollval;
+
 
 		#region user variables
 		///<summary>This will eventually hold all data needed for display.  It will be retrieved in one call to the database.</summary>
@@ -2283,7 +2285,13 @@ double adj=Adjustments.GetTotForProc(arrayProc[tempCountProc].ProcNum,Adjustment
 				gridAccount.Rows.Add(row);
 			}
 			gridAccount.EndUpdate();
-			gridAccount.ScrollToEnd();
+			if(Actscrollval==0) {
+				gridAccount.ScrollToEnd();
+			}
+			else {
+				gridAccount.ScrollValue=Actscrollval;
+				Actscrollval=0;
+			}
 		}
 
 		private void gridAccount_CellClick(object sender, OpenDental.UI.ODGridClickEventArgs e) {
@@ -2315,6 +2323,7 @@ double adj=Adjustments.GetTotForProc(arrayProc[tempCountProc].ProcNum,Adjustment
 
 		private void gridAccount_CellDoubleClick(object sender, OpenDental.UI.ODGridClickEventArgs e) {
 			if(ViewingInRecall) return;
+			Actscrollval=gridAccount.ScrollValue;
 			DataTable table=DataSetMain.Tables["account"];
 			if(table.Rows[e.Row]["ProcNum"].ToString()!="0"){
 				Procedure proc=Procedures.GetOneProc(PIn.PInt(table.Rows[e.Row]["ProcNum"].ToString()),true);

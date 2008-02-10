@@ -231,13 +231,15 @@ namespace OpenDental{
 		private CheckBox checkTasks;
 		private CheckBox checkEmail;
 		private int PrevPtNum;
+		private int Chartscrollval;
+
 	
 		///<summary></summary>
 		public ContrChart(){
 			Logger.openlog.Log("Initializing chart module...",Logger.Severity.INFO);
 			InitializeComponent();
 			tabControlImages.DrawItem += new DrawItemEventHandler(OnDrawItem);
-			if(CultureInfo.CurrentCulture.Name.Length>=4 && CultureInfo.CurrentCulture.Name.Substring(3)!="CA") {//Canada
+			if(CultureInfo.CurrentCulture.Name.Length>=3 && CultureInfo.CurrentCulture.Name.Substring(3)!="CA") {//Canada
 				menuItemLabFee.Visible=false;
 				menuItemLabFeeDetach.Visible=false;
 			}
@@ -2741,11 +2743,9 @@ namespace OpenDental{
 				tabProc.Enabled=true;
 				butAddKey.Enabled=true;
 				butForeignKey.Enabled=true;
-				if(((Pref)PrefB.HList["AutoResetTPEntryStatus"]).ValueString=="1"){
-					if(PrevPtNum != PatCur.PatNum) {//reset to TP status on every new patient selected
-						radioEntryTP.Select();
-						PrevPtNum = PatCur.PatNum;
-					}
+				if(PrevPtNum != PatCur.PatNum) {//reset to TP status on every new patient selected
+					radioEntryTP.Select();
+					PrevPtNum = PatCur.PatNum;
 				}
 			}
 			ToolBarMain.Invalidate();
@@ -3476,7 +3476,13 @@ namespace OpenDental{
 				}
 			}
 			gridProg.EndUpdate();
-			gridProg.ScrollToEnd();
+			if(Chartscrollval==0) {
+				gridProg.ScrollToEnd();
+			}
+			else {
+				gridProg.ScrollValue=Chartscrollval;
+				Chartscrollval=0;
+			}
 			FillToothChart(false);
 		}
 
@@ -3748,7 +3754,8 @@ namespace OpenDental{
 			tabControlImages.TabPages.Add(page);
 			visImageCats=new ArrayList();
 			for(int i=0;i<DefB.Short[(int)DefCat.ImageCats].Length;i++){
-				if(Regex.IsMatch(DefB.Short[(int)DefCat.ImageCats][i].ItemValue,@"X")){//if tagged to show in Chart
+				if(DefB.Short[(int)DefCat.ImageCats][i].ItemValue=="X" || DefB.Short[(int)DefCat.ImageCats][i].ItemValue=="XP"){
+					//if tagged to show in Chart
 					visImageCats.Add(i);
 					page=new TabPage();
 					page.Text=DefB.Short[(int)DefCat.ImageCats][i].ItemName;
@@ -3985,6 +3992,7 @@ namespace OpenDental{
 		}
 
 		private void gridProg_CellDoubleClick(object sender,ODGridClickEventArgs e) {
+			Chartscrollval=gridProg.ScrollValue;
 			DataRow row=(DataRow)gridProg.Rows[e.Row].Tag;
 			if(row["ProcNum"].ToString()!="0"){
 				if(checkAudit.Checked){
@@ -5304,6 +5312,7 @@ namespace OpenDental{
 
 		private void gridPtInfo_CellDoubleClick(object sender,ODGridClickEventArgs e) {
 			if(gridPtInfo.Rows[e.Row].Tag==null){//pt info
+			
 				return;
 			}
 			if(gridPtInfo.Rows[e.Row].Tag.ToString()=="med"){
