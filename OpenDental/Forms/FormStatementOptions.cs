@@ -1,8 +1,10 @@
 using System;
+using System.Diagnostics;
 using System.Drawing;
 using System.Collections;
 using System.ComponentModel;
 using System.Windows.Forms;
+using OpenDental.Imaging;
 using OpenDentBusiness;
 
 namespace OpenDental{
@@ -670,16 +672,25 @@ MsgBox.Show(this,"Not functional yet");
 		}
 
 		private void butPreview_Click(object sender,EventArgs e) {
-			if(initiallySent && checkIsSent.Checked){
+			if(StmtCur.DocNum!=0){//initiallySent && checkIsSent.Checked){
 				//launch existing archive pdf
-				MsgBox.Show(this,"Not functional yet");
+				//MsgBox.Show(this,"Not functional yet");
+				Cursor=Cursors.WaitCursor;
+				if(ImageStore.UpdatePatient == null){
+					ImageStore.UpdatePatient = new FileStore.UpdatePatientDelegate(Patients.Update);
+				}
+				Patient pat=Patients.GetPat(StmtCur.PatNum);
+				OpenDental.Imaging.IImageStore imageStore = OpenDental.Imaging.ImageStore.GetImageStore(pat);
+				Process.Start(imageStore.GetFilePath(Documents.GetByNum(StmtCur.DocNum)));
+				Cursor=Cursors.Default;
 			}
 			else{//was not initially sent, or else user has unchecked the sent box
-				//No archive to use, so generate a temporary file or else preview on the fly
+				//No archive to use, so just preview on the fly
+				Cursor=Cursors.WaitCursor;
 				if(!SaveToDb()){
+					Cursor=Cursors.Default;
 					return;
 				}
-				Cursor=Cursors.WaitCursor;
 				FormRpStatement FormST=new FormRpStatement();
 				FormST.PrintStatement(StmtCur,true);
 				FormST.ShowDialog();

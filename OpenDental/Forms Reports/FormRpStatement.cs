@@ -10,8 +10,11 @@ using System.Drawing.Imaging;
 using System.Drawing.Printing;
 using System.Drawing.Text;
 using System.Globalization;
+using System.IO;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using OpenDentBusiness;
+using OpenDental.Imaging;
 using OpenDental.UI;
 using PdfSharp.Drawing;
 using PdfSharp.Pdf;
@@ -34,19 +37,10 @@ namespace OpenDental{
 		private System.ComponentModel.Container components = null;
 		private System.Drawing.Printing.PrintDocument pd2;
 		private int totalPages;
-		//private bool HidePayment;
-		//private string[] Notes;
-		//<summary>Holds the data for all the statements.  Each item in the collection is one statement.</summary>
-		//private List<FamilyStatementData> FamilyStatementDataList;
-		//private Family FamCur;
-		//private bool SubtotalsOnly;
-		//<summary>First dim is for the family. Second dim is family members</summary>
-		//private int[][] PatNums;
-		//<summary>The guarantor for the statement that is currently printing.</summary>
-		//private Patient PatGuar;
 		///<summary>Holds the data for one statement.</summary>
 		private DataSet dataSet;
 		private Statement Stmt;
+		private IImageStore imageStore;
 
 		///<summary></summary>
 		public FormRpStatement(){
@@ -306,29 +300,18 @@ namespace OpenDental{
 		}
 
 		///<summary>If there is an existing pdf for this statement, it will be deleted.  A new one will then be created and attached. If it cannot create a pdf, for example if no AtoZ folders, then it will create a temp pdf file and return the full path.  Normally returns empty string.</summary>
-		public string CreateStatementPdf(Statement stmt){
+		public void CreateStatementPdf(Statement stmt){
 			Stmt=stmt;
 			dataSet=AccountModule.GetStatement(stmt.PatNum,stmt.SinglePatient,stmt.DateRangeFrom,stmt.DateRangeTo,
 				stmt.Intermingled);
-			//these 5 variables are needed by the printing logic. The rest are not.
-			/*PatNums=(int[][])patNums.Clone();
-			Notes=(string[])notes.Clone();
-			SubtotalsOnly=subtotalsOnly;
-			HidePayment=hidePayment;*/
+			if(ImageStore.UpdatePatient == null){
+				ImageStore.UpdatePatient = new FileStore.UpdatePatientDelegate(Patients.Update);
+			}
+			Patient pat=Patients.GetPat(stmt.PatNum);
+			imageStore = ImageStore.GetImageStore(pat);
+			//Save to a temp pdf--------------------------------------------------------------------------
+			string tempPath=CodeBase.ODFileUtils.CombinePaths(Path.GetTempPath(),pat.PatNum.ToString()+".pdf");
 			PrintDocument pd=new PrintDocument();
-			//bool willprint=false;
-			//for(int i=0;i<listStatements.Count;i++){
-			//	if(listStatements[i].Mode_==StatementMode.Mail
-			//		|| listStatements[i].Mode_==StatementMode.InPerson)
-			//	{
-			//		willprint=true;
-			//	}
-			//}
-			//if(willprint){ // pdfFullFileName==""){
-			//	if(!Printers.SetPrinter(pd,PrintSituation.Statement)){
-			//		return;
-			//	}
-			//}
 			pd.DefaultPageSettings.Margins=new Margins(40,40,40,60);
 			if(CultureInfo.CurrentCulture.Name.EndsWith("CH")) {//CH is for switzerland. eg de-CH
 				//leave a big margin on the bottom for the routing slip
@@ -338,64 +321,38 @@ namespace OpenDental{
 			if(pd.DefaultPageSettings.PaperSize.Height==0) {
 				pd.DefaultPageSettings.PaperSize=new PaperSize("default",850,1100);
 			}
-			//DataSet dataMain=null;
-			//for(int i=0;i<listStatements.Count;i++){
-			//	dataMain=AccountModule.GetStatement(listStatements[i].PatNum,listStatements[i].SinglePatient,
-			//		listStatements[i].DateRangeFrom,listStatements[i].DateRangeTo,listStatements[i].Intermingled);
-			//}
-			//ContrAccount contrAccount=new ContrAccount();
-			//FamilyStatementDataList=new List<FamilyStatementData>();
-			//Commlog commlog;
-			//FamilyStatementData famData;
-			//for(int i=0;i<patNums.GetLength(0);i++){//loop through each family
-				//famData=AssembleStatement(contrAccount,patNums[i],fromDate,toDate,includeClaims,nextAppt);
-				//FamilyStatementDataList.Add(famData);
-				//This has all been moved externally for multiple billing statements
-				/*if(patNums.GetLength(0)==1){
-					commlog=new Commlog();
-					commlog.CommDateTime=DateTime.Now;
-					commlog.CommType=0;
-					commlog.Note=Notes[i];
-					commlog.SentOrReceived=CommSentOrReceived.Sent;
-					if(isBill){
-						commlog.Mode_=CommItemMode.Mail;
-					}
-					else{
-						commlog.Mode_=CommItemMode.None;//.InPerson;
-					}
-					commlog.IsStatementSent=true;
-					commlog.PatNum=patNums[i][0];//uaually the guarantor
-					//there is no dialog here because it is just a simple entry
-					Commlogs.Insert(commlog);
-				}*/
-			//}
 			MigraDoc.DocumentObjectModel.Document doc=CreateDocument(pd);
-			/*if(willprint){//pdfFullFileName==""){//print
-				MigraDoc.Rendering.Printing.MigraDocPrintDocument printdoc=new MigraDoc.Rendering.Printing.MigraDocPrintDocument();
-				MigraDoc.Rendering.DocumentRenderer renderer=new MigraDoc.Rendering.DocumentRenderer(doc);
-				renderer.PrepareDocument();
-				totalPages=renderer.FormattedDocument.PageCount;
-				labelTotPages.Text="1 / "+totalPages.ToString();
-				printdoc.Renderer=renderer;
-				printdoc.PrinterSettings=pd.PrinterSettings;
-				#if DEBUG
-					printPreviewControl2.Document=printdoc;
-				#else
-					try{
-						printdoc.Print();
-					}
-					catch{
-						MessageBox.Show(Lan.g(this,"Printer not available"));
-					}
-				#endif
-			}
-			else{*/
 			MigraDoc.Rendering.PdfDocumentRenderer pdfRenderer=new MigraDoc.Rendering.PdfDocumentRenderer(true,PdfFontEmbedding.Always);
 			pdfRenderer.Document=doc;
 			pdfRenderer.RenderDocument();
-	//pdfRenderer.PdfDocument.Save(pdfFullFileName);
-			//}
-			return "";
+			pdfRenderer.PdfDocument.Save(tempPath);
+			//get the category-----------------------------------------------------------------------------
+			int category=0;
+			for(int i=0;i<DefB.Short[(int)DefCat.ImageCats].Length;i++){
+				if(Regex.IsMatch(DefB.Short[(int)DefCat.ImageCats][i].ItemValue,@"S")){
+					category=DefB.Short[(int)DefCat.ImageCats][i].DefNum;
+					break;
+				}
+			}
+			if(category==0){
+				category=DefB.Short[(int)DefCat.ImageCats][0].DefNum;//put it in the first category.
+			}
+			//create doc--------------------------------------------------------------------------------------
+			OpenDentBusiness.Document docc=null;
+			try {
+				docc=imageStore.Import(tempPath,category);
+			} 
+			catch {
+				MsgBox.Show(this,"Error saving document.");
+				//this.Cursor=Cursors.Default;
+				return;
+			}
+			docc.ImgType=ImageType.Document;
+			docc.Description=Lan.g(this,"Statement");
+			docc.DateCreated=stmt.DateSent;
+			Documents.Update(docc);
+			stmt.DocNum=docc.DocNum;
+			Statements.WriteObject(stmt);
 		}
 
 		///<summary>Prints one statement.  Does not generate pdf or print from existing pdf.</summary>
@@ -424,10 +381,8 @@ namespace OpenDental{
 			labelTotPages.Text="1 / "+totalPages.ToString();
 			printdoc.Renderer=renderer;
 			printdoc.PrinterSettings=pd.PrinterSettings;
-			//#if DEBUG
 			if(previewOnly){
 				printPreviewControl2.Document=printdoc;
-			//#else
 			}
 			else{
 				try{
@@ -437,7 +392,6 @@ namespace OpenDental{
 					MessageBox.Show(Lan.g(this,"Printer not available"));
 				}
 			}
-			//#endif
 		}
 
 		/*

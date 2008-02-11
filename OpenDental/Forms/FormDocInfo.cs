@@ -42,7 +42,7 @@ namespace OpenDental{
 		private Document DocCur;
 		private string initialSelection;
 		
-		///<summary></summary>
+		///<summary>ALWAYS save docCur before loading this form.</summary>
 		public FormDocInfo(Patient patCur,Document docCur,string pInitialSelection){
 			InitializeComponent();
 			PatCur=patCur;

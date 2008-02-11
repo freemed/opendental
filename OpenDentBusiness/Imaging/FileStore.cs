@@ -112,7 +112,6 @@ namespace OpenDental.Imaging {
 			if(!File.Exists(path)) {
 				return new byte[] { };
 			}
-
 			byte[] buffer;
 			using(FileStream fs = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read)) {
 				int fileLength = (int)fs.Length;

@@ -13,8 +13,10 @@ using System.Globalization;
 using System.IO;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
+using OpenDental.Imaging;
 using OpenDental.UI;
 using OpenDentBusiness;
+using OpenDentBusiness.Imaging;
 using CodeBase;
 
 namespace OpenDental {
@@ -3154,6 +3156,25 @@ double adj=Adjustments.GetTotForProc(arrayProc[tempCountProc].ProcNum,Adjustment
 			ModuleSelected(PatCur.PatNum);
 		}
 
+		/// <summary>Saves the statement.  Attaches a pdf to it by creating a doc object.  Prints it or emails it.  </summary>
+		private void PrintStatement(Statement stmt){
+			Cursor=Cursors.WaitCursor;
+			Statements.WriteObject(stmt);
+			FormRpStatement FormST=new FormRpStatement();
+			FormST.CreateStatementPdf(stmt);
+			//still need to attach email here
+			#if DEBUG
+				if(ImageStore.UpdatePatient == null){
+					ImageStore.UpdatePatient = new FileStore.UpdatePatientDelegate(Patients.Update);
+				}
+				OpenDental.Imaging.IImageStore imageStore = OpenDental.Imaging.ImageStore.GetImageStore(PatCur);
+				Process.Start(imageStore.GetFilePath(Documents.GetByNum(stmt.DocNum)));
+			#else
+				FormST.PrintStatement(stmt,false);
+			#endif
+			Cursor=Cursors.Default;
+		}
+
 		private void textUrgFinNote_TextChanged(object sender, System.EventArgs e) {
 			UrgFinNoteChanged=true;
 		}
@@ -3311,20 +3332,6 @@ double adj=Adjustments.GetTotForProc(arrayProc[tempCountProc].ProcNum,Adjustment
 		private void panelSplitter_MouseUp(object sender, System.Windows.Forms.MouseEventArgs e) {
 			MouseIsDownOnSplitter=false;
 			//tbAccount.LayoutTables();
-		}
-
-		/// <summary>Saves the statement.  Prints it or emails it.  Attaches a pdf to it by creating a doc object.</summary>
-		private void PrintStatement(Statement stmt){
-			Statements.WriteObject(stmt);
-			FormRpStatement FormST=new FormRpStatement();
-			#if DEBUG
-				FormST.PrintStatement(stmt,true);
-				if(stmt.Mode_!=StatementMode.Email){
-					FormST.ShowDialog();
-				}
-			#else
-				FormST.PrintStatement(stmt,false);
-			#endif
 		}
 
 		private void butComm_Click(object sender, System.EventArgs e) {

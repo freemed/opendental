@@ -477,6 +477,8 @@ namespace OpenDentBusiness {
 			return false;
 		}
 
+		//public static string GetFull
+
 	}	
   
 }

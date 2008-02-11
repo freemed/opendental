@@ -146,11 +146,10 @@ namespace OpenDental{
 		Document[] mountDocs=null;
 		///<summary>The hot document number of a mount image when it is copied.</summary>
 		int copyDocumentNumber=-1;
+		private IImageStore imageStore;
 
-		public IImageStore imageStore;
-
-		///<summary>The only reason this is public is for NewPatientForm.com functionality.</summary>
-		public Patient PatCur { get { return imageStore == null ? null : imageStore.Patient; } }
+		///<summary></summary>
+		private Patient PatCur { get { return imageStore == null ? null : imageStore.Patient; } }
 		#endregion
 
 		///<summary></summary>
@@ -718,8 +717,9 @@ namespace OpenDental{
 				return;
 			}
 			FamCur=Patients.GetFamily(patNum);
-			if(ImageStore.UpdatePatient == null)
+			if(ImageStore.UpdatePatient == null){
 				ImageStore.UpdatePatient = new FileStore.UpdatePatientDelegate(Patients.Update);
+			}
 			imageStore = ImageStore.GetImageStore(FamCur.GetPatient(patNum));
 			//ParentForm.Text=Patients.GetMainTitle(PatCur);
 		}
@@ -1872,7 +1872,6 @@ namespace OpenDental{
 			//viewer. On Unix systems, it is imagined that an equivalent viewer will launch to allow the image
 			//to be viewed.
 			if(imageStore.FilePathSupported) {
-
 				try {
 					Process.Start(imageStore.GetFilePath(nodeDoc));
 				}

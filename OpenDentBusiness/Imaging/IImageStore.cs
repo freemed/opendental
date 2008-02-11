@@ -23,6 +23,7 @@ namespace OpenDental.Imaging {
 		void DeleteThumbnailImage(Document doc);
 
 		void ImportImage(Document document, string filename);
+		/// <summary>This will also save the new document.</summary>
 		Document Import(Bitmap image, int docCategory, ImageType imageType);
 		Document Import(string path, int docCategory);
 		Document Import(Bitmap image, int docCategory);
@@ -36,6 +37,7 @@ namespace OpenDental.Imaging {
 		bool FilePathSupported { get; }
 		bool OpenFolderSupported { get; }
 		string FolderPath { get; }
+		/// <summary>Gets the full file path of the document</summary>
 		string GetFilePath(Document doc);
 	}
 }

@@ -13,9 +13,9 @@ namespace OpenDental.Imaging {
 
 		public static IImageStore GetImageStore(Patient patient) {
 			Type imageStoreType = Type.GetType(ImageStoreTypeName, false);
-			if(imageStoreType == null || !typeof(IImageStore).IsAssignableFrom(imageStoreType))
+			if(imageStoreType == null || !typeof(IImageStore).IsAssignableFrom(imageStoreType)){
 				imageStoreType = typeof(FileStore);
-
+			}
 			IImageStore store = (IImageStore)Activator.CreateInstance(imageStoreType);
 			store.OpenPatientStore(patient);
 			return store;

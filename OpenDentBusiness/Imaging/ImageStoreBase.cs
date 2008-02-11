@@ -35,7 +35,6 @@ namespace OpenDental.Imaging {
 				ClosePatientStore();
 				return;
 			}
-
 			this.patient = patient;
 			OnPatientStoreOpened(EventArgs.Empty, this);
 		}
@@ -193,7 +192,6 @@ namespace OpenDental.Imaging {
 			doc.PatNum = Patient.PatNum;
 			doc.DocCategory = docCategory;
 			Documents.Insert(doc, Patient);//creates filename and saves to db
-
 			long qualityL = 0;
 			if(imageType == ImageType.Radiograph) {
 				qualityL = Convert.ToInt64(((Pref)PrefB.HList["ScannerCompressionRadiographs"]).ValueString);
@@ -205,7 +203,6 @@ namespace OpenDental.Imaging {
 				//Possible values 0-100?
 				qualityL = (long)Convert.ToInt32(((Pref)PrefB.HList["ScannerCompression"]).ValueString);
 			}
-
 			ImageCodecInfo myImageCodecInfo;
 			ImageCodecInfo[] encoders;
 			encoders = ImageCodecInfo.GetImageEncoders();
@@ -276,19 +273,17 @@ namespace OpenDental.Imaging {
 		}
 
 		public void ImportImage(Document document, string filename) {
-			if(Patient == null)
+			if(Patient == null){
 				throw new NoActivePatientException();
-
+			}
 			// No try -- catch here, because the document already existed -- we cannot delete it.
 			SaveDocument(document, filename);
 		}
-
 
 		public void ImportPdf(string sPDF) {
 			Document DocCur = new Document();
 			DocCur.FileName = ".pdf";
 			DocCur.DateCreated = DateTime.Today;
-
 			//Find the category, hopefully 'Patient Information'
 			//otherwise, just default to first one
 			int iCategory = iCategory = DefB.Short[(int)DefCat.ImageCats][0].DefNum; ;
@@ -297,25 +292,21 @@ namespace OpenDental.Imaging {
 					iCategory = DefB.Short[(int)DefCat.ImageCats][i].DefNum;
 				}
 			}
-
 			DocCur.DocCategory = iCategory;
 			DocCur.ImgType = ImageType.Document;
 			DocCur.Description = "New Patient Form";
 			DocCur.PatNum = Patient.PatNum;
 			Documents.Insert(DocCur, Patient);//this assigns a filename and saves to db
-
 			// Save the PDF to a temporary file, then import that file.
 			string tempFileName = Path.GetTempFileName();
 			try {
 				// Convert the Base64 UUEncoded input into binary output.
 				byte[] binaryData = Convert.FromBase64String(sPDF);
-
 				// Write out the decoded data.
 				FileStream outFile = new FileStream(tempFileName, FileMode.Create, FileAccess.Write);
 				outFile.Write(binaryData, 0, binaryData.Length);
 				outFile.Close();
 				//Above is the code to save the file to a particular directory from NewPatientForm.com
-
 				// Import this file
 				SaveDocument(DocCur, tempFileName);
 			}
