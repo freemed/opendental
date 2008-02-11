@@ -24,7 +24,7 @@ namespace OpenDental.Imaging {
 					@"SELECT Data FROM files WHERE DocNum = ?DocNum";
 
 				IDataParameter docNumParameter = command.CreateParameter();
-				docNumParameter.ParameterName = "DocNum";
+				docNumParameter.ParameterName = "?DocNum";
 				docNumParameter.Value = doc.DocNum;
 				command.Parameters.Add(docNumParameter);
 
@@ -71,12 +71,12 @@ namespace OpenDental.Imaging {
 					@"INSERT INTO files (DocNum, Data, Thumbnail) VALUES (?DocNum, ?Data, NULL)";
 
 				IDataParameter docNumParameter = command.CreateParameter();
-				docNumParameter.ParameterName = "DocNum";
+				docNumParameter.ParameterName = "?DocNum";
 				docNumParameter.Value = doc.DocNum;
 				command.Parameters.Add(docNumParameter);
 
 				IDataParameter dataParameter = command.CreateParameter();
-				dataParameter.ParameterName = "Data";
+				dataParameter.ParameterName = "?Data";
 				dataParameter.Value = buffer;
 				command.Parameters.Add(dataParameter);
 
@@ -93,7 +93,7 @@ namespace OpenDental.Imaging {
 					@"UPDATE files SET Thumbnail = NULL WHERE DocNum = ?DocNum";
 
 				IDataParameter docNumParameter = command.CreateParameter();
-				docNumParameter.ParameterName = "DocNum";
+				docNumParameter.ParameterName = "?DocNum";
 				docNumParameter.Value = doc.DocNum;
 				command.Parameters.Add(docNumParameter);
 
@@ -110,7 +110,7 @@ namespace OpenDental.Imaging {
 					@"DELETE FROM files WHERE DocNum = ?DocNum";
 
 				IDataParameter docNumParameter = command.CreateParameter();
-				docNumParameter.ParameterName = "DocNum";
+				docNumParameter.ParameterName = "?DocNum";
 				docNumParameter.Value = doc.DocNum;
 				command.Parameters.Add(docNumParameter);
 
