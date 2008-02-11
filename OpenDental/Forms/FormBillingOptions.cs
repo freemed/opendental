@@ -520,6 +520,7 @@ namespace OpenDental{
 			gridDun.Rows.Clear();
 			OpenDental.UI.ODGridRow row;
 			//string text;
+			OpenDental.UI.ODGridCell cell;
 			for(int i=0;i<dunningList.Length;i++){
 				row=new OpenDental.UI.ODGridRow();
 				if(dunningList[i].BillingType==0){
@@ -544,7 +545,10 @@ namespace OpenDental{
 					row.Cells.Add(Lan.g(this,"N"));
 				}
 				row.Cells.Add(dunningList[i].DunMessage);
-				row.Cells.Add(dunningList[i].MessageBold);
+				cell=new ODGridCell(dunningList[i].MessageBold);
+				cell.Bold=YN.Yes;
+				cell.ColorText=Color.DarkRed;
+				row.Cells.Add(cell);
 				gridDun.Rows.Add(row);
 			}
 			gridDun.EndUpdate();

@@ -259,6 +259,7 @@ namespace OpenDental{
 			Dunning[] dunList=Dunnings.Refresh();
 			int ageAccount=0;
 			YN insIsPending=YN.Unknown;
+			Dunning dunning;
 			for(int i=0;i<guarNums.Length;i++){//loop through each family
 				famCur=Patients.GetFamily(guarNums[i]);
 				numsFam=new ArrayList();
@@ -291,7 +292,11 @@ namespace OpenDental{
 				else{
 					insIsPending=YN.No;
 				}
-				notes[i]=Dunnings.GetMessage(dunList,famCur.List[0].BillingType,ageAccount,insIsPending);
+				dunning=Dunnings.GetDunning(dunList,famCur.List[0].BillingType,ageAccount,insIsPending);
+				if(dunning!=null){
+					notes[i]+=dunning.DunMessage;
+					//also messageBold needs to be addressed.
+				}
 				if(notes[i]!="" && generalNote!=""){
 					notes[i]+="\r\n\r\n";//Space two lines apart
 				}

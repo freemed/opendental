@@ -21,17 +21,20 @@ namespace OpenDental{
 				List[i].BillingType    = PIn.PInt(table.Rows[i][2].ToString());
 				List[i].AgeAccount     = PIn.PInt(table.Rows[i][3].ToString());
 				List[i].InsIsPending   = (YN)PIn.PInt(table.Rows[i][4].ToString());
+				List[i].MessageBold    = PIn.PString(table.Rows[i][5].ToString());
 			}
 			return List;
 		}
 
 		///<summary></summary>
 		public static void Insert(Dunning dun){
-			string command= "INSERT INTO dunning (DunMessage,BillingType,AgeAccount,InsIsPending) VALUES("
+			string command= "INSERT INTO dunning (DunMessage,BillingType,AgeAccount,InsIsPending,"
+				+"MessageBold) VALUES("
 				+"'"+POut.PString(dun.DunMessage)+"', "
 				+"'"+POut.PInt   (dun.BillingType)+"', "
 				+"'"+POut.PInt   (dun.AgeAccount)+"', "
-				+"'"+POut.PInt   ((int)dun.InsIsPending)+"')";
+				+"'"+POut.PInt   ((int)dun.InsIsPending)+"', "
+				+"'"+POut.PString(dun.MessageBold)+"')";
  			dun.DunningNum=General.NonQ(command,true);
 		}
 
@@ -42,6 +45,7 @@ namespace OpenDental{
 				+ ",BillingType = '"     +POut.PInt   (dun.BillingType)+"'"
 				+ ",AgeAccount = '"      +POut.PInt   (dun.AgeAccount)+"'"
 				+ ",InsIsPending = '"    +POut.PInt   ((int)dun.InsIsPending)+"'"
+				+ ",MessageBold = '"     +POut.PString(dun.MessageBold)+"'"
 				+" WHERE DunningNum = '" +POut.PInt   (dun.DunningNum)+"'";
  			General.NonQ(command);
 		}
@@ -53,8 +57,8 @@ namespace OpenDental{
  			General.NonQ(command);
 		}
 
-		///<summary></summary>
-		public static string GetMessage(Dunning[] dunList, int billingType,int ageAccount,YN insIsPending){
+		///<summary>Will return null if no dunning matches the given criteria.</summary>
+		public static Dunning GetDunning(Dunning[] dunList, int billingType,int ageAccount,YN insIsPending){
 			//loop backwards through Dunning list and find the first dunning that matches criteria.
 			for(int i=dunList.Length-1;i>=0;i--){
 				if(dunList[i].BillingType!=0//0 in the list matches all
@@ -68,9 +72,9 @@ namespace OpenDental{
 					&& dunList[i].InsIsPending!=insIsPending){
 					continue;
 				}
-				return dunList[i].DunMessage;
+				return dunList[i];
 			}
-			return "";
+			return null;
 		}
 
 		
