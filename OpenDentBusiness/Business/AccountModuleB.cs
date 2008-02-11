@@ -994,7 +994,6 @@ namespace OpenDentBusiness {
 			row["ClaimNum"]="0";
 			row["ClaimPaymentNum"]="0";
 			row["colorText"]=Color.Black.ToArgb().ToString();
-			row["CommlogNum"]="0";
 			row["creditsDouble"]="0";
 			row["credits"]="";
 			row["DateTime"]=DateTime.MinValue;
@@ -1005,10 +1004,12 @@ namespace OpenDentBusiness {
 			row["PatNum"]="0";
 			row["PayNum"]="0";
 			row["PayPlanNum"]="0";
+			row["PayPlanChargeNum"]="0";
 			row["ProcCode"]="";
 			row["ProcNum"]="0";
 			row["procsOnClaim"]="";
 			row["prov"]="";
+			row["StatementNum"]="0";
 			row["tth"]="";
 		}
 

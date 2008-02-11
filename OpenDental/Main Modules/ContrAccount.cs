@@ -3056,103 +3056,75 @@ double adj=Adjustments.GetTotForProc(arrayProc[tempCountProc].ProcNum,Adjustment
 		
 		private void menuItemStatementWalkout_Click(object sender, System.EventArgs e) {
 			Statement stmt=new Statement();
-			PrintStatement(stmt);//new int[] {PatCur.PatNum},DateTime.Today,DateTime.Today,false,false,true,true,"",false,"");
+			stmt.PatNum=PatCur.Guarantor;
+			stmt.DateSent=DateTime.Today;
+			stmt.IsSent=true;
+			stmt.Mode_=StatementMode.InPerson;
+			stmt.HidePayment=true;
+			stmt.SinglePatient=true;
+			stmt.Intermingled=false;
+			stmt.DateRangeFrom=DateTime.Today;
+			stmt.DateRangeTo=DateTime.Today;
+			stmt.Note="";
+			stmt.NoteBold="";
+			PrintStatement(stmt);
 			ModuleSelected(PatCur.PatNum);
 		}
 
 		private void menuItemStatementEmail_Click(object sender,EventArgs e) {
 			Statement stmt=new Statement();
-			int[] patNums=new int[FamCur.List.Length];
-			for(int i=0;i<FamCur.List.Length;i++) {
-				patNums[i]=FamCur.List[i].PatNum;
-			}
-			DateTime fromDate=DateTime.MinValue;
-			DateTime toDate=DateTime.MaxValue;
-			if(textDateStart.errorProvider1.GetError(textDateStart)==""
-				&& textDateEnd.errorProvider1.GetError(textDateEnd)=="")
-			{
+			stmt.PatNum=PatCur.Guarantor;
+			stmt.DateSent=DateTime.Today;
+			stmt.IsSent=true;
+			stmt.Mode_=StatementMode.Email;
+			stmt.HidePayment=false;
+			stmt.SinglePatient=false;
+			stmt.Intermingled=false;
+			stmt.DateRangeFrom=DateTime.MinValue;
+			if(textDateStart.errorProvider1.GetError(textDateStart)==""){
 				if(textDateStart.Text!=""){
-					fromDate=PIn.PDate(textDateStart.Text);
-				}
-				if(textDateEnd.Text!=""){
-					toDate=PIn.PDate(textDateEnd.Text);
+					stmt.DateRangeFrom=PIn.PDate(textDateStart.Text);
 				}
 			}
-			string attachPath=FormEmailMessageEdit.GetAttachPath();
-			Random rnd=new Random();
-			string fileName=DateTime.Now.ToString("yyyyMMdd")+"_"+DateTime.Now.TimeOfDay.Ticks.ToString()+rnd.Next(1000).ToString()+".pdf";
-			string filePathAndName=ODFileUtils.CombinePaths(attachPath,fileName);
-			PrintStatement(stmt);//patNums,fromDate,toDate,true,false,false,false,"",false,filePathAndName);
-			//Process.Start(filePathAndName);
-			EmailMessage message=new EmailMessage();
-			message.PatNum=PatCur.PatNum;
-			message.ToAddress=PatCur.Email;
-			message.FromAddress=PrefB.GetString("EmailSenderAddress");
-			message.Subject=Lan.g(this,"Statement");
-	//message.BodyText=Lan.g(this,"");
-			EmailAttach attach=new EmailAttach();
-			attach.DisplayedFileName="Statement.pdf";
-			attach.ActualFileName=fileName;
-			message.Attachments.Add(attach);
-			FormEmailMessageEdit FormE=new FormEmailMessageEdit(message);
-			FormE.IsNew=true;
-			FormE.ShowDialog();
-			//if(FormE.DialogResult==DialogResult.OK) {
-			//	RefreshCurrentModule();
-			//}
+			stmt.DateRangeTo=DateTime.MaxValue;//new DateTime(2200,1,1);
+			if(textDateEnd.errorProvider1.GetError(textDateEnd)==""){
+				if(textDateEnd.Text!=""){
+					stmt.DateRangeTo=PIn.PDate(textDateEnd.Text);
+				}
+			}
+			stmt.Note="";
+			stmt.NoteBold="";
+			PrintStatement(stmt);
 			ModuleSelected(PatCur.PatNum);
 		}
 
 		private void menuItemStatementMore_Click(object sender, System.EventArgs e) {
 			Statement stmt=new Statement();
-			FormStatementOptions FormSO=new FormStatementOptions();//PatCur,FamCur);
-			DateTime fromDate=DateTime.MinValue;
-			DateTime toDate=DateTime.MaxValue;
-			if(textDateStart.errorProvider1.GetError(textDateStart)==""
-				&& textDateEnd.errorProvider1.GetError(textDateEnd)=="")
-			{
+			stmt.PatNum=PatCur.Guarantor;
+			stmt.DateSent=DateTime.Today;
+			stmt.IsSent=false;
+			stmt.Mode_=StatementMode.InPerson;
+			stmt.HidePayment=false;
+			stmt.SinglePatient=false;
+			stmt.Intermingled=false;
+			stmt.DateRangeFrom=DateTime.MinValue;
+			if(textDateStart.errorProvider1.GetError(textDateStart)==""){
 				if(textDateStart.Text!=""){
-					fromDate=PIn.PDate(textDateStart.Text);
+					stmt.DateRangeFrom=PIn.PDate(textDateStart.Text);
 				}
+			}
+			stmt.DateRangeTo=DateTime.MaxValue;//new DateTime(2200,1,1);
+			if(textDateEnd.errorProvider1.GetError(textDateEnd)==""){
 				if(textDateEnd.Text!=""){
-					toDate=PIn.PDate(textDateEnd.Text);
+					stmt.DateRangeTo=PIn.PDate(textDateEnd.Text);
 				}
 			}
-			//FormSO.FromDate=fromDate;
-			//FormSO.ToDate=toDate;
+			stmt.Note="";
+			stmt.NoteBold="";
+			//All printing and emailing will be done from within the form:
+			FormStatementOptions FormSO=new FormStatementOptions();
+			FormSO.StmtCur=stmt;
 			FormSO.ShowDialog();
-			if(FormSO.DialogResult!=DialogResult.OK){
-				return;
-			}
-			//FillMain(FormSO.FromDate,FormSO.ToDate,FormSO.IncludeClaims,FormSO.SubtotalsOnly);
-			//if Email button pushed then make statement to email
-			//if(FormSO.EmailOnClose) {
-				string attachPath=FormEmailMessageEdit.GetAttachPath();
-				Random rnd=new Random();
-				string fileName=DateTime.Now.ToString("yyyyMMdd")+"_"+DateTime.Now.TimeOfDay.Ticks.ToString()+rnd.Next(1000).ToString()+".pdf";
-				string filePathAndName=ODFileUtils.CombinePaths(attachPath,fileName);
-				//PrintStatement(patNums,fromDate,DateTime.MaxValue,true,false,false,false,"",false,PrefB.GetBool("PrintSimpleStatements"),
-				//	filePathAndName);
-//PrintStatement(FormSO.PatNums,fromDate,toDate,FormSO.IncludeClaims,FormSO.SubtotalsOnly,
-//					FormSO.HidePayment,FormSO.NextAppt,FormSO.Note,FormSO.IsBill,filePathAndName);
-				//Process.Start(filePathAndName);
-				EmailMessage message=new EmailMessage();
-				message.PatNum=PatCur.PatNum;
-				message.ToAddress=PatCur.Email;
-				message.FromAddress=PrefB.GetString("EmailSenderAddress");
-				message.Subject=Lan.g(this,"Statement");
-				EmailAttach attach=new EmailAttach();
-				attach.DisplayedFileName="Statement.pdf";
-				attach.ActualFileName=fileName;
-				message.Attachments.Add(attach);
-				FormEmailMessageEdit FormE=new FormEmailMessageEdit(message);
-				FormE.IsNew=true;
-				FormE.ShowDialog();
-			//}
-			//else {
-//				PrintStatement(FormSO.PatNums,fromDate,toDate,FormSO.IncludeClaims
-//					,FormSO.SubtotalsOnly,FormSO.HidePayment,FormSO.NextAppt,FormSO.Note,FormSO.IsBill,"");
-			//}
 			ModuleSelected(PatCur.PatNum);
 		}
 
@@ -3162,16 +3134,38 @@ double adj=Adjustments.GetTotForProc(arrayProc[tempCountProc].ProcNum,Adjustment
 			Statements.WriteObject(stmt);
 			FormRpStatement FormST=new FormRpStatement();
 			FormST.CreateStatementPdf(stmt);
-			//still need to attach email here
-			#if DEBUG
-				if(ImageStore.UpdatePatient == null){
-					ImageStore.UpdatePatient = new FileStore.UpdatePatientDelegate(Patients.Update);
-				}
-				OpenDental.Imaging.IImageStore imageStore = OpenDental.Imaging.ImageStore.GetImageStore(PatCur);
-				Process.Start(imageStore.GetFilePath(Documents.GetByNum(stmt.DocNum)));
-			#else
-				FormST.PrintStatement(stmt,false);
-			#endif
+			if(stmt.Mode_==StatementMode.Email){
+				string attachPath=FormEmailMessageEdit.GetAttachPath();
+				Random rnd=new Random();
+				string fileName=DateTime.Now.ToString("yyyyMMdd")+"_"+DateTime.Now.TimeOfDay.Ticks.ToString()+rnd.Next(1000).ToString()+".pdf";
+				string filePathAndName=ODFileUtils.CombinePaths(attachPath,fileName);
+				//Process.Start(filePathAndName);
+				EmailMessage message=new EmailMessage();
+				message.PatNum=PatCur.PatNum;
+				message.ToAddress=PatCur.Email;
+				message.FromAddress=PrefB.GetString("EmailSenderAddress");
+				message.Subject=Lan.g(this,"Statement");
+				//message.BodyText=Lan.g(this,"");
+				EmailAttach attach=new EmailAttach();
+				attach.DisplayedFileName="Statement.pdf";
+				attach.ActualFileName=fileName;
+				message.Attachments.Add(attach);
+				FormEmailMessageEdit FormE=new FormEmailMessageEdit(message);
+				FormE.IsNew=true;
+				FormE.ShowDialog();
+			}
+			else{
+				#if DEBUG
+					if(ImageStore.UpdatePatient == null){
+						ImageStore.UpdatePatient = new FileStore.UpdatePatientDelegate(Patients.Update);
+					}
+					OpenDental.Imaging.IImageStore imageStore = OpenDental.Imaging.ImageStore.GetImageStore(PatCur);
+					//don't bother to check valid path because it's just debug.
+					Process.Start(imageStore.GetFilePath(Documents.GetByNum(stmt.DocNum)));
+				#else
+					FormST.PrintStatement(stmt,false);
+				#endif
+			}
 			Cursor=Cursors.Default;
 		}
 

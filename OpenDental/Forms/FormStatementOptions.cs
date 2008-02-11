@@ -2,9 +2,12 @@ using System;
 using System.Diagnostics;
 using System.Drawing;
 using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
 using System.Windows.Forms;
 using OpenDental.Imaging;
+using CodeBase;
 using OpenDentBusiness;
 
 namespace OpenDental{
@@ -616,7 +619,17 @@ namespace OpenDental{
 					return;
 				}
 				SetEnabled(true);
-//Delete the archived copy of the statement
+				//Delete the archived copy of the statement
+				if(StmtCur.DocNum!=0){
+					if(ImageStore.UpdatePatient == null){
+						ImageStore.UpdatePatient = new FileStore.UpdatePatientDelegate(Patients.Update);
+					}
+					Patient pat=Patients.GetPat(StmtCur.PatNum);
+					OpenDental.Imaging.IImageStore imageStore = OpenDental.Imaging.ImageStore.GetImageStore(pat);
+					List<Document> listdocs=new List<Document>();
+					listdocs.Add(Documents.GetByNum(StmtCur.DocNum));
+					imageStore.DeleteImage(listdocs);
+				}
 			}
 		}
 
@@ -632,9 +645,16 @@ namespace OpenDental{
 		}
 
 		private void butPrint_Click(object sender,EventArgs e) {
-			if(initiallySent && checkIsSent.Checked){
-				//reprint existing archive pdf
-
+			if(StmtCur.DocNum!=0 && checkIsSent.Checked){
+				//launch existing archive pdf. User can click print from within Acrobat.
+				Cursor=Cursors.WaitCursor;
+				if(ImageStore.UpdatePatient == null){
+					ImageStore.UpdatePatient = new FileStore.UpdatePatientDelegate(Patients.Update);
+				}
+				Patient pat=Patients.GetPat(StmtCur.PatNum);
+				OpenDental.Imaging.IImageStore imageStore = OpenDental.Imaging.ImageStore.GetImageStore(pat);
+				Process.Start(imageStore.GetFilePath(Documents.GetByNum(StmtCur.DocNum)));
+				Cursor=Cursors.Default;
 			}
 			else{//was not initially sent, or else user has unchecked the sent box
 				//So create an archive
@@ -642,19 +662,30 @@ namespace OpenDental{
 					listMode.SelectedIndex=(int)StatementMode.InPerson;
 				}
 				checkIsSent.Checked=true;
+				Cursor=Cursors.WaitCursor;
 				if(!SaveToDb()){
+					Cursor=Cursors.Default;
 					return;
 				}
-
+				FormRpStatement FormST=new FormRpStatement();
+				FormST.CreateStatementPdf(StmtCur);
+				#if DEBUG
+					FormST.PrintStatement(StmtCur,true);
+					FormST.ShowDialog();
+				#else
+					FormST.PrintStatement(StmtCur,false);
+				#endif
+				Cursor=Cursors.Default;
 			}
-MsgBox.Show(this,"Not functional yet");
 			DialogResult=DialogResult.OK;
 		}
 
 		private void butEmail_Click(object sender,EventArgs e) {
-			if(initiallySent && checkIsSent.Checked){
-				//remail existing archive pdf
-
+			if(StmtCur.DocNum!=0 && checkIsSent.Checked){
+				//remail existing archive pdf?
+				//or maybe tell user they can't do that?
+				MsgBox.Show(this,"Email was already sent.");
+				return;
 			}
 			else{//was not initially sent, or else user has unchecked the sent box
 				//So create an archive
@@ -662,19 +693,58 @@ MsgBox.Show(this,"Not functional yet");
 					listMode.SelectedIndex=(int)StatementMode.Email;
 				}
 				checkIsSent.Checked=true;
+				Cursor=Cursors.WaitCursor;
 				if(!SaveToDb()){
 					return;
 				}
-
+				FormRpStatement FormST=new FormRpStatement();
+				FormST.CreateStatementPdf(StmtCur);
+				if(!CreateEmailMessage()){
+					Cursor=Cursors.Default;
+					return;
+				}
+				Cursor=Cursors.Default;
 			}
-MsgBox.Show(this,"Not functional yet");
 			DialogResult=DialogResult.OK;
 		}
 
+		/// <summary>Also displays the dialog for the email.  Must have already created and attached the pdf.  Returns false if it could not create the email.</summary>
+		private bool CreateEmailMessage(){
+			string attachPath=FormEmailMessageEdit.GetAttachPath();
+			Random rnd=new Random();
+			string fileName=DateTime.Now.ToString("yyyyMMdd")+"_"+DateTime.Now.TimeOfDay.Ticks.ToString()+rnd.Next(1000).ToString()+".pdf";
+			string filePathAndName=ODFileUtils.CombinePaths(attachPath,fileName);
+			if(!PrefB.UsingAtoZfolder){
+				MsgBox.Show(this,"Could not create email because no AtoZ folder.");
+				return false;
+			}
+			Patient pat=Patients.GetPat(StmtCur.PatNum);
+			string oldPath=ODFileUtils.CombinePaths(new string[] {	FormPath.GetPreferredImagePath(),
+				pat.ImageFolder.Substring(0,1).ToUpper(),pat.ImageFolder,Documents.GetByNum(StmtCur.DocNum).FileName});
+			File.Copy(oldPath,filePathAndName);//
+			//Process.Start(filePathAndName);
+			EmailMessage message=new EmailMessage();
+			message.PatNum=pat.PatNum;
+			message.ToAddress=pat.Email;
+			message.FromAddress=PrefB.GetString("EmailSenderAddress");
+			message.Subject=Lan.g(this,"Statement");
+			//message.BodyText=Lan.g(this,"");
+			EmailAttach attach=new EmailAttach();
+			attach.DisplayedFileName="Statement.pdf";
+			attach.ActualFileName=fileName;
+			message.Attachments.Add(attach);
+			FormEmailMessageEdit FormE=new FormEmailMessageEdit(message);
+			FormE.IsNew=true;
+			FormE.ShowDialog();
+			if(FormE.DialogResult==DialogResult.OK){
+				return true;
+			}
+			return false;
+		}
+
 		private void butPreview_Click(object sender,EventArgs e) {
-			if(StmtCur.DocNum!=0){//initiallySent && checkIsSent.Checked){
+			if(StmtCur.DocNum!=0 && checkIsSent.Checked){//initiallySent && checkIsSent.Checked){
 				//launch existing archive pdf
-				//MsgBox.Show(this,"Not functional yet");
 				Cursor=Cursors.WaitCursor;
 				if(ImageStore.UpdatePatient == null){
 					ImageStore.UpdatePatient = new FileStore.UpdatePatientDelegate(Patients.Update);
@@ -713,6 +783,9 @@ MsgBox.Show(this,"Not functional yet");
 		private void butOK_Click(object sender, System.EventArgs e) {
 			if(!SaveToDb()){
 				return;
+			}
+			if(StmtCur.Mode_==StatementMode.Email){
+
 			}
 			DialogResult=DialogResult.OK;
 		}
