@@ -21,7 +21,7 @@ namespace OpenDentBusiness{
 		public CommSentOrReceived SentOrReceived;
 		//<summary>FK to emailmessage.EmailMessageNum, if there is an associated email. Otherwise 0.</summary>
 		//public int EmailMessageNum;
-		///<Summary>Replaces the old way of doing it where StatementSent was one of the types.</Summary>
+		///<Summary>No longer used.  Use the statement table instead.</Summary>
 		public bool IsStatementSent;
 		///<summary>FK to user.UserNum.</summary>
 		public int UserNum;

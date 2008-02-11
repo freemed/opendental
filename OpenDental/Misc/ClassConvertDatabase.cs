@@ -6328,6 +6328,32 @@ namespace OpenDental{
 				General.NonQEx(command);
 				command="INSERT INTO preference (PrefName,ValueString) VALUES ('ShowAccountFamilyCommEntries','1')";
 				General.NonQEx(command);
+				//convert all existing statement commlog entries to statement objects
+				command="SELECT * FROM commlog WHERE IsStatementSent= 1";
+				DataTable table=General.GetTableEx(command);
+				for(int i=0;i<table.Rows.Count;i++){
+					command="INSERT INTO statement (PatNum,DateSent,DateRangeFrom,DateRangeTo,Note,NoteBold,Mode_,"
+						+"IsSent) VALUES ("
+						+table.Rows[i]["PatNum"].ToString()+","
+						+POut.PDate(PIn.PDate(table.Rows[i]["CommDateTime"].ToString()))+","
+						+POut.PDate(new DateTime(1,1,1))+","
+						+POut.PDate(new DateTime(2200,1,1))+","
+						+"'"+POut.PString(PIn.PString(table.Rows[i]["Note"].ToString()))+"',"
+						+"'',";
+					if(table.Rows[i]["Mode_"].ToString()=="4"){//InPerson
+						command+="1,";
+					}
+					else if(table.Rows[i]["Mode_"].ToString()=="1"){//Email
+						command+="2,";
+					}
+					else{//mail
+						command+="0,";
+					}
+					command+="1)";
+					General.NonQEx(command);
+				}
+				command="DELETE FROM commlog WHERE IsStatementSent=1";
+				General.NonQEx(command);
 
 
 
