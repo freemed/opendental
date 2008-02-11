@@ -6358,6 +6358,14 @@ namespace OpenDental{
 				General.NonQEx(command);
 				command = "UPDATE dunning SET MessageBold=''";
 				General.NonQEx(command);
+				command="INSERT INTO preference (PrefName,ValueString) VALUES ('BillingDefaultsLastDays','45')";
+				General.NonQEx(command);
+				command="INSERT INTO preference (PrefName,ValueString) VALUES ('BillingDefaultsIntermingle','0')";
+				General.NonQEx(command);
+				command="INSERT INTO preference (PrefName,ValueString) VALUES ('BillingDefaultsNote','')";
+				General.NonQEx(command);
+
+
 
 
 

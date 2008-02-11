@@ -48,6 +48,8 @@ namespace OpenDental{
 		private OpenDental.UI.Button butEmail;
 		private OpenDental.UI.Button butPreview;
 		private bool initiallySent;
+		///<summary>This will be null for ordinary edits.  But sometimes this window is used to edit bulk statements.  In that case, this list contains the statements being edited.  Must contain at least one item.</summary>
+		public List<Statement> StmtList;
 
 		///<summary></summary>
 		public FormStatementOptions()
@@ -548,38 +550,55 @@ namespace OpenDental{
 		#endregion
 
 		private void FormStatementOptions_Load(object sender, System.EventArgs e) {
-			if(StmtCur.IsSent){
-				checkIsSent.Checked=true;
-				initiallySent=true;
-				SetEnabled(false);
-			}
-			textDate.Text=StmtCur.DateSent.ToShortDateString();
-			listMode.Items.Clear();
-			for(int i=0;i<Enum.GetNames(typeof(StatementMode)).Length;i++){
-				listMode.Items.Add(Lan.g("enumStatementMode",Enum.GetNames(typeof(StatementMode))[i]));
-				if((int)StmtCur.Mode_==i){
-					listMode.SelectedIndex=i;
+			if(StmtList==null){
+				if(StmtCur.IsSent){
+					checkIsSent.Checked=true;
+					initiallySent=true;
+					SetEnabled(false);
 				}
+				textDate.Text=StmtCur.DateSent.ToShortDateString();
+				listMode.Items.Clear();
+				for(int i=0;i<Enum.GetNames(typeof(StatementMode)).Length;i++){
+					listMode.Items.Add(Lan.g("enumStatementMode",Enum.GetNames(typeof(StatementMode))[i]));
+					if((int)StmtCur.Mode_==i){
+						listMode.SelectedIndex=i;
+					}
+				}
+				checkHidePayment.Checked=StmtCur.HidePayment;
+				checkSinglePatient.Checked=StmtCur.SinglePatient;
+				checkIntermingled.Checked=StmtCur.Intermingled;
+				if(StmtCur.DateRangeFrom.Year>1880){
+					textDateStart.Text=StmtCur.DateRangeFrom.ToShortDateString();
+				}
+				if(StmtCur.DateRangeTo.Year<2100){
+					textDateEnd.Text=StmtCur.DateRangeTo.ToShortDateString();
+				}
+				if(PrefB.GetBool("FuchsOptionsOn")){
+					//textDateFrom.Text=DateTime.Today.AddDays(-90).ToShortDateString();
+					//textDateTo.Text=DateTime.Today.ToShortDateString();
+					groupFuchs.Visible=true;
+					buttonFuchs1.Visible=true;
+					buttonFuchs2.Visible=true;
+					buttonFuchs3.Visible=true;
+				}
+				textNote.Text=StmtCur.Note;
+				textNoteBold.Text=StmtCur.NoteBold;
 			}
-			checkHidePayment.Checked=StmtCur.HidePayment;
-			checkSinglePatient.Checked=StmtCur.SinglePatient;
-			checkIntermingled.Checked=StmtCur.Intermingled;
-			if(StmtCur.DateRangeFrom.Year>1880){
-				textDateStart.Text=StmtCur.DateRangeFrom.ToShortDateString();
+			else{
+				//bulk edit
+				checkIsSent.ThreeState=true;
+				checkIsSent.CheckState=CheckState.Indeterminate;
+				bool allSame=false;
+				for(int i=0;i<StmtList.Count;i++){
+					if(StmtList[0].IsSent!=StmtList[i].IsSent){//if any are different from the first element
+						allSame=false;
+					}
+				}
+				if(allSame){
+					checkIsSent.Checked=StmtList[0].IsSent;
+				}
+
 			}
-			if(StmtCur.DateRangeTo.Year<2100){
-				textDateEnd.Text=StmtCur.DateRangeTo.ToShortDateString();
-			}
-			if(PrefB.GetBool("FuchsOptionsOn")){
-				//textDateFrom.Text=DateTime.Today.AddDays(-90).ToShortDateString();
-				//textDateTo.Text=DateTime.Today.ToShortDateString();
-				groupFuchs.Visible=true;
-				buttonFuchs1.Visible=true;
-				buttonFuchs2.Visible=true;
-				buttonFuchs3.Visible=true;
-			}
-			textNote.Text=StmtCur.Note;
-			textNoteBold.Text=StmtCur.NoteBold;
 		}
 
 		private void butToday_Click(object sender,EventArgs e) {

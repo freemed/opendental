@@ -18,6 +18,12 @@ namespace OpenDentBusiness{
 			return DataObjectFactory<Statement>.CreateObject(statementNum);
 		}
 
+		public static List<Statement> GetList(bool isSent){
+			string command="SELECT * FROM statement WHERE IsSent="+POut.PBool(isSent);
+			Collection<Statement> collectState=DataObjectFactory<Statement>.CreateObjects(command);
+			return new List<Statement>(collectState);				
+		}
+
 		///<summary></summary>
 		public static void WriteObject(Statement statement){
 			DataObjectFactory<Statement>.WriteObject(statement);
