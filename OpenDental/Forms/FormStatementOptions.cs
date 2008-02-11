@@ -332,6 +332,8 @@ namespace OpenDental{
 			// textNoteBold
 			// 
 			this.textNoteBold.AcceptsReturn = true;
+			this.textNoteBold.Font = new System.Drawing.Font("Microsoft Sans Serif",10F,System.Drawing.FontStyle.Bold,System.Drawing.GraphicsUnit.Point,((byte)(0)));
+			this.textNoteBold.ForeColor = System.Drawing.Color.DarkRed;
 			this.textNoteBold.Location = new System.Drawing.Point(146,353);
 			this.textNoteBold.Multiline = true;
 			this.textNoteBold.Name = "textNoteBold";
