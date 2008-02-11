@@ -32,6 +32,8 @@ namespace OpenDental{
 		private System.Windows.Forms.RadioButton radioY;
 		private System.Windows.Forms.RadioButton radioN;
 		private System.Windows.Forms.RadioButton radioU;
+		private TextBox textMessageBold;
+		private Label label2;
 		private Dunning DunningCur;
 
 		///<summary></summary>
@@ -68,11 +70,8 @@ namespace OpenDental{
 		private void InitializeComponent()
 		{
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormDunningEdit));
-			this.butCancel = new OpenDental.UI.Button();
-			this.butOK = new OpenDental.UI.Button();
 			this.label1 = new System.Windows.Forms.Label();
 			this.textDunMessage = new System.Windows.Forms.TextBox();
-			this.butDelete = new OpenDental.UI.Button();
 			this.listBillType = new System.Windows.Forms.ListBox();
 			this.label8 = new System.Windows.Forms.Label();
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
@@ -84,39 +83,14 @@ namespace OpenDental{
 			this.radioY = new System.Windows.Forms.RadioButton();
 			this.radioN = new System.Windows.Forms.RadioButton();
 			this.radioU = new System.Windows.Forms.RadioButton();
+			this.textMessageBold = new System.Windows.Forms.TextBox();
+			this.label2 = new System.Windows.Forms.Label();
+			this.butDelete = new OpenDental.UI.Button();
+			this.butOK = new OpenDental.UI.Button();
+			this.butCancel = new OpenDental.UI.Button();
 			this.groupBox1.SuspendLayout();
 			this.groupBox2.SuspendLayout();
 			this.SuspendLayout();
-			// 
-			// butCancel
-			// 
-			this.butCancel.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butCancel.Autosize = true;
-			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butCancel.CornerRadius = 4F;
-			this.butCancel.Location = new System.Drawing.Point(366,387);
-			this.butCancel.Name = "butCancel";
-			this.butCancel.Size = new System.Drawing.Size(75,26);
-			this.butCancel.TabIndex = 9;
-			this.butCancel.Text = "&Cancel";
-			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
-			// 
-			// butOK
-			// 
-			this.butOK.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butOK.Autosize = true;
-			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(281,387);
-			this.butOK.Name = "butOK";
-			this.butOK.Size = new System.Drawing.Size(75,26);
-			this.butOK.TabIndex = 8;
-			this.butOK.Text = "&OK";
-			this.butOK.Click += new System.EventHandler(this.butOK_Click);
 			// 
 			// label1
 			// 
@@ -134,25 +108,8 @@ namespace OpenDental{
 			this.textDunMessage.Location = new System.Drawing.Point(28,265);
 			this.textDunMessage.Multiline = true;
 			this.textDunMessage.Name = "textDunMessage";
-			this.textDunMessage.Size = new System.Drawing.Size(412,113);
+			this.textDunMessage.Size = new System.Drawing.Size(412,89);
 			this.textDunMessage.TabIndex = 0;
-			// 
-			// butDelete
-			// 
-			this.butDelete.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butDelete.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.butDelete.Autosize = true;
-			this.butDelete.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butDelete.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butDelete.CornerRadius = 4F;
-			this.butDelete.Image = global::OpenDental.Properties.Resources.deleteX;
-			this.butDelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butDelete.Location = new System.Drawing.Point(27,387);
-			this.butDelete.Name = "butDelete";
-			this.butDelete.Size = new System.Drawing.Size(81,26);
-			this.butDelete.TabIndex = 4;
-			this.butDelete.Text = "Delete";
-			this.butDelete.Click += new System.EventHandler(this.butDelete_Click);
 			// 
 			// listBillType
 			// 
@@ -263,10 +220,80 @@ namespace OpenDental{
 			this.radioU.TabStop = true;
 			this.radioU.Text = "Doesn\'t Matter";
 			// 
+			// textMessageBold
+			// 
+			this.textMessageBold.AcceptsReturn = true;
+			this.textMessageBold.AcceptsTab = true;
+			this.textMessageBold.Font = new System.Drawing.Font("Microsoft Sans Serif",10F,System.Drawing.FontStyle.Bold,System.Drawing.GraphicsUnit.Point,((byte)(0)));
+			this.textMessageBold.ForeColor = System.Drawing.Color.DarkRed;
+			this.textMessageBold.Location = new System.Drawing.Point(28,377);
+			this.textMessageBold.Multiline = true;
+			this.textMessageBold.Name = "textMessageBold";
+			this.textMessageBold.Size = new System.Drawing.Size(412,89);
+			this.textMessageBold.TabIndex = 118;
+			// 
+			// label2
+			// 
+			this.label2.Location = new System.Drawing.Point(27,356);
+			this.label2.Name = "label2";
+			this.label2.Size = new System.Drawing.Size(148,17);
+			this.label2.TabIndex = 119;
+			this.label2.Text = "Bold Message";
+			this.label2.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
+			// 
+			// butDelete
+			// 
+			this.butDelete.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butDelete.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.butDelete.Autosize = true;
+			this.butDelete.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butDelete.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butDelete.CornerRadius = 4F;
+			this.butDelete.Image = global::OpenDental.Properties.Resources.deleteX;
+			this.butDelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butDelete.Location = new System.Drawing.Point(27,483);
+			this.butDelete.Name = "butDelete";
+			this.butDelete.Size = new System.Drawing.Size(81,24);
+			this.butDelete.TabIndex = 4;
+			this.butDelete.Text = "Delete";
+			this.butDelete.Click += new System.EventHandler(this.butDelete_Click);
+			// 
+			// butOK
+			// 
+			this.butOK.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.butOK.Autosize = true;
+			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butOK.CornerRadius = 4F;
+			this.butOK.Location = new System.Drawing.Point(279,483);
+			this.butOK.Name = "butOK";
+			this.butOK.Size = new System.Drawing.Size(76,24);
+			this.butOK.TabIndex = 8;
+			this.butOK.Text = "&OK";
+			this.butOK.Click += new System.EventHandler(this.butOK_Click);
+			// 
+			// butCancel
+			// 
+			this.butCancel.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.butCancel.Autosize = true;
+			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butCancel.CornerRadius = 4F;
+			this.butCancel.Location = new System.Drawing.Point(364,483);
+			this.butCancel.Name = "butCancel";
+			this.butCancel.Size = new System.Drawing.Size(76,24);
+			this.butCancel.TabIndex = 9;
+			this.butCancel.Text = "&Cancel";
+			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
+			// 
 			// FormDunningEdit
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
-			this.ClientSize = new System.Drawing.Size(464,431);
+			this.ClientSize = new System.Drawing.Size(464,525);
+			this.Controls.Add(this.textMessageBold);
+			this.Controls.Add(this.label2);
 			this.Controls.Add(this.groupBox2);
 			this.Controls.Add(this.groupBox1);
 			this.Controls.Add(this.listBillType);
@@ -327,6 +354,7 @@ namespace OpenDental{
 					break;
 			}
 			textDunMessage.Text=DunningCur.DunMessage;
+			textMessageBold.Text=DunningCur.MessageBold;
 		}
 
 		private void butDelete_Click(object sender, System.EventArgs e) {
@@ -340,8 +368,8 @@ namespace OpenDental{
 		}
 
 		private void butOK_Click(object sender, System.EventArgs e) {
-			if(textDunMessage.Text==""){
-				MessageBox.Show(Lan.g(this,"Message cannot be blank."));
+			if(textDunMessage.Text=="" && textMessageBold.Text==""){
+				MsgBox.Show(this,"Message cannot be blank.");
 				return;
 			}
 			if(listBillType.SelectedIndex==0){
@@ -372,7 +400,13 @@ namespace OpenDental{
 				DunningCur.InsIsPending=YN.No;
 			}
 			DunningCur.DunMessage=textDunMessage.Text;
-			Dunnings.InsertOrUpdate(DunningCur,IsNew);
+			DunningCur.MessageBold=textMessageBold.Text;
+			if(IsNew){
+				Dunnings.Insert(DunningCur);
+			}
+			else{
+				Dunnings.Update(DunningCur);
+			}
 			DialogResult=DialogResult.OK;
 		}
 

@@ -107,6 +107,7 @@ namespace OpenDental{
 			this.butPrint.TabIndex = 8;
 			this.butPrint.Text = "          Print";
 			this.butPrint.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butPrint.Visible = false;
 			this.butPrint.Click += new System.EventHandler(this.butPrint_Click);
 			// 
 			// butClose
@@ -190,6 +191,7 @@ namespace OpenDental{
 			this.butZoomIn.TabIndex = 10;
 			this.butZoomIn.Text = "       Zoom In";
 			this.butZoomIn.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butZoomIn.Visible = false;
 			this.butZoomIn.Click += new System.EventHandler(this.butZoomIn_Click);
 			// 
 			// butFullPage
@@ -216,10 +218,10 @@ namespace OpenDental{
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.Name = "FormRpStatement";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-			this.Text = "Statement";
+			this.Text = "Statement Preview";
 			this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
-			this.Layout += new System.Windows.Forms.LayoutEventHandler(this.FormRpStatement_Layout);
 			this.Load += new System.EventHandler(this.FormRpStatement_Load);
+			this.Layout += new System.Windows.Forms.LayoutEventHandler(this.FormRpStatement_Layout);
 			this.panelZoom.ResumeLayout(false);
 			this.ResumeLayout(false);
 
@@ -736,6 +738,14 @@ namespace OpenDental{
 				gridAging.Dispose();
 			}
 			#endregion
+			//Bold note-------------------------------------------------------------------------------
+			if(Stmt.NoteBold!=""){
+				font=MigraDocHelper.CreateFont(10,true,System.Drawing.Color.DarkRed);
+				par=section.AddParagraph();
+				par.Format.Font=font;
+				par.AddText(Stmt.NoteBold);
+				MigraDocHelper.InsertSpacer(section,10);
+			}
 			//Body Tables-----------------------------------------------------------------------------------------------------------
 			ODGrid gridPat=new ODGrid();
 			this.Controls.Add(gridPat);

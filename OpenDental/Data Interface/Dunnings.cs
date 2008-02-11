@@ -26,7 +26,7 @@ namespace OpenDental{
 		}
 
 		///<summary></summary>
-		private static void Insert(Dunning dun){
+		public static void Insert(Dunning dun){
 			string command= "INSERT INTO dunning (DunMessage,BillingType,AgeAccount,InsIsPending) VALUES("
 				+"'"+POut.PString(dun.DunMessage)+"', "
 				+"'"+POut.PInt   (dun.BillingType)+"', "
@@ -36,7 +36,7 @@ namespace OpenDental{
 		}
 
 		///<summary></summary>
-		private static void Update(Dunning dun){
+		public static void Update(Dunning dun){
 			string command= "UPDATE dunning SET " 
 				+ "DunMessage = '"       +POut.PString(dun.DunMessage)+"'"
 				+ ",BillingType = '"     +POut.PInt   (dun.BillingType)+"'"
@@ -44,19 +44,6 @@ namespace OpenDental{
 				+ ",InsIsPending = '"    +POut.PInt   ((int)dun.InsIsPending)+"'"
 				+" WHERE DunningNum = '" +POut.PInt   (dun.DunningNum)+"'";
  			General.NonQ(command);
-		}
-
-		///<summary></summary>
-		public static void InsertOrUpdate(Dunning dun,bool IsNew){
-			//if(){
-				//throw new Exception(Lan.g(this,""));
-			//}
-			if(IsNew){
-				Insert(dun);
-			}
-			else{
-				Update(dun);
-			}
 		}
 
 		///<summary></summary>

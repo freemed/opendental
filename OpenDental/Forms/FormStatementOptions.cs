@@ -659,6 +659,9 @@ namespace OpenDental{
 				Cursor=Cursors.Default;
 			}
 			else{//was not initially sent, or else user has unchecked the sent box
+				if(initiallySent && checkIsSent.Checked && StmtCur.DocNum==0){
+					MsgBox.Show(this,"There was no archived image of this statement.  The printout will be based on current data.");
+				}
 				//So create an archive
 				if(listMode.SelectedIndex==(int)StatementMode.Email){
 					listMode.SelectedIndex=(int)StatementMode.InPerson;
@@ -758,6 +761,9 @@ namespace OpenDental{
 			}
 			else{//was not initially sent, or else user has unchecked the sent box
 				//No archive to use, so just preview on the fly
+				if(initiallySent && checkIsSent.Checked && StmtCur.DocNum==0){
+					MsgBox.Show(this,"There was no archived image of this statement.  The preview will be based on current data.");
+				}
 				Cursor=Cursors.WaitCursor;
 				if(!SaveToDb()){
 					Cursor=Cursors.Default;

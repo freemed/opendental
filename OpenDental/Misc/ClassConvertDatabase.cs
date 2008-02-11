@@ -6354,6 +6354,10 @@ namespace OpenDental{
 				}
 				command="DELETE FROM commlog WHERE IsStatementSent=1";
 				General.NonQEx(command);
+				command = "ALTER TABLE dunning ADD MessageBold text";
+				General.NonQEx(command);
+				command = "UPDATE dunning SET MessageBold=''";
+				General.NonQEx(command);
 
 
 

@@ -97,14 +97,6 @@ namespace OpenDental{
 			string command= "DELETE FROM commlog WHERE CommLogNum = '"+POut.PInt(comm.CommlogNum)+"'";
 			General.NonQ(command);
 		}
-	
-		///<summary></summary>
-		public static int UndoStatements(DateTime date){
-			string command="DELETE FROM commlog WHERE CommDateTime LIKE '"+POut.PDate(date,false)+"%' "
-				+"AND IsStatementSent=1";
-			int rowsAffected=General.NonQ(command);
-			return rowsAffected;
-		}
 
 		///<summary>Used when printing recall cards to make a commlog entry for everyone at once.</summary>
 		public static void InsertForRecallPostcard(int patNum){

@@ -10,18 +10,17 @@ namespace OpenDental{
 ///<summary></summary>
 	public class FormBilling : System.Windows.Forms.Form{
 		private OpenDental.UI.Button butCancel;
-		private OpenDental.ContrAccount contrAccount1;
 		private OpenDental.UI.Button butAll;
 		private OpenDental.UI.Button butNone;
-		private System.Windows.Forms.Label label2;
-		private System.Windows.Forms.Label label1;
 		private OpenDental.UI.Button butPrint;
 		private System.ComponentModel.Container components = null;
-		private System.Windows.Forms.Label label3;
 		private OpenDental.UI.ODGrid gridBill;
 		///<summary>Set this list externally before openning the billing window.</summary>
 		public PatAging[] AgingList;
 		private Label labelCount;
+		private Label label1;
+		private RadioButton radioUnsent;
+		private RadioButton radioButton1;
 		///<summary></summary>
 		public string GeneralNote;
 
@@ -47,14 +46,13 @@ namespace OpenDental{
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormBilling));
 			this.butCancel = new OpenDental.UI.Button();
 			this.butPrint = new OpenDental.UI.Button();
-			this.contrAccount1 = new OpenDental.ContrAccount();
 			this.butNone = new OpenDental.UI.Button();
 			this.butAll = new OpenDental.UI.Button();
-			this.label2 = new System.Windows.Forms.Label();
-			this.label1 = new System.Windows.Forms.Label();
-			this.label3 = new System.Windows.Forms.Label();
 			this.gridBill = new OpenDental.UI.ODGrid();
 			this.labelCount = new System.Windows.Forms.Label();
+			this.label1 = new System.Windows.Forms.Label();
+			this.radioUnsent = new System.Windows.Forms.RadioButton();
+			this.radioButton1 = new System.Windows.Forms.RadioButton();
 			this.SuspendLayout();
 			// 
 			// butCancel
@@ -66,9 +64,9 @@ namespace OpenDental{
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
 			this.butCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.butCancel.Location = new System.Drawing.Point(672,658);
+			this.butCancel.Location = new System.Drawing.Point(805,654);
 			this.butCancel.Name = "butCancel";
-			this.butCancel.Size = new System.Drawing.Size(75,25);
+			this.butCancel.Size = new System.Drawing.Size(75,24);
 			this.butCancel.TabIndex = 1;
 			this.butCancel.Text = "&Cancel";
 			// 
@@ -81,21 +79,13 @@ namespace OpenDental{
 			this.butPrint.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butPrint.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butPrint.CornerRadius = 4F;
-			this.butPrint.Location = new System.Drawing.Point(672,624);
+			this.butPrint.Location = new System.Drawing.Point(805,620);
 			this.butPrint.Name = "butPrint";
-			this.butPrint.Size = new System.Drawing.Size(75,25);
+			this.butPrint.Size = new System.Drawing.Size(75,24);
 			this.butPrint.TabIndex = 0;
-			this.butPrint.Text = "&Print";
+			this.butPrint.Text = "Send";
 			this.butPrint.UseVisualStyleBackColor = false;
 			this.butPrint.Click += new System.EventHandler(this.butPrint_Click);
-			// 
-			// contrAccount1
-			// 
-			this.contrAccount1.Location = new System.Drawing.Point(-22,84);
-			this.contrAccount1.Name = "contrAccount1";
-			this.contrAccount1.Size = new System.Drawing.Size(916,494);
-			this.contrAccount1.TabIndex = 20;
-			this.contrAccount1.Visible = false;
 			// 
 			// butNone
 			// 
@@ -104,9 +94,9 @@ namespace OpenDental{
 			this.butNone.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butNone.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butNone.CornerRadius = 4F;
-			this.butNone.Location = new System.Drawing.Point(142,662);
+			this.butNone.Location = new System.Drawing.Point(142,656);
 			this.butNone.Name = "butNone";
-			this.butNone.Size = new System.Drawing.Size(75,25);
+			this.butNone.Size = new System.Drawing.Size(75,24);
 			this.butNone.TabIndex = 23;
 			this.butNone.Text = "&None";
 			this.butNone.Click += new System.EventHandler(this.butNone_Click);
@@ -118,48 +108,25 @@ namespace OpenDental{
 			this.butAll.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butAll.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butAll.CornerRadius = 4F;
-			this.butAll.Location = new System.Drawing.Point(42,662);
+			this.butAll.Location = new System.Drawing.Point(42,656);
 			this.butAll.Name = "butAll";
-			this.butAll.Size = new System.Drawing.Size(75,25);
+			this.butAll.Size = new System.Drawing.Size(75,24);
 			this.butAll.TabIndex = 22;
 			this.butAll.Text = "&All";
 			this.butAll.Click += new System.EventHandler(this.butAll_Click);
 			// 
-			// label2
-			// 
-			this.label2.Location = new System.Drawing.Point(42,28);
-			this.label2.Name = "label2";
-			this.label2.Size = new System.Drawing.Size(506,16);
-			this.label2.TabIndex = 25;
-			this.label2.Text = "(hint: hold down the control key when making selections)";
-			// 
-			// label1
-			// 
-			this.label1.Location = new System.Drawing.Point(44,8);
-			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(500,14);
-			this.label1.TabIndex = 26;
-			this.label1.Text = "Unhighlight any bills you don\'t want to print.";
-			// 
-			// label3
-			// 
-			this.label3.Location = new System.Drawing.Point(658,548);
-			this.label3.Name = "label3";
-			this.label3.Size = new System.Drawing.Size(91,73);
-			this.label3.TabIndex = 27;
-			this.label3.Text = "This will immediately print all selected bills";
-			this.label3.TextAlign = System.Drawing.ContentAlignment.BottomRight;
-			// 
 			// gridBill
 			// 
+			this.gridBill.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
 			this.gridBill.HScrollVisible = false;
-			this.gridBill.Location = new System.Drawing.Point(42,46);
+			this.gridBill.Location = new System.Drawing.Point(42,33);
 			this.gridBill.Name = "gridBill";
 			this.gridBill.ScrollValue = 0;
 			this.gridBill.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
-			this.gridBill.Size = new System.Drawing.Size(610,602);
+			this.gridBill.Size = new System.Drawing.Size(610,615);
 			this.gridBill.TabIndex = 28;
-			this.gridBill.Title = "Billing";
+			this.gridBill.Title = "Bills";
 			this.gridBill.TranslationName = "TableBilling";
 			// 
 			// labelCount
@@ -171,20 +138,48 @@ namespace OpenDental{
 			this.labelCount.Text = "Count=20";
 			this.labelCount.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
+			// label1
+			// 
+			this.label1.Location = new System.Drawing.Point(771,547);
+			this.label1.Name = "label1";
+			this.label1.Size = new System.Drawing.Size(110,68);
+			this.label1.TabIndex = 30;
+			this.label1.Text = "This will immediately print or email all selected bills";
+			this.label1.TextAlign = System.Drawing.ContentAlignment.BottomRight;
+			// 
+			// radioUnsent
+			// 
+			this.radioUnsent.Location = new System.Drawing.Point(42,7);
+			this.radioUnsent.Name = "radioUnsent";
+			this.radioUnsent.Size = new System.Drawing.Size(102,20);
+			this.radioUnsent.TabIndex = 31;
+			this.radioUnsent.TabStop = true;
+			this.radioUnsent.Text = "Unsent";
+			this.radioUnsent.UseVisualStyleBackColor = true;
+			// 
+			// radioButton1
+			// 
+			this.radioButton1.Location = new System.Drawing.Point(145,7);
+			this.radioButton1.Name = "radioButton1";
+			this.radioButton1.Size = new System.Drawing.Size(89,20);
+			this.radioButton1.TabIndex = 32;
+			this.radioButton1.TabStop = true;
+			this.radioButton1.Text = "Sent";
+			this.radioButton1.UseVisualStyleBackColor = true;
+			// 
 			// FormBilling
 			// 
 			this.AcceptButton = this.butPrint;
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.CancelButton = this.butCancel;
-			this.ClientSize = new System.Drawing.Size(758,692);
+			this.ClientSize = new System.Drawing.Size(891,688);
+			this.Controls.Add(this.radioButton1);
+			this.Controls.Add(this.radioUnsent);
+			this.Controls.Add(this.label1);
 			this.Controls.Add(this.labelCount);
 			this.Controls.Add(this.gridBill);
-			this.Controls.Add(this.label3);
-			this.Controls.Add(this.label1);
-			this.Controls.Add(this.label2);
 			this.Controls.Add(this.butNone);
 			this.Controls.Add(this.butAll);
-			this.Controls.Add(this.contrAccount1);
 			this.Controls.Add(this.butCancel);
 			this.Controls.Add(this.butPrint);
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -193,7 +188,7 @@ namespace OpenDental{
 			this.Name = "FormBilling";
 			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-			this.Text = "Billing";
+			this.Text = "Bills";
 			this.Load += new System.EventHandler(this.FormBilling_Load);
 			this.ResumeLayout(false);
 

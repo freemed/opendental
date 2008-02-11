@@ -1211,11 +1211,11 @@ namespace OpenDental {
 				panelSplitter.Top=300;//start the splitter higher for recall window.
 			}
 			LayoutPanels();
+			checkShowFamilyComm.Checked=PrefB.GetBoolSilent("ShowAccountFamilyCommEntries",true);
 		}
 
 		private void ContrAccount_Load(object sender,System.EventArgs e) {
 			this.Parent.MouseWheel+=new MouseEventHandler(Parent_MouseWheel);
-			this.checkShowFamilyComm.Checked=PrefB.GetBool("ShowAccountFamilyCommEntries");
 		}
 
 		///<summary>Causes the toolbar to be laid out again.</summary>
@@ -1282,7 +1282,7 @@ namespace OpenDental {
 			panelInsInfo.Top = panelBoldBalance.Top + panelBoldBalance.Height;
 			panelInsInfo.Left = panelBoldBalance.Left + panelBoldBalance.Width - panelInsInfo.Width;*/
 			int left=textUrgFinNote.Left;//769;
-			if(PrefB.GetBool("StoreCCnumbers")){
+			if(PrefB.GetBoolSilent("StoreCCnumbers",false)){
 				panelCC.Visible=true;
 				panelCC.Location=new Point(left,textUrgFinNote.Bottom);
 				gridAcctPat.Location=new Point(left,panelCC.Bottom);
@@ -1422,11 +1422,9 @@ namespace OpenDental {
 			//FillInsInfo();
 			FillRepeatCharges();//must be in this order. 1.
 			FillPaymentPlans();//2.
-			if(PatCur!=null){
-				FillMain();//3.
-			}
+			FillMain();//3.
 			LayoutPanels();
-			if(ViewingInRecall || PrefB.GetBool("FuchsOptionsOn")) {
+			if(ViewingInRecall || PrefB.GetBoolSilent("FuchsOptionsOn",false)) {
 				panelProgNotes.Visible = true;
 				FillProgNotes();
 				if(PrefB.GetBool("FuchsOptionsOn")) {//show prog note options
@@ -2261,7 +2259,13 @@ double adj=Adjustments.GetTotForProc(arrayProc[tempCountProc].ProcNum,Adjustment
 			gridAccount.Rows.Clear();
 			ODGridRow row;
 			//ODGridCell cell;
-			DataTable table=DataSetMain.Tables["account"];
+			DataTable table=null;
+			if(PatCur==null){
+				table=new DataTable();
+			}
+			else{
+				table=DataSetMain.Tables["account"];
+			}
 			string description;
 			for(int i=0;i<table.Rows.Count;i++) {
 				row = new ODGridRow();

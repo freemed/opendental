@@ -15,16 +15,12 @@ namespace OpenDentBusiness{
 		public int AgeAccount;
 		///<summary>Enum:YN Set Y to only show if insurance is pending.</summary>
 		public YN InsIsPending;
+		///<summary>A message that will be copied to the NoteBold field of the Statement.</summary>
+		public string MessageBold;
 
 		///<summary>Returns a copy of this Dunning.</summary>
 		public Dunning Copy(){
-			Dunning d=new Dunning();
-			d.DunningNum=DunningNum;
-			d.DunMessage=DunMessage;
-			d.BillingType=BillingType;
-			d.AgeAccount=AgeAccount;
-			d.InsIsPending=InsIsPending;
-			return d;
+			return (Dunning)this.MemberwiseClone();
 		}
 
 

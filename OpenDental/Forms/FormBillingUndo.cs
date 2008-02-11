@@ -143,13 +143,13 @@ namespace OpenDental{
 		}
 
 		private void butUndo_Click(object sender, System.EventArgs e) {
-			if(textDate.errorProvider1.GetError(textDate)!=""){
-				MsgBox.Show(this,"Please fix data entry errors first.");
-				return;
-			}
-			int rowsAffected=Commlogs.UndoStatements(PIn.PDate(textDate.Text));
-			MessageBox.Show(rowsAffected.ToString()+" "+Lan.g(this,"statement entries deleted."));
-			DialogResult=DialogResult.OK;
+			//if(textDate.errorProvider1.GetError(textDate)!=""){
+			//	MsgBox.Show(this,"Please fix data entry errors first.");
+			//	return;
+			//}
+			//int rowsAffected=Commlogs.UndoStatements(PIn.PDate(textDate.Text));
+			//MessageBox.Show(rowsAffected.ToString()+" "+Lan.g(this,"statement entries deleted."));
+			//DialogResult=DialogResult.OK;
 		}
 
 		private void butCancel_Click(object sender, System.EventArgs e) {
