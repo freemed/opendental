@@ -18,7 +18,7 @@ namespace OpenDental.Imaging {
 		Bitmap RetrieveImage(Document document);
 		Bitmap[] RetrieveImage(Document[] documents);
 		Collection<Bitmap> RetrieveImage(IList<Document> documents);
-
+		///<summary>Deletes the image itself as well as the document object.</summary>
 		void DeleteImage(IList<Document> documents);
 		void DeleteThumbnailImage(Document doc);
 

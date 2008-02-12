@@ -39,6 +39,10 @@ namespace OpenDentBusiness{
 			DataObjectFactory<Statement>.DeleteObject(statement);
 		}
 
+		public static void DeleteObject(int statementNum){
+			DataObjectFactory<Statement>.DeleteObject(statementNum);
+		}
+
 		public static bool UnsentStatementsExist(){
 			string command="SELECT COUNT(*) FROM statement WHERE IsSent=0";
 			if(General.GetCount(command)=="0"){
@@ -47,13 +51,15 @@ namespace OpenDentBusiness{
 			return true;
 		}
 
-		public static DataTable GetBilling(bool isSent){
+		///<summary>For orderBy, use 0 for BillingType and 1 for PatientName.</summary>
+		public static DataTable GetBilling(bool isSent,int orderBy,DateTime dateFrom,DateTime dateTo){
 			DataTable table=new DataTable();
 			DataRow row;
 			//columns that start with lowercase are altered for display rather than being raw data.
 			table.Columns.Add("amount");
 			table.Columns.Add("billingType");
 			table.Columns.Add("insEst");
+			table.Columns.Add("IsSent");
 			table.Columns.Add("lastStatement");
 			table.Columns.Add("mode");
 			table.Columns.Add("name");
@@ -61,10 +67,26 @@ namespace OpenDentBusiness{
 			table.Columns.Add("StatementNum");
 			table.Columns.Add("total");
 			List<DataRow> rows=new List<DataRow>();
-			string command="SELECT BillingType,FName,LName,MiddleI,Mode_,Preferred,statement.PatNum,StatementNum "
+			string command="SELECT BillingType,FName,IsSent,LName,MiddleI,Mode_,Preferred,"
+				+"statement.PatNum,StatementNum "
 				+"FROM statement "
-				+"LEFT JOIN patient ON statement.PatNum=patient.PatNum "
-				+"WHERE IsSent="+POut.PBool(isSent);
+				+"LEFT JOIN patient ON statement.PatNum=patient.PatNum ";
+			if(orderBy==0){//BillingType
+				command+="LEFT JOIN definition ON patient.BillingType=definition.DefNum ";
+			}
+			command+="WHERE IsSent="+POut.PBool(isSent)+" ";
+			//if(dateFrom.Year>1800){
+				command+="AND DateSent>"+POut.PDate(dateFrom)+" ";
+			//}
+			//if(dateFrom.Year>1800){
+				command+="AND DateSent<"+POut.PDate(dateTo)+" ";
+			//}
+			if(orderBy==0){//BillingType
+				command+="ORDER BY definition.ItemOrder,LName,FName";
+			}
+			else{
+				command+="ORDER BY LName,FName";
+			}
 			DataTable rawTable=General.GetTable(command);
 			Patient pat;
 			StatementMode mode;
@@ -73,6 +95,7 @@ namespace OpenDentBusiness{
 				row["amount"]="";
 				row["billingType"]=DefB.GetName(DefCat.BillingTypes,PIn.PInt(rawTable.Rows[i]["BillingType"].ToString()));
 				row["insEst"]="";
+				row["IsSent"]=rawTable.Rows[i]["IsSent"].ToString();
 				row["lastStatement"]="";
 				mode=(StatementMode)PIn.PInt(rawTable.Rows[i]["Mode_"].ToString());
 				row["mode"]=Lan.g("enumStatementMode",mode.ToString());

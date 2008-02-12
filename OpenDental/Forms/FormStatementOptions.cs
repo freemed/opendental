@@ -28,8 +28,6 @@ namespace OpenDental{
 		private OpenDental.UI.Button butDatesAll;
 		private OpenDental.UI.Button but90days;
 		private OpenDental.UI.Button but45days;
-		private ValidDate textDateEnd;
-		private ValidDate textDateStart;
 		private Label labelEndDate;
 		private Label labelStartDate;
 		private ODtextBox textNoteBold;
@@ -39,7 +37,6 @@ namespace OpenDental{
 		private CheckBox checkSinglePatient;
 		private CheckBox checkIntermingled;
 		private GroupBox groupDateRange;
-		private ValidDate textDate;
 		private Label label4;
 		private CheckBox checkIsSent;
 		public Statement StmtCur;
@@ -48,6 +45,9 @@ namespace OpenDental{
 		private OpenDental.UI.Button butEmail;
 		private OpenDental.UI.Button butPreview;
 		private bool initiallySent;
+		private TextBox textDateEnd;
+		private TextBox textDateStart;
+		private TextBox textDate;
 		///<summary>This will be null for ordinary edits.  But sometimes this window is used to edit bulk statements.  In that case, this list contains the statements being edited.  Must contain at least one item.</summary>
 		public List<Statement> StmtList;
 
@@ -99,8 +99,6 @@ namespace OpenDental{
 			this.butDatesAll = new OpenDental.UI.Button();
 			this.but90days = new OpenDental.UI.Button();
 			this.but45days = new OpenDental.UI.Button();
-			this.textDateEnd = new OpenDental.ValidDate();
-			this.textDateStart = new OpenDental.ValidDate();
 			this.labelEndDate = new System.Windows.Forms.Label();
 			this.labelStartDate = new System.Windows.Forms.Label();
 			this.textNoteBold = new OpenDental.ODtextBox();
@@ -110,13 +108,15 @@ namespace OpenDental{
 			this.checkIntermingled = new System.Windows.Forms.CheckBox();
 			this.checkSinglePatient = new System.Windows.Forms.CheckBox();
 			this.groupDateRange = new System.Windows.Forms.GroupBox();
-			this.textDate = new OpenDental.ValidDate();
 			this.label4 = new System.Windows.Forms.Label();
 			this.checkIsSent = new System.Windows.Forms.CheckBox();
 			this.butDelete = new OpenDental.UI.Button();
 			this.butPrint = new OpenDental.UI.Button();
 			this.butEmail = new OpenDental.UI.Button();
 			this.butPreview = new OpenDental.UI.Button();
+			this.textDate = new System.Windows.Forms.TextBox();
+			this.textDateStart = new System.Windows.Forms.TextBox();
+			this.textDateEnd = new System.Windows.Forms.TextBox();
 			this.groupFuchs.SuspendLayout();
 			this.groupDateRange.SuspendLayout();
 			this.SuspendLayout();
@@ -297,22 +297,6 @@ namespace OpenDental{
 			this.but45days.Text = "Last 45 Days";
 			this.but45days.Click += new System.EventHandler(this.but45days_Click);
 			// 
-			// textDateEnd
-			// 
-			this.textDateEnd.Location = new System.Drawing.Point(75,41);
-			this.textDateEnd.Name = "textDateEnd";
-			this.textDateEnd.Size = new System.Drawing.Size(77,20);
-			this.textDateEnd.TabIndex = 224;
-			// 
-			// textDateStart
-			// 
-			this.textDateStart.BackColor = System.Drawing.SystemColors.Window;
-			this.textDateStart.ForeColor = System.Drawing.SystemColors.WindowText;
-			this.textDateStart.Location = new System.Drawing.Point(75,18);
-			this.textDateStart.Name = "textDateStart";
-			this.textDateStart.Size = new System.Drawing.Size(77,20);
-			this.textDateStart.TabIndex = 223;
-			// 
 			// labelEndDate
 			// 
 			this.labelEndDate.Location = new System.Drawing.Point(3,44);
@@ -394,10 +378,10 @@ namespace OpenDental{
 			// 
 			// groupDateRange
 			// 
-			this.groupDateRange.Controls.Add(this.textDateStart);
-			this.groupDateRange.Controls.Add(this.labelStartDate);
-			this.groupDateRange.Controls.Add(this.labelEndDate);
 			this.groupDateRange.Controls.Add(this.textDateEnd);
+			this.groupDateRange.Controls.Add(this.labelStartDate);
+			this.groupDateRange.Controls.Add(this.textDateStart);
+			this.groupDateRange.Controls.Add(this.labelEndDate);
 			this.groupDateRange.Controls.Add(this.but45days);
 			this.groupDateRange.Controls.Add(this.but90days);
 			this.groupDateRange.Controls.Add(this.butDatesAll);
@@ -408,15 +392,6 @@ namespace OpenDental{
 			this.groupDateRange.TabIndex = 236;
 			this.groupDateRange.TabStop = false;
 			this.groupDateRange.Text = "Date Range";
-			// 
-			// textDate
-			// 
-			this.textDate.BackColor = System.Drawing.SystemColors.Window;
-			this.textDate.ForeColor = System.Drawing.SystemColors.WindowText;
-			this.textDate.Location = new System.Drawing.Point(146,19);
-			this.textDate.Name = "textDate";
-			this.textDate.Size = new System.Drawing.Size(77,20);
-			this.textDate.TabIndex = 238;
 			// 
 			// label4
 			// 
@@ -507,17 +482,38 @@ namespace OpenDental{
 			this.butPreview.Text = "View";
 			this.butPreview.Click += new System.EventHandler(this.butPreview_Click);
 			// 
+			// textDate
+			// 
+			this.textDate.Location = new System.Drawing.Point(146,20);
+			this.textDate.Name = "textDate";
+			this.textDate.Size = new System.Drawing.Size(77,20);
+			this.textDate.TabIndex = 244;
+			// 
+			// textDateStart
+			// 
+			this.textDateStart.Location = new System.Drawing.Point(75,18);
+			this.textDateStart.Name = "textDateStart";
+			this.textDateStart.Size = new System.Drawing.Size(77,20);
+			this.textDateStart.TabIndex = 245;
+			// 
+			// textDateEnd
+			// 
+			this.textDateEnd.Location = new System.Drawing.Point(75,41);
+			this.textDateEnd.Name = "textDateEnd";
+			this.textDateEnd.Size = new System.Drawing.Size(77,20);
+			this.textDateEnd.TabIndex = 246;
+			// 
 			// FormStatementOptions
 			// 
 			this.AcceptButton = this.butOK;
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.ClientSize = new System.Drawing.Size(709,493);
+			this.Controls.Add(this.textDate);
 			this.Controls.Add(this.butPrint);
 			this.Controls.Add(this.butPreview);
 			this.Controls.Add(this.butEmail);
 			this.Controls.Add(this.butDelete);
 			this.Controls.Add(this.checkIsSent);
-			this.Controls.Add(this.textDate);
 			this.Controls.Add(this.label4);
 			this.Controls.Add(this.groupDateRange);
 			this.Controls.Add(this.checkSinglePatient);
@@ -586,18 +582,136 @@ namespace OpenDental{
 			}
 			else{
 				//bulk edit
+				//DateSent-------------------------------------------------------------------------------------
+				textDate.Text="?";
+				bool allSame=true;
+				for(int i=0;i<StmtList.Count;i++){
+					if(StmtList[0].DateSent!=StmtList[i].DateSent){//if any are different from the first element
+						allSame=false;
+					}
+				}
+				if(allSame){
+					textDate.Text=StmtList[0].DateSent.ToShortDateString();
+				}
+				//IsSent----------------------------------------------------------------------------------------
 				checkIsSent.ThreeState=true;
 				checkIsSent.CheckState=CheckState.Indeterminate;
-				bool allSame=false;
+				allSame=true;
 				for(int i=0;i<StmtList.Count;i++){
-					if(StmtList[0].IsSent!=StmtList[i].IsSent){//if any are different from the first element
+					if(StmtList[0].IsSent!=StmtList[i].IsSent){
 						allSame=false;
 					}
 				}
 				if(allSame){
 					checkIsSent.Checked=StmtList[0].IsSent;
 				}
-
+				//Mode------------------------------------------------------------------------------------------
+				allSame=true;
+				for(int i=0;i<StmtList.Count;i++){
+					if(StmtList[0].Mode_!=StmtList[i].Mode_){
+						allSame=false;
+					}
+				}
+				listMode.Items.Clear();
+				for(int i=0;i<Enum.GetNames(typeof(StatementMode)).Length;i++){
+					listMode.Items.Add(Lan.g("enumStatementMode",Enum.GetNames(typeof(StatementMode))[i]));
+					if(allSame && (int)StmtList[0].Mode_==i){
+						listMode.SelectedIndex=i;
+					}
+				}
+				//HidePayment------------------------------------------------------------------------------------
+				checkHidePayment.ThreeState=true;
+				checkHidePayment.CheckState=CheckState.Indeterminate;
+				allSame=true;
+				for(int i=0;i<StmtList.Count;i++){
+					if(StmtList[0].HidePayment!=StmtList[i].HidePayment){
+						allSame=false;
+					}
+				}
+				if(allSame){
+					checkHidePayment.Checked=StmtList[0].HidePayment;
+				}
+				//SinglePatient------------------------------------------------------------------------------------
+				checkSinglePatient.ThreeState=true;
+				checkSinglePatient.CheckState=CheckState.Indeterminate;
+				allSame=true;
+				for(int i=0;i<StmtList.Count;i++){
+					if(StmtList[0].SinglePatient!=StmtList[i].SinglePatient){
+						allSame=false;
+					}
+				}
+				if(allSame){
+					checkSinglePatient.Checked=StmtList[0].SinglePatient;
+				}
+				//Intermingled----------------------------------------------------------------------------------------
+				checkIntermingled.ThreeState=true;
+				checkIntermingled.CheckState=CheckState.Indeterminate;
+				allSame=true;
+				for(int i=0;i<StmtList.Count;i++){
+					if(StmtList[0].Intermingled!=StmtList[i].Intermingled){
+						allSame=false;
+					}
+				}
+				if(allSame){
+					checkIntermingled.Checked=StmtList[0].Intermingled;
+				}
+				//DateStart-------------------------------------------------------------------------------------
+				textDateStart.Text="?";
+				allSame=true;
+				for(int i=0;i<StmtList.Count;i++){
+					if(StmtList[0].DateRangeFrom!=StmtList[i].DateRangeFrom){
+						allSame=false;
+					}
+				}
+				if(allSame){
+					if(StmtList[0].DateRangeFrom.Year<1880){
+						textDateStart.Text="";
+					}
+					else{
+						textDateStart.Text=StmtList[0].DateRangeFrom.ToShortDateString();
+					}
+				}
+				//DateEnd-------------------------------------------------------------------------------------
+				textDateEnd.Text="?";
+				allSame=true;
+				for(int i=0;i<StmtList.Count;i++){
+					if(StmtList[0].DateRangeTo!=StmtList[i].DateRangeTo){
+						allSame=false;
+					}
+				}
+				if(allSame){
+					if(StmtList[0].DateRangeTo.Year<1880){
+						textDateEnd.Text="";
+					}
+					else{
+						textDateEnd.Text=StmtList[0].DateRangeTo.ToShortDateString();
+					}
+				}
+				//Note----------------------------------------------------------------------------------------
+				textNote.Text="?";
+				allSame=true;
+				for(int i=0;i<StmtList.Count;i++){
+					if(StmtList[0].Note!=StmtList[i].Note){
+						allSame=false;
+					}
+				}
+				if(allSame){
+					textNote.Text=StmtList[0].Note;
+				}
+				//NoteBold----------------------------------------------------------------------------------------
+				textNoteBold.Text="?";
+				allSame=true;
+				for(int i=0;i<StmtList.Count;i++){
+					if(StmtList[0].NoteBold!=StmtList[i].NoteBold){
+						allSame=false;
+					}
+				}
+				if(allSame){
+					textNoteBold.Text=StmtList[0].NoteBold;
+				}
+				butEmail.Enabled=false;
+				butPrint.Enabled=false;
+				butPreview.Enabled=false;
 			}
 		}
 
@@ -796,14 +910,45 @@ namespace OpenDental{
 		}
 
 		private void butDelete_Click(object sender,EventArgs e) {
-			if(StmtCur.IsNew){
+			if(StmtList==null && StmtCur.IsNew){
 				DialogResult=DialogResult.Cancel;
 				return;
 			}
 			if(!MsgBox.Show(this,true,"Delete?")){
 				return;
 			}
-			Statements.DeleteObject(StmtCur);
+			if(StmtList==null){
+				if(StmtCur.DocNum!=0){
+					//deleted the pdf
+					//Document doc=Documents.GetByNum(StmtCur.DocNum);
+					if(ImageStore.UpdatePatient == null){
+						ImageStore.UpdatePatient = new FileStore.UpdatePatientDelegate(Patients.Update);
+					}
+					Patient pat=Patients.GetPat(StmtCur.PatNum);
+					OpenDental.Imaging.IImageStore imageStore = OpenDental.Imaging.ImageStore.GetImageStore(pat);
+					List<Document> listdocs=new List<Document>();
+					listdocs.Add(Documents.GetByNum(StmtCur.DocNum));
+					imageStore.DeleteImage(listdocs);
+				}
+				Statements.DeleteObject(StmtCur);
+			}
+			else{//bulk edit
+				for(int i=0;i<StmtList.Count;i++){
+					if(StmtList[i].DocNum!=0){
+						//deleted the pdf
+						//Document doc=Documents.GetByNum(StmtCur.DocNum);
+						if(ImageStore.UpdatePatient == null){
+							ImageStore.UpdatePatient = new FileStore.UpdatePatientDelegate(Patients.Update);
+						}
+						Patient pat=Patients.GetPat(StmtList[i].PatNum);
+						OpenDental.Imaging.IImageStore imageStore = OpenDental.Imaging.ImageStore.GetImageStore(pat);
+						List<Document> listdocs=new List<Document>();
+						listdocs.Add(Documents.GetByNum(StmtList[i].DocNum));
+						imageStore.DeleteImage(listdocs);
+					}
+					Statements.DeleteObject(StmtList[i]);
+				}
+			}
 			DialogResult=DialogResult.OK;
 		}
 
@@ -811,50 +956,139 @@ namespace OpenDental{
 			if(!SaveToDb()){
 				return;
 			}
-			if(StmtCur.Mode_==StatementMode.Email){
+			//if(StmtCur.Mode_==StatementMode.Email){
 
-			}
+			//}
 			DialogResult=DialogResult.OK;
 		}
 
 		private bool SaveToDb(){
-			if(  textDateStart.errorProvider1.GetError(textDateStart)!=""
-				|| textDateEnd.errorProvider1.GetError(textDateEnd)!=""
-				|| textDate.errorProvider1.GetError(textDate)!="")
-			{
-				MsgBox.Show(this,"Please fix data entry errors first.");
+			bool isError;
+			//Validate Date-------------------------------------------------------------------------------
+			isError=false;
+			if(textDate.Text==""){//not allowed to be blank.  Other two dates are allowed to be blank.
+				if(StmtList==null){//if editing a List, blank indicates dates vary.
+					MsgBox.Show(this,"Please enter a Date.");
+					return false;
+				}
+			}
+			else{//"?" not allowed here
+				try{
+					DateTime.Parse(textDate.Text);
+				}
+				catch{
+					isError=true;
+				}
+			}
+			if(isError){
+				MsgBox.Show(this,"Please fix Date.");
 				return false;
 			}
-			if(textDate.Text==""){
-				MsgBox.Show(this,"Please enter a date.");
-				return false;
+			//Validate DateStart-------------------------------------------------------------------------------
+			isError=false;
+			if(textDateStart.Text==""){
+				//no error
 			}
-			StmtCur.DateSent=PIn.PDate(textDate.Text);
-			StmtCur.IsSent=checkIsSent.Checked;
-			StmtCur.Mode_=(StatementMode)listMode.SelectedIndex;
-			StmtCur.HidePayment=checkHidePayment.Checked;
-			StmtCur.SinglePatient=checkSinglePatient.Checked;
-			StmtCur.Intermingled=checkIntermingled.Checked;
-			StmtCur.DateRangeFrom=PIn.PDate(textDateStart.Text);//handles blank
-			if(textDateEnd.Text==""){
-				StmtCur.DateRangeTo=new DateTime(2100,1,1);//max val
+			else if(textDateStart.Text=="?"){
+				if(StmtList==null){
+					isError=true;
+				}
 			}
 			else{
-				StmtCur.DateRangeTo=PIn.PDate(textDateEnd.Text);
+				try{
+					DateTime.Parse(textDateStart.Text);
+				}
+				catch{
+					isError=true;
+				}
 			}
-			StmtCur.Note=textNote.Text;
-			StmtCur.NoteBold=textNoteBold.Text;
-			/*if(initiallySent){
-				if(StmtCur.IsDirty){
-					if(!MsgBox.Show(this,true,"You should not be making changes to a statement that was already sent.  Continue anyway?")){
-						return false;
+			if(isError){
+				MsgBox.Show(this,"Please fix Start Date.");
+				return false;
+			}
+			//Validate DateEnd-------------------------------------------------------------------------------
+			isError=false;
+			if(textDateEnd.Text==""){
+				//no error
+			}
+			else if(textDateEnd.Text=="?"){
+				if(StmtList==null){
+					isError=true;
+				}
+			}
+			else{
+				try{
+					DateTime.Parse(textDateEnd.Text);
+				}
+				catch{
+					isError=true;
+				}
+			}
+			if(isError){
+				MsgBox.Show(this,"Please fix End Date.");
+				return false;
+			}
+			//if(  textDateStart.Text .errorProvider1.GetError(textDateStart)!=""
+			//	|| textDateEnd.errorProvider1.GetError(textDateEnd)!=""
+			//	|| textDate.errorProvider1.GetError(textDate)!="")
+			//{
+			//	MsgBox.Show(this,"Please fix data entry errors first.");
+			//	return false;
+			//}
+			if(StmtList==null){
+				StmtCur.DateSent=PIn.PDate(textDate.Text);
+				StmtCur.IsSent=checkIsSent.Checked;
+				StmtCur.Mode_=(StatementMode)listMode.SelectedIndex;
+				StmtCur.HidePayment=checkHidePayment.Checked;
+				StmtCur.SinglePatient=checkSinglePatient.Checked;
+				StmtCur.Intermingled=checkIntermingled.Checked;
+				StmtCur.DateRangeFrom=PIn.PDate(textDateStart.Text);//handles blank
+				if(textDateEnd.Text==""){
+					StmtCur.DateRangeTo=new DateTime(2200,1,1);//max val
+				}
+				else{
+					StmtCur.DateRangeTo=PIn.PDate(textDateEnd.Text);
+				}
+				StmtCur.Note=textNote.Text;
+				StmtCur.NoteBold=textNoteBold.Text;
+				Statements.WriteObject(StmtCur);
+			}
+			else{
+				for(int i=0;i<StmtList.Count;i++){
+					if(textDate.Text!=""){
+						StmtList[i].DateSent=PIn.PDate(textDate.Text);
 					}
+					if(checkIsSent.CheckState!=CheckState.Indeterminate){
+						StmtList[i].IsSent=checkIsSent.Checked;
+					}
+					if(listMode.SelectedIndex!=-1){
+						StmtList[i].Mode_=(StatementMode)listMode.SelectedIndex;
+					}
+					if(checkHidePayment.CheckState!=CheckState.Indeterminate){
+						StmtList[i].HidePayment=checkHidePayment.Checked;
+					}
+					if(checkSinglePatient.CheckState!=CheckState.Indeterminate){
+						StmtList[i].SinglePatient=checkSinglePatient.Checked;
+					}
+					if(checkIntermingled.CheckState!=CheckState.Indeterminate){
+						StmtList[i].Intermingled=checkIntermingled.Checked;
+					}
+					if(textDateStart.Text!="?"){
+						StmtList[i].DateRangeFrom=PIn.PDate(textDateStart.Text);//handles blank
+					}
+					if(textDateStart.Text!="?"){
+						if(textDateEnd.Text==""){
+							StmtList[i].DateRangeTo=new DateTime(2200,1,1);//max val
+						}
+						else{
+							StmtList[i].DateRangeTo=PIn.PDate(textDateEnd.Text);
+						}
+					}
+					StmtList[i].Note=textNote.Text;
+					StmtList[i].NoteBold=textNoteBold.Text;
+					Statements.WriteObject(StmtList[i]);
 				}
-				else{//no changes were made
-					return true;
-				}
-			}*/
-			Statements.WriteObject(StmtCur);
+			}
 			return true;
 		}
 

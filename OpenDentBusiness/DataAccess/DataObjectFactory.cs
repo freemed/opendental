@@ -660,7 +660,7 @@ namespace OpenDental.DataAccess {
 					parameter.Value = id;
 					command.Parameters.Add(parameter);
 				}
-
+				command.CommandText=query;
 				connection.Open();
 				command.ExecuteNonQuery();
 				connection.Close();

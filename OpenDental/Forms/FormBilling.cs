@@ -231,6 +231,7 @@ namespace OpenDental{
 			this.radioUnsent.TabStop = true;
 			this.radioUnsent.Text = "Unsent";
 			this.radioUnsent.UseVisualStyleBackColor = true;
+			this.radioUnsent.Click += new System.EventHandler(this.radioUnsent_Click);
 			// 
 			// radioSent
 			// 
@@ -240,6 +241,7 @@ namespace OpenDental{
 			this.radioSent.TabIndex = 32;
 			this.radioSent.Text = "Sent";
 			this.radioSent.UseVisualStyleBackColor = true;
+			this.radioSent.Click += new System.EventHandler(this.radioSent_Click);
 			// 
 			// groupBox1
 			// 
@@ -289,7 +291,7 @@ namespace OpenDental{
 			this.butEdit.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butEdit.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butEdit.CornerRadius = 4F;
-			this.butEdit.Location = new System.Drawing.Point(798,369);
+			this.butEdit.Location = new System.Drawing.Point(799,67);
 			this.butEdit.Name = "butEdit";
 			this.butEdit.Size = new System.Drawing.Size(82,24);
 			this.butEdit.TabIndex = 34;
@@ -341,6 +343,7 @@ namespace OpenDental{
 			this.butRefresh.Size = new System.Drawing.Size(82,24);
 			this.butRefresh.TabIndex = 39;
 			this.butRefresh.Text = "Refresh";
+			this.butRefresh.Click += new System.EventHandler(this.butRefresh_Click);
 			// 
 			// comboOrder
 			// 
@@ -350,6 +353,7 @@ namespace OpenDental{
 			this.comboOrder.Name = "comboOrder";
 			this.comboOrder.Size = new System.Drawing.Size(133,21);
 			this.comboOrder.TabIndex = 41;
+			this.comboOrder.SelectionChangeCommitted += new System.EventHandler(this.comboOrder_SelectionChangeCommitted);
 			// 
 			// label4
 			// 
@@ -370,7 +374,7 @@ namespace OpenDental{
 			this.butPrintList.CornerRadius = 4F;
 			this.butPrintList.Image = global::OpenDental.Properties.Resources.butPrint;
 			this.butPrintList.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butPrintList.Location = new System.Drawing.Point(696,654);
+			this.butPrintList.Location = new System.Drawing.Point(679,654);
 			this.butPrintList.Name = "butPrintList";
 			this.butPrintList.Size = new System.Drawing.Size(88,24);
 			this.butPrintList.TabIndex = 42;
@@ -390,8 +394,8 @@ namespace OpenDental{
 			this.Controls.Add(this.textDateStart);
 			this.Controls.Add(this.label2);
 			this.Controls.Add(this.label3);
-			this.Controls.Add(this.butEdit);
 			this.Controls.Add(this.groupBox1);
+			this.Controls.Add(this.butEdit);
 			this.Controls.Add(this.radioSent);
 			this.Controls.Add(this.radioUnsent);
 			this.Controls.Add(this.label1);
@@ -449,7 +453,7 @@ namespace OpenDental{
 			labelPrinted.Text=Lan.g(this,"Printed=")+"0";
 			labelEmailed.Text=Lan.g(this,"Emailed=")+"0";
 			comboOrder.Items.Add(Lan.g(this,"BillingType"));
-			comboOrder.Items.Add(Lan.g(this,"LastName"));
+			comboOrder.Items.Add(Lan.g(this,"PatientName"));
 			comboOrder.SelectedIndex=0;
 		}
 
@@ -460,12 +464,26 @@ namespace OpenDental{
 
 		///<summary>We will always try to preserve the selected bills as well as the scroll postition.</summary>
 		private void FillGrid(){
+			if(textDateStart.errorProvider1.GetError(textDateStart)!=""
+				|| textDateEnd.errorProvider1.GetError(textDateEnd)!="")
+			{
+				MsgBox.Show(this,"Please fix data entry errors first.");
+				return;
+			}
 			int scrollPos=gridBill.ScrollValue;
 			List<int> selectedKeys=new List<int>();
 			for(int i=0;i<gridBill.SelectedIndices.Length;i++){
 				selectedKeys.Add(PIn.PInt(table.Rows[gridBill.SelectedIndices[i]]["StatementNum"].ToString()));
 			}
-			table=Statements.GetBilling(radioSent.Checked);
+			DateTime dateFrom=DateTime.MinValue;
+			DateTime dateTo=new DateTime(2200,1,1);
+			if(textDateStart.Text!=""){
+				dateFrom=PIn.PDate(textDateStart.Text);
+			}
+			if(textDateEnd.Text!=""){
+				dateTo=PIn.PDate(textDateEnd.Text);
+			}
+			table=Statements.GetBilling(radioSent.Checked,comboOrder.SelectedIndex,dateFrom,dateTo);
 			gridBill.BeginUpdate();
 			gridBill.Columns.Clear();
 			ODGridColumn col=new ODGridColumn(Lan.g("TableBilling","Name"),180);
@@ -517,10 +535,36 @@ namespace OpenDental{
 
 		private void butAll_Click(object sender, System.EventArgs e) {
 			gridBill.SetSelected(true);
+			labelSelected.Text=Lan.g(this,"Selected=")+gridBill.SelectedIndices.Length.ToString();
 		}
 
 		private void butNone_Click(object sender, System.EventArgs e) {	
 			gridBill.SetSelected(false);
+			labelSelected.Text=Lan.g(this,"Selected=")+gridBill.SelectedIndices.Length.ToString();
+		}
+
+		private void radioUnsent_Click(object sender,EventArgs e) {
+			FillGrid();
+		}
+
+		private void radioSent_Click(object sender,EventArgs e) {
+			textDateStart.Text=DateTime.Today.ToShortDateString();
+			textDateEnd.Text=DateTime.Today.ToShortDateString();
+			FillGrid();
+		}
+
+		private void comboOrder_SelectionChangeCommitted(object sender,EventArgs e) {
+			FillGrid();
+		}
+
+		private void butRefresh_Click(object sender,EventArgs e) {
+			if(textDateStart.errorProvider1.GetError(textDateStart)!=""
+				|| textDateEnd.errorProvider1.GetError(textDateEnd)!="")
+			{
+				MsgBox.Show(this,"Please fix data entry errors first.");
+				return;
+			}
+			FillGrid();
 		}
 
 		private void gridBill_CellClick(object sender,ODGridClickEventArgs e) {
@@ -583,29 +627,13 @@ namespace OpenDental{
 				return;
 			}
 			Cursor=Cursors.WaitCursor;
-			int[] guarNums=new int[gridBill.SelectedIndices.Length];
-			for(int i=0;i<gridBill.SelectedIndices.Length;i++){
-				guarNums[i]=AgingList[gridBill.SelectedIndices[i]].PatNum;
-			}
+			//int[] guarNums=new int[gridBill.SelectedIndices.Length];
+			//for(int i=0;i<gridBill.SelectedIndices.Length;i++){
+			//	guarNums[i]=AgingList[gridBill.SelectedIndices[i]].PatNum;
+			//}
 			FormRpStatement FormS=new FormRpStatement();
 			//FormS.LoadAndPrint(guarNums,GeneralNote);
 			Cursor=Cursors.Default;
-			#if DEBUG
-				FormS.ShowDialog();
-			#endif
-			if(MsgBox.Show(this,true,"Printing Statements Complete.  OK to make Commlog entries?")){
-				Commlog commlog;
-				for(int i=0;i<guarNums.Length;i++){
-					commlog=new Commlog();
-					commlog.CommDateTime=DateTime.Now;
-					commlog.CommType=0;
-					commlog.SentOrReceived=CommSentOrReceived.Sent;
-					commlog.Mode_=CommItemMode.Mail;
-			//		commlog.IsStatementSent=true;
-					commlog.PatNum=guarNums[i];//usually the guarantor
-					Commlogs.Insert(commlog);
-				}
-			}
 			FillGrid();
 			if(gridBill.Rows.Count>0 && MsgBox.Show(this,true,"Delete all unsent bills?")){
 				MessageBox.Show("Not functional yet.");
@@ -619,7 +647,14 @@ namespace OpenDental{
 				DialogResult result=MessageBox.Show(Lan.g(this,"You may leave this window open while you work.  If you do close it, do you want to delete all unsent bills?"),
 					"",MessageBoxButtons.YesNoCancel);
 				if(result==DialogResult.Yes){
-					MessageBox.Show("Not functional yet.");
+					int rowsChanged=0;
+					for(int i=0;i<table.Rows.Count;i++){
+						if(table.Rows[i]["IsSent"].ToString()=="0"){
+							Statements.DeleteObject(PIn.PInt(table.Rows[i]["StatementNum"].ToString()));
+							rowsChanged++;
+						}
+					}
+					MessageBox.Show(Lan.g(this,"Unsent statements deleted: ")+rowsChanged.ToString());
 				}
 				else if(result==DialogResult.No){
 					DialogResult=DialogResult.Cancel;
@@ -632,6 +667,8 @@ namespace OpenDental{
 			DialogResult=DialogResult.Cancel;
 			Close();
 		}
+
+		
 
 		
 
