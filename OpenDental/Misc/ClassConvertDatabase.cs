@@ -6364,7 +6364,8 @@ namespace OpenDental{
 				General.NonQEx(command);
 				command="INSERT INTO preference (PrefName,ValueString) VALUES ('BillingDefaultsNote','')";
 				General.NonQEx(command);
-
+				command="ALTER TABLE insplan ADD AllowProcCodeSubt varchar(1) NOT NULL default '1'";
+				General.NonQEx(command);
 
 
 

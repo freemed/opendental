@@ -23,7 +23,7 @@ namespace OpenDental {
 				+"FeeSched,ReleaseInfo,AssignBen,PlanType,ClaimFormNum,UseAltCode,"
 				+"ClaimsUseUCR,CopayFeeSched,SubscriberID,"
 				+"EmployerNum,CarrierNum,AllowedFeeSched,TrojanID,DivisionNo,BenefitNotes,IsMedical,SubscNote,FilingCode,"
-				+"DentaideCardSequence,ShowBaseUnits,DedBeforePerc) VALUES(";
+				+"DentaideCardSequence,ShowBaseUnits,DedBeforePerc,AllowProcCodeSubt) VALUES(";
 			if(PrefB.RandomKeys) {
 				command+="'"+POut.PInt(plan.PlanNum)+"', ";
 			}
@@ -54,7 +54,8 @@ namespace OpenDental {
 				+"'"+POut.PInt((int)plan.FilingCode)+"', "
 				+"'"+POut.PInt((int)plan.DentaideCardSequence)+"', "
 				+"'"+POut.PBool(plan.ShowBaseUnits)+"', "
-				+"'"+POut.PBool(plan.DedBeforePerc)+"')";
+				+"'"+POut.PBool(plan.DedBeforePerc)+"',"
+				+"'"+POut.PBool(plan.AllowProcCodeSubt)+"')";
 			if(PrefB.RandomKeys) {
 				General.NonQ(command);
 			}
@@ -137,6 +138,7 @@ namespace OpenDental {
 				+",DentaideCardSequence='" +POut.PInt(plan.DentaideCardSequence)+"'"
 				+",ShowBaseUnits='"  +POut.PBool(plan.ShowBaseUnits)+"'"
 				+",DedBeforePerc='"  +POut.PBool(plan.DedBeforePerc)+"'"
+				+",AllowProcCodeSubt='"+POut.PBool(plan.AllowProcCodeSubt)+"'"
 				+" WHERE PlanNum = '"+POut.PInt   (plan.PlanNum)+"'";
 			General.NonQ(command);
 		}
@@ -161,6 +163,7 @@ namespace OpenDental {
 				+",FilingCode = '"     +POut.PInt   ((int)plan.FilingCode)+"'"
 				+",ShowBaseUnits = '"  +POut.PBool  (plan.ShowBaseUnits)+"'"
 				+",ShowBaseUnits = '"  +POut.PBool  (plan.DedBeforePerc)+"'"
+				+",AllowProcCodeSubt='"+POut.PBool	(plan.AllowProcCodeSubt)+"'"
 				+" WHERE "
 				+"EmployerNum = '"        +POut.PInt   (like.EmployerNum)+"' "
 				+"AND GroupName = '"      +POut.PString(like.GroupName)+"' "
@@ -279,6 +282,7 @@ namespace OpenDental {
 				PlanList[i].DentaideCardSequence= PIn.PInt(table.Rows[i][25].ToString());
 				PlanList[i].ShowBaseUnits  = PIn.PBool  (table.Rows[i][26].ToString());
 				PlanList[i].DedBeforePerc  = PIn.PBool  (table.Rows[i][27].ToString());
+				PlanList[i].AllowProcCodeSubt=PIn.PBool	(table.Rows[i][28].ToString());
 			}
 			return PlanList;
 		}
@@ -482,7 +486,10 @@ namespace OpenDental {
 				return -1;
 			}
 			int codeNum=ProcedureCodes.GetCodeNum(procCode);
-			int substCodeNum=ProcedureCodes.GetSubstituteCodeNum(procCode,toothNum);//for posterior composites
+			int substCodeNum=codeNum;
+			if(plan.AllowProcCodeSubt){
+				substCodeNum=ProcedureCodes.GetSubstituteCodeNum(procCode,toothNum);//for posterior composites
+			}			
 			if(plan.PlanType=="p"){
 				return Fees.GetAmount(substCodeNum,plan.FeeSched);
 			}
