@@ -702,12 +702,24 @@ namespace OpenDental{
 			//if(!Security.IsAuthorized(Permissions.Setup)) {
 			//	return;
 			//}
-			FormBillingOptions FormBO=new FormBillingOptions();
-			FormBO.ShowDialog();
+			bool unsentStatementsExist=Statements.UnsentStatementsExist();
+			if(unsentStatementsExist){
+				FormBilling FormB=new FormBilling();
+				FormB.GoToChanged += new PatientSelectedEventHandler(formBilling_GoToChanged);
+				FormB.Show();
+			}
+			else{
+				FormBillingOptions FormBO=new FormBillingOptions();
+				FormBO.ShowDialog();
+			}
 			//RefreshCurrentModule();
 			SecurityLogs.MakeLogEntry(Permissions.Setup,0,"Billing");
 		}
 
+		private void formBilling_GoToChanged(object sender,PatientSelectedEventArgs e) {
+			OnPatientSelected(e.PatNum,e.PatName,e.HasEmail,e.ChartNumber);
+			GotoModule.GotoAccount();
+		}
 
 		private void butDeposit_Click(object sender, System.EventArgs e) {
 			if(!Security.IsAuthorized(Permissions.DepositSlips,DateTime.Today)){

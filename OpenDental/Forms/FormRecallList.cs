@@ -135,7 +135,7 @@ namespace OpenDental{
 			this.butClose.DialogResult = System.Windows.Forms.DialogResult.Cancel;
 			this.butClose.Location = new System.Drawing.Point(873,645);
 			this.butClose.Name = "butClose";
-			this.butClose.Size = new System.Drawing.Size(75,26);
+			this.butClose.Size = new System.Drawing.Size(75,24);
 			this.butClose.TabIndex = 2;
 			this.butClose.Text = "&Close";
 			this.butClose.Click += new System.EventHandler(this.butClose_Click);
@@ -150,7 +150,7 @@ namespace OpenDental{
 			this.butRefresh.CornerRadius = 4F;
 			this.butRefresh.Location = new System.Drawing.Point(78,201);
 			this.butRefresh.Name = "butRefresh";
-			this.butRefresh.Size = new System.Drawing.Size(98,26);
+			this.butRefresh.Size = new System.Drawing.Size(98,24);
 			this.butRefresh.TabIndex = 2;
 			this.butRefresh.Text = "&Refresh List";
 			this.butRefresh.Click += new System.EventHandler(this.butRefresh_Click);
@@ -267,7 +267,7 @@ namespace OpenDental{
 			this.butReport.CornerRadius = 4F;
 			this.butReport.Location = new System.Drawing.Point(861,524);
 			this.butReport.Name = "butReport";
-			this.butReport.Size = new System.Drawing.Size(87,26);
+			this.butReport.Size = new System.Drawing.Size(87,24);
 			this.butReport.TabIndex = 13;
 			this.butReport.Text = "R&un Report";
 			this.butReport.Click += new System.EventHandler(this.butReport_Click);
@@ -284,7 +284,7 @@ namespace OpenDental{
 			this.butLabels.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.butLabels.Location = new System.Drawing.Point(829,489);
 			this.butLabels.Name = "butLabels";
-			this.butLabels.Size = new System.Drawing.Size(119,26);
+			this.butLabels.Size = new System.Drawing.Size(119,24);
 			this.butLabels.TabIndex = 14;
 			this.butLabels.Text = "Label Preview";
 			this.butLabels.Click += new System.EventHandler(this.butLabels_Click);
@@ -324,7 +324,7 @@ namespace OpenDental{
 			this.butSetStatus.CornerRadius = 4F;
 			this.butSetStatus.Location = new System.Drawing.Point(110,56);
 			this.butSetStatus.Name = "butSetStatus";
-			this.butSetStatus.Size = new System.Drawing.Size(67,26);
+			this.butSetStatus.Size = new System.Drawing.Size(67,24);
 			this.butSetStatus.TabIndex = 14;
 			this.butSetStatus.Text = "Set";
 			this.butSetStatus.Click += new System.EventHandler(this.butSetStatus_Click);
@@ -337,11 +337,11 @@ namespace OpenDental{
 			this.butPostcards.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butPostcards.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butPostcards.CornerRadius = 4F;
-			this.butPostcards.Image = global::OpenDental.Properties.Resources.butPrintSmall;
+			this.butPostcards.Image = global::OpenDental.Properties.Resources.butPreview;
 			this.butPostcards.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.butPostcards.Location = new System.Drawing.Point(829,454);
 			this.butPostcards.Name = "butPostcards";
-			this.butPostcards.Size = new System.Drawing.Size(119,26);
+			this.butPostcards.Size = new System.Drawing.Size(119,24);
 			this.butPostcards.TabIndex = 16;
 			this.butPostcards.Text = "Postcard Preview";
 			this.butPostcards.Click += new System.EventHandler(this.butPostcards_Click);
@@ -372,7 +372,7 @@ namespace OpenDental{
 			this.butPrint.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.butPrint.Location = new System.Drawing.Point(861,559);
 			this.butPrint.Name = "butPrint";
-			this.butPrint.Size = new System.Drawing.Size(87,26);
+			this.butPrint.Size = new System.Drawing.Size(87,24);
 			this.butPrint.TabIndex = 19;
 			this.butPrint.Text = "Print List";
 			this.butPrint.Click += new System.EventHandler(this.butPrint_Click);
@@ -387,7 +387,7 @@ namespace OpenDental{
 			this.butSchedPat.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.butSchedPat.Location = new System.Drawing.Point(90,19);
 			this.butSchedPat.Name = "butSchedPat";
-			this.butSchedPat.Size = new System.Drawing.Size(87,26);
+			this.butSchedPat.Size = new System.Drawing.Size(87,24);
 			this.butSchedPat.TabIndex = 58;
 			this.butSchedPat.Text = "Patient";
 			this.butSchedPat.Click += new System.EventHandler(this.butSchedPat_Click);
@@ -413,7 +413,7 @@ namespace OpenDental{
 			this.butSchedFam.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.butSchedFam.Location = new System.Drawing.Point(90,51);
 			this.butSchedFam.Name = "butSchedFam";
-			this.butSchedFam.Size = new System.Drawing.Size(87,26);
+			this.butSchedFam.Size = new System.Drawing.Size(87,24);
 			this.butSchedFam.TabIndex = 59;
 			this.butSchedFam.Text = "Family";
 			this.butSchedFam.Click += new System.EventHandler(this.butSchedFam_Click);
@@ -439,8 +439,8 @@ namespace OpenDental{
 			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Recall List";
-			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormRecallList_FormClosing);
 			this.Load += new System.EventHandler(this.FormRecallList_Load);
+			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormRecallList_FormClosing);
 			this.groupBox1.ResumeLayout(false);
 			this.groupBox1.PerformLayout();
 			this.groupBox3.ResumeLayout(false);

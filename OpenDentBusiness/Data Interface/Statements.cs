@@ -18,10 +18,9 @@ namespace OpenDentBusiness{
 			return DataObjectFactory<Statement>.CreateObject(statementNum);
 		}
 
-		public static List<Statement> GetList(bool isSent){
-			string command="SELECT * FROM statement WHERE IsSent="+POut.PBool(isSent);
-			Collection<Statement> collectState=DataObjectFactory<Statement>.CreateObjects(command);
-			return new List<Statement>(collectState);				
+		public static List<Statement> GetStatements(int[] statementNums){
+			Collection<Statement> collectState=DataObjectFactory<Statement>.CreateObjects(statementNums);
+			return new List<Statement>(collectState);		
 		}
 
 		///<summary></summary>
@@ -40,7 +39,59 @@ namespace OpenDentBusiness{
 			DataObjectFactory<Statement>.DeleteObject(statement);
 		}
 
-		
+		public static bool UnsentStatementsExist(){
+			string command="SELECT COUNT(*) FROM statement WHERE IsSent=0";
+			if(General.GetCount(command)=="0"){
+				return false;
+			}
+			return true;
+		}
+
+		public static DataTable GetBilling(bool isSent){
+			DataTable table=new DataTable();
+			DataRow row;
+			//columns that start with lowercase are altered for display rather than being raw data.
+			table.Columns.Add("amount");
+			table.Columns.Add("billingType");
+			table.Columns.Add("insEst");
+			table.Columns.Add("lastStatement");
+			table.Columns.Add("mode");
+			table.Columns.Add("name");
+			table.Columns.Add("PatNum");
+			table.Columns.Add("StatementNum");
+			table.Columns.Add("total");
+			List<DataRow> rows=new List<DataRow>();
+			string command="SELECT BillingType,FName,LName,MiddleI,Mode_,Preferred,statement.PatNum,StatementNum "
+				+"FROM statement "
+				+"LEFT JOIN patient ON statement.PatNum=patient.PatNum "
+				+"WHERE IsSent="+POut.PBool(isSent);
+			DataTable rawTable=General.GetTable(command);
+			Patient pat;
+			StatementMode mode;
+			for(int i=0;i<rawTable.Rows.Count;i++){
+				row=table.NewRow();
+				row["amount"]="";
+				row["billingType"]=DefB.GetName(DefCat.BillingTypes,PIn.PInt(rawTable.Rows[i]["BillingType"].ToString()));
+				row["insEst"]="";
+				row["lastStatement"]="";
+				mode=(StatementMode)PIn.PInt(rawTable.Rows[i]["Mode_"].ToString());
+				row["mode"]=Lan.g("enumStatementMode",mode.ToString());
+				pat=new Patient();
+				pat.LName=rawTable.Rows[i]["LName"].ToString();
+				pat.FName=rawTable.Rows[i]["FName"].ToString();
+				pat.Preferred=rawTable.Rows[i]["Preferred"].ToString();
+				pat.MiddleI=rawTable.Rows[i]["MiddleI"].ToString();
+				row["name"]=pat.GetNameLF();
+				row["PatNum"]=rawTable.Rows[i]["PatNum"].ToString();
+				row["StatementNum"]=rawTable.Rows[i]["StatementNum"].ToString();
+				row["total"]="";
+				rows.Add(row);
+			}
+			for(int i=0;i<rows.Count;i++) {
+				table.Rows.Add(rows[i]);
+			}
+			return table;
+		}
 
 
 	}

@@ -1070,7 +1070,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>This is only used in the Billing dialog</summary>
-		public static PatAging[] GetAgingList(string age,DateTime lastStatement,int[] billingIndices,bool excludeAddr
+		public static List<PatAging> GetAgingList(string age,DateTime lastStatement,int[] billingIndices,bool excludeAddr
 			,bool excludeNeg,double excludeLessThan,bool excludeInactive,bool includeChanged,bool excludeInsPending)
 		{
 			string command="";
@@ -1210,10 +1210,10 @@ namespace OpenDentBusiness{
 					agingList.Add(patage);
 				}
 			}
-			PatAging[] retVal=new PatAging[agingList.Count];
-			for(int i=0;i<retVal.Length;i++){
-				retVal[i]=agingList[i];
-			}
+			//PatAging[] retVal=new PatAging[agingList.Count];
+			//for(int i=0;i<retVal.Length;i++){
+			//	retVal[i]=agingList[i];
+			//}
 			if(includeChanged){
 				command="DROP TABLE IF EXISTS templastproc";
 				General.NonQ(command);
@@ -1224,7 +1224,7 @@ namespace OpenDentBusiness{
 				command="DROP TABLE IF EXISTS tempclaimspending";
 				General.NonQ(command);
 			}
-			return retVal;
+			return agingList;
 		}
 
 		///<summary>Used only to run finance charges, so it ignores negative balances.</summary>
@@ -1490,7 +1490,7 @@ namespace OpenDentBusiness{
 
 	
 
-	///<summary>Not a database table.  Just used for running reports.</summary>
+	///<summary>Not a database table.  Just used in billing and finance charges.</summary>
 	public class PatAging{
 		///<summary></summary>
 		public int PatNum;

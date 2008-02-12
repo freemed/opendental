@@ -300,6 +300,13 @@ namespace OpenDental{
 					}
 					//test for not require tooth number if time
 					break;
+				case DefCat.BillingTypes:
+					if(textValue.Text!="" && textValue.Text!="E") 
+					{
+						MsgBox.Show(this,"Valid values are blank or E.");
+						return;
+					}
+					break;
 				case DefCat.CommLogTypes:
 					if(textValue.Text!="" && textValue.Text!="MISC" && textValue.Text!="APPT" 
 						&& textValue.Text!="FIN" && textValue.Text!="RECALL") 

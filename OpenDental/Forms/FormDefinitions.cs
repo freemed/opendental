@@ -363,6 +363,8 @@ namespace OpenDental{
 					break;
 				case 5://"Billing Types":
 					//SelectedCat=4;
+					FormDefEdit.EnableValue=true;
+					FormDefEdit.ValueText=Lan.g(this,"E=Email bill");
 					FormDefEdit.HelpText=Lan.g(this,"It is recommended to use as few billing types as possible.  They can be useful when running reports to separate delinquent accounts, but can cause 'forgotten accounts' if used without good office procedures. Changes affect all patients.");
 					break;
 				case 6://"Blockout Types":
@@ -378,7 +380,7 @@ namespace OpenDental{
 					break;
 				case 8://"Commlog Types"
 					FormDefEdit.EnableValue=true;
-					FormDefEdit.ValueText=Lan.g(this,"");
+					FormDefEdit.ValueText=Lan.g(this,"APPT,FIN,RECALL,MISC");
 					FormDefEdit.HelpText=Lan.g(this,"Changes affect all current commlog entries.  In the second column, you can optionally specify APPT,FIN,RECALL,or MISC. Only one of each. This helps automate new entries.");
 					break;
 				case 9://"Contact Categories":

@@ -612,6 +612,7 @@ namespace OpenDental{
 			textExcludeLessThan.Text=PrefB.GetString("BillingExcludeLessThan");
 			//blank is allowed
 			FillDunning();
+			SetDefaults();
 		}
 
 		private void butAll_Click(object sender, System.EventArgs e) {
@@ -738,7 +739,10 @@ namespace OpenDental{
 		}
 
 		private void SetDefaults(){
-
+			textDateStart.Text=DateTime.Today.AddDays(PrefB.GetInt("BillingDefaultsLastDays")).ToShortDateString();
+			textDateEnd.Text="";
+			checkIntermingled.Checked=PrefB.GetBool("BillingDefaultsIntermingle");
+			textNote.Text=PrefB.GetString("BillingDefaultsNote");
 		}
 
 		private void but30days_Click(object sender,EventArgs e) {
@@ -764,6 +768,8 @@ namespace OpenDental{
 		private void butCreate_Click(object sender, System.EventArgs e) {
 			if( textExcludeLessThan.errorProvider1.GetError(textExcludeLessThan)!=""
 				|| textLastStatement.errorProvider1.GetError(textLastStatement)!=""
+				|| textDateStart.errorProvider1.GetError(textDateStart)!=""
+				|| textDateEnd.errorProvider1.GetError(textDateEnd)!=""
 				)
 			{
 				MsgBox.Show(this,"Please fix data entry errors first.");
@@ -783,9 +789,18 @@ namespace OpenDental{
 			FormB.AgingList=Patients.GetAgingList(getAge,lastStatement,billingIndices,checkBadAddress.Checked
 				,checkExcludeNegative.Checked,PIn.PDouble(textExcludeLessThan.Text)
 				,checkExcludeInactive.Checked,checkIncludeChanged.Checked,checkExcludeInsPending.Checked);
-			FormB.GeneralNote=textNote.Text;
-			Cursor=Cursors.Default;
+			FormB.Note=textNote.Text;
+			FormB.DateRangeFrom=DateTime.MinValue;
+			FormB.DateRangeTo=new DateTime(2200,1,1);
+			if(textDateStart.Text!=""){
+				FormB.DateRangeFrom=PIn.PDate(textDateStart.Text);
+			}
+			if(textDateEnd.Text!=""){
+				FormB.DateRangeTo=PIn.PDate(textDateEnd.Text);
+			}
+			FormB.Intermingled=checkIntermingled.Checked;
 			FormB.ShowDialog();
+			Cursor=Cursors.Default;
 			if(FormB.DialogResult==DialogResult.OK){
 				DialogResult=DialogResult.OK;			
 			}

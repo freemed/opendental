@@ -730,7 +730,7 @@ namespace OpenDentBusiness {
 				rows.Add(row);
 			}
 			//Statement----------------------------------------------------------------------------------------
-			command="SELECT DateSent,Mode_,StatementNum,PatNum "
+			command="SELECT DateSent,IsSent,Mode_,StatementNum,PatNum "
 				+"FROM statement "
 				+"WHERE (";
 			for(int i=0;i<fam.List.Length;i++){
@@ -759,9 +759,10 @@ namespace OpenDentBusiness {
 				row["date"]=dateT.ToShortDateString();
 				row["description"]+=Lan.g("ContrAccount","Statement");
 				_mode=(StatementMode)PIn.PInt(rawState.Rows[i]["Mode_"].ToString());
-				//if(_mode!=StatementMode.Unsent){
 				row["description"]+="-"+Lan.g("enumStatementMode",_mode.ToString());
-				//}
+				if(rawState.Rows[i]["IsSent"].ToString()=="0"){
+					row["description"]+=" "+Lan.g("ContrAccount","(unsent)");
+				}
 				row["extraDetail"]="";
 				row["patient"]=fam.GetNameInFamFirst(PIn.PInt(rawState.Rows[i]["PatNum"].ToString()));
 				row["PatNum"]=rawState.Rows[i]["PatNum"].ToString();

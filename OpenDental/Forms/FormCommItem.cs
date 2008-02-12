@@ -28,7 +28,6 @@ namespace OpenDental{
 		private System.Windows.Forms.Label label4;
 		private OpenDental.ODtextBox textNote;
 		private System.Windows.Forms.ListBox listType;
-		private CheckBox checkIsStatementSent;
 		private TextBox textPatientName;
 		private Label label5;
 		private TextBox textUser;
@@ -69,7 +68,6 @@ namespace OpenDental{
 			this.listSentOrReceived = new System.Windows.Forms.ListBox();
 			this.label4 = new System.Windows.Forms.Label();
 			this.textNote = new OpenDental.ODtextBox();
-			this.checkIsStatementSent = new System.Windows.Forms.CheckBox();
 			this.textPatientName = new System.Windows.Forms.TextBox();
 			this.label5 = new System.Windows.Forms.Label();
 			this.textUser = new System.Windows.Forms.TextBox();
@@ -102,7 +100,7 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(591,488);
+			this.butOK.Location = new System.Drawing.Point(591,448);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75,25);
 			this.butOK.TabIndex = 6;
@@ -118,7 +116,7 @@ namespace OpenDental{
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
 			this.butCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.butCancel.Location = new System.Drawing.Point(591,521);
+			this.butCancel.Location = new System.Drawing.Point(591,481);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75,25);
 			this.butCancel.TabIndex = 7;
@@ -135,7 +133,7 @@ namespace OpenDental{
 			this.butDelete.CornerRadius = 4F;
 			this.butDelete.Image = global::OpenDental.Properties.Resources.deleteX;
 			this.butDelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butDelete.Location = new System.Drawing.Point(14,521);
+			this.butDelete.Location = new System.Drawing.Point(14,481);
 			this.butDelete.Name = "butDelete";
 			this.butDelete.Size = new System.Drawing.Size(81,25);
 			this.butDelete.TabIndex = 17;
@@ -144,7 +142,7 @@ namespace OpenDental{
 			// 
 			// label2
 			// 
-			this.label2.Location = new System.Drawing.Point(106,217);
+			this.label2.Location = new System.Drawing.Point(106,191);
 			this.label2.Name = "label2";
 			this.label2.Size = new System.Drawing.Size(82,16);
 			this.label2.TabIndex = 18;
@@ -200,23 +198,13 @@ namespace OpenDental{
 			// textNote
 			// 
 			this.textNote.AcceptsReturn = true;
-			this.textNote.Location = new System.Drawing.Point(107,237);
+			this.textNote.Location = new System.Drawing.Point(107,211);
 			this.textNote.Multiline = true;
 			this.textNote.Name = "textNote";
 			this.textNote.QuickPasteType = OpenDentBusiness.QuickPasteType.CommLog;
 			this.textNote.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
 			this.textNote.Size = new System.Drawing.Size(557,209);
 			this.textNote.TabIndex = 27;
-			// 
-			// checkIsStatementSent
-			// 
-			this.checkIsStatementSent.Location = new System.Drawing.Point(107,188);
-			this.checkIsStatementSent.Name = "checkIsStatementSent";
-			this.checkIsStatementSent.Size = new System.Drawing.Size(136,16);
-			this.checkIsStatementSent.TabIndex = 28;
-			this.checkIsStatementSent.Text = "Is Statement";
-			this.checkIsStatementSent.UseVisualStyleBackColor = true;
-			this.checkIsStatementSent.Click += new System.EventHandler(this.checkIsStatementSent_Click);
 			// 
 			// textPatientName
 			// 
@@ -256,12 +244,11 @@ namespace OpenDental{
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.CancelButton = this.butCancel;
-			this.ClientSize = new System.Drawing.Size(702,566);
+			this.ClientSize = new System.Drawing.Size(702,526);
 			this.Controls.Add(this.textUser);
 			this.Controls.Add(this.label16);
 			this.Controls.Add(this.textPatientName);
 			this.Controls.Add(this.label5);
-			this.Controls.Add(this.checkIsStatementSent);
 			this.Controls.Add(this.textNote);
 			this.Controls.Add(this.listSentOrReceived);
 			this.Controls.Add(this.label4);
@@ -314,7 +301,7 @@ namespace OpenDental{
 			catch{
 				MessageBox.Show(((int)CommlogCur.SentOrReceived).ToString());
 			}
-			checkIsStatementSent.Checked=CommlogCur.IsStatementSent;
+			//checkIsStatementSent.Checked=CommlogCur.IsStatementSent;
 			textNote.Text=CommlogCur.Note;
 			textNote.SelectionStart=textNote.Text.Length;
 			textNote.Select();
@@ -330,12 +317,6 @@ namespace OpenDental{
 			CommlogCur=Commlogs.GetOne(CommlogCur.CommlogNum);
 		}*/
 
-		private void checkIsStatementSent_Click(object sender,EventArgs e) {
-			if(checkIsStatementSent.Checked){
-				listType.SelectedIndex=-1;
-			}
-		}
-
 		private void butOK_Click(object sender, System.EventArgs e) {
 			if(textDateTime.Text==""
 				//|| textAmount.errorProvider1.GetError(textAmount)!=""
@@ -350,10 +331,10 @@ namespace OpenDental{
 				MessageBox.Show(Lan.g(this,"Date and time invalid."));
 				return;
 			}
-			if(!checkIsStatementSent.Checked && listType.SelectedIndex==-1){
-				MsgBox.Show(this,"Please select a type.");
-				return;
-			}
+			//if(!checkIsStatementSent.Checked && listType.SelectedIndex==-1){
+			//	MsgBox.Show(this,"Please select a type.");
+			//	return;
+			//}
 			CommlogCur.CommDateTime=PIn.PDateT(textDateTime.Text);
 			//there may not be a commtype selected.
 			if(listType.SelectedIndex==-1){
@@ -365,7 +346,7 @@ namespace OpenDental{
 			CommlogCur.Mode_=(CommItemMode)listMode.SelectedIndex;
 			CommlogCur.SentOrReceived=(CommSentOrReceived)listSentOrReceived.SelectedIndex;
 			CommlogCur.Note=textNote.Text;
-			CommlogCur.IsStatementSent=checkIsStatementSent.Checked;
+			//CommlogCur.IsStatementSent=checkIsStatementSent.Checked;
 			if(IsNew){
 				Commlogs.Insert(CommlogCur);
 			}

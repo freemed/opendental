@@ -2181,6 +2181,7 @@ namespace OpenDental{
 			//panelSplitter.Cursor=Cursors.VSplit;
 			LayoutControls();
 		}
+
 		private void menuItemDockSavePos_Click(object sender, EventArgs e)
 		{
 
@@ -2676,6 +2677,16 @@ namespace OpenDental{
 				}
 			}
 		}
+
+		/*private void moduleStaffBilling_GoToChanged(object sender,GoToEventArgs e) {
+			if(e.PatNum==0) {
+				return;
+			}
+			CurPatNum=e.PatNum;
+			Patient pat=Patients.GetPat(CurPatNum);
+			RefreshCurrentModule();
+			FillPatientButton(CurPatNum,pat.GetNameLF(),pat.Email!="",pat.ChartNumber);
+		}*/
 
 		///<summary>This is recursive</summary>
 		private void TranslateMenuItem(MenuItem menuItem){
