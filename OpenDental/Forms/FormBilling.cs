@@ -26,7 +26,6 @@ namespace OpenDental{
 		private Label labelEmailed;
 		private Label labelPrinted;
 		private OpenDental.UI.Button butEdit;
-		private DataTable table;
 		private ValidDate textDateEnd;
 		private ValidDate textDateStart;
 		private Label label2;
@@ -53,6 +52,7 @@ namespace OpenDental{
 		}
 
 		#region user fields
+		private DataTable table;
 		//Must set all these externally before opening this form
 		///<summary></summary>
 		public List<PatAging> AgingList;
@@ -426,7 +426,12 @@ namespace OpenDental{
 			//textDate.Text=Ledgers.GetClosestFirst(DateTime.Today).ToShortDateString();
 			//Patients.GetAgingList();
 			Statement stmt;
+			int ageAccount=0;
+			YN insIsPending=YN.Unknown;
+			Dunning dunning;
+			//string allAppts;
 			if(AgingList!=null){
+				Dunning[] dunList=Dunnings.Refresh();
 				for(int i=0;i<AgingList.Count;i++){
 					stmt=new Statement();
 					stmt.DateRangeFrom=DateRangeFrom;
@@ -437,14 +442,45 @@ namespace OpenDental{
 					stmt.Intermingled=Intermingled;
 					stmt.IsSent=false;
 					stmt.Mode_=StatementMode.Mail;
-	//set email here
+					if(DefB.GetDef(DefCat.BillingTypes,AgingList[i].BillingType).ItemValue=="E"){
+						stmt.Mode_=StatementMode.Email;
+					}
 					stmt.Note=Note;
-	//set appointment reminders here
 					stmt.NoteBold="";
-	//set dunning messages here
+					//appointment reminders are not handled here since it would be too slow.
+					//set dunning messages here
+					if(AgingList[i].BalOver90>0){
+						ageAccount=90;
+					}
+					else if(AgingList[i].Bal_61_90>0){
+						ageAccount=60;
+					}
+					else if(AgingList[i].Bal_31_60>0){
+						ageAccount=30;
+					}
+					else{
+						ageAccount=0;
+					}
+					if(AgingList[i].InsEst>0){
+						insIsPending=YN.Yes;
+					}
+					else{
+						insIsPending=YN.No;
+					}
+					dunning=Dunnings.GetDunning(dunList,AgingList[i].BillingType,ageAccount,insIsPending);
+					if(dunning!=null){
+						if(stmt.Note!=""){
+							stmt.Note+="\r\n\r\n";//leave one empty line
+						}
+						stmt.Note+=dunning.DunMessage;
+						//if(stmt.Note!=""){//there will never be anything in NoteBold already
+						//	stmt.Note+="\r\n\r\n";//leave one empty line
+						//}
+						stmt.NoteBold+=dunning.MessageBold;
+					}
 					stmt.PatNum=AgingList[i].PatNum;
 					stmt.SinglePatient=false;
-					//Statements.WriteObject(stmt);
+					Statements.WriteObject(stmt);
 				}
 			}
 			//FillGrid();

@@ -1114,8 +1114,9 @@ namespace OpenDentBusiness{
 					AND (ClaimType='P' OR ClaimType='S' OR ClaimType='Other')
 					GROUP BY patient.Guarantor;";
 			}*/
-			command+="SELECT patient.PatNum,Bal_0_30,Bal_31_60,Bal_61_90,BalOver90,BalTotal,InsEst,LName,FName,MiddleI, "
-				+"IFNULL(MAX(commlog.CommDateTime),'0001-01-01') AS LastStatement ";
+			command+="SELECT patient.PatNum,Bal_0_30,Bal_31_60,Bal_61_90,BalOver90,BalTotal,BillingType,"
+				+"InsEst,LName,FName,MiddleI,Preferred, "
+				+"IFNULL(MAX(statement.DateSent),'0001-01-01') AS LastStatement ";
 			if(includeChanged){
 				command+=",IFNULL(templastproc.LastProc,'0001-01-01') AS LastChange,"
 					+"IFNULL(templastpay.LastPay,'0001-01-01') AS LastPayment ";
@@ -1125,8 +1126,7 @@ namespace OpenDentBusiness{
 			//}
 			command+=
 				"FROM patient "//actually only gets guarantors since others are 0.
-				+"LEFT JOIN commlog ON patient.PatNum=commlog.PatNum "
-				+"AND IsStatementSent=1 ";
+				+"LEFT JOIN statement ON patient.PatNum=statement.PatNum ";
 			if(includeChanged){
 				command+="LEFT JOIN templastproc ON patient.PatNum=templastproc.Guarantor "
 					+"LEFT JOIN templastpay ON patient.PatNum=templastpay.Guarantor ";
@@ -1189,20 +1189,25 @@ namespace OpenDentBusiness{
 			DataTable table=General.GetTable(command);
 			List<PatAging> agingList=new List<PatAging>();
 			PatAging patage;
+			Patient pat;
 			for(int i=0;i<table.Rows.Count;i++){
 				patage=new PatAging();
-				patage.PatNum   = PIn.PInt   (table.Rows[i][0].ToString());
-				patage.Bal_0_30 = PIn.PDouble(table.Rows[i][1].ToString());
-				patage.Bal_31_60= PIn.PDouble(table.Rows[i][2].ToString());
-				patage.Bal_61_90= PIn.PDouble(table.Rows[i][3].ToString());
-				patage.BalOver90= PIn.PDouble(table.Rows[i][4].ToString());
-				patage.BalTotal = PIn.PDouble(table.Rows[i][5].ToString());
-				patage.InsEst   = PIn.PDouble(table.Rows[i][6].ToString());
-				patage.PatName=PIn.PString(table.Rows[i][7].ToString())
-					+", "+PIn.PString(table.Rows[i][8].ToString())
-					+" "+PIn.PString(table.Rows[i][9].ToString());
+				patage.PatNum   = PIn.PInt   (table.Rows[i]["PatNum"].ToString());
+				patage.Bal_0_30 = PIn.PDouble(table.Rows[i]["Bal_0_30"].ToString());
+				patage.Bal_31_60= PIn.PDouble(table.Rows[i]["Bal_31_60"].ToString());
+				patage.Bal_61_90= PIn.PDouble(table.Rows[i]["Bal_61_90"].ToString());
+				patage.BalOver90= PIn.PDouble(table.Rows[i]["BalOver90"].ToString());
+				patage.BalTotal = PIn.PDouble(table.Rows[i]["BalTotal"].ToString());
+				patage.InsEst   = PIn.PDouble(table.Rows[i]["InsEst"].ToString());
+				pat=new Patient();
+				pat.LName=PIn.PString(table.Rows[i]["LName"].ToString());
+				pat.FName=PIn.PString(table.Rows[i]["FName"].ToString());
+				pat.MiddleI=PIn.PString(table.Rows[i]["MiddleI"].ToString());
+				pat.Preferred=PIn.PString(table.Rows[i]["Preferred"].ToString());
+				patage.PatName=pat.GetNameLF();
 				patage.AmountDue=patage.BalTotal-patage.InsEst;
-				patage.DateLastStatement=PIn.PDate(table.Rows[i][10].ToString());
+				patage.DateLastStatement=PIn.PDate(table.Rows[i]["LastStatement"].ToString());
+				patage.BillingType=PIn.PInt(table.Rows[i]["BillingType"].ToString());
 				if(excludeInsPending && patage.InsEst>0){
 					//don't add
 				}

@@ -76,10 +76,10 @@ namespace OpenDentBusiness{
 			}
 			command+="WHERE IsSent="+POut.PBool(isSent)+" ";
 			//if(dateFrom.Year>1800){
-				command+="AND DateSent>"+POut.PDate(dateFrom)+" ";
+				command+="AND DateSent>="+POut.PDate(dateFrom)+" ";//greater than midnight this morning
 			//}
 			//if(dateFrom.Year>1800){
-				command+="AND DateSent<"+POut.PDate(dateTo)+" ";
+				command+="AND DateSent<"+POut.PDate(dateTo.AddDays(1))+" ";//less than midnight tonight
 			//}
 			if(orderBy==0){//BillingType
 				command+="ORDER BY definition.ItemOrder,LName,FName";

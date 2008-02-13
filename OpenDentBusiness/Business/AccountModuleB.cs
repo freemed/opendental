@@ -59,6 +59,7 @@ namespace OpenDentBusiness {
 			//Gets 3 tables: account(or account###,account###,etc), patient, payplan.
 			GetAccount(patNum,fromDate,toDate,intermingled,singlePatient);
 			//GetPayPlans(patNum,fromDate,toDate,isFamily);
+			GetApptTable(fam,singlePatient,patNum);//table= appts
 			return retVal;
 		}
 
@@ -956,7 +957,7 @@ namespace OpenDentBusiness {
 					//Add balance forward row
 					if(foundBalForward){
 						//add a balance forward row
-						row=table.NewRow();
+						row=rowsByPat[p].NewRow();
 						SetBalForwardRow(row,balanceForward);
 						rowsByPat[p].Rows.InsertAt(row,0);
 					}
@@ -1134,6 +1135,53 @@ namespace OpenDentBusiness {
 			rowspat.Add(row);
 			for(int i=0;i<rowspat.Count;i++) {
 				table.Rows.Add(rowspat[i]);
+			}
+			retVal.Tables.Add(table);
+		}
+
+		///<summary>Future appointments.</summary>
+		private static void GetApptTable(Family fam,bool singlePatient,int patNum){
+			DataConnection dcon=new DataConnection();
+			DataTable table=new DataTable("appts");
+			DataRow row;
+			table.Columns.Add("descript");
+			table.Columns.Add("PatNum");
+			List<DataRow> rows=new List<DataRow>();
+			string command="SELECT AptDateTime,PatNum,ProcDescript "
+				+"FROM appointment "
+				+"WHERE AptDateTime > "+POut.PDate(DateTime.Today.AddDays(1))+" "//midnight tonight
+				+"AND AptStatus !="+POut.PInt((int)ApptStatus.PtNote)+" "
+				+"AND AptStatus !="+POut.PInt((int)ApptStatus.PtNoteCompleted)+" "
+				+"AND AptStatus !="+POut.PInt((int)ApptStatus.UnschedList)+" "
+				+"AND (";
+			if(singlePatient){
+				command+="PatNum ="+POut.PInt(patNum);
+			}
+			else{
+				for(int i=0;i<fam.List.Length;i++){
+					if(i!=0){
+						command+="OR ";
+					}
+					command+="PatNum ="+POut.PInt(fam.List[i].PatNum)+" ";
+				}
+			}
+			command+=") ORDER BY PatNum,AptDateTime";
+			DataTable raw=dcon.GetTable(command);
+			DateTime dateT;
+			int patNumm;
+			for(int i=0;i<raw.Rows.Count;i++){
+				row=table.NewRow();
+				patNumm=PIn.PInt(raw.Rows[i]["PatNum"].ToString());
+				dateT=PIn.PDateT(raw.Rows[i]["AptDateTime"].ToString());
+				row["descript"]=fam.GetNameInFamFL(patNumm)+":  "
+					+dateT.ToString("dddd")+",  "
+					+dateT.ToShortDateString()
+					+",  "+dateT.ToShortTimeString()+",  "+raw.Rows[i]["ProcDescript"].ToString();
+				row["PatNum"]=patNumm.ToString();
+				rows.Add(row);
+			}
+			for(int i=0;i<rows.Count;i++) {
+				table.Rows.Add(rows[i]);
 			}
 			retVal.Tables.Add(table);
 		}

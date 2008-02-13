@@ -249,8 +249,7 @@ namespace OpenDental{
 			}
 		}
 
-
-		///<summary>Used from FormBilling to print all statements for all the supplied patNums.  But commlog entries are done afterward, only when user confirms that they printed properly.</summary>
+		///<summary>Used from FormBilling to print all statements for all the supplied patNums.</summary>
 		public void LoadAndPrint(int[] guarNums,string generalNote){
 			int[][] patNums=new int[guarNums.Length][];
 			Family famCur;
@@ -745,11 +744,12 @@ namespace OpenDental{
 			#endregion
 			//Bold note-------------------------------------------------------------------------------
 			if(Stmt.NoteBold!=""){
+				MigraDocHelper.InsertSpacer(section,7);
 				font=MigraDocHelper.CreateFont(10,true,System.Drawing.Color.DarkRed);
 				par=section.AddParagraph();
 				par.Format.Font=font;
 				par.AddText(Stmt.NoteBold);
-				MigraDocHelper.InsertSpacer(section,10);
+				MigraDocHelper.InsertSpacer(section,8);
 			}
 			//Body Tables-----------------------------------------------------------------------------------------------------------
 			ODGrid gridPat=new ODGrid();
@@ -835,14 +835,26 @@ namespace OpenDental{
 				}
 			}
 			gridPat.Dispose();
-			//Note------------------------------------------------------------------------------------------------------------
-			//frame=MigraDocHelper.CreateContainer(section);
+			//Future appointments---------------------------------------------------------------------------------------------
 			font=MigraDocHelper.CreateFont(9);
-			//MigraDocHelper.DrawString(frame,,font,0,0);
+			DataTable tableAppt=dataSet.Tables["appts"];
+			if(tableAppt.Rows.Count>0){
+				par=section.AddParagraph();
+				par.Format.Font=font;
+				par.AddText(Lan.g(this,"Scheduled Appointments:"));
+			}
+			for(int i=0;i<tableAppt.Rows.Count;i++){
+				par.AddLineBreak();
+				par.AddText(tableAppt.Rows[i]["descript"].ToString());
+			}
+			if(tableAppt.Rows.Count>0){
+				MigraDocHelper.InsertSpacer(section,10);
+			}
+			//Note------------------------------------------------------------------------------------------------------------
+			font=MigraDocHelper.CreateFont(9);
 			par=section.AddParagraph();
 			par.Format.Font=font;
 			par.AddText(Stmt.Note);
-			//par.AddLineBreak();
 			//bold note
 			if(Stmt.NoteBold!=""){
 				MigraDocHelper.InsertSpacer(section,10);
