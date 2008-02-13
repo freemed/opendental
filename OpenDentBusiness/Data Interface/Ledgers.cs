@@ -17,10 +17,10 @@ namespace OpenDentBusiness{
 		private static DateTime AsOfDate;
 		///<summary></summary>
 		public struct DateValuePair{
-		///<summary></summary>
-		public DateTime Date;
-		///<summary></summary>
-		public double Value;
+			///<summary></summary>
+			public DateTime Date;
+			///<summary></summary>
+			public double Value;
 		}
 
 		///<summary></summary>
@@ -65,15 +65,15 @@ namespace OpenDentBusiness{
 			pairs=new DateValuePair[table.Rows.Count];
 			double val;
 			double qty;
-            double baseunits;
+			double baseunits;
 			for(int i=0;i<table.Rows.Count;i++){
 				pairs[i].Date=  PIn.PDate  (table.Rows[i][0].ToString());
 				val=PIn.PDouble(table.Rows[i][1].ToString());
 				qty=PIn.PDouble(table.Rows[i][2].ToString());
-                baseunits=PIn.PDouble(table.Rows[i][3].ToString());
-                if(baseunits > 0) {
-                    qty += baseunits;
-                }
+				baseunits=PIn.PDouble(table.Rows[i][3].ToString());
+				if(baseunits > 0) {
+					qty += baseunits;
+				}
 				if(qty > 0) {
 					val *= qty;
 				}
