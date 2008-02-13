@@ -6366,7 +6366,8 @@ namespace OpenDental{
 				General.NonQEx(command);
 				command="ALTER TABLE insplan ADD AllowProcCodeSubt varchar(1) NOT NULL default '1'";
 				General.NonQEx(command);
-
+				command="INSERT INTO preference (PrefName,ValueString) VALUES ('ExcludeImageFolderBackup','0')";
+				General.NonQEx(command);
 
 
 
