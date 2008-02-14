@@ -805,6 +805,9 @@ namespace OpenDental{
 							//myGridTS.GridColumnStyles[j].Alignment=HorizontalAlignment.Right;
 							Queries.CurReport.ColTotal[j]+=PIn.PDouble(tableOut.Rows[i][j].ToString());
 							break;
+						case "toothnum":
+							tableOut.Rows[i][j]=Tooth.ToInternat(tableOut.Rows[i][j].ToString());
+							break;
 						//definitions:
 						case "adjtype":
 							tableOut.Rows[i][j]

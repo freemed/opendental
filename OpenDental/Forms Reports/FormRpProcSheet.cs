@@ -272,8 +272,9 @@ namespace OpenDental{
 			//added Procnum to retrieve all codes
 			Queries.CurReport.Query="SELECT procedurelog.ProcDate,CONCAT(CONCAT(CONCAT(CONCAT"
 				+"(patient.LName,', '),patient.FName),' '),patient.MiddleI) AS plfname, procedurecode.ProcCode,"
-				+"CASE WHEN (SELECT procedurelog.ToothNum REGEXP '^[0-9]$')=1 THEN CONCAT('0',procedurelog.ToothNum) "
-				+"ELSE procedurelog.ToothNum END as ToothNum,procedurecode.Descript,provider.Abbr,"
+				//+"CASE WHEN (SELECT procedurelog.ToothNum REGEXP '^[0-9]$')=1 THEN CONCAT('0',procedurelog.ToothNum) "
+				//+"ELSE procedurelog.ToothNum END as ToothNum,procedurecode.Descript,provider.Abbr,"
+				+"procedurelog.ToothNum,procedurecode.Descript,provider.Abbr,"
 				+"procedurelog.ProcFee-IFNULL(SUM(claimproc.WriteOff),0) $fee "//if no writeoff, then subtract 0
 				+"FROM patient,procedurecode,provider,procedurelog "
 				+"LEFT JOIN claimproc ON procedurelog.ProcNum=claimproc.ProcNum "
