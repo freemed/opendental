@@ -278,6 +278,7 @@ namespace OpenDental{
 			this.optDisableFolders.TabStop = true;
 			this.optDisableFolders.Text = "Do not use folder. (Some features will be unavailable)";
 			this.optDisableFolders.UseVisualStyleBackColor = true;
+			this.optDisableFolders.Click += new System.EventHandler(this.optDisableFolders_Click);
 			this.optDisableFolders.CheckedChanged += new System.EventHandler(this.optUseFolder_CheckedChanged);
 			// 
 			// optUseDatabase
@@ -290,6 +291,7 @@ namespace OpenDental{
 			this.optUseDatabase.Text = "Store images and documents in the database. (there is no synching mechanism for a" +
     "ny current images)";
 			this.optUseDatabase.UseVisualStyleBackColor = true;
+			this.optUseDatabase.Click += new System.EventHandler(this.optUseDatabase_Click);
 			this.optUseDatabase.CheckedChanged += new System.EventHandler(this.optUseFolder_CheckedChanged);
 			// 
 			// optUseFolder
@@ -324,8 +326,8 @@ namespace OpenDental{
 			this.Name = "FormPath";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Edit Paths";
-			this.Closing += new System.ComponentModel.CancelEventHandler(this.FormPath_Closing);
 			this.Load += new System.EventHandler(this.FormPath_Load);
+			this.Closing += new System.ComponentModel.CancelEventHandler(this.FormPath_Closing);
 			this.groupbox1.ResumeLayout(false);
 			this.groupbox1.PerformLayout();
 			this.ResumeLayout(false);
@@ -446,6 +448,29 @@ namespace OpenDental{
 			return false;
 		}
 
+		private void optUseFolder_CheckedChanged(object sender, EventArgs e) {
+			label2.Enabled = optUseFolder.Checked;
+			textDocPath.Enabled = optUseFolder.Checked;
+			butBrowseDoc.Enabled = optUseFolder.Checked;
+			checkMultiplePaths.Enabled = optUseFolder.Checked;
+			textLocalPath.Enabled=optUseFolder.Checked;
+			butBrowseLocal.Enabled=optUseFolder.Checked;
+		}
+
+		private void optUseDatabase_Click(object sender,EventArgs e) {
+			if(!MsgBox.Show(this,true,"This is not recommended.  Only for experimental use by advanced users.  Continue anyway?")){
+				optUseFolder.Checked=true;
+				return;
+			}
+		}
+
+		private void optDisableFolders_Click(object sender,EventArgs e) {
+			if(!MsgBox.Show(this,true,"This is not recommended.  Only for experimental use by advanced users.  Continue anyway?")){
+				optUseFolder.Checked=true;
+				return;
+			}
+		}
+
 		///<summary>Returns true if the given path is part of the image paths stored in the database list, false otherwise.</summary>
 		public static bool IsImagePath(string path){
 			string imagePaths=PrefB.GetString("DocPath");
@@ -511,14 +536,7 @@ namespace OpenDental{
 			}
 		}
 
-		private void optUseFolder_CheckedChanged(object sender, EventArgs e) {
-			label2.Enabled = optUseFolder.Checked;
-			textDocPath.Enabled = optUseFolder.Checked;
-			butBrowseDoc.Enabled = optUseFolder.Checked;
-			checkMultiplePaths.Enabled = optUseFolder.Checked;
-			textLocalPath.Enabled=optUseFolder.Checked;
-			butBrowseLocal.Enabled=optUseFolder.Checked;
-		}
+		
 
 		
 	}
