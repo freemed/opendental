@@ -61,26 +61,31 @@ namespace OpenDentBusiness{
 			table.Columns.Add("billingType");
 			table.Columns.Add("insEst");
 			table.Columns.Add("IsSent");
-			//table.Columns.Add("lastStatement");
+			table.Columns.Add("lastStatement");
 			table.Columns.Add("mode");
 			table.Columns.Add("name");
 			table.Columns.Add("PatNum");
 			table.Columns.Add("StatementNum");
 			List<DataRow> rows=new List<DataRow>();
-			string command="SELECT BalTotal,BillingType,FName,InsEst,IsSent,LName,MiddleI,Mode_,Preferred,"
-				+"statement.PatNum,StatementNum "
+			string command="SELECT BalTotal,BillingType,FName,InsEst,statement.IsSent,"
+				+"IFNULL(MAX(s2.DateSent),'0001-01-01') LastStatement,"
+				+"LName,MiddleI,statement.Mode_,Preferred,"
+				+"statement.PatNum,statement.StatementNum "
 				+"FROM statement "
-				+"LEFT JOIN patient ON statement.PatNum=patient.PatNum ";
+				+"LEFT JOIN patient ON statement.PatNum=patient.PatNum "
+				+"LEFT JOIN statement s2 ON s2.PatNum=patient.PatNum "
+				+"AND s2.IsSent=1 ";
 			if(orderBy==0){//BillingType
 				command+="LEFT JOIN definition ON patient.BillingType=definition.DefNum ";
 			}
-			command+="WHERE IsSent="+POut.PBool(isSent)+" ";
+			command+="WHERE statement.IsSent="+POut.PBool(isSent)+" ";
 			//if(dateFrom.Year>1800){
-				command+="AND DateSent>="+POut.PDate(dateFrom)+" ";//greater than midnight this morning
+				command+="AND statement.DateSent>="+POut.PDate(dateFrom)+" ";//greater than midnight this morning
 			//}
 			//if(dateFrom.Year>1800){
-				command+="AND DateSent<"+POut.PDate(dateTo.AddDays(1))+" ";//less than midnight tonight
+				command+="AND statement.DateSent<"+POut.PDate(dateTo.AddDays(1))+" ";//less than midnight tonight
 			//}
+			command+="GROUP BY statement.StatementNum ";
 			if(orderBy==0){//BillingType
 				command+="ORDER BY definition.ItemOrder,LName,FName";
 			}
@@ -92,6 +97,7 @@ namespace OpenDentBusiness{
 			StatementMode mode;
 			double balTotal;
 			double insEst;
+			DateTime lastStatement;
 			for(int i=0;i<rawTable.Rows.Count;i++){
 				row=table.NewRow();
 				balTotal=PIn.PDouble(rawTable.Rows[i]["BalTotal"].ToString());
@@ -106,7 +112,13 @@ namespace OpenDentBusiness{
 					row["insEst"]=insEst.ToString("F");
 				}
 				row["IsSent"]=rawTable.Rows[i]["IsSent"].ToString();
-				//row["lastStatement"]="";
+				lastStatement=PIn.PDate(rawTable.Rows[i]["LastStatement"].ToString());
+				if(lastStatement.Year<1880){
+					row["lastStatement"]="";
+				}
+				else{
+					row["lastStatement"]=lastStatement.ToShortDateString();
+				}
 				mode=(StatementMode)PIn.PInt(rawTable.Rows[i]["Mode_"].ToString());
 				row["mode"]=Lan.g("enumStatementMode",mode.ToString());
 				pat=new Patient();

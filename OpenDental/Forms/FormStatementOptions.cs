@@ -603,6 +603,8 @@ namespace OpenDental{
 					}
 				}
 				if(allSame){
+					checkIsSent.ThreeState=false;
+					checkIsSent.CheckState=CheckState.Unchecked;
 					checkIsSent.Checked=StmtList[0].IsSent;
 				}
 				//Mode------------------------------------------------------------------------------------------
@@ -629,6 +631,8 @@ namespace OpenDental{
 					}
 				}
 				if(allSame){
+					checkHidePayment.ThreeState=false;
+					checkHidePayment.CheckState=CheckState.Unchecked;
 					checkHidePayment.Checked=StmtList[0].HidePayment;
 				}
 				//SinglePatient------------------------------------------------------------------------------------
@@ -641,6 +645,8 @@ namespace OpenDental{
 					}
 				}
 				if(allSame){
+					checkSinglePatient.ThreeState=false;
+					checkSinglePatient.CheckState=CheckState.Unchecked;
 					checkSinglePatient.Checked=StmtList[0].SinglePatient;
 				}
 				//Intermingled----------------------------------------------------------------------------------------
@@ -653,6 +659,8 @@ namespace OpenDental{
 					}
 				}
 				if(allSame){
+					checkIntermingled.ThreeState=false;
+					checkIntermingled.CheckState=CheckState.Unchecked;
 					checkIntermingled.Checked=StmtList[0].Intermingled;
 				}
 				//DateStart-------------------------------------------------------------------------------------

@@ -55,7 +55,7 @@ namespace OpenDental {
 				+"'"+POut.PInt((int)plan.DentaideCardSequence)+"', "
 				+"'"+POut.PBool(plan.ShowBaseUnits)+"', "
 				+"'"+POut.PBool(plan.DedBeforePerc)+"',"
-				+"'"+POut.PBool(plan.AllowProcCodeSubt)+"')";
+				+"'"+POut.PBool(plan.CodeSubstNone)+"')";
 			if(PrefB.RandomKeys) {
 				General.NonQ(command);
 			}
@@ -138,7 +138,7 @@ namespace OpenDental {
 				+",DentaideCardSequence='" +POut.PInt(plan.DentaideCardSequence)+"'"
 				+",ShowBaseUnits='"  +POut.PBool(plan.ShowBaseUnits)+"'"
 				+",DedBeforePerc='"  +POut.PBool(plan.DedBeforePerc)+"'"
-				+",AllowProcCodeSubt='"+POut.PBool(plan.AllowProcCodeSubt)+"'"
+				+",CodeSubstNone='"  +POut.PBool(plan.CodeSubstNone)+"'"
 				+" WHERE PlanNum = '"+POut.PInt   (plan.PlanNum)+"'";
 			General.NonQ(command);
 		}
@@ -163,7 +163,7 @@ namespace OpenDental {
 				+",FilingCode = '"     +POut.PInt   ((int)plan.FilingCode)+"'"
 				+",ShowBaseUnits = '"  +POut.PBool  (plan.ShowBaseUnits)+"'"
 				+",ShowBaseUnits = '"  +POut.PBool  (plan.DedBeforePerc)+"'"
-				+",AllowProcCodeSubt='"+POut.PBool	(plan.AllowProcCodeSubt)+"'"
+				+",CodeSubstNone='"    +POut.PBool  (plan.CodeSubstNone)+"'"
 				+" WHERE "
 				+"EmployerNum = '"        +POut.PInt   (like.EmployerNum)+"' "
 				+"AND GroupName = '"      +POut.PString(like.GroupName)+"' "
@@ -282,7 +282,7 @@ namespace OpenDental {
 				PlanList[i].DentaideCardSequence= PIn.PInt(table.Rows[i][25].ToString());
 				PlanList[i].ShowBaseUnits  = PIn.PBool  (table.Rows[i][26].ToString());
 				PlanList[i].DedBeforePerc  = PIn.PBool  (table.Rows[i][27].ToString());
-				PlanList[i].AllowProcCodeSubt=PIn.PBool	(table.Rows[i][28].ToString());
+				PlanList[i].CodeSubstNone  = PIn.PBool  (table.Rows[i][28].ToString());
 			}
 			return PlanList;
 		}
@@ -487,7 +487,7 @@ namespace OpenDental {
 			}
 			int codeNum=ProcedureCodes.GetCodeNum(procCode);
 			int substCodeNum=codeNum;
-			if(plan.AllowProcCodeSubt){
+			if(plan.CodeSubstNone){
 				substCodeNum=ProcedureCodes.GetSubstituteCodeNum(procCode,toothNum);//for posterior composites
 			}			
 			if(plan.PlanType=="p"){

@@ -1,6 +1,7 @@
 using System;
 using System.Data;
 using System.Drawing;
+using System.Drawing.Printing;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -39,6 +40,9 @@ namespace OpenDental{
 		private OpenDental.UI.Button butPrintList;
 		private ContextMenuStrip contextMenu;
 		private ToolStripMenuItem menuItemGoTo;
+		private bool headingPrinted;
+		private int headingPrintH;
+		private int pagesPrinted;
 
 		protected void OnGoToChanged(int patNum) {
 			if(GoToChanged!=null) {
@@ -120,7 +124,8 @@ namespace OpenDental{
 			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
-			this.butCancel.Location = new System.Drawing.Point(805,654);
+			this.butCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+			this.butCancel.Location = new System.Drawing.Point(774,656);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75,24);
 			this.butCancel.TabIndex = 1;
@@ -136,7 +141,7 @@ namespace OpenDental{
 			this.butSend.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butSend.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butSend.CornerRadius = 4F;
-			this.butSend.Location = new System.Drawing.Point(805,620);
+			this.butSend.Location = new System.Drawing.Point(774,622);
 			this.butSend.Name = "butSend";
 			this.butSend.Size = new System.Drawing.Size(75,24);
 			this.butSend.TabIndex = 0;
@@ -182,7 +187,7 @@ namespace OpenDental{
 			this.gridBill.Name = "gridBill";
 			this.gridBill.ScrollValue = 0;
 			this.gridBill.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
-			this.gridBill.Size = new System.Drawing.Size(742,615);
+			this.gridBill.Size = new System.Drawing.Size(711,615);
 			this.gridBill.TabIndex = 28;
 			this.gridBill.Title = "Bills";
 			this.gridBill.TranslationName = "TableBilling";
@@ -195,12 +200,12 @@ namespace OpenDental{
 			this.contextMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.menuItemGoTo});
 			this.contextMenu.Name = "contextMenu";
-			this.contextMenu.Size = new System.Drawing.Size(114,26);
+			this.contextMenu.Size = new System.Drawing.Size(103,26);
 			// 
 			// menuItemGoTo
 			// 
 			this.menuItemGoTo.Name = "menuItemGoTo";
-			this.menuItemGoTo.Size = new System.Drawing.Size(113,22);
+			this.menuItemGoTo.Size = new System.Drawing.Size(102,22);
 			this.menuItemGoTo.Text = "Go To";
 			this.menuItemGoTo.Click += new System.EventHandler(this.menuItemGoTo_Click);
 			// 
@@ -216,7 +221,7 @@ namespace OpenDental{
 			// label1
 			// 
 			this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.label1.Location = new System.Drawing.Point(790,528);
+			this.label1.Location = new System.Drawing.Point(759,530);
 			this.label1.Name = "label1";
 			this.label1.Size = new System.Drawing.Size(91,87);
 			this.label1.TabIndex = 30;
@@ -228,7 +233,7 @@ namespace OpenDental{
 			this.radioUnsent.Checked = true;
 			this.radioUnsent.Location = new System.Drawing.Point(42,7);
 			this.radioUnsent.Name = "radioUnsent";
-			this.radioUnsent.Size = new System.Drawing.Size(102,20);
+			this.radioUnsent.Size = new System.Drawing.Size(75,20);
 			this.radioUnsent.TabIndex = 31;
 			this.radioUnsent.TabStop = true;
 			this.radioUnsent.Text = "Unsent";
@@ -237,9 +242,9 @@ namespace OpenDental{
 			// 
 			// radioSent
 			// 
-			this.radioSent.Location = new System.Drawing.Point(145,7);
+			this.radioSent.Location = new System.Drawing.Point(121,7);
 			this.radioSent.Name = "radioSent";
-			this.radioSent.Size = new System.Drawing.Size(89,20);
+			this.radioSent.Size = new System.Drawing.Size(79,20);
 			this.radioSent.TabIndex = 32;
 			this.radioSent.Text = "Sent";
 			this.radioSent.UseVisualStyleBackColor = true;
@@ -247,11 +252,12 @@ namespace OpenDental{
 			// 
 			// groupBox1
 			// 
+			this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.groupBox1.Controls.Add(this.labelEmailed);
 			this.groupBox1.Controls.Add(this.labelPrinted);
 			this.groupBox1.Controls.Add(this.labelSelected);
 			this.groupBox1.Controls.Add(this.labelTotal);
-			this.groupBox1.Location = new System.Drawing.Point(790,233);
+			this.groupBox1.Location = new System.Drawing.Point(762,233);
 			this.groupBox1.Name = "groupBox1";
 			this.groupBox1.Size = new System.Drawing.Size(90,100);
 			this.groupBox1.TabIndex = 33;
@@ -293,7 +299,7 @@ namespace OpenDental{
 			this.butEdit.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butEdit.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butEdit.CornerRadius = 4F;
-			this.butEdit.Location = new System.Drawing.Point(799,67);
+			this.butEdit.Location = new System.Drawing.Point(768,67);
 			this.butEdit.Name = "butEdit";
 			this.butEdit.Size = new System.Drawing.Size(82,24);
 			this.butEdit.TabIndex = 34;
@@ -302,21 +308,21 @@ namespace OpenDental{
 			// 
 			// textDateEnd
 			// 
-			this.textDateEnd.Location = new System.Drawing.Point(707,8);
+			this.textDateEnd.Location = new System.Drawing.Point(615,8);
 			this.textDateEnd.Name = "textDateEnd";
 			this.textDateEnd.Size = new System.Drawing.Size(77,20);
 			this.textDateEnd.TabIndex = 38;
 			// 
 			// textDateStart
 			// 
-			this.textDateStart.Location = new System.Drawing.Point(561,8);
+			this.textDateStart.Location = new System.Drawing.Point(471,8);
 			this.textDateStart.Name = "textDateStart";
 			this.textDateStart.Size = new System.Drawing.Size(77,20);
 			this.textDateStart.TabIndex = 37;
 			// 
 			// label2
 			// 
-			this.label2.Location = new System.Drawing.Point(641,11);
+			this.label2.Location = new System.Drawing.Point(549,11);
 			this.label2.Name = "label2";
 			this.label2.Size = new System.Drawing.Size(64,14);
 			this.label2.TabIndex = 36;
@@ -325,7 +331,7 @@ namespace OpenDental{
 			// 
 			// label3
 			// 
-			this.label3.Location = new System.Drawing.Point(488,11);
+			this.label3.Location = new System.Drawing.Point(398,11);
 			this.label3.Name = "label3";
 			this.label3.Size = new System.Drawing.Size(70,14);
 			this.label3.TabIndex = 35;
@@ -340,7 +346,7 @@ namespace OpenDental{
 			this.butRefresh.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butRefresh.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butRefresh.CornerRadius = 4F;
-			this.butRefresh.Location = new System.Drawing.Point(799,7);
+			this.butRefresh.Location = new System.Drawing.Point(768,7);
 			this.butRefresh.Name = "butRefresh";
 			this.butRefresh.Size = new System.Drawing.Size(82,24);
 			this.butRefresh.TabIndex = 39;
@@ -350,7 +356,7 @@ namespace OpenDental{
 			// comboOrder
 			// 
 			this.comboOrder.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboOrder.Location = new System.Drawing.Point(317,7);
+			this.comboOrder.Location = new System.Drawing.Point(264,7);
 			this.comboOrder.MaxDropDownItems = 40;
 			this.comboOrder.Name = "comboOrder";
 			this.comboOrder.Size = new System.Drawing.Size(133,21);
@@ -359,9 +365,9 @@ namespace OpenDental{
 			// 
 			// label4
 			// 
-			this.label4.Location = new System.Drawing.Point(224,11);
+			this.label4.Location = new System.Drawing.Point(179,11);
 			this.label4.Name = "label4";
-			this.label4.Size = new System.Drawing.Size(91,14);
+			this.label4.Size = new System.Drawing.Size(83,14);
 			this.label4.TabIndex = 40;
 			this.label4.Text = "Order by";
 			this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -376,21 +382,22 @@ namespace OpenDental{
 			this.butPrintList.CornerRadius = 4F;
 			this.butPrintList.Image = global::OpenDental.Properties.Resources.butPrint;
 			this.butPrintList.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butPrintList.Location = new System.Drawing.Point(679,654);
+			this.butPrintList.Location = new System.Drawing.Point(649,656);
 			this.butPrintList.Name = "butPrintList";
 			this.butPrintList.Size = new System.Drawing.Size(88,24);
 			this.butPrintList.TabIndex = 42;
 			this.butPrintList.Text = "Print List";
+			this.butPrintList.Click += new System.EventHandler(this.butPrintList_Click);
 			// 
 			// FormBilling
 			// 
 			this.AcceptButton = this.butSend;
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.CancelButton = this.butCancel;
-			this.ClientSize = new System.Drawing.Size(891,688);
-			this.Controls.Add(this.butPrintList);
+			this.ClientSize = new System.Drawing.Size(860,688);
 			this.Controls.Add(this.comboOrder);
 			this.Controls.Add(this.label4);
+			this.Controls.Add(this.butPrintList);
 			this.Controls.Add(this.butRefresh);
 			this.Controls.Add(this.textDateEnd);
 			this.Controls.Add(this.textDateStart);
@@ -400,12 +407,12 @@ namespace OpenDental{
 			this.Controls.Add(this.butEdit);
 			this.Controls.Add(this.radioSent);
 			this.Controls.Add(this.radioUnsent);
-			this.Controls.Add(this.label1);
 			this.Controls.Add(this.gridBill);
+			this.Controls.Add(this.label1);
 			this.Controls.Add(this.butNone);
 			this.Controls.Add(this.butAll);
-			this.Controls.Add(this.butCancel);
 			this.Controls.Add(this.butSend);
+			this.Controls.Add(this.butCancel);
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.KeyPreview = true;
 			this.MaximizeBox = false;
@@ -526,41 +533,29 @@ namespace OpenDental{
 			gridBill.Columns.Clear();
 			ODGridColumn col=new ODGridColumn(Lan.g("TableBilling","Name"),180);
 			gridBill.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TableBilling","BillType"),100);
+			col=new ODGridColumn(Lan.g("TableBilling","BillType"),110);
 			gridBill.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TableBilling","Total"),90,HorizontalAlignment.Right);
-			gridBill.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TableBilling","-InsuranceEst"),90,HorizontalAlignment.Right);
-			gridBill.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TableBilling","=Amount"),90,HorizontalAlignment.Right);
+			col=new ODGridColumn(Lan.g("TableBilling","Mode"),80);
 			gridBill.Columns.Add(col);
 			col=new ODGridColumn(Lan.g("TableBilling","LastStatement"),100);
 			gridBill.Columns.Add(col);
-				col=new ODGridColumn(Lan.g("TableBilling","Mode"),100);
+			col=new ODGridColumn(Lan.g("TableBilling","BalTot"),70,HorizontalAlignment.Right);
+			gridBill.Columns.Add(col);
+			col=new ODGridColumn(Lan.g("TableBilling","-InsEst"),70,HorizontalAlignment.Right);
+			gridBill.Columns.Add(col);
+			col=new ODGridColumn(Lan.g("TableBilling","=AmtDue"),70,HorizontalAlignment.Right);
 			gridBill.Columns.Add(col);
 			gridBill.Rows.Clear();
 			OpenDental.UI.ODGridRow row;
-			//PatAging pataging=null;
 			for(int i=0;i<table.Rows.Count;i++){
-				/*for(int a=0;a<AgingList.Count;a++){
-					if(AgingList[a].PatNum.ToString()==table.Rows[i]["PatNum"].ToString()){
-						pataging=AgingList[a];
-						break;
-					}
-				}*/
 				row=new OpenDental.UI.ODGridRow();
 				row.Cells.Add(table.Rows[i]["name"].ToString());
 				row.Cells.Add(table.Rows[i]["billingType"].ToString());
+				row.Cells.Add(table.Rows[i]["mode"].ToString());
+				row.Cells.Add(table.Rows[i]["lastStatement"].ToString());
 				row.Cells.Add(table.Rows[i]["balTotal"].ToString());
 				row.Cells.Add(table.Rows[i]["insEst"].ToString());
 				row.Cells.Add(table.Rows[i]["amountDue"].ToString());
-				//if(pataging.DateLastStatement.Year<1880){
-				row.Cells.Add("");
-				//}
-				//else{
-				//	row.Cells.Add(pataging.DateLastStatement.ToShortDateString());
-				//}
-				row.Cells.Add(table.Rows[i]["mode"].ToString());
 				gridBill.Rows.Add(row);
 			}
 			gridBill.EndUpdate();
@@ -666,6 +661,66 @@ namespace OpenDental{
 			//stmt.DateRangeFrom=DateTime.
 			//FormSO.StmtCur=stmt;
 			FormSO.ShowDialog();
+		}
+
+		private void butPrintList_Click(object sender,EventArgs e) {
+			pagesPrinted=0;
+			PrintDocument pd=new PrintDocument();
+			pd.PrintPage += new PrintPageEventHandler(this.pd_PrintPage);
+			pd.DefaultPageSettings.Margins=new Margins(25,25,40,40);
+			//pd.OriginAtMargins=true;
+			if(pd.DefaultPageSettings.PaperSize.Height==0) {
+				pd.DefaultPageSettings.PaperSize=new PaperSize("default",850,1100);
+			}
+			headingPrinted=false;
+			#if DEBUG
+				FormRpPrintPreview pView = new FormRpPrintPreview();
+				pView.printPreviewControl2.Document=pd;
+				pView.ShowDialog();
+			#else
+				if(!Printers.SetPrinter(pd,PrintSituation.Default)) {
+					return;
+				}
+				try{
+					pd.Print();
+				}
+				catch {
+					MsgBox.Show(this,"Printer not available");
+				}
+			#endif			
+		}
+
+		private void pd_PrintPage(object sender,System.Drawing.Printing.PrintPageEventArgs e) {
+			Rectangle bounds=e.MarginBounds;
+			//new Rectangle(50,40,800,1035);//Some printers can handle up to 1042
+			Graphics g=e.Graphics;
+			string text;
+			Font headingFont=new Font("Arial",13,FontStyle.Bold);
+			Font subHeadingFont=new Font("Arial",10,FontStyle.Bold);
+			int yPos=bounds.Top;
+			int center=bounds.X+bounds.Width/2;
+			#region printHeading
+			if(!headingPrinted) {
+				text=Lan.g(this,"Billing List");
+				g.DrawString(text,headingFont,Brushes.Black,center-g.MeasureString(text,headingFont).Width/2,yPos);
+				//yPos+=(int)g.MeasureString(text,headingFont).Height;
+				//text=textDateFrom.Text+" "+Lan.g(this,"to")+" "+textDateTo.Text;
+				//g.DrawString(text,subHeadingFont,Brushes.Black,center-g.MeasureString(text,subHeadingFont).Width/2,yPos);
+				yPos+=25;
+				headingPrinted=true;
+				headingPrintH=yPos;
+			}
+			#endregion
+			int totalPages=gridBill.GetNumberOfPages(bounds,headingPrintH);
+			yPos=gridBill.PrintPage(g,pagesPrinted,bounds,headingPrintH);
+			pagesPrinted++;
+			if(pagesPrinted < totalPages) {
+				e.HasMorePages=true;
+			}
+			else {
+				e.HasMorePages=false;
+			}
+			g.Dispose();
 		}
 
 		private void butSend_Click(object sender, System.EventArgs e) {
