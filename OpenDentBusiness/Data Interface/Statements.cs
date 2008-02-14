@@ -56,18 +56,18 @@ namespace OpenDentBusiness{
 			DataTable table=new DataTable();
 			DataRow row;
 			//columns that start with lowercase are altered for display rather than being raw data.
-			table.Columns.Add("amount");
+			table.Columns.Add("amountDue");
+			table.Columns.Add("balTotal");
 			table.Columns.Add("billingType");
 			table.Columns.Add("insEst");
 			table.Columns.Add("IsSent");
-			table.Columns.Add("lastStatement");
+			//table.Columns.Add("lastStatement");
 			table.Columns.Add("mode");
 			table.Columns.Add("name");
 			table.Columns.Add("PatNum");
 			table.Columns.Add("StatementNum");
-			table.Columns.Add("total");
 			List<DataRow> rows=new List<DataRow>();
-			string command="SELECT BillingType,FName,IsSent,LName,MiddleI,Mode_,Preferred,"
+			string command="SELECT BalTotal,BillingType,FName,InsEst,IsSent,LName,MiddleI,Mode_,Preferred,"
 				+"statement.PatNum,StatementNum "
 				+"FROM statement "
 				+"LEFT JOIN patient ON statement.PatNum=patient.PatNum ";
@@ -90,13 +90,23 @@ namespace OpenDentBusiness{
 			DataTable rawTable=General.GetTable(command);
 			Patient pat;
 			StatementMode mode;
+			double balTotal;
+			double insEst;
 			for(int i=0;i<rawTable.Rows.Count;i++){
 				row=table.NewRow();
-				row["amount"]="";
+				balTotal=PIn.PDouble(rawTable.Rows[i]["BalTotal"].ToString());
+				insEst=PIn.PDouble(rawTable.Rows[i]["InsEst"].ToString());
+				row["amountDue"]=(balTotal-insEst).ToString("F");
+				row["balTotal"]=balTotal.ToString("F");;
 				row["billingType"]=DefB.GetName(DefCat.BillingTypes,PIn.PInt(rawTable.Rows[i]["BillingType"].ToString()));
-				row["insEst"]="";
+				if(insEst==0){
+					row["insEst"]="";
+				}
+				else{
+					row["insEst"]=insEst.ToString("F");
+				}
 				row["IsSent"]=rawTable.Rows[i]["IsSent"].ToString();
-				row["lastStatement"]="";
+				//row["lastStatement"]="";
 				mode=(StatementMode)PIn.PInt(rawTable.Rows[i]["Mode_"].ToString());
 				row["mode"]=Lan.g("enumStatementMode",mode.ToString());
 				pat=new Patient();
@@ -107,7 +117,6 @@ namespace OpenDentBusiness{
 				row["name"]=pat.GetNameLF();
 				row["PatNum"]=rawTable.Rows[i]["PatNum"].ToString();
 				row["StatementNum"]=rawTable.Rows[i]["StatementNum"].ToString();
-				row["total"]="";
 				rows.Add(row);
 			}
 			for(int i=0;i<rows.Count;i++) {

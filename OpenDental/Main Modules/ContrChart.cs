@@ -4000,7 +4000,7 @@ namespace OpenDental{
 					return;
 				}
 				Procedure proc=Procedures.GetOneProc(PIn.PInt(row["ProcNum"].ToString()),true);
-				FormProcEdit FormP=new FormProcEdit(proc,PatCur,FamCur,PlanList);
+				FormProcEdit FormP=new FormProcEdit(proc,PatCur,FamCur);
 				FormP.ShowDialog();
 				if(FormP.DialogResult!=DialogResult.OK) {
 					return;
@@ -4169,7 +4169,7 @@ namespace OpenDental{
 				ToothInitials.SetValue(PatCur.PatNum,ProcCur.ToothNum,ToothInitialType.Missing);
 			}
 			Procedures.ComputeEstimates(ProcCur,PatCur.PatNum,new ClaimProc[0],true,PlanList,PatPlanList,BenefitList);
-			FormProcEdit FormPE=new FormProcEdit(ProcCur,PatCur.Copy(),FamCur,PlanList);
+			FormProcEdit FormPE=new FormProcEdit(ProcCur,PatCur.Copy(),FamCur);
 			FormPE.IsNew=true;
 			FormPE.ShowDialog();
 			if(FormPE.DialogResult==DialogResult.Cancel){

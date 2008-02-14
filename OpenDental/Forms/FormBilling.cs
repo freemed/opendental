@@ -540,14 +540,26 @@ namespace OpenDental{
 			gridBill.Columns.Add(col);
 			gridBill.Rows.Clear();
 			OpenDental.UI.ODGridRow row;
-			for(int i=0;i<table.Rows.Count;i++){//AgingList.Count;i++){
+			//PatAging pataging=null;
+			for(int i=0;i<table.Rows.Count;i++){
+				/*for(int a=0;a<AgingList.Count;a++){
+					if(AgingList[a].PatNum.ToString()==table.Rows[i]["PatNum"].ToString()){
+						pataging=AgingList[a];
+						break;
+					}
+				}*/
 				row=new OpenDental.UI.ODGridRow();
 				row.Cells.Add(table.Rows[i]["name"].ToString());
 				row.Cells.Add(table.Rows[i]["billingType"].ToString());
-				row.Cells.Add(table.Rows[i]["total"].ToString());
+				row.Cells.Add(table.Rows[i]["balTotal"].ToString());
 				row.Cells.Add(table.Rows[i]["insEst"].ToString());
-				row.Cells.Add(table.Rows[i]["amount"].ToString());
-				row.Cells.Add(table.Rows[i]["lastStatement"].ToString());
+				row.Cells.Add(table.Rows[i]["amountDue"].ToString());
+				//if(pataging.DateLastStatement.Year<1880){
+				row.Cells.Add("");
+				//}
+				//else{
+				//	row.Cells.Add(pataging.DateLastStatement.ToShortDateString());
+				//}
 				row.Cells.Add(table.Rows[i]["mode"].ToString());
 				gridBill.Rows.Add(row);
 			}

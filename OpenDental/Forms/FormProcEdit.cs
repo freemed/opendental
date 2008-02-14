@@ -169,12 +169,12 @@ namespace OpenDental{
 		private Topaz.SigPlusNET sigBoxTopaz;
 
 		///<summary>Inserts are no longer done within this dialog, but must be done ahead of time from outside.You must specify a procedure to edit, and only the changes that are made in this dialog get saved.  Only used when double click in Account, Chart, TP, and in ContrChart.AddProcedure().  The procedure may be deleted if new, and user hits Cancel.</summary>
-		public FormProcEdit(Procedure proc,Patient patCur,Family famCur,InsPlan[] planList){
+		public FormProcEdit(Procedure proc,Patient patCur,Family famCur){
 			ProcCur=proc;
 			ProcOld=proc.Copy();
 			PatCur=patCur;
 			FamCur=famCur;
-			PlanList=planList;
+			PlanList=InsPlans.Refresh(FamCur);
 			InitializeComponent();
 			Lan.F(this);
 			if(Environment.OSVersion.Platform!=PlatformID.Unix){

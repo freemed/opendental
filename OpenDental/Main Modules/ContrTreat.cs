@@ -1563,7 +1563,7 @@ namespace OpenDental{
 			}
 			if(gridPlans.SelectedIndices[0]==0){//current plan
 				Procedure ProcCur=Procedures.GetOneProc(((Procedure)gridMain.Rows[e.Row].Tag).ProcNum,true); 
-				FormProcEdit FormPE=new FormProcEdit(ProcCur,PatCur,FamCur,InsPlanList);
+				FormProcEdit FormPE=new FormProcEdit(ProcCur,PatCur,FamCur);
 				FormPE.ShowDialog();
 				ModuleSelected(PatCur.PatNum);
 				for(int i=0;i<gridMain.Rows.Count;i++){

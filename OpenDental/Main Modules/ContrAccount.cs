@@ -91,49 +91,6 @@ namespace OpenDental {
 		private MenuItem menuItemProvIncTrans;
 		private MenuItem menuItemStatementEmail;
 		private int Actscrollval;
-
-
-		#region user variables
-		///<summary>This will eventually hold all data needed for display.  It will be retrieved in one call to the database.</summary>
-		private DataSet DataSetMain;
-		//public static bool PrintingStatement = false;
-		///<summary>Indices of the items within CommLogs.List of items to actually show in the commlog list on this page. Right now, does not include Statement Sent entries.</summary>
-		//private ArrayList CommIndices;
-		private Family FamCur;
-		///<summary>Public because used by FormRpStatement</summary>
-		private Patient PatCur;
-		private Benefit[] BenefitList;
-		//private Commlog[] CommlogList;
-		private PatientNote PatientNoteCur;
-		///<summary></summary>
-		[Category("Data"),Description("Occurs when user changes current patient, usually by clicking on the Select Patient button.")]
-		public event PatientSelectedEventHandler PatientSelected=null;
-		private RepeatCharge[] RepeatChargeList;
-		private PatPlan[] PatPlanList;
-		//private Procedure[] AccProcList;
-		private int OriginalMousePos;
-		//private ClaimProc[] ClaimProcList;
-		//<summary>Used only in printing reports that show subtotal only.  Public because used by FormRpStatement</summary>
-		//private double SubTotal;
-		private bool MouseIsDownOnSplitter;
-		private int SplitterOriginalY;
-		private bool FinNoteChanged;
-		private bool CCChanged;
-		private bool UrgFinNoteChanged;
-		///<summary>Set to true if this control is placed in the recall edit window. This affects the control behavior.</summary>
-		public bool ViewingInRecall=false;
-		//private Procedure[] arrayProc;
-		///<summary></summary>
-		//private List<AcctLine> AcctLineList;
-		///<summary>A single line of payment info in the Account.  Might be an actual payment, or an unattached paysplit, or a daily summary of attached paysplits.</summary>
-		//private PayInfo[] arrayPay;
-		//private Adjustment[] arrayAdj;
-		//private Claim[] arrayClaim;
-		//private Commlog[] arrayComm;
-		//private PayPlan[] arrayPayPlan;
-		private InsPlan[] InsPlanList;
-		private FormPayment FormPayment2;
-		private FormCommItem FormCommItem2;
 		private Label labelAgeBalance;
 		private TabControl tabControl1;
 		private TabPage tabMain;
@@ -151,6 +108,26 @@ namespace OpenDental {
 		private OpenDental.UI.Button butToday;
 		private CheckBox checkShowFamilyComm;
 		private FormPayPlan FormPayPlan2;
+
+		#region user variables
+		///<summary>This holds nearly all of the data needed for display.  It is retrieved in one call to the database.</summary>
+		private DataSet DataSetMain;
+		private Family FamCur;
+		///<summary></summary>
+		private Patient PatCur;
+		private PatientNote PatientNoteCur;
+		///<summary></summary>
+		[Category("Data"),Description("Occurs when user changes current patient, usually by clicking on the Select Patient button.")]
+		public event PatientSelectedEventHandler PatientSelected=null;
+		private RepeatCharge[] RepeatChargeList;
+		private int OriginalMousePos;
+		private bool MouseIsDownOnSplitter;
+		private int SplitterOriginalY;
+		private bool FinNoteChanged;
+		private bool CCChanged;
+		private bool UrgFinNoteChanged;
+		///<summary>Set to true if this control is placed in the recall edit window. This affects the control behavior.</summary>
+		public bool ViewingInRecall=false;
 		#endregion
 
 		///<summary></summary>
@@ -1348,9 +1325,6 @@ namespace OpenDental {
 				CCChanged=false;
 			}
 			FamCur=null;
-			//Claims.List=null;
-			//Commlogs.List=null;
-			//ClaimProcList=null;
 			RepeatChargeList=null;
 		}
 
@@ -1381,10 +1355,6 @@ namespace OpenDental {
 			DataSetMain=AccountModule.GetAll(patNum,viewingInRecall,fromDate,toDate,isSelectingFamily);
 			FamCur=Patients.GetFamily(patNum);//for now, have to get family after dataset due to aging calc.
 			PatCur=FamCur.GetPatient(patNum);
-			InsPlanList=InsPlans.Refresh(FamCur);
-			PatPlanList=PatPlans.Refresh(patNum);
-			BenefitList=Benefits.Refresh(PatPlanList);
-			//CovPats.Refresh(InsPlanList,PatPlanList);
 			PatientNoteCur=PatientNotes.Refresh(PatCur.PatNum,PatCur.Guarantor);		
 		}
 
@@ -2333,7 +2303,7 @@ double adj=Adjustments.GetTotForProc(arrayProc[tempCountProc].ProcNum,Adjustment
 			DataTable table=DataSetMain.Tables["account"];
 			if(table.Rows[e.Row]["ProcNum"].ToString()!="0"){
 				Procedure proc=Procedures.GetOneProc(PIn.PInt(table.Rows[e.Row]["ProcNum"].ToString()),true);
-				FormProcEdit FormPE=new FormProcEdit(proc,PatCur,FamCur,InsPlanList);
+				FormProcEdit FormPE=new FormProcEdit(proc,PatCur,FamCur);
 				FormPE.ShowDialog();
 			}
 			else if(table.Rows[e.Row]["AdjNum"].ToString()!="0"){
@@ -2351,7 +2321,7 @@ double adj=Adjustments.GetTotForProc(arrayProc[tempCountProc].ProcNum,Adjustment
 					FormPIT.ShowDialog();
 				}
 				else{
-					FormPayment2=new FormPayment(PatCur,FamCur,PaymentCur);
+					FormPayment FormPayment2=new FormPayment(PatCur,FamCur,PaymentCur);
 					FormPayment2.IsNew=false;
 					FormPayment2.ShowDialog();
 				}
@@ -3729,7 +3699,7 @@ double adj=Adjustments.GetTotForProc(arrayProc[tempCountProc].ProcNum,Adjustment
 					return;
 				}
 				Procedure proc=Procedures.GetOneProc(PIn.PInt(row["ProcNum"].ToString()),true);
-				FormProcEdit FormP=new FormProcEdit(proc,PatCur,FamCur,InsPlanList);
+				FormProcEdit FormP=new FormProcEdit(proc,PatCur,FamCur);
 				FormP.ShowDialog();
 				if(FormP.DialogResult!=DialogResult.OK) {
 					return;
