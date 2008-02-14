@@ -3138,12 +3138,16 @@ double adj=Adjustments.GetTotForProc(arrayProc[tempCountProc].ProcNum,Adjustment
 			Statements.WriteObject(stmt);
 			FormRpStatement FormST=new FormRpStatement();
 			FormST.CreateStatementPdf(stmt);
+			if(ImageStore.UpdatePatient == null){
+				ImageStore.UpdatePatient = new FileStore.UpdatePatientDelegate(Patients.Update);
+			}
+			OpenDental.Imaging.IImageStore imageStore = OpenDental.Imaging.ImageStore.GetImageStore(PatCur);
 			if(stmt.Mode_==StatementMode.Email){
 				string attachPath=FormEmailMessageEdit.GetAttachPath();
 				Random rnd=new Random();
 				string fileName=DateTime.Now.ToString("yyyyMMdd")+"_"+DateTime.Now.TimeOfDay.Ticks.ToString()+rnd.Next(1000).ToString()+".pdf";
 				string filePathAndName=ODFileUtils.CombinePaths(attachPath,fileName);
-				//File.Copy(  stmt.DocNum
+				File.Copy(imageStore.GetFilePath(Documents.GetByNum(stmt.DocNum)),filePathAndName);
 				//Process.Start(filePathAndName);
 				EmailMessage message=new EmailMessage();
 				message.PatNum=PatCur.PatNum;
@@ -3161,10 +3165,6 @@ double adj=Adjustments.GetTotForProc(arrayProc[tempCountProc].ProcNum,Adjustment
 			}
 			else{
 				#if DEBUG
-					if(ImageStore.UpdatePatient == null){
-						ImageStore.UpdatePatient = new FileStore.UpdatePatientDelegate(Patients.Update);
-					}
-					OpenDental.Imaging.IImageStore imageStore = OpenDental.Imaging.ImageStore.GetImageStore(PatCur);
 					//don't bother to check valid path because it's just debug.
 					Process.Start(imageStore.GetFilePath(Documents.GetByNum(stmt.DocNum)));
 				#else

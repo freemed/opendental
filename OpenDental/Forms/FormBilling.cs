@@ -4,10 +4,12 @@ using System.Drawing;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
 using System.Windows.Forms;
 using CodeBase;
 using OpenDental.UI;
 using OpenDentBusiness;
+using OpenDental.Imaging;
 
 namespace OpenDental{
 ///<summary></summary>
@@ -118,12 +120,11 @@ namespace OpenDental{
 			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
-			this.butCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
 			this.butCancel.Location = new System.Drawing.Point(805,654);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75,24);
 			this.butCancel.TabIndex = 1;
-			this.butCancel.Text = "&Cancel";
+			this.butCancel.Text = "Close";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
 			// 
 			// butSend
@@ -194,12 +195,12 @@ namespace OpenDental{
 			this.contextMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.menuItemGoTo});
 			this.contextMenu.Name = "contextMenu";
-			this.contextMenu.Size = new System.Drawing.Size(103,26);
+			this.contextMenu.Size = new System.Drawing.Size(114,26);
 			// 
 			// menuItemGoTo
 			// 
 			this.menuItemGoTo.Name = "menuItemGoTo";
-			this.menuItemGoTo.Size = new System.Drawing.Size(102,22);
+			this.menuItemGoTo.Size = new System.Drawing.Size(113,22);
 			this.menuItemGoTo.Text = "Go To";
 			this.menuItemGoTo.Click += new System.EventHandler(this.menuItemGoTo_Click);
 			// 
@@ -488,7 +489,7 @@ namespace OpenDental{
 			//gridBill.SetSelected(true);
 			//labelSelected.Text=Lan.g(this,"Selected=")+gridBill.SelectedIndices.Length.ToString();
 			labelPrinted.Text=Lan.g(this,"Printed=")+"0";
-			labelEmailed.Text=Lan.g(this,"Emailed=")+"0";
+			labelEmailed.Text=Lan.g(this,"E-mailed=")+"0";
 			comboOrder.Items.Add(Lan.g(this,"BillingType"));
 			comboOrder.Items.Add(Lan.g(this,"PatientName"));
 			comboOrder.SelectedIndex=0;
@@ -674,7 +675,13 @@ namespace OpenDental{
 			EmailAttach attach;
 			Patient pat;
 			int skipped=0;
+			int emailed=0;
+			int printed=0;
 			//FormEmailMessageEdit FormEME=new FormEmailMessageEdit();
+			if(ImageStore.UpdatePatient == null){
+				ImageStore.UpdatePatient = new FileStore.UpdatePatientDelegate(Patients.Update);
+			}
+			OpenDental.Imaging.IImageStore imageStore;
 			//Later, we could concat all the pdf's together and create one print job.
 			for(int i=0;i<gridBill.SelectedIndices.Length;i++){
 				stmt=Statements.CreateObject(PIn.PInt(table.Rows[gridBill.SelectedIndices[i]]["StatementNum"].ToString()));
@@ -701,6 +708,8 @@ namespace OpenDental{
 					rnd=new Random();
 					fileName=DateTime.Now.ToString("yyyyMMdd")+"_"+DateTime.Now.TimeOfDay.Ticks.ToString()+rnd.Next(1000).ToString()+".pdf";
 					filePathAndName=ODFileUtils.CombinePaths(attachPath,fileName);
+					imageStore = OpenDental.Imaging.ImageStore.GetImageStore(pat);
+					File.Copy(imageStore.GetFilePath(Documents.GetByNum(stmt.DocNum)),filePathAndName);
 					//Process.Start(filePathAndName);
 					message=new EmailMessage();
 					message.PatNum=pat.PatNum;
@@ -717,6 +726,9 @@ namespace OpenDental{
 					//FormE.ShowDialog();
 					try{
 						FormEmailMessageEdit.SendEmail(message);
+						emailed++;
+						labelEmailed.Text=Lan.g(this,"E-mailed=")+emailed.ToString();
+						Application.DoEvents();
 					}
 					catch(Exception ex){
 						stmt.IsSent=false;
@@ -735,13 +747,22 @@ namespace OpenDental{
 						//don't bother to check valid path because it's just debug.
 						//Process.Start(imageStore.GetFilePath(Documents.GetByNum(stmt.DocNum)));
 					#else
-						FormST.PrintStatement(stmt,false);
+						FormST.PrintStatement(stmt,false);	
 					#endif
+					printed++;
+					labelPrinted.Text=Lan.g(this,"Printed=")+printed.ToString();
+					Application.DoEvents();
 				}
 			}
+			string msg="";
 			if(skipped>0){
-				MessageBox.Show(Lan.g(this,"Skipped due to missing email address: ")+skipped.ToString());
+				msg+=Lan.g(this,"Skipped due to missing email address: ")+skipped.ToString()+"\r\n";
 			}
+			msg+=Lan.g(this,"Printed: ")+printed.ToString()+"\r\n"
+				+Lan.g(this,"E-mailed: ")+emailed.ToString();
+			MessageBox.Show(msg);
+			//labelPrinted.Text=Lan.g(this,"Printed=")+"0";
+			//labelEmailed.Text=Lan.g(this,"E-mailed=")+"0";
 			//FormS.LoadAndPrint(guarNums,GeneralNote);
 			Cursor=Cursors.Default;
 			FillGrid();

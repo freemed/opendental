@@ -411,7 +411,7 @@ namespace OpenDental{
 
 		private void FormBackup_Load(object sender, System.EventArgs e) {
 			//already include the \
-			checkExcludeImages.Checked=PrefB.GetBool("ExcludeImageFolderBackup");
+			checkExcludeImages.Checked=PrefB.GetBool("BackupExcludeImageFolder");
 			textBackupFromPath.Text=PrefB.GetString("BackupFromPath");
 			textBackupToPath.Text=PrefB.GetString("BackupToPath");
 			textBackupRestoreFromPath.Text=PrefB.GetString("BackupRestoreFromPath");
@@ -896,14 +896,14 @@ namespace OpenDental{
 				|| textBackupRestoreFromPath.Text!=PrefB.GetString("BackupRestoreFromPath")
 				|| textBackupRestoreToPath.Text!=PrefB.GetString("BackupRestoreToPath")
 				|| textBackupRestoreAtoZToPath.Text!=PrefB.GetString("BackupRestoreAtoZToPath")
-				|| checkExcludeImages.Checked!=PrefB.GetBool("ExcludeImageFolderBackup"))
+				|| checkExcludeImages.Checked!=PrefB.GetBool("BackupExcludeImageFolder"))
 			{
 				Prefs.UpdateString("BackupFromPath",textBackupFromPath.Text);
 				Prefs.UpdateString("BackupToPath",textBackupToPath.Text);
 				Prefs.UpdateString("BackupRestoreFromPath",textBackupRestoreFromPath.Text);
 				Prefs.UpdateString("BackupRestoreToPath",textBackupRestoreToPath.Text);
 				Prefs.UpdateString("BackupRestoreAtoZToPath",textBackupRestoreAtoZToPath.Text);
-				Prefs.UpdateBool("ExcludeImageFolderBackup",checkExcludeImages.Checked);
+				Prefs.UpdateBool("BackupExcludeImageFolder",checkExcludeImages.Checked);
 				DataValid.SetInvalid(InvalidTypes.Prefs);
 			}
 		}
