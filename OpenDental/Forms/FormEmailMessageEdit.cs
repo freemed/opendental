@@ -734,15 +734,6 @@ namespace OpenDental{
 			//Notice that SentOrReceived does not change here.
 			if(IsNew) {
 				EmailMessages.Insert(MessageCur);
-				/*Commlog CommlogCur=new Commlog();
-				CommlogCur.PatNum=MessageCur.PatNum;
-				CommlogCur.CommDateTime=DateTime.Now;
-				CommlogCur.CommType=CommItemType.Misc;
-				CommlogCur.EmailMessageNum=MessageCur.EmailMessageNum;
-				CommlogCur.Mode=CommItemMode.Email;
-				CommlogCur.SentOrReceived=CommSentOrReceived.Sent;
-				CommlogCur.Note=MessageCur.Subject;
-				Commlogs.Insert(CommlogCur);*/
 			}
 			else {
 				EmailMessages.Update(MessageCur);
@@ -758,11 +749,28 @@ namespace OpenDental{
 				MessageBox.Show("Addresses not allowed to be blank.");
 				return;
 			}
-			if(((Pref)PrefB.HList["EmailSMTPserver"]).ValueString==""){
+			if(PrefB.GetString("EmailSMTPserver")==""){
 				MsgBox.Show(this,"You need to enter an SMTP server name in e-mail setup before you can send e-mail.");
 				return;
 			}
 			Cursor=Cursors.WaitCursor;
+			MessageCur.SentOrReceived=CommSentOrReceived.Sent;
+			SaveMsg();
+			try{
+				SendEmail(MessageCur);
+				MsgBox.Show(this,"Sent");
+			}
+			catch(Exception ex){
+				Cursor=Cursors.Default;
+				MessageBox.Show(ex.Message);
+				return;
+			}
+			Cursor=Cursors.Default;
+			//MessageCur.MsgDateTime=DateTime.Now;
+			DialogResult=DialogResult.OK;
+		}
+
+		public static void SendEmail(EmailMessage emailMessage){
 			SmtpClient client=new SmtpClient(PrefB.GetString("EmailSMTPserver"),PrefB.GetInt("EmailPort"));
 			//The default credentials are not used by default, according to: 
 			//http://msdn2.microsoft.com/en-us/library/system.net.mail.smtpclient.usedefaultcredentials.aspx
@@ -770,33 +778,27 @@ namespace OpenDental{
 			client.DeliveryMethod=SmtpDeliveryMethod.Network;
 			MailMessage message=new MailMessage();
 			Attachment attach;
-			try{
-				message.From=new MailAddress(textFromAddress.Text);
-				message.To.Add(textToAddress.Text);//this might fail
-				message.Subject=textSubject.Text;
-				message.Body=textBodyText.Text;
-				message.IsBodyHtml=false;
-				string attachPath=GetAttachPath();
-				for(int i=0;i<MessageCur.Attachments.Count;i++){
-					attach=new Attachment(ODFileUtils.CombinePaths(attachPath,MessageCur.Attachments[i].ActualFileName));
-							//@"C:\OpenDentalData\EmailAttachments\1");
-					attach.Name=MessageCur.Attachments[i].DisplayedFileName;
-						//"canadian.gif";
-					message.Attachments.Add(attach);
-				}
-				client.Send(message);
+			//try{
+			message.From=new MailAddress(emailMessage.FromAddress);
+			message.To.Add(emailMessage.ToAddress);
+			message.Subject=emailMessage.Subject;
+			message.Body=emailMessage.BodyText;
+			message.IsBodyHtml=false;
+			string attachPath=GetAttachPath();
+			for(int i=0;i<emailMessage.Attachments.Count;i++){
+				attach=new Attachment(ODFileUtils.CombinePaths(attachPath,emailMessage.Attachments[i].ActualFileName));
+						//@"C:\OpenDentalData\EmailAttachments\1");
+				attach.Name=emailMessage.Attachments[i].DisplayedFileName;
+					//"canadian.gif";
+				message.Attachments.Add(attach);
 			}
-			catch(System.Exception ex){
-				Cursor=Cursors.Default;
-				MessageBox.Show(ex.Message);
-				return;
-			}
-			MsgBox.Show(this,"Sent");
-			Cursor=Cursors.Default;
-			//MessageCur.MsgDateTime=DateTime.Now;
-			MessageCur.SentOrReceived=CommSentOrReceived.Sent;
-			SaveMsg();
-			DialogResult=DialogResult.OK;
+			client.Send(message);
+			//}
+			//catch(System.Exception ex){
+			//	Cursor=Cursors.Default;
+			//	MessageBox.Show(ex.Message);
+			//	return;
+			//}
 		}
 
 		private void butCancel_Click(object sender, System.EventArgs e) {

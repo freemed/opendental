@@ -3143,6 +3143,7 @@ double adj=Adjustments.GetTotForProc(arrayProc[tempCountProc].ProcNum,Adjustment
 				Random rnd=new Random();
 				string fileName=DateTime.Now.ToString("yyyyMMdd")+"_"+DateTime.Now.TimeOfDay.Ticks.ToString()+rnd.Next(1000).ToString()+".pdf";
 				string filePathAndName=ODFileUtils.CombinePaths(attachPath,fileName);
+				//File.Copy(  stmt.DocNum
 				//Process.Start(filePathAndName);
 				EmailMessage message=new EmailMessage();
 				message.PatNum=PatCur.PatNum;

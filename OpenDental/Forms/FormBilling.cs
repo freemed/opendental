@@ -5,6 +5,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows.Forms;
+using CodeBase;
 using OpenDental.UI;
 using OpenDentBusiness;
 
@@ -663,19 +664,92 @@ namespace OpenDental{
 				return;
 			}
 			Cursor=Cursors.WaitCursor;
-			//int[] guarNums=new int[gridBill.SelectedIndices.Length];
-			//for(int i=0;i<gridBill.SelectedIndices.Length;i++){
-			//	guarNums[i]=AgingList[gridBill.SelectedIndices[i]].PatNum;
-			//}
-			FormRpStatement FormS=new FormRpStatement();
+			FormRpStatement FormST=new FormRpStatement();
+			Statement stmt;
+			Random rnd;
+			string fileName;
+			string filePathAndName;
+			string attachPath;
+			EmailMessage message;
+			EmailAttach attach;
+			Patient pat;
+			int skipped=0;
+			//FormEmailMessageEdit FormEME=new FormEmailMessageEdit();
+			//Later, we could concat all the pdf's together and create one print job.
+			for(int i=0;i<gridBill.SelectedIndices.Length;i++){
+				stmt=Statements.CreateObject(PIn.PInt(table.Rows[gridBill.SelectedIndices[i]]["StatementNum"].ToString()));
+				pat=null;
+				if(stmt.Mode_==StatementMode.Email){
+					if(PrefB.GetString("EmailSMTPserver")==""){
+						MsgBox.Show(this,"You need to enter an SMTP server name in e-mail setup before you can send e-mail.");
+						Cursor=Cursors.Default;
+						FillGrid();
+						return;
+					}
+					pat=Patients.GetPat(PIn.PInt(table.Rows[gridBill.SelectedIndices[i]]["PatNum"].ToString()));
+					if(pat.Email==""){
+						skipped++;
+						continue;
+					}
+				}
+				stmt.IsSent=true;
+				stmt.DateSent=DateTime.Today;
+				Statements.WriteObject(stmt);
+				FormST.CreateStatementPdf(stmt);
+				if(stmt.Mode_==StatementMode.Email){
+					attachPath=FormEmailMessageEdit.GetAttachPath();
+					rnd=new Random();
+					fileName=DateTime.Now.ToString("yyyyMMdd")+"_"+DateTime.Now.TimeOfDay.Ticks.ToString()+rnd.Next(1000).ToString()+".pdf";
+					filePathAndName=ODFileUtils.CombinePaths(attachPath,fileName);
+					//Process.Start(filePathAndName);
+					message=new EmailMessage();
+					message.PatNum=pat.PatNum;
+					message.ToAddress=pat.Email;
+					message.FromAddress=PrefB.GetString("EmailSenderAddress");
+					message.Subject=Lan.g(this,"Statement");
+					message.BodyText=Lan.g(this,"Statement");
+					attach=new EmailAttach();
+					attach.DisplayedFileName="Statement.pdf";
+					attach.ActualFileName=fileName;
+					message.Attachments.Add(attach);
+					//FormEmailMessageEdit FormE=new FormEmailMessageEdit(message);
+					//FormE.IsNew=true;
+					//FormE.ShowDialog();
+					try{
+						FormEmailMessageEdit.SendEmail(message);
+					}
+					catch(Exception ex){
+						stmt.IsSent=false;
+						Statements.WriteObject(stmt);
+						Cursor=Cursors.Default;
+						MessageBox.Show(ex.Message);
+						return;
+					}
+				}
+				else{
+					#if DEBUG
+						//if(ImageStore.UpdatePatient == null){
+						//	ImageStore.UpdatePatient = new FileStore.UpdatePatientDelegate(Patients.Update);
+						//}
+						//OpenDental.Imaging.IImageStore imageStore = OpenDental.Imaging.ImageStore.GetImageStore(PatCur);
+						//don't bother to check valid path because it's just debug.
+						//Process.Start(imageStore.GetFilePath(Documents.GetByNum(stmt.DocNum)));
+					#else
+						FormST.PrintStatement(stmt,false);
+					#endif
+				}
+			}
+			if(skipped>0){
+				MessageBox.Show(Lan.g(this,"Skipped due to missing email address: ")+skipped.ToString());
+			}
 			//FormS.LoadAndPrint(guarNums,GeneralNote);
 			Cursor=Cursors.Default;
 			FillGrid();
-			if(gridBill.Rows.Count>0 && MsgBox.Show(this,true,"Delete all unsent bills?")){
-				MessageBox.Show("Not functional yet.");
-			}
-			DialogResult=DialogResult.OK;
-			Close();
+			//if(gridBill.Rows.Count>0 && MsgBox.Show(this,true,"Delete all unsent bills?")){
+			//	MessageBox.Show("Not functional yet.");
+			//}
+			//DialogResult=DialogResult.OK;
+			//Close();
 		}
 
 		private void butCancel_Click(object sender,EventArgs e) {

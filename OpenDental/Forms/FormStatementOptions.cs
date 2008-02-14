@@ -1084,8 +1084,12 @@ namespace OpenDental{
 							StmtList[i].DateRangeTo=PIn.PDate(textDateEnd.Text);
 						}
 					}
-					StmtList[i].Note=textNote.Text;
-					StmtList[i].NoteBold=textNoteBold.Text;
+					if(textNote.Text!="?"){
+						StmtList[i].Note=textNote.Text;
+					}
+					if(textNoteBold.Text!="?"){
+						StmtList[i].NoteBold=textNoteBold.Text;
+					}
 					Statements.WriteObject(StmtList[i]);
 				}
 			}
