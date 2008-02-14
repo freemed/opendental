@@ -159,59 +159,6 @@ namespace OpenDental{
 		private OpenDental.UI.Button butEligibility;
 		private CheckBox checkShowBaseUnits;
 		private CheckBox checkDedBeforePerc;
-		private Panel panel2;
-		private CheckBox checkBox2;
-		private CheckBox checkBox3;
-		private ValidNumber validNumber1;
-		private Label label9;
-		private ComboBox comboBox1;
-		private GroupBox groupBox1;
-		private TextBox textBox1;
-		private GroupBox groupBox2;
-		private TextBox textBox2;
-		private TextBox textBox3;
-		private ComboBox comboBox2;
-		private TextBox textBox4;
-		private OpenDental.UI.Button button1;
-		private TextBox textBox5;
-		private TextBox textBox6;
-		private CheckBox checkBox4;
-		private Label label15;
-		private TextBox textBox7;
-		private Label label19;
-		private TextBox textBox8;
-		private Label label20;
-		private Label label22;
-		private Label label24;
-		private TextBox textBox9;
-		private Label label27;
-		private TextBox textBox10;
-		private CheckBox checkBox5;
-		private TextBox textBox11;
-		private Label label29;
-		private Label label30;
-		private TextBox textBox12;
-		private ComboBox comboBox3;
-		private TextBox textBox13;
-		private Label label34;
-		private Label label37;
-		private Label label38;
-		private ComboBox comboBox4;
-		private GroupBox groupBox3;
-		private Label label39;
-		private ComboBox comboBox5;
-		private Label label40;
-		private Label label41;
-		private ComboBox comboBox6;
-		private ComboBox comboBox7;
-		private Label label42;
-		private ComboBox comboBox8;
-		private Label label43;
-		private Label label44;
-		private Label label45;
-		private CheckBox checkBox6;
-		private CheckBox checkBox7;
-		private CheckBox checkSubstNone;
 		private Label labelViewRequestDocument;
 		//<summary>This is a field that is accessed only by clicking on the button because there's not room for it otherwise.  This variable should be treated just as if it was a visible textBox.</summary>
 		//private string BenefitNotes;
@@ -381,65 +328,11 @@ namespace OpenDental{
 			this.groupCarrier = new System.Windows.Forms.GroupBox();
 			this.butSearch = new OpenDental.UI.Button();
 			this.panelPlan = new System.Windows.Forms.Panel();
-			this.checkDedBeforePerc = new System.Windows.Forms.CheckBox();
 			this.checkShowBaseUnits = new System.Windows.Forms.CheckBox();
 			this.textDentaide = new OpenDental.ValidNumber();
 			this.labelDentaide = new System.Windows.Forms.Label();
 			this.comboFilingCode = new System.Windows.Forms.ComboBox();
 			this.label13 = new System.Windows.Forms.Label();
-			this.panel2 = new System.Windows.Forms.Panel();
-			this.checkSubstNone = new System.Windows.Forms.CheckBox();
-			this.checkBox2 = new System.Windows.Forms.CheckBox();
-			this.checkBox3 = new System.Windows.Forms.CheckBox();
-			this.validNumber1 = new OpenDental.ValidNumber();
-			this.label9 = new System.Windows.Forms.Label();
-			this.comboBox1 = new System.Windows.Forms.ComboBox();
-			this.groupBox1 = new System.Windows.Forms.GroupBox();
-			this.textBox1 = new System.Windows.Forms.TextBox();
-			this.groupBox2 = new System.Windows.Forms.GroupBox();
-			this.textBox2 = new System.Windows.Forms.TextBox();
-			this.textBox3 = new System.Windows.Forms.TextBox();
-			this.comboBox2 = new System.Windows.Forms.ComboBox();
-			this.textBox4 = new System.Windows.Forms.TextBox();
-			this.button1 = new OpenDental.UI.Button();
-			this.textBox5 = new System.Windows.Forms.TextBox();
-			this.textBox6 = new System.Windows.Forms.TextBox();
-			this.checkBox4 = new System.Windows.Forms.CheckBox();
-			this.label15 = new System.Windows.Forms.Label();
-			this.textBox7 = new System.Windows.Forms.TextBox();
-			this.label19 = new System.Windows.Forms.Label();
-			this.textBox8 = new System.Windows.Forms.TextBox();
-			this.label20 = new System.Windows.Forms.Label();
-			this.label22 = new System.Windows.Forms.Label();
-			this.label24 = new System.Windows.Forms.Label();
-			this.textBox9 = new System.Windows.Forms.TextBox();
-			this.label27 = new System.Windows.Forms.Label();
-			this.textBox10 = new System.Windows.Forms.TextBox();
-			this.checkBox5 = new System.Windows.Forms.CheckBox();
-			this.textBox11 = new System.Windows.Forms.TextBox();
-			this.label29 = new System.Windows.Forms.Label();
-			this.label30 = new System.Windows.Forms.Label();
-			this.textBox12 = new System.Windows.Forms.TextBox();
-			this.comboBox3 = new System.Windows.Forms.ComboBox();
-			this.textBox13 = new System.Windows.Forms.TextBox();
-			this.label34 = new System.Windows.Forms.Label();
-			this.label37 = new System.Windows.Forms.Label();
-			this.label38 = new System.Windows.Forms.Label();
-			this.comboBox4 = new System.Windows.Forms.ComboBox();
-			this.groupBox3 = new System.Windows.Forms.GroupBox();
-			this.label39 = new System.Windows.Forms.Label();
-			this.comboBox5 = new System.Windows.Forms.ComboBox();
-			this.label40 = new System.Windows.Forms.Label();
-			this.label41 = new System.Windows.Forms.Label();
-			this.comboBox6 = new System.Windows.Forms.ComboBox();
-			this.comboBox7 = new System.Windows.Forms.ComboBox();
-			this.label42 = new System.Windows.Forms.Label();
-			this.comboBox8 = new System.Windows.Forms.ComboBox();
-			this.label43 = new System.Windows.Forms.Label();
-			this.label44 = new System.Windows.Forms.Label();
-			this.label45 = new System.Windows.Forms.Label();
-			this.checkBox6 = new System.Windows.Forms.CheckBox();
-			this.checkBox7 = new System.Windows.Forms.CheckBox();
 			this.butPick = new OpenDental.UI.Button();
 			this.butEditBenefits = new OpenDental.UI.Button();
 			this.textPlanNote = new OpenDental.ODtextBox();
@@ -448,6 +341,7 @@ namespace OpenDental{
 			this.butLabel = new OpenDental.UI.Button();
 			this.butDelete = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
+			this.checkDedBeforePerc = new System.Windows.Forms.CheckBox();
 			this.groupSubscriber.SuspendLayout();
 			this.groupCoPay.SuspendLayout();
 			this.groupRequestBen.SuspendLayout();
@@ -455,10 +349,6 @@ namespace OpenDental{
 			this.groupPlan.SuspendLayout();
 			this.groupCarrier.SuspendLayout();
 			this.panelPlan.SuspendLayout();
-			this.panel2.SuspendLayout();
-			this.groupBox1.SuspendLayout();
-			this.groupBox2.SuspendLayout();
-			this.groupBox3.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// label5
@@ -662,7 +552,7 @@ namespace OpenDental{
 			// 
 			// label1
 			// 
-			this.label1.Location = new System.Drawing.Point(15,1552);
+			this.label1.Location = new System.Drawing.Point(15,343);
 			this.label1.Name = "label1";
 			this.label1.Size = new System.Drawing.Size(96,16);
 			this.label1.TabIndex = 91;
@@ -698,7 +588,7 @@ namespace OpenDental{
 			// 
 			// label23
 			// 
-			this.label23.Location = new System.Drawing.Point(14,1576);
+			this.label23.Location = new System.Drawing.Point(14,367);
 			this.label23.Name = "label23";
 			this.label23.Size = new System.Drawing.Size(95,15);
 			this.label23.TabIndex = 96;
@@ -708,7 +598,7 @@ namespace OpenDental{
 			// checkAlternateCode
 			// 
 			this.checkAlternateCode.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkAlternateCode.Location = new System.Drawing.Point(112,1485);
+			this.checkAlternateCode.Location = new System.Drawing.Point(112,293);
 			this.checkAlternateCode.Name = "checkAlternateCode";
 			this.checkAlternateCode.Size = new System.Drawing.Size(275,16);
 			this.checkAlternateCode.TabIndex = 3;
@@ -717,7 +607,7 @@ namespace OpenDental{
 			// checkClaimsUseUCR
 			// 
 			this.checkClaimsUseUCR.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkClaimsUseUCR.Location = new System.Drawing.Point(112,1518);
+			this.checkClaimsUseUCR.Location = new System.Drawing.Point(112,309);
 			this.checkClaimsUseUCR.Name = "checkClaimsUseUCR";
 			this.checkClaimsUseUCR.Size = new System.Drawing.Size(275,16);
 			this.checkClaimsUseUCR.TabIndex = 4;
@@ -725,7 +615,7 @@ namespace OpenDental{
 			// 
 			// label14
 			// 
-			this.label14.Location = new System.Drawing.Point(17,1463);
+			this.label14.Location = new System.Drawing.Point(17,271);
 			this.label14.Name = "label14";
 			this.label14.Size = new System.Drawing.Size(95,16);
 			this.label14.TabIndex = 104;
@@ -872,7 +762,7 @@ namespace OpenDental{
 			// comboPlanType
 			// 
 			this.comboPlanType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboPlanType.Location = new System.Drawing.Point(112,1462);
+			this.comboPlanType.Location = new System.Drawing.Point(112,270);
 			this.comboPlanType.Name = "comboPlanType";
 			this.comboPlanType.Size = new System.Drawing.Size(212,21);
 			this.comboPlanType.TabIndex = 2;
@@ -906,7 +796,7 @@ namespace OpenDental{
 			// comboClaimForm
 			// 
 			this.comboClaimForm.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboClaimForm.Location = new System.Drawing.Point(112,1573);
+			this.comboClaimForm.Location = new System.Drawing.Point(112,364);
 			this.comboClaimForm.MaxDropDownItems = 30;
 			this.comboClaimForm.Name = "comboClaimForm";
 			this.comboClaimForm.Size = new System.Drawing.Size(212,21);
@@ -915,7 +805,7 @@ namespace OpenDental{
 			// comboFeeSched
 			// 
 			this.comboFeeSched.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboFeeSched.Location = new System.Drawing.Point(112,1551);
+			this.comboFeeSched.Location = new System.Drawing.Point(112,342);
 			this.comboFeeSched.MaxDropDownItems = 30;
 			this.comboFeeSched.Name = "comboFeeSched";
 			this.comboFeeSched.Size = new System.Drawing.Size(212,21);
@@ -929,7 +819,7 @@ namespace OpenDental{
 			this.groupCoPay.Controls.Add(this.label3);
 			this.groupCoPay.Controls.Add(this.comboCopay);
 			this.groupCoPay.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.groupCoPay.Location = new System.Drawing.Point(5,1596);
+			this.groupCoPay.Location = new System.Drawing.Point(5,387);
 			this.groupCoPay.Name = "groupCoPay";
 			this.groupCoPay.Size = new System.Drawing.Size(404,99);
 			this.groupCoPay.TabIndex = 7;
@@ -1344,7 +1234,7 @@ namespace OpenDental{
 			this.groupPlan.Controls.Add(this.label16);
 			this.groupPlan.Controls.Add(this.label4);
 			this.groupPlan.Controls.Add(this.labelDivisionDash);
-			this.groupPlan.Location = new System.Drawing.Point(0,1194);
+			this.groupPlan.Location = new System.Drawing.Point(0,2);
 			this.groupPlan.Name = "groupPlan";
 			this.groupPlan.Size = new System.Drawing.Size(425,264);
 			this.groupPlan.TabIndex = 0;
@@ -1417,18 +1307,9 @@ namespace OpenDental{
 			this.panelPlan.Size = new System.Drawing.Size(454,438);
 			this.panelPlan.TabIndex = 157;
 			// 
-			// checkDedBeforePerc
-			// 
-			this.checkDedBeforePerc.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkDedBeforePerc.Location = new System.Drawing.Point(112,1534);
-			this.checkDedBeforePerc.Name = "checkDedBeforePerc";
-			this.checkDedBeforePerc.Size = new System.Drawing.Size(275,16);
-			this.checkDedBeforePerc.TabIndex = 163;
-			this.checkDedBeforePerc.Text = "Apply deductible before percentage";
-			// 
 			// checkShowBaseUnits
 			// 
-			this.checkShowBaseUnits.Location = new System.Drawing.Point(112,1745);
+			this.checkShowBaseUnits.Location = new System.Drawing.Point(112,536);
 			this.checkShowBaseUnits.Name = "checkShowBaseUnits";
 			this.checkShowBaseUnits.Size = new System.Drawing.Size(289,17);
 			this.checkShowBaseUnits.TabIndex = 162;
@@ -1437,7 +1318,7 @@ namespace OpenDental{
 			// 
 			// textDentaide
 			// 
-			this.textDentaide.Location = new System.Drawing.Point(158,1724);
+			this.textDentaide.Location = new System.Drawing.Point(158,515);
 			this.textDentaide.MaxVal = 255;
 			this.textDentaide.MinVal = 0;
 			this.textDentaide.Name = "textDentaide";
@@ -1446,7 +1327,7 @@ namespace OpenDental{
 			// 
 			// labelDentaide
 			// 
-			this.labelDentaide.Location = new System.Drawing.Point(12,1727);
+			this.labelDentaide.Location = new System.Drawing.Point(12,518);
 			this.labelDentaide.Name = "labelDentaide";
 			this.labelDentaide.Size = new System.Drawing.Size(140,19);
 			this.labelDentaide.TabIndex = 160;
@@ -1456,7 +1337,7 @@ namespace OpenDental{
 			// comboFilingCode
 			// 
 			this.comboFilingCode.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboFilingCode.Location = new System.Drawing.Point(112,1700);
+			this.comboFilingCode.Location = new System.Drawing.Point(112,491);
 			this.comboFilingCode.MaxDropDownItems = 30;
 			this.comboFilingCode.Name = "comboFilingCode";
 			this.comboFilingCode.Size = new System.Drawing.Size(212,21);
@@ -1464,548 +1345,12 @@ namespace OpenDental{
 			// 
 			// label13
 			// 
-			this.label13.Location = new System.Drawing.Point(10,1702);
+			this.label13.Location = new System.Drawing.Point(10,493);
 			this.label13.Name = "label13";
 			this.label13.Size = new System.Drawing.Size(100,19);
 			this.label13.TabIndex = 158;
 			this.label13.Text = "Filing Code";
 			this.label13.TextAlign = System.Drawing.ContentAlignment.TopRight;
-			// 
-			// panel2
-			// 
-			this.panel2.AutoScroll = true;
-			this.panel2.AutoScrollMargin = new System.Drawing.Size(0,10);
-			this.panel2.BackColor = System.Drawing.SystemColors.Control;
-			this.panel2.Controls.Add(this.checkSubstNone);
-			this.panel2.Controls.Add(this.checkBox2);
-			this.panel2.Controls.Add(this.checkBox3);
-			this.panel2.Controls.Add(this.validNumber1);
-			this.panel2.Controls.Add(this.label9);
-			this.panel2.Controls.Add(this.comboBox1);
-			this.panel2.Controls.Add(this.groupBox1);
-			this.panel2.Controls.Add(this.comboBox4);
-			this.panel2.Controls.Add(this.groupBox3);
-			this.panel2.Controls.Add(this.comboBox7);
-			this.panel2.Controls.Add(this.label42);
-			this.panel2.Controls.Add(this.comboBox8);
-			this.panel2.Controls.Add(this.label43);
-			this.panel2.Controls.Add(this.label44);
-			this.panel2.Controls.Add(this.label45);
-			this.panel2.Controls.Add(this.checkBox6);
-			this.panel2.Controls.Add(this.checkBox7);
-			this.panel2.Location = new System.Drawing.Point(8,116);
-			this.panel2.Name = "panel2";
-			this.panel2.Size = new System.Drawing.Size(454,438);
-			this.panel2.TabIndex = 157;
-			// 
-			// checkSubstNone
-			// 
-			this.checkSubstNone.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkSubstNone.Location = new System.Drawing.Point(118,311);
-			this.checkSubstNone.Name = "checkSubstNone";
-			this.checkSubstNone.Size = new System.Drawing.Size(275,16);
-			this.checkSubstNone.TabIndex = 164;
-			this.checkSubstNone.Text = "No code substitution (e.g. posterior composites)";
-			// 
-			// checkBox2
-			// 
-			this.checkBox2.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkBox2.Location = new System.Drawing.Point(118,344);
-			this.checkBox2.Name = "checkBox2";
-			this.checkBox2.Size = new System.Drawing.Size(275,16);
-			this.checkBox2.TabIndex = 163;
-			this.checkBox2.Text = "Apply deductible before percentage";
-			// 
-			// checkBox3
-			// 
-			this.checkBox3.Location = new System.Drawing.Point(118,555);
-			this.checkBox3.Name = "checkBox3";
-			this.checkBox3.Size = new System.Drawing.Size(289,17);
-			this.checkBox3.TabIndex = 162;
-			this.checkBox3.Text = "Claims show base units (Does not affect billed amount)";
-			this.checkBox3.UseVisualStyleBackColor = true;
-			// 
-			// validNumber1
-			// 
-			this.validNumber1.Location = new System.Drawing.Point(164,534);
-			this.validNumber1.MaxVal = 255;
-			this.validNumber1.MinVal = 0;
-			this.validNumber1.Name = "validNumber1";
-			this.validNumber1.Size = new System.Drawing.Size(55,20);
-			this.validNumber1.TabIndex = 161;
-			// 
-			// label9
-			// 
-			this.label9.Location = new System.Drawing.Point(18,537);
-			this.label9.Name = "label9";
-			this.label9.Size = new System.Drawing.Size(140,19);
-			this.label9.TabIndex = 160;
-			this.label9.Text = "Dentaide Card Sequence";
-			this.label9.TextAlign = System.Drawing.ContentAlignment.TopRight;
-			// 
-			// comboBox1
-			// 
-			this.comboBox1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboBox1.Location = new System.Drawing.Point(118,361);
-			this.comboBox1.MaxDropDownItems = 30;
-			this.comboBox1.Name = "comboBox1";
-			this.comboBox1.Size = new System.Drawing.Size(212,21);
-			this.comboBox1.TabIndex = 5;
-			// 
-			// groupBox1
-			// 
-			this.groupBox1.Controls.Add(this.textBox1);
-			this.groupBox1.Controls.Add(this.groupBox2);
-			this.groupBox1.Controls.Add(this.textBox10);
-			this.groupBox1.Controls.Add(this.checkBox5);
-			this.groupBox1.Controls.Add(this.textBox11);
-			this.groupBox1.Controls.Add(this.label29);
-			this.groupBox1.Controls.Add(this.label30);
-			this.groupBox1.Controls.Add(this.textBox12);
-			this.groupBox1.Controls.Add(this.comboBox3);
-			this.groupBox1.Controls.Add(this.textBox13);
-			this.groupBox1.Controls.Add(this.label34);
-			this.groupBox1.Controls.Add(this.label37);
-			this.groupBox1.Controls.Add(this.label38);
-			this.groupBox1.Location = new System.Drawing.Point(6,4);
-			this.groupBox1.Name = "groupBox1";
-			this.groupBox1.Size = new System.Drawing.Size(425,264);
-			this.groupBox1.TabIndex = 0;
-			this.groupBox1.TabStop = false;
-			this.groupBox1.Text = "Plan";
-			// 
-			// textBox1
-			// 
-			this.textBox1.Location = new System.Drawing.Point(112,26);
-			this.textBox1.MaxLength = 40;
-			this.textBox1.Name = "textBox1";
-			this.textBox1.Size = new System.Drawing.Size(291,20);
-			this.textBox1.TabIndex = 4;
-			this.textBox1.Leave += new System.EventHandler(this.textEmployer_Leave);
-			this.textBox1.KeyUp += new System.Windows.Forms.KeyEventHandler(this.textEmployer_KeyUp);
-			// 
-			// groupBox2
-			// 
-			this.groupBox2.Controls.Add(this.textBox2);
-			this.groupBox2.Controls.Add(this.textBox3);
-			this.groupBox2.Controls.Add(this.comboBox2);
-			this.groupBox2.Controls.Add(this.textBox4);
-			this.groupBox2.Controls.Add(this.button1);
-			this.groupBox2.Controls.Add(this.textBox5);
-			this.groupBox2.Controls.Add(this.textBox6);
-			this.groupBox2.Controls.Add(this.checkBox4);
-			this.groupBox2.Controls.Add(this.label15);
-			this.groupBox2.Controls.Add(this.textBox7);
-			this.groupBox2.Controls.Add(this.label19);
-			this.groupBox2.Controls.Add(this.textBox8);
-			this.groupBox2.Controls.Add(this.label20);
-			this.groupBox2.Controls.Add(this.label22);
-			this.groupBox2.Controls.Add(this.label24);
-			this.groupBox2.Controls.Add(this.textBox9);
-			this.groupBox2.Controls.Add(this.label27);
-			this.groupBox2.Location = new System.Drawing.Point(10,44);
-			this.groupBox2.Name = "groupBox2";
-			this.groupBox2.Size = new System.Drawing.Size(399,155);
-			this.groupBox2.TabIndex = 154;
-			this.groupBox2.TabStop = false;
-			this.groupBox2.Text = "Carrier";
-			// 
-			// textBox2
-			// 
-			this.textBox2.Location = new System.Drawing.Point(102,31);
-			this.textBox2.MaxLength = 30;
-			this.textBox2.Name = "textBox2";
-			this.textBox2.Size = new System.Drawing.Size(157,20);
-			this.textBox2.TabIndex = 0;
-			this.textBox2.TextChanged += new System.EventHandler(this.textPhone_TextChanged);
-			// 
-			// textBox3
-			// 
-			this.textBox3.Location = new System.Drawing.Point(102,51);
-			this.textBox3.MaxLength = 60;
-			this.textBox3.Name = "textBox3";
-			this.textBox3.Size = new System.Drawing.Size(291,20);
-			this.textBox3.TabIndex = 1;
-			this.textBox3.TextChanged += new System.EventHandler(this.textAddress_TextChanged);
-			// 
-			// comboBox2
-			// 
-			this.comboBox2.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboBox2.Location = new System.Drawing.Point(156,111);
-			this.comboBox2.MaxDropDownItems = 30;
-			this.comboBox2.Name = "comboBox2";
-			this.comboBox2.Size = new System.Drawing.Size(237,21);
-			this.comboBox2.TabIndex = 125;
-			this.comboBox2.SelectedIndexChanged += new System.EventHandler(this.comboElectIDdescript_SelectedIndexChanged);
-			// 
-			// textBox4
-			// 
-			this.textBox4.Location = new System.Drawing.Point(102,111);
-			this.textBox4.MaxLength = 20;
-			this.textBox4.Name = "textBox4";
-			this.textBox4.Size = new System.Drawing.Size(54,20);
-			this.textBox4.TabIndex = 7;
-			this.textBox4.Validating += new System.ComponentModel.CancelEventHandler(this.textElectID_Validating);
-			// 
-			// button1
-			// 
-			this.button1.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.button1.Autosize = true;
-			this.button1.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.button1.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.button1.CornerRadius = 4F;
-			this.button1.Location = new System.Drawing.Point(86,132);
-			this.button1.Name = "button1";
-			this.button1.Size = new System.Drawing.Size(84,20);
-			this.button1.TabIndex = 124;
-			this.button1.Text = "Search IDs";
-			this.button1.Click += new System.EventHandler(this.butSearch_Click);
-			// 
-			// textBox5
-			// 
-			this.textBox5.Location = new System.Drawing.Point(102,71);
-			this.textBox5.MaxLength = 60;
-			this.textBox5.Name = "textBox5";
-			this.textBox5.Size = new System.Drawing.Size(291,20);
-			this.textBox5.TabIndex = 2;
-			this.textBox5.TextChanged += new System.EventHandler(this.textAddress2_TextChanged);
-			// 
-			// textBox6
-			// 
-			this.textBox6.Location = new System.Drawing.Point(322,91);
-			this.textBox6.MaxLength = 10;
-			this.textBox6.Name = "textBox6";
-			this.textBox6.Size = new System.Drawing.Size(71,20);
-			this.textBox6.TabIndex = 5;
-			// 
-			// checkBox4
-			// 
-			this.checkBox4.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkBox4.Location = new System.Drawing.Point(178,133);
-			this.checkBox4.Name = "checkBox4";
-			this.checkBox4.Size = new System.Drawing.Size(213,17);
-			this.checkBox4.TabIndex = 8;
-			this.checkBox4.Text = "Don\'t Usually Send Electronically";
-			// 
-			// label15
-			// 
-			this.label15.Location = new System.Drawing.Point(5,53);
-			this.label15.Name = "label15";
-			this.label15.Size = new System.Drawing.Size(95,15);
-			this.label15.TabIndex = 10;
-			this.label15.Text = "Address";
-			this.label15.TextAlign = System.Drawing.ContentAlignment.TopRight;
-			// 
-			// textBox7
-			// 
-			this.textBox7.Location = new System.Drawing.Point(102,91);
-			this.textBox7.MaxLength = 40;
-			this.textBox7.Name = "textBox7";
-			this.textBox7.Size = new System.Drawing.Size(155,20);
-			this.textBox7.TabIndex = 3;
-			this.textBox7.TextChanged += new System.EventHandler(this.textCity_TextChanged);
-			// 
-			// label19
-			// 
-			this.label19.Location = new System.Drawing.Point(5,34);
-			this.label19.Name = "label19";
-			this.label19.Size = new System.Drawing.Size(95,15);
-			this.label19.TabIndex = 7;
-			this.label19.Text = "Phone";
-			this.label19.TextAlign = System.Drawing.ContentAlignment.TopRight;
-			// 
-			// textBox8
-			// 
-			this.textBox8.Font = new System.Drawing.Font("Microsoft Sans Serif",9F,System.Drawing.FontStyle.Bold,System.Drawing.GraphicsUnit.Point,((byte)(0)));
-			this.textBox8.Location = new System.Drawing.Point(102,11);
-			this.textBox8.MaxLength = 50;
-			this.textBox8.Multiline = true;
-			this.textBox8.Name = "textBox8";
-			this.textBox8.Size = new System.Drawing.Size(291,20);
-			this.textBox8.TabIndex = 0;
-			this.textBox8.Leave += new System.EventHandler(this.textCarrier_Leave);
-			this.textBox8.KeyUp += new System.Windows.Forms.KeyEventHandler(this.textCarrier_KeyUp);
-			// 
-			// label20
-			// 
-			this.label20.Location = new System.Drawing.Point(4,113);
-			this.label20.Name = "label20";
-			this.label20.Size = new System.Drawing.Size(95,15);
-			this.label20.TabIndex = 15;
-			this.label20.Text = "Electronic ID";
-			this.label20.TextAlign = System.Drawing.ContentAlignment.TopRight;
-			// 
-			// label22
-			// 
-			this.label22.Location = new System.Drawing.Point(5,74);
-			this.label22.Name = "label22";
-			this.label22.Size = new System.Drawing.Size(95,15);
-			this.label22.TabIndex = 79;
-			this.label22.Text = "Address 2";
-			this.label22.TextAlign = System.Drawing.ContentAlignment.TopRight;
-			// 
-			// label24
-			// 
-			this.label24.Location = new System.Drawing.Point(7,13);
-			this.label24.Name = "label24";
-			this.label24.Size = new System.Drawing.Size(94,15);
-			this.label24.TabIndex = 152;
-			this.label24.Text = "Carrier";
-			this.label24.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// textBox9
-			// 
-			this.textBox9.Location = new System.Drawing.Point(257,91);
-			this.textBox9.MaxLength = 2;
-			this.textBox9.Name = "textBox9";
-			this.textBox9.Size = new System.Drawing.Size(65,20);
-			this.textBox9.TabIndex = 4;
-			this.textBox9.TextChanged += new System.EventHandler(this.textState_TextChanged);
-			// 
-			// label27
-			// 
-			this.label27.Location = new System.Drawing.Point(5,93);
-			this.label27.Name = "label27";
-			this.label27.Size = new System.Drawing.Size(95,15);
-			this.label27.TabIndex = 11;
-			this.label27.Text = "City,ST,Zip";
-			this.label27.TextAlign = System.Drawing.ContentAlignment.TopRight;
-			// 
-			// textBox10
-			// 
-			this.textBox10.Location = new System.Drawing.Point(259,220);
-			this.textBox10.MaxLength = 20;
-			this.textBox10.Name = "textBox10";
-			this.textBox10.Size = new System.Drawing.Size(107,20);
-			this.textBox10.TabIndex = 3;
-			// 
-			// checkBox5
-			// 
-			this.checkBox5.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkBox5.Location = new System.Drawing.Point(112,9);
-			this.checkBox5.Name = "checkBox5";
-			this.checkBox5.Size = new System.Drawing.Size(202,17);
-			this.checkBox5.TabIndex = 113;
-			this.checkBox5.Text = "Medical Insurance";
-			// 
-			// textBox11
-			// 
-			this.textBox11.Location = new System.Drawing.Point(112,220);
-			this.textBox11.MaxLength = 20;
-			this.textBox11.Name = "textBox11";
-			this.textBox11.Size = new System.Drawing.Size(129,20);
-			this.textBox11.TabIndex = 2;
-			// 
-			// label29
-			// 
-			this.label29.Location = new System.Drawing.Point(16,223);
-			this.label29.Name = "label29";
-			this.label29.Size = new System.Drawing.Size(95,15);
-			this.label29.TabIndex = 9;
-			this.label29.Text = "Group Num";
-			this.label29.TextAlign = System.Drawing.ContentAlignment.TopRight;
-			// 
-			// label30
-			// 
-			this.label30.Location = new System.Drawing.Point(16,203);
-			this.label30.Name = "label30";
-			this.label30.Size = new System.Drawing.Size(95,15);
-			this.label30.TabIndex = 8;
-			this.label30.Text = "Group Name";
-			this.label30.TextAlign = System.Drawing.ContentAlignment.TopRight;
-			// 
-			// textBox12
-			// 
-			this.textBox12.Location = new System.Drawing.Point(112,200);
-			this.textBox12.MaxLength = 50;
-			this.textBox12.Name = "textBox12";
-			this.textBox12.Size = new System.Drawing.Size(193,20);
-			this.textBox12.TabIndex = 1;
-			// 
-			// comboBox3
-			// 
-			this.comboBox3.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboBox3.Location = new System.Drawing.Point(150,240);
-			this.comboBox3.MaxDropDownItems = 30;
-			this.comboBox3.Name = "comboBox3";
-			this.comboBox3.Size = new System.Drawing.Size(253,21);
-			this.comboBox3.TabIndex = 68;
-			// 
-			// textBox13
-			// 
-			this.textBox13.BackColor = System.Drawing.Color.White;
-			this.textBox13.Location = new System.Drawing.Point(112,240);
-			this.textBox13.Multiline = true;
-			this.textBox13.Name = "textBox13";
-			this.textBox13.ReadOnly = true;
-			this.textBox13.Size = new System.Drawing.Size(37,21);
-			this.textBox13.TabIndex = 67;
-			// 
-			// label34
-			// 
-			this.label34.Location = new System.Drawing.Point(33,28);
-			this.label34.Name = "label34";
-			this.label34.Size = new System.Drawing.Size(78,15);
-			this.label34.TabIndex = 73;
-			this.label34.Text = "Employer";
-			this.label34.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// label37
-			// 
-			this.label37.Location = new System.Drawing.Point(6,242);
-			this.label37.Name = "label37";
-			this.label37.Size = new System.Drawing.Size(104,17);
-			this.label37.TabIndex = 66;
-			this.label37.Text = "Identical Plans";
-			this.label37.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// label38
-			// 
-			this.label38.Location = new System.Drawing.Point(244,224);
-			this.label38.Name = "label38";
-			this.label38.Size = new System.Drawing.Size(31,16);
-			this.label38.TabIndex = 111;
-			this.label38.Text = "--";
-			// 
-			// comboBox4
-			// 
-			this.comboBox4.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboBox4.Location = new System.Drawing.Point(118,510);
-			this.comboBox4.MaxDropDownItems = 30;
-			this.comboBox4.Name = "comboBox4";
-			this.comboBox4.Size = new System.Drawing.Size(212,21);
-			this.comboBox4.TabIndex = 159;
-			// 
-			// groupBox3
-			// 
-			this.groupBox3.Controls.Add(this.label39);
-			this.groupBox3.Controls.Add(this.comboBox5);
-			this.groupBox3.Controls.Add(this.label40);
-			this.groupBox3.Controls.Add(this.label41);
-			this.groupBox3.Controls.Add(this.comboBox6);
-			this.groupBox3.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.groupBox3.Location = new System.Drawing.Point(11,406);
-			this.groupBox3.Name = "groupBox3";
-			this.groupBox3.Size = new System.Drawing.Size(404,99);
-			this.groupBox3.TabIndex = 7;
-			this.groupBox3.TabStop = false;
-			this.groupBox3.Text = "Other Fee Schedules";
-			// 
-			// label39
-			// 
-			this.label39.Location = new System.Drawing.Point(1,67);
-			this.label39.Name = "label39";
-			this.label39.Size = new System.Drawing.Size(105,27);
-			this.label39.TabIndex = 111;
-			this.label39.Text = "Carrier Allowed Amounts";
-			this.label39.TextAlign = System.Drawing.ContentAlignment.TopRight;
-			// 
-			// comboBox5
-			// 
-			this.comboBox5.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboBox5.Location = new System.Drawing.Point(107,67);
-			this.comboBox5.MaxDropDownItems = 30;
-			this.comboBox5.Name = "comboBox5";
-			this.comboBox5.Size = new System.Drawing.Size(212,21);
-			this.comboBox5.TabIndex = 1;
-			// 
-			// label40
-			// 
-			this.label40.Location = new System.Drawing.Point(1,36);
-			this.label40.Name = "label40";
-			this.label40.Size = new System.Drawing.Size(105,26);
-			this.label40.TabIndex = 109;
-			this.label40.Text = "Patient Co-pay Amounts";
-			this.label40.TextAlign = System.Drawing.ContentAlignment.TopRight;
-			// 
-			// label41
-			// 
-			this.label41.Location = new System.Drawing.Point(1,19);
-			this.label41.Name = "label41";
-			this.label41.Size = new System.Drawing.Size(390,17);
-			this.label41.TabIndex = 106;
-			this.label41.Text = "Don\'t use these unless you understand how they will affect your estimates";
-			// 
-			// comboBox6
-			// 
-			this.comboBox6.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboBox6.Location = new System.Drawing.Point(107,37);
-			this.comboBox6.MaxDropDownItems = 30;
-			this.comboBox6.Name = "comboBox6";
-			this.comboBox6.Size = new System.Drawing.Size(212,21);
-			this.comboBox6.TabIndex = 0;
-			// 
-			// comboBox7
-			// 
-			this.comboBox7.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboBox7.Location = new System.Drawing.Point(118,272);
-			this.comboBox7.Name = "comboBox7";
-			this.comboBox7.Size = new System.Drawing.Size(212,21);
-			this.comboBox7.TabIndex = 2;
-			this.comboBox7.SelectionChangeCommitted += new System.EventHandler(this.comboPlanType_SelectionChangeCommitted);
-			// 
-			// label42
-			// 
-			this.label42.Location = new System.Drawing.Point(16,512);
-			this.label42.Name = "label42";
-			this.label42.Size = new System.Drawing.Size(100,19);
-			this.label42.TabIndex = 158;
-			this.label42.Text = "Filing Code";
-			this.label42.TextAlign = System.Drawing.ContentAlignment.TopRight;
-			// 
-			// comboBox8
-			// 
-			this.comboBox8.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboBox8.Location = new System.Drawing.Point(118,383);
-			this.comboBox8.MaxDropDownItems = 30;
-			this.comboBox8.Name = "comboBox8";
-			this.comboBox8.Size = new System.Drawing.Size(212,21);
-			this.comboBox8.TabIndex = 6;
-			// 
-			// label43
-			// 
-			this.label43.Location = new System.Drawing.Point(21,362);
-			this.label43.Name = "label43";
-			this.label43.Size = new System.Drawing.Size(96,16);
-			this.label43.TabIndex = 91;
-			this.label43.Text = "Fee Schedule";
-			this.label43.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// label44
-			// 
-			this.label44.Location = new System.Drawing.Point(23,273);
-			this.label44.Name = "label44";
-			this.label44.Size = new System.Drawing.Size(95,16);
-			this.label44.TabIndex = 104;
-			this.label44.Text = "Plan Type";
-			this.label44.TextAlign = System.Drawing.ContentAlignment.TopRight;
-			// 
-			// label45
-			// 
-			this.label45.Location = new System.Drawing.Point(20,386);
-			this.label45.Name = "label45";
-			this.label45.Size = new System.Drawing.Size(95,15);
-			this.label45.TabIndex = 96;
-			this.label45.Text = "Claim Form";
-			this.label45.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// checkBox6
-			// 
-			this.checkBox6.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkBox6.Location = new System.Drawing.Point(118,295);
-			this.checkBox6.Name = "checkBox6";
-			this.checkBox6.Size = new System.Drawing.Size(275,16);
-			this.checkBox6.TabIndex = 3;
-			this.checkBox6.Text = "Use Alternate Code (for some Medicaid plans)";
-			// 
-			// checkBox7
-			// 
-			this.checkBox7.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkBox7.Location = new System.Drawing.Point(118,328);
-			this.checkBox7.Name = "checkBox7";
-			this.checkBox7.Size = new System.Drawing.Size(275,16);
-			this.checkBox7.TabIndex = 4;
-			this.checkBox7.Text = "Claims show UCR fee, not billed fee";
 			// 
 			// butPick
 			// 
@@ -2125,11 +1470,19 @@ namespace OpenDental{
 			this.butCancel.Text = "&Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
 			// 
+			// checkDedBeforePerc
+			// 
+			this.checkDedBeforePerc.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.checkDedBeforePerc.Location = new System.Drawing.Point(112,325);
+			this.checkDedBeforePerc.Name = "checkDedBeforePerc";
+			this.checkDedBeforePerc.Size = new System.Drawing.Size(275,16);
+			this.checkDedBeforePerc.TabIndex = 163;
+			this.checkDedBeforePerc.Text = "Apply deductible before percentage";
+			// 
 			// FormInsPlan
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.ClientSize = new System.Drawing.Size(982,700);
-			this.Controls.Add(this.panel2);
 			this.Controls.Add(this.panelPlan);
 			this.Controls.Add(this.butPick);
 			this.Controls.Add(this.butEditBenefits);
@@ -2154,8 +1507,8 @@ namespace OpenDental{
 			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Edit Insurance Plan";
-			this.Load += new System.EventHandler(this.FormInsPlan_Load);
 			this.Closing += new System.ComponentModel.CancelEventHandler(this.FormInsPlan_Closing);
+			this.Load += new System.EventHandler(this.FormInsPlan_Load);
 			this.groupSubscriber.ResumeLayout(false);
 			this.groupSubscriber.PerformLayout();
 			this.groupCoPay.ResumeLayout(false);
@@ -2169,13 +1522,6 @@ namespace OpenDental{
 			this.groupCarrier.PerformLayout();
 			this.panelPlan.ResumeLayout(false);
 			this.panelPlan.PerformLayout();
-			this.panel2.ResumeLayout(false);
-			this.panel2.PerformLayout();
-			this.groupBox1.ResumeLayout(false);
-			this.groupBox1.PerformLayout();
-			this.groupBox2.ResumeLayout(false);
-			this.groupBox2.PerformLayout();
-			this.groupBox3.ResumeLayout(false);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -2183,7 +1529,7 @@ namespace OpenDental{
 		#endregion
 
 		private void FormInsPlan_Load(object sender,System.EventArgs e) {
-			Cursor=Cursors.WaitCursor;
+			Cursor=Cursors.WaitCursor; 
 			PlanCurOld=PlanCur.Copy();
 			int patPlanNum=0;
 			if(PatPlanCur!=null) {
@@ -2324,7 +1670,6 @@ namespace OpenDental{
 					comboPlanType.SelectedIndex=3;
 			}
 			checkAlternateCode.Checked=PlanCur.UseAltCode;
-			checkSubstNone.Checked=PlanCur.CodeSubstNone;
 			checkIsMedical.Checked=PlanCur.IsMedical;
 			checkClaimsUseUCR.Checked=PlanCur.ClaimsUseUCR;
 			checkDedBeforePerc.Checked=PlanCur.DedBeforePerc;
@@ -4302,7 +3647,6 @@ namespace OpenDental{
 			PlanCur.ReleaseInfo=checkRelease.Checked;
 			PlanCur.AssignBen=checkAssign.Checked;
 			PlanCur.SubscNote=textSubscNote.Text;
-			PlanCur.CodeSubstNone=checkSubstNone.Checked;
 			//end of filling planCur.
 			Cursor=Cursors.WaitCursor;
 			if(PatPlanCur!=null) {

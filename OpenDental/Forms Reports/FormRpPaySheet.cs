@@ -17,6 +17,9 @@ namespace OpenDental{
 		private System.ComponentModel.Container components = null;
 		private ListBox listProv;
 		private Label label1;
+		private GroupBox groupBox1;
+		private RadioButton radioPatient;
+		private RadioButton radioCheck;
 		private CheckBox checkAllProv;
 		//private FormQuery FormQuery2;
 
@@ -52,6 +55,10 @@ namespace OpenDental{
 			this.listProv = new System.Windows.Forms.ListBox();
 			this.label1 = new System.Windows.Forms.Label();
 			this.checkAllProv = new System.Windows.Forms.CheckBox();
+			this.groupBox1 = new System.Windows.Forms.GroupBox();
+			this.radioCheck = new System.Windows.Forms.RadioButton();
+			this.radioPatient = new System.Windows.Forms.RadioButton();
+			this.groupBox1.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// butCancel
@@ -132,10 +139,42 @@ namespace OpenDental{
 			this.checkAllProv.Text = "All";
 			this.checkAllProv.Click += new System.EventHandler(this.checkAllProv_Click);
 			// 
+			// groupBox1
+			// 
+			this.groupBox1.Controls.Add(this.radioPatient);
+			this.groupBox1.Controls.Add(this.radioCheck);
+			this.groupBox1.Location = new System.Drawing.Point(31,263);
+			this.groupBox1.Name = "groupBox1";
+			this.groupBox1.Size = new System.Drawing.Size(161,72);
+			this.groupBox1.TabIndex = 44;
+			this.groupBox1.TabStop = false;
+			this.groupBox1.Text = "Group By";
+			// 
+			// radioCheck
+			// 
+			this.radioCheck.Checked = true;
+			this.radioCheck.Location = new System.Drawing.Point(8,19);
+			this.radioCheck.Name = "radioCheck";
+			this.radioCheck.Size = new System.Drawing.Size(104,18);
+			this.radioCheck.TabIndex = 0;
+			this.radioCheck.TabStop = true;
+			this.radioCheck.Text = "Check";
+			this.radioCheck.UseVisualStyleBackColor = true;
+			// 
+			// radioPatient
+			// 
+			this.radioPatient.Location = new System.Drawing.Point(8,43);
+			this.radioPatient.Name = "radioPatient";
+			this.radioPatient.Size = new System.Drawing.Size(104,18);
+			this.radioPatient.TabIndex = 1;
+			this.radioPatient.Text = "Patient";
+			this.radioPatient.UseVisualStyleBackColor = true;
+			// 
 			// FormRpPaySheet
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.ClientSize = new System.Drawing.Size(717,383);
+			this.Controls.Add(this.groupBox1);
 			this.Controls.Add(this.checkAllProv);
 			this.Controls.Add(this.listProv);
 			this.Controls.Add(this.label1);
@@ -152,6 +191,7 @@ namespace OpenDental{
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Daily Payments Report";
 			this.Load += new System.EventHandler(this.FormPaymentSheet_Load);
+			this.groupBox1.ResumeLayout(false);
 			this.ResumeLayout(false);
 
 		}
@@ -208,8 +248,13 @@ namespace OpenDental{
 				+whereProv+" "
 				+"AND (claimproc.Status=1 OR claimproc.Status=4) " //received or supplemental
 				+"AND claimpayment.CheckDate >= "+POut.PDate(date1.SelectionStart)+" "
-				+"AND claimpayment.CheckDate <= "+POut.PDate(date2.SelectionStart)+" "
-				+"GROUP BY claimproc.ClaimPaymentNum,provider.ProvNum";
+				+"AND claimpayment.CheckDate <= "+POut.PDate(date2.SelectionStart)+" ";
+			if(radioPatient.Checked){
+				queryIns+="GROUP BY patient.PatNum,claimproc.ClaimPaymentNum,provider.ProvNum";
+			}
+			else{
+				//+"GROUP BY claimproc.ClaimPaymentNum,provider.ProvNum";
+			}
 			if(checkAllProv.Checked){
 				whereProv="";
 			}
