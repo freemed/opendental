@@ -4032,7 +4032,7 @@ namespace OpenDental{
 				}
 			}
 			else if(row["TaskNum"].ToString()!="0") {
-			Task curTask=Task.GetOne(PIn.PInt(row["TaskNum"].ToString()));
+				Task curTask=Tasks.GetOne(PIn.PInt(row["TaskNum"].ToString()));
 				FormTaskEdit FormT=new FormTaskEdit(curTask);
 				FormT.ShowDialog();
 				if(FormT.GotoType!=TaskObjectType.None) {
@@ -4041,12 +4041,17 @@ namespace OpenDental{
 					//OnGoToChanged();
 					if(GotoType==TaskObjectType.Patient) {
 						if(GotoKeyNum!=0) {
-							PatCur.PatNum=GotoKeyNum;						
+							Patient pat=Patients.GetPat(GotoKeyNum);
+							OnPatientSelected(pat.PatNum,pat.GetNameLF(),pat.Email!="",pat.ChartNumber);
+							ModuleSelected(pat.PatNum);
+							return;
 						}
 					}
 					if(GotoType==TaskObjectType.Appointment) {
-						if(GotoKeyNum!=0) {
+						/*There's nothing to do here, since we're not in the appt module.
+							if(GotoKeyNum!=0) {
 							Appointment apt=Appointments.GetOneApt(GotoKeyNum);
+							//Patient pat=Patients.GetPat(apt.PatNum);
 							if(apt==null) {
 								MsgBox.Show(this,"Appointment has been deleted, so it's not available.");
 								return;
@@ -4062,6 +4067,7 @@ namespace OpenDental{
 							}
 							PatCur.PatNum=apt.PatNum;//OnPatientSelected(apt.PatNum);
 						}
+						*/
 						//DialogResult=DialogResult.OK;
 						return;
 					}

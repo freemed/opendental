@@ -26,6 +26,18 @@ namespace OpenDental{
 			return RefreshAndFill(command);
 		}*/
 
+		///<summary>Gets one Task from database.</summary>
+		public static Task GetOne(int TaskNum) {
+			string command=
+				"SELECT * FROM task"
+				+" WHERE TaskNum = "+POut.PInt(TaskNum);
+			List<Task> taskList=RefreshAndFill(command);
+			if(taskList.Count==0) {
+				return null;
+			}
+			return taskList[0];
+		}
+
 		///<summary>Gets all tasks for the main trunk.</summary>
 		public static List<Task> RefreshMainTrunk() {
 			string command="SELECT * FROM task "
@@ -113,6 +125,7 @@ namespace OpenDental{
 				task.FromNum        = PIn.PInt(table.Rows[i][8].ToString());
 				task.ObjectType     = (TaskObjectType)PIn.PInt(table.Rows[i][9].ToString());
 				task.DateTimeEntry  = PIn.PDateT(table.Rows[i][10].ToString());
+				task.UserNum        = PIn.PInt(table.Rows[i][11].ToString());
 				retVal.Add(task);
 			}
 			return retVal;
@@ -142,8 +155,9 @@ namespace OpenDental{
 				+",DateType = '"      +POut.PInt   ((int)task.DateType)+"'"
 				+",FromNum = '"       +POut.PInt   (task.FromNum)+"'"
 				+",ObjectType = '"    +POut.PInt   ((int)task.ObjectType)+"'"
-				+",DateTimeEntry = " +POut.PDateT (task.DateTimeEntry)
-				+" WHERE TaskNum = '"+POut.PInt(task.TaskNum)+"'";
+				+",DateTimeEntry = "  +POut.PDateT (task.DateTimeEntry)
+				+",UserNum = '"       +POut.PInt   (task.UserNum)+"'"
+				+" WHERE TaskNum = '" +POut.PInt(task.TaskNum)+"'";
  			General.NonQ(command);
 			//need to optimize this later to skip unless TaskListNumChanged
 			TaskAncestors.Synch(task);
@@ -168,7 +182,7 @@ namespace OpenDental{
 				command+="TaskNum,";
 			}
 			command+="TaskListNum,DateTask,KeyNum,Descript,TaskStatus,"
-				+"IsRepeating,DateType,FromNum,ObjectType,DateTimeEntry) VALUES(";
+				+"IsRepeating,DateType,FromNum,ObjectType,DateTimeEntry,UserNum) VALUES(";
 			if(PrefB.RandomKeys){
 				command+="'"+POut.PInt(task.TaskNum)+"', ";
 			}
@@ -182,7 +196,8 @@ namespace OpenDental{
 				+"'"+POut.PInt   ((int)task.DateType)+"', "
 				+"'"+POut.PInt   (task.FromNum)+"', "
 				+"'"+POut.PInt   ((int)task.ObjectType)+"', "
-				+POut.PDateT (task.DateTimeEntry)+")";
+				+POut.PDateT (task.DateTimeEntry)+","
+				+"'"+POut.PInt   (task.UserNum)+"')";
 				//+"NOW())";//DateTimeEntry set to current server time
  			if(PrefB.RandomKeys){
 				General.NonQ(command);
@@ -205,7 +220,8 @@ namespace OpenDental{
 					|| oldtask.KeyNum!=task.KeyNum
 					|| oldtask.ObjectType!=task.ObjectType
 					|| oldtask.TaskListNum!=task.TaskListNum
-					|| oldtask.TaskStatus!=task.TaskStatus)
+					|| oldtask.TaskStatus!=task.TaskStatus
+					|| oldtask.UserNum!=task.UserNum)
 			{
 				return true;
 			}

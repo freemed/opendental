@@ -6368,8 +6368,8 @@ namespace OpenDental{
 				General.NonQEx(command);
 				command="INSERT INTO preference (PrefName,ValueString) VALUES ('BackupExcludeImageFolder','0')";
 				General.NonQEx(command);
-				//command="ALTER TABLE insplan ADD AllowProcCodeSubt varchar(1) NOT NULL default '1'";
-				//General.NonQEx(command);
+				command="ALTER TABLE task ADD UserNum int NOT NULL";
+				General.NonQEx(command);
 
 
 
