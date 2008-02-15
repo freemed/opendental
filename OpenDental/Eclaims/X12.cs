@@ -740,7 +740,7 @@ namespace OpenDental.Eclaims
 						//still needed, even though missing teeth are not based on procedures any longer
 						doSkip=false;
 						for(int p=0;p<claimProcs.Length;p++){
-							proc=Procedures.GetProc(procList,claimProcs[p].ProcNum);
+							proc=Procedures.GetProcFromList(procList,claimProcs[p].ProcNum);
 							procCode=ProcedureCodes.GetProcCode(proc.CodeNum);
 							if(procCode.PaintType==ToothPaintingType.Extraction && proc.ToothNum==(string)missingTeeth[j]){
 								doSkip=true;
@@ -801,7 +801,7 @@ namespace OpenDental.Eclaims
 				ArrayList diagnoses=new ArrayList();//princDiag will always be the first element.
 				if(isMedical){
 					for(int j=0;j<claimProcs.Length;j++){
-						proc=Procedures.GetProc(procList,claimProcs[j].ProcNum);
+						proc=Procedures.GetProcFromList(procList,claimProcs[j].ProcNum);
 						if(proc.DiagnosticCode==""){
 							continue;
 						}
@@ -1032,7 +1032,7 @@ namespace OpenDental.Eclaims
 				#region Line Items
 				//2400 Service Lines
 				for(int j=0;j<claimProcs.Length;j++){
-					proc=Procedures.GetProc(procList,claimProcs[j].ProcNum);
+					proc=Procedures.GetProcFromList(procList,claimProcs[j].ProcNum);
 					procCode=ProcedureCodes.GetProcCode(proc.CodeNum);
 					//2400 LX: Line Counter. or (medical) Service Line Number
 					seg++;
@@ -1895,7 +1895,7 @@ namespace OpenDental.Eclaims
 			ProcedureCode procCode;
 			bool princDiagExists=false;
 			for(int i=0;i<claimProcs.Length;i++){
-				proc=Procedures.GetProc(procList,claimProcs[i].ProcNum);
+				proc=Procedures.GetProcFromList(procList,claimProcs[i].ProcNum);
 				procCode=ProcedureCodes.GetProcCode(proc.CodeNum);		
 				if(procCode.TreatArea==TreatmentArea.Arch && proc.Surf==""){
 					if(retVal!="")

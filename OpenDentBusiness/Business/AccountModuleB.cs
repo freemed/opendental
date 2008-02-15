@@ -455,7 +455,7 @@ namespace OpenDentBusiness {
 			}
 			//Procedures------------------------------------------------------------------------------------------
 			command="SELECT procedurelog.BaseUnits,Descript,SUM(InsPayAmt) _insPayAmt,"
-				+"LaymanTerm,procedurelog.MedicalCode,procedurelog.PatNum,ProcCode,"
+				+"LaymanTerm,procedurelog.MedicalCode,MAX(claimproc.NoBillIns) _noBillIns,procedurelog.PatNum,ProcCode,"
 				+"procedurelog.ProcDate,ProcFee,procedurelog.ProcNum,procedurelog.ProvNum,ToothNum,UnitQty,"
 				+"SUM(WriteOff) _writeOff "
 				+"FROM procedurelog "
@@ -500,6 +500,9 @@ namespace OpenDentBusiness {
 				row["description"]+=rawProc.Rows[i]["Descript"].ToString();
 				if(rawProc.Rows[i]["LaymanTerm"].ToString()!=""){
 					row["description"]=rawProc.Rows[i]["LaymanTerm"].ToString();
+				}
+				if(rawProc.Rows[i]["_noBillIns"].ToString()!="0"){
+					row["description"]+=" "+Lan.g("ContrAccount","(NoBillIns)");
 				}
 				insPayAmt=PIn.PDouble(rawProc.Rows[i]["_insPayAmt"].ToString());
 				writeOff=PIn.PDouble(rawProc.Rows[i]["_writeOff"].ToString());

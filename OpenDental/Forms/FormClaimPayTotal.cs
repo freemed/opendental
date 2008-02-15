@@ -331,7 +331,7 @@ namespace OpenDental
 					row.Cells.Add(Lan.g(this,"Total Payment"));
 				}
 				else {
-					ProcCur=Procedures.GetProc(ProcList,ClaimProcsToEdit[i].ProcNum);
+					ProcCur=Procedures.GetProcFromList(ProcList,ClaimProcsToEdit[i].ProcNum);
 					row.Cells.Add(ProcedureCodes.GetProcCode(ProcCur.CodeNum).ProcCode);
 					row.Cells.Add(ProcCur.ToothNum);
 					row.Cells.Add(ProcedureCodes.GetProcCode(ProcCur.CodeNum).Descript);
@@ -515,7 +515,7 @@ namespace OpenDental
 			double unpaidAmt=0;
 			Procedure[] ProcList=Procedures.Refresh(PatCur.PatNum);
 			for(int i=0;i<ClaimProcsToEdit.Length;i++){
-				unpaidAmt=Procedures.GetProc(ProcList,ClaimProcsToEdit[i].ProcNum).ProcFee
+				unpaidAmt=Procedures.GetProcFromList(ProcList,ClaimProcsToEdit[i].ProcNum).ProcFee
 					//((Procedure)Procedures.HList[ClaimProcsToEdit[i].ProcNum]).ProcFee
 					-ClaimProcsToEdit[i].DedApplied
 					-ClaimProcsToEdit[i].InsPayAmt;

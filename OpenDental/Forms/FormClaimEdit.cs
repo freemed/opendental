@@ -2813,7 +2813,7 @@ namespace OpenDental{
 						row.Cells.Add(Lan.g(this,"Total Payment"));
 				}
 				else {
-					ProcCur=Procedures.GetProc(ProcList,ClaimProcsForClaim[i].ProcNum);
+					ProcCur=Procedures.GetProcFromList(ProcList,ClaimProcsForClaim[i].ProcNum);
 					row.Cells.Add(ClaimProcsForClaim[i].CodeSent);
 					row.Cells.Add(Tooth.ToInternat(ProcCur.ToothNum));
 					row.Cells.Add(ProcedureCodes.GetProcCode(ProcCur.CodeNum).Descript);
@@ -3593,7 +3593,7 @@ namespace OpenDental{
 					//so only changed back to estimate if attached to a proc
 					ClaimProcsForClaim[i].Status=ClaimProcStatus.Estimate;
 					ClaimProcsForClaim[i].ClaimNum=0;
-					proc=Procedures.GetProc(ProcList,ClaimProcsForClaim[i].ProcNum);
+					proc=Procedures.GetProcFromList(ProcList,ClaimProcsForClaim[i].ProcNum);
 					if(ClaimCur.ClaimType=="P" && PatPlanList.Length>0){
 						ClaimProcs.ComputeBaseEst(ClaimProcsForClaim[i],proc,PriSecTot.Pri,PlanList,PatPlanList,benList);
 					}

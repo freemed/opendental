@@ -327,7 +327,7 @@ namespace OpenDental.Eclaims {
 				}
 				//Procedures: Repeat for number of times specified by F06.----------------------------------------------------------
 				for(int p=0;p<claimProcsClaim.Length;p++){
-					proc=Procedures.GetProc(procListAll,claimProcsClaim[i].ProcNum);
+					proc=Procedures.GetProcFromList(procListAll,claimProcsClaim[i].ProcNum);
 					procCode=ProcedureCodes.GetProcCode(proc.CodeNum);
 					//F07 proc line number 1 N
 					txt+=(p+1).ToString();
@@ -1079,7 +1079,7 @@ namespace OpenDental.Eclaims {
 				}
 			}
 			for(int i=0;i<claimProcsClaim.Length;i++){
-				proc=Procedures.GetProc(procListAll,claimProcsClaim[i].ProcNum);
+				proc=Procedures.GetProcFromList(procListAll,claimProcsClaim[i].ProcNum);
 				procCode=ProcedureCodes.GetProcCode(proc.CodeNum);
 				if(claimProcsClaim[i].ProcDate.Year<1970 || claimProcsClaim[i].ProcDate>DateTime.Today){
 					if(retVal!="")

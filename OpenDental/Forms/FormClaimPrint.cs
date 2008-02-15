@@ -498,7 +498,7 @@ namespace OpenDental{
 			for(int j=missingTeeth.Count-1;j>=0;j--) {//loop backwards to keep index accurate as items are removed
 				//if the missing tooth is missing because of an extraction being billed here, then exclude it
 				for(int p=0;p<claimprocs.Count;p++) {
-					proc=Procedures.GetProc(ProcList,claimprocs[p].ProcNum);
+					proc=Procedures.GetProcFromList(ProcList,claimprocs[p].ProcNum);
 					procCode=ProcedureCodes.GetProcCode(proc.CodeNum);
 					if(procCode.PaintType==ToothPaintingType.Extraction && proc.ToothNum==(string)missingTeeth[j]) {
 						missingTeeth.RemoveAt(j);
@@ -512,7 +512,7 @@ namespace OpenDental{
 				diagnoses[i]="";
 			}
 			for(int i=0;i<claimprocs.Count;i++){
-				proc=Procedures.GetProc(ProcList,claimprocs[i].ProcNum);
+				proc=Procedures.GetProcFromList(ProcList,claimprocs[i].ProcNum);
 				if(proc.DiagnosticCode==""){
 					continue;
 				}
@@ -2885,7 +2885,7 @@ namespace OpenDental{
 					return claimprocs[procIndex].FeeBilled.ToString(stringFormat);
 				}
 			}
-			Procedure ProcCur=Procedures.GetProc(ProcList,claimprocs[procIndex].ProcNum);
+			Procedure ProcCur=Procedures.GetProcFromList(ProcList,claimprocs[procIndex].ProcNum);
 			ProcedureCode procCode=ProcedureCodes.GetProcCode(ProcCur.CodeNum);
 			if(field=="RevCode"){
 				return ProcCur.RevCode;

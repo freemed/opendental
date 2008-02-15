@@ -2461,23 +2461,28 @@ double adj=Adjustments.GetTotForProc(arrayProc[tempCountProc].ProcNum,Adjustment
 		}
 
 		private void OnIns_Click() {
-			/*
+			PatPlan[] PatPlanList=PatPlans.Refresh(PatCur.PatNum);
+			InsPlan[] InsPlanList=InsPlans.Refresh(FamCur);
+			ClaimProc[] ClaimProcList=ClaimProcs.Refresh(PatCur.PatNum);
+			Benefit[] BenefitList=Benefits.Refresh(PatPlanList);
+			Procedure[] procsForPat=Procedures.Refresh(PatCur.PatNum);
 			if(PatPlanList.Length==0){
 				MsgBox.Show(this,"Patient does not have insurance.");
 				return;
 			}
 			int countSelected=0;
 			bool countIsOverMax=false;
+			DataTable table=DataSetMain.Tables["account"];
 			if(gridAccount.SelectedIndices.Length==0){
 				//autoselect procedures
-				for(int i=0;i<AcctLineList.Count;i++){//loop through every line showing on screen
-					if(AcctLineList[i].Type!=AcctModType.Proc){
+				for(int i=0;i<table.Rows.Count;i++){//loop through every line showing on screen
+					if(table.Rows[i]["ProcNum"].ToString()=="0"){
 						continue;//ignore non-procedures
 					}
-					if(arrayProc[AcctLineList[i].Index].ProcFee==0){
+					if((double)table.Rows[i]["chargesDouble"]==0){
 						continue;//ignore zero fee procedures, but user can explicitly select them
 					}
-					if(Procedures.NeedsSent(arrayProc[AcctLineList[i].Index],ClaimProcList,PatPlans.GetPlanNum(PatPlanList,1))){
+					if(Procedures.NeedsSent(PIn.PInt(table.Rows[i]["ProcNum"].ToString()),ClaimProcList,PatPlans.GetPlanNum(PatPlanList,1))){
 						if(CultureInfo.CurrentCulture.Name.Length>=4 && CultureInfo.CurrentCulture.Name.Substring(3)=="CA" && countSelected==7){//en-CA or fr-CA
 							countIsOverMax=true;
 							continue;//only send 7.
@@ -2493,7 +2498,7 @@ double adj=Adjustments.GetTotForProc(arrayProc[tempCountProc].ProcNum,Adjustment
 			}
 			bool allAreProcedures=true;
 			for(int i=0;i<gridAccount.SelectedIndices.Length;i++){
-				if(AcctLineList[gridAccount.SelectedIndices[i]].Type!=AcctModType.Proc){
+				if(table.Rows[gridAccount.SelectedIndices[i]]["ProcNum"].ToString()=="0"){
 					allAreProcedures=false;
 				}
 			}
@@ -2504,24 +2509,24 @@ double adj=Adjustments.GetTotForProc(arrayProc[tempCountProc].ProcNum,Adjustment
 			if(countIsOverMax){
 				MsgBox.Show(this,"Only the first 7 procedures will be selected.  You will need to also create a second claim.");
 			}
-			Claim ClaimCur=CreateClaim("P");
+			Claim ClaimCur=CreateClaim("P",PatPlanList,InsPlanList,ClaimProcList,procsForPat);
 			if(ClaimCur.ClaimNum==0){
 				ModuleSelected(PatCur.PatNum);
 				return;
 			}
-			ClaimProcList=ClaimProcs.Refresh(PatCur.PatNum);
+			//ClaimProcList=ClaimProcs.Refresh(PatCur.PatNum);
 			//ClaimProc[] ClaimProcsForClaim=ClaimProcs.GetForClaim(ClaimProcList,ClaimCur.ClaimNum);
 			ClaimCur.ClaimStatus="W";
 			ClaimCur.DateSent=DateTime.Today;
 			bool isFamMax=Benefits.GetIsFamMax(BenefitList,ClaimCur.PlanNum);
 			bool isFamDed=Benefits.GetIsFamDed(BenefitList,ClaimCur.PlanNum);
-			ClaimProc[] claimProcsFam=null;
+			ClaimProc[] claimProcsFam=null;			
 			if(isFamMax || isFamDed){
 				claimProcsFam=ClaimProcs.RefreshFam(ClaimCur.PlanNum);
-				Claims.CalculateAndUpdate(claimProcsFam,AccProcList,InsPlanList,ClaimCur,PatPlanList,BenefitList);
+				Claims.CalculateAndUpdate(claimProcsFam,procsForPat,InsPlanList,ClaimCur,PatPlanList,BenefitList);
 			}
 			else{
-				Claims.CalculateAndUpdate(ClaimProcList,AccProcList,InsPlanList,ClaimCur,PatPlanList,BenefitList);
+				Claims.CalculateAndUpdate(ClaimProcList,procsForPat,InsPlanList,ClaimCur,PatPlanList,BenefitList);
 			}
 			//Claims.Cur=ClaimCur;
 			FormClaimEdit FormCE=new FormClaimEdit(ClaimCur,PatCur,FamCur);
@@ -2535,7 +2540,7 @@ double adj=Adjustments.GetTotForProc(arrayProc[tempCountProc].ProcNum,Adjustment
 			if(PatPlans.GetPlanNum(PatPlanList,2)>0){
 				InsPlan plan=InsPlans.GetPlan(PatPlans.GetPlanNum(PatPlanList,2),InsPlanList);
 				if(!plan.IsMedical){
-					ClaimCur=CreateClaim("S");
+					ClaimCur=CreateClaim("S",PatPlanList,InsPlanList,ClaimProcList,procsForPat);
 					if(ClaimCur.ClaimNum==0){
 						ModuleSelected(PatCur.PatNum);
 						return;
@@ -2546,27 +2551,23 @@ double adj=Adjustments.GetTotForProc(arrayProc[tempCountProc].ProcNum,Adjustment
 					isFamDed=Benefits.GetIsFamDed(BenefitList,ClaimCur.PlanNum);
 					if(isFamMax || isFamDed) {
 						claimProcsFam=ClaimProcs.RefreshFam(ClaimCur.PlanNum);
-						Claims.CalculateAndUpdate(claimProcsFam,AccProcList,InsPlanList,ClaimCur,PatPlanList,BenefitList);
+						Claims.CalculateAndUpdate(claimProcsFam,procsForPat,InsPlanList,ClaimCur,PatPlanList,BenefitList);
 					}
 					else {
-						Claims.CalculateAndUpdate(ClaimProcList,AccProcList,InsPlanList,ClaimCur,PatPlanList,BenefitList);
+						Claims.CalculateAndUpdate(ClaimProcList,procsForPat,InsPlanList,ClaimCur,PatPlanList,BenefitList);
 					}
 					//Claims.Cur=ClaimCur;
 				}
 			}
-			ModuleSelected(PatCur.PatNum);*/
+			ModuleSelected(PatCur.PatNum);
 		}
 
-
 		///<summary>The only validation that's been done is just to make sure that only procedures are selected.  All validation on the procedures selected is done here.  Creates and saves claim initially, attaching all selected procedures.  But it does not refresh any data. Does not do a final update of the new claim.  Does not enter fee amounts.  claimType=P,S,Med,or Other</summary>
-		private Claim CreateClaim(string claimType){
+		private Claim CreateClaim(string claimType,PatPlan[] PatPlanList,InsPlan[] InsPlanList,ClaimProc[] ClaimProcList,Procedure[] procsForPat){
 			int claimFormNum = 0;
 			EtransType eFormat = 0;
 			InsPlan PlanCur=new InsPlan();
 			Relat relatOther=Relat.Self;
-			PatPlan[] PatPlanList=PatPlans.Refresh(PatCur.PatNum);
-			InsPlan[] InsPlanList=InsPlans.Refresh(FamCur);
-			ClaimProc[] ClaimProcList=ClaimProcs.Refresh(PatCur.PatNum);
 			switch(claimType){
 				case "P":
 					PlanCur=InsPlans.GetPlan(PatPlans.GetPlanNum(PatPlanList,1),InsPlanList);
@@ -2597,40 +2598,48 @@ double adj=Adjustments.GetTotForProc(arrayProc[tempCountProc].ProcNum,Adjustment
 					break;
 			}
 			DataTable table=DataSetMain.Tables["account"];
-			List<int> procNums=new List<int>();
+			//List<int> procNums=new List<int>();
+			//for(int i=0;i<gridAccount.SelectedIndices.Length;i++){
+			//	procNums.Add(PIn.PInt(table.Rows[gridAccount.SelectedIndices[i]]["ProcNum"].ToString()));
+			//}
+			//List<Procedure> procList=Procedures.GetProcFromList(procsForPat,  //.GetManyProcs(procNums);
+			Procedure proc;
 			for(int i=0;i<gridAccount.SelectedIndices.Length;i++){
-				procNums.Add(PIn.PInt(table.Rows[gridAccount.SelectedIndices[i]]["ProcNum"].ToString()));
-			}
-			List<Procedure> procList=Procedures.GetManyProcs(procNums);
-			for(int i=0;i<procList.Count;i++){
-				if(Procedures.NoBillIns(procList[i],ClaimProcList,PlanCur.PlanNum)){
+				proc=Procedures.GetProcFromList(procsForPat,PIn.PInt(table.Rows[gridAccount.SelectedIndices[i]]["ProcNum"].ToString()));
+				if(Procedures.NoBillIns(proc,ClaimProcList,PlanCur.PlanNum)){
 					MsgBox.Show(this,"Not allowed to send procedures to insurance that are marked 'Do not bill to ins'.");
 					return new Claim();
 				}
 			}
-			for(int i=0;i<procList.Count;i++){
-				if(Procedures.IsAlreadyAttachedToClaim(procList[i],ClaimProcList,PlanCur.PlanNum)){
+			for(int i=0;i<gridAccount.SelectedIndices.Length;i++){
+				proc=Procedures.GetProcFromList(procsForPat,PIn.PInt(table.Rows[gridAccount.SelectedIndices[i]]["ProcNum"].ToString()));
+				if(Procedures.IsAlreadyAttachedToClaim(proc,ClaimProcList,PlanCur.PlanNum)){
 					MsgBox.Show(this,"Not allowed to send a procedure to the same insurance company twice.");
 					return new Claim();
 				}
 			}
-			int clinic=procList[0].ClinicNum;
-			for(int i=1;i<procList.Count;i++){//skips 0
-				if(clinic!=procList[i].ClinicNum){
+			proc=Procedures.GetProcFromList(procsForPat,PIn.PInt(table.Rows[gridAccount.SelectedIndices[0]]["ProcNum"].ToString()));
+			int clinic=proc.ClinicNum;
+			for(int i=1;i<gridAccount.SelectedIndices.Length;i++){//skips 0
+				proc=Procedures.GetProcFromList(procsForPat,PIn.PInt(table.Rows[gridAccount.SelectedIndices[i]]["ProcNum"].ToString()));
+				if(clinic!=proc.ClinicNum){
 					MsgBox.Show(this,"All procedures do not have the same clinic.");
 					return new Claim();
 				}
 			}
-			ClaimProc[] claimProcs=new ClaimProc[procList.Count];//1:1 with procList
-			for(int i=0;i<procList.Count;i++){//loop through selected procs
+			ClaimProc[] claimProcs=new ClaimProc[gridAccount.SelectedIndices.Length];//1:1 with selectedIndices
+			int procNum;
+			for(int i=0;i<gridAccount.SelectedIndices.Length;i++){//loop through selected procs
 				//and try to find an estimate that can be used
-				claimProcs[i]=Procedures.GetClaimProcEstimate(procList[i],ClaimProcList,PlanCur);
+				procNum=PIn.PInt(table.Rows[gridAccount.SelectedIndices[i]]["ProcNum"].ToString());
+				claimProcs[i]=Procedures.GetClaimProcEstimate(procNum,ClaimProcList,PlanCur);
 			}
 			for(int i=0;i<claimProcs.Length;i++){//loop through each claimProc
 				//and create any missing estimates. This handles claims to 3rd and 4th ins co's.
 				if(claimProcs[i]==null){
 					claimProcs[i]=new ClaimProc();
-					ClaimProcs.CreateEst(claimProcs[i],procList[i],PlanCur);
+					proc=Procedures.GetProcFromList(procsForPat,PIn.PInt(table.Rows[gridAccount.SelectedIndices[i]]["ProcNum"].ToString()));//1:1
+					ClaimProcs.CreateEst(claimProcs[i],proc,PlanCur);
 				}
 			}
 			//now, all claimProcs have a valid value
@@ -2687,10 +2696,11 @@ double adj=Adjustments.GetTotForProc(arrayProc[tempCountProc].ProcNum,Adjustment
 			if(PlanCur.PlanType=="c"){//if capitation
 				ClaimCur.ClaimType="Cap";
 			}
-			ClaimCur.ProvTreat=procList[0].ProvNum;
-			for(int i=0;i<procList.Count;i++){
-				if(!Providers.GetIsSec(procList[i].ProvNum)){//if not a hygienist
-					ClaimCur.ProvTreat=procList[i].ProvNum;
+			ClaimCur.ProvTreat=Procedures.GetProcFromList(procsForPat,PIn.PInt(table.Rows[gridAccount.SelectedIndices[0]]["ProcNum"].ToString())).ProvNum;
+			for(int i=0;i<gridAccount.SelectedIndices.Length;i++){
+				proc=Procedures.GetProcFromList(procsForPat,PIn.PInt(table.Rows[gridAccount.SelectedIndices[i]]["ProcNum"].ToString()));
+				if(!Providers.GetIsSec(proc.ProvNum)){//if not a hygienist
+					ClaimCur.ProvTreat=proc.ProvNum;
 				}
 			}
 			if(Providers.GetIsSec(ClaimCur.ProvTreat)){
@@ -2709,7 +2719,7 @@ double adj=Adjustments.GetTotForProc(arrayProc[tempCountProc].ProcNum,Adjustment
 			Procedure ProcCur;
 			//for(int i=0;i<tbAccount.SelectedIndices.Length;i++){
 			for(int i=0;i<claimProcs.Length;i++){
-				ProcCur=procList[i].Copy();
+				ProcCur=Procedures.GetProcFromList(procsForPat,PIn.PInt(table.Rows[gridAccount.SelectedIndices[i]]["ProcNum"].ToString()));//1:1
 				//ClaimProc ClaimProcCur=new ClaimProc();
 				//ClaimProcCur.ProcNum=ProcCur.ProcNum;
 				claimProcs[i].ClaimNum=ClaimCur.ClaimNum;
@@ -2748,7 +2758,11 @@ double adj=Adjustments.GetTotForProc(arrayProc[tempCountProc].ProcNum,Adjustment
 		}
 
 		private void menuInsPri_Click(object sender, System.EventArgs e) {
-			/*
+			PatPlan[] PatPlanList=PatPlans.Refresh(PatCur.PatNum);
+			InsPlan[] InsPlanList=InsPlans.Refresh(FamCur);
+			ClaimProc[] ClaimProcList=ClaimProcs.Refresh(PatCur.PatNum);
+			Benefit[] BenefitList=Benefits.Refresh(PatPlanList);
+			Procedure[] procsForPat=Procedures.Refresh(PatCur.PatNum);
 			if(PatPlanList.Length==0){
 				MessageBox.Show(Lan.g(this,"Patient does not have insurance."));
 				return;
@@ -2757,9 +2771,10 @@ double adj=Adjustments.GetTotForProc(arrayProc[tempCountProc].ProcNum,Adjustment
 				MessageBox.Show(Lan.g(this,"Please select procedures first."));
 				return;
 			}
+			DataTable table=DataSetMain.Tables["account"];
 			bool allAreProcedures=true;
 			for(int i=0;i<gridAccount.SelectedIndices.Length;i++){
-				if(AcctLineList[gridAccount.SelectedIndices[i]].Type!=AcctModType.Proc){
+				if(table.Rows[gridAccount.SelectedIndices[i]]["ProcNum"].ToString()=="0"){
 					allAreProcedures=false;
 				}
 			}
@@ -2767,7 +2782,7 @@ double adj=Adjustments.GetTotForProc(arrayProc[tempCountProc].ProcNum,Adjustment
 				MessageBox.Show(Lan.g(this,"You can only select procedures."));
 				return;
 			}
-			Claim ClaimCur=CreateClaim("P");
+			Claim ClaimCur=CreateClaim("P",PatPlanList,InsPlanList,ClaimProcList,procsForPat);
 			if(ClaimCur.ClaimNum==0){
 				ModuleSelected(PatCur.PatNum);
 				return;
@@ -2783,18 +2798,22 @@ double adj=Adjustments.GetTotForProc(arrayProc[tempCountProc].ProcNum,Adjustment
 			bool isFamDed=Benefits.GetIsFamDed(BenefitList,ClaimCur.PlanNum);
 			if(isFamMax || isFamDed) {
 				ClaimProc[] claimProcsFam=ClaimProcs.RefreshFam(ClaimCur.PlanNum);
-				Claims.CalculateAndUpdate(claimProcsFam,AccProcList,InsPlanList,ClaimCur,PatPlanList,BenefitList);
+				Claims.CalculateAndUpdate(claimProcsFam,procsForPat,InsPlanList,ClaimCur,PatPlanList,BenefitList);
 			}
 			else {
-				Claims.CalculateAndUpdate(ClaimProcList,AccProcList,InsPlanList,ClaimCur,PatPlanList,BenefitList);
+				Claims.CalculateAndUpdate(ClaimProcList,procsForPat,InsPlanList,ClaimCur,PatPlanList,BenefitList);
 			}
 			FormCE.IsNew=true;//this causes it to delete the claim if cancelling.
 			FormCE.ShowDialog();
-			ModuleSelected(PatCur.PatNum);*/
+			ModuleSelected(PatCur.PatNum);
 		}
 
 		private void menuInsSec_Click(object sender, System.EventArgs e) {
-			/*
+			PatPlan[] PatPlanList=PatPlans.Refresh(PatCur.PatNum);
+			InsPlan[] InsPlanList=InsPlans.Refresh(FamCur);
+			ClaimProc[] ClaimProcList=ClaimProcs.Refresh(PatCur.PatNum);
+			Benefit[] BenefitList=Benefits.Refresh(PatPlanList);
+			Procedure[] procsForPat=Procedures.Refresh(PatCur.PatNum);
 			if(PatPlanList.Length<2){
 				MessageBox.Show(Lan.g(this,"Patient does not have secondary insurance."));
 				return;
@@ -2803,9 +2822,10 @@ double adj=Adjustments.GetTotForProc(arrayProc[tempCountProc].ProcNum,Adjustment
 				MessageBox.Show(Lan.g(this,"Please select procedures first."));
 				return;
 			}
+			DataTable table=DataSetMain.Tables["account"];
 			bool allAreProcedures=true;
 			for(int i=0;i<gridAccount.SelectedIndices.Length;i++){
-				if(AcctLineList[gridAccount.SelectedIndices[i]].Type!=AcctModType.Proc){
+				if(table.Rows[gridAccount.SelectedIndices[i]]["ProcNum"].ToString()=="0"){
 					allAreProcedures=false;
 				}
 			}
@@ -2813,7 +2833,7 @@ double adj=Adjustments.GetTotForProc(arrayProc[tempCountProc].ProcNum,Adjustment
 				MessageBox.Show(Lan.g(this,"You can only select procedures."));
 				return;
 			}
-			Claim ClaimCur=CreateClaim("S");
+			Claim ClaimCur=CreateClaim("S",PatPlanList,InsPlanList,ClaimProcList,procsForPat);
 			if(ClaimCur.ClaimNum==0){
 				ModuleSelected(PatCur.PatNum);
 				return;
@@ -2826,19 +2846,23 @@ double adj=Adjustments.GetTotForProc(arrayProc[tempCountProc].ProcNum,Adjustment
 			bool isFamDed=Benefits.GetIsFamDed(BenefitList,ClaimCur.PlanNum);
 			if(isFamMax || isFamDed) {
 				ClaimProc[] claimProcsFam=ClaimProcs.RefreshFam(ClaimCur.PlanNum);
-				Claims.CalculateAndUpdate(claimProcsFam,AccProcList,InsPlanList,ClaimCur,PatPlanList,BenefitList);
+				Claims.CalculateAndUpdate(claimProcsFam,procsForPat,InsPlanList,ClaimCur,PatPlanList,BenefitList);
 			}
 			else {
-				Claims.CalculateAndUpdate(ClaimProcList,AccProcList,InsPlanList,ClaimCur,PatPlanList,BenefitList);
+				Claims.CalculateAndUpdate(ClaimProcList,procsForPat,InsPlanList,ClaimCur,PatPlanList,BenefitList);
 			}
 			FormClaimEdit FormCE=new FormClaimEdit(ClaimCur,PatCur,FamCur);
 			FormCE.IsNew=true;//this causes it to delete the claim if cancelling.
 			FormCE.ShowDialog();
-			ModuleSelected(PatCur.PatNum);*/
+			ModuleSelected(PatCur.PatNum);
 		}
 
 		private void menuInsMedical_Click(object sender, System.EventArgs e) {
-			/*
+			PatPlan[] PatPlanList=PatPlans.Refresh(PatCur.PatNum);
+			InsPlan[] InsPlanList=InsPlans.Refresh(FamCur);
+			ClaimProc[] ClaimProcList=ClaimProcs.Refresh(PatCur.PatNum);
+			Benefit[] BenefitList=Benefits.Refresh(PatPlanList);
+			Procedure[] procsForPat=Procedures.Refresh(PatCur.PatNum);
 			int medPlanNum=0;
 			for(int i=0;i<PatPlanList.Length;i++){
 				if(InsPlans.GetPlan(PatPlanList[i].PlanNum,InsPlanList).IsMedical){
@@ -2850,19 +2874,22 @@ double adj=Adjustments.GetTotForProc(arrayProc[tempCountProc].ProcNum,Adjustment
 				MsgBox.Show(this,"Patient does not have medical insurance.");
 				return;
 			}
+			DataTable table=DataSetMain.Tables["account"];
+			Procedure proc;
 			if(gridAccount.SelectedIndices.Length==0){
 				//autoselect procedures
-				for(int i=0;i<AcctLineList.Count;i++){//loop through every line showing on screen
-					if(AcctLineList[i].Type!=AcctModType.Proc){
+				for(int i=0;i<table.Rows.Count;i++){//loop through every line showing on screen
+					if(table.Rows[i]["ProcNum"].ToString()=="0"){
 						continue;//ignore non-procedures
 					}
-					if(arrayProc[AcctLineList[i].Index].ProcFee==0){
+					proc=Procedures.GetProcFromList(procsForPat,PIn.PInt(table.Rows[i]["ProcNum"].ToString()));
+					if(proc.ProcFee==0){
 						continue;//ignore zero fee procedures, but user can explicitly select them
 					}
-					if(arrayProc[AcctLineList[i].Index].MedicalCode==""){
+					if(proc.MedicalCode==""){
 						continue;//ignore non-medical procedures
 					}
-					if(Procedures.NeedsSent(arrayProc[AcctLineList[i].Index],ClaimProcList,medPlanNum)){
+					if(Procedures.NeedsSent(proc.ProcNum,ClaimProcList,medPlanNum)){
 						gridAccount.SetSelected(i,true);
 					}
 				}
@@ -2873,7 +2900,7 @@ double adj=Adjustments.GetTotForProc(arrayProc[tempCountProc].ProcNum,Adjustment
 			}
 			bool allAreProcedures=true;
 			for(int i=0;i<gridAccount.SelectedIndices.Length;i++){
-				if(AcctLineList[gridAccount.SelectedIndices[i]].Type!=AcctModType.Proc){
+				if(table.Rows[gridAccount.SelectedIndices[i]]["ProcNum"].ToString()=="0"){
 					allAreProcedures=false;
 				}
 			}
@@ -2881,7 +2908,7 @@ double adj=Adjustments.GetTotForProc(arrayProc[tempCountProc].ProcNum,Adjustment
 				MsgBox.Show(this,"You can only select procedures.");
 				return;
 			}
-			Claim ClaimCur=CreateClaim("Med");
+			Claim ClaimCur=CreateClaim("Med",PatPlanList,InsPlanList,ClaimProcList,procsForPat);
 			if(ClaimCur.ClaimNum==0){
 				ModuleSelected(PatCur.PatNum);
 				return;
@@ -2893,28 +2920,33 @@ double adj=Adjustments.GetTotForProc(arrayProc[tempCountProc].ProcNum,Adjustment
 			bool isFamDed=Benefits.GetIsFamDed(BenefitList,ClaimCur.PlanNum);
 			if(isFamMax || isFamDed) {
 				ClaimProc[] claimProcsFam=ClaimProcs.RefreshFam(ClaimCur.PlanNum);
-				Claims.CalculateAndUpdate(claimProcsFam,AccProcList,InsPlanList,ClaimCur,PatPlanList,BenefitList);
+				Claims.CalculateAndUpdate(claimProcsFam,procsForPat,InsPlanList,ClaimCur,PatPlanList,BenefitList);
 			}
 			else {
-				Claims.CalculateAndUpdate(ClaimProcList,AccProcList,InsPlanList,ClaimCur,PatPlanList,BenefitList);
+				Claims.CalculateAndUpdate(ClaimProcList,procsForPat,InsPlanList,ClaimCur,PatPlanList,BenefitList);
 			}
 			//Claims.Cur=ClaimCur;
 			//still have not saved some changes to the claim at this point
 			FormClaimEdit FormCE=new FormClaimEdit(ClaimCur,PatCur,FamCur);
 			FormCE.IsNew=true;//this causes it to delete the claim if cancelling.
 			FormCE.ShowDialog();
-			ModuleSelected(PatCur.PatNum);*/
+			ModuleSelected(PatCur.PatNum);
 		}
 
 		private void menuInsOther_Click(object sender, System.EventArgs e) {
-			/*
+			PatPlan[] PatPlanList=PatPlans.Refresh(PatCur.PatNum);
+			InsPlan[] InsPlanList=InsPlans.Refresh(FamCur);
+			ClaimProc[] ClaimProcList=ClaimProcs.Refresh(PatCur.PatNum);
+			Benefit[] BenefitList=Benefits.Refresh(PatPlanList);
+			Procedure[] procsForPat=Procedures.Refresh(PatCur.PatNum);
 			if(gridAccount.SelectedIndices.Length==0){
 				MessageBox.Show(Lan.g(this,"Please select procedures first."));
 				return;
 			}
+			DataTable table=DataSetMain.Tables["account"];
 			bool allAreProcedures=true;
 			for(int i=0;i<gridAccount.SelectedIndices.Length;i++){
-				if(AcctLineList[gridAccount.SelectedIndices[i]].Type!=AcctModType.Proc){
+				if(table.Rows[gridAccount.SelectedIndices[i]]["ProcNum"].ToString()=="0"){
 					allAreProcedures=false;
 				}
 			}
@@ -2922,7 +2954,7 @@ double adj=Adjustments.GetTotForProc(arrayProc[tempCountProc].ProcNum,Adjustment
 				MessageBox.Show(Lan.g(this,"You can only select procedures."));
 				return;
 			}
-			Claim ClaimCur=CreateClaim("Other");
+			Claim ClaimCur=CreateClaim("Other",PatPlanList,InsPlanList,ClaimProcList,procsForPat);
 			if(ClaimCur.ClaimNum==0){
 				ModuleSelected(PatCur.PatNum);
 				return;
@@ -2933,17 +2965,17 @@ double adj=Adjustments.GetTotForProc(arrayProc[tempCountProc].ProcNum,Adjustment
 			bool isFamDed=Benefits.GetIsFamDed(BenefitList,ClaimCur.PlanNum);
 			if(isFamMax || isFamDed) {
 				ClaimProc[] claimProcsFam=ClaimProcs.RefreshFam(ClaimCur.PlanNum);
-				Claims.CalculateAndUpdate(claimProcsFam,AccProcList,InsPlanList,ClaimCur,PatPlanList,BenefitList);
+				Claims.CalculateAndUpdate(claimProcsFam,procsForPat,InsPlanList,ClaimCur,PatPlanList,BenefitList);
 			}
 			else {
-				Claims.CalculateAndUpdate(ClaimProcList,AccProcList,InsPlanList,ClaimCur,PatPlanList,BenefitList);
+				Claims.CalculateAndUpdate(ClaimProcList,procsForPat,InsPlanList,ClaimCur,PatPlanList,BenefitList);
 			}
 			//Claims.Cur=ClaimCur;
 			//still have not saved some changes to the claim at this point
 			FormClaimEdit FormCE=new FormClaimEdit(ClaimCur,PatCur,FamCur);
 			FormCE.IsNew=true;//this causes it to delete the claim if cancelling.
 			FormCE.ShowDialog();
-			ModuleSelected(PatCur.PatNum);*/
+			ModuleSelected(PatCur.PatNum);
 		}
 
 		private void OnPayPlan_Click() {

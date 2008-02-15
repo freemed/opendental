@@ -408,7 +408,7 @@ namespace OpenDental{
 					&& ClaimProcsForClaim[i].Status!=ClaimProcStatus.Preauth){
 					continue;
 				}
-				ProcCur=Procedures.GetProc(procList,ClaimProcsForClaim[i].ProcNum);
+				ProcCur=Procedures.GetProcFromList(procList,ClaimProcsForClaim[i].ProcNum);
 				if(ProcCur.ProcNum==0){
 					continue;//ignores payments, etc
 				}

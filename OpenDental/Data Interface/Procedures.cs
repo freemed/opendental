@@ -188,6 +188,7 @@ namespace OpenDental{
 			return proc;
 		}
 
+		/*
 		///<summary>Gets many procedure directly from the db all at once.  Never include the notes.</summary>
 		public static List<Procedure> GetManyProcs(List<int> procNums){
 			string command="SELECT * FROM procedurelog WHERE ";
@@ -198,7 +199,16 @@ namespace OpenDental{
 				command+="ProcNum="+POut.PInt(procNums[i])+" ";
 			}
 			return RefreshAndFill(command);
-		}
+		}*/
+
+		/*
+		///<summary>Gets all procedures from the database for the given plan/patient combo.  Used once when creating claims.</summary>
+		public static Procedure[] GetProcsForPlan(int planNum,int patNum){
+			string command="SELECT * FROM procedurelog WHERE "
+				+"PatNum="+POut.PInt(patNum)+" "
+				+"AND PlanNum="+POut.PInt(patNum)+" "
+			return RefreshAndFill(command).ToArray();
+		}*/
 
 		private static List<Procedure> RefreshAndFill(string command){
  			DataTable table=General.GetTable(command);
@@ -360,8 +370,8 @@ namespace OpenDental{
 			return retVal;
 		}
 
-		///<summary>Used in FormClaimEdit,FormClaimPrint,FormClaimPayTotal, etc to get description of procedure. Procedure list needs to include the procedure we are looking for.</summary>
-		public static Procedure GetProc(Procedure[] list, int procNum){
+		///<summary>Used in FormClaimEdit,FormClaimPrint,FormClaimPayTotal,ContrAccount etc to get description of procedure. Procedure list needs to include the procedure we are looking for.</summary>
+		public static Procedure GetProcFromList(Procedure[] list,int procNum){
 			for(int i=0;i<list.Length;i++){
 				if(procNum==list[i].ProcNum){
 					return list[i];
@@ -1078,9 +1088,9 @@ namespace OpenDental{
 		}
 
 		///<summary>Only used in ContrAccount.OnInsClick to automate selection of procedures.  Returns true if this procedure should be selected.  This happens if there is at least one claimproc attached for this plan that is an estimate, and it is not set to NoBillIns.  The list can be all ClaimProcs for patient, or just those for this procedure. The plan is the primary plan.</summary>
-		public static bool NeedsSent(Procedure proc,ClaimProc[] List,int planNum) {
+		public static bool NeedsSent(int procNum,ClaimProc[] List,int planNum) {
 			for(int i=0;i<List.Length;i++) {
-				if(List[i].ProcNum==proc.ProcNum
+				if(List[i].ProcNum==procNum
 					&& !List[i].NoBillIns
 					&& List[i].PlanNum==planNum
 					&& List[i].Status==ClaimProcStatus.Estimate) {
@@ -1091,10 +1101,10 @@ namespace OpenDental{
 		}
 
 		///<summary>Only used in ContrAccount.CreateClaim to decide whether a given procedure has an estimate that can be used to attach to a claim for the specified plan.  Returns a valid claimProc if this procedure has an estimate attached that is not set to NoBillIns.  The list can be all ClaimProcs for patient, or just those for this procedure. Returns null if there are no claimprocs that would work.</summary>
-		public static ClaimProc GetClaimProcEstimate(Procedure proc,ClaimProc[] List,InsPlan plan) {
+		public static ClaimProc GetClaimProcEstimate(int procNum,ClaimProc[] List,InsPlan plan) {
 			//bool matchOfWrongType=false;
 			for(int i=0;i<List.Length;i++) {
-				if(List[i].ProcNum==proc.ProcNum
+				if(List[i].ProcNum==procNum
 					&& !List[i].NoBillIns
 					&& List[i].PlanNum==plan.PlanNum) {
 					if(plan.PlanType=="c") {
