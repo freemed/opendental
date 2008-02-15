@@ -50,6 +50,7 @@ namespace OpenDental {
 			this.menuItemUnsubscribe = new System.Windows.Forms.MenuItem();
 			this.menuItem3 = new System.Windows.Forms.MenuItem();
 			this.menuItemGoto = new System.Windows.Forms.MenuItem();
+			this.gridMain = new OpenDental.UI.ODGrid();
 			this.ToolBarMain = new OpenDental.UI.ODToolBar();
 			this.tabContr.SuspendLayout();
 			this.SuspendLayout();
@@ -169,17 +170,17 @@ namespace OpenDental {
 			this.listMain.AutoArrange = false;
 			this.listMain.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.columnHeader1});
-			this.listMain.Location = new System.Drawing.Point(0,333);
+			this.listMain.Location = new System.Drawing.Point(0,429);
 			this.listMain.MultiSelect = false;
 			this.listMain.Name = "listMain";
 			this.listMain.ShowItemToolTips = true;
-			this.listMain.Size = new System.Drawing.Size(941,174);
+			this.listMain.Size = new System.Drawing.Size(941,78);
 			this.listMain.SmallImageList = this.imageListTree;
 			this.listMain.TabIndex = 8;
 			this.listMain.UseCompatibleStateImageBehavior = false;
 			this.listMain.View = System.Windows.Forms.View.List;
-			this.listMain.DoubleClick += new System.EventHandler(this.listMain_DoubleClick);
 			this.listMain.SelectedIndexChanged += new System.EventHandler(this.listMain_SelectedIndexChanged);
+			this.listMain.DoubleClick += new System.EventHandler(this.listMain_DoubleClick);
 			this.listMain.MouseDown += new System.Windows.Forms.MouseEventHandler(this.listMain_MouseDown);
 			this.listMain.Click += new System.EventHandler(this.listMain_Click);
 			// 
@@ -274,6 +275,19 @@ namespace OpenDental {
 			this.menuItemGoto.Text = "Go To";
 			this.menuItemGoto.Click += new System.EventHandler(this.menuItemGoto_Click);
 			// 
+			// gridMain
+			// 
+			this.gridMain.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.gridMain.HScrollVisible = false;
+			this.gridMain.Location = new System.Drawing.Point(0,310);
+			this.gridMain.Name = "gridMain";
+			this.gridMain.ScrollValue = 0;
+			this.gridMain.Size = new System.Drawing.Size(941,113);
+			this.gridMain.TabIndex = 9;
+			this.gridMain.Title = "Tasks";
+			this.gridMain.TranslationName = "TableTasks";
+			// 
 			// ToolBarMain
 			// 
 			this.ToolBarMain.Dock = System.Windows.Forms.DockStyle.Top;
@@ -288,6 +302,7 @@ namespace OpenDental {
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F,13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+			this.Controls.Add(this.gridMain);
 			this.Controls.Add(this.listMain);
 			this.Controls.Add(this.tree);
 			this.Controls.Add(this.cal);
@@ -329,5 +344,6 @@ namespace OpenDental {
 		private System.Windows.Forms.MenuItem menuItemSubscribe;
 		private System.Windows.Forms.MenuItem menuItemUnsubscribe;
 		private System.Windows.Forms.MenuItem menuItem3;
+		private OpenDental.UI.ODGrid gridMain;
 	}
 }

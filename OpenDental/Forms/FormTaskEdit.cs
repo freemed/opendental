@@ -42,6 +42,8 @@ namespace OpenDental{
 		private TextBox textDateTimeEntry;
 		private OpenDental.UI.Button butNow;
 		private OpenDental.UI.Button butDelete;
+		private TextBox textUser;
+		private Label label16;
 		///<summary>After closing, if this is not zero, then it will jump to the specified patient.</summary>
 		public int GotoKeyNum;
 
@@ -102,6 +104,8 @@ namespace OpenDental{
 			this.textDateTimeEntry = new System.Windows.Forms.TextBox();
 			this.butNow = new OpenDental.UI.Button();
 			this.butDelete = new OpenDental.UI.Button();
+			this.textUser = new System.Windows.Forms.TextBox();
+			this.label16 = new System.Windows.Forms.Label();
 			this.panelObject.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -338,10 +342,29 @@ namespace OpenDental{
 			this.butDelete.Text = "&Delete";
 			this.butDelete.Click += new System.EventHandler(this.butDelete_Click);
 			// 
+			// textUser
+			// 
+			this.textUser.Location = new System.Drawing.Point(460,7);
+			this.textUser.Name = "textUser";
+			this.textUser.ReadOnly = true;
+			this.textUser.Size = new System.Drawing.Size(119,20);
+			this.textUser.TabIndex = 126;
+			// 
+			// label16
+			// 
+			this.label16.Location = new System.Drawing.Point(385,8);
+			this.label16.Name = "label16";
+			this.label16.Size = new System.Drawing.Size(73,16);
+			this.label16.TabIndex = 125;
+			this.label16.Text = "User";
+			this.label16.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
 			// FormTaskEdit
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.ClientSize = new System.Drawing.Size(726,658);
+			this.Controls.Add(this.textUser);
+			this.Controls.Add(this.label16);
 			this.Controls.Add(this.butDelete);
 			this.Controls.Add(this.butNow);
 			this.Controls.Add(this.textDateTimeEntry);
@@ -378,6 +401,7 @@ namespace OpenDental{
 
 		private void FormTaskListEdit_Load(object sender, System.EventArgs e) {
 			checkTaskStatus.Checked=Cur.TaskStatus;
+			textUser.Text=UserodB.GetName(Cur.UserNum);//might be blank. 
 			if(Cur.DateTimeEntry.Year<1880){
 				textDateTimeEntry.Text=DateTime.Now.ToString();
 			}
@@ -520,6 +544,7 @@ namespace OpenDental{
 				return false;
 			}
 			Cur.TaskStatus=checkTaskStatus.Checked;
+			//UserNum not allowed to change
 			Cur.DateTimeEntry=PIn.PDateT(textDateTimeEntry.Text);
 			Cur.Descript=textDescript.Text;
 			Cur.DateTask=PIn.PDate(textDateTask.Text);

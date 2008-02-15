@@ -253,7 +253,7 @@ namespace OpenDental{
 				queryIns+="GROUP BY patient.PatNum,claimproc.ClaimPaymentNum,provider.ProvNum";
 			}
 			else{
-				//+"GROUP BY claimproc.ClaimPaymentNum,provider.ProvNum";
+				queryIns+="GROUP BY claimproc.ClaimPaymentNum,provider.ProvNum";
 			}
 			if(checkAllProv.Checked){
 				whereProv="";
@@ -280,8 +280,13 @@ namespace OpenDental{
 				AND definition.DefNum=payment.PayType "
 				+whereProv+" "
 				+"AND paysplit.DatePay >= "+POut.PDate(date1.SelectionStart)+" "
-				+"AND paysplit.DatePay <= "+POut.PDate(date2.SelectionStart)+" "
-				+"GROUP BY payment.PayNum,patient.PatNum,provider.ProvNum";
+				+"AND paysplit.DatePay <= "+POut.PDate(date2.SelectionStart)+" ";
+			if(radioPatient.Checked){
+				queryPat+="GROUP BY payment.PayNum,patient.PatNum,provider.ProvNum";
+			}
+			else{
+				queryPat+="GROUP BY payment.PayNum,provider.ProvNum";
+			}
 			DataTable tableIns=General.GetTable(queryIns);
 			DataTable tablePat=General.GetTable(queryPat);
 			FormReport FormR=new FormReport();

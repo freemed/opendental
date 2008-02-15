@@ -70,6 +70,7 @@ namespace OpenDental {
 			}
 			FillTree();
 			FillMain();
+			FillGrid();
 			SetMenusEnabled();
 		}
 
@@ -146,10 +147,137 @@ namespace OpenDental {
 			}
 			tree.Height=TreeHistory.Count*tree.ItemHeight+8;
 			tree.Refresh();
-			listMain.Top=tree.Bottom;
+			int halfH=(this.ClientSize.Height-tree.Bottom-2)/2;
+			gridMain.Top=tree.Bottom;
+			gridMain.Height=halfH;
+			listMain.Top=gridMain.Bottom;
 			listMain.Height=this.ClientSize.Height-listMain.Top-3;
 		}
 
+		private void FillGrid(){
+			int parent;
+			DateTime date;
+			if(TreeHistory.Count>0) {//not on main trunk
+				parent=TreeHistory[TreeHistory.Count-1].TaskListNum;
+				date=DateTime.MinValue;
+			}
+			else {//one of the main trunks
+				parent=0;
+				date=cal.SelectionStart;
+			}
+			RefreshMainLists(parent,date);
+//skip the dated trunk automation for now
+			gridMain.BeginUpdate();
+			gridMain.Columns.Clear();
+			ODGridColumn col=new ODGridColumn("",35);
+			gridMain.Columns.Add(col);
+			col=new ODGridColumn(Lan.g("TableTasks","Date"),70);
+			gridMain.Columns.Add(col);
+			col=new ODGridColumn(Lan.g("TableTasks","Description"),200);//any width
+			gridMain.Columns.Add(col);
+			gridMain.Rows.Clear();
+			ODGridRow row;
+			//listMain.Items.Clear();
+			//ListViewItem item;
+			string dateStr="";
+			string objDesc="";
+			string tasklistdescript="";
+			int imageindex;
+			for(int i=0;i<TaskListsList.Count;i++) {
+				dateStr="";
+				if(TaskListsList[i].DateTL.Year>1880
+					&& (tabContr.SelectedIndex==0 || tabContr.SelectedIndex==1))//user or main
+				{
+					//dateStr=TaskListsList[i].DateTL.ToShortDateString()+" - ";
+					if(TaskListsList[i].DateType==TaskDateType.Day) {
+						dateStr=TaskListsList[i].DateTL.ToShortDateString()+" - ";
+					}
+					else if(TaskListsList[i].DateType==TaskDateType.Week) {
+						dateStr=Lan.g(this,"Week of")+" "+TaskListsList[i].DateTL.ToShortDateString()+" - ";
+					}
+					else if(TaskListsList[i].DateType==TaskDateType.Month) {
+						dateStr=TaskListsList[i].DateTL.ToString("MMMM")+" - ";
+					}
+				}
+				objDesc="";
+				if(tabContr.SelectedIndex==0){//user tab
+					objDesc=TaskListsList[i].ParentDesc;
+				}
+				tasklistdescript=TaskListsList[i].Descript;
+				imageindex=0;
+				if(TaskListsList[i].NewTaskCount>0){
+					imageindex=3;//orange
+					tasklistdescript=tasklistdescript+"("+TaskListsList[i].NewTaskCount.ToString()+")";
+				}
+				//item=new ListViewItem(dateStr+objDesc+tasklistdescript,imageindex);
+				//item.ToolTipText=item.Text;
+				//listMain.Items.Add(item);
+				//for(int i=0;i<List.Length;i++){
+				row=new ODGridRow();
+				row.Cells.Add(imageindex.ToString());//no image yet
+				row.Cells.Add(dateStr);
+				row.Cells.Add(objDesc+tasklistdescript);
+				gridMain.Rows.Add(row);
+			}
+			for(int i=0;i<TasksList.Count;i++) {
+				//checked=1, unchecked=2
+				dateStr="";
+				if(tabContr.SelectedIndex==0 || tabContr.SelectedIndex==1) {//user or main
+					if(TasksList[i].DateTask.Year>1880) {
+						if(TasksList[i].DateType==TaskDateType.Day) {
+							dateStr=TasksList[i].DateTask.ToShortDateString()+" - ";
+						}
+						else if(TasksList[i].DateType==TaskDateType.Week) {
+							dateStr=Lan.g(this,"Week of")+" "+TasksList[i].DateTask.ToShortDateString()+" - ";
+						}
+						else if(TasksList[i].DateType==TaskDateType.Month) {
+							dateStr=TasksList[i].DateTask.ToString("MMMM")+" - ";
+						}
+					}
+					else if(TasksList[i].DateTimeEntry.Year>1880) {
+						dateStr=TasksList[i].DateTimeEntry.ToShortDateString()+" - ";
+					}
+				}
+				objDesc="";
+				if(TasksList[i].ObjectType==TaskObjectType.Patient) {
+					if(TasksList[i].KeyNum!=0) {
+						objDesc=Patients.GetPat(TasksList[i].KeyNum).GetNameLF()+" - ";
+					}
+				}
+				else if(TasksList[i].ObjectType==TaskObjectType.Appointment) {
+					if(TasksList[i].KeyNum!=0) {
+						Appointment AptCur=Appointments.GetOneApt(TasksList[i].KeyNum);
+						if(AptCur!=null) {
+							objDesc=Patients.GetPat(AptCur.PatNum).GetNameLF()
+								+"  "+AptCur.AptDateTime.ToString()
+								+"  "+AptCur.ProcDescript
+								+"  "+AptCur.Note
+								+" - ";
+						}
+					}
+				}
+				row=new ODGridRow();
+				if(TasksList[i].TaskStatus) {//complete
+					row.Cells.Add("1");//no image yet
+				}
+				else{
+					row.Cells.Add("2");
+				}
+				row.Cells.Add(dateStr);
+				row.Cells.Add(objDesc+TasksList[i].Descript);
+				gridMain.Rows.Add(row);
+				//if(TasksList[i].TaskStatus) {//complete
+				//	item=new ListViewItem(dateStr+objDesc+TasksList[i].Descript,1);
+				//}
+				//else {
+				//	item=new ListViewItem(dateStr+objDesc+TasksList[i].Descript,2);
+				//}
+				//item.ToolTipText=item.Text;
+				//listMain.Items.Add(item);
+			}
+			gridMain.EndUpdate();
+		}
+		
 		private void FillMain() {
 			int parent;
 			DateTime date;
@@ -248,6 +376,7 @@ namespace OpenDental {
 					repeatingTasks[i].FromNum=repeatingTasks[i].TaskNum;
 					repeatingTasks[i].IsRepeating=false;
 					repeatingTasks[i].TaskListNum=0;
+					//repeatingTasks[i].UserNum//repeating tasks shouldn't get a usernum
 					Tasks.Insert(repeatingTasks[i]);
 					changeMade=true;
 				}
@@ -402,12 +531,14 @@ namespace OpenDental {
 			TreeHistory=new List<TaskList>();//clear the tree no matter which tab clicked.
 			FillTree();
 			FillMain();
+			FillGrid();
 		}
 
 		private void cal_DateSelected(object sender,System.Windows.Forms.DateRangeEventArgs e) {
 			TreeHistory=new List<TaskList>();//clear the tree
 			FillTree();
 			FillMain();
+			FillGrid();
 		}
 
 		private void ToolBarMain_ButtonClick(object sender,OpenDental.UI.ODToolBarButtonClickEventArgs e) {
@@ -458,6 +589,7 @@ namespace OpenDental {
 			FormT.IsNew=true;
 			FormT.ShowDialog();
 			FillMain();
+			FillGrid();
 		}
 
 		private void OnAddTask_Click() {
@@ -488,6 +620,7 @@ namespace OpenDental {
 			if(tabContr.SelectedIndex==2) {//repeating
 				cur.IsRepeating=true;
 			}
+			cur.UserNum=Security.CurUser.UserNum;
 			FormTaskEdit FormT=new FormTaskEdit(cur);
 			FormT.IsNew=true;
 			FormT.ShowDialog();
@@ -499,6 +632,7 @@ namespace OpenDental {
 				return;
 			}
 			FillMain();
+			FillGrid();
 		}
 
 		private void OnEdit_Click() {
@@ -518,6 +652,7 @@ namespace OpenDental {
 				}
 			}
 			FillMain();
+			FillGrid();
 		}
 
 		private void OnCut_Click() {
@@ -675,6 +810,7 @@ namespace OpenDental {
 				if(WasCut && Tasks.WasTaskAltered(ClipTask)){
 					MsgBox.Show("Tasks","Not allowed to move because the task has been altered by someone else.");
 					FillMain();
+					FillGrid();
 					return;
 				}
 				Tasks.Insert(newT);
@@ -688,6 +824,7 @@ namespace OpenDental {
 				}
 			}
 			FillMain();
+			FillGrid();
 		}
 
 		private void OnGoto_Click() {
@@ -754,6 +891,7 @@ namespace OpenDental {
 				Tasks.Delete(TasksList[clickedI-TaskListsList.Count]);
 			}
 			FillMain();
+			FillGrid();
 		}
 
 		///<summary>A recursive function that deletes the specified list and all children.</summary>
@@ -802,6 +940,7 @@ namespace OpenDental {
 				}
 			}
 			FillMain();
+			FillGrid();
 		}
 
 		private void listMain_MouseDown(object sender,System.Windows.Forms.MouseEventArgs e) {
@@ -817,6 +956,7 @@ namespace OpenDental {
 				TreeHistory.Add(TaskListsList[clickedI]);
 				FillTree();
 				FillMain();
+				FillGrid();
 				return;
 			}
 			//check tasks off
@@ -834,6 +974,7 @@ namespace OpenDental {
 				return;
 			}
 			FillMain();
+			FillGrid();
 		}
 
 		private void menuEdit_Popup(object sender,System.EventArgs e) {
@@ -908,6 +1049,7 @@ namespace OpenDental {
 		private void OnUnsubscribe_Click() {
 			TaskSubscriptions.UnsubscList(TaskListsList[clickedI].TaskListNum,Security.CurUser.UserNum);
 			FillMain();
+			FillGrid();
 		}
 
 		private void menuItemEdit_Click(object sender,System.EventArgs e) {
@@ -955,6 +1097,7 @@ namespace OpenDental {
 			}
 			FillTree();
 			FillMain();
+			FillGrid();
 		}
 
 		

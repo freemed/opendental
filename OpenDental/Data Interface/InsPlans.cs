@@ -487,7 +487,7 @@ namespace OpenDental {
 			}
 			int codeNum=ProcedureCodes.GetCodeNum(procCode);
 			int substCodeNum=codeNum;
-			if(plan.CodeSubstNone){
+			if(!plan.CodeSubstNone){
 				substCodeNum=ProcedureCodes.GetSubstituteCodeNum(procCode,toothNum);//for posterior composites
 			}			
 			if(plan.PlanType=="p"){
