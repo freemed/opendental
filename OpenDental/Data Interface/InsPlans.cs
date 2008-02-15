@@ -23,7 +23,7 @@ namespace OpenDental {
 				+"FeeSched,ReleaseInfo,AssignBen,PlanType,ClaimFormNum,UseAltCode,"
 				+"ClaimsUseUCR,CopayFeeSched,SubscriberID,"
 				+"EmployerNum,CarrierNum,AllowedFeeSched,TrojanID,DivisionNo,BenefitNotes,IsMedical,SubscNote,FilingCode,"
-				+"DentaideCardSequence,ShowBaseUnits,DedBeforePerc,AllowProcCodeSubt) VALUES(";
+				+"DentaideCardSequence,ShowBaseUnits,DedBeforePerc,CodeSubstNone) VALUES(";
 			if(PrefB.RandomKeys) {
 				command+="'"+POut.PInt(plan.PlanNum)+"', ";
 			}

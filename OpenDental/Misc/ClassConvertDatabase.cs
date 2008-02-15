@@ -6370,10 +6370,10 @@ namespace OpenDental{
 				General.NonQEx(command);
 				command="ALTER TABLE task ADD UserNum int NOT NULL";
 				General.NonQEx(command);
-
-
-
-
+				command="INSERT INTO preference (PrefName,ValueString) VALUES ('InsDefaultPPOpercent','0')";
+				General.NonQEx(command);
+				command="INSERT INTO preference (PrefName,ValueString) VALUES ('TimecardUsersDontEditOwnCard','0')";
+				General.NonQEx(command);
 
 				command="UPDATE preference SET ValueString = '5.6.0.0' WHERE PrefName = 'DataBaseVersion'";
 				General.NonQEx(command);

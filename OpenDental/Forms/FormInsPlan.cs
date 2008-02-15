@@ -1599,6 +1599,9 @@ namespace OpenDental{
 			if(IsNewPlan) {
 				checkApplyAll.Checked=false;
 				checkApplyAll.Visible=false;//because it wouldn't make sense to apply anything to "all"
+				if(PrefB.GetBool("InsDefaultPPOpercent")) {
+					PlanCur.PlanType="p";
+				}
 			}
 			Program ProgramCur=Programs.GetCur("Trojan");
 			if(ProgramCur!=null && ProgramCur.Enabled) {

@@ -29,6 +29,7 @@ namespace OpenDental{
 		private ComboBox comboUsers;
 		private ComboBox comboSchoolClass;
 		private Label labelSchoolClass;
+		private CheckBox checkCannotEditOwn;
 		private DataTable table;
 
 		///<summary></summary>
@@ -69,14 +70,15 @@ namespace OpenDental{
 			this.imageListPerm = new System.Windows.Forms.ImageList(this.components);
 			this.labelPerm = new System.Windows.Forms.Label();
 			this.checkTimecardSecurityEnabled = new System.Windows.Forms.CheckBox();
+			this.comboUsers = new System.Windows.Forms.ComboBox();
+			this.comboSchoolClass = new System.Windows.Forms.ComboBox();
+			this.labelSchoolClass = new System.Windows.Forms.Label();
+			this.checkCannotEditOwn = new System.Windows.Forms.CheckBox();
 			this.gridMain = new OpenDental.UI.ODGrid();
 			this.butSetAll = new OpenDental.UI.Button();
 			this.butAddUser = new OpenDental.UI.Button();
 			this.butAddGroup = new OpenDental.UI.Button();
 			this.butClose = new OpenDental.UI.Button();
-			this.comboUsers = new System.Windows.Forms.ComboBox();
-			this.comboSchoolClass = new System.Windows.Forms.ComboBox();
-			this.labelSchoolClass = new System.Windows.Forms.Label();
 			this.SuspendLayout();
 			// 
 			// treePermissions
@@ -116,12 +118,53 @@ namespace OpenDental{
 			// 
 			this.checkTimecardSecurityEnabled.CheckAlign = System.Drawing.ContentAlignment.TopLeft;
 			this.checkTimecardSecurityEnabled.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkTimecardSecurityEnabled.Location = new System.Drawing.Point(222,618);
+			this.checkTimecardSecurityEnabled.Location = new System.Drawing.Point(220,602);
 			this.checkTimecardSecurityEnabled.Name = "checkTimecardSecurityEnabled";
 			this.checkTimecardSecurityEnabled.Size = new System.Drawing.Size(192,19);
 			this.checkTimecardSecurityEnabled.TabIndex = 57;
 			this.checkTimecardSecurityEnabled.Text = "TimecardSecurityEnabled";
 			this.checkTimecardSecurityEnabled.TextAlign = System.Drawing.ContentAlignment.TopLeft;
+			this.checkTimecardSecurityEnabled.Click += new System.EventHandler(this.checkTimecardSecurityEnabled_Click);
+			// 
+			// comboUsers
+			// 
+			this.comboUsers.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboUsers.FormattingEnabled = true;
+			this.comboUsers.Location = new System.Drawing.Point(8,5);
+			this.comboUsers.Name = "comboUsers";
+			this.comboUsers.Size = new System.Drawing.Size(182,21);
+			this.comboUsers.TabIndex = 60;
+			this.comboUsers.SelectionChangeCommitted += new System.EventHandler(this.comboUsers_SelectionChangeCommitted);
+			// 
+			// comboSchoolClass
+			// 
+			this.comboSchoolClass.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboSchoolClass.Location = new System.Drawing.Point(276,5);
+			this.comboSchoolClass.MaxDropDownItems = 30;
+			this.comboSchoolClass.Name = "comboSchoolClass";
+			this.comboSchoolClass.Size = new System.Drawing.Size(168,21);
+			this.comboSchoolClass.TabIndex = 90;
+			this.comboSchoolClass.SelectionChangeCommitted += new System.EventHandler(this.comboSchoolClass_SelectionChangeCommitted);
+			// 
+			// labelSchoolClass
+			// 
+			this.labelSchoolClass.Location = new System.Drawing.Point(203,8);
+			this.labelSchoolClass.Name = "labelSchoolClass";
+			this.labelSchoolClass.Size = new System.Drawing.Size(72,16);
+			this.labelSchoolClass.TabIndex = 91;
+			this.labelSchoolClass.Text = "Class";
+			this.labelSchoolClass.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// checkCannotEditOwn
+			// 
+			this.checkCannotEditOwn.CheckAlign = System.Drawing.ContentAlignment.TopLeft;
+			this.checkCannotEditOwn.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.checkCannotEditOwn.Location = new System.Drawing.Point(220,622);
+			this.checkCannotEditOwn.Name = "checkCannotEditOwn";
+			this.checkCannotEditOwn.Size = new System.Drawing.Size(192,19);
+			this.checkCannotEditOwn.TabIndex = 92;
+			this.checkCannotEditOwn.Text = "Users cannot edit their own timecard";
+			this.checkCannotEditOwn.TextAlign = System.Drawing.ContentAlignment.TopLeft;
 			// 
 			// gridMain
 			// 
@@ -196,39 +239,11 @@ namespace OpenDental{
 			this.butClose.Text = "Close";
 			this.butClose.Click += new System.EventHandler(this.butClose_Click);
 			// 
-			// comboUsers
-			// 
-			this.comboUsers.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboUsers.FormattingEnabled = true;
-			this.comboUsers.Location = new System.Drawing.Point(8,5);
-			this.comboUsers.Name = "comboUsers";
-			this.comboUsers.Size = new System.Drawing.Size(182,21);
-			this.comboUsers.TabIndex = 60;
-			this.comboUsers.SelectionChangeCommitted += new System.EventHandler(this.comboUsers_SelectionChangeCommitted);
-			// 
-			// comboSchoolClass
-			// 
-			this.comboSchoolClass.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboSchoolClass.Location = new System.Drawing.Point(276,5);
-			this.comboSchoolClass.MaxDropDownItems = 30;
-			this.comboSchoolClass.Name = "comboSchoolClass";
-			this.comboSchoolClass.Size = new System.Drawing.Size(168,21);
-			this.comboSchoolClass.TabIndex = 90;
-			this.comboSchoolClass.SelectionChangeCommitted += new System.EventHandler(this.comboSchoolClass_SelectionChangeCommitted);
-			// 
-			// labelSchoolClass
-			// 
-			this.labelSchoolClass.Location = new System.Drawing.Point(203,8);
-			this.labelSchoolClass.Name = "labelSchoolClass";
-			this.labelSchoolClass.Size = new System.Drawing.Size(72,16);
-			this.labelSchoolClass.TabIndex = 91;
-			this.labelSchoolClass.Text = "Class";
-			this.labelSchoolClass.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
 			// FormSecurity
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.ClientSize = new System.Drawing.Size(894,644);
+			this.Controls.Add(this.checkCannotEditOwn);
 			this.Controls.Add(this.comboSchoolClass);
 			this.Controls.Add(this.labelSchoolClass);
 			this.Controls.Add(this.comboUsers);
@@ -274,6 +289,8 @@ namespace OpenDental{
 			FillUsers();
 			FillTreePerm();
 			checkTimecardSecurityEnabled.Checked=PrefB.GetBool("TimecardSecurityEnabled");
+			checkCannotEditOwn.Checked=PrefB.GetBool("TimecardUsersDontEditOwnCard");
+			checkCannotEditOwn.Enabled=checkTimecardSecurityEnabled.Checked;
 		}
 
 		private void FillTreePermissionsInitial(){
@@ -647,10 +664,15 @@ namespace OpenDental{
 			if(changed){
 				DataValid.SetInvalid(InvalidTypes.Security);
 			}
-			if(Prefs.UpdateBool("TimecardSecurityEnabled",checkTimecardSecurityEnabled.Checked)){
+			if(	Prefs.UpdateBool("TimecardSecurityEnabled",checkTimecardSecurityEnabled.Checked) ||
+					Prefs.UpdateBool("TimecardUsersDontEditOwnCard",checkCannotEditOwn.Checked)){
 				DataValid.SetInvalid(InvalidTypes.Prefs);
 			}
 			Close();
+		}
+
+		private void checkTimecardSecurityEnabled_Click(object sender,EventArgs e) {
+			checkCannotEditOwn.Enabled=checkTimecardSecurityEnabled.Checked;
 		}
 
 		

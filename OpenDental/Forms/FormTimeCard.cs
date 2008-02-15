@@ -393,8 +393,18 @@ namespace OpenDental{
 		}
 		#endregion
 
-		private void FormTimeCard_Load(object sender, System.EventArgs e) {
-			Text=Lan.g(this,"TimeCard for")+" "+EmployeeCur.FName+" "+EmployeeCur.LName;
+		private void FormTimeCard_Load(object sender, System.EventArgs e){
+			//Check to see if the employee currently logged in can edit this time-card.
+			bool cannotEdit=Security.CurUser!=null &&
+				Security.CurUser.EmployeeNum==EmployeeCur.EmployeeNum &&
+				PrefB.GetBool("TimecardSecurityEnabled") &&
+				PrefB.GetBool("TimecardUsersDontEditOwnCard");
+			if(cannotEdit) {
+				DisableAllSubControls(this);
+				butClose.Enabled=true;
+			}
+			Text=Lan.g(this,"TimeCard for")+" "+EmployeeCur.FName+" "+EmployeeCur.LName
+				+(cannotEdit?" - You cannot modify your timecard":"");
 			TimeDelta=ClockEvents.GetServerTime()-DateTime.Now;
 			SelectedPayPeriod=PayPeriods.GetForDate(DateTime.Today);
 			if(IsBreaks){
@@ -403,8 +413,17 @@ namespace OpenDental{
 				butCompute.Visible=false;
 				butAdj.Visible=false;
 			}
+			radioTimeCard.Checked=!IsBreaks;
+			radioBreaks.Checked=IsBreaks;
 			FillPayPeriod();
 			FillMain(true);
+		}
+
+		private void DisableAllSubControls(Control con){
+			for(int i=0;i<con.Controls.Count;i++){
+				DisableAllSubControls(con.Controls[i]);
+				con.Controls[i].Enabled=false;
+			}			
 		}
 
 		private void butLeft_Click(object sender,EventArgs e) {
