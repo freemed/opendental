@@ -170,6 +170,7 @@ namespace OpenDental {
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
 			ODGridColumn col=new ODGridColumn("",17);
+			col.ImageList=imageListTree;
 			gridMain.Columns.Add(col);
 			//col=new ODGridColumn(Lan.g("TableTasks","Date"),60);
 			//gridMain.Columns.Add(col);

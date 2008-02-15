@@ -403,7 +403,7 @@ namespace OpenDental.UI{
 			}
 		}
 
-		///<summary>Draws background, lines, and text for a single row.</summary>
+		///<summary>Draws background, lines, image, and text for a single row.</summary>
 		private void DrawRow(int rowI,Graphics g){
 			RectangleF textRect;
 			StringFormat format=new StringFormat();
@@ -553,7 +553,19 @@ namespace OpenDental.UI{
 						cellFont=new Font(cellFont,FontStyle.Regular);				
 					}
 				}
-				g.DrawString(rows[rowI].Cells[i].Text,cellFont,textBrush,textRect,format);
+				if(columns[i].ImageList==null){
+					g.DrawString(rows[rowI].Cells[i].Text,cellFont,textBrush,textRect,format);
+				}
+				else{
+					int imageIndex=-1;
+					if(rows[rowI].Cells[i].Text!=""){
+						imageIndex=PIn.PInt(rows[rowI].Cells[i].Text);
+					}
+					if(imageIndex!=-1){
+						Image img=columns[i].ImageList.Images[imageIndex];
+						g.DrawImage(img,horizontal,vertical-1);
+					}
+				}
 			}
 			//note text
 			if(NoteHeights[rowI]>0 && NoteSpanStop>0 && NoteSpanStart<columns.Count){
@@ -682,7 +694,7 @@ namespace OpenDental.UI{
 			Invalidate();
 		}
 
-		///<summary>After adding rows to the grid, this calculates the height of each row because some rows may have text wrap and will take up more than one row.  Also, rows with notes, must be made much larger, because notes start on the second line.</summary>
+		///<summary>After adding rows to the grid, this calculates the height of each row because some rows may have text wrap and will take up more than one row.  Also, rows with notes, must be made much larger, because notes start on the second line.  If column images are used, rows will be enlarged to make space for the images.</summary>
 		private void ComputeRows(){
 			Graphics g=this.CreateGraphics();
 			RowHeights=new int[rows.Count];
@@ -694,6 +706,14 @@ namespace OpenDental.UI{
 			if(NoteSpanStop>0 && NoteSpanStart<columns.Count) {
 				for(int i=NoteSpanStart;i<=NoteSpanStop;i++) {
 					noteW+=columns[i].ColWidth;
+				}
+			}
+			int imageH=0;
+			for(int i=0;i<columns.Count;i++){
+				if(columns[i].ImageList!=null){
+					if(columns[i].ImageList.ImageSize.Height>imageH){
+						imageH=columns[i].ImageList.ImageSize.Height+1;
+					}
 				}
 			}
 			for(int i=0;i<rows.Count;i++){
@@ -720,13 +740,18 @@ namespace OpenDental.UI{
 						RowHeights[i]=rows[i].Height;
 					}
 				}
+				if(imageH>RowHeights[i]){
+					RowHeights[i]=imageH;
+				}
 				if(noteW>0 && rows[i].Note!=""){
 					NoteHeights[i]=(int)g.MeasureString(rows[i].Note,this.cellFont,noteW).Height;
 				}
-				if(i==0)
+				if(i==0){
 					RowLocs[i]=0;
-				else
+				}
+				else{
 					RowLocs[i]=RowLocs[i-1]+RowHeights[i-1]+NoteHeights[i-1];
+				}
 				GridH+=RowHeights[i]+NoteHeights[i];
 			}
 			g.Dispose();
