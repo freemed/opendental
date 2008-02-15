@@ -2557,13 +2557,16 @@ double adj=Adjustments.GetTotForProc(arrayProc[tempCountProc].ProcNum,Adjustment
 			ModuleSelected(PatCur.PatNum);*/
 		}
 
+
 		///<summary>The only validation that's been done is just to make sure that only procedures are selected.  All validation on the procedures selected is done here.  Creates and saves claim initially, attaching all selected procedures.  But it does not refresh any data. Does not do a final update of the new claim.  Does not enter fee amounts.  claimType=P,S,Med,or Other</summary>
 		private Claim CreateClaim(string claimType){
-			/*
 			int claimFormNum = 0;
 			EtransType eFormat = 0;
 			InsPlan PlanCur=new InsPlan();
 			Relat relatOther=Relat.Self;
+			PatPlan[] PatPlanList=PatPlans.Refresh(PatCur.PatNum);
+			InsPlan[] InsPlanList=InsPlans.Refresh(FamCur);
+			ClaimProc[] ClaimProcList=ClaimProcs.Refresh(PatCur.PatNum);
 			switch(claimType){
 				case "P":
 					PlanCur=InsPlans.GetPlan(PatPlans.GetPlanNum(PatPlanList,1),InsPlanList);
@@ -2593,35 +2596,41 @@ double adj=Adjustments.GetTotForProc(arrayProc[tempCountProc].ProcNum,Adjustment
 					eFormat=FormCC.EFormat;
 					break;
 			}
+			DataTable table=DataSetMain.Tables["account"];
+			List<int> procNums=new List<int>();
 			for(int i=0;i<gridAccount.SelectedIndices.Length;i++){
-				if(Procedures.NoBillIns(arrayProc[AcctLineList[gridAccount.SelectedIndices[i]].Index],ClaimProcList,PlanCur.PlanNum)){
+				procNums.Add(PIn.PInt(table.Rows[gridAccount.SelectedIndices[i]]["ProcNum"].ToString()));
+			}
+			List<Procedure> procList=Procedures.GetManyProcs(procNums);
+			for(int i=0;i<procList.Count;i++){
+				if(Procedures.NoBillIns(procList[i],ClaimProcList,PlanCur.PlanNum)){
 					MsgBox.Show(this,"Not allowed to send procedures to insurance that are marked 'Do not bill to ins'.");
 					return new Claim();
 				}
 			}
-			for(int i=0;i<gridAccount.SelectedIndices.Length;i++){
-				if(Procedures.IsAlreadyAttachedToClaim(arrayProc[AcctLineList[gridAccount.SelectedIndices[i]].Index],ClaimProcList,PlanCur.PlanNum)){
+			for(int i=0;i<procList.Count;i++){
+				if(Procedures.IsAlreadyAttachedToClaim(procList[i],ClaimProcList,PlanCur.PlanNum)){
 					MsgBox.Show(this,"Not allowed to send a procedure to the same insurance company twice.");
 					return new Claim();
 				}
 			}
-			int clinic=arrayProc[AcctLineList[gridAccount.SelectedIndices[0]].Index].ClinicNum;
-			for(int i=1;i<gridAccount.SelectedIndices.Length;i++){//skips 0
-				if(clinic!=arrayProc[AcctLineList[gridAccount.SelectedIndices[i]].Index].ClinicNum){
+			int clinic=procList[0].ClinicNum;
+			for(int i=1;i<procList.Count;i++){//skips 0
+				if(clinic!=procList[i].ClinicNum){
 					MsgBox.Show(this,"All procedures do not have the same clinic.");
 					return new Claim();
 				}
 			}
-			ClaimProc[] claimProcs=new ClaimProc[gridAccount.SelectedIndices.Length];
-			for(int i=0;i<gridAccount.SelectedIndices.Length;i++){//loop through selected procs
+			ClaimProc[] claimProcs=new ClaimProc[procList.Count];//1:1 with procList
+			for(int i=0;i<procList.Count;i++){//loop through selected procs
 				//and try to find an estimate that can be used
-				claimProcs[i]=Procedures.GetClaimProcEstimate(arrayProc[AcctLineList[gridAccount.SelectedIndices[i]].Index],ClaimProcList,PlanCur);
+				claimProcs[i]=Procedures.GetClaimProcEstimate(procList[i],ClaimProcList,PlanCur);
 			}
 			for(int i=0;i<claimProcs.Length;i++){//loop through each claimProc
 				//and create any missing estimates. This handles claims to 3rd and 4th ins co's.
 				if(claimProcs[i]==null){
 					claimProcs[i]=new ClaimProc();
-					ClaimProcs.CreateEst(claimProcs[i],arrayProc[AcctLineList[gridAccount.SelectedIndices[i]].Index],PlanCur);
+					ClaimProcs.CreateEst(claimProcs[i],procList[i],PlanCur);
 				}
 			}
 			//now, all claimProcs have a valid value
@@ -2678,13 +2687,10 @@ double adj=Adjustments.GetTotForProc(arrayProc[tempCountProc].ProcNum,Adjustment
 			if(PlanCur.PlanType=="c"){//if capitation
 				ClaimCur.ClaimType="Cap";
 			}
-			ClaimCur.ProvTreat=arrayProc[AcctLineList[gridAccount.SelectedIndices[0]].Index].ProvNum;
-			for(int i=0;i<gridAccount.SelectedIndices.Length;i++){
-				if(!Providers.GetIsSec//if not a hygienist
-					(arrayProc[AcctLineList[gridAccount.SelectedIndices[i]].Index].ProvNum))
-				{
-					ClaimCur.ProvTreat
-						=arrayProc[AcctLineList[gridAccount.SelectedIndices[i]].Index].ProvNum;
+			ClaimCur.ProvTreat=procList[0].ProvNum;
+			for(int i=0;i<procList.Count;i++){
+				if(!Providers.GetIsSec(procList[i].ProvNum)){//if not a hygienist
+					ClaimCur.ProvTreat=procList[i].ProvNum;
 				}
 			}
 			if(Providers.GetIsSec(ClaimCur.ProvTreat)){
@@ -2703,7 +2709,7 @@ double adj=Adjustments.GetTotForProc(arrayProc[tempCountProc].ProcNum,Adjustment
 			Procedure ProcCur;
 			//for(int i=0;i<tbAccount.SelectedIndices.Length;i++){
 			for(int i=0;i<claimProcs.Length;i++){
-				ProcCur=arrayProc[AcctLineList[gridAccount.SelectedIndices[i]].Index];
+				ProcCur=procList[i].Copy();
 				//ClaimProc ClaimProcCur=new ClaimProc();
 				//ClaimProcCur.ProcNum=ProcCur.ProcNum;
 				claimProcs[i].ClaimNum=ClaimCur.ClaimNum;
@@ -2737,8 +2743,8 @@ double adj=Adjustments.GetTotForProc(arrayProc[tempCountProc].ProcNum,Adjustment
 				claimProcs[i].LineNumber=i+1;
 				ClaimProcs.Update(claimProcs[i]);
 			}//for claimProc
-			return ClaimCur;*/
-			return null;
+			return ClaimCur;
+			//return null;
 		}
 
 		private void menuInsPri_Click(object sender, System.EventArgs e) {

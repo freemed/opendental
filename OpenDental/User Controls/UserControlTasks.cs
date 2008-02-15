@@ -169,10 +169,10 @@ namespace OpenDental {
 //skip the dated trunk automation for now
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
-			ODGridColumn col=new ODGridColumn("",35);
+			ODGridColumn col=new ODGridColumn("",17);
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TableTasks","Date"),70);
-			gridMain.Columns.Add(col);
+			//col=new ODGridColumn(Lan.g("TableTasks","Date"),60);
+			//gridMain.Columns.Add(col);
 			col=new ODGridColumn(Lan.g("TableTasks","Description"),200);//any width
 			gridMain.Columns.Add(col);
 			gridMain.Rows.Clear();
@@ -215,8 +215,8 @@ namespace OpenDental {
 				//for(int i=0;i<List.Length;i++){
 				row=new ODGridRow();
 				row.Cells.Add(imageindex.ToString());//no image yet
-				row.Cells.Add(dateStr);
-				row.Cells.Add(objDesc+tasklistdescript);
+				//row.Cells.Add();
+				row.Cells.Add(dateStr+objDesc+tasklistdescript);
 				gridMain.Rows.Add(row);
 			}
 			for(int i=0;i<TasksList.Count;i++) {
@@ -263,8 +263,8 @@ namespace OpenDental {
 				else{
 					row.Cells.Add("2");
 				}
-				row.Cells.Add(dateStr);
-				row.Cells.Add(objDesc+TasksList[i].Descript);
+				//row.Cells.Add();
+				row.Cells.Add(dateStr+objDesc+TasksList[i].Descript);
 				gridMain.Rows.Add(row);
 				//if(TasksList[i].TaskStatus) {//complete
 				//	item=new ListViewItem(dateStr+objDesc+TasksList[i].Descript,1);

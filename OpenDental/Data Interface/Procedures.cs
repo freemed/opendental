@@ -153,7 +153,7 @@ namespace OpenDental{
 				MessageBox.Show(e.Message);
 				return new Procedure[0];
 			}
-			Procedure[] procList=ConvertToList(ds.Tables[0]);
+			Procedure[] procList=ConvertToList(ds.Tables[0]).ToArray();
 			return procList;
 		}
 
@@ -162,12 +162,12 @@ namespace OpenDental{
 			string command=
 				"SELECT * FROM procedurelog "
 				+"WHERE ProcNum="+procNum.ToString();
-			Procedure[] List=RefreshAndFill(command);
-			if(List.Length==0){
+			List<Procedure> procList=RefreshAndFill(command);
+			if(procList.Count==0){
 				MessageBox.Show(Lan.g("Procedures","Error. Procedure not found")+": "+procNum.ToString());
 				return new Procedure();
 			}
-			Procedure proc=List[0];
+			Procedure proc=procList[0];
 			if(!includeNote){
 				return proc;
 			}
@@ -188,68 +188,66 @@ namespace OpenDental{
 			return proc;
 		}
 
-		private static Procedure[] RefreshAndFill(string command){
-			DataSet ds=null;
-			try {
-				if(RemotingClient.OpenDentBusinessIsLocal) {
-					ds=GeneralB.GetTable(command);
+		///<summary>Gets many procedure directly from the db all at once.  Never include the notes.</summary>
+		public static List<Procedure> GetManyProcs(List<int> procNums){
+			string command="SELECT * FROM procedurelog WHERE ";
+			for(int i=0;i<procNums.Count;i++){
+				if(i>0){
+					command+="OR ";
 				}
-				else {
-					DtoGeneralGetTable dto=new DtoGeneralGetTable();
-					dto.Command=command;
-					ds=RemotingClient.ProcessQuery(dto);
-				}
+				command+="ProcNum="+POut.PInt(procNums[i])+" ";
 			}
-			catch(Exception e) {
-				MessageBox.Show(e.Message);
-				return new Procedure[0];
-			}
- 			DataTable table=ds.Tables[0];
+			return RefreshAndFill(command);
+		}
+
+		private static List<Procedure> RefreshAndFill(string command){
+ 			DataTable table=General.GetTable(command);
 			return ConvertToList(table);
 		}
 
-		private static Procedure[] ConvertToList(DataTable table){
-			Procedure[] List=new Procedure[table.Rows.Count];
-			for(int i=0;i<List.Length;i++){
-				List[i]=new Procedure();
-				List[i].ProcNum					= PIn.PInt   (table.Rows[i][0].ToString());
-				List[i].PatNum					= PIn.PInt   (table.Rows[i][1].ToString());
-				List[i].AptNum					= PIn.PInt   (table.Rows[i][2].ToString());
-				List[i].OldCode					= PIn.PString(table.Rows[i][3].ToString());
-				List[i].ProcDate				= PIn.PDate  (table.Rows[i][4].ToString());
-				List[i].ProcFee					= PIn.PDouble(table.Rows[i][5].ToString());
-				List[i].Surf						= PIn.PString(table.Rows[i][6].ToString());
-				List[i].ToothNum				= PIn.PString(table.Rows[i][7].ToString());
-				List[i].ToothRange			= PIn.PString(table.Rows[i][8].ToString());
-				List[i].Priority				= PIn.PInt   (table.Rows[i][9].ToString());
-				List[i].ProcStatus			= (ProcStat)PIn.PInt   (table.Rows[i][10].ToString());
-				List[i].ProvNum					= PIn.PInt   (table.Rows[i][11].ToString());
-				List[i].Dx							= PIn.PInt   (table.Rows[i][12].ToString());
-				List[i].PlannedAptNum		= PIn.PInt   (table.Rows[i][13].ToString());
-				List[i].PlaceService		= (PlaceOfService)PIn.PInt(table.Rows[i][14].ToString());
-				List[i].Prosthesis		  = PIn.PString(table.Rows[i][15].ToString());
-				List[i].DateOriginalProsth= PIn.PDate(table.Rows[i][16].ToString());
-				List[i].ClaimNote		    = PIn.PString(table.Rows[i][17].ToString());
-				List[i].DateEntryC      = PIn.PDate  (table.Rows[i][18].ToString());
-				List[i].ClinicNum       = PIn.PInt   (table.Rows[i][19].ToString());
-				List[i].MedicalCode     = PIn.PString(table.Rows[i][20].ToString());
-				List[i].DiagnosticCode  = PIn.PString(table.Rows[i][21].ToString());
-				List[i].IsPrincDiag     = PIn.PBool  (table.Rows[i][22].ToString());
-				List[i].ProcNumLab      = PIn.PInt   (table.Rows[i][23].ToString());	
-				List[i].BillingTypeOne  = PIn.PInt   (table.Rows[i][24].ToString());
-				List[i].BillingTypeTwo  = PIn.PInt   (table.Rows[i][25].ToString());
-				List[i].CodeNum         = PIn.PInt   (table.Rows[i][26].ToString());
-				List[i].CodeMod1        = PIn.PString(table.Rows[i][27].ToString());
-				List[i].CodeMod2        = PIn.PString(table.Rows[i][28].ToString());
-				List[i].CodeMod3        = PIn.PString(table.Rows[i][29].ToString());
-				List[i].CodeMod4        = PIn.PString(table.Rows[i][30].ToString());
-				List[i].RevCode         = PIn.PString(table.Rows[i][31].ToString());
-				List[i].UnitCode        = PIn.PString(table.Rows[i][32].ToString());
-				List[i].UnitQty         = PIn.PInt(table.Rows[i][33].ToString());
-				List[i].BaseUnits       = PIn.PInt(table.Rows[i][34].ToString());
-				List[i].StartTime       = PIn.PInt(table.Rows[i][35].ToString());
-				List[i].StopTime        = PIn.PInt(table.Rows[i][36].ToString());
-				List[i].DateTP          = PIn.PDate(table.Rows[i][37].ToString());
+		private static List<Procedure> ConvertToList(DataTable table){
+			List<Procedure> retVal=new List<Procedure>();
+			Procedure proc;
+			for(int i=0;i<table.Rows.Count;i++){
+				proc=new Procedure();
+				proc.ProcNum				= PIn.PInt   (table.Rows[i][0].ToString());
+				proc.PatNum					= PIn.PInt   (table.Rows[i][1].ToString());
+				proc.AptNum					= PIn.PInt   (table.Rows[i][2].ToString());
+				proc.OldCode				= PIn.PString(table.Rows[i][3].ToString());
+				proc.ProcDate				= PIn.PDate  (table.Rows[i][4].ToString());
+				proc.ProcFee				= PIn.PDouble(table.Rows[i][5].ToString());
+				proc.Surf						= PIn.PString(table.Rows[i][6].ToString());
+				proc.ToothNum				= PIn.PString(table.Rows[i][7].ToString());
+				proc.ToothRange			= PIn.PString(table.Rows[i][8].ToString());
+				proc.Priority				= PIn.PInt   (table.Rows[i][9].ToString());
+				proc.ProcStatus			= (ProcStat)PIn.PInt   (table.Rows[i][10].ToString());
+				proc.ProvNum				= PIn.PInt   (table.Rows[i][11].ToString());
+				proc.Dx							= PIn.PInt   (table.Rows[i][12].ToString());
+				proc.PlannedAptNum	= PIn.PInt   (table.Rows[i][13].ToString());
+				proc.PlaceService		= (PlaceOfService)PIn.PInt(table.Rows[i][14].ToString());
+				proc.Prosthesis		  = PIn.PString(table.Rows[i][15].ToString());
+				proc.DateOriginalProsth= PIn.PDate(table.Rows[i][16].ToString());
+				proc.ClaimNote		    = PIn.PString(table.Rows[i][17].ToString());
+				proc.DateEntryC      = PIn.PDate  (table.Rows[i][18].ToString());
+				proc.ClinicNum       = PIn.PInt   (table.Rows[i][19].ToString());
+				proc.MedicalCode     = PIn.PString(table.Rows[i][20].ToString());
+				proc.DiagnosticCode  = PIn.PString(table.Rows[i][21].ToString());
+				proc.IsPrincDiag     = PIn.PBool  (table.Rows[i][22].ToString());
+				proc.ProcNumLab      = PIn.PInt   (table.Rows[i][23].ToString());	
+				proc.BillingTypeOne  = PIn.PInt   (table.Rows[i][24].ToString());
+				proc.BillingTypeTwo  = PIn.PInt   (table.Rows[i][25].ToString());
+				proc.CodeNum         = PIn.PInt   (table.Rows[i][26].ToString());
+				proc.CodeMod1        = PIn.PString(table.Rows[i][27].ToString());
+				proc.CodeMod2        = PIn.PString(table.Rows[i][28].ToString());
+				proc.CodeMod3        = PIn.PString(table.Rows[i][29].ToString());
+				proc.CodeMod4        = PIn.PString(table.Rows[i][30].ToString());
+				proc.RevCode         = PIn.PString(table.Rows[i][31].ToString());
+				proc.UnitCode        = PIn.PString(table.Rows[i][32].ToString());
+				proc.UnitQty         = PIn.PInt(table.Rows[i][33].ToString());
+				proc.BaseUnits       = PIn.PInt(table.Rows[i][34].ToString());
+				proc.StartTime       = PIn.PInt(table.Rows[i][35].ToString());
+				proc.StopTime        = PIn.PInt(table.Rows[i][36].ToString());
+				proc.DateTP          = PIn.PDate(table.Rows[i][37].ToString());
 				//only used sometimes:
 				/*if(table.Columns.Count>24){
 					List[i].UserNum       = PIn.PInt   (table.Rows[i][24].ToString());
@@ -257,8 +255,9 @@ namespace OpenDental{
 					List[i].SigIsTopaz    = PIn.PBool  (table.Rows[i][26].ToString());
 					List[i].Signature     = PIn.PString(table.Rows[i][27].ToString());
 				}*/
+				retVal.Add(proc);
 			}
-			return List;
+			return retVal;
 		}
 
 		///<summary>Gets Procedures for a single appointment directly from the database</summary>
@@ -270,7 +269,7 @@ namespace OpenDental{
 			else{
 				command = "SELECT * from procedurelog WHERE AptNum = '"+POut.PInt(aptNum)+"'";
 			}
-			return RefreshAndFill(command);
+			return RefreshAndFill(command).ToArray();
 		}
 
 		/// <summary>Used by GetProcsForSingle and GetProcsMultApts to generate a short string description of a procedure.</summary>
@@ -326,7 +325,7 @@ namespace OpenDental{
 				}
 			}
 			string command = "SELECT * FROM procedurelog WHERE"+strAptNums;
-			return RefreshAndFill(command);
+			return RefreshAndFill(command).ToArray();
 		}
 
 		///<summary>Used do display procedure descriptions on appointments. The returned string also includes surf and toothNum.</summary>
@@ -1020,6 +1019,9 @@ namespace OpenDental{
 
 		///<summary>Used in ContrAccount.CreateClaim when validating selected procedures. Returns true if there is any claimproc for this procedure and plan which is marked NoBillIns.  The claimProcList can be all claimProcs for the patient or only those attached to this proc. Will be true if any claimProcs attached to this procedure are set NoBillIns.</summary>
 		public static bool NoBillIns(Procedure proc,ClaimProc[] List,int planNum) {
+			if(proc==null){
+				return false;
+			}
 			for(int i=0;i<List.Length;i++) {
 				if(List[i].ProcNum==proc.ProcNum
 					&& List[i].PlanNum==planNum
