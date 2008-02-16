@@ -30,6 +30,8 @@ namespace OpenDentBusiness{
 		public DateTime DateTimeEntry;
 		///<summary>FK to user.UserNum.  The person who created the task.</summary>
 		public int UserNum;
+		///<summary>The date and time that this task was marked "done".</summary>
+		public DateTime DateTimeFinished;
 
 		///<summary></summary>
 		public Task Copy() {

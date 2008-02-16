@@ -148,11 +148,19 @@ namespace OpenDental {
 			}
 			tree.Height=TreeHistory.Count*tree.ItemHeight+8;
 			tree.Refresh();
-			//int halfH=(this.ClientSize.Height-tree.Bottom-2)/2;
 			gridMain.Top=tree.Bottom;
-			//gridMain.Height=halfH;
-			//listMain.Top=gridMain.Bottom;
+			checkShowFinished.Top=gridMain.Top+1;
+			textStartDate.Top=gridMain.Top;
+			labelStartDate.Top=gridMain.Top+1;
 			gridMain.Height=this.ClientSize.Height-gridMain.Top-3;
+		}
+
+		private void textStartDate_KeyPress(object sender,KeyPressEventArgs e) {
+			//FillGrid();
+		}
+
+		private void textStartDate_TextChanged(object sender,EventArgs e) {
+			FillGrid();
 		}
 
 		private void FillGrid(){
@@ -167,136 +175,8 @@ namespace OpenDental {
 				date=cal.SelectionStart;
 			}
 			RefreshMainLists(parent,date);
-//skip the dated trunk automation for now
-			gridMain.BeginUpdate();
-			gridMain.Columns.Clear();
-			ODGridColumn col=new ODGridColumn("",17);
-			col.ImageList=imageListTree;
-			gridMain.Columns.Add(col);
-			//col=new ODGridColumn(Lan.g("TableTasks","Date"),60);
-			//gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TableTasks","Description"),200);//any width
-			gridMain.Columns.Add(col);
-			gridMain.Rows.Clear();
-			ODGridRow row;
-			//listMain.Items.Clear();
-			//ListViewItem item;
-			string dateStr="";
-			string objDesc="";
-			string tasklistdescript="";
-			int imageindex;
-			for(int i=0;i<TaskListsList.Count;i++) {
-				dateStr="";
-				if(TaskListsList[i].DateTL.Year>1880
-					&& (tabContr.SelectedIndex==0 || tabContr.SelectedIndex==1))//user or main
-				{
-					//dateStr=TaskListsList[i].DateTL.ToShortDateString()+" - ";
-					if(TaskListsList[i].DateType==TaskDateType.Day) {
-						dateStr=TaskListsList[i].DateTL.ToShortDateString()+" - ";
-					}
-					else if(TaskListsList[i].DateType==TaskDateType.Week) {
-						dateStr=Lan.g(this,"Week of")+" "+TaskListsList[i].DateTL.ToShortDateString()+" - ";
-					}
-					else if(TaskListsList[i].DateType==TaskDateType.Month) {
-						dateStr=TaskListsList[i].DateTL.ToString("MMMM")+" - ";
-					}
-				}
-				objDesc="";
-				if(tabContr.SelectedIndex==0){//user tab
-					objDesc=TaskListsList[i].ParentDesc;
-				}
-				tasklistdescript=TaskListsList[i].Descript;
-				imageindex=0;
-				if(TaskListsList[i].NewTaskCount>0){
-					imageindex=3;//orange
-					tasklistdescript=tasklistdescript+"("+TaskListsList[i].NewTaskCount.ToString()+")";
-				}
-				//item=new ListViewItem(dateStr+objDesc+tasklistdescript,imageindex);
-				//item.ToolTipText=item.Text;
-				//listMain.Items.Add(item);
-				//for(int i=0;i<List.Length;i++){
-				row=new ODGridRow();
-				row.Cells.Add(imageindex.ToString());//no image yet
-				//row.Cells.Add();
-				row.Cells.Add(dateStr+objDesc+tasklistdescript);
-				gridMain.Rows.Add(row);
-			}
-			for(int i=0;i<TasksList.Count;i++) {
-				//checked=1, unchecked=2
-				dateStr="";
-				if(tabContr.SelectedIndex==0 || tabContr.SelectedIndex==1) {//user or main
-					if(TasksList[i].DateTask.Year>1880) {
-						if(TasksList[i].DateType==TaskDateType.Day) {
-							dateStr=TasksList[i].DateTask.ToShortDateString()+" - ";
-						}
-						else if(TasksList[i].DateType==TaskDateType.Week) {
-							dateStr=Lan.g(this,"Week of")+" "+TasksList[i].DateTask.ToShortDateString()+" - ";
-						}
-						else if(TasksList[i].DateType==TaskDateType.Month) {
-							dateStr=TasksList[i].DateTask.ToString("MMMM")+" - ";
-						}
-					}
-					else if(TasksList[i].DateTimeEntry.Year>1880) {
-						dateStr=TasksList[i].DateTimeEntry.ToShortDateString()+" - ";
-					}
-				}
-				objDesc="";
-				if(TasksList[i].ObjectType==TaskObjectType.Patient) {
-					if(TasksList[i].KeyNum!=0) {
-						objDesc=Patients.GetPat(TasksList[i].KeyNum).GetNameLF()+" - ";
-					}
-				}
-				else if(TasksList[i].ObjectType==TaskObjectType.Appointment) {
-					if(TasksList[i].KeyNum!=0) {
-						Appointment AptCur=Appointments.GetOneApt(TasksList[i].KeyNum);
-						if(AptCur!=null) {
-							objDesc=Patients.GetPat(AptCur.PatNum).GetNameLF()
-								+"  "+AptCur.AptDateTime.ToString()
-								+"  "+AptCur.ProcDescript
-								+"  "+AptCur.Note
-								+" - ";
-						}
-					}
-				}
-				row=new ODGridRow();
-				switch(TasksList[i].TaskStatus) {
-					case TaskStatusEnum.New:
-						row.Cells.Add("4");
-						break;
-					case TaskStatusEnum.Viewed:
-						row.Cells.Add("2");
-						break;
-					case TaskStatusEnum.Done:
-						row.Cells.Add("1");
-						break;
-				}
-				//row.Cells.Add();
-				row.Cells.Add(dateStr+objDesc+TasksList[i].Descript);
-				gridMain.Rows.Add(row);
-				//if(TasksList[i].TaskStatus) {//complete
-				//	item=new ListViewItem(dateStr+objDesc+TasksList[i].Descript,1);
-				//}
-				//else {
-				//	item=new ListViewItem(dateStr+objDesc+TasksList[i].Descript,2);
-				//}
-				//item.ToolTipText=item.Text;
-				//listMain.Items.Add(item);
-			}
-			gridMain.EndUpdate();
-		}
-		
-		/*private void FillMain() {
-			int parent;
-			DateTime date;
-			if(TreeHistory.Count>0) {//not on main trunk
-				parent=TreeHistory[TreeHistory.Count-1].TaskListNum;
-				date=DateTime.MinValue;
-			}
-			else {//one of the main trunks
-				parent=0;
-				date=cal.SelectionStart;
-			}
-			RefreshMainLists(parent,date);
+			#region dated trunk automation
+			//dated trunk automation-----------------------------------------------------------------------------
 			if(TreeHistory.Count==0//main trunk
 				&& (tabContr.SelectedIndex==3	|| tabContr.SelectedIndex==4 || tabContr.SelectedIndex==5))//any of the dated groups
 			{
@@ -311,12 +191,13 @@ namespace OpenDental {
 						changeMade=true;
 					}
 				}
-				//clear any tasks which are derived from a repeating tast and which are not checked off
+				//clear any tasks which are derived from a repeating task 
+				//and which are still new (not marked viewed or done)
 				for(int i=0;i<TasksList.Count;i++) {
 					if(TasksList[i].FromNum==0) {
 						continue;
 					}
-					if(!TasksList[i].TaskStatus) {
+					if(TasksList[i].TaskStatus==TaskStatusEnum.New) {
 						Tasks.Delete(TasksList[i]);
 						changeMade=true;
 					}
@@ -390,9 +271,17 @@ namespace OpenDental {
 				if(changeMade) {
 					RefreshMainLists(parent,date);
 				}
-			}//if main trunk on dated group
-			listMain.Items.Clear();
-			ListViewItem item;
+			}//End of dated trunk automation--------------------------------------------------------------------------
+			#endregion dated trunk automation
+			gridMain.BeginUpdate();
+			gridMain.Columns.Clear();
+			ODGridColumn col=new ODGridColumn("",17);
+			col.ImageList=imageListTree;
+			gridMain.Columns.Add(col);
+			col=new ODGridColumn(Lan.g("TableTasks","Description"),200);//any width
+			gridMain.Columns.Add(col);
+			gridMain.Rows.Clear();
+			ODGridRow row;
 			string dateStr="";
 			string objDesc="";
 			string tasklistdescript="";
@@ -402,7 +291,6 @@ namespace OpenDental {
 				if(TaskListsList[i].DateTL.Year>1880
 					&& (tabContr.SelectedIndex==0 || tabContr.SelectedIndex==1))//user or main
 				{
-					//dateStr=TaskListsList[i].DateTL.ToShortDateString()+" - ";
 					if(TaskListsList[i].DateType==TaskDateType.Day) {
 						dateStr=TaskListsList[i].DateTL.ToShortDateString()+" - ";
 					}
@@ -423,12 +311,12 @@ namespace OpenDental {
 					imageindex=3;//orange
 					tasklistdescript=tasklistdescript+"("+TaskListsList[i].NewTaskCount.ToString()+")";
 				}
-				item=new ListViewItem(dateStr+objDesc+tasklistdescript,imageindex);
-				item.ToolTipText=item.Text;
-				listMain.Items.Add(item);
+				row=new ODGridRow();
+				row.Cells.Add(imageindex.ToString());
+				row.Cells.Add(dateStr+objDesc+tasklistdescript);
+				gridMain.Rows.Add(row);
 			}
 			for(int i=0;i<TasksList.Count;i++) {
-				//checked=1, unchecked=2
 				dateStr="";
 				if(tabContr.SelectedIndex==0 || tabContr.SelectedIndex==1) {//user or main
 					if(TasksList[i].DateTask.Year>1880) {
@@ -447,6 +335,9 @@ namespace OpenDental {
 					}
 				}
 				objDesc="";
+				if(TasksList[i].TaskStatus==TaskStatusEnum.Done){
+					objDesc=Lan.g(this,"Done:")+TasksList[i].DateTimeFinished.ToShortDateString()+" - ";
+				}
 				if(TasksList[i].ObjectType==TaskObjectType.Patient) {
 					if(TasksList[i].KeyNum!=0) {
 						objDesc=Patients.GetPat(TasksList[i].KeyNum).GetNameLF()+" - ";
@@ -464,22 +355,42 @@ namespace OpenDental {
 						}
 					}
 				}
-				if(TasksList[i].TaskStatus) {//complete
-					item=new ListViewItem(dateStr+objDesc+TasksList[i].Descript,1);
+				row=new ODGridRow();
+				switch(TasksList[i].TaskStatus) {
+					case TaskStatusEnum.New:
+						row.Cells.Add("4");
+						break;
+					case TaskStatusEnum.Viewed:
+						row.Cells.Add("2");
+						break;
+					case TaskStatusEnum.Done:
+						row.Cells.Add("1");
+						break;
 				}
-				else {
-					item=new ListViewItem(dateStr+objDesc+TasksList[i].Descript,2);
-				}
-				item.ToolTipText=item.Text;
-				listMain.Items.Add(item);
+				row.Cells.Add(dateStr+objDesc+TasksList[i].Descript);
+				gridMain.Rows.Add(row);
 			}
-		}*/
+			gridMain.EndUpdate();
+		}
+
+		private void checkShowFinished_Click(object sender,EventArgs e) {
+			if(checkShowFinished.Checked){
+				labelStartDate.Visible=true;
+				textStartDate.Visible=true;
+				textStartDate.Text=DateTime.Now.AddDays(-7).ToShortDateString();
+			}
+			else{
+				labelStartDate.Visible=false;
+				textStartDate.Visible=false;
+			}
+			FillGrid();
+		}
 
 		///<summary>A recursive function that checks every child in a list IsFromRepeating.  If any are marked complete, then it returns true, signifying that this list should be immune from being deleted since it's already in use.</summary>
 		private bool AnyAreMarkedComplete(TaskList list) {
 			//get all children:
 			List<TaskList> childLists=TaskLists.RefreshChildren(list.TaskListNum);
-			List<Task> childTasks=Tasks.RefreshChildren(list.TaskListNum);
+			List<Task> childTasks=Tasks.RefreshChildren(list.TaskListNum,true,DateTime.MinValue);
 			for(int i=0;i<childLists.Count;i++) {
 				if(AnyAreMarkedComplete(childLists[i])) {
 					return true;
@@ -495,6 +406,15 @@ namespace OpenDental {
 
 		///<summary>If parent=0, then this is a trunk.</summary>
 		private void RefreshMainLists(int parent,DateTime date) {
+			DateTime startDate=DateTime.MinValue;
+			if(textStartDate.Visible && textStartDate.Text!=""){
+				if(textStartDate.errorProvider1.GetError(textStartDate)==""){
+					startDate=PIn.PDate(textStartDate.Text);
+				}
+				else{//invalid date
+					startDate=DateTime.Today.AddDays(-7);
+				}
+			}
 			if(this.DesignMode){
 				TaskListsList=new List<TaskList>();
 				TasksList=new List<Task>();
@@ -505,7 +425,7 @@ namespace OpenDental {
 			}
 			if(parent!=0){//not a trunk
 				TaskListsList=TaskLists.RefreshChildren(parent);
-				TasksList=Tasks.RefreshChildren(parent);
+				TasksList=Tasks.RefreshChildren(parent,checkShowFinished.Checked,startDate);
 			}
 			else if(tabContr.SelectedIndex==0) {//user
 				TaskListsList=TaskLists.RefreshUserTrunk(Security.CurUser.UserNum);
@@ -514,7 +434,7 @@ namespace OpenDental {
 			}
 			else if(tabContr.SelectedIndex==1) {//main
 				TaskListsList=TaskLists.RefreshMainTrunk();
-				TasksList=Tasks.RefreshMainTrunk();
+				TasksList=Tasks.RefreshMainTrunk(checkShowFinished.Checked,startDate);
 			}
 			else if(tabContr.SelectedIndex==2) {//repeating
 				TaskListsList=TaskLists.RefreshRepeatingTrunk();
@@ -537,14 +457,12 @@ namespace OpenDental {
 		private void tabContr_Click(object sender,System.EventArgs e) {
 			TreeHistory=new List<TaskList>();//clear the tree no matter which tab clicked.
 			FillTree();
-			//FillMain();
 			FillGrid();
 		}
 
 		private void cal_DateSelected(object sender,System.Windows.Forms.DateRangeEventArgs e) {
 			TreeHistory=new List<TaskList>();//clear the tree
 			FillTree();
-			//FillMain();
 			FillGrid();
 		}
 
@@ -558,9 +476,6 @@ namespace OpenDental {
 				case "AddTask":
 					OnAddTask_Click();
 					break;
-				//case "Exit":
-				//	Close();
-				//	break;
 			}
 		}
 
@@ -595,7 +510,6 @@ namespace OpenDental {
 			FormTaskListEdit FormT=new FormTaskListEdit(cur);
 			FormT.IsNew=true;
 			FormT.ShowDialog();
-			//FillMain();
 			FillGrid();
 		}
 
@@ -638,7 +552,6 @@ namespace OpenDental {
 				//DialogResult=DialogResult.OK;
 				return;
 			}
-			//FillMain();
 			FillGrid();
 		}
 
@@ -658,7 +571,6 @@ namespace OpenDental {
 					return;
 				}
 			}
-			//FillMain();
 			FillGrid();
 		}
 
@@ -816,7 +728,6 @@ namespace OpenDental {
 				newT.FromNum=0;//always
 				if(WasCut && Tasks.WasTaskAltered(ClipTask)){
 					MsgBox.Show("Tasks","Not allowed to move because the task has been altered by someone else.");
-					//FillMain();
 					FillGrid();
 					return;
 				}
@@ -830,7 +741,6 @@ namespace OpenDental {
 					Tasks.Delete(ClipTask);
 				}
 			}
-			//FillMain();
 			FillGrid();
 		}
 
@@ -840,14 +750,13 @@ namespace OpenDental {
 			GotoType=task.ObjectType;
 			GotoKeyNum=task.KeyNum;
 			OnGoToChanged();
-			//DialogResult=DialogResult.OK;
 		}
 
 		///<summary>A recursive function that duplicates an entire existing TaskList.  For the initial loop, make changes to the original taskList before passing it in.  That way, Date and type are only set in initial loop.  All children preserve original dates and types.  The isRepeating value will be applied in all loops.  Also, make sure to change the parent num to the new one before calling this function.  The taskListNum will always change, because we are inserting new record into database.</summary>
 		private void DuplicateExistingList(TaskList newList,bool isInMainOrUser) {
 			//get all children:
 			List<TaskList> childLists=TaskLists.RefreshChildren(newList.TaskListNum);
-			List<Task> childTasks=Tasks.RefreshChildren(newList.TaskListNum);
+			List<Task> childTasks=Tasks.RefreshChildren(newList.TaskListNum,true,DateTime.MinValue);
 			TaskLists.InsertOrUpdate(newList,true);
 			//now we have a new taskListNum to work with
 			for(int i=0;i<childLists.Count;i++) {
@@ -886,6 +795,13 @@ namespace OpenDental {
 
 		private void OnDelete_Click() {
 			if(clickedI < TaskListsList.Count) {//is list
+				//check to make sure the list is empty.
+				List<Task> tsks=Tasks.RefreshChildren(TaskListsList[clickedI].TaskListNum,true,DateTime.MinValue);
+				List<TaskList> tsklsts=TaskLists.RefreshChildren(TaskListsList[clickedI].TaskListNum);
+				if(tsks.Count>0 || tsklsts.Count>0){
+					MsgBox.Show(this,"Not allowed to delete a list unless it's empty.");
+					return;
+				}
 				if(!MsgBox.Show(this,true,"Delete list including all sublists and tasks?")) {
 					return;
 				}
@@ -897,7 +813,6 @@ namespace OpenDental {
 				}
 				Tasks.Delete(TasksList[clickedI-TaskListsList.Count]);
 			}
-			//FillMain();
 			FillGrid();
 		}
 
@@ -905,7 +820,7 @@ namespace OpenDental {
 		private void DeleteEntireList(TaskList list) {
 			//get all children:
 			List<TaskList> childLists=TaskLists.RefreshChildren(list.TaskListNum);
-			List<Task> childTasks=Tasks.RefreshChildren(list.TaskListNum);
+			List<Task> childTasks=Tasks.RefreshChildren(list.TaskListNum,true,DateTime.MinValue);
 			for(int i=0;i<childLists.Count;i++) {
 				DeleteEntireList(childLists[i]);
 			}
@@ -947,6 +862,10 @@ namespace OpenDental {
 			//if(clickedI==-1) {
 			//	return;
 			//}
+			if(e.Col==0){
+				//no longer allow double click on checkbox, because it's annoying.
+				return;
+			}
 			if(e.Row >= TaskListsList.Count) {//is task
 				FormTaskEdit FormT=new FormTaskEdit(TasksList[e.Row-TaskListsList.Count]);
 				FormT.ShowDialog();
@@ -954,53 +873,13 @@ namespace OpenDental {
 					GotoType=FormT.GotoType;
 					GotoKeyNum=FormT.GotoKeyNum;
 					OnGoToChanged();
-					//DialogResult=DialogResult.OK;
 					return;
 				}
 			}
-			//FillMain();
 			FillGrid();
 		}
 
-		/*private void listMain_MouseDown(object sender,System.Windows.Forms.MouseEventArgs e) {
-			ListViewItem ClickedItem=listMain.GetItemAt(e.X,e.Y);
-			if(ClickedItem==null) {
-				return;
-			}
-			clickedI=ClickedItem.Index;
-			if(e.Button!=MouseButtons.Left) {
-				return;
-			}
-			if(clickedI < TaskListsList.Count) {//is list
-				TreeHistory.Add(TaskListsList[clickedI]);
-				FillTree();
-				FillMain();
-				FillGrid();
-				return;
-			}
-			//check tasks off
-			if(e.X>ClickedItem.Position.X+16) {
-				return;
-			}
-			Task task=TasksList[clickedI-TaskListsList.Count].Copy();
-			Task taskOld=task.Copy();
-			task.TaskStatus= !task.TaskStatus;
-			try {
-				Tasks.Update(task,taskOld);
-			}
-			catch(Exception ex) {
-				MessageBox.Show(ex.Message);
-				return;
-			}
-			FillMain();
-			FillGrid();
-		}*/
-
 		private void gridMain_MouseDown(object sender,MouseEventArgs e) {
-			//ListViewItem ClickedItem=listMain.GetItemAt(e.X,e.Y);
-			//if(ClickedItem==null) {
-			//	return;
-			//}
 			clickedI=gridMain.PointToRow(e.Y);//e.Row;
 			int clickedCol=gridMain.PointToCol(e.X);
 			if(clickedI==-1){
@@ -1013,7 +892,6 @@ namespace OpenDental {
 			if(clickedI < TaskListsList.Count) {//is list
 				TreeHistory.Add(TaskListsList[clickedI]);
 				FillTree();
-				//FillMain();
 				FillGrid();
 				return;
 			}
@@ -1028,8 +906,10 @@ namespace OpenDental {
 			}
 			else if(task.TaskStatus==TaskStatusEnum.Viewed){
 				task.TaskStatus=TaskStatusEnum.Done;
+				task.DateTimeFinished=DateTime.Now;
 			}
 			else if(task.TaskStatus==TaskStatusEnum.Done){
+				//I guess just leave the date finished in place. It will reset if they mark it complete again.
 				task.TaskStatus=TaskStatusEnum.New;
 			}
 			try {
@@ -1039,12 +919,7 @@ namespace OpenDental {
 				MessageBox.Show(ex.Message);
 				return;
 			}
-			//FillMain();
 			FillGrid();
-		}
-
-		private void gridMain_CellClick(object sender,ODGridClickEventArgs e) {
-			
 		}
 
 		private void menuEdit_Popup(object sender,System.EventArgs e) {
@@ -1169,6 +1044,12 @@ namespace OpenDental {
 			//FillMain();
 			FillGrid();
 		}
+
+		
+
+		
+
+		
 
 		
 

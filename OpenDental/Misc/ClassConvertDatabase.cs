@@ -6374,6 +6374,23 @@ namespace OpenDental{
 				General.NonQEx(command);
 				command="INSERT INTO preference (PrefName,ValueString) VALUES ('TimecardUsersDontEditOwnCard','0')";
 				General.NonQEx(command);
+				command="ALTER TABLE task ADD DateTimeFinished datetime NOT NULL";
+				General.NonQEx(command);
+				command="UPDATE task SET DateTimeFinished ="+POut.PDate(DateTime.MinValue);
+				//equiv to:UPDATE task SET DateTimeFinished ='0001-01-01'
+				General.NonQEx(command);
+				
+
+				
+
+
+
+
+
+
+
+
+
 
 				command="UPDATE preference SET ValueString = '5.6.0.0' WHERE PrefName = 'DataBaseVersion'";
 				General.NonQEx(command);

@@ -16,7 +16,7 @@ namespace OpenDental{
 		public static DateTime LastOpenDate;
 
 		/*
-		///<summary>Gets all tasks for the trunk of the user tab.</summary>
+		///<summary>There are NO tasks on the user trunk, so this is not needed.</summary>
 		public static List<Task> RefreshUserTrunk(int userNum) {
 			string command="SELECT task.* FROM tasksubscription "
 				+"LEFT JOIN task ON task.TaskNum=tasksubscription.TaskNum "
@@ -39,16 +39,24 @@ namespace OpenDental{
 		}
 
 		///<summary>Gets all tasks for the main trunk.</summary>
-		public static List<Task> RefreshMainTrunk() {
+		public static List<Task> RefreshMainTrunk(bool showDone,DateTime startDate) {
+			//startDate only applies if showing Done tasks.
 			string command="SELECT * FROM task "
 				+"WHERE TaskListNum=0 "
 				+"AND DateTask < '1880-01-01' "
-				+"AND IsRepeating=0 "
-				+"ORDER BY DateTimeEntry";
+				+"AND IsRepeating=0";
+			if(showDone){
+				command+=" AND (TaskStatus !="+POut.PInt((int)TaskStatusEnum.Done)
+					+" OR DateTimeFinished > "+POut.PDate(startDate)+")";//of if done, then restrict date
+			}
+			else{
+				command+=" AND TaskStatus !="+POut.PInt((int)TaskStatusEnum.Done);
+			}
+			command+=" ORDER BY DateTimeEntry";
 			return RefreshAndFill(command);
 		}
 
-		///<summary>Gets all tasks for the repeating trunk.</summary>
+		///<summary>Gets all tasks for the repeating trunk.  Always includes "done".</summary>
 		public static List<Task> RefreshRepeatingTrunk() {
 			string command="SELECT * FROM task "
 				+"WHERE TaskListNum=0 "
@@ -59,11 +67,19 @@ namespace OpenDental{
 		}
 
 		///<summary>0 is not allowed, because that would be a trunk.</summary>
-		public static List<Task> RefreshChildren(int listNum) {
+		public static List<Task> RefreshChildren(int listNum, bool showDone,DateTime startDate) {
+			//startDate only applies if showing Done tasks.
 			string command=
 				"SELECT * FROM task "
-				+"WHERE TaskListNum="+POut.PInt(listNum)
-				+" ORDER BY DateTimeEntry";
+				+"WHERE TaskListNum="+POut.PInt(listNum);
+			if(showDone){
+				command+=" AND (TaskStatus !="+POut.PInt((int)TaskStatusEnum.Done)
+					+" OR DateTimeFinished > "+POut.PDate(startDate)+")";//of if done, then restrict date
+			}
+			else{
+				command+=" AND TaskStatus !="+POut.PInt((int)TaskStatusEnum.Done);
+			}
+			command+=" ORDER BY DateTimeEntry";
 			return RefreshAndFill(command);
 		}
 
@@ -126,6 +142,7 @@ namespace OpenDental{
 				task.ObjectType     = (TaskObjectType)PIn.PInt(table.Rows[i][9].ToString());
 				task.DateTimeEntry  = PIn.PDateT(table.Rows[i][10].ToString());
 				task.UserNum        = PIn.PInt(table.Rows[i][11].ToString());
+				task.DateTimeFinished= PIn.PDateT(table.Rows[i][12].ToString());
 				retVal.Add(task);
 			}
 			return retVal;
@@ -157,6 +174,7 @@ namespace OpenDental{
 				+",ObjectType = '"    +POut.PInt   ((int)task.ObjectType)+"'"
 				+",DateTimeEntry = "  +POut.PDateT (task.DateTimeEntry)
 				+",UserNum = '"       +POut.PInt   (task.UserNum)+"'"
+				+",DateTimeFinished ="+POut.PDateT (task.DateTimeFinished)
 				+" WHERE TaskNum = '" +POut.PInt(task.TaskNum)+"'";
  			General.NonQ(command);
 			//need to optimize this later to skip unless TaskListNumChanged
@@ -182,7 +200,7 @@ namespace OpenDental{
 				command+="TaskNum,";
 			}
 			command+="TaskListNum,DateTask,KeyNum,Descript,TaskStatus,"
-				+"IsRepeating,DateType,FromNum,ObjectType,DateTimeEntry,UserNum) VALUES(";
+				+"IsRepeating,DateType,FromNum,ObjectType,DateTimeEntry,UserNum,DateTimeFinished) VALUES(";
 			if(PrefB.RandomKeys){
 				command+="'"+POut.PInt(task.TaskNum)+"', ";
 			}
@@ -197,8 +215,8 @@ namespace OpenDental{
 				+"'"+POut.PInt   (task.FromNum)+"', "
 				+"'"+POut.PInt   ((int)task.ObjectType)+"', "
 				+POut.PDateT (task.DateTimeEntry)+","
-				+"'"+POut.PInt   (task.UserNum)+"')";
-				//+"NOW())";//DateTimeEntry set to current server time
+				+"'"+POut.PInt   (task.UserNum)+"',"
+				+POut.PDateT (task.DateTimeFinished)+")";
  			if(PrefB.RandomKeys){
 				General.NonQ(command);
 			}
@@ -221,7 +239,9 @@ namespace OpenDental{
 					|| oldtask.ObjectType!=task.ObjectType
 					|| oldtask.TaskListNum!=task.TaskListNum
 					|| oldtask.TaskStatus!=task.TaskStatus
-					|| oldtask.UserNum!=task.UserNum)
+					|| oldtask.UserNum!=task.UserNum
+					|| oldtask.DateTimeEntry!=task.DateTimeEntry
+					|| oldtask.DateTimeFinished!=task.DateTimeFinished)
 			{
 				return true;
 			}

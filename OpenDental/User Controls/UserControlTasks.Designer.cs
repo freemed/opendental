@@ -48,6 +48,9 @@ namespace OpenDental {
 			this.menuItemUnsubscribe = new System.Windows.Forms.MenuItem();
 			this.menuItem3 = new System.Windows.Forms.MenuItem();
 			this.menuItemGoto = new System.Windows.Forms.MenuItem();
+			this.checkShowFinished = new System.Windows.Forms.CheckBox();
+			this.labelStartDate = new System.Windows.Forms.Label();
+			this.textStartDate = new OpenDental.ValidDate();
 			this.gridMain = new OpenDental.UI.ODGrid();
 			this.ToolBarMain = new OpenDental.UI.ODToolBar();
 			this.tabContr.SuspendLayout();
@@ -245,6 +248,37 @@ namespace OpenDental {
 			this.menuItemGoto.Text = "Go To";
 			this.menuItemGoto.Click += new System.EventHandler(this.menuItemGoto_Click);
 			// 
+			// checkShowFinished
+			// 
+			this.checkShowFinished.CheckAlign = System.Drawing.ContentAlignment.TopLeft;
+			this.checkShowFinished.Location = new System.Drawing.Point(4,311);
+			this.checkShowFinished.Name = "checkShowFinished";
+			this.checkShowFinished.Size = new System.Drawing.Size(151,15);
+			this.checkShowFinished.TabIndex = 10;
+			this.checkShowFinished.Text = "Show Finished Tasks";
+			this.checkShowFinished.UseVisualStyleBackColor = true;
+			this.checkShowFinished.Click += new System.EventHandler(this.checkShowFinished_Click);
+			// 
+			// labelStartDate
+			// 
+			this.labelStartDate.Location = new System.Drawing.Point(155,311);
+			this.labelStartDate.Name = "labelStartDate";
+			this.labelStartDate.Size = new System.Drawing.Size(83,17);
+			this.labelStartDate.TabIndex = 12;
+			this.labelStartDate.Text = "Start Date";
+			this.labelStartDate.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.labelStartDate.Visible = false;
+			// 
+			// textStartDate
+			// 
+			this.textStartDate.Location = new System.Drawing.Point(238,310);
+			this.textStartDate.Name = "textStartDate";
+			this.textStartDate.Size = new System.Drawing.Size(87,20);
+			this.textStartDate.TabIndex = 11;
+			this.textStartDate.Visible = false;
+			this.textStartDate.TextChanged += new System.EventHandler(this.textStartDate_TextChanged);
+			this.textStartDate.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textStartDate_KeyPress);
+			// 
 			// gridMain
 			// 
 			this.gridMain.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -258,7 +292,6 @@ namespace OpenDental {
 			this.gridMain.TabIndex = 9;
 			this.gridMain.Title = "Tasks";
 			this.gridMain.TranslationName = "TableTasks";
-			this.gridMain.CellClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellClick);
 			this.gridMain.MouseDown += new System.Windows.Forms.MouseEventHandler(this.gridMain_MouseDown);
 			this.gridMain.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellDoubleClick);
 			// 
@@ -276,6 +309,9 @@ namespace OpenDental {
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F,13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+			this.Controls.Add(this.textStartDate);
+			this.Controls.Add(this.labelStartDate);
+			this.Controls.Add(this.checkShowFinished);
 			this.Controls.Add(this.gridMain);
 			this.Controls.Add(this.tree);
 			this.Controls.Add(this.cal);
@@ -286,6 +322,7 @@ namespace OpenDental {
 			this.Load += new System.EventHandler(this.UserControlTasks_Load);
 			this.tabContr.ResumeLayout(false);
 			this.ResumeLayout(false);
+			this.PerformLayout();
 
 		}
 
@@ -316,5 +353,8 @@ namespace OpenDental {
 		private System.Windows.Forms.MenuItem menuItemUnsubscribe;
 		private System.Windows.Forms.MenuItem menuItem3;
 		private OpenDental.UI.ODGrid gridMain;
+		private System.Windows.Forms.CheckBox checkShowFinished;
+		private ValidDate textStartDate;
+		private System.Windows.Forms.Label labelStartDate;
 	}
 }
