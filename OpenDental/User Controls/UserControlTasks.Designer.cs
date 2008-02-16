@@ -157,6 +157,7 @@ namespace OpenDental {
 			this.imageListTree.Images.SetKeyName(1,"checkBoxChecked.gif");
 			this.imageListTree.Images.SetKeyName(2,"checkBoxUnchecked.gif");
 			this.imageListTree.Images.SetKeyName(3,"TaskListHighlight.gif");
+			this.imageListTree.Images.SetKeyName(4,"checkBoxNew.gif");
 			// 
 			// imageListMain
 			// 

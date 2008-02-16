@@ -259,11 +259,16 @@ namespace OpenDental {
 					}
 				}
 				row=new ODGridRow();
-				if(TasksList[i].TaskStatus) {//complete
-					row.Cells.Add("1");//no image yet
-				}
-				else{
-					row.Cells.Add("2");
+				switch(TasksList[i].TaskStatus) {
+					case TaskStatusEnum.New:
+						row.Cells.Add("4");
+						break;
+					case TaskStatusEnum.Viewed:
+						row.Cells.Add("2");
+						break;
+					case TaskStatusEnum.Done:
+						row.Cells.Add("1");
+						break;
 				}
 				//row.Cells.Add();
 				row.Cells.Add(dateStr+objDesc+TasksList[i].Descript);
@@ -481,7 +486,7 @@ namespace OpenDental {
 				}
 			}
 			for(int i=0;i<childTasks.Count;i++) {
-				if(childTasks[i].TaskStatus) {
+				if(childTasks[i].TaskStatus==TaskStatusEnum.Done) {
 					return true;
 				}
 			}
@@ -1018,7 +1023,15 @@ namespace OpenDental {
 			}
 			Task task=TasksList[clickedI-TaskListsList.Count].Copy();
 			Task taskOld=task.Copy();
-			task.TaskStatus= !task.TaskStatus;
+			if(task.TaskStatus==TaskStatusEnum.New){
+				task.TaskStatus=TaskStatusEnum.Viewed;
+			}
+			else if(task.TaskStatus==TaskStatusEnum.Viewed){
+				task.TaskStatus=TaskStatusEnum.Done;
+			}
+			else if(task.TaskStatus==TaskStatusEnum.Done){
+				task.TaskStatus=TaskStatusEnum.New;
+			}
 			try {
 				Tasks.Update(task,taskOld);
 			}

@@ -119,7 +119,7 @@ namespace OpenDental{
 				task.DateTask       = PIn.PDate(table.Rows[i][2].ToString());
 				task.KeyNum         = PIn.PInt(table.Rows[i][3].ToString());
 				task.Descript       = PIn.PString(table.Rows[i][4].ToString());
-				task.TaskStatus     = PIn.PBool(table.Rows[i][5].ToString());
+				task.TaskStatus     = (TaskStatusEnum)PIn.PInt(table.Rows[i][5].ToString());
 				task.IsRepeating    = PIn.PBool(table.Rows[i][6].ToString());
 				task.DateType       = (TaskDateType)PIn.PInt(table.Rows[i][7].ToString());
 				task.FromNum        = PIn.PInt(table.Rows[i][8].ToString());
@@ -136,8 +136,8 @@ namespace OpenDental{
 			if(task.IsRepeating && task.DateTask.Year>1880) {
 				throw new Exception(Lan.g("Tasks","Task cannot be tagged repeating and also have a date."));
 			}
-			if(task.IsRepeating && task.TaskStatus) {//and complete
-				throw new Exception(Lan.g("Tasks","Task cannot be tagged repeating and also be marked complete."));
+			if(task.IsRepeating && task.TaskStatus!=TaskStatusEnum.New) {//and any status but new
+				throw new Exception(Lan.g("Tasks","Tasks that are repeating must have a status of New."));
 			}
 			if(task.IsRepeating && task.TaskListNum!=0 && task.DateType!=TaskDateType.None) {//In repeating, children not allowed to repeat.
 				throw new Exception(Lan.g("Tasks","In repeating tasks, only the main parents can have a task status."));
@@ -147,10 +147,10 @@ namespace OpenDental{
 			}
 			string command= "UPDATE task SET " 
 				+"TaskListNum = '"    +POut.PInt   (task.TaskListNum)+"'"
-				+",DateTask = "      +POut.PDate  (task.DateTask)
+				+",DateTask = "       +POut.PDate  (task.DateTask)
 				+",KeyNum = '"        +POut.PInt   (task.KeyNum)+"'"
 				+",Descript = '"      +POut.PString(task.Descript)+"'"
-				+",TaskStatus = '"    +POut.PBool  (task.TaskStatus)+"'"
+				+",TaskStatus = '"    +POut.PInt   ((int)task.TaskStatus)+"'"
 				+",IsRepeating = '"   +POut.PBool  (task.IsRepeating)+"'"
 				+",DateType = '"      +POut.PInt   ((int)task.DateType)+"'"
 				+",FromNum = '"       +POut.PInt   (task.FromNum)+"'"
@@ -168,8 +168,8 @@ namespace OpenDental{
 			if(task.IsRepeating && task.DateTask.Year>1880) {
 				throw new Exception(Lan.g("Tasks","Task cannot be tagged repeating and also have a date."));
 			}
-			if(task.IsRepeating && task.TaskStatus) {//and complete
-				throw new Exception(Lan.g("Tasks","Task cannot be tagged repeating and also be marked complete."));
+			if(task.IsRepeating && task.TaskStatus!=TaskStatusEnum.New) {//and any status but new
+				throw new Exception(Lan.g("Tasks","Tasks that are repeating must have a status of New."));
 			}
 			if(task.IsRepeating && task.TaskListNum!=0 && task.DateType!=TaskDateType.None) {//In repeating, children not allowed to repeat.
 				throw new Exception(Lan.g("Tasks","In repeating tasks, only the main parents can have a task status."));
@@ -191,7 +191,7 @@ namespace OpenDental{
 				+POut.PDate  (task.DateTask)+", "
 				+"'"+POut.PInt   (task.KeyNum)+"', "
 				+"'"+POut.PString(task.Descript)+"', "
-				+"'"+POut.PBool  (task.TaskStatus)+"', "
+				+"'"+POut.PInt   ((int)task.TaskStatus)+"', "
 				+"'"+POut.PBool  (task.IsRepeating)+"', "
 				+"'"+POut.PInt   ((int)task.DateType)+"', "
 				+"'"+POut.PInt   (task.FromNum)+"', "
@@ -236,13 +236,14 @@ namespace OpenDental{
 			General.NonQ(command);
 		}
 
+		///<summary>Gets a count of New tasks.</summary>
 		public static int UserTasksCount(int userNum){
 			string command="SELECT COUNT(*) FROM taskancestor,task,tasklist,tasksubscription "
 				+"WHERE taskancestor.TaskListNum=tasklist.TaskListNum "
 				+"AND task.TaskNum=taskancestor.TaskNum "
 				+"AND tasksubscription.TaskListNum=tasklist.TaskListNum "
 				+"AND tasksubscription.UserNum="+POut.PInt(userNum)
-				+" AND task.TaskStatus=0";
+				+" AND task.TaskStatus="+POut.PInt((int)TaskStatusEnum.New);
 			return PIn.PInt(General.GetCount(command));
 		}
 	

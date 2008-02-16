@@ -878,6 +878,15 @@ namespace OpenDentBusiness{
 		Appointment
 	}
 
+	public enum TaskStatusEnum{
+		///<summary>0</summary>
+		New,
+		///<summary>1</summary>
+		Viewed,
+		///<summary>2</summary>
+		Done
+	}
+
 	///<summary>Used as the enumeration of FieldValueType.ForeignKey.  Basically, this allows lists to be included in the parameter list.  The lists are those common short lists that are used so frequently.  The user can only select one from the list, and the primary key of that item will be used as the parameter.</summary>
 	public enum ReportFKType{
 		///<summary>0</summary>

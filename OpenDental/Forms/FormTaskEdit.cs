@@ -26,7 +26,6 @@ namespace OpenDental{
 		private Task CurOld;
 		private OpenDental.ValidDate textDateTask;
 		private OpenDental.UI.Button butChange;
-		private System.Windows.Forms.CheckBox checkTaskStatus;
 		private OpenDental.UI.Button butGoto;
 		///<summary></summary>
 		public bool IsNew;
@@ -44,6 +43,9 @@ namespace OpenDental{
 		private OpenDental.UI.Button butDelete;
 		private TextBox textUser;
 		private Label label16;
+		private RadioButton radioNew;
+		private RadioButton radioViewed;
+		private RadioButton radioDone;
 		///<summary>After closing, if this is not zero, then it will jump to the specified patient.</summary>
 		public int GotoKeyNum;
 
@@ -95,7 +97,6 @@ namespace OpenDental{
 			this.labelObjectDesc = new System.Windows.Forms.Label();
 			this.textObjectDesc = new System.Windows.Forms.TextBox();
 			this.butChange = new OpenDental.UI.Button();
-			this.checkTaskStatus = new System.Windows.Forms.CheckBox();
 			this.butGoto = new OpenDental.UI.Button();
 			this.listObjectType = new System.Windows.Forms.ListBox();
 			this.label6 = new System.Windows.Forms.Label();
@@ -106,6 +107,9 @@ namespace OpenDental{
 			this.butDelete = new OpenDental.UI.Button();
 			this.textUser = new System.Windows.Forms.TextBox();
 			this.label16 = new System.Windows.Forms.Label();
+			this.radioNew = new System.Windows.Forms.RadioButton();
+			this.radioViewed = new System.Windows.Forms.RadioButton();
+			this.radioDone = new System.Windows.Forms.RadioButton();
 			this.panelObject.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -141,7 +145,7 @@ namespace OpenDental{
 			// 
 			// label1
 			// 
-			this.label1.Location = new System.Drawing.Point(8,62);
+			this.label1.Location = new System.Drawing.Point(8,117);
 			this.label1.Name = "label1";
 			this.label1.Size = new System.Drawing.Size(116,19);
 			this.label1.TabIndex = 2;
@@ -151,7 +155,7 @@ namespace OpenDental{
 			// textDescript
 			// 
 			this.textDescript.AcceptsReturn = true;
-			this.textDescript.Location = new System.Drawing.Point(127,62);
+			this.textDescript.Location = new System.Drawing.Point(127,117);
 			this.textDescript.Multiline = true;
 			this.textDescript.Name = "textDescript";
 			this.textDescript.QuickPasteType = OpenDentBusiness.QuickPasteType.None;
@@ -161,7 +165,7 @@ namespace OpenDental{
 			// 
 			// label2
 			// 
-			this.label2.Location = new System.Drawing.Point(8,330);
+			this.label2.Location = new System.Drawing.Point(8,382);
 			this.label2.Name = "label2";
 			this.label2.Size = new System.Drawing.Size(116,19);
 			this.label2.TabIndex = 4;
@@ -170,7 +174,7 @@ namespace OpenDental{
 			// 
 			// label3
 			// 
-			this.label3.Location = new System.Drawing.Point(218,327);
+			this.label3.Location = new System.Drawing.Point(218,379);
 			this.label3.Name = "label3";
 			this.label3.Size = new System.Drawing.Size(185,32);
 			this.label3.TabIndex = 6;
@@ -178,7 +182,7 @@ namespace OpenDental{
 			// 
 			// label4
 			// 
-			this.label4.Location = new System.Drawing.Point(8,358);
+			this.label4.Location = new System.Drawing.Point(8,408);
 			this.label4.Name = "label4";
 			this.label4.Size = new System.Drawing.Size(116,19);
 			this.label4.TabIndex = 7;
@@ -187,7 +191,7 @@ namespace OpenDental{
 			// 
 			// listDateType
 			// 
-			this.listDateType.Location = new System.Drawing.Point(127,359);
+			this.listDateType.Location = new System.Drawing.Point(127,409);
 			this.listDateType.Name = "listDateType";
 			this.listDateType.Size = new System.Drawing.Size(120,56);
 			this.listDateType.TabIndex = 2;
@@ -196,7 +200,7 @@ namespace OpenDental{
 			// 
 			this.checkFromNum.CheckAlign = System.Drawing.ContentAlignment.TopRight;
 			this.checkFromNum.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkFromNum.Location = new System.Drawing.Point(8,421);
+			this.checkFromNum.Location = new System.Drawing.Point(8,470);
 			this.checkFromNum.Name = "checkFromNum";
 			this.checkFromNum.Size = new System.Drawing.Size(133,24);
 			this.checkFromNum.TabIndex = 3;
@@ -205,7 +209,7 @@ namespace OpenDental{
 			// 
 			// textDateTask
 			// 
-			this.textDateTask.Location = new System.Drawing.Point(127,330);
+			this.textDateTask.Location = new System.Drawing.Point(127,382);
 			this.textDateTask.Name = "textDateTask";
 			this.textDateTask.Size = new System.Drawing.Size(87,20);
 			this.textDateTask.TabIndex = 1;
@@ -241,17 +245,6 @@ namespace OpenDental{
 			this.butChange.Text = "Change";
 			this.butChange.Click += new System.EventHandler(this.butChange_Click);
 			// 
-			// checkTaskStatus
-			// 
-			this.checkTaskStatus.CheckAlign = System.Drawing.ContentAlignment.TopRight;
-			this.checkTaskStatus.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkTaskStatus.Location = new System.Drawing.Point(5,10);
-			this.checkTaskStatus.Name = "checkTaskStatus";
-			this.checkTaskStatus.Size = new System.Drawing.Size(136,21);
-			this.checkTaskStatus.TabIndex = 11;
-			this.checkTaskStatus.Text = "Is Complete";
-			this.checkTaskStatus.TextAlign = System.Drawing.ContentAlignment.TopRight;
-			// 
 			// butGoto
 			// 
 			this.butGoto.AdjustImageLocation = new System.Drawing.Point(0,0);
@@ -268,7 +261,7 @@ namespace OpenDental{
 			// 
 			// listObjectType
 			// 
-			this.listObjectType.Location = new System.Drawing.Point(127,442);
+			this.listObjectType.Location = new System.Drawing.Point(388,409);
 			this.listObjectType.Name = "listObjectType";
 			this.listObjectType.Size = new System.Drawing.Size(120,43);
 			this.listObjectType.TabIndex = 13;
@@ -276,7 +269,7 @@ namespace OpenDental{
 			// 
 			// label6
 			// 
-			this.label6.Location = new System.Drawing.Point(8,441);
+			this.label6.Location = new System.Drawing.Point(269,408);
 			this.label6.Name = "label6";
 			this.label6.Size = new System.Drawing.Size(116,19);
 			this.label6.TabIndex = 14;
@@ -289,14 +282,14 @@ namespace OpenDental{
 			this.panelObject.Controls.Add(this.labelObjectDesc);
 			this.panelObject.Controls.Add(this.butGoto);
 			this.panelObject.Controls.Add(this.butChange);
-			this.panelObject.Location = new System.Drawing.Point(3,491);
+			this.panelObject.Location = new System.Drawing.Point(3,502);
 			this.panelObject.Name = "panelObject";
 			this.panelObject.Size = new System.Drawing.Size(594,101);
 			this.panelObject.TabIndex = 15;
 			// 
 			// label5
 			// 
-			this.label5.Location = new System.Drawing.Point(8,34);
+			this.label5.Location = new System.Drawing.Point(8,61);
 			this.label5.Name = "label5";
 			this.label5.Size = new System.Drawing.Size(116,19);
 			this.label5.TabIndex = 17;
@@ -305,7 +298,7 @@ namespace OpenDental{
 			// 
 			// textDateTimeEntry
 			// 
-			this.textDateTimeEntry.Location = new System.Drawing.Point(127,33);
+			this.textDateTimeEntry.Location = new System.Drawing.Point(127,60);
 			this.textDateTimeEntry.Name = "textDateTimeEntry";
 			this.textDateTimeEntry.Size = new System.Drawing.Size(151,20);
 			this.textDateTimeEntry.TabIndex = 18;
@@ -318,7 +311,7 @@ namespace OpenDental{
 			this.butNow.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butNow.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butNow.CornerRadius = 4F;
-			this.butNow.Location = new System.Drawing.Point(284,31);
+			this.butNow.Location = new System.Drawing.Point(284,58);
 			this.butNow.Name = "butNow";
 			this.butNow.Size = new System.Drawing.Size(75,24);
 			this.butNow.TabIndex = 19;
@@ -359,10 +352,49 @@ namespace OpenDental{
 			this.label16.Text = "User";
 			this.label16.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
+			// radioNew
+			// 
+			this.radioNew.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.radioNew.Location = new System.Drawing.Point(37,4);
+			this.radioNew.Name = "radioNew";
+			this.radioNew.Size = new System.Drawing.Size(104,16);
+			this.radioNew.TabIndex = 127;
+			this.radioNew.TabStop = true;
+			this.radioNew.Text = "New";
+			this.radioNew.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.radioNew.UseVisualStyleBackColor = true;
+			// 
+			// radioViewed
+			// 
+			this.radioViewed.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.radioViewed.Location = new System.Drawing.Point(37,20);
+			this.radioViewed.Name = "radioViewed";
+			this.radioViewed.Size = new System.Drawing.Size(104,16);
+			this.radioViewed.TabIndex = 128;
+			this.radioViewed.TabStop = true;
+			this.radioViewed.Text = "Viewed";
+			this.radioViewed.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.radioViewed.UseVisualStyleBackColor = true;
+			// 
+			// radioDone
+			// 
+			this.radioDone.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.radioDone.Location = new System.Drawing.Point(37,37);
+			this.radioDone.Name = "radioDone";
+			this.radioDone.Size = new System.Drawing.Size(104,16);
+			this.radioDone.TabIndex = 129;
+			this.radioDone.TabStop = true;
+			this.radioDone.Text = "Done";
+			this.radioDone.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.radioDone.UseVisualStyleBackColor = true;
+			// 
 			// FormTaskEdit
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.ClientSize = new System.Drawing.Size(726,658);
+			this.Controls.Add(this.radioDone);
+			this.Controls.Add(this.radioViewed);
+			this.Controls.Add(this.radioNew);
 			this.Controls.Add(this.textUser);
 			this.Controls.Add(this.label16);
 			this.Controls.Add(this.butDelete);
@@ -376,7 +408,6 @@ namespace OpenDental{
 			this.Controls.Add(this.textDescript);
 			this.Controls.Add(this.butOK);
 			this.Controls.Add(this.butCancel);
-			this.Controls.Add(this.checkTaskStatus);
 			this.Controls.Add(this.checkFromNum);
 			this.Controls.Add(this.listDateType);
 			this.Controls.Add(this.label4);
@@ -400,7 +431,17 @@ namespace OpenDental{
 		#endregion
 
 		private void FormTaskListEdit_Load(object sender, System.EventArgs e) {
-			checkTaskStatus.Checked=Cur.TaskStatus;
+			switch(Cur.TaskStatus){
+				case TaskStatusEnum.New:
+					radioNew.Checked=true;
+					break;
+				case TaskStatusEnum.Viewed:
+					radioViewed.Checked=true;
+					break;
+				case TaskStatusEnum.Done:
+					radioDone.Checked=true;
+					break;
+			}
 			textUser.Text=UserodB.GetName(Cur.UserNum);//might be blank. 
 			if(Cur.DateTimeEntry.Year<1880){
 				textDateTimeEntry.Text=DateTime.Now.ToString();
@@ -413,7 +454,9 @@ namespace OpenDental{
 				textDateTask.Text=Cur.DateTask.ToShortDateString();
 			}
 			if(Cur.IsRepeating){
-				checkTaskStatus.Enabled=false;
+				radioNew.Enabled=false;
+				radioViewed.Enabled=false;
+				radioDone.Enabled=false;
 				textDateTask.Enabled=false;
 				listObjectType.Enabled=false;
 				if(Cur.TaskListNum!=0){//not a main parent
@@ -540,10 +583,18 @@ namespace OpenDental{
 		private bool SaveCur(){
 			if(  textDateTask.errorProvider1.GetError(textDateTask)!=""
 				){
-				MessageBox.Show(Lan.g(this,"Please fix data entry errors first."));
+				MsgBox.Show(this,"Please fix data entry errors first.");
 				return false;
 			}
-			Cur.TaskStatus=checkTaskStatus.Checked;
+			if(radioNew.Checked){
+				Cur.TaskStatus=TaskStatusEnum.New;
+			}
+			else if(radioViewed.Checked){
+				Cur.TaskStatus=TaskStatusEnum.Viewed;
+			}
+			else{
+				Cur.TaskStatus=TaskStatusEnum.Done;
+			}
 			//UserNum not allowed to change
 			Cur.DateTimeEntry=PIn.PDateT(textDateTimeEntry.Text);
 			Cur.Descript=textDescript.Text;

@@ -16,8 +16,8 @@ namespace OpenDentBusiness{
 		public int KeyNum;
 		///<summary>The description of this task.  Might be very long.</summary>
 		public string Descript;
-		///<summary>True if the task has been completed. This could later be turned into an enumeration if more statuses are needed.</summary>
-		public bool TaskStatus;
+		///<summary>Enum:TaskStatusEnum New,Viewed,Done.</summary>
+		public TaskStatusEnum TaskStatus;
 		///<summary>True if it is to show in the repeating section.  There should be no date.  All children and parents should also be set to IsRepeating=true.</summary>
 		public bool IsRepeating;
 		///<summary>Enum:TaskDateType  None, Day, Week, Month.  If IsRepeating, then setting to None effectively disables the repeating feature.</summary>
