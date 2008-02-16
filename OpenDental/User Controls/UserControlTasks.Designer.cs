@@ -35,8 +35,6 @@ namespace OpenDental {
 			this.cal = new System.Windows.Forms.MonthCalendar();
 			this.tree = new System.Windows.Forms.TreeView();
 			this.imageListTree = new System.Windows.Forms.ImageList(this.components);
-			this.listMain = new System.Windows.Forms.ListView();
-			this.columnHeader1 = new System.Windows.Forms.ColumnHeader();
 			this.imageListMain = new System.Windows.Forms.ImageList(this.components);
 			this.menuEdit = new System.Windows.Forms.ContextMenu();
 			this.menuItemEdit = new System.Windows.Forms.MenuItem();
@@ -160,35 +158,6 @@ namespace OpenDental {
 			this.imageListTree.Images.SetKeyName(2,"checkBoxUnchecked.gif");
 			this.imageListTree.Images.SetKeyName(3,"TaskListHighlight.gif");
 			// 
-			// listMain
-			// 
-			this.listMain.Activation = System.Windows.Forms.ItemActivation.TwoClick;
-			this.listMain.Alignment = System.Windows.Forms.ListViewAlignment.Default;
-			this.listMain.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-			this.listMain.AutoArrange = false;
-			this.listMain.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.columnHeader1});
-			this.listMain.Location = new System.Drawing.Point(0,429);
-			this.listMain.MultiSelect = false;
-			this.listMain.Name = "listMain";
-			this.listMain.ShowItemToolTips = true;
-			this.listMain.Size = new System.Drawing.Size(941,78);
-			this.listMain.SmallImageList = this.imageListTree;
-			this.listMain.TabIndex = 8;
-			this.listMain.UseCompatibleStateImageBehavior = false;
-			this.listMain.View = System.Windows.Forms.View.List;
-			this.listMain.SelectedIndexChanged += new System.EventHandler(this.listMain_SelectedIndexChanged);
-			this.listMain.DoubleClick += new System.EventHandler(this.listMain_DoubleClick);
-			this.listMain.MouseDown += new System.Windows.Forms.MouseEventHandler(this.listMain_MouseDown);
-			this.listMain.Click += new System.EventHandler(this.listMain_Click);
-			// 
-			// columnHeader1
-			// 
-			this.columnHeader1.Text = "Description";
-			this.columnHeader1.Width = 600;
-			// 
 			// imageListMain
 			// 
 			this.imageListMain.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imageListMain.ImageStream")));
@@ -277,16 +246,20 @@ namespace OpenDental {
 			// 
 			// gridMain
 			// 
-			this.gridMain.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+			this.gridMain.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.gridMain.HScrollVisible = false;
 			this.gridMain.Location = new System.Drawing.Point(0,310);
 			this.gridMain.Name = "gridMain";
 			this.gridMain.ScrollValue = 0;
-			this.gridMain.Size = new System.Drawing.Size(941,113);
+			this.gridMain.Size = new System.Drawing.Size(941,200);
 			this.gridMain.TabIndex = 9;
 			this.gridMain.Title = "Tasks";
 			this.gridMain.TranslationName = "TableTasks";
+			this.gridMain.CellClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellClick);
+			this.gridMain.MouseDown += new System.Windows.Forms.MouseEventHandler(this.gridMain_MouseDown);
+			this.gridMain.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellDoubleClick);
 			// 
 			// ToolBarMain
 			// 
@@ -303,7 +276,6 @@ namespace OpenDental {
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F,13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.Controls.Add(this.gridMain);
-			this.Controls.Add(this.listMain);
 			this.Controls.Add(this.tree);
 			this.Controls.Add(this.cal);
 			this.Controls.Add(this.tabContr);
@@ -327,8 +299,6 @@ namespace OpenDental {
 		private System.Windows.Forms.TabPage tabMonth;
 		private System.Windows.Forms.MonthCalendar cal;
 		private System.Windows.Forms.TreeView tree;
-		private System.Windows.Forms.ListView listMain;
-		private System.Windows.Forms.ColumnHeader columnHeader1;
 		private System.Windows.Forms.ImageList imageListMain;
 		private System.Windows.Forms.ContextMenu menuEdit;
 		private System.Windows.Forms.MenuItem menuItemEdit;

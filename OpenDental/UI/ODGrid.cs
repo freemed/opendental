@@ -73,6 +73,7 @@ namespace OpenDental.UI{
 		private int noteSpanStart;
 		private int noteSpanStop;
 		private TextBox editBox;
+		private MouseButtons lastButtonPressed;
 
 		///<summary></summary>
 		public ODGrid(){
@@ -627,7 +628,7 @@ namespace OpenDental.UI{
 
 		///<summary></summary>
 		protected void OnCellDoubleClick(int col,int row){
-			ODGridClickEventArgs gArgs=new ODGridClickEventArgs(col,row);
+			ODGridClickEventArgs gArgs=new ODGridClickEventArgs(col,row,MouseButtons.Left);
 			if(CellDoubleClick!=null){
 				CellDoubleClick(this,gArgs);
 			}
@@ -646,8 +647,8 @@ namespace OpenDental.UI{
 		}
 
 		///<summary></summary>
-		protected void OnCellClick(int col,int row){
-			ODGridClickEventArgs gArgs=new ODGridClickEventArgs(col,row);
+		protected void OnCellClick(int col,int row,MouseButtons button){
+			ODGridClickEventArgs gArgs=new ODGridClickEventArgs(col,row,button);
 			if(CellClick!=null)
 				CellClick(this,gArgs);
 		}
@@ -667,7 +668,7 @@ namespace OpenDental.UI{
 			if(MouseDownCol==-1){
 				return;//click was to the right of the columns
 			}
-			OnCellClick(MouseDownCol,MouseDownRow);
+			OnCellClick(MouseDownCol,MouseDownRow,lastButtonPressed);
 		}
 
 		///<summary></summary>
@@ -1106,8 +1107,8 @@ namespace OpenDental.UI{
 			return yPos+4;
 		}
 
-		///<summary>Returns row.  Supply the y position in pixels.</summary>
-		private int PointToRow(int y){
+		///<summary>Returns row. -1 if no valid row.  Supply the y position in pixels.</summary>
+		public int PointToRow(int y){
 			if(y<1+titleHeight+headerHeight){
 				return-1;
 			}
@@ -1120,8 +1121,8 @@ namespace OpenDental.UI{
 			return -1;
 		}
 
-		///<summary>Returns col.  Supply the x position in pixels.</summary>
-		private int PointToCol(int x){
+		///<summary>Returns col.  Supply the x position in pixels. -1 if no valid column.</summary>
+		public int PointToCol(int x){
 			int colRight;//the right edge of each column
 			for(int i=0;i<columns.Count;i++){
 				colRight=0;
@@ -1157,6 +1158,7 @@ namespace OpenDental.UI{
 		///<summary></summary>
 		protected override void OnMouseDown(MouseEventArgs e) {
 			base.OnMouseDown(e);
+			lastButtonPressed=e.Button;//used in the click event.
 			if(e.Button==MouseButtons.Right){
 				if(selectedIndices.Count>0){//if there are already rows selected, then ignore right click
 					return;
@@ -1468,11 +1470,13 @@ namespace OpenDental.UI{
 	public class ODGridClickEventArgs{
 		private int col;
 		private int row;
+		private MouseButtons button;
 
 		///<summary></summary>
-		public ODGridClickEventArgs(int col,int row){
+		public ODGridClickEventArgs(int col,int row,MouseButtons button){
 			this.col=col;
 			this.row=row;
+			this.button=button;
 		}
 
 		///<summary></summary>
@@ -1482,10 +1486,17 @@ namespace OpenDental.UI{
 			}
 		}
 
-		///<summary>Not actually used for anything yet, but we will soon have inline editing, so then it's important.  Just pass 0 for now and ignore it.</summary>
+		///<summary></summary>
 		public int Col{
 			get{ 
 				return col;
+			}
+		}
+
+		///<summary>Gets which mouse button was pressed.</summary>
+		public MouseButtons Button{
+			get{ 
+				return button;
 			}
 		}
 

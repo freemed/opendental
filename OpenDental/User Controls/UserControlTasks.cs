@@ -37,11 +37,12 @@ namespace OpenDental {
 
 		public UserControlTasks() {
 			InitializeComponent();
-			this.listMain.ContextMenu = this.menuEdit;
+			//this.listMain.ContextMenu = this.menuEdit;
 			//Lan.F(this);
 			for(int i=0;i<menuEdit.MenuItems.Count;i++) {
 				Lan.C(this,menuEdit.MenuItems[i]);
 			}
+			this.gridMain.ContextMenu=this.menuEdit;
 		}
 
 		protected void OnGoToChanged() {
@@ -69,7 +70,7 @@ namespace OpenDental {
 				cal.SelectionStart=Tasks.LastOpenDate;
 			}
 			FillTree();
-			FillMain();
+			//FillMain();
 			FillGrid();
 			SetMenusEnabled();
 		}
@@ -147,11 +148,11 @@ namespace OpenDental {
 			}
 			tree.Height=TreeHistory.Count*tree.ItemHeight+8;
 			tree.Refresh();
-			int halfH=(this.ClientSize.Height-tree.Bottom-2)/2;
+			//int halfH=(this.ClientSize.Height-tree.Bottom-2)/2;
 			gridMain.Top=tree.Bottom;
-			gridMain.Height=halfH;
-			listMain.Top=gridMain.Bottom;
-			listMain.Height=this.ClientSize.Height-listMain.Top-3;
+			//gridMain.Height=halfH;
+			//listMain.Top=gridMain.Bottom;
+			gridMain.Height=this.ClientSize.Height-gridMain.Top-3;
 		}
 
 		private void FillGrid(){
@@ -279,7 +280,7 @@ namespace OpenDental {
 			gridMain.EndUpdate();
 		}
 		
-		private void FillMain() {
+		/*private void FillMain() {
 			int parent;
 			DateTime date;
 			if(TreeHistory.Count>0) {//not on main trunk
@@ -467,7 +468,7 @@ namespace OpenDental {
 				item.ToolTipText=item.Text;
 				listMain.Items.Add(item);
 			}
-		}
+		}*/
 
 		///<summary>A recursive function that checks every child in a list IsFromRepeating.  If any are marked complete, then it returns true, signifying that this list should be immune from being deleted since it's already in use.</summary>
 		private bool AnyAreMarkedComplete(TaskList list) {
@@ -531,14 +532,14 @@ namespace OpenDental {
 		private void tabContr_Click(object sender,System.EventArgs e) {
 			TreeHistory=new List<TaskList>();//clear the tree no matter which tab clicked.
 			FillTree();
-			FillMain();
+			//FillMain();
 			FillGrid();
 		}
 
 		private void cal_DateSelected(object sender,System.Windows.Forms.DateRangeEventArgs e) {
 			TreeHistory=new List<TaskList>();//clear the tree
 			FillTree();
-			FillMain();
+			//FillMain();
 			FillGrid();
 		}
 
@@ -589,7 +590,7 @@ namespace OpenDental {
 			FormTaskListEdit FormT=new FormTaskListEdit(cur);
 			FormT.IsNew=true;
 			FormT.ShowDialog();
-			FillMain();
+			//FillMain();
 			FillGrid();
 		}
 
@@ -632,7 +633,7 @@ namespace OpenDental {
 				//DialogResult=DialogResult.OK;
 				return;
 			}
-			FillMain();
+			//FillMain();
 			FillGrid();
 		}
 
@@ -652,7 +653,7 @@ namespace OpenDental {
 					return;
 				}
 			}
-			FillMain();
+			//FillMain();
 			FillGrid();
 		}
 
@@ -810,7 +811,7 @@ namespace OpenDental {
 				newT.FromNum=0;//always
 				if(WasCut && Tasks.WasTaskAltered(ClipTask)){
 					MsgBox.Show("Tasks","Not allowed to move because the task has been altered by someone else.");
-					FillMain();
+					//FillMain();
 					FillGrid();
 					return;
 				}
@@ -824,7 +825,7 @@ namespace OpenDental {
 					Tasks.Delete(ClipTask);
 				}
 			}
-			FillMain();
+			//FillMain();
 			FillGrid();
 		}
 
@@ -891,7 +892,7 @@ namespace OpenDental {
 				}
 				Tasks.Delete(TasksList[clickedI-TaskListsList.Count]);
 			}
-			FillMain();
+			//FillMain();
 			FillGrid();
 		}
 
@@ -914,18 +915,11 @@ namespace OpenDental {
 			}
 		}
 
-		private void listMain_Click(object sender,System.EventArgs e) {
-			/*if(listMain.SelectedIndices.Count==0){
-				return;
-			}
-			if(clickedI < TaskListsList.Length){//is list
-				TreeHistory.Add(TaskListsList[listMain.SelectedIndices[0]]);
-				FillTree();
-				FillMain();
-			}*/
-		}
+		//private void listMain_Click(object sender,System.EventArgs e) {
+			
+		//}
 
-		private void listMain_DoubleClick(object sender,System.EventArgs e) {
+		/*private void listMain_DoubleClick(object sender,System.EventArgs e) {
 			if(clickedI==-1) {
 				return;
 			}
@@ -942,9 +936,28 @@ namespace OpenDental {
 			}
 			FillMain();
 			FillGrid();
+		}*/
+
+		private void gridMain_CellDoubleClick(object sender,ODGridClickEventArgs e) {
+			//if(clickedI==-1) {
+			//	return;
+			//}
+			if(e.Row >= TaskListsList.Count) {//is task
+				FormTaskEdit FormT=new FormTaskEdit(TasksList[e.Row-TaskListsList.Count]);
+				FormT.ShowDialog();
+				if(FormT.GotoType!=TaskObjectType.None) {
+					GotoType=FormT.GotoType;
+					GotoKeyNum=FormT.GotoKeyNum;
+					OnGoToChanged();
+					//DialogResult=DialogResult.OK;
+					return;
+				}
+			}
+			//FillMain();
+			FillGrid();
 		}
 
-		private void listMain_MouseDown(object sender,System.Windows.Forms.MouseEventArgs e) {
+		/*private void listMain_MouseDown(object sender,System.Windows.Forms.MouseEventArgs e) {
 			ListViewItem ClickedItem=listMain.GetItemAt(e.X,e.Y);
 			if(ClickedItem==null) {
 				return;
@@ -976,6 +989,49 @@ namespace OpenDental {
 			}
 			FillMain();
 			FillGrid();
+		}*/
+
+		private void gridMain_MouseDown(object sender,MouseEventArgs e) {
+			//ListViewItem ClickedItem=listMain.GetItemAt(e.X,e.Y);
+			//if(ClickedItem==null) {
+			//	return;
+			//}
+			clickedI=gridMain.PointToRow(e.Y);//e.Row;
+			int clickedCol=gridMain.PointToCol(e.X);
+			if(clickedI==-1){
+				return;
+			}
+			gridMain.SetSelected(clickedI,true);//if right click.
+			if(e.Button!=MouseButtons.Left) {
+				return;
+			}
+			if(clickedI < TaskListsList.Count) {//is list
+				TreeHistory.Add(TaskListsList[clickedI]);
+				FillTree();
+				//FillMain();
+				FillGrid();
+				return;
+			}
+			//check tasks off
+			if(clickedCol!=0){//e.X>ClickedItem.Position.X+16) {
+				return;
+			}
+			Task task=TasksList[clickedI-TaskListsList.Count].Copy();
+			Task taskOld=task.Copy();
+			task.TaskStatus= !task.TaskStatus;
+			try {
+				Tasks.Update(task,taskOld);
+			}
+			catch(Exception ex) {
+				MessageBox.Show(ex.Message);
+				return;
+			}
+			//FillMain();
+			FillGrid();
+		}
+
+		private void gridMain_CellClick(object sender,ODGridClickEventArgs e) {
+			
 		}
 
 		private void menuEdit_Popup(object sender,System.EventArgs e) {
@@ -983,7 +1039,7 @@ namespace OpenDental {
 		}
 
 		private void SetMenusEnabled() {
-			if(listMain.SelectedIndices.Count==0) {
+			if(gridMain.SelectedIndices.Length==0) {
 				menuItemEdit.Enabled=false;
 				menuItemCut.Enabled=false;
 				menuItemCopy.Enabled=false;
@@ -1002,7 +1058,7 @@ namespace OpenDental {
 				menuItemPaste.Enabled=true;
 			}
 			//Subscriptions----------------------------------------------------------
-			if(listMain.SelectedIndices.Count==0) {
+			if(gridMain.SelectedIndices.Length==0) {
 				menuItemSubscribe.Enabled=false;
 				menuItemUnsubscribe.Enabled=false;
 			}
@@ -1019,7 +1075,7 @@ namespace OpenDental {
 				menuItemUnsubscribe.Enabled=false;
 			}
 			//Goto---------------------------------------------------------------
-			if(listMain.SelectedIndices.Count>0
+			if(gridMain.SelectedIndices.Length>0
 				&& clickedI >= TaskListsList.Count)//is task
 			{
 				Task task=TasksList[clickedI-TaskListsList.Count];
@@ -1049,7 +1105,7 @@ namespace OpenDental {
 
 		private void OnUnsubscribe_Click() {
 			TaskSubscriptions.UnsubscList(TaskListsList[clickedI].TaskListNum,Security.CurUser.UserNum);
-			FillMain();
+			//FillMain();
 			FillGrid();
 		}
 
@@ -1085,9 +1141,9 @@ namespace OpenDental {
 			OnGoto_Click();
 		}
 
-		private void listMain_SelectedIndexChanged(object sender,System.EventArgs e) {
-			SetMenusEnabled();
-		}
+		//private void listMain_SelectedIndexChanged(object sender,System.EventArgs e) {
+		//	SetMenusEnabled();
+		//}
 
 		private void tree_MouseDown(object sender,System.Windows.Forms.MouseEventArgs e) {
 			for(int i=TreeHistory.Count-1;i>0;i--) {
@@ -1097,9 +1153,15 @@ namespace OpenDental {
 				TreeHistory.RemoveAt(i);
 			}
 			FillTree();
-			FillMain();
+			//FillMain();
 			FillGrid();
 		}
+
+		
+
+	
+
+		
 
 		
 
