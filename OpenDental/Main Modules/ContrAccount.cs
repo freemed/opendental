@@ -127,7 +127,7 @@ namespace OpenDental {
 		private Panel panelInsInfo;
 		private Label labelPriPend;
 		private Label labelPriRem;
-		private Label labelIns3;
+		private Label labelInsLeft;
 		private Label labelIns2;
 		private Label labelAfterIns;
 		private Label labelIns1;
@@ -156,6 +156,7 @@ namespace OpenDental {
 		private Label label17;
 		private Label labelTotalAmt;
 		private Label labelInsEstAmt;
+		private Panel panelAgeLine;
 		///<summary>Set to true if this control is placed in the recall edit window. This affects the control behavior.</summary>
 		public bool ViewingInRecall=false;
 		#endregion
@@ -244,7 +245,7 @@ namespace OpenDental {
 			this.panelInsInfo = new System.Windows.Forms.Panel();
 			this.labelPriPend = new System.Windows.Forms.Label();
 			this.labelPriRem = new System.Windows.Forms.Label();
-			this.labelIns3 = new System.Windows.Forms.Label();
+			this.labelInsLeft = new System.Windows.Forms.Label();
 			this.labelIns2 = new System.Windows.Forms.Label();
 			this.labelAfterIns = new System.Windows.Forms.Label();
 			this.labelIns1 = new System.Windows.Forms.Label();
@@ -271,6 +272,8 @@ namespace OpenDental {
 			this.label12 = new System.Windows.Forms.Label();
 			this.label11 = new System.Windows.Forms.Label();
 			this.label17 = new System.Windows.Forms.Label();
+			this.labelTotalAmt = new System.Windows.Forms.Label();
+			this.labelInsEstAmt = new System.Windows.Forms.Label();
 			this.gridPayPlan = new OpenDental.UI.ODGrid();
 			this.textUrgFinNote = new OpenDental.ODtextBox();
 			this.gridAcctPat = new OpenDental.UI.ODGrid();
@@ -291,8 +294,7 @@ namespace OpenDental {
 			this.butTrojan = new OpenDental.UI.Button();
 			this.butComm = new OpenDental.UI.Button();
 			this.ToolBarMain = new OpenDental.UI.ODToolBar();
-			this.labelTotalAmt = new System.Windows.Forms.Label();
-			this.labelInsEstAmt = new System.Windows.Forms.Label();
+			this.panelAgeLine = new System.Windows.Forms.Panel();
 			this.panelCommButs.SuspendLayout();
 			this.panelProgNotes.SuspendLayout();
 			this.groupBox7.SuspendLayout();
@@ -621,6 +623,7 @@ namespace OpenDental {
 			// 
 			// panelAging
 			// 
+			this.panelAging.Controls.Add(this.panelAgeLine);
 			this.panelAging.Controls.Add(this.labelInsEstAmt);
 			this.panelAging.Controls.Add(this.labelTotalAmt);
 			this.panelAging.Controls.Add(this.labelBalance);
@@ -664,9 +667,9 @@ namespace OpenDental {
 			// 
 			// labelInsEst
 			// 
-			this.labelInsEst.Location = new System.Drawing.Point(427,2);
+			this.labelInsEst.Location = new System.Drawing.Point(419,2);
 			this.labelInsEst.Name = "labelInsEst";
-			this.labelInsEst.Size = new System.Drawing.Size(60,13);
+			this.labelInsEst.Size = new System.Drawing.Size(75,13);
 			this.labelInsEst.TabIndex = 57;
 			this.labelInsEst.Text = "- InsEst";
 			this.labelInsEst.TextAlign = System.Drawing.ContentAlignment.TopCenter;
@@ -913,7 +916,7 @@ namespace OpenDental {
 			// 
 			this.panelInsInfo.Controls.Add(this.labelPriPend);
 			this.panelInsInfo.Controls.Add(this.labelPriRem);
-			this.panelInsInfo.Controls.Add(this.labelIns3);
+			this.panelInsInfo.Controls.Add(this.labelInsLeft);
 			this.panelInsInfo.Controls.Add(this.labelIns2);
 			this.panelInsInfo.Controls.Add(this.labelAfterIns);
 			this.panelInsInfo.Controls.Add(this.labelIns1);
@@ -942,15 +945,14 @@ namespace OpenDental {
 			this.labelPriRem.TabIndex = 79;
 			this.labelPriRem.Text = "NA";
 			// 
-			// labelIns3
+			// labelInsLeft
 			// 
-			this.labelIns3.Font = new System.Drawing.Font("Microsoft Sans Serif",8F,System.Drawing.FontStyle.Regular,System.Drawing.GraphicsUnit.Point,((byte)(0)));
-			this.labelIns3.Location = new System.Drawing.Point(3,18);
-			this.labelIns3.Name = "labelIns3";
-			this.labelIns3.Size = new System.Drawing.Size(58,12);
-			this.labelIns3.TabIndex = 82;
-			this.labelIns3.Text = "Ins Left:";
-			this.labelIns3.TextAlign = System.Drawing.ContentAlignment.TopRight;
+			this.labelInsLeft.Font = new System.Drawing.Font("Microsoft Sans Serif",8F,System.Drawing.FontStyle.Regular,System.Drawing.GraphicsUnit.Point,((byte)(0)));
+			this.labelInsLeft.Location = new System.Drawing.Point(3,18);
+			this.labelInsLeft.Name = "labelInsLeft";
+			this.labelInsLeft.Size = new System.Drawing.Size(124,12);
+			this.labelInsLeft.TabIndex = 82;
+			this.labelInsLeft.Text = "Ins Left:";
 			// 
 			// labelIns2
 			// 
@@ -1229,6 +1231,26 @@ namespace OpenDental {
 			this.label17.Text = "Primary";
 			this.label17.TextAlign = System.Drawing.ContentAlignment.TopCenter;
 			// 
+			// labelTotalAmt
+			// 
+			this.labelTotalAmt.Font = new System.Drawing.Font("Microsoft Sans Serif",13F,System.Drawing.FontStyle.Bold,System.Drawing.GraphicsUnit.Point,((byte)(0)));
+			this.labelTotalAmt.ForeColor = System.Drawing.Color.Firebrick;
+			this.labelTotalAmt.Location = new System.Drawing.Point(320,14);
+			this.labelTotalAmt.Name = "labelTotalAmt";
+			this.labelTotalAmt.Size = new System.Drawing.Size(95,19);
+			this.labelTotalAmt.TabIndex = 61;
+			this.labelTotalAmt.Text = "25000.00";
+			this.labelTotalAmt.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+			// 
+			// labelInsEstAmt
+			// 
+			this.labelInsEstAmt.Location = new System.Drawing.Point(427,18);
+			this.labelInsEstAmt.Name = "labelInsEstAmt";
+			this.labelInsEstAmt.Size = new System.Drawing.Size(60,13);
+			this.labelInsEstAmt.TabIndex = 62;
+			this.labelInsEstAmt.Text = "2500.00";
+			this.labelInsEstAmt.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+			// 
 			// gridPayPlan
 			// 
 			this.gridPayPlan.HScrollVisible = false;
@@ -1489,25 +1511,13 @@ namespace OpenDental {
 			this.ToolBarMain.TabIndex = 47;
 			this.ToolBarMain.ButtonClick += new OpenDental.UI.ODToolBarButtonClickEventHandler(this.ToolBarMain_ButtonClick);
 			// 
-			// labelTotalAmt
+			// panelAgeLine
 			// 
-			this.labelTotalAmt.Font = new System.Drawing.Font("Microsoft Sans Serif",13F,System.Drawing.FontStyle.Bold,System.Drawing.GraphicsUnit.Point,((byte)(0)));
-			this.labelTotalAmt.ForeColor = System.Drawing.Color.Firebrick;
-			this.labelTotalAmt.Location = new System.Drawing.Point(320,14);
-			this.labelTotalAmt.Name = "labelTotalAmt";
-			this.labelTotalAmt.Size = new System.Drawing.Size(95,19);
-			this.labelTotalAmt.TabIndex = 61;
-			this.labelTotalAmt.Text = "25000.00";
-			this.labelTotalAmt.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-			// 
-			// labelInsEstAmt
-			// 
-			this.labelInsEstAmt.Location = new System.Drawing.Point(427,18);
-			this.labelInsEstAmt.Name = "labelInsEstAmt";
-			this.labelInsEstAmt.Size = new System.Drawing.Size(60,13);
-			this.labelInsEstAmt.TabIndex = 62;
-			this.labelInsEstAmt.Text = "2500.00";
-			this.labelInsEstAmt.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+			this.panelAgeLine.BackColor = System.Drawing.SystemColors.ControlDark;
+			this.panelAgeLine.Location = new System.Drawing.Point(414,2);
+			this.panelAgeLine.Name = "panelAgeLine";
+			this.panelAgeLine.Size = new System.Drawing.Size(2,32);
+			this.panelAgeLine.TabIndex = 63;
 			// 
 			// ContrAccount
 			// 
@@ -1562,7 +1572,7 @@ namespace OpenDental {
 					label5,
 					label3,
 					//label8,
-					labelAgeInsEst,
+					//labelAgeInsEst,
 					//label10,
 					labelUrgFinNote,
 					labelFamFinancial,
@@ -1895,22 +1905,45 @@ namespace OpenDental {
 				text0_30.Text=FamCur.List[0].Bal_0_30.ToString("F");
 				double total=FamCur.List[0].BalTotal;
 				labelTotalAmt.Text=total.ToString("F");
-				if (PrefB.GetBool("BalancesDontSubtractIns"))
+				labelInsEstAmt.Text=FamCur.List[0].InsEst.ToString("F");
+				labelBalanceAmt.Text = (total - FamCur.List[0].InsEst).ToString("f");
+				labelInsLeft.Text="Ins Left: 0.00";//etc.  Same for everyone
+				Font fontBold=new Font(FontFamily.GenericSansSerif,13,FontStyle.Bold);
+				//In the new way of doing it, they are all visible and calculated identically,
+				//but the emphasis simply changes by slight renaming of labels
+				//and by font size changes.
+				if(PrefB.GetBool("BalancesDontSubtractIns"))
 				{//leave ins est out of main balance calculation
-					labelInsEst.Visible = false;
-					labelInsEstAmt.Visible = false;
-					labelBalanceAmt.Text = total.ToString("f");
-					labelAfterIns.Text = (total - FamCur.List[0].InsEst).ToString("F"); //show the balance with ins est.
-					labelIns1.Text = "After Ins:";
+					//labelInsEst.Visible = false;
+					//labelInsEstAmt.Visible = false;
+					//labelBalanceAmt.Text = total.ToString("f");
+					//labelAfterIns.Text = (total - FamCur.List[0].InsEst).ToString("F"); //show the balance with ins est.
+					//labelIns1.Text = "After Ins:";
+					labelTotal.Text="Balance";
+					labelTotalAmt.Font=fontBold;
+					labelTotalAmt.ForeColor=Color.Firebrick;
+					panelAgeLine.Visible=true;//verical line
+					labelInsEst.Text="Ins Pending";
+					labelBalance.Text="After Ins";
+					labelBalanceAmt.Font=this.Font;
+					labelBalanceAmt.ForeColor=Color.Black;
 				}
 				else
 				{//this is much more common, calculate balance - ins estimate
-					labelInsEst.Visible = true;
-					labelInsEstAmt.Visible = true;
-					labelInsEstAmt.Text = FamCur.List[0].InsEst.ToString("F");
-					labelBalanceAmt.Text = (total - FamCur.List[0].InsEst).ToString("f");
-					labelAfterIns.Text = total.ToString("F"); //show the balance with out ins est.
-					labelIns1.Text = "w/o Ins:";
+					//labelInsEst.Visible = true;
+					//labelInsEstAmt.Visible = true;
+					//labelInsEstAmt.Text = FamCur.List[0].InsEst.ToString("F");
+					//labelBalanceAmt.Text = (total - FamCur.List[0].InsEst).ToString("f");
+					//labelAfterIns.Text = total.ToString("F"); //show the balance with out ins est.
+					//labelIns1.Text = "w/o Ins:";
+					labelTotal.Text="Total";
+					labelTotalAmt.Font=this.Font;
+					labelTotalAmt.ForeColor=Color.Black;
+					panelAgeLine.Visible=false;
+					labelInsEst.Text="-InsEst";
+					labelBalance.Text="=Balance";
+					labelBalanceAmt.Font=fontBold;
+					labelBalanceAmt.ForeColor=Color.Firebrick;
 				}
 			}
 			else {
