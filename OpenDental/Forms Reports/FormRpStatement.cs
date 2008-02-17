@@ -249,6 +249,7 @@ namespace OpenDental{
 			}
 		}
 
+		/*
 		///<summary>Used from FormBilling to print all statements for all the supplied patNums.</summary>
 		public void LoadAndPrint(int[] guarNums,string generalNote){
 			int[][] patNums=new int[guarNums.Length][];
@@ -303,7 +304,7 @@ namespace OpenDental{
 			}
 			//PrintStatements(patNums,DateTime.Today.AddDays(-45),DateTime.Today,true,false,false,false,notes,true,"");
 			//PrintStatements();
-		}
+		}*/
 
 		///<summary>Creates a new pdf, attaches it to a new doc, and attaches that to the statement.  If it cannot create a pdf, for example if no AtoZ folders, then it will simply result in a docnum of zero, so no attached doc.</summary>
 		public void CreateStatementPdf(Statement stmt){
@@ -665,7 +666,7 @@ namespace OpenDental{
 			}
 			#endregion
 			//Patient's Billing Address---------------------------------------------------------------------------------------------
-			#region Patient Billing Address and aging
+			#region Patient Billing Address
 			font=MigraDocHelper.CreateFont(11);
 			frame=MigraDocHelper.CreateContainer(section,62.5f+12.5f,225+1,300,200);
 			par=frame.AddParagraph();
@@ -696,7 +697,9 @@ namespace OpenDental{
 				par.Format.Font=font;
 				par.AddText(text);
 			}
+			#endregion
 			//Aging-----------------------------------------------------------------------------------
+			#region Aging
 			MigraDocHelper.InsertSpacer(section,275);
 			ODGridColumn gcol;
 			ODGridRow grow;
@@ -713,14 +716,22 @@ namespace OpenDental{
 				gridAging.Columns.Add(gcol);
 				gcol=new ODGridColumn(Lan.g(this,"over 90"),70,HorizontalAlignment.Center);
 				gridAging.Columns.Add(gcol);
-				gcol=new ODGridColumn(Lan.g(this,"Total"),70,HorizontalAlignment.Center);
-				gridAging.Columns.Add(gcol);
-				if(!PrefB.GetBool("BalancesDontSubtractIns")) {//this typically happens
-					gcol=new ODGridColumn(Lan.g(this,"- InsEst"),70,HorizontalAlignment.Center);
+				if(PrefB.GetBool("BalancesDontSubtractIns")) {//less common
+					gcol=new ODGridColumn(Lan.g(this,"Balance"),70,HorizontalAlignment.Center);
+					gridAging.Columns.Add(gcol);
+					gcol=new ODGridColumn(Lan.g(this,"InsPending"),70,HorizontalAlignment.Center);
+					gridAging.Columns.Add(gcol);
+					gcol=new ODGridColumn(Lan.g(this,"AfterIns"),70,HorizontalAlignment.Center);
 					gridAging.Columns.Add(gcol);
 				}
-				gcol=new ODGridColumn(Lan.g(this,"= Balance"),70,HorizontalAlignment.Center);
-				gridAging.Columns.Add(gcol);
+				else{//more common
+					gcol=new ODGridColumn(Lan.g(this,"Total"),70,HorizontalAlignment.Center);
+					gridAging.Columns.Add(gcol);
+					gcol=new ODGridColumn(Lan.g(this,"- InsEst"),70,HorizontalAlignment.Center);
+					gridAging.Columns.Add(gcol);
+					gcol=new ODGridColumn(Lan.g(this,"= Balance"),70,HorizontalAlignment.Center);
+					gridAging.Columns.Add(gcol);
+				}
 				gridAging.Rows.Clear();
 				//Annual max--------------------------
 				grow=new ODGridRow();
@@ -729,13 +740,8 @@ namespace OpenDental{
 				grow.Cells.Add(PatGuar.Bal_61_90.ToString("F"));
 				grow.Cells.Add(PatGuar.BalOver90.ToString("F"));
 				grow.Cells.Add(PatGuar.BalTotal.ToString("F"));
-				if(PrefB.GetBool("BalancesDontSubtractIns")) {
-					grow.Cells.Add(PatGuar.BalTotal.ToString("F"));
-				}
-				else {//this is more typical
-					grow.Cells.Add(PatGuar.InsEst.ToString("F"));
-					grow.Cells.Add((PatGuar.BalTotal-PatGuar.InsEst).ToString("F"));
-				}
+				grow.Cells.Add(PatGuar.InsEst.ToString("F"));
+				grow.Cells.Add((PatGuar.BalTotal-PatGuar.InsEst).ToString("F"));
 				gridAging.Rows.Add(grow);
 				gridAging.EndUpdate();
 				MigraDocHelper.DrawGrid(section,gridAging);

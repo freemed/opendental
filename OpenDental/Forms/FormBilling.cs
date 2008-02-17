@@ -830,7 +830,6 @@ namespace OpenDental{
 			MessageBox.Show(msg);
 			//labelPrinted.Text=Lan.g(this,"Printed=")+"0";
 			//labelEmailed.Text=Lan.g(this,"E-mailed=")+"0";
-			//FormS.LoadAndPrint(guarNums,GeneralNote);
 			Cursor=Cursors.Default;
 			FillGrid();
 			//if(gridBill.Rows.Count>0 && MsgBox.Show(this,true,"Delete all unsent bills?")){

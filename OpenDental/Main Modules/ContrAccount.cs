@@ -124,13 +124,7 @@ namespace OpenDental {
 		private bool FinNoteChanged;
 		private bool CCChanged;
 		private bool UrgFinNoteChanged;
-		private Panel panelInsInfo;
-		private Label labelPriPend;
-		private Label labelPriRem;
 		private Label labelInsLeft;
-		private Label labelIns2;
-		private Label labelAfterIns;
-		private Label labelIns1;
 		private Panel panelInsInfoDetail;
 		private Label labelFamily;
 		private Label label9;
@@ -157,6 +151,7 @@ namespace OpenDental {
 		private Label labelTotalAmt;
 		private Label labelInsEstAmt;
 		private Panel panelAgeLine;
+		private Label labelInsLeftAmt;
 		///<summary>Set to true if this control is placed in the recall edit window. This affects the control behavior.</summary>
 		public bool ViewingInRecall=false;
 		#endregion
@@ -215,6 +210,9 @@ namespace OpenDental {
 			this.checkShowC = new System.Windows.Forms.CheckBox();
 			this.checkShowTP = new System.Windows.Forms.CheckBox();
 			this.panelAging = new System.Windows.Forms.Panel();
+			this.panelAgeLine = new System.Windows.Forms.Panel();
+			this.labelInsEstAmt = new System.Windows.Forms.Label();
+			this.labelTotalAmt = new System.Windows.Forms.Label();
 			this.labelBalance = new System.Windows.Forms.Label();
 			this.labelBalanceAmt = new System.Windows.Forms.Label();
 			this.labelInsEst = new System.Windows.Forms.Label();
@@ -242,13 +240,7 @@ namespace OpenDental {
 			this.checkShowDetail = new System.Windows.Forms.CheckBox();
 			this.labelEndDate = new System.Windows.Forms.Label();
 			this.labelStartDate = new System.Windows.Forms.Label();
-			this.panelInsInfo = new System.Windows.Forms.Panel();
-			this.labelPriPend = new System.Windows.Forms.Label();
-			this.labelPriRem = new System.Windows.Forms.Label();
 			this.labelInsLeft = new System.Windows.Forms.Label();
-			this.labelIns2 = new System.Windows.Forms.Label();
-			this.labelAfterIns = new System.Windows.Forms.Label();
-			this.labelIns1 = new System.Windows.Forms.Label();
 			this.panelInsInfoDetail = new System.Windows.Forms.Panel();
 			this.labelFamily = new System.Windows.Forms.Label();
 			this.label9 = new System.Windows.Forms.Label();
@@ -272,8 +264,7 @@ namespace OpenDental {
 			this.label12 = new System.Windows.Forms.Label();
 			this.label11 = new System.Windows.Forms.Label();
 			this.label17 = new System.Windows.Forms.Label();
-			this.labelTotalAmt = new System.Windows.Forms.Label();
-			this.labelInsEstAmt = new System.Windows.Forms.Label();
+			this.labelInsLeftAmt = new System.Windows.Forms.Label();
 			this.gridPayPlan = new OpenDental.UI.ODGrid();
 			this.textUrgFinNote = new OpenDental.ODtextBox();
 			this.gridAcctPat = new OpenDental.UI.ODGrid();
@@ -294,7 +285,6 @@ namespace OpenDental {
 			this.butTrojan = new OpenDental.UI.Button();
 			this.butComm = new OpenDental.UI.Button();
 			this.ToolBarMain = new OpenDental.UI.ODToolBar();
-			this.panelAgeLine = new System.Windows.Forms.Panel();
 			this.panelCommButs.SuspendLayout();
 			this.panelProgNotes.SuspendLayout();
 			this.groupBox7.SuspendLayout();
@@ -304,7 +294,6 @@ namespace OpenDental {
 			this.tabControl1.SuspendLayout();
 			this.tabMain.SuspendLayout();
 			this.tabShow.SuspendLayout();
-			this.panelInsInfo.SuspendLayout();
 			this.panelInsInfoDetail.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -623,8 +612,10 @@ namespace OpenDental {
 			// 
 			// panelAging
 			// 
+			this.panelAging.Controls.Add(this.labelInsLeftAmt);
 			this.panelAging.Controls.Add(this.panelAgeLine);
 			this.panelAging.Controls.Add(this.labelInsEstAmt);
+			this.panelAging.Controls.Add(this.labelInsLeft);
 			this.panelAging.Controls.Add(this.labelTotalAmt);
 			this.panelAging.Controls.Add(this.labelBalance);
 			this.panelAging.Controls.Add(this.labelBalanceAmt);
@@ -641,8 +632,36 @@ namespace OpenDental {
 			this.panelAging.Controls.Add(this.label2);
 			this.panelAging.Location = new System.Drawing.Point(0,25);
 			this.panelAging.Name = "panelAging";
-			this.panelAging.Size = new System.Drawing.Size(594,37);
+			this.panelAging.Size = new System.Drawing.Size(749,37);
 			this.panelAging.TabIndex = 213;
+			// 
+			// panelAgeLine
+			// 
+			this.panelAgeLine.BackColor = System.Drawing.SystemColors.ControlDark;
+			this.panelAgeLine.Location = new System.Drawing.Point(414,2);
+			this.panelAgeLine.Name = "panelAgeLine";
+			this.panelAgeLine.Size = new System.Drawing.Size(2,32);
+			this.panelAgeLine.TabIndex = 63;
+			// 
+			// labelInsEstAmt
+			// 
+			this.labelInsEstAmt.Location = new System.Drawing.Point(427,18);
+			this.labelInsEstAmt.Name = "labelInsEstAmt";
+			this.labelInsEstAmt.Size = new System.Drawing.Size(60,13);
+			this.labelInsEstAmt.TabIndex = 62;
+			this.labelInsEstAmt.Text = "2500.00";
+			this.labelInsEstAmt.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+			// 
+			// labelTotalAmt
+			// 
+			this.labelTotalAmt.Font = new System.Drawing.Font("Microsoft Sans Serif",13F,System.Drawing.FontStyle.Bold,System.Drawing.GraphicsUnit.Point,((byte)(0)));
+			this.labelTotalAmt.ForeColor = System.Drawing.Color.Firebrick;
+			this.labelTotalAmt.Location = new System.Drawing.Point(320,14);
+			this.labelTotalAmt.Name = "labelTotalAmt";
+			this.labelTotalAmt.Size = new System.Drawing.Size(95,19);
+			this.labelTotalAmt.TabIndex = 61;
+			this.labelTotalAmt.Text = "25000.00";
+			this.labelTotalAmt.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			// 
 			// labelBalance
 			// 
@@ -912,82 +931,16 @@ namespace OpenDental {
 			this.labelStartDate.Text = "Start Date";
 			this.labelStartDate.TextAlign = System.Drawing.ContentAlignment.TopRight;
 			// 
-			// panelInsInfo
-			// 
-			this.panelInsInfo.Controls.Add(this.labelPriPend);
-			this.panelInsInfo.Controls.Add(this.labelPriRem);
-			this.panelInsInfo.Controls.Add(this.labelInsLeft);
-			this.panelInsInfo.Controls.Add(this.labelIns2);
-			this.panelInsInfo.Controls.Add(this.labelAfterIns);
-			this.panelInsInfo.Controls.Add(this.labelIns1);
-			this.panelInsInfo.Location = new System.Drawing.Point(597,25);
-			this.panelInsInfo.Name = "panelInsInfo";
-			this.panelInsInfo.Size = new System.Drawing.Size(152,37);
-			this.panelInsInfo.TabIndex = 220;
-			// 
-			// labelPriPend
-			// 
-			this.labelPriPend.Font = new System.Drawing.Font("Microsoft Sans Serif",8F,System.Drawing.FontStyle.Regular,System.Drawing.GraphicsUnit.Point,((byte)(0)));
-			this.labelPriPend.ForeColor = System.Drawing.SystemColors.ControlText;
-			this.labelPriPend.Location = new System.Drawing.Point(166,3);
-			this.labelPriPend.Name = "labelPriPend";
-			this.labelPriPend.Size = new System.Drawing.Size(46,12);
-			this.labelPriPend.TabIndex = 81;
-			this.labelPriPend.Text = "NA";
-			// 
-			// labelPriRem
-			// 
-			this.labelPriRem.Font = new System.Drawing.Font("Microsoft Sans Serif",8F,System.Drawing.FontStyle.Regular,System.Drawing.GraphicsUnit.Point,((byte)(0)));
-			this.labelPriRem.ForeColor = System.Drawing.SystemColors.ControlText;
-			this.labelPriRem.Location = new System.Drawing.Point(166,18);
-			this.labelPriRem.Name = "labelPriRem";
-			this.labelPriRem.Size = new System.Drawing.Size(46,12);
-			this.labelPriRem.TabIndex = 79;
-			this.labelPriRem.Text = "NA";
-			// 
 			// labelInsLeft
 			// 
 			this.labelInsLeft.Font = new System.Drawing.Font("Microsoft Sans Serif",8F,System.Drawing.FontStyle.Regular,System.Drawing.GraphicsUnit.Point,((byte)(0)));
-			this.labelInsLeft.Location = new System.Drawing.Point(3,18);
+			this.labelInsLeft.Location = new System.Drawing.Point(594,2);
 			this.labelInsLeft.Name = "labelInsLeft";
-			this.labelInsLeft.Size = new System.Drawing.Size(124,12);
+			this.labelInsLeft.Size = new System.Drawing.Size(77,12);
 			this.labelInsLeft.TabIndex = 82;
-			this.labelInsLeft.Text = "Ins Left:";
-			// 
-			// labelIns2
-			// 
-			this.labelIns2.Font = new System.Drawing.Font("Microsoft Sans Serif",8F,System.Drawing.FontStyle.Regular,System.Drawing.GraphicsUnit.Point,((byte)(0)));
-			this.labelIns2.Location = new System.Drawing.Point(89,0);
-			this.labelIns2.Name = "labelIns2";
-			this.labelIns2.Size = new System.Drawing.Size(59,17);
-			this.labelIns2.TabIndex = 83;
-			this.labelIns2.Text = "Ins Pend:";
-			this.labelIns2.TextAlign = System.Drawing.ContentAlignment.TopRight;
-			this.labelIns2.Visible = false;
-			// 
-			// labelAfterIns
-			// 
-			this.labelAfterIns.BackColor = System.Drawing.SystemColors.Control;
-			this.labelAfterIns.Font = new System.Drawing.Font("Microsoft Sans Serif",8.25F,System.Drawing.FontStyle.Regular,System.Drawing.GraphicsUnit.Point,((byte)(0)));
-			this.labelAfterIns.ForeColor = System.Drawing.SystemColors.ControlText;
-			this.labelAfterIns.Location = new System.Drawing.Point(58,2);
-			this.labelAfterIns.Name = "labelAfterIns";
-			this.labelAfterIns.Size = new System.Drawing.Size(46,16);
-			this.labelAfterIns.TabIndex = 85;
-			this.labelAfterIns.Text = "NA";
-			this.labelAfterIns.Visible = false;
-			// 
-			// labelIns1
-			// 
-			this.labelIns1.Font = new System.Drawing.Font("Microsoft Sans Serif",8.25F,System.Drawing.FontStyle.Regular,System.Drawing.GraphicsUnit.Point,((byte)(0)));
-			this.labelIns1.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.labelIns1.Location = new System.Drawing.Point(0,2);
-			this.labelIns1.Name = "labelIns1";
-			this.labelIns1.Size = new System.Drawing.Size(56,13);
-			this.labelIns1.TabIndex = 86;
-			this.labelIns1.Text = "After Ins:";
-			this.labelIns1.TextAlign = System.Drawing.ContentAlignment.TopRight;
-			this.labelIns1.Visible = false;
+			this.labelInsLeft.Text = "Ins Left";
+			this.labelInsLeft.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+			this.labelInsLeft.Visible = false;
 			// 
 			// panelInsInfoDetail
 			// 
@@ -1231,25 +1184,15 @@ namespace OpenDental {
 			this.label17.Text = "Primary";
 			this.label17.TextAlign = System.Drawing.ContentAlignment.TopCenter;
 			// 
-			// labelTotalAmt
+			// labelInsLeftAmt
 			// 
-			this.labelTotalAmt.Font = new System.Drawing.Font("Microsoft Sans Serif",13F,System.Drawing.FontStyle.Bold,System.Drawing.GraphicsUnit.Point,((byte)(0)));
-			this.labelTotalAmt.ForeColor = System.Drawing.Color.Firebrick;
-			this.labelTotalAmt.Location = new System.Drawing.Point(320,14);
-			this.labelTotalAmt.Name = "labelTotalAmt";
-			this.labelTotalAmt.Size = new System.Drawing.Size(95,19);
-			this.labelTotalAmt.TabIndex = 61;
-			this.labelTotalAmt.Text = "25000.00";
-			this.labelTotalAmt.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-			// 
-			// labelInsEstAmt
-			// 
-			this.labelInsEstAmt.Location = new System.Drawing.Point(427,18);
-			this.labelInsEstAmt.Name = "labelInsEstAmt";
-			this.labelInsEstAmt.Size = new System.Drawing.Size(60,13);
-			this.labelInsEstAmt.TabIndex = 62;
-			this.labelInsEstAmt.Text = "2500.00";
-			this.labelInsEstAmt.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+			this.labelInsLeftAmt.Location = new System.Drawing.Point(600,19);
+			this.labelInsLeftAmt.Name = "labelInsLeftAmt";
+			this.labelInsLeftAmt.Size = new System.Drawing.Size(60,13);
+			this.labelInsLeftAmt.TabIndex = 83;
+			this.labelInsLeftAmt.Text = "2500.00";
+			this.labelInsLeftAmt.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+			this.labelInsLeftAmt.Visible = false;
 			// 
 			// gridPayPlan
 			// 
@@ -1511,18 +1454,9 @@ namespace OpenDental {
 			this.ToolBarMain.TabIndex = 47;
 			this.ToolBarMain.ButtonClick += new OpenDental.UI.ODToolBarButtonClickEventHandler(this.ToolBarMain_ButtonClick);
 			// 
-			// panelAgeLine
-			// 
-			this.panelAgeLine.BackColor = System.Drawing.SystemColors.ControlDark;
-			this.panelAgeLine.Location = new System.Drawing.Point(414,2);
-			this.panelAgeLine.Name = "panelAgeLine";
-			this.panelAgeLine.Size = new System.Drawing.Size(2,32);
-			this.panelAgeLine.TabIndex = 63;
-			// 
 			// ContrAccount
 			// 
 			this.Controls.Add(this.panelInsInfoDetail);
-			this.Controls.Add(this.panelInsInfo);
 			this.Controls.Add(this.gridPayPlan);
 			this.Controls.Add(this.tabControl1);
 			this.Controls.Add(this.panelAging);
@@ -1551,7 +1485,6 @@ namespace OpenDental {
 			this.tabMain.PerformLayout();
 			this.tabShow.ResumeLayout(false);
 			this.tabShow.PerformLayout();
-			this.panelInsInfo.ResumeLayout(false);
 			this.panelInsInfoDetail.ResumeLayout(false);
 			this.panelInsInfoDetail.PerformLayout();
 			this.ResumeLayout(false);
@@ -1907,41 +1840,29 @@ namespace OpenDental {
 				labelTotalAmt.Text=total.ToString("F");
 				labelInsEstAmt.Text=FamCur.List[0].InsEst.ToString("F");
 				labelBalanceAmt.Text = (total - FamCur.List[0].InsEst).ToString("f");
-				labelInsLeft.Text="Ins Left: 0.00";//etc.  Same for everyone
+				labelInsLeft.Text=Lan.g(this,"Ins Left");
+				labelInsLeftAmt.Text="";//etc. Will be same for everyone
 				Font fontBold=new Font(FontFamily.GenericSansSerif,13,FontStyle.Bold);
 				//In the new way of doing it, they are all visible and calculated identically,
 				//but the emphasis simply changes by slight renaming of labels
 				//and by font size changes.
-				if(PrefB.GetBool("BalancesDontSubtractIns"))
-				{//leave ins est out of main balance calculation
-					//labelInsEst.Visible = false;
-					//labelInsEstAmt.Visible = false;
-					//labelBalanceAmt.Text = total.ToString("f");
-					//labelAfterIns.Text = (total - FamCur.List[0].InsEst).ToString("F"); //show the balance with ins est.
-					//labelIns1.Text = "After Ins:";
-					labelTotal.Text="Balance";
+				if(PrefB.GetBool("BalancesDontSubtractIns")){
+					labelTotal.Text=Lan.g(this,"Balance");
 					labelTotalAmt.Font=fontBold;
 					labelTotalAmt.ForeColor=Color.Firebrick;
 					panelAgeLine.Visible=true;//verical line
-					labelInsEst.Text="Ins Pending";
-					labelBalance.Text="After Ins";
+					labelInsEst.Text=Lan.g(this,"Ins Pending");
+					labelBalance.Text=Lan.g(this,"After Ins");
 					labelBalanceAmt.Font=this.Font;
 					labelBalanceAmt.ForeColor=Color.Black;
 				}
-				else
-				{//this is much more common, calculate balance - ins estimate
-					//labelInsEst.Visible = true;
-					//labelInsEstAmt.Visible = true;
-					//labelInsEstAmt.Text = FamCur.List[0].InsEst.ToString("F");
-					//labelBalanceAmt.Text = (total - FamCur.List[0].InsEst).ToString("f");
-					//labelAfterIns.Text = total.ToString("F"); //show the balance with out ins est.
-					//labelIns1.Text = "w/o Ins:";
-					labelTotal.Text="Total";
+				else{//this is more common
+					labelTotal.Text=Lan.g(this,"Total");
 					labelTotalAmt.Font=this.Font;
 					labelTotalAmt.ForeColor=Color.Black;
 					panelAgeLine.Visible=false;
-					labelInsEst.Text="-InsEst";
-					labelBalance.Text="=Balance";
+					labelInsEst.Text=Lan.g(this,"-InsEst");
+					labelBalance.Text=Lan.g(this,"=Balance");
 					labelBalanceAmt.Font=fontBold;
 					labelBalanceAmt.ForeColor=Color.Firebrick;
 				}
@@ -1954,6 +1875,7 @@ namespace OpenDental {
 				labelTotalAmt.Text="";
 				labelInsEstAmt.Text="";
 				labelBalanceAmt.Text="";
+				labelInsLeftAmt.Text="";
 			}
 		}
 
