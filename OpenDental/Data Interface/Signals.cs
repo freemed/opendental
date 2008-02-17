@@ -1,6 +1,7 @@
 //using MySql.Data.MySqlClient;
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Data;
 using System.Windows.Forms;
 using OpenDentBusiness;
@@ -111,6 +112,7 @@ namespace OpenDental{
 			//we need to explicitly get the server time in advance rather than using NOW(),
 			//because we need to update the signal object soon after creation.
 			//DateTime now=ClockEvents.GetServerTime();
+			sig.SigDateTime=MiscData.GetNowDateTime();
 			if(PrefB.RandomKeys){
 				sig.SignalNum=MiscData.GetKey("signal","SignalNum");
 			}
@@ -128,14 +130,8 @@ namespace OpenDental{
 				+"'"+POut.PInt   ((int)sig.ITypes)+"', "
 				+POut.PDate  (sig.DateViewing)+", "
 				+"'"+POut.PInt   ((int)sig.SigType)+"', "
-				+"'"+POut.PString(sig.SigText)+"', ";
-				//+"'"+POut.PDateT (now)+"', "
-			if(DataConnection.DBtype==DatabaseType.Oracle) {
-				command+=POut.PDateT(MiscData.GetNowDateTime());
-			}else{//Assume MySQL
-				command+="NOW()";
-			}
-			command+=", "
+				+"'"+POut.PString(sig.SigText)+"', "
+				+POut.PDateT(sig.SigDateTime)+", "
 				+"'"+POut.PString(sig.ToUser)+"', "
 				+POut.PDateT (sig.AckTime)+", "
 				+"'"+POut.PInt(sig.TaskNum)+"')";
@@ -167,12 +163,32 @@ namespace OpenDental{
 
 		///<summary>After a refresh, this is used to determine whether the Current user has received any new tasks through subscription.  Must supply the current usernum as well as the recently retrieved signal list.</summary>
 		public static bool TasksNeedRefresh(Signal[] signalList,int userNum){
+			List<Signal> sigListFiltered=new List<Signal>();
 			for(int i=0;i<signalList.Length;i++){
-				if(signalList[i].ITypes==InvalidTypes.Tasks){// && signalList[i].ta==dateTimeShowing){
-					return true;
+				if(signalList[i].ITypes==InvalidTypes.Tasks){
+					sigListFiltered.Add(signalList[i]);
 				}
 			}
-			return false;
+			if(sigListFiltered.Count==0){//no task signals
+				return false;
+			}
+			string command="SELECT COUNT(*) FROM taskancestor,task,tasklist,tasksubscription "
+				+"WHERE taskancestor.TaskListNum=tasklist.TaskListNum "
+				+"AND task.TaskNum=taskancestor.TaskNum "
+				+"AND tasksubscription.TaskListNum=tasklist.TaskListNum "
+				+"AND tasksubscription.UserNum="+POut.PInt(userNum)
+				+" AND (";
+			for(int i=0;i<sigListFiltered.Count;i++){
+				if(i>0){
+					command+="OR ";
+				}
+				command+="task.TaskNum= "+POut.PInt(sigListFiltered[i].TaskNum);
+			}
+			command+=")";
+			if(General.GetCount(command)=="0"){
+				return false;
+			}
+			return true;
 		}
 
 		///<summary>After a refresh, this is used to get a single value representing all flags of types that need to be refreshed.   Types of Date and Task are not included.</summary>

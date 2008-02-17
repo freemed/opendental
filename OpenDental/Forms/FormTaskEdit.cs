@@ -49,6 +49,8 @@ namespace OpenDental{
 		private OpenDental.UI.Button butNowFinished;
 		private TextBox textDateTimeFinished;
 		private Label label7;
+		private TextBox textTaskNum;
+		private Label labelTaskNum;
 		///<summary>After closing, if this is not zero, then it will jump to the specified patient.</summary>
 		public int GotoKeyNum;
 
@@ -116,6 +118,8 @@ namespace OpenDental{
 			this.textDescript = new OpenDental.ODtextBox();
 			this.butOK = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
+			this.textTaskNum = new System.Windows.Forms.TextBox();
+			this.labelTaskNum = new System.Windows.Forms.Label();
 			this.panelObject.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -423,10 +427,31 @@ namespace OpenDental{
 			this.butCancel.Text = "&Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
 			// 
+			// textTaskNum
+			// 
+			this.textTaskNum.Location = new System.Drawing.Point(525,60);
+			this.textTaskNum.Name = "textTaskNum";
+			this.textTaskNum.ReadOnly = true;
+			this.textTaskNum.Size = new System.Drawing.Size(54,20);
+			this.textTaskNum.TabIndex = 134;
+			this.textTaskNum.Visible = false;
+			// 
+			// labelTaskNum
+			// 
+			this.labelTaskNum.Location = new System.Drawing.Point(450,61);
+			this.labelTaskNum.Name = "labelTaskNum";
+			this.labelTaskNum.Size = new System.Drawing.Size(73,16);
+			this.labelTaskNum.TabIndex = 133;
+			this.labelTaskNum.Text = "TaskNum";
+			this.labelTaskNum.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.labelTaskNum.Visible = false;
+			// 
 			// FormTaskEdit
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.ClientSize = new System.Drawing.Size(726,658);
+			this.Controls.Add(this.textTaskNum);
+			this.Controls.Add(this.labelTaskNum);
 			this.Controls.Add(this.butNowFinished);
 			this.Controls.Add(this.textDateTimeFinished);
 			this.Controls.Add(this.label7);
@@ -469,6 +494,11 @@ namespace OpenDental{
 		#endregion
 
 		private void FormTaskListEdit_Load(object sender, System.EventArgs e) {
+			#if DEBUG
+				labelTaskNum.Visible=true;
+				textTaskNum.Visible=true;
+				textTaskNum.Text=Cur.TaskNum.ToString();
+			#endif
 			switch(Cur.TaskStatus){
 				case TaskStatusEnum.New:
 					radioNew.Checked=true;

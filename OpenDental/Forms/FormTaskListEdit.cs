@@ -27,6 +27,8 @@ namespace OpenDental{
 		private System.Windows.Forms.CheckBox checkFromNum;
 		private System.Windows.Forms.ListBox listObjectType;
 		private System.Windows.Forms.Label label6;
+		private TextBox textTaskListNum;
+		private Label labelTaskListNum;
 		///<summary></summary>
 		public bool IsNew;
 
@@ -76,6 +78,8 @@ namespace OpenDental{
 			this.textDateTL = new OpenDental.ValidDate();
 			this.listObjectType = new System.Windows.Forms.ListBox();
 			this.label6 = new System.Windows.Forms.Label();
+			this.textTaskListNum = new System.Windows.Forms.TextBox();
+			this.labelTaskListNum = new System.Windows.Forms.Label();
 			this.SuspendLayout();
 			// 
 			// butCancel
@@ -191,10 +195,31 @@ namespace OpenDental{
 			this.label6.Text = "Object Type";
 			this.label6.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
+			// textTaskListNum
+			// 
+			this.textTaskListNum.Location = new System.Drawing.Point(366,94);
+			this.textTaskListNum.Name = "textTaskListNum";
+			this.textTaskListNum.ReadOnly = true;
+			this.textTaskListNum.Size = new System.Drawing.Size(54,20);
+			this.textTaskListNum.TabIndex = 136;
+			this.textTaskListNum.Visible = false;
+			// 
+			// labelTaskListNum
+			// 
+			this.labelTaskListNum.Location = new System.Drawing.Point(276,95);
+			this.labelTaskListNum.Name = "labelTaskListNum";
+			this.labelTaskListNum.Size = new System.Drawing.Size(88,16);
+			this.labelTaskListNum.TabIndex = 135;
+			this.labelTaskListNum.Text = "TaskListNum";
+			this.labelTaskListNum.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.labelTaskListNum.Visible = false;
+			// 
 			// FormTaskListEdit
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.ClientSize = new System.Drawing.Size(503,242);
+			this.Controls.Add(this.textTaskListNum);
+			this.Controls.Add(this.labelTaskListNum);
 			this.Controls.Add(this.listObjectType);
 			this.Controls.Add(this.label6);
 			this.Controls.Add(this.textDateTL);
@@ -222,6 +247,11 @@ namespace OpenDental{
 		#endregion
 
 		private void FormTaskListEdit_Load(object sender, System.EventArgs e) {
+			#if DEBUG
+				labelTaskListNum.Visible=true;
+				textTaskListNum.Visible=true;
+				textTaskListNum.Text=Cur.TaskListNum.ToString();
+			#endif
 			textDescript.Text=Cur.Descript;
 			if(Cur.DateTL.Year>1880){
 				textDateTL.Text=Cur.DateTL.ToShortDateString();

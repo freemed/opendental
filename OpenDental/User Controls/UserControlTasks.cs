@@ -45,6 +45,11 @@ namespace OpenDental {
 			this.gridMain.ContextMenu=this.menuEdit;
 		}
 
+		///<summary>The parent might call this if it gets a signal that a relevant task was added from another workstation.  This will only trigger a refresh if the current tab is the User tab. And the parent should only call this if it has been verified that the current user has a new task.</summary>
+		public void RefreshTasks(){
+			FillGrid();
+		}
+
 		protected void OnGoToChanged() {
 			if(GoToChanged!=null) {
 				GoToChanged(this,new EventArgs());
@@ -545,6 +550,9 @@ namespace OpenDental {
 			FormTaskEdit FormT=new FormTaskEdit(cur);
 			FormT.IsNew=true;
 			FormT.ShowDialog();
+			if(FormT.DialogResult==DialogResult.OK){
+				DataValid.SetInvalidTask(cur.TaskNum);
+			}
 			if(FormT.GotoType!=TaskObjectType.None) {
 				GotoType=FormT.GotoType;
 				GotoKeyNum=FormT.GotoKeyNum;
@@ -732,6 +740,7 @@ namespace OpenDental {
 					return;
 				}
 				Tasks.Insert(newT);
+				DataValid.SetInvalidTask(newT.TaskNum);
 			}
 			if(WasCut) {
 				if(ClipTaskList!=null) {

@@ -1457,28 +1457,23 @@ namespace OpenDental{
 				if(PrefB.GetBool("TaskListAlwaysShowsAtBottom")){
 					//seperate if statement to prevent database call if not showing task list at bottom to begin with
 					ComputerPref computerPrefs = ComputerPrefs.GetForLocalComputer();
-					if(!computerPrefs.TaskKeepListHidden)
-					{
+					if(!computerPrefs.TaskKeepListHidden){
 						userControlTasks1.InitializeOnStartup();
 						userControlTasks1.Visible = true;
-						if(computerPrefs.TaskDock == 0)
-						{
+						if(computerPrefs.TaskDock == 0){
 							menuItemDockBottom.Checked = true;
 							menuItemDockRight.Checked = false;
 						}
-						else
-						{
+						else{
 							menuItemDockRight.Checked = true;
 							menuItemDockBottom.Checked = false;
 						}
 					}
-					else
-					{
+					else{
 						userControlTasks1.Visible = false;
 					}
 				}
-				else
-				{
+				else{
 					userControlTasks1.Visible = false;
 				}
 				LayoutControls();
@@ -2205,14 +2200,22 @@ namespace OpenDental{
 				RefreshLocalData(InvalidTypes.AllLocal,true);//does local computer only
 				return;
 			}
-			if(e.ITypes!=InvalidTypes.Date){
+			if(e.ITypes!=InvalidTypes.Date && e.ITypes!=InvalidTypes.Tasks){
 				//local refresh for dates is handled within ContrAppt, not here
 				RefreshLocalData(e.ITypes,false);//does local computer
 			}
 			Signal sig=new Signal();
 			sig.ITypes=e.ITypes;
-			sig.DateViewing=Appointments.DateSelected;//ignored if ITypes not InvalidTypes.Date
+			if(e.ITypes==InvalidTypes.Date){
+				sig.DateViewing=e.DateViewing;
+			}
+			else{
+				sig.DateViewing=DateTime.MinValue;
+			}
 			sig.SigType=SignalType.Invalid;
+			if(e.ITypes==InvalidTypes.Tasks){
+				sig.TaskNum=e.TaskNum;
+			}
 			Signals.Insert(sig);
 		}
 
@@ -2397,7 +2400,13 @@ namespace OpenDental{
 				ContrAppt2.RefreshPeriod();
 			}
 			if(Signals.TasksNeedRefresh(sigList,Security.CurUser.UserNum)){
-				NotifyOfNewTask();
+				System.Media.SoundPlayer soundplay=new SoundPlayer(Properties.Resources.notify);
+				soundplay.Play();
+				if(userControlTasks1.Visible){
+					userControlTasks1.RefreshTasks();
+				}
+				//if user has the Task dialog open, we can't easily tell it to refresh,
+				//So that dialog is responsible for auto refreshing every minute on a timer.
 			}
 			InvalidTypes invalidTypes=Signals.GetInvalidTypes(sigList);
 			if(invalidTypes!=0){
@@ -2409,13 +2418,6 @@ namespace OpenDental{
 			//Need to add a test to this: do not play messages that are over 2 minutes old.
 			Thread newThread=new Thread(new ParameterizedThreadStart(PlaySounds));
 			newThread.Start(sigListButs);
-		}
-
-		private void NotifyOfNewTask(){
-			System.Media.SystemSounds.Exclamation.Play();
-			//this needs lots of improvement.  Should play the "notify" sound
-			//and that sound should be part of the compiled program
-			//It's still not actually refreshing the visible task list.
 		}
 
 		private void PlaySounds(Object objSignalList){

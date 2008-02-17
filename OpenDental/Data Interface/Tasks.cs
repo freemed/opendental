@@ -256,7 +256,7 @@ namespace OpenDental{
 			General.NonQ(command);
 		}
 
-		///<summary>Gets a count of New tasks.</summary>
+		///<summary>Gets a count of New tasks to notify user when first logging in.</summary>
 		public static int UserTasksCount(int userNum){
 			string command="SELECT COUNT(*) FROM taskancestor,task,tasklist,tasksubscription "
 				+"WHERE taskancestor.TaskListNum=tasklist.TaskListNum "

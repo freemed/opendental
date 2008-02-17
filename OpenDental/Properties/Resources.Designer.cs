@@ -330,6 +330,12 @@ namespace OpenDental.Properties {
             }
         }
         
+        internal static System.IO.UnmanagedMemoryStream notify {
+            get {
+                return ResourceManager.GetStream("notify", resourceCulture);
+            }
+        }
+        
         /// <summary>
         ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
         ///&lt;Report xmlns=&quot;http://schemas.microsoft.com/sqlserver/reporting/2005/01/reportdefinition&quot; xmlns:rd=&quot;http://schemas.microsoft.com/SQLServer/reporting/reportdesigner&quot;&gt;
