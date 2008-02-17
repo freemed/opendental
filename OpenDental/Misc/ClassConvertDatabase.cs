@@ -6381,6 +6381,8 @@ namespace OpenDental{
 				General.NonQEx(command);
 				command="ALTER TABLE signal ADD TaskNum int NOT NULL";
 				General.NonQEx(command);
+				command="ALTER TABLE signal ADD INDEX indexAckTime (AckTime)";
+				General.NonQEx(command);
 
 				
 
