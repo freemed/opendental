@@ -6379,7 +6379,8 @@ namespace OpenDental{
 				command="UPDATE task SET DateTimeFinished ="+POut.PDate(DateTime.MinValue);
 				//equiv to:UPDATE task SET DateTimeFinished ='0001-01-01'
 				General.NonQEx(command);
-				
+				command="ALTER TABLE signal ADD TaskNum int NOT NULL";
+				General.NonQEx(command);
 
 				
 

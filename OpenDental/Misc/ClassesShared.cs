@@ -113,17 +113,21 @@ namespace OpenDental{
 
 		///<summary>Triggers an event that causes a signal to be sent to all other computers telling them what kind of locally stored data needs to be updated.  Either supply a set of flags for the types, or supply a date if the appointment screen needs to be refreshed.  Yes, this does immediately refresh the local data, too.  The AllLocal override does all types except appointment date for the local computer only, such as when starting up.</summary>
 		public static void SetInvalid(InvalidTypes itypes){
-			OnBecameInvalid(new OpenDental.ValidEventArgs(DateTime.MinValue,itypes,false));
+			OnBecameInvalid(new OpenDental.ValidEventArgs(DateTime.MinValue,itypes,false,0));
 		}
 
 		///<summary>Triggers an event that causes a signal to be sent to all other computers telling them what kind of locally stored data needs to be updated.  Either supply a set of flags for the types, or supply a date if the appointment screen needs to be refreshed.  Yes, this does immediately refresh the local data, too.  The AllLocal override does all types except appointment date for the local computer only, such as when starting up.</summary>
 		public static void SetInvalid(DateTime date){
-			OnBecameInvalid(new OpenDental.ValidEventArgs(date,InvalidTypes.Date,false));
+			OnBecameInvalid(new OpenDental.ValidEventArgs(date,InvalidTypes.Date,false,0));
 		}
 
 		///<summary>Triggers an event that causes a signal to be sent to all other computers telling them what kind of locally stored data needs to be updated.  Either supply a set of flags for the types, or supply a date if the appointment screen needs to be refreshed.  Yes, this does immediately refresh the local data, too.  The AllLocal override does all types except appointment date for the local computer only, such as when starting up.</summary>
 		public static void SetInvalid(bool onlyLocal){
-			OnBecameInvalid(new OpenDental.ValidEventArgs(DateTime.MinValue,InvalidTypes.AllLocal,true));
+			OnBecameInvalid(new OpenDental.ValidEventArgs(DateTime.MinValue,InvalidTypes.AllLocal,true,0));
+		}
+
+		public static void SetInvalidTask(int taskNum){
+			OnBecameInvalid(new OpenDental.ValidEventArgs(DateTime.MinValue,InvalidTypes.Tasks,false,taskNum));
 		}
 
 		///<summary></summary>
@@ -143,12 +147,14 @@ namespace OpenDental{
 		private DateTime dateViewing;
 		private InvalidTypes itypes;
 		private bool onlyLocal;
+		private int taskNum;
 		
 		///<summary></summary>
-		public ValidEventArgs(DateTime dateViewing, InvalidTypes itypes,bool onlyLocal) : base(){
+		public ValidEventArgs(DateTime dateViewing, InvalidTypes itypes,bool onlyLocal,int taskNum) : base(){
 			this.dateViewing=dateViewing;
 			this.itypes=itypes;
 			this.onlyLocal=onlyLocal;
+			this.taskNum=taskNum;
 		}
 
 		///<summary></summary>
@@ -164,6 +170,11 @@ namespace OpenDental{
 		///<summary></summary>
 		public bool OnlyLocal{
 			get{return onlyLocal;}
+		}
+
+		///<summary></summary>
+		public int TaskNum{
+			get{return taskNum;}
 		}
 
 	}

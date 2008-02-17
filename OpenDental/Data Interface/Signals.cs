@@ -162,6 +162,16 @@ namespace OpenDental{
 			return false;
 		}
 
+		///<summary>After a refresh, this is used to determine whether the Current user has received any new tasks through subscription.  Must supply the current usernum as well as the recently retrieved signal list.</summary>
+		public static bool TasksNeedRefresh(Signal[] signalList,int userNum){
+			for(int i=0;i<signalList.Length;i++){
+				if(signalList[i].ITypes==InvalidTypes.Tasks){// && signalList[i].ta==dateTimeShowing){
+					return true;
+				}
+			}
+			return false;
+		}
+
 		///<summary>After a refresh, this is used to get a single value representing all flags of types that need to be refreshed.   Types of Date are not included.</summary>
 		public static InvalidTypes GetInvalidTypes(Signal[] signalList){
 			InvalidTypes retVal=0;

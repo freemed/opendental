@@ -2395,6 +2395,9 @@ namespace OpenDental{
 			if(ContrAppt2.Visible && Signals.ApptNeedsRefresh(sigList,Appointments.DateSelected.Date)){
 				ContrAppt2.RefreshPeriod();
 			}
+			if(Signals.TasksNeedRefresh(sigList,Security.CurUser.UserNum)){
+				NotifyOfNewTask();
+			}
 			InvalidTypes invalidTypes=Signals.GetInvalidTypes(sigList);
 			if(invalidTypes!=0){
 				RefreshLocalData(invalidTypes,false);
@@ -2405,6 +2408,13 @@ namespace OpenDental{
 			//Need to add a test to this: do not play messages that are over 2 minutes old.
 			Thread newThread=new Thread(new ParameterizedThreadStart(PlaySounds));
 			newThread.Start(sigListButs);
+		}
+
+		private void NotifyOfNewTask(){
+			System.Media.SystemSounds.Exclamation.Play();
+			//this needs lots of improvement.  Should play the "notify" sound
+			//and that sound should be part of the compiled program
+			//It's still not actually refreshing the visible task list.
 		}
 
 		private void PlaySounds(Object objSignalList){
