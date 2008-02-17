@@ -1577,6 +1577,7 @@ namespace OpenDental{
 				ElectIDs.Refresh();//only run on startup
 				Referrals.Refresh();//Referrals are also refreshed dynamically.
 			}
+			//InvalidTypes.Tasks not handled here.
 			if((itypes & InvalidTypes.ToolBut)==InvalidTypes.ToolBut){
 				ToolButItems.Refresh();
 				ContrAccount2.LayoutToolBar();

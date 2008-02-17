@@ -53,8 +53,8 @@ namespace OpenDentBusiness{
 		
 		///<summary></summary>
 		public Signal Copy(){
-			Signal s=new Signal();
-			s.SignalNum=SignalNum;
+			Signal s=(Signal)this.MemberwiseClone();
+			/*s.SignalNum=SignalNum;
 			s.FromUser=FromUser;
 			s.ITypes=ITypes;
 			s.DateViewing=DateViewing;
@@ -63,6 +63,7 @@ namespace OpenDentBusiness{
 			s.SigDateTime=SigDateTime;
 			s.ToUser=ToUser;
 			s.AckTime=AckTime;
+			 TaskNum*/
 			s.ElementList=new SigElement[ElementList.Length];
 			ElementList.CopyTo(s.ElementList,0);
 			return s;

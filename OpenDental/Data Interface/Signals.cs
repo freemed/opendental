@@ -84,6 +84,7 @@ namespace OpenDental{
 				List[i].SigDateTime= PIn.PDateT(table.Rows[i][6].ToString());
 				List[i].ToUser     = PIn.PString(table.Rows[i][7].ToString());
 				List[i].AckTime    = PIn.PDateT(table.Rows[i][8].ToString());
+				List[i].TaskNum    = PIn.PInt  (table.Rows[i][9].ToString());
 			}
 			Array.Sort(List);
 			return List;
@@ -94,12 +95,13 @@ namespace OpenDental{
 			string command= "UPDATE signal SET " 
 				+"FromUser = '"    +POut.PString(sig.FromUser)+"'"
 				+",ITypes = '"     +POut.PInt   ((int)sig.ITypes)+"'"
-				+",DateViewing = "+POut.PDate  (sig.DateViewing)
+				+",DateViewing = " +POut.PDate  (sig.DateViewing)
 				+",SigType = '"    +POut.PInt   ((int)sig.SigType)+"'"
 				+",SigText = '"    +POut.PString(sig.SigText)+"'"
 				//+",SigDateTime = '"+POut.PDateT (SigDateTime)+"'"//we don't want to ever update this
 				+",ToUser = '"     +POut.PString(sig.ToUser)+"'"
-				+",AckTime = "    +POut.PDateT (sig.AckTime)
+				+",AckTime = "     +POut.PDateT (sig.AckTime)
+				+",TaskNum = '"    +POut.PInt   (sig.TaskNum)+"'"
 				+" WHERE SignalNum = '"+POut.PInt(sig.SignalNum)+"'";
 			General.NonQ(command);
 		}
@@ -116,7 +118,7 @@ namespace OpenDental{
 			if(PrefB.RandomKeys){
 				command+="SignalNum,";
 			}
-			command+="FromUser,ITypes,DateViewing,SigType,SigText,SigDateTime,ToUser,AckTime"
+			command+="FromUser,ITypes,DateViewing,SigType,SigText,SigDateTime,ToUser,AckTime,TaskNum"
 				+") VALUES(";
 			if(PrefB.RandomKeys){
 				command+="'"+POut.PInt(sig.SignalNum)+"', ";
@@ -135,7 +137,8 @@ namespace OpenDental{
 			}
 			command+=", "
 				+"'"+POut.PString(sig.ToUser)+"', "
-				+POut.PDateT (sig.AckTime)+")";
+				+POut.PDateT (sig.AckTime)+", "
+				+"'"+POut.PInt(sig.TaskNum)+"')";
  			if(PrefB.RandomKeys){
 				General.NonQ(command);
 			}
@@ -172,7 +175,7 @@ namespace OpenDental{
 			return false;
 		}
 
-		///<summary>After a refresh, this is used to get a single value representing all flags of types that need to be refreshed.   Types of Date are not included.</summary>
+		///<summary>After a refresh, this is used to get a single value representing all flags of types that need to be refreshed.   Types of Date and Task are not included.</summary>
 		public static InvalidTypes GetInvalidTypes(Signal[] signalList){
 			InvalidTypes retVal=0;
 			for(int i=0;i<signalList.Length;i++){
@@ -180,6 +183,9 @@ namespace OpenDental{
 					continue;
 				}
 				if(signalList[i].ITypes==InvalidTypes.Date){
+					continue;
+				}
+				if(signalList[i].ITypes==InvalidTypes.Tasks){
 					continue;
 				}
 				retVal=retVal | signalList[i].ITypes;
@@ -219,9 +225,7 @@ namespace OpenDental{
 				+"AND sigelement.SigElementDefNum=sigelementdef.SigElementDefNum "
 				+"AND sigelementdef.LightRow="+POut.PInt(buttonIndex);
 			General.NonQ(command);*/
-
 			//Rewritten so that the SQL is compatible with both Oracle and MySQL.
-
 			string command= "SELECT signal.SignalNum FROM signal,sigelement,sigelementdef "
 				+"WHERE signal.AckTime < '1880-01-01' "
 				+"AND SigDateTime <= "+POut.PDateT(time)+" "
