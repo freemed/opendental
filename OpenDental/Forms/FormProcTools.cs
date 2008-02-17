@@ -294,11 +294,11 @@ namespace OpenDental{
 			}
 			if(checkAutocodes.Checked) {
 				AutoCodes.SetToDefault();
-				DataValid.SetInvalid(InvalidTypes.AutoCodes);
+				DataValid.SetInvalid(InvalidTypes.AutoCodesProcButtons);
 			}
 			if(checkProcButtons.Checked) {
 				ProcButtons.SetToDefault();
-				DataValid.SetInvalid(InvalidTypes.ProcButtons | InvalidTypes.Defs);
+				DataValid.SetInvalid(InvalidTypes.AutoCodesProcButtons | InvalidTypes.Defs);
 			}
 			if(checkApptProcsQuickAdd.Checked) {
 				ProcedureCodes.ResetApptProcsQuickAdd();

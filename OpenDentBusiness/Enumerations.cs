@@ -223,10 +223,10 @@ namespace OpenDentBusiness{
 		Prefs=4,
 		///<summary>8- Also includes appt rules</summary>
 		Views=8,
-		///<summary>16</summary>
-		AutoCodes=16,
+		///<summary>16- Not used with any other flags.</summary>
+		Tasks=16,
 		///<summary>32</summary>
-		ProcButtons=32,
+		AutoCodesProcButtons=32,
 		///<summary>64</summary>
 		Carriers=64,
 		///<summary>128- Also includes Signal/message defs.</summary>

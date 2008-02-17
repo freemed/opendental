@@ -1483,10 +1483,12 @@ namespace OpenDental{
 				}
 				LayoutControls();
 			}//if(InvalidTypes.Prefs)
-			if((itypes & InvalidTypes.AutoCodes)==InvalidTypes.AutoCodes){
+			if((itypes & InvalidTypes.AutoCodesProcButtons)==InvalidTypes.AutoCodesProcButtons){
 				AutoCodes.Refresh();
 				AutoCodeItems.Refresh();
 				AutoCodeConds.Refresh();
+				ProcButtons.Refresh();
+				ProcButtonItems.Refresh();
 			}
 			if((itypes & InvalidTypes.Carriers)==InvalidTypes.Carriers){
 				Carriers.Refresh();//run on startup, after telephone reformat, after list edit.
@@ -1540,10 +1542,6 @@ namespace OpenDental{
 			if((itypes & InvalidTypes.Operatories)==InvalidTypes.Operatories){
 				Operatories.Refresh();
 				AccountingAutoPays.Refresh();
-			}
-			if((itypes & InvalidTypes.ProcButtons)==InvalidTypes.ProcButtons){
-				ProcButtons.Refresh();
-				ProcButtonItems.Refresh();
 			}
 			if((itypes & InvalidTypes.ProcCodes)==InvalidTypes.ProcCodes){
 				ProcedureCodes.Refresh();

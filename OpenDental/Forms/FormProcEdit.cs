@@ -2865,7 +2865,7 @@ namespace OpenDental{
 				if(FormA.CheckedBox){
 					AutoCodeCur.LessIntrusive=true;
 					AutoCodes.Update(AutoCodeCur);
-					DataValid.SetInvalid(InvalidTypes.AutoCodes);
+					DataValid.SetInvalid(InvalidTypes.AutoCodesProcButtons);
 				}
 				ProcCur.CodeNum=verifyCode;
 				ProcedureCode2=ProcedureCodes.GetProcCode(ProcCur.CodeNum);
