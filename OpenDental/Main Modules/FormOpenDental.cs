@@ -181,8 +181,6 @@ namespace OpenDental{
 		private ContextMenu menuSplitter;
 		private MenuItem menuItemDockBottom;
 		private MenuItem menuItemDockRight;
-		private MenuItem menuItemDockSavePos;
-		private MenuItem menuItem3;
 		private OpenDental.SmartCards.SmartCardWatcher smartCardWatcher1;
 		private OpenDental.UI.ODToolBar ToolBarMain;
 		private ImageList imageListMain;
@@ -325,8 +323,6 @@ namespace OpenDental{
 			this.menuSplitter = new System.Windows.Forms.ContextMenu();
 			this.menuItemDockBottom = new System.Windows.Forms.MenuItem();
 			this.menuItemDockRight = new System.Windows.Forms.MenuItem();
-			this.menuItem3 = new System.Windows.Forms.MenuItem();
-			this.menuItemDockSavePos = new System.Windows.Forms.MenuItem();
 			this.imageListMain = new System.Windows.Forms.ImageList(this.components);
 			this.menuPatient = new System.Windows.Forms.ContextMenu();
 			this.menuLabel = new System.Windows.Forms.ContextMenu();
@@ -1002,9 +998,7 @@ namespace OpenDental{
 			// 
 			this.menuSplitter.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
             this.menuItemDockBottom,
-            this.menuItemDockRight,
-            this.menuItem3,
-            this.menuItemDockSavePos});
+            this.menuItemDockRight});
 			// 
 			// menuItemDockBottom
 			// 
@@ -1017,17 +1011,6 @@ namespace OpenDental{
 			this.menuItemDockRight.Index = 1;
 			this.menuItemDockRight.Text = "Dock to Right";
 			this.menuItemDockRight.Click += new System.EventHandler(this.menuItemDockRight_Click);
-			// 
-			// menuItem3
-			// 
-			this.menuItem3.Index = 2;
-			this.menuItem3.Text = "-";
-			// 
-			// menuItemDockSavePos
-			// 
-			this.menuItemDockSavePos.Index = 3;
-			this.menuItemDockSavePos.Text = "Save Current Position";
-			this.menuItemDockSavePos.Click += new System.EventHandler(this.menuItemDockSavePos_Click);
 			// 
 			// imageListMain
 			// 
@@ -1456,21 +1439,47 @@ namespace OpenDental{
 				ContrChart2.InitializeLocalData();
 				if(PrefB.GetBool("TaskListAlwaysShowsAtBottom")){
 					//seperate if statement to prevent database call if not showing task list at bottom to begin with
-					ComputerPref computerPrefs = ComputerPrefs.GetForLocalComputer();
-					if(!computerPrefs.TaskKeepListHidden){
-						userControlTasks1.InitializeOnStartup();
+					ComputerPref computerPref = ComputerPrefs.GetForLocalComputer();
+					if(computerPref.TaskKeepListHidden){
+						userControlTasks1.Visible = false;
+					}
+					else{//task list show
 						userControlTasks1.Visible = true;
-						if(computerPrefs.TaskDock == 0){
+						userControlTasks1.InitializeOnStartup();
+						if(computerPref.TaskDock == 0){//bottom
 							menuItemDockBottom.Checked = true;
 							menuItemDockRight.Checked = false;
+							panelSplitter.Cursor=Cursors.HSplit;
+							panelSplitter.Height=7;
+							int splitterNewY=540;
+							if(computerPref.TaskY!=0){
+								splitterNewY=computerPref.TaskY;
+								if(splitterNewY<300){
+									splitterNewY=300;//keeps it from going too high
+								}
+								if(splitterNewY>ClientSize.Height){
+									splitterNewY=ClientSize.Height-panelSplitter.Height;//keeps it from going off the bottom edge
+								}
+							}
+							panelSplitter.Location=new Point(myOutlookBar.Width,splitterNewY);
 						}
-						else{
+						else{//right
 							menuItemDockRight.Checked = true;
 							menuItemDockBottom.Checked = false;
+							panelSplitter.Cursor=Cursors.VSplit;
+							panelSplitter.Width=7;
+							int splitterNewX=900;
+							if(computerPref.TaskX!=0){
+								splitterNewX=computerPref.TaskX;
+								if(splitterNewX<300){
+									splitterNewX=300;//keeps it from going too far to the left
+								}
+								if(splitterNewX>ClientSize.Width){
+									splitterNewX=ClientSize.Width-panelSplitter.Width;//keeps it from going off the right edge
+								}
+							}
+							panelSplitter.Location=new Point(splitterNewX,ToolBarMain.Height);
 						}
-					}
-					else{
-						userControlTasks1.Visible = false;
 					}
 				}
 				else{
@@ -2066,12 +2075,12 @@ namespace OpenDental{
 			int width=this.ClientSize.Width-position.X;
 			int height=this.ClientSize.Height-position.Y;
 			if(userControlTasks1.Visible) {
-				ComputerPref computerPrefs=ComputerPrefs.GetForLocalComputer();
+				//this won't work.  It shouldn't be making a call to the database on screen layouts:
+				//ComputerPref computerPrefs=ComputerPrefs.GetForLocalComputer();
 				if(menuItemDockBottom.Checked) {
 					if(panelSplitter.Height>8) {//docking needs to be changed, or setting just reloaded
 						panelSplitter.Height=7;
-						panelSplitter.Location=new Point(position.X,computerPrefs.TaskY);
-						panelSplitter.Cursor=Cursors.HSplit;
+						panelSplitter.Location=new Point(position.X,540);//computerPrefs.TaskY);
 					}
 					panelSplitter.Location=new Point(position.X,panelSplitter.Location.Y);
 					panelSplitter.Width=width;
@@ -2084,8 +2093,7 @@ namespace OpenDental{
 				else {//docked Right
 					if(panelSplitter.Width>8) {//docking needs to be changed, or setting just reloaded
 						panelSplitter.Width=7;
-						panelSplitter.Location=new Point(computerPrefs.TaskX,position.Y);
-						panelSplitter.Cursor=Cursors.VSplit;
+						panelSplitter.Location=new Point(900,position.Y);//computerPrefs.TaskX,position.Y);
 					}
 					panelSplitter.Location=new Point(panelSplitter.Location.X,position.Y);
 					panelSplitter.Height=height;
@@ -2159,12 +2167,14 @@ namespace OpenDental{
 
 		private void panelSplitter_MouseUp(object sender,System.Windows.Forms.MouseEventArgs e) {
 			MouseIsDownOnSplitter=false;
+			TaskDockSavePos();
 		}
 
 		private void menuItemDockBottom_Click(object sender,EventArgs e) {
 			menuItemDockBottom.Checked=true;
 			menuItemDockRight.Checked=false;
-			//panelSplitter.Cursor=Cursors.HSplit;
+			panelSplitter.Cursor=Cursors.HSplit;
+			TaskDockSavePos();
 			LayoutControls();
 		}
 
@@ -2172,26 +2182,23 @@ namespace OpenDental{
 			menuItemDockBottom.Checked=false;
 			menuItemDockRight.Checked=true;
 			//included now with layoutcontrols
-			//panelSplitter.Cursor=Cursors.VSplit;
+			panelSplitter.Cursor=Cursors.VSplit;
+			TaskDockSavePos();
 			LayoutControls();
 		}
 
-		private void menuItemDockSavePos_Click(object sender, EventArgs e)
-		{
-
+		///<summary>Every time user changes doc position, it will save automatically.</summary>
+		private void TaskDockSavePos(){
 			ComputerPref computerPref = ComputerPrefs.GetForLocalComputer();
-			if(menuItemDockBottom.Checked)
-			{
+			if(menuItemDockBottom.Checked){
 				computerPref.TaskY = panelSplitter.Top;
 				computerPref.TaskDock = 0;
 			}
-			else
-			{
+			else{
 				computerPref.TaskX = panelSplitter.Left;
 				computerPref.TaskDock = 1;
 			}
 			ComputerPrefs.Update(computerPref);
-
 		}
 		
 		///<summary>This is called when any local data becomes outdated.  It's purpose is to tell the other computers to update certain local data.</summary>
