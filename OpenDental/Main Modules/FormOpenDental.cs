@@ -1438,7 +1438,7 @@ namespace OpenDental{
 				CheckCustomReports();
 				ContrChart2.InitializeLocalData();
 				if(PrefB.GetBool("TaskListAlwaysShowsAtBottom")){
-					//seperate if statement to prevent database call if not showing task list at bottom to begin with
+					//separate if statement to prevent database call if not showing task list at bottom to begin with
 					ComputerPref computerPref = ComputerPrefs.GetForLocalComputer();
 					if(computerPref.TaskKeepListHidden){
 						userControlTasks1.Visible = false;
@@ -1457,8 +1457,8 @@ namespace OpenDental{
 								if(splitterNewY<300){
 									splitterNewY=300;//keeps it from going too high
 								}
-								if(splitterNewY>ClientSize.Height){
-									splitterNewY=ClientSize.Height-panelSplitter.Height;//keeps it from going off the bottom edge
+								if(splitterNewY>ClientSize.Height-50){
+									splitterNewY=ClientSize.Height-panelSplitter.Height-50;//keeps it from going off the bottom edge
 								}
 							}
 							panelSplitter.Location=new Point(myOutlookBar.Width,splitterNewY);
@@ -1474,8 +1474,8 @@ namespace OpenDental{
 								if(splitterNewX<300){
 									splitterNewX=300;//keeps it from going too far to the left
 								}
-								if(splitterNewX>ClientSize.Width){
-									splitterNewX=ClientSize.Width-panelSplitter.Width;//keeps it from going off the right edge
+								if(splitterNewX>ClientSize.Width-50){
+									splitterNewX=ClientSize.Width-panelSplitter.Width-50;//keeps it from going off the right edge
 								}
 							}
 							panelSplitter.Location=new Point(splitterNewX,ToolBarMain.Height);
@@ -2075,12 +2075,10 @@ namespace OpenDental{
 			int width=this.ClientSize.Width-position.X;
 			int height=this.ClientSize.Height-position.Y;
 			if(userControlTasks1.Visible) {
-				//this won't work.  It shouldn't be making a call to the database on screen layouts:
-				//ComputerPref computerPrefs=ComputerPrefs.GetForLocalComputer();
 				if(menuItemDockBottom.Checked) {
-					if(panelSplitter.Height>8) {//docking needs to be changed, or setting just reloaded
+					if(panelSplitter.Height>8) {//docking needs to be changed
 						panelSplitter.Height=7;
-						panelSplitter.Location=new Point(position.X,540);//computerPrefs.TaskY);
+						panelSplitter.Location=new Point(position.X,540);
 					}
 					panelSplitter.Location=new Point(position.X,panelSplitter.Location.Y);
 					panelSplitter.Width=width;
@@ -2091,9 +2089,9 @@ namespace OpenDental{
 					height=ClientSize.Height-panelSplitter.Height-userControlTasks1.Height-ToolBarMain.Height;
 				}
 				else {//docked Right
-					if(panelSplitter.Width>8) {//docking needs to be changed, or setting just reloaded
+					if(panelSplitter.Width>8) {//docking needs to be changed
 						panelSplitter.Width=7;
-						panelSplitter.Location=new Point(900,position.Y);//computerPrefs.TaskX,position.Y);
+						panelSplitter.Location=new Point(900,position.Y);
 					}
 					panelSplitter.Location=new Point(panelSplitter.Location.X,position.Y);
 					panelSplitter.Height=height;
@@ -2147,8 +2145,8 @@ namespace OpenDental{
 				if(splitterNewY<300){
 					splitterNewY=300;//keeps it from going too high
 				}
-				if(splitterNewY>ClientSize.Height){
-					splitterNewY=ClientSize.Height-panelSplitter.Height;//keeps it from going off the bottom edge
+				if(splitterNewY>ClientSize.Height-50){
+					splitterNewY=ClientSize.Height-panelSplitter.Height-50;//keeps it from going off the bottom edge
 				}
 				panelSplitter.Top=splitterNewY;
 			}
@@ -2157,8 +2155,8 @@ namespace OpenDental{
 				if(splitterNewX<300) {
 					splitterNewX=300;//keeps it from going too far to the left
 				}
-				if(splitterNewX>ClientSize.Width) {
-					splitterNewX=ClientSize.Width-panelSplitter.Width;//keeps it from going off the right edge
+				if(splitterNewX>ClientSize.Width-50) {
+					splitterNewX=ClientSize.Width-panelSplitter.Width-50;//keeps it from going off the right edge
 				}
 				panelSplitter.Left=splitterNewX;
 			}
