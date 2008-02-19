@@ -776,6 +776,7 @@ namespace OpenDental{
 			//http://msdn2.microsoft.com/en-us/library/system.net.mail.smtpclient.usedefaultcredentials.aspx
 			client.Credentials=new NetworkCredential(PrefB.GetString("EmailUsername"),PrefB.GetString("EmailPassword"));
 			client.DeliveryMethod=SmtpDeliveryMethod.Network;
+			client.EnableSsl=PrefB.GetBool("EmailUseSSL");
 			MailMessage message=new MailMessage();
 			Attachment attach;
 			//try{

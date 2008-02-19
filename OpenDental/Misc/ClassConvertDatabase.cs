@@ -6383,7 +6383,8 @@ namespace OpenDental{
 				General.NonQEx(command);
 				command="ALTER TABLE signal ADD INDEX indexAckTime (AckTime)";
 				General.NonQEx(command);
-
+				command="INSERT INTO preference (PrefName,ValueString) VALUES ('EmailUseSSL','0')";
+				General.NonQEx(command);
 				
 
 
