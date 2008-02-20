@@ -91,7 +91,6 @@ namespace OpenDentBusiness {
 				row["ClaimNum"]="0";
 				row["ClaimPaymentNum"]="0";
 				row["colorText"]=Color.Black.ToArgb().ToString();
-				row["CommlogNum"]="0";
 				row["creditsDouble"]=0;
 				row["credits"]="";//((double)row["creditsDouble"]).ToString("n");
 				dateT=PIn.PDateT(rawCharge.Rows[i]["ChargeDate"].ToString());
@@ -100,6 +99,12 @@ namespace OpenDentBusiness {
 				row["description"]="";//"Princ: "+principal.ToString("n")+
 				if(interest!=0){
 					row["description"]+="Interest: "+interest.ToString("n");//+"Princ: "+principal.ToString("n")+;
+				}
+				if(rawCharge.Rows[i]["Note"].ToString()!=""){
+					if(row["description"].ToString()!=""){
+						row["description"]+="  ";	
+					}
+					row["description"]+=rawCharge.Rows[i]["Note"].ToString();
 				}
 				row["extraDetail"]="";
 				row["patient"]="";
@@ -111,6 +116,7 @@ namespace OpenDentBusiness {
 				row["ProcNum"]="0";
 				row["procsOnClaim"]="";
 				row["prov"]=Providers.GetAbbr(PIn.PInt(rawCharge.Rows[i]["ProvNum"].ToString()));
+				row["StatementNum"]="0";
 				row["tth"]="";
 				rows.Add(row);
 			}
@@ -141,7 +147,6 @@ namespace OpenDentBusiness {
 				row["ClaimNum"]="0";
 				row["ClaimPaymentNum"]="0";
 				row["colorText"]=DefB.Long[(int)DefCat.AccountColors][3].ItemColor.ToArgb().ToString();
-				row["CommlogNum"]="0";
 				amt=PIn.PDouble(rawPay.Rows[i]["SplitAmt"].ToString());
 				row["creditsDouble"]=amt;
 				row["credits"]=((double)row["creditsDouble"]).ToString("n");
@@ -168,6 +173,7 @@ namespace OpenDentBusiness {
 				row["ProcNum"]="0";
 				row["procsOnClaim"]="";
 				row["prov"]=Providers.GetAbbr(PIn.PInt(rawPay.Rows[i]["ProvNum"].ToString()));
+				row["StatementNum"]="0";
 				row["tth"]="";
 				rows.Add(row);
 			}
@@ -1228,12 +1234,12 @@ namespace OpenDentBusiness {
 				return 1;
 			}
 			//PayPlanCharges come before other types on same date, but rare to be on same date anyway.
-			if(rowA["PayPlanChargeNum"].ToString()!="0" && rowB["PayNum"].ToString()=="0"){
-				return -1;
-			}
-			if(rowA["PayNum"].ToString()=="0" && rowB["PayPlanChargeNum"].ToString()!="0"){
-				return 1;
-			}
+			//if(rowA["PayPlanChargeNum"].ToString()!="0" && rowB["PayNum"].ToString()=="0"){
+			//	return -1;
+			//}
+			//if(rowA["PayNum"].ToString()=="0" && rowB["PayPlanChargeNum"].ToString()!="0"){
+			//	return 1;
+			//}
 			return 0;
 		}
 	}

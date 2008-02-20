@@ -1256,7 +1256,7 @@ namespace SparksToothChart {
 					{ -2.6f,-2.1f,0 },
 					{ 0,-1.5f,0},
 					{ 2.3f,-2.1f,0 },
-					{ 2.3f,0,0 } 
+					{ 2.3f,0.5f,0 } 
 				};
 			}
 			if(toothID=="18") {
@@ -1265,7 +1265,7 @@ namespace SparksToothChart {
 					{ 2.6f,-2.1f,0 },
 					{ 0,-1.5f,0},
 					{ -2.3f,-2.1f,0 },
-					{ -2.3f,0,0 } 
+					{ -2.3f,0.5f,0 } 
 				};
 			}
 			if(toothID=="32") {

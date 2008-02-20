@@ -100,52 +100,107 @@ namespace OpenDental
 			
 		}
 
-		
-
-
 		private void butReport_Click(object sender, System.EventArgs e){
-			/*if(errorProvider1.GetError(textDateFrom) != ""
-				|| errorProvider1.GetError(textDateTo) != "") 
-			{
-				MsgBox.Show(this,"Please fix data entry errors first.");
-				return;
-			}
-			DateTime dateFrom=PIn.PDate(textDateFrom.Text);
-			DateTime dateTo=PIn.PDate(textDateTo.Text);
-			if(dateTo < dateFrom) 
-			{
-				MsgBox.Show(this,"To date cannot be before From date.");
-				return;
-			}
+			//if(errorProvider1.GetError(textDateFrom) != ""
+			//	|| errorProvider1.GetError(textDateTo) != "") 
+			//{
+			//	MsgBox.Show(this,"Please fix data entry errors first.");
+			//	return;
+			//}
+			//DateTime dateFrom=PIn.PDate(textDateFrom.Text);
+			//DateTime dateTo=PIn.PDate(textDateTo.Text);
+			//if(dateTo < dateFrom) 
+			//{
+			//	MsgBox.Show(this,"To date cannot be before From date.");
+			//	return;
+			//}
 			ReportOld2 report=new ReportOld2();
-			report.ReportName=Lan.g(this,"Birthdays");
-			report.AddTitle(Lan.g(this,"Birthdays"));
+			report.ReportName=Lan.g(this,"PaymentPlans");
+			report.AddTitle(Lan.g(this,"Payment Plans"));
 			report.AddSubTitle(PrefB.GetString("PracticeTitle"));
-			report.AddSubTitle(dateFrom.ToString("MM/dd")+" - "+dateTo.ToString("MM/dd"));*/
-			/*report.Query=@"SELECT LName,FName,Address,Address2,City,State,Zip,Birthdate,Birthdate
-				FROM patient 
-				WHERE SUBSTRING(Birthdate,6,5) >= '"+dateFrom.ToString("MM-dd")+"' "
-				+"AND SUBSTRING(Birthdate,6,5) <= '"+dateTo.ToString("MM-dd")+"' "
-				+"AND PatStatus=0	ORDER BY LName,FName";*/
-			/*report.AddColumn("LName",90,FieldValueType.String);
-			report.AddColumn("FName",90,FieldValueType.String);
-			report.AddColumn("Preferred",90,FieldValueType.String);
-			report.AddColumn("Address",90,FieldValueType.String);
-			report.AddColumn("Address2",90,FieldValueType.String);
-			report.AddColumn("City",75,FieldValueType.String);
-			report.AddColumn("State",60,FieldValueType.String);
-			report.AddColumn("Zip",75,FieldValueType.String);
-			report.AddColumn("Birthdate", 75, FieldValueType.Date);
-			report.GetLastRO(ReportObjectKind.FieldObject).FormatString="d";
-			report.AddColumn("Age", 45, FieldValueType.Integer);
+			report.AddSubTitle(DateTime.Today.ToShortDateString());
+			DataTable table=new DataTable();
+			//table.Columns.Add("date");
+			table.Columns.Add("guarantor");
+			table.Columns.Add("ins");
+			table.Columns.Add("princ");
+			table.Columns.Add("paid");
+			table.Columns.Add("due");
+			table.Columns.Add("dueTen");
+			DataRow row;
+			string command=@"SELECT FName,LName,MiddleI,PlanNum,Preferred,
+				(SELECT SUM(Principal+Interest) FROM payplancharge WHERE payplancharge.PayPlanNum=payplan.PayPlanNum
+				AND ChargeDate <= CURDATE()) _accumDue,
+				(SELECT SUM(Principal+Interest) FROM payplancharge WHERE payplancharge.PayPlanNum=payplan.PayPlanNum
+				AND ChargeDate <= ADDDATE(CURDATE(),45)) _dueTen,
+				(SELECT SUM(SplitAmt) FROM paysplit WHERE paysplit.PayPlanNum=payplan.PayPlanNum) _paid,
+				(SELECT SUM(Principal) FROM payplancharge WHERE payplancharge.PayPlanNum=payplan.PayPlanNum) _principal
+				FROM payplan
+				LEFT JOIN patient ON patient.PatNum=payplan.Guarantor "
+				//WHERE SUBSTRING(Birthdate,6,5) >= '"+dateFrom.ToString("MM-dd")+"' "
+				//+"AND SUBSTRING(Birthdate,6,5) <= '"+dateTo.ToString("MM-dd")+"' "
+				+"GROUP BY payplan.PayPlanNum ORDER BY LName,FName";
+			DataTable raw=General.GetTable(command);
+			//DateTime payplanDate;
+			Patient pat;
+			double princ;
+			double paid;
+			double accumDue;
+			double dueTen;
+			for(int i=0;i<raw.Rows.Count;i++){
+				princ=PIn.PDouble(raw.Rows[i]["_principal"].ToString());
+				paid=PIn.PDouble(raw.Rows[i]["_paid"].ToString());
+				accumDue=PIn.PDouble(raw.Rows[i]["_accumDue"].ToString());
+				dueTen=PIn.PDouble(raw.Rows[i]["_dueTen"].ToString());
+				row=table.NewRow();
+				//payplanDate=PIn.PDate(raw.Rows[i]["PayPlanDate"].ToString());
+				//row["date"]=raw.Rows[i]["PayPlanDate"].ToString();//payplanDate.ToShortDateString();
+				pat=new Patient();
+				pat.LName=raw.Rows[i]["LName"].ToString();
+				pat.FName=raw.Rows[i]["FName"].ToString();
+				pat.MiddleI=raw.Rows[i]["MiddleI"].ToString();
+				pat.Preferred=raw.Rows[i]["Preferred"].ToString();
+				row["guarantor"]=pat.GetNameLF();
+				if(raw.Rows[i]["Preferred"].ToString()=="0"){
+					row["ins"]="";
+				}
+				else{
+					row["ins"]="X";
+				}
+				row["princ"]=princ.ToString("f");
+				row["paid"]=paid.ToString("f");
+				row["due"]=(accumDue-paid).ToString("f");
+				row["dueTen"]=(dueTen-paid).ToString("f");
+				table.Rows.Add(row);
+			}
+			report.ReportTable=table;
+			//report.AddColumn("Date",90,FieldValueType.Date);			
+			report.AddColumn("Guarantor",160,FieldValueType.String);
+			report.AddColumn("Ins",40,FieldValueType.String);
+			report.GetLastRO(ReportObjectKind.TextObject).TextAlign=ContentAlignment.MiddleCenter;
+			report.GetLastRO(ReportObjectKind.FieldObject).TextAlign=ContentAlignment.MiddleCenter;
+			report.AddColumn("Princ",100,FieldValueType.String);
+			report.GetLastRO(ReportObjectKind.TextObject).TextAlign=ContentAlignment.MiddleRight;
+			report.GetLastRO(ReportObjectKind.FieldObject).TextAlign=ContentAlignment.MiddleRight;
+			report.AddColumn("Paid",100,FieldValueType.String);
+			report.GetLastRO(ReportObjectKind.TextObject).TextAlign=ContentAlignment.MiddleRight;
+			report.GetLastRO(ReportObjectKind.FieldObject).TextAlign=ContentAlignment.MiddleRight;
+			report.AddColumn("Due Now",100,FieldValueType.String);
+			report.GetLastRO(ReportObjectKind.TextObject).TextAlign=ContentAlignment.MiddleRight;
+			report.GetLastRO(ReportObjectKind.FieldObject).TextAlign=ContentAlignment.MiddleRight;
+			report.AddColumn("Due in 10 Days",100,FieldValueType.String);
+			report.GetLastRO(ReportObjectKind.TextObject).TextAlign=ContentAlignment.MiddleRight;
+			report.GetLastRO(ReportObjectKind.FieldObject).TextAlign=ContentAlignment.MiddleRight;
+			//report.GetLastRO(ReportObjectKind.FieldObject).FormatString="d";
 			report.AddPageNum();
-			report.ReportTable=Patients.GetBirthdayList(dateFrom,dateTo);
+			//report.SubmitQuery();
+			//report.ReportTable=Patients.GetBirthdayList(dateFrom,dateTo);
 			//if(!report.SubmitQuery()){
 			//	return;
 			//}
 			FormReportOld2 FormR=new FormReportOld2(report);
 			FormR.ShowDialog();
-			DialogResult=DialogResult.OK;*/
+			DialogResult=DialogResult.OK;
 		}
 
 		

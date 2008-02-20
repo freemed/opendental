@@ -1162,22 +1162,41 @@ namespace OpenDental{
 			section.Height=yPos+30;
 			report.AddColumn("ChargeDate",80,FieldValueType.Date);
 			//move the first column more to the middle
-			report.GetLastRO(ReportObjectKind.TextObject).Location=new Point(175,0);
+			report.GetLastRO(ReportObjectKind.TextObject).Location=new Point(150,0);
 			report.GetLastRO(ReportObjectKind.TextObject).StaticText="Date";
-			report.GetLastRO(ReportObjectKind.FieldObject).Location=new Point(175,0);
-			report.AddColumn("Principal",70,FieldValueType.Number);
-			report.AddColumn("Interest",70,FieldValueType.Number);
-			report.AddColumn("Payment",70,FieldValueType.Number);
-			//report.AddColumn("Balance  //no way to do running totals yet
-			report.AddColumn("Note",300,FieldValueType.String);
-			report.GetLastRO(ReportObjectKind.TextObject).Location=new Point(report.GetLastRO(ReportObjectKind.TextObject).Location.X+20,0);
-			report.GetLastRO(ReportObjectKind.FieldObject).Location=new Point(report.GetLastRO(ReportObjectKind.FieldObject).Location.X+20,0);
-			report.Query="SELECT ChargeDate,Principal,Interest,Principal+Interest,Note "
-				+"FROM payplancharge WHERE PayPlanNum="+POut.PInt(PayPlanCur.PayPlanNum)
-				+" ORDER BY ChargeDate";
-			if(!report.SubmitQuery()){
-				return;
+			report.GetLastRO(ReportObjectKind.FieldObject).Location=new Point(150,0);
+			report.AddColumn("Description",150,FieldValueType.String);
+			report.AddColumn("Charges",70,FieldValueType.Number);
+			report.AddColumn("Credits",70,FieldValueType.Number);
+			report.AddColumn("Balance",70,FieldValueType.String);
+			//report.AddColumn("Note",300,FieldValueType.String);
+			//report.GetLastRO(ReportObjectKind.TextObject).Location=new Point(report.GetLastRO(ReportObjectKind.TextObject).Location.X+20,0);
+			report.GetLastRO(ReportObjectKind.TextObject).TextAlign=ContentAlignment.MiddleRight;
+			report.GetLastRO(ReportObjectKind.FieldObject).TextAlign=ContentAlignment.MiddleRight;
+			//report.Query="SELECT ChargeDate,Principal,Interest,Principal+Interest,Note "
+			//	+"FROM payplancharge WHERE PayPlanNum="+POut.PInt(PayPlanCur.PayPlanNum)
+			//	+" ORDER BY ChargeDate";
+			//if(!report.SubmitQuery()){
+			//	return;
+			//}
+			//report.Sections[
+			DataTable tbl=new DataTable();
+			tbl.Columns.Add("date");
+			tbl.Columns.Add("description");
+			tbl.Columns.Add("charges");
+			tbl.Columns.Add("credits");
+			tbl.Columns.Add("balance");
+			DataRow row;
+			for(int i=0;i<table.Rows.Count;i++){
+				row=tbl.NewRow();
+				row["date"]=table.Rows[i]["date"].ToString();
+				row["description"]=table.Rows[i]["description"].ToString();
+				row["charges"]=table.Rows[i]["charges"].ToString();
+				row["credits"]=table.Rows[i]["credits"].ToString();
+				row["balance"]=table.Rows[i]["balance"].ToString();
+				tbl.Rows.Add(row);
 			}
+			report.ReportTable=tbl;
 			//yPos+=60;
 			report.ReportObjects.Add(new ReportObject
 				("Report Footer",new Point(x1,70),size,"Signature of Guarantor:",font,alignL));
