@@ -8,13 +8,16 @@ namespace OpenDentBusiness{
 
 	///<summary>This does not correspond to any table in the database.  It works with a variety of tables to calculate aging.</summary>
 	public class Ledgers{
+		///<summary>30-60-90 for one guarantor</summary>
+		public static double[] Bal;
+		///<summary>for one guarantor</summary>
+		public static double InsEst;
+		///<summary>for one guarantor</summary>
+		public static double BalTotal;
 		///<summary></summary>
-		public static double[] Bal;//30-60-90 for one guarantor
-		///<summary></summary>
-		public static double InsEst;//for one guarantor
-		///<summary></summary>
-		public static double BalTotal;//for one guarantor
 		private static DateTime AsOfDate;
+		///<summary>for one guar</summary>
+		public static double PayPlanDue;
 		///<summary></summary>
 		public struct DateValuePair{
 			///<summary></summary>
@@ -44,6 +47,7 @@ namespace OpenDentBusiness{
 			Bal[3]=0;//90plus
 			BalTotal=0;
 			InsEst=0;
+			PayPlanDue=0;
 			DateValuePair[] pairs;
 			ArrayList ALpatNums=new ArrayList();//used for payplans
 			string command="SELECT PatNum FROM patient WHERE guarantor = "+POut.PInt(guarantor);
@@ -139,13 +143,8 @@ namespace OpenDentBusiness{
 				pairs[i].Value= PIn.PDouble(table.Rows[i][1].ToString());
 			}
 			ComputePayments(pairs);
-			//PAYMENT PLANS:
-			//string whereGuars="";
-			//for(int i=0;i<ALpatNums.Count;i++){
-			//	if(i>0)
-			//		whereGuars+=" OR";
-			//	whereGuars+=" Guarantor = '"+((int)ALpatNums[i]).ToString()+"'";
-			//}
+			//PAYMENT PLAN princ:
+			
 			command="SELECT PatNum,Guarantor,Principal,Interest,ChargeDate FROM payplancharge"
 				//"SELECT currentdue,totalamount,patnum,guarantor FROM payplan"
 				+" WHERE"
@@ -168,7 +167,7 @@ namespace OpenDentBusiness{
 					//}
 					//if is patient
 					//if(PIn.PInt(table.Rows[i][0].ToString())==patNum){
-						pairs[0].Value-=PIn.PDouble(table.Rows[i][2].ToString());
+						pairs[0].Value-=PIn.PDouble(table.Rows[i][2].ToString());//just always subtract princ from patient aging.
 					//}
 				}
 			//}
@@ -178,6 +177,18 @@ namespace OpenDentBusiness{
 				pairs[0].Value=-pairs[0].Value;
 				ComputePayments(pairs);
 			}
+			//PAYMENT PLAN AMT DUE
+			command=@"SELECT (SELECT SUM(payplancharge.Principal+payplancharge.Interest) FROM payplancharge WHERE payplancharge.PayPlanNum=payplan.PayPlanNum
+				AND ChargeDate <= ADDDATE(CURDATE(),"+POut.PInt(PrefB.GetInt("PayPlansBillInAdvanceDays"))+@")) _dueTen,
+				(SELECT SUM(SplitAmt) FROM paysplit WHERE paysplit.PayPlanNum=payplan.PayPlanNum)";
+			string whereGuars="";
+			for(int i=0;i<ALpatNums.Count;i++){
+				if(i>0){
+					whereGuars+=" OR";
+				}
+				whereGuars+=" Guarantor = "+((int)ALpatNums[i]).ToString();
+			}
+
 			//CLAIM ESTIMATES
 			command="SELECT inspayest,writeoff FROM claimproc"
 				+" WHERE status = '0'"//not received

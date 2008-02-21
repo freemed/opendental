@@ -132,7 +132,7 @@ namespace OpenDental
 				(SELECT SUM(Principal+Interest) FROM payplancharge WHERE payplancharge.PayPlanNum=payplan.PayPlanNum
 				AND ChargeDate <= CURDATE()) _accumDue,
 				(SELECT SUM(Principal+Interest) FROM payplancharge WHERE payplancharge.PayPlanNum=payplan.PayPlanNum
-				AND ChargeDate <= ADDDATE(CURDATE(),45)) _dueTen,
+				AND ChargeDate <= ADDDATE(CURDATE(),"+POut.PInt(PrefB.GetInt("PayPlansBillInAdvanceDays"))+@")) _dueTen,
 				(SELECT SUM(SplitAmt) FROM paysplit WHERE paysplit.PayPlanNum=payplan.PayPlanNum) _paid,
 				(SELECT SUM(Principal) FROM payplancharge WHERE payplancharge.PayPlanNum=payplan.PayPlanNum) _principal
 				FROM payplan
@@ -188,7 +188,8 @@ namespace OpenDental
 			report.AddColumn("Due Now",100,FieldValueType.String);
 			report.GetLastRO(ReportObjectKind.TextObject).TextAlign=ContentAlignment.MiddleRight;
 			report.GetLastRO(ReportObjectKind.FieldObject).TextAlign=ContentAlignment.MiddleRight;
-			report.AddColumn("Due in 10 Days",100,FieldValueType.String);
+			report.AddColumn("Due in "+PrefB.GetInt("PayPlansBillInAdvanceDays").ToString()
+				+" Days",100,FieldValueType.String);
 			report.GetLastRO(ReportObjectKind.TextObject).TextAlign=ContentAlignment.MiddleRight;
 			report.GetLastRO(ReportObjectKind.FieldObject).TextAlign=ContentAlignment.MiddleRight;
 			//report.GetLastRO(ReportObjectKind.FieldObject).FormatString="d";

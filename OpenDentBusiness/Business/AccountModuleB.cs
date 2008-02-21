@@ -394,7 +394,7 @@ namespace OpenDentBusiness {
 				Ledgers.ComputeAging(pat.Guarantor,DateTime.Today);
 			}
 			Patients.UpdateAging(pat.Guarantor,Ledgers.Bal[0],Ledgers.Bal[1],Ledgers.Bal[2]
-				,Ledgers.Bal[3],Ledgers.InsEst,Ledgers.BalTotal);
+				,Ledgers.Bal[3],Ledgers.InsEst,Ledgers.BalTotal,Ledgers.PayPlanDue);
 			//Now, back to getting the tables------------------------------------------------------------------
 			DataRow row;
 			SetTableColumns(table);

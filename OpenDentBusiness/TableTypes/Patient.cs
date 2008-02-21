@@ -248,7 +248,7 @@ namespace OpenDentBusiness{
 		[DataField("CreditType")]
 		private string creditType;
 		bool creditTypeChanged;
-		/// <summary>Single char. Shows at upper left corner of appointments.  Suggested use is A,B,or C to designate creditworthiness, but it can actually be used for any purpose.</summary>
+		/// <summary>Single char. Shows at upper right corner of appointments.  Suggested use is A,B,or C to designate creditworthiness, but it can actually be used for any purpose.</summary>
 		public string CreditType {
 			get { return creditType; }
 			set { creditType = value; MarkDirty(); creditTypeChanged = true; }
@@ -815,6 +815,18 @@ namespace OpenDentBusiness{
 		}
 		public bool TitleChanged {
 			get { return titleChanged; }
+		}
+
+		[DataField("PayPlanDue")]
+		private double payPlanDue;
+		bool payPlanDueChanged;
+		/// <summary></summary>
+		public double PayPlanDue{
+			get { return payPlanDue; }
+			set { if(payPlanDue!=value){payPlanDue = value; MarkDirty(); payPlanDueChanged = true;} }
+		}
+		public bool PayPlanDueChanged {
+			get { return payPlanDueChanged; }
 		}
 
 

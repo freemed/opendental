@@ -182,7 +182,7 @@ namespace OpenDental{
 			for(int i=0;i<allGuarantors.Length;i++){
 				Ledgers.ComputeAging(allGuarantors[i],PIn.PDate(textDateCalc.Text));
 				Patients.UpdateAging(allGuarantors[i],Ledgers.Bal[0],Ledgers.Bal[1],Ledgers.Bal[2]
-					,Ledgers.Bal[3],Ledgers.InsEst,Ledgers.BalTotal);
+					,Ledgers.Bal[3],Ledgers.InsEst,Ledgers.BalTotal,Ledgers.PayPlanDue);
 			}
 			if(Prefs.UpdateString("DateLastAging",POut.PDate(PIn.PDate(textDateCalc.Text),false))){
 				DataValid.SetInvalid(InvalidTypes.Prefs);

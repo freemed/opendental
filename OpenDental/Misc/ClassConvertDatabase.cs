@@ -6391,7 +6391,8 @@ namespace OpenDental{
 				General.NonQEx(command);
 				command="INSERT INTO preference (PrefName,ValueString) VALUES ('PayPlansBillInAdvanceDays','10')";
 				General.NonQEx(command);
-				
+				command="ALTER TABLE patient ADD PayPlanDue double NOT NULL";
+				General.NonQEx(command);
 
 
 

@@ -86,7 +86,7 @@ namespace OpenDentBusiness{
 				+",EmployerNum,EmploymentNote,Race,County,GradeSchool,GradeLevel,Urgency,DateFirstVisit"
 				+",ClinicNum,HasIns,TrophyFolder,PlannedIsDone,Premed,Ward,PreferConfirmMethod,PreferContactMethod,PreferRecallMethod"
 				+",SchedBeforeTime,SchedAfterTime"
-				+",SchedDayOfWeek,Language,AdmitDate,Title) VALUES(";
+				+",SchedDayOfWeek,Language,AdmitDate,Title,PayPlanDue VALUES(";
 			if(includePatNum || PrefB.RandomKeys) {
 				command+="'"+POut.PInt(pat.PatNum)+"', ";
 			}
@@ -154,7 +154,8 @@ namespace OpenDentBusiness{
 				+"'"+POut.PInt(pat.SchedDayOfWeek)+"', "
 				+"'"+POut.PString(pat.Language)+"', "
 				+POut.PDate(pat.AdmitDate)+", "
-				+"'"+POut.PString(pat.Title)+"')";
+				+"'"+POut.PString(pat.Title)+"', "
+				+"'"+POut.PDouble(pat.PayPlanDue)+"')";
 			if(PrefB.RandomKeys) {
 				General.NonQ(command);
 			}
@@ -555,6 +556,12 @@ namespace OpenDentBusiness{
 				c+="Title = '"     +POut.PString(pat.Title)+"'";
 				comma=true;
 			}
+			if(pat.PayPlanDue!=CurOld.PayPlanDue) {
+				if(comma)
+					c+=",";
+				c+="PayPlanDue = '"     +POut.PDouble(pat.PayPlanDue)+"'";
+				comma=true;
+			}
 			if(!comma)
 				return 0;//this means no change is actually required.
 			c+=" WHERE PatNum = '"   +POut.PInt(pat.PatNum)+"'";
@@ -778,6 +785,7 @@ namespace OpenDentBusiness{
 				multPats[i].Language     = PIn.PString(table.Rows[i][64].ToString());
 				multPats[i].AdmitDate    = PIn.PDate(table.Rows[i][65].ToString());
 				multPats[i].Title        = PIn.PString(table.Rows[i][66].ToString());
+				multPats[i].PayPlanDue   = PIn.PDouble(table.Rows[i][67].ToString());
 			}
 			return multPats;
 		}
@@ -873,14 +881,14 @@ namespace OpenDentBusiness{
 				AND patient.Guarantor=@GuarNum
 				GROUP BY patient.PatNum,ProvNum;
 
-				/*payplan amount due*/
+				/*payplan amount due
 				INSERT INTO tempfambal (PatNum,ProvNum,AmtBal)
 				SELECT patient.PatNum,payplancharge.ProvNum,SUM(Principal+Interest)
 				FROM payplancharge,patient
 				WHERE patient.PatNum=payplancharge.Guarantor
 				AND ChargeDate <= NOW()
 				AND patient.Guarantor=@GuarNum
-				GROUP BY patient.PatNum,ProvNum;
+				GROUP BY patient.PatNum,ProvNum;*/
 
 				/*payplan princ reduction*/
 				INSERT INTO tempfambal (PatNum,ProvNum,AmtBal)
@@ -1070,7 +1078,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>This is only used in the Billing dialog</summary>
-		public static List<PatAging> GetAgingList(string age,DateTime lastStatement,int[] billingIndices,bool excludeAddr
+		public static List<PatAging> GetAgingList(string age,DateTime lastStatement,List<int> billingNums,bool excludeAddr
 			,bool excludeNeg,double excludeLessThan,bool excludeInactive,bool includeChanged,bool excludeInsPending)
 		{
 			string command="";
@@ -1100,20 +1108,18 @@ namespace OpenDentBusiness{
 					AND claimproc.InsPayAmt>0
 					GROUP BY patient.Guarantor;";					
 			}
-			/*if(excludeInsPending){
-				command+=@"DROP TABLE IF EXISTS tempclaimspending;
-					CREATE TABLE tempclaimspending(
-					Guarantor int unsigned NOT NULL,
-					PendingClaimCount int NOT NULL,
-					PRIMARY KEY (Guarantor));
-					INSERT INTO tempclaimspending
-					SELECT patient.Guarantor,COUNT(*)
-					FROM claim,patient
-					WHERE claim.PatNum=patient.PatNum
-					AND (ClaimStatus='U' OR ClaimStatus='H' OR ClaimStatus='W' OR ClaimStatus='S')
-					AND (ClaimType='P' OR ClaimType='S' OR ClaimType='Other')
-					GROUP BY patient.Guarantor;";
-			}*/
+			/*command+=@"DROP TABLE IF EXISTS temppayplans;
+				CREATE TABLE temppayplans(
+				Guarantor int unsigned NOT NULL,
+				PendingClaimCount int NOT NULL,
+				PRIMARY KEY (Guarantor));
+				INSERT INTO tempclaimspending
+				SELECT patient.Guarantor,COUNT(*)
+				FROM claim,patient
+				WHERE claim.PatNum=patient.PatNum
+				AND (ClaimStatus='U' OR ClaimStatus='H' OR ClaimStatus='W' OR ClaimStatus='S')
+				AND (ClaimType='P' OR ClaimType='S' OR ClaimType='Other')
+				GROUP BY patient.Guarantor;";*/
 			command+="SELECT patient.PatNum,Bal_0_30,Bal_31_60,Bal_61_90,BalOver90,BalTotal,BillingType,"
 				+"InsEst,LName,FName,MiddleI,Preferred, "
 				+"IFNULL(MAX(statement.DateSent),'0001-01-01') AS LastStatement ";
@@ -1157,17 +1163,20 @@ namespace OpenDentBusiness{
 					command+=" AND (BalOver90 > '0')";
 					break;
 			}
-			for(int i=0;i<billingIndices.Length;i++){
+			//if billingNums.Count==0, then we'll include all billing types
+			for(int i=0;i<billingNums.Count;i++){
 				if(i==0){
 					command+=" AND (billingtype = '";
 				}
 				else{
 					command+=" OR billingtype = '";
 				}
-				command+=
-					DefB.Short[(int)DefCat.BillingTypes][billingIndices[i]].DefNum.ToString()+"'";
+				command+=POut.PInt(billingNums[i])+"'";
+					//DefB.Short[(int)DefCat.BillingTypes][billingIndices[i]].DefNum.ToString()+"'";
+				if(i==billingNums.Count-1){
+					command+=")";
+				}
 			}
-			command+=")";
 			if(excludeAddr){
 				command+=" AND (zip !='')";
 			}	
@@ -1229,6 +1238,9 @@ namespace OpenDentBusiness{
 				command="DROP TABLE IF EXISTS tempclaimspending";
 				General.NonQ(command);
 			}
+
+
+
 			return agingList;
 		}
 
@@ -1270,7 +1282,8 @@ namespace OpenDentBusiness{
 				+",Bal_61_90 = '0'"
 				+",BalOver90 = '0'"
 				+",InsEst    = '0'"
-				+",BalTotal  = '0'";
+				+",BalTotal  = '0'"
+				+",PayPlanDue= '0'";
 			General.NonQ(command);
 		}
 
@@ -1283,13 +1296,14 @@ namespace OpenDentBusiness{
 				+",BalOver90 = '0'"
 				+",InsEst    = '0'"
 				+",BalTotal  = '0'"
+				+",PayPlanDue= '0'"
 			  +" WHERE guarantor = '"+POut.PInt(guarantor)+"'";
 			General.NonQ(command);
 		}
 
 		///<summary></summary>
 		public static void UpdateAging(int patnum,double Bal0,double Bal31
-			,double Bal61,double Bal91,double InsEst,double BalTotal){
+			,double Bal61,double Bal91,double InsEst,double BalTotal,double PayPlanDue){
 			string command="Update patient SET "
 				+"Bal_0_30        = '" +POut.PDouble(Bal0)+"'"
 				+",Bal_31_60      = '" +POut.PDouble(Bal31)+"'"
@@ -1297,6 +1311,7 @@ namespace OpenDentBusiness{
 				+",BalOver90      = '" +POut.PDouble(Bal91)+"'"
 				+",InsEst         = '" +POut.PDouble(InsEst)+"'"
 				+",BalTotal       = '" +POut.PDouble(BalTotal)+"'"
+				+",PayPlanDue     = '" +POut.PDouble(PayPlanDue)+"'"
 				+" WHERE patnum   = '" +POut.PInt   (patnum)+"'";
 			//MessageBox.Show(string command);
 			General.NonQ(command);
@@ -1521,6 +1536,8 @@ namespace OpenDentBusiness{
 		public DateTime DateLastStatement;
 		///<summary>FK to defNum.</summary>
 		public int BillingType;
+		///<summary></summary>
+		public double PayPlanDue;
 	}
 
 	
