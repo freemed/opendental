@@ -6389,7 +6389,9 @@ namespace OpenDental{
 				General.NonQEx(command);
 				command="DELETE FROM preference WHERE PrefName='BoldFamilyAccountBalanceView'";
 				General.NonQEx(command);
-
+				command="INSERT INTO preference (PrefName,ValueString) VALUES ('PayPlansBillInAdvanceDays','10')";
+				General.NonQEx(command);
+				
 
 
 

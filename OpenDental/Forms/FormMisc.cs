@@ -86,6 +86,8 @@ namespace OpenDental{
 		private Label label17;
 		private Label label20;
 		private CheckBox checkPPOpercentage;
+		private ValidNumber textPayPlansBillInAdvanceDays;
+		private Label label18;
 		private List<Def> posAdjTypes;
 
 		///<summary></summary>
@@ -119,6 +121,8 @@ namespace OpenDental{
 			this.checkTreatPlanShowCompleted = new System.Windows.Forms.CheckBox();
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
 			this.groupBox5 = new System.Windows.Forms.GroupBox();
+			this.textPayPlansBillInAdvanceDays = new OpenDental.ValidNumber();
+			this.label18 = new System.Windows.Forms.Label();
 			this.checkShowFamilyCommByDefault = new System.Windows.Forms.CheckBox();
 			this.checkProviderIncomeShows = new System.Windows.Forms.CheckBox();
 			this.label12 = new System.Windows.Forms.Label();
@@ -287,6 +291,8 @@ namespace OpenDental{
 			// 
 			// groupBox5
 			// 
+			this.groupBox5.Controls.Add(this.textPayPlansBillInAdvanceDays);
+			this.groupBox5.Controls.Add(this.label18);
 			this.groupBox5.Controls.Add(this.checkShowFamilyCommByDefault);
 			this.groupBox5.Controls.Add(this.checkProviderIncomeShows);
 			this.groupBox5.Controls.Add(this.label12);
@@ -308,6 +314,25 @@ namespace OpenDental{
 			this.groupBox5.TabIndex = 52;
 			this.groupBox5.TabStop = false;
 			this.groupBox5.Text = "Account module";
+			// 
+			// textPayPlansBillInAdvanceDays
+			// 
+			this.textPayPlansBillInAdvanceDays.Location = new System.Drawing.Point(328,116);
+			this.textPayPlansBillInAdvanceDays.MaxVal = 255;
+			this.textPayPlansBillInAdvanceDays.MinVal = 0;
+			this.textPayPlansBillInAdvanceDays.Name = "textPayPlansBillInAdvanceDays";
+			this.textPayPlansBillInAdvanceDays.Size = new System.Drawing.Size(60,20);
+			this.textPayPlansBillInAdvanceDays.TabIndex = 77;
+			this.textPayPlansBillInAdvanceDays.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+			// 
+			// label18
+			// 
+			this.label18.Location = new System.Drawing.Point(7,112);
+			this.label18.Name = "label18";
+			this.label18.Size = new System.Drawing.Size(318,27);
+			this.label18.TabIndex = 76;
+			this.label18.Text = "Days in advance to bill payment plan amounts due.\r\nUsually 10 or 15.";
+			this.label18.TextAlign = System.Drawing.ContentAlignment.TopRight;
 			// 
 			// checkShowFamilyCommByDefault
 			// 
@@ -390,7 +415,7 @@ namespace OpenDental{
 			// 
 			this.checkAgingMonthly.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.checkAgingMonthly.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkAgingMonthly.Location = new System.Drawing.Point(19,144);
+			this.checkAgingMonthly.Location = new System.Drawing.Point(19,161);
 			this.checkAgingMonthly.Name = "checkAgingMonthly";
 			this.checkAgingMonthly.Size = new System.Drawing.Size(368,17);
 			this.checkAgingMonthly.TabIndex = 57;
@@ -412,7 +437,7 @@ namespace OpenDental{
 			// 
 			this.checkBalancesDontSubtractIns.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.checkBalancesDontSubtractIns.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkBalancesDontSubtractIns.Location = new System.Drawing.Point(19,127);
+			this.checkBalancesDontSubtractIns.Location = new System.Drawing.Point(19,144);
 			this.checkBalancesDontSubtractIns.Name = "checkBalancesDontSubtractIns";
 			this.checkBalancesDontSubtractIns.Size = new System.Drawing.Size(368,17);
 			this.checkBalancesDontSubtractIns.TabIndex = 55;
@@ -423,7 +448,7 @@ namespace OpenDental{
 			// 
 			this.checkShowAccountNotes.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.checkShowAccountNotes.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkShowAccountNotes.Location = new System.Drawing.Point(19,161);
+			this.checkShowAccountNotes.Location = new System.Drawing.Point(19,178);
 			this.checkShowAccountNotes.Name = "checkShowAccountNotes";
 			this.checkShowAccountNotes.Size = new System.Drawing.Size(368,17);
 			this.checkShowAccountNotes.TabIndex = 56;
@@ -432,7 +457,7 @@ namespace OpenDental{
 			// 
 			// textStatementsCalcDueDate
 			// 
-			this.textStatementsCalcDueDate.Location = new System.Drawing.Point(328,80);
+			this.textStatementsCalcDueDate.Location = new System.Drawing.Point(328,84);
 			this.textStatementsCalcDueDate.MaxVal = 255;
 			this.textStatementsCalcDueDate.MinVal = 0;
 			this.textStatementsCalcDueDate.Name = "textStatementsCalcDueDate";
