@@ -86,8 +86,8 @@ namespace OpenDental{
 		private Label label17;
 		private Label label20;
 		private CheckBox checkPPOpercentage;
-		private ValidNumber textPayPlansBillInAdvanceDays;
 		private Label label18;
+		private ValidNum textPayPlansBillInAdvanceDays;
 		private List<Def> posAdjTypes;
 
 		///<summary></summary>
@@ -121,7 +121,6 @@ namespace OpenDental{
 			this.checkTreatPlanShowCompleted = new System.Windows.Forms.CheckBox();
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
 			this.groupBox5 = new System.Windows.Forms.GroupBox();
-			this.textPayPlansBillInAdvanceDays = new OpenDental.ValidNumber();
 			this.label18 = new System.Windows.Forms.Label();
 			this.checkShowFamilyCommByDefault = new System.Windows.Forms.CheckBox();
 			this.checkProviderIncomeShows = new System.Windows.Forms.CheckBox();
@@ -134,7 +133,6 @@ namespace OpenDental{
 			this.checkStatementShowReturnAddress = new System.Windows.Forms.CheckBox();
 			this.checkBalancesDontSubtractIns = new System.Windows.Forms.CheckBox();
 			this.checkShowAccountNotes = new System.Windows.Forms.CheckBox();
-			this.textStatementsCalcDueDate = new OpenDental.ValidNumber();
 			this.label2 = new System.Windows.Forms.Label();
 			this.checkEclaimsSeparateTreatProv = new System.Windows.Forms.CheckBox();
 			this.checkRandomPrimaryKeys = new System.Windows.Forms.CheckBox();
@@ -165,8 +163,6 @@ namespace OpenDental{
 			this.checkTaskListAlwaysShow = new System.Windows.Forms.CheckBox();
 			this.checkTasksCheckOnStartup = new System.Windows.Forms.CheckBox();
 			this.checkBoxTaskKeepListHidden = new System.Windows.Forms.CheckBox();
-			this.validNumY = new OpenDental.ValidNumber();
-			this.validNumX = new OpenDental.ValidNumber();
 			this.labelX = new System.Windows.Forms.Label();
 			this.labelY = new System.Windows.Forms.Label();
 			this.pictureBox1 = new System.Windows.Forms.PictureBox();
@@ -183,10 +179,14 @@ namespace OpenDental{
 			this.label17 = new System.Windows.Forms.Label();
 			this.label20 = new System.Windows.Forms.Label();
 			this.checkPPOpercentage = new System.Windows.Forms.CheckBox();
+			this.validNumY = new OpenDental.ValidNumber();
+			this.validNumX = new OpenDental.ValidNumber();
 			this.butLanguages = new OpenDental.UI.Button();
 			this.textSigInterval = new OpenDental.ValidNumber();
 			this.butCancel = new OpenDental.UI.Button();
 			this.butOK = new OpenDental.UI.Button();
+			this.textPayPlansBillInAdvanceDays = new OpenDental.ValidNum();
+			this.textStatementsCalcDueDate = new OpenDental.ValidNumber();
 			this.groupBox1.SuspendLayout();
 			this.groupBox5.SuspendLayout();
 			this.groupBox4.SuspendLayout();
@@ -314,16 +314,6 @@ namespace OpenDental{
 			this.groupBox5.TabIndex = 52;
 			this.groupBox5.TabStop = false;
 			this.groupBox5.Text = "Account module";
-			// 
-			// textPayPlansBillInAdvanceDays
-			// 
-			this.textPayPlansBillInAdvanceDays.Location = new System.Drawing.Point(328,116);
-			this.textPayPlansBillInAdvanceDays.MaxVal = 255;
-			this.textPayPlansBillInAdvanceDays.MinVal = 0;
-			this.textPayPlansBillInAdvanceDays.Name = "textPayPlansBillInAdvanceDays";
-			this.textPayPlansBillInAdvanceDays.Size = new System.Drawing.Size(60,20);
-			this.textPayPlansBillInAdvanceDays.TabIndex = 77;
-			this.textPayPlansBillInAdvanceDays.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
 			// 
 			// label18
 			// 
@@ -454,16 +444,6 @@ namespace OpenDental{
 			this.checkShowAccountNotes.TabIndex = 56;
 			this.checkShowAccountNotes.Text = "Show item notes in main grid ";
 			this.checkShowAccountNotes.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// textStatementsCalcDueDate
-			// 
-			this.textStatementsCalcDueDate.Location = new System.Drawing.Point(328,84);
-			this.textStatementsCalcDueDate.MaxVal = 255;
-			this.textStatementsCalcDueDate.MinVal = 0;
-			this.textStatementsCalcDueDate.Name = "textStatementsCalcDueDate";
-			this.textStatementsCalcDueDate.Size = new System.Drawing.Size(60,20);
-			this.textStatementsCalcDueDate.TabIndex = 54;
-			this.textStatementsCalcDueDate.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
 			// 
 			// label2
 			// 
@@ -808,32 +788,6 @@ namespace OpenDental{
 			this.checkBoxTaskKeepListHidden.UseVisualStyleBackColor = true;
 			this.checkBoxTaskKeepListHidden.CheckedChanged += new System.EventHandler(this.checkBoxTaskKeepListHidden_CheckedChanged);
 			// 
-			// validNumY
-			// 
-			this.validNumY.Location = new System.Drawing.Point(192,75);
-			this.validNumY.MaxLength = 4;
-			this.validNumY.MaxVal = 1200;
-			this.validNumY.MinVal = 300;
-			this.validNumY.Name = "validNumY";
-			this.validNumY.Size = new System.Drawing.Size(47,20);
-			this.validNumY.TabIndex = 188;
-			this.validNumY.Text = "542";
-			this.validNumY.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-			this.toolTip1.SetToolTip(this.validNumY,resources.GetString("validNumY.ToolTip"));
-			// 
-			// validNumX
-			// 
-			this.validNumX.Location = new System.Drawing.Point(72,75);
-			this.validNumX.MaxLength = 4;
-			this.validNumX.MaxVal = 2000;
-			this.validNumX.MinVal = 300;
-			this.validNumX.Name = "validNumX";
-			this.validNumX.Size = new System.Drawing.Size(47,20);
-			this.validNumX.TabIndex = 186;
-			this.validNumX.Text = "542";
-			this.validNumX.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-			this.toolTip1.SetToolTip(this.validNumX,resources.GetString("validNumX.ToolTip"));
-			// 
 			// labelX
 			// 
 			this.labelX.Location = new System.Drawing.Point(4,75);
@@ -997,6 +951,32 @@ namespace OpenDental{
 			this.checkPPOpercentage.Text = "Insurance defaults to PPO percentage instead of category percentage plan type";
 			this.checkPPOpercentage.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
+			// validNumY
+			// 
+			this.validNumY.Location = new System.Drawing.Point(192,75);
+			this.validNumY.MaxLength = 4;
+			this.validNumY.MaxVal = 1200;
+			this.validNumY.MinVal = 300;
+			this.validNumY.Name = "validNumY";
+			this.validNumY.Size = new System.Drawing.Size(47,20);
+			this.validNumY.TabIndex = 188;
+			this.validNumY.Text = "542";
+			this.validNumY.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+			this.toolTip1.SetToolTip(this.validNumY,resources.GetString("validNumY.ToolTip"));
+			// 
+			// validNumX
+			// 
+			this.validNumX.Location = new System.Drawing.Point(72,75);
+			this.validNumX.MaxLength = 4;
+			this.validNumX.MaxVal = 2000;
+			this.validNumX.MinVal = 300;
+			this.validNumX.Name = "validNumX";
+			this.validNumX.Size = new System.Drawing.Size(47,20);
+			this.validNumX.TabIndex = 186;
+			this.validNumX.Text = "542";
+			this.validNumX.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+			this.toolTip1.SetToolTip(this.validNumX,resources.GetString("validNumX.ToolTip"));
+			// 
 			// butLanguages
 			// 
 			this.butLanguages.AdjustImageLocation = new System.Drawing.Point(0,0);
@@ -1051,6 +1031,26 @@ namespace OpenDental{
 			this.butOK.TabIndex = 7;
 			this.butOK.Text = "&OK";
 			this.butOK.Click += new System.EventHandler(this.butOK_Click);
+			// 
+			// textPayPlansBillInAdvanceDays
+			// 
+			this.textPayPlansBillInAdvanceDays.Location = new System.Drawing.Point(327,116);
+			this.textPayPlansBillInAdvanceDays.MaxVal = 255;
+			this.textPayPlansBillInAdvanceDays.MinVal = 0;
+			this.textPayPlansBillInAdvanceDays.Name = "textPayPlansBillInAdvanceDays";
+			this.textPayPlansBillInAdvanceDays.Size = new System.Drawing.Size(60,20);
+			this.textPayPlansBillInAdvanceDays.TabIndex = 193;
+			this.textPayPlansBillInAdvanceDays.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+			// 
+			// textStatementsCalcDueDate
+			// 
+			this.textStatementsCalcDueDate.Location = new System.Drawing.Point(328,84);
+			this.textStatementsCalcDueDate.MaxVal = 255;
+			this.textStatementsCalcDueDate.MinVal = 0;
+			this.textStatementsCalcDueDate.Name = "textStatementsCalcDueDate";
+			this.textStatementsCalcDueDate.Size = new System.Drawing.Size(60,20);
+			this.textStatementsCalcDueDate.TabIndex = 54;
+			this.textStatementsCalcDueDate.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
 			// 
 			// FormMisc
 			// 
@@ -1131,6 +1131,7 @@ namespace OpenDental{
 			if(PrefB.GetInt("StatementsCalcDueDate")!=-1){
 				textStatementsCalcDueDate.Text=PrefB.GetInt("StatementsCalcDueDate").ToString();
 			}
+			textPayPlansBillInAdvanceDays.Text=PrefB.GetInt("PayPlansBillInAdvanceDays").ToString();
 			checkBalancesDontSubtractIns.Checked=PrefB.GetBool("BalancesDontSubtractIns");
 			checkAgingMonthly.Checked=PrefB.GetBool("AgingCalculatedMonthlyInsteadOfDaily");
 			if(PrefB.GetInt("ProcessSigsIntervalInSecs")==0){
@@ -1291,7 +1292,10 @@ namespace OpenDental{
 			//	MsgBox.Show(this,"Please enter priority for declined treatment.");
 			//	return;
 			//}
-			if(textStatementsCalcDueDate.errorProvider1.GetError(textStatementsCalcDueDate)!="")
+			if(textStatementsCalcDueDate.errorProvider1.GetError(textStatementsCalcDueDate)!=""
+				| textPayPlansBillInAdvanceDays.errorProvider1.GetError(textPayPlansBillInAdvanceDays)!=""
+				| validNumX.errorProvider1.GetError(validNumX)!=""
+				| validNumY.errorProvider1.GetError(validNumY)!="")
 			{
 				MessageBox.Show(Lan.g(this,"Please fix data entry errors first."));
 				return;
@@ -1306,6 +1310,8 @@ namespace OpenDental{
 				| Prefs.UpdateBool("StatementShowCreditCard",checkShowCC.Checked)
 				| Prefs.UpdateBool("StatementAccountsUseChartNumber",comboUseChartNum.SelectedIndex==1)
 				| Prefs.UpdateBool("BalancesDontSubtractIns",checkBalancesDontSubtractIns.Checked)
+						//	textPayPlansBillInAdvanceDays.Text=PrefB.GetInt("").ToString();
+				| Prefs.UpdateInt("PayPlansBillInAdvanceDays",PIn.PInt(textPayPlansBillInAdvanceDays.Text))
 				| Prefs.UpdateBool("AgingCalculatedMonthlyInsteadOfDaily",checkAgingMonthly.Checked)
 				| Prefs.UpdateBool("RandomPrimaryKeys",checkRandomPrimaryKeys.Checked)
 				| Prefs.UpdateString("MainWindowTitle",textMainWindowTitle.Text)
@@ -1338,7 +1344,7 @@ namespace OpenDental{
 			{
 				changed=true;
 			}
-			//task list
+			//task list------------------------------------------------------------------------------------------
 			computerPref.TaskKeepListHidden=checkBoxTaskKeepListHidden.Checked;
 			if(radioBottom.Checked){	
 				computerPref.TaskDock=0;
@@ -1346,11 +1352,11 @@ namespace OpenDental{
 			else{
 				computerPref.TaskDock=1;
 			}
-			computerPref.TaskX=Convert.ToInt32(validNumX.Text);
-			computerPref.TaskY=Convert.ToInt32(validNumY.Text);
+			computerPref.TaskX=PIn.PInt(validNumX.Text);
+			computerPref.TaskY=PIn.PInt(validNumY.Text);
 			ComputerPrefs.Update(computerPref);
-				changed=true;
-			
+			DataValid.SetInvalid(InvalidTypes.Computers);
+			//end of tasklist section-----------------------------------------------------------------------------
 			if(textStatementsCalcDueDate.Text==""){
 				if(Prefs.UpdateInt("StatementsCalcDueDate",-1)){
 					changed=true;
