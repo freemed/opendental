@@ -29,6 +29,7 @@
 			this.butPrint = new OpenDental.UI.Button();
 			this.butPreviousPage = new OpenDental.UI.Button();
 			this.butNextPage = new OpenDental.UI.Button();
+			this.vScroll = new System.Windows.Forms.VScrollBar();
 			this.SuspendLayout();
 			// 
 			// printPanel
@@ -36,6 +37,7 @@
 			this.printPanel.BackColor = System.Drawing.Color.White;
 			this.printPanel.Location = new System.Drawing.Point(10,33);
 			this.printPanel.Name = "printPanel";
+			this.printPanel.Origin = new System.Drawing.Point(0,0);
 			this.printPanel.Size = new System.Drawing.Size(650,620);
 			this.printPanel.TabIndex = 0;
 			// 
@@ -102,11 +104,22 @@
 			this.butNextPage.UseVisualStyleBackColor = true;
 			this.butNextPage.Click += new System.EventHandler(this.butNextPage_Click);
 			// 
+			// vScroll
+			// 
+			this.vScroll.Location = new System.Drawing.Point(663,33);
+			this.vScroll.Minimum = 1;
+			this.vScroll.Name = "vScroll";
+			this.vScroll.Size = new System.Drawing.Size(20,620);
+			this.vScroll.TabIndex = 5;
+			this.vScroll.Value = 1;
+			this.vScroll.Scroll += new System.Windows.Forms.ScrollEventHandler(this.vScroll_Scroll);
+			// 
 			// FormPrintReport
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F,13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(672,666);
+			this.ClientSize = new System.Drawing.Size(686,666);
+			this.Controls.Add(this.vScroll);
 			this.Controls.Add(this.labPageNum);
 			this.Controls.Add(this.butPrint);
 			this.Controls.Add(this.butPreviousPage);
@@ -129,6 +142,7 @@
 		private OpenDental.UI.Button butPrint;
 		private System.Windows.Forms.Label labPageNum;
 		private System.Drawing.Printing.PrintDocument pd1;
+		private System.Windows.Forms.VScrollBar vScroll;
 
 	}
 }

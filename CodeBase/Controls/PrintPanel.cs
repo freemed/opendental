@@ -5,18 +5,27 @@ using System.Drawing;
 using System.Data;
 using System.Text;
 using System.Windows.Forms;
+using System.Drawing.Drawing2D;
 
 namespace CodeBase {
 	public partial class PrintPanel:UserControl {
 		private Bitmap backImage;
 		///<summary>Draw to this back buffer, then the window display will take care of the rest.</summary>
 		public Graphics backBuffer;
-		public Point printOrigin=new Point(0,0);
 
 		public PrintPanel() {
 			InitializeComponent();
 			backImage=new Bitmap(this.Width,this.Height);
 			backBuffer=Graphics.FromImage(backImage);
+		}
+
+		public Point Origin{
+			get { return new Point((int)backBuffer.Transform.OffsetX,(int)backBuffer.Transform.OffsetY); }
+			set { backBuffer.TranslateTransform(value.X-backBuffer.Transform.OffsetX,value.Y-backBuffer.Transform.OffsetY); }
+		}
+
+		public void Clear(){
+			backBuffer.Clear(this.BackColor);
 		}
 
 		private void PrintPanel_SizeChanged(object sender,EventArgs e) {
@@ -26,7 +35,7 @@ namespace CodeBase {
 		}
 
 		private void panelSurface_Paint(object sender,PaintEventArgs e) {
-			e.Graphics.DrawImageUnscaled(backImage,printOrigin);
+			e.Graphics.DrawImageUnscaled(backImage,Origin);
 		}
 
 		private void panelSurface_SizeChanged(object sender,EventArgs e) {

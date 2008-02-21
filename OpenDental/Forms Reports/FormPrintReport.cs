@@ -15,11 +15,10 @@ namespace OpenDental {
 		private float pageNumberFontSize=0;
 		private PointF pageNumberLocation;
 		private int totalPages=0;
-		private int curPage=0;
 		///Is set to a non-null value only during printing to a physical printer.
 		private Graphics printerGraph=null;
 		private Rectangle printerMargins;
-		public int pageHeight=900;
+		private int pageHeight=900;
 		private int curPrintPage=0;
 		public delegate void PrintCallback(FormPrintReport fpr);
 		public PrintCallback printGenerator=null;
@@ -42,22 +41,55 @@ namespace OpenDental {
 			if(printGenerator==null){
 				return;
 			}
+			printPanel.Clear();
 			Invoke(printGenerator,new object[] { this });//Call the custom printing code.
 		}
 
+		private int CurPage(){
+			return (vScroll.Value-vScroll.Minimum+1)/pageHeight;
+		}
+
 		private void CalculatePageOffset(){
-			printPanel.printOrigin=new Point(0,-((curPage*pageHeight)/totalPages));
-			labPageNum.Text="Page: "+(curPage+1)+"\\"+totalPages;
+			printPanel.Origin=new Point(0,-vScroll.Value);
+			labPageNum.Text="Page: "+(CurPage()+1)+"\\"+totalPages;
+		}
+
+		private void CalculateVScrollMax(){
+			if(totalPages>1){
+				vScroll.Maximum=pageHeight*(totalPages-1)-1+vScroll.Minimum;
+			}else{
+				vScroll.Maximum=vScroll.Minimum;
+			}
+		}
+
+		private void MoveScrollBar(int amount){
+			int val=vScroll.Value+amount;
+			if(val<vScroll.Minimum){
+				val=vScroll.Minimum;
+			}else if(val>vScroll.Maximum){
+				val=vScroll.Maximum;
+			}
+			vScroll.Value=val;
+		}
+
+		public int ScrollAmount{
+			get{ return vScroll.SmallChange; }
+			set{ vScroll.SmallChange=value; }
 		}
 
 		public Graphics Graph{
-			get{ return (printerGraph!=null)?printerGraph:printPanel.backBuffer;	}
+			get{ return (printerGraph!=null)?printerGraph:printPanel.backBuffer; }
+		}
+
+		public int PageHeight {
+			get { return pageHeight; }
+			set { pageHeight=value; CalculateVScrollMax(); }
 		}
 
 		///<summary>Must be set by the external printing algorithm in order to get page numbers working properly.</summary>
 		public int TotalPages{
 			get{ return totalPages; }
-			set{ totalPages=value; CalculatePageOffset(); labPageNum.Visible=(totalPages>0); }
+			set { totalPages=value; CalculatePageOffset(); labPageNum.Visible=(totalPages>0); CalculateVScrollMax(); }
 		}
 
 		public int GraphWidth{
@@ -70,22 +102,24 @@ namespace OpenDental {
 			set { printPanel.Height=value; }
 		}
 
-		private void butNextPage_Click(object sender,EventArgs e) {
-			if(totalPages<1 || curPage>=totalPages-1){
-				return;
-			}
-			curPage++;
+		private void Display(){
 			CalculatePageOffset();
 			PrintCustom();
+			printPanel.Invalidate(true);
+		}
+
+		private void butNextPage_Click(object sender,EventArgs e) {
+			MoveScrollBar((CurPage()+1)*pageHeight-vScroll.Value);
+			Display();
 		}
 
 		private void butPreviousPage_Click(object sender,EventArgs e) {
-			if(totalPages<1 || curPage<=0){
-				return;
+			if(vScroll.Value%pageHeight==0){
+				MoveScrollBar(-pageHeight);
+			}else{
+				MoveScrollBar(CurPage()*pageHeight-vScroll.Value);
 			}
-			curPage--;
-			CalculatePageOffset();
-			PrintCustom();
+			Display();
 		}
 
 		private void butPrint_Click(object sender,EventArgs e) {
@@ -101,6 +135,10 @@ namespace OpenDental {
 			PrintCustom();
 			curPrintPage++;
 			e.HasMorePages=(printGenerator!=null)&&(curPrintPage<totalPages-1);
+		}
+
+		private void vScroll_Scroll(object sender,ScrollEventArgs e) {
+			Display();
 		}
 
 	}

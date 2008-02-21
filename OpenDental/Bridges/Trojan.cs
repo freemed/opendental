@@ -71,6 +71,7 @@ namespace OpenDental.Bridges {
 			}
 			FormPrintReport fpr=new FormPrintReport();
 			fpr.Text="Trojan Plans Pending Deletion";
+			fpr.ScrollAmount=10;
 			fpr.printGenerator=ShowPendingDeletionReportForPatients;
 			fpr.ShowDialog();
 			//File.Delete(file);//TODO: uncomment!!!
@@ -96,7 +97,7 @@ namespace OpenDental.Bridges {
 			y+=size.Height;
 			y+=20;//Skip a line or so.
 			text="Patient&Insured";
-			font=new Font(font.FontFamily,11);
+			font=new Font(font.FontFamily,9);
 			fpr.Graph.DrawString(text,font,Brushes.Black,20,y);
 			text="TrojanID";
 			fpr.Graph.DrawString(text,font,Brushes.Black,240,y);
@@ -140,8 +141,10 @@ namespace OpenDental.Bridges {
 			//Use a static height for the records, to keep the math simple.
 			float recordHeight=140;
 			float recordSpacing=10;
-			fpr.TotalPages=(int)Math.Ceiling((y+recordHeight*table.Rows.Count+
-				((table.Rows.Count>1)?table.Rows.Count-1:0)*recordSpacing)/fpr.pageHeight);
+			if(fpr.TotalPages==0){
+				fpr.TotalPages=(int)Math.Ceiling((y+recordHeight*table.Rows.Count+
+					((table.Rows.Count>1)?table.Rows.Count-1:0)*recordSpacing)/fpr.PageHeight);
+			}
 			for(int i=0;i<table.Rows.Count;i++){
 				//Draw the outlines around this record.
 				fpr.Graph.DrawLine(Pens.Black,new PointF(0,y),new PointF(fpr.GraphWidth-1,y));
