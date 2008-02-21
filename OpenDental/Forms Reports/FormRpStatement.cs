@@ -701,6 +701,63 @@ namespace OpenDental{
 			//Aging-----------------------------------------------------------------------------------
 			#region Aging
 			MigraDocHelper.InsertSpacer(section,275);
+			frame = MigraDocHelper.CreateContainer(section, 55, 390, 250, 29);
+			if (!Stmt.HidePayment)
+			{
+				table = MigraDocHelper.DrawTable(frame, 0, 0, 29);
+				col = table.AddColumn(Unit.FromInch(1.1));
+				col = table.AddColumn(Unit.FromInch(1.1));
+				col = table.AddColumn(Unit.FromInch(1.1));
+				col = table.AddColumn(Unit.FromInch(1.1));
+				row = table.AddRow();
+				row.Format.Alignment = ParagraphAlignment.Center;
+				row.Borders.Color = Colors.Black;
+				row.Shading.Color = Colors.LightGray;
+				row.TopPadding = Unit.FromInch(0);
+				row.BottomPadding = Unit.FromInch(0);
+				font = MigraDocHelper.CreateFont(8, true);
+				cell = row.Cells[0];
+				par = cell.AddParagraph();
+				par.AddFormattedText(Lan.g(this, "0-30"), font);
+				cell = row.Cells[1];
+				par = cell.AddParagraph();
+				par.AddFormattedText(Lan.g(this, "31-60"), font);
+				cell = row.Cells[2];
+				par = cell.AddParagraph();
+				par.AddFormattedText(Lan.g(this, "61-90"), font);
+				cell = row.Cells[3];
+				par = cell.AddParagraph();
+				par.AddFormattedText(Lan.g(this, "over 90"), font);
+				row = table.AddRow();
+				row.Format.Alignment = ParagraphAlignment.Center;
+				row.Borders.Left.Color = Colors.Gray;
+				row.Borders.Bottom.Color = Colors.Gray;
+				row.Borders.Right.Color = Colors.Gray;
+				font = MigraDocHelper.CreateFont(9);
+				
+				text= PatGuar.Bal_0_30.ToString("F");
+				cell = row.Cells[0];
+				par = cell.AddParagraph();
+				par.AddFormattedText(text, font);
+				
+				text = PatGuar.Bal_31_60.ToString("F");
+				cell = row.Cells[1];
+				par = cell.AddParagraph();
+				par.AddFormattedText(text, font);
+				
+				text = PatGuar.Bal_61_90.ToString("F");
+				cell = row.Cells[2];
+				par = cell.AddParagraph();
+				par.AddFormattedText(text, font);
+				
+				text = PatGuar.BalOver90.ToString("F");
+				cell = row.Cells[3];
+				par = cell.AddParagraph();
+				par.AddFormattedText(text, font);
+				
+			
+			
+			/*
 			ODGridColumn gcol;
 			ODGridRow grow;
 			if(!Stmt.HidePayment) {
@@ -746,7 +803,49 @@ namespace OpenDental{
 				gridAging.EndUpdate();
 				MigraDocHelper.DrawGrid(section,gridAging);
 				gridAging.Dispose();
-			}
+			*/
+			 }
+		
+			#endregion
+			//Floating Balance, Ins info
+			#region FloatingBalance
+			frame = MigraDocHelper.CreateContainer(section, 460, 380, 250, 200);
+			//table=MigraDocHelper.DrawTable(frame,0,0,90);
+			par = frame.AddParagraph();
+			parformat = new ParagraphFormat();
+			parformat.Alignment = ParagraphAlignment.Right;
+			par.Format = parformat;
+			font = MigraDocHelper.CreateFont(11, true);
+			text = Lan.g(this, "Current account balance:");
+			par.AddFormattedText(text, font);
+			par.AddLineBreak();
+			text = Lan.g(this, "Insurance Pending:");
+			par.AddFormattedText(text, font);
+			par.AddLineBreak();
+			text = Lan.g(this, "What you owe now:");
+			par.AddFormattedText(text, font);
+			par.AddLineBreak();
+
+
+			frame = MigraDocHelper.CreateContainer(section, 730, 380, 100, 200);
+			//table=MigraDocHelper.DrawTable(frame,0,0,90);
+			par = frame.AddParagraph();
+			parformat = new ParagraphFormat();
+			parformat.Alignment = ParagraphAlignment.Left;
+			par.Format = parformat;
+			font = MigraDocHelper.CreateFont(11, true);
+			text = Lan.g(this, "$" + PatGuar.BalTotal.ToString("F"));
+			par.AddFormattedText(text, font);
+			par.AddLineBreak();
+			text = Lan.g(this, "$" + PatGuar.InsEst.ToString("F"));
+			par.AddFormattedText(text, font);
+			par.AddLineBreak();
+			text = Lan.g(this, "$" + (PatGuar.BalTotal - PatGuar.InsEst).ToString("F"));
+			par.AddFormattedText(text, font);
+			par.AddLineBreak();
+			MigraDocHelper.InsertSpacer(section, 80);
+
+			//TextFrame frame;
 			#endregion
 			//Bold note-------------------------------------------------------------------------------
 			if(Stmt.NoteBold!=""){
@@ -758,7 +857,9 @@ namespace OpenDental{
 				MigraDocHelper.InsertSpacer(section,8);
 			}
 			//Body Tables-----------------------------------------------------------------------------------------------------------
-			ODGrid gridPat=new ODGrid();
+			ODGridColumn gcol;
+			ODGridRow grow;
+			ODGrid gridPat = new ODGrid();
 			this.Controls.Add(gridPat);
 			gridPat.BeginUpdate();
 			gridPat.Columns.Clear();
