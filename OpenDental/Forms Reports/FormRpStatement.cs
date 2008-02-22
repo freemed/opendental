@@ -734,29 +734,23 @@ namespace OpenDental{
 				row.Borders.Bottom.Color = Colors.Gray;
 				row.Borders.Right.Color = Colors.Gray;
 				font = MigraDocHelper.CreateFont(9);
-				
 				text= PatGuar.Bal_0_30.ToString("F");
 				cell = row.Cells[0];
 				par = cell.AddParagraph();
 				par.AddFormattedText(text, font);
-				
 				text = PatGuar.Bal_31_60.ToString("F");
 				cell = row.Cells[1];
 				par = cell.AddParagraph();
 				par.AddFormattedText(text, font);
-				
 				text = PatGuar.Bal_61_90.ToString("F");
 				cell = row.Cells[2];
 				par = cell.AddParagraph();
 				par.AddFormattedText(text, font);
-				
 				text = PatGuar.BalOver90.ToString("F");
 				cell = row.Cells[3];
 				par = cell.AddParagraph();
 				par.AddFormattedText(text, font);
-				
-			
-			
+			}
 			/*
 			ODGridColumn gcol;
 			ODGridRow grow;
@@ -804,10 +798,8 @@ namespace OpenDental{
 				MigraDocHelper.DrawGrid(section,gridAging);
 				gridAging.Dispose();
 			*/
-			 }
-		
 			#endregion
-			//Floating Balance, Ins info
+			//Floating Balance, Ins info-------------------------------------------------------------------
 			#region FloatingBalance
 			frame = MigraDocHelper.CreateContainer(section, 460, 380, 250, 200);
 			//table=MigraDocHelper.DrawTable(frame,0,0,90);
@@ -825,8 +817,6 @@ namespace OpenDental{
 			text = Lan.g(this, "What you owe now:");
 			par.AddFormattedText(text, font);
 			par.AddLineBreak();
-
-
 			frame = MigraDocHelper.CreateContainer(section, 730, 380, 100, 200);
 			//table=MigraDocHelper.DrawTable(frame,0,0,90);
 			par = frame.AddParagraph();
@@ -834,17 +824,16 @@ namespace OpenDental{
 			parformat.Alignment = ParagraphAlignment.Left;
 			par.Format = parformat;
 			font = MigraDocHelper.CreateFont(11, true);
-			text = Lan.g(this, "$" + PatGuar.BalTotal.ToString("F"));
+			text = PatGuar.BalTotal.ToString("c");
 			par.AddFormattedText(text, font);
 			par.AddLineBreak();
-			text = Lan.g(this, "$" + PatGuar.InsEst.ToString("F"));
+			text = PatGuar.InsEst.ToString("c");
 			par.AddFormattedText(text, font);
 			par.AddLineBreak();
-			text = Lan.g(this, "$" + (PatGuar.BalTotal - PatGuar.InsEst).ToString("F"));
+			text = (PatGuar.BalTotal - PatGuar.InsEst).ToString("c");
 			par.AddFormattedText(text, font);
 			par.AddLineBreak();
 			MigraDocHelper.InsertSpacer(section, 80);
-
 			//TextFrame frame;
 			#endregion
 			//Bold note-------------------------------------------------------------------------------
