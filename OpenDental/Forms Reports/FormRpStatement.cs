@@ -802,6 +802,12 @@ namespace OpenDental{
 			//Floating Balance, Ins info-------------------------------------------------------------------
 			#region FloatingBalance
 			frame = MigraDocHelper.CreateContainer(section, 460, 380, 250, 200);
+			if (!PrefB.GetBool("BalancesDontSubtractIns")){
+				MigraDocHelper.FillRectangle(frame, System.Drawing.Color.LightGray, 90, 36, 240, 18);
+			}
+			else{
+				MigraDocHelper.FillRectangle(frame, System.Drawing.Color.LightGray, 57, 1, 273, 16);
+			}
 			//table=MigraDocHelper.DrawTable(frame,0,0,90);
 			par = frame.AddParagraph();
 			parformat = new ParagraphFormat();
@@ -811,14 +817,18 @@ namespace OpenDental{
 			text = Lan.g(this, "Current account balance:");
 			par.AddFormattedText(text, font);
 			par.AddLineBreak();
-			text = Lan.g(this, "Insurance Pending:");
-			par.AddFormattedText(text, font);
-			par.AddLineBreak();
-			text = Lan.g(this, "What you owe now:");
-			par.AddFormattedText(text, font);
-			par.AddLineBreak();
+				text = Lan.g(this, "Insurance pending:");
+				par.AddFormattedText(text, font);
+				par.AddLineBreak();
+			if (!PrefB.GetBool("BalancesDontSubtractIns")){
+				text = Lan.g(this, "What you owe now:");
+				par.AddFormattedText(text, font);
+				par.AddLineBreak();
+			}
+			
+			//if payplan exists, may want to add something here
+			
 			frame = MigraDocHelper.CreateContainer(section, 730, 380, 100, 200);
-			//table=MigraDocHelper.DrawTable(frame,0,0,90);
 			par = frame.AddParagraph();
 			parformat = new ParagraphFormat();
 			parformat.Alignment = ParagraphAlignment.Left;
@@ -830,9 +840,11 @@ namespace OpenDental{
 			text = PatGuar.InsEst.ToString("c");
 			par.AddFormattedText(text, font);
 			par.AddLineBreak();
-			text = (PatGuar.BalTotal - PatGuar.InsEst).ToString("c");
-			par.AddFormattedText(text, font);
-			par.AddLineBreak();
+			if (!PrefB.GetBool("BalancesDontSubtractIns")){
+				text = (PatGuar.BalTotal - PatGuar.InsEst).ToString("c");
+				par.AddFormattedText(text, font);
+				par.AddLineBreak();
+			}
 			MigraDocHelper.InsertSpacer(section, 80);
 			//TextFrame frame;
 			#endregion
