@@ -40,7 +40,7 @@ namespace OpenDentBusiness{
 					"SELECT patient.*,CASE WHEN PatNum=Guarantor THEN 0 ELSE 1 END AS isguarantor "
 					+"FROM patient "
 					+"WHERE Guarantor = '"+table.Rows[0][0].ToString()+"'"
-					+" ORDER BY 68,Birthdate";//just asking for bugs
+					+" ORDER BY 69,Birthdate";//just asking for bugs. Must be two more than the last number in
 			}
 			Family fam=new Family();
 			fam.List=SubmitAndFill(command);
@@ -86,7 +86,7 @@ namespace OpenDentBusiness{
 				+",EmployerNum,EmploymentNote,Race,County,GradeSchool,GradeLevel,Urgency,DateFirstVisit"
 				+",ClinicNum,HasIns,TrophyFolder,PlannedIsDone,Premed,Ward,PreferConfirmMethod,PreferContactMethod,PreferRecallMethod"
 				+",SchedBeforeTime,SchedAfterTime"
-				+",SchedDayOfWeek,Language,AdmitDate,Title,PayPlanDue VALUES(";
+				+",SchedDayOfWeek,Language,AdmitDate,Title,PayPlanDue) VALUES (";
 			if(includePatNum || PrefB.RandomKeys) {
 				command+="'"+POut.PInt(pat.PatNum)+"', ";
 			}
