@@ -41,6 +41,7 @@
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.BackColor = System.Drawing.Color.White;
 			this.Controls.Add(this.panelSurface);
+			this.DoubleBuffered = true;
 			this.Name = "PrintPanel";
 			this.Size = new System.Drawing.Size(850,1100);
 			this.SizeChanged += new System.EventHandler(this.PrintPanel_SizeChanged);

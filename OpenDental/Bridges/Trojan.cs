@@ -15,6 +15,7 @@ namespace OpenDental.Bridges {
 
 		private static Collection<string[]> deletePatientRecords;
 		private static Collection<string[]> deleteTrojanRecords;
+		private static DataTable pendingDeletionTable;
 
 		public static void StartupCheck(){
 			//Skip all if not using Trojan.
@@ -69,23 +70,56 @@ namespace OpenDental.Bridges {
 					deletePatientRecords.Add(record);
 				}
 			}
-			FormPrintReport fpr=new FormPrintReport();
-			fpr.Text="Trojan Plans Pending Deletion";
-			fpr.ScrollAmount=10;
-			fpr.printGenerator=ShowPendingDeletionReportForPatients;
-			fpr.ShowDialog();
+			//Get the list of records for the pending plan deletion report.
+			string whereTrojanID="";
+			for(int i=0;i<deletePatientRecords.Count;i++) {
+				if(i>0) {
+					whereTrojanID+="OR ";
+				}
+				whereTrojanID+="i.TrojanID='"+deletePatientRecords[i][0]+"' ";
+			}
+			if(deletePatientRecords.Count>0){
+				string command="SELECT DISTINCT "+
+					"p.FName,"+
+					"p.LName,"+
+					"g.FName,"+
+					"g.LName,"+
+					"g.SSN,"+
+					"g.Birthdate,"+
+					"i.GroupNum,"+
+					"i.SubscriberID,"+
+					"i.TrojanID,"+
+					"CASE i.EmployerNum WHEN 0 THEN '' ELSE e.EmpName END,"+
+					"CASE i.EmployerNum WHEN 0 THEN '' ELSE e.Phone END,"+
+					"c.CarrierName,"+
+					"c.Phone,"+
+					"c.ElectID "+
+					"FROM patient p,patient g,insplan i,employer e,carrier c "+
+					"WHERE p.PatNum=i.Subscriber AND "+
+					"("+whereTrojanID+") AND "+
+					"i.CarrierNum=c.CarrierNum AND "+
+					"(i.EmployerNum=e.EmployerNum OR i.EmployerNum=0) AND "+
+					"p.Guarantor=g.PatNum "+
+					"ORDER BY i.TrojanID,g.LName,g.FName,p.LName,p.FName";
+				pendingDeletionTable=General.GetTable(command);
+				if(pendingDeletionTable.Rows.Count>0){
+					FormPrintReport fpr=new FormPrintReport();
+					fpr.Text="Trojan Plans Pending Deletion";
+					fpr.ScrollAmount=10;
+					fpr.printGenerator=ShowPendingDeletionReportForPatients;
+					fpr.UsePageNumbers(new Font(FontFamily.GenericMonospace,8));
+					fpr.ShowDialog();
+				}
+			}
 			//File.Delete(file);//TODO: uncomment!!!
 		}
 
 		private static void ShowPendingDeletionReportForPatients(FormPrintReport fpr){
-			if(deletePatientRecords.Count<1){
-				return;//Nothing to report.
-			}
 			//Print the header on the report.
 			Font font=new Font(FontFamily.GenericMonospace,12);
 			string text=PrefB.GetString("PracticeTitle");
 			SizeF size=fpr.Graph.MeasureString(text,font);
-			float y=0;
+			float y=20;
 			fpr.Graph.DrawString(text,font,Brushes.Black,fpr.GraphWidth/2-size.Width/2,y);
 			text=DateTime.Today.ToShortDateString();
 			size=fpr.Graph.MeasureString(text,font);
@@ -106,46 +140,16 @@ namespace OpenDental.Bridges {
 			text="Carrier";
 			fpr.Graph.DrawString(text,font,Brushes.Black,500,y);
 			y+=20;
-			string whereTrojanID="";
-			for(int i=0;i<deletePatientRecords.Count;i++){
-				if(i>0){
-					whereTrojanID+="OR ";
-				}
-				whereTrojanID+="i.TrojanID='"+deletePatientRecords[i][0]+"' ";
-			}
-			string command="SELECT DISTINCT "+
-				"p.FName,"+
-				"p.LName,"+
-				"g.FName,"+
-				"g.LName,"+
-				"g.SSN,"+
-				"g.Birthdate,"+
-				"i.GroupNum,"+
-				"i.SubscriberID,"+
-				"i.TrojanID,"+
-				"CASE i.EmployerNum WHEN 0 THEN '' ELSE e.EmpName END,"+
-				"CASE i.EmployerNum WHEN 0 THEN '' ELSE e.Phone END,"+
-				"c.CarrierName,"+
-				"c.Phone,"+
-				"c.ElectID "+
-				"FROM patient p,patient g,insplan i,employer e,carrier c "+
-				"WHERE p.PatNum=i.Subscriber AND "+
-				"("+whereTrojanID+") AND "+
-				"i.CarrierNum=c.CarrierNum AND "+
-				"(i.EmployerNum=e.EmployerNum OR i.EmployerNum=0) AND "+
-				"p.Guarantor=g.PatNum";
-			DataTable table=General.GetTable(command);
-			if(table.Rows.Count<1){
-				return;//Nothing to report.
-			}
 			//Use a static height for the records, to keep the math simple.
 			float recordHeight=140;
 			float recordSpacing=10;
+			//Calculate the total number of pages in the report the first time this function is called only.
 			if(fpr.TotalPages==0){
-				fpr.TotalPages=(int)Math.Ceiling((y+recordHeight*table.Rows.Count+
-					((table.Rows.Count>1)?table.Rows.Count-1:0)*recordSpacing)/fpr.PageHeight);
+				fpr.TotalPages=(int)Math.Ceiling((y+recordHeight*pendingDeletionTable.Rows.Count+
+					((pendingDeletionTable.Rows.Count>1)?pendingDeletionTable.Rows.Count-1:0)*recordSpacing)/fpr.PageHeight);
 			}
-			for(int i=0;i<table.Rows.Count;i++){
+			float pageBoundry=fpr.PageHeight;
+			for(int i=0;i<pendingDeletionTable.Rows.Count;i++){
 				//Draw the outlines around this record.
 				fpr.Graph.DrawLine(Pens.Black,new PointF(0,y),new PointF(fpr.GraphWidth-1,y));
 				fpr.Graph.DrawLine(Pens.Black,new PointF(0,y+recordHeight),new PointF(fpr.GraphWidth-1,y+recordHeight));
@@ -159,32 +163,37 @@ namespace OpenDental.Bridges {
 				//Patient name, Guarantor name, guarantor SSN, guarantor birthdate, insurance plan group number,
 				//and reason for pending deletion.
 				fpr.Graph.DrawString(
-					PIn.PString(table.Rows[i][0].ToString())+" "+PIn.PString(table.Rows[i][1].ToString())+Environment.NewLine+
-					PIn.PString(table.Rows[i][2].ToString())+" "+PIn.PString(table.Rows[i][3].ToString())+Environment.NewLine+
-					" SSN: "+PIn.PString(table.Rows[i][4].ToString())+Environment.NewLine+
-					" Birth: "+PIn.PDate(table.Rows[i][5].ToString()).ToShortDateString()+Environment.NewLine+
-					" Group: "+PIn.PString(table.Rows[i][6].ToString()),font,Brushes.Black,
+					PIn.PString(pendingDeletionTable.Rows[i][0].ToString())+" "+PIn.PString(pendingDeletionTable.Rows[i][1].ToString())+Environment.NewLine+
+					PIn.PString(pendingDeletionTable.Rows[i][2].ToString())+" "+PIn.PString(pendingDeletionTable.Rows[i][3].ToString())+Environment.NewLine+
+					" SSN: "+PIn.PString(pendingDeletionTable.Rows[i][4].ToString())+Environment.NewLine+
+					" Birth: "+PIn.PDate(pendingDeletionTable.Rows[i][5].ToString()).ToShortDateString()+Environment.NewLine+
+					" Group: "+PIn.PString(pendingDeletionTable.Rows[i][6].ToString()),font,Brushes.Black,
 					new RectangleF(20,y+5,215,95));
 				//Pending deletion reason.
 				for(int j=0;j<deletePatientRecords.Count;j++) {
-					if(deletePatientRecords[j][0]==PIn.PString(table.Rows[i][8].ToString())) {
+					if(deletePatientRecords[j][0]==PIn.PString(pendingDeletionTable.Rows[i][8].ToString())) {
 						fpr.Graph.DrawString("REASON FOR DELETION: "+deletePatientRecords[j][7],font,Brushes.Black,
 							new RectangleF(20,y+100,fpr.GraphWidth-40,40));
 						break;
 					}
 				}
 				//Trojan ID.
-				fpr.Graph.DrawString(PIn.PString(table.Rows[i][8].ToString()),font,Brushes.Black,new RectangleF(240,y+5,85,95));
+				fpr.Graph.DrawString(PIn.PString(pendingDeletionTable.Rows[i][8].ToString()),font,Brushes.Black,new RectangleF(240,y+5,85,95));
 				//Employer Name and Phone.
-				fpr.Graph.DrawString(PIn.PString(table.Rows[i][9].ToString())+Environment.NewLine+
-					PIn.PString(table.Rows[i][10].ToString()),font,Brushes.Black,new RectangleF(330,y+5,170,95));
+				fpr.Graph.DrawString(PIn.PString(pendingDeletionTable.Rows[i][9].ToString())+Environment.NewLine+
+					PIn.PString(pendingDeletionTable.Rows[i][10].ToString()),font,Brushes.Black,new RectangleF(330,y+5,170,95));
 				//Carrier Name, Phone and Electronic ID.
-				fpr.Graph.DrawString(PIn.PString(table.Rows[i][11].ToString())+Environment.NewLine+
-					PIn.PString(table.Rows[i][12].ToString())+Environment.NewLine+
-					PIn.PString(table.Rows[i][13].ToString()),font,Brushes.Black,
+				fpr.Graph.DrawString(PIn.PString(pendingDeletionTable.Rows[i][11].ToString())+Environment.NewLine+
+					PIn.PString(pendingDeletionTable.Rows[i][12].ToString())+Environment.NewLine+
+					PIn.PString(pendingDeletionTable.Rows[i][13].ToString()),font,Brushes.Black,
 					new RectangleF(500,y+5,150,95));
 				//Leave space between records.
 				y+=recordHeight+recordSpacing;
+				//Watch out for the bottom of each page for the next record.
+				if(y+recordHeight>pageBoundry) {
+					y=pageBoundry+fpr.MarginBottom+20;
+					pageBoundry+=fpr.PageHeight;
+				}
 			}
 		}
 

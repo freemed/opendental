@@ -6,14 +6,14 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 using System.Windows;
+using System.Drawing.Drawing2D;
 
 namespace OpenDental {
+	///<summary>This class is pretty much only coded for 8.5 inch X 11 inch sheets of paper, but with a little work could be made for more general sizes of paper, perhaps sometime in the future.</summary>
 	public partial class FormPrintReport:Form {
 
 		///<summary>If pageNumberFont is set, then the page number is displayed using the page number information.</summary>
 		private Font pageNumberFont=null;
-		private float pageNumberFontSize=0;
-		private PointF pageNumberLocation;
 		private int totalPages=0;
 		///Is set to a non-null value only during printing to a physical printer.
 		private Graphics printerGraph=null;
@@ -31,10 +31,8 @@ namespace OpenDental {
 			PrintCustom();
 		}
 
-		public void UsePageNumbers(Font font,float fontSize,PointF location){
+		public void UsePageNumbers(Font font){
 			pageNumberFont=font;
-			pageNumberFontSize=fontSize;
-			pageNumberLocation=location;
 		}
 
 		private void PrintCustom(){
@@ -43,6 +41,15 @@ namespace OpenDental {
 			}
 			printPanel.Clear();
 			Invoke(printGenerator,new object[] { this });//Call the custom printing code.
+			//Print page numbers.
+			if(pageNumberFont!=null){
+				for(int i=0;i<totalPages;i++){
+					string text="Page "+(i+1);
+					SizeF size=Graph.MeasureString(text,pageNumberFont);
+					Graph.DrawString(text,pageNumberFont,Brushes.Black,
+						new PointF(GraphWidth-size.Width,i*(pageHeight+MarginBottom)));
+				}
+			}
 		}
 
 		private int CurPage(){
@@ -75,6 +82,10 @@ namespace OpenDental {
 		public int ScrollAmount{
 			get{ return vScroll.SmallChange; }
 			set{ vScroll.SmallChange=value; }
+		}
+
+		public int MarginBottom{
+			get{ return (printerGraph!=null)?(1100-printerMargins.Bottom):0; }
 		}
 
 		public Graphics Graph{
@@ -132,9 +143,10 @@ namespace OpenDental {
 		private void pd1_PrintPage(object sender,System.Drawing.Printing.PrintPageEventArgs e) {
 			printerGraph=e.Graphics;
 			printerMargins=e.MarginBounds;
+			printerGraph.TranslateTransform(0,-curPrintPage*(pageHeight+MarginBottom));
 			PrintCustom();
 			curPrintPage++;
-			e.HasMorePages=(printGenerator!=null)&&(curPrintPage<totalPages-1);
+			e.HasMorePages=(printGenerator!=null)&&(curPrintPage<totalPages);
 		}
 
 		private void vScroll_Scroll(object sender,ScrollEventArgs e) {

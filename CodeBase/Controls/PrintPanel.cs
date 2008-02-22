@@ -35,7 +35,7 @@ namespace CodeBase {
 		}
 
 		private void panelSurface_Paint(object sender,PaintEventArgs e) {
-			e.Graphics.DrawImageUnscaled(backImage,Origin);
+			e.Graphics.DrawImageUnscaled(backImage,0,0);
 		}
 
 		private void panelSurface_SizeChanged(object sender,EventArgs e) {

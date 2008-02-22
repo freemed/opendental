@@ -106,6 +106,7 @@
 			// 
 			// vScroll
 			// 
+			this.vScroll.LargeChange = 1;
 			this.vScroll.Location = new System.Drawing.Point(663,33);
 			this.vScroll.Minimum = 1;
 			this.vScroll.Name = "vScroll";
