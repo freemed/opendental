@@ -396,9 +396,9 @@ namespace OpenDental{
 			this.label5.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.label5.Location = new System.Drawing.Point(456,651);
 			this.label5.Name = "label5";
-			this.label5.Size = new System.Drawing.Size(158,29);
+			this.label5.Size = new System.Drawing.Size(165,29);
 			this.label5.TabIndex = 43;
-			this.label5.Text = "Does not print individual bills, but just the list of bills";
+			this.label5.Text = "Does not print individual bills.  Just prints the list of bills.";
 			this.label5.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
 			// 
 			// FormBilling

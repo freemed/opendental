@@ -3493,7 +3493,8 @@ double adj=Adjustments.GetTotForProc(arrayProc[tempCountProc].ProcNum,Adjustment
 			if(ImageStore.UpdatePatient == null){
 				ImageStore.UpdatePatient = new FileStore.UpdatePatientDelegate(Patients.Update);
 			}
-			OpenDental.Imaging.IImageStore imageStore = OpenDental.Imaging.ImageStore.GetImageStore(PatCur);
+			Patient guar=Patients.GetPat(stmt.PatNum);
+			OpenDental.Imaging.IImageStore imageStore = OpenDental.Imaging.ImageStore.GetImageStore(guar);
 			if(stmt.Mode_==StatementMode.Email){
 				string attachPath=FormEmailMessageEdit.GetAttachPath();
 				Random rnd=new Random();
@@ -3502,8 +3503,8 @@ double adj=Adjustments.GetTotForProc(arrayProc[tempCountProc].ProcNum,Adjustment
 				File.Copy(imageStore.GetFilePath(Documents.GetByNum(stmt.DocNum)),filePathAndName);
 				//Process.Start(filePathAndName);
 				EmailMessage message=new EmailMessage();
-				message.PatNum=PatCur.PatNum;
-				message.ToAddress=PatCur.Email;
+				message.PatNum=guar.PatNum;
+				message.ToAddress=guar.Email;
 				message.FromAddress=PrefB.GetString("EmailSenderAddress");
 				message.Subject=Lan.g(this,"Statement");
 				//message.BodyText=Lan.g(this,"");
@@ -3518,7 +3519,8 @@ double adj=Adjustments.GetTotForProc(arrayProc[tempCountProc].ProcNum,Adjustment
 			else{
 				#if DEBUG
 					//don't bother to check valid path because it's just debug.
-					Process.Start(imageStore.GetFilePath(Documents.GetByNum(stmt.DocNum)));
+					string imgPath=imageStore.GetFilePath(Documents.GetByNum(stmt.DocNum));
+					Process.Start(imgPath);
 				#else
 					FormST.PrintStatement(stmt,false);
 				#endif
