@@ -144,7 +144,6 @@ namespace OpenDentBusiness{
 			}
 			ComputePayments(pairs);
 			//PAYMENT PLAN princ:
-			
 			command="SELECT PatNum,Guarantor,Principal,Interest,ChargeDate FROM payplancharge"
 				//"SELECT currentdue,totalamount,patnum,guarantor FROM payplan"
 				+" WHERE"
@@ -177,18 +176,18 @@ namespace OpenDentBusiness{
 				pairs[0].Value=-pairs[0].Value;
 				ComputePayments(pairs);
 			}
-			//PAYMENT PLAN AMT DUE
-			command=@"SELECT (SELECT SUM(payplancharge.Principal+payplancharge.Interest) FROM payplancharge WHERE payplancharge.PayPlanNum=payplan.PayPlanNum
-				AND ChargeDate <= ADDDATE(CURDATE(),"+POut.PInt(PrefB.GetInt("PayPlansBillInAdvanceDays"))+@")) _dueTen,
-				(SELECT SUM(SplitAmt) FROM paysplit WHERE paysplit.PayPlanNum=payplan.PayPlanNum)";
-			string whereGuars="";
+			//PAYMENT PLAN GUAR AMT DUE
+			command="SELECT (SELECT IFNULL(SUM(Principal+Interest),0) FROM payplancharge WHERE (";
 			for(int i=0;i<ALpatNums.Count;i++){
 				if(i>0){
-					whereGuars+=" OR";
+					command+=" OR";
 				}
-				whereGuars+=" Guarantor = "+((int)ALpatNums[i]).ToString();
+				command+=" Guarantor = "+((int)ALpatNums[i]).ToString();
 			}
-
+			command+=") AND ChargeDate <= ADDDATE(CURDATE(),"+POut.PInt(PrefB.GetInt("PayPlansBillInAdvanceDays"))+"))"
+				+"-(SELECT IFNULL(SUM(SplitAmt),0) FROM paysplit WHERE ("+wherePats+") AND PayPlanNum !=0 )";
+			table=General.GetTable(command);
+			PayPlanDue=PIn.PDouble(table.Rows[0][0].ToString());
 			//CLAIM ESTIMATES
 			command="SELECT inspayest,writeoff FROM claimproc"
 				+" WHERE status = '0'"//not received

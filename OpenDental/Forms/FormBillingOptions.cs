@@ -76,6 +76,7 @@ namespace OpenDental{
 			this.textExcludeLessThan = new OpenDental.ValidDouble();
 			this.checkExcludeInactive = new System.Windows.Forms.CheckBox();
 			this.groupBox2 = new System.Windows.Forms.GroupBox();
+			this.label2 = new System.Windows.Forms.Label();
 			this.label7 = new System.Windows.Forms.Label();
 			this.label6 = new System.Windows.Forms.Label();
 			this.comboAge = new System.Windows.Forms.ComboBox();
@@ -102,7 +103,6 @@ namespace OpenDental{
 			this.butDatesAll = new OpenDental.UI.Button();
 			this.checkIntermingled = new System.Windows.Forms.CheckBox();
 			this.butDefaults = new OpenDental.UI.Button();
-			this.label2 = new System.Windows.Forms.Label();
 			this.groupBox2.SuspendLayout();
 			this.groupDateRange.SuspendLayout();
 			this.SuspendLayout();
@@ -120,7 +120,7 @@ namespace OpenDental{
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(79,24);
 			this.butCancel.TabIndex = 4;
-			this.butCancel.Text = "&Cancel";
+			this.butCancel.Text = "&Close";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
 			// 
 			// butCreate
@@ -206,6 +206,16 @@ namespace OpenDental{
 			this.groupBox2.TabIndex = 24;
 			this.groupBox2.TabStop = false;
 			this.groupBox2.Text = "Filter";
+			// 
+			// label2
+			// 
+			this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.label2.Location = new System.Drawing.Point(84,590);
+			this.label2.Name = "label2";
+			this.label2.Size = new System.Drawing.Size(192,16);
+			this.label2.TabIndex = 246;
+			this.label2.Text = "(except the date at the top)";
+			this.label2.TextAlign = System.Drawing.ContentAlignment.TopRight;
 			// 
 			// label7
 			// 
@@ -498,16 +508,6 @@ namespace OpenDental{
 			this.butDefaults.TabIndex = 241;
 			this.butDefaults.Text = "Defaults";
 			this.butDefaults.Click += new System.EventHandler(this.butDefaults_Click);
-			// 
-			// label2
-			// 
-			this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.label2.Location = new System.Drawing.Point(84,590);
-			this.label2.Name = "label2";
-			this.label2.Size = new System.Drawing.Size(192,16);
-			this.label2.TabIndex = 246;
-			this.label2.Text = "(except the date at the top)";
-			this.label2.TextAlign = System.Drawing.ContentAlignment.TopRight;
 			// 
 			// FormBillingOptions
 			// 

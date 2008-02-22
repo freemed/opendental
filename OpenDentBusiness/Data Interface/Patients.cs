@@ -1121,7 +1121,7 @@ namespace OpenDentBusiness{
 				AND (ClaimType='P' OR ClaimType='S' OR ClaimType='Other')
 				GROUP BY patient.Guarantor;";*/
 			command+="SELECT patient.PatNum,Bal_0_30,Bal_31_60,Bal_61_90,BalOver90,BalTotal,BillingType,"
-				+"InsEst,LName,FName,MiddleI,Preferred, "
+				+"InsEst,LName,FName,MiddleI,PayPlanDue,Preferred, "
 				+"IFNULL(MAX(statement.DateSent),'0001-01-01') AS LastStatement ";
 			if(includeChanged){
 				command+=",IFNULL(templastproc.LastProc,'0001-01-01') AS LastChange,"
@@ -1144,7 +1144,8 @@ namespace OpenDentBusiness{
 			if(excludeInactive){
 				command+="(patstatus != '2') AND ";
 			}
-			command+="(BalTotal - InsEst > '"+excludeLessThan.ToString()+"'";
+			command+="(BalTotal - InsEst > '"+excludeLessThan.ToString()+"'"
+				+" OR PayPlanDue > 0";
 			if(!excludeNeg){
 				command+=" OR BalTotal - InsEst < '0')";
 			}
@@ -1154,13 +1155,13 @@ namespace OpenDentBusiness{
 			switch(age){
 				//where is age 0. Is it missing because no restriction
 				case "30":
-					command+=" AND (Bal_31_60 > '0' OR Bal_61_90 > '0' OR BalOver90 > '0')";
+					command+=" AND (Bal_31_60 > '0' OR Bal_61_90 > '0' OR BalOver90 > '0' OR PayPlanDue > 0)";
 					break;
 				case "60":
-					command+=" AND (Bal_61_90 > '0' OR BalOver90 > '0')";
+					command+=" AND (Bal_61_90 > '0' OR BalOver90 > '0' OR PayPlanDue > 0)";
 					break;
 				case "90":
-					command+=" AND (BalOver90 > '0')";
+					command+=" AND (BalOver90 > '0' OR PayPlanDue > 0)";
 					break;
 			}
 			//if billingNums.Count==0, then we'll include all billing types
@@ -1182,6 +1183,7 @@ namespace OpenDentBusiness{
 			}	
 			command+=" GROUP BY patient.PatNum "
 				+"HAVING (LastStatement < "+POut.PDate(lastStatement.AddDays(1))+" ";//<midnight of lastStatement date
+				//+"OR PayPlanDue>0 ";we don't have a great way to trigger due to a payplancharge yet
 			if(includeChanged){
 				command+=
 					 "OR LastChange > LastStatement "//eg '2005-10-25' > '2005-10-24 15:00:00'
@@ -1217,6 +1219,7 @@ namespace OpenDentBusiness{
 				patage.AmountDue=patage.BalTotal-patage.InsEst;
 				patage.DateLastStatement=PIn.PDate(table.Rows[i]["LastStatement"].ToString());
 				patage.BillingType=PIn.PInt(table.Rows[i]["BillingType"].ToString());
+				patage.PayPlanDue =PIn.PDouble(table.Rows[i]["PayPlanDue"].ToString());
 				if(excludeInsPending && patage.InsEst>0){
 					//don't add
 				}

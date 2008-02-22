@@ -65,11 +65,12 @@ namespace OpenDentBusiness{
 			table.Columns.Add("mode");
 			table.Columns.Add("name");
 			table.Columns.Add("PatNum");
+			table.Columns.Add("payPlanDue");
 			table.Columns.Add("StatementNum");
 			List<DataRow> rows=new List<DataRow>();
 			string command="SELECT BalTotal,BillingType,FName,InsEst,statement.IsSent,"
 				+"IFNULL(MAX(s2.DateSent),'0001-01-01') LastStatement,"
-				+"LName,MiddleI,statement.Mode_,Preferred,"
+				+"LName,MiddleI,statement.Mode_,PayPlanDue,Preferred,"
 				+"statement.PatNum,statement.StatementNum "
 				+"FROM statement "
 				+"LEFT JOIN patient ON statement.PatNum=patient.PatNum "
@@ -97,11 +98,13 @@ namespace OpenDentBusiness{
 			StatementMode mode;
 			double balTotal;
 			double insEst;
+			double payPlanDue;
 			DateTime lastStatement;
 			for(int i=0;i<rawTable.Rows.Count;i++){
 				row=table.NewRow();
 				balTotal=PIn.PDouble(rawTable.Rows[i]["BalTotal"].ToString());
 				insEst=PIn.PDouble(rawTable.Rows[i]["InsEst"].ToString());
+				payPlanDue=PIn.PDouble(rawTable.Rows[i]["PayPlanDue"].ToString());
 				row["amountDue"]=(balTotal-insEst).ToString("F");
 				row["balTotal"]=balTotal.ToString("F");;
 				row["billingType"]=DefB.GetName(DefCat.BillingTypes,PIn.PInt(rawTable.Rows[i]["BillingType"].ToString()));
@@ -128,6 +131,12 @@ namespace OpenDentBusiness{
 				pat.MiddleI=rawTable.Rows[i]["MiddleI"].ToString();
 				row["name"]=pat.GetNameLF();
 				row["PatNum"]=rawTable.Rows[i]["PatNum"].ToString();
+				if(payPlanDue==0){
+					row["payPlanDue"]="";
+				}
+				else{
+					row["payPlanDue"]=payPlanDue.ToString("F");
+				}
 				row["StatementNum"]=rawTable.Rows[i]["StatementNum"].ToString();
 				rows.Add(row);
 			}
