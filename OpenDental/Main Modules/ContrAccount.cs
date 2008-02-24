@@ -1784,6 +1784,12 @@ namespace OpenDental {
 					}
 				}
 			}
+			if(isSelectingFamily){
+				ToolBarMain.Buttons["Insurance"].Enabled=false;
+			}
+			else{
+				ToolBarMain.Buttons["Insurance"].Enabled=true;
+			}
 		}
 
 		private void FillMisc() {
