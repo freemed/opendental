@@ -40,7 +40,8 @@ namespace OpenDentBusiness{
 					"SELECT patient.*,CASE WHEN PatNum=Guarantor THEN 0 ELSE 1 END AS isguarantor "
 					+"FROM patient "
 					+"WHERE Guarantor = '"+table.Rows[0][0].ToString()+"'"
-					+" ORDER BY 69,Birthdate";//just asking for bugs. Must be two more than the last number in
+					+" ORDER BY 69,Birthdate";//just asking for bugs. Must be one more than the count of fields,
+				//which is two more than the last number in the [] of GetPatient
 			}
 			Family fam=new Family();
 			fam.List=SubmitAndFill(command);

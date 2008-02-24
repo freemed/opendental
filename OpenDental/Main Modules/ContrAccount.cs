@@ -2647,7 +2647,8 @@ double adj=Adjustments.GetTotForProc(arrayProc[tempCountProc].ProcNum,Adjustment
 			DataTable table=DataSetMain.Tables["account"];
 			if(table.Rows[e.Row]["ProcNum"].ToString()!="0"){
 				Procedure proc=Procedures.GetOneProc(PIn.PInt(table.Rows[e.Row]["ProcNum"].ToString()),true);
-				FormProcEdit FormPE=new FormProcEdit(proc,PatCur,FamCur);
+				Patient pat=FamCur.GetPatient(proc.PatNum);
+				FormProcEdit FormPE=new FormProcEdit(proc,pat,FamCur);
 				FormPE.ShowDialog();
 			}
 			else if(table.Rows[e.Row]["AdjNum"].ToString()!="0"){
@@ -2672,7 +2673,8 @@ double adj=Adjustments.GetTotForProc(arrayProc[tempCountProc].ProcNum,Adjustment
 			}
 			else if(table.Rows[e.Row]["ClaimNum"].ToString()!="0"){//claims and claimpayments
 				Claim claim=Claims.GetClaim(PIn.PInt(table.Rows[e.Row]["ClaimNum"].ToString()));
-				FormClaimEdit FormClaimEdit2=new FormClaimEdit(claim,PatCur,FamCur);
+				Patient pat=FamCur.GetPatient(claim.PatNum);
+				FormClaimEdit FormClaimEdit2=new FormClaimEdit(claim,pat,FamCur);
 				FormClaimEdit2.IsNew=false;
 				FormClaimEdit2.ShowDialog();
 			}
