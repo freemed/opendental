@@ -6390,7 +6390,7 @@ namespace OpenDental{
 				General.NonQEx(command);
 				command="INSERT INTO preference (PrefName,ValueString) VALUES ('PayPlansBillInAdvanceDays','10')";
 				General.NonQEx(command);
-				command="ALTER TABLE patient ADD PayPlanDue double NOT NULL";
+				command = "ALTER TABLE patient ADD PayPlanDue double NOT NULL";
 				General.NonQEx(command);
 				command="UPDATE preference SET ValueString = '5.6.1.0' WHERE PrefName = 'DataBaseVersion'";
 				General.NonQEx(command);
@@ -6402,12 +6402,10 @@ namespace OpenDental{
 			if(FromVersion<new Version("5.7.0.0")) {
 				string command;
 
-
-
-
-
-
-
+				command = "INSERT INTO preference (PrefName,ValueString) VALUES ('StatementSummaryShowInsInfo','1')";
+				General.NonQEx(command);
+				command = "INSERT INTO preference (PrefName,ValueString) VALUES ('IntermingleFamilyDefault','0')";
+				General.NonQEx(command);
 
 
 

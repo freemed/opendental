@@ -801,51 +801,117 @@ namespace OpenDental{
 			#endregion
 			//Floating Balance, Ins info-------------------------------------------------------------------
 			#region FloatingBalance
-			frame = MigraDocHelper.CreateContainer(section, 460, 380, 250, 200);
-			if (!PrefB.GetBool("BalancesDontSubtractIns")){
-				MigraDocHelper.FillRectangle(frame, System.Drawing.Color.LightGray, 90, 36, 240, 18);
+			
+			frame = MigraDocHelper.CreateContainer(section,455,380,250,200);					
+			//draw backgrounds first so the text always makes it on top (seems to mess it up if I do it in the same context as the text)
+			//so unless someone can figure out how to combine them, we will just have to run two separate if structures
+			if(PrefB.GetBool("StatementSummaryShowInsInfo")){
+				if(PatGuar.HasIns=="I"){
+					if (PrefB.GetBool("BalancesDontSubtractIns")){
+						MigraDocHelper.FillRectangle(frame,System.Drawing.Color.LightGray,57,1,280,16);
+					}
+					else{
+						MigraDocHelper.FillRectangle(frame,System.Drawing.Color.LightGray,57,36,280,18);
+					}
+				}
+				else{
+					MigraDocHelper.FillRectangle(frame,System.Drawing.Color.LightGray,57,1,280,16);			
+				}
 			}
 			else{
-				MigraDocHelper.FillRectangle(frame, System.Drawing.Color.LightGray, 57, 1, 273, 16);
+				MigraDocHelper.FillRectangle(frame,System.Drawing.Color.LightGray,57,18,280,18);
 			}
-			//table=MigraDocHelper.DrawTable(frame,0,0,90);
+			
+			//These are the lables for the floating blance info (left frame of the two)
+			frame = MigraDocHelper.CreateContainer(section,455,380,250,200);		
 			par = frame.AddParagraph();
 			parformat = new ParagraphFormat();
 			parformat.Alignment = ParagraphAlignment.Right;
 			par.Format = parformat;
 			font = MigraDocHelper.CreateFont(11, true);
-			text = Lan.g(this, "Current account balance:");
-			par.AddFormattedText(text, font);
-			par.AddLineBreak();
-				text = Lan.g(this, "Insurance pending:");
-				par.AddFormattedText(text, font);
+			if(PrefB.GetBool("StatementSummaryShowInsInfo"))//Show balance with ins estimate and est balance
+			{
+				text = Lan.g(this,"Current account balance:");
+				par.AddFormattedText(text,font);
 				par.AddLineBreak();
-			if (!PrefB.GetBool("BalancesDontSubtractIns")){
-				text = Lan.g(this, "What you owe now:");
-				par.AddFormattedText(text, font);
+				if(PatGuar.HasIns=="I"){//Pt has ins
+					if (PrefB.GetBool("BalancesDontSubtractIns")){
+						font = MigraDocHelper.CreateFont(11,false);
+						text = Lan.g(this,"Insurance pending:");
+						par.AddFormattedText(text,font);
+						par.AddLineBreak();
+						text = Lan.g(this,"Estimate after insurance:");
+					} 
+					else{
+						text = Lan.g(this,"Insurance pending:");
+						par.AddFormattedText(text,font);
+						par.AddLineBreak();
+						text = Lan.g(this,"What you owe now:");
+					}
+					par.AddFormattedText(text, font);
+					par.AddLineBreak();
+				}
+				else{//pt does not have ins listed on account
+					frame = MigraDocHelper.CreateContainer(section,550,400,350,200);
+					par = frame.AddParagraph();
+					font = MigraDocHelper.CreateFont(9,false,System.Drawing.Color.DarkGray);
+					text = Lan.g(this,"No insurance associated with account.");
+					par.AddFormattedText(text,font);
+					frame = MigraDocHelper.CreateContainer(section,560,412,350,200);
+					par = frame.AddParagraph();
+					text = Lan.g(this,"Please contact us if this is incorrect.");
+					par.AddFormattedText(text,font);
+					
+					font = MigraDocHelper.CreateFont(11,true,System.Drawing.Color.Black);
+					
+				}
+			}
+			else{//Just show balance, aligned to the middle
+				font = MigraDocHelper.CreateFont(11,true);
+				text = Lan.g(this,"Current account balance:");
 				par.AddLineBreak();
+				par.AddFormattedText(text,font);
+				par.AddLineBreak();
+
 			}
 			
-			//if payplan exists, may want to add something here
+			//if payplan exists, may want to add something in here
 			
-			frame = MigraDocHelper.CreateContainer(section, 730, 380, 100, 200);
+			//this is for the amts on the floating balance (right frame of the two)
+			frame = MigraDocHelper.CreateContainer(section, 708, 380, 100, 200);
 			par = frame.AddParagraph();
 			parformat = new ParagraphFormat();
 			parformat.Alignment = ParagraphAlignment.Left;
 			par.Format = parformat;
 			font = MigraDocHelper.CreateFont(11, true);
-			text = PatGuar.BalTotal.ToString("c");
-			par.AddFormattedText(text, font);
-			par.AddLineBreak();
-			text = PatGuar.InsEst.ToString("c");
-			par.AddFormattedText(text, font);
-			par.AddLineBreak();
-			if (!PrefB.GetBool("BalancesDontSubtractIns")){
-				text = (PatGuar.BalTotal - PatGuar.InsEst).ToString("c");
+			if(PrefB.GetBool("StatementSummaryShowInsInfo"))//Show balance with ins estimate and est balance
+			{
+				text = PatGuar.BalTotal.ToString("c");
 				par.AddFormattedText(text, font);
 				par.AddLineBreak();
+				if(PatGuar.HasIns=="I"){
+					if(PrefB.GetBool("BalancesDontSubtractIns")){
+						font = MigraDocHelper.CreateFont(11,false);
+					}
+					text = PatGuar.InsEst.ToString("c");
+					par.AddFormattedText(text, font);
+					par.AddLineBreak();
+					//same $, just different label on this line with "BalancesDontSubtractIns" and not bold
+						text = (PatGuar.BalTotal - PatGuar.InsEst).ToString("c");
+						par.AddFormattedText(text, font);
+						par.AddLineBreak();
+				}
+				else{//nothing else needed if pt does not have ins
+				
+				}
 			}
-			MigraDocHelper.InsertSpacer(section, 80);
+			else{//only show balance in the middle as no ins info is displayed
+				par.AddLineBreak();
+				text = PatGuar.BalTotal.ToString("c");
+				par.AddFormattedText(text,font);
+				par.AddLineBreak();
+			}
+			MigraDocHelper.InsertSpacer(section, 80);//spacer to put main grid in the right location
 			//TextFrame frame;
 			#endregion
 			//Bold note-------------------------------------------------------------------------------
