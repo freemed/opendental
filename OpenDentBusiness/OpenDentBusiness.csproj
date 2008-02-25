@@ -168,6 +168,7 @@
     <Compile Include="TableTypes\ClaimPayment.cs" />
     <Compile Include="TableTypes\ClaimProc.cs" />
     <Compile Include="TableTypes\ClaimValCode.cs" />
+    <Compile Include="TableTypes\AnestheticRecord.cs" />
     <Compile Include="TableTypes\Clearinghouse.cs" />
     <Compile Include="TableTypes\Clinic.cs" />
     <Compile Include="TableTypes\ClockEvent.cs" />
