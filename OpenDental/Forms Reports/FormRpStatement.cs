@@ -362,15 +362,25 @@ namespace OpenDental{
 			Statements.WriteObject(stmt);
 		}
 
+		///<summary>Prints one statement to a specified printer which is passed in as a PrintDocument field.  Used when printer selection happens before a batch</summary>
+		public void PrintStatement(Statement stmt,PrintDocument pd){
+			PrintStatement(stmt,false,pd);
+		}
+
 		///<summary>Prints one statement.  Does not generate pdf or print from existing pdf.</summary>
 		public void PrintStatement(Statement stmt,bool previewOnly){
-			Stmt=stmt;
-			dataSet=AccountModule.GetStatement(stmt.PatNum,stmt.SinglePatient,stmt.DateRangeFrom,stmt.DateRangeTo,
-				stmt.Intermingled);
 			PrintDocument pd=new PrintDocument();
 			if(!Printers.SetPrinter(pd,PrintSituation.Statement)){
 				return;
 			}
+			PrintStatement(stmt,previewOnly,pd);
+		}
+
+		///<summary>Prints one statement.  Does not generate pdf or print from existing pdf.</summary>
+		public void PrintStatement(Statement stmt,bool previewOnly,PrintDocument pd){
+			Stmt=stmt;
+			dataSet=AccountModule.GetStatement(stmt.PatNum,stmt.SinglePatient,stmt.DateRangeFrom,stmt.DateRangeTo,
+				stmt.Intermingled);
 			pd.DefaultPageSettings.Margins=new Margins(40,40,40,60);
 			if(CultureInfo.CurrentCulture.Name.EndsWith("CH")) {//CH is for switzerland. eg de-CH
 				//leave a big margin on the bottom for the routing slip

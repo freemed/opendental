@@ -44,6 +44,8 @@ namespace OpenDental{
 		private int headingPrintH;
 		private Label label5;
 		private int pagesPrinted;
+		///<summary>Used in the Activated event.</summary>
+		private bool isPrinting=false;
 
 		protected void OnGoToChanged(int patNum) {
 			if(GoToChanged!=null) {
@@ -516,8 +518,10 @@ namespace OpenDental{
 		}
 
 		private void FormBilling_Activated(object sender,EventArgs e) {
-			//this seems to fire quite frequently, so it should auto refresh pretty well.
-			FillGrid();
+			//this gets fired very frequently, including right in the middle of printing a batch.
+			if(!isPrinting){
+				FillGrid();
+			}
 		}
 
 		///<summary>We will always try to preserve the selected bills as well as the scroll postition.</summary>
@@ -677,6 +681,7 @@ namespace OpenDental{
 			//stmt.DateRangeFrom=DateTime.
 			//FormSO.StmtCur=stmt;
 			FormSO.ShowDialog();
+			//FillGrid happens automatically through Activated event.
 		}
 
 		private void butPrintList_Click(object sender,EventArgs e) {
@@ -744,10 +749,13 @@ namespace OpenDental{
 				MessageBox.Show(Lan.g(this,"Please select items first."));
 				return;
 			}
+			labelPrinted.Text=Lan.g(this,"Printed=")+"0";
+			labelEmailed.Text=Lan.g(this,"E-mailed=")+"0";
 			if(!MsgBox.Show(this,true,"Please be prepared to wait up to ten minutes while all the bills get processed.  Continue?")){
 				return;
 			}
 			Cursor=Cursors.WaitCursor;
+			isPrinting=true;
 			FormRpStatement FormST=new FormRpStatement();
 			Statement stmt;
 			Random rnd;
@@ -766,6 +774,7 @@ namespace OpenDental{
 			}
 			OpenDental.Imaging.IImageStore imageStore;
 			//Later, we could concat all the pdf's together and create one print job.
+			PrintDocument pd=null;
 			for(int i=0;i<gridBill.SelectedIndices.Length;i++){
 				stmt=Statements.CreateObject(PIn.PInt(table.Rows[gridBill.SelectedIndices[i]]["StatementNum"].ToString()));
 				pat=null;
@@ -773,13 +782,25 @@ namespace OpenDental{
 					if(PrefB.GetString("EmailSMTPserver")==""){
 						MsgBox.Show(this,"You need to enter an SMTP server name in e-mail setup before you can send e-mail.");
 						Cursor=Cursors.Default;
-						FillGrid();
+						isPrinting=false;
+						//FillGrid();//automatic
 						return;
 					}
 					pat=Patients.GetPat(PIn.PInt(table.Rows[gridBill.SelectedIndices[i]]["PatNum"].ToString()));
 					if(pat.Email==""){
 						skipped++;
 						continue;
+					}
+				}
+				if(stmt.Mode_==StatementMode.InPerson || stmt.Mode_==StatementMode.Mail){
+					if(pd==null){
+						pd=new PrintDocument();
+						if(!Printers.SetPrinter(pd,PrintSituation.Statement)){
+							Cursor=Cursors.Default;
+							//FillGrid();//automatic
+							isPrinting=false;
+							return;
+						}
 					}
 				}
 				stmt.IsSent=true;
@@ -830,7 +851,7 @@ namespace OpenDental{
 						//don't bother to check valid path because it's just debug.
 						//Process.Start(imageStore.GetFilePath(Documents.GetByNum(stmt.DocNum)));
 					#else
-						FormST.PrintStatement(stmt,false);	
+						FormST.PrintStatement(stmt,false,pd);	
 					#endif
 					printed++;
 					labelPrinted.Text=Lan.g(this,"Printed=")+printed.ToString();
@@ -847,7 +868,8 @@ namespace OpenDental{
 			//labelPrinted.Text=Lan.g(this,"Printed=")+"0";
 			//labelEmailed.Text=Lan.g(this,"E-mailed=")+"0";
 			Cursor=Cursors.Default;
-			FillGrid();
+			isPrinting=false;
+			FillGrid();//not automatic
 			//if(gridBill.Rows.Count>0 && MsgBox.Show(this,true,"Delete all unsent bills?")){
 			//	MessageBox.Show("Not functional yet.");
 			//}
