@@ -2611,8 +2611,8 @@ namespace OpenDental{
 			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"LabCase"),-1,"","LabCase"));
 		 	//ToolBarMain.Buttons.Add(new ODToolBarButton(ODToolBarButtonStyle.Separator));
 			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Perio Chart"),2,"","Perio"));
-            //ToolBarMain.Buttons.Add(new ODToolBarButton(ODToolBarButtonStyle.Separator));
-            ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Anesthesia"),3,"","AnestheticRecord"));
+			//ToolBarMain.Buttons.Add(new ODToolBarButton(ODToolBarButtonStyle.Separator));
+			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Anesthesia"),3,"","AnestheticRecord"));
 			//button=new ODToolBarButton(Lan.g(this,"Commlog"),4,"","Commlog");
 			//button.Style=ODToolBarButtonStyle.DropDownButton;
 			//button.DropDownMenu=menuEmail;
@@ -2809,9 +2809,9 @@ namespace OpenDental{
 					case "Perio":
 						OnPerio_Click();
 						break;
-                    case "AnestheticRecord":
-                        OnAnestheticRecord_Click();
-                        break;
+					case "AnestheticRecord":
+						OnAnestheticRecord_Click();
+						break;
 					//case "Commlog":
 					//	OnCommlog_Click();
 					//	break;
@@ -2860,10 +2860,11 @@ namespace OpenDental{
 			FormP.ShowDialog();
 		}
 
-        private void OnAnestheticRecord_Click(){
-            FormAnestheticRecord FormP=new FormAnestheticRecord(PatCur);
-            FormP.ShowDialog();
-        }
+		private void OnAnestheticRecord_Click(){
+			FormAnestheticRecord FormP=new FormAnestheticRecord(PatCur);
+			FormP.ShowDialog();
+		}
+
 		private void FillPlanned(){
 			if(PatCur==null){
 				ApptPlanned.Visible=false;
@@ -3029,16 +3030,16 @@ namespace OpenDental{
 				row.Cells.Add(PatCur.DateFirstVisit.ToShortDateString());
 			row.Tag=null;
 			gridPtInfo.Rows.Add(row);
-            //Prov - Pri & Sec
-            row = new ODGridRow();
-            row.Cells.Add(Lan.g("TableChartPtInfo", "Prov. (Pri, Sec)"));
-            if (PatCur.SecProv != 0)
-                row.Cells.Add(Providers.GetAbbr(PatCur.PriProv) + ", " + Providers.GetAbbr(PatCur.SecProv));
-            else
-                row.Cells.Add(Providers.GetAbbr(PatCur.PriProv) + ", " + "None");
-            row.Tag = null;
-            gridPtInfo.Rows.Add(row);
-            //PriIns
+      //Prov - Pri & Sec
+      row = new ODGridRow();
+      row.Cells.Add(Lan.g("TableChartPtInfo", "Prov. (Pri, Sec)"));
+      if (PatCur.SecProv != 0)
+          row.Cells.Add(Providers.GetAbbr(PatCur.PriProv) + ", " + Providers.GetAbbr(PatCur.SecProv));
+      else
+          row.Cells.Add(Providers.GetAbbr(PatCur.PriProv) + ", " + "None");
+      row.Tag = null;
+      gridPtInfo.Rows.Add(row);
+      //PriIns
 			row=new ODGridRow();
 			row.Cells.Add(Lan.g("TableChartPtInfo","Pri Ins"));
 			string name;
