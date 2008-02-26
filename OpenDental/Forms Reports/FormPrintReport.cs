@@ -22,6 +22,9 @@ namespace OpenDental {
 		private int curPrintPage=0;
 		public delegate void PrintCallback(FormPrintReport fpr);
 		public PrintCallback printGenerator=null;
+		private bool landscape=false;
+		private int numTimesPrinted=0;
+		private int minimumTimesToPrint=0;
 
 		public FormPrintReport() {
 			InitializeComponent();
@@ -29,6 +32,7 @@ namespace OpenDental {
 
 		private void FormPrintReport_Load(object sender,EventArgs e) {
 			PrintCustom();
+			CheckWindowSize();
 		}
 
 		public void UsePageNumbers(Font font){
@@ -84,6 +88,24 @@ namespace OpenDental {
 			set{ vScroll.SmallChange=value; }
 		}
 
+		///<summary>Window size can change based on landscape mode and possibly other things in the future (perhaps different paper sizes).</summary>
+		private void CheckWindowSize(){
+			if(landscape){
+				this.Width=942;
+				PageHeight=650;
+			}else{
+				this.Width=692;
+				PageHeight=900;
+			}
+			printPanel.Width=this.Width-42;
+			vScroll.Location=new Point(this.Width-29,33);
+		}
+
+		public bool Landscape{
+			get{ return landscape; }
+			set{ landscape=value; CheckWindowSize(); }
+		}
+
 		public int MarginBottom{
 			get{ return (printerGraph!=null)?(1100-printerMargins.Bottom):0; }
 		}
@@ -108,9 +130,9 @@ namespace OpenDental {
 			set{ printPanel.Width=value; }
 		}
 
-		public int GraphHeight{
-			get{ return (printerGraph!=null)?printerMargins.Height:printPanel.Height; }
-			set { printPanel.Height=value; }
+		public int MinimumTimesToPrint{
+			get{ return minimumTimesToPrint; }
+			set{ minimumTimesToPrint=value; }
 		}
 
 		private void Display(){
@@ -136,8 +158,15 @@ namespace OpenDental {
 		private void butPrint_Click(object sender,EventArgs e) {
 			curPrintPage=0;
 			pd1.OriginAtMargins=true;
-			pd1.Print();
+			pd1.DefaultPageSettings.Landscape=landscape;
+			try{
+				pd1.Print();
+				numTimesPrinted++;
+			}catch(Exception ex){
+				MessageBox.Show(Lan.g(this,"Failed to print")+": "+ex.Message);
+			}
 			printerGraph=null;
+			Display();
 		}
 
 		private void pd1_PrintPage(object sender,System.Drawing.Printing.PrintPageEventArgs e) {
@@ -151,6 +180,18 @@ namespace OpenDental {
 
 		private void vScroll_Scroll(object sender,ScrollEventArgs e) {
 			Display();
+		}
+
+		private void FormPrintReport_FormClosing(object sender,FormClosingEventArgs e) {
+			if(numTimesPrinted<minimumTimesToPrint){
+				if(MessageBox.Show("WARNING: You should print this document at least "+
+					(minimumTimesToPrint==1?"one time.":(minimumTimesToPrint+" times."))+
+					"You may not be able to print this document again if you close it now. Are you sure you want to close this document?","",
+					MessageBoxButtons.YesNo)==DialogResult.No){
+					e.Cancel=true;
+					return;
+				}
+			}
 		}
 
 	}

@@ -16,6 +16,7 @@ namespace OpenDental.Bridges {
 		private static Collection<string[]> deletePatientRecords;
 		private static Collection<string[]> deleteTrojanRecords;
 		private static DataTable pendingDeletionTable;
+		private static DataTable pendingDeletionTableTrojan;
 
 		public static void StartupCheck(){
 			//Skip all if not using Trojan.
@@ -61,7 +62,12 @@ namespace OpenDental.Bridges {
 				string whoToContact=record[3].ToUpper();
 				string deleteType=record[1].ToUpper();
 				if(deleteType=="F"){
-					//TODO: delete the insurance plan if it exists.
+					/*try {
+						InsPlans.Delete(InsPlans.get);//checks dependencies first. Also deletes benefits,claimprocs,patplan and recomputes all estimates.
+					} catch(ApplicationException ex) {
+						MessageBox.Show(ex.Message);
+						return;
+					}*/					
 					continue;//Do not report the deleted plan on the pending deletion reports.
 				}
 				if(whoToContact=="T"){
@@ -70,15 +76,15 @@ namespace OpenDental.Bridges {
 					deletePatientRecords.Add(record);
 				}
 			}
-			//Get the list of records for the pending plan deletion report.
-			string whereTrojanID="";
-			for(int i=0;i<deletePatientRecords.Count;i++) {
-				if(i>0) {
-					whereTrojanID+="OR ";
-				}
-				whereTrojanID+="i.TrojanID='"+deletePatientRecords[i][0]+"' ";
-			}
 			if(deletePatientRecords.Count>0){
+				//Get the list of records for the pending plan deletion report for plans that need to be brought to the patient's attention.
+				string whereTrojanID="";
+				for(int i=0;i<deletePatientRecords.Count;i++) {
+					if(i>0) {
+						whereTrojanID+="OR ";
+					}
+					whereTrojanID+="i.TrojanID='"+deletePatientRecords[i][0]+"' ";
+				}
 				string command="SELECT DISTINCT "+
 					"p.FName,"+
 					"p.LName,"+
@@ -104,14 +110,58 @@ namespace OpenDental.Bridges {
 				pendingDeletionTable=General.GetTable(command);
 				if(pendingDeletionTable.Rows.Count>0){
 					FormPrintReport fpr=new FormPrintReport();
-					fpr.Text="Trojan Plans Pending Deletion";
+					fpr.Text="Trojan Plans Pending Deletion: Contact Patients";
 					fpr.ScrollAmount=10;
 					fpr.printGenerator=ShowPendingDeletionReportForPatients;
 					fpr.UsePageNumbers(new Font(FontFamily.GenericMonospace,8));
+					fpr.MinimumTimesToPrint=1;
 					fpr.ShowDialog();
 				}
 			}
-			//File.Delete(file);//TODO: uncomment!!!
+			if(deleteTrojanRecords.Count>0) {
+				//Get the list of records for the pending plan deletion report for plans which need to be bought to Trojan's attention.
+				string whereTrojanID="";
+				for(int i=0;i<deleteTrojanRecords.Count;i++) {
+					if(i>0) {
+						whereTrojanID+="OR ";
+					}
+					whereTrojanID+="i.TrojanID='"+deleteTrojanRecords[i][0]+"' ";
+				}
+				string command="SELECT DISTINCT "+
+					"p.FName,"+
+					"p.LName,"+
+					"g.FName,"+
+					"g.LName,"+
+					"g.SSN,"+
+					"g.Birthdate,"+
+					"i.GroupNum,"+
+					"i.SubscriberID,"+
+					"i.TrojanID,"+
+					"CASE i.EmployerNum WHEN 0 THEN '' ELSE e.EmpName END,"+
+					"CASE i.EmployerNum WHEN 0 THEN '' ELSE e.Phone END,"+
+					"c.CarrierName,"+
+					"c.Phone,"+
+					"c.ElectID "+
+					"FROM patient p,patient g,insplan i,employer e,carrier c "+
+					"WHERE p.PatNum=i.Subscriber AND "+
+					"("+whereTrojanID+") AND "+
+					"i.CarrierNum=c.CarrierNum AND "+
+					"(i.EmployerNum=e.EmployerNum OR i.EmployerNum=0) AND "+
+					"p.Guarantor=g.PatNum "+
+					"ORDER BY i.TrojanID,g.LName,g.FName,p.LName,p.FName";
+				pendingDeletionTableTrojan=General.GetTable(command);
+				if(pendingDeletionTableTrojan.Rows.Count>0) {
+					FormPrintReport fpr=new FormPrintReport();
+					fpr.Text="Trojan Plans Pending Deletion: Contact Trojan";
+					fpr.ScrollAmount=10;
+					fpr.printGenerator=ShowPendingDeletionReportForTrojan;
+					fpr.UsePageNumbers(new Font(FontFamily.GenericMonospace,8));
+					fpr.MinimumTimesToPrint=1;
+					fpr.Landscape=true;
+					fpr.ShowDialog();
+				}
+			}
+			File.Delete(file);
 		}
 
 		private static void ShowPendingDeletionReportForPatients(FormPrintReport fpr){
@@ -130,6 +180,9 @@ namespace OpenDental.Bridges {
 			fpr.Graph.DrawString(text,font,Brushes.Black,fpr.GraphWidth/2-fpr.Graph.MeasureString(text,font).Width/2,y);
 			y+=size.Height;
 			y+=20;//Skip a line or so.
+			text="INSTRUCTIONS: These plans no longer exist, please do not contact Trojan. Please contact your patient for current benefit information.";
+			fpr.Graph.DrawString(text,new Font(font,FontStyle.Bold),Brushes.Black,new RectangleF(0,y,650,500));
+			y+=70;//Skip a line or so.
 			text="Patient&Insured";
 			font=new Font(font.FontFamily,9);
 			fpr.Graph.DrawString(text,font,Brushes.Black,20,y);
@@ -192,7 +245,162 @@ namespace OpenDental.Bridges {
 				//Watch out for the bottom of each page for the next record.
 				if(y+recordHeight>pageBoundry) {
 					y=pageBoundry+fpr.MarginBottom+20;
-					pageBoundry+=fpr.PageHeight;
+					pageBoundry+=fpr.PageHeight+fpr.MarginBottom;
+					text="Patient&Insured";
+					font=new Font(font.FontFamily,9);
+					fpr.Graph.DrawString(text,font,Brushes.Black,20,y);
+					text="TrojanID";
+					fpr.Graph.DrawString(text,font,Brushes.Black,240,y);
+					text="Employer";
+					fpr.Graph.DrawString(text,font,Brushes.Black,330,y);
+					text="Carrier";
+					fpr.Graph.DrawString(text,font,Brushes.Black,500,y);
+					y+=20;
+				}
+			}
+		}
+
+		private static void ShowPendingDeletionReportForTrojan(FormPrintReport fpr) {
+			//Print the header on the report.
+			Font font=new Font(FontFamily.GenericMonospace,12);
+			string text=PrefB.GetString("PracticeTitle");
+			SizeF size=fpr.Graph.MeasureString(text,font);
+			float y=20;
+			fpr.Graph.DrawString(text,font,Brushes.Black,fpr.GraphWidth/2-size.Width/2,y);
+			text=DateTime.Today.ToShortDateString();
+			size=fpr.Graph.MeasureString(text,font);
+			fpr.Graph.DrawString(text,font,Brushes.Black,fpr.GraphWidth-size.Width,y);
+			y+=size.Height;
+			text="PLANS PENDING DELETION: Please Fax or Mail to Trojan";
+			size=fpr.Graph.MeasureString(text,font);
+			fpr.Graph.DrawString(text,font,Brushes.Black,fpr.GraphWidth/2-fpr.Graph.MeasureString(text,font).Width/2,y);
+			y+=size.Height;
+			text="Fax: 800-232-9788";
+			size=fpr.Graph.MeasureString(text,font);
+			fpr.Graph.DrawString(text,font,Brushes.Black,fpr.GraphWidth/2-fpr.Graph.MeasureString(text,font).Width/2,y);
+			y+=size.Height;
+			y+=20;//Skip a line or so.
+			text="INSTRUCTIONS: Please complete the information requested below to help Trojan research these plans.\n"+
+				"Active Patient: \"Yes\" means the patient has been in the office within the past 6 to 8 months.\n"+
+				"Correct Employer: \"Yes\" means the insured currently is insured through this employer.\n"+
+				"Correct Carrier: \"Yes\" means the insured currently has coverage with this carrier.";
+			fpr.Graph.DrawString(text,new Font(new Font(font.FontFamily,10),FontStyle.Bold),Brushes.Black,new RectangleF(0,y,900,500));
+			y+=85;//Skip a line or so.
+			font=new Font(font.FontFamily,9);
+			text="Active\nPatient?";
+			fpr.Graph.DrawString(text,font,Brushes.Black,5,y);
+			text="\nPatient&Insured";
+			fpr.Graph.DrawString(text,font,Brushes.Black,80,y);
+			text="\nTrojanID";
+			fpr.Graph.DrawString(text,font,Brushes.Black,265,y);
+			text="Correct\nEmployer?";
+			fpr.Graph.DrawString(text,font,Brushes.Black,345,y);
+			text="\nEmployer";
+			fpr.Graph.DrawString(text,font,Brushes.Black,420,y);
+			text="Correct\nCarrier?";
+			fpr.Graph.DrawString(text,font,Brushes.Black,600,y);
+			text="\nCarrier";
+			fpr.Graph.DrawString(text,font,Brushes.Black,670,y);
+			y+=30;
+			//Use a static height for the records, to keep the math simple.
+			float recordHeight=200;
+			float recordSpacing=10;
+			//Calculate the total number of pages in the report the first time this function is called only.
+			if(fpr.TotalPages==0) {
+				fpr.TotalPages=(int)Math.Ceiling((y+recordHeight*pendingDeletionTableTrojan.Rows.Count+
+					((pendingDeletionTableTrojan.Rows.Count>1)?pendingDeletionTableTrojan.Rows.Count-1:0)*recordSpacing)/fpr.PageHeight);
+			}
+			float pageBoundry=fpr.PageHeight;
+			for(int i=0;i<pendingDeletionTableTrojan.Rows.Count;i++) {
+				//Draw the outlines around this record.
+				fpr.Graph.DrawLine(Pens.Black,new PointF(0,y),new PointF(fpr.GraphWidth-1,y));
+				fpr.Graph.DrawLine(Pens.Black,new PointF(0,y+recordHeight),new PointF(fpr.GraphWidth-1,y+recordHeight));
+				fpr.Graph.DrawLine(Pens.Black,new PointF(0,y),new PointF(0,y+recordHeight));
+				fpr.Graph.DrawLine(Pens.Black,new PointF(fpr.GraphWidth-1,y),new PointF(fpr.GraphWidth-1,y+recordHeight));
+				fpr.Graph.DrawLine(Pens.Black,new PointF(0,y+recordHeight-40),new PointF(fpr.GraphWidth-1,y+recordHeight-40));
+				fpr.Graph.DrawLine(Pens.Black,new PointF(260,y),new PointF(260,y+recordHeight-40));
+				fpr.Graph.DrawLine(Pens.Black,new PointF(340,y),new PointF(340,y+recordHeight-40));
+				fpr.Graph.DrawLine(Pens.Black,new PointF(595,y),new PointF(595,y+recordHeight-40));
+				//Patient active boxes.
+				text="Yes No";
+				fpr.Graph.DrawString(text,font,Brushes.Black,10,y);
+				fpr.Graph.DrawRectangle(Pens.Black,new Rectangle(15,(int)(y+15),15,15));
+				fpr.Graph.DrawRectangle(Pens.Black,new Rectangle(40,(int)(y+15),15,15));
+				//Install the information for the record into the outline box.
+				//Patient name, Guarantor name, guarantor SSN, guarantor birthdate, insurance plan group number,
+				//and reason for pending deletion.
+				fpr.Graph.DrawString(
+					PIn.PString(pendingDeletionTableTrojan.Rows[i][0].ToString())+" "+PIn.PString(pendingDeletionTableTrojan.Rows[i][1].ToString())+Environment.NewLine+
+					PIn.PString(pendingDeletionTableTrojan.Rows[i][2].ToString())+" "+PIn.PString(pendingDeletionTableTrojan.Rows[i][3].ToString())+Environment.NewLine+
+					" SSN: "+PIn.PString(pendingDeletionTableTrojan.Rows[i][4].ToString())+Environment.NewLine+
+					" Birth: "+PIn.PDate(pendingDeletionTableTrojan.Rows[i][5].ToString()).ToShortDateString()+Environment.NewLine+
+					" Group: "+PIn.PString(pendingDeletionTableTrojan.Rows[i][6].ToString()),font,Brushes.Black,
+					new RectangleF(80,y+5,185,95));
+				//Pending deletion reason.
+				for(int j=0;j<deleteTrojanRecords.Count;j++) {
+					if(deleteTrojanRecords[j][0]==PIn.PString(pendingDeletionTableTrojan.Rows[i][8].ToString())) {
+						fpr.Graph.DrawString("REASON FOR DELETION: "+deleteTrojanRecords[j][7],font,Brushes.Black,
+							new RectangleF(5,y+recordHeight-40,fpr.GraphWidth-10,40));
+						break;
+					}
+				}
+				//Trojan ID.
+				fpr.Graph.DrawString(PIn.PString(pendingDeletionTableTrojan.Rows[i][8].ToString()),font,Brushes.Black,new RectangleF(265,y+5,85,95));
+				//Correct Employer boxes and arrow.
+				text="Yes No";
+				fpr.Graph.DrawString(text,font,Brushes.Black,345,y);
+				fpr.Graph.DrawRectangle(Pens.Black,new Rectangle(350,(int)(y+15),15,15));
+				fpr.Graph.DrawRectangle(Pens.Black,new Rectangle(375,(int)(y+15),15,15));
+				//Employer Name and Phone.
+				fpr.Graph.DrawString(PIn.PString(pendingDeletionTableTrojan.Rows[i][9].ToString())+Environment.NewLine+
+					PIn.PString(pendingDeletionTableTrojan.Rows[i][10].ToString()),font,Brushes.Black,new RectangleF(420,y+5,175,95));
+				//New employer information if necessary.
+				text="New\nEmployer:";
+				fpr.Graph.DrawString(text,font,Brushes.Black,345,y+85);
+				fpr.Graph.DrawLine(Pens.Black,415,y+110,590,y+110);
+				fpr.Graph.DrawLine(Pens.Black,415,y+125,590,y+125);
+				text="Phone:";
+				fpr.Graph.DrawString(text,font,Brushes.Black,345,y+130);
+				fpr.Graph.DrawLine(Pens.Black,415,y+140,590,y+140);
+				//Correct Carrier boxes and arrow.
+				text="Yes No";
+				fpr.Graph.DrawString(text,font,Brushes.Black,600,y);
+				fpr.Graph.DrawRectangle(Pens.Black,new Rectangle(605,(int)(y+15),15,15));
+				fpr.Graph.DrawRectangle(Pens.Black,new Rectangle(630,(int)(y+15),15,15));
+				//Carrier Name, Phone and Electronic ID.
+				fpr.Graph.DrawString(PIn.PString(pendingDeletionTableTrojan.Rows[i][11].ToString())+Environment.NewLine+
+					PIn.PString(pendingDeletionTableTrojan.Rows[i][12].ToString())+Environment.NewLine+
+					PIn.PString(pendingDeletionTableTrojan.Rows[i][13].ToString()),font,Brushes.Black,
+					new RectangleF(670,y+5,225,95));
+				//New carrier information if necessary.
+				text="New\nCarrier:";
+				fpr.Graph.DrawString(text,font,Brushes.Black,600,y+85);
+				fpr.Graph.DrawLine(Pens.Black,670,y+110,895,y+110);
+				fpr.Graph.DrawLine(Pens.Black,670,y+125,895,y+125);
+				text="Phone:";
+				fpr.Graph.DrawString(text,font,Brushes.Black,600,y+130);
+				fpr.Graph.DrawLine(Pens.Black,670,y+140,895,y+140);
+				//Leave space between records.
+				y+=recordHeight+recordSpacing;
+				//Watch out for the bottom of each page for the next record.
+				if(y+recordHeight>pageBoundry) {
+					y=pageBoundry+fpr.MarginBottom+20;
+					pageBoundry+=fpr.PageHeight+fpr.MarginBottom;
+					text="Active\nPatient?";
+					fpr.Graph.DrawString(text,font,Brushes.Black,5,y);
+					text="\nPatient&Insured";
+					fpr.Graph.DrawString(text,font,Brushes.Black,80,y);
+					text="\nTrojanID";
+					fpr.Graph.DrawString(text,font,Brushes.Black,265,y);
+					text="Correct\nEmployer?";
+					fpr.Graph.DrawString(text,font,Brushes.Black,345,y);
+					text="\nEmployer";
+					fpr.Graph.DrawString(text,font,Brushes.Black,420,y);
+					text="Correct\nCarrier?";
+					fpr.Graph.DrawString(text,font,Brushes.Black,600,y);
+					text="\nCarrier";
+					fpr.Graph.DrawString(text,font,Brushes.Black,670,y);
+					y+=30;
 				}
 			}
 		}

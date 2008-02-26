@@ -26,10 +26,10 @@
 			this.printPanel = new CodeBase.PrintPanel();
 			this.labPageNum = new System.Windows.Forms.Label();
 			this.pd1 = new System.Drawing.Printing.PrintDocument();
+			this.vScroll = new System.Windows.Forms.VScrollBar();
 			this.butPrint = new OpenDental.UI.Button();
 			this.butPreviousPage = new OpenDental.UI.Button();
 			this.butNextPage = new OpenDental.UI.Button();
-			this.vScroll = new System.Windows.Forms.VScrollBar();
 			this.SuspendLayout();
 			// 
 			// printPanel
@@ -55,6 +55,17 @@
 			// pd1
 			// 
 			this.pd1.PrintPage += new System.Drawing.Printing.PrintPageEventHandler(this.pd1_PrintPage);
+			// 
+			// vScroll
+			// 
+			this.vScroll.LargeChange = 30;
+			this.vScroll.Location = new System.Drawing.Point(663,33);
+			this.vScroll.Minimum = 1;
+			this.vScroll.Name = "vScroll";
+			this.vScroll.Size = new System.Drawing.Size(20,620);
+			this.vScroll.TabIndex = 5;
+			this.vScroll.Value = 1;
+			this.vScroll.Scroll += new System.Windows.Forms.ScrollEventHandler(this.vScroll_Scroll);
 			// 
 			// butPrint
 			// 
@@ -104,17 +115,6 @@
 			this.butNextPage.UseVisualStyleBackColor = true;
 			this.butNextPage.Click += new System.EventHandler(this.butNextPage_Click);
 			// 
-			// vScroll
-			// 
-			this.vScroll.LargeChange = 1;
-			this.vScroll.Location = new System.Drawing.Point(663,33);
-			this.vScroll.Minimum = 1;
-			this.vScroll.Name = "vScroll";
-			this.vScroll.Size = new System.Drawing.Size(20,620);
-			this.vScroll.TabIndex = 5;
-			this.vScroll.Value = 1;
-			this.vScroll.Scroll += new System.Windows.Forms.ScrollEventHandler(this.vScroll_Scroll);
-			// 
 			// FormPrintReport
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F,13F);
@@ -127,9 +127,12 @@
 			this.Controls.Add(this.butNextPage);
 			this.Controls.Add(this.printPanel);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+			this.MaximizeBox = false;
+			this.MinimizeBox = false;
 			this.Name = "FormPrintReport";
 			this.Text = "Print Report";
 			this.Load += new System.EventHandler(this.FormPrintReport_Load);
+			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormPrintReport_FormClosing);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
