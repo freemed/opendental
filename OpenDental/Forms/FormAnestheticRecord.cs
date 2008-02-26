@@ -8,118 +8,116 @@ using System.Windows.Forms;
 using OpenDentBusiness;
 using OpenDental.UI;
 
-
 namespace OpenDental {
 	public partial class FormAnestheticRecord:Form {
-        private ListBox listAnesthetic;
-        private OpenDental.UI.Button button2;
-        private Label label2;
-        private OpenDental.UI.Button button3;
-        private OpenDental.UI.Button button4;
-        private OpenDental.UI.Button button5;
-        private OpenDental.UI.Button button6;
-        private OpenDental.UI.Button button7;
-        private OpenDental.UI.Button button8;
-        private OpenDental.UI.Button button9;
-        private OpenDental.UI.Button button10;
-        private OpenDental.UI.Button button11;
-        private OpenDental.UI.Button button12;
-        private OpenDental.UI.Button button13;
-        private OpenDental.UI.Button button14;
-        private OpenDental.UI.Button button15;
-        private OpenDental.UI.Button button16;
-        private OpenDental.UI.Button button17;
-        private ListBox listMeds;
+		private ListBox listAnesthetic;
+		private OpenDental.UI.Button button2;
+		private Label label2;
+		private OpenDental.UI.Button button3;
+		private OpenDental.UI.Button button4;
+		private OpenDental.UI.Button button5;
+		private OpenDental.UI.Button button6;
+		private OpenDental.UI.Button button7;
+		private OpenDental.UI.Button button8;
+		private OpenDental.UI.Button button9;
+		private OpenDental.UI.Button button10;
+		private OpenDental.UI.Button button11;
+		private OpenDental.UI.Button button12;
+		private OpenDental.UI.Button button13;
+		private OpenDental.UI.Button button14;
+		private OpenDental.UI.Button button15;
+		private OpenDental.UI.Button button16;
+		private OpenDental.UI.Button button17;
+		private ListBox listMeds;
 		private bool localDefsChanged;
-        private OpenDental.UI.Button button18;
-        private OpenDental.UI.Button button19;
-        private Label label4;
-        private ComboBox comboBox1;
-        private Label label6;
-        private Label label7;
-        private OpenDental.UI.Button button21;
-        private OpenDental.UI.Button button22;
-        private OpenDental.UI.Button button23;
-        private OpenDental.UI.Button button24;
-        private OpenDental.UI.Button button25;
-        private ComboBox comboBox2;
-        private Label label8;
-        private ComboBox comboBox3;
-        private Label label9;
-        private ComboBox comboBox4;
-        private Label label10;
-        private TextBox textBox1;
-        private TextBox textBox2;
-        private TextBox textBox3;
-        private TextBox textBox4;
-        private OpenDental.UI.Button button26;
-        private RichTextBox richTextBox1;
-        private TextBox textBox6;
-        private Label label22;
-        private ComboBox comboBox11;
-        private Label label23;
-        private Label label24;
-        private TextBox textBox7;
-        private Label label25;
-        private Label label26;
-        private TextBox textBox8;
-        private Label label27;
-        private TextBox textBox9;
-        private OpenDental.UI.SignatureBox sigBox;
-        private OpenDental.UI.Button butClearSig;
-        private Label label28;
-        private GroupBox groupBox1;
-        private Label label12;
-        private OpenDental.UI.Button button20;
-        private ComboBox comboBox6;
-        private Label label20;
-        private TextBox textBox5;
-        private Label label19;
-        private ComboBox comboBox10;
-        private Label label18;
-        private ComboBox comboBox9;
-        private Label label17;
-        private ComboBox comboBox8;
-        private CheckBox checkBox9;
-        private CheckBox checkBox8;
-        private CheckBox checkBox7;
-        private CheckBox checkBox6;
-        private Label label16;
-        private CheckBox checkBox5;
-        private CheckBox checkBox4;
-        private CheckBox checkBox3;
-        private Label label15;
-        private Label label14;
-        private Label label13;
-        private ComboBox comboBox7;
-        private CheckBox checkBox2;
-        private CheckBox CheckBox1;
-        private ComboBox comboBox5;
-        private Label label11;
-        private GroupBox groupBox2;
-        private GroupBox groupBox3;
-        private GroupBox groupBox4;
-        private TextBox textBox11;
-        private DataGridView dataGridView1;
-        private TextBox textBox10;
-        private GroupBox groupBox5;
-        private OpenDental.UI.Button button27;
-        private OpenDental.UI.Button button1;
-        private Patient PatCur;
-        private ComboBox comboBox12;
-        private Label label1;
+		private OpenDental.UI.Button button18;
+		private OpenDental.UI.Button button19;
+		private Label label4;
+		private ComboBox comboBox1;
+		private Label label6;
+		private Label label7;
+		private OpenDental.UI.Button button21;
+		private OpenDental.UI.Button button22;
+		private OpenDental.UI.Button button23;
+		private OpenDental.UI.Button button24;
+		private OpenDental.UI.Button button25;
+		private ComboBox comboBox2;
+		private Label label8;
+		private ComboBox comboBox3;
+		private Label label9;
+		private ComboBox comboBox4;
+		private Label label10;
+		private TextBox textBox1;
+		private TextBox textBox2;
+		private TextBox textBox3;
+		private TextBox textBox4;
+		private OpenDental.UI.Button button26;
+		private RichTextBox richTextBox1;
+		private TextBox textBox6;
+		private Label label22;
+		private ComboBox comboBox11;
+		private Label label23;
+		private Label label24;
+		private TextBox textBox7;
+		private Label label25;
+		private Label label26;
+		private TextBox textBox8;
+		private Label label27;
+		private TextBox textBox9;
+		private OpenDental.UI.SignatureBox sigBox;
+		private OpenDental.UI.Button butClearSig;
+		private Label label28;
+		private GroupBox groupBox1;
+		private Label label12;
+		private OpenDental.UI.Button button20;
+		private ComboBox comboBox6;
+		private Label label20;
+		private TextBox textBox5;
+		private Label label19;
+		private ComboBox comboBox10;
+		private Label label18;
+		private ComboBox comboBox9;
+		private Label label17;
+		private ComboBox comboBox8;
+		private CheckBox checkBox9;
+		private CheckBox checkBox8;
+		private CheckBox checkBox7;
+		private CheckBox checkBox6;
+		private Label label16;
+		private CheckBox checkBox5;
+		private CheckBox checkBox4;
+		private CheckBox checkBox3;
+		private Label label15;
+		private Label label14;
+		private Label label13;
+		private ComboBox comboBox7;
+		private CheckBox checkBox2;
+		private CheckBox CheckBox1;
+		private ComboBox comboBox5;
+		private Label label11;
+		private GroupBox groupBox2;
+		private GroupBox groupBox3;
+		private GroupBox groupBox4;
+		private TextBox textBox11;
+		private DataGridView dataGridView1;
+		private TextBox textBox10;
+		private GroupBox groupBox5;
+		private OpenDental.UI.Button button27;
+		private OpenDental.UI.Button button1;
+		private Patient PatCur;
+		private ComboBox comboBox12;
+		private Label label1;
     
 		public FormAnestheticRecord(Patient patCur)
-        {			
-            //
+		{			
+			//
 			// Required for Windows Form Designer support
 			//
 
 			InitializeComponent();
-            PatCur=patCur;
+			PatCur=patCur;
 			Lan.F(this);
 		}
-
 
 		private void butOK_Click(object sender,EventArgs e) {
 			DialogResult=DialogResult.OK;
@@ -129,7 +127,7 @@ namespace OpenDental {
 			DialogResult=DialogResult.Cancel;
 		}
 
-        private void InitializeComponent(){
+		private void InitializeComponent(){
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormAnestheticRecord));
 			this.listAnesthetic = new System.Windows.Forms.ListBox();
 			this.label2 = new System.Windows.Forms.Label();
@@ -798,11 +796,11 @@ namespace OpenDental {
 			// 
 			this.comboBox7.FormattingEnabled = true;
 			this.comboBox7.Items.AddRange(new object[] {
-            "1",
-            "2",
-            "3",
-            "4",
-            "5"});
+			"1",
+			"2",
+			"3",
+			"4",
+			"5"});
 			this.comboBox7.Location = new System.Drawing.Point(65, 100);
 			this.comboBox7.Name = "comboBox7";
 			this.comboBox7.Size = new System.Drawing.Size(40, 21);
@@ -832,9 +830,9 @@ namespace OpenDental {
 			// 
 			this.comboBox5.FormattingEnabled = true;
 			this.comboBox5.Items.AddRange(new object[] {
-            "I",
-            "II",
-            "III"});
+			"I",
+			"II",
+			"III"});
 			this.comboBox5.Location = new System.Drawing.Point(17, 32);
 			this.comboBox5.Name = "comboBox5";
 			this.comboBox5.Size = new System.Drawing.Size(50, 21);
@@ -1230,7 +1228,6 @@ namespace OpenDental {
 			this.groupBox4.Location = new System.Drawing.Point(12, 352);
 			this.groupBox4.Name = "groupBox4";
 			this.groupBox4.Size = new System.Drawing.Size(592, 178);
-			this.groupBox4.TabIndex = 139;
 			this.groupBox4.TabStop = false;
 			this.groupBox4.Text = "Vital Signs";
 			// 
@@ -1390,41 +1387,40 @@ namespace OpenDental {
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
-        }
+		}
 
-        private void FormAnestheticRecord_Load(object sender, EventArgs e){
+		private void FormAnestheticRecord_Load(object sender, EventArgs e){
 
-        }
+		}
 
-        private void button1_Click(object sender, EventArgs e){
+		private void button1_Click(object sender, EventArgs e){
 
-        }
+		}
 
-        private void button20_Click(object sender, EventArgs e){
+		private void button20_Click(object sender, EventArgs e){
 
-        }
+		}
 
-        private void comboBox5_SelectedIndexChanged(object sender, EventArgs e){
+		private void comboBox5_SelectedIndexChanged(object sender, EventArgs e){
 
-        }
+		}
 
-        private void checkBox7_CheckedChanged(object sender, EventArgs e){
+		private void checkBox7_CheckedChanged(object sender, EventArgs e){
 
-        }
+		}
 
-        private void label26_Click(object sender, EventArgs e){
+		private void label26_Click(object sender, EventArgs e){
 
-        }
+		}
 
-        private void button27_Click(object sender, System.EventArgs e){
+		 private void button27_Click(object sender, System.EventArgs e){
 			Close();}
 
-        private void comboBox8_SelectedIndexChanged(object sender, EventArgs e){
+		private void comboBox8_SelectedIndexChanged(object sender, EventArgs e){
 
-        }
+		}
 
-		private void butClose_Click(object sender, System.EventArgs e)
-		{
+		private void butClose_Click(object sender, System.EventArgs e){
 			Close();
 		}
 
@@ -1440,8 +1436,5 @@ namespace OpenDental {
 
 		}
 		
-        }
-    }
-       
-		
-      
+		}
+	}
