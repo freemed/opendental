@@ -69,6 +69,7 @@ namespace OpenDental {
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.AutoScroll = true;
+			this.AutoScrollMargin = new System.Drawing.Size(0, 50);
 			this.ClientSize = new System.Drawing.Size(490, 633);
 			this.Controls.Add(this.listBoxControls);
 			this.Controls.Add(this.butOK);
@@ -77,7 +78,7 @@ namespace OpenDental {
 			this.MaximizeBox = false;
 			this.MinimizeBox = false;
 			this.Name = "FormAutoNoteBuild";
-			this.Text = "Auto Note";
+			this.Text = " ";
 			this.Load += new System.EventHandler(this.FormAutoNoteBuild_Load);
 			this.ResumeLayout(false);
 
