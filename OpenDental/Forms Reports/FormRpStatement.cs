@@ -856,7 +856,19 @@ namespace OpenDental{
 						text = Lan.g(this,"Insurance pending:");
 						par.AddFormattedText(text,font);
 						par.AddLineBreak();
-						text = Lan.g(this,"What you owe now:");
+						if((PatGuar.BalTotal - PatGuar.InsEst) < 0)
+						{
+							if(PatGuar.InsEst == 0)
+							{
+								text = Lan.g(this,"Credit:");
+							} else
+							{
+								text = Lan.g(this,"Estimated credit after Ins:");
+							}
+						} else
+						{
+							text = Lan.g(this,"What you owe now:");
+						}
 					}
 					par.AddFormattedText(text, font);
 					par.AddLineBreak();

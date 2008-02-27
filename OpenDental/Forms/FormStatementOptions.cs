@@ -752,7 +752,7 @@ namespace OpenDental{
 		}
 
 		private void buttonFuchs3_Click(object sender,EventArgs e) {
-			textNote.Text="This credit is on your account. We look forward to seeing you on your next apptointment! "+textNote.Text;
+			textNote.Text="This credit is on your account. We look forward to seeing you on your next appointment! "+textNote.Text;
 		}
 
 		private void checkIsSent_Click(object sender,EventArgs e) {

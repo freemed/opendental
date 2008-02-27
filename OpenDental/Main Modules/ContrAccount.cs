@@ -1615,12 +1615,41 @@ namespace OpenDental {
 
 		///<summary></summary>
 		public void ModuleSelected(int patNum) {
+			bool selectingFamily = false;
+			if(PrefB.GetBool("IntermingleFamilyDefault"))
+			{
+				if(PatCur != null)
+				{
+					if(PatCur.Guarantor != PrevGuar && PrevGuar!=0)
+					{
+						selectingFamily = true;
+					}
+					PrevGuar = PatCur.Guarantor;
+				} else
+				{
+					selectingFamily = true;
+				}
+			}
 			RefreshModuleData(patNum,false);
 			RefreshModuleScreen(false);
 		}
 
 		///<summary></summary>
 		public void ModuleSelected(int patNum,bool isSelectingFamily) {
+			if(PrefB.GetBool("IntermingleFamilyDefault"))
+			{
+				if(PatCur != null)
+				{
+					if(PatCur.Guarantor != PrevGuar && PrevGuar != 0)
+					{
+						isSelectingFamily = true;
+					}
+					PrevGuar = PatCur.Guarantor;
+				} else
+				{
+					isSelectingFamily = true;
+				}
+			}
 			RefreshModuleData(patNum,isSelectingFamily);
 			RefreshModuleScreen(isSelectingFamily);
 		}
@@ -1669,7 +1698,22 @@ namespace OpenDental {
 
 		///<summary></summary>
 		private void RefreshModuleData(int patNum,bool isSelectingFamily) {
-			if(patNum==0) {
+			if(PrefB.GetBool("IntermingleFamilyDefault"))
+			{
+				if(PatCur != null)
+				{
+					if(PatCur.Guarantor != PrevGuar && PrevGuar != 0)
+					{
+						isSelectingFamily = true;
+					}
+					PrevGuar = PatCur.Guarantor;
+				} else
+				{
+					isSelectingFamily = true;
+				}
+			}
+			if(patNum==0)
+			{
 				PatCur=null;
 				FamCur=null;
 				DataSetMain=null;
@@ -2185,11 +2229,11 @@ namespace OpenDental {
 			}
 			//**only different line from tx pl routine fillsummary
 			if(PatPlanList.Length==0){
-				labelInsLeft.Text = Lan.g(this,"No Ins");
-				labelInsLeftAmt.Text = Lan.g(this,"on account");
+				labelInsLeft.Text = Lan.g(this,"No Ins.");
+				labelInsLeftAmt.Text = "";
 			}
 			else{
-				labelInsLeft.Text = Lan.g(this,"Ins Left");
+				labelInsLeft.Text = Lan.g(this,"Ins. Left");
 				labelInsLeftAmt.Text = textPriRem.Text;
 			}
 		}
