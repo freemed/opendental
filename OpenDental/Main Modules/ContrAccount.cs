@@ -2862,6 +2862,7 @@ double adj=Adjustments.GetTotForProc(arrayProc[tempCountProc].ProcNum,Adjustment
 				MsgBox.Show(this,"Only the first 7 procedures will be selected.  You will need to also create a second claim.");
 			}
 			Claim ClaimCur=CreateClaim("P",PatPlanList,InsPlanList,ClaimProcList,procsForPat);
+			ClaimProcList=ClaimProcs.Refresh(PatCur.PatNum);
 			if(ClaimCur.ClaimNum==0){
 				ModuleSelected(PatCur.PatNum);
 				return;
@@ -2994,10 +2995,13 @@ double adj=Adjustments.GetTotForProc(arrayProc[tempCountProc].ProcNum,Adjustment
 					ClaimProcs.CreateEst(claimProcs[i],proc,PlanCur);
 				}
 			}
+			Claim ClaimCur=new Claim();
+			Claims.Insert(ClaimCur);//to retreive a key for new Claim.ClaimNum
 			//now, all claimProcs have a valid value
 			//for any CapComplete, need to make a copy so that original doesn't get attached.
 			for(int i=0;i<claimProcs.Length;i++){
 				if(claimProcs[i].Status==ClaimProcStatus.CapComplete){
+					claimProcs[i].ClaimNum=ClaimCur.ClaimNum;
 					claimProcs[i]=claimProcs[i].Copy();
 					claimProcs[i].WriteOff=0;
 					claimProcs[i].CopayAmt=-1;
@@ -3006,8 +3010,6 @@ double adj=Adjustments.GetTotForProc(arrayProc[tempCountProc].ProcNum,Adjustment
 					ClaimProcs.Insert(claimProcs[i]);//this makes a duplicate in db with different claimProcNum
 				}
 			}
-			Claim ClaimCur=new Claim();
-			Claims.Insert(ClaimCur);//to retreive a key for new Claim.ClaimNum
 			//Claim ClaimCur=Claims.Cur;
 			ClaimCur.PatNum=PatCur.PatNum;
 			ClaimCur.DateService=claimProcs[claimProcs.Length-1].ProcDate;
