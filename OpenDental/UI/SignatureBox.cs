@@ -11,7 +11,7 @@ using System.Text;
 using System.Windows.Forms;
 
 namespace OpenDental.UI {
-	///<summary>This class is specifically designed to duplicate the functionality of the Topaz SigPlusNET control.  So even if I would have done it differenly, I didn't have a choice.</summary>
+	///<summary>This class is specifically designed to duplicate the functionality of the Topaz SigPlusNET control.  So even if I would have done it differenly, I didn't have a choice.  Size of box will always be 362,79, although that seems to be arbitrary.  We just don't want to be changing it.</summary>
 	public partial class SignatureBox:Control {
 		///<summary>0=not accepting input. 1=accepting input.</summary>
 		private int tabletState;
