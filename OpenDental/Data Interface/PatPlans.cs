@@ -12,6 +12,10 @@ namespace OpenDental{
 			string command="SELECT * from patplan"
 				+" WHERE PatNum = "+patNum.ToString()
 				+" ORDER BY Ordinal";
+			return Refresh(command);
+		}
+
+		private static PatPlan[] Refresh(string command){
 			DataTable table=General.GetTable(command);
 			PatPlan[] List=new PatPlan[table.Rows.Count];
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -193,6 +197,11 @@ namespace OpenDental{
 				}
 			}
 			return 0;
+		}
+
+		public static PatPlan[] GetByPlanNum(int planNum){
+			string command="SELECT * FROM patplan WHERE PlanNum='"+POut.PInt(planNum)+"'";
+			return Refresh(command);
 		}
 
 		

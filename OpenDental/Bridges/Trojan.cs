@@ -52,6 +52,7 @@ namespace OpenDental.Bridges {
 			deletePatientRecords=new Collection<string[]>();
 			deleteTrojanRecords=new Collection<string[]>();
 			string[] trojanplans=deleteplantext.Split(new string[] { "\n" },StringSplitOptions.RemoveEmptyEntries);
+			Collection <string[]> records=new Collection<string[]>();
 			for(int i=0;i<trojanplans.Length;i++) {
 				string[] record=trojanplans[i].Split(new string[] {"\t"},StringSplitOptions.None);
 				for(int j=0;j<record.Length;j++){
@@ -59,17 +60,8 @@ namespace OpenDental.Bridges {
 					record[j]=record[j].Trim().Substring(1);
 					record[j]=record[j].Substring(0,record[j].Length-1);
 				}
+				records.Add(record);
 				string whoToContact=record[3].ToUpper();
-				string deleteType=record[1].ToUpper();
-				if(deleteType=="F"){
-					/*try {
-						InsPlans.Delete(InsPlans.get);//checks dependencies first. Also deletes benefits,claimprocs,patplan and recomputes all estimates.
-					} catch(ApplicationException ex) {
-						MessageBox.Show(ex.Message);
-						return;
-					}*/					
-					continue;//Do not report the deleted plan on the pending deletion reports.
-				}
 				if(whoToContact=="T"){
 					deleteTrojanRecords.Add(record);
 				}else{//whoToContact="P"
@@ -88,25 +80,24 @@ namespace OpenDental.Bridges {
 				string command="SELECT DISTINCT "+
 					"p.FName,"+
 					"p.LName,"+
-					"g.FName,"+
-					"g.LName,"+
-					"g.SSN,"+
-					"g.Birthdate,"+
+					"p.FName,"+
+					"p.LName,"+
+					"p.SSN,"+
+					"p.Birthdate,"+
 					"i.GroupNum,"+
 					"i.SubscriberID,"+
 					"i.TrojanID,"+
 					"CASE i.EmployerNum WHEN 0 THEN '' ELSE e.EmpName END,"+
 					"CASE i.EmployerNum WHEN 0 THEN '' ELSE e.Phone END,"+
 					"c.CarrierName,"+
-					"c.Phone,"+
-					"c.ElectID "+
-					"FROM patient p,patient g,insplan i,employer e,carrier c "+
+					"c.Phone "+
+					"FROM patient p,insplan i,employer e,carrier c "+
 					"WHERE p.PatNum=i.Subscriber AND "+
 					"("+whereTrojanID+") AND "+
 					"i.CarrierNum=c.CarrierNum AND "+
 					"(i.EmployerNum=e.EmployerNum OR i.EmployerNum=0) AND "+
-					"p.Guarantor=g.PatNum "+
-					"ORDER BY i.TrojanID,g.LName,g.FName,p.LName,p.FName";
+					"(SELECT COUNT(*) FROM patplan a WHERE a.PlanNum=i.PlanNum) > 0 "+
+					"ORDER BY i.TrojanID,p.LName,p.FName";
 				pendingDeletionTable=General.GetTable(command);
 				if(pendingDeletionTable.Rows.Count>0){
 					FormPrintReport fpr=new FormPrintReport();
@@ -130,25 +121,24 @@ namespace OpenDental.Bridges {
 				string command="SELECT DISTINCT "+
 					"p.FName,"+
 					"p.LName,"+
-					"g.FName,"+
-					"g.LName,"+
-					"g.SSN,"+
-					"g.Birthdate,"+
+					"p.FName,"+
+					"p.LName,"+
+					"p.SSN,"+
+					"p.Birthdate,"+
 					"i.GroupNum,"+
 					"i.SubscriberID,"+
 					"i.TrojanID,"+
 					"CASE i.EmployerNum WHEN 0 THEN '' ELSE e.EmpName END,"+
 					"CASE i.EmployerNum WHEN 0 THEN '' ELSE e.Phone END,"+
 					"c.CarrierName,"+
-					"c.Phone,"+
-					"c.ElectID "+
-					"FROM patient p,patient g,insplan i,employer e,carrier c "+
+					"c.Phone "+
+					"FROM patient p,insplan i,employer e,carrier c "+
 					"WHERE p.PatNum=i.Subscriber AND "+
 					"("+whereTrojanID+") AND "+
 					"i.CarrierNum=c.CarrierNum AND "+
 					"(i.EmployerNum=e.EmployerNum OR i.EmployerNum=0) AND "+
-					"p.Guarantor=g.PatNum "+
-					"ORDER BY i.TrojanID,g.LName,g.FName,p.LName,p.FName";
+					"(SELECT COUNT(*) FROM patplan a WHERE a.PlanNum=i.PlanNum) > 0 "+
+					"ORDER BY i.TrojanID,p.LName,p.FName";
 				pendingDeletionTableTrojan=General.GetTable(command);
 				if(pendingDeletionTableTrojan.Rows.Count>0) {
 					FormPrintReport fpr=new FormPrintReport();
@@ -159,6 +149,26 @@ namespace OpenDental.Bridges {
 					fpr.MinimumTimesToPrint=1;
 					fpr.Landscape=true;
 					fpr.ShowDialog();
+				}
+			}
+			//Now that the plans have been reported, drop the plans that are marked finally deleted.
+			for(int i=0;i<records.Count;i++){
+				if(records[i][1]=="F") {
+					try {
+						InsPlan[] insplans=InsPlans.GetByTrojanID(records[i][0]);
+						for(int j=0;j<insplans.Length;j++) {
+							insplans[j].PlanNote="PLAN DROPED BY TROJAN"+Environment.NewLine+insplans[j].PlanNote;
+							insplans[j].TrojanID="";
+							InsPlans.Update(insplans[j]);
+							PatPlan[] patplans=PatPlans.GetByPlanNum(insplans[j].PlanNum);
+							for(int k=0;k<patplans.Length;k++) {
+								PatPlans.Delete(patplans[k].PatPlanNum);
+							}
+						}
+					} catch(ApplicationException ex) {
+						MessageBox.Show(ex.Message);
+						return;
+					}
 				}
 			}
 			File.Delete(file);
@@ -225,7 +235,11 @@ namespace OpenDental.Bridges {
 				//Pending deletion reason.
 				for(int j=0;j<deletePatientRecords.Count;j++) {
 					if(deletePatientRecords[j][0]==PIn.PString(pendingDeletionTable.Rows[i][8].ToString())) {
-						fpr.Graph.DrawString("REASON FOR DELETION: "+deletePatientRecords[j][7],font,Brushes.Black,
+						text="REASON FOR DELETION: "+deletePatientRecords[j][7];
+						if(deletePatientRecords[j][1].ToUpper()=="F"){
+							text="FINALLY DELETED"+Environment.NewLine+text;
+						}
+						fpr.Graph.DrawString(text,font,Brushes.Black,
 							new RectangleF(20,y+100,fpr.GraphWidth-40,40));
 						break;
 					}
@@ -235,10 +249,9 @@ namespace OpenDental.Bridges {
 				//Employer Name and Phone.
 				fpr.Graph.DrawString(PIn.PString(pendingDeletionTable.Rows[i][9].ToString())+Environment.NewLine+
 					PIn.PString(pendingDeletionTable.Rows[i][10].ToString()),font,Brushes.Black,new RectangleF(330,y+5,170,95));
-				//Carrier Name, Phone and Electronic ID.
+				//Carrier Name and Phone
 				fpr.Graph.DrawString(PIn.PString(pendingDeletionTable.Rows[i][11].ToString())+Environment.NewLine+
-					PIn.PString(pendingDeletionTable.Rows[i][12].ToString())+Environment.NewLine+
-					PIn.PString(pendingDeletionTable.Rows[i][13].ToString()),font,Brushes.Black,
+					PIn.PString(pendingDeletionTable.Rows[i][12].ToString()),font,Brushes.Black,
 					new RectangleF(500,y+5,150,95));
 				//Leave space between records.
 				y+=recordHeight+recordSpacing;
@@ -339,7 +352,11 @@ namespace OpenDental.Bridges {
 				//Pending deletion reason.
 				for(int j=0;j<deleteTrojanRecords.Count;j++) {
 					if(deleteTrojanRecords[j][0]==PIn.PString(pendingDeletionTableTrojan.Rows[i][8].ToString())) {
-						fpr.Graph.DrawString("REASON FOR DELETION: "+deleteTrojanRecords[j][7],font,Brushes.Black,
+						text="REASON FOR DELETION: "+deleteTrojanRecords[j][7];
+						if(deleteTrojanRecords[j][1].ToUpper()=="F"){
+							text="FINALLY DELETED"+Environment.NewLine+text;
+						}
+						fpr.Graph.DrawString(text,font,Brushes.Black,
 							new RectangleF(5,y+recordHeight-40,fpr.GraphWidth-10,40));
 						break;
 					}
@@ -367,10 +384,9 @@ namespace OpenDental.Bridges {
 				fpr.Graph.DrawString(text,font,Brushes.Black,600,y);
 				fpr.Graph.DrawRectangle(Pens.Black,new Rectangle(605,(int)(y+15),15,15));
 				fpr.Graph.DrawRectangle(Pens.Black,new Rectangle(630,(int)(y+15),15,15));
-				//Carrier Name, Phone and Electronic ID.
+				//Carrier Name and Phone
 				fpr.Graph.DrawString(PIn.PString(pendingDeletionTableTrojan.Rows[i][11].ToString())+Environment.NewLine+
-					PIn.PString(pendingDeletionTableTrojan.Rows[i][12].ToString())+Environment.NewLine+
-					PIn.PString(pendingDeletionTableTrojan.Rows[i][13].ToString()),font,Brushes.Black,
+					PIn.PString(pendingDeletionTableTrojan.Rows[i][12].ToString()),font,Brushes.Black,
 					new RectangleF(670,y+5,225,95));
 				//New carrier information if necessary.
 				text="New\nCarrier:";

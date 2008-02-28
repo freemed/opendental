@@ -203,6 +203,11 @@ namespace OpenDental {
 			return retPlan;
 		}
 
+		public static InsPlan[] GetByTrojanID(string TrojanID) {
+			string command="SELECT * FROM insplan WHERE TrojanID = '"+POut.PString(TrojanID)+"'";
+			return RefreshFill(command);
+		}
+
 		///<summary>Used in FormInsSelectSubscr to get a list of insplans for one subscriber directly from the database.</summary>
 		public static InsPlan[] GetListForSubscriber(int subscriber) {
 			string command="SELECT * FROM insplan WHERE Subscriber="+POut.PInt(subscriber);
