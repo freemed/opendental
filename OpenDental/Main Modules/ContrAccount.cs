@@ -106,6 +106,7 @@ namespace OpenDental {
 		private OpenDental.UI.Button butToday;
 		private CheckBox checkShowFamilyComm;
 		private FormPayPlan FormPayPlan2;
+		private int PrevGuar;//so that it will build
 
 		#region user variables
 		///<summary>This holds nearly all of the data needed for display.  It is retrieved in one call to the database.</summary>
