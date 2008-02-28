@@ -255,6 +255,7 @@ namespace OpenDental{
 			else{
 				queryIns+="GROUP BY claimproc.ClaimPaymentNum,provider.ProvNum";
 			}
+			queryIns+=" ORDER BY claimproc.DateCP";
 			if(checkAllProv.Checked){
 				whereProv="";
 			}
@@ -287,6 +288,7 @@ namespace OpenDental{
 			else{
 				queryPat+="GROUP BY payment.PayNum,provider.ProvNum";
 			}
+			queryPat+=" ORDER BY paysplit.DatePay";
 			DataTable tableIns=General.GetTable(queryIns);
 			DataTable tablePat=General.GetTable(queryPat);
 			FormReport FormR=new FormReport();
