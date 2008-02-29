@@ -2013,7 +2013,8 @@ namespace OpenDental{
 				List<ProcTP> proctpList=ProcTPs.RefreshForTP(PlanList[gridPlans.SelectedIndices[0]-1].TreatPlanNum);
 				if(PlanList[gridPlans.SelectedIndices[0]-1].SigIsTopaz){
 					Topaz.SigPlusNET sigBoxTopaz=new Topaz.SigPlusNET();
-					sigBoxTopaz.Size=new System.Drawing.Size(394,91);
+					sigBoxTopaz.Size=new System.Drawing.Size(362,79);
+					Controls.Add(sigBoxTopaz);
 					sigBoxTopaz.ClearTablet();
 					sigBoxTopaz.SetSigCompressionMode(0);
 					sigBoxTopaz.SetEncryptionMode(0);
@@ -2026,11 +2027,13 @@ namespace OpenDental{
 					//if(sigBoxTopaz.NumberOfTabletPoints()==0) {
 					//	labelInvalidSig.Visible=true;
 					//}
+					sigBoxTopaz.Refresh();
 					sigBitmap=(Bitmap)sigBoxTopaz.GetSigImage();
+					Controls.Remove(sigBoxTopaz);
 				}
 				else{
 					SignatureBox sigBox=new SignatureBox();
-					sigBox.Size=new System.Drawing.Size(394,91);
+					sigBox.Size=new System.Drawing.Size(362,79);
 					sigBox.ClearTablet();
 					//sigBox.SetSigCompressionMode(0);
 					//sigBox.SetEncryptionMode(0);

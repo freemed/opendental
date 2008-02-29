@@ -51,11 +51,11 @@ namespace OpenDental{
 				sigBoxTopaz=new Topaz.SigPlusNET();
 				sigBoxTopaz.Location=sigBox.Location;//this puts both boxes in the same spot.
 				sigBoxTopaz.Name="sigBoxTopaz";
-				sigBoxTopaz.Size=new System.Drawing.Size(394,91);//Must be same dimensions as the sigBox.
+				sigBoxTopaz.Size=new System.Drawing.Size(362,79);
 				sigBoxTopaz.TabIndex=92;
 				sigBoxTopaz.Text="sigPlusNET1";
 				sigBoxTopaz.Visible=false;
-				Controls.Add(sigBoxTopaz);
+				panelSig.Controls.Add(sigBoxTopaz);
 				sigBox.SetTabletState(1);//It starts out accepting input. It will be set to 0 if a sig is already present.  It will be set back to 1 if note changes or if user clicks Clear.
 			}
 		}
@@ -123,16 +123,16 @@ namespace OpenDental{
 			this.panelSig.Controls.Add(this.label1);
 			this.panelSig.Controls.Add(this.sigBox);
 			this.panelSig.Dock = System.Windows.Forms.DockStyle.Bottom;
-			this.panelSig.Location = new System.Drawing.Point(0,554);
+			this.panelSig.Location = new System.Drawing.Point(0,562);
 			this.panelSig.Name = "panelSig";
-			this.panelSig.Size = new System.Drawing.Size(842,100);
+			this.panelSig.Size = new System.Drawing.Size(842,92);
 			this.panelSig.TabIndex = 92;
 			// 
 			// labelInvalidSig
 			// 
 			this.labelInvalidSig.BackColor = System.Drawing.SystemColors.Window;
 			this.labelInvalidSig.Font = new System.Drawing.Font("Microsoft Sans Serif",8.25F,System.Drawing.FontStyle.Regular,System.Drawing.GraphicsUnit.Point,((byte)(0)));
-			this.labelInvalidSig.Location = new System.Drawing.Point(266,18);
+			this.labelInvalidSig.Location = new System.Drawing.Point(251,13);
 			this.labelInvalidSig.Name = "labelInvalidSig";
 			this.labelInvalidSig.Size = new System.Drawing.Size(196,59);
 			this.labelInvalidSig.TabIndex = 99;
@@ -146,7 +146,7 @@ namespace OpenDental{
 			this.butTopazSign.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butTopazSign.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butTopazSign.CornerRadius = 4F;
-			this.butTopazSign.Location = new System.Drawing.Point(562,35);
+			this.butTopazSign.Location = new System.Drawing.Point(537,35);
 			this.butTopazSign.Name = "butTopazSign";
 			this.butTopazSign.Size = new System.Drawing.Size(81,25);
 			this.butTopazSign.TabIndex = 98;
@@ -161,7 +161,7 @@ namespace OpenDental{
 			this.butClearSig.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butClearSig.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butClearSig.CornerRadius = 4F;
-			this.butClearSig.Location = new System.Drawing.Point(562,4);
+			this.butClearSig.Location = new System.Drawing.Point(537,4);
 			this.butClearSig.Name = "butClearSig";
 			this.butClearSig.Size = new System.Drawing.Size(81,25);
 			this.butClearSig.TabIndex = 97;
@@ -175,7 +175,7 @@ namespace OpenDental{
 			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
-			this.butCancel.Location = new System.Drawing.Point(741,63);
+			this.butCancel.Location = new System.Drawing.Point(741,57);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75,25);
 			this.butCancel.TabIndex = 94;
@@ -190,7 +190,7 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(741,31);
+			this.butOK.Location = new System.Drawing.Point(741,25);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75,25);
 			this.butOK.TabIndex = 93;
@@ -212,7 +212,7 @@ namespace OpenDental{
 			// 
 			this.sigBox.Location = new System.Drawing.Point(162,3);
 			this.sigBox.Name = "sigBox";
-			this.sigBox.Size = new System.Drawing.Size(394,91);
+			this.sigBox.Size = new System.Drawing.Size(362,79);
 			this.sigBox.TabIndex = 91;
 			this.sigBox.MouseUp += new System.Windows.Forms.MouseEventHandler(this.sigBox_MouseUp);
 			// 
@@ -238,8 +238,8 @@ namespace OpenDental{
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Report";
 			this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
-			this.Layout += new System.Windows.Forms.LayoutEventHandler(this.FormReport_Layout);
 			this.Load += new System.EventHandler(this.FormTPsign_Load);
+			this.Layout += new System.Windows.Forms.LayoutEventHandler(this.FormReport_Layout);
 			this.panelSig.ResumeLayout(false);
 			this.ResumeLayout(false);
 
@@ -261,21 +261,23 @@ namespace OpenDental{
 			labelInvalidSig.Visible=false;
 			sigBox.Visible=true;
 			proctpList=ProcTPs.RefreshForTP(TPcur.TreatPlanNum);
-			if(Environment.OSVersion.Platform!=PlatformID.Unix && TPcur.SigIsTopaz) {
+			if(TPcur.SigIsTopaz){
 				if(TPcur.Signature!="") {
-					sigBox.Visible=false;
-					sigBoxTopaz.Visible=true;
-					sigBoxTopaz.ClearTablet();
-					sigBoxTopaz.SetSigCompressionMode(0);
-					sigBoxTopaz.SetEncryptionMode(0);
-					sigBoxTopaz.SetKeyString(TreatPlans.GetHashString(TPcur,proctpList));
-					//"0000000000000000");
-					//sigBoxTopaz.SetAutoKeyData(ProcCur.Note+ProcCur.UserNum.ToString());
-					sigBoxTopaz.SetEncryptionMode(2);//high encryption
-					sigBoxTopaz.SetSigCompressionMode(2);//high compression
-					sigBoxTopaz.SetSigString(TPcur.Signature);
-					if(sigBoxTopaz.NumberOfTabletPoints()==0) {
-						labelInvalidSig.Visible=true;
+					if(Environment.OSVersion.Platform!=PlatformID.Unix) {
+						sigBox.Visible=false;
+						sigBoxTopaz.Visible=true;
+						sigBoxTopaz.ClearTablet();
+						sigBoxTopaz.SetSigCompressionMode(0);
+						sigBoxTopaz.SetEncryptionMode(0);
+						sigBoxTopaz.SetKeyString(TreatPlans.GetHashString(TPcur,proctpList));
+						//"0000000000000000");
+						//sigBoxTopaz.SetAutoKeyData(ProcCur.Note+ProcCur.UserNum.ToString());
+						sigBoxTopaz.SetEncryptionMode(2);//high encryption
+						sigBoxTopaz.SetSigCompressionMode(2);//high compression
+						sigBoxTopaz.SetSigString(TPcur.Signature);
+						if(sigBoxTopaz.NumberOfTabletPoints()==0) {
+							labelInvalidSig.Visible=true;
+						}
 					}
 				}
 			}
