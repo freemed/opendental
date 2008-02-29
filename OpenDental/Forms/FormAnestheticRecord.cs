@@ -796,11 +796,11 @@ namespace OpenDental {
 			// 
 			this.comboBox7.FormattingEnabled = true;
 			this.comboBox7.Items.AddRange(new object[] {
-			"1",
-			"2",
-			"3",
-			"4",
-			"5"});
+            "1",
+            "2",
+            "3",
+            "4",
+            "5"});
 			this.comboBox7.Location = new System.Drawing.Point(65, 100);
 			this.comboBox7.Name = "comboBox7";
 			this.comboBox7.Size = new System.Drawing.Size(40, 21);
@@ -830,9 +830,9 @@ namespace OpenDental {
 			// 
 			this.comboBox5.FormattingEnabled = true;
 			this.comboBox5.Items.AddRange(new object[] {
-			"I",
-			"II",
-			"III"});
+            "I",
+            "II",
+            "III"});
 			this.comboBox5.Location = new System.Drawing.Point(17, 32);
 			this.comboBox5.Name = "comboBox5";
 			this.comboBox5.Size = new System.Drawing.Size(50, 21);
@@ -1217,6 +1217,7 @@ namespace OpenDental {
 			this.sigBox.Name = "sigBox";
 			this.sigBox.Size = new System.Drawing.Size(176, 79);
 			this.sigBox.TabIndex = 135;
+			this.sigBox.Click += new System.EventHandler(this.sigBox_Click);
 			// 
 			// groupBox4
 			// 
@@ -1228,6 +1229,7 @@ namespace OpenDental {
 			this.groupBox4.Location = new System.Drawing.Point(12, 352);
 			this.groupBox4.Name = "groupBox4";
 			this.groupBox4.Size = new System.Drawing.Size(592, 178);
+			this.groupBox4.TabIndex = 139;
 			this.groupBox4.TabStop = false;
 			this.groupBox4.Text = "Vital Signs";
 			// 
@@ -1343,7 +1345,7 @@ namespace OpenDental {
 			// 
 			// FormAnestheticRecord
 			// 
-			this.ClientSize = new System.Drawing.Size(793, 734);
+			this.ClientSize = new System.Drawing.Size(793, 732);
 			this.Controls.Add(this.groupBox1);
 			this.Controls.Add(this.label22);
 			this.Controls.Add(this.richTextBox1);
@@ -1433,6 +1435,11 @@ namespace OpenDental {
 		}
 
 		private void listAnesthetic_SelectedIndexChanged(object sender, EventArgs e){
+
+		}
+
+		private void sigBox_Click(object sender, EventArgs e)
+		{
 
 		}
 		
