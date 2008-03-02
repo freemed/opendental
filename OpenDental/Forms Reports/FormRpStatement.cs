@@ -815,6 +815,47 @@ namespace OpenDental{
 			frame = MigraDocHelper.CreateContainer(section,455,380,250,200);					
 			//draw backgrounds first so the text always makes it on top (seems to mess it up if I do it in the same context as the text)
 			//so unless someone can figure out how to combine them, we will just have to run two separate if structures
+
+			/*
+			string command="SELECT COUNT(*)"+
+			"FROM patplan,patient"+
+			"WHERE patplan.PatNum=patient.PatNum"+
+			"AND patient.Guarantor=123";
+				Table InsOnAccountTable=General.GetTable(command);
+				int InsOnAccountSituation=0;
+				if (InsOnAccountTable.Rows.Count > 0){//ins on at least on family member
+					
+					for (int i = 0; i < InsOnAccount.Rows.Count; i++){
+						MembersWithInsOnAccount++;
+					}
+				}
+				else{//no ins on any family member
+				}
+
+
+			
+			SELECT COUNT(*)
+			FROM patplan,patient
+			WHERE patplan.PatNum=patient.PatNum
+			AND patient.Guarantor=123
+			 */
+			//PatPlan[] PatPlanList = PatPlans.Refresh(PatGuar)
+			InsPlan[] PlanList = InsPlans.Refresh(fam);
+			if(PlanList.Rows.Count >0){//someone has ins in the family
+				for (int i = 0; i < PlanList.Rows.Count; i++){
+					if (PlanList[i].DateEffective.Year > 1880
+						&& PlanList[i].DateEffective.Date <= DateTime.Today.Date
+						&& PlanList[i].DateTerm.Date > DateTime.Today.Date){//plan is currently effective
+	//Todo:determine if someone in the family is not covered
+						//for(int j=0;j<famCur.List.Length;j++);
+						//	if(fam.List[j].PatNum=PlanList[i].)//
+						//PlanList[i].
+						//everyone has ins in family
+					}
+					else { } //inactive plan
+
+				}
+			}
 			if(PrefB.GetBool("StatementSummaryShowInsInfo")){
 				if(PatGuar.HasIns=="I"){
 					if (PrefB.GetBool("BalancesDontSubtractIns")){
