@@ -240,6 +240,7 @@ namespace OpenDental{
 			this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
 			this.Load += new System.EventHandler(this.FormTPsign_Load);
 			this.Layout += new System.Windows.Forms.LayoutEventHandler(this.FormReport_Layout);
+			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormTPsign_FormClosing);
 			this.panelSig.ResumeLayout(false);
 			this.ResumeLayout(false);
 
@@ -269,12 +270,14 @@ namespace OpenDental{
 						sigBoxTopaz.ClearTablet();
 						sigBoxTopaz.SetSigCompressionMode(0);
 						sigBoxTopaz.SetEncryptionMode(0);
-						sigBoxTopaz.SetKeyString(TreatPlans.GetHashString(TPcur,proctpList));
+						string keystring=TreatPlans.GetHashString(TPcur,proctpList);
+						sigBoxTopaz.SetKeyString(keystring);
 						//"0000000000000000");
 						//sigBoxTopaz.SetAutoKeyData(ProcCur.Note+ProcCur.UserNum.ToString());
 						sigBoxTopaz.SetEncryptionMode(2);//high encryption
 						sigBoxTopaz.SetSigCompressionMode(2);//high compression
 						sigBoxTopaz.SetSigString(TPcur.Signature);
+						sigBoxTopaz.Refresh();
 						if(sigBoxTopaz.NumberOfTabletPoints()==0) {
 							labelInvalidSig.Visible=true;
 						}
@@ -554,6 +557,10 @@ namespace OpenDental{
 
 		private void butCancel_Click(object sender,EventArgs e) {
 			DialogResult=DialogResult.Cancel;
+		}
+
+		private void FormTPsign_FormClosing(object sender,FormClosingEventArgs e) {
+			sigBoxTopaz.Dispose();
 		}
 
 		

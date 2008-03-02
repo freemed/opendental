@@ -1675,6 +1675,7 @@ namespace OpenDental{
 			this.Text = "Procedure Info";
 			this.Load += new System.EventHandler(this.FormProcInfo_Load);
 			this.Closing += new System.ComponentModel.CancelEventHandler(this.FormProcEdit_Closing);
+			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormProcEdit_FormClosing);
 			this.groupQuadrant.ResumeLayout(false);
 			this.panelSurfaces.ResumeLayout(false);
 			this.groupArch.ResumeLayout(false);
@@ -3080,6 +3081,10 @@ namespace OpenDental{
 		}
 		private void butCancel_Click(object sender,System.EventArgs e) {
 			DialogResult=DialogResult.Cancel;
+		}
+
+		private void FormProcEdit_FormClosing(object sender,FormClosingEventArgs e) {
+			sigBoxTopaz.Dispose();
 		}
 
 	//private void richTextBox1_TextChanged(object sender, System.EventArgs e) {

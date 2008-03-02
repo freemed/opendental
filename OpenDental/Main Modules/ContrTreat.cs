@@ -2018,7 +2018,8 @@ namespace OpenDental{
 					sigBoxTopaz.ClearTablet();
 					sigBoxTopaz.SetSigCompressionMode(0);
 					sigBoxTopaz.SetEncryptionMode(0);
-					sigBoxTopaz.SetKeyString(TreatPlans.GetHashString(PlanList[gridPlans.SelectedIndices[0]-1],proctpList));
+					string keystring=TreatPlans.GetHashString(PlanList[gridPlans.SelectedIndices[0]-1],proctpList);
+					sigBoxTopaz.SetKeyString(keystring);
 					//"0000000000000000");
 					//sigBoxTopaz.SetAutoKeyData(ProcCur.Note+ProcCur.UserNum.ToString());
 					sigBoxTopaz.SetEncryptionMode(2);//high encryption
@@ -2027,9 +2028,13 @@ namespace OpenDental{
 					//if(sigBoxTopaz.NumberOfTabletPoints()==0) {
 					//	labelInvalidSig.Visible=true;
 					//}
+					//int numpoints=sigBoxTopaz.NumberOfTabletPoints();
 					sigBoxTopaz.Refresh();
-					sigBitmap=(Bitmap)sigBoxTopaz.GetSigImage();
+					//sigBitmap=(Bitmap)sigBoxTopaz.GetSigImage().Clone();
+					sigBitmap=new Bitmap(362,79);
+					sigBoxTopaz.DrawToBitmap(sigBitmap,new Rectangle(0,0,362,79));//GetBitmap would probably work.
 					Controls.Remove(sigBoxTopaz);
+					sigBoxTopaz.Dispose();
 				}
 				else{
 					SignatureBox sigBox=new SignatureBox();
