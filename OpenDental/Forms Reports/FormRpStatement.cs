@@ -815,7 +815,8 @@ namespace OpenDental{
 			frame = MigraDocHelper.CreateContainer(section,455,380,250,200);					
 			//draw backgrounds first so the text always makes it on top (seems to mess it up if I do it in the same context as the text)
 			//so unless someone can figure out how to combine them, we will just have to run two separate if structures
-
+			
+			//Working on figuring out if all patients in account have ins or not
 			/*
 			string command="SELECT COUNT(*)"+
 			"FROM patplan,patient"+
@@ -839,25 +840,47 @@ namespace OpenDental{
 			WHERE patplan.PatNum=patient.PatNum
 			AND patient.Guarantor=123
 			 */
+			
 			//PatPlan[] PatPlanList = PatPlans.Refresh(PatGuar)
 			InsPlan[] PlanList = InsPlans.Refresh(fam);
-			if(PlanList.Rows.Count >0){//someone has ins in the family
-				for (int i = 0; i < PlanList.Rows.Count; i++){
-					if (PlanList[i].DateEffective.Year > 1880
-						&& PlanList[i].DateEffective.Date <= DateTime.Today.Date
-						&& PlanList[i].DateTerm.Date > DateTime.Today.Date){//plan is currently effective
-	//Todo:determine if someone in the family is not covered
+				int InsOnAccountSituation=0;//will have three states 0 no, 1 yes, 2 some family members
+			if(PlanList.Length >0){//someone has ins in the family, but not known yet if it is effective
+				for (int i = 0; i < PlanList.Length; i++){
+					if (PlanList[i].DateTerm.Year > 1880){
+						if(PlanList[i].DateTerm.Date <= DateTime.Today.Date){
+							if(PlanList[i].DateEffective.Year > 1880){
+								if(PlanList[i].DateEffective.Date > DateTime.Today.Date){//date specified and still effective
+									InsOnAccountSituation=1;
+								}
+							}
+							else{//date not specified will have to assume it is still good
+								InsOnAccountSituation=1;
+							}
+						}
+					}
+					else{//end date not specifed, will have to assume it is good and now check effective date
+							if(PlanList[i].DateEffective.Year > 1880){
+								if(PlanList[i].DateEffective.Date > DateTime.Today.Date){//date specified and still effective
+									InsOnAccountSituation=1;
+								}
+							}
+							else{//date not specified will have to assume it is still good
+								InsOnAccountSituation=1;
+							}
+					}
+				}
+						//plan is currently effective
+	//Todo:determine if someone in the family is not covered. Right now, we just know ins does exist for someone in the family
 						//for(int j=0;j<famCur.List.Length;j++);
 						//	if(fam.List[j].PatNum=PlanList[i].)//
 						//PlanList[i].
-						//everyone has ins in family
-					}
-					else { } //inactive plan
-
-				}
+						InsOnAccountSituation=1;
 			}
+			else { //inactive plan
+			}
+
 			if(PrefB.GetBool("StatementSummaryShowInsInfo")){
-				if(PatGuar.HasIns=="I"){
+				if(InsOnAccountSituation==1){
 					if (PrefB.GetBool("BalancesDontSubtractIns")){
 						MigraDocHelper.FillRectangle(frame,System.Drawing.Color.LightGray,57,1,280,16);
 					}
@@ -885,7 +908,7 @@ namespace OpenDental{
 				text = Lan.g(this,"Current account balance:");
 				par.AddFormattedText(text,font);
 				par.AddLineBreak();
-				if(PatGuar.HasIns=="I"){//Pt has ins
+				if(InsOnAccountSituation==1){//Pt has ins
 					if (PrefB.GetBool("BalancesDontSubtractIns")){
 						font = MigraDocHelper.CreateFont(11,false);
 						text = Lan.g(this,"Insurance pending:");
@@ -952,7 +975,7 @@ namespace OpenDental{
 				text = PatGuar.BalTotal.ToString("c");
 				par.AddFormattedText(text, font);
 				par.AddLineBreak();
-				if(PatGuar.HasIns=="I"){
+				if(InsOnAccountSituation==1){
 					if(PrefB.GetBool("BalancesDontSubtractIns")){
 						font = MigraDocHelper.CreateFont(11,false);
 					}
