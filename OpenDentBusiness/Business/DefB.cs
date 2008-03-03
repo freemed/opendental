@@ -8,7 +8,7 @@ using System.Text;
 namespace OpenDentBusiness {
 	///<summary></summary>
 	public class DefB {
-		///<summary>This gets filled automatically when Refresh is called.  </summary>
+		//<summary>This gets filled automatically when Refresh is called.  </summary>
 		//public static DataTable RawData;
 		///<summary>Stores all defs in a 2D array except the hidden ones.  The first dimension is the category, in int format.  The second dimension is the index of the definition in this category.  This is dependent on how it was refreshed, and not on what is in the database.  If you need to reference a specific def, then the DefNum is more effective.</summary>
 		public static Def[][] Short;

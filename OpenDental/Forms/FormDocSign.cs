@@ -46,18 +46,20 @@ namespace OpenDental{
 		public FormDocSign(Document docCur,IImageStore imageStore){
 			InitializeComponent();
 			//Can only allow tablet signatures on Windows, since we use a native dll to handle the tablet interaction.
-			if(Environment.OSVersion.Platform!=PlatformID.Unix){
+			if(Environment.OSVersion.Platform==PlatformID.Unix){
+				butTopazSign.Visible=false;
+			}
+			else{
 				//Add signature box for Topaz signatures.
 				sigBoxTopaz=new Topaz.SigPlusNET();
 				sigBoxTopaz.Location=sigBox.Location;//this puts both boxes in the same spot.
 				sigBoxTopaz.Name="sigBoxTopaz";
-				sigBoxTopaz.Size=new System.Drawing.Size(394,91);//Must be same dimensions as the sigBox.
+				sigBoxTopaz.Size=new System.Drawing.Size(362,79);
 				sigBoxTopaz.TabIndex=92;
 				sigBoxTopaz.Text="sigPlusNET1";
 				sigBoxTopaz.Visible=false;
 				Controls.Add(sigBoxTopaz);
 				sigBox.SetTabletState(1);//It starts out accepting input. It will be set to 0 if a sig is already present.  It will be set back to 1 if note changes or if user clicks Clear.
-				butTopazSign.Visible=false;
 			}
 			DocCur=docCur;
 			this.imageStore=imageStore;
@@ -94,11 +96,13 @@ namespace OpenDental{
 			// 
 			// textNote
 			// 
+			this.textNote.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
 			this.textNote.Location = new System.Drawing.Point(39,0);
 			this.textNote.MaxLength = 255;
 			this.textNote.Multiline = true;
 			this.textNote.Name = "textNote";
-			this.textNote.Size = new System.Drawing.Size(302,91);
+			this.textNote.Size = new System.Drawing.Size(302,85);
 			this.textNote.TabIndex = 17;
 			this.textNote.TextChanged += new System.EventHandler(this.textNote_TextChanged);
 			// 
@@ -124,7 +128,7 @@ namespace OpenDental{
 			// 
 			this.labelInvalidSig.BackColor = System.Drawing.SystemColors.Window;
 			this.labelInvalidSig.Font = new System.Drawing.Font("Microsoft Sans Serif",8.25F,System.Drawing.FontStyle.Regular,System.Drawing.GraphicsUnit.Point,((byte)(0)));
-			this.labelInvalidSig.Location = new System.Drawing.Point(566,13);
+			this.labelInvalidSig.Location = new System.Drawing.Point(550,10);
 			this.labelInvalidSig.Name = "labelInvalidSig";
 			this.labelInvalidSig.Size = new System.Drawing.Size(196,59);
 			this.labelInvalidSig.TabIndex = 95;
@@ -135,7 +139,7 @@ namespace OpenDental{
 			// 
 			this.sigBox.Location = new System.Drawing.Point(457,0);
 			this.sigBox.Name = "sigBox";
-			this.sigBox.Size = new System.Drawing.Size(394,91);
+			this.sigBox.Size = new System.Drawing.Size(362,79);
 			this.sigBox.TabIndex = 91;
 			this.sigBox.MouseUp += new System.Windows.Forms.MouseEventHandler(this.sigBox_MouseUp);
 			// 
@@ -146,7 +150,7 @@ namespace OpenDental{
 			this.butClearSig.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butClearSig.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butClearSig.CornerRadius = 4F;
-			this.butClearSig.Location = new System.Drawing.Point(370,30);
+			this.butClearSig.Location = new System.Drawing.Point(370,25);
 			this.butClearSig.Name = "butClearSig";
 			this.butClearSig.Size = new System.Drawing.Size(81,25);
 			this.butClearSig.TabIndex = 90;
@@ -162,7 +166,7 @@ namespace OpenDental{
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
 			this.butCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.butCancel.Location = new System.Drawing.Point(853,56);
+			this.butCancel.Location = new System.Drawing.Point(837,50);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75,25);
 			this.butCancel.TabIndex = 4;
@@ -177,7 +181,7 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(853,25);
+			this.butOK.Location = new System.Drawing.Point(837,19);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75,25);
 			this.butOK.TabIndex = 3;
@@ -191,7 +195,7 @@ namespace OpenDental{
 			this.butTopazSign.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butTopazSign.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butTopazSign.CornerRadius = 4F;
-			this.butTopazSign.Location = new System.Drawing.Point(370,61);
+			this.butTopazSign.Location = new System.Drawing.Point(370,56);
 			this.butTopazSign.Name = "butTopazSign";
 			this.butTopazSign.Size = new System.Drawing.Size(81,25);
 			this.butTopazSign.TabIndex = 96;
@@ -203,7 +207,7 @@ namespace OpenDental{
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.BackColor = System.Drawing.SystemColors.Control;
-			this.ClientSize = new System.Drawing.Size(929,90);
+			this.ClientSize = new System.Drawing.Size(913,84);
 			this.Controls.Add(this.butTopazSign);
 			this.Controls.Add(this.butCancel);
 			this.Controls.Add(this.butOK);
@@ -221,6 +225,7 @@ namespace OpenDental{
 			this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
 			this.Text = "Signature";
 			this.Load += new System.EventHandler(this.FormDocSign_Load);
+			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormDocSign_FormClosing);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -233,21 +238,24 @@ namespace OpenDental{
 			textNote.Text=DocCur.Note;
 			labelInvalidSig.Visible=false;
 			sigBox.Visible=true;
-			if(Environment.OSVersion.Platform!=PlatformID.Unix && DocCur.SigIsTopaz) {
+			if(DocCur.SigIsTopaz) {
 				if(DocCur.Signature!="") {
-					sigBox.Visible=false;
-					sigBoxTopaz.Visible=true;
-					sigBoxTopaz.ClearTablet();
-					sigBoxTopaz.SetSigCompressionMode(0);
-					sigBoxTopaz.SetEncryptionMode(0);
-					sigBoxTopaz.SetKeyString(imageStore.GetHashString(DocCur));
-						//"0000000000000000");
-					//sigBoxTopaz.SetAutoKeyData(ProcCur.Note+ProcCur.UserNum.ToString());
-					sigBoxTopaz.SetEncryptionMode(2);//high encryption
-					sigBoxTopaz.SetSigCompressionMode(2);//high compression
-					sigBoxTopaz.SetSigString(DocCur.Signature);
-					if(sigBoxTopaz.NumberOfTabletPoints()==0) {
-						labelInvalidSig.Visible=true;
+					if(Environment.OSVersion.Platform!=PlatformID.Unix){
+						sigBox.Visible=false;
+						sigBoxTopaz.Visible=true;
+						sigBoxTopaz.ClearTablet();
+						sigBoxTopaz.SetSigCompressionMode(0);
+						sigBoxTopaz.SetEncryptionMode(0);
+						sigBoxTopaz.SetKeyString(imageStore.GetHashString(DocCur));
+							//"0000000000000000");
+						//sigBoxTopaz.SetAutoKeyData(ProcCur.Note+ProcCur.UserNum.ToString());
+						sigBoxTopaz.SetEncryptionMode(2);//high encryption
+						sigBoxTopaz.SetSigCompressionMode(2);//high compression
+						sigBoxTopaz.SetSigString(DocCur.Signature);
+						sigBoxTopaz.Refresh();
+						if(sigBoxTopaz.NumberOfTabletPoints()==0) {
+							labelInvalidSig.Visible=true;
+						}
 					}
 				}
 			}
@@ -285,7 +293,6 @@ namespace OpenDental{
 			labelInvalidSig.Visible=false;
 		}
 
-		///<summary>This button is disabled in Unix operating systems.</summary>
 		private void butTopazSign_Click(object sender,EventArgs e) {
 			sigBox.Visible=false;
 			sigBoxTopaz.Visible=true;
@@ -357,14 +364,18 @@ namespace OpenDental{
 		}
 
 		private void butOK_Click(object sender, System.EventArgs e){
-			SaveSignature();
 			DocCur.Note=textNote.Text;
+			SaveSignature();
 			Documents.Update(DocCur);
 			DialogResult=DialogResult.OK;
 		}
 
 		private void butCancel_Click(object sender, System.EventArgs e) {
 			DialogResult=DialogResult.Cancel;
+		}
+
+		private void FormDocSign_FormClosing(object sender,FormClosingEventArgs e) {
+			sigBoxTopaz.Dispose();
 		}
 
 		
