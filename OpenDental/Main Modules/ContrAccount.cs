@@ -1617,7 +1617,8 @@ namespace OpenDental {
 		///<summary></summary>
 		public void ModuleSelected(int patNum) {
 			bool selectingFamily = false;
-			if(PrefB.GetBool("IntermingleFamilyDefault"))
+			/*
+			 if(PrefB.GetBool("IntermingleFamilyDefault"))
 			{
 				if(PatCur != null)
 				{
@@ -1631,6 +1632,7 @@ namespace OpenDental {
 					selectingFamily = true;
 				}
 			}
+			*/
 			RefreshModuleData(patNum,false);
 			RefreshModuleScreen(false);
 		}
@@ -1699,7 +1701,8 @@ namespace OpenDental {
 
 		///<summary></summary>
 		private void RefreshModuleData(int patNum,bool isSelectingFamily) {
-			if(PrefB.GetBool("IntermingleFamilyDefault"))
+			/*
+			 if(PrefB.GetBool("IntermingleFamilyDefault"))
 			{
 				if(PatCur != null)
 				{
@@ -1713,6 +1716,7 @@ namespace OpenDental {
 					isSelectingFamily = true;
 				}
 			}
+			 */
 			if(patNum==0)
 			{
 				PatCur=null;
