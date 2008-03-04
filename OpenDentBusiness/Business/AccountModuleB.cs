@@ -31,7 +31,7 @@ namespace OpenDentBusiness {
 			}
 			bool singlePatient=!intermingled;//so one or the other will be true
 			//Gets 3 tables: account(or account###,account###,etc), patient, payplan.
-			GetAccount(patNum,fromDate,toDate,intermingled,singlePatient);
+			GetAccount(patNum,fromDate,toDate,intermingled,singlePatient,false);
 			//GetPayPlans(patNum,fromDate,toDate,isFamily);
 			return retVal;
 		}
@@ -57,7 +57,7 @@ namespace OpenDentBusiness {
 			//	GetCommLog(patNum);
 			//}
 			//Gets 3 tables: account(or account###,account###,etc), patient, payplan.
-			GetAccount(patNum,fromDate,toDate,intermingled,singlePatient);
+			GetAccount(patNum,fromDate,toDate,intermingled,singlePatient,true);
 			//GetPayPlans(patNum,fromDate,toDate,isFamily);
 			GetApptTable(fam,singlePatient,patNum);//table= appts
 			return retVal;
@@ -382,8 +382,8 @@ namespace OpenDentBusiness {
 			table.Columns.Add("tth");
 		}
 		
-		///<summary>Also gets the patient table, which has one row for each family member. Also currently runs aging.  Also gets payplan table.</summary>
-		private static void GetAccount(int patNum,DateTime fromDate,DateTime toDate,bool intermingled,bool singlePatient) {
+		///<summary>Also gets the patient table, which has one row for each family member. Also currently runs aging.  Also gets payplan table.  If isForStatement, then the resulting payplan table looks totally different.</summary>
+		private static void GetAccount(int patNum,DateTime fromDate,DateTime toDate,bool intermingled,bool singlePatient,bool isForStatement) {
 			DataConnection dcon=new DataConnection();
 			DataTable table=new DataTable("account");
 			//run aging.  This need serious optimization-------------------------------------------------------
@@ -857,7 +857,12 @@ namespace OpenDentBusiness {
 				row["tth"]="";
 				rows.Add(row);
 			}
-			GetPayPlans(rawPayPlan,rawPay);
+			if(isForStatement){
+				GetPayPlansForStatement(rawPayPlan,rawPay,fromDate,toDate);
+			}
+			else{
+				GetPayPlans(rawPayPlan,rawPay);
+			}
 			//Sorting-----------------------------------------------------------------------------------------
 			rows.Sort(new AccountLineComparer());
 			//rows.Sort(CompareCommRows);
@@ -1035,7 +1040,6 @@ namespace OpenDentBusiness {
 
 		///<summary>Gets payment plans for the family.  RawPay will include any paysplits for anyone in the family, so it's guaranteed to include all paysplits for a given payplan since payplans only show in the guarantor's family.  Database maint tool enforces paysplit.patnum=payplan.guarantor just in case.</summary>
 		private static void GetPayPlans(DataTable rawPayPlan,DataTable rawPay){
-			//,int patNum,DateTime fromDate,DateTime toDate,bool isFamily){
 			DataConnection dcon=new DataConnection();
 			DataTable table=new DataTable("payplan");
 			DataRow row;
@@ -1110,6 +1114,102 @@ namespace OpenDentBusiness {
 			}
 			retVal.Tables.Add(table);
 		}
+
+		
+		///<summary>Gets payment plans for the family.  RawPay will include any paysplits for anyone in the family, so it's guaranteed to include all paysplits for a given payplan since payplans only show in the guarantor's family.  Database maint tool enforces paysplit.patnum=payplan.guarantor just in case.  fromDate and toDate are only used if isForStatement.  From date lets us restrict how many amortization items to show.  toDate is typically 10 days in the future.</summary>
+		private static void GetPayPlansForStatement(DataTable rawPayPlan,DataTable rawPay,DateTime fromDate,DateTime toDate){
+			DataConnection dcon=new DataConnection();
+			DataTable table=new DataTable("payplan");
+			DataRow row;
+			SetTableColumns(table);//this will allow it to later be fully integrated into a single grid.
+			List<DataRow> rows=new List<DataRow>();
+			//DateTime dateT;
+			//double paid;
+			double princ;
+			//double princDue;
+			//double interestDue;
+			//double accumDue;
+			//double princPaid;
+			//double totCost;
+			//double due;
+			//double balance;
+			for(int i=0;i<rawPayPlan.Rows.Count;i++){//loop through the payment plans (usually zero or one)
+				//first, calculate the numbers-------------------------------------------------------------
+				//paid=0;
+				//for(int p=0;p<rawPay.Rows.Count;p++){
+				//	if(rawPay.Rows[p]["PayPlanNum"].ToString()==rawPayPlan.Rows[i]["PayPlanNum"].ToString()){
+				//		paid+=PIn.PDouble(rawPay.Rows[p]["SplitAmt"].ToString());
+				//	}
+				//}
+				princ=PIn.PDouble(rawPayPlan.Rows[i]["_principal"].ToString());
+				//princDue=PIn.PDouble(rawPayPlan.Rows[i]["_principalDue"].ToString());
+				//interestDue=PIn.PDouble(rawPayPlan.Rows[i]["_interestDue"].ToString());
+				//accumDue=princDue+interestDue;
+				//princPaid=paid-interestDue;
+				//if(princPaid<0){
+				//	princPaid=0;
+				//}
+				//totCost=princ+PIn.PDouble(rawPayPlan.Rows[i]["_interest"].ToString());
+				//due=accumDue-paid;
+				//balance=princ-princPaid;
+				//summary row----------------------------------------------------------------------
+				row=table.NewRow();
+				row["AdjNum"]="0";
+				row["balance"]="";
+				row["balanceDouble"]=0;
+				row["chargesDouble"]=0;
+				row["charges"]="";
+				row["ClaimNum"]="0";
+				row["ClaimPaymentNum"]="0";
+				row["colorText"]=Color.Black.ToArgb().ToString();
+				row["creditsDouble"]=0;
+				row["credits"]="";
+				row["DateTime"]=DateTime.MinValue;
+				row["date"]="";
+				row["description"]=Lan.g("AccountModule","Payment Plan.  Total loan amount: ")+princ.ToString("c");
+				row["extraDetail"]="";
+				row["patient"]="";
+				row["PatNum"]="0";
+				row["PayNum"]="0";
+				row["PayPlanNum"]="0";
+				row["PayPlanChargeNum"]="0";
+				row["ProcCode"]="";
+				row["ProcNum"]="0";
+				row["procsOnClaim"]="";
+				row["prov"]="";
+				row["StatementNum"]="0";
+				row["tth"]="";
+
+
+
+
+				/*row["accumDue"]=accumDue.ToString("n");
+				row["balance"]=balance.ToString("n");
+				dateT=PIn.PDateT(rawPayPlan.Rows[i]["PayPlanDate"].ToString());
+				row["DateTime"]=dateT;
+				row["date"]=dateT.ToShortDateString();
+				row["due"]=due.ToString("n");
+				row["guarantor"]=fam.GetNameInFamLF(PIn.PInt(rawPayPlan.Rows[i]["Guarantor"].ToString()));
+				if(rawPayPlan.Rows[i]["PlanNum"].ToString()=="0"){
+					row["isIns"]="";
+				}
+				else{
+					row["isIns"]="X";
+				}
+				row["paid"]=paid.ToString("n");
+				row["patient"]=fam.GetNameInFamLF(PIn.PInt(rawPayPlan.Rows[i]["PatNum"].ToString()));
+				row["PayPlanNum"]=rawPayPlan.Rows[i]["PayPlanNum"].ToString();
+				row["principal"]=princ.ToString("n");
+				row["princPaid"]=princPaid.ToString("n");
+				row["totalCost"]=totCost.ToString("n");*/
+				rows.Add(row);
+			}
+			for(int i=0;i<rows.Count;i++) {
+				table.Rows.Add(rows[i]);
+			}
+			retVal.Tables.Add(table);
+		}
+
 
 		///<summary>All rows for the entire family are getting passed in here.  They have already been sorted.  Balances have not been computed, and we will do that here, separately for each patient.</summary>
 		private static void GetPatientTable(Family fam,List<DataRow> rows){
