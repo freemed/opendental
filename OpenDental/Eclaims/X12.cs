@@ -773,14 +773,9 @@ namespace OpenDental.Eclaims
 				//2300 REF: Predetermination ID
 				if(claim.PreAuthString!=""){
 					seg++;
-					if(isMedical){
-						sw.WriteLine("REF*G1*"//REF01: G1=medical prior auth
-							+Sout(claim.PreAuthString,30)+"~");//REF02: Prior Auth Identifier
-					}
-					else{
-						sw.WriteLine("REF*G3*"//REF01: G3=dental predeterm
-							+Sout(claim.PreAuthString,30)+"~");//REF02: Predeterm Identifier
-					}
+					//note for REF01: G1 replaced G3 in 837_A specs, including 837pro.
+					sw.WriteLine("REF*G1*"//REF01: G1=prior auth number
+						+Sout(claim.PreAuthString,30)+"~");//REF02: Prior Auth Identifier
 				}
 				//2300 REF: Referral number
 				if(claim.RefNumString!=""){
