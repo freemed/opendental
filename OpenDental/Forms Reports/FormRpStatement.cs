@@ -885,7 +885,7 @@ namespace OpenDental{
 						MigraDocHelper.FillRectangle(frame,System.Drawing.Color.LightGray,57,1,280,16);
 					}
 					else{
-						MigraDocHelper.FillRectangle(frame,System.Drawing.Color.LightGray,57,36,280,18);
+						MigraDocHelper.FillRectangle(frame,System.Drawing.Color.LightGray,57,32,280,18);
 					}
 				}
 				else{
@@ -893,7 +893,7 @@ namespace OpenDental{
 				}
 			}
 			else{
-				MigraDocHelper.FillRectangle(frame,System.Drawing.Color.LightGray,57,18,280,18);
+				MigraDocHelper.FillRectangle(frame,System.Drawing.Color.LightGray,57,16,280,18);
 			}
 			
 			//These are the lables for the floating blance info (left frame of the two)
@@ -902,7 +902,7 @@ namespace OpenDental{
 			parformat = new ParagraphFormat();
 			parformat.Alignment = ParagraphAlignment.Right;
 			par.Format = parformat;
-			font = MigraDocHelper.CreateFont(11, true);
+			font = MigraDocHelper.CreateFont(10, true);
 			if(PrefB.GetBool("StatementSummaryShowInsInfo"))//Show balance with ins estimate and est balance
 			{
 				text = Lan.g(this,"Current account balance:");
@@ -910,7 +910,7 @@ namespace OpenDental{
 				par.AddLineBreak();
 				if(InsOnAccountSituation==1){//Pt has ins
 					if (PrefB.GetBool("BalancesDontSubtractIns")){
-						font = MigraDocHelper.CreateFont(11,false);
+						font = MigraDocHelper.CreateFont(10,false);
 						text = Lan.g(this,"Insurance pending:");
 						par.AddFormattedText(text,font);
 						par.AddLineBreak();
@@ -953,7 +953,7 @@ namespace OpenDental{
 				}
 			}
 			else{//Just show balance, aligned to the middle
-				font = MigraDocHelper.CreateFont(11,true);
+				font = MigraDocHelper.CreateFont(10,true);
 				text = Lan.g(this,"Current account balance:");
 				par.AddLineBreak();
 				par.AddFormattedText(text,font);
@@ -969,7 +969,7 @@ namespace OpenDental{
 			parformat = new ParagraphFormat();
 			parformat.Alignment = ParagraphAlignment.Left;
 			par.Format = parformat;
-			font = MigraDocHelper.CreateFont(11, true);
+			font = MigraDocHelper.CreateFont(10, true);
 			if(PrefB.GetBool("StatementSummaryShowInsInfo"))//Show balance with ins estimate and est balance
 			{
 				text = PatGuar.BalTotal.ToString("c");
@@ -977,7 +977,7 @@ namespace OpenDental{
 				par.AddLineBreak();
 				if(InsOnAccountSituation==1){
 					if(PrefB.GetBool("BalancesDontSubtractIns")){
-						font = MigraDocHelper.CreateFont(11,false);
+						font = MigraDocHelper.CreateFont(10,false);
 					}
 					text = PatGuar.InsEst.ToString("c");
 					par.AddFormattedText(text, font);
@@ -1001,6 +1001,7 @@ namespace OpenDental{
 			//TextFrame frame;
 			#endregion
 			//Bold note-------------------------------------------------------------------------------
+			#region Bold note
 			if(Stmt.NoteBold!=""){
 				MigraDocHelper.InsertSpacer(section,7);
 				font=MigraDocHelper.CreateFont(10,true,System.Drawing.Color.DarkRed);
@@ -1009,9 +1010,58 @@ namespace OpenDental{
 				par.AddText(Stmt.NoteBold);
 				MigraDocHelper.InsertSpacer(section,8);
 			}
-			//Body Tables-----------------------------------------------------------------------------------------------------------
+			#endregion Bold note
+			//Payment plan grid definition---------------------------------------------------------------------------------
+			#region PayPlan grid definition
 			ODGridColumn gcol;
 			ODGridRow grow;
+			ODGrid gridPP = new ODGrid();
+			this.Controls.Add(gridPP);
+			gridPP.BeginUpdate();
+			gridPP.Columns.Clear();
+			gcol=new ODGridColumn(Lan.g(this,"Date"),73);
+			gridPP.Columns.Add(gcol);
+			gcol=new ODGridColumn(Lan.g(this,"Description"),270);
+			gridPP.Columns.Add(gcol);
+			gcol=new ODGridColumn(Lan.g(this,"Charges"),60,HorizontalAlignment.Right);
+			gridPP.Columns.Add(gcol);
+			gcol=new ODGridColumn(Lan.g(this,"Credits"),60,HorizontalAlignment.Right);
+			gridPP.Columns.Add(gcol);
+			gcol=new ODGridColumn(Lan.g(this,"Balance"),60,HorizontalAlignment.Right);
+			gridPP.Columns.Add(gcol);
+			gridPP.Width=gridPP.WidthAllColumns+20;
+			gridPP.EndUpdate();
+			#endregion PayPlan grid definition
+			//Payment plan grid.  There will be only one, if any-----------------------------------------------------------------
+			#region PayPlan grid
+			DataTable tablePP=dataSet.Tables["payplan"];
+			if(tablePP.Rows.Count>0){
+				//MigraDocHelper.InsertSpacer(section,5);
+				par=section.AddParagraph();
+				par.Format.Font=MigraDocHelper.CreateFont(10,true);
+				par.Format.Alignment=ParagraphAlignment.Center;
+				//par.Format.SpaceBefore=Unit.FromInch(.05);
+				//par.Format.SpaceAfter=Unit.FromInch(.05);
+				par.AddText(Lan.g(this,"Payment Plans"));
+				MigraDocHelper.InsertSpacer(section,2);
+				gridPP.BeginUpdate();
+				gridPP.Rows.Clear();
+				for(int p=0;p<tablePP.Rows.Count;p++){
+					grow=new ODGridRow();
+					grow.Cells.Add(tablePP.Rows[p]["date"].ToString());
+					grow.Cells.Add(tablePP.Rows[p]["description"].ToString());
+					grow.Cells.Add(tablePP.Rows[p]["charges"].ToString());
+					grow.Cells.Add(tablePP.Rows[p]["credits"].ToString());
+					grow.Cells.Add(tablePP.Rows[p]["balance"].ToString());
+					gridPP.Rows.Add(grow);
+				}
+				gridPP.EndUpdate();
+				MigraDocHelper.DrawGrid(section,gridPP);
+				MigraDocHelper.InsertSpacer(section,10);
+			}
+			#endregion PayPlan grid
+			//Body Table definition----------------------------------------------------------------------------------------------------
+			#region Body Table definition
 			ODGrid gridPat = new ODGrid();
 			this.Controls.Add(gridPat);
 			gridPat.BeginUpdate();
@@ -1035,6 +1085,7 @@ namespace OpenDental{
 			gridPat.Columns.Add(gcol);
 			gridPat.Width=gridPat.WidthAllColumns+20;
 			gridPat.EndUpdate();
+			#endregion Body Table definition
 			//Loop through each table.  Could be one intermingled, or one for each patient-----------------------------------------
 			DataTable tableAccount;
 			string tablename;

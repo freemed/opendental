@@ -6401,7 +6401,6 @@ namespace OpenDental{
 		private void To5_7_0() {
 			if(FromVersion<new Version("5.7.0.0")) {
 				string command;
-
 				command = "INSERT INTO preference (PrefName,ValueString) VALUES ('StatementSummaryShowInsInfo','1')";
 				General.NonQEx(command);
 				command = "INSERT INTO preference (PrefName,ValueString) VALUES ('IntermingleFamilyDefault','0')";
