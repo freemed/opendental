@@ -46,7 +46,7 @@ namespace OpenDental {
 		}
 
 		private void listBoxControlsToIncl_SelectedIndexChanged(object sender, EventArgs e) {
-
+            listBoxControlToIncNum.SelectedIndex=listBoxControlsToIncl.SelectedIndex;
 		}
 
 		private void listBoxControls_SelectedIndexChanged(object sender, EventArgs e) {
@@ -221,7 +221,43 @@ namespace OpenDental {
 
 
 		private void butCancel_Click(object sender,EventArgs e) {
-			DialogResult=DialogResult.Cancel;
+            DialogResult=DialogResult.Cancel;
 		}
+
+        /// <summary>Moves items up the ControlsToInc list box</summary>        
+        private void butUp_Click(object sender,EventArgs e)
+        {
+            
+            if (listBoxControlsToIncl.SelectedIndex==-1) {
+                throw new ApplicationException(Lan.g("Auto Notes","Please select a control to move."));
+            }
+            if (listBoxControlsToIncl.SelectedIndex==0) {
+                return;
+            }
+            int selectedIndex=listBoxControlsToIncl.SelectedIndex;
+            listBoxControlToIncNum.Items.Insert(listBoxControlsToIncl.SelectedIndex-1,listBoxControlToIncNum.SelectedItem);
+            listBoxControlsToIncl.Items.Insert(listBoxControlsToIncl.SelectedIndex-1,listBoxControlsToIncl.SelectedItem);           
+            listBoxControlToIncNum.Items.RemoveAt(listBoxControlsToIncl.SelectedIndex);
+            listBoxControlsToIncl.Items.RemoveAt(listBoxControlsToIncl.SelectedIndex);
+            listBoxControlsToIncl.SelectedIndex=selectedIndex-1;
+        }
+
+        private void butDown_Click(object sender,EventArgs e)
+        {
+            if (listBoxControlsToIncl.SelectedIndex==-1)
+            {
+                throw new ApplicationException(Lan.g("Auto Notes","Please select a control to move."));
+            }
+            if (listBoxControlsToIncl.SelectedIndex==listBoxControlsToIncl.Items.Count-1)
+            {
+                return;
+            }
+            int selectedIndex=listBoxControlsToIncl.SelectedIndex;            
+            listBoxControlsToIncl.Items.Insert(listBoxControlsToIncl.SelectedIndex+2,listBoxControlsToIncl.SelectedItem);
+            listBoxControlToIncNum.Items.Insert(listBoxControlsToIncl.SelectedIndex+2,listBoxControlToIncNum.SelectedItem);            
+            listBoxControlToIncNum.Items.RemoveAt(listBoxControlsToIncl.SelectedIndex);
+            listBoxControlsToIncl.Items.RemoveAt(listBoxControlsToIncl.SelectedIndex);
+            listBoxControlsToIncl.SelectedIndex=selectedIndex+1;
+        }
 	}
 }
