@@ -11,6 +11,7 @@ namespace OpenDental.Reporting.Allocators.MyAllocator1
 	public partial class FormInstallAllocator_Provider : Form
 	{
 		private static string _InitialMessage = "Welcome to the Provider Allocation Setup\r\nPlease read the following:";
+		 
 		public FormInstallAllocator_Provider()
 		{
 			InitializeComponent();
@@ -19,16 +20,21 @@ namespace OpenDental.Reporting.Allocators.MyAllocator1
 
 		
 
-		private void butGuarantorDetailReport_Click(object sender, EventArgs e)
-		{
-			FormReport_GuarantorAllocationCheck fgac = new FormReport_GuarantorAllocationCheck();
-			fgac.ShowDialog();
-		}
+		
 		private void FormInstallAllocator_Provider_Load(object sender, EventArgs e)
 		{
+			Prefs.Refresh();
+			bool toolRan = OpenDentBusiness.PrefB.HList.ContainsKey(MyAllocator1_ProviderPayment.Pref_AllocatorProvider1_ToolHasRun);
+			bool isUsing = OpenDentBusiness.PrefB.HList.ContainsKey(MyAllocator1_ProviderPayment.Pref_AllocatorProvider1_Use);
+			this.lblAllocatorStatus.Text = "Current Tool Status: "
+				+ (toolRan?"Tool has been run and " + (isUsing?"\nsettings indicate that allocation is occuring.":"\nsettings indicate that allocation is not occuring.")
+						: "Tool has not been run yet.") ;
+				
+
+
 			
 		}
-
+		#region Report Buttons on Right of Form
 		private void butProviderIncomeReport_Click(object sender, EventArgs e)
 		{
 			1.ToString();
@@ -45,15 +51,24 @@ namespace OpenDental.Reporting.Allocators.MyAllocator1
 		{
 
 		}
+		private void butGuarantorDetailReport_Click(object sender, EventArgs e)
+		{
+			FormReport_GuarantorAllocationCheck fgac = new FormReport_GuarantorAllocationCheck();
+			fgac.ShowDialog();
+		}
 
+#endregion
 		private void butRunAllocatorTool_Click(object sender, EventArgs e)
 		{
 
 			if (MessageBox.Show("Do you want to run the batch allocation?", "Please Respond", MessageBoxButtons.YesNo) == DialogResult.Yes)
 			{
 				Reporting.Allocators.MyAllocator1_ProviderPayment allocator1 = new OpenDental.Reporting.Allocators.MyAllocator1_ProviderPayment();
+				SecurityLogs.MakeLogEntry(OpenDentBusiness.Permissions.Setup, 0, "Started Batch Allocation For Provider Allocation Tool");
 				allocator1.StartBatchAllocation();
+				SecurityLogs.MakeLogEntry(OpenDentBusiness.Permissions.Setup, 0, "Finished Batch Allocation For Provider Allocation Tool");
 			}
+			
 		}
 
 		private void rbutIHaveRead_CheckedChanged(object sender, EventArgs e)

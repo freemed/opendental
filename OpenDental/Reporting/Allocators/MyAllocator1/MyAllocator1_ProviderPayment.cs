@@ -23,7 +23,8 @@ namespace OpenDental.Reporting.Allocators
 				  "ProvNum", "PayTableSource", "PaySourceNum",
 				  "AllocToTableSource", "AllocToSourceNum",
 			      "Amount", "IsFullyAllocated" };
-
+		public static readonly string Pref_AllocatorProvider1_Use = "AllocatorProvider1_Use";
+		public static readonly string Pref_AllocatorProvider1_ToolHasRun = "AllocatorProvider1_ToolHasRun";
 		public MyAllocator1_ProviderPayment()
 			: base(TABLENAME, TABLE_COLUMNS)
 		{

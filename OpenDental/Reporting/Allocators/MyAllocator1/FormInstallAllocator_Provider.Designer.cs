@@ -41,6 +41,7 @@ namespace OpenDental.Reporting.Allocators.MyAllocator1
 			this.rbIhaveNotRead = new System.Windows.Forms.RadioButton();
 			this.panel2 = new System.Windows.Forms.Panel();
 			this.rbutIHaveRead = new System.Windows.Forms.RadioButton();
+			this.lblAllocatorStatus = new System.Windows.Forms.Label();
 			this.panel1.SuspendLayout();
 			this.panel2.SuspendLayout();
 			this.SuspendLayout();
@@ -140,7 +141,7 @@ namespace OpenDental.Reporting.Allocators.MyAllocator1
 			this.butRunAllocatorTool.Enabled = false;
 			this.butRunAllocatorTool.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.butRunAllocatorTool.ForeColor = System.Drawing.Color.Maroon;
-			this.butRunAllocatorTool.Location = new System.Drawing.Point(252, 258);
+			this.butRunAllocatorTool.Location = new System.Drawing.Point(252, 239);
 			this.butRunAllocatorTool.Name = "butRunAllocatorTool";
 			this.butRunAllocatorTool.Size = new System.Drawing.Size(143, 23);
 			this.butRunAllocatorTool.TabIndex = 4;
@@ -181,12 +182,24 @@ namespace OpenDental.Reporting.Allocators.MyAllocator1
 			this.rbutIHaveRead.UseVisualStyleBackColor = true;
 			this.rbutIHaveRead.CheckedChanged += new System.EventHandler(this.rbutIHaveRead_CheckedChanged);
 			// 
+			// lblAllocatorStatus
+			// 
+			this.lblAllocatorStatus.AutoSize = true;
+			this.lblAllocatorStatus.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.lblAllocatorStatus.ForeColor = System.Drawing.Color.Maroon;
+			this.lblAllocatorStatus.Location = new System.Drawing.Point(253, 269);
+			this.lblAllocatorStatus.Name = "lblAllocatorStatus";
+			this.lblAllocatorStatus.Size = new System.Drawing.Size(121, 13);
+			this.lblAllocatorStatus.TabIndex = 7;
+			this.lblAllocatorStatus.Text = "Current Tool Status:";
+			// 
 			// FormInstallAllocator_Provider
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(229)))), ((int)(((byte)(222)))), ((int)(((byte)(222)))));
 			this.ClientSize = new System.Drawing.Size(649, 308);
+			this.Controls.Add(this.lblAllocatorStatus);
 			this.Controls.Add(this.panel2);
 			this.Controls.Add(this.butRunAllocatorTool);
 			this.Controls.Add(this.panel1);
@@ -216,5 +229,6 @@ namespace OpenDental.Reporting.Allocators.MyAllocator1
 		private System.Windows.Forms.RadioButton rbIhaveNotRead;
 		private System.Windows.Forms.Panel panel2;
 		private System.Windows.Forms.RadioButton rbutIHaveRead;
+		private System.Windows.Forms.Label lblAllocatorStatus;
 	}
 }

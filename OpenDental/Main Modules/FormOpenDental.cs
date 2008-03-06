@@ -191,7 +191,7 @@ namespace OpenDental{
 		private Point OriginalMousePos;
 		private MenuItem menuItemCustomerManage;
 		private System.Windows.Forms.Timer timerDisabledKey;
-		private MenuItem menuItem2;
+		private MenuItem menuItem_ProviderAllocatorSetup;
 		///<summary>This list will only contain events for this computer where the users clicked to disable a popup for a specified period of time.  So it won't typically have many items in it.</summary>
 		private List<PopupEvent> PopupEventList;
 
@@ -270,6 +270,7 @@ namespace OpenDental{
 			this.menuItemRequirementsNeeded = new System.Windows.Forms.MenuItem();
 			this.menuItemSched = new System.Windows.Forms.MenuItem();
 			this.menuItemSecurity = new System.Windows.Forms.MenuItem();
+			this.menuItem_ProviderAllocatorSetup = new System.Windows.Forms.MenuItem();
 			this.menuItemLists = new System.Windows.Forms.MenuItem();
 			this.menuItemProcCodes = new System.Windows.Forms.MenuItem();
 			this.menuItem5 = new System.Windows.Forms.MenuItem();
@@ -342,7 +343,6 @@ namespace OpenDental{
 			this.lightSignalGrid1 = new OpenDental.UI.LightSignalGrid();
 			this.myOutlookBar = new OpenDental.OutlookBar();
 			this.smartCardWatcher1 = new OpenDental.SmartCards.SmartCardWatcher();
-			this.menuItem2 = new System.Windows.Forms.MenuItem();
 			this.SuspendLayout();
 			// 
 			// timerTimeIndic
@@ -450,7 +450,7 @@ namespace OpenDental{
             this.menuItemRequirementsNeeded,
             this.menuItemSched,
             this.menuItemSecurity,
-            this.menuItem2});
+            this.menuItem_ProviderAllocatorSetup});
 			this.menuItemSettings.Shortcut = System.Windows.Forms.Shortcut.CtrlS;
 			this.menuItemSettings.Text = "&Setup";
 			// 
@@ -633,6 +633,12 @@ namespace OpenDental{
 			this.menuItemSecurity.Index = 29;
 			this.menuItemSecurity.Text = "Security";
 			this.menuItemSecurity.Click += new System.EventHandler(this.menuItemSecurity_Click);
+			// 
+			// menuItem_ProviderAllocatorSetup
+			// 
+			this.menuItem_ProviderAllocatorSetup.Index = 30;
+			this.menuItem_ProviderAllocatorSetup.Text = "Provider Allocator Setup";
+			this.menuItem_ProviderAllocatorSetup.Click += new System.EventHandler(this.menuItem_ProviderAllocatorSetup_Click);
 			// 
 			// menuItemLists
 			// 
@@ -1146,12 +1152,6 @@ namespace OpenDental{
 			// smartCardWatcher1
 			// 
 			this.smartCardWatcher1.PatientCardInserted += new OpenDental.SmartCards.PatientCardInsertedEventHandler(this.OnPatientCardInserted);
-			// 
-			// menuItem2
-			// 
-			this.menuItem2.Index = 30;
-			this.menuItem2.Text = "Provider Allocator Setup";
-			this.menuItem2.Click += new System.EventHandler(this.menuItem2_Click);
 			// 
 			// FormOpenDental
 			// 
@@ -3518,9 +3518,15 @@ namespace OpenDental{
 			}
 		}
 
-		private void menuItem2_Click(object sender, EventArgs e)
+		private void menuItem_ProviderAllocatorSetup_Click(object sender, EventArgs e)
 		{
 			// Check Permissions
+			if (!Security.IsAuthorized(Permissions.Setup))
+			{
+				// Failed security prompts message box. Consider adding overload to not show message.
+				//MessageBox.Show("Not Authorized to Run Setup for Provider Allocation Tool");
+				return;
+			}
 			Reporting.Allocators.MyAllocator1.FormInstallAllocator_Provider fap = new OpenDental.Reporting.Allocators.MyAllocator1.FormInstallAllocator_Provider();
 			fap.ShowDialog();
 		}
