@@ -117,4 +117,15 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="richTextBox1.Text" xml:space="preserve">
+    <value>This tool is designed to get provide you Opendental program with the ability 
+to track provider revenue by automatically allocating the provider revenue
+according to a specified set of rules.
+
+Currently this project is under construction but we look forward to implenting
+this feature very soon.
+
+
+</value>
+  </data>
 </root>

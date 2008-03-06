@@ -10,9 +10,11 @@ namespace OpenDental.Reporting.Allocators.MyAllocator1
 {
 	public partial class FormInstallAllocator_Provider : Form
 	{
+		private static string _InitialMessage = "Welcome to the Provider Allocation Setup\r\nPlease read the following:";
 		public FormInstallAllocator_Provider()
 		{
 			InitializeComponent();
+			
 		}
 
 		
@@ -24,7 +26,7 @@ namespace OpenDental.Reporting.Allocators.MyAllocator1
 		}
 		private void FormInstallAllocator_Provider_Load(object sender, EventArgs e)
 		{
-			this.richTextBox1.Text = "";
+			
 		}
 
 		private void butProviderIncomeReport_Click(object sender, EventArgs e)

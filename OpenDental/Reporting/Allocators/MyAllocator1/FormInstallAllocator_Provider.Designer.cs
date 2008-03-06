@@ -2,6 +2,7 @@ namespace OpenDental.Reporting.Allocators.MyAllocator1
 {
 	partial class FormInstallAllocator_Provider
 	{
+		
 		/// <summary>
 		/// Required designer variable.
 		/// </summary>
@@ -28,6 +29,7 @@ namespace OpenDental.Reporting.Allocators.MyAllocator1
 		/// </summary>
 		private void InitializeComponent()
 		{
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormInstallAllocator_Provider));
 			this.label1 = new System.Windows.Forms.Label();
 			this.richTextBox1 = new System.Windows.Forms.RichTextBox();
 			this.panel1 = new System.Windows.Forms.Panel();
@@ -62,7 +64,7 @@ namespace OpenDental.Reporting.Allocators.MyAllocator1
 			this.richTextBox1.Name = "richTextBox1";
 			this.richTextBox1.Size = new System.Drawing.Size(383, 164);
 			this.richTextBox1.TabIndex = 1;
-			this.richTextBox1.Text = "";
+			this.richTextBox1.Text = resources.GetString("richTextBox1.Text");
 			// 
 			// panel1
 			// 
@@ -71,6 +73,7 @@ namespace OpenDental.Reporting.Allocators.MyAllocator1
 			this.panel1.Controls.Add(this.butProviderIncomeReport);
 			this.panel1.Controls.Add(this.butGuarnDetailReport);
 			this.panel1.Controls.Add(this.butUneardedIncomeReport);
+			this.panel1.Enabled = false;
 			this.panel1.Location = new System.Drawing.Point(475, 69);
 			this.panel1.Name = "panel1";
 			this.panel1.Size = new System.Drawing.Size(145, 94);
@@ -161,6 +164,7 @@ namespace OpenDental.Reporting.Allocators.MyAllocator1
 			// 
 			this.panel2.Controls.Add(this.rbutIHaveRead);
 			this.panel2.Controls.Add(this.rbIhaveNotRead);
+			this.panel2.Enabled = false;
 			this.panel2.Location = new System.Drawing.Point(12, 239);
 			this.panel2.Name = "panel2";
 			this.panel2.Size = new System.Drawing.Size(234, 57);

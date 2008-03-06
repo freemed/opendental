@@ -191,6 +191,7 @@ namespace OpenDental{
 		private Point OriginalMousePos;
 		private MenuItem menuItemCustomerManage;
 		private System.Windows.Forms.Timer timerDisabledKey;
+		private MenuItem menuItem2;
 		///<summary>This list will only contain events for this computer where the users clicked to disable a popup for a specified period of time.  So it won't typically have many items in it.</summary>
 		private List<PopupEvent> PopupEventList;
 
@@ -341,6 +342,7 @@ namespace OpenDental{
 			this.lightSignalGrid1 = new OpenDental.UI.LightSignalGrid();
 			this.myOutlookBar = new OpenDental.OutlookBar();
 			this.smartCardWatcher1 = new OpenDental.SmartCards.SmartCardWatcher();
+			this.menuItem2 = new System.Windows.Forms.MenuItem();
 			this.SuspendLayout();
 			// 
 			// timerTimeIndic
@@ -447,7 +449,8 @@ namespace OpenDental{
             this.menuItemRecall,
             this.menuItemRequirementsNeeded,
             this.menuItemSched,
-            this.menuItemSecurity});
+            this.menuItemSecurity,
+            this.menuItem2});
 			this.menuItemSettings.Shortcut = System.Windows.Forms.Shortcut.CtrlS;
 			this.menuItemSettings.Text = "&Setup";
 			// 
@@ -1143,6 +1146,12 @@ namespace OpenDental{
 			// smartCardWatcher1
 			// 
 			this.smartCardWatcher1.PatientCardInserted += new OpenDental.SmartCards.PatientCardInsertedEventHandler(this.OnPatientCardInserted);
+			// 
+			// menuItem2
+			// 
+			this.menuItem2.Index = 30;
+			this.menuItem2.Text = "Provider Allocator Setup";
+			this.menuItem2.Click += new System.EventHandler(this.menuItem2_Click);
 			// 
 			// FormOpenDental
 			// 
@@ -3507,6 +3516,13 @@ namespace OpenDental{
 					// ModuleSelected(formPS.SelectedPatNum);
 				}
 			}
+		}
+
+		private void menuItem2_Click(object sender, EventArgs e)
+		{
+			// Check Permissions
+			Reporting.Allocators.MyAllocator1.FormInstallAllocator_Provider fap = new OpenDental.Reporting.Allocators.MyAllocator1.FormInstallAllocator_Provider();
+			fap.ShowDialog();
 		}
 
 		
