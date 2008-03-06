@@ -534,7 +534,7 @@ namespace OpenDentBusiness {
 				rows.Add(row);
 			}
 			//Adjustments---------------------------------------------------------------------------------------
-			command="SELECT AdjAmt,AdjDate,AdjNum,AdjType,PatNum,ProvNum "
+			command="SELECT AdjAmt,AdjDate,AdjNum,AdjType,PatNum,ProvNum,AdjNote "
 				+"FROM adjustment "
 				+"WHERE (";
 			for(int i=0;i<fam.List.Length;i++){
@@ -570,7 +570,7 @@ namespace OpenDentBusiness {
 				row["DateTime"]=dateT;
 				row["date"]=dateT.ToShortDateString();
 				row["description"]=DefB.GetName(DefCat.AdjTypes,PIn.PInt(rawAdj.Rows[i]["AdjType"].ToString()));
-				row["extraDetail"]="";
+				row["extraDetail"] = rawAdj.Rows[i]["AdjNote"].ToString();
 				row["patient"]=fam.GetNameInFamFirst(PIn.PInt(rawAdj.Rows[i]["PatNum"].ToString()));
 				row["PatNum"]=rawAdj.Rows[i]["PatNum"].ToString();
 				row["PayNum"]="0";
@@ -586,7 +586,7 @@ namespace OpenDentBusiness {
 			}
 			//paysplits-----------------------------------------------------------------------------------------
 			command="SELECT CheckNum,DatePay,paysplit.PatNum,PayAmt,paysplit.PayNum,PayPlanNum,"
-				+"PayType,ProcDate,ProvNum,SplitAmt "
+				+"PayType,ProcDate,ProvNum,SplitAmt,payment.PayNote,payment.PatNum AS OrgPatNum "
 				+"FROM paysplit "
 				+"LEFT JOIN payment ON paysplit.PayNum=payment.PayNum "
 				+"WHERE (";
@@ -623,13 +623,14 @@ namespace OpenDentBusiness {
 				if(rawPay.Rows[i]["CheckNum"].ToString()!=""){
 					row["description"]+=" #"+rawPay.Rows[i]["CheckNum"].ToString();
 				}
-				payamt=PIn.PDouble(rawPay.Rows[i]["PayAmt"].ToString());
+				payamt = PIn.PDouble(rawPay.Rows[i]["PayAmt"].ToString());
 				row["description"]+=" "+payamt.ToString("c");
 				if(payamt!=amt){
 					row["description"]+=" "+Lan.g("ContrAccount","(split)");
+					row["description"] += " - Made by: " + fam.GetNameInFamFirst(PIn.PInt(rawPay.Rows[i]["OrgPatNum"].ToString()));
 				}
 				//we might use DatePay here to add to description
-				row["extraDetail"]="";
+				row["extraDetail"] = rawPay.Rows[i]["PayNote"].ToString();
 				row["patient"]=fam.GetNameInFamFirst(PIn.PInt(rawPay.Rows[i]["PatNum"].ToString()));
 				row["PatNum"]=rawPay.Rows[i]["PatNum"].ToString();
 				row["PayNum"]=rawPay.Rows[i]["PayNum"].ToString();
@@ -690,7 +691,12 @@ namespace OpenDentBusiness {
 				}
 				else if(rawClaim.Rows[i]["ClaimType"].ToString()=="PreAuth"){
 					row["description"]=Lan.g("ContrAccount","PreAuth")+" ";
-					row["colorText"] = DefB.Long[(int)DefCat.AccountColors][9].ItemColor.ToArgb().ToString();
+					if (rawClaim.Rows[i]["ClaimStatus"].ToString() == "R") {//only change color on pre-auths that are recieved
+						row["colorText"] = DefB.Long[(int)DefCat.AccountColors][9].ItemColor.ToArgb().ToString();
+					}
+					else{
+						row["colorText"] = DefB.Long[(int)DefCat.AccountColors][4].ItemColor.ToArgb().ToString();
+					}
 				}
 				else if(rawClaim.Rows[i]["ClaimType"].ToString()=="Other"){
 					row["description"]="";
@@ -704,31 +710,74 @@ namespace OpenDentBusiness {
 				row["description"]+=Lan.g("ContrAccount","Claim")+" "+amt.ToString("c")+" "
 					+rawClaim.Rows[i]["CarrierName"].ToString();
 				daterec=PIn.PDateT(rawClaim.Rows[i]["DateReceived"].ToString());
-				if(daterec.Year>1880){//and claimstatus=R
-					row["description"]+="\r\n"+Lan.g("ContrAccount","Received")+" "+daterec.ToShortDateString();
-					row["colorText"] = DefB.Long[(int)DefCat.AccountColors][8].ItemColor.ToArgb().ToString();
-				}
-				else if(rawClaim.Rows[i]["ClaimStatus"].ToString()=="U"){
-					row["description"]+="\r\n"+Lan.g("ContrAccount","Unsent");
-				}
-				else if(rawClaim.Rows[i]["ClaimStatus"].ToString()=="H"){
-					row["description"]+="\r\n"+Lan.g("ContrAccount","Hold until Pri received");
-				}
-				else if(rawClaim.Rows[i]["ClaimStatus"].ToString()=="W"){
-					row["description"]+="\r\n"+Lan.g("ContrAccount","Waiting to Send");
-				}
-				//else if(rawClaim.Rows[i]["ClaimStatus"].ToString()=="S"){
-				//	row["description"]+="\r\n"+Lan.g("ContrAccount","Sent");
-				//}
-				insest=PIn.PDouble(rawClaim.Rows[i]["InsPayEst"].ToString());
-				if(rawClaim.Rows[i]["ClaimStatus"].ToString()=="W"
-					|| rawClaim.Rows[i]["ClaimStatus"].ToString()=="S")
+				if (daterec.Year > 1880)
+				{//and claimstatus=R
+					row["description"] += "\r\n" + Lan.g("ContrAccount", "Received") + " " + daterec.ToShortDateString();
+					if (rawClaim.Rows[i]["ClaimStatus"].ToString() == "R"){
+						if (rawClaim.Rows[i]["ClaimType"].ToString() == "PreAuth") {
+							row["colorText"] = DefB.Long[(int)DefCat.AccountColors][9].ItemColor.ToArgb().ToString();
+						} 
+						else {
+							row["colorText"] = DefB.Long[(int)DefCat.AccountColors][8].ItemColor.ToArgb().ToString();
+						}
+					} 
+					else if (rawClaim.Rows[i]["ClaimType"].ToString() == "PreAuth" && rawClaim.Rows[i]["ClaimStatus"].ToString() == "R")
+					{
+						row["colorText"] = DefB.Long[(int)DefCat.AccountColors][9].ItemColor.ToArgb().ToString();
+					} 
+					else{
+						row["description"] += "\r\n" + Lan.g("ContrAccount", "Re-Sent");
+						row["colorText"] = DefB.Long[(int)DefCat.AccountColors][4].ItemColor.ToArgb().ToString();
+					}
+
+				} else if (rawClaim.Rows[i]["ClaimStatus"].ToString() == "U")
 				{
-					row["description"]+="\r\n"+Lan.g("ContrAccount","Estimated Payment:")+" "+insest.ToString("c");
+					row["description"] += "\r\n" + Lan.g("ContrAccount", "Unsent");
+				} else if (rawClaim.Rows[i]["ClaimStatus"].ToString() == "H")
+				{
+					row["description"] += "\r\n" + Lan.g("ContrAccount", "Hold until Pri received");
+				} else if (rawClaim.Rows[i]["ClaimStatus"].ToString() == "W")
+				{
+					row["description"] += "\r\n" + Lan.g("ContrAccount", "Waiting to Send");
+				} else if (rawClaim.Rows[i]["ClaimStatus"].ToString() == "S")
+				{
+					row["description"] += "\r\n" + Lan.g("ContrAccount", "Sent");
 				}
-				amtpaid=PIn.PDouble(rawClaim.Rows[i]["InsPayAmt"].ToString());
-				if(amtpaid!=0){
-					row["description"]+="\r\n"+Lan.g("ContrAccount","Payment:")+" "+amtpaid.ToString("c");
+				insest = PIn.PDouble(rawClaim.Rows[i]["InsPayEst"].ToString());
+				amtpaid = PIn.PDouble(rawClaim.Rows[i]["InsPayAmt"].ToString());
+				if (rawClaim.Rows[i]["ClaimStatus"].ToString() == "W"
+					|| rawClaim.Rows[i]["ClaimStatus"].ToString() == "S")
+				{
+					if (rawClaim.Rows[i]["ClaimType"].ToString() == "PreAuth") {
+						if (amtpaid != 0 && ((insest - amtpaid) >= 0)) {//show additional info on PreAuth resubmits
+							row["description"] += "\r\n" + Lan.g("ContrAccount", "Est. Pre-Authorization Pending:") + " " + (insest - amtpaid).ToString("c");
+						}
+						else {
+							row["description"] += "\r\n" + Lan.g("ContrAccount", "Est. Pre-Authorization Pending:") + " " + insest.ToString("c");
+						}
+					}
+					else if (amtpaid != 0 && ((insest - amtpaid) >= 0)) {//show additional info on resubmits
+						row["description"] += "\r\n" + Lan.g("ContrAccount", "Remaining Est. Payment Pending:") + " " + (insest - amtpaid).ToString("c");
+					}
+					else {
+						row["description"] += "\r\n" + Lan.g("ContrAccount", "Estimated Payment Pending:") + " " + insest.ToString("c");
+					}
+				}
+				if (amtpaid != 0){
+					if (rawClaim.Rows[i]["ClaimType"].ToString() == "PreAuth") {
+						row["description"] += "\r\n" + Lan.g("ContrAccount", "Estimated Payment From Pre-Auth:") + " " + amtpaid.ToString("c");
+					}
+					else {
+						row["description"] += "\r\n" + Lan.g("ContrAccount", "Payment:") + " " + amtpaid.ToString("c");
+					}
+				} 
+				else if(amtpaid == 0 && (rawClaim.Rows[i]["ClaimStatus"].ToString() == "R")){
+					if (rawClaim.Rows[i]["ClaimType"].ToString() == "PreAuth") {
+						row["description"] += "\r\n" + Lan.g("ContrAccount", "No Payment Authorized by Pre-Auth");
+					}
+					else {
+						row["description"] += "\r\n" + Lan.g("ContrAccount", "NO PAYMENT");
+					}
 				}
 				writeoff=PIn.PDouble(rawClaim.Rows[i]["WriteOff"].ToString());
 				if(writeoff!=0){
@@ -749,7 +798,7 @@ namespace OpenDentBusiness {
 				rows.Add(row);
 			}
 			//Statement----------------------------------------------------------------------------------------
-			command="SELECT DateSent,IsSent,Mode_,StatementNum,PatNum "
+			command="SELECT DateSent,IsSent,Mode_,StatementNum,PatNum, Note, NoteBold "
 				+"FROM statement "
 				+"WHERE (";
 			for(int i=0;i<fam.List.Length;i++){
@@ -782,7 +831,13 @@ namespace OpenDentBusiness {
 				if(rawState.Rows[i]["IsSent"].ToString()=="0"){
 					row["description"]+=" "+Lan.g("ContrAccount","(unsent)");
 				}
-				row["extraDetail"]="";
+				row["extraDetail"] = "";
+				if(rawState.Rows[i]["NoteBold"].ToString() != ""){
+					row["extraDetail"] += rawState.Rows[i]["NoteBold"].ToString() + "\r\n";
+				}
+				if (rawState.Rows[i]["Note"].ToString() != "") {
+					row["extraDetail"] += rawState.Rows[i]["Note"].ToString();
+				}
 				row["patient"]=fam.GetNameInFamFirst(PIn.PInt(rawState.Rows[i]["PatNum"].ToString()));
 				row["PatNum"]=rawState.Rows[i]["PatNum"].ToString();
 				row["PayNum"]="0";
@@ -1038,7 +1093,7 @@ namespace OpenDentBusiness {
 			row["tth"]="";
 		}
 
-		///<summary>Gets payment plans for the family.  RawPay will include any paysplits for anyone in the family, so it's guaranteed to include all paysplits for a given payplan since payplans only show in the guarantor's family.  Database maint tool enforces paysplit.patnum=payplan.guarantor just in case.</summary>
+		///<summary>Gets payment plans for the family.  RawPay will include any paysplits for anyone in the family, so it's guaranteed to include all paysplits for a given payplan since payplans only show in the guarantor's family.  Database maint tool enforces paysplit.patnum=payplan.guarantor just in case. </summary>
 		private static void GetPayPlans(DataTable rawPayPlan,DataTable rawPay){
 			DataConnection dcon=new DataConnection();
 			DataTable table=new DataTable("payplan");
@@ -1115,7 +1170,6 @@ namespace OpenDentBusiness {
 			retVal.Tables.Add(table);
 		}
 
-		
 		///<summary>Gets payment plans for the family.  RawPay will include any paysplits for anyone in the family, so it's guaranteed to include all paysplits for a given payplan since payplans only show in the guarantor's family.  Database maint tool enforces paysplit.patnum=payplan.guarantor just in case.  fromDate and toDate are only used if isForStatement.  From date lets us restrict how many amortization items to show.  toDate is typically 10 days in the future.</summary>
 		private static void GetPayPlansForStatement(DataTable rawPayPlan,DataTable rawPay,DateTime fromDate,DateTime toDate){
 			DataConnection dcon=new DataConnection();
@@ -1209,7 +1263,6 @@ namespace OpenDentBusiness {
 			}
 			retVal.Tables.Add(table);
 		}
-
 
 		///<summary>All rows for the entire family are getting passed in here.  They have already been sorted.  Balances have not been computed, and we will do that here, separately for each patient.</summary>
 		private static void GetPatientTable(Family fam,List<DataRow> rows){

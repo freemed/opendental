@@ -6409,7 +6409,7 @@ namespace OpenDental{
 				General.NonQEx(command);
 				command = "INSERT INTO definition (Category,ItemOrder,ItemName,ItemColor,IsHidden) VALUES(0,8,'Received Ins Claim',-5220352,0)";//drkOrange
 				General.NonQEx(command);
-				command = "INSERT INTO definition (Category,ItemOrder,ItemName,ItemColor,IsHidden) VALUES(0,9,'Pre-Auth',-8388480,0)";//Purple
+				command = "INSERT INTO definition (Category,ItemOrder,ItemName,ItemColor,IsHidden) VALUES(0,9,'Received Pre-Auth',-8388480,0)";//Purple
 				General.NonQEx(command);
 
 
