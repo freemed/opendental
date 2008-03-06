@@ -2,7 +2,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.21022</ProductVersion>
+    <ProductVersion>9.0.20706</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{8136317D-C936-49B6-9E31-D90F02D2F207}</ProjectGuid>
     <OutputType>WinExe</OutputType>
@@ -69,6 +69,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Required dlls\CDT.dll</HintPath>
     </Reference>
+    <Reference Include="CodeBase, Version=4.7.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\OpenDentBusiness\bin\Debug\CodeBase.dll</HintPath>
+    </Reference>
     <Reference Include="Interop.Microsoft.Office.Core, Version=2.2.0.0, Culture=neutral">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Required dlls\Interop.Microsoft.Office.Core.dll</HintPath>
@@ -85,9 +89,25 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Required dlls\NDde.dll</HintPath>
     </Reference>
+    <Reference Include="OpenDentBusiness, Version=5.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\OpenDentBusiness\bin\Release\OpenDentBusiness.dll</HintPath>
+    </Reference>
     <Reference Include="Oracle.DataAccess, Version=10.2.0.100, Culture=neutral, PublicKeyToken=89b483f429c47342">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Required dlls\Oracle.DataAccess.dll</HintPath>
+    </Reference>
+    <Reference Include="PdfSharp, Version=1.0.898.0, Culture=neutral, PublicKeyToken=f94615aa0424f9eb, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\PdfSharp\bin\Debug\PdfSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="RdlEngine, Version=2.9.3.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\RdlViewer\bin\Debug\RdlEngine.dll</HintPath>
+    </Reference>
+    <Reference Include="RdlViewer, Version=2.9.3.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\RdlViewer\bin\Debug\RdlViewer.dll</HintPath>
     </Reference>
     <Reference Include="RS232, Version=1.18.0.0, Culture=neutral">
       <SpecificVersion>False</SpecificVersion>
@@ -96,6 +116,10 @@
     <Reference Include="SigPlusNET, Version=1.0.2245.36238, Culture=neutral, PublicKeyToken=6aef07010bb0624f">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Required dlls\SigPlusNET.dll</HintPath>
+    </Reference>
+    <Reference Include="SparksToothChart, Version=4.7.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\SparksToothChart\bin\Debug\SparksToothChart.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -2684,6 +2708,22 @@
       <DependentUpon>FormReportOld2.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="Reporting\Allocators\FormProgressViewer.resx">
+      <DependentUpon>FormProgressViewer.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reporting\Allocators\MyAllocator1\FormInstallAllocator_Provider.resx">
+      <DependentUpon>FormInstallAllocator_Provider.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reporting\Allocators\MyAllocator1\FormReport_GuarantorAllocationCheck.resx">
+      <DependentUpon>FormReport_GuarantorAllocationCheck.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reporting\Allocators\MyAllocator1\FormReport_ProviderIncomeReport.resx">
+      <DependentUpon>FormReport_ProviderIncomeReport.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Reporting\FormReportCustom.resx">
       <DependentUpon>FormReportCustom.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -2968,6 +3008,49 @@
     <Compile Include="ReportingOld2\ReportOld2.cs" />
     <Compile Include="ReportingOld2\Section.cs" />
     <Compile Include="ReportingOld2\SectionCollection.cs" />
+    <Compile Include="Reporting\Allocators\Allocator.cs" />
+    <Compile Include="Reporting\Allocators\AllocatorCollection.cs" />
+    <Compile Include="Reporting\Allocators\FormProgressViewer.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Reporting\Allocators\FormProgressViewer.designer.cs">
+      <DependentUpon>FormProgressViewer.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Reporting\Allocators\IAllocator.cs" />
+    <Compile Include="Reporting\Allocators\MyAllocator1\FormInstallAllocator_Provider.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Reporting\Allocators\MyAllocator1\FormInstallAllocator_Provider.Designer.cs">
+      <DependentUpon>FormInstallAllocator_Provider.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Reporting\Allocators\MyAllocator1\FormReport_GuarantorAllocationCheck.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Reporting\Allocators\MyAllocator1\FormReport_GuarantorAllocationCheck.designer.cs">
+      <DependentUpon>FormReport_GuarantorAllocationCheck.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Reporting\Allocators\MyAllocator1\FormReport_ProviderIncomeReport.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Reporting\Allocators\MyAllocator1\FormReport_ProviderIncomeReport.Designer.cs">
+      <DependentUpon>FormReport_ProviderIncomeReport.cs</DependentUpon>
+    </Compile>
+    <None Include="Reporting\Allocators\MyAllocator1\GuarantorAccounts_Graphic.cs" />
+    <Compile Include="Reporting\Allocators\MyAllocator1\MyAllocator1_ProviderPayment.cs" />
+    <Compile Include="Reporting\Allocators\MyAllocator1\Report1_GuarantorAllocation.cs" />
+    <Compile Include="Reporting\Allocators\MyAllocator1\ReportUI\ReportStyles.cs" />
+    <Compile Include="Reporting\Allocators\MyAllocator1\SupportingCode\EqualizeProviderPayments.cs" />
+    <Compile Include="Reporting\Allocators\MyAllocator1\SupportingCode\GuarantorLedgerItemsCollection.cs" />
+    <Compile Include="Reporting\Allocators\MyAllocator1\SupportingCode\Guarantors.cs" />
+    <Compile Include="Reporting\Allocators\MyAllocator1\SupportingCode\MakeLedgerObj.cs" />
+    <Compile Include="Reporting\Allocators\MyAllocator1\SupportingCode\ODCheckQuerries.cs" />
+    <Compile Include="Reporting\Allocators\MyAllocator1\SupportingCode\ODTableDefs.cs" />
+    <Compile Include="Reporting\Allocators\MyAllocator1\SupportingCode\ODTablesUsed.cs" />
+    <Compile Include="Reporting\Allocators\MyAllocator1\SupportingCode\PP_LedgerItem.cs" />
+    <Compile Include="Reporting\Allocators\MyAllocator1\SupportingCode\PP_LedgerItemGenerator.cs" />
+    <Compile Include="Reporting\Allocators\MyAllocator1\SupportingCode\PP_ODSQLPullStrings_LedgerItem.cs" />
+    <Compile Include="Reporting\Allocators\MyAllocator1\SupportingCode\PP_PaySplitItem.cs" />
+    <Compile Include="Reporting\Allocators\MyAllocator1\SupportingCode\PU.cs" />
     <Compile Include="Reporting\FormReportCustom.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -3251,7 +3334,8 @@
     <Content Include="Misc\App.ico" />
     <Content Include="Misc\TerminalMgr.ico" />
     <Content Include="Resources\Anesth.gif" />
-    <None Include="ClassDiagram1.cd" />
+    <None Include="Reporting\Allocators\ClassDiagram_Allocators.cd" />
+    <None Include="Reporting\Allocators\MyAllocator1\SupportingCode\EPP_ClassDiagram.cd" />
     <None Include="Resources\notify.wav" />
     <None Include="Resources\printPreview20.gif" />
     <None Include="Resources\email1.gif" />
@@ -3334,26 +3418,6 @@
     <ProjectReference Include="..\ODR\xODR.csproj">
       <Project>{84688345-BB6A-4F2F-8672-A82B52FD433B}</Project>
       <Name>xODR</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\OpenDentBusiness\OpenDentBusiness.csproj">
-      <Project>{3D0FC76E-803C-4DE2-BDB1-47D63A4E2357}</Project>
-      <Name>OpenDentBusiness</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\PdfSharp\PdfSharp.csproj">
-      <Project>{5384CE57-1F94-4D22-860D-2E9C1AC12DDF}</Project>
-      <Name>PdfSharp</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\RdlEngine\RdlEngine.csproj">
-      <Project>{C97E91F4-B310-44E2-9B6C-96775395722D}</Project>
-      <Name>RdlEngine</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\RdlViewer\RdlViewer.csproj">
-      <Project>{D99145B1-CB6C-41F5-BA86-723325145FB5}</Project>
-      <Name>RdlViewer</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\SparksToothChart\SparksToothChart.csproj">
-      <Project>{033B77F4-2E98-49A7-901F-5F388DEDF83E}</Project>
-      <Name>SparksToothChart</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
