@@ -412,6 +412,9 @@
     <Compile Include="Forms\FormBillingDefaults.Designer.cs">
       <DependentUpon>FormBillingDefaults.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\FormLabCaseEdit.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Forms\FormPopupDisplay.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -690,9 +693,6 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\FormLabTurnaroundEdit.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\FormLabCaseEdit.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\FormGraphics.cs">
@@ -1466,6 +1466,10 @@
       <DependentUpon>FormBillingDefaults.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormLabCaseEdit.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>FormLabCaseEdit.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormPopupDisplay.resx">
       <DependentUpon>FormPopupDisplay.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -1792,10 +1796,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormLabTurnaroundEdit.resx">
       <DependentUpon>FormLabTurnaroundEdit.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\FormLabCaseEdit.resx">
-      <DependentUpon>FormLabCaseEdit.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormGraphics.resx">
