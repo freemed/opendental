@@ -29,7 +29,6 @@ namespace OpenDental {
 		private OpenDental.UI.Button button16;
 		private OpenDental.UI.Button button17;
 		private ListBox listMeds;
-		private bool localDefsChanged;
 		private OpenDental.UI.Button button18;
 		private OpenDental.UI.Button button19;
 		private Label label4;
@@ -107,9 +106,6 @@ namespace OpenDental {
 		private Patient PatCur;
 		private ComboBox comboBox12;
 		private Label label1;
-		private System.Drawing.Printing.PrintDocument pd2;
-		private System.Windows.Forms.PrintDialog printDialog2;
-		private System.Windows.Forms.PrintPreviewDialog printPreviewDlg;
     
 		public FormAnestheticRecord(Patient patCur)
 		{			
@@ -1430,11 +1426,9 @@ namespace OpenDental {
 			Close();
 		}
 
-		private void FormAnestheticRecord_Closing(object sender, System.ComponentModel.CancelEventArgs e){
-			if (localDefsChanged)
-			{
-				DataValid.SetInvalid(InvalidTypes.Defs | InvalidTypes.Prefs);
-			}
+		private void FormAnestheticRecord_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+		{
+
 
 		}
 

@@ -10,7 +10,7 @@ using OpenDental.UI;
 
 namespace OpenDental.Forms
 {
-	public class FormAnesthesiaScore : System.Windows.Forms.Form{
+	public partial class FormAnesthesiaScore : Form{
 		
 		public FormAnesthesiaScore()
 		{

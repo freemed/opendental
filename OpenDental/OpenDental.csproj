@@ -2,7 +2,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.20706</ProductVersion>
+    <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{8136317D-C936-49B6-9E31-D90F02D2F207}</ProjectGuid>
     <OutputType>WinExe</OutputType>
@@ -71,7 +71,7 @@
     </Reference>
     <Reference Include="CodeBase, Version=4.7.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\OpenDentBusiness\bin\Debug\CodeBase.dll</HintPath>
+      <HintPath>..\CodeBase\bin\Debug\CodeBase.dll</HintPath>
     </Reference>
     <Reference Include="Interop.Microsoft.Office.Core, Version=2.2.0.0, Culture=neutral">
       <SpecificVersion>False</SpecificVersion>
@@ -81,6 +81,18 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Required dlls\Interop.Word.dll</HintPath>
     </Reference>
+    <Reference Include="MigraDoc.DocumentObjectModel, Version=1.2.2175.0, Culture=neutral, PublicKeyToken=f94615aa0424f9eb, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Required dlls\MigraDoc.DocumentObjectModel.dll</HintPath>
+    </Reference>
+    <Reference Include="MigraDoc.Rendering, Version=1.2.2175.0, Culture=neutral, PublicKeyToken=f94615aa0424f9eb, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Required dlls\MigraDoc.Rendering.dll</HintPath>
+    </Reference>
+    <Reference Include="MigraDoc.RtfRendering, Version=1.2.2175.0, Culture=neutral, PublicKeyToken=f94615aa0424f9eb, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Required dlls\MigraDoc.RtfRendering.dll</HintPath>
+    </Reference>
     <Reference Include="MySql.Data, Version=1.0.7.30072, Culture=neutral, PublicKeyToken=c5687fc88969c44d">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Required dlls\MySql.Data.dll</HintPath>
@@ -89,9 +101,13 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Required dlls\NDde.dll</HintPath>
     </Reference>
+    <Reference Include="ODR, Version=4.6.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Required dlls\ODR.dll</HintPath>
+    </Reference>
     <Reference Include="OpenDentBusiness, Version=5.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\OpenDentBusiness\bin\Release\OpenDentBusiness.dll</HintPath>
+      <HintPath>..\OpenDentBusiness\bin\Debug\OpenDentBusiness.dll</HintPath>
     </Reference>
     <Reference Include="Oracle.DataAccess, Version=10.2.0.100, Culture=neutral, PublicKeyToken=89b483f429c47342">
       <SpecificVersion>False</SpecificVersion>
@@ -99,15 +115,15 @@
     </Reference>
     <Reference Include="PdfSharp, Version=1.0.898.0, Culture=neutral, PublicKeyToken=f94615aa0424f9eb, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\PdfSharp\bin\Debug\PdfSharp.dll</HintPath>
+      <HintPath>..\Required dlls\PdfSharp.dll</HintPath>
     </Reference>
     <Reference Include="RdlEngine, Version=2.9.3.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\RdlViewer\bin\Debug\RdlEngine.dll</HintPath>
+      <HintPath>..\Required dlls\RdlEngine.dll</HintPath>
     </Reference>
     <Reference Include="RdlViewer, Version=2.9.3.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\RdlViewer\bin\Debug\RdlViewer.dll</HintPath>
+      <HintPath>..\Required dlls\RdlViewer.dll</HintPath>
     </Reference>
     <Reference Include="RS232, Version=1.18.0.0, Culture=neutral">
       <SpecificVersion>False</SpecificVersion>
@@ -119,7 +135,7 @@
     </Reference>
     <Reference Include="SparksToothChart, Version=4.7.1.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\SparksToothChart\bin\Debug\SparksToothChart.dll</HintPath>
+      <HintPath>..\Required dlls\SparksToothChart.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -150,6 +166,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Bridges\Apteryx.cs" />
+    <Compile Include="Bridges\FormHouseCalls.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Bridges\FormIap.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Bridges\FormPrintReport.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -167,12 +189,6 @@
     <Compile Include="Bridges\Dexis.cs" />
     <Compile Include="Bridges\DrCeph.cs" />
     <Compile Include="Bridges\FloridaProbe.cs" />
-    <Compile Include="Bridges\FormHouseCalls.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Bridges\FormIap.cs">
-      <SubType>Form</SubType>
-    </Compile>
     <Compile Include="Bridges\Iap.cs" />
     <Compile Include="Bridges\ImageFX.cs" />
     <Compile Include="Bridges\Lightyear.cs" />
@@ -369,8 +385,23 @@
     <Compile Include="Forms\BasicTemplate.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\BasicTemplate.Designer.cs">
+    <Compile Include="Forms\BasicTemplate.designer.cs">
       <DependentUpon>BasicTemplate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\FormAnesthesiaScore.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormAnesthesiaScore.Designer.cs">
+      <DependentUpon>FormAnesthesiaScore.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\FormAnestheticMedsIntake.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormAnestheticMedsIntake.Designer.cs">
+      <DependentUpon>FormAnestheticMedsIntake.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\FormAnestheticMedsInventory.cs">
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\FormAnestheticRecord.cs">
       <SubType>Form</SubType>
@@ -640,7 +671,7 @@
     <Compile Include="Forms\FormCommunications.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\FormAccountingLock.cs">
+    <Compile Include="Web References\FormAccountingLock.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\FormBlockoutCutCopyPaste.cs">
@@ -1412,8 +1443,20 @@
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\BasicTemplate.resx">
-      <SubType>Designer</SubType>
       <DependentUpon>BasicTemplate.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormAnesthesiaScore.resx">
+      <DependentUpon>FormAnesthesiaScore.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormAnestheticMedsIntake.resx">
+      <DependentUpon>FormAnestheticMedsIntake.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormAnestheticMedsInventory.resx">
+      <DependentUpon>FormAnestheticMedsInventory.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormAnestheticRecord.resx">
       <DependentUpon>FormAnestheticRecord.cs</DependentUpon>
@@ -1723,7 +1766,7 @@
       <DependentUpon>FormCommunications.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\FormAccountingLock.resx">
+    <EmbeddedResource Include="Web References\FormAccountingLock.resx">
       <DependentUpon>FormAccountingLock.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
@@ -2708,22 +2751,6 @@
       <DependentUpon>FormReportOld2.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Reporting\Allocators\FormProgressViewer.resx">
-      <DependentUpon>FormProgressViewer.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Reporting\Allocators\MyAllocator1\FormInstallAllocator_Provider.resx">
-      <DependentUpon>FormInstallAllocator_Provider.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Reporting\Allocators\MyAllocator1\FormReport_GuarantorAllocationCheck.resx">
-      <DependentUpon>FormReport_GuarantorAllocationCheck.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Reporting\Allocators\MyAllocator1\FormReport_ProviderIncomeReport.resx">
-      <DependentUpon>FormReport_ProviderIncomeReport.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
     <EmbeddedResource Include="Reporting\FormReportCustom.resx">
       <DependentUpon>FormReportCustom.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -3008,49 +3035,6 @@
     <Compile Include="ReportingOld2\ReportOld2.cs" />
     <Compile Include="ReportingOld2\Section.cs" />
     <Compile Include="ReportingOld2\SectionCollection.cs" />
-    <Compile Include="Reporting\Allocators\Allocator.cs" />
-    <Compile Include="Reporting\Allocators\AllocatorCollection.cs" />
-    <Compile Include="Reporting\Allocators\FormProgressViewer.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Reporting\Allocators\FormProgressViewer.designer.cs">
-      <DependentUpon>FormProgressViewer.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Reporting\Allocators\IAllocator.cs" />
-    <Compile Include="Reporting\Allocators\MyAllocator1\FormInstallAllocator_Provider.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Reporting\Allocators\MyAllocator1\FormInstallAllocator_Provider.Designer.cs">
-      <DependentUpon>FormInstallAllocator_Provider.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Reporting\Allocators\MyAllocator1\FormReport_GuarantorAllocationCheck.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Reporting\Allocators\MyAllocator1\FormReport_GuarantorAllocationCheck.designer.cs">
-      <DependentUpon>FormReport_GuarantorAllocationCheck.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Reporting\Allocators\MyAllocator1\FormReport_ProviderIncomeReport.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Reporting\Allocators\MyAllocator1\FormReport_ProviderIncomeReport.Designer.cs">
-      <DependentUpon>FormReport_ProviderIncomeReport.cs</DependentUpon>
-    </Compile>
-    <None Include="Reporting\Allocators\MyAllocator1\GuarantorAccounts_Graphic.cs" />
-    <Compile Include="Reporting\Allocators\MyAllocator1\MyAllocator1_ProviderPayment.cs" />
-    <Compile Include="Reporting\Allocators\MyAllocator1\Report1_GuarantorAllocation.cs" />
-    <Compile Include="Reporting\Allocators\MyAllocator1\ReportUI\ReportStyles.cs" />
-    <Compile Include="Reporting\Allocators\MyAllocator1\SupportingCode\EqualizeProviderPayments.cs" />
-    <Compile Include="Reporting\Allocators\MyAllocator1\SupportingCode\GuarantorLedgerItemsCollection.cs" />
-    <Compile Include="Reporting\Allocators\MyAllocator1\SupportingCode\Guarantors.cs" />
-    <Compile Include="Reporting\Allocators\MyAllocator1\SupportingCode\MakeLedgerObj.cs" />
-    <Compile Include="Reporting\Allocators\MyAllocator1\SupportingCode\ODCheckQuerries.cs" />
-    <Compile Include="Reporting\Allocators\MyAllocator1\SupportingCode\ODTableDefs.cs" />
-    <Compile Include="Reporting\Allocators\MyAllocator1\SupportingCode\ODTablesUsed.cs" />
-    <Compile Include="Reporting\Allocators\MyAllocator1\SupportingCode\PP_LedgerItem.cs" />
-    <Compile Include="Reporting\Allocators\MyAllocator1\SupportingCode\PP_LedgerItemGenerator.cs" />
-    <Compile Include="Reporting\Allocators\MyAllocator1\SupportingCode\PP_ODSQLPullStrings_LedgerItem.cs" />
-    <Compile Include="Reporting\Allocators\MyAllocator1\SupportingCode\PP_PaySplitItem.cs" />
-    <Compile Include="Reporting\Allocators\MyAllocator1\SupportingCode\PU.cs" />
     <Compile Include="Reporting\FormReportCustom.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -3334,8 +3318,8 @@
     <Content Include="Misc\App.ico" />
     <Content Include="Misc\TerminalMgr.ico" />
     <Content Include="Resources\Anesth.gif" />
-    <None Include="Reporting\Allocators\ClassDiagram_Allocators.cd" />
-    <None Include="Reporting\Allocators\MyAllocator1\SupportingCode\EPP_ClassDiagram.cd" />
+    <None Include="ClassDiagram1.cd" />
+    <None Include="ClassDiagram2.cd" />
     <None Include="Resources\notify.wav" />
     <None Include="Resources\printPreview20.gif" />
     <None Include="Resources\email1.gif" />
@@ -3397,28 +3381,6 @@
     </None>
     <None Include="Web References\com.dentalxchange.webservices\wsdl.wsdl" />
     <None Include="Web References\localhost\Service1.wsdl" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\CodeBase\xCodeBase.csproj">
-      <Project>{18F7BC78-4B99-48D3-A1F1-0D13A63E3CF9}</Project>
-      <Name>xCodeBase</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\MigraDoc.DocumentObjectModel\xMigraDocLite.DocumentObjectModel.csproj">
-      <Project>{4666ABF3-EFE5-49BD-B2E8-9E04F5949145}</Project>
-      <Name>xMigraDocLite.DocumentObjectModel</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\MigraDoc.Rendering\xMigraDocLite.Rendering.csproj">
-      <Project>{FEBBE5BE-9F58-4967-BBCF-801F1CFCD774}</Project>
-      <Name>xMigraDocLite.Rendering</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\MigraDoc.RtfRendering\xMigraDocLite.RtfRendering.csproj">
-      <Project>{22010032-52DC-464D-B8BB-6CD9BF230D1F}</Project>
-      <Name>xMigraDocLite.RtfRendering</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\ODR\xODR.csproj">
-      <Project>{84688345-BB6A-4F2F-8672-A82B52FD433B}</Project>
-      <Name>xODR</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <WebReferences Include="Web References\" />

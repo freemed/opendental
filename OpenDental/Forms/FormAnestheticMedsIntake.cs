@@ -10,7 +10,7 @@ using OpenDental.UI;
 
 namespace OpenDental.Forms
 {
-	public class FormAnestheticMedsIntake : System.Windows.Forms.Form{
+	public partial class FormAnestheticMedsIntake : Form{
 
 		public FormAnestheticMedsIntake()
 		{
