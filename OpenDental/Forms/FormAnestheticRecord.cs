@@ -28,7 +28,7 @@ namespace OpenDental {
 		private OpenDental.UI.Button button15;
 		private OpenDental.UI.Button button16;
 		private OpenDental.UI.Button button17;
-		private ListBox listMeds;
+		private ListBox listAnestheticMeds;
 		private OpenDental.UI.Button button18;
 		private OpenDental.UI.Button button19;
 		private Label label4;
@@ -77,14 +77,7 @@ namespace OpenDental {
 		private ComboBox comboBox9;
 		private Label label17;
 		private ComboBox comboBox8;
-		private CheckBox checkBox9;
-		private CheckBox checkBox8;
-		private CheckBox checkBox7;
-		private CheckBox checkBox6;
 		private Label label16;
-		private CheckBox checkBox5;
-		private CheckBox checkBox4;
-		private CheckBox checkBox3;
 		private Label label15;
 		private Label label14;
 		private Label label13;
@@ -106,6 +99,17 @@ namespace OpenDental {
 		private ComboBox comboBox12;
 		private Label label8;
 		private GroupBox groupBox6;
+		private RadioButton radioButton2;
+		private RadioButton radioButton1;
+		private ComboBox comboBox13;
+		private Label label3;
+		private Label label5;
+		private TextBox textBox1;
+		private RadioButton radioButton7;
+		private RadioButton radioButton6;
+		private RadioButton radioButton5;
+		private RadioButton radioButton4;
+		private RadioButton radioButton3;
 		private Label label1;
     
 		public FormAnestheticRecord(Patient patCur)
@@ -131,7 +135,7 @@ namespace OpenDental {
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormAnestheticRecord));
 			this.listAnesthetic = new System.Windows.Forms.ListBox();
 			this.label2 = new System.Windows.Forms.Label();
-			this.listMeds = new System.Windows.Forms.ListBox();
+			this.listAnestheticMeds = new System.Windows.Forms.ListBox();
 			this.label4 = new System.Windows.Forms.Label();
 			this.comboBox1 = new System.Windows.Forms.ComboBox();
 			this.label6 = new System.Windows.Forms.Label();
@@ -159,6 +163,8 @@ namespace OpenDental {
 			this.textBox9 = new System.Windows.Forms.TextBox();
 			this.label28 = new System.Windows.Forms.Label();
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
+			this.radioButton2 = new System.Windows.Forms.RadioButton();
+			this.radioButton1 = new System.Windows.Forms.RadioButton();
 			this.label1 = new System.Windows.Forms.Label();
 			this.comboBox12 = new System.Windows.Forms.ComboBox();
 			this.label12 = new System.Windows.Forms.Label();
@@ -171,14 +177,7 @@ namespace OpenDental {
 			this.comboBox9 = new System.Windows.Forms.ComboBox();
 			this.label17 = new System.Windows.Forms.Label();
 			this.comboBox8 = new System.Windows.Forms.ComboBox();
-			this.checkBox9 = new System.Windows.Forms.CheckBox();
-			this.checkBox8 = new System.Windows.Forms.CheckBox();
-			this.checkBox7 = new System.Windows.Forms.CheckBox();
-			this.checkBox6 = new System.Windows.Forms.CheckBox();
 			this.label16 = new System.Windows.Forms.Label();
-			this.checkBox5 = new System.Windows.Forms.CheckBox();
-			this.checkBox4 = new System.Windows.Forms.CheckBox();
-			this.checkBox3 = new System.Windows.Forms.CheckBox();
 			this.label15 = new System.Windows.Forms.Label();
 			this.label14 = new System.Windows.Forms.Label();
 			this.label13 = new System.Windows.Forms.Label();
@@ -188,19 +187,19 @@ namespace OpenDental {
 			this.comboBox5 = new System.Windows.Forms.ComboBox();
 			this.label11 = new System.Windows.Forms.Label();
 			this.groupBox2 = new System.Windows.Forms.GroupBox();
+			this.label5 = new System.Windows.Forms.Label();
+			this.textBox1 = new System.Windows.Forms.TextBox();
+			this.label3 = new System.Windows.Forms.Label();
+			this.comboBox13 = new System.Windows.Forms.ComboBox();
 			this.groupBox5 = new System.Windows.Forms.GroupBox();
+			this.groupBox6 = new System.Windows.Forms.GroupBox();
 			this.groupBox3 = new System.Windows.Forms.GroupBox();
 			this.groupBox4 = new System.Windows.Forms.GroupBox();
 			this.textBox11 = new System.Windows.Forms.TextBox();
 			this.dataGridView1 = new System.Windows.Forms.DataGridView();
 			this.textBox10 = new System.Windows.Forms.TextBox();
+			this.label8 = new System.Windows.Forms.Label();
 			this.button20 = new OpenDental.UI.Button();
-			this.butAnesthClose = new OpenDental.UI.Button();
-			this.butSurgClose = new OpenDental.UI.Button();
-			this.butSurgOpen = new OpenDental.UI.Button();
-			this.butAnesthOpen = new OpenDental.UI.Button();
-			this.button19 = new OpenDental.UI.Button();
-			this.button18 = new OpenDental.UI.Button();
 			this.button13 = new OpenDental.UI.Button();
 			this.button3 = new OpenDental.UI.Button();
 			this.button4 = new OpenDental.UI.Button();
@@ -219,19 +218,28 @@ namespace OpenDental {
 			this.button25 = new OpenDental.UI.Button();
 			this.button1 = new OpenDental.UI.Button();
 			this.button2 = new OpenDental.UI.Button();
+			this.butAnesthOpen = new OpenDental.UI.Button();
+			this.butSurgOpen = new OpenDental.UI.Button();
+			this.butAnesthClose = new OpenDental.UI.Button();
+			this.button19 = new OpenDental.UI.Button();
+			this.button18 = new OpenDental.UI.Button();
+			this.butSurgClose = new OpenDental.UI.Button();
 			this.button27 = new OpenDental.UI.Button();
 			this.button26 = new OpenDental.UI.Button();
 			this.butClearSig = new OpenDental.UI.Button();
 			this.sigBox = new OpenDental.UI.SignatureBox();
-			this.label8 = new System.Windows.Forms.Label();
-			this.groupBox6 = new System.Windows.Forms.GroupBox();
+			this.radioButton3 = new System.Windows.Forms.RadioButton();
+			this.radioButton4 = new System.Windows.Forms.RadioButton();
+			this.radioButton5 = new System.Windows.Forms.RadioButton();
+			this.radioButton6 = new System.Windows.Forms.RadioButton();
+			this.radioButton7 = new System.Windows.Forms.RadioButton();
 			this.groupBox1.SuspendLayout();
 			this.groupBox2.SuspendLayout();
 			this.groupBox5.SuspendLayout();
+			this.groupBox6.SuspendLayout();
 			this.groupBox3.SuspendLayout();
 			this.groupBox4.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
-			this.groupBox6.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// listAnesthetic
@@ -252,13 +260,13 @@ namespace OpenDental {
 			this.label2.TabIndex = 55;
 			this.label2.Text = "Anesthetic";
 			// 
-			// listMeds
+			// listAnestheticMeds
 			// 
-			this.listMeds.FormattingEnabled = true;
-			this.listMeds.Location = new System.Drawing.Point(159, 219);
-			this.listMeds.Name = "listMeds";
-			this.listMeds.Size = new System.Drawing.Size(209, 82);
-			this.listMeds.TabIndex = 72;
+			this.listAnestheticMeds.FormattingEnabled = true;
+			this.listAnestheticMeds.Location = new System.Drawing.Point(148, 204);
+			this.listAnestheticMeds.Name = "listAnestheticMeds";
+			this.listAnestheticMeds.Size = new System.Drawing.Size(204, 82);
+			this.listAnestheticMeds.TabIndex = 72;
 			// 
 			// label4
 			// 
@@ -273,7 +281,7 @@ namespace OpenDental {
 			this.comboBox1.FormattingEnabled = true;
 			this.comboBox1.Location = new System.Drawing.Point(159, 189);
 			this.comboBox1.Name = "comboBox1";
-			this.comboBox1.Size = new System.Drawing.Size(209, 21);
+			this.comboBox1.Size = new System.Drawing.Size(139, 21);
 			this.comboBox1.TabIndex = 77;
 			// 
 			// label6
@@ -299,21 +307,21 @@ namespace OpenDental {
 			this.comboBox2.FormattingEnabled = true;
 			this.comboBox2.Location = new System.Drawing.Point(158, 139);
 			this.comboBox2.Name = "comboBox2";
-			this.comboBox2.Size = new System.Drawing.Size(116, 21);
+			this.comboBox2.Size = new System.Drawing.Size(100, 21);
 			this.comboBox2.TabIndex = 87;
 			// 
 			// comboBox3
 			// 
 			this.comboBox3.FormattingEnabled = true;
-			this.comboBox3.Location = new System.Drawing.Point(322, 139);
+			this.comboBox3.Location = new System.Drawing.Point(372, 127);
 			this.comboBox3.Name = "comboBox3";
-			this.comboBox3.Size = new System.Drawing.Size(116, 21);
+			this.comboBox3.Size = new System.Drawing.Size(100, 21);
 			this.comboBox3.TabIndex = 89;
 			// 
 			// label9
 			// 
 			this.label9.AutoSize = true;
-			this.label9.Location = new System.Drawing.Point(307, 109);
+			this.label9.Location = new System.Drawing.Point(369, 110);
 			this.label9.Name = "label9";
 			this.label9.Size = new System.Drawing.Size(49, 13);
 			this.label9.TabIndex = 90;
@@ -322,15 +330,15 @@ namespace OpenDental {
 			// comboBox4
 			// 
 			this.comboBox4.FormattingEnabled = true;
-			this.comboBox4.Location = new System.Drawing.Point(475, 139);
+			this.comboBox4.Location = new System.Drawing.Point(478, 127);
 			this.comboBox4.Name = "comboBox4";
-			this.comboBox4.Size = new System.Drawing.Size(116, 21);
+			this.comboBox4.Size = new System.Drawing.Size(100, 21);
 			this.comboBox4.TabIndex = 91;
 			// 
 			// label10
 			// 
 			this.label10.AutoSize = true;
-			this.label10.Location = new System.Drawing.Point(472, 122);
+			this.label10.Location = new System.Drawing.Point(475, 110);
 			this.label10.Name = "label10";
 			this.label10.Size = new System.Drawing.Size(51, 13);
 			this.label10.TabIndex = 92;
@@ -506,6 +514,13 @@ namespace OpenDental {
 			// 
 			// groupBox1
 			// 
+			this.groupBox1.Controls.Add(this.radioButton7);
+			this.groupBox1.Controls.Add(this.radioButton6);
+			this.groupBox1.Controls.Add(this.radioButton5);
+			this.groupBox1.Controls.Add(this.radioButton4);
+			this.groupBox1.Controls.Add(this.radioButton3);
+			this.groupBox1.Controls.Add(this.radioButton2);
+			this.groupBox1.Controls.Add(this.radioButton1);
 			this.groupBox1.Controls.Add(this.label1);
 			this.groupBox1.Controls.Add(this.comboBox12);
 			this.groupBox1.Controls.Add(this.label12);
@@ -519,14 +534,7 @@ namespace OpenDental {
 			this.groupBox1.Controls.Add(this.comboBox9);
 			this.groupBox1.Controls.Add(this.label17);
 			this.groupBox1.Controls.Add(this.comboBox8);
-			this.groupBox1.Controls.Add(this.checkBox9);
-			this.groupBox1.Controls.Add(this.checkBox8);
-			this.groupBox1.Controls.Add(this.checkBox7);
-			this.groupBox1.Controls.Add(this.checkBox6);
 			this.groupBox1.Controls.Add(this.label16);
-			this.groupBox1.Controls.Add(this.checkBox5);
-			this.groupBox1.Controls.Add(this.checkBox4);
-			this.groupBox1.Controls.Add(this.checkBox3);
 			this.groupBox1.Controls.Add(this.label15);
 			this.groupBox1.Controls.Add(this.label14);
 			this.groupBox1.Controls.Add(this.label13);
@@ -540,6 +548,28 @@ namespace OpenDental {
 			this.groupBox1.Size = new System.Drawing.Size(171, 518);
 			this.groupBox1.TabIndex = 136;
 			this.groupBox1.TabStop = false;
+			// 
+			// radioButton2
+			// 
+			this.radioButton2.AutoSize = true;
+			this.radioButton2.Location = new System.Drawing.Point(88, 328);
+			this.radioButton2.Name = "radioButton2";
+			this.radioButton2.Size = new System.Drawing.Size(43, 17);
+			this.radioButton2.TabIndex = 154;
+			this.radioButton2.TabStop = true;
+			this.radioButton2.Text = "Left";
+			this.radioButton2.UseVisualStyleBackColor = true;
+			// 
+			// radioButton1
+			// 
+			this.radioButton1.AutoSize = true;
+			this.radioButton1.Location = new System.Drawing.Point(20, 328);
+			this.radioButton1.Name = "radioButton1";
+			this.radioButton1.Size = new System.Drawing.Size(50, 17);
+			this.radioButton1.TabIndex = 133;
+			this.radioButton1.TabStop = true;
+			this.radioButton1.Text = "Right";
+			this.radioButton1.UseVisualStyleBackColor = true;
 			// 
 			// label1
 			// 
@@ -566,7 +596,7 @@ namespace OpenDental {
 			// label12
 			// 
 			this.label12.AutoSize = true;
-			this.label12.Location = new System.Drawing.Point(113, 83);
+			this.label12.Location = new System.Drawing.Point(113, 80);
 			this.label12.Name = "label12";
 			this.label12.Size = new System.Drawing.Size(34, 13);
 			this.label12.TabIndex = 151;
@@ -581,7 +611,7 @@ namespace OpenDental {
             "3",
             "4",
             "5"});
-			this.comboBox6.Location = new System.Drawing.Point(65, 78);
+			this.comboBox6.Location = new System.Drawing.Point(65, 75);
 			this.comboBox6.Name = "comboBox6";
 			this.comboBox6.Size = new System.Drawing.Size(40, 21);
 			this.comboBox6.TabIndex = 150;
@@ -673,84 +703,14 @@ namespace OpenDental {
 			this.comboBox8.TabIndex = 142;
 			this.comboBox8.SelectedIndexChanged += new System.EventHandler(this.comboBox8_SelectedIndexChanged);
 			// 
-			// checkBox9
-			// 
-			this.checkBox9.AutoSize = true;
-			this.checkBox9.Location = new System.Drawing.Point(19, 328);
-			this.checkBox9.Name = "checkBox9";
-			this.checkBox9.Size = new System.Drawing.Size(51, 17);
-			this.checkBox9.TabIndex = 141;
-			this.checkBox9.Text = "Right";
-			this.checkBox9.UseVisualStyleBackColor = true;
-			// 
-			// checkBox8
-			// 
-			this.checkBox8.AutoSize = true;
-			this.checkBox8.Location = new System.Drawing.Point(87, 328);
-			this.checkBox8.Name = "checkBox8";
-			this.checkBox8.Size = new System.Drawing.Size(44, 17);
-			this.checkBox8.TabIndex = 140;
-			this.checkBox8.Text = "Left";
-			this.checkBox8.UseVisualStyleBackColor = true;
-			// 
-			// checkBox7
-			// 
-			this.checkBox7.AutoSize = true;
-			this.checkBox7.Location = new System.Drawing.Point(84, 214);
-			this.checkBox7.Name = "checkBox7";
-			this.checkBox7.Size = new System.Drawing.Size(64, 17);
-			this.checkBox7.TabIndex = 139;
-			this.checkBox7.Text = "Butterfly";
-			this.checkBox7.UseVisualStyleBackColor = true;
-			// 
-			// checkBox6
-			// 
-			this.checkBox6.AutoSize = true;
-			this.checkBox6.Location = new System.Drawing.Point(18, 214);
-			this.checkBox6.Name = "checkBox6";
-			this.checkBox6.Size = new System.Drawing.Size(66, 17);
-			this.checkBox6.TabIndex = 138;
-			this.checkBox6.Text = "Catheter";
-			this.checkBox6.UseVisualStyleBackColor = true;
-			// 
 			// label16
 			// 
 			this.label16.AutoSize = true;
-			this.label16.Location = new System.Drawing.Point(15, 196);
+			this.label16.Location = new System.Drawing.Point(15, 197);
 			this.label16.Name = "label16";
 			this.label16.Size = new System.Drawing.Size(55, 13);
 			this.label16.TabIndex = 137;
 			this.label16.Text = "IV Access";
-			// 
-			// checkBox5
-			// 
-			this.checkBox5.AutoSize = true;
-			this.checkBox5.Location = new System.Drawing.Point(18, 174);
-			this.checkBox5.Name = "checkBox5";
-			this.checkBox5.Size = new System.Drawing.Size(113, 17);
-			this.checkBox5.TabIndex = 136;
-			this.checkBox5.Text = "Endotracheal tube";
-			this.checkBox5.UseVisualStyleBackColor = true;
-			// 
-			// checkBox4
-			// 
-			this.checkBox4.AutoSize = true;
-			this.checkBox4.Location = new System.Drawing.Point(18, 158);
-			this.checkBox4.Name = "checkBox4";
-			this.checkBox4.Size = new System.Drawing.Size(94, 17);
-			this.checkBox4.TabIndex = 135;
-			this.checkBox4.Text = "Nasal cannula";
-			this.checkBox4.UseVisualStyleBackColor = true;
-			// 
-			// checkBox3
-			// 
-			this.checkBox3.AutoSize = true;
-			this.checkBox3.Location = new System.Drawing.Point(18, 141);
-			this.checkBox3.Name = "checkBox3";
-			this.checkBox3.Size = new System.Drawing.Size(80, 17);
-			this.checkBox3.TabIndex = 134;
-			this.checkBox3.Text = "Nasal hood";
-			this.checkBox3.UseVisualStyleBackColor = true;
 			// 
 			// label15
 			// 
@@ -764,7 +724,7 @@ namespace OpenDental {
 			// label14
 			// 
 			this.label14.AutoSize = true;
-			this.label14.Location = new System.Drawing.Point(14, 62);
+			this.label14.Location = new System.Drawing.Point(14, 59);
 			this.label14.Name = "label14";
 			this.label14.Size = new System.Drawing.Size(96, 13);
 			this.label14.TabIndex = 132;
@@ -773,7 +733,7 @@ namespace OpenDental {
 			// label13
 			// 
 			this.label13.AutoSize = true;
-			this.label13.Location = new System.Drawing.Point(113, 105);
+			this.label13.Location = new System.Drawing.Point(113, 102);
 			this.label13.Name = "label13";
 			this.label13.Size = new System.Drawing.Size(34, 13);
 			this.label13.TabIndex = 131;
@@ -788,7 +748,7 @@ namespace OpenDental {
             "3",
             "4",
             "5"});
-			this.comboBox7.Location = new System.Drawing.Point(65, 100);
+			this.comboBox7.Location = new System.Drawing.Point(65, 97);
 			this.comboBox7.Name = "comboBox7";
 			this.comboBox7.Size = new System.Drawing.Size(40, 21);
 			this.comboBox7.TabIndex = 130;
@@ -796,7 +756,7 @@ namespace OpenDental {
 			// checkBox2
 			// 
 			this.checkBox2.AutoSize = true;
-			this.checkBox2.Location = new System.Drawing.Point(18, 104);
+			this.checkBox2.Location = new System.Drawing.Point(18, 101);
 			this.checkBox2.Name = "checkBox2";
 			this.checkBox2.Size = new System.Drawing.Size(46, 17);
 			this.checkBox2.TabIndex = 128;
@@ -806,7 +766,7 @@ namespace OpenDental {
 			// CheckBox1
 			// 
 			this.CheckBox1.AutoSize = true;
-			this.CheckBox1.Location = new System.Drawing.Point(18, 80);
+			this.CheckBox1.Location = new System.Drawing.Point(18, 77);
 			this.CheckBox1.Name = "CheckBox1";
 			this.CheckBox1.Size = new System.Drawing.Size(40, 17);
 			this.CheckBox1.TabIndex = 127;
@@ -836,10 +796,18 @@ namespace OpenDental {
 			// 
 			// groupBox2
 			// 
+			this.groupBox2.Controls.Add(this.label5);
+			this.groupBox2.Controls.Add(this.textBox1);
+			this.groupBox2.Controls.Add(this.label3);
+			this.groupBox2.Controls.Add(this.comboBox13);
 			this.groupBox2.Controls.Add(this.groupBox5);
 			this.groupBox2.Controls.Add(this.listAnesthetic);
 			this.groupBox2.Controls.Add(this.button1);
+			this.groupBox2.Controls.Add(this.listAnestheticMeds);
+			this.groupBox2.Controls.Add(this.comboBox3);
+			this.groupBox2.Controls.Add(this.label10);
 			this.groupBox2.Controls.Add(this.button2);
+			this.groupBox2.Controls.Add(this.comboBox4);
 			this.groupBox2.Controls.Add(this.textAnesthOpen);
 			this.groupBox2.Controls.Add(this.textSurgOpen);
 			this.groupBox2.Controls.Add(this.butAnesthOpen);
@@ -854,7 +822,40 @@ namespace OpenDental {
 			this.groupBox2.Size = new System.Drawing.Size(592, 334);
 			this.groupBox2.TabIndex = 137;
 			this.groupBox2.TabStop = false;
-			this.groupBox2.Text = "Anesthetics";
+			this.groupBox2.Text = "IV Anesthetics";
+			// 
+			// label5
+			// 
+			this.label5.AutoSize = true;
+			this.label5.Location = new System.Drawing.Point(295, 158);
+			this.label5.Name = "label5";
+			this.label5.Size = new System.Drawing.Size(32, 13);
+			this.label5.TabIndex = 100;
+			this.label5.Text = "Dose";
+			// 
+			// textBox1
+			// 
+			this.textBox1.Location = new System.Drawing.Point(298, 177);
+			this.textBox1.Name = "textBox1";
+			this.textBox1.Size = new System.Drawing.Size(54, 20);
+			this.textBox1.TabIndex = 99;
+			// 
+			// label3
+			// 
+			this.label3.AutoSize = true;
+			this.label3.Location = new System.Drawing.Point(249, 110);
+			this.label3.Name = "label3";
+			this.label3.Size = new System.Drawing.Size(47, 13);
+			this.label3.TabIndex = 98;
+			this.label3.Text = "Surgeon";
+			// 
+			// comboBox13
+			// 
+			this.comboBox13.FormattingEnabled = true;
+			this.comboBox13.Location = new System.Drawing.Point(252, 127);
+			this.comboBox13.Name = "comboBox13";
+			this.comboBox13.Size = new System.Drawing.Size(100, 21);
+			this.comboBox13.TabIndex = 97;
 			// 
 			// groupBox5
 			// 
@@ -879,7 +880,19 @@ namespace OpenDental {
 			this.groupBox5.Size = new System.Drawing.Size(200, 177);
 			this.groupBox5.TabIndex = 54;
 			this.groupBox5.TabStop = false;
-			this.groupBox5.Text = "Dose";
+			this.groupBox5.Text = "Click to add dose";
+			// 
+			// groupBox6
+			// 
+			this.groupBox6.Controls.Add(this.butSurgClose);
+			this.groupBox6.Controls.Add(this.textSurgClose);
+			this.groupBox6.Controls.Add(this.textAnesthClose);
+			this.groupBox6.Location = new System.Drawing.Point(142, 16);
+			this.groupBox6.Name = "groupBox6";
+			this.groupBox6.Size = new System.Drawing.Size(444, 83);
+			this.groupBox6.TabIndex = 96;
+			this.groupBox6.TabStop = false;
+			this.groupBox6.Text = "Times";
 			// 
 			// groupBox3
 			// 
@@ -941,6 +954,15 @@ namespace OpenDental {
 			this.textBox10.Size = new System.Drawing.Size(88, 20);
 			this.textBox10.TabIndex = 130;
 			// 
+			// label8
+			// 
+			this.label8.AutoSize = true;
+			this.label8.Location = new System.Drawing.Point(156, 122);
+			this.label8.Name = "label8";
+			this.label8.Size = new System.Drawing.Size(59, 13);
+			this.label8.TabIndex = 88;
+			this.label8.Text = "Anesthetist";
+			// 
 			// button20
 			// 
 			this.button20.AdjustImageLocation = new System.Drawing.Point(0, 0);
@@ -955,98 +977,6 @@ namespace OpenDental {
 			this.button20.Text = "Post anesthesia score";
 			this.button20.UseVisualStyleBackColor = true;
 			this.button20.Click += new System.EventHandler(this.button20_Click_1);
-			// 
-			// butAnesthClose
-			// 
-			this.butAnesthClose.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butAnesthClose.Autosize = true;
-			this.butAnesthClose.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butAnesthClose.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butAnesthClose.CornerRadius = 4F;
-			this.butAnesthClose.Location = new System.Drawing.Point(481, 35);
-			this.butAnesthClose.Name = "butAnesthClose";
-			this.butAnesthClose.Size = new System.Drawing.Size(97, 26);
-			this.butAnesthClose.TabIndex = 85;
-			this.butAnesthClose.Text = "Anesthesia Close";
-			this.butAnesthClose.UseVisualStyleBackColor = true;
-			this.butAnesthClose.Click += new System.EventHandler(this.butAnesthClose_Click);
-			// 
-			// butSurgClose
-			// 
-			this.butSurgClose.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butSurgClose.Autosize = true;
-			this.butSurgClose.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butSurgClose.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butSurgClose.CornerRadius = 4F;
-			this.butSurgClose.Location = new System.Drawing.Point(237, 19);
-			this.butSurgClose.Name = "butSurgClose";
-			this.butSurgClose.Size = new System.Drawing.Size(96, 26);
-			this.butSurgClose.TabIndex = 84;
-			this.butSurgClose.Text = "Surgery Close";
-			this.butSurgClose.UseVisualStyleBackColor = true;
-			this.butSurgClose.Click += new System.EventHandler(this.butSurgClose_Click);
-			// 
-			// butSurgOpen
-			// 
-			this.butSurgOpen.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butSurgOpen.Autosize = true;
-			this.butSurgOpen.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butSurgOpen.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butSurgOpen.CornerRadius = 4F;
-			this.butSurgOpen.Location = new System.Drawing.Point(249, 35);
-			this.butSurgOpen.Name = "butSurgOpen";
-			this.butSurgOpen.Size = new System.Drawing.Size(97, 26);
-			this.butSurgOpen.TabIndex = 83;
-			this.butSurgOpen.Text = "Surgery Open";
-			this.butSurgOpen.UseVisualStyleBackColor = true;
-			this.butSurgOpen.Click += new System.EventHandler(this.butSurgOpen_Click);
-			// 
-			// butAnesthOpen
-			// 
-			this.butAnesthOpen.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butAnesthOpen.Autosize = true;
-			this.butAnesthOpen.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butAnesthOpen.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butAnesthOpen.CornerRadius = 4F;
-			this.butAnesthOpen.Location = new System.Drawing.Point(147, 35);
-			this.butAnesthOpen.Name = "butAnesthOpen";
-			this.butAnesthOpen.Size = new System.Drawing.Size(96, 26);
-			this.butAnesthOpen.TabIndex = 82;
-			this.butAnesthOpen.Text = "Anesthesia Open";
-			this.butAnesthOpen.UseVisualStyleBackColor = true;
-			this.butAnesthOpen.Click += new System.EventHandler(this.buttonAnesthOpen_Click);
-			// 
-			// button19
-			// 
-			this.button19.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.button19.Autosize = true;
-			this.button19.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.button19.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.button19.CornerRadius = 4F;
-			this.button19.Image = global::OpenDental.Properties.Resources.deleteX;
-			this.button19.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.button19.Location = new System.Drawing.Point(249, 298);
-			this.button19.Name = "button19";
-			this.button19.Size = new System.Drawing.Size(82, 26);
-			this.button19.TabIndex = 74;
-			this.button19.Text = "Delete";
-			this.button19.UseVisualStyleBackColor = true;
-			// 
-			// button18
-			// 
-			this.button18.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.button18.Autosize = true;
-			this.button18.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.button18.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.button18.CornerRadius = 4F;
-			this.button18.Image = global::OpenDental.Properties.Resources.Add;
-			this.button18.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.button18.Location = new System.Drawing.Point(161, 298);
-			this.button18.Name = "button18";
-			this.button18.Size = new System.Drawing.Size(82, 26);
-			this.button18.TabIndex = 73;
-			this.button18.Text = "Add";
-			this.button18.UseVisualStyleBackColor = true;
 			// 
 			// button13
 			// 
@@ -1305,6 +1235,100 @@ namespace OpenDental {
 			this.button2.Text = "Delete";
 			this.button2.UseVisualStyleBackColor = true;
 			// 
+			// butAnesthOpen
+			// 
+			this.butAnesthOpen.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butAnesthOpen.Autosize = true;
+			this.butAnesthOpen.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butAnesthOpen.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butAnesthOpen.CornerRadius = 4F;
+			this.butAnesthOpen.Location = new System.Drawing.Point(147, 35);
+			this.butAnesthOpen.Name = "butAnesthOpen";
+			this.butAnesthOpen.Size = new System.Drawing.Size(96, 26);
+			this.butAnesthOpen.TabIndex = 82;
+			this.butAnesthOpen.Text = "Anesthesia Open";
+			this.butAnesthOpen.UseVisualStyleBackColor = true;
+			this.butAnesthOpen.Click += new System.EventHandler(this.buttonAnesthOpen_Click);
+			// 
+			// butSurgOpen
+			// 
+			this.butSurgOpen.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butSurgOpen.Autosize = true;
+			this.butSurgOpen.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butSurgOpen.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butSurgOpen.CornerRadius = 4F;
+			this.butSurgOpen.Location = new System.Drawing.Point(249, 35);
+			this.butSurgOpen.Name = "butSurgOpen";
+			this.butSurgOpen.Size = new System.Drawing.Size(97, 26);
+			this.butSurgOpen.TabIndex = 83;
+			this.butSurgOpen.Text = "Surgery Open";
+			this.butSurgOpen.UseVisualStyleBackColor = true;
+			this.butSurgOpen.Click += new System.EventHandler(this.butSurgOpen_Click);
+			// 
+			// butAnesthClose
+			// 
+			this.butAnesthClose.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butAnesthClose.Autosize = true;
+			this.butAnesthClose.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butAnesthClose.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butAnesthClose.CornerRadius = 4F;
+			this.butAnesthClose.Location = new System.Drawing.Point(481, 35);
+			this.butAnesthClose.Name = "butAnesthClose";
+			this.butAnesthClose.Size = new System.Drawing.Size(97, 26);
+			this.butAnesthClose.TabIndex = 85;
+			this.butAnesthClose.Text = "Anesthesia Close";
+			this.butAnesthClose.UseVisualStyleBackColor = true;
+			this.butAnesthClose.Click += new System.EventHandler(this.butAnesthClose_Click);
+			// 
+			// button19
+			// 
+			this.button19.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.button19.Autosize = true;
+			this.button19.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.button19.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.button19.CornerRadius = 4F;
+			this.button19.Image = global::OpenDental.Properties.Resources.deleteX;
+			this.button19.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.button19.Location = new System.Drawing.Point(270, 296);
+			this.button19.Name = "button19";
+			this.button19.Size = new System.Drawing.Size(82, 26);
+			this.button19.TabIndex = 74;
+			this.button19.Text = "Delete";
+			this.button19.UseVisualStyleBackColor = true;
+			this.button19.Click += new System.EventHandler(this.button19_Click);
+			// 
+			// button18
+			// 
+			this.button18.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.button18.Autosize = true;
+			this.button18.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.button18.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.button18.CornerRadius = 4F;
+			this.button18.Image = global::OpenDental.Properties.Resources.Add;
+			this.button18.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.button18.Location = new System.Drawing.Point(182, 296);
+			this.button18.Name = "button18";
+			this.button18.Size = new System.Drawing.Size(82, 26);
+			this.button18.TabIndex = 73;
+			this.button18.Text = "Add";
+			this.button18.UseVisualStyleBackColor = true;
+			this.button18.Click += new System.EventHandler(this.button18_Click);
+			// 
+			// butSurgClose
+			// 
+			this.butSurgClose.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butSurgClose.Autosize = true;
+			this.butSurgClose.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butSurgClose.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butSurgClose.CornerRadius = 4F;
+			this.butSurgClose.Location = new System.Drawing.Point(237, 19);
+			this.butSurgClose.Name = "butSurgClose";
+			this.butSurgClose.Size = new System.Drawing.Size(96, 26);
+			this.butSurgClose.TabIndex = 84;
+			this.butSurgClose.Text = "Surgery Close";
+			this.butSurgClose.UseVisualStyleBackColor = true;
+			this.butSurgClose.Click += new System.EventHandler(this.butSurgClose_Click);
+			// 
 			// button27
 			// 
 			this.button27.AdjustImageLocation = new System.Drawing.Point(0, 0);
@@ -1358,26 +1382,60 @@ namespace OpenDental {
 			this.sigBox.TabIndex = 135;
 			this.sigBox.Click += new System.EventHandler(this.sigBox_Click);
 			// 
-			// label8
+			// radioButton3
 			// 
-			this.label8.AutoSize = true;
-			this.label8.Location = new System.Drawing.Point(156, 122);
-			this.label8.Name = "label8";
-			this.label8.Size = new System.Drawing.Size(59, 13);
-			this.label8.TabIndex = 88;
-			this.label8.Text = "Anesthetist";
+			this.radioButton3.AutoSize = true;
+			this.radioButton3.Location = new System.Drawing.Point(17, 212);
+			this.radioButton3.Name = "radioButton3";
+			this.radioButton3.Size = new System.Drawing.Size(65, 17);
+			this.radioButton3.TabIndex = 155;
+			this.radioButton3.TabStop = true;
+			this.radioButton3.Text = "Catheter";
+			this.radioButton3.UseVisualStyleBackColor = true;
 			// 
-			// groupBox6
+			// radioButton4
 			// 
-			this.groupBox6.Controls.Add(this.butSurgClose);
-			this.groupBox6.Controls.Add(this.textSurgClose);
-			this.groupBox6.Controls.Add(this.textAnesthClose);
-			this.groupBox6.Location = new System.Drawing.Point(142, 16);
-			this.groupBox6.Name = "groupBox6";
-			this.groupBox6.Size = new System.Drawing.Size(444, 83);
-			this.groupBox6.TabIndex = 96;
-			this.groupBox6.TabStop = false;
-			this.groupBox6.Text = "Times";
+			this.radioButton4.AutoSize = true;
+			this.radioButton4.Location = new System.Drawing.Point(82, 212);
+			this.radioButton4.Name = "radioButton4";
+			this.radioButton4.Size = new System.Drawing.Size(63, 17);
+			this.radioButton4.TabIndex = 156;
+			this.radioButton4.TabStop = true;
+			this.radioButton4.Text = "Butterfly";
+			this.radioButton4.UseVisualStyleBackColor = true;
+			// 
+			// radioButton5
+			// 
+			this.radioButton5.AutoSize = true;
+			this.radioButton5.Location = new System.Drawing.Point(18, 138);
+			this.radioButton5.Name = "radioButton5";
+			this.radioButton5.Size = new System.Drawing.Size(79, 17);
+			this.radioButton5.TabIndex = 157;
+			this.radioButton5.TabStop = true;
+			this.radioButton5.Text = "Nasal hood";
+			this.radioButton5.UseVisualStyleBackColor = true;
+			// 
+			// radioButton6
+			// 
+			this.radioButton6.AutoSize = true;
+			this.radioButton6.Location = new System.Drawing.Point(18, 157);
+			this.radioButton6.Name = "radioButton6";
+			this.radioButton6.Size = new System.Drawing.Size(93, 17);
+			this.radioButton6.TabIndex = 158;
+			this.radioButton6.TabStop = true;
+			this.radioButton6.Text = "Nasal cannula";
+			this.radioButton6.UseVisualStyleBackColor = true;
+			// 
+			// radioButton7
+			// 
+			this.radioButton7.AutoSize = true;
+			this.radioButton7.Location = new System.Drawing.Point(18, 175);
+			this.radioButton7.Name = "radioButton7";
+			this.radioButton7.Size = new System.Drawing.Size(112, 17);
+			this.radioButton7.TabIndex = 159;
+			this.radioButton7.TabStop = true;
+			this.radioButton7.Text = "Endotracheal tube";
+			this.radioButton7.UseVisualStyleBackColor = true;
 			// 
 			// FormAnestheticRecord
 			// 
@@ -1385,14 +1443,10 @@ namespace OpenDental {
 			this.Controls.Add(this.groupBox1);
 			this.Controls.Add(this.label22);
 			this.Controls.Add(this.richTextBox1);
-			this.Controls.Add(this.label10);
-			this.Controls.Add(this.comboBox4);
-			this.Controls.Add(this.comboBox3);
 			this.Controls.Add(this.label8);
 			this.Controls.Add(this.comboBox2);
 			this.Controls.Add(this.comboBox1);
 			this.Controls.Add(this.label4);
-			this.Controls.Add(this.listMeds);
 			this.Controls.Add(this.label2);
 			this.Controls.Add(this.groupBox2);
 			this.Controls.Add(this.groupBox3);
@@ -1407,13 +1461,13 @@ namespace OpenDental {
 			this.groupBox2.ResumeLayout(false);
 			this.groupBox2.PerformLayout();
 			this.groupBox5.ResumeLayout(false);
+			this.groupBox6.ResumeLayout(false);
+			this.groupBox6.PerformLayout();
 			this.groupBox3.ResumeLayout(false);
 			this.groupBox3.PerformLayout();
 			this.groupBox4.ResumeLayout(false);
 			this.groupBox4.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
-			this.groupBox6.ResumeLayout(false);
-			this.groupBox6.PerformLayout();
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -1519,6 +1573,16 @@ namespace OpenDental {
 		private void butAnesthClose_Click(object sender, EventArgs e)
 		{
 			textAnesthClose.Text = MiscData.GetNowDateTime().ToString("HH:mm");
+		}
+
+		private void button19_Click(object sender, EventArgs e)
+		{
+
+		}
+
+		private void button18_Click(object sender, EventArgs e)
+		{
+
 		}
 		
 		}
