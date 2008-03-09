@@ -164,7 +164,6 @@ namespace OpenDental.Reporting.Allocators.MyAllocator1
 			// 
 			this.panel2.Controls.Add(this.rbutIHaveRead);
 			this.panel2.Controls.Add(this.rbIhaveNotRead);
-			this.panel2.Enabled = false;
 			this.panel2.Location = new System.Drawing.Point(12, 239);
 			this.panel2.Name = "panel2";
 			this.panel2.Size = new System.Drawing.Size(234, 57);
