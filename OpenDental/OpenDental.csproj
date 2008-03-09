@@ -2,7 +2,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.21022</ProductVersion>
+    <ProductVersion>9.0.20706</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{8136317D-C936-49B6-9E31-D90F02D2F207}</ProjectGuid>
     <OutputType>WinExe</OutputType>
@@ -388,6 +388,9 @@
     <Compile Include="Forms\BasicTemplate.designer.cs">
       <DependentUpon>BasicTemplate.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\FormAccountingLock.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Forms\FormAnesthesiaScore.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -672,9 +675,6 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\FormCommunications.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Web References\FormAccountingLock.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\FormBlockoutCutCopyPaste.cs">
@@ -1446,6 +1446,10 @@
       <DependentUpon>BasicTemplate.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormAccountingLock.resx">
+      <DependentUpon>FormAccountingLock.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormAnesthesiaScore.resx">
       <DependentUpon>FormAnesthesiaScore.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -1768,10 +1772,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormCommunications.resx">
       <DependentUpon>FormCommunications.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Web References\FormAccountingLock.resx">
-      <DependentUpon>FormAccountingLock.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormBlockoutCutCopyPaste.resx">
