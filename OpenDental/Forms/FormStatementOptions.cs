@@ -730,17 +730,17 @@ namespace OpenDental{
 
 		private void but45days_Click(object sender,EventArgs e) {
 			textDateStart.Text=DateTime.Today.AddDays(-45).ToShortDateString();
-			textDateEnd.Text="";
+			textDateEnd.Text=DateTime.Today.ToShortDateString();
 		}
 
 		private void but90days_Click(object sender,EventArgs e) {
 			textDateStart.Text=DateTime.Today.AddDays(-90).ToShortDateString();
-			textDateEnd.Text="";
+			textDateEnd.Text=DateTime.Today.ToShortDateString();
 		}
 
 		private void butDatesAll_Click(object sender,EventArgs e) {
 			textDateStart.Text="";
-			textDateEnd.Text="";
+			textDateEnd.Text=DateTime.Today.ToShortDateString();
 		}
 
 		private void buttonFuchs1_Click(object sender,EventArgs e) {

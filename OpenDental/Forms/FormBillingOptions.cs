@@ -731,30 +731,30 @@ namespace OpenDental{
 		}
 
 		private void SetDefaults(){
-			textDateStart.Text=DateTime.Today.AddDays(PrefB.GetInt("BillingDefaultsLastDays")).ToShortDateString();
-			textDateEnd.Text="";
+			textDateStart.Text=DateTime.Today.AddDays(-PrefB.GetInt("BillingDefaultsLastDays")).ToShortDateString();
+			textDateEnd.Text=DateTime.Today.ToShortDateString();
 			checkIntermingled.Checked=PrefB.GetBool("BillingDefaultsIntermingle");
 			textNote.Text=PrefB.GetString("BillingDefaultsNote");
 		}
 
 		private void but30days_Click(object sender,EventArgs e) {
 			textDateStart.Text=DateTime.Today.AddDays(-30).ToShortDateString();
-			textDateEnd.Text="";
+			textDateEnd.Text=DateTime.Today.ToShortDateString();
 		}
 
 		private void but45days_Click(object sender,EventArgs e) {
 			textDateStart.Text=DateTime.Today.AddDays(-45).ToShortDateString();
-			textDateEnd.Text="";
+			textDateEnd.Text=DateTime.Today.ToShortDateString();
 		}
 
 		private void but90days_Click(object sender,EventArgs e) {
 			textDateStart.Text=DateTime.Today.AddDays(-90).ToShortDateString();
-			textDateEnd.Text="";
+			textDateEnd.Text=DateTime.Today.ToShortDateString();
 		}
 
 		private void butDatesAll_Click(object sender,EventArgs e) {
 			textDateStart.Text="";
-			textDateEnd.Text="";
+			textDateEnd.Text=DateTime.Today.ToShortDateString();
 		}
 
 		private void butCreate_Click(object sender, System.EventArgs e) {
@@ -787,7 +787,7 @@ namespace OpenDental{
 				,checkExcludeInactive.Checked,checkIncludeChanged.Checked,checkExcludeInsPending.Checked);
 			FormB.Note=textNote.Text;
 			FormB.DateRangeFrom=DateTime.MinValue;
-			FormB.DateRangeTo=new DateTime(2200,1,1);
+			FormB.DateRangeTo=DateTime.Today;//Needed for payplan accuracy.//new DateTime(2200,1,1);
 			if(textDateStart.Text!=""){
 				FormB.DateRangeFrom=PIn.PDate(textDateStart.Text);
 			}

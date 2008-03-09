@@ -3605,7 +3605,7 @@ double adj=Adjustments.GetTotForProc(arrayProc[tempCountProc].ProcNum,Adjustment
 					stmt.DateRangeFrom=PIn.PDate(textDateStart.Text);
 				}
 			}
-			stmt.DateRangeTo=DateTime.MaxValue;//new DateTime(2200,1,1);
+			stmt.DateRangeTo=DateTime.Today;//This is needed for payment plan accuracy.//new DateTime(2200,1,1);
 			if(textDateEnd.errorProvider1.GetError(textDateEnd)==""){
 				if(textDateEnd.Text!=""){
 					stmt.DateRangeTo=PIn.PDate(textDateEnd.Text);
@@ -3619,7 +3619,7 @@ double adj=Adjustments.GetTotForProc(arrayProc[tempCountProc].ProcNum,Adjustment
 		
 		private void menuItemStatementWalkout_Click(object sender, System.EventArgs e) {
 			Statement stmt=new Statement();
-			stmt.PatNum=PatCur.Guarantor;
+			stmt.PatNum=PatCur.PatNum;
 			stmt.DateSent=DateTime.Today;
 			stmt.IsSent=true;
 			stmt.Mode_=StatementMode.InPerson;
@@ -3663,7 +3663,7 @@ double adj=Adjustments.GetTotForProc(arrayProc[tempCountProc].ProcNum,Adjustment
 
 		private void menuItemStatementMore_Click(object sender, System.EventArgs e) {
 			Statement stmt=new Statement();
-			stmt.PatNum=PatCur.Guarantor;
+			stmt.PatNum=PatCur.PatNum;
 			stmt.DateSent=DateTime.Today;
 			stmt.IsSent=false;
 			stmt.Mode_=StatementMode.InPerson;
@@ -3676,7 +3676,7 @@ double adj=Adjustments.GetTotForProc(arrayProc[tempCountProc].ProcNum,Adjustment
 					stmt.DateRangeFrom=PIn.PDate(textDateStart.Text);
 				}
 			}
-			stmt.DateRangeTo=DateTime.MaxValue;//new DateTime(2200,1,1);
+			stmt.DateRangeTo=DateTime.Today;//Needed for payplan accuracy.//new DateTime(2200,1,1);
 			if(textDateEnd.errorProvider1.GetError(textDateEnd)==""){
 				if(textDateEnd.Text!=""){
 					stmt.DateRangeTo=PIn.PDate(textDateEnd.Text);

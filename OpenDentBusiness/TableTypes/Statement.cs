@@ -22,7 +22,7 @@ namespace OpenDentBusiness{
 		[DataField("PatNum")]
 		private int patNum;
 		bool patNumChanged;
-		/// <summary>FK to patient.PatNum. Typically the guarantor unless the family has been rearranged.</summary>
+		/// <summary>FK to patient.PatNum. Typically the guarantor.  Can also be the patient for walkout statements.</summary>
 		public int PatNum {
 			get { return patNum; }
 			set { if(patNum!=value){patNum = value; MarkDirty(); patNumChanged = true;} }
@@ -58,7 +58,7 @@ namespace OpenDentBusiness{
 		[DataField("DateRangeTo")]
 		private DateTime dateRangeTo;
 		bool dateRangeToChanged;
-		/// <summary>Any date >= year 2200 is considered max val.</summary>
+		/// <summary>Any date >= year 2200 is considered max val.  We generally try to automate this value to be the same date as the statement rather than the max val.  This is so that when payment plans are displayed, we can add approximately 10 days to effectively show the charge that will soon be due.  Adding the 10 days is not done until display time.</summary>
 		public DateTime DateRangeTo {
 			get { return dateRangeTo; }
 			set { if(dateRangeTo!=value){dateRangeTo = value; MarkDirty(); dateRangeToChanged = true; }}
