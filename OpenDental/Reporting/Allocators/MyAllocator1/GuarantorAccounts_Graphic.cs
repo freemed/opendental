@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Data;
 using System.Drawing;
-using OpenDental.Reporting.Allocators.SimpleReporting;
+
 
 namespace OpenDental.Reporting.Allocators.MyAllocator1
 {
@@ -24,7 +24,7 @@ namespace OpenDental.Reporting.Allocators.MyAllocator1
 	/// Returns Null if _Guarantor = 0
 	/// 
 	/// </summary>
-	class GuarantorAccounts_Graphic : OpenDental.Reporting.Allocators.SimpleReporting.DrawableObject
+	class GuarantorAccounts_Graphic 
 	{
 		private int _Guarantor;
 		private int[] _colWidths;

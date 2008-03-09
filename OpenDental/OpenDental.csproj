@@ -2751,6 +2751,22 @@
       <DependentUpon>FormReportOld2.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="Reporting\Allocators\FormProgressViewer.resx">
+      <DependentUpon>FormProgressViewer.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reporting\Allocators\MyAllocator1\FormInstallAllocator_Provider.resx">
+      <DependentUpon>FormInstallAllocator_Provider.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reporting\Allocators\MyAllocator1\FormReport_GuarantorAllocationCheck.resx">
+      <DependentUpon>FormReport_GuarantorAllocationCheck.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reporting\Allocators\MyAllocator1\FormReport_ProviderIncomeReport.resx">
+      <DependentUpon>FormReport_ProviderIncomeReport.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Reporting\FormReportCustom.resx">
       <DependentUpon>FormReportCustom.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -3035,6 +3051,49 @@
     <Compile Include="ReportingOld2\ReportOld2.cs" />
     <Compile Include="ReportingOld2\Section.cs" />
     <Compile Include="ReportingOld2\SectionCollection.cs" />
+    <Compile Include="Reporting\Allocators\Allocator.cs" />
+    <Compile Include="Reporting\Allocators\AllocatorCollection.cs" />
+    <Compile Include="Reporting\Allocators\FormProgressViewer.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Reporting\Allocators\FormProgressViewer.designer.cs">
+      <DependentUpon>FormProgressViewer.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Reporting\Allocators\IAllocator.cs" />
+    <Compile Include="Reporting\Allocators\MyAllocator1\FormInstallAllocator_Provider.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Reporting\Allocators\MyAllocator1\FormInstallAllocator_Provider.Designer.cs">
+      <DependentUpon>FormInstallAllocator_Provider.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Reporting\Allocators\MyAllocator1\FormReport_GuarantorAllocationCheck.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Reporting\Allocators\MyAllocator1\FormReport_GuarantorAllocationCheck.designer.cs">
+      <DependentUpon>FormReport_GuarantorAllocationCheck.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Reporting\Allocators\MyAllocator1\FormReport_ProviderIncomeReport.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Reporting\Allocators\MyAllocator1\FormReport_ProviderIncomeReport.Designer.cs">
+      <DependentUpon>FormReport_ProviderIncomeReport.cs</DependentUpon>
+    </Compile>
+    <None Include="Reporting\Allocators\MyAllocator1\GuarantorAccounts_Graphic.cs" />
+    <Compile Include="Reporting\Allocators\MyAllocator1\MyAllocator1_ProviderPayment.cs" />
+    <Compile Include="Reporting\Allocators\MyAllocator1\Report1_GuarantorAllocation.cs" />
+    <Compile Include="Reporting\Allocators\MyAllocator1\ReportUI\ReportStyles.cs" />
+    <Compile Include="Reporting\Allocators\MyAllocator1\SupportingCode\EqualizeProviderPayments.cs" />
+    <Compile Include="Reporting\Allocators\MyAllocator1\SupportingCode\GuarantorLedgerItemsCollection.cs" />
+    <Compile Include="Reporting\Allocators\MyAllocator1\SupportingCode\Guarantors.cs" />
+    <Compile Include="Reporting\Allocators\MyAllocator1\SupportingCode\MakeLedgerObj.cs" />
+    <Compile Include="Reporting\Allocators\MyAllocator1\SupportingCode\ODCheckQuerries.cs" />
+    <Compile Include="Reporting\Allocators\MyAllocator1\SupportingCode\ODTableDefs.cs" />
+    <Compile Include="Reporting\Allocators\MyAllocator1\SupportingCode\ODTablesUsed.cs" />
+    <Compile Include="Reporting\Allocators\MyAllocator1\SupportingCode\PP_LedgerItem.cs" />
+    <Compile Include="Reporting\Allocators\MyAllocator1\SupportingCode\PP_LedgerItemGenerator.cs" />
+    <Compile Include="Reporting\Allocators\MyAllocator1\SupportingCode\PP_ODSQLPullStrings_LedgerItem.cs" />
+    <Compile Include="Reporting\Allocators\MyAllocator1\SupportingCode\PP_PaySplitItem.cs" />
+    <Compile Include="Reporting\Allocators\MyAllocator1\SupportingCode\PU.cs" />
     <Compile Include="Reporting\FormReportCustom.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -3318,8 +3377,10 @@
     <Content Include="Misc\App.ico" />
     <Content Include="Misc\TerminalMgr.ico" />
     <Content Include="Resources\Anesth.gif" />
-    <None Include="ClassDiagram1.cd" />
-    <None Include="ClassDiagram2.cd" />
+    <None Include="Reporting\Allocators\ClassDiagram_Allocators.cd" />
+    <None Include="Reporting\Allocators\MyAllocator1\SupportingCode\EPP_ClassDiagram.cd" />
+    <None Include="Reporting\Allocators\Supporting Queries.zip" />
+    <None Include="Reporting\Allocators\TableDefinition.ods" />
     <None Include="Resources\notify.wav" />
     <None Include="Resources\printPreview20.gif" />
     <None Include="Resources\email1.gif" />

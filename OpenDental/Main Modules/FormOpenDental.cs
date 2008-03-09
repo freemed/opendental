@@ -3527,8 +3527,8 @@ namespace OpenDental{
 				//MessageBox.Show("Not Authorized to Run Setup for Provider Allocation Tool");
 				return;
 			}
-			//Reporting.Allocators.MyAllocator1.FormInstallAllocator_Provider fap = new OpenDental.Reporting.Allocators.MyAllocator1.FormInstallAllocator_Provider();
-			//fap.ShowDialog();
+			Reporting.Allocators.MyAllocator1.FormInstallAllocator_Provider fap = new OpenDental.Reporting.Allocators.MyAllocator1.FormInstallAllocator_Provider();
+			fap.ShowDialog();
 		}
 
 		
