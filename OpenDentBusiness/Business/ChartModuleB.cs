@@ -309,7 +309,7 @@ namespace OpenDentBusiness {
 				row["RxNum"]=0;
 				rows.Add(row);
 			}
-			//Task List------------------------------------------------------------------------------------------------------------------
+			//TaskList------------------------------------------------------------------------------------------------------------------
 			command="SELECT task.*,tasklist.Descript ListDisc,p1.FName "
 				+"FROM patient p1,patient p2, task,tasklist "
 				+"WHERE task.KeyNum=p1.PatNum "
@@ -322,8 +322,10 @@ namespace OpenDentBusiness {
 			for(int i=0;i<rawTask.Rows.Count;i++) {
 				row=table.NewRow();
 				row["AptNum"]=0;
-				row["colorBackG"]=Color.White.ToArgb();
-				row["colorText"]=DefB.Long[(int)DefCat.ProgNoteColors][6].ItemColor.ToArgb().ToString();//same as commlog
+				//colors the same as notes
+				row["colorText"] = DefB.Long[(int)DefCat.ProgNoteColors][18].ItemColor.ToArgb().ToString();
+				row["colorBackG"] = DefB.Long[(int)DefCat.ProgNoteColors][19].ItemColor.ToArgb().ToString();
+				//row["colorText"] = DefB.Long[(int)DefCat.ProgNoteColors][6].ItemColor.ToArgb().ToString();//same as commlog
 				row["CommlogNum"]=0;
 				if(rawTask.Rows[i]["KeyNum"].ToString()==patNum.ToString()){
 					txt="";
@@ -331,22 +333,42 @@ namespace OpenDentBusiness {
 				else{
 					txt="("+rawTask.Rows[i]["FName"].ToString()+") ";
 				}
+				if(rawTask.Rows[i]["TaskStatus"].ToString()=="2"){//completed
+					row["description"] = txt + Lan.g("ChartModule", "Completed ");
+					row["colorBackG"] = Color.White.ToArgb();
+					//use same as note colors for completed tasks
+					row["colorText"] = DefB.Long[(int)DefCat.ProgNoteColors][20].ItemColor.ToArgb().ToString();
+					row["colorBackG"] = DefB.Long[(int)DefCat.ProgNoteColors][21].ItemColor.ToArgb().ToString();
+				}
 				row["description"]=txt+Lan.g("ChartModule","Task - In List: ")+rawTask.Rows[i]["ListDisc"].ToString();
 				row["EmailMessageNum"]=0;
 				row["LabCaseNum"]=0;
 				row["note"]=rawTask.Rows[i]["Descript"].ToString();
 				row["PatNum"]=rawTask.Rows[i]["KeyNum"].ToString();
-				dateT=PIn.PDateT(rawTask.Rows[i]["DateTimeEntry"].ToString());
-				if(dateT.Year<1880) {
-					row["procDate"]="";
+					dateT = PIn.PDateT(rawTask.Rows[i]["DateTask"].ToString());
+				if (dateT.Year < 1880) {//check if due date set for task or note
+					dateT = PIn.PDateT(rawTask.Rows[i]["DateTimeEntry"].ToString());
+					if (dateT.Year < 1880) {//since dateT was just redefined, check it now
+						row["procDate"] = "";
+					}
+					else {
+						row["procDate"] = dateT.ToShortDateString();
+					}
+					if (dateT.TimeOfDay != TimeSpan.Zero) {
+						row["procTime"] = dateT.ToString("h:mm") + dateT.ToString("%t").ToLower();
+					}
+					row["ProcDate"] = dateT;
 				}
 				else {
-					row["procDate"]=dateT.ToShortDateString();
+					row["procDate"] = dateT.ToShortDateString();
+					if (dateT.TimeOfDay != TimeSpan.Zero) {
+						row["procTime"] = dateT.ToString("h:mm") + dateT.ToString("%t").ToLower();
+					}
+					row["ProcDate"] = dateT;
+					row["Surf"] = "DUE";
+
 				}
-				if(dateT.TimeOfDay!=TimeSpan.Zero) {
-					row["procTime"]=dateT.ToString("h:mm")+dateT.ToString("%t").ToLower();
-				}
-				row["ProcDate"]=dateT;
+
 				row["ProcNum"]=0;
 				row["TaskNum"]=rawTask.Rows[i]["TaskNum"].ToString();
 				row["RxNum"]=0;
