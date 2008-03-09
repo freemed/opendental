@@ -588,8 +588,8 @@ namespace OpenDental.Reporting.Allocators.MyAllocator1
 						// 100 + -50 = +50 --- Allocate -50
 						// 100 + -60 = +40 --- Allocate -60
 						// 100 + -110 =  -10  --- Allocate -100
-						if (this.Payments[4] == PaymentsAndAdjustList[j])
-							1.ToString(); // to debug
+						//if (this.Payments[4] == PaymentsAndAdjustList[j])
+						//    1.ToString(); // to debug
 						ChargesAndRefundsList[CurChargeIndex].ALLOCATED_AMMOUNT += AmmountToAllocate;
 						PaymentsAndAdjustList[j].ALLOCATED_AMMOUNT -= AmmountToAllocate;
 						if (AmmountToAllocate != 0)

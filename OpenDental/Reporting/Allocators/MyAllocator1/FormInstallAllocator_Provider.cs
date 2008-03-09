@@ -60,13 +60,22 @@ namespace OpenDental.Reporting.Allocators.MyAllocator1
 #endregion
 		private void butRunAllocatorTool_Click(object sender, EventArgs e)
 		{
+			if (!rbutIHaveRead.Checked)
+			{
+				PU.MB = Lan.g(this,"You must indicate that you have read the text in the box!");
+				return;
+			}
 
 			if (MessageBox.Show("Do you want to run the batch allocation?", "Please Respond", MessageBoxButtons.YesNo) == DialogResult.Yes)
 			{
-				Reporting.Allocators.MyAllocator1_ProviderPayment allocator1 = new OpenDental.Reporting.Allocators.MyAllocator1_ProviderPayment();
-				SecurityLogs.MakeLogEntry(OpenDentBusiness.Permissions.Setup, 0, "Started Batch Allocation For Provider Allocation Tool");
-				allocator1.StartBatchAllocation();
-				SecurityLogs.MakeLogEntry(OpenDentBusiness.Permissions.Setup, 0, "Finished Batch Allocation For Provider Allocation Tool");
+				FormWarnToCloseComputers fwc = new FormWarnToCloseComputers();
+				if (fwc.ShowDialog() == DialogResult.Yes)
+				{
+					Reporting.Allocators.MyAllocator1_ProviderPayment allocator1 = new OpenDental.Reporting.Allocators.MyAllocator1_ProviderPayment();
+					SecurityLogs.MakeLogEntry(OpenDentBusiness.Permissions.Setup, 0, "Started Batch Allocation For Provider Allocation Tool");
+					allocator1.StartBatchAllocation();
+					SecurityLogs.MakeLogEntry(OpenDentBusiness.Permissions.Setup, 0, "Finished Batch Allocation For Provider Allocation Tool");
+				}
 			}
 			
 		}

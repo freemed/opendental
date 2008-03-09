@@ -3079,6 +3079,18 @@
       <DependentUpon>FormReport_ProviderIncomeReport.cs</DependentUpon>
     </Compile>
     <None Include="Reporting\Allocators\MyAllocator1\GuarantorAccounts_Graphic.cs" />
+    <Compile Include="Reporting\Allocators\MyAllocator1\FormWarnToCloseComputers.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Reporting\Allocators\MyAllocator1\FormWarnToCloseComputers.Designer.cs">
+      <DependentUpon>FormWarnToCloseComputers.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Reporting\Allocators\MyAllocator1\Images\ImageAnimator.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Reporting\Allocators\MyAllocator1\Images\ImageAnimator.Designer.cs">
+      <DependentUpon>ImageAnimator.cs</DependentUpon>
+    </Compile>
     <Compile Include="Reporting\Allocators\MyAllocator1\MyAllocator1_ProviderPayment.cs" />
     <Compile Include="Reporting\Allocators\MyAllocator1\Report1_GuarantorAllocation.cs" />
     <Compile Include="Reporting\Allocators\MyAllocator1\ReportUI\ReportStyles.cs" />
@@ -3376,6 +3388,22 @@
     <None Include="bin\Debug\payments.txt" />
     <Content Include="Misc\App.ico" />
     <Content Include="Misc\TerminalMgr.ico" />
+    <EmbeddedResource Include="Reporting\Allocators\MyAllocator1\FormWarnToCloseComputers.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>FormWarnToCloseComputers.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reporting\Allocators\MyAllocator1\Images\ImageAnimator.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>ImageAnimator.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reporting\Allocators\MyAllocator1\Images\SnuffLight1.gif" />
+    <EmbeddedResource Include="Reporting\Allocators\MyAllocator1\Images\SnuffLight2.gif" />
+    <EmbeddedResource Include="Reporting\Allocators\MyAllocator1\Images\SnuffLight3.gif" />
+    <EmbeddedResource Include="Reporting\Allocators\MyAllocator1\Images\SnuffLight4.gif" />
+    <EmbeddedResource Include="Reporting\Allocators\MyAllocator1\Images\SnuffLight5.gif" />
+    <EmbeddedResource Include="Reporting\Allocators\MyAllocator1\Images\SnuffLight6.gif" />
+    <EmbeddedResource Include="Reporting\Allocators\MyAllocator1\Images\SnuffLight7.gif" />
+    <EmbeddedResource Include="Reporting\Allocators\MyAllocator1\Images\SnuffLight8.gif" />
     <Content Include="Resources\Anesth.gif" />
     <None Include="Reporting\Allocators\ClassDiagram_Allocators.cd" />
     <None Include="Reporting\Allocators\MyAllocator1\SupportingCode\EPP_ClassDiagram.cd" />

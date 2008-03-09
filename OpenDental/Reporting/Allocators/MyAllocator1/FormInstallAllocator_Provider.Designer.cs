@@ -138,7 +138,6 @@ namespace OpenDental.Reporting.Allocators.MyAllocator1
 			// butRunAllocatorTool
 			// 
 			this.butRunAllocatorTool.BackColor = System.Drawing.Color.White;
-			this.butRunAllocatorTool.Enabled = false;
 			this.butRunAllocatorTool.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.butRunAllocatorTool.ForeColor = System.Drawing.Color.Maroon;
 			this.butRunAllocatorTool.Location = new System.Drawing.Point(252, 239);
