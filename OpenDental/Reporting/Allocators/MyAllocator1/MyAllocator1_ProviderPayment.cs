@@ -40,6 +40,7 @@ namespace OpenDental.Reporting.Allocators
 		/// </summary>
 		public override bool Allocate(int iGuarantor)
 		{
+
 			OpenDental.Reporting.Allocators.MyAllocator1.GuarantorLedgerItemsCollection Ledger =
 				new OpenDental.Reporting.Allocators.MyAllocator1.GuarantorLedgerItemsCollection(iGuarantor);
 			Ledger.Fill(false);
@@ -47,11 +48,37 @@ namespace OpenDental.Reporting.Allocators
 			return false;
 		}
 
+		/// <summary>
+		/// Calls Allocate but first checks for existance of prefences and an indication that The tool has run.
+		/// The reason for the overlaid method is becuase the tool when it runs
+		/// </summary>
+		/// <param name="iGuarantor"></param>
+		/// <returns></returns>
+		public bool AllocateWithToolCheck(int iGuarantor)
+		{
+			bool AllocatedNomally = false;
+			try
+			{
+				bool toolRan = OpenDentBusiness.PrefB.HList.ContainsKey(MyAllocator1_ProviderPayment.Pref_AllocatorProvider1_ToolHasRun);
+				bool isUsing = OpenDentBusiness.PrefB.HList.ContainsKey(MyAllocator1_ProviderPayment.Pref_AllocatorProvider1_Use);
+				if (toolRan & isUsing)
+					Allocate(iGuarantor);
+				AllocatedNomally = true;
+			}
+			catch (Exception e)
+			{
+				AllocatedNomally = false;
+			}
+			return AllocatedNomally;
+		}
+
+
 		public override bool DeAllocate(int iGuarantor)
 		{
 			throw new Exception("The method or operation is not implemented.");
 		}
 
+		
 		///// <summary>
 		///// Sets the inherited properties.
 		///// Really did not wan't this member public

@@ -19,16 +19,12 @@ namespace OpenDental.Reporting.Allocators.MyAllocator1
 			
 		}
 
-		
 
-		
+
+
 		private void FormInstallAllocator_Provider_Load(object sender, EventArgs e)
 		{
 			RefreshForm();
-				
-
-
-			
 		}
 		private void RefreshForm()
 		{
@@ -38,6 +34,10 @@ namespace OpenDental.Reporting.Allocators.MyAllocator1
 			this.lblAllocatorStatus.Text = "Current Tool Status: "
 				+ (toolRan ? "Tool has been run and " + (isUsing ? "\nsettings indicate that allocation is occuring." : "\nsettings indicate that allocation is not occuring.")
 						: "Tool has not been run yet.");
+			
+			this.butGuarnDetailReport.Enabled = toolRan & isUsing;
+			this.butProviderIncomeReport.Enabled = toolRan & isUsing;
+			this.butUneardedIncomeReport.Enabled = toolRan & isUsing;
 		}
 		#region Report Buttons on Right of Form
 		private void butProviderIncomeReport_Click(object sender, EventArgs e)
@@ -108,6 +108,10 @@ namespace OpenDental.Reporting.Allocators.MyAllocator1
 		private void rbutIHaveRead_CheckedChanged(object sender, EventArgs e)
 		{
 			this.butRunAllocatorTool.Enabled = this.rbutIHaveRead.Checked;
+			if (this.butRunAllocatorTool.Enabled)
+				this.butRunAllocatorTool.BackColor = Color.White;
+			else
+				this.butRunAllocatorTool.BackColor = this.BackColor;
 		}
 
 		

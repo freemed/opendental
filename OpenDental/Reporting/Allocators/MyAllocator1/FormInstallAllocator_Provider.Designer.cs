@@ -74,7 +74,6 @@ namespace OpenDental.Reporting.Allocators.MyAllocator1
 			this.panel1.Controls.Add(this.butProviderIncomeReport);
 			this.panel1.Controls.Add(this.butGuarnDetailReport);
 			this.panel1.Controls.Add(this.butUneardedIncomeReport);
-			this.panel1.Enabled = false;
 			this.panel1.Location = new System.Drawing.Point(475, 69);
 			this.panel1.Name = "panel1";
 			this.panel1.Size = new System.Drawing.Size(145, 94);
@@ -84,6 +83,7 @@ namespace OpenDental.Reporting.Allocators.MyAllocator1
 			// 
 			this.button4.BackColor = System.Drawing.Color.Maroon;
 			this.button4.Dock = System.Windows.Forms.DockStyle.Bottom;
+			this.button4.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this.button4.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.button4.ForeColor = System.Drawing.Color.White;
 			this.button4.Location = new System.Drawing.Point(0, 0);
@@ -97,6 +97,7 @@ namespace OpenDental.Reporting.Allocators.MyAllocator1
 			// 
 			this.butProviderIncomeReport.BackColor = System.Drawing.Color.White;
 			this.butProviderIncomeReport.Dock = System.Windows.Forms.DockStyle.Bottom;
+			this.butProviderIncomeReport.Enabled = false;
 			this.butProviderIncomeReport.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.butProviderIncomeReport.ForeColor = System.Drawing.Color.Maroon;
 			this.butProviderIncomeReport.Location = new System.Drawing.Point(0, 23);
@@ -137,7 +138,7 @@ namespace OpenDental.Reporting.Allocators.MyAllocator1
 			// 
 			// butRunAllocatorTool
 			// 
-			this.butRunAllocatorTool.BackColor = System.Drawing.Color.White;
+			this.butRunAllocatorTool.Enabled = false;
 			this.butRunAllocatorTool.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.butRunAllocatorTool.ForeColor = System.Drawing.Color.Maroon;
 			this.butRunAllocatorTool.Location = new System.Drawing.Point(252, 239);
