@@ -4107,6 +4107,7 @@ namespace OpenDental{
 				}
 			}
 			ModuleSelected(PatCur.PatNum);
+			Reporting.Allocators.MyAllocator1_ProviderPayment.AllocateWithToolCheck(this.PatCur.Guarantor);
 		}
 
 		///<summary>Sets many fields for a new procedure, then displays it for editing before inserting it into the db.  No need to worry about ProcOld because it's an insert, not an update.</summary>

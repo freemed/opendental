@@ -2898,6 +2898,7 @@ double adj=Adjustments.GetTotForProc(arrayProc[tempCountProc].ProcNum,Adjustment
 			}
 			bool isSelectingFamily=gridAcctPat.GetSelectedIndex()==this.DataSetMain.Tables["patient"].Rows.Count-1;
 			ModuleSelected(PatCur.PatNum,isSelectingFamily);
+			Reporting.Allocators.MyAllocator1_ProviderPayment.AllocateWithToolCheck(this.PatCur.Guarantor);
 		}
 
 		private void gridPayPlan_CellDoubleClick(object sender,ODGridClickEventArgs e) {
@@ -2911,6 +2912,7 @@ double adj=Adjustments.GetTotForProc(arrayProc[tempCountProc].ProcNum,Adjustment
 			}
 			bool isSelectingFamily=gridAcctPat.GetSelectedIndex()==this.DataSetMain.Tables["patient"].Rows.Count-1;
 			ModuleSelected(PatCur.PatNum,isSelectingFamily);
+			Reporting.Allocators.MyAllocator1_ProviderPayment.AllocateWithToolCheck(this.PatCur.Guarantor);
 		}
 
 		private void gridAcctPat_CellClick(object sender,ODGridClickEventArgs e) {
@@ -2930,6 +2932,7 @@ double adj=Adjustments.GetTotForProc(arrayProc[tempCountProc].ProcNum,Adjustment
 		}
 
 		private void ToolBarMain_ButtonClick(object sender, OpenDental.UI.ODToolBarButtonClickEventArgs e) {
+			bool NeedAllocation = true;
 			if(e.Button.Tag.GetType()==typeof(string)){
 				//standard predefined button
 				switch(e.Button.Tag.ToString()){
@@ -2953,12 +2956,15 @@ double adj=Adjustments.GetTotForProc(arrayProc[tempCountProc].ProcNum,Adjustment
 						break;
 					case "Statement":
 						OnStatement_Click();
+						NeedAllocation = false;
 						break;
 				}
 			}
 			else if(e.Button.Tag.GetType()==typeof(int)){
 				Programs.Execute((int)e.Button.Tag,PatCur);
 			}
+			if (NeedAllocation)
+				Reporting.Allocators.MyAllocator1_ProviderPayment.AllocateWithToolCheck(this.PatCur.Guarantor);
 		}
 
 		///<summary></summary>
@@ -4031,6 +4037,7 @@ double adj=Adjustments.GetTotForProc(arrayProc[tempCountProc].ProcNum,Adjustment
 			FormRepeatChargeEdit FormR=new FormRepeatChargeEdit(RepeatChargeList[e.Row]);
 			FormR.ShowDialog();
 			ModuleSelected(PatCur.PatNum);
+			Reporting.Allocators.MyAllocator1_ProviderPayment.AllocateWithToolCheck(this.PatCur.Guarantor);
 		}
 
 		///<summary>The supplied procedure row must include these columns: ProcDate,ProcStatus,ProcCode,Surf,ToothNum, and ToothRange, all in raw database format.</summary>

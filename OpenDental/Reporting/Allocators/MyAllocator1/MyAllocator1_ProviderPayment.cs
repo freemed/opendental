@@ -51,19 +51,39 @@ namespace OpenDental.Reporting.Allocators
 		/// <summary>
 		/// Calls Allocate but first checks for existance of prefences and an indication that The tool has run.
 		/// The reason for the overlaid method is becuase the tool when it runs
+		/// 
+		/// Points of Entry Identified in OD
+		///		1)  ContrAccount.ToolBarMain_ButtonClick(...)  Added code to run allocator after user is finished with clicked tasks
+		///		2)	ContrAccount.gridAccount_CellDoubleClick(...)  Double Click means that an edit was potentialy occuring run allocator.
+		///		3)  ContrAccount.gridRepeat_CellDoubleClick(...)  I am not familiar with Payment Plans or Repeating Charges need to check against tool
+		///		4)  ContrAccount.gridPayPlan_CellDoubleClick(...) I am not familiar with Payment Plans or Repeating Charges need to check against tool
+		///		5)  ContrChart.gridProg_CellDoubleClick(...)  Indicates Procedure was potentially changed. Runs allocator if any of the dialogs returned DialogResult.OK
+		///		6)	
+		///		
+		/// Points of Entry That Need Atttention to
+		/// ContrChart. EnterTreatment Buttons.  --> Consider FormProcEdit but then you will double allocate becuase of #5
+		///			But start here because can use search to see were procedures are entered into dbase.
+		/// 
 		/// </summary>
 		/// <param name="iGuarantor"></param>
 		/// <returns></returns>
-		public bool AllocateWithToolCheck(int iGuarantor)
+		public static bool AllocateWithToolCheck(int iGuarantor)
 		{
 			bool AllocatedNomally = false;
 			try
 			{
-				bool toolRan = OpenDentBusiness.PrefB.HList.ContainsKey(MyAllocator1_ProviderPayment.Pref_AllocatorProvider1_ToolHasRun);
-				bool isUsing = OpenDentBusiness.PrefB.HList.ContainsKey(MyAllocator1_ProviderPayment.Pref_AllocatorProvider1_Use);
+				bool toolRan = false;
+				bool isUsing = false;
+				if (OpenDentBusiness.PrefB.HList.ContainsKey(MyAllocator1_ProviderPayment.Pref_AllocatorProvider1_ToolHasRun))
+					toolRan = PrefB.GetBool(MyAllocator1_ProviderPayment.Pref_AllocatorProvider1_ToolHasRun);
+				if (OpenDentBusiness.PrefB.HList.ContainsKey(MyAllocator1_ProviderPayment.Pref_AllocatorProvider1_Use))
+					isUsing = PrefB.GetBool(MyAllocator1_ProviderPayment.Pref_AllocatorProvider1_Use);
 				if (toolRan & isUsing)
-					Allocate(iGuarantor);
-				AllocatedNomally = true;
+				{
+					MyAllocator1_ProviderPayment mpp = new MyAllocator1_ProviderPayment();
+					mpp.Allocate(iGuarantor);
+					AllocatedNomally = true;
+				}
 			}
 			catch (Exception e)
 			{
