@@ -22,6 +22,19 @@ namespace OpenDental.Reporting.Allocators
 		/// <summary>
 		/// Calls all of the allocators created for this patient.
 		/// Determines the guarantor form this patient first
+		/// 
+		/// 
+		/// Points of Entry Identified in OD
+		///		1)  ContrAccount.ToolBarMain_ButtonClick(...)  Added code to run allocator after user is finished with clicked tasks
+		///		2)	ContrAccount.gridAccount_CellDoubleClick(...)  Double Click means that an edit was potentialy occuring run allocator.
+		///		3)  ContrAccount.gridRepeat_CellDoubleClick(...)  I am not familiar with Payment Plans or Repeating Charges need to check against tool
+		///		4)  ContrAccount.gridPayPlan_CellDoubleClick(...) I am not familiar with Payment Plans or Repeating Charges need to check against tool
+		///		5)  ContrChart.gridProg_CellDoubleClick(...)  Indicates Procedure was potentially changed. Runs allocator if any of the dialogs returned DialogResult.OK
+		///		6)	ContrChart.EnterTypedCode(...) 
+		///		7)  ContrChart.ProcButtonClicked(...)
+		///		8)  Procedures.SetCompleteInAppt(...) // Called from Set Complete Checkmark (butComplete) in the appointment module.
+		///		
+		/// Points of Entry That Need Atttention to
 		/// </summary>
 		/// <param name="uiPatient"></param>
 		public static void CallAll_Allocators(int iPatient)

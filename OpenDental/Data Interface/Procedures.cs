@@ -444,6 +444,8 @@ namespace OpenDental{
 			//	Recalls.Reset(apt.PatNum);//this also synchs recall
 			//}
 			Recalls.Synch(apt.PatNum);
+			Patient pt = Patients.GetPat(apt.PatNum);
+			Reporting.Allocators.AllocatorCollection.CallAll_Allocators(pt.Guarantor);
 		}
 
 		///<Summary>Supply the list of procedures attached to the appointment.  It will loop through each and assign the correct provider.  Also sets clinic.</Summary>

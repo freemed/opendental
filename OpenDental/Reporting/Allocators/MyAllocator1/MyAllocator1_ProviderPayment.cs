@@ -41,29 +41,45 @@ namespace OpenDental.Reporting.Allocators
 		public override bool Allocate(int iGuarantor)
 		{
 
+			return AllocateWithToolCheck(iGuarantor);
+			
+		}
+		/// <summary>
+		/// Does not check to see if Preferences are set in OD to handle this allocator.  This is only used in the Batch
+		/// processing of the Allocator Tool.  Do not want the overhead of checking the preferences everytime the tool is run.
+		/// Probably not a big deal unless it tries to get the preference from the Dbase every time.
+		/// </summary>
+		private bool AllocateWithOutToolCheck(int iGuarantor)
+		{
+			bool AllocatedNormally = true;
+			try
+			{
+				_AllocateExecute(iGuarantor);
+			}
+			catch (Exception e)
+			{
+				AllocatedNormally = false;
+			}
+			return AllocatedNormally;
+		}
+		/// <summary>
+		/// Where the actual allocation occurs.  Put it in this method so that we could run the allocator in different 
+		/// circumstances.
+		/// </summary>
+		/// <param name="iGuarantor"></param>
+		private static void _AllocateExecute(int iGuarantor)
+		{
 			OpenDental.Reporting.Allocators.MyAllocator1.GuarantorLedgerItemsCollection Ledger =
-				new OpenDental.Reporting.Allocators.MyAllocator1.GuarantorLedgerItemsCollection(iGuarantor);
+								new OpenDental.Reporting.Allocators.MyAllocator1.GuarantorLedgerItemsCollection(iGuarantor);
 			Ledger.Fill(false);
 			Ledger.EqualizePaymentsV2();
-			return false;
+
 		}
 
 		/// <summary>
 		/// Calls Allocate but first checks for existance of prefences and an indication that The tool has run.
 		/// The reason for the overlaid method is becuase the tool when it runs
-		/// 
-		/// Points of Entry Identified in OD
-		///		1)  ContrAccount.ToolBarMain_ButtonClick(...)  Added code to run allocator after user is finished with clicked tasks
-		///		2)	ContrAccount.gridAccount_CellDoubleClick(...)  Double Click means that an edit was potentialy occuring run allocator.
-		///		3)  ContrAccount.gridRepeat_CellDoubleClick(...)  I am not familiar with Payment Plans or Repeating Charges need to check against tool
-		///		4)  ContrAccount.gridPayPlan_CellDoubleClick(...) I am not familiar with Payment Plans or Repeating Charges need to check against tool
-		///		5)  ContrChart.gridProg_CellDoubleClick(...)  Indicates Procedure was potentially changed. Runs allocator if any of the dialogs returned DialogResult.OK
-		///		6)	
-		///		
-		/// Points of Entry That Need Atttention to
-		/// ContrChart. EnterTreatment Buttons.  --> Consider FormProcEdit but then you will double allocate becuase of #5
-		///			But start here because can use search to see were procedures are entered into dbase.
-		/// 
+		/// <href = "AllocatorCollection.CallAll_Allocators>  See the AllocatorCollection.CallAll_Allocators </href
 		/// </summary>
 		/// <param name="iGuarantor"></param>
 		/// <returns></returns>
@@ -80,8 +96,7 @@ namespace OpenDental.Reporting.Allocators
 					isUsing = PrefB.GetBool(MyAllocator1_ProviderPayment.Pref_AllocatorProvider1_Use);
 				if (toolRan & isUsing)
 				{
-					MyAllocator1_ProviderPayment mpp = new MyAllocator1_ProviderPayment();
-					mpp.Allocate(iGuarantor);
+					_AllocateExecute(iGuarantor);
 					AllocatedNomally = true;
 				}
 			}
@@ -245,7 +260,7 @@ namespace OpenDental.Reporting.Allocators
 					string UpdateTempTableCommand = "INSERT INTO " + TABLENAME + "_temp (Guarantor,AllocStatus) VALUES "
 						+ "( " + GuarantorsToAllocate[j].ToString() + ", " + ((int)ProcessingState.Started_and_Incomplete).ToString() + " ) ";
 					General.NonQEx(UpdateTempTableCommand);
-					allocator.Allocate(GuarantorsToAllocate[j]);
+					allocator.AllocateWithOutToolCheck(GuarantorsToAllocate[j]);
 					iProgress = (j*100) / (GuarantorsToAllocate.Length - 1);
 					if (bw.CancellationPending) // Try to cancel between allocations which does a lot of writting
 					{
