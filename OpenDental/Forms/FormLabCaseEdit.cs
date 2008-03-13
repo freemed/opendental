@@ -112,13 +112,13 @@ namespace OpenDental{
 			this.label11 = new System.Windows.Forms.Label();
 			this.listLab = new System.Windows.Forms.ListBox();
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
+			this.listTurnaround = new System.Windows.Forms.ListBox();
+			this.label12 = new System.Windows.Forms.Label();
+			this.textWeekday = new System.Windows.Forms.TextBox();
 			this.butCheckedNow = new OpenDental.UI.Button();
 			this.butRecdNow = new OpenDental.UI.Button();
 			this.butSentNow = new OpenDental.UI.Button();
 			this.butCreatedNow = new OpenDental.UI.Button();
-			this.listTurnaround = new System.Windows.Forms.ListBox();
-			this.label12 = new System.Windows.Forms.Label();
-			this.textWeekday = new System.Windows.Forms.TextBox();
 			this.butDetachPlanned = new OpenDental.UI.Button();
 			this.butDetach = new OpenDental.UI.Button();
 			this.butDelete = new OpenDental.UI.Button();
@@ -296,6 +296,7 @@ namespace OpenDental{
 			this.comboProv.Name = "comboProv";
 			this.comboProv.Size = new System.Drawing.Size(158, 21);
 			this.comboProv.TabIndex = 121;
+			this.comboProv.SelectedIndexChanged += new System.EventHandler(this.comboProv_SelectedIndexChanged);
 			// 
 			// label11
 			// 
@@ -335,6 +336,33 @@ namespace OpenDental{
 			this.groupBox1.TabIndex = 122;
 			this.groupBox1.TabStop = false;
 			this.groupBox1.Text = "Tracking";
+			// 
+			// listTurnaround
+			// 
+			this.listTurnaround.FormattingEnabled = true;
+			this.listTurnaround.Location = new System.Drawing.Point(296, 136);
+			this.listTurnaround.Name = "listTurnaround";
+			this.listTurnaround.Size = new System.Drawing.Size(198, 121);
+			this.listTurnaround.TabIndex = 124;
+			this.listTurnaround.Click += new System.EventHandler(this.listTurnaround_Click);
+			// 
+			// label12
+			// 
+			this.label12.Location = new System.Drawing.Point(293, 116);
+			this.label12.Name = "label12";
+			this.label12.Size = new System.Drawing.Size(89, 17);
+			this.label12.TabIndex = 125;
+			this.label12.Text = "Set Due Date";
+			this.label12.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
+			// 
+			// textWeekday
+			// 
+			this.textWeekday.BackColor = System.Drawing.Color.White;
+			this.textWeekday.Location = new System.Drawing.Point(296, 261);
+			this.textWeekday.Name = "textWeekday";
+			this.textWeekday.ReadOnly = true;
+			this.textWeekday.Size = new System.Drawing.Size(40, 20);
+			this.textWeekday.TabIndex = 126;
 			// 
 			// butCheckedNow
 			// 
@@ -391,33 +419,6 @@ namespace OpenDental{
 			this.butCreatedNow.TabIndex = 118;
 			this.butCreatedNow.Text = "Now";
 			this.butCreatedNow.Click += new System.EventHandler(this.butCreatedNow_Click);
-			// 
-			// listTurnaround
-			// 
-			this.listTurnaround.FormattingEnabled = true;
-			this.listTurnaround.Location = new System.Drawing.Point(296, 136);
-			this.listTurnaround.Name = "listTurnaround";
-			this.listTurnaround.Size = new System.Drawing.Size(198, 121);
-			this.listTurnaround.TabIndex = 124;
-			this.listTurnaround.Click += new System.EventHandler(this.listTurnaround_Click);
-			// 
-			// label12
-			// 
-			this.label12.Location = new System.Drawing.Point(293, 116);
-			this.label12.Name = "label12";
-			this.label12.Size = new System.Drawing.Size(89, 17);
-			this.label12.TabIndex = 125;
-			this.label12.Text = "Set Due Date";
-			this.label12.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
-			// 
-			// textWeekday
-			// 
-			this.textWeekday.BackColor = System.Drawing.Color.White;
-			this.textWeekday.Location = new System.Drawing.Point(296, 261);
-			this.textWeekday.Name = "textWeekday";
-			this.textWeekday.ReadOnly = true;
-			this.textWeekday.Size = new System.Drawing.Size(40, 20);
-			this.textWeekday.TabIndex = 126;
 			// 
 			// butDetachPlanned
 			// 
@@ -770,6 +771,11 @@ namespace OpenDental{
 		}
 
 		private void textPatient_TextChanged(object sender, EventArgs e)
+		{
+
+		}
+
+		private void comboProv_SelectedIndexChanged(object sender, EventArgs e)
 		{
 
 		}

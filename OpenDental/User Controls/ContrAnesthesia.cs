@@ -18,16 +18,16 @@ namespace OpenDental
 		private System.ComponentModel.Container components = null;
 		///<summary>This data array gets filled when loading an anesthetic. It is altered as the user makes changes, and then the results are saved to the db by reading from this array.</summary>
 		///<summary>The index in Anesthesics.List of the currently selected exam.</summary>
-		private int selectedAnesthetic;
-		//public AnesthesiaExam AnesthesiaExamCur;
-		///<summary>The index in Anesthesics.List of the currently selected anesthetic.</summary>
-		public int SelectedAnesthetic{
+		private int selectedAnestheticRecord;
+		public AnestheticRecord AnestheticRecordCur;
+		///<summary>The index in Anesthetics.List of the currently selected anesthetic.</summary>
+		public int SelectedAnestheticRecord{
 			get{
-				return selectedAnesthetic;
+				return SelectedAnestheticRecord;
 			}
-			set{
-				selectedAnesthetic=value;
-			}
+			//set{
+				//selectedAnestheticRecord=value;
+			//}
 		}
 
 		///<summary></summary>

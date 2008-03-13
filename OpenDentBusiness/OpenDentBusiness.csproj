@@ -181,6 +181,7 @@
     <Compile Include="TableTypes\CanadianExtract.cs" />
     <Compile Include="TableTypes\CanadianNetwork.cs" />
     <Compile Include="TableTypes\ClaimAttach.cs" />
+    <Compile Include="TableTypes\AnestheticData.cs" />
     <Compile Include="TableTypes\Files.cs" />
     <Compile Include="TableTypes\Statement.cs" />
     <Compile Include="TableTypes\TaskAncestor.cs" />

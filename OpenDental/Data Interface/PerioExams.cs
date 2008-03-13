@@ -33,7 +33,7 @@ namespace OpenDental{
 		public static void Update(PerioExam Cur){
 			string command= "UPDATE perioexam SET "
 				+ "PatNum = '"     +POut.PInt   (Cur.PatNum)+"'"
-				+",ExamDate = "   +POut.PDate  (Cur.ExamDate)
+				+ ",ExamDate = " + POut.PDate(Cur.ExamDate) + "'"
 				+",ProvNum = '"    +POut.PInt   (Cur.ProvNum)+"'"
 				+" WHERE PerioExamNum = '"+POut.PInt(Cur.PerioExamNum)+"'";
 			General.NonQ(command);
