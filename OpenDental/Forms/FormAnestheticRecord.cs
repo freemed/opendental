@@ -1664,6 +1664,7 @@ namespace OpenDental {
 			//most recent date at the bottom
 			AnestheticRecords.Refresh(PatCur.PatNum);
 			listAnesthetics.Items.Clear();
+			long anestheticDate = DateTime.Now.ToFileTime();
 
 	
 			for (int i = 0; i < AnestheticRecords.List.Length; i++)
@@ -1677,7 +1678,8 @@ namespace OpenDental {
 			 
 			AnestheticRecordCur=new AnestheticRecord();
 			AnestheticRecordCur.PatNum=PatCur.PatNum;
-			AnestheticRecordCur.AnestheticDate = DateTime.Now;
+			long anestheticDate = DateTime.Now.ToFileTime();
+			//AnestheticRecordCur.AnestheticDate = DateTime.Now;
 			AnestheticRecordCur.ProvNum=PatCur.PriProv;
 			AnestheticRecords.Insert(AnestheticRecordCur);
 			RefreshListAnesthetics();
