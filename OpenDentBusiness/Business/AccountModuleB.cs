@@ -36,7 +36,7 @@ namespace OpenDentBusiness {
 			return retVal;
 		}
 
-		///<summary>Parameters: 0:patNum, 1:singlePatient, 2:fromDate, 3:toDate, 4:intermingled,   If intermingled=1 the patnum of any family member will get entire family intermingled.</summary>
+		///<summary>Parameters: 0:patNum, 1:singlePatient, 2:fromDate, 3:toDate, 4:intermingled,   If intermingled=1 the patnum of any family member will get entire family intermingled.  toDate should not be Max, or PayPlan amort will include too many charges.  The 10 days will not be added to toDate until creating the actual amortization schedule.</summary>
 		public static DataSet GetStatement(string[] parameters){
 			int patNum=PIn.PInt(parameters[0]);
 			fam=Patients.GetFamily(patNum);
@@ -1177,35 +1177,11 @@ namespace OpenDentBusiness {
 			DataRow row;
 			SetTableColumns(table);//this will allow it to later be fully integrated into a single grid.
 			List<DataRow> rows=new List<DataRow>();
-			//DateTime dateT;
-			//double paid;
 			double princ;
-			//double princDue;
-			//double interestDue;
-			//double accumDue;
-			//double princPaid;
-			//double totCost;
-			//double due;
-			//double balance;
+			DataTable rawAmort;
+			int payPlanNum;
 			for(int i=0;i<rawPayPlan.Rows.Count;i++){//loop through the payment plans (usually zero or one)
-				//first, calculate the numbers-------------------------------------------------------------
-				//paid=0;
-				//for(int p=0;p<rawPay.Rows.Count;p++){
-				//	if(rawPay.Rows[p]["PayPlanNum"].ToString()==rawPayPlan.Rows[i]["PayPlanNum"].ToString()){
-				//		paid+=PIn.PDouble(rawPay.Rows[p]["SplitAmt"].ToString());
-				//	}
-				//}
 				princ=PIn.PDouble(rawPayPlan.Rows[i]["_principal"].ToString());
-				//princDue=PIn.PDouble(rawPayPlan.Rows[i]["_principalDue"].ToString());
-				//interestDue=PIn.PDouble(rawPayPlan.Rows[i]["_interestDue"].ToString());
-				//accumDue=princDue+interestDue;
-				//princPaid=paid-interestDue;
-				//if(princPaid<0){
-				//	princPaid=0;
-				//}
-				//totCost=princ+PIn.PDouble(rawPayPlan.Rows[i]["_interest"].ToString());
-				//due=accumDue-paid;
-				//balance=princ-princPaid;
 				//summary row----------------------------------------------------------------------
 				row=table.NewRow();
 				row["AdjNum"]="0";
@@ -1233,30 +1209,48 @@ namespace OpenDentBusiness {
 				row["prov"]="";
 				row["StatementNum"]="0";
 				row["tth"]="";
-				
-
-
-
-				/*row["accumDue"]=accumDue.ToString("n");
-				row["balance"]=balance.ToString("n");
-				dateT=PIn.PDateT(rawPayPlan.Rows[i]["PayPlanDate"].ToString());
-				row["DateTime"]=dateT;
-				row["date"]=dateT.ToShortDateString();
-				row["due"]=due.ToString("n");
-				row["guarantor"]=fam.GetNameInFamLF(PIn.PInt(rawPayPlan.Rows[i]["Guarantor"].ToString()));
-				if(rawPayPlan.Rows[i]["PlanNum"].ToString()=="0"){
-					row["isIns"]="";
-				}
-				else{
-					row["isIns"]="X";
-				}
-				row["paid"]=paid.ToString("n");
-				row["patient"]=fam.GetNameInFamLF(PIn.PInt(rawPayPlan.Rows[i]["PatNum"].ToString()));
-				row["PayPlanNum"]=rawPayPlan.Rows[i]["PayPlanNum"].ToString();
-				row["principal"]=princ.ToString("n");
-				row["princPaid"]=princPaid.ToString("n");
-				row["totalCost"]=totCost.ToString("n");*/
 				rows.Add(row);
+				//detail rows-------------------------------------------------------------------------------
+				payPlanNum=PIn.PInt(rawPayPlan.Rows[i]["PayPlanNum"].ToString());
+				rawAmort=GetPayPlanAmortTable(payPlanNum);
+				//remove rows out of date range, going backwards
+				for(int d=rawAmort.Rows.Count-1;d>=0;d--){
+					if((DateTime)rawAmort.Rows[d]["DateTime"]>toDate.AddDays(PrefB.GetInt("PayPlansBillInAdvanceDays"))){
+						rawAmort.Rows.RemoveAt(d);
+					}
+					else if((DateTime)rawAmort.Rows[d]["DateTime"]<fromDate){
+						rawAmort.Rows.RemoveAt(d);
+					}
+				}
+				for(int d=0;d<rawAmort.Rows.Count;d++){
+					row=table.NewRow();
+					row["AdjNum"]="0";
+					row["balance"]=rawAmort.Rows[d]["balance"];
+					row["balanceDouble"]=rawAmort.Rows[d]["balanceDouble"];
+					row["chargesDouble"]=rawAmort.Rows[d]["chargesDouble"];
+					row["charges"]=rawAmort.Rows[d]["charges"];
+					row["ClaimNum"]="0";
+					row["ClaimPaymentNum"]="0";
+					row["colorText"]=Color.Black.ToArgb().ToString();
+					row["creditsDouble"]=rawAmort.Rows[d]["creditsDouble"];
+					row["credits"]=rawAmort.Rows[d]["credits"];
+					row["DateTime"]=rawAmort.Rows[d]["DateTime"];
+					row["date"]=rawAmort.Rows[d]["date"];
+					row["description"]=rawAmort.Rows[d]["description"];
+					row["extraDetail"]="";
+					row["patient"]=rawAmort.Rows[d]["patient"];
+					row["PatNum"]=rawAmort.Rows[d]["PatNum"];
+					row["PayNum"]=rawAmort.Rows[d]["PayNum"];
+					row["PayPlanNum"]="0";
+					row["PayPlanChargeNum"]=rawAmort.Rows[d]["PayPlanChargeNum"];
+					row["ProcCode"]="";
+					row["ProcNum"]="0";
+					row["procsOnClaim"]="";
+					row["prov"]=rawAmort.Rows[d]["prov"];
+					row["StatementNum"]="0";
+					row["tth"]="";
+					rows.Add(row);
+				}
 			}
 			for(int i=0;i<rows.Count;i++) {
 				table.Rows.Add(rows[i]);

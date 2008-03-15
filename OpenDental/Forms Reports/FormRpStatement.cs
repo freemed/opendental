@@ -604,12 +604,12 @@ namespace OpenDental{
 				row.Borders.Bottom.Color=Colors.Gray;
 				row.Borders.Right.Color=Colors.Gray;
 				font=MigraDocHelper.CreateFont(9);
-				if(PrefB.GetBool("BalancesDontSubtractIns")) {
-					text=PatGuar.BalTotal.ToString("F");
+				double balTotal=PatGuar.BalTotal;
+				if(!PrefB.GetBool("BalancesDontSubtractIns")) {//this is typical
+					balTotal-=PatGuar.InsEst;
 				}
-				else {//this is more typical
-					text=(PatGuar.BalTotal-PatGuar.InsEst).ToString("F");
-				}
+				balTotal+=PatGuar.PayPlanDue;
+				text=balTotal.ToString("F");
 				cell=row.Cells[0];
 				par=cell.AddParagraph();
 				par.AddFormattedText(text,font);
@@ -1035,6 +1035,7 @@ namespace OpenDental{
 			//Payment plan grid.  There will be only one, if any-----------------------------------------------------------------
 			#region PayPlan grid
 			DataTable tablePP=dataSet.Tables["payplan"];
+			ODGridCell gcell;
 			if(tablePP.Rows.Count>0){
 				//MigraDocHelper.InsertSpacer(section,5);
 				par=section.AddParagraph();
@@ -1052,15 +1053,28 @@ namespace OpenDental{
 					grow.Cells.Add(tablePP.Rows[p]["description"].ToString());
 					grow.Cells.Add(tablePP.Rows[p]["charges"].ToString());
 					grow.Cells.Add(tablePP.Rows[p]["credits"].ToString());
-					grow.Cells.Add(tablePP.Rows[p]["balance"].ToString());
+					gcell=new ODGridCell(tablePP.Rows[p]["balance"].ToString());
+					if(p==tablePP.Rows.Count-1){
+						gcell.Bold=YN.Yes;
+					}
+					else if(tablePP.Rows[p+1]["balance"].ToString()==""){//if next row balance is blank.
+						gcell.Bold=YN.Yes;
+					}
+					grow.Cells.Add(gcell);
 					gridPP.Rows.Add(grow);
 				}
 				gridPP.EndUpdate();
 				MigraDocHelper.DrawGrid(section,gridPP);
+				MigraDocHelper.InsertSpacer(section,2);
+				par=section.AddParagraph();
+				par.Format.Font=MigraDocHelper.CreateFont(10,true);
+				par.Format.Alignment=ParagraphAlignment.Right;
+				par.Format.RightIndent=Unit.FromInch(0.25);
+				par.AddText(Lan.g(this,"Payment Plan Amount Due: ")+PatGuar.PayPlanDue.ToString("c"));
 				MigraDocHelper.InsertSpacer(section,10);
 			}
 			#endregion PayPlan grid
-			//Body Table definition-----------------------------------------------------------------------------------------------------------
+			//Body Table definition--------------------------------------------------------------------------------------------------------
 			#region Body Table definition
 			ODGrid gridPat = new ODGrid();
 			this.Controls.Add(gridPat);
