@@ -221,6 +221,7 @@ namespace OpenDental{
 			this.textDateCreated.Name = "textDateCreated";
 			this.textDateCreated.Size = new System.Drawing.Size(147, 20);
 			this.textDateCreated.TabIndex = 111;
+			this.textDateCreated.TextChanged += new System.EventHandler(this.textDateCreated_TextChanged);
 			// 
 			// textDateSent
 			// 
@@ -776,6 +777,11 @@ namespace OpenDental{
 		}
 
 		private void comboProv_SelectedIndexChanged(object sender, EventArgs e)
+		{
+
+		}
+
+		private void textDateCreated_TextChanged(object sender, EventArgs e)
 		{
 
 		}

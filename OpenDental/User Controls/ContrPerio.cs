@@ -1294,9 +1294,11 @@ namespace OpenDental
 		}
 
 		///<summary></summary>
-		protected override void OnKeyDown(KeyEventArgs e) {
-			if(selectedExam==-1){
-				MessageBox.Show(Lan.g(this,"Please add or select an exam first in the list to the left."));
+		protected override void OnKeyDown(KeyEventArgs e)
+		{
+			if (selectedExam == -1)
+			{
+				MessageBox.Show(Lan.g(this, "Please add or select an exam first in the list to the left."));
 				return;
 			}
 			//MessageBox.Show("key down");

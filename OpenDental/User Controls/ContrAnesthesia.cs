@@ -16,30 +16,31 @@ namespace OpenDental
 	public class ContrAnesthesia : System.Windows.Forms.Control{
 		///<summary>Required designer variable.</summary>
 		private System.ComponentModel.Container components = null;
-		///<summary>This data array gets filled when loading an anesthetic. It is altered as the user makes changes, and then the results are saved to the db by reading from this array.</summary>
-		///<summary>The index in Anesthesics.List of the currently selected exam.</summary>
+		///<summary>The index in Anesthesics.List of the currently selected anesthetic.</summary>
 		private int selectedAnestheticRecord;
+
 		public AnestheticRecord AnestheticRecordCur;
 		///<summary>The index in Anesthetics.List of the currently selected anesthetic.</summary>
 		public int SelectedAnestheticRecord{
 			get{
-				return SelectedAnestheticRecord;
+				return selectedAnestheticRecord;
 			}
-			//set{
-				//selectedAnestheticRecord=value;
-			//}
-		}
-
-		///<summary></summary>
-		protected override Size DefaultSize{
-			get{
-				return new Size(590,665);
+				set{
+				selectedAnestheticRecord=value;
 			}
 		}
 
+		///<summary>Used in LoadData.</summary>
+
+		///<summary>Saves the cur exam measurements to the db by looping through each tooth and deciding whether the data for that tooth has changed.  If so, it either updates or inserts a measurement.  It won't delete a measurement if all values for that tooth are cleared, but just sets that measurement to all -1's.</summary>
+		public void SaveCurAnestheticRecord(int anestheticRecordNum)
+		{
+		}
 		///<summary></summary>
-		public ContrAnesthesia(){
-			
+		protected override void OnMouseDown(MouseEventArgs e)
+		{
+			base.OnMouseDown(e);
+			Focus();
 		}
 
 		/// <summary> 

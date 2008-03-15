@@ -10,16 +10,16 @@ namespace OpenDental{
 		public class AnestheticRecords{
 		///<summary>List of all anesthetic records for the current patient.</summary>
 		public static AnestheticRecord[] List;
-		///<summary>Most recent date *first*.  All anesthetics loaded, even if not displayed.</summary>
+		///<summary>Most recent date *first*. </summary>
 		public static void Refresh(int patNum){
+			
 			string command =
 				"SELECT * from anestheticrecord"
 				+ " WHERE PatNum = '"+patNum.ToString()+"'"
 				+ " ORDER BY anestheticrecord.AnestheticDate DESC";
 				DataTable table = General.GetTable(command);
 				List = new AnestheticRecord[table.Rows.Count];
-				for (int i = 0; i < table.Rows.Count; i++)
-				{
+				for (int i = 0; i < table.Rows.Count; i++){
 				List[i] = new AnestheticRecord();
 				List[i].AnestheticRecordNum = PIn.PInt(table.Rows[i][0].ToString());
 				List[i].PatNum = PIn.PInt(table.Rows[i][1].ToString());
@@ -74,8 +74,7 @@ namespace OpenDental{
 
 		///<summary></summary>
 		public static void Delete(AnestheticRecord Cur) {
-
-			string command = "DELETE from anestheticrecord WHERE AnestheticRecordNum = '"+Cur.AnestheticRecordNum.ToString()+"'";
+			string command = "DELETE from anestheticrecord WHERE AnestheticRecordNum = '" + Cur.AnestheticRecordNum.ToString() + "'";
 			General.NonQ(command);
 		}
 
