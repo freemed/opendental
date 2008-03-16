@@ -2985,13 +2985,6 @@ namespace OpenDental{
 				timerSignals.Interval=PrefB.GetInt("ProcessSigsIntervalInSecs")*1000;
 				timerSignals.Enabled=true;
 			}
-			//signal for resetting position of splitter bar...tells it to reload info since not the normal size
-			if(panelSplitter.Height==7) {
-				panelSplitter.Height=9;
-			}
-			else {
-				panelSplitter.Width=9;
-			}
 			SecurityLogs.MakeLogEntry(Permissions.Setup,0,"Misc");
 		}
 

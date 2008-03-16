@@ -1331,17 +1331,26 @@ namespace OpenDental{
 				changed=true;
 			}
 			//task list------------------------------------------------------------------------------------------
-			computerPref.TaskKeepListHidden=checkBoxTaskKeepListHidden.Checked;
-			if(radioBottom.Checked){	
+			if(computerPref.TaskKeepListHidden!=checkBoxTaskKeepListHidden.Checked){
+				computerPref.TaskKeepListHidden=checkBoxTaskKeepListHidden.Checked;
+				changed=true;//needed to trigger screen refresh
+			}
+			if(radioBottom.Checked && computerPref.TaskDock!=0){
 				computerPref.TaskDock=0;
+				changed=true;
 			}
-			else{
+			else if(!radioBottom.Checked && computerPref.TaskDock!=1){
 				computerPref.TaskDock=1;
+				changed=true;
 			}
-			computerPref.TaskX=PIn.PInt(validNumX.Text);
-			computerPref.TaskY=PIn.PInt(validNumY.Text);
-			ComputerPrefs.Update(computerPref);
-			DataValid.SetInvalid(InvalidTypes.Computers);
+			if(computerPref.TaskX!=PIn.PInt(validNumX.Text)){
+				computerPref.TaskX=PIn.PInt(validNumX.Text);
+				changed=true;
+			}
+			if(computerPref.TaskY!=PIn.PInt(validNumY.Text)){
+				computerPref.TaskY=PIn.PInt(validNumY.Text);
+				changed=true;
+			}
 			//end of tasklist section-----------------------------------------------------------------------------
 			if(textStatementsCalcDueDate.Text==""){
 				if(Prefs.UpdateInt("StatementsCalcDueDate",-1)){
@@ -1364,7 +1373,8 @@ namespace OpenDental{
 				}
 			}
 			if(changed){
-				DataValid.SetInvalid(InvalidTypes.Prefs);
+				DataValid.SetInvalid(InvalidTypes.Prefs | InvalidTypes.Computers);
+				ComputerPrefs.Update(computerPref);//redundant?
 			}
 			DialogResult=DialogResult.OK;
 		}
