@@ -513,7 +513,7 @@ namespace OpenDentBusiness {
 				if(rawProc.Rows[i]["LaymanTerm"].ToString()!=""){
 					row["description"]=rawProc.Rows[i]["LaymanTerm"].ToString();
 				}
-				if(rawProc.Rows[i]["_noBillIns"].ToString()!="0"){
+				if(rawProc.Rows[i]["_noBillIns"].ToString()!="" && rawProc.Rows[i]["_noBillIns"].ToString()!="0"){
 					row["description"]+=" "+Lan.g("ContrAccount","(NoBillIns)");
 				}
 				insPayAmt=PIn.PDouble(rawProc.Rows[i]["_insPayAmt"].ToString());
