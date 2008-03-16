@@ -1,16 +1,14 @@
-﻿
-using System;
+﻿using System;
 
 namespace OpenDentBusiness
 {
 
-    ///<summary>Anesthetic data from an Anesthetic Record.</summary>
-    public class AnestheticData
-    {
-        ///<summary>Primary key.</summary>
+	///<summary>Anesthetic data from an Anesthetic Record.</summary>
+	public class AnestheticData{
+		///<summary>Primary key.</summary>
         public int AnestheticRecordNum;
         ///<summary>FK to patient.PatNum.</summary>
-        public int AnesthOpen;
+		public int AnesthOpen;
 		public int AnesthClose;
 		public int SurgOpen;
 		public int SurgClose;
@@ -53,7 +51,7 @@ namespace OpenDentBusiness
 		public string NPOTime;
 		//public string SigBox;
 
-    }
+	}
 
 
 
