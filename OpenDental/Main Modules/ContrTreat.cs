@@ -760,7 +760,8 @@ namespace OpenDental{
 						checkShowMaxDed.Visible=true;
 						if(checkShowFees.Checked){//if fees are showing
 							checkShowIns.Checked=true;
-							if(InsPlans.GetPlan(PatPlanList[0].PlanNum,InsPlanList).PlanType=="p"){//ppo
+							InsPlan plan=InsPlans.GetPlan(PatPlanList[0].PlanNum,InsPlanList);
+							if(plan.PlanType=="p" || plan.PlanType=="c"){//ppo or cap
 								checkShowDiscount.Checked=true;
 							}
 							else{
@@ -1150,6 +1151,9 @@ namespace OpenDental{
 							discount=fee-insplanAllowed;
 						}
 						//else, if -1 fee not found, then do not show a discount. User can override estimate if they disagree.
+					}
+					if(PriPlanCur!=null && PriPlanCur.PlanType=="c"){//capitation
+						discount=Procedures.GetWriteOff(ProcListTP[i],ClaimProcList);
 					}
 					subdiscount+=discount;
 					totDiscount+=discount;

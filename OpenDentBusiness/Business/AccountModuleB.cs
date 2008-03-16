@@ -461,13 +461,15 @@ namespace OpenDentBusiness {
 				rows.Add(row);
 			}
 			//Procedures------------------------------------------------------------------------------------------
-			command="SELECT procedurelog.BaseUnits,Descript,SUM(InsPayAmt) _insPayAmt,"
-				+"LaymanTerm,procedurelog.MedicalCode,MAX(claimproc.NoBillIns) _noBillIns,procedurelog.PatNum,ProcCode,"
+			command="SELECT procedurelog.BaseUnits,Descript,SUM(cp1.InsPayAmt) _insPayAmt,"
+				+"LaymanTerm,procedurelog.MedicalCode,MAX(cp1.NoBillIns) _noBillIns,procedurelog.PatNum,ProcCode,"
 				+"procedurelog.ProcDate,ProcFee,procedurelog.ProcNum,procedurelog.ProvNum,ToothNum,UnitQty,"
-				+"SUM(WriteOff) _writeOff "
+				+"SUM(cp1.WriteOff) _writeOff, SUM(cp2.WriteOff) _writeOffCap "
 				+"FROM procedurelog "
 				+"LEFT JOIN procedurecode ON procedurelog.CodeNum=procedurecode.CodeNum "
-				+"LEFT JOIN claimproc ON procedurelog.ProcNum=claimproc.ProcNum "
+				+"LEFT JOIN claimproc cp1 ON procedurelog.ProcNum=cp1.ProcNum "
+				+"LEFT JOIN insplan ON cp1.PlanNum=insplan.PlanNum "//to determine capitation
+				+"LEFT JOIN claimproc cp2 ON procedurelog.ProcNum=cp2.ProcNum AND insplan.PlanType='c' "
 				+"WHERE ProcStatus=2 "//complete
 				+"AND (";
 			for(int i=0;i<fam.List.Length;i++){
@@ -480,6 +482,7 @@ namespace OpenDentBusiness {
 			DataTable rawProc=dcon.GetTable(command);
 			double insPayAmt;
 			double writeOff;
+			double writeOffCap;
 			for(int i=0;i<rawProc.Rows.Count;i++){
 				row=table.NewRow();
 				row["AdjNum"]="0";
@@ -490,6 +493,8 @@ namespace OpenDentBusiness {
 					qty=1;
 				}
 				amt=PIn.PDouble(rawProc.Rows[i]["ProcFee"].ToString());
+				writeOffCap=PIn.PDouble(rawProc.Rows[i]["_writeOffCap"].ToString());
+				amt-=writeOffCap;
 				row["chargesDouble"]=amt*qty;
 				row["charges"]=((double)row["chargesDouble"]).ToString("n");
 				row["ClaimNum"]="0";
