@@ -590,8 +590,9 @@ namespace OpenDentBusiness {
 				rows.Add(row);
 			}
 			//paysplits-----------------------------------------------------------------------------------------
-			command="SELECT CheckNum,DatePay,paysplit.PatNum,PayAmt,paysplit.PayNum,PayPlanNum,"
-				+"PayType,ProcDate,ProvNum,SplitAmt,payment.PayNote,payment.PatNum AS OrgPatNum "
+			command="SELECT CheckNum,DatePay,paysplit.PatNum,payment.PatNum _patNumPayment,PayAmt,"
+				+"paysplit.PayNum,PayPlanNum,"
+				+"PayType,ProcDate,ProvNum,SplitAmt,payment.PayNote "
 				+"FROM paysplit "
 				+"LEFT JOIN payment ON paysplit.PayNum=payment.PayNum "
 				+"WHERE (";
@@ -628,11 +629,14 @@ namespace OpenDentBusiness {
 				if(rawPay.Rows[i]["CheckNum"].ToString()!=""){
 					row["description"]+=" #"+rawPay.Rows[i]["CheckNum"].ToString();
 				}
-				payamt = PIn.PDouble(rawPay.Rows[i]["PayAmt"].ToString());
+				payamt=PIn.PDouble(rawPay.Rows[i]["PayAmt"].ToString());
 				row["description"]+=" "+payamt.ToString("c");
+				if(rawPay.Rows[i]["PatNum"].ToString() != rawPay.Rows[i]["_patNumPayment"].ToString()){
+					row["description"]+=" ("+Lan.g("ContrAccount","Paid by ")
+						+fam.GetNameInFamFirst(PIn.PInt(rawPay.Rows[i]["_patNumPayment"].ToString()))+")";
+				}
 				if(payamt!=amt){
 					row["description"]+=" "+Lan.g("ContrAccount","(split)");
-					row["description"] += " - Made by: " + fam.GetNameInFamFirst(PIn.PInt(rawPay.Rows[i]["OrgPatNum"].ToString()));
 				}
 				//we might use DatePay here to add to description
 				row["extraDetail"] = rawPay.Rows[i]["PayNote"].ToString();
