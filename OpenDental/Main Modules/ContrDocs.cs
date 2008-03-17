@@ -2625,6 +2625,6 @@ namespace OpenDental{
 			//Update the mount image to reflect the swapped images.
 			InvalidateSettings(ApplySettings.ALL,false,docsToUpdate);
 		}
-		//REMOVE ME: Email test comment.
+		
 	}
 }
