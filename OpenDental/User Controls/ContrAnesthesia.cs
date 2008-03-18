@@ -32,7 +32,7 @@ namespace OpenDental
 
 		///<summary>Used in LoadData.</summary>
 
-		///<summary>Saves the cur exam measurements to the db by looping through each tooth and deciding whether the data for that tooth has changed.  If so, it either updates or inserts a measurement.  It won't delete a measurement if all values for that tooth are cleared, but just sets that measurement to all -1's.</summary>
+		///<summary></summary>
 		public void SaveCurAnestheticRecord(int anestheticRecordNum)
 		{
 		}

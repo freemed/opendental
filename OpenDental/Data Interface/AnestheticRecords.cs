@@ -23,7 +23,7 @@ namespace OpenDental{
 				List[i] = new AnestheticRecord();
 				List[i].AnestheticRecordNum = PIn.PInt(table.Rows[i][0].ToString());
 				List[i].PatNum = PIn.PInt(table.Rows[i][1].ToString());
-				List[i].AnestheticDate = PIn.PDate(table.Rows[i][2].ToString());
+				List[i].AnestheticDate = PIn.PDateT(table.Rows[i][2].ToString());
 				List[i].ProvNum = PIn.PInt(table.Rows[i][3].ToString());
 			}
 		}
@@ -34,7 +34,7 @@ namespace OpenDental{
 
 			string command = "UPDATE anestheticrecord SET "
 				+ "PatNum = '" + POut.PInt(Cur.PatNum) + "'"
-				+ ",AnestheticDate = " + POut.PDate(Cur.AnestheticDate) + "'"
+				+ ",AnestheticDate = " + POut.PDateT(Cur.AnestheticDate) + "'"
 				+ ",ProvNum = '" + POut.PInt(Cur.ProvNum) + "'"
 				+ " WHERE AnestheticRecordNum = '" + POut.PInt(Cur.AnestheticRecordNum) + "'";
 			General.NonQ(command);
@@ -60,7 +60,7 @@ namespace OpenDental{
 			}
 				command +=
 				"'" + POut.PInt(Cur.PatNum) + "', "
-				+ POut.PDate(Cur.AnestheticDate) + ", "
+				+ POut.PDateT(Cur.AnestheticDate) + ", "
 				+ "'" + POut.PInt(Cur.ProvNum) + "')";
 			if (PrefB.RandomKeys)
 			{

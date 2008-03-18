@@ -129,8 +129,7 @@ namespace OpenDental {
 		private OpenDental.UI.Button butPrint;
 		private OpenDental.UI.Button butClose;
 		private PrintDialog printDialog;
-		private String result;
-
+		
 
 		private void InitializeComponent(){
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormAnestheticRecord));
@@ -1656,16 +1655,14 @@ namespace OpenDental {
 			//display Patient ID number
 			textBoxPatID.Text = PatCur.PatNum.ToString();
 			RefreshListAnesthetics();
-			listAnesthetics.SelectedIndex = AnestheticRecords.List.Length - 1;//this works even if no items.
+			listAnesthetics.SelectedIndex = AnestheticRecords.List.Length-1;//This works even if no items.
 			
 		}
 
 		private void RefreshListAnesthetics(){
-			//most recent date at the bottom
+			//most recent date at the top
 			AnestheticRecords.Refresh(PatCur.PatNum);
 			listAnesthetics.Items.Clear();
-			long anestheticDate = DateTime.Now.ToFileTime();
-
 	
 			for (int i = 0; i < AnestheticRecords.List.Length; i++)
 			{
@@ -1678,12 +1675,11 @@ namespace OpenDental {
 			 
 			AnestheticRecordCur=new AnestheticRecord();
 			AnestheticRecordCur.PatNum=PatCur.PatNum;
-			long anestheticDate = DateTime.Now.ToFileTime();
-			//AnestheticRecordCur.AnestheticDate = DateTime.Now;
+			AnestheticRecordCur.AnestheticDate = DateTime.Now;
 			AnestheticRecordCur.ProvNum=PatCur.PriProv;
 			AnestheticRecords.Insert(AnestheticRecordCur);
 			RefreshListAnesthetics();
-			listAnesthetics.SelectedIndex=AnestheticRecords.List.Length-1;
+			listAnesthetics.SelectedIndex=AnestheticRecords.List.Length-1;//Add -1 after List.Length to select in ascending order
 		}
 
 		private void butDelAnesthetic_Click(object sender, System.EventArgs e)
@@ -1755,7 +1751,7 @@ namespace OpenDental {
 
 		private void butAnesthOpen_Click(object sender, EventArgs e)
 		{
-			textBoxAnesthOpen.Text = MiscData.GetNowDateTime().ToString("HH:mm");
+			textBoxAnesthOpen.Text = MiscData.GetNowDateTime().ToString("hh:mm:ss tt"); //tt shows AM/PM, change to "HH:mm:ss" for military time
 		}
 
 		private void Text1_TextChanged(object sender, EventArgs e)
