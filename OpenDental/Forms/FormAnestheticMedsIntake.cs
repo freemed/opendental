@@ -20,8 +20,7 @@ namespace OpenDental
 
 		private void FormAnestheticMedsIntake_Load(object sender, EventArgs e)
 		{
-			//display Date
-			textDate.Text = MiscData.GetNowDateTime().ToString("mm/dd/yyyy");
+
 		}
 
 		private void textDate_TextChanged(object sender, EventArgs e)
@@ -42,6 +41,16 @@ namespace OpenDental
 		private void butCancel_Click(object sender, EventArgs e)
 		{
 			DialogResult = DialogResult.Cancel;
+		}
+
+		//this will ultimately be moved to main OD setup menu, here for convenience now
+		private void butSetupAnesthMeds_Click(object sender, EventArgs e)
+		{
+			FormAnestheticMedsInventory FormI = new FormAnestheticMedsInventory();
+			//FormI.AnestheticMedsCur = new AnestheticMeds();
+			//FormI.IsNew = true;
+			FormI.ShowDialog();
+			//FillGrid();
 		}
 
 

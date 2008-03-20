@@ -2,7 +2,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.20706</ProductVersion>
+    <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{8136317D-C936-49B6-9E31-D90F02D2F207}</ProjectGuid>
     <OutputType>WinExe</OutputType>
@@ -396,6 +396,12 @@
     </Compile>
     <Compile Include="Forms\FormAnesthesiaScore.Designer.cs">
       <DependentUpon>FormAnesthesiaScore.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\FormAnestheticMedsEdit.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormAnestheticMedsEdit.designer.cs">
+      <DependentUpon>FormAnestheticMedsEdit.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\FormAnestheticMedsIntake.cs">
       <SubType>Form</SubType>
@@ -1440,10 +1446,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms Reports\FormRpLaserLabels.resx">
       <DependentUpon>FormRpLaserLabels.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\BasicTemplate.resx">
-      <DependentUpon>BasicTemplate.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormAccountingLock.resx">
@@ -3388,6 +3390,14 @@
     <None Include="bin\Debug\payments.txt" />
     <Content Include="Misc\App.ico" />
     <Content Include="Misc\TerminalMgr.ico" />
+    <EmbeddedResource Include="Forms\BasicTemplate.resx">
+      <DependentUpon>BasicTemplate.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormAnestheticMedsEdit.resx">
+      <DependentUpon>FormAnestheticMedsEdit.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Reporting\Allocators\MyAllocator1\FormWarnToCloseComputers.resx">
       <SubType>Designer</SubType>
       <DependentUpon>FormWarnToCloseComputers.cs</DependentUpon>

@@ -29,10 +29,7 @@
 		private void InitializeComponent()
 		{
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormAnestheticMedsIntake));
-			this.textAnesthMed = new System.Windows.Forms.TextBox();
-			this.textDoseVol = new System.Windows.Forms.TextBox();
 			this.textQty = new System.Windows.Forms.TextBox();
-			this.labelDoseVol = new System.Windows.Forms.Label();
 			this.labelQty = new System.Windows.Forms.Label();
 			this.comboSupplier = new System.Windows.Forms.ComboBox();
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
@@ -41,46 +38,26 @@
 			this.labelInvoice = new System.Windows.Forms.Label();
 			this.textDate = new System.Windows.Forms.TextBox();
 			this.labelDate = new System.Windows.Forms.Label();
+			this.comboBox1 = new System.Windows.Forms.ComboBox();
+			this.butAddAnesthetic = new OpenDental.UI.Button();
 			this.butClose = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
+			this.butSetupAnesthMeds = new OpenDental.UI.Button();
+			this.groupBox1.SuspendLayout();
 			this.groupSupplier.SuspendLayout();
 			this.SuspendLayout();
 			// 
-			// textAnesthMed
-			// 
-			this.textAnesthMed.Location = new System.Drawing.Point(42, 56);
-			this.textAnesthMed.Name = "textAnesthMed";
-			this.textAnesthMed.Size = new System.Drawing.Size(229, 20);
-			this.textAnesthMed.TabIndex = 0;
-			this.textAnesthMed.TextChanged += new System.EventHandler(this.textAnesthMed_TextChanged);
-			// 
-			// textDoseVol
-			// 
-			this.textDoseVol.Location = new System.Drawing.Point(280, 56);
-			this.textDoseVol.Name = "textDoseVol";
-			this.textDoseVol.Size = new System.Drawing.Size(100, 20);
-			this.textDoseVol.TabIndex = 1;
-			// 
 			// textQty
 			// 
-			this.textQty.Location = new System.Drawing.Point(396, 56);
+			this.textQty.Location = new System.Drawing.Point(247, 20);
 			this.textQty.Name = "textQty";
 			this.textQty.Size = new System.Drawing.Size(100, 20);
 			this.textQty.TabIndex = 2;
 			// 
-			// labelDoseVol
-			// 
-			this.labelDoseVol.AutoSize = true;
-			this.labelDoseVol.Location = new System.Drawing.Point(277, 39);
-			this.labelDoseVol.Name = "labelDoseVol";
-			this.labelDoseVol.Size = new System.Drawing.Size(107, 13);
-			this.labelDoseVol.TabIndex = 3;
-			this.labelDoseVol.Text = "Dose per unit volume";
-			// 
 			// labelQty
 			// 
 			this.labelQty.AutoSize = true;
-			this.labelQty.Location = new System.Drawing.Point(396, 39);
+			this.labelQty.Location = new System.Drawing.Point(246, 0);
 			this.labelQty.Name = "labelQty";
 			this.labelQty.Size = new System.Drawing.Size(46, 13);
 			this.labelQty.TabIndex = 4;
@@ -96,6 +73,10 @@
 			// 
 			// groupBox1
 			// 
+			this.groupBox1.Controls.Add(this.butAddAnesthetic);
+			this.groupBox1.Controls.Add(this.comboBox1);
+			this.groupBox1.Controls.Add(this.textQty);
+			this.groupBox1.Controls.Add(this.labelQty);
 			this.groupBox1.Location = new System.Drawing.Point(30, 39);
 			this.groupBox1.Name = "groupBox1";
 			this.groupBox1.Size = new System.Drawing.Size(482, 48);
@@ -112,6 +93,7 @@
 			// 
 			// groupSupplier
 			// 
+			this.groupSupplier.Controls.Add(this.butSetupAnesthMeds);
 			this.groupSupplier.Controls.Add(this.butClose);
 			this.groupSupplier.Controls.Add(this.butCancel);
 			this.groupSupplier.Controls.Add(this.labelInvoice);
@@ -149,6 +131,30 @@
 			this.labelDate.TabIndex = 10;
 			this.labelDate.Text = "Date";
 			// 
+			// comboBox1
+			// 
+			this.comboBox1.FormattingEnabled = true;
+			this.comboBox1.Location = new System.Drawing.Point(10, 19);
+			this.comboBox1.Name = "comboBox1";
+			this.comboBox1.Size = new System.Drawing.Size(231, 21);
+			this.comboBox1.TabIndex = 0;
+			// 
+			// butAddAnesthetic
+			// 
+			this.butAddAnesthetic.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butAddAnesthetic.Autosize = true;
+			this.butAddAnesthetic.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butAddAnesthetic.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butAddAnesthetic.CornerRadius = 4F;
+			this.butAddAnesthetic.Image = global::OpenDental.Properties.Resources.Add;
+			this.butAddAnesthetic.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butAddAnesthetic.Location = new System.Drawing.Point(366, 16);
+			this.butAddAnesthetic.Name = "butAddAnesthetic";
+			this.butAddAnesthetic.Size = new System.Drawing.Size(90, 26);
+			this.butAddAnesthetic.TabIndex = 54;
+			this.butAddAnesthetic.Text = "Add new...";
+			this.butAddAnesthetic.UseVisualStyleBackColor = true;
+			// 
 			// butClose
 			// 
 			this.butClose.AdjustImageLocation = new System.Drawing.Point(0, 0);
@@ -159,7 +165,7 @@
 			this.butClose.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.butClose.Location = new System.Drawing.Point(366, 53);
 			this.butClose.Name = "butClose";
-			this.butClose.Size = new System.Drawing.Size(100, 26);
+			this.butClose.Size = new System.Drawing.Size(90, 26);
 			this.butClose.TabIndex = 137;
 			this.butClose.Text = "Save and Close";
 			this.butClose.UseVisualStyleBackColor = true;
@@ -181,6 +187,22 @@
 			this.butCancel.UseVisualStyleBackColor = true;
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
 			// 
+			// butSetupAnesthMeds
+			// 
+			this.butSetupAnesthMeds.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butSetupAnesthMeds.Autosize = true;
+			this.butSetupAnesthMeds.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butSetupAnesthMeds.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butSetupAnesthMeds.CornerRadius = 4F;
+			this.butSetupAnesthMeds.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butSetupAnesthMeds.Location = new System.Drawing.Point(12, 53);
+			this.butSetupAnesthMeds.Name = "butSetupAnesthMeds";
+			this.butSetupAnesthMeds.Size = new System.Drawing.Size(90, 26);
+			this.butSetupAnesthMeds.TabIndex = 138;
+			this.butSetupAnesthMeds.Text = "Setup inventory";
+			this.butSetupAnesthMeds.UseVisualStyleBackColor = true;
+			this.butSetupAnesthMeds.Click += new System.EventHandler(this.butSetupAnesthMeds_Click);
+			// 
 			// FormAnestheticMedsIntake
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -190,16 +212,13 @@
 			this.Controls.Add(this.textDate);
 			this.Controls.Add(this.textBox1);
 			this.Controls.Add(this.comboSupplier);
-			this.Controls.Add(this.labelQty);
-			this.Controls.Add(this.labelDoseVol);
-			this.Controls.Add(this.textQty);
-			this.Controls.Add(this.textDoseVol);
-			this.Controls.Add(this.textAnesthMed);
 			this.Controls.Add(this.groupBox1);
 			this.Controls.Add(this.groupSupplier);
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.Name = "FormAnestheticMedsIntake";
 			this.Text = "Anesthetic Medication Intake Form";
+			this.groupBox1.ResumeLayout(false);
+			this.groupBox1.PerformLayout();
 			this.groupSupplier.ResumeLayout(false);
 			this.groupSupplier.PerformLayout();
 			this.ResumeLayout(false);
@@ -209,10 +228,7 @@
 
 		#endregion
 
-		private System.Windows.Forms.TextBox textAnesthMed;
-		private System.Windows.Forms.TextBox textDoseVol;
 		private System.Windows.Forms.TextBox textQty;
-		private System.Windows.Forms.Label labelDoseVol;
 		private System.Windows.Forms.Label labelQty;
 		private System.Windows.Forms.ComboBox comboSupplier;
 		private System.Windows.Forms.GroupBox groupBox1;
@@ -223,5 +239,8 @@
 		private OpenDental.UI.Button butClose;
 		private System.Windows.Forms.TextBox textDate;
 		private System.Windows.Forms.Label labelDate;
+		private System.Windows.Forms.ComboBox comboBox1;
+		private OpenDental.UI.Button butAddAnesthetic;
+		private OpenDental.UI.Button butSetupAnesthMeds;
 	}
 }
