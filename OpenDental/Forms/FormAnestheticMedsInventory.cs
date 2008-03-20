@@ -19,7 +19,7 @@ namespace OpenDental
 		private OpenDental.UI.Button butAddAnesthMeds;
 		private OpenDental.UI.Button butClose;
 		private OpenDental.UI.Button butCancel;
-		private DataGridView dataGridView1;
+		private DataGridView gridAnesthMeds;
 		
 		public FormAnestheticMedsInventory()
 		{
@@ -31,7 +31,7 @@ namespace OpenDental
 		private void InitializeComponent()
 		{
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormAnestheticMedsInventory));
-			this.dataGridView1 = new System.Windows.Forms.DataGridView();
+			this.gridAnesthMeds = new System.Windows.Forms.DataGridView();
 			this.AnestheticMed = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.HowSupplied = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.QtyOnHand = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -40,21 +40,22 @@ namespace OpenDental
 			this.butCancel = new OpenDental.UI.Button();
 			this.butDelAnesthMeds = new OpenDental.UI.Button();
 			this.butAddAnesthMeds = new OpenDental.UI.Button();
-			((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.gridAnesthMeds)).BeginInit();
 			this.groupAnestheticMeds.SuspendLayout();
 			this.SuspendLayout();
 			// 
-			// dataGridView1
+			// gridAnesthMeds
 			// 
-			this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-			this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+			this.gridAnesthMeds.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+			this.gridAnesthMeds.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.AnestheticMed,
             this.HowSupplied,
             this.QtyOnHand});
-			this.dataGridView1.Location = new System.Drawing.Point(106, 34);
-			this.dataGridView1.Name = "dataGridView1";
-			this.dataGridView1.Size = new System.Drawing.Size(582, 150);
-			this.dataGridView1.TabIndex = 0;
+			this.gridAnesthMeds.Location = new System.Drawing.Point(106, 34);
+			this.gridAnesthMeds.Name = "gridAnesthMeds";
+			this.gridAnesthMeds.Size = new System.Drawing.Size(582, 307);
+			this.gridAnesthMeds.TabIndex = 0;
+			this.gridAnesthMeds.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.gridAnesthMeds_CellContentClick);
 			// 
 			// AnestheticMed
 			// 
@@ -78,12 +79,12 @@ namespace OpenDental
 			// 
 			this.groupAnestheticMeds.Controls.Add(this.butClose);
 			this.groupAnestheticMeds.Controls.Add(this.butCancel);
-			this.groupAnestheticMeds.Controls.Add(this.dataGridView1);
+			this.groupAnestheticMeds.Controls.Add(this.gridAnesthMeds);
 			this.groupAnestheticMeds.Controls.Add(this.butDelAnesthMeds);
 			this.groupAnestheticMeds.Controls.Add(this.butAddAnesthMeds);
 			this.groupAnestheticMeds.Location = new System.Drawing.Point(24, 24);
 			this.groupAnestheticMeds.Name = "groupAnestheticMeds";
-			this.groupAnestheticMeds.Size = new System.Drawing.Size(705, 277);
+			this.groupAnestheticMeds.Size = new System.Drawing.Size(705, 403);
 			this.groupAnestheticMeds.TabIndex = 1;
 			this.groupAnestheticMeds.TabStop = false;
 			this.groupAnestheticMeds.Text = "Anesthetic Medications";
@@ -96,7 +97,7 @@ namespace OpenDental
 			this.butClose.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butClose.CornerRadius = 4F;
 			this.butClose.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butClose.Location = new System.Drawing.Point(588, 219);
+			this.butClose.Location = new System.Drawing.Point(598, 360);
 			this.butClose.Name = "butClose";
 			this.butClose.Size = new System.Drawing.Size(90, 26);
 			this.butClose.TabIndex = 140;
@@ -112,7 +113,7 @@ namespace OpenDental
 			this.butCancel.CornerRadius = 4F;
 			this.butCancel.Image = global::OpenDental.Properties.Resources.deleteX;
 			this.butCancel.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butCancel.Location = new System.Drawing.Point(516, 219);
+			this.butCancel.Location = new System.Drawing.Point(526, 360);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(66, 26);
 			this.butCancel.TabIndex = 139;
@@ -155,12 +156,12 @@ namespace OpenDental
 			// 
 			// FormAnestheticMedsInventory
 			// 
-			this.ClientSize = new System.Drawing.Size(755, 339);
+			this.ClientSize = new System.Drawing.Size(755, 451);
 			this.Controls.Add(this.groupAnestheticMeds);
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.Name = "FormAnestheticMedsInventory";
 			this.Text = "Anesthetic Medication Inventory";
-			((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.gridAnesthMeds)).EndInit();
 			this.groupAnestheticMeds.ResumeLayout(false);
 			this.ResumeLayout(false);
 
@@ -178,6 +179,11 @@ namespace OpenDental
 		private void butCancel_Click(object sender, EventArgs e)
 		{
 			DialogResult = DialogResult.Cancel;
+		}
+
+		private void gridAnesthMeds_CellContentClick(object sender, DataGridViewCellEventArgs e)
+		{
+
 		}
 	}
 }
