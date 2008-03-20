@@ -2801,8 +2801,8 @@ namespace OpenDental{
 			{
 				return;
 			}
-			FormAnestheticMedsInventory FormM = new FormAnestheticMedsInventory();
-			FormM.ShowDialog();
+			FormAnestheticMedsInventory FormAM = new FormAnestheticMedsInventory();
+			FormAM.ShowDialog();
 			RefreshCurrentModule();
 			SecurityLogs.MakeLogEntry(Permissions.Setup, 0, "Anesthetic Medications");
 		}
