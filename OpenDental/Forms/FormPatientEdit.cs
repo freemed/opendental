@@ -886,6 +886,7 @@ namespace OpenDental{
 			this.comboBillType.Name = "comboBillType";
 			this.comboBillType.Size = new System.Drawing.Size(198, 21);
 			this.comboBillType.TabIndex = 16;
+			this.comboBillType.SelectedIndexChanged += new System.EventHandler(this.comboBillType_SelectedIndexChanged);
 			// 
 			// butEditZip
 			// 
@@ -2499,6 +2500,11 @@ namespace OpenDental{
 		}
 
 		private void textPatNum_TextChanged(object sender, EventArgs e)
+		{
+
+		}
+
+		private void comboBillType_SelectedIndexChanged(object sender, EventArgs e)
 		{
 
 		}

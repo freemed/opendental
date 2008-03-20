@@ -295,7 +295,7 @@ namespace OpenDental{
 			FormL.ShowDialog();
 			if(FormL.DialogResult==DialogResult.OK){
 				turnaroundList.Add(FormL.LabTurnaroundCur);
-				FillGrid();
+				FillGrid(); 
 			}
 		}
 

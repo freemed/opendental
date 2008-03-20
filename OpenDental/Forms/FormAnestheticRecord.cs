@@ -36,6 +36,7 @@ namespace OpenDental {
 		private TextBox textBoxAnesthClose;
 		private Label labelAnesthMed;
 		private ComboBox comboAnesthMed;
+		public bool IsNew;
 		private Label labelAnesthetist;
 		private Label labelSurgeon;
 		private Label labelAsst;
@@ -128,6 +129,7 @@ namespace OpenDental {
 		private OpenDental.UI.Button butClearSig;
 		private OpenDental.UI.Button butPrint;
 		private OpenDental.UI.Button butClose;
+		private OpenDental.UI.Button butAnesthMedIntake;
 		private PrintDialog printDialog;
 		
 
@@ -169,6 +171,7 @@ namespace OpenDental {
 			this.radButIVSiteR = new System.Windows.Forms.RadioButton();
 			this.labelIVGauge = new System.Windows.Forms.Label();
 			this.comboBoxIVGauge = new System.Windows.Forms.ComboBox();
+			this.butAnesthScore = new OpenDental.UI.Button();
 			this.comboBoxO2LMin = new System.Windows.Forms.ComboBox();
 			this.labelIVFVol = new System.Windows.Forms.Label();
 			this.textBoxIVFVol = new System.Windows.Forms.TextBox();
@@ -201,22 +204,6 @@ namespace OpenDental {
 			this.labelSurgeon = new System.Windows.Forms.Label();
 			this.comboBoxSurgeon = new System.Windows.Forms.ComboBox();
 			this.groupBoxDoseCalc = new System.Windows.Forms.GroupBox();
-			this.groupBoxTimes = new System.Windows.Forms.GroupBox();
-			this.textBoxAnesthOpen = new System.Windows.Forms.TextBox();
-			this.labelIVAnesthetics = new System.Windows.Forms.Label();
-			this.groupBoxNotes = new System.Windows.Forms.GroupBox();
-			this.groupBoxSig = new System.Windows.Forms.GroupBox();
-			this.groupBoxHgtWgt = new System.Windows.Forms.GroupBox();
-			this.groupBoxNPO = new System.Windows.Forms.GroupBox();
-			this.groupBoxVS = new System.Windows.Forms.GroupBox();
-			this.textBoxVSMSerNum = new System.Windows.Forms.TextBox();
-			this.dataGridVS = new System.Windows.Forms.DataGridView();
-			this.BP = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.HR = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.SpO2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.Temp = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.EtCO2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.textBoxVSM = new System.Windows.Forms.TextBox();
 			this.butDose10 = new OpenDental.UI.Button();
 			this.butDose7 = new OpenDental.UI.Button();
 			this.butDose8 = new OpenDental.UI.Button();
@@ -237,16 +224,32 @@ namespace OpenDental {
 			this.butDelAnesthetic = new OpenDental.UI.Button();
 			this.butDelAnesthMeds = new OpenDental.UI.Button();
 			this.butAddAnesthMeds = new OpenDental.UI.Button();
+			this.labelIVAnesthetics = new System.Windows.Forms.Label();
+			this.groupBoxTimes = new System.Windows.Forms.GroupBox();
+			this.textBoxAnesthOpen = new System.Windows.Forms.TextBox();
 			this.butSurgClose = new OpenDental.UI.Button();
 			this.butAnesthOpen = new OpenDental.UI.Button();
 			this.butAnesthClose = new OpenDental.UI.Button();
 			this.butSurgOpen = new OpenDental.UI.Button();
-			this.butAnesthScore = new OpenDental.UI.Button();
+			this.groupBoxNotes = new System.Windows.Forms.GroupBox();
 			this.butClose = new OpenDental.UI.Button();
 			this.butPrint = new OpenDental.UI.Button();
+			this.groupBoxSig = new System.Windows.Forms.GroupBox();
 			this.butSignTopaz = new OpenDental.UI.Button();
 			this.sigBox = new OpenDental.UI.SignatureBox();
 			this.butClearSig = new OpenDental.UI.Button();
+			this.groupBoxHgtWgt = new System.Windows.Forms.GroupBox();
+			this.groupBoxNPO = new System.Windows.Forms.GroupBox();
+			this.groupBoxVS = new System.Windows.Forms.GroupBox();
+			this.textBoxVSMSerNum = new System.Windows.Forms.TextBox();
+			this.dataGridVS = new System.Windows.Forms.DataGridView();
+			this.BP = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.HR = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.SpO2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.Temp = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.EtCO2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.textBoxVSM = new System.Windows.Forms.TextBox();
+			this.butAnesthMedIntake = new OpenDental.UI.Button();
 			this.groupBoxSidebarRt.SuspendLayout();
 			this.groupBoxAnesthMeds.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.dataGridAnestheticMeds)).BeginInit();
@@ -647,6 +650,20 @@ namespace OpenDental {
 			this.comboBoxIVGauge.Size = new System.Drawing.Size(65, 21);
 			this.comboBoxIVGauge.TabIndex = 152;
 			// 
+			// butAnesthScore
+			// 
+			this.butAnesthScore.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butAnesthScore.Autosize = true;
+			this.butAnesthScore.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butAnesthScore.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butAnesthScore.CornerRadius = 4F;
+			this.butAnesthScore.Location = new System.Drawing.Point(18, 508);
+			this.butAnesthScore.Name = "butAnesthScore";
+			this.butAnesthScore.Size = new System.Drawing.Size(131, 32);
+			this.butAnesthScore.TabIndex = 129;
+			this.butAnesthScore.Text = "Post-anesthesia score";
+			this.butAnesthScore.UseVisualStyleBackColor = true;
+			// 
 			// comboBoxO2LMin
 			// 
 			this.comboBoxO2LMin.FormattingEnabled = true;
@@ -832,6 +849,7 @@ namespace OpenDental {
 			// 
 			// groupBoxAnesthMeds
 			// 
+			this.groupBoxAnesthMeds.Controls.Add(this.butAnesthMedIntake);
 			this.groupBoxAnesthMeds.Controls.Add(this.textBoxPatID);
 			this.groupBoxAnesthMeds.Controls.Add(this.labelPatID);
 			this.groupBoxAnesthMeds.Controls.Add(this.labelPatient);
@@ -1001,163 +1019,6 @@ namespace OpenDental {
 			this.groupBoxDoseCalc.TabStop = false;
 			this.groupBoxDoseCalc.Text = "Click to add dose";
 			this.groupBoxDoseCalc.Enter += new System.EventHandler(this.groupBox5_Enter);
-			// 
-			// groupBoxTimes
-			// 
-			this.groupBoxTimes.Controls.Add(this.textBoxAnesthOpen);
-			this.groupBoxTimes.Controls.Add(this.butSurgClose);
-			this.groupBoxTimes.Controls.Add(this.textBoxSurgClose);
-			this.groupBoxTimes.Controls.Add(this.textBoxAnesthClose);
-			this.groupBoxTimes.Controls.Add(this.butAnesthOpen);
-			this.groupBoxTimes.Controls.Add(this.butAnesthClose);
-			this.groupBoxTimes.Controls.Add(this.butSurgOpen);
-			this.groupBoxTimes.Controls.Add(this.textBoxSurgOpen);
-			this.groupBoxTimes.Location = new System.Drawing.Point(173, 11);
-			this.groupBoxTimes.Name = "groupBoxTimes";
-			this.groupBoxTimes.Size = new System.Drawing.Size(413, 76);
-			this.groupBoxTimes.TabIndex = 96;
-			this.groupBoxTimes.TabStop = false;
-			this.groupBoxTimes.Text = "Times";
-			// 
-			// textBoxAnesthOpen
-			// 
-			this.textBoxAnesthOpen.Location = new System.Drawing.Point(16, 49);
-			this.textBoxAnesthOpen.Name = "textBoxAnesthOpen";
-			this.textBoxAnesthOpen.Size = new System.Drawing.Size(100, 20);
-			this.textBoxAnesthOpen.TabIndex = 97;
-			this.textBoxAnesthOpen.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-			this.textBoxAnesthOpen.TextChanged += new System.EventHandler(this.textBoxAnesthOpen_TextChanged);
-			// 
-			// labelIVAnesthetics
-			// 
-			this.labelIVAnesthetics.AutoSize = true;
-			this.labelIVAnesthetics.Location = new System.Drawing.Point(25, 76);
-			this.labelIVAnesthetics.Name = "labelIVAnesthetics";
-			this.labelIVAnesthetics.Size = new System.Drawing.Size(75, 13);
-			this.labelIVAnesthetics.TabIndex = 106;
-			this.labelIVAnesthetics.Text = "IV Anesthetics";
-			// 
-			// groupBoxNotes
-			// 
-			this.groupBoxNotes.Controls.Add(this.butClose);
-			this.groupBoxNotes.Controls.Add(this.richTextBoxNotes);
-			this.groupBoxNotes.Controls.Add(this.butPrint);
-			this.groupBoxNotes.Controls.Add(this.groupBoxSig);
-			this.groupBoxNotes.Controls.Add(this.groupBoxHgtWgt);
-			this.groupBoxNotes.Controls.Add(this.groupBoxNPO);
-			this.groupBoxNotes.Location = new System.Drawing.Point(12, 565);
-			this.groupBoxNotes.Name = "groupBoxNotes";
-			this.groupBoxNotes.Size = new System.Drawing.Size(769, 155);
-			this.groupBoxNotes.TabIndex = 138;
-			this.groupBoxNotes.TabStop = false;
-			this.groupBoxNotes.Text = "Notes (record additional meds/routes/times here)";
-			// 
-			// groupBoxSig
-			// 
-			this.groupBoxSig.Controls.Add(this.butSignTopaz);
-			this.groupBoxSig.Controls.Add(this.sigBox);
-			this.groupBoxSig.Controls.Add(this.butClearSig);
-			this.groupBoxSig.Location = new System.Drawing.Point(540, 0);
-			this.groupBoxSig.Name = "groupBoxSig";
-			this.groupBoxSig.Size = new System.Drawing.Size(229, 105);
-			this.groupBoxSig.TabIndex = 139;
-			this.groupBoxSig.TabStop = false;
-			this.groupBoxSig.Text = "Signature/Initials";
-			// 
-			// groupBoxHgtWgt
-			// 
-			this.groupBoxHgtWgt.Controls.Add(this.labelEscortRel);
-			this.groupBoxHgtWgt.Controls.Add(this.labelPatWgt);
-			this.groupBoxHgtWgt.Controls.Add(this.labelEscortName);
-			this.groupBoxHgtWgt.Controls.Add(this.textBoxEscortName);
-			this.groupBoxHgtWgt.Controls.Add(this.textBoxEscortRel);
-			this.groupBoxHgtWgt.Controls.Add(this.textBoxPatWgt);
-			this.groupBoxHgtWgt.Controls.Add(this.textBoxPatHgt);
-			this.groupBoxHgtWgt.Controls.Add(this.labelPatHgt);
-			this.groupBoxHgtWgt.Location = new System.Drawing.Point(203, 19);
-			this.groupBoxHgtWgt.Name = "groupBoxHgtWgt";
-			this.groupBoxHgtWgt.Size = new System.Drawing.Size(331, 74);
-			this.groupBoxHgtWgt.TabIndex = 138;
-			this.groupBoxHgtWgt.TabStop = false;
-			this.groupBoxHgtWgt.Enter += new System.EventHandler(this.groupBoxHgtWgt_Enter);
-			// 
-			// groupBoxNPO
-			// 
-			this.groupBoxNPO.Controls.Add(this.comboBoxNPOTime);
-			this.groupBoxNPO.Location = new System.Drawing.Point(327, 99);
-			this.groupBoxNPO.Name = "groupBoxNPO";
-			this.groupBoxNPO.Size = new System.Drawing.Size(442, 50);
-			this.groupBoxNPO.TabIndex = 137;
-			this.groupBoxNPO.TabStop = false;
-			this.groupBoxNPO.Text = "NPO Since";
-			// 
-			// groupBoxVS
-			// 
-			this.groupBoxVS.Controls.Add(this.textBoxVSMSerNum);
-			this.groupBoxVS.Controls.Add(this.dataGridVS);
-			this.groupBoxVS.Controls.Add(this.textBoxVSM);
-			this.groupBoxVS.Controls.Add(this.labelVSM);
-			this.groupBoxVS.Controls.Add(this.labelVSMSerNum);
-			this.groupBoxVS.Location = new System.Drawing.Point(12, 352);
-			this.groupBoxVS.Name = "groupBoxVS";
-			this.groupBoxVS.Size = new System.Drawing.Size(592, 207);
-			this.groupBoxVS.TabIndex = 139;
-			this.groupBoxVS.TabStop = false;
-			this.groupBoxVS.Text = "Vital Signs";
-			// 
-			// textBoxVSMSerNum
-			// 
-			this.textBoxVSMSerNum.Location = new System.Drawing.Point(347, 19);
-			this.textBoxVSMSerNum.Name = "textBoxVSMSerNum";
-			this.textBoxVSMSerNum.Size = new System.Drawing.Size(88, 20);
-			this.textBoxVSMSerNum.TabIndex = 132;
-			// 
-			// dataGridVS
-			// 
-			this.dataGridVS.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-			this.dataGridVS.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.BP,
-            this.HR,
-            this.SpO2,
-            this.Temp,
-            this.EtCO2});
-			this.dataGridVS.Location = new System.Drawing.Point(37, 51);
-			this.dataGridVS.Name = "dataGridVS";
-			this.dataGridVS.Size = new System.Drawing.Size(542, 141);
-			this.dataGridVS.TabIndex = 131;
-			this.dataGridVS.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridVS_CellContentClick);
-			// 
-			// BP
-			// 
-			this.BP.HeaderText = "BP";
-			this.BP.Name = "BP";
-			// 
-			// HR
-			// 
-			this.HR.HeaderText = "Heart Rate";
-			this.HR.Name = "HR";
-			// 
-			// SpO2
-			// 
-			this.SpO2.HeaderText = "SpO2";
-			this.SpO2.Name = "SpO2";
-			// 
-			// Temp
-			// 
-			this.Temp.HeaderText = "Temp";
-			this.Temp.Name = "Temp";
-			// 
-			// EtCO2
-			// 
-			this.EtCO2.HeaderText = "EtCO2";
-			this.EtCO2.Name = "EtCO2";
-			// 
-			// textBoxVSM
-			// 
-			this.textBoxVSM.Location = new System.Drawing.Point(170, 19);
-			this.textBoxVSM.Name = "textBoxVSM";
-			this.textBoxVSM.Size = new System.Drawing.Size(88, 20);
-			this.textBoxVSM.TabIndex = 130;
 			// 
 			// butDose10
 			// 
@@ -1465,6 +1326,41 @@ namespace OpenDental {
 			this.butAddAnesthMeds.UseVisualStyleBackColor = true;
 			this.butAddAnesthMeds.Click += new System.EventHandler(this.butAddAnesthMeds_Click);
 			// 
+			// labelIVAnesthetics
+			// 
+			this.labelIVAnesthetics.AutoSize = true;
+			this.labelIVAnesthetics.Location = new System.Drawing.Point(25, 76);
+			this.labelIVAnesthetics.Name = "labelIVAnesthetics";
+			this.labelIVAnesthetics.Size = new System.Drawing.Size(75, 13);
+			this.labelIVAnesthetics.TabIndex = 106;
+			this.labelIVAnesthetics.Text = "IV Anesthetics";
+			// 
+			// groupBoxTimes
+			// 
+			this.groupBoxTimes.Controls.Add(this.textBoxAnesthOpen);
+			this.groupBoxTimes.Controls.Add(this.butSurgClose);
+			this.groupBoxTimes.Controls.Add(this.textBoxSurgClose);
+			this.groupBoxTimes.Controls.Add(this.textBoxAnesthClose);
+			this.groupBoxTimes.Controls.Add(this.butAnesthOpen);
+			this.groupBoxTimes.Controls.Add(this.butAnesthClose);
+			this.groupBoxTimes.Controls.Add(this.butSurgOpen);
+			this.groupBoxTimes.Controls.Add(this.textBoxSurgOpen);
+			this.groupBoxTimes.Location = new System.Drawing.Point(173, 11);
+			this.groupBoxTimes.Name = "groupBoxTimes";
+			this.groupBoxTimes.Size = new System.Drawing.Size(413, 76);
+			this.groupBoxTimes.TabIndex = 96;
+			this.groupBoxTimes.TabStop = false;
+			this.groupBoxTimes.Text = "Times";
+			// 
+			// textBoxAnesthOpen
+			// 
+			this.textBoxAnesthOpen.Location = new System.Drawing.Point(16, 49);
+			this.textBoxAnesthOpen.Name = "textBoxAnesthOpen";
+			this.textBoxAnesthOpen.Size = new System.Drawing.Size(100, 20);
+			this.textBoxAnesthOpen.TabIndex = 97;
+			this.textBoxAnesthOpen.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+			this.textBoxAnesthOpen.TextChanged += new System.EventHandler(this.textBoxAnesthOpen_TextChanged);
+			// 
 			// butSurgClose
 			// 
 			this.butSurgClose.AdjustImageLocation = new System.Drawing.Point(0, 0);
@@ -1525,19 +1421,20 @@ namespace OpenDental {
 			this.butSurgOpen.UseVisualStyleBackColor = true;
 			this.butSurgOpen.Click += new System.EventHandler(this.butSurgOpen_Click);
 			// 
-			// butAnesthScore
+			// groupBoxNotes
 			// 
-			this.butAnesthScore.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butAnesthScore.Autosize = true;
-			this.butAnesthScore.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butAnesthScore.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butAnesthScore.CornerRadius = 4F;
-			this.butAnesthScore.Location = new System.Drawing.Point(18, 508);
-			this.butAnesthScore.Name = "butAnesthScore";
-			this.butAnesthScore.Size = new System.Drawing.Size(131, 32);
-			this.butAnesthScore.TabIndex = 129;
-			this.butAnesthScore.Text = "Post-anesthesia score";
-			this.butAnesthScore.UseVisualStyleBackColor = true;
+			this.groupBoxNotes.Controls.Add(this.butClose);
+			this.groupBoxNotes.Controls.Add(this.richTextBoxNotes);
+			this.groupBoxNotes.Controls.Add(this.butPrint);
+			this.groupBoxNotes.Controls.Add(this.groupBoxSig);
+			this.groupBoxNotes.Controls.Add(this.groupBoxHgtWgt);
+			this.groupBoxNotes.Controls.Add(this.groupBoxNPO);
+			this.groupBoxNotes.Location = new System.Drawing.Point(12, 565);
+			this.groupBoxNotes.Name = "groupBoxNotes";
+			this.groupBoxNotes.Size = new System.Drawing.Size(769, 155);
+			this.groupBoxNotes.TabIndex = 138;
+			this.groupBoxNotes.TabStop = false;
+			this.groupBoxNotes.Text = "Notes (record additional meds/routes/times here)";
 			// 
 			// butClose
 			// 
@@ -1571,6 +1468,18 @@ namespace OpenDental {
 			this.butPrint.Text = "Print";
 			this.butPrint.UseVisualStyleBackColor = true;
 			this.butPrint.Click += new System.EventHandler(this.butPrint_Click);
+			// 
+			// groupBoxSig
+			// 
+			this.groupBoxSig.Controls.Add(this.butSignTopaz);
+			this.groupBoxSig.Controls.Add(this.sigBox);
+			this.groupBoxSig.Controls.Add(this.butClearSig);
+			this.groupBoxSig.Location = new System.Drawing.Point(540, 0);
+			this.groupBoxSig.Name = "groupBoxSig";
+			this.groupBoxSig.Size = new System.Drawing.Size(229, 105);
+			this.groupBoxSig.TabIndex = 139;
+			this.groupBoxSig.TabStop = false;
+			this.groupBoxSig.Text = "Signature/Initials";
 			// 
 			// butSignTopaz
 			// 
@@ -1607,6 +1516,118 @@ namespace OpenDental {
 			this.butClearSig.TabIndex = 134;
 			this.butClearSig.Text = "Clear";
 			this.butClearSig.Click += new System.EventHandler(this.butClearSig_Click);
+			// 
+			// groupBoxHgtWgt
+			// 
+			this.groupBoxHgtWgt.Controls.Add(this.labelEscortRel);
+			this.groupBoxHgtWgt.Controls.Add(this.labelPatWgt);
+			this.groupBoxHgtWgt.Controls.Add(this.labelEscortName);
+			this.groupBoxHgtWgt.Controls.Add(this.textBoxEscortName);
+			this.groupBoxHgtWgt.Controls.Add(this.textBoxEscortRel);
+			this.groupBoxHgtWgt.Controls.Add(this.textBoxPatWgt);
+			this.groupBoxHgtWgt.Controls.Add(this.textBoxPatHgt);
+			this.groupBoxHgtWgt.Controls.Add(this.labelPatHgt);
+			this.groupBoxHgtWgt.Location = new System.Drawing.Point(203, 19);
+			this.groupBoxHgtWgt.Name = "groupBoxHgtWgt";
+			this.groupBoxHgtWgt.Size = new System.Drawing.Size(331, 74);
+			this.groupBoxHgtWgt.TabIndex = 138;
+			this.groupBoxHgtWgt.TabStop = false;
+			this.groupBoxHgtWgt.Enter += new System.EventHandler(this.groupBoxHgtWgt_Enter);
+			// 
+			// groupBoxNPO
+			// 
+			this.groupBoxNPO.Controls.Add(this.comboBoxNPOTime);
+			this.groupBoxNPO.Location = new System.Drawing.Point(327, 99);
+			this.groupBoxNPO.Name = "groupBoxNPO";
+			this.groupBoxNPO.Size = new System.Drawing.Size(442, 50);
+			this.groupBoxNPO.TabIndex = 137;
+			this.groupBoxNPO.TabStop = false;
+			this.groupBoxNPO.Text = "NPO Since";
+			// 
+			// groupBoxVS
+			// 
+			this.groupBoxVS.Controls.Add(this.textBoxVSMSerNum);
+			this.groupBoxVS.Controls.Add(this.dataGridVS);
+			this.groupBoxVS.Controls.Add(this.textBoxVSM);
+			this.groupBoxVS.Controls.Add(this.labelVSM);
+			this.groupBoxVS.Controls.Add(this.labelVSMSerNum);
+			this.groupBoxVS.Location = new System.Drawing.Point(12, 352);
+			this.groupBoxVS.Name = "groupBoxVS";
+			this.groupBoxVS.Size = new System.Drawing.Size(592, 207);
+			this.groupBoxVS.TabIndex = 139;
+			this.groupBoxVS.TabStop = false;
+			this.groupBoxVS.Text = "Vital Signs";
+			// 
+			// textBoxVSMSerNum
+			// 
+			this.textBoxVSMSerNum.Location = new System.Drawing.Point(347, 19);
+			this.textBoxVSMSerNum.Name = "textBoxVSMSerNum";
+			this.textBoxVSMSerNum.Size = new System.Drawing.Size(88, 20);
+			this.textBoxVSMSerNum.TabIndex = 132;
+			// 
+			// dataGridVS
+			// 
+			this.dataGridVS.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+			this.dataGridVS.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.BP,
+            this.HR,
+            this.SpO2,
+            this.Temp,
+            this.EtCO2});
+			this.dataGridVS.Location = new System.Drawing.Point(37, 51);
+			this.dataGridVS.Name = "dataGridVS";
+			this.dataGridVS.Size = new System.Drawing.Size(542, 141);
+			this.dataGridVS.TabIndex = 131;
+			this.dataGridVS.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridVS_CellContentClick);
+			// 
+			// BP
+			// 
+			this.BP.HeaderText = "BP";
+			this.BP.Name = "BP";
+			// 
+			// HR
+			// 
+			this.HR.HeaderText = "Heart Rate";
+			this.HR.Name = "HR";
+			// 
+			// SpO2
+			// 
+			this.SpO2.HeaderText = "SpO2";
+			this.SpO2.Name = "SpO2";
+			// 
+			// Temp
+			// 
+			this.Temp.HeaderText = "Temp";
+			this.Temp.Name = "Temp";
+			// 
+			// EtCO2
+			// 
+			this.EtCO2.HeaderText = "EtCO2";
+			this.EtCO2.Name = "EtCO2";
+			// 
+			// textBoxVSM
+			// 
+			this.textBoxVSM.Location = new System.Drawing.Point(170, 19);
+			this.textBoxVSM.Name = "textBoxVSM";
+			this.textBoxVSM.Size = new System.Drawing.Size(88, 20);
+			this.textBoxVSM.TabIndex = 130;
+			// 
+			// butAnesthMedIntake
+			// 
+			this.butAnesthMedIntake.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butAnesthMedIntake.Autosize = true;
+			this.butAnesthMedIntake.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butAnesthMedIntake.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butAnesthMedIntake.CornerRadius = 4F;
+			this.butAnesthMedIntake.Image = global::OpenDental.Properties.Resources.Add;
+			this.butAnesthMedIntake.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butAnesthMedIntake.Location = new System.Drawing.Point(28, 309);
+			this.butAnesthMedIntake.Name = "butAnesthMedIntake";
+			this.butAnesthMedIntake.Size = new System.Drawing.Size(136, 26);
+			this.butAnesthMedIntake.TabIndex = 107;
+			this.butAnesthMedIntake.Text = "Intake new meds";
+			this.butAnesthMedIntake.UseVisualStyleBackColor = true;
+			this.butAnesthMedIntake.Click += new System.EventHandler(this.butAnesthMedIntake_Click);
 			// 
 			// FormAnestheticRecord
 			// 
@@ -1649,6 +1670,8 @@ namespace OpenDental {
 			Lan.F(this);
 		}
 
+
+
 		private void FormAnestheticRecord_Load(object sender, EventArgs e){
 			//display Patient name
 			textBoxPatient.Text = Patients.GetPat(PatCur.PatNum).GetNameFL();
@@ -1657,7 +1680,40 @@ namespace OpenDental {
 			RefreshListAnesthetics();
 			listAnesthetics.SelectedIndex = AnestheticRecords.List.Length-1;//This works even if no items.
 			
-		}
+			/*
+			//ADDING FUNCTIONALITY 2008-03-18: fills provider and assistant comboboxes
+
+			for (int i = 0; i < Providers.List.Length; i++)
+			{
+				comboBoxSurgeon.Items.Add(Providers.List[i].Abbr);
+				if (Providers.List[i].ProvNum == PatCur.Surgeon)
+					comboBoxSurgeon.SelectedIndex = i;
+			}
+
+			if (comboBoxSurgeon.SelectedIndex == -1)
+			{
+				int defaultindex = Providers.GetIndex(PrefB.GetInt("PriProv"));
+				if (defaultindex == -1)
+				{//default provider hidden
+					comboBoxSurgeon.SelectedIndex = 0;
+				}
+				else
+				{
+					comboBoxSurgeon.SelectedIndex = defaultindex;
+				}
+			}
+			//Change to suit for Anesthetist, Circulator, Assistant
+			//comboSecProv.Items.Clear();
+			//comboSecProv.Items.Add(Lan.g(this, "none"));
+			//comboSecProv.SelectedIndex = 0;
+			//for (int i = 0; i < Providers.List.Length; i++)
+			//{
+				//comboSecProv.Items.Add(Providers.List[i].Abbr);
+				//if (Providers.List[i].ProvNum == PatCur.SecProv)
+					//comboSecProv.SelectedIndex = i + 1;
+			 */
+			
+			}
 
 		private void RefreshListAnesthetics(){
 			//most recent date at the top
@@ -1748,12 +1804,6 @@ namespace OpenDental {
 			
 		}
 		
-
-		private void butAnesthOpen_Click(object sender, EventArgs e)
-		{
-			textBoxAnesthOpen.Text = MiscData.GetNowDateTime().ToString("hh:mm:ss tt"); //tt shows AM/PM, change to "HH:mm:ss" for military time
-		}
-
 		private void Text1_TextChanged(object sender, EventArgs e)
 		{
 
@@ -1779,19 +1829,24 @@ namespace OpenDental {
 			
 		}
 
+		private void butAnesthOpen_Click(object sender, EventArgs e)
+		{
+			textBoxAnesthOpen.Text = MiscData.GetNowDateTime().ToString("hh:mm:ss tt"); //tt shows AM/PM, change to "HH:mm:ss" for military time
+		}
+
 		private void butSurgOpen_Click(object sender, EventArgs e)
 		{
-			textBoxSurgOpen.Text = MiscData.GetNowDateTime().ToString("HH:mm");
+			textBoxSurgOpen.Text = MiscData.GetNowDateTime().ToString("hh:mm:ss tt");
 		}
 
 		private void butSurgClose_Click(object sender, EventArgs e)
 		{
-			textBoxSurgClose.Text = MiscData.GetNowDateTime().ToString("HH:mm");
+			textBoxSurgClose.Text = MiscData.GetNowDateTime().ToString("hh:mm:ss tt");
 		}
 
 		private void butAnesthClose_Click(object sender, EventArgs e)
 		{
-			textBoxAnesthClose.Text = MiscData.GetNowDateTime().ToString("HH:mm");
+			textBoxAnesthClose.Text = MiscData.GetNowDateTime().ToString("hh:mm:ss tt");
 		}
 
 		private void butDelAnesthMeds_Click(object sender, EventArgs e)
@@ -1966,12 +2021,23 @@ namespace OpenDental {
 
 		private void FormAnestheticRecord_Closing(object sender, System.ComponentModel.CancelEventArgs e)
 		{
-
+			if (listAnesthetics.SelectedIndex != -1){
+				//SaveCurAnesthetic(AnestheticRecordCur.AnestheticRecordNum);
+			}
 		}
 
 		private void textBoxAnesthOpen_TextChanged(object sender, EventArgs e)
 		{
 
+		}
+
+		private void butAnesthMedIntake_Click(object sender, EventArgs e)
+		{
+			FormAnestheticMedsIntake FormM = new FormAnestheticMedsIntake();
+			//FormM.AnestheticMedsCur = new AnestheticMeds();
+			//FormM.IsNew = true;
+			FormM.ShowDialog();
+			//FillGrid();
 		}
 		
 		}
