@@ -179,6 +179,7 @@
 			this.butCancel.TabIndex = 54;
 			this.butCancel.Text = "Cancel";
 			this.butCancel.UseVisualStyleBackColor = true;
+			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
 			// 
 			// FormAnestheticMedsIntake
 			// 
