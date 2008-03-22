@@ -464,12 +464,12 @@ namespace OpenDentBusiness {
 			command="SELECT procedurelog.BaseUnits,Descript,SUM(cp1.InsPayAmt) _insPayAmt,"
 				+"LaymanTerm,procedurelog.MedicalCode,MAX(cp1.NoBillIns) _noBillIns,procedurelog.PatNum,ProcCode,"
 				+"procedurelog.ProcDate,ProcFee,procedurelog.ProcNum,procedurelog.ProvNum,ToothNum,UnitQty,"
-				+"SUM(cp1.WriteOff) _writeOff, SUM(cp2.WriteOff) _writeOffCap "
+				+"SUM(cp1.WriteOff) _writeOff, "
+				+"(SELECT SUM(WriteOff) FROM claimproc cp2 WHERE procedurelog.ProcNum=cp2.ProcNum "
+				+"AND (cp2.Status=7 OR cp2.Status=5)) _writeOffCap "
 				+"FROM procedurelog "
 				+"LEFT JOIN procedurecode ON procedurelog.CodeNum=procedurecode.CodeNum "
 				+"LEFT JOIN claimproc cp1 ON procedurelog.ProcNum=cp1.ProcNum "
-				+"LEFT JOIN insplan ON cp1.PlanNum=insplan.PlanNum "//to determine capitation
-				+"LEFT JOIN claimproc cp2 ON procedurelog.ProcNum=cp2.ProcNum AND insplan.PlanType='c' "
 				+"WHERE ProcStatus=2 "//complete
 				+"AND (";
 			for(int i=0;i<fam.List.Length;i++){
