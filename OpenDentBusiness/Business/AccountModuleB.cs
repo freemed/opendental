@@ -408,7 +408,7 @@ namespace OpenDentBusiness {
 			command="SELECT ClaimNum,ClaimPaymentNum,DateCP,SUM(InsPayAmt) _InsPayAmt,PatNum,ProcDate,"
 				+"ProvNum,SUM(WriteOff) _WriteOff "
 				+"FROM claimproc "
-				+"WHERE (Status=1 OR Status=4 OR Status=5) "//received,supplemental, or capclaim
+				+"WHERE (Status=1 OR Status=4) "//received or supplemental, (5, capclaim handled on procedure row)
 				+"AND (";
 			for(int i=0;i<fam.List.Length;i++){
 				if(i!=0){
@@ -430,8 +430,6 @@ namespace OpenDentBusiness {
 				row["ClaimNum"]=rawClaimPay.Rows[i]["ClaimNum"].ToString();
 				row["ClaimPaymentNum"]="1";//this is now just a boolean flag indicating that it is a payment.
 				//this is because it will frequently not be attached to an actual claim payment.
-//todo(maybe): change this color. 3 means payment. 4 means claim.  get a new color for inspayments.
-				//changed color to 7 - drtech
 				row["colorText"]=DefB.Long[(int)DefCat.AccountColors][7].ItemColor.ToArgb().ToString();
 				amt=PIn.PDouble(rawClaimPay.Rows[i]["_InsPayAmt"].ToString());
 				writeoff=PIn.PDouble(rawClaimPay.Rows[i]["_WriteOff"].ToString());
