@@ -594,9 +594,9 @@ namespace OpenDental{
 					//MsgBox.Show(this,"This patient does not have any recall due.");
 					continue;
 				}
-				//if(recallList[0].){
-				
-				//}
+				if(recallList[0].IsDisabled){
+					continue;
+				}
 				planList=InsPlans.Refresh(FamCur);
 				apt=Appointments.CreateRecallApt(FamCur.List[i],procList,recallList[0],planList);
 				AptNumsSelected.Add(apt.AptNum);
