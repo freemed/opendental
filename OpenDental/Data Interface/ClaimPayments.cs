@@ -53,8 +53,10 @@ namespace OpenDental{
 				+"ClinicNum,DepositNum,CarrierName "
 				+"FROM claimpayment "
 				+"WHERE DepositNum = 0 "
-				+"AND CheckDate >= "+POut.PDate(dateStart)+" "
-				+"AND ClinicNum="+POut.PInt(clinicNum);
+				+"AND CheckDate >= "+POut.PDate(dateStart);
+			if(clinicNum!=0){
+				command+=" AND ClinicNum="+POut.PInt(clinicNum);
+			}
 			return RefreshAndFill(command);
 		}
 
