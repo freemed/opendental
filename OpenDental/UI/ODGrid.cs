@@ -691,6 +691,9 @@ namespace OpenDental.UI{
 			//ScrollValue=0;
 			selectedIndices=new ArrayList();
 			selectedCell=new Point(-1,-1);
+			if(editBox!=null) {
+				editBox.Dispose();
+			}
 			IsUpdating=false;
 			Invalidate();
 		}
@@ -1389,7 +1392,6 @@ namespace OpenDental.UI{
 			if(e.KeyCode==Keys.ShiftKey){
 				ShiftIsDown=true;
 			}
-
 		}
 
 		///<summary></summary>
@@ -1411,18 +1413,19 @@ namespace OpenDental.UI{
 				ShiftIsDown=true;
 			}
 			if(selectionMode==GridSelectionMode.One){
-				if (e.KeyCode==Keys.Down){
-						int PrevRow=(int)selectedIndices[0];
+				if(e.KeyCode==Keys.Down){
+					if(selectedIndices.Count>0 && (int)selectedIndices[0] < rows.Count-1){
+						int prevRow=(int)selectedIndices[0];
 						selectedIndices.Clear();
-						selectedIndices.Add(PrevRow +1);
+						selectedIndices.Add(prevRow+1);
 						hScroll.Value=hScroll.Minimum;
-
+					}
 				}
-				else if (e.KeyCode==Keys.Up){
-						int PrevRow=(int)selectedIndices[0];
-					if (PrevRow>0){
+				else if(e.KeyCode==Keys.Up){
+					if(selectedIndices.Count>0 && (int)selectedIndices[0] > 0){
+						int prevRow=(int)selectedIndices[0];
 						selectedIndices.Clear();
-						selectedIndices.Add(PrevRow -1);
+						selectedIndices.Add(prevRow-1);
 					}
 				}
 			}

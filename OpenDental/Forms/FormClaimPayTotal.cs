@@ -493,9 +493,9 @@ namespace OpenDental
 				return;
 			}
 			//then move dedAmt to the selected proc
-			ClaimProcsToEdit[gridMain.SelectedIndices[0]].DedApplied=dedAmt;
-			ClaimProcsToEdit[gridMain.SelectedIndices[0]].InsPayEst-=dedAmt;
-			ClaimProcsToEdit[gridMain.SelectedIndices[0]].InsPayAmt-=dedAmt;
+			ClaimProcsToEdit[gridMain.SelectedCell.Y].DedApplied=dedAmt;
+			ClaimProcsToEdit[gridMain.SelectedCell.Y].InsPayEst-=dedAmt;
+			ClaimProcsToEdit[gridMain.SelectedCell.Y].InsPayAmt-=dedAmt;
 			FillGrid();
 		}
 
