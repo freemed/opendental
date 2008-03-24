@@ -1,5 +1,6 @@
 using System;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Printing;
 using System.Collections;
@@ -11,6 +12,10 @@ using CodeBase;
 using OpenDental.UI;
 using OpenDentBusiness;
 using OpenDental.Imaging;
+using PdfSharp;
+using PdfSharp.Pdf;
+using PdfSharp.Pdf.IO;
+using PdfSharp.Pdf.Printing;
 
 namespace OpenDental{
 ///<summary></summary>
@@ -699,11 +704,17 @@ namespace OpenDental{
 				ImageStore.UpdatePatient = new FileStore.UpdatePatientDelegate(Patients.Update);
 			}
 			OpenDental.Imaging.IImageStore imageStore;
-			//Later, we could concat all the pdf's together and create one print job.
+			//Concat all the pdf's together to create one print job.
+			//Also, if a statement is to be emailed, it does that here and does not attach it to the print job.
+			//If something fails badly, it's no big deal, because we can click the radio button to see "sent" bills, and unsend them from there.
+      PdfDocument outputDocument=new PdfDocument();
+			PdfDocument inputDocument;
+			PdfPage page;
+			string savedPdfPath;
 			PrintDocument pd=null;
 			for(int i=0;i<gridBill.SelectedIndices.Length;i++){
 				stmt=Statements.CreateObject(PIn.PInt(table.Rows[gridBill.SelectedIndices[i]]["StatementNum"].ToString()));
-				pat=null;
+				pat=Patients.GetPat(PIn.PInt(table.Rows[gridBill.SelectedIndices[i]]["PatNum"].ToString()));
 				if(stmt.Mode_==StatementMode.Email){
 					if(PrefB.GetString("EmailSMTPserver")==""){
 						MsgBox.Show(this,"You need to enter an SMTP server name in e-mail setup before you can send e-mail.");
@@ -712,12 +723,23 @@ namespace OpenDental{
 						//FillGrid();//automatic
 						return;
 					}
-					pat=Patients.GetPat(PIn.PInt(table.Rows[gridBill.SelectedIndices[i]]["PatNum"].ToString()));
 					if(pat.Email==""){
 						skipped++;
 						continue;
 					}
 				}
+				stmt.IsSent=true;
+				stmt.DateSent=DateTime.Today;
+				Statements.WriteObject(stmt);
+				FormST.CreateStatementPdf(stmt);
+				if(stmt.DocNum==0){
+					MsgBox.Show(this,"Failed to save PDF.  In Setup, DataPaths, please make sure the top radio button is checked.");
+					Cursor=Cursors.Default;
+					isPrinting=false;
+					return;
+				}
+				imageStore = OpenDental.Imaging.ImageStore.GetImageStore(pat);
+				savedPdfPath=imageStore.GetFilePath(Documents.GetByNum(stmt.DocNum));
 				if(stmt.Mode_==StatementMode.InPerson || stmt.Mode_==StatementMode.Mail){
 					if(pd==null){
 						pd=new PrintDocument();
@@ -728,18 +750,18 @@ namespace OpenDental{
 							return;
 						}
 					}
+					inputDocument=PdfReader.Open(savedPdfPath,PdfDocumentOpenMode.Import);
+					for(int idx=0;idx<inputDocument.PageCount;idx++){
+						page=inputDocument.Pages[idx];
+						outputDocument.AddPage(page);
+					}
 				}
-				stmt.IsSent=true;
-				stmt.DateSent=DateTime.Today;
-				Statements.WriteObject(stmt);
-				FormST.CreateStatementPdf(stmt);
 				if(stmt.Mode_==StatementMode.Email){
 					attachPath=FormEmailMessageEdit.GetAttachPath();
 					rnd=new Random();
 					fileName=DateTime.Now.ToString("yyyyMMdd")+"_"+DateTime.Now.TimeOfDay.Ticks.ToString()+rnd.Next(1000).ToString()+".pdf";
 					filePathAndName=ODFileUtils.CombinePaths(attachPath,fileName);
-					imageStore = OpenDental.Imaging.ImageStore.GetImageStore(pat);
-					File.Copy(imageStore.GetFilePath(Documents.GetByNum(stmt.DocNum)),filePathAndName);
+					File.Copy(savedPdfPath,filePathAndName);
 					//Process.Start(filePathAndName);
 					message=new EmailMessage();
 					message.PatNum=pat.PatNum;
@@ -769,20 +791,49 @@ namespace OpenDental{
 					}
 				}
 				else{
-					#if DEBUG
+				//	#if DEBUG
 						//if(ImageStore.UpdatePatient == null){
 						//	ImageStore.UpdatePatient = new FileStore.UpdatePatientDelegate(Patients.Update);
 						//}
 						//OpenDental.Imaging.IImageStore imageStore = OpenDental.Imaging.ImageStore.GetImageStore(PatCur);
 						//don't bother to check valid path because it's just debug.
 						//Process.Start(imageStore.GetFilePath(Documents.GetByNum(stmt.DocNum)));
-					#else
-						FormST.PrintStatement(stmt,false,pd);	
-					#endif
+				//	#else
+				//		FormST.PrintStatement(stmt,false,pd);	
+				//	#endif
 					printed++;
 					labelPrinted.Text=Lan.g(this,"Printed=")+printed.ToString();
 					Application.DoEvents();
 				}
+			}
+			//now print-------------------------------------------------------------------------------------
+			if(pd!=null){
+				string tempFileOutputDocument=Path.GetTempFileName()+".pdf";
+				outputDocument.Save(tempFileOutputDocument);
+				/*string adobeInstallPath="C:\\Program Files\\Adobe\\Acrobat 7.0\\Reader\\AcroRd32.exe";
+				if(!File.Exists(adobeInstallPath) && Environment.OSVersion.Platform!=PlatformID.Unix){
+					//Can't find Acrobat in typical location, so look in the registry
+					string regKeyName="HKEY_LOCAL_MACHINE\\SOFTWARE\\Adobe\\Acrobat Reader\\7.0\\InstallPath";
+					adobeInstallPath=(string)Microsoft.Win32.Registry.GetValue(regKeyName,"","");
+				}
+				if(File.Exists(adobeInstallPath)){
+					PdfFilePrinter.AdobeReaderPath=adobeInstallPath;
+					PdfFilePrinter printer=new PdfFilePrinter(tempFileOutputDocument,pd.PrinterSettings.PrinterName);
+					try{
+						printer.Print();
+					}
+					catch (Exception ex){
+						MessageBox.Show("Error: "+ex.Message);//shouldn't happen
+					}
+				}
+				else{*/
+				try{
+					Process.Start(tempFileOutputDocument);
+				}
+				catch(Exception ex){
+					MessageBox.Show(Lan.g(this,"Error: Please make sure Adobe Reader is installed.")+ex.Message);
+				}
+				//}
 			}
 			string msg="";
 			if(skipped>0){

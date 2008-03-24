@@ -65,6 +65,7 @@ namespace OpenDental{
 		private SigElementDef[] sigElementDefMessages;
 		private OpenDental.UI.Button butSupply;
 		private Employee EmployeeCur;
+		private FormBilling FormB;
 
 		///<summary></summary>
 		public ContrStaff(){
@@ -704,16 +705,23 @@ namespace OpenDental{
 			//}
 			bool unsentStatementsExist=Statements.UnsentStatementsExist();
 			if(unsentStatementsExist){
-				FormBilling FormB=new FormBilling();
-				FormB.GoToChanged += new PatientSelectedEventHandler(formBilling_GoToChanged);
+				bool isFirstShow=false;
+				if(FormB==null || FormB.IsDisposed){
+					isFirstShow=true;
+					FormB=new FormBilling();
+					FormB.GoToChanged += new PatientSelectedEventHandler(formBilling_GoToChanged);
+				}
 				FormB.Show();
-				MsgBox.Show(this,"These unsent bills must either be sent or deleted before a new list can be created.");
+				FormB.BringToFront();
+				if(isFirstShow){
+					MsgBox.Show(this,"These unsent bills must either be sent or deleted before a new list can be created.");
+				}
 			}
 			else{
 				FormBillingOptions FormBO=new FormBillingOptions();
 				FormBO.ShowDialog();
 				if(FormBO.DialogResult==DialogResult.OK){
-					FormBilling FormB=new FormBilling();
+					FormB=new FormBilling();
 					FormB.GoToChanged += new PatientSelectedEventHandler(formBilling_GoToChanged);
 					FormB.Show();
 				}
