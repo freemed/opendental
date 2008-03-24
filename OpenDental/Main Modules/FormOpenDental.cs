@@ -3379,8 +3379,8 @@ namespace OpenDental{
 
 		private void menuItemTerminal_Click(object sender,EventArgs e) {
 			FormTerminal FormT=new FormTerminal();
-			FormT.Show();
-			//Application.Exit();//always close after coming out of terminal mode as a safety precaution.
+			FormT.ShowDialog(); 
+			Application.Exit();//always close after coming out of terminal mode as a safety precaution.
 		}
 
 		private void menuItemTerminalManager_Click(object sender,EventArgs e) {
