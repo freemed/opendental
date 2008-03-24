@@ -8,6 +8,7 @@ using System.Collections;
 using System.ComponentModel;
 using System.Globalization;
 using System.IO;
+using System.Reflection;
 using System.Text;
 using System.Windows.Forms;
 using OpenDentBusiness;
@@ -480,7 +481,12 @@ namespace OpenDental{
 				ref oMissing,ref oMissing,ref oMissing,ref oMissing,ref oMissing,ref oMissing,
 				ref oMissing,ref oMissing,ref oMissing,ref oMissing,ref oMissing,ref oMissing);
 			wrdMailMerge.Destination = Word.WdMailMergeDestination.wdSendToPrinter;
-			WrdApp.ActivePrinter=pd.PrinterSettings.PrinterName;
+			//WrdApp.ActivePrinter=pd.PrinterSettings.PrinterName;
+			//replaced with following 4 lines due to MS bug that changes computer default printer
+			object oWBasic = WrdApp.WordBasic;
+			object[] oWBValues = new object[] { pd.PrinterSettings.PrinterName, 1 };
+			String[] sWBNames = new String[] { "Printer", "DoNotSetAsSysDefault" };
+			oWBasic.GetType().InvokeMember("FilePrintSetup", BindingFlags.InvokeMethod, null, oWBasic, oWBValues, null, null, sWBNames);
 			wrdMailMerge.Execute(ref oFalse);
 			//Close the original form document since just one record.
 			wrdDoc.Saved=true;
