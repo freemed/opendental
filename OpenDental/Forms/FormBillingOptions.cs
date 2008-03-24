@@ -781,26 +781,79 @@ namespace OpenDental{
 				billingNums.Add(DefB.Short[(int)DefCat.BillingTypes][listBillType.SelectedIndices[i]-1].DefNum);
 			}
 			Cursor=Cursors.WaitCursor;
-			FormBilling FormB=new FormBilling();
-			FormB.AgingList=Patients.GetAgingList(getAge,lastStatement,billingNums,checkBadAddress.Checked
+			List<PatAging> agingList=Patients.GetAgingList(getAge,lastStatement,billingNums,checkBadAddress.Checked
 				,checkExcludeNegative.Checked,PIn.PDouble(textExcludeLessThan.Text)
 				,checkExcludeInactive.Checked,checkIncludeChanged.Checked,checkExcludeInsPending.Checked);
-			FormB.Note=textNote.Text;
-			FormB.DateRangeFrom=DateTime.MinValue;
-			FormB.DateRangeTo=DateTime.Today;//Needed for payplan accuracy.//new DateTime(2200,1,1);
+			DateTime dateRangeFrom=DateTime.MinValue;
+			DateTime dateRangeTo=DateTime.Today;//Needed for payplan accuracy.//new DateTime(2200,1,1);
 			if(textDateStart.Text!=""){
-				FormB.DateRangeFrom=PIn.PDate(textDateStart.Text);
+				dateRangeFrom=PIn.PDate(textDateStart.Text);
 			}
 			if(textDateEnd.Text!=""){
-				FormB.DateRangeTo=PIn.PDate(textDateEnd.Text);
+				dateRangeTo=PIn.PDate(textDateEnd.Text);
 			}
-			FormB.Intermingled=checkIntermingled.Checked;
-			FormB.ShowDialog();
-			Cursor=Cursors.Default;
-			if(FormB.DialogResult==DialogResult.OK){
-				DialogResult=DialogResult.OK;			
+			if(agingList.Count==0){
+				Cursor=Cursors.Default;
+				MsgBox.Show(this,"List of created bills is empty.");
+				return;
 			}
-			//otherwise, return to this window.
+			//if(agingList!=null){
+			Statement stmt;
+			int ageAccount=0;
+			YN insIsPending=YN.Unknown;
+			Dunning dunning;
+			Dunning[] dunList=Dunnings.Refresh();
+			for(int i=0;i<agingList.Count;i++){
+				stmt=new Statement();
+				stmt.DateRangeFrom=dateRangeFrom;
+				stmt.DateRangeTo=dateRangeTo;
+				stmt.DateSent=DateTime.Today;
+				stmt.DocNum=0;
+				stmt.HidePayment=false;
+				stmt.Intermingled=checkIntermingled.Checked;
+				stmt.IsSent=false;
+				stmt.Mode_=StatementMode.Mail;
+				if(DefB.GetDef(DefCat.BillingTypes,agingList[i].BillingType).ItemValue=="E"){
+					stmt.Mode_=StatementMode.Email;
+				}
+				stmt.Note=textNote.Text;
+				stmt.NoteBold="";
+				//appointment reminders are not handled here since it would be too slow.
+				//set dunning messages here
+				if(agingList[i].BalOver90>0){
+					ageAccount=90;
+				}
+				else if(agingList[i].Bal_61_90>0){
+					ageAccount=60;
+				}
+				else if(agingList[i].Bal_31_60>0){
+					ageAccount=30;
+				}
+				else{
+					ageAccount=0;
+				}
+				if(agingList[i].InsEst>0){
+					insIsPending=YN.Yes;
+				}
+				else{
+					insIsPending=YN.No;
+				}
+				dunning=Dunnings.GetDunning(dunList,agingList[i].BillingType,ageAccount,insIsPending);
+				if(dunning!=null){
+					if(stmt.Note!=""){
+						stmt.Note+="\r\n\r\n";//leave one empty line
+					}
+					stmt.Note+=dunning.DunMessage;
+					//if(stmt.Note!=""){//there will never be anything in NoteBold already
+					//	stmt.Note+="\r\n\r\n";//leave one empty line
+					//}
+					stmt.NoteBold+=dunning.MessageBold;
+				}
+				stmt.PatNum=agingList[i].PatNum;
+				stmt.SinglePatient=false;
+				Statements.WriteObject(stmt);
+			}
+			DialogResult=DialogResult.OK;
 		}
 
 		private void butCancel_Click(object sender, System.EventArgs e) {

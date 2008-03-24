@@ -46,6 +46,11 @@ namespace OpenDental{
 		private int pagesPrinted;
 		///<summary>Used in the Activated event.</summary>
 		private bool isPrinting=false;
+		private DataTable table;
+		///<summary></summary>
+		[Category("Property Changed"),Description("Event raised when user wants to go to a patient or related object.")]
+		public event PatientSelectedEventHandler GoToChanged=null;
+		private bool isInitial=true;
 
 		protected void OnGoToChanged(int patNum) {
 			if(GoToChanged!=null) {
@@ -60,21 +65,6 @@ namespace OpenDental{
 			//this.listMain.ContextMenu = this.menuEdit;
 			Lan.F(this);
 		}
-
-		#region user fields
-		private DataTable table;
-		//Must set all these externally before opening this form
-		///<summary></summary>
-		public List<PatAging> AgingList;
-		public string Note;
-		public DateTime DateRangeFrom;
-		public DateTime DateRangeTo;
-		public bool Intermingled;
-		///<summary></summary>
-		[Category("Property Changed"),Description("Event raised when user wants to go to a patient or related object.")]
-		public event PatientSelectedEventHandler GoToChanged=null;
-		private bool isInitial=true;
-		#endregion
 
 		///<summary></summary>
 		protected override void Dispose(bool disposing){
@@ -446,70 +436,6 @@ namespace OpenDental{
 		#endregion
 
 		private void FormBilling_Load(object sender, System.EventArgs e) {
-			//contrAccount1.checkShowAll.Checked=false;
-			//textDate.Text=Ledgers.GetClosestFirst(DateTime.Today).ToShortDateString();
-			//Patients.GetAgingList();
-			Statement stmt;
-			int ageAccount=0;
-			YN insIsPending=YN.Unknown;
-			Dunning dunning;
-			//string allAppts;
-			if(AgingList!=null){
-				Dunning[] dunList=Dunnings.Refresh();
-				for(int i=0;i<AgingList.Count;i++){
-					stmt=new Statement();
-					stmt.DateRangeFrom=DateRangeFrom;
-					stmt.DateRangeTo=DateRangeTo;
-					stmt.DateSent=DateTime.Today;
-					stmt.DocNum=0;
-					stmt.HidePayment=false;
-					stmt.Intermingled=Intermingled;
-					stmt.IsSent=false;
-					stmt.Mode_=StatementMode.Mail;
-					if(DefB.GetDef(DefCat.BillingTypes,AgingList[i].BillingType).ItemValue=="E"){
-						stmt.Mode_=StatementMode.Email;
-					}
-					stmt.Note=Note;
-					stmt.NoteBold="";
-					//appointment reminders are not handled here since it would be too slow.
-					//set dunning messages here
-					if(AgingList[i].BalOver90>0){
-						ageAccount=90;
-					}
-					else if(AgingList[i].Bal_61_90>0){
-						ageAccount=60;
-					}
-					else if(AgingList[i].Bal_31_60>0){
-						ageAccount=30;
-					}
-					else{
-						ageAccount=0;
-					}
-					if(AgingList[i].InsEst>0){
-						insIsPending=YN.Yes;
-					}
-					else{
-						insIsPending=YN.No;
-					}
-					dunning=Dunnings.GetDunning(dunList,AgingList[i].BillingType,ageAccount,insIsPending);
-					if(dunning!=null){
-						if(stmt.Note!=""){
-							stmt.Note+="\r\n\r\n";//leave one empty line
-						}
-						stmt.Note+=dunning.DunMessage;
-						//if(stmt.Note!=""){//there will never be anything in NoteBold already
-						//	stmt.Note+="\r\n\r\n";//leave one empty line
-						//}
-						stmt.NoteBold+=dunning.MessageBold;
-					}
-					stmt.PatNum=AgingList[i].PatNum;
-					stmt.SinglePatient=false;
-					Statements.WriteObject(stmt);
-				}
-			}
-			//FillGrid();
-			//gridBill.SetSelected(true);
-			//labelSelected.Text=Lan.g(this,"Selected=")+gridBill.SelectedIndices.Length.ToString();
 			labelPrinted.Text=Lan.g(this,"Printed=")+"0";
 			labelEmailed.Text=Lan.g(this,"E-mailed=")+"0";
 			comboOrder.Items.Add(Lan.g(this,"BillingType"));

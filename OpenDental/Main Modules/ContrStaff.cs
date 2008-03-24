@@ -707,10 +707,16 @@ namespace OpenDental{
 				FormBilling FormB=new FormBilling();
 				FormB.GoToChanged += new PatientSelectedEventHandler(formBilling_GoToChanged);
 				FormB.Show();
+				MsgBox.Show(this,"These unsent bills must either be sent or deleted before a new list can be created.");
 			}
 			else{
 				FormBillingOptions FormBO=new FormBillingOptions();
 				FormBO.ShowDialog();
+				if(FormBO.DialogResult==DialogResult.OK){
+					FormBilling FormB=new FormBilling();
+					FormB.GoToChanged += new PatientSelectedEventHandler(formBilling_GoToChanged);
+					FormB.Show();
+				}
 			}
 			//RefreshCurrentModule();
 			SecurityLogs.MakeLogEntry(Permissions.Setup,0,"Billing");
