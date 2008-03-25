@@ -965,7 +965,8 @@ namespace OpenDental{
 				if(claimProcs[i].ProcNum!=proc.ProcNum) {
 					continue;
 				}
-				claimProcs[i].DateCP=proc.ProcDate;//dates MUST match, but I can't remember why. Claims?
+				//This was a longstanding bug. I hope there are not other consequences for commenting it out.
+				//claimProcs[i].DateCP=proc.ProcDate;
 				claimProcs[i].ProcDate=proc.ProcDate;
 				//capitation estimates are always forced to follow the status of the procedure
 				PlanCur=InsPlans.GetPlan(claimProcs[i].PlanNum,PlanList);
