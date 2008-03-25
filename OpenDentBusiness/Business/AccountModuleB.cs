@@ -416,7 +416,7 @@ namespace OpenDentBusiness {
 				}
 				command+="PatNum ="+POut.PInt(fam.List[i].PatNum)+" ";
 			}
-			command+=") GROUP BY ClaimNum ORDER BY DateCP";
+			command+=") GROUP BY ClaimNum,DateCP ORDER BY DateCP";
 			DataTable rawClaimPay=dcon.GetTable(command);
 			DateTime procdate;
 			double writeoff;
