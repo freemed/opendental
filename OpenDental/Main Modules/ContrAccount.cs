@@ -2000,6 +2000,7 @@ namespace OpenDental {
 				gridRepeat.Rows.Add(row);
 			}
 			gridRepeat.EndUpdate();
+			gridComm.ScrollToEnd();
 		}
 
 		private void FillPaymentPlans(){
