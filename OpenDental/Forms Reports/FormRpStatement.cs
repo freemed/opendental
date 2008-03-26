@@ -811,11 +811,16 @@ namespace OpenDental{
 			#endregion
 			//Floating Balance, Ins info-------------------------------------------------------------------
 			#region FloatingBalance
-			
-			frame = MigraDocHelper.CreateContainer(section,455,380,250,200);					
+			#region coding in progress
+//js If you're going to do this, it should use PatPlan, not InsPlan.  That's the only way to test current coverage.
+//But then you'll also have to check for any pending claims under previous coverage or check for an amount pending number.
+//In any case, the calculations should not be done here.  It should be a method in the business layer.
+//Perhaps: InsPlans.StatementHasInsurance
+//The concept is good, but unless the calculations are 100% accurate, this will cause nothing but patient complaints.
+//I also question the purpose of the pref StatementSummaryShowInsInfo.  Why does this exist?  It just makes this section too complex.
+			//frame=MigraDocHelper.CreateContainer(section,455,380,250,200);
 			//draw backgrounds first so the text always makes it on top (seems to mess it up if I do it in the same context as the text)
 			//so unless someone can figure out how to combine them, we will just have to run two separate if structures
-			
 			//Working on figuring out if all patients in account have ins or not
 			/*
 			string command="SELECT COUNT(*)"+
@@ -832,18 +837,14 @@ namespace OpenDental{
 				}
 				else{//no ins on any family member
 				}
-
-
-			
 			SELECT COUNT(*)
 			FROM patplan,patient
 			WHERE patplan.PatNum=patient.PatNum
 			AND patient.Guarantor=123
 			 */
-			
 			//PatPlan[] PatPlanList = PatPlans.Refresh(PatGuar)
-			InsPlan[] PlanList = InsPlans.Refresh(fam);
-				int InsOnAccountSituation=0;//will have three states 0 no, 1 yes, 2 some family members
+			//InsPlan[] PlanList = InsPlans.Refresh(fam);
+			/*int InsOnAccountSituation=1;//will have three states 0 no, 1 yes, 2 some family members
 			if(PlanList.Length >0){//someone has ins in the family, but not known yet if it is effective
 				for (int i = 0; i < PlanList.Length; i++){
 					if (PlanList[i].DateTerm.Year > 1880){
@@ -878,7 +879,6 @@ namespace OpenDental{
 			}
 			else { //inactive plan
 			}
-
 			if(PrefB.GetBool("StatementSummaryShowInsInfo")){
 				if(InsOnAccountSituation==1){
 					if (PrefB.GetBool("BalancesDontSubtractIns")){
@@ -895,7 +895,6 @@ namespace OpenDental{
 			else{
 				MigraDocHelper.FillRectangle(frame,System.Drawing.Color.LightGray,57,17,280,18);
 			}
-			
 			//These are the lables for the floating blance info (left frame of the two)
 			frame = MigraDocHelper.CreateContainer(section,455,380,250,200);		
 			par = frame.AddParagraph();
@@ -946,10 +945,8 @@ namespace OpenDental{
 					frame = MigraDocHelper.CreateContainer(section,560,412,350,200);
 					par = frame.AddParagraph();
 					text = Lan.g(this,"Please contact us if this is incorrect.");
-					par.AddFormattedText(text,font);
-					
+					par.AddFormattedText(text,font);			
 					font = MigraDocHelper.CreateFont(11,true,System.Drawing.Color.Black);
-					
 				}
 			}
 			else{//Just show balance, aligned to the middle
@@ -958,11 +955,8 @@ namespace OpenDental{
 				par.AddLineBreak();
 				par.AddFormattedText(text,font);
 				par.AddLineBreak();
-
 			}
-			
 			//if payplan exists, may want to add something in here
-			
 			//this is for the amts on the floating balance (right frame of the two)
 			frame = MigraDocHelper.CreateContainer(section, 708, 380, 100, 200);
 			par = frame.AddParagraph();
@@ -998,6 +992,41 @@ namespace OpenDental{
 				par.AddLineBreak();
 			}
 			MigraDocHelper.InsertSpacer(section, 80);//spacer to put main grid in the right location
+			*/
+			#endregion coding in progress
+			frame=MigraDocHelper.CreateContainer(section,460,380,250,200);
+			//table=MigraDocHelper.DrawTable(frame,0,0,90);
+			par = frame.AddParagraph();
+			parformat = new ParagraphFormat();
+			parformat.Alignment = ParagraphAlignment.Right;
+			par.Format = parformat;
+			font = MigraDocHelper.CreateFont(10, true);
+			text = Lan.g(this, "Current account balance:");
+			par.AddFormattedText(text, font);
+			par.AddLineBreak();
+			text = Lan.g(this, "Insurance Pending:");
+			par.AddFormattedText(text, font);
+			par.AddLineBreak();
+			text = Lan.g(this, "Amount due now:");
+			par.AddFormattedText(text, font);
+			par.AddLineBreak();
+			frame = MigraDocHelper.CreateContainer(section, 730, 380, 100, 200);
+			//table=MigraDocHelper.DrawTable(frame,0,0,90);
+			par = frame.AddParagraph();
+			parformat = new ParagraphFormat();
+			parformat.Alignment = ParagraphAlignment.Left;
+			par.Format = parformat;
+			font = MigraDocHelper.CreateFont(10, true);
+			text = PatGuar.BalTotal.ToString("c");
+			par.AddFormattedText(text, font);
+			par.AddLineBreak();
+			text = PatGuar.InsEst.ToString("c");
+			par.AddFormattedText(text, font);
+			par.AddLineBreak();
+			text = (PatGuar.BalTotal - PatGuar.InsEst).ToString("c");
+			par.AddFormattedText(text, font);
+			par.AddLineBreak();
+			MigraDocHelper.InsertSpacer(section, 80);
 			//TextFrame frame;
 			#endregion FloatingBalance
 			//Bold note-------------------------------------------------------------------------------
