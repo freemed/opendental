@@ -309,7 +309,7 @@ namespace OpenDentBusiness {
 				row["RxNum"]=0;
 				rows.Add(row);
 			}
-			//TaskList------------------------------------------------------------------------------------------------------------------
+			//Task List------------------------------------------------------------------------------------------------------------------
 			command="SELECT task.*,tasklist.Descript ListDisc,p1.FName "
 				+"FROM patient p1,patient p2, task,tasklist "
 				+"WHERE task.KeyNum=p1.PatNum "
