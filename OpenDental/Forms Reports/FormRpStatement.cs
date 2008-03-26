@@ -1000,34 +1000,58 @@ namespace OpenDental{
 			parformat = new ParagraphFormat();
 			parformat.Alignment = ParagraphAlignment.Right;
 			par.Format = parformat;
-			font = MigraDocHelper.CreateFont(10, true);
-			text = Lan.g(this, "Current account balance:");
-			par.AddFormattedText(text, font);
-			par.AddLineBreak();
-			text = Lan.g(this, "Insurance Pending:");
-			par.AddFormattedText(text, font);
-			par.AddLineBreak();
-			text = Lan.g(this, "Amount due now:");
-			par.AddFormattedText(text, font);
-			par.AddLineBreak();
+			font = MigraDocHelper.CreateFont(10,false);
+			MigraDoc.DocumentObjectModel.Font fontBold=MigraDocHelper.CreateFont(10, true);
+			if(PrefB.GetBool("BalancesDontSubtractIns")){
+				text = Lan.g(this, "Balance:");
+				par.AddFormattedText(text, fontBold);
+				par.AddLineBreak();
+				text = Lan.g(this, "Ins Pending:");
+				par.AddFormattedText(text, font);
+				par.AddLineBreak();
+				text = Lan.g(this, "After Ins:");
+				par.AddFormattedText(text, font);
+				par.AddLineBreak();
+			}
+			else{//this is more common
+				text = Lan.g(this, "Total:");
+				par.AddFormattedText(text, font);
+				par.AddLineBreak();
+				text = Lan.g(this, "-Ins Estimate:");
+				par.AddFormattedText(text, font);
+				par.AddLineBreak();
+				text = Lan.g(this, "=Balance:");
+				par.AddFormattedText(text, fontBold);
+				par.AddLineBreak();
+			}
 			frame = MigraDocHelper.CreateContainer(section, 730, 380, 100, 200);
 			//table=MigraDocHelper.DrawTable(frame,0,0,90);
 			par = frame.AddParagraph();
 			parformat = new ParagraphFormat();
 			parformat.Alignment = ParagraphAlignment.Left;
 			par.Format = parformat;
-			font = MigraDocHelper.CreateFont(10, true);
+			font = MigraDocHelper.CreateFont(10,false);
+			//numbers:
 			text = PatGuar.BalTotal.ToString("c");
-			par.AddFormattedText(text, font);
+			if(PrefB.GetBool("BalancesDontSubtractIns")){
+				par.AddFormattedText(text, fontBold);
+			}
+			else{
+				par.AddFormattedText(text, font);
+			}
 			par.AddLineBreak();
 			text = PatGuar.InsEst.ToString("c");
 			par.AddFormattedText(text, font);
 			par.AddLineBreak();
 			text = (PatGuar.BalTotal - PatGuar.InsEst).ToString("c");
-			par.AddFormattedText(text, font);
+			if(PrefB.GetBool("BalancesDontSubtractIns")){
+				par.AddFormattedText(text, font);
+			}
+			else{
+				par.AddFormattedText(text, fontBold);
+			}
 			par.AddLineBreak();
 			MigraDocHelper.InsertSpacer(section, 80);
-			//TextFrame frame;
 			#endregion FloatingBalance
 			//Bold note-------------------------------------------------------------------------------
 			#region Bold note
