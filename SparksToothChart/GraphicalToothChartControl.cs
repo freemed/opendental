@@ -54,11 +54,11 @@ namespace SparksToothChart {
 		private int hotTooth;
 		///<summary>The previous hotTooth.  If this is different than hotTooth, then mouse has just now moved to a new tooth.  Can be 0 to represent no previous.</summary>
 		private int hotToothOld;
-		private bool useInternational;
+		private int toothNomenclature;
 		private int fontOffset;
 		private int displayListOffset;
-		private string[][] numbers;
-		private string[][] letters;
+		private string[][] fontsymbols;
+
 		///<summary>This gets set to true during certain operations where we do not need to redraw all the teeth.  Specifically, during tooth selection where only the color of the tooth number text needs to change.  In this case, the rest of the scene will not be rendered again.</summary>
 		private bool suspendRendering;
 		private int selectedPixelFormat;
@@ -162,13 +162,13 @@ namespace SparksToothChart {
 			}
 		}
 
-		///<summary>Set true to show international tooth numbers.</summary>
-		public bool UseInternational{
+		///<summary>Tooth nomenclature to use. 0.</summary>
+		public int ToothNomenclature{
 			get{
-				return useInternational;
+				return toothNomenclature;
 			}
 			set{
-				useInternational=value;
+				toothNomenclature=value;
 			}
 		}
 
@@ -411,6 +411,11 @@ namespace SparksToothChart {
 			//bitmap.RotateFlip(RotateFlipType.RotateNoneFlipY);
 			g.Dispose();
 			return bitmap;
+		}
+
+		public string GetToothLabel(string tooth_id)
+		{
+			return ToothGraphic.GetToothLabel(toothNomenclature, tooth_id);
 		}
 
 		#endregion Public Methods
@@ -826,10 +831,8 @@ namespace SparksToothChart {
 				yPos-=3.8f;
 			}
 			xPos+=GetTransX(tooth_id);
-			string displayNum=tooth_id;
-			if(useInternational) {
-				displayNum=ToothGraphic.ToInternat(displayNum);
-			}
+			string displayNum=GetToothLabel(tooth_id);
+
 			float strWidth=MeasureStringMm(displayNum);
 			xPos-=strWidth/2f;
 			//only use the ShiftM portion of the user translation
@@ -866,10 +869,8 @@ namespace SparksToothChart {
 			if(isFullRedraw && ListToothGraphics[tooth_id].HideNumber){//if redrawing all numbers, and this is a "hidden" number
 				return;//skip
 			}
-			string displayNum=tooth_id;
-			if(useInternational) {
-				displayNum=ToothGraphic.ToInternat(displayNum);
-			}
+			string displayNum=GetToothLabel(tooth_id);
+
 			/*float strWidth=MeasureStringMm(displayNum);
 			xPos-=strWidth/2f;
 			//only use the ShiftM portion of the user translation
@@ -934,12 +935,7 @@ namespace SparksToothChart {
 		private float MeasureStringPix(string text){
 			float retVal=0;
 			for(int i=0;i<text.Length;i++){
-				if(text[i]>='A' && text[i]<='T'){
-					retVal+=letters[(byte)text[i]-(byte)'A'][0].Length+1;
-				}
-				else if(text[i]>='0' && text[i]<='9') {
-					retVal+=numbers[(byte)text[i]-(byte)'0'][0].Length+1;
-				}
+				if (fontsymbols[(byte)text[i]] != null) retVal+=fontsymbols[(byte)text[i]][0].Length+1;
 			}
 			return retVal;
 		}
@@ -949,80 +945,66 @@ namespace SparksToothChart {
 		} 
 
 		private void MakeRasterFont() {
-			letters = new string[20][];
-			letters[0]=new string[] {"0001000","0001000","0010100","0010100","0100010","0100010","0111110","1000001","1000001"};//A
-			letters[1]=new string[] { "11110","10001","10001","10001","11110","10001","10001","10001","11110" };//B
-			letters[2]=new string[] { "011110","100001","100000","100000","100000","100000","100000","100001","011110" };//C
-			letters[3]=new string[] { "111100","100010","100001","100001","100001","100001","100001","100010","111100" };//D
-			letters[4]=new string[] { "11111","10000","10000","10000","11110","10000","10000","10000","11111" };//E
-			letters[5]=new string[] { "11111","10000","10000","10000","11110","10000","10000","10000","10000" };//F
-			letters[6]=new string[] { "011110","100001","100000","100000","100111","100001","100001","100011","011101" };//G
-			letters[7]=new string[] { "100001","100001","100001","100001","111111","100001","100001","100001","100001" };//H
-			letters[8]=new string[] { "111","010","010","010","010","010","010","010","111" };//I
-			letters[9]=new string[] { "00001","00001","00001","00001","00001","00001","10001","10001","01110" };//J
-			letters[10]=new string[] { "100001","100010","100100","101000","110000","101000","100100","100010","100001" };//K
-			letters[11]=new string[] { "10000","10000","10000","10000","10000","10000","10000","10000","11111" };//L
-			letters[12]=new string[] { "1000001","1000001","1100011","1100011","1010101","1010101","1001001","1001001","1000001" };//M
-			letters[13]=new string[] { "100001","110001","110001","101001","101001","100101","100011","100011","100001" };//N
-			letters[14]=new string[] { "011110","100001","100001","100001","100001","100001","100001","100001","011110" };//O
-			letters[15]=new string[] { "111110","100001","100001","100001","111110","100000","100000","100000","100000" };//P
-			letters[16]=new string[] { "011110","100001","100001","100001","100001","100001","100101","100010","011101" };//Q
-			letters[17]=new string[] { "111110","100001","100001","100001","111110","100100","100010","100010","100001" };//R
-			letters[18]=new string[] { "011110","100001","100000","100000","011110","000001","000001","100001","011110" };//S
-			letters[19]=new string[] { "1111111","0001000","0001000","0001000","0001000","0001000","0001000","0001000","0001000" };//T
-			//letters[20]=new string[] { "","","","","","","","","" };//
-			int i,j;
+			fontsymbols = new string[255][];
+			fontsymbols['+'] = new string[] { "00000", "00000", "00100", "00100", "11111", "00100", "00100", "00000", "00000" };
+			fontsymbols['-'] = new string[] { "00000", "00000", "00000", "00000", "11111", "00000", "00000", "00000", "00000" };
+			fontsymbols['A'] = new string[] { "0001000", "0001000", "0010100", "0010100", "0100010", "0100010", "0111110", "1000001", "1000001" };//A
+			fontsymbols['B']=new string[] { "11110","10001","10001","10001","11110","10001","10001","10001","11110" };//B
+			fontsymbols['C']=new string[] { "011110","100001","100000","100000","100000","100000","100000","100001","011110" };//C
+			fontsymbols['D']=new string[] { "111100","100010","100001","100001","100001","100001","100001","100010","111100" };//D
+			fontsymbols['E']=new string[] { "11111","10000","10000","10000","11110","10000","10000","10000","11111" };//E
+			fontsymbols['F']=new string[] { "11111","10000","10000","10000","11110","10000","10000","10000","10000" };//F
+			fontsymbols['G']=new string[] { "011110","100001","100000","100000","100111","100001","100001","100011","011101" };//G
+			fontsymbols['H']=new string[] { "100001","100001","100001","100001","111111","100001","100001","100001","100001" };//H
+			fontsymbols['I']=new string[] { "111","010","010","010","010","010","010","010","111" };//I
+			fontsymbols['J']=new string[] { "00001","00001","00001","00001","00001","00001","10001","10001","01110" };//J
+			fontsymbols['K']=new string[] { "100001","100010","100100","101000","110000","101000","100100","100010","100001" };//K
+			fontsymbols['L']=new string[] { "10000","10000","10000","10000","10000","10000","10000","10000","11111" };//L
+			fontsymbols['M']=new string[] { "1000001","1000001","1100011","1100011","1010101","1010101","1001001","1001001","1000001" };//M
+			fontsymbols['N']=new string[] { "100001","110001","110001","101001","101001","100101","100011","100011","100001" };//N
+			fontsymbols['O']=new string[] { "011110","100001","100001","100001","100001","100001","100001","100001","011110" };//O
+			fontsymbols['P']=new string[] { "111110","100001","100001","100001","111110","100000","100000","100000","100000" };//P
+			fontsymbols['Q']=new string[] { "011110","100001","100001","100001","100001","100001","100101","100010","011101" };//Q
+			fontsymbols['R']=new string[] { "111110","100001","100001","100001","111110","100100","100010","100010","100001" };//R
+			fontsymbols['S']=new string[] { "011110","100001","100000","100000","011110","000001","000001","100001","011110" };//S
+			fontsymbols['T']=new string[] { "1111111","0001000","0001000","0001000","0001000","0001000","0001000","0001000","0001000" };//T
+			fontsymbols['0'] = new string[] { "01110", "10001", "10001", "10001", "10001", "10001", "10001", "10001", "01110" };//0
+			fontsymbols['1'] = new string[] { "0010", "1110", "0010", "0010", "0010", "0010", "0010", "0010", "0010" };//1
+			fontsymbols['2'] = new string[] { "01110", "10001", "00001", "00001", "00010", "00100", "01000", "10000", "11111" };//2
+			fontsymbols['3'] = new string[] { "01110", "10001", "00001", "00001", "00110", "00001", "00001", "10001", "01110" };//3
+			fontsymbols['4'] = new string[] { "00010", "00110", "00110", "01010", "01010", "10010", "11111", "00010", "00010" };//4
+			fontsymbols['5'] = new string[] { "11111", "10000", "10000", "11110", "10001", "00001", "00001", "10001", "01110" };//5
+			fontsymbols['6'] = new string[] { "01110", "10001", "10000", "10000", "11110", "10001", "10001", "10001", "01110" };//6
+			fontsymbols['7'] = new string[] { "11111", "00001", "00010", "00010", "00100", "00100", "01000", "01000", "01000" };//7
+			fontsymbols['8'] = new string[] { "01110", "10001", "10001", "10001", "01110", "10001", "10001", "10001", "01110" };//8
+			fontsymbols['9'] = new string[] { "01110", "10001", "10001", "10001", "01111", "00001", "00001", "10001", "01110" };//9
+
+			int i;
 			byte[] letter;
 			Gl.glPixelStorei(Gl.GL_UNPACK_ALIGNMENT,1);
 			fontOffset = Gl.glGenLists(128);
 			int letterW;
 			int letterH;
 			string row;
-			for(i=0,j='A';i<letters.Length;i++,j++) {
-				letterW=letters[i][0].Length;
-				letterH=letters[i].Length;
+			for(i=0;i<fontsymbols.Length;i++) {
+				if (fontsymbols[i]==null) continue;
+				letterW=fontsymbols[i][0].Length;
+				letterH=fontsymbols[i].Length;
 				letter = new byte[letterH];
 				for(int h=0;h<letterH;h++) {//actually draws the letter from the bottom up.
 					letter[h]=0;
-					row=letters[i][letterH-h-1];
+					row=fontsymbols[i][letterH-h-1];
 					for(int w=0;w<letterW;w++){
 						if(row.Substring(w,1)=="1"){
 							letter[h]=(byte)(letter[h] | (byte)Math.Pow(2,7-w));
 						}
 					}
 				}
-				Gl.glNewList(fontOffset + j,Gl.GL_COMPILE);
+				Gl.glNewList(fontOffset + i,Gl.GL_COMPILE);
 				Gl.glBitmap(letterW,letterH,0,0,letterW+1,0,letter);
 				Gl.glEndList();
 			}
-			numbers = new string[10][];
-			numbers[0]=new string[] { "01110","10001","10001","10001","10001","10001","10001","10001","01110" };//0
-			numbers[1]=new string[] { "0010","1110","0010","0010","0010","0010","0010","0010","0010" };//1
-			numbers[2]=new string[] { "01110","10001","00001","00001","00010","00100","01000","10000","11111" };//2
-			numbers[3]=new string[] { "01110","10001","00001","00001","00110","00001","00001","10001","01110" };//3
-			numbers[4]=new string[] { "00010","00110","00110","01010","01010","10010","11111","00010","00010" };//4
-			numbers[5]=new string[] { "11111","10000","10000","11110","10001","00001","00001","10001","01110" };//5
-			numbers[6]=new string[] { "01110","10001","10000","10000","11110","10001","10001","10001","01110" };//6
-			numbers[7]=new string[] { "11111","00001","00010","00010","00100","00100","01000","01000","01000" };//7
-			numbers[8]=new string[] { "01110","10001","10001","10001","01110","10001","10001","10001","01110" };//8
-			numbers[9]=new string[] { "01110","10001","10001","10001","01111","00001","00001","10001","01110" };//9
-			for(i=0,j='0';i<numbers.Length;i++,j++) {
-				letterW=numbers[i][0].Length;
-				letterH=numbers[i].Length;
-				letter = new byte[letterH];
-				for(int h=0;h<letterH;h++) {//actually draws the letter from the bottom up.
-					letter[h]=0;
-					row=numbers[i][letterH-h-1];
-					for(int w=0;w<letterW;w++){
-						if(row.Substring(w,1)=="1"){
-							letter[h]=(byte)(letter[h] | (byte)Math.Pow(2,7-w));
-						}
-					}
-				}
-				Gl.glNewList(fontOffset + j,Gl.GL_COMPILE);
-				Gl.glBitmap(letterW,letterH,0,0,letterW+1,0,letter);
-				Gl.glEndList();
-			}
+
 		}
 
 		private void PrintString(string text) {
@@ -1380,4 +1362,6 @@ namespace SparksToothChart {
 
 	}
 }
+
+
 

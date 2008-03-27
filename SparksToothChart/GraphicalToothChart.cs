@@ -11,7 +11,7 @@ using System.Windows.Forms;
 namespace SparksToothChart {
 	public partial class GraphicalToothChart:UserControl {
 		private string[] selectedTeeth;
-		private bool useInternational;
+		private int toothNomenclature;
 		private Color colorBackground;
 		private Color colorBackSimple=Color.FromArgb(150,145,153);//constant
 		private bool simpleMode=true;
@@ -60,17 +60,31 @@ namespace SparksToothChart {
 		}
 
 		///<summary>Set true to show international tooth numbers.</summary>
-		public bool UseInternational {
+		public bool UseInternational // CWI: Keep for a while for compatibility
+		{
+			get
+			{
+				return toothNomenclature != 0;
+			}
+			set
+			{
+				toothNomenclature = 1;
+			}
+		}
+
+		///<summary>Tooth nomenclature to use. 0, 1 or 2.</summary>
+		public int ToothNomenclature
+		{
 			get {
-				return useInternational;
+				return toothNomenclature;
 			}
 			set {
-				useInternational=value;
+				toothNomenclature = value;
 				if(simpleMode) {
 					//				 
 				}
 				else {
-					toothChart.UseInternational=value;
+					toothChart.ToothNomenclature=value;
 				}
 			}
 		}
@@ -177,6 +191,7 @@ namespace SparksToothChart {
 
 		#endregion Properties
 
+
 		private void ResetControls(){
 			selectedTeeth=new string[0];
 			this.Controls.Clear();
@@ -194,7 +209,7 @@ namespace SparksToothChart {
 				toothChart.Name = "toothChart";
 				toothChart.Size = new System.Drawing.Size(719,564);//unnecessary?
 				//this.toothChart.TabIndex = 0;
-				toothChart.UseInternational = useInternational;
+				toothChart.ToothNomenclature = toothNomenclature;
 				this.Controls.Add(toothChart);
 			}
 		}
@@ -433,6 +448,11 @@ namespace SparksToothChart {
 			return result;
 		}
 
+		public string GetToothLabel(string tooth_id)
+		{
+			return ToothGraphic.GetToothLabel(toothNomenclature, tooth_id);
+		}
+
 		#endregion
 
 		#region Painting
@@ -549,10 +569,8 @@ namespace SparksToothChart {
 			else {
 				yPos+=3;
 			}
-			string displayNum=tooth_id;
-			if(useInternational) {
-				displayNum=ToothGraphic.ToInternat(displayNum);
-			}
+			string displayNum = GetToothLabel(tooth_id);
+
 			float strWidth=g.MeasureString(displayNum,Font).Width;
 			xPos-=strWidth/2f;
 			RectangleF rec=new RectangleF(xPos-1,yPos-1,strWidth,12);//this rec has origin at UL
@@ -574,10 +592,7 @@ namespace SparksToothChart {
 				if(isFullRedraw && ListToothGraphics[tooth_id].HideNumber){//if redrawing all numbers, and this is a "hidden" number
 					return;//skip
 				}
-				displayNum=tooth_id;
-				if(useInternational) {
-					displayNum=ToothGraphic.ToInternat(displayNum);
-				}
+				displayNum = GetToothLabel(tooth_id);
 				hideNumber=ListToothGraphics[tooth_id].HideNumber;
 			}
 			catch{
