@@ -1222,7 +1222,7 @@ namespace OpenDentBusiness {
 				rows.Add(row);
 				//detail rows-------------------------------------------------------------------------------
 				payPlanNum=PIn.PInt(rawPayPlan.Rows[i]["PayPlanNum"].ToString());
-				rawAmort = null;// GetPayPlanAmortTable(payPlanNum);
+				rawAmort=GetPayPlanAmortTable(payPlanNum);
 				//remove rows out of date range, going backwards
 				for(int d=rawAmort.Rows.Count-1;d>=0;d--){
 					if((DateTime)rawAmort.Rows[d]["DateTime"]>toDate.AddDays(PrefB.GetInt("PayPlansBillInAdvanceDays"))){
