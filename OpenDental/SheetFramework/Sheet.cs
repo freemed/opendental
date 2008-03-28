@@ -109,6 +109,7 @@ namespace OpenDental{
 				case SheetTypeEnum.LabelPatient:
 				case SheetTypeEnum.LabelCarrier:
 				case SheetTypeEnum.LabelReferral:
+					pd.DefaultPageSettings.Landscape=false;
 					sit=PrintSituation.LabelSingle;
 					break;
 			}
