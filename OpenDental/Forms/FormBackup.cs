@@ -78,50 +78,50 @@ namespace OpenDental{
 		/// </summary>
 		private void InitializeComponent()
 		{
-			System.ComponentModel.ComponentResourceManager resources=new System.ComponentModel.ComponentResourceManager(typeof(FormBackup));
-			this.label1=new System.Windows.Forms.Label();
-			this.textBackupToPath=new System.Windows.Forms.TextBox();
-			this.groupBox1=new System.Windows.Forms.GroupBox();
-			this.textBox5=new System.Windows.Forms.TextBox();
-			this.textBackupRestoreAtoZToPath=new System.Windows.Forms.TextBox();
-			this.textBox3=new System.Windows.Forms.TextBox();
-			this.textBackupRestoreToPath=new System.Windows.Forms.TextBox();
-			this.textBox4=new System.Windows.Forms.TextBox();
-			this.textBackupRestoreFromPath=new System.Windows.Forms.TextBox();
-			this.textBox1=new System.Windows.Forms.TextBox();
-			this.textBox2=new System.Windows.Forms.TextBox();
-			this.textBackupFromPath=new System.Windows.Forms.TextBox();
-			this.groupBox2=new System.Windows.Forms.GroupBox();
-			this.checkExcludeImages=new System.Windows.Forms.CheckBox();
-			this.butSave=new OpenDental.UI.Button();
-			this.butBrowseFrom=new OpenDental.UI.Button();
-			this.butBrowseTo=new OpenDental.UI.Button();
-			this.butBackup=new OpenDental.UI.Button();
-			this.butCancel=new OpenDental.UI.Button();
-			this.butBrowseRestoreAtoZTo=new OpenDental.UI.Button();
-			this.butBrowseRestoreTo=new OpenDental.UI.Button();
-			this.butBrowseRestoreFrom=new OpenDental.UI.Button();
-			this.butRestore=new OpenDental.UI.Button();
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormBackup));
+			this.label1 = new System.Windows.Forms.Label();
+			this.textBackupToPath = new System.Windows.Forms.TextBox();
+			this.groupBox1 = new System.Windows.Forms.GroupBox();
+			this.textBox5 = new System.Windows.Forms.TextBox();
+			this.butBrowseRestoreAtoZTo = new OpenDental.UI.Button();
+			this.textBackupRestoreAtoZToPath = new System.Windows.Forms.TextBox();
+			this.textBox3 = new System.Windows.Forms.TextBox();
+			this.butBrowseRestoreTo = new OpenDental.UI.Button();
+			this.textBackupRestoreToPath = new System.Windows.Forms.TextBox();
+			this.textBox4 = new System.Windows.Forms.TextBox();
+			this.butBrowseRestoreFrom = new OpenDental.UI.Button();
+			this.textBackupRestoreFromPath = new System.Windows.Forms.TextBox();
+			this.butRestore = new OpenDental.UI.Button();
+			this.textBox1 = new System.Windows.Forms.TextBox();
+			this.textBox2 = new System.Windows.Forms.TextBox();
+			this.textBackupFromPath = new System.Windows.Forms.TextBox();
+			this.groupBox2 = new System.Windows.Forms.GroupBox();
+			this.checkExcludeImages = new System.Windows.Forms.CheckBox();
+			this.butSave = new OpenDental.UI.Button();
+			this.butBrowseFrom = new OpenDental.UI.Button();
+			this.butBrowseTo = new OpenDental.UI.Button();
+			this.butBackup = new OpenDental.UI.Button();
+			this.butCancel = new OpenDental.UI.Button();
 			this.groupBox1.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// label1
 			// 
-			this.label1.Location=new System.Drawing.Point(18,5);
-			this.label1.Name="label1";
-			this.label1.Size=new System.Drawing.Size(713,28);
-			this.label1.TabIndex=2;
-			this.label1.Text="BACKUPS ARE USELESS UNLESS YOU REGULARLY VERIFY THEIR QUALITY BY TAKING A BACKUP "+
-					"HOME AND RESTORING IT TO YOUR HOME COMPUTER.  We suggest an inexpensive USB flas"+
-					"h drive for this purpose.";
-			this.label1.TextAlign=System.Drawing.ContentAlignment.BottomLeft;
+			this.label1.Location = new System.Drawing.Point(18,5);
+			this.label1.Name = "label1";
+			this.label1.Size = new System.Drawing.Size(713,28);
+			this.label1.TabIndex = 2;
+			this.label1.Text = "BACKUPS ARE USELESS UNLESS YOU REGULARLY VERIFY THEIR QUALITY BY TAKING A BACKUP " +
+    "HOME AND RESTORING IT TO YOUR HOME COMPUTER.  We suggest an inexpensive USB flas" +
+    "h drive for this purpose.";
+			this.label1.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
 			// 
 			// textBackupToPath
 			// 
-			this.textBackupToPath.Location=new System.Drawing.Point(18,212);
-			this.textBackupToPath.Name="textBackupToPath";
-			this.textBackupToPath.Size=new System.Drawing.Size(481,20);
-			this.textBackupToPath.TabIndex=4;
+			this.textBackupToPath.Location = new System.Drawing.Point(18,212);
+			this.textBackupToPath.Name = "textBackupToPath";
+			this.textBackupToPath.Size = new System.Drawing.Size(481,20);
+			this.textBackupToPath.TabIndex = 4;
 			// 
 			// groupBox1
 			// 
@@ -135,251 +135,251 @@ namespace OpenDental{
 			this.groupBox1.Controls.Add(this.butBrowseRestoreFrom);
 			this.groupBox1.Controls.Add(this.textBackupRestoreFromPath);
 			this.groupBox1.Controls.Add(this.butRestore);
-			this.groupBox1.FlatStyle=System.Windows.Forms.FlatStyle.System;
-			this.groupBox1.Location=new System.Drawing.Point(12,255);
-			this.groupBox1.Name="groupBox1";
-			this.groupBox1.Size=new System.Drawing.Size(747,213);
-			this.groupBox1.TabIndex=8;
-			this.groupBox1.TabStop=false;
-			this.groupBox1.Text="Restore";
+			this.groupBox1.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.groupBox1.Location = new System.Drawing.Point(12,255);
+			this.groupBox1.Name = "groupBox1";
+			this.groupBox1.Size = new System.Drawing.Size(747,213);
+			this.groupBox1.TabIndex = 8;
+			this.groupBox1.TabStop = false;
+			this.groupBox1.Text = "Restore";
 			// 
 			// textBox5
 			// 
-			this.textBox5.BackColor=System.Drawing.SystemColors.Control;
-			this.textBox5.BorderStyle=System.Windows.Forms.BorderStyle.None;
-			this.textBox5.Location=new System.Drawing.Point(7,142);
-			this.textBox5.Multiline=true;
-			this.textBox5.Name="textBox5";
-			this.textBox5.Size=new System.Drawing.Size(396,27);
-			this.textBox5.TabIndex=21;
-			this.textBox5.Text="Restore A-Z images to this folder: (example:)\r\nC:\\OpenDentalData\\";
-			// 
-			// textBackupRestoreAtoZToPath
-			// 
-			this.textBackupRestoreAtoZToPath.Location=new System.Drawing.Point(6,173);
-			this.textBackupRestoreAtoZToPath.Name="textBackupRestoreAtoZToPath";
-			this.textBackupRestoreAtoZToPath.Size=new System.Drawing.Size(481,20);
-			this.textBackupRestoreAtoZToPath.TabIndex=19;
-			// 
-			// textBox3
-			// 
-			this.textBox3.BackColor=System.Drawing.SystemColors.Control;
-			this.textBox3.BorderStyle=System.Windows.Forms.BorderStyle.None;
-			this.textBox3.Location=new System.Drawing.Point(7,81);
-			this.textBox3.Multiline=true;
-			this.textBox3.Name="textBox3";
-			this.textBox3.Size=new System.Drawing.Size(247,27);
-			this.textBox3.TabIndex=18;
-			this.textBox3.Text="Restore database TO this folder: (example:)\r\nC:\\mysql\\data\\";
-			// 
-			// textBackupRestoreToPath
-			// 
-			this.textBackupRestoreToPath.Location=new System.Drawing.Point(6,112);
-			this.textBackupRestoreToPath.Name="textBackupRestoreToPath";
-			this.textBackupRestoreToPath.Size=new System.Drawing.Size(481,20);
-			this.textBackupRestoreToPath.TabIndex=16;
-			// 
-			// textBox4
-			// 
-			this.textBox4.BackColor=System.Drawing.SystemColors.Control;
-			this.textBox4.BorderStyle=System.Windows.Forms.BorderStyle.None;
-			this.textBox4.Location=new System.Drawing.Point(7,20);
-			this.textBox4.Multiline=true;
-			this.textBox4.Name="textBox4";
-			this.textBox4.Size=new System.Drawing.Size(280,29);
-			this.textBox4.TabIndex=15;
-			this.textBox4.Text="Restore FROM this folder: (example:)\r\nD:\\";
-			// 
-			// textBackupRestoreFromPath
-			// 
-			this.textBackupRestoreFromPath.Location=new System.Drawing.Point(6,50);
-			this.textBackupRestoreFromPath.Name="textBackupRestoreFromPath";
-			this.textBackupRestoreFromPath.Size=new System.Drawing.Size(481,20);
-			this.textBackupRestoreFromPath.TabIndex=13;
-			// 
-			// textBox1
-			// 
-			this.textBox1.BackColor=System.Drawing.SystemColors.Control;
-			this.textBox1.BorderStyle=System.Windows.Forms.BorderStyle.None;
-			this.textBox1.Location=new System.Drawing.Point(19,155);
-			this.textBox1.Multiline=true;
-			this.textBox1.Name="textBox1";
-			this.textBox1.Size=new System.Drawing.Size(279,55);
-			this.textBox1.TabIndex=9;
-			this.textBox1.Text="Backup TO this folder: (examples:)\r\nD:\\\r\nD:\\Backups\\\r\n\\\\frontdesk\\backups\\";
-			// 
-			// textBox2
-			// 
-			this.textBox2.BackColor=System.Drawing.SystemColors.Control;
-			this.textBox2.BorderStyle=System.Windows.Forms.BorderStyle.None;
-			this.textBox2.Location=new System.Drawing.Point(19,81);
-			this.textBox2.Multiline=true;
-			this.textBox2.Name="textBox2";
-			this.textBox2.Size=new System.Drawing.Size(240,43);
-			this.textBox2.TabIndex=12;
-			this.textBox2.Text="Backup database FROM this folder: (examples:)\r\nC:\\mysql\\data\\\r\n\\\\server\\mysql\\dat"+
-					"a\\";
-			// 
-			// textBackupFromPath
-			// 
-			this.textBackupFromPath.Location=new System.Drawing.Point(18,126);
-			this.textBackupFromPath.Name="textBackupFromPath";
-			this.textBackupFromPath.Size=new System.Drawing.Size(481,20);
-			this.textBackupFromPath.TabIndex=10;
-			// 
-			// groupBox2
-			// 
-			this.groupBox2.Location=new System.Drawing.Point(12,65);
-			this.groupBox2.Name="groupBox2";
-			this.groupBox2.Size=new System.Drawing.Size(747,184);
-			this.groupBox2.TabIndex=14;
-			this.groupBox2.TabStop=false;
-			this.groupBox2.Text="Backup";
-			// 
-			// checkExcludeImages
-			// 
-			this.checkExcludeImages.AutoSize=true;
-			this.checkExcludeImages.Location=new System.Drawing.Point(12,42);
-			this.checkExcludeImages.Name="checkExcludeImages";
-			this.checkExcludeImages.Size=new System.Drawing.Size(221,17);
-			this.checkExcludeImages.TabIndex=15;
-			this.checkExcludeImages.Text="Exclude image folder in backup or restore";
-			this.checkExcludeImages.UseVisualStyleBackColor=true;
-			this.checkExcludeImages.Click+=new System.EventHandler(this.checkExcludeImages_Click);
-			// 
-			// butSave
-			// 
-			this.butSave.AdjustImageLocation=new System.Drawing.Point(0,0);
-			this.butSave.Anchor=((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom|System.Windows.Forms.AnchorStyles.Right)));
-			this.butSave.Autosize=true;
-			this.butSave.BtnShape=OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butSave.BtnStyle=OpenDental.UI.enumType.XPStyle.Silver;
-			this.butSave.CornerRadius=4F;
-			this.butSave.Location=new System.Drawing.Point(19,501);
-			this.butSave.Name="butSave";
-			this.butSave.Size=new System.Drawing.Size(86,26);
-			this.butSave.TabIndex=13;
-			this.butSave.Text="Save Defaults";
-			this.butSave.Click+=new System.EventHandler(this.butSave_Click);
-			// 
-			// butBrowseFrom
-			// 
-			this.butBrowseFrom.AdjustImageLocation=new System.Drawing.Point(0,0);
-			this.butBrowseFrom.Autosize=true;
-			this.butBrowseFrom.BtnShape=OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butBrowseFrom.BtnStyle=OpenDental.UI.enumType.XPStyle.Silver;
-			this.butBrowseFrom.CornerRadius=4F;
-			this.butBrowseFrom.Location=new System.Drawing.Point(512,123);
-			this.butBrowseFrom.Name="butBrowseFrom";
-			this.butBrowseFrom.Size=new System.Drawing.Size(86,26);
-			this.butBrowseFrom.TabIndex=11;
-			this.butBrowseFrom.Text="Browse";
-			this.butBrowseFrom.Click+=new System.EventHandler(this.butBrowseFrom_Click);
-			// 
-			// butBrowseTo
-			// 
-			this.butBrowseTo.AdjustImageLocation=new System.Drawing.Point(0,0);
-			this.butBrowseTo.Autosize=true;
-			this.butBrowseTo.BtnShape=OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butBrowseTo.BtnStyle=OpenDental.UI.enumType.XPStyle.Silver;
-			this.butBrowseTo.CornerRadius=4F;
-			this.butBrowseTo.Location=new System.Drawing.Point(512,209);
-			this.butBrowseTo.Name="butBrowseTo";
-			this.butBrowseTo.Size=new System.Drawing.Size(86,26);
-			this.butBrowseTo.TabIndex=5;
-			this.butBrowseTo.Text="Browse";
-			this.butBrowseTo.Click+=new System.EventHandler(this.butBrowseTo_Click);
-			// 
-			// butBackup
-			// 
-			this.butBackup.AdjustImageLocation=new System.Drawing.Point(0,0);
-			this.butBackup.Autosize=true;
-			this.butBackup.BtnShape=OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butBackup.BtnStyle=OpenDental.UI.enumType.XPStyle.Silver;
-			this.butBackup.CornerRadius=4F;
-			this.butBackup.Location=new System.Drawing.Point(665,209);
-			this.butBackup.Name="butBackup";
-			this.butBackup.Size=new System.Drawing.Size(86,26);
-			this.butBackup.TabIndex=1;
-			this.butBackup.Text="Backup";
-			this.butBackup.Click+=new System.EventHandler(this.butBackup_Click);
-			// 
-			// butCancel
-			// 
-			this.butCancel.AdjustImageLocation=new System.Drawing.Point(0,0);
-			this.butCancel.Anchor=((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom|System.Windows.Forms.AnchorStyles.Right)));
-			this.butCancel.Autosize=true;
-			this.butCancel.BtnShape=OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butCancel.BtnStyle=OpenDental.UI.enumType.XPStyle.Silver;
-			this.butCancel.CornerRadius=4F;
-			this.butCancel.Location=new System.Drawing.Point(660,501);
-			this.butCancel.Name="butCancel";
-			this.butCancel.Size=new System.Drawing.Size(86,26);
-			this.butCancel.TabIndex=0;
-			this.butCancel.Text="&Cancel";
-			this.butCancel.Click+=new System.EventHandler(this.butCancel_Click);
+			this.textBox5.BackColor = System.Drawing.SystemColors.Control;
+			this.textBox5.BorderStyle = System.Windows.Forms.BorderStyle.None;
+			this.textBox5.Location = new System.Drawing.Point(7,142);
+			this.textBox5.Multiline = true;
+			this.textBox5.Name = "textBox5";
+			this.textBox5.Size = new System.Drawing.Size(396,27);
+			this.textBox5.TabIndex = 21;
+			this.textBox5.Text = "Restore A-Z images to this folder: (example:)\r\nC:\\OpenDentImages\\";
 			// 
 			// butBrowseRestoreAtoZTo
 			// 
-			this.butBrowseRestoreAtoZTo.AdjustImageLocation=new System.Drawing.Point(0,0);
-			this.butBrowseRestoreAtoZTo.Autosize=true;
-			this.butBrowseRestoreAtoZTo.BtnShape=OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butBrowseRestoreAtoZTo.BtnStyle=OpenDental.UI.enumType.XPStyle.Silver;
-			this.butBrowseRestoreAtoZTo.CornerRadius=4F;
-			this.butBrowseRestoreAtoZTo.Location=new System.Drawing.Point(500,170);
-			this.butBrowseRestoreAtoZTo.Name="butBrowseRestoreAtoZTo";
-			this.butBrowseRestoreAtoZTo.Size=new System.Drawing.Size(86,26);
-			this.butBrowseRestoreAtoZTo.TabIndex=20;
-			this.butBrowseRestoreAtoZTo.Text="Browse";
-			this.butBrowseRestoreAtoZTo.Click+=new System.EventHandler(this.butBrowseRestoreAtoZTo_Click);
+			this.butBrowseRestoreAtoZTo.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butBrowseRestoreAtoZTo.Autosize = true;
+			this.butBrowseRestoreAtoZTo.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butBrowseRestoreAtoZTo.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butBrowseRestoreAtoZTo.CornerRadius = 4F;
+			this.butBrowseRestoreAtoZTo.Location = new System.Drawing.Point(500,170);
+			this.butBrowseRestoreAtoZTo.Name = "butBrowseRestoreAtoZTo";
+			this.butBrowseRestoreAtoZTo.Size = new System.Drawing.Size(86,26);
+			this.butBrowseRestoreAtoZTo.TabIndex = 20;
+			this.butBrowseRestoreAtoZTo.Text = "Browse";
+			this.butBrowseRestoreAtoZTo.Click += new System.EventHandler(this.butBrowseRestoreAtoZTo_Click);
+			// 
+			// textBackupRestoreAtoZToPath
+			// 
+			this.textBackupRestoreAtoZToPath.Location = new System.Drawing.Point(6,173);
+			this.textBackupRestoreAtoZToPath.Name = "textBackupRestoreAtoZToPath";
+			this.textBackupRestoreAtoZToPath.Size = new System.Drawing.Size(481,20);
+			this.textBackupRestoreAtoZToPath.TabIndex = 19;
+			// 
+			// textBox3
+			// 
+			this.textBox3.BackColor = System.Drawing.SystemColors.Control;
+			this.textBox3.BorderStyle = System.Windows.Forms.BorderStyle.None;
+			this.textBox3.Location = new System.Drawing.Point(7,81);
+			this.textBox3.Multiline = true;
+			this.textBox3.Name = "textBox3";
+			this.textBox3.Size = new System.Drawing.Size(247,27);
+			this.textBox3.TabIndex = 18;
+			this.textBox3.Text = "Restore database TO this folder: (example:)\r\nC:\\mysql\\data\\";
 			// 
 			// butBrowseRestoreTo
 			// 
-			this.butBrowseRestoreTo.AdjustImageLocation=new System.Drawing.Point(0,0);
-			this.butBrowseRestoreTo.Autosize=true;
-			this.butBrowseRestoreTo.BtnShape=OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butBrowseRestoreTo.BtnStyle=OpenDental.UI.enumType.XPStyle.Silver;
-			this.butBrowseRestoreTo.CornerRadius=4F;
-			this.butBrowseRestoreTo.Location=new System.Drawing.Point(500,109);
-			this.butBrowseRestoreTo.Name="butBrowseRestoreTo";
-			this.butBrowseRestoreTo.Size=new System.Drawing.Size(86,26);
-			this.butBrowseRestoreTo.TabIndex=17;
-			this.butBrowseRestoreTo.Text="Browse";
-			this.butBrowseRestoreTo.Click+=new System.EventHandler(this.butBrowseRestoreTo_Click);
+			this.butBrowseRestoreTo.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butBrowseRestoreTo.Autosize = true;
+			this.butBrowseRestoreTo.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butBrowseRestoreTo.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butBrowseRestoreTo.CornerRadius = 4F;
+			this.butBrowseRestoreTo.Location = new System.Drawing.Point(500,109);
+			this.butBrowseRestoreTo.Name = "butBrowseRestoreTo";
+			this.butBrowseRestoreTo.Size = new System.Drawing.Size(86,26);
+			this.butBrowseRestoreTo.TabIndex = 17;
+			this.butBrowseRestoreTo.Text = "Browse";
+			this.butBrowseRestoreTo.Click += new System.EventHandler(this.butBrowseRestoreTo_Click);
+			// 
+			// textBackupRestoreToPath
+			// 
+			this.textBackupRestoreToPath.Location = new System.Drawing.Point(6,112);
+			this.textBackupRestoreToPath.Name = "textBackupRestoreToPath";
+			this.textBackupRestoreToPath.Size = new System.Drawing.Size(481,20);
+			this.textBackupRestoreToPath.TabIndex = 16;
+			// 
+			// textBox4
+			// 
+			this.textBox4.BackColor = System.Drawing.SystemColors.Control;
+			this.textBox4.BorderStyle = System.Windows.Forms.BorderStyle.None;
+			this.textBox4.Location = new System.Drawing.Point(7,20);
+			this.textBox4.Multiline = true;
+			this.textBox4.Name = "textBox4";
+			this.textBox4.Size = new System.Drawing.Size(280,29);
+			this.textBox4.TabIndex = 15;
+			this.textBox4.Text = "Restore FROM this folder: (example:)\r\nD:\\";
 			// 
 			// butBrowseRestoreFrom
 			// 
-			this.butBrowseRestoreFrom.AdjustImageLocation=new System.Drawing.Point(0,0);
-			this.butBrowseRestoreFrom.Autosize=true;
-			this.butBrowseRestoreFrom.BtnShape=OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butBrowseRestoreFrom.BtnStyle=OpenDental.UI.enumType.XPStyle.Silver;
-			this.butBrowseRestoreFrom.CornerRadius=4F;
-			this.butBrowseRestoreFrom.Location=new System.Drawing.Point(500,47);
-			this.butBrowseRestoreFrom.Name="butBrowseRestoreFrom";
-			this.butBrowseRestoreFrom.Size=new System.Drawing.Size(86,26);
-			this.butBrowseRestoreFrom.TabIndex=14;
-			this.butBrowseRestoreFrom.Text="Browse";
-			this.butBrowseRestoreFrom.Click+=new System.EventHandler(this.butBrowseRestoreFrom_Click);
+			this.butBrowseRestoreFrom.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butBrowseRestoreFrom.Autosize = true;
+			this.butBrowseRestoreFrom.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butBrowseRestoreFrom.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butBrowseRestoreFrom.CornerRadius = 4F;
+			this.butBrowseRestoreFrom.Location = new System.Drawing.Point(500,47);
+			this.butBrowseRestoreFrom.Name = "butBrowseRestoreFrom";
+			this.butBrowseRestoreFrom.Size = new System.Drawing.Size(86,26);
+			this.butBrowseRestoreFrom.TabIndex = 14;
+			this.butBrowseRestoreFrom.Text = "Browse";
+			this.butBrowseRestoreFrom.Click += new System.EventHandler(this.butBrowseRestoreFrom_Click);
+			// 
+			// textBackupRestoreFromPath
+			// 
+			this.textBackupRestoreFromPath.Location = new System.Drawing.Point(6,50);
+			this.textBackupRestoreFromPath.Name = "textBackupRestoreFromPath";
+			this.textBackupRestoreFromPath.Size = new System.Drawing.Size(481,20);
+			this.textBackupRestoreFromPath.TabIndex = 13;
 			// 
 			// butRestore
 			// 
-			this.butRestore.AdjustImageLocation=new System.Drawing.Point(0,0);
-			this.butRestore.Anchor=((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom|System.Windows.Forms.AnchorStyles.Right)));
-			this.butRestore.Autosize=true;
-			this.butRestore.BtnShape=OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butRestore.BtnStyle=OpenDental.UI.enumType.XPStyle.Silver;
-			this.butRestore.CornerRadius=4F;
-			this.butRestore.Location=new System.Drawing.Point(648,170);
-			this.butRestore.Name="butRestore";
-			this.butRestore.Size=new System.Drawing.Size(86,26);
-			this.butRestore.TabIndex=6;
-			this.butRestore.Text="Restore";
-			this.butRestore.Click+=new System.EventHandler(this.butRestore_Click);
+			this.butRestore.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butRestore.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.butRestore.Autosize = true;
+			this.butRestore.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butRestore.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butRestore.CornerRadius = 4F;
+			this.butRestore.Location = new System.Drawing.Point(648,170);
+			this.butRestore.Name = "butRestore";
+			this.butRestore.Size = new System.Drawing.Size(86,26);
+			this.butRestore.TabIndex = 6;
+			this.butRestore.Text = "Restore";
+			this.butRestore.Click += new System.EventHandler(this.butRestore_Click);
+			// 
+			// textBox1
+			// 
+			this.textBox1.BackColor = System.Drawing.SystemColors.Control;
+			this.textBox1.BorderStyle = System.Windows.Forms.BorderStyle.None;
+			this.textBox1.Location = new System.Drawing.Point(19,155);
+			this.textBox1.Multiline = true;
+			this.textBox1.Name = "textBox1";
+			this.textBox1.Size = new System.Drawing.Size(279,55);
+			this.textBox1.TabIndex = 9;
+			this.textBox1.Text = "Backup TO this folder: (examples:)\r\nD:\\\r\nD:\\Backups\\\r\n\\\\frontdesk\\backups\\";
+			// 
+			// textBox2
+			// 
+			this.textBox2.BackColor = System.Drawing.SystemColors.Control;
+			this.textBox2.BorderStyle = System.Windows.Forms.BorderStyle.None;
+			this.textBox2.Location = new System.Drawing.Point(19,81);
+			this.textBox2.Multiline = true;
+			this.textBox2.Name = "textBox2";
+			this.textBox2.Size = new System.Drawing.Size(240,43);
+			this.textBox2.TabIndex = 12;
+			this.textBox2.Text = "Backup database FROM this folder: (examples:)\r\nC:\\mysql\\data\\\r\n\\\\server\\mysql\\dat" +
+    "a\\";
+			// 
+			// textBackupFromPath
+			// 
+			this.textBackupFromPath.Location = new System.Drawing.Point(18,126);
+			this.textBackupFromPath.Name = "textBackupFromPath";
+			this.textBackupFromPath.Size = new System.Drawing.Size(481,20);
+			this.textBackupFromPath.TabIndex = 10;
+			// 
+			// groupBox2
+			// 
+			this.groupBox2.Location = new System.Drawing.Point(12,65);
+			this.groupBox2.Name = "groupBox2";
+			this.groupBox2.Size = new System.Drawing.Size(747,184);
+			this.groupBox2.TabIndex = 14;
+			this.groupBox2.TabStop = false;
+			this.groupBox2.Text = "Backup";
+			// 
+			// checkExcludeImages
+			// 
+			this.checkExcludeImages.AutoSize = true;
+			this.checkExcludeImages.Location = new System.Drawing.Point(12,42);
+			this.checkExcludeImages.Name = "checkExcludeImages";
+			this.checkExcludeImages.Size = new System.Drawing.Size(221,17);
+			this.checkExcludeImages.TabIndex = 15;
+			this.checkExcludeImages.Text = "Exclude image folder in backup or restore";
+			this.checkExcludeImages.UseVisualStyleBackColor = true;
+			this.checkExcludeImages.Click += new System.EventHandler(this.checkExcludeImages_Click);
+			// 
+			// butSave
+			// 
+			this.butSave.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butSave.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.butSave.Autosize = true;
+			this.butSave.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butSave.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butSave.CornerRadius = 4F;
+			this.butSave.Location = new System.Drawing.Point(19,501);
+			this.butSave.Name = "butSave";
+			this.butSave.Size = new System.Drawing.Size(86,26);
+			this.butSave.TabIndex = 13;
+			this.butSave.Text = "Save Defaults";
+			this.butSave.Click += new System.EventHandler(this.butSave_Click);
+			// 
+			// butBrowseFrom
+			// 
+			this.butBrowseFrom.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butBrowseFrom.Autosize = true;
+			this.butBrowseFrom.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butBrowseFrom.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butBrowseFrom.CornerRadius = 4F;
+			this.butBrowseFrom.Location = new System.Drawing.Point(512,123);
+			this.butBrowseFrom.Name = "butBrowseFrom";
+			this.butBrowseFrom.Size = new System.Drawing.Size(86,26);
+			this.butBrowseFrom.TabIndex = 11;
+			this.butBrowseFrom.Text = "Browse";
+			this.butBrowseFrom.Click += new System.EventHandler(this.butBrowseFrom_Click);
+			// 
+			// butBrowseTo
+			// 
+			this.butBrowseTo.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butBrowseTo.Autosize = true;
+			this.butBrowseTo.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butBrowseTo.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butBrowseTo.CornerRadius = 4F;
+			this.butBrowseTo.Location = new System.Drawing.Point(512,209);
+			this.butBrowseTo.Name = "butBrowseTo";
+			this.butBrowseTo.Size = new System.Drawing.Size(86,26);
+			this.butBrowseTo.TabIndex = 5;
+			this.butBrowseTo.Text = "Browse";
+			this.butBrowseTo.Click += new System.EventHandler(this.butBrowseTo_Click);
+			// 
+			// butBackup
+			// 
+			this.butBackup.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butBackup.Autosize = true;
+			this.butBackup.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butBackup.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butBackup.CornerRadius = 4F;
+			this.butBackup.Location = new System.Drawing.Point(665,209);
+			this.butBackup.Name = "butBackup";
+			this.butBackup.Size = new System.Drawing.Size(86,26);
+			this.butBackup.TabIndex = 1;
+			this.butBackup.Text = "Backup";
+			this.butBackup.Click += new System.EventHandler(this.butBackup_Click);
+			// 
+			// butCancel
+			// 
+			this.butCancel.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.butCancel.Autosize = true;
+			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butCancel.CornerRadius = 4F;
+			this.butCancel.Location = new System.Drawing.Point(660,501);
+			this.butCancel.Name = "butCancel";
+			this.butCancel.Size = new System.Drawing.Size(86,26);
+			this.butCancel.TabIndex = 0;
+			this.butCancel.Text = "&Cancel";
+			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
 			// 
 			// FormBackup
 			// 
-			this.AutoScaleBaseSize=new System.Drawing.Size(5,13);
-			this.ClientSize=new System.Drawing.Size(777,550);
+			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
+			this.ClientSize = new System.Drawing.Size(777,550);
 			this.Controls.Add(this.checkExcludeImages);
 			this.Controls.Add(this.butSave);
 			this.Controls.Add(this.textBox2);
@@ -393,14 +393,14 @@ namespace OpenDental{
 			this.Controls.Add(this.groupBox1);
 			this.Controls.Add(this.label1);
 			this.Controls.Add(this.groupBox2);
-			this.Icon=((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-			this.MaximizeBox=false;
-			this.MinimizeBox=false;
-			this.Name="FormBackup";
-			this.ShowInTaskbar=false;
-			this.StartPosition=System.Windows.Forms.FormStartPosition.CenterScreen;
-			this.Text="Backup";
-			this.Load+=new System.EventHandler(this.FormBackup_Load);
+			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+			this.MaximizeBox = false;
+			this.MinimizeBox = false;
+			this.Name = "FormBackup";
+			this.ShowInTaskbar = false;
+			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+			this.Text = "Backup";
+			this.Load += new System.EventHandler(this.FormBackup_Load);
 			this.groupBox1.ResumeLayout(false);
 			this.groupBox1.PerformLayout();
 			this.ResumeLayout(false);
