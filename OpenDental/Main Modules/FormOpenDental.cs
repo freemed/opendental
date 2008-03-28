@@ -2417,6 +2417,9 @@ namespace OpenDental{
 			if(sigList.Length==0){
 				return;
 			}
+			if(Security.CurUser==null){
+				return;
+			}
 			if(sigList[sigList.Length-1].AckTime.Year>1880){
 				signalLastRefreshed=sigList[sigList.Length-1].AckTime;
 			}
