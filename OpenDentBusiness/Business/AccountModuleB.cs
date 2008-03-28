@@ -66,6 +66,13 @@ namespace OpenDentBusiness {
 		///<summary>Gets a table of charges mixed with payments to show in the payplan edit window.  Parameters: 0:payPlanNum</summary>
 		public static DataSet GetPayPlanAmort(string[] parameters){
 			int payPlanNum=PIn.PInt(parameters[0]);
+			retVal=new DataSet();
+			DataTable table=GetPayPlanAmortTable(payPlanNum);
+			retVal.Tables.Add(table);
+			return retVal;
+		}
+
+		private static DataTable GetPayPlanAmortTable(int payPlanNum){
 			DataConnection dcon=new DataConnection();
 			DataTable table=new DataTable("payplanamort");
 			DataRow row;
@@ -201,12 +208,10 @@ namespace OpenDentBusiness {
 					rows[i]["balance"]=bal.ToString("n");
 				//}
 			}
-			retVal=new DataSet();
 			for(int i=0;i<rows.Count;i++) {
 				table.Rows.Add(rows[i]);
 			}
-			retVal.Tables.Add(table);
-			return retVal;
+			return table;
 		}
 
 		/*private static void GetPayPlanCharges(){
