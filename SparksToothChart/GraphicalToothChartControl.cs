@@ -54,7 +54,6 @@ namespace SparksToothChart {
 		private int hotTooth;
 		///<summary>The previous hotTooth.  If this is different than hotTooth, then mouse has just now moved to a new tooth.  Can be 0 to represent no previous.</summary>
 		private int hotToothOld;
-		private int toothNomenclature;
 		private int fontOffset;
 		private int displayListOffset;
 		private string[][] fontsymbols;
@@ -159,16 +158,6 @@ namespace SparksToothChart {
 		public string[] SelectedTeeth{
 			get{
 				return selectedTeeth;
-			}
-		}
-
-		///<summary>Tooth nomenclature to use. 0.</summary>
-		public int ToothNomenclature{
-			get{
-				return toothNomenclature;
-			}
-			set{
-				toothNomenclature=value;
 			}
 		}
 
@@ -411,11 +400,6 @@ namespace SparksToothChart {
 			//bitmap.RotateFlip(RotateFlipType.RotateNoneFlipY);
 			g.Dispose();
 			return bitmap;
-		}
-
-		public string GetToothLabel(string tooth_id)
-		{
-			return ToothGraphic.GetToothLabel(toothNomenclature, tooth_id);
 		}
 
 		#endregion Public Methods
@@ -831,7 +815,7 @@ namespace SparksToothChart {
 				yPos-=3.8f;
 			}
 			xPos+=GetTransX(tooth_id);
-			string displayNum=GetToothLabel(tooth_id);
+			string displayNum=OpenDentBusiness.Tooth.GetToothLabel(tooth_id);
 
 			float strWidth=MeasureStringMm(displayNum);
 			xPos-=strWidth/2f;
@@ -869,7 +853,7 @@ namespace SparksToothChart {
 			if(isFullRedraw && ListToothGraphics[tooth_id].HideNumber){//if redrawing all numbers, and this is a "hidden" number
 				return;//skip
 			}
-			string displayNum=GetToothLabel(tooth_id);
+			string displayNum=OpenDentBusiness.Tooth.GetToothLabel(tooth_id);
 
 			/*float strWidth=MeasureStringMm(displayNum);
 			xPos-=strWidth/2f;
@@ -1362,6 +1346,7 @@ namespace SparksToothChart {
 
 	}
 }
+
 
 
 

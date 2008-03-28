@@ -533,7 +533,7 @@ namespace OpenDentBusiness {
 				row["procsOnClaim"]="";
 				row["prov"]=Providers.GetAbbr(PIn.PInt(rawProc.Rows[i]["ProvNum"].ToString()));
 				row["StatementNum"]="0";
-				row["tth"]=Tooth.ToInternat(rawProc.Rows[i]["ToothNum"].ToString());
+				row["tth"]=Tooth.GetToothLabel(rawProc.Rows[i]["ToothNum"].ToString());
 				rows.Add(row);
 			}
 			//Adjustments---------------------------------------------------------------------------------------
@@ -1222,7 +1222,7 @@ namespace OpenDentBusiness {
 				rows.Add(row);
 				//detail rows-------------------------------------------------------------------------------
 				payPlanNum=PIn.PInt(rawPayPlan.Rows[i]["PayPlanNum"].ToString());
-				rawAmort=GetPayPlanAmortTable(payPlanNum);
+				rawAmort = null;// GetPayPlanAmortTable(payPlanNum);
 				//remove rows out of date range, going backwards
 				for(int d=rawAmort.Rows.Count-1;d>=0;d--){
 					if((DateTime)rawAmort.Rows[d]["DateTime"]>toDate.AddDays(PrefB.GetInt("PayPlansBillInAdvanceDays"))){

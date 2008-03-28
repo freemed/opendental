@@ -13,6 +13,24 @@ namespace OpenDentBusiness{
 			
 		}
 
+		private static String[] labelsUniversal = new String[] { "1",  "2",  "3",  "4",  "5",  "6",  "7",  "8",  "9", "10", "11", "12", "13", "14", "15", "16", 
+																"32", "31", "30", "29", "28", "27", "26", "25", "24", "23", "22", "21", "20", "19", "18", "17",
+																                   "A",  "B",  "C",  "D",  "E",  "F",  "G",  "H",  "I",  "J",
+																				   "T",  "S",  "R",  "Q",  "P",  "O",  "N",  "M",  "L",  "K"
+																};
+
+		private static String[] labelsFDI = new String[] {"18", "17", "16", "15", "14", "13", "12", "11", "21", "22", "23", "24", "25", "26", "27", "28", 
+																"48", "47", "46", "45", "44", "43", "42", "41", "31", "32", "33", "34", "35", "36", "37", "38",
+																                  "55", "54", "53", "52", "51", "61", "62", "63", "64", "65",
+																				  "85", "84", "83", "82", "81", "71", "72", "73", "74", "75"
+																};
+
+		private static String[] labelsHaderup = new String[] { "8+",  "7+",  "6+",  "5+",  "4+",  "3+",  "2+",  "1+",  "+1", "+2", "+3", "+4", "+5", "+6", "+7", "+8", 
+																 "8-",  "7-",  "6-",  "5-",  "4-",  "3-",  "2-",  "1-",  "-1", "-2", "-3", "-4", "-5", "-6", "-7", "-8", 
+																                   "A",  "B",  "C",  "D",  "E",  "F",  "G",  "H",  "I",  "J",
+																				   "T",  "S",  "R",  "Q",  "P",  "O",  "N",  "M",  "L",  "K"
+																};
+
 		///<summary></summary>
 		public static bool IsAnterior(string toothNum){
 			if(!IsValidDB(toothNum))
@@ -105,95 +123,54 @@ namespace OpenDentBusiness{
 			return IsPreMolar(toothNum);
 		}
 
+		///<summary>Return the correct label (number) for a tooth</summary>
+		public static string GetToothLabel(string tooth_id)
+		{
+			if (tooth_id == null || tooth_id == "") return ""; // CWI: We should fix the source of these
+			int nomenclature = PrefB.GetInt("UseInternationalToothNumbers");
+			if (nomenclature == 0) return tooth_id; // Universal
+
+			int index = Array.IndexOf(labelsUniversal, tooth_id);
+
+			if (nomenclature == 1)
+			{ // FDI
+				return labelsFDI[index];
+			}
+			else if (nomenclature == 2)
+			{ // Haderup
+				return labelsHaderup[index];
+			}
+
+			return "-"; // Should never happen
+		}
+
+		public static string GetToothId(string tooth_label)
+		{
+			int nomenclature = PrefB.GetInt("UseInternationalToothNumbers");
+			if (nomenclature == 0) return tooth_label; // Universal
+
+			int index = 0;
+			if (nomenclature == 1)
+			{ // FDI
+				index = Array.IndexOf(labelsFDI, tooth_label);
+			}
+			else if (nomenclature == 2)
+			{ // Haderup
+				index = Array.IndexOf(labelsHaderup, tooth_label);
+			}
+
+			return labelsUniversal[index];
+
+		}
+
 		///<summary>Sometimes validated by IsValidDB before coming here, otherwise an invalid toothnum .  This should be run on all displayed tooth numbers. It will handle checking for whether user is using international tooth numbers.  All tooth numbers are passed in american values until the very last moment.  Just before display, the string is converted using this method.</summary>
-		public static string ToInternat(string toothNum){
-			//if not using international tooth numbers, no change.
-			if(!PrefB.GetBool("UseInternationalToothNumbers")){
-				//((Pref)PrefB.HList[]).ValueString=="0"){
-				return toothNum;
-			}
-			if(toothNum==null || toothNum=="")
-				return "";
-			int intToothI=0;//the international tooth number we will find
-			int intTooth=0;
-			try{
-				intTooth=ToInt(toothNum);//this gives us the american 1-32. Primary are 4-13,20-29
-			}
-			catch{
-				return "";//for situations where no validation was performed
-			}
-			if(IsPrimary(toothNum)){
-				if(intTooth>=4 && intTooth<=8){//UR= 51-55
-					intToothI=59-intTooth;
-				}
-				else if(intTooth>=9 && intTooth<=13){//UL= 61-65
-					intToothI=52+intTooth;
-				}
-				else if(intTooth>=20 && intTooth<=24){//LL= 71-75
-					intToothI=95-intTooth;
-				}
-				else if(intTooth>=25 && intTooth<=29){//LR= 81-85
-					intToothI=56+intTooth;
-				}
-			}
-			else{//adult toothnum
-				if(intTooth>=1 && intTooth<=8){//UR= 11-18
-					intToothI=19-intTooth;
-				}
-				else if(intTooth>=9 && intTooth<=16){//UL= 21-28
-					intToothI=12+intTooth;
-				}
-				else if(intTooth>=17 && intTooth<=24){//LL= 31-38
-					intToothI=55-intTooth;
-				}
-				else if(intTooth>=25 && intTooth<=32){//LR= 41-48
-					intToothI=16+intTooth;
-				}
-			}
-			return intToothI.ToString();
+		public static string ToInternat(string toothNum){ // CWI: Left for compatibility
+			return GetToothLabel(toothNum);
 		}
 
 		///<summary>MUST be validated by IsValidEntry before coming here.  All user entered toothnumbers are run through this method which automatically checks to see if using international toothnumbers.  So the procedurelog class will always contain the american toothnum.</summary>
-		public static string FromInternat(string toothNum){
-			//if not using international tooth numbers, no change.
-			if(((Pref)PrefB.HList["UseInternationalToothNumbers"]).ValueString=="0"){
-				return toothNum;
-			}
-			int intTooth=0;
-			int intToothI=Convert.ToInt32(toothNum);
-			if(intToothI>=11 && intToothI<=18){//UR perm
-				intTooth=19-intToothI;
-				return intTooth.ToString();
-			}
-			if(intToothI>=21 && intToothI<=28){//UL perm
-				intTooth=intToothI-12;
-				return intTooth.ToString();
-			}
-			if(intToothI>=31 && intToothI<=38){//LL perm
-				intTooth=55-intToothI;
-				return intTooth.ToString();
-			}
-			if(intToothI>=41 && intToothI<=48){//LR perm
-				intTooth=intToothI-16;
-				return intTooth.ToString();
-			}
-			if(intToothI>=51 && intToothI<=55){//UR pri
-				intTooth=59-intToothI;
-				return PermToPri(intTooth.ToString());
-			}
-			if(intToothI>=61 && intToothI<=65){//UL pri
-				intTooth=intToothI-52;
-				return PermToPri(intTooth.ToString());
-			}
-			if(intToothI>=71 && intToothI<=75){//LL pri
-				intTooth=95-intToothI;
-				return PermToPri(intTooth.ToString());
-			}
-			if(intToothI>=81 && intToothI<=85){//LR pri
-				intTooth=intToothI-56;
-				return PermToPri(intTooth.ToString());
-			}
-			return "";//should never happen
+		public static string FromInternat(string toothNum){ // CWI: Left for compatibility
+			return GetToothId(toothNum);
 		}
 
 		///<summary>The supplied toothNumbers will be a series of tooth numbers separated by commas.  They will be in american format..  For display purposes, ranges will use dashes, and international numbers will be used.</summary>
@@ -207,10 +184,10 @@ namespace OpenDentBusiness{
 			}
 			string[] toothArray=toothNumbers.Split(',');
 			if(toothArray.Length==1) {
-				return Tooth.ToInternat(toothArray[0]);
+				return Tooth.GetToothLabel(toothArray[0]);
 			}
 			else if(toothArray.Length==2) {
-				return Tooth.ToInternat(toothArray[0])+","+Tooth.ToInternat(toothArray[1]);//just two numbers separated by comma
+				return Tooth.GetToothLabel(toothArray[0])+","+Tooth.GetToothLabel(toothArray[1]);//just two numbers separated by comma
 			}
 			Array.Sort<string>(toothArray, new ToothComparer());
 			StringBuilder strbuild=new StringBuilder();
@@ -233,7 +210,7 @@ namespace OpenDentBusiness{
 					if(strbuild.Length>0 && strbuild[strbuild.Length-1]!='-') {
 						strbuild.Append(",");
 					}
-					strbuild.Append(Tooth.ToInternat(toothArray[i]));
+					strbuild.Append(Tooth.GetToothLabel(toothArray[i]));
 				}
 				else if(numberInaRow==3) {//this way, the dash only gets added exactly once
 					strbuild.Append("-");
@@ -243,7 +220,7 @@ namespace OpenDentBusiness{
 			if(strbuild.Length>0 && strbuild[strbuild.Length-1]!='-') {
 				strbuild.Append(",");
 			}
-			strbuild.Append(Tooth.ToInternat(toothArray[toothArray.Length-1]));//always show the last number
+			strbuild.Append(Tooth.GetToothLabel(toothArray[toothArray.Length-1]));//always show the last number
 			return strbuild.ToString();
 		}
 
@@ -273,8 +250,8 @@ namespace OpenDentBusiness{
 					if(!IsValidEntry(rangeend)) {
 						throw new ApplicationException(rangeend+" "+Lan.g("Tooth","is not a valid tooth number."));
 					}
-					beginint=Tooth.ToOrdinal(FromInternat(rangebegin));
-					endint=Tooth.ToInt(FromInternat(rangeend));
+					beginint=Tooth.ToOrdinal(GetToothId(rangebegin));
+					endint=Tooth.ToInt(GetToothId(rangeend));
 					if(endint<beginint){
 						throw new ApplicationException("Range specified is impossible.");
 					}
@@ -287,7 +264,7 @@ namespace OpenDentBusiness{
 					if(!IsValidEntry(toothArray[i])){
 						throw new ApplicationException(toothArray[i]+" "+Lan.g("Tooth","is not a valid tooth number."));
 					}
-					toothList.Add(Tooth.FromInternat(toothArray[i]));
+					toothList.Add(Tooth.GetToothId(toothArray[i]));
 				}
 			}
 			toothList.Sort(new ToothComparer());

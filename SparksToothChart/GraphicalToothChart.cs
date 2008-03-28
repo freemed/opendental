@@ -11,7 +11,6 @@ using System.Windows.Forms;
 namespace SparksToothChart {
 	public partial class GraphicalToothChart:UserControl {
 		private string[] selectedTeeth;
-		private int toothNomenclature;
 		private Color colorBackground;
 		private Color colorBackSimple=Color.FromArgb(150,145,153);//constant
 		private bool simpleMode=true;
@@ -59,35 +58,6 @@ namespace SparksToothChart {
 			}
 		}
 
-		///<summary>Set true to show international tooth numbers.</summary>
-		public bool UseInternational // CWI: Keep for a while for compatibility
-		{
-			get
-			{
-				return toothNomenclature != 0;
-			}
-			set
-			{
-				toothNomenclature = 1;
-			}
-		}
-
-		///<summary>Tooth nomenclature to use. 0, 1 or 2.</summary>
-		public int ToothNomenclature
-		{
-			get {
-				return toothNomenclature;
-			}
-			set {
-				toothNomenclature = value;
-				if(simpleMode) {
-					//				 
-				}
-				else {
-					toothChart.ToothNomenclature=value;
-				}
-			}
-		}
 
 		///<summary></summary>
 		public Color ColorBackground {
@@ -209,7 +179,6 @@ namespace SparksToothChart {
 				toothChart.Name = "toothChart";
 				toothChart.Size = new System.Drawing.Size(719,564);//unnecessary?
 				//this.toothChart.TabIndex = 0;
-				toothChart.ToothNomenclature = toothNomenclature;
 				this.Controls.Add(toothChart);
 			}
 		}
@@ -448,11 +417,6 @@ namespace SparksToothChart {
 			return result;
 		}
 
-		public string GetToothLabel(string tooth_id)
-		{
-			return ToothGraphic.GetToothLabel(toothNomenclature, tooth_id);
-		}
-
 		#endregion
 
 		#region Painting
@@ -569,7 +533,7 @@ namespace SparksToothChart {
 			else {
 				yPos+=3;
 			}
-			string displayNum = GetToothLabel(tooth_id);
+			string displayNum = OpenDentBusiness.Tooth.GetToothLabel(tooth_id);
 
 			float strWidth=g.MeasureString(displayNum,Font).Width;
 			xPos-=strWidth/2f;
@@ -592,7 +556,7 @@ namespace SparksToothChart {
 				if(isFullRedraw && ListToothGraphics[tooth_id].HideNumber){//if redrawing all numbers, and this is a "hidden" number
 					return;//skip
 				}
-				displayNum = GetToothLabel(tooth_id);
+				displayNum = OpenDentBusiness.Tooth.GetToothLabel(tooth_id);
 				hideNumber=ListToothGraphics[tooth_id].HideNumber;
 			}
 			catch{

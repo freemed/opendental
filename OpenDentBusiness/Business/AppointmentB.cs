@@ -346,11 +346,11 @@ namespace OpenDentBusiness{
 					}
 					switch(rawProc.Rows[p]["TreatArea"].ToString()) {
 						case "1"://TreatmentArea.Surf:
-							row["procs"]+="#"+Tooth.ToInternat(rawProc.Rows[p]["ToothNum"].ToString())+"-"
+							row["procs"]+="#"+Tooth.GetToothLabel(rawProc.Rows[p]["ToothNum"].ToString())+"-"
 								+rawProc.Rows[p]["Surf"].ToString()+"-";//""#12-MOD-"
 							break;
 						case "2"://TreatmentArea.Tooth:
-							row["procs"]+="#"+Tooth.ToInternat(rawProc.Rows[p]["ToothNum"].ToString())+"-";//"#12-"
+							row["procs"]+="#"+Tooth.GetToothLabel(rawProc.Rows[p]["ToothNum"].ToString())+"-";//"#12-"
 							break;
 						default://area 3 or 0 (mouth)
 							break;
@@ -598,7 +598,7 @@ namespace OpenDentBusiness{
 				row["ProcStatus"]=rawProc.Rows[i]["ProcStatus"].ToString();
 				row["ProvNum"]=rawProc.Rows[i]["ProvNum"].ToString();
 				row["status"]=((ProcStat)PIn.PInt(rawProc.Rows[i]["ProcStatus"].ToString())).ToString();
-				row["toothNum"]=Tooth.ToInternat(rawProc.Rows[i]["ToothNum"].ToString());
+				row["toothNum"]=Tooth.GetToothLabel(rawProc.Rows[i]["ToothNum"].ToString());
 				row["Surf"]=rawProc.Rows[i]["Surf"].ToString();
 				table.Rows.Add(row);
 			}

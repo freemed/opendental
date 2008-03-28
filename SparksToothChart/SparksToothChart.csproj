@@ -150,16 +150,6 @@
     <Compile Include="ToothGroup.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\CodeBase\xCodeBase.csproj">
-      <Project>{18F7BC78-4B99-48D3-A1F1-0D13A63E3CF9}</Project>
-      <Name>xCodeBase</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\OpenDentBusiness\OpenDentBusiness.csproj">
-      <Project>{3D0FC76E-803C-4DE2-BDB1-47D63A4E2357}</Project>
-      <Name>OpenDentBusiness</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Framework.2.0">
       <Visible>False</Visible>
       <ProductName>.NET Framework 2.0 %28x86%29</ProductName>
@@ -175,6 +165,16 @@
       <ProductName>.NET Framework 3.5</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\CodeBase\xCodeBase.csproj">
+      <Project>{18F7BC78-4B99-48D3-A1F1-0D13A63E3CF9}</Project>
+      <Name>xCodeBase</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\OpenDentBusiness\OpenDentBusiness.csproj">
+      <Project>{3D0FC76E-803C-4DE2-BDB1-47D63A4E2357}</Project>
+      <Name>OpenDentBusiness</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

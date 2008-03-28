@@ -1774,7 +1774,6 @@ namespace OpenDental{
 				//panelHide.SendToBack();
 				//this.Controls.Add(panelHide);
 				toothChart=new GraphicalToothChart();
-				toothChart.UseInternational=PrefB.GetBool("UseInternationalToothNumbers");
 				toothChart.ColorBackground=DefB.Long[(int)DefCat.ChartGraphicColors][14].ItemColor;
 				toothChart.ColorText=DefB.Long[(int)DefCat.ChartGraphicColors][15].ItemColor;
 				//toothChart.TaoRenderEnabled=true;

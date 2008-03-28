@@ -1465,7 +1465,6 @@ namespace OpenDental{
 			this.toothChart.Size = new System.Drawing.Size(410, 307);
 			this.toothChart.TabIndex = 194;
 			this.toothChart.UseHardware = false;
-			this.toothChart.UseInternational = false;
 			// 
 			// gridProg
 			// 
@@ -3503,7 +3502,6 @@ namespace OpenDental{
 		private void FillToothChart(bool retainSelection){
 			Cursor=Cursors.WaitCursor;
 			toothChart.SuspendLayout();
-			toothChart.UseInternational=PrefB.GetBool("UseInternationalToothNumbers");
 			toothChart.ColorBackground=DefB.Long[(int)DefCat.ChartGraphicColors][10].ItemColor;
 			toothChart.ColorText=DefB.Long[(int)DefCat.ChartGraphicColors][11].ItemColor;
 			toothChart.ColorTextHighlight=DefB.Long[(int)DefCat.ChartGraphicColors][12].ItemColor;

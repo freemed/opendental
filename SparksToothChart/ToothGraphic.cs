@@ -61,24 +61,6 @@ namespace SparksToothChart {
 		///<summary>If sealant, then this will contain the color.</summary>
 		public Color colorSealant;
 
-		private static String[] labelsUniversal = new String[] { "1",  "2",  "3",  "4",  "5",  "6",  "7",  "8",  "9", "10", "11", "12", "13", "14", "15", "16", 
-																"32", "31", "30", "29", "28", "27", "26", "25", "24", "23", "22", "21", "20", "19", "18", "17",
-																                   "A",  "B",  "C",  "D",  "E",  "F",  "G",  "H",  "I",  "J",
-																				   "T",  "S",  "R",  "Q",  "P",  "O",  "N",  "M",  "L",  "K"
-																};
-
-		private static String[] labelsFDI       = new String[] {"18", "17", "16", "15", "14", "13", "12", "11", "21", "22", "23", "24", "25", "26", "27", "28", 
-																"48", "47", "46", "45", "44", "43", "42", "41", "31", "32", "33", "34", "35", "36", "37", "38",
-																                  "55", "54", "53", "52", "51", "61", "62", "63", "64", "65",
-																				  "85", "84", "83", "82", "81", "71", "72", "73", "74", "75"
-																};
-
-		private static String[] labelsHaderup   = new String[] { "8+",  "7+",  "6+",  "5+",  "4+",  "3+",  "2+",  "1+",  "+1", "+2", "+3", "+4", "+5", "+6", "+7", "+8", 
-																 "8-",  "7-",  "6-",  "5-",  "4-",  "3-",  "2-",  "1-",  "-1", "-2", "-3", "-4", "-5", "-6", "-7", "-8", 
-																                   "A",  "B",  "C",  "D",  "E",  "F",  "G",  "H",  "I",  "J",
-																				   "T",  "S",  "R",  "Q",  "P",  "O",  "N",  "M",  "L",  "K"
-																};
-
 		///<summary>Only called from GraphicalToothChart.ResetTeeth or from GraphicalToothChartControl.ResetTeeth when program first loads.  Constructor requires passing in the toothID.  Exception will be thrown if not one of the following: 1-32 or A-T.  Always loads graphics data from local resources even if in simplemode.</summary>
 		public ToothGraphic(string tooth_id) {
 			if(tooth_id!="implant" && !IsValidToothID(tooth_id)) {
@@ -482,21 +464,6 @@ namespace SparksToothChart {
 			if(intTooth>=25 && intTooth<=32)
 				return true;
 			return false;
-		}
-
-		public static string GetToothLabel(int nomenclature,string tooth_id) {
-			if (nomenclature == 0) return tooth_id; // Universal
-
-			int index = Array.IndexOf(labelsUniversal, tooth_id);
-
-			if (nomenclature == 1) { // FDI
-				return labelsFDI[index];
-			}
-			else if (nomenclature == 2) { // Haderup
-				return labelsHaderup[index];
-			}
-
-			return "-"; // Should never happen
 		}
 
 		#endregion static functions
