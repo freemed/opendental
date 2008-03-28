@@ -1678,7 +1678,9 @@ namespace OpenDental{
 		private void pinBoard_MouseUp(object sender,MouseEventArgs e) {
 			if(!boolAptMoved){
 				mouseIsDown=false;
-				TempApptSingle.Dispose();
+				if(TempApptSingle!=null){
+					TempApptSingle.Dispose();
+				}
 				return;
 			}
 			if(TempApptSingle.Location.X>ContrApptSheet2.Width){
