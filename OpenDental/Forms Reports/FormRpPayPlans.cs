@@ -19,12 +19,12 @@ namespace OpenDental
 	public class FormRpPayPlans:System.Windows.Forms.Form {
 		private OpenDental.UI.Button butCancel;
 		private OpenDental.UI.Button butOK;
-		private int pagesPrinted;
+		//private int pagesPrinted;
 		private ODErrorProvider errorProvider1=new ODErrorProvider();
-		private DataTable BirthdayTable;
-		private int patientsPrinted;
-		private PrintDocument pd;
-		private OpenDental.UI.PrintPreview printPreview;
+		//private DataTable BirthdayTable;
+		//private int patientsPrinted;
+		//private PrintDocument pd;
+		//private OpenDental.UI.PrintPreview printPreview;
 
 		///<summary></summary>
 		public FormRpPayPlans()

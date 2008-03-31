@@ -29,9 +29,6 @@ namespace OpenDentServer {
 			else if(type==typeof(DtoPrefRefresh)) {
 				return PrefB.Refresh();
 			}
-			else if(type==typeof(DtoProcedureRefresh)) {
-				return ProcedureB.Refresh(((DtoProcedureRefresh)dto).PatNum);
-			}
 			else if(type==typeof(DtoUserodRefresh)) {
 				return UserodB.Refresh();
 			}
@@ -51,29 +48,6 @@ namespace OpenDentServer {
 			}
 			else if(type==typeof(DtoMiscDataMakeABackup)) {
 				return MiscDataB.MakeABackup();
-			}
-			else if(type==typeof(DtoProcedureInsert)) {
-				return ProcedureB.Insert(((DtoProcedureInsert)dto).Proc);
-			}
-			else if(type==typeof(DtoProcedureUpdate)) {
-				return ProcedureB.Update(((DtoProcedureUpdate)dto).Proc,((DtoProcedureUpdate)dto).OldProc);
-			}
-			else if(type==typeof(DtoProcedureDelete)) {
-				return ProcedureB.Delete(((DtoProcedureDelete)dto).ProcNum);
-			}
-			else if(type==typeof(DtoProcedureUpdateAptNum)) {
-				return ProcedureB.UpdateAptNum(((DtoProcedureUpdateAptNum)dto).ProcNum,((DtoProcedureUpdateAptNum)dto).NewAptNum);
-			}
-			else if(type==typeof(DtoProcedureUpdatePlannedAptNum)) {
-				return ProcedureB.UpdatePlannedAptNum(((DtoProcedureUpdatePlannedAptNum)dto).ProcNum,
-					((DtoProcedureUpdatePlannedAptNum)dto).NewPlannedAptNum);
-			}
-			else if(type==typeof(DtoProcedureUpdatePriority)) {
-				return ProcedureB.UpdatePriority(((DtoProcedureUpdatePriority)dto).ProcNum,
-					((DtoProcedureUpdatePriority)dto).NewPriority);
-			}
-			else if(type==typeof(DtoProcedureUpdateFee)) {
-				return ProcedureB.UpdateFee(((DtoProcedureUpdateFee)dto).ProcNum,((DtoProcedureUpdateFee)dto).NewFee);
 			}
 			else{
 				throw new Exception("OpenDentServer.BusinessLayer.ProcessCommand(dto) is missing a case for "

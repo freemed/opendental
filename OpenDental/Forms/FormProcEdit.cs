@@ -2640,9 +2640,13 @@ namespace OpenDental{
 			if(MessageBox.Show(Lan.g(this,"Delete Procedure?"),"",MessageBoxButtons.OKCancel)!=DialogResult.OK){
 				return;
 			}
-			if(Procedures.Delete(ProcCur.ProcNum)){//also deletes the claimProcs and adjustments.
-				Recalls.Synch(ProcCur.PatNum);//needs to be moved into ProcedureB.Delete
+			try{
+				Procedures.Delete(ProcCur.ProcNum);//also deletes the claimProcs and adjustments. Might throw exception.
+				Recalls.Synch(ProcCur.PatNum);//needs to be moved into Procedures.Delete
 				DialogResult=DialogResult.OK;	
+			}
+			catch(Exception ex){
+				MessageBox.Show(ex.Message);
 			}
 		}		
 

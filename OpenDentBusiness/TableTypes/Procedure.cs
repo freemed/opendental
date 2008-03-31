@@ -86,7 +86,7 @@ namespace OpenDentBusiness {
 		///<summary>The date that the procedure was originally treatment planned.  Does not change when marked complete.</summary>
 		public DateTime DateTP;
 
-		///<summary>Not a database column.  Saved in database in the procnote table.  This note is only the most recent note from that table.  If user changes it, then the business layer handles adding another procnote to that table.</summary>
+		///<summary>Not a database column.  Saved in database in the procnote table.  This note is only the most recent note from that table.  If user changes it, then the business layer handles it by adding another procnote to that table.</summary>
 		public string Note;
 		///<summary>Not a database column.  Just used for now to set the user so that it can be saved with the ProcNote.</summary>
 		public int UserNum;
@@ -101,44 +101,7 @@ namespace OpenDentBusiness {
 		}
 	}
 
-	public class DtoProcedureRefresh:DtoQueryBase {
-		public int PatNum;
-		//public bool IncludeDeletedAndNotes;
-	}
-
-	public class DtoProcedureInsert:DtoCommandBase {
-		public Procedure Proc;
-	}
-
-	public class DtoProcedureUpdate:DtoCommandBase {
-		public Procedure Proc;
-		public Procedure OldProc;
-	}
-
-	public class DtoProcedureDelete:DtoCommandBase {
-		public int ProcNum;
-	}
-
-	public class DtoProcedureUpdateAptNum:DtoCommandBase {
-		public int ProcNum;
-		public int NewAptNum;
-	}
-
-	public class DtoProcedureUpdatePlannedAptNum:DtoCommandBase {
-		public int ProcNum;
-		public int NewPlannedAptNum;
-	}
-
-	public class DtoProcedureUpdatePriority:DtoCommandBase {
-		public int ProcNum;
-		public int NewPriority;
-	}
-
-	public class DtoProcedureUpdateFee:DtoCommandBase {
-		public int ProcNum;
-		public double NewFee;
-	}
-
+	
 
 
 }

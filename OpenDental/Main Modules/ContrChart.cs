@@ -4192,7 +4192,12 @@ namespace OpenDental{
 			FormPE.ShowDialog();
 			if(FormPE.DialogResult==DialogResult.Cancel){
 				//any created claimprocs are automatically deleted from within procEdit window.
-				Procedures.Delete(ProcCur.ProcNum);//also deletes the claimprocs
+				try{
+					Procedures.Delete(ProcCur.ProcNum);//also deletes the claimprocs
+				}
+				catch(Exception ex){
+					MessageBox.Show(ex.Message);
+				}
 			}
 			else{
 				Recalls.Synch(PatCur.PatNum);
@@ -4436,7 +4441,12 @@ namespace OpenDental{
 						skippedC++;
 					}
 					else{
-						Procedures.Delete(PIn.PInt(row["ProcNum"].ToString()));//also deletes the claimprocs
+						try{
+							Procedures.Delete(PIn.PInt(row["ProcNum"].ToString()));//also deletes the claimprocs
+						}
+						catch(Exception ex){
+							MessageBox.Show(ex.Message);
+						}
 					}
 				}
 				else if(row["RxNum"].ToString()!="0"){
