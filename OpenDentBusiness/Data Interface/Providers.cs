@@ -15,7 +15,7 @@ namespace OpenDentBusiness{
 
 		///<summary>Refreshes List with all providers.</summary>
 		public static void RefreshOnClient(){
-			DataTable table=General.GetDS("Providers.RefreshOnServer").Tables[0];
+			DataTable table=General.GetDS(MethodName.Providers_RefreshOnServer).Tables[0];
 			FillArrays(table);//now, we have an arrays on both the client and the server.
 		}
 

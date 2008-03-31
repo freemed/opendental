@@ -673,7 +673,7 @@ namespace OpenDental{
 					dcon.SetDb(comboComputerName.Text,comboDatabase.Text,textUser.Text,textPassword.Text,"","",DataConnection.DBtype);
 				}
 				//a direct connection does not utilize lower privileges.
-				RemotingClient.OpenDentBusinessIsLocal=true;
+				RemotingClient.RemotingRole=RemotingRole.ClientDirect;
 				return true;
 			}
 			catch {//(Exception ex){
@@ -697,7 +697,7 @@ namespace OpenDental{
 				dto.OdPassHash=UserodB.EncryptPassword(textPassword2.Text);
 				try{
 					RemotingClient.ProcessCommand(dto);
-					RemotingClient.OpenDentBusinessIsLocal=false;
+					RemotingClient.RemotingRole=RemotingRole.ClientTcp;
 				}
 				catch(Exception ex){
 					RemotingClient.ServerName=originalServer;
@@ -730,7 +730,7 @@ namespace OpenDental{
 						ex.Message);
 					return;
 				}
-				RemotingClient.OpenDentBusinessIsLocal=true;
+				RemotingClient.RemotingRole=RemotingRole.ClientDirect;
 			}
 			try{
 				XmlWriterSettings settings = new XmlWriterSettings();
@@ -738,7 +738,7 @@ namespace OpenDental{
 				settings.IndentChars = ("    ");
 				using(XmlWriter writer=XmlWriter.Create("FreeDentalConfig.xml",settings)) {
 					writer.WriteStartElement("ConnectionSettings");
-					if(RemotingClient.OpenDentBusinessIsLocal){
+					if(RemotingClient.RemotingRole==RemotingRole.ClientDirect){
 						writer.WriteStartElement("DatabaseConnection");
 						writer.WriteStartElement("ComputerName");
 						writer.WriteString(comboComputerName.Text);
@@ -762,7 +762,7 @@ namespace OpenDental{
 						writer.WriteEndElement();
 						writer.WriteEndElement();
 					}
-					else{
+					else if(RemotingClient.RemotingRole==RemotingRole.ClientTcp){
 						writer.WriteStartElement("ServerConnection");
 						writer.WriteStartElement("ComputerName");
 						writer.WriteString(comboServerName2.Text);

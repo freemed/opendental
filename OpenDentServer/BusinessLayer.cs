@@ -20,9 +20,6 @@ namespace OpenDentServer {
 			else if(type==typeof(DtoGeneralGetDataSet)) {
 				return GeneralB.GetDataSet(((DtoGeneralGetDataSet)dto).Commands);
 			}
-			else if(type==typeof(DtoChartModuleGetAll)) {
-				return ChartModuleB.GetAll(((DtoChartModuleGetAll)dto).PatNum,((DtoChartModuleGetAll)dto).IsAuditMode);
-			}
 			else if(type==typeof(DtoCovCatRefresh)) {
 				return CovCatB.Refresh();
 			}

@@ -13,6 +13,9 @@ namespace OpenDentBusiness {
 
 		///<summary></summary>
 		public static DataSet Refresh() {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb){//ClientTcp will already have been handled.
+
+			}
 			string command="SELECT * FROM userod ORDER BY UserName";
 			DataConnection dcon=new DataConnection();
 			RawData=dcon.GetTable(command);

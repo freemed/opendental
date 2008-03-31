@@ -12,13 +12,13 @@ namespace OpenDental {
 		public static void Refresh() {
 			DataSet ds=null;
 			try {
-				if(RemotingClient.OpenDentBusinessIsLocal) {
-					CovCatB.Refresh();
-				}
-				else {
+				if(RemotingClient.RemotingRole==RemotingRole.ClientTcp) {
 					DtoCovCatRefresh dto=new DtoCovCatRefresh();
 					ds=RemotingClient.ProcessQuery(dto);
 					CovCatB.FillLists(ds);//now, we have both lists on both the client and the server.
+				}
+				else {
+					CovCatB.Refresh();
 				}
 			}
 			catch(Exception e) {

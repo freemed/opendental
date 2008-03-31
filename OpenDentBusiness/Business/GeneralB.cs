@@ -60,31 +60,38 @@ namespace OpenDentBusiness {
 			return retVal;
 		}
 
-		public static DataSet GetDS(string methodName, string[] parameters) {
+		///<summary>This is is only here for compatibility with the old 3-tier architecture.  Do not add to this.</summary>
+		public static DataSet GetDS(MethodName methodName, object[] parameters) {
 			switch (methodName){
 				default:
 					throw new ApplicationException("MethodName not found");
-				case "AccountModule.GetAll":
-					return AccountModuleB.GetAll(parameters);
-				case "AccountModule.GetPayPlanAmort":
-					return AccountModuleB.GetPayPlanAmort(parameters);
-				case "AccountModule.GetStatement":
-					return AccountModuleB.GetStatement(parameters);
-				case "Appointment.GetApptEdit":
-					return AppointmentB.GetApptEdit(parameters);
-				case "Appointment.RefreshPeriod":
-					return AppointmentB.RefreshPeriod(parameters);
-				case "Appointment.RefreshOneApt":
-					return AppointmentB.RefreshOneApt(parameters);
-				case "Definition.Refresh":
+				case MethodName.AccountModule_GetAll:
+					return AccountModuleB.GetAll((int)parameters[0],(bool)parameters[1],(DateTime)parameters[2],(DateTime)parameters[3],(bool)parameters[4]);
+				case MethodName.AccountModule_GetPayPlanAmort:
+					return AccountModuleB.GetPayPlanAmort((int)parameters[0]);
+				case  MethodName.AccountModule_GetStatement:
+					return AccountModuleB.GetStatement((int)parameters[0],(bool)parameters[1],(DateTime)parameters[2],(DateTime)parameters[3],(bool)parameters[4]);
+				case  MethodName.Appointment_GetApptEdit:
+					return AppointmentB.GetApptEdit((int)parameters[0]);
+				case  MethodName.Appointment_RefreshPeriod:
+					return AppointmentB.RefreshPeriod((DateTime)parameters[0],(DateTime)parameters[1]);
+				case  MethodName.Appointment_RefreshOneApt:
+					return AppointmentB.RefreshOneApt((int)parameters[0],(bool)parameters[1]);
+				case  MethodName.Chart_GetAll:
+					return ChartModuleB.GetAll((int)parameters[0],(bool)parameters[1]);
+				case  MethodName.Definition_Refresh:
 					return DefB.Refresh();
-				case "Providers.RefreshOnServer":
+				case  MethodName.Providers_RefreshOnServer:
 					return Providers.RefreshOnServer();
 			}
 
 		}
+
+	
 		
 
 
 	}
+
+	
 }

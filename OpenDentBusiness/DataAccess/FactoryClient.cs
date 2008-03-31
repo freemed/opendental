@@ -14,16 +14,13 @@ namespace OpenDental.DataAccess {
 			fto.Command = command;
 			fto.DataObject = dataObject;
 			fto.Parameters = args;
-
 			byte[] buffer = RemotingClient.SendAndReceive(fto);//this might throw an exception if server unavailable
 			object value;
-
 			using (MemoryStream memStream = new MemoryStream(buffer)) {
 				Type returnType = FactoryServer<T>.GetReturnType(typeof(T), command);
 				XmlSerializer serializer = new XmlSerializer(returnType);
 				value = serializer.Deserialize(memStream);
 			}
-
 			return value;
 		}
 	}

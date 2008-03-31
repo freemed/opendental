@@ -14,12 +14,12 @@ namespace OpenDental{
 		public static void Refresh() {
 			DataSet ds=null;
 			try {
-				if(RemotingClient.OpenDentBusinessIsLocal) {
-					ds=PrefB.Refresh();
-				}
-				else {
+				if(RemotingClient.RemotingRole==RemotingRole.ClientTcp) {
 					DtoPrefRefresh dto=new DtoPrefRefresh();
 					ds=RemotingClient.ProcessQuery(dto);
+				}
+				else {
+					ds=PrefB.Refresh();
 				}
 			}
 			catch(Exception e) {

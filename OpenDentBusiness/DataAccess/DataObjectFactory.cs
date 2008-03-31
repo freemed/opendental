@@ -40,23 +40,19 @@ namespace OpenDental.DataAccess {
 		public static Collection<T> CreateObjects(string query) {
 			if (query == null)
 				throw new ArgumentNullException("query");
-
-			if (!RemotingClient.OpenDentBusinessIsLocal)
+			if (RemotingClient.RemotingRole==RemotingRole.ClientTcp){
 				return (Collection<T>)FactoryClient<T>.SendRequest("CreateObjects", default(T), new object[] { query });
-
+			}
 			Collection<T> values;
-
 			using (IDbConnection connection = DataSettings.GetConnection())
 			using (IDbCommand command = connection.CreateCommand()) {
 				command.CommandText = query;
-
 				connection.Open();
 				using (IDataReader reader = command.ExecuteReader()) {
 					values = CreateObjects(reader);
 				}
 				connection.Close();
 			}
-
 			return values;
 		}
 
@@ -67,18 +63,16 @@ namespace OpenDental.DataAccess {
 		/// <param name="query">The query to execute on the server.</param>
 		/// <returns>An objects of type <typeparamref name="T"/>.</returns>
 		public static T CreateObject(string query) {
-			if (query == null)
+			if (query == null){
 				throw new ArgumentNullException("query");
-
-			if (!RemotingClient.OpenDentBusinessIsLocal)
+			}
+			if(RemotingClient.RemotingRole==RemotingRole.ClientTcp){
 				return (T)FactoryClient<T>.SendRequest("CreateObject", default(T), new object[] { query });
-
+			}
 			T value;
-
 			using (IDbConnection connection = DataSettings.GetConnection())
 			using (IDbCommand command = connection.CreateCommand()) {
 				command.CommandText = query;
-
 				connection.Open();
 				using (IDataReader reader = command.ExecuteReader()) {
 					reader.Read();
@@ -86,7 +80,6 @@ namespace OpenDental.DataAccess {
 				}
 				connection.Close();
 			}
-
 			return value;
 		}
 
@@ -101,23 +94,22 @@ namespace OpenDental.DataAccess {
 		/// <exception cref="InvalidOperationException">The object does not have a single primary key.</exception>
 		/// <exception cref="InvalidOperationException">The object does have a single primary key, but it is not of the <see cref="System.Int32"/> type.</exception>
 		public static Collection<T> CreateObjects(int[] id) {
-			if (id == null)
+			if (id == null){
 				throw new ArgumentNullException("id");
-
+			}
 			// Specific case. Create a list of objects, base on IDs.
 			// Construct the query
 			string primaryKeyFieldName = DataObjectInfo<T>.GetPrimaryKeyFieldName();
 			string tableName = DataObjectInfo<T>.GetTableName();
-
 			StringBuilder queryBuilder = new StringBuilder();
 			queryBuilder.Append(string.Format("SELECT * FROM {0} WHERE {1} IN (", tableName, primaryKeyFieldName));
 			for (int i = 0; i < id.Length; i++) {
 				queryBuilder.Append(id[i]);
-				if (i != id.Length - 1)
+				if (i != id.Length - 1){
 					queryBuilder.Append(',');
+				}
 			}
 			queryBuilder.Append(")");
-
 			return CreateObjects(queryBuilder.ToString());
 		}
 
@@ -136,7 +128,6 @@ namespace OpenDental.DataAccess {
 			string primaryKeyFieldName = DataObjectInfo<T>.GetPrimaryKeyFieldName();
 			string tableName = DataObjectInfo<T>.GetTableName();
 			string query = string.Format("SELECT * FROM {0} WHERE {1} = {2}", tableName, primaryKeyFieldName, id);
-
 			return CreateObject(query);
 		}
 
@@ -147,18 +138,16 @@ namespace OpenDental.DataAccess {
 		/// <returns>An object of type <typeparamref name="T"/>.</returns>
 		/// <exception cref="ArgumentNullException"><paramref name="reader"/> is <see langword="null"/>.</exception>
 		public static T CreateObject(IDataReader reader) {
-			if (reader == null)
+			if (reader == null){
 				throw new ArgumentNullException("reader");
-
+			}
 			T value = new T();
 			Collection<DataFieldInfo> dataFields = DataObjectInfo<T>.GetDataFields();
-
 			foreach (DataFieldInfo dataField in dataFields) {
-				if (dataField.WriteOnly)
+				if (dataField.WriteOnly){
 					continue;
-
+				}
 				int ordinal = reader.GetOrdinal(dataField.DatabaseName);
-
 				// Special case for certain types
 				if (dataField.Field.FieldType == typeof(bool)) {
 					// Booleans are sometimes stored as TINYINT(3), to enable conversion to
@@ -196,7 +185,8 @@ namespace OpenDental.DataAccess {
 					//to be the minimum possible value, so that we don't have to handle null values in the code.
 					try{
 						dataField.Field.SetValue(value,reader.GetValue(ordinal));
-					}catch{
+					}
+					catch{
 						dataField.Field.SetValue(value,TimeSpan.MinValue);
 					}
 				}
@@ -233,23 +223,20 @@ namespace OpenDental.DataAccess {
 		///  </para>
 		/// </remarks>
 		public static T CreateObject(DataRow row) {
-			if (row == null)
+			if (row == null){
 				throw new ArgumentNullException("row");
-
+			}
 			Collection<T> values = new Collection<T>();
 			Collection<DataFieldInfo> dataFields = DataObjectInfo<T>.GetDataFields();
-
 			T value = new T();
-
 			foreach (DataFieldInfo dataField in dataFields) {
-				if (dataField.WriteOnly)
+				if (dataField.WriteOnly){
 					continue;
-
+				}
 				// Retrieve the value and its type, both in the database and code.
 				object dataValue = row[dataField.DatabaseName];
 				Type dataType = row.Table.Columns[dataField.DatabaseName].DataType;
 				Type codeType = dataField.Field.FieldType;
-
 				if (codeType != typeof(string) && dataType == typeof(string)) {
 					// If the type in the dataset is "string", but the type in the code
 					// object isn't "string", we use the PIn class.
@@ -285,7 +272,6 @@ namespace OpenDental.DataAccess {
 					// The object is stored in it's "true" type in the DataSet as well (no conversions to
 					// string types have been done). We can, normally, directly use it, except for a couple
 					// of special cases.
-
 					if (codeType == typeof(bool)) {
 						// Booleans are sometimes stored as TINYINT(3), to enable conversion to
 						// Enums if required. Hence, we need to do an explicit conversion.
@@ -307,7 +293,6 @@ namespace OpenDental.DataAccess {
 					}
 				}
 			}
-
 			return value;
 		}
 
@@ -332,15 +317,14 @@ namespace OpenDental.DataAccess {
 		///  </para>
 		/// </remarks>
 		public static Collection<T> CreateObjects(DataTable table) {
-			if (table == null)
+			if (table == null){
 				throw new ArgumentNullException("table");
-
+			}
 			Collection<T> values = new Collection<T>();
 			foreach (DataRow row in table.Rows) {
 				T value = CreateObject(row);
 				values.Add(value);
 			}
-
 			return values;
 		}
 
@@ -352,15 +336,13 @@ namespace OpenDental.DataAccess {
 		/// <returns>An object of type <typeparamref name="T"/>.</returns>
 		/// <exception cref="ArgumentNullException"><paramref name="reader"/> is <see langword="null"/>.</exception>
 		public static Collection<T> CreateObjects(IDataReader reader) {
-			if (reader == null)
+			if (reader == null){
 				throw new ArgumentNullException("reader");
-
+			}
 			Collection<T> values = new Collection<T>();
-
 			while (reader.Read()) {
 				values.Add(CreateObject(reader));
 			}
-
 			return values;
 		}
 
@@ -415,58 +397,52 @@ namespace OpenDental.DataAccess {
 		///  To prevent the code (or database) from auto-assigning a new key, this parameter should be set.
 		/// </param>
 		public static void WriteObject(T value, bool overrideAutoNumber) {
-			if (value == null)
+			if (value == null){
 				throw new ArgumentNullException("value");
-
-			if (value.IsDeleted)
+			}
+			if (value.IsDeleted){
 				throw new InvalidOperationException(Resources.CannotSaveDeletedObject);
-
+			}
 			// If the value is not new, and none of the values has changed, there is nothing we
 			// should do.
-			if (!value.IsNew && !value.IsDirty)
+			if (!value.IsNew && !value.IsDirty){
 				return;
-
+			}
 			// Should we update the primary key? Yes, if the value is new and the data object has a primary key
 			// which is auto-numbered (IDENTITY in SQL).
 			bool updatePrimaryKey = value.IsNew && DataObjectInfo<T>.HasPrimaryKeyWithAutoNumber();
-
 			// Make sure the overrideAutoNumber parameter is set only if the code would attempt 
 			// to update the primary key.
-			if (overrideAutoNumber && !updatePrimaryKey)
+			if (overrideAutoNumber && !updatePrimaryKey){
 				throw new InvalidOperationException(Resources.CannotOverridePrimaryKey);
-
+			}
 			// If overrideAutoNumber is set, we don't update the primary key -- obviously!
-			if (overrideAutoNumber)
+			if (overrideAutoNumber){
 				updatePrimaryKey = false;
-
+			}
 			// Should we generate a new, random key?
 			bool generateRandomKey = updatePrimaryKey && PrefB.RandomKeys;
 			if (generateRandomKey) {
 				int key = MiscData.GetKey(DataObjectInfo<T>.GetTableName(), DataObjectInfo<T>.GetPrimaryKeyFieldName());
 				DataObjectInfo<T>.SetPrimaryKey(value, key);
-
 				// The primary key as already been updated. No need to retrieve it from the database.
 				updatePrimaryKey = false;
 			}
-
-			if (!RemotingClient.OpenDentBusinessIsLocal) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientTcp) {
 				DtoObjectInsertedAck ack = (DtoObjectInsertedAck)FactoryClient<T>.SendRequest("WriteObject", value, new object[] { overrideAutoNumber });
 				DataObjectInfo<T>.SetPrimaryKeys(value, ack.PrimaryKeys);
 				value.OnSaved(EventArgs.Empty);
 				return;
 			}
-
 			Collection<DataFieldInfo> dataFields = DataObjectInfo<T>.GetDataFields(DataFieldMask.Data);
 			Collection<DataFieldInfo> primaryKeyFields = DataObjectInfo<T>.GetDataFields(DataFieldMask.PrimaryKey);
 			Collection<DataFieldInfo> allFields = DataObjectInfo<T>.GetDataFields();
-
-			if (allFields.Count == 0)
+			if (allFields.Count == 0){
 				throw new InvalidOperationException(Resources.NoFields);
-
+			}
 			// In queries, the first field always is special (because of the use of commas). This helper variable
 			// helps us generate correct queries.
 			bool isFirstField = true;
-
 			using (IDbConnection connection = DataSettings.GetConnection())
 			using (IDbCommand command = connection.CreateCommand()) {
 				if (useParameters) {
@@ -474,60 +450,56 @@ namespace OpenDental.DataAccess {
 					foreach (DataFieldInfo dataField in allFields) {
 						IDbDataParameter parameter = command.CreateParameter();
 						parameter.ParameterName = ParameterPrefix + dataField.DatabaseName;
-
 						// Get the value of the field
 						object fieldValue = dataField.Field.GetValue(value);
-
 						// If the value is of type string and the value is null, we replace it
 						// by an empty string.
-						if (fieldValue == null && dataField.Field.FieldType == typeof(string))
+						if (fieldValue == null && dataField.Field.FieldType == typeof(string)){
 							fieldValue = string.Empty;
-
+						}
 						parameter.Value = fieldValue;
 						command.Parameters.Add(parameter);
 					}
 				}
-
 				// Create the SQL query. If it is a new field, create an "INSERT" statement, else
 				// an "UPDATE" statement.
-
 				StringBuilder commandTextBuilder = new StringBuilder();
 				if (value.IsNew) {
 					// Create a new row, using an INSERT statement. 
 					// The values to set always include the data values (not part of the PK)
 					commandTextBuilder.Append(string.Format("INSERT INTO {0} (", DataObjectInfo<T>.GetTableName()));
 					foreach (DataFieldInfo field in dataFields) {
-						if (isFirstField)
+						if (isFirstField){
 							isFirstField = false;
-						else
+						}
+						else{
 							commandTextBuilder.Append(',');
-
+						}
 						commandTextBuilder.Append(field.DatabaseName);
 					}
-
 					// If the PK is auto-generated, it it shouldn't be included. If the PK is generated by the code
 					// (be it that is some external variable or that the PK is a random number generated previously);
 					// it should be included
 					if (!updatePrimaryKey) {
 						foreach (DataFieldInfo primaryKeyField in primaryKeyFields) {
-							if (isFirstField)
+							if (isFirstField){
 								isFirstField = false;
-							else
+							}
+							else{
 								commandTextBuilder.Append(',');
-
+							}
 							commandTextBuilder.Append(primaryKeyField.DatabaseName);
 						}
 					}
-
 					commandTextBuilder.Append(") VALUES (");
 					isFirstField = true;
-
 					foreach (DataFieldInfo field in dataFields) {
-						if (isFirstField)
+						if (isFirstField){
 							isFirstField = false;
-						else
+						}
+						else{
 							commandTextBuilder.Append(',');
-
+						}
 						if (useParameters) {
 							commandTextBuilder.Append(ParameterPrefix + field.DatabaseName);
 						}
@@ -538,11 +510,12 @@ namespace OpenDental.DataAccess {
 
 					if (!updatePrimaryKey) {
 						foreach (DataFieldInfo primaryKeyField in primaryKeyFields) {
-							if (isFirstField)
+							if (isFirstField){
 								isFirstField = false;
-							else
+							}
+							else{
 								commandTextBuilder.Append(',');
-
+							}
 							if (useParameters) {
 								commandTextBuilder.Append(ParameterPrefix + primaryKeyField.DatabaseName);
 							}
@@ -551,7 +524,6 @@ namespace OpenDental.DataAccess {
 							}
 						}
 					}
-
 					commandTextBuilder.Append(')');
 				}
 				else {
@@ -561,14 +533,15 @@ namespace OpenDental.DataAccess {
 					commandTextBuilder.Append(string.Format("UPDATE {0} SET ", DataObjectInfo<T>.GetTableName()));
 					foreach (DataFieldInfo field in dataFields) {
 						// If the data field has not changed, we don't need to update it -- obviously
-						if (!DataObjectInfo<T>.HasChanged(field, value))
+						if (!DataObjectInfo<T>.HasChanged(field, value)){
 							continue;
-
-						if (isFirstField)
+						}
+						if (isFirstField){
 							isFirstField = false;
-						else
+						}
+						else{
 							commandTextBuilder.Append(',');
-
+						}
 						if (useParameters) {
 							commandTextBuilder.Append(string.Format("{0} = {1}{0}", field.DatabaseName, ParameterPrefix));
 						}
@@ -576,16 +549,15 @@ namespace OpenDental.DataAccess {
 							commandTextBuilder.Append(string.Format("{0} = {1}", field.DatabaseName, POut.PObject(field.Field.GetValue(value))));
 						}
 					}
-
 					commandTextBuilder.Append(" WHERE ");
-
 					isFirstField = true;
 					foreach (DataFieldInfo field in primaryKeyFields) {
-						if (isFirstField)
+						if (isFirstField){
 							isFirstField = false;
-						else
+						}
+						else{
 							commandTextBuilder.Append(',');
-
+						}
 						if (useParameters) {
 							commandTextBuilder.Append(string.Format("{0} = {1}{0}", field.DatabaseName, ParameterPrefix));
 						}
@@ -594,64 +566,54 @@ namespace OpenDental.DataAccess {
 						}
 					}
 				}
-
 				command.CommandText = commandTextBuilder.ToString();
-
 				connection.Open();
-
 				// This executes the UPDATE/INSERT command.
 				command.ExecuteNonQuery();
-
 				// Update the PK if required
 				if (updatePrimaryKey) {
 					// This is currently not implemented for Oracle. Open Dental uses a special mechanism, OracleInsertId,
 					// but using a SEQUENCE might be better. See http://coldfusion.sys-con.com/read/43794.htm .
 					//
 					// For MS SQL (not implemented, either), this would be SCOPE_IDENTITY()
-					if (DataSettings.DbType != DatabaseType.MySql)
+					if (DataSettings.DbType != DatabaseType.MySql){
 						throw new NotImplementedException();
-
+					}
 					command.CommandText = "SELECT LAST_INSERT_ID()";
-
 					// The type returned by command.ExecuteScalar() is System.Int64.
 					// We need to cast it to System.Int32, that's what we use here.
 					int key = Convert.ToInt32(command.ExecuteScalar());
 					DataObjectInfo<T>.SetPrimaryKey(value, key);
 				}
-
 				connection.Close();
-
 				// The object has been saved
 				value.OnSaved(EventArgs.Empty);
 			}
 		}
 
 		public static void WriteObjects(Collection<T> values) {
-			if (values == null)
+			if (values == null){
 				throw new ArgumentNullException("values");
-
+			}
 			foreach (T value in values) {
 				WriteObject(value);
 			}
 		}
 
 		public static void DeleteObject(int id) {
-			if (!RemotingClient.OpenDentBusinessIsLocal) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientTcp) {
 				FactoryClient<T>.SendRequest("DeleteObject", default(T), new object[] { id });
 				return;
 			}
-
 			string primaryKeyFieldName = DataObjectInfo<T>.GetPrimaryKeyFieldName();
 			string tableName = DataObjectInfo<T>.GetTableName();
 			string query;
-
 			if (useParameters) {
 				query = string.Format("DELETE FROM {0} WHERE {1} = {2}{1}", tableName, primaryKeyFieldName, ParameterPrefix);
 			}
 			else {
 				query = string.Format("DELETE FROM {0} WHERE {1} = '{2}'", tableName, primaryKeyFieldName, POut.PInt(id));
 			}
-
 			using (IDbConnection connection = DataSettings.GetConnection())
 			using (IDbCommand command = connection.CreateCommand()) {
 				if (useParameters) {
@@ -668,29 +630,25 @@ namespace OpenDental.DataAccess {
 		}
 
 		public static void DeleteObject(T value) {
-			if (value == null)
+			if (value == null){
 				throw new ArgumentNullException("value");
-
-			if (value.IsDeleted)
+			}
+			if (value.IsDeleted){
 				throw new InvalidOperationException(Resources.ObjectAlreadyDeleted);
-
-			if (value.IsNew)
+			}
+			if (value.IsNew){
 				throw new InvalidOperationException(Resources.ObjectNotSaved);
-
-			if (!RemotingClient.OpenDentBusinessIsLocal) {
+			}
+			if(RemotingClient.RemotingRole==RemotingRole.ClientTcp) {
 				FactoryClient<T>.SendRequest("DeleteObject", value, new object[] {});
 				value.OnDeleted(EventArgs.Empty);
 				return;
 			}
-
 			Collection<DataFieldInfo> identityFields = DataObjectInfo<T>.GetDataFields(DataFieldMask.PrimaryKey);
-
 			using (IDbConnection connection = DataSettings.GetConnection())
 			using (IDbCommand command = connection.CreateCommand()) {
 				StringBuilder commandTextBuilder = new StringBuilder();
-
 				commandTextBuilder.Append(string.Format("DELETE FROM {0} WHERE ", DataObjectInfo<T>.GetTableName()));
-
 				if (useParameters) {
 					// For each field, create a parameter
 					foreach (DataFieldInfo dataField in identityFields) {
@@ -700,7 +658,6 @@ namespace OpenDental.DataAccess {
 						command.Parameters.Add(parameter);
 					}
 				}
-
 				for (int i = 0; i < identityFields.Count; i++) {
 					if (useParameters) {
 						commandTextBuilder.Append(string.Format("{0} = {1}{0}", identityFields[i].DatabaseName, ParameterPrefix));
@@ -708,18 +665,15 @@ namespace OpenDental.DataAccess {
 					else {
 						commandTextBuilder.Append(string.Format("{0} = '{1}'", identityFields[i].DatabaseName, POut.PObject(identityFields[i].Field.GetValue(value))));
 					}
-
-					if (i != identityFields.Count - 1)
+					if (i != identityFields.Count - 1){
 						commandTextBuilder.Append(" AND ");
+					}
 				}
-
 				command.CommandText = commandTextBuilder.ToString();
-
 				connection.Open();
 				command.ExecuteNonQuery();
 				connection.Close();
 			}
-
 			// The object has been deleted
 			value.OnDeleted(EventArgs.Empty);
 		}

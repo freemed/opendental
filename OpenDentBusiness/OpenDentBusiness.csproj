@@ -82,6 +82,7 @@
     <Compile Include="Business\DefB.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="ClientSL.cs" />
     <Compile Include="Data Interface\Statements.cs" />
     <Compile Include="Data Interface\Documents.cs" />
     <Compile Include="Data Interface\Family.cs" />

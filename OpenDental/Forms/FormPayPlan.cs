@@ -754,7 +754,7 @@ namespace OpenDental{
 
 		/// <summary>Called 5 times</summary>
 		private void FillCharges(){
-			table=General.GetDS("AccountModule.GetPayPlanAmort",PayPlanCur.PayPlanNum.ToString()).Tables["payplanamort"];
+			table=General.GetDS(MethodName.AccountModule_GetPayPlanAmort,PayPlanCur.PayPlanNum).Tables["payplanamort"];
 			gridCharges.BeginUpdate();
 			gridCharges.Columns.Clear();
 			ODGridColumn col;

@@ -535,9 +535,9 @@ namespace OpenDentBusiness {
 
 	
 
-	public class DtoChartModuleGetAll:DtoQueryBase {
-		public int PatNum;
-		public bool IsAuditMode;
-	}
+	//public class DtoChartModuleGetAll:DtoQueryBase {
+	//	public int PatNum;
+	//	public bool IsAuditMode;
+	//}
 
 }

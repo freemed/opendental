@@ -10,13 +10,27 @@ using System.Xml.Serialization;
 using OpenDentBusiness;
 
 namespace OpenDentBusiness {
-	public class RemotingClient {
-		public static bool OpenDentBusinessIsLocal;
+		public class RemotingClient {
+		//<summary>This will only be true if this dll is on a local workstation, and this workstation has successfully connected directly to the database.  What this fails to tell us is whether this is a workstation or server, which is going to become quite critical.</summary>
+		//public static bool OpenDentBusinessIsLocal;
+		//<summary>This will be true on a SilverLight client, but false on the server.  Once we have completely shifted to web services, we might combine this with OpenDentBusinessIsLocal.</summary>
+		//public static bool IsSLclient;
+		///<summary>This dll will be in one of these five roles.  There can be a dll on the client and a dll on the server, both involved in the logic.  This keeps track of which one is which.</summary>
+		public static RemotingRole RemotingRole;
 		private static TcpClient client;
 		private static NetworkStream netStream;
 		public static string ServerName;
 		public static int ServerPort;
 		private const int BufferSize = 1024;
+
+		/*public bool IsDirectConnect{
+			get{
+				if(RemotingRole==RemotingRole.ClientDirect
+					|| RemotingRole==RemotingRole.ClientTcp
+					|| RemotingRole==RemotingRole.ClientWeb
+
+			}
+		}*/
 
 		public static DataSet ProcessQuery(DtoQueryBase dto){
 			byte[] buffer=SendAndReceive(dto);//this might throw an exception if server unavailable
@@ -147,5 +161,19 @@ namespace OpenDentBusiness {
 			stream.WriteByte((byte)'\0');
 			stream.Flush();
 		}
+	}
+
+	///<summary></summary>
+	public enum RemotingRole{
+		///<summary>This dll is on a local workstation, and this workstation has successfully connected directly to the database with no 'server' layer.</summary>
+		ClientDirect,
+		///<summary>This dll is on a local workstation, and is connected to a port on the server.</summary>
+		ClientTcp,
+		///<summary>Silverlight for now, but could later replace ClientTcp.  Workstation that is getting its data from a web service on the server.</summary>
+		ClientWeb,
+		///<summary>This dll is part of the server component that provides data via a port.</summary>
+		ServerTcp,
+		///<summary>This dll is part of a web server that is providing data via web services.</summary>
+		ServerWeb
 	}
 }

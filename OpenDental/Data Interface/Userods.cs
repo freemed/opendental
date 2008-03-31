@@ -17,13 +17,13 @@ namespace OpenDental{
 		///<summary></summary>
 		public static void Refresh() {
 			try {
-				if(RemotingClient.OpenDentBusinessIsLocal) {
-					UserodB.Refresh();
-				}
-				else {
+				if(RemotingClient.RemotingRole==RemotingRole.ClientTcp){
 					DtoUserodRefresh dto=new DtoUserodRefresh();
 					DataSet ds=RemotingClient.ProcessQuery(dto);
 					UserodB.RawData=ds.Tables[0];
+				}
+				else{
+					UserodB.Refresh();
 				}
 			}
 			catch(Exception e) {

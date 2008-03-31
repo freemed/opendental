@@ -11,17 +11,20 @@ namespace OpenDentBusiness {
 		private static Patient pat;
 
 		///<summary>Parameters: 0:patNum, 1:viewingInRecall, 2:fromDate, 3:toDate, 4:intermingled.  If intermingled=1, the patnum of any family member will get entire family intermingled.</summary>
-		public static DataSet GetAll(string[] parameters){
-			int patNum=PIn.PInt(parameters[0]);
+		public static DataSet GetAll(int patNum,bool viewingInRecall,DateTime fromDate, DateTime toDate,bool intermingled){//string[] parameters){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb){
+				return (DataSet)ClientSL.CallWebService(MethodName.AccountModule_GetAll,patNum,viewingInRecall,fromDate,toDate,intermingled);
+			}
+			//int patNum=PIn.PInt(parameters[0]);
 			fam=Patients.GetFamily(patNum);
-			bool intermingled=PIn.PBool(parameters[4]);
+			//bool intermingled=PIn.PBool(parameters[4]);
 			if(intermingled){
 				patNum=fam.List[0].PatNum;//guarantor
 			}
 			pat=fam.GetPatient(patNum);
-			bool viewingInRecall=PIn.PBool(parameters[1]);
-			DateTime fromDate=PIn.PDate(parameters[2]);
-			DateTime toDate=PIn.PDate(parameters[3]);
+			//bool viewingInRecall=PIn.PBool(parameters[1]);
+			//DateTime fromDate=PIn.PDate(parameters[2]);
+			//DateTime toDate=PIn.PDate(parameters[3]);
 			retVal=new DataSet();
 			if(viewingInRecall) {
 				retVal.Tables.Add(ChartModuleB.GetProgNotes(patNum, false));
@@ -37,18 +40,18 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary>Parameters: 0:patNum, 1:singlePatient, 2:fromDate, 3:toDate, 4:intermingled,   If intermingled=1 the patnum of any family member will get entire family intermingled.  toDate should not be Max, or PayPlan amort will include too many charges.  The 10 days will not be added to toDate until creating the actual amortization schedule.</summary>
-		public static DataSet GetStatement(string[] parameters){
-			int patNum=PIn.PInt(parameters[0]);
+		public static DataSet GetStatement(int patNum,bool singlePatient,DateTime fromDate,DateTime toDate,bool intermingled){
+			//int patNum=PIn.PInt(parameters[0]);
 			fam=Patients.GetFamily(patNum);
-			bool intermingled=PIn.PBool(parameters[4]);
+			//bool intermingled=PIn.PBool(parameters[4]);
 			if(intermingled){
 				patNum=fam.List[0].PatNum;//guarantor
 			}
 			pat=fam.GetPatient(patNum);
 			//bool viewingInRecall=PIn.PBool(parameters[1]);
-			bool singlePatient=PIn.PBool(parameters[1]);
-			DateTime fromDate=PIn.PDate(parameters[2]);
-			DateTime toDate=PIn.PDate(parameters[3]);
+			//bool singlePatient=PIn.PBool(parameters[1]);
+			//DateTime fromDate=PIn.PDate(parameters[2]);
+			//DateTime toDate=PIn.PDate(parameters[3]);
 			retVal=new DataSet();
 			//if(viewingInRecall) {
 			//	retVal.Tables.Add(ChartModuleB.GetProgNotes(patNum, false));
@@ -64,8 +67,8 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary>Gets a table of charges mixed with payments to show in the payplan edit window.  Parameters: 0:payPlanNum</summary>
-		public static DataSet GetPayPlanAmort(string[] parameters){
-			int payPlanNum=PIn.PInt(parameters[0]);
+		public static DataSet GetPayPlanAmort(int payPlanNum){
+			//int payPlanNum=PIn.PInt(parameters[0]);
 			retVal=new DataSet();
 			DataTable table=GetPayPlanAmortTable(payPlanNum);
 			retVal.Tables.Add(table);

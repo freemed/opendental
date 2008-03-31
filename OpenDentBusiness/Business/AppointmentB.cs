@@ -46,26 +46,26 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Parameters: 1:dateStart, 2:dateEnd</summary>
-		public static DataSet RefreshPeriod(string[] parameters) {
+		public static DataSet RefreshPeriod(DateTime dateStart,DateTime dateEnd) {
 			DataSet retVal=new DataSet();
-			retVal.Tables.Add(GetPeriodApptsTable(parameters[0],parameters[1],"0","0"));
-			retVal.Tables.Add(GetPeriodEmployeeSchedTable(parameters[0],parameters[1]));
+			retVal.Tables.Add(GetPeriodApptsTable(dateStart,dateEnd,0,false));//parameters[0],parameters[1],"0","0"));
+			retVal.Tables.Add(GetPeriodEmployeeSchedTable(dateStart,dateEnd));
 			return retVal;
 		}
 
 		///<summary>Parameters: 1:AptNum 2:IsPlanned</summary>
-		public static DataSet RefreshOneApt(string[] parameters) {
+		public static DataSet RefreshOneApt(int aptNum,bool isPlanned) {
 			DataSet retVal=new DataSet();
-			retVal.Tables.Add(GetPeriodApptsTable("","",parameters[0],parameters[1]));
+			retVal.Tables.Add(GetPeriodApptsTable(DateTime.MinValue,DateTime.MinValue,aptNum,isPlanned));
 			return retVal;
 		}
 
 		///<summary>If aptnum is specified, then the dates are ignored.  If getting data for one planned appt, then pass isPlanned=1.  This changes which procedures are retrieved.</summary>
-		private static DataTable GetPeriodApptsTable(string strDateStart,string strDateEnd,string strAptNum,string strIsPlanned) {
-			DateTime dateStart=PIn.PDate(strDateStart);
-			DateTime dateEnd=PIn.PDate(strDateEnd);
-			int aptNum=PIn.PInt(strAptNum);
-			bool isPlanned=PIn.PBool(strIsPlanned);
+		private static DataTable GetPeriodApptsTable(DateTime dateStart,DateTime dateEnd,int aptNum,bool isPlanned) {
+			//DateTime dateStart=PIn.PDate(strDateStart);
+			//DateTime dateEnd=PIn.PDate(strDateEnd);
+			//int aptNum=PIn.PInt(strAptNum);
+			//bool isPlanned=PIn.PBool(strIsPlanned);
 			DataConnection dcon=new DataConnection();
 			DataTable table=new DataTable("Appointments");
 			DataRow row;
@@ -392,9 +392,9 @@ namespace OpenDentBusiness{
 			return table;
 		}
 
-		private static DataTable GetPeriodEmployeeSchedTable(string strDateStart,string strDateEnd) {
-			DateTime dateStart=PIn.PDate(strDateStart);
-			DateTime dateEnd=PIn.PDate(strDateEnd);
+		private static DataTable GetPeriodEmployeeSchedTable(DateTime dateStart,DateTime dateEnd) {
+			//DateTime dateStart=PIn.PDate(strDateStart);
+			//DateTime dateEnd=PIn.PDate(strDateEnd);
 			DataConnection dcon=new DataConnection();
 			DataTable table=new DataTable("EmpSched");
 			DataRow row;
@@ -436,22 +436,22 @@ namespace OpenDentBusiness{
 		//-------------------------------------------------------------------------------------------------------------------------
 
 		///<summary>Parameters: 1:AptNum</summary>
-		public static DataSet GetApptEdit(string[] parameters){
+		public static DataSet GetApptEdit(int aptNum){
 			DataSet retVal=new DataSet();
-			retVal.Tables.Add(GetApptTable(parameters[0]));
+			retVal.Tables.Add(GetApptTable(aptNum));
 			retVal.Tables.Add(GetPatTable(retVal.Tables["Appointment"].Rows[0]["PatNum"].ToString()));
-			retVal.Tables.Add(GetProcTable(retVal.Tables["Appointment"].Rows[0]["PatNum"].ToString(),parameters[0],
+			retVal.Tables.Add(GetProcTable(retVal.Tables["Appointment"].Rows[0]["PatNum"].ToString(),aptNum.ToString(),
 				retVal.Tables["Appointment"].Rows[0]["AptStatus"].ToString(),
 				retVal.Tables["Appointment"].Rows[0]["AptDateTime"].ToString()
 				));
 			retVal.Tables.Add(GetCommTable(retVal.Tables["Appointment"].Rows[0]["PatNum"].ToString()));
-			retVal.Tables.Add(GetMiscTable(parameters[0],retVal.Tables["Appointment"].Rows[0]["AptStatus"].ToString()));
+			retVal.Tables.Add(GetMiscTable(aptNum.ToString(),retVal.Tables["Appointment"].Rows[0]["AptStatus"].ToString()));
 			return retVal;
 		}
 
-		private static DataTable GetApptTable(string aptNum){
+		private static DataTable GetApptTable(int aptNum){
 			DataConnection dcon=new DataConnection();
-			string command="SELECT * FROM appointment WHERE AptNum="+aptNum;
+			string command="SELECT * FROM appointment WHERE AptNum="+aptNum.ToString();
 			DataTable table=dcon.GetTable(command);
 			table.TableName="Appointment";
 			return table;

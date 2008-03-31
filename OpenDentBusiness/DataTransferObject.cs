@@ -67,10 +67,10 @@ namespace OpenDentBusiness {
 
 	///<summary>This DTO is planned to replace all the DtoQueryBase types.  Having multiple DTO types takes too long to program, so there should only be one type which is used for everything.  We will also eventually move to simpler XML representation of the datasets instead of using the dotNet serialization.</summary>
 	public class DtoGetDS:DataTransferObject{
-		///<summary>This is the name of the method that we need to call.  "Class.Method" format.</summary>
-		public string MethodName;
-		///<summary>This is a list of parameters that we are passing.  They are always strings.</summary>
-		public string[] Parameters;
+		///<summary>This is the name of the method that we need to call.  "Class_Method" format.</summary>
+		public MethodName MethodName;
+		///<summary>This is a list of parameters that we are passing.  They can be various kinds of objects.</summary>
+		public object[] Parameters;
 	}
 
 	public class DtoGeneralGetTable:DtoQueryBase {

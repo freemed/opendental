@@ -2678,7 +2678,7 @@ namespace OpenDental{
 #endif
 				}
 				//a direct connection does not utilize lower privileges.
-				RemotingClient.OpenDentBusinessIsLocal=true;
+				RemotingClient.RemotingRole=RemotingRole.ClientDirect;
 				return true;
 			}
 			catch(Exception ex) {

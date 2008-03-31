@@ -794,39 +794,13 @@ namespace OpenDental{
 			}
 			//MessageBox.Show(cmd.CommandText);
 			//dcon.NonQ(command);
-			try {
-				if(RemotingClient.OpenDentBusinessIsLocal) {
-					GeneralB.NonQ(command);
-				}
-				else {
-					DtoGeneralNonQ dto=new DtoGeneralNonQ();
-					dto.Command=command;
-					RemotingClient.ProcessCommand(dto);
-				}
-			}
-			catch(Exception e) {
-				MessageBox.Show(e.Message);
-			}
+			General.NonQ(command);
 		}
 
 		///<summary>Used in FormClaimProc to get the codeNum for a procedure. Do not use this if accessing FormClaimProc from the ProcEdit window, because proc might not be updated to db yet.</summary>
 		public static int GetCodeNum(int procNum){
 			string command="SELECT CodeNum FROM procedurelog WHERE ProcNum='"+procNum.ToString()+"'";
-			DataSet ds=null;
-			try {
-				if(RemotingClient.OpenDentBusinessIsLocal) {
-					ds=GeneralB.GetTable(command);
-				}
-				else {
-					DtoGeneralGetTable dto=new DtoGeneralGetTable();
-					dto.Command=command;
-					ds=RemotingClient.ProcessQuery(dto);
-				}
-			}
-			catch(Exception e) {
-				MessageBox.Show(e.Message);
-			}
-			DataTable table=ds.Tables[0];
+			DataTable table=General.GetTable(command);
 			if(table.Rows.Count==0){
 				return 0;
 			}
@@ -836,21 +810,7 @@ namespace OpenDental{
 		///<summary>Used in FormClaimProc to get the fee for a procedure directly from the db.  Do not use this if accessing FormClaimProc from the ProcEdit window, because proc might not be updated to db yet.</summary>
 		public static double GetProcFee(int procNum){
 			string command="SELECT ProcFee FROM procedurelog WHERE ProcNum='"+procNum.ToString()+"'";
-			DataSet ds=null;
-			try {
-				if(RemotingClient.OpenDentBusinessIsLocal) {
-					ds=GeneralB.GetTable(command);
-				}
-				else {
-					DtoGeneralGetTable dto=new DtoGeneralGetTable();
-					dto.Command=command;
-					ds=RemotingClient.ProcessQuery(dto);
-				}
-			}
-			catch(Exception e) {
-				MessageBox.Show(e.Message);
-			}
-			DataTable table=ds.Tables[0];
+			DataTable table=General.GetTable(command);
 			if(table.Rows.Count==0){
 				return 0;
 			}
@@ -880,21 +840,7 @@ namespace OpenDental{
 			string command="SELECT COUNT(*) FROM procedurelog "
 				+"WHERE PatNum="+patNum.ToString()
 				+" AND ProcStatus=2";
-			DataSet ds=null;
-			try {
-				if(RemotingClient.OpenDentBusinessIsLocal) {
-					ds=GeneralB.GetTable(command);
-				}
-				else {
-					DtoGeneralGetTable dto=new DtoGeneralGetTable();
-					dto.Command=command;
-					ds=RemotingClient.ProcessQuery(dto);
-				}
-			}
-			catch(Exception e) {
-				MessageBox.Show(e.Message);
-			}
-			DataTable table=ds.Tables[0];
+			DataTable table=General.GetTable(command);
 			if(table.Rows[0][0].ToString()=="0"){
 				return false;
 			}
@@ -908,44 +854,17 @@ namespace OpenDental{
 				+"WHERE ToothNum='"+toothNum+"' "
 				+"AND PatNum="+POut.PInt(patNum)
 				+" AND InitialType=0";//missing
-			DataSet ds=null;
-			try {
-				if(RemotingClient.OpenDentBusinessIsLocal) {
-					ds=GeneralB.GetTable(command);
-				}
-				else {
-					DtoGeneralGetTable dto=new DtoGeneralGetTable();
-					dto.Command=command;
-					ds=RemotingClient.ProcessQuery(dto);
-				}
-			}
-			catch(Exception e) {
-				MessageBox.Show(e.Message);
-			}
-			DataTable table=ds.Tables[0];
+			DataTable table=General.GetTable(command);
 			if(table.Rows[0][0].ToString()!="0"){
 				return true;
-			}
+			}			
 			//then, check for a planned extraction
 			command="SELECT COUNT(*) FROM procedurelog,procedurecode "
 				+"WHERE procedurelog.CodeNum=procedurecode.CodeNum "
 				+"AND procedurelog.ToothNum='"+toothNum+"' "
 				+"AND procedurelog.PatNum="+patNum.ToString()
 				+" AND procedurecode.PaintType=1";//extraction
-			try {
-				if(RemotingClient.OpenDentBusinessIsLocal) {
-					ds=GeneralB.GetTable(command);
-				}
-				else {
-					DtoGeneralGetTable dto=new DtoGeneralGetTable();
-					dto.Command=command;
-					ds=RemotingClient.ProcessQuery(dto);
-				}
-			}
-			catch(Exception e) {
-				MessageBox.Show(e.Message);
-			}
-			table=ds.Tables[0];
+			table=General.GetTable(command);
 			if(table.Rows[0][0].ToString()!="0"){
 				return true;
 			}
