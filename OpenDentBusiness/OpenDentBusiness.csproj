@@ -60,7 +60,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="CodeBase, Version=4.7.0.0, Culture=neutral, processorArchitecture=MSIL" />
     <Reference Include="MySql.Data, Version=1.0.9.0, Culture=neutral, PublicKeyToken=null">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Required dlls\MySql.Data.dll</HintPath>
