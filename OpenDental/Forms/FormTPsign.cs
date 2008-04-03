@@ -34,21 +34,25 @@ namespace OpenDental{
 		private OpenDental.UI.Button butClearSig;
 		private Label labelInvalidSig;
 		///<summary>Used to display Topaz signatures on Windows. Is added dynamically to avoid native code references crashing MONO.</summary>
-		private Topaz.SigPlusNET sigBoxTopaz;
+		private Control sigBoxTopaz;
 		private bool SigChanged;
 		public TreatPlan TPcur;
 		///<summary>Must be sorted by primary key.</summary>
 		private List<ProcTP> proctpList;
+        private bool allowTopaz;
 
 		///<summary></summary>
 		public FormTPsign(){
 			InitializeComponent();//Required for Windows Form Designer support
-			if(Environment.OSVersion.Platform==PlatformID.Unix) {
+            allowTopaz=(Environment.OSVersion.Platform!=PlatformID.Unix && !CodeBase.ODEnvironment.Is64BitOperatingSystem());
+            sigBox.SetTabletState(1);//It starts out accepting input. It will be set to 0 if a sig is already present.  It will be set back to 1 if note changes or if user clicks Clear.
+			if(!allowTopaz) {
 				butTopazSign.Visible=false;
+                sigBox.Visible=true;
 			}
 			else{
 				//Add signature box for Topaz signatures.
-				sigBoxTopaz=new Topaz.SigPlusNET();
+				sigBoxTopaz=CodeBase.TopazWrapper.GetTopaz();
 				sigBoxTopaz.Location=sigBox.Location;//this puts both boxes in the same spot.
 				sigBoxTopaz.Name="sigBoxTopaz";
 				sigBoxTopaz.Size=new System.Drawing.Size(362,79);
@@ -56,7 +60,6 @@ namespace OpenDental{
 				sigBoxTopaz.Text="sigPlusNET1";
 				sigBoxTopaz.Visible=false;
 				panelSig.Controls.Add(sigBoxTopaz);
-				sigBox.SetTabletState(1);//It starts out accepting input. It will be set to 0 if a sig is already present.  It will be set back to 1 if note changes or if user clicks Clear.
 			}
 		}
 
@@ -264,21 +267,19 @@ namespace OpenDental{
 			proctpList=ProcTPs.RefreshForTP(TPcur.TreatPlanNum);
 			if(TPcur.SigIsTopaz){
 				if(TPcur.Signature!="") {
-					if(Environment.OSVersion.Platform!=PlatformID.Unix) {
+					if(allowTopaz) {
 						sigBox.Visible=false;
 						sigBoxTopaz.Visible=true;
-						sigBoxTopaz.ClearTablet();
-						sigBoxTopaz.SetSigCompressionMode(0);
-						sigBoxTopaz.SetEncryptionMode(0);
+                        CodeBase.TopazWrapper.ClearTopaz(sigBoxTopaz);
+						CodeBase.TopazWrapper.SetTopazCompressionMode(sigBoxTopaz,0);
+						CodeBase.TopazWrapper.SetTopazEncryptionMode(sigBoxTopaz,0);						
 						string keystring=TreatPlans.GetHashString(TPcur,proctpList);
-						sigBoxTopaz.SetKeyString(keystring);
-						//"0000000000000000");
-						//sigBoxTopaz.SetAutoKeyData(ProcCur.Note+ProcCur.UserNum.ToString());
-						sigBoxTopaz.SetEncryptionMode(2);//high encryption
-						sigBoxTopaz.SetSigCompressionMode(2);//high compression
-						sigBoxTopaz.SetSigString(TPcur.Signature);
+                        CodeBase.TopazWrapper.SetTopazKeyString(sigBoxTopaz,keystring);
+						CodeBase.TopazWrapper.SetTopazEncryptionMode(sigBoxTopaz,2);//high encryption
+						CodeBase.TopazWrapper.SetTopazCompressionMode(sigBoxTopaz,2);//high encryption
+						CodeBase.TopazWrapper.SetTopazSigString(sigBoxTopaz,TPcur.Signature);
 						sigBoxTopaz.Refresh();
-						if(sigBoxTopaz.NumberOfTabletPoints()==0) {
+						if(CodeBase.TopazWrapper.GetTopazNumberOfTabletPoints(sigBoxTopaz)==0) {
 							labelInvalidSig.Visible=true;
 						}
 					}
@@ -486,8 +487,8 @@ namespace OpenDental{
 		private void butClearSig_Click(object sender,EventArgs e) {
 			sigBox.ClearTablet();
 			sigBox.Visible=true;
-			if(Environment.OSVersion.Platform!=PlatformID.Unix) {
-				sigBoxTopaz.ClearTablet();
+			if(allowTopaz) {
+                CodeBase.TopazWrapper.ClearTopaz(sigBoxTopaz);
 				sigBoxTopaz.Visible=false;//until user explicitly starts it.
 			}
 			sigBox.SetTabletState(1);//on-screen box is now accepting input.
@@ -498,7 +499,9 @@ namespace OpenDental{
 		private void butTopazSign_Click(object sender,EventArgs e) {
 			sigBox.Visible=false;
 			sigBoxTopaz.Visible=true;
-			sigBoxTopaz.SetTabletState(1);
+            if(allowTopaz){
+                CodeBase.TopazWrapper.SetTopazState(sigBoxTopaz,1);
+            }
 			SigChanged=true;
 			labelInvalidSig.Visible=false;
 		}
@@ -516,20 +519,18 @@ namespace OpenDental{
 		private void SaveSignature() {
 			if(SigChanged) {
 				//This check short-circuits so that sigBoxTopaz.Visible will not be checked in MONO ever.
-				if(Environment.OSVersion.Platform!=PlatformID.Unix && sigBoxTopaz.Visible) {
+				if(allowTopaz && sigBoxTopaz.Visible) {
 					TPcur.SigIsTopaz=true;
-					if(sigBoxTopaz.NumberOfTabletPoints()==0) {
+					if(CodeBase.TopazWrapper.GetTopazNumberOfTabletPoints(sigBoxTopaz)==0) {
 						TPcur.Signature="";
 						return;
 					}
-					sigBoxTopaz.SetSigCompressionMode(0);
-					sigBoxTopaz.SetEncryptionMode(0);
-					sigBoxTopaz.SetKeyString(TreatPlans.GetHashString(TPcur,proctpList));
-					//"0000000000000000");
-					//sigBoxTopaz.SetAutoKeyData(ProcCur.Note+ProcCur.UserNum.ToString());
-					sigBoxTopaz.SetEncryptionMode(2);
-					sigBoxTopaz.SetSigCompressionMode(2);
-					TPcur.Signature=sigBoxTopaz.GetSigString();
+                    CodeBase.TopazWrapper.SetTopazCompressionMode(sigBoxTopaz,0);
+					CodeBase.TopazWrapper.SetTopazEncryptionMode(sigBoxTopaz,0);
+					CodeBase.TopazWrapper.SetTopazKeyString(sigBoxTopaz,TreatPlans.GetHashString(TPcur,proctpList));
+                    CodeBase.TopazWrapper.SetTopazEncryptionMode(sigBoxTopaz,2);
+					CodeBase.TopazWrapper.SetTopazCompressionMode(sigBoxTopaz,2);
+					TPcur.Signature=CodeBase.TopazWrapper.GetTopazString(sigBoxTopaz);
 				}
 				else {
 					TPcur.SigIsTopaz=false;
@@ -560,7 +561,9 @@ namespace OpenDental{
 		}
 
 		private void FormTPsign_FormClosing(object sender,FormClosingEventArgs e) {
-			sigBoxTopaz.Dispose();
+            if(allowTopaz){
+			    sigBoxTopaz.Dispose();
+            }
 		}
 
 		

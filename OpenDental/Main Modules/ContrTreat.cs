@@ -2015,25 +2015,18 @@ namespace OpenDental{
 				System.Drawing.Bitmap sigBitmap=null;
 				List<ProcTP> proctpList=ProcTPs.RefreshForTP(PlanList[gridPlans.SelectedIndices[0]-1].TreatPlanNum);
 				if(PlanList[gridPlans.SelectedIndices[0]-1].SigIsTopaz){
-					Topaz.SigPlusNET sigBoxTopaz=new Topaz.SigPlusNET();
+                    Control sigBoxTopaz=CodeBase.TopazWrapper.GetTopaz();
 					sigBoxTopaz.Size=new System.Drawing.Size(362,79);
 					Controls.Add(sigBoxTopaz);
-					sigBoxTopaz.ClearTablet();
-					sigBoxTopaz.SetSigCompressionMode(0);
-					sigBoxTopaz.SetEncryptionMode(0);
+                    CodeBase.TopazWrapper.ClearTopaz(sigBoxTopaz);
+                    CodeBase.TopazWrapper.SetTopazCompressionMode(sigBoxTopaz,0);
+                    CodeBase.TopazWrapper.SetTopazEncryptionMode(sigBoxTopaz,0);					
 					string keystring=TreatPlans.GetHashString(PlanList[gridPlans.SelectedIndices[0]-1],proctpList);
-					sigBoxTopaz.SetKeyString(keystring);
-					//"0000000000000000");
-					//sigBoxTopaz.SetAutoKeyData(ProcCur.Note+ProcCur.UserNum.ToString());
-					sigBoxTopaz.SetEncryptionMode(2);//high encryption
-					sigBoxTopaz.SetSigCompressionMode(2);//high compression
-					sigBoxTopaz.SetSigString(PlanList[gridPlans.SelectedIndices[0]-1].Signature);
-					//if(sigBoxTopaz.NumberOfTabletPoints()==0) {
-					//	labelInvalidSig.Visible=true;
-					//}
-					//int numpoints=sigBoxTopaz.NumberOfTabletPoints();
+                    CodeBase.TopazWrapper.SetTopazKeyString(sigBoxTopaz,keystring);
+                    CodeBase.TopazWrapper.SetTopazEncryptionMode(sigBoxTopaz,2);//high encryption
+					CodeBase.TopazWrapper.SetTopazCompressionMode(sigBoxTopaz,2);//high compression
+					CodeBase.TopazWrapper.SetTopazSigString(sigBoxTopaz,PlanList[gridPlans.SelectedIndices[0]-1].Signature);
 					sigBoxTopaz.Refresh();
-					//sigBitmap=(Bitmap)sigBoxTopaz.GetSigImage().Clone();
 					sigBitmap=new Bitmap(362,79);
 					sigBoxTopaz.DrawToBitmap(sigBitmap,new Rectangle(0,0,362,79));//GetBitmap would probably work.
 					Controls.Remove(sigBoxTopaz);

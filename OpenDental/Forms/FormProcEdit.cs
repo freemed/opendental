@@ -181,8 +181,10 @@ namespace OpenDental{
 			InitializeComponent();
 			Lan.F(this);
             allowTopaz=(Environment.OSVersion.Platform!=PlatformID.Unix && !CodeBase.ODEnvironment.Is64BitOperatingSystem());
+            sigBox.SetTabletState(1);
 			if(!allowTopaz) {
 				butTopazSign.Visible=false;
+                sigBox.Visible=true;
 			}
 			else{
 				//Add signature box for Topaz signatures.
