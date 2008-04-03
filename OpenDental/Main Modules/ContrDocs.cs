@@ -147,6 +147,7 @@ namespace OpenDental{
 		///<summary>The hot document number of a mount image when it is copied.</summary>
 		int copyDocumentNumber=-1;
 		private IImageStore imageStore;
+        private bool allowTopaz;
 
 		///<summary></summary>
 		private Patient PatCur { get { return imageStore == null ? null : imageStore.Patient; } }
@@ -163,7 +164,8 @@ namespace OpenDental{
 			//the creation code for the topaz box in CodeBase.TopazWrapper.GetTopaz() so that
 			//the native code does not exist or get called anywhere in the program unless we are running on a 
 			//32-bit version of Windows.
-			if(Environment.OSVersion.Platform==PlatformID.Unix || CodeBase.ODEnvironment.Is64BitOperatingSystem()){
+            allowTopaz=(Environment.OSVersion.Platform!=PlatformID.Unix && !CodeBase.ODEnvironment.Is64BitOperatingSystem());
+			if(!allowTopaz){
 				TreeDocuments.ContextMenu=null;
 			}
 			else{//Windows OS
@@ -175,7 +177,7 @@ namespace OpenDental{
 				sigBoxTopaz.TabIndex=93;
 				sigBoxTopaz.Text="sigPlusNET1";
 				sigBoxTopaz.DoubleClick+=new System.EventHandler(this.sigBoxTopaz_DoubleClick);
-				((Topaz.SigPlusNET)sigBoxTopaz).SetTabletState(0);
+                CodeBase.TopazWrapper.SetTopazState(sigBoxTopaz,0);
 			}
 			//We always capture with a Suni device for now.
 			//TODO: In the future use a device locator in the xImagingDeviceManager
@@ -1172,21 +1174,19 @@ namespace OpenDental{
 			//Topaz box is not supported in Unix, since the required dll is Windows native.
 			if(selectionDoc.SigIsTopaz){
 				if(selectionDoc.Signature!=null && selectionDoc.Signature!="") {
-					if(Environment.OSVersion.Platform!=PlatformID.Unix) {	
+					if(allowTopaz) {	
 						sigBox.Visible=false;
 						sigBoxTopaz.Visible=true;
-						((Topaz.SigPlusNET)sigBoxTopaz).ClearTablet();
-						((Topaz.SigPlusNET)sigBoxTopaz).SetSigCompressionMode(0);
-						((Topaz.SigPlusNET)sigBoxTopaz).SetEncryptionMode(0);
-						string keystring=GetHashString(selectionDoc);
-						((Topaz.SigPlusNET)sigBoxTopaz).SetKeyString(keystring);
-						//"0000000000000000");
-						//((Topaz.SigPlusNET)sigBoxTopaz).SetAutoKeyData(ProcCur.Note+ProcCur.UserNum.ToString());
-						((Topaz.SigPlusNET)sigBoxTopaz).SetEncryptionMode(2);//high encryption
-						((Topaz.SigPlusNET)sigBoxTopaz).SetSigCompressionMode(2);//high compression
-						((Topaz.SigPlusNET)sigBoxTopaz).SetSigString(selectionDoc.Signature);
+                        CodeBase.TopazWrapper.ClearTopaz(sigBoxTopaz);
+                        CodeBase.TopazWrapper.SetTopazCompressionMode(sigBoxTopaz,0);
+                        CodeBase.TopazWrapper.SetTopazEncryptionMode(sigBoxTopaz,0);
+                        string keystring=GetHashString(selectionDoc);
+                        CodeBase.TopazWrapper.SetTopazKeyString(sigBoxTopaz,keystring);
+                        CodeBase.TopazWrapper.SetTopazEncryptionMode(sigBoxTopaz,2);//high encryption
+                        CodeBase.TopazWrapper.SetTopazCompressionMode(sigBoxTopaz,2);//high compression
+                        CodeBase.TopazWrapper.SetTopazSigString(sigBoxTopaz,selectionDoc.Signature);						
 						sigBoxTopaz.Refresh();
-						if(((Topaz.SigPlusNET)sigBoxTopaz).NumberOfTabletPoints()==0) {
+						if(CodeBase.TopazWrapper.GetTopazNumberOfTabletPoints(sigBoxTopaz)==0) {
 							labelInvalidSig.Visible=true;
 						}
 					}
@@ -1195,7 +1195,7 @@ namespace OpenDental{
 			else {//not topaz
 				if(selectionDoc.Signature!=null && selectionDoc.Signature!="") {
 					sigBox.Visible=true;
-					if(Environment.OSVersion.Platform!=PlatformID.Unix) {	
+					if(allowTopaz) {	
 						sigBoxTopaz.Visible=false;
 					}
 					sigBox.ClearTablet();
