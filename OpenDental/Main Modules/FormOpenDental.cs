@@ -1338,6 +1338,7 @@ namespace OpenDental{
 				MsgBox.Show(this,"You do not have permission to use any modules.");
 			}
 			Bridges.Trojan.StartupCheck();
+			//OpenDentSilver.
 		}
 
 		///<summary>Refreshes certain rarely used data from database.  Must supply the types of data to refresh as flags.  Also performs a few other tasks that must be done when local data is changed.</summary>

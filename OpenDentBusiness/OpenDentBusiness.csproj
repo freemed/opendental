@@ -82,6 +82,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="ClientSL.cs" />
+    <Compile Include="Data Interface\DataInterface.cs" />
     <Compile Include="Data Interface\Statements.cs" />
     <Compile Include="Data Interface\Documents.cs" />
     <Compile Include="Data Interface\Family.cs" />
@@ -139,6 +140,8 @@
     <Compile Include="Enumerations.cs" />
     <Compile Include="Imaging\SqlStore.cs" />
     <Compile Include="Lan.cs" />
+    <Compile Include="LocalCache\EnumRemotingRole.cs" />
+    <Compile Include="LocalCache\LocalCache.cs" />
     <Compile Include="PIn.cs" />
     <Compile Include="POut.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -15,7 +15,7 @@ namespace OpenDentBusiness {
 		//public static bool OpenDentBusinessIsLocal;
 		//<summary>This will be true on a SilverLight client, but false on the server.  Once we have completely shifted to web services, we might combine this with OpenDentBusinessIsLocal.</summary>
 		//public static bool IsSLclient;
-		///<summary>This dll will be in one of these five roles.  There can be a dll on the client and a dll on the server, both involved in the logic.  This keeps track of which one is which.</summary>
+			///<summary>This dll will be in one of these five roles.  There can be a dll on the client and a dll on the server, both involved in the logic.  This keeps track of which one is which.</summary>
 		public static RemotingRole RemotingRole;
 		private static TcpClient client;
 		private static NetworkStream netStream;
@@ -163,17 +163,4 @@ namespace OpenDentBusiness {
 		}
 	}
 
-	///<summary></summary>
-	public enum RemotingRole{
-		///<summary>This dll is on a local workstation, and this workstation has successfully connected directly to the database with no 'server' layer.</summary>
-		ClientDirect,
-		///<summary>This dll is on a local workstation, and is connected to a port on the server.</summary>
-		ClientTcp,
-		///<summary>Silverlight for now, but could later replace ClientTcp.  Workstation that is getting its data from a web service on the server.</summary>
-		ClientWeb,
-		///<summary>This dll is part of the server component that provides data via a port.</summary>
-		ServerTcp,
-		///<summary>This dll is part of a web server that is providing data via web services.</summary>
-		ServerWeb
-	}
 }

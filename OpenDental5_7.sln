@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 10.00
-# Visual C# Express 2008
+# Visual Studio 2008
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenDental", "OpenDental\OpenDental.csproj", "{8136317D-C936-49B6-9E31-D90F02D2F207}"
 	ProjectSection(ProjectDependencies) = postProject
 		{22010032-52DC-464D-B8BB-6CD9BF230D1F} = {22010032-52DC-464D-B8BB-6CD9BF230D1F}
