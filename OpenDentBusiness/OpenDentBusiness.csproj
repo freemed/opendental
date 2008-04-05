@@ -75,14 +75,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Business\AppointmentB.cs" />
-    <Compile Include="Business\ChartModuleB.cs" />
-    <Compile Include="Business\BenefitB.cs" />
-    <Compile Include="Business\DefB.cs">
+    <Compile Include="Logic\aaLogic.cs" />
+    <Compile Include="Logic\AppointmentB.cs" />
+    <Compile Include="Logic\ChartModuleB.cs" />
+    <Compile Include="Logic\BenefitB.cs" />
+    <Compile Include="Logic\DefB.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="ClientSL.cs" />
-    <Compile Include="Data Interface\DataInterface.cs" />
+    <Compile Include="Data Interface\aaDataInterface.cs" />
     <Compile Include="Data Interface\Statements.cs" />
     <Compile Include="Data Interface\Documents.cs" />
     <Compile Include="Data Interface\Family.cs" />
@@ -106,17 +107,17 @@
     <Compile Include="Imaging\ImageStoreCreationException.cs" />
     <Compile Include="Imaging\ImageStoreRemovalException.cs" />
     <Compile Include="Imaging\NoActivePatientException.cs" />
-    <Compile Include="Business\PatientB.cs" />
-    <Compile Include="Business\CovCatB.cs" />
-    <Compile Include="Business\GeneralB.cs" />
-    <Compile Include="Business\InsPlanB.cs" />
-    <Compile Include="Business\MiscDataB.cs" />
-    <Compile Include="Business\AccountModuleB.cs" />
-    <Compile Include="Business\PrefB.cs" />
-    <Compile Include="Business\ProcedureB.cs" />
-    <Compile Include="Business\ProcNoteB.cs" />
-    <Compile Include="Business\Tooth.cs" />
-    <Compile Include="Business\UserodB.cs" />
+    <Compile Include="Logic\PatientB.cs" />
+    <Compile Include="Logic\CovCatB.cs" />
+    <Compile Include="Logic\GeneralB.cs" />
+    <Compile Include="Logic\InsPlanB.cs" />
+    <Compile Include="Logic\MiscDataB.cs" />
+    <Compile Include="Logic\AccountModuleB.cs" />
+    <Compile Include="Logic\PrefB.cs" />
+    <Compile Include="Logic\ProcedureB.cs" />
+    <Compile Include="Logic\ProcNoteB.cs" />
+    <Compile Include="Logic\Tooth.cs" />
+    <Compile Include="Logic\UserodB.cs" />
     <Compile Include="Data Interface\MiscData.cs" />
     <Compile Include="DataAccess\DataCommand.cs" />
     <Compile Include="DataAccess\DataFieldAttribute.cs" />
@@ -140,8 +141,8 @@
     <Compile Include="Enumerations.cs" />
     <Compile Include="Imaging\SqlStore.cs" />
     <Compile Include="Lan.cs" />
-    <Compile Include="LocalCache\EnumRemotingRole.cs" />
-    <Compile Include="LocalCache\LocalCache.cs" />
+    <Compile Include="Cache\EnumRemotingRole.cs" />
+    <Compile Include="Cache\aaCache.cs" />
     <Compile Include="PIn.cs" />
     <Compile Include="POut.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -300,7 +301,7 @@
     <Compile Include="TableTypes\UserGroup.cs" />
     <Compile Include="TableTypes\UserQuery.cs" />
     <Compile Include="TableTypes\ZipCode.cs" />
-    <Compile Include="Business\ToothComparer.cs" />
+    <Compile Include="Logic\ToothComparer.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CodeBase\xCodeBase.csproj">

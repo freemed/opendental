@@ -1,13 +1,11 @@
 using System;
 using System.Collections;
-using System.Data;
-using System.Drawing;
 
 namespace OpenDentBusiness{
 
 	///<summary>Used in the accounting section in chart of accounts.  Not related to patient accounts in any way.</summary>
 	public class Account{
-		///<summary>Primary key.</summary>
+		///<summary>Primary key..</summary>
 		public int AccountNum;
 		///<summary>.</summary>
 		public string Description;
