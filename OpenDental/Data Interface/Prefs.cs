@@ -1,17 +1,17 @@
-using System;
-using System.Collections;
+﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
 using System.IO;
-using System.Windows.Forms;
+using System.Text;
 using OpenDentBusiness;
+using System.Windows.Forms;
 using CodeBase;
 
-namespace OpenDental{
-	///<summary></summary>
-	public class Prefs{
+namespace OpenDental {
+	public class Prefs {
 		///<summary></summary>
-		public static void Refresh() {
+		public static void RefreshClient() {
 			DataSet ds=null;
 			try {
 				if(RemotingClient.RemotingRole==RemotingRole.ClientTcp) {
@@ -19,22 +19,101 @@ namespace OpenDental{
 					ds=RemotingClient.ProcessQuery(dto);
 				}
 				else {
-					ds=PrefB.Refresh();
+					ds=PrefD.Refresh();
 				}
 			}
 			catch(Exception e) {
 				MessageBox.Show(e.Message);
 				return;
 			}
-			PrefB.FillHList(ds.Tables[0]);//now, we have an HList on both the client and the server.
+			PrefD.FillHList(ds.Tables[0]);//now, we have an HList on both the client and the server.
 		}
 
-		///<summary></summary>
-		public static void Update(Pref pref) {
-			string command= "UPDATE preference SET "
-				+"valuestring = '"  +POut.PString(pref.ValueString)+"'"
-				+" WHERE prefname = '"+POut.PString(pref.PrefName)+"'";
-			General.NonQ(command);
+		///<summary>This ONLY runs when first opening the program</summary>
+		public static bool ConvertDB() {
+			ClassConvertDatabase ClassConvertDatabase2=new ClassConvertDatabase();
+			string pref=PrefC.GetString("DataBaseVersion");
+				//(Pref)PrefC.HList["DataBaseVersion"];
+			//Debug.WriteLine(pref.PrefName+","+pref.ValueString);
+			if(ClassConvertDatabase2.Convert(pref)){
+				//((Pref)PrefC.HList["DataBaseVersion"]).ValueString)) {
+				return true;
+			}
+			else {
+				Application.Exit();
+				return false;
+			}
+		}
+
+		///<summary>Called in two places.  Once from RefreshLocalData, and also from FormBackups after a restore.</summary>
+		public static bool CheckProgramVersion() {
+			Version storedVersion=new Version(PrefC.GetString("ProgramVersion"));
+			Version currentVersion=new Version(Application.ProductVersion);
+			string database="";
+			string command="";
+			if(DataConnection.DBtype==DatabaseType.MySql){
+				command="SELECT database()";
+				DataTable table=General.GetTable(command);
+				database=PIn.PString(table.Rows[0][0].ToString());
+			}
+			if(storedVersion<currentVersion) {
+				UpdateString("ProgramVersion",currentVersion.ToString());
+				Prefs.RefreshClient();
+			}
+			if(storedVersion>currentVersion) {
+				if(PrefC.UsingAtoZfolder){
+					string setupBinPath=ODFileUtils.CombinePaths(FormPath.GetPreferredImagePath(),"Setup.exe");
+					if(File.Exists(setupBinPath)) {
+						if(MessageBox.Show("You are attempting to run version "+currentVersion.ToString(3)+",\r\n"
+							+"But the database "+database+"\r\n"
+							+"is already using version "+storedVersion.ToString(3)+".\r\n"
+							+"A newer version must have already been installed on at least one computer.\r\n"  
+							+"The setup program stored in your A to Z folder will now be launched.\r\n"
+							+"Or, if you hit Cancel, then you will have the option to download again."
+							,"",MessageBoxButtons.OKCancel)==DialogResult.Cancel) {
+							if(MessageBox.Show("Download again?","",MessageBoxButtons.OKCancel)
+								==DialogResult.OK) {
+								FormUpdate FormU=new FormUpdate();
+								FormU.ShowDialog();
+							}
+							Application.Exit();
+							return false;
+						}
+						try {
+							Process.Start(setupBinPath);
+						}
+						catch {
+							MessageBox.Show("Could not launch Setup.exe");
+						}
+					}
+					else if(MessageBox.Show("A newer version has been installed on at least one computer,"+
+							"but Setup.exe could not be found in any of the following paths: "+
+							FormPath.GetPreferredImagePath()+".  Download again?","",MessageBoxButtons.OKCancel)==DialogResult.OK) {
+						FormUpdate FormU=new FormUpdate();
+						FormU.ShowDialog();
+					}
+				}else{//Not using image path.
+					//perform program update automatically.
+					string patchName="Setup.exe";
+					string updateUri=PrefC.GetString("UpdateWebsitePath");
+					string registrationCode=PrefC.GetString("RegistrationNumber");
+					string updateInfoMajor="";
+					string updateInfoMinor="";
+					if(FormUpdate.ShouldDownloadUpdate(updateUri,registrationCode,out updateInfoMajor,out updateInfoMinor)){
+						if(MessageBox.Show(updateInfoMajor+Lan.g("Prefs","Perform program update now?"),"",
+							MessageBoxButtons.YesNo)==DialogResult.Yes)
+						{
+							string tempFile=ODFileUtils.CombinePaths(Path.GetTempPath(),patchName);//Resort to a more common temp file name.
+							FormUpdate.DownloadInstallPatchFromURI(updateUri+registrationCode+"/"+patchName,//Source URI
+								tempFile);//Local destination file.
+							File.Delete(tempFile);//Cleanup install file.
+						}
+					}
+				}
+				Application.Exit();//always exits, whether launch of setup worked or not
+				return false;
+			}
+			return true;
 		}
 
 		///<summary>Updates a pref of type int.  Returns true if a change was required, or false if no change needed.</summary>
@@ -99,93 +178,6 @@ namespace OpenDental{
 				+"WHERE PrefName = '"+POut.PString(prefName)+"'";
 			General.NonQ(command);
 			return true;
-		}
-
-		///<summary>Called in two places.  Once from RefreshLocalData, and also from FormBackups after a restore.</summary>
-		public static bool CheckProgramVersion() {
-			Version storedVersion=new Version(PrefC.GetString("ProgramVersion"));
-			Version currentVersion=new Version(Application.ProductVersion);
-			string database="";
-			string command="";
-			if(DataConnection.DBtype==DatabaseType.MySql){
-				command="SELECT database()";
-				DataTable table=General.GetTable(command);
-				database=PIn.PString(table.Rows[0][0].ToString());
-			}
-			if(storedVersion<currentVersion) {
-				UpdateString("ProgramVersion",currentVersion.ToString());
-				Prefs.Refresh();
-			}
-			if(storedVersion>currentVersion) {
-				if(PrefC.UsingAtoZfolder){
-					string setupBinPath=ODFileUtils.CombinePaths(FormPath.GetPreferredImagePath(),"Setup.exe");
-					if(File.Exists(setupBinPath)) {
-						if(MessageBox.Show("You are attempting to run version "+currentVersion.ToString(3)+",\r\n"
-							+"But the database "+database+"\r\n"
-							+"is already using version "+storedVersion.ToString(3)+".\r\n"
-							+"A newer version must have already been installed on at least one computer.\r\n"  
-							+"The setup program stored in your A to Z folder will now be launched.\r\n"
-							+"Or, if you hit Cancel, then you will have the option to download again."
-							,"",MessageBoxButtons.OKCancel)==DialogResult.Cancel) {
-							if(MessageBox.Show("Download again?","",MessageBoxButtons.OKCancel)
-								==DialogResult.OK) {
-								FormUpdate FormU=new FormUpdate();
-								FormU.ShowDialog();
-							}
-							Application.Exit();
-							return false;
-						}
-						try {
-							Process.Start(setupBinPath);
-						}
-						catch {
-							MessageBox.Show("Could not launch Setup.exe");
-						}
-					}
-					else if(MessageBox.Show("A newer version has been installed on at least one computer,"+
-							"but Setup.exe could not be found in any of the following paths: "+
-							FormPath.GetPreferredImagePath()+".  Download again?","",MessageBoxButtons.OKCancel)==DialogResult.OK) {
-						FormUpdate FormU=new FormUpdate();
-						FormU.ShowDialog();
-					}
-				}else{//Not using image path.
-					//perform program update automatically.
-					string patchName="Setup.exe";
-					string updateUri=PrefC.GetString("UpdateWebsitePath");
-					string registrationCode=PrefC.GetString("RegistrationNumber");
-					string updateInfoMajor="";
-					string updateInfoMinor="";
-					if(FormUpdate.ShouldDownloadUpdate(updateUri,registrationCode,out updateInfoMajor,out updateInfoMinor)){
-						if(MessageBox.Show(updateInfoMajor+Lan.g("Prefs","Perform program update now?"),"",
-							MessageBoxButtons.YesNo)==DialogResult.Yes)
-						{
-							string tempFile=ODFileUtils.CombinePaths(Path.GetTempPath(),patchName);//Resort to a more common temp file name.
-							FormUpdate.DownloadInstallPatchFromURI(updateUri+registrationCode+"/"+patchName,//Source URI
-								tempFile);//Local destination file.
-							File.Delete(tempFile);//Cleanup install file.
-						}
-					}
-				}
-				Application.Exit();//always exits, whether launch of setup worked or not
-				return false;
-			}
-			return true;
-		}
-
-		///<summary>This ONLY runs when first opening the program</summary>
-		public static bool ConvertDB() {
-			ClassConvertDatabase ClassConvertDatabase2=new ClassConvertDatabase();
-			string pref=PrefC.GetString("DataBaseVersion");
-				//(Pref)PrefC.HList["DataBaseVersion"];
-			//Debug.WriteLine(pref.PrefName+","+pref.ValueString);
-			if(ClassConvertDatabase2.Convert(pref)){
-				//((Pref)PrefC.HList["DataBaseVersion"]).ValueString)) {
-				return true;
-			}
-			else {
-				Application.Exit();
-				return false;
-			}
 		}
 
 		///<summary>This ONLY runs when first opening the program.  Gets run early in the sequence. Returns false if the program should exit.</summary>
@@ -271,36 +263,5 @@ namespace OpenDental{
 			return true;
 		}
 
-		/*
-		///<summary>Attempts to write a simple value to the database.  If it fails, then we know we don't have a good connection with write permissions.</summary>
-		public static bool TryToConnect() {
-			DataConnection dcon=new DataConnection();
-			return dcon.IsValid();
-		}
-
-		///<summary></summary>
-		public static bool DBExists() {
-			DataConnection dcon=new DataConnection();
-			return dcon.DbExists();
-		}*/
-
-
 	}
-
-	
-
-
-	
-
-
 }
-
-
-
-
-
-
-
-
-
-

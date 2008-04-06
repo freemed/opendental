@@ -100,10 +100,10 @@ namespace OpenDental{
 				To2_8_2();//begins going through the chain of conversion steps
 				MsgBox.Show(this,"Conversion successful");
 				if(FromVersion>=new Version("3.4.0")){
-					Prefs.Refresh();//or it won't know it has to update in the next line.
+					Prefs.RefreshClient();//or it won't know it has to update in the next line.
 					Prefs.UpdateBool("CorruptedDatabase",false);
 				}
-				Prefs.Refresh();
+				Prefs.RefreshClient();
 				return true;
 #if !DEBUG
 			}

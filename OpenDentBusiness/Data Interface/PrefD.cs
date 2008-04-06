@@ -1,13 +1,11 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.Data;
-using System.Text;
+using System.Diagnostics;
 
-namespace OpenDentBusiness {
+namespace OpenDentBusiness{
 	///<summary></summary>
-	public class PrefB {
-		
+	public class PrefD{
 		public static DataSet Refresh(){
 			string command="SELECT * FROM preference";
 			DataConnection dcon=new DataConnection();
@@ -30,7 +28,36 @@ namespace OpenDentBusiness {
 			}
 		}
 
+		///<summary></summary>
+		public static void Update(Pref pref) {
+			string command= "UPDATE preference SET "
+				+"valuestring = '"  +POut.PString(pref.ValueString)+"'"
+				+" WHERE prefname = '"+POut.PString(pref.PrefName)+"'";
+			General.NonQ(command);
+		}
 
+		
+
+		
+
+		
 
 	}
+
+	
+
+
+	
+
+
 }
+
+
+
+
+
+
+
+
+
+

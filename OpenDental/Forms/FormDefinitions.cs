@@ -456,7 +456,7 @@ namespace OpenDental{
 		private void FillDefs(){
 			//Defs.IsSelected=false;
 			int scroll=tbDefs.ScrollValue;
-			DefsList=Defs.GetCatList(SelectedCat);
+			DefsList=DefD.GetCatList(SelectedCat);
 			tbDefs.ResetRows(DefsList.Length);
 			tbDefs.SetBackGColor(Color.White);
 			for(int i=0;i<DefsList.Length;i++){

@@ -841,8 +841,8 @@ namespace OpenDental{
 					def.Category=DefCat.ProcCodeCats;
 					def.ItemName=listCodes[i].ProcCatDescript;
 					def.ItemOrder=DefC.Long[(int)DefCat.ProcCodeCats].Length;
-					Defs.Insert(def);
-					Defs.Refresh();
+					DefD.Insert(def);
+					Defs.RefreshClient();
 					listCodes[i].ProcCat=def.DefNum;
 				}
 				ProcedureCodes.Insert(listCodes[i]);

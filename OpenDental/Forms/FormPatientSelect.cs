@@ -873,7 +873,7 @@ namespace OpenDental{
 
 		private void checkUseSearch_Click(object sender, System.EventArgs e) {
 			Prefs.UpdateBool("PatientSelectUsesSearchButton",checkUseSearch.Checked);
-			Prefs.Refresh();
+			Prefs.RefreshClient();
 			//simply not important enough to send an update to the other computers.
 			FillSearchOption();
 			if(!checkUseSearch.Checked)

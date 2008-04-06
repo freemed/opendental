@@ -270,7 +270,7 @@ namespace OpenDental{
 				return;
 			}
 			try{
-				Defs.Delete(DefCur);
+				DefD.Delete(DefCur);
 				DialogResult=DialogResult.OK;
 			}
 			catch(ApplicationException ex){
@@ -370,10 +370,10 @@ namespace OpenDental{
 			if(EnableColor) DefCur.ItemColor=butColor.BackColor;
 			DefCur.IsHidden=checkHidden.Checked;
 			if(IsNew){
-				Defs.Insert(DefCur);
+				DefD.Insert(DefCur);
 			}
 			else{
-				Defs.Update(DefCur);
+				DefD.Update(DefCur);
 			}
 			DialogResult=DialogResult.OK;
 		}

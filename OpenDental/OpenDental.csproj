@@ -168,6 +168,7 @@
     <Compile Include="Bridges\TrophyEnhanced.cs" />
     <Compile Include="Bridges\VixWin.cs" />
     <Compile Include="Bridges\VixWinOld.cs" />
+    <Compile Include="Data Interface\aaDataInterface.cs" />
     <Compile Include="Data Interface\AccountingAutoPays.cs" />
     <Compile Include="Data Interface\Accounts.cs" />
     <Compile Include="Data Interface\Adjustments.cs" />
@@ -203,6 +204,7 @@
     <Compile Include="Data Interface\CanadianNetworks.cs" />
     <Compile Include="Data Interface\ClaimAttaches.cs" />
     <Compile Include="Data Interface\Patients2.cs" />
+    <Compile Include="Data Interface\Prefs.cs" />
     <Compile Include="Data Interface\TaskAncestors.cs" />
     <Compile Include="Data Interface\TaskSubscriptions.cs" />
     <Compile Include="Data Interface\SupplyOrderItems.cs" />
@@ -261,7 +263,6 @@
     <Compile Include="Data Interface\PaySplits.cs" />
     <Compile Include="Data Interface\PerioExams.cs" />
     <Compile Include="Data Interface\PerioMeasures.cs" />
-    <Compile Include="Data Interface\Prefs.cs" />
     <Compile Include="Data Interface\Printers.cs" />
     <Compile Include="Data Interface\ProcButtonItems.cs" />
     <Compile Include="Data Interface\ProcButtons.cs" />
