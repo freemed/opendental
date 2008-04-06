@@ -213,7 +213,7 @@ namespace OpenDental{
 				def.ItemName="Reallocation";
 				def.ItemValue="+";
 				def.ItemOrder=DefC.Long[(int)DefCat.AdjTypes].Length;
-				DefD.Insert(def);
+				Defs.Insert(def);
 				defnum=def.DefNum;
 				DataValid.SetInvalid(InvalidTypes.Defs);
 			}

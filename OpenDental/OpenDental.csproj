@@ -204,7 +204,7 @@
     <Compile Include="Data Interface\CanadianNetworks.cs" />
     <Compile Include="Data Interface\ClaimAttaches.cs" />
     <Compile Include="Data Interface\Patients2.cs" />
-    <Compile Include="Data Interface\Prefs.cs" />
+    <Compile Include="Data Interface\Prefs_client.cs" />
     <Compile Include="Data Interface\TaskAncestors.cs" />
     <Compile Include="Data Interface\TaskSubscriptions.cs" />
     <Compile Include="Data Interface\SupplyOrderItems.cs" />
@@ -229,7 +229,7 @@
     <Compile Include="Data Interface\Counties.cs" />
     <Compile Include="Data Interface\CovCats.cs" />
     <Compile Include="Data Interface\CovSpans.cs" />
-    <Compile Include="Data Interface\Defs.cs" />
+    <Compile Include="Data Interface\Defs_client.cs" />
     <Compile Include="Data Interface\Deposits.cs" />
     <Compile Include="Data Interface\DiseaseDefs.cs" />
     <Compile Include="Data Interface\Diseases.cs" />

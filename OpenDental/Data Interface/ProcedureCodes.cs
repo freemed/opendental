@@ -349,8 +349,8 @@ namespace OpenDental{
 				def=DefC.GetDef(DefCat.ProcCodeCats,catNum);
 				if(!def.IsHidden) {
 					def.IsHidden=true;
-					DefD.Update(def);
-					Defs.RefreshClient();
+					Defs.Update(def);
+					Defs_client.RefreshClient();
 				}
 			}
 			if(catNum==0) {
@@ -359,8 +359,8 @@ namespace OpenDental{
 				def.ItemName="Obsolete";
 				def.ItemOrder=DefC.Long[(int)DefCat.ProcCodeCats].Length;
 				def.IsHidden=true;
-				DefD.Insert(def);
-				Defs.RefreshClient();
+				Defs.Insert(def);
+				Defs_client.RefreshClient();
 				catNum=def.DefNum;
 			}
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -375,8 +375,8 @@ namespace OpenDental{
 				def=DefC.GetDef(DefCat.ProcCodeCats,catNum);
 				if(!def.IsHidden) {
 					def.IsHidden=true;
-					DefD.Update(def);
-					Defs.RefreshClient();
+					Defs.Update(def);
+					Defs_client.RefreshClient();
 				}
 			}
 		}
@@ -446,7 +446,7 @@ namespace OpenDental{
 				def.ItemOrder=itemorder;
 				def.ItemName=array[i];
 				def.ItemValue=array[i+1];
-				DefD.Insert(def);
+				Defs.Insert(def);
 				itemorder++;
 			}
 		}

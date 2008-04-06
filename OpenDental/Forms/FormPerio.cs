@@ -1324,8 +1324,8 @@ namespace OpenDental{
 			butColorBleed.BackColor=colorDialog1.Color;
 			Def DefCur=DefC.Short[(int)DefCat.MiscColors][1].Copy();
 			DefCur.ItemColor=colorDialog1.Color;
-			DefD.Update(DefCur);
-			Defs.RefreshClient();
+			Defs.Update(DefCur);
+			Defs_client.RefreshClient();
 			localDefsChanged=true;
 			gridP.SetColors();
 			gridP.Invalidate();
@@ -1340,8 +1340,8 @@ namespace OpenDental{
 			butColorPus.BackColor=colorDialog1.Color;
 			Def DefCur=DefC.Short[(int)DefCat.MiscColors][2].Copy();
 			DefCur.ItemColor=colorDialog1.Color;
-			DefD.Update(DefCur);
-			Defs.RefreshClient();
+			Defs.Update(DefCur);
+			Defs_client.RefreshClient();
 			localDefsChanged=true;
 			gridP.SetColors();
 			gridP.Invalidate();
@@ -1356,8 +1356,8 @@ namespace OpenDental{
 			butColorPlaque.BackColor=colorDialog1.Color;
 			Def DefCur=DefC.Short[(int)DefCat.MiscColors][4].Copy();
 			DefCur.ItemColor=colorDialog1.Color;
-			DefD.Update(DefCur);
-			Defs.RefreshClient();
+			Defs.Update(DefCur);
+			Defs_client.RefreshClient();
 			localDefsChanged=true;
 			gridP.SetColors();
 			gridP.Invalidate();
@@ -1372,8 +1372,8 @@ namespace OpenDental{
 			butColorCalculus.BackColor=colorDialog1.Color;
 			Def DefCur=DefC.Short[(int)DefCat.MiscColors][5].Copy();
 			DefCur.ItemColor=colorDialog1.Color;
-			DefD.Update(DefCur);
-			Defs.RefreshClient();
+			Defs.Update(DefCur);
+			Defs_client.RefreshClient();
 			localDefsChanged=true;
 			gridP.SetColors();
 			gridP.Invalidate();
@@ -1419,9 +1419,9 @@ namespace OpenDental{
 				currentValue--;
 			}
 			pref.ValueString=currentValue.ToString();
-			PrefD.Update(pref);
+			Prefs.Update(pref);
 			localDefsChanged=true;
-			Prefs.RefreshClient();
+			Prefs_client.RefreshClient();
 			if(sender==updownProb){
 				textRedProb.Text=currentValue.ToString();
 				textCountProb.Text=gridP.CountTeeth(PerioSequenceType.Probing).Count.ToString();

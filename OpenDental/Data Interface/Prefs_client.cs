@@ -9,7 +9,7 @@ using System.Windows.Forms;
 using CodeBase;
 
 namespace OpenDental {
-	public class Prefs {
+	public class Prefs_client {
 		///<summary></summary>
 		public static void RefreshClient() {
 			DataSet ds=null;
@@ -19,14 +19,14 @@ namespace OpenDental {
 					ds=RemotingClient.ProcessQuery(dto);
 				}
 				else {
-					ds=PrefD.Refresh();
+					ds=Prefs.Refresh();
 				}
 			}
 			catch(Exception e) {
 				MessageBox.Show(e.Message);
 				return;
 			}
-			PrefD.FillHList(ds.Tables[0]);//now, we have an HList on both the client and the server.
+			Prefs.FillHList(ds.Tables[0]);//now, we have an HList on both the client and the server.
 		}
 
 		///<summary>This ONLY runs when first opening the program</summary>
@@ -57,8 +57,8 @@ namespace OpenDental {
 				database=PIn.PString(table.Rows[0][0].ToString());
 			}
 			if(storedVersion<currentVersion) {
-				UpdateString("ProgramVersion",currentVersion.ToString());
-				Prefs.RefreshClient();
+				Prefs.UpdateString("ProgramVersion",currentVersion.ToString());
+				RefreshClient();
 			}
 			if(storedVersion>currentVersion) {
 				if(PrefC.UsingAtoZfolder){
@@ -113,70 +113,6 @@ namespace OpenDental {
 				Application.Exit();//always exits, whether launch of setup worked or not
 				return false;
 			}
-			return true;
-		}
-
-		///<summary>Updates a pref of type int.  Returns true if a change was required, or false if no change needed.</summary>
-		public static bool UpdateInt(string prefName,int newValue) {
-			if(!PrefC.HList.ContainsKey(prefName)) {
-				MessageBox.Show(prefName+" is an invalid pref name.");
-				return false;
-			}
-			if(PrefC.GetInt(prefName)==newValue) {
-				return false;//no change needed
-			}
-			string command= "UPDATE preference SET "
-				+"ValueString = '"+POut.PInt(newValue)+"' "
-				+"WHERE PrefName = '"+POut.PString(prefName)+"'";
-			General.NonQ(command);
-			return true;
-		}
-
-		///<summary>Updates a pref of type double.  Returns true if a change was required, or false if no change needed.</summary>
-		public static bool UpdateDouble(string prefName,double newValue) {
-			if(!PrefC.HList.ContainsKey(prefName)) {
-				MessageBox.Show(prefName+" is an invalid pref name.");
-				return false;
-			}
-			if(PrefC.GetDouble(prefName)==newValue) {
-				return false;//no change needed
-			}
-			string command = "UPDATE preference SET "
-				+"ValueString = '"+POut.PDouble(newValue)+"' "
-				+"WHERE PrefName = '"+POut.PString(prefName)+"'";
-			General.NonQ(command);
-			return true;
-		}
-
-		///<summary>Returns true if a change was required, or false if no change needed.</summary>
-		public static bool UpdateBool(string prefName,bool newValue) {
-			if(!PrefC.HList.ContainsKey(prefName)) {
-				MessageBox.Show(prefName+" is an invalid pref name.");
-				return false;
-			}
-			if(PrefC.GetBool(prefName)==newValue) {
-				return false;//no change needed
-			}
-			string command = "UPDATE preference SET "
-				+"ValueString = '"+POut.PBool(newValue)+"' "
-				+"WHERE PrefName = '"+POut.PString(prefName)+"'";
-			General.NonQ(command);
-			return true;
-		}
-
-		///<summary>Returns true if a change was required, or false if no change needed.</summary>
-		public static bool UpdateString(string prefName,string newValue) {
-			if(!PrefC.HList.ContainsKey(prefName)) {
-				MessageBox.Show(prefName+" is an invalid pref name.");
-				return false;
-			}
-			if(PrefC.GetString(prefName)==newValue) {
-				return false;//no change needed
-			}
-			string command = "UPDATE preference SET "
-				+"ValueString = '"+POut.PString(newValue)+"' "
-				+"WHERE PrefName = '"+POut.PString(prefName)+"'";
-			General.NonQ(command);
 			return true;
 		}
 

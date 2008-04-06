@@ -209,9 +209,9 @@ namespace OpenDental{
 				def.Category=DefCat.FeeSchedNames;
 				def.ItemName=feeSchedName;
 				def.ItemOrder=DefC.Long[(int)DefCat.FeeSchedNames].Length;
-				DefD.Insert(def);
+				Defs.Insert(def);
 				feeSched=def.DefNum;
-				Defs.RefreshClient();
+				Defs_client.RefreshClient();
 				Fees.Refresh();
 				DataValid.SetInvalid(InvalidTypes.Defs | InvalidTypes.Fees);
 			}
@@ -220,8 +220,8 @@ namespace OpenDental{
 			}
 			if(def.IsHidden){//if the fee schedule is hidden
 				def.IsHidden=false;//unhide it
-				DefD.Update(def);
-				Defs.RefreshClient();
+				Defs.Update(def);
+				Defs_client.RefreshClient();
 				DataValid.SetInvalid(InvalidTypes.Defs);
 			}
 			Fee fee=GetFeeByOrder(ProcedureCodes.GetCodeNum(procCode),DefC.GetOrder(DefCat.FeeSchedNames,def.DefNum));

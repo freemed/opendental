@@ -1344,12 +1344,12 @@ namespace OpenDental{
 		///<summary>Refreshes certain rarely used data from database.  Must supply the types of data to refresh as flags.  Also performs a few other tasks that must be done when local data is changed.</summary>
 		private bool RefreshLocalData(InvalidTypes itypes,bool isStartingUp){
 			if((itypes & InvalidTypes.Prefs)==InvalidTypes.Prefs){
-				Prefs.RefreshClient();
+				Prefs_client.RefreshClient();
 				if(isStartingUp){
-					if(!Prefs.CheckMySqlVersion41()){
+					if(!Prefs_client.CheckMySqlVersion41()){
 						return false;
 					}
-					if(!Prefs.ConvertDB()){
+					if(!Prefs_client.ConvertDB()){
 						return false;
 					}
 					if(PrefC.UsingAtoZfolder && FormPath.GetPreferredImagePath()==null){//AtoZ folder not found
@@ -1364,9 +1364,9 @@ namespace OpenDental{
 						//menuItemClaimForms.Visible=usingAtoZ;
 						//CheckCustomReports();
 						//this.RefreshCurrentModule();
-						Prefs.RefreshClient();//because listening thread not started yet.
+						Prefs_client.RefreshClient();//because listening thread not started yet.
 					}
-					if(!Prefs.CheckProgramVersion()){
+					if(!Prefs_client.CheckProgramVersion()){
 						return false;
 					}
 					if(!FormRegistrationKey.ValidateKey(PrefC.GetString("RegistrationKey"))){
@@ -1377,7 +1377,7 @@ namespace OpenDental{
 							Application.Exit();
 							return false;
 						}
-						Prefs.RefreshClient();
+						Prefs_client.RefreshClient();
 					}
 					Lan.Refresh();//automatically skips if current culture is en-US
 					LanguageForeigns.Refresh(CultureInfo.CurrentCulture);//automatically skips if current culture is en-US
@@ -1536,7 +1536,7 @@ namespace OpenDental{
 				Printers.Refresh();
 			}
 			if((itypes & InvalidTypes.Defs)==InvalidTypes.Defs){
-				Defs.RefreshClient();
+				Defs_client.RefreshClient();
 			}
 			if((itypes & InvalidTypes.DentalSchools)==InvalidTypes.DentalSchools){
 				//Instructors.Refresh();

@@ -27,7 +27,7 @@ namespace OpenDentBusiness {
 				return "";
 			}
 			if(DefC.Long==null){
-				DefD.Refresh();
+				Defs.Refresh();
 			}
 			for(int i=0;i<DefC.Long[(int)myCat].GetLength(0);i++) {
 				if(DefC.Long[(int)myCat][i].DefNum==myDefNum) {

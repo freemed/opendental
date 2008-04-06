@@ -80,7 +80,7 @@ namespace OpenDentBusiness {
 				case  MethodName.Chart_GetAll:
 					return ChartModuleB.GetAll((int)parameters[0],(bool)parameters[1]);
 				case  MethodName.Definition_Refresh:
-					return DefD.Refresh();
+					return Defs.Refresh();
 				case  MethodName.Providers_RefreshOnServer:
 					return Providers.RefreshOnServer();
 			}

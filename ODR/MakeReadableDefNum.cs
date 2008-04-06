@@ -15,7 +15,7 @@ namespace ODR{
 			string command="SELECT * FROM definition ORDER BY Category,ItemOrder";
 			DataConnection dcon=new DataConnection();
 			DataTable table=dcon.GetTable(command);
-			DefD.FillArrays(table);
+			Defs.FillArrays(table);
 		}
 
 		public string GetPaymentType(string defNum){

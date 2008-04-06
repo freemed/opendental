@@ -456,7 +456,7 @@ namespace OpenDental{
 		private void FillDefs(){
 			//Defs.IsSelected=false;
 			int scroll=tbDefs.ScrollValue;
-			DefsList=DefD.GetCatList(SelectedCat);
+			DefsList=Defs.GetCatList(SelectedCat);
 			tbDefs.ResetRows(DefsList.Length);
 			tbDefs.SetBackGColor(Color.White);
 			for(int i=0;i<DefsList.Length;i++){
@@ -565,19 +565,19 @@ namespace OpenDental{
 				MessageBox.Show(Lan.g(this,"Please select item first,"));
 				return;
 			}
-			Defs.HideDef(DefsList[DefsSelected]);
+			Defs_client.HideDef(DefsList[DefsSelected]);
 			changed=true;
 			FillDefs();
 		}
 
 		private void butUp_Click(object sender, System.EventArgs e) {
-			DefsSelected=Defs.MoveUp(DefsIsSelected,DefsSelected,DefsList);
+			DefsSelected=Defs_client.MoveUp(DefsIsSelected,DefsSelected,DefsList);
 			changed=true;
 			FillDefs();
 		}
 
 		private void butDown_Click(object sender, System.EventArgs e) {
-			DefsSelected=Defs.MoveDown(DefsIsSelected,DefsSelected,DefsList);
+			DefsSelected=Defs_client.MoveDown(DefsIsSelected,DefsSelected,DefsList);
 			changed=true;
 			FillDefs();
 		}

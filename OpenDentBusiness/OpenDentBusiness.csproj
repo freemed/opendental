@@ -81,8 +81,8 @@
     <Compile Include="Cache\PrefC.cs" />
     <Compile Include="ClientSL.cs" />
     <Compile Include="Data Interface\aaDataInterface.cs" />
-    <Compile Include="Data Interface\DefD.cs" />
-    <Compile Include="Data Interface\PrefD.cs" />
+    <Compile Include="Data Interface\Defs.cs" />
+    <Compile Include="Data Interface\Prefs.cs" />
     <Compile Include="Data Interface\Statements.cs" />
     <Compile Include="Data Interface\Documents.cs" />
     <Compile Include="Data Interface\Family.cs" />
