@@ -331,17 +331,17 @@ namespace OpenDental{
 				if(Providers.List[i].ProvNum==AdjustmentCur.ProvNum)
 					listProvider.SelectedIndex=i;
 			}				
-			for(int i=0;i<DefB.Short[1].Length;i++){//temp.AdjType
-				if(DefB.Short[1][i].ItemValue=="+"){
+			for(int i=0;i<DefC.Short[1].Length;i++){//temp.AdjType
+				if(DefC.Short[1][i].ItemValue=="+"){
 					PosIndex.Add(i);
-					listTypePos.Items.Add(DefB.Short[1][i].ItemName);
-					if(DefB.Short[1][i].DefNum==AdjustmentCur.AdjType)
+					listTypePos.Items.Add(DefC.Short[1][i].ItemName);
+					if(DefC.Short[1][i].DefNum==AdjustmentCur.AdjType)
 						listTypePos.SelectedIndex=PosIndex.Count-1;
 				}
-				else if(DefB.Short[1][i].ItemValue=="-"){
+				else if(DefC.Short[1][i].ItemValue=="-"){
 					NegIndex.Add(i);
-					listTypeNeg.Items.Add(DefB.Short[1][i].ItemName);
-					if(DefB.Short[1][i].DefNum==AdjustmentCur.AdjType)
+					listTypeNeg.Items.Add(DefC.Short[1][i].ItemName);
+					if(DefC.Short[1][i].DefNum==AdjustmentCur.AdjType)
 						listTypeNeg.SelectedIndex=NegIndex.Count-1;
 				}
 			}
@@ -382,11 +382,11 @@ namespace OpenDental{
 				AdjustmentCur.ProvNum=Providers.List[this.listProvider.SelectedIndex].ProvNum;
 			if(listTypePos.SelectedIndex!=-1){
 				AdjustmentCur.AdjType
-					=DefB.Short[(int)DefCat.AdjTypes][(int)PosIndex[listTypePos.SelectedIndex]].DefNum;
+					=DefC.Short[(int)DefCat.AdjTypes][(int)PosIndex[listTypePos.SelectedIndex]].DefNum;
 			}
 			if(listTypeNeg.SelectedIndex!=-1){
 				AdjustmentCur.AdjType
-					=DefB.Short[(int)DefCat.AdjTypes][(int)NegIndex[listTypeNeg.SelectedIndex]].DefNum;
+					=DefC.Short[(int)DefCat.AdjTypes][(int)NegIndex[listTypeNeg.SelectedIndex]].DefNum;
 			}
 			if(DefB.GetValue(DefCat.AdjTypes,AdjustmentCur.AdjType)=="+"){//pos
 				AdjustmentCur.AdjAmt=PIn.PDouble(textAmount.Text);

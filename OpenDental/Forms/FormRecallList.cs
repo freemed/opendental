@@ -484,8 +484,8 @@ namespace OpenDental{
 				}
 			}
 			comboStatus.Items.Clear();
-			for(int i=0;i<DefB.Short[(int)DefCat.RecallUnschedStatus].Length;i++){
-				comboStatus.Items.Add(DefB.Short[(int)DefCat.RecallUnschedStatus][i].ItemName);
+			for(int i=0;i<DefC.Short[(int)DefCat.RecallUnschedStatus].Length;i++){
+				comboStatus.Items.Add(DefC.Short[(int)DefCat.RecallUnschedStatus][i].ItemName);
 			}
 			FillMain();
 		}
@@ -902,7 +902,7 @@ namespace OpenDental{
 				Recalls.UpdateStatus(
 					PIn.PInt(table.Rows[gridMain.SelectedIndices[i]]["RecallNum"].ToString()),
 					//((RecallItem)gridMain.Rows[gridMain.SelectedIndices[i]].Tag).RecallNum,
-					DefB.Short[(int)DefCat.RecallUnschedStatus][comboStatus.SelectedIndex].DefNum);
+					DefC.Short[(int)DefCat.RecallUnschedStatus][comboStatus.SelectedIndex].DefNum);
 				//((RecallItem)MainAL[tbMain.SelectedIndices[i]]).up
 			}
 			FillMain();

@@ -153,14 +153,14 @@ namespace OpenDental{
 		}
 		#endregion
 		private void FormRpProcCodes_Load(object sender, System.EventArgs e) {
-			for(int i=0;i<DefB.Short[(int)DefCat.FeeSchedNames].Length;i++){
-				listFeeSched.Items.Add(DefB.Short[(int)DefCat.FeeSchedNames][i].ItemName);
+			for(int i=0;i<DefC.Short[(int)DefCat.FeeSchedNames].Length;i++){
+				listFeeSched.Items.Add(DefC.Short[(int)DefCat.FeeSchedNames][i].ItemName);
 			}		
 			listFeeSched.SelectedIndex=0;
 		}
 
 		private void butOK_Click(object sender, System.EventArgs e) {
-			int feeSched=DefB.Short[(int)DefCat.FeeSchedNames][listFeeSched.SelectedIndex].DefNum;	
+			int feeSched=DefC.Short[(int)DefCat.FeeSchedNames][listFeeSched.SelectedIndex].DefNum;	
       string catName="";  //string to hold current category name
 			Fees fee=new Fees();
 			Queries.CurReport=new ReportOld();

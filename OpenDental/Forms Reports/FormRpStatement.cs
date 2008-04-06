@@ -335,14 +335,14 @@ namespace OpenDental{
 			pdfRenderer.PdfDocument.Save(tempPath);
 			//get the category-----------------------------------------------------------------------------
 			int category=0;
-			for(int i=0;i<DefB.Short[(int)DefCat.ImageCats].Length;i++){
-				if(Regex.IsMatch(DefB.Short[(int)DefCat.ImageCats][i].ItemValue,@"S")){
-					category=DefB.Short[(int)DefCat.ImageCats][i].DefNum;
+			for(int i=0;i<DefC.Short[(int)DefCat.ImageCats].Length;i++){
+				if(Regex.IsMatch(DefC.Short[(int)DefCat.ImageCats][i].ItemValue,@"S")){
+					category=DefC.Short[(int)DefCat.ImageCats][i].DefNum;
 					break;
 				}
 			}
 			if(category==0){
-				category=DefB.Short[(int)DefCat.ImageCats][0].DefNum;//put it in the first category.
+				category=DefC.Short[(int)DefCat.ImageCats][0].DefNum;//put it in the first category.
 			}
 			//create doc--------------------------------------------------------------------------------------
 			OpenDentBusiness.Document docc=null;

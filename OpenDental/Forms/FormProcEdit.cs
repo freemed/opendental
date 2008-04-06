@@ -1830,9 +1830,9 @@ namespace OpenDental{
 			}
 			//if clinical is hidden, then there's a chance that no item is selected at this point.
 			comboDx.Items.Clear();
-			for(int i=0;i<DefB.Short[(int)DefCat.Diagnosis].Length;i++){
-				comboDx.Items.Add(DefB.Short[(int)DefCat.Diagnosis][i].ItemName);
-				if(DefB.Short[(int)DefCat.Diagnosis][i].DefNum==ProcCur.Dx)
+			for(int i=0;i<DefC.Short[(int)DefCat.Diagnosis].Length;i++){
+				comboDx.Items.Add(DefC.Short[(int)DefCat.Diagnosis][i].ItemName);
+				if(DefC.Short[(int)DefCat.Diagnosis][i].DefNum==ProcCur.Dx)
 					comboDx.SelectedIndex=i;
 			}
 			comboProvNum.Items.Clear();
@@ -1844,25 +1844,25 @@ namespace OpenDental{
 			comboPriority.Items.Clear();
 			comboPriority.Items.Add(Lan.g(this,"no priority"));
 			comboPriority.SelectedIndex=0;
-			for(int i=0;i<DefB.Short[(int)DefCat.TxPriorities].Length;i++){
-				comboPriority.Items.Add(DefB.Short[(int)DefCat.TxPriorities][i].ItemName);
-				if(DefB.Short[(int)DefCat.TxPriorities][i].DefNum==ProcCur.Priority)
+			for(int i=0;i<DefC.Short[(int)DefCat.TxPriorities].Length;i++){
+				comboPriority.Items.Add(DefC.Short[(int)DefCat.TxPriorities][i].ItemName);
+				if(DefC.Short[(int)DefCat.TxPriorities][i].DefNum==ProcCur.Priority)
 					comboPriority.SelectedIndex=i+1;
 			}
 			comboBillingTypeOne.Items.Clear();
 			comboBillingTypeOne.Items.Add(Lan.g(this,"none"));
 			comboBillingTypeOne.SelectedIndex=0;
-			for(int i=0;i<DefB.Short[(int)DefCat.BillingTypes].Length;i++) {
-				comboBillingTypeOne.Items.Add(DefB.Short[(int)DefCat.BillingTypes][i].ItemName);
-				if(DefB.Short[(int)DefCat.BillingTypes][i].DefNum==ProcCur.BillingTypeOne)
+			for(int i=0;i<DefC.Short[(int)DefCat.BillingTypes].Length;i++) {
+				comboBillingTypeOne.Items.Add(DefC.Short[(int)DefCat.BillingTypes][i].ItemName);
+				if(DefC.Short[(int)DefCat.BillingTypes][i].DefNum==ProcCur.BillingTypeOne)
 					comboBillingTypeOne.SelectedIndex=i+1;
 			}
 			comboBillingTypeTwo.Items.Clear();
 			comboBillingTypeTwo.Items.Add(Lan.g(this,"none"));
 			comboBillingTypeTwo.SelectedIndex=0;
-			for(int i=0;i<DefB.Short[(int)DefCat.BillingTypes].Length;i++) {
-				comboBillingTypeTwo.Items.Add(DefB.Short[(int)DefCat.BillingTypes][i].ItemName);
-				if(DefB.Short[(int)DefCat.BillingTypes][i].DefNum==ProcCur.BillingTypeTwo)
+			for(int i=0;i<DefC.Short[(int)DefCat.BillingTypes].Length;i++) {
+				comboBillingTypeTwo.Items.Add(DefC.Short[(int)DefCat.BillingTypes][i].ItemName);
+				if(DefC.Short[(int)DefCat.BillingTypes][i].DefNum==ProcCur.BillingTypeTwo)
 					comboBillingTypeTwo.SelectedIndex=i+1;
 			}
 			textNotes.Text=ProcCur.Note;
@@ -2783,11 +2783,11 @@ namespace OpenDental{
 			if(comboProvNum.SelectedIndex!=-1)
 				ProcCur.ProvNum=Providers.List[comboProvNum.SelectedIndex].ProvNum;
 			if(comboDx.SelectedIndex!=-1)
-				ProcCur.Dx=DefB.Short[(int)DefCat.Diagnosis][comboDx.SelectedIndex].DefNum;
+				ProcCur.Dx=DefC.Short[(int)DefCat.Diagnosis][comboDx.SelectedIndex].DefNum;
 			if(comboPriority.SelectedIndex==0)
 				ProcCur.Priority=0;
 			else
-				ProcCur.Priority=DefB.Short[(int)DefCat.TxPriorities][comboPriority.SelectedIndex-1].DefNum;
+				ProcCur.Priority=DefC.Short[(int)DefCat.TxPriorities][comboPriority.SelectedIndex-1].DefNum;
 			ProcCur.PlaceService=(PlaceOfService)comboPlaceService.SelectedIndex;
 			if(comboClinic.SelectedIndex==0){
 				ProcCur.ClinicNum=0;
@@ -2799,13 +2799,13 @@ namespace OpenDental{
 				ProcCur.BillingTypeOne=0;
 			}
 			else{
-				ProcCur.BillingTypeOne=DefB.Short[(int)DefCat.BillingTypes][comboBillingTypeOne.SelectedIndex-1].DefNum;
+				ProcCur.BillingTypeOne=DefC.Short[(int)DefCat.BillingTypes][comboBillingTypeOne.SelectedIndex-1].DefNum;
 			}
 			if(comboBillingTypeTwo.SelectedIndex==0) {
 				ProcCur.BillingTypeTwo=0;
 			}
 			else {
-				ProcCur.BillingTypeTwo=DefB.Short[(int)DefCat.BillingTypes][comboBillingTypeTwo.SelectedIndex-1].DefNum;
+				ProcCur.BillingTypeTwo=DefC.Short[(int)DefCat.BillingTypes][comboBillingTypeTwo.SelectedIndex-1].DefNum;
 			}
 			//ProcCur.HideGraphical=checkHideGraphical.Checked;
 			if(ProcedureCode2.IsProsth){

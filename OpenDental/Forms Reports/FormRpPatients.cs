@@ -999,9 +999,9 @@ namespace OpenDental{
    		  case "FeeSched":
           SetListBoxConditions();
 					ComboBox.Items.Clear();
-          for(int i=0;i<DefB.Long[(int)DefCat.FeeSchedNames].Length;i++){
-						sItem=DefB.Long[(int)DefCat.FeeSchedNames][i].ItemName.ToString();
-						if(DefB.Long[(int)DefCat.FeeSchedNames][i].IsHidden)
+          for(int i=0;i<DefC.Long[(int)DefCat.FeeSchedNames].Length;i++){
+						sItem=DefC.Long[(int)DefCat.FeeSchedNames][i].ItemName.ToString();
+						if(DefC.Long[(int)DefCat.FeeSchedNames][i].IsHidden)
 							sItem+="(hidden)";
             ComboBox.Items.Add(sItem);
 					}
@@ -1009,9 +1009,9 @@ namespace OpenDental{
    		  case "BillingType":
           SetListBoxConditions();
 					ComboBox.Items.Clear();
-          for(int i=0;i<DefB.Long[(int)DefCat.BillingTypes].Length;i++){
-						sItem=DefB.Long[(int)DefCat.BillingTypes][i].ItemName.ToString();
-						if(DefB.Long[(int)DefCat.BillingTypes][i].IsHidden)
+          for(int i=0;i<DefC.Long[(int)DefCat.BillingTypes].Length;i++){
+						sItem=DefC.Long[(int)DefCat.BillingTypes][i].ItemName.ToString();
+						if(DefC.Long[(int)DefCat.BillingTypes][i].IsHidden)
 							sItem+="(hidden)";
             ComboBox.Items.Add(sItem);
 					}
@@ -1019,9 +1019,9 @@ namespace OpenDental{
    		  /*case "RecallStatus":
           SetListBoxConditions();
 					ComboBox.Items.Clear();
-          for(int i=0;i<DefB.Long[(int)DefCat.RecallUnschedStatus	].Length;i++){
-						sItem=DefB.Long[(int)DefCat.RecallUnschedStatus][i].ItemName.ToString();
-						if(DefB.Long[(int)DefCat.RecallUnschedStatus][i].IsHidden)
+          for(int i=0;i<DefC.Long[(int)DefCat.RecallUnschedStatus	].Length;i++){
+						sItem=DefC.Long[(int)DefCat.RecallUnschedStatus][i].ItemName.ToString();
+						if(DefC.Long[(int)DefCat.RecallUnschedStatus][i].IsHidden)
 							sItem+="(hidden)";
             ComboBox.Items.Add(sItem);
 					}
@@ -1240,7 +1240,7 @@ namespace OpenDental{
               sItem="OR ";
             }  
 						sItem+="patient.FeeSched "+ListConditions.SelectedItem.ToString()+" '"
-							+DefB.Long[(int)DefCat.FeeSchedNames][ComboBox.SelectedIndices[i]].DefNum.ToString()+"'"; 
+							+DefC.Long[(int)DefCat.FeeSchedNames][ComboBox.SelectedIndices[i]].DefNum.ToString()+"'"; 
 						if(i==ComboBox.SelectedIndices.Count-1){
 							sItem+=")";
             }  
@@ -1257,7 +1257,7 @@ namespace OpenDental{
               sItem="OR ";
             }
 						sItem+="patient.BillingType "+ListConditions.SelectedItem.ToString()+" '"
-							+DefB.Long[(int)DefCat.BillingTypes][ComboBox.SelectedIndices[i]].DefNum.ToString()+"'"; 
+							+DefC.Long[(int)DefCat.BillingTypes][ComboBox.SelectedIndices[i]].DefNum.ToString()+"'"; 
 						if(i==ComboBox.SelectedIndices.Count-1){
 							sItem+=")";
             }
@@ -1274,7 +1274,7 @@ namespace OpenDental{
               sItem="OR ";
             }
 						sItem+="patient.RecallStatus "+ListConditions.SelectedItem.ToString()+" '"
-							+DefB.Long[(int)DefCat.RecallUnschedStatus][ComboBox.SelectedIndices[i]]
+							+DefC.Long[(int)DefCat.RecallUnschedStatus][ComboBox.SelectedIndices[i]]
 							.DefNum.ToString()+"'"; 
 						if(i==ComboBox.SelectedIndices.Count-1){
 							sItem+=")";

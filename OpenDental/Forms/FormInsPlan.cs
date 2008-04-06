@@ -214,7 +214,7 @@ namespace OpenDental{
 			if(CultureInfo.CurrentCulture.Name.Length>=4 && CultureInfo.CurrentCulture.Name.Substring(3)=="GB"){//en-GB
 				labelCitySTZip.Text=Lan.g(this,"City,Postcode");
 			}
-			panelPat.BackColor=DefB.Long[(int)DefCat.MiscColors][0].ItemColor;
+			panelPat.BackColor=DefC.Long[(int)DefCat.MiscColors][0].ItemColor;
 			labelViewRequestDocument.Text="         ";
 			//if(!PrefB.GetBool("CustomizedForPracticeWeb")) {
 			//	butEligibility.Visible=false;

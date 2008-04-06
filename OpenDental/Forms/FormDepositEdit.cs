@@ -421,8 +421,8 @@ namespace OpenDental{
 				for(int i=0;i<Clinics.List.Length;i++){
 					comboClinic.Items.Add(Clinics.List[i].Description);
 				}
-				for(int i=0;i<DefB.Short[(int)DefCat.PaymentTypes].Length;i++){
-					listPayType.Items.Add(DefB.Short[(int)DefCat.PaymentTypes][i].ItemName);
+				for(int i=0;i<DefC.Short[(int)DefCat.PaymentTypes].Length;i++){
+					listPayType.Items.Add(DefC.Short[(int)DefCat.PaymentTypes][i].ItemName);
 					listPayType.SetSelected(i,true);
 				}
 				textDepositAccount.Visible=false;//this is never visible for new. It's a description if already attached.
@@ -487,7 +487,7 @@ namespace OpenDental{
 				}
 				int[] payTypes=new int[listPayType.SelectedIndices.Count];
 				for(int i=0;i<payTypes.Length;i++){
-					payTypes[i]=DefB.Short[(int)DefCat.PaymentTypes][listPayType.SelectedIndices[i]].DefNum;
+					payTypes[i]=DefC.Short[(int)DefCat.PaymentTypes][listPayType.SelectedIndices[i]].DefNum;
 				}
 				PatPayList=Payments.GetForDeposit(dateStart,clinicNum,payTypes);
 				ClaimPayList=ClaimPayments.GetForDeposit(dateStart,clinicNum);

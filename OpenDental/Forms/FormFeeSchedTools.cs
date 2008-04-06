@@ -448,8 +448,8 @@ namespace OpenDental{
 		#endregion
 
 		private void FormFeeSchedTools_Load(object sender, System.EventArgs e) {
-			for(int i=0;i<DefB.Short[(int)DefCat.FeeSchedNames].Length;i++){
-				comboCopyFrom.Items.Add(DefB.Short[(int)DefCat.FeeSchedNames][i].ItemName);
+			for(int i=0;i<DefC.Short[(int)DefCat.FeeSchedNames].Length;i++){
+				comboCopyFrom.Items.Add(DefC.Short[(int)DefCat.FeeSchedNames][i].ItemName);
 			}
 		}
 

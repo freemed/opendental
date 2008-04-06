@@ -353,9 +353,9 @@ namespace OpenDental{
         this.Text=Lan.g(this,"Edit Procedure Button");
       }
 			textDescript.Text=ProcButtonCur.Description;
-			for(int i=0;i<DefB.Short[(int)DefCat.ProcButtonCats].Length;i++){
-				comboCategory.Items.Add(DefB.Short[(int)DefCat.ProcButtonCats][i].ItemName);
-				if(ProcButtonCur.Category==DefB.Short[(int)DefCat.ProcButtonCats][i].DefNum){
+			for(int i=0;i<DefC.Short[(int)DefCat.ProcButtonCats].Length;i++){
+				comboCategory.Items.Add(DefC.Short[(int)DefCat.ProcButtonCats][i].ItemName);
+				if(ProcButtonCur.Category==DefC.Short[(int)DefCat.ProcButtonCats][i].DefNum){
 					comboCategory.SelectedIndex=i;
 				}
 			}
@@ -437,12 +437,12 @@ namespace OpenDental{
         return;
       }
       ProcButtonCur.Description=textDescript.Text;
-			if(ProcButtonCur.Category != DefB.Short[(int)DefCat.ProcButtonCats][comboCategory.SelectedIndex].DefNum){
+			if(ProcButtonCur.Category != DefC.Short[(int)DefCat.ProcButtonCats][comboCategory.SelectedIndex].DefNum){
 				//This will put it at the end of the order in the new category
 				ProcButtonCur.ItemOrder
-					=ProcButtons.GetForCat(DefB.Short[(int)DefCat.ProcButtonCats][comboCategory.SelectedIndex].DefNum).Length;
+					=ProcButtons.GetForCat(DefC.Short[(int)DefCat.ProcButtonCats][comboCategory.SelectedIndex].DefNum).Length;
 			}
-			ProcButtonCur.Category=DefB.Short[(int)DefCat.ProcButtonCats][comboCategory.SelectedIndex].DefNum;
+			ProcButtonCur.Category=DefC.Short[(int)DefCat.ProcButtonCats][comboCategory.SelectedIndex].DefNum;
 			ProcButtonCur.ButtonImage=(Bitmap)pictureBox.Image;
       if(IsNew){
         ProcButtonCur.ItemOrder=ProcButtons.List.Length;        

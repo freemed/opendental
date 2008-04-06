@@ -594,8 +594,8 @@ namespace OpenDental{
 			if(SelectionModeOnly){
 				groupAddPt.Visible=false;
 			}
-			for(int i=0;i<DefB.Short[(int)DefCat.BillingTypes].Length;i++){
-				listBillingTypes.Items.Add(DefB.Short[(int)DefCat.BillingTypes][i].ItemName);
+			for(int i=0;i<DefC.Short[(int)DefCat.BillingTypes].Length;i++){
+				listBillingTypes.Items.Add(DefC.Short[(int)DefCat.BillingTypes][i].ItemName);
 			}
 			FillSearchOption();
 			SetGridCols();
@@ -894,7 +894,7 @@ namespace OpenDental{
 			int[] selectedBillingTypes=new int[listBillingTypes.SelectedIndices.Count];
 			for(int i=0;i<selectedBillingTypes.Length;i++){
 				selectedBillingTypes[i]
-					=DefB.Short[(int)DefCat.BillingTypes][listBillingTypes.SelectedIndices[i]].DefNum;
+					=DefC.Short[(int)DefCat.BillingTypes][listBillingTypes.SelectedIndices[i]].DefNum;
 			}
 			DateTime birthdate=PIn.PDate(textBirthdate.Text);//this will frequently be minval.
 			PtDataTable=Patients.GetPtDataTable(!checkUseSearch.Checked,textLName.Text,textFName.Text,textHmPhone.Text,

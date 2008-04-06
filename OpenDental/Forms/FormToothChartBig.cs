@@ -109,10 +109,10 @@ namespace OpenDental{
 		private void FillToothChart(){
 			Cursor=Cursors.WaitCursor;
 			toothChart.SuspendLayout();
-			toothChart.ColorBackground=DefB.Long[(int)DefCat.ChartGraphicColors][10].ItemColor;
-			toothChart.ColorText=DefB.Long[(int)DefCat.ChartGraphicColors][11].ItemColor;
-			toothChart.ColorTextHighlight=DefB.Long[(int)DefCat.ChartGraphicColors][12].ItemColor;
-			toothChart.ColorBackHighlight=DefB.Long[(int)DefCat.ChartGraphicColors][13].ItemColor;
+			toothChart.ColorBackground=DefC.Long[(int)DefCat.ChartGraphicColors][10].ItemColor;
+			toothChart.ColorText=DefC.Long[(int)DefCat.ChartGraphicColors][11].ItemColor;
+			toothChart.ColorTextHighlight=DefC.Long[(int)DefCat.ChartGraphicColors][12].ItemColor;
+			toothChart.ColorBackHighlight=DefC.Long[(int)DefCat.ChartGraphicColors][13].ItemColor;
 			//remember which teeth were selected
 			ArrayList selectedTeeth=new ArrayList();//integers 1-32
 			for(int i=0;i<toothChart.SelectedTeeth.Length;i++) {
@@ -195,24 +195,24 @@ namespace OpenDental{
 				if(ProcedureCodes.GetProcCode(ProcList[i]["ProcCode"].ToString()).GraphicColor==Color.FromArgb(0)) {
 					switch((ProcStat)PIn.PInt(ProcList[i]["ProcStatus"].ToString())) {
 						case ProcStat.C:
-							cDark=DefB.Short[(int)DefCat.ChartGraphicColors][1].ItemColor;
-							cLight=DefB.Short[(int)DefCat.ChartGraphicColors][6].ItemColor;
+							cDark=DefC.Short[(int)DefCat.ChartGraphicColors][1].ItemColor;
+							cLight=DefC.Short[(int)DefCat.ChartGraphicColors][6].ItemColor;
 							break;
 						case ProcStat.TP:
-							cDark=DefB.Short[(int)DefCat.ChartGraphicColors][0].ItemColor;
-							cLight=DefB.Short[(int)DefCat.ChartGraphicColors][5].ItemColor;
+							cDark=DefC.Short[(int)DefCat.ChartGraphicColors][0].ItemColor;
+							cLight=DefC.Short[(int)DefCat.ChartGraphicColors][5].ItemColor;
 							break;
 						case ProcStat.EC:
-							cDark=DefB.Short[(int)DefCat.ChartGraphicColors][2].ItemColor;
-							cLight=DefB.Short[(int)DefCat.ChartGraphicColors][7].ItemColor;
+							cDark=DefC.Short[(int)DefCat.ChartGraphicColors][2].ItemColor;
+							cLight=DefC.Short[(int)DefCat.ChartGraphicColors][7].ItemColor;
 							break;
 						case ProcStat.EO:
-							cDark=DefB.Short[(int)DefCat.ChartGraphicColors][3].ItemColor;
-							cLight=DefB.Short[(int)DefCat.ChartGraphicColors][8].ItemColor;
+							cDark=DefC.Short[(int)DefCat.ChartGraphicColors][3].ItemColor;
+							cLight=DefC.Short[(int)DefCat.ChartGraphicColors][8].ItemColor;
 							break;
 						case ProcStat.R:
-							cDark=DefB.Short[(int)DefCat.ChartGraphicColors][4].ItemColor;
-							cLight=DefB.Short[(int)DefCat.ChartGraphicColors][9].ItemColor;
+							cDark=DefC.Short[(int)DefCat.ChartGraphicColors][4].ItemColor;
+							cLight=DefC.Short[(int)DefCat.ChartGraphicColors][9].ItemColor;
 							break;
 					}
 				}

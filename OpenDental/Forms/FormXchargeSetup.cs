@@ -190,9 +190,9 @@ namespace OpenDental{
 			checkEnabled.Checked=prog.Enabled;
 			textPath.Text=prog.Path;
 			prop=(ProgramProperty)ProgramProperties.GetForProgram(prog.ProgramNum)[0];
-			for(int i=0;i<DefB.Short[(int)DefCat.PaymentTypes].Length;i++) {
-				comboPaymentType.Items.Add(DefB.Short[(int)DefCat.PaymentTypes][i].ItemName);
-				if(DefB.Short[(int)DefCat.PaymentTypes][i].DefNum.ToString()==prop.PropertyValue)
+			for(int i=0;i<DefC.Short[(int)DefCat.PaymentTypes].Length;i++) {
+				comboPaymentType.Items.Add(DefC.Short[(int)DefCat.PaymentTypes][i].ItemName);
+				if(DefC.Short[(int)DefCat.PaymentTypes][i].DefNum.ToString()==prop.PropertyValue)
 					comboPaymentType.SelectedIndex=i;
 			}
 		}
@@ -217,7 +217,7 @@ namespace OpenDental{
 			prog.Enabled=checkEnabled.Checked;
 			prog.Path=textPath.Text;
 			Programs.Update(prog);
-			prop.PropertyValue=DefB.Short[(int)DefCat.PaymentTypes][comboPaymentType.SelectedIndex].DefNum.ToString();
+			prop.PropertyValue=DefC.Short[(int)DefCat.PaymentTypes][comboPaymentType.SelectedIndex].DefNum.ToString();
 			ProgramProperties.Update(prop);
 			DataValid.SetInvalid(InvalidTypes.Programs);
 			DialogResult=DialogResult.OK;

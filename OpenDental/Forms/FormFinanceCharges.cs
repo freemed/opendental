@@ -329,7 +329,7 @@ namespace OpenDental{
 					return;
 				}
 			}
-			if(DefB.Short[(int)DefCat.BillingTypes].Length==0){//highly unlikely that this would happen
+			if(DefC.Short[(int)DefCat.BillingTypes].Length==0){//highly unlikely that this would happen
 				MsgBox.Show(this,"No billing types have been set up or are visible.");
 				DialogResult=DialogResult.Cancel;
 				return;
@@ -340,8 +340,8 @@ namespace OpenDental{
 			textAPR.MaxVal=100;
 			textAPR.MinVal=0;
 			textAPR.Text=PrefB.GetString("FinanceChargeAPR");
-			for(int i=0;i<DefB.Short[(int)DefCat.BillingTypes].Length;i++) {
-				listBillType.Items.Add(DefB.Short[(int)DefCat.BillingTypes][i].ItemName);
+			for(int i=0;i<DefC.Short[(int)DefCat.BillingTypes].Length;i++) {
+				listBillType.Items.Add(DefC.Short[(int)DefCat.BillingTypes][i].ItemName);
 				listBillType.SetSelected(i,true);
 			}
 		}
@@ -404,7 +404,7 @@ namespace OpenDental{
 				}
 				billingMatch=false;
 				for(int b=0;b<listBillType.SelectedIndices.Count;b++){
-					if(DefB.Short[(int)DefCat.BillingTypes][listBillType.SelectedIndices[b]].DefNum==AgingList[i].BillingType){
+					if(DefC.Short[(int)DefCat.BillingTypes][listBillType.SelectedIndices[b]].DefNum==AgingList[i].BillingType){
 						billingMatch=true;
 						break;
 					}

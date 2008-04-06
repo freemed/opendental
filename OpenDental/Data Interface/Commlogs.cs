@@ -128,13 +128,13 @@ namespace OpenDental{
 
 		///<Summary>Returns a defnum.  If no match, then it returns the first one in the list in that category.</Summary>
 		public static int GetTypeAuto(CommItemTypeAuto typeauto){
-			for(int i=0;i<DefB.Long[(int)DefCat.CommLogTypes].Length;i++){
-				if(DefB.Long[(int)DefCat.CommLogTypes][i].ItemValue==typeauto.ToString()){
-					return DefB.Long[(int)DefCat.CommLogTypes][i].DefNum;
+			for(int i=0;i<DefC.Long[(int)DefCat.CommLogTypes].Length;i++){
+				if(DefC.Long[(int)DefCat.CommLogTypes][i].ItemValue==typeauto.ToString()){
+					return DefC.Long[(int)DefCat.CommLogTypes][i].DefNum;
 				}
 			}
-			if(DefB.Long[(int)DefCat.CommLogTypes].Length>0){
-				return DefB.Long[(int)DefCat.CommLogTypes][0].DefNum;
+			if(DefC.Long[(int)DefCat.CommLogTypes].Length>0){
+				return DefC.Long[(int)DefCat.CommLogTypes][0].DefNum;
 			}
 			return 0;
 		}

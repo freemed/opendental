@@ -143,8 +143,8 @@ namespace OpenDental{
 		#endregion
 
 		private void FormContacts_Load(object sender, System.EventArgs e) {
-			for(int i=0;i<DefB.Short[(int)DefCat.ContactCategories].Length;i++){
-				listCategory.Items.Add(DefB.Short[(int)DefCat.ContactCategories][i].ItemName);
+			for(int i=0;i<DefC.Short[(int)DefCat.ContactCategories].Length;i++){
+				listCategory.Items.Add(DefC.Short[(int)DefCat.ContactCategories][i].ItemName);
 			}
 			if(listCategory.Items.Count>0)
 				listCategory.SelectedIndex=0;
@@ -155,7 +155,7 @@ namespace OpenDental{
 		}
 
 		private void FillGrid(){
-			Contacts.Refresh(DefB.Short[(int)DefCat.ContactCategories][listCategory.SelectedIndex].DefNum);
+			Contacts.Refresh(DefC.Short[(int)DefCat.ContactCategories][listCategory.SelectedIndex].DefNum);
 			tbContacts.ResetRows(Contacts.List.Length);
 			tbContacts.SetGridColor(Color.Gray);
 			tbContacts.SetBackGColor(Color.White);      
@@ -179,7 +179,7 @@ namespace OpenDental{
 
 		private void butAdd_Click(object sender, System.EventArgs e) {
 			Contact ContactCur=new Contact();
-			ContactCur.Category=DefB.Short[(int)DefCat.ContactCategories][listCategory.SelectedIndex].DefNum;
+			ContactCur.Category=DefC.Short[(int)DefCat.ContactCategories][listCategory.SelectedIndex].DefNum;
 			FormContactEdit FormCE=new FormContactEdit();
 			FormCE.ContactCur=ContactCur;
 			FormCE.IsNew=true;

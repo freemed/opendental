@@ -235,9 +235,9 @@ namespace OpenDental{
 
 		private void FormScheduleDayEdit_Load(object sender, System.EventArgs e) {
 			listType.Items.Clear();
-			for(int i=0;i<DefB.Short[(int)DefCat.BlockoutTypes].Length;i++){
-				listType.Items.Add(DefB.Short[(int)DefCat.BlockoutTypes][i].ItemName);
-				if(SchedCur.BlockoutType==DefB.Short[(int)DefCat.BlockoutTypes][i].DefNum){
+			for(int i=0;i<DefC.Short[(int)DefCat.BlockoutTypes].Length;i++){
+				listType.Items.Add(DefC.Short[(int)DefCat.BlockoutTypes][i].ItemName);
+				if(SchedCur.BlockoutType==DefC.Short[(int)DefCat.BlockoutTypes][i].DefNum){
 					listType.SelectedIndex=i;
 				}
 			}
@@ -293,7 +293,7 @@ namespace OpenDental{
 				return;
 			}
       SchedCur.Note=textNote.Text;
-			SchedCur.BlockoutType=DefB.Short[(int)DefCat.BlockoutTypes][listType.SelectedIndex].DefNum;
+			SchedCur.BlockoutType=DefC.Short[(int)DefCat.BlockoutTypes][listType.SelectedIndex].DefNum;
 			if(listOp.SelectedIndex==0){
 				SchedCur.Op=0;
 			}

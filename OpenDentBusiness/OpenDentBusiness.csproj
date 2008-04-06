@@ -76,6 +76,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Cache\aaCache.cs" />
+    <Compile Include="Cache\DefC.cs" />
     <Compile Include="Cache\EnumRemotingRole.cs" />
     <Compile Include="ClientSL.cs" />
     <Compile Include="Data Interface\aaDataInterface.cs" />

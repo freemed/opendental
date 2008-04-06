@@ -793,22 +793,22 @@ namespace OpenDental{
 			}
 			comboUnschedStatus.Items.Add(Lan.g(this,"none"));
 			comboUnschedStatus.SelectedIndex=0;
-			for(int i=0;i<DefB.Short[(int)DefCat.RecallUnschedStatus].Length;i++) {
-				comboUnschedStatus.Items.Add(DefB.Short[(int)DefCat.RecallUnschedStatus][i].ItemName);
-				if(DefB.Short[(int)DefCat.RecallUnschedStatus][i].DefNum==AptCur.UnschedStatus)
+			for(int i=0;i<DefC.Short[(int)DefCat.RecallUnschedStatus].Length;i++) {
+				comboUnschedStatus.Items.Add(DefC.Short[(int)DefCat.RecallUnschedStatus][i].ItemName);
+				if(DefC.Short[(int)DefCat.RecallUnschedStatus][i].DefNum==AptCur.UnschedStatus)
 					comboUnschedStatus.SelectedIndex=i+1;
 			}
-			for(int i=0;i<DefB.Short[(int)DefCat.ApptConfirmed].Length;i++) {
-				comboConfirmed.Items.Add(DefB.Short[(int)DefCat.ApptConfirmed][i].ItemName);
-				if(DefB.Short[(int)DefCat.ApptConfirmed][i].DefNum==AptCur.Confirmed)
+			for(int i=0;i<DefC.Short[(int)DefCat.ApptConfirmed].Length;i++) {
+				comboConfirmed.Items.Add(DefC.Short[(int)DefCat.ApptConfirmed][i].ItemName);
+				if(DefC.Short[(int)DefCat.ApptConfirmed][i].DefNum==AptCur.Confirmed)
 					comboConfirmed.SelectedIndex=i;
 			}
 			textAddTime.MinVal=-1200;
 			textAddTime.MaxVal=1200;
 			textAddTime.Text=POut.PInt(AptCur.AddTime*PIn.PInt(((Pref)PrefB.HList["AppointmentTimeIncrement"]).ValueString));
 			textNote.Text=AptCur.Note;
-			for(int i=0;i<DefB.Short[(int)DefCat.ApptProcsQuickAdd].Length;i++) {
-				listQuickAdd.Items.Add(DefB.Short[(int)DefCat.ApptProcsQuickAdd][i].ItemName);
+			for(int i=0;i<DefC.Short[(int)DefCat.ApptProcsQuickAdd].Length;i++) {
+				listQuickAdd.Items.Add(DefC.Short[(int)DefCat.ApptProcsQuickAdd][i].ItemName);
 			}
 			comboClinic.Items.Add(Lan.g(this,"none"));
 			comboClinic.SelectedIndex=0;
@@ -921,7 +921,7 @@ namespace OpenDental{
 				row.Cells.Add(DS.Tables["Comm"].Rows[i]["commDateTime"].ToString());
 				row.Cells.Add(DS.Tables["Comm"].Rows[i]["Note"].ToString());
 				if(DS.Tables["Comm"].Rows[i]["CommType"].ToString()==Commlogs.GetTypeAuto(CommItemTypeAuto.APPT).ToString()){
-					row.ColorBackG=DefB.Long[(int)DefCat.MiscColors][7].ItemColor;
+					row.ColorBackG=DefC.Long[(int)DefCat.MiscColors][7].ItemColor;
 				}
 				gridComm.Rows.Add(row);
 			}
@@ -1268,7 +1268,7 @@ namespace OpenDental{
 			Procedures.SetDateFirstVisit(AptCur.AptDateTime.Date,1,pat);
 			Benefit[] benefitList=Benefits.Refresh(PatPlanList);
 			ClaimProc[] ClaimProcList=ClaimProcs.Refresh(AptCur.PatNum);
-			string[] codes=DefB.Short[(int)DefCat.ApptProcsQuickAdd][listQuickAdd.IndexFromPoint(e.X,e.Y)].ItemValue.Split(',');
+			string[] codes=DefC.Short[(int)DefCat.ApptProcsQuickAdd][listQuickAdd.IndexFromPoint(e.X,e.Y)].ItemValue.Split(',');
 			for(int i=0;i<codes.Length;i++) {
 				if(!ProcedureCodes.HList.ContainsKey(codes[i])){
 					MsgBox.Show(this,"Definition contains invalid code.");
@@ -1422,10 +1422,10 @@ namespace OpenDental{
 				AptCur.UnschedStatus=0;
 			else
 				AptCur.UnschedStatus
-					=DefB.Short[(int)DefCat.RecallUnschedStatus][comboUnschedStatus.SelectedIndex-1].DefNum;
+					=DefC.Short[(int)DefCat.RecallUnschedStatus][comboUnschedStatus.SelectedIndex-1].DefNum;
 			if(comboConfirmed.SelectedIndex!=-1)
 				AptCur.Confirmed
-					=DefB.Short[(int)DefCat.ApptConfirmed][comboConfirmed.SelectedIndex].DefNum;
+					=DefC.Short[(int)DefCat.ApptConfirmed][comboConfirmed.SelectedIndex].DefNum;
 			AptCur.AddTime=(int)(PIn.PInt(textAddTime.Text)/
 				PIn.PInt(((Pref)PrefB.HList["AppointmentTimeIncrement"]).ValueString));
 			AptCur.Note=textNote.Text;

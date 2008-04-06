@@ -19,9 +19,9 @@ namespace OpenDental {
 
 		private void FormSupplyEdit_Load(object sender,EventArgs e) {
 			textSupplier.Text=Suppliers.GetName(ListSupplier,Supp.SupplierNum);
-			for(int i=0;i<DefB.Short[(int)DefCat.SupplyCats].Length;i++){
-				comboCategory.Items.Add(DefB.Short[(int)DefCat.SupplyCats][i].ItemName);
-				if(Supp.Category==DefB.Short[(int)DefCat.SupplyCats][i].DefNum){
+			for(int i=0;i<DefC.Short[(int)DefCat.SupplyCats].Length;i++){
+				comboCategory.Items.Add(DefC.Short[(int)DefCat.SupplyCats][i].ItemName);
+				if(Supp.Category==DefC.Short[(int)DefCat.SupplyCats][i].DefNum){
 					comboCategory.SelectedIndex=i;
 				}
 			}
@@ -67,7 +67,7 @@ namespace OpenDental {
 				MsgBox.Show(this,"Please enter a description.");
 				return;
 			}
-			Supp.Category=DefB.Short[(int)DefCat.SupplyCats][comboCategory.SelectedIndex].DefNum;
+			Supp.Category=DefC.Short[(int)DefCat.SupplyCats][comboCategory.SelectedIndex].DefNum;
 			Supp.CatalogNumber=textCatalogNumber.Text;
 			Supp.Descript=textDescript.Text;
 			Supp.LevelDesired=PIn.PFloat(textLevelDesired.Text);

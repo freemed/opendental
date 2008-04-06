@@ -214,9 +214,9 @@ namespace OpenDental{
 			if(AutoPayCur==null) {
 				MessageBox.Show("Autopay cannot be null.");//just for debugging
 			}
-			for(int i=0;i<DefB.Short[(int)DefCat.PaymentTypes].Length;i++){
-				comboPayType.Items.Add(DefB.Short[(int)DefCat.PaymentTypes][i].ItemName);
-				if(DefB.Short[(int)DefCat.PaymentTypes][i].DefNum==AutoPayCur.PayType){
+			for(int i=0;i<DefC.Short[(int)DefCat.PaymentTypes].Length;i++){
+				comboPayType.Items.Add(DefC.Short[(int)DefCat.PaymentTypes][i].ItemName);
+				if(DefC.Short[(int)DefCat.PaymentTypes][i].DefNum==AutoPayCur.PayType){
 					comboPayType.SelectedIndex=i;
 				}
 			}
@@ -278,7 +278,7 @@ namespace OpenDental{
 				MsgBox.Show(this,"Please add at least one account to the pick list first.");
 				return;
 			}
-			AutoPayCur.PayType=DefB.Short[(int)DefCat.PaymentTypes][comboPayType.SelectedIndex].DefNum;
+			AutoPayCur.PayType=DefC.Short[(int)DefCat.PaymentTypes][comboPayType.SelectedIndex].DefNum;
 			AutoPayCur.PickList="";
 			for(int i=0;i<accountAL.Count;i++){
 				if(i>0){

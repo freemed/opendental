@@ -1174,7 +1174,7 @@ namespace OpenDentBusiness{
 					command+=" OR billingtype = '";
 				}
 				command+=POut.PInt(billingNums[i])+"'";
-					//DefB.Short[(int)DefCat.BillingTypes][billingIndices[i]].DefNum.ToString()+"'";
+					//DefC.Short[(int)DefCat.BillingTypes][billingIndices[i]].DefNum.ToString()+"'";
 				if(i==billingNums.Count-1){
 					command+=")";
 				}

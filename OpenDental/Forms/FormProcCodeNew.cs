@@ -448,8 +448,8 @@ namespace OpenDental{
 				comboTreatArea.Items.Add(Lan.g(this,Enum.GetNames(typeof(TreatmentArea))[i]));
 			}
 			comboTreatArea.SelectedIndex=(int)TreatmentArea.Mouth-1;
-			for(int i=0;i<DefB.Short[(int)DefCat.ProcCodeCats].Length;i++) {
-				comboCategory.Items.Add(DefB.Short[(int)DefCat.ProcCodeCats][i].ItemName);
+			for(int i=0;i<DefC.Short[(int)DefCat.ProcCodeCats].Length;i++) {
+				comboCategory.Items.Add(DefC.Short[(int)DefCat.ProcCodeCats][i].ItemName);
 			}
 			comboCategory.SelectedIndex=0;
 			textNewCode.Focus();
@@ -685,8 +685,8 @@ namespace OpenDental{
 
 		///<summary>Returns the index of the category with the supplied name.  Zero if the name does not exist.</summary>
 		private int GetCategoryIndex(string name){
-			for(int i=0;i<DefB.Short[(int)DefCat.ProcCodeCats].Length;i++) {
-				if(DefB.Short[(int)DefCat.ProcCodeCats][i].ItemName==name){
+			for(int i=0;i<DefC.Short[(int)DefCat.ProcCodeCats].Length;i++) {
+				if(DefC.Short[(int)DefCat.ProcCodeCats][i].ItemName==name){
 					return i;
 				}
 			}
@@ -724,7 +724,7 @@ namespace OpenDental{
 			code.PaintType=(ToothPaintingType)comboPaintType.SelectedIndex;
 			code.TreatArea=(TreatmentArea)comboTreatArea.SelectedIndex+1;
 			//if(comboCategory.SelectedIndex!=-1)
-			code.ProcCat=DefB.Short[(int)DefCat.ProcCodeCats][comboCategory.SelectedIndex].DefNum;
+			code.ProcCat=DefC.Short[(int)DefCat.ProcCodeCats][comboCategory.SelectedIndex].DefNum;
 			ProcedureCodes.Insert(code);
 			Changed=true;
 			SecurityLogs.MakeLogEntry(Permissions.Setup,0,"Added Procedure Code: "+code.ProcCode);

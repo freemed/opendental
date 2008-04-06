@@ -369,9 +369,9 @@ namespace OpenDental{
 			textPath.Text=mergePath;
 			textTemplateName.Text=LetterMergeCur.TemplateName;
 			textDataFileName.Text=LetterMergeCur.DataFileName;
-			for(int i=0;i<DefB.Short[(int)DefCat.LetterMergeCats].Length;i++){
-				comboCategory.Items.Add(DefB.Short[(int)DefCat.LetterMergeCats][i].ItemName);
-				if(LetterMergeCur.Category==DefB.Short[(int)DefCat.LetterMergeCats][i].DefNum){
+			for(int i=0;i<DefC.Short[(int)DefCat.LetterMergeCats].Length;i++){
+				comboCategory.Items.Add(DefC.Short[(int)DefCat.LetterMergeCats][i].ItemName);
+				if(LetterMergeCur.Category==DefC.Short[(int)DefCat.LetterMergeCats][i].DefNum){
 					comboCategory.SelectedIndex=i;
 				}
 			}
@@ -578,7 +578,7 @@ namespace OpenDental{
 			LetterMergeCur.TemplateName=textTemplateName.Text;
 			LetterMergeCur.DataFileName=textDataFileName.Text;
 			LetterMergeCur.Category
-				=DefB.Short[(int)DefCat.LetterMergeCats][comboCategory.SelectedIndex].DefNum;
+				=DefC.Short[(int)DefCat.LetterMergeCats][comboCategory.SelectedIndex].DefNum;
 			if(IsNew){
 				LetterMerges.Insert(LetterMergeCur);
 			}

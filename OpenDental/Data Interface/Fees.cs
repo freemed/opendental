@@ -12,7 +12,7 @@ namespace OpenDental{
 
 		///<summary>Refreshes all fees and loads them into HList array.  </summary>
 		public static void Refresh() {
-			HList=new Hashtable[DefB.Short[(int)DefCat.FeeSchedNames].Length];
+			HList=new Hashtable[DefC.Short[(int)DefCat.FeeSchedNames].Length];
 			for(int i=0;i<HList.Length;i++) {
 				HList[i]=new Hashtable();
 			}
@@ -193,7 +193,7 @@ namespace OpenDental{
 			}
 			fee=new Fee();
 			fee.Amount=amt;
-			fee.FeeSched=DefB.Short[(int)DefCat.FeeSchedNames][schedI].DefNum;
+			fee.FeeSched=DefC.Short[(int)DefCat.FeeSchedNames][schedI].DefNum;
 			fee.CodeNum=ProcedureCodes.GetCodeNum(codeText);
 			Insert(fee);
 		}
@@ -208,7 +208,7 @@ namespace OpenDental{
 				def=new Def();
 				def.Category=DefCat.FeeSchedNames;
 				def.ItemName=feeSchedName;
-				def.ItemOrder=DefB.Long[(int)DefCat.FeeSchedNames].Length;
+				def.ItemOrder=DefC.Long[(int)DefCat.FeeSchedNames].Length;
 				Defs.Insert(def);
 				feeSched=def.DefNum;
 				Defs.Refresh();

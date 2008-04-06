@@ -325,7 +325,7 @@ namespace OpenDental {
 				MsgBox.Show(this,"Please add suppliers first.  Use the menu at the top of this window.");
 				return;
 			}
-			if(DefB.Short[(int)DefCat.SupplyCats].Length==0) {
+			if(DefC.Short[(int)DefCat.SupplyCats].Length==0) {
 				MsgBox.Show(this,"Please add supply categories first.  Use the menu at the top of this window.");
 				return;
 			}

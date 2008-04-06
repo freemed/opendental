@@ -253,21 +253,21 @@ namespace OpenDental{
 
 		private void FillCategories(){
 			listCategories.Items.Clear();
-			if(DefB.Short[(int)DefCat.ProcButtonCats].Length==0){
+			if(DefC.Short[(int)DefCat.ProcButtonCats].Length==0){
 				selectedCat=0;
 				MsgBox.Show(this,"You must have at least one category setup.");
 				return;
 			}
-			for(int i=0;i<DefB.Short[(int)DefCat.ProcButtonCats].Length;i++){
-				listCategories.Items.Add(DefB.Short[(int)DefCat.ProcButtonCats][i].ItemName);
-				if(selectedCat==DefB.Short[(int)DefCat.ProcButtonCats][i].DefNum){
+			for(int i=0;i<DefC.Short[(int)DefCat.ProcButtonCats].Length;i++){
+				listCategories.Items.Add(DefC.Short[(int)DefCat.ProcButtonCats][i].ItemName);
+				if(selectedCat==DefC.Short[(int)DefCat.ProcButtonCats][i].DefNum){
 					listCategories.SelectedIndex=i;
 				}
 			}
 			if(listCategories.SelectedIndex==-1){//category was hidden, or just openning the form
 				listCategories.SelectedIndex=0;
 			}
-			selectedCat=DefB.Short[(int)DefCat.ProcButtonCats][listCategories.SelectedIndex].DefNum;
+			selectedCat=DefC.Short[(int)DefCat.ProcButtonCats][listCategories.SelectedIndex].DefNum;
 		}
 
     private void FillButtons(){
@@ -312,7 +312,7 @@ namespace OpenDental{
 			if(listCategories.SelectedIndex==-1){
 				return;
 			}
-			selectedCat=DefB.Short[(int)DefCat.ProcButtonCats][listCategories.SelectedIndex].DefNum;
+			selectedCat=DefC.Short[(int)DefCat.ProcButtonCats][listCategories.SelectedIndex].DefNum;
 			FillButtons();
 		}
 

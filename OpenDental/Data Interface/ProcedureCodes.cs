@@ -235,9 +235,9 @@ namespace OpenDental{
 			//int i=0;
 			ProcedureCode procCode;
 			ArrayList AL=new ArrayList();
-			for(int j=0;j<DefB.Short[(int)DefCat.ProcCodeCats].Length;j++){
+			for(int j=0;j<DefC.Short[(int)DefCat.ProcCodeCats].Length;j++){
 				for(int k=0;k<tableStat.Rows.Count;k++){
-					if(DefB.Short[(int)DefCat.ProcCodeCats][j].DefNum==PIn.PInt(tableStat.Rows[k][5].ToString())){
+					if(DefC.Short[(int)DefCat.ProcCodeCats][j].DefNum==PIn.PInt(tableStat.Rows[k][5].ToString())){
 						procCode=new ProcedureCode();
 						procCode.CodeNum=PIn.PInt(tableStat.Rows[k][0].ToString());
 						procCode.ProcCode = PIn.PString(tableStat.Rows[k][1].ToString());
@@ -357,7 +357,7 @@ namespace OpenDental{
 				def=new Def();
 				def.Category=DefCat.ProcCodeCats;
 				def.ItemName="Obsolete";
-				def.ItemOrder=DefB.Long[(int)DefCat.ProcCodeCats].Length;
+				def.ItemOrder=DefC.Long[(int)DefCat.ProcCodeCats].Length;
 				def.IsHidden=true;
 				Defs.Insert(def);
 				Defs.Refresh();

@@ -1192,9 +1192,9 @@ namespace OpenDental{
 			}
 			validNumX.Text=computerPref.TaskX.ToString();
 			validNumY.Text=computerPref.TaskY.ToString();
-				/*for(int i=0;i<DefB.Short[(int)DefCat.TxPriorities].Length;i++){
-					comboPriority.Items.Add(DefB.Short[(int)DefCat.TxPriorities][i].ItemName);
-					if(PrefB.GetInt("TreatPlanPriorityForDeclined")==DefB.Short[(int)DefCat.TxPriorities][i].DefNum){
+				/*for(int i=0;i<DefC.Short[(int)DefCat.TxPriorities].Length;i++){
+					comboPriority.Items.Add(DefC.Short[(int)DefCat.TxPriorities][i].ItemName);
+					if(PrefB.GetInt("TreatPlanPriorityForDeclined")==DefC.Short[(int)DefCat.TxPriorities][i].DefNum){
 						comboPriority.SelectedIndex=i;
 					}
 				}*/
@@ -1330,7 +1330,7 @@ namespace OpenDental{
 				| Prefs.UpdateInt("BrokenAppointmentAdjustmentType",posAdjTypes[comboBrokenApptAdjType.SelectedIndex].DefNum)
 				| Prefs.UpdateBool("TaskListAlwaysShowsAtBottom", checkTaskListAlwaysShow.Checked)
 				| Prefs.UpdateBool("TasksCheckOnStartup", checkTasksCheckOnStartup.Checked)
-				//| Prefs.UpdateInt("TreatPlanPriorityForDeclined",DefB.Short[(int)DefCat.TxPriorities][comboPriority.SelectedIndex].DefNum)
+				//| Prefs.UpdateInt("TreatPlanPriorityForDeclined",DefC.Short[(int)DefCat.TxPriorities][comboPriority.SelectedIndex].DefNum)
 				| Prefs.UpdateBool("ApptExclamationShowForUnsentIns", checkApptExclamation.Checked)
 				| Prefs.UpdateBool("ProviderIncomeTransferShows", checkProviderIncomeShows.Checked)
 				| Prefs.UpdateString("ClaimAttachExportPath",textClaimAttachPath.Text)

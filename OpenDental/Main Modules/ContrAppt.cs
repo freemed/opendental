@@ -946,7 +946,7 @@ namespace OpenDental{
 		public void ModuleSelected(int patNum){
 			//the scrollbar logic cannot be moved to someplace where it will be activated while working in apptbook
 			//RefreshVisops();//forces reset after changing databases
-			if(DefB.Short!=null) {
+			if(DefC.Short!=null) {
 				ApptViewItems.GetForCurView(comboView.SelectedIndex-1);//refreshes visops,etc
 				ContrApptSheet2.ComputeColWidth(panelSheet.Width-vScrollBar1.Width);
 			}
@@ -1042,8 +1042,8 @@ namespace OpenDental{
 			}
 			this.ResumeLayout();
 			listConfirmed.Items.Clear();
-			for(int i=0;i<DefB.Short[(int)DefCat.ApptConfirmed].Length;i++){
-				this.listConfirmed.Items.Add(DefB.Short[(int)DefCat.ApptConfirmed][i].ItemValue);
+			for(int i=0;i<DefC.Short[(int)DefCat.ApptConfirmed].Length;i++){
+				this.listConfirmed.Items.Add(DefC.Short[(int)DefCat.ApptConfirmed][i].ItemValue);
 			}
 			RefreshModulePatient(patNum);
 			RefreshPeriod();
@@ -1173,7 +1173,7 @@ namespace OpenDental{
 			gridEmpSched.Location=new Point(panelAptInfo.Left,panelAptInfo.Bottom+1);
 			panelSheet.Width=ClientSize.Width-panelAptInfo.Width-2;
 			panelSheet.Height=ClientSize.Height-panelSheet.Location.Y;
-			if(DefB.Short!=null) {
+			if(DefC.Short!=null) {
 				ApptViewItems.GetForCurView(comboView.SelectedIndex-1);//refreshes visops,etc
 				ContrApptSheet2.ComputeColWidth(panelSheet.Width-vScrollBar1.Width);
 			}
@@ -3524,7 +3524,7 @@ namespace OpenDental{
 			if(listConfirmed.IndexFromPoint(e.X,e.Y)==-1){
 				return;
 			}
-			int newStatus=DefB.Short[(int)DefCat.ApptConfirmed][listConfirmed.IndexFromPoint(e.X,e.Y)].DefNum;
+			int newStatus=DefC.Short[(int)DefCat.ApptConfirmed][listConfirmed.IndexFromPoint(e.X,e.Y)].DefNum;
 			Appointments.SetConfirmed(ContrApptSingle.SelectedAptNum,newStatus);
 			RefreshPeriod();
 			SetInvalid();

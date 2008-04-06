@@ -714,9 +714,9 @@ namespace OpenDental{
 					listPaintType.SelectedIndex=i;
 				}
 			}
-			for(int i=0;i<DefB.Short[(int)DefCat.ProcCodeCats].Length;i++){
-				listCategory.Items.Add(DefB.Short[(int)DefCat.ProcCodeCats][i].ItemName);
-				if(DefB.Short[(int)DefCat.ProcCodeCats][i].DefNum==ProcCode.ProcCat)
+			for(int i=0;i<DefC.Short[(int)DefCat.ProcCodeCats].Length;i++){
+				listCategory.Items.Add(DefC.Short[(int)DefCat.ProcCodeCats][i].ItemName);
+				if(DefC.Short[(int)DefCat.ProcCodeCats][i].DefNum==ProcCode.ProcCat)
 					listCategory.SelectedIndex=i;
 			}
 			if(listCategory.SelectedIndex==-1)
@@ -753,10 +753,10 @@ namespace OpenDental{
 			gridFees.Rows.Clear();
 			ODGridRow row;
 			Fee fee;
-			for(int i=0;i<DefB.Short[(int)DefCat.FeeSchedNames].Length;i++){
+			for(int i=0;i<DefC.Short[(int)DefCat.FeeSchedNames].Length;i++){
 				fee=Fees.GetFeeByOrder(ProcCode.CodeNum,i);
 				row=new ODGridRow();
-				row.Cells.Add(DefB.Short[(int)DefCat.FeeSchedNames][i].ItemName);
+				row.Cells.Add(DefC.Short[(int)DefCat.FeeSchedNames][i].ItemName);
 				if(fee==null){
 					row.Cells.Add("");
 				}
@@ -775,7 +775,7 @@ namespace OpenDental{
 			FormFeeEdit FormFE=new FormFeeEdit();
 			if(FeeCur==null) {
 				FeeCur=new Fee();
-				FeeCur.FeeSched=DefB.Short[(int)DefCat.FeeSchedNames][e.Row].DefNum;
+				FeeCur.FeeSched=DefC.Short[(int)DefCat.FeeSchedNames][e.Row].DefNum;
 				FeeCur.CodeNum=ProcCode.CodeNum;
 				Fees.Insert(FeeCur);
 				FormFE.IsNew=true;
@@ -923,7 +923,7 @@ namespace OpenDental{
 			ProcCode.TreatArea=(TreatmentArea)listTreatArea.SelectedIndex+1;
 			ProcCode.BaseUnits=Int16.Parse(textBaseUnits.Text.ToString());
 			if(listCategory.SelectedIndex!=-1)
-				ProcCode.ProcCat=DefB.Short[(int)DefCat.ProcCodeCats][listCategory.SelectedIndex].DefNum;
+				ProcCode.ProcCat=DefC.Short[(int)DefCat.ProcCodeCats][listCategory.SelectedIndex].DefNum;
 			ProcedureCodes.Update(ProcCode);//whether new or not.
 			if(DoSynchRecall){
 				Cursor=Cursors.WaitCursor;

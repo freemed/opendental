@@ -506,8 +506,8 @@ namespace OpenDental{
 
 		private void FillFeeSchedules(){
 			listFeeSched.Items.Clear();
-			for(int i=0;i<DefB.Short[(int)DefCat.FeeSchedNames].Length;i++) {
-				this.listFeeSched.Items.Add(DefB.Short[(int)DefCat.FeeSchedNames][i].ItemName);
+			for(int i=0;i<DefC.Short[(int)DefCat.FeeSchedNames].Length;i++) {
+				this.listFeeSched.Items.Add(DefC.Short[(int)DefCat.FeeSchedNames][i].ItemName);
 			}
 			if(listFeeSched.Items.Count>0) {
 				listFeeSched.SelectedIndex=0;
@@ -518,9 +518,9 @@ namespace OpenDental{
 			comboCompare2.Items.Clear();
 			comboCompare2.Items.Add(Lan.g(this,"none"));
 			comboCompare2.SelectedIndex=0;
-			for(int i=0;i<DefB.Short[(int)DefCat.FeeSchedNames].Length;i++) {
-				comboCompare1.Items.Add(DefB.Short[(int)DefCat.FeeSchedNames][i].ItemName);
-				comboCompare2.Items.Add(DefB.Short[(int)DefCat.FeeSchedNames][i].ItemName);
+			for(int i=0;i<DefC.Short[(int)DefCat.FeeSchedNames].Length;i++) {
+				comboCompare1.Items.Add(DefC.Short[(int)DefCat.FeeSchedNames][i].ItemName);
+				comboCompare2.Items.Add(DefC.Short[(int)DefCat.FeeSchedNames][i].ItemName);
 			}
 		}
 
@@ -530,10 +530,10 @@ namespace OpenDental{
 				selected.Add(CatList[listCategories.SelectedIndices[i]].DefNum);
 			}
 			if(checkShowHidden.Checked){
-				CatList=DefB.Long[(int)DefCat.ProcCodeCats];
+				CatList=DefC.Long[(int)DefCat.ProcCodeCats];
 			}
 			else{
-				CatList=DefB.Short[(int)DefCat.ProcCodeCats];
+				CatList=DefC.Short[(int)DefCat.ProcCodeCats];
 			}
 			listCategories.Items.Clear();
 			for(int i=0;i<CatList.Length;i++) {
@@ -561,14 +561,14 @@ namespace OpenDental{
 			for(int i=0;i<listCategories.SelectedIndices.Count;i++){
 				cats[i]=CatList[listCategories.SelectedIndices[i]].DefNum;
 			}
-			int feeSched=DefB.Short[(int)DefCat.FeeSchedNames][listFeeSched.SelectedIndex].DefNum;
+			int feeSched=DefC.Short[(int)DefCat.FeeSchedNames][listFeeSched.SelectedIndex].DefNum;
 			int feeSchedComp1=0;
 			if(comboCompare1.SelectedIndex!=0) {
-				feeSchedComp1=DefB.Short[(int)DefCat.FeeSchedNames][comboCompare1.SelectedIndex-1].DefNum;
+				feeSchedComp1=DefC.Short[(int)DefCat.FeeSchedNames][comboCompare1.SelectedIndex-1].DefNum;
 			}
 			int feeSchedComp2=0;
 			if(comboCompare2.SelectedIndex!=0) {
-				feeSchedComp2=DefB.Short[(int)DefCat.FeeSchedNames][comboCompare2.SelectedIndex-1].DefNum;
+				feeSchedComp2=DefC.Short[(int)DefCat.FeeSchedNames][comboCompare2.SelectedIndex-1].DefNum;
 			}
 			ProcTable=ProcedureCodes.GetProcTable(textAbbreviation.Text,textDescription.Text,textCode.Text,cats,feeSched,
 				feeSchedComp1,feeSchedComp2);
@@ -582,7 +582,7 @@ namespace OpenDental{
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn(Lan.g("TableProcedures","Code"),50);
 			gridMain.Columns.Add(col);
-			string heading=DefB.Short[(int)DefCat.FeeSchedNames][listFeeSched.SelectedIndex].ItemName;
+			string heading=DefC.Short[(int)DefCat.FeeSchedNames][listFeeSched.SelectedIndex].ItemName;
 			if(heading.Length>8){
 				heading=heading.Substring(0,8);
 			}
@@ -590,7 +590,7 @@ namespace OpenDental{
 			gridMain.Columns.Add(col);
 			heading="";
 			if(comboCompare1.SelectedIndex!=0){
-				heading=DefB.Short[(int)DefCat.FeeSchedNames][comboCompare1.SelectedIndex-1].ItemName;
+				heading=DefC.Short[(int)DefCat.FeeSchedNames][comboCompare1.SelectedIndex-1].ItemName;
 			}
 			if(heading.Length>8) {
 				heading=heading.Substring(0,8);
@@ -599,7 +599,7 @@ namespace OpenDental{
 			gridMain.Columns.Add(col);
 			heading="";
 			if(comboCompare2.SelectedIndex!=0) {
-				heading=DefB.Short[(int)DefCat.FeeSchedNames][comboCompare2.SelectedIndex-1].ItemName;
+				heading=DefC.Short[(int)DefCat.FeeSchedNames][comboCompare2.SelectedIndex-1].ItemName;
 			}
 			if(heading.Length>8) {
 				heading=heading.Substring(0,8);
@@ -717,7 +717,7 @@ namespace OpenDental{
 			//won't even be visible if no permission
 			int selectedSched=0;
 			if(listFeeSched.SelectedIndex !=-1){
-				selectedSched=DefB.Short[(int)DefCat.FeeSchedNames][listFeeSched.SelectedIndex].DefNum;
+				selectedSched=DefC.Short[(int)DefCat.FeeSchedNames][listFeeSched.SelectedIndex].DefNum;
 			}
 			FormDefinitions FormD=new FormDefinitions(DefCat.FeeSchedNames);
 			FormD.ShowDialog();
@@ -726,8 +726,8 @@ namespace OpenDental{
 			ProcedureCodes.Refresh();
 			changed=true;
 			FillFeeSchedules();
-			for(int i=0;i<DefB.Short[(int)DefCat.FeeSchedNames].Length;i++){
-				if(DefB.Short[(int)DefCat.FeeSchedNames][i].DefNum==selectedSched){
+			for(int i=0;i<DefC.Short[(int)DefCat.FeeSchedNames].Length;i++){
+				if(DefC.Short[(int)DefCat.FeeSchedNames][i].DefNum==selectedSched){
 					listFeeSched.SelectedIndex=i;
 				}
 			}
@@ -737,7 +737,7 @@ namespace OpenDental{
 		}
 
 		private void butTools_Click(object sender, System.EventArgs e) {
-			FormFeeSchedTools FormF=new FormFeeSchedTools(DefB.Short[(int)DefCat.FeeSchedNames][listFeeSched.SelectedIndex].DefNum);
+			FormFeeSchedTools FormF=new FormFeeSchedTools(DefC.Short[(int)DefCat.FeeSchedNames][listFeeSched.SelectedIndex].DefNum);
 			FormF.ShowDialog();
 			if(FormF.DialogResult==DialogResult.Cancel){
 				return;
@@ -840,7 +840,7 @@ namespace OpenDental{
 					Def def=new Def();
 					def.Category=DefCat.ProcCodeCats;
 					def.ItemName=listCodes[i].ProcCatDescript;
-					def.ItemOrder=DefB.Long[(int)DefCat.ProcCodeCats].Length;
+					def.ItemOrder=DefC.Long[(int)DefCat.ProcCodeCats].Length;
 					Defs.Insert(def);
 					Defs.Refresh();
 					listCodes[i].ProcCat=def.DefNum;
@@ -889,21 +889,21 @@ namespace OpenDental{
 				int feesched=0;
 				if(e.Col==4){
 					FeeCur=Fees.GetFeeByOrder(codeNum,listFeeSched.SelectedIndex);
-					feesched=DefB.Short[(int)DefCat.FeeSchedNames][listFeeSched.SelectedIndex].DefNum;
+					feesched=DefC.Short[(int)DefCat.FeeSchedNames][listFeeSched.SelectedIndex].DefNum;
 				}
 				if(e.Col==5) {
 					if(comboCompare1.SelectedIndex==0){
 						return;
 					}
 					FeeCur=Fees.GetFeeByOrder(codeNum,comboCompare1.SelectedIndex-1);
-					feesched=DefB.Short[(int)DefCat.FeeSchedNames][comboCompare1.SelectedIndex-1].DefNum;
+					feesched=DefC.Short[(int)DefCat.FeeSchedNames][comboCompare1.SelectedIndex-1].DefNum;
 				}
 				if(e.Col==6) {
 					if(comboCompare2.SelectedIndex==0) {
 						return;
 					}
 					FeeCur=Fees.GetFeeByOrder(codeNum,comboCompare2.SelectedIndex-1);
-					feesched=DefB.Short[(int)DefCat.FeeSchedNames][comboCompare2.SelectedIndex-1].DefNum;
+					feesched=DefC.Short[(int)DefCat.FeeSchedNames][comboCompare2.SelectedIndex-1].DefNum;
 				}
 				FormFeeEdit FormFE=new FormFeeEdit();
 				if(FeeCur==null) {

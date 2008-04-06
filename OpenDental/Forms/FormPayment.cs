@@ -623,9 +623,9 @@ namespace OpenDental{
 			textAmount.Text=PaymentCur.PayAmt.ToString("F");
 			textCheckNum.Text=PaymentCur.CheckNum;
 			textBankBranch.Text=PaymentCur.BankBranch;
-			for(int i=0;i<DefB.Short[(int)DefCat.PaymentTypes].Length;i++){
-				listPayType.Items.Add(DefB.Short[(int)DefCat.PaymentTypes][i].ItemName);
-				if(DefB.Short[(int)DefCat.PaymentTypes][i].DefNum==PaymentCur.PayType)
+			for(int i=0;i<DefC.Short[(int)DefCat.PaymentTypes].Length;i++){
+				listPayType.Items.Add(DefC.Short[(int)DefCat.PaymentTypes][i].ItemName);
+				if(DefC.Short[(int)DefCat.PaymentTypes][i].DefNum==PaymentCur.PayType)
 					listPayType.SelectedIndex=i;
 			}
 			if(listPayType.SelectedIndex==-1)
@@ -970,7 +970,7 @@ namespace OpenDental{
 		///<summary>Called from all 3 places where listPayType gets changed.</summary>
 		private void SetComboDepositAccounts(){
 			AccountingAutoPay autoPay=AccountingAutoPays.GetForPayType(
-				DefB.Short[(int)DefCat.PaymentTypes][listPayType.SelectedIndex].DefNum);
+				DefC.Short[(int)DefCat.PaymentTypes][listPayType.SelectedIndex].DefNum);
 			if(autoPay==null) {
 				labelDepositAccount.Visible=false;
 				comboDepositAccount.Visible=false;
@@ -1207,7 +1207,7 @@ namespace OpenDental{
 			PaymentCur.CheckNum=textCheckNum.Text;
 			PaymentCur.BankBranch=textBankBranch.Text;
 			PaymentCur.PayNote=textNote.Text;
-			PaymentCur.PayType=DefB.Short[(int)DefCat.PaymentTypes][listPayType.SelectedIndex].DefNum;
+			PaymentCur.PayType=DefC.Short[(int)DefCat.PaymentTypes][listPayType.SelectedIndex].DefNum;
 			PaymentCur.PatNum=PatCur.PatNum;
 			if(!comboClinic.Visible || Clinics.List.Length==0 || comboClinic.SelectedIndex==0) {
 				PaymentCur.ClinicNum=0;

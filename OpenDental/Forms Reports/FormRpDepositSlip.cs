@@ -229,8 +229,8 @@ namespace OpenDental{
 			monthCal2.SelectionStart=DateTime.Today;
 			//textDateFrom.Text=DateTime.Today.ToShortDateString();
 			//textDateTo.Text=DateTime.Today.ToShortDateString();
-			for(int i=0;i<DefB.Short[(int)DefCat.PaymentTypes].Length;i++){
-				this.listPayType.Items.Add(DefB.Short[(int)DefCat.PaymentTypes][i].ItemName);
+			for(int i=0;i<DefC.Short[(int)DefCat.PaymentTypes].Length;i++){
+				this.listPayType.Items.Add(DefC.Short[(int)DefCat.PaymentTypes][i].ItemName);
 				listPayType.SetSelected(i,true);
 			}
 			checkBoxIns.Checked=true;
@@ -323,7 +323,7 @@ ORDER BY PayDate, plfname
 				for(int i=0;i<listPayType.SelectedIndices.Count;i++){
 					if(i>0) cmd+=" OR "; 
 					cmd+="PayType = '"
-						+DefB.Short[(int)DefCat.PaymentTypes][listPayType.SelectedIndices[i]].DefNum+"'";
+						+DefC.Short[(int)DefCat.PaymentTypes][listPayType.SelectedIndices[i]].DefNum+"'";
 				}
 				cmd+=
 					") AND PayDate >= "+POut.PDate(monthCal1.SelectionStart)+" "
@@ -390,7 +390,7 @@ ORDER BY PayDate, plfname
 					for(int i=0;i<listPayType.SelectedIndices.Count;i++){
 						if(i>0) Queries.CurReport.SubTitle[2]+=", ";
 						Queries.CurReport.SubTitle[2]
-							+=DefB.Short[(int)DefCat.PaymentTypes][listPayType.SelectedIndices[i]].ItemName;
+							+=DefC.Short[(int)DefCat.PaymentTypes][listPayType.SelectedIndices[i]].ItemName;
 					}
 				if(checkBoxIns.Checked)
 					Queries.CurReport.SubTitle[2]+=" Insurance Claim Checks";

@@ -201,7 +201,7 @@ namespace OpenDental{
 		private static void Insert(Appointment appt){
 			//make sure all fields are properly filled:
 			if(appt.Confirmed==0){
-				appt.Confirmed=DefB.Short[(int)DefCat.ApptConfirmed][0].DefNum;
+				appt.Confirmed=DefC.Short[(int)DefCat.ApptConfirmed][0].DefNum;
 			}
 			if(appt.ProvNum==0){
 				appt.ProvNum=Providers.List[0].ProvNum;

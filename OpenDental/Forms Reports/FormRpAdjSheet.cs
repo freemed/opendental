@@ -203,8 +203,8 @@ namespace OpenDental{
 				listProv.Items.Add(Providers.List[i].GetLongDesc());
 				listProv.SetSelected(i,true);
 			}
-			for(int i=0;i<DefB.Short[(int)DefCat.AdjTypes].Length;i++) {
-				listType.Items.Add(DefB.Short[(int)DefCat.AdjTypes][i].ItemName);
+			for(int i=0;i<DefC.Short[(int)DefCat.AdjTypes].Length;i++) {
+				listType.Items.Add(DefC.Short[(int)DefCat.AdjTypes][i].ItemName);
 				listType.SetSelected(i,true);
 			}
 		}
@@ -245,7 +245,7 @@ namespace OpenDental{
 					whereType+="OR ";
 				}
 				whereType+="adjustment.AdjType = '"
-					+POut.PInt(DefB.Short[(int)DefCat.AdjTypes][listType.SelectedIndices[i]].DefNum)+"' ";
+					+POut.PInt(DefC.Short[(int)DefCat.AdjTypes][listType.SelectedIndices[i]].DefNum)+"' ";
 			}
 			whereType+=")";
 			Queries.CurReport=new ReportOld();

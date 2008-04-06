@@ -563,9 +563,9 @@ namespace OpenDental{
 			comboStatus.Items.Clear();
 			comboStatus.Items.Add(Lan.g(this,"None"));
 			comboStatus.SelectedIndex=0;
-			for(int i=0;i<DefB.Short[(int)DefCat.RecallUnschedStatus].Length;i++){
-				comboStatus.Items.Add(DefB.Short[(int)DefCat.RecallUnschedStatus][i].ItemName);
-				if(DefB.Short[(int)DefCat.RecallUnschedStatus][i].DefNum==RecallCur.RecallStatus)
+			for(int i=0;i<DefC.Short[(int)DefCat.RecallUnschedStatus].Length;i++){
+				comboStatus.Items.Add(DefC.Short[(int)DefCat.RecallUnschedStatus][i].ItemName);
+				if(DefC.Short[(int)DefCat.RecallUnschedStatus][i].DefNum==RecallCur.RecallStatus)
 					comboStatus.SelectedIndex=i+1;
 			}
 			textNote.Text=RecallCur.Note;
@@ -654,7 +654,7 @@ namespace OpenDental{
 				newStatus=0;
 			}
 			else{
-				newStatus=DefB.Short[(int)DefCat.RecallUnschedStatus][comboStatus.SelectedIndex-1].DefNum;
+				newStatus=DefC.Short[(int)DefCat.RecallUnschedStatus][comboStatus.SelectedIndex-1].DefNum;
 			}
 			if(newStatus!=RecallCur.RecallStatus//if the status has changed
 				|| (RecallCur.Note=="" && textNote.Text!=""))//or a note was added

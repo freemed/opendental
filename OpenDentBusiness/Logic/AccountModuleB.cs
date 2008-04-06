@@ -156,7 +156,7 @@ namespace OpenDentBusiness {
 				row["charges"]="";
 				row["ClaimNum"]="0";
 				row["ClaimPaymentNum"]="0";
-				row["colorText"]=DefB.Long[(int)DefCat.AccountColors][3].ItemColor.ToArgb().ToString();
+				row["colorText"]=DefC.Long[(int)DefCat.AccountColors][3].ItemColor.ToArgb().ToString();
 				amt=PIn.PDouble(rawPay.Rows[i]["SplitAmt"].ToString());
 				row["creditsDouble"]=amt;
 				row["credits"]=((double)row["creditsDouble"]).ToString("n");
@@ -438,7 +438,7 @@ namespace OpenDentBusiness {
 				row["ClaimNum"]=rawClaimPay.Rows[i]["ClaimNum"].ToString();
 				row["ClaimPaymentNum"]="1";//this is now just a boolean flag indicating that it is a payment.
 				//this is because it will frequently not be attached to an actual claim payment.
-				row["colorText"]=DefB.Long[(int)DefCat.AccountColors][7].ItemColor.ToArgb().ToString();
+				row["colorText"]=DefC.Long[(int)DefCat.AccountColors][7].ItemColor.ToArgb().ToString();
 				amt=PIn.PDouble(rawClaimPay.Rows[i]["_InsPayAmt"].ToString());
 				writeoff=PIn.PDouble(rawClaimPay.Rows[i]["_WriteOff"].ToString());
 				row["creditsDouble"]=amt+writeoff;
@@ -505,7 +505,7 @@ namespace OpenDentBusiness {
 				row["charges"]=((double)row["chargesDouble"]).ToString("n");
 				row["ClaimNum"]="0";
 				row["ClaimPaymentNum"]="0";
-				row["colorText"]=DefB.Long[(int)DefCat.AccountColors][0].ItemColor.ToArgb().ToString();
+				row["colorText"]=DefC.Long[(int)DefCat.AccountColors][0].ItemColor.ToArgb().ToString();
 				row["creditsDouble"]=0;
 				row["credits"]="";
 				dateT=PIn.PDateT(rawProc.Rows[i]["ProcDate"].ToString());
@@ -576,7 +576,7 @@ namespace OpenDentBusiness {
 				}
 				row["ClaimNum"]="0";
 				row["ClaimPaymentNum"]="0";
-				row["colorText"]=DefB.Long[(int)DefCat.AccountColors][1].ItemColor.ToArgb().ToString();
+				row["colorText"]=DefC.Long[(int)DefCat.AccountColors][1].ItemColor.ToArgb().ToString();
 				dateT=PIn.PDateT(rawAdj.Rows[i]["AdjDate"].ToString());
 				row["DateTime"]=dateT;
 				row["date"]=dateT.ToShortDateString();
@@ -624,7 +624,7 @@ namespace OpenDentBusiness {
 				row["charges"]="";
 				row["ClaimNum"]="0";
 				row["ClaimPaymentNum"]="0";
-				row["colorText"]=DefB.Long[(int)DefCat.AccountColors][3].ItemColor.ToArgb().ToString();
+				row["colorText"]=DefC.Long[(int)DefCat.AccountColors][3].ItemColor.ToArgb().ToString();
 				amt=PIn.PDouble(rawPay.Rows[i]["SplitAmt"].ToString());
 				row["creditsDouble"]=amt;
 				row["credits"]=((double)row["creditsDouble"]).ToString("n");
@@ -689,7 +689,7 @@ namespace OpenDentBusiness {
 				row["ClaimNum"]=rawClaim.Rows[i]["ClaimNum"].ToString();
 				row["ClaimPaymentNum"]="0";
 				//moved down lower to use different colors depending on the claim status
-				//row["colorText"] = DefB.Long[(int)DefCat.AccountColors][4].ItemColor.ToArgb().ToString();
+				//row["colorText"] = DefC.Long[(int)DefCat.AccountColors][4].ItemColor.ToArgb().ToString();
 				row["creditsDouble"] = 0;
 				row["credits"]="";
 				dateT=PIn.PDateT(rawClaim.Rows[i]["DateService"].ToString());
@@ -697,29 +697,29 @@ namespace OpenDentBusiness {
 				row["date"]=dateT.ToShortDateString();
 				if(rawClaim.Rows[i]["ClaimType"].ToString()=="P"){
 					row["description"]=Lan.g("ContrAccount","Pri")+" ";
-					row["colorText"] = DefB.Long[(int)DefCat.AccountColors][4].ItemColor.ToArgb().ToString();
+					row["colorText"] = DefC.Long[(int)DefCat.AccountColors][4].ItemColor.ToArgb().ToString();
 					//if the claim is received, the color will change below
 				}
 				else if(rawClaim.Rows[i]["ClaimType"].ToString()=="S"){
 					row["description"]=Lan.g("ContrAccount","Sec")+" ";
-					row["colorText"] = DefB.Long[(int)DefCat.AccountColors][4].ItemColor.ToArgb().ToString();
+					row["colorText"] = DefC.Long[(int)DefCat.AccountColors][4].ItemColor.ToArgb().ToString();
 				}
 				else if(rawClaim.Rows[i]["ClaimType"].ToString()=="PreAuth"){
 					row["description"]=Lan.g("ContrAccount","PreAuth")+" ";
 					if (rawClaim.Rows[i]["ClaimStatus"].ToString() == "R") {//only change color on pre-auths that are recieved
-						row["colorText"] = DefB.Long[(int)DefCat.AccountColors][9].ItemColor.ToArgb().ToString();
+						row["colorText"] = DefC.Long[(int)DefCat.AccountColors][9].ItemColor.ToArgb().ToString();
 					}
 					else{
-						row["colorText"] = DefB.Long[(int)DefCat.AccountColors][4].ItemColor.ToArgb().ToString();
+						row["colorText"] = DefC.Long[(int)DefCat.AccountColors][4].ItemColor.ToArgb().ToString();
 					}
 				}
 				else if(rawClaim.Rows[i]["ClaimType"].ToString()=="Other"){
 					row["description"]="";
-					row["colorText"] = DefB.Long[(int)DefCat.AccountColors][4].ItemColor.ToArgb().ToString();
+					row["colorText"] = DefC.Long[(int)DefCat.AccountColors][4].ItemColor.ToArgb().ToString();
 				}
 				else if(rawClaim.Rows[i]["ClaimType"].ToString()=="Cap"){
 					row["description"]=Lan.g("ContrAccount","Cap")+" ";
-					row["colorText"] = DefB.Long[(int)DefCat.AccountColors][4].ItemColor.ToArgb().ToString();
+					row["colorText"] = DefC.Long[(int)DefCat.AccountColors][4].ItemColor.ToArgb().ToString();
 				}
 				amt=PIn.PDouble(rawClaim.Rows[i]["ClaimFee"].ToString());
 				row["description"]+=Lan.g("ContrAccount","Claim")+" "+amt.ToString("c")+" "
@@ -730,19 +730,19 @@ namespace OpenDentBusiness {
 					row["description"] += "\r\n" + Lan.g("ContrAccount", "Received") + " " + daterec.ToShortDateString();
 					if (rawClaim.Rows[i]["ClaimStatus"].ToString() == "R"){
 						if (rawClaim.Rows[i]["ClaimType"].ToString() == "PreAuth") {
-							row["colorText"] = DefB.Long[(int)DefCat.AccountColors][9].ItemColor.ToArgb().ToString();
+							row["colorText"] = DefC.Long[(int)DefCat.AccountColors][9].ItemColor.ToArgb().ToString();
 						} 
 						else {
-							row["colorText"] = DefB.Long[(int)DefCat.AccountColors][8].ItemColor.ToArgb().ToString();
+							row["colorText"] = DefC.Long[(int)DefCat.AccountColors][8].ItemColor.ToArgb().ToString();
 						}
 					} 
 					else if (rawClaim.Rows[i]["ClaimType"].ToString() == "PreAuth" && rawClaim.Rows[i]["ClaimStatus"].ToString() == "R")
 					{
-						row["colorText"] = DefB.Long[(int)DefCat.AccountColors][9].ItemColor.ToArgb().ToString();
+						row["colorText"] = DefC.Long[(int)DefCat.AccountColors][9].ItemColor.ToArgb().ToString();
 					} 
 					else{
 						row["description"] += "\r\n" + Lan.g("ContrAccount", "Re-Sent");
-						row["colorText"] = DefB.Long[(int)DefCat.AccountColors][4].ItemColor.ToArgb().ToString();
+						row["colorText"] = DefC.Long[(int)DefCat.AccountColors][4].ItemColor.ToArgb().ToString();
 					}
 
 				} else if (rawClaim.Rows[i]["ClaimStatus"].ToString() == "U")
@@ -834,7 +834,7 @@ namespace OpenDentBusiness {
 				row["charges"]="";
 				row["ClaimNum"]="0";
 				row["ClaimPaymentNum"]="0";
-				row["colorText"]=DefB.Long[(int)DefCat.AccountColors][5].ItemColor.ToArgb().ToString();
+				row["colorText"]=DefC.Long[(int)DefCat.AccountColors][5].ItemColor.ToArgb().ToString();
 				row["creditsDouble"]=0;
 				row["credits"]="";
 				dateT=PIn.PDateT(rawState.Rows[i]["DateSent"].ToString());
@@ -899,7 +899,7 @@ namespace OpenDentBusiness {
 				row["charges"]="";
 				row["ClaimNum"]="0";
 				row["ClaimPaymentNum"]="0";
-				row["colorText"]=DefB.Long[(int)DefCat.AccountColors][6].ItemColor.ToArgb().ToString();
+				row["colorText"]=DefC.Long[(int)DefCat.AccountColors][6].ItemColor.ToArgb().ToString();
 				amt=PIn.PDouble(rawPayPlan.Rows[i]["_principal"].ToString());
 				row["creditsDouble"]=amt;
 				row["credits"]=((double)row["creditsDouble"]).ToString("n");

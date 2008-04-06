@@ -79,7 +79,7 @@ namespace OpenDentBusiness{
 
 		public ProcedureCode(){
 			ProcTime="/X/";
-			//procCode.ProcCat=DefB.Short[(int)DefCat.ProcCodeCats][0].DefNum;
+			//procCode.ProcCat=DefC.Short[(int)DefCat.ProcCodeCats][0].DefNum;
 			GraphicColor=Color.FromArgb(0);
 		}
 

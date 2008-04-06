@@ -1114,7 +1114,7 @@ namespace OpenDental{
 			for(int i=0;i<PatPlanList.Length;i++){
 				row.Cells.Add(FamCur.GetNameInFamFL(planArray[i].Subscriber));
 			}
-			row.ColorBackG=DefB.Long[(int)DefCat.MiscColors][0].ItemColor;
+			row.ColorBackG=DefC.Long[(int)DefCat.MiscColors][0].ItemColor;
 			gridIns.Rows.Add(row);
 			//subscriber ID
 			row=new ODGridRow();
@@ -1122,7 +1122,7 @@ namespace OpenDental{
 			for(int i=0;i<PatPlanList.Length;i++) {
 				row.Cells.Add(planArray[i].SubscriberID);
 			}
-			row.ColorBackG=DefB.Long[(int)DefCat.MiscColors][0].ItemColor;
+			row.ColorBackG=DefC.Long[(int)DefCat.MiscColors][0].ItemColor;
 			gridIns.Rows.Add(row);
 			//relationship
 			row=new ODGridRow();
@@ -1130,7 +1130,7 @@ namespace OpenDental{
 			for(int i=0;i<PatPlanList.Length;i++){
 				row.Cells.Add(Lan.g("enumRelat",PatPlanList[i].Relationship.ToString()));
 			}
-			row.ColorBackG=DefB.Long[(int)DefCat.MiscColors][0].ItemColor;
+			row.ColorBackG=DefC.Long[(int)DefCat.MiscColors][0].ItemColor;
 			gridIns.Rows.Add(row);
 			//patient ID
 			row=new ODGridRow();
@@ -1138,7 +1138,7 @@ namespace OpenDental{
 			for(int i=0;i<PatPlanList.Length;i++){
 				row.Cells.Add(PatPlanList[i].PatID);
 			}
-			row.ColorBackG=DefB.Long[(int)DefCat.MiscColors][0].ItemColor;
+			row.ColorBackG=DefC.Long[(int)DefCat.MiscColors][0].ItemColor;
 			gridIns.Rows.Add(row);
 			//pending
 			row=new ODGridRow();
@@ -1151,7 +1151,7 @@ namespace OpenDental{
 					row.Cells.Add("");
 				}
 			}
-			row.ColorBackG=DefB.Long[(int)DefCat.MiscColors][0].ItemColor;
+			row.ColorBackG=DefC.Long[(int)DefCat.MiscColors][0].ItemColor;
 			row.ColorLborder=Color.Black;
 			gridIns.Rows.Add(row);
 			//employer

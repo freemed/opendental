@@ -2911,20 +2911,20 @@ namespace OpenDental{
 				if(schedPlanapt.AptDateTime.Date==DateTime.Today.Date) {
 					labelApptStatus.Text=Lan.g(this,"Today");
 					labelApptDate.Text=schedPlanapt.AptDateTime.ToString();
-					labelApptStatus.ForeColor=DefB.Long[(int)DefCat.ProgNoteColors][8].ItemColor;
-					labelApptStatus.BackColor=DefB.Long[(int)DefCat.ProgNoteColors][9].ItemColor;
+					labelApptStatus.ForeColor=DefC.Long[(int)DefCat.ProgNoteColors][8].ItemColor;
+					labelApptStatus.BackColor=DefC.Long[(int)DefCat.ProgNoteColors][9].ItemColor;
 				}
 				else if(schedPlanapt.AptDateTime.Date<DateTime.Today.Date) {
 					labelApptStatus.Text=Lan.g(this,"");
 					labelApptDate.Text=schedPlanapt.AptDateTime.ToString();
-					labelApptStatus.ForeColor=DefB.Long[(int)DefCat.ProgNoteColors][10].ItemColor;
-					labelApptStatus.BackColor=DefB.Long[(int)DefCat.ProgNoteColors][11].ItemColor;
+					labelApptStatus.ForeColor=DefC.Long[(int)DefCat.ProgNoteColors][10].ItemColor;
+					labelApptStatus.BackColor=DefC.Long[(int)DefCat.ProgNoteColors][11].ItemColor;
 				}
 				else if(schedPlanapt.AptDateTime.Date>DateTime.Today.Date) {
 					labelApptStatus.Text=Lan.g(this,"");
 					labelApptDate.Text=schedPlanapt.AptDateTime.ToString();
-					labelApptStatus.ForeColor=DefB.Long[(int)DefCat.ProgNoteColors][12].ItemColor;
-					labelApptStatus.BackColor=DefB.Long[(int)DefCat.ProgNoteColors][13].ItemColor;
+					labelApptStatus.ForeColor=DefC.Long[(int)DefCat.ProgNoteColors][12].ItemColor;
+					labelApptStatus.BackColor=DefC.Long[(int)DefCat.ProgNoteColors][13].ItemColor;
 				}
 				if(schedPlanapt.AptStatus==ApptStatus.Complete) {//this is the only section that varies from the logic in Progress Notes
 					picCheck.Visible=true;
@@ -2932,14 +2932,14 @@ namespace OpenDental{
 				if(schedPlanapt.AptStatus==ApptStatus.Broken) {
 					labelApptStatus.Text=Lan.g(this,"Broken");
 					labelApptDate.Text=schedPlanapt.AptDateTime.ToString();
-					labelApptStatus.ForeColor=DefB.Long[(int)DefCat.ProgNoteColors][14].ItemColor;
-					labelApptStatus.BackColor=DefB.Long[(int)DefCat.ProgNoteColors][15].ItemColor;
+					labelApptStatus.ForeColor=DefC.Long[(int)DefCat.ProgNoteColors][14].ItemColor;
+					labelApptStatus.BackColor=DefC.Long[(int)DefCat.ProgNoteColors][15].ItemColor;
 				}
 				else if(schedPlanapt.AptStatus==ApptStatus.UnschedList) {
 					labelApptStatus.Text=Lan.g(this,"UnschedList");
 					labelApptDate.Text=schedPlanapt.AptDateTime.ToString();
-					labelApptStatus.ForeColor=DefB.Long[(int)DefCat.ProgNoteColors][14].ItemColor;
-					labelApptStatus.BackColor=DefB.Long[(int)DefCat.ProgNoteColors][15].ItemColor;
+					labelApptStatus.ForeColor=DefC.Long[(int)DefCat.ProgNoteColors][14].ItemColor;
+					labelApptStatus.BackColor=DefC.Long[(int)DefCat.ProgNoteColors][15].ItemColor;
 				}
 				labelApptDate.Visible=true;
 				labelApptDate.ForeColor=labelApptStatus.ForeColor;
@@ -3107,7 +3107,7 @@ namespace OpenDental{
 				cell.ColorText=Color.Red;
 				cell.Bold=YN.Yes;
 				row.Cells.Add(cell);
-				row.ColorBackG=DefB.Long[(int)DefCat.MiscColors][3].ItemColor;
+				row.ColorBackG=DefC.Long[(int)DefCat.MiscColors][3].ItemColor;
 				row.Tag="med";
 				gridPtInfo.Rows.Add(row);
 			}
@@ -3123,7 +3123,7 @@ namespace OpenDental{
 			else {
 				row.Cells.Add(Lan.g("TableChartPtInfo","none"));
 			}
-			row.ColorBackG=DefB.Long[(int)DefCat.MiscColors][3].ItemColor;
+			row.ColorBackG=DefC.Long[(int)DefCat.MiscColors][3].ItemColor;
 			row.Tag="med";
 			gridPtInfo.Rows.Add(row);
 			for(int i=0;i<DiseaseList.Length;i++) {
@@ -3133,7 +3133,7 @@ namespace OpenDental{
 				cell.Bold=YN.Yes;
 				row.Cells.Add(cell);
 				row.Cells.Add(DiseaseList[i].PatNote);
-				row.ColorBackG=DefB.Long[(int)DefCat.MiscColors][3].ItemColor;
+				row.ColorBackG=DefC.Long[(int)DefCat.MiscColors][3].ItemColor;
 				row.Tag="med";
 				gridPtInfo.Rows.Add(row);
 			}
@@ -3145,21 +3145,21 @@ namespace OpenDental{
 			cell.ColorText=Color.Red;
 			cell.Bold=YN.Yes;
 			row.Cells.Add(cell);
-			row.ColorBackG=DefB.Long[(int)DefCat.MiscColors][3].ItemColor;
+			row.ColorBackG=DefC.Long[(int)DefCat.MiscColors][3].ItemColor;
 			row.Tag="med";
 			gridPtInfo.Rows.Add(row);
 			//Medical
 			row=new ODGridRow();
 			row.Cells.Add(Lan.g("TableChartPtInfo","Medical Summary"));
 			row.Cells.Add(PatientNoteCur.Medical);
-			row.ColorBackG=DefB.Long[(int)DefCat.MiscColors][3].ItemColor;
+			row.ColorBackG=DefC.Long[(int)DefCat.MiscColors][3].ItemColor;
 			row.Tag="med";
 			gridPtInfo.Rows.Add(row);
 			//Service
 			row=new ODGridRow();
 			row.Cells.Add(Lan.g("TableChartPtInfo","Service Notes"));
 			row.Cells.Add(PatientNoteCur.Service);
-			row.ColorBackG=DefB.Long[(int)DefCat.MiscColors][3].ItemColor;
+			row.ColorBackG=DefC.Long[(int)DefCat.MiscColors][3].ItemColor;
 			row.Tag="med";
 			gridPtInfo.Rows.Add(row);
 			//medications
@@ -3175,7 +3175,7 @@ namespace OpenDental{
 			else{
 				row.Cells.Add(Lan.g("TableChartPtInfo","none"));
 			}
-			row.ColorBackG=DefB.Long[(int)DefCat.MiscColors][3].ItemColor;
+			row.ColorBackG=DefC.Long[(int)DefCat.MiscColors][3].ItemColor;
 			row.Tag="med";
 			gridPtInfo.Rows.Add(row);
 			string text;
@@ -3191,7 +3191,7 @@ namespace OpenDental{
 				text=MedicationPats.List[i].PatNote
 					+"("+Medications.GetGeneric(MedicationPats.List[i].MedicationNum).Notes+")";
 				row.Cells.Add(text);
-				row.ColorBackG=DefB.Long[(int)DefCat.MiscColors][3].ItemColor;
+				row.ColorBackG=DefC.Long[(int)DefCat.MiscColors][3].ItemColor;
 				row.Tag="med";
 				gridPtInfo.Rows.Add(row);
 			}
@@ -3502,10 +3502,10 @@ namespace OpenDental{
 		private void FillToothChart(bool retainSelection){
 			Cursor=Cursors.WaitCursor;
 			toothChart.SuspendLayout();
-			toothChart.ColorBackground=DefB.Long[(int)DefCat.ChartGraphicColors][10].ItemColor;
-			toothChart.ColorText=DefB.Long[(int)DefCat.ChartGraphicColors][11].ItemColor;
-			toothChart.ColorTextHighlight=DefB.Long[(int)DefCat.ChartGraphicColors][12].ItemColor;
-			toothChart.ColorBackHighlight=DefB.Long[(int)DefCat.ChartGraphicColors][13].ItemColor;
+			toothChart.ColorBackground=DefC.Long[(int)DefCat.ChartGraphicColors][10].ItemColor;
+			toothChart.ColorText=DefC.Long[(int)DefCat.ChartGraphicColors][11].ItemColor;
+			toothChart.ColorTextHighlight=DefC.Long[(int)DefCat.ChartGraphicColors][12].ItemColor;
+			toothChart.ColorBackHighlight=DefC.Long[(int)DefCat.ChartGraphicColors][13].ItemColor;
 			//remember which teeth were selected
 			ArrayList selectedTeeth=new ArrayList();//integers 1-32
 			for(int i=0;i<toothChart.SelectedTeeth.Length;i++) {
@@ -3589,24 +3589,24 @@ namespace OpenDental{
 				if(ProcedureCodes.GetProcCode(ProcList[i]["ProcCode"].ToString()).GraphicColor==Color.FromArgb(0)){
 					switch((ProcStat)PIn.PInt(ProcList[i]["ProcStatus"].ToString())) {
 						case ProcStat.C:
-							cDark=DefB.Short[(int)DefCat.ChartGraphicColors][1].ItemColor;
-							cLight=DefB.Short[(int)DefCat.ChartGraphicColors][6].ItemColor;
+							cDark=DefC.Short[(int)DefCat.ChartGraphicColors][1].ItemColor;
+							cLight=DefC.Short[(int)DefCat.ChartGraphicColors][6].ItemColor;
 							break;
 						case ProcStat.TP:
-							cDark=DefB.Short[(int)DefCat.ChartGraphicColors][0].ItemColor;
-							cLight=DefB.Short[(int)DefCat.ChartGraphicColors][5].ItemColor;
+							cDark=DefC.Short[(int)DefCat.ChartGraphicColors][0].ItemColor;
+							cLight=DefC.Short[(int)DefCat.ChartGraphicColors][5].ItemColor;
 							break;
 						case ProcStat.EC:
-							cDark=DefB.Short[(int)DefCat.ChartGraphicColors][2].ItemColor;
-							cLight=DefB.Short[(int)DefCat.ChartGraphicColors][7].ItemColor;
+							cDark=DefC.Short[(int)DefCat.ChartGraphicColors][2].ItemColor;
+							cLight=DefC.Short[(int)DefCat.ChartGraphicColors][7].ItemColor;
 							break;
 						case ProcStat.EO:
-							cDark=DefB.Short[(int)DefCat.ChartGraphicColors][3].ItemColor;
-							cLight=DefB.Short[(int)DefCat.ChartGraphicColors][8].ItemColor;
+							cDark=DefC.Short[(int)DefCat.ChartGraphicColors][3].ItemColor;
+							cLight=DefC.Short[(int)DefCat.ChartGraphicColors][8].ItemColor;
 							break;
 						case ProcStat.R:
-							cDark=DefB.Short[(int)DefCat.ChartGraphicColors][4].ItemColor;
-							cLight=DefB.Short[(int)DefCat.ChartGraphicColors][9].ItemColor;
+							cDark=DefC.Short[(int)DefCat.ChartGraphicColors][4].ItemColor;
+							cLight=DefC.Short[(int)DefCat.ChartGraphicColors][9].ItemColor;
 							break;
 					}
 				}
@@ -3729,14 +3729,14 @@ namespace OpenDental{
 			}
 			//}
 			listDx.Items.Clear();
-			for(int i=0;i<DefB.Short[(int)DefCat.Diagnosis].Length;i++){//move to instantClasses?
-				this.listDx.Items.Add(DefB.Short[(int)DefCat.Diagnosis][i].ItemName);
+			for(int i=0;i<DefC.Short[(int)DefCat.Diagnosis].Length;i++){//move to instantClasses?
+				this.listDx.Items.Add(DefC.Short[(int)DefCat.Diagnosis][i].ItemName);
 			}
 			int selectedPriority=comboPriority.SelectedIndex;//retain current selection
 			comboPriority.Items.Clear();
 			comboPriority.Items.Add(Lan.g(this,"no priority"));
-			for(int i=0;i<DefB.Short[(int)DefCat.TxPriorities].Length;i++){
-				this.comboPriority.Items.Add(DefB.Short[(int)DefCat.TxPriorities][i].ItemName);
+			for(int i=0;i<DefC.Short[(int)DefCat.TxPriorities].Length;i++){
+				this.comboPriority.Items.Add(DefC.Short[(int)DefCat.TxPriorities][i].ItemName);
 			}
 			if(selectedPriority>0 && selectedPriority<comboPriority.Items.Count)
 				//set the selected to what it was before.
@@ -3747,8 +3747,8 @@ namespace OpenDental{
 			int selectedButtonCat=listButtonCats.SelectedIndex;
 			listButtonCats.Items.Clear();
 			listButtonCats.Items.Add(Lan.g(this,"Quick Buttons"));
-			for(int i=0;i<DefB.Short[(int)DefCat.ProcButtonCats].Length;i++){
-				listButtonCats.Items.Add(DefB.Short[(int)DefCat.ProcButtonCats][i].ItemName);
+			for(int i=0;i<DefC.Short[(int)DefCat.ProcButtonCats].Length;i++){
+				listButtonCats.Items.Add(DefC.Short[(int)DefCat.ProcButtonCats][i].ItemName);
 			}
 			if(selectedButtonCat < listButtonCats.Items.Count){
 				listButtonCats.SelectedIndex=selectedButtonCat;
@@ -3764,12 +3764,12 @@ namespace OpenDental{
 			page.Text=Lan.g(this,"All");
 			tabControlImages.TabPages.Add(page);
 			visImageCats=new ArrayList();
-			for(int i=0;i<DefB.Short[(int)DefCat.ImageCats].Length;i++){
-				if(DefB.Short[(int)DefCat.ImageCats][i].ItemValue=="X" || DefB.Short[(int)DefCat.ImageCats][i].ItemValue=="XP"){
+			for(int i=0;i<DefC.Short[(int)DefCat.ImageCats].Length;i++){
+				if(DefC.Short[(int)DefCat.ImageCats][i].ItemValue=="X" || DefC.Short[(int)DefCat.ImageCats][i].ItemValue=="XP"){
 					//if tagged to show in Chart
 					visImageCats.Add(i);
 					page=new TabPage();
-					page.Text=DefB.Short[(int)DefCat.ImageCats][i].ItemName;
+					page.Text=DefC.Short[(int)DefCat.ImageCats][i].ItemName;
 					tabControlImages.TabPages.Add(page);
 				}
 			}
@@ -3794,7 +3794,7 @@ namespace OpenDental{
 				return;
 			}
 			ProcButtons.Refresh();
-			ProcButtonList=ProcButtons.GetForCat(DefB.Short[(int)DefCat.ProcButtonCats][listButtonCats.SelectedIndex-1].DefNum);
+			ProcButtonList=ProcButtons.GetForCat(DefC.Short[(int)DefCat.ProcButtonCats][listButtonCats.SelectedIndex-1].DefNum);
 			ListViewItem item;
 			for(int i=0;i<ProcButtonList.Length;i++){
 				if(ProcButtonList[i].ButtonImage!=null) {
@@ -3843,7 +3843,7 @@ namespace OpenDental{
 					continue;//if category not visible, continue
 				}
 				if(tabControlImages.SelectedIndex>0){//any category except 'all'
-					if(DocumentList[i].DocCategory!=DefB.Short[(int)DefCat.ImageCats]
+					if(DocumentList[i].DocCategory!=DefC.Short[(int)DefCat.ImageCats]
 						[(int)visImageCats[tabControlImages.SelectedIndex-1]].DefNum)
 					{
 						continue;//if not in category, continue
@@ -4157,7 +4157,7 @@ namespace OpenDental{
 			if(comboPriority.SelectedIndex==0)
 				ProcCur.Priority=0;
 			else
-				ProcCur.Priority=DefB.Short[(int)DefCat.TxPriorities][comboPriority.SelectedIndex-1].DefNum;
+				ProcCur.Priority=DefC.Short[(int)DefCat.TxPriorities][comboPriority.SelectedIndex-1].DefNum;
 			ProcCur.ProcStatus=newStatus;
 			if(ProcedureCodes.GetProcCode(ProcCur.CodeNum).IsHygiene
 				&& PatCur.SecProv != 0){
@@ -4174,7 +4174,7 @@ namespace OpenDental{
 			}
 			ProcCur.ClinicNum=PatCur.ClinicNum;
 			if(listDx.SelectedIndex!=-1)
-				ProcCur.Dx=DefB.Short[(int)DefCat.Diagnosis][listDx.SelectedIndex].DefNum;
+				ProcCur.Dx=DefC.Short[(int)DefCat.Diagnosis][listDx.SelectedIndex].DefNum;
 			//nextaptnum
 			ProcCur.DateEntryC=DateTime.Now;
 			ProcCur.MedicalCode=ProcedureCodes.GetProcCode(ProcCur.CodeNum).MedicalCode;
@@ -4251,7 +4251,7 @@ namespace OpenDental{
 			if(comboPriority.SelectedIndex==0)
 				ProcCur.Priority=0;
 			else
-				ProcCur.Priority=DefB.Short[(int)DefCat.TxPriorities][comboPriority.SelectedIndex-1].DefNum;
+				ProcCur.Priority=DefC.Short[(int)DefCat.TxPriorities][comboPriority.SelectedIndex-1].DefNum;
 			ProcCur.ProcStatus=newStatus;
 			if(ProcedureCodes.GetProcCode(ProcCur.CodeNum).IsHygiene
 				&& PatCur.SecProv != 0){
@@ -4268,7 +4268,7 @@ namespace OpenDental{
 			}
 			ProcCur.ClinicNum=PatCur.ClinicNum;
 			if(listDx.SelectedIndex!=-1)
-				ProcCur.Dx=DefB.Short[(int)DefCat.Diagnosis][listDx.SelectedIndex].DefNum;
+				ProcCur.Dx=DefC.Short[(int)DefCat.Diagnosis][listDx.SelectedIndex].DefNum;
 			ProcCur.MedicalCode=ProcedureCodes.GetProcCode(ProcCur.CodeNum).MedicalCode;
 			ProcCur.BaseUnits=ProcedureCodes.GetProcCode(ProcCur.CodeNum).BaseUnits;
 			//nextaptnum

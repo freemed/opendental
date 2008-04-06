@@ -665,8 +665,8 @@ namespace OpenDental{
 		public void InitializeLocalData(){
 			listSetPr.Items.Clear();
 			listSetPr.Items.Add(Lan.g(this,"no priority"));
-			for(int i=0;i<DefB.Short[(int)DefCat.TxPriorities].Length;i++){
-				listSetPr.Items.Add(DefB.Short[(int)DefCat.TxPriorities][i].ItemName);
+			for(int i=0;i<DefC.Short[(int)DefCat.TxPriorities].Length;i++){
+				listSetPr.Items.Add(DefC.Short[(int)DefCat.TxPriorities][i].ItemName);
 			}
 			LayoutToolBar();
 			if(PrefB.GetBool("EasyHideInsurance")){
@@ -1636,9 +1636,9 @@ namespace OpenDental{
 						Procedures.UpdatePriority(((Procedure)gridMain.Rows[gridMain.SelectedIndices[i]].Tag).ProcNum,0);
 					}
 					else{
-						//ProcCur.Priority=DefB.Short[(int)DefCat.TxPriorities][clickedRow-1].DefNum;
+						//ProcCur.Priority=DefC.Short[(int)DefCat.TxPriorities][clickedRow-1].DefNum;
 						Procedures.UpdatePriority(((Procedure)gridMain.Rows[gridMain.SelectedIndices[i]].Tag).ProcNum,
-							DefB.Short[(int)DefCat.TxPriorities][clickedRow-1].DefNum);
+							DefC.Short[(int)DefCat.TxPriorities][clickedRow-1].DefNum);
 					}
 					//Procedures.Update(ProcCur,ProcOld);//no recall synch required
 				}
@@ -1656,7 +1656,7 @@ namespace OpenDental{
 					if(clickedRow==0)//set priority to "no priority"
 						proc.Priority=0;
 					else
-						proc.Priority=DefB.Short[(int)DefCat.TxPriorities][clickedRow-1].DefNum;
+						proc.Priority=DefC.Short[(int)DefCat.TxPriorities][clickedRow-1].DefNum;
 					ProcTPs.InsertOrUpdate(proc,false);
 				}
 				ModuleSelected(PatCur.PatNum);
@@ -1774,8 +1774,8 @@ namespace OpenDental{
 				//panelHide.SendToBack();
 				//this.Controls.Add(panelHide);
 				toothChart=new GraphicalToothChart();
-				toothChart.ColorBackground=DefB.Long[(int)DefCat.ChartGraphicColors][14].ItemColor;
-				toothChart.ColorText=DefB.Long[(int)DefCat.ChartGraphicColors][15].ItemColor;
+				toothChart.ColorBackground=DefC.Long[(int)DefCat.ChartGraphicColors][14].ItemColor;
+				toothChart.ColorText=DefC.Long[(int)DefCat.ChartGraphicColors][15].ItemColor;
 				//toothChart.TaoRenderEnabled=true;
 				//toothChart.TaoInitializeContexts();
 				toothChart.Size=new Size(500,370);
@@ -1902,24 +1902,24 @@ namespace OpenDental{
 				if(checkShowCompleted.Checked) {
 					float yPos=toothChart.Height+15;
 					float xPos=225;
-					MigraDocHelper.FillRectangle(frame,DefB.Short[(int)DefCat.ChartGraphicColors][3].ItemColor,xPos,yPos,14,14);
+					MigraDocHelper.FillRectangle(frame,DefC.Short[(int)DefCat.ChartGraphicColors][3].ItemColor,xPos,yPos,14,14);
 					xPos+=16;
 					MigraDocHelper.DrawString(frame,Lan.g(this,"Existing"),bodyFontx,xPos,yPos);
 					Graphics g=this.CreateGraphics();//for measuring strings.
 					xPos+=(int)g.MeasureString(Lan.g(this,"Existing"),bodyFont).Width+23;
 					//The Complete work is actually a combination of EC and C. Usually same color.
 					//But just in case they are different, this will show it.
-					MigraDocHelper.FillRectangle(frame,DefB.Short[(int)DefCat.ChartGraphicColors][2].ItemColor,xPos,yPos,7,14);
+					MigraDocHelper.FillRectangle(frame,DefC.Short[(int)DefCat.ChartGraphicColors][2].ItemColor,xPos,yPos,7,14);
 					xPos+=7;
-					MigraDocHelper.FillRectangle(frame,DefB.Short[(int)DefCat.ChartGraphicColors][1].ItemColor,xPos,yPos,7,14);
+					MigraDocHelper.FillRectangle(frame,DefC.Short[(int)DefCat.ChartGraphicColors][1].ItemColor,xPos,yPos,7,14);
 					xPos+=9;
 					MigraDocHelper.DrawString(frame,Lan.g(this,"Complete"),bodyFontx,xPos,yPos);
 					xPos+=(int)g.MeasureString(Lan.g(this,"Complete"),bodyFont).Width+23;
-					MigraDocHelper.FillRectangle(frame,DefB.Short[(int)DefCat.ChartGraphicColors][4].ItemColor,xPos,yPos,14,14);
+					MigraDocHelper.FillRectangle(frame,DefC.Short[(int)DefCat.ChartGraphicColors][4].ItemColor,xPos,yPos,14,14);
 					xPos+=16;
 					MigraDocHelper.DrawString(frame,Lan.g(this,"Referred Out"),bodyFontx,xPos,yPos);
 					xPos+=(int)g.MeasureString(Lan.g(this,"Referred Out"),bodyFont).Width+23;
-					MigraDocHelper.FillRectangle(frame,DefB.Short[(int)DefCat.ChartGraphicColors][0].ItemColor,xPos,yPos,14,14);
+					MigraDocHelper.FillRectangle(frame,DefC.Short[(int)DefCat.ChartGraphicColors][0].ItemColor,xPos,yPos,14,14);
 					xPos+=16;
 					MigraDocHelper.DrawString(frame,Lan.g(this,"Treatment Planned"),bodyFontx,xPos,yPos);
 					g.Dispose();
@@ -2129,24 +2129,24 @@ namespace OpenDental{
 				if(ProcedureCodes.GetProcCode(proc.CodeNum).GraphicColor==System.Drawing.Color.FromArgb(0)) {
 					switch(proc.ProcStatus) {
 						case ProcStat.C:
-							cDark=DefB.Short[(int)DefCat.ChartGraphicColors][1].ItemColor;
-							cLight=DefB.Short[(int)DefCat.ChartGraphicColors][6].ItemColor;
+							cDark=DefC.Short[(int)DefCat.ChartGraphicColors][1].ItemColor;
+							cLight=DefC.Short[(int)DefCat.ChartGraphicColors][6].ItemColor;
 							break;
 						case ProcStat.TP:
-							cDark=DefB.Short[(int)DefCat.ChartGraphicColors][0].ItemColor;
-							cLight=DefB.Short[(int)DefCat.ChartGraphicColors][5].ItemColor;
+							cDark=DefC.Short[(int)DefCat.ChartGraphicColors][0].ItemColor;
+							cLight=DefC.Short[(int)DefCat.ChartGraphicColors][5].ItemColor;
 							break;
 						case ProcStat.EC:
-							cDark=DefB.Short[(int)DefCat.ChartGraphicColors][2].ItemColor;
-							cLight=DefB.Short[(int)DefCat.ChartGraphicColors][7].ItemColor;
+							cDark=DefC.Short[(int)DefCat.ChartGraphicColors][2].ItemColor;
+							cLight=DefC.Short[(int)DefCat.ChartGraphicColors][7].ItemColor;
 							break;
 						case ProcStat.EO:
-							cDark=DefB.Short[(int)DefCat.ChartGraphicColors][3].ItemColor;
-							cLight=DefB.Short[(int)DefCat.ChartGraphicColors][8].ItemColor;
+							cDark=DefC.Short[(int)DefCat.ChartGraphicColors][3].ItemColor;
+							cLight=DefC.Short[(int)DefCat.ChartGraphicColors][8].ItemColor;
 							break;
 						case ProcStat.R:
-							cDark=DefB.Short[(int)DefCat.ChartGraphicColors][4].ItemColor;
-							cLight=DefB.Short[(int)DefCat.ChartGraphicColors][9].ItemColor;
+							cDark=DefC.Short[(int)DefCat.ChartGraphicColors][4].ItemColor;
+							cLight=DefC.Short[(int)DefCat.ChartGraphicColors][9].ItemColor;
 							break;
 					}
 				}

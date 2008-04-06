@@ -281,9 +281,9 @@ namespace OpenDental{
 			textUser.Text=UserodB.GetName(CommlogCur.UserNum);//might be blank. 
 			textDateTime.Text=CommlogCur.CommDateTime.ToString();
 			//there will usually be a commtype set before this dialog is opened
-			for(int i=0;i<DefB.Short[(int)DefCat.CommLogTypes].Length;i++){
-				listType.Items.Add(DefB.Short[(int)DefCat.CommLogTypes][i].ItemName);
-				if(DefB.Short[(int)DefCat.CommLogTypes][i].DefNum==CommlogCur.CommType){
+			for(int i=0;i<DefC.Short[(int)DefCat.CommLogTypes].Length;i++){
+				listType.Items.Add(DefC.Short[(int)DefCat.CommLogTypes][i].ItemName);
+				if(DefC.Short[(int)DefCat.CommLogTypes][i].DefNum==CommlogCur.CommType){
 					listType.SelectedIndex=i;
 				}
 			}
@@ -341,7 +341,7 @@ namespace OpenDental{
 				CommlogCur.CommType=0;
 			}
 			else{
-				CommlogCur.CommType=DefB.Short[(int)DefCat.CommLogTypes][listType.SelectedIndex].DefNum;
+				CommlogCur.CommType=DefC.Short[(int)DefCat.CommLogTypes][listType.SelectedIndex].DefNum;
 			}
 			CommlogCur.Mode_=(CommItemMode)listMode.SelectedIndex;
 			CommlogCur.SentOrReceived=(CommSentOrReceived)listSentOrReceived.SelectedIndex;

@@ -1606,15 +1606,15 @@ namespace OpenDental{
 			comboFeeSched.Items.Clear();
 			comboFeeSched.Items.Add(Lan.g(this,"none"));
 			comboFeeSched.SelectedIndex=0;
-			for(int i=0;i<DefB.Short[(int)DefCat.FeeSchedNames].Length;i++){
-				comboFeeSched.Items.Add(DefB.Short[(int)DefCat.FeeSchedNames][i].ItemName);
-				if(DefB.Short[(int)DefCat.FeeSchedNames][i].DefNum==PatCur.FeeSched)
+			for(int i=0;i<DefC.Short[(int)DefCat.FeeSchedNames].Length;i++){
+				comboFeeSched.Items.Add(DefC.Short[(int)DefCat.FeeSchedNames][i].ItemName);
+				if(DefC.Short[(int)DefCat.FeeSchedNames][i].DefNum==PatCur.FeeSched)
 					comboFeeSched.SelectedIndex=i+1;
 			}
-			//MessageBox.Show(DefB.Short[(int)DefCat.BillingTypes].Length.ToString());
-			for(int i=0;i<DefB.Short[(int)DefCat.BillingTypes].Length;i++){
-				comboBillType.Items.Add(DefB.Short[(int)DefCat.BillingTypes][i].ItemName);
-				if(DefB.Short[(int)DefCat.BillingTypes][i].DefNum==PatCur.BillingType)
+			//MessageBox.Show(DefC.Short[(int)DefCat.BillingTypes].Length.ToString());
+			for(int i=0;i<DefC.Short[(int)DefCat.BillingTypes].Length;i++){
+				comboBillType.Items.Add(DefC.Short[(int)DefCat.BillingTypes][i].ItemName);
+				if(DefC.Short[(int)DefCat.BillingTypes][i].DefNum==PatCur.BillingType)
 					comboBillType.SelectedIndex=i;
 			}
 			if(comboBillType.SelectedIndex==-1){
@@ -2413,9 +2413,9 @@ namespace OpenDental{
 			if(comboFeeSched.SelectedIndex==0)
 				PatCur.FeeSched=0;
 			else
-				PatCur.FeeSched=DefB.Short[(int)DefCat.FeeSchedNames][comboFeeSched.SelectedIndex-1].DefNum;
+				PatCur.FeeSched=DefC.Short[(int)DefCat.FeeSchedNames][comboFeeSched.SelectedIndex-1].DefNum;
 			if(comboBillType.SelectedIndex!=-1)
-				PatCur.BillingType=DefB.Short[(int)DefCat.BillingTypes][comboBillType.SelectedIndex].DefNum;
+				PatCur.BillingType=DefC.Short[(int)DefCat.BillingTypes][comboBillType.SelectedIndex].DefNum;
 			if(comboClinic.SelectedIndex==0){
 				PatCur.ClinicNum=0;
 			}

@@ -577,8 +577,8 @@ namespace OpenDental{
 			checkExcludeInsPending.Checked=PrefB.GetBool("BillingExcludeInsPending");
 			textExcludeLessThan.Text=PrefB.GetString("BillingExcludeLessThan");
 			listBillType.Items.Add(Lan.g(this,"(all)"));
-			for(int i=0;i<DefB.Short[(int)DefCat.BillingTypes].Length;i++){
-				listBillType.Items.Add(DefB.Short[(int)DefCat.BillingTypes][i].ItemName);
+			for(int i=0;i<DefC.Short[(int)DefCat.BillingTypes].Length;i++){
+				listBillType.Items.Add(DefC.Short[(int)DefCat.BillingTypes][i].ItemName);
 			}
 			string[] selectedBillTypes=PrefB.GetString("BillingSelectBillingTypes").Split(',');//might be blank
 			for(int i=0;i<selectedBillTypes.Length;i++){
@@ -626,7 +626,7 @@ namespace OpenDental{
 				if(i>0){
 					selectedBillingTypes+=",";
 				}
-				selectedBillingTypes+=DefB.Short[(int)DefCat.BillingTypes][listBillType.SelectedIndices[i]-1].DefNum.ToString();
+				selectedBillingTypes+=DefC.Short[(int)DefCat.BillingTypes][listBillType.SelectedIndices[i]-1].DefNum.ToString();
 			}
 			string ageOfAccount="";
 			if(comboAge.SelectedIndex==0){
@@ -778,7 +778,7 @@ namespace OpenDental{
 					billingNums.Clear();
 					break;
 				}
-				billingNums.Add(DefB.Short[(int)DefCat.BillingTypes][listBillType.SelectedIndices[i]-1].DefNum);
+				billingNums.Add(DefC.Short[(int)DefCat.BillingTypes][listBillType.SelectedIndices[i]-1].DefNum);
 			}
 			Cursor=Cursors.WaitCursor;
 			List<PatAging> agingList=Patients.GetAgingList(getAge,lastStatement,billingNums,checkBadAddress.Checked

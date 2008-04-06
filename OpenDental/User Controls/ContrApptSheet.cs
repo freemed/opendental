@@ -265,9 +265,9 @@ namespace OpenDental{
 			g.FillRectangle(new SolidBrush(Color.LightGray),0,0,TimeWidth,Height);//L time bar
 			g.FillRectangle(new SolidBrush(Color.LightGray),TimeWidth+ColWidth*ColCount+ProvWidth*ProvCount,0,TimeWidth,Height);//R time bar
 			try{
-				openBrush=new SolidBrush(DefB.Long[(int)DefCat.AppointmentColors][0].ItemColor);
-				closedBrush=new SolidBrush(DefB.Long[(int)DefCat.AppointmentColors][1].ItemColor);
-        holidayBrush=new SolidBrush(DefB.Long[(int)DefCat.AppointmentColors][4].ItemColor);  
+				openBrush=new SolidBrush(DefC.Long[(int)DefCat.AppointmentColors][0].ItemColor);
+				closedBrush=new SolidBrush(DefC.Long[(int)DefCat.AppointmentColors][1].ItemColor);
+        holidayBrush=new SolidBrush(DefC.Long[(int)DefCat.AppointmentColors][4].ItemColor);  
 			}
 			catch{//this is just for design-time
 				openBrush=new SolidBrush(Color.White);
@@ -450,7 +450,7 @@ namespace OpenDental{
 				else{
 					g.DrawRectangle(penOutline,rect.X+1,rect.Y+2,rect.Width-2,rect.Height-3);
 				}				
-				g.DrawString(blockText,blockFont,new SolidBrush(DefB.Short[(int)DefCat.AppointmentColors][5].ItemColor),rect);
+				g.DrawString(blockText,blockFont,new SolidBrush(DefC.Short[(int)DefCat.AppointmentColors][5].ItemColor),rect);
 			}         
 		}
 

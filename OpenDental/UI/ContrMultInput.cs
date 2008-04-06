@@ -199,11 +199,11 @@ namespace OpenDental.UI
 				else if(multInputItems[i].ValueType==FieldValueType.Def){
 					//add a psuedo combobox filled with visible defs for one category
 					inputs[i]=new ComboBoxMulti();
-					for(int j=0;j<DefB.Short[(int)multInputItems[i].DefCategory].Length;j++){
-						((ComboBoxMulti)inputs[i]).Items.Add(DefB.Short[(int)multInputItems[i].DefCategory][j].ItemName);
+					for(int j=0;j<DefC.Short[(int)multInputItems[i].DefCategory].Length;j++){
+						((ComboBoxMulti)inputs[i]).Items.Add(DefC.Short[(int)multInputItems[i].DefCategory][j].ItemName);
 						if(multInputItems[i].CurrentValues.Count > 0
 							&& multInputItems[i].CurrentValues
-							.Contains(DefB.Short[(int)multInputItems[i].DefCategory][j].DefNum))
+							.Contains(DefC.Short[(int)multInputItems[i].DefCategory][j].DefNum))
 						{
 							((ComboBoxMulti)inputs[i]).SetSelected(j,true);
 						}
@@ -411,7 +411,7 @@ namespace OpenDental.UI
 				ComboBoxMulti comboBox=(ComboBoxMulti)inputs[item];
 				for(int j=0;j<comboBox.SelectedIndices.Count;j++){
 					retVal.Add(
-						DefB.Short[(int)multInputItems[item].DefCategory]
+						DefC.Short[(int)multInputItems[item].DefCategory]
 						[(int)comboBox.SelectedIndices[j]].DefNum);
 				}
 			}

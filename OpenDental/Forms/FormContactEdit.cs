@@ -264,9 +264,9 @@ namespace OpenDental{
 		#endregion
 
 		private void FormContactEdit_Load(object sender, System.EventArgs e) {
-			for(int i=0;i<DefB.Short[(int)DefCat.ContactCategories].Length;i++){
-				listCategory.Items.Add(DefB.Short[(int)DefCat.ContactCategories][i].ItemName);
-				if(ContactCur.Category==DefB.Short[(int)DefCat.ContactCategories][i].DefNum){
+			for(int i=0;i<DefC.Short[(int)DefCat.ContactCategories].Length;i++){
+				listCategory.Items.Add(DefC.Short[(int)DefCat.ContactCategories][i].ItemName);
+				if(ContactCur.Category==DefC.Short[(int)DefCat.ContactCategories][i].DefNum){
 					listCategory.SelectedIndex=i;
 				}
 			}
@@ -328,7 +328,7 @@ namespace OpenDental{
 				return;
 			}
 			//a category will always be selected because of the manner in which Contact is accessed
-			ContactCur.Category=DefB.Short[(int)DefCat.ContactCategories][listCategory.SelectedIndex].DefNum;
+			ContactCur.Category=DefC.Short[(int)DefCat.ContactCategories][listCategory.SelectedIndex].DefNum;
 			ContactCur.LName=textLName.Text;
 			ContactCur.FName=textFName.Text;
 			ContactCur.WkPhone=textWkPhone.Text;

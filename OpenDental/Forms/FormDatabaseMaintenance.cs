@@ -907,7 +907,7 @@ namespace OpenDental {
 			command="SELECT DocNum FROM document WHERE DocCategory=0";
 			table=General.GetTable(command);
 			for(int i=0;i<table.Rows.Count;i++) {
-				command="UPDATE document SET DocCategory="+POut.PInt(DefB.Short[(int)DefCat.ImageCats][0].DefNum)
+				command="UPDATE document SET DocCategory="+POut.PInt(DefC.Short[(int)DefCat.ImageCats][0].DefNum)
 					+" WHERE DocNum="+table.Rows[i][0].ToString();
 				General.NonQ(command);
 			}

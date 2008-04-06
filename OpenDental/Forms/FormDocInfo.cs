@@ -274,10 +274,10 @@ namespace OpenDental{
 		public void FormDocInfo_Load(object sender, System.EventArgs e){
 			//if (Docs.Cur.FileName.Equals(null))
 			listCategory.Items.Clear();
-			for(int i=0;i<DefB.Short[(int)DefCat.ImageCats].Length;i++){
-				string folderName=DefB.Short[(int)DefCat.ImageCats][i].ItemName;
+			for(int i=0;i<DefC.Short[(int)DefCat.ImageCats].Length;i++){
+				string folderName=DefC.Short[(int)DefCat.ImageCats][i].ItemName;
 				listCategory.Items.Add(folderName);
-				if(i==0 || DefB.Short[(int)DefCat.ImageCats][i].DefNum==DocCur.DocCategory || folderName==initialSelection){
+				if(i==0 || DefC.Short[(int)DefCat.ImageCats][i].DefNum==DocCur.DocCategory || folderName==initialSelection){
 					listCategory.SelectedIndex=i;
 				}
 			}
@@ -314,7 +314,7 @@ namespace OpenDental{
 				MessageBox.Show(ex.Message);
 				return;
 			}
-			DocCur.DocCategory=DefB.Short[(int)DefCat.ImageCats][listCategory.SelectedIndex].DefNum;
+			DocCur.DocCategory=DefC.Short[(int)DefCat.ImageCats][listCategory.SelectedIndex].DefNum;
 			DocCur.ImgType=(ImageType)listType.SelectedIndex;
 			DocCur.Description=textDescript.Text;
 			DocCur.DateCreated=DateTime.Parse(textDate.Text);

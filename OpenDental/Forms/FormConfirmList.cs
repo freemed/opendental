@@ -338,8 +338,8 @@ namespace OpenDental{
 			}
 			//textPostcardMessage.Text=PrefB.GetString("ConfirmPostcardMessage");
 			comboStatus.Items.Clear();
-			for(int i=0;i<DefB.Short[(int)DefCat.ApptConfirmed].Length;i++){
-				comboStatus.Items.Add(DefB.Short[(int)DefCat.ApptConfirmed][i].ItemName);
+			for(int i=0;i<DefC.Short[(int)DefCat.ApptConfirmed].Length;i++){
+				comboStatus.Items.Add(DefC.Short[(int)DefCat.ApptConfirmed][i].ItemName);
 			}
 			FillMain();
 		}
@@ -486,7 +486,7 @@ namespace OpenDental{
 				apt=Appointments.GetOneApt(PIn.PInt(table.Rows[grid.SelectedIndices[i]]["AptNum"].ToString()));
 				Appointment aptOld=apt.Copy();
 				int selectedI=comboStatus.SelectedIndex;
-				apt.Confirmed=DefB.Short[(int)DefCat.ApptConfirmed][selectedI].DefNum;
+				apt.Confirmed=DefC.Short[(int)DefCat.ApptConfirmed][selectedI].DefNum;
 				try{
 					Appointments.InsertOrUpdate(apt,aptOld,false);
 				}
@@ -722,7 +722,7 @@ namespace OpenDental{
 				originalRecalls[i]=((RecallItem)MainAL[tbMain.SelectedIndices[i]]).RecallNum;
 				Recalls.UpdateStatus(
 					((RecallItem)MainAL[tbMain.SelectedIndices[i]]).RecallNum,
-					DefB.Short[(int)DefCat.RecallUnschedStatus][comboStatus.SelectedIndex].DefNum);
+					DefC.Short[(int)DefCat.RecallUnschedStatus][comboStatus.SelectedIndex].DefNum);
 				//((RecallItem)MainAL[tbMain.SelectedIndices[i]]).up
 			}
 			FillMain();

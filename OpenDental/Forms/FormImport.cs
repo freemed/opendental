@@ -3977,7 +3977,7 @@ namespace OpenDental{
 								ProvCur.ItemOrder=Providers.ListLong[Providers.ListLong.Length-1].ItemOrder+1;
 								ProvCur.LName=table.Rows[i][table.Columns["PriProv"].Ordinal].ToString();
 								ProvCur.Abbr=ProvCur.LName;
-								ProvCur.FeeSched=DefB.Short[(int)DefCat.FeeSchedNames][0].DefNum;
+								ProvCur.FeeSched=DefC.Short[(int)DefCat.FeeSchedNames][0].DefNum;
 								ProvCur.ProvColor=Color.White;
 								ProvCur.SigOnFile=true;
 								ProvCur.OutlineColor=Color.Gray;

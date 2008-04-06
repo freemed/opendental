@@ -146,8 +146,8 @@ namespace OpenDental{
 			//will start out 1st through 30th of previous month
 			date1.SelectionStart=new DateTime(today.Year,today.Month,1).AddMonths(-1);
 			date2.SelectionStart=new DateTime(today.Year,today.Month,1).AddDays(-1);
-			for(int i=0;i<DefB.Short[(int)DefCat.AdjTypes].Length;i++){
-				listAdjType.Items.Add(DefB.Short[(int)DefCat.AdjTypes][i].ItemName);
+			for(int i=0;i<DefC.Short[(int)DefCat.AdjTypes].Length;i++){
+				listAdjType.Items.Add(DefC.Short[(int)DefCat.AdjTypes][i].ItemName);
 			}
 		}
 
@@ -166,7 +166,7 @@ namespace OpenDental{
 					types+="OR ";
 				}
 				types+="AdjType='"
-					+DefB.Short[(int)DefCat.AdjTypes][listAdjType.SelectedIndices[i]].DefNum.ToString()
+					+DefC.Short[(int)DefCat.AdjTypes][listAdjType.SelectedIndices[i]].DefNum.ToString()
 					+"' ";
 			}
 			types+=")";

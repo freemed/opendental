@@ -607,9 +607,9 @@ namespace OpenDental{
 				}
 			}
 			listBillType.Items.Clear();
-			for(int i=0;i<DefB.Short[(int)DefCat.BillingTypes].Length;i++){
-				listBillType.Items.Add(DefB.Short[(int)DefCat.BillingTypes][i].ItemName);
-				if(DefB.Short[(int)DefCat.BillingTypes][i].DefNum==PrefB.GetInt("PracticeDefaultBillType"))
+			for(int i=0;i<DefC.Short[(int)DefCat.BillingTypes].Length;i++){
+				listBillType.Items.Add(DefC.Short[(int)DefCat.BillingTypes][i].ItemName);
+				if(DefC.Short[(int)DefCat.BillingTypes][i].DefNum==PrefB.GetInt("PracticeDefaultBillType"))
 					listBillType.SelectedIndex=i;
 			}
 			if(PrefB.GetBool("EasyHidePublicHealth")){
@@ -705,7 +705,7 @@ namespace OpenDental{
 			}
 			if(listBillType.SelectedIndex!=-1){
 				if(Prefs.UpdateInt("PracticeDefaultBillType"
-					,DefB.Short[(int)DefCat.BillingTypes][listBillType.SelectedIndex].DefNum))
+					,DefC.Short[(int)DefCat.BillingTypes][listBillType.SelectedIndex].DefNum))
 				{
 					changed=true;
 				}

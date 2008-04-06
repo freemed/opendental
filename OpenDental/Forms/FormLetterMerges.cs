@@ -294,8 +294,8 @@ namespace OpenDental{
 
 		private void FillCats(){
 			listCategories.Items.Clear();
-			for(int i=0;i<DefB.Short[(int)DefCat.LetterMergeCats].Length;i++){
-				listCategories.Items.Add(DefB.Short[(int)DefCat.LetterMergeCats][i].ItemName);
+			for(int i=0;i<DefC.Short[(int)DefCat.LetterMergeCats].Length;i++){
+				listCategories.Items.Add(DefC.Short[(int)DefCat.LetterMergeCats][i].ItemName);
 			}
 		}
 
@@ -351,7 +351,7 @@ namespace OpenDental{
 				return;
 			}
 			LetterMerge letter=new LetterMerge();
-			letter.Category=DefB.Short[(int)DefCat.LetterMergeCats][listCategories.SelectedIndex].DefNum;
+			letter.Category=DefC.Short[(int)DefCat.LetterMergeCats][listCategories.SelectedIndex].DefNum;
 			letter.Fields=new ArrayList();
 			FormLetterMergeEdit FormL=new FormLetterMergeEdit(letter);
 			FormL.IsNew=true;

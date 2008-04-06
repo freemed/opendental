@@ -944,8 +944,8 @@ namespace OpenDental{
 				return;
 			}
 			//Add all predefined folder names to the tree.
-			for(int i=0;i<DefB.Short[(int)DefCat.ImageCats].Length;i++){
-				TreeDocuments.Nodes.Add(new TreeNode(DefB.Short[(int)DefCat.ImageCats][i].ItemName));
+			for(int i=0;i<DefC.Short[(int)DefCat.ImageCats].Length;i++){
+				TreeDocuments.Nodes.Add(new TreeNode(DefC.Short[(int)DefCat.ImageCats][i].ItemName));
 				TreeDocuments.Nodes[i].SelectedImageIndex=1;
 				TreeDocuments.Nodes[i].ImageIndex=1;
 			}
@@ -1631,10 +1631,10 @@ namespace OpenDental{
 				//Find the destination folder.
 				int destinationCategory;
 				if(node.Parent!=null) {
-					destinationCategory=DefB.Short[(int)DefCat.ImageCats][node.Parent.Index].DefNum;
+					destinationCategory=DefC.Short[(int)DefCat.ImageCats][node.Parent.Index].DefNum;
 				}
 				else {
-					destinationCategory=DefB.Short[(int)DefCat.ImageCats][node.Index].DefNum;
+					destinationCategory=DefC.Short[(int)DefCat.ImageCats][node.Index].DefNum;
 				}
 				//Update the object's document category in the database.
 				DataRow obj=(DataRow)sourceNode.Tag;
