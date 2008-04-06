@@ -583,7 +583,7 @@ namespace OpenDental{
 			string[] selectedBillTypes=PrefC.GetString("BillingSelectBillingTypes").Split(',');//might be blank
 			for(int i=0;i<selectedBillTypes.Length;i++){
 				try{
-					int order=DefB.GetOrder(DefCat.BillingTypes,Convert.ToInt32(selectedBillTypes[i]));
+					int order=DefC.GetOrder(DefCat.BillingTypes,Convert.ToInt32(selectedBillTypes[i]));
 					if(order!=-1){
 						listBillType.SetSelected(order+1,true);
 					}
@@ -678,7 +678,7 @@ namespace OpenDental{
 					row.Cells.Add(Lan.g(this,"all"));
 				}
 				else{
-					row.Cells.Add(DefB.GetName(DefCat.BillingTypes,dunningList[i].BillingType));
+					row.Cells.Add(DefC.GetName(DefCat.BillingTypes,dunningList[i].BillingType));
 				}
 				if(dunningList[i].AgeAccount==0){
 					row.Cells.Add(Lan.g(this,"any"));
@@ -813,7 +813,7 @@ namespace OpenDental{
 				stmt.Intermingled=checkIntermingled.Checked;
 				stmt.IsSent=false;
 				stmt.Mode_=StatementMode.Mail;
-				if(DefB.GetDef(DefCat.BillingTypes,agingList[i].BillingType).ItemValue=="E"){
+				if(DefC.GetDef(DefCat.BillingTypes,agingList[i].BillingType).ItemValue=="E"){
 					stmt.Mode_=StatementMode.Email;
 				}
 				stmt.Note=textNote.Text;

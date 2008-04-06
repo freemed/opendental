@@ -227,7 +227,7 @@ namespace OpenDentBusiness{
 				row["AptNum"]=raw.Rows[i]["AptNum"].ToString();
 				row["AptStatus"]=raw.Rows[i]["AptStatus"].ToString();
 				row["Assistant"]=raw.Rows[i]["Assistant"].ToString();
-				row["billingType"]=DefB.GetName(DefCat.BillingTypes,PIn.PInt(raw.Rows[i]["BillingType"].ToString()));
+				row["billingType"]=DefC.GetName(DefCat.BillingTypes,PIn.PInt(raw.Rows[i]["BillingType"].ToString()));
 				if(raw.Rows[i]["ChartNumber"].ToString()!=""){
 					row["chartNumber"]=raw.Rows[i]["ChartNumber"].ToString();
 				}
@@ -239,7 +239,7 @@ namespace OpenDentBusiness{
 				row["chartNumAndName"]+=raw.Rows[i]["ChartNumber"].ToString()+" "
 					+PatientB.GetNameLF(raw.Rows[i]["LName"].ToString(),raw.Rows[i]["FName"].ToString(),
 					raw.Rows[i]["Preferred"].ToString(),raw.Rows[i]["MiddleI"].ToString());
-				row["confirmed"]=DefB.GetName(DefCat.ApptConfirmed,PIn.PInt(raw.Rows[i]["Confirmed"].ToString()));
+				row["confirmed"]=DefC.GetName(DefCat.ApptConfirmed,PIn.PInt(raw.Rows[i]["Confirmed"].ToString()));
 				row["Confirmed"]=raw.Rows[i]["Confirmed"].ToString();
 				row["contactMethods"]="";
 				if(raw.Rows[i]["PreferConfirmMethod"].ToString()!="0"){
@@ -510,7 +510,7 @@ namespace OpenDentBusiness{
 			//Patient billing type------------------------------------------------------------------
 			row=table.NewRow();
 			row["field"]=Lan.g("FormApptEdit","Billing Type");
-			row["value"]=DefB.GetName(DefCat.BillingTypes,PIn.PInt(rawPat.Rows[0]["BillingType"].ToString()));
+			row["value"]=DefC.GetName(DefCat.BillingTypes,PIn.PInt(rawPat.Rows[0]["BillingType"].ToString()));
 			table.Rows.Add(row);
 			//Patient total balance-----------------------------------------------------------------
 			row=table.NewRow();
@@ -592,7 +592,7 @@ namespace OpenDentBusiness{
 				}
 				row["descript"]+=rawProc.Rows[i]["Descript"].ToString();
 				row["fee"]=PIn.PDouble(rawProc.Rows[i]["ProcFee"].ToString()).ToString("F");
-				row["priority"]=DefB.GetName(DefCat.TxPriorities,PIn.PInt(rawProc.Rows[i]["Priority"].ToString()));
+				row["priority"]=DefC.GetName(DefCat.TxPriorities,PIn.PInt(rawProc.Rows[i]["Priority"].ToString()));
 				row["ProcCode"]=rawProc.Rows[i]["ProcCode"].ToString();
 				row["ProcNum"]=rawProc.Rows[i]["ProcNum"].ToString();
 				row["ProcStatus"]=rawProc.Rows[i]["ProcStatus"].ToString();

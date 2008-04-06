@@ -961,7 +961,7 @@ namespace OpenDental{
 				for(int i=0;i<ProcListTP.Length;i++){
 					row=new ODGridRow();
 					row.Cells.Add("");//never done
-					row.Cells.Add(DefB.GetName(DefCat.TxPriorities,ProcListTP[i].Priority));
+					row.Cells.Add(DefC.GetName(DefCat.TxPriorities,ProcListTP[i].Priority));
 					row.Cells.Add(Tooth.ToInternat(ProcListTP[i].ToothNum));
 					row.Cells.Add(ProcListTP[i].Surf);
 					row.Cells.Add(ProcedureCodes.GetProcCode(ProcListTP[i].CodeNum).ProcCode);
@@ -1177,7 +1177,7 @@ namespace OpenDental{
 					if(checkShowFees.Checked){	
 						row.Cells.Add(pat.ToString("F"));
 					}
-					row.ColorText=DefB.GetColor(DefCat.TxPriorities,ProcListTP[i].Priority);
+					row.ColorText=DefC.GetColor(DefCat.TxPriorities,ProcListTP[i].Priority);
 					if(row.ColorText==System.Drawing.Color.White){
 						row.ColorText=System.Drawing.Color.Black;
 					}
@@ -1249,7 +1249,7 @@ namespace OpenDental{
 						if(checkShowFees.Checked){
 							row.Cells.Add(subpat.ToString("F"));//pat portion
 						}
-						row.ColorText=DefB.GetColor(DefCat.TxPriorities,ProcListTP[i].Priority);
+						row.ColorText=DefC.GetColor(DefCat.TxPriorities,ProcListTP[i].Priority);
 						if(row.ColorText==System.Drawing.Color.White) {
 							row.ColorText=System.Drawing.Color.Black;
 						}
@@ -1286,7 +1286,7 @@ namespace OpenDental{
 					else {
 						row.Cells.Add("");
 					}	
-					row.Cells.Add(DefB.GetName(DefCat.TxPriorities,ProcTPSelectList[i].Priority));
+					row.Cells.Add(DefC.GetName(DefCat.TxPriorities,ProcTPSelectList[i].Priority));
 					row.Cells.Add(ProcTPSelectList[i].ToothNumTP);
 					row.Cells.Add(ProcTPSelectList[i].Surf);
 					row.Cells.Add(ProcTPSelectList[i].ProcCode);
@@ -1320,7 +1320,7 @@ namespace OpenDental{
 						subpat+=ProcTPSelectList[i].PatAmt;
 						totPat+=ProcTPSelectList[i].PatAmt;						
 					}
-					row.ColorText=DefB.GetColor(DefCat.TxPriorities,ProcTPSelectList[i].Priority);
+					row.ColorText=DefC.GetColor(DefCat.TxPriorities,ProcTPSelectList[i].Priority);
 					if(row.ColorText==System.Drawing.Color.White){
 						row.ColorText=System.Drawing.Color.Black;
 					}
@@ -1353,7 +1353,7 @@ namespace OpenDental{
 							
 							row.Cells.Add(subpat.ToString("F"));//pat portion
 						}
-						row.ColorText=DefB.GetColor(DefCat.TxPriorities,ProcTPSelectList[i].Priority);
+						row.ColorText=DefC.GetColor(DefCat.TxPriorities,ProcTPSelectList[i].Priority);
 						if(row.ColorText==System.Drawing.Color.White) {
 							row.ColorText=System.Drawing.Color.Black;
 						}

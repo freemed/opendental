@@ -1650,9 +1650,9 @@ namespace OpenDental{
 				else
 					textDateTerm.Text=PlanCur.DateTerm.ToString("d");
 			}
-			FeeSchedsStandard=DefB.GetFeeSchedList("");
-			FeeSchedsCopay=DefB.GetFeeSchedList("C");
-			FeeSchedsAllowed=DefB.GetFeeSchedList("A");
+			FeeSchedsStandard=DefC.GetFeeSchedList("");
+			FeeSchedsCopay=DefC.GetFeeSchedList("C");
+			FeeSchedsAllowed=DefC.GetFeeSchedList("A");
 			Clearinghouse clearhouse=Clearinghouses.GetDefault();
 			if(clearhouse==null || clearhouse.CommBridge!=EclaimsCommBridge.ClaimConnect) {
 				butEligibility.Visible=false;
@@ -2463,9 +2463,9 @@ namespace OpenDental{
 			}
 			FillBenefits();
 			if(resetFeeSched){
-				FeeSchedsStandard=DefB.GetFeeSchedList("");
-				FeeSchedsCopay=DefB.GetFeeSchedList("C");
-				FeeSchedsAllowed=DefB.GetFeeSchedList("A");
+				FeeSchedsStandard=DefC.GetFeeSchedList("");
+				FeeSchedsCopay=DefC.GetFeeSchedList("C");
+				FeeSchedsAllowed=DefC.GetFeeSchedList("A");
 				//if managed care, then do it a bit differently
 				comboFeeSched.Items.Clear();
 				comboFeeSched.Items.Add(Lan.g(this,"none"));

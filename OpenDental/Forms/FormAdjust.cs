@@ -320,7 +320,7 @@ namespace OpenDental{
 			textDateEntry.Text=AdjustmentCur.DateEntry.ToShortDateString();
 			textAdjDate.Text=AdjustmentCur.AdjDate.ToShortDateString();
 			textProcDate.Text=AdjustmentCur.ProcDate.ToShortDateString();
-			if(DefB.GetValue(DefCat.AdjTypes,AdjustmentCur.AdjType)=="+"){//pos
+			if(DefC.GetValue(DefCat.AdjTypes,AdjustmentCur.AdjType)=="+"){//pos
 				textAmount.Text=AdjustmentCur.AdjAmt.ToString("F");
 			}
 			else{//neg
@@ -388,7 +388,7 @@ namespace OpenDental{
 				AdjustmentCur.AdjType
 					=DefC.Short[(int)DefCat.AdjTypes][(int)NegIndex[listTypeNeg.SelectedIndex]].DefNum;
 			}
-			if(DefB.GetValue(DefCat.AdjTypes,AdjustmentCur.AdjType)=="+"){//pos
+			if(DefC.GetValue(DefCat.AdjTypes,AdjustmentCur.AdjType)=="+"){//pos
 				AdjustmentCur.AdjAmt=PIn.PDouble(textAmount.Text);
 			}
 			else{//neg

@@ -1114,7 +1114,7 @@ namespace OpenDental{
 						break;
 					}
 				}
-				listConfirmed.SelectedIndex=DefB.GetOrder(DefCat.ApptConfirmed,aptconfirmed);//could be -1
+				listConfirmed.SelectedIndex=DefC.GetOrder(DefCat.ApptConfirmed,aptconfirmed);//could be -1
 			}
 			else {
 				listConfirmed.SelectedIndex=-1;

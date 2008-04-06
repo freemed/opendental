@@ -114,7 +114,7 @@ namespace OpenDentBusiness {
 				else {
 					row["description"]=rawProcs.Rows[i]["LaymanTerm"].ToString();
 				}
-				row["dx"]=DefB.GetValue(DefCat.Diagnosis,PIn.PInt(rawProcs.Rows[i]["Dx"].ToString()));
+				row["dx"]=DefC.GetValue(DefCat.Diagnosis,PIn.PInt(rawProcs.Rows[i]["Dx"].ToString()));
 				row["Dx"]=rawProcs.Rows[i]["Dx"].ToString();
 				row["EmailMessageNum"]=0;
 				row["LabCaseNum"]=0;
@@ -211,7 +211,7 @@ namespace OpenDentBusiness {
 					txt="("+rawComm.Rows[i]["FName"].ToString()+") ";
 				}
 				row["description"]=txt+Lan.g("ChartModule","Comm - ")
-					+DefB.GetName(DefCat.CommLogTypes,PIn.PInt(rawComm.Rows[i]["CommType"].ToString()));
+					+DefC.GetName(DefCat.CommLogTypes,PIn.PInt(rawComm.Rows[i]["CommType"].ToString()));
 				row["EmailMessageNum"]=0;
 				row["LabCaseNum"]=0;
 				row["note"]=rawComm.Rows[i]["Note"].ToString();

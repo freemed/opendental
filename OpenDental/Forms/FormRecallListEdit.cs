@@ -545,7 +545,7 @@ namespace OpenDental{
 			ProcList=Procedures.Refresh(PatCur.PatNum);
 			Text="Recall for "+PatCur.GetNameLF();
 			textCreditType.Text=PatCur.CreditType;
-			textBillingType.Text=DefB.GetName(DefCat.BillingTypes,PatCur.BillingType);
+			textBillingType.Text=DefC.GetName(DefCat.BillingTypes,PatCur.BillingType);
 			//textPriIns.Text=InsPlans.GetDescript(PatCur.PriPlanNum,FamCur,PlanList);
       textHmPhone.Text=PatCur.HmPhone;
 			textWkPhone.Text=PatCur.WkPhone;
@@ -680,7 +680,7 @@ namespace OpenDental{
 						if(newStatus==0)
 							CommlogCur.Note+=Lan.g(this,"Status None");
 						else
-							CommlogCur.Note+=DefB.GetName(DefCat.RecallUnschedStatus,newStatus);
+							CommlogCur.Note+=DefC.GetName(DefCat.RecallUnschedStatus,newStatus);
 						if(RecallCur.Note=="" && textNote.Text!="")
 							CommlogCur.Note+=", ";
 					}

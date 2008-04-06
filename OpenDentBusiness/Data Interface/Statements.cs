@@ -107,7 +107,7 @@ namespace OpenDentBusiness{
 				payPlanDue=PIn.PDouble(rawTable.Rows[i]["PayPlanDue"].ToString());
 				row["amountDue"]=(balTotal-insEst).ToString("F");
 				row["balTotal"]=balTotal.ToString("F");;
-				row["billingType"]=DefB.GetName(DefCat.BillingTypes,PIn.PInt(rawTable.Rows[i]["BillingType"].ToString()));
+				row["billingType"]=DefC.GetName(DefCat.BillingTypes,PIn.PInt(rawTable.Rows[i]["BillingType"].ToString()));
 				if(insEst==0){
 					row["insEst"]="";
 				}

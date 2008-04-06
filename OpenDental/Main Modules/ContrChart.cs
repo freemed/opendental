@@ -2998,7 +2998,7 @@ namespace OpenDental{
 			//Billing type
 			row=new ODGridRow();
 			row.Cells.Add(Lan.g("TableChartPtInfo","Billing Type"));
-			row.Cells.Add(DefB.GetName(DefCat.BillingTypes,PatCur.BillingType));
+			row.Cells.Add(DefC.GetName(DefCat.BillingTypes,PatCur.BillingType));
 			row.Tag=null;
 			gridPtInfo.Rows.Add(row);
 			//Referral
@@ -3839,7 +3839,7 @@ namespace OpenDental{
 			notAvailFormat.Alignment=StringAlignment.Center;
 			notAvailFormat.LineAlignment=StringAlignment.Center;
 			for(int i=0;i<DocumentList.Length;i++){
-				if(!visImageCats.Contains(DefB.GetOrder(DefCat.ImageCats,DocumentList[i].DocCategory))){
+				if(!visImageCats.Contains(DefC.GetOrder(DefCat.ImageCats,DocumentList[i].DocCategory))){
 					continue;//if category not visible, continue
 				}
 				if(tabControlImages.SelectedIndex>0){//any category except 'all'

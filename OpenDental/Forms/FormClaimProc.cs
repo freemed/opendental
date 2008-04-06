@@ -1530,7 +1530,7 @@ namespace OpenDental
 			else if(plan.PlanType=="p") {
 				feeSched=plan.FeeSched;
 			}
-			int feeOrder=DefB.GetOrder(DefCat.FeeSchedNames,feeSched);
+			int feeOrder=DefC.GetOrder(DefCat.FeeSchedNames,feeSched);
 			if(feeOrder==-1){
 				MsgBox.Show(this,"Allowed fee schedule is hidden, so no changes can be made.");
 				return;

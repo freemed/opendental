@@ -686,7 +686,7 @@ namespace OpenDentBusiness{
 				r["WkPhone"]=table.Rows[i]["WkPhone"].ToString();
 				r["Address"]=table.Rows[i]["Address"].ToString();
 				r["PatStatus"]=((PatientStatus)PIn.PInt(table.Rows[i]["PatStatus"].ToString())).ToString();
-				r["BillingType"]=DefB.GetName(DefCat.BillingTypes,PIn.PInt(table.Rows[i]["BillingType"].ToString()));
+				r["BillingType"]=DefC.GetName(DefCat.BillingTypes,PIn.PInt(table.Rows[i]["BillingType"].ToString()));
 				r["ChartNumber"]=table.Rows[i]["ChartNumber"].ToString();
 				r["City"]=table.Rows[i]["City"].ToString();
 				r["State"]=table.Rows[i]["State"].ToString();

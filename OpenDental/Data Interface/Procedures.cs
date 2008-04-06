@@ -1388,7 +1388,7 @@ namespace OpenDental{
 				if(y.Priority==0){
 					return -1;//x is less than y. Priorities always come first.
 				}
-				return DefB.GetOrder(DefCat.TxPriorities,x.Priority).CompareTo(DefB.GetOrder(DefCat.TxPriorities,y.Priority));
+				return DefC.GetOrder(DefCat.TxPriorities,x.Priority).CompareTo(DefC.GetOrder(DefCat.TxPriorities,y.Priority));
 			}
 			//priorities are the same, so sort by toothrange
 			if(x.ToothRange != y.ToothRange){

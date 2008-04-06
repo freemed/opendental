@@ -524,7 +524,7 @@ namespace OpenDental{
 				row=new OpenDental.UI.ODGridRow();
 				row.Cells.Add(PatPayList[i].PayDate.ToShortDateString());
 				row.Cells.Add(Patients.GetOnePat(pats,PatPayList[i].PatNum).GetNameLF());
-				row.Cells.Add(DefB.GetName(DefCat.PaymentTypes,PatPayList[i].PayType));
+				row.Cells.Add(DefC.GetName(DefCat.PaymentTypes,PatPayList[i].PayType));
 				row.Cells.Add(PatPayList[i].CheckNum);
 				row.Cells.Add(PatPayList[i].BankBranch);
 				row.Cells.Add(PatPayList[i].PayAmt.ToString("F"));

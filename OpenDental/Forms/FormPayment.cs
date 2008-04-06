@@ -1015,7 +1015,7 @@ namespace OpenDental{
 			}
 			ProgramProperty prop=(ProgramProperty)ProgramProperties.GetForProgram(prog.ProgramNum)[0];
 			//still need to add functionality for accountingAutoPay
-			listPayType.SelectedIndex=DefB.GetOrder(DefCat.PaymentTypes,PIn.PInt(prop.PropertyValue));
+			listPayType.SelectedIndex=DefC.GetOrder(DefCat.PaymentTypes,PIn.PInt(prop.PropertyValue));
 			SetComboDepositAccounts();
 			/*XCharge.exe [/TRANSACTIONTYPE:type] [/AMOUNT:amount] [/ACCOUNT:account] [/EXP:exp]
 				[“/TRACK:track”] [/ZIP:zip] [/ADDRESS:address] [/RECEIPT:receipt] [/CLERK:clerk]

@@ -343,10 +343,10 @@ namespace OpenDental{
 				AND definition.IsHidden=0
 				AND procedurecode.ProcCat=definition.DefNum";
 			table=General.GetTable(command);
-			int catNum=DefB.GetByExactName(DefCat.ProcCodeCats,"Obsolete");//check to make sure an Obsolete category exists.
+			int catNum=DefC.GetByExactName(DefCat.ProcCodeCats,"Obsolete");//check to make sure an Obsolete category exists.
 			Def def;
 			if(catNum!=0) {//if a category exists with that name
-				def=DefB.GetDef(DefCat.ProcCodeCats,catNum);
+				def=DefC.GetDef(DefCat.ProcCodeCats,catNum);
 				if(!def.IsHidden) {
 					def.IsHidden=true;
 					DefD.Update(def);
@@ -370,9 +370,9 @@ namespace OpenDental{
 			}
 			//finally, set Never Used category to be hidden.  This isn't really part of clearing Tcodes, but is required
 			//because many customers won't have that category hidden
-			catNum=DefB.GetByExactName(DefCat.ProcCodeCats,"Never Used");
+			catNum=DefC.GetByExactName(DefCat.ProcCodeCats,"Never Used");
 			if(catNum!=0) {//if a category exists with that name
-				def=DefB.GetDef(DefCat.ProcCodeCats,catNum);
+				def=DefC.GetDef(DefCat.ProcCodeCats,catNum);
 				if(!def.IsHidden) {
 					def.IsHidden=true;
 					DefD.Update(def);

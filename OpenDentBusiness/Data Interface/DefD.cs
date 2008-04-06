@@ -6,6 +6,54 @@ using System.Text;
 
 namespace OpenDentBusiness {
 	public class DefD {
+		///<summary>If using remoting, then the calling program is responsible for filling the arrays on the client since the automated part only happens on the server.  So there are TWO sets of arrays in a server situation, but only one in a small office that connects directly to the database.</summary>
+		public static DataSet Refresh(){
+			string command="SELECT * FROM definition ORDER BY Category,ItemOrder";
+			DataConnection dcon=new DataConnection();
+			DataTable table=dcon.GetTable(command);
+			DataSet retVal=new DataSet();
+			retVal.Tables.Add(table);
+			FillArrays(table);
+			return retVal;
+		}
+
+		///<summary>Used by the refresh method above.</summary>
+		private static Def[] GetForCategory(int catIndex,bool includeHidden,DataTable table) {
+			List<Def> list=new List<Def>();
+			Def def;
+			for(int i=0;i<table.Rows.Count;i++) {
+				if(PIn.PInt(table.Rows[i][1].ToString())!=catIndex) {
+					continue;
+				}
+				if(PIn.PBool(table.Rows[i][6].ToString())//if is hidden
+					&& !includeHidden)//and we don't want to include hidden
+				{
+					continue;
+				}
+				def=new Def();
+				def.DefNum    = PIn.PInt(table.Rows[i][0].ToString());
+				def.Category  = (DefCat)PIn.PInt(table.Rows[i][1].ToString());
+				def.ItemOrder = PIn.PInt(table.Rows[i][2].ToString());
+				def.ItemName  = PIn.PString(table.Rows[i][3].ToString());
+				def.ItemValue = PIn.PString(table.Rows[i][4].ToString());
+				def.ItemColor = Color.FromArgb(PIn.PInt(table.Rows[i][5].ToString()));
+				def.IsHidden  = PIn.PBool(table.Rows[i][6].ToString());
+				list.Add(def);
+			}
+			return list.ToArray();
+		}
+
+		public static void FillArrays(DataTable table){
+			DefC.Long=new Def[Enum.GetValues(typeof(DefCat)).Length][];
+			for(int j=0;j<Enum.GetValues(typeof(DefCat)).Length;j++) {
+				DefC.Long[j]=GetForCategory(j,true,table);
+			}
+			DefC.Short=new Def[Enum.GetValues(typeof(DefCat)).Length][];
+			for(int j=0;j<Enum.GetValues(typeof(DefCat)).Length;j++) {
+				DefC.Short[j]=GetForCategory(j,false,table);
+			}
+		}
+
 		///<summary>Only used in FormDefinitions</summary>
 		public static Def[] GetCatList(int myCat){
 			string command=

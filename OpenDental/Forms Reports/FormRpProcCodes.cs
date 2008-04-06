@@ -176,7 +176,7 @@ namespace OpenDental{
 				Queries.CurReport.Title="Procedure Codes";
 				Queries.CurReport.SubTitle=new string[2];
 				Queries.CurReport.SubTitle[0]=((Pref)PrefC.HList["PracticeTitle"]).ValueString;
-				Queries.CurReport.SubTitle[1]=DefB.GetName(DefCat.FeeSchedNames,feeSched);
+				Queries.CurReport.SubTitle[1]=DefC.GetName(DefCat.FeeSchedNames,feeSched);
 				Queries.CurReport.ColPos=new int[6];
 				Queries.CurReport.ColCaption=new string[5];
 				Queries.CurReport.ColAlign=new HorizontalAlignment[5];
@@ -206,7 +206,7 @@ namespace OpenDental{
 			  }
 				Queries.CurReport.ColTotal=new double[Queries.TableQ.Columns.Count];
         DataRow row=Queries.TableQ.NewRow();//add first row by hand to get value for temp
-				row[0]=DefB.GetName(DefCat.ProcCodeCats,ProcList[0].ProcCat);
+				row[0]=DefC.GetName(DefCat.ProcCodeCats,ProcList[0].ProcCat);
 				catName=row[0].ToString();
 				row[1]=ProcList[0].ProcCode;
 				row[2]=ProcList[0].Descript;
@@ -216,7 +216,7 @@ namespace OpenDental{
 				Queries.TableQ.Rows.Add(row);
 				for(int i=1;i<ProcList.Length;i++){//loop through data rows
 					row=Queries.TableQ.NewRow();//create new row called 'row' based on structure of TableQ
-					row[0]=DefB.GetName(DefCat.ProcCodeCats,ProcList[i].ProcCat);
+					row[0]=DefC.GetName(DefCat.ProcCodeCats,ProcList[i].ProcCat);
 					if(catName==row[0].ToString()){
             row[0]=""; 
 					}
@@ -240,7 +240,7 @@ namespace OpenDental{
 				Queries.CurReport.Title="Procedure Codes";
 				Queries.CurReport.SubTitle=new string[5];
 				Queries.CurReport.SubTitle[0]=((Pref)PrefC.HList["PracticeTitle"]).ValueString;
-				Queries.CurReport.SubTitle[1]=DefB.GetName(DefCat.FeeSchedNames,feeSched);
+				Queries.CurReport.SubTitle[1]=DefC.GetName(DefCat.FeeSchedNames,feeSched);
 				Queries.CurReport.ColPos[0]=20;
 				Queries.CurReport.ColPos[1]=120;
 				Queries.CurReport.ColPos[2]=270;

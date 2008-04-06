@@ -391,9 +391,9 @@ namespace OpenDental{
 			RectangleF rect;
 			//g.TextRenderingHint=TextRenderingHint.SingleBitPerPixelGridFit;//to make printing clearer
 			for(int i=0;i<schedForType.Length;i++){	
-				blockBrush=new SolidBrush(DefB.GetColor(DefCat.BlockoutTypes,schedForType[i].BlockoutType));
-				penOutline = new Pen(DefB.GetColor(DefCat.BlockoutTypes, schedForType[i].BlockoutType),2);
-				blockText=DefB.GetName(DefCat.BlockoutTypes,schedForType[i].BlockoutType)+"\r\n"+schedForType[i].Note;
+				blockBrush=new SolidBrush(DefC.GetColor(DefCat.BlockoutTypes,schedForType[i].BlockoutType));
+				penOutline = new Pen(DefC.GetColor(DefCat.BlockoutTypes, schedForType[i].BlockoutType),2);
+				blockText=DefC.GetName(DefCat.BlockoutTypes,schedForType[i].BlockoutType)+"\r\n"+schedForType[i].Note;
 				if(IsWeeklyView){
 					if(schedForType[i].Op==0) {//all ops
 						rect=new RectangleF(

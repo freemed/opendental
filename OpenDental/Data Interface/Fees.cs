@@ -28,14 +28,14 @@ namespace OpenDental{
 				//fee.UseDefaultFee=PIn.PBool(table.Rows[i][4].ToString());
 				//fee.UseDefaultCov=PIn.PBool(table.Rows[i][5].ToString());
 				fee.CodeNum      =PIn.PInt(table.Rows[i][6].ToString());
-				if(DefB.GetOrder(DefCat.FeeSchedNames,fee.FeeSched)!=-1) {//if fee sched is visible
-					if(HList[DefB.GetOrder(DefCat.FeeSchedNames,fee.FeeSched)].ContainsKey(fee.CodeNum)) {
+				if(DefC.GetOrder(DefCat.FeeSchedNames,fee.FeeSched)!=-1) {//if fee sched is visible
+					if(HList[DefC.GetOrder(DefCat.FeeSchedNames,fee.FeeSched)].ContainsKey(fee.CodeNum)) {
 						//if fee was already loaded for this code, delete this duplicate.
 						command="DELETE FROM fee WHERE feenum = '"+fee.FeeNum+"'";
 						General.NonQ(command);
 					}
 					else {
-						HList[DefB.GetOrder(DefCat.FeeSchedNames,fee.FeeSched)].Add(fee.CodeNum,fee);
+						HList[DefC.GetOrder(DefCat.FeeSchedNames,fee.FeeSched)].Add(fee.CodeNum,fee);
 					}
 				}
 			}
@@ -89,7 +89,7 @@ namespace OpenDental{
 				return -1;
 			if(feeSched==0)
 				return -1;
-			int i=DefB.GetOrder(DefCat.FeeSchedNames,feeSched);
+			int i=DefC.GetOrder(DefCat.FeeSchedNames,feeSched);
 			if(i==-1){
 				return -1;//you cannot obtain fees for hidden fee schedules
 			}
@@ -201,7 +201,7 @@ namespace OpenDental{
 		///<summary>If the named fee schedule does not exist, then it will be created.  It always returns the defnum for the feesched used, regardless of whether it already existed.  procCode must have already been tested for valid code, and feeSchedName must not be blank.</summary>
 		public static int ImportTrojan(string procCode,double amt,string feeSchedName){
 			Def def;
-			int feeSched=DefB.GetByExactName(DefCat.FeeSchedNames,feeSchedName);
+			int feeSched=DefC.GetByExactName(DefCat.FeeSchedNames,feeSchedName);
 			//if isManaged, then this should be done differently from here on out.
 			if(feeSched==0){
 				//add the new fee schedule
@@ -216,7 +216,7 @@ namespace OpenDental{
 				DataValid.SetInvalid(InvalidTypes.Defs | InvalidTypes.Fees);
 			}
 			else{
-				def=DefB.GetDef(DefCat.FeeSchedNames,feeSched);
+				def=DefC.GetDef(DefCat.FeeSchedNames,feeSched);
 			}
 			if(def.IsHidden){//if the fee schedule is hidden
 				def.IsHidden=false;//unhide it
@@ -224,7 +224,7 @@ namespace OpenDental{
 				Defs.RefreshClient();
 				DataValid.SetInvalid(InvalidTypes.Defs);
 			}
-			Fee fee=GetFeeByOrder(ProcedureCodes.GetCodeNum(procCode),DefB.GetOrder(DefCat.FeeSchedNames,def.DefNum));
+			Fee fee=GetFeeByOrder(ProcedureCodes.GetCodeNum(procCode),DefC.GetOrder(DefCat.FeeSchedNames,def.DefNum));
 			if(fee==null) {
 				fee=new Fee();
 				fee.Amount=amt;

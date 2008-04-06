@@ -504,7 +504,7 @@ namespace OpenDental{
 			if(radioPenny.Checked){
 				round=2;
 			}
-			Fees.Increase(DefB.GetOrder(DefCat.FeeSchedNames,SchedNum),percent,round);
+			Fees.Increase(DefC.GetOrder(DefCat.FeeSchedNames,SchedNum),percent,round);
 			DialogResult=DialogResult.OK;
 		}
 
@@ -516,7 +516,7 @@ namespace OpenDental{
 			}else if(Directory.Exists("C:\\")){
 				Dlg.InitialDirectory="C:\\";
 			}
-			Dlg.FileName="Fees"+DefB.GetName(DefCat.FeeSchedNames,SchedNum)+".txt";
+			Dlg.FileName="Fees"+DefC.GetName(DefCat.FeeSchedNames,SchedNum)+".txt";
 			if(Dlg.ShowDialog()!=DialogResult.OK){
 				Cursor=Cursors.Default;
 				return;
@@ -564,7 +564,7 @@ namespace OpenDental{
 			}
 			string[] fields;
 			double fee;
-			int schedI=DefB.GetOrder(DefCat.FeeSchedNames,SchedNum);
+			int schedI=DefC.GetOrder(DefCat.FeeSchedNames,SchedNum);
 			using(StreamReader sr=new StreamReader(Dlg.FileName)){
 				string line=sr.ReadLine();
 				while(line!=null){

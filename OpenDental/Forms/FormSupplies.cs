@@ -60,7 +60,7 @@ namespace OpenDental {
 			for(int i=0;i<listSupply.Count;i++) {
 				row=new ODGridRow();
 				if(i==0 || listSupply[i].Category!=listSupply[i-1].Category) {
-					row.Cells.Add(DefB.GetName(DefCat.SupplyCats,listSupply[i].Category));
+					row.Cells.Add(DefC.GetName(DefCat.SupplyCats,listSupply[i].Category));
 				}
 				else {
 					row.Cells.Add("");

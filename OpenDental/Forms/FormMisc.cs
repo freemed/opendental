@@ -1163,7 +1163,7 @@ namespace OpenDental{
 			textBoxStationary.Text = PrefC.GetString("StationaryDocument");
 			checkApptBubbleDelay.Checked = PrefC.GetBool("ApptBubbleDelay");
 			checkAppointmentBubblesDisabled.Checked=PrefC.GetBool("AppointmentBubblesDisabled");
-			posAdjTypes=DefB.GetPositiveAdjTypes();
+			posAdjTypes=DefC.GetPositiveAdjTypes();
 			for(int i=0;i<posAdjTypes.Count;i++){
 				comboFinanceChargeAdjType.Items.Add(posAdjTypes[i].ItemName);
 				if(PrefC.GetInt("FinanceChargeAdjustmentType")==posAdjTypes[i].DefNum){

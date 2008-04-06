@@ -140,7 +140,7 @@ namespace OpenDental{
 				interv=new Interval(PIn.PInt(rawtable.Rows[i]["RecallInterval"].ToString()));
 				row["recallInterval"]=interv.ToString();
 				row["RecallNum"]=rawtable.Rows[i]["RecallNum"].ToString();
-				row["status"]=DefB.GetName(DefCat.RecallUnschedStatus,PIn.PInt(rawtable.Rows[i]["RecallStatus"].ToString()));
+				row["status"]=DefC.GetName(DefCat.RecallUnschedStatus,PIn.PInt(rawtable.Rows[i]["RecallStatus"].ToString()));
 				rows.Add(row);
 			}
 			//Array.Sort(orderDate,RecallList);

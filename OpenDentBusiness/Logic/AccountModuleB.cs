@@ -163,7 +163,7 @@ namespace OpenDentBusiness {
 				dateT=PIn.PDateT(rawPay.Rows[i]["ProcDate"].ToString());
 				row["DateTime"]=dateT;
 				row["date"]=dateT.ToShortDateString();
-				row["description"]=DefB.GetName(DefCat.PaymentTypes,PIn.PInt(rawPay.Rows[i]["PayType"].ToString()));
+				row["description"]=DefC.GetName(DefCat.PaymentTypes,PIn.PInt(rawPay.Rows[i]["PayType"].ToString()));
 				if(rawPay.Rows[i]["CheckNum"].ToString()!=""){
 					row["description"]+=" #"+rawPay.Rows[i]["CheckNum"].ToString();
 				}
@@ -282,7 +282,7 @@ namespace OpenDentBusiness {
 					row["commTime"]=dateT.ToString("h:mm")+dateT.ToString("%t").ToLower();
 				}
 				row["CommlogNum"]=rawComm.Rows[i]["CommlogNum"].ToString();
-				row["commType"]=DefB.GetName(DefCat.CommLogTypes,PIn.PInt(rawComm.Rows[i]["CommType"].ToString()));
+				row["commType"]=DefC.GetName(DefCat.CommLogTypes,PIn.PInt(rawComm.Rows[i]["CommType"].ToString()));
 				row["EmailMessageNum"]="0";
 				row["FormPatNum"]="0";
 				if(rawComm.Rows[i]["Mode_"].ToString()!="0"){//anything except none
@@ -580,7 +580,7 @@ namespace OpenDentBusiness {
 				dateT=PIn.PDateT(rawAdj.Rows[i]["AdjDate"].ToString());
 				row["DateTime"]=dateT;
 				row["date"]=dateT.ToShortDateString();
-				row["description"]=DefB.GetName(DefCat.AdjTypes,PIn.PInt(rawAdj.Rows[i]["AdjType"].ToString()));
+				row["description"]=DefC.GetName(DefCat.AdjTypes,PIn.PInt(rawAdj.Rows[i]["AdjType"].ToString()));
 				row["extraDetail"] = rawAdj.Rows[i]["AdjNote"].ToString();
 				row["patient"]=fam.GetNameInFamFirst(PIn.PInt(rawAdj.Rows[i]["PatNum"].ToString()));
 				row["PatNum"]=rawAdj.Rows[i]["PatNum"].ToString();
@@ -631,7 +631,7 @@ namespace OpenDentBusiness {
 				dateT=PIn.PDateT(rawPay.Rows[i]["ProcDate"].ToString());
 				row["DateTime"]=dateT;
 				row["date"]=dateT.ToShortDateString();
-				row["description"]=DefB.GetName(DefCat.PaymentTypes,PIn.PInt(rawPay.Rows[i]["PayType"].ToString()));
+				row["description"]=DefC.GetName(DefCat.PaymentTypes,PIn.PInt(rawPay.Rows[i]["PayType"].ToString()));
 				if(rawPay.Rows[i]["CheckNum"].ToString()!=""){
 					row["description"]+=" #"+rawPay.Rows[i]["CheckNum"].ToString();
 				}

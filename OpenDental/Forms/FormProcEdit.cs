@@ -2277,7 +2277,7 @@ namespace OpenDental{
 				tbAdj.Cell[0,i]=((Adjustment)AdjustmentsForProc[i]).AdjDate.ToShortDateString();
 				tbAdj.Cell[1,i]=((Adjustment)AdjustmentsForProc[i]).AdjAmt.ToString("F");
 				tbAdj.FontBold[1,i]=true;
-				tbAdj.Cell[2,i]=DefB.GetName(DefCat.AdjTypes,((Adjustment)AdjustmentsForProc[i]).AdjType);
+				tbAdj.Cell[2,i]=DefC.GetName(DefCat.AdjTypes,((Adjustment)AdjustmentsForProc[i]).AdjType);
 				tbAdj.Cell[3,i]=((Adjustment)AdjustmentsForProc[i]).AdjNote;
 			}
 			tbAdj.SetGridColor(Color.LightGray);

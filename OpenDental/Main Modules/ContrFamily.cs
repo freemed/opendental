@@ -634,7 +634,7 @@ namespace OpenDental{
 			//Billing Type
 			row=new ODGridRow();
 			row.Cells.Add(Lan.g("TablePatient","Billing Type"));
-			row.Cells.Add(DefB.GetName(DefCat.BillingTypes,PatCur.BillingType));
+			row.Cells.Add(DefC.GetName(DefCat.BillingTypes,PatCur.BillingType));
 			gridPat.Rows.Add(row);
 			//Ward
 			if(!PrefC.GetBool("EasyHideHospitals")){
@@ -1195,7 +1195,7 @@ namespace OpenDental{
 			row=new ODGridRow();
 			row.Cells.Add(Lan.g("TableCoverage","Fee Schedule"));
 			for(int i=0;i<planArray.Length;i++) {
-				row.Cells.Add(DefB.GetName(DefCat.FeeSchedNames,planArray[i].FeeSched));
+				row.Cells.Add(DefC.GetName(DefCat.FeeSchedNames,planArray[i].FeeSched));
 			}
 			row.ColorLborder=Color.Black;
 			gridIns.Rows.Add(row);

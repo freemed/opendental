@@ -893,7 +893,7 @@ namespace OpenDental{
 
 		///<summary>Gets the document category of the current selection. The current selection can be a folder itself, or a document within a folder.</summary>
 		private int GetCurrentCategory() {
-			return DefB.GetByExactName(DefCat.ImageCats,GetCurrentFolderName(TreeDocuments.SelectedNode));
+			return DefC.GetByExactName(DefCat.ImageCats,GetCurrentFolderName(TreeDocuments.SelectedNode));
 		}
 
 		///<summary>Returns the current tree node with the given node id.</summary>

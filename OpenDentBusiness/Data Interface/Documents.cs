@@ -379,7 +379,7 @@ namespace OpenDentBusiness {
 			raw=dcon.GetTable(command);
 			for(int i=0;i<raw.Rows.Count;i++){
 				//Make sure hidden documents are never added (there is a small possibility that one is added after all are made visible).
-				if(DefB.GetOrder(DefCat.ImageCats,PIn.PInt(raw.Rows[i]["DocCategory"].ToString()))<0){ 
+				if(DefC.GetOrder(DefCat.ImageCats,PIn.PInt(raw.Rows[i]["DocCategory"].ToString()))<0){ 
 					continue;
 				}
 				//Do not add individual documents which are part of a mount object.
@@ -391,7 +391,7 @@ namespace OpenDentBusiness {
 				row["MountNum"]=0;
 				row["DocCategory"]=PIn.PInt(raw.Rows[i]["DocCategory"].ToString());
 				row["DateCreated"]=PIn.PDate(raw.Rows[i]["DateCreated"].ToString());
-				row["docFolder"]=DefB.GetOrder(DefCat.ImageCats,PIn.PInt(raw.Rows[i]["DocCategory"].ToString()));
+				row["docFolder"]=DefC.GetOrder(DefCat.ImageCats,PIn.PInt(raw.Rows[i]["DocCategory"].ToString()));
 				row["description"]=PIn.PDate(raw.Rows[i]["DateCreated"].ToString()).ToString("d")+": "
 					+PIn.PString(raw.Rows[i]["Description"].ToString());
 				row["ImgType"]=PIn.PInt(raw.Rows[i]["ImgType"].ToString());
@@ -418,7 +418,7 @@ namespace OpenDentBusiness {
 			raw=dcon.GetTable(command);
 			for(int i=0;i<raw.Rows.Count;i++){
 				//Make sure hidden mounts are never added (there is a small possibility that one is added after all are made visible).
-				if(DefB.GetOrder(DefCat.ImageCats,PIn.PInt(raw.Rows[i]["DocCategory"].ToString()))<0) {
+				if(DefC.GetOrder(DefCat.ImageCats,PIn.PInt(raw.Rows[i]["DocCategory"].ToString()))<0) {
 					continue;
 				}
 				row=table.NewRow();
@@ -426,7 +426,7 @@ namespace OpenDentBusiness {
 				row["MountNum"]=PIn.PInt(raw.Rows[i]["MountNum"].ToString());
 				row["DocCategory"]=PIn.PInt(raw.Rows[i]["DocCategory"].ToString());
 				row["DateCreated"]=PIn.PDate(raw.Rows[i]["DateCreated"].ToString());
-				row["docFolder"]=DefB.GetOrder(DefCat.ImageCats,PIn.PInt(raw.Rows[i]["DocCategory"].ToString()));
+				row["docFolder"]=DefC.GetOrder(DefCat.ImageCats,PIn.PInt(raw.Rows[i]["DocCategory"].ToString()));
 				row["description"]=PIn.PDate(raw.Rows[i]["DateCreated"].ToString()).ToString("d")+": "
 					+PIn.PString(raw.Rows[i]["Description"].ToString());
 				row["ImgType"]=PIn.PInt(raw.Rows[i]["ImgType"].ToString());

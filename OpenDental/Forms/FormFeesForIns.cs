@@ -265,7 +265,7 @@ namespace OpenDental{
 			comboFeeSchedWithout.SelectedIndex=0;
 			comboFeeSchedWith.SelectedIndex=0;
 			comboFeeSchedNew.SelectedIndex=0;
-			FeeSchedsStandard=DefB.GetFeeSchedList("");
+			FeeSchedsStandard=DefC.GetFeeSchedList("");
 			for(int i=0;i<FeeSchedsStandard.Length;i++){
 				comboFeeSchedWithout.Items.Add(FeeSchedsStandard[i].ItemName);
 				comboFeeSchedWith.Items.Add(FeeSchedsStandard[i].ItemName);

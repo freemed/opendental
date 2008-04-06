@@ -611,7 +611,7 @@ namespace OpenDental{
 			for(int i=0;i<ProcTable.Rows.Count;i++){
 				row=new ODGridRow();
 				if(i==0 || ProcTable.Rows[i-1]["ProcCat"].ToString() != ProcTable.Rows[i]["ProcCat"].ToString()){
-					row.Cells.Add(DefB.GetName(DefCat.ProcCodeCats,PIn.PInt(ProcTable.Rows[i]["ProcCat"].ToString())));
+					row.Cells.Add(DefC.GetName(DefCat.ProcCodeCats,PIn.PInt(ProcTable.Rows[i]["ProcCat"].ToString())));
 				}
 				else{
 					row.Cells.Add("");
@@ -835,7 +835,7 @@ namespace OpenDental{
 				if(ProcedureCodes.HList.ContainsKey(listCodes[i].ProcCode)) {
 					continue;//don't import duplicates.
 				}
-				listCodes[i].ProcCat=DefB.GetByExactName(DefCat.ProcCodeCats,listCodes[i].ProcCatDescript);
+				listCodes[i].ProcCat=DefC.GetByExactName(DefCat.ProcCodeCats,listCodes[i].ProcCatDescript);
 				if(listCodes[i].ProcCat==0) {//no category exists with that name
 					Def def=new Def();
 					def.Category=DefCat.ProcCodeCats;
