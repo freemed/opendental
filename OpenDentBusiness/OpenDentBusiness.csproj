@@ -75,6 +75,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Cache\aaCache.cs" />
+    <Compile Include="Cache\EnumRemotingRole.cs" />
     <Compile Include="ClientSL.cs" />
     <Compile Include="Data Interface\aaDataInterface.cs" />
     <Compile Include="Data Interface\Statements.cs" />
@@ -123,8 +125,6 @@
     <Compile Include="Enumerations.cs" />
     <Compile Include="Imaging\SqlStore.cs" />
     <Compile Include="Lan.cs" />
-    <Compile Include="LocalCache\EnumRemotingRole.cs" />
-    <Compile Include="LocalCache\aaCache.cs" />
     <Compile Include="Logic\aaLogic.cs" />
     <Compile Include="Logic\AccountModuleB.cs" />
     <Compile Include="Logic\AppointmentB.cs" />
