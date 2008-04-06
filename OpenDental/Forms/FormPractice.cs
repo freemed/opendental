@@ -569,13 +569,13 @@ namespace OpenDental{
 		#endregion
 
 		private void FormPractice_Load(object sender, System.EventArgs e) {
-			textPracticeTitle.Text=PrefB.GetString("PracticeTitle");
-			textAddress.Text=PrefB.GetString("PracticeAddress");
-			textAddress2.Text=PrefB.GetString("PracticeAddress2");
-			textCity.Text=PrefB.GetString("PracticeCity");
-			textST.Text=PrefB.GetString("PracticeST");
-			textZip.Text=PrefB.GetString("PracticeZip");
-			string phone=PrefB.GetString("PracticePhone");
+			textPracticeTitle.Text=PrefC.GetString("PracticeTitle");
+			textAddress.Text=PrefC.GetString("PracticeAddress");
+			textAddress2.Text=PrefC.GetString("PracticeAddress2");
+			textCity.Text=PrefC.GetString("PracticeCity");
+			textST.Text=PrefC.GetString("PracticeST");
+			textZip.Text=PrefC.GetString("PracticeZip");
+			string phone=PrefC.GetString("PracticePhone");
 			if(phone.Length==10 
 				&& (CultureInfo.CurrentCulture.Name=="en-US" || 
 				(CultureInfo.CurrentCulture.Name.Length>=4 && CultureInfo.CurrentCulture.Name.Substring(3)=="CA")))
@@ -585,16 +585,16 @@ namespace OpenDental{
 			else{
 				textPhone.Text=phone;
 			}
-			checkUseBillingAddressOnClaims.Checked=PrefB.GetBool("UseBillingAddressOnClaims");
-			textBillingAddress.Text=PrefB.GetString("PracticeBillingAddress");
-			textBillingAddress2.Text=PrefB.GetString("PracticeBillingAddress2");
-			textBillingCity.Text=PrefB.GetString("PracticeBillingCity");
-			textBillingST.Text=PrefB.GetString("PracticeBillingST");
-			textBillingZip.Text=PrefB.GetString("PracticeBillingZip");
-			textBankNumber.Text=PrefB.GetString("PracticeBankNumber");
+			checkUseBillingAddressOnClaims.Checked=PrefC.GetBool("UseBillingAddressOnClaims");
+			textBillingAddress.Text=PrefC.GetString("PracticeBillingAddress");
+			textBillingAddress2.Text=PrefC.GetString("PracticeBillingAddress2");
+			textBillingCity.Text=PrefC.GetString("PracticeBillingCity");
+			textBillingST.Text=PrefC.GetString("PracticeBillingST");
+			textBillingZip.Text=PrefC.GetString("PracticeBillingZip");
+			textBankNumber.Text=PrefC.GetString("PracticeBankNumber");
 			if(CultureInfo.CurrentCulture.Name.EndsWith("CH")) {//CH is for switzerland. eg de-CH
-				textBankRouting.Text=PrefB.GetString("BankRouting");
-				textBankAddress.Text=PrefB.GetString("BankAddress");
+				textBankRouting.Text=PrefC.GetString("BankRouting");
+				textBankAddress.Text=PrefC.GetString("BankAddress");
 			}
 			else {
 				groupSwiss.Visible=false;
@@ -602,17 +602,17 @@ namespace OpenDental{
 			listProvider.Items.Clear();
 			for(int i=0;i<Providers.List.Length;i++){
 				listProvider.Items.Add(Providers.List[i].Abbr);
-				if(Providers.List[i].ProvNum==PrefB.GetInt("PracticeDefaultProv")){
+				if(Providers.List[i].ProvNum==PrefC.GetInt("PracticeDefaultProv")){
 					listProvider.SelectedIndex=i;
 				}
 			}
 			listBillType.Items.Clear();
 			for(int i=0;i<DefC.Short[(int)DefCat.BillingTypes].Length;i++){
 				listBillType.Items.Add(DefC.Short[(int)DefCat.BillingTypes][i].ItemName);
-				if(DefC.Short[(int)DefCat.BillingTypes][i].DefNum==PrefB.GetInt("PracticeDefaultBillType"))
+				if(DefC.Short[(int)DefCat.BillingTypes][i].DefNum==PrefC.GetInt("PracticeDefaultBillType"))
 					listBillType.SelectedIndex=i;
 			}
-			if(PrefB.GetBool("EasyHidePublicHealth")){
+			if(PrefC.GetBool("EasyHidePublicHealth")){
 				labelPlaceService.Visible=false;
 				listPlaceService.Visible=false;
 			}
@@ -621,19 +621,19 @@ namespace OpenDental{
 				listPlaceService.Items.Add
 					(Lan.g("enumPlaceOfService",Enum.GetNames(typeof(PlaceOfService))[i]));
 			}
-			listPlaceService.SelectedIndex=PrefB.GetInt("DefaultProcedurePlaceService");
+			listPlaceService.SelectedIndex=PrefC.GetInt("DefaultProcedurePlaceService");
 			for(int i=0;i<Providers.List.Length;i++){
 				comboInsBillingProv.Items.Add(Providers.List[i].Abbr);
 			}
-			if(PrefB.GetInt("InsBillingProv")==0){
+			if(PrefC.GetInt("InsBillingProv")==0){
 				radioInsBillingProvDefault.Checked=true;//default=0
 			}
-			else if(PrefB.GetInt("InsBillingProv")==-1){
+			else if(PrefC.GetInt("InsBillingProv")==-1){
 				radioInsBillingProvTreat.Checked=true;//treat=-1
 			}
 			else{
 				radioInsBillingProvSpecific.Checked=true;//specific=any number >0. Foreign key to ProvNum
-				comboInsBillingProv.SelectedIndex=Providers.GetIndex(PrefB.GetInt("InsBillingProv"));
+				comboInsBillingProv.SelectedIndex=Providers.GetIndex(PrefC.GetInt("InsBillingProv"));
 			}
 		}
 

@@ -1692,7 +1692,7 @@ namespace OpenDental {
 
 			if (comboBoxSurgeon.SelectedIndex == -1)
 			{
-				int defaultindex = Providers.GetIndex(PrefB.GetInt("PriProv"));
+				int defaultindex = Providers.GetIndex(PrefC.GetInt("PriProv"));
 				if (defaultindex == -1)
 				{//default provider hidden
 					comboBoxSurgeon.SelectedIndex = 0;

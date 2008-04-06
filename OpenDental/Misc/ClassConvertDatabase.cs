@@ -29,7 +29,7 @@ namespace OpenDental{
 		public bool Convert(string fromVersion){
 			FromVersion=new Version(fromVersion);
 			ToVersion=new Version(Application.ProductVersion);
-			if(FromVersion>=new Version("3.4.0") && PrefB.GetBool("CorruptedDatabase")){
+			if(FromVersion>=new Version("3.4.0") && PrefC.GetBool("CorruptedDatabase")){
 				MsgBox.Show(this,"Your database is corrupted because a conversion failed.  Please contact us.  This database is unusable and you will need to restore from a backup.");
 				return false;//shuts program down.
 			}
@@ -3061,7 +3061,7 @@ namespace OpenDental{
 			if(FromVersion < new Version("4.3.3.0")) {
 				string command="INSERT INTO preference VALUES ('ReportFolderName','Reports')";
 				General.NonQEx(command);
-				string imagePath=PrefB.GetString("DocPath");
+				string imagePath=PrefC.GetString("DocPath");
 				string reportDir=ODFileUtils.CombinePaths(imagePath,"Reports");
 				if(!Directory.Exists(reportDir)) {
 					if(Directory.Exists(imagePath)) {
@@ -3251,14 +3251,14 @@ namespace OpenDental{
 					) DEFAULT CHARSET=utf8";
 				General.NonQEx(command);
 				//We never change previous conversion scripts to support new features.  This code gets skipped on Linux.
-				if(!Directory.Exists(PrefB.GetString("DocPath")+"EmailAttachments")) {
-					if(Directory.Exists(PrefB.GetString("DocPath"))) {
-						Directory.CreateDirectory(PrefB.GetString("DocPath")+"EmailAttachments");
+				if(!Directory.Exists(PrefC.GetString("DocPath")+"EmailAttachments")) {
+					if(Directory.Exists(PrefC.GetString("DocPath"))) {
+						Directory.CreateDirectory(PrefC.GetString("DocPath")+"EmailAttachments");
 					}
 				}
-				if(!Directory.Exists(PrefB.GetString("DocPath")+"Forms")) {
-					if(Directory.Exists(PrefB.GetString("DocPath"))) {
-						Directory.CreateDirectory(PrefB.GetString("DocPath")+"Forms");
+				if(!Directory.Exists(PrefC.GetString("DocPath")+"Forms")) {
+					if(Directory.Exists(PrefC.GetString("DocPath"))) {
+						Directory.CreateDirectory(PrefC.GetString("DocPath")+"Forms");
 					}
 				}
 				commands=new string[]
@@ -4138,7 +4138,7 @@ namespace OpenDental{
 		private void To4_8_1() {
 			if(FromVersion<new Version("4.8.1.0")) {
 				string command="";
-				int practiceDefaultProv=PrefB.GetInt("PracticeDefaultProv");
+				int practiceDefaultProv=PrefC.GetInt("PracticeDefaultProv");
 				if(DataConnection.DBtype==DatabaseType.MySql) {
 					//Turn all hardcoded clearinghouse fields into dynamic fields------------------------------------------------------
 					command="ALTER TABLE clearinghouse ADD ISA05 varchar(255) AFTER Eformat";
@@ -4178,10 +4178,10 @@ namespace OpenDental{
 					string AOSnumber=General.GetTableEx(command).Rows[0][0].ToString();
 					command="UPDATE clearinghouse SET SenderName='"+POut.PString(AOSnumber)+"' WHERE ISA08='AOS'";
 					General.NonQEx(command);
-					command="UPDATE clearinghouse SET SenderName='"+POut.PString(PrefB.GetString("PracticeTitle"))+"' "
+					command="UPDATE clearinghouse SET SenderName='"+POut.PString(PrefC.GetString("PracticeTitle"))+"' "
 						+"WHERE ISA08='660610220' OR ISA08='113504607'";//Inmediata or Tesia
 					General.NonQEx(command);
-					command="UPDATE clearinghouse SET SenderTelephone='"+POut.PString(PrefB.GetString("PracticePhone"))+"' "
+					command="UPDATE clearinghouse SET SenderTelephone='"+POut.PString(PrefC.GetString("PracticePhone"))+"' "
 						+"WHERE ISA08='660610220' OR ISA08='113504607' OR ISA08='AOS'";//Inmediata or Tesia or AOS
 					General.NonQEx(command);
 					command="UPDATE clearinghouse SET GS03=ISA08";
@@ -5082,7 +5082,7 @@ namespace OpenDental{
 				command="INSERT INTO preference VALUES('ScheduleProvUnassigned','1')";
 				General.NonQEx(command);
 				//this next one is hard to run manually and can be skipped by developers:
-				command="UPDATE preference Set ValueString= '"+PrefB.GetInt("PracticeDefaultProv").ToString()
+				command="UPDATE preference Set ValueString= '"+PrefC.GetInt("PracticeDefaultProv").ToString()
 					+"' WHERE PrefName='ScheduleProvUnassigned'";
 				General.NonQEx(command);
 				//added after r292
@@ -5323,7 +5323,7 @@ namespace OpenDental{
 				General.NonQEx(command);
 				command = "INSERT INTO preference VALUES('RecallFMXPanoYrInterval','5')";
 				General.NonQEx(command);
-				if ((((Pref)PrefB.HList["RecallBW"]).ValueString) == "") {
+				if ((((Pref)PrefC.HList["RecallBW"]).ValueString) == "") {
 					command = "INSERT INTO preference VALUES('RecallDisableAutoFilms','1')";
 				}
 				else {

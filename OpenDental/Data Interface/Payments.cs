@@ -146,16 +146,16 @@ namespace OpenDental{
 
 		///<summary>There's only one place in the program where this is called from.  Date is today, so no need to validate the date.</summary>
 		public static void Insert(Payment pay){
-			if(PrefB.RandomKeys){
+			if(PrefC.RandomKeys){
 				pay.PayNum=MiscData.GetKey("payment","PayNum");
 			}
 			string command= "INSERT INTO payment (";
-			if(PrefB.RandomKeys){
+			if(PrefC.RandomKeys){
 				command+="PayNum,";
 			}
 			command+="PayType,PayDate,PayAmt, "
 				+"CheckNum,BankBranch,PayNote,IsSplit,PatNum,ClinicNum,DateEntry,DepositNum) VALUES(";
-			if(PrefB.RandomKeys){
+			if(PrefC.RandomKeys){
 				command+="'"+POut.PInt(pay.PayNum)+"', ";
 			}
 			command+=
@@ -174,7 +174,7 @@ namespace OpenDental{
 				command+="NOW()";
 			}
 			command+=", '"+POut.PInt   (pay.DepositNum)+"')";
- 			if(PrefB.RandomKeys){
+ 			if(PrefC.RandomKeys){
 				General.NonQ(command);
 			}
 			else{
@@ -404,12 +404,12 @@ namespace OpenDental{
 					je.CreditAmt=absNew;
 				}
 				je.Memo=Lan.g("Payments","Payment -")+" "+patName;
-				je.Splits=Accounts.GetDescript(PrefB.GetInt("AccountingCashIncomeAccount"));
+				je.Splits=Accounts.GetDescript(PrefC.GetInt("AccountingCashIncomeAccount"));
 				je.TransactionNum=trans.TransactionNum;
 				JournalEntries.Insert(je);
 				//then, the income entry
 				je=new JournalEntry();
-				je.AccountNum=PrefB.GetInt("AccountingCashIncomeAccount");
+				je.AccountNum=PrefC.GetInt("AccountingCashIncomeAccount");
 				//je.CheckNumber=;
 				je.DateDisplayed=payDate;//it would be nice to add security here.
 				if(absNew==newAmt) {//amount is positive

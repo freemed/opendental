@@ -2581,8 +2581,8 @@ namespace OpenDental{
 
 		///<summary>Called every time prefs are changed from any workstation.</summary>
 		public void InitializeLocalData(){
-			butAddKey.Visible=PrefB.GetBool("DistributorKey");
-			butForeignKey.Visible=PrefB.GetBool("DistributorKey");
+			butAddKey.Visible=PrefC.GetBool("DistributorKey");
+			butForeignKey.Visible=PrefC.GetBool("DistributorKey");
 			ComputerPref computerPrefs=ComputerPrefs.GetForLocalComputer();
 			toothChart.UseHardware=computerPrefs.GraphicsUseHardware;
 			toothChart.PreferredPixelFormatNumber=computerPrefs.PreferredPixelFormatNum;
@@ -2667,7 +2667,7 @@ namespace OpenDental{
 
 		///<summary>Creates the patient image folder if it does not exist, unless the A to Z folders are not being used.</summary>
 		private void GetImageFolder(){
-			if(!PrefB.UsingAtoZfolder){
+			if(!PrefC.UsingAtoZfolder){
 				//Not using A to Z folders. Do not create folder.
 				return;
 			}
@@ -2762,7 +2762,7 @@ namespace OpenDental{
 		}
 
 		private void EasyHideClinicalData(){
-			if(((Pref)PrefB.HList["EasyHideClinical"]).ValueString=="1"){
+			if(((Pref)PrefC.HList["EasyHideClinical"]).ValueString=="1"){
 				gridPtInfo.Visible=false;
 				checkShowE.Visible=false;
 				checkShowR.Visible=false;
@@ -3068,7 +3068,7 @@ namespace OpenDental{
 			row.Tag=null;
 			gridPtInfo.Rows.Add(row);
 			//Registration keys-------------------------------------------------------------------------------------------
-			if(PrefB.GetBool("DistributorKey")){
+			if(PrefC.GetBool("DistributorKey")){
 				RegistrationKey[] keys=RegistrationKeys.GetForPatient(PatCur.PatNum);
 				for(int i=0;i<keys.Length;i++) {
 					row=new ODGridRow();
@@ -3811,7 +3811,7 @@ namespace OpenDental{
 			visImages=new ArrayList();
 			listViewImages.Items.Clear();
 			imageListThumbnails.Images.Clear();
-			if(!PrefB.UsingAtoZfolder) {
+			if(!PrefC.UsingAtoZfolder) {
 				//Don't show any images if there is no document path.
 				return;
 			}
@@ -5486,7 +5486,7 @@ namespace OpenDental{
 
 		private void gridProg_MouseUp(object sender,MouseEventArgs e) {
 			if(e.Button==MouseButtons.Right) {
-				if(PrefB.GetBool("EasyHideHospitals")){
+				if(PrefC.GetBool("EasyHideHospitals")){
 					menuItemPrintDay.Visible=false;
 				}
 				else{
@@ -5596,7 +5596,7 @@ namespace OpenDental{
 				}
 				else {
 					procCur.ProcDate=PIn.PDate(textDate.Text);
-					procCur.PlaceService=(PlaceOfService)PrefB.GetInt("DefaultProcedurePlaceService");
+					procCur.PlaceService=(PlaceOfService)PrefC.GetInt("DefaultProcedurePlaceService");
 				}
 				Procedures.SetDateFirstVisit(procCur.ProcDate,2,PatCur);
 				if(procCode.PaintType==ToothPaintingType.Extraction){//if an extraction, then mark previous procs hidden
@@ -5809,7 +5809,7 @@ namespace OpenDental{
 					yPos+=80;
 				}*/
 				//Patient images are not shown when the A to Z folders are disabled.
-				if(PrefB.UsingAtoZfolder){
+				if(PrefC.UsingAtoZfolder){
 					Bitmap picturePat;
 					bool patientPictExists=Documents.GetPatPict(PatCur.PatNum,
 						ODFileUtils.CombinePaths(new string[] {	FormPath.GetPreferredImagePath(),

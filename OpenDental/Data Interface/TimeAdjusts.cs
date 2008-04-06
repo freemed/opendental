@@ -33,15 +33,15 @@ namespace OpenDental{
 	
 		///<summary></summary>
 		public static void Insert(TimeAdjust adj) {
-			if(PrefB.RandomKeys) {
+			if(PrefC.RandomKeys) {
 				adj.TimeAdjustNum=MiscData.GetKey("timeadjust","TimeAdjustNum");
 			}
 			string command="INSERT INTO timeadjust (";
-			if(PrefB.RandomKeys) {
+			if(PrefC.RandomKeys) {
 				command+="TimeAdjustNum,";
 			}
 			command+="EmployeeNum,TimeEntry,RegHours,OTimeHours,Note) VALUES(";
-			if(PrefB.RandomKeys) {
+			if(PrefC.RandomKeys) {
 				command+="'"+POut.PInt(adj.TimeAdjustNum)+"', ";
 			}
 			command+=
@@ -50,7 +50,7 @@ namespace OpenDental{
 				+"'"+POut.PDouble(adj.RegHours.TotalHours)+"', "
 				+"'"+POut.PDouble(adj.OTimeHours.TotalHours)+"', "
 				+"'"+POut.PString(adj.Note)+"')";
-			if(PrefB.RandomKeys) {
+			if(PrefC.RandomKeys) {
 				General.NonQ(command);
 			}
 			else {

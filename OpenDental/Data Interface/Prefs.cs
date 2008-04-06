@@ -39,11 +39,11 @@ namespace OpenDental{
 
 		///<summary>Updates a pref of type int.  Returns true if a change was required, or false if no change needed.</summary>
 		public static bool UpdateInt(string prefName,int newValue) {
-			if(!PrefB.HList.ContainsKey(prefName)) {
+			if(!PrefC.HList.ContainsKey(prefName)) {
 				MessageBox.Show(prefName+" is an invalid pref name.");
 				return false;
 			}
-			if(PrefB.GetInt(prefName)==newValue) {
+			if(PrefC.GetInt(prefName)==newValue) {
 				return false;//no change needed
 			}
 			string command= "UPDATE preference SET "
@@ -55,11 +55,11 @@ namespace OpenDental{
 
 		///<summary>Updates a pref of type double.  Returns true if a change was required, or false if no change needed.</summary>
 		public static bool UpdateDouble(string prefName,double newValue) {
-			if(!PrefB.HList.ContainsKey(prefName)) {
+			if(!PrefC.HList.ContainsKey(prefName)) {
 				MessageBox.Show(prefName+" is an invalid pref name.");
 				return false;
 			}
-			if(PrefB.GetDouble(prefName)==newValue) {
+			if(PrefC.GetDouble(prefName)==newValue) {
 				return false;//no change needed
 			}
 			string command = "UPDATE preference SET "
@@ -71,11 +71,11 @@ namespace OpenDental{
 
 		///<summary>Returns true if a change was required, or false if no change needed.</summary>
 		public static bool UpdateBool(string prefName,bool newValue) {
-			if(!PrefB.HList.ContainsKey(prefName)) {
+			if(!PrefC.HList.ContainsKey(prefName)) {
 				MessageBox.Show(prefName+" is an invalid pref name.");
 				return false;
 			}
-			if(PrefB.GetBool(prefName)==newValue) {
+			if(PrefC.GetBool(prefName)==newValue) {
 				return false;//no change needed
 			}
 			string command = "UPDATE preference SET "
@@ -87,11 +87,11 @@ namespace OpenDental{
 
 		///<summary>Returns true if a change was required, or false if no change needed.</summary>
 		public static bool UpdateString(string prefName,string newValue) {
-			if(!PrefB.HList.ContainsKey(prefName)) {
+			if(!PrefC.HList.ContainsKey(prefName)) {
 				MessageBox.Show(prefName+" is an invalid pref name.");
 				return false;
 			}
-			if(PrefB.GetString(prefName)==newValue) {
+			if(PrefC.GetString(prefName)==newValue) {
 				return false;//no change needed
 			}
 			string command = "UPDATE preference SET "
@@ -103,7 +103,7 @@ namespace OpenDental{
 
 		///<summary>Called in two places.  Once from RefreshLocalData, and also from FormBackups after a restore.</summary>
 		public static bool CheckProgramVersion() {
-			Version storedVersion=new Version(PrefB.GetString("ProgramVersion"));
+			Version storedVersion=new Version(PrefC.GetString("ProgramVersion"));
 			Version currentVersion=new Version(Application.ProductVersion);
 			string database="";
 			string command="";
@@ -117,7 +117,7 @@ namespace OpenDental{
 				Prefs.Refresh();
 			}
 			if(storedVersion>currentVersion) {
-				if(PrefB.UsingAtoZfolder){
+				if(PrefC.UsingAtoZfolder){
 					string setupBinPath=ODFileUtils.CombinePaths(FormPath.GetPreferredImagePath(),"Setup.exe");
 					if(File.Exists(setupBinPath)) {
 						if(MessageBox.Show("You are attempting to run version "+currentVersion.ToString(3)+",\r\n"
@@ -151,8 +151,8 @@ namespace OpenDental{
 				}else{//Not using image path.
 					//perform program update automatically.
 					string patchName="Setup.exe";
-					string updateUri=PrefB.GetString("UpdateWebsitePath");
-					string registrationCode=PrefB.GetString("RegistrationNumber");
+					string updateUri=PrefC.GetString("UpdateWebsitePath");
+					string registrationCode=PrefC.GetString("RegistrationNumber");
 					string updateInfoMajor="";
 					string updateInfoMinor="";
 					if(FormUpdate.ShouldDownloadUpdate(updateUri,registrationCode,out updateInfoMajor,out updateInfoMinor)){
@@ -175,11 +175,11 @@ namespace OpenDental{
 		///<summary>This ONLY runs when first opening the program</summary>
 		public static bool ConvertDB() {
 			ClassConvertDatabase ClassConvertDatabase2=new ClassConvertDatabase();
-			string pref=PrefB.GetString("DataBaseVersion");
-				//(Pref)PrefB.HList["DataBaseVersion"];
+			string pref=PrefC.GetString("DataBaseVersion");
+				//(Pref)PrefC.HList["DataBaseVersion"];
 			//Debug.WriteLine(pref.PrefName+","+pref.ValueString);
 			if(ClassConvertDatabase2.Convert(pref)){
-				//((Pref)PrefB.HList["DataBaseVersion"]).ValueString)) {
+				//((Pref)PrefC.HList["DataBaseVersion"]).ValueString)) {
 				return true;
 			}
 			else {
@@ -203,7 +203,7 @@ namespace OpenDental{
 				|| thisVersion.Substring(0,3)=="5.0"
 				|| thisVersion.Substring(0,3)=="5.1")
 			{
-				if(PrefB.HList.ContainsKey("DatabaseConvertedForMySql41"))
+				if(PrefC.HList.ContainsKey("DatabaseConvertedForMySql41"))
 				//&& GetBool("DatabaseConvertedForMySql41"))
 				{
 					return true;//already converted

@@ -49,15 +49,15 @@ namespace OpenDental{
 
 		///<summary></summary>
 		public static void Insert(Commlog comm){
-			if(PrefB.RandomKeys) {
+			if(PrefC.RandomKeys) {
 				comm.CommlogNum=MiscData.GetKey("commlog","CommlogNum");
 			}
 			string command="INSERT INTO commlog (";
-			if(PrefB.RandomKeys) {
+			if(PrefC.RandomKeys) {
 				command+="CommlogNum,";
 			}
 			command+="PatNum,CommDateTime,CommType,Note,Mode_,SentOrReceived,UserNum) VALUES(";
-			if(PrefB.RandomKeys) {
+			if(PrefC.RandomKeys) {
 				command+="'"+POut.PInt(comm.CommlogNum)+"', ";
 			}
 			command+=
@@ -69,7 +69,7 @@ namespace OpenDental{
 				+"'"+POut.PInt   ((int)comm.SentOrReceived)+"', "
 				//+"'"+POut.PBool  (comm.IsStatementSent)+"', "
 				+"'"+POut.PInt   (comm.UserNum)+"')";
-			if(PrefB.RandomKeys) {
+			if(PrefC.RandomKeys) {
 				General.NonQ(command);
 			}
 			else {

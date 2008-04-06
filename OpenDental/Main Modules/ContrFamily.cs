@@ -208,7 +208,7 @@ namespace OpenDental{
 				ToolBarMain.Buttons["Delete"].Enabled=true;
 				ToolBarMain.Buttons["Guarantor"].Enabled=true;
 				ToolBarMain.Buttons["Move"].Enabled=true;
-				if(!PrefB.GetBool("EasyHideInsurance")){
+				if(!PrefC.GetBool("EasyHideInsurance")){
 					ToolBarMain.Buttons["Ins"].Enabled=true;
 				}
 				ToolBarMain.Invalidate();
@@ -219,13 +219,13 @@ namespace OpenDental{
 				ToolBarMain.Buttons["Delete"].Enabled=false;
 				ToolBarMain.Buttons["Guarantor"].Enabled=false;
 				ToolBarMain.Buttons["Move"].Enabled=false;
-				if(!PrefB.GetBool("EasyHideInsurance")){
+				if(!PrefC.GetBool("EasyHideInsurance")){
 					ToolBarMain.Buttons["Ins"].Enabled=false;
 				}
 				ToolBarMain.Invalidate();
 				//Patients.Cur=new Patient();
 			}
-			if(PrefB.GetBool("EasyHideInsurance")){
+			if(PrefC.GetBool("EasyHideInsurance")){
 				gridIns.Visible=false;
 			}
 			else{
@@ -241,7 +241,7 @@ namespace OpenDental{
 			picturePat.Image=null;
 			picturePat.TextNullImage=Lan.g(this,"Patient Picture Unavailable");
 			if(PatCur==null || 
-				!PrefB.UsingAtoZfolder){//Do not use patient image when A to Z folders are disabled.
+				!PrefC.UsingAtoZfolder){//Do not use patient image when A to Z folders are disabled.
 				return;
 			}
 			try{
@@ -286,7 +286,7 @@ namespace OpenDental{
 			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Delete"),3,Lan.g(this,"Delete Family Member"),"Delete"));
 			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Set Guarantor"),4,Lan.g(this,"Set as Guarantor"),"Guarantor"));
 			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Move"),5,Lan.g(this,"Move to Another Family"),"Move"));
-			if(!PrefB.GetBool("EasyHideInsurance")){
+			if(!PrefC.GetBool("EasyHideInsurance")){
 				ToolBarMain.Buttons.Add(new ODToolBarButton(ODToolBarButtonStyle.Separator));
 				button=new ODToolBarButton(Lan.g(this,"Add Insurance"),6,"","Ins");
 				button.Style=ODToolBarButtonStyle.DropDownButton;
@@ -637,7 +637,7 @@ namespace OpenDental{
 			row.Cells.Add(DefB.GetName(DefCat.BillingTypes,PatCur.BillingType));
 			gridPat.Rows.Add(row);
 			//Ward
-			if(!PrefB.GetBool("EasyHideHospitals")){
+			if(!PrefC.GetBool("EasyHideHospitals")){
 				row=new ODGridRow();
 				row.Cells.Add(Lan.g("TablePatient","Ward"));
 				row.Cells.Add(PatCur.Ward);
@@ -1037,7 +1037,7 @@ namespace OpenDental{
 				}
 				plan.ReleaseInfo=true;
 				plan.AssignBen=true;
-				plan.DedBeforePerc=PrefB.GetBool("DeductibleBeforePercentAsDefault");
+				plan.DedBeforePerc=PrefC.GetBool("DeductibleBeforePercentAsDefault");
 				plan.PlanType="";
 				InsPlans.Insert(plan);
 				Benefit ben;

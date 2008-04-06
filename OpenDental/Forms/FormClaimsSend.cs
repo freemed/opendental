@@ -356,7 +356,7 @@ namespace OpenDental{
 				contextMenuEclaims.MenuItems.Add(Clearinghouses.List[i].Description,new EventHandler(Clearinghouse_Clicked));
 			}
 			LayoutToolBars();
-			if(PrefB.GetBool("EasyNoClinics")) {
+			if(PrefC.GetBool("EasyNoClinics")) {
 				comboClinic.Visible=false;
 				labelClinic.Visible=false;
 			}
@@ -367,7 +367,7 @@ namespace OpenDental{
 					comboClinic.Items.Add(Clinics.List[i].Description);
 				}
 			}
-			if(PrefB.RandomKeys && !PrefB.GetBool("EasyNoClinics")){//using random keys and clinics
+			if(PrefC.RandomKeys && !PrefC.GetBool("EasyNoClinics")){//using random keys and clinics
 				//Does not pull in reports automatically, because they could easily get assigned to the wrong clearinghouse
 			}
 			else{
@@ -444,7 +444,7 @@ namespace OpenDental{
 
 		private void FillGrid(){
 			int clinicNum=0;
-			if(!PrefB.GetBool("EasyNoClinics") && comboClinic.SelectedIndex!=0) {
+			if(!PrefC.GetBool("EasyNoClinics") && comboClinic.SelectedIndex!=0) {
 				clinicNum=Clinics.List[comboClinic.SelectedIndex-1].ClinicNum;
 			}
 			listQueue=Claims.GetQueueList(0,clinicNum);
@@ -609,7 +609,7 @@ namespace OpenDental{
 
 		///<Summary>Use clearinghouseNum of 0 to indicate automatic calculation of clearinghouses.</Summary>
 		private void OnEclaims_Click(int clearinghouseNum){
-			if(clearinghouseNum==0 && !PrefB.GetBool("EasyNoClinics")) {
+			if(clearinghouseNum==0 && !PrefC.GetBool("EasyNoClinics")) {
 				MsgBox.Show(this,"When the Clinics option is enabled, you must use the dropdown list to select the clearinghouse to send to.");
 				return;
 			}

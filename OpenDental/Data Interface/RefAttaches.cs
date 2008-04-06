@@ -46,15 +46,15 @@ namespace OpenDental{
 
 		///<summary></summary>
 		public static void Insert(RefAttach attach){
-			if(PrefB.RandomKeys){
+			if(PrefC.RandomKeys){
 				attach.RefAttachNum=MiscData.GetKey("refattach","RefAttachNum");
 			}
 			string command="INSERT INTO refattach (";
-			if(PrefB.RandomKeys){
+			if(PrefC.RandomKeys){
 				command+="RefAttachNum,";
 			}			
 			command+="ReferralNum,PatNum,ItemOrder,RefDate,IsFrom,RefToStatus,Note) VALUES (";
-			if(PrefB.RandomKeys){
+			if(PrefC.RandomKeys){
 				command+="'"+POut.PInt(attach.RefAttachNum)+"', ";
 			}
 			command+="'"+POut.PInt(attach.ReferralNum)+"', "

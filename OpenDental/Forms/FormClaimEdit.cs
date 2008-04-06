@@ -2502,7 +2502,7 @@ namespace OpenDental{
 				butPayTotal.Visible=false;	
 				butSplit.Visible=false;
       }
-			if(PrefB.GetBool("EasyNoClinics")){
+			if(PrefC.GetBool("EasyNoClinics")){
 				labelClinic.Visible=false;
 				comboClinic.Visible=false;
 			}
@@ -3326,7 +3326,7 @@ namespace OpenDental{
 
 		private void butAttachPerio_Click(object sender,EventArgs e) {
 			//Patient PatCur=Patients.GetPat(PatNum);
-			if(!PrefB.UsingAtoZfolder) {
+			if(!PrefC.UsingAtoZfolder) {
 				MsgBox.Show(this,"Error. Not using AtoZ images folder.");
 				return;
 			}
@@ -3347,7 +3347,7 @@ namespace OpenDental{
 			string text=PatCur.GetNameFL();
 			Font font=new Font("Microsoft Sans Serif",12,FontStyle.Bold);
 			g.DrawString(text,font,Brushes.Black,595/2-g.MeasureString(text,font).Width/2,5);
-			text=PrefB.GetString("PracticeTitle");
+			text=PrefC.GetString("PracticeTitle");
 			font=new Font("Microsoft Sans Serif",9,FontStyle.Bold);
 			g.DrawString(text,font,Brushes.Black,595/2-g.MeasureString(text,font).Width/2,28);
 			g.DrawImage(bitmap,0,50);
@@ -3371,7 +3371,7 @@ namespace OpenDental{
 		}
 
 		private void butExport_Click(object sender,EventArgs e) {
-			string exportPath=PrefB.GetString("ClaimAttachExportPath");
+			string exportPath=PrefC.GetString("ClaimAttachExportPath");
 			if(!Directory.Exists(exportPath)){
 				MessageBox.Show("The claim export path no longer exists at: "+exportPath);
 				return;
@@ -3660,7 +3660,7 @@ namespace OpenDental{
 				//}
 			}
 			if(listClaimStatus.SelectedIndex==5){//Received
-				if(PrefB.GetBool("ProviderIncomeTransferShows")){
+				if(PrefC.GetBool("ProviderIncomeTransferShows")){
 					Payment PaymentCur=new Payment();
 					PaymentCur.PayDate=DateTime.Today;
 					PaymentCur.PatNum=PatCur.PatNum;

@@ -44,15 +44,15 @@ namespace OpenDental{
 
 		///<summary></summary>
 		public static void Insert(RepeatCharge charge){
-			if(PrefB.RandomKeys){
+			if(PrefC.RandomKeys){
 				charge.RepeatChargeNum=MiscData.GetKey("repeatcharge","RepeatChargeNum");
 			}
 			string command="INSERT INTO repeatcharge (";
-			if(PrefB.RandomKeys){
+			if(PrefC.RandomKeys){
 				command+="RepeatChargeNum,";
 			}
 			command+="PatNum,ProcCode,ChargeAmt,DateStart,DateStop,Note) VALUES(";
-			if(PrefB.RandomKeys){
+			if(PrefC.RandomKeys){
 				command+="'"+POut.PInt(charge.RepeatChargeNum)+"', ";
 			}
 			command+=
@@ -62,7 +62,7 @@ namespace OpenDental{
 				+POut.PDate  (charge.DateStart)+", "
 				+POut.PDate  (charge.DateStop)+", "
 				+"'"+POut.PString(charge.Note)+"')";
-			if(PrefB.RandomKeys){
+			if(PrefC.RandomKeys){
 				General.NonQ(command);
 			}
 			else{

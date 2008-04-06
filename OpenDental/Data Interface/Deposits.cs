@@ -56,22 +56,22 @@ namespace OpenDental{
 
 		///<summary></summary>
 		public static void Insert(Deposit dep){
-			if(PrefB.RandomKeys){
+			if(PrefC.RandomKeys){
 				dep.DepositNum=MiscData.GetKey("deposit","DepositNum");
 			}
 			string command= "INSERT INTO deposit (";
-			if(PrefB.RandomKeys){
+			if(PrefC.RandomKeys){
 				command+="DepositNum,";
 			}
 			command+="DateDeposit,BankAccountInfo,Amount) VALUES(";
-			if(PrefB.RandomKeys){
+			if(PrefC.RandomKeys){
 				command+="'"+POut.PInt(dep.DepositNum)+"', ";
 			}
 			command+=
 				 POut.PDate  (dep.DateDeposit)+", "
 				+"'"+POut.PString(dep.BankAccountInfo)+"', "
 				+"'"+POut.PDouble(dep.Amount)+"')";
- 			if(PrefB.RandomKeys){
+ 			if(PrefC.RandomKeys){
 				General.NonQ(command);
 			}
 			else{

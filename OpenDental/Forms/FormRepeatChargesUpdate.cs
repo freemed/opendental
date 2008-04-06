@@ -164,7 +164,7 @@ namespace OpenDental{
 					proc.DateTP=possibleDate;
 					proc.ProcFee=chargeList[i].ChargeAmt;
 					proc.ProcStatus=ProcStat.C;
-					proc.ProvNum=PrefB.GetInt("PracticeDefaultProv");
+					proc.ProvNum=PrefC.GetInt("PracticeDefaultProv");
 					proc.MedicalCode=ProcedureCodes.GetProcCode(proc.CodeNum).MedicalCode;
 					proc.BaseUnits = ProcedureCodes.GetProcCode(proc.CodeNum).BaseUnits;
 					Procedures.Insert(proc);//no recall synch needed because dental offices don't use this feature

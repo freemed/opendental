@@ -39,15 +39,15 @@ namespace OpenDental{
 
 		///<summary></summary>
 		public static void Insert(Laboratory lab){
-			if(PrefB.RandomKeys) {
+			if(PrefC.RandomKeys) {
 				lab.LaboratoryNum=MiscData.GetKey("laboratory","LaboratoryNum");
 			}
 			string command="INSERT INTO laboratory (";
-			if(PrefB.RandomKeys) {
+			if(PrefC.RandomKeys) {
 				command+="LaboratoryNum,";
 			}
 			command+="Description,Phone,Notes,LabSlip) VALUES(";
-			if(PrefB.RandomKeys) {
+			if(PrefC.RandomKeys) {
 				command+="'"+POut.PInt(lab.LaboratoryNum)+"', ";
 			}
 			command+=
@@ -55,7 +55,7 @@ namespace OpenDental{
 				+"'"+POut.PString(lab.Phone)+"', "
 				+"'"+POut.PString(lab.Notes)+"', "
 				+"'"+POut.PString(lab.LabSlip)+"')";
-			if(PrefB.RandomKeys) {
+			if(PrefC.RandomKeys) {
 				General.NonQ(command);
 			}
 			else {

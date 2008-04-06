@@ -824,30 +824,30 @@ namespace OpenDental{
 		#endregion
 
 		private void FormRecallSetup_Load(object sender, System.EventArgs e) {
-			textPatternAdult.Text=PrefB.GetString("RecallPattern");
-			textProcsAdult.Text = ((Pref)PrefB.HList["RecallProcedures"]).ValueString;
-			textPatternChild.Text = PrefB.GetString("RecallPatternChild");
-			textProcsChild.Text = ((Pref)PrefB.HList["RecallProceduresChild"]).ValueString;
-			textPatternPerio.Text = PrefB.GetString("RecallPatternPerio");
-			textProcsPerio.Text = ((Pref)PrefB.HList["RecallProceduresPerio"]).ValueString;
-			textPerioTriggerProcs.Text = ((Pref)PrefB.HList["RecallPerioTriggerProcs"]).ValueString;
-			textBW.Text = ((Pref)PrefB.HList["RecallBW"]).ValueString;
-			textFMXPanoProc.Text = ((Pref)PrefB.HList["RecallFMXPanoProc"]).ValueString;
-			checkDisableAutoFilms.Checked = PrefB.GetBool("RecallDisableAutoFilms");
-			checkDisablePerioAlt.Checked = PrefB.GetBool("RecallDisablePerioAlt");
-			textFMXPanoYrInterval.Text = PrefB.GetInt("RecallFMXPanoYrInterval").ToString();
+			textPatternAdult.Text=PrefC.GetString("RecallPattern");
+			textProcsAdult.Text = ((Pref)PrefC.HList["RecallProcedures"]).ValueString;
+			textPatternChild.Text = PrefC.GetString("RecallPatternChild");
+			textProcsChild.Text = ((Pref)PrefC.HList["RecallProceduresChild"]).ValueString;
+			textPatternPerio.Text = PrefC.GetString("RecallPatternPerio");
+			textProcsPerio.Text = ((Pref)PrefC.HList["RecallProceduresPerio"]).ValueString;
+			textPerioTriggerProcs.Text = ((Pref)PrefC.HList["RecallPerioTriggerProcs"]).ValueString;
+			textBW.Text = ((Pref)PrefC.HList["RecallBW"]).ValueString;
+			textFMXPanoProc.Text = ((Pref)PrefC.HList["RecallFMXPanoProc"]).ValueString;
+			checkDisableAutoFilms.Checked = PrefC.GetBool("RecallDisableAutoFilms");
+			checkDisablePerioAlt.Checked = PrefC.GetBool("RecallDisablePerioAlt");
+			textFMXPanoYrInterval.Text = PrefC.GetInt("RecallFMXPanoYrInterval").ToString();
 			if(textFMXPanoYrInterval.Text == "0") textFMXPanoYrInterval.Text = "";
-			checkGroupFamilies.Checked = PrefB.GetBool("RecallGroupByFamily");
-			textPostcardMessage.Text = PrefB.GetString("RecallPostcardMessage");
-			textPostcardFamMsg.Text=PrefB.GetString("RecallPostcardFamMsg");
-			textConfirmPostcardMessage.Text=PrefB.GetString("ConfirmPostcardMessage");
-			textPostcardsPerSheet.Text=PrefB.GetInt("RecallPostcardsPerSheet").ToString();
-			checkReturnAdd.Checked=PrefB.GetBool("RecallCardsShowReturnAdd");
-			checkGroupFamilies.Checked=PrefB.GetBool("RecallGroupByFamily");
-			textDaysPast.Text=PrefB.GetInt("RecallDaysPast").ToString();
-			textDaysFuture.Text=PrefB.GetInt("RecallDaysFuture").ToString();
-			textRight.Text=PrefB.GetDouble("RecallAdjustRight").ToString();
-			textDown.Text=PrefB.GetDouble("RecallAdjustDown").ToString();
+			checkGroupFamilies.Checked = PrefC.GetBool("RecallGroupByFamily");
+			textPostcardMessage.Text = PrefC.GetString("RecallPostcardMessage");
+			textPostcardFamMsg.Text=PrefC.GetString("RecallPostcardFamMsg");
+			textConfirmPostcardMessage.Text=PrefC.GetString("ConfirmPostcardMessage");
+			textPostcardsPerSheet.Text=PrefC.GetInt("RecallPostcardsPerSheet").ToString();
+			checkReturnAdd.Checked=PrefC.GetBool("RecallCardsShowReturnAdd");
+			checkGroupFamilies.Checked=PrefC.GetBool("RecallGroupByFamily");
+			textDaysPast.Text=PrefC.GetInt("RecallDaysPast").ToString();
+			textDaysFuture.Text=PrefC.GetInt("RecallDaysFuture").ToString();
+			textRight.Text=PrefC.GetDouble("RecallAdjustRight").ToString();
+			textDown.Text=PrefC.GetDouble("RecallAdjustDown").ToString();
 			listProcs.Items.Clear();
 			for(int i=0;i<ProcedureCodes.RecallAL.Count;i++){
 				listProcs.Items.Add(((ProcedureCode)ProcedureCodes.RecallAL[i]).Descript);

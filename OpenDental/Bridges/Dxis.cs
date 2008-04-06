@@ -25,7 +25,7 @@ namespace OpenDental.Bridges{
 				return;
 			}
 			ArrayList ForProgram=ProgramProperties.GetForProgram(ProgramCur.ProgramNum);
-			string info="/i /t:"+pat.LName+" "+pat.FName+" "+pat.PatNum.ToString()+" - "+PrefB.GetString("PracticeTitle");
+			string info="/i /t:"+pat.LName+" "+pat.FName+" "+pat.PatNum.ToString()+" - "+PrefC.GetString("PracticeTitle");
 			Process process=new Process();
 			process.StartInfo=new ProcessStartInfo(ProgramCur.Path,info);
 			try{

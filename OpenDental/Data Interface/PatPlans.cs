@@ -46,15 +46,15 @@ namespace OpenDental{
 
 		///<summary></summary>
 		public static void Insert(PatPlan p){
-			if(PrefB.RandomKeys){
+			if(PrefC.RandomKeys){
 				p.PatPlanNum=MiscData.GetKey("patplan","PatPlanNum");
 			}
 			string command="INSERT INTO patplan (";
-			if(PrefB.RandomKeys){
+			if(PrefC.RandomKeys){
 				command+="PatPlanNum,";
 			}
 			command+="PatNum,PlanNum,Ordinal,IsPending,Relationship,PatID) VALUES(";
-			if(PrefB.RandomKeys){
+			if(PrefC.RandomKeys){
 				command+="'"+POut.PInt(p.PatPlanNum)+"', ";
 			}
 			command+=
@@ -64,7 +64,7 @@ namespace OpenDental{
 				+"'"+POut.PBool  (p.IsPending)+"', "
 				+"'"+POut.PInt   ((int)p.Relationship)+"', "
 				+"'"+POut.PString(p.PatID)+"')";
-			if(PrefB.RandomKeys){
+			if(PrefC.RandomKeys){
 				General.NonQ(command);
 			}
 			else{

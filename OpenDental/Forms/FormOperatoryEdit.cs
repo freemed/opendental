@@ -280,7 +280,7 @@ namespace OpenDental{
 			textOpName.Text=OpCur.OpName;
 			textAbbrev.Text=OpCur.Abbrev;
 			checkIsHidden.Checked=OpCur.IsHidden;
-			if(PrefB.GetBool("EasyNoClinics")){
+			if(PrefC.GetBool("EasyNoClinics")){
 				labelClinic.Visible=false;
 				comboClinic.Visible=false;
 			}

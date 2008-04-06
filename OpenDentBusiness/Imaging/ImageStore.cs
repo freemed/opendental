@@ -8,7 +8,7 @@ namespace OpenDental.Imaging {
 		public static FileStore.UpdatePatientDelegate UpdatePatient;
 
 		public static string ImageStoreTypeName {
-			get { return PrefB.GetString("ImageStore"); }
+			get { return PrefC.GetString("ImageStore"); }
 		}
 
 		public static IImageStore GetImageStore(Patient patient) {

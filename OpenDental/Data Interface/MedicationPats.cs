@@ -40,23 +40,23 @@ namespace OpenDental{
 
 		///<summary></summary>
 		public static void Insert(MedicationPat Cur){
-			if(PrefB.RandomKeys){
+			if(PrefC.RandomKeys){
 				Cur.MedicationPatNum=MiscData.GetKey("medicationpat","MedicationPatNum");
 			}
 			string command="INSERT INTO medicationpat (";
-			if(PrefB.RandomKeys){
+			if(PrefC.RandomKeys){
 				command+="MedicationPatNum,";
 			}
 			command+="patnum,medicationnum,patnote"
 				+") VALUES(";
-			if(PrefB.RandomKeys){
+			if(PrefC.RandomKeys){
 				command+="'"+POut.PInt(Cur.MedicationPatNum)+"', ";
 			}
 			command+=
 				 "'"+POut.PInt   (Cur.PatNum)+"', "
 				+"'"+POut.PInt   (Cur.MedicationNum)+"', "
 				+"'"+POut.PString(Cur.PatNote)+"')";
-			if(PrefB.RandomKeys){
+			if(PrefC.RandomKeys){
 				General.NonQ(command);
 			}
 			else{

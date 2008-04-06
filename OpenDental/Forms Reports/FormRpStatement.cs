@@ -238,7 +238,7 @@ namespace OpenDental{
 		private void FormRpStatement_Load(object sender, System.EventArgs e) {
 			//this only happens during debugging
 			labelTotPages.Text="1 / "+totalPages.ToString();
-			if(PrefB.GetBool("FuchsOptionsOn")) {
+			if(PrefC.GetBool("FuchsOptionsOn")) {
 				butFullPage.Visible = true;
 				butZoomIn.Visible = false;
 				printPreviewControl2.Zoom = 1;
@@ -493,7 +493,7 @@ namespace OpenDental{
 			par.AddLineBreak();
 			par.AddFormattedText(text,font);
 			text=Lan.g(this,"Account Number")+" ";
-			if(PrefB.GetBool("StatementAccountsUseChartNumber")) {
+			if(PrefC.GetBool("StatementAccountsUseChartNumber")) {
 				text+=PatGuar.ChartNumber;
 			}
 			else {
@@ -505,7 +505,7 @@ namespace OpenDental{
 			#endregion
 			//Practice Address----------------------------------------------------------------------
 			#region Practice Address
-			if(PrefB.GetBool("StatementShowReturnAddress")) {
+			if(PrefC.GetBool("StatementShowReturnAddress")) {
 				font=MigraDocHelper.CreateFont(10);
 				frame=section.AddTextFrame();
 				frame.RelativeVertical=RelativeVertical.Page;
@@ -515,7 +515,7 @@ namespace OpenDental{
 				frame.Top=TopPosition.Parse("0.5 in");
 				frame.Left=LeftPosition.Parse("0.3 in");
 				frame.Width=Unit.FromInch(3);
-				if(!PrefB.GetBool("EasyNoClinics") && Clinics.List.Length>0 //if using clinics
+				if(!PrefC.GetBool("EasyNoClinics") && Clinics.List.Length>0 //if using clinics
 						&& Clinics.GetClinic(PatGuar.ClinicNum)!=null)//and this patient assigned to a clinic
 					{
 					Clinic clinic=Clinics.GetClinic(PatGuar.ClinicNum);
@@ -546,22 +546,22 @@ namespace OpenDental{
 				else {
 					par=frame.AddParagraph();
 					par.Format.Font=font;
-					par.AddText(PrefB.GetString("PracticeTitle"));
+					par.AddText(PrefC.GetString("PracticeTitle"));
 					par.AddLineBreak();
-					par.AddText(PrefB.GetString("PracticeAddress"));
+					par.AddText(PrefC.GetString("PracticeAddress"));
 					par.AddLineBreak();
-					if(PrefB.GetString("PracticeAddress2")!="") {
-						par.AddText(PrefB.GetString("PracticeAddress2"));
+					if(PrefC.GetString("PracticeAddress2")!="") {
+						par.AddText(PrefC.GetString("PracticeAddress2"));
 						par.AddLineBreak();
 					}
 					if(CultureInfo.CurrentCulture.Name.EndsWith("CH")) {//CH is for switzerland. eg de-CH
-						par.AddText(PrefB.GetString("PracticeZip")+" "+PrefB.GetString("PracticeCity"));
+						par.AddText(PrefC.GetString("PracticeZip")+" "+PrefC.GetString("PracticeCity"));
 					}
 					else {
-						par.AddText(PrefB.GetString("PracticeCity")+", "+PrefB.GetString("PracticeST")+" "+PrefB.GetString("PracticeZip"));
+						par.AddText(PrefC.GetString("PracticeCity")+", "+PrefC.GetString("PracticeST")+" "+PrefC.GetString("PracticeZip"));
 					}
 					par.AddLineBreak();
-					text=PrefB.GetString("PracticePhone");
+					text=PrefC.GetString("PracticePhone");
 					if(text.Length==10){
 						text="("+text.Substring(0,3)+")"+text.Substring(3,3)+"-"+text.Substring(6);
 					}
@@ -605,7 +605,7 @@ namespace OpenDental{
 				row.Borders.Right.Color=Colors.Gray;
 				font=MigraDocHelper.CreateFont(9);
 				double balTotal=PatGuar.BalTotal;
-				if(!PrefB.GetBool("BalancesDontSubtractIns")) {//this is typical
+				if(!PrefC.GetBool("BalancesDontSubtractIns")) {//this is typical
 					balTotal-=PatGuar.InsEst;
 				}
 				balTotal+=PatGuar.PayPlanDue;
@@ -613,11 +613,11 @@ namespace OpenDental{
 				cell=row.Cells[0];
 				par=cell.AddParagraph();
 				par.AddFormattedText(text,font);
-				if(PrefB.GetInt("StatementsCalcDueDate")==-1) {
+				if(PrefC.GetInt("StatementsCalcDueDate")==-1) {
 					text=Lan.g(this,"Upon Receipt");
 				}
 				else {
-					text=DateTime.Today.AddDays(PrefB.GetInt("StatementsCalcDueDate")).ToShortDateString();
+					text=DateTime.Today.AddDays(PrefC.GetInt("StatementsCalcDueDate")).ToShortDateString();
 				}
 				cell=row.Cells[1];
 				par=cell.AddParagraph();
@@ -627,7 +627,7 @@ namespace OpenDental{
 			//Credit Card Info--------------------------------------------------------------------------------------------------------
 			#region Credit Card Info
 			if(!Stmt.HidePayment) {
-				if(PrefB.GetBool("StatementShowCreditCard")) {
+				if(PrefC.GetBool("StatementShowCreditCard")) {
 					float yPos=60;
 					font=MigraDocHelper.CreateFont(7,true);
 					text=Lan.g(this,"CREDIT CARD TYPE");
@@ -777,7 +777,7 @@ namespace OpenDental{
 				gridAging.Columns.Add(gcol);
 				gcol=new ODGridColumn(Lan.g(this,"over 90"),70,HorizontalAlignment.Center);
 				gridAging.Columns.Add(gcol);
-				if(PrefB.GetBool("BalancesDontSubtractIns")) {//less common
+				if(PrefC.GetBool("BalancesDontSubtractIns")) {//less common
 					gcol=new ODGridColumn(Lan.g(this,"Balance"),70,HorizontalAlignment.Center);
 					gridAging.Columns.Add(gcol);
 					gcol=new ODGridColumn(Lan.g(this,"InsPending"),70,HorizontalAlignment.Center);
@@ -879,9 +879,9 @@ namespace OpenDental{
 			}
 			else { //inactive plan
 			}
-			if(PrefB.GetBool("StatementSummaryShowInsInfo")){
+			if(PrefC.GetBool("StatementSummaryShowInsInfo")){
 				if(InsOnAccountSituation==1){
-					if (PrefB.GetBool("BalancesDontSubtractIns")){
+					if (PrefC.GetBool("BalancesDontSubtractIns")){
 						MigraDocHelper.FillRectangle(frame,System.Drawing.Color.LightGray,57,0,280,16);
 					}
 					else{
@@ -902,13 +902,13 @@ namespace OpenDental{
 			parformat.Alignment = ParagraphAlignment.Right;
 			par.Format = parformat;
 			font = MigraDocHelper.CreateFont(10, true);
-			if(PrefB.GetBool("StatementSummaryShowInsInfo"))//Show balance with ins estimate and est balance
+			if(PrefC.GetBool("StatementSummaryShowInsInfo"))//Show balance with ins estimate and est balance
 			{
 				text = Lan.g(this,"Current account balance:");
 				par.AddFormattedText(text,font);
 				par.AddLineBreak();
 				if(InsOnAccountSituation==1){//Pt has ins
-					if (PrefB.GetBool("BalancesDontSubtractIns")){
+					if (PrefC.GetBool("BalancesDontSubtractIns")){
 						font = MigraDocHelper.CreateFont(11,false);
 						text = Lan.g(this,"Insurance pending:");
 						par.AddFormattedText(text,font);
@@ -964,13 +964,13 @@ namespace OpenDental{
 			parformat.Alignment = ParagraphAlignment.Left;
 			par.Format = parformat;
 			font = MigraDocHelper.CreateFont(10, true);
-			if(PrefB.GetBool("StatementSummaryShowInsInfo"))//Show balance with ins estimate and est balance
+			if(PrefC.GetBool("StatementSummaryShowInsInfo"))//Show balance with ins estimate and est balance
 			{
 				text = PatGuar.BalTotal.ToString("c");
 				par.AddFormattedText(text, font);
 				par.AddLineBreak();
 				if(InsOnAccountSituation==1){
-					if(PrefB.GetBool("BalancesDontSubtractIns")){
+					if(PrefC.GetBool("BalancesDontSubtractIns")){
 						font = MigraDocHelper.CreateFont(11,false);
 					}
 					text = PatGuar.InsEst.ToString("c");
@@ -1002,7 +1002,7 @@ namespace OpenDental{
 			par.Format = parformat;
 			font = MigraDocHelper.CreateFont(10,false);
 			MigraDoc.DocumentObjectModel.Font fontBold=MigraDocHelper.CreateFont(10, true);
-			if(PrefB.GetBool("BalancesDontSubtractIns")){
+			if(PrefC.GetBool("BalancesDontSubtractIns")){
 				text = Lan.g(this, "Balance:");
 				par.AddFormattedText(text, fontBold);
 				par.AddLineBreak();
@@ -1033,7 +1033,7 @@ namespace OpenDental{
 			font = MigraDocHelper.CreateFont(10,false);
 			//numbers:
 			text = PatGuar.BalTotal.ToString("c");
-			if(PrefB.GetBool("BalancesDontSubtractIns")){
+			if(PrefC.GetBool("BalancesDontSubtractIns")){
 				par.AddFormattedText(text, fontBold);
 			}
 			else{
@@ -1044,7 +1044,7 @@ namespace OpenDental{
 			par.AddFormattedText(text, font);
 			par.AddLineBreak();
 			text = (PatGuar.BalTotal - PatGuar.InsEst).ToString("c");
-			if(PrefB.GetBool("BalancesDontSubtractIns")){
+			if(PrefC.GetBool("BalancesDontSubtractIns")){
 				par.AddFormattedText(text, font);
 			}
 			else{
@@ -1255,7 +1255,7 @@ namespace OpenDental{
 				//Bank Address---------------------------------------------------------
 				HeaderFooter footer=section.Footers.Primary;
 				footer.Format.Borders.Color=Colors.Black;
-				//footer.AddParagraph(PrefB.GetString("BankAddress"));
+				//footer.AddParagraph(PrefC.GetString("BankAddress"));
 				frame=footer.AddTextFrame();
 				frame.RelativeVertical=RelativeVertical.Line;
 				frame.RelativeHorizontal=RelativeHorizontal.Page;
@@ -1266,19 +1266,19 @@ namespace OpenDental{
 				frame.Width=Unit.FromInch(8.3);
 				frame.Height=300;
 				//RectangleF=new RectangleF(0,0,
-				MigraDocHelper.DrawString(frame,PrefB.GetString("BankAddress"),swfont,30,30);
-				MigraDocHelper.DrawString(frame,PrefB.GetString("BankAddress"),swfont,246,30);
+				MigraDocHelper.DrawString(frame,PrefC.GetString("BankAddress"),swfont,30,30);
+				MigraDocHelper.DrawString(frame,PrefC.GetString("BankAddress"),swfont,246,30);
 				//Office Name and Address----------------------------------------------
-				text=PrefB.GetString("PracticeTitle")+"\r\n"
-					+PrefB.GetString("PracticeAddress")+"\r\n";
-				if(PrefB.GetString("PracticeAddress2")!="") {
-					text+=PrefB.GetString("PracticeAddress2")+"\r\n";
+				text=PrefC.GetString("PracticeTitle")+"\r\n"
+					+PrefC.GetString("PracticeAddress")+"\r\n";
+				if(PrefC.GetString("PracticeAddress2")!="") {
+					text+=PrefC.GetString("PracticeAddress2")+"\r\n";
 				}
-				text+=PrefB.GetString("PracticeZip")+" "+PrefB.GetString("PracticeCity");
+				text+=PrefC.GetString("PracticeZip")+" "+PrefC.GetString("PracticeCity");
 				MigraDocHelper.DrawString(frame,text,swfont,30,89);
 				MigraDocHelper.DrawString(frame,text,swfont,246,89);
 				//Bank account number--------------------------------------------------
-				string origBankNum=PrefB.GetString("PracticeBankNumber");//must be exactly 9 digits. 2+6+1.
+				string origBankNum=PrefC.GetString("PracticeBankNumber");//must be exactly 9 digits. 2+6+1.
 				//the 6 digit portion might have 2 leading 0's which would not go into the dashed bank num.
 				string dashedBankNum="?";
 				//examples: 01-200027-2
@@ -1317,7 +1317,7 @@ namespace OpenDental{
 				//First 6 numbers are what we are calling the BankRouting number.
 				//Next 20 numbers represent the invoice #.
 				//27th number is the checksum
-				string referenceNum=PrefB.GetString("BankRouting");//6 digits
+				string referenceNum=PrefC.GetString("BankRouting");//6 digits
 				if(referenceNum.Length!=6) {
 					referenceNum="000000";
 				}

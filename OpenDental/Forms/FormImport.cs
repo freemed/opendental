@@ -3805,9 +3805,9 @@ namespace OpenDental{
 				MessageBox.Show(ex.Message);
 				return;
 			}
-			//int defaultProvNum=PrefB.GetInt("PracticeDefaultProv");
+			//int defaultProvNum=PrefC.GetInt("PracticeDefaultProv");
 			int provNum;
-			int billType=PrefB.GetInt("PracticeDefaultBillType");
+			int billType=PrefC.GetInt("PracticeDefaultBillType");
 			Patient pat;
 			Adjustment adj;
 			int adjType=2;
@@ -3958,12 +3958,12 @@ namespace OpenDental{
 					}
 					if(table.Columns["PriProv"]==null){//no prov column
 						if(radioInsert.Checked){//must supply a prov anyway
-							pat.PriProv=PrefB.GetInt("PracticeDefaultProv");
+							pat.PriProv=PrefC.GetInt("PracticeDefaultProv");
 						}
 					}
 					else{//prov column
 						if(table.Rows[i][table.Columns["PriProv"].Ordinal].ToString()==""){
-							pat.PriProv=PrefB.GetInt("PracticeDefaultProv");
+							pat.PriProv=PrefC.GetInt("PracticeDefaultProv");
 						}
 						else{
 							provNum=0;

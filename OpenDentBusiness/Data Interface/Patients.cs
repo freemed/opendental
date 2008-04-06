@@ -70,11 +70,11 @@ namespace OpenDentBusiness{
 
 		///<summary>ONLY for new patients. Set includePatNum to true for use the patnum from the import function.  Otherwise, uses InsertID to fill PatNum.</summary>
 		public static void Insert(Patient pat, bool includePatNum) {
-			if(!includePatNum && PrefB.RandomKeys) {
+			if(!includePatNum && PrefC.RandomKeys) {
 				pat.PatNum=MiscData.GetKey("patient","PatNum");
 			}
 			string command= "INSERT INTO patient (";
-			if(includePatNum || PrefB.RandomKeys) {
+			if(includePatNum || PrefC.RandomKeys) {
 				command+="PatNum,";
 			}
 			command+="lname,fname,middlei,preferred,patstatus,gender,"
@@ -88,7 +88,7 @@ namespace OpenDentBusiness{
 				+",ClinicNum,HasIns,TrophyFolder,PlannedIsDone,Premed,Ward,PreferConfirmMethod,PreferContactMethod,PreferRecallMethod"
 				+",SchedBeforeTime,SchedAfterTime"
 				+",SchedDayOfWeek,Language,AdmitDate,Title,PayPlanDue) VALUES (";
-			if(includePatNum || PrefB.RandomKeys) {
+			if(includePatNum || PrefC.RandomKeys) {
 				command+="'"+POut.PInt(pat.PatNum)+"', ";
 			}
 			command+="'"+POut.PString(pat.LName)+"', "
@@ -157,7 +157,7 @@ namespace OpenDentBusiness{
 				+POut.PDate(pat.AdmitDate)+", "
 				+"'"+POut.PString(pat.Title)+"', "
 				+"'"+POut.PDouble(pat.PayPlanDue)+"')";
-			if(PrefB.RandomKeys) {
+			if(PrefC.RandomKeys) {
 				General.NonQ(command);
 			}
 			else {
@@ -1456,11 +1456,11 @@ namespace OpenDentBusiness{
 		public static int GetProvNum(Patient pat) {
 			if(pat.PriProv!=0)
 				return pat.PriProv;
-			if(PrefB.GetInt("PracticeDefaultProv")==0) {
+			if(PrefC.GetInt("PracticeDefaultProv")==0) {
 				MessageBox.Show(Lan.g("Patients","Please set a default provider in the practice setup window."));
 				return Providers.List[0].ProvNum;
 			}
-			return PrefB.GetInt("PracticeDefaultProv");
+			return PrefC.GetInt("PracticeDefaultProv");
 		}
 
 		///<summary>Gets the list of all valid patient primary keys. Used when checking for missing ADA procedure codes after a user has begun entering them manually. This function is necessary because not all patient numbers are necessarily consecutive (say if the database was created due to a conversion from another program and the customer wanted to keep their old patient ids after the conversion).</summary>

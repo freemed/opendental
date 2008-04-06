@@ -20,7 +20,7 @@ namespace OpenDental{
 
 		///<summary>It is entirely acceptable to pass in a null value for PatCur.  In that case, no patient name will show.</summary>
 		public static string GetMainTitle(Patient PatCur){
-			string retVal=PrefB.GetString("MainWindowTitle");
+			string retVal=PrefC.GetString("MainWindowTitle");
 			if(Security.CurUser!=null) {
 				retVal+=" {"+Security.CurUser.UserName+"}";
 			}
@@ -28,11 +28,11 @@ namespace OpenDental{
 				return retVal;
 			}
 			retVal+=" - "+PatCur.GetNameLF();
-			//if(PrefB.GetInt("ShowIDinTitleBar")==0){//no action
-			if(PrefB.GetInt("ShowIDinTitleBar")==1){
+			//if(PrefC.GetInt("ShowIDinTitleBar")==0){//no action
+			if(PrefC.GetInt("ShowIDinTitleBar")==1){
 				retVal+=" - "+PatCur.PatNum.ToString();
 			}
-			else if(PrefB.GetInt("ShowIDinTitleBar")==2) {
+			else if(PrefC.GetInt("ShowIDinTitleBar")==2) {
 				retVal+=" - "+PatCur.ChartNumber;
 			}
 			return retVal;
@@ -40,7 +40,7 @@ namespace OpenDental{
 
 		///<summary>A simpler version which does not require as much data.</summary>
 		public static string GetMainTitle(string nameLF,int patNum,string chartNumber) {
-			string retVal=PrefB.GetString("MainWindowTitle");
+			string retVal=PrefC.GetString("MainWindowTitle");
 			if(Security.CurUser!=null){
 				retVal+=" {"+Security.CurUser.UserName+"}";
 			}
@@ -48,10 +48,10 @@ namespace OpenDental{
 				return retVal;
 			}
 			retVal+=" - "+nameLF;
-			if(PrefB.GetInt("ShowIDinTitleBar")==1) {
+			if(PrefC.GetInt("ShowIDinTitleBar")==1) {
 				retVal+=" - "+patNum.ToString();
 			}
-			else if(PrefB.GetInt("ShowIDinTitleBar")==2) {
+			else if(PrefC.GetInt("ShowIDinTitleBar")==2) {
 				retVal+=" - "+chartNumber;
 			}
 			return retVal;

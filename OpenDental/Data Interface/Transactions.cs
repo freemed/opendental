@@ -49,15 +49,15 @@ namespace OpenDental{
 
 		///<summary></summary>
 		public static void Insert(Transaction trans) {
-			if(PrefB.RandomKeys) {
+			if(PrefC.RandomKeys) {
 				trans.TransactionNum=MiscData.GetKey("transaction","TransactionNum");
 			}
 			string command="INSERT INTO transaction (";
-			if(PrefB.RandomKeys) {
+			if(PrefC.RandomKeys) {
 				command+="TransactionNum,";
 			}
 			command+="DateTimeEntry,UserNum,DepositNum,PayNum) VALUES(";
-			if(PrefB.RandomKeys) {
+			if(PrefC.RandomKeys) {
 				command+="'"+POut.PInt(trans.TransactionNum)+"', ";
 			}
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
@@ -71,7 +71,7 @@ namespace OpenDental{
 				+"'"+POut.PInt   (trans.UserNum)+"', "
 				+"'"+POut.PInt   (trans.DepositNum)+"', "
 				+"'"+POut.PInt   (trans.PayNum)+"')";
-			if(PrefB.RandomKeys) {
+			if(PrefC.RandomKeys) {
 				General.NonQ(command);
 			}
 			else {

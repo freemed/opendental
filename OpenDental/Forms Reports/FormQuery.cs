@@ -550,7 +550,7 @@ namespace OpenDental{
 				panelZoom.Visible=true;
 				PrintReport(true);
 				labelTotPages.Text="/ "+totalPages.ToString();
-				if(PrefB.GetBool("FuchsOptionsOn")) {
+				if(PrefC.GetBool("FuchsOptionsOn")) {
 					butFullPage.Visible = true;
 					butZoomIn.Visible = false;
 					printPreviewControl2.Zoom = 1;
@@ -624,7 +624,7 @@ namespace OpenDental{
 				}*/
 				Queries.CurReport.Title=textTitle.Text;
 				Queries.CurReport.SubTitle=new string[1];
-				Queries.CurReport.SubTitle[0]=((Pref)PrefB.HList["PracticeTitle"]).ValueString;
+				Queries.CurReport.SubTitle[0]=((Pref)PrefC.HList["PracticeTitle"]).ValueString;
 				for(int iCol=0;iCol<Queries.TableQ.Columns.Count;iCol++){
 					Queries.CurReport.ColCaption[iCol]=Queries.TableQ.Columns[iCol].Caption;//myGridTS.GridColumnStyles[iCol].HeaderText;
 					myGridTS.GridColumnStyles[iCol].Alignment=Queries.CurReport.ColAlign[iCol];
@@ -1282,16 +1282,16 @@ namespace OpenDental{
       else{
         saveFileDialog2.FileName=UserQueries.Cur.FileName;
 			}
-			if(!Directory.Exists( ((Pref)PrefB.HList["ExportPath"]).ValueString )){
+			if(!Directory.Exists( ((Pref)PrefC.HList["ExportPath"]).ValueString )){
 				try{
-					Directory.CreateDirectory( ((Pref)PrefB.HList["ExportPath"]).ValueString );
-					saveFileDialog2.InitialDirectory=((Pref)PrefB.HList["ExportPath"]).ValueString;
+					Directory.CreateDirectory( ((Pref)PrefC.HList["ExportPath"]).ValueString );
+					saveFileDialog2.InitialDirectory=((Pref)PrefC.HList["ExportPath"]).ValueString;
 				}
 				catch{
 					//initialDirectory will be blank
 				}
 			}
-			else saveFileDialog2.InitialDirectory=((Pref)PrefB.HList["ExportPath"]).ValueString;
+			else saveFileDialog2.InitialDirectory=((Pref)PrefC.HList["ExportPath"]).ValueString;
 			//saveFileDialog2.DefaultExt="xls";
 			//saveFileDialog2.Filter="txt files(*.txt)|*.txt|All files(*.*)|*.*";
       //saveFileDialog2.FilterIndex=1;
@@ -1326,16 +1326,16 @@ namespace OpenDental{
 				else
 					saveFileDialog2.FileName=UserQueryCur.FileName;
 			}
-			if(!Directory.Exists( ((Pref)PrefB.HList["ExportPath"]).ValueString )){
+			if(!Directory.Exists( ((Pref)PrefC.HList["ExportPath"]).ValueString )){
 				try{
-					Directory.CreateDirectory( ((Pref)PrefB.HList["ExportPath"]).ValueString );
-					saveFileDialog2.InitialDirectory=((Pref)PrefB.HList["ExportPath"]).ValueString;
+					Directory.CreateDirectory( ((Pref)PrefC.HList["ExportPath"]).ValueString );
+					saveFileDialog2.InitialDirectory=((Pref)PrefC.HList["ExportPath"]).ValueString;
 				}
 				catch{
 					//initialDirectory will be blank
 				}
 			}
-			else saveFileDialog2.InitialDirectory=((Pref)PrefB.HList["ExportPath"]).ValueString;
+			else saveFileDialog2.InitialDirectory=((Pref)PrefC.HList["ExportPath"]).ValueString;
 			//saveFileDialog2.DefaultExt="txt";
 			saveFileDialog2.Filter="Text files(*.txt)|*.txt|Excel Files(*.xls)|*.xls|All files(*.*)|*.*";
       saveFileDialog2.FilterIndex=0;

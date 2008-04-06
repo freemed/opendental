@@ -569,7 +569,7 @@ namespace OpenDental{
 				if(StmtCur.DateRangeTo.Year<2100){
 					textDateEnd.Text=StmtCur.DateRangeTo.ToShortDateString();
 				}
-				if(PrefB.GetBool("FuchsOptionsOn")){
+				if(PrefC.GetBool("FuchsOptionsOn")){
 					//textDateFrom.Text=DateTime.Today.AddDays(-90).ToShortDateString();
 					//textDateTo.Text=DateTime.Today.ToShortDateString();
 					groupFuchs.Visible=true;
@@ -860,7 +860,7 @@ namespace OpenDental{
 			Random rnd=new Random();
 			string fileName=DateTime.Now.ToString("yyyyMMdd")+"_"+DateTime.Now.TimeOfDay.Ticks.ToString()+rnd.Next(1000).ToString()+".pdf";
 			string filePathAndName=ODFileUtils.CombinePaths(attachPath,fileName);
-			if(!PrefB.UsingAtoZfolder){
+			if(!PrefC.UsingAtoZfolder){
 				MsgBox.Show(this,"Could not create email because no AtoZ folder.");
 				return false;
 			}
@@ -872,7 +872,7 @@ namespace OpenDental{
 			EmailMessage message=new EmailMessage();
 			message.PatNum=pat.PatNum;
 			message.ToAddress=pat.Email;
-			message.FromAddress=PrefB.GetString("EmailSenderAddress");
+			message.FromAddress=PrefC.GetString("EmailSenderAddress");
 			message.Subject=Lan.g(this,"Statement");
 			//message.BodyText=Lan.g(this,"");
 			EmailAttach attach=new EmailAttach();

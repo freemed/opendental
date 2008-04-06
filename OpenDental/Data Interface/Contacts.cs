@@ -30,16 +30,16 @@ namespace OpenDental{
 
 		///<summary></summary>
 		public static void Insert(Contact Cur){
-			if(PrefB.RandomKeys){
+			if(PrefC.RandomKeys){
 				Cur.ContactNum=MiscData.GetKey("contact","ContactNum");
 			}
 			string command="INSERT INTO contact (";
-			if(PrefB.RandomKeys){
+			if(PrefC.RandomKeys){
 				command+="ContactNum,";
 			}
 			command+="LName,FName,WkPhone,Fax,Category,"
 				+"Notes) VALUES(";
-			if(PrefB.RandomKeys){
+			if(PrefC.RandomKeys){
 				command+="'"+POut.PInt(Cur.ContactNum)+"', ";
 			}
 			command+=
@@ -49,7 +49,7 @@ namespace OpenDental{
 				+"'"+POut.PString(Cur.Fax)+"', "
 				+"'"+POut.PInt   (Cur.Category)+"', "
 				+"'"+POut.PString(Cur.Notes)+"')";
-			if(PrefB.RandomKeys){
+			if(PrefC.RandomKeys){
 				General.NonQ(command);
 			}
 			else{

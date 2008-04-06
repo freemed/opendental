@@ -28,23 +28,23 @@ namespace OpenDental{
 
 		///<summary>Inserts this lettermergefield into database.</summary>
 		public static void Insert(LetterMergeField lmf){
-			if(PrefB.RandomKeys){
+			if(PrefC.RandomKeys){
 				lmf.FieldNum=MiscData.GetKey("lettermergefield","FieldNum");
 			}
 			string command= "INSERT INTO lettermergefield (";
-			if(PrefB.RandomKeys){
+			if(PrefC.RandomKeys){
 				command+="FieldNum,";
 			}
 			command+="LetterMergeNum,FieldName"
 				+") VALUES(";
-			if(PrefB.RandomKeys){
+			if(PrefC.RandomKeys){
 				command+="'"+POut.PInt(lmf.FieldNum)+"', ";
 			}
 			command+=
 				 "'"+POut.PInt   (lmf.LetterMergeNum)+"', "
 				+"'"+POut.PString(lmf.FieldName)+"')";
 			//MessageBox.Show(string command);
- 			if(PrefB.RandomKeys){
+ 			if(PrefC.RandomKeys){
 				General.NonQ(command);
 			}
 			else{

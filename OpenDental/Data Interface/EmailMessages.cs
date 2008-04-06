@@ -63,16 +63,16 @@ namespace OpenDental{
 
 		///<summary></summary>
 		public static void Insert(EmailMessage message){
-			if(PrefB.RandomKeys) {
+			if(PrefC.RandomKeys) {
 				message.EmailMessageNum=MiscDataB.GetKey("emailmessage","EmailMessageNum");
 			}
 			string command="INSERT INTO emailmessage (";
-			if(PrefB.RandomKeys) {
+			if(PrefC.RandomKeys) {
 				command+="EmailMessageNum,";
 			}
 			command+="PatNum,ToAddress,FromAddress,Subject,BodyText,"
 				+"MsgDateTime,SentOrReceived) VALUES(";
-			if(PrefB.RandomKeys) {
+			if(PrefC.RandomKeys) {
 				command+="'"+POut.PInt(message.EmailMessageNum)+"', ";
 			}
 			command+=
@@ -83,7 +83,7 @@ namespace OpenDental{
 				+"'"+POut.PString(message.BodyText)+"', "
 				+POut.PDateT(message.MsgDateTime)+", "
 				+"'"+POut.PInt((int)message.SentOrReceived)+"')";
-			if(PrefB.RandomKeys) {
+			if(PrefC.RandomKeys) {
 				General.NonQ(command);
 			}
 			else {

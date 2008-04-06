@@ -1704,11 +1704,11 @@ namespace OpenDental{
 			//richTextBox1.Select(22,9);
 			//richTextBox1.SelectionFont=new Font(FontFamily.GenericMonospace,8,FontStyle.Underline);
 			textDateEntry.Text=ProcCur.DateEntryC.ToShortDateString();
-			if(PrefB.GetBool("EasyHidePublicHealth")){
+			if(PrefC.GetBool("EasyHidePublicHealth")){
 				labelPlaceService.Visible=false;
 				comboPlaceService.Visible=false;
 			}
-			if(PrefB.GetBool("UseInternationalToothNumbers")){
+			if(PrefC.GetBool("UseInternationalToothNumbers")){
 				listBoxTeeth.Items.Clear();
 				listBoxTeeth.Items.AddRange(new string[] {"18","17","16","15","14","13","12","11","21","22","23","24","25","26","27","28"});
 				listBoxTeeth2.Items.Clear();
@@ -1750,15 +1750,15 @@ namespace OpenDental{
 				labelClaim.Visible=true;
 				butSetComplete.Enabled=false;
 			}
-			if(PrefB.GetBool("EasyHideClinical")){
+			if(PrefC.GetBool("EasyHideClinical")){
 				labelDx.Visible=false;
 				comboDx.Visible=false;
 			}
-			if(PrefB.GetBool("EasyNoClinics")){
+			if(PrefC.GetBool("EasyNoClinics")){
 				comboClinic.Visible=false;
 				labelClinic.Visible=false;
 			}
-			if(PrefB.GetBool("EasyHideMedicaid")) {
+			if(PrefC.GetBool("EasyHideMedicaid")) {
 				comboBillingTypeOne.Visible=false;
 				labelBillingTypeOne.Visible=false;
 				comboBillingTypeTwo.Visible=false;
@@ -1788,7 +1788,7 @@ namespace OpenDental{
 			listProcStatus.Items.Clear();
 			listProcStatus.Items.Add(Lan.g(this,"Treatment Planned"));
 			listProcStatus.Items.Add(Lan.g(this,"Complete"));
-			if(!PrefB.GetBool("EasyHideClinical")) {
+			if(!PrefC.GetBool("EasyHideClinical")) {
 				listProcStatus.Items.Add(Lan.g(this,"Existing-Current Prov"));
 				listProcStatus.Items.Add(Lan.g(this,"Existing-Other Prov"));
 				listProcStatus.Items.Add(Lan.g(this,"Referred Out"));
@@ -1800,7 +1800,7 @@ namespace OpenDental{
 			if(ProcCur.ProcStatus==ProcStat.C) {
 				listProcStatus.SelectedIndex=1;
 			}
-			if(PrefB.GetBool("EasyHideClinical")) {
+			if(PrefC.GetBool("EasyHideClinical")) {
 				if(ProcCur.ProcStatus==ProcStat.D) {
 					listProcStatus.SelectedIndex=2;
 				}
@@ -2416,7 +2416,7 @@ namespace OpenDental{
 					if(ProcCur.ProcStatus==ProcStat.TP) {
 						listProcStatus.SelectedIndex=0;
 					}
-					else if(PrefB.GetBool("EasyHideClinical")) {
+					else if(PrefC.GetBool("EasyHideClinical")) {
 						if(ProcCur.ProcStatus==ProcStat.D) {
 							listProcStatus.SelectedIndex=2;
 						}
@@ -2444,7 +2444,7 @@ namespace OpenDental{
 				ProcCur.ProcStatus=ProcStat.C;
 			}
 			if(listProcStatus.SelectedIndex==2) {
-				if(PrefB.GetBool("EasyHideClinical")){
+				if(PrefC.GetBool("EasyHideClinical")){
 					ProcCur.ProcStatus=ProcStat.D;
 				}
 				else{
@@ -2487,7 +2487,7 @@ namespace OpenDental{
 			listProcStatus.SelectedIndex=-1;
 			//radioStatusC.Checked=true;
 			ProcCur.ProcStatus=ProcStat.C;
-			comboPlaceService.SelectedIndex=PrefB.GetInt("DefaultProcedurePlaceService");
+			comboPlaceService.SelectedIndex=PrefC.GetInt("DefaultProcedurePlaceService");
 			if(EntriesAreValid()){
 				SaveAndClose();
 			}

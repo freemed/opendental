@@ -719,14 +719,14 @@ namespace OpenDental{
 			pat=fam.GetPatient(AptCur.PatNum);
 			PlanList=InsPlans.Refresh(fam);
 			PatPlanList=PatPlans.Refresh(AptCur.PatNum);
-			if(PrefB.GetBool("EasyHideDentalSchools")) {
+			if(PrefC.GetBool("EasyHideDentalSchools")) {
 				butRequirement.Visible=false;
 				textRequirement.Visible=false;
 				textNote.Top = 238;
 				textNote.Height=126;
 				labelApptNote.Top = 219;
 			}
-			if(PrefB.GetBool("EasyNoClinics")) {
+			if(PrefC.GetBool("EasyNoClinics")) {
 				labelClinic.Visible=false;
 				comboClinic.Visible=false;
 			}
@@ -783,10 +783,10 @@ namespace OpenDental{
 			strBTime=new StringBuilder();
 			for(int i=0;i<AptCur.Pattern.Length;i++) {
 				strBTime.Append(AptCur.Pattern.Substring(i,1));
-				if(PrefB.GetInt("AppointmentTimeIncrement")==10) {
+				if(PrefC.GetInt("AppointmentTimeIncrement")==10) {
 					i++;
 				}
-				if(PrefB.GetInt("AppointmentTimeIncrement")==15) {
+				if(PrefC.GetInt("AppointmentTimeIncrement")==15) {
 					i++;
 					i++;
 				}
@@ -805,7 +805,7 @@ namespace OpenDental{
 			}
 			textAddTime.MinVal=-1200;
 			textAddTime.MaxVal=1200;
-			textAddTime.Text=POut.PInt(AptCur.AddTime*PIn.PInt(((Pref)PrefB.HList["AppointmentTimeIncrement"]).ValueString));
+			textAddTime.Text=POut.PInt(AptCur.AddTime*PIn.PInt(((Pref)PrefC.HList["AppointmentTimeIncrement"]).ValueString));
 			textNote.Text=AptCur.Note;
 			for(int i=0;i<DefC.Short[(int)DefCat.ApptProcsQuickAdd].Length;i++) {
 				listQuickAdd.Items.Add(DefC.Short[(int)DefCat.ApptProcsQuickAdd][i].ItemName);
@@ -1069,7 +1069,7 @@ namespace OpenDental{
 		}
 
 		private void CalculateTime() {
-			int adjTimeU=PIn.PInt(textAddTime.Text)/PrefB.GetInt("AppointmentTimeIncrement");
+			int adjTimeU=PIn.PInt(textAddTime.Text)/PrefC.GetInt("AppointmentTimeIncrement");
 			strBTime=new StringBuilder("");
 			string procTime="";
 			int codeNum;
@@ -1409,7 +1409,7 @@ namespace OpenDental{
 			for(int i=0;i<strBTime.Length;i++) {
 				savePattern.Append(strBTime[i]);
 				savePattern.Append(strBTime[i]);
-				if(PrefB.GetInt("AppointmentTimeIncrement")==15) {
+				if(PrefC.GetInt("AppointmentTimeIncrement")==15) {
 					savePattern.Append(strBTime[i]);
 				}
 			}
@@ -1427,7 +1427,7 @@ namespace OpenDental{
 				AptCur.Confirmed
 					=DefC.Short[(int)DefCat.ApptConfirmed][comboConfirmed.SelectedIndex].DefNum;
 			AptCur.AddTime=(int)(PIn.PInt(textAddTime.Text)/
-				PIn.PInt(((Pref)PrefB.HList["AppointmentTimeIncrement"]).ValueString));
+				PIn.PInt(((Pref)PrefC.HList["AppointmentTimeIncrement"]).ValueString));
 			AptCur.Note=textNote.Text;
 			if(comboClinic.SelectedIndex==0)//none
 				AptCur.ClinicNum=0;

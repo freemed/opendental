@@ -64,15 +64,15 @@ namespace OpenDental{
 
 		///<summary></summary>
 		public static void Insert(Employer Cur){
-			if(PrefB.RandomKeys){
+			if(PrefC.RandomKeys){
 				Cur.EmployerNum=MiscData.GetKey("employer","EmployerNum");
 			}
 			string command="INSERT INTO employer (";
-			if(PrefB.RandomKeys){
+			if(PrefC.RandomKeys){
 				command+="EmployerNum,";
 			}
 			command+="EmpName,Address,Address2,City,State,Zip,Phone) VALUES(";
-			if(PrefB.RandomKeys){
+			if(PrefC.RandomKeys){
 				command+="'"+POut.PInt(Cur.EmployerNum)+"', ";
 			}
 			command+=
@@ -83,7 +83,7 @@ namespace OpenDental{
 				+"'"+POut.PString(Cur.State)+"', "
 				+"'"+POut.PString(Cur.Zip)+"', "
 				+"'"+POut.PString(Cur.Phone)+"')";
-			if(PrefB.RandomKeys){
+			if(PrefC.RandomKeys){
 				General.NonQ(command);
 			}
 			else{

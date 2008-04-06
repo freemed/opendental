@@ -10,10 +10,10 @@ namespace OpenDental.Imaging {
 		public static string GetPreferredImagePath {
 //#warning Hard-coded path
 			get { //return @"C:\OpenDentImages\"; }
-				if(!PrefB.UsingAtoZfolder) {
+				if(!PrefC.UsingAtoZfolder) {
 					return null;
 				}
-				return ElucidatePreferredImagePath(PrefB.GetString("DocPath"));
+				return ElucidatePreferredImagePath(PrefC.GetString("DocPath"));
 			}
 		}
 

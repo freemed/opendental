@@ -308,8 +308,8 @@ namespace OpenDental{
 		#endregion
 
 		private void FormAging_Load(object sender, System.EventArgs e) {
-			textDate.Text=(PIn.PDate(PrefB.GetString("DateLastAging"))).ToShortDateString();
-			if(PIn.PDate(PrefB.GetString("DateLastAging")) < DateTime.Today){
+			textDate.Text=(PIn.PDate(PrefC.GetString("DateLastAging"))).ToShortDateString();
+			if(PIn.PDate(PrefC.GetString("DateLastAging")) < DateTime.Today){
 				if(MessageBox.Show(Lan.g(this,"Update aging first?"),"",MessageBoxButtons.YesNo)==DialogResult.Yes){
 					FormAging FormA=new FormAging();
 					FormA.ShowDialog();
@@ -441,7 +441,7 @@ namespace OpenDental{
 			FormQuery2.SubmitReportQuery();		
 			Queries.CurReport.Title="AGING REPORT";
 			Queries.CurReport.SubTitle=new string[4];
-			Queries.CurReport.SubTitle[0]=((Pref)PrefB.HList["PracticeTitle"]).ValueString;
+			Queries.CurReport.SubTitle[0]=((Pref)PrefC.HList["PracticeTitle"]).ValueString;
 			Queries.CurReport.SubTitle[1]="As of "+textDate.Text;
 			if(radioAny.Checked){
 				Queries.CurReport.SubTitle[2]="Any Balance";

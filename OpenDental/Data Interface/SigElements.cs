@@ -50,22 +50,22 @@ namespace OpenDental{
 
 		///<summary></summary>
 		public static void Insert(SigElement se){
-			if(PrefB.RandomKeys){
+			if(PrefC.RandomKeys){
 				se.SigElementNum=MiscData.GetKey("sigelement","SigElementNum");
 			}
 			string command= "INSERT INTO sigelement (";
-			if(PrefB.RandomKeys){
+			if(PrefC.RandomKeys){
 				command+="SigElementNum,";
 			}
 			command+="SigElementDefNum,SignalNum"
 				+") VALUES(";
-			if(PrefB.RandomKeys){
+			if(PrefC.RandomKeys){
 				command+="'"+POut.PInt(se.SigElementNum)+"', ";
 			}
 			command+=
 				 "'"+POut.PInt   (se.SigElementDefNum)+"', "
 				+"'"+POut.PInt   (se.SignalNum)+"')";
- 			if(PrefB.RandomKeys){
+ 			if(PrefC.RandomKeys){
 				General.NonQ(command);
 			}
 			else{

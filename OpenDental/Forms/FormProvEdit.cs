@@ -649,7 +649,7 @@ namespace OpenDental{
 			//	Providers.InsertCur();
 				//one field handled from previous form
 			//}
-			if(PrefB.GetBool("EasyHideDentalSchools")){
+			if(PrefC.GetBool("EasyHideDentalSchools")){
 				labelSchoolClass.Visible=false;
 				comboSchoolClass.Visible=false;
 			}

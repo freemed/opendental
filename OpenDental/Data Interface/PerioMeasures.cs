@@ -66,17 +66,17 @@ namespace OpenDental{
 
 		///<summary></summary>
 		public static void Insert(PerioMeasure Cur){
-			if(PrefB.RandomKeys){
+			if(PrefC.RandomKeys){
 				Cur.PerioMeasureNum=MiscData.GetKey("periomeasure","PerioMeasureNum");
 			}
 			string command="INSERT INTO periomeasure (";
-			if(PrefB.RandomKeys){
+			if(PrefC.RandomKeys){
 				command+="PerioMeasureNum,";
 			}
 			command+="PerioExamNum,SequenceType,IntTooth,ToothValue,"
 				+"MBvalue,Bvalue,DBvalue,MLvalue,Lvalue,DLvalue"
 				+") VALUES(";
-			if(PrefB.RandomKeys){
+			if(PrefC.RandomKeys){
 				command+="'"+POut.PInt(Cur.PerioMeasureNum)+"', ";
 			}
 			command+=
@@ -90,7 +90,7 @@ namespace OpenDental{
 				+"'"+POut.PInt   (Cur.MLvalue)+"', "
 				+"'"+POut.PInt   (Cur.Lvalue)+"', "
 				+"'"+POut.PInt   (Cur.DLvalue)+"')";
-			if(PrefB.RandomKeys){
+			if(PrefC.RandomKeys){
 				General.NonQ(command);
 			}
 			else{

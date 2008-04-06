@@ -153,17 +153,17 @@ namespace OpenDental{
 
 		///<summary></summary>
 		public static void Insert(Recall recall) {
-			if(PrefB.RandomKeys) {
+			if(PrefC.RandomKeys) {
 				recall.RecallNum=MiscData.GetKey("recall","RecallNum");
 			}
 			string command= "INSERT INTO recall (";
-			if(PrefB.RandomKeys) {
+			if(PrefC.RandomKeys) {
 				command+="RecallNum,";
 			}
 			command+="PatNum,DateDueCalc,DateDue,DatePrevious,"
 				+"RecallInterval,RecallStatus,Note,IsDisabled"
 				+") VALUES(";
-			if(PrefB.RandomKeys) {
+			if(PrefC.RandomKeys) {
 				command+="'"+POut.PInt(recall.RecallNum)+"', ";
 			}
 			command+=
@@ -175,7 +175,7 @@ namespace OpenDental{
 				+"'"+POut.PInt(recall.RecallStatus)+"', "
 				+"'"+POut.PString(recall.Note)+"', "
 				+"'"+POut.PBool(recall.IsDisabled)+"')";
-			if(PrefB.RandomKeys) {
+			if(PrefC.RandomKeys) {
 				General.NonQ(command);
 			}
 			else {

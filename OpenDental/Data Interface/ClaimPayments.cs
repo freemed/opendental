@@ -100,16 +100,16 @@ namespace OpenDental{
 
 		///<summary></summary>
 		public static void Insert(ClaimPayment cp){
-			if(PrefB.RandomKeys){
+			if(PrefC.RandomKeys){
 				cp.ClaimPaymentNum=MiscData.GetKey("claimpayment","ClaimPaymentNum");
 			}
 			string command= "INSERT INTO claimpayment (";
-			if(PrefB.RandomKeys){
+			if(PrefC.RandomKeys){
 				command+="ClaimPaymentNum,";
 			}
 			command+="CheckDate,CheckAmt,CheckNum,"
 				+"BankBranch,Note,ClinicNum,DepositNum,CarrierName) VALUES(";
-			if(PrefB.RandomKeys){
+			if(PrefC.RandomKeys){
 				command+="'"+POut.PInt(cp.ClaimPaymentNum)+"', ";
 			}
 			command+=
@@ -121,7 +121,7 @@ namespace OpenDental{
 				+"'"+POut.PInt   (cp.ClinicNum)+"', "
 				+"'"+POut.PInt   (cp.DepositNum)+"', "
 				+"'"+POut.PString(cp.CarrierName)+"')";
-			if(PrefB.RandomKeys){
+			if(PrefC.RandomKeys){
 				General.NonQ(command);
 			}
 			else{

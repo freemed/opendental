@@ -42,22 +42,22 @@ namespace OpenDental{
 
 		///<summary></summary>
 		public static void Insert(ReqNeeded req) {
-			if(PrefB.RandomKeys) {
+			if(PrefC.RandomKeys) {
 				req.ReqNeededNum=MiscData.GetKey("reqneeded","ReqNeededNum");
 			}
 			string command= "INSERT INTO reqneeded (";
-			if(PrefB.RandomKeys) {
+			if(PrefC.RandomKeys) {
 				command+="ReqNeededNum,";
 			}
 			command+="Descript,SchoolCourseNum,SchoolClassNum) VALUES(";
-			if(PrefB.RandomKeys) {
+			if(PrefC.RandomKeys) {
 				command+="'"+POut.PInt(req.ReqNeededNum)+"', ";
 			}
 			command+=
 				 "'"+POut.PString(req.Descript)+"', "
 				+"'"+POut.PInt   (req.SchoolCourseNum)+"', "
 				+"'"+POut.PInt   (req.SchoolClassNum)+"')";
-			if(PrefB.RandomKeys) {
+			if(PrefC.RandomKeys) {
 				General.NonQ(command);
 			}
 			else {

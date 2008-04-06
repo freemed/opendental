@@ -70,15 +70,15 @@ namespace OpenDental{
 
 		///<summary></summary>
 		public static void Insert(PayPlan plan){
-			if(PrefB.RandomKeys){
+			if(PrefC.RandomKeys){
 				plan.PayPlanNum=MiscData.GetKey("payplan","PayPlanNum");
 			}
 			string command="INSERT INTO payplan (";
-			if(PrefB.RandomKeys){
+			if(PrefC.RandomKeys){
 				command+="PayPlanNum,";
 			}
 			command+="PatNum,Guarantor,PayPlanDate,APR,Note,PlanNum) VALUES(";
-			if(PrefB.RandomKeys){
+			if(PrefC.RandomKeys){
 				command+="'"+POut.PInt(plan.PayPlanNum)+"', ";
 			}
 			command+=
@@ -88,7 +88,7 @@ namespace OpenDental{
 				+"'"+POut.PDouble(plan.APR)+"', "
 				+"'"+POut.PString(plan.Note)+"', "
 				+"'"+POut.PInt   (plan.PlanNum)+"')";
-			if(PrefB.RandomKeys){
+			if(PrefC.RandomKeys){
 				General.NonQ(command);
 			}
 			else{

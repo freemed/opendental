@@ -1082,12 +1082,12 @@ namespace OpenDental{
 			butColorPus.BackColor=DefC.Short[(int)DefCat.MiscColors][2].ItemColor;
 			butColorPlaque.BackColor=DefC.Short[(int)DefCat.MiscColors][4].ItemColor;
 			butColorCalculus.BackColor=DefC.Short[(int)DefCat.MiscColors][5].ItemColor;
-			textRedProb.Text=((Pref)PrefB.HList["PerioRedProb"]).ValueString;
-			textRedMGJ.Text =((Pref)PrefB.HList["PerioRedMGJ"] ).ValueString;
-			textRedGing.Text=((Pref)PrefB.HList["PerioRedGing"]).ValueString;
-			textRedCAL.Text =((Pref)PrefB.HList["PerioRedCAL"] ).ValueString;
-			textRedFurc.Text=((Pref)PrefB.HList["PerioRedFurc"]).ValueString;
-			textRedMob.Text =((Pref)PrefB.HList["PerioRedMob"] ).ValueString;
+			textRedProb.Text=((Pref)PrefC.HList["PerioRedProb"]).ValueString;
+			textRedMGJ.Text =((Pref)PrefC.HList["PerioRedMGJ"] ).ValueString;
+			textRedGing.Text=((Pref)PrefC.HList["PerioRedGing"]).ValueString;
+			textRedCAL.Text =((Pref)PrefC.HList["PerioRedCAL"] ).ValueString;
+			textRedFurc.Text=((Pref)PrefC.HList["PerioRedFurc"]).ValueString;
+			textRedMob.Text =((Pref)PrefC.HList["PerioRedMob"] ).ValueString;
 			//Procedure[] procList=Procedures.Refresh(PatCur.PatNum);
 			ToothInitial[] initialList=ToothInitials.Refresh(PatCur.PatNum);
 			MissingTeeth=ToothInitials.GetMissingOrHiddenTeeth(initialList);
@@ -1390,22 +1390,22 @@ namespace OpenDental{
 			Pref pref=null;
 			if(sender==updownProb){
 				//textRedProb.Cursor=Cursors.WaitCursor;
-				pref=(Pref)PrefB.HList["PerioRedProb"];//erioRedNumber
+				pref=(Pref)PrefC.HList["PerioRedProb"];//erioRedNumber
 			}
 			else if(sender==updownMGJ){
-				pref=(Pref)PrefB.HList["PerioRedMGJ"];
+				pref=(Pref)PrefC.HList["PerioRedMGJ"];
 			}
 			else if(sender==updownGing){
-				pref=(Pref)PrefB.HList["PerioRedGing"];
+				pref=(Pref)PrefC.HList["PerioRedGing"];
 			}
 			else if(sender==updownCAL){
-				pref=(Pref)PrefB.HList["PerioRedCAL"];
+				pref=(Pref)PrefC.HList["PerioRedCAL"];
 			}
 			else if(sender==updownFurc){
-				pref=(Pref)PrefB.HList["PerioRedFurc"];
+				pref=(Pref)PrefC.HList["PerioRedFurc"];
 			}
 			else if(sender==updownMob){
-				pref=(Pref)PrefB.HList["PerioRedMob"];
+				pref=(Pref)PrefC.HList["PerioRedMob"];
 			}
 			int currentValue=PIn.PInt(pref.ValueString);
 			if(e.Y<8){//up

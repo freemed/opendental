@@ -167,7 +167,7 @@ namespace OpenDentBusiness{
 			}
 			DataTable rawProc=dcon.GetTable(command);
 			DataTable rawInsProc=null;
-			if(PrefB.GetBool("ApptExclamationShowForUnsentIns")){
+			if(PrefC.GetBool("ApptExclamationShowForUnsentIns")){
 				//procs for flag, InsNotSent
 				command ="SELECT patient.PatNum, patient.Guarantor "
 					+"FROM patient,procedurecode,procedurelog,claimproc "

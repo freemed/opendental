@@ -716,7 +716,7 @@ namespace OpenDental{
 				stmt=Statements.CreateObject(PIn.PInt(table.Rows[gridBill.SelectedIndices[i]]["StatementNum"].ToString()));
 				pat=Patients.GetPat(PIn.PInt(table.Rows[gridBill.SelectedIndices[i]]["PatNum"].ToString()));
 				if(stmt.Mode_==StatementMode.Email){
-					if(PrefB.GetString("EmailSMTPserver")==""){
+					if(PrefC.GetString("EmailSMTPserver")==""){
 						MsgBox.Show(this,"You need to enter an SMTP server name in e-mail setup before you can send e-mail.");
 						Cursor=Cursors.Default;
 						isPrinting=false;
@@ -766,7 +766,7 @@ namespace OpenDental{
 					message=new EmailMessage();
 					message.PatNum=pat.PatNum;
 					message.ToAddress=pat.Email;
-					message.FromAddress=PrefB.GetString("EmailSenderAddress");
+					message.FromAddress=PrefC.GetString("EmailSenderAddress");
 					message.Subject=Lan.g(this,"Statement");
 					message.BodyText=Lan.g(this,"Statement");
 					attach=new EmailAttach();

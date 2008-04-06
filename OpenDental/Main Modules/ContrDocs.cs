@@ -694,7 +694,7 @@ namespace OpenDental{
 
 		///<summary></summary>
 		public void ModuleSelected(int patNum){
-			if(!PrefB.UsingAtoZfolder) {
+			if(!PrefC.UsingAtoZfolder) {
 				MsgBox.Show(this,"Not currently using documents. Turn on the A to Z folders option by going to Setup | Data Paths to enable imaging.");
 				this.Enabled=false;
 				return;
@@ -738,7 +738,7 @@ namespace OpenDental{
 			}else{
 				EnableAllTools(false);//Disable entire menu (besides select patient).
 			}
-			if (((Pref)PrefB.HList["FuchsOptionsOn"]).ValueString == "1") {
+			if (((Pref)PrefC.HList["FuchsOptionsOn"]).ValueString == "1") {
 				panelDrTech.Visible = true;
 			}
 			ToolBarMain.Invalidate();
@@ -2223,8 +2223,8 @@ namespace OpenDental{
 					MountItems.Insert(mountItem);
 					FillDocList(false);
 					SelectTreeNode(GetNodeById(MakeIdentifier("0",mount.MountNum.ToString())));
-					brightnessContrastSlider.MinVal=PrefB.GetInt("ImageWindowingMin");
-					brightnessContrastSlider.MaxVal=PrefB.GetInt("ImageWindowingMax");
+					brightnessContrastSlider.MinVal=PrefC.GetInt("ImageWindowingMin");
+					brightnessContrastSlider.MaxVal=PrefC.GetInt("ImageWindowingMax");
 				}else {//A mount is currently selected. We must allow the user to insert new images into partially complete mounts.
 					//Clear the visible selection so that the user will know when the device is ready for xray exposure.
 					ImageHelper.RenderMountFrames(renderImage,selectionMountItems,-1);
@@ -2513,7 +2513,7 @@ namespace OpenDental{
 			if(imageStore.OpenFolderSupported) {
 				this.Cursor = Cursors.AppStarting;
 
-				string ProgName = PrefB.GetString("WordProcessorPath");
+				string ProgName = PrefC.GetString("WordProcessorPath");
 				//if (File.Exists(patFolder + @"~C&B Sheet.doc")){
 				//open existing file
 				//}; 
@@ -2522,7 +2522,7 @@ namespace OpenDental{
 				string TheFile = imageStore.FolderPath + "CB-Sheet" + DateTime.Now.ToFileTime() + ".doc";
 				try {
 					//File.Copy(@"\\server\opendental\data\CB-Sheet.odt", TheFile);
-					File.Copy(((PrefB.GetString("DocPath")) + @"\"
+					File.Copy(((PrefC.GetString("DocPath")) + @"\"
 						+ "CB-Sheet.doc"), TheFile);
 				}
 				catch {

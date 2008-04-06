@@ -2409,7 +2409,7 @@ namespace OpenDental{
 		///<summary>Does a hit test to determine if over an appointment.  Fills the bubble with data and then positions it.</summary>
 		private void InfoBubbleDraw(Point p){
 			//remember where to draw for hover effect
-			if(PrefB.GetBool("AppointmentBubblesDisabled")){
+			if(PrefC.GetBool("AppointmentBubblesDisabled")){
 				infoBubble.Visible=false;
 				timerInfoBubble.Enabled=false;
 				return;
@@ -2452,7 +2452,7 @@ namespace OpenDental{
 				PicturePat.Image=null;
 				if(//PatCur==null ||
 					row["ImageFolder"].ToString()!=""
-					&& PrefB.UsingAtoZfolder)//Do not use patient image when A to Z folders are disabled.
+					&& PrefC.UsingAtoZfolder)//Do not use patient image when A to Z folders are disabled.
 					//return;
 				{
 					try {
@@ -2570,7 +2570,7 @@ namespace OpenDental{
 			until mouse had hovered for at least 0.28 seconds(arbitrary #)
 			the timer fires at 0.30 seconds, so the difference was introduced because
 			of what seemed to be inconsistencies in the timer function */
-			if (DateTime.Now.AddMilliseconds(-280) > bubbleTime | !PrefB.GetBool("ApptBubbleDelay")){
+			if (DateTime.Now.AddMilliseconds(-280) > bubbleTime | !PrefC.GetBool("ApptBubbleDelay")){
 				infoBubble.Visible=true;
 			}
 			else{
@@ -2635,7 +2635,7 @@ namespace OpenDental{
 					apt.IsNewPatient=true;
 					apt.Pattern="/X/";
 					if(pat.PriProv==0){
-						apt.ProvNum=PrefB.GetInt("PracticeDefaultProv");
+						apt.ProvNum=PrefC.GetInt("PracticeDefaultProv");
 					}
 					else{			
 						apt.ProvNum=pat.PriProv;
@@ -3176,7 +3176,7 @@ namespace OpenDental{
 		}
 
 		private void OnBreak_Click(){
-			if(!PrefB.GetBool("BrokenApptCommLogNotAdjustment") && PrefB.GetInt("BrokenAppointmentAdjustmentType")==0){
+			if(!PrefC.GetBool("BrokenApptCommLogNotAdjustment") && PrefC.GetInt("BrokenAppointmentAdjustmentType")==0){
 				MsgBox.Show(this,"Broken appointment adjustment type is not setup yet.  Please go to Setup | Misc to fix this.");
 				return;
 			}
@@ -3203,7 +3203,7 @@ namespace OpenDental{
 			int provNum=PIn.PInt(ContrApptSingle3[thisI].DataRoww["ProvNum"].ToString());//remember before ModuleSelected
 			ModuleSelected(pat.PatNum);
 			SetInvalid();		
-			if(PrefB.GetBool("BrokenApptCommLogNotAdjustment")){
+			if(PrefC.GetBool("BrokenApptCommLogNotAdjustment")){
 				Commlog CommlogCur=new Commlog();
 				CommlogCur.PatNum=pat.PatNum;
 				CommlogCur.CommDateTime=DateTime.Now;
@@ -3222,7 +3222,7 @@ namespace OpenDental{
 				AdjustmentCur.ProcDate=DateTime.Today;
 				AdjustmentCur.ProvNum=provNum;
 				AdjustmentCur.PatNum=pat.PatNum;
-				AdjustmentCur.AdjType=PrefB.GetInt("BrokenAppointmentAdjustmentType");
+				AdjustmentCur.AdjType=PrefC.GetInt("BrokenAppointmentAdjustmentType");
 				FormAdjust FormA=new FormAdjust(pat,AdjustmentCur);
 				FormA.IsNew=true;
 				FormA.ShowDialog();
@@ -3724,16 +3724,16 @@ namespace OpenDental{
 		private void pd2_PrintApptCard(object sender, PrintPageEventArgs ev){
 			Graphics g=ev.Graphics;
 			//Return Address--------------------------------------------------------------------------
-			string str=PrefB.GetString("PracticeTitle")+"\r\n";
+			string str=PrefC.GetString("PracticeTitle")+"\r\n";
 			g.DrawString(str,new Font(FontFamily.GenericSansSerif,9,FontStyle.Bold),Brushes.Black,60,60);
-			str=PrefB.GetString("PracticeAddress")+"\r\n";
-			if(PrefB.GetString("PracticeAddress2")!=""){
-				str+=PrefB.GetString("PracticeAddress2")+"\r\n";
+			str=PrefC.GetString("PracticeAddress")+"\r\n";
+			if(PrefC.GetString("PracticeAddress2")!=""){
+				str+=PrefC.GetString("PracticeAddress2")+"\r\n";
 			}
-			str+=PrefB.GetString("PracticeCity")+"  "
-				+PrefB.GetString("PracticeST")+"  "
-				+PrefB.GetString("PracticeZip")+"\r\n";
-			string phone=PrefB.GetString("PracticePhone");
+			str+=PrefC.GetString("PracticeCity")+"  "
+				+PrefC.GetString("PracticeST")+"  "
+				+PrefC.GetString("PracticeZip")+"\r\n";
+			string phone=PrefC.GetString("PracticePhone");
 			if(CultureInfo.CurrentCulture.Name=="en-US"
 				&& phone.Length==10)
 			{

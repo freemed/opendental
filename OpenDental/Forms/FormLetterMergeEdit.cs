@@ -365,7 +365,7 @@ namespace OpenDental{
 
 		private void FormLetterMergeEdit_Load(object sender, System.EventArgs e) {
 			textDescription.Text=LetterMergeCur.Description;
-			mergePath=PrefB.GetString("LetterMergePath");
+			mergePath=PrefC.GetString("LetterMergePath");
 			textPath.Text=mergePath;
 			textTemplateName.Text=LetterMergeCur.TemplateName;
 			textDataFileName.Text=LetterMergeCur.DataFileName;
@@ -484,16 +484,16 @@ namespace OpenDental{
 		private void butEditPaths_Click(object sender, System.EventArgs e) {
 			FormPath FormP=new FormPath();
 			FormP.ShowDialog();
-			mergePath=PrefB.GetString("LetterMergePath");
+			mergePath=PrefC.GetString("LetterMergePath");
 			textPath.Text=mergePath;
 		}
 
 		private void butBrowse_Click(object sender, System.EventArgs e) {
-			if(!Directory.Exists(PrefB.GetString("LetterMergePath"))){
+			if(!Directory.Exists(PrefC.GetString("LetterMergePath"))){
 				MsgBox.Show(this,"Letter merge path invalid");
 				return;
 			}
-			openFileDlg.InitialDirectory=PrefB.GetString("LetterMergePath");
+			openFileDlg.InitialDirectory=PrefC.GetString("LetterMergePath");
 			if(openFileDlg.ShowDialog() !=DialogResult.OK){
 				return;
 			}
@@ -502,7 +502,7 @@ namespace OpenDental{
 
 		private void butNew_Click(object sender, System.EventArgs e) {
 #if !DISABLE_MICROSOFT_OFFICE
-			if(!Directory.Exists(PrefB.GetString("LetterMergePath"))){
+			if(!Directory.Exists(PrefC.GetString("LetterMergePath"))){
 				MsgBox.Show(this,"Letter merge path invalid");
 				return;
 			}
@@ -510,7 +510,7 @@ namespace OpenDental{
 				MsgBox.Show(this,"Please enter a template file name first.");
 				return;
 			}
-			string templateFile=ODFileUtils.CombinePaths(PrefB.GetString("LetterMergePath"),textTemplateName.Text);
+			string templateFile=ODFileUtils.CombinePaths(PrefC.GetString("LetterMergePath"),textTemplateName.Text);
 			if(File.Exists(templateFile)){
 				MsgBox.Show(this,"A file with that name already exists.  Choose a different name, or close this window to edit the template.");
 				return;

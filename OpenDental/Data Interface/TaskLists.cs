@@ -190,16 +190,16 @@ namespace OpenDental{
 
 		///<summary></summary>
 		private static void Insert(TaskList tlist){
-			if(PrefB.RandomKeys){
+			if(PrefC.RandomKeys){
 				tlist.TaskListNum=MiscData.GetKey("tasklist","TaskListNum");
 			}
 			string command= "INSERT INTO tasklist (";
-			if(PrefB.RandomKeys){
+			if(PrefC.RandomKeys){
 				command+="TaskListNum,";
 			}
 			command+="Descript,Parent,DateTL,IsRepeating,DateType,"
 				+"FromNum,ObjectType,DateTimeEntry) VALUES(";
-			if(PrefB.RandomKeys){
+			if(PrefC.RandomKeys){
 				command+="'"+POut.PInt(tlist.TaskListNum)+"', ";
 			}
 			command+=
@@ -217,7 +217,7 @@ namespace OpenDental{
 				command+="NOW()";
 			}
 			command+=")";//DateTimeEntry set to current server time
- 			if(PrefB.RandomKeys){
+ 			if(PrefC.RandomKeys){
 				General.NonQ(command);
 			}
 			else{

@@ -191,7 +191,7 @@ namespace OpenDental{
 				+"IFNULL((SELECT SUM(InsPayEst) FROM claimproc WHERE PatNum="+POut.PInt(patNum)+" GROUP BY PatNum),0) Estimate ";
 			DataTable table=General.GetTable(command);
 			double calcBal=PIn.PDouble(table.Rows[0]["CalcBalance"].ToString());
-			if(!PrefB.GetBool("BalancesDontSubtractIns")){//most common
+			if(!PrefC.GetBool("BalancesDontSubtractIns")){//most common
 				calcBal-=PIn.PDouble(table.Rows[0]["Estimate"].ToString());
 			}
 			double estBal=PIn.PDouble(table.Rows[0]["EstBalance"].ToString());
@@ -271,7 +271,7 @@ namespace OpenDental{
 					adj.AdjNote="Automatic";
 					adj.AdjType=defnum;
 					adj.ProcDate=DateTime.Today;
-					adj.ProvNum=PrefB.GetInt("PracticeDefaultProv");
+					adj.ProvNum=PrefC.GetInt("PracticeDefaultProv");
 					delta=familyBals[p]-PIn.PDouble(tablePatients.Rows[p]["EstBalance"].ToString());//works whether pos or neg
 					adj.AdjAmt=delta;
 					Adjustments.InsertOrUpdate(adj,true);

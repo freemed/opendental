@@ -28,16 +28,16 @@ namespace OpenDental{
 
 		///<summary></summary>
 		private static void Insert(Adjustment adj){
-			if(PrefB.RandomKeys){
+			if(PrefC.RandomKeys){
 				adj.AdjNum=MiscData.GetKey("adjustment","AdjNum");
 			}
 			string command= "INSERT INTO adjustment (";
-			if(PrefB.RandomKeys){
+			if(PrefC.RandomKeys){
 				command+="AdjNum,";
 			}
 			command+="AdjDate,AdjAmt,PatNum, "
 				+"AdjType,ProvNum,AdjNote,ProcDate,ProcNum,DateEntry) VALUES(";
-			if(PrefB.RandomKeys){
+			if(PrefC.RandomKeys){
 				command+="'"+POut.PInt(adj.AdjNum)+"', ";
 			}
 			command+=
@@ -55,7 +55,7 @@ namespace OpenDental{
 				command+="NOW()";//DateEntry set to server date
 			}
 			command+=")";
-			if(PrefB.RandomKeys){
+			if(PrefC.RandomKeys){
 				General.NonQ(command);
 			}
 			else{

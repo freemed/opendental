@@ -14,11 +14,11 @@ namespace OpenDental{
 	
 		///<summary></summary>
 		public static void Insert(Procedure proc){
-			if(PrefB.RandomKeys) {
+			if(PrefC.RandomKeys) {
 				proc.ProcNum=MiscDataB.GetKey("procedurelog","ProcNum");
 			}
 			string command= "INSERT INTO procedurelog (";
-			if(PrefB.RandomKeys) {
+			if(PrefC.RandomKeys) {
 				command+="ProcNum,";
 			}
 			command+="PatNum, AptNum, OldCode, ProcDate,ProcFee,Surf,"
@@ -27,7 +27,7 @@ namespace OpenDental{
 				+"DateEntryC,ClinicNum,MedicalCode,DiagnosticCode,IsPrincDiag,ProcNumLab,"
 				+"BillingTypeOne,BillingTypeTwo,CodeNum,CodeMod1,CodeMod2,CodeMod3,CodeMod4,RevCode,UnitCode,"
 				+"UnitQty,BaseUnits,StartTime,StopTime,DateTP) VALUES(";
-			if(PrefB.RandomKeys) {
+			if(PrefC.RandomKeys) {
 				command+="'"+POut.PInt(proc.ProcNum)+"', ";
 			}
 			command+=
@@ -74,7 +74,7 @@ namespace OpenDental{
 				+"'"+POut.PInt(proc.StopTime)+"', "
 				+POut.PDate(proc.DateTP)+")";
 			//MessageBox.Show(cmd.CommandText);
-			if(PrefB.RandomKeys) {
+			if(PrefC.RandomKeys) {
 				General.NonQ(command);
 			}
 			else {
@@ -682,7 +682,7 @@ namespace OpenDental{
 				if(oldProc.ProcStatus!=ProcStat.C){
 					ProcList[i].DateEntryC=DateTime.Now;//this triggers it to set to server time NOW().
 				}
-				ProcList[i].PlaceService=(PlaceOfService)PrefB.GetInt("DefaultProcedurePlaceService");
+				ProcList[i].PlaceService=(PlaceOfService)PrefC.GetInt("DefaultProcedurePlaceService");
 				ProcList[i].ClinicNum=apt.ClinicNum;
 				ProcList[i].PlaceService=Clinics.GetPlaceService(apt.ClinicNum);
 				if(apt.ProvHyg!=0){//if the appointment has a hygiene provider
@@ -1020,7 +1020,7 @@ namespace OpenDental{
 				{
 					retVal+=claimProcs[i].WriteOff;
 				}
-				if(!PrefB.GetBool("BalancesDontSubtractIns")//this is the typical situation
+				if(!PrefC.GetBool("BalancesDontSubtractIns")//this is the typical situation
 					&& claimProcs[i].Status==ClaimProcStatus.NotReceived) 
 				{
 					//so, if user IS using "balances don't subtract ins", and a proc as been sent but not received,

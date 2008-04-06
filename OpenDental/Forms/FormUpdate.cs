@@ -561,11 +561,11 @@ namespace OpenDental{
 
 		private void FormUpdate_Load(object sender, System.EventArgs e) {
 			labelVersion.Text=Lan.g(this,"Using Version:")+" "+Application.ProductVersion;
-			if(PrefB.GetBool("UpdateWindowShowsClassicView")){
+			if(PrefC.GetBool("UpdateWindowShowsClassicView")){
 				panelClassic.Visible=true;
 				panelClassic.Location=new Point(67,29);
-				textUpdateCode.Text=PrefB.GetString("UpdateCode");
-				textWebsitePath.Text=PrefB.GetString("UpdateWebsitePath");//should include trailing /
+				textUpdateCode.Text=PrefC.GetString("UpdateCode");
+				textWebsitePath.Text=PrefC.GetString("UpdateWebsitePath");//should include trailing /
 				butDownload.Enabled=false;
 				if(!Security.IsAuthorized(Permissions.Setup)){//gives a message box if no permission
 					butCheck.Enabled=false;
@@ -582,7 +582,7 @@ namespace OpenDental{
 		}
 
 		private void menuItemSetup_Click(object sender,EventArgs e) {
-			if(PrefB.GetBool("UpdateWindowShowsClassicView")){
+			if(PrefC.GetBool("UpdateWindowShowsClassicView")){
 				return;
 			}
 			FormUpdateSetup FormU=new FormUpdateSetup();
@@ -604,16 +604,16 @@ namespace OpenDental{
 			using(XmlWriter writer=XmlWriter.Create(strbuild,settings)){
 				writer.WriteStartElement("UpdateRequest");
 				writer.WriteStartElement("RegistrationKey");
-				writer.WriteString(PrefB.GetString("RegistrationKey"));
+				writer.WriteString(PrefC.GetString("RegistrationKey"));
 				writer.WriteEndElement();
 				writer.WriteStartElement("PracticeTitle");
-				writer.WriteString(PrefB.GetString("PracticeTitle"));
+				writer.WriteString(PrefC.GetString("PracticeTitle"));
 				writer.WriteEndElement();
 				writer.WriteStartElement("PracticePhone");
-				writer.WriteString(PrefB.GetString("PracticePhone"));
+				writer.WriteString(PrefC.GetString("PracticePhone"));
 				writer.WriteEndElement();
 				writer.WriteStartElement("ProgramVersion");
-				writer.WriteString(PrefB.GetString("ProgramVersion"));
+				writer.WriteString(PrefC.GetString("ProgramVersion"));
 				writer.WriteEndElement();
 				writer.WriteEndElement();
 			}
@@ -622,7 +622,7 @@ namespace OpenDental{
 			#else
 				OpenDental.customerUpdates.Service1 updateService=new OpenDental.customerUpdates.Service1();
 			#endif
-			updateService.Url=PrefB.GetString("UpdateServerAddress");
+			updateService.Url=PrefC.GetString("UpdateServerAddress");
 			string result="";
 			try {
 				result=updateService.RequestUpdate(strbuild.ToString());
@@ -726,7 +726,7 @@ namespace OpenDental{
 			if(destDir==null) {//Not using A to Z folders?
 				destDir=Path.GetTempPath();
 			}
-			DownloadInstallPatchFromURI(PrefB.GetString("UpdateWebsitePath")+buildAvailableCode+"/"+patchName,//Source URI
+			DownloadInstallPatchFromURI(PrefC.GetString("UpdateWebsitePath")+buildAvailableCode+"/"+patchName,//Source URI
 				ODFileUtils.CombinePaths(destDir,patchName));//Local destination file.
 		}
 
@@ -736,7 +736,7 @@ namespace OpenDental{
 			if(destDir==null) {//Not using A to Z folders?
 				destDir=Path.GetTempPath();
 			}
-			DownloadInstallPatchFromURI(PrefB.GetString("UpdateWebsitePath")+stableAvailableCode+"/"+patchName,//Source URI
+			DownloadInstallPatchFromURI(PrefC.GetString("UpdateWebsitePath")+stableAvailableCode+"/"+patchName,//Source URI
 				ODFileUtils.CombinePaths(destDir,patchName));//Local destination file.
 		}
 
@@ -746,7 +746,7 @@ namespace OpenDental{
 			if(destDir==null) {//Not using A to Z folders?
 				destDir=Path.GetTempPath();
 			}
-			DownloadInstallPatchFromURI(PrefB.GetString("UpdateWebsitePath")+betaAvailableCode+"/"+patchName,//Source URI
+			DownloadInstallPatchFromURI(PrefC.GetString("UpdateWebsitePath")+betaAvailableCode+"/"+patchName,//Source URI
 				ODFileUtils.CombinePaths(destDir,patchName));//Local destination file.
 		}
 
@@ -934,7 +934,7 @@ namespace OpenDental{
 
 		private void FormUpdate_FormClosing(object sender,FormClosingEventArgs e) {
 			if(Security.IsAuthorized(Permissions.Setup,DateTime.Now,true)
-				&& PrefB.GetBool("UpdateWindowShowsClassicView"))			
+				&& PrefC.GetBool("UpdateWindowShowsClassicView"))			
 			{
 				SavePrefs();
 			}

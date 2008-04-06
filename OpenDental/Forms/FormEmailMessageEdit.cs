@@ -474,7 +474,7 @@ namespace OpenDental{
 			textBodyText.Text=MessageCur.BodyText;
 			FillAttachments();
 			FillList();
-			if(PrefB.GetBool("FuchsOptionsOn")){
+			if(PrefC.GetBool("FuchsOptionsOn")){
 				buttonFuchsMailDMF.Visible=true;
 				buttonFuchsMailDSF.Visible=true;
 			}
@@ -560,7 +560,7 @@ namespace OpenDental{
 		///<summary>This is a stupid place for this, but keeping it around because it's used from many places.</summary>
 		public static string GetAttachPath(){
 			string attachPath;
-			if(PrefB.UsingAtoZfolder) {
+			if(PrefC.UsingAtoZfolder) {
 				attachPath=ODFileUtils.CombinePaths(FormPath.GetPreferredImagePath(),"EmailAttachments");
 				if(!Directory.Exists(attachPath)) {
 					Directory.CreateDirectory(attachPath);
@@ -580,7 +580,7 @@ namespace OpenDental{
 			dlg.Multiselect=true;
 			Patient PatCur=Patients.GetPat(MessageCur.PatNum);
 			if(PatCur.ImageFolder!=""){
-				if(PrefB.UsingAtoZfolder){
+				if(PrefC.UsingAtoZfolder){
 					dlg.InitialDirectory=ODFileUtils.CombinePaths(new string[] {	FormPath.GetPreferredImagePath(),
 																																				PatCur.ImageFolder.Substring(0,1).ToUpper(),
 																																				PatCur.ImageFolder});
@@ -749,7 +749,7 @@ namespace OpenDental{
 				MessageBox.Show("Addresses not allowed to be blank.");
 				return;
 			}
-			if(PrefB.GetString("EmailSMTPserver")==""){
+			if(PrefC.GetString("EmailSMTPserver")==""){
 				MsgBox.Show(this,"You need to enter an SMTP server name in e-mail setup before you can send e-mail.");
 				return;
 			}
@@ -771,12 +771,12 @@ namespace OpenDental{
 		}
 
 		public static void SendEmail(EmailMessage emailMessage){
-			SmtpClient client=new SmtpClient(PrefB.GetString("EmailSMTPserver"),PrefB.GetInt("EmailPort"));
+			SmtpClient client=new SmtpClient(PrefC.GetString("EmailSMTPserver"),PrefC.GetInt("EmailPort"));
 			//The default credentials are not used by default, according to: 
 			//http://msdn2.microsoft.com/en-us/library/system.net.mail.smtpclient.usedefaultcredentials.aspx
-			client.Credentials=new NetworkCredential(PrefB.GetString("EmailUsername"),PrefB.GetString("EmailPassword"));
+			client.Credentials=new NetworkCredential(PrefC.GetString("EmailUsername"),PrefC.GetString("EmailPassword"));
 			client.DeliveryMethod=SmtpDeliveryMethod.Network;
-			client.EnableSsl=PrefB.GetBool("EmailUseSSL");
+			client.EnableSsl=PrefC.GetBool("EmailUseSSL");
 			MailMessage message=new MailMessage();
 			Attachment attach;
 			//try{

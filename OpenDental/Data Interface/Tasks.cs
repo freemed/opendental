@@ -192,16 +192,16 @@ namespace OpenDental{
 			if(task.IsRepeating && task.TaskListNum!=0 && task.DateType!=TaskDateType.None) {//In repeating, children not allowed to repeat.
 				throw new Exception(Lan.g("Tasks","In repeating tasks, only the main parents can have a task status."));
 			}
-			if(PrefB.RandomKeys){
+			if(PrefC.RandomKeys){
 				task.TaskNum=MiscData.GetKey("task","TaskNum");
 			}
 			string command= "INSERT INTO task (";
-			if(PrefB.RandomKeys){
+			if(PrefC.RandomKeys){
 				command+="TaskNum,";
 			}
 			command+="TaskListNum,DateTask,KeyNum,Descript,TaskStatus,"
 				+"IsRepeating,DateType,FromNum,ObjectType,DateTimeEntry,UserNum,DateTimeFinished) VALUES(";
-			if(PrefB.RandomKeys){
+			if(PrefC.RandomKeys){
 				command+="'"+POut.PInt(task.TaskNum)+"', ";
 			}
 			command+=
@@ -217,7 +217,7 @@ namespace OpenDental{
 				+POut.PDateT (task.DateTimeEntry)+","
 				+"'"+POut.PInt   (task.UserNum)+"',"
 				+POut.PDateT (task.DateTimeFinished)+")";
- 			if(PrefB.RandomKeys){
+ 			if(PrefC.RandomKeys){
 				General.NonQ(command);
 			}
 			else{

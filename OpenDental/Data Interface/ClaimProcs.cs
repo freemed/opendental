@@ -67,11 +67,11 @@ namespace OpenDental{
 
 		///<summary></summary>
 		public static void Insert(ClaimProc cp) {
-			if(PrefB.RandomKeys) {
+			if(PrefC.RandomKeys) {
 				cp.ClaimProcNum=MiscData.GetKey("claimproc","ClaimProcNum");
 			}
 			string command= "INSERT INTO claimproc (";
-			if(PrefB.RandomKeys) {
+			if(PrefC.RandomKeys) {
 				command+="ClaimProcNum,";
 			}
 			command+="ProcNum,ClaimNum,PatNum,ProvNum"
@@ -79,7 +79,7 @@ namespace OpenDental{
 				+",PlanNum,DateCP,WriteOff,CodeSent,AllowedOverride,Percentage,PercentOverride"
 				+",CopayAmt,OverrideInsEst,NoBillIns,DedBeforePerc,OverAnnualMax"
 				+",PaidOtherIns,BaseEst,CopayOverride,ProcDate,DateEntry,LineNumber) VALUES(";
-			if(PrefB.RandomKeys) {
+			if(PrefC.RandomKeys) {
 				command+="'"+POut.PInt(cp.ClaimProcNum)+"', ";
 			}
 			command+=
@@ -117,7 +117,7 @@ namespace OpenDental{
 			}
 			command+=", '"+POut.PInt(cp.LineNumber)+"')";
 			//MessageBox.Show(string command);
-			if(PrefB.RandomKeys) {
+			if(PrefC.RandomKeys) {
 				General.NonQ(command);
 			}
 			else {
@@ -528,7 +528,7 @@ namespace OpenDental{
 					retVal-=List[i].WriteOff;
 				}
 				else if(List[i].Status==ClaimProcStatus.NotReceived) {
-					if(!PrefB.GetBool("BalancesDontSubtractIns")) {//this typically happens
+					if(!PrefC.GetBool("BalancesDontSubtractIns")) {//this typically happens
 						retVal-=List[i].InsPayEst;
 						retVal-=List[i].WriteOff;
 					}

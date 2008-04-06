@@ -334,7 +334,7 @@ namespace OpenDental{
 		#endregion
 
 		private void FormAccountingSetup_Load(object sender,EventArgs e) {
-			string depStr=PrefB.GetString("AccountingDepositAccounts");
+			string depStr=PrefC.GetString("AccountingDepositAccounts");
 			string[] depStrArray=depStr.Split(new char[] {','});
 			depAL=new ArrayList();
 			for(int i=0;i<depStrArray.Length;i++){
@@ -344,12 +344,12 @@ namespace OpenDental{
 				depAL.Add(PIn.PInt(depStrArray[i]));
 			}
 			FillDepList();
-			PickedDepAccountNum=PrefB.GetInt("AccountingIncomeAccount");
+			PickedDepAccountNum=PrefC.GetInt("AccountingIncomeAccount");
 			textAccountInc.Text=Accounts.GetDescript(PickedDepAccountNum);
 			//pay----------------------------------------------------------
 			payAL=AccountingAutoPays.AList;//Count might be 0
 			FillPayGrid();
-			PickedPayAccountNum=PrefB.GetInt("AccountingCashIncomeAccount");
+			PickedPayAccountNum=PrefC.GetInt("AccountingCashIncomeAccount");
 			textAccountCashInc.Text=Accounts.GetDescript(PickedPayAccountNum);
 		}
 

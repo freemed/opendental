@@ -288,7 +288,7 @@ namespace OpenDental{
 				if(ClaimForms.ListLong[i].IsHidden){
 					description+=" (hidden)";
 				}
-				if(ClaimForms.ListLong[i].ClaimFormNum==PrefB.GetInt("DefaultClaimForm")) {
+				if(ClaimForms.ListLong[i].ClaimFormNum==PrefC.GetInt("DefaultClaimForm")) {
 					description+=" (default)";
 				}
 				listClaimForms.Items.Add(description);
@@ -370,7 +370,7 @@ namespace OpenDental{
 			ClaimForm ClaimFormCur=ClaimForms.ListLong[listClaimForms.SelectedIndex];
 			SaveFileDialog saveDlg=new SaveFileDialog();
 			string filename="ClaimForm"+ClaimFormCur.Description+".xml";
-			saveDlg.InitialDirectory=PrefB.GetString("ExportPath");
+			saveDlg.InitialDirectory=PrefC.GetString("ExportPath");
 			saveDlg.FileName=filename;
 			if(saveDlg.ShowDialog()!=DialogResult.OK){
 				return;
@@ -385,7 +385,7 @@ namespace OpenDental{
 
 		private void butImport_Click(object sender, System.EventArgs e) {
 			OpenFileDialog openDlg=new OpenFileDialog();
-			openDlg.InitialDirectory=PrefB.GetString("ExportPath");
+			openDlg.InitialDirectory=PrefC.GetString("ExportPath");
 			if(openDlg.ShowDialog()!=DialogResult.OK){
 				return;
 			}

@@ -39,16 +39,16 @@ namespace OpenDental{
 
 		///<summary></summary>
 		public static void Insert(ClockEvent ce) {
-			if(PrefB.RandomKeys) {
+			if(PrefC.RandomKeys) {
 				ce.ClockEventNum=MiscData.GetKey("clockevent","ClockEventNum");
 			}
 			string command="INSERT INTO clockevent (";
-			if(PrefB.RandomKeys) {
+			if(PrefC.RandomKeys) {
 				command+="ClockEventNum,";
 			}
 			command+="EmployeeNum,TimeEntered,TimeDisplayed,ClockIn"
 				+",ClockStatus,Note) VALUES(";
-			if(PrefB.RandomKeys) {
+			if(PrefC.RandomKeys) {
 				command+="'"+POut.PInt(ce.ClockEventNum)+"', ";
 			}
 			command+=
@@ -58,7 +58,7 @@ namespace OpenDental{
 				+"'"+POut.PBool  (ce.ClockIn)+"', "
 				+"'"+POut.PInt   ((int)ce.ClockStatus)+"', "
 				+"'"+POut.PString(ce.Note)+"')";
-			if(PrefB.RandomKeys) {
+			if(PrefC.RandomKeys) {
 				General.NonQ(command);
 			}
 			else {

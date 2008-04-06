@@ -39,15 +39,15 @@ namespace OpenDental{
 
 		///<summary></summary>
 		public static void Insert(LabTurnaround lab){
-			if(PrefB.RandomKeys) {
+			if(PrefC.RandomKeys) {
 				lab.LabTurnaroundNum=MiscData.GetKey("labturnaround","LabTurnaroundNum");
 			}
 			string command="INSERT INTO labturnaround (";
-			if(PrefB.RandomKeys) {
+			if(PrefC.RandomKeys) {
 				command+="LabTurnaroundNum,";
 			}
 			command+="LaboratoryNum,Description,DaysPublished,DaysActual) VALUES(";
-			if(PrefB.RandomKeys) {
+			if(PrefC.RandomKeys) {
 				command+="'"+POut.PInt(lab.LabTurnaroundNum)+"', ";
 			}
 			command+=
@@ -55,7 +55,7 @@ namespace OpenDental{
 				+"'"+POut.PString(lab.Description)+"', "
 				+"'"+POut.PInt   (lab.DaysPublished)+"', "
 				+"'"+POut.PInt   (lab.DaysActual)+"')";
-			if(PrefB.RandomKeys) {
+			if(PrefC.RandomKeys) {
 				General.NonQ(command);
 			}
 			else {

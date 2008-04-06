@@ -274,7 +274,7 @@ namespace OpenDental{
 			comboUsers.Items.Add(Lan.g(this,"Employees"));
 			comboUsers.Items.Add(Lan.g(this,"Other"));
 			comboUsers.SelectedIndex=0;
-			if(PrefB.GetBool("EasyHideDentalSchools")){
+			if(PrefC.GetBool("EasyHideDentalSchools")){
 				comboSchoolClass.Visible=false;
 				labelSchoolClass.Visible=false;
 			}
@@ -288,8 +288,8 @@ namespace OpenDental{
 			FillTreePermissionsInitial();
 			FillUsers();
 			FillTreePerm();
-			checkTimecardSecurityEnabled.Checked=PrefB.GetBool("TimecardSecurityEnabled");
-			checkCannotEditOwn.Checked=PrefB.GetBool("TimecardUsersDontEditOwnCard");
+			checkTimecardSecurityEnabled.Checked=PrefC.GetBool("TimecardSecurityEnabled");
+			checkCannotEditOwn.Checked=PrefC.GetBool("TimecardUsersDontEditOwnCard");
 			checkCannotEditOwn.Enabled=checkTimecardSecurityEnabled.Checked;
 		}
 

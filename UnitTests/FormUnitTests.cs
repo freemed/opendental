@@ -63,11 +63,11 @@ namespace UnitTests {
 		}
 
 		private void ToothFormatRanges(){
-			PrefB.HList=new Hashtable();
+			PrefC.HList=new Hashtable();
 			Pref pref=new Pref();
 			pref.PrefName="UseInternationalToothNumbers";
 			pref.ValueString="0";
-			PrefB.HList.Add(pref.PrefName,pref);
+			PrefC.HList.Add(pref.PrefName,pref);
 			//for display----------------------------------------------------------------
 			string inputrange="1,2,3,4,5,7,8,9,11,12,15,16,17,18,21,22,23";
 			string result=Tooth.FormatRangeForDisplay(inputrange);

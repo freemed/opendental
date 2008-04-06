@@ -28,15 +28,15 @@ namespace OpenDental{
 
 		///<summary></summary>
 		public static void Insert(QuickPasteCat cat){
-			if(PrefB.RandomKeys){
+			if(PrefC.RandomKeys){
 				cat.QuickPasteCatNum=MiscData.GetKey("quickpastecat","QuickPasteCatNum");
 			}
 			string command= "INSERT INTO quickpastecat (";
-			if(PrefB.RandomKeys){
+			if(PrefC.RandomKeys){
 				command+="QuickPasteCatNum,";
 			}
 			command+="Description,ItemOrder,DefaultForTypes) VALUES(";
-			if(PrefB.RandomKeys){
+			if(PrefC.RandomKeys){
 				command+="'"+POut.PInt(cat.QuickPasteCatNum)+"', ";
 			}
 			command+=
@@ -44,7 +44,7 @@ namespace OpenDental{
 				+"'"+POut.PInt   (cat.ItemOrder)+"', "
 				+"'"+POut.PString(cat.DefaultForTypes)+"')";
 			//MessageBox.Show(string command);
- 			if(PrefB.RandomKeys){
+ 			if(PrefC.RandomKeys){
 				General.NonQ(command);
 			}
 			else{

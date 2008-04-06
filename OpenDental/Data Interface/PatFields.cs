@@ -35,22 +35,22 @@ namespace OpenDental {
 
 		///<summary></summary>
 		public static void Insert(PatField pf) {
-			if(PrefB.RandomKeys) {
+			if(PrefC.RandomKeys) {
 				pf.PatFieldNum=MiscData.GetKey("patfield","PatFieldNum");
 			}
 			string command="INSERT INTO patfield (";
-			if(PrefB.RandomKeys) {
+			if(PrefC.RandomKeys) {
 				command+="PatFieldNum,";
 			}
 			command+="PatNum,FieldName,FieldValue) VALUES(";
-			if(PrefB.RandomKeys) {
+			if(PrefC.RandomKeys) {
 				command+="'"+POut.PInt(pf.PatFieldNum)+"', ";
 			}
 			command+=
 				 "'"+POut.PInt   (pf.PatNum)+"', "
 				+"'"+POut.PString(pf.FieldName)+"', "
 				+"'"+POut.PString(pf.FieldValue)+"')";
-			if(PrefB.RandomKeys) {
+			if(PrefC.RandomKeys) {
 				General.NonQ(command);
 			}
 			else {

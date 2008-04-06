@@ -12,21 +12,21 @@ namespace OpenDental{
 
 		///<summary></summary>
 		public static void Insert(FormPat Cur) {
-			if(PrefB.RandomKeys) {
+			if(PrefC.RandomKeys) {
 				Cur.FormPatNum=MiscData.GetKey("formpat","FormPatNum");
 			}
 			string command="INSERT INTO formpat (";
-			if(PrefB.RandomKeys) {
+			if(PrefC.RandomKeys) {
 				command+="FormPatNum,";
 			}
 			command+="PatNum,FormDateTime) VALUES(";
-			if(PrefB.RandomKeys) {
+			if(PrefC.RandomKeys) {
 				command+="'"+POut.PInt(Cur.FormPatNum)+"', ";
 			}
 			command+=
 				 "'"+POut.PInt  (Cur.PatNum)+"', "
 				+POut.PDateT(Cur.FormDateTime)+")";
-			if(PrefB.RandomKeys) {
+			if(PrefC.RandomKeys) {
 				General.NonQ(command);
 			}
 			else {

@@ -1666,7 +1666,7 @@ namespace OpenDental {
 				panelSplitter.Top=300;//start the splitter higher for recall window.
 			}
 			LayoutPanels();
-			checkShowFamilyComm.Checked=PrefB.GetBoolSilent("ShowAccountFamilyCommEntries",true);
+			checkShowFamilyComm.Checked=PrefC.GetBoolSilent("ShowAccountFamilyCommEntries",true);
 		}
 
 		private void ContrAccount_Load(object sender,System.EventArgs e) {
@@ -1688,7 +1688,7 @@ namespace OpenDental {
 			ToolBarMain.Buttons.Add(button);
 			ToolBarMain.Buttons.Add(new ODToolBarButton(ODToolBarButtonStyle.Separator));
 			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Payment Plan"),-1,"","PayPlan"));
-			if(!PrefB.GetBool("EasyHideRepeatCharges")) {
+			if(!PrefC.GetBool("EasyHideRepeatCharges")) {
 				button=new ODToolBarButton(Lan.g(this,"Repeating Charge"),-1,"","RepeatCharge");
 				button.Style=ODToolBarButtonStyle.DropDownButton;
 				button.DropDownMenu=contextMenuRepeat;
@@ -1713,7 +1713,7 @@ namespace OpenDental {
 		}
 
 		private void ContrAccount_Resize(object sender,EventArgs e) {
-			if(PrefB.HList==null){
+			if(PrefC.HList==null){
 				return;//helps on startup.
 			}
 			LayoutPanels();
@@ -1737,7 +1737,7 @@ namespace OpenDental {
 			panelInsInfoDetail.Top = panelBoldBalance.Top + panelBoldBalance.Height;
 			panelInsInfoDetail.Left = panelBoldBalance.Left + panelBoldBalance.Width - panelInsInfoDetail.Width;*/
 			int left=textUrgFinNote.Left;//769;
-			if(PrefB.GetBoolSilent("StoreCCnumbers",false)){
+			if(PrefC.GetBoolSilent("StoreCCnumbers",false)){
 				panelCC.Visible=true;
 				panelCC.Location=new Point(left,textUrgFinNote.Bottom);
 				gridAcctPat.Location=new Point(left,panelCC.Bottom);
@@ -1755,7 +1755,7 @@ namespace OpenDental {
 		///<summary></summary>
 		public void ModuleSelected(int patNum) {
 			bool selectingFamily = false;
-			/*if (PrefB.GetBool("IntermingleFamilyDefault"))
+			/*if (PrefC.GetBool("IntermingleFamilyDefault"))
 			{
 				if (PatCur != null){
 					if (PatCur.Guarantor != PrevGuar && PrevGuar!=0)
@@ -1775,7 +1775,7 @@ namespace OpenDental {
 
 		///<summary></summary>
 		public void ModuleSelected(int patNum,bool isSelectingFamily) {
-			if (PrefB.GetBool("IntermingleFamilyDefault"))
+			if (PrefC.GetBool("IntermingleFamilyDefault"))
 			{
 				if (PatCur != null)
 				{
@@ -1837,7 +1837,7 @@ namespace OpenDental {
 
 		///<summary></summary>
 		private void RefreshModuleData(int patNum,bool isSelectingFamily) {
-			/*if (PrefB.GetBool("IntermingleFamilyDefault"))
+			/*if (PrefC.GetBool("IntermingleFamilyDefault"))
 			{
 				if (PatCur != null)
 				{
@@ -1872,7 +1872,7 @@ namespace OpenDental {
 				}
 			}
 			bool viewingInRecall=ViewingInRecall;
-			if(PrefB.GetBool("FuchsOptionsOn")) {
+			if(PrefC.GetBool("FuchsOptionsOn")) {
 				viewingInRecall=true;
 			}
 			DataSetMain=AccountModule.GetAll(patNum,viewingInRecall,fromDate,toDate,isSelectingFamily);
@@ -1913,7 +1913,7 @@ namespace OpenDental {
 				butComm.Enabled=true;
 			}
 			//if(checkShowNotes.Tag!=null && checkShowNotes.Tag.ToString()!="JustClicked"){
-			//checkShowNotes.Checked=PrefB.GetBool("ShowNotesInAccount");
+			//checkShowNotes.Checked=PrefC.GetBool("ShowNotesInAccount");
 			//}
 			FillPats(isSelectingFamily);
 			FillMisc();
@@ -1923,10 +1923,10 @@ namespace OpenDental {
 			FillPaymentPlans();//2.
 			FillMain();//3.
 			LayoutPanels();
-			if(ViewingInRecall || PrefB.GetBoolSilent("FuchsOptionsOn",false)) {
+			if(ViewingInRecall || PrefC.GetBoolSilent("FuchsOptionsOn",false)) {
 				panelProgNotes.Visible = true;
 				FillProgNotes();
-				if(PrefB.GetBool("FuchsOptionsOn")) {//show prog note options
+				if(PrefC.GetBool("FuchsOptionsOn")) {//show prog note options
 					groupBox6.Visible = true;
 					groupBox7.Visible = true;
 					butShowAll.Visible = true;
@@ -2003,7 +2003,7 @@ namespace OpenDental {
 				textFinNotes.ScrollToCaret();
 				textUrgFinNote.SelectionStart=0;
 				textUrgFinNote.ScrollToCaret();
-				if(PrefB.GetBool("StoreCCnumbers")) {
+				if(PrefC.GetBool("StoreCCnumbers")) {
 					string cc=PatientNoteCur.CCNumber;
 					if(Regex.IsMatch(cc,@"^\d{16}$")){
 						textCC.Text=cc.Substring(0,4)+"-"+cc.Substring(4,4)+"-"+cc.Substring(8,4)+"-"+cc.Substring(12,4);
@@ -2049,7 +2049,7 @@ namespace OpenDental {
 				//In the new way of doing it, they are all visible and calculated identically,
 				//but the emphasis simply changes by slight renaming of labels
 				//and by font size changes.
-				if(PrefB.GetBool("BalancesDontSubtractIns")){
+				if(PrefC.GetBool("BalancesDontSubtractIns")){
 					labelTotal.Text=Lan.g(this,"Balance");
 					labelTotalAmt.Font=fontBold;
 					labelTotalAmt.ForeColor=Color.Firebrick;
@@ -2068,7 +2068,7 @@ namespace OpenDental {
 					labelBalance.Text=Lan.g(this,"=Balance");
 					labelBalanceAmt.Font=fontBold;
 					labelBalanceAmt.ForeColor=Color.Firebrick;
-					if(PrefB.GetBool("FuchsOptionsOn")){
+					if(PrefC.GetBool("FuchsOptionsOn")){
 						labelTotal.Text=Lan.g(this,"Balance");
 						labelBalance.Text=Lan.g(this,"=Owed Now");
 						labelTotalAmt.Font = fontBold;
@@ -2225,7 +2225,7 @@ namespace OpenDental {
 			labelPPAst2.Visible = true;
 			if (PPBalanceTotal != 0) {
 				labelPPStatus.Visible=false;
-				if (PrefB.GetBool("BalancesDontSubtractIns")) {
+				if (PrefC.GetBool("BalancesDontSubtractIns")) {
 					labelPPAst1.ForeColor = Color.Firebrick;
 				}
 				else {
@@ -2234,7 +2234,7 @@ namespace OpenDental {
 			}
 			if (PPDueTotal!=0) {
 				labelPPStatus.Visible = false;
-				if (PrefB.GetBool("BalancesDontSubtractIns")) {
+				if (PrefC.GetBool("BalancesDontSubtractIns")) {
 					labelPPAst2.ForeColor = Color.Black;
 				}
 				else {
@@ -2442,11 +2442,11 @@ namespace OpenDental {
 			//5/3/05 changed this to always compute aging. Accuracy is more important than speed.
 			//if(Shared.ComputeBalances(AccProcList,ClaimProcList,PatCur,PaySplitList,AdjustmentList)){
 			Shared.ComputeBalances(AccProcList,ClaimProcList,PatCur,PaySplitList,AdjustmentList,PayPlanList,PayPlanChargeList);
-			//if(!PrefB.GetBool("SkipComputeAgingInAccount")){
+			//if(!PrefC.GetBool("SkipComputeAgingInAccount")){
 				//then recompute aging for family. This is time consuming, about 1/2 second.
 				//Compute aging involves about 10 to 12 database calls.  (We plan to reduce this later)
-				if(PrefB.GetBool("AgingCalculatedMonthlyInsteadOfDaily")){
-					Ledgers.ComputeAging(PatCur.Guarantor,PIn.PDate(PrefB.GetString("DateLastAging")));
+				if(PrefC.GetBool("AgingCalculatedMonthlyInsteadOfDaily")){
+					Ledgers.ComputeAging(PatCur.Guarantor,PIn.PDate(PrefC.GetString("DateLastAging")));
 				}
 				else{
 					Ledgers.ComputeAging(PatCur.Guarantor,DateTime.Today);
@@ -2576,12 +2576,12 @@ namespace OpenDental {
 					double insEst=ClaimProcs.ProcEstNotReceived(ClaimProcList,arrayProc[tempCountProc].ProcNum);
 					double insPay=ClaimProcs.ProcInsPay(ClaimProcList,arrayProc[tempCountProc].ProcNum);
 					double discount=0;
-					//if(!PrefB.GetBool("BalancesDontSubtractIns")){//this is the typical situation
+					//if(!PrefC.GetBool("BalancesDontSubtractIns")){//this is the typical situation
 					//this applies to everyone regardless of 'balancesDontSubtractIns', because it's not an insurance item.
 discount=Procedures.GetWriteOffC(arrayProc[tempCountProc],ClaimProcList);//this is for CapComplete and all other writeoffs
 					//}
 					double pat=fee-insPay;
-					if(!PrefB.GetBool("BalancesDontSubtractIns")){//this is the typical situation
+					if(!PrefC.GetBool("BalancesDontSubtractIns")){//this is the typical situation
 						pat-=insEst;
 					}			
 double adj=Adjustments.GetTotForProc(arrayProc[tempCountProc].ProcNum,AdjustmentList)-discount;
@@ -3782,7 +3782,7 @@ double adj=Adjustments.GetTotForProc(arrayProc[tempCountProc].ProcNum,Adjustment
 			stmt.SinglePatient=false;
 			stmt.Intermingled=false;
 			stmt.DateRangeFrom=DateTime.MinValue;
-			if (PrefB.GetBool("FuchsOptionsOn"))
+			if (PrefC.GetBool("FuchsOptionsOn"))
 			{
 				stmt.DateRangeFrom = PIn.PDate(DateTime.Today.AddDays(-45).ToShortDateString());
 				stmt.DateRangeTo = PIn.PDate(DateTime.Today.ToShortDateString());
@@ -3902,7 +3902,7 @@ double adj=Adjustments.GetTotForProc(arrayProc[tempCountProc].ProcNum,Adjustment
 				EmailMessage message=new EmailMessage();
 				message.PatNum=guar.PatNum;
 				message.ToAddress=guar.Email;
-				message.FromAddress=PrefB.GetString("EmailSenderAddress");
+				message.FromAddress=PrefC.GetString("EmailSenderAddress");
 				message.Subject=Lan.g(this,"Statement");
 				//message.BodyText=Lan.g(this,"");
 				EmailAttach attach=new EmailAttach();
@@ -4138,7 +4138,7 @@ double adj=Adjustments.GetTotForProc(arrayProc[tempCountProc].ProcNum,Adjustment
 			EmailMessage message=new EmailMessage();
 			message.PatNum=PatCur.PatNum;
 			message.ToAddress=PatCur.Email;
-			message.FromAddress=PrefB.GetString("EmailSenderAddress");
+			message.FromAddress=PrefC.GetString("EmailSenderAddress");
 			FormEmailMessageEdit FormE=new FormEmailMessageEdit(message);
 			FormE.IsNew=true;
 			FormE.ShowDialog();

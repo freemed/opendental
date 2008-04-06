@@ -214,7 +214,7 @@ namespace OpenDental{
 				}
 			}
 			Security.CurUser = selectedUser.Copy();
-			if(PrefB.GetBool("TasksCheckOnStartup")){
+			if(PrefC.GetBool("TasksCheckOnStartup")){
 				int taskcount=Tasks.UserTasksCount(Security.CurUser.UserNum);
 				if(taskcount>0){
 					MessageBox.Show(Lan.g(this,"There are ")+taskcount+Lan.g(this," unfinished tasks on your tasklists."));

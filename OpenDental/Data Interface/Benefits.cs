@@ -173,16 +173,16 @@ namespace OpenDental {
 
 		///<summary></summary>
 		public static void Insert(Benefit ben) {
-			if(PrefB.RandomKeys) {
+			if(PrefC.RandomKeys) {
 				ben.BenefitNum=MiscData.GetKey("benefit","BenefitNum");
 			}
 			string command="INSERT INTO benefit (";
-			if(PrefB.RandomKeys) {
+			if(PrefC.RandomKeys) {
 				command+="BenefitNum,";
 			}
 			command+="PlanNum,PatPlanNum,CovCatNum,OldCode,BenefitType,Percent,MonetaryAmt,TimePeriod,"
 				+"QuantityQualifier,Quantity,CodeNum,CoverageLevel) VALUES(";
-			if(PrefB.RandomKeys) {
+			if(PrefC.RandomKeys) {
 				command+="'"+POut.PInt(ben.BenefitNum)+"', ";
 			}
 			command+=
@@ -198,7 +198,7 @@ namespace OpenDental {
 				+"'"+POut.PInt(ben.Quantity)+"', "
 				+"'"+POut.PInt(ben.CodeNum)+"', "
 				+"'"+POut.PInt((int)ben.CoverageLevel)+"')";
-			if(PrefB.RandomKeys) {
+			if(PrefC.RandomKeys) {
 				General.NonQ(command);
 			}
 			else {

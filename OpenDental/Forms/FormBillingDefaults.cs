@@ -15,9 +15,9 @@ namespace OpenDental {
 		}
 
 		private void FormBillingDefaults_Load(object sender,EventArgs e) {
-			textDays.Text=PrefB.GetInt("BillingDefaultsLastDays").ToString();
-			checkIntermingled.Checked=PrefB.GetBool("BillingDefaultsIntermingle");
-			textNote.Text=PrefB.GetString("BillingDefaultsNote");
+			textDays.Text=PrefC.GetInt("BillingDefaultsLastDays").ToString();
+			checkIntermingled.Checked=PrefC.GetBool("BillingDefaultsIntermingle");
+			textNote.Text=PrefC.GetString("BillingDefaultsNote");
 		}
 
 		private void butOK_Click(object sender,EventArgs e) {

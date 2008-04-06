@@ -336,7 +336,7 @@ namespace OpenDental{
 			for(int i=0;i<Providers.List.Length;i++) {
 				comboProv.Items.Add(Providers.List[i].GetLongDesc());
 			}
-			//textPostcardMessage.Text=PrefB.GetString("ConfirmPostcardMessage");
+			//textPostcardMessage.Text=PrefC.GetString("ConfirmPostcardMessage");
 			comboStatus.Items.Clear();
 			for(int i=0;i<DefC.Short[(int)DefCat.ApptConfirmed].Length;i++){
 				comboStatus.Items.Add(DefC.Short[(int)DefCat.ApptConfirmed][i].ItemName);
@@ -583,11 +583,11 @@ namespace OpenDental{
 			pd.PrintPage+=new PrintPageEventHandler(this.pdCards_PrintPage);
 			pd.OriginAtMargins=true;
 			pd.DefaultPageSettings.Margins=new Margins(0,0,0,0);
-			if(PrefB.GetInt("RecallPostcardsPerSheet")==1){
+			if(PrefC.GetInt("RecallPostcardsPerSheet")==1){
 				pd.DefaultPageSettings.PaperSize=new PaperSize("Postcard",400,600);
 				pd.DefaultPageSettings.Landscape=true;
 			}
-			else if(PrefB.GetInt("RecallPostcardsPerSheet")==3){
+			else if(PrefC.GetInt("RecallPostcardsPerSheet")==3){
 				pd.DefaultPageSettings.PaperSize=new PaperSize("Postcard",850,1100);
 			}
 			else{//4
@@ -595,7 +595,7 @@ namespace OpenDental{
 				pd.DefaultPageSettings.Landscape=true;
 			}
 			printPreview=new OpenDental.UI.PrintPreview(PrintSituation.Postcard,pd,
-				(int)Math.Ceiling((double)AddrTable.Rows.Count/(double)PrefB.GetInt("RecallPostcardsPerSheet")));
+				(int)Math.Ceiling((double)AddrTable.Rows.Count/(double)PrefC.GetInt("RecallPostcardsPerSheet")));
 			printPreview.ShowDialog();
 		}
 
@@ -639,24 +639,24 @@ namespace OpenDental{
 
 		///<summary>raised for each page to be printed.</summary>
 		private void pdCards_PrintPage(object sender, PrintPageEventArgs ev){
-			int totalPages=(int)Math.Ceiling((double)AddrTable.Rows.Count/(double)PrefB.GetInt("RecallPostcardsPerSheet"));
+			int totalPages=(int)Math.Ceiling((double)AddrTable.Rows.Count/(double)PrefC.GetInt("RecallPostcardsPerSheet"));
 			Graphics g=ev.Graphics;
-			int yAdj=(int)(PrefB.GetDouble("RecallAdjustDown")*100);
-			int xAdj=(int)(PrefB.GetDouble("RecallAdjustRight")*100);
+			int yAdj=(int)(PrefC.GetDouble("RecallAdjustDown")*100);
+			int xAdj=(int)(PrefC.GetDouble("RecallAdjustRight")*100);
 			float yPos=0+yAdj;//these refer to the upper left origin of each postcard
 			float xPos=0+xAdj;
 			string str;
 			while(yPos<ev.PageBounds.Height-100 && patientsPrinted<AddrTable.Rows.Count){
 				//Return Address--------------------------------------------------------------------------
-				if(PrefB.GetBool("RecallCardsShowReturnAdd")){
-					str=PrefB.GetString("PracticeTitle")+"\r\n";
+				if(PrefC.GetBool("RecallCardsShowReturnAdd")){
+					str=PrefC.GetString("PracticeTitle")+"\r\n";
 					g.DrawString(str,new Font(FontFamily.GenericSansSerif,9,FontStyle.Bold),Brushes.Black,xPos+45,yPos+60);
-					str=PrefB.GetString("PracticeAddress")+"\r\n";
-					if(PrefB.GetString("PracticeAddress2")!=""){
-						str+=PrefB.GetString("PracticeAddress2")+"\r\n";
+					str=PrefC.GetString("PracticeAddress")+"\r\n";
+					if(PrefC.GetString("PracticeAddress2")!=""){
+						str+=PrefC.GetString("PracticeAddress2")+"\r\n";
 					}
-					str+=PrefB.GetString("PracticeCity")+",  "+PrefB.GetString("PracticeST")+"  "+PrefB.GetString("PracticeZip")+"\r\n";
-					string phone=PrefB.GetString("PracticePhone");
+					str+=PrefC.GetString("PracticeCity")+",  "+PrefC.GetString("PracticeST")+"  "+PrefC.GetString("PracticeZip")+"\r\n";
+					string phone=PrefC.GetString("PracticePhone");
 					if(CultureInfo.CurrentCulture.Name=="en-US"&& phone.Length==10){
 						str+="("+phone.Substring(0,3)+")"+phone.Substring(3,3)+"-"+phone.Substring(6);
 					}
@@ -666,7 +666,7 @@ namespace OpenDental{
 					g.DrawString(str,new Font(FontFamily.GenericSansSerif,8),Brushes.Black,xPos+45,yPos+75);
 				}
 				//Body text-------------------------------------------------------------------------------
-				str=PrefB.GetString("ConfirmPostcardMessage");
+				str=PrefC.GetString("ConfirmPostcardMessage");
 					//textPostcardMessage.Text;
 				str=str.Replace("?date",PIn.PDate(AddrTable.Rows[patientsPrinted]["AptDateTime"].ToString()).ToShortDateString());
 				str=str.Replace("?time",PIn.PDate(AddrTable.Rows[patientsPrinted]["AptDateTime"].ToString()).ToShortTimeString());
@@ -683,10 +683,10 @@ namespace OpenDental{
 						+AddrTable.Rows[patientsPrinted]["State"].ToString()+"   "
 						+AddrTable.Rows[patientsPrinted]["Zip"].ToString()+"\r\n";
 				g.DrawString(str,new Font(FontFamily.GenericSansSerif,11),Brushes.Black,xPos+320,yPos+240);
-				if(PrefB.GetInt("RecallPostcardsPerSheet")==1){
+				if(PrefC.GetInt("RecallPostcardsPerSheet")==1){
 					yPos+=400;
 				}
-				else if(PrefB.GetInt("RecallPostcardsPerSheet")==3){
+				else if(PrefC.GetInt("RecallPostcardsPerSheet")==3){
 					yPos+=366;
 				}
 				else{//4

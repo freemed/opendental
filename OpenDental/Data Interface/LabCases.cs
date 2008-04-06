@@ -131,16 +131,16 @@ namespace OpenDental{
 
 		///<summary></summary>
 		public static void Insert(LabCase lab){
-			if(PrefB.RandomKeys) {
+			if(PrefC.RandomKeys) {
 				lab.LabCaseNum=MiscData.GetKey("labcase","LabCaseNum");
 			}
 			string command="INSERT INTO labcase (";
-			if(PrefB.RandomKeys) {
+			if(PrefC.RandomKeys) {
 				command+="LabCaseNum,";
 			}
 			command+="PatNum,LaboratoryNum,AptNum,PlannedAptNum,DateTimeDue,DateTimeCreated,"
 				+"DateTimeSent,DateTimeRecd,DateTimeChecked,ProvNum,Instructions) VALUES(";
-			if(PrefB.RandomKeys) {
+			if(PrefC.RandomKeys) {
 				command+="'"+POut.PInt(lab.LabCaseNum)+"', ";
 			}
 			command+=
@@ -155,7 +155,7 @@ namespace OpenDental{
 				    +POut.PDateT (lab.DateTimeChecked)+", "
 				+"'"+POut.PInt   (lab.ProvNum)+"', "
 				+"'"+POut.PString(lab.Instructions)+"')";
-			if(PrefB.RandomKeys) {
+			if(PrefC.RandomKeys) {
 				General.NonQ(command);
 			}
 			else {

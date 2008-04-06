@@ -60,15 +60,15 @@ namespace OpenDental{
 
 		///<summary></summary>
 		public static void Insert(ReqStudent req) {
-			if(PrefB.RandomKeys) {
+			if(PrefC.RandomKeys) {
 				req.ReqStudentNum=MiscData.GetKey("reqstudent","ReqStudentNum");
 			}
 			string command= "INSERT INTO reqstudent (";
-			if(PrefB.RandomKeys) {
+			if(PrefC.RandomKeys) {
 				command+="ReqStudentNum,";
 			}
 			command+="ReqNeededNum,Descript,SchoolCourseNum,ProvNum,AptNum,PatNum,InstructorNum,DateCompleted) VALUES(";
-			if(PrefB.RandomKeys) {
+			if(PrefC.RandomKeys) {
 				command+="'"+POut.PInt(req.ReqStudentNum)+"', ";
 			}
 			command+=
@@ -80,7 +80,7 @@ namespace OpenDental{
 				+"'"+POut.PInt(req.PatNum)+"', "
 				+"'"+POut.PInt(req.InstructorNum)+"', "
 				    +POut.PDate(req.DateCompleted)+")";
-			if(PrefB.RandomKeys) {
+			if(PrefC.RandomKeys) {
 				General.NonQ(command);
 			}
 			else {

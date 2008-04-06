@@ -246,11 +246,11 @@ namespace OpenDental{
 			for(int i=0;i<AllCultures.Length;i++){
 				listAvailable.Items.Add(AllCultures[i].DisplayName);
 			}
-			if(PrefB.GetString("LanguagesUsedByPatients")==""){
+			if(PrefC.GetString("LanguagesUsedByPatients")==""){
 				LangsUsed=new List<string>();
 			}
 			else{
-				LangsUsed=new List<string>(PrefB.GetString("LanguagesUsedByPatients").Split(','));
+				LangsUsed=new List<string>(PrefC.GetString("LanguagesUsedByPatients").Split(','));
 			}
 			FillListUsed();
 		}

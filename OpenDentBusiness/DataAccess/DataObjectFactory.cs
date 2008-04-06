@@ -421,7 +421,7 @@ namespace OpenDental.DataAccess {
 				updatePrimaryKey = false;
 			}
 			// Should we generate a new, random key?
-			bool generateRandomKey = updatePrimaryKey && PrefB.RandomKeys;
+			bool generateRandomKey = updatePrimaryKey && PrefC.RandomKeys;
 			if (generateRandomKey) {
 				int key = MiscData.GetKey(DataObjectInfo<T>.GetTableName(), DataObjectInfo<T>.GetPrimaryKeyFieldName());
 				DataObjectInfo<T>.SetPrimaryKey(value, key);

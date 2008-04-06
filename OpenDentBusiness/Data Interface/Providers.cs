@@ -249,14 +249,14 @@ namespace OpenDentBusiness{
 
 		///<summary>There are three different choices for getting the billing provider.  One of the three is to use the treating provider, so supply that as an argument.  It will return a valid provNum unless the supplied treatProv was invalid.</summary>
 		public static int GetBillingProvNum(int treatProv){
-			if(PrefB.GetInt("InsBillingProv")==0) {//default=0
-				return PrefB.GetInt("PracticeDefaultProv");
+			if(PrefC.GetInt("InsBillingProv")==0) {//default=0
+				return PrefC.GetInt("PracticeDefaultProv");
 			}
-			else if(PrefB.GetInt("InsBillingProv")==-1) {//treat=-1
+			else if(PrefC.GetInt("InsBillingProv")==-1) {//treat=-1
 				return treatProv;
 			}
 			else {
-				return PrefB.GetInt("InsBillingProv");
+				return PrefC.GetInt("InsBillingProv");
 			}
 		}
 

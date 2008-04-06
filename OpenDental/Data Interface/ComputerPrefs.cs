@@ -68,16 +68,16 @@ namespace OpenDental {
 
 		///<summary>Inserts the given preference and ensures that the primary key is properly set.</summary>
 		public static void Insert(ComputerPref computerPref){
-			if(PrefB.RandomKeys) {
+			if(PrefC.RandomKeys) {
 				computerPref.ComputerPrefNum=MiscData.GetKey("computerpref","ComputerPrefNum");
 			}
 			string command="INSERT INTO computerpref (";
-			if(PrefB.RandomKeys){
+			if(PrefC.RandomKeys){
 				command+="ComputerPrefNum,";
 			}			
 			command+="ComputerName,GraphicsUseHardware,GraphicsSimple,SensorType,SensorPort,SensorExposure,SensorBinned,"
 				+ "GraphicsDoubleBuffering,PreferredPixelFormatNum,AtoZpath,TaskKeepListHidden,TaskDock,TaskX,TaskY) VALUES(";
-			if(PrefB.RandomKeys){
+			if(PrefC.RandomKeys){
 				command+="'"+POut.PInt(computerPref.ComputerPrefNum)+"',";
 			}
 			command+="'"+POut.PString(computerPref.ComputerName)+"',"
@@ -94,7 +94,7 @@ namespace OpenDental {
 				+"'"+POut.PInt(computerPref.TaskDock)+"',"
 				+"'"+POut.PInt(computerPref.TaskX)+"',"
 				+"'"+POut.PInt(computerPref.TaskY)+"')";
-			if(PrefB.RandomKeys)
+			if(PrefC.RandomKeys)
 			{
 				General.NonQ(command);
 			}else{

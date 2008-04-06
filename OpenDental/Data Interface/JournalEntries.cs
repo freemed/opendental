@@ -70,16 +70,16 @@ namespace OpenDental{
 			if(je.DebitAmt<0 || je.CreditAmt<0){
 				throw new ApplicationException(Lan.g("JournalEntries","Error. Credit and debit must both be positive."));
 			}
-			if(PrefB.RandomKeys) {
+			if(PrefC.RandomKeys) {
 				je.JournalEntryNum=MiscData.GetKey("journalentry","JournalEntryNum");
 			}
 			string command="INSERT INTO journalentry (";
-			if(PrefB.RandomKeys) {
+			if(PrefC.RandomKeys) {
 				command+="JournalEntryNum,";
 			}
 			command+="TransactionNum,AccountNum,DateDisplayed,DebitAmt,CreditAmt,Memo,Splits,CheckNumber,"
 				+"ReconcileNum) VALUES(";
-			if(PrefB.RandomKeys) {
+			if(PrefC.RandomKeys) {
 				command+="'"+POut.PInt(je.JournalEntryNum)+"', ";
 			}
 			command+=
@@ -92,7 +92,7 @@ namespace OpenDental{
 				+"'"+POut.PString(je.Splits)+"', "
 				+"'"+POut.PString(je.CheckNumber)+"', "
 				+"'"+POut.PInt   (je.ReconcileNum)+"')";
-			if(PrefB.RandomKeys) {
+			if(PrefC.RandomKeys) {
 				General.NonQ(command);
 			}
 			else {

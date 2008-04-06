@@ -62,15 +62,15 @@ namespace OpenDental{
 
 		///<summary></summary>
 		public static void Insert(Account acct) {
-			if(PrefB.RandomKeys) {
+			if(PrefC.RandomKeys) {
 				acct.AccountNum=MiscData.GetKey("account","AccountNum");
 			}
 			string command="INSERT INTO account (";
-			if(PrefB.RandomKeys) {
+			if(PrefC.RandomKeys) {
 				command+="AccountNum,";
 			}
 			command+="Description,AcctType,BankNumber,Inactive,AccountColor) VALUES(";
-			if(PrefB.RandomKeys) {
+			if(PrefC.RandomKeys) {
 				command+="'"+POut.PInt(acct.AccountNum)+"', ";
 			}
 			command+=
@@ -79,7 +79,7 @@ namespace OpenDental{
 				+"'"+POut.PString(acct.BankNumber)+"', "
 				+"'"+POut.PBool  (acct.Inactive)+"', "
 				+"'"+POut.PInt   (acct.AccountColor.ToArgb())+"')";
-			if(PrefB.RandomKeys) {
+			if(PrefC.RandomKeys) {
 				General.NonQ(command);
 			}
 			else {
@@ -207,11 +207,11 @@ namespace OpenDental{
 
 		///<summary>Checks the loaded prefs to see if user has setup deposit linking.  Returns true if so.</summary>
 		public static bool DepositsLinked(){
-			string depAccounts=PrefB.GetString("AccountingDepositAccounts");
+			string depAccounts=PrefC.GetString("AccountingDepositAccounts");
 			if(depAccounts==""){
 				return false;
 			}
-			if(PrefB.GetInt("AccountingIncomeAccount")==0){
+			if(PrefC.GetInt("AccountingIncomeAccount")==0){
 				return false;
 			}
 			//might add a few more checks later.
@@ -223,7 +223,7 @@ namespace OpenDental{
 			if(AccountingAutoPays.AList.Count==0){
 				return false;
 			}
-			if(PrefB.GetInt("AccountingIncomeAccount")==0) {
+			if(PrefC.GetInt("AccountingIncomeAccount")==0) {
 				return false;
 			}
 			//might add a few more checks later.
@@ -232,7 +232,7 @@ namespace OpenDental{
 
 		///<summary></summary>
 		public static int[] GetDepositAccounts(){
-			string depStr=PrefB.GetString("AccountingDepositAccounts");
+			string depStr=PrefC.GetString("AccountingDepositAccounts");
 			string[] depStrArray=depStr.Split(new char[] { ',' });
 			ArrayList depAL=new ArrayList();
 			for(int i=0;i<depStrArray.Length;i++) {

@@ -47,18 +47,18 @@ namespace OpenDental{
 
 		///<summary></summary>
 		public static void Insert(OpenDentBusiness.Screen Cur){
-			if(PrefB.RandomKeys){
+			if(PrefC.RandomKeys){
 				Cur.ScreenNum=MiscData.GetKey("screen","ScreenNum");
 			}
 			string command="INSERT INTO screen (";
-			if(PrefB.RandomKeys){
+			if(PrefC.RandomKeys){
 				command+="ScreenNum,";
 			}
 			command+="ScreenDate,GradeSchool,County,PlaceService,"
 				+"ProvNum,ProvName,Gender,Race,GradeLevel,Age,Urgency,HasCaries,NeedsSealants,"
 				+"CariesExperience,EarlyChildCaries,ExistingSealants,MissingAllTeeth,Birthdate,"
 				+"ScreenGroupNum,ScreenGroupOrder,Comments) VALUES(";
-			if(PrefB.RandomKeys){
+			if(PrefC.RandomKeys){
 				command+="'"+POut.PInt(Cur.ScreenNum)+"', ";
 			}
 			command+=
@@ -83,7 +83,7 @@ namespace OpenDental{
 				+"'"+POut.PInt   (Cur.ScreenGroupNum)+"', "
 				+"'"+POut.PInt   (Cur.ScreenGroupOrder)+"', "
 				+"'"+POut.PString(Cur.Comments)+"')";
-			if(PrefB.RandomKeys){
+			if(PrefC.RandomKeys){
 				General.NonQ(command);
 			}
 			else{

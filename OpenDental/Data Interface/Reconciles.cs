@@ -40,15 +40,15 @@ namespace OpenDental{
 
 		///<summary></summary>
 		public static void Insert(Reconcile reconcile) {
-			if(PrefB.RandomKeys) {
+			if(PrefC.RandomKeys) {
 				reconcile.ReconcileNum=MiscData.GetKey("reconcile","ReconcileNum");
 			}
 			string command="INSERT INTO reconcile (";
-			if(PrefB.RandomKeys) {
+			if(PrefC.RandomKeys) {
 				command+="ReconcileNum,";
 			}
 			command+="AccountNum,StartingBal,EndingBal,DateReconcile,IsLocked) VALUES(";
-			if(PrefB.RandomKeys) {
+			if(PrefC.RandomKeys) {
 				command+="'"+POut.PInt(reconcile.ReconcileNum)+"', ";
 			}
 			command+=
@@ -57,7 +57,7 @@ namespace OpenDental{
 				+"'"+POut.PDouble(reconcile.EndingBal)+"', "
 				+POut.PDate  (reconcile.DateReconcile)+", "
 				+"'"+POut.PBool  (reconcile.IsLocked)+"')";
-			if(PrefB.RandomKeys) {
+			if(PrefC.RandomKeys) {
 				General.NonQ(command);
 			}
 			else {

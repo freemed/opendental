@@ -285,10 +285,10 @@ namespace OpenDental{
 		#endregion
 
 		private void FormLetterSetup_Load(object sender, System.EventArgs e) {
-			if(PrefB.GetBool("LettersIncludeReturnAddress")){
+			if(PrefC.GetBool("LettersIncludeReturnAddress")){
 				checkIncludeRet.Checked=true;
 			}
-			if(PrefB.GetBool("FuchsOptionsOn")) {
+			if(PrefC.GetBool("FuchsOptionsOn")) {
 				buttonTYDMF.Visible = true;
 				buttonTYREF.Visible = true;
 			}
@@ -314,13 +314,13 @@ namespace OpenDental{
 			StringBuilder str = new StringBuilder();
 			//return address
 			if (checkIncludeRet.Checked) {
-				str.Append(PrefB.GetString("PracticeTitle") + "\r\n");
-				str.Append(PrefB.GetString("PracticeAddress") + "\r\n");
-				if (PrefB.GetString("PracticeAddress2") != "")
-					str.Append(PrefB.GetString("PracticeAddress2") + "\r\n");
-				str.Append(PrefB.GetString("PracticeCity") + ", ");
-				str.Append(PrefB.GetString("PracticeST") + "  ");
-				str.Append(PrefB.GetString("PracticeZip") + "\r\n");
+				str.Append(PrefC.GetString("PracticeTitle") + "\r\n");
+				str.Append(PrefC.GetString("PracticeAddress") + "\r\n");
+				if (PrefC.GetString("PracticeAddress2") != "")
+					str.Append(PrefC.GetString("PracticeAddress2") + "\r\n");
+				str.Append(PrefC.GetString("PracticeCity") + ", ");
+				str.Append(PrefC.GetString("PracticeST") + "  ");
+				str.Append(PrefC.GetString("PracticeZip") + "\r\n");
 			}
 			else {
 				str.Append("\r\n\r\n\r\n\r\n");
@@ -386,11 +386,11 @@ namespace OpenDental{
 			else {
 				str.Append("\r\n\r\n" + Lan.g(this, "Sincerely,") + "\r\n\r\n\r\n\r\n");
 			}
-			if (PrefB.GetBool("FuchsOptionsOn")) {
+			if (PrefC.GetBool("FuchsOptionsOn")) {
 				str.Append("Dr. Fuchs");
 			}
 			else {
-				str.Append(PrefB.GetString("PracticeTitle"));
+				str.Append(PrefC.GetString("PracticeTitle"));
 			}
 			textBody.Text = str.ToString();
 			bodyChanged = false;
@@ -490,7 +490,7 @@ namespace OpenDental{
 
 		private void pd2_PrintPage(object sender, PrintPageEventArgs ev) {//raised for each page to be printed.
 			Graphics grfx = ev.Graphics;
-			if (PrefB.GetString("StationaryImage") == "") {//no stationary image specified
+			if (PrefC.GetString("StationaryImage") == "") {//no stationary image specified
 				ev.PageSettings.Margins = new Margins(100, 100, 80, 80);
 				grfx.DrawString(textBody.Text, new Font(FontFamily.GenericSansSerif, 11), Brushes.Black
 					, new RectangleF(0, 0, ev.MarginBounds.Width, ev.MarginBounds.Height));
@@ -501,8 +501,8 @@ namespace OpenDental{
 				ev.PageSettings.Margins = new Margins(80, 80, 0, 0);
 				//Letterhead image
 				string fileName;
-				if(PrefB.GetString("StationaryImage") != "") {
-					fileName = ODFileUtils.CombinePaths(FormPath.GetPreferredImagePath(),PrefB.GetString("StationaryImage"));
+				if(PrefC.GetString("StationaryImage") != "") {
+					fileName = ODFileUtils.CombinePaths(FormPath.GetPreferredImagePath(),PrefC.GetString("StationaryImage"));
 					Image thisImage = Image.FromFile(fileName);
 					grfx.DrawImage(thisImage
 						, -100
@@ -535,13 +535,13 @@ namespace OpenDental{
 			StringBuilder str = new StringBuilder();
 			//return address
 			if(checkIncludeRet.Checked) {
-				str.Append(PrefB.GetString("PracticeTitle") + "\r\n");
-				str.Append(PrefB.GetString("PracticeAddress") + "\r\n");
-				if(PrefB.GetString("PracticeAddress2") != "")
-					str.Append(PrefB.GetString("PracticeAddress2") + "\r\n");
-				str.Append(PrefB.GetString("PracticeCity") + ", ");
-				str.Append(PrefB.GetString("PracticeST") + "  ");
-				str.Append(PrefB.GetString("PracticeZip") + "\r\n");
+				str.Append(PrefC.GetString("PracticeTitle") + "\r\n");
+				str.Append(PrefC.GetString("PracticeAddress") + "\r\n");
+				if(PrefC.GetString("PracticeAddress2") != "")
+					str.Append(PrefC.GetString("PracticeAddress2") + "\r\n");
+				str.Append(PrefC.GetString("PracticeCity") + ", ");
+				str.Append(PrefC.GetString("PracticeST") + "  ");
+				str.Append(PrefC.GetString("PracticeZip") + "\r\n");
 			}
 			else {
 				str.Append("\r\n\r\n\r\n");
@@ -616,13 +616,13 @@ namespace OpenDental{
 			StringBuilder str = new StringBuilder();
 			//return address
 			if(checkIncludeRet.Checked) {
-				str.Append(PrefB.GetString("PracticeTitle") + "\r\n");
-				str.Append(PrefB.GetString("PracticeAddress") + "\r\n");
-				if(PrefB.GetString("PracticeAddress2") != "")
-					str.Append(PrefB.GetString("PracticeAddress2") + "\r\n");
-				str.Append(PrefB.GetString("PracticeCity") + ", ");
-				str.Append(PrefB.GetString("PracticeST") + "  ");
-				str.Append(PrefB.GetString("PracticeZip") + "\r\n");
+				str.Append(PrefC.GetString("PracticeTitle") + "\r\n");
+				str.Append(PrefC.GetString("PracticeAddress") + "\r\n");
+				if(PrefC.GetString("PracticeAddress2") != "")
+					str.Append(PrefC.GetString("PracticeAddress2") + "\r\n");
+				str.Append(PrefC.GetString("PracticeCity") + ", ");
+				str.Append(PrefC.GetString("PracticeST") + "  ");
+				str.Append(PrefC.GetString("PracticeZip") + "\r\n");
 			}
 			else {
 				str.Append("\r\n\r\n\r\n");

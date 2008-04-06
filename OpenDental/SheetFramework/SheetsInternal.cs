@@ -50,7 +50,7 @@ namespace OpenDental{
 				sheet.Height=346;
 				int rowH=sheet.Font.Height;
 				int yPos=30;
-				if(PrefB.GetBool("FuchsOptionsOn")) yPos = 50;
+				if(PrefC.GetBool("FuchsOptionsOn")) yPos = 50;
 				sheet.SheetFields.Add(new SheetField(InOutEnum.Out, "nameLF", 25, yPos, 300, sheet.Font, GrowthBehaviorEnum.None));
 				yPos+=rowH;
 				sheet.SheetFields.Add(new SheetField(InOutEnum.Out,"ChartNumber",25,yPos,300,sheet.Font,GrowthBehaviorEnum.None));
@@ -66,7 +66,7 @@ namespace OpenDental{
 				sheet.Height=346;
 				int rowH=sheet.Font.Height;
 				int yPos=30;
-				if(PrefB.GetBool("FuchsOptionsOn")) yPos = 50;
+				if(PrefC.GetBool("FuchsOptionsOn")) yPos = 50;
 				sheet.SheetFields.Add(new SheetField(InOutEnum.Out, "nameLF", 25, yPos, 300, sheet.Font, GrowthBehaviorEnum.None));
 				yPos+=rowH;
 				sheet.SheetFields.Add(new SheetField(InOutEnum.Out,"PatNum",25,yPos,300,sheet.Font,GrowthBehaviorEnum.None));
@@ -83,7 +83,7 @@ namespace OpenDental{
 				Font smallFont=new Font(FontFamily.GenericSansSerif, 9);
 				int rowH=sheet.Font.Height;
 				int yPos=30;
-				if(PrefB.GetBool("FuchsOptionsOn")) yPos = 50;
+				if(PrefC.GetBool("FuchsOptionsOn")) yPos = 50;
 				sheet.SheetFields.Add(new SheetField(InOutEnum.Out, "nameLF", 25, yPos, 150, sheet.Font, GrowthBehaviorEnum.None));
 				sheet.SheetFields.Add(new SheetField(InOutEnum.Out, "dateTime.Today", 180, yPos, 100, sheet.Font, GrowthBehaviorEnum.None));
 				yPos += rowH;

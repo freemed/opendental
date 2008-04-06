@@ -41,15 +41,15 @@ namespace OpenDental{
 
 		///<summary></summary>
 		public static void Insert(ZipCode Cur){
-			if(PrefB.RandomKeys){
+			if(PrefC.RandomKeys){
 				Cur.ZipCodeNum=MiscData.GetKey("zipcode","ZipCodeNum");
 			}
 			string command="INSERT INTO zipcode (";
-			if(PrefB.RandomKeys){
+			if(PrefC.RandomKeys){
 				 command+="ZipCodeNum,";
 			}
 			command+="zipcodedigits,city,state,isfrequent) VALUES(";
-			if(PrefB.RandomKeys){
+			if(PrefC.RandomKeys){
 				command+="'"+POut.PInt(Cur.ZipCodeNum)+"', ";
 			}
 			command+=
@@ -57,7 +57,7 @@ namespace OpenDental{
 				+"'"+POut.PString(Cur.City)+"', "
 				+"'"+POut.PString(Cur.State)+"', "
 				+"'"+POut.PBool  (Cur.IsFrequent)+"')";
-			if(PrefB.RandomKeys){
+			if(PrefC.RandomKeys){
 				General.NonQ(command);
 			}
 			else{

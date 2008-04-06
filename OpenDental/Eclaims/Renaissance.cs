@@ -319,7 +319,7 @@ namespace OpenDental.Eclaims{
 
 		private static void SaveFile(int batchNum){
 			//this actually gets the current batch number since it was already incremented
-			//int batchNum=PIn.PInt(((Pref)PrefB.HList["RenaissanceLastBatchNumber"]).ValueString);
+			//int batchNum=PIn.PInt(((Pref)PrefC.HList["RenaissanceLastBatchNumber"]).ValueString);
 			for(int i=0;i<DisplayStrings.GetLength(0);i++){//usually 1, but sometimes 2 or 3
 				string uploadPath=@"C:\Program Files\Renaissance\dotr\upload\";
 				if(!Directory.Exists(uploadPath)){

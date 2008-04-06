@@ -139,7 +139,7 @@ Order By patient.lname,patient.fname
 			FormQuery2.SubmitReportQuery();			
 			Queries.CurReport.Title="Insurance Plan List";
 			Queries.CurReport.SubTitle=new string[2];
-			Queries.CurReport.SubTitle[0]=((Pref)PrefB.HList["PracticeTitle"]).ValueString;
+			Queries.CurReport.SubTitle[0]=((Pref)PrefC.HList["PracticeTitle"]).ValueString;
 
 			Queries.CurReport.ColPos=new int[5];
 			Queries.CurReport.ColCaption=new string[4];

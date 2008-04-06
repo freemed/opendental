@@ -47,16 +47,16 @@ namespace OpenDental{
 
 		///<summary></summary>
 		private static void Insert(Printer cur){
-			if(PrefB.RandomKeys){
+			if(PrefC.RandomKeys){
 				cur.PrinterNum=MiscData.GetKey("printer","PrinterNum");
 			}
 			string command= "INSERT INTO printer (";
-			if(PrefB.RandomKeys){
+			if(PrefC.RandomKeys){
 				command+="PrinterNum,";
 			}
 			command+="ComputerNum,PrintSit,PrinterName,"
 				+"DisplayPrompt) VALUES(";
-			if(PrefB.RandomKeys){
+			if(PrefC.RandomKeys){
 				command+="'"+POut.PInt(cur.PrinterNum)+"', ";
 			}
 			command+=
@@ -65,7 +65,7 @@ namespace OpenDental{
 				+"'"+POut.PString(cur.PrinterName)+"', "
 				+"'"+POut.PBool  (cur.DisplayPrompt)+"')";
 			//MessageBox.Show(string command);
- 			if(PrefB.RandomKeys){
+ 			if(PrefC.RandomKeys){
 				General.NonQ(command);
 			}
 			else{

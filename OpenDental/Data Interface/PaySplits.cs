@@ -67,16 +67,16 @@ namespace OpenDental{
 
 		///<summary></summary>
 		public static void Insert(PaySplit split){
-			if(PrefB.RandomKeys){
+			if(PrefC.RandomKeys){
 				split.SplitNum=MiscData.GetKey("paysplit","SplitNum");
 			}
 			string command= "INSERT INTO paysplit (";
-			if(PrefB.RandomKeys){
+			if(PrefC.RandomKeys){
 				command+="SplitNum,";
 			}
 			command+="SplitAmt,PatNum,ProcDate, "
 				+"PayNum,IsDiscount,DiscountType,ProvNum,PayPlanNum,DatePay,ProcNum,DateEntry) VALUES(";
-			if(PrefB.RandomKeys){
+			if(PrefC.RandomKeys){
 				command+="'"+POut.PInt(split.SplitNum)+"', ";
 			}
 			command+=
@@ -96,7 +96,7 @@ namespace OpenDental{
 				command+="NOW()";
 			}
 			command+=")";//DateEntry: date of server
- 			if(PrefB.RandomKeys){
+ 			if(PrefC.RandomKeys){
 				General.NonQ(command);
 			}
 			else{

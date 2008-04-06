@@ -125,7 +125,7 @@ namespace OpenDental{
 		}
 
 		public static void PrintStationery(Patient PatCur){
-			if(PrefB.GetString("StationaryDocument")==""){
+			if(PrefC.GetString("StationaryDocument")==""){
 				MsgBox.Show("Stationery","Please setup your stationery document first in Setup | Misc");
 				return;
 			}
@@ -160,10 +160,10 @@ namespace OpenDental{
 					PatCur.ImageFolder.Substring(0, 1),
 					PatCur.ImageFolder);
 				//string ProgName = @"C:\Program Files\OpenOffice.org 2.0\program\swriter.exe";
-				//string ProgName = PrefB.GetString("WordProcessorPath");
+				//string ProgName = PrefC.GetString("WordProcessorPath");
 				string TheFile=ODFileUtils.CombinePaths(patFolder,"Letter_"+DateTime.Now.ToFileTime()+".doc");
 				try{
-					File.Copy(ODFileUtils.CombinePaths(FormPath.GetPreferredImagePath(),PrefB.GetString("StationaryDocument")),TheFile);
+					File.Copy(ODFileUtils.CombinePaths(FormPath.GetPreferredImagePath(),PrefC.GetString("StationaryDocument")),TheFile);
 				}
 				catch {
 				}

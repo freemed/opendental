@@ -271,7 +271,7 @@ namespace OpenDental{
 					comboUserGroup.Items.Add(UserGroups.List[i].Description);
 				}
 			}
-			if(PrefB.GetBool("EasyHideDentalSchools")){
+			if(PrefC.GetBool("EasyHideDentalSchools")){
 				groupDentalSchools.Visible=false;
 			}
 			else{
@@ -314,7 +314,7 @@ namespace OpenDental{
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn(Lan.g("TableProviders","Hidden"),50,HorizontalAlignment.Center);
 			gridMain.Columns.Add(col);
-			if(!PrefB.GetBool("EasyHideDentalSchools")) {
+			if(!PrefC.GetBool("EasyHideDentalSchools")) {
 				col=new ODGridColumn(Lan.g("TableProviders","Class"),90);
 				gridMain.Columns.Add(col);
 			}
@@ -332,7 +332,7 @@ namespace OpenDental{
 				else{
 					row.Cells.Add("");
 				}
-				if(!PrefB.GetBool("EasyHideDentalSchools")) {
+				if(!PrefC.GetBool("EasyHideDentalSchools")) {
 					if(table.Rows[i]["GradYear"].ToString()!=""){
 						row.Cells.Add(table.Rows[i]["GradYear"].ToString()+"-"+table.Rows[i]["Descript"].ToString());
 					}

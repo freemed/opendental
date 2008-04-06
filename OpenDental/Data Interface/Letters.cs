@@ -40,21 +40,21 @@ namespace OpenDental{
 
 		///<summary></summary>
 		public static void Insert(Letter Cur){
-			if(PrefB.RandomKeys){
+			if(PrefC.RandomKeys){
 				Cur.LetterNum=MiscData.GetKey("letter","LetterNum");
 			}
 			string command="INSERT INTO letter (";
-			if(PrefB.RandomKeys){
+			if(PrefC.RandomKeys){
 				command+="LetterNum,";
 			}
 			command+="Description,BodyText) VALUES(";
-			if(PrefB.RandomKeys){
+			if(PrefC.RandomKeys){
 				command+="'"+POut.PInt(Cur.LetterNum)+"', ";
 			}
 			command+=
 				 "'"+POut.PString(Cur.Description)+"', "
 				+"'"+POut.PString(Cur.BodyText)+"')";
-			if(PrefB.RandomKeys){
+			if(PrefC.RandomKeys){
 				General.NonQ(command);
 			}
 			else{

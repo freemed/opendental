@@ -150,14 +150,14 @@ namespace OpenDental{
 		#endregion
 
 		private void FormAging_Load(object sender, System.EventArgs e) {
-			DateTime dateLastAging=PIn.PDate(PrefB.GetString("DateLastAging"));
+			DateTime dateLastAging=PIn.PDate(PrefC.GetString("DateLastAging"));
 			if(dateLastAging.Year<1880){
 				textDateLast.Text="";
 			}
 			else{
 				textDateLast.Text=dateLastAging.ToShortDateString();
 			}
-			if(PrefB.GetBool("AgingCalculatedMonthlyInsteadOfDaily")){
+			if(PrefC.GetBool("AgingCalculatedMonthlyInsteadOfDaily")){
 				textDateCalc.Text=dateLastAging.ToShortDateString();
 			}
 			else{

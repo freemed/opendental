@@ -30,21 +30,21 @@ namespace OpenDental{
 
 		///<summary></summary>
 		public static void Insert(ScreenGroup Cur){
-			if(PrefB.RandomKeys){
+			if(PrefC.RandomKeys){
 				Cur.ScreenGroupNum=MiscData.GetKey("screengroup","ScreenGroupNum");
 			}
 			string command="INSERT INTO screengroup (";
-			if(PrefB.RandomKeys){
+			if(PrefC.RandomKeys){
 				command+="ScreenGroupNum,";
 			}
 			command+="Description,SGDate) VALUES(";
-			if(PrefB.RandomKeys){
+			if(PrefC.RandomKeys){
 				command+="'"+POut.PInt(Cur.ScreenGroupNum)+"', ";
 			}
 			command+=
 				 "'"+POut.PString(Cur.Description)+"', "
 				+POut.PDate  (Cur.SGDate)+")";
-			if(PrefB.RandomKeys){
+			if(PrefC.RandomKeys){
 				General.NonQ(command);
 			}
 			else{

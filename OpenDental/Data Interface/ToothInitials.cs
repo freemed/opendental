@@ -29,15 +29,15 @@ namespace OpenDental{
 
 		///<summary></summary>
 		public static void Insert(ToothInitial init){
-			if(PrefB.RandomKeys) {
+			if(PrefC.RandomKeys) {
 				init.ToothInitialNum=MiscData.GetKey("toothinitial","ToothInitialNum");
 			}
 			string command="INSERT INTO toothinitial (";
-			if(PrefB.RandomKeys) {
+			if(PrefC.RandomKeys) {
 				command+="ToothInitialNum,";
 			}
 			command+="PatNum,ToothNum,InitialType,Movement) VALUES(";
-			if(PrefB.RandomKeys) {
+			if(PrefC.RandomKeys) {
 				command+="'"+POut.PInt(init.ToothInitialNum)+"', ";
 			}
 			command+=
@@ -45,7 +45,7 @@ namespace OpenDental{
 				+"'"+POut.PString(init.ToothNum)+"', "
 				+"'"+POut.PInt   ((int)init.InitialType)+"', "
 				+"'"+POut.PFloat (init.Movement)+"')";
-			if(PrefB.RandomKeys) {
+			if(PrefC.RandomKeys) {
 				General.NonQ(command);
 			}
 			else {

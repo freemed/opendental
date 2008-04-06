@@ -563,10 +563,10 @@ namespace OpenDental{
 			text=Accounts.GetAccount(ReconcileCur.AccountNum).Description.ToUpper();
 			par.AddFormattedText(text,totalFontx);
 			par.AddLineBreak();
-			text=PrefB.GetString("PracticeTitle");
+			text=PrefC.GetString("PracticeTitle");
 			par.AddText(text);
 			par.AddLineBreak();
-			text=PrefB.GetString("PracticePhone");
+			text=PrefC.GetString("PracticePhone");
 			if(text.Length==10&&Application.CurrentCulture.Name=="en-US") {
 				text="("+text.Substring(0,3)+")"+text.Substring(3,3)+"-"+text.Substring(6);
 			}

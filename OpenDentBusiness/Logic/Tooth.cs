@@ -127,7 +127,7 @@ namespace OpenDentBusiness{
 		public static string GetToothLabel(string tooth_id)
 		{
 			if (tooth_id == null || tooth_id == "") return ""; // CWI: We should fix the source of these
-			int nomenclature = PrefB.GetInt("UseInternationalToothNumbers");
+			int nomenclature = PrefC.GetInt("UseInternationalToothNumbers");
 			if (nomenclature == 0) return tooth_id; // Universal
 
 			int index = Array.IndexOf(labelsUniversal, tooth_id);
@@ -146,7 +146,7 @@ namespace OpenDentBusiness{
 
 		public static string GetToothId(string tooth_label)
 		{
-			int nomenclature = PrefB.GetInt("UseInternationalToothNumbers");
+			int nomenclature = PrefC.GetInt("UseInternationalToothNumbers");
 			if (nomenclature == 0) return tooth_label; // Universal
 
 			int index = 0;
@@ -281,7 +281,7 @@ namespace OpenDentBusiness{
 		///<summary>Used every time user enters toothNum in procedure box. Must be followed with FromInternat. These are the *ONLY* methods that are designed to accept user input.  Can also handle international toothnum</summary>
 		public static bool IsValidEntry(string toothNum){
 			//international
-			if(PrefB.GetBool("UseInternationalToothNumbers")){
+			if(PrefC.GetBool("UseInternationalToothNumbers")){
 				if(toothNum==null || toothNum=="")
 					return false;
 				Regex regex=new Regex("^[1-4][1-8]$");//perm teeth: matches firt digit 1-4 and second digit 1-8,9 would be supernumerary?

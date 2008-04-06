@@ -52,16 +52,16 @@ namespace OpenDental{
 
 		///<summary>Inserts this lettermerge into database.</summary>
 		public static void Insert(LetterMerge merge){
-			if(PrefB.RandomKeys){
+			if(PrefC.RandomKeys){
 				merge.LetterMergeNum=MiscData.GetKey("lettermerge","LetterMergeNum");
 			}
 			string command= "INSERT INTO lettermerge (";
-			if(PrefB.RandomKeys){
+			if(PrefC.RandomKeys){
 				command+="LetterMergeNum,";
 			}
 			command+="Description,TemplateName,DataFileName,"
 				+"Category) VALUES(";
-			if(PrefB.RandomKeys){
+			if(PrefC.RandomKeys){
 				command+="'"+POut.PInt(merge.LetterMergeNum)+"', ";
 			}
 			command+=
@@ -70,7 +70,7 @@ namespace OpenDental{
 				+"'"+POut.PString(merge.DataFileName)+"', "
 				+"'"+POut.PInt   (merge.Category)+"')";
 			//MessageBox.Show(string command);
- 			if(PrefB.RandomKeys){
+ 			if(PrefC.RandomKeys){
 				General.NonQ(command);
 			}
 			else{

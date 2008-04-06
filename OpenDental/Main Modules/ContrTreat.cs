@@ -631,9 +631,9 @@ namespace OpenDental{
 
 		///<summary>Only called on startup, but after local data loaded from db.</summary>
 		public void InitializeOnStartup(){
-			checkShowCompleted.Checked=PrefB.GetBool("TreatPlanShowCompleted");
-			//checkShowIns.Checked=PrefB.GetBool("TreatPlanShowIns");
-			//checkShowDiscount.Checked=PrefB.GetBool("TreatPlanShowDiscount");
+			checkShowCompleted.Checked=PrefC.GetBool("TreatPlanShowCompleted");
+			//checkShowIns.Checked=PrefC.GetBool("TreatPlanShowIns");
+			//checkShowDiscount.Checked=PrefC.GetBool("TreatPlanShowDiscount");
 			//showHidden=true;//shows hidden priorities
 			//can't use Lan.F(this);
 			Lan.C(this,new Control[]
@@ -669,7 +669,7 @@ namespace OpenDental{
 				listSetPr.Items.Add(DefC.Short[(int)DefCat.TxPriorities][i].ItemName);
 			}
 			LayoutToolBar();
-			if(PrefB.GetBool("EasyHideInsurance")){
+			if(PrefC.GetBool("EasyHideInsurance")){
 				checkShowIns.Visible=false;
 				checkShowIns.Checked=false;
 				checkShowDiscount.Visible=false;
@@ -756,7 +756,7 @@ namespace OpenDental{
 					checkShowMaxDed.Visible=false;
 				}
 				else{//patient has insurance
-					if(!PrefB.GetBool("EasyHideInsurance")){//if insurance isn't hidden
+					if(!PrefC.GetBool("EasyHideInsurance")){//if insurance isn't hidden
 						checkShowMaxDed.Visible=true;
 						if(checkShowFees.Checked){//if fees are showing
 							checkShowIns.Checked=true;
@@ -1265,7 +1265,7 @@ namespace OpenDental{
 					}
 					#endregion subtotal
 				}//for(int i=0;i<ProcListTP.Length
-				textNote.Text=PrefB.GetString("TreatmentPlanNote");
+				textNote.Text=PrefC.GetString("TreatmentPlanNote");
 			}
 			#endregion currentTP
 			#region AnyTP except current
@@ -1673,7 +1673,7 @@ namespace OpenDental{
 			if(checkShowFees.Checked){
 				//checkShowStandard.Checked=true;
 				checkShowIns.Checked=true;
-				//if(PrefB.GetBool("TreatPlanShowDiscount")){
+				//if(PrefC.GetBool("TreatPlanShowDiscount")){
 				checkShowDiscount.Checked=true;
 				//}
 				checkShowSubtotals.Checked=true;
@@ -1743,7 +1743,7 @@ namespace OpenDental{
 			EmailMessage message=new EmailMessage();
 			message.PatNum=PatCur.PatNum;
 			message.ToAddress=PatCur.Email;
-			message.FromAddress=PrefB.GetString("EmailSenderAddress");
+			message.FromAddress=PrefC.GetString("EmailSenderAddress");
 			message.Subject=Lan.g(this,"Treatment Plan");
 			EmailAttach attach=new EmailAttach();
 			attach.DisplayedFileName="TreatmentPlan.pdf";
@@ -1766,7 +1766,7 @@ namespace OpenDental{
 			//benefitsPrinted=false;
 			//notePrinted=false;
 			//pagesPrinted=0;
-			if(PrefB.GetBool("TreatPlanShowGraphics")){
+			if(PrefC.GetBool("TreatPlanShowGraphics")){
 				//prints the graphical tooth chart and legend
 				//Panel panelHide=new Panel();
 				//panelHide.Size=new Size(600,500);
@@ -1868,10 +1868,10 @@ namespace OpenDental{
 			}
 			par.AddFormattedText(text,headingFont);
 			par.AddLineBreak();
-			text=PrefB.GetString("PracticeTitle");
+			text=PrefC.GetString("PracticeTitle");
 			par.AddText(text);
 			par.AddLineBreak();
-			text=PrefB.GetString("PracticePhone");
+			text=PrefC.GetString("PracticePhone");
 			if(text.Length==10 && Application.CurrentCulture.Name=="en-US") {
 				text="("+text.Substring(0,3)+")"+text.Substring(3,3)+"-"+text.Substring(6);
 			}
@@ -1892,7 +1892,7 @@ namespace OpenDental{
 			#region PrintGraphics
 			TextFrame frame;
 			int widthDoc=MigraDocHelper.GetDocWidth();
-			if(PrefB.GetBool("TreatPlanShowGraphics")) {	
+			if(PrefC.GetBool("TreatPlanShowGraphics")) {	
 				frame=MigraDocHelper.CreateContainer(section);
 				MigraDocHelper.DrawString(frame,Lan.g(this,"Your")+"\r\n"+Lan.g(this,"Right"),bodyFontx,
 					new RectangleF(widthDoc/2-toothChart.Width/2-50,toothChart.Height/2-10,50,100));
@@ -1993,7 +1993,7 @@ namespace OpenDental{
 			#region printNote
 			string note="";
 			if(gridPlans.SelectedIndices[0]==0) {//current TP
-				note=PrefB.GetString("TreatmentPlanNote");
+				note=PrefC.GetString("TreatmentPlanNote");
 			}
 			else {
 				note=PlanList[gridPlans.SelectedIndices[0]-1].Note;
@@ -2303,7 +2303,7 @@ namespace OpenDental{
 			tp.Heading=Lan.g(this,"Proposed Treatment Plan");
 			tp.DateTP=DateTime.Today;
 			tp.PatNum=PatCur.PatNum;
-			tp.Note=PrefB.GetString("TreatmentPlanNote");
+			tp.Note=PrefC.GetString("TreatmentPlanNote");
 			TreatPlans.Insert(tp);
 			ProcTP procTP;
 			Procedure proc;
@@ -2457,14 +2457,14 @@ namespace OpenDental{
 				ClaimCur.ProvTreat=PatCur.PriProv;
 				//OK if 0, because auto select first in list when open claim
 			}
-			if(PrefB.GetInt("InsBillingProv")==0){//default=0
-				ClaimCur.ProvBill=PrefB.GetInt("PracticeDefaultProv");
+			if(PrefC.GetInt("InsBillingProv")==0){//default=0
+				ClaimCur.ProvBill=PrefC.GetInt("PracticeDefaultProv");
 			}
-			else if(PrefB.GetInt("InsBillingProv")==-1){//treat=-1
+			else if(PrefC.GetInt("InsBillingProv")==-1){//treat=-1
 				ClaimCur.ProvBill=ClaimCur.ProvTreat;//OK if zero, because it will get fixed in claim
 			}
 			else{//specific=any number >0. Foreign key to ProvNum
-				ClaimCur.ProvBill=PrefB.GetInt("InsBillingProv");
+				ClaimCur.ProvBill=PrefC.GetInt("InsBillingProv");
 			}
 			ClaimCur.EmployRelated=YN.No;
       ClaimCur.ClaimType="PreAuth";

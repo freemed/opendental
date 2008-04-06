@@ -278,12 +278,12 @@ namespace OpenDental{
 			if(!Security.IsAuthorized(Permissions.SecurityAdmin,true)){
 				textPassword.PasswordChar='*';
 			}
-			textSMTPserver.Text=((Pref)PrefB.HList["EmailSMTPserver"]).ValueString;
-			textUsername.Text=PrefB.GetString("EmailUsername");
-			textPassword.Text=PrefB.GetString("EmailPassword");
-			textPort.Text=PrefB.GetString("EmailPort");
-			checkSSL.Checked=PrefB.GetBool("EmailUseSSL");
-			textSender.Text=((Pref)PrefB.HList["EmailSenderAddress"]).ValueString;
+			textSMTPserver.Text=((Pref)PrefC.HList["EmailSMTPserver"]).ValueString;
+			textUsername.Text=PrefC.GetString("EmailUsername");
+			textPassword.Text=PrefC.GetString("EmailPassword");
+			textPort.Text=PrefC.GetString("EmailPort");
+			checkSSL.Checked=PrefC.GetBool("EmailUseSSL");
+			textSender.Text=((Pref)PrefC.HList["EmailSenderAddress"]).ValueString;
 		}
 
 		private void butOK_Click(object sender, System.EventArgs e) {

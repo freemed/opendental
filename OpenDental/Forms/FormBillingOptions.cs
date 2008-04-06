@@ -545,19 +545,19 @@ namespace OpenDental{
 		#endregion
 
 		private void FormBillingOptions_Load(object sender, System.EventArgs e) {
-			if(PIn.PDate(PrefB.GetString("DateLastAging")) < DateTime.Today){
+			if(PIn.PDate(PrefC.GetString("DateLastAging")) < DateTime.Today){
 				if(MessageBox.Show(Lan.g(this,"Update aging first?"),"",MessageBoxButtons.YesNo)==DialogResult.Yes){
 					FormAging FormA=new FormAging();
 					FormA.ShowDialog();
 				}
 			}
 			textLastStatement.Text=DateTime.Today.AddMonths(-1).ToShortDateString();
-			checkIncludeChanged.Checked=PrefB.GetBool("BillingIncludeChanged");
+			checkIncludeChanged.Checked=PrefC.GetBool("BillingIncludeChanged");
 			comboAge.Items.Add(Lan.g(this,"Any Balance"));
 			comboAge.Items.Add(Lan.g(this,"Over 30 Days"));
 			comboAge.Items.Add(Lan.g(this,"Over 60 Days"));
 			comboAge.Items.Add(Lan.g(this,"Over 90 Days"));
-			switch(PrefB.GetString("BillingAgeOfAccount")){
+			switch(PrefC.GetString("BillingAgeOfAccount")){
 				default:
 					comboAge.SelectedIndex=0;
 					break;
@@ -571,16 +571,16 @@ namespace OpenDental{
 					comboAge.SelectedIndex=3;
 					break;
 			}
-			checkBadAddress.Checked=PrefB.GetBool("BillingExcludeBadAddresses");
-			checkExcludeInactive.Checked=PrefB.GetBool("BillingExcludeInactive");
-			checkExcludeNegative.Checked=PrefB.GetBool("BillingExcludeNegative");
-			checkExcludeInsPending.Checked=PrefB.GetBool("BillingExcludeInsPending");
-			textExcludeLessThan.Text=PrefB.GetString("BillingExcludeLessThan");
+			checkBadAddress.Checked=PrefC.GetBool("BillingExcludeBadAddresses");
+			checkExcludeInactive.Checked=PrefC.GetBool("BillingExcludeInactive");
+			checkExcludeNegative.Checked=PrefC.GetBool("BillingExcludeNegative");
+			checkExcludeInsPending.Checked=PrefC.GetBool("BillingExcludeInsPending");
+			textExcludeLessThan.Text=PrefC.GetString("BillingExcludeLessThan");
 			listBillType.Items.Add(Lan.g(this,"(all)"));
 			for(int i=0;i<DefC.Short[(int)DefCat.BillingTypes].Length;i++){
 				listBillType.Items.Add(DefC.Short[(int)DefCat.BillingTypes][i].ItemName);
 			}
-			string[] selectedBillTypes=PrefB.GetString("BillingSelectBillingTypes").Split(',');//might be blank
+			string[] selectedBillTypes=PrefC.GetString("BillingSelectBillingTypes").Split(',');//might be blank
 			for(int i=0;i<selectedBillTypes.Length;i++){
 				try{
 					int order=DefB.GetOrder(DefCat.BillingTypes,Convert.ToInt32(selectedBillTypes[i]));
@@ -731,10 +731,10 @@ namespace OpenDental{
 		}
 
 		private void SetDefaults(){
-			textDateStart.Text=DateTime.Today.AddDays(-PrefB.GetInt("BillingDefaultsLastDays")).ToShortDateString();
+			textDateStart.Text=DateTime.Today.AddDays(-PrefC.GetInt("BillingDefaultsLastDays")).ToShortDateString();
 			textDateEnd.Text=DateTime.Today.ToShortDateString();
-			checkIntermingled.Checked=PrefB.GetBool("BillingDefaultsIntermingle");
-			textNote.Text=PrefB.GetString("BillingDefaultsNote");
+			checkIntermingled.Checked=PrefC.GetBool("BillingDefaultsIntermingle");
+			textNote.Text=PrefC.GetString("BillingDefaultsNote");
 		}
 
 		private void but30days_Click(object sender,EventArgs e) {

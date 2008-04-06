@@ -1111,7 +1111,7 @@ namespace OpenDental{
 			}
 			ReportOld2 report=new ReportOld2();
 			report.AddTitle("Payment Plan Terms");
-			report.AddSubTitle(PrefB.GetString("PracticeTitle"));
+			report.AddSubTitle(PrefC.GetString("PracticeTitle"));
 			report.AddSubTitle(DateTime.Today.ToShortDateString());
 			string sectName="Report Header";
 			Section section=report.Sections["Report Header"];

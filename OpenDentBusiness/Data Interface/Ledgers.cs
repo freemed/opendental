@@ -184,7 +184,7 @@ namespace OpenDentBusiness{
 				}
 				command+=" Guarantor = "+((int)ALpatNums[i]).ToString();
 			}
-			command+=") AND ChargeDate <= ADDDATE(CURDATE(),"+POut.PInt(PrefB.GetInt("PayPlansBillInAdvanceDays"))+"))"
+			command+=") AND ChargeDate <= ADDDATE(CURDATE(),"+POut.PInt(PrefC.GetInt("PayPlansBillInAdvanceDays"))+"))"
 				+"-(SELECT IFNULL(SUM(SplitAmt),0) FROM paysplit WHERE ("+wherePats+") AND PayPlanNum !=0 )";
 			table=General.GetTable(command);
 			PayPlanDue=PIn.PDouble(table.Rows[0][0].ToString());

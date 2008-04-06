@@ -185,9 +185,9 @@ namespace OpenDental{
 		#endregion
 
 		private void FormUpdateSetup_Load(object sender,EventArgs e) {
-			textUpdateServerAddress.Text=PrefB.GetString("UpdateServerAddress");
-			textWebsitePath.Text=PrefB.GetString("UpdateWebsitePath");
-			string regkey=PrefB.GetString("RegistrationKey");
+			textUpdateServerAddress.Text=PrefC.GetString("UpdateServerAddress");
+			textWebsitePath.Text=PrefC.GetString("UpdateWebsitePath");
+			string regkey=PrefC.GetString("RegistrationKey");
 			if(regkey.Length==16){
 				textRegKey.Text=regkey.Substring(0,4)+"-"+regkey.Substring(4,4)+"-"+regkey.Substring(8,4)+"-"+regkey.Substring(12,4);
 			}

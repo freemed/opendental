@@ -40,15 +40,15 @@ namespace OpenDental {
 
 		///<summary></summary>
 		public static void Insert(Question quest) {
-			if(PrefB.RandomKeys) {
+			if(PrefC.RandomKeys) {
 				quest.QuestionNum=MiscData.GetKey("question","QuestionNum");
 			}
 			string command="INSERT INTO question (";
-			if(PrefB.RandomKeys) {
+			if(PrefC.RandomKeys) {
 				command+="QuestionNum,";
 			}
 			command+="PatNum,ItemOrder,Description,Answer,FormPatNum) VALUES(";
-			if(PrefB.RandomKeys) {
+			if(PrefC.RandomKeys) {
 				command+="'"+POut.PInt(quest.QuestionNum)+"', ";
 			}
 			command+=
@@ -57,7 +57,7 @@ namespace OpenDental {
 				+"'"+POut.PString(quest.Description)+"', "
 				+"'"+POut.PString(quest.Answer)+"', "
 				+"'"+POut.PInt   (quest.FormPatNum)+"')";
-			if(PrefB.RandomKeys) {
+			if(PrefC.RandomKeys) {
 				General.NonQ(command);
 			}
 			else {

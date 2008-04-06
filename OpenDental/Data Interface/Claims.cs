@@ -144,11 +144,11 @@ namespace OpenDental{
 
 		///<summary></summary>
 		public static void Insert(Claim Cur){
-			if(PrefB.RandomKeys){
+			if(PrefC.RandomKeys){
 				Cur.ClaimNum=MiscData.GetKey("claim","ClaimNum");
 			}
 			string command="INSERT INTO claim (";
-			if(PrefB.RandomKeys){
+			if(PrefC.RandomKeys){
 				command+="ClaimNum,";
 			}
 			command+="patnum,dateservice,datesent,claimstatus,datereceived"
@@ -158,7 +158,7 @@ namespace OpenDental{
 				+",refnumstring,placeservice,accidentrelated,accidentdate,accidentst"
 				+",employrelated,isortho,orthoremainm,orthodate,patrelat,plannum2"
 				+",patrelat2,writeoff,Radiographs,ClinicNum,ClaimForm,EFormat) VALUES(";
-			if(PrefB.RandomKeys){
+			if(PrefC.RandomKeys){
 				command+="'"+POut.PInt(Cur.ClaimNum)+"', ";
 			}
 			command+=
@@ -198,7 +198,7 @@ namespace OpenDental{
 				+"'"+POut.PInt   (Cur.ClinicNum)+"', "
 				+"'"+POut.PInt   (Cur.ClaimForm)+"', "
 				+"'"+POut.PInt   ((int)Cur.EFormat)+"')";
-			if(PrefB.RandomKeys){
+			if(PrefC.RandomKeys){
 				General.NonQ(command);
 			}
 			else{
@@ -420,7 +420,7 @@ namespace OpenDental{
 				if(PlanCur.ClaimsUseUCR){//use UCR for the provider of the procedure
 					provNum=ProcCur.ProvNum;
 					if(provNum==0){//if no prov set, then use practice default.
-						provNum=PrefB.GetInt("PracticeDefaultProv");
+						provNum=PrefC.GetInt("PracticeDefaultProv");
 					}
 					ClaimProcsForClaim[i].FeeBilled=qty*(Fees.GetAmount0(//get the fee based on code and prov fee sched
 						ProcCur.CodeNum,Providers.ListLong[Providers.GetIndexLong(provNum)].FeeSched));

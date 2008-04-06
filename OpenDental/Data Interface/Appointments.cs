@@ -207,18 +207,18 @@ namespace OpenDental{
 				appt.ProvNum=Providers.List[0].ProvNum;
 			}
 			//now, save to db----------------------------------------------------------------------------------------
-			if(PrefB.RandomKeys){
+			if(PrefC.RandomKeys){
 				appt.AptNum=MiscData.GetKey("appointment","AptNum");
 			}
 			string command="INSERT INTO appointment (";
-			if(PrefB.RandomKeys){
+			if(PrefC.RandomKeys){
 				command+="AptNum,";
 			}
 			command+="patnum,aptstatus, "
 				+"pattern,confirmed,addtime,op,note,provnum,"
 				+"provhyg,aptdatetime,nextaptnum,unschedstatus,lab,isnewpatient,procdescript,"
 				+"Assistant,InstructorNum,SchoolClassNum,SchoolCourseNum,GradePoint,ClinicNum,IsHygiene) VALUES(";
-			if(PrefB.RandomKeys){
+			if(PrefC.RandomKeys){
 				command+="'"+POut.PInt(appt.AptNum)+"', ";
 			}
 			command+=
@@ -244,7 +244,7 @@ namespace OpenDental{
 				+"'"+POut.PFloat (appt.GradePoint)+"', "
 				+"'"+POut.PInt   (appt.ClinicNum)+"', "
 				+"'"+POut.PBool  (appt.IsHygiene)+"')";
-			if(PrefB.RandomKeys){
+			if(PrefC.RandomKeys){
 				General.NonQ(command);
 			}
 			else{
@@ -675,8 +675,8 @@ namespace OpenDental{
 		}
 
 		private static int GetProvBarIndex(DateTime time){
-			return (int)(((double)time.Hour*(double)60/(double)PrefB.GetInt("AppointmentTimeIncrement")//aptTimeIncr=minutesPerIncr
-				+(double)time.Minute/(double)PrefB.GetInt("AppointmentTimeIncrement"))
+			return (int)(((double)time.Hour*(double)60/(double)PrefC.GetInt("AppointmentTimeIncrement")//aptTimeIncr=minutesPerIncr
+				+(double)time.Minute/(double)PrefC.GetInt("AppointmentTimeIncrement"))
 				*(double)ContrApptSheet.Lh*ContrApptSheet.RowsPerIncr)
 				/ContrApptSheet.Lh;//rounds down
 		}
@@ -687,7 +687,7 @@ namespace OpenDental{
 			AptCur.PatNum=patCur.PatNum;
 			AptCur.AptStatus=ApptStatus.Scheduled;
 			if(patCur.PriProv==0){
-				AptCur.ProvNum=PrefB.GetInt("PracticeDefaultProv");
+				AptCur.ProvNum=PrefC.GetInt("PracticeDefaultProv");
 			}
 			else{
 				AptCur.ProvNum=patCur.PriProv;
@@ -701,14 +701,14 @@ namespace OpenDental{
 			StringBuilder savePattern=new StringBuilder();
 			string[] procs;
 			if(patCur.Birthdate.AddYears(12) < recallCur.DateDue) {//pt is over 12 at recall date)
-				if(!PrefB.GetBool("RecallDisablePerioAlt")) {
+				if(!PrefC.GetBool("RecallDisablePerioAlt")) {
 					//if pt is perio pt RecallPerioTriggerProcs
 					string[] PerioProc;
-					if(PrefB.GetString("RecallPerioTriggerProcs")==""){
+					if(PrefC.GetString("RecallPerioTriggerProcs")==""){
 						PerioProc=new string[0];
 					}
 					else{
-						PerioProc=PrefB.GetString("RecallPerioTriggerProcs").Split(',');
+						PerioProc=PrefC.GetString("RecallPerioTriggerProcs").Split(',');
 					}
 					for (int q=0;q<PerioProc.Length;q++) {//see if pt has had any perio procs in the past
 						for (int i=0;i<procList.Length;i++) {
@@ -720,55 +720,55 @@ namespace OpenDental{
 					}
 				}
 				if(perioPt) {
-					if(PrefB.GetString("RecallProceduresPerio")==""){
+					if(PrefC.GetString("RecallProceduresPerio")==""){
 						procs=new string[0];
 					}
 					else{
-						procs=PrefB.GetString("RecallProceduresPerio").Split(',');
+						procs=PrefC.GetString("RecallProceduresPerio").Split(',');
 					}
 					//convert time pattern to 5 minute increment
-					for(int i=0;i<PrefB.GetString("RecallPatternPerio").Length;i++){
-						savePattern.Append(PrefB.GetString("RecallPatternPerio").Substring(i,1));
-						savePattern.Append(PrefB.GetString("RecallPatternPerio").Substring(i,1));
-						if(PrefB.GetInt("AppointmentTimeIncrement")==15){
-						savePattern.Append(PrefB.GetString("RecallPatternPerio").Substring(i,1));
+					for(int i=0;i<PrefC.GetString("RecallPatternPerio").Length;i++){
+						savePattern.Append(PrefC.GetString("RecallPatternPerio").Substring(i,1));
+						savePattern.Append(PrefC.GetString("RecallPatternPerio").Substring(i,1));
+						if(PrefC.GetInt("AppointmentTimeIncrement")==15){
+						savePattern.Append(PrefC.GetString("RecallPatternPerio").Substring(i,1));
 						}
 					}
 				}
 				else {//not perio pt
-					if(PrefB.GetString("RecallProcedures")=="") {
+					if(PrefC.GetString("RecallProcedures")=="") {
 						procs=new string[0];
 					}
 					else {
-						procs=PrefB.GetString("RecallProcedures").Split(',');
+						procs=PrefC.GetString("RecallProcedures").Split(',');
 					}
 					//convert time pattern to 5 minute increment
-					for(int i=0;i<PrefB.GetString("RecallPattern").Length;i++){
-						savePattern.Append(PrefB.GetString("RecallPattern").Substring(i,1));
-						savePattern.Append(PrefB.GetString("RecallPattern").Substring(i,1));
-						if(PrefB.GetInt("AppointmentTimeIncrement")==15){
-						savePattern.Append(PrefB.GetString("RecallPattern").Substring(i,1));
+					for(int i=0;i<PrefC.GetString("RecallPattern").Length;i++){
+						savePattern.Append(PrefC.GetString("RecallPattern").Substring(i,1));
+						savePattern.Append(PrefC.GetString("RecallPattern").Substring(i,1));
+						if(PrefC.GetInt("AppointmentTimeIncrement")==15){
+						savePattern.Append(PrefC.GetString("RecallPattern").Substring(i,1));
 						}
 					}
 				}
 			}
 			else {//child under 12 years
-				if(PrefB.GetString("RecallProceduresChild")=="") {
+				if(PrefC.GetString("RecallProceduresChild")=="") {
 					procs=new string[0];
 				}
 				else {
-					procs=PrefB.GetString("RecallProceduresChild").Split(',');
+					procs=PrefC.GetString("RecallProceduresChild").Split(',');
 				}
-				for (int i=0;i<PrefB.GetString("RecallPatternChild").Length;i++) {
-					savePattern.Append(PrefB.GetString("RecallPatternChild").Substring(i, 1));
-					savePattern.Append(PrefB.GetString("RecallPatternChild").Substring(i, 1));
-					if (PrefB.GetInt("AppointmentTimeIncrement")==15) {
-						savePattern.Append(PrefB.GetString("RecallPatternChild").Substring(i, 1));
+				for (int i=0;i<PrefC.GetString("RecallPatternChild").Length;i++) {
+					savePattern.Append(PrefC.GetString("RecallPatternChild").Substring(i, 1));
+					savePattern.Append(PrefC.GetString("RecallPatternChild").Substring(i, 1));
+					if (PrefC.GetInt("AppointmentTimeIncrement")==15) {
+						savePattern.Append(PrefC.GetString("RecallPatternChild").Substring(i, 1));
 					}
 				}
 			}
 			if(savePattern.ToString()==""){
-				if(PrefB.GetInt("AppointmentTimeIncrement")==15){
+				if(PrefC.GetInt("AppointmentTimeIncrement")==15){
 					savePattern.Append("///XXX///");
 				}
 				else{
@@ -776,7 +776,7 @@ namespace OpenDental{
 				}
 			}
 			AptCur.Pattern=savePattern.ToString();
-			if(!PrefB.GetBool("RecallDisableAutoFilms")) {//Add Films
+			if(!PrefC.GetBool("RecallDisableAutoFilms")) {//Add Films
 				bool dueBW=true;
 				bool dueFMXPano=true;
 				bool dueBW_w_FMXPano=false;
@@ -787,11 +787,11 @@ namespace OpenDental{
 					//dueFMXPano=true and dueBW=false because we don't want to take both.
 					//also skip this is pt is less than 18 years old.
 					//later, might add here check for FMX freq based on ins information
-					if ((PrefB.GetInt("RecallFMXPanoYrInterval").ToString() != "0") && (patCur.Birthdate.AddYears(18) < recallCur.DateDue)) {
-						if (PrefB.GetString("RecallFMXPanoProc") == ProcedureCodes.GetStringProcCode(procList[i].CodeNum)
+					if ((PrefC.GetInt("RecallFMXPanoYrInterval").ToString() != "0") && (patCur.Birthdate.AddYears(18) < recallCur.DateDue)) {
+						if (PrefC.GetString("RecallFMXPanoProc") == ProcedureCodes.GetStringProcCode(procList[i].CodeNum)
 							&& (procList[i].ProcStatus.ToString() == "C" | procList[i].ProcStatus.ToString() == "EO")
 							&& recallCur.DateDue.Year > 1880
-							&& procList[i].ProcDate > recallCur.DateDue.AddYears(-(PrefB.GetInt("RecallFMXPanoYrInterval")))) 
+							&& procList[i].ProcDate > recallCur.DateDue.AddYears(-(PrefC.GetInt("RecallFMXPanoYrInterval")))) 
 						{
 							dueFMXPano=false;
 							if (procList[i].ProcDate > recallCur.DateDue.AddYears(-1)) {//if FMX was taken w/ year, then we don't need BW's either
@@ -807,7 +807,7 @@ namespace OpenDental{
 						skipFMXPano=true;
 					}
 					//if any BW found within last year, then dueBW=false, dueBW_w_FMXPano=false.
-					if(PrefB.GetString("RecallBW")==ProcedureCodes.GetStringProcCode(procList[i].CodeNum)
+					if(PrefC.GetString("RecallBW")==ProcedureCodes.GetStringProcCode(procList[i].CodeNum)
 						&& (procList[i].ProcStatus.ToString() == "C" | procList[i].ProcStatus.ToString() == "EO")
 						&& recallCur.DateDue.Year > 1880
 						&& procList[i].ProcDate > recallCur.DateDue.AddYears(-1)){
@@ -825,19 +825,19 @@ namespace OpenDental{
 					dueFMXPano=false;
 				}
 				if(dueBW){
-					if(PrefB.GetString("RecallBW")!=""){
+					if(PrefC.GetString("RecallBW")!=""){
 						string[] procs2=new string[procs.Length+1];
 						procs.CopyTo(procs2,0);
-						procs2[procs2.Length-1]=PrefB.GetString("RecallBW");
+						procs2[procs2.Length-1]=PrefC.GetString("RecallBW");
 						procs=new string[procs2.Length];
 						procs2.CopyTo(procs,0);
 					}
 				}
 				if(dueFMXPano) {
-					if(PrefB.GetString("RecallFMXPanoProc")!=""){
+					if(PrefC.GetString("RecallFMXPanoProc")!=""){
 						string[] procs2=new string[procs.Length+1];
 						procs.CopyTo(procs2,0);
-						procs2[procs2.Length-1]=PrefB.GetString("RecallFMXPanoProc");
+						procs2[procs2.Length-1]=PrefC.GetString("RecallFMXPanoProc");
 						procs=new string[procs2.Length];
 						procs2.CopyTo(procs,0);
 					}
@@ -919,9 +919,9 @@ namespace OpenDental{
 			}
 			//compute the starting row of this appt
 			int convertToY=(int)(((double)apt.AptDateTime.Hour*(double)60
-				/(double)PrefB.GetInt("AppointmentTimeIncrement")
+				/(double)PrefC.GetInt("AppointmentTimeIncrement")
 				+(double)apt.AptDateTime.Minute
-				/(double)PrefB.GetInt("AppointmentTimeIncrement")
+				/(double)PrefC.GetInt("AppointmentTimeIncrement")
 				)*(double)ContrApptSheet.Lh*ContrApptSheet.RowsPerIncr);
 			int startIndex=convertToY/ContrApptSheet.Lh;//rounds down
 			string pattern=ContrApptSingle.GetPatternShowing(apt.Pattern);
@@ -958,9 +958,9 @@ namespace OpenDental{
 				//calculate starting row
 				//this math is copied from another section of the program, so it's sloppy. Safer than trying to rewrite it:
 				convertToY=(int)(((double)aptDateTime.Hour*(double)60
-					/(double)PrefB.GetInt("AppointmentTimeIncrement")
+					/(double)PrefC.GetInt("AppointmentTimeIncrement")
 					+(double)aptDateTime.Minute
-					/(double)PrefB.GetInt("AppointmentTimeIncrement")
+					/(double)PrefC.GetInt("AppointmentTimeIncrement")
 					)*(double)ContrApptSheet.Lh*ContrApptSheet.RowsPerIncr);
 				startIndex=convertToY/ContrApptSheet.Lh;//rounds down
 				pattern=ContrApptSingle.GetPatternShowing(dayTable.Rows[i]["Pattern"].ToString());

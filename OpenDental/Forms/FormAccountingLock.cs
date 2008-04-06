@@ -126,8 +126,8 @@ namespace OpenDental{
 		#endregion
 
 		private void FormAccountingLock_Load(object sender,EventArgs e) {
-			if(PrefB.GetDate("AccountingLockDate").Year>1880){
-				textDate.Text=PrefB.GetDate("AccountingLockDate").ToShortDateString();
+			if(PrefC.GetDate("AccountingLockDate").Year>1880){
+				textDate.Text=PrefC.GetDate("AccountingLockDate").ToShortDateString();
 			}
 		}
 

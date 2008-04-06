@@ -151,16 +151,16 @@ namespace OpenDental{
 
 		///<summary>This should not be used from outside this class unless proper validation is written similar to InsertOrUpdate.</summary>
 		public static void Insert(Schedule sched){
-			if(PrefB.RandomKeys){
+			if(PrefC.RandomKeys){
 				sched.ScheduleNum=MiscData.GetKey("schedule","ScheduleNum");
 			}
 			string command= "INSERT INTO schedule (";
-			if(PrefB.RandomKeys){
+			if(PrefC.RandomKeys){
 				command+="ScheduleNum,";
 			}
 			command+="scheddate,starttime,stoptime,"
 				+"SchedType,ProvNum,BlockoutType,Note,Status,Op,EmployeeNum) VALUES(";
-			if(PrefB.RandomKeys){
+			if(PrefC.RandomKeys){
 				command+="'"+POut.PInt(sched.ScheduleNum)+"', ";
 			}
 			command+=
@@ -174,7 +174,7 @@ namespace OpenDental{
 				+"'"+POut.PInt   ((int)sched.Status)+"', "
 				+"'"+POut.PInt   (sched.Op)+"', "
 				+"'"+POut.PInt   (sched.EmployeeNum)+"')";
-			if(PrefB.RandomKeys) {
+			if(PrefC.RandomKeys) {
 				General.NonQ(command);
 			}
 			else {

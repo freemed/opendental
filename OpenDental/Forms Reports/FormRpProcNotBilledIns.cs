@@ -159,7 +159,7 @@ namespace OpenDental{
 			FormQuery2.SubmitReportQuery();
 			Queries.CurReport.Title="Procedures Not Billed to Insurance";
 			Queries.CurReport.SubTitle=new string[3];
-			Queries.CurReport.SubTitle[0]=((Pref)PrefB.HList["PracticeTitle"]).ValueString;
+			Queries.CurReport.SubTitle[0]=((Pref)PrefC.HList["PracticeTitle"]).ValueString;
 				Queries.CurReport.SubTitle[1]=date1.SelectionStart.ToString("d")
 					+" - "+date2.SelectionStart.ToString("d");
 			Queries.CurReport.ColPos=new int[5];

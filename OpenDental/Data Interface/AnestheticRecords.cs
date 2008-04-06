@@ -43,18 +43,18 @@ namespace OpenDental{
 		///<summary></summary>
 		public static void Insert(AnestheticRecord Cur){
 
-			if (PrefB.RandomKeys)
+			if (PrefC.RandomKeys)
 			{
 				Cur.AnestheticRecordNum = MiscData.GetKey("anestheticrecord", "AnestheticRecordNum");
 			}
 			string command = "INSERT INTO anestheticrecord (";
-			if (PrefB.RandomKeys)
+			if (PrefC.RandomKeys)
 			{
 				command += "AnestheticRecordNum,";
 			}
 				command += "PatNum,AnestheticDate,ProvNum"
 				+ ") VALUES(";
-			if (PrefB.RandomKeys)
+			if (PrefC.RandomKeys)
 			{
 				command += "'" + POut.PInt(Cur.AnestheticRecordNum) + "', ";
 			}
@@ -62,7 +62,7 @@ namespace OpenDental{
 				"'" + POut.PInt(Cur.PatNum) + "', "
 				+ POut.PDateT(Cur.AnestheticDate) + ", "
 				+ "'" + POut.PInt(Cur.ProvNum) + "')";
-			if (PrefB.RandomKeys)
+			if (PrefC.RandomKeys)
 			{
 				General.NonQ(command);
 			}

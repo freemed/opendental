@@ -323,7 +323,7 @@ namespace OpenDental{
 							schedForType=Schedules.GetForType(SchedListPeriod,ScheduleType.Provider,curOp.ProvHygienist);
 						}
 						else {//no provider set
-							schedForType=Schedules.GetForType(SchedListPeriod,ScheduleType.Provider,PrefB.GetInt("ScheduleProvUnassigned"));
+							schedForType=Schedules.GetForType(SchedListPeriod,ScheduleType.Provider,PrefC.GetInt("ScheduleProvUnassigned"));
 						}
 						for(int i=0;i<schedForType.Length;i++) {
 							if((int)schedForType[i].SchedDate.DayOfWeek!=d+1){
@@ -360,7 +360,7 @@ namespace OpenDental{
 						schedForType=Schedules.GetForType(SchedListPeriod,ScheduleType.Provider,curOp.ProvHygienist);
 					}
 					else {//no provider set
-						schedForType=Schedules.GetForType(SchedListPeriod,ScheduleType.Provider,PrefB.GetInt("ScheduleProvUnassigned"));
+						schedForType=Schedules.GetForType(SchedListPeriod,ScheduleType.Provider,PrefC.GetInt("ScheduleProvUnassigned"));
 					}
 					if(isHoliday) {
 						g.FillRectangle(holidayBrush,TimeWidth+ProvWidth*ProvCount+j*ColWidth,0,ColWidth,Height);
@@ -443,7 +443,7 @@ namespace OpenDental{
 					}
 				}
 				//paint either solid block or outline
-				if(PrefB.GetBool("SolidBlockouts")){
+				if(PrefC.GetBool("SolidBlockouts")){
 					g.FillRectangle(blockBrush,rect);
 					g.DrawLine(blockOutlinePen,rect.X,rect.Y+1,rect.Right-1,rect.Y+1);
 				}
@@ -657,7 +657,7 @@ namespace OpenDental{
 						ColWidth=(totalWidth-TimeWidth*2-ProvWidth*ProvCount)/ColCount;
 					}
 				}
-				MinPerIncr=PrefB.GetInt("AppointmentTimeIncrement");
+				MinPerIncr=PrefC.GetInt("AppointmentTimeIncrement");
 				MinPerRow=(float)MinPerIncr/(float)RowsPerIncr;
 				RowsPerHr=60/MinPerIncr*RowsPerIncr;
 				//if(TwoRowsPerIncrement){

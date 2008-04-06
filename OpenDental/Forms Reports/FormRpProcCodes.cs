@@ -175,7 +175,7 @@ namespace OpenDental{
 			  FormQuery2.SubmitReportQuery();			      
 				Queries.CurReport.Title="Procedure Codes";
 				Queries.CurReport.SubTitle=new string[2];
-				Queries.CurReport.SubTitle[0]=((Pref)PrefB.HList["PracticeTitle"]).ValueString;
+				Queries.CurReport.SubTitle[0]=((Pref)PrefC.HList["PracticeTitle"]).ValueString;
 				Queries.CurReport.SubTitle[1]=DefB.GetName(DefCat.FeeSchedNames,feeSched);
 				Queries.CurReport.ColPos=new int[6];
 				Queries.CurReport.ColCaption=new string[5];
@@ -239,7 +239,7 @@ namespace OpenDental{
 				
 				Queries.CurReport.Title="Procedure Codes";
 				Queries.CurReport.SubTitle=new string[5];
-				Queries.CurReport.SubTitle[0]=((Pref)PrefB.HList["PracticeTitle"]).ValueString;
+				Queries.CurReport.SubTitle[0]=((Pref)PrefC.HList["PracticeTitle"]).ValueString;
 				Queries.CurReport.SubTitle[1]=DefB.GetName(DefCat.FeeSchedNames,feeSched);
 				Queries.CurReport.ColPos[0]=20;
 				Queries.CurReport.ColPos[1]=120;

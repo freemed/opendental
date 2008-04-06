@@ -26,22 +26,22 @@ namespace OpenDental{
 
 		///<summary></summary>
 		public static void Insert(PayPeriod pp) {
-			if(PrefB.RandomKeys) {
+			if(PrefC.RandomKeys) {
 				pp.PayPeriodNum=MiscData.GetKey("payperiod","PayPeriodNum");
 			}
 			string command="INSERT INTO payperiod (";
-			if(PrefB.RandomKeys) {
+			if(PrefC.RandomKeys) {
 				command+="PayPeriodNum,";
 			}
 			command+="DateStart,DateStop,DatePaycheck) VALUES(";
-			if(PrefB.RandomKeys) {
+			if(PrefC.RandomKeys) {
 				command+="'"+POut.PInt(pp.PayPeriodNum)+"', ";
 			}
 			command+=
 				 POut.PDate  (pp.DateStart)+", "
 				+POut.PDate  (pp.DateStop)+", "
 				+POut.PDate  (pp.DatePaycheck)+")";
-			if(PrefB.RandomKeys) {
+			if(PrefC.RandomKeys) {
 				General.NonQ(command);
 			}
 			else {

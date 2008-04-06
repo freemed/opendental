@@ -76,16 +76,16 @@ namespace OpenDental{
 
 		///<summary></summary>
 		public static void Insert(Referral refer) {
-			if(PrefB.RandomKeys) {
+			if(PrefC.RandomKeys) {
 				refer.ReferralNum=MiscData.GetKey("referral","ReferralNum");
 			}
 			string command= "INSERT INTO referral (";
-			if(PrefB.RandomKeys) {
+			if(PrefC.RandomKeys) {
 				command+="ReferralNum,";
 			}
 			command+="LName,FName,MName,SSN,UsingTIN,Specialty,ST,"
 				+"Telephone,Address,Address2,City,Zip,Note,Phone2,IsHidden,NotPerson,Title,Email,PatNum,NationalProvID) VALUES(";
-			if(PrefB.RandomKeys) {
+			if(PrefC.RandomKeys) {
 				command+="'"+POut.PInt(refer.ReferralNum)+"', ";
 			}
 			command+=
@@ -109,7 +109,7 @@ namespace OpenDental{
 				+"'"+POut.PString(refer.EMail)+"', "
 				+"'"+POut.PInt(refer.PatNum)+"', "
 				+"'"+POut.PString(refer.NationalProvID)+"')";
-			if(PrefB.RandomKeys) {
+			if(PrefC.RandomKeys) {
 				General.NonQ(command);
 			}
 			else {

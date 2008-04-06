@@ -1267,7 +1267,7 @@ namespace OpenDental{
 			//LanguageForeigns.Refresh(CultureInfo.CurrentCulture);//automatically skips if current culture is en-US
 			DataValid.BecameInvalid += new OpenDental.ValidEventHandler(DataValid_BecameInvalid);
 			signalLastRefreshed=MiscData.GetNowDateTime();
-			timerSignals.Interval=PrefB.GetInt("ProcessSigsIntervalInSecs")*1000;
+			timerSignals.Interval=PrefC.GetInt("ProcessSigsIntervalInSecs")*1000;
 			timerSignals.Enabled=true;
 			ContrAccount2.InitializeOnStartup();
 			ContrAppt2.InitializeOnStartup();
@@ -1301,7 +1301,7 @@ namespace OpenDental{
 			//if(!File.Exists("remoteclient.exe")){
 			//	menuItemRemote.Visible=false;
 			//}
-			//menuItemClaimForms.Visible=PrefB.UsingAtoZfolder;
+			//menuItemClaimForms.Visible=PrefC.UsingAtoZfolder;
 			if(Environment.OSVersion.Platform==PlatformID.Unix){//Create A to Z unsupported on Unix for now.
 				menuItemCreateAtoZFolders.Visible=false;
 			}
@@ -1309,7 +1309,7 @@ namespace OpenDental{
 				//only visible in debug mode.  It's only usefulness is after a conversion, so no need for user to see it.
 				menuItemReallocate.Visible=false;
 			#endif
-			if(!PrefB.GetBool("ADAdescriptionsReset")) {
+			if(!PrefC.GetBool("ADAdescriptionsReset")) {
 				ProcedureCodes.ResetADAdescriptions();
 			}
 			Splash.Dispose();
@@ -1352,7 +1352,7 @@ namespace OpenDental{
 					if(!Prefs.ConvertDB()){
 						return false;
 					}
-					if(PrefB.UsingAtoZfolder && FormPath.GetPreferredImagePath()==null){//AtoZ folder not found
+					if(PrefC.UsingAtoZfolder && FormPath.GetPreferredImagePath()==null){//AtoZ folder not found
 						Userods.Refresh();
 						FormPath FormP=new FormPath();
 						FormP.ShowDialog();
@@ -1369,7 +1369,7 @@ namespace OpenDental{
 					if(!Prefs.CheckProgramVersion()){
 						return false;
 					}
-					if(!FormRegistrationKey.ValidateKey(PrefB.GetString("RegistrationKey"))){
+					if(!FormRegistrationKey.ValidateKey(PrefC.GetString("RegistrationKey"))){
 						//true){
 						FormRegistrationKey FormR=new FormRegistrationKey();
 						FormR.ShowDialog();
@@ -1381,9 +1381,9 @@ namespace OpenDental{
 					}
 					Lan.Refresh();//automatically skips if current culture is en-US
 					LanguageForeigns.Refresh(CultureInfo.CurrentCulture);//automatically skips if current culture is en-US
-					menuItemMergeDatabases.Visible=PrefB.GetBool("RandomPrimaryKeys");
+					menuItemMergeDatabases.Visible=PrefC.GetBool("RandomPrimaryKeys");
 				}
-				if(((Pref)PrefB.HList["EasyHidePublicHealth"]).ValueString=="1"){
+				if(((Pref)PrefC.HList["EasyHidePublicHealth"]).ValueString=="1"){
 					menuItemSchools.Visible=false;
 					menuItemCounties.Visible=false;
 					menuItemScreening.Visible=false;
@@ -1402,19 +1402,19 @@ namespace OpenDental{
 					//menuItemPHRawPop.Visible=true;
 					//menuItemPHScreen.Visible=true;
 				}
-				if(PrefB.GetBool("EasyNoClinics")){
+				if(PrefC.GetBool("EasyNoClinics")){
 					menuItemClinics.Visible=false;
 				}
 				else{
 					menuItemClinics.Visible=true;
 				}
-				if(((Pref)PrefB.HList["EasyHideClinical"]).ValueString=="1"){
+				if(((Pref)PrefC.HList["EasyHideClinical"]).ValueString=="1"){
 					myOutlookBar.Buttons[4].Caption=Lan.g(this,"Procs");
 				}
 				else{
 					myOutlookBar.Buttons[4].Caption=Lan.g(this,"Chart");
 				}
-				if(((Pref)PrefB.HList["EasyBasicModules"]).ValueString=="1"){
+				if(((Pref)PrefC.HList["EasyBasicModules"]).ValueString=="1"){
 					myOutlookBar.Buttons[3].Visible=false;
 					myOutlookBar.Buttons[5].Visible=false;
 					myOutlookBar.Buttons[6].Visible=false;
@@ -1427,7 +1427,7 @@ namespace OpenDental{
 					//pictButtons.Visible=true;
 				}
 				myOutlookBar.Invalidate();
-				if(PrefB.GetBool("EasyHideDentalSchools")){
+				if(PrefC.GetBool("EasyHideDentalSchools")){
 					menuItemSchoolClass.Visible=false;
 					menuItemSchoolCourses.Visible=false;
 					//menuItemInstructors.Visible=false;
@@ -1443,24 +1443,24 @@ namespace OpenDental{
 					menuItemRequirementsNeeded.Visible=true;
 					menuItemReqStudents.Visible=true;
 				}
-				if(PrefB.GetBool("EasyHideRepeatCharges")){
+				if(PrefC.GetBool("EasyHideRepeatCharges")){
 					menuItemRepeatingCharges.Visible=false;
 				}
 				else{
 					menuItemRepeatingCharges.Visible=true;
 				}
 
-				if(PrefB.GetString("DistributorKey")=="") {
+				if(PrefC.GetString("DistributorKey")=="") {
 					menuItemCustomerManage.Visible=false;
 				}
 				else {
 					menuItemCustomerManage.Visible=true;
 				}
-				ContrDocs2.Enabled=PrefB.UsingAtoZfolder;
-				//menuItemClaimForms.Visible=PrefB.UsingAtoZfolder;
+				ContrDocs2.Enabled=PrefC.UsingAtoZfolder;
+				//menuItemClaimForms.Visible=PrefC.UsingAtoZfolder;
 				CheckCustomReports();
 				ContrChart2.InitializeLocalData();
-				if(PrefB.GetBool("TaskListAlwaysShowsAtBottom")){
+				if(PrefC.GetBool("TaskListAlwaysShowsAtBottom")){
 					//separate if statement to prevent database call if not showing task list at bottom to begin with
 					ComputerPref computerPref = ComputerPrefs.GetForLocalComputer();
 					if(computerPref.TaskKeepListHidden){
@@ -1631,9 +1631,9 @@ namespace OpenDental{
 		private void CheckCustomReports(){
 			menuItemCustomReports.MenuItems.Clear();
 			//Try to load custom reports, but only if using the A to Z folders.
-			if(PrefB.UsingAtoZfolder) {
+			if(PrefC.UsingAtoZfolder) {
 				string imagePath=FormPath.GetPreferredImagePath();
-				string reportFolderName=PrefB.GetString("ReportFolderName");
+				string reportFolderName=PrefC.GetString("ReportFolderName");
 				string reportDir=ODFileUtils.CombinePaths(imagePath,reportFolderName);
 				if(Directory.Exists(reportDir)) {
 					DirectoryInfo infoDir=new DirectoryInfo(reportDir);
@@ -1820,7 +1820,7 @@ namespace OpenDental{
 			message.PatNum=CurPatNum;
 			Patient pat=Patients.GetPat(CurPatNum);
 			message.ToAddress=pat.Email;
-			message.FromAddress=PrefB.GetString("EmailSenderAddress");
+			message.FromAddress=PrefC.GetString("EmailSenderAddress");
 			FormEmailMessageEdit FormE=new FormEmailMessageEdit(message);
 			FormE.IsNew=true;
 			FormE.ShowDialog();
@@ -1875,7 +1875,7 @@ namespace OpenDental{
 				message.PatNum=CurPatNum;
 				Patient pat=Patients.GetPat(CurPatNum);
 				message.ToAddress=refer.EMail;//pat.Email;
-				message.FromAddress=PrefB.GetString("EmailSenderAddress");
+				message.FromAddress=PrefC.GetString("EmailSenderAddress");
 				message.Subject=Lan.g(this,"RE: ")+pat.GetNameFL();
 				FormEmailMessageEdit FormE=new FormEmailMessageEdit(message);
 				FormE.IsNew=true;
@@ -2647,7 +2647,7 @@ namespace OpenDental{
 		}
 
 		private void timerDisabledKey_Tick(object sender,EventArgs e) {
-			if(PrefB.GetBoolSilent("RegistrationKeyIsDisabled",false)) {
+			if(PrefC.GetBoolSilent("RegistrationKeyIsDisabled",false)) {
 				MessageBox.Show("Registration key has been disabled.  You are using an unauthorized version of this program.","Warning",
 					MessageBoxButtons.OK,MessageBoxIcon.Warning);
 			}
@@ -2864,7 +2864,7 @@ namespace OpenDental{
 		}
 
 		private void menuItemClaimForms_Click(object sender, System.EventArgs e) {
-			if(!PrefB.UsingAtoZfolder){
+			if(!PrefC.UsingAtoZfolder){
 				MsgBox.Show(this,"Claim Forms feature is unavailable when data path A to Z folder is disabled.");
 				return;
 			}
@@ -2900,8 +2900,8 @@ namespace OpenDental{
 			}
 			FormPath FormP=new FormPath();
 			FormP.ShowDialog();
-			ContrDocs2.Enabled=PrefB.UsingAtoZfolder;
-			//menuItemClaimForms.Visible=PrefB.UsingAtoZfolder;
+			ContrDocs2.Enabled=PrefC.UsingAtoZfolder;
+			//menuItemClaimForms.Visible=PrefC.UsingAtoZfolder;
 			CheckCustomReports();
 			this.RefreshCurrentModule();
 			SecurityLogs.MakeLogEntry(Permissions.Setup,0,"Data Path");	
@@ -3015,14 +3015,14 @@ namespace OpenDental{
 			}
 			FormMisc FormM=new FormMisc();
 			if(FormM.ShowDialog()==DialogResult.OK) {
-				menuItemMergeDatabases.Visible=PrefB.GetBool("RandomPrimaryKeys");
+				menuItemMergeDatabases.Visible=PrefC.GetBool("RandomPrimaryKeys");
 			}
 			//signalLastRefreshed=MiscData.GetNowDate();
 			if(timerSignals.Interval==0){
 				timerSignals.Enabled=false;
 			}
 			else{
-				timerSignals.Interval=PrefB.GetInt("ProcessSigsIntervalInSecs")*1000;
+				timerSignals.Interval=PrefC.GetInt("ProcessSigsIntervalInSecs")*1000;
 				timerSignals.Enabled=true;
 			}
 			SecurityLogs.MakeLogEntry(Permissions.Setup,0,"Misc");
@@ -3288,7 +3288,7 @@ namespace OpenDental{
 			//the image path should exist.
 			FormReportCustom FormR=new FormReportCustom();
 			FormR.SourceFilePath=ODFileUtils.CombinePaths(new string[]
-				{FormPath.GetPreferredImagePath(),PrefB.GetString("ReportFolderName"),((MenuItem)sender).Text+".rdl"}
+				{FormPath.GetPreferredImagePath(),PrefC.GetString("ReportFolderName"),((MenuItem)sender).Text+".rdl"}
 				);
 			FormR.ShowDialog();
 		}

@@ -210,7 +210,7 @@ namespace OpenDental{
 			FormQuery2.SubmitReportQuery();			
 			Queries.CurReport.Title="Daily Writeoffs";
 			Queries.CurReport.SubTitle=new string[2];
-			Queries.CurReport.SubTitle[0]=((Pref)PrefB.HList["PracticeTitle"]).ValueString;
+			Queries.CurReport.SubTitle[0]=((Pref)PrefC.HList["PracticeTitle"]).ValueString;
 			Queries.CurReport.SubTitle[1]=date1.SelectionStart.ToString("d")+" - "+date2.SelectionStart.ToString("d");	
 			Queries.CurReport.ColPos=new int[7];
 			Queries.CurReport.ColCaption=new string[6];

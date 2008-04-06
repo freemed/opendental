@@ -112,7 +112,7 @@ namespace OpenDental{
 		#endregion
 
 		private void FormRpFinanceCharge_Load(object sender, System.EventArgs e) {
-			textDate.Text=PIn.PDate(((Pref)PrefB.HList["FinanceChargeLastRun"]).ValueString).ToShortDateString();
+			textDate.Text=PIn.PDate(((Pref)PrefC.HList["FinanceChargeLastRun"]).ValueString).ToShortDateString();
 			/*if(DateTime.Today.Day > 15){
 				if(DateTime.Today.Month!=12){
 					textDate.Text=(new DateTime(DateTime.Today.Year,DateTime.Today.Month+1,1)).ToShortDateString();		
@@ -136,16 +136,16 @@ namespace OpenDental{
 				"SELECT CONCAT(CONCAT(CONCAT(CONCAT(patient.LName,', '),patient.FName),' '),patient.MiddleI),adjamt "
 				+"FROM patient,adjustment "
 				+"WHERE patient.patnum=adjustment.patnum "
-				+"AND adjustment.adjdate = '"+((Pref)PrefB.HList["FinanceChargeLastRun"]).ValueString+"'"
-				+"AND adjustment.adjtype = '"+((Pref)PrefB.HList["FinanceChargeAdjustmentType"]).ValueString+"'";
+				+"AND adjustment.adjdate = '"+((Pref)PrefC.HList["FinanceChargeLastRun"]).ValueString+"'"
+				+"AND adjustment.adjtype = '"+((Pref)PrefC.HList["FinanceChargeAdjustmentType"]).ValueString+"'";
 			FormQuery2=new FormQuery();
 			FormQuery2.IsReport=true;
 			FormQuery2.SubmitReportQuery();		
 			Queries.CurReport.Title="FINANCE CHARGE REPORT";
 			Queries.CurReport.SubTitle=new string[4];
-			Queries.CurReport.SubTitle[0]=((Pref)PrefB.HList["PracticeTitle"]).ValueString;
+			Queries.CurReport.SubTitle[0]=((Pref)PrefC.HList["PracticeTitle"]).ValueString;
 			Queries.CurReport.SubTitle[1]="Date of Charges: "
-				+PIn.PDate(((Pref)PrefB.HList["FinanceChargeLastRun"]).ValueString).ToShortDateString();
+				+PIn.PDate(((Pref)PrefC.HList["FinanceChargeLastRun"]).ValueString).ToShortDateString();
 			//Queries.CurReport.SubTitle[2]="Adjustment type: "+PIn.PDate(textDate.Text).ToShortDateString();
 
 			Queries.CurReport.ColPos=new int[3];

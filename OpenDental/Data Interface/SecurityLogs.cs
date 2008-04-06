@@ -39,15 +39,15 @@ namespace OpenDental{
 
 		///<summary></summary>
 		public static void Insert(SecurityLog log){
-			if(PrefB.RandomKeys){
+			if(PrefC.RandomKeys){
 				log.SecurityLogNum=MiscData.GetKey("securitylog","SecurityLogNum");
 			}
 			string command= "INSERT INTO securitylog (";
-			if(PrefB.RandomKeys){
+			if(PrefC.RandomKeys){
 				command+="SecurityLogNum,";
 			}
 			command+="PermType,UserNum,LogDateTime,LogText,PatNum) VALUES(";
-			if(PrefB.RandomKeys){
+			if(PrefC.RandomKeys){
 				command+="'"+POut.PInt(log.SecurityLogNum)+"', ";
 			}
 			command+=
@@ -61,7 +61,7 @@ namespace OpenDental{
 			command+=", "//LogDateTime set to current server time
 				+"'"+POut.PString(log.LogText)+"', "
 				+"'"+POut.PInt   (log.PatNum)+"')";
- 			if(PrefB.RandomKeys){
+ 			if(PrefC.RandomKeys){
 				General.NonQ(command);
 			}
 			else{

@@ -216,7 +216,7 @@ namespace OpenDental{
 			}
 			panelPat.BackColor=DefC.Long[(int)DefCat.MiscColors][0].ItemColor;
 			labelViewRequestDocument.Text="         ";
-			//if(!PrefB.GetBool("CustomizedForPracticeWeb")) {
+			//if(!PrefC.GetBool("CustomizedForPracticeWeb")) {
 			//	butEligibility.Visible=false;
 			//	labelViewRequestDocument.Visible=false;
 			//}
@@ -1580,26 +1580,26 @@ namespace OpenDental{
 #else
 				textPlanNum.Visible=false;
 #endif
-			if(((Pref)PrefB.HList["EasyHideCapitation"]).ValueString=="1") {
+			if(((Pref)PrefC.HList["EasyHideCapitation"]).ValueString=="1") {
 				//groupCoPay.Visible=false;
 				//comboCopay.Visible=false;
 			}
-			if(((Pref)PrefB.HList["EasyHideMedicaid"]).ValueString=="1") {
+			if(((Pref)PrefC.HList["EasyHideMedicaid"]).ValueString=="1") {
 				checkAlternateCode.Visible=false;
 			}
-			if(((Pref)PrefB.HList["EasyHideAdvancedIns"]).ValueString=="1") {
+			if(((Pref)PrefC.HList["EasyHideAdvancedIns"]).ValueString=="1") {
 				//textOrthoMax.Visible=false;
 				//labelOrthoMax.Visible=false;
 				//panelAdvancedIns.Visible=false;
 				//panelSynch.Visible=false;
 			}
-			if(PrefB.GetBool("InsurancePlansShared")) {
+			if(PrefC.GetBool("InsurancePlansShared")) {
 				checkApplyAll.Checked=true;
 			}
 			if(IsNewPlan) {
 				checkApplyAll.Checked=false;
 				checkApplyAll.Visible=false;//because it wouldn't make sense to apply anything to "all"
-				if(PrefB.GetBool("InsDefaultPPOpercent")) {
+				if(PrefC.GetBool("InsDefaultPPOpercent")) {
 					PlanCur.PlanType="p";
 				}
 			}
@@ -1679,7 +1679,7 @@ namespace OpenDental{
 			comboPlanType.Items.Add(Lan.g(this,"Medicaid or Flat Co-pay"));
 			if(PlanCur.PlanType=="f")
 				comboPlanType.SelectedIndex=2;
-			if(!PrefB.GetBool("EasyHideCapitation")) {
+			if(!PrefC.GetBool("EasyHideCapitation")) {
 				comboPlanType.Items.Add(Lan.g(this,"Capitation"));
 				if(PlanCur.PlanType=="c")
 					comboPlanType.SelectedIndex=3;
@@ -1723,7 +1723,7 @@ namespace OpenDental{
 			}
 			if(comboClaimForm.Items.Count>0 && comboClaimForm.SelectedIndex==-1) {
 				for(int i=0;i<ClaimForms.ListShort.Length;i++) {
-					if(ClaimForms.ListShort[i].ClaimFormNum==PrefB.GetInt("DefaultClaimForm")) {
+					if(ClaimForms.ListShort[i].ClaimFormNum==PrefC.GetInt("DefaultClaimForm")) {
 						comboClaimForm.SelectedIndex=i;
 					}
 				}
@@ -3272,7 +3272,7 @@ namespace OpenDental{
 			XmlNode InfoAddressFirstName = doc.CreateNode(XmlNodeType.Element,"FirstName","");
 			XmlNode InfoAddressLastName = doc.CreateNode(XmlNodeType.Element,"LastName","");
 			// Get Provider Information
-			command = @"SELECT FName,LName,Specialty FROM provider WHERE provnum=" + Convert.ToInt32(((Pref)PrefB.HList["PracticeDefaultProv"]).ValueString);
+			command = @"SELECT FName,LName,Specialty FROM provider WHERE provnum=" + Convert.ToInt32(((Pref)PrefC.HList["PracticeDefaultProv"]).ValueString);
 			table =General.GetTable(command);
 			if(table.Rows.Count != 0) {
 				infoReceiverFirstName = PIn.PString(table.Rows[0][0].ToString());
@@ -3330,20 +3330,20 @@ namespace OpenDental{
 			XmlNode InfoState = doc.CreateNode(XmlNodeType.Element,"State","");
 			XmlNode InfoZip = doc.CreateNode(XmlNodeType.Element,"Zip","");
 			//  Populate Practioner demographic from hash table
-			practiceAddress1 = ((Pref)PrefB.HList["PracticeAddress"]).ValueString;
-			practiceAddress2 = ((Pref)PrefB.HList["PracticeAddress2"]).ValueString;
+			practiceAddress1 = ((Pref)PrefC.HList["PracticeAddress"]).ValueString;
+			practiceAddress2 = ((Pref)PrefC.HList["PracticeAddress2"]).ValueString;
 			// Format Phone
-			if(((Pref)PrefB.HList["PracticePhone"]).ValueString.Length == 10) {
-				practicePhone = ((Pref)PrefB.HList["PracticePhone"]).ValueString.Substring(0,3)
-                                    + "-" + ((Pref)PrefB.HList["PracticePhone"]).ValueString.Substring(3,3)
-                                    + "-" + ((Pref)PrefB.HList["PracticePhone"]).ValueString.Substring(6);
+			if(((Pref)PrefC.HList["PracticePhone"]).ValueString.Length == 10) {
+				practicePhone = ((Pref)PrefC.HList["PracticePhone"]).ValueString.Substring(0,3)
+                                    + "-" + ((Pref)PrefC.HList["PracticePhone"]).ValueString.Substring(3,3)
+                                    + "-" + ((Pref)PrefC.HList["PracticePhone"]).ValueString.Substring(6);
 			}
 			else {
-				practicePhone = ((Pref)PrefB.HList["PracticePhone"]).ValueString;
+				practicePhone = ((Pref)PrefC.HList["PracticePhone"]).ValueString;
 			}
-			practiceCity = ((Pref)PrefB.HList["PracticeCity"]).ValueString;
-			practiceState = ((Pref)PrefB.HList["PracticeST"]).ValueString;
-			practiceZip = ((Pref)PrefB.HList["PracticeZip"]).ValueString;
+			practiceCity = ((Pref)PrefC.HList["PracticeCity"]).ValueString;
+			practiceState = ((Pref)PrefC.HList["PracticeST"]).ValueString;
+			practiceZip = ((Pref)PrefC.HList["PracticeZip"]).ValueString;
 			InfoAddressLine1.InnerText = practiceAddress1;
 			InfoAddressLine2.InnerText = practiceAddress2;
 			InfoPhone.InnerText = practicePhone;

@@ -395,8 +395,8 @@ namespace OpenDentBusiness {
 			DataConnection dcon=new DataConnection();
 			DataTable table=new DataTable("account");
 			//run aging.  This need serious optimization-------------------------------------------------------
-			if(PrefB.GetBool("AgingCalculatedMonthlyInsteadOfDaily")){
-				Ledgers.ComputeAging(pat.Guarantor,PIn.PDate(PrefB.GetString("DateLastAging")));
+			if(PrefC.GetBool("AgingCalculatedMonthlyInsteadOfDaily")){
+				Ledgers.ComputeAging(pat.Guarantor,PIn.PDate(PrefC.GetString("DateLastAging")));
 			}
 			else{
 				Ledgers.ComputeAging(pat.Guarantor,DateTime.Today);
@@ -1233,7 +1233,7 @@ namespace OpenDentBusiness {
 				rawAmort=GetPayPlanAmortTable(payPlanNum);
 				//remove rows out of date range, going backwards
 				for(int d=rawAmort.Rows.Count-1;d>=0;d--){
-					if((DateTime)rawAmort.Rows[d]["DateTime"]>toDate.AddDays(PrefB.GetInt("PayPlansBillInAdvanceDays"))){
+					if((DateTime)rawAmort.Rows[d]["DateTime"]>toDate.AddDays(PrefC.GetInt("PayPlansBillInAdvanceDays"))){
 						rawAmort.Rows.RemoveAt(d);
 					}
 					else if((DateTime)rawAmort.Rows[d]["DateTime"]<fromDate){

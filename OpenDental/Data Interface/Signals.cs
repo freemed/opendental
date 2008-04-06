@@ -113,16 +113,16 @@ namespace OpenDental{
 			//because we need to update the signal object soon after creation.
 			//DateTime now=ClockEvents.GetServerTime();
 			sig.SigDateTime=MiscData.GetNowDateTime();
-			if(PrefB.RandomKeys){
+			if(PrefC.RandomKeys){
 				sig.SignalNum=MiscData.GetKey("signal","SignalNum");
 			}
 			string command= "INSERT INTO signal (";
-			if(PrefB.RandomKeys){
+			if(PrefC.RandomKeys){
 				command+="SignalNum,";
 			}
 			command+="FromUser,ITypes,DateViewing,SigType,SigText,SigDateTime,ToUser,AckTime,TaskNum"
 				+") VALUES(";
-			if(PrefB.RandomKeys){
+			if(PrefC.RandomKeys){
 				command+="'"+POut.PInt(sig.SignalNum)+"', ";
 			}
 			command+=
@@ -135,7 +135,7 @@ namespace OpenDental{
 				+"'"+POut.PString(sig.ToUser)+"', "
 				+POut.PDateT (sig.AckTime)+", "
 				+"'"+POut.PInt(sig.TaskNum)+"')";
- 			if(PrefB.RandomKeys){
+ 			if(PrefC.RandomKeys){
 				General.NonQ(command);
 			}
 			else{

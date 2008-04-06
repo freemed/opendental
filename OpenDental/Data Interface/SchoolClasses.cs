@@ -37,21 +37,21 @@ namespace OpenDental{
 
 		///<summary></summary>
 		private static void Insert(SchoolClass sc){
-			if(PrefB.RandomKeys){
+			if(PrefC.RandomKeys){
 				sc.SchoolClassNum=MiscData.GetKey("schoolclass","SchoolClassNum");
 			}
 			string command= "INSERT INTO schoolclass (";
-			if(PrefB.RandomKeys){
+			if(PrefC.RandomKeys){
 				command+="SchoolClassNum,";
 			}
 			command+="GradYear,Descript) VALUES(";
-			if(PrefB.RandomKeys){
+			if(PrefC.RandomKeys){
 				command+="'"+POut.PInt(sc.SchoolClassNum)+"', ";
 			}
 			command+=
 				 "'"+POut.PInt   (sc.GradYear)+"', "
 				+"'"+POut.PString(sc.Descript)+"')";
- 			if(PrefB.RandomKeys){
+ 			if(PrefC.RandomKeys){
 				General.NonQ(command);
 			}
 			else{

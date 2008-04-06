@@ -11,11 +11,11 @@ namespace OpenDental {
 	public class InsPlans {
 		///<summary>Also fills PlanNum from db.</summary>
 		public static void Insert(InsPlan plan) {
-			if(PrefB.RandomKeys) {
+			if(PrefC.RandomKeys) {
 				plan.PlanNum=MiscData.GetKey("insplan","PlanNum");
 			}
 			string command= "INSERT INTO insplan (";
-			if(PrefB.RandomKeys) {
+			if(PrefC.RandomKeys) {
 				command+="PlanNum,";
 			}
 			command+="Subscriber,"
@@ -24,7 +24,7 @@ namespace OpenDental {
 				+"ClaimsUseUCR,CopayFeeSched,SubscriberID,"
 				+"EmployerNum,CarrierNum,AllowedFeeSched,TrojanID,DivisionNo,BenefitNotes,IsMedical,SubscNote,FilingCode,"
 				+"DentaideCardSequence,ShowBaseUnits,DedBeforePerc,CodeSubstNone) VALUES(";
-			if(PrefB.RandomKeys) {
+			if(PrefC.RandomKeys) {
 				command+="'"+POut.PInt(plan.PlanNum)+"', ";
 			}
 			command+=
@@ -56,7 +56,7 @@ namespace OpenDental {
 				+"'"+POut.PBool(plan.ShowBaseUnits)+"', "
 				+"'"+POut.PBool(plan.DedBeforePerc)+"',"
 				+"'"+POut.PBool(plan.CodeSubstNone)+"')";
-			if(PrefB.RandomKeys) {
+			if(PrefC.RandomKeys) {
 				General.NonQ(command);
 			}
 			else {

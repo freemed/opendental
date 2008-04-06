@@ -327,7 +327,7 @@ namespace OpenDental{
 				//ClaimPayments.InsertCur();//assigns a ClaimPaymentNum for use below
 				checkShowUn.Checked=true;
 			}
-			if(PrefB.GetBool("EasyNoClinics")){
+			if(PrefC.GetBool("EasyNoClinics")){
 				comboClinic.Visible=false;
 				labelClinic.Visible=false;
 			}

@@ -1356,7 +1356,7 @@ namespace OpenDental{
 			if(input.DialogResult!=DialogResult.OK){
 				return;
 			}
-			if(input.textResult.Text!=PrefB.GetString("TerminalClosePassword")){
+			if(input.textResult.Text!=PrefC.GetString("TerminalClosePassword")){
 				MsgBox.Show(this,"Invalid password.");
 				return;
 			}

@@ -293,17 +293,17 @@ namespace OpenDental{
 			saveFileDialog2.AddExtension=true;
 			//saveFileDialog2.Title=Lan.g(this,"Select Folder to Save File To");
 			saveFileDialog2.FileName=MyReport.ReportName+".txt";
-			if(!Directory.Exists(PrefB.GetString("ExportPath"))){
+			if(!Directory.Exists(PrefC.GetString("ExportPath"))){
 				try{
-					Directory.CreateDirectory(PrefB.GetString("ExportPath"));
-					saveFileDialog2.InitialDirectory=PrefB.GetString("ExportPath");
+					Directory.CreateDirectory(PrefC.GetString("ExportPath"));
+					saveFileDialog2.InitialDirectory=PrefC.GetString("ExportPath");
 				}
 				catch{
 					//initialDirectory will be blank
 				}
 			}
 			else{
-				saveFileDialog2.InitialDirectory=PrefB.GetString("ExportPath");
+				saveFileDialog2.InitialDirectory=PrefC.GetString("ExportPath");
 			}
 			//saveFileDialog2.DefaultExt="txt";
 			saveFileDialog2.Filter="Text files(*.txt)|*.txt|Excel Files(*.xls)|*.xls|All files(*.*)|*.*";

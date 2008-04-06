@@ -359,7 +359,7 @@ namespace OpenDental{
 				listProv.Items.Add(Providers.List[i].GetLongDesc());
 				listProv.SetSelected(i,true);
 			}
-			//if(PrefB.GetBool("EasyNoClinics")){
+			//if(PrefC.GetBool("EasyNoClinics")){
 				listClinic.Visible=false;
 				labelClinic.Visible=false;
 			/*}
@@ -691,7 +691,7 @@ namespace OpenDental{
 			FormQuery2.SubmitReportQuery();			
 			Queries.CurReport.Title="Daily Production and Income";
 			Queries.CurReport.SubTitle=new string[2];
-			Queries.CurReport.SubTitle[0]=((Pref)PrefB.HList["PracticeTitle"]).ValueString;
+			Queries.CurReport.SubTitle[0]=((Pref)PrefC.HList["PracticeTitle"]).ValueString;
 			Queries.CurReport.SubTitle[1]=dateFrom.ToString("d")
 				+" - "+dateTo.ToString("d");	
 			Queries.CurReport.ColPos=new int[11];
@@ -1056,7 +1056,7 @@ ORDER BY adjdate DESC
 			FormQuery2.ResetGrid();//necessary won't work without
 			Queries.CurReport.Title="Production and Income";
 			Queries.CurReport.SubTitle=new string[3];
-			Queries.CurReport.SubTitle[0]=((Pref)PrefB.HList["PracticeTitle"]).ValueString;
+			Queries.CurReport.SubTitle[0]=((Pref)PrefC.HList["PracticeTitle"]).ValueString;
 			Queries.CurReport.SubTitle[1]=textDateFrom.Text+" - "
 				+textDateTo.Text;
 			bool allProv=true;
@@ -1341,7 +1341,7 @@ ORDER BY adjdate DESC
 			FormQuery2.ResetGrid();//necessary won't work without
 			Queries.CurReport.Title="Annual Production and Income";
 			Queries.CurReport.SubTitle=new string[3];
-			Queries.CurReport.SubTitle[0]=((Pref)PrefB.HList["PracticeTitle"]).ValueString;
+			Queries.CurReport.SubTitle[0]=((Pref)PrefC.HList["PracticeTitle"]).ValueString;
 			Queries.CurReport.SubTitle[1]=textDateFrom.Text+" - "
 				+textDateTo.Text;
 			bool allProv=true;
@@ -1415,7 +1415,7 @@ ORDER BY adjdate DESC
 				MessageBox.Show(Lan.g(this,"You must select at least one provider."));
 				return;
 			}
-			//if(!PrefB.GetBool("EasyNoClinics") && listClinic.SelectedIndices.Count==0) {
+			//if(!PrefC.GetBool("EasyNoClinics") && listClinic.SelectedIndices.Count==0) {
 			//	MessageBox.Show(Lan.g(this,"You must select at least one clinic."));
 			//	return;
 			//}

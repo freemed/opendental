@@ -283,31 +283,31 @@ namespace OpenDental.Eclaims
 					sw.WriteLine(Sout(billProv.NationalProvID,80)+"~");//NM109: ID code. NPI validated
 					//2010AA N3: Billing provider address
 					seg++;
-					if(PrefB.GetBool("UseBillingAddressOnClaims")) {
-						sw.Write("N3*"+Sout(PrefB.GetString("PracticeBillingAddress"),55));//N301: Address
+					if(PrefC.GetBool("UseBillingAddressOnClaims")) {
+						sw.Write("N3*"+Sout(PrefC.GetString("PracticeBillingAddress"),55));//N301: Address
 					}
 					else if(clinic==null){
-						sw.Write("N3*"+Sout(PrefB.GetString("PracticeAddress"),55));//N301: Address
+						sw.Write("N3*"+Sout(PrefC.GetString("PracticeAddress"),55));//N301: Address
 					}
 					else{
 						sw.Write("N3*"+Sout(clinic.Address,55));//N301: Address
 					}
-					if(PrefB.GetBool("UseBillingAddressOnClaims")) {
-						if(PrefB.GetString("PracticeBillingAddress2")=="") {
+					if(PrefC.GetBool("UseBillingAddressOnClaims")) {
+						if(PrefC.GetString("PracticeBillingAddress2")=="") {
 							sw.WriteLine("~");
 						}
 						else {
 							//N302: Address2. Optional.
-							sw.WriteLine("*"+Sout(PrefB.GetString("PracticeBillingAddress2"),55)+"~");
+							sw.WriteLine("*"+Sout(PrefC.GetString("PracticeBillingAddress2"),55)+"~");
 						}
 					}
 					else if(clinic==null) {
-						if(PrefB.GetString("PracticeAddress2")==""){
+						if(PrefC.GetString("PracticeAddress2")==""){
 							sw.WriteLine("~");
 						}
 						else{
 							//N302: Address2. Optional.
-							sw.WriteLine("*"+Sout(PrefB.GetString("PracticeAddress2"),55)+"~");
+							sw.WriteLine("*"+Sout(PrefC.GetString("PracticeAddress2"),55)+"~");
 						}
 					}
 					else{
@@ -321,15 +321,15 @@ namespace OpenDental.Eclaims
 					}
 					//2010AA N4: Billing prov City,State,Zip
 					seg++;
-					if(PrefB.GetBool("UseBillingAddressOnClaims")) {
-						sw.WriteLine("N4*"+Sout(PrefB.GetString("PracticeBillingCity"),30)+"*"//N401: City
-							+Sout(PrefB.GetString("PracticeBillingST"),2)+"*"//N402: State
-							+Sout(PrefB.GetString("PracticeBillingZip").Replace("-",""),15)+"~");//N403: Zip
+					if(PrefC.GetBool("UseBillingAddressOnClaims")) {
+						sw.WriteLine("N4*"+Sout(PrefC.GetString("PracticeBillingCity"),30)+"*"//N401: City
+							+Sout(PrefC.GetString("PracticeBillingST"),2)+"*"//N402: State
+							+Sout(PrefC.GetString("PracticeBillingZip").Replace("-",""),15)+"~");//N403: Zip
 					}
 					else if(clinic==null){
-						sw.WriteLine("N4*"+Sout(PrefB.GetString("PracticeCity"),30)+"*"//N401: City
-							+Sout(PrefB.GetString("PracticeST"),2)+"*"//N402: State
-							+Sout(PrefB.GetString("PracticeZip").Replace("-",""),15)+"~");//N403: Zip
+						sw.WriteLine("N4*"+Sout(PrefC.GetString("PracticeCity"),30)+"*"//N401: City
+							+Sout(PrefC.GetString("PracticeST"),2)+"*"//N402: State
+							+Sout(PrefC.GetString("PracticeZip").Replace("-",""),15)+"~");//N403: Zip
 					}
 					else{
 						sw.WriteLine("N4*"+Sout(clinic.City,30)+"*"//N401: City
@@ -342,7 +342,7 @@ namespace OpenDental.Eclaims
 							seg++;
 							if(clinic==null){
 								sw.WriteLine("REF*LU*"
-									+PrefB.GetString("PracticePhone")+"~");
+									+PrefC.GetString("PracticePhone")+"~");
 							}
 							else{
 								sw.WriteLine("REF*LU*"
@@ -373,13 +373,13 @@ namespace OpenDental.Eclaims
 						seg++;
 						if(clinic==null){
 							sw.WriteLine("PER*IC*"//PER01: IC=Information Contact
-								+Sout(PrefB.GetString("PracticeTitle"),60,1)+"*"//PER02:Name. Practice title
+								+Sout(PrefC.GetString("PracticeTitle"),60,1)+"*"//PER02:Name. Practice title
 								+"TE*"//PER03:Comm Number Qualifier: TE=Telephone
-								+Sout(PrefB.GetString("PracticePhone"),256,1)+"~");//PER04:Comm Number. aka telephone number
+								+Sout(PrefC.GetString("PracticePhone"),256,1)+"~");//PER04:Comm Number. aka telephone number
 						}
 						else{
 							sw.WriteLine("PER*IC*"//PER01: IC=Information Contact
-								+Sout(PrefB.GetString("PracticeTitle"),60,1)+"*"//PER02:Name. Practice title
+								+Sout(PrefC.GetString("PracticeTitle"),60,1)+"*"//PER02:Name. Practice title
 								+"TE*"//PER03:Comm Number Qualifier: TE=Telephone
 								+Sout(clinic.Phone,256,1)+"~");//PER04:Comm Number. aka telephone number
 						}
@@ -878,11 +878,11 @@ namespace OpenDental.Eclaims
 				//or 2310D (medical)NM1: Service facility location. Required if different from 2010AA. Not supported.
 				//2310D (medical)N3,N4,REF,PER: not supported.
 				if(!isMedical && claim.PlaceService!=PlaceOfService.Office){
-					Provider provFac=Providers.List[Providers.GetIndex(PrefB.GetInt("PracticeDefaultProv"))];
+					Provider provFac=Providers.List[Providers.GetIndex(PrefC.GetInt("PracticeDefaultProv"))];
 					seg++;
 					sw.Write("NM1*FA*"//FA=Facility
 						+"2*"//NM102: 2=non-person
-						+Sout(PrefB.GetString("PracticeTitle"),35)+"*"//NM103:Submitter Name
+						+Sout(PrefC.GetString("PracticeTitle"),35)+"*"//NM103:Submitter Name
 						+"*"//NM104: not used
 						+"*"//NM105: not used
 						+"*"//NM106: not used
@@ -1165,7 +1165,7 @@ namespace OpenDental.Eclaims
 					//2410 LIN,CTP,REF: (medical) Not supported
 					//2420A NM1: Rendering provider name. Only if different from the claim.
 					if(claim.ProvTreat!=proc.ProvNum
-						&& PrefB.GetBool("EclaimsSeparateTreatProv"))
+						&& PrefC.GetBool("EclaimsSeparateTreatProv"))
 					{
 						provTreat=Providers.ListLong[Providers.GetIndexLong(proc.ProvNum)];
 						seg++;
@@ -1633,7 +1633,7 @@ namespace OpenDental.Eclaims
 			Provider billProv=Providers.ListLong[Providers.GetIndexLong((int)claimAr[1,0])];
 			Provider treatProv=Providers.ListLong[Providers.GetIndexLong(claim.ProvTreat)];
 			InsPlan insPlan=InsPlans.GetPlan(claim.PlanNum,new InsPlan[] {});
-			if(insPlan.IsMedical && !PrefB.GetBool("MedicalEclaimsEnabled")) {
+			if(insPlan.IsMedical && !PrefC.GetBool("MedicalEclaimsEnabled")) {
 				return "Medical e-claims not allowed";
 			}
 			//billProv
@@ -1695,34 +1695,34 @@ namespace OpenDental.Eclaims
 					retVal+="Treating Prov NPI";
 				}
 			}
-			if(PrefB.GetString("PracticeTitle")=="") {
+			if(PrefC.GetString("PracticeTitle")=="") {
 				if(retVal!="")
 					retVal+=",";
 				retVal+="Practice Title";
 			}
 			if(clinic==null){
-				if(PrefB.GetString("PracticePhone").Length!=10) {
+				if(PrefC.GetString("PracticePhone").Length!=10) {
 					//10 digit phone is required by WebMD and is universally assumed 
 					if(retVal!="")
 						retVal+=",";
 					retVal+="Practice Phone";
 				}
-				if(PrefB.GetString("PracticeAddress")==""){
+				if(PrefC.GetString("PracticeAddress")==""){
 					if(retVal!="")
 						retVal+=",";
 					retVal+="Practice Address";
 				}
-				if(PrefB.GetString("PracticeCity").Length<2){
+				if(PrefC.GetString("PracticeCity").Length<2){
 					if(retVal!="")
 						retVal+=",";
 					retVal+="Practice City";
 				}
-				if(PrefB.GetString("PracticeST").Length!=2){
+				if(PrefC.GetString("PracticeST").Length!=2){
 					if(retVal!="")
 						retVal+=",";
 					retVal+="Practice State(2 char)";
 				}
-				if(PrefB.GetString("PracticeZip").Length<3){
+				if(PrefC.GetString("PracticeZip").Length<3){
 					if(retVal!="")
 						retVal+=",";
 					retVal+="Practice Zip";
@@ -1932,7 +1932,7 @@ namespace OpenDental.Eclaims
 						princDiagExists=true;
 					}
 				}
-				if(claim.ProvTreat!=proc.ProvNum && PrefB.GetBool("EclaimsSeparateTreatProv")){
+				if(claim.ProvTreat!=proc.ProvNum && PrefC.GetBool("EclaimsSeparateTreatProv")){
 					treatProv=Providers.ListLong[Providers.GetIndexLong(proc.ProvNum)];
 					if(treatProv.LName==""){
 						if(retVal!="")

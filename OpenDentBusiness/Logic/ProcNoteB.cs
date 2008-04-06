@@ -7,15 +7,15 @@ using System.Text;
 namespace OpenDentBusiness {
 	public class ProcNoteB{
 		public static void Insert(ProcNote procNote){
-			if(PrefB.RandomKeys) {
+			if(PrefC.RandomKeys) {
 				procNote.ProcNoteNum=MiscDataB.GetKey("procnote","ProcNoteNum");
 			}
 			string command= "INSERT INTO procnote (";
-			if(PrefB.RandomKeys) {
+			if(PrefC.RandomKeys) {
 				command+="ProcNoteNum,";
 			}
 			command+="PatNum, ProcNum, EntryDateTime, UserNum, Note, SigIsTopaz, Signature) VALUES(";
-			if(PrefB.RandomKeys) {
+			if(PrefC.RandomKeys) {
 				command+="'"+POut.PInt(procNote.ProcNoteNum)+"', ";
 			}
 			command+=

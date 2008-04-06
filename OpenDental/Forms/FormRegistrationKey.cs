@@ -208,7 +208,7 @@ namespace OpenDental{
 		#endregion
 
 		private void FormRegistrationKey_Load(object sender,EventArgs e) {
-			string key=PrefB.GetString("RegistrationKey");
+			string key=PrefC.GetString("RegistrationKey");
 			if(key!=null && key.Length==16){
 				textKey1.Text=key.Substring(0,4);
 				textKey2.Text=key.Substring(4,4);

@@ -90,10 +90,10 @@ namespace OpenDental.Reporting.Allocators
 			{
 				bool toolRan = false;
 				bool isUsing = false;
-				if (OpenDentBusiness.PrefB.HList.ContainsKey(MyAllocator1_ProviderPayment.Pref_AllocatorProvider1_ToolHasRun))
-					toolRan = PrefB.GetBool(MyAllocator1_ProviderPayment.Pref_AllocatorProvider1_ToolHasRun);
-				if (OpenDentBusiness.PrefB.HList.ContainsKey(MyAllocator1_ProviderPayment.Pref_AllocatorProvider1_Use))
-					isUsing = PrefB.GetBool(MyAllocator1_ProviderPayment.Pref_AllocatorProvider1_Use);
+				if (OpenDentBusiness.PrefC.HList.ContainsKey(MyAllocator1_ProviderPayment.Pref_AllocatorProvider1_ToolHasRun))
+					toolRan = PrefC.GetBool(MyAllocator1_ProviderPayment.Pref_AllocatorProvider1_ToolHasRun);
+				if (OpenDentBusiness.PrefC.HList.ContainsKey(MyAllocator1_ProviderPayment.Pref_AllocatorProvider1_Use))
+					isUsing = PrefC.GetBool(MyAllocator1_ProviderPayment.Pref_AllocatorProvider1_Use);
 				if (toolRan & isUsing)
 				{
 					_AllocateExecute(iGuarantor);

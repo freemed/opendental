@@ -73,16 +73,16 @@ namespace OpenDental{
 
 		///<summary></summary>
 		private static void Insert(ProcTP proc){
-			if(PrefB.RandomKeys){
+			if(PrefC.RandomKeys){
 				proc.ProcTPNum=MiscData.GetKey("proctp","ProcTPNum");
 			}
 			string command= "INSERT INTO proctp (";
-			if(PrefB.RandomKeys){
+			if(PrefC.RandomKeys){
 				command+="ProcTPNum,";
 			}
 			command+="TreatPlanNum,PatNum,ProcNumOrig,ItemOrder,Priority,ToothNumTP,Surf,ProcCode,Descript,FeeAmt,"
 				+"PriInsAmt,SecInsAmt,PatAmt,Discount) VALUES(";
-			if(PrefB.RandomKeys){
+			if(PrefC.RandomKeys){
 				command+="'"+POut.PInt(proc.ProcTPNum)+"', ";
 			}
 			command+=
@@ -100,7 +100,7 @@ namespace OpenDental{
 				+"'"+POut.PDouble(proc.SecInsAmt)+"', "
 				+"'"+POut.PDouble(proc.PatAmt)+"', "
 				+"'"+POut.PDouble(proc.Discount)+"')";
- 			if(PrefB.RandomKeys){
+ 			if(PrefC.RandomKeys){
 				General.NonQ(command);
 			}
 			else{

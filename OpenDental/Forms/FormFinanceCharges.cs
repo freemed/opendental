@@ -314,12 +314,12 @@ namespace OpenDental{
 		#endregion
 
 		private void FormFinanceCharges_Load(object sender, System.EventArgs e) {
-			if(PrefB.GetInt("FinanceChargeAdjustmentType")==0){
+			if(PrefC.GetInt("FinanceChargeAdjustmentType")==0){
 				MsgBox.Show(this,"No finance charge adjustment type has been set.  Please go to Setup | Misc to fix this.");
 				DialogResult=DialogResult.Cancel;
 				return;
 			}
-			if(PIn.PDate(PrefB.GetString("DateLastAging")) < DateTime.Today){
+			if(PIn.PDate(PrefC.GetString("DateLastAging")) < DateTime.Today){
 				if(MsgBox.Show(this,true,"You must update aging first.")){//OK
 					FormAging FormA=new FormAging();
 					FormA.ShowDialog();
@@ -334,12 +334,12 @@ namespace OpenDental{
 				DialogResult=DialogResult.Cancel;
 				return;
 			}
-			textDateLastRun.Text=PrefB.GetDate("FinanceChargeLastRun").ToShortDateString();
-			textDateUndo.Text=PrefB.GetDate("FinanceChargeLastRun").ToShortDateString();
+			textDateLastRun.Text=PrefC.GetDate("FinanceChargeLastRun").ToShortDateString();
+			textDateUndo.Text=PrefC.GetDate("FinanceChargeLastRun").ToShortDateString();
 			textDate.Text=DateTime.Today.ToShortDateString();		
 			textAPR.MaxVal=100;
 			textAPR.MinVal=0;
-			textAPR.Text=PrefB.GetString("FinanceChargeAPR");
+			textAPR.Text=PrefC.GetString("FinanceChargeAPR");
 			for(int i=0;i<DefC.Short[(int)DefCat.BillingTypes].Length;i++) {
 				listBillType.Items.Add(DefC.Short[(int)DefCat.BillingTypes][i].ItemName);
 				listBillType.SetSelected(i,true);
@@ -368,7 +368,7 @@ namespace OpenDental{
 				return;
 			}
 			DateTime date=PIn.PDate(textDate.Text);
-			if(PrefB.GetDate("FinanceChargeLastRun").AddDays(25)>date) {
+			if(PrefC.GetDate("FinanceChargeLastRun").AddDays(25)>date) {
 				if(!MsgBox.Show(this,true,"Warning.  Finance charges should not be run more than once per month.  Continue?")){
 					return;
 				}
@@ -417,7 +417,7 @@ namespace OpenDental{
 				//AdjustmentCur.DateEntry=PIn.PDate(textDate.Text);//automatically handled
 				AdjustmentCur.AdjDate=date;
 				AdjustmentCur.ProcDate=date;
-				AdjustmentCur.AdjType=PrefB.GetInt("FinanceChargeAdjustmentType");
+				AdjustmentCur.AdjType=PrefC.GetInt("FinanceChargeAdjustmentType");
 				AdjustmentCur.AdjNote="Finance Charge";
 				AdjustmentCur.AdjAmt=Math.Round(((PIn.PDouble(textAPR.Text) * .01d / 12d) * OverallBalance),2);
 				AdjustmentCur.ProvNum=AgingList[i].PriProv;

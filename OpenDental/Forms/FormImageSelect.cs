@@ -161,7 +161,7 @@ namespace OpenDental{
 				MsgBox.Show(this,"Invalid patient image folder.");
 				return;
 			}
-			if(!PrefB.UsingAtoZfolder) {
+			if(!PrefC.UsingAtoZfolder) {
 				MsgBox.Show(this,"Error. Not using AtoZ images folder.");
 				return;
 			}

@@ -37,21 +37,21 @@ namespace OpenDental{
 
 		///<summary></summary>
 		public static void Insert(CanadianNetwork network) {
-			if(PrefB.RandomKeys) {
+			if(PrefC.RandomKeys) {
 				network.CanadianNetworkNum=MiscData.GetKey("canadiannetwork","CanadianNetworkNum");
 			}
 			string command="INSERT INTO canadiannetwork (";
-			if(PrefB.RandomKeys) {
+			if(PrefC.RandomKeys) {
 				command+="CanadianNetworkNum,";
 			}
 			command+="Abbrev, Descript) VALUES(";
-			if(PrefB.RandomKeys) {
+			if(PrefC.RandomKeys) {
 				command+="'"+POut.PInt(network.CanadianNetworkNum)+"', ";
 			}
 			command+=
 				 "'"+POut.PString(network.Abbrev)+"', "
 				+"'"+POut.PString(network.Descript)+"')";
-			if(PrefB.RandomKeys) {
+			if(PrefC.RandomKeys) {
 				General.NonQ(command);
 			}
 			else {

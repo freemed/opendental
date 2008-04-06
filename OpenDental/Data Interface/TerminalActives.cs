@@ -51,22 +51,22 @@ namespace OpenDental {
 
 		///<summary></summary>
 		public static void Insert(TerminalActive te) {
-			if(PrefB.RandomKeys) {
+			if(PrefC.RandomKeys) {
 				te.TerminalActiveNum=MiscData.GetKey("terminalactive","TerminalActiveNum");
 			}
 			string command="INSERT INTO terminalactive (";
-			if(PrefB.RandomKeys) {
+			if(PrefC.RandomKeys) {
 				command+="TerminalActiveNum,";
 			}
 			command+="ComputerName,TerminalStatus,PatNum) VALUES(";
-			if(PrefB.RandomKeys) {
+			if(PrefC.RandomKeys) {
 				command+="'"+POut.PInt(te.TerminalActiveNum)+"', ";
 			}
 			command+=
 				 "'"+POut.PString(te.ComputerName)+"', "
 				+"'"+POut.PInt   ((int)te.TerminalStatus)+"', "
 				+"'"+POut.PInt   (te.PatNum)+"')";
-			if(PrefB.RandomKeys) {
+			if(PrefC.RandomKeys) {
 				General.NonQ(command);
 			}
 			else {

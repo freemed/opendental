@@ -41,22 +41,22 @@ namespace OpenDental{
 
 			///<summary>ONLY use this if compname is not already present</summary>
 		public static void Insert(Computer comp){
-			if(PrefB.RandomKeys){
+			if(PrefC.RandomKeys){
 				comp.ComputerNum=MiscData.GetKey("computer","ComputerNum");
 			}
 			string command= "INSERT INTO computer (";
-			if(PrefB.RandomKeys){
+			if(PrefC.RandomKeys){
 				command+="ComputerNum,";
 			}
 			command+="CompName"
 				+") VALUES(";
-			if(PrefB.RandomKeys){
+			if(PrefC.RandomKeys){
 				command+="'"+POut.PInt(comp.ComputerNum)+"', ";
 			}
 			command+=
 				"'"+POut.PString(comp.CompName)+"')";
 				//+"'"+POut.PString(PrinterName)+"')";
-			if(PrefB.RandomKeys){
+			if(PrefC.RandomKeys){
 				General.NonQ(command);
 			}
 			else{

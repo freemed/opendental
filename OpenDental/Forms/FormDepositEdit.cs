@@ -410,8 +410,8 @@ namespace OpenDental{
 				}
 			}
 			if(IsNew){
-				textDateStart.Text=PIn.PDate(PrefB.GetString("DateDepositsStarted")).ToShortDateString();
-				if(PrefB.GetBool("EasyNoClinics")){
+				textDateStart.Text=PIn.PDate(PrefC.GetString("DateDepositsStarted")).ToShortDateString();
+				if(PrefC.GetBool("EasyNoClinics")){
 					comboClinic.Visible=false;
 					labelClinic.Visible=false;
 				}
@@ -592,7 +592,7 @@ namespace OpenDental{
 			gridIns.SetSelected(true);
 			ComputeAmt();
 			if(comboClinic.SelectedIndex==0){
-				textBankAccountInfo.Text=PrefB.GetString("PracticeBankNumber");
+				textBankAccountInfo.Text=PrefC.GetString("PracticeBankNumber");
 			}
 			else{
 				textBankAccountInfo.Text=Clinics.List[comboClinic.SelectedIndex-1].BankNumber;
@@ -704,7 +704,7 @@ namespace OpenDental{
 			FormQuery2.ResetGrid();//necessary won't work without
 			Queries.CurReport.Title="Deposit Slip";
 			Queries.CurReport.SubTitle=new string[2];
-			Queries.CurReport.SubTitle[0]=((Pref)PrefB.HList["PracticeTitle"]).ValueString;
+			Queries.CurReport.SubTitle[0]=((Pref)PrefC.HList["PracticeTitle"]).ValueString;
 			Queries.CurReport.SubTitle[1]=DepositCur.DateDeposit.ToShortDateString();
 			Queries.CurReport.Summary=new string[1];
 			Queries.CurReport.Summary[0]=DepositCur.BankAccountInfo;
@@ -761,12 +761,12 @@ namespace OpenDental{
 					je.DateDisplayed=DepositCur.DateDeposit;//it would be nice to add security here.
 					je.DebitAmt=DepositCur.Amount;
 					je.Memo=Lan.g(this,"Deposit");
-					je.Splits=Accounts.GetDescript(PrefB.GetInt("AccountingIncomeAccount"));
+					je.Splits=Accounts.GetDescript(PrefC.GetInt("AccountingIncomeAccount"));
 					je.TransactionNum=trans.TransactionNum;
 					JournalEntries.Insert(je);
 					//then, the income entry
 					je=new JournalEntry();
-					je.AccountNum=PrefB.GetInt("AccountingIncomeAccount");
+					je.AccountNum=PrefC.GetInt("AccountingIncomeAccount");
 					//je.CheckNumber=;
 					je.DateDisplayed=DepositCur.DateDeposit;//it would be nice to add security here.
 					je.CreditAmt=DepositCur.Amount;

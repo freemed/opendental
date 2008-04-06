@@ -77,17 +77,17 @@ namespace OpenDentBusiness {
 
 		///<summary>Inserts a new document into db, creates a filename based on Cur.DocNum, and then updates the db with this filename.</summary>
 		public static void Insert(Document doc,Patient pat){
-			if(PrefB.RandomKeys) {
+			if(PrefC.RandomKeys) {
 				doc.DocNum=MiscDataB.GetKey("document","DocNum");
 			}
 			string command="INSERT INTO document (";
-			if(PrefB.RandomKeys) {
+			if(PrefC.RandomKeys) {
 				command+="DocNum,";
 			}
 			command+="Description,DateCreated,DocCategory,PatNum,FileName,ImgType,"
 				+"IsFlipped,DegreesRotated,ToothNumbers,Note,SigIsTopaz,Signature,CropX,CropY,CropW,CropH,"
 				+"WindowingMin,WindowingMax,MountItemNum) VALUES(";
-			if(PrefB.RandomKeys) {
+			if(PrefC.RandomKeys) {
 				command+="'"+POut.PInt(doc.DocNum)+"', ";
 			}
 			command+=
@@ -113,7 +113,7 @@ namespace OpenDentBusiness {
 			/*+"'"+POut.PDate  (LastAltered)+"', "//will later be used in backups
 					+"'"+POut.PBool  (IsDeleted)+"')";//ditto*/
 			//MessageBox.Show(cmd.CommandText);
-			if(PrefB.RandomKeys) {
+			if(PrefC.RandomKeys) {
 				General.NonQ(command);
 			}
 			else {

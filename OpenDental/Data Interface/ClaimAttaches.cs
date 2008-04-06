@@ -9,22 +9,22 @@ namespace OpenDental{
 	public class ClaimAttaches{
 
 		public static void Insert(ClaimAttach attach) {
-			if(PrefB.RandomKeys) {
+			if(PrefC.RandomKeys) {
 				attach.ClaimAttachNum=MiscData.GetKey("claimattach","ClaimAttachNum");
 			}
 			string command= "INSERT INTO claimattach (";
-			if(PrefB.RandomKeys) {
+			if(PrefC.RandomKeys) {
 				command+="ClaimAttachNum,";
 			}
 			command+="ClaimNum, DisplayedFileName, ActualFileName) VALUES(";
-			if(PrefB.RandomKeys) {
+			if(PrefC.RandomKeys) {
 				command+="'"+POut.PInt(attach.ClaimAttachNum)+"', ";
 			}
 			command+=
 				 "'"+POut.PInt(attach.ClaimNum)+"', "
 				+"'"+POut.PString(attach.DisplayedFileName)+"', "
 				+"'"+POut.PString(attach.ActualFileName)+"')";
-			if(PrefB.RandomKeys) {
+			if(PrefC.RandomKeys) {
 				General.NonQ(command);
 			}
 			else {

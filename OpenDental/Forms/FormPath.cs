@@ -337,12 +337,12 @@ namespace OpenDental{
 		#endregion
 
 		private void FormPath_Load(object sender, System.EventArgs e){
-			textDocPath.Text=PrefB.GetString("DocPath");
+			textDocPath.Text=PrefC.GetString("DocPath");
 			//ComputerPref compPref=ComputerPrefs.GetForLocalComputer();
 			textLocalPath.Text=localAtoZpath;//This was set on startup.  //compPref.AtoZpath;
-			textExportPath.Text=PrefB.GetString("ExportPath");
-			textLetterMergePath.Text=PrefB.GetString("LetterMergePath");
-			if(PrefB.GetBool("AtoZfolderNotRequired")) {
+			textExportPath.Text=PrefC.GetString("ExportPath");
+			textLetterMergePath.Text=PrefC.GetString("LetterMergePath");
+			if(PrefC.GetBool("AtoZfolderNotRequired")) {
 				optDisableFolders.Checked = true;
 			} else if(ImageStore.ImageStoreTypeName == typeof(SqlStore).FullName) {
 				optUseDatabase.Checked = true;
@@ -423,7 +423,7 @@ namespace OpenDental{
 
 		///<summary>Returns the most preferred fully qualified network path or null if no valid paths were found.</summary>
 		public static string GetPreferredImagePath(){
-			if(!PrefB.UsingAtoZfolder) {
+			if(!PrefC.UsingAtoZfolder) {
 				return null;
 			}
 			//this requires a query to the database each time this method is used.  This might need to be optimized.
@@ -434,7 +434,7 @@ namespace OpenDental{
 			if(localAtoZpath!=""){//compPref.AtoZpath!=""){
 				return localAtoZpath;//compPref.AtoZpath;
 			}
-			return GetPreferredImagePath(PrefB.GetString("DocPath"));
+			return GetPreferredImagePath(PrefC.GetString("DocPath"));
 		}
 
 		///<summary>Returns true if the given path is part of the imagePaths list, false otherwise.</summary>
@@ -473,7 +473,7 @@ namespace OpenDental{
 
 		///<summary>Returns true if the given path is part of the image paths stored in the database list, false otherwise.</summary>
 		public static bool IsImagePath(string path){
-			string imagePaths=PrefB.GetString("DocPath");
+			string imagePaths=PrefC.GetString("DocPath");
 			return IsImagePath(path,imagePaths);
 		}
 

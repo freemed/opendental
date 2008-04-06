@@ -762,7 +762,7 @@ namespace OpenDental{
 			}
 			//ok signifies that a database was restored
 			OnPatientSelected(0,"",false,"");
-			//ParentForm.Text=PrefB.GetString("MainWindowTitle");
+			//ParentForm.Text=PrefC.GetString("MainWindowTitle");
 			DataValid.SetInvalid(true);
 			ModuleSelected();
 		}
@@ -873,7 +873,7 @@ namespace OpenDental{
 		}
 
 		private void gridEmp_CellClick(object sender, OpenDental.UI.ODGridClickEventArgs e) {
-			if(PrefB.GetBool("TimecardSecurityEnabled")){
+			if(PrefC.GetBool("TimecardSecurityEnabled")){
 				if(Security.CurUser.EmployeeNum!=Employees.ListShort[e.Row].EmployeeNum){
 					if(!Security.IsAuthorized(Permissions.TimecardsEditAll)){
 						SelectEmpI(-1);

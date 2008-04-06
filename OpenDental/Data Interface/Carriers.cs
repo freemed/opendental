@@ -166,16 +166,16 @@ namespace OpenDental{
 					}
 				}
 			}
-			if(PrefB.RandomKeys){
+			if(PrefC.RandomKeys){
 				Cur.CarrierNum=MiscData.GetKey("carrier","CarrierNum");
 			}
 			command="INSERT INTO carrier (";
-			if(PrefB.RandomKeys){
+			if(PrefC.RandomKeys){
 				command+="CarrierNum,";
 			}
 			command+="CarrierName,Address,Address2,City,State,Zip,Phone,ElectID,NoSendElect,"
 				+"IsCDA,IsPMP,CDAnetVersion,CanadianNetworkNum) VALUES(";
-			if(PrefB.RandomKeys){
+			if(PrefC.RandomKeys){
 				command+="'"+POut.PInt(Cur.CarrierNum)+"', ";
 			}
 			command+=
@@ -192,7 +192,7 @@ namespace OpenDental{
 				+"'"+POut.PBool  (Cur.IsPMP)+"', "
 				+"'"+POut.PString(Cur.CDAnetVersion)+"', "
 				+"'"+POut.PInt   (Cur.CanadianNetworkNum)+"')";
-			if(PrefB.RandomKeys){
+			if(PrefC.RandomKeys){
 				General.NonQ(command);
 			}
 			else{

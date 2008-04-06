@@ -600,7 +600,7 @@ namespace OpenDental{
 					butPay.Enabled=false;
 				}
 			}
-			if(PrefB.GetBool("EasyNoClinics")){
+			if(PrefC.GetBool("EasyNoClinics")){
 				comboClinic.Visible=false;
 				labelClinic.Visible=false;
 			}

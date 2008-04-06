@@ -246,7 +246,7 @@ namespace OpenDental{
 		#endregion
 
 		private void FormTerminalManager_Load(object sender,EventArgs e) {
-			textPassword.Text=PrefB.GetString("TerminalClosePassword");
+			textPassword.Text=PrefC.GetString("TerminalClosePassword");
 			FillGrid();
 		}
 

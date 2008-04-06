@@ -621,22 +621,22 @@ namespace OpenDental
 				//test for red
 				switch(RowTypes[GetSection(row)][GetSectionRow(row)]){
 					case PerioSequenceType.Probing:
-						redThresh=PIn.PInt(((Pref)PrefB.HList["PerioRedProb"]).ValueString);
+						redThresh=PIn.PInt(((Pref)PrefC.HList["PerioRedProb"]).ValueString);
 						break;
 					case PerioSequenceType.MGJ:
-						redThresh=PIn.PInt(((Pref)PrefB.HList["PerioRedMGJ"]).ValueString);
+						redThresh=PIn.PInt(((Pref)PrefC.HList["PerioRedMGJ"]).ValueString);
 						break;
 					case PerioSequenceType.GingMargin:
-						redThresh=PIn.PInt(((Pref)PrefB.HList["PerioRedGing"]).ValueString);
+						redThresh=PIn.PInt(((Pref)PrefC.HList["PerioRedGing"]).ValueString);
 						break;
 					case PerioSequenceType.CAL:
-						redThresh=PIn.PInt(((Pref)PrefB.HList["PerioRedCAL"]).ValueString);
+						redThresh=PIn.PInt(((Pref)PrefC.HList["PerioRedCAL"]).ValueString);
 						break;
 					case PerioSequenceType.Furcation:
-						redThresh=PIn.PInt(((Pref)PrefB.HList["PerioRedFurc"]).ValueString);
+						redThresh=PIn.PInt(((Pref)PrefC.HList["PerioRedFurc"]).ValueString);
 						break;
 					case PerioSequenceType.Mobility:
-						redThresh=PIn.PInt(((Pref)PrefB.HList["PerioRedMob"]).ValueString);
+						redThresh=PIn.PInt(((Pref)PrefC.HList["PerioRedMob"]).ValueString);
 						break;
 				}
 				if((RowTypes[GetSection(row)][GetSectionRow(row)]
@@ -1757,22 +1757,22 @@ namespace OpenDental
 			int prefVal=0;
 			switch(seqType){
 				case PerioSequenceType.Probing:
-					prefVal=PrefB.GetInt("PerioRedProb");
+					prefVal=PrefC.GetInt("PerioRedProb");
 					break;
 				case PerioSequenceType.MGJ:
-					prefVal=PrefB.GetInt("PerioRedMGJ");
+					prefVal=PrefC.GetInt("PerioRedMGJ");
 					break;
 				case PerioSequenceType.GingMargin:
-					prefVal=PrefB.GetInt("PerioRedGing");
+					prefVal=PrefC.GetInt("PerioRedGing");
 					break;
 				case PerioSequenceType.CAL:
-					prefVal=PrefB.GetInt("PerioRedCAL");
+					prefVal=PrefC.GetInt("PerioRedCAL");
 					break;
 				case PerioSequenceType.Furcation:
-					prefVal=PrefB.GetInt("PerioRedFurc");
+					prefVal=PrefC.GetInt("PerioRedFurc");
 					break;
 				case PerioSequenceType.Mobility:
-					prefVal=PrefB.GetInt("PerioRedMob");
+					prefVal=PrefC.GetInt("PerioRedMob");
 					break;
 			}
 			ArrayList retList=new ArrayList();

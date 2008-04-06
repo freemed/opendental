@@ -194,14 +194,14 @@ namespace OpenDental.Imaging {
 			Documents.Insert(doc, Patient);//creates filename and saves to db
 			long qualityL = 0;
 			if(imageType == ImageType.Radiograph) {
-				qualityL = Convert.ToInt64(((Pref)PrefB.HList["ScannerCompressionRadiographs"]).ValueString);
+				qualityL = Convert.ToInt64(((Pref)PrefC.HList["ScannerCompressionRadiographs"]).ValueString);
 			}
 			else if(imageType == ImageType.Photo) {
-				qualityL = Convert.ToInt64(((Pref)PrefB.HList["ScannerCompressionPhotos"]).ValueString);
+				qualityL = Convert.ToInt64(((Pref)PrefC.HList["ScannerCompressionPhotos"]).ValueString);
 			}
 			else {//Assume document
 				//Possible values 0-100?
-				qualityL = (long)Convert.ToInt32(((Pref)PrefB.HList["ScannerCompression"]).ValueString);
+				qualityL = (long)Convert.ToInt32(((Pref)PrefC.HList["ScannerCompression"]).ValueString);
 			}
 			ImageCodecInfo myImageCodecInfo;
 			ImageCodecInfo[] encoders;
@@ -259,8 +259,8 @@ namespace OpenDental.Imaging {
 			doc.DateCreated = DateTime.Today;
 			doc.PatNum = Patient.PatNum;
 			doc.DocCategory = docCategory;
-			doc.WindowingMin = PrefB.GetInt("ImageWindowingMin");
-			doc.WindowingMax = PrefB.GetInt("ImageWindowingMax");
+			doc.WindowingMin = PrefC.GetInt("ImageWindowingMin");
+			doc.WindowingMax = PrefC.GetInt("ImageWindowingMax");
 			Documents.Insert(doc, Patient);//creates filename and saves to db
 			try {
 				SaveDocument(doc, image, ImageFormat.Bmp);

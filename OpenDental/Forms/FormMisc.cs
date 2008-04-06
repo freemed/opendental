@@ -1104,78 +1104,78 @@ namespace OpenDental{
 		#endregion
 
 		private void FormMisc_Load(object sender, System.EventArgs e) {
-			textTreatNote.Text=PrefB.GetString("TreatmentPlanNote");
-			checkTreatPlanShowGraphics.Checked=PrefB.GetBool("TreatPlanShowGraphics");
-			checkTreatPlanShowCompleted.Checked=PrefB.GetBool("TreatPlanShowCompleted");
-			//checkTreatPlanShowIns.Checked=PrefB.GetBool("TreatPlanShowIns");
-			//checkTreatPlanShowDiscount.Checked=PrefB.GetBool("TreatPlanShowDiscount");
-			checkStatementShowReturnAddress.Checked=PrefB.GetBool("StatementShowReturnAddress");
-			checkShowCC.Checked=PrefB.GetBool("StatementShowCreditCard");
+			textTreatNote.Text=PrefC.GetString("TreatmentPlanNote");
+			checkTreatPlanShowGraphics.Checked=PrefC.GetBool("TreatPlanShowGraphics");
+			checkTreatPlanShowCompleted.Checked=PrefC.GetBool("TreatPlanShowCompleted");
+			//checkTreatPlanShowIns.Checked=PrefC.GetBool("TreatPlanShowIns");
+			//checkTreatPlanShowDiscount.Checked=PrefC.GetBool("TreatPlanShowDiscount");
+			checkStatementShowReturnAddress.Checked=PrefC.GetBool("StatementShowReturnAddress");
+			checkShowCC.Checked=PrefC.GetBool("StatementShowCreditCard");
 			comboUseChartNum.Items.Add(Lan.g(this,"PatNum"));
 			comboUseChartNum.Items.Add(Lan.g(this,"ChartNumber"));
-			if(PrefB.GetBool("StatementAccountsUseChartNumber")){
+			if(PrefC.GetBool("StatementAccountsUseChartNumber")){
 				comboUseChartNum.SelectedIndex=1;
 			}
 			else{
 				comboUseChartNum.SelectedIndex=0;
 			}
-			if(PrefB.GetInt("StatementsCalcDueDate")!=-1){
-				textStatementsCalcDueDate.Text=PrefB.GetInt("StatementsCalcDueDate").ToString();
+			if(PrefC.GetInt("StatementsCalcDueDate")!=-1){
+				textStatementsCalcDueDate.Text=PrefC.GetInt("StatementsCalcDueDate").ToString();
 			}
-			textPayPlansBillInAdvanceDays.Text=PrefB.GetInt("PayPlansBillInAdvanceDays").ToString();
-			checkBalancesDontSubtractIns.Checked=PrefB.GetBool("BalancesDontSubtractIns");
-			checkAgingMonthly.Checked=PrefB.GetBool("AgingCalculatedMonthlyInsteadOfDaily");
-			if(PrefB.GetInt("ProcessSigsIntervalInSecs")==0){
+			textPayPlansBillInAdvanceDays.Text=PrefC.GetInt("PayPlansBillInAdvanceDays").ToString();
+			checkBalancesDontSubtractIns.Checked=PrefC.GetBool("BalancesDontSubtractIns");
+			checkAgingMonthly.Checked=PrefC.GetBool("AgingCalculatedMonthlyInsteadOfDaily");
+			if(PrefC.GetInt("ProcessSigsIntervalInSecs")==0){
 				textSigInterval.Text="";
 			}
 			else{
-				textSigInterval.Text=PrefB.GetInt("ProcessSigsIntervalInSecs").ToString();
+				textSigInterval.Text=PrefC.GetInt("ProcessSigsIntervalInSecs").ToString();
 			}
-			checkRandomPrimaryKeys.Checked=PrefB.GetBool("RandomPrimaryKeys");
+			checkRandomPrimaryKeys.Checked=PrefC.GetBool("RandomPrimaryKeys");
 			if(checkRandomPrimaryKeys.Checked){
 				//not allowed to uncheck it
 				checkRandomPrimaryKeys.Enabled=false;
 			}
-			textMainWindowTitle.Text=PrefB.GetString("MainWindowTitle");
+			textMainWindowTitle.Text=PrefC.GetString("MainWindowTitle");
 			comboShowID.Items.Add(Lan.g(this,"None"));
 			comboShowID.Items.Add(Lan.g(this,"PatNum"));
 			comboShowID.Items.Add(Lan.g(this,"ChartNumber"));
-			comboShowID.SelectedIndex=PrefB.GetInt("ShowIDinTitleBar");
-			checkEclaimsSeparateTreatProv.Checked=PrefB.GetBool("EclaimsSeparateTreatProv");
-			checkMedicalEclaimsEnabled.Checked=PrefB.GetBool("MedicalEclaimsEnabled");
+			comboShowID.SelectedIndex=PrefC.GetInt("ShowIDinTitleBar");
+			checkEclaimsSeparateTreatProv.Checked=PrefC.GetBool("EclaimsSeparateTreatProv");
+			checkMedicalEclaimsEnabled.Checked=PrefC.GetBool("MedicalEclaimsEnabled");
 			comboToothNomenclature.Items.Add(Lan.g(this, "Universal (Common in the US, 1-32)"));
 			comboToothNomenclature.Items.Add(Lan.g(this, "FDA Notation (International, 11-48)"));
 			comboToothNomenclature.Items.Add(Lan.g(this, "Haderup (Danish)"));
-			comboToothNomenclature.SelectedIndex = PrefB.GetInt("UseInternationalToothNumbers");
+			comboToothNomenclature.SelectedIndex = PrefC.GetInt("UseInternationalToothNumbers");
 
-			checkInsurancePlansShared.Checked=PrefB.GetBool("InsurancePlansShared");
-			checkSolidBlockouts.Checked=PrefB.GetBool("SolidBlockouts");
-			checkStoreCCnumbers.Checked=PrefB.GetBool("StoreCCnumbers");
-			checkDeductibleBeforePercent.Checked=PrefB.GetBool("DeductibleBeforePercentAsDefault");
-			checkShowAccountNotes.Checked=PrefB.GetBool("ShowNotesInAccount");
-			checkBrokenApptNote.Checked=PrefB.GetBool("BrokenApptCommLogNotAdjustment");
-			textClaimAttachPath.Text=PrefB.GetString("ClaimAttachExportPath");
+			checkInsurancePlansShared.Checked=PrefC.GetBool("InsurancePlansShared");
+			checkSolidBlockouts.Checked=PrefC.GetBool("SolidBlockouts");
+			checkStoreCCnumbers.Checked=PrefC.GetBool("StoreCCnumbers");
+			checkDeductibleBeforePercent.Checked=PrefC.GetBool("DeductibleBeforePercentAsDefault");
+			checkShowAccountNotes.Checked=PrefC.GetBool("ShowNotesInAccount");
+			checkBrokenApptNote.Checked=PrefC.GetBool("BrokenApptCommLogNotAdjustment");
+			textClaimAttachPath.Text=PrefC.GetString("ClaimAttachExportPath");
 			string AZpath=FormPath.GetPreferredImagePath();
 			if(AZpath!=null){
 				textBoxDocPath.Text =AZpath;
 			}
-			textBoxLogo.Text = PrefB.GetString("StationaryImage");
-			textBoxStationary.Text = PrefB.GetString("StationaryDocument");
-			checkApptBubbleDelay.Checked = PrefB.GetBool("ApptBubbleDelay");
-			checkAppointmentBubblesDisabled.Checked=PrefB.GetBool("AppointmentBubblesDisabled");
+			textBoxLogo.Text = PrefC.GetString("StationaryImage");
+			textBoxStationary.Text = PrefC.GetString("StationaryDocument");
+			checkApptBubbleDelay.Checked = PrefC.GetBool("ApptBubbleDelay");
+			checkAppointmentBubblesDisabled.Checked=PrefC.GetBool("AppointmentBubblesDisabled");
 			posAdjTypes=DefB.GetPositiveAdjTypes();
 			for(int i=0;i<posAdjTypes.Count;i++){
 				comboFinanceChargeAdjType.Items.Add(posAdjTypes[i].ItemName);
-				if(PrefB.GetInt("FinanceChargeAdjustmentType")==posAdjTypes[i].DefNum){
+				if(PrefC.GetInt("FinanceChargeAdjustmentType")==posAdjTypes[i].DefNum){
 					comboFinanceChargeAdjType.SelectedIndex=i;
 				}
 				comboBrokenApptAdjType.Items.Add(posAdjTypes[i].ItemName);
-				if(PrefB.GetInt("BrokenAppointmentAdjustmentType")==posAdjTypes[i].DefNum) {
+				if(PrefC.GetInt("BrokenAppointmentAdjustmentType")==posAdjTypes[i].DefNum) {
 					comboBrokenApptAdjType.SelectedIndex=i;
 				}
 			}
-			checkTasksCheckOnStartup.Checked=PrefB.GetBool("TasksCheckOnStartup");
-			checkTaskListAlwaysShow.Checked=PrefB.GetBool("TaskListAlwaysShowsAtBottom");
+			checkTasksCheckOnStartup.Checked=PrefC.GetBool("TasksCheckOnStartup");
+			checkTaskListAlwaysShow.Checked=PrefC.GetBool("TaskListAlwaysShowsAtBottom");
 			if(checkTaskListAlwaysShow.Checked) {
 				groupBoxTaskDefaults.Enabled=true;
 			}
@@ -1194,17 +1194,17 @@ namespace OpenDental{
 			validNumY.Text=computerPref.TaskY.ToString();
 				/*for(int i=0;i<DefC.Short[(int)DefCat.TxPriorities].Length;i++){
 					comboPriority.Items.Add(DefC.Short[(int)DefCat.TxPriorities][i].ItemName);
-					if(PrefB.GetInt("TreatPlanPriorityForDeclined")==DefC.Short[(int)DefCat.TxPriorities][i].DefNum){
+					if(PrefC.GetInt("TreatPlanPriorityForDeclined")==DefC.Short[(int)DefCat.TxPriorities][i].DefNum){
 						comboPriority.SelectedIndex=i;
 					}
 				}*/
-			checkApptExclamation.Checked=PrefB.GetBool("ApptExclamationShowForUnsentIns");
-			checkProviderIncomeShows.Checked=PrefB.GetBool("ProviderIncomeTransferShows");
-			checkAutoClearEntryStatus.Checked=PrefB.GetBool("AutoResetTPEntryStatus");
-			checkShowFamilyCommByDefault.Checked=PrefB.GetBool("ShowAccountFamilyCommEntries");
-			checkPPOpercentage.Checked=PrefB.GetBool("InsDefaultPPOpercent");
-			checkStatementSummaryShowInsInfo.Checked=PrefB.GetBool("StatementSummaryShowInsInfo");
-			checkIntermingleFamilyDefault.Checked=PrefB.GetBool("IntermingleFamilyDefault");
+			checkApptExclamation.Checked=PrefC.GetBool("ApptExclamationShowForUnsentIns");
+			checkProviderIncomeShows.Checked=PrefC.GetBool("ProviderIncomeTransferShows");
+			checkAutoClearEntryStatus.Checked=PrefC.GetBool("AutoResetTPEntryStatus");
+			checkShowFamilyCommByDefault.Checked=PrefC.GetBool("ShowAccountFamilyCommEntries");
+			checkPPOpercentage.Checked=PrefC.GetBool("InsDefaultPPOpercent");
+			checkStatementSummaryShowInsInfo.Checked=PrefC.GetBool("StatementSummaryShowInsInfo");
+			checkIntermingleFamilyDefault.Checked=PrefC.GetBool("IntermingleFamilyDefault");
 		}
 
 		private void checkRandomPrimaryKeys_Click(object sender, System.EventArgs e) {
@@ -1307,7 +1307,7 @@ namespace OpenDental{
 				| Prefs.UpdateBool("StatementShowCreditCard",checkShowCC.Checked)
 				| Prefs.UpdateBool("StatementAccountsUseChartNumber",comboUseChartNum.SelectedIndex==1)
 				| Prefs.UpdateBool("BalancesDontSubtractIns",checkBalancesDontSubtractIns.Checked)
-						//	textPayPlansBillInAdvanceDays.Text=PrefB.GetInt("").ToString();
+						//	textPayPlansBillInAdvanceDays.Text=PrefC.GetInt("").ToString();
 				| Prefs.UpdateInt("PayPlansBillInAdvanceDays",PIn.PInt(textPayPlansBillInAdvanceDays.Text))
 				| Prefs.UpdateBool("AgingCalculatedMonthlyInsteadOfDaily",checkAgingMonthly.Checked)
 				| Prefs.UpdateBool("RandomPrimaryKeys",checkRandomPrimaryKeys.Checked)

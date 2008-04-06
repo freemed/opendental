@@ -46,15 +46,15 @@ namespace OpenDental{
 
 		///<summary></summary>
 		public static void Insert(TreatPlan tp){
-			if(PrefB.RandomKeys){
+			if(PrefC.RandomKeys){
 				tp.TreatPlanNum=MiscData.GetKey("treatplan","TreatPlanNum");
 			}
 			string command= "INSERT INTO treatplan (";
-			if(PrefB.RandomKeys){
+			if(PrefC.RandomKeys){
 				command+="TreatPlanNum,";
 			}
 			command+="PatNum,DateTP,Heading,Note,Signature,SigIsTopaz) VALUES(";
-			if(PrefB.RandomKeys){
+			if(PrefC.RandomKeys){
 				command+="'"+POut.PInt(tp.TreatPlanNum)+"', ";
 			}
 			command+=
@@ -64,7 +64,7 @@ namespace OpenDental{
 				+"'"+POut.PString(tp.Note)+"', "
 				+"'"+POut.PString(tp.Signature)+"', "
 				+"'"+POut.PBool  (tp.SigIsTopaz)+"')";
- 			if(PrefB.RandomKeys){
+ 			if(PrefC.RandomKeys){
 				General.NonQ(command);
 			}
 			else{

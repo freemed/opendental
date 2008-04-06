@@ -628,7 +628,7 @@ namespace OpenDental{
 		}
 
 		private void FillSearchOption(){
-			checkUseSearch.Checked=PrefB.GetBool("PatientSelectUsesSearchButton");
+			checkUseSearch.Checked=PrefC.GetBool("PatientSelectUsesSearchButton");
 			if(checkUseSearch.Checked)
 				butSearch.Enabled=true;
 			else

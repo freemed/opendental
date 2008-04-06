@@ -127,7 +127,7 @@ namespace OpenDental{
 		private void ExecuteReport(){
 			ReportOld2 report=new ReportOld2();
 			report.AddTitle("INCOMPLETE PROCEDURE NOTES");
-			report.AddSubTitle(((Pref)PrefB.HList["PracticeTitle"]).ValueString);
+			report.AddSubTitle(((Pref)PrefC.HList["PracticeTitle"]).ValueString);
 			report.Query=@"SELECT procedurelog.ProcDate,
 				CONCAT(CONCAT(patient.LName,', '),patient.FName),
 				procedurecode.ProcCode,procedurecode.Descript,

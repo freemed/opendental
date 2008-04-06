@@ -38,7 +38,7 @@ namespace OpenDental{
 				return false;
 			}
 			if(perm==Permissions.AccountingCreate || perm==Permissions.AccountingEdit){
-				if(date <= PrefB.GetDate("AccountingLockDate")){
+				if(date <= PrefC.GetDate("AccountingLockDate")){
 					if(!suppressMessage) {
 						MessageBox.Show(Lan.g("Security","Locked by Administrator."));
 					}

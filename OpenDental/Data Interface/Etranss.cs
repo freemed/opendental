@@ -120,16 +120,16 @@ namespace OpenDental{
 
 		///<summary>DateTimeTrans can be handled automatically here.  No need to set it in advance, but it's allowed to do so.</summary>
 		private static void Insert(Etrans etrans) {
-			if(PrefB.RandomKeys) {
+			if(PrefC.RandomKeys) {
 				etrans.EtransNum=MiscData.GetKey("etrans","EtransNum");
 			}
 			string command="INSERT INTO etrans (";
-			if(PrefB.RandomKeys) {
+			if(PrefC.RandomKeys) {
 				command+="EtransNum,";
 			}
 			command+="DateTimeTrans,ClearinghouseNum,Etype,ClaimNum,OfficeSequenceNumber,CarrierTransCounter,"
 				+"CarrierTransCounter2,CarrierNum,CarrierNum2,PatNum,MessageText,BatchNumber,AckCode,TransSetNum,Note) VALUES(";
-			if(PrefB.RandomKeys) {
+			if(PrefC.RandomKeys) {
 				command+="'"+POut.PInt(etrans.EtransNum)+"', ";
 			}
 			if(etrans.DateTimeTrans.Year<1880) {
@@ -158,7 +158,7 @@ namespace OpenDental{
 				+"'"+POut.PString(etrans.AckCode)+"', "
 				+"'"+POut.PInt   (etrans.TransSetNum)+"', "
 				+"'"+POut.PString(etrans.Note)+"')";
-			if(PrefB.RandomKeys) {
+			if(PrefC.RandomKeys) {
 				General.NonQ(command);
 			}
 			else {

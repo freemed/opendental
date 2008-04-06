@@ -318,7 +318,7 @@ namespace OpenDental{
       FillGrid();
 			for(int i=0;i<Providers.List.Length;i++) {
 				comboProv.Items.Add(Providers.List[i].Abbr);
-				if(Providers.List[i].ProvNum==PrefB.GetInt("ScheduleProvUnassigned")) {
+				if(Providers.List[i].ProvNum==PrefC.GetInt("ScheduleProvUnassigned")) {
 					comboProv.SelectedIndex=i;
 				}
 			}

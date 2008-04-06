@@ -293,7 +293,7 @@ namespace OpenDental{
 					listProv.SelectedIndex=i+1;
 				}
 			}
-			if(PrefB.GetBool("EasyNoClinics")){
+			if(PrefC.GetBool("EasyNoClinics")){
 				labelClinic.Visible=false;
 				listClinic.Visible=false;
 			}
@@ -369,7 +369,7 @@ namespace OpenDental{
 			else {
 				UserCur.ProvNum=Providers.List[listProv.SelectedIndex-1].ProvNum;
 			}
-			if(PrefB.GetBool("EasyNoClinics") || listClinic.SelectedIndex==0) {
+			if(PrefC.GetBool("EasyNoClinics") || listClinic.SelectedIndex==0) {
 				UserCur.ClinicNum=0;
 			}
 			else{

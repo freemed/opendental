@@ -212,7 +212,7 @@ namespace OpenDental{
 		private void ExecuteIndividual(){
 			ReportOld2 report=new ReportOld2();
 			report.AddTitle(Lan.g(this,"PPO WRITEOFFS"));
-			report.AddSubTitle(PrefB.GetString("PracticeTitle"));
+			report.AddSubTitle(PrefC.GetString("PracticeTitle"));
 			report.AddSubTitle(date1.SelectionStart.ToShortDateString()+" - "+date2.SelectionStart.ToShortDateString());
 			report.AddSubTitle(Lan.g(this,"Individual Claims"));
 			if(textCarrier.Text!=""){
@@ -259,7 +259,7 @@ namespace OpenDental{
 		private void ExecuteGroup() {
 			ReportOld2 report=new ReportOld2();
 			report.AddTitle(Lan.g(this,"PPO WRITEOFFS"));
-			report.AddSubTitle(PrefB.GetString("PracticeTitle"));
+			report.AddSubTitle(PrefC.GetString("PracticeTitle"));
 			report.AddSubTitle(date1.SelectionStart.ToShortDateString()+" - "+date2.SelectionStart.ToShortDateString());
 			report.AddSubTitle(Lan.g(this,"Grouped by Carrier"));
 			if(textCarrier.Text!="") {

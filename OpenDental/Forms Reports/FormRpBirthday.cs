@@ -289,7 +289,7 @@ namespace OpenDental
 
 		private void FormRpBirthday_Load(object sender, System.EventArgs e){
 			SetNextMonth();
-			textPostcardMsg.Text=PrefB.GetString("BirthdayPostcardMsg");
+			textPostcardMsg.Text=PrefC.GetString("BirthdayPostcardMsg");
 		}
 
 		private void butLeft_Click(object sender, System.EventArgs e) {
@@ -402,11 +402,11 @@ namespace OpenDental
 			pd.PrintPage+=new PrintPageEventHandler(this.pdCards_PrintPage);
 			pd.OriginAtMargins=true;
 			pd.DefaultPageSettings.Margins=new Margins(0,0,0,0);
-			if(PrefB.GetInt("RecallPostcardsPerSheet")==1) {
+			if(PrefC.GetInt("RecallPostcardsPerSheet")==1) {
 				pd.DefaultPageSettings.PaperSize=new PaperSize("Postcard",400,600);
 				pd.DefaultPageSettings.Landscape=true;
 			}
-			else if(PrefB.GetInt("RecallPostcardsPerSheet")==3) {
+			else if(PrefC.GetInt("RecallPostcardsPerSheet")==3) {
 				pd.DefaultPageSettings.PaperSize=new PaperSize("Postcard",850,1100);
 			}
 			else {//4
@@ -414,13 +414,13 @@ namespace OpenDental
 				pd.DefaultPageSettings.Landscape=true;
 			}
 			printPreview=new OpenDental.UI.PrintPreview(PrintSituation.Postcard,pd,
-				(int)Math.Ceiling((double)BirthdayTable.Rows.Count/(double)PrefB.GetInt("RecallPostcardsPerSheet")));
+				(int)Math.Ceiling((double)BirthdayTable.Rows.Count/(double)PrefC.GetInt("RecallPostcardsPerSheet")));
 			printPreview.ShowDialog();
 		}
 
 		///<summary>raised for each page to be printed.</summary>
 		private void pdCards_PrintPage(object sender,PrintPageEventArgs ev) {
-			int totalPages=(int)Math.Ceiling((double)BirthdayTable.Rows.Count/(double)PrefB.GetInt("RecallPostcardsPerSheet"));
+			int totalPages=(int)Math.Ceiling((double)BirthdayTable.Rows.Count/(double)PrefC.GetInt("RecallPostcardsPerSheet"));
 			Graphics g=ev.Graphics;
 			float yPos=0;//these refer to the upper left origin of each postcard
 			float xPos=0;
@@ -429,15 +429,15 @@ namespace OpenDental
 			DateTime birthdate;
 			while(yPos<ev.PageBounds.Height-100 && patientsPrinted<BirthdayTable.Rows.Count) {
 				//Return Address--------------------------------------------------------------------------
-				if(PrefB.GetBool("RecallCardsShowReturnAdd")) {
-					str=PrefB.GetString("PracticeTitle")+"\r\n";
+				if(PrefC.GetBool("RecallCardsShowReturnAdd")) {
+					str=PrefC.GetString("PracticeTitle")+"\r\n";
 					g.DrawString(str,new Font(FontFamily.GenericSansSerif,9,FontStyle.Bold),Brushes.Black,xPos+45,yPos+60);
-					str=PrefB.GetString("PracticeAddress")+"\r\n";
-					if(PrefB.GetString("PracticeAddress2")!="") {
-						str+=PrefB.GetString("PracticeAddress2")+"\r\n";
+					str=PrefC.GetString("PracticeAddress")+"\r\n";
+					if(PrefC.GetString("PracticeAddress2")!="") {
+						str+=PrefC.GetString("PracticeAddress2")+"\r\n";
 					}
-					str+=PrefB.GetString("PracticeCity")+",  "+PrefB.GetString("PracticeST")+"  "+PrefB.GetString("PracticeZip")+"\r\n";
-					string phone=PrefB.GetString("PracticePhone");
+					str+=PrefC.GetString("PracticeCity")+",  "+PrefC.GetString("PracticeST")+"  "+PrefC.GetString("PracticeZip")+"\r\n";
+					string phone=PrefC.GetString("PracticePhone");
 					if(CultureInfo.CurrentCulture.Name=="en-US"&& phone.Length==10) {
 						str+="("+phone.Substring(0,3)+")"+phone.Substring(3,3)+"-"+phone.Substring(6);
 					}
@@ -472,10 +472,10 @@ namespace OpenDental
 					+BirthdayTable.Rows[patientsPrinted]["State"].ToString()+"   "
 					+BirthdayTable.Rows[patientsPrinted]["Zip"].ToString()+"\r\n";
 				g.DrawString(str,new Font(FontFamily.GenericSansSerif,11),Brushes.Black,xPos+320,yPos+240);
-				if(PrefB.GetInt("RecallPostcardsPerSheet")==1) {
+				if(PrefC.GetInt("RecallPostcardsPerSheet")==1) {
 					yPos+=400;
 				}
-				else if(PrefB.GetInt("RecallPostcardsPerSheet")==3) {
+				else if(PrefC.GetInt("RecallPostcardsPerSheet")==3) {
 					yPos+=366;
 				}
 				else {//4
@@ -515,7 +515,7 @@ namespace OpenDental
 			ReportOld2 report=new ReportOld2();
 			report.ReportName=Lan.g(this,"Birthdays");
 			report.AddTitle(Lan.g(this,"Birthdays"));
-			report.AddSubTitle(PrefB.GetString("PracticeTitle"));
+			report.AddSubTitle(PrefC.GetString("PracticeTitle"));
 			report.AddSubTitle(dateFrom.ToString("MM/dd")+" - "+dateTo.ToString("MM/dd"));
 			/*report.Query=@"SELECT LName,FName,Address,Address2,City,State,Zip,Birthdate,Birthdate
 				FROM patient 

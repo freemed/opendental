@@ -64,15 +64,15 @@ namespace OpenDental{
 
 		///<summary></summary>
 		public static void Insert(RxPat rx) {
-			if(PrefB.RandomKeys) {
+			if(PrefC.RandomKeys) {
 				rx.RxNum=MiscData.GetKey("rxpat","RxNum");
 			}
 			string command="INSERT INTO rxpat (";
-			if(PrefB.RandomKeys) {
+			if(PrefC.RandomKeys) {
 				command+="RxNum,";
 			}
 			command+="PatNum,RxDate,Drug,Sig,Disp,Refills,ProvNum,Notes) VALUES(";
-			if(PrefB.RandomKeys) {
+			if(PrefC.RandomKeys) {
 				command+="'"+POut.PInt(rx.RxNum)+"', ";
 			}
 			command+=
@@ -84,7 +84,7 @@ namespace OpenDental{
 				+"'"+POut.PString(rx.Refills)+"', "
 				+"'"+POut.PInt   (rx.ProvNum)+"', "
 				+"'"+POut.PString(rx.Notes)+"')";
-			if(PrefB.RandomKeys) {
+			if(PrefC.RandomKeys) {
 				General.NonQ(command);
 			}
 			else{

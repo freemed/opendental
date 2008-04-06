@@ -533,7 +533,7 @@ namespace OpenDental{
 				textDate.Text=lastProcDate.ToString("MM/dd/yyyy");
 			}
 			textAmount.Text=guarCur.BalTotal.ToString("F2");
-			textPassword.Text=PrefB.GetString("TrojanExpressCollectPassword");
+			textPassword.Text=PrefC.GetString("TrojanExpressCollectPassword");
 		}
 
 		private void menuItemSetup_Click(object sender,EventArgs e) {
@@ -568,12 +568,12 @@ namespace OpenDental{
 				MessageBox.Show("Password is not in correct format. Must be like this: AB1234");
 				return;
 			}
-			if(textPassword.Text!=PrefB.GetString("TrojanExpressCollectPassword")){//user changed password
+			if(textPassword.Text!=PrefC.GetString("TrojanExpressCollectPassword")){//user changed password
 				Prefs.UpdateString("TrojanExpressCollectPassword",textPassword.Text);
 				DataValid.SetInvalid(InvalidTypes.Prefs);
 			}
 			Cursor=Cursors.WaitCursor;
-			string folderPath=PrefB.GetString("TrojanExpressCollectPath");
+			string folderPath=PrefC.GetString("TrojanExpressCollectPath");
 			if(folderPath==""){
 				Cursor=Cursors.Default;
 				MessageBox.Show("Export folder has not been setup yet.  Please go to Setup at the top of this window.");
@@ -596,7 +596,7 @@ namespace OpenDental{
 				MessageBox.Show("The Trojan Communicator is not running. Please check it.");
 				return;
 			}
-			int billingType=PrefB.GetInt("TrojanExpressCollectBillingType");
+			int billingType=PrefC.GetInt("TrojanExpressCollectBillingType");
 			if(billingType==0){
 				Cursor=Cursors.Default;
 				MessageBox.Show("Billing type has not been setup yet.  Please go to Setup at the top of this window.");
