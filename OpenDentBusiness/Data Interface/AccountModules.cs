@@ -5,7 +5,7 @@ using System.Text;
 using System.Drawing;
 
 namespace OpenDentBusiness {
-	public class AccountModuleB {
+	public class AccountModules {
 		private static DataSet retVal;
 		private static Family fam;
 		private static Patient pat;

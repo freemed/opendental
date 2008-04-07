@@ -135,7 +135,7 @@
     <Compile Include="Imaging\SqlStore.cs" />
     <Compile Include="Lan.cs" />
     <Compile Include="Logic\aaLogic.cs" />
-    <Compile Include="Logic\AccountModuleB.cs" />
+    <Compile Include="Data Interface\AccountModules.cs" />
     <Compile Include="Logic\AppointmentB.cs" />
     <Compile Include="Logic\BenefitB.cs" />
     <Compile Include="Logic\ChartModuleB.cs" />

@@ -11,9 +11,7 @@ namespace OpenDentBusiness{
 		Appointment_GetApptEdit,
 		Appointment_RefreshPeriod,
 		Appointment_RefreshOneApt,
-		Chart_GetAll,
-		
-		Providers_RefreshOnServer
+		Chart_GetAll
 	}
 
 	///<summary>MethodNames for retrieving tables.</summary>
