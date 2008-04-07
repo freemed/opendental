@@ -345,18 +345,18 @@ namespace OpenDental{
 			}
 			FillDepList();
 			PickedDepAccountNum=PrefC.GetInt("AccountingIncomeAccount");
-			textAccountInc.Text=Accounts.GetDescript(PickedDepAccountNum);
+			textAccountInc.Text=AccountC.GetDescript(PickedDepAccountNum);
 			//pay----------------------------------------------------------
-			payAL=AccountingAutoPays.AList;//Count might be 0
+			payAL=AccountingAutoPayC.AList;//Count might be 0
 			FillPayGrid();
 			PickedPayAccountNum=PrefC.GetInt("AccountingCashIncomeAccount");
-			textAccountCashInc.Text=Accounts.GetDescript(PickedPayAccountNum);
+			textAccountCashInc.Text=AccountC.GetDescript(PickedPayAccountNum);
 		}
 
 		private void FillDepList(){
 			listAccountsDep.Items.Clear();
 			for(int i=0;i<depAL.Count;i++){
-				listAccountsDep.Items.Add(Accounts.GetDescript((int)depAL[i]));
+				listAccountsDep.Items.Add(AccountC.GetDescript((int)depAL[i]));
 			}
 		}
 
@@ -404,7 +404,7 @@ namespace OpenDental{
 				return;
 			}
 			PickedDepAccountNum=FormA.SelectedAccount.AccountNum;
-			textAccountInc.Text=Accounts.GetDescript(PickedDepAccountNum);
+			textAccountInc.Text=AccountC.GetDescript(PickedDepAccountNum);
 		}
 
 		private void gridMain_CellDoubleClick(object sender,ODGridClickEventArgs e) {
@@ -436,7 +436,7 @@ namespace OpenDental{
 				return;
 			}
 			PickedPayAccountNum=FormA.SelectedAccount.AccountNum;
-			textAccountCashInc.Text=Accounts.GetDescript(PickedPayAccountNum);
+			textAccountCashInc.Text=AccountC.GetDescript(PickedPayAccountNum);
 		}
 
 		private void butOK_Click(object sender, System.EventArgs e) {

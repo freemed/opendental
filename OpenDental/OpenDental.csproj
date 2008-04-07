@@ -169,8 +169,7 @@
     <Compile Include="Bridges\VixWin.cs" />
     <Compile Include="Bridges\VixWinOld.cs" />
     <Compile Include="Data Interface\aaDataInterface.cs" />
-    <Compile Include="Data Interface\AccountingAutoPays.cs" />
-    <Compile Include="Data Interface\Accounts.cs" />
+    <Compile Include="Data Interface\Account_client.cs" />
     <Compile Include="Data Interface\Adjustments.cs" />
     <Compile Include="Data Interface\AppointmentRules.cs" />
     <Compile Include="Data Interface\Appointments.cs" />

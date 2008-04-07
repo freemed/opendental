@@ -302,7 +302,7 @@ namespace OpenDental{
 		}
 
 		private void FillGrid(){
-			Accounts.Refresh();
+			Account_client.Refresh();
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
 			ODGridColumn col=new ODGridColumn(Lan.g("TableChartOfAccounts","Type"),70);
@@ -389,7 +389,7 @@ namespace OpenDental{
 				MsgBox.Show(this,"This account is generated automatically, and cannot be edited.");
 				return;
 			}
-			Account acct=Accounts.GetAccount(acctNum);
+			Account acct=AccountC.GetAccount(acctNum);
 			FormAccountEdit FormA=new FormAccountEdit(acct);
 			FormA.ShowDialog();
 			FillGrid();
@@ -413,7 +413,7 @@ namespace OpenDental{
 			else{
 				asofDate=PIn.PDate(textDate.Text);
 			}
-			Account acct=Accounts.GetAccount(acctNum);
+			Account acct=AccountC.GetAccount(acctNum);
 			FormJournal FormJ=new FormJournal(acct);
 			FormJ.InitialAsOfDate=asofDate;
 			FormJ.ShowDialog();

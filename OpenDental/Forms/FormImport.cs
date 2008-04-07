@@ -2926,7 +2926,7 @@ namespace OpenDental{
 				 command+=';';//Ensure that commands are always terminated, but only with a single ';', otherwise there are blank queries that are somtimes created due to 2 ';' characters.
 			}
 			try{
-				 General.NonQEx(command);//If SQL command fails, then the SQL statement is not written to the conversion script.
+				 General.NonQ(command);//If SQL command fails, then the SQL statement is not written to the conversion script.
 				 StreamWriter writer=File.AppendText(GetScriptPath());
 				 writer.Write("\r\n"+command);
 				 writer.Flush();
@@ -2972,7 +2972,7 @@ namespace OpenDental{
 				command="ALTER TABLE "+comboTableName.SelectedItem.ToString()+" ADD PRIMARY KEY ("+pkCol+"(10))";
 				bool commandSuccess=true;
 				try{
-						General.NonQEx(command);
+						General.NonQ(command);
 				}catch{
 						commandSuccess=false;
 				}

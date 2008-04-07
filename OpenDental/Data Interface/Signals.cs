@@ -66,7 +66,7 @@ namespace OpenDental{
 					table=RemotingClient.ProcessQuery(dto).Tables[0];
 				}
 				else {
-					table=GeneralB.GetTable(command).Tables[0];
+					table=General.GetTable(command);
 				}
 			}
 			catch{

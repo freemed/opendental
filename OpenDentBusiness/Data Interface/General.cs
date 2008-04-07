@@ -15,12 +15,12 @@ namespace OpenDentBusiness {
 				retVal=RemotingClient.ProcessQuery(dto).Tables[0].Copy();
 			}
 			else{
-				retVal=GeneralB.GetTable(command).Tables[0].Copy();
+				retVal=DataCore.GetTable(command).Tables[0].Copy();
 			}
 			retVal.TableName="";//this is needed for FormQuery dataGrid
 			return retVal;
 		}
-
+		/*
 		///<summary>Same as GetTable</summary>
 		public static DataTable GetTableEx(string command) {
 			DataTable retVal;
@@ -34,7 +34,7 @@ DtoGeneralGetTable dto=new DtoGeneralGetTable();
 			}
 			retVal.TableName="";//this is needed for FormQuery dataGrid
 			return retVal;
-		}
+		}*/
 
 		///<summary>This is used for queries written by the user.  If using the server component, it uses the user with lower privileges  to prevent injection attack.</summary>
 		public static DataTable GetTableLow(string command) {
@@ -45,7 +45,7 @@ DtoGeneralGetTable dto=new DtoGeneralGetTable();
 				retVal=RemotingClient.ProcessQuery(dto).Tables[0].Copy();
 			}
 			else {
-				retVal=GeneralB.GetTable(command).Tables[0].Copy();
+				retVal=DataCore.GetTable(command).Tables[0].Copy();
 			}
 			retVal.TableName="";//this is needed for FormQuery dataGrid
 			return retVal;
@@ -59,32 +59,7 @@ DtoGeneralGetTable dto=new DtoGeneralGetTable();
 				return RemotingClient.ProcessQuery(dto);
 			}
 			else {
-				return GeneralB.GetDataSet(commands);
-			}
-		}
-		
-		///<summary>This is is only here for compatibility with the old 3-tier architecture.  Do not add to this.</summary>
-		public static DataSet GetDS(MethodName methodName, params object[] parameters) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientTcp) {
-				DtoGetDS dto=new DtoGetDS();
-				dto.MethodName=methodName;
-				dto.Parameters=parameters;
-				return RemotingClient.ProcessGetDS(dto);
-			}
-			else {
-				return GeneralB.GetDS(methodName,parameters);
-			}
-		}
-
-		///<summary>Same as GetDataSet, but will throw exception if query fails instead of displaying message.</summary>
-		public static DataSet GetDataSetEx(string commands) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientTcp) {
-				DtoGeneralGetDataSet dto=new DtoGeneralGetDataSet();
-				dto.Commands=commands;
-				return RemotingClient.ProcessQuery(dto);
-			}
-			else {
-				return GeneralB.GetDataSet(commands);
+				return DataCore.GetDataSet(commands);
 			}
 		}
 
@@ -97,7 +72,7 @@ DtoGeneralGetTable dto=new DtoGeneralGetTable();
 				return RemotingClient.ProcessCommand(dto);
 			}
 			else {
-				return GeneralB.NonQ(command,getInsertID);
+				return DataCore.NonQ(command,getInsertID);
 			}
 		}
 
@@ -115,12 +90,13 @@ DtoGeneralGetTable dto=new DtoGeneralGetTable();
 					RemotingClient.ProcessCommand(dto);
 				}
 				else {
-					GeneralB.NonQ(commands[i],false);
+					DataCore.NonQ(commands[i],false);
 				}
 			}
 			return 0;
 		}
 
+		/*
 		///<summary>Same as NonQ now.</summary>
 		public static int NonQEx(string command,bool getInsertID) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientTcp) {
@@ -152,7 +128,7 @@ DtoGeneralNonQ dto=new DtoGeneralNonQ();
 				}
 			}
 			return 0;
-		}
+		}*/
 
 		///<summary>Use this for count(*) queries.  They are always guaranteed to return one and only one value.  Not any faster, just handier.  Can also be used when retrieving prefs manually, since they will also return exactly one value.</summary>
 		public static string GetCount(string command) {
@@ -162,10 +138,11 @@ DtoGeneralNonQ dto=new DtoGeneralNonQ();
 				return RemotingClient.ProcessQuery(dto).Tables[0].Rows[0][0].ToString();
 			}
 			else {
-				return GeneralB.GetTable(command).Tables[0].Rows[0][0].ToString();
+				return DataCore.GetTable(command).Tables[0].Rows[0][0].ToString();
 			}
 		}
 
+		/*
 		///<summary>Same as GetCount.</summary>
 		public static string GetCountEx(string command) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientTcp) {
@@ -176,6 +153,6 @@ DtoGeneralNonQ dto=new DtoGeneralNonQ();
 			else {
 				return GeneralB.GetTable(command).Tables[0].Rows[0][0].ToString();
 			}
-		}
+		}*/
 	}
 }

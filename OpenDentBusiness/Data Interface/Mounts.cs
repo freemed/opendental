@@ -18,7 +18,7 @@ namespace OpenDentBusiness {
 				+"'"+POut.PInt((int)mount.ImgType)+"',"
 				+"'"+POut.PInt(mount.Width)+"',"
 				+"'"+POut.PInt(mount.Height)+"')";
-			return General.NonQEx(command,true);
+			return General.NonQ(command,true);
 		}
 
 		public static int Update(Mount mount){
@@ -32,12 +32,12 @@ namespace OpenDentBusiness {
 				+"Width='"+POut.PInt(mount.Width)+"',"
 				+"Height='"+POut.PInt(mount.Height)+"' "
 				+"WHERE MountNum='"+POut.PInt(mount.MountNum)+"'";
-			return General.NonQEx(command);
+			return General.NonQ(command);
 		}
 
 		public static void Delete(Mount mount){
 			string command="DELETE FROM mount WHERE MountNum='"+POut.PInt(mount.MountNum)+"'";
-			General.NonQEx(command);
+			General.NonQ(command);
 		}
 
 		///<summary>Converts the given datarow into a mount object.</summary>

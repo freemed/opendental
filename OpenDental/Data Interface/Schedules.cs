@@ -110,7 +110,7 @@ namespace OpenDental{
 		}
 
 		private static List<Schedule> RefreshAndFill(string command) {
-			DataTable table=General.GetTableEx(command);
+			DataTable table=General.GetTable(command);
 			List<Schedule> retVal=new List<Schedule>();
 			//Schedule[] List=new Schedule[table.Rows.Count];
 			Schedule sched;

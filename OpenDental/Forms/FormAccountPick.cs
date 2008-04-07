@@ -162,32 +162,32 @@ namespace OpenDental{
 			gridMain.Columns.Add(col);
 			gridMain.Rows.Clear();
 			ODGridRow row;
-			for(int i=0;i<Accounts.ListLong.Length;i++){
-				if(!checkInactive.Checked && Accounts.ListLong[i].Inactive){
+			for(int i=0;i<AccountC.ListLong.Length;i++){
+				if(!checkInactive.Checked && AccountC.ListLong[i].Inactive){
 					continue;
 				}
 				row=new ODGridRow();
-				row.Cells.Add(Lan.g("enumAccountType",Accounts.ListLong[i].AcctType.ToString()));
-				row.Cells.Add(Accounts.ListLong[i].Description);
-				if(Accounts.ListLong[i].AcctType==AccountType.Asset){
-					row.Cells.Add(Accounts.GetBalance(Accounts.ListLong[i].AccountNum,Accounts.ListLong[i].AcctType).ToString("n"));
+				row.Cells.Add(Lan.g("enumAccountType",AccountC.ListLong[i].AcctType.ToString()));
+				row.Cells.Add(AccountC.ListLong[i].Description);
+				if(AccountC.ListLong[i].AcctType==AccountType.Asset){
+					row.Cells.Add(Accounts.GetBalance(AccountC.ListLong[i].AccountNum,AccountC.ListLong[i].AcctType).ToString("n"));
 				}
 				else{
 					row.Cells.Add("");
 				}
-				row.Cells.Add(Accounts.ListLong[i].BankNumber);
-				if(Accounts.ListLong[i].Inactive){
+				row.Cells.Add(AccountC.ListLong[i].BankNumber);
+				if(AccountC.ListLong[i].Inactive){
 					row.Cells.Add("X");
 				}
 				else{
 					row.Cells.Add("");
 				}
-				if(i<Accounts.ListLong.Length-1//if not the last row
-					&& Accounts.ListLong[i].AcctType != Accounts.ListLong[i+1].AcctType){
+				if(i<AccountC.ListLong.Length-1//if not the last row
+					&& AccountC.ListLong[i].AcctType != AccountC.ListLong[i+1].AcctType){
 					row.ColorLborder=Color.Black;
 				}
-				row.Tag=Accounts.ListLong[i].Copy();
-				row.ColorBackG=Accounts.ListLong[i].AccountColor;
+				row.Tag=AccountC.ListLong[i].Copy();
+				row.ColorBackG=AccountC.ListLong[i].AccountColor;
 				gridMain.Rows.Add(row);
 			}
 			gridMain.EndUpdate();

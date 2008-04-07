@@ -68,7 +68,7 @@ namespace OpenDental{
 			InitializeComponent();
 			Lan.F(this);
 			TransCur=Transactions.GetTrans(transNum);
-			AccountOfOrigin=Accounts.GetAccount(accountNum);
+			AccountOfOrigin=AccountC.GetAccount(accountNum);
 			//AccountNumOrigin=accountNumOrigin;
 		}
 
@@ -647,7 +647,7 @@ namespace OpenDental{
 			ODGridRow row;
 			for(int i=0;i<JournalList.Count;i++){
 				row=new ODGridRow();
-				row.Cells.Add(Accounts.GetDescript(((JournalEntry)JournalList[i]).AccountNum));
+				row.Cells.Add(AccountC.GetDescript(((JournalEntry)JournalList[i]).AccountNum));
 				if(((JournalEntry)JournalList[i]).DebitAmt==0){
 					row.Cells.Add("");
 				}
@@ -725,7 +725,7 @@ namespace OpenDental{
 					butChange.Text=Lan.g(this,"Pick");
 				}
 				else{//the sole entry is not for the current account
-					AccountPicked=Accounts.GetAccount(((JournalEntry)JournalList[0]).AccountNum);
+					AccountPicked=AccountC.GetAccount(((JournalEntry)JournalList[0]).AccountNum);
 					textAccount.Text=AccountPicked.Description;
 					butChange.Text=Lan.g(this,"Change");
 				}
@@ -766,7 +766,7 @@ namespace OpenDental{
 					butChange.Text=Lan.g(this,"Pick");
 				}
 				else{
-					AccountPicked=Accounts.GetAccount(journalOther.AccountNum);
+					AccountPicked=AccountC.GetAccount(journalOther.AccountNum);
 					textAccount.Text=AccountPicked.Description;
 					butChange.Text=Lan.g(this,"Change");
 				}
@@ -1001,7 +1001,7 @@ namespace OpenDental{
 					if(i>0){
 						securityentry+=", ";
 					}
-					securityentry+=Accounts.GetDescript(((JournalEntry)JournalList[i]).AccountNum);
+					securityentry+=AccountC.GetDescript(((JournalEntry)JournalList[i]).AccountNum);
 				}
 				securityentry+=". "+tot.ToString("c");
 				JournalList=new ArrayList();//in case it fails, we don't want to leave this list around.
@@ -1078,7 +1078,7 @@ namespace OpenDental{
 					if(splits !="") {
 						splits+="\r\n";
 					}
-					splits+=Accounts.GetDescript(((JournalEntry)JournalList[j]).AccountNum);
+					splits+=AccountC.GetDescript(((JournalEntry)JournalList[j]).AccountNum);
 					if(JournalList.Count<3){
 						continue;//don't show the amount if there is only two splits, because the amount is the same.
 					}

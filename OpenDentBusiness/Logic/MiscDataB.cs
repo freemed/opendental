@@ -20,8 +20,8 @@ namespace OpenDentBusiness{
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				command="SELECT CURRENT_TIMESTAMP FROM DUAL";
 			}
-			DataSet table=GeneralB.GetTable(command);
-			return PIn.PDateT(table.Tables[0].Rows[0][0].ToString());
+			DataTable table=General.GetTable(command);
+			return PIn.PDateT(table.Rows[0][0].ToString());
 		}
 
 		///<summary>Generates a random primary key.  Tests to see if that key already exists before returning it for use.  Currently, the range of returned values is greater than 0, and less than or equal to 16777215, the limit for mysql medium int.  This will eventually change to a max of 18446744073709551615.  Then, the return value would have to be a ulong and the mysql type would have to be bigint.</summary>
@@ -30,12 +30,12 @@ namespace OpenDentBusiness{
 			if(numComputers==0 || myComputerNum==0){
 				try {
 					string command="SELECT COUNT(*) FROM computer";
-					DataSet result=GeneralB.GetTable(command);
-					numComputers=PIn.PInt(result.Tables[0].Rows[0][0].ToString());
+					DataTable table=General.GetTable(command);
+					numComputers=PIn.PInt(table.Rows[0][0].ToString());
 					command="SELECT COUNT(*) FROM computer WHERE ComputerNum<=(SELECT ComputerNum FROM computer AS temp WHERE CompName "+
 						"like '"+Dns.GetHostName()+"')";
-					result=GeneralB.GetTable(command);
-					myComputerNum=PIn.PInt(result.Tables[0].Rows[0][0].ToString());
+					table=General.GetTable(command);
+					myComputerNum=PIn.PInt(table.Rows[0][0].ToString());
 				} catch {
 					//This computer has not yet been added to the computer table. Generate any old random number as long as it is unique.
 					//This is the first introduction of the computer into the cluster.

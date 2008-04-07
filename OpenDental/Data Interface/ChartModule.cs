@@ -10,7 +10,7 @@ namespace OpenDental{
 	public class ChartModule{
 		///<summary>This is just the first version of this function.  It only gets selected parts of the Chart refresh.</summary>
 		public static DataSet GetAll(int patNum, bool isAuditMode) {
-			return General.GetDS(MethodName.Chart_GetAll,patNum,isAuditMode);
+			return Gen.GetDS(MethodName.Chart_GetAll,patNum,isAuditMode);
 		}
 
 

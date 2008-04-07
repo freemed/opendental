@@ -12,13 +12,13 @@ namespace OpenDentServer {
 			Type type = dto.GetType();
 
 			if(type==typeof(DtoGeneralGetTable)) {
-				return GeneralB.GetTable(((DtoGeneralGetTable)dto).Command);
+				return DataCore.GetTable(((DtoGeneralGetTable)dto).Command);
 			}
 			else if(type==typeof(DtoGeneralGetTableLow)) {
-				return GeneralB.GetTableLow(((DtoGeneralGetTableLow)dto).Command);
+				return DataCore.GetTableLow(((DtoGeneralGetTableLow)dto).Command);
 			}
 			else if(type==typeof(DtoGeneralGetDataSet)) {
-				return GeneralB.GetDataSet(((DtoGeneralGetDataSet)dto).Commands);
+				return DataCore.GetDataSet(((DtoGeneralGetDataSet)dto).Commands);
 			}
 			else if(type==typeof(DtoCovCatRefresh)) {
 				return CovCatB.Refresh();
@@ -38,7 +38,7 @@ namespace OpenDentServer {
 		public static int ProcessCommand(DtoCommandBase dto) {
 			Type type = dto.GetType();
 			if(type==typeof(DtoGeneralNonQ)) {
-				return GeneralB.NonQ(((DtoGeneralNonQ)dto).Command,((DtoGeneralNonQ)dto).GetInsertID);
+				return DataCore.NonQ(((DtoGeneralNonQ)dto).Command,((DtoGeneralNonQ)dto).GetInsertID);
 			}
 			else if(type==typeof(DtoLogin)) {
 				return OpenDentalService.Login(((DtoLogin)dto).Database,((DtoLogin)dto).OdUser,((DtoLogin)dto).OdPassHash);

@@ -47,12 +47,12 @@ namespace OpenDentBusiness {
 			if(numComputers==0 || myComputerNum==0){
 				try{
 					string command="SELECT COUNT(*) FROM computer";
-					DataSet result=GeneralB.GetTable(command);
-					numComputers=PIn.PInt(result.Tables[0].Rows[0][0].ToString());
+					DataTable table=General.GetTable(command);
+					numComputers=PIn.PInt(table.Rows[0][0].ToString());
 					command="SELECT COUNT(*) FROM computer WHERE ComputerNum<=(SELECT ComputerNum FROM computer AS temp WHERE CompName "+
 						"like '"+Dns.GetHostName()+"')";
-					result=GeneralB.GetTable(command);
-					myComputerNum=PIn.PInt(result.Tables[0].Rows[0][0].ToString());
+					table=General.GetTable(command);
+					myComputerNum=PIn.PInt(table.Rows[0][0].ToString());
 				}catch{
 					//This computer has not yet been added to the computer table. Generate any old random number as long as it is unique.
 					//This is the first introduction of the computer into the cluster.

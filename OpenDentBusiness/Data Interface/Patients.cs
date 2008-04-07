@@ -1466,7 +1466,7 @@ namespace OpenDentBusiness{
 		///<summary>Gets the list of all valid patient primary keys. Used when checking for missing ADA procedure codes after a user has begun entering them manually. This function is necessary because not all patient numbers are necessarily consecutive (say if the database was created due to a conversion from another program and the customer wanted to keep their old patient ids after the conversion).</summary>
 		public static int[] GetAllPatNums(){
 			string command="SELECT PatNum From patient";
-			DataTable dt=General.GetTableEx(command);
+			DataTable dt=General.GetTable(command);
 			int[] patnums=new int[dt.Rows.Count];
 			for(int i=0;i<patnums.Length;i++){
 				patnums[i]=PIn.PInt(dt.Rows[i]["PatNum"].ToString());

@@ -31,7 +31,7 @@ namespace OpenDental {
 			computerPref.TaskX=900;
 			computerPref.TaskY=625;
 			try{
-				table=General.GetTableEx(command);
+				table=General.GetTable(command);
 			}catch{
 				//In case of database error, just use default graphics settings so that it is possible for the program to start.
 				return computerPref;

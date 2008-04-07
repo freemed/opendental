@@ -429,7 +429,7 @@ namespace OpenDental{
 				if(Accounts.DepositsLinked()) {
 					DepositAccounts=Accounts.GetDepositAccounts();
 					for(int i=0;i<DepositAccounts.Length;i++){
-						comboDepositAccount.Items.Add(Accounts.GetDescript(DepositAccounts[i]));
+						comboDepositAccount.Items.Add(AccountC.GetDescript(DepositAccounts[i]));
 					}
 					comboDepositAccount.SelectedIndex=0;
 				}
@@ -456,8 +456,8 @@ namespace OpenDental{
 					labelDepositAccount.Text=Lan.g(this,"Deposited into Account");
 					ArrayList jeAL=JournalEntries.GetForTrans(trans.TransactionNum);
 					for(int i=0;i<jeAL.Count;i++){
-						if(Accounts.GetAccount(((JournalEntry)jeAL[i]).AccountNum).AcctType==AccountType.Asset){
-							comboDepositAccount.Items.Add(Accounts.GetDescript(((JournalEntry)jeAL[i]).AccountNum));
+						if(AccountC.GetAccount(((JournalEntry)jeAL[i]).AccountNum).AcctType==AccountType.Asset){
+							comboDepositAccount.Items.Add(AccountC.GetDescript(((JournalEntry)jeAL[i]).AccountNum));
 							comboDepositAccount.SelectedIndex=0;
 							textDepositAccount.Text=((JournalEntry)jeAL[i]).DateDisplayed.ToShortDateString()
 								+" "+((JournalEntry)jeAL[i]).DebitAmt.ToString("c");
@@ -761,7 +761,7 @@ namespace OpenDental{
 					je.DateDisplayed=DepositCur.DateDeposit;//it would be nice to add security here.
 					je.DebitAmt=DepositCur.Amount;
 					je.Memo=Lan.g(this,"Deposit");
-					je.Splits=Accounts.GetDescript(PrefC.GetInt("AccountingIncomeAccount"));
+					je.Splits=AccountC.GetDescript(PrefC.GetInt("AccountingIncomeAccount"));
 					je.TransactionNum=trans.TransactionNum;
 					JournalEntries.Insert(je);
 					//then, the income entry
@@ -771,7 +771,7 @@ namespace OpenDental{
 					je.DateDisplayed=DepositCur.DateDeposit;//it would be nice to add security here.
 					je.CreditAmt=DepositCur.Amount;
 					je.Memo=Lan.g(this,"Deposit");
-					je.Splits=Accounts.GetDescript(DepositAccounts[comboDepositAccount.SelectedIndex]);
+					je.Splits=AccountC.GetDescript(DepositAccounts[comboDepositAccount.SelectedIndex]);
 					je.TransactionNum=trans.TransactionNum;
 					JournalEntries.Insert(je);
 				}

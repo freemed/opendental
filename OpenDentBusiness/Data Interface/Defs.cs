@@ -8,12 +8,15 @@ namespace OpenDentBusiness {
 	public class Defs {
 		///<summary>If using remoting, then the calling program is responsible for filling the arrays on the client since the automated part only happens on the server.  So there are TWO sets of arrays in a server situation, but only one in a small office that connects directly to the database.</summary>
 		public static DataSet Refresh(){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientTcp){
+				throw new ApplicationException("Defs.Refresh incorrect RemotingRole.");
+			}
 			string command="SELECT * FROM definition ORDER BY Category,ItemOrder";
 			DataConnection dcon=new DataConnection();
 			DataTable table=dcon.GetTable(command);
 			DataSet retVal=new DataSet();
 			retVal.Tables.Add(table);
-			FillArrays(table);
+			FillCache(table);
 			return retVal;
 		}
 
@@ -43,7 +46,7 @@ namespace OpenDentBusiness {
 			return list.ToArray();
 		}
 
-		public static void FillArrays(DataTable table){
+		public static void FillCache(DataTable table){
 			DefC.Long=new Def[Enum.GetValues(typeof(DefCat)).Length][];
 			for(int j=0;j<Enum.GetValues(typeof(DefCat)).Length;j++) {
 				DefC.Long[j]=GetForCategory(j,true,table);

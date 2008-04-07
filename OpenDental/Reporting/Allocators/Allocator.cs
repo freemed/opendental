@@ -82,7 +82,7 @@ namespace OpenDental.Reporting.Allocators
 			cmd += " FROM " + DbaseStorageTable + " LIMIT 1";
 			try
 			{
-				General.GetTableEx(cmd);
+				General.GetTable(cmd);
 			}
 			catch
 			{
@@ -103,7 +103,7 @@ namespace OpenDental.Reporting.Allocators
 			string thistable = this.DbaseStorageTable.ToLower();
 			try
 			{
-				DataTable dt = General.GetTableEx(cmd);
+				DataTable dt = General.GetTable(cmd);
 				if (dt.Rows.Count != 0)
 				{
 					for (int i=0; i<dt.Rows.Count; i++)

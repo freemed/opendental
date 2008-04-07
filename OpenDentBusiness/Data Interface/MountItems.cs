@@ -17,7 +17,7 @@ namespace OpenDentBusiness {
 				+"'"+POut.PInt(mountItem.OrdinalPos)+"',"
 				+"'"+POut.PInt(mountItem.Width)+"',"
 				+"'"+POut.PInt(mountItem.Height)+"')";
-			return General.NonQEx(command,true);
+			return General.NonQ(command,true);
 		}
 
 		public static int Update(MountItem mountItem) {
@@ -29,12 +29,12 @@ namespace OpenDentBusiness {
 				+"Width='"+POut.PInt(mountItem.Width)+"',"
 				+"Height='"+POut.PInt(mountItem.Height)+"' "
 				+"WHERE MountItemNum='"+POut.PInt(mountItem.MountItemNum)+"'";
-			return General.NonQEx(command);
+			return General.NonQ(command);
 		}
 
 		public static void Delete(MountItem mountItem) {
 			string command="DELETE FROM mountitem WHERE MountItemNum='"+POut.PInt(mountItem.MountItemNum)+"'";
-			General.NonQEx(command);
+			General.NonQ(command);
 		}
 
 		///<summary>Converts the given datarow to a mountitem, assuming that the row represents a mountitem.</summary>

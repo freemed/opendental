@@ -107,7 +107,7 @@ namespace OpenDental.Reporting.Allocators.MyAllocator1.SupportingCode
 					System.Collections.Hashtable htProvs = new System.Collections.Hashtable();
 					try
 					{
-						DataTable dt = General.GetTableEx("SELECT ProvNum, Abbr FROM Provider");
+						DataTable dt = General.GetTable("SELECT ProvNum, Abbr FROM Provider");
 
 						if (dt.Rows.Count != 0)
 							foreach (DataRow dr in dt.Rows)

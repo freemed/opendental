@@ -132,30 +132,30 @@ namespace OpenDental{
 		}
 
 		public static DataSet GetApptEdit(int aptNum){
-			return General.GetDS(MethodName.Appointment_GetApptEdit,aptNum);
+			return Gen.GetDS(MethodName.Appointment_GetApptEdit,aptNum);
 		}
 
 		public static DataTable GetApptEditProcs(int aptNum) {
 			//this is quick and dirty. Get all the tables, but only use the one we are interested in.
-			return General.GetDS(MethodName.Appointment_GetApptEdit,aptNum).Tables["Procedure"].Copy();
+			return Gen.GetDS(MethodName.Appointment_GetApptEdit,aptNum).Tables["Procedure"].Copy();
 		}
 
 		public static DataTable GetApptEditComm(int aptNum) {
-			return General.GetDS(MethodName.Appointment_GetApptEdit,aptNum).Tables["Comm"].Copy();
+			return Gen.GetDS(MethodName.Appointment_GetApptEdit,aptNum).Tables["Comm"].Copy();
 		}
 
 		public static DataTable GetApptEditMisc(int aptNum) {
-			return General.GetDS(MethodName.Appointment_GetApptEdit,aptNum).Tables["Misc"].Copy();
+			return Gen.GetDS(MethodName.Appointment_GetApptEdit,aptNum).Tables["Misc"].Copy();
 		}
 
 		///<summary>Contains all data needed to display appointments for a period.</summary>
 		public static DataSet RefreshPeriod(DateTime dateStart,DateTime dateEnd){
-			return General.GetDS(MethodName.Appointment_RefreshPeriod,dateStart,dateEnd);
+			return Gen.GetDS(MethodName.Appointment_RefreshPeriod,dateStart,dateEnd);
 		}
 
 		///<summary>The resulting datatable will have just one row in it.</summary>
 		public static DataTable RefreshOneApt(int aptNum,bool isPlanned){
-			return General.GetDS(MethodName.Appointment_RefreshOneApt,aptNum,isPlanned).Tables["Appointments"].Copy();
+			return Gen.GetDS(MethodName.Appointment_RefreshOneApt,aptNum,isPlanned).Tables["Appointments"].Copy();
 		}
 
 		///<summary>Called when closing FormApptEdit with an OK in order to reattach the procedures to the appointment.</summary>

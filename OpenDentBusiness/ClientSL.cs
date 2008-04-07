@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 
 namespace OpenDentBusiness {
-	///<summary>The name of this class is still up in the air.  Not sure how any of this will work until we actually build the web service.</summary>
+	///<summary>This class was a placeholder and will soon be gone.</summary>
 	class ClientSL {
 		
 		public static object CallWebService(MethodName methodName,params object[] parameters){
@@ -21,6 +21,7 @@ namespace OpenDentBusiness {
 
 	//This will soon be moved to its own file.
 	public enum MethodName{
+		Account_RefreshCache,
 		AccountModule_GetAll,
 		AccountModule_GetPayPlanAmort,
 		AccountModule_GetStatement,

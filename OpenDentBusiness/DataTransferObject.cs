@@ -9,7 +9,7 @@ using OpenDental.DataAccess;
 using System.Diagnostics;
 
 namespace OpenDentBusiness {
-	///<summary>Provides a base class for the hundreds of DTO classes that we will need.  A DTO class is a simple data storage type.  A DTO is the only format accepted by OpenDentBusiness.dll.</summary>
+	///<summary>Provides a base class for the many types of DTO classes that we will need.  A DTO class is a simple data storage object.  A DTO is the only format accepted by OpenDentBusiness.dll.</summary>
 	public abstract class DataTransferObject {
 			
 		public byte[] Serialize(){
@@ -61,12 +61,20 @@ namespace OpenDentBusiness {
 	public class DtoCommandBase:DataTransferObject {
 	}
 
-	///<summary>All queries should inherit from this rather than directly from the DTO.  This kind of DTO will trigger a Dataset result.</summary>
+	///<summary>All queries should inherit from this rather than directly from the DTO.  This kind of DTO will trigger a Dataset or DataTable result.</summary>
 	public class DtoQueryBase:DataTransferObject {
 	}
 
 	///<summary>This DTO is planned to replace all the DtoQueryBase types.  Having multiple DTO types takes too long to program, so there should only be one type which is used for everything.  We will also eventually move to simpler XML representation of the datasets instead of using the dotNet serialization.</summary>
 	public class DtoGetDS:DataTransferObject{
+		///<summary>This is the name of the method that we need to call.  "Class_Method" format.</summary>
+		public MethodName MethodName;
+		///<summary>This is a list of parameters that we are passing.  They can be various kinds of objects.</summary>
+		public object[] Parameters;
+	}
+
+	///<summary></summary>
+	public class DtoGetTable:DataTransferObject{
 		///<summary>This is the name of the method that we need to call.  "Class_Method" format.</summary>
 		public MethodName MethodName;
 		///<summary>This is a list of parameters that we are passing.  They can be various kinds of objects.</summary>

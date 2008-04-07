@@ -5,7 +5,7 @@ using System.Text;
 using System.Xml;
 
 namespace OpenDentBusiness {
-	public class GeneralB {
+	public class DataCore {
 		///<summary></summary>
 		public static DataSet GetTable(string command) {
 			DataConnection dcon=new DataConnection();
@@ -42,15 +42,6 @@ namespace OpenDentBusiness {
 			return NonQ(command,false);
 		}
 
-		/*
-		///<summary>This query is run with full privileges.</summary>
-		public static int NonQ(string[] commands) {
-			DataConnection dcon=new DataConnection();
-			
-			int rowsChanged=dcon.NonQ(cmd);
-			return rowsChanged;//I don't think this will be accurate
-		}*/
-
 		///<summary>This is for multiple queries all concatenated together with ;</summary>
 		public static DataSet GetDataSet(string commands){
 			DataConnection dcon=new DataConnection();
@@ -60,8 +51,18 @@ namespace OpenDentBusiness {
 			return retVal;
 		}
 
-		///<summary>This is is only here for compatibility with the old 3-tier architecture.  Do not add to this.</summary>
-		public static DataSet GetDS(MethodName methodName, object[] parameters) {
+		///<summary></summary>
+		public static DataTable GetTableByMethod(MethodName methodName, object[] parameters) {
+			switch (methodName){
+				default:
+					throw new ApplicationException("MethodName not found");
+				case MethodName.Account_RefreshCache:
+					return Accounts.RefreshCache();
+			}
+		}
+
+		///<summary></summary>
+		public static DataSet GetDsByMethod(MethodName methodName, object[] parameters) {
 			switch (methodName){
 				default:
 					throw new ApplicationException("MethodName not found");
