@@ -3982,7 +3982,7 @@ namespace OpenDental{
 								ProvCur.SigOnFile=true;
 								ProvCur.OutlineColor=Color.Gray;
 								Providers.Insert(ProvCur);
-								Providers.RefreshOnClient();//this is because SetInvalid might be too slow
+								Provider_client.RefreshOnClient();//this is because SetInvalid might be too slow
 								DataValid.SetInvalid(InvalidTypes.Providers);//also refreshes local
 								provNum=ProvCur.ProvNum;
 							}

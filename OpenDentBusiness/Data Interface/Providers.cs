@@ -13,23 +13,17 @@ namespace OpenDentBusiness{
 		///<summary>This is the list used most often. It does not include hidden providers.</summary>
 		public static Provider[] List;
 
-		///<summary>Refreshes List with all providers.</summary>
-		public static void RefreshOnClient(){
-			DataTable table=Gen.GetDS(MethodName.Providers_RefreshOnServer).Tables[0];
-			FillArrays(table);//now, we have an arrays on both the client and the server.
-		}
-
 		///<summary>Does not get called directly from the UI.</summary>
-		public static DataSet RefreshOnServer(){
+		public static DataTable RefreshCache(){
 			string command="SELECT * FROM provider ORDER BY ItemOrder";
 			DataTable table=General.GetTable(command);
-			DataSet retVal=new DataSet();
-			retVal.Tables.Add(table);
-			FillArrays(table);
-			return retVal;
+			//DataSet retVal=new DataSet();
+			//retVal.Tables.Add(table);
+			FillCache(table);
+			return table;
 		}
 
-		public static void FillArrays(DataTable table){
+		public static void FillCache(DataTable table){
 			ArrayList AL=new ArrayList();
 			ListLong=new Provider[table.Rows.Count];
 			for(int i=0;i<table.Rows.Count;i++){

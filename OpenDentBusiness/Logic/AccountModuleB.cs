@@ -12,9 +12,9 @@ namespace OpenDentBusiness {
 
 		///<summary>Parameters: 0:patNum, 1:viewingInRecall, 2:fromDate, 3:toDate, 4:intermingled.  If intermingled=1, the patnum of any family member will get entire family intermingled.</summary>
 		public static DataSet GetAll(int patNum,bool viewingInRecall,DateTime fromDate, DateTime toDate,bool intermingled){//string[] parameters){
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb){
-				return (DataSet)ClientSL.CallWebService(MethodName.AccountModule_GetAll,patNum,viewingInRecall,fromDate,toDate,intermingled);
-			}
+			//if(RemotingClient.RemotingRole==RemotingRole.ClientWeb){
+			//	return (DataSet)ClientSL.CallWebService(MethodName.AccountModule_GetAll,patNum,viewingInRecall,fromDate,toDate,intermingled);
+			//}
 			//int patNum=PIn.PInt(parameters[0]);
 			fam=Patients.GetFamily(patNum);
 			//bool intermingled=PIn.PBool(parameters[4]);

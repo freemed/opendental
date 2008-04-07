@@ -204,6 +204,7 @@
     <Compile Include="Data Interface\ClaimAttaches.cs" />
     <Compile Include="Data Interface\Patients2.cs" />
     <Compile Include="Data Interface\Prefs_client.cs" />
+    <Compile Include="Data Interface\Provider_client.cs" />
     <Compile Include="Data Interface\TaskAncestors.cs" />
     <Compile Include="Data Interface\TaskSubscriptions.cs" />
     <Compile Include="Data Interface\SupplyOrderItems.cs" />

@@ -168,12 +168,12 @@ namespace OpenDentServer {
 					try {
 						Type type = dto.GetType();
 						if (type == typeof(DtoGetDS)) {
-							DataSet ds = DataCore.GetDsByMethod(((DtoGetDS)dto).MethodName, ((DtoGetDS)dto).Parameters);
+							DataSet ds = DataCore.GetDsByMethod(((DtoGetDS)dto).MethodNameDS, ((DtoGetDS)dto).Parameters);
 							serializer = new XmlSerializer(typeof(DataSet));
 							serializer.Serialize(memStream, ds);
 						}
 						else if (type == typeof(DtoGetTable)) {
-							DataTable tb = DataCore.GetTableByMethod(((DtoGetTable)dto).MethodName, ((DtoGetTable)dto).Parameters);
+							DataTable tb = DataCore.GetTableByMethod(((DtoGetTable)dto).MethodNameTable, ((DtoGetTable)dto).Parameters);
 							serializer = new XmlSerializer(typeof(DataTable));
 							serializer.Serialize(memStream, tb);
 						}

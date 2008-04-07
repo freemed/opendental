@@ -7,10 +7,10 @@ namespace OpenDentBusiness{
 	///<summary>A more secure version of "General", which passes specific method names to the server instead of just queries.  This also packages username and pass hash if remote.  User permissions will gradually be incorporated here.</summary>
 	public class Gen {
 		///<summary></summary>
-		public static DataSet GetDS(MethodName methodName, params object[] parameters) {
+		public static DataSet GetDS(MethodNameDS methodName, params object[] parameters) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientTcp) {
 				DtoGetDS dto=new DtoGetDS();
-				dto.MethodName=methodName;
+				dto.MethodNameDS=methodName;
 				dto.Parameters=parameters;
 				return RemotingClient.ProcessGetDS(dto);
 			}
@@ -20,10 +20,10 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static DataTable GetTable(MethodName methodName, params object[] parameters) {
+		public static DataTable GetTable(MethodNameTable methodName, params object[] parameters) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientTcp) {
 				DtoGetTable dto=new DtoGetTable();
-				dto.MethodName=methodName;
+				dto.MethodNameTable=methodName;
 				dto.Parameters=parameters;
 				return RemotingClient.ProcessGetTable(dto);
 			}

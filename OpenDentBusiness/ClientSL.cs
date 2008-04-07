@@ -1,4 +1,4 @@
-﻿using System;
+﻿/*using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -19,17 +19,5 @@ namespace OpenDentBusiness {
 		}
 	}
 
-	//This will soon be moved to its own file.
-	public enum MethodName{
-		Account_RefreshCache,
-		AccountModule_GetAll,
-		AccountModule_GetPayPlanAmort,
-		AccountModule_GetStatement,
-		Appointment_GetApptEdit,
-		Appointment_RefreshPeriod,
-		Appointment_RefreshOneApt,
-		Chart_GetAll,
-		Definition_Refresh,
-		Providers_RefreshOnServer
-	}
-}
+	
+}*/

@@ -52,38 +52,39 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary></summary>
-		public static DataTable GetTableByMethod(MethodName methodName, object[] parameters) {
+		public static DataTable GetTableByMethod(MethodNameTable methodName, object[] parameters) {
 			switch (methodName){
 				default:
 					throw new ApplicationException("MethodName not found");
-				case MethodName.Account_RefreshCache:
+				case MethodNameTable.Account_RefreshCache:
 					return Accounts.RefreshCache();
+				case  MethodNameTable.Definition_RefreshCache:
+					return Defs.RefreshCache();
+				case  MethodNameTable.Providers_RefreshCache:
+					return Providers.RefreshCache();
 			}
 		}
 
 		///<summary></summary>
-		public static DataSet GetDsByMethod(MethodName methodName, object[] parameters) {
+		public static DataSet GetDsByMethod(MethodNameDS methodName, object[] parameters) {
 			switch (methodName){
 				default:
 					throw new ApplicationException("MethodName not found");
-				case MethodName.AccountModule_GetAll:
+				case MethodNameDS.AccountModule_GetAll:
 					return AccountModuleB.GetAll((int)parameters[0],(bool)parameters[1],(DateTime)parameters[2],(DateTime)parameters[3],(bool)parameters[4]);
-				case MethodName.AccountModule_GetPayPlanAmort:
+				case MethodNameDS.AccountModule_GetPayPlanAmort:
 					return AccountModuleB.GetPayPlanAmort((int)parameters[0]);
-				case  MethodName.AccountModule_GetStatement:
+				case  MethodNameDS.AccountModule_GetStatement:
 					return AccountModuleB.GetStatement((int)parameters[0],(bool)parameters[1],(DateTime)parameters[2],(DateTime)parameters[3],(bool)parameters[4]);
-				case  MethodName.Appointment_GetApptEdit:
+				case  MethodNameDS.Appointment_GetApptEdit:
 					return AppointmentB.GetApptEdit((int)parameters[0]);
-				case  MethodName.Appointment_RefreshPeriod:
+				case  MethodNameDS.Appointment_RefreshPeriod:
 					return AppointmentB.RefreshPeriod((DateTime)parameters[0],(DateTime)parameters[1]);
-				case  MethodName.Appointment_RefreshOneApt:
+				case  MethodNameDS.Appointment_RefreshOneApt:
 					return AppointmentB.RefreshOneApt((int)parameters[0],(bool)parameters[1]);
-				case  MethodName.Chart_GetAll:
+				case  MethodNameDS.Chart_GetAll:
 					return ChartModuleB.GetAll((int)parameters[0],(bool)parameters[1]);
-				case  MethodName.Definition_Refresh:
-					return Defs.Refresh();
-				case  MethodName.Providers_RefreshOnServer:
-					return Providers.RefreshOnServer();
+				
 			}
 
 		}

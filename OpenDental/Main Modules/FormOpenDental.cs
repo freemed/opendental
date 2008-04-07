@@ -1582,7 +1582,7 @@ namespace OpenDental{
 				}
 			}
 			if((itypes & InvalidTypes.Providers)==InvalidTypes.Providers){
-				Providers.RefreshOnClient();
+				Provider_client.RefreshOnClient();
 				ProviderIdents.Refresh();
 				Clinics.Refresh();
 			}

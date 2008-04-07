@@ -11,7 +11,7 @@ namespace OpenDental{
 	public class Defs_client{
 		///<summary></summary>
 		public static void RefreshClient(){
-			DataTable table=Gen.GetDS(MethodName.Definition_Refresh).Tables[0];
+			DataTable table=Gen.GetTable(MethodNameTable.Definition_RefreshCache);
 			Defs.FillCache(table);//now, we have an arrays on both the client and the server.
 		}
 
