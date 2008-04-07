@@ -12,8 +12,8 @@ namespace OpenDentBusiness {
 		public string ValueString;
 	}
 
-	public class DtoPrefRefresh:DtoQueryBase {
-	}
+	//public class DtoPrefRefresh:DtoQueryBase {
+	//}
 
 	/*public class DtoDefInsert:DtoCommandBase {
 		public Def DefCur;

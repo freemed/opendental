@@ -23,9 +23,6 @@ namespace OpenDentServer {
 			else if(type==typeof(DtoCovCatRefresh)) {
 				return CovCatB.Refresh();
 			}
-			else if(type==typeof(DtoPrefRefresh)) {
-				return Prefs.Refresh();
-			}
 			else if(type==typeof(DtoUserodRefresh)) {
 				return UserodB.Refresh();
 			}

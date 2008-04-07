@@ -12,6 +12,9 @@ namespace OpenDental {
 	public class Prefs_client {
 		///<summary></summary>
 		public static void RefreshClient() {
+			DataTable table=Gen.GetTable(MethodNameTable.Prefs_RefreshCache);
+			Prefs.FillCache(table);
+			/*
 			DataSet ds=null;
 			try {
 				if(RemotingClient.RemotingRole==RemotingRole.ClientTcp) {
@@ -26,7 +29,7 @@ namespace OpenDental {
 				MessageBox.Show(e.Message);
 				return;
 			}
-			Prefs.FillHList(ds.Tables[0]);//now, we have an HList on both the client and the server.
+			Prefs.FillHList(ds.Tables[0]);//now, we have an HList on both the client and the server.*/
 		}
 
 		///<summary>This ONLY runs when first opening the program</summary>

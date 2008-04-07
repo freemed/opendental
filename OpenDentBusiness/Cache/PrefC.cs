@@ -41,7 +41,7 @@ namespace OpenDentBusiness {
 		///<summary>Gets a pref of type bool.</summary>
 		public static bool GetBool(string prefName) {
 			if(HList==null){
-				Prefs.Refresh();
+				Prefs.RefreshCache();
 			}
 			if(!HList.ContainsKey(prefName)) {
 				throw new Exception(prefName+" is an invalid pref name.");

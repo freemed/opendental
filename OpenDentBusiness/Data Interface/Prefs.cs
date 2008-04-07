@@ -6,18 +6,16 @@ using System.Diagnostics;
 namespace OpenDentBusiness{
 	///<summary></summary>
 	public class Prefs{
-		public static DataSet Refresh(){
+		public static DataTable RefreshCache(){
 			string command="SELECT * FROM preference";
 			DataConnection dcon=new DataConnection();
 			DataTable table=dcon.GetTable(command);
-			DataSet retVal=new DataSet();
-			retVal.Tables.Add(table);
-			FillHList(table);
-			return retVal;
+			FillCache(table);
+			return table;
 		}
 
 		///<summary></summary>
-		public static void FillHList(DataTable table){
+		public static void FillCache(DataTable table){
 			PrefC.HList=new Hashtable();
 			Pref pref;
 			for(int i=0;i<table.Rows.Count;i++) {

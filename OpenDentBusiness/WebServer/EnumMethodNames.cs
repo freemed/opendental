@@ -20,6 +20,7 @@ namespace OpenDentBusiness{
 	public enum MethodNameTable{
 		Account_RefreshCache,
 		Definition_RefreshCache,
+		Prefs_RefreshCache,
 		Providers_RefreshCache
 	}
 }
