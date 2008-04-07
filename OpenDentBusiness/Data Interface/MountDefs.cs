@@ -9,15 +9,18 @@ using OpenDentBusiness;
 namespace OpenDentBusiness {
 	///<summary></summary>
 	public class MountDefs {
-		///<summary>A list of all MountDefs.</summary>
-		public static List<MountDef> Listt;
-
+		
 		///<summary>Gets a list of all MountDefs when program first opens.  Also refreshes MountItemDefs and attaches all items to the appropriate mounts.</summary>
-		public static void Refresh() {
+		public static DataTable RefreshCache() {
 			MountItemDefs.Refresh();
 			string command="SELECT * FROM mountdef ORDER BY ItemOrder";
 			DataTable table=General.GetTable(command);
-			Listt=new List<MountDef>();
+			FillCache(table);
+			return table;
+		}	
+
+		public static void FillCache(DataTable table){
+			MountDefC.Listt=new List<MountDef>();
 			MountDef mount;
 			for(int i=0;i<table.Rows.Count;i++) {
 				mount=new MountDef();
@@ -27,9 +30,9 @@ namespace OpenDentBusiness {
 				mount.IsRadiograph=PIn.PBool  (table.Rows[i][3].ToString());
 				mount.Width       =PIn.PInt   (table.Rows[i][4].ToString());
 				mount.Height      =PIn.PInt   (table.Rows[i][5].ToString());
-				Listt.Add(mount);
+				MountDefC.Listt.Add(mount);
 			}
-		}	
+		}
 
 		///<summary></summary>
 		public static void Update(MountDef def) {

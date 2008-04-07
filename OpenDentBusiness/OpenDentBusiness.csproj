@@ -80,6 +80,7 @@
     <Compile Include="Cache\AccountingAutoPayC.cs" />
     <Compile Include="Cache\DefC.cs" />
     <Compile Include="Cache\EnumRemotingRole.cs" />
+    <Compile Include="Cache\MountDefC.cs" />
     <Compile Include="Cache\PrefC.cs" />
     <Compile Include="ClientSL.cs" />
     <Compile Include="Data Interface\aaDataInterface.cs" />

@@ -175,10 +175,10 @@ namespace OpenDental{
 		}
 
 		private void FillList(){
-			MountDefs.Refresh();
+			MountDef_client.Refresh();
 			listMain.Items.Clear();
-			for(int i=0;i<MountDefs.Listt.Count;i++){
-				listMain.Items.Add(MountDefs.Listt[i].Description);
+			for(int i=0;i<MountDefC.Listt.Count;i++){
+				listMain.Items.Add(MountDefC.Listt[i].Description);
 			}
 		}
 
@@ -195,7 +195,7 @@ namespace OpenDental{
 			if(listMain.SelectedIndex==-1){
 				return;
 			}
-			FormMountDefEdit FormM=new FormMountDefEdit(MountDefs.Listt[listMain.SelectedIndex]);
+			FormMountDefEdit FormM=new FormMountDefEdit(MountDefC.Listt[listMain.SelectedIndex]);
 			FormM.ShowDialog();
 			FillList();
 			changed=true;

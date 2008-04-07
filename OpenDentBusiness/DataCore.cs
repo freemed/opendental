@@ -52,22 +52,6 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary></summary>
-		public static DataTable GetTableByMethod(MethodNameTable methodName, object[] parameters) {
-			switch (methodName){
-				default:
-					throw new ApplicationException("MethodName not found");
-				case MethodNameTable.Account_RefreshCache:
-					return Accounts.RefreshCache();
-				case  MethodNameTable.Definition_RefreshCache:
-					return Defs.RefreshCache();
-				case  MethodNameTable.Prefs_RefreshCache:
-					return Prefs.RefreshCache();
-				case  MethodNameTable.Providers_RefreshCache:
-					return Providers.RefreshCache();
-			}
-		}
-
-		///<summary></summary>
 		public static DataSet GetDsByMethod(MethodNameDS methodName, object[] parameters) {
 			switch (methodName){
 				default:
@@ -91,7 +75,23 @@ namespace OpenDentBusiness {
 
 		}
 
-	
+		///<summary></summary>
+		public static DataTable GetTableByMethod(MethodNameTable methodName, object[] parameters) {
+			switch (methodName){
+				default:
+					throw new ApplicationException("MethodName not found");
+				case MethodNameTable.Account_RefreshCache:
+					return Accounts.RefreshCache();
+				case  MethodNameTable.Definition_RefreshCache:
+					return Defs.RefreshCache();
+				case  MethodNameTable.MountDef_RefreshCache:
+					return MountDefs.RefreshCache();
+				case  MethodNameTable.Prefs_RefreshCache:
+					return Prefs.RefreshCache();
+				case  MethodNameTable.Providers_RefreshCache:
+					return Providers.RefreshCache();
+			}
+		}
 		
 
 
