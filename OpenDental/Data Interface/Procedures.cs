@@ -15,7 +15,7 @@ namespace OpenDental{
 		///<summary></summary>
 		public static void Insert(Procedure proc){
 			if(PrefC.RandomKeys) {
-				proc.ProcNum=MiscDataB.GetKey("procedurelog","ProcNum");
+				proc.ProcNum=MiscData.GetKey("procedurelog","ProcNum");
 			}
 			string command= "INSERT INTO procedurelog (";
 			if(PrefC.RandomKeys) {
@@ -49,7 +49,7 @@ namespace OpenDental{
 				+POut.PDate  (proc.DateOriginalProsth)+", "
 				+"'"+POut.PString(proc.ClaimNote)+"', ";
 			if(DataConnection.DBtype==DatabaseType.Oracle){
-				command+=POut.PDateT(MiscDataB.GetNowDateTime());
+				command+=POut.PDateT(MiscData.GetNowDateTime());
 			}else{//Assume MySQL
 				command+="NOW()";
 			}
@@ -182,7 +182,7 @@ namespace OpenDental{
 				if(comma) c+=",";
 				c+="DateEntryC = ";
 				if(DataConnection.DBtype==DatabaseType.Oracle) {
-					c+=POut.PDateT(MiscDataB.GetNowDateTime());
+					c+=POut.PDateT(MiscData.GetNowDateTime());
 				}
 				else {//Assume MySQL
 					c+="NOW()";

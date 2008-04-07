@@ -64,7 +64,7 @@ namespace OpenDental{
 		///<summary></summary>
 		public static void Insert(EmailMessage message){
 			if(PrefC.RandomKeys) {
-				message.EmailMessageNum=MiscDataB.GetKey("emailmessage","EmailMessageNum");
+				message.EmailMessageNum=MiscData.GetKey("emailmessage","EmailMessageNum");
 			}
 			string command="INSERT INTO emailmessage (";
 			if(PrefC.RandomKeys) {

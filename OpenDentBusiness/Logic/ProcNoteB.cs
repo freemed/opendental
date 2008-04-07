@@ -8,7 +8,7 @@ namespace OpenDentBusiness {
 	public class ProcNoteB{
 		public static void Insert(ProcNote procNote){
 			if(PrefC.RandomKeys) {
-				procNote.ProcNoteNum=MiscDataB.GetKey("procnote","ProcNoteNum");
+				procNote.ProcNoteNum=MiscData.GetKey("procnote","ProcNoteNum");
 			}
 			string command= "INSERT INTO procnote (";
 			if(PrefC.RandomKeys) {
@@ -22,7 +22,7 @@ namespace OpenDentBusiness {
 				 "'"+POut.PInt   (procNote.PatNum)+"', "
 				+"'"+POut.PInt   (procNote.ProcNum)+"', ";
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
-				command+=POut.PDateT(MiscDataB.GetNowDateTime());
+				command+=POut.PDateT(MiscData.GetNowDateTime());
 			}
 			else {//Assume MySQL
 				command+="NOW()";

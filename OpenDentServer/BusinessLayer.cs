@@ -41,7 +41,7 @@ namespace OpenDentServer {
 				return OpenDentalService.Login(((DtoLogin)dto).Database,((DtoLogin)dto).OdUser,((DtoLogin)dto).OdPassHash);
 			}
 			else if(type==typeof(DtoMiscDataMakeABackup)) {
-				return MiscDataB.MakeABackup();
+				return MiscData.MakeABackup();
 			}
 			else{
 				throw new Exception("OpenDentServer.BusinessLayer.ProcessCommand(dto) is missing a case for "

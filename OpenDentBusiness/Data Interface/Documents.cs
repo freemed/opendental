@@ -78,7 +78,7 @@ namespace OpenDentBusiness {
 		///<summary>Inserts a new document into db, creates a filename based on Cur.DocNum, and then updates the db with this filename.</summary>
 		public static void Insert(Document doc,Patient pat){
 			if(PrefC.RandomKeys) {
-				doc.DocNum=MiscDataB.GetKey("document","DocNum");
+				doc.DocNum=MiscData.GetKey("document","DocNum");
 			}
 			string command="INSERT INTO document (";
 			if(PrefC.RandomKeys) {
