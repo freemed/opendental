@@ -570,7 +570,7 @@ namespace OpenDental{
 			}
 			Recall recallCur=recallList[0];
 			InsPlan[] planList=InsPlans.Refresh(FamCur);
-			Appointment apt=Appointments.CreateRecallApt(PatCur,procList,recallCur,planList);
+			Appointment apt=Appointment_client.CreateRecallApt(PatCur,procList,recallCur,planList);
 			AptNumsSelected.Add(apt.AptNum);
 			oResult=OtherResult.PinboardAndSearch;
 			if(recallCur.DateDue<DateTime.Today){
@@ -598,7 +598,7 @@ namespace OpenDental{
 					continue;
 				}
 				planList=InsPlans.Refresh(FamCur);
-				apt=Appointments.CreateRecallApt(FamCur.List[i],procList,recallList[0],planList);
+				apt=Appointment_client.CreateRecallApt(FamCur.List[i],procList,recallList[0],planList);
 				AptNumsSelected.Add(apt.AptNum);
 				oResult=OtherResult.PinboardAndSearch;
 				if(recallList[0].DateDue<DateTime.Today) {

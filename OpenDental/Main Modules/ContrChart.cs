@@ -2950,7 +2950,7 @@ namespace OpenDental{
 				labelApptStatus.Text=Lan.g(this,"none");
 				labelApptDate.Visible=false;
 			}
-			ApptPlanned.DataRoww=Appointments.RefreshOneApt(apt.AptNum,true).Rows[0];
+			ApptPlanned.DataRoww=Appointment_client.RefreshOneApt(apt.AptNum,true).Rows[0];
 			ApptPlanned.SetSize();
 			ApptPlanned.Width=114;
 			ApptPlanned.CreateShadow();
@@ -5367,7 +5367,7 @@ namespace OpenDental{
 						return; 
 					}
 					//Procedures.UnattachProcsInPlannedAppt(ApptPlanned.Info.MyApt.AptNum);
-					Appointments.Delete(PIn.PInt(ApptPlanned.DataRoww["AptNum"].ToString()));
+					Appointment_client.Delete(PIn.PInt(ApptPlanned.DataRoww["AptNum"].ToString()));
 				}
 				PatCur.NextAptNum=0;//-1;
 				PatCur.PlannedIsDone=true;
@@ -5387,7 +5387,7 @@ namespace OpenDental{
 					,"",MessageBoxButtons.OKCancel)!=DialogResult.OK)
 					return;
 				//Procedures.UnattachProcsInPlannedAppt(ApptPlanned.Info.MyApt.AptNum);
-				Appointments.Delete(PIn.PInt(ApptPlanned.DataRoww["AptNum"].ToString()));
+				Appointment_client.Delete(PIn.PInt(ApptPlanned.DataRoww["AptNum"].ToString()));
 			}
 			Appointment AptCur=new Appointment();
 			AptCur.PatNum=PatCur.PatNum;
@@ -5433,7 +5433,7 @@ namespace OpenDental{
 			if(MessageBox.Show(Lan.g(this,"Delete planned appointment?"),"",MessageBoxButtons.OKCancel)!=DialogResult.OK)
 				return;
 			//Procedures.UnattachProcsInPlannedAppt(ApptPlanned.Info.MyApt.AptNum);
-			Appointments.Delete(PIn.PInt(ApptPlanned.DataRoww["AptNum"].ToString()));
+			Appointment_client.Delete(PIn.PInt(ApptPlanned.DataRoww["AptNum"].ToString()));
 			Patient patOld=PatCur.Copy();
 			PatCur.NextAptNum=0;
 			Patients.Update(PatCur,patOld);

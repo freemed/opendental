@@ -63,11 +63,11 @@ namespace OpenDentBusiness {
 				case  MethodNameDS.AccountModule_GetStatement:
 					return AccountModules.GetStatement((int)parameters[0],(bool)parameters[1],(DateTime)parameters[2],(DateTime)parameters[3],(bool)parameters[4]);
 				case  MethodNameDS.Appointment_GetApptEdit:
-					return AppointmentB.GetApptEdit((int)parameters[0]);
+					return Appointments.GetApptEdit((int)parameters[0]);
 				case  MethodNameDS.Appointment_RefreshPeriod:
-					return AppointmentB.RefreshPeriod((DateTime)parameters[0],(DateTime)parameters[1]);
+					return Appointments.RefreshPeriod((DateTime)parameters[0],(DateTime)parameters[1]);
 				case  MethodNameDS.Appointment_RefreshOneApt:
-					return AppointmentB.RefreshOneApt((int)parameters[0],(bool)parameters[1]);
+					return Appointments.RefreshOneApt((int)parameters[0],(bool)parameters[1]);
 				case  MethodNameDS.Chart_GetAll:
 					return ChartModuleB.GetAll((int)parameters[0],(bool)parameters[1]);
 				

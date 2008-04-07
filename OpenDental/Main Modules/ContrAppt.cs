@@ -1593,10 +1593,10 @@ namespace OpenDental{
 					}
 				}
 				if(row==null){
-					row=Appointments.RefreshOneApt(aptNums[a],false).Rows[0];
+					row=Appointment_client.RefreshOneApt(aptNums[a],false).Rows[0];
 					if(row["AptStatus"].ToString()=="6") {//planned
 						//then do it again the right way
-						row=Appointments.RefreshOneApt(aptNums[a],true).Rows[0];
+						row=Appointment_client.RefreshOneApt(aptNums[a],true).Rows[0];
 					}
 				}
 				pinBoard.AddAppointment(row);
@@ -1725,7 +1725,7 @@ namespace OpenDental{
 				Procedure[] procsMultApts=Procedures.GetProcsMultApts(aptNums);
 				Procedure[] procsForOne=Procedures.GetProcsOneApt(aptCur.AptNum,procsMultApts);
 				ArrayList doubleBookedCodes=new ArrayList();
-					Appointments.GetDoubleBookedCodes(aptCur,DS.Tables["Appointments"].Copy(),procsMultApts,procsForOne);
+					Appointment_client.GetDoubleBookedCodes(aptCur,DS.Tables["Appointments"].Copy(),procsMultApts,procsForOne);
 				if(doubleBookedCodes.Count>0){//if some codes would be double booked
 					if(AppointmentRules.IsBlocked(doubleBookedCodes)){
 						MessageBox.Show(Lan.g(this,"Not allowed to double book:")+" "
@@ -2311,7 +2311,7 @@ namespace OpenDental{
 				}
 				procsForOne=Procedures.GetProcsOneApt(apt.AptNum,procsMultApts);
 				ArrayList doubleBookedCodes=
-					Appointments.GetDoubleBookedCodes(apt,DS.Tables["Appointments"].Copy(),procsMultApts,procsForOne);
+					Appointment_client.GetDoubleBookedCodes(apt,DS.Tables["Appointments"].Copy(),procsMultApts,procsForOne);
 				if(doubleBookedCodes.Count>0) {//if some codes would be double booked
 					if(AppointmentRules.IsBlocked(doubleBookedCodes)) {
 						MessageBox.Show(Lan.g(this,"Not allowed to double book:")+" "
@@ -3021,7 +3021,7 @@ namespace OpenDental{
 				}
 				else{//for normal appt:
 					//this gets rid of new appointments that never made it off the pinboard
-					Appointments.Delete(PIn.PInt(row["AptNum"].ToString()));
+					Appointment_client.Delete(PIn.PInt(row["AptNum"].ToString()));
 				}
 			}
 			if(pinBoard.SelectedIndex==-1){
@@ -3322,7 +3322,7 @@ namespace OpenDental{
 					+ ContrApptSingle3[thisI].DataRoww["AptDateTime"].ToString() + ", "
 					+ "Deleted");
 			}
-			Appointments.Delete(ContrApptSingle.SelectedAptNum);
+			Appointment_client.Delete(ContrApptSingle.SelectedAptNum);
 			ContrApptSingle.SelectedAptNum=-1;
 			pinBoard.SelectedIndex=-1;
 			//ContrApptSingle.PinBoardIsSelected=false;
@@ -3627,7 +3627,7 @@ namespace OpenDental{
 				providers[i]=Providers.List[listProviders.SelectedIndices[i]].ProvNum;
 			}
 			//the result might be empty
-			SearchResults=Appointments.GetSearchResults(PIn.PInt(pinBoard.SelectedAppt.DataRoww["AptNum"].ToString()),
+			SearchResults=Appointment_client.GetSearchResults(PIn.PInt(pinBoard.SelectedAppt.DataRoww["AptNum"].ToString()),
 				afterDate,providers,10,beforeTime,afterTime);
 			listSearchResults.Items.Clear();
 			for(int i=0;i<SearchResults.Length;i++){

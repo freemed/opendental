@@ -710,7 +710,7 @@ namespace OpenDental{
 		private void butPin_Click(object sender, System.EventArgs e) {
 			SaveRecall();
 			PinClicked=true;
-			Appointment apt=Appointments.CreateRecallApt(PatCur,ProcList,RecallCur,PlanList);
+			Appointment apt=Appointment_client.CreateRecallApt(PatCur,ProcList,RecallCur,PlanList);
 			AptSelected=apt.AptNum;
 			DialogResult=DialogResult.OK;
 		}

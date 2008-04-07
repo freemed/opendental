@@ -201,6 +201,7 @@
     <Compile Include="Data Interface\ChartModule.cs" />
     <Compile Include="Data Interface\CanadianNetworks.cs" />
     <Compile Include="Data Interface\ClaimAttaches.cs" />
+    <Compile Include="Data Interface\Appointment_client.cs" />
     <Compile Include="Data Interface\MountDef_client.cs" />
     <Compile Include="Data Interface\Patients2.cs" />
     <Compile Include="Data Interface\Prefs_client.cs" />

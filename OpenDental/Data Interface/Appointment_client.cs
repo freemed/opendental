@@ -1,136 +1,12 @@
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Data;
-using System.Diagnostics;
 using System.Text;
-using System.Windows.Forms;
 using OpenDentBusiness;
 
 namespace OpenDental{
-	///<summary>Handles database commands related to the appointment table in the db.</summary>
-	public class Appointments {
-		///<summary>The date currently selected in the appointment module.</summary>
-		public static DateTime DateSelected;
-
-		///<summary>Gets a list of appointments for a period of time in the schedule, whether hidden or not.</summary>
-		public static Appointment[] GetForPeriod(DateTime startDate,DateTime endDate){
-			//DateSelected = thisDay;
-			string command=
-				"SELECT * from appointment "
-				+"WHERE AptDateTime BETWEEN '"+POut.PDate(startDate,false)+"' AND '"+POut.PDate(endDate.AddDays(1),false)+"'"
-				+"AND aptstatus != '"+(int)ApptStatus.UnschedList+"' "
-				+"AND aptstatus != '"+(int)ApptStatus.Planned+"'";
-			return FillList(command).ToArray();
-		}
-
-		///<summary>Gets list of unscheduled appointments.  Allowed orderby: status, alph, date</summary>
-		public static Appointment[] RefreshUnsched(string orderby,int provNum) {
-			string command="SELECT * FROM appointment ";
-			if(orderby=="alph") {
-				command+="LEFT JOIN patient ON patient.PatNum=appointment.PatNum ";
-			}
-			command+="WHERE AptStatus = "+POut.PInt((int)ApptStatus.UnschedList)+" ";
-			if(provNum>0) {
-				command+="AND (appointment.ProvNum="+POut.PInt(provNum)+" OR appointment.ProvHyg="+POut.PInt(provNum)+") ";
-			}
-			if(orderby=="status") {
-				command+="ORDER BY UnschedStatus,AptDateTime";
-			}
-			else if(orderby=="alph") {
-				command+="ORDER BY LName,FName";
-			}
-			else { //if(orderby=="date"){
-				command+="ORDER BY AptDateTime";
-			}
-			return FillList(command).ToArray();
-		}
-
-		///<summary>Allowed orderby: status, alph, date</summary>
-		public static List<Appointment> RefreshPlannedTracker(string orderby,int provNum){
-			string command="SELECT tplanned.*,tregular.aptnum "
-				+"FROM appointment tplanned "
-				+"LEFT JOIN appointment tregular ON tplanned.aptnum = tregular.nextaptnum ";
-			if(orderby=="alph"){
-				command+="LEFT JOIN patient ON patient.PatNum=tplanned.PatNum ";
-			}
-			command+="WHERE tplanned.aptstatus = "+POut.PInt((int)ApptStatus.Planned)
-				+" AND tregular.aptnum IS NULL ";
-			if(provNum>0) {
-				command+="AND (tplanned.ProvNum="+POut.PInt(provNum)+" OR tplanned.ProvHyg="+POut.PInt(provNum)+") ";
-			}
-			if(orderby=="status"){
-				command+="ORDER BY tplanned.UnschedStatus,tplanned.AptDateTime";
-			}
-			else if(orderby=="alph"){
-				command+="ORDER BY LName,FName";
-			}
-			else{ //if(orderby=="date"){
-				command+="ORDER BY tplanned.AptDateTime";
-			}
-			return FillList(command);
-		}
-
-		///<summary>Returns all appointments for the given patient, ordered from earliest to latest.  Used in statements, appt cards, OtherAppts window, etc.</summary>
-		public static Appointment[] GetForPat(int patNum) {
-			string command=
-				"SELECT * FROM appointment "
-				+"WHERE patnum = '"+patNum.ToString()+"' "
-				+"ORDER BY AptDateTime";
-			return FillList(command).ToArray();
-		}
-
-		///<summary>Gets one appointment from db.  Returns null if not found.</summary>
-		public static Appointment GetOneApt(int aptNum) {
-			if(aptNum==0) {
-				return null;
-			}
-			string command="SELECT * FROM appointment "
-				+"WHERE AptNum = '"+POut.PInt(aptNum)+"'";
-			List<Appointment> list=FillList(command);
-			if(list.Count==0) {
-				return null;
-			}
-			return list[0];
-		}
-		public static Appointment GetScheduledPlannedApt(int aptNum) {
-			if(aptNum==0) {
-				return null;
-			}
-			string command="SELECT * FROM appointment "
-				+"WHERE NextAptNum = '"+POut.PInt(aptNum)+"'";
-			List<Appointment> list=FillList(command);
-			if(list.Count==0) {
-				return null;
-			}
-			return list[0];
-		}
-
-		///<summary>Gets a list of appointments for one day in the schedule for a given set of providers.</summary>
-		public static Appointment[] GetRouting(DateTime date,int[] provNums) {
-			string command=
-				"SELECT * FROM appointment "
-				+"WHERE AptDateTime LIKE '"+POut.PDate(date,false)+"%' "
-				+"AND aptstatus != '"+(int)ApptStatus.UnschedList+"' "
-				+"AND aptstatus != '"+(int)ApptStatus.Planned+"' "
-				+"AND (";
-			for(int i=0;i<provNums.Length;i++) {
-				if(i>0) {
-					command+=" OR";
-				}
-				command+=" ProvNum="+POut.PInt(provNums[i])
-					+" OR ProvHyg="+POut.PInt(provNums[i]);
-			}
-			command+=") ORDER BY AptDateTime";
-			return FillList(command).ToArray();
-		}
-
-		///<summary>Returns a list of Appointments using the supplied SQL command.</summary>
-		private static List<Appointment> FillList(string command) {
-			DataTable table=General.GetTable(command);
-			return AppointmentB.TableToObjects(table);
-		}
-
+	public class Appointment_client {
 		public static DataSet GetApptEdit(int aptNum){
 			return Gen.GetDS(MethodNameDS.Appointment_GetApptEdit,aptNum);
 		}
@@ -158,391 +34,11 @@ namespace OpenDental{
 			return Gen.GetDS(MethodNameDS.Appointment_RefreshOneApt,aptNum,isPlanned).Tables["Appointments"].Copy();
 		}
 
-		///<summary>Called when closing FormApptEdit with an OK in order to reattach the procedures to the appointment.</summary>
-		public static void UpdateAttached(int aptNum,int[] procNums,bool isPlanned){
-			//detach all procs from this appt.
-			string command;
-			if(isPlanned){
-				command="UPDATE procedurelog SET PlannedAptNum=0 WHERE PlannedAptNum="+POut.PInt(aptNum);
-			}
-			else{
-				command="UPDATE procedurelog SET AptNum=0 WHERE AptNum="+POut.PInt(aptNum);
-			}
-			General.NonQ(command);
-			//now, attach all
-			for(int i=0;i<procNums.Length;i++){
-				if(isPlanned) {
-					command="UPDATE procedurelog SET PlannedAptNum="+POut.PInt(aptNum)+" WHERE ProcNum="+POut.PInt(procNums[i]);
-				}
-				else {
-					command="UPDATE procedurelog SET AptNum="+POut.PInt(aptNum)+" WHERE ProcNum="+POut.PInt(procNums[i]);
-				}
-				General.NonQ(command);
-			}
-		}
-
-		///<summary>If IsNew, just supply null for oldApt.</summary>
-		public static void InsertOrUpdate(Appointment appt, Appointment oldApt,bool IsNew){
-			//if(){
-				//throw new Exception(Lan.g(this,""));
-			//}
-			if(IsNew){
-				Insert(appt);
-			}
-			else{
-				if(oldApt==null){
-					throw new ApplicationException("oldApt cannot be null if updating.");
-				}
-				Update(appt,oldApt);
-			}
-		}
-
-		///<summary></summary>
-		private static void Insert(Appointment appt){
-			//make sure all fields are properly filled:
-			if(appt.Confirmed==0){
-				appt.Confirmed=DefC.Short[(int)DefCat.ApptConfirmed][0].DefNum;
-			}
-			if(appt.ProvNum==0){
-				appt.ProvNum=Providers.List[0].ProvNum;
-			}
-			//now, save to db----------------------------------------------------------------------------------------
-			if(PrefC.RandomKeys){
-				appt.AptNum=MiscData.GetKey("appointment","AptNum");
-			}
-			string command="INSERT INTO appointment (";
-			if(PrefC.RandomKeys){
-				command+="AptNum,";
-			}
-			command+="patnum,aptstatus, "
-				+"pattern,confirmed,addtime,op,note,provnum,"
-				+"provhyg,aptdatetime,nextaptnum,unschedstatus,lab,isnewpatient,procdescript,"
-				+"Assistant,InstructorNum,SchoolClassNum,SchoolCourseNum,GradePoint,ClinicNum,IsHygiene) VALUES(";
-			if(PrefC.RandomKeys){
-				command+="'"+POut.PInt(appt.AptNum)+"', ";
-			}
-			command+=
-				 "'"+POut.PInt   (appt.PatNum)+"', "
-				+"'"+POut.PInt   ((int)appt.AptStatus)+"', "
-				+"'"+POut.PString(appt.Pattern)+"', "
-				+"'"+POut.PInt   (appt.Confirmed)+"', "
-				+"'"+POut.PInt   (appt.AddTime)+"', "
-				+"'"+POut.PInt   (appt.Op)+"', "
-				+"'"+POut.PString(appt.Note)+"', "
-				+"'"+POut.PInt   (appt.ProvNum)+"', "
-				+"'"+POut.PInt   (appt.ProvHyg)+"', "
-				+POut.PDateT (appt.AptDateTime)+", "
-				+"'"+POut.PInt   (appt.NextAptNum)+"', "
-				+"'"+POut.PInt   (appt.UnschedStatus)+"', "
-				+"'"+POut.PInt   (appt.LabOld)+"', "
-				+"'"+POut.PBool  (appt.IsNewPatient)+"', "
-				+"'"+POut.PString(appt.ProcDescript)+"', "
-				+"'"+POut.PInt   (appt.Assistant)+"', "
-				+"'"+POut.PInt   (appt.InstructorNum)+"', "
-				+"'"+POut.PInt   (appt.SchoolClassNum)+"', "
-				+"'"+POut.PInt   (appt.SchoolCourseNum)+"', "
-				+"'"+POut.PFloat (appt.GradePoint)+"', "
-				+"'"+POut.PInt   (appt.ClinicNum)+"', "
-				+"'"+POut.PBool  (appt.IsHygiene)+"')";
-			if(PrefC.RandomKeys){
-				General.NonQ(command);
-			}
-			else{
-				appt.AptNum=General.NonQ(command,true);
-			}
-		}
-
-		//public static void SaveData(Appointment apt) {
-
-		//}
-
-		///<summary>Updates only the changed columns and returns the number of rows affected.  Supply an oldApt for comparison.</summary>
-		public static int Update(Appointment appt, Appointment oldApt){
-			bool comma=false;
-			string c = "UPDATE appointment SET ";
-			if(appt.PatNum!=oldApt.PatNum){
-				c+="PatNum = '"      +POut.PInt   (appt.PatNum)+"'";
-				comma=true;
-			}
-			if(appt.AptStatus!=oldApt.AptStatus){
-				if(comma) c+=",";
-				c+="AptStatus = '"   +POut.PInt   ((int)appt.AptStatus)+"'";
-				comma=true;
-			}
-			if(appt.Pattern!=oldApt.Pattern){
-				if(comma) c+=",";
-				c+="Pattern = '"     +POut.PString(appt.Pattern)+"'";
-				comma=true;
-			}
-			if(appt.Confirmed!=oldApt.Confirmed){
-				if(comma) c+=",";
-				c+="Confirmed = '"   +POut.PInt   (appt.Confirmed)+"'";
-				comma=true;
-			}
-			if(appt.AddTime!=oldApt.AddTime){
-				if(comma) c+=",";
-				c+="AddTime = '"     +POut.PInt   (appt.AddTime)+"'";
-				comma=true;
-			}
-			if(appt.Op!=oldApt.Op){
-				if(comma) c+=",";
-				c+="Op = '"          +POut.PInt   (appt.Op)+"'";
-				comma=true;
-			}
-			if(appt.Note!=oldApt.Note){
-				if(comma) c+=",";
-				c+="Note = '"        +POut.PString(appt.Note)+"'";
-				comma=true;
-			}
-			if(appt.ProvNum!=oldApt.ProvNum){
-				if(comma) c+=",";
-				c+="ProvNum = '"     +POut.PInt   (appt.ProvNum)+"'";
-				comma=true;
-			}
-			if(appt.ProvHyg!=oldApt.ProvHyg){
-				if(comma) c+=",";
-				c+="ProvHyg = '"     +POut.PInt   (appt.ProvHyg)+"'";
-				comma=true;
-			}
-			if(appt.AptDateTime!=oldApt.AptDateTime){
-				if(comma) c+=",";
-				c+="AptDateTime = " +POut.PDateT (appt.AptDateTime)+"";
-				comma=true;
-			}
-			if(appt.NextAptNum!=oldApt.NextAptNum){
-				if(comma) c+=",";
-				c+="NextAptNum = '"  +POut.PInt   (appt.NextAptNum)+"'";
-				comma=true;
-			}
-			if(appt.UnschedStatus!=oldApt.UnschedStatus){
-				if(comma) c+=",";
-				c+="UnschedStatus = '" +POut.PInt(appt.UnschedStatus)+"'";
-				comma=true;
-			}
-			//if(appt.Lab!=oldApt.Lab){
-			//	if(comma) c+=",";
-			//	c+="Lab = '"         +POut.PInt   ((int)appt.Lab)+"'";
-			//	comma=true;
-			//}
-			if(appt.IsNewPatient!=oldApt.IsNewPatient){
-				if(comma) c+=",";
-				c+="IsNewPatient = '"+POut.PBool  (appt.IsNewPatient)+"'";
-				comma=true;
-			}
-			if(appt.ProcDescript!=oldApt.ProcDescript){
-				if(comma) c+=",";
-				c+="ProcDescript = '"+POut.PString(appt.ProcDescript)+"'";
-				comma=true;
-			}
-			if(appt.Assistant!=oldApt.Assistant){
-				if(comma) c+=",";
-				c+="Assistant = '"   +POut.PInt   (appt.Assistant)+"'";
-				comma=true;
-			}
-			if(appt.InstructorNum!=oldApt.InstructorNum){
-				if(comma) c+=",";
-				c+="InstructorNum = '"   +POut.PInt   (appt.InstructorNum)+"'";
-				comma=true;
-			}
-			if(appt.SchoolClassNum!=oldApt.SchoolClassNum){
-				if(comma) c+=",";
-				c+="SchoolClassNum = '"   +POut.PInt   (appt.SchoolClassNum)+"'";
-				comma=true;
-			}
-			if(appt.SchoolCourseNum!=oldApt.SchoolCourseNum){
-				if(comma) c+=",";
-				c+="SchoolCourseNum = '"   +POut.PInt   (appt.SchoolCourseNum)+"'";
-				comma=true;
-			}
-			if(appt.GradePoint!=oldApt.GradePoint){
-				if(comma) c+=",";
-				c+="GradePoint = '"   +POut.PFloat  (appt.GradePoint)+"'";
-				comma=true;
-			}
-			if(appt.ClinicNum!=oldApt.ClinicNum){
-				if(comma) c+=",";
-				c+="ClinicNum = '"   +POut.PInt  (appt.ClinicNum)+"'";
-				comma=true;
-			}
-			if(appt.IsHygiene!=oldApt.IsHygiene){
-				if(comma) c+=",";
-				c+="IsHygiene = '"   +POut.PBool (appt.IsHygiene)+"'";
-				comma=true;
-			}
-			if(!comma)
-				return 0;//this means no change is actually required.
-			c+=" WHERE AptNum = '"+POut.PInt(appt.AptNum)+"'";
- 			int rowsChanged=General.NonQ(c);
-			//MessageBox.Show(c);
-			return rowsChanged;
-		}
-
-		///<summary></summary>
-		public static void Delete(int aptNum){
-			string command;
-			command="SELECT PatNum,IsNewPatient,AptStatus FROM appointment WHERE AptNum="+POut.PInt(aptNum);
-			DataTable table=General.GetTable(command);
-			Patient pat=Patients.GetPat(PIn.PInt(table.Rows[0]["PatNum"].ToString()));
-			if(table.Rows[0]["IsNewPatient"].ToString()=="1"){
-				Procedures.SetDateFirstVisit(DateTime.MinValue,3,pat);
-			}
-			//procs
-			if(table.Rows[0]["AptStatus"].ToString()=="6"){//planned
-				command="UPDATE procedurelog SET PlannedAptNum =0 WHERE PlannedAptNum = "+POut.PInt(aptNum);
-			}
-			else{
-				command="UPDATE procedurelog SET AptNum =0 WHERE AptNum = "+POut.PInt(aptNum);
-			}
-			General.NonQ(command);
-			//labcases
-			if(table.Rows[0]["AptStatus"].ToString()=="6") {//planned
-				command="UPDATE labcase SET PlannedAptNum =0 WHERE PlannedAptNum = "+POut.PInt(aptNum);
-			}
-			else {
-				command="UPDATE labcase SET AptNum =0 WHERE AptNum = "+POut.PInt(aptNum);
-			}
-			General.NonQ(command);
-			command="DELETE FROM appointment WHERE AptNum = "+POut.PInt(aptNum);
- 			General.NonQ(command);
-		}
-
-		///<summary>Used in Chart module to test whether a procedure is attached to an appointment with today's date. The procedure might have a different date if still TP status.  ApptList should include all appointments for this patient. Does not make a call to db.</summary>
-		public static bool ProcIsToday(Appointment[] apptList,Procedure proc){
-			for(int i=0;i<apptList.Length;i++){
-				if(apptList[i].AptDateTime.Date==DateTime.Today
-					&& apptList[i].AptNum==proc.AptNum
-					&& (apptList[i].AptStatus==ApptStatus.Scheduled
-					|| apptList[i].AptStatus==ApptStatus.ASAP
-					|| apptList[i].AptStatus==ApptStatus.Broken
-					|| apptList[i].AptStatus==ApptStatus.Complete))
-				{
-					return true;
-				}
-			}
-			return false;
-		}
-
-
-		///<summary>Used in FormConfirmList</summary>
-		public static DataTable GetConfirmList(DateTime dateFrom,DateTime dateTo,int provNum){
-			DataTable table=new DataTable();
-			DataRow row;
-			//columns that start with lowercase are altered for display rather than being raw data.
-			table.Columns.Add("AddrNote");
-			table.Columns.Add("AptNum");
-			table.Columns.Add("age");
-			table.Columns.Add("aptDateTime");
-			table.Columns.Add("confirmed");
-			table.Columns.Add("contactMethod");
-			table.Columns.Add("Guarantor");
-			table.Columns.Add("medNotes");
-			table.Columns.Add("Note");
-			table.Columns.Add("patientName");
-			table.Columns.Add("PatNum");
-			table.Columns.Add("ProcDescript");
-			List<DataRow> rows=new List<DataRow>();
-			string command="SELECT patient.PatNum,"//0
-				+"patient.LName,"//1-LName
-				+"patient.FName,patient.Preferred,patient.LName, "//2-patientName
-				+"Guarantor,AptDateTime,Birthdate,HmPhone,"//3-6
-				+"WkPhone,WirelessPhone,ProcDescript,Confirmed,Note,"//7-11
-				+"AddrNote,AptNum,MedUrgNote,PreferConfirmMethod,Email,Premed "//12-14
-				+"FROM patient,appointment "
-				+"WHERE patient.PatNum=appointment.PatNum "
-				+"AND AptDateTime > "+POut.PDate(dateFrom)+" "
-				+"AND AptDateTime < "+POut.PDate(dateTo.AddDays(1))+" "
-				+"AND (AptStatus=1 "//scheduled
-				+"OR AptStatus=4) ";//ASAP
-			if(provNum>0){
-				command+="AND (appointment.ProvNum="+POut.PInt(provNum)+" OR appointment.ProvHyg="+POut.PInt(provNum)+") ";
-			}
-			command+="ORDER BY AptDateTime";
-			DataTable rawtable=General.GetTable(command);
-			DateTime dateT;
-			Patient pat;
-			ContactMethod contmeth;
-			for(int i=0;i<rawtable.Rows.Count;i++) {
-				row=table.NewRow();
-				row["AddrNote"]=rawtable.Rows[i]["AddrNote"].ToString();
-				row["AptNum"]=rawtable.Rows[i]["AptNum"].ToString();
-				row["age"]=Patients.DateToAge(PIn.PDate(rawtable.Rows[i]["Birthdate"].ToString())).ToString();//we don't care about m/y.
-				dateT=PIn.PDateT(rawtable.Rows[i]["AptDateTime"].ToString());
-				row["aptDateTime"]=dateT.ToShortDateString()+"\r\n"+dateT.ToShortTimeString();
-				row["confirmed"]=DefC.GetName(DefCat.ApptConfirmed,PIn.PInt(rawtable.Rows[i]["Confirmed"].ToString()));
-				contmeth=(ContactMethod)PIn.PInt(rawtable.Rows[i]["PreferConfirmMethod"].ToString());
-				if(contmeth==ContactMethod.None || contmeth==ContactMethod.HmPhone) {
-					row["contactMethod"]=Lan.g("FormConfirmList","Hm:")+rawtable.Rows[i]["HmPhone"].ToString();
-				}
-				if(contmeth==ContactMethod.WkPhone) {
-					row["contactMethod"]=Lan.g("FormConfirmList","Wk:")+rawtable.Rows[i]["WkPhone"].ToString();
-				}
-				if(contmeth==ContactMethod.WirelessPh) {
-					row["contactMethod"]=Lan.g("FormConfirmList","Cell:")+rawtable.Rows[i]["WirelessPhone"].ToString();
-				}
-				if(contmeth==ContactMethod.Email) {
-					row["contactMethod"]=rawtable.Rows[i]["Email"].ToString();
-				}
-				if(contmeth==ContactMethod.DoNotCall || contmeth==ContactMethod.SeeNotes) {
-					row["contactMethod"]=Lan.g("enumContactMethod",contmeth.ToString());
-				}
-				row["Guarantor"]=rawtable.Rows[i]["Guarantor"].ToString();
-				row["medNotes"]="";
-				if(rawtable.Rows[i]["Premed"].ToString()=="1"){
-					row["medNotes"]=Lan.g("FormConfirmList","Premedicate");
-				}
-				if(rawtable.Rows[i]["MedUrgNote"].ToString()!=""){
-					if(row["medNotes"].ToString()!="") {
-						row["medNotes"]+="\r\n";
-					}
-					row["medNotes"]+=rawtable.Rows[i]["MedUrgNote"].ToString();
-				}
-				row["Note"]=rawtable.Rows[i]["Note"].ToString();
-				pat=new Patient();
-				pat.LName=rawtable.Rows[i]["LName"].ToString();
-				pat.FName=rawtable.Rows[i]["FName"].ToString();
-				pat.Preferred=rawtable.Rows[i]["Preferred"].ToString();
-				row["patientName"]=pat.LName+"\r\n";
-				if(pat.Preferred!=""){
-					row["patientName"]+="'"+pat.Preferred+"'";
-				}
-				else{
-					row["patientName"]+=pat.FName;
-				}
-					//pat.GetNameLF();
-				row["PatNum"]=rawtable.Rows[i]["PatNum"].ToString();
-				row["ProcDescript"]=rawtable.Rows[i]["ProcDescript"].ToString();
-				rows.Add(row);
-			}
-			//Array.Sort(orderDate,RecallList);
-			//return RecallList;
-			for(int i=0;i<rows.Count;i++) {
-				table.Rows.Add(rows[i]);
-			}
-			return table;
-		}
-
-		///<summary>Used in Confirm list to just get addresses.</summary>
-		public static DataTable GetAddrTable(int[] aptNums){
-			string command="SELECT patient.LName,patient.FName,patient.MiddleI,patient.Preferred,"
-				+"patient.Address,patient.Address2,patient.City,patient.State,patient.Zip,appointment.AptDateTime "
-				+"FROM patient,appointment "
-				+"WHERE patient.PatNum=appointment.PatNum "
-				+"AND (";
-			for(int i=0;i<aptNums.Length;i++){
-				if(i>0){
-					command+=" OR ";
-				}
-				command+="appointment.AptNum="+aptNums[i].ToString();
-			}
-			command+=") ORDER BY patient.LName,patient.FName";
-			return General.GetTable(command);
-		}
-
 		///<summary>Used by appt search function.  Returns the next available time for the appointment.  Starts searching on lastSlot, which can be tonight at midnight for the first search.  Then, each subsequent search will start at the time of the previous search plus the length of the appointment.  Provider array cannot be length 0.  Might return array of 0 if it goes more than 2 years into the future.</summary>
 		public static DateTime[] GetSearchResults(int aptNum,DateTime afterDate,int[] providers,int resultCount,
 			TimeSpan beforeTime,TimeSpan afterTime)
 		{
-			Appointment apt=GetOneApt(aptNum);
+			Appointment apt=Appointments.GetOneApt(aptNum);
 			DateTime dayEvaluating=afterDate.AddDays(1);
 			Appointment[] aptList;//list of appointments for one day
 			ArrayList ALresults=new ArrayList();//result Date/Times
@@ -564,7 +60,7 @@ namespace OpenDental{
 					provBarSched[i]=new bool[24*ContrApptSheet.RowsPerHr];
 				}
 				//get appointments for one day
-				aptList=GetForPeriod(dayEvaluating,dayEvaluating);
+				aptList=Appointments.GetForPeriod(dayEvaluating,dayEvaluating);
 				//fill provBar
 				for(int i=0;i<aptList.Length;i++){
 					if(aptList[i].IsHygiene){
@@ -680,7 +176,36 @@ namespace OpenDental{
 				*(double)ContrApptSheet.Lh*ContrApptSheet.RowsPerIncr)
 				/ContrApptSheet.Lh;//rounds down
 		}
- 
+
+		///<summary></summary>
+		public static void Delete(int aptNum){
+			string command;
+			command="SELECT PatNum,IsNewPatient,AptStatus FROM appointment WHERE AptNum="+POut.PInt(aptNum);
+			DataTable table=General.GetTable(command);
+			Patient pat=Patients.GetPat(PIn.PInt(table.Rows[0]["PatNum"].ToString()));
+			if(table.Rows[0]["IsNewPatient"].ToString()=="1"){
+				Procedures.SetDateFirstVisit(DateTime.MinValue,3,pat);
+			}
+			//procs
+			if(table.Rows[0]["AptStatus"].ToString()=="6"){//planned
+				command="UPDATE procedurelog SET PlannedAptNum =0 WHERE PlannedAptNum = "+POut.PInt(aptNum);
+			}
+			else{
+				command="UPDATE procedurelog SET AptNum =0 WHERE AptNum = "+POut.PInt(aptNum);
+			}
+			General.NonQ(command);
+			//labcases
+			if(table.Rows[0]["AptStatus"].ToString()=="6") {//planned
+				command="UPDATE labcase SET PlannedAptNum =0 WHERE PlannedAptNum = "+POut.PInt(aptNum);
+			}
+			else {
+				command="UPDATE labcase SET AptNum =0 WHERE AptNum = "+POut.PInt(aptNum);
+			}
+			General.NonQ(command);
+			command="DELETE FROM appointment WHERE AptNum = "+POut.PInt(aptNum);
+ 			General.NonQ(command);
+		}
+
 		///<summary>Used by UI when it needs a recall appointment placed on the pinboard ready to schedule.  This method creates the appointment and attaches all appropriate procedures.  It's up to the calling class to then place the appointment on the pinboard.  If the appointment doesn't get scheduled, it's important to delete it.</summary>
 		public static Appointment CreateRecallApt(Patient patCur,Procedure[] procList,Recall recallCur,InsPlan[] planList){
 			Appointment AptCur=new Appointment();
@@ -991,41 +516,5 @@ namespace OpenDental{
 			}
 			return retVal;
 		}
-
-		///<summary>The newStatus will be a DefNum or 0.</summary>
-		public static void SetConfirmed(int aptNum,int newStatus){
-			string command="UPDATE appointment SET Confirmed="+POut.PInt(newStatus)
-				+" WHERE AptNum="+POut.PInt(aptNum);
-			General.NonQ(command);
-		}
-
-		///<summary>Sets the new pattern for an appointment.  This is how resizing is done.  Must contain only / and X, with each char representing 5 minutes.</summary>
-		public static void SetPattern(int aptNum,string newPattern) {
-			string command="UPDATE appointment SET Pattern='"+POut.PString(newPattern)+"' WHERE AptNum="+POut.PInt(aptNum);
-			General.NonQ(command);
-		}
-
-		///<summary>Use to send to unscheduled list, or to set broken.</summary>
-		public static void SetAptStatus(int aptNum,ApptStatus newStatus) {
-			string command="UPDATE appointment SET AptStatus="+POut.PInt((int)newStatus)
-				+" WHERE AptNum="+POut.PInt(aptNum);
-			General.NonQ(command);
-		}
-
-
-
 	}
-	
-	
-
-
 }
-
-
-
-
-
-
-
-
-

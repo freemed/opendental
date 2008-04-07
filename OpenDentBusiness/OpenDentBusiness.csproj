@@ -138,7 +138,7 @@
     <Compile Include="Lan.cs" />
     <Compile Include="Logic\aaLogic.cs" />
     <Compile Include="Data Interface\AccountModules.cs" />
-    <Compile Include="Logic\AppointmentB.cs" />
+    <Compile Include="Data Interface\Appointments.cs" />
     <Compile Include="Logic\BenefitB.cs" />
     <Compile Include="Logic\ChartModuleB.cs" />
     <Compile Include="Logic\CovCatB.cs" />
