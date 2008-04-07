@@ -34,7 +34,7 @@ namespace OpenDental{
 		public bool IsNew=false;
 		private OpenDental.ValidDate textDate;
 		private OpenDental.ValidDouble textAmount;
-		private Adjustments Adjustments=new Adjustments();
+		//private Adjustments Adjustments=new Adjustments();
 		private System.Windows.Forms.Label label8;
 		private System.Windows.Forms.ListBox listPayType;
 		private double tot=0;

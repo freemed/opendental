@@ -2,10 +2,10 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Data;
-using System.Windows.Forms;
+//using System.Windows.Forms;
 using OpenDentBusiness;
 
-namespace OpenDental{
+namespace OpenDentBusiness{
 	///<summary>Handles database commands related to the adjustment table in the db.</summary>
 	public class Adjustments {
 
@@ -50,7 +50,7 @@ namespace OpenDental{
 				+POut.PDate  (adj.ProcDate)+", "
 				+"'"+POut.PInt   (adj.ProcNum)+"', ";
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
-				command+=POut.PDateT(MiscData.GetNowDateTime());
+				command+=POut.PDateT(MiscDataB.GetNowDateTime());
 			}else{//Assume MySQL
 				command+="NOW()";//DateEntry set to server date
 			}

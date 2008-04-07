@@ -60,6 +60,8 @@ namespace OpenDentBusiness {
 					return Accounts.RefreshCache();
 				case  MethodNameTable.Definition_RefreshCache:
 					return Defs.RefreshCache();
+				case  MethodNameTable.Prefs_RefreshCache:
+					return Prefs.RefreshCache();
 				case  MethodNameTable.Providers_RefreshCache:
 					return Providers.RefreshCache();
 			}
