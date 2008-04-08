@@ -86,7 +86,7 @@ namespace OpenDental{
 			for(int i=0;i<logList.Length;i++){
 				row=new ODGridRow();
 				row.Cells.Add(logList[i].LogDateTime.ToShortDateString()+" "+logList[i].LogDateTime.ToShortTimeString());
-				row.Cells.Add(UserodB.GetUser(logList[i].UserNum).UserName);
+				row.Cells.Add(Userods.GetUser(logList[i].UserNum).UserName);
 				row.Cells.Add(logList[i].PermType.ToString());
 				row.Cells.Add(logList[i].LogText);
 				grid.Rows.Add(row);

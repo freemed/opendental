@@ -86,7 +86,7 @@ namespace OpenDental{
 				note.ProcNum=proc.ProcNum;
 				note.UserNum=proc.UserNum;
 				note.Note=proc.Note;
-				ProcNoteB.Insert(note);
+				ProcNotes.Insert(note);
 			}
 		}
 
@@ -308,7 +308,7 @@ namespace OpenDental{
 				note.Note=proc.Note;
 				note.SigIsTopaz=proc.SigIsTopaz;
 				note.Signature=proc.Signature;
-				ProcNoteB.Insert(note);
+				ProcNotes.Insert(note);
 			}
 			return rowsChanged;
 			/*

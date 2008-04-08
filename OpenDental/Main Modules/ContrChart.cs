@@ -2986,7 +2986,7 @@ namespace OpenDental{
 			//Age
 			row=new ODGridRow();
 			row.Cells.Add(Lan.g("TableChartPtInfo","Age"));
-			row.Cells.Add(PatientB.DateToAgeString(PatCur.Birthdate));
+			row.Cells.Add(PatientL.DateToAgeString(PatCur.Birthdate));
 			row.Tag=null;
 			gridPtInfo.Rows.Add(row);
 			//Credit type

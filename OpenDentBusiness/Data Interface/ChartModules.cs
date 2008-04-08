@@ -128,7 +128,7 @@ namespace OpenDentBusiness {
 							row["note"]+="\r\n------------------------------------------------------\r\n";//start a new line
 						}
 						row["note"]+=PIn.PDateT(rawNotes.Rows[n]["EntryDateTime"].ToString()).ToString();
-						row["note"]+="  "+UserodB.GetName(PIn.PInt(rawNotes.Rows[n]["UserNum"].ToString()));
+						row["note"]+="  "+Userods.GetName(PIn.PInt(rawNotes.Rows[n]["UserNum"].ToString()));
 						if(rawNotes.Rows[n]["SigPresent"].ToString()=="1") {
 							row["note"]+="  "+Lan.g("ChartModule","(signed)");
 						}
@@ -140,7 +140,7 @@ namespace OpenDentBusiness {
 						if(rawProcs.Rows[i]["ProcNum"].ToString() != rawNotes.Rows[n]["ProcNum"].ToString()) {
 							continue;
 						}
-						row["user"]		 =UserodB.GetName(PIn.PInt(rawNotes.Rows[n]["UserNum"].ToString()));
+						row["user"]		 =Userods.GetName(PIn.PInt(rawNotes.Rows[n]["UserNum"].ToString()));
 						row["note"]		 =rawNotes.Rows[n]["Note"].ToString();
 						if(rawNotes.Rows[n]["SigPresent"].ToString()=="1") {
 							row["signature"]=Lan.g("ChartModule","Signed");
@@ -230,7 +230,7 @@ namespace OpenDentBusiness {
 				row["ProcNum"]=0;
 				row["RxNum"]=0;
 				row["TaskNum"]=0;
-				row["user"]=UserodB.GetName(PIn.PInt(rawComm.Rows[i]["UserNum"].ToString()));
+				row["user"]=Userods.GetName(PIn.PInt(rawComm.Rows[i]["UserNum"].ToString()));
 				rows.Add(row);
 			}
 			//Rx------------------------------------------------------------------------------------------------------------------
@@ -510,7 +510,7 @@ namespace OpenDentBusiness {
 		public static int CompareChartRows(DataRow x,DataRow y){
 			if(x["ProcNum"].ToString()!="0" && y["ProcNum"].ToString()!="0") {//if both are procedures
 				if(((DateTime)x["ProcDate"]).Date==((DateTime)y["ProcDate"]).Date) {//and the dates are the same
-					return ProcedureB.CompareProcedures(x,y);
+					return ProcedureL.CompareProcedures(x,y);
 					//IComparer procComparer=new ProcedureComparer();
 					//return procComparer.Compare(x,y);//sort by priority, toothnum, procCode
 					//return 0;

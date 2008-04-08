@@ -188,9 +188,9 @@ namespace OpenDental{
 			listUser.BeginUpdate();
 			listUser.Items.Clear();
 			shortList=new List<Userod>();
-			for(int i=0;i<Userods.Listt.Count;i++){
-				if(!Userods.Listt[i].IsHidden){
-					shortList.Add(Userods.Listt[i]);
+			for(int i=0;i<UserodC.Listt.Count;i++){
+				if(!UserodC.Listt[i].IsHidden){
+					shortList.Add(UserodC.Listt[i]);
 				}
 			}
 			for(int i=0;i<shortList.Count;i++){
@@ -208,7 +208,7 @@ namespace OpenDental{
 		private void butOK_Click(object sender,System.EventArgs e) {
 			Userod selectedUser = (Userod)listUser.SelectedItem;
 			if(selectedUser.Password != "") {
-				if(!UserodB.CheckPassword(textPassword.Text,selectedUser.Password)) {
+				if(!Userods.CheckPassword(textPassword.Text,selectedUser.Password)) {
 					MsgBox.Show(this,"Incorrect password");
 					return;
 				}

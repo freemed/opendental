@@ -193,7 +193,7 @@ namespace OpenDental{
 				hashedResult="";
 			}
 			else{
-				hashedResult=UserodB.EncryptPassword(textPassword.Text);
+				hashedResult=Userods.EncryptPassword(textPassword.Text);
 			}
 			//MessageBox.Show(hashedResult);
 			DialogResult=DialogResult.OK;

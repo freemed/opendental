@@ -62,19 +62,19 @@ namespace OpenDental{
 		private static DateTime GetDateLimit(Permissions permType,int userGroupNum){
 			DateTime nowDate=MiscData.GetNowDateTime().Date;
 			DateTime retVal=DateTime.MinValue;
-			for(int i=0;i<GroupPermissions.List.Length;i++){
-				if(GroupPermissions.List[i].UserGroupNum!=userGroupNum || GroupPermissions.List[i].PermType!=permType){
+			for(int i=0;i<GroupPermissionC.List.Length;i++){
+				if(GroupPermissionC.List[i].UserGroupNum!=userGroupNum || GroupPermissionC.List[i].PermType!=permType){
 					continue;
 				}
 				//this should only happen once.  One match.
-				if(GroupPermissions.List[i].NewerDate.Year>1880){
-					retVal=GroupPermissions.List[i].NewerDate;
+				if(GroupPermissionC.List[i].NewerDate.Year>1880){
+					retVal=GroupPermissionC.List[i].NewerDate;
 				}
-				if(GroupPermissions.List[i].NewerDays==0){//do not restrict by days
+				if(GroupPermissionC.List[i].NewerDays==0){//do not restrict by days
 					//do not change retVal
 				}
-				else if(nowDate.AddDays(-GroupPermissions.List[i].NewerDays)>retVal){
-					retVal=nowDate.AddDays(-GroupPermissions.List[i].NewerDays);
+				else if(nowDate.AddDays(-GroupPermissionC.List[i].NewerDays)>retVal){
+					retVal=nowDate.AddDays(-GroupPermissionC.List[i].NewerDays);
 				}
 			}
 			return retVal;

@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Text;
 
 namespace OpenDentBusiness {
-	public class ProcNoteB{
+	public class ProcNotes{
 		public static void Insert(ProcNote procNote){
 			if(PrefC.RandomKeys) {
 				procNote.ProcNoteNum=MiscData.GetKey("procnote","ProcNoteNum");

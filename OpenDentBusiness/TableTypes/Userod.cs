@@ -32,7 +32,7 @@ namespace OpenDentBusiness{
 		}
 	}
 
-	public class DtoUserodRefresh:DtoQueryBase {
-	}
+	//public class DtoUserodRefresh:DtoQueryBase {
+	//}
 
 }

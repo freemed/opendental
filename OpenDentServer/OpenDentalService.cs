@@ -74,7 +74,7 @@ namespace OpenDentServer {
 				throw new Exception(@"Connection to database failed.  Check the values in the config file on the server, usually at C:\Program Files\Open Dental Server\OpenDentServerConfig.xml");
 			}
 			//Then, check username and password
-			if(!UserodB.CheckUserAndPassword(oduser,odpasshash)) {
+			if(!Userods.CheckUserAndPassword(oduser,odpasshash)) {
 				throw new Exception("Invalid username or password.");
 			}
 			return 0;//meaningless

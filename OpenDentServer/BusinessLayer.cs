@@ -19,9 +19,6 @@ namespace OpenDentServer {
 			else if(type==typeof(DtoGeneralGetDataSet)) {
 				return DataCore.GetDataSet(((DtoGeneralGetDataSet)dto).Commands);
 			}
-			else if(type==typeof(DtoUserodRefresh)) {
-				return UserodB.Refresh();
-			}
 			else{
 				throw new Exception("OpenDentServer.BusinessLayer.ProcessObject(dto) is missing a case for "
 					+dto.GetType().ToString());

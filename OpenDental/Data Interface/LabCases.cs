@@ -39,7 +39,7 @@ namespace OpenDental{
 				row["aptDateTime"]=AptDateTime.ToShortDateString()+" "+AptDateTime.ToShortTimeString();
 				row["lab"]=raw.Rows[i]["Description"].ToString();
 				row["LabCaseNum"]=raw.Rows[i]["LabCaseNum"].ToString();
-				row["patient"]=PatientB.GetNameLF(raw.Rows[i]["LName"].ToString(),raw.Rows[i]["FName"].ToString(),
+				row["patient"]=PatientL.GetNameLF(raw.Rows[i]["LName"].ToString(),raw.Rows[i]["FName"].ToString(),
 					raw.Rows[i]["Preferred"].ToString(),raw.Rows[i]["MiddleI"].ToString());
 				row["phone"]=raw.Rows[i]["Phone"].ToString();
 				row["ProcDescript"]=raw.Rows[i]["ProcDescript"].ToString();

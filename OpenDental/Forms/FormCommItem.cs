@@ -278,7 +278,7 @@ namespace OpenDental{
 
 		private void FormCommItem_Load(object sender, System.EventArgs e) {
 			textPatientName.Text=Patients.GetLim(CommlogCur.PatNum).GetNameFL();
-			textUser.Text=UserodB.GetName(CommlogCur.UserNum);//might be blank. 
+			textUser.Text=Userods.GetName(CommlogCur.UserNum);//might be blank. 
 			textDateTime.Text=CommlogCur.CommDateTime.ToString();
 			//there will usually be a commtype set before this dialog is opened
 			for(int i=0;i<DefC.Short[(int)DefCat.CommLogTypes].Length;i++){

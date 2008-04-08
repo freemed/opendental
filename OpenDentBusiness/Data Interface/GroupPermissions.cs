@@ -4,24 +4,26 @@ using System.Data;
 using System.Windows.Forms;
 using OpenDentBusiness;
 
-namespace OpenDental{
+namespace OpenDentBusiness{
 	///<summary></summary>
 	public class GroupPermissions {
-		///<summary>A list of all GroupPermissions for all groups.</summary>
-		public static GroupPermission[] List;
-
 		///<summary></summary>
-		public static void Refresh() {
+		public static DataTable RefreshCache() {
 			string command="SELECT * from grouppermission";
 			DataTable table=General.GetTable(command);
-			List=new GroupPermission[table.Rows.Count];
-			for(int i=0;i<List.Length;i++) {
-				List[i]=new GroupPermission();
-				List[i].GroupPermNum  = PIn.PInt(table.Rows[i][0].ToString());
-				List[i].NewerDate     = PIn.PDate(table.Rows[i][1].ToString());
-				List[i].NewerDays     = PIn.PInt(table.Rows[i][2].ToString());
-				List[i].UserGroupNum  = PIn.PInt(table.Rows[i][3].ToString());
-				List[i].PermType      =(Permissions)PIn.PInt(table.Rows[i][4].ToString());
+			FillCache(table);
+			return table;
+		}
+
+		public static void FillCache(DataTable table){
+			GroupPermissionC.List=new GroupPermission[table.Rows.Count];
+			for(int i=0;i<GroupPermissionC.List.Length;i++) {
+				GroupPermissionC.List[i]=new GroupPermission();
+				GroupPermissionC.List[i].GroupPermNum  = PIn.PInt(table.Rows[i][0].ToString());
+				GroupPermissionC.List[i].NewerDate     = PIn.PDate(table.Rows[i][1].ToString());
+				GroupPermissionC.List[i].NewerDays     = PIn.PInt(table.Rows[i][2].ToString());
+				GroupPermissionC.List[i].UserGroupNum  = PIn.PInt(table.Rows[i][3].ToString());
+				GroupPermissionC.List[i].PermType      =(Permissions)PIn.PInt(table.Rows[i][4].ToString());
 			}
 		}
 
@@ -83,9 +85,9 @@ namespace OpenDental{
 
 		///<summary>Gets a GroupPermission based on the supplied userGroupNum and permType.  If not found, then it returns null.  Used in FormSecurity when double clicking on a dated permission or when clicking the all button.</summary>
 		public static GroupPermission GetPerm(int userGroupNum,Permissions permType){
-			for(int i=0;i<List.Length;i++){
-				if(List[i].UserGroupNum==userGroupNum && List[i].PermType==permType){
-					return List[i].Copy();
+			for(int i=0;i<GroupPermissionC.List.Length;i++){
+				if(GroupPermissionC.List[i].UserGroupNum==userGroupNum && GroupPermissionC.List[i].PermType==permType){
+					return GroupPermissionC.List[i].Copy();
 				}
 			}
 			return null;
@@ -93,46 +95,14 @@ namespace OpenDental{
 
 		///<summary>Used in Security.IsAuthorized</summary>
 		public static bool HasPermission(int userGroupNum,Permissions permType){
-			for(int i=0;i<List.Length;i++){
-				if(List[i].UserGroupNum!=userGroupNum || List[i].PermType!=permType){
+			for(int i=0;i<GroupPermissionC.List.Length;i++){
+				if(GroupPermissionC.List[i].UserGroupNum!=userGroupNum || GroupPermissionC.List[i].PermType!=permType){
 					continue;
 				}
 				return true;
 			}
 			return false;
 		}
-
-		/*
-		///<summary>Must supply a user that has permission for this permission type, so only run AFTER Security.GetAuthorizedUser returns a valid user.  Used for types of permissions that use date limits.  Gets run from the form where the permission is needed.  Date comparisons are based on the server date.</summary>
-		public static DateTime GetDateLimit(Permissions permType,int userGroupNum){
-			DateTime nowDate=MiscData.GetNowDate();
-			DateTime retVal=DateTime.MinValue;
-			for(int i=0;i<List.Length;i++){
-				if(List[i].UserGroupNum!=userGroupNum || List[i].PermType!=permType){
-					continue;
-				}
-				//this should only happen once.  One match.
-				if(List[i].NewerDate.Year>1880){
-					retVal=List[i].NewerDate;
-				}
-				if(List[i].NewerDays==0){//do not restrict by days
-					//do not change retVal
-				}
-				else if(nowDate.AddDays(-List[i].NewerDays)>retVal){
-					retVal=nowDate.AddDays(-List[i].NewerDays);
-				}
-			}
-			return retVal;
-		}*/
-
-		/*public static GroupPermission[] GetForGroup(int UserGroupNum){
-			for(int i=0;i<List.Length;i++){
-				if(List[i].GroupPermissionNum==GroupPermissionNum){
-					return List[i].Copy();
-				}
-			}
-			return null;
-		}*/
 
 		///<summary>Gets the description for the specified permisssion.  Already translated.</summary>
 		public static string GetDesc(Permissions perm){

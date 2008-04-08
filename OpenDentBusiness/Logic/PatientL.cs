@@ -4,7 +4,7 @@ using System.Data;
 using System.Text;
 
 namespace OpenDentBusiness{
-	public class PatientB {
+	public class PatientL {
 		///<summary>Returns a formatted name, Last, First.</summary>
 		public static string GetNameLF(string LName,string FName, string Preferred,string MiddleI) {
 			if(LName==""){

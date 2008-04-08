@@ -203,6 +203,7 @@
     <Compile Include="Data Interface\Appointment_client.cs" />
     <Compile Include="Data Interface\AccountingAutoPay_client.cs" />
     <Compile Include="Data Interface\CovCat_client.cs" />
+    <Compile Include="Data Interface\GroupPermission_client.cs" />
     <Compile Include="Data Interface\MountDef_client.cs" />
     <Compile Include="Data Interface\Patients2.cs" />
     <Compile Include="Data Interface\Prefs_client.cs" />
@@ -241,7 +242,6 @@
     <Compile Include="Data Interface\Employees.cs" />
     <Compile Include="Data Interface\Employers.cs" />
     <Compile Include="Data Interface\Fees.cs" />
-    <Compile Include="Data Interface\GroupPermissions.cs" />
     <Compile Include="Data Interface\InsPlans.cs" />
     <Compile Include="Data Interface\Instructors.cs" />
     <Compile Include="Data Interface\JournalEntries.cs" />
@@ -310,7 +310,7 @@
     <Compile Include="Data Interface\TreatPlans.cs" />
     <Compile Include="Data Interface\UserGroups.cs" />
     <Compile Include="Data Interface\UserQueries.cs" />
-    <Compile Include="Data Interface\Userods.cs" />
+    <Compile Include="Data Interface\Userod_client.cs" />
     <Compile Include="Data Interface\ZipCodes.cs" />
     <Compile Include="Eclaims\AOS.cs" />
     <Compile Include="Eclaims\BCBSGA.cs" />

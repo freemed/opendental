@@ -20,8 +20,10 @@ namespace OpenDentBusiness{
 		Account_RefreshCache,
 		AccountingAutoPay_RefreshCache,
 		Definition_RefreshCache,
+		GroupPermission_RefreshCache,
 		MountDef_RefreshCache,
 		Prefs_RefreshCache,
-		Providers_RefreshCache
+		Providers_RefreshCache,
+		Userod_RefreshCache
 	}
 }

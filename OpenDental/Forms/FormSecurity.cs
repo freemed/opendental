@@ -392,7 +392,7 @@ namespace OpenDental{
 
 		private void FillUsers(){
 			UserGroups.Refresh();
-			Userods.Refresh();
+			Userod_client.Refresh();
 			SelectedGroupNum=0;
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
@@ -488,7 +488,7 @@ namespace OpenDental{
 		}
 
 		private void gridMain_CellDoubleClick(object sender,ODGridClickEventArgs e) {
-			Userod user=UserodB.GetUser(PIn.PInt(table.Rows[e.Row]["UserNum"].ToString()));
+			Userod user=Userods.GetUser(PIn.PInt(table.Rows[e.Row]["UserNum"].ToString()));
 			FormUserEdit FormU=new FormUserEdit(user);
 			FormU.ShowDialog();
 			if(FormU.DialogResult==DialogResult.Cancel){
@@ -506,7 +506,7 @@ namespace OpenDental{
 		}
 
 		private void FillTreePerm(){
-			GroupPermissions.Refresh();
+			GroupPermission_client.Refresh();
 			if(SelectedGroupNum==0){
 				labelPerm.Text="";
 				treePermissions.Enabled=false;
@@ -532,16 +532,16 @@ namespace OpenDental{
 			}
 			node.ImageIndex=1;
 			node.Text=GroupPermissions.GetDesc((Permissions)node.Tag);
-			for(int i=0;i<GroupPermissions.List.Length;i++){
-				if(GroupPermissions.List[i].UserGroupNum==userGroupNum
-					&& GroupPermissions.List[i].PermType==(Permissions)node.Tag)
+			for(int i=0;i<GroupPermissionC.List.Length;i++){
+				if(GroupPermissionC.List[i].UserGroupNum==userGroupNum
+					&& GroupPermissionC.List[i].PermType==(Permissions)node.Tag)
 				{
 					node.ImageIndex=2;
-					if(GroupPermissions.List[i].NewerDate.Year>1880){
-						node.Text+=" ("+Lan.g(this,"if date newer than")+" "+GroupPermissions.List[i].NewerDate.ToShortDateString()+")";
+					if(GroupPermissionC.List[i].NewerDate.Year>1880){
+						node.Text+=" ("+Lan.g(this,"if date newer than")+" "+GroupPermissionC.List[i].NewerDate.ToShortDateString()+")";
 					}
-					else if(GroupPermissions.List[i].NewerDays>0){
-						node.Text+=" ("+Lan.g(this,"if days newer than")+" "+GroupPermissions.List[i].NewerDays.ToString()+")";
+					else if(GroupPermissionC.List[i].NewerDays>0){
+						node.Text+=" ("+Lan.g(this,"if days newer than")+" "+GroupPermissionC.List[i].NewerDays.ToString()+")";
 					}
 				}
 			}

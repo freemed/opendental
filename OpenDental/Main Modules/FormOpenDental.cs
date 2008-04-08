@@ -1353,7 +1353,7 @@ namespace OpenDental{
 						return false;
 					}
 					if(PrefC.UsingAtoZfolder && FormPath.GetPreferredImagePath()==null){//AtoZ folder not found
-						Userods.Refresh();
+						Userod_client.Refresh();
 						FormPath FormP=new FormPath();
 						FormP.ShowDialog();
 						if(FormP.DialogResult!=DialogResult.OK){
@@ -1591,9 +1591,9 @@ namespace OpenDental{
 				QuickPasteCats.Refresh();
 			}
 			if((itypes & InvalidTypes.Security)==InvalidTypes.Security){
-				Userods.Refresh();
+				Userod_client.Refresh();
 				UserGroups.Refresh();
-				GroupPermissions.Refresh();
+				GroupPermission_client.Refresh();
 			}
 			//if((itypes & InvalidTypes.Sched)==InvalidTypes.Sched){
 				//SchedDefaults.Refresh();//assumed to change rarely

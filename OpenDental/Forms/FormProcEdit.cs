@@ -1904,7 +1904,7 @@ namespace OpenDental{
 				groupProsth.Visible=false;
 			}
 			textClaimNote.Text=ProcCur.ClaimNote;
-			textUser.Text=UserodB.GetName(ProcCur.UserNum);//might be blank. Will change automatically if user changes note or alters sig.
+			textUser.Text=Userods.GetName(ProcCur.UserNum);//might be blank. Will change automatically if user changes note or alters sig.
 			labelInvalidSig.Visible=false;
 			sigBox.Visible=true;
 			if(ProcCur.SigIsTopaz){
@@ -2580,7 +2580,7 @@ namespace OpenDental{
 				sigBox.SetTabletState(1);//on-screen box is now accepting input.
 				SigChanged=true;
 				ProcCur.UserNum=Security.CurUser.UserNum;
-				textUser.Text=UserodB.GetName(ProcCur.UserNum);
+				textUser.Text=Userods.GetName(ProcCur.UserNum);
 			}
 		}
 
@@ -2605,7 +2605,7 @@ namespace OpenDental{
 			SigChanged=true;
 			labelInvalidSig.Visible=false;
 			ProcCur.UserNum=Security.CurUser.UserNum;
-			textUser.Text=UserodB.GetName(ProcCur.UserNum);
+			textUser.Text=Userods.GetName(ProcCur.UserNum);
 		}
 
 		private void butTopazSign_Click(object sender,EventArgs e) {
@@ -2617,7 +2617,7 @@ namespace OpenDental{
 			SigChanged=true;
 			labelInvalidSig.Visible=false;
 			ProcCur.UserNum=Security.CurUser.UserNum;
-			textUser.Text=UserodB.GetName(ProcCur.UserNum);
+			textUser.Text=Userods.GetName(ProcCur.UserNum);
 		}
 
 		private void sigBox_MouseUp(object sender,MouseEventArgs e) {
@@ -2628,7 +2628,7 @@ namespace OpenDental{
 				//sigBox handles its own pen input.
 				SigChanged=true;
 				ProcCur.UserNum=Security.CurUser.UserNum;
-				textUser.Text=UserodB.GetName(ProcCur.UserNum);
+				textUser.Text=Userods.GetName(ProcCur.UserNum);
 			}
 		}
 

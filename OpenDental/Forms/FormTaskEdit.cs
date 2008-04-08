@@ -510,7 +510,7 @@ namespace OpenDental{
 					radioDone.Checked=true;
 					break;
 			}
-			textUser.Text=UserodB.GetName(Cur.UserNum);//might be blank. 
+			textUser.Text=Userods.GetName(Cur.UserNum);//might be blank. 
 			if(Cur.DateTimeEntry.Year<1880){
 				textDateTimeEntry.Text=DateTime.Now.ToString();
 			}

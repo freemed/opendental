@@ -694,7 +694,7 @@ namespace OpenDental{
 				DtoLogin dto=new DtoLogin();
 				dto.Database=comboDatabase2.Text;
 				dto.OdUser=textUser2.Text;
-				dto.OdPassHash=UserodB.EncryptPassword(textPassword2.Text);
+				dto.OdPassHash=Userods.EncryptPassword(textPassword2.Text);
 				try{
 					RemotingClient.ProcessCommand(dto);
 					RemotingClient.RemotingRole=RemotingRole.ClientTcp;
