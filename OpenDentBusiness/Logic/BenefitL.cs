@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 
 namespace OpenDentBusiness {
-	public class BenefitB {
+	public class BenefitL {
 		///<summary>This function is unit tested for accuracy because it has been a source of bugs in the past.</summary>
 		public static DateTime ComputeRenewDate(DateTime asofDate,bool isCalendarYear,DateTime insStartDate){
 			if(isCalendarYear) {

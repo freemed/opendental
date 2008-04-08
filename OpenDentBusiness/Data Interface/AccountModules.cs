@@ -27,7 +27,7 @@ namespace OpenDentBusiness {
 			//DateTime toDate=PIn.PDate(parameters[3]);
 			retVal=new DataSet();
 			if(viewingInRecall) {
-				retVal.Tables.Add(ChartModuleB.GetProgNotes(patNum, false));
+				retVal.Tables.Add(ChartModules.GetProgNotes(patNum, false));
 			}
 			else {
 				GetCommLog(patNum);

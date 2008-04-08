@@ -171,7 +171,6 @@
     <Compile Include="Data Interface\aaDataInterface.cs" />
     <Compile Include="Data Interface\Account_client.cs" />
     <Compile Include="Data Interface\AppointmentRules.cs" />
-    <Compile Include="Data Interface\Appointments.cs" />
     <Compile Include="Data Interface\ApptViewItems.cs" />
     <Compile Include="Data Interface\ApptViews.cs" />
     <Compile Include="Data Interface\AutoCodeConds.cs" />

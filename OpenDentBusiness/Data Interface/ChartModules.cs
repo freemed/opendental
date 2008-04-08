@@ -5,7 +5,7 @@ using System.Drawing;
 using System.Text;
 
 namespace OpenDentBusiness {
-	public class ChartModuleB {
+	public class ChartModules {
 		public static DataSet GetAll(int patNum,bool isAuditMode) {
 			DataSet retVal=new DataSet();
 			retVal.Tables.Add(GetProgNotes(patNum,isAuditMode));

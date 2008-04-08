@@ -139,8 +139,8 @@
     <Compile Include="Logic\aaLogic.cs" />
     <Compile Include="Data Interface\AccountModules.cs" />
     <Compile Include="Data Interface\Appointments.cs" />
-    <Compile Include="Logic\BenefitB.cs" />
-    <Compile Include="Logic\ChartModuleB.cs" />
+    <Compile Include="Logic\BenefitL.cs" />
+    <Compile Include="Data Interface\ChartModules.cs" />
     <Compile Include="Logic\CovCatB.cs" />
     <Compile Include="DataCore.cs" />
     <Compile Include="Logic\InsPlanB.cs" />

@@ -69,7 +69,7 @@ namespace OpenDentBusiness {
 				case  MethodNameDS.Appointment_RefreshOneApt:
 					return Appointments.RefreshOneApt((int)parameters[0],(bool)parameters[1]);
 				case  MethodNameDS.Chart_GetAll:
-					return ChartModuleB.GetAll((int)parameters[0],(bool)parameters[1]);
+					return ChartModules.GetAll((int)parameters[0],(bool)parameters[1]);
 				
 			}
 
