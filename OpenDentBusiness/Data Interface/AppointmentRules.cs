@@ -4,24 +4,27 @@ using System.Data;
 using System.Windows.Forms;
 using OpenDentBusiness;
 
-namespace OpenDental{
+namespace OpenDentBusiness{
 	///<summary></summary>
 	public class AppointmentRules {
-		///<summary></summary>
-		public static AppointmentRule[] List;
 
-		///<summary>Fills List with all AppointmentRules.</summary>
-		public static void Refresh() {
+		///<summary></summary>
+		public static DataTable RefreshCache() {
 			string command="SELECT * FROM appointmentrule";
 			DataTable table=General.GetTable(command);
-			List=new AppointmentRule[table.Rows.Count];
+			FillCache(table);
+			return table;
+		}
+
+		public static void FillCache(DataTable table){
+			AppointmentRuleC.List=new AppointmentRule[table.Rows.Count];
 			for(int i=0;i<table.Rows.Count;i++) {
-				List[i]=new AppointmentRule();
-				List[i].AppointmentRuleNum = PIn.PInt(table.Rows[i][0].ToString());
-				List[i].RuleDesc           = PIn.PString(table.Rows[i][1].ToString());
-				List[i].CodeStart          = PIn.PString(table.Rows[i][2].ToString());
-				List[i].CodeEnd            = PIn.PString(table.Rows[i][3].ToString());
-				List[i].IsEnabled          = PIn.PBool(table.Rows[i][4].ToString());
+				AppointmentRuleC.List[i]=new AppointmentRule();
+				AppointmentRuleC.List[i].AppointmentRuleNum = PIn.PInt(table.Rows[i][0].ToString());
+				AppointmentRuleC.List[i].RuleDesc           = PIn.PString(table.Rows[i][1].ToString());
+				AppointmentRuleC.List[i].CodeStart          = PIn.PString(table.Rows[i][2].ToString());
+				AppointmentRuleC.List[i].CodeEnd            = PIn.PString(table.Rows[i][3].ToString());
+				AppointmentRuleC.List[i].IsEnabled          = PIn.PBool(table.Rows[i][4].ToString());
 			}
 		}
 
@@ -56,14 +59,14 @@ namespace OpenDental{
 		///<summary>Whenever an appointment is scheduled, the procedures which would be double booked are calculated.  In this method, those procedures are checked to see if the double booking should be blocked.  If double booking is indeed blocked, then a separate function will tell the user which category.</summary>
 		public static bool IsBlocked(ArrayList codes){
 			for(int j=0;j<codes.Count;j++){
-				for(int i=0;i<List.Length;i++){
-					if(!List[i].IsEnabled){
+				for(int i=0;i<AppointmentRuleC.List.Length;i++){
+					if(!AppointmentRuleC.List[i].IsEnabled){
 						continue;
 					}
-					if(String.Compare((string)codes[j],List[i].CodeStart) < 0){
+					if(String.Compare((string)codes[j],AppointmentRuleC.List[i].CodeStart) < 0){
 						continue;
 					}
-					if(String.Compare((string)codes[j],List[i].CodeEnd) > 0) {
+					if(String.Compare((string)codes[j],AppointmentRuleC.List[i].CodeEnd) > 0) {
 						continue;
 					}
 					return true;
@@ -75,17 +78,17 @@ namespace OpenDental{
 		///<summary>Whenever an appointment is blocked from being double booked, this method will tell the user which category.</summary>
 		public static string GetBlockedDescription(ArrayList codes){
 			for(int j=0;j<codes.Count;j++) {
-				for(int i=0;i<List.Length;i++) {
-					if(!List[i].IsEnabled) {
+				for(int i=0;i<AppointmentRuleC.List.Length;i++) {
+					if(!AppointmentRuleC.List[i].IsEnabled) {
 						continue;
 					}
-					if(String.Compare((string)codes[j],List[i].CodeStart) < 0) {
+					if(String.Compare((string)codes[j],AppointmentRuleC.List[i].CodeStart) < 0) {
 						continue;
 					}
-					if(String.Compare((string)codes[j],List[i].CodeEnd) > 0) {
+					if(String.Compare((string)codes[j],AppointmentRuleC.List[i].CodeEnd) > 0) {
 						continue;
 					}
-					return List[i].RuleDesc;
+					return AppointmentRuleC.List[i].RuleDesc;
 				}
 			}
 			return "";

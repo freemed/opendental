@@ -947,7 +947,7 @@ namespace OpenDental{
 			//the scrollbar logic cannot be moved to someplace where it will be activated while working in apptbook
 			//RefreshVisops();//forces reset after changing databases
 			if(DefC.Short!=null) {
-				ApptViewItems.GetForCurView(comboView.SelectedIndex-1);//refreshes visops,etc
+				ApptViewItem_client.GetForCurView(comboView.SelectedIndex-1);//refreshes visops,etc
 				ContrApptSheet2.ComputeColWidth(panelSheet.Width-vScrollBar1.Width);
 			}
 			this.SuspendLayout();
@@ -1174,7 +1174,7 @@ namespace OpenDental{
 			panelSheet.Width=ClientSize.Width-panelAptInfo.Width-2;
 			panelSheet.Height=ClientSize.Height-panelSheet.Location.Y;
 			if(DefC.Short!=null) {
-				ApptViewItems.GetForCurView(comboView.SelectedIndex-1);//refreshes visops,etc
+				ApptViewItem_client.GetForCurView(comboView.SelectedIndex-1);//refreshes visops,etc
 				ContrApptSheet2.ComputeColWidth(panelSheet.Width-vScrollBar1.Width);
 			}
 			panelOps.Width=panelSheet.Width;
@@ -1351,7 +1351,7 @@ namespace OpenDental{
 				ContrApptSingle.SelectedAptNum=-1;//fixes a minor bug.
 			}
 			DS=Appointments.RefreshPeriod(startDate,endDate);
-			ApptViewItems.GetForCurView(comboView.SelectedIndex-1);
+			ApptViewItem_client.GetForCurView(comboView.SelectedIndex-1);
 			ContrApptSingle.ProvBar=new int[ApptViewItems.VisProvs.Length][];
 			for(int i=0;i<ApptViewItems.VisProvs.Length;i++){
 				ContrApptSingle.ProvBar[i]=new int[24*ContrApptSheet.RowsPerHr]; //[144]; or 24*6
@@ -1716,7 +1716,7 @@ namespace OpenDental{
 			}
 			DateTime fromDate=aptCur.AptDateTime.Date;
 			aptCur.AptDateTime=new DateTime(tDate.Year,tDate.Month,tDate.Day,tHr,tMin,0);
-			if(AppointmentRules.List.Length>0){
+			if(AppointmentRuleC.List.Length>0){
 				//this is crude and temporary:
 				int[] aptNums=new int[DS.Tables["Appointments"].Rows.Count];
 				for(int i=0;i<DS.Tables["Appointments"].Rows.Count;i++){
@@ -1741,7 +1741,7 @@ namespace OpenDental{
 				[ContrApptSheet2.ConvertToOp(TempApptSingle.Location.X-ContrApptSheet2.Location.X)]];
 			aptCur.Op=curOp.OperatoryNum;
 			if(DoesOverlap(aptCur)){
-				int startingOp=ApptViewItems.GetIndexOp(aptCur.Op);
+				int startingOp=ApptViewItem_client.GetIndexOp(aptCur.Op);
 				bool stillOverlaps=true;
 				for(int i=startingOp;i<ApptViewItems.VisOps.Length;i++){
 					aptCur.Op=Operatories.ListShort[ApptViewItems.VisOps[i]].OperatoryNum;
@@ -2297,14 +2297,14 @@ namespace OpenDental{
 			apt.AptDateTime=new DateTime(tDate.Year,tDate.Month,tDate.Day,tHr,tMin,0);
 			Procedure[] procsMultApts=null;
 			Procedure[] procsForOne=null;
-			if(AppointmentRules.List.Length>0) {
+			if(AppointmentRuleC.List.Length>0) {
 				int[] aptNums=new int[DS.Tables["Appointments"].Rows.Count];
 				for(int i=0;i<DS.Tables["Appointments"].Rows.Count;i++) {
 					aptNums[i]=PIn.PInt(DS.Tables["Appointments"].Rows[i]["AptNum"].ToString());//ListDay[i].AptNum;
 				}
 				procsMultApts=Procedures.GetProcsMultApts(aptNums);
 			}
-			if(AppointmentRules.List.Length>0) {
+			if(AppointmentRuleC.List.Length>0) {
 				int[] aptNums=new int[DS.Tables["Appointments"].Rows.Count];
 				for(int i=0;i<DS.Tables["Appointments"].Rows.Count;i++) {
 					aptNums[i]=PIn.PInt(DS.Tables["Appointments"].Rows[i]["AptNum"].ToString());//ListDay[i].AptNum;
@@ -2327,7 +2327,7 @@ namespace OpenDental{
 				[ApptViewItems.VisOps[ContrApptSheet2.ConvertToOp(TempApptSingle.Location.X-ContrApptSheet2.Location.X)]];
 			apt.Op=curOp.OperatoryNum;
 			if(DoesOverlap(apt)) {
-				int startingOp=ApptViewItems.GetIndexOp(apt.Op);
+				int startingOp=ApptViewItem_client.GetIndexOp(apt.Op);
 				bool stillOverlaps=true;
 				for(int i=startingOp;i<ApptViewItems.VisOps.Length;i++) {
 					apt.Op=Operatories.ListShort[ApptViewItems.VisOps[i]].OperatoryNum;

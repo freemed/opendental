@@ -78,6 +78,8 @@
     <Compile Include="Cache\aaCache.cs" />
     <Compile Include="Cache\AccountC.cs" />
     <Compile Include="Cache\AccountingAutoPayC.cs" />
+    <Compile Include="Cache\AppointmentRuleC.cs" />
+    <Compile Include="Cache\ApptViewItemC.cs" />
     <Compile Include="Cache\GroupPermissionC.cs" />
     <Compile Include="Cache\UserodC.cs" />
     <Compile Include="Cache\CovCatC.cs" />
@@ -90,6 +92,9 @@
     <Compile Include="Data Interface\AccountingAutoPays.cs" />
     <Compile Include="Data Interface\Accounts.cs" />
     <Compile Include="Data Interface\Adjustments.cs" />
+    <Compile Include="Data Interface\AnestheticRecords.cs" />
+    <Compile Include="Data Interface\AppointmentRules.cs" />
+    <Compile Include="Data Interface\ApptViewItems.cs" />
     <Compile Include="Data Interface\CovCats.cs" />
     <Compile Include="Data Interface\Defs.cs" />
     <Compile Include="Data Interface\Gen.cs" />

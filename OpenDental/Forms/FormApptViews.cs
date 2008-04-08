@@ -259,7 +259,7 @@ namespace OpenDental{
 
 		private void FillViewList(){
 			ApptViews.Refresh();
-			ApptViewItems.Refresh();
+			ApptViewItem_client.Refresh();
 			listViews.Items.Clear();
 			string F;
 			for(int i=0;i<ApptViews.List.Length;i++){

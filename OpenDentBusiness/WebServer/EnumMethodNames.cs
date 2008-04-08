@@ -19,6 +19,8 @@ namespace OpenDentBusiness{
 	public enum MethodNameTable{
 		Account_RefreshCache,
 		AccountingAutoPay_RefreshCache,
+		AppointmentRule_RefreshCache,
+		ApptViewItem_RefreshCache,
 		Definition_RefreshCache,
 		GroupPermission_RefreshCache,
 		MountDef_RefreshCache,

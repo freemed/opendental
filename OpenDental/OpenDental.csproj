@@ -170,8 +170,6 @@
     <Compile Include="Bridges\VixWinOld.cs" />
     <Compile Include="Data Interface\aaDataInterface.cs" />
     <Compile Include="Data Interface\Account_client.cs" />
-    <Compile Include="Data Interface\AppointmentRules.cs" />
-    <Compile Include="Data Interface\ApptViewItems.cs" />
     <Compile Include="Data Interface\ApptViews.cs" />
     <Compile Include="Data Interface\AutoCodeConds.cs" />
     <Compile Include="Data Interface\AutoCodeItems.cs" />
@@ -187,7 +185,6 @@
     <Compile Include="Data Interface\ClaimProcs.cs" />
     <Compile Include="Data Interface\Claims.cs" />
     <Compile Include="Data Interface\ClaimValCodeLog.cs" />
-    <Compile Include="Data Interface\AnestheticRecords.cs" />
     <Compile Include="Data Interface\Clearinghouses.cs" />
     <Compile Include="Data Interface\Clinics.cs" />
     <Compile Include="Data Interface\ClockEvents.cs" />
@@ -202,6 +199,8 @@
     <Compile Include="Data Interface\ClaimAttaches.cs" />
     <Compile Include="Data Interface\Appointment_client.cs" />
     <Compile Include="Data Interface\AccountingAutoPay_client.cs" />
+    <Compile Include="Data Interface\AppointmentRule_client.cs" />
+    <Compile Include="Data Interface\ApptViewItem_client.cs" />
     <Compile Include="Data Interface\CovCat_client.cs" />
     <Compile Include="Data Interface\GroupPermission_client.cs" />
     <Compile Include="Data Interface\MountDef_client.cs" />

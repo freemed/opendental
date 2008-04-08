@@ -85,6 +85,10 @@ namespace OpenDentBusiness {
 					return Accounts.RefreshCache();
 				case MethodNameTable.AccountingAutoPay_RefreshCache:
 					return AccountingAutoPays.RefreshCache();
+				case MethodNameTable.AppointmentRule_RefreshCache:
+					return AppointmentRules.RefreshCache();
+				case MethodNameTable.ApptViewItem_RefreshCache:
+					return ApptViewItems.RefreshCache();
 				case  MethodNameTable.Definition_RefreshCache:
 					return Defs.RefreshCache();
 				case  MethodNameTable.GroupPermission_RefreshCache:

@@ -371,11 +371,13 @@ namespace OpenDental{
 
 		private void FormApptViewEdit_Load(object sender, System.EventArgs e) {
 			textDescription.Text=ApptViewCur.Description;
-			if(ApptViewCur.RowsPerIncr==0)
+			if(ApptViewCur.RowsPerIncr==0){
 				textRowsPerIncr.Text="1";
-			else
+			}
+			else{
 				textRowsPerIncr.Text=ApptViewCur.RowsPerIncr.ToString();
-			ApptViewItems.GetForCurView(ApptViewCur);
+			}
+			ApptViewItem_client.GetForCurView(ApptViewCur);
 			for(int i=0;i<Operatories.ListShort.Length;i++){
 				listOps.Items.Add(Operatories.ListShort[i].OpName);
 				if(ApptViewItems.OpIsInView(Operatories.ListShort[i].OperatoryNum)){

@@ -139,7 +139,7 @@ namespace OpenDental{
 		}
 
 		private void FillGrid(){
-			AppointmentRules.Refresh();
+			AppointmentRule_client.Refresh();
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
 			ODGridColumn col=new ODGridColumn("Description",200);
@@ -152,12 +152,12 @@ namespace OpenDental{
 			gridMain.Columns.Add(col);
 			gridMain.Rows.Clear();
 			UI.ODGridRow row;
-			for(int i=0;i<AppointmentRules.List.Length;i++){
+			for(int i=0;i<AppointmentRuleC.List.Length;i++){
 				row=new OpenDental.UI.ODGridRow();
-				row.Cells.Add(AppointmentRules.List[i].RuleDesc);
-				row.Cells.Add(AppointmentRules.List[i].CodeStart);
-				row.Cells.Add(AppointmentRules.List[i].CodeEnd);
-				if(AppointmentRules.List[i].IsEnabled){
+				row.Cells.Add(AppointmentRuleC.List[i].RuleDesc);
+				row.Cells.Add(AppointmentRuleC.List[i].CodeStart);
+				row.Cells.Add(AppointmentRuleC.List[i].CodeEnd);
+				if(AppointmentRuleC.List[i].IsEnabled){
 					row.Cells.Add("X");
 				}
 				else{
@@ -169,7 +169,7 @@ namespace OpenDental{
 		}
 
 		private void gridMain_CellDoubleClick(object sender, OpenDental.UI.ODGridClickEventArgs e) {
-			FormApptRuleEdit FormA=new FormApptRuleEdit(AppointmentRules.List[e.Row]);
+			FormApptRuleEdit FormA=new FormApptRuleEdit(AppointmentRuleC.List[e.Row]);
 			FormA.ShowDialog();
 			FillGrid();
 			changed=true;

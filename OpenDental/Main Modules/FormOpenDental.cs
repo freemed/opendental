@@ -1614,9 +1614,9 @@ namespace OpenDental{
 				ContrFamily2.LayoutToolBar();
 			}
 			if((itypes & InvalidTypes.Views)==InvalidTypes.Views){
-				AppointmentRules.Refresh();
+				AppointmentRule_client.Refresh();
 				ApptViews.Refresh();
-				ApptViewItems.Refresh();
+				ApptViewItem_client.Refresh();
 				ContrAppt2.FillViews();
 			}
 			if((itypes & InvalidTypes.ZipCodes)==InvalidTypes.ZipCodes){
