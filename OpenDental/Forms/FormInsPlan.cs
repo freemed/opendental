@@ -2333,7 +2333,7 @@ namespace OpenDental{
 									break;
 								fields[2]=fields[2].Remove(0,1);
 								fields[2]=fields[2].Split(new char[] { ' ' })[0];
-								if(CovCatB.ListShort.Length>0) {
+								if(CovCatC.ListShort.Length>0) {
 									ben=new Benefit();
 									ben.BenefitType=InsBenefitType.Limitations;
 									ben.CovCatNum=CovCats.GetForEbenCat(EbenefitCategory.General).CovCatNum;

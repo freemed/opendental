@@ -230,7 +230,7 @@ namespace OpenDental {
 		}
 
 		private void FillSpans() {
-			CovCats.Refresh();
+			CovCat_client.Refresh();
 			CovSpans.Refresh();
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
@@ -247,30 +247,30 @@ namespace OpenDental {
 			gridMain.Rows.Clear();
 			ODGridRow row;
 			CovSpan[] spansForCat;
-			for(int i=0;i<CovCatB.Listt.Length;i++){
+			for(int i=0;i<CovCatC.Listt.Length;i++){
 				row=new ODGridRow();
-				row.Tag=CovCatB.Listt[i].Copy();
+				row.Tag=CovCatC.Listt[i].Copy();
 				row.ColorBackG=Color.FromArgb(225,225,225);
 				if(i!=0) {
 					gridMain.Rows[gridMain.Rows.Count-1].ColorLborder=Color.Black;
 				}
-				row.Cells.Add(CovCatB.Listt[i].Description);
+				row.Cells.Add(CovCatC.Listt[i].Description);
 				row.Cells.Add("");
 				row.Cells.Add("");
-				if(CovCatB.Listt[i].IsHidden){
+				if(CovCatC.Listt[i].IsHidden){
 					row.Cells.Add("X");
 				}
 				else {
 					row.Cells.Add("");
 				}
-				if(CovCatB.Listt[i].EbenefitCat==EbenefitCategory.None){
+				if(CovCatC.Listt[i].EbenefitCat==EbenefitCategory.None){
 					row.Cells.Add("");
 				}
 				else{
-					row.Cells.Add(CovCatB.Listt[i].EbenefitCat.ToString());
+					row.Cells.Add(CovCatC.Listt[i].EbenefitCat.ToString());
 				}
 				gridMain.Rows.Add(row);
-				spansForCat=CovSpans.GetForCat(CovCatB.Listt[i].CovCatNum);
+				spansForCat=CovSpans.GetForCat(CovCatC.Listt[i].CovCatNum);
 				for(int j=0;j<spansForCat.Length;j++){
 					row=new ODGridRow();
 					row.Tag=spansForCat[j].Copy();
@@ -384,7 +384,7 @@ namespace OpenDental {
 
 		private void butAddCat_Click(object sender, System.EventArgs e) {
 			CovCat covcat=new CovCat();
-			covcat.CovOrder=CovCatB.Listt.Length;
+			covcat.CovOrder=CovCatC.Listt.Length;
 			covcat.DefaultPercent=-1;
 			FormInsCatEdit FormE=new FormInsCatEdit(covcat);
 			FormE.IsNew=true;

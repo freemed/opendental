@@ -10,7 +10,6 @@ namespace OpenDentServer {
 		///<summary>DataSet cannot be null.</summary>
 		public static DataSet ProcessQuery(DtoQueryBase dto) {
 			Type type = dto.GetType();
-
 			if(type==typeof(DtoGeneralGetTable)) {
 				return DataCore.GetTable(((DtoGeneralGetTable)dto).Command);
 			}
@@ -19,9 +18,6 @@ namespace OpenDentServer {
 			}
 			else if(type==typeof(DtoGeneralGetDataSet)) {
 				return DataCore.GetDataSet(((DtoGeneralGetDataSet)dto).Commands);
-			}
-			else if(type==typeof(DtoCovCatRefresh)) {
-				return CovCatB.Refresh();
 			}
 			else if(type==typeof(DtoUserodRefresh)) {
 				return UserodB.Refresh();

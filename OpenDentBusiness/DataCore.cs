@@ -70,7 +70,8 @@ namespace OpenDentBusiness {
 					return Appointments.RefreshOneApt((int)parameters[0],(bool)parameters[1]);
 				case  MethodNameDS.Chart_GetAll:
 					return ChartModules.GetAll((int)parameters[0],(bool)parameters[1]);
-				
+				case  MethodNameDS.CovCats_RefreshCache:
+					return CovCats.RefreshCache();
 			}
 
 		}
@@ -82,6 +83,8 @@ namespace OpenDentBusiness {
 					throw new ApplicationException("MethodName not found");
 				case MethodNameTable.Account_RefreshCache:
 					return Accounts.RefreshCache();
+				case MethodNameTable.AccountingAutoPay_RefreshCache:
+					return AccountingAutoPays.RefreshCache();
 				case  MethodNameTable.Definition_RefreshCache:
 					return Defs.RefreshCache();
 				case  MethodNameTable.MountDef_RefreshCache:

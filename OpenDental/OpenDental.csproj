@@ -201,6 +201,8 @@
     <Compile Include="Data Interface\CanadianNetworks.cs" />
     <Compile Include="Data Interface\ClaimAttaches.cs" />
     <Compile Include="Data Interface\Appointment_client.cs" />
+    <Compile Include="Data Interface\AccountingAutoPay_client.cs" />
+    <Compile Include="Data Interface\CovCat_client.cs" />
     <Compile Include="Data Interface\MountDef_client.cs" />
     <Compile Include="Data Interface\Patients2.cs" />
     <Compile Include="Data Interface\Prefs_client.cs" />
@@ -227,7 +229,6 @@
     <Compile Include="Data Interface\Etranss.cs" />
     <Compile Include="Data Interface\FormPats.cs" />
     <Compile Include="Data Interface\Counties.cs" />
-    <Compile Include="Data Interface\CovCats.cs" />
     <Compile Include="Data Interface\CovSpans.cs" />
     <Compile Include="Data Interface\Defs_client.cs" />
     <Compile Include="Data Interface\Deposits.cs" />

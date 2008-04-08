@@ -7,6 +7,27 @@ using OpenDentBusiness;
 namespace OpenDentBusiness{
 	///<summary></summary>
 	public class AccountingAutoPays {
+		///<summary>Gets a list of all AccountingAutoPays.</summary>
+		public static DataTable RefreshCache(){
+			string command="SELECT * FROM accountingautopay";
+			DataTable table=General.GetTable(command);
+			FillCache(table);
+			return table;
+		}
+
+		public static void FillCache(DataTable table){
+			AccountingAutoPay[] List=new AccountingAutoPay[table.Rows.Count];
+			for(int i=0;i<table.Rows.Count;i++) {
+				List[i]=new AccountingAutoPay();
+				List[i].AccountingAutoPayNum = PIn.PInt(table.Rows[i][0].ToString());
+				List[i].PayType              = PIn.PInt(table.Rows[i][1].ToString());
+				List[i].PickList             = PIn.PString(table.Rows[i][2].ToString());
+			}
+			AccountingAutoPayC.AList=new ArrayList();
+			for(int i=0;i<List.Length;i++){
+				AccountingAutoPayC.AList.Add(List[i]);
+			}
+		}
 		
 		///<summary></summary>
 		public static void Insert(AccountingAutoPay pay){
@@ -45,23 +66,6 @@ namespace OpenDentBusiness{
 			int[] retVal=new int[AL.Count];
 			AL.CopyTo(retVal);
 			return retVal;
-		}
-
-		///<summary>Gets a list of all AccountingAutoPays.</summary>
-		public static void Refresh(){
-			string command="SELECT * FROM accountingautopay";
-			DataTable table=General.GetTable(command);
-			AccountingAutoPay[] List=new AccountingAutoPay[table.Rows.Count];
-			for(int i=0;i<table.Rows.Count;i++) {
-				List[i]=new AccountingAutoPay();
-				List[i].AccountingAutoPayNum = PIn.PInt(table.Rows[i][0].ToString());
-				List[i].PayType              = PIn.PInt(table.Rows[i][1].ToString());
-				List[i].PickList             = PIn.PString(table.Rows[i][2].ToString());
-			}
-			AccountingAutoPayC.AList=new ArrayList();
-			for(int i=0;i<List.Length;i++){
-				AccountingAutoPayC.AList.Add(List[i]);
-			}
 		}
 
 		///<summary>Loops through the AList to find one with the specified payType (defNum).  If none is found, then it returns null.</summary>

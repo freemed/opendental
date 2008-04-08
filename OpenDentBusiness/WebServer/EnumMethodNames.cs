@@ -11,12 +11,14 @@ namespace OpenDentBusiness{
 		Appointment_GetApptEdit,
 		Appointment_RefreshPeriod,
 		Appointment_RefreshOneApt,
-		Chart_GetAll
+		Chart_GetAll,
+		CovCats_RefreshCache
 	}
 
 	///<summary>MethodNames for retrieving tables.</summary>
 	public enum MethodNameTable{
 		Account_RefreshCache,
+		AccountingAutoPay_RefreshCache,
 		Definition_RefreshCache,
 		MountDef_RefreshCache,
 		Prefs_RefreshCache,

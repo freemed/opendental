@@ -33,8 +33,8 @@ namespace OpenDentBusiness{
 
 	}
 
-	public class DtoCovCatRefresh:DtoQueryBase {
-	}
+	//public class DtoCovCatRefresh:DtoQueryBase {
+	//}
 	
 
 

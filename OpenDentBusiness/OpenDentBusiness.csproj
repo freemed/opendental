@@ -78,6 +78,7 @@
     <Compile Include="Cache\aaCache.cs" />
     <Compile Include="Cache\AccountC.cs" />
     <Compile Include="Cache\AccountingAutoPayC.cs" />
+    <Compile Include="Cache\CovCatC.cs" />
     <Compile Include="Cache\DefC.cs" />
     <Compile Include="Cache\EnumRemotingRole.cs" />
     <Compile Include="Cache\MountDefC.cs" />
@@ -87,6 +88,7 @@
     <Compile Include="Data Interface\AccountingAutoPays.cs" />
     <Compile Include="Data Interface\Accounts.cs" />
     <Compile Include="Data Interface\Adjustments.cs" />
+    <Compile Include="Data Interface\CovCats.cs" />
     <Compile Include="Data Interface\Defs.cs" />
     <Compile Include="Data Interface\Gen.cs" />
     <Compile Include="Data Interface\Prefs.cs" />
@@ -141,7 +143,6 @@
     <Compile Include="Data Interface\Appointments.cs" />
     <Compile Include="Logic\BenefitL.cs" />
     <Compile Include="Data Interface\ChartModules.cs" />
-    <Compile Include="Logic\CovCatB.cs" />
     <Compile Include="DataCore.cs" />
     <Compile Include="Logic\InsPlanB.cs" />
     <Compile Include="Logic\PatientB.cs" />

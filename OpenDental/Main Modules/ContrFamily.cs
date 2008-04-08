@@ -1041,15 +1041,15 @@ namespace OpenDental{
 				plan.PlanType="";
 				InsPlans.Insert(plan);
 				Benefit ben;
-				for(int i=0;i<CovCatB.ListShort.Length;i++){
-					if(CovCatB.ListShort[i].DefaultPercent==-1){
+				for(int i=0;i<CovCatC.ListShort.Length;i++){
+					if(CovCatC.ListShort[i].DefaultPercent==-1){
 						continue;
 					}
 					ben=new Benefit();
 					ben.BenefitType=InsBenefitType.Percentage;
-					ben.CovCatNum=CovCatB.ListShort[i].CovCatNum;
+					ben.CovCatNum=CovCatC.ListShort[i].CovCatNum;
 					ben.PlanNum=plan.PlanNum;
-					ben.Percent=CovCatB.ListShort[i].DefaultPercent;
+					ben.Percent=CovCatC.ListShort[i].DefaultPercent;
 					ben.TimePeriod=BenefitTimePeriod.CalendarYear;
 					ben.CodeNum=0;
 					Benefits.Insert(ben);

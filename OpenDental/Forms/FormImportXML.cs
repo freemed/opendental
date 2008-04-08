@@ -469,19 +469,19 @@ namespace OpenDental{
 			}
 			PatPlans.Insert(patplan);
 			//benefits
-			if(annualMax!=-1 && CovCatB.ListShort.Length>0){
+			if(annualMax!=-1 && CovCatC.ListShort.Length>0){
 				Benefit ben=new Benefit();
 				ben.BenefitType=InsBenefitType.Limitations;
-				ben.CovCatNum=CovCatB.ListShort[0].CovCatNum;
+				ben.CovCatNum=CovCatC.ListShort[0].CovCatNum;
 				ben.MonetaryAmt=annualMax;
 				ben.PlanNum=plan.PlanNum;
 				ben.TimePeriod=BenefitTimePeriod.CalendarYear;
 				Benefits.Insert(ben);
 			}
-			if(deductible!=-1 && CovCatB.ListShort.Length>0) {
+			if(deductible!=-1 && CovCatC.ListShort.Length>0) {
 				Benefit ben=new Benefit();
 				ben.BenefitType=InsBenefitType.Deductible;
-				ben.CovCatNum=CovCatB.ListShort[0].CovCatNum;
+				ben.CovCatNum=CovCatC.ListShort[0].CovCatNum;
 				ben.MonetaryAmt=deductible;
 				ben.PlanNum=plan.PlanNum;
 				ben.TimePeriod=BenefitTimePeriod.CalendarYear;

@@ -352,13 +352,13 @@ namespace OpenDental{
 				checkPat.Checked=true;
 			}
 			listCategory.Items.Clear();
-			for(int i=0;i<CovCatB.ListShort.Length;i++){
-				listCategory.Items.Add(CovCatB.ListShort[i].Description);
-				if(CovCatB.ListShort[i].CovCatNum==BenCur.CovCatNum){
+			for(int i=0;i<CovCatC.ListShort.Length;i++){
+				listCategory.Items.Add(CovCatC.ListShort[i].Description);
+				if(CovCatC.ListShort[i].CovCatNum==BenCur.CovCatNum){
 					listCategory.SelectedIndex=i;
 				}
 			}
-			if(listCategory.SelectedIndex==-1 && CovCatB.ListShort.Length>0){
+			if(listCategory.SelectedIndex==-1 && CovCatC.ListShort.Length>0){
 				listCategory.SelectedIndex=0;
 			}
 			textProcCode.Text=ProcedureCodes.GetStringProcCode(BenCur.CodeNum);
@@ -495,7 +495,7 @@ namespace OpenDental{
 				BenCur.PatPlanNum=0;
 				BenCur.PlanNum=PlanNum;
 			}
-			BenCur.CovCatNum=CovCatB.ListShort[listCategory.SelectedIndex].CovCatNum;
+			BenCur.CovCatNum=CovCatC.ListShort[listCategory.SelectedIndex].CovCatNum;
 			BenCur.CodeNum=ProcedureCodes.GetCodeNum(textProcCode.Text);
 			BenCur.BenefitType=(InsBenefitType)listType.SelectedIndex;
 			BenCur.Percent=PIn.PInt(textPercent.Text);

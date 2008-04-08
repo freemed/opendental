@@ -1555,7 +1555,7 @@ namespace OpenDental{
 				Fees.Refresh();
 			}
 			if((itypes & InvalidTypes.InsCats)==InvalidTypes.InsCats){
-				CovCats.Refresh();
+				CovCat_client.Refresh();
 				CovSpans.Refresh();
 				DisplayFields.Refresh();
 			}
@@ -1568,7 +1568,7 @@ namespace OpenDental{
 			}
 			if((itypes & InvalidTypes.Operatories)==InvalidTypes.Operatories){
 				Operatories.Refresh();
-				AccountingAutoPays.Refresh();
+				AccountingAutoPay_client.Refresh();
 			}
 			if((itypes & InvalidTypes.ProcCodes)==InvalidTypes.ProcCodes){
 				ProcedureCodes.Refresh();

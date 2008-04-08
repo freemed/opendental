@@ -62,7 +62,7 @@ namespace OpenDentBusiness{
 				&& CovCatNum!=ben.CovCatNum) {//and they are different
 				//return CovCats.GetOrderShort(CovCatNum).CompareTo(CovCats.GetOrderShort(ben.CovCatNum));
 				//this line was changed because we really do need to know if they have different covcats.
-				return CovCatB.GetOrderLong(CovCatNum).CompareTo(CovCatB.GetOrderLong(ben.CovCatNum));
+				return CovCatC.GetOrderLong(CovCatNum).CompareTo(CovCatC.GetOrderLong(ben.CovCatNum));
 			}
 			//ProcCode
 //THIS IS WRONG! NEED TO COMPARE THE PROCCODES, NOT THE CODENUMS.

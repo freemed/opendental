@@ -1589,8 +1589,8 @@ namespace OpenDental{
 			if(checkCalendarYear.CheckState==CheckState.Unchecked) {
 				ben.TimePeriod=BenefitTimePeriod.ServiceYear;
 			}
-			if(CovCatB.ListShort.Length>0){
-				ben.CovCatNum=CovCatB.ListShort[0].CovCatNum;
+			if(CovCatC.ListShort.Length>0){
+				ben.CovCatNum=CovCatC.ListShort[0].CovCatNum;
 			}
 			ben.BenefitType=InsBenefitType.Percentage;
 			FormBenefitEdit FormB=new FormBenefitEdit(PatPlanNum,PlanNum);

@@ -1,13 +1,46 @@
 using System;
 using System.Collections;
 using System.Data;
-using System.Windows.Forms;
-using OpenDentBusiness;
 
-namespace OpenDental {
+namespace OpenDentBusiness {
 	///<summary></summary>
 	public class CovCats {
+		///<summary></summary>
+		public static DataSet RefreshCache(){
+			string command="SELECT * FROM covcat ORDER BY covorder;"
+				+"SELECT * FROM covcat WHERE IsHidden = 0 ORDER BY CovOrder";
+			DataSet ds=General.GetDataSet(command);
+			FillCache(ds);
+			return ds;
+		}
+
+		///<summary></summary>
+		public static void FillCache(DataSet ds) {
+			DataTable table=ds.Tables[0];
+			CovCatC.Listt=new CovCat[table.Rows.Count];
+			for(int i=0;i<table.Rows.Count;i++) {
+				CovCatC.Listt[i]=new CovCat();
+				CovCatC.Listt[i].CovCatNum     =PIn.PInt(table.Rows[i][0].ToString());
+				CovCatC.Listt[i].Description   =PIn.PString(table.Rows[i][1].ToString());
+				CovCatC.Listt[i].DefaultPercent=PIn.PInt(table.Rows[i][2].ToString());
+				CovCatC.Listt[i].CovOrder      =PIn.PInt(table.Rows[i][3].ToString());
+				CovCatC.Listt[i].IsHidden      =PIn.PBool(table.Rows[i][4].ToString());
+				CovCatC.Listt[i].EbenefitCat   =(EbenefitCategory)PIn.PInt(table.Rows[i][5].ToString());
+			}
+			table=ds.Tables[1];
+			CovCatC.ListShort=new CovCat[table.Rows.Count];
+			for(int i=0;i<table.Rows.Count;i++) {
+				CovCatC.ListShort[i]=new CovCat();
+				CovCatC.ListShort[i].CovCatNum     =PIn.PInt(table.Rows[i][0].ToString());
+				CovCatC.ListShort[i].Description   =PIn.PString(table.Rows[i][1].ToString());
+				CovCatC.ListShort[i].DefaultPercent=PIn.PInt(table.Rows[i][2].ToString());
+				CovCatC.ListShort[i].CovOrder      =PIn.PInt(table.Rows[i][3].ToString());
+				CovCatC.ListShort[i].IsHidden      =PIn.PBool(table.Rows[i][4].ToString());
+				CovCatC.ListShort[i].EbenefitCat   =(EbenefitCategory)PIn.PInt(table.Rows[i][5].ToString());
+			}
+		}
 		
+		/*
 		///<summary></summary>
 		public static void Refresh() {
 			DataSet ds=null;
@@ -25,7 +58,7 @@ namespace OpenDental {
 				MessageBox.Show(e.Message);
 				return;
 			}
-		}
+		}*/
 
 		///<summary></summary>
 		public static void Update(CovCat covcat) {
@@ -53,24 +86,24 @@ namespace OpenDental {
 
 		///<summary></summary>
 		public static void MoveUp(CovCat covcat) {
-			CovCats.Refresh();
-			int oldOrder=CovCatB.GetOrderLong(covcat.CovCatNum);
+			RefreshCache();
+			int oldOrder=CovCatC.GetOrderLong(covcat.CovCatNum);
 			if(oldOrder==0) {
 				return;
 			}
-			SetOrder(CovCatB.Listt[oldOrder],oldOrder-1);
-			SetOrder(CovCatB.Listt[oldOrder-1],oldOrder);
+			SetOrder(CovCatC.Listt[oldOrder],oldOrder-1);
+			SetOrder(CovCatC.Listt[oldOrder-1],oldOrder);
 		}
 
 		///<summary></summary>
 		public static void MoveDown(CovCat covcat) {
-			CovCats.Refresh();
-			int oldOrder=CovCatB.GetOrderLong(covcat.CovCatNum);
-			if(oldOrder==CovCatB.Listt.Length-1) {
+			RefreshCache();
+			int oldOrder=CovCatC.GetOrderLong(covcat.CovCatNum);
+			if(oldOrder==CovCatC.Listt.Length-1) {
 				return;
 			}
-			SetOrder(CovCatB.Listt[oldOrder],oldOrder+1);
-			SetOrder(CovCatB.Listt[oldOrder+1],oldOrder);
+			SetOrder(CovCatC.Listt[oldOrder],oldOrder+1);
+			SetOrder(CovCatC.Listt[oldOrder+1],oldOrder);
 		}
 
 		///<summary></summary>
@@ -81,9 +114,9 @@ namespace OpenDental {
 
 		///<summary></summary>
 		public static CovCat GetCovCat(int covCatNum){
-			for(int i=0;i<CovCatB.Listt.Length;i++) {
-				if(covCatNum==CovCatB.Listt[i].CovCatNum) {
-					return CovCatB.Listt[i].Copy();
+			for(int i=0;i<CovCatC.Listt.Length;i++) {
+				if(covCatNum==CovCatC.Listt[i].CovCatNum) {
+					return CovCatC.Listt[i].Copy();
 				}
 			}
 			return null;//won't happen	
@@ -92,9 +125,9 @@ namespace OpenDental {
 		///<summary></summary>
 		public static double GetDefaultPercent(int myCovCatNum){
 			double retVal=0;
-			for(int i=0;i<CovCatB.Listt.Length;i++){
-				if(myCovCatNum==CovCatB.Listt[i].CovCatNum){
-					retVal=(double)CovCatB.Listt[i].DefaultPercent;
+			for(int i=0;i<CovCatC.Listt.Length;i++){
+				if(myCovCatNum==CovCatC.Listt[i].CovCatNum){
+					retVal=(double)CovCatC.Listt[i].DefaultPercent;
 				}
 			}
 			return retVal;	
@@ -103,9 +136,9 @@ namespace OpenDental {
 		///<summary></summary>
 		public static string GetDesc(int covCatNum){
 			string retStr="";
-			for(int i=0;i<CovCatB.Listt.Length;i++){
-				if(covCatNum==CovCatB.Listt[i].CovCatNum){
-					retStr=CovCatB.Listt[i].Description;
+			for(int i=0;i<CovCatC.Listt.Length;i++){
+				if(covCatNum==CovCatC.Listt[i].CovCatNum){
+					retStr=CovCatC.Listt[i].Description;
 				}
 			}
 			return retStr;	
@@ -115,9 +148,9 @@ namespace OpenDental {
 		public static int GetCovCatNum(int orderShort){
 			//need to check this again:
 			int retVal=0;
-			for(int i=0;i<CovCatB.ListShort.Length;i++){
-				if(orderShort==CovCatB.ListShort[i].CovOrder){
-					retVal=CovCatB.ListShort[i].CovCatNum;
+			for(int i=0;i<CovCatC.ListShort.Length;i++){
+				if(orderShort==CovCatC.ListShort[i].CovOrder){
+					retVal=CovCatC.ListShort[i].CovCatNum;
 				}
 			}
 			return retVal;	
@@ -126,8 +159,8 @@ namespace OpenDental {
 		///<summary></summary>
 		public static int GetOrderShort(int CovCatNum){
 			int retVal=-1;
-			for(int i=0;i<CovCatB.ListShort.Length;i++){
-				if(CovCatNum==CovCatB.ListShort[i].CovCatNum){
+			for(int i=0;i<CovCatC.ListShort.Length;i++){
+				if(CovCatNum==CovCatC.ListShort[i].CovCatNum){
 					retVal=i;
 				}
 			}
@@ -136,9 +169,9 @@ namespace OpenDental {
 
 		///<summary>Gets a matching benefit category from the short list.  Returns null if not found, which should be tested for.</summary>
 		public static CovCat GetForEbenCat(EbenefitCategory eben){
-			for(int i=0;i<CovCatB.ListShort.Length;i++) {
-				if(eben==CovCatB.ListShort[i].EbenefitCat) {
-					return CovCatB.ListShort[i];
+			for(int i=0;i<CovCatC.ListShort.Length;i++) {
+				if(eben==CovCatC.ListShort[i].EbenefitCat) {
+					return CovCatC.ListShort[i];
 				}
 			}
 			return null;
