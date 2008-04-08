@@ -126,14 +126,14 @@ namespace OpenDental{
 		}
 
     private void FillList(){
-      AutoCodes.Refresh();
+      AutoCode_client.Refresh();
       listAutoCodes.Items.Clear();
-      for(int i=0;i<AutoCodes.List.Length;i++){
-        if(AutoCodes.List[i].IsHidden){
-          listAutoCodes.Items.Add(AutoCodes.List[i].Description+"(hidden)");  
+      for(int i=0;i<AutoCodeC.List.Length;i++){
+        if(AutoCodeC.List[i].IsHidden){
+          listAutoCodes.Items.Add(AutoCodeC.List[i].Description+"(hidden)");  
         }
         else{
-          listAutoCodes.Items.Add(AutoCodes.List[i].Description); 
+          listAutoCodes.Items.Add(AutoCodeC.List[i].Description); 
         } 
       }  
     }
@@ -155,7 +155,7 @@ namespace OpenDental{
 			if(listAutoCodes.SelectedIndex==-1){
 				return;
 			}
-		  AutoCode AutoCodeCur=AutoCodes.List[listAutoCodes.SelectedIndex];
+		  AutoCode AutoCodeCur=AutoCodeC.List[listAutoCodes.SelectedIndex];
 		  FormAutoCodeEdit FormACE=new FormAutoCodeEdit();
 			FormACE.AutoCodeCur=AutoCodeCur;
       FormACE.ShowDialog();
@@ -175,7 +175,7 @@ namespace OpenDental{
         MessageBox.Show(Lan.g(this,"You must first select a row"));
 				return;
       }
-      AutoCode AutoCodeCur=AutoCodes.List[listAutoCodes.SelectedIndex];
+      AutoCode AutoCodeCur=AutoCodeC.List[listAutoCodes.SelectedIndex];
       AutoCodes.Delete(AutoCodeCur);
 			changed=true;
       FillList(); 		

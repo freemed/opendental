@@ -235,8 +235,8 @@ namespace OpenDental{
 
     private void FillTable(){
       int count=0;
-      AutoCodeItems.Refresh();
-      AutoCodeConds.Refresh();
+      AutoCodeItem_client.Refresh();
+      AutoCodeCond_client.Refresh();
       AutoCodeItems.GetListForCode(AutoCodeCur.AutoCodeNum);
  			tbAutoItem.ResetRows(AutoCodeItems.ListForCode.Length);
 			tbAutoItem.SetGridColor(Color.Gray);
@@ -245,12 +245,12 @@ namespace OpenDental{
         tbAutoItem.Cell[0,i]=ProcedureCodes.GetProcCode(AutoCodeItems.ListForCode[i].CodeNum).ProcCode;
 				tbAutoItem.Cell[1,i]=ProcedureCodes.GetProcCode(AutoCodeItems.ListForCode[i].CodeNum).Descript;
         count=0;
-        for(int j=0;j<AutoCodeConds.List.Length;j++){
-          if(AutoCodeConds.List[j].AutoCodeItemNum==AutoCodeItems.ListForCode[i].AutoCodeItemNum){
+        for(int j=0;j<AutoCodeCondC.List.Length;j++){
+          if(AutoCodeCondC.List[j].AutoCodeItemNum==AutoCodeItems.ListForCode[i].AutoCodeItemNum){
 						if(count!=0){
 							tbAutoItem.Cell[2,i]+=", ";
 						}
-						tbAutoItem.Cell[2,i]+=AutoCodeConds.List[j].Cond.ToString();
+						tbAutoItem.Cell[2,i]+=AutoCodeCondC.List[j].Cond.ToString();
             count++;
           }
         }

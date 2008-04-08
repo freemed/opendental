@@ -1511,9 +1511,9 @@ namespace OpenDental{
 				LayoutControls();
 			}//if(InvalidTypes.Prefs)
 			if((itypes & InvalidTypes.AutoCodesProcButtons)==InvalidTypes.AutoCodesProcButtons){
-				AutoCodes.Refresh();
-				AutoCodeItems.Refresh();
-				AutoCodeConds.Refresh();
+				AutoCode_client.Refresh();
+				AutoCodeItem_client.Refresh();
+				AutoCodeCond_client.Refresh();
 				ProcButtons.Refresh();
 				ProcButtonItems.Refresh();
 			}
@@ -1615,7 +1615,7 @@ namespace OpenDental{
 			}
 			if((itypes & InvalidTypes.Views)==InvalidTypes.Views){
 				AppointmentRule_client.Refresh();
-				ApptViews.Refresh();
+				ApptView_client.Refresh();
 				ApptViewItem_client.Refresh();
 				ContrAppt2.FillViews();
 			}

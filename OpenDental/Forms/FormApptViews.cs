@@ -258,22 +258,22 @@ namespace OpenDental{
 		}
 
 		private void FillViewList(){
-			ApptViews.Refresh();
+			ApptView_client.Refresh();
 			ApptViewItem_client.Refresh();
 			listViews.Items.Clear();
 			string F;
-			for(int i=0;i<ApptViews.List.Length;i++){
+			for(int i=0;i<ApptViewC.List.Length;i++){
 				if(i<12)
 					F="F"+(i+1).ToString()+"-";
 				else
 					F="";
-				listViews.Items.Add(F+ApptViews.List[i].Description);
+				listViews.Items.Add(F+ApptViewC.List[i].Description);
 			}
 		}
 		
 		private void butAdd_Click(object sender, System.EventArgs e) {
 			ApptView ApptViewCur=new ApptView();
-			ApptViewCur.ItemOrder=ApptViews.List.Length;
+			ApptViewCur.ItemOrder=ApptViewC.List.Length;
 			ApptViews.Insert(ApptViewCur);//this also gets the primary key
 			FormApptViewEdit FormAVE=new FormApptViewEdit();
 			FormAVE.ApptViewCur=ApptViewCur;
@@ -292,7 +292,7 @@ namespace OpenDental{
 				return;
 			}
 			int selected=listViews.SelectedIndex;
-			ApptView ApptViewCur=ApptViews.List[listViews.SelectedIndex];
+			ApptView ApptViewCur=ApptViewC.List[listViews.SelectedIndex];
 			FormApptViewEdit FormAVE=new FormApptViewEdit();
 			FormAVE.ApptViewCur=ApptViewCur;
 			FormAVE.ShowDialog();
@@ -316,11 +316,11 @@ namespace OpenDental{
 			}
 			int selected=listViews.SelectedIndex;
 			//it will flip flop with the one above it
-			ApptView ApptViewCur=ApptViews.List[listViews.SelectedIndex];
+			ApptView ApptViewCur=ApptViewC.List[listViews.SelectedIndex];
 			ApptViewCur.ItemOrder=ApptViewCur.ItemOrder-1;
 			ApptViews.Update(ApptViewCur);
 			//now the other
-			ApptViewCur=ApptViews.List[listViews.SelectedIndex-1];
+			ApptViewCur=ApptViewC.List[listViews.SelectedIndex-1];
 			ApptViewCur.ItemOrder=ApptViewCur.ItemOrder+1;
 			ApptViews.Update(ApptViewCur);
 			viewChanged=true;
@@ -333,16 +333,16 @@ namespace OpenDental{
 				MessageBox.Show(Lan.g(this,"Please select a category first."));
 				return;
 			}
-			if(listViews.SelectedIndex==ApptViews.List.Length-1){
+			if(listViews.SelectedIndex==ApptViewC.List.Length-1){
 				return;//can't go down any more
 			}
 			int selected=listViews.SelectedIndex;
 			//it will flip flop with the one below it
-			ApptView ApptViewCur=ApptViews.List[listViews.SelectedIndex];
+			ApptView ApptViewCur=ApptViewC.List[listViews.SelectedIndex];
 			ApptViewCur.ItemOrder=ApptViewCur.ItemOrder+1;
 			ApptViews.Update(ApptViewCur);
 			//now the other
-			ApptViewCur=ApptViews.List[listViews.SelectedIndex+1];
+			ApptViewCur=ApptViewC.List[listViews.SelectedIndex+1];
 			ApptViewCur.ItemOrder=ApptViewCur.ItemOrder-1;
 			ApptViews.Update(ApptViewCur);
 			viewChanged=true;

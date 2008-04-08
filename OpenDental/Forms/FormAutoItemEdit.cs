@@ -157,7 +157,7 @@ namespace OpenDental{
 		#endregion
 
  		private void FormAutoItemEdit_Load(object sender, System.EventArgs e) { 
-      AutoCodeConds.Refresh();    
+      AutoCodeCond_client.Refresh();    
 			if(IsNew){
 				this.Text=Lan.g(this,"Add Auto Code Item");  
 			}
@@ -173,9 +173,9 @@ namespace OpenDental{
       foreach(string s in Enum.GetNames(typeof(AutoCondition))){
          listConditions.Items.Add(Lan.g("enumAutoConditions",s));
       }  
-			for(int i=0;i<AutoCodeConds.List.Length;i++){
-        if(AutoCodeConds.List[i].AutoCodeItemNum==AutoCodeItemCur.AutoCodeItemNum){
-          listConditions.SetSelected((int)AutoCodeConds.List[i].Cond,true);
+			for(int i=0;i<AutoCodeCondC.List.Length;i++){
+        if(AutoCodeCondC.List[i].AutoCodeItemNum==AutoCodeItemCur.AutoCodeItemNum){
+          listConditions.SetSelected((int)AutoCodeCondC.List[i].Cond,true);
         }   
       }
     } 
@@ -212,12 +212,12 @@ namespace OpenDental{
         textADA.Text=ProcedureCodes.GetStringProcCode(AutoCodeItemCur.CodeNum);
 				return;
       }
-			if(AutoCodeItems.HList.ContainsKey(FormP.SelectedCodeNum)
-				&& (int)AutoCodeItems.HList[FormP.SelectedCodeNum] != AutoCodeItemCur.AutoCodeNum)
+			if(AutoCodeItemC.HList.ContainsKey(FormP.SelectedCodeNum)
+				&& (int)AutoCodeItemC.HList[FormP.SelectedCodeNum] != AutoCodeItemCur.AutoCodeNum)
 			{
 				//This section is a fix for an old bug that did not cause items to get deleted properly
-				if(!AutoCodes.HList.ContainsKey((int)AutoCodeItems.HList[FormP.SelectedCodeNum])){
-					AutoCodeItems.Delete((int)AutoCodeItems.HList[FormP.SelectedCodeNum]);
+				if(!AutoCodeC.HList.ContainsKey((int)AutoCodeItemC.HList[FormP.SelectedCodeNum])){
+					AutoCodeItems.Delete((int)AutoCodeItemC.HList[FormP.SelectedCodeNum]);
 					textADA.Text=ProcedureCodes.GetStringProcCode(FormP.SelectedCodeNum);
 				}
 				else{

@@ -18,7 +18,7 @@ namespace OpenDental{
 				GetForCurView(new ApptView());
 			}
 			else{
-				GetForCurView(ApptViews.List[indexInList]);
+				GetForCurView(ApptViewC.List[indexInList]);
 			}
 		}
 

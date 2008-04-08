@@ -1,26 +1,27 @@
 using System;
 using System.Collections;
 using System.Data;
-using System.Windows.Forms;
-using OpenDentBusiness;
 
-namespace OpenDental{
+namespace OpenDentBusiness{
 	///<summary>Handles database commands related to the apptview table in the database.</summary>
 	public class ApptViews{
-		///<summary>A list of all apptviews, in order.</summary>
-		public static ApptView[] List;
 
 		///<summary></summary>
-		public static void Refresh(){
+		public static DataTable RefreshCache(){
 			string c="SELECT * from apptview ORDER BY itemorder";
 			DataTable table=General.GetTable(c);
-			List=new ApptView[table.Rows.Count];
-			for(int i=0;i<List.Length;i++){
-				List[i]=new ApptView();
-				List[i].ApptViewNum = PIn.PInt   (table.Rows[i][0].ToString());
-				List[i].Description = PIn.PString(table.Rows[i][1].ToString());
-				List[i].ItemOrder   = PIn.PInt   (table.Rows[i][2].ToString());
-				List[i].RowsPerIncr = PIn.PInt   (table.Rows[i][3].ToString());	
+			FillCache(table);
+			return table;
+		}
+
+		public static void FillCache(DataTable table){
+			ApptViewC.List=new ApptView[table.Rows.Count];
+			for(int i=0;i<ApptViewC.List.Length;i++){
+				ApptViewC.List[i]=new ApptView();
+				ApptViewC.List[i].ApptViewNum = PIn.PInt   (table.Rows[i][0].ToString());
+				ApptViewC.List[i].Description = PIn.PString(table.Rows[i][1].ToString());
+				ApptViewC.List[i].ItemOrder   = PIn.PInt   (table.Rows[i][2].ToString());
+				ApptViewC.List[i].RowsPerIncr = PIn.PInt   (table.Rows[i][3].ToString());	
 			}
 		}
 
@@ -52,25 +53,9 @@ namespace OpenDental{
 			General.NonQ(command);
 		}
 
-		public static ApptView GetView(int apptViewNum){
-			for(int i=0;i<List.Length;i++){
-				if(List[i].ApptViewNum==apptViewNum){
-					return List[i];
-				}
-			}
-			return null;//should never happen
-		}
+	
 
-		/*
-		/// <summary>Used in appt module.  Can be -1 if no category selected </summary>
-		public static void SetCur(int index){
-			if(index==-1){
-				Cur=new ApptView();
-			}
-			else{
-				Cur=List[index];
-			}
-		}*/
+	
 
 
 	}

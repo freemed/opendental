@@ -1,30 +1,31 @@
 using System;
 using System.Collections;
 using System.Data;
-using System.Windows.Forms;
-using OpenDentBusiness;
 
-namespace OpenDental{
+namespace OpenDentBusiness{
   ///<summary></summary>
 	public class AutoCodeConds{
-		///<summary></summary>
-		public static AutoCodeCond[] List;
 		///<summary></summary>
 		public static AutoCodeCond[] ListForItem;
 		private static ArrayList ALlist;
 		//public static Hashtable HList; 
 
 		///<summary></summary>
-		public static void Refresh(){
+		public static DataTable RefreshCache(){
 			string command="SELECT * from autocodecond ORDER BY cond";
 			DataTable table=General.GetTable(command);
+			FillCache(table);
+			return table;
+		}
+
+		public static void FillCache(DataTable table){
 			//HList=new Hashtable();
-			List=new AutoCodeCond[table.Rows.Count];
-			for(int i=0;i<List.Length;i++){
-				List[i]=new AutoCodeCond();
-				List[i].AutoCodeCondNum= PIn.PInt        (table.Rows[i][0].ToString());
-				List[i].AutoCodeItemNum= PIn.PInt        (table.Rows[i][1].ToString());
-				List[i].Cond=(AutoCondition)PIn.PInt(table.Rows[i][2].ToString());	
+			AutoCodeCondC.List=new AutoCodeCond[table.Rows.Count];
+			for(int i=0;i<AutoCodeCondC.List.Length;i++){
+				AutoCodeCondC.List[i]=new AutoCodeCond();
+				AutoCodeCondC.List[i].AutoCodeCondNum= PIn.PInt        (table.Rows[i][0].ToString());
+				AutoCodeCondC.List[i].AutoCodeItemNum= PIn.PInt        (table.Rows[i][1].ToString());
+				AutoCodeCondC.List[i].Cond=(AutoCondition)PIn.PInt(table.Rows[i][2].ToString());	
 				//HList.Add(List[i].AutoCodeItemNum,List[i]);
 			}
 		}
@@ -65,9 +66,9 @@ namespace OpenDental{
 		///<summary></summary>
 		public static void GetListForItem(int autoCodeItemNum){
 			ALlist=new ArrayList();
-			for(int i=0;i<List.Length;i++){
-				if(List[i].AutoCodeItemNum==autoCodeItemNum){
-					ALlist.Add(List[i]);
+			for(int i=0;i<AutoCodeCondC.List.Length;i++){
+				if(AutoCodeCondC.List[i].AutoCodeItemNum==autoCodeItemNum){
+					ALlist.Add(AutoCodeCondC.List[i]);
 				} 
 			}
 			ListForItem=new AutoCodeCond[ALlist.Count];

@@ -80,6 +80,10 @@
     <Compile Include="Cache\AccountingAutoPayC.cs" />
     <Compile Include="Cache\AppointmentRuleC.cs" />
     <Compile Include="Cache\ApptViewItemC.cs" />
+    <Compile Include="Cache\ApptViewC.cs" />
+    <Compile Include="Cache\AutoCodeCondC.cs" />
+    <Compile Include="Cache\AutoCodeC.cs" />
+    <Compile Include="Cache\AutoCodeItemC.cs" />
     <Compile Include="Cache\GroupPermissionC.cs" />
     <Compile Include="Cache\UserodC.cs" />
     <Compile Include="Cache\CovCatC.cs" />
@@ -95,6 +99,10 @@
     <Compile Include="Data Interface\AnestheticRecords.cs" />
     <Compile Include="Data Interface\AppointmentRules.cs" />
     <Compile Include="Data Interface\ApptViewItems.cs" />
+    <Compile Include="Data Interface\ApptViews.cs" />
+    <Compile Include="Data Interface\AutoCodeConds.cs" />
+    <Compile Include="Data Interface\AutoCodeItems.cs" />
+    <Compile Include="Data Interface\AutoCodes.cs" />
     <Compile Include="Data Interface\CovCats.cs" />
     <Compile Include="Data Interface\Defs.cs" />
     <Compile Include="Data Interface\Gen.cs" />

@@ -1186,7 +1186,7 @@ namespace OpenDental{
 			Appointments.DateSelected=DateTime.Now;
 			ContrApptSingle.SelectedAptNum=-1;
 			RefreshPeriod();
-			if(ApptViews.List.Length>0){//if any views
+			if(ApptViewC.List.Length>0){//if any views
 				SetView(1);//default to first view
 			}
 			menuWeeklyApt.MenuItems.Clear();
@@ -1277,7 +1277,7 @@ namespace OpenDental{
 
 		/// <summary>Sets the view to the specified index, checking for validity in the process.</summary>
 		private void SetView(int viewIndex){
-			if(viewIndex > ApptViews.List.Length){
+			if(viewIndex > ApptViewC.List.Length){
 				return;
 			}
 			comboView.SelectedIndex=viewIndex;//this also triggers SelectedIndexChanged
@@ -1289,12 +1289,12 @@ namespace OpenDental{
 			comboView.Items.Clear();
 			comboView.Items.Add(Lan.g(this,"none"));
 			string f="";
-			for(int i=0;i<ApptViews.List.Length;i++){
+			for(int i=0;i<ApptViewC.List.Length;i++){
 				if(i<=12)
 					f="F"+(i+1).ToString()+"-";
 				else
 					f="";
-				comboView.Items.Add(f+ApptViews.List[i].Description);
+				comboView.Items.Add(f+ApptViewC.List[i].Description);
 			}
 			if(selected<comboView.Items.Count){
 				comboView.SelectedIndex=selected;//this also triggers SelectedIndexChanged
@@ -3475,7 +3475,7 @@ namespace OpenDental{
 				FormB.ApptViewNumCur=0;
 			}
 			else{
-				FormB.ApptViewNumCur=ApptViews.List[comboView.SelectedIndex-1].ApptViewNum;
+				FormB.ApptViewNumCur=ApptViewC.List[comboView.SelectedIndex-1].ApptViewNum;
 			}
 			FormB.ShowDialog();
 			RefreshPeriod();

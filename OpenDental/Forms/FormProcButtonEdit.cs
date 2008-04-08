@@ -344,7 +344,7 @@ namespace OpenDental{
 		#endregion
 
 		private void FormChartProcedureEntryEdit_Load(object sender, System.EventArgs e) {
-      AutoCodes.Refresh(); 
+      AutoCode_client.Refresh(); 
       ProcButtonItems.Refresh();     
       if(IsNew){
         this.Text=Lan.g(this,"Add Procedure Button");
@@ -370,10 +370,10 @@ namespace OpenDental{
 				listADA.Items.Add(ProcedureCodes.GetStringProcCode(codeNumList[i]));
 			}
 			listAutoCodes.Items.Clear();
-      for(int i=0;i<AutoCodes.ListShort.Length;i++){
-        listAutoCodes.Items.Add(AutoCodes.ListShort[i].Description);
+      for(int i=0;i<AutoCodeC.ListShort.Length;i++){
+        listAutoCodes.Items.Add(AutoCodeC.ListShort[i].Description);
 				for(int j=0;j<auto.Length;j++){
-					if(auto[j]==AutoCodes.ListShort[i].AutoCodeNum){
+					if(auto[j]==AutoCodeC.ListShort[i].AutoCodeNum){
 						listAutoCodes.SetSelected(i,true);
 						break;
 					}
@@ -462,7 +462,7 @@ namespace OpenDental{
       for(int i=0;i<listAutoCodes.SelectedIndices.Count;i++){
         item=new ProcButtonItem();
         item.ProcButtonNum=ProcButtonCur.ProcButtonNum;
-        item.AutoCodeNum=AutoCodes.ListShort[listAutoCodes.SelectedIndices[i]].AutoCodeNum;
+        item.AutoCodeNum=AutoCodeC.ListShort[listAutoCodes.SelectedIndices[i]].AutoCodeNum;
         ProcButtonItems.Insert(item);
       }
       DialogResult=DialogResult.OK;    
