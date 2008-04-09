@@ -3,10 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Text.RegularExpressions;
-using System.Windows.Forms;
-using OpenDentBusiness;
 
-namespace OpenDental{
+namespace OpenDentBusiness{
 	///<summary></summary>
 	public class CanadianExtracts{
 	

@@ -170,12 +170,6 @@
     <Compile Include="Bridges\VixWinOld.cs" />
     <Compile Include="Data Interface\aaDataInterface.cs" />
     <Compile Include="Data Interface\Account_client.cs" />
-    <Compile Include="Data Interface\AutoNoteControls.cs" />
-    <Compile Include="Data Interface\AutoNotes.cs" />
-    <Compile Include="Data Interface\Benefits.cs" />
-    <Compile Include="Data Interface\Carriers.cs" />
-    <Compile Include="Data Interface\ClaimCondCodeLog.cs" />
-    <Compile Include="Data Interface\ClaimFormItems.cs" />
     <Compile Include="Data Interface\ClaimForms.cs" />
     <Compile Include="Data Interface\ClaimPayments.cs" />
     <Compile Include="Data Interface\ClaimProcs.cs" />
@@ -188,11 +182,7 @@
     <Compile Include="Data Interface\ComputerPrefs.cs" />
     <Compile Include="Data Interface\Computers.cs" />
     <Compile Include="Data Interface\Contacts.cs" />
-    <Compile Include="Data Interface\CanadianClaims.cs" />
-    <Compile Include="Data Interface\CanadianExtracts.cs" />
     <Compile Include="Data Interface\ChartModule.cs" />
-    <Compile Include="Data Interface\CanadianNetworks.cs" />
-    <Compile Include="Data Interface\ClaimAttaches.cs" />
     <Compile Include="Data Interface\Appointment_client.cs" />
     <Compile Include="Data Interface\AccountingAutoPay_client.cs" />
     <Compile Include="Data Interface\AppointmentRule_client.cs" />
@@ -201,6 +191,8 @@
     <Compile Include="Data Interface\AutoCodeCond_client.cs" />
     <Compile Include="Data Interface\AutoCode_client.cs" />
     <Compile Include="Data Interface\AutoCodeItem_client.cs" />
+    <Compile Include="Data Interface\ClaimFormItem_client.cs" />
+    <Compile Include="Data Interface\CovSpan_client.cs" />
     <Compile Include="Data Interface\CovCat_client.cs" />
     <Compile Include="Data Interface\GroupPermission_client.cs" />
     <Compile Include="Data Interface\MountDef_client.cs" />
@@ -229,7 +221,6 @@
     <Compile Include="Data Interface\Etranss.cs" />
     <Compile Include="Data Interface\FormPats.cs" />
     <Compile Include="Data Interface\Counties.cs" />
-    <Compile Include="Data Interface\CovSpans.cs" />
     <Compile Include="Data Interface\Defs_client.cs" />
     <Compile Include="Data Interface\Deposits.cs" />
     <Compile Include="Data Interface\DiseaseDefs.cs" />

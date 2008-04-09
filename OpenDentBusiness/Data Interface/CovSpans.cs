@@ -1,29 +1,30 @@
 using System;
 using System.Collections;
 using System.Data;
-using System.Windows.Forms;
-using OpenDentBusiness;
 
-namespace OpenDental {
+namespace OpenDentBusiness{
 	///<summary></summary>
 	public class CovSpans {
-		///<summary></summary>
-		public static CovSpan[] List;
 
 		///<summary></summary>
-		public static void Refresh() {
+		public static DataTable RefreshCache() {
 			string command=
-				"SELECT * from covspan"
+				"SELECT * FROM covspan"
 				+" ORDER BY FromCode";
 			//+" ORDER BY CovCatNum";
 			DataTable table=General.GetTable(command);
-			List=new CovSpan[table.Rows.Count];
+			FillCache(table);
+			return table;
+		}
+
+		public static void FillCache(DataTable table){
+			CovSpanC.List=new CovSpan[table.Rows.Count];
 			for(int i=0;i<table.Rows.Count;i++) {
-				List[i]=new CovSpan();
-				List[i].CovSpanNum  = PIn.PInt(table.Rows[i][0].ToString());
-				List[i].CovCatNum   = PIn.PInt(table.Rows[i][1].ToString());
-				List[i].FromCode    = PIn.PString(table.Rows[i][2].ToString());
-				List[i].ToCode      = PIn.PString(table.Rows[i][3].ToString());
+				CovSpanC.List[i]=new CovSpan();
+				CovSpanC.List[i].CovSpanNum  = PIn.PInt(table.Rows[i][0].ToString());
+				CovSpanC.List[i].CovCatNum   = PIn.PInt(table.Rows[i][1].ToString());
+				CovSpanC.List[i].FromCode    = PIn.PString(table.Rows[i][2].ToString());
+				CovSpanC.List[i].ToCode      = PIn.PString(table.Rows[i][3].ToString());
 			}
 		}
 
@@ -73,10 +74,10 @@ namespace OpenDental {
 		///<summary></summary>
 		public static int GetCat(string myCode){
 			int retVal=0;
-			for(int i=0;i<List.Length;i++){
-				if(String.Compare(myCode,List[i].FromCode)>=0
-					&& String.Compare(myCode,List[i].ToCode)<=0){
-					retVal=List[i].CovCatNum;
+			for(int i=0;i<CovSpanC.List.Length;i++){
+				if(String.Compare(myCode,CovSpanC.List[i].FromCode)>=0
+					&& String.Compare(myCode,CovSpanC.List[i].ToCode)<=0){
+					retVal=CovSpanC.List[i].CovCatNum;
 				}
 			}
 			return retVal;
@@ -85,9 +86,9 @@ namespace OpenDental {
 		///<summary></summary>
 		public static CovSpan[] GetForCat(int catNum){
 			ArrayList AL=new ArrayList();
-			for(int i=0;i<List.Length;i++){
-				if(List[i].CovCatNum==catNum){
-					AL.Add(List[i].Copy());
+			for(int i=0;i<CovSpanC.List.Length;i++){
+				if(CovSpanC.List[i].CovCatNum==catNum){
+					AL.Add(CovSpanC.List[i].Copy());
 				}
 			}
 			CovSpan[] retVal=new CovSpan[AL.Count];

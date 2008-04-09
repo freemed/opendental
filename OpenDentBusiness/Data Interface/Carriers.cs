@@ -4,17 +4,15 @@ using System.Collections.Generic;
 using System.Data;
 using System.Globalization;
 using System.Text.RegularExpressions;
-using System.Windows.Forms;
-using OpenDentBusiness;
 
-namespace OpenDental{
+namespace OpenDentBusiness{
 	///<summary></summary>
 	public class Carriers{
 		///<summary></summary>
 		public static Carrier[] List;
 		///<summary>A hashtable of all carriers.</summary>
 		public static Hashtable HList;
-
+	
 		///<summary>Carriers are not refreshed as local data, but are refreshed as needed. A full refresh is frequently triggered if a carrierNum cannot be found in the HList.  Important retrieval is done directly from the db.</summary>
 		public static void Refresh(){
 			HList=new Hashtable();

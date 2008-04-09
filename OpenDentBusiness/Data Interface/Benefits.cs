@@ -3,10 +3,8 @@ using System.Data;
 using System.Diagnostics;
 using System.Collections;
 using System.Collections.Generic;
-using System.Windows.Forms;
-using OpenDentBusiness;
 
-namespace OpenDental {
+namespace OpenDentBusiness {
 	///<summary></summary>
 	public class Benefits {
 		///<summary>Gets a list of all benefits for a given list of patplans for one patient.</summary>

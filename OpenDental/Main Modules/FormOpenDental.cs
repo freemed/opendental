@@ -1521,7 +1521,7 @@ namespace OpenDental{
 				Carriers.Refresh();//run on startup, after telephone reformat, after list edit.
 			}
 			if((itypes & InvalidTypes.ClaimForms)==InvalidTypes.ClaimForms){
-				ClaimFormItems.Refresh();
+				ClaimFormItem_client.Refresh();
 				ClaimForms.Refresh();
 			}
 			
@@ -1556,7 +1556,7 @@ namespace OpenDental{
 			}
 			if((itypes & InvalidTypes.InsCats)==InvalidTypes.InsCats){
 				CovCat_client.Refresh();
-				CovSpans.Refresh();
+				CovSpan_client.Refresh();
 				DisplayFields.Refresh();
 			}
 			if((itypes & InvalidTypes.Letters)==InvalidTypes.Letters){

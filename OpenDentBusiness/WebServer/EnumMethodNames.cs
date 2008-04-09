@@ -25,6 +25,8 @@ namespace OpenDentBusiness{
 		AutoCode_RefreshCache,
 		AutoCodeCond_RefreshCache,
 		AutoCodeItem_RefreshCache,
+		ClaimFormItem_RefreshCache,
+		CovSpan_RefreshCache,
 		Definition_RefreshCache,
 		GroupPermission_RefreshCache,
 		MountDef_RefreshCache,

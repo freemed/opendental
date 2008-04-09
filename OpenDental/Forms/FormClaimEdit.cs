@@ -227,7 +227,7 @@ namespace OpenDental{
 		private MenuItem menuItemOpen;
 		private MenuItem menuItemRename;
 		private MenuItem menuItemRemove;
-		private ClaimCondCodes CurCondCodes;
+		private ClaimCondCodeLog CurCondCodeLog;
 		private OpenDental.UI.Button butExport;
 		private List<Claim> ClaimList;
 
@@ -239,7 +239,7 @@ namespace OpenDental{
 			if(ClaimCur.ClaimForm != 0){
 				ClaimFormCur=ClaimForms.GetClaimForm(ClaimCur.ClaimForm);
 				ClaimValCodes=ClaimValCodeLog.GetValCodes(ClaimCur);
-				CurCondCodes=ClaimCondCodeLog.GetAllCodes(ClaimCur.ClaimNum);
+				CurCondCodeLog=ClaimCondCodeLogs.GetOne(ClaimCur.ClaimNum);
 			}
 			InitializeComponent();// Required for Windows Form Designer support
 			//tbPay.CellDoubleClicked += new OpenDental.ContrTable.CellEventHandler(tbPay_CellDoubleClicked);
@@ -2586,18 +2586,18 @@ namespace OpenDental{
 					amount.Text=vc.ValAmount.ToString();
 				}
 			}
-			if(CurCondCodes!=null && CurCondCodes.ClaimNum!=0){
-				textCode0.Text=CurCondCodes.Code0.ToString();
-				textCode1.Text=CurCondCodes.Code1.ToString();
-				textCode2.Text=CurCondCodes.Code2.ToString();
-				textCode3.Text=CurCondCodes.Code3.ToString();
-				textCode4.Text=CurCondCodes.Code4.ToString();
-				textCode5.Text=CurCondCodes.Code5.ToString();
-				textCode6.Text=CurCondCodes.Code6.ToString();
-				textCode7.Text=CurCondCodes.Code7.ToString();
-				textCode8.Text=CurCondCodes.Code8.ToString();
-				textCode9.Text=CurCondCodes.Code9.ToString();
-				textCode10.Text=CurCondCodes.Code10.ToString();
+			if(CurCondCodeLog!=null && CurCondCodeLog.ClaimNum!=0){
+				textCode0.Text=CurCondCodeLog.Code0.ToString();
+				textCode1.Text=CurCondCodeLog.Code1.ToString();
+				textCode2.Text=CurCondCodeLog.Code2.ToString();
+				textCode3.Text=CurCondCodeLog.Code3.ToString();
+				textCode4.Text=CurCondCodeLog.Code4.ToString();
+				textCode5.Text=CurCondCodeLog.Code5.ToString();
+				textCode6.Text=CurCondCodeLog.Code6.ToString();
+				textCode7.Text=CurCondCodeLog.Code7.ToString();
+				textCode8.Text=CurCondCodeLog.Code8.ToString();
+				textCode9.Text=CurCondCodeLog.Code9.ToString();
+				textCode10.Text=CurCondCodeLog.Code10.ToString();
 			}
 			if(ClaimCur.DateService.Year<1880)
 				textDateService.Text="";

@@ -4,11 +4,9 @@ using System.Collections.Generic;
 using System.Data;
 using System.Drawing;
 using System.Diagnostics;
-using System.Windows.Forms;
-using OpenDentBusiness;
 
-namespace OpenDental {
-	class AutoNoteControls {
+namespace OpenDentBusiness {
+	public class AutoNoteControls {
 		/// <summary>A list of all the Controls</summary>
 		public static List<AutoNoteControl> Listt;
 

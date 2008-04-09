@@ -4,10 +4,11 @@ using System.Text;
 
 namespace OpenDentBusiness {
 
-	public class ClaimCondCodes {
+	///<summary>There is either one or zero per claim.</summary>
+	public class ClaimCondCodeLog {
 		///<summary>Primary key.</summary>
 		public int ClaimCondCodeNum;
-		///<summary>FK to claim number.</summary>
+		///<summary>FK to claim.ClaimNum.</summary>
 		public int ClaimNum;
 		public string Code0;
 		public string Code1;

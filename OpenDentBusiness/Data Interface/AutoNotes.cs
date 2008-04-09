@@ -4,10 +4,8 @@ using System.Collections.Generic;
 using System.Data;
 using System.Drawing;
 using System.Diagnostics;
-using System.Windows.Forms;
-using OpenDentBusiness;
 
-namespace OpenDental {
+namespace OpenDentBusiness {
 	public class AutoNotes {
 		///<summary>A list of all Auto Notes</summary>
 		public static List<AutoNote> Listt;
@@ -56,8 +54,6 @@ namespace OpenDental {
 			}
 			return IsUsed;
 		}
-
-		
 
 		/// <summary></summary>
 		public static List<AutoNote> AutoNoteEdit(string AutoNoteName) { 
