@@ -662,7 +662,8 @@ namespace OpenDentBusiness {
 			//claims (do not affect balance)-------------------------------------------------------------------------
 			command="SELECT CarrierName,ClaimFee,claim.ClaimNum,ClaimStatus,ClaimType,DateReceived,DateService,"
 				+"claim.InsPayEst,"
-				+"claim.InsPayAmt,claim.PatNum,GROUP_CONCAT(claimproc.ProcNum) _ProcNums,ProvTreat,claim.WriteOff "
+				+"claim.InsPayAmt,claim.PatNum,GROUP_CONCAT(claimproc.ProcNum) _ProcNums,ProvTreat,claim.WriteOff,"
+				+"claim.DedApplied "
 				+"FROM claim "
 				+"LEFT JOIN insplan ON claim.PlanNum=insplan.PlanNum "
 				+"LEFT JOIN carrier ON carrier.CarrierNum=insplan.CarrierNum "
@@ -679,6 +680,7 @@ namespace OpenDentBusiness {
 			DateTime daterec;
 			double amtpaid;
 			double insest;
+			double deductible;
 			for(int i=0;i<rawClaim.Rows.Count;i++){
 				row=table.NewRow();
 				row["AdjNum"]="0";
@@ -797,6 +799,10 @@ namespace OpenDentBusiness {
 				writeoff=PIn.PDouble(rawClaim.Rows[i]["WriteOff"].ToString());
 				if(writeoff!=0){
 					row["description"]+="\r\n"+Lan.g("ContrAccount","Writeoff:")+" "+writeoff.ToString("c");
+				}
+				deductible=PIn.PDouble(rawClaim.Rows[i]["DedApplied"].ToString());
+				if(deductible!=0) {
+					row["description"]+="\r\n"+Lan.g("ContrAccount","Deductible Applied:")+" "+deductible.ToString("c");
 				}
 				row["extraDetail"]="";
 				row["patient"]=fam.GetNameInFamFirst(PIn.PInt(rawClaim.Rows[i]["PatNum"].ToString()));
