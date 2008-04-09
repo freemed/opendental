@@ -2,7 +2,7 @@
 Open Dental GPL license Copyright (C) 2003  Jordan Sparks, DMD.  http://www.open-dent.com,  www.docsparks.com
 See header in FormOpenDental.cs for complete text.  Redistributions must retain this text.
 ===============================================================================================================*/
-//#define TRIALONLY
+//#define TRIALONLY //Do not set here because ContrChart.ProcButtonClicked also needs to test this value.
 using System;
 using System.Drawing;
 using System.Collections;

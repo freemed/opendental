@@ -4512,7 +4512,7 @@ namespace OpenDental{
 					MsgBox.Show(this,"Quick buttons do not work in the trial version because dummy codes are being used instead of real codes.  Just to the left, change to a different category to see other procedure buttons available which do work.");
 					return;
 				}
-			#endif
+			#endif 
 			Procedures.SetDateFirstVisit(DateTime.Today,1,PatCur);
 			bool isValid;
 			TreatmentArea tArea;
@@ -4527,6 +4527,7 @@ namespace OpenDental{
 			else{
 				codeList=ProcButtonItems.GetCodeNumListForButton(procButtonNum);
 				autoCodeList=ProcButtonItems.GetAutoListForButton(procButtonNum);
+				//if(codeList.
 			}
 			Procedure ProcCur;
 			for(int i=0;i<codeList.Length;i++){

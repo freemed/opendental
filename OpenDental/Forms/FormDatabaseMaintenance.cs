@@ -221,6 +221,8 @@ namespace OpenDental {
 			//Now, methods that apply to specific tables----------------------------------------------------------------------------
 			AppointmentsNoPattern();
 			Application.DoEvents();
+			AutoCodesDeleteWithNoItems();
+			Application.DoEvents();
 			ClaimPlanNum2NotValid();
 			Application.DoEvents();
 			ClaimDeleteWithInvalidPlanNums();
@@ -284,6 +286,8 @@ namespace OpenDental {
 			PreferencePracticeBillingType();
 			Application.DoEvents();
 			PreferencePracticeProv();
+			Application.DoEvents();
+			ProcButtonItemsDeleteWithInvalidAutoCode();
 			Application.DoEvents();
 			ProcedurelogAttachedToWrongAppts();
 			Application.DoEvents();
@@ -652,6 +656,18 @@ namespace OpenDental {
 			int numberFixed=table.Rows.Count;
 			if(numberFixed!=0 && !checkShow.Checked) {
 				textLog.Text+=Lan.g(this,"Appointments deleted with zero length: ")+numberFixed.ToString()+"\r\n";
+			}
+		}
+
+		private void AutoCodesDeleteWithNoItems() {
+			command=@"DELETE FROM autocode WHERE NOT EXISTS(
+				SELECT * FROM autocodeitem WHERE autocodeitem.AutoCodeNum=autocode.AutoCodeNum)";
+			int numberFixed=General.NonQ(command);
+			if(numberFixed>0){
+				DataValid.SetInvalid(InvalidTypes.AutoCodesProcButtons);
+			}
+			if(numberFixed!=0 && !checkShow.Checked) {
+				textLog.Text+=Lan.g(this,"Autocodes deleted due to no items: ")+numberFixed.ToString()+"\r\n";
 			}
 		}
 
@@ -1126,6 +1142,18 @@ namespace OpenDental {
 			command="UPDATE preference SET valuestring = '"+table.Rows[0][0].ToString()+"' WHERE prefname = 'PracticeDefaultProv'";
 			General.NonQ(command);
 			textLog.Text+="  "+Lan.g(this,"Fixed.")+"\r\n";
+		}
+
+		private void ProcButtonItemsDeleteWithInvalidAutoCode(){
+			command=@"DELETE FROM procbuttonitem WHERE CodeNum=0 AND NOT EXISTS(
+				SELECT * FROM autocode WHERE autocode.AutoCodeNum=procbuttonitem.AutoCodeNum)";
+			int numberFixed=General.NonQ(command);
+			if(numberFixed>0){
+				DataValid.SetInvalid(InvalidTypes.AutoCodesProcButtons);
+			}
+			if(numberFixed>0 || checkShow.Checked) {
+				textLog.Text+=Lan.g(this,"ProcButtonItems deleted due to invalid autocode: ")+numberFixed.ToString()+"\r\n";
+			}
 		}
 
 		private void ProcedurelogAttachedToWrongAppts() {

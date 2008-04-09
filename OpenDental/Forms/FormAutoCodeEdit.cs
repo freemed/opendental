@@ -291,6 +291,11 @@ namespace OpenDental{
         MessageBox.Show(Lan.g(this,"The Description cannot be blank"));
         return;
       }
+			if(AutoCodeItems.ListForCode.Length==0){
+				MsgBox.Show(this,"Must have at least one item in the list.");
+				//This is not actually rigorous enough since items will already be deleted.
+				return;
+			}
       AutoCodeCur.Description=textDescript.Text;
       AutoCodeCur.IsHidden=checkHidden.Checked;
 			AutoCodeCur.LessIntrusive=checkLessIntrusive.Checked;

@@ -99,6 +99,8 @@ namespace OpenDentBusiness {
 					return AutoCodeItems.RefreshCache();
 				case MethodNameTable.ClaimFormItem_RefreshCache:
 					return ClaimFormItems.RefreshCache();
+				case MethodNameTable.CovSpan_RefreshCache:
+					return CovSpans.RefreshCache();
 				case  MethodNameTable.Definition_RefreshCache:
 					return Defs.RefreshCache();
 				case  MethodNameTable.GroupPermission_RefreshCache:
