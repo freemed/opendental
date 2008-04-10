@@ -3343,7 +3343,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="bin\Debug\payments.txt" />
     <Content Include="Misc\App.ico" />
     <Content Include="Misc\TerminalMgr.ico" />
     <EmbeddedResource Include="Forms\BasicTemplate.resx">
@@ -3373,8 +3372,6 @@
     <Content Include="Resources\Anesth.gif" />
     <None Include="Reporting\Allocators\ClassDiagram_Allocators.cd" />
     <None Include="Reporting\Allocators\MyAllocator1\SupportingCode\EPP_ClassDiagram.cd" />
-    <None Include="Reporting\Allocators\Supporting Queries.zip" />
-    <None Include="Reporting\Allocators\TableDefinition.ods" />
     <None Include="Resources\notify.wav" />
     <None Include="Resources\printPreview20.gif" />
     <None Include="Resources\email1.gif" />
@@ -3396,7 +3393,6 @@
     <None Include="Resources\NoFeeProcCodes.txt" />
     <None Include="Resources\CDT Content End User License.rtf" />
     <None Include="Resources\stationary sample1.jpg" />
-    <None Include="Resources\stationary sample.jpg" />
     <None Include="Resources\ClaimForm.xml" />
     <None Include="Resources\butZoomOut.gif" />
     <None Include="Resources\butQView.gif" />
