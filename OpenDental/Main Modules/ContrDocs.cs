@@ -147,7 +147,7 @@ namespace OpenDental{
 		///<summary>The hot document number of a mount image when it is copied.</summary>
 		int copyDocumentNumber=-1;
 		private IImageStore imageStore;
-        private bool allowTopaz;
+    private bool allowTopaz;
 
 		///<summary></summary>
 		private Patient PatCur { get { return imageStore == null ? null : imageStore.Patient; } }
@@ -164,7 +164,7 @@ namespace OpenDental{
 			//the creation code for the topaz box in CodeBase.TopazWrapper.GetTopaz() so that
 			//the native code does not exist or get called anywhere in the program unless we are running on a 
 			//32-bit version of Windows.
-            allowTopaz=(Environment.OSVersion.Platform!=PlatformID.Unix && !CodeBase.ODEnvironment.Is64BitOperatingSystem());
+      allowTopaz=(Environment.OSVersion.Platform!=PlatformID.Unix && !CodeBase.ODEnvironment.Is64BitOperatingSystem());
 			if(!allowTopaz){
 				TreeDocuments.ContextMenu=null;
 			}
@@ -177,7 +177,7 @@ namespace OpenDental{
 				sigBoxTopaz.TabIndex=93;
 				sigBoxTopaz.Text="sigPlusNET1";
 				sigBoxTopaz.DoubleClick+=new System.EventHandler(this.sigBoxTopaz_DoubleClick);
-                CodeBase.TopazWrapper.SetTopazState(sigBoxTopaz,0);
+        CodeBase.TopazWrapper.SetTopazState(sigBoxTopaz,0);
 			}
 			//We always capture with a Suni device for now.
 			//TODO: In the future use a device locator in the xImagingDeviceManager
@@ -1129,6 +1129,7 @@ namespace OpenDental{
 				SelectTreeNode(null);//Release access to current image so it may be properly deleted.
 			}
 			//Delete all documents involved in deleting this object.
+			ImageStoreBase.verbose=verbose;
 			imageStore.DeleteImage(docs);
 			if(refreshTree){
 				FillDocList(false);

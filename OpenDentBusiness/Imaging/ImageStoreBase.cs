@@ -17,15 +17,13 @@ namespace OpenDental.Imaging {
 	/// Provide a standard base class for image (and file) stores.
 	/// </summary>
 	public abstract class ImageStoreBase : IImageStore {
+
+		public static bool verbose=false;
+
 		#region Properties
 		private Patient patient;
 		public Patient Patient {
 			get { return patient; }
-		}
-
-		private bool verbose = false;
-		protected bool Verbose {
-			get { return verbose; }
 		}
 		#endregion
 

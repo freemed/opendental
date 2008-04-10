@@ -169,7 +169,7 @@ namespace OpenDental.Imaging {
 			if(File.Exists(srcFile)) {
 				File.Delete(srcFile);
 			}
-			else if(Verbose) {
+			else if(verbose) {
 				Debug.WriteLine(Lan.g("ContrDocs", "File could not be found. It may have already been deleted."));
 			}
 		}
