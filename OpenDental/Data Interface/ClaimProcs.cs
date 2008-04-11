@@ -243,6 +243,9 @@ namespace OpenDental{
 				else {//pst.Other
 					cp.CopayAmt=-1;
 				}
+				if(cp.CopayAmt>proc.ProcFee){
+					cp.CopayAmt=proc.ProcFee;
+				}
 				if(cp.Status==ClaimProcStatus.CapEstimate) {
 					//this does automate the Writeoff. If user does not want writeoff automated,
 					//then they will have to complete the procedure first. (very rare)

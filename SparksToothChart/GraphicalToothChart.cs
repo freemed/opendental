@@ -533,8 +533,13 @@ namespace SparksToothChart {
 			else {
 				yPos+=3;
 			}
-			string displayNum = OpenDentBusiness.Tooth.GetToothLabel(tooth_id);
-
+			string displayNum ="";
+			try{
+				displayNum =OpenDentBusiness.Tooth.GetToothLabel(tooth_id);
+			}
+			catch{
+				displayNum ="";//helps with design-time error
+			}
 			float strWidth=g.MeasureString(displayNum,Font).Width;
 			xPos-=strWidth/2f;
 			RectangleF rec=new RectangleF(xPos-1,yPos-1,strWidth,12);//this rec has origin at UL
