@@ -38,7 +38,7 @@ namespace OpenDentBusiness{
 
 	///<summary>MethodNames for retrieving strings.</summary>
 	public enum MethodNameString{
-
+		Userod_CheckDbUserPassword
 	}
 
 	///<summary>MethodNames for retrieving objects.</summary>
@@ -48,7 +48,7 @@ namespace OpenDentBusiness{
 
 	///<summary>MethodNames for sending commands.</summary>
 	public enum MethodNameCmd{
-		Userod_CheckDbUserPassword
+		
 	}
 
 

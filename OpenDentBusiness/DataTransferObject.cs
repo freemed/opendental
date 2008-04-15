@@ -82,8 +82,6 @@ namespace OpenDentBusiness {
 		}
 	}
 
-
-
 	///<summary>This is used for initial login.</summary>
 	public class DtoLogin:DtoCommandBase {
 		public string Database;

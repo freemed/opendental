@@ -136,7 +136,14 @@ namespace OpenDentBusiness {
 			}
 		}
 		
-
+		public static string GetStringByMethod(MethodNameString methodName,object[] parameters){
+			switch (methodName){
+				default:
+					throw new ApplicationException("MethodName not found");
+				//case MethodNameString.Userod_CheckDbUserPassword:
+					//return Userods.CheckDbUserPassword((string)parameters[0],(string)parameters[1],(string)parameters[2]);
+			}
+		}
 
 	}
 

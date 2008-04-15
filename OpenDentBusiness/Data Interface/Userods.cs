@@ -100,14 +100,35 @@ namespace OpenDentBusiness {
 			return false;
 		}
 
-		///<summary>Used by the SL logon window to validate credentials.  Returns 1 if valid.</summary>
-		public static int CheckDbUserPassword(string configFilePath,string database,string username,string password){
+		///<summary>Used by SilverLight.  Throws exception if bad username or passhash or if either are blank.  If database is same, it uses cached user list.  If database has changed, it triggers all cached data to be reset to null and then it resets to a different database.  This way, if multiple users are accessing multiple databases, it will still not crash.</summary>
+		public static void CheckCredentials(Credentials cred){
+			if(cred.Database=="" || cred.Username=="" || cred.PassHash==""){
+				throw new ApplicationException("Invalid username or password.");
+			}
+			Userod userod=null;
+//todo: check database and config file.
+			for(int i=0;i<UserodC.Listt.Count;i++){
+				if(UserodC.Listt[i].UserName==cred.Username){
+					userod=UserodC.Listt[i];
+					break;
+				}
+			}
+			if(userod==null){
+				throw new ApplicationException("Invalid username or password.");
+			}
+			if(userod.Password!=cred.PassHash){
+				throw new ApplicationException("Invalid username or password.");
+			}
+		}
+
+		///<summary>Used by the SL logon window to validate credentials.  Send in the password unhashed.  If invalid, it will sometimes return "" and sometimes throw an informative exception.  If it is valid, then it will return the hashed password.</summary>
+		public static string CheckDbUserPassword(string configFilePath,string database,string username,string password){
 			//Get the database server, user, and password from the config file
 			if(!File.Exists(configFilePath)){
 				#if DEBUG
 					throw new Exception("Could not find " + configFilePath);
 				#else
-					return 0;
+					return "";
 				#endif
 			}
 			XmlDocument doc=new XmlDocument();
@@ -118,7 +139,7 @@ namespace OpenDentBusiness {
 				#if DEBUG
 					throw new Exception(configFilePath+" is not a valid format.");
 				#else
-					return 0;
+					return "";
 				#endif
 			}
 			XPathNavigator Navigator=doc.CreateNavigator();
@@ -128,7 +149,7 @@ namespace OpenDentBusiness {
 				#if DEBUG
 					throw new Exception(database+" is not an allowed database.");
 				#else
-					return 0;
+					return "";
 				#endif
 			}
 			//return navOne.SelectSingleNode("summary").Value;
@@ -155,18 +176,24 @@ namespace OpenDentBusiness {
 				#if DEBUG
 					throw new Exception(@"Connection to database failed.  Check the values in the config file on the server: OpenDentServerConfig.xml");
 				#else
-					return 0;
+					return "";
 				#endif
 			}
 			//Then, check username and password
-			if(!Userods.CheckUserAndPassword(username,EncryptPassword(password))) {
+			string passhash="";
+			string command="SELECT Password FROM userod WHERE UserName='"+POut.PString(username)+"'";
+			DataTable table=dcon.GetTable(command);
+			if(table.Rows.Count!=0){
+				passhash=table.Rows[0][0].ToString();
+			}
+			if(passhash=="" || passhash!=EncryptPassword(password)){
 				#if DEBUG
 					throw new Exception("Invalid username or password.");
 				#else
-					return 0;
+					return "";
 				#endif
 			}
-			return 1;
+			return passhash;
 		}
 
 		///<summary></summary>
