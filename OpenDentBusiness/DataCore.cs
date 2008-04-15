@@ -101,18 +101,38 @@ namespace OpenDentBusiness {
 					return ClaimFormItems.RefreshCache();
 				case MethodNameTable.CovSpan_RefreshCache:
 					return CovSpans.RefreshCache();
-				case  MethodNameTable.Definition_RefreshCache:
+				case MethodNameTable.Definition_RefreshCache:
 					return Defs.RefreshCache();
-				case  MethodNameTable.GroupPermission_RefreshCache:
+				case MethodNameTable.GroupPermission_RefreshCache:
 					return GroupPermissions.RefreshCache();
-				case  MethodNameTable.MountDef_RefreshCache:
+				case MethodNameTable.MountDef_RefreshCache:
 					return MountDefs.RefreshCache();
-				case  MethodNameTable.Prefs_RefreshCache:
+				case MethodNameTable.Patient_GetPtDataTable:
+					return Patients.GetPtDataTable((bool)parameters[0],(string)parameters[1],(string)parameters[2],(string)parameters[3],
+						(string)parameters[4],(bool)parameters[5],(string)parameters[6],(string)parameters[7],(string)parameters[8],
+						(string)parameters[9],(string)parameters[10],(int[])parameters[11],(bool)parameters[12],(bool)parameters[13],
+						(int)parameters[14],(DateTime)parameters[15]);
+				case MethodNameTable.Prefs_RefreshCache:
 					return Prefs.RefreshCache();
-				case  MethodNameTable.Providers_RefreshCache:
+				case MethodNameTable.Providers_RefreshCache:
 					return Providers.RefreshCache();
-				case  MethodNameTable.Userod_RefreshCache:
+				case MethodNameTable.Userod_RefreshCache:
 					return Userods.RefreshCache();
+			}
+		}
+
+		public static string GetXmlTableByMethod(MethodNameTable methodName,object[] parameters) {
+			DataTable table=GetTableByMethod(methodName,parameters);
+			string retVal=XmlConverter.TableToXml(table);
+			return retVal;
+		}
+
+		public static int GetCmdIntByMethod(MethodNameCmd methodName,object[] parameters){
+			switch (methodName){
+				default:
+					throw new ApplicationException("MethodName not found");
+				//case MethodNameCmd.Userod_CheckDbUserPassword:
+					//return Userods.CheckDbUserPassword((string)parameters[0],(string)parameters[1],(string)parameters[2]);
 			}
 		}
 		

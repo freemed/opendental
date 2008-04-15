@@ -1,16 +1,20 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.IO;
 using System.Security;
 using System.Security.Cryptography;
 using System.Text;
+using System.Xml;
+using System.Xml.XPath;
+using System.Web;
 using CodeBase;
+using System.Windows.Forms;
 
 namespace OpenDentBusiness {
 	///<summary>(Users OD)</summary>
 	public class Userods {
-		//<summary>This gets filled automatically when Refresh is called.  If using remoting, then the calling program is responsible for filling this RawData on the client since the automated part only happens on the server.  So there are TWO RawDatas in a server situation, but only one in a small office that connects directly to the database.</summary>
-		//public static DataTable RawData;
+		
 		///<summary></summary>
 		public static DataTable RefreshCache() {
 			string command="SELECT * FROM userod ORDER BY UserName";
@@ -38,6 +42,9 @@ namespace OpenDentBusiness {
 
 		///<summary></summary>
 		public static Userod GetUser(int userNum) {
+			if(UserodC.Listt==null){
+				RefreshCache();
+			}
 			for(int i=0;i<UserodC.Listt.Count;i++) {
 				if(UserodC.Listt[i].UserNum==userNum){
 					return UserodC.Listt[i];
@@ -45,6 +52,8 @@ namespace OpenDentBusiness {
 			}
 			return null;
 		}
+
+		
 		/*
 			Userod user=null;
 			for(int i=0;i<RawData.Rows.Count;i++) {
@@ -89,6 +98,75 @@ namespace OpenDentBusiness {
 				return true;
 			}
 			return false;
+		}
+
+		///<summary>Used by the SL logon window to validate credentials.  Returns 1 if valid.</summary>
+		public static int CheckDbUserPassword(string configFilePath,string database,string username,string password){
+			//Get the database server, user, and password from the config file
+			if(!File.Exists(configFilePath)){
+				#if DEBUG
+					throw new Exception("Could not find " + configFilePath);
+				#else
+					return 0;
+				#endif
+			}
+			XmlDocument doc=new XmlDocument();
+			try {
+				doc.Load(configFilePath);
+			}
+			catch {
+				#if DEBUG
+					throw new Exception(configFilePath+" is not a valid format.");
+				#else
+					return 0;
+				#endif
+			}
+			XPathNavigator Navigator=doc.CreateNavigator();
+			//make sure there's an entry for the requested database:
+			XPathNavigator navConn=Navigator.SelectSingleNode("//DatabaseConnection[Database='"+database+"']");
+			if(navConn==null) {
+				#if DEBUG
+					throw new Exception(database+" is not an allowed database.");
+				#else
+					return 0;
+				#endif
+			}
+			//return navOne.SelectSingleNode("summary").Value;
+			//now, get the values for this connection
+			string server=navConn.SelectSingleNode("ComputerName").Value;
+			string mysqlUser=navConn.SelectSingleNode("User").Value;
+			string mysqlPassword=navConn.SelectSingleNode("Password").Value;
+			string mysqlUserLow=navConn.SelectSingleNode("UserLow").Value;
+			string mysqlPasswordLow=navConn.SelectSingleNode("PasswordLow").Value;
+			XPathNavigator dbTypeNav=navConn.SelectSingleNode("DatabaseType");
+			DatabaseType dbtype=DatabaseType.MySql;
+			if(dbTypeNav!=null){
+				if(dbTypeNav.Value=="Oracle"){
+					dbtype=DatabaseType.Oracle;
+				}
+			}
+			DataConnection dcon=new DataConnection();
+			//Try to connect to the database
+			try {
+				dcon.SetDb(server,database,mysqlUser,mysqlPassword,mysqlUserLow,mysqlPasswordLow,dbtype);
+				//Console.WriteLine(username);
+			}
+			catch {
+				#if DEBUG
+					throw new Exception(@"Connection to database failed.  Check the values in the config file on the server: OpenDentServerConfig.xml");
+				#else
+					return 0;
+				#endif
+			}
+			//Then, check username and password
+			if(!Userods.CheckUserAndPassword(username,EncryptPassword(password))) {
+				#if DEBUG
+					throw new Exception("Invalid username or password.");
+				#else
+					return 0;
+				#endif
+			}
+			return 1;
 		}
 
 		///<summary></summary>

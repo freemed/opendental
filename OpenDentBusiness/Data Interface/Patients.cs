@@ -576,13 +576,13 @@ namespace OpenDentBusiness{
 		}
 
  		///<summary>Only used for the Select Patient dialog</summary>
-		public static DataTable GetPtDataTable(bool limit,string lname,string fname,string phone,//string wkphone,
+		public static DataTable GetPtDataTable(bool limit,string lname,string fname,string phone,
 			string address,bool hideInactive,string city,string state,string ssn,string patnum,string chartnumber,
 			int[] billingtypes,bool guarOnly,bool showArchived,int clinicNum,DateTime birthdate)
 		{
 			//bool retval=false;
 			string billingsnippet="";
-			for(int i=0;i<billingtypes.Length;i++){
+			for(int i=0;i<billingtypes.Length;i++){//if length==0, it will get all billing types
 				if(i==0){
 					billingsnippet+="AND (";
 				}
@@ -695,6 +695,17 @@ namespace OpenDentBusiness{
 			}
 			return PtDataTable;//retval;//if true, there are more rows.
 		}
+
+		/*
+		///<summary>Only used for the SilverLight Select Patient dialog</summary>
+		public static string GetPtDataXml(bool limit,string lname,string fname,string phone,//string wkphone,
+			string address,bool hideInactive,string city,string state,string ssn,string patnum,string chartnumber,
+			int[] billingtypes,bool guarOnly,bool showArchived,int clinicNum,DateTime birthdate)
+		{
+			DataTable table=GetPtDataTable(limit,lname,fname,phone,address,hideInactive,city,state,ssn,patnum,chartnumber,billingtypes,guarOnly,showArchived,clinicNum,birthdate);
+			string retVal=XmlConverter.TableToXml(table);
+			return retVal;
+		}*/
 
 		///<summary>Used when filling appointments for an entire day. Gets a list of Pats, multPats, of all the specified patients.  Then, use GetOnePat to pull one patient from this list.  This process requires only one call to the database.</summary>
 		public static Patient[] GetMultPats(int[] patNums){

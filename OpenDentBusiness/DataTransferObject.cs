@@ -48,7 +48,41 @@ namespace OpenDentBusiness {
 			memStream.Close();
 			return retVal;
 		}
+
+		public string SerializeToStr(){
+			StringBuilder strBuild=new StringBuilder();
+			XmlWriter writer=XmlWriter.Create(strBuild);
+			XmlSerializer serializer = new XmlSerializer(this.GetType());
+			serializer.Serialize(writer,this);
+			writer.Close();
+			return strBuild.ToString();
+		}
+
+		public static DataTransferObject Deserialize(string data) {
+			StringReader strReader=new StringReader(data);
+			XmlReader reader=XmlReader.Create(strReader);
+			string strNodeName="";
+			while(reader.Read()){
+				if(reader.NodeType!=XmlNodeType.Element){
+					continue;
+				}
+				strNodeName=reader.Name;
+				break;
+			}
+			strReader.Close();
+			reader.Close();
+			Type type = Type.GetType("OpenDentBusiness." +strNodeName);
+			StringReader strReader2=new StringReader(data);
+			XmlReader reader2=XmlReader.Create(strReader2);
+			XmlSerializer serializer = new XmlSerializer(type);
+			DataTransferObject retVal=(DataTransferObject)serializer.Deserialize(reader2);
+			strReader2.Close();
+			reader2.Close();
+			return retVal;
+		}
 	}
+
+
 
 	///<summary>This is used for initial login.</summary>
 	public class DtoLogin:DtoCommandBase {
@@ -65,8 +99,17 @@ namespace OpenDentBusiness {
 	public class DtoQueryBase:DataTransferObject {
 	}
 
+	///<summary>The username and password are internal to OD.  They are not the MySQL username and password.</summary>
+	public class Credentials{
+		public string Database;
+		public string Username;
+		public string PassHash;
+	}
+
 	///<summary>This DTO is planned to replace all the DtoQueryBase types.  Having multiple DTO types takes too long to program, so there should only be one type which is used for everything.  We will also eventually move to simpler XML representation of the datasets instead of using the dotNet serialization.</summary>
 	public class DtoGetDS:DataTransferObject{
+		///<summary>Always passed with new web service.  Might be null for direct Tcp connection.</summary>
+		public Credentials Credentials;
 		///<summary>This is the name of the method that we need to call.  "Class_Method" format.</summary>
 		public MethodNameDS MethodNameDS;
 		///<summary>This is a list of parameters that we are passing.  They can be various kinds of objects.</summary>
@@ -75,8 +118,40 @@ namespace OpenDentBusiness {
 
 	///<summary></summary>
 	public class DtoGetTable:DataTransferObject{
+		///<summary>Always passed with new web service.  Might be null for direct Tcp connection.</summary>
+		public Credentials Credentials;
 		///<summary>This is the name of the method that we need to call.  "Class_Method" format.</summary>
 		public MethodNameTable MethodNameTable;
+		///<summary>This is a list of parameters that we are passing.  They can be various kinds of objects.</summary>
+		public object[] Parameters;
+	}
+
+	///<summary>Gets a simple string.</summary>
+	public class DtoGetString:DataTransferObject{
+		///<summary>Always passed with new web service.  Might be null for direct Tcp connection.</summary>
+		public Credentials Credentials;
+		///<summary>This is the name of the method that we need to call.  "Class_Method" format.</summary>
+		public MethodNameString MethodNameString;
+		///<summary>This is a list of parameters that we are passing.  They can be various kinds of objects.</summary>
+		public object[] Parameters;
+	}
+
+	///<summary>Gets an object which must be serializable.  Calling code will convert object to specific type.</summary>
+	public class DtoGetObject:DataTransferObject{
+		///<summary>Always passed with new web service.  Might be null for direct Tcp connection.</summary>
+		public Credentials Credentials;
+		///<summary>This is the name of the method that we need to call.  "Class_Method" format.</summary>
+		public MethodNameObject MethodNameObject;
+		///<summary>This is a list of parameters that we are passing.  They can be various kinds of objects.</summary>
+		public object[] Parameters;
+	}
+
+	///<summary>The result will be an ack or exception.</summary>
+	public class DtoSendCmd:DataTransferObject{
+		///<summary>Always passed with new web service.  Might be null for direct Tcp connection.</summary>
+		public Credentials Credentials;
+		///<summary>This is the name of the method that we need to call.  "Class_Method" format.</summary>
+		public MethodNameCmd MethodNameCmd;
 		///<summary>This is a list of parameters that we are passing.  They can be various kinds of objects.</summary>
 		public object[] Parameters;
 	}

@@ -338,6 +338,7 @@
     <Compile Include="TableTypes\UserQuery.cs" />
     <Compile Include="TableTypes\ZipCode.cs" />
     <Compile Include="WebServer\EnumMethodNames.cs" />
+    <Compile Include="WebServer\XmlConverter.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CodeBase\xCodeBase.csproj">

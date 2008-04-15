@@ -15,7 +15,7 @@ namespace OpenDentBusiness{
 		CovCats_RefreshCache
 	}
 
-	///<summary>MethodNames for retrieving tables.</summary>
+	///<summary>MethodNames for retrieving tables as DataTables or as Xml tables.</summary>
 	public enum MethodNameTable{
 		Account_RefreshCache,
 		AccountingAutoPay_RefreshCache,
@@ -30,8 +30,26 @@ namespace OpenDentBusiness{
 		Definition_RefreshCache,
 		GroupPermission_RefreshCache,
 		MountDef_RefreshCache,
+		Patient_GetPtDataTable,
 		Prefs_RefreshCache,
 		Providers_RefreshCache,
 		Userod_RefreshCache
 	}
+
+	///<summary>MethodNames for retrieving strings.</summary>
+	public enum MethodNameString{
+
+	}
+
+	///<summary>MethodNames for retrieving objects.</summary>
+	public enum MethodNameObject{
+
+	}
+
+	///<summary>MethodNames for sending commands.</summary>
+	public enum MethodNameCmd{
+		Userod_CheckDbUserPassword
+	}
+
+
 }

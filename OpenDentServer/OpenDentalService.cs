@@ -84,14 +84,14 @@ namespace OpenDentServer {
 		public void ServiceWorkerMethod() {
 			try {
 				do {
-                    // Look in the program directory first (e.g. if the program is at c:\foo\bar.exe, this will be c:\foo)
+					// Look in the program directory first (e.g. if the program is at c:\foo\bar.exe, this will be c:\foo)
 					string configfile=ODFileUtils.CombinePaths(Application.StartupPath,"OpenDentServerConfig.xml");
 					if(!File.Exists(configfile)){
-                        // Else, try the current working directory. This is required to get the NUnit tests working.
-                        configfile=ODFileUtils.CombinePaths(Environment.CurrentDirectory,"OpenDentServerConfig.xml");
-                        if(!File.Exists(configfile)){
-                            throw new Exception("Could not find " + configfile);
-                        }
+						// Else, try the current working directory. This is required to get the NUnit tests working.
+						configfile=ODFileUtils.CombinePaths(Environment.CurrentDirectory,"OpenDentServerConfig.xml");
+						if(!File.Exists(configfile)){
+								throw new Exception("Could not find " + configfile);
+						}
 					}
 					XmlDocument doc=new XmlDocument();
 					try {
