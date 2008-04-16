@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 
 namespace OpenDentBusiness{
-		///<summary>(User OD since user is a reserved word) Users are a completely separate entity from Providers and Employees even though they can be linked.  A usernumber can never be changed, ensuring a permanent way to record database entries and leave an audit trail.  A user can be a provider, employee, or neither.</summary>
+		///<summary>(User OD since "user" is a reserved word) Users are a completely separate entity from Providers and Employees even though they can be linked.  A usernumber can never be changed, ensuring a permanent way to record database entries and leave an audit trail.  A user can be a provider, employee, or neither.</summary>
 	public class Userod{
 		///<summary>Primary key.</summary>
 		public int UserNum;
@@ -21,6 +21,21 @@ namespace OpenDentBusiness{
 		public int ProvNum;
 		///<summary>Set true to hide user from login list.</summary>
 		public bool IsHidden;
+
+		public Userod(){
+
+		}
+
+		public Userod(int userNum,string userName,string password,int userGroupNum,int employeeNum,int clinicNum,int provNum,bool isHidden){
+			UserNum=userNum;
+			UserName=userName;
+			Password=password;
+			UserGroupNum=userGroupNum;
+			EmployeeNum=employeeNum;
+			ClinicNum=clinicNum;
+			ProvNum=provNum;
+			IsHidden=isHidden;
+		}
 		
 		///<summary></summary>
 		public Userod Copy(){
