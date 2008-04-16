@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Data;
+using System.Diagnostics;
 using System.Windows.Forms;
 using OpenDentBusiness;
 
@@ -62,9 +63,9 @@ namespace OpenDentBusiness{
 				wherePats+=" PatNum = '"+table.Rows[i][0].ToString()+"'";
 			}
 			//REGULAR PROCEDURES:
-			command="SELECT procdate,procfee,unitqty,baseunits FROM procedurelog"
+			command="SELECT ProcDate,procfee,unitqty,baseunits FROM procedurelog"
 				+" WHERE procstatus = '2'"//complete
-				+" AND ("+wherePats+")";
+				+" AND ("+wherePats+") ORDER BY ProcDate";
 			table=General.GetTable(command);
 			pairs=new DateValuePair[table.Rows.Count];
 			double val;
@@ -82,21 +83,28 @@ namespace OpenDentBusiness{
 					val *= qty;
 				}
 				pairs[i].Value=val;
+				Debug.WriteLine("Proc: "+pairs[i].Date.ToShortDateString()+" "+pairs[i].Value.ToString("c"));
 			}
+			double SumDebugProcs=0;
 			for(int i=0;i<pairs.Length;i++){
+				SumDebugProcs+=pairs[i].Value;
 				Bal[GetAgingType(pairs[i].Date)]+=pairs[i].Value;
 			}
+			Debug.WriteLine("Sum procs: "+SumDebugProcs.ToString("n"));
 			//POSITIVE ADJUSTMENTS:
-			command="SELECT adjdate,adjamt FROM adjustment"
+			command="SELECT AdjDate,adjamt FROM adjustment"
 				+" WHERE adjamt > 0"
-				+" AND ("+wherePats+")";
+				+" AND ("+wherePats+") ORDER BY AdjDate";
 			table=General.GetTable(command);
 			pairs=new DateValuePair[table.Rows.Count];
+			double SumDebugAdj=0;
 			for(int i=0;i<table.Rows.Count;i++){
 				pairs[i].Date=  PIn.PDate  (table.Rows[i][0].ToString());
 				pairs[i].Value= PIn.PDouble(table.Rows[i][1].ToString());
+				Debug.WriteLine("Adj: "+pairs[i].Date.ToShortDateString()+" "+pairs[i].Value.ToString("c"));
 			}
 			for(int i=0;i<pairs.Length;i++){
+				SumDebugAdj+=pairs[i].Value;
 				Bal[GetAgingType(pairs[i].Date)]+=pairs[i].Value;
 			}
 			//NEGATIVE ADJUSTMENTS:
@@ -109,7 +117,10 @@ namespace OpenDentBusiness{
 			for(int i=0;i<table.Rows.Count;i++){
 				pairs[i].Date=  PIn.PDate  (table.Rows[i][0].ToString());
 				pairs[i].Value= -PIn.PDouble(table.Rows[i][1].ToString());
+				Debug.WriteLine("Adj: "+pairs[i].Date.ToShortDateString()+" -"+pairs[i].Value.ToString("c"));
+				SumDebugAdj-=pairs[i].Value;
 			}
+			Debug.WriteLine("Sum adj: "+SumDebugAdj.ToString("n"));
 			ComputePayments(pairs);
 			//CLAIM PAYMENTS AND CAPITATION WRITEOFFS:
 			//Always use DateCP rather than ProcDate to calculate the date of a claim payment
@@ -125,11 +136,15 @@ namespace OpenDentBusiness{
 				+" ORDER BY datecp";
 			table=General.GetTable(command);
 			pairs=new DateValuePair[table.Rows.Count];
+			double SumDebugInsPay=0;
 			for(int i=0;i<table.Rows.Count;i++){
 				pairs[i].Date=  PIn.PDate  (table.Rows[i][0].ToString());
 				pairs[i].Value= PIn.PDouble(table.Rows[i][1].ToString())
 					+PIn.PDouble(table.Rows[i][2].ToString());
+				SumDebugInsPay+=pairs[i].Value;
+				Debug.WriteLine("InsPay+CapWriteoff: "+pairs[i].Date.ToShortDateString()+" -"+pairs[i].Value.ToString("c"));
 			}
+			Debug.WriteLine("Sum InsPayments+CapWriteoffs: "+SumDebugInsPay.ToString("c"));
 			ComputePayments(pairs);
 			//PAYSPLITS:
 			command="SELECT ProcDate,SplitAmt FROM paysplit "
@@ -138,10 +153,14 @@ namespace OpenDentBusiness{
 				+"ORDER BY procdate";
 			table=General.GetTable(command);
 			pairs=new DateValuePair[table.Rows.Count];
+			double SumDebugPaysplit=0;
 			for(int i=0;i<table.Rows.Count;i++){
 				pairs[i].Date=  PIn.PDate  (table.Rows[i][0].ToString());
 				pairs[i].Value= PIn.PDouble(table.Rows[i][1].ToString());
+				SumDebugPaysplit+=pairs[i].Value;
+				Debug.WriteLine("Paysplit: "+pairs[i].Date.ToShortDateString()+" -"+pairs[i].Value.ToString("c"));
 			}
+			Debug.WriteLine("Sum Paysplits: "+SumDebugPaysplit.ToString("c"));
 			ComputePayments(pairs);
 			//PAYMENT PLAN princ:
 			command="SELECT PatNum,Guarantor,Principal,Interest,ChargeDate FROM payplancharge"
@@ -167,6 +186,7 @@ namespace OpenDentBusiness{
 					//if is patient
 					//if(PIn.PInt(table.Rows[i][0].ToString())==patNum){
 						pairs[0].Value-=PIn.PDouble(table.Rows[i][2].ToString());//just always subtract princ from patient aging.
+					Debug.WriteLine("PayPlan: "+pairs[i].Date.ToShortDateString()+" "+pairs[i].Value.ToString("c"));
 					//}
 				}
 			//}
@@ -196,6 +216,7 @@ namespace OpenDentBusiness{
 			for(int i=0;i<table.Rows.Count;i++){
 				InsEst+=PIn.PDouble(table.Rows[i][0].ToString())+PIn.PDouble(table.Rows[i][1].ToString());
 			}
+			Debug.WriteLine("Procs+Adj-InsPay-PaySplit: "+(SumDebugProcs+SumDebugAdj-SumDebugInsPay-SumDebugPaysplit).ToString("c"));
 			//balance is sum of 4 aging periods
 			BalTotal=Bal[0]+Bal[1]+Bal[2]+Bal[3];
 			//after this, balance will NOT necessarily be the same as the sum of the 4.
