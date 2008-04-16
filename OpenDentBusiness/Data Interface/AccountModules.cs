@@ -416,7 +416,7 @@ namespace OpenDentBusiness {
 			command="SELECT ClaimNum,ClaimPaymentNum,DateCP,SUM(InsPayAmt) _InsPayAmt,PatNum,ProcDate,"
 				+"ProvNum,SUM(WriteOff) _WriteOff "
 				+"FROM claimproc "
-				+"WHERE (Status=1 OR Status=4) "//received or supplemental, (5, capclaim handled on procedure row)
+				+"WHERE (Status=1 OR Status=4 OR Status=5) "//received or supplemental or capclaim
 				+"AND (";
 			for(int i=0;i<fam.List.Length;i++){
 				if(i!=0){
@@ -472,7 +472,7 @@ namespace OpenDentBusiness {
 				+"procedurelog.ProcDate,ProcFee,procedurelog.ProcNum,procedurelog.ProvNum,ToothNum,UnitQty,"
 				+"SUM(cp1.WriteOff) _writeOff, "
 				+"(SELECT SUM(WriteOff) FROM claimproc cp2 WHERE procedurelog.ProcNum=cp2.ProcNum "
-				+"AND (cp2.Status=7 OR cp2.Status=5)) _writeOffCap "
+				+"AND cp2.Status=7) _writeOffCap "//CapComplete (CapClaim handled on claimproc row)
 				+"FROM procedurelog "
 				+"LEFT JOIN procedurecode ON procedurelog.CodeNum=procedurecode.CodeNum "
 				+"LEFT JOIN claimproc cp1 ON procedurelog.ProcNum=cp1.ProcNum "
