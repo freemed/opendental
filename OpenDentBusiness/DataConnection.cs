@@ -115,16 +115,16 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>This needs to be run every time we switch databases, especially on startup.  Will throw an exception if fails.  Calling class should catch exception.</summary>
-		public void SetDb(string server, string database,string user, string password, string userLow, string passLow, DatabaseType dbtype){
+		public void SetDb(string server, string db,string user, string password, string userLow, string passLow, DatabaseType dbtype){
 			DBtype=dbtype;
-			string connectStr=BuildSimpleConnectionString(server,database,DefaultPortNum().ToString(),user,password);
+			string connectStr=BuildSimpleConnectionString(server,db,DefaultPortNum().ToString(),user,password);
 			string connectStrLow="";
 			if(userLow!=""){
-				connectStrLow=BuildSimpleConnectionString(server,database,DefaultPortNum().ToString(),userLow,passLow);
+				connectStrLow=BuildSimpleConnectionString(server,db,DefaultPortNum().ToString(),userLow,passLow);
 			}
 			TestConnection(connectStr,connectStrLow,dbtype);
 			//connection strings must be valid, so OK to set permanently
-			Database=database;
+			Database=db;
 			ServerName=server;
 			MysqlUser=user;
 			MysqlPass=password;

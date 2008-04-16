@@ -10,10 +10,10 @@ namespace OpenDentBusiness {
 		public static string TableToXml(DataTable table){
 			StringBuilder strBuild=new StringBuilder();
 			XmlWriter xmlWriter=XmlWriter.Create(strBuild);
-			//XmlSerializer serializer=new XmlSerializer(typeof(DataTable));
-			table.TableName="Userod";
+			if(table.TableName==""){
+				throw new ApplicationException("OpenDentBusiness.WebServer.XmlConverter.TableToXml requires a tablename matching the type of the collection.");
+			}
 			table.WriteXml(xmlWriter);
-			//serializer.Serialize(xmlWriter,table);
 			xmlWriter.Close();
 			return strBuild.ToString();
 		}

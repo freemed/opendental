@@ -82,7 +82,7 @@ namespace OpenDentBusiness {
 		}
 	}
 
-	///<summary>This is used for initial login.</summary>
+	///<summary>This is used for initial login in old tcp architecture.</summary>
 	public class DtoLogin:DtoCommandBase {
 		public string Database;
 		public string OdUser;
@@ -99,7 +99,6 @@ namespace OpenDentBusiness {
 
 	///<summary>The username and password are internal to OD.  They are not the MySQL username and password.</summary>
 	public class Credentials{
-		public string Database;
 		public string Username;
 		public string PassHash;
 	}

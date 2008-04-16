@@ -14,11 +14,13 @@ using System.Windows.Forms;
 namespace OpenDentBusiness {
 	///<summary>(Users OD)</summary>
 	public class Userods {
+		private static bool webServerConfigHasLoaded=false;
 		
 		///<summary></summary>
 		public static DataTable RefreshCache() {
 			string command="SELECT * FROM userod ORDER BY UserName";
 			DataTable table=General.GetTable(command);
+			table.TableName="Userod";
 			FillCache(table);
 			return table;
 		}
@@ -100,13 +102,12 @@ namespace OpenDentBusiness {
 			return false;
 		}
 
-		///<summary>Used by SilverLight.  Throws exception if bad username or passhash or if either are blank.  If database is same, it uses cached user list.  If database has changed, it triggers all cached data to be reset to null and then it resets to a different database.  This way, if multiple users are accessing multiple databases, it will still not crash.</summary>
+		///<summary>Used by SilverLight.  Throws exception if bad username or passhash or if either are blank.  It uses cached user list, refreshing it if null.  This is use everywhere except in the log on screen.</summary>
 		public static void CheckCredentials(Credentials cred){
-			if(cred.Database=="" || cred.Username=="" || cred.PassHash==""){
+			if(cred.Username=="" || cred.PassHash==""){
 				throw new ApplicationException("Invalid username or password.");
 			}
 			Userod userod=null;
-//todo: check database and config file.
 			for(int i=0;i<UserodC.Listt.Count;i++){
 				if(UserodC.Listt[i].UserName==cred.Username){
 					userod=UserodC.Listt[i];
@@ -121,40 +122,28 @@ namespace OpenDentBusiness {
 			}
 		}
 
-		///<summary>Used by the SL logon window to validate credentials.  Send in the password unhashed.  If invalid, it will sometimes return "" and sometimes throw an informative exception.  If it is valid, then it will return the hashed password.</summary>
-		public static string CheckDbUserPassword(string configFilePath,string database,string username,string password){
-			//Get the database server, user, and password from the config file
+		///<summary>Will throw an exception if it fails for any reason.  This will directly access the config file on the disk, read the values, and set the DataConnection to the new database.  This is only triggered on startup of SL the first time someone tries to log on.</summary>
+		private static void LoadDatabaseInfoFromFile(string configFilePath){
 			if(!File.Exists(configFilePath)){
-				#if DEBUG
-					throw new Exception("Could not find " + configFilePath);
-				#else
-					return "";
-				#endif
+				throw new Exception("Could not find "+configFilePath+" on the web server.");
 			}
 			XmlDocument doc=new XmlDocument();
 			try {
 				doc.Load(configFilePath);
 			}
-			catch {
-				#if DEBUG
-					throw new Exception(configFilePath+" is not a valid format.");
-				#else
-					return "";
-				#endif
+			catch{
+				throw new Exception("Web server "+configFilePath+" could not be opened or is in an invalid format.");
 			}
 			XPathNavigator Navigator=doc.CreateNavigator();
-			//make sure there's an entry for the requested database:
-			XPathNavigator navConn=Navigator.SelectSingleNode("//DatabaseConnection[Database='"+database+"']");
+			//always picks the first database entry in the file:
+			XPathNavigator navConn=Navigator.SelectSingleNode("//DatabaseConnection");//[Database='"+database+"']");
 			if(navConn==null) {
-				#if DEBUG
-					throw new Exception(database+" is not an allowed database.");
-				#else
-					return "";
-				#endif
+				throw new Exception(configFilePath+" does not contain a valid database entry.");//database+" is not an allowed database.");
 			}
 			//return navOne.SelectSingleNode("summary").Value;
 			//now, get the values for this connection
 			string server=navConn.SelectSingleNode("ComputerName").Value;
+			string database=navConn.SelectSingleNode("Database").Value;
 			string mysqlUser=navConn.SelectSingleNode("User").Value;
 			string mysqlPassword=navConn.SelectSingleNode("Password").Value;
 			string mysqlUserLow=navConn.SelectSingleNode("UserLow").Value;
@@ -167,18 +156,22 @@ namespace OpenDentBusiness {
 				}
 			}
 			DataConnection dcon=new DataConnection();
-			//Try to connect to the database
 			try {
 				dcon.SetDb(server,database,mysqlUser,mysqlPassword,mysqlUserLow,mysqlPasswordLow,dbtype);
-				//Console.WriteLine(username);
 			}
 			catch {
-				#if DEBUG
-					throw new Exception(@"Connection to database failed.  Check the values in the config file on the server: OpenDentServerConfig.xml");
-				#else
-					return "";
-				#endif
+				throw new Exception("Connection to database failed.  Check the values in the config file on the web server "+configFilePath);
 			}
+			//todo?: make sure no users have blank passwords.
+		}
+
+		///<summary>Used by the SL logon window to validate credentials.  Send in the password unhashed.  If invalid, it will always throw an exception of some type.  If it is valid, then it will return the hashed password.  This is the only place where the config file is read, and it's only read on startup.  So the web service needs to be restarted if the config file changes.</summary>
+		public static string CheckDbUserPassword(string configFilePath,string username,string password){
+			if(!webServerConfigHasLoaded){
+				LoadDatabaseInfoFromFile(configFilePath);
+				webServerConfigHasLoaded=true;
+			}
+			DataConnection dcon=new DataConnection();
 			//Then, check username and password
 			string passhash="";
 			string command="SELECT Password FROM userod WHERE UserName='"+POut.PString(username)+"'";
@@ -187,11 +180,7 @@ namespace OpenDentBusiness {
 				passhash=table.Rows[0][0].ToString();
 			}
 			if(passhash=="" || passhash!=EncryptPassword(password)){
-				#if DEBUG
-					throw new Exception("Invalid username or password.");
-				#else
-					return "";
-				#endif
+				throw new Exception("Invalid username or password.");
 			}
 			return passhash;
 		}
@@ -214,9 +203,7 @@ namespace OpenDentBusiness {
 			//MessageBox.Show(
 			//Debug.WriteLine(hashedInput+","+hashedPass);
 			return hashedInput==hashedPass;
-		}
-
-		
+		}		
 
 		///<summary>usertype can be 'all', 'prov', 'emp', or 'other'.</summary>
 		public static DataTable RefreshSecurity(string usertype,int schoolClassNum){
