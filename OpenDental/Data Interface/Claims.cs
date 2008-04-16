@@ -25,7 +25,7 @@ namespace OpenDental{
 				+" AND patient.PatNum = claim.PatNum"
 				+" AND insplan.PlanNum = claim.PlanNum"
 				+" AND insplan.CarrierNum = carrier.CarrierNum"	// added SPK
-				+" AND (claimproc.Status = '1' OR claimproc.Status = '4')"//received or supplemental
+				+" AND (claimproc.Status = '1' OR claimproc.Status = '4' OR claimproc.Status=5)"//received or supplemental or capclaim
  				+" AND (claimproc.ClaimPaymentNum = '"+POut.PInt(claimPaymentNum)+"'";
 			if(showUnattached){
 				command+=" OR (claimproc.InsPayAmt != 0 AND claimproc.ClaimPaymentNum = '0'))"
