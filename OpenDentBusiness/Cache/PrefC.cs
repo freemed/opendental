@@ -24,6 +24,9 @@ namespace OpenDentBusiness {
 
 		///<summary>Gets a pref of type int.</summary>
 		public static int GetInt(string prefName) {
+			if(HList==null){
+				Prefs.RefreshCache();
+			}
 			if(!HList.ContainsKey(prefName)) {
 				throw new Exception(prefName+" is an invalid pref name.");
 			}
@@ -32,6 +35,9 @@ namespace OpenDentBusiness {
 
 		///<summary>Gets a pref of type double.</summary>
 		public static double GetDouble(string prefName) {
+			if(HList==null){
+				Prefs.RefreshCache();
+			}
 			if(!HList.ContainsKey(prefName)) {
 				throw new Exception(prefName+" is an invalid pref name.");
 			}
@@ -62,6 +68,9 @@ namespace OpenDentBusiness {
 
 		///<summary>Gets a pref of type string.</summary>
 		public static string GetString(string prefName) {
+			if(HList==null){
+				Prefs.RefreshCache();
+			}
 			if(!HList.ContainsKey(prefName)) {
 				throw new Exception(prefName+" is an invalid pref name.");
 			}
@@ -70,6 +79,9 @@ namespace OpenDentBusiness {
 
 		///<summary>Gets a pref of type date.</summary>
 		public static DateTime GetDate(string prefName) {
+			if(HList==null){
+				Prefs.RefreshCache();
+			}
 			if(!HList.ContainsKey(prefName)) {
 				throw new Exception(prefName+" is an invalid pref name.");
 			}

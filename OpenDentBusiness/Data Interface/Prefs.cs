@@ -10,6 +10,7 @@ namespace OpenDentBusiness{
 			string command="SELECT * FROM preference";
 			DataConnection dcon=new DataConnection();
 			DataTable table=dcon.GetTable(command);
+			table.TableName="Pref";
 			FillCache(table);
 			return table;
 		}
