@@ -47,7 +47,6 @@ namespace OpenDental{
 		private System.Windows.Forms.Label label11;
 		private System.Windows.Forms.TextBox textSSN;
 		private System.Windows.Forms.Label label12;
-		private System.Windows.Forms.ListBox listBillingTypes;
 		private System.Windows.Forms.GroupBox groupBox1;
 		private OpenDental.UI.Button butSearch;
 		///<summary>When closing the form, this indicates whether a new patient was added from within this form.</summary>
@@ -64,6 +63,7 @@ namespace OpenDental{
 		private Label label2;
 		private RadioButton radioSearchButtonNo;
 		private RadioButton radioSearchButtonYes;
+		private ComboBox comboBillingType;
 		private TextBox selectedTxtBox;
 
 		///<summary></summary>
@@ -104,7 +104,6 @@ namespace OpenDental{
 			this.label2 = new System.Windows.Forms.Label();
 			this.checkShowArchived = new System.Windows.Forms.CheckBox();
 			this.textChartNumber = new System.Windows.Forms.TextBox();
-			this.listBillingTypes = new System.Windows.Forms.ListBox();
 			this.textSSN = new System.Windows.Forms.TextBox();
 			this.label12 = new System.Windows.Forms.Label();
 			this.label11 = new System.Windows.Forms.Label();
@@ -126,11 +125,12 @@ namespace OpenDental{
 			this.label3 = new System.Windows.Forms.Label();
 			this.labelMore = new System.Windows.Forms.Label();
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
+			this.radioSearchButtonNo = new System.Windows.Forms.RadioButton();
+			this.radioSearchButtonYes = new System.Windows.Forms.RadioButton();
 			this.butSearch = new OpenDental.UI.Button();
 			this.gridMain = new OpenDental.UI.ODGrid();
 			this.contrKeyboard1 = new OpenDental.User_Controls.ContrKeyboard();
-			this.radioSearchButtonYes = new System.Windows.Forms.RadioButton();
-			this.radioSearchButtonNo = new System.Windows.Forms.RadioButton();
+			this.comboBillingType = new System.Windows.Forms.ComboBox();
 			this.groupAddPt.SuspendLayout();
 			this.groupBox2.SuspendLayout();
 			this.groupBox1.SuspendLayout();
@@ -213,11 +213,11 @@ namespace OpenDental{
 			// 
 			// groupBox2
 			// 
+			this.groupBox2.Controls.Add(this.comboBillingType);
 			this.groupBox2.Controls.Add(this.textBirthdate);
 			this.groupBox2.Controls.Add(this.label2);
 			this.groupBox2.Controls.Add(this.checkShowArchived);
 			this.groupBox2.Controls.Add(this.textChartNumber);
-			this.groupBox2.Controls.Add(this.listBillingTypes);
 			this.groupBox2.Controls.Add(this.textSSN);
 			this.groupBox2.Controls.Add(this.label12);
 			this.groupBox2.Controls.Add(this.label11);
@@ -286,15 +286,6 @@ namespace OpenDental{
 			this.textChartNumber.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textChartNumber_KeyDown);
 			this.textChartNumber.Enter += new System.EventHandler(this.textBox_Enter);
 			// 
-			// listBillingTypes
-			// 
-			this.listBillingTypes.Location = new System.Drawing.Point(86,243);
-			this.listBillingTypes.Name = "listBillingTypes";
-			this.listBillingTypes.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
-			this.listBillingTypes.Size = new System.Drawing.Size(138,56);
-			this.listBillingTypes.TabIndex = 9;
-			this.listBillingTypes.SelectedIndexChanged += new System.EventHandler(this.listBillingTypes_SelectedIndexChanged);
-			// 
 			// textSSN
 			// 
 			this.textSSN.Location = new System.Drawing.Point(135,158);
@@ -316,11 +307,11 @@ namespace OpenDental{
 			// 
 			// label11
 			// 
-			this.label11.Location = new System.Drawing.Point(30,249);
+			this.label11.Location = new System.Drawing.Point(3,249);
 			this.label11.Name = "label11";
-			this.label11.Size = new System.Drawing.Size(52,46);
+			this.label11.Size = new System.Drawing.Size(83,29);
 			this.label11.TabIndex = 21;
-			this.label11.Text = "Billing Types";
+			this.label11.Text = "Billing Type";
 			this.label11.TextAlign = System.Drawing.ContentAlignment.TopRight;
 			// 
 			// label10
@@ -497,6 +488,28 @@ namespace OpenDental{
 			this.groupBox1.TabStop = false;
 			this.groupBox1.Text = "Search";
 			// 
+			// radioSearchButtonNo
+			// 
+			this.radioSearchButtonNo.Location = new System.Drawing.Point(11,56);
+			this.radioSearchButtonNo.Name = "radioSearchButtonNo";
+			this.radioSearchButtonNo.Size = new System.Drawing.Size(148,17);
+			this.radioSearchButtonNo.TabIndex = 9;
+			this.radioSearchButtonNo.Text = "Refresh while typing";
+			this.radioSearchButtonNo.UseVisualStyleBackColor = true;
+			this.radioSearchButtonNo.Click += new System.EventHandler(this.radioSearchButtonNo_Click);
+			// 
+			// radioSearchButtonYes
+			// 
+			this.radioSearchButtonYes.Checked = true;
+			this.radioSearchButtonYes.Location = new System.Drawing.Point(11,39);
+			this.radioSearchButtonYes.Name = "radioSearchButtonYes";
+			this.radioSearchButtonYes.Size = new System.Drawing.Size(148,17);
+			this.radioSearchButtonYes.TabIndex = 8;
+			this.radioSearchButtonYes.TabStop = true;
+			this.radioSearchButtonYes.Text = "Use Search button";
+			this.radioSearchButtonYes.UseVisualStyleBackColor = true;
+			this.radioSearchButtonYes.Click += new System.EventHandler(this.radioSearchButtonYes_Click);
+			// 
 			// butSearch
 			// 
 			this.butSearch.AdjustImageLocation = new System.Drawing.Point(0,0);
@@ -534,27 +547,15 @@ namespace OpenDental{
 			this.contrKeyboard1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.contrKeyboard1_MouseDown);
 			this.contrKeyboard1.KeyClick += new OpenDental.User_Controls.KeyboardClickEventHandler(this.contrKeyboard1_KeyClick);
 			// 
-			// radioSearchButtonYes
+			// comboBillingType
 			// 
-			this.radioSearchButtonYes.Checked = true;
-			this.radioSearchButtonYes.Location = new System.Drawing.Point(11,39);
-			this.radioSearchButtonYes.Name = "radioSearchButtonYes";
-			this.radioSearchButtonYes.Size = new System.Drawing.Size(148,17);
-			this.radioSearchButtonYes.TabIndex = 8;
-			this.radioSearchButtonYes.TabStop = true;
-			this.radioSearchButtonYes.Text = "Use Search button";
-			this.radioSearchButtonYes.UseVisualStyleBackColor = true;
-			this.radioSearchButtonYes.Click += new System.EventHandler(this.radioSearchButtonYes_Click);
-			// 
-			// radioSearchButtonNo
-			// 
-			this.radioSearchButtonNo.Location = new System.Drawing.Point(11,56);
-			this.radioSearchButtonNo.Name = "radioSearchButtonNo";
-			this.radioSearchButtonNo.Size = new System.Drawing.Size(148,17);
-			this.radioSearchButtonNo.TabIndex = 9;
-			this.radioSearchButtonNo.Text = "Refresh while typing";
-			this.radioSearchButtonNo.UseVisualStyleBackColor = true;
-			this.radioSearchButtonNo.Click += new System.EventHandler(this.radioSearchButtonNo_Click);
+			this.comboBillingType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboBillingType.FormattingEnabled = true;
+			this.comboBillingType.Location = new System.Drawing.Point(87,248);
+			this.comboBillingType.Name = "comboBillingType";
+			this.comboBillingType.Size = new System.Drawing.Size(138,21);
+			this.comboBillingType.TabIndex = 28;
+			this.comboBillingType.SelectionChangeCommitted += new System.EventHandler(this.comboBillingType_SelectionChangeCommitted);
 			// 
 			// FormPatientSelect
 			// 
@@ -607,8 +608,10 @@ namespace OpenDental{
 			if(SelectionModeOnly){
 				groupAddPt.Visible=false;
 			}
+			comboBillingType.Items.Add(Lan.g(this,"all"));
+			comboBillingType.SelectedIndex=0;
 			for(int i=0;i<DefC.Short[(int)DefCat.BillingTypes].Length;i++){
-				listBillingTypes.Items.Add(DefC.Short[(int)DefCat.BillingTypes][i].ItemName);
+				comboBillingType.Items.Add(DefC.Short[(int)DefCat.BillingTypes][i].ItemName);
 			}
 			FillSearchOption();
 			SetGridCols();
@@ -789,7 +792,7 @@ namespace OpenDental{
 			OnDataEntered();
 		}
 
-		private void listBillingTypes_SelectedIndexChanged(object sender, System.EventArgs e) {
+		private void comboBillingType_SelectionChangeCommitted(object sender,EventArgs e) {
 			OnDataEntered();
 		}
 
@@ -920,15 +923,19 @@ namespace OpenDental{
 		}
 
 		private void FillGrid(){
-			int[] selectedBillingTypes=new int[listBillingTypes.SelectedIndices.Count];
-			for(int i=0;i<selectedBillingTypes.Length;i++){
-				selectedBillingTypes[i]
-					=DefC.Short[(int)DefCat.BillingTypes][listBillingTypes.SelectedIndices[i]].DefNum;
+			int billingType=0;
+			if(comboBillingType.SelectedIndex!=0){
+				billingType=DefC.Short[(int)DefCat.BillingTypes][comboBillingType.SelectedIndex-1].DefNum;
 			}
+			//int[] selectedBillingTypes=new int[listBillingTypes.SelectedIndices.Count];
+			//for(int i=0;i<selectedBillingTypes.Length;i++){
+			//	selectedBillingTypes[i]
+			//		=DefC.Short[(int)DefCat.BillingTypes][listBillingTypes.SelectedIndices[i]].DefNum;
+			//}
 			DateTime birthdate=PIn.PDate(textBirthdate.Text);//this will frequently be minval.
 			PtDataTable=Patients.GetPtDataTable(!radioSearchButtonYes.Checked,textLName.Text,textFName.Text,textHmPhone.Text,
 				textAddress.Text,checkHideInactive.Checked,textCity.Text,textState.Text,
-				textSSN.Text,textPatNum.Text,textChartNumber.Text,selectedBillingTypes,
+				textSSN.Text,textPatNum.Text,textChartNumber.Text,billingType,
 				checkGuarantors.Checked,checkShowArchived.Checked,Security.CurUser.ClinicNum,birthdate);
 			if(!radioSearchButtonYes.Checked && PtDataTable.Rows.Count==36){
 				//if limit and there are more rows
@@ -1042,6 +1049,8 @@ namespace OpenDental{
 		private void butCancel_Click(object sender, System.EventArgs e) {
 			DialogResult=DialogResult.Cancel;
 		}
+
+		
 
 		
 

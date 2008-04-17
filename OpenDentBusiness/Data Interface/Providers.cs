@@ -145,6 +145,9 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static string GetAbbr(int provNum){
+			if(ListLong==null){
+				RefreshCache();
+			}
 			for(int i=0;i<ListLong.Length;i++){
 				if(ListLong[i].ProvNum==provNum){
 					return ListLong[i].Abbr;

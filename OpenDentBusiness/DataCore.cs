@@ -110,7 +110,7 @@ namespace OpenDentBusiness {
 				case MethodNameTable.Patient_GetPtDataTable:
 					return Patients.GetPtDataTable((bool)parameters[0],(string)parameters[1],(string)parameters[2],(string)parameters[3],
 						(string)parameters[4],(bool)parameters[5],(string)parameters[6],(string)parameters[7],(string)parameters[8],
-						(string)parameters[9],(string)parameters[10],(int[])parameters[11],(bool)parameters[12],(bool)parameters[13],
+						(string)parameters[9],(string)parameters[10],(int)parameters[11],(bool)parameters[12],(bool)parameters[13],
 						(int)parameters[14],(DateTime)parameters[15]);
 				case MethodNameTable.Prefs_RefreshCache:
 					return Prefs.RefreshCache();

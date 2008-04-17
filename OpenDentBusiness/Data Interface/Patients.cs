@@ -575,14 +575,16 @@ namespace OpenDentBusiness{
 			General.NonQ(command);
 		}
 
- 		///<summary>Only used for the Select Patient dialog</summary>
+ 		///<summary>Only used for the Select Patient dialog.  Pass in a billing type of 0 for all billing types.</summary>
 		public static DataTable GetPtDataTable(bool limit,string lname,string fname,string phone,
 			string address,bool hideInactive,string city,string state,string ssn,string patnum,string chartnumber,
-			int[] billingtypes,bool guarOnly,bool showArchived,int clinicNum,DateTime birthdate)
+			int billingtype,bool guarOnly,bool showArchived,int clinicNum,DateTime birthdate)
 		{
-			//bool retval=false;
-			string billingsnippet="";
-			for(int i=0;i<billingtypes.Length;i++){//if length==0, it will get all billing types
+			string billingsnippet=" ";
+			if(billingtype!=0){
+				billingsnippet+="AND BillingType="+POut.PInt(billingtype)+" ";
+			}
+			/*for(int i=0;i<billingtypes.Length;i++){//if length==0, it will get all billing types
 				if(i==0){
 					billingsnippet+="AND (";
 				}
@@ -593,7 +595,7 @@ namespace OpenDentBusiness{
 				if(i==billingtypes.Length-1){//if there is only one row, this will also be triggered.
 					billingsnippet+=") ";
 				}
-			}
+			}*/
 			string phonedigits="";
 			for(int i=0;i<phone.Length;i++){
 				if(Regex.IsMatch(phone[i].ToString(),"[0-9]")){
@@ -654,6 +656,7 @@ namespace OpenDentBusiness{
 			//MessageBox.Show(command);
  			DataTable table=General.GetTable(command);
 			DataTable PtDataTable=table.Clone();//does not copy any data
+			PtDataTable.TableName="table";
 			PtDataTable.Columns.Add("age");
 			for(int i=0;i<PtDataTable.Columns.Count;i++){
 				PtDataTable.Columns[i].DataType=typeof(string);
