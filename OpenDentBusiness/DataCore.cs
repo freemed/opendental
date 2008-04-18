@@ -145,6 +145,15 @@ namespace OpenDentBusiness {
 			}
 		}
 
+		public static object GetObjectByMethod(MethodNameObject methodName,object[] parameters){
+			switch (methodName){
+				default:
+					throw new ApplicationException("MethodName not found");
+				case MethodNameObject.Patient_GetPat:
+					return Patients.GetPat((int)parameters[0]);
+			}
+		}
+
 	}
 
 	

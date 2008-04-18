@@ -43,7 +43,7 @@ namespace OpenDentBusiness{
 
 	///<summary>MethodNames for retrieving objects.</summary>
 	public enum MethodNameObject{
-
+		Patient_GetPat
 	}
 
 	///<summary>MethodNames for sending commands.</summary>

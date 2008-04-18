@@ -81,51 +81,85 @@ namespace OpenDental.DataAccess {
 		public XmlSchema GetSchema() {
 			return null;
 		}
-
+		
 		public void ReadXml(XmlReader reader) {
 			// Move to the first value
 			reader.Read();
 			// Go over all fields
 			Type type = GetType();
-			while(type != typeof(object)) {
-				FieldInfo[] fields = type.GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.FlattenHierarchy);
-				foreach (FieldInfo field in fields) {
-					if (field.FieldType == typeof(EventHandler))
-						continue;
-					if (field.FieldType == typeof(TimeSpan)) {
-						TimeSpanSerializer serializer = new TimeSpanSerializer();
-						field.SetValue(this, serializer.Deserialize(reader));
-					}
-					else {
-						XmlSerializer serializer = new XmlSerializer(field.FieldType);
-						field.SetValue(this, serializer.Deserialize(reader));
-					}
+			//while(type != typeof(object)) {
+			FieldInfo[] fields = type.GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.FlattenHierarchy);
+			string fieldVal;
+			foreach (FieldInfo field in fields) {
+				if(field.FieldType==typeof(EventHandler)){
+					continue;
 				}
-				type = type.BaseType;
+				if(field.Name.EndsWith("Changed")){
+					continue;
+				}
+				reader.ReadStartElement();
+				//note that we are not checking the names of the elements like we probably should.
+				fieldVal=reader.ReadElementContentAsString();
+				if(fieldVal!=null){
+					if(field.FieldType == typeof(TimeSpan)) {
+						long ticks = reader.ReadElementContentAsLong();
+						field.SetValue(this,TimeSpan.FromTicks(ticks));
+						//TimeSpanSerializer serializer = new TimeSpanSerializer();
+						//field.SetValue(this, serializer.Deserialize(reader));
+					}
+					else if(field.FieldType==typeof(DateTime)){
+						field.SetValue(this,DateTime.Parse(fieldVal));
+					}
+					else if(field.FieldType==typeof(string)){
+						field.SetValue(this,fieldVal);
+					}
+					else if(field.FieldType==typeof(int)){
+						field.SetValue(this,int.Parse(fieldVal));
+					}
+					else if(field.FieldType==typeof(double)){
+						field.SetValue(this,double.Parse(fieldVal));
+					}
+					
+					//else if(field.FieldType==typeof(Enum)){
+					//	field.SetValue(this,double.Parse(fieldVal));
+					//}
+					
+				}
+				reader.ReadEndElement();
 			}
-			// Move to the next node
 			reader.Read();
 		}
 
 		public void WriteXml(XmlWriter writer) {
-			// Go over all fields
 			Type type = GetType();
-			while (type != typeof(object)) {
-				FieldInfo[] fields = type.GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.FlattenHierarchy);
-				foreach (FieldInfo field in fields) {
-					if (field.FieldType == typeof(EventHandler))
-						continue;
-					if (field.FieldType == typeof(TimeSpan)) {
-						TimeSpanSerializer serializer = new TimeSpanSerializer();
-						serializer.Serialize(writer, (TimeSpan)field.GetValue(this));
+			//writer.WriteStartElement(type.Name);
+			//it looks like we will just be serializing the private fields, since the public ones are properties which don't seem to be picked up.
+			FieldInfo[] fields = type.GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.FlattenHierarchy);
+			object fieldVal;
+			foreach (FieldInfo field in fields) {
+				if (field.FieldType == typeof(EventHandler))
+					continue;
+				//We don't want these for now because they take up space
+				if(field.Name.EndsWith("Changed")){
+					continue;
+				}
+				writer.WriteStartElement(field.Name);
+				fieldVal=field.GetValue(this);
+				if(fieldVal!=null){
+					if(field.FieldType == typeof(TimeSpan)) {
+						writer.WriteValue(((TimeSpan)fieldVal).Ticks);
 					}
-					else {
-						XmlSerializer serializer = new XmlSerializer(field.FieldType);
-						serializer.Serialize(writer, field.GetValue(this));
+					else if(field.FieldType==typeof(DateTime)){
+						writer.WriteValue((DateTime)fieldVal);
+					}
+					else{
+						writer.WriteValue(fieldVal.ToString());
 					}
 				}
-				type = type.BaseType;
+				writer.WriteEndElement();
 			}
+			//writer.WriteEndElement();
 		}
+
 	}
 }

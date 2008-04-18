@@ -139,6 +139,8 @@ namespace OpenDentBusiness {
 		public Credentials Credentials;
 		///<summary>This is the name of the method that we need to call.  "Class_Method" format.</summary>
 		public MethodNameObject MethodNameObject;
+		///<summary>This is the string representation of the type of object that we expect back as a result.</summary>
+		public string ObjectType;
 		///<summary>This is a list of parameters that we are passing.  They can be various kinds of objects.</summary>
 		public object[] Parameters;
 	}

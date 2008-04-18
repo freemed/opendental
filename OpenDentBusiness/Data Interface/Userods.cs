@@ -158,6 +158,7 @@ namespace OpenDentBusiness {
 			DataConnection dcon=new DataConnection();
 			try {
 				dcon.SetDb(server,database,mysqlUser,mysqlPassword,mysqlUserLow,mysqlPasswordLow,dbtype);
+				OpenDental.DataAccess.DataSettings.CreateConnectionString(server,database, mysqlUser,mysqlPassword);
 			}
 			catch {
 				throw new Exception("Connection to database failed.  Check the values in the config file on the web server "+configFilePath);
