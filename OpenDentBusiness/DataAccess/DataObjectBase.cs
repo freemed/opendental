@@ -17,6 +17,7 @@ namespace OpenDental.DataAccess {
 	///   for example, handle events or call backs. (More info).
 	///	 </para>
 	/// </remarks>
+	//[XmlRootAttribute("PurchaseOrder", Namespace="http://www.cpandl.com",IsNullable = false)]
 	public class DataObjectBase : IDataObject, ICloneable {
 		public DataObjectBase() {
 			// Always assume the object is not created from the database. The DataObjectFactory<T> sets the
@@ -34,6 +35,7 @@ namespace OpenDental.DataAccess {
 		private bool isDeleted;
 		public bool IsDeleted {
 			get { return isDeleted; }
+			set { isDeleted=value; }
 		}
 
 		private bool isNew;
@@ -83,82 +85,85 @@ namespace OpenDental.DataAccess {
 		}
 		
 		public void ReadXml(XmlReader reader) {
-			// Move to the first value
-			reader.Read();
-			// Go over all fields
+			reader.Read();//
+			//if(reader.NodeType==XmlNodeType.XmlDeclaration){
+			//	reader.Read();
+			//}
+			//reader.Read();//Main node.  eg. Patient
 			Type type = GetType();
-			//while(type != typeof(object)) {
-			FieldInfo[] fields = type.GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.FlattenHierarchy);
-			string fieldVal;
-			foreach (FieldInfo field in fields) {
-				if(field.FieldType==typeof(EventHandler)){
+			PropertyInfo[] props=type.GetProperties();
+			string propVal;
+			Type propType;
+			foreach (PropertyInfo prop in props) {
+				if(prop.Name.EndsWith("Changed")){
 					continue;
 				}
-				if(field.Name.EndsWith("Changed")){
-					continue;
-				}
-				reader.ReadStartElement();
 				//note that we are not checking the names of the elements like we probably should.
-				fieldVal=reader.ReadElementContentAsString();
-				if(fieldVal!=null){
-					if(field.FieldType == typeof(TimeSpan)) {
-						long ticks = reader.ReadElementContentAsLong();
-						field.SetValue(this,TimeSpan.FromTicks(ticks));
-						//TimeSpanSerializer serializer = new TimeSpanSerializer();
-						//field.SetValue(this, serializer.Deserialize(reader));
+				XmlNodeType nodetype=reader.NodeType;
+				string nodename=reader.Name;
+				propVal=reader.ReadElementContentAsString();
+				propType=prop.PropertyType;
+				if(propVal!=null){
+					try{
+						if(propType== typeof(TimeSpan)) {
+							prop.SetValue(this,TimeSpan.FromTicks(long.Parse(propVal)),null);
+						}
+						else if(propType==typeof(DateTime)){
+							prop.SetValue(this,DateTime.Parse(propVal),null);
+						}
+						else if(propType==typeof(string)){
+							prop.SetValue(this,propVal,null);
+						}
+						else if(propType==typeof(int)){
+							prop.SetValue(this,int.Parse(propVal),null);
+						}
+						else if(propType==typeof(double)){
+							prop.SetValue(this,double.Parse(propVal),null);
+						}
+						else if(propType.IsEnum){
+							prop.SetValue(this,Enum.Parse(propType,propVal,false),null);
+						}
+						else if(propType==typeof(bool)){
+							prop.SetValue(this,bool.Parse(propVal),null);
+						}
+						else if(propType==typeof(byte)){
+							prop.SetValue(this,byte.Parse(propVal),null);
+						}
+						else{
+							throw new NotImplementedException("DataObjectBase.ReadXml does not yet support this property type: "+propType.ToString());
+						}
 					}
-					else if(field.FieldType==typeof(DateTime)){
-						field.SetValue(this,DateTime.Parse(fieldVal));
+					catch(Exception e){
+						throw new Exception(e.Message+", Property name: "+prop.Name+",  Value: "+propVal);
 					}
-					else if(field.FieldType==typeof(string)){
-						field.SetValue(this,fieldVal);
-					}
-					else if(field.FieldType==typeof(int)){
-						field.SetValue(this,int.Parse(fieldVal));
-					}
-					else if(field.FieldType==typeof(double)){
-						field.SetValue(this,double.Parse(fieldVal));
-					}
-					
-					//else if(field.FieldType==typeof(Enum)){
-					//	field.SetValue(this,double.Parse(fieldVal));
-					//}
-					
 				}
-				reader.ReadEndElement();
 			}
-			reader.Read();
 		}
 
 		public void WriteXml(XmlWriter writer) {
 			Type type = GetType();
-			//writer.WriteStartElement(type.Name);
-			//it looks like we will just be serializing the private fields, since the public ones are properties which don't seem to be picked up.
-			FieldInfo[] fields = type.GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.FlattenHierarchy);
-			object fieldVal;
-			foreach (FieldInfo field in fields) {
-				if (field.FieldType == typeof(EventHandler))
-					continue;
+			PropertyInfo[] props=type.GetProperties();
+			object propVal;
+			foreach (PropertyInfo prop in props) {
 				//We don't want these for now because they take up space
-				if(field.Name.EndsWith("Changed")){
+				if(prop.Name.EndsWith("Changed")){
 					continue;
 				}
-				writer.WriteStartElement(field.Name);
-				fieldVal=field.GetValue(this);
-				if(fieldVal!=null){
-					if(field.FieldType == typeof(TimeSpan)) {
-						writer.WriteValue(((TimeSpan)fieldVal).Ticks);
+				writer.WriteStartElement(prop.Name);
+				propVal=prop.GetValue(this,null);
+				if(propVal!=null){
+					if(prop.PropertyType==typeof(TimeSpan)) {
+						writer.WriteValue(((TimeSpan)propVal).Ticks);
 					}
-					else if(field.FieldType==typeof(DateTime)){
-						writer.WriteValue((DateTime)fieldVal);
+					else if(prop.PropertyType==typeof(DateTime)){
+						writer.WriteValue((DateTime)propVal);
 					}
 					else{
-						writer.WriteValue(fieldVal.ToString());
+						writer.WriteValue(propVal.ToString());
 					}
 				}
 				writer.WriteEndElement();
 			}
-			//writer.WriteEndElement();
 		}
 
 	}
