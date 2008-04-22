@@ -471,6 +471,10 @@ namespace OpenDentBusiness {
 				+"LaymanTerm,procedurelog.MedicalCode,MAX(cp1.NoBillIns) _noBillIns,procedurelog.PatNum,ProcCode,"
 				+"procedurelog.ProcDate,ProcFee,procedurelog.ProcNum,procedurelog.ProvNum,ToothNum,UnitQty,"
 				+"SUM(cp1.WriteOff) _writeOff, "
+				//+"MIN(cp1.ClaimNum) _unsent,"//this worked, but doesn't take into account capitation
+				+"(SELECT MIN(ClaimNum) FROM claimproc cp3 WHERE procedurelog.ProcNum=cp3.ProcNum "
+				+"AND cp3.Status!=7) _unsent,"
+				//(SELECT COUNT(*) FROM cp1 WHERE cp1.ClaimNum=0) _unsent,"//will grab any estimate with zero for claim
 				+"(SELECT SUM(WriteOff) FROM claimproc cp2 WHERE procedurelog.ProcNum=cp2.ProcNum "
 				+"AND cp2.Status=7) _writeOffCap "//CapComplete (CapClaim handled on claimproc row)
 				+"FROM procedurelog "
@@ -521,6 +525,9 @@ namespace OpenDentBusiness {
 				}
 				if(rawProc.Rows[i]["_noBillIns"].ToString()!="" && rawProc.Rows[i]["_noBillIns"].ToString()!="0"){
 					row["description"]+=" "+Lan.g("ContrAccount","(NoBillIns)");
+				}
+				if(rawProc.Rows[i]["_unsent"].ToString()=="0"){
+					row["description"]+=" "+Lan.g("ContrAccount","(unsent)");
 				}
 				insPayAmt=PIn.PDouble(rawProc.Rows[i]["_insPayAmt"].ToString());
 				writeOff=PIn.PDouble(rawProc.Rows[i]["_writeOff"].ToString());
