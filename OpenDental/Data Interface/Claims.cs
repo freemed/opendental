@@ -501,6 +501,8 @@ namespace OpenDental{
 				}
 				dedApplied+=ClaimProcsForClaim[i].DedApplied;
 				insPayEst+=ClaimProcsForClaim[i].InsPayEst;
+				ClaimProcsForClaim[i].ProcDate=ProcCur.ProcDate.Date;//this solves a rare bug. Keeps dates synched.
+					//It's rare enough that I'm not goint to add it to the db maint tool.
 				ClaimProcs.Update(ClaimProcsForClaim[i]);
 				//but notice that the ClaimProcs lists are not refreshed until the loop is finished.
 			}//for claimprocs.forclaim
