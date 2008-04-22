@@ -934,7 +934,7 @@ namespace OpenDentBusiness {
 				rows.Add(row);
 			}
 			if(isForStatement){
-				GetPayPlansForStatement(rawPayPlan,rawPay,fromDate,toDate);
+				GetPayPlansForStatement(rawPayPlan,rawPay,fromDate,toDate,singlePatient);
 			}
 			else{
 				GetPayPlans(rawPayPlan,rawPay);
@@ -1195,7 +1195,7 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary>Gets payment plans for the family.  RawPay will include any paysplits for anyone in the family, so it's guaranteed to include all paysplits for a given payplan since payplans only show in the guarantor's family.  Database maint tool enforces paysplit.patnum=payplan.guarantor just in case.  fromDate and toDate are only used if isForStatement.  From date lets us restrict how many amortization items to show.  toDate is typically 10 days in the future.</summary>
-		private static void GetPayPlansForStatement(DataTable rawPayPlan,DataTable rawPay,DateTime fromDate,DateTime toDate){
+		private static void GetPayPlansForStatement(DataTable rawPayPlan,DataTable rawPay,DateTime fromDate,DateTime toDate,bool singlePatient){
 			DataConnection dcon=new DataConnection();
 			DataTable table=new DataTable("payplan");
 			DataRow row;
@@ -1221,6 +1221,16 @@ namespace OpenDentBusiness {
 				row["DateTime"]=DateTime.MinValue;
 				row["date"]="";
 				row["description"]=Lan.g("AccountModule","Payment Plan.  Total loan amount: ")+princ.ToString("c");
+				if(rawPayPlan.Rows[i]["PlanNum"].ToString()=="0"){
+					//row["description"]+="\r\n"+Lan.g("AccountModule","This 'payment plan' is only used ");
+					continue;//don't show insurance payment plans on statements.
+					//Although if they are properly deleting insurance pp charges, no such pp's will be here anyway.
+				}
+				//so all payment plans will have a patient.
+				if(singlePatient && rawPayPlan.Rows[i]["PatNum"].ToString()!=pat.PatNum.ToString()){
+					continue;
+				}
+				row["description"]+="\r\nPatient: "+fam.GetNameInFamLF(PIn.PInt(rawPayPlan.Rows[i]["PatNum"].ToString()));
 				row["extraDetail"]="";
 				row["patient"]="";
 				row["PatNum"]="0";

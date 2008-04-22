@@ -1341,9 +1341,9 @@ namespace OpenDental{
 						break;
 					case "TreatingDentistSignature":
 						if(treatDent.SigOnFile){
-							displayStrings[i]=treatDent.FName+" "+treatDent.MI+" "+treatDent.LName+" "
+							displayStrings[i]=treatDent.FName+" "+treatDent.MI+" "+treatDent.LName;
 								//+treatDent.Suffix+" SOF";
-								+"Sig on File";
+								//+"Sig on File";
 						}
 						break;
 					case "TreatingDentistSigDate":
