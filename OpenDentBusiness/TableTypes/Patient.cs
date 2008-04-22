@@ -836,6 +836,10 @@ namespace OpenDentBusiness{
 			return (Patient)this.MemberwiseClone();
 		}
 
+		public override string ToString() {
+			return "Patient: "+GetNameLF();
+		}
+
 		///<summary>Returns a formatted name, Last, First.</summary>
 		public string GetNameLF(){
 			string retVal="";

@@ -149,8 +149,11 @@ namespace OpenDentBusiness {
 			switch (methodName){
 				default:
 					throw new ApplicationException("MethodName not found");
+				case MethodNameObject.Patient_GetFamily:
+					return Patients.GetFamily((int)parameters[0]);
 				case MethodNameObject.Patient_GetPat:
 					return Patients.GetPat((int)parameters[0]);
+				
 			}
 		}
 
