@@ -1237,6 +1237,15 @@ namespace OpenDental.UI{
 			Invalidate();
 		}
 
+		///<summary></summary>
+		protected override void OnMouseUp(MouseEventArgs e){
+			base.OnMouseUp(e);
+			//if(e.Button==MouseButtons.Right){
+			//	return;
+			//}
+			MouseIsDown=false;
+		}
+
 		///<summary>When selection mode is OneCell, and user clicks in a column that isEditable, then this edit box will appear.  Pass in the location from the click event so that we can determine where to place the text cursor in the box.</summary>
 		private void CreateEditBox(){
 			editBox=new TextBox();
@@ -1354,15 +1363,6 @@ namespace OpenDental.UI{
 
 		private void hScroll_MouseMove(Object sender,MouseEventArgs e){
 			MouseIsOver=true;
-		}
-
-		///<summary></summary>
-		protected override void OnMouseUp(MouseEventArgs e){
-			base.OnMouseUp(e);
-			//if(e.Button==MouseButtons.Right){
-			//	return;
-			//}
-			MouseIsDown=false;
 		}
 
 		private void Parent_MouseWheel(Object sender,MouseEventArgs e){
