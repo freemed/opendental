@@ -417,6 +417,7 @@ namespace OpenDentBusiness {
 				+"ProvNum,SUM(WriteOff) _WriteOff "
 				+"FROM claimproc "
 				+"WHERE (Status=1 OR Status=4 OR Status=5) "//received or supplemental or capclaim
+				+"AND (WriteOff>0 OR InsPayAmt>0) "
 				+"AND (";
 			for(int i=0;i<fam.List.Length;i++){
 				if(i!=0){
