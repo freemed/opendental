@@ -9,6 +9,7 @@ using System.Text;
 using System.Windows.Forms;
 using OpenDentBusiness;
 using CodeBase;
+using System.IO;
 
 namespace OpenDental{
 	/// <summary>
@@ -503,6 +504,11 @@ namespace OpenDental{
 				string fileName;
 				if(PrefC.GetString("StationaryImage") != "") {
 					fileName = ODFileUtils.CombinePaths(FormPath.GetPreferredImagePath(),PrefC.GetString("StationaryImage"));
+					if(!File.Exists(fileName)){
+						MessageBox.Show(Lan.g(this,"The letter background image was not found")+": "+fileName);
+						ev.Cancel=true;
+						return;//Cancel the print job.
+					}
 					Image thisImage = Image.FromFile(fileName);
 					grfx.DrawImage(thisImage
 						, -100
