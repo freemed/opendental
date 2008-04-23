@@ -447,15 +447,15 @@ namespace OpenDental {
 			}
 			else if(tabContr.SelectedIndex==3) {//date
 				TaskListsList=TaskLists.RefreshDatedTrunk(date,TaskDateType.Day);
-				TasksList=Tasks.RefreshDatedTrunk(date,TaskDateType.Day);
+				TasksList=Tasks.RefreshDatedTrunk(date,TaskDateType.Day,checkShowFinished.Checked,startDate);
 			}
 			else if(tabContr.SelectedIndex==4) {//week
 				TaskListsList=TaskLists.RefreshDatedTrunk(date,TaskDateType.Week);
-				TasksList=Tasks.RefreshDatedTrunk(date,TaskDateType.Week);
+				TasksList=Tasks.RefreshDatedTrunk(date,TaskDateType.Week,checkShowFinished.Checked,startDate);
 			}
 			else if(tabContr.SelectedIndex==5) {//month
 				TaskListsList=TaskLists.RefreshDatedTrunk(date,TaskDateType.Month);
-				TasksList=Tasks.RefreshDatedTrunk(date,TaskDateType.Month);
+				TasksList=Tasks.RefreshDatedTrunk(date,TaskDateType.Month,checkShowFinished.Checked,startDate);
 			}
 		}
 

@@ -93,8 +93,8 @@ namespace OpenDental{
 			return RefreshAndFill(command);
 		}
 
-		///<summary>Gets all tasks for one of the 3 dated trunks.</summary>
-		public static List<Task> RefreshDatedTrunk(DateTime date,TaskDateType dateType) {
+		///<summary>Gets all tasks for one of the 3 dated trunks. startDate only applies if showing Done.</summary>
+		public static List<Task> RefreshDatedTrunk(DateTime date,TaskDateType dateType,bool showDone,DateTime startDate) {
 			DateTime dateFrom=DateTime.MinValue;
 			DateTime dateTo=DateTime.MaxValue;
 			if(dateType==TaskDateType.Day) {
@@ -113,8 +113,15 @@ namespace OpenDental{
 				"SELECT * FROM task "
 				+"WHERE DateTask >= "+POut.PDate(dateFrom)
 				+" AND DateTask <= "+POut.PDate(dateTo)
-				+" AND DateType="+POut.PInt((int)dateType)
-				+" ORDER BY DateTimeEntry";
+				+" AND DateType="+POut.PInt((int)dateType);
+			if(showDone){
+				command+=" AND (TaskStatus !="+POut.PInt((int)TaskStatusEnum.Done)
+					+" OR DateTimeFinished > "+POut.PDate(startDate)+")";//of if done, then restrict date
+			}
+			else{
+				command+=" AND TaskStatus !="+POut.PInt((int)TaskStatusEnum.Done);
+			}
+			command+=" ORDER BY DateTimeEntry";
 			return RefreshAndFill(command);
 		}
 
