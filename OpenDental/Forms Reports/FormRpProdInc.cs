@@ -536,7 +536,7 @@ namespace OpenDental{
 				+"CONCAT(CONCAT(CONCAT(CONCAT(patient.LName,', '),patient.FName),' '),patient.MiddleI) AS namelf,"
 				+"procedurecode.Descript,"
 				+"provider.Abbr,"
-				+"procedurelog.ProcFee-IFNULL(SUM(claimproc.WriteOff),0) $fee,"//if no writeoff, then subtract 0
+				+"procedurelog.ProcFee*(CASE procedurelog.UnitQty+procedurelog.BaseUnits WHEN 0 THEN 1 ELSE procedurelog.UnitQty+procedurelog.BaseUnits END)-IFNULL(SUM(claimproc.WriteOff),0) $fee,"//if no writeoff, then subtract 0
 				+"'0000000000000' $Adj,"
 				+"'0000000000000' $InsW,"
 				+"'0000000000000' $PtInc,"
@@ -778,7 +778,7 @@ Group By procdate Order by procdate desc
 			}
 			whereProv+=")";
 			Queries.CurReport.Query="SELECT procedurelog.ProcDate, "
-				+"SUM(procedurelog.ProcFee) "
+				+"SUM(procedurelog.ProcFee*(CASE procedurelog.UnitQty+procedurelog.BaseUnits WHEN 0 THEN 1 ELSE procedurelog.UnitQty+procedurelog.BaseUnits END)) "
 				+"FROM procedurelog "
 				+"WHERE procedurelog.ProcDate >= "+POut.PDate(dateFrom)+" "
 				+"AND procedurelog.ProcDate <= "+POut.PDate(dateTo)+" "
@@ -1156,7 +1156,7 @@ ORDER BY adjdate DESC
 			whereProv+=")";
 			Queries.CurReport.Query="SELECT "
 				+"procedurelog.ProcDate,"
-				+"SUM(procedurelog.ProcFee)-IFNULL(SUM(claimproc.WriteOff),0) "
+				+"SUM(procedurelog.ProcFee*(CASE procedurelog.UnitQty+procedurelog.BaseUnits WHEN 0 THEN 1 ELSE procedurelog.UnitQty+procedurelog.BaseUnits END))-IFNULL(SUM(claimproc.WriteOff),0) "
 				+"FROM procedurelog "
 				+"LEFT JOIN claimproc ON procedurelog.ProcNum=claimproc.ProcNum "
 				+"AND claimproc.Status='7' "//only CapComplete writeoffs are subtracted here.
