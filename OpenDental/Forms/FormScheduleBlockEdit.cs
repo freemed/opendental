@@ -1,6 +1,7 @@
 using System;
 using System.Drawing;
 using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows.Forms;
 using OpenDentBusiness;
@@ -252,9 +253,9 @@ namespace OpenDental{
 			listOp.Items.Clear();
 			listOp.Items.Add(Lan.g(this,"All Ops"));
 			listOp.SelectedIndex=0;
-			for(int i=0;i<Operatories.ListShort.Length ;i++){
-				listOp.Items.Add(Operatories.ListShort[i].Abbrev);
-				if(SchedCur.Op==Operatories.ListShort[i].OperatoryNum){
+			for(int i=0;i<OperatoryC.ListShort.Count ;i++){
+				listOp.Items.Add(OperatoryC.ListShort[i].Abbrev);
+				if(SchedCur.Op==OperatoryC.ListShort[i].OperatoryNum){
 					listOp.SelectedIndex=i+1;
 				}
 			}
@@ -298,7 +299,7 @@ namespace OpenDental{
 				SchedCur.Op=0;
 			}
 			else{
-				SchedCur.Op=Operatories.ListShort[listOp.SelectedIndex-1].OperatoryNum;
+				SchedCur.Op=OperatoryC.ListShort[listOp.SelectedIndex-1].OperatoryNum;
 			}
 			try{
 				Schedules.InsertOrUpdate(SchedCur,IsNew);

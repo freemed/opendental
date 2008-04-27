@@ -1,6 +1,7 @@
 using System;
 using System.Drawing;
 using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows.Forms;
 using OpenDentBusiness;
@@ -180,7 +181,7 @@ namespace OpenDental{
 		}
 
 		private void FillGrid(){
-			Operatories.Refresh();
+			Operatory_client.Refresh();
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
 			ODGridColumn col=new ODGridColumn(Lan.g("TableOperatories","Op Name"),150);
@@ -199,20 +200,20 @@ namespace OpenDental{
 			gridMain.Columns.Add(col);
 			gridMain.Rows.Clear();
 			UI.ODGridRow row;
-			for(int i=0;i<Operatories.List.Length;i++){
+			for(int i=0;i<OperatoryC.Listt.Count;i++){
 				row=new OpenDental.UI.ODGridRow();
-				row.Cells.Add(Operatories.List[i].OpName);
-				row.Cells.Add(Operatories.List[i].Abbrev);
-				if(Operatories.List[i].IsHidden){
+				row.Cells.Add(OperatoryC.Listt[i].OpName);
+				row.Cells.Add(OperatoryC.Listt[i].Abbrev);
+				if(OperatoryC.Listt[i].IsHidden){
 					row.Cells.Add("X");
 				}
 				else{
 					row.Cells.Add("");
 				}
-				row.Cells.Add(Clinics.GetDesc(Operatories.List[i].ClinicNum));
-				row.Cells.Add(Providers.GetAbbr(Operatories.List[i].ProvDentist));
-				row.Cells.Add(Providers.GetAbbr(Operatories.List[i].ProvHygienist));
-				if(Operatories.List[i].IsHygiene){
+				row.Cells.Add(Clinics.GetDesc(OperatoryC.Listt[i].ClinicNum));
+				row.Cells.Add(Providers.GetAbbr(OperatoryC.Listt[i].ProvDentist));
+				row.Cells.Add(Providers.GetAbbr(OperatoryC.Listt[i].ProvHygienist));
+				if(OperatoryC.Listt[i].IsHygiene){
 					row.Cells.Add("X");
 				}
 				else{
@@ -224,7 +225,7 @@ namespace OpenDental{
 		}
 
 		private void gridMain_CellDoubleClick(object sender, OpenDental.UI.ODGridClickEventArgs e) {
-			FormOperatoryEdit FormE=new FormOperatoryEdit(Operatories.List[e.Row]);
+			FormOperatoryEdit FormE=new FormOperatoryEdit(OperatoryC.Listt[e.Row]);
 			FormE.ShowDialog();
 			FillGrid();
 			changed=true;
@@ -236,7 +237,7 @@ namespace OpenDental{
 				opCur.ItemOrder=gridMain.SelectedIndices[0];
 			}
 			else{
-				opCur.ItemOrder=Operatories.List.Length;//goes at end of list
+				opCur.ItemOrder=OperatoryC.Listt.Count;//goes at end of list
 			}
 			FormOperatoryEdit FormE=new FormOperatoryEdit(opCur);
 			FormE.IsNew=true;
@@ -246,9 +247,9 @@ namespace OpenDental{
 			}
 			if(gridMain.SelectedIndices.Length>0){
 				//fix the itemOrder of every Operatory following this one
-				for(int i=gridMain.SelectedIndices[0];i<Operatories.List.Length;i++){
-					Operatories.List[i].ItemOrder++;
-					Operatories.InsertOrUpdate(Operatories.List[i],false);
+				for(int i=gridMain.SelectedIndices[0];i<OperatoryC.Listt.Count;i++){
+					OperatoryC.Listt[i].ItemOrder++;
+					Operatories.InsertOrUpdate(OperatoryC.Listt[i],false);
 				}
 			}
 			FillGrid();
@@ -265,11 +266,11 @@ namespace OpenDental{
 				return;//already at the top
 			}
 			//move selected item up
-			Operatories.List[selected].ItemOrder--;
-			Operatories.InsertOrUpdate(Operatories.List[selected],false);
+			OperatoryC.Listt[selected].ItemOrder--;
+			Operatories.InsertOrUpdate(OperatoryC.Listt[selected],false);
 			//move the one above it down
-			Operatories.List[selected-1].ItemOrder++;
-			Operatories.InsertOrUpdate(Operatories.List[selected-1],false);
+			OperatoryC.Listt[selected-1].ItemOrder++;
+			Operatories.InsertOrUpdate(OperatoryC.Listt[selected-1],false);
 			FillGrid();
 			gridMain.SetSelected(selected-1,true);
 			changed=true;
@@ -281,15 +282,15 @@ namespace OpenDental{
 				return;
 			}
 			int selected=gridMain.SelectedIndices[0];
-			if(selected==Operatories.List.Length-1){
+			if(selected==OperatoryC.Listt.Count-1){
 				return;//already at the bottom
 			}
 			//move selected item down
-			Operatories.List[selected].ItemOrder++;
-			Operatories.InsertOrUpdate(Operatories.List[selected],false);
+			OperatoryC.Listt[selected].ItemOrder++;
+			Operatories.InsertOrUpdate(OperatoryC.Listt[selected],false);
 			//move the one below it up
-			Operatories.List[selected+1].ItemOrder--;
-			Operatories.InsertOrUpdate(Operatories.List[selected+1],false);
+			OperatoryC.Listt[selected+1].ItemOrder--;
+			Operatories.InsertOrUpdate(OperatoryC.Listt[selected+1],false);
 			FillGrid();
 			gridMain.SetSelected(selected+1,true);
 			changed=true;

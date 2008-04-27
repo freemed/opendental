@@ -1,41 +1,42 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Data;
-using System.Windows.Forms;
-using OpenDentBusiness;
 
-namespace OpenDental{
+namespace OpenDentBusiness{
 	///<summary></summary>
 	public class Operatories {
-		///<summary></summary>
-		public static Operatory[] List;
-		///<summary>A list of only those operatories that are visible.</summary>
-		public static Operatory[] ListShort;
 
 		///<summary>Refresh all operatories</summary>
-		public static void Refresh() {
+		public static DataTable RefreshCache() {
 			string command="SELECT * FROM operatory "
 				+"ORDER BY ItemOrder";
 			DataTable table=General.GetTable(command);
-			List=new Operatory[table.Rows.Count];
-			ArrayList AL=new ArrayList();
+			table.TableName="Operatory";
+			FillCache(table);
+			return table;
+		}
+
+		public static void FillCache(DataTable table){
+			OperatoryC.Listt=new List<Operatory>();
+			OperatoryC.ListShort=new List<Operatory>();
+			Operatory op;
 			for(int i=0;i<table.Rows.Count;i++) {
-				List[i]=new Operatory();
-				List[i].OperatoryNum = PIn.PInt(table.Rows[i][0].ToString());
-				List[i].OpName       = PIn.PString(table.Rows[i][1].ToString());
-				List[i].Abbrev       = PIn.PString(table.Rows[i][2].ToString());
-				List[i].ItemOrder    = PIn.PInt(table.Rows[i][3].ToString());
-				List[i].IsHidden     = PIn.PBool(table.Rows[i][4].ToString());
-				List[i].ProvDentist  = PIn.PInt(table.Rows[i][5].ToString());
-				List[i].ProvHygienist= PIn.PInt(table.Rows[i][6].ToString());
-				List[i].IsHygiene    = PIn.PBool(table.Rows[i][7].ToString());
-				List[i].ClinicNum    = PIn.PInt(table.Rows[i][8].ToString());
-				if(!List[i].IsHidden) {
-					AL.Add(List[i]);
+				op=new Operatory();
+				op.OperatoryNum = PIn.PInt(table.Rows[i][0].ToString());
+				op.OpName       = PIn.PString(table.Rows[i][1].ToString());
+				op.Abbrev       = PIn.PString(table.Rows[i][2].ToString());
+				op.ItemOrder    = PIn.PInt(table.Rows[i][3].ToString());
+				op.IsHidden     = PIn.PBool(table.Rows[i][4].ToString());
+				op.ProvDentist  = PIn.PInt(table.Rows[i][5].ToString());
+				op.ProvHygienist= PIn.PInt(table.Rows[i][6].ToString());
+				op.IsHygiene    = PIn.PBool(table.Rows[i][7].ToString());
+				op.ClinicNum    = PIn.PInt(table.Rows[i][8].ToString());
+				OperatoryC.Listt.Add(op);
+				if(!op.IsHidden) {
+					OperatoryC.ListShort.Add(op);
 				}
 			}
-			ListShort=new Operatory[AL.Count];
-			AL.CopyTo(ListShort);
 		}
 
 		///<summary></summary>
@@ -86,35 +87,7 @@ namespace OpenDental{
 		//public void Delete(){//no such thing as delete.  Hide instead
 		//}
 
-		///<summary>Gets the order of the op within ListShort or -1 if not found.</summary>
-		public static int GetOrder(int opNum){
-			for(int i=0;i<ListShort.Length;i++){
-				if(ListShort[i].OperatoryNum==opNum){
-					return i;
-				}
-			}
-			return -1;
-		}
-
-		///<summary>Gets the abbreviation of an op.</summary>
-		public static string GetAbbrev(int opNum){
-			for(int i=0;i<List.Length;i++){
-				if(List[i].OperatoryNum==opNum){
-					return List[i].Abbrev;
-				}
-			}
-			return "";
-		}
-
-		///<summary></summary>
-		public static Operatory GetOperatory(int operatoryNum){
-			for(int i=0;i<List.Length;i++){
-				if(List[i].OperatoryNum==operatoryNum){
-					return List[i].Copy();
-				}
-			}
-			return null;
-		}
+		
 	
 	}
 	

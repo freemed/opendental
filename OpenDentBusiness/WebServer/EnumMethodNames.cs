@@ -30,6 +30,7 @@ namespace OpenDentBusiness{
 		Definition_RefreshCache,
 		GroupPermission_RefreshCache,
 		MountDef_RefreshCache,
+		Operatory_RefreshCache,
 		Patient_GetPtDataTable,
 		Prefs_RefreshCache,
 		Providers_RefreshCache,

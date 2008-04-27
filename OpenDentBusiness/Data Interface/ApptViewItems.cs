@@ -7,7 +7,6 @@ using OpenDentBusiness;
 namespace OpenDentBusiness{
 	///<summary>Handles database commands related to the apptviewitem table in the database.</summary>
 	public class ApptViewItems{
-		
 		///<summary>A list of the ApptViewItems for the current view.</summary>
 		public static ApptViewItem[] ForCurView;
 		//these two are subsets of provs and ops. You can't include hidden prov or op in this list.

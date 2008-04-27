@@ -1567,7 +1567,7 @@ namespace OpenDental{
 				LetterMerges.Refresh();
 			}
 			if((itypes & InvalidTypes.Operatories)==InvalidTypes.Operatories){
-				Operatories.Refresh();
+				Operatory_client.Refresh();
 				AccountingAutoPay_client.Refresh();
 			}
 			if((itypes & InvalidTypes.ProcCodes)==InvalidTypes.ProcCodes){

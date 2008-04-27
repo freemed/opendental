@@ -85,6 +85,7 @@
     <Compile Include="Cache\AutoCodeC.cs" />
     <Compile Include="Cache\AutoCodeItemC.cs" />
     <Compile Include="Cache\ClaimFormItemC.cs" />
+    <Compile Include="Cache\OperatoryC.cs" />
     <Compile Include="Cache\CovSpanC.cs" />
     <Compile Include="Cache\GroupPermissionC.cs" />
     <Compile Include="Cache\UserodC.cs" />
@@ -120,6 +121,7 @@
     <Compile Include="Data Interface\Defs.cs" />
     <Compile Include="Data Interface\Gen.cs" />
     <Compile Include="Data Interface\GroupPermissions.cs" />
+    <Compile Include="Data Interface\Operatories.cs" />
     <Compile Include="Data Interface\Prefs.cs" />
     <Compile Include="Data Interface\Statements.cs" />
     <Compile Include="Data Interface\Documents.cs" />

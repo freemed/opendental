@@ -1016,7 +1016,7 @@ namespace OpenDental{
 				for(int i=0;i<ContrApptSheet.ColCount;i++){
 					Panel panOpName=new Panel();
 					Label labOpName=new Label();
-					curOp=Operatories.ListShort[ApptViewItems.VisOps[i]];
+					curOp=OperatoryC.ListShort[ApptViewItems.VisOps[i]];
 					labOpName.Text=curOp.OpName;
 					if(curOp.ProvDentist!=0 && !curOp.IsHygiene){
 						panOpName.BackColor=Providers.GetColor(curOp.ProvDentist);
@@ -1737,14 +1737,14 @@ namespace OpenDental{
 					}
 				}
 			}
-			Operatory curOp=Operatories.ListShort[ApptViewItems.VisOps
+			Operatory curOp=OperatoryC.ListShort[ApptViewItems.VisOps
 				[ContrApptSheet2.ConvertToOp(TempApptSingle.Location.X-ContrApptSheet2.Location.X)]];
 			aptCur.Op=curOp.OperatoryNum;
 			if(DoesOverlap(aptCur)){
 				int startingOp=ApptViewItem_client.GetIndexOp(aptCur.Op);
 				bool stillOverlaps=true;
 				for(int i=startingOp;i<ApptViewItems.VisOps.Length;i++){
-					aptCur.Op=Operatories.ListShort[ApptViewItems.VisOps[i]].OperatoryNum;
+					aptCur.Op=OperatoryC.ListShort[ApptViewItems.VisOps[i]].OperatoryNum;
 					if(!DoesOverlap(aptCur)){
 						stillOverlaps=false;
 						break;
@@ -1752,7 +1752,7 @@ namespace OpenDental{
 				}
 				if(stillOverlaps){
 					for(int i=startingOp;i>=0;i--){
-						aptCur.Op=Operatories.ListShort[ApptViewItems.VisOps[i]].OperatoryNum;
+						aptCur.Op=OperatoryC.ListShort[ApptViewItems.VisOps[i]].OperatoryNum;
 						if(!DoesOverlap(aptCur)){
 							stillOverlaps=false;
 							break;
@@ -1936,7 +1936,7 @@ namespace OpenDental{
 				return 0;
 			}
 			int day=ContrApptSheet.XPosToDay(point.X);
-			int op=Operatories.ListShort[ApptViewItems.VisOps[ContrApptSheet.XPosToOp(point.X)]].OperatoryNum;
+			int op=OperatoryC.ListShort[ApptViewItems.VisOps[ContrApptSheet.XPosToOp(point.X)]].OperatoryNum;
 			int hour=ContrApptSheet.YPosToHour(point.Y);
 			int minute=ContrApptSheet.YPosToMin(point.Y);
 			TimeSpan time=new TimeSpan(hour,minute,0);
@@ -1995,7 +1995,7 @@ namespace OpenDental{
 			SheetClickedonMin=ContrApptSheet.YPosToMin(e.Y);
 			TimeSpan sheetClickedOnTime=new TimeSpan(SheetClickedonHour,SheetClickedonMin,0);
 			ContrApptSingle.ClickedAptNum=HitTestAppt(e.Location);
-			SheetClickedonOp=Operatories.ListShort[ApptViewItems.VisOps[ContrApptSheet.XPosToOp(e.X)]].OperatoryNum;
+			SheetClickedonOp=OperatoryC.ListShort[ApptViewItems.VisOps[ContrApptSheet.XPosToOp(e.X)]].OperatoryNum;
 			SheetClickedonDay=ContrApptSheet.XPosToDay(e.X);
 			if(!ContrApptSheet.IsWeeklyView) {
 				SheetClickedonDay=((int)Appointments.DateSelected.DayOfWeek)-1;
@@ -2323,14 +2323,14 @@ namespace OpenDental{
 					}
 				}
 			}
-			Operatory curOp=Operatories.ListShort
+			Operatory curOp=OperatoryC.ListShort
 				[ApptViewItems.VisOps[ContrApptSheet2.ConvertToOp(TempApptSingle.Location.X-ContrApptSheet2.Location.X)]];
 			apt.Op=curOp.OperatoryNum;
 			if(DoesOverlap(apt)) {
 				int startingOp=ApptViewItem_client.GetIndexOp(apt.Op);
 				bool stillOverlaps=true;
 				for(int i=startingOp;i<ApptViewItems.VisOps.Length;i++) {
-					apt.Op=Operatories.ListShort[ApptViewItems.VisOps[i]].OperatoryNum;
+					apt.Op=OperatoryC.ListShort[ApptViewItems.VisOps[i]].OperatoryNum;
 					if(!DoesOverlap(apt)) {
 						stillOverlaps=false;
 						break;
@@ -2338,7 +2338,7 @@ namespace OpenDental{
 				}
 				if(stillOverlaps) {
 					for(int i=startingOp;i>=0;i--) {
-						apt.Op=Operatories.ListShort[ApptViewItems.VisOps[i]].OperatoryNum;
+						apt.Op=OperatoryC.ListShort[ApptViewItems.VisOps[i]].OperatoryNum;
 						if(!DoesOverlap(apt)) {
 							stillOverlaps=false;
 							break;
@@ -2651,7 +2651,7 @@ namespace OpenDental{
 					int minutes=(int)(ContrAppt.SheetClickedonMin/ContrApptSheet.MinPerIncr)*ContrApptSheet.MinPerIncr;
 					apt.AptDateTime=new DateTime(d.Year,d.Month,d.Day,ContrAppt.SheetClickedonHour,minutes,0);
 					apt.Op=SheetClickedonOp;
-					Operatory curOp=Operatories.GetOperatory(apt.Op);
+					Operatory curOp=Operatory_client.GetOperatory(apt.Op);
 					if(curOp.ProvDentist!=0) {//if no dentist is assigned to op, then keep the original dentist.  All appts must have prov.
 						apt.ProvNum=curOp.ProvDentist;
 					}
@@ -2984,7 +2984,7 @@ namespace OpenDental{
       xPos+=(int)(ContrApptSheet.TimeWidth+(ContrApptSheet.ProvWidth*ContrApptSheet.ProvCount)*(100/imageTemp.HorizontalResolution));  // x position
 			int xCenter=0;
 			for(int i=0;i<ContrApptSheet.ColCount;i++){
-				headers[i]=Operatories.ListShort[ApptViewItems.VisOps[i]].OpName;	
+				headers[i]=OperatoryC.ListShort[ApptViewItems.VisOps[i]].OpName;	
 				xCenter=(int)((ContrApptSheet.ColWidth/2)-(e.Graphics.MeasureString(headers[i],headerFont).Width/2));
 			  e.Graphics.DrawString(headers[i],headerFont,Brushes.Black,(int)((xPos+xCenter)*(100/imageTemp.HorizontalResolution)),yPos);
         xPos+=ContrApptSheet.ColWidth;

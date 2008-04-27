@@ -192,6 +192,7 @@
     <Compile Include="Data Interface\AutoCode_client.cs" />
     <Compile Include="Data Interface\AutoCodeItem_client.cs" />
     <Compile Include="Data Interface\ClaimFormItem_client.cs" />
+    <Compile Include="Data Interface\Operatory_client.cs" />
     <Compile Include="Data Interface\CovSpan_client.cs" />
     <Compile Include="Data Interface\CovCat_client.cs" />
     <Compile Include="Data Interface\GroupPermission_client.cs" />
@@ -243,7 +244,6 @@
     <Compile Include="Data Interface\MedicationPats.cs" />
     <Compile Include="Data Interface\Medications.cs" />
     <Compile Include="Data Interface\AccountModule.cs" />
-    <Compile Include="Data Interface\Operatories.cs" />
     <Compile Include="Data Interface\PatFieldDefs.cs" />
     <Compile Include="Data Interface\PatFields.cs" />
     <Compile Include="Data Interface\PatPlans.cs" />

@@ -1,6 +1,7 @@
 using System;
 using System.Drawing;
 using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows.Forms;
 using OpenDentBusiness;
@@ -378,9 +379,9 @@ namespace OpenDental{
 				textRowsPerIncr.Text=ApptViewCur.RowsPerIncr.ToString();
 			}
 			ApptViewItem_client.GetForCurView(ApptViewCur);
-			for(int i=0;i<Operatories.ListShort.Length;i++){
-				listOps.Items.Add(Operatories.ListShort[i].OpName);
-				if(ApptViewItems.OpIsInView(Operatories.ListShort[i].OperatoryNum)){
+			for(int i=0;i<OperatoryC.ListShort.Count;i++){
+				listOps.Items.Add(OperatoryC.ListShort[i].OpName);
+				if(ApptViewItems.OpIsInView(OperatoryC.ListShort[i].OperatoryNum)){
 					listOps.SetSelected(i,true);
 				}
 			}
@@ -557,11 +558,11 @@ namespace OpenDental{
 				return;
 			}
 			ApptViewItems.DeleteAllForView(ApptViewCur);//start with a clean slate
-			for(int i=0;i<Operatories.ListShort.Length;i++){
+			for(int i=0;i<OperatoryC.ListShort.Count;i++){
 				if(listOps.SelectedIndices.Contains(i)){
 					ApptViewItem ApptViewItemCur=new ApptViewItem();
 					ApptViewItemCur.ApptViewNum=ApptViewCur.ApptViewNum;
-					ApptViewItemCur.OpNum=Operatories.ListShort[i].OperatoryNum;
+					ApptViewItemCur.OpNum=OperatoryC.ListShort[i].OperatoryNum;
 					ApptViewItems.Insert(ApptViewItemCur);
 				}
 			}

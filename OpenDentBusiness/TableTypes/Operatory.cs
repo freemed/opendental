@@ -26,17 +26,25 @@ namespace OpenDentBusiness{
 
 		///<summary>Returns a copy of this Operatory.</summary>
 		public Operatory Copy(){
-			Operatory o=new Operatory();
-			o.OperatoryNum=OperatoryNum;
-			o.OpName=OpName;
-			o.Abbrev=Abbrev;
-			o.ItemOrder=ItemOrder;
-			o.IsHidden=IsHidden;
-			o.ProvDentist=ProvDentist;
-			o.ProvHygienist=ProvHygienist;
-			o.IsHygiene=IsHygiene;
-			o.ClinicNum=ClinicNum;
-			return o;
+			return (Operatory)this.MemberwiseClone();
+		}
+
+		public Operatory(){
+
+		}
+
+		public Operatory(int operatoryNum,string opName,string abbrev,int itemOrder,bool isHidden,int provDentist,
+			int provHygienist,bool isHygiene,int clinicNum)
+		{
+			OperatoryNum=operatoryNum;
+			OpName=opName;
+			Abbrev=abbrev;
+			ItemOrder=itemOrder;
+			IsHidden=isHidden;
+			ProvDentist=provDentist;
+			ProvHygienist=provHygienist;
+			IsHygiene=isHygiene;
+			ClinicNum=clinicNum;
 		}
 
 	

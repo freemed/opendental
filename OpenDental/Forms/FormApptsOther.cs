@@ -704,7 +704,7 @@ namespace OpenDental{
 				AptCur.AptDateTime=new DateTime(d.Year,d.Month,d.Day
 					,ContrAppt.SheetClickedonHour,minutes,0);
 				AptCur.Op=ContrAppt.SheetClickedonOp;
-				Operatory curOp=Operatories.GetOperatory(AptCur.Op);
+				Operatory curOp=Operatory_client.GetOperatory(AptCur.Op);
 				if(curOp.ProvDentist!=0) {
 					AptCur.ProvNum=curOp.ProvDentist;
 				}

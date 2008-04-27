@@ -107,6 +107,8 @@ namespace OpenDentBusiness {
 					return GroupPermissions.RefreshCache();
 				case MethodNameTable.MountDef_RefreshCache:
 					return MountDefs.RefreshCache();
+				case MethodNameTable.Operatory_RefreshCache:
+					return Operatories.RefreshCache();
 				case MethodNameTable.Patient_GetPtDataTable:
 					return Patients.GetPtDataTable((bool)parameters[0],(string)parameters[1],(string)parameters[2],(string)parameters[3],
 						(string)parameters[4],(bool)parameters[5],(string)parameters[6],(string)parameters[7],(string)parameters[8],
@@ -156,6 +158,13 @@ namespace OpenDentBusiness {
 				
 			}
 		}
+
+		public static string GetXmlDSByMethod(MethodNameDS methodName,object[] parameters) {
+			DataSet ds=GetDsByMethod(methodName,parameters);
+			string retVal=XmlConverter.DsToXml(ds);
+			return retVal;
+		}
+
 
 	}
 

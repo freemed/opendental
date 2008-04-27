@@ -277,8 +277,8 @@ namespace OpenDental{
 			DrawMainBackground(g);
 			DrawBlockouts(g);
 			if(!IsWeeklyView){
-				DrawProvSchedInTimebar(g);
-				DrawProvTimebar(g);
+				DrawProvScheds(g);
+				DrawProvBars(g);
 			}
 			DrawGridLines(g);
 			DrawRedTimeIndicator(g);
@@ -315,7 +315,7 @@ namespace OpenDental{
 						g.FillRectangle(holidayBrush,TimeWidth+1+d*ColDayWidth,0,ColDayWidth,Height);
 					}
 					for(int j=0;j<ColCount;j++) {
-						curOp=Operatories.ListShort[ApptViewItems.VisOps[j]];
+						curOp=OperatoryC.ListShort[ApptViewItems.VisOps[j]];
 						if(curOp.ProvDentist!=0 && !curOp.IsHygiene) {//dentist
 							schedForType=Schedules.GetForType(SchedListPeriod,ScheduleType.Provider,curOp.ProvDentist);
 						}
@@ -352,7 +352,7 @@ namespace OpenDental{
 					break;
 				}
 				for(int j=0;j<ColCount;j++) {
-					curOp=Operatories.ListShort[ApptViewItems.VisOps[j]];
+					curOp=OperatoryC.ListShort[ApptViewItems.VisOps[j]];
 					if(curOp.ProvDentist!=0 && !curOp.IsHygiene) {//dentist
 						schedForType=Schedules.GetForType(SchedListPeriod,ScheduleType.Provider,curOp.ProvDentist);
 					}
@@ -454,8 +454,8 @@ namespace OpenDental{
 			}         
 		}
 
-		///<summary>The background provider schedule for the timebar on the left</summary>
-		private void DrawProvSchedInTimebar(Graphics g){
+		///<summary>The background provider schedules for the provider bars on the left</summary>
+		private void DrawProvScheds(Graphics g){
 			Provider provCur;
 			//SchedDefault[] schedDefs;//for one type at a time
 			Schedule[] schedForType;
@@ -474,8 +474,8 @@ namespace OpenDental{
 			}
 		}
 
-		///<summary>Not the schedule, but just the indicators of scheduling in the ops.</summary>
-		private void DrawProvTimebar(Graphics g){			
+		///<summary>Not the schedule, but just the indicators of scheduling.</summary>
+		private void DrawProvBars(Graphics g){			
 			for(int j=0;j<ContrApptSingle.ProvBar.Length;j++){
 				for(int i=0;i<24*RowsPerHr;i++){
 					//144;i++){//ContrApptSingle.TimeBar.Length;i++){

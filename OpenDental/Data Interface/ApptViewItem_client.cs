@@ -31,7 +31,7 @@ namespace OpenDental{
 			if(ApptViewCur.ApptViewNum==0){
 				//MessageBox.Show("apptcategorynum:"+ApptCategories.Cur.ApptCategoryNum.ToString());
 				//make visible ops exactly the same as the short ops list (all except hidden)
-				for(int i=0;i<Operatories.ListShort.Length;i++){
+				for(int i=0;i<OperatoryC.ListShort.Count;i++){
 					ALops.Add(i);
 				}
 				//make visible provs exactly the same as the prov list (all except hidden)
@@ -51,7 +51,7 @@ namespace OpenDental{
 					if(ApptViewItemC.List[i].ApptViewNum==ApptViewCur.ApptViewNum){
 						tempAL.Add(ApptViewItemC.List[i]);
 						if(ApptViewItemC.List[i].OpNum>0){//op
-							index=Operatories.GetOrder(ApptViewItemC.List[i].OpNum);
+							index=Operatory_client.GetOrder(ApptViewItemC.List[i].OpNum);
 							if(index!=-1){
 								ALops.Add(index);
 							}
@@ -92,7 +92,7 @@ namespace OpenDental{
 		///<summary>Returns the index of the opNum within VisOps.  Returns -1 if not in visOps.</summary>
 		public static int GetIndexOp(int opNum){
 			for(int i=0;i<ApptViewItems.VisOps.Length;i++){
-				if(Operatories.ListShort[ApptViewItems.VisOps[i]].OperatoryNum==opNum)
+				if(OperatoryC.ListShort[ApptViewItems.VisOps[i]].OperatoryNum==opNum)
 					return i;
 			}		
 			return -1;
