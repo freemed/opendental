@@ -1030,10 +1030,10 @@ namespace OpenDental{
         case "SecProv":
           SetListBoxConditions();
 					ComboBox.Items.Clear();
-          for(int i=0;i<Providers.ListLong.Length;i++){
-						sItem=Providers.ListLong[i].LName+", "
-							+Providers.ListLong[i].MI+" "+Providers.ListLong[i].FName;
-						if(Providers.ListLong[i].IsHidden)
+          for(int i=0;i<ProviderC.ListLong.Length;i++){
+						sItem=ProviderC.ListLong[i].LName+", "
+							+ProviderC.ListLong[i].MI+" "+ProviderC.ListLong[i].FName;
+						if(ProviderC.ListLong[i].IsHidden)
 							sItem+="(hidden)";
             ComboBox.Items.Add(sItem);
 					}	
@@ -1292,7 +1292,7 @@ namespace OpenDental{
               sItem="OR ";
             }
 						sItem+="patient.PriProv "+ListConditions.SelectedItem.ToString()+" '"
-							+Providers.ListLong[ComboBox.SelectedIndices[i]].ProvNum.ToString()+"'"; 
+							+ProviderC.ListLong[ComboBox.SelectedIndices[i]].ProvNum.ToString()+"'"; 
 						if(i==ComboBox.SelectedIndices.Count-1){
 							sItem+=")";
             }
@@ -1309,7 +1309,7 @@ namespace OpenDental{
               sItem="OR ";
             } 
 						sItem+="patient.SecProv "+ListConditions.SelectedItem.ToString()+" '"
-							+Providers.ListLong[ComboBox.SelectedIndices[i]].ProvNum.ToString()+"'"; 
+							+ProviderC.ListLong[ComboBox.SelectedIndices[i]].ProvNum.ToString()+"'"; 
 						if(i==ComboBox.SelectedIndices.Count-1){  
 							sItem+=")";
             }  

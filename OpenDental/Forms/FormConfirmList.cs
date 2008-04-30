@@ -333,8 +333,8 @@ namespace OpenDental{
 			textDateTo.Text=AddWorkDays(2,DateTime.Today).ToShortDateString();
 			comboProv.Items.Add(Lan.g(this,"All"));
 			comboProv.SelectedIndex=0;
-			for(int i=0;i<Providers.List.Length;i++) {
-				comboProv.Items.Add(Providers.List[i].GetLongDesc());
+			for(int i=0;i<ProviderC.List.Length;i++) {
+				comboProv.Items.Add(ProviderC.List[i].GetLongDesc());
 			}
 			//textPostcardMessage.Text=PrefC.GetString("ConfirmPostcardMessage");
 			comboStatus.Items.Clear();
@@ -362,7 +362,7 @@ namespace OpenDental{
 			DateTime dateTo=PIn.PDate(textDateTo.Text);
 			int provNum=0;
 			if(comboProv.SelectedIndex!=0) {
-				provNum=Providers.List[comboProv.SelectedIndex-1].ProvNum;
+				provNum=ProviderC.List[comboProv.SelectedIndex-1].ProvNum;
 			}
 			table=Appointments.GetConfirmList(dateFrom,dateTo,provNum);
 			int scrollVal=grid.ScrollValue;

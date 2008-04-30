@@ -8,55 +8,50 @@ namespace OpenDentBusiness{
 
 	///<summary></summary>
 	public class Providers{
-		///<summary>Rarely used. Includes all providers, even if hidden.</summary>
-		public static Provider[] ListLong;
-		///<summary>This is the list used most often. It does not include hidden providers.</summary>
-		public static Provider[] List;
-
+		
 		///<summary>Does not get called directly from the UI.</summary>
 		public static DataTable RefreshCache(){
 			string command="SELECT * FROM provider ORDER BY ItemOrder";
 			DataTable table=General.GetTable(command);
-			//DataSet retVal=new DataSet();
-			//retVal.Tables.Add(table);
+			table.TableName="Provider";
 			FillCache(table);
 			return table;
 		}
 
 		public static void FillCache(DataTable table){
 			ArrayList AL=new ArrayList();
-			ListLong=new Provider[table.Rows.Count];
+			ProviderC.ListLong=new Provider[table.Rows.Count];
 			for(int i=0;i<table.Rows.Count;i++){
-				ListLong[i]=new Provider();
-				ListLong[i].ProvNum       = PIn.PInt   (table.Rows[i][0].ToString());
-				ListLong[i].Abbr          = PIn.PString(table.Rows[i][1].ToString());
-				ListLong[i].ItemOrder     = PIn.PInt   (table.Rows[i][2].ToString());
-				ListLong[i].LName         = PIn.PString(table.Rows[i][3].ToString());
-				ListLong[i].FName         = PIn.PString(table.Rows[i][4].ToString());
-				ListLong[i].MI            = PIn.PString(table.Rows[i][5].ToString());
-				ListLong[i].Suffix        = PIn.PString(table.Rows[i][6].ToString());
-				ListLong[i].FeeSched      = PIn.PInt   (table.Rows[i][7].ToString());
-				ListLong[i].Specialty     =(DentalSpecialty)PIn.PInt (table.Rows[i][8].ToString());
-				ListLong[i].SSN           = PIn.PString(table.Rows[i][9].ToString());
-				ListLong[i].StateLicense  = PIn.PString(table.Rows[i][10].ToString());
-				ListLong[i].DEANum        = PIn.PString(table.Rows[i][11].ToString());
-				ListLong[i].IsSecondary   = PIn.PBool  (table.Rows[i][12].ToString());
-				ListLong[i].ProvColor     = Color.FromArgb(PIn.PInt(table.Rows[i][13].ToString()));
-				ListLong[i].IsHidden      = PIn.PBool  (table.Rows[i][14].ToString());
-				ListLong[i].UsingTIN      = PIn.PBool  (table.Rows[i][15].ToString());
-				//ListLong[i].BlueCrossID = PIn.PString(table.Rows[i][16].ToString());
-				ListLong[i].SigOnFile     = PIn.PBool  (table.Rows[i][17].ToString());
-				ListLong[i].MedicaidID    = PIn.PString(table.Rows[i][18].ToString());
-				ListLong[i].OutlineColor  = Color.FromArgb(PIn.PInt(table.Rows[i][19].ToString()));
-				ListLong[i].SchoolClassNum= PIn.PInt   (table.Rows[i][20].ToString());
-				ListLong[i].NationalProvID= PIn.PString(table.Rows[i][21].ToString());
-				ListLong[i].CanadianOfficeNum= PIn.PString(table.Rows[i][22].ToString());
-				if(!ListLong[i].IsHidden){
-					AL.Add(ListLong[i]);	
+				ProviderC.ListLong[i]=new Provider();
+				ProviderC.ListLong[i].ProvNum       = PIn.PInt   (table.Rows[i][0].ToString());
+				ProviderC.ListLong[i].Abbr          = PIn.PString(table.Rows[i][1].ToString());
+				ProviderC.ListLong[i].ItemOrder     = PIn.PInt   (table.Rows[i][2].ToString());
+				ProviderC.ListLong[i].LName         = PIn.PString(table.Rows[i][3].ToString());
+				ProviderC.ListLong[i].FName         = PIn.PString(table.Rows[i][4].ToString());
+				ProviderC.ListLong[i].MI            = PIn.PString(table.Rows[i][5].ToString());
+				ProviderC.ListLong[i].Suffix        = PIn.PString(table.Rows[i][6].ToString());
+				ProviderC.ListLong[i].FeeSched      = PIn.PInt   (table.Rows[i][7].ToString());
+				ProviderC.ListLong[i].Specialty     =(DentalSpecialty)PIn.PInt (table.Rows[i][8].ToString());
+				ProviderC.ListLong[i].SSN           = PIn.PString(table.Rows[i][9].ToString());
+				ProviderC.ListLong[i].StateLicense  = PIn.PString(table.Rows[i][10].ToString());
+				ProviderC.ListLong[i].DEANum        = PIn.PString(table.Rows[i][11].ToString());
+				ProviderC.ListLong[i].IsSecondary   = PIn.PBool  (table.Rows[i][12].ToString());
+				ProviderC.ListLong[i].ProvColor     = Color.FromArgb(PIn.PInt(table.Rows[i][13].ToString()));
+				ProviderC.ListLong[i].IsHidden      = PIn.PBool  (table.Rows[i][14].ToString());
+				ProviderC.ListLong[i].UsingTIN      = PIn.PBool  (table.Rows[i][15].ToString());
+				//ProviderC.ListLong[i].BlueCrossID = PIn.PString(table.Rows[i][16].ToString());
+				ProviderC.ListLong[i].SigOnFile     = PIn.PBool  (table.Rows[i][17].ToString());
+				ProviderC.ListLong[i].MedicaidID    = PIn.PString(table.Rows[i][18].ToString());
+				ProviderC.ListLong[i].OutlineColor  = Color.FromArgb(PIn.PInt(table.Rows[i][19].ToString()));
+				ProviderC.ListLong[i].SchoolClassNum= PIn.PInt   (table.Rows[i][20].ToString());
+				ProviderC.ListLong[i].NationalProvID= PIn.PString(table.Rows[i][21].ToString());
+				ProviderC.ListLong[i].CanadianOfficeNum= PIn.PString(table.Rows[i][22].ToString());
+				if(!ProviderC.ListLong[i].IsHidden){
+					AL.Add(ProviderC.ListLong[i]);	
 				}
 			}
-			List=new Provider[AL.Count];
-			AL.CopyTo(List);
+			ProviderC.List=new Provider[AL.Count];
+			AL.CopyTo(ProviderC.List);
 		}
 	
 		///<summary></summary>
@@ -145,12 +140,12 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static string GetAbbr(int provNum){
-			if(ListLong==null){
+			if(ProviderC.ListLong==null){
 				RefreshCache();
 			}
-			for(int i=0;i<ListLong.Length;i++){
-				if(ListLong[i].ProvNum==provNum){
-					return ListLong[i].Abbr;
+			for(int i=0;i<ProviderC.ListLong.Length;i++){
+				if(ProviderC.ListLong[i].ProvNum==provNum){
+					return ProviderC.ListLong[i].Abbr;
 				}
 			}
 			return "";
@@ -159,9 +154,9 @@ namespace OpenDentBusiness{
 		///<summary>Used in the HouseCalls bridge</summary>
 		public static string GetLName(int provNum){
 			string retStr="";
-			for(int i=0;i<ListLong.Length;i++){
-				if(ListLong[i].ProvNum==provNum){
-					retStr=ListLong[i].LName;
+			for(int i=0;i<ProviderC.ListLong.Length;i++){
+				if(ProviderC.ListLong[i].ProvNum==provNum){
+					retStr=ProviderC.ListLong[i].LName;
 				}
 			}
 			return retStr;
@@ -169,9 +164,9 @@ namespace OpenDentBusiness{
 
 		///<summary>Abbr - LName, FName (hidden).</summary>
 		public static string GetLongDesc(int provNum) {
-			for(int i=0;i<ListLong.Length;i++) {
-				if(ListLong[i].ProvNum==provNum) {
-					return ListLong[i].GetLongDesc();
+			for(int i=0;i<ProviderC.ListLong.Length;i++) {
+				if(ProviderC.ListLong[i].ProvNum==provNum) {
+					return ProviderC.ListLong[i].GetLongDesc();
 				}
 			}
 			return "";
@@ -180,9 +175,9 @@ namespace OpenDentBusiness{
 		///<summary></summary>
 		public static Color GetColor(int provNum){
 			Color retCol=Color.White;
-			for(int i=0;i<ListLong.Length;i++){
-				if(ListLong[i].ProvNum==provNum){
-					retCol=ListLong[i].ProvColor;
+			for(int i=0;i<ProviderC.ListLong.Length;i++){
+				if(ProviderC.ListLong[i].ProvNum==provNum){
+					retCol=ProviderC.ListLong[i].ProvColor;
 				}
 			}
 			return retCol;
@@ -191,9 +186,9 @@ namespace OpenDentBusiness{
 		///<summary></summary>
 		public static Color GetOutlineColor(int provNum){
 			Color retCol=Color.Black;
-			for(int i=0;i<ListLong.Length;i++){
-				if(ListLong[i].ProvNum==provNum){
-					retCol=ListLong[i].OutlineColor;
+			for(int i=0;i<ProviderC.ListLong.Length;i++){
+				if(ProviderC.ListLong[i].ProvNum==provNum){
+					retCol=ProviderC.ListLong[i].OutlineColor;
 				}
 			}
 			return retCol;
@@ -202,9 +197,9 @@ namespace OpenDentBusiness{
 		///<summary></summary>
 		public static bool GetIsSec(int provNum){
 			bool retVal=false;
-			for(int i=0;i<ListLong.Length;i++){
-				if(ListLong[i].ProvNum==provNum){
-					retVal=ListLong[i].IsSecondary;
+			for(int i=0;i<ProviderC.ListLong.Length;i++){
+				if(ProviderC.ListLong[i].ProvNum==provNum){
+					retVal=ProviderC.ListLong[i].IsSecondary;
 				}
 			}
 			return retVal;
@@ -215,9 +210,9 @@ namespace OpenDentBusiness{
 			if(provNum==0){
 				return null;
 			}
-			for(int i=0;i<ListLong.Length;i++) {
-				if(ListLong[i].ProvNum==provNum) {
-					return ListLong[i].Copy();
+			for(int i=0;i<ProviderC.ListLong.Length;i++) {
+				if(ProviderC.ListLong[i].ProvNum==provNum) {
+					return ProviderC.ListLong[i].Copy();
 				}
 			}
 			return null;
@@ -225,8 +220,8 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static int GetIndexLong(int provNum){
-			for(int i=0;i<ListLong.Length;i++){
-				if(ListLong[i].ProvNum==provNum){
+			for(int i=0;i<ProviderC.ListLong.Length;i++){
+				if(ProviderC.ListLong[i].ProvNum==provNum){
 					return i;
 				}
 			}
@@ -236,8 +231,8 @@ namespace OpenDentBusiness{
 		///<summary></summary>
 		public static int GetIndex(int provNum){
 			//Gets the index of the provider in short list (visible providers)
-			for(int i=0;i<List.Length;i++){
-				if(List[i].ProvNum==provNum){
+			for(int i=0;i<ProviderC.List.Length;i++){
+				if(ProviderC.List[i].ProvNum==provNum){
 					return i;
 				}
 			}

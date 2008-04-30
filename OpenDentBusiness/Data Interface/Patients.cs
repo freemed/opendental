@@ -1472,7 +1472,7 @@ namespace OpenDentBusiness{
 				return pat.PriProv;
 			if(PrefC.GetInt("PracticeDefaultProv")==0) {
 				MessageBox.Show(Lan.g("Patients","Please set a default provider in the practice setup window."));
-				return Providers.List[0].ProvNum;
+				return ProviderC.List[0].ProvNum;
 			}
 			return PrefC.GetInt("PracticeDefaultProv");
 		}

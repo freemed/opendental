@@ -200,8 +200,8 @@ namespace OpenDental{
 		private void FormPaymentSheet_Load(object sender, System.EventArgs e) {
 			date1.SelectionStart=DateTime.Today;
 			date2.SelectionStart=DateTime.Today;
-			for(int i=0;i<Providers.List.Length;i++) {
-				listProv.Items.Add(Providers.List[i].GetLongDesc());
+			for(int i=0;i<ProviderC.List.Length;i++) {
+				listProv.Items.Add(ProviderC.List[i].GetLongDesc());
 			}
 			checkAllProv.Checked=true;
 			listProv.Visible=false;
@@ -232,7 +232,7 @@ namespace OpenDental{
 						whereProv+="OR ";
 					}
 					whereProv+="claimproc.ProvNum = '"
-					+POut.PInt(Providers.List[listProv.SelectedIndices[i]].ProvNum)+"' ";
+					+POut.PInt(ProviderC.List[listProv.SelectedIndices[i]].ProvNum)+"' ";
 				}
 				whereProv+=")";
 			}
@@ -266,7 +266,7 @@ namespace OpenDental{
 						whereProv+="OR ";
 					}
 					whereProv+="paysplit.ProvNum = '"
-						+POut.PInt(Providers.List[listProv.SelectedIndices[i]].ProvNum)+"' ";
+						+POut.PInt(ProviderC.List[listProv.SelectedIndices[i]].ProvNum)+"' ";
 				}
 				whereProv+=")";
 			}

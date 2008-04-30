@@ -287,9 +287,9 @@ namespace OpenDental{
 			}
 			comboInstructor.Items.Add(Lan.g(this,"None"));
 			comboInstructor.SelectedIndex=0;
-			for(int i=0;i<Providers.List.Length;i++) {
-				comboInstructor.Items.Add(Providers.List[i].GetLongDesc());
-				//if(Providers.List[i].ProvNum==ReqCur.InstructorNum) {
+			for(int i=0;i<ProviderC.List.Length;i++) {
+				comboInstructor.Items.Add(ProviderC.List[i].GetLongDesc());
+				//if(ProviderC.List[i].ProvNum==ReqCur.InstructorNum) {
 				//	comboInstructor.SelectedIndex=i+1;
 				//}
 			}
@@ -416,7 +416,7 @@ namespace OpenDental{
 					reqsAttached[i].InstructorNum=0;
 				}
 				else{
-					reqsAttached[i].InstructorNum=Providers.List[comboInstructor.SelectedIndex-1].ProvNum;
+					reqsAttached[i].InstructorNum=ProviderC.List[comboInstructor.SelectedIndex-1].ProvNum;
 				}
 			}
 		}
@@ -433,7 +433,7 @@ namespace OpenDental{
 				//req.DateCompleted
 				req.Descript=ReqTable.Rows[gridReqs.SelectedIndices[i]]["Descript"].ToString();
 				if(comboInstructor.SelectedIndex>0){
-					req.InstructorNum=Providers.List[comboInstructor.SelectedIndex-1].ProvNum;
+					req.InstructorNum=ProviderC.List[comboInstructor.SelectedIndex-1].ProvNum;
 				}
 				req.PatNum=PatNum;
 				req.ProvNum=StudentList[gridStudents.GetSelectedIndex()].ProvNum;

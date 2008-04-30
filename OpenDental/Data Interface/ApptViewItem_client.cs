@@ -35,7 +35,7 @@ namespace OpenDental{
 					ALops.Add(i);
 				}
 				//make visible provs exactly the same as the prov list (all except hidden)
-				for(int i=0;i<Providers.List.Length;i++){
+				for(int i=0;i<ProviderC.List.Length;i++){
 					ALprov.Add(i);
 				}
 				//Hard coded elements showing

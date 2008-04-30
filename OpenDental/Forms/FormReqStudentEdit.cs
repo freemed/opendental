@@ -399,9 +399,9 @@ namespace OpenDental{
 			}
 			comboInstructor.Items.Add(Lan.g(this,"None"));
 			comboInstructor.SelectedIndex=0;
-			for(int i=0;i<Providers.List.Length;i++) {
-				comboInstructor.Items.Add(Providers.List[i].GetLongDesc());
-				if(Providers.List[i].ProvNum==ReqCur.InstructorNum) {
+			for(int i=0;i<ProviderC.List.Length;i++) {
+				comboInstructor.Items.Add(ProviderC.List[i].GetLongDesc());
+				if(ProviderC.List[i].ProvNum==ReqCur.InstructorNum) {
 					comboInstructor.SelectedIndex=i+1;
 				}
 			}
@@ -469,7 +469,7 @@ namespace OpenDental{
 				ReqCur.InstructorNum=0;
 			}
 			else{
-				ReqCur.InstructorNum=Providers.List[comboInstructor.SelectedIndex-1].ProvNum;
+				ReqCur.InstructorNum=ProviderC.List[comboInstructor.SelectedIndex-1].ProvNum;
 			}
 			//DateCompleted
 			ReqCur.DateCompleted=PIn.PDate(textDateCompleted.Text);

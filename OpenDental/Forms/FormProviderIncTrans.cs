@@ -384,8 +384,8 @@ namespace OpenDental{
 					//butPay.Enabled=false;
 				}
 			}
-			for(int i=0;i<Providers.List.Length;i++) {
-				comboProv.Items.Add(Providers.List[i].Abbr);
+			for(int i=0;i<ProviderC.List.Length;i++) {
+				comboProv.Items.Add(ProviderC.List[i].Abbr);
 			}
 			FamCur=Patients.GetFamily(PatNum);
 			PatCur=FamCur.GetPatient(PatNum);
@@ -540,7 +540,7 @@ namespace OpenDental{
 			split.PayNum=PaymentCur.PayNum;
 			split.ProcDate=PIn.PDate(textDate.Text);
 			split.DatePay=PIn.PDate(textDate.Text);
-			split.ProvNum=Providers.List[comboProv.SelectedIndex].ProvNum;
+			split.ProvNum=ProviderC.List[comboProv.SelectedIndex].ProvNum;
 			split.SplitAmt=-amt;
 			SplitList.Add(split);
 			FillMain();

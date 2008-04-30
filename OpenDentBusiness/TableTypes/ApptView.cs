@@ -13,12 +13,20 @@ namespace OpenDentBusiness{
 		public int ItemOrder;
 		///<summary>Number of rows per time increment.  Usually 1 or 2.  Programming note: Value updated to ContrApptSheet.RowsPerIncr to track current state.</summary>
 		public int RowsPerIncr;
-	}
-	
-	
-	
 
-	
+		public ApptView(){
+
+		}
+
+		public ApptView(int apptViewNum,string description,int itemOrder,int rowsPerIncr){
+			ApptViewNum=apptViewNum;
+			Description=description;
+			ItemOrder=itemOrder;
+			RowsPerIncr=rowsPerIncr;
+		}
+
+
+	}
 
 
 }

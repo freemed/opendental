@@ -315,9 +315,9 @@ namespace OpenDental{
 
 		private void FormRxEdit_Load(object sender, System.EventArgs e) {
 			//security is handled on the Rx button click in the Chart module
-			for(int i=0;i<Providers.List.Length;i++){
-				this.listProv.Items.Add(Providers.List[i].Abbr);
-				if(Providers.List[i].ProvNum==RxPatCur.ProvNum)
+			for(int i=0;i<ProviderC.List.Length;i++){
+				this.listProv.Items.Add(ProviderC.List[i].Abbr);
+				if(ProviderC.List[i].ProvNum==RxPatCur.ProvNum)
 					listProv.SelectedIndex=i;
 			}
 			if(listProv.SelectedIndex==-1){
@@ -339,7 +339,7 @@ namespace OpenDental{
 				return false;
 			}
 			if(listProv.SelectedIndex!=-1)
-				RxPatCur.ProvNum=Providers.List[listProv.SelectedIndex].ProvNum;
+				RxPatCur.ProvNum=ProviderC.List[listProv.SelectedIndex].ProvNum;
 			RxPatCur.RxDate=PIn.PDate(textDate.Text);
 			RxPatCur.Drug=textDrug.Text;
 			RxPatCur.Sig=textSig.Text;

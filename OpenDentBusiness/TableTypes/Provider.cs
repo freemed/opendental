@@ -56,32 +56,43 @@ namespace OpenDentBusiness{
 
 		///<summary>Returns a copy of this Provider.</summary>
 		public Provider Copy(){
-			Provider p=new Provider();
-			p.ProvNum=ProvNum;
-			p.Abbr=Abbr;
-			p.ItemOrder=ItemOrder;
-			p.LName=LName;
-			p.FName=FName;
-			p.MI=MI;
-			p.Suffix=Suffix;
-			p.FeeSched=FeeSched;
-			p.Specialty=Specialty;
-			p.SSN=SSN;
-			p.StateLicense=StateLicense;
-			p.DEANum=DEANum;
-			p.IsSecondary=IsSecondary;
-			p.ProvColor=ProvColor;
-			p.IsHidden=IsHidden;
-			p.UsingTIN=UsingTIN;
-			//bluecross
-			p.SigOnFile=SigOnFile;
-			p.MedicaidID=MedicaidID;
-			p.OutlineColor=OutlineColor;
-			p.SchoolClassNum=SchoolClassNum;
-			p.NationalProvID=NationalProvID;
-			p.CanadianOfficeNum=CanadianOfficeNum;
-			return p;
+			return (Provider)MemberwiseClone();
 		}
+
+		public Provider(){
+
+		}
+
+		public Provider(int provNum,string abbr,int itemOrder,string lName,string fName,string mI,string suffix,int feeSched,
+			DentalSpecialty specialty,string sSN,string stateLicense,string dEANum,bool isSecondary,Color provColor,bool isHidden,
+			bool usingTIN,string blueCrossID,bool sigOnFile,string medicaidID,Color outlineColor,int schoolClassNum,
+			string nationalProvID,string canadianOfficeNum)
+		{
+			ProvNum=provNum;
+			Abbr=abbr;
+			ItemOrder=itemOrder;
+			LName=lName;
+			FName=fName;
+			MI=mI;
+			Suffix=suffix;
+			FeeSched=feeSched;
+			Specialty=specialty;
+			SSN=sSN;
+			StateLicense=stateLicense;
+			DEANum=dEANum;
+			IsSecondary=isSecondary;
+			ProvColor=provColor;
+			IsHidden=isHidden;
+			UsingTIN=usingTIN;
+			BlueCrossID=blueCrossID;
+			SigOnFile=sigOnFile;
+			MedicaidID=medicaidID;
+			OutlineColor=outlineColor;
+			SchoolClassNum=schoolClassNum;
+			NationalProvID=nationalProvID;
+			CanadianOfficeNum=canadianOfficeNum;
+		}
+
 
 		///<Summary>For use in areas of the program where we have more room than just simple abbr.  Such as pick boxes in reports.  This will give Abbr - LName, FName (hidden).</Summary>
 		public string GetLongDesc(){

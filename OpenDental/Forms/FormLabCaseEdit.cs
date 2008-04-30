@@ -548,9 +548,9 @@ namespace OpenDental{
 					listLab.SelectedIndex=i;
 				}
 			}
-			for(int i=0;i<Providers.List.Length;i++){
-				comboProv.Items.Add(Providers.List[i].Abbr);
-				if(Providers.List[i].ProvNum==CaseCur.ProvNum){
+			for(int i=0;i<ProviderC.List.Length;i++){
+				comboProv.Items.Add(ProviderC.List[i].Abbr);
+				if(ProviderC.List[i].ProvNum==CaseCur.ProvNum){
 					comboProv.SelectedIndex=i;
 				}
 			}
@@ -720,7 +720,7 @@ namespace OpenDental{
 			CaseCur.LaboratoryNum=ListLabs[listLab.SelectedIndex].LaboratoryNum;
 			//AptNum
 			//PlannedAptNum
-			CaseCur.ProvNum=Providers.List[comboProv.SelectedIndex].ProvNum;
+			CaseCur.ProvNum=ProviderC.List[comboProv.SelectedIndex].ProvNum;
 			if(textDateCreated.Text==""){
 				CaseCur.DateTimeCreated=DateTime.MinValue;
 			}

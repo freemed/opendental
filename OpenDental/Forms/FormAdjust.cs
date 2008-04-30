@@ -326,9 +326,9 @@ namespace OpenDental{
 			else{//neg
 				textAmount.Text=(-AdjustmentCur.AdjAmt).ToString("F");//shows without the neg sign
 			}
-			for(int i=0;i<Providers.List.Length;i++){
-				this.listProvider.Items.Add(Providers.List[i].GetLongDesc());
-				if(Providers.List[i].ProvNum==AdjustmentCur.ProvNum)
+			for(int i=0;i<ProviderC.List.Length;i++){
+				this.listProvider.Items.Add(ProviderC.List[i].GetLongDesc());
+				if(ProviderC.List[i].ProvNum==AdjustmentCur.ProvNum)
 					listProvider.SelectedIndex=i;
 			}				
 			for(int i=0;i<DefC.Short[1].Length;i++){//temp.AdjType
@@ -379,7 +379,7 @@ namespace OpenDental{
 			if(listProvider.SelectedIndex==-1)
 				AdjustmentCur.ProvNum=PatCur.PriProv;
 			else
-				AdjustmentCur.ProvNum=Providers.List[this.listProvider.SelectedIndex].ProvNum;
+				AdjustmentCur.ProvNum=ProviderC.List[this.listProvider.SelectedIndex].ProvNum;
 			if(listTypePos.SelectedIndex!=-1){
 				AdjustmentCur.AdjType
 					=DefC.Short[(int)DefCat.AdjTypes][(int)PosIndex[listTypePos.SelectedIndex]].DefNum;

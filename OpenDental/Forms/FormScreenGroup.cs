@@ -467,9 +467,9 @@ namespace OpenDental{
 			textScreenDate.Text=ScreenGroupCur.SGDate.ToShortDateString();
 			textDescription.Text=ScreenGroupCur.Description;
 			textProvName.Text=ScreenGroupCur.ProvName;//has to be filled before provnum
-			for(int i=0;i<Providers.List.Length;i++){
-				comboProv.Items.Add(Providers.List[i].Abbr);
-				if(ScreenGroupCur.ProvNum==Providers.List[i].ProvNum){
+			for(int i=0;i<ProviderC.List.Length;i++){
+				comboProv.Items.Add(ProviderC.List[i].Abbr);
+				if(ScreenGroupCur.ProvNum==ProviderC.List[i].ProvNum){
 					comboProv.SelectedIndex=i;
 				}
 			}
@@ -550,8 +550,8 @@ namespace OpenDental{
 		private void comboProv_SelectedIndexChanged(object sender, System.EventArgs e) {
 			if(comboProv.SelectedIndex!=-1){//if a prov was selected
 				//set the provname accordingly
-				textProvName.Text=Providers.List[comboProv.SelectedIndex].LName+", "
-					+Providers.List[comboProv.SelectedIndex].FName;
+				textProvName.Text=ProviderC.List[comboProv.SelectedIndex].LName+", "
+					+ProviderC.List[comboProv.SelectedIndex].FName;
 			}
 		}
 

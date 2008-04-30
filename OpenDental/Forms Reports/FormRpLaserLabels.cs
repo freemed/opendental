@@ -966,9 +966,9 @@ namespace OpenDental
         //
         private void FormLaserLabels_Load(object sender, System.EventArgs e)
         {
-            for (int i = 0; i < Providers.List.Length; i++)
+            for (int i = 0; i < ProviderC.List.Length; i++)
             {
-                listProviders.Items.Add(Providers.List[i].GetLongDesc());
+                listProviders.Items.Add(ProviderC.List[i].GetLongDesc());
             }
             if (listProviders.Items.Count > 0)
             {
@@ -1019,7 +1019,7 @@ namespace OpenDental
                         {
                             whereProv += ",";
                         }
-                        whereProv += "'" + POut.PInt(Providers.List[listProviders.SelectedIndices[i]].ProvNum) + "'";
+                        whereProv += "'" + POut.PInt(ProviderC.List[listProviders.SelectedIndices[i]].ProvNum) + "'";
                     }
                     whereProv += ") ";
                     patStat = BuildPatStatList(checkActiveOnly.Checked);

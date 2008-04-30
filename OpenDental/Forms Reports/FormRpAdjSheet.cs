@@ -199,8 +199,8 @@ namespace OpenDental{
 		private void FormDailyAdjustment_Load(object sender, System.EventArgs e) {
 			date1.SelectionStart=DateTime.Today;
 			date2.SelectionStart=DateTime.Today;
-			for(int i=0;i<Providers.List.Length;i++) {
-				listProv.Items.Add(Providers.List[i].GetLongDesc());
+			for(int i=0;i<ProviderC.List.Length;i++) {
+				listProv.Items.Add(ProviderC.List[i].GetLongDesc());
 				listProv.SetSelected(i,true);
 			}
 			for(int i=0;i<DefC.Short[(int)DefCat.AdjTypes].Length;i++) {
@@ -236,7 +236,7 @@ namespace OpenDental{
 					whereProv+="OR ";
 				}
 				whereProv+="adjustment.ProvNum = '"
-					+POut.PInt(Providers.List[listProv.SelectedIndices[i]].ProvNum)+"' ";
+					+POut.PInt(ProviderC.List[listProv.SelectedIndices[i]].ProvNum)+"' ";
 			}
 			whereProv+=")";
 			string whereType="(";

@@ -355,8 +355,8 @@ namespace OpenDental{
 		#endregion
 		private void FormProduction_Load(object sender, System.EventArgs e) {
 			textToday.Text=DateTime.Today.ToShortDateString();
-			for(int i=0;i<Providers.List.Length;i++){
-				listProv.Items.Add(Providers.List[i].GetLongDesc());
+			for(int i=0;i<ProviderC.List.Length;i++){
+				listProv.Items.Add(ProviderC.List[i].GetLongDesc());
 				listProv.SetSelected(i,true);
 			}
 			//if(PrefC.GetBool("EasyNoClinics")){
@@ -526,7 +526,7 @@ namespace OpenDental{
 					whereProv+="OR ";
 				}
 				whereProv+="procedurelog.ProvNum = '"
-					+POut.PInt(Providers.List[listProv.SelectedIndices[i]].ProvNum)+"' ";
+					+POut.PInt(ProviderC.List[listProv.SelectedIndices[i]].ProvNum)+"' ";
 			}
 			whereProv+=")";
 			Queries.CurReport=new ReportOld();
@@ -561,7 +561,7 @@ namespace OpenDental{
 					whereProv+="OR ";
 				}
 				whereProv+="adjustment.ProvNum = '"
-					+POut.PInt(Providers.List[listProv.SelectedIndices[i]].ProvNum)+"' ";
+					+POut.PInt(ProviderC.List[listProv.SelectedIndices[i]].ProvNum)+"' ";
 			}
 			whereProv+=")";
 			Queries.CurReport.Query+="SELECT "
@@ -590,7 +590,7 @@ namespace OpenDental{
 					whereProv+="OR ";
 				}
 				whereProv+="claimproc.ProvNum = '"
-					+POut.PInt(Providers.List[listProv.SelectedIndices[i]].ProvNum)+"' ";
+					+POut.PInt(ProviderC.List[listProv.SelectedIndices[i]].ProvNum)+"' ";
 			}
 			whereProv+=")";
 			Queries.CurReport.Query+="SELECT "
@@ -625,7 +625,7 @@ namespace OpenDental{
 					whereProv+="OR ";
 				}
 				whereProv+="paysplit.ProvNum = '"
-					+POut.PInt(Providers.List[listProv.SelectedIndices[i]].ProvNum)+"' ";
+					+POut.PInt(ProviderC.List[listProv.SelectedIndices[i]].ProvNum)+"' ";
 			}
 			whereProv+=")";
 			Queries.CurReport.Query+="SELECT "
@@ -657,7 +657,7 @@ namespace OpenDental{
 					whereProv+="OR ";
 				}
 				whereProv+="claimproc.ProvNum = '"
-					+POut.PInt(Providers.List[listProv.SelectedIndices[i]].ProvNum)+"' ";
+					+POut.PInt(ProviderC.List[listProv.SelectedIndices[i]].ProvNum)+"' ";
 			}
 			whereProv+=")";
 			Queries.CurReport.Query+="SELECT "
@@ -774,7 +774,7 @@ Group By procdate Order by procdate desc
 				if(i>0){
 					whereProv+=" OR";
 				}
-				whereProv+=" procedurelog.ProvNum = '"+POut.PInt(Providers.List[listProv.SelectedIndices[i]].ProvNum)+"'";
+				whereProv+=" procedurelog.ProvNum = '"+POut.PInt(ProviderC.List[listProv.SelectedIndices[i]].ProvNum)+"'";
 			}
 			whereProv+=")";
 			Queries.CurReport.Query="SELECT procedurelog.ProcDate, "
@@ -801,7 +801,7 @@ GROUP BY DateCP Order by DateCP
 				if(i>0){
 					whereProv+=" OR";
 				}
-				whereProv+=" ProvNum = '"+POut.PInt(Providers.List[listProv.SelectedIndices[i]].ProvNum)+"'";
+				whereProv+=" ProvNum = '"+POut.PInt(ProviderC.List[listProv.SelectedIndices[i]].ProvNum)+"'";
 			}
 			whereProv+=")";
 			Queries.CurReport.Query="SELECT DateCP, SUM(WriteOff) FROM claimproc WHERE "
@@ -826,7 +826,7 @@ GROUP BY DateCP Order by DateCP
 				if(i>0){
 					whereProv+=" OR";
 				}
-				whereProv+=" ProvNum = '"+POut.PInt(Providers.List[listProv.SelectedIndices[i]].ProvNum)+"'";
+				whereProv+=" ProvNum = '"+POut.PInt(ProviderC.List[listProv.SelectedIndices[i]].ProvNum)+"'";
 			}
 			whereProv+=")";
 			Queries.CurReport.Query="SELECT DateCP, SUM(WriteOff) FROM claimproc WHERE "
@@ -854,7 +854,7 @@ GROUP BY SchedDate
 					whereProv+=" OR";
 				}
 				whereProv+=" procedurelog.provnum = '"
-					+POut.PInt(Providers.List[listProv.SelectedIndices[i]].ProvNum)+"'";
+					+POut.PInt(ProviderC.List[listProv.SelectedIndices[i]].ProvNum)+"'";
 			}
 			whereProv+=")";
 			Queries.CurReport.Query= "SELECT FROM_DAYS(TO_DAYS(appointment.AptDateTime)) "//gets rid of time
@@ -890,7 +890,7 @@ group by claimpayment.checkdate order by procdate
 					whereProv+=" OR";
 				}
 				whereProv+=" paysplit.ProvNum = '"
-					+POut.PInt(Providers.List[listProv.SelectedIndices[i]].ProvNum)+"'";
+					+POut.PInt(ProviderC.List[listProv.SelectedIndices[i]].ProvNum)+"'";
 			}
 			whereProv+=")";
 			Queries.CurReport.Query= "SELECT paysplit.DatePay,SUM(paysplit.splitamt) FROM paysplit "
@@ -916,7 +916,7 @@ group by claimpayment.checkdate order by procdate
 					whereProv+=" OR";
 				}
 				whereProv+=" claimproc.ProvNum = '"
-					+POut.PInt(Providers.List[listProv.SelectedIndices[i]].ProvNum)+"'";
+					+POut.PInt(ProviderC.List[listProv.SelectedIndices[i]].ProvNum)+"'";
 			}
 			whereProv+=")";
 			Queries.CurReport.Query= "SELECT claimpayment.CheckDate,SUM(claimproc.InsPayamt) "
@@ -946,7 +946,7 @@ ORDER BY adjdate DESC
 					whereProv+=" OR";
 				}
 				whereProv+=" provnum = '"
-					+POut.PInt(Providers.List[listProv.SelectedIndices[i]].ProvNum)+"'";
+					+POut.PInt(ProviderC.List[listProv.SelectedIndices[i]].ProvNum)+"'";
 			}
 			whereProv+=")";
 			Queries.CurReport.Query="SELECT adjdate, SUM(adjamt) FROM adjustment WHERE "
@@ -1065,7 +1065,7 @@ ORDER BY adjdate DESC
 				if(listProv.SelectedIndices.Contains(i)){
 					if(sProv!="")
 						sProv+=", ";
-					sProv+=Providers.List[i].Abbr;
+					sProv+=ProviderC.List[i].Abbr;
 				}
 				else{
 					allProv=false;
@@ -1151,7 +1151,7 @@ ORDER BY adjdate DESC
 					whereProv+="OR ";
 				}
 				whereProv+="procedurelog.ProvNum = '"
-					+POut.PInt(Providers.List[listProv.SelectedIndices[i]].ProvNum)+"' ";
+					+POut.PInt(ProviderC.List[listProv.SelectedIndices[i]].ProvNum)+"' ";
 			}
 			whereProv+=")";
 			Queries.CurReport.Query="SELECT "
@@ -1175,7 +1175,7 @@ ORDER BY adjdate DESC
 					whereProv+="OR ";
 				}
 				whereProv+="adjustment.ProvNum = '"
-					+POut.PInt(Providers.List[listProv.SelectedIndices[i]].ProvNum)+"' ";
+					+POut.PInt(ProviderC.List[listProv.SelectedIndices[i]].ProvNum)+"' ";
 			}
 			whereProv+=")";
 			Queries.CurReport.Query="SELECT "
@@ -1196,7 +1196,7 @@ ORDER BY adjdate DESC
 				if(i>0)	{
 					whereProv+=" OR";
 				}
-				whereProv+=" ProvNum = '"+POut.PInt(Providers.List[listProv.SelectedIndices[i]].ProvNum)+"'";
+				whereProv+=" ProvNum = '"+POut.PInt(ProviderC.List[listProv.SelectedIndices[i]].ProvNum)+"'";
 			}
 			whereProv+=")";
 			Queries.CurReport.Query="SELECT "
@@ -1218,7 +1218,7 @@ ORDER BY adjdate DESC
 					whereProv+="OR ";
 				}
 				whereProv+="paysplit.ProvNum = '"
-					+POut.PInt(Providers.List[listProv.SelectedIndices[i]].ProvNum)+"' ";
+					+POut.PInt(ProviderC.List[listProv.SelectedIndices[i]].ProvNum)+"' ";
 			}
 			whereProv+=")";
 			Queries.CurReport.Query="SELECT "
@@ -1239,7 +1239,7 @@ ORDER BY adjdate DESC
 					whereProv+=" OR";
 				}
 				whereProv+=" claimproc.ProvNum = '"
-					+POut.PInt(Providers.List[listProv.SelectedIndices[i]].ProvNum)+"'";
+					+POut.PInt(ProviderC.List[listProv.SelectedIndices[i]].ProvNum)+"'";
 			}
 			whereProv+=")";
 			Queries.CurReport.Query= "SELECT claimpayment.CheckDate,SUM(claimproc.InsPayamt) "
@@ -1350,7 +1350,7 @@ ORDER BY adjdate DESC
 				if(listProv.SelectedIndices.Contains(i)){
 					if(sProv!="")
 						sProv+=", ";
-					sProv+=Providers.List[i].Abbr;
+					sProv+=ProviderC.List[i].Abbr;
 				}
 				else{
 					allProv=false;

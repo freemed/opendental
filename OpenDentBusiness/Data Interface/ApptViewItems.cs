@@ -10,7 +10,7 @@ namespace OpenDentBusiness{
 		///<summary>A list of the ApptViewItems for the current view.</summary>
 		public static ApptViewItem[] ForCurView;
 		//these two are subsets of provs and ops. You can't include hidden prov or op in this list.
-		///<summary>Visible providers in appt module.  List of indices to providers.List(short).  Also see VisOps.  This is a subset of the available provs.  You can't include a hidden prov in this list.</summary>
+		///<summary>Visible providers in appt module.  List of indices to ProviderC.List(short).  Also see VisOps.  This is a subset of the available provs.  You can't include a hidden prov in this list.</summary>
 		public static int[] VisProvs;
 		///<summary>Visible ops in appt module.  List of indices to Operatories.ListShort[ops].  Also see VisProvs.  This is a subset of the available ops.  You can't include a hidden op in this list.</summary>
 		public static int[] VisOps;
@@ -21,6 +21,7 @@ namespace OpenDentBusiness{
 		public static DataTable RefreshCache(){
 			string command="SELECT * from apptviewitem ORDER BY ElementOrder";
 			DataTable table=General.GetTable(command);
+			table.TableName="ApptViewItem";
 			FillCache(table);
 			return table;
 		}
@@ -85,7 +86,7 @@ namespace OpenDentBusiness{
 		///<summary>Returns the index of the provNum within VisProvs.</summary>
 		public static int GetIndexProv(int provNum){
 			for(int i=0;i<VisProvs.Length;i++){
-				if(Providers.List[VisProvs[i]].ProvNum==provNum)
+				if(ProviderC.List[VisProvs[i]].ProvNum==provNum)
 					return i;
 			}		
 			return -1;

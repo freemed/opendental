@@ -291,9 +291,9 @@ namespace OpenDental{
 		#endregion
 
 		private void FormProvIncTransAdd_Load(object sender,EventArgs e) {
-			for(int i=0;i<Providers.List.Length;i++) {
-				comboProvFrom.Items.Add(Providers.List[i].Abbr);
-				comboProvTo.Items.Add(Providers.List[i].Abbr);
+			for(int i=0;i<ProviderC.List.Length;i++) {
+				comboProvFrom.Items.Add(ProviderC.List[i].Abbr);
+				comboProvTo.Items.Add(ProviderC.List[i].Abbr);
 			}
 			for(int i=0;i<FamCur.List.Length;i++) {
 				comboFromPat.Items.Add(FamCur.GetNameInFamFL(i));
@@ -388,7 +388,7 @@ namespace OpenDental{
 			split.PayNum=PayNum;
 			split.ProcDate=DateTime.Today;//will be updated in parent form.
 			split.DatePay=DateTime.Today;//will be updated when closing parent form.
-			split.ProvNum=Providers.List[comboProvFrom.SelectedIndex].ProvNum;
+			split.ProvNum=ProviderC.List[comboProvFrom.SelectedIndex].ProvNum;
 			split.SplitAmt=-amt;
 			SplitList.Add(split);
 			//To-----------------------------------------------------------------------------------
@@ -397,7 +397,7 @@ namespace OpenDental{
 			split.PayNum=PayNum;
 			split.ProcDate=DateTime.Today;//will be updated in parent form.
 			split.DatePay=DateTime.Today;//will be updated when closing parent form.
-			split.ProvNum=Providers.List[comboProvTo.SelectedIndex].ProvNum;
+			split.ProvNum=ProviderC.List[comboProvTo.SelectedIndex].ProvNum;
 			split.SplitAmt=amt;
 			SplitList.Add(split);
 			DialogResult=DialogResult.OK;

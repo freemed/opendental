@@ -293,16 +293,16 @@ namespace OpenDental{
 			}
 			comboProvDentist.Items.Add(Lan.g(this,"none"));
 			comboProvDentist.SelectedIndex=0;
-			for(int i=0;i<Providers.List.Length;i++){
-				comboProvDentist.Items.Add(Providers.List[i].Abbr);
-				if(Providers.List[i].ProvNum==OpCur.ProvDentist)
+			for(int i=0;i<ProviderC.List.Length;i++){
+				comboProvDentist.Items.Add(ProviderC.List[i].Abbr);
+				if(ProviderC.List[i].ProvNum==OpCur.ProvDentist)
 					comboProvDentist.SelectedIndex=i+1;
 			}
 			comboProvHygienist.Items.Add(Lan.g(this,"none"));
 			comboProvHygienist.SelectedIndex=0;
-			for(int i=0;i<Providers.List.Length;i++){
-				comboProvHygienist.Items.Add(Providers.List[i].Abbr);
-				if(Providers.List[i].ProvNum==OpCur.ProvHygienist)
+			for(int i=0;i<ProviderC.List.Length;i++){
+				comboProvHygienist.Items.Add(ProviderC.List[i].Abbr);
+				if(ProviderC.List[i].ProvNum==OpCur.ProvHygienist)
 					comboProvHygienist.SelectedIndex=i+1;
 			}
 			checkIsHygiene.Checked=OpCur.IsHygiene;
@@ -323,11 +323,11 @@ namespace OpenDental{
 			if(comboProvDentist.SelectedIndex==0)//none
 				OpCur.ProvDentist=0;
 			else
-				OpCur.ProvDentist=Providers.List[comboProvDentist.SelectedIndex-1].ProvNum;
+				OpCur.ProvDentist=ProviderC.List[comboProvDentist.SelectedIndex-1].ProvNum;
 			if(comboProvHygienist.SelectedIndex==0)//none
 				OpCur.ProvHygienist=0;
 			else
-				OpCur.ProvHygienist=Providers.List[comboProvHygienist.SelectedIndex-1].ProvNum;
+				OpCur.ProvHygienist=ProviderC.List[comboProvHygienist.SelectedIndex-1].ProvNum;
 			OpCur.IsHygiene=checkIsHygiene.Checked;
 			try{
 				Operatories.InsertOrUpdate(OpCur,IsNew);

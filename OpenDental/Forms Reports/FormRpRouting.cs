@@ -231,8 +231,8 @@ namespace OpenDental
 				printPreview.ShowDialog();
 				DialogResult=DialogResult.OK;
 			}
-			for(int i=0;i<Providers.List.Length;i++){
-				listProv.Items.Add(Providers.List[i].GetLongDesc());
+			for(int i=0;i<ProviderC.List.Length;i++){
+				listProv.Items.Add(ProviderC.List[i].GetLongDesc());
 				listProv.SetSelected(i,true);
 			}
 			textDate.Text=DateTime.Today.ToShortDateString();
@@ -269,7 +269,7 @@ namespace OpenDental
 			}
 			int[] provNums=new int[listProv.SelectedIndices.Count];
 			for(int i=0;i<provNums.Length;i++){
-				provNums[i]=Providers.List[listProv.SelectedIndices[i]].ProvNum;
+				provNums[i]=ProviderC.List[listProv.SelectedIndices[i]].ProvNum;
 			}
 			Appts=Appointments.GetRouting(date,provNums);
 			if(Appts.Length==0){

@@ -446,8 +446,8 @@ namespace OpenDental{
 			//textDateTo.Text=dateFrom.AddDays(6).ToShortDateString();
 			//listProv.Items.Add(Lan.g(this,"(Practice)"));
 			//listProv.SetSelected(0,true);
-			for(int i=0;i<Providers.List.Length;i++){
-				listProv.Items.Add(Providers.List[i].Abbr);
+			for(int i=0;i<ProviderC.List.Length;i++){
+				listProv.Items.Add(ProviderC.List[i].Abbr);
 				listProv.SetSelected(i,true);
 			}
 			for(int i=0;i<Employees.ListShort.Length;i++) {
@@ -470,7 +470,7 @@ namespace OpenDental{
 			ProvsChanged=false;
 			List<int> provNums=new List<int>();
 			for(int i=0;i<listProv.SelectedIndices.Count;i++){
-				provNums.Add(Providers.List[listProv.SelectedIndices[i]].ProvNum);
+				provNums.Add(ProviderC.List[listProv.SelectedIndices[i]].ProvNum);
 			}
 			List<int> empNums=new List<int>();
 			for(int i=0;i<listEmp.SelectedIndices.Count;i++){
@@ -628,7 +628,7 @@ namespace OpenDental{
 			}
 			List<int> provNums=new List<int>();
 			for(int i=0;i<listProv.SelectedIndices.Count;i++) {
-				provNums.Add(Providers.List[listProv.SelectedIndices[i]].ProvNum);
+				provNums.Add(ProviderC.List[listProv.SelectedIndices[i]].ProvNum);
 			}
 			List<int> empNums=new List<int>();
 			for(int i=0;i<listEmp.SelectedIndices.Count;i++) {
@@ -733,7 +733,7 @@ namespace OpenDental{
 			}
 			List<int> provNums=new List<int>();
 			for(int i=0;i<listProv.SelectedIndices.Count;i++) {
-				provNums.Add(Providers.List[listProv.SelectedIndices[i]].ProvNum);
+				provNums.Add(ProviderC.List[listProv.SelectedIndices[i]].ProvNum);
 			}
 			List<int> empNums=new List<int>();
 			for(int i=0;i<listEmp.SelectedIndices.Count;i++) {
@@ -831,7 +831,7 @@ namespace OpenDental{
 			//}
 			List<int> provNums=new List<int>();
 			for(int i=0;i<listProv.SelectedIndices.Count;i++) {
-				provNums.Add(Providers.List[listProv.SelectedIndices[i]].ProvNum);
+				provNums.Add(ProviderC.List[listProv.SelectedIndices[i]].ProvNum);
 			}
 			List<int> empNums=new List<int>();
 			for(int i=0;i<listEmp.SelectedIndices.Count;i++) {

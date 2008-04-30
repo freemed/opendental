@@ -57,8 +57,8 @@ namespace OpenDental.Eclaims {
 				claim=Claims.GetClaim(queueItems[i].ClaimNum);
 				canClaim=CanadianClaims.GetForClaim(claim.ClaimNum);//already validated to not=null
 				clinic=Clinics.GetClinic(claim.ClinicNum);
-				billProv=Providers.ListLong[Providers.GetIndexLong(claim.ProvBill)];
-				treatProv=Providers.ListLong[Providers.GetIndexLong(claim.ProvTreat)];
+				billProv=ProviderC.ListLong[Providers.GetIndexLong(claim.ProvBill)];
+				treatProv=ProviderC.ListLong[Providers.GetIndexLong(claim.ProvTreat)];
 				insPlan=InsPlans.GetPlan(claim.PlanNum,new InsPlan[] { });
 				carrier=Carriers.GetCarrier(insPlan.CarrierNum);
 				if(claim.PlanNum2>0) {
@@ -763,8 +763,8 @@ namespace OpenDental.Eclaims {
 			Claim claim=Claims.GetClaim(queueItem.ClaimNum);
 			CanadianClaim canClaim=CanadianClaims.GetForClaim(claim.ClaimNum);
 			Clinic clinic=Clinics.GetClinic(claim.ClinicNum);
-			Provider billProv=Providers.ListLong[Providers.GetIndexLong(claim.ProvBill)];
-			Provider treatProv=Providers.ListLong[Providers.GetIndexLong(claim.ProvTreat)];
+			Provider billProv=ProviderC.ListLong[Providers.GetIndexLong(claim.ProvBill)];
+			Provider treatProv=ProviderC.ListLong[Providers.GetIndexLong(claim.ProvTreat)];
 			InsPlan insPlan=InsPlans.GetPlan(claim.PlanNum,new InsPlan[] { });
 			Carrier carrier=Carriers.GetCarrier(insPlan.CarrierNum);
 			InsPlan insPlan2=null;

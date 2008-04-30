@@ -527,7 +527,7 @@ namespace OpenDental{
 				}
 				//There's still a chance that the diagnosis didn't get added, if there were more than 4.
 			}
-			Provider treatDent=Providers.ListLong[Providers.GetIndexLong(ClaimCur.ProvTreat)];
+			Provider treatDent=ProviderC.ListLong[Providers.GetIndexLong(ClaimCur.ProvTreat)];
 			if(ClaimFormCur==null){
 				if(ClaimCur.ClaimForm>0){
 					ClaimFormCur=ClaimForms.GetClaimForm(ClaimCur.ClaimForm);
@@ -1201,7 +1201,7 @@ namespace OpenDental{
 						displayStrings[i]=ClaimCur.AccidentST;
 						break;
 					case "BillingDentist":
-						Provider P=Providers.ListLong[Providers.GetIndexLong(ClaimCur.ProvBill)];
+						Provider P=ProviderC.ListLong[Providers.GetIndexLong(ClaimCur.ProvBill)];
 						displayStrings[i]=P.FName+" "+P.MI+" "+P.LName+" "+P.Suffix;
 						break;
 					case "BillingDentistAddress":
@@ -1250,7 +1250,7 @@ namespace OpenDental{
 							displayStrings[i]=clinic.Zip;
 						break;
 					case "BillingDentistMedicaidID":
-						displayStrings[i]=Providers.ListLong[Providers.GetIndexLong(ClaimCur.ProvBill)].MedicaidID;
+						displayStrings[i]=ProviderC.ListLong[Providers.GetIndexLong(ClaimCur.ProvBill)].MedicaidID;
 						break;
 					case "BillingDentistProviderID":
 						ProviderIdent[] provIdents=ProviderIdents.GetForPayor(ClaimCur.ProvBill,carrier.ElectID);
@@ -1259,20 +1259,20 @@ namespace OpenDental{
 						}
 						break;
 					case "BillingDentistNPI":
-						displayStrings[i]=Providers.ListLong[Providers.GetIndexLong(ClaimCur.ProvBill)].NationalProvID;
+						displayStrings[i]=ProviderC.ListLong[Providers.GetIndexLong(ClaimCur.ProvBill)].NationalProvID;
 						break;
 					case "BillingDentistLicenseNum":
-						displayStrings[i]=Providers.ListLong[Providers.GetIndexLong(ClaimCur.ProvBill)].StateLicense;
+						displayStrings[i]=ProviderC.ListLong[Providers.GetIndexLong(ClaimCur.ProvBill)].StateLicense;
 						break;
 					case "BillingDentistSSNorTIN":
-						displayStrings[i]=Providers.ListLong[Providers.GetIndexLong(ClaimCur.ProvBill)].SSN;
+						displayStrings[i]=ProviderC.ListLong[Providers.GetIndexLong(ClaimCur.ProvBill)].SSN;
 						break;
 					case "BillingDentistNumIsSSN":
-						if(!Providers.ListLong[Providers.GetIndexLong(ClaimCur.ProvBill)].UsingTIN)
+						if(!ProviderC.ListLong[Providers.GetIndexLong(ClaimCur.ProvBill)].UsingTIN)
 							displayStrings[i]="X";
 						break;
 					case "BillingDentistNumIsTIN":
-						if(Providers.ListLong[Providers.GetIndexLong(ClaimCur.ProvBill)].UsingTIN)
+						if(ProviderC.ListLong[Providers.GetIndexLong(ClaimCur.ProvBill)].UsingTIN)
 							displayStrings[i]="X";
 						break;
 					case "BillingDentistPh123":
@@ -1432,7 +1432,7 @@ namespace OpenDental{
 						break;
 					case "TreatingProviderSpecialty":
 						displayStrings[i]=Eclaims.X12.GetTaxonomy
-							(Providers.ListLong[Providers.GetIndexLong(ClaimCur.ProvTreat)].Specialty);
+							(ProviderC.ListLong[Providers.GetIndexLong(ClaimCur.ProvTreat)].Specialty);
 						break;
 					case "TotalPages":
 						displayStrings[i]=totalPages.ToString();
@@ -2645,7 +2645,7 @@ namespace OpenDental{
 						case "MedInsAOtherProvID":
 							ProviderIdent AltID;
 							string CarrierElectID = Carriers.GetCarrier(MedInsA.CarrierNum).ElectID.ToString();
-							Provider P = Providers.ListLong[Providers.GetIndexLong(ClaimCur.ProvBill)];
+							Provider P = ProviderC.ListLong[Providers.GetIndexLong(ClaimCur.ProvBill)];
 							if (P.ProvNum > 0 && CarrierElectID != "" && (ProviderIdents.GetForPayor(P.ProvNum, CarrierElectID).Length > 0)){
 								AltID = ProviderIdents.GetForPayor(P.ProvNum, CarrierElectID)[0];
 								if (AltID.IDNumber != ""){
@@ -2712,7 +2712,7 @@ namespace OpenDental{
 						case "MedInsBOtherProvID":
 							ProviderIdent AltID;
 							string CarrierElectID = Carriers.GetCarrier(MedInsB.CarrierNum).ElectID.ToString();
-							Provider P = Providers.ListLong[Providers.GetIndexLong(ClaimCur.ProvBill)];
+							Provider P = ProviderC.ListLong[Providers.GetIndexLong(ClaimCur.ProvBill)];
 							if (P.ProvNum > 0 && CarrierElectID != "" && (ProviderIdents.GetForPayor(P.ProvNum, CarrierElectID).Length > 0)){
 								AltID = ProviderIdents.GetForPayor(P.ProvNum, CarrierElectID)[0];
 								if (AltID.IDNumber != ""){
@@ -2779,7 +2779,7 @@ namespace OpenDental{
 						case "MedInsCOtherProvID":
 							ProviderIdent AltID;
 							string CarrierElectID = Carriers.GetCarrier(MedInsC.CarrierNum).ElectID.ToString();
-							Provider P = Providers.ListLong[Providers.GetIndexLong(ClaimCur.ProvBill)];
+							Provider P = ProviderC.ListLong[Providers.GetIndexLong(ClaimCur.ProvBill)];
 							if (P.ProvNum > 0 && CarrierElectID != "" && (ProviderIdents.GetForPayor(P.ProvNum, CarrierElectID).Length > 0)){
 								AltID = ProviderIdents.GetForPayor(P.ProvNum, CarrierElectID)[0];
 								if (AltID.IDNumber != ""){
@@ -2929,14 +2929,14 @@ namespace OpenDental{
 				if(claimprocs[procIndex].ProvNum==0){
 					return "";
 				}
-				else return Providers.ListLong[Providers.GetIndexLong(claimprocs[procIndex].ProvNum)].MedicaidID;
+				else return ProviderC.ListLong[Providers.GetIndexLong(claimprocs[procIndex].ProvNum)].MedicaidID;
 			}
 			if(field=="TreatProvNPI"){
 				if(claimprocs[procIndex].ProvNum==0) {
 					return "";
 				}
 				else
-					return Providers.ListLong[Providers.GetIndexLong(claimprocs[procIndex].ProvNum)].NationalProvID;
+					return ProviderC.ListLong[Providers.GetIndexLong(claimprocs[procIndex].ProvNum)].NationalProvID;
 			}
 			if(field=="PlaceNumericCode"){
 				return GetPlaceOfServiceNum(ClaimCur.PlaceService);

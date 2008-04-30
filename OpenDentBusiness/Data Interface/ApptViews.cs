@@ -10,6 +10,7 @@ namespace OpenDentBusiness{
 		public static DataTable RefreshCache(){
 			string c="SELECT * from apptview ORDER BY itemorder";
 			DataTable table=General.GetTable(c);
+			table.TableName="ApptView";
 			FillCache(table);
 			return table;
 		}

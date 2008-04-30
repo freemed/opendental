@@ -85,6 +85,7 @@
     <Compile Include="Cache\AutoCodeC.cs" />
     <Compile Include="Cache\AutoCodeItemC.cs" />
     <Compile Include="Cache\ClaimFormItemC.cs" />
+    <Compile Include="Cache\ProviderC.cs" />
     <Compile Include="Cache\OperatoryC.cs" />
     <Compile Include="Cache\CovSpanC.cs" />
     <Compile Include="Cache\GroupPermissionC.cs" />

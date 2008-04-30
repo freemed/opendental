@@ -154,8 +154,8 @@ namespace OpenDental{
 			}
 			//comboProv.Items.Add(Lan.g(this,"All"));
 			//comboProv.SelectedIndex=0;
-			//for(int i=0;i<Providers.List.Length;i++) {
-			//	comboProv.Items.Add(Providers.List[i].GetLongDesc());
+			//for(int i=0;i<ProviderC.List.Length;i++) {
+			//	comboProv.Items.Add(ProviderC.List[i].GetLongDesc());
 			//}
 			FillGrid();
 		}
@@ -167,7 +167,7 @@ namespace OpenDental{
 		private void FillGrid(){
 			//int provNum=0;
 			//if(comboProv.SelectedIndex!=0) {
-			//	provNum=Providers.List[comboProv.SelectedIndex-1].ProvNum;
+			//	provNum=ProviderC.List[comboProv.SelectedIndex-1].ProvNum;
 			//}
 			if(IsSelectionMode){
 				DList=Deposits.GetUnattached();

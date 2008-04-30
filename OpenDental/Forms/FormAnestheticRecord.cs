@@ -1683,10 +1683,10 @@ namespace OpenDental {
 			/*
 			//ADDING FUNCTIONALITY 2008-03-18: fills provider and assistant comboboxes
 
-			for (int i = 0; i < Providers.List.Length; i++)
+			for (int i = 0; i < ProviderC.List.Length; i++)
 			{
-				comboBoxSurgeon.Items.Add(Providers.List[i].Abbr);
-				if (Providers.List[i].ProvNum == PatCur.Surgeon)
+				comboBoxSurgeon.Items.Add(ProviderC.List[i].Abbr);
+				if (ProviderC.List[i].ProvNum == PatCur.Surgeon)
 					comboBoxSurgeon.SelectedIndex = i;
 			}
 
@@ -1706,10 +1706,10 @@ namespace OpenDental {
 			//comboSecProv.Items.Clear();
 			//comboSecProv.Items.Add(Lan.g(this, "none"));
 			//comboSecProv.SelectedIndex = 0;
-			//for (int i = 0; i < Providers.List.Length; i++)
+			//for (int i = 0; i < ProviderC.List.Length; i++)
 			//{
-				//comboSecProv.Items.Add(Providers.List[i].Abbr);
-				//if (Providers.List[i].ProvNum == PatCur.SecProv)
+				//comboSecProv.Items.Add(ProviderC.List[i].Abbr);
+				//if (ProviderC.List[i].ProvNum == PatCur.SecProv)
 					//comboSecProv.SelectedIndex = i + 1;
 			 */
 			

@@ -127,11 +127,11 @@ namespace OpenDental{
 				}
 				else{
 					if(pat.PriProv==0){
-						retVal=Providers.List[0].FeeSched;
+						retVal=ProviderC.List[0].FeeSched;
 					}
 					else{
             //MessageBox.Show(Providers.GetIndex(Patients.Cur.PriProv).ToString());   
-						retVal=Providers.ListLong[Providers.GetIndexLong(pat.PriProv)].FeeSched;
+						retVal=ProviderC.ListLong[Providers.GetIndexLong(pat.PriProv)].FeeSched;
 					}
 				}
 			}
@@ -146,7 +146,7 @@ namespace OpenDental{
 			if(patFeeSched!=0){
 				return patFeeSched;
 			}
-			return Providers.ListLong[Providers.GetIndexLong(patPriProvNum)].FeeSched;
+			return ProviderC.ListLong[Providers.GetIndexLong(patPriProvNum)].FeeSched;
 		}
 
 		///<summary>Clears all fees from one fee schedule.  Supply the DefNum of the feeSchedule.</summary>

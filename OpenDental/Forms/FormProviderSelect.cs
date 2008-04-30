@@ -376,9 +376,9 @@ namespace OpenDental{
 			changed=true;
 			FillGrid();
 			gridMain.ScrollToEnd();
-			for(int i=0;i<table.Rows.Count;i++){//Providers.ListLong.Length;i++) {
+			for(int i=0;i<table.Rows.Count;i++){//ProviderC.ListLong.Length;i++) {
 				if(table.Rows[i]["ProvNum"].ToString()==FormP.ProvCur.ProvNum.ToString()){
-					//Providers.ListLong[i].ProvNum==FormP.ProvCur.ProvNum) {
+					//ProviderC.ListLong[i].ProvNum==FormP.ProvCur.ProvNum) {
 					gridMain.SetSelected(i,true);
 					break;
 				}
@@ -397,7 +397,7 @@ namespace OpenDental{
 			Provider prov=Providers.GetProv(PIn.PInt(table.Rows[gridMain.SelectedIndices[0]]["ProvNum"].ToString()));
 				//.ListLong[gridMain.GetSelectedIndex()];
 			Provider otherprov=Providers.GetProv(PIn.PInt(table.Rows[gridMain.SelectedIndices[0]-1]["ProvNum"].ToString()));
-				//Providers.ListLong[gridMain.GetSelectedIndex()-1];
+				//ProviderC.ListLong[gridMain.GetSelectedIndex()-1];
 			prov.ItemOrder--;
 			Providers.Update(prov);
 			otherprov.ItemOrder++;
@@ -412,13 +412,13 @@ namespace OpenDental{
 				MsgBox.Show(this,"Please select exactly one provider first.");
 				return;
 			}
-			if(gridMain.SelectedIndices[0]==Providers.ListLong.Length-1) {//already at bottom
+			if(gridMain.SelectedIndices[0]==ProviderC.ListLong.Length-1) {//already at bottom
 				return;
 			}
 			Provider prov=Providers.GetProv(PIn.PInt(table.Rows[gridMain.SelectedIndices[0]]["ProvNum"].ToString()));
-				//Providers.ListLong[gridMain.GetSelectedIndex()];
+				//ProviderC.ListLong[gridMain.GetSelectedIndex()];
 			Provider otherprov=Providers.GetProv(PIn.PInt(table.Rows[gridMain.SelectedIndices[0]+1]["ProvNum"].ToString()));
-				//Providers.ListLong[gridMain.GetSelectedIndex()+1];
+				//ProviderC.ListLong[gridMain.GetSelectedIndex()+1];
 			prov.ItemOrder++;
 			Providers.Update(prov);
 			otherprov.ItemOrder--;
@@ -510,7 +510,7 @@ namespace OpenDental{
 		private void listProviders_DoubleClick(object sender, System.EventArgs e) {
 			if(listProviders.SelectedIndex<0)
 				return;
-			FormProvEdit FormP=new FormProvEdit(Providers.ListLong[Providers.Selected]);
+			FormProvEdit FormP=new FormProvEdit(ProviderC.ListLong[Providers.Selected]);
 			FormP.ShowDialog();
 			if(FormP.DialogResult!=DialogResult.OK){
 				return;

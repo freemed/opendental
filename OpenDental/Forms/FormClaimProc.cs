@@ -1373,9 +1373,9 @@ namespace OpenDental
 				textDateEntry.Visible=false;
 			}
 			listProv.Items.Clear();
-			for(int i=0;i<Providers.List.Length;i++){
-				listProv.Items.Add(Providers.List[i].Abbr);
-				if(ClaimProcCur.ProvNum==Providers.List[i].ProvNum){
+			for(int i=0;i<ProviderC.List.Length;i++){
+				listProv.Items.Add(ProviderC.List[i].Abbr);
+				if(ClaimProcCur.ProvNum==ProviderC.List[i].ProvNum){
 					listProv.SelectedIndex=i;
 				}
 			}
@@ -1975,7 +1975,7 @@ namespace OpenDental
 			if(listProv.SelectedIndex!=-1){//if no prov selected, then that prov must simply be hidden,
 													//because all claimprocs are initially created with a prov(except preauth).
 													//So, in this case, don't change.
-				ClaimProcCur.ProvNum=Providers.List[listProv.SelectedIndex].ProvNum;
+				ClaimProcCur.ProvNum=ProviderC.List[listProv.SelectedIndex].ProvNum;
 			}
 			ClaimProcCur.ProcDate=PIn.PDate(textProcDate.Text);
 			if(!textDateCP.ReadOnly){

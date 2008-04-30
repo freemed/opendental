@@ -252,7 +252,7 @@ namespace OpenDental.Eclaims
 						+"*"//HL02: No parent. Not used
 						+"20*"//HL03: Heirarchical level code. 20=Information source
 						+"1~");//HL04: Heirarchical child code. 1=child HL present
-					Provider billProv=Providers.ListLong[Providers.GetIndexLong((int)claimAr[1,i])];
+					Provider billProv=ProviderC.ListLong[Providers.GetIndexLong((int)claimAr[1,i])];
 					if(isMedical){
 						//2000A PRV: Provider Specialty Information
 						seg++;
@@ -833,7 +833,7 @@ namespace OpenDental.Eclaims
 				//2310A Referring provider. We don't use.
 				//2310B Rendering provider. Only required if different from the billing provider
 				//But required by WebClaim, so we will always include it
-				provTreat=Providers.ListLong[Providers.GetIndexLong(claim.ProvTreat)];
+				provTreat=ProviderC.ListLong[Providers.GetIndexLong(claim.ProvTreat)];
 				//if(claim.ProvTreat!=claim.ProvBill){
 				//2310B NM1: name
 				seg++;
@@ -878,7 +878,7 @@ namespace OpenDental.Eclaims
 				//or 2310D (medical)NM1: Service facility location. Required if different from 2010AA. Not supported.
 				//2310D (medical)N3,N4,REF,PER: not supported.
 				if(!isMedical && claim.PlaceService!=PlaceOfService.Office){
-					Provider provFac=Providers.List[Providers.GetIndex(PrefC.GetInt("PracticeDefaultProv"))];
+					Provider provFac=ProviderC.List[Providers.GetIndex(PrefC.GetInt("PracticeDefaultProv"))];
 					seg++;
 					sw.Write("NM1*FA*"//FA=Facility
 						+"2*"//NM102: 2=non-person
@@ -1167,7 +1167,7 @@ namespace OpenDental.Eclaims
 					if(claim.ProvTreat!=proc.ProvNum
 						&& PrefC.GetBool("EclaimsSeparateTreatProv"))
 					{
-						provTreat=Providers.ListLong[Providers.GetIndexLong(proc.ProvNum)];
+						provTreat=ProviderC.ListLong[Providers.GetIndexLong(proc.ProvNum)];
 						seg++;
 						sw.Write("NM1*82*"//82=rendering prov
 							+"1*"//NM102: 1=person
@@ -1630,8 +1630,8 @@ namespace OpenDental.Eclaims
 				retVal+="Clearinghouse GS03";
 			}
 			object[,] claimAr=Claims.GetX12TransactionInfo(((ClaimSendQueueItem)queueItem).ClaimNum);//just to get prov. Needs work.
-			Provider billProv=Providers.ListLong[Providers.GetIndexLong((int)claimAr[1,0])];
-			Provider treatProv=Providers.ListLong[Providers.GetIndexLong(claim.ProvTreat)];
+			Provider billProv=ProviderC.ListLong[Providers.GetIndexLong((int)claimAr[1,0])];
+			Provider treatProv=ProviderC.ListLong[Providers.GetIndexLong(claim.ProvTreat)];
 			InsPlan insPlan=InsPlans.GetPlan(claim.PlanNum,new InsPlan[] {});
 			if(insPlan.IsMedical && !PrefC.GetBool("MedicalEclaimsEnabled")) {
 				return "Medical e-claims not allowed";
@@ -1933,7 +1933,7 @@ namespace OpenDental.Eclaims
 					}
 				}
 				if(claim.ProvTreat!=proc.ProvNum && PrefC.GetBool("EclaimsSeparateTreatProv")){
-					treatProv=Providers.ListLong[Providers.GetIndexLong(proc.ProvNum)];
+					treatProv=ProviderC.ListLong[Providers.GetIndexLong(proc.ProvNum)];
 					if(treatProv.LName==""){
 						if(retVal!="")
 							retVal+=",";

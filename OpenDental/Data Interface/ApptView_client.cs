@@ -10,5 +10,16 @@ namespace OpenDental{
 			DataTable table=Gen.GetTable(MethodNameTable.ApptView_RefreshCache);
 			ApptViews.FillCache(table);//now, we have an arrays on both the client and the server.
 		}
+
+		/*
+		public static ApptView GetView(int apptViewNum){
+			for(int i=0;i<ApptViewC.List.Length;i++){
+				if(ApptViewC.List[i].ApptViewNum==apptViewNum){
+					return ApptViewC.List[i];
+				}
+			}
+			return null;//should never happen
+		}*/
+
 	}
 }

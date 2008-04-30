@@ -175,9 +175,9 @@ namespace OpenDental{
 
 		public static List<Provider> GetStudents(int classNum) {
 			List<Provider> retVal=new List<Provider>();
-			for(int i=0;i<Providers.List.Length;i++){
-				if(Providers.List[i].SchoolClassNum==classNum){
-					retVal.Add(Providers.List[i]);
+			for(int i=0;i<ProviderC.List.Length;i++){
+				if(ProviderC.List[i].SchoolClassNum==classNum){
+					retVal.Add(ProviderC.List[i]);
 				}
 			}
 			return retVal;

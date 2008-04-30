@@ -3967,14 +3967,14 @@ namespace OpenDental{
 						}
 						else{
 							provNum=0;
-							for(int p=0;p<Providers.ListLong.Length;p++){
-								if(Providers.ListLong[p].LName==table.Rows[i][table.Columns["PriProv"].Ordinal].ToString()){
-									provNum=Providers.ListLong[p].ProvNum;
+							for(int p=0;p<ProviderC.ListLong.Length;p++){
+								if(ProviderC.ListLong[p].LName==table.Rows[i][table.Columns["PriProv"].Ordinal].ToString()){
+									provNum=ProviderC.ListLong[p].ProvNum;
 								}
 							}
 							if(provNum==0){
 								Provider ProvCur=new Provider();
-								ProvCur.ItemOrder=Providers.ListLong[Providers.ListLong.Length-1].ItemOrder+1;
+								ProvCur.ItemOrder=ProviderC.ListLong[ProviderC.ListLong.Length-1].ItemOrder+1;
 								ProvCur.LName=table.Rows[i][table.Columns["PriProv"].Ordinal].ToString();
 								ProvCur.Abbr=ProvCur.LName;
 								ProvCur.FeeSched=DefC.Short[(int)DefCat.FeeSchedNames][0].DefNum;

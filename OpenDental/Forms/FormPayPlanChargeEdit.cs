@@ -235,9 +235,9 @@ namespace OpenDental{
 		private void FormPayPlanCharge_Load(object sender, System.EventArgs e) {
 			textDate.Text=PayPlanChargeCur.ChargeDate.ToShortDateString();
 			comboProvNum.Items.Clear();
-			for(int i=0;i<Providers.List.Length;i++) {
-				comboProvNum.Items.Add(Providers.List[i].Abbr);
-				if(Providers.List[i].ProvNum==PayPlanChargeCur.ProvNum)
+			for(int i=0;i<ProviderC.List.Length;i++) {
+				comboProvNum.Items.Add(ProviderC.List[i].Abbr);
+				if(ProviderC.List[i].ProvNum==PayPlanChargeCur.ProvNum)
 					comboProvNum.SelectedIndex=i;
 			}
 			textPrincipal.Text=PayPlanChargeCur.Principal.ToString("n");
@@ -265,7 +265,7 @@ namespace OpenDental{
 			}
 			//todo: test dates?  The day of the month should be the same as all others
 			PayPlanChargeCur.ChargeDate=PIn.PDate(textDate.Text);
-			PayPlanChargeCur.ProvNum=Providers.List[comboProvNum.SelectedIndex].ProvNum;
+			PayPlanChargeCur.ProvNum=ProviderC.List[comboProvNum.SelectedIndex].ProvNum;
 			PayPlanChargeCur.Principal=PIn.PDouble(textPrincipal.Text);
 			PayPlanChargeCur.Interest=PIn.PDouble(textInterest.Text);
 			PayPlanChargeCur.Note=textNote.Text;

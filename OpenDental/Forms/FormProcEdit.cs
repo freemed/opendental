@@ -1836,9 +1836,9 @@ namespace OpenDental{
 					comboDx.SelectedIndex=i;
 			}
 			comboProvNum.Items.Clear();
-			for(int i=0;i<Providers.List.Length;i++){
-				comboProvNum.Items.Add(Providers.List[i].Abbr);
-				if(Providers.List[i].ProvNum==ProcCur.ProvNum)
+			for(int i=0;i<ProviderC.List.Length;i++){
+				comboProvNum.Items.Add(ProviderC.List[i].Abbr);
+				if(ProviderC.List[i].ProvNum==ProcCur.ProvNum)
 					comboProvNum.SelectedIndex=i;
 			}
 			comboPriority.Items.Clear();
@@ -2482,7 +2482,7 @@ namespace OpenDental{
 				//Procedures.SetHideGraphical(ProcCur);//might not matter anymore
 				ToothInitials.SetValue(ProcCur.PatNum,ProcCur.ToothNum,ToothInitialType.Missing);
 			}
-			int provNum=Providers.List[comboProvNum.SelectedIndex].ProvNum;
+			int provNum=ProviderC.List[comboProvNum.SelectedIndex].ProvNum;
 			textNotes.Text+=ProcCodeNotes.GetNote(provNum,ProcCur.CodeNum);
 			listProcStatus.SelectedIndex=-1;
 			//radioStatusC.Checked=true;
@@ -2781,7 +2781,7 @@ namespace OpenDental{
 			ProcCur.Note=this.textNotes.Text;
 			SaveSignature();
 			if(comboProvNum.SelectedIndex!=-1)
-				ProcCur.ProvNum=Providers.List[comboProvNum.SelectedIndex].ProvNum;
+				ProcCur.ProvNum=ProviderC.List[comboProvNum.SelectedIndex].ProvNum;
 			if(comboDx.SelectedIndex!=-1)
 				ProcCur.Dx=DefC.Short[(int)DefCat.Diagnosis][comboDx.SelectedIndex].DefNum;
 			if(comboPriority.SelectedIndex==0)

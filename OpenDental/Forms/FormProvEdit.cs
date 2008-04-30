@@ -784,11 +784,11 @@ namespace OpenDental{
 				MsgBox.Show(this,"SSN/TIN not allowed to have dash.");
 				return;
 			}
-			for(int i=0;i<Providers.ListLong.Length;i++){
-				if(Providers.ListLong[i].ProvNum==ProvCur.ProvNum){
+			for(int i=0;i<ProviderC.ListLong.Length;i++){
+				if(ProviderC.ListLong[i].ProvNum==ProvCur.ProvNum){
 					continue;
 				}
-				if(Providers.ListLong[i].Abbr==textAbbr.Text){
+				if(ProviderC.ListLong[i].Abbr==textAbbr.Text){
 					if(!MsgBox.Show(this,true,"This abbreviation is already in use by another provider.  Continue anyway?")){
 						return;
 					}

@@ -326,8 +326,8 @@ namespace OpenDental{
 			}
 			listBillType.Visible=false;
 			checkBillTypesAll.Checked=true;
-			for(int i=0;i<Providers.List.Length;i++){
-				listProv.Items.Add(Providers.List[i].GetLongDesc());
+			for(int i=0;i<ProviderC.List.Length;i++){
+				listProv.Items.Add(ProviderC.List[i].GetLongDesc());
 			}
 			if(listProv.Items.Count>0) {
 				listProv.SelectedIndex=0;
@@ -431,7 +431,7 @@ namespace OpenDental{
 					else {
 						Queries.CurReport.Query+=" OR PriProv = ";
 					}
-					Queries.CurReport.Query+=POut.PInt(Providers.List[listProv.SelectedIndices[i]].ProvNum);
+					Queries.CurReport.Query+=POut.PInt(ProviderC.List[listProv.SelectedIndices[i]].ProvNum);
 				}
 				Queries.CurReport.Query+=") ";
 			}

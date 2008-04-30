@@ -973,7 +973,7 @@ namespace OpenDental{
 			panelOps.Controls.Clear();
 			for(int i=0;i<ContrApptSheet.ProvCount;i++){
 				Panel panProv=new Panel();
-				panProv.BackColor=Providers.List[ApptViewItems.VisProvs[i]].ProvColor;
+				panProv.BackColor=ProviderC.List[ApptViewItems.VisProvs[i]].ProvColor;
 				panProv.Location=new Point(2+ContrApptSheet.TimeWidth+ContrApptSheet.ProvWidth*i,0);
 				panProv.Width=ContrApptSheet.ProvWidth;
 				if(i==0){//just looks a little nicer:
@@ -984,7 +984,7 @@ namespace OpenDental{
 				panProv.BorderStyle=BorderStyle.Fixed3D;
 				panProv.ForeColor=Color.DarkGray;
 				panelOps.Controls.Add(panProv);
-				toolTip1.SetToolTip(panProv,Providers.List[ApptViewItems.VisProvs[i]].Abbr);
+				toolTip1.SetToolTip(panProv,ProviderC.List[ApptViewItems.VisProvs[i]].Abbr);
 			}
 			Operatory curOp;
 			if(ContrApptSheet.IsWeeklyView){
@@ -2157,8 +2157,9 @@ namespace OpenDental{
 
 		///<summary>Usually dropping an appointment to a new location.</summary>
 		private void ContrApptSheet2_MouseUp(object sender,System.Windows.Forms.MouseEventArgs e) {
-			if(!mouseIsDown)
+			if(!mouseIsDown){
 				return;
+			}
 			/*if(ContrApptSheet.IsWeeklyView) {
 				ResizingAppt=false;
 				mouseIsDown=false;
@@ -3558,15 +3559,15 @@ namespace OpenDental{
 			textBefore.Text="";
 			textAfter.Text="";
 			listProviders.Items.Clear();
-			for(int i=0;i<Providers.List.Length;i++){
-				listProviders.Items.Add(Providers.List[i].Abbr);
+			for(int i=0;i<ProviderC.List.Length;i++){
+				listProviders.Items.Add(ProviderC.List[i].Abbr);
 				if(pinBoard.SelectedAppt.DataRoww["IsHygiene"].ToString()=="1"
-					&& Providers.List[i].ProvNum.ToString()==pinBoard.SelectedAppt.DataRoww["ProvHyg"].ToString())
+					&& ProviderC.List[i].ProvNum.ToString()==pinBoard.SelectedAppt.DataRoww["ProvHyg"].ToString())
 				{
 					listProviders.SetSelected(i,true);
 				}
 				else if(pinBoard.SelectedAppt.DataRoww["IsHygiene"].ToString()=="0"
-					&& Providers.List[i].ProvNum.ToString()==pinBoard.SelectedAppt.DataRoww["ProvNum"].ToString())
+					&& ProviderC.List[i].ProvNum.ToString()==pinBoard.SelectedAppt.DataRoww["ProvNum"].ToString())
 				{
 					listProviders.SelectedIndex=i;
 				}
@@ -3624,7 +3625,7 @@ namespace OpenDental{
 			}
 			int[] providers=new int[listProviders.SelectedIndices.Count];
 			for(int i=0;i<providers.Length;i++){
-				providers[i]=Providers.List[listProviders.SelectedIndices[i]].ProvNum;
+				providers[i]=ProviderC.List[listProviders.SelectedIndices[i]].ProvNum;
 			}
 			//the result might be empty
 			SearchResults=Appointment_client.GetSearchResults(PIn.PInt(pinBoard.SelectedAppt.DataRoww["AptNum"].ToString()),

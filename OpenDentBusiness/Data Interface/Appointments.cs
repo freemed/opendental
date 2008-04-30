@@ -173,7 +173,7 @@ namespace OpenDentBusiness{
 				appt.Confirmed=DefC.Short[(int)DefCat.ApptConfirmed][0].DefNum;
 			}
 			if(appt.ProvNum==0){
-				appt.ProvNum=Providers.List[0].ProvNum;
+				appt.ProvNum=ProviderC.List[0].ProvNum;
 			}
 			//now, save to db----------------------------------------------------------------------------------------
 			if(PrefC.RandomKeys){
@@ -690,6 +690,7 @@ namespace OpenDentBusiness{
 			DateTime birthdate;
 			for(int i=0;i<raw.Rows.Count;i++) {
 				row=table.NewRow();
+				row["addrNote"]="";
 				if(raw.Rows[i]["AddrNote"].ToString()!=""){
 					row["addrNote"]=Lan.g("Appointments","AddrNote: ")+raw.Rows[i]["AddrNote"].ToString();
 				}
@@ -703,6 +704,7 @@ namespace OpenDentBusiness{
 				else{
 					row["age"]+="?";
 				}
+				row["apptModNote"]="";
 				if(raw.Rows[i]["ApptModNote"].ToString()!="") {
 					row["apptModNote"]=Lan.g("Appointments","ApptModNote: ")+raw.Rows[i]["ApptModNote"].ToString();
 				}
@@ -727,10 +729,7 @@ namespace OpenDentBusiness{
 				row["AptStatus"]=raw.Rows[i]["AptStatus"].ToString();
 				row["Assistant"]=raw.Rows[i]["Assistant"].ToString();
 				row["billingType"]=DefC.GetName(DefCat.BillingTypes,PIn.PInt(raw.Rows[i]["BillingType"].ToString()));
-				if(raw.Rows[i]["ChartNumber"].ToString()!=""){
-					row["chartNumber"]=raw.Rows[i]["ChartNumber"].ToString();
-				}
-				//row["ChartNumber"]=raw.Rows[i]["ChartNumber"].ToString();
+				row["chartNumber"]=raw.Rows[i]["ChartNumber"].ToString();
 				row["chartNumAndName"]="";
 				if(raw.Rows[i]["IsNewPatient"].ToString()=="1") {
 					row["chartNumAndName"]="NP-";
@@ -773,17 +772,20 @@ namespace OpenDentBusiness{
 						}
 					}
 				}
+				row["creditIns"]="";
 				if(InsToSend){
 					row["creditIns"]+="!";
 				}
 				else if(raw.Rows[i]["PlanNum"].ToString()!="" && raw.Rows[i]["PlanNum"].ToString()!="0") {
 					row["creditIns"]+="I";
 				}
+				row["famFinUrgNote"]="";
 				if(raw.Rows[i]["FamFinUrgNote"].ToString()!="") {
 					row["famFinUrgNote"]=Lan.g("Appointments","FamFinUrgNote: ")+raw.Rows[i]["FamFinUrgNote"].ToString();
 				}
 				row["hmPhone"]=Lan.g("Appointments","Hm: ")+raw.Rows[i]["HmPhone"].ToString();
 				row["ImageFolder"]=raw.Rows[i]["ImageFolder"].ToString();
+				row["insurance"]="";
 				if(raw.Rows[i]["PlanNum"].ToString()!="" && raw.Rows[i]["PlanNum"].ToString()!="0"){
 					row["insurance"]=Lan.g("Appointments","Insured");
 				}
@@ -829,6 +831,7 @@ namespace OpenDentBusiness{
 					+PatientL.GetNameLF(raw.Rows[i]["LName"].ToString(),raw.Rows[i]["FName"].ToString(),
 					raw.Rows[i]["Preferred"].ToString(),raw.Rows[i]["MiddleI"].ToString());
 				row["Pattern"]=raw.Rows[i]["Pattern"].ToString();
+				row["preMedFlag"]="";
 				if(raw.Rows[i]["Premed"].ToString()=="1"){
 					row["preMedFlag"]=Lan.g("Appointments","Premedicate");
 				}

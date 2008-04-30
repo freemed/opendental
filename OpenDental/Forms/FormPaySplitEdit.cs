@@ -662,9 +662,9 @@ namespace OpenDental
 			textDatePay.Text=PaySplitCur.DatePay.ToShortDateString();
 			textProcDate.Text=PaySplitCur.ProcDate.ToShortDateString();
 			textAmount.Text=PaySplitCur.SplitAmt.ToString("F");
-			for(int i=0;i<Providers.List.Length;i++){
-				listProvider.Items.Add(Providers.List[i].Abbr);
-				if(Providers.List[i].ProvNum==PaySplitCur.ProvNum)
+			for(int i=0;i<ProviderC.List.Length;i++){
+				listProvider.Items.Add(ProviderC.List[i].Abbr);
+				if(ProviderC.List[i].ProvNum==PaySplitCur.ProvNum)
 					listProvider.SelectedIndex=i;
 			}
 			if(PaySplitCur.PayPlanNum==0){
@@ -907,7 +907,7 @@ namespace OpenDental
 			PaySplitCur.ProcDate=PIn.PDate(textProcDate.Text);
 			PaySplitCur.SplitAmt=PIn.PDouble(textAmount.Text);
 			if(listProvider.SelectedIndex!=-1)
-				PaySplitCur.ProvNum=Providers.List[listProvider.SelectedIndex].ProvNum;
+				PaySplitCur.ProvNum=ProviderC.List[listProvider.SelectedIndex].ProvNum;
 			//if(!checkPatOtherFam.Checked){
 				//This is still needed because it might be zero:
 			//	PaySplitCur.PatNum=FamCur.List[listPatient.SelectedIndex].PatNum;

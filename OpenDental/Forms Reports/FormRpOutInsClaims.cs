@@ -179,8 +179,8 @@ namespace OpenDental{
 		#endregion
 
 		private void FormOutstandingInsuranceClaims_Load(object sender, System.EventArgs e) {
-			for(int i=0;i<Providers.List.Length;i++) {
-				listProv.Items.Add(Providers.List[i].GetLongDesc());
+			for(int i=0;i<ProviderC.List.Length;i++) {
+				listProv.Items.Add(ProviderC.List[i].GetLongDesc());
 			}
 			if(listProv.Items.Count>0) {
 				listProv.SelectedIndex=0;
@@ -231,8 +231,8 @@ namespace OpenDental{
 					else {
 						Queries.CurReport.Query+=" OR ";
 					}
-					Queries.CurReport.Query+=	"(claim.ProvBill="+POut.PInt(Providers.List[listProv.SelectedIndices[i]].ProvNum)
-						+" OR claim.ProvTreat="+POut.PInt(Providers.List[listProv.SelectedIndices[i]].ProvNum)+")";
+					Queries.CurReport.Query+=	"(claim.ProvBill="+POut.PInt(ProviderC.List[listProv.SelectedIndices[i]].ProvNum)
+						+" OR claim.ProvTreat="+POut.PInt(ProviderC.List[listProv.SelectedIndices[i]].ProvNum)+")";
 				}
 				Queries.CurReport.Query+=") ";
 			}

@@ -817,16 +817,16 @@ namespace OpenDental{
 				if(Clinics.List[i].ClinicNum==AptCur.ClinicNum)
 					comboClinic.SelectedIndex=i+1;
 			}
-			for(int i=0;i<Providers.List.Length;i++) {
-				comboProvNum.Items.Add(Providers.List[i].Abbr);
-				if(Providers.List[i].ProvNum==AptCur.ProvNum)
+			for(int i=0;i<ProviderC.List.Length;i++) {
+				comboProvNum.Items.Add(ProviderC.List[i].Abbr);
+				if(ProviderC.List[i].ProvNum==AptCur.ProvNum)
 					comboProvNum.SelectedIndex=i;
 			}
 			comboProvHyg.Items.Add(Lan.g(this,"none"));
 			comboProvHyg.SelectedIndex=0;
-			for(int i=0;i<Providers.List.Length;i++) {
-				comboProvHyg.Items.Add(Providers.List[i].Abbr);
-				if(Providers.List[i].ProvNum==AptCur.ProvHyg)
+			for(int i=0;i<ProviderC.List.Length;i++) {
+				comboProvHyg.Items.Add(ProviderC.List[i].Abbr);
+				if(ProviderC.List[i].ProvNum==AptCur.ProvHyg)
 					comboProvHyg.SelectedIndex=i+1;
 			}
 			checkIsHygiene.Checked=AptCur.IsHygiene;
@@ -1047,7 +1047,7 @@ namespace OpenDental{
 		private void FillTime() {
 			Color provColor=Color.Gray;
 			if(comboProvNum.SelectedIndex!=-1) {
-				provColor=Providers.List[comboProvNum.SelectedIndex].ProvColor;
+				provColor=ProviderC.List[comboProvNum.SelectedIndex].ProvColor;
 			}
 			for(int i=0;i<strBTime.Length;i++) {
 				if(strBTime.ToString(i,1)=="X") {
@@ -1076,11 +1076,11 @@ namespace OpenDental{
 			int dentNum=Patients.GetProvNum(pat);
 			int hygNum=Patients.GetProvNum(pat);
 			if(comboProvNum.SelectedIndex!=-1){
-				dentNum=Providers.List[comboProvNum.SelectedIndex].ProvNum;
-				hygNum=Providers.List[comboProvNum.SelectedIndex].ProvNum;
+				dentNum=ProviderC.List[comboProvNum.SelectedIndex].ProvNum;
+				hygNum=ProviderC.List[comboProvNum.SelectedIndex].ProvNum;
 			}
 			if(comboProvHyg.SelectedIndex!=0) {
-				hygNum=Providers.List[comboProvHyg.SelectedIndex-1].ProvNum;
+				hygNum=ProviderC.List[comboProvHyg.SelectedIndex-1].ProvNum;
 			}
 			ProcedureCode procCode;
 			if(gridProc.SelectedIndices.Length==1) {
@@ -1435,13 +1435,13 @@ namespace OpenDental{
 				AptCur.ClinicNum=Clinics.List[comboClinic.SelectedIndex-1].ClinicNum;
 			//there should always be a non-hidden primary provider for an appt.
 			if(comboProvNum.SelectedIndex==-1)
-				AptCur.ProvNum=Providers.List[0].ProvNum;
+				AptCur.ProvNum=ProviderC.List[0].ProvNum;
 			else
-				AptCur.ProvNum=Providers.List[comboProvNum.SelectedIndex].ProvNum;
+				AptCur.ProvNum=ProviderC.List[comboProvNum.SelectedIndex].ProvNum;
 			if(comboProvHyg.SelectedIndex==0)//none
 				AptCur.ProvHyg=0;
 			else
-				AptCur.ProvHyg=Providers.List[comboProvHyg.SelectedIndex-1].ProvNum;
+				AptCur.ProvHyg=ProviderC.List[comboProvHyg.SelectedIndex-1].ProvNum;
 			AptCur.IsHygiene=checkIsHygiene.Checked;
 			if(comboAssistant.SelectedIndex==0)//none
 				AptCur.Assistant=0;
