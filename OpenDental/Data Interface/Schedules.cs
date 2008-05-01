@@ -39,14 +39,13 @@ namespace OpenDental{
 				+" ORDER BY StartTime";
 			return RefreshAndFill(command).ToArray();
 		}*/
-
-		///<summary>Called every time the period is refreshed or changed in Appointments module.  Gets the data directly from the database.</summary>
-		public static Schedule[] RefreshPeriod(DateTime startDate,DateTime endDate) {
+		
+		///<summary>Used rarely</summary>
+		public static List<Schedule> GetDayList(DateTime date){
 			string command="SELECT * FROM schedule "
-				+"WHERE SchedDate >= "+POut.PDate(startDate)+" "
-				+"AND SchedDate <= "+POut.PDate(endDate)+" "
+				+"WHERE SchedDate = "+POut.PDate(date)+" "
 				+"ORDER BY StartTime";
-			return RefreshAndFill(command).ToArray();
+			return RefreshAndFill(command);
 		}
 
 		///<summary>Used in the Schedules edit window to get a filtered list of schedule items in preparation for paste or repeat.</summary>
@@ -111,6 +110,10 @@ namespace OpenDental{
 
 		private static List<Schedule> RefreshAndFill(string command) {
 			DataTable table=General.GetTable(command);
+			return ConvertTableToList(table);
+		}
+
+		public static List<Schedule> ConvertTableToList(DataTable table){
 			List<Schedule> retVal=new List<Schedule>();
 			//Schedule[] List=new Schedule[table.Rows.Count];
 			Schedule sched;
@@ -205,7 +208,7 @@ namespace OpenDental{
 
 		///<summary></summary>
 		private static bool Overlaps(Schedule sched){
-			Schedule[] SchedListDay=Schedules.RefreshPeriod(sched.SchedDate,sched.SchedDate);
+			List<Schedule> SchedListDay=Schedules.GetDayList(sched.SchedDate);
 			Schedule[] ListForType=Schedules.GetForType(SchedListDay,sched.SchedType,sched.ProvNum);
 			for(int i=0;i<ListForType.Length;i++){
 				if(ListForType[i].SchedType==ScheduleType.Blockout){
@@ -249,9 +252,9 @@ namespace OpenDental{
 		}
 	
 		///<summary>Supply a list of all Schedule for one day. Then, this filters out for one type.</summary>
-		public static Schedule[] GetForType(Schedule[] ListDay,ScheduleType schedType,int provNum){
+		public static Schedule[] GetForType(List<Schedule> ListDay,ScheduleType schedType,int provNum){
 			ArrayList AL=new ArrayList();
-			for(int i=0;i<ListDay.Length;i++){
+			for(int i=0;i<ListDay.Count;i++){
 				if(ListDay[i].SchedType==schedType && ListDay[i].ProvNum==provNum){
 					AL.Add(ListDay[i]);
 				}

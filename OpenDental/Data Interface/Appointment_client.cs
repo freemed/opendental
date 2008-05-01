@@ -50,7 +50,7 @@ namespace OpenDental{
 			string pattern;
 			int startIndex;
 			int provIndex;//the index of a provider within providers
-			Schedule[] schedDay;//all schedule items for a given day.
+			List<Schedule> schedDay;//all schedule items for a given day.
 			bool aptIsMatch=false;
 			while(ALresults.Count<resultCount//stops when the specified number of results are retrieved
 				&& dayEvaluating<afterDate.AddYears(2))
@@ -90,9 +90,9 @@ namespace OpenDental{
 					}
 				}
 				//handle all schedules by setting element of provBarSched to true if provider schedule shows open.
-				schedDay=Schedules.RefreshPeriod(dayEvaluating,dayEvaluating);
+				schedDay=Schedules.GetDayList(dayEvaluating);
 				for(int p=0;p<providers.Length;p++){
-					for(int i=0;i<schedDay.Length;i++){
+					for(int i=0;i<schedDay.Count;i++){
 						if(schedDay[i].SchedType!=ScheduleType.Provider){
 							continue;
 						}

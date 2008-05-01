@@ -4,6 +4,7 @@ See header in FormOpenDental.cs for complete text.  Redistributions must retain 
 ===============================================================================================================*/
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Drawing2D;
@@ -47,7 +48,7 @@ namespace OpenDental{
 		private SolidBrush closedBrush;
     private SolidBrush holidayBrush;
 		///<summary>This gets set externally each time the module is selected.  It is the background schedule for the entire period.  Includes all types.</summary>
-		public Schedule[] SchedListPeriod;
+		public List<Schedule> SchedListPeriod;
 		public static bool IsWeeklyView;
 		///<summary>Typically 5. Only used with weekview.</summary>
 		public static int NumOfWeekDaysToDisplay=5;
@@ -298,7 +299,7 @@ namespace OpenDental{
 			if(IsWeeklyView){
 				for(int d=0;d<NumOfWeekDaysToDisplay;d++){
 					isHoliday=false;
-					for(int i=0;i<SchedListPeriod.Length;i++) {
+					for(int i=0;i<SchedListPeriod.Count;i++) {
 						if(SchedListPeriod[i].SchedType!=ScheduleType.Practice){
 							continue;	
 						}
@@ -341,7 +342,7 @@ namespace OpenDental{
 			}
 			else{//only one day showing
 				isHoliday=false;
-				for(int i=0;i<SchedListPeriod.Length;i++) {
+				for(int i=0;i<SchedListPeriod.Count;i++) {
 					if(SchedListPeriod[i].SchedType!=ScheduleType.Practice) {
 						continue;
 					}

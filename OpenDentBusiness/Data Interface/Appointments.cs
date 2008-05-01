@@ -549,6 +549,7 @@ namespace OpenDentBusiness{
 			DataSet retVal=new DataSet();
 			retVal.Tables.Add(GetPeriodApptsTable(dateStart,dateEnd,0,false));//parameters[0],parameters[1],"0","0"));
 			retVal.Tables.Add(GetPeriodEmployeeSchedTable(dateStart,dateEnd));
+			retVal.Tables.Add(GetPeriodSchedule(dateStart,dateEnd));
 			return retVal;
 		}
 
@@ -929,6 +930,44 @@ namespace OpenDentBusiness{
 				startTime=PIn.PDateT(raw.Rows[i]["StartTime"].ToString());
 				stopTime=PIn.PDateT(raw.Rows[i]["StopTime"].ToString());
 				row["schedule"]+=startTime.ToString("h:mm")+"-"+stopTime.ToString("h:mm");
+				table.Rows.Add(row);
+			}
+			return table;
+		}
+
+		private static DataTable GetPeriodSchedule(DateTime dateStart,DateTime dateEnd){
+			DataTable table=new DataTable("Schedule");
+			table.Columns.Add("ScheduleNum");
+			table.Columns.Add("SchedDate");
+			table.Columns.Add("StartTime");
+			table.Columns.Add("StopTime");
+			table.Columns.Add("SchedType");
+			table.Columns.Add("ProvNum");
+			table.Columns.Add("BlockoutType");
+			table.Columns.Add("Note");
+			table.Columns.Add("Status");
+			table.Columns.Add("Op");
+			table.Columns.Add("EmployeeNum");
+			string command="SELECT * FROM schedule "
+				+"WHERE SchedDate >= "+POut.PDate(dateStart)+" "
+				+"AND SchedDate <= "+POut.PDate(dateEnd)+" "
+				+"ORDER BY StartTime";
+			DataTable raw=General.GetTable(command);
+			//the times come back as times rather than datetimes.  This causes problems.  That's why we're not just returning raw.
+			DataRow row;
+			for(int i=0;i<raw.Rows.Count;i++){
+				row=table.NewRow();
+				row["ScheduleNum"]=raw.Rows[i]["ScheduleNum"].ToString();
+				row["SchedDate"]=POut.PDate(PIn.PDate(raw.Rows[i]["SchedDate"].ToString()),false);
+				row["StartTime"]=POut.PDateT(PIn.PDateT(raw.Rows[i]["StartTime"].ToString()),false);
+				row["StopTime"]=POut.PDateT(PIn.PDateT(raw.Rows[i]["StopTime"].ToString()),false);
+				row["SchedType"]=raw.Rows[i]["SchedType"].ToString();
+				row["ProvNum"]=raw.Rows[i]["ProvNum"].ToString();
+				row["BlockoutType"]=raw.Rows[i]["BlockoutType"].ToString();
+				row["Note"]=raw.Rows[i]["Note"].ToString();
+				row["Status"]=raw.Rows[i]["Status"].ToString();
+				row["Op"]=raw.Rows[i]["Op"].ToString();
+				row["EmployeeNum"]=raw.Rows[i]["EmployeeNum"].ToString();
 				table.Rows.Add(row);
 			}
 			return table;

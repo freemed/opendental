@@ -79,7 +79,7 @@ namespace OpenDental{
 		private System.Windows.Forms.ContextMenu menuApt;
 		private System.Windows.Forms.ContextMenu menuBlockout;
 		private System.Windows.Forms.ContextMenu menuWeeklyApt;
-		private Schedule[] SchedListPeriod;
+		private List<Schedule> SchedListPeriod;
 		///<summary></summary>
 		[Category("Data"),Description("Occurs when user changes current patient, usually by clicking on the Select Patient button.")]
 		public event PatientSelectedEventHandler PatientSelected=null;
@@ -1350,7 +1350,8 @@ namespace OpenDental{
 				//there cannot be a selected appointment if no patient is loaded.
 				ContrApptSingle.SelectedAptNum=-1;//fixes a minor bug.
 			}
-			DS=Appointments.RefreshPeriod(startDate,endDate);
+			DS=Appointment_client.RefreshPeriod(startDate,endDate);
+			SchedListPeriod=Schedules.ConvertTableToList(DS.Tables["Schedule"]);
 			ApptViewItem_client.GetForCurView(comboView.SelectedIndex-1);
 			ContrApptSingle.ProvBar=new int[ApptViewItems.VisProvs.Length][];
 			for(int i=0;i<ApptViewItems.VisProvs.Length;i++){
@@ -1365,7 +1366,6 @@ namespace OpenDental{
 				}
 				ContrApptSingle3=null;
 			}
-			SchedListPeriod=Schedules.RefreshPeriod(startDate,endDate);
 			labelDate.Text=startDate.ToString("ddd");
 			labelDate2.Text=startDate.ToString("-  MMM d");
 			ContrApptSheet2.Controls.Clear();
@@ -2899,22 +2899,13 @@ namespace OpenDental{
       DateTime StopTime;  
       Rectangle imageRect;  //holds new dimensions for temp image
 		  Bitmap imageTemp;  //clone of shadow image with correct dimensions depending on day of week. Needs to be rewritten.
-			Schedule[] SchedListDay;
-			if(ContrApptSheet.IsWeeklyView) {
-				SchedListDay = Schedules.RefreshPeriod(WeekStartDate,WeekEndDate);
-			}
-			else {
-				SchedListDay=Schedules.RefreshPeriod(Appointments.DateSelected,Appointments.DateSelected);
-			}
-      if(SchedListDay.Length > 0){
-        for(int i=0;i<SchedListDay.Length;i++){
-					if(SchedListDay[i].SchedType!=ScheduleType.Provider){
-						continue;
-					}
-          AListStart.Add(SchedListDay[i].StartTime);
-          AListStop.Add(SchedListDay[i].StopTime);
-        } 
-      }
+      for(int i=0;i<SchedListPeriod.Count;i++){
+				if(SchedListPeriod[i].SchedType!=ScheduleType.Provider){
+					continue;
+				}
+        AListStart.Add(SchedListPeriod[i].StartTime);
+        AListStop.Add(SchedListPeriod[i].StopTime);
+      } 
 			if(AListStart.Count > 0){//makes sure there is at least one timeblock
         StartTime=(DateTime)AListStart[0]; 
 				for(int i=0;i<AListStart.Count;i++){
@@ -3409,7 +3400,8 @@ namespace OpenDental{
 				startDate=Appointments.DateSelected;
 				endDate=Appointments.DateSelected;
 			}
-			SchedListPeriod=Schedules.RefreshPeriod(startDate,endDate);
+			//no need to do this since schedule is refreshed in RefreshPeriod().
+			//SchedListPeriod=Schedules.RefreshPeriod(startDate,endDate);
 			Schedule[] ListForType=Schedules.GetForType(SchedListPeriod,ScheduleType.Blockout,0);
 			//now find which blockout
 			Schedule SchedCur=null;
@@ -3699,8 +3691,9 @@ namespace OpenDental{
 					startDate=Appointments.DateSelected;
 					endDate=Appointments.DateSelected;
 				}
-				Schedule[] schedListPeriod=Schedules.RefreshPeriod(startDate,endDate);
-				ContrApptSheet2.SchedListPeriod=schedListPeriod;
+				//The only purpose is to redraw the red line.  The code below is too intensive.
+				//Schedule[] schedListPeriod=Schedules.RefreshPeriod(startDate,endDate);
+				//ContrApptSheet2.SchedListPeriod=schedListPeriod;
 				ContrApptSheet2.CreateShadow();
 				CreateAptShadows();
 				ContrApptSheet2.DrawShadow();

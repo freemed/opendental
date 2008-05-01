@@ -29,19 +29,27 @@ namespace OpenDentBusiness{
 		public int EmployeeNum;
 
 		public Schedule Copy(){
-			Schedule s=new Schedule();
-			s.ScheduleNum=ScheduleNum;
-			s.SchedDate=SchedDate;
-			s.StartTime=StartTime;
-			s.StopTime=StopTime;
-			s.SchedType=SchedType;
-			s.ProvNum=ProvNum;
-			s.BlockoutType=BlockoutType;
-			s.Note=Note;
-			s.Status=Status;
-			s.Op=Op;
-			s.EmployeeNum=EmployeeNum;
-			return s;
+			return (Schedule)this.MemberwiseClone();
+		}
+
+		public Schedule(){
+
+		}
+
+		public Schedule(int scheduleNum,DateTime schedDate,DateTime startTime,DateTime stopTime,ScheduleType schedType,
+			int provNum,int blockoutType,string note,SchedStatus status,int op,int employeeNum)
+		{
+			ScheduleNum=scheduleNum;
+			SchedDate=schedDate;
+			StartTime=startTime;
+			StopTime=stopTime;
+			SchedType=schedType;
+			ProvNum=provNum;
+			BlockoutType=blockoutType;
+			Note=note;
+			Status=status;
+			Op=op;
+			EmployeeNum=employeeNum;
 		}
 		
 	}
