@@ -1608,12 +1608,17 @@ namespace OpenDental{
 			//clicking on, so displaying the image (in a different thread) will give the user a chance to view
 			//the image corresponding to a delete, info display, etc...
 			SelectTreeNode(node);
+			//Remember that a new selection has begun, so that if the document is being dragged, the appropriate delay time can be used.
+			treeDocumentMouseMoveTime=new DateTime(1,1,1);
 		}
 
 		private void TreeDocuments_MouseMove(object sender,System.Windows.Forms.MouseEventArgs e) {
 			TreeNode node=TreeDocuments.GetNodeAt(e.Location);
-			if(treeIdNumDown!="" && GetNodeIdentifier(node)!=treeIdNumDown){
+			if(treeIdNumDown!=""&&GetNodeIdentifier(node)!=treeIdNumDown){//The document is being moved probably.
 				TreeDocuments.Cursor=Cursors.Hand;
+				if(treeDocumentMouseMoveTime.Year==1) {
+					treeDocumentMouseMoveTime=DateTime.Now;
+				}
 			}else{
 				TreeDocuments.Cursor=Cursors.Default;
 			}
@@ -1625,9 +1630,12 @@ namespace OpenDental{
 				return;
 			}
 			TreeNode node=TreeDocuments.GetNodeAt(e.Location);
-			TreeNode sourceNode=GetNodeById(treeIdNumDown);			
+			TreeNode sourceNode=GetNodeById(treeIdNumDown);
+			TimeSpan documentDragTime=(TimeSpan)(DateTime.Now-treeDocumentMouseMoveTime);
 			//Dragging a document?
-			if(e.Button==MouseButtons.Left && GetNodeIdentifier(node)!=treeIdNumDown) {
+			if(e.Button==MouseButtons.Left&&//Dragging can only happen with the left mouse button.
+				GetCurrentFolderName(node)!=GetCurrentFolderName(GetNodeById(treeIdNumDown))&& //Only necessary if the document in question has changed categories.
+				documentDragTime.Milliseconds>250) { //Only takes effect if it happens over a period of time longer than .25 seconds.
 				TreeDocuments.Cursor=Cursors.Default;
 				//Find the destination folder.
 				int destinationCategory;
