@@ -651,7 +651,7 @@ namespace OpenDentBusiness{
 				}else{//Assume MySQL
 					command+="LIMIT ";
 				}
-				command+="36";//only need 35, but the extra will help indicate more rows
+				command+="40";
 			}
 			//MessageBox.Show(command);
  			DataTable table=General.GetTable(command);
@@ -696,19 +696,8 @@ namespace OpenDentBusiness{
 				r["PriProv"]=Providers.GetAbbr(PIn.PInt(table.Rows[i]["PriProv"].ToString()));
 				PtDataTable.Rows.Add(r);
 			}
-			return PtDataTable;//retval;//if true, there are more rows.
+			return PtDataTable;
 		}
-
-		/*
-		///<summary>Only used for the SilverLight Select Patient dialog</summary>
-		public static string GetPtDataXml(bool limit,string lname,string fname,string phone,//string wkphone,
-			string address,bool hideInactive,string city,string state,string ssn,string patnum,string chartnumber,
-			int[] billingtypes,bool guarOnly,bool showArchived,int clinicNum,DateTime birthdate)
-		{
-			DataTable table=GetPtDataTable(limit,lname,fname,phone,address,hideInactive,city,state,ssn,patnum,chartnumber,billingtypes,guarOnly,showArchived,clinicNum,birthdate);
-			string retVal=XmlConverter.TableToXml(table);
-			return retVal;
-		}*/
 
 		///<summary>Used when filling appointments for an entire day. Gets a list of Pats, multPats, of all the specified patients.  Then, use GetOnePat to pull one patient from this list.  This process requires only one call to the database.</summary>
 		public static Patient[] GetMultPats(int[] patNums){

@@ -124,6 +124,14 @@ namespace OpenDental.UI{
 		}
 		#endregion
 
+		///<summary></summary>
+		protected override void OnLoad(EventArgs e) {
+			base.OnLoad (e);
+			this.Parent.MouseWheel+=new MouseEventHandler(Parent_MouseWheel);
+			this.Parent.KeyDown+=new KeyEventHandler(Parent_KeyDown);
+			this.Parent.KeyUp+=new KeyEventHandler(Parent_KeyUp);
+		}
+
 		#region Properties
 		///<summary>Gets the collection of ODGridColumns assigned to the ODGrid control.</summary>
 		//[DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
@@ -132,7 +140,6 @@ namespace OpenDental.UI{
 		public ODGridColumnCollection Columns{
 			get{
 				return columns;
-				//Invalidate();
 			}
 		}
 
@@ -318,15 +325,7 @@ namespace OpenDental.UI{
 			}
 		}
 
-		#endregion
-
-		///<summary></summary>
-		protected override void OnLoad(EventArgs e) {
-			base.OnLoad (e);
-			this.Parent.MouseWheel+=new MouseEventHandler(Parent_MouseWheel);
-			this.Parent.KeyDown+=new KeyEventHandler(Parent_KeyDown);
-			this.Parent.KeyUp+=new KeyEventHandler(Parent_KeyUp);
-		}
+		#endregion Properties
 
 		#region Painting
 		///<summary>Runs any time the control is invalidated.</summary>

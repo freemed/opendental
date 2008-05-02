@@ -14,8 +14,7 @@ namespace OpenDentBusiness {
 			string command="SELECT * FROM definition ORDER BY Category,ItemOrder";
 			DataConnection dcon=new DataConnection();
 			DataTable table=dcon.GetTable(command);
-			//DataSet retVal=new DataSet();
-			//retVal.Tables.Add(table);
+			table.TableName="Def";
 			FillCache(table);
 			return table;
 		}

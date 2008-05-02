@@ -25,10 +25,24 @@ namespace OpenDentBusiness {
 		public Def Copy() {
 			return (Def)MemberwiseClone();
 		}
+
+		public Def(){
+
+		}
+
+		public Def(int defNum,DefCat category,int itemOrder,string itemName,string itemValue,Color itemColor,bool isHidden){
+			DefNum=defNum;
+			Category=category;
+			ItemOrder=itemOrder;
+			ItemName=itemName;
+			ItemValue=itemValue;
+			ItemColor=itemColor;
+			IsHidden=isHidden;
+		}
+
 	}
 
-	//public class DtoDefRefresh:DtoQueryBase {
-	//}
+	
 
 	
 

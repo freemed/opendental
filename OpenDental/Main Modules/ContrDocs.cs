@@ -148,6 +148,7 @@ namespace OpenDental{
 		int copyDocumentNumber=-1;
 		private IImageStore imageStore;
     private bool allowTopaz;
+		DateTime treeDocumentMouseMoveTime=new DateTime(1,1,1);
 
 		///<summary></summary>
 		private Patient PatCur { get { return imageStore == null ? null : imageStore.Patient; } }
