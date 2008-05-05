@@ -325,7 +325,7 @@ namespace OpenDental {
 			return retStr;
 		}
 
-		///<summary>Used in Ins lines in Account module.</summary>
+		///<summary>Used in Ins lines in Account module and in Family module.</summary>
 		public static string GetCarrierName(int planNum,InsPlan[] PlanList) {
 			InsPlan plan=GetPlan(planNum,PlanList);
 			if(plan==null) {

@@ -1884,7 +1884,6 @@ namespace OpenDental {
 			PatPlanList=PatPlans.Refresh(patNum);
 			BenefitList=Benefits.Refresh(PatPlanList);
 			ClaimProcList=ClaimProcs.Refresh(patNum);
-
 		}
 
 		private void RefreshModuleScreen(bool isSelectingFamily) {

@@ -879,7 +879,7 @@ namespace OpenDental{
 
 		private void checkRefresh_Click(object sender,EventArgs e) {
 			Prefs.UpdateBool("PatientSelectUsesSearchButton",!checkRefresh.Checked);
-			Prefs_client.RefreshClient();
+			CacheL.Refresh(InvalidTypes.Prefs);
 			//simply not important enough to send an update to the other computers.
 			FillSearchOption();
 			if(checkRefresh.Checked){

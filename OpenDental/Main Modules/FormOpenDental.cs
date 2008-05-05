@@ -1258,11 +1258,12 @@ namespace OpenDental{
 			Cursor=Cursors.WaitCursor;
 			Splash=new FormSplash();
 			Splash.Show();
-			if(!RefreshLocalData(InvalidTypes.AllLocal,true)){
+			if(!PrefsStartup()){
 				Cursor=Cursors.Default;
 				Splash.Dispose();
 				return;
 			}
+			RefreshLocalData((InvalidTypes)(InvalidTypes.AllLocal-InvalidTypes.Prefs));
 			//Lan.Refresh();//automatically skips if current culture is en-US
 			//LanguageForeigns.Refresh(CultureInfo.CurrentCulture);//automatically skips if current culture is en-US
 			DataValid.BecameInvalid += new OpenDental.ValidEventHandler(DataValid_BecameInvalid);
@@ -1341,48 +1342,53 @@ namespace OpenDental{
 			//OpenDentSilver.
 		}
 
-		///<summary>Refreshes certain rarely used data from database.  Must supply the types of data to refresh as flags.  Also performs a few other tasks that must be done when local data is changed.</summary>
-		private bool RefreshLocalData(InvalidTypes itypes,bool isStartingUp){
-			if((itypes & InvalidTypes.Prefs)==InvalidTypes.Prefs){
-				Prefs_client.RefreshClient();
-				if(isStartingUp){
-					if(!Prefs_client.CheckMySqlVersion41()){
-						return false;
-					}
-					if(!Prefs_client.ConvertDB()){
-						return false;
-					}
-					if(PrefC.UsingAtoZfolder && FormPath.GetPreferredImagePath()==null){//AtoZ folder not found
-						Userod_client.Refresh();
-						FormPath FormP=new FormPath();
-						FormP.ShowDialog();
-						if(FormP.DialogResult!=DialogResult.OK){
-							return false;
-						}
-						//bool usingAtoZ=FormPath.UsingImagePath();
-						//ContrDocs2.Enabled=usingAtoZ;
-						//menuItemClaimForms.Visible=usingAtoZ;
-						//CheckCustomReports();
-						//this.RefreshCurrentModule();
-						Prefs_client.RefreshClient();//because listening thread not started yet.
-					}
-					if(!Prefs_client.CheckProgramVersion()){
-						return false;
-					}
-					if(!FormRegistrationKey.ValidateKey(PrefC.GetString("RegistrationKey"))){
-						//true){
-						FormRegistrationKey FormR=new FormRegistrationKey();
-						FormR.ShowDialog();
-						if(FormR.DialogResult!=DialogResult.OK){
-							Application.Exit();
-							return false;
-						}
-						Prefs_client.RefreshClient();
-					}
-					Lan.Refresh();//automatically skips if current culture is en-US
-					LanguageForeigns.Refresh(CultureInfo.CurrentCulture);//automatically skips if current culture is en-US
-					menuItemMergeDatabases.Visible=PrefC.GetBool("RandomPrimaryKeys");
+		///<summary>Returns false if it can't complete a conversion, find datapath, or validate registration key.</summary>
+		private bool PrefsStartup(){
+			CacheL.Refresh(InvalidTypes.Prefs);
+			if(!Prefs_client.CheckMySqlVersion41()){
+				return false;
+			}
+			if(!Prefs_client.ConvertDB()){
+				return false;
+			}
+			if(PrefC.UsingAtoZfolder && FormPath.GetPreferredImagePath()==null){//AtoZ folder not found
+				CacheL.Refresh(InvalidTypes.Security);
+				FormPath FormP=new FormPath();
+				FormP.ShowDialog();
+				if(FormP.DialogResult!=DialogResult.OK){
+					return false;
 				}
+				//bool usingAtoZ=FormPath.UsingImagePath();
+				//ContrDocs2.Enabled=usingAtoZ;
+				//menuItemClaimForms.Visible=usingAtoZ;
+				//CheckCustomReports();
+				//this.RefreshCurrentModule();
+				CacheL.Refresh(InvalidTypes.Prefs);//because listening thread not started yet.
+			}
+			if(!Prefs_client.CheckProgramVersion()){
+				return false;
+			}
+			if(!FormRegistrationKey.ValidateKey(PrefC.GetString("RegistrationKey"))){
+				//true){
+				FormRegistrationKey FormR=new FormRegistrationKey();
+				FormR.ShowDialog();
+				if(FormR.DialogResult!=DialogResult.OK){
+					Application.Exit();
+					return false;
+				}
+				CacheL.Refresh(InvalidTypes.Prefs);
+			}
+			Lan.Refresh();//automatically skips if current culture is en-US
+			LanguageForeigns.Refresh(CultureInfo.CurrentCulture);//automatically skips if current culture is en-US
+			menuItemMergeDatabases.Visible=PrefC.GetBool("RandomPrimaryKeys");
+			return true;
+		}
+
+		///<summary>Refreshes certain rarely used data from database.  Must supply the types of data to refresh as flags.  Also performs a few other tasks that must be done when local data is changed.</summary>
+		private void RefreshLocalData(InvalidTypes itypes){
+			CacheL.Refresh(itypes);
+			if((itypes & InvalidTypes.Prefs)==InvalidTypes.Prefs){
+				//Prefs_client.RefreshClient();
 				if(((Pref)PrefC.HList["EasyHidePublicHealth"]).ValueString=="1"){
 					menuItemSchools.Visible=false;
 					menuItemCounties.Visible=false;
@@ -1524,7 +1530,6 @@ namespace OpenDental{
 				ClaimFormItem_client.Refresh();
 				ClaimForms.Refresh();
 			}
-			
 			if((itypes & InvalidTypes.ClearHouses)==InvalidTypes.ClearHouses){
 //kh until we add an EasyHideClearHouses						Clearinghouses.Refresh();
 				SigElementDefs.Refresh();
@@ -1536,7 +1541,7 @@ namespace OpenDental{
 				Printers.Refresh();
 			}
 			if((itypes & InvalidTypes.Defs)==InvalidTypes.Defs){
-				Defs_client.RefreshClient();
+				//Defs_client.RefreshClient();
 			}
 			if((itypes & InvalidTypes.DentalSchools)==InvalidTypes.DentalSchools){
 				//Instructors.Refresh();
@@ -1567,7 +1572,7 @@ namespace OpenDental{
 				LetterMerges.Refresh();
 			}
 			if((itypes & InvalidTypes.Operatories)==InvalidTypes.Operatories){
-				Operatory_client.Refresh();
+				//Operatory_client.Refresh();
 				AccountingAutoPay_client.Refresh();
 			}
 			if((itypes & InvalidTypes.ProcCodes)==InvalidTypes.ProcCodes){
@@ -1582,7 +1587,7 @@ namespace OpenDental{
 				}
 			}
 			if((itypes & InvalidTypes.Providers)==InvalidTypes.Providers){
-				Provider_client.RefreshOnClient();
+				//Provider_client.RefreshOnClient();
 				ProviderIdents.Refresh();
 				Clinics.Refresh();
 			}
@@ -1591,7 +1596,7 @@ namespace OpenDental{
 				QuickPasteCats.Refresh();
 			}
 			if((itypes & InvalidTypes.Security)==InvalidTypes.Security){
-				Userod_client.Refresh();
+				//Userod_client.Refresh();
 				UserGroups.Refresh();
 				GroupPermission_client.Refresh();
 			}
@@ -1615,8 +1620,8 @@ namespace OpenDental{
 			}
 			if((itypes & InvalidTypes.Views)==InvalidTypes.Views){
 				AppointmentRule_client.Refresh();
-				ApptView_client.Refresh();
-				ApptViewItem_client.Refresh();
+				//ApptView_client.Refresh();
+				//ApptViewItem_client.Refresh();
 				ContrAppt2.FillViews();
 			}
 			if((itypes & InvalidTypes.ZipCodes)==InvalidTypes.ZipCodes){
@@ -1624,7 +1629,6 @@ namespace OpenDental{
 				PatFieldDefs.Refresh();
 			}
 			ContrTreat2.InitializeLocalData();//easier to leave this here for now than to split it.
-			return true;
 		}
 
 		///<summary>Sets up the custom reports list in the main menu when certain requirements are met, or disables the custom reports menu item when those same conditions are not met. This function is called during initialization, and on the event that the A to Z folder usage has changed.</summary>
@@ -2225,12 +2229,15 @@ namespace OpenDental{
 		///<summary>This is called when any local data becomes outdated.  It's purpose is to tell the other computers to update certain local data.</summary>
 		private void DataValid_BecameInvalid(OpenDental.ValidEventArgs e){
 			if(e.OnlyLocal){
-				RefreshLocalData(InvalidTypes.AllLocal,true);//does local computer only
+				if(!PrefsStartup()){//??
+					return;
+				}
+				RefreshLocalData(InvalidTypes.AllLocal);//does local computer only
 				return;
 			}
 			if(e.ITypes!=InvalidTypes.Date && e.ITypes!=InvalidTypes.Tasks){
 				//local refresh for dates is handled within ContrAppt, not here
-				RefreshLocalData(e.ITypes,false);//does local computer
+				RefreshLocalData(e.ITypes);//does local computer
 			}
 			Signal sig=new Signal();
 			sig.ITypes=e.ITypes;
@@ -2441,7 +2448,7 @@ namespace OpenDental{
 			}
 			InvalidTypes invalidTypes=Signals.GetInvalidTypes(sigList);
 			if(invalidTypes!=0){
-				RefreshLocalData(invalidTypes,false);
+				RefreshLocalData(invalidTypes);
 			}
 			Signal[] sigListButs=Signals.GetButtonSigs(sigList);
 			ContrManage2.LogMsgs(sigListButs);
@@ -2797,7 +2804,10 @@ namespace OpenDental{
 			}
 			CurPatNum=0;
 			RefreshCurrentModule();//clumsy but necessary. Sets child PatNums to 0.
-			RefreshLocalData(InvalidTypes.AllLocal,true);
+			if(!PrefsStartup()){
+				return;
+			}
+			RefreshLocalData(InvalidTypes.AllLocal);
 			//RefreshCurrentModule();
 			menuItemLogOff_Click(this,e);//this is a quick shortcut.
 		}

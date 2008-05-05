@@ -215,7 +215,8 @@ namespace OpenDental{
 				//set "use A to Z folders" check-box to checked.
 				Prefs.UpdateString("DocPath",rootDir);
 				Prefs.UpdateString("AtoZfolderNotRequired","0");
-				Prefs_client.RefreshClient();
+				CacheL.Refresh(InvalidTypes.Prefs);
+				//Prefs_client.RefreshClient();
 			}
 			catch(Exception ex) {
 				Logger.openlog.LogMB("Failed to create A to Z folders: "+ex.ToString(),Logger.Severity.ERROR);

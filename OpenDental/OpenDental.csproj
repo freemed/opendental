@@ -170,6 +170,7 @@
     <Compile Include="Bridges\VixWinOld.cs" />
     <Compile Include="Data Interface\aaDataInterface.cs" />
     <Compile Include="Data Interface\Account_client.cs" />
+    <Compile Include="Data Interface\CacheL.cs" />
     <Compile Include="Data Interface\ClaimForms.cs" />
     <Compile Include="Data Interface\ClaimPayments.cs" />
     <Compile Include="Data Interface\ClaimProcs.cs" />

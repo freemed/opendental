@@ -392,7 +392,7 @@ namespace OpenDental{
 
 		private void FillUsers(){
 			UserGroups.Refresh();
-			Userod_client.Refresh();
+			CacheL.Refresh(InvalidTypes.Security);
 			SelectedGroupNum=0;
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();

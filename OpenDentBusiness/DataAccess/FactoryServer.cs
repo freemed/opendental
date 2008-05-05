@@ -17,19 +17,17 @@ namespace OpenDental.DataAccess {
 		/// <param name="stream">The stream the result will be serialized to.</param>
 		/// <param name="command">The command to execute.</param>
 		public static void ProcessCommand(Stream stream, FactoryTransferObject<T> command) {
-			if (command == null)
+			if(command == null){
 				throw new ArgumentNullException("command");
-
-			if (stream == null)
+			}
+			if(stream == null){
 				throw new ArgumentNullException("stream");
-
+			}
 			Type factoryType = typeof(DataObjectFactory<T>);
 			Type returnType = GetReturnType(typeof(T), command.Command);
-
-			MethodInfo method = factoryType.GetMethod(command.Command, BindingFlags.Public | BindingFlags.Static, null, command.GetAllParameterTypes(), null);
+			MethodInfo method=factoryType.GetMethod(command.Command,BindingFlags.Public | BindingFlags.Static,null,command.GetAllParameterTypes(),null);
 			object value;
-
-			switch (command.Command) {
+			switch(command.Command) {
 				case "CreateObjects":
 					value = method.Invoke(null, command.GetAllParameters());
 					break;
@@ -47,7 +45,6 @@ namespace OpenDental.DataAccess {
 				default:
 					throw new ArgumentOutOfRangeException("command");
 			}
-
 			XmlSerializer serializer = new XmlSerializer(returnType);
 			serializer.Serialize(stream, value);
 		}

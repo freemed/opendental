@@ -22,15 +22,7 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public PatPlan Copy(){
-			PatPlan p=new PatPlan();
-			p.PatPlanNum=PatPlanNum;
-			p.PatNum=PatNum;
-			p.PlanNum=PlanNum;
-			p.Ordinal=Ordinal;
-			p.IsPending=IsPending;
-			p.Relationship=Relationship;
-			p.PatID=PatID;
-			return p;
+			return (PatPlan)this.MemberwiseClone();
 		}
 
 

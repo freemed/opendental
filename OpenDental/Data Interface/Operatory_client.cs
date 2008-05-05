@@ -6,11 +6,7 @@ using OpenDentBusiness;
 
 namespace OpenDental{
 	public class Operatory_client {
-		public static void Refresh(){
-			DataTable table=Gen.GetTable(MethodNameTable.Operatory_RefreshCache);
-			Operatories.FillCache(table);//now, we have an arrays on both the client and the server.
-		}
-
+		
 		///<summary>Gets the order of the op within ListShort or -1 if not found.</summary>
 		public static int GetOrder(int opNum){
 			for(int i=0;i<OperatoryC.ListShort.Count;i++){

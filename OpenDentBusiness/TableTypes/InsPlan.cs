@@ -61,10 +61,11 @@ namespace OpenDentBusiness{
 		public bool ShowBaseUnits;
 		///<summary>Apply deductible before percentage when calculating estimates.</summary>
 		public bool DedBeforePerc;
-		///<summary>This is not a database column.  It is just used to display the number of plans with the same info.</summary>
-		public int NumberPlans;
 		///<summary>Set to true to not allow procedure code downgrade substitution on this insurance plan.</summary>
 		public bool CodeSubstNone;
+		///<summary>This is not a database column.  It is just used to display the number of plans with the same info.</summary>
+		public int NumberPlans;
+		
 
 		/*
 		///<summary>IComparable.CompareTo implementation.  This is used to determine if plans are identical.  The criteria is that they have 6 fields in common: Employer, Carrier, GroupName, GroupNum, DivisionNo, and IsMedical.  There is no less than or greater than; just not equal.</summary>

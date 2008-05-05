@@ -21,6 +21,13 @@ namespace OpenDentBusiness{
 
 		///<summary>Returns a Family object for the supplied patNum.  Use Family.GetPatient to extract the desired patient from the family.</summary>
 		public static Family GetFamily(int patNum){
+			string command=GetFamilySelectCommand(patNum);
+			Family fam=new Family();
+			fam.List=SubmitAndFill(command);
+			return fam;
+		}
+
+		public static string GetFamilySelectCommand(int patNum){
 			string command= 
 				"SELECT guarantor FROM patient "
 				+"WHERE patnum = '"+POut.PInt(patNum)+"'";
@@ -43,9 +50,7 @@ namespace OpenDentBusiness{
 					+" ORDER BY 69,Birthdate";//just asking for bugs. Must be one more than the count of fields,
 				//which is two more than the last number in the [] of GetPatient
 			}
-			Family fam=new Family();
-			fam.List=SubmitAndFill(command);
-			return fam;
+			return command;
 		}
 
 		///<summary>This is a way to get a single patient from the database if you don't already have a family object to use.</summary>
@@ -58,7 +63,7 @@ namespace OpenDentBusiness{
 			return patarray[0];
 		}
 
-		private static Patient[] SubmitAndFill(string command){
+		public static Patient[] SubmitAndFill(string command){
 			Collection<Patient> patients = DataObjectFactory<Patient>.CreateObjects(command);
 			foreach (Patient patient in patients) {
 				patient.Age = DateToAge(patient.Birthdate);
@@ -718,80 +723,87 @@ namespace OpenDentBusiness{
 			else{
 				table=new DataTable();
 			}
-			Patient[] multPats=new Patient[table.Rows.Count];
-			for(int i=0;i<table.Rows.Count;i++){
-				multPats[i]=new Patient();
-				multPats[i].PatNum       = PIn.PInt   (table.Rows[i][0].ToString());
-				multPats[i].LName        = PIn.PString(table.Rows[i][1].ToString());
-				multPats[i].FName        = PIn.PString(table.Rows[i][2].ToString());
-				multPats[i].MiddleI      = PIn.PString(table.Rows[i][3].ToString());
-				multPats[i].Preferred    = PIn.PString(table.Rows[i][4].ToString());
-				multPats[i].PatStatus    = (PatientStatus)PIn.PInt   (table.Rows[i][5].ToString());
-				multPats[i].Gender       = (PatientGender)PIn.PInt   (table.Rows[i][6].ToString());
-				multPats[i].Position     = (PatientPosition)PIn.PInt   (table.Rows[i][7].ToString());
-				multPats[i].Birthdate    = PIn.PDate  (table.Rows[i][8].ToString());
-				multPats[i].Age=DateToAge(multPats[i].Birthdate);
-				multPats[i].SSN          = PIn.PString(table.Rows[i][9].ToString());
-				multPats[i].Address      = PIn.PString(table.Rows[i][10].ToString());
-				multPats[i].Address2     = PIn.PString(table.Rows[i][11].ToString());
-				multPats[i].City         = PIn.PString(table.Rows[i][12].ToString());
-				multPats[i].State        = PIn.PString(table.Rows[i][13].ToString());
-				multPats[i].Zip          = PIn.PString(table.Rows[i][14].ToString());
-				multPats[i].HmPhone      = PIn.PString(table.Rows[i][15].ToString());
-				multPats[i].WkPhone      = PIn.PString(table.Rows[i][16].ToString());
-				multPats[i].WirelessPhone= PIn.PString(table.Rows[i][17].ToString());
-				multPats[i].Guarantor    = PIn.PInt   (table.Rows[i][18].ToString());
-				multPats[i].CreditType   = PIn.PString(table.Rows[i][19].ToString());
-				multPats[i].Email        = PIn.PString(table.Rows[i][20].ToString());
-				multPats[i].Salutation   = PIn.PString(table.Rows[i][21].ToString());
-				multPats[i].EstBalance   = PIn.PDouble(table.Rows[i][22].ToString());
-				multPats[i].NextAptNum   = PIn.PInt   (table.Rows[i][23].ToString());
-				multPats[i].PriProv      = PIn.PInt   (table.Rows[i][24].ToString());
-				multPats[i].SecProv      = PIn.PInt   (table.Rows[i][25].ToString());
-				multPats[i].FeeSched     = PIn.PInt   (table.Rows[i][26].ToString());
-				multPats[i].BillingType  = PIn.PInt   (table.Rows[i][27].ToString());
-				multPats[i].ImageFolder  = PIn.PString(table.Rows[i][28].ToString());
-				multPats[i].AddrNote     = PIn.PString(table.Rows[i][29].ToString());
-				multPats[i].FamFinUrgNote= PIn.PString(table.Rows[i][30].ToString());
-				multPats[i].MedUrgNote   = PIn.PString(table.Rows[i][31].ToString());
-				multPats[i].ApptModNote  = PIn.PString(table.Rows[i][32].ToString());
-				multPats[i].StudentStatus= PIn.PString(table.Rows[i][33].ToString());
-				multPats[i].SchoolName   = PIn.PString(table.Rows[i][34].ToString());
-				multPats[i].ChartNumber  = PIn.PString(table.Rows[i][35].ToString());
-				multPats[i].MedicaidID   = PIn.PString(table.Rows[i][36].ToString());
-				multPats[i].Bal_0_30     = PIn.PDouble(table.Rows[i][37].ToString());
-				multPats[i].Bal_31_60    = PIn.PDouble(table.Rows[i][38].ToString());
-				multPats[i].Bal_61_90    = PIn.PDouble(table.Rows[i][39].ToString());
-				multPats[i].BalOver90    = PIn.PDouble(table.Rows[i][40].ToString());
-				multPats[i].InsEst       = PIn.PDouble(table.Rows[i][41].ToString());
-				//multPats[i].PrimaryTeeth = PIn.PString(table.Rows[i][42].ToString());
-				multPats[i].BalTotal     = PIn.PDouble(table.Rows[i][43].ToString());
-				multPats[i].EmployerNum  = PIn.PInt   (table.Rows[i][44].ToString());
-				multPats[i].EmploymentNote=PIn.PString(table.Rows[i][45].ToString());
-				multPats[i].Race         = (PatientRace)PIn.PInt(table.Rows[i][46].ToString());
-				multPats[i].County       = PIn.PString(table.Rows[i][47].ToString());
-				multPats[i].GradeSchool  = PIn.PString(table.Rows[i][48].ToString());
-				multPats[i].GradeLevel   = (PatientGrade)PIn.PInt(table.Rows[i][49].ToString());
-				multPats[i].Urgency      = (TreatmentUrgency)PIn.PInt(table.Rows[i][50].ToString());
-				multPats[i].DateFirstVisit=PIn.PDate  (table.Rows[i][51].ToString());
-				multPats[i].ClinicNum    = PIn.PInt   (table.Rows[i][52].ToString());
-				multPats[i].HasIns       = PIn.PString(table.Rows[i][53].ToString());
-				multPats[i].TrophyFolder = PIn.PString(table.Rows[i][54].ToString());
-				multPats[i].PlannedIsDone= PIn.PBool  (table.Rows[i][55].ToString());
-				multPats[i].Premed       = PIn.PBool  (table.Rows[i][56].ToString());
-				multPats[i].Ward         = PIn.PString(table.Rows[i][57].ToString());
-				multPats[i].PreferConfirmMethod=(ContactMethod)PIn.PInt(table.Rows[i][58].ToString());
-				multPats[i].PreferContactMethod=(ContactMethod)PIn.PInt(table.Rows[i][59].ToString());
-				multPats[i].PreferRecallMethod=(ContactMethod)PIn.PInt(table.Rows[i][60].ToString());
-				multPats[i].SchedBeforeTime= PIn.PTimeSpan(table.Rows[i][61].ToString());
-				multPats[i].SchedAfterTime= PIn.PTimeSpan(table.Rows[i][62].ToString());
-				multPats[i].SchedDayOfWeek= PIn.PByte(table.Rows[i][63].ToString());
-				multPats[i].Language     = PIn.PString(table.Rows[i][64].ToString());
-				multPats[i].AdmitDate    = PIn.PDate(table.Rows[i][65].ToString());
-				multPats[i].Title        = PIn.PString(table.Rows[i][66].ToString());
-				multPats[i].PayPlanDue   = PIn.PDouble(table.Rows[i][67].ToString());
-			}
+			Patient[] multPats=TableToList(table).ToArray();
 			return multPats;
+		}
+
+		public static List<Patient> TableToList(DataTable table){
+			List<Patient> patList=new List<Patient>();
+			Patient pat;
+			for(int i=0;i<table.Rows.Count;i++){
+				pat=new Patient();
+				pat.PatNum       = PIn.PInt   (table.Rows[i][0].ToString());
+				pat.LName        = PIn.PString(table.Rows[i][1].ToString());
+				pat.FName        = PIn.PString(table.Rows[i][2].ToString());
+				pat.MiddleI      = PIn.PString(table.Rows[i][3].ToString());
+				pat.Preferred    = PIn.PString(table.Rows[i][4].ToString());
+				pat.PatStatus    = (PatientStatus)PIn.PInt   (table.Rows[i][5].ToString());
+				pat.Gender       = (PatientGender)PIn.PInt   (table.Rows[i][6].ToString());
+				pat.Position     = (PatientPosition)PIn.PInt   (table.Rows[i][7].ToString());
+				pat.Birthdate    = PIn.PDate  (table.Rows[i][8].ToString());
+				pat.Age=DateToAge(pat.Birthdate);
+				pat.SSN          = PIn.PString(table.Rows[i][9].ToString());
+				pat.Address      = PIn.PString(table.Rows[i][10].ToString());
+				pat.Address2     = PIn.PString(table.Rows[i][11].ToString());
+				pat.City         = PIn.PString(table.Rows[i][12].ToString());
+				pat.State        = PIn.PString(table.Rows[i][13].ToString());
+				pat.Zip          = PIn.PString(table.Rows[i][14].ToString());
+				pat.HmPhone      = PIn.PString(table.Rows[i][15].ToString());
+				pat.WkPhone      = PIn.PString(table.Rows[i][16].ToString());
+				pat.WirelessPhone= PIn.PString(table.Rows[i][17].ToString());
+				pat.Guarantor    = PIn.PInt   (table.Rows[i][18].ToString());
+				pat.CreditType   = PIn.PString(table.Rows[i][19].ToString());
+				pat.Email        = PIn.PString(table.Rows[i][20].ToString());
+				pat.Salutation   = PIn.PString(table.Rows[i][21].ToString());
+				pat.EstBalance   = PIn.PDouble(table.Rows[i][22].ToString());
+				pat.NextAptNum   = PIn.PInt   (table.Rows[i][23].ToString());
+				pat.PriProv      = PIn.PInt   (table.Rows[i][24].ToString());
+				pat.SecProv      = PIn.PInt   (table.Rows[i][25].ToString());
+				pat.FeeSched     = PIn.PInt   (table.Rows[i][26].ToString());
+				pat.BillingType  = PIn.PInt   (table.Rows[i][27].ToString());
+				pat.ImageFolder  = PIn.PString(table.Rows[i][28].ToString());
+				pat.AddrNote     = PIn.PString(table.Rows[i][29].ToString());
+				pat.FamFinUrgNote= PIn.PString(table.Rows[i][30].ToString());
+				pat.MedUrgNote   = PIn.PString(table.Rows[i][31].ToString());
+				pat.ApptModNote  = PIn.PString(table.Rows[i][32].ToString());
+				pat.StudentStatus= PIn.PString(table.Rows[i][33].ToString());
+				pat.SchoolName   = PIn.PString(table.Rows[i][34].ToString());
+				pat.ChartNumber  = PIn.PString(table.Rows[i][35].ToString());
+				pat.MedicaidID   = PIn.PString(table.Rows[i][36].ToString());
+				pat.Bal_0_30     = PIn.PDouble(table.Rows[i][37].ToString());
+				pat.Bal_31_60    = PIn.PDouble(table.Rows[i][38].ToString());
+				pat.Bal_61_90    = PIn.PDouble(table.Rows[i][39].ToString());
+				pat.BalOver90    = PIn.PDouble(table.Rows[i][40].ToString());
+				pat.InsEst       = PIn.PDouble(table.Rows[i][41].ToString());
+				pat.PrimaryTeethOld="";
+				pat.BalTotal     = PIn.PDouble(table.Rows[i][43].ToString());
+				pat.EmployerNum  = PIn.PInt   (table.Rows[i][44].ToString());
+				pat.EmploymentNote=PIn.PString(table.Rows[i][45].ToString());
+				pat.Race         = (PatientRace)PIn.PInt(table.Rows[i][46].ToString());
+				pat.County       = PIn.PString(table.Rows[i][47].ToString());
+				pat.GradeSchool  = PIn.PString(table.Rows[i][48].ToString());
+				pat.GradeLevel   = (PatientGrade)PIn.PInt(table.Rows[i][49].ToString());
+				pat.Urgency      = (TreatmentUrgency)PIn.PInt(table.Rows[i][50].ToString());
+				pat.DateFirstVisit=PIn.PDate  (table.Rows[i][51].ToString());
+				pat.ClinicNum    = PIn.PInt   (table.Rows[i][52].ToString());
+				pat.HasIns       = PIn.PString(table.Rows[i][53].ToString());
+				pat.TrophyFolder = PIn.PString(table.Rows[i][54].ToString());
+				pat.PlannedIsDone= PIn.PBool  (table.Rows[i][55].ToString());
+				pat.Premed       = PIn.PBool  (table.Rows[i][56].ToString());
+				pat.Ward         = PIn.PString(table.Rows[i][57].ToString());
+				pat.PreferConfirmMethod=(ContactMethod)PIn.PInt(table.Rows[i][58].ToString());
+				pat.PreferContactMethod=(ContactMethod)PIn.PInt(table.Rows[i][59].ToString());
+				pat.PreferRecallMethod=(ContactMethod)PIn.PInt(table.Rows[i][60].ToString());
+				pat.SchedBeforeTime= PIn.PTimeSpan(table.Rows[i][61].ToString());
+				pat.SchedAfterTime= PIn.PTimeSpan(table.Rows[i][62].ToString());
+				pat.SchedDayOfWeek= PIn.PByte(table.Rows[i][63].ToString());
+				pat.Language     = PIn.PString(table.Rows[i][64].ToString());
+				pat.AdmitDate    = PIn.PDate(table.Rows[i][65].ToString());
+				pat.Title        = PIn.PString(table.Rows[i][66].ToString());
+				pat.PayPlanDue   = PIn.PDouble(table.Rows[i][67].ToString());
+				patList.Add(pat);
+			}
+			return patList;
 		}
 
 		///<summary>First call GetMultPats to fill the list of multPats. Then, use this to return one patient from that list.</summary>

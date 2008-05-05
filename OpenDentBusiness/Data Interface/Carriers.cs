@@ -14,10 +14,16 @@ namespace OpenDentBusiness{
 		public static Hashtable HList;
 	
 		///<summary>Carriers are not refreshed as local data, but are refreshed as needed. A full refresh is frequently triggered if a carrierNum cannot be found in the HList.  Important retrieval is done directly from the db.</summary>
-		public static void Refresh(){
+		public static DataTable Refresh(){
 			HList=new Hashtable();
 			string command="SELECT * FROM carrier ORDER BY CarrierName";
 			DataTable table=General.GetTable(command);
+			table.TableName="Carrier";
+			FillCache(table);
+			return table;
+		}
+		
+		public static void FillCache(DataTable table){
 			List=new Carrier[table.Rows.Count];
 			for(int i=0;i<table.Rows.Count;i++){
 				List[i]=new Carrier();

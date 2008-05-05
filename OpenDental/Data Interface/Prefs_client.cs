@@ -10,27 +10,6 @@ using CodeBase;
 
 namespace OpenDental {
 	public class Prefs_client {
-		///<summary></summary>
-		public static void RefreshClient() {
-			DataTable table=Gen.GetTable(MethodNameTable.Prefs_RefreshCache);
-			Prefs.FillCache(table);
-			/*
-			DataSet ds=null;
-			try {
-				if(RemotingClient.RemotingRole==RemotingRole.ClientTcp) {
-					DtoPrefRefresh dto=new DtoPrefRefresh();
-					ds=RemotingClient.ProcessQuery(dto);
-				}
-				else {
-					ds=Prefs.Refresh();
-				}
-			}
-			catch(Exception e) {
-				MessageBox.Show(e.Message);
-				return;
-			}
-			Prefs.FillHList(ds.Tables[0]);//now, we have an HList on both the client and the server.*/
-		}
 
 		///<summary>This ONLY runs when first opening the program</summary>
 		public static bool ConvertDB() {
@@ -61,7 +40,7 @@ namespace OpenDental {
 			}
 			if(storedVersion<currentVersion) {
 				Prefs.UpdateString("ProgramVersion",currentVersion.ToString());
-				RefreshClient();
+				CacheL.Refresh(InvalidTypes.Prefs);
 			}
 			if(storedVersion>currentVersion) {
 				if(PrefC.UsingAtoZfolder){

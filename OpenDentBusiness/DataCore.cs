@@ -68,10 +68,14 @@ namespace OpenDentBusiness {
 					return Appointments.RefreshPeriod((DateTime)parameters[0],(DateTime)parameters[1]);
 				case  MethodNameDS.Appointment_RefreshOneApt:
 					return Appointments.RefreshOneApt((int)parameters[0],(bool)parameters[1]);
+				case MethodNameDS.Cache_Refresh:
+					return Cache.Refresh((InvalidTypes)parameters[0]);
 				case  MethodNameDS.Chart_GetAll:
 					return ChartModules.GetAll((int)parameters[0],(bool)parameters[1]);
 				case  MethodNameDS.CovCats_RefreshCache:
 					return CovCats.RefreshCache();
+				case  MethodNameDS.FamilyModule_GetAll:
+					return FamilyModules.GetAll((int)parameters[0]);
 			}
 
 		}
@@ -87,39 +91,27 @@ namespace OpenDentBusiness {
 					return AccountingAutoPays.RefreshCache();
 				case MethodNameTable.AppointmentRule_RefreshCache:
 					return AppointmentRules.RefreshCache();
-				case MethodNameTable.ApptView_RefreshCache:
-					return ApptViews.RefreshCache();
-				case MethodNameTable.ApptViewItem_RefreshCache:
-					return ApptViewItems.RefreshCache();
 				case MethodNameTable.AutoCode_RefreshCache:
 					return AutoCodes.RefreshCache();
 				case MethodNameTable.AutoCodeCond_RefreshCache:
 					return AutoCodeConds.RefreshCache();
 				case MethodNameTable.AutoCodeItem_RefreshCache:
 					return AutoCodeItems.RefreshCache();
+				case MethodNameTable.Carrier_Refresh:
+					return Carriers.Refresh();
 				case MethodNameTable.ClaimFormItem_RefreshCache:
 					return ClaimFormItems.RefreshCache();
 				case MethodNameTable.CovSpan_RefreshCache:
 					return CovSpans.RefreshCache();
-				case MethodNameTable.Definition_RefreshCache:
-					return Defs.RefreshCache();
 				case MethodNameTable.GroupPermission_RefreshCache:
 					return GroupPermissions.RefreshCache();
 				case MethodNameTable.MountDef_RefreshCache:
 					return MountDefs.RefreshCache();
-				case MethodNameTable.Operatory_RefreshCache:
-					return Operatories.RefreshCache();
 				case MethodNameTable.Patient_GetPtDataTable:
 					return Patients.GetPtDataTable((bool)parameters[0],(string)parameters[1],(string)parameters[2],(string)parameters[3],
 						(string)parameters[4],(bool)parameters[5],(string)parameters[6],(string)parameters[7],(string)parameters[8],
 						(string)parameters[9],(string)parameters[10],(int)parameters[11],(bool)parameters[12],(bool)parameters[13],
 						(int)parameters[14],(DateTime)parameters[15]);
-				case MethodNameTable.Prefs_RefreshCache:
-					return Prefs.RefreshCache();
-				case MethodNameTable.Providers_RefreshCache:
-					return Providers.RefreshCache();
-				case MethodNameTable.Userod_RefreshCache:
-					return Userods.RefreshCache();
 			}
 		}
 

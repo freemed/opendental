@@ -134,8 +134,12 @@ namespace OpenDentBusiness{
 		}
 
 		public static string PTimeSpan(TimeSpan myTimeSpan, bool encapsulate) {
+			if(myTimeSpan==TimeSpan.Zero){
+				return "00:00:00";
+			}
 			try {
-				string outTimeSpan = myTimeSpan.ToString();
+				DateTime dateT=new DateTime(1,1,1)+myTimeSpan;
+				string outTimeSpan=dateT.ToString("HH:mm:ss",CultureInfo.InvariantCulture);
 				string frontCap = "'";
 				string backCap = "'";
 				if (encapsulate) {
@@ -144,7 +148,7 @@ namespace OpenDentBusiness{
 				return outTimeSpan;
 			}
 			catch {
-				return "";//this saves zero's to the database
+				return "00:00:00";//"";//this saves zero's to the database
 			}
 		}
 

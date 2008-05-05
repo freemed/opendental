@@ -14,7 +14,7 @@ using System.Windows.Forms;
 namespace OpenDentBusiness {
 	///<summary>(Users OD)</summary>
 	public class Userods {
-		private static bool webServerConfigHasLoaded=false;
+		//private static bool webServerConfigHasLoadedd=false;
 		
 		///<summary></summary>
 		public static DataTable RefreshCache() {
@@ -160,18 +160,20 @@ namespace OpenDentBusiness {
 				dcon.SetDb(server,database,mysqlUser,mysqlPassword,mysqlUserLow,mysqlPasswordLow,dbtype);
 				OpenDental.DataAccess.DataSettings.CreateConnectionString(server,database, mysqlUser,mysqlPassword);
 			}
-			catch {
-				throw new Exception("Connection to database failed.  Check the values in the config file on the web server "+configFilePath);
+			catch(Exception e){
+				throw new Exception(e.Message+"\r\n"+"Connection to database failed.  Check the values in the config file on the web server "+configFilePath);
 			}
 			//todo?: make sure no users have blank passwords.
 		}
 
 		///<summary>Used by the SL logon window to validate credentials.  Send in the password unhashed.  If invalid, it will always throw an exception of some type.  If it is valid, then it will return the hashed password.  This is the only place where the config file is read, and it's only read on startup.  So the web service needs to be restarted if the config file changes.</summary>
 		public static string CheckDbUserPassword(string configFilePath,string username,string password){
-			if(!webServerConfigHasLoaded){
+			//for some reason, this static variable was remaining true even if the webservice was restarted.
+			//So we're not going to use it anymore.  Always load from file.
+			//if(!webServerConfigHasLoadedd){
 				LoadDatabaseInfoFromFile(configFilePath);
-				webServerConfigHasLoaded=true;
-			}
+			//	webServerConfigHasLoadedd=true;
+			//}
 			DataConnection dcon=new DataConnection();
 			//Then, check username and password
 			string passhash="";

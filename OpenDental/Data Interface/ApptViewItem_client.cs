@@ -8,10 +8,6 @@ using OpenDentBusiness;
 
 namespace OpenDental{
 	public class ApptViewItem_client {
-		public static void Refresh(){
-			DataTable table=Gen.GetTable(MethodNameTable.ApptViewItem_RefreshCache);
-			ApptViewItems.FillCache(table);//now, we have an arrays on both the client and the server.
-		}
 
 		public static void GetForCurView(int indexInList){
 			if(indexInList==-1){

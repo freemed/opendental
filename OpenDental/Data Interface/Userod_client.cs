@@ -10,11 +10,7 @@ using OpenDentBusiness;
 namespace OpenDental{
 	///<summary></summary>
 	public class Userod_client {
-		public static void Refresh(){
-			DataTable table=Gen.GetTable(MethodNameTable.Userod_RefreshCache);
-			Userods.FillCache(table);//now, we have arrays on both the client and the server.
-		}
-
+		
 		
 
 		
