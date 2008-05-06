@@ -1289,6 +1289,7 @@ namespace OpenDental{
 				TranslateMenuItem(menuItem);
 			}
 			if(CultureInfo.CurrentCulture.Name=="en-US"){
+				//for the business layer, this functionality is duplicated in the Lan class.  Need for SL.
 				CultureInfo cInfo=(CultureInfo)CultureInfo.CurrentCulture.Clone();
 				cInfo.DateTimeFormat.ShortDatePattern="MM/dd/yyyy";
 				Application.CurrentCulture=cInfo;

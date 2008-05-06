@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Data;
 using System.Text;
 using System.Drawing;
@@ -277,7 +278,8 @@ namespace OpenDentBusiness {
 				row=table.NewRow();
 				dateT=PIn.PDateT(rawComm.Rows[i]["CommDateTime"].ToString());
 				row["CommDateTime"]=dateT;
-				row["commDate"]=dateT.ToShortDateString();
+				row["commDate"]=dateT.ToString(Lan.GetShortDateTimeFormat());
+				row["commTime"]="";
 				if(dateT.TimeOfDay!=TimeSpan.Zero) {
 					row["commTime"]=dateT.ToString("h:mm")+dateT.ToString("%t").ToLower();
 				}
@@ -285,10 +287,12 @@ namespace OpenDentBusiness {
 				row["commType"]=DefC.GetName(DefCat.CommLogTypes,PIn.PInt(rawComm.Rows[i]["CommType"].ToString()));
 				row["EmailMessageNum"]="0";
 				row["FormPatNum"]="0";
+				row["mode"]="";
 				if(rawComm.Rows[i]["Mode_"].ToString()!="0"){//anything except none
 					row["mode"]=Lan.g("enumCommItemMode",((CommItemMode)PIn.PInt(rawComm.Rows[i]["Mode_"].ToString())).ToString());
 				}
 				row["Note"]=rawComm.Rows[i]["Note"].ToString();
+				row["patName"]="";
 				if(rawComm.Rows[i]["PatNum"].ToString()!=patNum.ToString()){
 					row["patName"]=rawComm.Rows[i]["FName"].ToString();
 				}
@@ -446,7 +450,7 @@ namespace OpenDentBusiness {
 				row["credits"]=((double)row["creditsDouble"]).ToString("n");
 				dateT=PIn.PDateT(rawClaimPay.Rows[i]["DateCP"].ToString());
 				row["DateTime"]=dateT;
-				row["date"]=dateT.ToShortDateString();
+				row["date"]=dateT.ToString(Lan.GetShortDateTimeFormat());
 				procdate=PIn.PDateT(rawClaimPay.Rows[i]["ProcDate"].ToString());
 				row["description"]=Lan.g("AccountModule","Insurance Payment for Claim ")+procdate.ToShortDateString();
 				if(writeoff!=0){
@@ -515,7 +519,7 @@ namespace OpenDentBusiness {
 				row["credits"]="";
 				dateT=PIn.PDateT(rawProc.Rows[i]["ProcDate"].ToString());
 				row["DateTime"]=dateT;
-				row["date"]=dateT.ToShortDateString();
+				row["date"]=dateT.ToString(Lan.GetShortDateTimeFormat());
 				row["description"]="";
 				if(rawProc.Rows[i]["MedicalCode"].ToString()!=""){
 					row["description"]+=Lan.g("ContrAccount","(medical)")+" ";
@@ -587,7 +591,7 @@ namespace OpenDentBusiness {
 				row["colorText"]=DefC.Long[(int)DefCat.AccountColors][1].ItemColor.ToArgb().ToString();
 				dateT=PIn.PDateT(rawAdj.Rows[i]["AdjDate"].ToString());
 				row["DateTime"]=dateT;
-				row["date"]=dateT.ToShortDateString();
+				row["date"]=dateT.ToString(Lan.GetShortDateTimeFormat());
 				row["description"]=DefC.GetName(DefCat.AdjTypes,PIn.PInt(rawAdj.Rows[i]["AdjType"].ToString()));
 				row["extraDetail"] = rawAdj.Rows[i]["AdjNote"].ToString();
 				row["patient"]=fam.GetNameInFamFirst(PIn.PInt(rawAdj.Rows[i]["PatNum"].ToString()));
@@ -638,7 +642,7 @@ namespace OpenDentBusiness {
 				row["credits"]=((double)row["creditsDouble"]).ToString("n");
 				dateT=PIn.PDateT(rawPay.Rows[i]["ProcDate"].ToString());
 				row["DateTime"]=dateT;
-				row["date"]=dateT.ToShortDateString();
+				row["date"]=dateT.ToString(Lan.GetShortDateTimeFormat());
 				row["description"]=DefC.GetName(DefCat.PaymentTypes,PIn.PInt(rawPay.Rows[i]["PayType"].ToString()));
 				if(rawPay.Rows[i]["CheckNum"].ToString()!=""){
 					row["description"]+=" #"+rawPay.Rows[i]["CheckNum"].ToString();
@@ -704,7 +708,7 @@ namespace OpenDentBusiness {
 				row["credits"]="";
 				dateT=PIn.PDateT(rawClaim.Rows[i]["DateService"].ToString());
 				row["DateTime"]=dateT;
-				row["date"]=dateT.ToShortDateString();
+				row["date"]=dateT.ToString(Lan.GetShortDateTimeFormat());
 				if(rawClaim.Rows[i]["ClaimType"].ToString()=="P"){
 					row["description"]=Lan.g("ContrAccount","Pri")+" ";
 					row["colorText"] = DefC.Long[(int)DefCat.AccountColors][4].ItemColor.ToArgb().ToString();
@@ -853,7 +857,7 @@ namespace OpenDentBusiness {
 				row["credits"]="";
 				dateT=PIn.PDateT(rawState.Rows[i]["DateSent"].ToString());
 				row["DateTime"]=dateT;
-				row["date"]=dateT.ToShortDateString();
+				row["date"]=dateT.ToString(Lan.GetShortDateTimeFormat());
 				row["description"]+=Lan.g("ContrAccount","Statement");
 				_mode=(StatementMode)PIn.PInt(rawState.Rows[i]["Mode_"].ToString());
 				row["description"]+="-"+Lan.g("enumStatementMode",_mode.ToString());
@@ -919,7 +923,7 @@ namespace OpenDentBusiness {
 				row["credits"]=((double)row["creditsDouble"]).ToString("n");
 				dateT=PIn.PDateT(rawPayPlan.Rows[i]["PayPlanDate"].ToString());
 				row["DateTime"]=dateT;
-				row["date"]=dateT.ToShortDateString();
+				row["date"]=dateT.ToString(Lan.GetShortDateTimeFormat());
 				if(rawPayPlan.Rows[i]["PlanNum"].ToString()=="0"){
 					row["description"]=Lan.g("ContrAccount","Payment Plan");
 				}
