@@ -1538,7 +1538,7 @@ namespace OpenDental {
 			this.gridPayPlan.Location = new System.Drawing.Point(0,144);
 			this.gridPayPlan.Name = "gridPayPlan";
 			this.gridPayPlan.ScrollValue = 0;
-			this.gridPayPlan.Size = new System.Drawing.Size(749,75);
+			this.gridPayPlan.Size = new System.Drawing.Size(749,93);
 			this.gridPayPlan.TabIndex = 217;
 			this.gridPayPlan.Title = "Payment Plans";
 			this.gridPayPlan.TranslationName = "TablePaymentPlans";
@@ -2129,7 +2129,7 @@ namespace OpenDental {
 				gridPayPlan.Location=gridRepeat.Location;
 			}
 			gridPayPlan.Visible = true;
-			gridPayPlan.Height=75;
+			gridPayPlan.Height=100;
 			gridPayPlan.BeginUpdate();
 			gridPayPlan.Columns.Clear();
 			ODGridColumn col=new ODGridColumn(Lan.g("TablePaymentPlans","Date"),65);
