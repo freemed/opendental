@@ -1997,7 +1997,6 @@ namespace OpenDental {
 				textUrgFinNote.ReadOnly=false;
 				textFinNotes.ReadOnly=false;
 			}
-			
 		}
 
 		private void FillAging() {

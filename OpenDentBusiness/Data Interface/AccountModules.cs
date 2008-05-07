@@ -11,21 +11,13 @@ namespace OpenDentBusiness {
 		private static Family fam;
 		private static Patient pat;
 
-		///<summary>Parameters: 0:patNum, 1:viewingInRecall, 2:fromDate, 3:toDate, 4:intermingled.  If intermingled=1, the patnum of any family member will get entire family intermingled.</summary>
-		public static DataSet GetAll(int patNum,bool viewingInRecall,DateTime fromDate, DateTime toDate,bool intermingled){//string[] parameters){
-			//if(RemotingClient.RemotingRole==RemotingRole.ClientWeb){
-			//	return (DataSet)ClientSL.CallWebService(MethodName.AccountModule_GetAll,patNum,viewingInRecall,fromDate,toDate,intermingled);
-			//}
-			//int patNum=PIn.PInt(parameters[0]);
+		///<summary>If intermingled=true, the patnum of any family member will get entire family intermingled.</summary>
+		public static DataSet GetAll(int patNum,bool viewingInRecall,DateTime fromDate, DateTime toDate,bool intermingled){
 			fam=Patients.GetFamily(patNum);
-			//bool intermingled=PIn.PBool(parameters[4]);
 			if(intermingled){
 				patNum=fam.List[0].PatNum;//guarantor
 			}
 			pat=fam.GetPatient(patNum);
-			//bool viewingInRecall=PIn.PBool(parameters[1]);
-			//DateTime fromDate=PIn.PDate(parameters[2]);
-			//DateTime toDate=PIn.PDate(parameters[3]);
 			retVal=new DataSet();
 			if(viewingInRecall) {
 				retVal.Tables.Add(ChartModules.GetProgNotes(patNum, false));
@@ -37,10 +29,11 @@ namespace OpenDentBusiness {
 			//Gets 3 tables: account(or account###,account###,etc), patient, payplan.
 			GetAccount(patNum,fromDate,toDate,intermingled,singlePatient,false);
 			//GetPayPlans(patNum,fromDate,toDate,isFamily);
+			GetMisc(fam);//table = misc.
 			return retVal;
 		}
 
-		///<summary>Parameters: 0:patNum, 1:singlePatient, 2:fromDate, 3:toDate, 4:intermingled,   If intermingled=1 the patnum of any family member will get entire family intermingled.  toDate should not be Max, or PayPlan amort will include too many charges.  The 10 days will not be added to toDate until creating the actual amortization schedule.</summary>
+		///<summary>If intermingled=true the patnum of any family member will get entire family intermingled.  toDate should not be Max, or PayPlan amort will include too many charges.  The 10 days will not be added to toDate until creating the actual amortization schedule.</summary>
 		public static DataSet GetStatement(int patNum,bool singlePatient,DateTime fromDate,DateTime toDate,bool intermingled){
 			//int patNum=PIn.PInt(parameters[0]);
 			fam=Patients.GetFamily(patNum);
@@ -1397,23 +1390,29 @@ namespace OpenDentBusiness {
 			retVal.Tables.Add(table);
 		}
 
-		/*
-		///<summary>The supplied DataRows must include the following columns: ProcNum,ProcDate,Priority,ToothRange,ToothNum,ProcCode.
-		///This sorts all objects in Chart module based on their dates, times, priority, and toothnum.</summary>
-		public static int CompareChartRows(DataRow x, DataRow y) {
-			if (x["ProcNum"].ToString() != "0" && y["ProcNum"].ToString() != "0") {//if both are procedures
-				if (((DateTime)x["ProcDate"]).Date == ((DateTime)y["ProcDate"]).Date) {//and the dates are the same
-					return ProcedureB.CompareProcedures(x, y);
-					//IComparer procComparer=new ProcedureComparer();
-					//return procComparer.Compare(x,y);//sort by priority, toothnum, procCode
-					//return 0;
-				}
+		private static void GetMisc(Family fam){
+			DataTable table=new DataTable("misc");
+			DataRow row;
+			table.Columns.Add("descript");
+			table.Columns.Add("value");
+			List<DataRow> rows=new List<DataRow>();
+			string command = 
+				"SELECT FamFinancial "
+				+"FROM patientnote WHERE patnum ="+POut.PInt(fam.List[0].PatNum);
+			DataTable raw=General.GetTable(command);
+			//for(int i=0;i<raw.Rows.Count;i++){
+			row=table.NewRow();
+			row["descript"]="FamFinancial";
+			row["value"]="";
+			if(raw.Rows.Count==1){
+				row["value"]=PIn.PString(raw.Rows[0][0].ToString());
 			}
-			//In all other situations, all we care about is the dates.
-			return ((DateTime)x["ProcDate"]).Date.CompareTo(((DateTime)y["ProcDate"]).Date);
-			//IComparer myComparer = new ObjectDateComparer();
-			//return myComparer.Compare(x,y);
-		}*/
+			rows.Add(row);
+			for(int i=0;i<rows.Count;i++) {
+				table.Rows.Add(rows[i]);
+			}
+			retVal.Tables.Add(table);
+		}
 
 
 
