@@ -752,23 +752,23 @@ namespace OpenDentBusiness {
 						row["colorText"] = DefC.Long[(int)DefCat.AccountColors][4].ItemColor.ToArgb().ToString();
 					}
 
-				} else if (rawClaim.Rows[i]["ClaimStatus"].ToString() == "U")
-				{
+				} 
+				else if (rawClaim.Rows[i]["ClaimStatus"].ToString() == "U"){
 					row["description"] += "\r\n" + Lan.g("ContrAccount", "Unsent");
-				} else if (rawClaim.Rows[i]["ClaimStatus"].ToString() == "H")
-				{
+				} 
+				else if (rawClaim.Rows[i]["ClaimStatus"].ToString() == "H"){
 					row["description"] += "\r\n" + Lan.g("ContrAccount", "Hold until Pri received");
-				} else if (rawClaim.Rows[i]["ClaimStatus"].ToString() == "W")
-				{
+				} 
+				else if (rawClaim.Rows[i]["ClaimStatus"].ToString() == "W"){
 					row["description"] += "\r\n" + Lan.g("ContrAccount", "Waiting to Send");
-				} else if (rawClaim.Rows[i]["ClaimStatus"].ToString() == "S")
-				{
+				} 
+				else if (rawClaim.Rows[i]["ClaimStatus"].ToString() == "S"){
 					row["description"] += "\r\n" + Lan.g("ContrAccount", "Sent");
 				}
 				insest = PIn.PDouble(rawClaim.Rows[i]["InsPayEst"].ToString());
 				amtpaid = PIn.PDouble(rawClaim.Rows[i]["InsPayAmt"].ToString());
-				if (rawClaim.Rows[i]["ClaimStatus"].ToString() == "W"
-					|| rawClaim.Rows[i]["ClaimStatus"].ToString() == "S")
+				if(!PrefB.GetBool("BalancesDontSubtractIns") &&
+					(rawClaim.Rows[i]["ClaimStatus"].ToString() == "W" || rawClaim.Rows[i]["ClaimStatus"].ToString() == "S"))
 				{
 					if (rawClaim.Rows[i]["ClaimType"].ToString() == "PreAuth") {
 						if (amtpaid != 0 && ((insest - amtpaid) >= 0)) {//show additional info on PreAuth resubmits
