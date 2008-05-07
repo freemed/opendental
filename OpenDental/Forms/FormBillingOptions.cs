@@ -47,6 +47,7 @@ namespace OpenDental{
 		private Label label7;
 		private ListBox listBillType;
 		private Label label2;
+		private OpenDental.UI.Button butUndo;
 		private Dunning[] dunningList;
 
 		///<summary></summary>
@@ -103,6 +104,7 @@ namespace OpenDental{
 			this.butDatesAll = new OpenDental.UI.Button();
 			this.checkIntermingled = new System.Windows.Forms.CheckBox();
 			this.butDefaults = new OpenDental.UI.Button();
+			this.butUndo = new OpenDental.UI.Button();
 			this.groupBox2.SuspendLayout();
 			this.groupDateRange.SuspendLayout();
 			this.SuspendLayout();
@@ -509,12 +511,27 @@ namespace OpenDental{
 			this.butDefaults.Text = "Defaults";
 			this.butDefaults.Click += new System.EventHandler(this.butDefaults_Click);
 			// 
+			// butUndo
+			// 
+			this.butUndo.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butUndo.Autosize = true;
+			this.butUndo.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butUndo.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butUndo.CornerRadius = 4F;
+			this.butUndo.Location = new System.Drawing.Point(7,631);
+			this.butUndo.Name = "butUndo";
+			this.butUndo.Size = new System.Drawing.Size(88,25);
+			this.butUndo.TabIndex = 243;
+			this.butUndo.Text = "Undo Billing";
+			this.butUndo.Click += new System.EventHandler(this.butUndo_Click);
+			// 
 			// FormBillingOptions
 			// 
 			this.AcceptButton = this.butCreate;
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.CancelButton = this.butCancel;
 			this.ClientSize = new System.Drawing.Size(898,666);
+			this.Controls.Add(this.butUndo);
 			this.Controls.Add(this.butDefaults);
 			this.Controls.Add(this.checkIntermingled);
 			this.Controls.Add(this.groupDateRange);
@@ -757,6 +774,11 @@ namespace OpenDental{
 			textDateEnd.Text=DateTime.Today.ToShortDateString();
 		}
 
+		private void butUndo_Click(object sender,EventArgs e) {
+			MsgBox.Show(this,"When the billing list comes up, use the radio button at the top to show the 'Sent' bills.\r\nThen, change their status back to unsent.\r\nYou can edit them as a group using the button at the right.");
+			DialogResult=DialogResult.OK;//will trigger ContrStaff to bring up the billing window
+		}
+
 		private void butCreate_Click(object sender, System.EventArgs e) {
 			if( textExcludeLessThan.errorProvider1.GetError(textExcludeLessThan)!=""
 				|| textLastStatement.errorProvider1.GetError(textLastStatement)!=""
@@ -859,6 +881,8 @@ namespace OpenDental{
 		private void butCancel_Click(object sender, System.EventArgs e) {
 			DialogResult=DialogResult.Cancel;
 		}
+
+		
 
 		
 
