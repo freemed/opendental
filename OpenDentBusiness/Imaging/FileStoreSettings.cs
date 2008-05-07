@@ -7,12 +7,18 @@ using CodeBase;
 
 namespace OpenDental.Imaging {
 	public static class FileStoreSettings {
+		///<summary>If set, this path will override all other paths.</summary>
+		public static string LocalAtoZpath;
+
 		public static string GetPreferredImagePath {
-//#warning Hard-coded path
-			get { //return @"C:\OpenDentImages\"; }
+			get {
 				if(!PrefC.UsingAtoZfolder) {
 					return null;
 				}
+				if(LocalAtoZpath!=""){
+					return LocalAtoZpath;
+				}
+				//use this to handle possible multiple paths separated by semicolons.
 				return ElucidatePreferredImagePath(PrefC.GetString("DocPath"));
 			}
 		}

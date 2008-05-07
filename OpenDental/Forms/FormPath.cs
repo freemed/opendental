@@ -430,6 +430,7 @@ namespace OpenDental{
 			//ComputerPref compPref=ComputerPrefs.GetForLocalComputer();
 			if(localAtoZpath==null){//on startup
 				localAtoZpath=ComputerPrefs.GetForLocalComputer().AtoZpath;
+				FileStoreSettings.LocalAtoZpath=localAtoZpath;
 			}
 			if(localAtoZpath!=""){//compPref.AtoZpath!=""){
 				return localAtoZpath;//compPref.AtoZpath;
