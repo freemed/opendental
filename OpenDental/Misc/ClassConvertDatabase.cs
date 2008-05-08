@@ -6420,6 +6420,18 @@ namespace OpenDental{
 				General.NonQ(command);
 				command = "INSERT INTO definition (Category,ItemOrder,ItemName,ItemColor,IsHidden) VALUES(0,9,'Received Pre-Auth',-8388480,0)";//Purple
 				General.NonQ(command);
+				command="ALTER TABLE commlog ADD INDEX (CommlogNum)";
+				try {
+					General.NonQ(command);
+				}
+				catch {
+				}
+
+
+
+
+
+
 				command="UPDATE preference SET ValueString = '5.7.0.0' WHERE PrefName = 'DataBaseVersion'";
 				General.NonQ(command);
 			}
