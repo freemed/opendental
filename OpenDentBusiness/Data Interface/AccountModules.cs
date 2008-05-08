@@ -695,79 +695,56 @@ namespace OpenDentBusiness {
 				row["charges"]="";
 				row["ClaimNum"]=rawClaim.Rows[i]["ClaimNum"].ToString();
 				row["ClaimPaymentNum"]="0";
-				//moved down lower to use different colors depending on the claim status
-				//row["colorText"] = DefC.Long[(int)DefCat.AccountColors][4].ItemColor.ToArgb().ToString();
-				row["creditsDouble"] = 0;
+				row["colorText"]=DefC.Long[(int)DefCat.AccountColors][4].ItemColor.ToArgb().ToString();
+					//might be changed lower down based on claim status
+				row["creditsDouble"]=0;
 				row["credits"]="";
 				dateT=PIn.PDateT(rawClaim.Rows[i]["DateService"].ToString());
 				row["DateTime"]=dateT;
 				row["date"]=dateT.ToString(Lan.GetShortDateTimeFormat());
 				if(rawClaim.Rows[i]["ClaimType"].ToString()=="P"){
 					row["description"]=Lan.g("ContrAccount","Pri")+" ";
-					row["colorText"] = DefC.Long[(int)DefCat.AccountColors][4].ItemColor.ToArgb().ToString();
-					//if the claim is received, the color will change below
 				}
 				else if(rawClaim.Rows[i]["ClaimType"].ToString()=="S"){
 					row["description"]=Lan.g("ContrAccount","Sec")+" ";
-					row["colorText"] = DefC.Long[(int)DefCat.AccountColors][4].ItemColor.ToArgb().ToString();
 				}
 				else if(rawClaim.Rows[i]["ClaimType"].ToString()=="PreAuth"){
 					row["description"]=Lan.g("ContrAccount","PreAuth")+" ";
-					if (rawClaim.Rows[i]["ClaimStatus"].ToString() == "R") {//only change color on pre-auths that are recieved
-						row["colorText"] = DefC.Long[(int)DefCat.AccountColors][9].ItemColor.ToArgb().ToString();
-					}
-					else{
-						row["colorText"] = DefC.Long[(int)DefCat.AccountColors][4].ItemColor.ToArgb().ToString();
-					}
 				}
 				else if(rawClaim.Rows[i]["ClaimType"].ToString()=="Other"){
 					row["description"]="";
-					row["colorText"] = DefC.Long[(int)DefCat.AccountColors][4].ItemColor.ToArgb().ToString();
 				}
 				else if(rawClaim.Rows[i]["ClaimType"].ToString()=="Cap"){
 					row["description"]=Lan.g("ContrAccount","Cap")+" ";
-					row["colorText"] = DefC.Long[(int)DefCat.AccountColors][4].ItemColor.ToArgb().ToString();
 				}
 				amt=PIn.PDouble(rawClaim.Rows[i]["ClaimFee"].ToString());
 				row["description"]+=Lan.g("ContrAccount","Claim")+" "+amt.ToString("c")+" "
 					+rawClaim.Rows[i]["CarrierName"].ToString();
 				daterec=PIn.PDateT(rawClaim.Rows[i]["DateReceived"].ToString());
-				if (daterec.Year > 1880)
-				{//and claimstatus=R
-					row["description"] += "\r\n" + Lan.g("ContrAccount", "Received") + " " + daterec.ToShortDateString();
-					if (rawClaim.Rows[i]["ClaimStatus"].ToString() == "R"){
-						if (rawClaim.Rows[i]["ClaimType"].ToString() == "PreAuth") {
-							row["colorText"] = DefC.Long[(int)DefCat.AccountColors][9].ItemColor.ToArgb().ToString();
-						} 
-						else {
-							row["colorText"] = DefC.Long[(int)DefCat.AccountColors][8].ItemColor.ToArgb().ToString();
-						}
-					} 
-					else if (rawClaim.Rows[i]["ClaimType"].ToString() == "PreAuth" && rawClaim.Rows[i]["ClaimStatus"].ToString() == "R")
-					{
+				if(daterec.Year>1880){//and claimstatus=R
+					row["description"]+="\r\n"+Lan.g("ContrAccount","Received")+" "+daterec.ToShortDateString();
+					if(rawClaim.Rows[i]["ClaimType"].ToString() == "PreAuth") {
 						row["colorText"] = DefC.Long[(int)DefCat.AccountColors][9].ItemColor.ToArgb().ToString();
 					} 
 					else{
-						row["description"] += "\r\n" + Lan.g("ContrAccount", "Re-Sent");
-						row["colorText"] = DefC.Long[(int)DefCat.AccountColors][4].ItemColor.ToArgb().ToString();
+						row["colorText"] = DefC.Long[(int)DefCat.AccountColors][8].ItemColor.ToArgb().ToString();
 					}
-
 				} 
-				else if (rawClaim.Rows[i]["ClaimStatus"].ToString() == "U"){
-					row["description"] += "\r\n" + Lan.g("ContrAccount", "Unsent");
+				else if(rawClaim.Rows[i]["ClaimStatus"].ToString()=="U"){
+					row["description"]+="\r\n"+Lan.g("ContrAccount","Unsent");
 				} 
-				else if (rawClaim.Rows[i]["ClaimStatus"].ToString() == "H"){
-					row["description"] += "\r\n" + Lan.g("ContrAccount", "Hold until Pri received");
+				else if(rawClaim.Rows[i]["ClaimStatus"].ToString()=="H"){
+					row["description"]+="\r\n"+Lan.g("ContrAccount","Hold until Pri received");
 				} 
-				else if (rawClaim.Rows[i]["ClaimStatus"].ToString() == "W"){
-					row["description"] += "\r\n" + Lan.g("ContrAccount", "Waiting to Send");
+				else if(rawClaim.Rows[i]["ClaimStatus"].ToString()=="W"){
+					row["description"]+="\r\n"+Lan.g("ContrAccount","Waiting to Send");
 				} 
-				else if (rawClaim.Rows[i]["ClaimStatus"].ToString() == "S"){
-					row["description"] += "\r\n" + Lan.g("ContrAccount", "Sent");
+				else if(rawClaim.Rows[i]["ClaimStatus"].ToString()=="S"){
+					row["description"]+="\r\n"+Lan.g("ContrAccount","Sent");
 				}
 				insest = PIn.PDouble(rawClaim.Rows[i]["InsPayEst"].ToString());
 				amtpaid = PIn.PDouble(rawClaim.Rows[i]["InsPayAmt"].ToString());
-				if(!PrefB.GetBool("BalancesDontSubtractIns") &&
+				if(!PrefC.GetBool("BalancesDontSubtractIns") &&
 					(rawClaim.Rows[i]["ClaimStatus"].ToString() == "W" || rawClaim.Rows[i]["ClaimStatus"].ToString() == "S"))
 				{
 					if (rawClaim.Rows[i]["ClaimType"].ToString() == "PreAuth") {

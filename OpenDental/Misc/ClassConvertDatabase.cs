@@ -6395,6 +6395,19 @@ namespace OpenDental{
 				command="UPDATE preference SET ValueString = '5.6.1.0' WHERE PrefName = 'DataBaseVersion'";
 				General.NonQ(command);
 			}
+			To5_6_18();
+		}
+
+		private void To5_6_18() {
+			if(FromVersion<new Version("5.6.18.0")) {
+				string command;
+				command = "INSERT INTO definition (Category,ItemOrder,ItemName,ItemColor,IsHidden) VALUES(0,7,'Insurance Payment',-16744448,0)";//Green
+				General.NonQ(command);
+				command = "INSERT INTO definition (Category,ItemOrder,ItemName,ItemColor,IsHidden) VALUES(0,8,'Received Ins Claim',-5220352,0)";//drkOrange
+				General.NonQ(command);
+				command="UPDATE preference SET ValueString = '5.6.18.0' WHERE PrefName = 'DataBaseVersion'";
+				General.NonQ(command);
+			}
 			To5_7_0();
 		}
 
@@ -6405,17 +6418,8 @@ namespace OpenDental{
 				General.NonQ(command);
 				command = "INSERT INTO preference (PrefName,ValueString) VALUES ('IntermingleFamilyDefault','0')";
 				General.NonQ(command);
-				command = "INSERT INTO definition (Category,ItemOrder,ItemName,ItemColor,IsHidden) VALUES(0,7,'Insurance Payment',-16744448,0)";//Green
-				General.NonQ(command);
-				command = "INSERT INTO definition (Category,ItemOrder,ItemName,ItemColor,IsHidden) VALUES(0,8,'Received Ins Claim',-5220352,0)";//drkOrange
-				General.NonQ(command);
 				command = "INSERT INTO definition (Category,ItemOrder,ItemName,ItemColor,IsHidden) VALUES(0,9,'Received Pre-Auth',-8388480,0)";//Purple
 				General.NonQ(command);
-
-
-
-
-
 				command="UPDATE preference SET ValueString = '5.7.0.0' WHERE PrefName = 'DataBaseVersion'";
 				General.NonQ(command);
 			}
