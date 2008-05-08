@@ -1329,6 +1329,10 @@ namespace OpenDental{
 		}
 
 		private void SaveQuestions(){
+			FormPat form=new FormPat();
+			form.PatNum=PatCur.PatNum;
+			form.FormDateTime=DateTime.Now;
+			FormPats.Insert(form);
 			Question quest;
 			ArrayList ALval;
 			for(int i=0;i<QuestionDefList.Length;i++) {
@@ -1346,6 +1350,7 @@ namespace OpenDental{
 				else if(QuestionDefList[i].QuestType==QuestionType.YesNoUnknown) {
 					quest.Answer=Lan.g("enumYN",multInput.GetCurrentValues(i)[0].ToString());
 				}
+				quest.FormPatNum=form.FormPatNum;
 				Questions.Insert(quest);
 			}
 		}
