@@ -691,6 +691,8 @@ namespace OpenDentBusiness {
 			double amtpaid;
 			double insest;
 			double deductible;
+			double patport;
+			string claimStatus;
 			for(int i=0;i<rawClaim.Rows.Count;i++){
 				row=table.NewRow();
 				row["AdjNum"]="0";
@@ -726,6 +728,7 @@ namespace OpenDentBusiness {
 				row["description"]+=Lan.g("ContrAccount","Claim")+" "+amt.ToString("c")+" "
 					+rawClaim.Rows[i]["CarrierName"].ToString();
 				daterec=PIn.PDateT(rawClaim.Rows[i]["DateReceived"].ToString());
+				claimStatus=rawClaim.Rows[i]["ClaimStatus"].ToString();
 				if(daterec.Year>1880){//and claimstatus=R
 					row["description"]+="\r\n"+Lan.g("ContrAccount","Received")+" "+daterec.ToShortDateString();
 					if(rawClaim.Rows[i]["ClaimType"].ToString() == "PreAuth") {
@@ -735,24 +738,24 @@ namespace OpenDentBusiness {
 						row["colorText"] = DefC.Long[(int)DefCat.AccountColors][8].ItemColor.ToArgb().ToString();
 					}
 				} 
-				else if(rawClaim.Rows[i]["ClaimStatus"].ToString()=="U"){
+				else if(claimStatus=="U"){
 					row["description"]+="\r\n"+Lan.g("ContrAccount","Unsent");
 				} 
-				else if(rawClaim.Rows[i]["ClaimStatus"].ToString()=="H"){
+				else if(claimStatus=="H"){
 					row["description"]+="\r\n"+Lan.g("ContrAccount","Hold until Pri received");
 				} 
-				else if(rawClaim.Rows[i]["ClaimStatus"].ToString()=="W"){
+				else if(claimStatus=="W"){
 					row["description"]+="\r\n"+Lan.g("ContrAccount","Waiting to Send");
 				} 
-				else if(rawClaim.Rows[i]["ClaimStatus"].ToString()=="S"){
+				else if(claimStatus=="S"){
 					row["description"]+="\r\n"+Lan.g("ContrAccount","Sent");
 				}
-				insest = PIn.PDouble(rawClaim.Rows[i]["InsPayEst"].ToString());
-				amtpaid = PIn.PDouble(rawClaim.Rows[i]["InsPayAmt"].ToString());
-				if(!PrefC.GetBool("BalancesDontSubtractIns") &&
-					(rawClaim.Rows[i]["ClaimStatus"].ToString() == "W" || rawClaim.Rows[i]["ClaimStatus"].ToString() == "S"))
-				{
-					if (rawClaim.Rows[i]["ClaimType"].ToString() == "PreAuth") {
+				insest=PIn.PDouble(rawClaim.Rows[i]["InsPayEst"].ToString());
+				amtpaid=PIn.PDouble(rawClaim.Rows[i]["InsPayAmt"].ToString());
+				writeoff=PIn.PDouble(rawClaim.Rows[i]["WriteOff"].ToString());
+				deductible=PIn.PDouble(rawClaim.Rows[i]["DedApplied"].ToString());
+				if(!PrefC.GetBool("BalancesDontSubtractIns") &&	(claimStatus=="W" || claimStatus=="S")){
+					if (rawClaim.Rows[i]["ClaimType"].ToString()=="PreAuth") {
 						if (amtpaid != 0 && ((insest - amtpaid) >= 0)) {//show additional info on PreAuth resubmits
 							row["description"] += "\r\n" + Lan.g("ContrAccount", "Est. Pre-Authorization Pending:") + " " + (insest - amtpaid).ToString("c");
 						}
@@ -767,29 +770,34 @@ namespace OpenDentBusiness {
 						row["description"] += "\r\n" + Lan.g("ContrAccount", "Estimated Payment Pending:") + " " + insest.ToString("c");
 					}
 				}
-				if (amtpaid != 0){
-					if (rawClaim.Rows[i]["ClaimType"].ToString() == "PreAuth") {
-						row["description"] += "\r\n" + Lan.g("ContrAccount", "Estimated Payment From Pre-Auth:") + " " + amtpaid.ToString("c");
+				if(amtpaid != 0){
+					if(rawClaim.Rows[i]["ClaimType"].ToString()=="PreAuth") {
+						row["description"]+="\r\n"+Lan.g("ContrAccount","Estimated Payment From Pre-Auth:")+" "+amtpaid.ToString("c");
 					}
-					else {
-						row["description"] += "\r\n" + Lan.g("ContrAccount", "Payment:") + " " + amtpaid.ToString("c");
+					else{
+						row["description"]+="\r\n"+Lan.g("ContrAccount","Payment:")+" "+amtpaid.ToString("c");
 					}
 				} 
-				else if(amtpaid == 0 && (rawClaim.Rows[i]["ClaimStatus"].ToString() == "R")){
-					if (rawClaim.Rows[i]["ClaimType"].ToString() == "PreAuth") {
-						row["description"] += "\r\n" + Lan.g("ContrAccount", "No Payment Authorized by Pre-Auth");
+				else if(amtpaid==0 && (claimStatus=="R")){
+					if (rawClaim.Rows[i]["ClaimType"].ToString()=="PreAuth"){
+						row["description"]+="\r\n"+Lan.g("ContrAccount", "No Payment Authorized by Pre-Auth");
 					}
 					else {
-						row["description"] += "\r\n" + Lan.g("ContrAccount", "NO PAYMENT");
+						row["description"]+="\r\n"+Lan.g("ContrAccount", "NO PAYMENT");
 					}
 				}
-				writeoff=PIn.PDouble(rawClaim.Rows[i]["WriteOff"].ToString());
 				if(writeoff!=0){
 					row["description"]+="\r\n"+Lan.g("ContrAccount","Writeoff:")+" "+writeoff.ToString("c");
 				}
-				deductible=PIn.PDouble(rawClaim.Rows[i]["DedApplied"].ToString());
-				if(deductible!=0) {
+				if(deductible!=0){
 					row["description"]+="\r\n"+Lan.g("ContrAccount","Deductible Applied:")+" "+deductible.ToString("c");
+				}
+				if(!PrefC.GetBool("BalancesDontSubtractIns") &&	(claimStatus=="W" || claimStatus=="S")){
+					patport=amt-insest-writeoff;
+					if(patport<0){
+						patport=0;
+					}
+					row["description"]+="\r\n"+Lan.g("ContrAccount","Est. Patient Portion:")+" "+patport.ToString("c");
 				}
 				if(rawClaim.Rows[i]["ReasonUnderPaid"].ToString()!=""){
 					row["description"]+="\r\n"+rawClaim.Rows[i]["ReasonUnderPaid"].ToString();
@@ -842,11 +850,14 @@ namespace OpenDentBusiness {
 				if(rawState.Rows[i]["IsSent"].ToString()=="0"){
 					row["description"]+=" "+Lan.g("ContrAccount","(unsent)");
 				}
-				row["extraDetail"] = "";
-				if(rawState.Rows[i]["NoteBold"].ToString() != ""){
-					row["extraDetail"] += rawState.Rows[i]["NoteBold"].ToString() + "\r\n";
+				row["extraDetail"]="";
+				if(rawState.Rows[i]["NoteBold"].ToString() !=""){
+					row["extraDetail"] += rawState.Rows[i]["NoteBold"].ToString();
 				}
-				if (rawState.Rows[i]["Note"].ToString() != "") {
+				if (rawState.Rows[i]["Note"].ToString() !="") {
+					if(row["extraDetail"].ToString()!=""){
+						row["extraDetail"]+="\r\n";
+					}
 					row["extraDetail"] += rawState.Rows[i]["Note"].ToString();
 				}
 				row["patient"]=fam.GetNameInFamFirst(PIn.PInt(rawState.Rows[i]["PatNum"].ToString()));
