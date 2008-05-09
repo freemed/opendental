@@ -762,7 +762,7 @@ namespace OpenDental
 			ClaimProc[] ClaimProcList=ClaimProcs.Refresh(ProcCur.PatNum);
 			Adjustment[] AdjustmentList=Adjustments.Refresh(ProcCur.PatNum);
 			PaySplit[] PaySplitList=PaySplits.Refresh(ProcCur.PatNum);
-			textProcDate.Text=ProcCur.ProcDate.ToShortDateString();
+			//textProcDate.Text=ProcCur.ProcDate.ToShortDateString();
 			textProcDate2.Text=ProcCur.ProcDate.ToShortDateString();
 			textProcProv.Text=Providers.GetAbbr(ProcCur.ProvNum);
 			textProcTooth.Text=Tooth.ToInternat(ProcCur.ToothNum);
