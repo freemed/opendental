@@ -491,6 +491,7 @@ namespace OpenDentBusiness {
 			double insPayAmt;
 			double writeOff;
 			double writeOffCap;
+			bool isNoBill;
 			for(int i=0;i<rawProc.Rows.Count;i++){
 				row=table.NewRow();
 				row["AdjNum"]="0";
@@ -521,10 +522,14 @@ namespace OpenDentBusiness {
 				if(rawProc.Rows[i]["LaymanTerm"].ToString()!=""){
 					row["description"]=rawProc.Rows[i]["LaymanTerm"].ToString();
 				}
+				isNoBill=false;
 				if(rawProc.Rows[i]["_noBillIns"].ToString()!="" && rawProc.Rows[i]["_noBillIns"].ToString()!="0"){
+					isNoBill=true;
+				}
+				if(isNoBill){
 					row["description"]+=" "+Lan.g("ContrAccount","(NoBillIns)");
 				}
-				if(rawProc.Rows[i]["_unsent"].ToString()=="0"){
+				if(rawProc.Rows[i]["_unsent"].ToString()=="0" && !isNoBill){
 					row["description"]+=" "+Lan.g("ContrAccount","(unsent)");
 				}
 				insPayAmt=PIn.PDouble(rawProc.Rows[i]["_insPayAmt"].ToString());
