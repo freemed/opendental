@@ -2641,6 +2641,118 @@ namespace OpenDental{
 			}
 		}
 
+		private void textStart_TextChanged(object sender, EventArgs e){
+			if(textStart.Text!="" && textStop.Text!=""){
+				updateTotalMin();
+			}
+		}
+
+		private void updateTotalMin(){
+			int startTime = Int16.Parse(textStart.Text);
+			int stopTime = Int16.Parse(textStop.Text);
+			int total=(((stopTime/100)*60)+(stopTime%100))-(((startTime/100)*60)+(startTime%100));
+			textTotal.Text=total.ToString();
+		}
+
+		private void textStop_TextChanged(object sender, EventArgs e){
+			if (textStart.Text != "" && textStop.Text != ""){
+				updateTotalMin();
+			}
+		}
+
+		private void UpdateSurf() {
+			errorProvider2.SetError(textSurfaces,"");
+			textSurfaces.Text="";
+			if(butM.BackColor==Color.White) {
+				textSurfaces.AppendText("M");
+			}
+			if(butOI.BackColor==Color.White) {
+				if(ToothGraphic.IsAnterior(textTooth.Text)) {
+					textSurfaces.AppendText("I");
+				}
+				else {
+					textSurfaces.AppendText("O");
+				}
+			}
+			if(butD.BackColor==Color.White) {
+				textSurfaces.AppendText("D");
+			}
+			if(butV.BackColor==Color.White) {
+				textSurfaces.AppendText("V");
+			}
+			if(butBF.BackColor==Color.White) {
+				if(ToothGraphic.IsAnterior(textTooth.Text)) {
+					textSurfaces.AppendText("F");
+				}
+				else {
+					textSurfaces.AppendText("B");
+				}
+			}
+			if(butL.BackColor==Color.White) {
+				textSurfaces.AppendText("L");
+			}
+		}
+
+		private void butM_Click(object sender,EventArgs e) {
+			if(butM.BackColor==Color.White) {
+				butM.BackColor=SystemColors.Control;
+			}
+			else {
+				butM.BackColor=Color.White;
+			}
+			UpdateSurf();
+		}
+
+		private void butOI_Click(object sender,EventArgs e) {
+			if(butOI.BackColor==Color.White) {
+				butOI.BackColor=SystemColors.Control;
+			}
+			else {
+				butOI.BackColor=Color.White;
+			}
+			UpdateSurf();
+		}
+
+		private void butL_Click(object sender,EventArgs e) {
+			if(butL.BackColor==Color.White) {
+				butL.BackColor=SystemColors.Control;
+			}
+			else {
+				butL.BackColor=Color.White;
+			}
+			UpdateSurf();
+		}
+
+		private void butV_Click(object sender,EventArgs e) {
+			if(butV.BackColor==Color.White) {
+				butV.BackColor=SystemColors.Control;
+			}
+			else {
+				butV.BackColor=Color.White;
+			}
+			UpdateSurf();
+		}
+
+		private void butBF_Click(object sender,EventArgs e) {
+			if(butBF.BackColor==Color.White) {
+				butBF.BackColor=SystemColors.Control;
+			}
+			else {
+				butBF.BackColor=Color.White;
+			}
+			UpdateSurf();
+		}
+
+		private void butD_Click(object sender,EventArgs e) {
+			if(butD.BackColor==Color.White) {
+				butD.BackColor=SystemColors.Control;
+			}
+			else {
+				butD.BackColor=Color.White;
+			}
+			UpdateSurf();
+		}
+
 		private void butDelete_Click(object sender, System.EventArgs e) {
 			if(MessageBox.Show(Lan.g(this,"Delete Procedure?"),"",MessageBoxButtons.OKCancel)!=DialogResult.OK){
 				return;
@@ -2929,13 +3041,13 @@ namespace OpenDental{
 						ProcCur.Signature="";
 						return;
 					}
-                    CodeBase.TopazWrapper.SetTopazCompressionMode(sigBoxTopaz,0);
-                    CodeBase.TopazWrapper.SetTopazEncryptionMode(sigBoxTopaz,0);
-                    CodeBase.TopazWrapper.SetTopazKeyString(sigBoxTopaz,"0000000000000000");
-                    CodeBase.TopazWrapper.SetTopazAutoKeyData(sigBoxTopaz,ProcCur.Note+ProcCur.UserNum.ToString());
-                    CodeBase.TopazWrapper.SetTopazEncryptionMode(sigBoxTopaz,2);
-                    CodeBase.TopazWrapper.SetTopazCompressionMode(sigBoxTopaz,2);
-                    ProcCur.Signature=CodeBase.TopazWrapper.GetTopazString(sigBoxTopaz);
+					CodeBase.TopazWrapper.SetTopazCompressionMode(sigBoxTopaz,0);
+					CodeBase.TopazWrapper.SetTopazEncryptionMode(sigBoxTopaz,0);
+					CodeBase.TopazWrapper.SetTopazKeyString(sigBoxTopaz,"0000000000000000");
+					CodeBase.TopazWrapper.SetTopazAutoKeyData(sigBoxTopaz,ProcCur.Note+ProcCur.UserNum.ToString());
+					CodeBase.TopazWrapper.SetTopazEncryptionMode(sigBoxTopaz,2);
+					CodeBase.TopazWrapper.SetTopazCompressionMode(sigBoxTopaz,2);
+					ProcCur.Signature=CodeBase.TopazWrapper.GetTopazString(sigBoxTopaz);
 				}
 				else{
 					ProcCur.SigIsTopaz=false;
@@ -2970,137 +3082,23 @@ namespace OpenDental{
 			}
 		}
 
-		private void textStart_TextChanged(object sender, EventArgs e)
-		{
-			if(textStart.Text!="" && textStop.Text!="")
-				updateTotalMin();
-		}
-
-		private void updateTotalMin(){
-			int startTime = Int16.Parse(textStart.Text);
-			int stopTime = Int16.Parse(textStop.Text);
-			int total=(((stopTime/100)*60)+(stopTime%100))-(((startTime/100)*60)+(startTime%100));
-			textTotal.Text=total.ToString();
-		}
-
-		private void textStop_TextChanged(object sender, EventArgs e)
-		{
-			if (textStart.Text != "" && textStop.Text != "")
-				updateTotalMin();
-		}
-		private void UpdateSurf() {
-			textSurfaces.Text="";
-			if(butM.BackColor==Color.White) {
-				textSurfaces.AppendText("M");
-			}
-			if(butOI.BackColor==Color.White) {
-				if(ToothGraphic.IsAnterior(textTooth.Text)) {
-					textSurfaces.AppendText("I");
-				}
-				else {
-					textSurfaces.AppendText("O");
-				}
-			}
-			if(butD.BackColor==Color.White) {
-				textSurfaces.AppendText("D");
-			}
-			if(butV.BackColor==Color.White) {
-				textSurfaces.AppendText("V");
-			}
-			if(butBF.BackColor==Color.White) {
-				if(ToothGraphic.IsAnterior(textTooth.Text)) {
-					textSurfaces.AppendText("F");
-				}
-				else {
-					textSurfaces.AppendText("B");
-				}
-			}
-			if(butL.BackColor==Color.White) {
-				textSurfaces.AppendText("L");
-			}
-		}
-		private void butM_Click(object sender,EventArgs e) {
-			if(butM.BackColor==Color.White) {
-				butM.BackColor=SystemColors.Control;
-			}
-			else {
-				butM.BackColor=Color.White;
-			}
-			UpdateSurf();
-
-		}
-
-		private void butOI_Click(object sender,EventArgs e) {
-			if(butOI.BackColor==Color.White) {
-				butOI.BackColor=SystemColors.Control;
-			}
-			else {
-				butOI.BackColor=Color.White;
-			}
-			UpdateSurf();
-		}
-
-		private void butL_Click(object sender,EventArgs e) {
-			if(butL.BackColor==Color.White) {
-				butL.BackColor=SystemColors.Control;
-			}
-			else {
-				butL.BackColor=Color.White;
-			}
-			UpdateSurf();
-
-		}
-
-		private void butV_Click(object sender,EventArgs e) {
-			if(butV.BackColor==Color.White) {
-				butV.BackColor=SystemColors.Control;
-			}
-			else {
-				butV.BackColor=Color.White;
-			}
-			UpdateSurf();
-
-		}
-
-		private void butBF_Click(object sender,EventArgs e) {
-			if(butBF.BackColor==Color.White) {
-				butBF.BackColor=SystemColors.Control;
-			}
-			else {
-				butBF.BackColor=Color.White;
-			}
-			UpdateSurf();
-
-		}
-
-		private void butD_Click(object sender,EventArgs e) {
-			if(butD.BackColor==Color.White) {
-				butD.BackColor=SystemColors.Control;
-			}
-			else {
-				butD.BackColor=Color.White;
-			}
-			UpdateSurf();
-
-
-		}
 		private void butOK_Click(object sender,System.EventArgs e) {
 			if(EntriesAreValid()) {
 				SaveAndClose();
 			}
 		}
+
 		private void butCancel_Click(object sender,System.EventArgs e) {
 			DialogResult=DialogResult.Cancel;
 		}
 
 		private void FormProcEdit_FormClosing(object sender,FormClosingEventArgs e) {
-            if(allowTopaz){
-			    sigBoxTopaz.Dispose();
-            }
+			if(allowTopaz){
+				sigBoxTopaz.Dispose();
+			}
 		}
 
-		private void textMedicalCode_TextChanged(object sender, EventArgs e)
-		{
+		private void textMedicalCode_TextChanged(object sender, EventArgs e){
 
 		}
 
