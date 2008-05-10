@@ -60,6 +60,13 @@ namespace UnitTests {
 			if(result!=new DateTime(2005,3,1)) {
 				textResults.Text+="BenefitComputeRenewDate 6 failed.\r\n";
 			}
+			//Insurance start date not on the 1st.
+			asofDate=new DateTime(2008,5,10);
+			insStartDate=new DateTime(2007,1,12);
+			result=BenefitL.ComputeRenewDate(asofDate,isCalendarYear,insStartDate);
+			if(result!=new DateTime(2008,1,1)) {
+				textResults.Text+="BenefitComputeRenewDate 7 failed.\r\n";
+			}
 		}
 
 		private void ToothFormatRanges(){
