@@ -466,7 +466,8 @@ namespace OpenDentBusiness {
 			}
 			//Procedures------------------------------------------------------------------------------------------
 			command="SELECT procedurelog.BaseUnits,Descript,SUM(cp1.InsPayAmt) _insPayAmt,"
-				+"LaymanTerm,procedurelog.MedicalCode,MAX(cp1.NoBillIns) _noBillIns,procedurelog.PatNum,ProcCode,"
+				+"LaymanTerm,procedurelog.MedicalCode,MAX(cp1.NoBillIns) _noBillIns,procedurelog.PatNum,"
+				+"SUM(paysplit.SplitAmt) _patPay,ProcCode,"
 				+"procedurelog.ProcDate,ProcFee,procedurelog.ProcNum,procedurelog.ProvNum,ToothNum,UnitQty,"
 				+"SUM(cp1.WriteOff) _writeOff, "
 				//+"MIN(cp1.ClaimNum) _unsent,"//this worked, but doesn't take into account capitation
@@ -478,6 +479,7 @@ namespace OpenDentBusiness {
 				+"FROM procedurelog "
 				+"LEFT JOIN procedurecode ON procedurelog.CodeNum=procedurecode.CodeNum "
 				+"LEFT JOIN claimproc cp1 ON procedurelog.ProcNum=cp1.ProcNum "
+				+"LEFT JOIN paysplit ON procedurelog.ProcNum=paysplit.ProcNum "
 				+"WHERE ProcStatus=2 "//complete
 				+"AND (";
 			for(int i=0;i<fam.List.Length;i++){
@@ -491,6 +493,7 @@ namespace OpenDentBusiness {
 			double insPayAmt;
 			double writeOff;
 			double writeOffCap;
+			double patPay;
 			bool isNoBill;
 			for(int i=0;i<rawProc.Rows.Count;i++){
 				row=table.NewRow();
@@ -534,8 +537,15 @@ namespace OpenDentBusiness {
 				}
 				insPayAmt=PIn.PDouble(rawProc.Rows[i]["_insPayAmt"].ToString());
 				writeOff=PIn.PDouble(rawProc.Rows[i]["_writeOff"].ToString());
+				patPay=PIn.PDouble(rawProc.Rows[i]["_patPay"].ToString());
 				row["extraDetail"]="";
+				if(patPay>0){
+					row["extraDetail"]+=Lan.g("AccountModule","Pat Paid: ")+patPay.ToString("c");
+				}
 				if(insPayAmt>0 || writeOff>0){
+					if(row["extraDetail"].ToString()!=""){
+						row["extraDetail"]+=", ";
+					}
 					row["extraDetail"]+=Lan.g("AccountModule","Ins Paid: ")+insPayAmt.ToString("c");
 					if(writeOff>0){
 						row["extraDetail"]+=", "+Lan.g("AccountModule","Writeoff: ")+writeOff.ToString("c");
@@ -608,7 +618,7 @@ namespace OpenDentBusiness {
 			//paysplits-----------------------------------------------------------------------------------------
 			command="SELECT CheckNum,DatePay,paysplit.PatNum,payment.PatNum _patNumPayment,PayAmt,"
 				+"paysplit.PayNum,PayPlanNum,"
-				+"PayType,ProcDate,ProvNum,SplitAmt,payment.PayNote "
+				+"PayType,ProcDate,ProvNum,SUM(SplitAmt) _splitAmt,payment.PayNote "
 				+"FROM paysplit "
 				+"LEFT JOIN payment ON paysplit.PayNum=payment.PayNum "
 				+"WHERE (";
@@ -618,7 +628,7 @@ namespace OpenDentBusiness {
 				}
 				command+="paysplit.PatNum ="+POut.PInt(fam.List[i].PatNum)+" ";
 			}
-			command+=") ORDER BY ProcDate";
+			command+=") GROUP BY paysplit.PayNum,paysplit.PatNum,ProcDate ORDER BY ProcDate";
 			DataTable rawPay=dcon.GetTable(command);
 			double payamt;
 			for(int i=0;i<rawPay.Rows.Count;i++){
@@ -635,7 +645,7 @@ namespace OpenDentBusiness {
 				row["ClaimNum"]="0";
 				row["ClaimPaymentNum"]="0";
 				row["colorText"]=DefC.Long[(int)DefCat.AccountColors][3].ItemColor.ToArgb().ToString();
-				amt=PIn.PDouble(rawPay.Rows[i]["SplitAmt"].ToString());
+				amt=PIn.PDouble(rawPay.Rows[i]["_splitAmt"].ToString());
 				row["creditsDouble"]=amt;
 				row["credits"]=((double)row["creditsDouble"]).ToString("n");
 				dateT=PIn.PDateT(rawPay.Rows[i]["ProcDate"].ToString());
