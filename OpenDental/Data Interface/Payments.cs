@@ -54,8 +54,10 @@ namespace OpenDental{
 			string command=
 				"SELECT * FROM payment "
 				+"WHERE DepositNum = 0 "
-				+"AND PayDate >= "+POut.PDate(dateStart)+" "
-				+"AND ClinicNum="+POut.PInt(clinicNum);
+				+"AND PayDate >= "+POut.PDate(dateStart)+" ";
+			if(clinicNum!=0){
+				command+="AND ClinicNum="+POut.PInt(clinicNum);
+			}
 			for(int i=0;i<payTypes.Length;i++) {
 				if(i==0) {
 					command+=" AND (";
