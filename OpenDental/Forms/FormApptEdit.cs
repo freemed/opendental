@@ -377,8 +377,8 @@ namespace OpenDental{
 			this.butSlider.Size = new System.Drawing.Size(12,15);
 			this.butSlider.TabIndex = 60;
 			this.butSlider.UseVisualStyleBackColor = false;
-			this.butSlider.MouseDown += new System.Windows.Forms.MouseEventHandler(this.butSlider_MouseDown);
 			this.butSlider.MouseMove += new System.Windows.Forms.MouseEventHandler(this.butSlider_MouseMove);
+			this.butSlider.MouseDown += new System.Windows.Forms.MouseEventHandler(this.butSlider_MouseDown);
 			this.butSlider.MouseUp += new System.Windows.Forms.MouseEventHandler(this.butSlider_MouseUp);
 			// 
 			// panel1
@@ -526,7 +526,7 @@ namespace OpenDental{
 			this.gridPatient.Location = new System.Drawing.Point(23,366);
 			this.gridPatient.Name = "gridPatient";
 			this.gridPatient.ScrollValue = 0;
-			this.gridPatient.Size = new System.Drawing.Size(400,336);
+			this.gridPatient.Size = new System.Drawing.Size(313,336);
 			this.gridPatient.TabIndex = 0;
 			this.gridPatient.Title = "Patient Info";
 			this.gridPatient.TranslationName = "TableApptPtInfo";
@@ -535,10 +535,10 @@ namespace OpenDental{
 			// gridComm
 			// 
 			this.gridComm.HScrollVisible = false;
-			this.gridComm.Location = new System.Drawing.Point(425,366);
+			this.gridComm.Location = new System.Drawing.Point(338,366);
 			this.gridComm.Name = "gridComm";
 			this.gridComm.ScrollValue = 0;
-			this.gridComm.Size = new System.Drawing.Size(439,336);
+			this.gridComm.Size = new System.Drawing.Size(526,336);
 			this.gridComm.TabIndex = 1;
 			this.gridComm.Title = "Communications Log - Appointment Scheduling";
 			this.gridComm.TranslationName = "TableCommLog";
@@ -686,8 +686,8 @@ namespace OpenDental{
 			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Edit Appointment";
-			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormApptEdit_FormClosing);
 			this.Load += new System.EventHandler(this.FormApptEdit_Load);
+			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormApptEdit_FormClosing);
 			this.panel1.ResumeLayout(false);
 			this.panel1.PerformLayout();
 			this.ResumeLayout(false);
@@ -1228,6 +1228,7 @@ namespace OpenDental{
 		}
 		
 		private void gridComm_MouseMove(object sender,MouseEventArgs e) {
+			/*
 			if(gridPatient.Width==200){
 				return;//already resized
 			}
@@ -1236,10 +1237,11 @@ namespace OpenDental{
 			gridPatient.Width=200;
 			gridComm.Location=new Point(gridPatient.Right+2,gridComm.Top);
 			gridComm.Width=commright-gridComm.Left;
-			this.ResumeLayout();
+			this.ResumeLayout();*/
 		}
 
 		private void gridPatient_MouseMove(object sender,MouseEventArgs e) {
+			/*
 			if(gridPatient.Width==400) {
 				return;//already resized
 			}
@@ -1248,7 +1250,7 @@ namespace OpenDental{
 			gridPatient.Width=400;
 			gridComm.Width=commright-gridPatient.Right-2;//doing this before location prevents flicker
 			gridComm.Location=new Point(gridPatient.Right+2,gridComm.Top);
-			this.ResumeLayout();
+			this.ResumeLayout();*/
 		}
 
 		private void listQuickAdd_MouseDown(object sender,System.Windows.Forms.MouseEventArgs e) {
