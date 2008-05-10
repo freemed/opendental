@@ -3186,6 +3186,11 @@ namespace OpenDental{
 				MsgBox.Show(this,"Only appointments may be broken, not notes.");
 				return;
 			}
+			if(PrefC.GetBool("BrokenApptCommLogNotAdjustment")){
+				if(!MsgBox.Show(this,true,"Break appointment?")){
+					return;
+				}
+			}
 			Appointments.SetAptStatus(ContrApptSingle.SelectedAptNum,ApptStatus.Broken);
 			SecurityLogs.MakeLogEntry(Permissions.AppointmentMove,pat.PatNum,
 				pat.GetNameLF()+", "
