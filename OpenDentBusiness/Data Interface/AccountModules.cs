@@ -118,7 +118,7 @@ namespace OpenDentBusiness {
 				row["PayPlanChargeNum"]=rawCharge.Rows[i]["PayPlanChargeNum"].ToString();
 				row["ProcCode"]=Lan.g("AccountModule","PPcharge");
 				row["ProcNum"]="0";
-				row["procsOnClaim"]="";
+				row["procsOnObj"]="";
 				row["prov"]=Providers.GetAbbr(PIn.PInt(rawCharge.Rows[i]["ProvNum"].ToString()));
 				row["StatementNum"]="0";
 				row["tth"]="";
@@ -175,7 +175,7 @@ namespace OpenDentBusiness {
 				row["PayPlanChargeNum"]="0";
 				row["ProcCode"]=Lan.g("AccountModule","Pay");
 				row["ProcNum"]="0";
-				row["procsOnClaim"]="";
+				row["procsOnObj"]="";
 				row["prov"]=Providers.GetAbbr(PIn.PInt(rawPay.Rows[i]["ProvNum"].ToString()));
 				row["StatementNum"]="0";
 				row["tth"]="";
@@ -381,7 +381,7 @@ namespace OpenDentBusiness {
 			table.Columns.Add("PayPlanChargeNum");
 			table.Columns.Add("ProcCode");
 			table.Columns.Add("ProcNum");
-			table.Columns.Add("procsOnClaim");//for a claim, the ProcNums, comma delimited.
+			table.Columns.Add("procsOnObj");//for a claim or payment, the ProcNums, comma delimited.
 			table.Columns.Add("prov");
 			table.Columns.Add("StatementNum");
 			table.Columns.Add("tth");
@@ -458,7 +458,7 @@ namespace OpenDentBusiness {
 				row["PayPlanChargeNum"]="0";
 				row["ProcCode"]=Lan.g("AccountModule","InsPay");
 				row["ProcNum"]="0";
-				row["procsOnClaim"]="";
+				row["procsOnObj"]="";
 				row["prov"]=Providers.GetAbbr(PIn.PInt(rawClaimPay.Rows[i]["ProvNum"].ToString()));
 				row["StatementNum"]="0";
 				row["tth"]="";
@@ -558,7 +558,7 @@ namespace OpenDentBusiness {
 				row["PayPlanChargeNum"]="0";
 				row["ProcCode"]=rawProc.Rows[i]["ProcCode"].ToString();
 				row["ProcNum"]=rawProc.Rows[i]["ProcNum"].ToString();
-				row["procsOnClaim"]="";
+				row["procsOnObj"]="";
 				row["prov"]=Providers.GetAbbr(PIn.PInt(rawProc.Rows[i]["ProvNum"].ToString()));
 				row["StatementNum"]="0";
 				row["tth"]=Tooth.GetToothLabel(rawProc.Rows[i]["ToothNum"].ToString());
@@ -609,7 +609,7 @@ namespace OpenDentBusiness {
 				row["PayPlanChargeNum"]="0";
 				row["ProcCode"]=Lan.g("AccountModule","Adjust");
 				row["ProcNum"]="0";
-				row["procsOnClaim"]="";
+				row["procsOnObj"]="";
 				row["prov"]=Providers.GetAbbr(PIn.PInt(rawAdj.Rows[i]["ProvNum"].ToString()));
 				row["StatementNum"]="0";
 				row["tth"]="";
@@ -618,7 +618,8 @@ namespace OpenDentBusiness {
 			//paysplits-----------------------------------------------------------------------------------------
 			command="SELECT CheckNum,DatePay,paysplit.PatNum,payment.PatNum _patNumPayment,PayAmt,"
 				+"paysplit.PayNum,PayPlanNum,"
-				+"PayType,ProcDate,ProvNum,SUM(SplitAmt) _splitAmt,payment.PayNote "
+				+"PayType,ProcDate,GROUP_CONCAT(ProcNum) _ProcNums, "
+				+"ProvNum,SUM(SplitAmt) _splitAmt,payment.PayNote "
 				+"FROM paysplit "
 				+"LEFT JOIN payment ON paysplit.PayNum=payment.PayNum "
 				+"WHERE (";
@@ -673,7 +674,7 @@ namespace OpenDentBusiness {
 				row["PayPlanChargeNum"]="0";
 				row["ProcCode"]=Lan.g("AccountModule","Pay");
 				row["ProcNum"]="0";
-				row["procsOnClaim"]="";
+				row["procsOnObj"]=PIn.PByteArray(rawPay.Rows[i]["_ProcNums"]);
 				row["prov"]=Providers.GetAbbr(PIn.PInt(rawPay.Rows[i]["ProvNum"].ToString()));
 				row["StatementNum"]="0";
 				row["tth"]="";
@@ -820,7 +821,7 @@ namespace OpenDentBusiness {
 				row["PayPlanChargeNum"]="0";
 				row["ProcCode"]=Lan.g("AccountModule","Claim");
 				row["ProcNum"]="0";
-				row["procsOnClaim"]=PIn.PByteArray(rawClaim.Rows[i]["_ProcNums"]);
+				row["procsOnObj"]=PIn.PByteArray(rawClaim.Rows[i]["_ProcNums"]);
 				row["prov"]=Providers.GetAbbr(PIn.PInt(rawClaim.Rows[i]["ProvTreat"].ToString()));
 				row["StatementNum"]="0";
 				row["tth"]="";
@@ -877,7 +878,7 @@ namespace OpenDentBusiness {
 				row["PayPlanChargeNum"]="0";
 				row["ProcCode"]=Lan.g("AccountModule","Stmt");
 				row["ProcNum"]="0";
-				row["procsOnClaim"]="";
+				row["procsOnObj"]="";
 				row["prov"]="";
 				row["StatementNum"]=rawState.Rows[i]["StatementNum"].ToString();
 				row["tth"]="";
@@ -938,7 +939,7 @@ namespace OpenDentBusiness {
 				row["PayPlanChargeNum"]="0";
 				row["ProcCode"]=Lan.g("AccountModule","PayPln");
 				row["ProcNum"]="0";
-				row["procsOnClaim"]="";
+				row["procsOnObj"]="";
 				row["prov"]="";
 				row["StatementNum"]="0";
 				row["tth"]="";
@@ -1122,7 +1123,7 @@ namespace OpenDentBusiness {
 			row["PayPlanChargeNum"]="0";
 			row["ProcCode"]="";
 			row["ProcNum"]="0";
-			row["procsOnClaim"]="";
+			row["procsOnObj"]="";
 			row["prov"]="";
 			row["StatementNum"]="0";
 			row["tth"]="";
@@ -1250,7 +1251,7 @@ namespace OpenDentBusiness {
 				row["PayPlanChargeNum"]="0";
 				row["ProcCode"]="";
 				row["ProcNum"]="0";
-				row["procsOnClaim"]="";
+				row["procsOnObj"]="";
 				row["prov"]="";
 				row["StatementNum"]="0";
 				row["tth"]="";
@@ -1290,7 +1291,7 @@ namespace OpenDentBusiness {
 					row["PayPlanChargeNum"]=rawAmort.Rows[d]["PayPlanChargeNum"];
 					row["ProcCode"]="";
 					row["ProcNum"]="0";
-					row["procsOnClaim"]="";
+					row["procsOnObj"]="";
 					row["prov"]=rawAmort.Rows[d]["prov"];
 					row["StatementNum"]="0";
 					row["tth"]="";

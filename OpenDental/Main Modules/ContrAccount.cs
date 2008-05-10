@@ -2476,7 +2476,7 @@ namespace OpenDental {
 			if(table.Rows[e.Row]["ClaimNum"].ToString()!="0"){//claims and claimpayments
 				//Claim ClaimCur=Claims.GetClaim(
 				//	arrayClaim[AcctLineList[e.Row].Index];
-				string[] procsOnClaim=table.Rows[e.Row]["procsOnClaim"].ToString().Split(',');
+				string[] procsOnClaim=table.Rows[e.Row]["procsOnObj"].ToString().Split(',');
 				for(int i=0;i<table.Rows.Count;i++){//loop through all rows
 					if(table.Rows[i]["ClaimNum"].ToString()==table.Rows[e.Row]["ClaimNum"].ToString()){
 						gridAccount.SetSelected(i,true);//for the claim payments
@@ -2486,6 +2486,22 @@ namespace OpenDental {
 					}
 					for(int j=0;j<procsOnClaim.Length;j++){
 						if(table.Rows[i]["ProcNum"].ToString()==procsOnClaim[j]){
+							gridAccount.SetSelected(i,true);
+						}
+					}
+				}
+			}
+			if(table.Rows[e.Row]["PayNum"].ToString()!="0"){
+				string[] procsOnPayment=table.Rows[e.Row]["procsOnObj"].ToString().Split(',');
+				for(int i=0;i<table.Rows.Count;i++){//loop through all rows
+					if(table.Rows[i]["PayNum"].ToString()==table.Rows[e.Row]["PayNum"].ToString()){
+						gridAccount.SetSelected(i,true);//for other splits in family view
+					}
+					if(table.Rows[i]["ProcNum"].ToString()=="0"){//if not a procedure, then skip
+						continue;
+					}
+					for(int j=0;j<procsOnPayment.Length;j++){
+						if(table.Rows[i]["ProcNum"].ToString()==procsOnPayment[j]){
 							gridAccount.SetSelected(i,true);
 						}
 					}
