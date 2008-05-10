@@ -8,7 +8,7 @@ using OpenDentBusiness;
 
 namespace OpenDental{
 	///<summary>Handles database commands related to the definition table in the db.  The related DefB class is referenced frequently from many different areas of the program.</summary>
-	public class Defs_client{
+	public class DefL{
 
 		///<summary></summary>
 		public static void HideDef(Def def){

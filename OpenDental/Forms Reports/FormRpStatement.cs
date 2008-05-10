@@ -309,7 +309,7 @@ namespace OpenDental{
 		///<summary>Creates a new pdf, attaches it to a new doc, and attaches that to the statement.  If it cannot create a pdf, for example if no AtoZ folders, then it will simply result in a docnum of zero, so no attached doc.</summary>
 		public void CreateStatementPdf(Statement stmt){
 			Stmt=stmt;
-			dataSet=AccountModule.GetStatement(stmt.PatNum,stmt.SinglePatient,stmt.DateRangeFrom,stmt.DateRangeTo,
+			dataSet=AccountModuleL.GetStatement(stmt.PatNum,stmt.SinglePatient,stmt.DateRangeFrom,stmt.DateRangeTo,
 				stmt.Intermingled);
 			if(ImageStore.UpdatePatient == null){
 				ImageStore.UpdatePatient = new FileStore.UpdatePatientDelegate(Patients.Update);
@@ -379,7 +379,7 @@ namespace OpenDental{
 		///<summary>Prints one statement.  Does not generate pdf or print from existing pdf.</summary>
 		public void PrintStatement(Statement stmt,bool previewOnly,PrintDocument pd){
 			Stmt=stmt;
-			dataSet=AccountModule.GetStatement(stmt.PatNum,stmt.SinglePatient,stmt.DateRangeFrom,stmt.DateRangeTo,
+			dataSet=AccountModuleL.GetStatement(stmt.PatNum,stmt.SinglePatient,stmt.DateRangeFrom,stmt.DateRangeTo,
 				stmt.Intermingled);
 			pd.DefaultPageSettings.Margins=new Margins(40,40,40,60);
 			if(CultureInfo.CurrentCulture.Name.EndsWith("CH")) {//CH is for switzerland. eg de-CH

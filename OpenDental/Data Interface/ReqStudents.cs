@@ -133,7 +133,7 @@ namespace OpenDental{
 				if(dateCompleted.Year>1880){
 					row["done"]="X";
 				}
-				row["patient"]=PatientL.GetNameLF(raw.Rows[i]["LName"].ToString(),raw.Rows[i]["FName"].ToString(),
+				row["patient"]=PatientLogic.GetNameLF(raw.Rows[i]["LName"].ToString(),raw.Rows[i]["FName"].ToString(),
 					raw.Rows[i]["Preferred"].ToString(),raw.Rows[i]["MiddleI"].ToString());
 				row["ReqStudentNum"]=raw.Rows[i]["ReqStudentNum"].ToString();
 				row["requirement"]=raw.Rows[i]["ReqDescript"].ToString();

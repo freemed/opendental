@@ -139,7 +139,7 @@ namespace OpenDental{
 		}
 
 		private void FillGrid(){
-			AppointmentRule_client.Refresh();
+			AppointmentRuleL.Refresh();
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
 			ODGridColumn col=new ODGridColumn("Description",200);

@@ -7,7 +7,7 @@ using System.Windows.Forms;
 using OpenDentBusiness;
 
 namespace OpenDental{
-	public class AccountModule{
+	public class AccountModuleL{
 		
 		///<summary>Gets the Account table and the Commlog table.</summary>
 		public static DataSet GetAll(int patNum,bool viewingInRecall,DateTime fromDate,DateTime toDate,bool intermingled)

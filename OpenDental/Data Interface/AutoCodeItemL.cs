@@ -5,7 +5,7 @@ using System.Text;
 using OpenDentBusiness;
 
 namespace OpenDental{
-	public class AutoCodeItem_client {
+	public class AutoCodeItemL {
 		public static void Refresh(){
 			DataTable table=Gen.GetTable(MethodNameTable.AutoCodeItem_RefreshCache);
 			AutoCodeItems.FillCache(table);//now, we have an arrays on both the client and the server.

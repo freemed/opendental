@@ -565,19 +565,19 @@ namespace OpenDental{
 				MessageBox.Show(Lan.g(this,"Please select item first,"));
 				return;
 			}
-			Defs_client.HideDef(DefsList[DefsSelected]);
+			DefL.HideDef(DefsList[DefsSelected]);
 			changed=true;
 			FillDefs();
 		}
 
 		private void butUp_Click(object sender, System.EventArgs e) {
-			DefsSelected=Defs_client.MoveUp(DefsIsSelected,DefsSelected,DefsList);
+			DefsSelected=DefL.MoveUp(DefsIsSelected,DefsSelected,DefsList);
 			changed=true;
 			FillDefs();
 		}
 
 		private void butDown_Click(object sender, System.EventArgs e) {
-			DefsSelected=Defs_client.MoveDown(DefsIsSelected,DefsSelected,DefsList);
+			DefsSelected=DefL.MoveDown(DefsIsSelected,DefsSelected,DefsList);
 			changed=true;
 			FillDefs();
 		}

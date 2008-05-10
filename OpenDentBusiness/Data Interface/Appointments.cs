@@ -700,7 +700,7 @@ namespace OpenDentBusiness{
 				birthdate=PIn.PDate(raw.Rows[i]["Birthdate"].ToString());
 				row["age"]=Lan.g("Appointments","Age: ");
 				if(birthdate.Year>1880){
-					row["age"]+=PatientL.DateToAgeString(birthdate);
+					row["age"]+=PatientLogic.DateToAgeString(birthdate);
 				}
 				else{
 					row["age"]+="?";
@@ -736,7 +736,7 @@ namespace OpenDentBusiness{
 					row["chartNumAndName"]="NP-";
 				}
 				row["chartNumAndName"]+=raw.Rows[i]["ChartNumber"].ToString()+" "
-					+PatientL.GetNameLF(raw.Rows[i]["LName"].ToString(),raw.Rows[i]["FName"].ToString(),
+					+PatientLogic.GetNameLF(raw.Rows[i]["LName"].ToString(),raw.Rows[i]["FName"].ToString(),
 					raw.Rows[i]["Preferred"].ToString(),raw.Rows[i]["MiddleI"].ToString());
 				row["confirmed"]=DefC.GetName(DefCat.ApptConfirmed,PIn.PInt(raw.Rows[i]["Confirmed"].ToString()));
 				row["Confirmed"]=raw.Rows[i]["Confirmed"].ToString();
@@ -819,7 +819,7 @@ namespace OpenDentBusiness{
 				if(raw.Rows[i]["IsNewPatient"].ToString()=="1"){
 					row["patientName"]="NP-";
 				}
-				row["patientName"]+=PatientL.GetNameLF(raw.Rows[i]["LName"].ToString(),raw.Rows[i]["FName"].ToString(),
+				row["patientName"]+=PatientLogic.GetNameLF(raw.Rows[i]["LName"].ToString(),raw.Rows[i]["FName"].ToString(),
 					raw.Rows[i]["Preferred"].ToString(),raw.Rows[i]["MiddleI"].ToString());
 				row["PatNum"]=raw.Rows[i]["PatNum"].ToString();
 				row["patNum"]="PatNum: "+raw.Rows[i]["PatNum"].ToString();
@@ -829,7 +829,7 @@ namespace OpenDentBusiness{
 					row["patNumAndName"]="NP-";
 				}
 				row["patNumAndName"]+=raw.Rows[i]["PatNum"].ToString()+" "
-					+PatientL.GetNameLF(raw.Rows[i]["LName"].ToString(),raw.Rows[i]["FName"].ToString(),
+					+PatientLogic.GetNameLF(raw.Rows[i]["LName"].ToString(),raw.Rows[i]["FName"].ToString(),
 					raw.Rows[i]["Preferred"].ToString(),raw.Rows[i]["MiddleI"].ToString());
 				row["Pattern"]=raw.Rows[i]["Pattern"].ToString();
 				row["preMedFlag"]="";
@@ -1008,7 +1008,7 @@ namespace OpenDentBusiness{
 			//Patient Name--------------------------------------------------------------------------
 			row=table.NewRow();
 			row["field"]=Lan.g("FormApptEdit","Name");
-			row["value"]=PatientL.GetNameLF(rawPat.Rows[0]["LName"].ToString(),rawPat.Rows[0]["FName"].ToString(),
+			row["value"]=PatientLogic.GetNameLF(rawPat.Rows[0]["LName"].ToString(),rawPat.Rows[0]["FName"].ToString(),
 				rawPat.Rows[0]["Preferred"].ToString(),rawPat.Rows[0]["MiddleI"].ToString());
 			table.Rows.Add(row);
 			//Patient First Name--------------------------------------------------------------------

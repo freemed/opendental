@@ -934,7 +934,7 @@ namespace OpenDental{
 			FormCommItem FormCI=new FormCommItem(item);
 			FormCI.ShowDialog();
 			DS.Tables.Remove("Comm");
-			DS.Tables.Add(Appointment_client.GetApptEditComm(AptCur.AptNum));
+			DS.Tables.Add(AppointmentL.GetApptEditComm(AptCur.AptNum));
 			FillComm();
 		}
 
@@ -948,7 +948,7 @@ namespace OpenDental{
 			FormCI.IsNew=true;
 			FormCI.ShowDialog();
 			DS.Tables.Remove("Comm");
-			DS.Tables.Add(Appointment_client.GetApptEditComm(AptCur.AptNum));
+			DS.Tables.Add(AppointmentL.GetApptEditComm(AptCur.AptNum));
 			FillComm();
 		}
 
@@ -1326,7 +1326,7 @@ namespace OpenDental{
 				selectedProcs[i]=DS.Tables["Procedure"].Rows[gridProc.SelectedIndices[i]]["ProcNum"].ToString();
 			}
 			DS.Tables.Remove("Procedure");
-			DS.Tables.Add(Appointment_client.GetApptEditProcs(AptCur.AptNum));
+			DS.Tables.Add(AppointmentL.GetApptEditProcs(AptCur.AptNum));
 			FillProcedures();
 			for(int i=0;i<gridProc.Rows.Count;i++){
 				for(int j=0;j<selectedProcs.Length;j++){
@@ -1367,7 +1367,7 @@ namespace OpenDental{
 				//Deleting or detaching labcase would have been done from in that window
 			}
 			DS.Tables.Remove("Misc");
-			DS.Tables.Add(Appointment_client.GetApptEditMisc(AptCur.AptNum));
+			DS.Tables.Add(AppointmentL.GetApptEditMisc(AptCur.AptNum));
 			textLabCase.Text=DS.Tables["Misc"].Rows[0]["labDescript"].ToString();
 		}
 
@@ -1380,7 +1380,7 @@ namespace OpenDental{
 				return;
 			}
 			DS.Tables.Remove("Misc");
-			DS.Tables.Add(Appointment_client.GetApptEditMisc(AptCur.AptNum));
+			DS.Tables.Add(AppointmentL.GetApptEditMisc(AptCur.AptNum));
 			textRequirement.Text=DS.Tables["Misc"].Rows[0]["requirements"].ToString();
 		}
 
@@ -1562,7 +1562,7 @@ namespace OpenDental{
 			else {
 				Procedures.UnattachProcsInAppt(AptCur.AptNum);
 			}*/
-			Appointment_client.Delete(AptCur.AptNum);
+			AppointmentL.Delete(AptCur.AptNum);
 			SecurityLogs.MakeLogEntry(Permissions.AppointmentEdit,pat.PatNum,
 				"Delete for patient: "
 				+pat.GetNameLF()+", "
@@ -1590,7 +1590,7 @@ namespace OpenDental{
 			if(DialogResult==DialogResult.OK)
 				return;
 			if(IsNew) {
-				Appointment_client.Delete(AptCur.AptNum);
+				AppointmentL.Delete(AptCur.AptNum);
 			}
 		}
 

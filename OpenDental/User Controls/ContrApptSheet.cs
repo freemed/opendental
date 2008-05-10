@@ -406,12 +406,12 @@ namespace OpenDental{
 							+(schedForType[i].StopTime-schedForType[i].StartTime).Minutes*Lh/MinPerRow);
 					}
 					else {//just one op
-						if(ApptViewItem_client.GetIndexOp(schedForType[i].Op)==-1) {
+						if(ApptViewItemL.GetIndexOp(schedForType[i].Op)==-1) {
 							continue;//don't display if op not visible
 						}
 						rect=new RectangleF(
 							TimeWidth+1+((int)schedForType[i].SchedDate.DayOfWeek-1)*ColDayWidth
-							+ColAptWidth*ApptViewItem_client.GetIndexOp(schedForType[i].Op)+1
+							+ColAptWidth*ApptViewItemL.GetIndexOp(schedForType[i].Op)+1
 							,schedForType[i].StartTime.Hour*Lh*RowsPerHr
 							+schedForType[i].StartTime.Minute*Lh/MinPerRow
 							,ColAptWidth-1
@@ -430,12 +430,12 @@ namespace OpenDental{
 							+(schedForType[i].StopTime-schedForType[i].StartTime).Minutes*Lh/MinPerRow);
 					}
 					else{//just one op
-						if(ApptViewItem_client.GetIndexOp(schedForType[i].Op)==-1){
+						if(ApptViewItemL.GetIndexOp(schedForType[i].Op)==-1){
 							continue;//don't display if op not visible
 						}
 						rect=new RectangleF(
 							TimeWidth+ProvWidth*ProvCount
-							+ColWidth*ApptViewItem_client.GetIndexOp(schedForType[i].Op)+1
+							+ColWidth*ApptViewItemL.GetIndexOp(schedForType[i].Op)+1
 							,schedForType[i].StartTime.Hour*Lh*RowsPerHr
 							+schedForType[i].StartTime.Minute*Lh/MinPerRow
 							,ColWidth-1

@@ -352,7 +352,7 @@ namespace OpenDentBusiness {
 					continue;
 				}
 				bool isCalendarYear=list[i].TimePeriod==BenefitTimePeriod.CalendarYear;
-				return OpenDentBusiness.BenefitL.ComputeRenewDate(asofDate,isCalendarYear,insStartDate);
+				return OpenDentBusiness.BenefitLogic.ComputeRenewDate(asofDate,isCalendarYear,insStartDate);
 			}
 			return new DateTime(DateTime.Now.Year,1,1);
 		}

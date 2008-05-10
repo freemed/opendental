@@ -510,7 +510,7 @@ namespace OpenDentBusiness {
 		public static int CompareChartRows(DataRow x,DataRow y){
 			if(x["ProcNum"].ToString()!="0" && y["ProcNum"].ToString()!="0") {//if both are procedures
 				if(((DateTime)x["ProcDate"]).Date==((DateTime)y["ProcDate"]).Date) {//and the dates are the same
-					return ProcedureL.CompareProcedures(x,y);
+					return ProcedureLogic.CompareProcedures(x,y);
 					//IComparer procComparer=new ProcedureComparer();
 					//return procComparer.Compare(x,y);//sort by priority, toothnum, procCode
 					//return 0;

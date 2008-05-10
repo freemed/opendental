@@ -230,8 +230,8 @@ namespace OpenDental {
 		}
 
 		private void FillSpans() {
-			CovCat_client.Refresh();
-			CovSpan_client.Refresh();
+			CovCatL.Refresh();
+			CovSpanL.Refresh();
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
 			ODGridColumn col=new ODGridColumn("Category",90);

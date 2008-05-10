@@ -6,7 +6,7 @@ using System.Text;
 using OpenDentBusiness;
 
 namespace OpenDental{
-	public class Appointment_client {
+	public class AppointmentL {
 		public static DataSet GetApptEdit(int aptNum){
 			return Gen.GetDS(MethodNameDS.Appointment_GetApptEdit,aptNum);
 		}

@@ -5,7 +5,7 @@ using System.Text;
 using OpenDentBusiness;
 
 namespace OpenDental{
-	public class Operatory_client {
+	public class OperatoryL {
 		
 		///<summary>Gets the order of the op within ListShort or -1 if not found.</summary>
 		public static int GetOrder(int opNum){

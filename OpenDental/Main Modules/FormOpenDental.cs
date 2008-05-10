@@ -1346,10 +1346,10 @@ namespace OpenDental{
 		///<summary>Returns false if it can't complete a conversion, find datapath, or validate registration key.</summary>
 		private bool PrefsStartup(){
 			CacheL.Refresh(InvalidTypes.Prefs);
-			if(!Prefs_client.CheckMySqlVersion41()){
+			if(!PrefL.CheckMySqlVersion41()){
 				return false;
 			}
-			if(!Prefs_client.ConvertDB()){
+			if(!PrefL.ConvertDB()){
 				return false;
 			}
 			if(PrefC.UsingAtoZfolder && FormPath.GetPreferredImagePath()==null){//AtoZ folder not found
@@ -1366,7 +1366,7 @@ namespace OpenDental{
 				//this.RefreshCurrentModule();
 				CacheL.Refresh(InvalidTypes.Prefs);//because listening thread not started yet.
 			}
-			if(!Prefs_client.CheckProgramVersion()){
+			if(!PrefL.CheckProgramVersion()){
 				return false;
 			}
 			if(!FormRegistrationKey.ValidateKey(PrefC.GetString("RegistrationKey"))){
@@ -1518,9 +1518,9 @@ namespace OpenDental{
 				LayoutControls();
 			}//if(InvalidTypes.Prefs)
 			if((itypes & InvalidTypes.AutoCodesProcButtons)==InvalidTypes.AutoCodesProcButtons){
-				AutoCode_client.Refresh();
-				AutoCodeItem_client.Refresh();
-				AutoCodeCond_client.Refresh();
+				AutoCodeL.Refresh();
+				AutoCodeItemL.Refresh();
+				AutoCodeCondL.Refresh();
 				ProcButtons.Refresh();
 				ProcButtonItems.Refresh();
 			}
@@ -1528,7 +1528,7 @@ namespace OpenDental{
 				Carriers.Refresh();//run on startup, after telephone reformat, after list edit.
 			}
 			if((itypes & InvalidTypes.ClaimForms)==InvalidTypes.ClaimForms){
-				ClaimFormItem_client.Refresh();
+				ClaimFormItemL.Refresh();
 				ClaimForms.Refresh();
 			}
 			if((itypes & InvalidTypes.ClearHouses)==InvalidTypes.ClearHouses){
@@ -1561,8 +1561,8 @@ namespace OpenDental{
 				Fees.Refresh();
 			}
 			if((itypes & InvalidTypes.InsCats)==InvalidTypes.InsCats){
-				CovCat_client.Refresh();
-				CovSpan_client.Refresh();
+				CovCatL.Refresh();
+				CovSpanL.Refresh();
 				DisplayFields.Refresh();
 			}
 			if((itypes & InvalidTypes.Letters)==InvalidTypes.Letters){
@@ -1574,7 +1574,7 @@ namespace OpenDental{
 			}
 			if((itypes & InvalidTypes.Operatories)==InvalidTypes.Operatories){
 				//Operatory_client.Refresh();
-				AccountingAutoPay_client.Refresh();
+				AccountingAutoPayL.Refresh();
 			}
 			if((itypes & InvalidTypes.ProcCodes)==InvalidTypes.ProcCodes){
 				ProcedureCodes.Refresh();
@@ -1599,7 +1599,7 @@ namespace OpenDental{
 			if((itypes & InvalidTypes.Security)==InvalidTypes.Security){
 				//Userod_client.Refresh();
 				UserGroups.Refresh();
-				GroupPermission_client.Refresh();
+				GroupPermissionL.Refresh();
 			}
 			//if((itypes & InvalidTypes.Sched)==InvalidTypes.Sched){
 				//SchedDefaults.Refresh();//assumed to change rarely
@@ -1620,7 +1620,7 @@ namespace OpenDental{
 				ContrFamily2.LayoutToolBar();
 			}
 			if((itypes & InvalidTypes.Views)==InvalidTypes.Views){
-				AppointmentRule_client.Refresh();
+				AppointmentRuleL.Refresh();
 				//ApptView_client.Refresh();
 				//ApptViewItem_client.Refresh();
 				ContrAppt2.FillViews();

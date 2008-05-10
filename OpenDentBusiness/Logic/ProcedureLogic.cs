@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Text;
 
 namespace OpenDentBusiness {
-	public class ProcedureL{
+	public class ProcedureLogic{
 
 		///<summary>The supplied DataRows must include the following columns: Priority,ToothRange,ToothNum,ProcCode.  This sorts procedures based on priority, then tooth number, then procCode.  It does not care about dates or status.  Currently used in TP module and Chart module sorting.</summary>
 		public static int CompareProcedures(DataRow x,DataRow y) {

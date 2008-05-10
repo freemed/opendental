@@ -235,8 +235,8 @@ namespace OpenDental{
 
     private void FillTable(){
       int count=0;
-      AutoCodeItem_client.Refresh();
-      AutoCodeCond_client.Refresh();
+      AutoCodeItemL.Refresh();
+      AutoCodeCondL.Refresh();
       AutoCodeItems.GetListForCode(AutoCodeCur.AutoCodeNum);
  			tbAutoItem.ResetRows(AutoCodeItems.ListForCode.Length);
 			tbAutoItem.SetGridColor(Color.Gray);

@@ -7,7 +7,7 @@ using System.Text;
 using OpenDentBusiness;
 
 namespace OpenDental{
-	public class ApptViewItem_client {
+	public class ApptViewItemL{
 
 		public static void GetForCurView(int indexInList){
 			if(indexInList==-1){
@@ -47,7 +47,7 @@ namespace OpenDental{
 					if(ApptViewItemC.List[i].ApptViewNum==ApptViewCur.ApptViewNum){
 						tempAL.Add(ApptViewItemC.List[i]);
 						if(ApptViewItemC.List[i].OpNum>0){//op
-							index=Operatory_client.GetOrder(ApptViewItemC.List[i].OpNum);
+							index=OperatoryL.GetOrder(ApptViewItemC.List[i].OpNum);
 							if(index!=-1){
 								ALops.Add(index);
 							}

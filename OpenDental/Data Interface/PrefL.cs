@@ -9,7 +9,7 @@ using System.Windows.Forms;
 using CodeBase;
 
 namespace OpenDental {
-	public class Prefs_client {
+	public class PrefL{
 
 		///<summary>This ONLY runs when first opening the program</summary>
 		public static bool ConvertDB() {

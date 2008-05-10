@@ -2950,7 +2950,7 @@ namespace OpenDental{
 				labelApptStatus.Text=Lan.g(this,"none");
 				labelApptDate.Visible=false;
 			}
-			ApptPlanned.DataRoww=Appointment_client.RefreshOneApt(apt.AptNum,true).Rows[0];
+			ApptPlanned.DataRoww=AppointmentL.RefreshOneApt(apt.AptNum,true).Rows[0];
 			ApptPlanned.SetSize();
 			ApptPlanned.Width=114;
 			ApptPlanned.CreateShadow();
@@ -2986,7 +2986,7 @@ namespace OpenDental{
 			//Age
 			row=new ODGridRow();
 			row.Cells.Add(Lan.g("TableChartPtInfo","Age"));
-			row.Cells.Add(PatientL.DateToAgeString(PatCur.Birthdate));
+			row.Cells.Add(PatientLogic.DateToAgeString(PatCur.Birthdate));
 			row.Tag=null;
 			gridPtInfo.Rows.Add(row);
 			//Credit type
@@ -4626,7 +4626,7 @@ namespace OpenDental{
 					surf=textSurf.Text;
 					isAdditional= n!=0;
 					ProcCur=new Procedure();//this will be an insert, so no need to set CurOld
-					ProcCur.CodeNum=AutoCodeItem_client.GetCodeNum(autoCodeList[i],toothNum,surf,isAdditional,PatCur.PatNum,PatCur.Age);
+					ProcCur.CodeNum=AutoCodeItemL.GetCodeNum(autoCodeList[i],toothNum,surf,isAdditional,PatCur.PatNum,PatCur.Age);
 					tArea=ProcedureCodes.GetProcCode(ProcCur.CodeNum).TreatArea;
 					if((tArea==TreatmentArea.Arch
 						|| tArea==TreatmentArea.Mouth
@@ -5368,7 +5368,7 @@ namespace OpenDental{
 						return; 
 					}
 					//Procedures.UnattachProcsInPlannedAppt(ApptPlanned.Info.MyApt.AptNum);
-					Appointment_client.Delete(PIn.PInt(ApptPlanned.DataRoww["AptNum"].ToString()));
+					AppointmentL.Delete(PIn.PInt(ApptPlanned.DataRoww["AptNum"].ToString()));
 				}
 				PatCur.NextAptNum=0;//-1;
 				PatCur.PlannedIsDone=true;
@@ -5388,7 +5388,7 @@ namespace OpenDental{
 					,"",MessageBoxButtons.OKCancel)!=DialogResult.OK)
 					return;
 				//Procedures.UnattachProcsInPlannedAppt(ApptPlanned.Info.MyApt.AptNum);
-				Appointment_client.Delete(PIn.PInt(ApptPlanned.DataRoww["AptNum"].ToString()));
+				AppointmentL.Delete(PIn.PInt(ApptPlanned.DataRoww["AptNum"].ToString()));
 			}
 			Appointment AptCur=new Appointment();
 			AptCur.PatNum=PatCur.PatNum;
@@ -5434,7 +5434,7 @@ namespace OpenDental{
 			if(MessageBox.Show(Lan.g(this,"Delete planned appointment?"),"",MessageBoxButtons.OKCancel)!=DialogResult.OK)
 				return;
 			//Procedures.UnattachProcsInPlannedAppt(ApptPlanned.Info.MyApt.AptNum);
-			Appointment_client.Delete(PIn.PInt(ApptPlanned.DataRoww["AptNum"].ToString()));
+			AppointmentL.Delete(PIn.PInt(ApptPlanned.DataRoww["AptNum"].ToString()));
 			Patient patOld=PatCur.Copy();
 			PatCur.NextAptNum=0;
 			Patients.Update(PatCur,patOld);

@@ -627,7 +627,7 @@ namespace OpenDental{
 			}
 			PinClicked=true;
 			planList=InsPlans.Refresh(fam);
-			apt=Appointment_client.CreateRecallApt(pat,procList,recallList[0],planList);
+			apt=AppointmentL.CreateRecallApt(pat,procList,recallList[0],planList);
 			AptNumsSelected.Add(apt.AptNum);
 			//}
 			if(AptNumsSelected.Count==0) {
@@ -657,7 +657,7 @@ namespace OpenDental{
 				}
 				PinClicked=true;
 				planList=InsPlans.Refresh(fam);
-				apt=Appointment_client.CreateRecallApt(fam.List[i],procList,recallList[0],planList);
+				apt=AppointmentL.CreateRecallApt(fam.List[i],procList,recallList[0],planList);
 				AptNumsSelected.Add(apt.AptNum);
 			}
 			if(AptNumsSelected.Count==0) {

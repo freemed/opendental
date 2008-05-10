@@ -861,7 +861,7 @@ namespace OpenDental{
 			FormClaimFormItemEdit FormCFIE=new FormClaimFormItemEdit();
 			FormCFIE.CFIcur=ClaimFormCur.Items[index];
 			FormCFIE.ShowDialog();
-			ClaimFormItem_client.Refresh();
+			ClaimFormItemL.Refresh();
 			FillForm();
 			panel2.Invalidate();
 			if(listItems.Items.Count > index)//in case the last item in the list was deleted
@@ -882,7 +882,7 @@ namespace OpenDental{
 				ClaimFormCur.Items[listItems.SelectedIndices[i]].XPos=xPos;
 				ClaimFormItems.Update(ClaimFormCur.Items[listItems.SelectedIndices[i]]);
 			}
-			ClaimFormItem_client.Refresh();
+			ClaimFormItemL.Refresh();
 			ClaimFormCur.Items=ClaimFormItems.GetListForForm(ClaimFormCur.ClaimFormNum);
 			FillItem();
 			panel2.Invalidate();
@@ -900,7 +900,7 @@ namespace OpenDental{
 				ClaimFormCur.Items[listItems.SelectedIndices[i]].YPos=yPos;
 				ClaimFormItems.Update(ClaimFormCur.Items[listItems.SelectedIndices[i]]);
 			}
-			ClaimFormItem_client.Refresh();
+			ClaimFormItemL.Refresh();
 			ClaimFormCur.Items=ClaimFormItems.GetListForForm(ClaimFormCur.ClaimFormNum);
 			FillItem();
 			panel2.Invalidate();
@@ -919,7 +919,7 @@ namespace OpenDental{
 				ClaimFormCur.Items[listItems.SelectedIndices[i]].Width=width;
 				ClaimFormItems.Update(ClaimFormCur.Items[listItems.SelectedIndices[i]]);
 			}
-			ClaimFormItem_client.Refresh();
+			ClaimFormItemL.Refresh();
 			ClaimFormCur.Items=ClaimFormItems.GetListForForm(ClaimFormCur.ClaimFormNum);
 			FillItem();
 			panel2.Invalidate();
@@ -937,7 +937,7 @@ namespace OpenDental{
 				ClaimFormCur.Items[listItems.SelectedIndices[i]].Height=height;
 				ClaimFormItems.Update(ClaimFormCur.Items[listItems.SelectedIndices[i]]);
 			}
-			ClaimFormItem_client.Refresh();
+			ClaimFormItemL.Refresh();
 			ClaimFormCur.Items=ClaimFormItems.GetListForForm(ClaimFormCur.ClaimFormNum);
 			FillItem();
 			panel2.Invalidate();
@@ -980,7 +980,7 @@ namespace OpenDental{
 			//grfx.Dispose();
 			//ClaimFormItems.Cur.YPos=540;
 			//ClaimFormItems.UpdateCur();
-			ClaimFormItem_client.Refresh();
+			ClaimFormItemL.Refresh();
 			FillForm();//also gets ListForForm
 			listItems.ClearSelected();
 			listItems.SetSelected(listItems.Items.Count-1,true);//selects last item in list
@@ -1067,7 +1067,7 @@ namespace OpenDental{
 					curItem.XPos=850;
 				ClaimFormItems.Update(curItem);
 			}
-			ClaimFormItem_client.Refresh();
+			ClaimFormItemL.Refresh();
 			ClaimFormCur.Items=ClaimFormItems.GetListForForm(ClaimFormCur.ClaimFormNum);
 			FillItem();
 			panel2.Invalidate();
@@ -1151,7 +1151,7 @@ namespace OpenDental{
 					ClaimFormCur.Items[listItems.SelectedIndices[i]].XPos=850;
 				ClaimFormItems.Update(ClaimFormCur.Items[listItems.SelectedIndices[i]]);
 			}
-			ClaimFormItem_client.Refresh();
+			ClaimFormItemL.Refresh();
 			ClaimFormCur.Items=ClaimFormItems.GetListForForm(ClaimFormCur.ClaimFormNum);
 			FillItem();
 			panel2.Invalidate();

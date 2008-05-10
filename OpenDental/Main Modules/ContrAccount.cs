@@ -1849,7 +1849,7 @@ namespace OpenDental {
 			if(PrefC.GetBool("FuchsOptionsOn")) {
 				viewingInRecall=true;
 			}
-			DataSetMain=AccountModule.GetAll(patNum,viewingInRecall,fromDate,toDate,isSelectingFamily);
+			DataSetMain=AccountModuleL.GetAll(patNum,viewingInRecall,fromDate,toDate,isSelectingFamily);
 			FamCur=Patients.GetFamily(patNum);//for now, have to get family after dataset due to aging calc.
 			PatCur=FamCur.GetPatient(patNum);
 			PatientNoteCur=PatientNotes.Refresh(PatCur.PatNum,PatCur.Guarantor);

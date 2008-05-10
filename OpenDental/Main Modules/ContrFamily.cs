@@ -506,7 +506,7 @@ namespace OpenDental{
 			//Age
 			row=new ODGridRow();
 			row.Cells.Add(Lan.g("TablePatient","Age"));
-			row.Cells.Add(PatientL.DateToAgeString(PatCur.Birthdate));
+			row.Cells.Add(PatientLogic.DateToAgeString(PatCur.Birthdate));
 				//AgeToString(PatCur.Age));
 			gridPat.Rows.Add(row);
 			//SS#

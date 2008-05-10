@@ -857,7 +857,7 @@ namespace OpenDental{
 				}
 			}
 			MsgBox.Show(this,"Done");
-			Prefs_client.CheckProgramVersion();//this might force program to close if version mismatch could not be resolved.
+			PrefL.CheckProgramVersion();//this might force program to close if version mismatch could not be resolved.
 			Close();
 		}
 

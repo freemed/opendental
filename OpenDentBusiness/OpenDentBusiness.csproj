@@ -175,11 +175,11 @@
     <Compile Include="Logic\aaLogic.cs" />
     <Compile Include="Data Interface\AccountModules.cs" />
     <Compile Include="Data Interface\Appointments.cs" />
-    <Compile Include="Logic\BenefitL.cs" />
+    <Compile Include="Logic\BenefitLogic.cs" />
     <Compile Include="Data Interface\ChartModules.cs" />
     <Compile Include="DataCore.cs" />
-    <Compile Include="Logic\PatientL.cs" />
-    <Compile Include="Logic\ProcedureL.cs" />
+    <Compile Include="Logic\PatientLogic.cs" />
+    <Compile Include="Logic\ProcedureLogic.cs" />
     <Compile Include="Data Interface\ProcNotes.cs" />
     <Compile Include="Logic\Tooth.cs" />
     <Compile Include="Logic\ToothComparer.cs" />

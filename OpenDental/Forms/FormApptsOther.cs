@@ -570,7 +570,7 @@ namespace OpenDental{
 			}
 			Recall recallCur=recallList[0];
 			InsPlan[] planList=InsPlans.Refresh(FamCur);
-			Appointment apt=Appointment_client.CreateRecallApt(PatCur,procList,recallCur,planList);
+			Appointment apt=AppointmentL.CreateRecallApt(PatCur,procList,recallCur,planList);
 			AptNumsSelected.Add(apt.AptNum);
 			oResult=OtherResult.PinboardAndSearch;
 			if(recallCur.DateDue<DateTime.Today){
@@ -598,7 +598,7 @@ namespace OpenDental{
 					continue;
 				}
 				planList=InsPlans.Refresh(FamCur);
-				apt=Appointment_client.CreateRecallApt(FamCur.List[i],procList,recallList[0],planList);
+				apt=AppointmentL.CreateRecallApt(FamCur.List[i],procList,recallList[0],planList);
 				AptNumsSelected.Add(apt.AptNum);
 				oResult=OtherResult.PinboardAndSearch;
 				if(recallList[0].DateDue<DateTime.Today) {
@@ -704,7 +704,7 @@ namespace OpenDental{
 				AptCur.AptDateTime=new DateTime(d.Year,d.Month,d.Day
 					,ContrAppt.SheetClickedonHour,minutes,0);
 				AptCur.Op=ContrAppt.SheetClickedonOp;
-				Operatory curOp=Operatory_client.GetOperatory(AptCur.Op);
+				Operatory curOp=OperatoryL.GetOperatory(AptCur.Op);
 				if(curOp.ProvDentist!=0) {
 					AptCur.ProvNum=curOp.ProvDentist;
 				}

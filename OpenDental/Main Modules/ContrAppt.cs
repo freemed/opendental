@@ -947,7 +947,7 @@ namespace OpenDental{
 			//the scrollbar logic cannot be moved to someplace where it will be activated while working in apptbook
 			//RefreshVisops();//forces reset after changing databases
 			if(DefC.Short!=null) {
-				ApptViewItem_client.GetForCurView(comboView.SelectedIndex-1);//refreshes visops,etc
+				ApptViewItemL.GetForCurView(comboView.SelectedIndex-1);//refreshes visops,etc
 				ContrApptSheet2.ComputeColWidth(panelSheet.Width-vScrollBar1.Width);
 			}
 			this.SuspendLayout();
@@ -1174,7 +1174,7 @@ namespace OpenDental{
 			panelSheet.Width=ClientSize.Width-panelAptInfo.Width-2;
 			panelSheet.Height=ClientSize.Height-panelSheet.Location.Y;
 			if(DefC.Short!=null) {
-				ApptViewItem_client.GetForCurView(comboView.SelectedIndex-1);//refreshes visops,etc
+				ApptViewItemL.GetForCurView(comboView.SelectedIndex-1);//refreshes visops,etc
 				ContrApptSheet2.ComputeColWidth(panelSheet.Width-vScrollBar1.Width);
 			}
 			panelOps.Width=panelSheet.Width;
@@ -1350,9 +1350,9 @@ namespace OpenDental{
 				//there cannot be a selected appointment if no patient is loaded.
 				ContrApptSingle.SelectedAptNum=-1;//fixes a minor bug.
 			}
-			DS=Appointment_client.RefreshPeriod(startDate,endDate);
+			DS=AppointmentL.RefreshPeriod(startDate,endDate);
 			SchedListPeriod=Schedules.ConvertTableToList(DS.Tables["Schedule"]);
-			ApptViewItem_client.GetForCurView(comboView.SelectedIndex-1);
+			ApptViewItemL.GetForCurView(comboView.SelectedIndex-1);
 			ContrApptSingle.ProvBar=new int[ApptViewItems.VisProvs.Length][];
 			for(int i=0;i<ApptViewItems.VisProvs.Length;i++){
 				ContrApptSingle.ProvBar[i]=new int[24*ContrApptSheet.RowsPerHr]; //[144]; or 24*6
@@ -1593,10 +1593,10 @@ namespace OpenDental{
 					}
 				}
 				if(row==null){
-					row=Appointment_client.RefreshOneApt(aptNums[a],false).Rows[0];
+					row=AppointmentL.RefreshOneApt(aptNums[a],false).Rows[0];
 					if(row["AptStatus"].ToString()=="6") {//planned
 						//then do it again the right way
-						row=Appointment_client.RefreshOneApt(aptNums[a],true).Rows[0];
+						row=AppointmentL.RefreshOneApt(aptNums[a],true).Rows[0];
 					}
 				}
 				pinBoard.AddAppointment(row);
@@ -1725,7 +1725,7 @@ namespace OpenDental{
 				Procedure[] procsMultApts=Procedures.GetProcsMultApts(aptNums);
 				Procedure[] procsForOne=Procedures.GetProcsOneApt(aptCur.AptNum,procsMultApts);
 				ArrayList doubleBookedCodes=new ArrayList();
-					Appointment_client.GetDoubleBookedCodes(aptCur,DS.Tables["Appointments"].Copy(),procsMultApts,procsForOne);
+					AppointmentL.GetDoubleBookedCodes(aptCur,DS.Tables["Appointments"].Copy(),procsMultApts,procsForOne);
 				if(doubleBookedCodes.Count>0){//if some codes would be double booked
 					if(AppointmentRules.IsBlocked(doubleBookedCodes)){
 						MessageBox.Show(Lan.g(this,"Not allowed to double book:")+" "
@@ -1741,7 +1741,7 @@ namespace OpenDental{
 				[ContrApptSheet2.ConvertToOp(TempApptSingle.Location.X-ContrApptSheet2.Location.X)]];
 			aptCur.Op=curOp.OperatoryNum;
 			if(DoesOverlap(aptCur)){
-				int startingOp=ApptViewItem_client.GetIndexOp(aptCur.Op);
+				int startingOp=ApptViewItemL.GetIndexOp(aptCur.Op);
 				bool stillOverlaps=true;
 				for(int i=startingOp;i<ApptViewItems.VisOps.Length;i++){
 					aptCur.Op=OperatoryC.ListShort[ApptViewItems.VisOps[i]].OperatoryNum;
@@ -2312,7 +2312,7 @@ namespace OpenDental{
 				}
 				procsForOne=Procedures.GetProcsOneApt(apt.AptNum,procsMultApts);
 				ArrayList doubleBookedCodes=
-					Appointment_client.GetDoubleBookedCodes(apt,DS.Tables["Appointments"].Copy(),procsMultApts,procsForOne);
+					AppointmentL.GetDoubleBookedCodes(apt,DS.Tables["Appointments"].Copy(),procsMultApts,procsForOne);
 				if(doubleBookedCodes.Count>0) {//if some codes would be double booked
 					if(AppointmentRules.IsBlocked(doubleBookedCodes)) {
 						MessageBox.Show(Lan.g(this,"Not allowed to double book:")+" "
@@ -2328,7 +2328,7 @@ namespace OpenDental{
 				[ApptViewItems.VisOps[ContrApptSheet2.ConvertToOp(TempApptSingle.Location.X-ContrApptSheet2.Location.X)]];
 			apt.Op=curOp.OperatoryNum;
 			if(DoesOverlap(apt)) {
-				int startingOp=ApptViewItem_client.GetIndexOp(apt.Op);
+				int startingOp=ApptViewItemL.GetIndexOp(apt.Op);
 				bool stillOverlaps=true;
 				for(int i=startingOp;i<ApptViewItems.VisOps.Length;i++) {
 					apt.Op=OperatoryC.ListShort[ApptViewItems.VisOps[i]].OperatoryNum;
@@ -2652,7 +2652,7 @@ namespace OpenDental{
 					int minutes=(int)(ContrAppt.SheetClickedonMin/ContrApptSheet.MinPerIncr)*ContrApptSheet.MinPerIncr;
 					apt.AptDateTime=new DateTime(d.Year,d.Month,d.Day,ContrAppt.SheetClickedonHour,minutes,0);
 					apt.Op=SheetClickedonOp;
-					Operatory curOp=Operatory_client.GetOperatory(apt.Op);
+					Operatory curOp=OperatoryL.GetOperatory(apt.Op);
 					if(curOp.ProvDentist!=0) {//if no dentist is assigned to op, then keep the original dentist.  All appts must have prov.
 						apt.ProvNum=curOp.ProvDentist;
 					}
@@ -3013,7 +3013,7 @@ namespace OpenDental{
 				}
 				else{//for normal appt:
 					//this gets rid of new appointments that never made it off the pinboard
-					Appointment_client.Delete(PIn.PInt(row["AptNum"].ToString()));
+					AppointmentL.Delete(PIn.PInt(row["AptNum"].ToString()));
 				}
 			}
 			if(pinBoard.SelectedIndex==-1){
@@ -3319,7 +3319,7 @@ namespace OpenDental{
 					+ ContrApptSingle3[thisI].DataRoww["AptDateTime"].ToString() + ", "
 					+ "Deleted");
 			}
-			Appointment_client.Delete(ContrApptSingle.SelectedAptNum);
+			AppointmentL.Delete(ContrApptSingle.SelectedAptNum);
 			ContrApptSingle.SelectedAptNum=-1;
 			pinBoard.SelectedIndex=-1;
 			//ContrApptSingle.PinBoardIsSelected=false;
@@ -3625,7 +3625,7 @@ namespace OpenDental{
 				providers[i]=ProviderC.List[listProviders.SelectedIndices[i]].ProvNum;
 			}
 			//the result might be empty
-			SearchResults=Appointment_client.GetSearchResults(PIn.PInt(pinBoard.SelectedAppt.DataRoww["AptNum"].ToString()),
+			SearchResults=AppointmentL.GetSearchResults(PIn.PInt(pinBoard.SelectedAppt.DataRoww["AptNum"].ToString()),
 				afterDate,providers,10,beforeTime,afterTime);
 			listSearchResults.Items.Clear();
 			for(int i=0;i<SearchResults.Length;i++){

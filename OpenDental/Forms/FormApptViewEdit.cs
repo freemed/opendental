@@ -378,7 +378,7 @@ namespace OpenDental{
 			else{
 				textRowsPerIncr.Text=ApptViewCur.RowsPerIncr.ToString();
 			}
-			ApptViewItem_client.GetForCurView(ApptViewCur);
+			ApptViewItemL.GetForCurView(ApptViewCur);
 			for(int i=0;i<OperatoryC.ListShort.Count;i++){
 				listOps.Items.Add(OperatoryC.ListShort[i].OpName);
 				if(ApptViewItems.OpIsInView(OperatoryC.ListShort[i].OperatoryNum)){
