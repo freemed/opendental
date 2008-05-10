@@ -743,12 +743,12 @@ namespace OpenDental{
 				if(stmt.Mode_==StatementMode.InPerson || stmt.Mode_==StatementMode.Mail){
 					if(pd==null){
 						pd=new PrintDocument();
-						if(!Printers.SetPrinter(pd,PrintSituation.Statement)){
-							Cursor=Cursors.Default;
+						//if(!Printers.SetPrinter(pd,PrintSituation.Statement)){
+						//	Cursor=Cursors.Default;
 							//FillGrid();//automatic
-							isPrinting=false;
-							return;
-						}
+						//	isPrinting=false;
+						//	return;
+						//}
 					}
 					inputDocument=PdfReader.Open(savedPdfPath,PdfDocumentOpenMode.Import);
 					for(int idx=0;idx<inputDocument.PageCount;idx++){
