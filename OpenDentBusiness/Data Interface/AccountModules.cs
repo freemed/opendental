@@ -1167,7 +1167,7 @@ namespace OpenDentBusiness {
 				paid=0;
 				for(int p=0;p<rawPay.Rows.Count;p++){
 					if(rawPay.Rows[p]["PayPlanNum"].ToString()==rawPayPlan.Rows[i]["PayPlanNum"].ToString()){
-						paid+=PIn.PDouble(rawPay.Rows[p]["SplitAmt"].ToString());
+						paid+=PIn.PDouble(rawPay.Rows[p]["_splitAmt"].ToString());
 					}
 				}
 				princ=PIn.PDouble(rawPayPlan.Rows[i]["_principal"].ToString());
