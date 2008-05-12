@@ -683,12 +683,14 @@ namespace OpenDentBusiness {
 			//claims (do not affect balance)-------------------------------------------------------------------------
 			command="SELECT CarrierName,ClaimFee,claim.ClaimNum,ClaimStatus,ClaimType,DateReceived,DateService,"
 				+"claim.DedApplied,claim.InsPayEst,"
-				+"claim.InsPayAmt,claim.PatNum,GROUP_CONCAT(claimproc.ProcNum) _ProcNums,ProvTreat,"
+				+"claim.InsPayAmt,claim.PatNum,SUM(ProcFee) _procAmt,"
+				+"GROUP_CONCAT(claimproc.ProcNum) _ProcNums,ProvTreat,"
 				+"claim.ReasonUnderPaid,claim.WriteOff "
 				+"FROM claim "
 				+"LEFT JOIN insplan ON claim.PlanNum=insplan.PlanNum "
 				+"LEFT JOIN carrier ON carrier.CarrierNum=insplan.CarrierNum "
 				+"INNER JOIN claimproc ON claimproc.ClaimNum=claim.ClaimNum "
+				+"LEFT JOIN procedurelog ON claimproc.ProcNum=procedurelog.ProcNum "
 				+"WHERE (";
 			for(int i=0;i<fam.List.Length;i++){
 				if(i!=0){
@@ -699,7 +701,8 @@ namespace OpenDentBusiness {
 			command+=") GROUP BY claim.ClaimNum ORDER BY DateService";
 			DataTable rawClaim=dcon.GetTable(command);
 			DateTime daterec;
-			double amtpaid;
+			double amtpaid;//can be different than amt if claims show UCR.
+			double procAmt;
 			double insest;
 			double deductible;
 			double patport;
@@ -761,6 +764,7 @@ namespace OpenDentBusiness {
 				else if(claimStatus=="S"){
 					row["description"]+="\r\n"+Lan.g("ContrAccount","Sent");
 				}
+				procAmt=PIn.PDouble(rawClaim.Rows[i]["_procAmt"].ToString());
 				insest=PIn.PDouble(rawClaim.Rows[i]["InsPayEst"].ToString());
 				amtpaid=PIn.PDouble(rawClaim.Rows[i]["InsPayAmt"].ToString());
 				writeoff=PIn.PDouble(rawClaim.Rows[i]["WriteOff"].ToString());
@@ -804,7 +808,7 @@ namespace OpenDentBusiness {
 					row["description"]+="\r\n"+Lan.g("ContrAccount","Deductible Applied:")+" "+deductible.ToString("c");
 				}
 				if(!PrefC.GetBool("BalancesDontSubtractIns") &&	(claimStatus=="W" || claimStatus=="S")){
-					patport=amt-insest-writeoff;
+					patport=procAmt-insest-writeoff;
 					if(patport<0){
 						patport=0;
 					}
