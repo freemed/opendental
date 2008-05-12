@@ -7,15 +7,19 @@ using System.Diagnostics;
 using System.Windows.Forms;
 using OpenDentBusiness;
 
-namespace OpenDental {
+namespace OpenDentBusiness {
 	public class DisplayFields {
-		///<summary>A list of all DisplayFields</summary>
-		public static List<DisplayField> Listt;
 
-		public static void Refresh() {
+		public static DataTable Refresh() {
 			string command = "SELECT * FROM displayfield ORDER BY ItemOrder";
 			DataTable table = General.GetTable(command);
-			Listt=new List<DisplayField>();
+			table.TableName="DisplayField";
+			FillCache(table);
+			return table;
+		}
+
+		public static void FillCache(DataTable table){
+			DisplayFieldC.Listt=new List<DisplayField>();
 			DisplayField field;
 			for(int i=0;i<table.Rows.Count;i++){
 				field = new DisplayField();
@@ -24,7 +28,7 @@ namespace OpenDental {
 				field.ItemOrder       = PIn.PInt   (table.Rows[i][2].ToString());
 				field.Description     = PIn.PString(table.Rows[i][3].ToString());
 				field.ColumnWidth     = PIn.PInt   (table.Rows[i][4].ToString());
-				Listt.Add(field);
+				DisplayFieldC.Listt.Add(field);
 			}
 		}
 
@@ -51,10 +55,10 @@ namespace OpenDental {
 
 		///<Summary>There's only one category for now.  So this doesn't really do much.</Summary>
 		public static List<DisplayField> GetForCategory(){
-			if(DisplayFields.Listt.Count==0) {//default
+			if(DisplayFieldC.Listt.Count==0) {//default
 				return DisplayFields.GetDefaultList();
 			}
-			return DisplayFields.Listt;//later, filter by category
+			return DisplayFieldC.Listt;//later, filter by category
 		}
 
 		public static List<DisplayField> GetDefaultList(){
