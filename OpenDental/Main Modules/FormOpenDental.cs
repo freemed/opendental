@@ -1091,7 +1091,6 @@ namespace OpenDental{
 			// 
 			// ContrChart2
 			// 
-			this.ContrChart2.DataValid = false;
 			this.ContrChart2.Location = new System.Drawing.Point(77,49);
 			this.ContrChart2.Name = "ContrChart2";
 			this.ContrChart2.Size = new System.Drawing.Size(865,589);
@@ -1532,7 +1531,7 @@ namespace OpenDental{
 				ClaimForms.Refresh();
 			}
 			if((itypes & InvalidTypes.ClearHouses)==InvalidTypes.ClearHouses){
-//kh until we add an EasyHideClearHouses						Clearinghouses.Refresh();
+				//kh until we add an EasyHideClearHouses						Clearinghouses.Refresh();
 				SigElementDefs.Refresh();
 				SigButDefs.Refresh();//includes SigButDefElements.Refresh()
 				FillSignalButtons(null);
@@ -1545,7 +1544,6 @@ namespace OpenDental{
 				//Defs_client.RefreshClient();
 			}
 			if((itypes & InvalidTypes.DentalSchools)==InvalidTypes.DentalSchools){
-				//Instructors.Refresh();
 				SchoolClasses.Refresh();
 				SchoolCourses.Refresh();
 			}
@@ -1576,6 +1574,9 @@ namespace OpenDental{
 				//Operatory_client.Refresh();
 				AccountingAutoPayL.Refresh();
 			}
+			//if((itypes & InvalidTypes.Prefs)==InvalidTypes.Prefs){
+
+			//}
 			if((itypes & InvalidTypes.ProcCodes)==InvalidTypes.ProcCodes){
 				ProcedureCodes.Refresh();
 				ProcCodeNotes.Refresh();
@@ -1601,10 +1602,6 @@ namespace OpenDental{
 				UserGroups.Refresh();
 				GroupPermissionL.Refresh();
 			}
-			//if((itypes & InvalidTypes.Sched)==InvalidTypes.Sched){
-				//SchedDefaults.Refresh();//assumed to change rarely
-				//Schedules.Refresh();//Schedules are refreshed as needed.  Not here.
-			//}
 			if((itypes & InvalidTypes.Startup)==InvalidTypes.Startup){
 				Employers.Refresh();//only needed when opening the prog. After that, automated.
 				ElectIDs.Refresh();//only run on startup

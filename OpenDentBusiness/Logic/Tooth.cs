@@ -123,13 +123,15 @@ namespace OpenDentBusiness{
 			return IsPreMolar(toothNum);
 		}
 
-		///<summary>Return the correct label (number) for a tooth</summary>
-		public static string GetToothLabel(string tooth_id)
-		{
-			if (tooth_id == null || tooth_id == "") return ""; // CWI: We should fix the source of these
+		///<summary>Sometimes validated by IsValidDB before coming here, otherwise an invalid toothnum .  This should be run on all displayed tooth numbers. It will handle checking for whether user is using international tooth numbers.  All tooth numbers are passed in american values until the very last moment.  Just before display, the string is converted using this method.</summary>
+		public static string GetToothLabel(string tooth_id){
+			if(tooth_id==null || tooth_id==""){
+				return ""; // CWI: We should fix the source of these
+			}
 			int nomenclature = PrefC.GetInt("UseInternationalToothNumbers");
-			if (nomenclature == 0) return tooth_id; // Universal
-
+			if(nomenclature == 0){
+				return tooth_id; // Universal
+			}
 			int index = Array.IndexOf(labelsUniversal, tooth_id);
 
 			if (nomenclature == 1)
@@ -144,11 +146,12 @@ namespace OpenDentBusiness{
 			return "-"; // Should never happen
 		}
 
-		public static string GetToothId(string tooth_label)
-		{
+		///<summary>MUST be validated by IsValidEntry before coming here.  All user entered toothnumbers are run through this method which automatically checks to see if using international toothnumbers.  So the procedurelog class will always contain the american toothnum.</summary>
+		public static string GetToothId(string tooth_label){
 			int nomenclature = PrefC.GetInt("UseInternationalToothNumbers");
-			if (nomenclature == 0) return tooth_label; // Universal
-
+			if (nomenclature == 0){
+				return tooth_label; // Universal
+			}
 			int index = 0;
 			if (nomenclature == 1)
 			{ // FDI

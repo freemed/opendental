@@ -86,6 +86,7 @@
     <Compile Include="Cache\AutoCodeItemC.cs" />
     <Compile Include="Cache\Cache.cs" />
     <Compile Include="Cache\ClaimFormItemC.cs" />
+    <Compile Include="Cache\DisplayFieldC.cs" />
     <Compile Include="Cache\ProviderC.cs" />
     <Compile Include="Cache\OperatoryC.cs" />
     <Compile Include="Cache\CovSpanC.cs" />
@@ -121,6 +122,7 @@
     <Compile Include="Data Interface\CovCats.cs" />
     <Compile Include="Data Interface\CovSpans.cs" />
     <Compile Include="Data Interface\Defs.cs" />
+    <Compile Include="Data Interface\DisplayFields.cs" />
     <Compile Include="Data Interface\FamilyModules.cs" />
     <Compile Include="Data Interface\Gen.cs" />
     <Compile Include="Data Interface\GroupPermissions.cs" />

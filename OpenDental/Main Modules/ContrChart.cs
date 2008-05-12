@@ -41,7 +41,7 @@ namespace OpenDental{
 		private ProcStat newStatus;
 		private OpenDental.UI.Button button1;
 		private System.Windows.Forms.RadioButton radioEntryC;
-		private bool dataValid=false;
+		//private bool dataValid=false;
 		private System.Windows.Forms.ListBox listDx;
 		private int[] hiLightedRows=new int[1];
 		private ContrApptSingle ApptPlanned;
@@ -2488,15 +2488,14 @@ namespace OpenDental{
 		}
 		#endregion
 
-		///<summary></summary>
-		public bool DataValid{
+		/*public bool DataValid{
       get{
         return dataValid;
       }
       set{
         dataValid=value;
       }
-    }
+    }*/
 
 		private void ContrChart_Layout(object sender, System.Windows.Forms.LayoutEventArgs e){
 			gridProg.Height=ClientSize.Height-tabControlImages.Height-gridProg.Location.Y+1;
@@ -5218,6 +5217,7 @@ namespace OpenDental{
 		}
 		#endregion Primary
 
+		#region Show
 		private void button1_Click(object sender, System.EventArgs e) {
 			//sometimes used for testing purposes
 		}
@@ -5338,6 +5338,7 @@ namespace OpenDental{
 			checkEmail.Checked=false;
 			FillProgNotes();
 		}
+		#endregion Show
 
 		private void gridPtInfo_CellDoubleClick(object sender,ODGridClickEventArgs e) {
 			if(gridPtInfo.Rows[e.Row].Tag==null){//pt info
@@ -5984,6 +5985,7 @@ namespace OpenDental{
 			FormT.Show();
 		}
 
+		#region Quick Buttons
 		private void panelQuickButtons_Paint(object sender,PaintEventArgs e) {
 
 		}
@@ -6021,13 +6023,11 @@ namespace OpenDental{
 		private void butDL_Click(object sender,EventArgs e) {
 			textSurf.Text = "DL";
 			ProcButtonClicked(0,"D2331");
-
 		}
 
 		private void butML_Click(object sender,EventArgs e) {
 			textSurf.Text = "ML";
 			ProcButtonClicked(0,"D2331");
-
 		}
 
 		private void buttonCSeal_Click(object sender,EventArgs e) {
@@ -6053,7 +6053,6 @@ namespace OpenDental{
 		private void buttonAMO_Click(object sender,EventArgs e) {
 			textSurf.Text = "MO";
 			ProcButtonClicked(0,"D2150");
-
 		}
 
 		private void butCMDL_Click(object sender,EventArgs e) {
@@ -6061,46 +6060,36 @@ namespace OpenDental{
 			ProcButtonClicked(0,"D2332");
 		}
 
-		private void buttonAOL_Click(object sender, EventArgs e)
-		{
+		private void buttonAOL_Click(object sender, EventArgs e){
 			textSurf.Text = "OL";
 			ProcButtonClicked(0, "D2150");
-
 		}
 
-		private void buttonAOB_Click(object sender, EventArgs e)
-		{
+		private void buttonAOB_Click(object sender, EventArgs e){
 			textSurf.Text = "OB";
 			ProcButtonClicked(0, "D2150");
-
 		}
 
-		private void buttonAMODL_Click(object sender, EventArgs e)
-		{
+		private void buttonAMODL_Click(object sender, EventArgs e){
 			textSurf.Text = "MODL";
 			ProcButtonClicked(0, "D2161");
 		}
 
-		private void buttonAMODB_Click(object sender, EventArgs e)
-		{
+		private void buttonAMODB_Click(object sender, EventArgs e){
 			textSurf.Text = "MODB";
 			ProcButtonClicked(0, "D2161");
-
 		}
 
-		private void buttonCMODL_Click(object sender, EventArgs e)
-		{
+		private void buttonCMODL_Click(object sender, EventArgs e){
 			textSurf.Text = "MODL";
 			ProcButtonClicked(0, "D2394");
-
 		}
 
-		private void buttonCMODB_Click(object sender, EventArgs e)
-		{
+		private void buttonCMODB_Click(object sender, EventArgs e){
 			textSurf.Text = "MODB";
 			ProcButtonClicked(0, "D2394");
-
 		}
+		#endregion Quick Buttons
 
 		private void butAddKey_Click(object sender,EventArgs e) {
 			RegistrationKey key=new RegistrationKey();
@@ -6124,8 +6113,6 @@ namespace OpenDental{
 			FillPtInfo();
 		}
 
-
-		
 
 		
 

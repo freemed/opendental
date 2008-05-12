@@ -208,7 +208,6 @@
     <Compile Include="Data Interface\SupplyNeededs.cs" />
     <Compile Include="Data Interface\EmailAttaches.cs" />
     <Compile Include="Data Interface\Popups.cs" />
-    <Compile Include="Data Interface\DisplayFields.cs" />
     <Compile Include="Data Interface\ProcCodeNotes.cs" />
     <Compile Include="Data Interface\MiscData.cs">
       <SubType>Code</SubType>

@@ -11,6 +11,7 @@ namespace OpenDentBusiness{
 		public static DataTable RefreshCache(){
 			string command="SELECT * FROM accountingautopay";
 			DataTable table=General.GetTable(command);
+			table.TableName="AccountingAutoPay";
 			FillCache(table);
 			return table;
 		}
