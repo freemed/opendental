@@ -1005,13 +1005,13 @@ namespace OpenDental{
 			if(PrefC.GetBool("BalancesDontSubtractIns")){
 				text = Lan.g(this, "Balance:");
 				par.AddFormattedText(text, fontBold);
-				par.AddLineBreak();
-				text = Lan.g(this, "Ins Pending:");
-				par.AddFormattedText(text, font);
-				par.AddLineBreak();
-				text = Lan.g(this, "After Ins:");
-				par.AddFormattedText(text, font);
-				par.AddLineBreak();
+				//par.AddLineBreak();
+				//text = Lan.g(this, "Ins Pending:");
+				//par.AddFormattedText(text, font);
+				//par.AddLineBreak();
+				//text = Lan.g(this, "After Ins:");
+				//par.AddFormattedText(text, font);
+				//par.AddLineBreak();
 			}
 			else{//this is more common
 				text = Lan.g(this, "Total:");
@@ -1032,25 +1032,28 @@ namespace OpenDental{
 			par.Format = parformat;
 			font = MigraDocHelper.CreateFont(10,false);
 			//numbers:
-			text = PatGuar.BalTotal.ToString("c");
 			if(PrefC.GetBool("BalancesDontSubtractIns")){
+				text = PatGuar.BalTotal.ToString("c");
 				par.AddFormattedText(text, fontBold);
+				//par.AddLineBreak();
+				//text = PatGuar.InsEst.ToString("c");
+				//par.AddFormattedText(text, font);
+				//par.AddLineBreak();
+				//text = (PatGuar.BalTotal - PatGuar.InsEst).ToString("c");
+				//par.AddFormattedText(text, font);
+				//par.AddLineBreak();
 			}
-			else{
+			else{//more common
+				text = PatGuar.BalTotal.ToString("c");
 				par.AddFormattedText(text, font);
-			}
-			par.AddLineBreak();
-			text = PatGuar.InsEst.ToString("c");
-			par.AddFormattedText(text, font);
-			par.AddLineBreak();
-			text = (PatGuar.BalTotal - PatGuar.InsEst).ToString("c");
-			if(PrefC.GetBool("BalancesDontSubtractIns")){
+				par.AddLineBreak();
+				text = PatGuar.InsEst.ToString("c");
 				par.AddFormattedText(text, font);
-			}
-			else{
+				par.AddLineBreak();
+				text = (PatGuar.BalTotal - PatGuar.InsEst).ToString("c");
 				par.AddFormattedText(text, fontBold);
+				par.AddLineBreak();
 			}
-			par.AddLineBreak();
 			MigraDocHelper.InsertSpacer(section, 80);
 			#endregion FloatingBalance
 			//Bold note-------------------------------------------------------------------------------
