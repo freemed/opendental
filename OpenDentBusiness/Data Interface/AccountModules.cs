@@ -464,6 +464,13 @@ namespace OpenDentBusiness {
 				row["tth"]="";
 				rows.Add(row);
 			}
+			string familyPatNums="";
+			for(int i=0;i<fam.List.Length;i++) {
+				if(i!=0) {
+					familyPatNums+=", ";
+				}
+				familyPatNums+=POut.PInt(fam.List[i].PatNum);
+			}
 			//Procedures------------------------------------------------------------------------------------------
 			command="SELECT procedurelog.BaseUnits,Descript,SUM(cp1.InsPayAmt) _insPayAmt,"
 				+"LaymanTerm,procedurelog.MedicalCode,MAX(cp1.NoBillIns) _noBillIns,procedurelog.PatNum,"
@@ -479,16 +486,11 @@ namespace OpenDentBusiness {
 				+"FROM procedurelog "
 				+"LEFT JOIN procedurecode ON procedurelog.CodeNum=procedurecode.CodeNum "
 				+"LEFT JOIN claimproc cp1 ON procedurelog.ProcNum=cp1.ProcNum "
-				+"LEFT JOIN paysplit ON procedurelog.ProcNum=paysplit.ProcNum "
+				+"LEFT JOIN paysplit ON procedurelog.ProcNum=paysplit.ProcNum AND paysplit.PatNum IN ("+familyPatNums+") "
 				+"WHERE ProcStatus=2 "//complete
-				+"AND (";
-			for(int i=0;i<fam.List.Length;i++){
-				if(i!=0){
-					command+="OR ";
-				}
-				command+="procedurelog.PatNum ="+POut.PInt(fam.List[i].PatNum)+" ";
-			}
-			command+=") GROUP BY procedurelog.ProcNum ORDER BY ProcDate";
+				+"AND procedurelog.PatNum IN ("
+				+familyPatNums
+				+") GROUP BY procedurelog.ProcNum ORDER BY ProcDate";
 			DataTable rawProc=dcon.GetTable(command);
 			double insPayAmt;
 			double writeOff;
