@@ -6429,10 +6429,10 @@ namespace OpenDental{
 				command="UPDATE preference SET ValueString = '5.6.22.0' WHERE PrefName = 'DataBaseVersion'";
 				General.NonQ(command);
 			}
-			To5_6_24();
+			To5_7_0();
 		}
 
-		private void To5_6_24() {
+		/*private void To5_6_24() {
 			if(FromVersion<new Version("5.6.24.0")) {
 				string command;
 				command="ALTER TABLE procedurelog ADD INDEX IDX_PROCEDURELOG_PROCNUM (ProcNum)";
@@ -6444,7 +6444,7 @@ namespace OpenDental{
 				General.NonQ(command);
 			}
 			To5_7_0();
-		}
+		}*/
 
 		private void To5_7_0() {
 			if(FromVersion<new Version("5.7.0.0")) {
