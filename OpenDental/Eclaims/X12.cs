@@ -535,11 +535,11 @@ namespace OpenDental.Eclaims
 					sw.Write("****"//NM104-07 not used
 						+"PI*");//NM108: PI=PayorID
 					string electid=carrier.ElectID;
+					if(electid=="" && clearhouse.ISA08=="113504607"){//only for Tesia
+						electid="00000";
+					}
 					if(electid.Length<3){
 						electid="06126";
-					}
-					if(electid=="06126" && clearhouse.ISA08=="113504607"){//only for Tesia
-						electid="00000";
 					}
 					sw.WriteLine(Sout(electid,80,2)+"~");//NM109: PayorID
 					//2010BB N3: Carrier Address
