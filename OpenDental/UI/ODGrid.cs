@@ -132,6 +132,13 @@ namespace OpenDental.UI{
 			this.Parent.KeyUp+=new KeyEventHandler(Parent_KeyUp);
 		}
 
+		///<summary></summary>
+		protected override void OnResize(EventArgs e){
+			base.OnResize (e);
+			LayoutScrollBars();
+			Invalidate();
+		}
+
 		#region Properties
 		///<summary>Gets the collection of ODGridColumns assigned to the ODGrid control.</summary>
 		//[DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
@@ -327,24 +334,7 @@ namespace OpenDental.UI{
 
 		#endregion Properties
 
-		#region Painting
-		///<summary>Runs any time the control is invalidated.</summary>
-		protected override void OnPaint(System.Windows.Forms.PaintEventArgs e){
-			if(IsUpdating) return;
-			if(Width<1 || Height<1) {
-				return;
-			}
-			ComputeColumns();//it's only here because I can't figure out how to do it when columns are added. It will be removed.
-			Bitmap doubleBuffer=new Bitmap(Width,Height,e.Graphics);
-			Graphics g=Graphics.FromImage(doubleBuffer);
-			DrawBackG(g);
-			DrawRows(g);
-			DrawTitleAndHeaders(g);//this will draw on top of any grid stuff
-			DrawOutline(g);
-			e.Graphics.DrawImageUnscaled(doubleBuffer,0,0);
-			g.Dispose();
-		}
-
+		#region Computations
 		///<summary>Computes the position of each column and the overall width.  Called from endUpdate and also from OnPaint.</summary>
 		private void ComputeColumns(){
 			if(!hScrollVisible) {//this used to be in the resize logic
@@ -374,6 +364,124 @@ namespace OpenDental.UI{
 			if(columns.Count>0){
 				GridW=ColPos[ColPos.Length-1]+columns[columns.Count-1].ColWidth;
 			}
+		}
+
+		///<summary>After adding rows to the grid, this calculates the height of each row because some rows may have text wrap and will take up more than one row.  Also, rows with notes, must be made much larger, because notes start on the second line.  If column images are used, rows will be enlarged to make space for the images.</summary>
+		private void ComputeRows(){
+			Graphics g=this.CreateGraphics();
+			RowHeights=new int[rows.Count];
+			NoteHeights=new int[rows.Count];
+			RowLocs=new int[rows.Count];
+			GridH=0;
+			int cellH;
+			int noteW=0;
+			if(NoteSpanStop>0 && NoteSpanStart<columns.Count) {
+				for(int i=NoteSpanStart;i<=NoteSpanStop;i++) {
+					noteW+=columns[i].ColWidth;
+				}
+			}
+			int imageH=0;
+			for(int i=0;i<columns.Count;i++){
+				if(columns[i].ImageList!=null){
+					if(columns[i].ImageList.ImageSize.Height>imageH){
+						imageH=columns[i].ImageList.ImageSize.Height+1;
+					}
+				}
+			}
+			for(int i=0;i<rows.Count;i++){
+				RowHeights[i]=0;
+				if(wrapText){
+					//find the tallest col
+					for(int j=0;j<rows[i].Cells.Count;j++) {
+						if(rows[i].Height==0){//not set
+							cellH=(int)g.MeasureString(rows[i].Cells[j].Text,this.cellFont,columns[j].ColWidth).Height+1;
+						}
+						else{
+							cellH=rows[i].Height;
+						}
+						if(cellH>RowHeights[i]) {
+							RowHeights[i]=cellH;
+						}
+					}
+				}
+				else{
+					if(rows[i].Height==0){//not set
+						RowHeights[i]=(int)g.MeasureString("Any",this.cellFont).Height+1;
+					}
+					else{
+						RowHeights[i]=rows[i].Height;
+					}
+				}
+				if(imageH>RowHeights[i]){
+					RowHeights[i]=imageH;
+				}
+				if(noteW>0 && rows[i].Note!=""){
+					NoteHeights[i]=(int)g.MeasureString(rows[i].Note,this.cellFont,noteW).Height;
+				}
+				if(i==0){
+					RowLocs[i]=0;
+				}
+				else{
+					RowLocs[i]=RowLocs[i-1]+RowHeights[i-1]+NoteHeights[i-1];
+				}
+				GridH+=RowHeights[i]+NoteHeights[i];
+			}
+			g.Dispose();
+		}
+
+		///<summary>Returns row. -1 if no valid row.  Supply the y position in pixels.</summary>
+		public int PointToRow(int y){
+			if(y<1+titleHeight+headerHeight){
+				return-1;
+			}
+			for(int i=0;i<rows.Count;i++){
+				if(y>-vScroll.Value+1+titleHeight+headerHeight+RowLocs[i]+RowHeights[i]+NoteHeights[i]){
+					continue;//clicked below this row.
+				}
+				return i;
+			}
+			return -1;
+		}
+
+		///<summary>Returns col.  Supply the x position in pixels. -1 if no valid column.</summary>
+		public int PointToCol(int x){
+			int colRight;//the right edge of each column
+			for(int i=0;i<columns.Count;i++){
+				colRight=0;
+				for(int c=0;c<i+1;c++){
+					colRight+=columns[c].ColWidth;
+				}
+				if(x>-hScroll.Value+colRight){
+					continue;//clicked to the right of this col
+				}
+				return i;
+			}
+			return -1;
+		}
+		#endregion Computations
+
+		#region Painting
+		///<summary></summary>
+		protected override void OnPaintBackground(PaintEventArgs pea) {
+			//base.OnPaintBackground (pea);
+			//don't paint background.  This reduces flickering.
+		}
+		
+		///<summary>Runs any time the control is invalidated.</summary>
+		protected override void OnPaint(System.Windows.Forms.PaintEventArgs e){
+			if(IsUpdating) return;
+			if(Width<1 || Height<1) {
+				return;
+			}
+			ComputeColumns();//it's only here because I can't figure out how to do it when columns are added. It will be removed.
+			Bitmap doubleBuffer=new Bitmap(Width,Height,e.Graphics);
+			Graphics g=Graphics.FromImage(doubleBuffer);
+			DrawBackG(g);
+			DrawRows(g);
+			DrawTitleAndHeaders(g);//this will draw on top of any grid stuff
+			DrawOutline(g);
+			e.Graphics.DrawImageUnscaled(doubleBuffer,0,0);
+			g.Dispose();
 		}
 
 		///<summary>Draws a solid gray background.</summary>
@@ -625,6 +733,7 @@ namespace OpenDental.UI{
 		}
 		#endregion
 
+		#region Clicking
 		///<summary></summary>
 		protected void OnCellDoubleClick(int col,int row){
 			ODGridClickEventArgs gArgs=new ODGridClickEventArgs(col,row,MouseButtons.Left);
@@ -652,12 +761,6 @@ namespace OpenDental.UI{
 				CellClick(this,gArgs);
 		}
 
-		protected void OnCellTextChanged() {
-			if(CellTextChanged!=null){
-				CellTextChanged(this,new EventArgs());
-			}
-		}
-
 		///<summary></summary>
 		protected override void OnClick(EventArgs e){
 			base.OnClick (e);
@@ -669,14 +772,9 @@ namespace OpenDental.UI{
 			}
 			OnCellClick(MouseDownCol,MouseDownRow,lastButtonPressed);
 		}
+		#endregion Clicking
 
-		///<summary></summary>
-		protected override void OnResize(EventArgs e){
-			base.OnResize (e);
-			LayoutScrollBars();
-			Invalidate();
-		}
-
+		#region BeginEndUpdate
 		///<summary>Call this before adding any rows.  You would typically call Rows.Clear after this.</summary>
 		public void BeginUpdate(){
 			IsUpdating=true;
@@ -696,216 +794,9 @@ namespace OpenDental.UI{
 			IsUpdating=false;
 			Invalidate();
 		}
+		#endregion BeginEndUpdate
 
-		///<summary>After adding rows to the grid, this calculates the height of each row because some rows may have text wrap and will take up more than one row.  Also, rows with notes, must be made much larger, because notes start on the second line.  If column images are used, rows will be enlarged to make space for the images.</summary>
-		private void ComputeRows(){
-			Graphics g=this.CreateGraphics();
-			RowHeights=new int[rows.Count];
-			NoteHeights=new int[rows.Count];
-			RowLocs=new int[rows.Count];
-			GridH=0;
-			int cellH;
-			int noteW=0;
-			if(NoteSpanStop>0 && NoteSpanStart<columns.Count) {
-				for(int i=NoteSpanStart;i<=NoteSpanStop;i++) {
-					noteW+=columns[i].ColWidth;
-				}
-			}
-			int imageH=0;
-			for(int i=0;i<columns.Count;i++){
-				if(columns[i].ImageList!=null){
-					if(columns[i].ImageList.ImageSize.Height>imageH){
-						imageH=columns[i].ImageList.ImageSize.Height+1;
-					}
-				}
-			}
-			for(int i=0;i<rows.Count;i++){
-				RowHeights[i]=0;//rowHeight;
-				if(wrapText){
-					//find the tallest row
-					for(int j=0;j<rows[i].Cells.Count;j++) {
-						if(rows[i].Height==0){//not set
-							cellH=(int)g.MeasureString(rows[i].Cells[j].Text,this.cellFont,columns[j].ColWidth).Height+1;
-						}
-						else{
-							cellH=rows[i].Height;
-						}
-						if(cellH>RowHeights[i]) {
-							RowHeights[i]=cellH;
-						}
-					}
-				}
-				else{
-					if(rows[i].Height==0){//not set
-						RowHeights[i]=(int)g.MeasureString("Any",this.cellFont).Height+1;
-					}
-					else{
-						RowHeights[i]=rows[i].Height;
-					}
-				}
-				if(imageH>RowHeights[i]){
-					RowHeights[i]=imageH;
-				}
-				if(noteW>0 && rows[i].Note!=""){
-					NoteHeights[i]=(int)g.MeasureString(rows[i].Note,this.cellFont,noteW).Height;
-				}
-				if(i==0){
-					RowLocs[i]=0;
-				}
-				else{
-					RowLocs[i]=RowLocs[i-1]+RowHeights[i-1]+NoteHeights[i-1];
-				}
-				GridH+=RowHeights[i]+NoteHeights[i];
-			}
-			g.Dispose();
-		}
-
-		private void LayoutScrollBars(){
-			vScroll.Location=new Point(this.Width-vScroll.Width-1,titleHeight+headerHeight+1);
-			if(this.hScrollVisible){
-				hScroll.Visible=true;
-				vScroll.Height=this.Height-titleHeight-headerHeight-hScroll.Height-2;
-				hScroll.Location=new Point(1,this.Height-hScroll.Height-1);
-				hScroll.Width=this.Width-vScroll.Width-2;
-				if(GridW<hScroll.Width){
-					hScroll.Value=0;
-					hScroll.Enabled=false;
-				}
-				else{
-					hScroll.Enabled=true;
-					hScroll.Minimum = 0;
-					hScroll.Maximum=GridW;
-					hScroll.LargeChange=(hScroll.Width<0?0:hScroll.Width);//Don't allow negative width (will throw exception).
-					hScroll.SmallChange=(int)(50);
-				}
-
-			}
-			else{
-				hScroll.Visible=false;
-				vScroll.Height=this.Height-titleHeight-headerHeight-2;
-			}
-			if(vScroll.Height<=0){
-				return;
-			}
-			//hScroll support incomplete
-			if(GridH<vScroll.Height){
-				vScroll.Value=0;
-				vScroll.Enabled=false;
-			}
-			else{
-				vScroll.Enabled=true;
-				vScroll.Minimum = 0;
-				vScroll.Maximum=GridH;
-				vScroll.LargeChange=vScroll.Height;//it used to crash right here as it tried to assign a negative number.
-				vScroll.SmallChange=(int)(14*3.4);//it's not an even number so that it is obvious to user that rows moved
-			}
-			//vScroll.Value=0;
-		}
-
-		///<summary></summary>
-		protected override void OnPaintBackground(PaintEventArgs pea) {
-			//base.OnPaintBackground (pea);
-			//don't paint background.  This reduces flickering.
-		}
-
-		///<summary>Usually called after entering a new list to automatically scroll to the end.</summary>
-		public void ScrollToEnd(){
-			ScrollValue=vScroll.Maximum;//this does all error checking and invalidates
-		}
-
-		///<summary>Use to set a row selected or not.  Can handle values outside the acceptable range.</summary>
-		public void SetSelected(int index,bool setValue){
-			if(setValue){//select specified index
-				if(selectionMode==GridSelectionMode.None){
-					throw new Exception("Selection mode is none.");
-				}
-				if(index<0 || index>rows.Count-1){//check to see if index is within the valid range of values
-					return;//if not, then ignore.
-				}
-				if(selectionMode==GridSelectionMode.One){
-					selectedIndices.Clear();//clear existing selection before assigning the new one.
-				}
-				if(!selectedIndices.Contains(index)){
-					selectedIndices.Add(index);
-				}
-			}
-			else{//unselect specified index
-				if(selectedIndices.Contains(index)){
-					selectedIndices.Remove(index);
-				}
-			}
-      Invalidate();
-		}
-
-		///<summary>Allows setting multiple values all at once</summary>
-		public void SetSelected(int[] iArray,bool setValue){
-			if(selectionMode==GridSelectionMode.None){
-				throw new Exception("Selection mode is none.");
-			}
-			if(selectionMode==GridSelectionMode.One){
-				throw new Exception("Selection mode is one.");
-			}
-			for(int i=0;i<iArray.Length;i++){
-				if(setValue){//select specified index
-					if(iArray[i]<0 || iArray[i]>rows.Count-1) {//check to see if index is within the valid range of values
-						return;//if not, then ignore.
-					}
-					if(!selectedIndices.Contains(iArray[i])){
-						selectedIndices.Add(iArray[i]);
-					}
-				}
-				else{//unselect specified index
-					if(selectedIndices.Contains(iArray[i])){
-						selectedIndices.Remove(iArray[i]);
-					}
-				}
-			}
-			Invalidate();
-		}
-
-		///<summary>Sets all rows to specified value.</summary>
-		public void SetSelected(bool setValue){
-			if(selectionMode==GridSelectionMode.None){
-				throw new Exception("Selection mode is none.");
-			}
-			if(selectionMode==GridSelectionMode.One && setValue==true){
-				throw new Exception("Selection mode is one.");
-			}
-			if(selectionMode==GridSelectionMode.OneCell){
-				throw new Exception("Selection mode is OneCell.");
-			}
-			selectedIndices.Clear();
-			if(setValue){//select all
-				for(int i=0;i<rows.Count;i++){
-					selectedIndices.Add(i);
-				}
-			}
-			Invalidate();
-		}
-
-		///<summary></summary>
-		public void SetSelected(Point setCell){
-			if(selectionMode!=GridSelectionMode.OneCell) {
-				throw new Exception("Selection mode must be OneCell.");
-			}
-			selectedCell=setCell;
-			if(editBox!=null) {
-				editBox.Dispose();
-			}
-			if(Columns[selectedCell.X].IsEditable) {
-				CreateEditBox();
-			}
-			Invalidate();
-		}
-
-		///<summary>If one row is selected, it returns the index to that row.  Really only useful for SelectionMode.One.  If no rows selected, returns -1.</summary>
-		public int GetSelectedIndex(){
-			if(selectedIndices.Count>0){
-				return (int)selectedIndices[0];
-			}
-			return -1;
-		}
-
+		#region Printing
 		///<summary>When using the included printing function, this tells you how many pages the printing will take.  The first page does not need to start at 0, but can start further down.</summary>
 		public int GetNumberOfPages(Rectangle bounds,int marginTopFirstPage) {
 			float adj=100f/96f;
@@ -1108,38 +999,146 @@ namespace OpenDental.UI{
 			#endregion Rows
 			return yPos+4;
 		}
+		#endregion Printing
 
-		///<summary>Returns row. -1 if no valid row.  Supply the y position in pixels.</summary>
-		public int PointToRow(int y){
-			if(y<1+titleHeight+headerHeight){
-				return-1;
-			}
-			for(int i=0;i<rows.Count;i++){
-				if(y>-vScroll.Value+1+titleHeight+headerHeight+RowLocs[i]+RowHeights[i]+NoteHeights[i]){
-					continue;//clicked below this row.
+		#region Selections
+		///<summary>Use to set a row selected or not.  Can handle values outside the acceptable range.</summary>
+		public void SetSelected(int index,bool setValue){
+			if(setValue){//select specified index
+				if(selectionMode==GridSelectionMode.None){
+					throw new Exception("Selection mode is none.");
 				}
-				return i;
+				if(index<0 || index>rows.Count-1){//check to see if index is within the valid range of values
+					return;//if not, then ignore.
+				}
+				if(selectionMode==GridSelectionMode.One){
+					selectedIndices.Clear();//clear existing selection before assigning the new one.
+				}
+				if(!selectedIndices.Contains(index)){
+					selectedIndices.Add(index);
+				}
+			}
+			else{//unselect specified index
+				if(selectedIndices.Contains(index)){
+					selectedIndices.Remove(index);
+				}
+			}
+      Invalidate();
+		}
+
+		///<summary>Allows setting multiple values all at once</summary>
+		public void SetSelected(int[] iArray,bool setValue){
+			if(selectionMode==GridSelectionMode.None){
+				throw new Exception("Selection mode is none.");
+			}
+			if(selectionMode==GridSelectionMode.One){
+				throw new Exception("Selection mode is one.");
+			}
+			for(int i=0;i<iArray.Length;i++){
+				if(setValue){//select specified index
+					if(iArray[i]<0 || iArray[i]>rows.Count-1) {//check to see if index is within the valid range of values
+						return;//if not, then ignore.
+					}
+					if(!selectedIndices.Contains(iArray[i])){
+						selectedIndices.Add(iArray[i]);
+					}
+				}
+				else{//unselect specified index
+					if(selectedIndices.Contains(iArray[i])){
+						selectedIndices.Remove(iArray[i]);
+					}
+				}
+			}
+			Invalidate();
+		}
+
+		///<summary>Sets all rows to specified value.</summary>
+		public void SetSelected(bool setValue){
+			if(selectionMode==GridSelectionMode.None){
+				throw new Exception("Selection mode is none.");
+			}
+			if(selectionMode==GridSelectionMode.One && setValue==true){
+				throw new Exception("Selection mode is one.");
+			}
+			if(selectionMode==GridSelectionMode.OneCell){
+				throw new Exception("Selection mode is OneCell.");
+			}
+			selectedIndices.Clear();
+			if(setValue){//select all
+				for(int i=0;i<rows.Count;i++){
+					selectedIndices.Add(i);
+				}
+			}
+			Invalidate();
+		}
+
+		///<summary></summary>
+		public void SetSelected(Point setCell){
+			if(selectionMode!=GridSelectionMode.OneCell) {
+				throw new Exception("Selection mode must be OneCell.");
+			}
+			selectedCell=setCell;
+			if(editBox!=null) {
+				editBox.Dispose();
+			}
+			if(Columns[selectedCell.X].IsEditable) {
+				CreateEditBox();
+			}
+			Invalidate();
+		}
+
+		///<summary>If one row is selected, it returns the index to that row.  Really only useful for SelectionMode.One.  If no rows selected, returns -1.</summary>
+		public int GetSelectedIndex(){
+			if(selectedIndices.Count>0){
+				return (int)selectedIndices[0];
 			}
 			return -1;
 		}
+		#endregion Selections
 
-		///<summary>Returns col.  Supply the x position in pixels. -1 if no valid column.</summary>
-		public int PointToCol(int x){
-			int colRight;//the right edge of each column
-			for(int i=0;i<columns.Count;i++){
-				colRight=0;
-				for(int c=0;c<i+1;c++){
-					colRight+=columns[c].ColWidth;
+		#region Scrolling
+		private void LayoutScrollBars(){
+			vScroll.Location=new Point(this.Width-vScroll.Width-1,titleHeight+headerHeight+1);
+			if(this.hScrollVisible){
+				hScroll.Visible=true;
+				vScroll.Height=this.Height-titleHeight-headerHeight-hScroll.Height-2;
+				hScroll.Location=new Point(1,this.Height-hScroll.Height-1);
+				hScroll.Width=this.Width-vScroll.Width-2;
+				if(GridW<hScroll.Width){
+					hScroll.Value=0;
+					hScroll.Enabled=false;
 				}
-				if(x>-hScroll.Value+colRight){
-					continue;//clicked to the right of this col
+				else{
+					hScroll.Enabled=true;
+					hScroll.Minimum = 0;
+					hScroll.Maximum=GridW;
+					hScroll.LargeChange=(hScroll.Width<0?0:hScroll.Width);//Don't allow negative width (will throw exception).
+					hScroll.SmallChange=(int)(50);
 				}
-				return i;
+
 			}
-			return -1;
+			else{
+				hScroll.Visible=false;
+				vScroll.Height=this.Height-titleHeight-headerHeight-2;
+			}
+			if(vScroll.Height<=0){
+				return;
+			}
+			//hScroll support incomplete
+			if(GridH<vScroll.Height){
+				vScroll.Value=0;
+				vScroll.Enabled=false;
+			}
+			else{
+				vScroll.Enabled=true;
+				vScroll.Minimum = 0;
+				vScroll.Maximum=GridH;
+				vScroll.LargeChange=vScroll.Height;//it used to crash right here as it tried to assign a negative number.
+				vScroll.SmallChange=(int)(14*3.4);//it's not an even number so that it is obvious to user that rows moved
+			}
+			//vScroll.Value=0;
 		}
 
-		#region ScrollEvents
 		private void vScroll_Scroll(object sender,System.Windows.Forms.ScrollEventArgs e){
 			if(editBox!=null) {
 				editBox.Dispose();
@@ -1153,7 +1152,12 @@ namespace OpenDental.UI{
 			Invalidate();
 			this.Focus();
 		}
-		#endregion
+
+		///<summary>Usually called after entering a new list to automatically scroll to the end.</summary>
+		public void ScrollToEnd(){
+			ScrollValue=vScroll.Maximum;//this does all error checking and invalidates
+		}
+		#endregion Scrolling
 
 		#region MouseEvents
 
@@ -1381,7 +1385,6 @@ namespace OpenDental.UI{
 		#endregion
 
 		#region KeyEvents
-
 		///<summary></summary>
 		protected override void OnKeyDown(KeyEventArgs e){
 			base.OnKeyDown (e);
@@ -1443,7 +1446,12 @@ namespace OpenDental.UI{
 			//}
 		}
 
-		#endregion
+		protected void OnCellTextChanged() {
+			if(CellTextChanged!=null){
+				CellTextChanged(this,new EventArgs());
+			}
+		}
+		#endregion KeyEvents
 
 		
 

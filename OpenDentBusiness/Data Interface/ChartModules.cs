@@ -161,7 +161,7 @@ namespace OpenDentBusiness {
 					row["procDate"]="";
 				}
 				else{
-					row["procDate"]=dateT.ToShortDateString();
+					row["procDate"]=dateT.ToString(Lan.GetShortDateTimeFormat());
 				}
 				row["ProcDate"]=dateT;
 				double amt = PIn.PDouble(rawProcs.Rows[i]["ProcFee"].ToString());
@@ -231,7 +231,7 @@ namespace OpenDentBusiness {
 					row["procDate"]="";
 				}
 				else{
-					row["procDate"]=dateT.ToShortDateString();
+					row["procDate"]=dateT.ToString(Lan.GetShortDateTimeFormat());
 				}
 				row["ProcDate"]=dateT;
 				row["procTime"]="";
@@ -280,7 +280,7 @@ namespace OpenDentBusiness {
 					row["procDate"]="";
 				}
 				else {
-					row["procDate"]=dateT.ToShortDateString();
+					row["procDate"]=dateT.ToString(Lan.GetShortDateTimeFormat());
 				}
 				row["ProcDate"]=dateT;
 				row["procFee"]="";
@@ -345,7 +345,7 @@ namespace OpenDentBusiness {
 					row["procDate"]="";
 				}
 				else {
-					row["procDate"]=dateT.ToShortDateString();
+					row["procDate"]=dateT.ToString(Lan.GetShortDateTimeFormat());
 				}
 				row["procTime"]="";
 				if(dateT.TimeOfDay!=TimeSpan.Zero) {
@@ -426,7 +426,7 @@ namespace OpenDentBusiness {
 					row["ProcDate"] = dateT;
 				}
 				else {
-					row["procDate"] = dateT.ToShortDateString();
+					row["procDate"] =dateT.ToString(Lan.GetShortDateTimeFormat());
 					if (dateT.TimeOfDay != TimeSpan.Zero) {
 						row["procTime"] = dateT.ToString("h:mm") + dateT.ToString("%t").ToLower();
 					}
@@ -519,7 +519,7 @@ namespace OpenDentBusiness {
 					row["procDate"]="";
 				}
 				else {
-					row["procDate"]=dateT.ToShortDateString();
+					row["procDate"]=dateT.ToString(Lan.GetShortDateTimeFormat());
 				}
 				row["procTime"]="";
 				if(dateT.TimeOfDay!=TimeSpan.Zero) {
@@ -575,7 +575,7 @@ namespace OpenDentBusiness {
 					row["procDate"]="";
 				}
 				else {
-					row["procDate"]=dateT.ToShortDateString();
+					row["procDate"]=dateT.ToString(Lan.GetShortDateTimeFormat());
 				}
 				row["ProcDate"]=dateT;
 				row["procTime"]="";
