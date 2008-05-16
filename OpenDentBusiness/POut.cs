@@ -135,7 +135,12 @@ namespace OpenDentBusiness{
 
 		public static string PTimeSpan(TimeSpan myTimeSpan, bool encapsulate) {
 			if(myTimeSpan==TimeSpan.Zero){
-				return "00:00:00";
+				if(encapsulate){
+					return "'00:00:00'";
+				}
+				else{
+					return "00:00:00";
+				}
 			}
 			try {
 				DateTime dateT=new DateTime(1,1,1)+myTimeSpan;
@@ -148,7 +153,12 @@ namespace OpenDentBusiness{
 				return outTimeSpan;
 			}
 			catch {
-				return "00:00:00";//"";//this saves zero's to the database
+				if(encapsulate){
+					return "'00:00:00'";
+				}
+				else{
+					return "00:00:00";
+				}
 			}
 		}
 

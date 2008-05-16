@@ -40,8 +40,9 @@ namespace OpenDental{
 		///<summary>If set externally, then this sets the date on startup.</summary>
 		public DateTime DateStart;
 		private GroupBox groupBox3;
-		private RadioButton radioButton1;
-		private RadioButton radioButton2;
+		private RadioButton radioWriteoffPay;
+		private RadioButton radioWriteoffProc;
+		private Label label5;
 		///<summary>If set externally, then this sets the date on startup.</summary>
 		public DateTime DateEnd;
 
@@ -83,7 +84,8 @@ namespace OpenDental{
 			this.listClinic = new System.Windows.Forms.ListBox();
 			this.labelClinic = new System.Windows.Forms.Label();
 			this.groupBox3 = new System.Windows.Forms.GroupBox();
-			this.radioButton1 = new System.Windows.Forms.RadioButton();
+			this.radioWriteoffPay = new System.Windows.Forms.RadioButton();
+			this.radioWriteoffProc = new System.Windows.Forms.RadioButton();
 			this.butRight = new OpenDental.UI.Button();
 			this.butThis = new OpenDental.UI.Button();
 			this.textDateFrom = new OpenDental.ValidDate();
@@ -91,7 +93,7 @@ namespace OpenDental{
 			this.butLeft = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
 			this.butOK = new OpenDental.UI.Button();
-			this.radioButton2 = new System.Windows.Forms.RadioButton();
+			this.label5 = new System.Windows.Forms.Label();
 			this.groupBox1.SuspendLayout();
 			this.groupBox2.SuspendLayout();
 			this.groupBox3.SuspendLayout();
@@ -229,27 +231,39 @@ namespace OpenDental{
 			// 
 			// groupBox3
 			// 
-			this.groupBox3.Controls.Add(this.radioButton2);
-			this.groupBox3.Controls.Add(this.radioButton1);
-			this.groupBox3.Location = new System.Drawing.Point(333,263);
+			this.groupBox3.Controls.Add(this.label5);
+			this.groupBox3.Controls.Add(this.radioWriteoffProc);
+			this.groupBox3.Controls.Add(this.radioWriteoffPay);
+			this.groupBox3.Location = new System.Drawing.Point(333,238);
 			this.groupBox3.Name = "groupBox3";
-			this.groupBox3.Size = new System.Drawing.Size(281,70);
+			this.groupBox3.Size = new System.Drawing.Size(281,95);
 			this.groupBox3.TabIndex = 46;
 			this.groupBox3.TabStop = false;
-			this.groupBox3.Text = "Insurance Writeoffs";
+			this.groupBox3.Text = "Show Insurance Writeoffs";
 			// 
-			// radioButton1
+			// radioWriteoffPay
 			// 
-			this.radioButton1.CheckAlign = System.Drawing.ContentAlignment.TopLeft;
-			this.radioButton1.Checked = true;
-			this.radioButton1.Location = new System.Drawing.Point(9,20);
-			this.radioButton1.Name = "radioButton1";
-			this.radioButton1.Size = new System.Drawing.Size(244,23);
-			this.radioButton1.TabIndex = 0;
-			this.radioButton1.TabStop = true;
-			this.radioButton1.Text = "Use insurance payment date.";
-			this.radioButton1.TextAlign = System.Drawing.ContentAlignment.TopLeft;
-			this.radioButton1.UseVisualStyleBackColor = true;
+			this.radioWriteoffPay.CheckAlign = System.Drawing.ContentAlignment.TopLeft;
+			this.radioWriteoffPay.Checked = true;
+			this.radioWriteoffPay.Location = new System.Drawing.Point(9,20);
+			this.radioWriteoffPay.Name = "radioWriteoffPay";
+			this.radioWriteoffPay.Size = new System.Drawing.Size(244,23);
+			this.radioWriteoffPay.TabIndex = 0;
+			this.radioWriteoffPay.TabStop = true;
+			this.radioWriteoffPay.Text = "Using insurance payment date.";
+			this.radioWriteoffPay.TextAlign = System.Drawing.ContentAlignment.TopLeft;
+			this.radioWriteoffPay.UseVisualStyleBackColor = true;
+			// 
+			// radioWriteoffProc
+			// 
+			this.radioWriteoffProc.CheckAlign = System.Drawing.ContentAlignment.TopLeft;
+			this.radioWriteoffProc.Location = new System.Drawing.Point(9,41);
+			this.radioWriteoffProc.Name = "radioWriteoffProc";
+			this.radioWriteoffProc.Size = new System.Drawing.Size(244,23);
+			this.radioWriteoffProc.TabIndex = 1;
+			this.radioWriteoffProc.Text = "Using procedure date.";
+			this.radioWriteoffProc.TextAlign = System.Drawing.ContentAlignment.TopLeft;
+			this.radioWriteoffProc.UseVisualStyleBackColor = true;
 			// 
 			// butRight
 			// 
@@ -337,16 +351,13 @@ namespace OpenDental{
 			this.butOK.Text = "&OK";
 			this.butOK.Click += new System.EventHandler(this.butOK_Click);
 			// 
-			// radioButton2
+			// label5
 			// 
-			this.radioButton2.CheckAlign = System.Drawing.ContentAlignment.TopLeft;
-			this.radioButton2.Location = new System.Drawing.Point(9,41);
-			this.radioButton2.Name = "radioButton2";
-			this.radioButton2.Size = new System.Drawing.Size(244,23);
-			this.radioButton2.TabIndex = 1;
-			this.radioButton2.Text = "Use procedure date.";
-			this.radioButton2.TextAlign = System.Drawing.ContentAlignment.TopLeft;
-			this.radioButton2.UseVisualStyleBackColor = true;
+			this.label5.Location = new System.Drawing.Point(6,71);
+			this.label5.Name = "label5";
+			this.label5.Size = new System.Drawing.Size(269,17);
+			this.label5.TabIndex = 2;
+			this.label5.Text = "(this is discussed in the PPO section of the manual)";
 			// 
 			// FormRpProdInc
 			// 
@@ -615,7 +626,7 @@ namespace OpenDental{
 				+"AND adjustment.AdjDate >= "+POut.PDate(dateFrom)+" "
 				+"AND adjustment.AdjDate <= "+POut.PDate(dateTo)
 				+") UNION (";
-			//Insurance Writeoff---added spk 5/19/05--------------------------------------
+			//Insurance Writeoff----------------------------------------------------------
 			whereProv="";
 			if(listProv.SelectedIndices[0]!=0){
 				for(int i=0;i<listProv.SelectedIndices.Count;i++){
@@ -630,9 +641,14 @@ namespace OpenDental{
 				}
 				whereProv+=") ";
 			}
-			Queries.CurReport.Query+="SELECT "
-				+"claimproc.DateCP,"
-				+"CONCAT(CONCAT(CONCAT(CONCAT(patient.LName,', '),patient.FName),' '),patient.MiddleI),"
+			Queries.CurReport.Query+="SELECT ";
+			if(radioWriteoffPay.Checked){
+				Queries.CurReport.Query+="claimproc.DateCP,";
+			}
+			else{
+				Queries.CurReport.Query+="claimproc.ProcDate,";
+			}
+			Queries.CurReport.Query+="CONCAT(CONCAT(CONCAT(CONCAT(patient.LName,', '),patient.FName),' '),patient.MiddleI),"
 				+"carrier.CarrierName,"
 				+"provider.Abbr,"
 				+"'0',"
@@ -641,19 +657,23 @@ namespace OpenDental{
 				+"'0',"
 				+"'0',"
 				+"claimproc.ClaimNum "
-				+"FROM claimproc,insplan,patient,carrier,provider "//,claimpayment "
-				//claimpayment date is used because DateCP was not forced to be the same until version 3.0
-				//+"WHERE claimproc.ClaimPaymentNum = claimpayment.ClaimPaymentNum "
+				+"FROM claimproc,insplan,patient,carrier,provider "
 				+"WHERE provider.ProvNum = claimproc.ProvNum "
 				+"AND claimproc.PlanNum = insplan.PlanNum "
 				+"AND claimproc.PatNum = patient.PatNum "
 				+"AND carrier.CarrierNum = insplan.CarrierNum "
 				+whereProv
 				+"AND (claimproc.Status=1 OR claimproc.Status=4) "//received or supplemental
-				+"AND claimproc.WriteOff > '.0001' "
-				+"AND claimproc.DateCP >= "+POut.PDate(dateFrom)+" "
-				+"AND claimproc.DateCP <= "+POut.PDate(dateTo)+" "
-				+"GROUP BY claimproc.ClaimNum"
+				+"AND claimproc.WriteOff > '.0001' ";
+			if(radioWriteoffPay.Checked){
+				Queries.CurReport.Query+="AND claimproc.DateCP >= "+POut.PDate(dateFrom)+" "
+					+"AND claimproc.DateCP <= "+POut.PDate(dateTo)+" ";
+			}
+			else{//WriteoffProc
+				Queries.CurReport.Query+="AND claimproc.ProcDate >= "+POut.PDate(dateFrom)+" "
+					+"AND claimproc.ProcDate <= "+POut.PDate(dateTo)+" ";
+			}
+			Queries.CurReport.Query+="GROUP BY claimproc.ClaimNum"
 				+") UNION (";
 			//Patient Income------------------------------------------------------------------------------
 			whereProv="";
@@ -894,13 +914,24 @@ GROUP BY DateCP Order by DateCP
 				}
 				whereProv+=") ";
 			}
-			Queries.CurReport.Query="SELECT DateCP, SUM(WriteOff) FROM claimproc WHERE "
-				+"DateCP >= "+POut.PDate(dateFrom)+" "
-				+"AND DateCP <= "+POut.PDate(dateTo)+" "
-				+"AND (Status = '1' OR Status = 4) "//Recieved or supplemental. Otherwise, it's only an estimate.
-				+whereProv
-				+" GROUP BY DateCP "
-				+"ORDER BY DateCP"; 
+			if(radioWriteoffPay.Checked){
+				Queries.CurReport.Query="SELECT DateCP,SUM(WriteOff) FROM claimproc WHERE "
+					+"DateCP >= "+POut.PDate(dateFrom)+" "
+					+"AND DateCP <= "+POut.PDate(dateTo)+" "
+					+"AND (Status = '1' OR Status = 4) "//Recieved or supplemental. Otherwise, it's only an estimate.
+					+whereProv
+					+" GROUP BY DateCP "
+					+"ORDER BY DateCP"; 
+			}
+			else{
+				Queries.CurReport.Query="SELECT ProcDate,SUM(WriteOff) FROM claimproc WHERE "
+					+"ProcDate >= "+POut.PDate(dateFrom)+" "
+					+"AND ProcDate <= "+POut.PDate(dateTo)+" "
+					+"AND (Status = '1' OR Status = 4) "//Recieved or supplemental. Otherwise, it's only an estimate.
+					+whereProv
+					+" GROUP BY ProcDate "
+					+"ORDER BY ProcDate"; 
+			}
 			Queries.SubmitTemp(); //create TableTemp
       TableInsWriteoff=Queries.TableTemp.Copy();
 
@@ -1275,7 +1306,6 @@ ORDER BY adjdate DESC
 				+"GROUP BY MONTH(adjustment.AdjDate)";
 			Queries.SubmitTemp();
       TableAdj=Queries.TableTemp.Copy();
-			//****** added, spk 5/19/05
 			//TableInsWriteoff--------------------------------------------------------------------------
 			whereProv="";
 			if(listProv.SelectedIndices[0]!=0){
@@ -1291,15 +1321,28 @@ ORDER BY adjdate DESC
 				}
 				whereProv+=") ";
 			}
-			Queries.CurReport.Query="SELECT "
-				+"claimproc.DateCP," 
-				+"SUM(claimproc.WriteOff) "
-				+"FROM claimproc "
-				+"WHERE claimproc.DateCP >= "+POut.PDate(dateFrom)+" "
-				+"AND claimproc.DateCP <= "+POut.PDate(dateTo)+" "
-				+whereProv
-				+"AND claimproc.Status = '1' "//Received. 
-				+"GROUP BY MONTH(claimproc.DateCP)";
+			if(radioWriteoffPay.Checked){
+				Queries.CurReport.Query="SELECT "
+					+"claimproc.DateCP," 
+					+"SUM(claimproc.WriteOff) "
+					+"FROM claimproc "
+					+"WHERE claimproc.DateCP >= "+POut.PDate(dateFrom)+" "
+					+"AND claimproc.DateCP <= "+POut.PDate(dateTo)+" "
+					+whereProv
+					+"AND claimproc.Status = '1' "//Received. 
+					+"GROUP BY MONTH(claimproc.DateCP)";
+			}
+			else{
+				Queries.CurReport.Query="SELECT "
+					+"claimproc.ProcDate," 
+					+"SUM(claimproc.WriteOff) "
+					+"FROM claimproc "
+					+"WHERE claimproc.ProcDate >= "+POut.PDate(dateFrom)+" "
+					+"AND claimproc.ProcDate <= "+POut.PDate(dateTo)+" "
+					+whereProv
+					+"AND claimproc.Status = '1' "//Received. 
+					+"GROUP BY MONTH(claimproc.ProcDate)";
+			}
 			Queries.SubmitTemp(); //create TableTemp
 			TableInsWriteoff=Queries.TableTemp.Copy();
 			//PtIncome--------------------------------------------------------------------------------
