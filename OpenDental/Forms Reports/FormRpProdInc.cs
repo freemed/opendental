@@ -641,36 +641,48 @@ namespace OpenDental{
 				}
 				whereProv+=") ";
 			}
-			Queries.CurReport.Query+="SELECT ";
 			if(radioWriteoffPay.Checked){
-				Queries.CurReport.Query+="claimproc.DateCP,";
-			}
-			else{
-				Queries.CurReport.Query+="claimproc.ProcDate,";
-			}
-			Queries.CurReport.Query+="CONCAT(CONCAT(CONCAT(CONCAT(patient.LName,', '),patient.FName),' '),patient.MiddleI),"
-				+"carrier.CarrierName,"
-				+"provider.Abbr,"
-				+"'0',"
-				+"'0',"
-				+"-SUM(claimproc.WriteOff),"
-				+"'0',"
-				+"'0',"
-				+"claimproc.ClaimNum "
-				+"FROM claimproc,insplan,patient,carrier,provider "
-				+"WHERE provider.ProvNum = claimproc.ProvNum "
-				+"AND claimproc.PlanNum = insplan.PlanNum "
-				+"AND claimproc.PatNum = patient.PatNum "
-				+"AND carrier.CarrierNum = insplan.CarrierNum "
-				+whereProv
-				+"AND (claimproc.Status=1 OR claimproc.Status=4) "//received or supplemental
-				+"AND claimproc.WriteOff > '.0001' ";
-			if(radioWriteoffPay.Checked){
-				Queries.CurReport.Query+="AND claimproc.DateCP >= "+POut.PDate(dateFrom)+" "
+				Queries.CurReport.Query+="SELECT claimproc.DateCP,"
+					+"CONCAT(CONCAT(CONCAT(CONCAT(patient.LName,', '),patient.FName),' '),patient.MiddleI),"
+					+"carrier.CarrierName,"
+					+"provider.Abbr,"
+					+"'0',"
+					+"'0',"
+					+"-SUM(claimproc.WriteOff),"
+					+"'0',"
+					+"'0',"
+					+"claimproc.ClaimNum "
+					+"FROM claimproc,insplan,patient,carrier,provider "
+					+"WHERE provider.ProvNum = claimproc.ProvNum "
+					+"AND claimproc.PlanNum = insplan.PlanNum "
+					+"AND claimproc.PatNum = patient.PatNum "
+					+"AND carrier.CarrierNum = insplan.CarrierNum "
+					+whereProv
+					+"AND (claimproc.Status=1 OR claimproc.Status=4) "//received or supplemental
+					+"AND claimproc.WriteOff > '.0001' "
+					+"AND claimproc.DateCP >= "+POut.PDate(dateFrom)+" "
 					+"AND claimproc.DateCP <= "+POut.PDate(dateTo)+" ";
 			}
-			else{//WriteoffProc
-				Queries.CurReport.Query+="AND claimproc.ProcDate >= "+POut.PDate(dateFrom)+" "
+			else{
+				Queries.CurReport.Query+="SELECT claimproc.ProcDate,"
+					+"CONCAT(CONCAT(CONCAT(CONCAT(patient.LName,', '),patient.FName),' '),patient.MiddleI),"
+					+"carrier.CarrierName,"
+					+"provider.Abbr,"
+					+"'0',"
+					+"'0',"
+					+"-SUM(claimproc.WriteOff),"
+					+"'0',"
+					+"'0',"
+					+"claimproc.ClaimNum "
+					+"FROM claimproc,insplan,patient,carrier,provider "
+					+"WHERE provider.ProvNum = claimproc.ProvNum "
+					+"AND claimproc.PlanNum = insplan.PlanNum "
+					+"AND claimproc.PatNum = patient.PatNum "
+					+"AND carrier.CarrierNum = insplan.CarrierNum "
+					+whereProv
+					+"AND (claimproc.Status=1 OR claimproc.Status=4 OR claimproc.Status=0) "//received or supplemental or notreceived
+					+"AND claimproc.WriteOff > '.0001' "
+					+"AND claimproc.ProcDate >= "+POut.PDate(dateFrom)+" "
 					+"AND claimproc.ProcDate <= "+POut.PDate(dateTo)+" ";
 			}
 			Queries.CurReport.Query+="GROUP BY claimproc.ClaimNum"
@@ -927,7 +939,7 @@ GROUP BY DateCP Order by DateCP
 				Queries.CurReport.Query="SELECT ProcDate,SUM(WriteOff) FROM claimproc WHERE "
 					+"ProcDate >= "+POut.PDate(dateFrom)+" "
 					+"AND ProcDate <= "+POut.PDate(dateTo)+" "
-					+"AND (Status = '1' OR Status = 4) "//Recieved or supplemental. Otherwise, it's only an estimate.
+					+"AND (claimproc.Status=1 OR claimproc.Status=4 OR claimproc.Status=0) " //received or supplemental or notreceived
 					+whereProv
 					+" GROUP BY ProcDate "
 					+"ORDER BY ProcDate"; 
@@ -1329,7 +1341,7 @@ ORDER BY adjdate DESC
 					+"WHERE claimproc.DateCP >= "+POut.PDate(dateFrom)+" "
 					+"AND claimproc.DateCP <= "+POut.PDate(dateTo)+" "
 					+whereProv
-					+"AND claimproc.Status = '1' "//Received. 
+					+"AND (claimproc.Status=1 OR claimproc.Status=4) "//Received or supplemental
 					+"GROUP BY MONTH(claimproc.DateCP)";
 			}
 			else{
@@ -1340,7 +1352,7 @@ ORDER BY adjdate DESC
 					+"WHERE claimproc.ProcDate >= "+POut.PDate(dateFrom)+" "
 					+"AND claimproc.ProcDate <= "+POut.PDate(dateTo)+" "
 					+whereProv
-					+"AND claimproc.Status = '1' "//Received. 
+					+"AND (claimproc.Status=1 OR claimproc.Status=4 OR claimproc.Status=0) " //received or supplemental or notreceived
 					+"GROUP BY MONTH(claimproc.ProcDate)";
 			}
 			Queries.SubmitTemp(); //create TableTemp
