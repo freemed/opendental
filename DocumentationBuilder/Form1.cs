@@ -202,6 +202,7 @@ namespace DocumentationBuilder {
 				case "canadianclaim": return "CanadianClaim";
 				case "canadianextract": return "CanadianExtract";
 				case "canadiannetwork": return "CanadianNetwork";
+				case "claimattach": return "ClaimAttach";
 				case "claimform": return "ClaimForm";
 				case "claimformitem": return "ClaimFormItem";
 				case "claimpayment": return "ClaimPayment";
