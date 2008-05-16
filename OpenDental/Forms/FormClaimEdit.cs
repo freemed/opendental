@@ -229,6 +229,7 @@ namespace OpenDental{
 		private MenuItem menuItemRemove;
 		private ClaimCondCodeLog CurCondCodeLog;
 		private OpenDental.UI.Button butExport;
+		private Label label61;
 		private List<Claim> ClaimList;
 
 		///<summary></summary>
@@ -369,6 +370,7 @@ namespace OpenDental{
 			this.tabMain = new System.Windows.Forms.TabControl();
 			this.tabGeneral = new System.Windows.Forms.TabPage();
 			this.groupAttachments = new System.Windows.Forms.GroupBox();
+			this.butExport = new OpenDental.UI.Button();
 			this.listAttachments = new System.Windows.Forms.ListBox();
 			this.butAttachAdd = new OpenDental.UI.Button();
 			this.butAttachPerio = new OpenDental.UI.Button();
@@ -447,7 +449,7 @@ namespace OpenDental{
 			this.menuItemOpen = new System.Windows.Forms.MenuItem();
 			this.menuItemRename = new System.Windows.Forms.MenuItem();
 			this.menuItemRemove = new System.Windows.Forms.MenuItem();
-			this.butExport = new OpenDental.UI.Button();
+			this.label61 = new System.Windows.Forms.Label();
 			this.groupProsth.SuspendLayout();
 			this.groupOrtho.SuspendLayout();
 			this.groupBox2.SuspendLayout();
@@ -857,7 +859,7 @@ namespace OpenDental{
 			// 
 			// labelRadiographs
 			// 
-			this.labelRadiographs.Location = new System.Drawing.Point(2,19);
+			this.labelRadiographs.Location = new System.Drawing.Point(628,282);
 			this.labelRadiographs.Name = "labelRadiographs";
 			this.labelRadiographs.Size = new System.Drawing.Size(79,18);
 			this.labelRadiographs.TabIndex = 117;
@@ -1431,6 +1433,8 @@ namespace OpenDental{
 			this.tabGeneral.Controls.Add(this.label42);
 			this.tabGeneral.Controls.Add(this.groupBox4);
 			this.tabGeneral.Controls.Add(this.comboAccident);
+			this.tabGeneral.Controls.Add(this.labelRadiographs);
+			this.tabGeneral.Controls.Add(this.textRadiographs);
 			this.tabGeneral.Controls.Add(this.label43);
 			this.tabGeneral.Controls.Add(this.groupProsth);
 			this.tabGeneral.Controls.Add(this.comboEmployRelated);
@@ -1452,23 +1456,37 @@ namespace OpenDental{
 			// 
 			// groupAttachments
 			// 
+			this.groupAttachments.Controls.Add(this.label61);
 			this.groupAttachments.Controls.Add(this.butExport);
 			this.groupAttachments.Controls.Add(this.listAttachments);
 			this.groupAttachments.Controls.Add(this.butAttachAdd);
 			this.groupAttachments.Controls.Add(this.butAttachPerio);
-			this.groupAttachments.Controls.Add(this.textRadiographs);
-			this.groupAttachments.Controls.Add(this.labelRadiographs);
-			this.groupAttachments.Location = new System.Drawing.Point(629,126);
+			this.groupAttachments.Location = new System.Drawing.Point(629,96);
 			this.groupAttachments.Name = "groupAttachments";
-			this.groupAttachments.Size = new System.Drawing.Size(319,148);
+			this.groupAttachments.Size = new System.Drawing.Size(319,178);
 			this.groupAttachments.TabIndex = 147;
 			this.groupAttachments.TabStop = false;
-			this.groupAttachments.Text = "Electronic Attachments";
+			this.groupAttachments.Text = "Attached Images";
+			// 
+			// butExport
+			// 
+			this.butExport.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butExport.Autosize = true;
+			this.butExport.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butExport.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butExport.CornerRadius = 4F;
+			this.butExport.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+			this.butExport.Location = new System.Drawing.Point(253,55);
+			this.butExport.Name = "butExport";
+			this.butExport.Size = new System.Drawing.Size(62,22);
+			this.butExport.TabIndex = 150;
+			this.butExport.Text = "Export";
+			this.butExport.Click += new System.EventHandler(this.butExport_Click);
 			// 
 			// listAttachments
 			// 
 			this.listAttachments.FormattingEnabled = true;
-			this.listAttachments.Location = new System.Drawing.Point(10,51);
+			this.listAttachments.Location = new System.Drawing.Point(10,81);
 			this.listAttachments.Name = "listAttachments";
 			this.listAttachments.Size = new System.Drawing.Size(305,82);
 			this.listAttachments.TabIndex = 149;
@@ -1483,9 +1501,9 @@ namespace OpenDental{
 			this.butAttachAdd.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butAttachAdd.CornerRadius = 4F;
 			this.butAttachAdd.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-			this.butAttachAdd.Location = new System.Drawing.Point(123,17);
+			this.butAttachAdd.Location = new System.Drawing.Point(123,55);
 			this.butAttachAdd.Name = "butAttachAdd";
-			this.butAttachAdd.Size = new System.Drawing.Size(62,24);
+			this.butAttachAdd.Size = new System.Drawing.Size(62,22);
 			this.butAttachAdd.TabIndex = 147;
 			this.butAttachAdd.Text = "Add";
 			this.butAttachAdd.Click += new System.EventHandler(this.butAttachAdd_Click);
@@ -1498,9 +1516,9 @@ namespace OpenDental{
 			this.butAttachPerio.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butAttachPerio.CornerRadius = 4F;
 			this.butAttachPerio.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-			this.butAttachPerio.Location = new System.Drawing.Point(188,17);
+			this.butAttachPerio.Location = new System.Drawing.Point(188,55);
 			this.butAttachPerio.Name = "butAttachPerio";
-			this.butAttachPerio.Size = new System.Drawing.Size(62,24);
+			this.butAttachPerio.Size = new System.Drawing.Size(62,22);
 			this.butAttachPerio.TabIndex = 146;
 			this.butAttachPerio.Text = "Perio";
 			this.butAttachPerio.Click += new System.EventHandler(this.butAttachPerio_Click);
@@ -1508,7 +1526,7 @@ namespace OpenDental{
 			// textRadiographs
 			// 
 			this.textRadiographs.ForeColor = System.Drawing.SystemColors.WindowText;
-			this.textRadiographs.Location = new System.Drawing.Point(81,19);
+			this.textRadiographs.Location = new System.Drawing.Point(713,280);
 			this.textRadiographs.MaxVal = 255;
 			this.textRadiographs.MinVal = 0;
 			this.textRadiographs.Name = "textRadiographs";
@@ -2329,20 +2347,14 @@ namespace OpenDental{
 			this.menuItemRemove.Text = "Remove";
 			this.menuItemRemove.Click += new System.EventHandler(this.menuItemRemove_Click);
 			// 
-			// butExport
+			// label61
 			// 
-			this.butExport.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butExport.Autosize = true;
-			this.butExport.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butExport.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butExport.CornerRadius = 4F;
-			this.butExport.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-			this.butExport.Location = new System.Drawing.Point(253,17);
-			this.butExport.Name = "butExport";
-			this.butExport.Size = new System.Drawing.Size(62,24);
-			this.butExport.TabIndex = 150;
-			this.butExport.Text = "Export";
-			this.butExport.Click += new System.EventHandler(this.butExport_Click);
+			this.label61.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+			this.label61.Location = new System.Drawing.Point(7,16);
+			this.label61.Name = "label61";
+			this.label61.Size = new System.Drawing.Size(282,30);
+			this.label61.TabIndex = 151;
+			this.label61.Text = "These images will NOT be automatically sent with an electronic claim.";
 			// 
 			// FormClaimEdit
 			// 
@@ -2420,7 +2432,6 @@ namespace OpenDental{
 			this.tabGeneral.ResumeLayout(false);
 			this.tabGeneral.PerformLayout();
 			this.groupAttachments.ResumeLayout(false);
-			this.groupAttachments.PerformLayout();
 			this.groupBox4.ResumeLayout(false);
 			this.groupBox4.PerformLayout();
 			this.tabUB04.ResumeLayout(false);
