@@ -82,7 +82,7 @@ namespace OpenDentBusiness{
 		public int ClaimForm;
 		///<summary>Enum:EtransType to define a specific version of an e-claim.  Only used for medical claims right now.</summary>
 		public EtransType EFormat;
-		///<summary>The number of images attached.</summary>
+		///<summary>The number of intraoral images attached.  Not the number of files attached.  This is the value that goes on the 2006 claimform.</summary>
 		public int AttachedImages;
 		///<summary>The number of models attached.</summary>
 		public int AttachedModels;

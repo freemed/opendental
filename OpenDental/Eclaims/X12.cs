@@ -766,6 +766,76 @@ namespace OpenDental.Eclaims
 						+"AC*"//PWK05: Identification Code Qualifier. AC=Attachment Control Number
 						+"TES"+claim.ClaimNum.ToString()+"~");//PWK06: Identification Code.
 				}*/
+				//No validation is done.  However, warnings are displayed if:
+				//Warning if attachments are listed as Mail even though we are sending electronically.
+				//Warning if any PWK segments are needed, and there is no ID code.
+				//PWK can repeat max 10 times.
+				string pwk02;
+				string idCode=claim.AttachmentID;
+				if(idCode==""){//must be min of two char, so we need to make one up.
+					idCode=patient.LName;
+				}
+				idCode=Sout(idCode,80,2);
+				if(claim.AttachedFlags.Contains("Mail")){
+					pwk02="BM";//By Mail
+				}
+				else{
+					pwk02="EL";//Elect
+				}
+				if(claim.AttachedFlags.Contains("EoB")){
+					seg++;
+					sw.WriteLine("PWK*"
+						+"EB*"//PWK01: ReportTypeCode. EB=EoB.
+						+pwk02+"*"//PWK02: Report Transmission Code. EL=Electronic, BM=By Mail
+						+"**"//PWK03 and 04: not used
+						+"AC*"//PWK05: Identification Code Qualifier. AC=Attachment Control Number
+						+idCode+"~");//PWK06: Identification Code.
+				}
+				if(claim.AttachedFlags.Contains("Note")){
+					seg++;
+					sw.WriteLine("PWK*"
+						+"OB*"//PWK01: ReportTypeCode. OB=Operative Note.
+						+pwk02+"*"//PWK02: Report Transmission Code. EL=Electronic, BM=By Mail
+						+"**"//PWK03 and 04: not used
+						+"AC*"//PWK05: Identification Code Qualifier. AC=Attachment Control Number
+						+idCode+"~");//PWK06: Identification Code.
+				}
+				if(claim.AttachedFlags.Contains("Perio")){
+					seg++;
+					sw.WriteLine("PWK*"
+						+"P6*"//PWK01: ReportTypeCode. P6=Perio
+						+pwk02+"*"//PWK02: Report Transmission Code. EL=Electronic, BM=By Mail
+						+"**"//PWK03 and 04: not used
+						+"AC*"//PWK05: Identification Code Qualifier. AC=Attachment Control Number
+						+idCode+"~");//PWK06: Identification Code.
+				}
+				if(claim.AttachedFlags.Contains("Misc") || claim.AttachedImages>0){
+					seg++;
+					sw.WriteLine("PWK*"
+						+"OZ*"//PWK01: ReportTypeCode. OZ=Support Data For Claim.
+						+pwk02+"*"//PWK02: Report Transmission Code. EL=Electronic, BM=By Mail
+						+"**"//PWK03 and 04: not used
+						+"AC*"//PWK05: Identification Code Qualifier. AC=Attachment Control Number
+						+idCode+"~");//PWK06: Identification Code.
+				}
+				if(claim.Radiographs>0){
+					seg++;
+					sw.WriteLine("PWK*"
+						+"RB*"//PWK01: ReportTypeCode. RB=Radiology Films.
+						+pwk02+"*"//PWK02: Report Transmission Code. EL=Electronic, BM=By Mail
+						+"**"//PWK03 and 04: not used
+						+"AC*"//PWK05: Identification Code Qualifier. AC=Attachment Control Number
+						+idCode+"~");//PWK06: Identification Code.
+				}
+				if(claim.AttachedModels>0){
+					seg++;
+					sw.WriteLine("PWK*"
+						+"DA*"//PWK01: ReportTypeCode. DA=Dental Models.
+						+pwk02+"*"//PWK02: Report Transmission Code. EL=Electronic, BM=By Mail
+						+"**"//PWK03 and 04: not used
+						+"AC*"//PWK05: Identification Code Qualifier. AC=Attachment Control Number
+						+idCode+"~");//PWK06: Identification Code.
+				}
 				//2300 CN1: Contract Info (medical)
 				//2300 AMT: Patient amount paid
 				//2300 AMT: Total Purchased Service Amt (medical)
@@ -785,10 +855,15 @@ namespace OpenDental.Eclaims
 				}
 				//2300 K3: File info (medical). Not used.
 				//2300 NTE: Note
-				if(claim.ClaimNote!=""){
+				string note="";
+				if(claim.AttachmentID!="" && !claim.ClaimNote.StartsWith(claim.AttachmentID)){
+					note=claim.AttachmentID+" ";
+				}
+				note+=claim.ClaimNote;
+				if(note!=""){
 					seg++;
 					sw.WriteLine("NTE*ADD*"//NTE01: ADD=Additional infor
-						+Sout(claim.ClaimNote,80)+"~");
+						+Sout(note,80)+"~");
 				}
 				//2300 CR1: (medical)Ambulance transport info
 				//2300 CR2: (medical) Spinal Manipulation Service Info
@@ -1574,9 +1649,10 @@ namespace OpenDental.Eclaims
 			return Sout(str,-1,-1);
 		}
 
-		///<summary>Returns a string describing all missing data on this claim.  Claim will not be allowed to be sent electronically unless this string comes back empty.</summary>
-		public static string GetMissingData(ClaimSendQueueItem queueItem){
+		///<summary>Returns a string describing all missing data on this claim.  Claim will not be allowed to be sent electronically unless this string comes back empty.  There is also an out parameter containing any warnings.  Warnings will not block sending.</summary>
+		public static string GetMissingData(ClaimSendQueueItem queueItem, out string warning){
 			string retVal="";
+			warning="";
 			Clearinghouse clearhouse=Clearinghouses.GetClearinghouse(queueItem.ClearinghouseNum);
 			Claim claim=Claims.GetClaim(queueItem.ClaimNum);
 			Clinic clinic=Clinics.GetClinic(claim.ClinicNum);
@@ -1871,7 +1947,7 @@ namespace OpenDental.Eclaims
 					retVal+=",";
 				retVal+="Auto accident State";
 			}
-			if(clearhouse.ISA08=="113504607" && claim.Attachments.Count>0) {//If Tesia and has attachments
+			/*if(clearhouse.ISA08=="113504607" && claim.Attachments.Count>0) {//If Tesia and has attachments
 				string storedFile;
 				for(int c=0;c<claim.Attachments.Count;c++) {
 					storedFile=ODFileUtils.CombinePaths(FormEmailMessageEdit.GetAttachPath(),claim.Attachments[c].ActualFileName);
@@ -1882,6 +1958,25 @@ namespace OpenDental.Eclaims
 						break;
 					}
 				}
+			}*/
+			//Warning if attachments are listed as Mail even though we are sending electronically.
+			bool pwkNeeded=false;
+			if(claim.AttachedFlags!="Mail"){//in other words, if there are additional flags.
+				pwkNeeded=true;
+			}
+			if(claim.Radiographs>0 || claim.AttachedImages>0 || claim.AttachedModels>0){
+				pwkNeeded=true;
+			}
+			if(claim.AttachedFlags.Contains("Mail") && pwkNeeded){
+				if(warning!="")
+					warning+=",";
+				warning+="Attachments set to Mail";
+			}
+			//Warning if any PWK segments are needed, and there is no ID code.
+			if(pwkNeeded && claim.AttachmentID==""){
+				if(warning!="")
+					warning+=",";
+				warning+="Attachment ID missing";
 			}
 			ClaimProc[] claimProcList=ClaimProcs.Refresh(patient.PatNum);
 			ClaimProc[] claimProcs=ClaimProcs.GetForSendClaim(claimProcList,claim.ClaimNum);

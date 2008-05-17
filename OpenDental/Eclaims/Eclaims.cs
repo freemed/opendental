@@ -151,10 +151,12 @@ namespace OpenDental.Eclaims
 		}
 
 		///<summary>Returns a string describing all missing data on this claim.  Claim will not be allowed to be sent electronically unless this string comes back empty.</summary>
-		public static string GetMissingData(ClaimSendQueueItem queueItem){
+		public static string GetMissingData(ClaimSendQueueItem queueItem, out string warnings){
+			warnings="";
 			Clearinghouse clearhouse=Clearinghouses.GetClearinghouse(queueItem.ClearinghouseNum);
 			if(clearhouse.Eformat==ElectronicClaimFormat.X12){
-				return X12.GetMissingData(queueItem);
+				string retVal=X12.GetMissingData(queueItem,out warnings);
+				return retVal;
 			}
 			else if(clearhouse.Eformat==ElectronicClaimFormat.Renaissance){
 				return Renaissance.GetMissingData(queueItem);
@@ -164,6 +166,8 @@ namespace OpenDental.Eclaims
 			}
 			return "";
 		}
+
+	
 
 
 	}

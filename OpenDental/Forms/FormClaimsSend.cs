@@ -450,33 +450,35 @@ namespace OpenDental{
 			listQueue=Claims.GetQueueList(0,clinicNum);
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
-			ODGridColumn col=new ODGridColumn(Lan.g("TableQueue","Patient Name"),130);
+			ODGridColumn col=new ODGridColumn(Lan.g("TableQueue","Patient Name"),120);
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TableQueue","Carrier Name"),170);
+			col=new ODGridColumn(Lan.g("TableQueue","Carrier Name"),150);
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TableQueue","Clearinghouse"),120);
+			col=new ODGridColumn(Lan.g("TableQueue","Clearinghouse"),110);
 			gridMain.Columns.Add(col);
-			//col=new ODGridColumn("",120);//Lan.g("TableQueue","Status"),120);
-			//gridMain.Columns.Add(col);
+			col=new ODGridColumn(Lan.g("TableQueue","Warnings"),120);
+			gridMain.Columns.Add(col);
 			col=new ODGridColumn(Lan.g("TableQueue","Missing Info"),400);
 			gridMain.Columns.Add(col);			 
 			gridMain.Rows.Clear();
 			ODGridRow row;
+			string missingData;
+			string warnings;
 			for(int i=0;i<listQueue.Length;i++){
 				row=new ODGridRow();
 				row.Cells.Add(listQueue[i].PatName);
 				row.Cells.Add(listQueue[i].Carrier);
 				if(listQueue[i].NoSendElect){
 					row.Cells.Add("Paper");
-				}
-				else{
-					row.Cells.Add(Clearinghouses.GetDescript(listQueue[i].ClearinghouseNum));
-				}
-				if(listQueue[i].NoSendElect){
+					row.Cells.Add("");
 					row.Cells.Add("");
 				}
 				else{
-					row.Cells.Add(Eclaims.Eclaims.GetMissingData(listQueue[i]));
+					warnings="";
+					missingData=Eclaims.Eclaims.GetMissingData(listQueue[i],out warnings);
+					row.Cells.Add(Clearinghouses.GetDescript(listQueue[i].ClearinghouseNum));
+					row.Cells.Add(warnings);
+					row.Cells.Add(missingData);
 				}
 				gridMain.Rows.Add(row);
 			}
@@ -633,8 +635,7 @@ namespace OpenDental{
 			List<ClaimSendQueueItem> queueItems=new List<ClaimSendQueueItem>();//a list of queue items to send
 			if(gridMain.SelectedIndices.Length==0){
 				for(int i=0;i<listQueue.Length;i++){
-					if(!listQueue[i].NoSendElect && gridMain.Rows[i].Cells[3].Text=="")//no Missing Info
-					{
+					if(!listQueue[i].NoSendElect && gridMain.Rows[i].Cells[4].Text==""){//no Missing Info
 						gridMain.SetSelected(i,true);
 					}	
 				}
@@ -655,7 +656,7 @@ namespace OpenDental{
 				}
 			}
 			for(int i=0;i<gridMain.SelectedIndices.Length;i++){
-				if(gridMain.Rows[gridMain.SelectedIndices[i]].Cells[3].Text!=""){
+				if(gridMain.Rows[gridMain.SelectedIndices[i]].Cells[4].Text!=""){
 					MsgBox.Show(this,"Not allowed to send e-claims with missing information.");
 					return;
 				}
