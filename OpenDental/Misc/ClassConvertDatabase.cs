@@ -6455,7 +6455,7 @@ namespace OpenDental{
 				General.NonQ(command);
 				command="ALTER TABLE claim ADD AttachmentID varchar(255)";
 				General.NonQ(command);
-				//new claim form fields for attachments
+				//new claim form fields for attachments---------------------------------
 				command="SELECT ClaimFormNum FROM claimform WHERE UniqueID='OD8'";
 				DataTable table=General.GetTable(command);
 				if(table.Rows.Count>0){
@@ -6467,9 +6467,23 @@ namespace OpenDental{
 						+",XPos,YPos,Width,Height) VALUES("+claimFormNum+",'','AttachedModelsNum','',796,779,27,14)";
 					General.NonQ(command);
 				}
-
-
-
+				//Appt time override----------------------------------------------------
+				//This query uses nested CONCATs for compatibility with Oracle database:
+				//Also, an assumption is made that the user is on 10min increments.  This is a somewhat safe assumption, since 15 minute offices will not track their time as closely.  The inconvenience will be minor in any case.
+				command="UPDATE appointment SET Note=CONCAT('AddTime: ',CONCAT(AddTime,CONCAT('0',CONCAT(' ',Note)))) WHERE AddTime !=0";
+				General.NonQ(command);
+				command="UPDATE appointment SET AddTime=0";
+				General.NonQ(command);
+				if(DataConnection.DBtype == DatabaseType.MySql){
+					command="ALTER TABLE appointment CHANGE AddTime TimeLocked tinyint(1) NOT NULL";//bool
+					General.NonQ(command);
+				}
+				else{//Oracle
+					//I think this will fail in Oracle, but I don't know how to easily do it.
+					//Trying to change the name and type of column.
+					command="ALTER TABLE appointment CHANGE AddTime TimeLocked tinyint(1) NOT NULL";//bool
+					General.NonQ(command);
+				}
 
 
 

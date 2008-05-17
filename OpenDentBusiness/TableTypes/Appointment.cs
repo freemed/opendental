@@ -15,8 +15,8 @@ namespace OpenDentBusiness{
 		public string Pattern;
 		///<summary>FK to definition.DefNum.  This field can also be used to show patient arrived, in chair, etc.  The Category column in the definition table is DefCat.ApptConfirmed.</summary>
 		public int Confirmed;
-		///<summary>Amount of time to add to appointment.  Example: 2 would represent add 20 minutes.</summary>
-		public int AddTime;
+		///<summary>If true, then the program will not attempt to reset the user's time pattern and length when adding or removing procedures.</summary>
+		public bool TimeLocked;
 		///<summary>FK to operatory.OperatoryNum.</summary>
 		public int Op;
 		///<summary>Note.</summary>
@@ -54,7 +54,8 @@ namespace OpenDentBusiness{
 
 		///<summary>Returns a copy of the appointment.</summary>
     public Appointment Copy(){
-			Appointment a=new Appointment();
+			return (Appointment)this.MemberwiseClone();
+			/*Appointment a=new Appointment();
 			a.AptNum=AptNum;
 			a.PatNum=PatNum;
 			a.AptStatus=AptStatus;
@@ -78,7 +79,7 @@ namespace OpenDentBusiness{
 			a.GradePoint=GradePoint;
 			a.ClinicNum=ClinicNum;
 			a.IsHygiene=IsHygiene;
-			return a;
+			return a;*/
 		}
 
 		

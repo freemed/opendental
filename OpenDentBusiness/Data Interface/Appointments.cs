@@ -184,7 +184,7 @@ namespace OpenDentBusiness{
 				command+="AptNum,";
 			}
 			command+="patnum,aptstatus, "
-				+"pattern,confirmed,addtime,op,note,provnum,"
+				+"pattern,confirmed,TimeLocked,op,note,provnum,"
 				+"provhyg,aptdatetime,nextaptnum,unschedstatus,lab,isnewpatient,procdescript,"
 				+"Assistant,InstructorNum,SchoolClassNum,SchoolCourseNum,GradePoint,ClinicNum,IsHygiene) VALUES(";
 			if(PrefC.RandomKeys){
@@ -195,7 +195,7 @@ namespace OpenDentBusiness{
 				+"'"+POut.PInt   ((int)appt.AptStatus)+"', "
 				+"'"+POut.PString(appt.Pattern)+"', "
 				+"'"+POut.PInt   (appt.Confirmed)+"', "
-				+"'"+POut.PInt   (appt.AddTime)+"', "
+				+"'"+POut.PBool  (appt.TimeLocked)+"', "
 				+"'"+POut.PInt   (appt.Op)+"', "
 				+"'"+POut.PString(appt.Note)+"', "
 				+"'"+POut.PInt   (appt.ProvNum)+"', "
@@ -248,9 +248,9 @@ namespace OpenDentBusiness{
 				c+="Confirmed = '"   +POut.PInt   (appt.Confirmed)+"'";
 				comma=true;
 			}
-			if(appt.AddTime!=oldApt.AddTime){
+			if(appt.TimeLocked!=oldApt.TimeLocked){
 				if(comma) c+=",";
-				c+="AddTime = '"     +POut.PInt   (appt.AddTime)+"'";
+				c+="TimeLocked = '"     +POut.PBool (appt.TimeLocked)+"'";
 				comma=true;
 			}
 			if(appt.Op!=oldApt.Op){
@@ -479,10 +479,6 @@ namespace OpenDentBusiness{
 			command+=") ORDER BY patient.LName,patient.FName";
 			return General.GetTable(command);
 		}
- 
-		
-
-		
 
 		///<summary>The newStatus will be a DefNum or 0.</summary>
 		public static void SetConfirmed(int aptNum,int newStatus){
@@ -521,7 +517,7 @@ namespace OpenDentBusiness{
 				apt.AptStatus      =(ApptStatus)PIn.PInt(table.Rows[i][2].ToString());
 				apt.Pattern        =PIn.PString(table.Rows[i][3].ToString());
 				apt.Confirmed      =PIn.PInt(table.Rows[i][4].ToString());
-				apt.AddTime        =PIn.PInt(table.Rows[i][5].ToString());
+				apt.TimeLocked     =PIn.PBool(table.Rows[i][5].ToString());
 				apt.Op             =PIn.PInt(table.Rows[i][6].ToString());
 				apt.Note           =PIn.PString(table.Rows[i][7].ToString());
 				apt.ProvNum        =PIn.PInt(table.Rows[i][8].ToString());

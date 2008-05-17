@@ -45,10 +45,7 @@ namespace OpenDental{
 		private System.Windows.Forms.Button butSlider;
 		private TableTimeBar tbTime;
 		private Label label6;
-		private ValidNum textAddTime;
 		private TextBox textTime;
-		private OpenDental.UI.Button butCalcTime;
-		private Label label1;
 		private ODtextBox textNote;
 		private Label labelApptNote;
 		private OpenDental.UI.Button butAddComm;
@@ -75,6 +72,7 @@ namespace OpenDental{
 		private TextBox textRequirement;
 		private OpenDental.UI.Button butRequirement;
 		private ToolTip toolTip1;
+		private CheckBox checkTimeLocked;
 		private PatPlan[] PatPlanList;
 
 		///<summary></summary>
@@ -136,17 +134,14 @@ namespace OpenDental{
 			this.listQuickAdd = new System.Windows.Forms.ListBox();
 			this.label6 = new System.Windows.Forms.Label();
 			this.textTime = new System.Windows.Forms.TextBox();
-			this.label1 = new System.Windows.Forms.Label();
 			this.butSlider = new System.Windows.Forms.Button();
 			this.panel1 = new System.Windows.Forms.Panel();
 			this.textRequirement = new System.Windows.Forms.TextBox();
-			this.butRequirement = new OpenDental.UI.Button();
 			this.textLabCase = new System.Windows.Forms.TextBox();
-			this.butLab = new OpenDental.UI.Button();
 			this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
 			this.textNote = new OpenDental.ODtextBox();
-			this.textAddTime = new OpenDental.ValidNum();
-			this.butCalcTime = new OpenDental.UI.Button();
+			this.butRequirement = new OpenDental.UI.Button();
+			this.butLab = new OpenDental.UI.Button();
 			this.butAddComm = new OpenDental.UI.Button();
 			this.tbTime = new OpenDental.TableTimeBar();
 			this.gridPatient = new OpenDental.UI.ODGrid();
@@ -158,6 +153,7 @@ namespace OpenDental{
 			this.butPin = new OpenDental.UI.Button();
 			this.butOK = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
+			this.checkTimeLocked = new System.Windows.Forms.CheckBox();
 			this.panel1.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -360,15 +356,6 @@ namespace OpenDental{
 			this.textTime.Size = new System.Drawing.Size(66,20);
 			this.textTime.TabIndex = 62;
 			// 
-			// label1
-			// 
-			this.label1.Location = new System.Drawing.Point(1,41);
-			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(75,14);
-			this.label1.TabIndex = 64;
-			this.label1.Text = "Adj Time";
-			this.label1.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
-			// 
 			// butSlider
 			// 
 			this.butSlider.BackColor = System.Drawing.SystemColors.ControlDark;
@@ -421,6 +408,26 @@ namespace OpenDental{
 			this.textRequirement.Size = new System.Drawing.Size(188,150);
 			this.textRequirement.TabIndex = 144;
 			// 
+			// textLabCase
+			// 
+			this.textLabCase.Location = new System.Drawing.Point(56,183);
+			this.textLabCase.Multiline = true;
+			this.textLabCase.Name = "textLabCase";
+			this.textLabCase.ReadOnly = true;
+			this.textLabCase.Size = new System.Drawing.Size(188,34);
+			this.textLabCase.TabIndex = 142;
+			// 
+			// textNote
+			// 
+			this.textNote.AcceptsReturn = true;
+			this.textNote.Location = new System.Drawing.Point(24,263);
+			this.textNote.Multiline = true;
+			this.textNote.Name = "textNote";
+			this.textNote.QuickPasteType = OpenDentBusiness.QuickPasteType.Appointment;
+			this.textNote.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+			this.textNote.Size = new System.Drawing.Size(312,101);
+			this.textNote.TabIndex = 142;
+			// 
 			// butRequirement
 			// 
 			this.butRequirement.AdjustImageLocation = new System.Drawing.Point(0,0);
@@ -435,15 +442,6 @@ namespace OpenDental{
 			this.butRequirement.Text = "Req";
 			this.butRequirement.Click += new System.EventHandler(this.butRequirement_Click);
 			// 
-			// textLabCase
-			// 
-			this.textLabCase.Location = new System.Drawing.Point(56,183);
-			this.textLabCase.Multiline = true;
-			this.textLabCase.Name = "textLabCase";
-			this.textLabCase.ReadOnly = true;
-			this.textLabCase.Size = new System.Drawing.Size(188,34);
-			this.textLabCase.TabIndex = 142;
-			// 
 			// butLab
 			// 
 			this.butLab.AdjustImageLocation = new System.Drawing.Point(0,0);
@@ -457,40 +455,6 @@ namespace OpenDental{
 			this.butLab.TabIndex = 141;
 			this.butLab.Text = "Lab";
 			this.butLab.Click += new System.EventHandler(this.butLab_Click);
-			// 
-			// textNote
-			// 
-			this.textNote.AcceptsReturn = true;
-			this.textNote.Location = new System.Drawing.Point(24,263);
-			this.textNote.Multiline = true;
-			this.textNote.Name = "textNote";
-			this.textNote.QuickPasteType = OpenDentBusiness.QuickPasteType.Appointment;
-			this.textNote.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-			this.textNote.Size = new System.Drawing.Size(312,101);
-			this.textNote.TabIndex = 142;
-			// 
-			// textAddTime
-			// 
-			this.textAddTime.Location = new System.Drawing.Point(3,56);
-			this.textAddTime.MaxVal = 255;
-			this.textAddTime.MinVal = 0;
-			this.textAddTime.Name = "textAddTime";
-			this.textAddTime.Size = new System.Drawing.Size(65,20);
-			this.textAddTime.TabIndex = 61;
-			// 
-			// butCalcTime
-			// 
-			this.butCalcTime.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butCalcTime.Autosize = true;
-			this.butCalcTime.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butCalcTime.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butCalcTime.CornerRadius = 4F;
-			this.butCalcTime.Location = new System.Drawing.Point(22,85);
-			this.butCalcTime.Name = "butCalcTime";
-			this.butCalcTime.Size = new System.Drawing.Size(46,20);
-			this.butCalcTime.TabIndex = 63;
-			this.butCalcTime.Text = "Calc";
-			this.butCalcTime.Click += new System.EventHandler(this.butCalcTime_Click);
 			// 
 			// butAddComm
 			// 
@@ -653,20 +617,28 @@ namespace OpenDental{
 			this.butCancel.Text = "&Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
 			// 
+			// checkTimeLocked
+			// 
+			this.checkTimeLocked.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.checkTimeLocked.Location = new System.Drawing.Point(4,41);
+			this.checkTimeLocked.Name = "checkTimeLocked";
+			this.checkTimeLocked.Size = new System.Drawing.Size(70,33);
+			this.checkTimeLocked.TabIndex = 148;
+			this.checkTimeLocked.Text = "Time Locked";
+			this.checkTimeLocked.Click += new System.EventHandler(this.checkTimeLocked_Click);
+			// 
 			// FormApptEdit
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.ClientSize = new System.Drawing.Size(974,704);
+			this.Controls.Add(this.checkTimeLocked);
 			this.Controls.Add(this.textNote);
 			this.Controls.Add(this.labelApptNote);
 			this.Controls.Add(this.panel1);
 			this.Controls.Add(this.label6);
-			this.Controls.Add(this.textAddTime);
 			this.Controls.Add(this.textTime);
 			this.Controls.Add(this.labelQuickAdd);
-			this.Controls.Add(this.butCalcTime);
 			this.Controls.Add(this.listQuickAdd);
-			this.Controls.Add(this.label1);
 			this.Controls.Add(this.butAddComm);
 			this.Controls.Add(this.butSlider);
 			this.Controls.Add(this.tbTime);
@@ -803,9 +775,10 @@ namespace OpenDental{
 				if(DefC.Short[(int)DefCat.ApptConfirmed][i].DefNum==AptCur.Confirmed)
 					comboConfirmed.SelectedIndex=i;
 			}
-			textAddTime.MinVal=-1200;
-			textAddTime.MaxVal=1200;
-			textAddTime.Text=POut.PInt(AptCur.AddTime*PIn.PInt(((Pref)PrefC.HList["AppointmentTimeIncrement"]).ValueString));
+			//textAddTime.MinVal=-1200;
+			//textAddTime.MaxVal=1200;
+			checkTimeLocked.Checked=AptCur.TimeLocked;
+			//textAddTime.Text=POut.PInt(AptCur.AddTime*PIn.PInt(((Pref)PrefC.HList["AppointmentTimeIncrement"]).ValueString));
 			textNote.Text=AptCur.Note;
 			for(int i=0;i<DefC.Short[(int)DefCat.ApptProcsQuickAdd].Length;i++) {
 				listQuickAdd.Items.Add(DefC.Short[(int)DefCat.ApptProcsQuickAdd][i].ItemName);
@@ -1069,7 +1042,10 @@ namespace OpenDental{
 		}
 
 		private void CalculateTime() {
-			int adjTimeU=PIn.PInt(textAddTime.Text)/PrefC.GetInt("AppointmentTimeIncrement");
+			if(checkTimeLocked.Checked){
+				return;
+			}
+			//int adjTimeU=PIn.PInt(textAddTime.Text)/PrefC.GetInt("AppointmentTimeIncrement");
 			strBTime=new StringBuilder("");
 			string procTime="";
 			int codeNum;
@@ -1120,45 +1096,6 @@ namespace OpenDental{
 				}
 			}
 			//MessageBox.Show(strBTime.ToString());
-			if(adjTimeU!=0) {
-				if(strBTime.Length==0) {//might be useless.
-					if(adjTimeU > 0) {
-						strBTime.Insert(0,"X",adjTimeU);
-					}
-				}
-				else {//not length 0
-					double xRatio;
-					if((double)strBTime.ToString().LastIndexOf("X")==0)
-						xRatio=1;
-					else
-						xRatio=(double)strBTime.ToString().LastIndexOf("X")/(double)(strBTime.Length-1);
-					if(adjTimeU<0) {//subtract time
-						int xPort=(int)(-adjTimeU*xRatio);
-						if(xPort > 0)
-							if(xPort>=strBTime.Length)
-								strBTime=new StringBuilder("");
-							else
-								strBTime.Remove(0,xPort);
-						int iRemove=strBTime.Length-(-adjTimeU-xPort);
-						if(iRemove < 0)
-							strBTime=new StringBuilder("");
-						else if(adjTimeU+xPort > strBTime.Length) {
-							strBTime=new StringBuilder("");
-						}
-						else
-							strBTime.Remove(iRemove,-adjTimeU-xPort);
-					}
-					else {//add time
-						//MessageBox.Show("adjTimeU:"+adjTimeU.ToString()+"xratio:"+xRatio.ToString());
-						int xPort=(int)Math.Ceiling(adjTimeU*xRatio);
-						//MessageBox.Show("xPort:"+xPort.ToString());
-						if(xPort > 0)
-							strBTime.Insert(0,"X",xPort);
-						if(adjTimeU-xPort > 0)
-							strBTime.Insert(strBTime.Length-1,"/",adjTimeU-xPort);
-					}
-				}//end else not length 0
-			}//if(adjTimeU!=0)
 			if(gridProc.SelectedIndices.Length>1) {//multiple procs
 				strBTime.Insert(0,"/");
 				strBTime.Append("/");
@@ -1169,6 +1106,11 @@ namespace OpenDental{
 			if(strBTime.Length>39) {
 				strBTime.Remove(39,strBTime.Length-39);
 			}
+		}
+
+		private void checkTimeLocked_Click(object sender,EventArgs e) {
+			CalculateTime();
+			FillTime();
 		}
 
 		private void tbTime_CellClicked(object sender,CellEventArgs e) {
@@ -1217,7 +1159,7 @@ namespace OpenDental{
 			mouseIsDown=false;
 		}
 
-		private void butCalcTime_Click(object sender,System.EventArgs e) {
+		/*private void butCalcTime_Click(object sender,System.EventArgs e) {
 			if(textAddTime.errorProvider1.GetError(textAddTime)!=""
 				) {
 				MessageBox.Show(Lan.g(this,"Please fix data entry errors first."));
@@ -1225,7 +1167,7 @@ namespace OpenDental{
 			}
 			CalculateTime();
 			FillTime();
-		}
+		}*/
 		
 		private void gridComm_MouseMove(object sender,MouseEventArgs e) {
 			/*
@@ -1257,10 +1199,10 @@ namespace OpenDental{
 			if(listQuickAdd.IndexFromPoint(e.X,e.Y)==-1) {
 				return;
 			}
-			if(textAddTime.errorProvider1.GetError(textAddTime)!="") {
-				MessageBox.Show(Lan.g(this,"Please fix data entry errors first."));
-				return;
-			}
+			//if(textAddTime.errorProvider1.GetError(textAddTime)!="") {
+			//	MessageBox.Show(Lan.g(this,"Please fix data entry errors first."));
+			//	return;
+			//}
 			if(AptCur.AptStatus==ApptStatus.Complete) {
 				//added procedures would be marked complete when form closes. We'll just stop it here.
 				if(!Security.IsAuthorized(Permissions.ProcComplCreate)) {
@@ -1386,12 +1328,12 @@ namespace OpenDental{
 
 		///<summary>Called from butOK_Click and butPin_Click</summary>
 		private bool UpdateToDB(){
-			if(textAddTime.errorProvider1.GetError(textAddTime)!=""
+			//if(textAddTime.errorProvider1.GetError(textAddTime)!=""
 				//|| textDateTerm.errorProvider1.GetError(textDateTerm)!=""
-				) {
-				MessageBox.Show(Lan.g(this,"Please fix data entry errors first."));
-				return false;
-			}
+			//	) {
+			//	MessageBox.Show(Lan.g(this,"Please fix data entry errors first."));
+			//	return false;
+			//}
 			if (AptCur.AptStatus == ApptStatus.Planned) {
 				;
 			}
@@ -1420,16 +1362,18 @@ namespace OpenDental{
 			}
 			//MessageBox.Show(savePattern.ToString());
 			AptCur.Pattern=savePattern.ToString();
-			if(comboUnschedStatus.SelectedIndex==0)//none
+			if(comboUnschedStatus.SelectedIndex==0){//none
 				AptCur.UnschedStatus=0;
-			else
-				AptCur.UnschedStatus
-					=DefC.Short[(int)DefCat.RecallUnschedStatus][comboUnschedStatus.SelectedIndex-1].DefNum;
-			if(comboConfirmed.SelectedIndex!=-1)
-				AptCur.Confirmed
-					=DefC.Short[(int)DefCat.ApptConfirmed][comboConfirmed.SelectedIndex].DefNum;
-			AptCur.AddTime=(int)(PIn.PInt(textAddTime.Text)/
-				PIn.PInt(((Pref)PrefC.HList["AppointmentTimeIncrement"]).ValueString));
+			}
+			else{
+				AptCur.UnschedStatus=DefC.Short[(int)DefCat.RecallUnschedStatus][comboUnschedStatus.SelectedIndex-1].DefNum;
+			}
+			if(comboConfirmed.SelectedIndex!=-1){
+				AptCur.Confirmed=DefC.Short[(int)DefCat.ApptConfirmed][comboConfirmed.SelectedIndex].DefNum;
+			}
+			AptCur.TimeLocked=checkTimeLocked.Checked;
+			//AptCur.AddTime=(int)(PIn.PInt(textAddTime.Text)/
+			//	PIn.PInt(((Pref)PrefC.HList["AppointmentTimeIncrement"]).ValueString));
 			AptCur.Note=textNote.Text;
 			if(comboClinic.SelectedIndex==0)//none
 				AptCur.ClinicNum=0;
@@ -1593,6 +1537,8 @@ namespace OpenDental{
 				AppointmentL.Delete(AptCur.AptNum);
 			}
 		}
+
+		
 
 
 
