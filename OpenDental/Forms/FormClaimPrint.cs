@@ -1023,7 +1023,11 @@ namespace OpenDental{
 							displayStrings[i]="X";
 						break;
 					case "Remarks":
-						displayStrings[i]=ClaimCur.ClaimNote;
+						displayStrings[i]="";
+						if(ClaimCur.AttachmentID!="" && !ClaimCur.ClaimNote.StartsWith(ClaimCur.AttachmentID)){
+							displayStrings[i]=ClaimCur.AttachmentID+" ";
+						}
+						displayStrings[i]+=ClaimCur.ClaimNote;
 						break;
 					case "PatientRelease":
 						if(planCur.ReleaseInfo)
