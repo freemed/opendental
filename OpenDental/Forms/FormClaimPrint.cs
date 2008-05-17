@@ -1108,8 +1108,12 @@ namespace OpenDental{
 						if(ClaimCur.Radiographs==0)
 							displayStrings[i]="X";
 						break;
-					//"ImagesEnclosed":
-					//"ModelsEnclosed":
+					case "AttachedImagesNum":
+						displayStrings[i]=ClaimCur.AttachedImages.ToString();
+						break;
+					case "AttachedModelsNum":
+						displayStrings[i]=ClaimCur.AttachedModels.ToString();
+						break;
 					case "IsNotOrtho":
 						if(!ClaimCur.IsOrtho)
 							displayStrings[i]="X";

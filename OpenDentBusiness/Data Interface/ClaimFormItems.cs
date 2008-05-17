@@ -34,8 +34,8 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void Insert(ClaimFormItem item){
-			string command="INSERT INTO claimformitem (claimformnum,imagefilename,fieldname,formatstring"
-				+",xpos,ypos,width,height) VALUES("
+			string command="INSERT INTO claimformitem (ClaimFormNum,ImageFileName,FieldName,FormatString"
+				+",XPos,YPos,Width,Height) VALUES("
 				+"'"+POut.PInt   (item.ClaimFormNum)+"', "
 				+"'"+POut.PString(item.ImageFileName)+"', "
 				+"'"+POut.PString(item.FieldName)+"', "

@@ -38,7 +38,25 @@
       <FieldName>RadiographsNumAttached</FieldName>
       <FormatString />
       <XPos>695</XPos>
-      <YPos>782</YPos>
+      <YPos>780</YPos>
+      <Width>27</Width>
+      <Height>14</Height>
+    </ClaimFormItem>
+    <ClaimFormItem>
+      <ImageFileName />
+      <FieldName>AttachedImagesNum</FieldName>
+      <FormatString />
+      <XPos>746</XPos>
+      <YPos>779</YPos>
+      <Width>27</Width>
+      <Height>14</Height>
+    </ClaimFormItem>
+    <ClaimFormItem>
+      <ImageFileName />
+      <FieldName>AttachedModelsNum</FieldName>
+      <FormatString />
+      <XPos>796</XPos>
+      <YPos>779</YPos>
       <Width>27</Width>
       <Height>14</Height>
     </ClaimFormItem>

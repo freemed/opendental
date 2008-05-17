@@ -6455,6 +6455,23 @@ namespace OpenDental{
 				General.NonQ(command);
 				command="ALTER TABLE claim ADD AttachmentID varchar(255)";
 				General.NonQ(command);
+				//new claim form fields for attachments
+				command="SELECT ClaimFormNum FROM claimform WHERE UniqueID='OD8'";
+				DataTable table=General.GetTable(command);
+				if(table.Rows.Count>0){
+					string claimFormNum=table.Rows[0][0].ToString();
+					command="INSERT INTO claimformitem (ClaimFormNum,ImageFileName,FieldName,FormatString"
+						+",XPos,YPos,Width,Height) VALUES("+claimFormNum+",'','AttachedImagesNum','',746,779,27,14)";
+					General.NonQ(command);
+					command="INSERT INTO claimformitem (ClaimFormNum,ImageFileName,FieldName,FormatString"
+						+",XPos,YPos,Width,Height) VALUES("+claimFormNum+",'','AttachedModelsNum','',796,779,27,14)";
+					General.NonQ(command);
+				}
+
+
+
+
+
 
 
 
