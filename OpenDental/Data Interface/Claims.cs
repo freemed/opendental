@@ -130,6 +130,10 @@ namespace OpenDental{
 				tempClaim.ClinicNum     =   PIn.PInt   (table.Rows[i][34].ToString());
 				tempClaim.ClaimForm     =   PIn.PInt   (table.Rows[i][35].ToString());
 				tempClaim.EFormat       =(EtransType)PIn.PInt(table.Rows[i][36].ToString());
+				tempClaim.AttachedImages=   PIn.PInt   (table.Rows[i][37].ToString());
+				tempClaim.AttachedModels=   PIn.PInt   (table.Rows[i][38].ToString());
+				tempClaim.AttachedFlags =   PIn.PString(table.Rows[i][39].ToString());
+				tempClaim.AttachmentID  =   PIn.PString(table.Rows[i][40].ToString());
 				claims.Add(tempClaim);
 				//if(single){
 				//	retVal=tempClaim;
@@ -157,7 +161,8 @@ namespace OpenDental{
 				+",claimtype,provbill,referringprov"
 				+",refnumstring,placeservice,accidentrelated,accidentdate,accidentst"
 				+",employrelated,isortho,orthoremainm,orthodate,patrelat,plannum2"
-				+",patrelat2,writeoff,Radiographs,ClinicNum,ClaimForm,EFormat) VALUES(";
+				+",patrelat2,writeoff,Radiographs,ClinicNum,ClaimForm,EFormat,"
+				+"AttachedImages,AttachedModels,AttachedFlags,AttachmentID) VALUES(";
 			if(PrefC.RandomKeys){
 				command+="'"+POut.PInt(Cur.ClaimNum)+"', ";
 			}
@@ -197,7 +202,11 @@ namespace OpenDental{
 				+"'"+POut.PInt   (Cur.Radiographs)+"', "
 				+"'"+POut.PInt   (Cur.ClinicNum)+"', "
 				+"'"+POut.PInt   (Cur.ClaimForm)+"', "
-				+"'"+POut.PInt   ((int)Cur.EFormat)+"')";
+				+"'"+POut.PInt   ((int)Cur.EFormat)+"', "
+				+"'"+POut.PInt   (Cur.AttachedImages)+"', "
+				+"'"+POut.PInt   (Cur.AttachedModels)+"', "
+				+"'"+POut.PString(Cur.AttachedFlags)+"', "
+				+"'"+POut.PString(Cur.AttachmentID)+"')";
 			if(PrefC.RandomKeys){
 				General.NonQ(command);
 			}
@@ -230,21 +239,25 @@ namespace OpenDental{
 				+",referringprov = '"+	POut.PInt   (Cur.ReferringProv)+"' "
 				+",refnumstring = '" +	POut.PString(Cur.RefNumString)+"' "
 				+",placeservice = '" +	POut.PInt   ((int)Cur.PlaceService)+"' "
-				+",accidentdate = " +	POut.PDate  (Cur.AccidentDate)+" "
-				+",accidentst = '"   +	POut.PString(Cur.AccidentST)+"' "
-				+",employrelated = '"+	POut.PInt   ((int)Cur.EmployRelated)+"' "
-				+",isortho = '"      +	POut.PBool  (Cur.IsOrtho)+"' "
-				+",orthoremainm = '" +	POut.PInt   (Cur.OrthoRemainM)+"' "
-				+",orthodate = "    +	POut.PDate  (Cur.OrthoDate)+" "
-				+",patrelat = '"     +	POut.PInt   ((int)Cur.PatRelat)+"' "
-				+",plannum2 = '"     +	POut.PInt   (Cur.PlanNum2)+"' "
-				+",patrelat2 = '"    +	POut.PInt   ((int)Cur.PatRelat2)+"' "
-				+",writeoff = '"     +	POut.PDouble(Cur.WriteOff)+"' "
-				+",Radiographs = '"  +  POut.PInt   (Cur.Radiographs)+"' "
-				+",ClinicNum = '"    +  POut.PInt   (Cur.ClinicNum)+"' "
-				+",ClaimForm = '"    +  POut.PInt   (Cur.ClaimForm)+"' "
-				+",EFormat = '"      +  POut.PInt   ((int)Cur.EFormat)+"' "
-				+",accidentrelated = '"+POut.PString(Cur.AccidentRelated)+"' "
+				+",accidentrelated = '"+POut.PString(Cur.AccidentRelated)+"' "//ask Derek why this was out of order.
+				+",accidentdate = "   +	POut.PDate  (Cur.AccidentDate)+" "
+				+",accidentst = '"    +	POut.PString(Cur.AccidentST)+"' "
+				+",employrelated = '" +	POut.PInt   ((int)Cur.EmployRelated)+"' "
+				+",isortho = '"       +	POut.PBool  (Cur.IsOrtho)+"' "
+				+",orthoremainm = '"  +	POut.PInt   (Cur.OrthoRemainM)+"' "
+				+",orthodate = "      +	POut.PDate  (Cur.OrthoDate)+" "
+				+",patrelat = '"      +	POut.PInt   ((int)Cur.PatRelat)+"' "
+				+",plannum2 = '"      +	POut.PInt   (Cur.PlanNum2)+"' "
+				+",patrelat2 = '"     +	POut.PInt   ((int)Cur.PatRelat2)+"' "
+				+",writeoff = '"      +	POut.PDouble(Cur.WriteOff)+"' "
+				+",Radiographs = '"   + POut.PInt   (Cur.Radiographs)+"' "
+				+",ClinicNum = '"     + POut.PInt   (Cur.ClinicNum)+"' "
+				+",ClaimForm = '"     + POut.PInt   (Cur.ClaimForm)+"' "
+				+",EFormat = '"       + POut.PInt   ((int)Cur.EFormat)+"' "
+				+",AttachedImages = '"+ POut.PInt   (Cur.AttachedImages)+"' "
+				+",AttachedModels = '"+ POut.PInt   (Cur.AttachedModels)+"' "
+				+",AttachedFlags = '" + POut.PString(Cur.AttachedFlags)+"' "
+				+",AttachmentID = '"  + POut.PString(Cur.AttachmentID)+"' "
 				+"WHERE claimnum = '"+	POut.PInt   (Cur.ClaimNum)+"'";
 			General.NonQ(command);
 			//now, delete all attachments and recreate.

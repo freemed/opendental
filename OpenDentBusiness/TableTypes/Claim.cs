@@ -82,6 +82,15 @@ namespace OpenDentBusiness{
 		public int ClaimForm;
 		///<summary>Enum:EtransType to define a specific version of an e-claim.  Only used for medical claims right now.</summary>
 		public EtransType EFormat;
+		///<summary>The number of images attached.</summary>
+		public int AttachedImages;
+		///<summary>The number of models attached.</summary>
+		public int AttachedModels;
+		///<summary>A comma-delimited set of flag keywords.  Can have one or more of the following: EoB,Note,Perio,Misc.  Must also contain one of these: Mail or Elect.</summary>
+		public string AttachedFlags;
+		///<summary>Example: NEA#1234567.  If present, and if the claim note does not already start with this Id, then it will be prepended to the claim note for both e-claims and mail.  If using e-claims, this same ID will be used for all PWK segements.</summary>
+		public string AttachmentID;
+
 		///<summary>Not a data column.</summary>
 		public List<ClaimAttach> Attachments;
 

@@ -6447,7 +6447,14 @@ namespace OpenDental{
 				}
 				catch {
 				}
-
+				command="ALTER TABLE claim ADD AttachedImages int NOT NULL";
+				General.NonQ(command);
+				command="ALTER TABLE claim ADD AttachedModels int NOT NULL";
+				General.NonQ(command);
+				command="ALTER TABLE claim ADD AttachedFlags varchar(255)";
+				General.NonQ(command);
+				command="ALTER TABLE claim ADD AttachmentID varchar(255)";
+				General.NonQ(command);
 
 
 
