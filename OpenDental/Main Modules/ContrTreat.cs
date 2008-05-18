@@ -958,6 +958,7 @@ namespace OpenDental{
 				bool hasMaxedPri=false;//this tracks exactly which row max happens on so that note can be placed.
 				bool hasMaxedSec=false;
 				ClaimProc claimproc;//holds the estimate.
+				string descript;
 				for(int i=0;i<ProcListTP.Length;i++){
 					row=new ODGridRow();
 					row.Cells.Add("");//never done
@@ -965,7 +966,11 @@ namespace OpenDental{
 					row.Cells.Add(Tooth.ToInternat(ProcListTP[i].ToothNum));
 					row.Cells.Add(ProcListTP[i].Surf);
 					row.Cells.Add(ProcedureCodes.GetProcCode(ProcListTP[i].CodeNum).ProcCode);
-					row.Cells.Add(ProcedureCodes.GetLaymanTerm(ProcListTP[i].CodeNum));
+					descript=ProcedureCodes.GetLaymanTerm(ProcListTP[i].CodeNum);
+					if(ProcListTP[i].ToothRange!=""){
+						descript+=" #"+Tooth.FormatRangeForDisplay(ProcListTP[i].ToothRange);
+					}
+					row.Cells.Add(descript);
 					//if(checkShowStandard.Checked){
 					//	standard=Fees.GetAmount0(ProcListTP[i].CodeNum,feeSched);
 					//	substandard+=standard;

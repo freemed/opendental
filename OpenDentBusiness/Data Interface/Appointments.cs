@@ -611,7 +611,7 @@ namespace OpenDentBusiness{
 			string command="SELECT p1.Abbr ProvAbbr,p2.Abbr HygAbbr,patient.AddrNote,"
 				+"patient.ApptModNote,AptDateTime,appointment.AptNum,AptStatus,Assistant,"
 				+"patient.BillingType,patient.BirthDate,patient.Guarantor,"
-				+"patient.ChartNumber,Confirmed,patient.CreditType,DateTimeChecked,DateTimeRecd,DateTimeSent,"
+				+"patient.ChartNumber,Confirmed,patient.CreditType,DateTimeChecked,DateTimeDue,DateTimeRecd,DateTimeSent,"
 				+"guar.FamFinUrgNote,patient.FName,patient.HmPhone,patient.ImageFolder,IsHygiene,IsNewPatient,"
 				+"LabCaseNum,patient.LName,patient.MedUrgNote,patient.MiddleI,Note,Op,appointment.PatNum,"
 				+"Pattern,patplan.PlanNum,patient.PreferConfirmMethod,patient.PreferContactMethod,patient.Preferred,"
@@ -684,6 +684,7 @@ namespace OpenDentBusiness{
 			int hours;
 			int minutes;
 			DateTime labDate;
+			DateTime labDueDate;
 			DateTime birthdate;
 			for(int i=0;i<raw.Rows.Count;i++) {
 				row=table.NewRow();
@@ -805,6 +806,11 @@ namespace OpenDentBusiness{
 							}
 							else {
 								row["lab"]=Lan.g("Appointments","Lab Not Sent");
+							}
+							labDueDate=PIn.PDateT(raw.Rows[i]["DateTimeDue"].ToString());
+							if(labDueDate.Year>1880) {
+								row["lab"]+=", "+Lan.g("Appointments","Due: ")//+dateDue.ToString("ddd")+" "
+									+labDueDate.ToShortDateString();//+" "+dateDue.ToShortTimeString();
 							}
 						}
 					}
@@ -982,7 +988,11 @@ namespace OpenDentBusiness{
 				retVal.Tables["Appointment"].Rows[0]["AptDateTime"].ToString()
 				));
 			retVal.Tables.Add(GetCommTable(retVal.Tables["Appointment"].Rows[0]["PatNum"].ToString()));
-			retVal.Tables.Add(GetMiscTable(aptNum.ToString(),retVal.Tables["Appointment"].Rows[0]["AptStatus"].ToString()));
+			bool isPlanned=false;
+			if(retVal.Tables["Appointment"].Rows[0]["AptStatus"].ToString()=="6"){
+				isPlanned=true;
+			}
+			retVal.Tables.Add(GetMiscTable(aptNum.ToString(),isPlanned));
 			return retVal;
 		}
 
@@ -1087,8 +1097,9 @@ namespace OpenDentBusiness{
 			table.Columns.Add("status");
 			table.Columns.Add("toothNum");
 			table.Columns.Add("Surf");
-			string command="SELECT procedurecode.ProcCode,AptNum,PlannedAptNum,Priority,ProcFee,ProcNum,ProcStatus,Surf,ToothNum, "
-				+"procedurecode.Descript,procedurelog.CodeNum,procedurelog.ProvNum "
+			string command="SELECT procedurecode.ProcCode,AptNum,LaymanTerm,"
+				+"PlannedAptNum,Priority,ProcFee,ProcNum,ProcStatus,Surf,ToothNum, "
+				+"ToothRange,procedurecode.Descript,procedurelog.CodeNum,procedurelog.ProvNum "
 				+"FROM procedurelog LEFT JOIN procedurecode ON procedurelog.CodeNum=procedurecode.CodeNum "
 				+"WHERE PatNum="+patNum//sort later
 			//1. All TP procs
@@ -1124,7 +1135,15 @@ namespace OpenDentBusiness{
 				if(rawProc.Rows[i]["AptNum"].ToString()!="0" && rawProc.Rows[i]["AptNum"].ToString()!=aptNum) {
 					row["descript"]=Lan.g("FormApptEdit","(other appt)");
 				}
-				row["descript"]+=rawProc.Rows[i]["Descript"].ToString();
+				if(rawProc.Rows[i]["LaymanTerm"].ToString()==""){
+					row["descript"]+=rawProc.Rows[i]["Descript"].ToString();
+				}
+				else{
+					row["descript"]+=rawProc.Rows[i]["LaymanTerm"].ToString();
+				}
+				if(rawProc.Rows[i]["ToothRange"].ToString()!=""){
+					row["descript"]+=" #"+Tooth.FormatRangeForDisplay(rawProc.Rows[i]["ToothRange"].ToString());
+				}
 				row["fee"]=PIn.PDouble(rawProc.Rows[i]["ProcFee"].ToString()).ToString("F");
 				row["priority"]=DefC.GetName(DefCat.TxPriorities,PIn.PInt(rawProc.Rows[i]["Priority"].ToString()));
 				row["ProcCode"]=rawProc.Rows[i]["ProcCode"].ToString();
@@ -1161,7 +1180,7 @@ namespace OpenDentBusiness{
 			return table;
 		}
 
-		private static DataTable GetMiscTable(string aptNum,string apptStatus) {
+		private static DataTable GetMiscTable(string aptNum,bool isPlanned) {
 			DataTable table=new DataTable("Misc");
 			DataRow row;
 			table.Columns.Add("LabCaseNum");
@@ -1170,7 +1189,7 @@ namespace OpenDentBusiness{
 			string command="SELECT LabCaseNum,DateTimeDue,DateTimeChecked,DateTimeRecd,DateTimeSent,"
 				+"laboratory.Description FROM labcase,laboratory "
 				+"WHERE labcase.LaboratoryNum=laboratory.LaboratoryNum AND ";
-			if(apptStatus=="6") {//planned
+			if(isPlanned){
 				command+="labcase.PlannedAptNum="+aptNum;
 			}
 			else {
@@ -1178,34 +1197,35 @@ namespace OpenDentBusiness{
 			}
 			DataTable raw=General.GetTable(command);
 			DateTime date;
-			//always return one row:
+			DateTime dateDue;
+			//for(int i=0;i<raw.Rows.Count;i++) {//always return one row:
 			row=table.NewRow();
 			row["LabCaseNum"]="0";
 			row["labDescript"]="";
 			if(raw.Rows.Count>0){
 				row["LabCaseNum"]=raw.Rows[0]["LabCaseNum"].ToString();
 				row["labDescript"]=raw.Rows[0]["Description"].ToString();
-				//DateTime date=PIn.PDateT(raw.Rows[0]["DateTimeDue"].ToString());
-				//if(date.Year>1880) {
-				//	row["labDescript"]+="\r\n"+Lan.g("FormAppEdit","Due: ")+date.ToString("ddd")+" "
-				//	+date.ToShortDateString()+" "+date.ToShortTimeString();
-				//}
 				date=PIn.PDateT(raw.Rows[0]["DateTimeChecked"].ToString());
 				if(date.Year>1880){
-					row["labDescript"]+="\r\n"+Lan.g("FormApptEdit","Quality Checked");
+					row["labDescript"]+=", "+Lan.g("FormApptEdit","Quality Checked");
 				}
 				else{
 					date=PIn.PDateT(raw.Rows[0]["DateTimeRecd"].ToString());
 					if(date.Year>1880){
-						row["labDescript"]+="\r\n"+Lan.g("FormApptEdit","Received");
+						row["labDescript"]+=", "+Lan.g("FormApptEdit","Received");
 					}
 					else{
 						date=PIn.PDateT(raw.Rows[0]["DateTimeSent"].ToString());
 						if(date.Year>1880){
-							row["labDescript"]+="\r\n"+Lan.g("FormApptEdit","Sent");//sent but not received
+							row["labDescript"]+=", "+Lan.g("FormApptEdit","Sent");//sent but not received
 						}
 						else{
-							row["labDescript"]+="\r\n"+Lan.g("FormApptEdit","Not Sent");
+							row["labDescript"]+=", "+Lan.g("FormApptEdit","Not Sent");
+						}
+						dateDue=PIn.PDateT(raw.Rows[0]["DateTimeDue"].ToString());
+						if(dateDue.Year>1880) {
+							row["labDescript"]+=", "+Lan.g("FormAppEdit","Due: ")+dateDue.ToString("ddd")+" "
+								+dateDue.ToShortDateString()+" "+dateDue.ToShortTimeString();
 						}
 					}
 				}

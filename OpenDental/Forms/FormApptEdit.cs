@@ -73,7 +73,7 @@ namespace OpenDental{
 		private OpenDental.UI.Button butRequirement;
 		private ToolTip toolTip1;
 		private CheckBox checkTimeLocked;
-		private PatPlan[] PatPlanList;
+		//private PatPlan[] PatPlanList;
 
 		///<summary></summary>
 		public FormApptEdit(int aptNum)
@@ -139,6 +139,7 @@ namespace OpenDental{
 			this.textRequirement = new System.Windows.Forms.TextBox();
 			this.textLabCase = new System.Windows.Forms.TextBox();
 			this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+			this.checkTimeLocked = new System.Windows.Forms.CheckBox();
 			this.textNote = new OpenDental.ODtextBox();
 			this.butRequirement = new OpenDental.UI.Button();
 			this.butLab = new OpenDental.UI.Button();
@@ -153,7 +154,6 @@ namespace OpenDental{
 			this.butPin = new OpenDental.UI.Button();
 			this.butOK = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
-			this.checkTimeLocked = new System.Windows.Forms.CheckBox();
 			this.panel1.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -410,12 +410,24 @@ namespace OpenDental{
 			// 
 			// textLabCase
 			// 
+			this.textLabCase.AcceptsReturn = true;
 			this.textLabCase.Location = new System.Drawing.Point(56,183);
 			this.textLabCase.Multiline = true;
 			this.textLabCase.Name = "textLabCase";
 			this.textLabCase.ReadOnly = true;
+			this.textLabCase.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
 			this.textLabCase.Size = new System.Drawing.Size(188,34);
 			this.textLabCase.TabIndex = 142;
+			// 
+			// checkTimeLocked
+			// 
+			this.checkTimeLocked.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.checkTimeLocked.Location = new System.Drawing.Point(4,41);
+			this.checkTimeLocked.Name = "checkTimeLocked";
+			this.checkTimeLocked.Size = new System.Drawing.Size(70,33);
+			this.checkTimeLocked.TabIndex = 148;
+			this.checkTimeLocked.Text = "Time Locked";
+			this.checkTimeLocked.Click += new System.EventHandler(this.checkTimeLocked_Click);
 			// 
 			// textNote
 			// 
@@ -617,16 +629,6 @@ namespace OpenDental{
 			this.butCancel.Text = "&Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
 			// 
-			// checkTimeLocked
-			// 
-			this.checkTimeLocked.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkTimeLocked.Location = new System.Drawing.Point(4,41);
-			this.checkTimeLocked.Name = "checkTimeLocked";
-			this.checkTimeLocked.Size = new System.Drawing.Size(70,33);
-			this.checkTimeLocked.TabIndex = 148;
-			this.checkTimeLocked.Text = "Time Locked";
-			this.checkTimeLocked.Click += new System.EventHandler(this.checkTimeLocked_Click);
-			// 
 			// FormApptEdit
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
@@ -690,7 +692,6 @@ namespace OpenDental{
 			fam=Patients.GetFamily(AptCur.PatNum);
 			pat=fam.GetPatient(AptCur.PatNum);
 			PlanList=InsPlans.Refresh(fam);
-			PatPlanList=PatPlans.Refresh(AptCur.PatNum);
 			if(PrefC.GetBool("EasyHideDentalSchools")) {
 				butRequirement.Visible=false;
 				textRequirement.Visible=false;
@@ -775,10 +776,7 @@ namespace OpenDental{
 				if(DefC.Short[(int)DefCat.ApptConfirmed][i].DefNum==AptCur.Confirmed)
 					comboConfirmed.SelectedIndex=i;
 			}
-			//textAddTime.MinVal=-1200;
-			//textAddTime.MaxVal=1200;
 			checkTimeLocked.Checked=AptCur.TimeLocked;
-			//textAddTime.Text=POut.PInt(AptCur.AddTime*PIn.PInt(((Pref)PrefC.HList["AppointmentTimeIncrement"]).ValueString));
 			textNote.Text=AptCur.Note;
 			for(int i=0;i<DefC.Short[(int)DefCat.ApptProcsQuickAdd].Length;i++) {
 				listQuickAdd.Items.Add(DefC.Short[(int)DefCat.ApptProcsQuickAdd][i].ItemName);
@@ -1210,6 +1208,7 @@ namespace OpenDental{
 				}
 			}
 			Procedures.SetDateFirstVisit(AptCur.AptDateTime.Date,1,pat);
+			PatPlan[] PatPlanList=PatPlans.Refresh(AptCur.PatNum);
 			Benefit[] benefitList=Benefits.Refresh(PatPlanList);
 			ClaimProc[] ClaimProcList=ClaimProcs.Refresh(AptCur.PatNum);
 			string[] codes=DefC.Short[(int)DefCat.ApptProcsQuickAdd][listQuickAdd.IndexFromPoint(e.X,e.Y)].ItemValue.Split(',');
@@ -1427,6 +1426,7 @@ namespace OpenDental{
 					if(!Security.IsAuthorized(Permissions.ProcComplCreate)) {
 						return false;
 					}
+					PatPlan[] PatPlanList=PatPlans.Refresh(AptCur.PatNum);
 					Procedures.SetCompleteInAppt(AptCur,PlanList,PatPlanList);
 					SecurityLogs.MakeLogEntry(Permissions.ProcComplCreate,pat.PatNum,
 						pat.GetNameLF()+" "+AptCur.AptDateTime.ToShortDateString());

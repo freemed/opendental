@@ -113,6 +113,9 @@ namespace OpenDentBusiness {
 				else {
 					row["description"]=rawProcs.Rows[i]["LaymanTerm"].ToString();
 				}
+				if(rawProcs.Rows[i]["ToothRange"].ToString()!=""){
+					row["description"]+=" #"+Tooth.FormatRangeForDisplay(rawProcs.Rows[i]["ToothRange"].ToString());
+				}
 				row["dx"]=DefC.GetValue(DefCat.Diagnosis,PIn.PInt(rawProcs.Rows[i]["Dx"].ToString()));
 				row["Dx"]=rawProcs.Rows[i]["Dx"].ToString();
 				row["EmailMessageNum"]=0;

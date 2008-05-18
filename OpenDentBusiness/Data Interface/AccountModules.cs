@@ -475,7 +475,7 @@ namespace OpenDentBusiness {
 			command="SELECT procedurelog.BaseUnits,Descript,SUM(cp1.InsPayAmt) _insPayAmt,"
 				+"LaymanTerm,procedurelog.MedicalCode,MAX(cp1.NoBillIns) _noBillIns,procedurelog.PatNum,"
 				+"SUM(paysplit.SplitAmt) _patPay,ProcCode,"
-				+"procedurelog.ProcDate,ProcFee,procedurelog.ProcNum,procedurelog.ProvNum,ToothNum,UnitQty,"
+				+"procedurelog.ProcDate,ProcFee,procedurelog.ProcNum,procedurelog.ProvNum,ToothNum,ToothRange,UnitQty,"
 				+"SUM(cp1.WriteOff) _writeOff, "
 				//+"MIN(cp1.ClaimNum) _unsent,"//this worked, but doesn't take into account capitation
 				+"(SELECT MIN(ClaimNum) FROM claimproc cp3 WHERE procedurelog.ProcNum=cp3.ProcNum "
@@ -526,6 +526,9 @@ namespace OpenDentBusiness {
 				row["description"]+=rawProc.Rows[i]["Descript"].ToString();
 				if(rawProc.Rows[i]["LaymanTerm"].ToString()!=""){
 					row["description"]=rawProc.Rows[i]["LaymanTerm"].ToString();
+				}
+				if(rawProc.Rows[i]["ToothRange"].ToString()!=""){
+					row["description"]+=" #"+Tooth.FormatRangeForDisplay(rawProc.Rows[i]["ToothRange"].ToString());
 				}
 				isNoBill=false;
 				if(rawProc.Rows[i]["_noBillIns"].ToString()!="" && rawProc.Rows[i]["_noBillIns"].ToString()!="0"){
