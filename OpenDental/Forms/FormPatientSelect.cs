@@ -63,6 +63,7 @@ namespace OpenDental{
 		private ComboBox comboBillingType;
 		private OpenDental.UI.Button butGetAll;
 		private CheckBox checkRefresh;
+		private OpenDental.UI.Button butAddAll;
 		private TextBox selectedTxtBox;
 
 		///<summary></summary>
@@ -95,6 +96,7 @@ namespace OpenDental{
 			this.textLName = new System.Windows.Forms.TextBox();
 			this.label1 = new System.Windows.Forms.Label();
 			this.groupAddPt = new System.Windows.Forms.GroupBox();
+			this.butAddAll = new OpenDental.UI.Button();
 			this.butAddPt = new OpenDental.UI.Button();
 			this.butOK = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
@@ -124,11 +126,11 @@ namespace OpenDental{
 			this.textFName = new System.Windows.Forms.TextBox();
 			this.label3 = new System.Windows.Forms.Label();
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
+			this.checkRefresh = new System.Windows.Forms.CheckBox();
+			this.butGetAll = new OpenDental.UI.Button();
 			this.butSearch = new OpenDental.UI.Button();
 			this.gridMain = new OpenDental.UI.ODGrid();
 			this.contrKeyboard1 = new OpenDental.User_Controls.ContrKeyboard();
-			this.butGetAll = new OpenDental.UI.Button();
-			this.checkRefresh = new System.Windows.Forms.CheckBox();
 			this.groupAddPt.SuspendLayout();
 			this.groupBox2.SuspendLayout();
 			this.groupBox1.SuspendLayout();
@@ -156,15 +158,30 @@ namespace OpenDental{
 			// 
 			// groupAddPt
 			// 
+			this.groupAddPt.Controls.Add(this.butAddAll);
 			this.groupAddPt.Controls.Add(this.butAddPt);
 			this.groupAddPt.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.groupAddPt.Font = new System.Drawing.Font("Microsoft Sans Serif",8.25F,System.Drawing.FontStyle.Regular,System.Drawing.GraphicsUnit.Point,((byte)(0)));
 			this.groupAddPt.Location = new System.Drawing.Point(699,557);
 			this.groupAddPt.Name = "groupAddPt";
-			this.groupAddPt.Size = new System.Drawing.Size(237,47);
+			this.groupAddPt.Size = new System.Drawing.Size(237,53);
 			this.groupAddPt.TabIndex = 1;
 			this.groupAddPt.TabStop = false;
 			this.groupAddPt.Text = "Add New Family:";
+			// 
+			// butAddAll
+			// 
+			this.butAddAll.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butAddAll.Autosize = true;
+			this.butAddAll.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butAddAll.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butAddAll.CornerRadius = 4F;
+			this.butAddAll.Location = new System.Drawing.Point(137,21);
+			this.butAddAll.Name = "butAddAll";
+			this.butAddAll.Size = new System.Drawing.Size(75,23);
+			this.butAddAll.TabIndex = 1;
+			this.butAddAll.Text = "Add Many";
+			this.butAddAll.Click += new System.EventHandler(this.butAddAll_Click);
 			// 
 			// butAddPt
 			// 
@@ -173,11 +190,11 @@ namespace OpenDental{
 			this.butAddPt.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butAddPt.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butAddPt.CornerRadius = 4F;
-			this.butAddPt.Location = new System.Drawing.Point(68,18);
+			this.butAddPt.Location = new System.Drawing.Point(24,21);
 			this.butAddPt.Name = "butAddPt";
 			this.butAddPt.Size = new System.Drawing.Size(75,23);
 			this.butAddPt.TabIndex = 0;
-			this.butAddPt.Text = "&Add";
+			this.butAddPt.Text = "&Add Pt";
 			this.butAddPt.Click += new System.EventHandler(this.butAddPt_Click);
 			// 
 			// butOK
@@ -487,6 +504,30 @@ namespace OpenDental{
 			this.groupBox1.TabStop = false;
 			this.groupBox1.Text = "Search";
 			// 
+			// checkRefresh
+			// 
+			this.checkRefresh.Location = new System.Drawing.Point(17,53);
+			this.checkRefresh.Name = "checkRefresh";
+			this.checkRefresh.Size = new System.Drawing.Size(195,18);
+			this.checkRefresh.TabIndex = 11;
+			this.checkRefresh.Text = "Refresh while typing";
+			this.checkRefresh.UseVisualStyleBackColor = true;
+			this.checkRefresh.Click += new System.EventHandler(this.checkRefresh_Click);
+			// 
+			// butGetAll
+			// 
+			this.butGetAll.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butGetAll.Autosize = true;
+			this.butGetAll.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butGetAll.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butGetAll.CornerRadius = 4F;
+			this.butGetAll.Location = new System.Drawing.Point(137,21);
+			this.butGetAll.Name = "butGetAll";
+			this.butGetAll.Size = new System.Drawing.Size(75,23);
+			this.butGetAll.TabIndex = 10;
+			this.butGetAll.Text = "Get All";
+			this.butGetAll.Click += new System.EventHandler(this.butGetAll_Click);
+			// 
 			// butSearch
 			// 
 			this.butSearch.AdjustImageLocation = new System.Drawing.Point(0,0);
@@ -523,30 +564,6 @@ namespace OpenDental{
 			this.contrKeyboard1.TabIndex = 10;
 			this.contrKeyboard1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.contrKeyboard1_MouseDown);
 			this.contrKeyboard1.KeyClick += new OpenDental.User_Controls.KeyboardClickEventHandler(this.contrKeyboard1_KeyClick);
-			// 
-			// butGetAll
-			// 
-			this.butGetAll.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butGetAll.Autosize = true;
-			this.butGetAll.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butGetAll.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butGetAll.CornerRadius = 4F;
-			this.butGetAll.Location = new System.Drawing.Point(137,21);
-			this.butGetAll.Name = "butGetAll";
-			this.butGetAll.Size = new System.Drawing.Size(75,23);
-			this.butGetAll.TabIndex = 10;
-			this.butGetAll.Text = "Get All";
-			this.butGetAll.Click += new System.EventHandler(this.butGetAll_Click);
-			// 
-			// checkRefresh
-			// 
-			this.checkRefresh.Location = new System.Drawing.Point(17,53);
-			this.checkRefresh.Name = "checkRefresh";
-			this.checkRefresh.Size = new System.Drawing.Size(195,18);
-			this.checkRefresh.TabIndex = 11;
-			this.checkRefresh.Text = "Refresh while typing";
-			this.checkRefresh.UseVisualStyleBackColor = true;
-			this.checkRefresh.Click += new System.EventHandler(this.checkRefresh_Click);
 			// 
 			// FormPatientSelect
 			// 
@@ -992,6 +1009,51 @@ namespace OpenDental{
 			}
 		}
 
+		private void butAddAll_Click(object sender,EventArgs e) {
+			#if(TRIALONLY)
+				MsgBox.Show(this,"Trial version.  Maximum 30 patients");
+				if(Patients.GetNumberPatients()>30){
+					MsgBox.Show(this,"Maximum reached");
+					return;
+				}
+			#endif
+			if(textLName.Text=="" && textFName.Text=="" && textChartNumber.Text==""){
+				MessageBox.Show(Lan.g(this,"Not allowed to add a new patient until you have done a search to see if that patient already exists. Hint: just type a few letters into the Last Name box above.")); 
+				return;
+			}
+			FormPatientAddAll FormP=new FormPatientAddAll();
+			if(textLName.Text.Length>1){//eg Sp
+				FormP.LName=textLName.Text.Substring(0,1).ToUpper()+textLName.Text.Substring(1);
+			}
+			if(textFName.Text.Length>1){
+				FormP.FName=textFName.Text.Substring(0,1).ToUpper()+textFName.Text.Substring(1);
+			}
+			FormP.ShowDialog();
+
+			/*
+			Patient PatCur=new Patient();
+			if(textLName.Text.Length>1){//eg Sp
+				PatCur.LName=textLName.Text.Substring(0,1).ToUpper()+textLName.Text.Substring(1);
+			}
+			if(textFName.Text.Length>1){
+				PatCur.FName=textFName.Text.Substring(0,1).ToUpper()+textFName.Text.Substring(1);
+			}
+			PatCur.PatStatus=PatientStatus.Patient;
+			Patients.Insert(PatCur,false);
+			Patient PatOld=PatCur.Copy();
+			PatCur.Guarantor=PatCur.PatNum;
+			Patients.Update(PatCur,PatOld);
+			Family FamCur=Patients.GetFamily(PatCur.PatNum);
+			FormPatientEdit FormPE=new FormPatientEdit(PatCur,FamCur);
+			FormPE.IsNew=true;
+			FormPE.ShowDialog();
+			if(FormPE.DialogResult==DialogResult.OK){
+				NewPatientAdded=true;
+				SelectedPatNum=PatCur.PatNum;
+				DialogResult=DialogResult.OK;
+			}*/
+		}
+
 		private void PatSelected(){
 			//SelectedPatNum=PIn.PInt(PtDataTable.Rows[grid2.CurrentRowIndex][0].ToString());
 			SelectedPatNum=PIn.PInt(PtDataTable.Rows[gridMain.GetSelectedIndex()][0].ToString());
@@ -1011,6 +1073,8 @@ namespace OpenDental{
 		private void butCancel_Click(object sender, System.EventArgs e) {
 			DialogResult=DialogResult.Cancel;
 		}
+
+		
 
 		
 

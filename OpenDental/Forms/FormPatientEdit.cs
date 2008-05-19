@@ -110,7 +110,6 @@ namespace OpenDental{
 		private System.Windows.Forms.Label label37;
 		private System.Windows.Forms.ListBox listEmps;//displayed from within code, not designer
 		private string empOriginal;//used in the emp dropdown logic
-		private ArrayList similarEmps;
 		private bool mouseIsInListEmps;
 		///<summary>This is the object that is altered in this form.</summary>
 		private Patient PatCur;
@@ -2240,13 +2239,14 @@ namespace OpenDental{
 			}
 			empOriginal=textEmployer.Text;//the original text is preserved when using up and down arrows
 			listEmps.Items.Clear();
-			similarEmps=Employers.GetSimilarNames(textEmployer.Text);
+			List<Employer> similarEmps=Employers.GetSimilarNames(textEmployer.Text);
 			for(int i=0;i<similarEmps.Count;i++){
-				listEmps.Items.Add(((Employer)similarEmps[i]).EmpName);
+				listEmps.Items.Add(similarEmps[i].EmpName);
 			}
 			int h=13*similarEmps.Count+5;
-			if(h > ClientSize.Height-listEmps.Top)
+			if(h > ClientSize.Height-listEmps.Top){
 				h=ClientSize.Height-listEmps.Top;
+			}
 			listEmps.Size=new Size(231,h);
 			listEmps.Visible=true;
 		}
@@ -2314,11 +2314,11 @@ namespace OpenDental{
 				|| textDateFirstVisit.errorProvider1.GetError(textDateFirstVisit)!=""
 				|| textAdmitDate.errorProvider1.GetError(textAdmitDate)!=""
 				){
-				MessageBox.Show(Lan.g(this,"Please fix data entry errors first."));
+				MsgBox.Show(this,"Please fix data entry errors first.");
 				return;
 			}
 			if(textLName.Text==""){
-				MessageBox.Show(Lan.g(this,"Last Name must be entered."));
+				MsgBox.Show(this,"Last Name must be entered.");
 				return;
 			}
 			//see if chartNum is a duplicate

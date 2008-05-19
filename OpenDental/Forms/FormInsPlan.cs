@@ -69,9 +69,10 @@ namespace OpenDental{
 		private System.Windows.Forms.TextBox textLinkedNum;
 		private System.Windows.Forms.ToolTip toolTip1;
 		private System.Windows.Forms.CheckBox checkAssign;
-		private ArrayList similarEmps;
-		private string empOriginal;//used in the emp dropdown logic
-		private System.Windows.Forms.ListBox listEmps;//displayed from within code, not designer
+		/// <summary>used in the emp dropdown logic</summary>
+		private string empOriginal;
+		/// <summary>displayed from within code, not designer</summary>
+		private System.Windows.Forms.ListBox listEmps;
 		private bool mouseIsInListEmps;
 		private ArrayList similarCars;
 		private string carOriginal;
@@ -1992,13 +1993,14 @@ namespace OpenDental{
 			}
 			empOriginal=textEmployer.Text;//the original text is preserved when using up and down arrows
 			listEmps.Items.Clear();
-			similarEmps=Employers.GetSimilarNames(textEmployer.Text);
+			List<Employer> similarEmps=Employers.GetSimilarNames(textEmployer.Text);
 			for(int i=0;i<similarEmps.Count;i++) {
-				listEmps.Items.Add(((Employer)similarEmps[i]).EmpName);
+				listEmps.Items.Add(similarEmps[i].EmpName);
 			}
 			int h=13*similarEmps.Count+5;
-			if(h > ClientSize.Height-listEmps.Top)
+			if(h > ClientSize.Height-listEmps.Top){
 				h=ClientSize.Height-listEmps.Top;
+			}
 			listEmps.Size=new Size(231,h);
 			listEmps.Visible=true;
 		}

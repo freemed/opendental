@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Data;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
@@ -181,12 +182,13 @@ namespace OpenDental{
 		}
 
 		///<summary>Returns an arraylist of Employers with names similar to the supplied string.  Used in dropdown list from employer field for faster entry.  There is a small chance that the list will not be completely refreshed when this is run, but it won't really matter if one employer doesn't show in dropdown.</summary>
-		public static ArrayList GetSimilarNames(string empName){
-			ArrayList retVal=new ArrayList();
+		public static List<Employer> GetSimilarNames(string empName){
+			List<Employer> retVal=new List<Employer>();
 			for(int i=0;i<List.Length;i++){
 				//if(Regex.IsMatch(List[i].EmpName,"^"+empName,RegexOptions.IgnoreCase))
-				if(List[i].EmpName.ToUpper().IndexOf(empName.ToUpper())==0)
+				if(List[i].EmpName.StartsWith(empName,StringComparison.CurrentCultureIgnoreCase)){
 					retVal.Add(List[i]);
+				}
 			}
 			return retVal;
 		}
