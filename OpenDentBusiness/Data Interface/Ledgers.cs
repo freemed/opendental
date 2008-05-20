@@ -74,14 +74,9 @@ namespace OpenDentBusiness{
 			for(int i=0;i<table.Rows.Count;i++){
 				pairs[i].Date=  PIn.PDate  (table.Rows[i][0].ToString());
 				val=PIn.PDouble(table.Rows[i][1].ToString());
-				qty=PIn.PDouble(table.Rows[i][2].ToString());
-				baseunits=PIn.PDouble(table.Rows[i][3].ToString());
-				if(baseunits > 0) {
-					qty += baseunits;
-				}
-				if(qty > 0) {
-					val *= qty;
-				}
+				qty=PIn.PDouble(table.Rows[i][2].ToString())
+					+PIn.PDouble(table.Rows[i][3].ToString());
+				val *= qty;
 				pairs[i].Value=val;
 				Debug.WriteLine("Proc: "+pairs[i].Date.ToShortDateString()+" "+pairs[i].Value.ToString("c"));
 			}
@@ -91,6 +86,21 @@ namespace OpenDentBusiness{
 				Bal[GetAgingType(pairs[i].Date)]+=pairs[i].Value;
 			}
 			Debug.WriteLine("Sum procs: "+SumDebugProcs.ToString("n"));
+			//NEGATIVE PAYSPLITS(refunds):
+			command="SELECT ProcDate,SplitAmt FROM paysplit "
+				+"WHERE ("+wherePats+") "
+				+"AND PayPlanNum=0 "//only splits not attached to payment plans.
+				+"AND SplitAmt<0 "
+				+"ORDER BY procdate";
+			table=General.GetTable(command);
+			pairs=new DateValuePair[table.Rows.Count];
+			for(int i=0;i<table.Rows.Count;i++){
+				pairs[i].Date=  PIn.PDate  (table.Rows[i][0].ToString());
+				pairs[i].Value= -PIn.PDouble(table.Rows[i][1].ToString());
+			}
+			for(int i=0;i<pairs.Length;i++){
+				Bal[GetAgingType(pairs[i].Date)]+=pairs[i].Value;
+			}
 			//POSITIVE ADJUSTMENTS:
 			command="SELECT AdjDate,adjamt FROM adjustment"
 				+" WHERE adjamt > 0"
@@ -146,10 +156,11 @@ namespace OpenDentBusiness{
 			}
 			Debug.WriteLine("Sum InsPayments+CapWriteoffs: "+SumDebugInsPay.ToString("c"));
 			ComputePayments(pairs);
-			//PAYSPLITS:
+			//POSITIVE PAYSPLITS:
 			command="SELECT ProcDate,SplitAmt FROM paysplit "
 				+"WHERE ("+wherePats+") "
 				+"AND PayPlanNum=0 "//only splits not attached to payment plans.
+				+"AND SplitAmt>0 "
 				+"ORDER BY procdate";
 			table=General.GetTable(command);
 			pairs=new DateValuePair[table.Rows.Count];
