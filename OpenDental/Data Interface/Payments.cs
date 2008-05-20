@@ -192,7 +192,9 @@ namespace OpenDental{
 				return;
 			}
 			if(table.Rows[0][0].ToString()!="0"){//if payment is already attached to a deposit
+				#if !DEBUG
 				throw new ApplicationException(Lan.g("Payments","Not allowed to delete a payment attached to a deposit."));
+				#endif
 			}
 			command= "DELETE from payment WHERE payNum = '"+pay.PayNum.ToString()+"'";
  			General.NonQ(command);
