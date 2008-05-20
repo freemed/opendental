@@ -165,7 +165,9 @@ namespace OpenDental{
 				return;
 			}
 			if(table.Rows[0][0].ToString()!="0"){//if claimpayment is already attached to a deposit
+				#if !DEBUG
 				throw new ApplicationException(Lan.g("ClaimPayments","Not allowed to delete a payment attached to a deposit."));
+				#endif
 			}
 			command= "UPDATE claimproc SET "
 				+"ClaimPaymentNum=0 "
