@@ -334,15 +334,16 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Returns an arraylist of Carriers with names similar to the supplied string.  Used in dropdown list from carrier field for faster entry.  There is a small chance that the list will not be completely refreshed when this is run, but it won't really matter if one carrier doesn't show in dropdown.</summary>
-		public static ArrayList GetSimilarNames(string carrierName){
-			ArrayList retVal=new ArrayList();
+		public static List<Carrier> GetSimilarNames(string carrierName){
+			List<Carrier> retVal=new List<Carrier>();
 			for(int i=0;i<List.Length;i++){
 				//if(i>0 && List[i].CarrierName==List[i-1].CarrierName){
 				//	continue;//ignore all duplicate names
 				//}
 				//if(Regex.IsMatch(List[i].CarrierName,"^"+carrierName,RegexOptions.IgnoreCase))
-				if(List[i].CarrierName.ToUpper().IndexOf(carrierName.ToUpper())==0)
+				if(List[i].CarrierName.ToUpper().IndexOf(carrierName.ToUpper())==0){
 					retVal.Add(List[i]);
+				}
 			}
 			return retVal;
 		}

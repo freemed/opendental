@@ -6484,8 +6484,8 @@ namespace OpenDental{
 					command="ALTER TABLE appointment CHANGE AddTime TimeLocked tinyint(1) NOT NULL";//bool
 					General.NonQ(command);
 				}
-
-
+				command="UPDATE procedurelog SET UnitQty=1 WHERE UnitQty=0";
+				General.NonQ(command);
 
 
 

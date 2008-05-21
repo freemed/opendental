@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Data;
 using System.Windows.Forms;
 using OpenDentBusiness;
@@ -210,6 +211,17 @@ namespace OpenDental{
 				}
 			}
 			return null;
+		}
+
+		///<summary>Returns a list of Referrals with names similar to the supplied string.  Used in dropdown list from referral field in FormPatientAddAll for faster entry.</summary>
+		public static List<Referral> GetSimilarNames(string referralLName){
+			List<Referral> retVal=new List<Referral>();
+			for(int i=0;i<List.Length;i++){
+				if(List[i].LName.ToUpper().IndexOf(referralLName.ToUpper())==0){
+					retVal.Add(List[i]);
+				}
+			}
+			return retVal;
 		}
 
 

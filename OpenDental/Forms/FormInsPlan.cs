@@ -74,7 +74,7 @@ namespace OpenDental{
 		/// <summary>displayed from within code, not designer</summary>
 		private System.Windows.Forms.ListBox listEmps;
 		private bool mouseIsInListEmps;
-		private ArrayList similarCars;
+		private List<Carrier> similarCars;
 		private string carOriginal;
 		private System.Windows.Forms.ListBox listCars;
 		private System.Windows.Forms.Label labelCitySTZip;
@@ -2041,7 +2041,7 @@ namespace OpenDental{
 					textPhone.Focus();
 				}
 				else {
-					FillCarrier(((Carrier)similarCars[listCars.SelectedIndex]).CarrierNum);
+					FillCarrier(similarCars[listCars.SelectedIndex].CarrierNum);
 					textCarrier.Focus();
 					textCarrier.SelectionStart=textCarrier.Text.Length;
 				}
@@ -2058,7 +2058,7 @@ namespace OpenDental{
 				}
 				if(listCars.SelectedIndex==-1) {
 					listCars.SelectedIndex=0;
-					textCarrier.Text=((Carrier)similarCars[listCars.SelectedIndex]).CarrierName;
+					textCarrier.Text=similarCars[listCars.SelectedIndex].CarrierName;
 				}
 				else if(listCars.SelectedIndex==listCars.Items.Count-1) {
 					listCars.SelectedIndex=-1;
@@ -2066,7 +2066,7 @@ namespace OpenDental{
 				}
 				else {
 					listCars.SelectedIndex++;
-					textCarrier.Text=((Carrier)similarCars[listCars.SelectedIndex]).CarrierName;
+					textCarrier.Text=similarCars[listCars.SelectedIndex].CarrierName;
 				}
 				textCarrier.SelectionStart=textCarrier.Text.Length;
 				return;
@@ -2077,7 +2077,7 @@ namespace OpenDental{
 				}
 				if(listCars.SelectedIndex==-1) {
 					listCars.SelectedIndex=listCars.Items.Count-1;
-					textCarrier.Text=((Carrier)similarCars[listCars.SelectedIndex]).CarrierName;
+					textCarrier.Text=similarCars[listCars.SelectedIndex].CarrierName;
 				}
 				else if(listCars.SelectedIndex==0) {
 					listCars.SelectedIndex=-1;
@@ -2085,7 +2085,7 @@ namespace OpenDental{
 				}
 				else {
 					listCars.SelectedIndex--;
-					textCarrier.Text=((Carrier)similarCars[listCars.SelectedIndex]).CarrierName;
+					textCarrier.Text=similarCars[listCars.SelectedIndex].CarrierName;
 				}
 				textCarrier.SelectionStart=textCarrier.Text.Length;
 				return;
@@ -2098,17 +2098,18 @@ namespace OpenDental{
 			listCars.Items.Clear();
 			similarCars=Carriers.GetSimilarNames(textCarrier.Text);
 			for(int i=0;i<similarCars.Count;i++) {
-				listCars.Items.Add(((Carrier)similarCars[i]).CarrierName+", "
-					+((Carrier)similarCars[i]).Phone+", "
-					+((Carrier)similarCars[i]).Address+", "
-					+((Carrier)similarCars[i]).Address2+", "
-					+((Carrier)similarCars[i]).City+", "
-					+((Carrier)similarCars[i]).State+", "
-					+((Carrier)similarCars[i]).Zip);
+				listCars.Items.Add(similarCars[i].CarrierName+", "
+					+similarCars[i].Phone+", "
+					+similarCars[i].Address+", "
+					+similarCars[i].Address2+", "
+					+similarCars[i].City+", "
+					+similarCars[i].State+", "
+					+similarCars[i].Zip);
 			}
 			int h=13*similarCars.Count+5;
-			if(h > ClientSize.Height-listCars.Top)
+			if(h > ClientSize.Height-listCars.Top){
 				h=ClientSize.Height-listCars.Top;
+			}
 			listCars.Size=new Size(listCars.Width,h);
 			listCars.Visible=true;
 		}
@@ -2119,13 +2120,13 @@ namespace OpenDental{
 			}
 			//or if user clicked on a different text box.
 			if(listCars.SelectedIndex!=-1) {
-				FillCarrier(((Carrier)similarCars[listCars.SelectedIndex]).CarrierNum);
+				FillCarrier(similarCars[listCars.SelectedIndex].CarrierNum);
 			}
 			listCars.Visible=false;
 		}
 
 		private void listCars_Click(object sender,System.EventArgs e) {
-			FillCarrier(((Carrier)similarCars[listCars.SelectedIndex]).CarrierNum);
+			FillCarrier(similarCars[listCars.SelectedIndex].CarrierNum);
 			textCarrier.Focus();
 			textCarrier.SelectionStart=textCarrier.Text.Length;
 			listCars.Visible=false;

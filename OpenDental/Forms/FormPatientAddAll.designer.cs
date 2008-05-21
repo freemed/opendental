@@ -80,6 +80,7 @@ namespace OpenDental{
 			this.textCarrier1 = new System.Windows.Forms.TextBox();
 			this.label17 = new System.Windows.Forms.Label();
 			this.groupIns1 = new System.Windows.Forms.GroupBox();
+			this.butPick1 = new OpenDental.UI.Button();
 			this.textGroupNum1 = new System.Windows.Forms.TextBox();
 			this.labelGroupNum = new System.Windows.Forms.Label();
 			this.label19 = new System.Windows.Forms.Label();
@@ -94,6 +95,7 @@ namespace OpenDental{
 			this.label21 = new System.Windows.Forms.Label();
 			this.label22 = new System.Windows.Forms.Label();
 			this.groupIns2 = new System.Windows.Forms.GroupBox();
+			this.butPick2 = new OpenDental.UI.Button();
 			this.textGroupNum2 = new System.Windows.Forms.TextBox();
 			this.label23 = new System.Windows.Forms.Label();
 			this.label24 = new System.Windows.Forms.Label();
@@ -123,9 +125,10 @@ namespace OpenDental{
 			this.comboPriProv4 = new System.Windows.Forms.ComboBox();
 			this.comboSecProv5 = new System.Windows.Forms.ComboBox();
 			this.comboPriProv5 = new System.Windows.Forms.ComboBox();
+			this.label8 = new System.Windows.Forms.Label();
+			this.textReferralFName = new System.Windows.Forms.TextBox();
+			this.label9 = new System.Windows.Forms.Label();
 			this.textAddrNotes = new OpenDental.ODtextBox();
-			this.butPick2 = new OpenDental.UI.Button();
-			this.butPick1 = new OpenDental.UI.Button();
 			this.textBirthdate5 = new OpenDental.ValidDate();
 			this.textBirthdate4 = new OpenDental.ValidDate();
 			this.textBirthdate3 = new OpenDental.ValidDate();
@@ -309,6 +312,7 @@ namespace OpenDental{
 			this.textAddress.Name = "textAddress";
 			this.textAddress.Size = new System.Drawing.Size(253,20);
 			this.textAddress.TabIndex = 1;
+			this.textAddress.TextChanged += new System.EventHandler(this.textAddress_TextChanged);
 			// 
 			// label12
 			// 
@@ -335,6 +339,7 @@ namespace OpenDental{
 			this.textAddress2.Name = "textAddress2";
 			this.textAddress2.Size = new System.Drawing.Size(253,20);
 			this.textAddress2.TabIndex = 2;
+			this.textAddress2.TextChanged += new System.EventHandler(this.textAddress2_TextChanged);
 			// 
 			// labelZip
 			// 
@@ -673,6 +678,8 @@ namespace OpenDental{
 			this.textCarrier1.Name = "textCarrier1";
 			this.textCarrier1.Size = new System.Drawing.Size(254,20);
 			this.textCarrier1.TabIndex = 3;
+			this.textCarrier1.Leave += new System.EventHandler(this.textCarrier1_Leave);
+			this.textCarrier1.KeyUp += new System.Windows.Forms.KeyEventHandler(this.textCarrier1_KeyUp);
 			// 
 			// label17
 			// 
@@ -703,9 +710,24 @@ namespace OpenDental{
 			this.groupIns1.Location = new System.Drawing.Point(444,211);
 			this.groupIns1.Name = "groupIns1";
 			this.groupIns1.Size = new System.Drawing.Size(396,167);
-			this.groupIns1.TabIndex = 14;
+			this.groupIns1.TabIndex = 15;
 			this.groupIns1.TabStop = false;
 			this.groupIns1.Text = "Insurance 1";
+			// 
+			// butPick1
+			// 
+			this.butPick1.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butPick1.Autosize = true;
+			this.butPick1.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butPick1.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butPick1.CornerRadius = 4F;
+			this.butPick1.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butPick1.Location = new System.Drawing.Point(305,31);
+			this.butPick1.Name = "butPick1";
+			this.butPick1.Size = new System.Drawing.Size(90,23);
+			this.butPick1.TabIndex = 168;
+			this.butPick1.Text = "Pick From List";
+			this.butPick1.Click += new System.EventHandler(this.butPick1_Click);
 			// 
 			// textGroupNum1
 			// 
@@ -843,9 +865,24 @@ namespace OpenDental{
 			this.groupIns2.Location = new System.Drawing.Point(444,384);
 			this.groupIns2.Name = "groupIns2";
 			this.groupIns2.Size = new System.Drawing.Size(396,167);
-			this.groupIns2.TabIndex = 15;
+			this.groupIns2.TabIndex = 16;
 			this.groupIns2.TabStop = false;
 			this.groupIns2.Text = "Insurance 2";
+			// 
+			// butPick2
+			// 
+			this.butPick2.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butPick2.Autosize = true;
+			this.butPick2.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butPick2.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butPick2.CornerRadius = 4F;
+			this.butPick2.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butPick2.Location = new System.Drawing.Point(305,31);
+			this.butPick2.Name = "butPick2";
+			this.butPick2.Size = new System.Drawing.Size(90,23);
+			this.butPick2.TabIndex = 169;
+			this.butPick2.Text = "Pick From List";
+			this.butPick2.Click += new System.EventHandler(this.butPick2_Click);
 			// 
 			// textGroupNum2
 			// 
@@ -888,6 +925,8 @@ namespace OpenDental{
 			this.textEmployer2.Name = "textEmployer2";
 			this.textEmployer2.Size = new System.Drawing.Size(254,20);
 			this.textEmployer2.TabIndex = 2;
+			this.textEmployer2.Leave += new System.EventHandler(this.textEmployer2_Leave);
+			this.textEmployer2.KeyUp += new System.Windows.Forms.KeyEventHandler(this.textEmployer2_KeyUp);
 			// 
 			// label25
 			// 
@@ -969,6 +1008,8 @@ namespace OpenDental{
 			this.textCarrier2.Name = "textCarrier2";
 			this.textCarrier2.Size = new System.Drawing.Size(254,20);
 			this.textCarrier2.TabIndex = 3;
+			this.textCarrier2.Leave += new System.EventHandler(this.textCarrier2_Leave);
+			this.textCarrier2.KeyUp += new System.Windows.Forms.KeyEventHandler(this.textCarrier2_KeyUp);
 			// 
 			// label30
 			// 
@@ -981,13 +1022,15 @@ namespace OpenDental{
 			// 
 			// textReferral
 			// 
-			this.textReferral.Font = new System.Drawing.Font("Microsoft Sans Serif",9F,System.Drawing.FontStyle.Bold,System.Drawing.GraphicsUnit.Point,((byte)(0)));
+			this.textReferral.Font = new System.Drawing.Font("Microsoft Sans Serif",8.25F,System.Drawing.FontStyle.Regular,System.Drawing.GraphicsUnit.Point,((byte)(0)));
 			this.textReferral.Location = new System.Drawing.Point(157,477);
 			this.textReferral.MaxLength = 50;
 			this.textReferral.Multiline = true;
 			this.textReferral.Name = "textReferral";
 			this.textReferral.Size = new System.Drawing.Size(237,20);
 			this.textReferral.TabIndex = 13;
+			this.textReferral.Leave += new System.EventHandler(this.textReferral_Leave);
+			this.textReferral.KeyUp += new System.Windows.Forms.KeyEventHandler(this.textReferral_KeyUp);
 			// 
 			// textAge1
 			// 
@@ -1109,6 +1152,34 @@ namespace OpenDental{
 			this.comboPriProv5.Size = new System.Drawing.Size(149,21);
 			this.comboPriProv5.TabIndex = 176;
 			// 
+			// label8
+			// 
+			this.label8.Location = new System.Drawing.Point(-2,499);
+			this.label8.Name = "label8";
+			this.label8.Size = new System.Drawing.Size(158,15);
+			this.label8.TabIndex = 179;
+			this.label8.Text = "Referral First Name";
+			this.label8.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// textReferralFName
+			// 
+			this.textReferralFName.Font = new System.Drawing.Font("Microsoft Sans Serif",8.25F,System.Drawing.FontStyle.Regular,System.Drawing.GraphicsUnit.Point,((byte)(0)));
+			this.textReferralFName.Location = new System.Drawing.Point(157,497);
+			this.textReferralFName.MaxLength = 50;
+			this.textReferralFName.Multiline = true;
+			this.textReferralFName.Name = "textReferralFName";
+			this.textReferralFName.Size = new System.Drawing.Size(141,20);
+			this.textReferralFName.TabIndex = 14;
+			// 
+			// label9
+			// 
+			this.label9.Location = new System.Drawing.Point(299,499);
+			this.label9.Name = "label9";
+			this.label9.Size = new System.Drawing.Size(138,15);
+			this.label9.TabIndex = 180;
+			this.label9.Text = "(if applicable)";
+			this.label9.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
 			// textAddrNotes
 			// 
 			this.textAddrNotes.AcceptsReturn = true;
@@ -1119,34 +1190,6 @@ namespace OpenDental{
 			this.textAddrNotes.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
 			this.textAddrNotes.Size = new System.Drawing.Size(237,59);
 			this.textAddrNotes.TabIndex = 12;
-			// 
-			// butPick2
-			// 
-			this.butPick2.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butPick2.Autosize = true;
-			this.butPick2.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butPick2.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butPick2.CornerRadius = 4F;
-			this.butPick2.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butPick2.Location = new System.Drawing.Point(305,31);
-			this.butPick2.Name = "butPick2";
-			this.butPick2.Size = new System.Drawing.Size(90,23);
-			this.butPick2.TabIndex = 169;
-			this.butPick2.Text = "Pick From List";
-			// 
-			// butPick1
-			// 
-			this.butPick1.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butPick1.Autosize = true;
-			this.butPick1.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butPick1.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butPick1.CornerRadius = 4F;
-			this.butPick1.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butPick1.Location = new System.Drawing.Point(305,31);
-			this.butPick1.Name = "butPick1";
-			this.butPick1.Size = new System.Drawing.Size(90,23);
-			this.butPick1.TabIndex = 168;
-			this.butPick1.Text = "Pick From List";
 			// 
 			// textBirthdate5
 			// 
@@ -1222,6 +1265,9 @@ namespace OpenDental{
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
 			this.ClientSize = new System.Drawing.Size(896,674);
+			this.Controls.Add(this.label9);
+			this.Controls.Add(this.label8);
+			this.Controls.Add(this.textReferralFName);
 			this.Controls.Add(this.comboSecProv5);
 			this.Controls.Add(this.comboPriProv5);
 			this.Controls.Add(this.comboSecProv4);
@@ -1416,5 +1462,8 @@ namespace OpenDental{
 		private System.Windows.Forms.ComboBox comboPriProv4;
 		private System.Windows.Forms.ComboBox comboSecProv5;
 		private System.Windows.Forms.ComboBox comboPriProv5;
+		private System.Windows.Forms.Label label8;
+		private System.Windows.Forms.TextBox textReferralFName;
+		private System.Windows.Forms.Label label9;
 	}
 }

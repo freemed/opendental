@@ -75,9 +75,9 @@ namespace OpenDentBusiness {
 		public string RevCode;
 		/// <summary>Unit support for things like anesthesia billing and such.-dt</summary>
 		public string UnitCode;
-		///<summary>For certain CPT codes.</summary>
+		///<summary>For certain CPT codes.  Default is now 1.  It was 0 in previous versions, causing all kinds of problems.</summary>
 		public int UnitQty;
-		///<summary>Base units used for some billing codes.</summary>
+		///<summary>Base units used for some billing codes.  Default is 0.</summary>
 		public int BaseUnits;
 		///<summary>Start time in military</summary>
 		public int StartTime;
@@ -94,6 +94,10 @@ namespace OpenDentBusiness {
 		public string Signature;
 		///<summary>Not a database column.</summary>
 		public bool SigIsTopaz;
+
+		public Procedure(){
+			UnitQty=1;
+		}
 
 		///<summary>Returns a copy of the procedure.</summary>
 		public Procedure Copy() {
