@@ -2435,14 +2435,20 @@ namespace OpenDental{
 			if(ContrAppt2.Visible && Signals.ApptNeedsRefresh(sigList,Appointments.DateSelected.Date)){
 				ContrAppt2.RefreshPeriod();
 			}
-			if(Signals.TasksNeedRefresh(sigList,Security.CurUser.UserNum)){
+			List<Task> tasks=Signals.GetNewTasksThisUser(sigList,Security.CurUser.UserNum);
+			if(tasks.Count>0){
 				System.Media.SoundPlayer soundplay=new SoundPlayer(Properties.Resources.notify);
 				soundplay.Play();
+				//if user has the Task dialog open, we can't easily tell it to refresh,
+				//So that dialog is responsible for auto refreshing every minute on a timer.
+				for(int i=0;i<tasks.Count;i++){
+					this.BringToFront();//don't know if this is doing anything.
+					FormTaskEdit FormT=new FormTaskEdit(tasks[i]);
+					FormT.ShowDialog();
+				}
 				if(userControlTasks1.Visible){
 					userControlTasks1.RefreshTasks();
 				}
-				//if user has the Task dialog open, we can't easily tell it to refresh,
-				//So that dialog is responsible for auto refreshing every minute on a timer.
 			}
 			InvalidTypes invalidTypes=Signals.GetInvalidTypes(sigList);
 			if(invalidTypes!=0){

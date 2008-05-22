@@ -161,8 +161,8 @@ namespace OpenDental{
 			return false;
 		}
 
-		///<summary>After a refresh, this is used to determine whether the Current user has received any new tasks through subscription.  Must supply the current usernum as well as the recently retrieved signal list.</summary>
-		public static bool TasksNeedRefresh(Signal[] signalList,int userNum){
+		///<summary>After a refresh, this is used to determine whether the Current user has received any new tasks through subscription.  Must supply the current usernum as well as the recently retrieved signal list.  The signal list will include any task changes including status changes and deletions.  I think we need a bool to know whether to show the task.</summary>
+		public static List<Task> GetNewTasksThisUser(Signal[] signalList,int userNum){
 			List<Signal> sigListFiltered=new List<Signal>();
 			for(int i=0;i<signalList.Length;i++){
 				if(signalList[i].ITypes==InvalidTypes.Tasks){
@@ -170,9 +170,9 @@ namespace OpenDental{
 				}
 			}
 			if(sigListFiltered.Count==0){//no task signals
-				return false;
+				return new List<Task>();
 			}
-			string command="SELECT COUNT(*) FROM taskancestor,task,tasklist,tasksubscription "
+			string command="SELECT task.* FROM taskancestor,task,tasklist,tasksubscription "
 				+"WHERE taskancestor.TaskListNum=tasklist.TaskListNum "
 				+"AND task.TaskNum=taskancestor.TaskNum "
 				+"AND tasksubscription.TaskListNum=tasklist.TaskListNum "
@@ -185,10 +185,7 @@ namespace OpenDental{
 				command+="task.TaskNum= "+POut.PInt(sigListFiltered[i].TaskNum);
 			}
 			command+=")";
-			if(General.GetCount(command)=="0"){
-				return false;
-			}
-			return true;
+			return Tasks.RefreshAndFill(command);
 		}
 
 		///<summary>After a refresh, this is used to get a single value representing all flags of types that need to be refreshed.   Types of Date and Task are not included.</summary>

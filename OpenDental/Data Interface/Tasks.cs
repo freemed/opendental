@@ -131,7 +131,7 @@ namespace OpenDental{
 			return RefreshAndFill(command);
 		}
 
-		private static List<Task> RefreshAndFill(string command){
+		public static List<Task> RefreshAndFill(string command){
 			DataTable table=General.GetTable(command);
 			List<Task> retVal=new List<Task>();
 			Task task;

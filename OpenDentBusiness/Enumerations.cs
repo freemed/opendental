@@ -223,7 +223,7 @@ namespace OpenDentBusiness{
 		Prefs=4,
 		///<summary>8- Also includes appt rules</summary>
 		Views=8,
-		///<summary>16- Not used with any other flags.</summary>
+		///<summary>16- Not used with any other flags.  Used to just indicate added tasks, but now we are trying to indicate any change at all.</summary>
 		Tasks=16,
 		///<summary>32</summary>
 		AutoCodesProcButtons=32,
