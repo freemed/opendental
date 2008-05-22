@@ -847,35 +847,31 @@ namespace OpenDental{
 			/*int InsOnAccountSituation=1;//will have three states 0 no, 1 yes, 2 some family members
 			if(PlanList.Length >0){//someone has ins in the family, but not known yet if it is effective
 				for (int i = 0; i < PlanList.Length; i++){
-					if (PlanList[i].DateTerm.Year > 1880){
-						if(PlanList[i].DateTerm.Date <= DateTime.Today.Date){
-							if(PlanList[i].DateEffective.Year > 1880){
-								if(PlanList[i].DateEffective.Date > DateTime.Today.Date){//date specified and still effective
+					//if(PlanList[i].d
+						if (PlanList[i].DateTerm.Year > 1880){
+							if(PlanList[i].DateTerm.Date <= DateTime.Today.Date){
+								if(PlanList[i].DateEffective.Year > 1880){
+									if(PlanList[i].DateEffective.Date > DateTime.Today.Date){//date specified and still effective
+										InsOnAccountSituation=1;
+									}
+								}
+								else{//date not specified will have to assume it is still good
 									InsOnAccountSituation=1;
 								}
-							}
-							else{//date not specified will have to assume it is still good
-								InsOnAccountSituation=1;
 							}
 						}
-					}
-					else{//end date not specifed, will have to assume it is good and now check effective date
-							if(PlanList[i].DateEffective.Year > 1880){
-								if(PlanList[i].DateEffective.Date > DateTime.Today.Date){//date specified and still effective
+						else{//end date not specifed, will have to assume it is good and now check effective date
+								if(PlanList[i].DateEffective.Year > 1880){
+									if(PlanList[i].DateEffective.Date > DateTime.Today.Date){//date specified and still effective
+										InsOnAccountSituation=1;
+									}
+								}
+								else{//date not specified will have to assume it is still good
 									InsOnAccountSituation=1;
 								}
-							}
-							else{//date not specified will have to assume it is still good
-								InsOnAccountSituation=1;
-							}
+						}
 					}
-				}
-						//plan is currently effective
 	//Todo:determine if someone in the family is not covered. Right now, we just know ins does exist for someone in the family
-						//for(int j=0;j<famCur.List.Length;j++);
-						//	if(fam.List[j].PatNum=PlanList[i].)//
-						//PlanList[i].
-						InsOnAccountSituation=1;
 			}
 			else { //inactive plan
 			}
@@ -1014,15 +1010,28 @@ namespace OpenDental{
 				//par.AddLineBreak();
 			}
 			else{//this is more common
-				text = Lan.g(this, "Total:");
-				par.AddFormattedText(text, font);
-				par.AddLineBreak();
-				text = Lan.g(this, "-Ins Estimate:");
-				par.AddFormattedText(text, font);
-				par.AddLineBreak();
-				text = Lan.g(this, "=Balance:");
-				par.AddFormattedText(text, fontBold);
-				par.AddLineBreak();
+				if (PrefC.GetBool("FuchsOptionsOn")) {
+					text = Lan.g(this, "Balance:");
+					par.AddFormattedText(text, font);
+					par.AddLineBreak();
+					text = Lan.g(this, "-Ins Estimate:");
+					par.AddFormattedText(text, font);
+					par.AddLineBreak();
+					text = Lan.g(this, "=Owed Now:");
+					par.AddFormattedText(text, fontBold);
+					par.AddLineBreak();
+				}
+				else {
+					text = Lan.g(this, "Total:");
+					par.AddFormattedText(text, font);
+					par.AddLineBreak();
+					text = Lan.g(this, "-Ins Estimate:");
+					par.AddFormattedText(text, font);
+					par.AddLineBreak();
+					text = Lan.g(this, "=Balance:");
+					par.AddFormattedText(text, fontBold);
+					par.AddLineBreak();
+				}
 			}
 			frame = MigraDocHelper.CreateContainer(section, 730, 380, 100, 200);
 			//table=MigraDocHelper.DrawTable(frame,0,0,90);
