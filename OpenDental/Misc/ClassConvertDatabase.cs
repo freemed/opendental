@@ -6429,6 +6429,37 @@ namespace OpenDental{
 				command="UPDATE preference SET ValueString = '5.6.22.0' WHERE PrefName = 'DataBaseVersion'";
 				General.NonQ(command);
 			}
+			To5_6_28();
+		}
+
+		private void To5_6_28() {
+			if(FromVersion<new Version("5.6.28.0")) {
+				string command;
+				//Digora Bridge---------------------------------------------------------------------------
+				command = "INSERT INTO program (ProgName,ProgDesc,Enabled,Path,CommandLine,Note"
+					+ ") VALUES("
+					+ "'Digora', "
+					+ "'Digora from www.soredex.com', "
+					+ "'0', "
+					+ "'', "
+					+ "'', "
+					+ "'" + POut.PString(@"No path is needed.") + "')";
+				int programNum =General.NonQEx(command,true);//we now have a ProgramNum to work with
+				command="INSERT INTO programproperty (ProgramNum,PropertyDesc,PropertyValue"
+					+") VALUES("
+					+"'"+programNum.ToString()+"', "
+					+"'Enter 0 to use PatientNum, or 1 to use ChartNum', "
+					+"'0')";
+				General.NonQEx(command);
+				command = "INSERT INTO toolbutitem (ProgramNum,ToolBar,ButtonText) "
+					+ "VALUES ("
+					+ "'" + POut.PInt(programNum) + "', "
+					+ "'" + POut.PInt((int)ToolBarsAvail.ChartModule) + "', "
+					+ "'Digora')";
+				General.NonQEx(command);
+				command="UPDATE preference SET ValueString = '5.6.28.0' WHERE PrefName = 'DataBaseVersion'";
+				General.NonQ(command);
+			}
 			To5_7_0();
 		}
 

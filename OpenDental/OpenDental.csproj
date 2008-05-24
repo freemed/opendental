@@ -130,6 +130,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Bridges\Apteryx.cs" />
+    <Compile Include="Bridges\Digora.cs" />
     <Compile Include="Bridges\FormHouseCalls.cs">
       <SubType>Form</SubType>
     </Compile>

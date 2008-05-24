@@ -147,6 +147,10 @@ namespace OpenDental{
 				Dexis.SendData(Cur,pat);
 				return;
 			}
+			else if(Cur.ProgName=="Digora") {
+				Digora.SendData(Cur,pat);
+				return;
+			}
 			else if(Cur.ProgName=="Dxis") {
 				Dxis.SendData(Cur,pat);
 				return;
