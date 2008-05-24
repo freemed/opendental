@@ -37,7 +37,7 @@ namespace OpenDental.Bridges{
 		//option -r creates patient if not found, -a changes focus to Digora
 		public static void SendData(Program ProgramCur, Patient pat){
 			if(pat==null){
-				MsgBox.Show(this,"No patient selected.");
+				MessageBox.Show("No patient selected.");
 				return;
 			}
 			ArrayList ForProgram=ProgramProperties.GetForProgram(ProgramCur.ProgramNum);

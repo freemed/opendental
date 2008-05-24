@@ -6444,19 +6444,19 @@ namespace OpenDental{
 					+ "'', "
 					+ "'', "
 					+ "'" + POut.PString(@"No path is needed.") + "')";
-				int programNum =General.NonQEx(command,true);//we now have a ProgramNum to work with
+				int programNum =General.NonQ(command,true);//we now have a ProgramNum to work with
 				command="INSERT INTO programproperty (ProgramNum,PropertyDesc,PropertyValue"
 					+") VALUES("
 					+"'"+programNum.ToString()+"', "
 					+"'Enter 0 to use PatientNum, or 1 to use ChartNum', "
 					+"'0')";
-				General.NonQEx(command);
+				General.NonQ(command);
 				command = "INSERT INTO toolbutitem (ProgramNum,ToolBar,ButtonText) "
 					+ "VALUES ("
 					+ "'" + POut.PInt(programNum) + "', "
 					+ "'" + POut.PInt((int)ToolBarsAvail.ChartModule) + "', "
 					+ "'Digora')";
-				General.NonQEx(command);
+				General.NonQ(command);
 				command="UPDATE preference SET ValueString = '5.6.28.0' WHERE PrefName = 'DataBaseVersion'";
 				General.NonQ(command);
 			}
@@ -6517,6 +6517,9 @@ namespace OpenDental{
 				}
 				command="UPDATE procedurelog SET UnitQty=1 WHERE UnitQty=0";
 				General.NonQ(command);
+				command="";
+
+
 
 
 
