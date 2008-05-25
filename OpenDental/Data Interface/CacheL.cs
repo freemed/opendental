@@ -6,100 +6,117 @@ using OpenDentBusiness;
 
 namespace OpenDental{
 	public class CacheL {
-		public static void Refresh(InvalidTypes itypes){
-			DataSet ds=Gen.GetDS(MethodNameDS.Cache_Refresh,itypes);
-			if((itypes & InvalidTypes.AutoCodesProcButtons)==InvalidTypes.AutoCodesProcButtons){
+		public static void Refresh(InvalidType itype){
+			List<int> listInt=new List<int>();
+			listInt.Add((int)itype);
+			Refresh(listInt);
+		}
+
+		public static void Refresh(List<int> itypes){
+			string itypesStr="";
+			for(int i=0;i<itypes.Count;i++){
+				if(i>0){
+					itypesStr+=",";
+				}
+				itypesStr+=itypes[i].ToString();
+			}
+			DataSet ds=Gen.GetDS(MethodNameDS.Cache_Refresh,itypesStr);
+			bool isAll=false;
+			if(itypes.Contains((int)InvalidType.AllLocal)){
+				isAll=true;
+			}
+			if(itypes.Contains((int)InvalidType.AutoCodesProcButtons) || isAll){
 				//AutoCodeL.Refresh();
 				//AutoCodeItemL.Refresh();
 				//AutoCodeCondL.Refresh();
 				//ProcButtons.Refresh();
 				//ProcButtonItems.Refresh();
 			}
-			if((itypes & InvalidTypes.Carriers)==InvalidTypes.Carriers){
+			if(itypes.Contains((int)InvalidType.Carriers) || isAll){
 				//Carriers.Refresh();//run on startup, after telephone reformat, after list edit.
 			}
-			if((itypes & InvalidTypes.ClaimForms)==InvalidTypes.ClaimForms){
+			if(itypes.Contains((int)InvalidType.ClaimForms) || isAll){
 				//ClaimFormItemL.Refresh();
 				//ClaimForms.Refresh();
 			}
-			if((itypes & InvalidTypes.ClearHouses)==InvalidTypes.ClearHouses){
+			if(itypes.Contains((int)InvalidType.ClearHouses) || isAll){
 				//kh until we add an EasyHideClearHouses						Clearinghouses.Refresh();
 				//SigElementDefs.Refresh();
 				//SigButDefs.Refresh();//includes SigButDefElements.Refresh()
 			}
-			if((itypes & InvalidTypes.Computers)==InvalidTypes.Computers){
+			if(itypes.Contains((int)InvalidType.Computers) || isAll){
 				//Computers.Refresh();
 				//Printers.Refresh();
 			}
-			if((itypes & InvalidTypes.Defs)==InvalidTypes.Defs){
+			if(itypes.Contains((int)InvalidType.Defs) || isAll){
 				Defs.FillCache(ds.Tables["Def"]);
 			}
-			if((itypes & InvalidTypes.DentalSchools)==InvalidTypes.DentalSchools){
+			if(itypes.Contains((int)InvalidType.DentalSchools) || isAll){
 				//SchoolClasses.Refresh();
 				//SchoolCourses.Refresh();
 			}
-			if((itypes & InvalidTypes.Email)==InvalidTypes.Email){
+			if(itypes.Contains((int)InvalidType.Email) || isAll){
 				//EmailTemplates.Refresh();
 				//DiseaseDefs.Refresh();
 			}
-			if((itypes & InvalidTypes.Employees)==InvalidTypes.Employees){
+			if(itypes.Contains((int)InvalidType.Employees) || isAll){
 				//Employees.Refresh();
 				//PayPeriods.Refresh();
 			}
-			if((itypes & InvalidTypes.Fees)==InvalidTypes.Fees){
+			if(itypes.Contains((int)InvalidType.Fees) || isAll){
 				//Fees.Refresh();
 			}
-			if((itypes & InvalidTypes.InsCats)==InvalidTypes.InsCats){
+			if(itypes.Contains((int)InvalidType.InsCats) || isAll){
 				//CovCatL.Refresh();
 				//CovSpanL.Refresh();
 				DisplayFields.FillCache(ds.Tables["DisplayField"]);;
 			}
-			if((itypes & InvalidTypes.Letters)==InvalidTypes.Letters){
+			if(itypes.Contains((int)InvalidType.Letters) || isAll){
 				//Letters.Refresh();
 			}
-			if((itypes & InvalidTypes.LetterMerge)==InvalidTypes.LetterMerge){
+			if(itypes.Contains((int)InvalidType.LetterMerge) || isAll){
 				//LetterMergeFields.Refresh();
 				//LetterMerges.Refresh();
 			}
-			if((itypes & InvalidTypes.Operatories)==InvalidTypes.Operatories){
+			if(itypes.Contains((int)InvalidType.Operatories) || isAll){
 				Operatories.FillCache(ds.Tables["Operatory"]);
 				//AccountingAutoPayL.Refresh();
 			}
-			if((itypes & InvalidTypes.Prefs)==InvalidTypes.Prefs){
+			if(itypes.Contains((int)InvalidType.Prefs) || isAll){
 				Prefs.FillCache(ds.Tables["Pref"]);
 			}
-			if((itypes & InvalidTypes.ProcCodes)==InvalidTypes.ProcCodes){
+			if(itypes.Contains((int)InvalidType.ProcCodes) || isAll){
 				//ProcedureCodes.Refresh();
 				//ProcCodeNotes.Refresh();
 			}
-			if((itypes & InvalidTypes.Programs)==InvalidTypes.Programs){
+			if(itypes.Contains((int)InvalidType.Programs) || isAll){
 				//Programs.Refresh();
 				//ProgramProperties.Refresh();
 			}
-			if((itypes & InvalidTypes.Providers)==InvalidTypes.Providers){
+			if(itypes.Contains((int)InvalidType.Providers) || isAll){
 				Providers.FillCache(ds.Tables["Provider"]);
 			}
-			if((itypes & InvalidTypes.QuickPaste)==InvalidTypes.QuickPaste){
+			if(itypes.Contains((int)InvalidType.QuickPaste) || isAll){
 				//QuickPasteNotes.Refresh();
 				//QuickPasteCats.Refresh();
 			}
-			if((itypes & InvalidTypes.Security)==InvalidTypes.Security){
+			if(itypes.Contains((int)InvalidType.Security) || isAll){
 				Userods.FillCache(ds.Tables["Userod"]);
 			}
-			if((itypes & InvalidTypes.Startup)==InvalidTypes.Startup){
+			if(itypes.Contains((int)InvalidType.Startup) || isAll){
 				//Employers.Refresh();//only needed when opening the prog. After that, automated.
 				//ElectIDs.Refresh();//only run on startup
 				//Referrals.Refresh();//Referrals are also refreshed dynamically.
 			}
 			//InvalidTypes.Tasks not handled here.
-			if((itypes & InvalidTypes.ToolBut)==InvalidTypes.ToolBut){
+			if(itypes.Contains((int)InvalidType.ToolBut) || isAll){
 				//ToolButItems.Refresh();
 			}
-			if((itypes & InvalidTypes.Views)==InvalidTypes.Views){
+			if(itypes.Contains((int)InvalidType.Views) || isAll){
 				ApptViews.FillCache(ds.Tables["ApptView"]);
 				ApptViewItems.FillCache(ds.Tables["ApptViewItem"]);
 			}
-			if((itypes & InvalidTypes.ZipCodes)==InvalidTypes.ZipCodes){
+			if(itypes.Contains((int)InvalidType.ZipCodes) || isAll){
 				//ZipCodes.Refresh();
 				//PatFieldDefs.Refresh();
 			}

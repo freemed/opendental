@@ -268,7 +268,7 @@ namespace OpenDental{
 			if(checkTcodes.Checked){
 				ProcedureCodes.TcodesClear();
 				//yes, this really does refresh before moving on.
-				DataValid.SetInvalid(InvalidTypes.Defs | InvalidTypes.ProcCodes | InvalidTypes.Fees);
+				DataValid.SetInvalid(InvalidType.Defs, InvalidType.ProcCodes, InvalidType.Fees);
 			}
 			if(checkNcodes.Checked) {
 				try {
@@ -277,7 +277,7 @@ namespace OpenDental{
 				catch(ApplicationException ex) {
 					MessageBox.Show(ex.Message);
 				}
-				DataValid.SetInvalid(InvalidTypes.Defs | InvalidTypes.ProcCodes | InvalidTypes.Fees);
+				DataValid.SetInvalid(InvalidType.Defs, InvalidType.ProcCodes, InvalidType.Fees);
 				//fees are included because they are grouped by defs.
 			}
 			if(checkDcodes.Checked) {
@@ -287,22 +287,22 @@ namespace OpenDental{
 				catch(ApplicationException ex) {
 					MessageBox.Show(ex.Message);
 				}
-				DataValid.SetInvalid(InvalidTypes.Defs | InvalidTypes.ProcCodes | InvalidTypes.Fees);
+				DataValid.SetInvalid(InvalidType.Defs, InvalidType.ProcCodes, InvalidType.Fees);
 			}
 			if(checkNcodes.Checked || checkDcodes.Checked){
 				MessageBox.Show("Procedure codes inserted: "+rowsInserted);
 			}
 			if(checkAutocodes.Checked) {
 				AutoCodeL.SetToDefault();
-				DataValid.SetInvalid(InvalidTypes.AutoCodesProcButtons);
+				DataValid.SetInvalid(InvalidType.AutoCodesProcButtons);
 			}
 			if(checkProcButtons.Checked) {
 				ProcButtons.SetToDefault();
-				DataValid.SetInvalid(InvalidTypes.AutoCodesProcButtons | InvalidTypes.Defs);
+				DataValid.SetInvalid(InvalidType.AutoCodesProcButtons, InvalidType.Defs);
 			}
 			if(checkApptProcsQuickAdd.Checked) {
 				ProcedureCodes.ResetApptProcsQuickAdd();
-				DataValid.SetInvalid(InvalidTypes.Defs);
+				DataValid.SetInvalid(InvalidType.Defs);
 			}
 			MessageBox.Show(Lan.g(this,"Done."));
 			SecurityLogs.MakeLogEntry(Permissions.Setup,0,"New Customer Procedure codes tool was run.");

@@ -401,7 +401,7 @@ namespace OpenDental {
 
 		private void FormInsCatsSetup_Closing(object sender, System.ComponentModel.CancelEventArgs e) {
 			if(changed){
-				DataValid.SetInvalid(InvalidTypes.InsCats);
+				DataValid.SetInvalid(InvalidType.InsCats);
 			}
 		}
 

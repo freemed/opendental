@@ -40,7 +40,7 @@ namespace OpenDental {
 			}
 			if(storedVersion<currentVersion) {
 				Prefs.UpdateString("ProgramVersion",currentVersion.ToString());
-				CacheL.Refresh(InvalidTypes.Prefs);
+				CacheL.Refresh(InvalidType.Prefs);
 			}
 			if(storedVersion>currentVersion) {
 				if(PrefC.UsingAtoZfolder){

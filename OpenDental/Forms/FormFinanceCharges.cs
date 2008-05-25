@@ -427,7 +427,7 @@ namespace OpenDental{
 			if(Prefs.UpdateString("FinanceChargeAPR",textAPR.Text)
 				| Prefs.UpdateString("FinanceChargeLastRun",POut.PDate(date,false)))
 			{
-				DataValid.SetInvalid(InvalidTypes.Prefs);
+				DataValid.SetInvalid(InvalidType.Prefs);
 			}
 			MessageBox.Show(Lan.g(this,"Finance Charges Added: ")+rowsAffected.ToString());
 			FormAging FormA=new FormAging();

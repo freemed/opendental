@@ -78,7 +78,7 @@ namespace OpenDental{
 				List[i]=new Signal();
 				List[i].SignalNum  = PIn.PInt(table.Rows[i][0].ToString());
 				List[i].FromUser   = PIn.PString(table.Rows[i][1].ToString());
-				List[i].ITypes     = (InvalidTypes)PIn.PInt(table.Rows[i][2].ToString());
+				List[i].ITypes     = PIn.PString(table.Rows[i][2].ToString());
 				List[i].DateViewing= PIn.PDate(table.Rows[i][3].ToString());
 				List[i].SigType    = (SignalType)PIn.PInt(table.Rows[i][4].ToString());
 				List[i].SigText    = PIn.PString(table.Rows[i][5].ToString());
@@ -95,7 +95,7 @@ namespace OpenDental{
 		public static void Update(Signal sig){
 			string command= "UPDATE signal SET " 
 				+"FromUser = '"    +POut.PString(sig.FromUser)+"'"
-				+",ITypes = '"     +POut.PInt   ((int)sig.ITypes)+"'"
+				+",ITypes = '"     +POut.PString(sig.ITypes)+"'"
 				+",DateViewing = " +POut.PDate  (sig.DateViewing)
 				+",SigType = '"    +POut.PInt   ((int)sig.SigType)+"'"
 				+",SigText = '"    +POut.PString(sig.SigText)+"'"
@@ -127,7 +127,7 @@ namespace OpenDental{
 			}
 			command+=
 				 "'"+POut.PString(sig.FromUser)+"', "
-				+"'"+POut.PInt   ((int)sig.ITypes)+"', "
+				+"'"+POut.PString(sig.ITypes)+"', "
 				+POut.PDate  (sig.DateViewing)+", "
 				+"'"+POut.PInt   ((int)sig.SigType)+"', "
 				+"'"+POut.PString(sig.SigText)+"', "
@@ -153,23 +153,25 @@ namespace OpenDental{
 
 		///<summary>After a refresh, this is used to determine whether the Appt Module needs to be refreshed.  Must supply the current date showing as well as the recently retrieved signal list.</summary>
 		public static bool ApptNeedsRefresh(Signal[] signalList,DateTime dateTimeShowing){
+			List<string> iTypeList;
 			for(int i=0;i<signalList.Length;i++){
-				if(signalList[i].ITypes==InvalidTypes.Date && signalList[i].DateViewing.Date==dateTimeShowing){
+				iTypeList=new List<string>(signalList[i].ITypes.Split(','));
+				if(iTypeList.Contains(((int)InvalidType.Date).ToString()) && signalList[i].DateViewing.Date==dateTimeShowing){
 					return true;
 				}
 			}
 			return false;
 		}
 
-		///<summary>After a refresh, this is used to determine whether the Current user has received any new tasks through subscription.  Must supply the current usernum as well as the recently retrieved signal list.  The signal list will include any task changes including status changes and deletions.  I think we need a bool to know whether to show the task.</summary>
-		public static List<Task> GetNewTasksThisUser(Signal[] signalList,int userNum){
+		///<summary>After a refresh, this is used to determine whether the Current user has received any new tasks through subscription.  Must supply the current usernum as well as the recently retrieved signal list.  The signal list will include any task changes including status changes and deletions.  This will be called twice, once with isPopup=true and once with isPopup=false.</summary>
+		public static List<Task> GetNewTaskPopupsThisUser(Signal[] signalList,int userNum){
 			List<Signal> sigListFiltered=new List<Signal>();
 			for(int i=0;i<signalList.Length;i++){
-				if(signalList[i].ITypes==InvalidTypes.Tasks){
+				if(signalList[i].ITypes==((int)InvalidType.TaskPopup).ToString()){
 					sigListFiltered.Add(signalList[i]);
 				}
 			}
-			if(sigListFiltered.Count==0){//no task signals
+			if(sigListFiltered.Count==0){//no task popup signals
 				return new List<Task>();
 			}
 			string command="SELECT task.* FROM taskancestor,task,tasklist,tasksubscription "
@@ -188,23 +190,33 @@ namespace OpenDental{
 			return Tasks.RefreshAndFill(command);
 		}
 
-		///<summary>After a refresh, this is used to get a single value representing all flags of types that need to be refreshed.   Types of Date and Task are not included.</summary>
-		public static InvalidTypes GetInvalidTypes(Signal[] signalList){
-			InvalidTypes retVal=0;
+		///<summary>After a refresh, this is used to get a list containing all flags of types that need to be refreshed.   Types of Date and Task are not included.</summary>
+		public static List<int> GetInvalidTypes(Signal[] signalList){
+			List<int> retVal=new List<int>();
+			string[] strArray;
 			for(int i=0;i<signalList.Length;i++){
 				if(signalList[i].SigType!=SignalType.Invalid){
 					continue;
 				}
-				if(signalList[i].ITypes==InvalidTypes.Date){
+				if(signalList[i].ITypes==((int)InvalidType.Date).ToString()){
 					continue;
 				}
-				if(signalList[i].ITypes==InvalidTypes.Tasks){
+				if(signalList[i].ITypes==((int)InvalidType.Task).ToString()){
 					continue;
 				}
-				retVal=retVal | signalList[i].ITypes;
+				if(signalList[i].ITypes==((int)InvalidType.TaskPopup).ToString()){
+					continue;
+				}
+				strArray=signalList[i].ITypes.Split(',');
+				for(int t=0;t<strArray.Length;t++){
+					if(!retVal.Contains(PIn.PInt(strArray[t]))){
+						retVal.Add(PIn.PInt(strArray[t]));
+					}
+				}
 			}
 			return retVal;
 		}
+
 
 		///<summary>After a refresh, this gets a list of only the button signals.</summary>
 		public static Signal[] GetButtonSigs(Signal[] signalList){

@@ -487,7 +487,7 @@ namespace OpenDental {
 				if(FormZE.DialogResult!=DialogResult.OK){
 					return;
 				}
-				DataValid.SetInvalid(InvalidTypes.ZipCodes);//FormZipCodeEdit does not contain internal refresh
+				DataValid.SetInvalid(InvalidType.ZipCodes);//FormZipCodeEdit does not contain internal refresh
 				FillComboZip();
 				textCity.Text=ZipCodeCur.City;
 				textState.Text=ZipCodeCur.State;
@@ -506,7 +506,7 @@ namespace OpenDental {
 				if(FormZS.DialogResult!=DialogResult.OK){
 					return;
 				}
-				DataValid.SetInvalid(InvalidTypes.ZipCodes);
+				DataValid.SetInvalid(InvalidType.ZipCodes);
 				textCity.Text=FormZS.ZipSelected.City;
 				textState.Text=FormZS.ZipSelected.State;
 				textZip.Text=FormZS.ZipSelected.ZipCodeDigits;

@@ -1226,7 +1226,7 @@ namespace OpenDental{
 			FormLanguagesUsed FormL=new FormLanguagesUsed();
 			FormL.ShowDialog();
 			if(FormL.DialogResult==DialogResult.OK){
-				DataValid.SetInvalid(InvalidTypes.Prefs);
+				DataValid.SetInvalid(InvalidType.Prefs);
 			}
 		}
 
@@ -1386,7 +1386,7 @@ namespace OpenDental{
 				}
 			}
 			if(changed){
-				DataValid.SetInvalid(InvalidTypes.Prefs | InvalidTypes.Computers);
+				DataValid.SetInvalid(InvalidType.Prefs, InvalidType.Computers);
 				ComputerPrefs.Update(computerPref);//redundant?
 			}
 			DialogResult=DialogResult.OK;

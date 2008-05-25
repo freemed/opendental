@@ -28,7 +28,7 @@ namespace OpenDentBusiness{
 		public TaskObjectType ObjectType;
 		///<summary>The date and time that this task was added.  Used to sort the list by the order entered.</summary>
 		public DateTime DateTimeEntry;
-		///<summary>FK to user.UserNum.  The person who created the task.</summary>
+		///<summary>FK to user.UserNum.  The person who created the task or who made the most recent edit to the task.</summary>
 		public int UserNum;
 		///<summary>The date and time that this task was marked "done".</summary>
 		public DateTime DateTimeFinished;
@@ -38,6 +38,26 @@ namespace OpenDentBusiness{
 			return (Task)MemberwiseClone();
 		}
 
+		public override bool Equals(object obj) {
+			if(TaskNum==((Task)obj).TaskNum
+				&& TaskListNum==((Task)obj).TaskListNum
+				&& DateTask==((Task)obj).DateTask
+				&& KeyNum==((Task)obj).KeyNum
+				&& Descript==((Task)obj).Descript
+				&& TaskStatus==((Task)obj).TaskStatus
+				&& IsRepeating==((Task)obj).IsRepeating
+				&& DateType==((Task)obj).DateType
+				&& FromNum==((Task)obj).FromNum
+				&& ObjectType==((Task)obj).ObjectType
+				&& DateTimeEntry==((Task)obj).DateTimeEntry
+				&& UserNum==((Task)obj).UserNum
+				&& DateTimeFinished==((Task)obj).DateTimeFinished)
+			{
+				return true;
+			}
+			return false;
+			//return base.Equals(obj);
+		}
 		
 
 	}

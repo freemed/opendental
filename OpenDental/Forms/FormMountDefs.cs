@@ -234,7 +234,7 @@ namespace OpenDental{
 
 		private void FormMounts_FormClosing(object sender,FormClosingEventArgs e) {
 			if(changed) {
-				DataValid.SetInvalid(InvalidTypes.ToolBut);
+				DataValid.SetInvalid(InvalidType.ToolBut);
 			}
 		}
 

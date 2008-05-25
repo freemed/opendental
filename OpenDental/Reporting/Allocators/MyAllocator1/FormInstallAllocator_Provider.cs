@@ -28,7 +28,7 @@ namespace OpenDental.Reporting.Allocators.MyAllocator1
 		}
 		private void RefreshForm()
 		{
-			CacheL.Refresh(InvalidTypes.Prefs);
+			CacheL.Refresh(InvalidType.Prefs);
 			bool toolRan = OpenDentBusiness.PrefC.HList.ContainsKey(MyAllocator1_ProviderPayment.Pref_AllocatorProvider1_ToolHasRun);
 			bool isUsing = OpenDentBusiness.PrefC.HList.ContainsKey(MyAllocator1_ProviderPayment.Pref_AllocatorProvider1_Use);
 			this.lblAllocatorStatus.Text = "Current Tool Status: "
@@ -95,7 +95,7 @@ namespace OpenDental.Reporting.Allocators.MyAllocator1
 					if (commands.Count != 0)
 					{
 						General.NonQ(commands.ToArray());
-						CacheL.Refresh(InvalidTypes.Prefs);
+						CacheL.Refresh(InvalidType.Prefs);
 					}
 					Prefs.UpdateBool(MyAllocator1_ProviderPayment.Pref_AllocatorProvider1_ToolHasRun,true);
 					Prefs.UpdateBool(MyAllocator1_ProviderPayment.Pref_AllocatorProvider1_Use, true);

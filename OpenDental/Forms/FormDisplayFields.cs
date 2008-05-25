@@ -392,7 +392,7 @@ namespace OpenDental{
 				return;
 			}
 			DisplayFields.SaveListForCategory(ListShowing);
-			DataValid.SetInvalid(InvalidTypes.InsCats);
+			DataValid.SetInvalid(InvalidType.InsCats);
 			DialogResult=DialogResult.OK;
 		}
 

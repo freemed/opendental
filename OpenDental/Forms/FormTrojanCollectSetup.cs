@@ -178,7 +178,7 @@ namespace OpenDental{
 			if( Prefs.UpdateString("TrojanExpressCollectPath",textExportFolder.Text)
 				| Prefs.UpdateInt   ("TrojanExpressCollectBillingType",billtype))
 			{
-				DataValid.SetInvalid(InvalidTypes.Prefs);
+				DataValid.SetInvalid(InvalidType.Prefs);
 			}
 			Cursor=Cursors.Default;
 			DialogResult=DialogResult.OK;

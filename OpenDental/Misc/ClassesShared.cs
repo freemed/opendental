@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Globalization;
@@ -111,23 +112,44 @@ namespace OpenDental{
 		///<summary></summary>
 		public static event OpenDental.ValidEventHandler BecameInvalid;	
 
+		/*
 		///<summary>Triggers an event that causes a signal to be sent to all other computers telling them what kind of locally stored data needs to be updated.  Either supply a set of flags for the types, or supply a date if the appointment screen needs to be refreshed.  Yes, this does immediately refresh the local data, too.  The AllLocal override does all types except appointment date for the local computer only, such as when starting up.</summary>
-		public static void SetInvalid(InvalidTypes itypes){
+		public static void SetInvalid(List<int> itypes){
 			OnBecameInvalid(new OpenDental.ValidEventArgs(DateTime.MinValue,itypes,false,0));
+		}*/
+
+		///<summary>Triggers an event that causes a signal to be sent to all other computers telling them what kind of locally stored data needs to be updated.  Either supply a set of flags for the types, or supply a date if the appointment screen needs to be refreshed.  Yes, this does immediately refresh the local data, too.  The AllLocal override does all types except appointment date for the local computer only, such as when starting up.</summary>
+		public static void SetInvalid(params InvalidType[] itypes){
+			List<int> itypeList=new List<int>();
+			for(int i=0;i<itypes.Length;i++){
+				itypeList.Add((int)itypes[i]);
+			}
+			OnBecameInvalid(new OpenDental.ValidEventArgs(DateTime.MinValue,itypeList,false,0));
 		}
 
 		///<summary>Triggers an event that causes a signal to be sent to all other computers telling them what kind of locally stored data needs to be updated.  Either supply a set of flags for the types, or supply a date if the appointment screen needs to be refreshed.  Yes, this does immediately refresh the local data, too, except Appointments.  The AllLocal override does all types except appointment date for the local computer only, such as when starting up.</summary>
 		public static void SetInvalid(DateTime date){
-			OnBecameInvalid(new OpenDental.ValidEventArgs(date,InvalidTypes.Date,false,0));
+			List<int> itypeList=new List<int>();
+			itypeList.Add((int)InvalidType.Date);
+			OnBecameInvalid(new OpenDental.ValidEventArgs(date,itypeList,false,0));
 		}
 
 		///<summary>Triggers an event that causes a signal to be sent to all other computers telling them what kind of locally stored data needs to be updated.  Either supply a set of flags for the types, or supply a date if the appointment screen needs to be refreshed.  Yes, this does immediately refresh the local data, too.  The AllLocal override does all types except appointment date for the local computer only, such as when starting up.</summary>
 		public static void SetInvalid(bool onlyLocal){
-			OnBecameInvalid(new OpenDental.ValidEventArgs(DateTime.MinValue,InvalidTypes.AllLocal,true,0));
+			List<int> itypeList=new List<int>();
+			itypeList.Add((int)InvalidType.AllLocal);
+			OnBecameInvalid(new OpenDental.ValidEventArgs(DateTime.MinValue,itypeList,true,0));
 		}
 
-		public static void SetInvalidTask(int taskNum){
-			OnBecameInvalid(new OpenDental.ValidEventArgs(DateTime.MinValue,InvalidTypes.Tasks,false,taskNum));
+		public static void SetInvalidTask(int taskNum,bool isPopup){
+			List<int> itypeList=new List<int>();
+			if(isPopup){
+				itypeList.Add((int)InvalidType.TaskPopup);
+			}
+			else{
+				itypeList.Add((int)InvalidType.Task);
+			}
+			OnBecameInvalid(new OpenDental.ValidEventArgs(DateTime.MinValue,itypeList,false,taskNum));
 		}
 
 		///<summary></summary>
@@ -145,12 +167,12 @@ namespace OpenDental{
 	///<summary></summary>
 	public class ValidEventArgs : System.EventArgs{
 		private DateTime dateViewing;
-		private InvalidTypes itypes;
+		private List<int> itypes;
 		private bool onlyLocal;
 		private int taskNum;
 		
 		///<summary></summary>
-		public ValidEventArgs(DateTime dateViewing, InvalidTypes itypes,bool onlyLocal,int taskNum) : base(){
+		public ValidEventArgs(DateTime dateViewing, List<int> itypes,bool onlyLocal,int taskNum) : base(){
 			this.dateViewing=dateViewing;
 			this.itypes=itypes;
 			this.onlyLocal=onlyLocal;
@@ -163,7 +185,7 @@ namespace OpenDental{
 		}
 
 		///<summary></summary>
-		public InvalidTypes ITypes{
+		public List<int> ITypes{
 			get{return itypes;}
 		}
 

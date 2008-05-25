@@ -170,7 +170,7 @@ namespace OpenDental{
 
 		private void FormProgramLinks_Closing(object sender, System.ComponentModel.CancelEventArgs e) {
 			if(changed){
-				DataValid.SetInvalid(InvalidTypes.Programs | InvalidTypes.ToolBut);
+				DataValid.SetInvalid(InvalidType.Programs, InvalidType.ToolBut);
 			}
 		}
 

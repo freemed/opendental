@@ -942,7 +942,7 @@ namespace OpenDental{
 				return;
 			}
 			if(FeeChanged){
-				DataValid.SetInvalid(InvalidTypes.Fees);
+				DataValid.SetInvalid(InvalidType.Fees);
 				DialogResult=DialogResult.OK;
 			}
 		}

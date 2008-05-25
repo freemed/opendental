@@ -3982,7 +3982,7 @@ namespace OpenDental{
 								ProvCur.SigOnFile=true;
 								ProvCur.OutlineColor=Color.Gray;
 								Providers.Insert(ProvCur);
-								DataValid.SetInvalid(InvalidTypes.Providers);//also refreshes local
+								DataValid.SetInvalid(InvalidType.Providers);//also refreshes local
 								provNum=ProvCur.ProvNum;
 							}
 							pat.PriProv=provNum;

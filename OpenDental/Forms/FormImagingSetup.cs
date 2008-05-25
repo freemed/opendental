@@ -405,7 +405,7 @@ namespace OpenDental{
 			computerPrefs.SensorExposure=(int)upDownExposure.Value;
 			computerPrefs.SensorBinned=checkBinned.Checked;
 			ComputerPrefs.Update(computerPrefs);
-			DataValid.SetInvalid(InvalidTypes.Prefs);
+			DataValid.SetInvalid(InvalidType.Prefs);
 			DialogResult=DialogResult.OK;
 		}
 

@@ -29,7 +29,7 @@ namespace OpenDental {
 				| Prefs.UpdateBool("BillingDefaultsIntermingle",checkIntermingled.Checked)
 				| Prefs.UpdateString("BillingDefaultsNote",textNote.Text))
 			{
-				DataValid.SetInvalid(InvalidTypes.Prefs);
+				DataValid.SetInvalid(InvalidType.Prefs);
 			}
 			DialogResult=DialogResult.OK;
 		}

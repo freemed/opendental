@@ -512,7 +512,7 @@ namespace OpenDental{
 				| Prefs.UpdateString("LetterMergePath",textLetterMergePath.Text)
 				| Prefs.UpdateString("ImageStore",optUseDatabase.Checked ? typeof(SqlStore).FullName : typeof(FileStore).FullName))
 			{
-				DataValid.SetInvalid(InvalidTypes.Prefs);
+				DataValid.SetInvalid(InvalidType.Prefs);
 			}
 			if(localAtoZpath!=textLocalPath.Text){//if local path changed
 				localAtoZpath=textLocalPath.Text;

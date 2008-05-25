@@ -96,7 +96,7 @@ namespace OpenDental {
 				Cursor=Cursors.WaitCursor;
 				TaskAncestors.SynchAll();
 				Prefs.UpdateBool("TaskAncestorsAllSetInVersion55",true);
-				DataValid.SetInvalid(InvalidTypes.Prefs);
+				DataValid.SetInvalid(InvalidType.Prefs);
 				Cursor=Cursors.Default;
 			}
 		}
@@ -550,9 +550,10 @@ namespace OpenDental {
 			FormTaskEdit FormT=new FormTaskEdit(cur);
 			FormT.IsNew=true;
 			FormT.ShowDialog();
-			if(FormT.DialogResult==DialogResult.OK){
-				DataValid.SetInvalidTask(cur.TaskNum);
-			}
+			//moved into the task edit window.
+			//if(FormT.DialogResult==DialogResult.OK){
+			//	DataValid.SetInvalidTask(cur.TaskNum,true);
+			//}
 			if(FormT.GotoType!=TaskObjectType.None) {
 				GotoType=FormT.GotoType;
 				GotoKeyNum=FormT.GotoKeyNum;
@@ -740,7 +741,7 @@ namespace OpenDental {
 					return;
 				}
 				Tasks.Insert(newT);
-				DataValid.SetInvalidTask(newT.TaskNum);
+				DataValid.SetInvalidTask(newT.TaskNum,true);
 			}
 			if(WasCut) {
 				if(ClipTaskList!=null) {
@@ -821,6 +822,7 @@ namespace OpenDental {
 					return;
 				}
 				Tasks.Delete(TasksList[clickedI-TaskListsList.Count]);
+				DataValid.SetInvalidTask(TasksList[clickedI-TaskListsList.Count].TaskNum,false);
 			}
 			FillGrid();
 		}
@@ -923,6 +925,7 @@ namespace OpenDental {
 			}
 			try {
 				Tasks.Update(task,taskOld);
+				DataValid.SetInvalidTask(task.TaskNum,false);
 			}
 			catch(Exception ex) {
 				MessageBox.Show(ex.Message);

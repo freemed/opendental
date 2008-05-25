@@ -137,7 +137,7 @@ namespace OpenDental{
 				return;
 			}
 			if(Prefs.UpdateString("AccountingLockDate",POut.PDate(PIn.PDate(textDate.Text),false))){
-				DataValid.SetInvalid(InvalidTypes.Prefs);
+				DataValid.SetInvalid(InvalidType.Prefs);
 			}
 			DialogResult=DialogResult.OK;
 		}

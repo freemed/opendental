@@ -258,7 +258,7 @@ namespace OpenDental{
 		}
 
 		private void FillViewList(){
-			CacheL.Refresh(InvalidTypes.Views);
+			CacheL.Refresh(InvalidType.Views);
 			listViews.Items.Clear();
 			string F;
 			for(int i=0;i<ApptViewC.List.Length;i++){
@@ -354,13 +354,13 @@ namespace OpenDental{
 				&& radioTen.Checked)
 			{
 				Prefs.UpdateInt("AppointmentTimeIncrement",10);
-				DataValid.SetInvalid(InvalidTypes.Prefs);
+				DataValid.SetInvalid(InvalidType.Prefs);
 			}
 			if(PrefC.GetInt("AppointmentTimeIncrement")==10
 				&& radioFifteen.Checked)
 			{
 				Prefs.UpdateInt("AppointmentTimeIncrement",15);
-				DataValid.SetInvalid(InvalidTypes.Prefs);
+				DataValid.SetInvalid(InvalidType.Prefs);
 			}
 			DialogResult=DialogResult.OK;
 		}
@@ -372,7 +372,7 @@ namespace OpenDental{
 
 		private void FormApptViews_Closing(object sender, System.ComponentModel.CancelEventArgs e) {
 			if(viewChanged){
-				DataValid.SetInvalid(InvalidTypes.Views);
+				DataValid.SetInvalid(InvalidType.Views);
 			}
 		}
 

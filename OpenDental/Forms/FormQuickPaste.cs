@@ -611,7 +611,7 @@ namespace OpenDental{
 
 		private void FormQuickPaste_Closing(object sender, System.ComponentModel.CancelEventArgs e) {
 			if(localChanged){
-				DataValid.SetInvalid(InvalidTypes.QuickPaste);
+				DataValid.SetInvalid(InvalidType.QuickPaste);
 			}
 		}
 

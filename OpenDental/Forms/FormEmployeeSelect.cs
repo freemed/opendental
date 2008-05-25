@@ -230,7 +230,7 @@ namespace OpenDental{
 
 		private void FormEmployee_Closing(object sender, System.ComponentModel.CancelEventArgs e) {
 			if(isChanged){
-				DataValid.SetInvalid(InvalidTypes.Employees);
+				DataValid.SetInvalid(InvalidType.Employees);
 			}
 		}
 

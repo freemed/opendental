@@ -667,7 +667,7 @@ namespace OpenDental{
 				| Prefs.UpdateBool("BillingExcludeInsPending",checkExcludeInsPending.Checked)
 				| Prefs.UpdateString("BillingExcludeLessThan",textExcludeLessThan.Text))
 			{
-				DataValid.SetInvalid(InvalidTypes.Prefs);
+				DataValid.SetInvalid(InvalidType.Prefs);
 			}
 		}
 

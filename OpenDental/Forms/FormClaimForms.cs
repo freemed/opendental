@@ -469,7 +469,7 @@ namespace OpenDental{
 				return;
 			}
 			if(Prefs.UpdateInt("DefaultClaimForm",ClaimForms.ListLong[listClaimForms.SelectedIndex].ClaimFormNum)){
-				DataValid.SetInvalid(InvalidTypes.Prefs);
+				DataValid.SetInvalid(InvalidType.Prefs);
 			}
 			FillList();
 		}
@@ -502,7 +502,7 @@ namespace OpenDental{
 
 		private void FormClaimForms_Closing(object sender, System.ComponentModel.CancelEventArgs e) {
 			if(changed){
-				DataValid.SetInvalid(InvalidTypes.ClaimForms);
+				DataValid.SetInvalid(InvalidType.ClaimForms);
 			}
 		}
 

@@ -292,7 +292,7 @@ namespace OpenDental{
 				selectedProvNum=PIn.PInt(table.Rows[gridMain.SelectedIndices[0]]["ProvNum"].ToString());
 			}
 			int scroll=gridMain.ScrollValue;
-			CacheL.Refresh(InvalidTypes.Providers);
+			CacheL.Refresh(InvalidType.Providers);
 			int schoolClass=0;
 			if(groupDentalSchools.Visible && comboClass.SelectedIndex>0){
 				schoolClass=SchoolClasses.List[comboClass.SelectedIndex-1].SchoolClassNum;
@@ -534,7 +534,7 @@ namespace OpenDental{
 				}
 			}
 			if(changed){
-				DataValid.SetInvalid(InvalidTypes.Providers | InvalidTypes.Security);
+				DataValid.SetInvalid(InvalidType.Providers, InvalidType.Security);
 			}
 			//SecurityLogs.MakeLogEntry("Providers","Altered Providers",user);
 		}

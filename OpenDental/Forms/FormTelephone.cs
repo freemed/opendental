@@ -130,7 +130,7 @@ namespace OpenDental{
 			}
 			Reformat();
 			//refresh carriers:
-			DataValid.SetInvalid(InvalidTypes.Carriers);
+			DataValid.SetInvalid(InvalidType.Carriers);
 			MessageBox.Show(Lan.g(this,"Telephone numbers reformatted."));
 		}
 			

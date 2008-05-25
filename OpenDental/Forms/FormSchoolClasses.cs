@@ -156,7 +156,7 @@ namespace OpenDental{
 
 		private void FormSchoolClasses_Closing(object sender, System.ComponentModel.CancelEventArgs e) {
 			if(changed){
-				DataValid.SetInvalid(InvalidTypes.DentalSchools);
+				DataValid.SetInvalid(InvalidType.DentalSchools);
 			}
 		}
 

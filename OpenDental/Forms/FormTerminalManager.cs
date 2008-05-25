@@ -467,7 +467,7 @@ namespace OpenDental{
 
 		private void butSave_Click(object sender,EventArgs e) {
 			if(Prefs.UpdateString("TerminalClosePassword",textPassword.Text)){
-				DataValid.SetInvalid(InvalidTypes.Prefs);
+				DataValid.SetInvalid(InvalidType.Prefs);
 			}
 			MsgBox.Show(this,"Done.");
 		}

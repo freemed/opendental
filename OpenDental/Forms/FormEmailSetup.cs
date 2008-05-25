@@ -298,7 +298,7 @@ namespace OpenDental{
 			}
 			Prefs.UpdateBool("EmailUseSSL",checkSSL.Checked);
 			Prefs.UpdateString("EmailSenderAddress",textSender.Text);
-			DataValid.SetInvalid(InvalidTypes.Prefs);
+			DataValid.SetInvalid(InvalidType.Prefs);
 			DialogResult=DialogResult.OK;
 		}
 

@@ -9,8 +9,8 @@ namespace OpenDentBusiness{
 		public int SignalNum;
 		///<summary>Text version of 'user' this message was sent from, which can actually be any description of a group or individual.</summary>
 		public string FromUser;
-		///<summary>Enum:InvalidTypes  None, Date, or combined flags for any LocalData</summary>
-		public InvalidTypes ITypes;
+		///<summary>Enum:InvalidType List of InvalidType int values separated by commas.  Can be empty.  When Date or Tasks are used, they are used all alone with no other flags present.</summary>
+		public string ITypes;
 		///<summary>If IType=Date, then this is the affected date in the Appointments module.</summary>
 		public DateTime DateViewing;
 		///<summary>Enum:SignalType  Button, or Invalid.</summary>

@@ -647,14 +647,14 @@ namespace OpenDental{
 			if(node==null) {
 				//no error, and no disabled message
 				if(Prefs.UpdateBool("RegistrationKeyIsDisabled",false)) {//this is the only place in the program where this happens.
-					DataValid.SetInvalid(InvalidTypes.Prefs);
+					DataValid.SetInvalid(InvalidType.Prefs);
 				}
 			}
 			else {
 				textConnectionMessage.Text=node.InnerText;
 				MessageBox.Show(node.InnerText);
 				if(Prefs.UpdateBool("RegistrationKeyIsDisabled",true)) {//this is the only place in the program where this happens.
-					DataValid.SetInvalid(InvalidTypes.Prefs);
+					DataValid.SetInvalid(InvalidType.Prefs);
 				}
 				return;
 			}
@@ -919,7 +919,7 @@ namespace OpenDental{
 				changed=true;
 			}
 			if(changed){
-				DataValid.SetInvalid(InvalidTypes.Prefs);
+				DataValid.SetInvalid(InvalidType.Prefs);
 			}
 		}
 

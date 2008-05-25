@@ -288,7 +288,7 @@ namespace OpenDental{
 		}
 
 		private void FormDiseaseDefs_FormClosing(object sender,FormClosingEventArgs e) {
-			DataValid.SetInvalid(InvalidTypes.Email);
+			DataValid.SetInvalid(InvalidType.Email);
 		}
 
 		

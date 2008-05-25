@@ -215,7 +215,7 @@ namespace OpenDental{
 				def.ItemOrder=DefC.Long[(int)DefCat.AdjTypes].Length;
 				Defs.Insert(def);
 				defnum=def.DefNum;
-				DataValid.SetInvalid(InvalidTypes.Defs);
+				DataValid.SetInvalid(InvalidType.Defs);
 			}
 			else{
 				defnum=PIn.PInt(table.Rows[0][0].ToString());

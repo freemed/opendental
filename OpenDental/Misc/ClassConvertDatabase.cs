@@ -100,10 +100,10 @@ namespace OpenDental{
 				To2_8_2();//begins going through the chain of conversion steps
 				MsgBox.Show(this,"Conversion successful");
 				if(FromVersion>=new Version("3.4.0")){
-					CacheL.Refresh(InvalidTypes.Prefs);//or it won't know it has to update in the next line.
+					CacheL.Refresh(InvalidType.Prefs);//or it won't know it has to update in the next line.
 					Prefs.UpdateBool("CorruptedDatabase",false);
 				}
-				CacheL.Refresh(InvalidTypes.Prefs);
+				CacheL.Refresh(InvalidType.Prefs);
 				return true;
 #if !DEBUG
 			}
@@ -6517,7 +6517,17 @@ namespace OpenDental{
 				}
 				command="UPDATE procedurelog SET UnitQty=1 WHERE UnitQty=0";
 				General.NonQ(command);
-				command="";
+				command="DELETE FROM signal";
+				General.NonQ(command);
+				if(DataConnection.DBtype == DatabaseType.MySql){
+					//currently, the max length will end up being about 100, but that wouldn't leave much room for expansion with only 256.
+					command="ALTER TABLE signal CHANGE ITypes ITypes text";
+					General.NonQ(command);
+				}
+				else{//Oracle
+					command="ALTER TABLE signal CHANGE ITypes ITypes text";
+					General.NonQ(command);
+				}
 
 
 

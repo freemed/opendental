@@ -185,7 +185,7 @@ namespace OpenDental{
 					,Ledgers.Bal[3],Ledgers.InsEst,Ledgers.BalTotal,Ledgers.PayPlanDue);
 			}
 			if(Prefs.UpdateString("DateLastAging",POut.PDate(PIn.PDate(textDateCalc.Text),false))){
-				DataValid.SetInvalid(InvalidTypes.Prefs);
+				DataValid.SetInvalid(InvalidType.Prefs);
 			}
 			Cursor=Cursors.Default;
 			MsgBox.Show(this,"Aging Complete");

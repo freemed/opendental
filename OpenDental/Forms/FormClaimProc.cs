@@ -1548,7 +1548,7 @@ namespace OpenDental
 			FormFE.ShowDialog();
 			if(FormFE.DialogResult==DialogResult.OK){
 				Fees.Refresh();
-				DataValid.SetInvalid(InvalidTypes.Fees);
+				DataValid.SetInvalid(InvalidType.Fees);
 			}
 			FillAllowed();
 		}

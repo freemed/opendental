@@ -667,7 +667,7 @@ namespace OpenDental{
 			}
 			FormDefinitions FormD=new FormDefinitions(DefCat.ProcCodeCats);
 			FormD.ShowDialog();
-			DataValid.SetInvalid(InvalidTypes.Defs);
+			DataValid.SetInvalid(InvalidType.Defs);
 			changed=true;
 			FillCats();
 			for(int i=0;i<CatList.Length;i++) {
@@ -721,7 +721,7 @@ namespace OpenDental{
 			}
 			FormDefinitions FormD=new FormDefinitions(DefCat.FeeSchedNames);
 			FormD.ShowDialog();
-			DataValid.SetInvalid(InvalidTypes.Defs | InvalidTypes.Fees);
+			DataValid.SetInvalid(InvalidType.Defs, InvalidType.Fees);
 			Fees.Refresh();
 			ProcedureCodes.Refresh();
 			changed=true;
@@ -796,7 +796,7 @@ namespace OpenDental{
 				return;
 			}
 			MessageBox.Show("Procedure codes inserted: "+rowsInserted);
-			DataValid.SetInvalid(InvalidTypes.Defs);
+			DataValid.SetInvalid(InvalidType.Defs);
 			changed=true;
 			FillCats();
 			FillGrid();
@@ -842,7 +842,7 @@ namespace OpenDental{
 					def.ItemName=listCodes[i].ProcCatDescript;
 					def.ItemOrder=DefC.Long[(int)DefCat.ProcCodeCats].Length;
 					Defs.Insert(def);
-					CacheL.Refresh(InvalidTypes.Defs);
+					CacheL.Refresh(InvalidType.Defs);
 					listCodes[i].ProcCat=def.DefNum;
 				}
 				ProcedureCodes.Insert(listCodes[i]);
@@ -950,7 +950,7 @@ namespace OpenDental{
 
 		private void FormProcedures_Closing(object sender, System.ComponentModel.CancelEventArgs e) {
 			if(changed){
-				DataValid.SetInvalid(InvalidTypes.ProcCodes | InvalidTypes.Fees);
+				DataValid.SetInvalid(InvalidType.ProcCodes, InvalidType.Fees);
 			}
 		}
 

@@ -392,7 +392,7 @@ namespace OpenDental{
 
 		private void FillUsers(){
 			UserGroups.Refresh();
-			CacheL.Refresh(InvalidTypes.Security);
+			CacheL.Refresh(InvalidType.Security);
 			SelectedGroupNum=0;
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
@@ -662,11 +662,11 @@ namespace OpenDental{
 
 		private void butClose_Click(object sender, System.EventArgs e) {
 			if(changed){
-				DataValid.SetInvalid(InvalidTypes.Security);
+				DataValid.SetInvalid(InvalidType.Security);
 			}
 			if(	Prefs.UpdateBool("TimecardSecurityEnabled",checkTimecardSecurityEnabled.Checked) ||
 					Prefs.UpdateBool("TimecardUsersDontEditOwnCard",checkCannotEditOwn.Checked)){
-				DataValid.SetInvalid(InvalidTypes.Prefs);
+				DataValid.SetInvalid(InvalidType.Prefs);
 			}
 			Close();
 		}

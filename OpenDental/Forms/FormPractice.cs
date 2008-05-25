@@ -729,7 +729,7 @@ namespace OpenDental{
 				}
 			}
 			if(changed){
-				DataValid.SetInvalid(InvalidTypes.Prefs);
+				DataValid.SetInvalid(InvalidType.Prefs);
 			}
 			DialogResult=DialogResult.OK;
 		}

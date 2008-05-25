@@ -436,7 +436,7 @@ namespace OpenDental{
 		private void checkIncludeRet_Click(object sender, System.EventArgs e) {	
 			Prefs.UpdateBool("LettersIncludeReturnAddress",checkIncludeRet.Checked);
 			localChanged=true;
-			CacheL.Refresh(InvalidTypes.Prefs);
+			CacheL.Refresh(InvalidType.Prefs);
 		}
 
 		///<summary>If the user has selected a letter, and then edited it in the main textbox, this warns them before continuing.</summary>
@@ -703,7 +703,7 @@ namespace OpenDental{
 
 		private void FormLetters_Closing(object sender, System.ComponentModel.CancelEventArgs e) {
 			if(localChanged){
-				DataValid.SetInvalid(InvalidTypes.Letters);
+				DataValid.SetInvalid(InvalidType.Letters);
 			}
 		}
 

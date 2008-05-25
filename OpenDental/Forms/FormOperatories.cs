@@ -181,7 +181,7 @@ namespace OpenDental{
 		}
 
 		private void FillGrid(){
-			CacheL.Refresh(InvalidTypes.Operatories);
+			CacheL.Refresh(InvalidType.Operatories);
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
 			ODGridColumn col=new ODGridColumn(Lan.g("TableOperatories","Op Name"),150);
@@ -302,7 +302,7 @@ namespace OpenDental{
 
 		private void FormOperatories_Closing(object sender, System.ComponentModel.CancelEventArgs e) {
 			if(changed){
-				DataValid.SetInvalid(InvalidTypes.Operatories);
+				DataValid.SetInvalid(InvalidType.Operatories);
 			}
 		}
 

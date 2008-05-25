@@ -166,7 +166,7 @@ namespace OpenDental{
 		}
 
 		private void FormPatFieldDefs_FormClosing(object sender,FormClosingEventArgs e) {
-			DataValid.SetInvalid(InvalidTypes.ZipCodes);
+			DataValid.SetInvalid(InvalidType.ZipCodes);
 		}
 
 		

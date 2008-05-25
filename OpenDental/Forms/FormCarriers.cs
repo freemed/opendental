@@ -372,7 +372,7 @@ namespace OpenDental{
 		private void FormCarriers_Closing(object sender, System.ComponentModel.CancelEventArgs e) {
 			//it doesn't matter whether the user hits ok, or cancel for this to happen
 			if(changed){
-				DataValid.SetInvalid(InvalidTypes.Carriers);
+				DataValid.SetInvalid(InvalidType.Carriers);
 			}
 		}
 

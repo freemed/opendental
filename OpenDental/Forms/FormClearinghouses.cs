@@ -208,7 +208,7 @@ namespace OpenDental{
 			}
 			if(listHasChanged){
 				//update all computers including this one:
-				DataValid.SetInvalid(InvalidTypes.ClearHouses);
+				DataValid.SetInvalid(InvalidType.ClearHouses);
 			}
 		}
 

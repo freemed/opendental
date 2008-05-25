@@ -236,7 +236,7 @@ namespace OpenDental{
 				| Prefs.UpdateString("RegistrationKey",regkey))
 			{
 				Cursor=Cursors.WaitCursor;
-				DataValid.SetInvalid(InvalidTypes.Prefs);
+				DataValid.SetInvalid(InvalidType.Prefs);
 				Cursor=Cursors.Default;
 			}
 			DialogResult=DialogResult.OK;

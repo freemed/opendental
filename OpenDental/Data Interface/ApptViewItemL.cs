@@ -10,7 +10,7 @@ namespace OpenDental{
 	public class ApptViewItemL{
 
 		public static void GetForCurView(int indexInList){
-			if(indexInList==-1){
+			if(indexInList<0){//might be -1 or -2
 				GetForCurView(new ApptView());
 			}
 			else{

@@ -922,7 +922,7 @@ namespace OpenDental{
 			Prefs.UpdateDouble("RecallAdjustRight",PIn.PDouble(textRight.Text));
 			Prefs.UpdateDouble("RecallAdjustDown",PIn.PDouble(textDown.Text));
 			
-			DataValid.SetInvalid(InvalidTypes.Prefs);
+			DataValid.SetInvalid(InvalidType.Prefs);
 			DialogResult=DialogResult.OK;
 		}
 

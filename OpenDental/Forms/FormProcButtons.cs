@@ -399,7 +399,7 @@ namespace OpenDental{
 
 		private void FormProcButtons_Closing(object sender, System.ComponentModel.CancelEventArgs e) {
 			if(changed){
-				DataValid.SetInvalid(InvalidTypes.AutoCodesProcButtons);
+				DataValid.SetInvalid(InvalidType.AutoCodesProcButtons);
 			}
 		}
 

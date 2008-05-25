@@ -296,7 +296,7 @@ namespace OpenDental{
 
 			Prefs.UpdateBool("EasyHideRepeatCharges",checkRepeatCharges.Checked);
 
-			DataValid.SetInvalid(InvalidTypes.Prefs);
+			DataValid.SetInvalid(InvalidType.Prefs);
 			DialogResult=DialogResult.OK;
 		}
 

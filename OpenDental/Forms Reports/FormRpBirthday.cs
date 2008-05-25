@@ -379,7 +379,7 @@ namespace OpenDental
 
 		private void butSave_Click(object sender,EventArgs e) {
 			if(Prefs.UpdateString("BirthdayPostcardMsg",textPostcardMsg.Text)){
-				DataValid.SetInvalid(InvalidTypes.Prefs);
+				DataValid.SetInvalid(InvalidType.Prefs);
 			}
 		}
 

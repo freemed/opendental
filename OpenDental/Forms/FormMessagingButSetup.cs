@@ -318,7 +318,7 @@ namespace OpenDental{
 		}
 
 		private void FormMessagingButSetup_FormClosing(object sender,FormClosingEventArgs e) {
-			DataValid.SetInvalid(InvalidTypes.ClearHouses);//messaging shares with clearinghouses.
+			DataValid.SetInvalid(InvalidType.ClearHouses);//messaging shares with clearinghouses.
 		}
 
 		

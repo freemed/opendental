@@ -817,7 +817,7 @@ namespace OpenDental{
 
 		private void FormDepositEdit_Closing(object sender, System.ComponentModel.CancelEventArgs e) {
 			if(changed){
-				DataValid.SetInvalid(InvalidTypes.Prefs);
+				DataValid.SetInvalid(InvalidType.Prefs);
 			}
 		}
 

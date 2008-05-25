@@ -506,7 +506,7 @@ namespace OpenDental{
 					Prefs.UpdateString("BackupRestoreFromPath",textBackupRestoreFromPath.Text);
 					Prefs.UpdateString("BackupRestoreToPath",textBackupRestoreToPath.Text);
 					Prefs.UpdateString("BackupRestoreAtoZToPath",textBackupRestoreAtoZToPath.Text);
-					DataValid.SetInvalid(InvalidTypes.Prefs);
+					DataValid.SetInvalid(InvalidType.Prefs);
 				}
 			}
 			string dbName=MiscData.GetCurrentDatabase();
@@ -904,7 +904,7 @@ namespace OpenDental{
 				Prefs.UpdateString("BackupRestoreToPath",textBackupRestoreToPath.Text);
 				Prefs.UpdateString("BackupRestoreAtoZToPath",textBackupRestoreAtoZToPath.Text);
 				Prefs.UpdateBool("BackupExcludeImageFolder",checkExcludeImages.Checked);
-				DataValid.SetInvalid(InvalidTypes.Prefs);
+				DataValid.SetInvalid(InvalidType.Prefs);
 			}
 		}
 

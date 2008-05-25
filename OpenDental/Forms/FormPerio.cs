@@ -1325,7 +1325,7 @@ namespace OpenDental{
 			Def DefCur=DefC.Short[(int)DefCat.MiscColors][1].Copy();
 			DefCur.ItemColor=colorDialog1.Color;
 			Defs.Update(DefCur);
-			CacheL.Refresh(InvalidTypes.Defs);
+			CacheL.Refresh(InvalidType.Defs);
 			localDefsChanged=true;
 			gridP.SetColors();
 			gridP.Invalidate();
@@ -1341,7 +1341,7 @@ namespace OpenDental{
 			Def DefCur=DefC.Short[(int)DefCat.MiscColors][2].Copy();
 			DefCur.ItemColor=colorDialog1.Color;
 			Defs.Update(DefCur);
-			CacheL.Refresh(InvalidTypes.Defs);
+			CacheL.Refresh(InvalidType.Defs);
 			localDefsChanged=true;
 			gridP.SetColors();
 			gridP.Invalidate();
@@ -1357,7 +1357,7 @@ namespace OpenDental{
 			Def DefCur=DefC.Short[(int)DefCat.MiscColors][4].Copy();
 			DefCur.ItemColor=colorDialog1.Color;
 			Defs.Update(DefCur);
-			CacheL.Refresh(InvalidTypes.Defs);
+			CacheL.Refresh(InvalidType.Defs);
 			localDefsChanged=true;
 			gridP.SetColors();
 			gridP.Invalidate();
@@ -1373,7 +1373,7 @@ namespace OpenDental{
 			Def DefCur=DefC.Short[(int)DefCat.MiscColors][5].Copy();
 			DefCur.ItemColor=colorDialog1.Color;
 			Defs.Update(DefCur);
-			CacheL.Refresh(InvalidTypes.Defs);
+			CacheL.Refresh(InvalidType.Defs);
 			localDefsChanged=true;
 			gridP.SetColors();
 			gridP.Invalidate();
@@ -1421,7 +1421,7 @@ namespace OpenDental{
 			pref.ValueString=currentValue.ToString();
 			Prefs.Update(pref);
 			localDefsChanged=true;
-			CacheL.Refresh(InvalidTypes.Prefs);
+			CacheL.Refresh(InvalidType.Prefs);
 			if(sender==updownProb){
 				textRedProb.Text=currentValue.ToString();
 				textCountProb.Text=gridP.CountTeeth(PerioSequenceType.Probing).Count.ToString();
@@ -1581,7 +1581,7 @@ namespace OpenDental{
 
 		private void FormPerio_Closing(object sender, System.ComponentModel.CancelEventArgs e) {
 			if(localDefsChanged){
-				DataValid.SetInvalid(InvalidTypes.Defs | InvalidTypes.Prefs);
+				DataValid.SetInvalid(InvalidType.Defs, InvalidType.Prefs);
 			}
 			if(listExams.SelectedIndex!=-1){
 				gridP.SaveCurExam(PerioExamCur.PerioExamNum);

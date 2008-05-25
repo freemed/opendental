@@ -448,16 +448,16 @@ namespace OpenDental{
 				depStr+=depAL[i].ToString();
 			}
 			if(Prefs.UpdateString("AccountingDepositAccounts",depStr)){
-				DataValid.SetInvalid(InvalidTypes.Prefs);
+				DataValid.SetInvalid(InvalidType.Prefs);
 			}
 			if(Prefs.UpdateInt("AccountingIncomeAccount",PickedDepAccountNum)) {
-				DataValid.SetInvalid(InvalidTypes.Prefs);
+				DataValid.SetInvalid(InvalidType.Prefs);
 			}
 			//pay------------------------------------------------------------------------------------------
 			AccountingAutoPays.SaveList(payAL);//just deletes them all and starts over
-			DataValid.SetInvalid(InvalidTypes.Operatories);
+			DataValid.SetInvalid(InvalidType.Operatories);
 			if(Prefs.UpdateInt("AccountingCashIncomeAccount",PickedPayAccountNum)) {
-				DataValid.SetInvalid(InvalidTypes.Prefs);
+				DataValid.SetInvalid(InvalidType.Prefs);
 			}
 			DialogResult=DialogResult.OK;
 		}

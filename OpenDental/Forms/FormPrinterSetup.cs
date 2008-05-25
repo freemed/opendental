@@ -633,10 +633,10 @@ namespace OpenDental{
 				}
 				Printers.PutForSit((PrintSituation)i,compName,printerName,isChecked);
 			}
-			DataValid.SetInvalid(InvalidTypes.Computers);
+			DataValid.SetInvalid(InvalidType.Computers);
 			if(checkSimple.Checked!=PrefC.GetBool("EasyHidePrinters")){
 				Prefs.UpdateBool("EasyHidePrinters",checkSimple.Checked);
-				DataValid.SetInvalid(InvalidTypes.Prefs);
+				DataValid.SetInvalid(InvalidType.Prefs);
 			}
 			DialogResult=DialogResult.OK;
 		}

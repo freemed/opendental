@@ -165,7 +165,7 @@ namespace OpenDental{
 
 		private void FormClinics_Closing(object sender, System.ComponentModel.CancelEventArgs e) {
 			if(changed){
-				DataValid.SetInvalid(InvalidTypes.Providers);
+				DataValid.SetInvalid(InvalidType.Providers);
 			}
 		}
 

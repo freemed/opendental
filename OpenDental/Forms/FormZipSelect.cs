@@ -264,7 +264,7 @@ namespace OpenDental{
 
 		private void FormZipSelect_Closing(object sender, System.ComponentModel.CancelEventArgs e) {
 			if(changed){
-				DataValid.SetInvalid(InvalidTypes.ZipCodes);
+				DataValid.SetInvalid(InvalidType.ZipCodes);
 			}
 		}
 

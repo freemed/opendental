@@ -187,7 +187,7 @@ namespace OpenDental{
 
 		private void FormPayPeriods_FormClosing(object sender,FormClosingEventArgs e) {
 			if(changed) {
-				DataValid.SetInvalid(InvalidTypes.Employees);
+				DataValid.SetInvalid(InvalidType.Employees);
 			}
 		}
 

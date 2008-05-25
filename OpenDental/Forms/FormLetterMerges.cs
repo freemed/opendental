@@ -617,7 +617,7 @@ namespace OpenDental{
 
 		private void FormLetterMerges_Closing(object sender, System.ComponentModel.CancelEventArgs e) {
 			if(changed){
-				DataValid.SetInvalid(InvalidTypes.LetterMerge);
+				DataValid.SetInvalid(InvalidType.LetterMerge);
 			}
 		}
 

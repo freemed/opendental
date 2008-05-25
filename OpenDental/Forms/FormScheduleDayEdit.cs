@@ -545,7 +545,7 @@ namespace OpenDental{
 			if(comboProv.SelectedIndex!=-1
 				&& Prefs.UpdateInt("ScheduleProvUnassigned",ProviderC.List[comboProv.SelectedIndex].ProvNum))
 			{
-				DataValid.SetInvalid(InvalidTypes.Prefs);
+				DataValid.SetInvalid(InvalidType.Prefs);
 			}
 			DialogResult=DialogResult.OK;
 		}

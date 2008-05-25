@@ -219,7 +219,7 @@ namespace OpenDental{
 			Programs.Update(prog);
 			prop.PropertyValue=DefC.Short[(int)DefCat.PaymentTypes][comboPaymentType.SelectedIndex].DefNum.ToString();
 			ProgramProperties.Update(prop);
-			DataValid.SetInvalid(InvalidTypes.Programs);
+			DataValid.SetInvalid(InvalidType.Programs);
 			DialogResult=DialogResult.OK;
 		}
 

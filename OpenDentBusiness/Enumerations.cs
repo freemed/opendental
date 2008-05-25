@@ -210,67 +210,66 @@ namespace OpenDentBusiness{
 		Arch,
 		///<summary>7</summary>
 		ToothRange}
-	///<summary>When the autorefresh message is sent to the other computers, this is the type.  Keep in mind that this is a default Int32 type,so the max is 2,147,483,647 unless we change the type.</summary>
-	[Flags]
-	public enum InvalidTypes{
+	///<summary>When the autorefresh message is sent to the other computers, this is the type.</summary>
+	public enum InvalidType{
 		///<summary>0</summary>
-		None=0,
-		///<summary>1- Not used with any other flags</summary>
-		Date=1,
-		///<summary>2</summary>
-		ProcCodes=2,
+		None,
+		///<summary>1 Not used with any other flags</summary>
+		Date,
+		///<summary>2 All flags combined except Date and Tasks.</summary>
+		AllLocal,
+		///<summary>3 Not used with any other flags.  Used to just indicate added tasks, but now it indicates any change at all except those where a popup is needed.  If we also want a popup, then use TaskPopup.</summary>
+		Task,
 		///<summary>4</summary>
-		Prefs=4,
-		///<summary>8- Also includes appt rules</summary>
-		Views=8,
-		///<summary>16- Not used with any other flags.  Used to just indicate added tasks, but now we are trying to indicate any change at all.</summary>
-		Tasks=16,
-		///<summary>32</summary>
-		AutoCodesProcButtons=32,
-		///<summary>64</summary>
-		Carriers=64,
-		///<summary>128- Also includes Signal/message defs.</summary>
-		ClearHouses=128,
-		///<summary>256</summary>
-		Computers=256,
-		///<summary>512- Also includes DisplayFields</summary>
-		InsCats=512,
-		///<summary>1024. Also includes payperiods.</summary>
-		Employees=1024,
-		///<summary>2048</summary>
-		Startup=2048,
-		///<summary>4096</summary>
-		Defs=4096,
-		///<summary>8192. Also includes diseases.</summary>
-		Email=8192,
-		///<summary>16384</summary>
-		Fees=16384,
-		///<summary>32768</summary>
-		Letters=32768,
-		///<summary>65536</summary>
-		QuickPaste=65536,
-		///<summary>131072</summary>
-		Security=131072,
-		///<summary>262144</summary>
-		Programs=262144,
-		///<summary>524288  Also includes Image Mounts</summary>
-		ToolBut=524288,
-		///<summary>1048576  Also includes clinics.</summary>
-		Providers=1048576,
-		///<summary>2097152. No longer used.</summary>
-		SchedOld=2097152,
-		///<summary>4194304</summary>
-		ClaimForms=4194304,
-		///<summary>8388608  Also includes patientfields</summary>
-		ZipCodes=8388608,
-		///<summary>16777216</summary>
-		LetterMerge=16777216,
-		///<summary>33554432</summary>
-		DentalSchools=33554432,
-		///<summary>67108864. Includes AccountingAutoPay.</summary>
-		Operatories=67108864,
-		///<summary>All flags combined except Date.</summary>
-		AllLocal=134217728-1-1
+		ProcCodes,
+		///<summary>5</summary>
+		Prefs,
+		///<summary>6 Also includes appt rules</summary>
+		Views,
+		///<summary></summary>
+		AutoCodesProcButtons,
+		///<summary></summary>
+		Carriers,
+		///<summary>Also includes Signal/message defs.</summary>
+		ClearHouses,
+		///<summary></summary>
+		Computers,
+		///<summary>Also includes DisplayFields</summary>
+		InsCats,
+		///<summary>Also includes payperiods.</summary>
+		Employees,
+		///<summary></summary>
+		Startup,
+		///<summary></summary>
+		Defs,
+		///<summary> Also includes diseases.</summary>
+		Email,
+		///<summary></summary>
+		Fees,
+		///<summary></summary>
+		Letters,
+		///<summary></summary>
+		QuickPaste,
+		///<summary></summary>
+		Security,
+		///<summary></summary>
+		Programs,
+		///<summary>Also includes Image Mounts</summary>
+		ToolBut,
+		///<summary>Also includes clinics.</summary>
+		Providers,
+		///<summary></summary>
+		ClaimForms,
+		///<summary>Also includes patientfields</summary>
+		ZipCodes,
+		///<summary></summary>
+		LetterMerge,
+		///<summary></summary>
+		DentalSchools,
+		///<summary>Includes AccountingAutoPay.</summary>
+		Operatories,
+		///<summary></summary>
+		TaskPopup
 	}
 	//<summary></summary>
 	/*public enum ButtonType{

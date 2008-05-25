@@ -1262,7 +1262,8 @@ namespace OpenDental{
 				Splash.Dispose();
 				return;
 			}
-			RefreshLocalData((InvalidTypes)(InvalidTypes.AllLocal-InvalidTypes.Prefs));
+			//This next line used to read InvalidTypes.AllLocal-InvalidTypes.Prefs.  But we can't really do that now.
+			RefreshLocalData(InvalidType.AllLocal);
 			//Lan.Refresh();//automatically skips if current culture is en-US
 			//LanguageForeigns.Refresh(CultureInfo.CurrentCulture);//automatically skips if current culture is en-US
 			DataValid.BecameInvalid += new OpenDental.ValidEventHandler(DataValid_BecameInvalid);
@@ -1344,7 +1345,7 @@ namespace OpenDental{
 
 		///<summary>Returns false if it can't complete a conversion, find datapath, or validate registration key.</summary>
 		private bool PrefsStartup(){
-			CacheL.Refresh(InvalidTypes.Prefs);
+			CacheL.Refresh(InvalidType.Prefs);
 			if(!PrefL.CheckMySqlVersion41()){
 				return false;
 			}
@@ -1352,7 +1353,7 @@ namespace OpenDental{
 				return false;
 			}
 			if(PrefC.UsingAtoZfolder && FormPath.GetPreferredImagePath()==null){//AtoZ folder not found
-				CacheL.Refresh(InvalidTypes.Security);
+				CacheL.Refresh(InvalidType.Security);
 				FormPath FormP=new FormPath();
 				FormP.ShowDialog();
 				if(FormP.DialogResult!=DialogResult.OK){
@@ -1363,7 +1364,7 @@ namespace OpenDental{
 				//menuItemClaimForms.Visible=usingAtoZ;
 				//CheckCustomReports();
 				//this.RefreshCurrentModule();
-				CacheL.Refresh(InvalidTypes.Prefs);//because listening thread not started yet.
+				CacheL.Refresh(InvalidType.Prefs);//because listening thread not started yet.
 			}
 			if(!PrefL.CheckProgramVersion()){
 				return false;
@@ -1376,7 +1377,7 @@ namespace OpenDental{
 					Application.Exit();
 					return false;
 				}
-				CacheL.Refresh(InvalidTypes.Prefs);
+				CacheL.Refresh(InvalidType.Prefs);
 			}
 			Lan.Refresh();//automatically skips if current culture is en-US
 			LanguageForeigns.Refresh(CultureInfo.CurrentCulture);//automatically skips if current culture is en-US
@@ -1385,9 +1386,18 @@ namespace OpenDental{
 		}
 
 		///<summary>Refreshes certain rarely used data from database.  Must supply the types of data to refresh as flags.  Also performs a few other tasks that must be done when local data is changed.</summary>
-		private void RefreshLocalData(InvalidTypes itypes){
-			CacheL.Refresh(itypes);
-			if((itypes & InvalidTypes.Prefs)==InvalidTypes.Prefs){
+		private void RefreshLocalData(params InvalidType[] itypes){
+			List<int> itypeList=new List<int>();
+			for(int i=0;i<itypes.Length;i++){
+				itypeList.Add((int)itypes[i]);
+			}
+			CacheL.Refresh(itypeList);
+			bool isAll=false;
+			if(itypeList.Contains((int)InvalidType.AllLocal)){
+				isAll=true;
+			}
+			if(itypeList.Contains((int)InvalidType.Prefs) || isAll){
+			//if((itypes & InvalidTypes.Prefs)==InvalidTypes.Prefs){
 				//Prefs_client.RefreshClient();
 				if(((Pref)PrefC.HList["EasyHidePublicHealth"]).ValueString=="1"){
 					menuItemSchools.Visible=false;
@@ -1516,99 +1526,101 @@ namespace OpenDental{
 				}
 				LayoutControls();
 			}//if(InvalidTypes.Prefs)
-			if((itypes & InvalidTypes.AutoCodesProcButtons)==InvalidTypes.AutoCodesProcButtons){
+			if(itypeList.Contains((int)InvalidType.AutoCodesProcButtons) || isAll){
 				AutoCodeL.Refresh();
 				AutoCodeItemL.Refresh();
 				AutoCodeCondL.Refresh();
 				ProcButtons.Refresh();
 				ProcButtonItems.Refresh();
 			}
-			if((itypes & InvalidTypes.Carriers)==InvalidTypes.Carriers){
+			if(itypeList.Contains((int)InvalidType.Carriers) || isAll){
 				Carriers.Refresh();//run on startup, after telephone reformat, after list edit.
 			}
-			if((itypes & InvalidTypes.ClaimForms)==InvalidTypes.ClaimForms){
+			if(itypeList.Contains((int)InvalidType.ClaimForms) || isAll){
 				ClaimFormItemL.Refresh();
 				ClaimForms.Refresh();
 			}
-			if((itypes & InvalidTypes.ClearHouses)==InvalidTypes.ClearHouses){
+			if(itypeList.Contains((int)InvalidType.ClearHouses) || isAll){
 				//kh until we add an EasyHideClearHouses						Clearinghouses.Refresh();
 				SigElementDefs.Refresh();
 				SigButDefs.Refresh();//includes SigButDefElements.Refresh()
 				FillSignalButtons(null);
 			}
-			if((itypes & InvalidTypes.Computers)==InvalidTypes.Computers){
+			if(itypeList.Contains((int)InvalidType.Computers) || isAll){
 				Computers.Refresh();
 				Printers.Refresh();
 			}
-			if((itypes & InvalidTypes.Defs)==InvalidTypes.Defs){
+			if(itypeList.Contains((int)InvalidType.Defs) || isAll){
+			//if((itypes & InvalidTypes.Defs)==InvalidTypes.Defs){
 				//Defs_client.RefreshClient();
 			}
-			if((itypes & InvalidTypes.DentalSchools)==InvalidTypes.DentalSchools){
+			if(itypeList.Contains((int)InvalidType.DentalSchools) || isAll){
 				SchoolClasses.Refresh();
 				SchoolCourses.Refresh();
 			}
-			if((itypes & InvalidTypes.Email)==InvalidTypes.Email){
+			if(itypeList.Contains((int)InvalidType.Email) || isAll){
+			//if((itypes & InvalidTypes.Email)==InvalidTypes.Email){
 				EmailTemplates.Refresh();
 				DiseaseDefs.Refresh();
 			}
-			if((itypes & InvalidTypes.Employees)==InvalidTypes.Employees){
+			if(itypeList.Contains((int)InvalidType.Employees) || isAll){
 				Employees.Refresh();
 				PayPeriods.Refresh();
 			}
-			if((itypes & InvalidTypes.Fees)==InvalidTypes.Fees){
+			if(itypeList.Contains((int)InvalidType.Fees) || isAll){
 				Fees.Refresh();
 			}
-			if((itypes & InvalidTypes.InsCats)==InvalidTypes.InsCats){
+			if(itypeList.Contains((int)InvalidType.InsCats) || isAll){
 				CovCatL.Refresh();
 				CovSpanL.Refresh();
 				DisplayFields.Refresh();
 			}
-			if((itypes & InvalidTypes.Letters)==InvalidTypes.Letters){
+			if(itypeList.Contains((int)InvalidType.Letters) || isAll){
 				Letters.Refresh();
 			}
-			if((itypes & InvalidTypes.LetterMerge)==InvalidTypes.LetterMerge){
+			if(itypeList.Contains((int)InvalidType.LetterMerge) || isAll){
 				LetterMergeFields.Refresh();
 				LetterMerges.Refresh();
 			}
-			if((itypes & InvalidTypes.Operatories)==InvalidTypes.Operatories){
+			if(itypeList.Contains((int)InvalidType.Operatories) || isAll){
 				//Operatory_client.Refresh();
 				AccountingAutoPayL.Refresh();
 			}
 			//if((itypes & InvalidTypes.Prefs)==InvalidTypes.Prefs){
 
 			//}
-			if((itypes & InvalidTypes.ProcCodes)==InvalidTypes.ProcCodes){
+			if(itypeList.Contains((int)InvalidType.ProcCodes) || isAll){
 				ProcedureCodes.Refresh();
 				ProcCodeNotes.Refresh();
 			}
-			if((itypes & InvalidTypes.Programs)==InvalidTypes.Programs){
+			if(itypeList.Contains((int)InvalidType.Programs) || isAll){
 				Programs.Refresh();
 				ProgramProperties.Refresh();
 				if(Programs.GetCur("PT").Enabled){
 					Bridges.PaperlessTechnology.InitializeFileWatcher();
 				}
 			}
-			if((itypes & InvalidTypes.Providers)==InvalidTypes.Providers){
+			if(itypeList.Contains((int)InvalidType.Providers) || isAll){
 				//Provider_client.RefreshOnClient();
 				ProviderIdents.Refresh();
 				Clinics.Refresh();
 			}
-			if((itypes & InvalidTypes.QuickPaste)==InvalidTypes.QuickPaste){
+			if(itypeList.Contains((int)InvalidType.QuickPaste) || isAll){
 				QuickPasteNotes.Refresh();
 				QuickPasteCats.Refresh();
 			}
-			if((itypes & InvalidTypes.Security)==InvalidTypes.Security){
+			if(itypeList.Contains((int)InvalidType.Security) || isAll){
 				//Userod_client.Refresh();
 				UserGroups.Refresh();
 				GroupPermissionL.Refresh();
 			}
-			if((itypes & InvalidTypes.Startup)==InvalidTypes.Startup){
+			if(itypeList.Contains((int)InvalidType.Startup) || isAll){
 				Employers.Refresh();//only needed when opening the prog. After that, automated.
 				ElectIDs.Refresh();//only run on startup
 				Referrals.Refresh();//Referrals are also refreshed dynamically.
 			}
 			//InvalidTypes.Tasks not handled here.
-			if((itypes & InvalidTypes.ToolBut)==InvalidTypes.ToolBut){
+			if(itypeList.Contains((int)InvalidType.ToolBut) || isAll){
 				ToolButItems.Refresh();
 				ContrAccount2.LayoutToolBar();
 				ContrAppt2.LayoutToolBar();
@@ -1616,13 +1628,13 @@ namespace OpenDental{
 				ContrDocs2.LayoutToolBar();
 				ContrFamily2.LayoutToolBar();
 			}
-			if((itypes & InvalidTypes.Views)==InvalidTypes.Views){
+			if(itypeList.Contains((int)InvalidType.Views) || isAll){
 				AppointmentRuleL.Refresh();
 				//ApptView_client.Refresh();
 				//ApptViewItem_client.Refresh();
 				ContrAppt2.FillViews();
 			}
-			if((itypes & InvalidTypes.ZipCodes)==InvalidTypes.ZipCodes){
+			if(itypeList.Contains((int)InvalidType.ZipCodes) || isAll){
 				ZipCodes.Refresh();
 				PatFieldDefs.Refresh();
 			}
@@ -2230,23 +2242,36 @@ namespace OpenDental{
 				if(!PrefsStartup()){//??
 					return;
 				}
-				RefreshLocalData(InvalidTypes.AllLocal);//does local computer only
+				RefreshLocalData(InvalidType.AllLocal);//does local computer only
 				return;
 			}
-			if(e.ITypes!=InvalidTypes.Date && e.ITypes!=InvalidTypes.Tasks){
+			if(!e.ITypes.Contains((int)InvalidType.Date) 
+				&& !e.ITypes.Contains((int)InvalidType.Task)
+				&& !e.ITypes.Contains((int)InvalidType.TaskPopup)){
 				//local refresh for dates is handled within ContrAppt, not here
-				RefreshLocalData(e.ITypes);//does local computer
+				InvalidType[] itypeArray=new InvalidType[e.ITypes.Count];
+				for(int i=0;i<itypeArray.Length;i++){
+					itypeArray[i]=(InvalidType)e.ITypes[i];
+				}
+				RefreshLocalData(itypeArray);//does local computer
+			}
+			string itypeString="";
+			for(int i=0;i<e.ITypes.Count;i++){
+				if(i>0){
+					itypeString+=",";
+				}
+				itypeString+=e.ITypes[i].ToString();
 			}
 			Signal sig=new Signal();
-			sig.ITypes=e.ITypes;
-			if(e.ITypes==InvalidTypes.Date){
+			sig.ITypes=itypeString;
+			if(e.ITypes.Contains((int)InvalidType.Date)){
 				sig.DateViewing=e.DateViewing;
 			}
 			else{
 				sig.DateViewing=DateTime.MinValue;
 			}
 			sig.SigType=SignalType.Invalid;
-			if(e.ITypes==InvalidTypes.Tasks){
+			if(e.ITypes.Contains((int)InvalidType.Task) || e.ITypes.Contains((int)InvalidType.TaskPopup)){
 				sig.TaskNum=e.TaskNum;
 			}
 			Signals.Insert(sig);
@@ -2435,24 +2460,44 @@ namespace OpenDental{
 			if(ContrAppt2.Visible && Signals.ApptNeedsRefresh(sigList,Appointments.DateSelected.Date)){
 				ContrAppt2.RefreshPeriod();
 			}
-			List<Task> tasks=Signals.GetNewTasksThisUser(sigList,Security.CurUser.UserNum);
-			if(tasks.Count>0){
-				System.Media.SoundPlayer soundplay=new SoundPlayer(Properties.Resources.notify);
-				soundplay.Play();
-				//if user has the Task dialog open, we can't easily tell it to refresh,
-				//So that dialog is responsible for auto refreshing every minute on a timer.
-				for(int i=0;i<tasks.Count;i++){
+			bool areAnySignalsTasks=false;
+			for(int i=0;i<sigList.Length;i++){
+				if(sigList[i].ITypes==((int)InvalidType.Task).ToString()
+					|| sigList[i].ITypes==((int)InvalidType.TaskPopup).ToString())
+				{
+					areAnySignalsTasks=true;
+				}
+			}
+			List<Task> tasksPopup=Signals.GetNewTaskPopupsThisUser(sigList,Security.CurUser.UserNum);
+			if(tasksPopup.Count>0){
+				for(int i=0;i<tasksPopup.Count;i++){
+					//Even though this is triggered to popup, if this is my own task, then do not popup.
+					if(tasksPopup[i].UserNum==Security.CurUser.UserNum){
+						continue;
+					}
+					System.Media.SoundPlayer soundplay=new SoundPlayer(Properties.Resources.notify);
+					soundplay.Play();
 					this.BringToFront();//don't know if this is doing anything.
-					FormTaskEdit FormT=new FormTaskEdit(tasks[i]);
+					FormTaskEdit FormT=new FormTaskEdit(tasksPopup[i]);
+					FormT.IsPopup=true;
 					FormT.ShowDialog();
 				}
+			}
+			if(areAnySignalsTasks || tasksPopup.Count>0){
+				//if user has the Task dialog open, we can't easily tell it to refresh,
+				//So that dialog is responsible for auto refreshing every minute on a timer.
 				if(userControlTasks1.Visible){
 					userControlTasks1.RefreshTasks();
 				}
 			}
-			InvalidTypes invalidTypes=Signals.GetInvalidTypes(sigList);
-			if(invalidTypes!=0){
-				RefreshLocalData(invalidTypes);
+			List<int> itypes=Signals.GetInvalidTypes(sigList);
+			InvalidType[] itypeArray=new InvalidType[itypes.Count];
+			for(int i=0;i<itypeArray.Length;i++){
+				itypeArray[i]=(InvalidType)itypes[i];
+			}
+			//InvalidTypes invalidTypes=Signals.GetInvalidTypes(sigList);
+			if(itypes.Count>0){//invalidTypes!=0){
+				RefreshLocalData(itypeArray);
 			}
 			Signal[] sigListButs=Signals.GetButtonSigs(sigList);
 			ContrManage2.LogMsgs(sigListButs);
@@ -2811,7 +2856,7 @@ namespace OpenDental{
 			if(!PrefsStartup()){
 				return;
 			}
-			RefreshLocalData(InvalidTypes.AllLocal);
+			RefreshLocalData(InvalidType.AllLocal);
 			//RefreshCurrentModule();
 			menuItemLogOff_Click(this,e);//this is a quick shortcut.
 		}

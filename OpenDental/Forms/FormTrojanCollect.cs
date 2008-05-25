@@ -570,7 +570,7 @@ namespace OpenDental{
 			}
 			if(textPassword.Text!=PrefC.GetString("TrojanExpressCollectPassword")){//user changed password
 				Prefs.UpdateString("TrojanExpressCollectPassword",textPassword.Text);
-				DataValid.SetInvalid(InvalidTypes.Prefs);
+				DataValid.SetInvalid(InvalidType.Prefs);
 			}
 			Cursor=Cursors.WaitCursor;
 			string folderPath=PrefC.GetString("TrojanExpressCollectPath");

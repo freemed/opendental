@@ -808,7 +808,7 @@ namespace OpenDental{
 
 		private void FormEmailMessageEdit_Closing(object sender, System.ComponentModel.CancelEventArgs e) {
 			if(templatesChanged){
-				DataValid.SetInvalid(InvalidTypes.Email);
+				DataValid.SetInvalid(InvalidType.Email);
 			}
 		}
 
