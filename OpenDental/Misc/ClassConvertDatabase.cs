@@ -6528,13 +6528,14 @@ namespace OpenDental{
 					command="ALTER TABLE signal CHANGE ITypes ITypes text";
 					General.NonQ(command);
 				}
-
-
-
-
-
-
-
+				if(DataConnection.DBtype == DatabaseType.MySql){
+					command="ALTER TABLE userod ADD TaskListInBox int NOT NULL";
+					General.NonQ(command);
+				}
+				else{//Oracle
+					command="ALTER TABLE userod ADD TaskListInBox int NOT NULL";
+					General.NonQ(command);
+				}
 				command="UPDATE preference SET ValueString = '5.7.0.0' WHERE PrefName = 'DataBaseVersion'";
 				General.NonQ(command);
 			}

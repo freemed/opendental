@@ -118,10 +118,10 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="label1.Text" xml:space="preserve">
-    <value>This is where you assign in-boxes for each user.
+    <value>This is where you assign inboxes for each user.
 1.  Go to the Main tab of the Tasks window.  Create a Task List for each user, naming it similarly to the user.
-2.  From the list below, match up each user with their newly created Task List.
-3.  Have each user log in and Subscribe to their in-box Task List by right clicking on it and selecting Subscribe from the menu.
-The reason this setup is so involved is because users can also subscribe to any other Task Lists such as shared lists.  So in addition to subscriptions, it is also necessary to assign in-boxes.  Note that subscriptions and in-boxes are not suitable for repeating tasks.</value>
+2.  In the list below, assign each user one of the newly created Task Lists as their inbox.
+3.  Have each user log in and Subscribe to their inbox Task List by right clicking on it and selecting Subscribe from the menu.
+The reason this setup is so involved is because users can also subscribe to any other Task Lists such as shared lists.  So in addition to subscriptions, it is also necessary to assign inboxes.  Note that subscriptions and inboxes are not suitable for repeating dated tasks.</value>
   </data>
 </root>

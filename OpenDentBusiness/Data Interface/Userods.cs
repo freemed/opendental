@@ -38,6 +38,7 @@ namespace OpenDentBusiness {
 				user.ClinicNum     = PIn.PInt   (table.Rows[i][5].ToString());
 				user.ProvNum       = PIn.PInt   (table.Rows[i][6].ToString());
 				user.IsHidden      = PIn.PBool  (table.Rows[i][7].ToString());
+				user.TaskListInBox = PIn.PInt   (table.Rows[i][8].ToString());
 				UserodC.Listt.Add(user);
 			}
 		}			
@@ -241,28 +242,31 @@ namespace OpenDentBusiness {
 				+"UserName = '"      +POut.PString(user.UserName)+"'"
 				+",Password = '"     +POut.PString(user.Password)+"'"
 				+",UserGroupNum = '" +POut.PInt   (user.UserGroupNum)+"'"
-				+",EmployeeNum = '"  +POut.PInt(user.EmployeeNum)+"'"
-				+",ClinicNum = '"    +POut.PInt(user.ClinicNum)+"'"
-				+",ProvNum = '"      +POut.PInt(user.ProvNum)+"'"
+				+",EmployeeNum = '"  +POut.PInt   (user.EmployeeNum)+"'"
+				+",ClinicNum = '"    +POut.PInt   (user.ClinicNum)+"'"
+				+",ProvNum = '"      +POut.PInt   (user.ProvNum)+"'"
 				+",IsHidden = '"     +POut.PBool  (user.IsHidden)+"'"
+				+",TaskListInBox = '"+POut.PInt   (user.TaskListInBox)+"'"
 				+" WHERE UserNum = '"+POut.PInt   (user.UserNum)+"'";
  			General.NonQ(command);
 		}
 
 		///<summary></summary>
 		private static void Insert(Userod user){
-			string command= "INSERT INTO userod (UserName,Password,UserGroupNum,EmployeeNum,ClinicNum,ProvNum,IsHidden) VALUES("
+			string command= "INSERT INTO userod (UserName,Password,UserGroupNum,EmployeeNum,ClinicNum,ProvNum,IsHidden,"
+				+"TaskListInBox) VALUES("
 				+"'"+POut.PString(user.UserName)+"', "
 				+"'"+POut.PString(user.Password)+"', "
 				+"'"+POut.PInt   (user.UserGroupNum)+"', "
-				+"'"+POut.PInt(user.EmployeeNum)+"', "
-				+"'"+POut.PInt(user.ClinicNum)+"', "
-				+"'"+POut.PInt(user.ProvNum)+"', "
-				+"'"+POut.PBool  (user.IsHidden)+"')";
+				+"'"+POut.PInt   (user.EmployeeNum)+"', "
+				+"'"+POut.PInt   (user.ClinicNum)+"', "
+				+"'"+POut.PInt   (user.ProvNum)+"', "
+				+"'"+POut.PBool  (user.IsHidden)+"', "
+				+"'"+POut.PInt   (user.TaskListInBox)+"')";
  			user.UserNum=General.NonQ(command,true);
 		}
 
-		///<summary></summary>
+		///<summary>Surround with try/catch because it can throw exceptions.</summary>
 		public static void InsertOrUpdate(bool isNew,Userod user){
 			//should add a check that employeenum and provnum are not both set.
 			//make sure username is not already taken
@@ -346,7 +350,27 @@ namespace OpenDentBusiness {
 			return null;//will never happen
 		}
 
-	
+		/// <summary>Will return 0 if no inbox found for user.</summary>
+		public static int GetInbox(int userNum){
+			for(int i=0;i<UserodC.Listt.Count;i++) {
+				if(UserodC.Listt[i].UserNum==userNum){
+					return UserodC.Listt[i].TaskListInBox;
+				}
+			}
+			return 0;
+		}
+
+		///<summary></summary>
+		public static List<Userod> GetNotHidden(){
+			List<Userod> retVal=new List<Userod>();
+			for(int i=0;i<UserodC.Listt.Count;i++){
+				if(!UserodC.Listt[i].IsHidden){
+					retVal.Add(UserodC.Listt[i]);
+				}
+			}
+			//retVal.Sort(//in a hurry, so skipping
+			return retVal;
+		}
 
 
 	}

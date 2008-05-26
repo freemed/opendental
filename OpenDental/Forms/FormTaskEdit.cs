@@ -812,7 +812,7 @@ namespace OpenDental{
 				MsgBox.Show(this,"You can't reply to yourself.");
 				return;
 			}
-			int inbox=TaskLists.GetInbox(Cur.UserNum);
+			int inbox=Userods.GetInbox(Cur.UserNum);
 			if(inbox==0){
 				MsgBox.Show(this,"No inbox has been setup for this user yet.");
 				return;

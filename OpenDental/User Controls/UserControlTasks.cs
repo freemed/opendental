@@ -492,7 +492,8 @@ namespace OpenDental {
 			if(!Security.IsAuthorized(Permissions.Setup)) {
 				return;
 			}
-
+			FormTaskSetup FormT=new FormTaskSetup();
+			FormT.ShowDialog();
 		}
 
 		private void OnAddList_Click() {

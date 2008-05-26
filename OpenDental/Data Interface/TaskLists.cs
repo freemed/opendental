@@ -257,15 +257,17 @@ namespace OpenDental{
 			if(table.Rows[0][0].ToString()!="0"){
 				throw new Exception(Lan.g("TaskLists","Not allowed to delete task list because it still has child tasks attached."));
 			}
+			command="SELECT COUNT(*) FROM userod WHERE TaskListInBox="+POut.PInt(tlist.TaskListNum);
+			table=General.GetTable(command);
+			if(table.Rows[0][0].ToString()!="0"){
+				throw new Exception(Lan.g("TaskLists","Not allowed to delete task list because it is attached to a user inbox."));
+			}
 			command= "DELETE from tasklist WHERE TaskListNum = '"
 				+POut.PInt(tlist.TaskListNum)+"'";
  			General.NonQ(command);
 		}
 
-		/// <summary>Will return 0 if no inbox found for user.</summary>
-		public static int GetInbox(int userNum){
-			return 0;
-		}
+		
 	
 	
 

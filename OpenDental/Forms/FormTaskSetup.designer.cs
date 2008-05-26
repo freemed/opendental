@@ -24,10 +24,32 @@ namespace OpenDental{
 		/// </summary>
 		private void InitializeComponent() {
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormTaskSetup));
+			this.label1 = new System.Windows.Forms.Label();
+			this.gridMain = new OpenDental.UI.ODGrid();
 			this.butOK = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
-			this.label1 = new System.Windows.Forms.Label();
+			this.listMain = new System.Windows.Forms.ListBox();
+			this.butSet = new OpenDental.UI.Button();
 			this.SuspendLayout();
+			// 
+			// label1
+			// 
+			this.label1.Location = new System.Drawing.Point(12,20);
+			this.label1.Name = "label1";
+			this.label1.Size = new System.Drawing.Size(645,113);
+			this.label1.TabIndex = 4;
+			this.label1.Text = resources.GetString("label1.Text");
+			// 
+			// gridMain
+			// 
+			this.gridMain.HScrollVisible = false;
+			this.gridMain.Location = new System.Drawing.Point(116,114);
+			this.gridMain.Name = "gridMain";
+			this.gridMain.ScrollValue = 0;
+			this.gridMain.Size = new System.Drawing.Size(231,393);
+			this.gridMain.TabIndex = 5;
+			this.gridMain.Title = null;
+			this.gridMain.TranslationName = null;
 			// 
 			// butOK
 			// 
@@ -59,24 +81,45 @@ namespace OpenDental{
 			this.butCancel.Text = "&Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
 			// 
-			// label1
+			// listMain
 			// 
-			this.label1.Location = new System.Drawing.Point(12,20);
-			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(645,113);
-			this.label1.TabIndex = 4;
-			this.label1.Text = resources.GetString("label1.Text");
+			this.listMain.FormattingEnabled = true;
+			this.listMain.Location = new System.Drawing.Point(495,146);
+			this.listMain.Name = "listMain";
+			this.listMain.Size = new System.Drawing.Size(120,264);
+			this.listMain.TabIndex = 6;
+			// 
+			// butSet
+			// 
+			this.butSet.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butSet.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.butSet.Autosize = true;
+			this.butSet.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butSet.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butSet.CornerRadius = 4F;
+			this.butSet.Image = global::OpenDental.Properties.Resources.Left;
+			this.butSet.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butSet.Location = new System.Drawing.Point(414,228);
+			this.butSet.Name = "butSet";
+			this.butSet.Size = new System.Drawing.Size(75,24);
+			this.butSet.TabIndex = 7;
+			this.butSet.Text = "Set";
+			this.butSet.Click += new System.EventHandler(this.butSet_Click);
 			// 
 			// FormTaskSetup
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
 			this.ClientSize = new System.Drawing.Size(725,534);
+			this.Controls.Add(this.butSet);
+			this.Controls.Add(this.listMain);
+			this.Controls.Add(this.gridMain);
 			this.Controls.Add(this.label1);
 			this.Controls.Add(this.butOK);
 			this.Controls.Add(this.butCancel);
 			this.Name = "FormTaskSetup";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Task Setup";
+			this.Load += new System.EventHandler(this.FormTaskSetup_Load);
 			this.ResumeLayout(false);
 
 		}
@@ -86,5 +129,8 @@ namespace OpenDental{
 		private OpenDental.UI.Button butOK;
 		private OpenDental.UI.Button butCancel;
 		private System.Windows.Forms.Label label1;
+		private OpenDental.UI.ODGrid gridMain;
+		private System.Windows.Forms.ListBox listMain;
+		private OpenDental.UI.Button butSet;
 	}
 }
