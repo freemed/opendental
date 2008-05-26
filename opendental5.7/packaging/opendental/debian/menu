@@ -1,3 +1,0 @@
-?package(opendental):needs="X11" section="Apps/Tools" \
-  title="Open Dental" command="/usr/bin/opendental" \
-  hints="Open Source Dental Practice Management"
