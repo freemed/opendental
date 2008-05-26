@@ -45,7 +45,7 @@ namespace OpenDental {
 			this.gridMain.ContextMenu=this.menuEdit;
 		}
 
-		///<summary>The parent might call this if it gets a signal that a relevant task was added from another workstation.  This will only trigger a refresh if the current tab is the User tab. And the parent should only call this if it has been verified that the current user has a new task.</summary>
+		///<summary>The parent might call this if it gets a signal that a relevant task was added from another workstation.  The parent should only call this if it has been verified that there is a change to tasks.</summary>
 		public void RefreshTasks(){
 			FillGrid();
 		}
@@ -104,6 +104,7 @@ namespace OpenDental {
 		///<summary></summary>
 		public void LayoutToolBar() {
 			ToolBarMain.Buttons.Clear();
+			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Setup"),-1,"","Setup"));
 			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Add TaskList"),0,"","AddList"));
 			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Add Task"),1,"","AddTask"));
 			//ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Exit"),-1,"","Exit"));
@@ -475,6 +476,9 @@ namespace OpenDental {
 			//if(e.Button.Tag.GetType()==typeof(string)){
 			//standard predefined button
 			switch(e.Button.Tag.ToString()) {
+				case "Setup":
+					OnSetup_Click();
+					break;
 				case "AddList":
 					OnAddList_Click();
 					break;
@@ -482,6 +486,13 @@ namespace OpenDental {
 					OnAddTask_Click();
 					break;
 			}
+		}
+
+		private void OnSetup_Click() {
+			if(!Security.IsAuthorized(Permissions.Setup)) {
+				return;
+			}
+
 		}
 
 		private void OnAddList_Click() {

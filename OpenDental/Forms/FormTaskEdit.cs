@@ -342,7 +342,7 @@ namespace OpenDental{
 			this.labelViewed.Name = "labelViewed";
 			this.labelViewed.Size = new System.Drawing.Size(163,19);
 			this.labelViewed.TabIndex = 138;
-			this.labelViewed.Text = "(set to Viewed, and OK)";
+			this.labelViewed.Text = "(Set to Viewed, and OK)";
 			this.labelViewed.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			// 
 			// label8
@@ -808,6 +808,16 @@ namespace OpenDental{
 
 		private void butReply_Click(object sender,EventArgs e) {
 			//This can't happen if IsNew
+			if(Cur.UserNum==Security.CurUser.UserNum){
+				MsgBox.Show(this,"You can't reply to yourself.");
+				return;
+			}
+			int inbox=TaskLists.GetInbox(Cur.UserNum);
+			if(inbox==0){
+				MsgBox.Show(this,"No inbox has been setup for this user yet.");
+				return;
+			}
+			Cur.TaskListNum=inbox;
 			if(!SaveCur(true)){
 				return;
 			}
@@ -840,7 +850,8 @@ namespace OpenDental{
 				DataValid.SetInvalidTask(Cur.TaskNum,true);//popup
 			}
 			else if(textChanged){
-				if(MsgBox.Show(this,true,"Display popup for recipient?")){
+				DialogResult result=MessageBox.Show(Lan.g(this,"Display popup for recipient?"),"",MessageBoxButtons.YesNo);
+				if(result==DialogResult.Yes){
 					DataValid.SetInvalidTask(Cur.TaskNum,true);//popup
 				}
 				else{

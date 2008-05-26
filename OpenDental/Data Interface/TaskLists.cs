@@ -262,7 +262,10 @@ namespace OpenDental{
  			General.NonQ(command);
 		}
 
-		
+		/// <summary>Will return 0 if no inbox found for user.</summary>
+		public static int GetInbox(int userNum){
+			return 0;
+		}
 	
 	
 
