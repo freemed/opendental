@@ -1,0 +1,156 @@
+   1 Missing/Invalid Transaction Prefix                  
+   2 Missing/Invalid Dental Claim # or Office Sequence #
+   3 Missing/Invalid Version Number
+   4 Missing/Invalid Transaction Code
+   5 Missing/Invalid Carrier Identification Number
+   6 Missing/Invalid Software System ID
+   7 Missing/Invalid Dentist Unique ID (Provider Number)
+   8 Missing/Invalid Dental Office Number
+   9 Missing/Invalid Primary Policy/Plan Number
+  10 Missing/Invalid Division/Section Number
+  11 Missing/Invalid Subscriber Identification Number
+  12 Missing/Invalid Relationship Code
+  13 Missing/Invalid Patient's Sex
+  14 Missing/Invalid Patient's Birthday
+  15 Missing Patient's Last Name
+  16 Missing Patient's First Name
+  17 Missing/Invalid Eligibility Exception Code
+  18 Missing Name of School
+  19 Missing Subscriber's Last Name or Name did not match to the one on file
+  20 Missing Subscriber's First Name or Name did not match to the one on file
+  21 Missing Subscriber's Address
+  22 Missing Subscriber's City
+  23 Missing/Invalid Subscriber's Postal Code
+  24 Invalid Language of Insured
+  25 Missing/Invalid Subscriber's Birthday
+  26 Invalid Secondary Carrier ID Number
+  27 Missing/Invalid Secondary Policy/Plan Number
+  28 Missing/Invalid Secondary Division/Section Number
+  29 Missing/Invalid Secondary Plan Subscriber Number
+  30 Missing/Invalid Secondary Subscriber's Birthday
+  31 Claim should be submitted to the Secondary Carrier first. (The secondary is the primary carrier)
+  32 Missing/Invalid Payee
+  33 Invalid Accident Date
+  34 Missing/Invalid Number of Procedures Performed
+  35 Missing/Invalid Procedure Code
+  36 Missing/Invalid Date of Service
+  37 Missing/Invalid International Tooth, Sextant, Quadrant or Arch Designation
+  38 Missing/Invalid Tooth Surface
+  39 Invalid Date of Initial Placement (Upper)
+  40 Missing/Invalid Response re: Treatment Required for Orthodontic Purposes
+  41 Missing/Invalid Dentist's Fee Claimed
+  42 Missing/Invalid Lab Fee
+  43 Missing/Invalid Units of Time
+  44 Message Length Field did not match length of message received
+  45 Missing/Invalid E-Mail / Materials Forwarded Flag
+  46 Missing/Invalid Claim Reference Number
+  47 Provider is not Authorized to access CDAnet
+  48 Please Submit Claim Manually
+  49 No outstanding responses from the network requested
+  50 Missing/Invalid Procedure Line Number               
+  51 Predetermination number not found                   
+  52 At least one service must be entered for a claim/predetermination
+  53 Missing/Invalid Subscriber's province             
+  54 Subscriber ID on reversal did not match that on the original claim
+  55 Reversal not for today's transaction                
+  56 Provider's specialty code does not match that on file
+  57 Missing/Invalid response to Question re: Is this an initial placement (Upper)
+  58 Number of procedures found did not match with number indicated
+  59 Dental Office Software is not certified to submit transactions to CDAnet
+  60 Claim Reversal Transaction cannot be accepted now, please try again later today
+  61 Network error, please re-submit transaction
+  62 Missing/Invalid Payee CDA Provider Number
+  63 Missing/Invalid Payee Provider Office Number
+  64 Missing/Invalid Referring Provider
+  65 Missing/Invalid Referral Reason Code
+  66 Missing/Invalid Plan Flag
+  67 Missing NIHB Plan fields
+  68 Missing/Invalid Band Number
+  69 Missing/Invalid Family Number
+  70 Missing/Invalid Missing Teeth Map
+  71 Missing/Invalid Secondary Relationship Code
+  72 Missing/Invalid Procedure Type Codes
+  73 Missing/Invalid Remarks Code
+  74 Date of Service is a future date
+  75 Date of Service is more than one week old
+  76 Group not acceptable through EDI
+  77 Procedure Type not supported by carrier
+  78 Please submit pre-authorization manually
+  79 Duplicate Claim
+  80 Missing/Invalid Carrier Transaction Counter
+  81 Invalid Eligibility Date
+  82 Invalid Card Sequence/Version Number
+  83 Missing/Invalid Secondary Subscriber's Last Name
+  84 Missing/Invalid Secondary Subscriber's First Name
+  85 Invalid Secondary Subscriber's Middle Initial
+  86 Missing Secondary Subscriber's Address Line 1
+  87 Missing Secondary Subscriber's City
+  88 Missing Secondary Subscriber's Province/State Code
+  89 Invalid Secondary Subscriber's Postal/Zip Code
+  90 Missing/Invalid response to Question: Is this an Initial Placement Lower
+  91 Missing/Invalid Date of Initial Placement Lower
+  92 Missing/Invalid Maxillary Prosthesis Material
+  93 Missing/Invalid Mandibular Prosthesis Material
+  94 Missing/Invalid Extracted Teeth Count
+  95 Missing/Invalid Extracted Tooth Number
+  96 Missing/Invalid Extraction Date
+  97 Invalid Reconciliation Date
+  98 Missing/Invalid Lab Procedure Code
+  99 Invalid Encryption Code
+ 100 Invalid Encryption
+ 101 Invalid Subscriber's Middle Initial
+ 102 Invalid Patient’s Middle Initial
+ 103 Missing/Invalid Primary Dependant Code
+ 104 Missing/Invalid Secondary Dependant Code
+ 105 Missing/Invalid Secondary Card Sequence/Version Number
+ 106 Missing/Invalid Secondary Language
+ 107 Missing/Invalid Secondary Coverage Flag
+ 108 Secondary Coverage Fields Missing
+ 109 Missing/Invalid Secondary Sequence Number
+ 110 Missing/Invalid Orthodontic Record Flag
+ 111 Missing/Invalid First Examination Fee
+ 112 Missing/Invalid Diagnostic Phase Fee
+ 113 Missing/Invalid Initial Payment
+ 114 Missing/Invalid Payment Mode 
+ 115 Missing/Invalid Treatment Duration
+ 116 Missing/Invalid Number of Anticipated Payments
+ 117 Missing/Invalid Anticipated Payment Amount
+ 118 Missing/Invalid Lab Procedure Code # 2
+ 119 Missing/Invalid Lab Procedure Fee # 2
+ 120 Missing/Invalid Estimated Treatment Starting Date
+ 121 Primary EOB Altered from the Original
+ 122 Data no longer available
+ 123 Missing/Invalid Reconciliation Page Number
+ 124 Transaction type not supported by the carrier
+ 125 Transaction Version not supported
+ 126 Missing/Invalid Diagnostic Code
+ 127 Missing/Invalid Institution Code
+ 128 Missing/Invalid Current Predetermination Page Number
+ 129 Missing/Invalid Last Predetermination Page Number
+ 130 Missing/Invalid Plan Record Count
+ 131 Missing/Invalid Plan Record
+ 132 Missing/Invalid Secondary Record Count
+ 133 Missing/Invalid Embedded Transaction Length
+ 134 Invalid Secondary Address Line # 2
+ 135 Missing/Invalid Receiving Provider Number
+ 136 Missing/Invalid Receiving Office Number
+ 137 Missing/Invalid Original Office Sequence Number
+ 138 Missing/Invalid Original Transaction Reference Number
+ 139 Missing/Invalid Attachment Source
+ 140 Missing/Invalid Attachment Count
+ 141 Missing/Invalid Attachment Type
+ 142 Missing/Invalid Attachment Length
+ 143 Missing/Invalid Attachment
+ 144 Missing/Invalid Attachment File Date
+ 145 Submitted Claim’s Predetermination number indicates claim must be made manually
+ 146 Submitted Claim’s Predetermination number has expired
+ 147 Overage dependant is not a student or disabled
+ 148 Subscriber does not have dental coverage
+ 149 Patient is not eligible
+ 150 Lab bill is not allowed
+ 151 Patient’s name / birth year does not match our files
+ 152 Lab bill must be submitted on the same line as the associated professional fee
+ 153 Our records indicate another payor should be primary
+ 997 Last Transaction Unreadable
+ 998 Reserved by CDA for future use                      
+ 999 Host Processing Error - Resubmit Claim Manually

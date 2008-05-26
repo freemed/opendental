@@ -1,0 +1,323 @@
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
+  <PropertyGroup>
+    <ProjectType>Local</ProjectType>
+    <ProductVersion>8.0.50727</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{FEBBE5BE-9F58-4967-BBCF-801F1CFCD774}</ProjectGuid>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ApplicationIcon>
+    </ApplicationIcon>
+    <AssemblyKeyContainerName>
+    </AssemblyKeyContainerName>
+    <AssemblyName>MigraDoc.Rendering</AssemblyName>
+    <AssemblyOriginatorKeyFile>StrongnameKey.snk</AssemblyOriginatorKeyFile>
+    <DefaultClientScript>JScript</DefaultClientScript>
+    <DefaultHTMLPageLayout>Grid</DefaultHTMLPageLayout>
+    <DefaultTargetSchema>IE50</DefaultTargetSchema>
+    <DelaySign>false</DelaySign>
+    <OutputType>Library</OutputType>
+    <RootNamespace>
+    </RootNamespace>
+    <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
+    <StartupObject>
+    </StartupObject>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <SignAssembly>true</SignAssembly>
+    <OldToolsVersion>2.0</OldToolsVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <OutputPath>bin\Debug\</OutputPath>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <BaseAddress>285212672</BaseAddress>
+    <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
+    <ConfigurationOverrideFile>
+    </ConfigurationOverrideFile>
+    <DefineConstants>TRACE;DEBUG;NET_2_0</DefineConstants>
+    <DocumentationFile>
+    </DocumentationFile>
+    <DebugSymbols>true</DebugSymbols>
+    <FileAlignment>4096</FileAlignment>
+    <NoStdLib>false</NoStdLib>
+    <NoWarn>
+    </NoWarn>
+    <Optimize>false</Optimize>
+    <RegisterForComInterop>false</RegisterForComInterop>
+    <RemoveIntegerChecks>false</RemoveIntegerChecks>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <WarningLevel>4</WarningLevel>
+    <DebugType>full</DebugType>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <OutputPath>bin\Release\</OutputPath>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <BaseAddress>285212672</BaseAddress>
+    <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
+    <ConfigurationOverrideFile>
+    </ConfigurationOverrideFile>
+    <DefineConstants>TRACE;NET_2_0</DefineConstants>
+    <DocumentationFile>
+    </DocumentationFile>
+    <DebugSymbols>false</DebugSymbols>
+    <FileAlignment>4096</FileAlignment>
+    <NoStdLib>false</NoStdLib>
+    <NoWarn>
+    </NoWarn>
+    <Optimize>true</Optimize>
+    <RegisterForComInterop>false</RegisterForComInterop>
+    <RemoveIntegerChecks>false</RemoveIntegerChecks>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <WarningLevel>4</WarningLevel>
+    <DebugType>none</DebugType>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System">
+      <Name>System</Name>
+    </Reference>
+    <Reference Include="System.Data">
+      <Name>System.Data</Name>
+    </Reference>
+    <Reference Include="System.Drawing">
+      <Name>System.Drawing</Name>
+    </Reference>
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml">
+      <Name>System.XML</Name>
+    </Reference>
+    <ProjectReference Include="..\PdfSharp.Charting\PdfSharp.Charting.csproj">
+      <Project>{CFDB7D46-EA8D-47DE-B10A-9E755A1B48BA}</Project>
+      <Name>PdfSharp.Charting</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\PdfSharp\PdfSharp.csproj">
+      <Name>PdfSharp</Name>
+      <Project>{5384CE57-1F94-4D22-860D-2E9C1AC12DDF}</Project>
+      <Package>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</Package>
+    </ProjectReference>
+    <ProjectReference Include="..\MigraDoc.DocumentObjectModel\xMigraDocLite.DocumentObjectModel.csproj">
+      <Project>{4666ABF3-EFE5-49BD-B2E8-9E04F5949145}</Project>
+      <Name>xMigraDocLite.DocumentObjectModel</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AssemblyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="VersionInfo.cs" />
+    <Compile Include="MigraDoc.Rendering.ChartMapper\AxisMapper.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MigraDoc.Rendering.ChartMapper\ChartMapper.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MigraDoc.Rendering.ChartMapper\DataLabelMapper.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MigraDoc.Rendering.ChartMapper\FillFormatMapper.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MigraDoc.Rendering.ChartMapper\FontMapper.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MigraDoc.Rendering.ChartMapper\LegendMapper.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MigraDoc.Rendering.ChartMapper\LineFormatMapper.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MigraDoc.Rendering.ChartMapper\PlotAreaMapper.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MigraDoc.Rendering.ChartMapper\SeriesCollectionMapper.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MigraDoc.Rendering.ChartMapper\XValuesMapper.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MigraDoc.Rendering.Forms\enums\Zoom.cs" />
+    <Compile Include="MigraDoc.Rendering.Forms\DocumentPreview.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="MigraDoc.Rendering.Printing\MigraDocPrintDocument.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="MigraDoc.Rendering.Resources\Messages.cs" />
+    <Compile Include="MigraDoc.Rendering\Area.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MigraDoc.Rendering\BordersRenderer.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MigraDoc.Rendering\ChartFormatInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MigraDoc.Rendering\ChartRenderer.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MigraDoc.Rendering\ChartRenderInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MigraDoc.Rendering\DocumentRenderer.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MigraDoc.Rendering\enums\ElementAlignment.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MigraDoc.Rendering\enums\Floating.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MigraDoc.Rendering\enums\HorizontalReference.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MigraDoc.Rendering\enums\ImageFailure.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MigraDoc.Rendering\enums\VerticalReference.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MigraDoc.Rendering\FieldInfos.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MigraDoc.Rendering\FillFormatRenderer.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MigraDoc.Rendering\FontHandler.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MigraDoc.Rendering\FormatInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MigraDoc.Rendering\FormattedCell.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MigraDoc.Rendering\FormattedDocument.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MigraDoc.Rendering\FormattedHeaderFooter.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MigraDoc.Rendering\FormattedTextArea.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MigraDoc.Rendering\FormattedTextFrame.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MigraDoc.Rendering\IAreaProvider.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MigraDoc.Rendering\ImageFormatInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MigraDoc.Rendering\ImageRenderer.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MigraDoc.Rendering\ImageRenderInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MigraDoc.Rendering\LayoutInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MigraDoc.Rendering\LineFormatRenderer.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MigraDoc.Rendering\NumberFormatter.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MigraDoc.Rendering\PageBreakFormatInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MigraDoc.Rendering\PageBreakRenderer.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MigraDoc.Rendering\PageBreakRenderInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MigraDoc.Rendering\PageInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MigraDoc.Rendering\ParagraphFormatInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MigraDoc.Rendering\ParagraphIterator.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MigraDoc.Rendering\ParagraphRenderer.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MigraDoc.Rendering\ParagraphRenderInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MigraDoc.Rendering\PdfDocumentRenderer.cs" />
+    <Compile Include="MigraDoc.Rendering\PdfPrinter.cs" />
+    <Compile Include="MigraDoc.Rendering\Renderer.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MigraDoc.Rendering\RenderInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MigraDoc.Rendering\ShadingRenderer.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MigraDoc.Rendering\ShapeFormatInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MigraDoc.Rendering\ShapeRenderer.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MigraDoc.Rendering\ShapeRenderInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MigraDoc.Rendering\TableFormatInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MigraDoc.Rendering\TableRenderer.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MigraDoc.Rendering\TableRenderInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MigraDoc.Rendering\TextFrameFormatInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MigraDoc.Rendering\TextFrameRenderer.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MigraDoc.Rendering\TextFrameRenderInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MigraDoc.Rendering\TopDownFormatter.cs">
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="MigraDoc.Rendering.Forms\DocumentPreview.resx">
+      <DependentUpon>DocumentPreview.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MigraDoc.Rendering.Resources\Messages.de.resources" />
+    <EmbeddedResource Include="MigraDoc.Rendering.Resources\Messages.resources" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="MigraDoc.Rendering.Resources\Messages.de.txt" />
+    <Content Include="MigraDoc.Rendering.Resources\Messages.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="MigraDoc.Rendering.Resources\MigraDoc.Rendering.Resources.vcproj" />
+    <None Include="StrongnameKey.snk" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="MigraDoc.Rendering.Resources\Debug\" />
+    <Folder Include="MigraDoc.Rendering.Resources\Release\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PreBuildEvent>
+    </PreBuildEvent>
+    <PostBuildEvent>
+    </PostBuildEvent>
+  </PropertyGroup>
+</Project>

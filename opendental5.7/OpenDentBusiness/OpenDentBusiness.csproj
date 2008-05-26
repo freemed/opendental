@@ -1,0 +1,371 @@
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.21022</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{3D0FC76E-803C-4DE2-BDB1-47D63A4E2357}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>OpenDentBusiness</RootNamespace>
+    <AssemblyName>OpenDentBusiness</AssemblyName>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <OldToolsVersion>2.0</OldToolsVersion>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>3</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <OutputType>Library</OutputType>
+    <AssemblyName>OpenDentBusiness</AssemblyName>
+    <RootNamespace>OpenDentBusiness</RootNamespace>
+    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>3</WarningLevel>
+    <DocumentationFile>bin\Release\OpenDentBusiness.XML</DocumentationFile>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <OutputType>Library</OutputType>
+    <AssemblyName>OpenDentBusiness</AssemblyName>
+    <DebugSymbols>true</DebugSymbols>
+    <RootNamespace>OpenDentBusiness</RootNamespace>
+    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'LinuxRelease|AnyCPU' ">
+    <OutputPath>bin\LinuxRelease\</OutputPath>
+    <DefineConstants>TRACE;LINUX</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <OutputType>Library</OutputType>
+    <AssemblyName>OpenDentBusiness</AssemblyName>
+    <DebugSymbols>true</DebugSymbols>
+    <RootNamespace>OpenDentBusiness</RootNamespace>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="MySql.Data, Version=1.0.9.0, Culture=neutral, PublicKeyToken=null">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Required dlls\MySql.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="Oracle.DataAccess, Version=10.2.0.100, Culture=neutral, PublicKeyToken=89b483f429c47342">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Required dlls\Oracle.DataAccess.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Cache\aaCache.cs" />
+    <Compile Include="Cache\AccountC.cs" />
+    <Compile Include="Cache\AccountingAutoPayC.cs" />
+    <Compile Include="Cache\AppointmentRuleC.cs" />
+    <Compile Include="Cache\ApptViewItemC.cs" />
+    <Compile Include="Cache\ApptViewC.cs" />
+    <Compile Include="Cache\AutoCodeCondC.cs" />
+    <Compile Include="Cache\AutoCodeC.cs" />
+    <Compile Include="Cache\AutoCodeItemC.cs" />
+    <Compile Include="Cache\Cache.cs" />
+    <Compile Include="Cache\ClaimFormItemC.cs" />
+    <Compile Include="Cache\DisplayFieldC.cs" />
+    <Compile Include="Cache\ProviderC.cs" />
+    <Compile Include="Cache\OperatoryC.cs" />
+    <Compile Include="Cache\CovSpanC.cs" />
+    <Compile Include="Cache\GroupPermissionC.cs" />
+    <Compile Include="Cache\UserodC.cs" />
+    <Compile Include="Cache\CovCatC.cs" />
+    <Compile Include="Cache\DefC.cs" />
+    <Compile Include="Cache\EnumRemotingRole.cs" />
+    <Compile Include="Cache\MountDefC.cs" />
+    <Compile Include="Cache\PrefC.cs" />
+    <Compile Include="ClientSL.cs" />
+    <Compile Include="Data Interface\aaDataInterface.cs" />
+    <Compile Include="Data Interface\AccountingAutoPays.cs" />
+    <Compile Include="Data Interface\Accounts.cs" />
+    <Compile Include="Data Interface\Adjustments.cs" />
+    <Compile Include="Data Interface\AnestheticRecords.cs" />
+    <Compile Include="Data Interface\AppointmentRules.cs" />
+    <Compile Include="Data Interface\ApptViewItems.cs" />
+    <Compile Include="Data Interface\ApptViews.cs" />
+    <Compile Include="Data Interface\AutoCodeConds.cs" />
+    <Compile Include="Data Interface\AutoCodeItems.cs" />
+    <Compile Include="Data Interface\AutoCodes.cs" />
+    <Compile Include="Data Interface\AutoNoteControls.cs" />
+    <Compile Include="Data Interface\AutoNotes.cs" />
+    <Compile Include="Data Interface\Benefits.cs" />
+    <Compile Include="Data Interface\CanadianClaims.cs" />
+    <Compile Include="Data Interface\CanadianExtracts.cs" />
+    <Compile Include="Data Interface\CanadianNetworks.cs" />
+    <Compile Include="Data Interface\Carriers.cs" />
+    <Compile Include="Data Interface\ClaimAttaches.cs" />
+    <Compile Include="Data Interface\ClaimCondCodeLogs.cs" />
+    <Compile Include="Data Interface\ClaimFormItems.cs" />
+    <Compile Include="Data Interface\CovCats.cs" />
+    <Compile Include="Data Interface\CovSpans.cs" />
+    <Compile Include="Data Interface\Defs.cs" />
+    <Compile Include="Data Interface\DisplayFields.cs" />
+    <Compile Include="Data Interface\FamilyModules.cs" />
+    <Compile Include="Data Interface\Gen.cs" />
+    <Compile Include="Data Interface\GroupPermissions.cs" />
+    <Compile Include="Data Interface\Operatories.cs" />
+    <Compile Include="Data Interface\Prefs.cs" />
+    <Compile Include="Data Interface\Statements.cs" />
+    <Compile Include="Data Interface\Documents.cs" />
+    <Compile Include="Data Interface\Family.cs" />
+    <Compile Include="Data Interface\General.cs" />
+    <Compile Include="Data Interface\Ledgers.cs" />
+    <Compile Include="Data Interface\MountDefs.cs" />
+    <Compile Include="Data Interface\MountItemDefs.cs" />
+    <Compile Include="Data Interface\MountItems.cs" />
+    <Compile Include="Data Interface\Mounts.cs" />
+    <Compile Include="Data Interface\PatientNotes.cs" />
+    <Compile Include="Data Interface\Patients.cs" />
+    <Compile Include="Data Interface\Providers.cs" />
+    <Compile Include="Imaging\ApplySettings.cs" />
+    <Compile Include="Imaging\FileStore.cs" />
+    <Compile Include="Imaging\FileStoreSettings.cs" />
+    <Compile Include="Imaging\IImageStore.cs" />
+    <Compile Include="Imaging\ImageHelper.cs" />
+    <Compile Include="Imaging\ImageNotFoundException.cs" />
+    <Compile Include="Imaging\ImageStore.cs" />
+    <Compile Include="Imaging\ImageStoreBase.cs" />
+    <Compile Include="Imaging\ImageStoreCreationException.cs" />
+    <Compile Include="Imaging\ImageStoreRemovalException.cs" />
+    <Compile Include="Imaging\NoActivePatientException.cs" />
+    <Compile Include="Data Interface\MiscData.cs" />
+    <Compile Include="DataAccess\DataCommand.cs" />
+    <Compile Include="DataAccess\DataFieldAttribute.cs" />
+    <Compile Include="DataAccess\DataFieldInfo.cs" />
+    <Compile Include="DataAccess\DataFieldMask.cs" />
+    <Compile Include="DataAccess\DataObjectAttribute.cs" />
+    <Compile Include="DataAccess\DataObjectBase.cs" />
+    <Compile Include="DataAccess\DataObjectFactory.cs" />
+    <Compile Include="DataAccess\DataObjectInfo.cs" />
+    <Compile Include="DataAccess\DataSettings.cs" />
+    <Compile Include="DataAccess\DataTests.cs" />
+    <Compile Include="DataAccess\DtoObjectInsertedAck.cs" />
+    <Compile Include="DataAccess\FactoryClient.cs" />
+    <Compile Include="DataAccess\FactoryServer.cs" />
+    <Compile Include="DataAccess\FactoryTransferObject.cs" />
+    <Compile Include="DataAccess\IDataObject.cs" />
+    <Compile Include="DataAccess\InvalidDataObjectException.cs" />
+    <Compile Include="DataAccess\TimeSpanSerializer.cs" />
+    <Compile Include="DataConnection.cs" />
+    <Compile Include="DataTransferObject.cs" />
+    <Compile Include="Enumerations.cs" />
+    <Compile Include="Imaging\SqlStore.cs" />
+    <Compile Include="Lan.cs" />
+    <Compile Include="Logic\aaLogic.cs" />
+    <Compile Include="Data Interface\AccountModules.cs" />
+    <Compile Include="Data Interface\Appointments.cs" />
+    <Compile Include="Logic\BenefitLogic.cs" />
+    <Compile Include="Data Interface\ChartModules.cs" />
+    <Compile Include="DataCore.cs" />
+    <Compile Include="Logic\PatientLogic.cs" />
+    <Compile Include="Logic\ProcedureLogic.cs" />
+    <Compile Include="Data Interface\ProcNotes.cs" />
+    <Compile Include="Logic\Tooth.cs" />
+    <Compile Include="Logic\ToothComparer.cs" />
+    <Compile Include="Data Interface\Userods.cs" />
+    <Compile Include="PIn.cs" />
+    <Compile Include="POut.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="RemotingClient.cs" />
+    <Compile Include="TableTypes\Account.cs" />
+    <Compile Include="TableTypes\AccountingAutoPay.cs" />
+    <Compile Include="TableTypes\Adjustment.cs" />
+    <Compile Include="TableTypes\Appointment.cs" />
+    <Compile Include="TableTypes\AppointmentRule.cs" />
+    <Compile Include="TableTypes\ApptView.cs" />
+    <Compile Include="TableTypes\ApptViewItem.cs" />
+    <Compile Include="TableTypes\AutoCode.cs" />
+    <Compile Include="TableTypes\AutoCodeCond.cs" />
+    <Compile Include="TableTypes\AutoCodeItem.cs" />
+    <Compile Include="TableTypes\AutoNote.cs" />
+    <Compile Include="TableTypes\AutoNoteControl.cs" />
+    <Compile Include="TableTypes\Benefit.cs" />
+    <Compile Include="TableTypes\Carrier.cs" />
+    <Compile Include="TableTypes\Claim.cs" />
+    <Compile Include="TableTypes\ClaimCondCodeLog.cs" />
+    <Compile Include="TableTypes\ClaimForm.cs" />
+    <Compile Include="TableTypes\ClaimFormItem.cs" />
+    <Compile Include="TableTypes\ClaimPayment.cs" />
+    <Compile Include="TableTypes\ClaimProc.cs" />
+    <Compile Include="TableTypes\ClaimValCode.cs" />
+    <Compile Include="TableTypes\AnestheticRecord.cs" />
+    <Compile Include="TableTypes\AnestheticMeds.cs" />
+    <Compile Include="TableTypes\Clearinghouse.cs" />
+    <Compile Include="TableTypes\Clinic.cs" />
+    <Compile Include="TableTypes\ClockEvent.cs" />
+    <Compile Include="TableTypes\Commlog.cs" />
+    <Compile Include="TableTypes\Computer.cs" />
+    <Compile Include="TableTypes\ComputerPref.cs" />
+    <Compile Include="TableTypes\Contact.cs" />
+    <Compile Include="TableTypes\CanadianClaim.cs" />
+    <Compile Include="TableTypes\CanadianExtract.cs" />
+    <Compile Include="TableTypes\CanadianNetwork.cs" />
+    <Compile Include="TableTypes\ClaimAttach.cs" />
+    <Compile Include="TableTypes\AnestheticData.cs" />
+    <Compile Include="TableTypes\Files.cs" />
+    <Compile Include="TableTypes\Statement.cs" />
+    <Compile Include="TableTypes\TaskAncestor.cs" />
+    <Compile Include="TableTypes\TaskSubscription.cs" />
+    <Compile Include="TableTypes\SupplyOrderItem.cs" />
+    <Compile Include="TableTypes\SupplyOrder.cs" />
+    <Compile Include="TableTypes\Supply.cs" />
+    <Compile Include="TableTypes\Supplier.cs" />
+    <Compile Include="TableTypes\SupplyNeeded.cs" />
+    <Compile Include="TableTypes\Popup.cs" />
+    <Compile Include="TableTypes\DisplayField.cs" />
+    <Compile Include="TableTypes\ProcCodeNote.cs" />
+    <Compile Include="TableTypes\ReqStudent.cs" />
+    <Compile Include="TableTypes\ReqNeeded.cs" />
+    <Compile Include="TableTypes\LabTurnaround.cs" />
+    <Compile Include="TableTypes\LabCase.cs" />
+    <Compile Include="TableTypes\Laboratory.cs" />
+    <Compile Include="TableTypes\Mount.cs" />
+    <Compile Include="TableTypes\MountItem.cs" />
+    <Compile Include="TableTypes\MountItemDef.cs" />
+    <Compile Include="TableTypes\MountDef.cs" />
+    <Compile Include="TableTypes\Etrans.cs" />
+    <Compile Include="TableTypes\FormPat.cs" />
+    <Compile Include="TableTypes\County.cs" />
+    <Compile Include="TableTypes\CovCat.cs" />
+    <Compile Include="TableTypes\CovSpan.cs" />
+    <Compile Include="TableTypes\Def.cs" />
+    <Compile Include="TableTypes\Deposit.cs" />
+    <Compile Include="TableTypes\Disease.cs" />
+    <Compile Include="TableTypes\DiseaseDef.cs" />
+    <Compile Include="TableTypes\Document.cs" />
+    <Compile Include="TableTypes\Dunning.cs" />
+    <Compile Include="TableTypes\ElectID.cs" />
+    <Compile Include="TableTypes\EmailAttach.cs" />
+    <Compile Include="TableTypes\EmailMessage.cs" />
+    <Compile Include="TableTypes\EmailTemplate.cs" />
+    <Compile Include="TableTypes\Employee.cs" />
+    <Compile Include="TableTypes\Employer.cs" />
+    <Compile Include="TableTypes\Fee.cs" />
+    <Compile Include="TableTypes\GroupPermission.cs" />
+    <Compile Include="TableTypes\InsPlan.cs" />
+    <Compile Include="TableTypes\Instructor.cs" />
+    <Compile Include="TableTypes\Interval.cs" />
+    <Compile Include="TableTypes\JournalEntry.cs" />
+    <Compile Include="TableTypes\Language.cs" />
+    <Compile Include="TableTypes\LanguageForeign.cs" />
+    <Compile Include="TableTypes\Letter.cs" />
+    <Compile Include="TableTypes\LetterMerge.cs" />
+    <Compile Include="TableTypes\LetterMergeField.cs" />
+    <Compile Include="TableTypes\Medication.cs" />
+    <Compile Include="TableTypes\MedicationPat.cs" />
+    <Compile Include="TableTypes\Operatory.cs" />
+    <Compile Include="TableTypes\PatField.cs" />
+    <Compile Include="TableTypes\PatFieldDef.cs" />
+    <Compile Include="TableTypes\Patient.cs" />
+    <Compile Include="TableTypes\PatientNote.cs" />
+    <Compile Include="TableTypes\PatPlan.cs" />
+    <Compile Include="TableTypes\Payment.cs" />
+    <Compile Include="TableTypes\PayPeriod.cs" />
+    <Compile Include="TableTypes\PayPlan.cs" />
+    <Compile Include="TableTypes\PayPlanCharge.cs" />
+    <Compile Include="TableTypes\PaySplit.cs" />
+    <Compile Include="TableTypes\PerioExam.cs" />
+    <Compile Include="TableTypes\PerioMeasure.cs" />
+    <Compile Include="TableTypes\Pref.cs" />
+    <Compile Include="TableTypes\Printer.cs" />
+    <Compile Include="TableTypes\ProcButton.cs" />
+    <Compile Include="TableTypes\ProcButtonItem.cs" />
+    <Compile Include="TableTypes\Procedure.cs" />
+    <Compile Include="TableTypes\ProcedureCode.cs" />
+    <Compile Include="TableTypes\ProcNote.cs" />
+    <Compile Include="TableTypes\ProcTP.cs" />
+    <Compile Include="TableTypes\Program.cs" />
+    <Compile Include="TableTypes\ProgramProperty.cs" />
+    <Compile Include="TableTypes\Provider.cs" />
+    <Compile Include="TableTypes\ProviderIdent.cs" />
+    <Compile Include="TableTypes\Question.cs" />
+    <Compile Include="TableTypes\QuestionDef.cs" />
+    <Compile Include="TableTypes\QuickPasteCat.cs" />
+    <Compile Include="TableTypes\QuickPasteNote.cs" />
+    <Compile Include="TableTypes\Recall.cs" />
+    <Compile Include="TableTypes\Reconcile.cs" />
+    <Compile Include="TableTypes\RefAttach.cs" />
+    <Compile Include="TableTypes\Referral.cs" />
+    <Compile Include="TableTypes\RegistrationKey.cs" />
+    <Compile Include="TableTypes\RepeatCharge.cs" />
+    <Compile Include="TableTypes\RxAlert.cs" />
+    <Compile Include="TableTypes\RxDef.cs" />
+    <Compile Include="TableTypes\RxPat.cs" />
+    <Compile Include="TableTypes\SchedDefault.cs" />
+    <Compile Include="TableTypes\Schedule.cs" />
+    <Compile Include="TableTypes\SchoolClass.cs" />
+    <Compile Include="TableTypes\SchoolCourse.cs" />
+    <Compile Include="TableTypes\School.cs" />
+    <Compile Include="TableTypes\ScreenGroup.cs" />
+    <Compile Include="TableTypes\Screen.cs" />
+    <Compile Include="TableTypes\SecurityLog.cs" />
+    <Compile Include="TableTypes\SigButDef.cs" />
+    <Compile Include="TableTypes\SigButDefElement.cs" />
+    <Compile Include="TableTypes\SigElement.cs" />
+    <Compile Include="TableTypes\SigElementDef.cs" />
+    <Compile Include="TableTypes\Signal.cs" />
+    <Compile Include="TableTypes\Task.cs" />
+    <Compile Include="TableTypes\TaskList.cs" />
+    <Compile Include="TableTypes\TerminalActive.cs" />
+    <Compile Include="TableTypes\TimeAdjust.cs" />
+    <Compile Include="TableTypes\ToolButItem.cs" />
+    <Compile Include="TableTypes\ToothInitial.cs" />
+    <Compile Include="TableTypes\Transaction.cs" />
+    <Compile Include="TableTypes\TreatPlan.cs" />
+    <Compile Include="TableTypes\Userod.cs" />
+    <Compile Include="TableTypes\UserGroup.cs" />
+    <Compile Include="TableTypes\UserQuery.cs" />
+    <Compile Include="TableTypes\ZipCode.cs" />
+    <Compile Include="WebServer\EnumMethodNames.cs" />
+    <Compile Include="WebServer\XmlConverter.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\CodeBase\xCodeBase.csproj">
+      <Project>{18F7BC78-4B99-48D3-A1F1-0D13A63E3CF9}</Project>
+      <Name>xCodeBase</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <SubType>Designer</SubType>
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
