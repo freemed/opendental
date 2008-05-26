@@ -365,7 +365,7 @@ namespace OpenDentBusiness {
 			List<Userod> retVal=new List<Userod>();
 			for(int i=0;i<UserodC.Listt.Count;i++){
 				if(!UserodC.Listt[i].IsHidden){
-					retVal.Add(UserodC.Listt[i]);
+					retVal.Add(UserodC.Listt[i].Copy());
 				}
 			}
 			//retVal.Sort(//in a hurry, so skipping
