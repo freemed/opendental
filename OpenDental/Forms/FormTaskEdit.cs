@@ -206,7 +206,7 @@ namespace OpenDental{
 			this.textObjectDesc.Multiline = true;
 			this.textObjectDesc.Name = "textObjectDesc";
 			this.textObjectDesc.Size = new System.Drawing.Size(452,63);
-			this.textObjectDesc.TabIndex = 9;
+			this.textObjectDesc.TabIndex = 0;
 			// 
 			// listObjectType
 			// 
@@ -286,7 +286,7 @@ namespace OpenDental{
 			this.textUser.Name = "textUser";
 			this.textUser.ReadOnly = true;
 			this.textUser.Size = new System.Drawing.Size(119,20);
-			this.textUser.TabIndex = 126;
+			this.textUser.TabIndex = 0;
 			// 
 			// label16
 			// 
@@ -474,7 +474,7 @@ namespace OpenDental{
 			this.textDateTask.Location = new System.Drawing.Point(127,382);
 			this.textDateTask.Name = "textDateTask";
 			this.textDateTask.Size = new System.Drawing.Size(87,20);
-			this.textDateTask.TabIndex = 1;
+			this.textDateTask.TabIndex = 2;
 			// 
 			// textDescript
 			// 
@@ -485,7 +485,7 @@ namespace OpenDental{
 			this.textDescript.QuickPasteType = OpenDentBusiness.QuickPasteType.None;
 			this.textDescript.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
 			this.textDescript.Size = new System.Drawing.Size(452,258);
-			this.textDescript.TabIndex = 0;
+			this.textDescript.TabIndex = 1;
 			// 
 			// butOK
 			// 
@@ -626,7 +626,7 @@ namespace OpenDental{
 				textDateTimeFinished.Text=Cur.DateTimeFinished.ToString();
 			}
 			textDescript.Text=Cur.Descript;
-			textDescript.Select(textDescript.Text.Length,0);
+			//textDescript.Select(textDescript.Text.Length,0);
 			if(Cur.DateTask.Year>1880){
 				textDateTask.Text=Cur.DateTask.ToShortDateString();
 			}
