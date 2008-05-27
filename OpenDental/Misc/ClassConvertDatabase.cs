@@ -55,12 +55,13 @@ namespace OpenDental{
 				|| FromVersion.ToString()=="5.3.0.0"
 				|| FromVersion.ToString()=="5.4.0.0"
 				|| FromVersion.ToString()=="5.5.0.0"
-				|| FromVersion.ToString()=="5.6.0.0")
+				|| FromVersion.ToString()=="5.6.0.0"
+				|| FromVersion.ToString()=="5.7.0.0")
 			{
 				MsgBox.Show(this,"Cannot convert this database version which was only for development purposes.");
 				return false;
 			}
-			if(FromVersion < new Version("5.7.0.0")){
+			if(FromVersion < new Version("5.8.0.0")){
 				if(MessageBox.Show(Lan.g(this,"Your database will now be converted")+"\r"
 					+Lan.g(this,"from version")+" "+FromVersion.ToString()+"\r"
 					+Lan.g(this,"to version")+" "+ToVersion.ToString()+"\r"
@@ -6539,8 +6540,24 @@ namespace OpenDental{
 				command="UPDATE preference SET ValueString = '5.7.0.0' WHERE PrefName = 'DataBaseVersion'";
 				General.NonQ(command);
 			}
-			//To5_7_?();
+			To5_8_0();
 		}
+
+		private void To5_8_0() {
+			if(FromVersion<new Version("5.8.0.0")) {
+				string command;
+				
+
+
+
+
+				command="UPDATE preference SET ValueString = '5.8.0.0' WHERE PrefName = 'DataBaseVersion'";
+				General.NonQ(command);
+			}
+			//To5_8_?();
+		}
+
+
 	}
 
 }
