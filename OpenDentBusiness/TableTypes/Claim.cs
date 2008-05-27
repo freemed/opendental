@@ -95,6 +95,7 @@ namespace OpenDentBusiness{
 		public List<ClaimAttach> Attachments;
 
 		public Claim(){
+			AttachedFlags="";
 			Attachments=new List<ClaimAttach>();
 		}
 
