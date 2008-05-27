@@ -182,7 +182,7 @@ namespace OpenDental{
 				+" AND (";
 			for(int i=0;i<sigListFiltered.Count;i++){
 				if(i>0){
-					command+="OR ";
+					command+=" OR ";
 				}
 				command+="task.TaskNum= "+POut.PInt(sigListFiltered[i].TaskNum);
 			}
