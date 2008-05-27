@@ -23,7 +23,7 @@ namespace OpenDental{
 					RemotingClient.ProcessCommand(dto);
 				}
 				else {
-					MiscData.MakeABackup();
+					OpenDentBusiness.MiscData.MakeABackup();
 				}
 			//}
 			//catch(Exception e) {
