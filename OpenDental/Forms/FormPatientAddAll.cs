@@ -1194,7 +1194,7 @@ namespace OpenDental {
 
 
 
-
+			MessageBox.Show("Not functional yet.");
 			DialogResult=DialogResult.OK;
 		}
 
