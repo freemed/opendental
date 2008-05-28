@@ -60,7 +60,10 @@ namespace OpenDental{
 		private OpenDental.UI.Button butReply;
 		private OpenDental.UI.Button butSend;
 		private Label label9;
+		private TextBox textTaskList;
+		private Label label10;
 		public bool IsPopup;
+		private TaskList TaskListCur;
 
 		///<summary></summary>
 		public FormTaskEdit(Task cur)
@@ -71,6 +74,7 @@ namespace OpenDental{
 			InitializeComponent();
 			Cur=cur;
 			CurOld=cur.Copy();
+			TaskListCur=TaskLists.GetOne(cur.TaskListNum);
 			Lan.F(this);
 		}
 
@@ -135,6 +139,8 @@ namespace OpenDental{
 			this.butCancel = new OpenDental.UI.Button();
 			this.butSend = new OpenDental.UI.Button();
 			this.label9 = new System.Windows.Forms.Label();
+			this.textTaskList = new System.Windows.Forms.TextBox();
+			this.label10 = new System.Windows.Forms.Label();
 			this.panelObject.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -282,19 +288,19 @@ namespace OpenDental{
 			// 
 			// textUser
 			// 
-			this.textUser.Location = new System.Drawing.Point(460,7);
+			this.textUser.Location = new System.Drawing.Point(445,7);
 			this.textUser.Name = "textUser";
 			this.textUser.ReadOnly = true;
-			this.textUser.Size = new System.Drawing.Size(119,20);
+			this.textUser.Size = new System.Drawing.Size(134,20);
 			this.textUser.TabIndex = 0;
 			// 
 			// label16
 			// 
-			this.label16.Location = new System.Drawing.Point(364,9);
+			this.label16.Location = new System.Drawing.Point(350,9);
 			this.label16.Name = "label16";
 			this.label16.Size = new System.Drawing.Size(94,16);
 			this.label16.TabIndex = 125;
-			this.label16.Text = "User";
+			this.label16.Text = "From User";
 			this.label16.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// radioNew
@@ -541,10 +547,29 @@ namespace OpenDental{
 			this.label9.Text = "(Send to other user)";
 			this.label9.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			// 
+			// textTaskList
+			// 
+			this.textTaskList.Location = new System.Drawing.Point(445,30);
+			this.textTaskList.Name = "textTaskList";
+			this.textTaskList.ReadOnly = true;
+			this.textTaskList.Size = new System.Drawing.Size(134,20);
+			this.textTaskList.TabIndex = 146;
+			// 
+			// label10
+			// 
+			this.label10.Location = new System.Drawing.Point(350,32);
+			this.label10.Name = "label10";
+			this.label10.Size = new System.Drawing.Size(94,16);
+			this.label10.TabIndex = 147;
+			this.label10.Text = "Task List";
+			this.label10.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
 			// FormTaskEdit
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.ClientSize = new System.Drawing.Size(726,658);
+			this.Controls.Add(this.textTaskList);
+			this.Controls.Add(this.label10);
 			this.Controls.Add(this.label9);
 			this.Controls.Add(this.butSend);
 			this.Controls.Add(this.labelReply);
@@ -612,7 +637,8 @@ namespace OpenDental{
 					radioDone.Checked=true;
 					break;
 			}
-			textUser.Text=Userods.GetName(Cur.UserNum);//might be blank. 
+			textUser.Text=Userods.GetName(Cur.UserNum);//might be blank.
+			textTaskList.Text=TaskListCur.Descript; 
 			if(Cur.DateTimeEntry.Year<1880){
 				textDateTimeEntry.Text=DateTime.Now.ToString();
 			}
@@ -666,6 +692,10 @@ namespace OpenDental{
 				butReply.Visible=false;
 				labelViewed.Visible=false;
 				butViewed.Visible=false;
+			}
+			if(TaskListCur.TaskListNum!=Security.CurUser.TaskListInBox){//if this task is not in my inbox
+				labelReply.Visible=false;
+				butReply.Visible=false;
 			}
 		}
 

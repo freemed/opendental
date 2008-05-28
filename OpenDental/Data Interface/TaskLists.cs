@@ -107,6 +107,19 @@ namespace OpenDental{
 			return RefreshAndFill(command);
 		}
 
+		///<summary></summary>
+		public static TaskList GetOne(int taskListNum){
+			if(taskListNum==0){
+				return null;
+			}
+			string command="SELECT * FROM tasklist WHERE TaskListNum="+POut.PInt(taskListNum);
+			List<TaskList> list=RefreshAndFill(command);
+			if(list.Count>0){
+				return list[0];
+			}
+			return null;
+		}
+
 		/*
 		///<Summary>Gets all task lists in the general tab with no heirarchy.  This allows us to loop through the list to grab useful heirarchy info.  Only used when viewing user tab.  Not guaranteed to get all tasklists, because we exclude those with a DateType.</Summary>
 		public static List<TaskList> GetAllGeneral(){
