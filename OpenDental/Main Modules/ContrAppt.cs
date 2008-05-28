@@ -2369,7 +2369,9 @@ namespace OpenDental{
 			catch(ApplicationException ex) {
 				MessageBox.Show(ex.Message);
 			}
-			Procedures.SetProvidersInAppointment(apt,Procedures.GetProcsForSingle(apt.AptNum,false));
+			if(apt.AptStatus!=ApptStatus.Complete){
+				Procedures.SetProvidersInAppointment(apt,Procedures.GetProcsForSingle(apt.AptNum,false));
+			}
 			SecurityLogs.MakeLogEntry(Permissions.AppointmentMove,PatCurNum,
 				PatCurName+", "
 				+apt.ProcDescript
