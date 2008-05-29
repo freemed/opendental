@@ -2637,7 +2637,9 @@ namespace OpenDental{
 		 	//ToolBarMain.Buttons.Add(new ODToolBarButton(ODToolBarButtonStyle.Separator));
 			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Perio Chart"),2,"","Perio"));
 			//ToolBarMain.Buttons.Add(new ODToolBarButton(ODToolBarButtonStyle.Separator));
-			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Anesthesia"),3,"","AnestheticRecord"));
+//This button cannot be added back until conversion code to add tables to db has been included.
+//And until a flag has been included to turn it off for most offices.
+//ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Anesthesia"),3,"","AnestheticRecord"));
 			//button=new ODToolBarButton(Lan.g(this,"Commlog"),4,"","Commlog");
 			//button.Style=ODToolBarButtonStyle.DropDownButton;
 			//button.DropDownMenu=menuEmail;
