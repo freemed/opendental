@@ -40,7 +40,7 @@ namespace OpenDental{
 			return RefreshAndFill(command).ToArray();
 		}*/
 		
-		///<summary>Used rarely</summary>
+		///<summary>Gets a list of Schedule items for one date.</summary>
 		public static List<Schedule> GetDayList(DateTime date){
 			string command="SELECT * FROM schedule "
 				+"WHERE SchedDate = "+POut.PDate(date)+" "
