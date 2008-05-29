@@ -110,11 +110,8 @@ namespace OpenDental{
 		private System.Windows.Forms.MenuItem menuItemEmail;
 		private System.Windows.Forms.MenuItem menuItemHelpContents;
 		private System.Windows.Forms.MenuItem menuItemHelp;
-		//private Image buttonsShadow;
 		///<summary>The only reason this is public static is so that it can be seen from the terminal manager.  Otherwise, it's passed around properly.</summary>
 		public static int CurPatNum;
-		//<Summary>Not sure if this is needed.  PatName is part of PatientSelectedEventArgs so that the patient select dropdown menu can be filled without another call to the database.  But we might only need to use it once, then forget it.  So this might soon be eliminated.</Summary>
-		//private static int CurPatName;
 		private System.Windows.Forms.MenuItem menuItemClearinghouses;
 		private System.Windows.Forms.MenuItem menuItemUpdate;
 		private System.Windows.Forms.MenuItem menuItemHelpWindows;
@@ -125,8 +122,6 @@ namespace OpenDental{
 		private System.Windows.Forms.MenuItem menuItemPatientImport;
 		private System.Windows.Forms.MenuItem menuItemSecurity;
 		private System.Windows.Forms.MenuItem menuItemLogOff;
-		//<summary>Will be true if this is the second instance of Open Dental running on this computer. This might happen with terminal services or fast user switching.  If true, then the message listening is disabled.  This might cause synchronisation issues if used extensively.  A timed synchronization is planned for this situation.</summary>
-		//private static bool IsSecondInstance;
 		private System.Windows.Forms.MenuItem menuItemInsPlans;
 		private System.Windows.Forms.MenuItem menuItemClinics;
 		private System.Windows.Forms.MenuItem menuItemOperatories;
@@ -195,6 +190,7 @@ namespace OpenDental{
 		private MenuItem menuItemAnestheticMeds;
 		///<summary>This list will only contain events for this computer where the users clicked to disable a popup for a specified period of time.  So it won't typically have many items in it.</summary>
 		private List<PopupEvent> PopupEventList;
+		private UserControlPhonePanel phonePanel;
 
 		///<summary></summary>
 		public FormOpenDental(){
@@ -210,9 +206,12 @@ namespace OpenDental{
 			ContrDocs2.PatientSelected+=new PatientSelectedEventHandler(Contr_PatientSelected);
 			ContrManage2.PatientSelected+=new PatientSelectedEventHandler(Contr_PatientSelected);
 			GotoModule.ModuleSelected+=new ModuleEventHandler(GotoModule_ModuleSelected);
-			Logger.openlog.Log("Open Dental initialization complete.",Logger.Severity.INFO);
 			panelSplitter.ContextMenu=menuSplitter;
 			menuItemDockBottom.Checked=true;
+			phonePanel=new UserControlPhonePanel();
+			phonePanel.Visible=false;
+			this.Controls.Add(phonePanel);
+			Logger.openlog.Log("Open Dental initialization complete.",Logger.Severity.INFO);
 		}
 
 		///<summary></summary>
@@ -2120,12 +2119,24 @@ namespace OpenDental{
 					panelSplitter.Location=new Point(position.X,panelSplitter.Location.Y);
 					panelSplitter.Width=width;
 					panelSplitter.Visible=true;
-					userControlTasks1.Location=new Point(position.X,panelSplitter.Bottom);
-					userControlTasks1.Width=width;
+					if(PrefC.GetBool("DockPhonePanelShow")){
+						phonePanel.Visible=true;
+						phonePanel.Location=new Point(position.X,panelSplitter.Bottom);
+						phonePanel.Width=240;
+						phonePanel.Height=this.ClientSize.Height-userControlTasks1.Top;
+						userControlTasks1.Location=new Point(position.X+phonePanel.Width,panelSplitter.Bottom);
+						userControlTasks1.Width=width-phonePanel.Width;
+					}
+					else{
+						phonePanel.Visible=false;
+						userControlTasks1.Location=new Point(position.X,panelSplitter.Bottom);
+						userControlTasks1.Width=width;
+					}
 					userControlTasks1.Height=this.ClientSize.Height-userControlTasks1.Top;
 					height=ClientSize.Height-panelSplitter.Height-userControlTasks1.Height-ToolBarMain.Height;
 				}
 				else {//docked Right
+					phonePanel.Visible=false;
 					if(panelSplitter.Width>8) {//docking needs to be changed
 						panelSplitter.Width=7;
 						panelSplitter.Location=new Point(900,position.Y);
@@ -2142,6 +2153,7 @@ namespace OpenDental{
 				panelSplitter.Invalidate();
 			}
 			else {
+				phonePanel.Visible=false;
 				panelSplitter.Visible=false;
 			}
 			ContrAccount2.Location=position;

@@ -6540,6 +6540,17 @@ namespace OpenDental{
 				command="UPDATE preference SET ValueString = '5.7.0.0' WHERE PrefName = 'DataBaseVersion'";
 				General.NonQ(command);
 			}
+			To5_7_3();
+		}
+
+		private void To5_7_3() {
+			if(FromVersion<new Version("5.7.3.0")) {
+				string command;
+				command = "INSERT INTO preference (PrefName,ValueString) VALUES ('DockPhonePanelShow','0')";
+				General.NonQ(command);
+				command="UPDATE preference SET ValueString = '5.7.3.0' WHERE PrefName = 'DataBaseVersion'";
+				General.NonQ(command);
+			}
 			To5_8_0();
 		}
 
