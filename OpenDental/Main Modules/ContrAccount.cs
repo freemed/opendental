@@ -876,7 +876,7 @@ namespace OpenDental {
 			this.labelInsLeft.Name = "labelInsLeft";
 			this.labelInsLeft.Size = new System.Drawing.Size(59,13);
 			this.labelInsLeft.TabIndex = 82;
-			this.labelInsLeft.Text = "Ins Left";
+			this.labelInsLeft.Text = "Ins. Left";
 			this.labelInsLeft.TextAlign = System.Drawing.ContentAlignment.TopCenter;
 			this.labelInsLeft.MouseLeave += new System.EventHandler(this.labelInsLeft_MouseLeave);
 			this.labelInsLeft.MouseHover += new System.EventHandler(this.labelInsLeft_MouseHover);
