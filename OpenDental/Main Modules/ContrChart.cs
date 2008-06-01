@@ -2771,7 +2771,7 @@ namespace OpenDental{
 				ToolBarMain.Buttons["Rx"].Enabled=true;
 				ToolBarMain.Buttons["LabCase"].Enabled=true;
 				ToolBarMain.Buttons["Perio"].Enabled=true;
-                ToolBarMain.Buttons["AnestheticRecord"].Enabled=true;
+                //ToolBarMain.Buttons["AnestheticRecord"].Enabled=true;
 				tabProc.Enabled=true;
 				butAddKey.Enabled=true;
 				butForeignKey.Enabled=true;

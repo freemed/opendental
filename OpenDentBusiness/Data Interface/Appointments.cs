@@ -756,7 +756,6 @@ namespace OpenDentBusiness{
 					row["contactMethods"]+=Lan.g("Appointments","Recall Method: ")
 						+((ContactMethod)PIn.PInt(raw.Rows[i]["PreferRecallMethod"].ToString())).ToString();
 				}
-				row["creditIns"]=raw.Rows[i]["CreditType"].ToString();
 				bool InsToSend=false;
 				if(rawInsProc!=null){
 					//figure out if pt's family has ins claims that need to be created
@@ -770,8 +769,8 @@ namespace OpenDentBusiness{
 						}
 					}
 				}
-				row["creditIns"]="";
-				if(InsToSend){
+				row["creditIns"]=raw.Rows[i]["CreditType"].ToString();
+				if(InsToSend) {
 					row["creditIns"]+="!";
 				}
 				else if(raw.Rows[i]["PlanNum"].ToString()!="" && raw.Rows[i]["PlanNum"].ToString()!="0") {
