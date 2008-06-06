@@ -165,6 +165,10 @@ namespace OpenDental {
 		private int Actscrollval;
 		///<summary>Set to true if this control is placed in the recall edit window. This affects the control behavior.</summary>
 		public bool ViewingInRecall=false;
+		private Label labelTotalPtOwes;
+		private Label label21;
+		private Panel panelTotalOwes;
+		private Timer timerPayPlan;
 		///<summary>For selecting entire fam by default</summary>
 		private int PrevGuar;
 		#endregion UserVariables
@@ -309,6 +313,10 @@ namespace OpenDental {
 			this.gridAccount = new OpenDental.UI.ODGrid();
 			this.gridComm = new OpenDental.UI.ODGrid();
 			this.ToolBarMain = new OpenDental.UI.ODToolBar();
+			this.labelTotalPtOwes = new System.Windows.Forms.Label();
+			this.label21 = new System.Windows.Forms.Label();
+			this.panelTotalOwes = new System.Windows.Forms.Panel();
+			this.timerPayPlan = new System.Windows.Forms.Timer(this.components);
 			this.panelCommButs.SuspendLayout();
 			this.panelProgNotes.SuspendLayout();
 			this.groupBox7.SuspendLayout();
@@ -320,6 +328,7 @@ namespace OpenDental {
 			this.tabMain.SuspendLayout();
 			this.tabShow.SuspendLayout();
 			this.panelInsInfoDetail.SuspendLayout();
+			this.panelTotalOwes.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// labelFamFinancial
@@ -739,7 +748,7 @@ namespace OpenDental {
 			// 
 			// panelPayPlanTotals
 			// 
-			this.panelPayPlanTotals.Controls.Add(this.labelPPStatus);
+			this.panelPayPlanTotals.Controls.Add(this.panelTotalOwes);
 			this.panelPayPlanTotals.Controls.Add(this.labelPayPlanDue);
 			this.panelPayPlanTotals.Controls.Add(this.labelPayPlanBal);
 			this.panelPayPlanTotals.Controls.Add(this.label10);
@@ -751,7 +760,7 @@ namespace OpenDental {
 			// 
 			// labelPPStatus
 			// 
-			this.labelPPStatus.Location = new System.Drawing.Point(0,2);
+			this.labelPPStatus.Location = new System.Drawing.Point(1,0);
 			this.labelPPStatus.Name = "labelPPStatus";
 			this.labelPPStatus.Size = new System.Drawing.Size(126,35);
 			this.labelPPStatus.TabIndex = 94;
@@ -1592,6 +1601,43 @@ namespace OpenDental {
 			this.ToolBarMain.TabIndex = 47;
 			this.ToolBarMain.ButtonClick += new OpenDental.UI.ODToolBarButtonClickEventHandler(this.ToolBarMain_ButtonClick);
 			// 
+			// labelTotalPtOwes
+			// 
+			this.labelTotalPtOwes.Font = new System.Drawing.Font("Microsoft Sans Serif",14.25F,System.Drawing.FontStyle.Bold,System.Drawing.GraphicsUnit.Point,((byte)(0)));
+			this.labelTotalPtOwes.ForeColor = System.Drawing.Color.Firebrick;
+			this.labelTotalPtOwes.Location = new System.Drawing.Point(6,12);
+			this.labelTotalPtOwes.Name = "labelTotalPtOwes";
+			this.labelTotalPtOwes.Size = new System.Drawing.Size(112,23);
+			this.labelTotalPtOwes.TabIndex = 222;
+			this.labelTotalPtOwes.Text = "2500.00";
+			this.labelTotalPtOwes.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+			this.labelTotalPtOwes.MouseEnter += new System.EventHandler(this.labelTotalPtOwes_MouseEnter);
+			// 
+			// label21
+			// 
+			this.label21.Location = new System.Drawing.Point(3,0);
+			this.label21.Name = "label21";
+			this.label21.Size = new System.Drawing.Size(123,12);
+			this.label21.TabIndex = 223;
+			this.label21.Text = "TOTAL Patient Owes:";
+			this.label21.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+			this.toolTip1.SetToolTip(this.label21,"Total balance owed on all payment plans ");
+			// 
+			// panelTotalOwes
+			// 
+			this.panelTotalOwes.Controls.Add(this.labelPPStatus);
+			this.panelTotalOwes.Controls.Add(this.label21);
+			this.panelTotalOwes.Controls.Add(this.labelTotalPtOwes);
+			this.panelTotalOwes.Location = new System.Drawing.Point(0,1);
+			this.panelTotalOwes.Name = "panelTotalOwes";
+			this.panelTotalOwes.Size = new System.Drawing.Size(126,37);
+			this.panelTotalOwes.TabIndex = 224;
+			// 
+			// timerPayPlan
+			// 
+			this.timerPayPlan.Interval = 5000;
+			this.timerPayPlan.Tick += new System.EventHandler(this.timerPayPlan_Tick);
+			// 
 			// ContrAccount
 			// 
 			this.Controls.Add(this.panelInsInfoDetail);
@@ -1626,6 +1672,7 @@ namespace OpenDental {
 			this.tabShow.PerformLayout();
 			this.panelInsInfoDetail.ResumeLayout(false);
 			this.panelInsInfoDetail.PerformLayout();
+			this.panelTotalOwes.ResumeLayout(false);
 			this.ResumeLayout(false);
 
 		}
@@ -1752,17 +1799,23 @@ namespace OpenDental {
 
 		///<summary></summary>
 		public void ModuleSelected(int patNum,bool isSelectingFamily) {
-			if(PrefC.GetBool("IntermingleFamilyDefault")){
-				if(PatCur != null){
-					if(PatCur.Guarantor != PrevGuar && PrevGuar != 0){
-						isSelectingFamily = true;
+			bool selectingFamily = false;
+			//couldn't get to work quite right, and since you can't make ins 
+			//claims, decided maybe this wasn't the best thing to do right now anyway - drtech
+			/*if (PrefB.GetBool("IntermingleFamilyDefault"))
+			{
+				if (PatCur != null){
+					if (PatCur.Guarantor != PrevGuar && PrevGuar!=0)
+					{
+						selectingFamily = true;
 					}
 					PrevGuar = PatCur.Guarantor;
 				} 
 				else{
-					isSelectingFamily = true;
+					selectingFamily = true;
 				}
 			}
+			*/
 			RefreshModuleData(patNum,isSelectingFamily);
 			RefreshModuleScreen(isSelectingFamily);
 		}
@@ -2180,6 +2233,7 @@ namespace OpenDental {
 
 			labelPayPlanBal.Text = PPBalanceTotal.ToString("F");
 			labelPayPlanDue.Text =PPDueTotal.ToString("F");
+			labelTotalPtOwes.Text=(PPBalanceTotal + FamCur.List[0].BalTotal -FamCur.List[0].InsEst).ToString("F");
 			if (PPBalanceTotal == 0 && PPDueTotal == 0) {
 				labelPPAst1.Visible = false;
 				labelPPAst2.Visible = false;
@@ -3297,8 +3351,13 @@ namespace OpenDental {
 			stmt.IsSent=true;
 			stmt.Mode_=StatementMode.InPerson;
 			stmt.HidePayment=true;
-			stmt.SinglePatient=true;
-			stmt.Intermingled=false;
+			if(PrefC.GetBool("IntermingleFamilyDefault")) {
+				stmt.Intermingled=true;
+				stmt.SinglePatient=false;
+			}
+			else {
+				stmt.Intermingled=false;
+			}
 			stmt.DateRangeFrom=DateTime.Today;
 			stmt.DateRangeTo=DateTime.Today;
 			stmt.Note="";
@@ -3315,7 +3374,12 @@ namespace OpenDental {
 			stmt.Mode_=StatementMode.Email;
 			stmt.HidePayment=false;
 			stmt.SinglePatient=false;
-			stmt.Intermingled=false;
+			if(PrefC.GetBool("IntermingleFamilyDefault")) {
+				stmt.Intermingled=true;
+			}
+			else {
+				stmt.Intermingled=false;
+			}
 			stmt.DateRangeFrom=DateTime.MinValue;
 			if(textDateStart.errorProvider1.GetError(textDateStart)==""){
 				if(textDateStart.Text!=""){
@@ -3342,12 +3406,21 @@ namespace OpenDental {
 			stmt.Mode_=StatementMode.InPerson;
 			stmt.HidePayment=false;
 			stmt.SinglePatient=false;
-			stmt.Intermingled=false;
+			if(PrefC.GetBool("IntermingleFamilyDefault")) {
+				stmt.Intermingled=true;
+			}
+			else {
+				stmt.Intermingled=false;
+			} 
+			stmt.DateRangeFrom=DateTime.MinValue;
 			stmt.DateRangeFrom=DateTime.MinValue;
 			if(textDateStart.errorProvider1.GetError(textDateStart)==""){
 				if(textDateStart.Text!=""){
 					stmt.DateRangeFrom=PIn.PDate(textDateStart.Text);
 				}
+			}
+			if(PrefC.GetBool("FuchsOptionsOn")) {
+				stmt.DateRangeFrom=DateTime.Today.AddDays(-90);
 			}
 			stmt.DateRangeTo=DateTime.Today;//Needed for payplan accuracy.//new DateTime(2200,1,1);
 			if(textDateEnd.errorProvider1.GetError(textDateEnd)==""){
@@ -4023,6 +4096,16 @@ namespace OpenDental {
 
 		private void labelInsLeft_MouseLeave(object sender,EventArgs e){
 			panelInsInfoDetail.Visible = false;
+		}
+
+		private void labelTotalPtOwes_MouseEnter(object sender,EventArgs e) {
+			panelTotalOwes.Visible=false;
+			timerPayPlan.Enabled=true;
+		}
+
+		private void timerPayPlan_Tick(object sender,EventArgs e) {
+			panelTotalOwes.Visible=true;
+			timerPayPlan.Enabled=false;
 		}
 
 	
