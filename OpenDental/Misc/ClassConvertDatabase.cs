@@ -6461,11 +6461,22 @@ namespace OpenDental{
 				command="UPDATE preference SET ValueString = '5.6.28.0' WHERE PrefName = 'DataBaseVersion'";
 				General.NonQ(command);
 			}
-			To5_7_0();
+			To5_6_31();
 		}
 
-		private void To5_7_0() {
-			if(FromVersion<new Version("5.7.0.0")) {
+		private void To5_6_31() {
+			if(FromVersion<new Version("5.6.31.0")) {
+				string command;
+				command="INSERT INTO preference (PrefName,ValueString) VALUES ('ClaimFormTreatDentSaysSigOnFile','0')";
+				General.NonQ(command);
+				command="UPDATE preference SET ValueString = '5.6.31.0' WHERE PrefName = 'DataBaseVersion'";
+				General.NonQ(command);
+			}
+			To5_7_1();
+		}
+
+		private void To5_7_1() {
+			if(FromVersion<new Version("5.7.1.0")) {
 				string command;
 				command = "INSERT INTO preference (PrefName,ValueString) VALUES ('StatementSummaryShowInsInfo','1')";
 				General.NonQ(command);
@@ -6537,7 +6548,7 @@ namespace OpenDental{
 					command="ALTER TABLE userod ADD TaskListInBox int NOT NULL";
 					General.NonQ(command);
 				}
-				command="UPDATE preference SET ValueString = '5.7.0.0' WHERE PrefName = 'DataBaseVersion'";
+				command="UPDATE preference SET ValueString = '5.7.1.0' WHERE PrefName = 'DataBaseVersion'";
 				General.NonQ(command);
 			}
 			To5_7_3();
@@ -6549,6 +6560,22 @@ namespace OpenDental{
 				command = "INSERT INTO preference (PrefName,ValueString) VALUES ('DockPhonePanelShow','0')";
 				General.NonQ(command);
 				command="UPDATE preference SET ValueString = '5.7.3.0' WHERE PrefName = 'DataBaseVersion'";
+				General.NonQ(command);
+			}
+			To5_7_4();
+		}
+
+		private void To5_7_4() {
+			if(FromVersion<new Version("5.7.4.0")) {
+				string command;
+				command="INSERT INTO preference (PrefName,ValueString) VALUES ('ClaimFormTreatDentSaysSigOnFile','0')";
+				try{
+					General.NonQ(command);
+				}
+				catch{
+					//might already exist
+				}
+				command="UPDATE preference SET ValueString = '5.7.4.0' WHERE PrefName = 'DataBaseVersion'";
 				General.NonQ(command);
 			}
 			To5_8_0();
