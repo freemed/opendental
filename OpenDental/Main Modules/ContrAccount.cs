@@ -1951,6 +1951,7 @@ namespace OpenDental {
 					groupBox7.Visible = true;
 					butShowAll.Visible = true;
 					butShowNone.Visible = true;
+					FillInsInfo();
 				}
 			}
 			else{
