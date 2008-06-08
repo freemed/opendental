@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Data;
 using System.Windows.Forms;
 using OpenDentBusiness;
@@ -27,6 +28,7 @@ namespace OpenDental{
 				ListLong[i].MiddleI =     PIn.PString(table.Rows[i][3].ToString());
 				ListLong[i].IsHidden =    PIn.PBool  (table.Rows[i][4].ToString());
 				ListLong[i].ClockStatus =	PIn.PString(table.Rows[i][5].ToString());
+				ListLong[i].PhoneExt =    PIn.PInt   (table.Rows[i][6].ToString());
 				if(!ListLong[i].IsHidden){
 					tempList.Add(ListLong[i]);
 				}
@@ -37,6 +39,22 @@ namespace OpenDental{
 			}
 		}
 
+		public static Employee[] GetListByExtension(){
+			if(ListShort==null){
+				return new Employee[0];
+			}
+			Employee[] arrayCopy=new Employee[ListShort.Length];
+			ListShort.CopyTo(arrayCopy,0);
+			int[] arrayKeys=new int[ListShort.Length];
+			for(int i=0;i<ListShort.Length;i++){
+				arrayKeys[i]=ListShort[i].PhoneExt;
+			}
+			Array.Sort(arrayKeys,arrayCopy);
+			//List<Employee> retVal=new List<Employee>(ListShort);
+			//retVal.Sort(
+			return arrayCopy;
+		}
+
 		///<summary></summary>
 		public static void Update(Employee Cur){
 			string command="UPDATE employee SET " 
@@ -45,6 +63,7 @@ namespace OpenDental{
 				+ ",middlei = '"    +POut.PString(Cur.MiddleI)+"' "
 				+ ",ishidden = '"   +POut.PBool  (Cur.IsHidden)+"' "
 				+ ",ClockStatus = '"+POut.PString(Cur.ClockStatus)+"' "
+				+ ",PhoneExt = '"   +POut.PInt   (Cur.PhoneExt)+"' "
 				+"WHERE EmployeeNum = '"+POut.PInt(Cur.EmployeeNum)+"'";
 			//MessageBox.Show(string command);
 			General.NonQ(command);
@@ -53,13 +72,14 @@ namespace OpenDental{
 		///<summary></summary>
 		public static void Insert(Employee Cur){
 			string command = "INSERT INTO employee (lname,fname,middlei,ishidden"
-				+",ClockStatus) "
+				+",ClockStatus,PhoneExt) "
 				+"VALUES("
 				+"'"+POut.PString(Cur.LName)+"', "
 				+"'"+POut.PString(Cur.FName)+"', "
 				+"'"+POut.PString(Cur.MiddleI)+"', "
 				+"'"+POut.PBool  (Cur.IsHidden)+"', "
-				+"'"+POut.PString(Cur.ClockStatus)+"')";
+				+"'"+POut.PString(Cur.ClockStatus)+"', "
+				+"'"+POut.PInt   (Cur.PhoneExt)+"')";
 			Cur.EmployeeNum=General.NonQ(command,true);
 		}
 
@@ -143,6 +163,7 @@ namespace OpenDental{
 			}
 			return null;
 		}
+
 		/// <summary> Returns -1 if employeeNum is not found.  0 if not hidden and 1 if hidden </summary>		
 		public static int IsHidden(int employeeNum){
 			int rValue = -1;
@@ -156,6 +177,18 @@ namespace OpenDental{
 			}
 			return rValue;
 		}
+
+		public static DataTable GetPhoneTable(){
+			string command="SELECT * FROM phone";
+			try{
+				return General.GetTable(command);
+			}
+			catch{
+				return new DataTable();
+			}
+		}
+
+
 
 	}
 

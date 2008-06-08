@@ -6575,6 +6575,8 @@ namespace OpenDental{
 				catch{
 					//might already exist
 				}
+				command="ALTER TABLE employee ADD PhoneExt int NOT NULL";
+				General.NonQ(command);
 				command="UPDATE preference SET ValueString = '5.7.4.0' WHERE PrefName = 'DataBaseVersion'";
 				General.NonQ(command);
 			}
