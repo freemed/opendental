@@ -2756,8 +2756,8 @@ namespace OpenDental{
 				ToolBarMain.Buttons["Rx"].Enabled=false;
 				ToolBarMain.Buttons["LabCase"].Enabled=false;
 				ToolBarMain.Buttons["Perio"].Enabled=false;
-                ToolBarMain.Buttons["AnestheticRecord"].Enabled=false; 
-                tabProc.Enabled = false;
+				//ToolBarMain.Buttons["AnestheticRecord"].Enabled=false; 
+				tabProc.Enabled = false;
 				butAddKey.Enabled=false;
 				butForeignKey.Enabled=false;
 			}
@@ -2771,7 +2771,7 @@ namespace OpenDental{
 				ToolBarMain.Buttons["Rx"].Enabled=true;
 				ToolBarMain.Buttons["LabCase"].Enabled=true;
 				ToolBarMain.Buttons["Perio"].Enabled=true;
-                //ToolBarMain.Buttons["AnestheticRecord"].Enabled=true;
+				//ToolBarMain.Buttons["AnestheticRecord"].Enabled=true;
 				tabProc.Enabled=true;
 				butAddKey.Enabled=true;
 				butForeignKey.Enabled=true;
