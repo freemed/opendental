@@ -39,7 +39,7 @@ namespace OpenDental{
 			}
 		}
 
-		public static Employee[] GetListByExtension(){
+		/*public static Employee[] GetListByExtension(){
 			if(ListShort==null){
 				return new Employee[0];
 			}
@@ -53,7 +53,7 @@ namespace OpenDental{
 			//List<Employee> retVal=new List<Employee>(ListShort);
 			//retVal.Sort(
 			return arrayCopy;
-		}
+		}*/
 
 		///<summary></summary>
 		public static void Update(Employee Cur){

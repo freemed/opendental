@@ -10,10 +10,7 @@ using OpenDentBusiness;
 
 namespace OpenDental {
 	public partial class UserControlPhonePanel:UserControl {
-		Employee[] EmployeeListSorted;
-		List<Schedule> schedList;
 		DataTable tablePhone;
-		DateTime dateShowing;
 
 		public UserControlPhonePanel() {
 			InitializeComponent();
@@ -25,15 +22,6 @@ namespace OpenDental {
 		}
 
 		private void FillEmps(){
-			if(schedList==null || dateShowing.Date<DateTime.Today){//at midnight or on startup, this triggers a refresh of schedule
-				dateShowing=DateTime.Today;
-				try{
-					schedList=Schedules.GetDayList(DateTime.Today);
-				}
-				catch{
-					return;
-				}
-			}
 			gridEmp.BeginUpdate();
 			gridEmp.Columns.Clear();
 			ODGridColumn col;
@@ -47,13 +35,17 @@ namespace OpenDental {
 			gridEmp.Columns.Add(col);
 			gridEmp.Rows.Clear();
 			UI.ODGridRow row;
-			bool isOff;
-			bool isBusy;
 			tablePhone=Employees.GetPhoneTable();
-			EmployeeListSorted=Employees.GetListByExtension();
-			for(int i=0;i<EmployeeListSorted.Length;i++){
+			for(int i=0;i<tablePhone.Rows.Count;i++){
 				row=new OpenDental.UI.ODGridRow();
-				row.Cells.Add(EmployeeListSorted[i].PhoneExt.ToString());
+				row.Cells.Add(tablePhone.Rows[i]["Extension"].ToString());
+				row.Cells.Add(tablePhone.Rows[i]["EmployeeName"].ToString());
+				row.Cells.Add(tablePhone.Rows[i]["ClockStatus"].ToString());
+				row.Cells.Add(tablePhone.Rows[i]["Description"].ToString());
+				row.ColorBackG=Color.FromArgb(PIn.PInt(tablePhone.Rows[i]["ColorBar"].ToString()));
+				row.ColorText=Color.FromArgb(PIn.PInt(tablePhone.Rows[i]["ColorText"].ToString()));
+				/*
+					EmployeeListSorted[i].PhoneExt.ToString());
 				row.Cells.Add(EmployeeListSorted[i].FName);
 				isOff=IsOff(EmployeeListSorted[i].EmployeeNum);
 				isBusy=IsBusy(EmployeeListSorted[i].PhoneExt);
@@ -70,7 +62,7 @@ namespace OpenDental {
 				}
 				else if(EmployeeListSorted[i].ClockStatus=="Working"){
 					row.ColorBackG=Color.FromArgb(153,220,153);
-				}
+				}*/
 				gridEmp.Rows.Add(row);
 			}
 			gridEmp.EndUpdate();
@@ -87,7 +79,7 @@ namespace OpenDental {
 			gridEmp.SetSelected(false);
 		}
 
-		private bool IsBusy(int phoneExt){
+		/*private bool IsBusy(int phoneExt){
 			for(int i=0;i<tablePhone.Rows.Count;i++){
 				if(tablePhone.Rows[i]["Extension"].ToString()==phoneExt.ToString()){
 					if(tablePhone.Rows[i]["ExtStatus"].ToString()=="1"){
@@ -129,7 +121,7 @@ namespace OpenDental {
 			schedList=Schedules.GetDayList(DateTime.Today);
 			Employees.Refresh();
 			FillEmps();
-		}
+		}*/
 
 		private void timer1_Tick(object sender,EventArgs e) {
 			//For now, happens once per second regardless of phone activity.
