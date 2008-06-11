@@ -227,6 +227,8 @@ namespace OpenDental {
 			Application.DoEvents();
 			ClaimDeleteWithInvalidPlanNums();
 			Application.DoEvents();
+			ClaimDeleteWithNoClaimProcs();
+			Application.DoEvents();
 			ClaimWriteoffSum();
 			Application.DoEvents();
 			ClaimPaymentCheckAmt();//also fixes resulting deposit misbalances.
@@ -654,7 +656,7 @@ namespace OpenDental {
 				General.NonQ(command);
 			}
 			int numberFixed=table.Rows.Count;
-			if(numberFixed!=0 && !checkShow.Checked) {
+			if(numberFixed!=0 || checkShow.Checked) {
 				textLog.Text+=Lan.g(this,"Appointments deleted with zero length: ")+numberFixed.ToString()+"\r\n";
 			}
 		}
@@ -666,7 +668,7 @@ namespace OpenDental {
 			if(numberFixed>0){
 				DataValid.SetInvalid(InvalidType.AutoCodesProcButtons);
 			}
-			if(numberFixed!=0 && !checkShow.Checked) {
+			if(numberFixed!=0 || checkShow.Checked) {
 				textLog.Text+=Lan.g(this,"Autocodes deleted due to no items: ")+numberFixed.ToString()+"\r\n";
 			}
 		}
@@ -695,8 +697,17 @@ namespace OpenDental {
 				textLog.Text+=Lan.g(this,"Claim with invalid PlanNum deleted for ")+Lim.GetNameLF()+"\r\n";
 				numberFixed++;
 			}
-			if(numberFixed!=0 && !checkShow.Checked) {
+			if(numberFixed!=0 || checkShow.Checked) {
 				textLog.Text+=Lan.g(this,"Claims deleted due to invalid PlanNum: ")+numberFixed.ToString()+"\r\n";
+			}
+		}
+
+		private void  ClaimDeleteWithNoClaimProcs(){
+			command=@"DELETE FROM claim WHERE NOT EXISTS(
+				SELECT * FROM claimproc WHERE claim.ClaimNum=claimproc.ClaimNum)";
+			int numberFixed=General.NonQ(command);
+			if(numberFixed!=0 || checkShow.Checked) {
+				textLog.Text+=Lan.g(this,"Autocodes deleted due to no items: ")+numberFixed.ToString()+"\r\n";
 			}
 		}
 
@@ -821,7 +832,7 @@ namespace OpenDental {
 				textLog.Text+=Lan.g(this,"Claimproc with invalid PlanNum deleted for ")+Lim.GetNameLF()+"\r\n";
 				numberFixed++;
 			}
-			if(numberFixed!=0 && !checkShow.Checked) {
+			if(numberFixed!=0 || checkShow.Checked) {
 				textLog.Text+=Lan.g(this,"ClaimProcs deleted due to invalid PlanNum: ")+numberFixed.ToString()+"\r\n";
 			}
 		}
@@ -928,7 +939,7 @@ namespace OpenDental {
 				General.NonQ(command);
 			}
 			int numberFixed=table.Rows.Count;
-			if(numberFixed>0||checkShow.Checked) {
+			if(numberFixed>0 || checkShow.Checked) {
 				textLog.Text+=Lan.g(this,"Images with no category fixed: ")+numberFixed.ToString()+"\r\n";
 			}
 		}
@@ -946,7 +957,7 @@ namespace OpenDental {
 				General.NonQ(command);
 			}
 			int numberFixed=table.Rows.Count;
-			if(numberFixed>0||checkShow.Checked) {
+			if(numberFixed>0 || checkShow.Checked) {
 				textLog.Text+=Lan.g(this,"Ins plans with carrier missing fixed: ")+numberFixed.ToString()+"\r\n";
 			}
 		}
