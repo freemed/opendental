@@ -1242,7 +1242,7 @@ namespace OpenDentBusiness {
 				row["DateTime"]=DateTime.MinValue;
 				row["date"]="";
 				row["description"]=Lan.g("AccountModule","Payment Plan.  Total loan amount: ")+princ.ToString("c");
-				if(rawPayPlan.Rows[i]["PlanNum"].ToString()=="0"){
+				if(rawPayPlan.Rows[i]["PlanNum"].ToString()!="0"){
 					//row["description"]+="\r\n"+Lan.g("AccountModule","This 'payment plan' is only used ");
 					continue;//don't show insurance payment plans on statements.
 					//Although if they are properly deleting insurance pp charges, no such pp's will be here anyway.

@@ -197,7 +197,7 @@ namespace OpenDentBusiness{
 					//if is patient
 					//if(PIn.PInt(table.Rows[i][0].ToString())==patNum){
 						pairs[0].Value-=PIn.PDouble(table.Rows[i][2].ToString());//just always subtract princ from patient aging.
-					Debug.WriteLine("PayPlan: "+pairs[i].Date.ToShortDateString()+" "+pairs[i].Value.ToString("c"));
+					Debug.WriteLine("PayPlan: "+pairs[0].Date.ToShortDateString()+" "+pairs[0].Value.ToString("c"));
 					//}
 				}
 			//}
