@@ -342,6 +342,18 @@
     <Compile Include="Forms\BasicTemplate.designer.cs">
       <DependentUpon>BasicTemplate.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\FormPhoneOverrideEdit.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormPhoneOverrideEdit.designer.cs">
+      <DependentUpon>FormPhoneOverrideEdit.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\FormPhoneOverrides.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormPhoneOverrides.designer.cs">
+      <DependentUpon>FormPhoneOverrides.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\FormTaskSendUser.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -3370,6 +3382,12 @@
     <EmbeddedResource Include="Forms\BasicTemplate.resx">
       <DependentUpon>BasicTemplate.cs</DependentUpon>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormPhoneOverrideEdit.resx">
+      <DependentUpon>FormPhoneOverrideEdit.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormPhoneOverrides.resx">
+      <DependentUpon>FormPhoneOverrides.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormTaskSendUser.resx">
       <DependentUpon>FormTaskSendUser.cs</DependentUpon>

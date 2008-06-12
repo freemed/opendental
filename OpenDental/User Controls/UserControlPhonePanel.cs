@@ -129,5 +129,10 @@ namespace OpenDental {
 			FillEmps();
 		}
 
+		private void butOverride_Click(object sender,EventArgs e) {
+			FormPhoneOverrides FormO=new FormPhoneOverrides();
+			FormO.ShowDialog();
+		}
+
 	}
 }

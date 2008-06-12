@@ -26,16 +26,17 @@
 			this.components = new System.ComponentModel.Container();
 			this.gridEmp = new OpenDental.UI.ODGrid();
 			this.timer1 = new System.Windows.Forms.Timer(this.components);
+			this.butOverride = new OpenDental.UI.Button();
 			this.SuspendLayout();
 			// 
 			// gridEmp
 			// 
 			this.gridEmp.AllowSelection = false;
 			this.gridEmp.HScrollVisible = false;
-			this.gridEmp.Location = new System.Drawing.Point(0,0);
+			this.gridEmp.Location = new System.Drawing.Point(0,24);
 			this.gridEmp.Name = "gridEmp";
 			this.gridEmp.ScrollValue = 0;
-			this.gridEmp.Size = new System.Drawing.Size(240,319);
+			this.gridEmp.Size = new System.Drawing.Size(240,295);
 			this.gridEmp.TabIndex = 22;
 			this.gridEmp.Title = "Employee";
 			this.gridEmp.TranslationName = "TableEmpClock";
@@ -45,10 +46,25 @@
 			this.timer1.Interval = 1000;
 			this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
 			// 
+			// butOverride
+			// 
+			this.butOverride.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butOverride.Autosize = true;
+			this.butOverride.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butOverride.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butOverride.CornerRadius = 4F;
+			this.butOverride.Location = new System.Drawing.Point(0,0);
+			this.butOverride.Name = "butOverride";
+			this.butOverride.Size = new System.Drawing.Size(75,24);
+			this.butOverride.TabIndex = 24;
+			this.butOverride.Text = "Override";
+			this.butOverride.Click += new System.EventHandler(this.butOverride_Click);
+			// 
 			// UserControlPhonePanel
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F,13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+			this.Controls.Add(this.butOverride);
 			this.Controls.Add(this.gridEmp);
 			this.Name = "UserControlPhonePanel";
 			this.Size = new System.Drawing.Size(240,323);
@@ -61,5 +77,6 @@
 
 		private OpenDental.UI.ODGrid gridEmp;
 		private System.Windows.Forms.Timer timer1;
+		private OpenDental.UI.Button butOverride;
 	}
 }
