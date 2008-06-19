@@ -3017,9 +3017,26 @@ namespace OpenDental{
 					DataValid.SetInvalid(InvalidType.AutoCodesProcButtons);
 				}
 				ProcCur.CodeNum=verifyCode;
-				ProcedureCode2=ProcedureCodes.GetProcCode(ProcCur.CodeNum);
+				//ProcedureCode2=ProcedureCodes.GetProcCode(ProcCur.CodeNum);
 				//ProcCur.Code=verifyCode;
-				ProcCur.ProcFee=Fees.GetAmount0(ProcedureCode2.CodeNum,Fees.GetFeeSched(PatCur,PlanList,PatPlanList));
+				InsPlan priplan=null;
+				if(PatPlanList.Length>0) {
+					priplan=InsPlans.GetPlan(PatPlanList[0].PlanNum,PlanList);
+				}
+				double insfee=Fees.GetAmount0(ProcCur.CodeNum,Fees.GetFeeSched(PatCur,PlanList,PatPlanList));
+				if(priplan!=null && priplan.PlanType=="p") {//PPO
+					double standardfee=Fees.GetAmount0(ProcCur.CodeNum,Providers.GetProv(Patients.GetProvNum(PatCur)).FeeSched);
+					if(standardfee>insfee) {
+						ProcCur.ProcFee=standardfee;
+					}
+					else {
+						ProcCur.ProcFee=insfee;
+					}
+				}
+				else {
+					ProcCur.ProcFee=insfee;
+				}
+				//ProcCur.ProcFee=Fees.GetAmount0(ProcedureCode2.CodeNum,Fees.GetFeeSched(PatCur,PlanList,PatPlanList));
 				Procedures.Update(ProcCur,ProcOld);
 				Recalls.Synch(ProcCur.PatNum);
 				if(ProcCur.ProcStatus==ProcStat.C){
