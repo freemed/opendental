@@ -772,6 +772,7 @@ namespace OpenDental{
 			this.butSubmit.Autosize = true;
 			this.butSubmit.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butSubmit.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butSubmit.CornerRadius = 4F;
 			this.butSubmit.Location = new System.Drawing.Point(929,731);
 			this.butSubmit.Name = "butSubmit";
 			this.butSubmit.Size = new System.Drawing.Size(75,26);
@@ -786,6 +787,7 @@ namespace OpenDental{
 			this.butClose.Autosize = true;
 			this.butClose.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butClose.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butClose.CornerRadius = 4F;
 			this.butClose.Location = new System.Drawing.Point(501,731);
 			this.butClose.Name = "butClose";
 			this.butClose.Size = new System.Drawing.Size(75,26);
@@ -803,6 +805,7 @@ namespace OpenDental{
 			this.Controls.Add(this.butSubmit);
 			this.Controls.Add(this.butClose);
 			this.Controls.Add(this.textWelcome);
+			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
 			this.MaximizeBox = false;
 			this.MinimizeBox = false;
 			this.Name = "FormTerminal";
