@@ -1035,7 +1035,9 @@ namespace OpenDental{
 					ppCharge.Principal+=roundedP;
 					//and alter the interest by the opposite amount to keep the payment the same.
 					//So in the end, the pennies got absorbed by changing the interest.
-					ppCharge.Interest-=roundedP;
+					if(APR!=0){
+						ppCharge.Interest-=roundedP;
+					}
 					tempP=0;//this will prevent another loop
 				}
 				PayPlanCharges.Insert(ppCharge);
