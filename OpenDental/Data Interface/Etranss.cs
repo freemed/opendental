@@ -26,7 +26,7 @@ namespace OpenDental{
 				if(DataConnection.DBtype==DatabaseType.Oracle){
 					command+="TO_";
 				}
-				command+="DATE(DateTimeTrans) <= "+POut.PDate(dateTo.AddDays(1))+" "//because it's midnight
+				command+="DATE(DateTimeTrans) <= "+POut.PDate(dateTo)+" "
 					+"AND Etype!=21 "
 					+"ORDER BY DateTimeTrans";
 			DataTable table=General.GetTable(command);
