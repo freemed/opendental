@@ -1699,6 +1699,9 @@ namespace OpenDental{
 		}
 
 		private void menuPatient_Popup(object sender,EventArgs e) {
+			if(CurPatNum==0){
+				return;
+			}
 			Family fam=Patients.GetFamily(CurPatNum);
 			Patients.AddFamilyToMenu(menuPatient,new EventHandler(menuPatient_Click),CurPatNum,fam);
 		}
