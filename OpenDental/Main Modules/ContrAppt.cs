@@ -3146,7 +3146,6 @@ namespace OpenDental{
 
 		private void OnUnsched_Click(){
 			Appointment apt = Appointments.GetOneApt(ContrApptSingle.SelectedAptNum);
-
 			if(!Security.IsAuthorized(Permissions.AppointmentMove)){
 				return;
 			}
@@ -3157,8 +3156,12 @@ namespace OpenDental{
 				,"",MessageBoxButtons.OKCancel)!=DialogResult.OK){
 				return;
 			}
-			Appointments.SetAptStatus(ContrApptSingle.SelectedAptNum,ApptStatus.UnschedList);
 			int thisI=GetIndex(ContrApptSingle.SelectedAptNum);
+			if(thisI==-1) {//selected appt is on a different day
+				MsgBox.Show(this,"Please select an appointment first.");
+				return;
+			}
+			Appointments.SetAptStatus(ContrApptSingle.SelectedAptNum,ApptStatus.UnschedList);
 			Patient pat=Patients.GetPat(PIn.PInt(ContrApptSingle3[thisI].DataRoww["PatNum"].ToString()));
 			SecurityLogs.MakeLogEntry(Permissions.AppointmentMove,pat.PatNum,
 				pat.GetNameLF()+", "
@@ -3174,12 +3177,12 @@ namespace OpenDental{
 				MsgBox.Show(this,"Broken appointment adjustment type is not setup yet.  Please go to Setup | Misc to fix this.");
 				return;
 			}
-			Appointment apt = Appointments.GetOneApt(ContrApptSingle.SelectedAptNum);
 			int thisI=GetIndex(ContrApptSingle.SelectedAptNum);
 			if(thisI==-1) {//selected appt is on a different day
 				MsgBox.Show(this,"Please select an appointment first.");
 				return;
 			}
+			Appointment apt = Appointments.GetOneApt(ContrApptSingle.SelectedAptNum);
 			Patient pat=Patients.GetPat(PIn.PInt(ContrApptSingle3[thisI].DataRoww["PatNum"].ToString()));
 			if(!Security.IsAuthorized(Permissions.AppointmentEdit)) {
 				return;
@@ -3235,6 +3238,11 @@ namespace OpenDental{
 			if(!Security.IsAuthorized(Permissions.AppointmentEdit)){
 				return;
 			}
+			int thisI=GetIndex(ContrApptSingle.SelectedAptNum);
+			if(thisI==-1) {//selected appt is on a different day
+				MsgBox.Show(this,"Please select an appointment first.");
+				return;
+			}
 			Appointment apt = Appointments.GetOneApt(ContrApptSingle.SelectedAptNum);
 			if (apt.AptStatus == ApptStatus.PtNoteCompleted) {
 				return;
@@ -3271,7 +3279,11 @@ namespace OpenDental{
 			if (!Security.IsAuthorized(Permissions.AppointmentEdit)) {
 				return;
 			}
-			int thisI = GetIndex(ContrApptSingle.SelectedAptNum);
+			int thisI=GetIndex(ContrApptSingle.SelectedAptNum);
+			if(thisI==-1) {//selected appt is on a different day
+				MsgBox.Show(this,"Please select an appointment first.");
+				return;
+			}
 			if (apt.AptStatus == ApptStatus.PtNote | apt.AptStatus == ApptStatus.PtNoteCompleted) {
 				if (!MsgBox.Show(this, true, "Delete Patient Note?")) {
 					return;
