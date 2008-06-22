@@ -83,7 +83,6 @@ namespace OpenDental{
 		private CheckBox checkPPOpercentage;
 		private Label label18;
 		private ValidNum textPayPlansBillInAdvanceDays;
-		private CheckBox checkIntermingleFamilyDefault;
 		private CheckBox checkStatementSummaryShowInsInfo;
 		private ComboBox comboToothNomenclature;
 		private Label label11;
@@ -119,8 +118,8 @@ namespace OpenDental{
 			this.checkTreatPlanShowCompleted = new System.Windows.Forms.CheckBox();
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
 			this.groupBox5 = new System.Windows.Forms.GroupBox();
+			this.checkClaimFormTreatDentSaysSigOnFile = new System.Windows.Forms.CheckBox();
 			this.checkStatementSummaryShowInsInfo = new System.Windows.Forms.CheckBox();
-			this.checkIntermingleFamilyDefault = new System.Windows.Forms.CheckBox();
 			this.textPayPlansBillInAdvanceDays = new OpenDental.ValidNum();
 			this.label18 = new System.Windows.Forms.Label();
 			this.checkShowFamilyCommByDefault = new System.Windows.Forms.CheckBox();
@@ -186,7 +185,6 @@ namespace OpenDental{
 			this.textSigInterval = new OpenDental.ValidNumber();
 			this.butCancel = new OpenDental.UI.Button();
 			this.butOK = new OpenDental.UI.Button();
-			this.checkClaimFormTreatDentSaysSigOnFile = new System.Windows.Forms.CheckBox();
 			this.groupBox1.SuspendLayout();
 			this.groupBox5.SuspendLayout();
 			this.groupBox4.SuspendLayout();
@@ -273,7 +271,6 @@ namespace OpenDental{
 			// 
 			this.groupBox5.Controls.Add(this.checkClaimFormTreatDentSaysSigOnFile);
 			this.groupBox5.Controls.Add(this.checkStatementSummaryShowInsInfo);
-			this.groupBox5.Controls.Add(this.checkIntermingleFamilyDefault);
 			this.groupBox5.Controls.Add(this.textPayPlansBillInAdvanceDays);
 			this.groupBox5.Controls.Add(this.label18);
 			this.groupBox5.Controls.Add(this.checkShowFamilyCommByDefault);
@@ -298,30 +295,27 @@ namespace OpenDental{
 			this.groupBox5.TabStop = false;
 			this.groupBox5.Text = "Account module";
 			// 
+			// checkClaimFormTreatDentSaysSigOnFile
+			// 
+			this.checkClaimFormTreatDentSaysSigOnFile.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkClaimFormTreatDentSaysSigOnFile.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.checkClaimFormTreatDentSaysSigOnFile.Location = new System.Drawing.Point(6,272);
+			this.checkClaimFormTreatDentSaysSigOnFile.Name = "checkClaimFormTreatDentSaysSigOnFile";
+			this.checkClaimFormTreatDentSaysSigOnFile.Size = new System.Drawing.Size(381,17);
+			this.checkClaimFormTreatDentSaysSigOnFile.TabIndex = 197;
+			this.checkClaimFormTreatDentSaysSigOnFile.Text = "Claim Form treating dentist shows Signature On File rather than name";
+			this.checkClaimFormTreatDentSaysSigOnFile.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
 			// checkStatementSummaryShowInsInfo
 			// 
 			this.checkStatementSummaryShowInsInfo.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.checkStatementSummaryShowInsInfo.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkStatementSummaryShowInsInfo.Location = new System.Drawing.Point(19,306);
+			this.checkStatementSummaryShowInsInfo.Location = new System.Drawing.Point(19,289);
 			this.checkStatementSummaryShowInsInfo.Name = "checkStatementSummaryShowInsInfo";
 			this.checkStatementSummaryShowInsInfo.Size = new System.Drawing.Size(368,17);
 			this.checkStatementSummaryShowInsInfo.TabIndex = 195;
 			this.checkStatementSummaryShowInsInfo.Text = "Show insurance pending and related balance info on statement summary";
 			this.checkStatementSummaryShowInsInfo.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// checkIntermingleFamilyDefault
-			// 
-			this.checkIntermingleFamilyDefault.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.checkIntermingleFamilyDefault.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkIntermingleFamilyDefault.Location = new System.Drawing.Point(6,289);
-			this.checkIntermingleFamilyDefault.Name = "checkIntermingleFamilyDefault";
-			this.checkIntermingleFamilyDefault.Size = new System.Drawing.Size(381,17);
-			this.checkIntermingleFamilyDefault.TabIndex = 194;
-			this.checkIntermingleFamilyDefault.Text = "Intermingle family members by default";
-			this.checkIntermingleFamilyDefault.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.toolTip1.SetToolTip(this.checkIntermingleFamilyDefault,"Generally used with \"Balances don\'t subtract insurance estimate\"\r\nchecked to the " +
-        "upper right of this option in the \"Statements\" section.\r\nHowever, it will work w" +
-        "ell either way.");
 			// 
 			// textPayPlansBillInAdvanceDays
 			// 
@@ -1049,17 +1043,6 @@ namespace OpenDental{
 			this.butOK.Text = "&OK";
 			this.butOK.Click += new System.EventHandler(this.butOK_Click);
 			// 
-			// checkClaimFormTreatDentSaysSigOnFile
-			// 
-			this.checkClaimFormTreatDentSaysSigOnFile.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.checkClaimFormTreatDentSaysSigOnFile.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkClaimFormTreatDentSaysSigOnFile.Location = new System.Drawing.Point(6,272);
-			this.checkClaimFormTreatDentSaysSigOnFile.Name = "checkClaimFormTreatDentSaysSigOnFile";
-			this.checkClaimFormTreatDentSaysSigOnFile.Size = new System.Drawing.Size(381,17);
-			this.checkClaimFormTreatDentSaysSigOnFile.TabIndex = 197;
-			this.checkClaimFormTreatDentSaysSigOnFile.Text = "Claim Form treating dentist shows Signature On File rather than name";
-			this.checkClaimFormTreatDentSaysSigOnFile.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
 			// FormMisc
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
@@ -1218,7 +1201,6 @@ namespace OpenDental{
 			checkPPOpercentage.Checked=PrefC.GetBool("InsDefaultPPOpercent");
 			checkClaimFormTreatDentSaysSigOnFile.Checked=PrefC.GetBool("ClaimFormTreatDentSaysSigOnFile");
 			checkStatementSummaryShowInsInfo.Checked=PrefC.GetBool("StatementSummaryShowInsInfo");
-			checkIntermingleFamilyDefault.Checked=PrefC.GetBool("IntermingleFamilyDefault");
 		}
 
 		private void checkRandomPrimaryKeys_Click(object sender, System.EventArgs e) {
@@ -1352,7 +1334,6 @@ namespace OpenDental{
 				| Prefs.UpdateBool("ShowAccountFamilyCommEntries",checkShowFamilyCommByDefault.Checked)
 				| Prefs.UpdateBool("InsDefaultPPOpercent",checkPPOpercentage.Checked)
 				| Prefs.UpdateBool("StatementSummaryShowInsInfo", checkStatementSummaryShowInsInfo.Checked)
-				| Prefs.UpdateBool("IntermingleFamilyDefault", checkIntermingleFamilyDefault.Checked)
 				)
 			{
 				changed=true;

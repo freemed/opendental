@@ -169,8 +169,6 @@ namespace OpenDental {
 		private Label label21;
 		private Panel panelTotalOwes;
 		private Timer timerPayPlan;
-		///<summary>For selecting entire fam by default</summary>
-		private int PrevGuar;
 		#endregion UserVariables
 
 		///<summary></summary>
@@ -1799,23 +1797,6 @@ namespace OpenDental {
 
 		///<summary></summary>
 		public void ModuleSelected(int patNum,bool isSelectingFamily) {
-			bool selectingFamily = false;
-			//couldn't get to work quite right, and since you can't make ins 
-			//claims, decided maybe this wasn't the best thing to do right now anyway - drtech
-			/*if (PrefB.GetBool("IntermingleFamilyDefault"))
-			{
-				if (PatCur != null){
-					if (PatCur.Guarantor != PrevGuar && PrevGuar!=0)
-					{
-						selectingFamily = true;
-					}
-					PrevGuar = PatCur.Guarantor;
-				} 
-				else{
-					selectingFamily = true;
-				}
-			}
-			*/
 			RefreshModuleData(patNum,isSelectingFamily);
 			RefreshModuleScreen(isSelectingFamily);
 		}
@@ -1864,21 +1845,6 @@ namespace OpenDental {
 
 		///<summary></summary>
 		private void RefreshModuleData(int patNum,bool isSelectingFamily) {
-			/*if (PrefC.GetBool("IntermingleFamilyDefault"))
-			{
-				if (PatCur != null)
-				{
-					if (PatCur.Guarantor != PrevGuar && PrevGuar != 0)
-					{
-						isSelectingFamily = true;
-					}
-					PrevGuar = PatCur.Guarantor;
-				} else
-				{
-					isSelectingFamily = true;
-				}
-			}
-			*/
 			if (patNum == 0)
 			{
 				PatCur=null;
