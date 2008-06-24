@@ -1339,6 +1339,7 @@ namespace OpenDental{
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Add Family";
 			this.Load += new System.EventHandler(this.FormPatientAddAll_Load);
+			this.Shown += new System.EventHandler(this.FormPatientAddAll_Shown);
 			this.groupBox1.ResumeLayout(false);
 			this.groupBox1.PerformLayout();
 			this.groupIns1.ResumeLayout(false);
