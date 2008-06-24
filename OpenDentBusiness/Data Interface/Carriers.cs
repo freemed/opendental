@@ -202,7 +202,6 @@ namespace OpenDentBusiness{
 			else{
  				Cur.CarrierNum=General.NonQ(command,true);
 			}
-			//id used in the conversion process for 2.8
 		}
 
 		///<summary>Surround with try/catch.  If there are any dependencies, then this will throw an exception.  This is currently only called from FormCarrierEdit.</summary>
@@ -424,6 +423,22 @@ namespace OpenDentBusiness{
 				}
 			}
 			return null;
+		}
+
+		public static Carrier GetByNameAndPhone(string carrierName,string phone){
+			if(carrierName==""){
+				throw new ApplicationException("Carrier cannot be blank");
+			}
+			for(int i=0;i<List.Length;i++){
+				if(carrierName==List[i].CarrierName && phone==List[i].Phone){
+					return List[i].Copy();
+				}
+			}
+			Carrier carrier=new Carrier();
+			carrier.CarrierName=carrierName;
+			carrier.Phone=phone;
+			Insert(carrier);
+			return carrier;
 		}
 
 

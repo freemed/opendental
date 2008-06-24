@@ -34,6 +34,12 @@ namespace OpenDentBusiness{
 		public string CDAnetVersion;
 		///<summary>FK to canadiannetwork.CanadianNetworkNum.  Only used in Canada.</summary>
 		public int CanadianNetworkNum;
+
+		public Carrier Copy(){
+			return (Carrier)this.MemberwiseClone();
+		}
+
+
 	}
 	
 
