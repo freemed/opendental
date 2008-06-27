@@ -208,15 +208,29 @@ namespace OpenDentBusiness{
 				ComputePayments(pairs);
 			}
 			//PAYMENT PLAN GUAR AMT DUE
-			command="SELECT (SELECT IFNULL(SUM(Principal+Interest),0) FROM payplancharge WHERE (";
-			for(int i=0;i<ALpatNums.Count;i++){
-				if(i>0){
-					command+=" OR";
+			if(DataConnection.DBtype==DatabaseType.MySql) {
+				command="SELECT (SELECT IFNULL(SUM(Principal+Interest),0) FROM payplancharge WHERE (";
+				for(int i=0;i<ALpatNums.Count;i++) {
+					if(i>0) {
+						command+=" OR";
+					}
+					command+=" Guarantor = "+((int)ALpatNums[i]).ToString();
 				}
-				command+=" Guarantor = "+((int)ALpatNums[i]).ToString();
+				command+=") AND ChargeDate <= ADDDATE(CURDATE(),"+POut.PInt(PrefC.GetInt("PayPlansBillInAdvanceDays"))+"))"
+					+"-(SELECT IFNULL(SUM(SplitAmt),0) FROM paysplit WHERE ("+wherePats+") AND PayPlanNum !=0 )";
+			} else {//oracle
+				command="SELECT (SELECT CASE SUM(Principal+Interest) WHEN NULL THEN 0 ELSE SUM(Principal+Interest) END "+
+				"FROM payplancharge WHERE (";
+				for(int i=0;i<ALpatNums.Count;i++) {
+					if(i>0) {
+						command+=" OR";
+					}
+					command+=" Guarantor = "+((int)ALpatNums[i]).ToString();
+				}
+				command+=") AND ChargeDate <= "+POut.PDate(DateTime.Now.AddDays(PrefC.GetInt("PayPlansBillInAdvanceDays")))+"))"
+					+"-(SELECT CASE SUM(SplitAmt) WHEN NULL THEN 0 ELSE SUM(SplitAmt) END FROM paysplit WHERE ("+wherePats+") AND PayPlanNum !=0 ) "
+					+"FROM dual";
 			}
-			command+=") AND ChargeDate <= ADDDATE(CURDATE(),"+POut.PInt(PrefC.GetInt("PayPlansBillInAdvanceDays"))+"))"
-				+"-(SELECT IFNULL(SUM(SplitAmt),0) FROM paysplit WHERE ("+wherePats+") AND PayPlanNum !=0 )";
 			table=General.GetTable(command);
 			PayPlanDue=PIn.PDouble(table.Rows[0][0].ToString());
 			//CLAIM ESTIMATES

@@ -381,16 +381,21 @@ namespace OpenDental {
 				"autocode","AutoCodeNum",
 				"autocodecond","AutoCodeCondNum",
 				"autocodeitem","AutoCodeItemNum",
+				"autonote","AutoNoteNum",
+				"autonotecontrol","AutoNoteControlNum",
 				"benefit","BenefitNum",
-				//canadianclaim: no autoinc cols.
+				"canadianclaim","ClaimNum",
 				"canadianextract","CanadianExtractNum",
 				"canadiannetwork","CanadianNetworkNum",
 				"carrier","CarrierNum",
 				"claim","ClaimNum",
+				"claimattach","ClaimAttachNum",
+				"claimcondcodelog","ClaimCondCodeLogNum",
 				"claimform","ClaimFormNum",
 				"claimformitem","ClaimFormItemNum",
 				"claimpayment","ClaimPaymentNum",
 				"claimproc","ClaimProcNum",
+				"claimvalcodelog","ClaimValCodeLogNum",
 				"clearinghouse","ClearinghouseNum",
 				"clinic","ClinicNum",
 				"clockevent","ClockEventNum",
@@ -405,6 +410,7 @@ namespace OpenDental {
 				"deposit","DepositNum",
 				"disease","DiseaseNum",
 				"diseasedef","DiseaseDefNum",
+				"displayfield","DisplayFieldNum",
 				"document","DocNum",
 				"dunning","DunningNum",
 				"electid","ElectIDNum",
@@ -415,21 +421,22 @@ namespace OpenDental {
 				"employer","EmployerNum",
 				"etrans","EtransNum",
 				"fee","FeeNum",
+				"files","DocNum",
 				"formpat","FormPatNum",
-				//graphicassembly is obsolete
-				//graphicelement is obsolete
-				//graphicpoint is obsolete.
-				//graphicshape is obsolete.
-				//graphictype is obsolete.
+				"graphicassembly","GAssemblyNum",
+				"graphicelement","GElementNum",
+				"graphicpoint","GPointNum",
+				"graphicshape","GShapeNum",
+				"graphictype","GTypeNum",
 				"grouppermission","GroupPermNum",
 				"insplan","PlanNum",
 				"instructor","InstructorNum",
 				"journalentry","JournalEntryNum",
-				//language: has no auto-inc col.
-				//languageforeign: has no auto-inc col.
 				"labcase","LabCaseNum",
 				"laboratory","LaboratoryNum",
 				"labturnaround","LabTurnaroundNum",
+				//language: has no auto-inc col.
+				//languageforeign: has no auto-inc col.
 				"letter","LetterNum",
 				"lettermerge","LetterMergeNum",
 				"lettermergefield","FieldNum",
@@ -452,10 +459,12 @@ namespace OpenDental {
 				"paysplit","SplitNum",
 				"perioexam","PerioExamNum",
 				"periomeasure","PerioMeasureNum",
+				"popup","PopupNum",
 				//preference: has no auto-inc col.
 				"printer","PrinterNum",
 				"procbutton","ProcButtonNum",
 				"procbuttonitem","ProcButtonItemNum",
+				"proccodenote","ProcCodeNoteNum",
 				"procedurecode","CodeNum",
 				"procedurelog","ProcNum",
 				"proclicense","ProcLicenseNum",
@@ -476,6 +485,7 @@ namespace OpenDental {
 				"registrationkey","RegistrationKeyNum",
 				"repeatcharge","RepeatChargeNum",
 				"reqneeded","ReqNeededNum",
+				"reqstudent","ReqStudentNum",
 				"rxalert","RxAlertNum",
 				"rxdef","RxDefNum",
 				"rxpat","RxNum",
@@ -492,8 +502,16 @@ namespace OpenDental {
 				"sigelement","SigElementNum",
 				"sigelementdef","SigElementDefNum",
 				"signal","SignalNum",
+				"statement","StatementNum",
+				"supplier","SupplierNum",
+				"supply","SupplyNum",
+				"supplyneeded","SupplyNeededNum",
+				"supplyorder","SupplyOrderNum",
+				"supplyorderitem","SupplyOrderItemNum",
 				"task","TaskNum",
+				"taskancestor","TaskAncestorNum",
 				"tasklist","TaskListNum",
+				"tasksubscription","TaskSubscriptionNum",
 				"terminalactive","TerminalActiveNum",
 				"timeadjust","TimeAdjustNum",
 				"toolbutitem","ToolButItemNum",
@@ -737,48 +755,119 @@ namespace OpenDental {
 		///<Summary>also fixes resulting deposit misbalances.</Summary>
 		private void ClaimPaymentCheckAmt() {
 			//because of the way this is grouped, it will just get one of many patients for each
-			command=@"SELECT claimproc.ClaimPaymentNum,ROUND(SUM(InsPayAmt),2) _sumpay,ROUND(CheckAmt,2) _checkamt
-				FROM claimpayment,claimproc
-				WHERE claimpayment.ClaimPaymentNum=claimproc.ClaimPaymentNum
-				GROUP BY claimproc.ClaimPaymentNum
-				HAVING _sumpay!=_checkamt";
-			table=General.GetTable(command);
-			for(int i=0;i<table.Rows.Count;i++) {
-				//if(i==0){
-				//	textLog.Text+=Lan.g(this,"PRINT THIS FOR REFERENCE. Claim Payments fixed:")+"\r\n";
-				//}
-				//textLog.Text+="\r\n";
-				command="UPDATE claimpayment SET CheckAmt='"+POut.PDouble(PIn.PDouble(table.Rows[i]["_sumpay"].ToString()))+"' "
-					+"WHERE ClaimPaymentNum="+table.Rows[i]["ClaimPaymentNum"].ToString();
-				General.NonQ(command);
-			}
-			int numberFixed=table.Rows.Count;
-			if(numberFixed>0 || checkShow.Checked) {
-				textLog.Text+=Lan.g(this,"Claim payment sums fixed: ")+numberFixed.ToString()+"\r\n";
-			}
-			//now deposits which were affected by the changes above--------------------------------------------------
-			command=@"SELECT DepositNum,deposit.Amount,DateDeposit,
-				IFNULL((SELECT SUM(CheckAmt) FROM claimpayment WHERE claimpayment.DepositNum=deposit.DepositNum GROUP BY deposit.DepositNum),0)
-				+IFNULL((SELECT SUM(PayAmt) FROM payment WHERE payment.DepositNum=deposit.DepositNum GROUP BY deposit.DepositNum),0) _sum
-				FROM deposit
-				HAVING ROUND(_sum,2) != ROUND(deposit.Amount,2)";
-			table=General.GetTable(command);
-			for(int i=0;i<table.Rows.Count;i++) {
-				if(i==0) {
-					textLog.Text+=Lan.g(this,"PRINT THIS FOR REFERENCE. Deposit sums recalculated:")+"\r\n";
+			int numberFixed=0;
+			if(DataConnection.DBtype==DatabaseType.MySql) {
+				command=@"SELECT claimproc.ClaimPaymentNum,ROUND(SUM(InsPayAmt),2) _sumpay,ROUND(CheckAmt,2) _checkamt
+					FROM claimpayment,claimproc
+					WHERE claimpayment.ClaimPaymentNum=claimproc.ClaimPaymentNum
+					GROUP BY claimproc.ClaimPaymentNum
+					HAVING _sumpay!=_checkamt";
+				table=General.GetTable(command);
+				for(int i=0;i<table.Rows.Count;i++) {
+					command="UPDATE claimpayment SET CheckAmt='"+POut.PDouble(PIn.PDouble(table.Rows[i]["_sumpay"].ToString()))+"' "
+						+"WHERE ClaimPaymentNum="+table.Rows[i]["ClaimPaymentNum"].ToString();
+					General.NonQ(command);
 				}
-				DateTime date=PIn.PDate(table.Rows[i]["DateDeposit"].ToString());
-				Double oldval=PIn.PDouble(table.Rows[i]["Amount"].ToString());
-				Double newval=PIn.PDouble(table.Rows[i]["_sum"].ToString());
-				textLog.Text+=date.ToShortDateString()+" "+Lan.g(this,"OldSum:")+oldval.ToString("c")
-					+", "+Lan.g(this,"NewSum:")+newval.ToString("c")+"\r\n";
-				command="UPDATE deposit SET Amount='"+POut.PDouble(PIn.PDouble(table.Rows[i]["_sum"].ToString()))+"' "
-					+"WHERE DepositNum="+table.Rows[i]["DepositNum"].ToString();
+				numberFixed=table.Rows.Count;
+				if(numberFixed>0||checkShow.Checked) {
+					textLog.Text+=Lan.g(this,"Claim payment sums fixed: ")+numberFixed.ToString()+"\r\n";
+				}
+				//now deposits which were affected by the changes above--------------------------------------------------
+				command=@"SELECT DepositNum,deposit.Amount,DateDeposit,
+					IFNULL((SELECT SUM(CheckAmt) FROM claimpayment WHERE claimpayment.DepositNum=deposit.DepositNum GROUP BY deposit.DepositNum),0)
+					+IFNULL((SELECT SUM(PayAmt) FROM payment WHERE payment.DepositNum=deposit.DepositNum GROUP BY deposit.DepositNum),0) _sum
+					FROM deposit
+					HAVING ROUND(_sum,2) != ROUND(deposit.Amount,2)";
+				table=General.GetTable(command);
+				for(int i=0;i<table.Rows.Count;i++) {
+					if(i==0) {
+						textLog.Text+=Lan.g(this,"PRINT THIS FOR REFERENCE. Deposit sums recalculated:")+"\r\n";
+					}
+					DateTime date=PIn.PDate(table.Rows[i]["DateDeposit"].ToString());
+					Double oldval=PIn.PDouble(table.Rows[i]["Amount"].ToString());
+					Double newval=PIn.PDouble(table.Rows[i]["_sum"].ToString());
+					textLog.Text+=date.ToShortDateString()+" "+Lan.g(this,"OldSum:")+oldval.ToString("c")
+						+", "+Lan.g(this,"NewSum:")+newval.ToString("c")+"\r\n";
+					command="UPDATE deposit SET Amount='"+POut.PDouble(PIn.PDouble(table.Rows[i]["_sum"].ToString()))+"' "
+						+"WHERE DepositNum="+table.Rows[i]["DepositNum"].ToString();
+					General.NonQ(command);
+				}
+				if(numberFixed>0||checkShow.Checked) {
+					textLog.Text+=Lan.g(this,"Deposit sums fixed: ")+numberFixed.ToString()+"\r\n";
+				}
+			} else {//oracle
+				//Delete the temporary table if it already exists.
+				try {
+					command="SELECT COUNT(*) FROM tempclaimpaymenttest";
+					General.GetTable(command);
+					//The table exists at this point.
+					command="DROP TABLE tempclaimpaymenttest PURGE";
+					General.NonQ(command);
+				} catch {//The temp table does not exist.
+				}
+				command=@"CREATE TABLE tempclaimpaymenttest AS SELECT cl.ClaimPaymentNum,ROUND(SUM(cl.InsPayAmt),2) sumpay_,
+									ROUND(cp.CheckAmt,2) checkamt_
+								FROM claimpayment cp,claimproc cl
+								WHERE cp.ClaimPaymentNum=cl.ClaimPaymentNum
+								GROUP BY cl.ClaimPaymentNum, cp.CheckAmt";
 				General.NonQ(command);
-			}
-			numberFixed=table.Rows.Count;
-			if(numberFixed>0 || checkShow.Checked) {
-				textLog.Text+=Lan.g(this,"Deposit sums fixed: ")+numberFixed.ToString()+"\r\n";
+				command="DELETE FROM tempclaimpaymenttest WHERE sumpay_=checkamt_";
+				General.NonQ(command);
+				command=@"UPDATE claimpayment cp 
+					SET cp.CheckAmt=(SELECT sumpay_ FROM tempclaimpaymenttest tcpt WHERE tcpt.ClaimPaymentNum=cp.ClaimPaymentNum)
+					WHERE cp.ClaimPaymentNum IN (SELECT tcp.ClaimPaymentNum FROM tempclaimpaymenttest tcp)";
+				General.NonQ(command);
+				command="SELECT COUNT(*) FROM tempclaimpaymenttest";
+				numberFixed=PIn.PInt(General.GetTable(command).Rows[0][0].ToString());
+				command="DROP TABLE tempclaimpaymenttest PURGE";
+				General.NonQ(command);
+				if(numberFixed>0||checkShow.Checked) {
+					textLog.Text+=Lan.g(this,"Claim payment sums fixed: ")+numberFixed.ToString()+"\r\n";
+				}
+				//now deposits which were affected by the changes above--------------------------------------------------
+				try {
+					command="SELECT COUNT(*) FROM tempdeposittest";
+					General.GetTable(command);
+					//The table exists at this point.
+					command="DROP TABLE tempdeposittest PURGE";
+					General.NonQ(command);
+				} catch {//The table does not exist.
+				}
+				command=@"CREATE TABLE tempdeposittest AS SELECT d.DepositNum,d.Amount,d.DateDeposit,
+					(SELECT SUM(cp.CheckAmt) FROM claimpayment cp WHERE cp.DepositNum=d.DepositNum GROUP BY d.DepositNum) claimsum_,
+					(SELECT SUM(p.PayAmt) FROM payment p WHERE p.DepositNum=d.DepositNum GROUP BY d.DepositNum) paysum_,
+					0 sum_
+					FROM deposit d";
+				General.NonQ(command);
+				command="UPDATE tempdeposittest SET claimsum_=0 WHERE claimsum_ IS NULL";
+				General.NonQ(command);
+				command="UPDATE tempdeposittest SET paysum_=0 WHERE paysum_ IS NULL";
+				General.NonQ(command);
+				command="UPDATE tempdeposittest SET sum_=claimsum_+paysum_";
+				General.NonQ(command);
+				command="DELETE FROM tempdeposittest WHERE ROUND(sum_,2)=ROUND(Amount,2)";
+				General.NonQ(command);
+				command="UPDATE deposit d SET d.Amount=(SELECT tdt.sum_ FROM tempdeposittest tdt WHERE tdt.DepositNum=d.DepositNum) WHERE "+
+					"d.DepositNum IN (SELECT tdt2.DepositNum FROM tempdeposittest tdt2)";
+				General.NonQ(command);
+				command="SELECT * FROM tempdeposittest";
+				table=General.GetTable(command);
+				numberFixed=table.Rows.Count;
+				if(numberFixed>0) {
+					textLog.Text+=Lan.g(this,"PRINT THIS FOR REFERENCE. Deposit sums recalculated:")+"\r\n";
+					for(int i=0;i<table.Rows.Count;i++) {
+						DateTime date=PIn.PDate(table.Rows[i]["DateDeposit"].ToString());
+						Double oldval=PIn.PDouble(table.Rows[i]["Amount"].ToString());
+						Double newval=PIn.PDouble(table.Rows[i]["sum_"].ToString());
+						textLog.Text+=date.ToShortDateString()+" "+Lan.g(this,"OldSum:")+oldval.ToString("c")
+							+", "+Lan.g(this,"NewSum:")+newval.ToString("c")+"\r\n";
+					}
+				}
+				command="DROP TABLE tempdeposittest PURGE";
+				General.NonQ(command);
+				if(numberFixed>0||checkShow.Checked) {
+					textLog.Text+=Lan.g(this,"Deposit sums fixed: ")+numberFixed.ToString()+"\r\n";
+				}
 			}
 		}
 

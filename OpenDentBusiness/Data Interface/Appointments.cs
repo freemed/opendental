@@ -644,6 +644,16 @@ namespace OpenDentBusiness{
 				command+="WHERE appointment.AptNum="+POut.PInt(aptNum);
 			}
 			command+=" GROUP BY appointment.AptNum";
+			if(DataConnection.DBtype==DatabaseType.Oracle){
+				command+=",p1.Abbr,p2.Abbr,patient.AddrNote,"
+				+"patient.ApptModNote,AptDateTime,AptStatus,Assistant,"
+				+"patient.BillingType,patient.BirthDate,patient.Guarantor,"
+				+"patient.ChartNumber,Confirmed,patient.CreditType,DateTimeChecked,DateTimeDue,DateTimeRecd,DateTimeSent,"
+				+"guar.FamFinUrgNote,patient.FName,patient.HmPhone,patient.ImageFolder,IsHygiene,IsNewPatient,"
+				+"LabCaseNum,patient.LName,patient.MedUrgNote,patient.MiddleI,Note,Op,appointment.PatNum,"
+				+"Pattern,patplan.PlanNum,patient.PreferConfirmMethod,patient.PreferContactMethod,patient.Preferred,"
+				+"patient.PreferRecallMethod,patient.Premed,ProvHyg,appointment.ProvNum,patient.WirelessPhone,patient.WkPhone";
+			}
 			DataTable raw=dcon.GetTable(command);
 			command="SELECT pc.AbbrDesc,p.AptNum,p.CodeNum,p.PlannedAptNum,p.Surf,p.ToothNum,pc.TreatArea  "
 				+"FROM procedurelog p,procedurecode pc "

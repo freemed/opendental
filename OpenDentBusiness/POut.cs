@@ -133,33 +133,24 @@ namespace OpenDentBusiness{
 			return PTimeSpan(myTimeSpan, true);
 		}
 
-		public static string PTimeSpan(TimeSpan myTimeSpan, bool encapsulate) {
-			if(myTimeSpan==TimeSpan.Zero){
-				if(encapsulate){
-					return "'00:00:00'";
-				}
-				else{
-					return "00:00:00";
-				}
-			}
-			try {
-				DateTime dateT=new DateTime(1,1,1)+myTimeSpan;
-				string outTimeSpan=dateT.ToString("HH:mm:ss",CultureInfo.InvariantCulture);
-				string frontCap = "'";
-				string backCap = "'";
-				if (encapsulate) {
-					outTimeSpan = frontCap + outTimeSpan + backCap;
-				}
-				return outTimeSpan;
-			}
-			catch {
-				if(encapsulate){
-					return "'00:00:00'";
-				}
-				else{
-					return "00:00:00";
+		public static string PTimeSpan(TimeSpan myTimeSpan,bool encapsulate) {
+			string retval="00:00:00";
+			if(myTimeSpan!=TimeSpan.Zero) {
+				try {
+					DateTime dateT=new DateTime(1,1,1)+myTimeSpan;
+					retval=dateT.ToString("HH:mm:ss",CultureInfo.InvariantCulture);
+				} catch {
+					//Do nothing. This will return the time zero.
 				}
 			}
+			if(DataConnection.DBtype==DatabaseType.MySql) {
+				if(encapsulate) {
+					retval="'"+retval+"'";
+				}
+			} else {//oracle
+				retval="TO_TIMESTAMP('"+retval+"','HH24:MI:SS')";
+			}
+			return retval;
 		}
 
 		///<summary></summary>

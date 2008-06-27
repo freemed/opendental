@@ -619,20 +619,26 @@ namespace OpenDentBusiness{
 				+",BillingType,ChartNumber,City,State,PriProv "
 				+"FROM patient "
 				+"WHERE PatStatus != '4' "//not status 'deleted'
-				+"AND LName LIKE '"      +POut.PString(lname)+"%' "
-				+"AND FName LIKE '"      +POut.PString(fname)+"%' ";
-			if(regexp!=""){
-				command+="AND (HmPhone REGEXP '"+POut.PString(regexp)+"' "
-					+"OR WkPhone REGEXP '"+POut.PString(regexp)+"' "
-					+"OR WirelessPhone REGEXP '"+POut.PString(regexp)+"') ";
+				+(lname.Length>0?"AND LOWER(LName) LIKE '"+POut.PString(lname).ToLower()+"%' ":"") //case matters in a like statement in oracle.
+				+(fname.Length>0?"AND LOWER(FName) LIKE '"+POut.PString(fname).ToLower()+"%' ":"");//case matters in a like statement in oracle.
+			if(regexp!="") {
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command+="AND (HmPhone REGEXP '"+POut.PString(regexp)+"' "
+						+"OR WkPhone REGEXP '"+POut.PString(regexp)+"' "
+						+"OR WirelessPhone REGEXP '"+POut.PString(regexp)+"') ";
+				} else {//oracle
+					command+="AND ((SELECT REGEXP_INSTR(p.HmPhone,'"+POut.PString(regexp)+"') FROM dual)<>0"
+						+"OR (SELECT REGEXP_INSTR(p.WkPhone,'"+POut.PString(regexp)+"') FROM dual)<>0 "
+						+"OR (SELECT REGEXP_INSTR(p.WirelessPhone,'"+POut.PString(regexp)+"') FROM dual)<>0) ";
+				}
 			}
 			command+=
-				"AND Address LIKE '"    +POut.PString(address)+"%' "
-				+"AND City LIKE '"       +POut.PString(city)+"%' "
-				+"AND State LIKE '"      +POut.PString(state)+"%' "
-				+"AND SSN LIKE '"        +POut.PString(ssn)+"%' "
-				+"AND PatNum LIKE '"     +POut.PString(patnum)+"%' "
-				+"AND ChartNumber LIKE '"+POut.PString(chartnumber)+"%' ";
+				(address.Length>0?"AND LOWER(Address) LIKE '"+POut.PString(address).ToLower()+"%' ":"")//case matters in a like statement in oracle.
+				+(city.Length>0?"AND LOWER(City) LIKE '"+POut.PString(city).ToLower()+"%' ":"")//case matters in a like statement in oracle.
+				+(state.Length>0?"AND LOWER(State) LIKE '"+POut.PString(state).ToLower()+"%' ":"")//case matters in a like statement in oracle.
+				+(ssn.Length>0?"AND LOWER(SSN) LIKE '"+POut.PString(ssn).ToLower()+"%' ":"")//In case an office uses this field for something else.
+				+(patnum.Length>0?"AND PatNum LIKE '"+POut.PString(patnum)+"%' ":"")//case matters in a like statement in oracle.
+				+(chartnumber.Length>0?"AND LOWER(ChartNumber) LIKE '"+POut.PString(chartnumber).ToLower()+"%' ":"");//case matters in a like statement in oracle.
 			if(birthdate.Year>1880 && birthdate.Year<2100){
 				command+="AND Birthdate ="+POut.PDate(birthdate)+" ";
 			}
