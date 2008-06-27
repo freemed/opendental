@@ -929,7 +929,7 @@ namespace OpenDental{
 			this.checkAutoClearEntryStatus.Name = "checkAutoClearEntryStatus";
 			this.checkAutoClearEntryStatus.Size = new System.Drawing.Size(381,15);
 			this.checkAutoClearEntryStatus.TabIndex = 73;
-			this.checkAutoClearEntryStatus.Text = "Auto reset entry stats to TreatPlan after selecting a different patient";
+			this.checkAutoClearEntryStatus.Text = "Reset entry status to TreatPlan when switching patients";
 			this.checkAutoClearEntryStatus.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.checkAutoClearEntryStatus.UseVisualStyleBackColor = true;
 			// 

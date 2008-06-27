@@ -5649,9 +5649,15 @@ namespace OpenDental{
 			bool showRx=this.checkRx.Checked;
 			bool showComm=this.checkComm.Checked;
 			bool showApt=this.checkAppt.Checked;
+			bool showEmail=this.checkEmail.Checked;
+			bool showTask=this.checkTasks.Checked;
+			bool showLab=this.checkLabCase.Checked;
 			checkRx.Checked=false;
 			checkComm.Checked=false;
 			checkAppt.Checked=false;
+			checkEmail.Checked=false;
+			checkTasks.Checked=false;
+			checkLabCase.Checked=false;
 			FillProgNotes();
 			try {
 				pagesPrinted=0;
@@ -5669,6 +5675,9 @@ namespace OpenDental{
 			checkRx.Checked=showRx;
 			checkComm.Checked=showComm;
 			checkAppt.Checked=showApt;
+			checkEmail.Checked=showEmail;
+			checkTasks.Checked=showTask;
+			checkLabCase.Checked=showLab;
 			FillProgNotes();
 		}
 
