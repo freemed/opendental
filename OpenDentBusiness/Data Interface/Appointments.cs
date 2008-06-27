@@ -645,22 +645,22 @@ namespace OpenDentBusiness{
 			}
 			command+=" GROUP BY appointment.AptNum";
 			DataTable raw=dcon.GetTable(command);
-			command="SELECT AbbrDesc,procedurelog.AptNum,procedurelog.CodeNum,PlannedAptNum,Surf,ToothNum,TreatArea "
-				+"FROM procedurelog,appointment,procedurecode ";
-			if(isPlanned){
-				command+="WHERE procedurelog.PlannedAptNum=appointment.AptNum AND procedurelog.PlannedAptNum!=0 ";
+			command="SELECT pc.AbbrDesc,p.AptNum,p.CodeNum,p.PlannedAptNum,p.Surf,p.ToothNum,pc.TreatArea  "
+				+"FROM procedurelog p,procedurecode pc "
+				+"WHERE p.CodeNum=pc.CodeNum AND ";
+			if(isPlanned) {
+				command+="p.PlannedAptNum!=0 AND p.PlannedAptNum ";
+			} else {
+				command+="p.AptNum!=0 AND p.AptNum ";
 			}
-			else{
-				command+="WHERE procedurelog.AptNum=appointment.AptNum AND procedurelog.AptNum!=0 ";
-			}
-			command+="AND procedurelog.CodeNum=procedurecode.CodeNum ";
+			command+="IN(SELECT a.AptNum FROM appointment a WHERE ";
 			if(aptNum==0) {
-				command+="AND AptDateTime >= "+POut.PDate(dateStart)+" "
-					+"AND AptDateTime < "+POut.PDate(dateEnd.AddDays(1))+" ";
+				command+="a.AptDateTime >= "+POut.PDate(dateStart)+" "
+					+"AND a.AptDateTime < "+POut.PDate(dateEnd.AddDays(1));
+			} else {
+				command+="a.AptNum="+POut.PInt(aptNum);
 			}
-			else {
-				command+="AND appointment.AptNum="+POut.PInt(aptNum);
-			}
+			command+=")";
 			DataTable rawProc=dcon.GetTable(command);
 			DataTable rawInsProc=null;
 			if(PrefC.GetBool("ApptExclamationShowForUnsentIns")){
