@@ -994,6 +994,7 @@ namespace OpenDental{
 				PatCur.FName=textFName.Text.Substring(0,1).ToUpper()+textFName.Text.Substring(1);
 			}
 			PatCur.PatStatus=PatientStatus.Patient;
+			PatCur.BillingType=PrefC.GetInt("PracticeDefaultBillType");
 			Patients.Insert(PatCur,false);
 			Patient PatOld=PatCur.Copy();
 			PatCur.Guarantor=PatCur.PatNum;
@@ -1029,6 +1030,12 @@ namespace OpenDental{
 				FormP.FName=textFName.Text.Substring(0,1).ToUpper()+textFName.Text.Substring(1);
 			}
 			FormP.ShowDialog();
+			if(FormP.DialogResult!=DialogResult.OK){
+				return;
+			}
+			NewPatientAdded=true;
+			SelectedPatNum=FormP.SelectedPatNum;
+			DialogResult=DialogResult.OK;
 
 			/*
 			Patient PatCur=new Patient();
