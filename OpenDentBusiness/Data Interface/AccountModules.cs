@@ -474,7 +474,10 @@ namespace OpenDentBusiness {
 			//Procedures------------------------------------------------------------------------------------------
 			command="SELECT procedurelog.BaseUnits,Descript,SUM(cp1.InsPayAmt) _insPayAmt,"
 				+"LaymanTerm,procedurelog.MedicalCode,MAX(cp1.NoBillIns) _noBillIns,procedurelog.PatNum,"
-				+"SUM(paysplit.SplitAmt) _patPay,ProcCode,"
+				+"(SELECT SUM(paysplit.SplitAmt) FROM paysplit WHERE procedurelog.ProcNum=paysplit.ProcNum "
+				+"AND paysplit.PatNum IN ("+familyPatNums+")) _patPay,"
+				//+"SUM(paysplit.SplitAmt) _patPay,"
+				+"ProcCode,"
 				+"procedurelog.ProcDate,ProcFee,procedurelog.ProcNum,procedurelog.ProvNum,ToothNum,ToothRange,UnitQty,"
 				+"SUM(cp1.WriteOff) _writeOff, "
 				//+"MIN(cp1.ClaimNum) _unsent,"//this worked, but doesn't take into account capitation
@@ -486,7 +489,7 @@ namespace OpenDentBusiness {
 				+"FROM procedurelog "
 				+"LEFT JOIN procedurecode ON procedurelog.CodeNum=procedurecode.CodeNum "
 				+"LEFT JOIN claimproc cp1 ON procedurelog.ProcNum=cp1.ProcNum "
-				+"LEFT JOIN paysplit ON procedurelog.ProcNum=paysplit.ProcNum AND paysplit.PatNum IN ("+familyPatNums+") "
+				//+"LEFT JOIN paysplit ON procedurelog.ProcNum=paysplit.ProcNum AND paysplit.PatNum IN ("+familyPatNums+") "
 				+"WHERE ProcStatus=2 "//complete
 				+"AND procedurelog.PatNum IN ("
 				+familyPatNums
