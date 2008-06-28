@@ -199,6 +199,7 @@ namespace OpenDental{
 			this.comboDatabase.Name = "comboDatabase";
 			this.comboDatabase.Size = new System.Drawing.Size(280,21);
 			this.comboDatabase.TabIndex = 9;
+			this.comboDatabase.DropDown += new System.EventHandler(this.comboDatabase_DropDown);
 			// 
 			// checkNoShow
 			// 
@@ -218,8 +219,8 @@ namespace OpenDental{
 			this.comboComputerName.Name = "comboComputerName";
 			this.comboComputerName.Size = new System.Drawing.Size(280,21);
 			this.comboComputerName.TabIndex = 8;
-			this.comboComputerName.Leave += new System.EventHandler(this.comboComputerName_Leave);
 			this.comboComputerName.SelectionChangeCommitted += new System.EventHandler(this.comboComputerName_SelectionChangeCommitted);
+			this.comboComputerName.Leave += new System.EventHandler(this.comboComputerName_Leave);
 			// 
 			// groupServer
 			// 
@@ -432,8 +433,8 @@ namespace OpenDental{
 			this.Name = "FormChooseDatabase";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Choose Database";
-			this.Closing += new System.ComponentModel.CancelEventHandler(this.FormConfig_Closing);
 			this.Load += new System.EventHandler(this.FormConfig_Load);
+			this.Closing += new System.ComponentModel.CancelEventHandler(this.FormConfig_Closing);
 			this.groupDirect.ResumeLayout(false);
 			this.groupDirect.PerformLayout();
 			this.groupServer.ResumeLayout(false);
@@ -555,11 +556,17 @@ namespace OpenDental{
 		}
 
 		private void comboComputerName_SelectionChangeCommitted(object sender, System.EventArgs e) {
-			FillComboDatabases();
+			//FillComboDatabases();
 		}
 
 		private void comboComputerName_Leave(object sender, System.EventArgs e) {
+			//FillComboDatabases();
+		}
+
+		private void comboDatabase_DropDown(object sender,EventArgs e) {
+			Cursor=Cursors.WaitCursor;
 			FillComboDatabases();
+			Cursor=Cursors.Default;
 		}
 
 		private void checkConnectServer_Click(object sender,EventArgs e) {
