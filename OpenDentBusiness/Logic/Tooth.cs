@@ -133,7 +133,9 @@ namespace OpenDentBusiness{
 				return tooth_id; // Universal
 			}
 			int index = Array.IndexOf(labelsUniversal, tooth_id);
-
+			if(index==-1){
+				return "-";
+			}
 			if (nomenclature == 1)
 			{ // FDI
 				return labelsFDI[index];
@@ -142,7 +144,6 @@ namespace OpenDentBusiness{
 			{ // Haderup
 				return labelsHaderup[index];
 			}
-
 			return "-"; // Should never happen
 		}
 
