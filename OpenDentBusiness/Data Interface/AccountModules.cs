@@ -411,7 +411,8 @@ namespace OpenDentBusiness {
 			string command;
 			//claimprocs (ins payments)----------------------------------------------------------------------------
 			command="SELECT ClaimNum,ClaimPaymentNum,DateCP,SUM(InsPayAmt) _InsPayAmt,PatNum,ProcDate,"
-				+"ProvNum,SUM(WriteOff) _WriteOff "
+				+"ProvNum,SUM(WriteOff) _WriteOff,"
+				+"(SELECT ProvBill FROM claim WHERE claimproc.ClaimNum=claim.ClaimNum) _provNum "
 				+"FROM claimproc "
 				+"WHERE (Status=1 OR Status=4 OR Status=5) "//received or supplemental or capclaim
 				+"AND (WriteOff>0 OR InsPayAmt!=0) "
@@ -463,7 +464,7 @@ namespace OpenDentBusiness {
 				row["ProcCode"]=Lan.g("AccountModule","InsPay");
 				row["ProcNum"]="0";
 				row["procsOnObj"]="";
-				row["prov"]=Providers.GetAbbr(PIn.PInt(rawClaimPay.Rows[i]["ProvNum"].ToString()));
+				row["prov"]=Providers.GetAbbr(PIn.PInt(rawClaimPay.Rows[i]["_provNum"].ToString()));
 				row["StatementNum"]="0";
 				row["tth"]="";
 				rows.Add(row);
