@@ -902,7 +902,7 @@ namespace OpenDental{
 				col=new ODGridColumn(Lan.g("TableTP","Discount"),55,HorizontalAlignment.Right);
 				gridMain.Columns.Add(col);
 			}
-			if(checkShowFees.Checked){
+			if(checkShowIns.Checked){
 				col=new ODGridColumn(Lan.g("TableTP","Pat"),50,HorizontalAlignment.Right);
 				gridMain.Columns.Add(col);
 			}
@@ -1179,7 +1179,7 @@ namespace OpenDental{
 					if(checkShowDiscount.Checked){
 						row.Cells.Add(discount.ToString("F"));
 					}
-					if(checkShowFees.Checked){	
+					if(checkShowIns.Checked){	
 						row.Cells.Add(pat.ToString("F"));
 					}
 					row.ColorText=DefC.GetColor(DefCat.TxPriorities,ProcListTP[i].Priority);
@@ -1251,7 +1251,7 @@ namespace OpenDental{
 						if(checkShowDiscount.Checked){
 							row.Cells.Add(subdiscount.ToString("F"));//
 						}
-						if(checkShowFees.Checked){
+						if(checkShowIns.Checked){
 							row.Cells.Add(subpat.ToString("F"));//pat portion
 						}
 						row.ColorText=DefC.GetColor(DefCat.TxPriorities,ProcListTP[i].Priority);
@@ -1320,7 +1320,7 @@ namespace OpenDental{
 						subdiscount+=ProcTPSelectList[i].Discount;
 						totDiscount+=ProcTPSelectList[i].Discount;
 					}
-					if(checkShowFees.Checked){
+					if(checkShowIns.Checked){
 						row.Cells.Add(ProcTPSelectList[i].PatAmt.ToString("F"));
 						subpat+=ProcTPSelectList[i].PatAmt;
 						totPat+=ProcTPSelectList[i].PatAmt;						
@@ -1354,7 +1354,7 @@ namespace OpenDental{
 						if(checkShowDiscount.Checked){
 							row.Cells.Add(subdiscount.ToString("F"));
 						}
-						if(checkShowFees.Checked) {
+						if(checkShowIns.Checked) {
 							
 							row.Cells.Add(subpat.ToString("F"));//pat portion
 						}
@@ -1399,7 +1399,7 @@ namespace OpenDental{
 				if(checkShowDiscount.Checked){
 					row.Cells.Add(totDiscount.ToString("F"));
 				}
-				if(checkShowFees.Checked) {
+				if(checkShowIns.Checked) {
 					
 					row.Cells.Add(totPat.ToString("F"));//pat portion
 				}
@@ -2344,7 +2344,7 @@ namespace OpenDental{
 					procTP.Discount=PIn.PDouble(gridMain.Rows[gridMain.SelectedIndices[i]]
 							.Cells[gridMain.Columns.GetIndex(Lan.g("TableTP","Discount"))].Text);
 				}
-				if(checkShowFees.Checked){
+				if(checkShowIns.Checked){
 					procTP.PatAmt=PIn.PDouble(gridMain.Rows[gridMain.SelectedIndices[i]]
 						.Cells[gridMain.Columns.GetIndex(Lan.g("TableTP","Pat"))].Text);
 				}
