@@ -855,10 +855,13 @@ namespace OpenDental{
 			if(terminal==null){
 				return;
 			}
-			if(terminal.TerminalStatus==TerminalStatus){
+			if(terminal.TerminalStatus==TerminalStatus
+				&& PatCur!=null
+				&& terminal.PatNum==PatCur.PatNum)
+			{
 				return;
 			}
-			//someone changed the status from the terminal manager.
+			//someone changed the status or patient from the terminal manager.
 			TerminalStatus=terminal.TerminalStatus;
 			//set tab visibility
 			tabMain.TabPages.Clear();
