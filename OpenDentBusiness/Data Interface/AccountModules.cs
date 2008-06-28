@@ -656,7 +656,7 @@ namespace OpenDentBusiness {
 				//and the order-by result, in order to get the proper group by result and corresponding procnum concat list.
 				command="SELECT p.CheckNum,ps.DatePay,ps.PatNum,p.PatNum patNumPayment_,p.PayAmt,"
 				+"ps.PayNum,ps.PayPlanNum,"
-				+"p.PayType,ps.ProcDate,";
+				+"p.PayType,ps.ProcDate,"
 				+"'' ProcNums_, "
 				+"ps.ProvNum,SUM(SplitAmt) splitAmt_,p.PayNote "
 				+"FROM paysplit ps "
@@ -669,6 +669,7 @@ namespace OpenDentBusiness {
 					command+="ps.PatNum ="+POut.PInt(fam.List[i].PatNum)+" ";
 				}
 				command+=") ORDER BY paysplit.PayNum,paysplit.PatNum,ProcDate";
+				rawPay=null;//js because this was breaking
 			}
 			double payamt;
 			for(int i=0;i<rawPay.Rows.Count;i++){
@@ -1100,7 +1101,7 @@ namespace OpenDentBusiness {
 						if(((DateTime)rowsByPat[p].Rows[i]["DateTime"])>toDate){
 							rowsByPat[p].Rows.RemoveAt(i);
 						}
-						if(((DateTime)rowsByPat[p].Rows[i]["DateTime"])<fromDate){
+						else if(((DateTime)rowsByPat[p].Rows[i]["DateTime"])<fromDate){
 							if(!foundBalForward){
 								foundBalForward=true;
 								balanceForward=(double)rowsByPat[p].Rows[i]["balanceDouble"];
