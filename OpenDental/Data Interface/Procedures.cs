@@ -1259,6 +1259,18 @@ namespace OpenDental{
 			return false;
 		}
 
+		///<summary>Queries the database to determine if this procedure is attached to a claim already.</summary>
+		public static bool IsAttachedToClaim(int procNum){
+			string command="SELECT COUNT(*) FROM claimproc "
+				+"WHERE ProcNum="+POut.PInt(procNum)+" "
+				+"AND ClaimNum>0";
+			DataTable table=General.GetTable(command);
+			if(table.Rows[0][0].ToString()=="0"){
+				return false;
+			}
+			return true;
+		}
+
 		///<summary>Used in ContrAccount.CreateClaim to validate that procedure is not already attached to a claim for this specific insPlan.  The claimProcList can be all claimProcs for the patient or only those attached to this proc.</summary>
 		public static bool IsAlreadyAttachedToClaim(Procedure proc,ClaimProc[] List,int planNum) {
 			for(int i=0;i<List.Length;i++) {

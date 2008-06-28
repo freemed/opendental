@@ -169,7 +169,8 @@ namespace OpenDental{
 		private OpenDental.UI.Button butTopazSign;
 		private Label labelInvalidSig;
 		private Control sigBoxTopaz;
-        private bool allowTopaz;
+    private bool allowTopaz;
+		private bool StartedAttachedToClaim;
 
 		///<summary>Inserts are no longer done within this dialog, but must be done ahead of time from outside.You must specify a procedure to edit, and only the changes that are made in this dialog get saved.  Only used when double click in Account, Chart, TP, and in ContrChart.AddProcedure().  The procedure may be deleted if new, and user hits Cancel.</summary>
 		public FormProcEdit(Procedure proc,Patient patCur,Family famCur){
@@ -180,15 +181,15 @@ namespace OpenDental{
 			PlanList=InsPlans.Refresh(FamCur);
 			InitializeComponent();
 			Lan.F(this);
-            allowTopaz=(Environment.OSVersion.Platform!=PlatformID.Unix && !CodeBase.ODEnvironment.Is64BitOperatingSystem());
-            sigBox.SetTabletState(1);
+			allowTopaz=(Environment.OSVersion.Platform!=PlatformID.Unix && !CodeBase.ODEnvironment.Is64BitOperatingSystem());
+			sigBox.SetTabletState(1);
 			if(!allowTopaz) {
 				butTopazSign.Visible=false;
-                sigBox.Visible=true;
+				sigBox.Visible=true;
 			}
 			else{
 				//Add signature box for Topaz signatures.
-                sigBoxTopaz=CodeBase.TopazWrapper.GetTopaz();
+				sigBoxTopaz=CodeBase.TopazWrapper.GetTopaz();
 				sigBoxTopaz.Location=sigBox.Location;//this puts both boxes in the same spot.
 				sigBoxTopaz.Name="sigBoxTopaz";
 				sigBoxTopaz.Size=new System.Drawing.Size(362,79);
@@ -196,8 +197,8 @@ namespace OpenDental{
 				sigBoxTopaz.Text="sigPlusNET1";
 				sigBoxTopaz.Visible=false;
 				Controls.Add(sigBoxTopaz);
-                //It starts out accepting input. It will be set to 0 if a sig is already present.  It will be set back to 1 if note changes or if user clicks Clear.
-                CodeBase.TopazWrapper.SetTopazState(sigBoxTopaz,1);
+				//It starts out accepting input. It will be set to 0 if a sig is already present.  It will be set back to 1 if note changes or if user clicks Clear.
+				CodeBase.TopazWrapper.SetTopazState(sigBoxTopaz,1);
 			}
 		}
 
@@ -1678,7 +1679,6 @@ namespace OpenDental{
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Procedure Info";
 			this.Load += new System.EventHandler(this.FormProcInfo_Load);
-			this.Closing += new System.ComponentModel.CancelEventHandler(this.FormProcEdit_Closing);
 			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormProcEdit_FormClosing);
 			this.groupQuadrant.ResumeLayout(false);
 			this.panelSurfaces.ResumeLayout(false);
@@ -1741,6 +1741,9 @@ namespace OpenDental{
 			PatPlanList=PatPlans.Refresh(PatCur.PatNum);
 			BenefitList=Benefits.Refresh(PatPlanList);
 			if(Procedures.IsAttachedToClaim(ProcCur,ClaimProcList)){
+				StartedAttachedToClaim=true;
+				//however, this doesn't stop someone from creating a claim while this window is open,
+				//so this is checked at the end, too.
 				panel1.Enabled=false;
 				listProcStatus.Enabled=false;
 				checkNoBillIns.Enabled=false;
@@ -3083,11 +3086,18 @@ namespace OpenDental{
 			}
 		}
 
-		private void FormProcEdit_Closing(object sender, System.ComponentModel.CancelEventArgs e) {
+		private void FormProcEdit_FormClosing(object sender,FormClosingEventArgs e) {
+			if(allowTopaz){
+				sigBoxTopaz.Dispose();
+			}
 			if(DialogResult==DialogResult.OK){
-				//this catches date,prov,fee,status,etc for all claimProcs attached to this proc:
+				//this catches date,prov,fee,status,etc for all claimProcs attached to this proc.
+				if(!StartedAttachedToClaim
+					&& Procedures.IsAttachedToClaim(ProcCur.ProcNum))
+				{
+					return;//unless they got attached to a claim while this window was open.  Then it doesn't touch them.
+				}
 				Procedures.ComputeEstimates(ProcCur,PatCur.PatNum,ClaimProcList,false,PlanList,PatPlanList,BenefitList);
-				return;
 			}
 			if(IsNew){//if cancelling on a new procedure
 				//delete any newly created claimprocs
@@ -3107,12 +3117,6 @@ namespace OpenDental{
 
 		private void butCancel_Click(object sender,System.EventArgs e) {
 			DialogResult=DialogResult.Cancel;
-		}
-
-		private void FormProcEdit_FormClosing(object sender,FormClosingEventArgs e) {
-			if(allowTopaz){
-				sigBoxTopaz.Dispose();
-			}
 		}
 
 		private void textMedicalCode_TextChanged(object sender, EventArgs e){
