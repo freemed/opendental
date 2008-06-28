@@ -325,7 +325,10 @@ namespace OpenDental{
 				pd.DefaultPageSettings.Margins=new Margins(40,40,40,440);//4.4" from bottom
 			}
 			//pd.OriginAtMargins=true;
-			if(pd.DefaultPageSettings.PaperSize.Height==0) {
+			//fixes a bug if user has label printer as default printer on their computer:
+			if(pd.DefaultPageSettings.PaperSize.Height<1000
+				|| pd.DefaultPageSettings.PaperSize.Width<750)
+			{
 				pd.DefaultPageSettings.PaperSize=new PaperSize("default",850,1100);
 			}
 			MigraDoc.DocumentObjectModel.Document doc=CreateDocument(pd);
