@@ -7594,7 +7594,9 @@ namespace OpenDental{
 			if(FromVersion<new Version("5.8.0.0")) {
 				string command;
 				if(DataConnection.DBtype==DatabaseType.MySql){
+
 				}else{//oracle
+
 				}
 				command="UPDATE preference SET ValueString = '5.8.0.0' WHERE PrefName = 'DataBaseVersion'";
 				General.NonQ(command);
