@@ -708,6 +708,9 @@ namespace OpenDental{
 			Queries.CurReport.SubTitle[1]=DepositCur.DateDeposit.ToShortDateString();
 			Queries.CurReport.Summary=new string[1];
 			Queries.CurReport.Summary[0]=DepositCur.BankAccountInfo;
+			if(DepositCur.BankAccountInfo.StartsWith("A")){
+				Queries.CurReport.SummaryFont="GnuMICR";
+			}
 			Queries.CurReport.ColPos[0]=20;
 			Queries.CurReport.ColPos[1]=110;
 			Queries.CurReport.ColPos[2]=260;

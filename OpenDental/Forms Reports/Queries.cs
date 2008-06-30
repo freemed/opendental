@@ -62,6 +62,8 @@ namespace OpenDental{
 		public int[] ColWidth;
 		///<summary></summary>
 		public string[] Summary;
+		///<summary>This is a quick hack to allow printing account numbers on deposit slips in a different font.  It will typically be null.</summary>
+		public string SummaryFont;
 	}
 
 

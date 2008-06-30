@@ -1212,16 +1212,19 @@ namespace OpenDental{
 			}
 			//Summary
 			if(totalsPrinted){
-				if(yPos+Queries.CurReport.Summary.Length*subtitleFont.GetHeight(ev.Graphics)
-					< bounds.Top+bounds.Height){
+				if(yPos+Queries.CurReport.Summary.Length*subtitleFont.GetHeight(ev.Graphics)< bounds.Top+bounds.Height){
 					ev.Graphics.DrawLine(new Pen(Color.Black),bounds.Left,yPos+2,bounds.Right,yPos+2);
 					yPos+=bodyFont.GetHeight(ev.Graphics);
 					for(int i=0;i<Queries.CurReport.Summary.Length;i++){
-					//while(yPos<bounds.Top+bounds.Height && linesPrinted<Queries.TableQ.Rows.Count){
-						//if(yPos>=bounds.Top+bounds.Height) break;
-						ev.Graphics.DrawString(Queries.CurReport.Summary[i]
-							,subtitleFont,Brushes.Black,bounds.Left,yPos);
-						yPos+=subtitleFont.GetHeight(ev.Graphics);
+						if(Queries.CurReport.SummaryFont!=null && Queries.CurReport.SummaryFont!=""){
+							Font acctnumFont=new Font(Queries.CurReport.SummaryFont,12);
+							ev.Graphics.DrawString(Queries.CurReport.Summary[i],acctnumFont,Brushes.Black,bounds.Left,yPos);
+							yPos+=acctnumFont.GetHeight(ev.Graphics);
+						}
+						else{
+							ev.Graphics.DrawString(Queries.CurReport.Summary[i],subtitleFont,Brushes.Black,bounds.Left,yPos);
+							yPos+=subtitleFont.GetHeight(ev.Graphics);
+						}
 					}
 					summaryPrinted=true;
 				}
