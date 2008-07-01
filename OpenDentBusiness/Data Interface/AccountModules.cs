@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Data;
 using System.Text;
 using System.Drawing;
+using System.Collections;
 
 namespace OpenDentBusiness {
 	public class AccountModules {
@@ -212,13 +213,17 @@ namespace OpenDentBusiness {
 		}
 
 		/*private static void GetPayPlanCharges(){
+		  string datesql="CURDATE()";
+		  if(DataConnection.Dbtype==DatabaseType.Oracle){
+				datesql="(SELECT CURRENT_DATE FROM dual)";
+		  }
 			string command="SELECT "
-				+"(SELECT SUM(Principal) FROM payplancharge WHERE payplancharge.PayPlanNum=payplan.PayPlanNum) _principal,"
-				+"(SELECT SUM(Interest) FROM payplancharge WHERE payplancharge.PayPlanNum=payplan.PayPlanNum) _interest,"
+				+"(SELECT SUM(Principal) FROM payplancharge WHERE payplancharge.PayPlanNum=payplan.PayPlanNum) principal_,"
+				+"(SELECT SUM(Interest) FROM payplancharge WHERE payplancharge.PayPlanNum=payplan.PayPlanNum) interest_,"
 				+"(SELECT SUM(Principal) FROM payplancharge WHERE payplancharge.PayPlanNum=payplan.PayPlanNum "
-					+"AND ChargeDate <= CURDATE()) _principalDue,"
+					+"AND ChargeDate <= "+datesql+@") principalDue_,"
 				+"(SELECT SUM(Interest) FROM payplancharge WHERE payplancharge.PayPlanNum=payplan.PayPlanNum "
-					+"AND ChargeDate <= CURDATE()) _interestDue,"
+					+"AND ChargeDate <= "+datesql+@") interestDue_,"
 				+"CarrierName,payplan.Guarantor,"
 				+"payplan.PatNum,PayPlanDate,payplan.PayPlanNum,"
 				+"payplan.PlanNum "
@@ -652,14 +657,15 @@ namespace OpenDentBusiness {
 				command+=") GROUP BY paysplit.PayNum,paysplit.PatNum,ProcDate ORDER BY ProcDate";
 				rawPay=dcon.GetTable(command);
 			}else{//oracle
-				//TODO: Use the ordered by results to create a for loop and mimic the mysql GROUP_CONCAT 
-				//and GROUP BY functions for Oracle??? Possibly use multiple queries to get the group-by result
-				//and the order-by result, in order to get the proper group by result and corresponding procnum concat list.
+				//The GROUP_CONCAT() functionality does not exist in Oracle. So, here we must mimic
+				//the functionality that is missing in Oracle using information on the MySQL website
+				//which details how the GROUP BY works internally.
 				command="SELECT p.CheckNum,ps.DatePay,ps.PatNum,p.PatNum patNumPayment_,p.PayAmt,"
 				+"ps.PayNum,ps.PayPlanNum,"
 				+"p.PayType,ps.ProcDate,"
 				+"'' ProcNums_, "
-				+"ps.ProvNum,SUM(SplitAmt) splitAmt_,p.PayNote "
+				+"ps.ProvNum,0 splitAmt_,p.PayNote,"
+				+"ps.ProcNum,ps.SplitAmt "//Columns added at the end of the select for Oracle only.
 				+"FROM paysplit ps "
 				+"LEFT JOIN payment p ON ps.PayNum=p.PayNum "
 				+"WHERE (";
@@ -669,8 +675,42 @@ namespace OpenDentBusiness {
 					}
 					command+="ps.PatNum ="+POut.PInt(fam.List[i].PatNum)+" ";
 				}
-				command+=") ORDER BY paysplit.PayNum,paysplit.PatNum,ProcDate";
-				rawPay=null;//js because this was breaking
+				command+=") ORDER BY ps.PayNum,ps.PatNum,ps.ProcDate";
+				DataTable rawPayOrder=dcon.GetTable(command);
+				rawPay=rawPayOrder.Clone();//To get the column information.
+				rawPay.Rows.Clear();//To get a blank table to fill in the group-by results with.
+				ArrayList rawPayRows=new ArrayList();
+				for(int i=0;i<rawPay.Rows.Count;i++){
+					int j=i+1;
+					int k=i;//Used to choose the row with the lowest ps.ProcDate, as done in the MySQL command above.
+					string procNums="";
+					double splitAmt=0;
+					do{
+						procNums+=PIn.PInt(rawPayOrder.Rows[j-1]["ps.ProcNum"].ToString()).ToString();
+						splitAmt+=PIn.PDouble(rawPayOrder.Rows[j-1]["ps.SplitAmt"].ToString());
+						if(j>=rawPayOrder.Rows.Count){
+							break;
+						}
+						if(rawPayOrder.Rows[j]["ps.PayNum"].ToString()!=rawPayOrder.Rows[j-1]["PayNum"].ToString() ||
+							rawPayOrder.Rows[j]["ps.PatNum"].ToString()!=rawPayOrder.Rows[j-1]["PatNum"].ToString() ||
+							rawPayOrder.Rows[j]["ps.ProcDate"].ToString()!=rawPayOrder.Rows[j-1]["ProcDate"].ToString()){
+							break;
+						}
+						if(PIn.PDate(rawPayOrder.Rows[j]["ProcDate"].ToString())<PIn.PDate(rawPayOrder.Rows[j-1]["ProcDate"].ToString())){
+							k=j;
+						}
+						procNums+=",";
+						j++;
+					}while(true);
+					rawPayOrder.Rows[k]["ProcNums_"]=POut.PString(procNums);
+					rawPayOrder.Rows[k]["splitAmt_"]=POut.PDouble(splitAmt);
+					rawPayRows.Add(rawPayOrder.Rows[k]);
+					i=j;
+				}
+				rawPayOrder.Dispose();
+				for(int i=0;i<rawPayRows.Count;i++){
+					rawPay.Rows.Add(rawPayRows[i]);
+				}
 			}
 			double payamt;
 			for(int i=0;i<rawPay.Rows.Count;i++){
@@ -722,25 +762,80 @@ namespace OpenDentBusiness {
 				rows.Add(row);
 			}
 			//claims (do not affect balance)-------------------------------------------------------------------------
-			command="SELECT CarrierName,ClaimFee,claim.ClaimNum,ClaimStatus,ClaimType,DateReceived,DateService,"
-				+"claim.DedApplied,claim.InsPayEst,"
-				+"claim.InsPayAmt,claim.PatNum,SUM(ProcFee) _procAmt,"
-				+"GROUP_CONCAT(claimproc.ProcNum) _ProcNums,ProvTreat,"
-				+"claim.ReasonUnderPaid,claim.WriteOff "
-				+"FROM claim "
-				+"LEFT JOIN insplan ON claim.PlanNum=insplan.PlanNum "
-				+"LEFT JOIN carrier ON carrier.CarrierNum=insplan.CarrierNum "
-				+"INNER JOIN claimproc ON claimproc.ClaimNum=claim.ClaimNum "
-				+"LEFT JOIN procedurelog ON claimproc.ProcNum=procedurelog.ProcNum "
-				+"WHERE (";
-			for(int i=0;i<fam.List.Length;i++){
-				if(i!=0){
-					command+="OR ";
+			DataTable rawClaim;
+			if(DataConnection.DBtype==DatabaseType.MySql){
+				command="SELECT CarrierName,ClaimFee,claim.ClaimNum,ClaimStatus,ClaimType,DateReceived,DateService,"
+					+"claim.DedApplied,claim.InsPayEst,"
+					+"claim.InsPayAmt,claim.PatNum,SUM(ProcFee) procAmt_,"
+					+"GROUP_CONCAT(claimproc.ProcNum) ProcNums_,ProvTreat,"
+					+"claim.ReasonUnderPaid,claim.WriteOff "
+					+"FROM claim "
+					+"LEFT JOIN insplan ON claim.PlanNum=insplan.PlanNum "
+					+"LEFT JOIN carrier ON carrier.CarrierNum=insplan.CarrierNum "
+					+"INNER JOIN claimproc ON claimproc.ClaimNum=claim.ClaimNum "
+					+"LEFT JOIN procedurelog ON claimproc.ProcNum=procedurelog.ProcNum "
+					+"WHERE (";
+				for(int i=0;i<fam.List.Length;i++){
+					if(i!=0){
+						command+="OR ";
+					}
+					command+="claim.PatNum ="+POut.PInt(fam.List[i].PatNum)+" ";
 				}
-				command+="claim.PatNum ="+POut.PInt(fam.List[i].PatNum)+" ";
+				command+=") GROUP BY claim.ClaimNum ORDER BY DateService";
+				rawClaim=dcon.GetTable(command);
+			}else{//oracle
+				command="SELECT CarrierName,ClaimFee,claim.ClaimNum,ClaimStatus,ClaimType,DateReceived,DateService,"
+					+"claim.DedApplied,claim.InsPayEst,"
+					+"claim.InsPayAmt,claim.PatNum,0 procAmt_,"
+					+"'' ProcNums_,ProvTreat,"
+					+"claim.ReasonUnderPaid,claim.WriteOff,"
+					+"claimproc.ProcNum,ProcFee "//For Oracle GROUP_CONCAT() functionality mimic.
+					+"FROM claim "
+					+"LEFT JOIN insplan ON claim.PlanNum=insplan.PlanNum "
+					+"LEFT JOIN carrier ON carrier.CarrierNum=insplan.CarrierNum "
+					+"INNER JOIN claimproc ON claimproc.ClaimNum=claim.ClaimNum "
+					+"LEFT JOIN procedurelog ON claimproc.ProcNum=procedurelog.ProcNum "
+					+"WHERE (";
+				for(int i=0;i<fam.List.Length;i++) {
+					if(i!=0) {
+						command+="OR ";
+					}
+					command+="claim.PatNum ="+POut.PInt(fam.List[i].PatNum)+" ";
+				}
+				command+=") ORDER BY claim.ClaimNum";
+				DataTable rawClaimOrder=dcon.GetTable(command);
+				rawClaim=rawClaimOrder.Clone();
+				rawClaim.Rows.Clear();
+				ArrayList rawClaimRows=new ArrayList();
+				for(int i=0;i<rawClaimOrder.Rows.Count;i++){
+					int j=i+1;
+					int k=i;
+					string procNums="";
+					double procAmtTotal=0;
+					do{
+						procNums+=PIn.PInt(rawClaimOrder.Rows[j-1]["ProcNum"].ToString()).ToString();
+						procAmtTotal+=PIn.PDouble(rawClaimOrder.Rows[j-1]["ProcFee"].ToString());
+						if(j>=rawClaimOrder.Rows.Count){
+							break;
+						}
+						if(rawClaimOrder.Rows[j]["ClaimNum"].ToString()!=rawClaimOrder.Rows[j-1]["ClaimNum"].ToString()){
+							break;
+						}
+						if(PIn.PDate(rawClaimOrder.Rows[j]["DateService"].ToString())<PIn.PDate(rawClaimOrder.Rows[j-1]["DateService"].ToString())){
+							k=j;
+						}
+						procNums+=",";
+						j++;
+					}while(true);
+					rawClaimOrder.Rows[k]["ProcNums_"]=procNums;
+					rawClaimOrder.Rows[k]["procAmt_"]=procAmtTotal;
+					rawClaimRows.Add(rawClaimOrder.Rows[k]);
+				}
+				rawClaimOrder.Dispose();
+				for(int i=0;i<rawClaimRows.Count;i++){
+					rawClaim.Rows.Add(rawClaimRows[i]);
+				}
 			}
-			command+=") GROUP BY claim.ClaimNum ORDER BY DateService";
-			DataTable rawClaim=dcon.GetTable(command);
 			DateTime daterec;
 			double amtpaid;//can be different than amt if claims show UCR.
 			double procAmt;
@@ -805,7 +900,7 @@ namespace OpenDentBusiness {
 				else if(claimStatus=="S"){
 					row["description"]+="\r\n"+Lan.g("ContrAccount","Sent");
 				}
-				procAmt=PIn.PDouble(rawClaim.Rows[i]["_procAmt"].ToString());
+				procAmt=PIn.PDouble(rawClaim.Rows[i]["procAmt_"].ToString());
 				insest=PIn.PDouble(rawClaim.Rows[i]["InsPayEst"].ToString());
 				amtpaid=PIn.PDouble(rawClaim.Rows[i]["InsPayAmt"].ToString());
 				writeoff=PIn.PDouble(rawClaim.Rows[i]["WriteOff"].ToString());
@@ -866,7 +961,7 @@ namespace OpenDentBusiness {
 				row["PayPlanChargeNum"]="0";
 				row["ProcCode"]=Lan.g("AccountModule","Claim");
 				row["ProcNum"]="0";
-				row["procsOnObj"]=PIn.PByteArray(rawClaim.Rows[i]["_ProcNums"]);
+				row["procsOnObj"]=PIn.PByteArray(rawClaim.Rows[i]["ProcNums_"]);
 				row["prov"]=Providers.GetAbbr(PIn.PInt(rawClaim.Rows[i]["ProvTreat"].ToString()));
 				row["StatementNum"]="0";
 				row["tth"]="";
@@ -930,13 +1025,17 @@ namespace OpenDentBusiness {
 				rows.Add(row);
 			}
 			//Payment plans----------------------------------------------------------------------------------
+			string datesql="CURDATE()";
+			if(DataConnection.DBtype==DatabaseType.Oracle){
+				datesql="(SELECT CURRENT_DATE FROM dual)";
+			}
 			command="SELECT "
-				+"(SELECT SUM(Principal) FROM payplancharge WHERE payplancharge.PayPlanNum=payplan.PayPlanNum) _principal,"
-				+"(SELECT SUM(Interest) FROM payplancharge WHERE payplancharge.PayPlanNum=payplan.PayPlanNum) _interest,"
+				+"(SELECT SUM(Principal) FROM payplancharge WHERE payplancharge.PayPlanNum=payplan.PayPlanNum) principal_,"
+				+"(SELECT SUM(Interest) FROM payplancharge WHERE payplancharge.PayPlanNum=payplan.PayPlanNum) interest_,"
 				+"(SELECT SUM(Principal) FROM payplancharge WHERE payplancharge.PayPlanNum=payplan.PayPlanNum "
-					+"AND ChargeDate <= CURDATE()) _principalDue,"
+					+"AND ChargeDate <= "+datesql+@") principalDue_,"
 				+"(SELECT SUM(Interest) FROM payplancharge WHERE payplancharge.PayPlanNum=payplan.PayPlanNum "
-					+"AND ChargeDate <= CURDATE()) _interestDue,"
+					+"AND ChargeDate <= "+datesql+@") interestDue_,"
 				+"CarrierName,payplan.Guarantor,"
 				+"payplan.PatNum,PayPlanDate,payplan.PayPlanNum,"
 				+"payplan.PlanNum "
@@ -951,7 +1050,11 @@ namespace OpenDentBusiness {
 				command+="payplan.Guarantor ="+POut.PInt(fam.List[i].PatNum)+" "
 					+"OR payplan.PatNum ="+POut.PInt(fam.List[i].PatNum)+" ";
 			}
-			command+=") GROUP BY payplan.PayPlanNum ORDER BY PayPlanDate";
+			command+=") GROUP BY payplan.PayPlanNum ";
+			if(DataConnection.DBtype==DatabaseType.Oracle){
+				command+=",CarrierName,payplan.Guarantor,payplan.PatNum,PayPlanDate,payplan.PlanNum ";
+			}
+			command+="ORDER BY PayPlanDate";
 			DataTable rawPayPlan=dcon.GetTable(command);
 			for(int i=0;i<rawPayPlan.Rows.Count;i++){
 				row=table.NewRow();
@@ -963,7 +1066,7 @@ namespace OpenDentBusiness {
 				row["ClaimNum"]="0";
 				row["ClaimPaymentNum"]="0";
 				row["colorText"]=DefC.Long[(int)DefCat.AccountColors][6].ItemColor.ToArgb().ToString();
-				amt=PIn.PDouble(rawPayPlan.Rows[i]["_principal"].ToString());
+				amt=PIn.PDouble(rawPayPlan.Rows[i]["principal_"].ToString());
 				row["creditsDouble"]=amt;
 				row["credits"]=((double)row["creditsDouble"]).ToString("n");
 				dateT=PIn.PDateT(rawPayPlan.Rows[i]["PayPlanDate"].ToString());
@@ -1211,15 +1314,15 @@ namespace OpenDentBusiness {
 						paid+=PIn.PDouble(rawPay.Rows[p]["_splitAmt"].ToString());
 					}
 				}
-				princ=PIn.PDouble(rawPayPlan.Rows[i]["_principal"].ToString());
-				princDue=PIn.PDouble(rawPayPlan.Rows[i]["_principalDue"].ToString());
-				interestDue=PIn.PDouble(rawPayPlan.Rows[i]["_interestDue"].ToString());
+				princ=PIn.PDouble(rawPayPlan.Rows[i]["principal_"].ToString());
+				princDue=PIn.PDouble(rawPayPlan.Rows[i]["principalDue_"].ToString());
+				interestDue=PIn.PDouble(rawPayPlan.Rows[i]["interestDue_"].ToString());
 				accumDue=princDue+interestDue;
 				princPaid=paid-interestDue;
 				if(princPaid<0){
 					princPaid=0;
 				}
-				totCost=princ+PIn.PDouble(rawPayPlan.Rows[i]["_interest"].ToString());
+				totCost=princ+PIn.PDouble(rawPayPlan.Rows[i]["interest_"].ToString());
 				due=accumDue-paid;
 				balance=princ-princPaid;
 				//then fill the row----------------------------------------------------------------------
@@ -1262,7 +1365,7 @@ namespace OpenDentBusiness {
 			DataTable rawAmort;
 			int payPlanNum;
 			for(int i=0;i<rawPayPlan.Rows.Count;i++){//loop through the payment plans (usually zero or one)
-				princ=PIn.PDouble(rawPayPlan.Rows[i]["_principal"].ToString());
+				princ=PIn.PDouble(rawPayPlan.Rows[i]["principal_"].ToString());
 				//summary row----------------------------------------------------------------------
 				row=table.NewRow();
 				row["AdjNum"]="0";

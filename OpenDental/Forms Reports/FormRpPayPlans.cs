@@ -128,11 +128,15 @@ namespace OpenDental
 			table.Columns.Add("due");
 			table.Columns.Add("dueTen");
 			DataRow row;
+			string datesql="CURDATE()";
+			if(DataConnection.DBtype==DatabaseType.Oracle){
+				datesql="(SELECT CURRENT_DATE FROM dual)";
+			}
 			string command=@"SELECT FName,LName,MiddleI,PlanNum,Preferred,
 				(SELECT SUM(Principal+Interest) FROM payplancharge WHERE payplancharge.PayPlanNum=payplan.PayPlanNum
-				AND ChargeDate <= CURDATE()) _accumDue,
+				AND ChargeDate <= "+datesql+@") _accumDue,
 				(SELECT SUM(Principal+Interest) FROM payplancharge WHERE payplancharge.PayPlanNum=payplan.PayPlanNum
-				AND ChargeDate <= ADDDATE(CURDATE(),"+POut.PInt(PrefC.GetInt("PayPlansBillInAdvanceDays"))+@")) _dueTen,
+				AND ChargeDate <= ADDDATE("+datesql+","+POut.PInt(PrefC.GetInt("PayPlansBillInAdvanceDays"))+@")) _dueTen,
 				(SELECT SUM(SplitAmt) FROM paysplit WHERE paysplit.PayPlanNum=payplan.PayPlanNum) _paid,
 				(SELECT SUM(Principal) FROM payplancharge WHERE payplancharge.PayPlanNum=payplan.PayPlanNum) _principal
 				FROM payplan
