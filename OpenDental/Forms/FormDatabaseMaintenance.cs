@@ -725,7 +725,7 @@ namespace OpenDental {
 				SELECT * FROM claimproc WHERE claim.ClaimNum=claimproc.ClaimNum)";
 			int numberFixed=General.NonQ(command);
 			if(numberFixed!=0 || checkShow.Checked) {
-				textLog.Text+=Lan.g(this,"Autocodes deleted due to no items: ")+numberFixed.ToString()+"\r\n";
+				textLog.Text+=Lan.g(this,"Claims deleted due to no procedures: ")+numberFixed.ToString()+"\r\n";
 			}
 		}
 
