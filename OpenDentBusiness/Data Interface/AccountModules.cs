@@ -11,6 +11,8 @@ namespace OpenDentBusiness {
 		private static DataSet retVal;
 		private static Family fam;
 		private static Patient pat;
+		///<summary>Gets filled in GetPayPlansForStatement, then gets added to the misc table.</summary>
+		private static double payPlanDue;
 
 		///<summary>If intermingled=true, the patnum of any family member will get entire family intermingled.</summary>
 		public static DataSet GetAll(int patNum,bool viewingInRecall,DateTime fromDate, DateTime toDate,bool intermingled){
@@ -27,10 +29,11 @@ namespace OpenDentBusiness {
 				GetCommLog(patNum);
 			}
 			bool singlePatient=!intermingled;//so one or the other will be true
+			payPlanDue=0;
 			//Gets 3 tables: account(or account###,account###,etc), patient, payplan.
 			GetAccount(patNum,fromDate,toDate,intermingled,singlePatient,false);
 			//GetPayPlans(patNum,fromDate,toDate,isFamily);
-			GetMisc(fam);//table = misc.
+			GetMisc(fam);//table = misc.  Just holds a few bits of info that we can't find anywhere else.
 			return retVal;
 		}
 
@@ -54,10 +57,12 @@ namespace OpenDentBusiness {
 			//else {
 			//	GetCommLog(patNum);
 			//}
+			payPlanDue=0;
 			//Gets 3 tables: account(or account###,account###,etc), patient, payplan.
 			GetAccount(patNum,fromDate,toDate,intermingled,singlePatient,true);
 			//GetPayPlans(patNum,fromDate,toDate,isFamily);
 			GetApptTable(fam,singlePatient,patNum);//table= appts
+			GetMisc(fam);
 			return retVal;
 		}
 
@@ -429,7 +434,7 @@ namespace OpenDentBusiness {
 				command+="PatNum ="+POut.PInt(fam.List[i].PatNum)+" ";
 			}
 			command+=") GROUP BY ClaimNum,DateCP ";
-			if(DataConnection.DBtype==DatabaseType.Oracle) {
+			if(DataConnection.DBtype==DatabaseType.Oracle){
 				command+=",ClaimPaymentNum,PatNum,ProcDate,ProvNum ";
 			}
 			command+="ORDER BY DateCP";
@@ -504,7 +509,7 @@ namespace OpenDentBusiness {
 				+"AND procedurelog.PatNum IN ("
 				+familyPatNums
 				+") GROUP BY procedurelog.ProcNum ";
-			if(DataConnection.DBtype==DatabaseType.Oracle) {
+			if(DataConnection.DBtype==DatabaseType.Oracle){
 				command+=",procedurelog.BaseUnits,Descript,LaymanTerm,procedurelog.MedicalCode,procedurelog.PatNum,"
 					+"ProcCode,procedurelog.ProcDate,ProcFee,procedurelog.ProcNum,procedurelog.ProvNum,ToothNum,ToothRange,UnitQty ";
 			}
@@ -1439,6 +1444,9 @@ namespace OpenDentBusiness {
 					row["StatementNum"]="0";
 					row["tth"]="";
 					rows.Add(row);
+					if(d==rawAmort.Rows.Count-1){//last row
+						payPlanDue+=(double)rawAmort.Rows[d]["balanceDouble"];
+					}
 				}
 			}
 			for(int i=0;i<rows.Count;i++) {
@@ -1557,6 +1565,11 @@ namespace OpenDentBusiness {
 			if(raw.Rows.Count==1){
 				row["value"]=PIn.PString(raw.Rows[0][0].ToString());
 			}
+			rows.Add(row);
+			//payPlanDue-----------------------
+			row=table.NewRow();
+			row["descript"]="PayPlanDue";
+			row["value"]=POut.PDouble(payPlanDue);
 			rows.Add(row);
 			for(int i=0;i<rows.Count;i++) {
 				table.Rows.Add(rows[i]);

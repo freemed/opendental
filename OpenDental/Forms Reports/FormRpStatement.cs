@@ -611,7 +611,13 @@ namespace OpenDental{
 				if(!PrefC.GetBool("BalancesDontSubtractIns")) {//this is typical
 					balTotal-=PatGuar.InsEst;
 				}
-				balTotal+=PatGuar.PayPlanDue;
+				DataTable tableMisc=dataSet.Tables["misc"];
+				for(int m=0;m<tableMisc.Rows.Count;m++){
+					if(tableMisc.Rows[m]["descript"].ToString()=="PayPlanDue"){
+						balTotal+=PIn.PDouble(tableMisc.Rows[m]["value"].ToString());
+						//payPlanDue;//PatGuar.PayPlanDue;
+					}
+				}
 				text=balTotal.ToString("F");
 				cell=row.Cells[0];
 				par=cell.AddParagraph();
