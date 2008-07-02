@@ -47,7 +47,7 @@ namespace OpenDental{
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.listMain.Location = new System.Drawing.Point(16,12);
 			this.listMain.Name = "listMain";
-			this.listMain.Size = new System.Drawing.Size(618,667);
+			this.listMain.Size = new System.Drawing.Size(418,433);
 			this.listMain.TabIndex = 4;
 			this.listMain.DoubleClick += new System.EventHandler(this.listMain_DoubleClick);
 			// 
@@ -60,7 +60,7 @@ namespace OpenDental{
 			this.butClose.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butClose.CornerRadius = 4F;
 			this.butClose.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.butClose.Location = new System.Drawing.Point(562,705);
+			this.butClose.Location = new System.Drawing.Point(362,473);
 			this.butClose.Name = "butClose";
 			this.butClose.Size = new System.Drawing.Size(75,26);
 			this.butClose.TabIndex = 3;
@@ -77,7 +77,7 @@ namespace OpenDental{
 			this.butAdd.CornerRadius = 4F;
 			this.butAdd.Image = global::OpenDental.Properties.Resources.Add;
 			this.butAdd.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butAdd.Location = new System.Drawing.Point(16,704);
+			this.butAdd.Location = new System.Drawing.Point(16,472);
 			this.butAdd.Name = "butAdd";
 			this.butAdd.Size = new System.Drawing.Size(79,26);
 			this.butAdd.TabIndex = 10;
@@ -88,7 +88,7 @@ namespace OpenDental{
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.CancelButton = this.butClose;
-			this.ClientSize = new System.Drawing.Size(653,747);
+			this.ClientSize = new System.Drawing.Size(453,515);
 			this.Controls.Add(this.butAdd);
 			this.Controls.Add(this.butClose);
 			this.Controls.Add(this.listMain);
@@ -99,8 +99,8 @@ namespace OpenDental{
 			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Dental School Courses";
-			this.Closing += new System.ComponentModel.CancelEventHandler(this.FormSchoolCourses_Closing);
 			this.Load += new System.EventHandler(this.FormSchoolCourses_Load);
+			this.Closing += new System.ComponentModel.CancelEventHandler(this.FormSchoolCourses_Closing);
 			this.ResumeLayout(false);
 
 		}
