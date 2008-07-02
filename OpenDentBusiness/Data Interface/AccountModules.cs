@@ -415,9 +415,9 @@ namespace OpenDentBusiness {
 			double amt;
 			string command;
 			//claimprocs (ins payments)----------------------------------------------------------------------------
-			command="SELECT ClaimNum,ClaimPaymentNum,DateCP,SUM(InsPayAmt) _InsPayAmt,PatNum,ProcDate,"
-				+"ProvNum,SUM(WriteOff) _WriteOff,"
-				+"(SELECT ProvBill FROM claim WHERE claimproc.ClaimNum=claim.ClaimNum) _provNum "
+			command="SELECT ClaimNum,ClaimPaymentNum,DateCP,SUM(InsPayAmt) InsPayAmt_,PatNum,ProcDate,"
+				+"ProvNum,SUM(WriteOff) WriteOff_,"
+				+"(SELECT ProvBill FROM claim WHERE claimproc.ClaimNum=claim.ClaimNum) provNum_ "
 				+"FROM claimproc "
 				+"WHERE (Status=1 OR Status=4 OR Status=5) "//received or supplemental or capclaim
 				+"AND (WriteOff>0 OR InsPayAmt!=0) "
@@ -447,8 +447,8 @@ namespace OpenDentBusiness {
 				row["ClaimPaymentNum"]="1";//this is now just a boolean flag indicating that it is a payment.
 				//this is because it will frequently not be attached to an actual claim payment.
 				row["colorText"]=DefC.Long[(int)DefCat.AccountColors][7].ItemColor.ToArgb().ToString();
-				amt=PIn.PDouble(rawClaimPay.Rows[i]["_InsPayAmt"].ToString());
-				writeoff=PIn.PDouble(rawClaimPay.Rows[i]["_WriteOff"].ToString());
+				amt=PIn.PDouble(rawClaimPay.Rows[i]["InsPayAmt_"].ToString());
+				writeoff=PIn.PDouble(rawClaimPay.Rows[i]["WriteOff_"].ToString());
 				row["creditsDouble"]=amt+writeoff;
 				row["credits"]=((double)row["creditsDouble"]).ToString("n");
 				dateT=PIn.PDateT(rawClaimPay.Rows[i]["DateCP"].ToString());
@@ -469,7 +469,7 @@ namespace OpenDentBusiness {
 				row["ProcCode"]=Lan.g("AccountModule","InsPay");
 				row["ProcNum"]="0";
 				row["procsOnObj"]="";
-				row["prov"]=Providers.GetAbbr(PIn.PInt(rawClaimPay.Rows[i]["_provNum"].ToString()));
+				row["prov"]=Providers.GetAbbr(PIn.PInt(rawClaimPay.Rows[i]["provNum_"].ToString()));
 				row["StatementNum"]="0";
 				row["tth"]="";
 				rows.Add(row);
@@ -665,7 +665,7 @@ namespace OpenDentBusiness {
 				+"p.PayType,ps.ProcDate,"
 				+"'' ProcNums_, "
 				+"ps.ProvNum,0 splitAmt_,p.PayNote,"
-				+"ps.ProcNum,ps.SplitAmt "//Columns added at the end of the select for Oracle only.
+				+"0 Keep,ps.ProcNum,ps.SplitAmt "//Columns added at the end of the select for Oracle only.
 				+"FROM paysplit ps "
 				+"LEFT JOIN payment p ON ps.PayNum=p.PayNum "
 				+"WHERE (";
@@ -676,40 +676,37 @@ namespace OpenDentBusiness {
 					command+="ps.PatNum ="+POut.PInt(fam.List[i].PatNum)+" ";
 				}
 				command+=") ORDER BY ps.PayNum,ps.PatNum,ps.ProcDate";
-				DataTable rawPayOrder=dcon.GetTable(command);
-				rawPay=rawPayOrder.Clone();//To get the column information.
-				rawPay.Rows.Clear();//To get a blank table to fill in the group-by results with.
-				ArrayList rawPayRows=new ArrayList();
-				for(int i=0;i<rawPay.Rows.Count;i++){
-					int j=i+1;
-					int k=i;//Used to choose the row with the lowest ps.ProcDate, as done in the MySQL command above.
+				rawPay=dcon.GetTable(command);
+				for(int i=0,j,k;i<rawPay.Rows.Count;i=j){
+					j=i+1;
+					k=i;//Used to choose the row with the lowest ps.ProcDate, as done in the MySQL command above.
 					string procNums="";
 					double splitAmt=0;
 					do{
-						procNums+=PIn.PInt(rawPayOrder.Rows[j-1]["ps.ProcNum"].ToString()).ToString();
-						splitAmt+=PIn.PDouble(rawPayOrder.Rows[j-1]["ps.SplitAmt"].ToString());
-						if(j>=rawPayOrder.Rows.Count){
+						procNums+=PIn.PInt(rawPay.Rows[j-1]["ps.ProcNum"].ToString()).ToString();
+						splitAmt+=PIn.PDouble(rawPay.Rows[j-1]["ps.SplitAmt"].ToString());
+						if(j>=rawPay.Rows.Count){
 							break;
 						}
-						if(rawPayOrder.Rows[j]["ps.PayNum"].ToString()!=rawPayOrder.Rows[j-1]["PayNum"].ToString() ||
-							rawPayOrder.Rows[j]["ps.PatNum"].ToString()!=rawPayOrder.Rows[j-1]["PatNum"].ToString() ||
-							rawPayOrder.Rows[j]["ps.ProcDate"].ToString()!=rawPayOrder.Rows[j-1]["ProcDate"].ToString()){
+						if(rawPay.Rows[j]["ps.PayNum"].ToString()!=rawPay.Rows[j-1]["PayNum"].ToString() ||
+							rawPay.Rows[j]["ps.PatNum"].ToString()!=rawPay.Rows[j-1]["PatNum"].ToString() ||
+							rawPay.Rows[j]["ps.ProcDate"].ToString()!=rawPay.Rows[j-1]["ProcDate"].ToString()){
 							break;
 						}
-						if(PIn.PDate(rawPayOrder.Rows[j]["ProcDate"].ToString())<PIn.PDate(rawPayOrder.Rows[j-1]["ProcDate"].ToString())){
+						if(PIn.PDate(rawPay.Rows[j]["ProcDate"].ToString())<PIn.PDate(rawPay.Rows[j-1]["ProcDate"].ToString())){
 							k=j;
 						}
 						procNums+=",";
 						j++;
 					}while(true);
-					rawPayOrder.Rows[k]["ProcNums_"]=POut.PString(procNums);
-					rawPayOrder.Rows[k]["splitAmt_"]=POut.PDouble(splitAmt);
-					rawPayRows.Add(rawPayOrder.Rows[k]);
-					i=j;
+					rawPay.Rows[k]["Keep"]=1;
+					rawPay.Rows[k]["ProcNums_"]=POut.PString(procNums);
+					rawPay.Rows[k]["splitAmt_"]=POut.PDouble(splitAmt);
 				}
-				rawPayOrder.Dispose();
-				for(int i=0;i<rawPayRows.Count;i++){
-					rawPay.Rows.Add(rawPayRows[i]);
+				for(int i=0;i<rawPay.Rows.Count;i++){
+					if(rawPay.Rows[i]["Keep"].ToString()!="1"){
+						rawPay.Rows.RemoveAt(i--);
+					}
 				}
 			}
 			double payamt;
@@ -789,7 +786,7 @@ namespace OpenDentBusiness {
 					+"claim.InsPayAmt,claim.PatNum,0 procAmt_,"
 					+"'' ProcNums_,ProvTreat,"
 					+"claim.ReasonUnderPaid,claim.WriteOff,"
-					+"claimproc.ProcNum,ProcFee "//For Oracle GROUP_CONCAT() functionality mimic.
+					+"0 Keep,claimproc.ProcNum,ProcFee "//For Oracle GROUP_CONCAT() functionality mimic.
 					+"FROM claim "
 					+"LEFT JOIN insplan ON claim.PlanNum=insplan.PlanNum "
 					+"LEFT JOIN carrier ON carrier.CarrierNum=insplan.CarrierNum "
@@ -803,37 +800,35 @@ namespace OpenDentBusiness {
 					command+="claim.PatNum ="+POut.PInt(fam.List[i].PatNum)+" ";
 				}
 				command+=") ORDER BY claim.ClaimNum";
-				DataTable rawClaimOrder=dcon.GetTable(command);
-				rawClaim=rawClaimOrder.Clone();
-				rawClaim.Rows.Clear();
-				ArrayList rawClaimRows=new ArrayList();
-				for(int i=0;i<rawClaimOrder.Rows.Count;i++){
-					int j=i+1;
-					int k=i;
+				rawClaim=dcon.GetTable(command);
+				for(int i=0,j,k;i<rawClaim.Rows.Count;i=j){
+					j=i+1;
+					k=i;
 					string procNums="";
 					double procAmtTotal=0;
 					do{
-						procNums+=PIn.PInt(rawClaimOrder.Rows[j-1]["ProcNum"].ToString()).ToString();
-						procAmtTotal+=PIn.PDouble(rawClaimOrder.Rows[j-1]["ProcFee"].ToString());
-						if(j>=rawClaimOrder.Rows.Count){
+						procNums+=PIn.PInt(rawClaim.Rows[j-1]["ProcNum"].ToString()).ToString();
+						procAmtTotal+=PIn.PDouble(rawClaim.Rows[j-1]["ProcFee"].ToString());
+						if(j>=rawClaim.Rows.Count){
 							break;
 						}
-						if(rawClaimOrder.Rows[j]["ClaimNum"].ToString()!=rawClaimOrder.Rows[j-1]["ClaimNum"].ToString()){
+						if(rawClaim.Rows[j]["ClaimNum"].ToString()!=rawClaim.Rows[j-1]["ClaimNum"].ToString()){
 							break;
 						}
-						if(PIn.PDate(rawClaimOrder.Rows[j]["DateService"].ToString())<PIn.PDate(rawClaimOrder.Rows[j-1]["DateService"].ToString())){
+						if(PIn.PDate(rawClaim.Rows[j]["DateService"].ToString())<PIn.PDate(rawClaim.Rows[j-1]["DateService"].ToString())){
 							k=j;
 						}
 						procNums+=",";
 						j++;
 					}while(true);
-					rawClaimOrder.Rows[k]["ProcNums_"]=procNums;
-					rawClaimOrder.Rows[k]["procAmt_"]=procAmtTotal;
-					rawClaimRows.Add(rawClaimOrder.Rows[k]);
+					rawClaim.Rows[k]["Keep"]=1;
+					rawClaim.Rows[k]["ProcNums_"]=procNums;
+					rawClaim.Rows[k]["procAmt_"]=procAmtTotal;
 				}
-				rawClaimOrder.Dispose();
-				for(int i=0;i<rawClaimRows.Count;i++){
-					rawClaim.Rows.Add(rawClaimRows[i]);
+				for(int i=0;i<rawClaim.Rows.Count;i++){
+					if(rawClaim.Rows[i]["Keep"].ToString()!="1"){
+						rawClaim.Rows.RemoveAt(i--);
+					}
 				}
 			}
 			DateTime daterec;
@@ -1311,7 +1306,7 @@ namespace OpenDentBusiness {
 				paid=0;
 				for(int p=0;p<rawPay.Rows.Count;p++){
 					if(rawPay.Rows[p]["PayPlanNum"].ToString()==rawPayPlan.Rows[i]["PayPlanNum"].ToString()){
-						paid+=PIn.PDouble(rawPay.Rows[p]["_splitAmt"].ToString());
+						paid+=PIn.PDouble(rawPay.Rows[p]["splitAmt_"].ToString());
 					}
 				}
 				princ=PIn.PDouble(rawPayPlan.Rows[i]["principal_"].ToString());
