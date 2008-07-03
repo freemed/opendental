@@ -235,6 +235,8 @@ namespace OpenDental {
 			Application.DoEvents();
 			ClaimPaymentDeleteWithNoSplits();
 			Application.DoEvents();
+			ClaimProcDateNotMatchCapComplete();
+			Application.DoEvents();
 			ClaimProcDateNotMatchPayment();
 			Application.DoEvents();
 			ClaimProcDeleteWithInvalidClaimNum();
@@ -877,6 +879,14 @@ namespace OpenDental {
 			int numberFixed=General.NonQ(command);
 			if(numberFixed>0 || checkShow.Checked) {
 				textLog.Text+=Lan.g(this,"Claim payments with no splits removed: ")+numberFixed.ToString()+"\r\n";
+			}
+		}
+
+		private void ClaimProcDateNotMatchCapComplete() {
+			command="UPDATE claimproc SET DateCP=ProcDate WHERE Status=7";
+			int numberFixed=General.NonQ(command);
+			if(numberFixed>0 || checkShow.Checked) {
+				textLog.Text+=Lan.g(this,"Capitation procs with mismatched dates fixed: ")+numberFixed.ToString()+"\r\n";
 			}
 		}
 
