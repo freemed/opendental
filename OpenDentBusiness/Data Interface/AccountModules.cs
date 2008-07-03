@@ -33,7 +33,7 @@ namespace OpenDentBusiness {
 			//Gets 3 tables: account(or account###,account###,etc), patient, payplan.
 			GetAccount(patNum,fromDate,toDate,intermingled,singlePatient,false);
 			//GetPayPlans(patNum,fromDate,toDate,isFamily);
-			GetMisc(fam);//table = misc.  Just holds a few bits of info that we can't find anywhere else.
+			GetMisc(fam,patNum);//table = misc.  Just holds a few bits of info that we can't find anywhere else.
 			return retVal;
 		}
 
@@ -62,7 +62,7 @@ namespace OpenDentBusiness {
 			GetAccount(patNum,fromDate,toDate,intermingled,singlePatient,true);
 			//GetPayPlans(patNum,fromDate,toDate,isFamily);
 			GetApptTable(fam,singlePatient,patNum);//table= appts
-			GetMisc(fam);
+			GetMisc(fam,patNum);
 			return retVal;
 		}
 
@@ -1548,7 +1548,7 @@ namespace OpenDentBusiness {
 			retVal.Tables.Add(table);
 		}
 
-		private static void GetMisc(Family fam){
+		private static void GetMisc(Family fam,int patNum){
 			DataTable table=new DataTable("misc");
 			DataRow row;
 			table.Columns.Add("descript");
@@ -1568,9 +1568,19 @@ namespace OpenDentBusiness {
 			rows.Add(row);
 			//payPlanDue-----------------------
 			row=table.NewRow();
-			row["descript"]="PayPlanDue";
+			row["descript"]="payPlanDue";
 			row["value"]=POut.PDouble(payPlanDue);
 			rows.Add(row);
+			//patInsEst
+			command="SELECT SUM(inspayest+writeoff) FROM claimproc "
+				+"WHERE status = 0 "//not received
+				+"AND PatNum="+POut.PInt(patNum);
+			raw=General.GetTable(command);
+			row=table.NewRow();
+			row["descript"]="patInsEst";
+			row["value"]=raw.Rows[0][0].ToString();
+			rows.Add(row);
+			//final prep:
 			for(int i=0;i<rows.Count;i++) {
 				table.Rows.Add(rows[i]);
 			}

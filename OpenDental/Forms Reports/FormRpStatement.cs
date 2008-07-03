@@ -613,7 +613,7 @@ namespace OpenDental{
 				}
 				DataTable tableMisc=dataSet.Tables["misc"];
 				for(int m=0;m<tableMisc.Rows.Count;m++){
-					if(tableMisc.Rows[m]["descript"].ToString()=="PayPlanDue"){
+					if(tableMisc.Rows[m]["descript"].ToString()=="payPlanDue"){
 						balTotal+=PIn.PDouble(tableMisc.Rows[m]["value"].ToString());
 						//payPlanDue;//PatGuar.PayPlanDue;
 					}
@@ -1144,7 +1144,14 @@ namespace OpenDental{
 				par.Format.Font=MigraDocHelper.CreateFont(10,true);
 				par.Format.Alignment=ParagraphAlignment.Right;
 				par.Format.RightIndent=Unit.FromInch(0.25);
-				par.AddText(Lan.g(this,"Payment Plan Amount Due: ")+PatGuar.PayPlanDue.ToString("c"));
+				double payPlanDue=0;
+				DataTable tableMisc=dataSet.Tables["misc"];
+				for(int m=0;m<tableMisc.Rows.Count;m++){
+					if(tableMisc.Rows[m]["descript"].ToString()=="payPlanDue"){
+						payPlanDue=PIn.PDouble(tableMisc.Rows[m]["value"].ToString());
+					}
+				}
+				par.AddText(Lan.g(this,"Payment Plan Amount Due: ")+payPlanDue.ToString("c"));//PatGuar.PayPlanDue.ToString("c"));
 				MigraDocHelper.InsertSpacer(section,10);
 			}
 			#endregion PayPlan grid
