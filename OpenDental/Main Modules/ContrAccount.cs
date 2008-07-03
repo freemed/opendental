@@ -1941,7 +1941,7 @@ namespace OpenDental {
 			gridAcctPat.Columns.Clear();
 			ODGridColumn col=new ODGridColumn(Lan.g("TableAccountPat","Patient"),105);
 			gridAcctPat.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TableAccountPat","Est Bal"),49,HorizontalAlignment.Right);
+			col=new ODGridColumn(Lan.g("TableAccountPat","Bal"),49,HorizontalAlignment.Right);
 			gridAcctPat.Columns.Add(col);
 			gridAcctPat.Rows.Clear();
 			ODGridRow row;
@@ -2051,7 +2051,7 @@ namespace OpenDental {
 					labelTotalAmt.ForeColor = Color.Black;
 					panelAgeLine.Visible=false;
 					labelInsEst.Text=Lan.g(this,"-InsEst");
-					labelBalance.Text=Lan.g(this,"=Balance");
+					labelBalance.Text=Lan.g(this,"=Est Bal");
 					labelBalanceAmt.Font=fontBold;
 					labelBalanceAmt.ForeColor=Color.Firebrick;
 					if(PrefC.GetBool("FuchsOptionsOn")){
