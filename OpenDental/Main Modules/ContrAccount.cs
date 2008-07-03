@@ -133,8 +133,6 @@ namespace OpenDental {
 		private Label labelInsEstAmt;
 		private Panel panelAgeLine;
 		private Label labelInsLeftAmt;
-		private Label labelPPAst2;
-		private Label labelPPAst1;
 		private Panel panel2;
 		private Panel panel1;
 		private Panel panelPayPlanTotals;
@@ -231,15 +229,16 @@ namespace OpenDental {
 			this.gridProg = new OpenDental.UI.ODGrid();
 			this.panelAging = new System.Windows.Forms.Panel();
 			this.panelPayPlanTotals = new System.Windows.Forms.Panel();
+			this.panelTotalOwes = new System.Windows.Forms.Panel();
 			this.labelPPStatus = new System.Windows.Forms.Label();
+			this.label21 = new System.Windows.Forms.Label();
+			this.labelTotalPtOwes = new System.Windows.Forms.Label();
 			this.labelPayPlanDue = new System.Windows.Forms.Label();
 			this.labelPayPlanBal = new System.Windows.Forms.Label();
 			this.label10 = new System.Windows.Forms.Label();
 			this.label8 = new System.Windows.Forms.Label();
 			this.panel2 = new System.Windows.Forms.Panel();
 			this.panel1 = new System.Windows.Forms.Panel();
-			this.labelPPAst2 = new System.Windows.Forms.Label();
-			this.labelPPAst1 = new System.Windows.Forms.Label();
 			this.labelInsLeftAmt = new System.Windows.Forms.Label();
 			this.panelAgeLine = new System.Windows.Forms.Panel();
 			this.labelInsEstAmt = new System.Windows.Forms.Label();
@@ -311,9 +310,6 @@ namespace OpenDental {
 			this.gridAccount = new OpenDental.UI.ODGrid();
 			this.gridComm = new OpenDental.UI.ODGrid();
 			this.ToolBarMain = new OpenDental.UI.ODToolBar();
-			this.labelTotalPtOwes = new System.Windows.Forms.Label();
-			this.label21 = new System.Windows.Forms.Label();
-			this.panelTotalOwes = new System.Windows.Forms.Panel();
 			this.timerPayPlan = new System.Windows.Forms.Timer(this.components);
 			this.panelCommButs.SuspendLayout();
 			this.panelProgNotes.SuspendLayout();
@@ -321,12 +317,12 @@ namespace OpenDental {
 			this.groupBox6.SuspendLayout();
 			this.panelAging.SuspendLayout();
 			this.panelPayPlanTotals.SuspendLayout();
+			this.panelTotalOwes.SuspendLayout();
 			this.panelCC.SuspendLayout();
 			this.tabControl1.SuspendLayout();
 			this.tabMain.SuspendLayout();
 			this.tabShow.SuspendLayout();
 			this.panelInsInfoDetail.SuspendLayout();
-			this.panelTotalOwes.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// labelFamFinancial
@@ -719,8 +715,6 @@ namespace OpenDental {
 			this.panelAging.Controls.Add(this.panelPayPlanTotals);
 			this.panelAging.Controls.Add(this.panel2);
 			this.panelAging.Controls.Add(this.panel1);
-			this.panelAging.Controls.Add(this.labelPPAst2);
-			this.panelAging.Controls.Add(this.labelPPAst1);
 			this.panelAging.Controls.Add(this.labelInsLeftAmt);
 			this.panelAging.Controls.Add(this.panelAgeLine);
 			this.panelAging.Controls.Add(this.labelInsEstAmt);
@@ -756,6 +750,16 @@ namespace OpenDental {
 			this.panelPayPlanTotals.Size = new System.Drawing.Size(126,37);
 			this.panelPayPlanTotals.TabIndex = 89;
 			// 
+			// panelTotalOwes
+			// 
+			this.panelTotalOwes.Controls.Add(this.labelPPStatus);
+			this.panelTotalOwes.Controls.Add(this.label21);
+			this.panelTotalOwes.Controls.Add(this.labelTotalPtOwes);
+			this.panelTotalOwes.Location = new System.Drawing.Point(0,1);
+			this.panelTotalOwes.Name = "panelTotalOwes";
+			this.panelTotalOwes.Size = new System.Drawing.Size(126,37);
+			this.panelTotalOwes.TabIndex = 224;
+			// 
 			// labelPPStatus
 			// 
 			this.labelPPStatus.Location = new System.Drawing.Point(1,0);
@@ -764,6 +768,28 @@ namespace OpenDental {
 			this.labelPPStatus.TabIndex = 94;
 			this.labelPPStatus.Text = "No\r\nPayment Plans";
 			this.labelPPStatus.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+			// 
+			// label21
+			// 
+			this.label21.Location = new System.Drawing.Point(3,0);
+			this.label21.Name = "label21";
+			this.label21.Size = new System.Drawing.Size(123,12);
+			this.label21.TabIndex = 223;
+			this.label21.Text = "TOTAL Patient Owes:";
+			this.label21.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+			this.toolTip1.SetToolTip(this.label21,"Total balance owed on all payment plans ");
+			// 
+			// labelTotalPtOwes
+			// 
+			this.labelTotalPtOwes.Font = new System.Drawing.Font("Microsoft Sans Serif",14.25F,System.Drawing.FontStyle.Bold,System.Drawing.GraphicsUnit.Point,((byte)(0)));
+			this.labelTotalPtOwes.ForeColor = System.Drawing.Color.Firebrick;
+			this.labelTotalPtOwes.Location = new System.Drawing.Point(6,12);
+			this.labelTotalPtOwes.Name = "labelTotalPtOwes";
+			this.labelTotalPtOwes.Size = new System.Drawing.Size(112,23);
+			this.labelTotalPtOwes.TabIndex = 222;
+			this.labelTotalPtOwes.Text = "2500.00";
+			this.labelTotalPtOwes.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+			this.labelTotalPtOwes.MouseEnter += new System.EventHandler(this.labelTotalPtOwes_MouseEnter);
 			// 
 			// labelPayPlanDue
 			// 
@@ -823,30 +849,6 @@ namespace OpenDental {
 			this.panel1.Name = "panel1";
 			this.panel1.Size = new System.Drawing.Size(2,32);
 			this.panel1.TabIndex = 86;
-			// 
-			// labelPPAst2
-			// 
-			this.labelPPAst2.Font = new System.Drawing.Font("Microsoft Sans Serif",18F,System.Drawing.FontStyle.Regular,System.Drawing.GraphicsUnit.Point,((byte)(0)));
-			this.labelPPAst2.ForeColor = System.Drawing.Color.Firebrick;
-			this.labelPPAst2.Location = new System.Drawing.Point(543,-2);
-			this.labelPPAst2.Name = "labelPPAst2";
-			this.labelPPAst2.Size = new System.Drawing.Size(15,14);
-			this.labelPPAst2.TabIndex = 85;
-			this.labelPPAst2.Text = "*";
-			this.labelPPAst2.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-			this.toolTip1.SetToolTip(this.labelPPAst2,"Payment plan is active on this account");
-			// 
-			// labelPPAst1
-			// 
-			this.labelPPAst1.Font = new System.Drawing.Font("Microsoft Sans Serif",18F,System.Drawing.FontStyle.Regular,System.Drawing.GraphicsUnit.Point,((byte)(0)));
-			this.labelPPAst1.ForeColor = System.Drawing.Color.Firebrick;
-			this.labelPPAst1.Location = new System.Drawing.Point(380,-2);
-			this.labelPPAst1.Name = "labelPPAst1";
-			this.labelPPAst1.Size = new System.Drawing.Size(18,14);
-			this.labelPPAst1.TabIndex = 84;
-			this.labelPPAst1.Text = "*";
-			this.labelPPAst1.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-			this.toolTip1.SetToolTip(this.labelPPAst1,"Payment plan is active on this account");
 			// 
 			// labelInsLeftAmt
 			// 
@@ -1599,38 +1601,6 @@ namespace OpenDental {
 			this.ToolBarMain.TabIndex = 47;
 			this.ToolBarMain.ButtonClick += new OpenDental.UI.ODToolBarButtonClickEventHandler(this.ToolBarMain_ButtonClick);
 			// 
-			// labelTotalPtOwes
-			// 
-			this.labelTotalPtOwes.Font = new System.Drawing.Font("Microsoft Sans Serif",14.25F,System.Drawing.FontStyle.Bold,System.Drawing.GraphicsUnit.Point,((byte)(0)));
-			this.labelTotalPtOwes.ForeColor = System.Drawing.Color.Firebrick;
-			this.labelTotalPtOwes.Location = new System.Drawing.Point(6,12);
-			this.labelTotalPtOwes.Name = "labelTotalPtOwes";
-			this.labelTotalPtOwes.Size = new System.Drawing.Size(112,23);
-			this.labelTotalPtOwes.TabIndex = 222;
-			this.labelTotalPtOwes.Text = "2500.00";
-			this.labelTotalPtOwes.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-			this.labelTotalPtOwes.MouseEnter += new System.EventHandler(this.labelTotalPtOwes_MouseEnter);
-			// 
-			// label21
-			// 
-			this.label21.Location = new System.Drawing.Point(3,0);
-			this.label21.Name = "label21";
-			this.label21.Size = new System.Drawing.Size(123,12);
-			this.label21.TabIndex = 223;
-			this.label21.Text = "TOTAL Patient Owes:";
-			this.label21.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-			this.toolTip1.SetToolTip(this.label21,"Total balance owed on all payment plans ");
-			// 
-			// panelTotalOwes
-			// 
-			this.panelTotalOwes.Controls.Add(this.labelPPStatus);
-			this.panelTotalOwes.Controls.Add(this.label21);
-			this.panelTotalOwes.Controls.Add(this.labelTotalPtOwes);
-			this.panelTotalOwes.Location = new System.Drawing.Point(0,1);
-			this.panelTotalOwes.Name = "panelTotalOwes";
-			this.panelTotalOwes.Size = new System.Drawing.Size(126,37);
-			this.panelTotalOwes.TabIndex = 224;
-			// 
 			// timerPayPlan
 			// 
 			this.timerPayPlan.Interval = 5000;
@@ -1661,6 +1631,7 @@ namespace OpenDental {
 			this.panelAging.ResumeLayout(false);
 			this.panelAging.PerformLayout();
 			this.panelPayPlanTotals.ResumeLayout(false);
+			this.panelTotalOwes.ResumeLayout(false);
 			this.panelCC.ResumeLayout(false);
 			this.panelCC.PerformLayout();
 			this.tabControl1.ResumeLayout(false);
@@ -1670,7 +1641,6 @@ namespace OpenDental {
 			this.tabShow.PerformLayout();
 			this.panelInsInfoDetail.ResumeLayout(false);
 			this.panelInsInfoDetail.PerformLayout();
-			this.panelTotalOwes.ResumeLayout(false);
 			this.ResumeLayout(false);
 
 		}
@@ -2127,8 +2097,6 @@ namespace OpenDental {
 		private void FillPaymentPlans(){
 			if(PatCur==null) {
 				gridPayPlan.Visible=false;
-				labelPPAst1.Visible = false;
-				labelPPAst2.Visible = false;
 				panelPayPlanTotals.Visible = false;
 				return;
 			}
@@ -2136,8 +2104,6 @@ namespace OpenDental {
 			panelPayPlanTotals.Visible = true;
 			if (table.Rows.Count == 0) {
 				gridPayPlan.Visible=false;
-				labelPPAst1.Visible = false;
-				labelPPAst2.Visible = false;
 				labelPPStatus.Visible = true;
 				labelPPStatus.Text = "No\r\nPayment Plans";
 				return;
@@ -2194,39 +2160,21 @@ namespace OpenDental {
 				gridPayPlan.Rows.Add(row);
 				PPBalanceTotal += (Convert.ToDouble((table.Rows[i]["balance"]).ToString()));
 				PPDueTotal += (Convert.ToDouble((table.Rows[i]["due"]).ToString()));
-
 			}
 			gridPayPlan.EndUpdate();
-
 			labelPayPlanBal.Text = PPBalanceTotal.ToString("F");
 			labelPayPlanDue.Text =PPDueTotal.ToString("F");
 			labelTotalPtOwes.Text=(PPBalanceTotal + FamCur.List[0].BalTotal -FamCur.List[0].InsEst).ToString("F");
 			if (PPBalanceTotal == 0 && PPDueTotal == 0) {
-				labelPPAst1.Visible = false;
-				labelPPAst2.Visible = false;
 				labelPPStatus.Visible = true;
 				labelPPStatus.Text = "Payment Plans\r\nPaid Off";
 				return;
 			}
-			labelPPAst1.Visible = true;
-			labelPPAst2.Visible = true;
 			if (PPBalanceTotal != 0) {
 				labelPPStatus.Visible=false;
-				if (PrefC.GetBool("BalancesDontSubtractIns")) {
-					labelPPAst1.ForeColor = Color.Firebrick;
-				}
-				else {
-					labelPPAst1.ForeColor = Color.Black;
-				}
 			}
 			if (PPDueTotal!=0) {
 				labelPPStatus.Visible = false;
-				if (PrefC.GetBool("BalancesDontSubtractIns")) {
-					labelPPAst2.ForeColor = Color.Black;
-				}
-				else {
-					labelPPAst2.ForeColor = Color.Firebrick;
-				}
 			}
 		}
 
