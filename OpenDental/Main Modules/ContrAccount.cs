@@ -155,6 +155,7 @@ namespace OpenDental {
 		private bool CCChanged;
 		private bool UrgFinNoteChanged;
 		private int Actscrollval;
+		private Label labelPatEstBal;
 		///<summary>Set to true if this control is placed in the recall edit window. This affects the control behavior.</summary>
 		public bool ViewingInRecall=false;
 		#endregion UserVariables
@@ -180,6 +181,7 @@ namespace OpenDental {
 		private void InitializeComponent() {
 			this.components = new System.ComponentModel.Container();
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ContrAccount));
+			System.Windows.Forms.Label labelPatEstBalAmt;
 			this.labelFamFinancial = new System.Windows.Forms.Label();
 			this.labelUrgFinNote = new System.Windows.Forms.Label();
 			this.contextMenuIns = new System.Windows.Forms.ContextMenu();
@@ -291,6 +293,8 @@ namespace OpenDental {
 			this.butTrojan = new OpenDental.UI.Button();
 			this.butComm = new OpenDental.UI.Button();
 			this.ToolBarMain = new OpenDental.UI.ODToolBar();
+			this.labelPatEstBal = new System.Windows.Forms.Label();
+			labelPatEstBalAmt = new System.Windows.Forms.Label();
 			this.panelCommButs.SuspendLayout();
 			this.panelProgNotes.SuspendLayout();
 			this.groupBox7.SuspendLayout();
@@ -618,6 +622,8 @@ namespace OpenDental {
 			// 
 			// panelAging
 			// 
+			this.panelAging.Controls.Add(labelPatEstBalAmt);
+			this.panelAging.Controls.Add(this.labelPatEstBal);
 			this.panelAging.Controls.Add(this.panel2);
 			this.panelAging.Controls.Add(this.panel1);
 			this.panelAging.Controls.Add(this.labelInsLeftAmt);
@@ -646,7 +652,7 @@ namespace OpenDental {
 			// panel2
 			// 
 			this.panel2.BackColor = System.Drawing.SystemColors.ControlDark;
-			this.panel2.Location = new System.Drawing.Point(688,3);
+			this.panel2.Location = new System.Drawing.Point(685,3);
 			this.panel2.Name = "panel2";
 			this.panel2.Size = new System.Drawing.Size(2,32);
 			this.panel2.TabIndex = 87;
@@ -694,7 +700,7 @@ namespace OpenDental {
 			this.labelInsLeft.Name = "labelInsLeft";
 			this.labelInsLeft.Size = new System.Drawing.Size(59,13);
 			this.labelInsLeft.TabIndex = 82;
-			this.labelInsLeft.Text = "Ins. Left";
+			this.labelInsLeft.Text = "Ins Left";
 			this.labelInsLeft.TextAlign = System.Drawing.ContentAlignment.TopCenter;
 			this.labelInsLeft.MouseLeave += new System.EventHandler(this.labelInsLeft_MouseLeave);
 			this.labelInsLeft.MouseHover += new System.EventHandler(this.labelInsLeft_MouseHover);
@@ -713,7 +719,7 @@ namespace OpenDental {
 			// labelBalance
 			// 
 			this.labelBalance.Font = new System.Drawing.Font("Microsoft Sans Serif",8.25F,System.Drawing.FontStyle.Regular,System.Drawing.GraphicsUnit.Point,((byte)(0)));
-			this.labelBalance.Location = new System.Drawing.Point(463,1);
+			this.labelBalance.Location = new System.Drawing.Point(463,2);
 			this.labelBalance.Name = "labelBalance";
 			this.labelBalance.Size = new System.Drawing.Size(95,13);
 			this.labelBalance.TabIndex = 59;
@@ -1482,6 +1488,24 @@ namespace OpenDental {
 			this.ToolBarMain.TabIndex = 47;
 			this.ToolBarMain.ButtonClick += new OpenDental.UI.ODToolBarButtonClickEventHandler(this.ToolBarMain_ButtonClick);
 			// 
+			// labelPatEstBalAmt
+			// 
+			labelPatEstBalAmt.Location = new System.Drawing.Point(589,18);
+			labelPatEstBalAmt.Name = "labelPatEstBalAmt";
+			labelPatEstBalAmt.Size = new System.Drawing.Size(65,13);
+			labelPatEstBalAmt.TabIndex = 89;
+			labelPatEstBalAmt.Text = "25000.00";
+			labelPatEstBalAmt.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+			// 
+			// labelPatEstBal
+			// 
+			this.labelPatEstBal.Location = new System.Drawing.Point(589,2);
+			this.labelPatEstBal.Name = "labelPatEstBal";
+			this.labelPatEstBal.Size = new System.Drawing.Size(65,13);
+			this.labelPatEstBal.TabIndex = 88;
+			this.labelPatEstBal.Text = "Pat Est Bal";
+			this.labelPatEstBal.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+			// 
 			// ContrAccount
 			// 
 			this.Controls.Add(this.panelInsInfoDetail);
@@ -1873,6 +1897,7 @@ namespace OpenDental {
 				labelTotalAmt.Text=total.ToString("F");
 				labelInsEstAmt.Text=FamCur.List[0].InsEst.ToString("F");
 				labelBalanceAmt.Text = (total - FamCur.List[0].InsEst).ToString("f");
+				labelPatEstBalAmt.Text="";
 				labelInsLeft.Text=Lan.g(this,"Ins Left");
 				labelInsLeftAmt.Text="";//etc. Will be same for everyone
 				Font fontBold=new Font(FontFamily.GenericSansSerif,13,FontStyle.Bold);
@@ -1913,6 +1938,7 @@ namespace OpenDental {
 				labelTotalAmt.Text="";
 				labelInsEstAmt.Text="";
 				labelBalanceAmt.Text="";
+				labelPatEstBalAmt.Text="";
 				labelInsLeftAmt.Text="";
 			}
 		}
