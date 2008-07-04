@@ -1045,6 +1045,8 @@ namespace OpenDental{
 			for(int i=0;i<DefC.Short[(int)DefCat.ApptConfirmed].Length;i++){
 				this.listConfirmed.Items.Add(DefC.Short[(int)DefCat.ApptConfirmed][i].ItemValue);
 			}
+			//This is redundant and inefficient, but won't cause an actual bug.
+			//In all other modules, it only does this (triggers the OnPatientSelected) if the patient actually changes)
 			RefreshModulePatient(patNum);
 			RefreshPeriod();
 		}
