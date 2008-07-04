@@ -66,6 +66,7 @@ namespace OpenDental{
 		private OpenDental.UI.Button butSupply;
 		private Employee EmployeeCur;
 		private FormBilling FormB;
+		private int PatCurNum;
 
 		///<summary></summary>
 		public ContrStaff(){
@@ -657,8 +658,8 @@ namespace OpenDental{
 		}
 
 		///<summary></summary>
-		public void ModuleSelected(){
-			RefreshModuleData();
+		public void ModuleSelected(int patNum){
+			RefreshModuleData(patNum);
 			RefreshModuleScreen();
 		}
 
@@ -667,19 +668,31 @@ namespace OpenDental{
 			//this is not getting triggered yet.
 		}
 
-		private void RefreshModuleData(){
+		private void RefreshModuleData(int patNum){
 			TimeDelta=ClockEvents.GetServerTime()-DateTime.Now;
 			Employees.Refresh();
+			RefreshModulePatient(patNum);
 		}
 
 		private void RefreshModuleScreen(){
-			//ParentForm.Text=Patients.GetMainTitle(null);
 			textTime.Text=(DateTime.Now+TimeDelta).ToLongTimeString();
 			FillEmps();
 			FillMessageDefs();
 		}
 
-		///<summary></summary>
+		///<summary>Here so it's parallel with other modules.</summary>
+		private void RefreshModulePatient(int patNum){
+			PatCurNum=patNum;
+			if(patNum==0){
+				OnPatientSelected(patNum,"",false,"");
+			}
+			else{
+				Patient pat=Patients.GetPat(patNum);
+				OnPatientSelected(patNum,pat.GetNameLF(),pat.Email!="",pat.ChartNumber);
+			}
+		}
+
+		///<summary>Sends the PatientSelected event on up to the main form.  The only result is that the main window now knows the new patNum and patName.  Does nothing else.  Does not trigger any other methods to run which might cause a loop.  Only called from RefreshModulePatient, but it's separate so that it's the same as in the other modules.</summary>
 		private void OnPatientSelected(int patNum,string patName,bool hasEmail,string chartNumber){
 			PatientSelectedEventArgs eArgs=new OpenDental.PatientSelectedEventArgs(patNum,patName,hasEmail,chartNumber);
 			if(PatientSelected!=null){
@@ -764,7 +777,7 @@ namespace OpenDental{
 			OnPatientSelected(0,"",false,"");
 			//ParentForm.Text=PrefC.GetString("MainWindowTitle");
 			DataValid.SetInvalid(true);
-			ModuleSelected();
+			ModuleSelected(PatCurNum);
 		}
 
 		private void butTasks_Click(object sender, System.EventArgs e) {
@@ -898,7 +911,7 @@ namespace OpenDental{
 			ClockEvents.Insert(ce);
 			EmployeeCur.ClockStatus=Lan.g(this,"Working");;
 			Employees.Update(EmployeeCur);
-			ModuleSelected();
+			ModuleSelected(PatCurNum);
 		}
 
 		private void butClockOut_Click(object sender, System.EventArgs e) {
@@ -915,7 +928,7 @@ namespace OpenDental{
 			ClockEvents.Insert(ce);
 			EmployeeCur.ClockStatus=Lan.g("enumTimeClockStatus",ce.ClockStatus.ToString());
 			Employees.Update(EmployeeCur);
-			ModuleSelected();
+			ModuleSelected(PatCurNum);
 		}
 
 		private void timer1_Tick(object sender, System.EventArgs e) {
@@ -933,7 +946,7 @@ namespace OpenDental{
 			FormTimeCard FormTC=new FormTimeCard();
 			FormTC.EmployeeCur=EmployeeCur;
 			FormTC.ShowDialog();
-			ModuleSelected();
+			ModuleSelected(PatCurNum);
 		}
 
 		private void butBreaks_Click(object sender,EventArgs e) {
@@ -945,7 +958,7 @@ namespace OpenDental{
 			FormTC.EmployeeCur=EmployeeCur;
 			FormTC.IsBreaks=true;
 			FormTC.ShowDialog();
-			ModuleSelected();
+			ModuleSelected(PatCurNum);
 		}
 
 		#region Messaging

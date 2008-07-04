@@ -187,6 +187,7 @@ namespace OpenDental{
 				PatCur=null;
 				FamCur=null;
 				PatPlanList=new PatPlan[0]; 
+				RefreshModulePatient(PatCur);
 				return;
 			}
 			FamCur=Patients.GetFamily(patNum);
@@ -196,6 +197,7 @@ namespace OpenDental{
 			BenefitList=Benefits.Refresh(PatPlanList);
 			RecallList=Recalls.GetList(FamCur.List);
 			PatFieldList=PatFields.Refresh(patNum);
+			RefreshModulePatient(PatCur);
 		}
 
 		private void RefreshModuleScreen(){
@@ -354,6 +356,18 @@ namespace OpenDental{
 		}
 
 		///<summary></summary>
+		private void RefreshModulePatient(Patient PatCur){
+			//PatCurNum=patNum;
+			if(PatCur==null){
+				OnPatientSelected(0,"",false,"");
+			}
+			else{
+				//Patient pat=Patients.GetPat(patNum);
+				OnPatientSelected(PatCur.PatNum,PatCur.GetNameLF(),PatCur.Email!="",PatCur.ChartNumber);
+			}
+		}
+
+		///<summary></summary>
 		private void OnPatientSelected(int patNum,string patName,bool hasEmail,string chartNumber){
 			PatientSelectedEventArgs eArgs=new OpenDental.PatientSelectedEventArgs(patNum,patName,hasEmail,chartNumber);
 			if(PatientSelected!=null){
@@ -422,9 +436,10 @@ namespace OpenDental{
 				FormPatientEdit FormP=new FormPatientEdit(PatCur,FamCur);
 				FormP.IsNew=false;
 				FormP.ShowDialog();
-				if(email!=PatCur.Email){//PatCur.EmailChanged){//do it this way later
-					OnPatientSelected(PatCur.PatNum,PatCur.GetNameLF(),PatCur.Email!="",PatCur.ChartNumber);
-				}
+				//redundant.  This will happen in ModuleSelected
+				//if(email!=PatCur.Email){//PatCur.EmailChanged){//do it this way later
+				//	OnPatientSelected(PatCur.PatNum,PatCur.GetNameLF(),PatCur.Email!="",PatCur.ChartNumber);
+				//}
 			}
 			ModuleSelected(PatCur.PatNum);
 		}
@@ -777,8 +792,9 @@ namespace OpenDental{
 			}
 			tbFamily.SelectedRow=e.Row;
 			tbFamily.ColorRow(e.Row,Color.DarkSalmon);
-			OnPatientSelected(FamCur.List[e.Row].PatNum,FamCur.List[e.Row].GetNameLF(),FamCur.List[e.Row].Email!="",
-				FamCur.List[e.Row].ChartNumber);
+			//redundant.  This will happen in ModuleSelected
+			//OnPatientSelected(FamCur.List[e.Row].PatNum,FamCur.List[e.Row].GetNameLF(),FamCur.List[e.Row].Email!="",
+			//	FamCur.List[e.Row].ChartNumber);
 			ModuleSelected(FamCur.List[e.Row].PatNum);
 		}
 
@@ -805,7 +821,8 @@ namespace OpenDental{
 			FormPE.IsNew=true;
 			FormPE.ShowDialog();
 			if(FormPE.DialogResult==DialogResult.OK){
-				OnPatientSelected(tempPat.PatNum,tempPat.GetNameLF(),tempPat.Email!="",tempPat.ChartNumber);
+				//redundant.  This will happen in ModuleSelected
+				//OnPatientSelected(tempPat.PatNum,tempPat.GetNameLF(),tempPat.Email!="",tempPat.ChartNumber);
 				ModuleSelected(tempPat.PatNum);
 			}
 			else{

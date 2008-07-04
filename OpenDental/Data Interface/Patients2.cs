@@ -17,7 +17,7 @@ namespace OpenDental{
 		//private static ArrayList buttonLastFiveNames;
 		//<summary>Collection of PatNums. The last five patients. Used when clicking on dropdown button.</summary>
 		//private static ArrayList buttonLastFivePatNums;
-
+		/*
 		///<summary>It is entirely acceptable to pass in a null value for PatCur.  In that case, no patient name will show.</summary>
 		public static string GetMainTitle(Patient PatCur){
 			string retVal=PrefC.GetString("MainWindowTitle");
@@ -36,7 +36,7 @@ namespace OpenDental{
 				retVal+=" - "+PatCur.ChartNumber;
 			}
 			return retVal;
-		}
+		}*/
 
 		///<summary>A simpler version which does not require as much data.</summary>
 		public static string GetMainTitle(string nameLF,int patNum,string chartNumber) {

@@ -1743,9 +1743,10 @@ namespace OpenDental{
 			formPS.ShowDialog();
 			if(formPS.DialogResult==DialogResult.OK) {
 				CurPatNum=formPS.SelectedPatNum;
-				Patient pat=Patients.GetPat(CurPatNum);
+				//Patient pat=Patients.GetPat(CurPatNum);
 				RefreshCurrentModule();
-				FillPatientButton(CurPatNum,pat.GetNameLF(),pat.Email!="",pat.ChartNumber);
+				//this is now triggered within RefreshModule because patientSelected event will fire.
+				//FillPatientButton(CurPatNum,pat.GetNameLF(),pat.Email!="",pat.ChartNumber);
 			}
 		}
 
@@ -1758,7 +1759,7 @@ namespace OpenDental{
 			FillPatientButton(CurPatNum,pat.GetNameLF(),pat.Email!="",pat.ChartNumber);
 		}
 
-		///<summary>Happens when any of the modules changes the current patient or when this main form changes the patient.  The calling module should refresh itself.  The current patNum is stored here in the parent form so that when switching modules, the parent form knows which patient to call up for that module.</summary>
+		///<summary>Happens when any of the modules changes the current patient or when this main form changes the patient.  The calling module should refresh itself.  The current patNum is stored here in the parent form so that when switching modules, the parent form knows which patient to call up for that module.  Also necessary when user changes in order to refresh title bar.</summary>
 		private void Contr_PatientSelected(object sender,PatientSelectedEventArgs e) {
 			CurPatNum=e.PatNum;
 			FillPatientButton(CurPatNum,e.PatName,e.HasEmail,e.ChartNumber);
@@ -2641,7 +2642,7 @@ namespace OpenDental{
 				case 6:
 					ContrManage2.Visible=true;
 					this.ActiveControl=this.ContrManage2;
-					ContrManage2.ModuleSelected();
+					ContrManage2.ModuleSelected(CurPatNum);
 					break;
 			}
 		}
@@ -2686,7 +2687,7 @@ namespace OpenDental{
 			if(ContrDocs2.Visible)
 				ContrDocs2.ModuleSelected(CurPatNum);
 			if(ContrManage2.Visible)
-				ContrManage2.ModuleSelected();
+				ContrManage2.ModuleSelected(CurPatNum);
 		}
 
 		/// <summary>sends function key presses to the appointment module</summary>
