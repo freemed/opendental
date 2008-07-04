@@ -659,6 +659,7 @@ namespace OpenDental{
 
 		///<summary></summary>
 		public void ModuleSelected(int patNum){
+			PatCurNum=patNum;
 			RefreshModuleData(patNum);
 			RefreshModuleScreen();
 		}
@@ -671,7 +672,7 @@ namespace OpenDental{
 		private void RefreshModuleData(int patNum){
 			TimeDelta=ClockEvents.GetServerTime()-DateTime.Now;
 			Employees.Refresh();
-			RefreshModulePatient(patNum);
+			//RefreshModulePatient(patNum);
 		}
 
 		private void RefreshModuleScreen(){
@@ -679,7 +680,7 @@ namespace OpenDental{
 			FillEmps();
 			FillMessageDefs();
 		}
-
+		/*
 		///<summary>Here so it's parallel with other modules.</summary>
 		private void RefreshModulePatient(int patNum){
 			PatCurNum=patNum;
@@ -690,7 +691,7 @@ namespace OpenDental{
 				Patient pat=Patients.GetPat(patNum);
 				OnPatientSelected(patNum,pat.GetNameLF(),pat.Email!="",pat.ChartNumber);
 			}
-		}
+		}*/
 
 		///<summary>Sends the PatientSelected event on up to the main form.  The only result is that the main window now knows the new patNum and patName.  Does nothing else.  Does not trigger any other methods to run which might cause a loop.  Only called from RefreshModulePatient, but it's separate so that it's the same as in the other modules.</summary>
 		private void OnPatientSelected(int patNum,string patName,bool hasEmail,string chartNumber){

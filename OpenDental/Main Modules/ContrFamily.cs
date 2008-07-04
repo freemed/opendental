@@ -356,18 +356,6 @@ namespace OpenDental{
 		}
 
 		///<summary></summary>
-		private void RefreshModulePatient(Patient PatCur){
-			//PatCurNum=patNum;
-			if(PatCur==null){
-				OnPatientSelected(0,"",false,"");
-			}
-			else{
-				//Patient pat=Patients.GetPat(patNum);
-				OnPatientSelected(PatCur.PatNum,PatCur.GetNameLF(),PatCur.Email!="",PatCur.ChartNumber);
-			}
-		}
-
-		///<summary></summary>
 		private void OnPatientSelected(int patNum,string patName,bool hasEmail,string chartNumber){
 			PatientSelectedEventArgs eArgs=new OpenDental.PatientSelectedEventArgs(patNum,patName,hasEmail,chartNumber);
 			if(PatientSelected!=null){
@@ -436,10 +424,9 @@ namespace OpenDental{
 				FormPatientEdit FormP=new FormPatientEdit(PatCur,FamCur);
 				FormP.IsNew=false;
 				FormP.ShowDialog();
-				//redundant.  This will happen in ModuleSelected
-				//if(email!=PatCur.Email){//PatCur.EmailChanged){//do it this way later
-				//	OnPatientSelected(PatCur.PatNum,PatCur.GetNameLF(),PatCur.Email!="",PatCur.ChartNumber);
-				//}
+				if(email!=PatCur.Email){//PatCur.EmailChanged){//do it this way later
+					OnPatientSelected(PatCur.PatNum,PatCur.GetNameLF(),PatCur.Email!="",PatCur.ChartNumber);
+				}
 			}
 			ModuleSelected(PatCur.PatNum);
 		}
@@ -792,9 +779,8 @@ namespace OpenDental{
 			}
 			tbFamily.SelectedRow=e.Row;
 			tbFamily.ColorRow(e.Row,Color.DarkSalmon);
-			//redundant.  This will happen in ModuleSelected
-			//OnPatientSelected(FamCur.List[e.Row].PatNum,FamCur.List[e.Row].GetNameLF(),FamCur.List[e.Row].Email!="",
-			//	FamCur.List[e.Row].ChartNumber);
+			OnPatientSelected(FamCur.List[e.Row].PatNum,FamCur.List[e.Row].GetNameLF(),FamCur.List[e.Row].Email!="",
+				FamCur.List[e.Row].ChartNumber);
 			ModuleSelected(FamCur.List[e.Row].PatNum);
 		}
 
@@ -821,8 +807,7 @@ namespace OpenDental{
 			FormPE.IsNew=true;
 			FormPE.ShowDialog();
 			if(FormPE.DialogResult==DialogResult.OK){
-				//redundant.  This will happen in ModuleSelected
-				//OnPatientSelected(tempPat.PatNum,tempPat.GetNameLF(),tempPat.Email!="",tempPat.ChartNumber);
+				OnPatientSelected(tempPat.PatNum,tempPat.GetNameLF(),tempPat.Email!="",tempPat.ChartNumber);
 				ModuleSelected(tempPat.PatNum);
 			}
 			else{

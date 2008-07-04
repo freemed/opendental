@@ -1743,10 +1743,9 @@ namespace OpenDental{
 			formPS.ShowDialog();
 			if(formPS.DialogResult==DialogResult.OK) {
 				CurPatNum=formPS.SelectedPatNum;
-				//Patient pat=Patients.GetPat(CurPatNum);
+				Patient pat=Patients.GetPat(CurPatNum);
 				RefreshCurrentModule();
-				//this is now triggered within RefreshModule because patientSelected event will fire.
-				//FillPatientButton(CurPatNum,pat.GetNameLF(),pat.Email!="",pat.ChartNumber);
+				FillPatientButton(CurPatNum,pat.GetNameLF(),pat.Email!="",pat.ChartNumber);
 			}
 		}
 
@@ -1759,7 +1758,7 @@ namespace OpenDental{
 			FillPatientButton(CurPatNum,pat.GetNameLF(),pat.Email!="",pat.ChartNumber);
 		}
 
-		///<summary>Happens when any of the modules changes the current patient or when this main form changes the patient.  The calling module should refresh itself.  The current patNum is stored here in the parent form so that when switching modules, the parent form knows which patient to call up for that module.  Also necessary when user changes in order to refresh title bar.</summary>
+		///<summary>Happens when any of the modules changes the current patient or when this main form changes the patient.  The calling module should refresh itself.  The current patNum is stored here in the parent form so that when switching modules, the parent form knows which patient to call up for that module.</summary>
 		private void Contr_PatientSelected(object sender,PatientSelectedEventArgs e) {
 			CurPatNum=e.PatNum;
 			FillPatientButton(CurPatNum,e.PatName,e.HasEmail,e.ChartNumber);
@@ -2839,6 +2838,13 @@ namespace OpenDental{
 			myOutlookBar.SelectedIndex=Security.GetModule(LastModule);
 			myOutlookBar.Invalidate();
 			SetModuleSelected();
+			if(CurPatNum==0){
+				Text=Patients2.GetMainTitle("",0,"");
+			}
+			else{
+				Patient pat=Patients.GetPat(CurPatNum);
+				Text=Patients2.GetMainTitle(pat.GetNameLF(),pat.PatNum,pat.ChartNumber);
+			}
 			if(userControlTasks1.Visible) {
 				userControlTasks1.InitializeOnStartup();
 			}
