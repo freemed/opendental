@@ -187,7 +187,6 @@ namespace OpenDental{
 				PatCur=null;
 				FamCur=null;
 				PatPlanList=new PatPlan[0]; 
-				RefreshModulePatient(PatCur);
 				return;
 			}
 			FamCur=Patients.GetFamily(patNum);
@@ -197,7 +196,6 @@ namespace OpenDental{
 			BenefitList=Benefits.Refresh(PatPlanList);
 			RecallList=Recalls.GetList(FamCur.List);
 			PatFieldList=PatFields.Refresh(patNum);
-			RefreshModulePatient(PatCur);
 		}
 
 		private void RefreshModuleScreen(){

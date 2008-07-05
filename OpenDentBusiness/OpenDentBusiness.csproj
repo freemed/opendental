@@ -231,6 +231,7 @@
     <Compile Include="TableTypes\ClaimAttach.cs" />
     <Compile Include="TableTypes\AnestheticData.cs" />
     <Compile Include="TableTypes\Files.cs" />
+    <Compile Include="TableTypes\Site.cs" />
     <Compile Include="TableTypes\Statement.cs" />
     <Compile Include="TableTypes\TaskAncestor.cs" />
     <Compile Include="TableTypes\TaskSubscription.cs" />

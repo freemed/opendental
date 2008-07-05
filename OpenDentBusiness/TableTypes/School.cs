@@ -2,7 +2,7 @@ using System;
 
 namespace OpenDentBusiness{
 
-	///<summary>Used in public health.</summary>
+	///<summary>Gradeschool.  Used in public health.  Only used in the screen table and patient table.  Probably being deprecated in patient table in favor of sites.</summary>
 	public class School{
 		///<summary>Primary key, but allowed to change.  Change is programmatically synchronized so that keys stay intact.</summary>
 		public string SchoolName;

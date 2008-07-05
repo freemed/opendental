@@ -7594,8 +7594,20 @@ namespace OpenDental{
 			if(FromVersion<new Version("5.8.0.0")) {
 				string command;
 				if(DataConnection.DBtype==DatabaseType.MySql){
+					command="DROP TABLE IF EXISTS site";
+					General.NonQ(command);
+					command=@"CREATE TABLE site (
+						SiteNum int NOT NULL auto_increment,
+						Description int NOT NULL,
+						Note text,
+						PRIMARY KEY (SiteNum)
+						) DEFAULT CHARSET=utf8";
 
-				}else{//oracle
+
+
+
+				}
+				else{//oracle
 
 				}
 				command="UPDATE preference SET ValueString = '5.8.0.0' WHERE PrefName = 'DataBaseVersion'";
