@@ -3399,9 +3399,11 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormPhoneOverrideEdit.resx">
       <DependentUpon>FormPhoneOverrideEdit.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormPhoneOverrides.resx">
       <DependentUpon>FormPhoneOverrides.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormTaskSendUser.resx">
       <DependentUpon>FormTaskSendUser.cs</DependentUpon>

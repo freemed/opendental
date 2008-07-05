@@ -7598,10 +7598,18 @@ namespace OpenDental{
 					General.NonQ(command);
 					command=@"CREATE TABLE site (
 						SiteNum int NOT NULL auto_increment,
-						Description int NOT NULL,
+						Description varchar(255),
 						Note text,
 						PRIMARY KEY (SiteNum)
 						) DEFAULT CHARSET=utf8";
+					command="INSERT INTO site (Description,Note) SELECT SchoolName,SchoolCode FROM school"; 
+					General.NonQ(command);
+					command="INSERT INTO site (Description,Note) SELECT distinct GradeSchool,'' FROM patient WHERE GradeSchool !='' AND NOT EXISTS(SELECT * FROM site WHERE site.Description=patient.GradeSchool)";
+					General.NonQ(command);
+					command="ALTER TABLE patient ADD SiteNum int default '0' NOT NULL";
+					General.NonQ(command);
+					command="UPDATE patient SET patient.SiteNum= (SELECT site.SiteNum FROM site WHERE site.Description=patient.GradeSchool)";
+					General.NonQ(command);
 
 
 
