@@ -774,7 +774,7 @@ namespace OpenDental{
 			// 
 			this.menuItemSchools.Index = 16;
 			this.menuItemSchools.Text = "Sites";
-			this.menuItemSchools.Click += new System.EventHandler(this.menuItemSchools_Click);
+			this.menuItemSchools.Click += new System.EventHandler(this.menuItemSites_Click);
 			// 
 			// menuItemZipCodes
 			// 
@@ -1151,7 +1151,7 @@ namespace OpenDental{
 			this.myOutlookBar.ImageList = this.imageList32;
 			this.myOutlookBar.Location = new System.Drawing.Point(0,0);
 			this.myOutlookBar.Name = "myOutlookBar";
-			this.myOutlookBar.Size = new System.Drawing.Size(51,724);
+			this.myOutlookBar.Size = new System.Drawing.Size(51,640);
 			this.myOutlookBar.TabIndex = 18;
 			this.myOutlookBar.Text = "outlookBar1";
 			this.myOutlookBar.ButtonClicked += new OpenDental.ButtonClickedEventHandler(this.myOutlookBar_ButtonClicked);
@@ -1162,7 +1162,7 @@ namespace OpenDental{
 			// 
 			// FormOpenDental
 			// 
-			this.ClientSize = new System.Drawing.Size(982,724);
+			this.ClientSize = new System.Drawing.Size(982,640);
 			this.Controls.Add(this.ToolBarMain);
 			this.Controls.Add(this.panelSplitter);
 			this.Controls.Add(this.userControlTasks1);
@@ -3336,14 +3336,14 @@ namespace OpenDental{
 			FormRS.ShowDialog();		
 		}
 
-		private void menuItemSchools_Click(object sender, System.EventArgs e) {
+		private void menuItemSites_Click(object sender, System.EventArgs e) {
 			if(!Security.IsAuthorized(Permissions.Setup)){
 				return;
 			}
-			FormSchools FormS=new FormSchools();
+			FormSites FormS=new FormSites();
 			FormS.ShowDialog();
 			RefreshCurrentModule();
-			SecurityLogs.MakeLogEntry(Permissions.Setup,0,"Dental Schools");
+			SecurityLogs.MakeLogEntry(Permissions.Setup,0,"Sites");
 		}
 
 		private void menuItemZipCodes_Click(object sender, System.EventArgs e) {

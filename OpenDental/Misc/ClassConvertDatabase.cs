@@ -7610,6 +7610,10 @@ namespace OpenDental{
 					General.NonQ(command);
 					command="UPDATE patient SET patient.SiteNum= (SELECT site.SiteNum FROM site WHERE site.Description=patient.GradeSchool)";
 					General.NonQ(command);
+					command="ALTER TABLE patient DROP COLUMN GradeSchool";
+					General.NonQ(command);
+					command="ALTER TABLE patient DROP COLUMN PrimaryTeeth";
+					General.NonQ(command);
 
 
 

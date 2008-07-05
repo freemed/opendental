@@ -21,6 +21,7 @@ namespace OpenDentBusiness{
 			SiteC.List=new Site[table.Rows.Count];
 			for(int i=0;i<SiteC.List.Length;i++){
 				SiteC.List[i]=new Site();
+				SiteC.List[i].IsNew=false;
 				SiteC.List[i].SiteNum    = PIn.PInt   (table.Rows[i][0].ToString());
 				SiteC.List[i].Description= PIn.PString(table.Rows[i][1].ToString());
 				SiteC.List[i].Note       = PIn.PString(table.Rows[i][2].ToString());
@@ -43,18 +44,39 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static void DeleteObject(Site site){
-			//validate that not already in use.
-			//string command="SELECT COUNT(*) FROM supplyorderitem WHERE SupplyNum="+POut.PInt(supp.SupplyNum);
-			//int count=PIn.PInt(General.GetCount(command));
-			//if(count>0){
-			//	throw new ApplicationException(Lan.g("Supplies","Supply is already in use on an order. Not allowed to delete."));
-			//}
-			DataObjectFactory<Site>.DeleteObject(site);
-		}
-
 		public static void DeleteObject(int siteNum){
+			//validate that not already in use.
+			string command="SELECT LName,FName FROM patient WHERE SiteNum="+POut.PInt(siteNum);
+			DataTable table=General.GetTable(command);
+			//int count=PIn.PInt(General.GetCount(command));
+			string pats="";
+			for(int i=0;i<table.Rows.Count;i++){
+				if(i>0){
+					pats+=", ";
+				}
+				pats+=table.Rows[i]["FName"].ToString()+" "+table.Rows[i]["LName"].ToString();
+			}
+			if(table.Rows.Count>0){
+				throw new ApplicationException(Lan.g("Sites","Site is already in use by patient(s). Not allowed to delete. "+pats));
+			}
 			DataObjectFactory<Site>.DeleteObject(siteNum);
 		}
+
+		//public static void DeleteObject(int siteNum){
+		//	DataObjectFactory<Site>.DeleteObject(siteNum);
+		//}
+
+		public static string GetDescription(int siteNum){
+			if(siteNum==0){
+				return "";
+			}
+			for(int i=0;i<SiteC.List.Length;i++){
+				if(SiteC.List[i].SiteNum==siteNum){
+					return SiteC.List[i].Description;
+				}
+			}
+			return "";
+		}
+
 	}
 }
