@@ -269,7 +269,9 @@ namespace OpenDentBusiness{
 		///<summary>Includes AccountingAutoPay.</summary>
 		Operatories,
 		///<summary></summary>
-		TaskPopup
+		TaskPopup,
+		///<summary></summary>
+		Sites
 	}
 	//<summary></summary>
 	/*public enum ButtonType{

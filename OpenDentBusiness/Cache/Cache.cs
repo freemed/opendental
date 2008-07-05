@@ -94,6 +94,9 @@ namespace OpenDentBusiness {
 			if(itypes.Contains((int)InvalidType.Security) || isAll){
 				ds.Tables.Add(Userods.RefreshCache());
 			}
+			if(itypes.Contains((int)InvalidType.Sites) || isAll){
+				ds.Tables.Add(Sites.RefreshCache());
+			}
 			if(itypes.Contains((int)InvalidType.Startup) || isAll){
 				//Employers.Refresh();//only needed when opening the prog. After that, automated.
 				//ElectIDs.Refresh();//only run on startup

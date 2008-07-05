@@ -20,10 +20,10 @@ namespace OpenDentBusiness{
 		}
 
 		[DataField("Description")]
-		private int description;
+		private string description;
 		bool descriptionChanged;
 		///<summary></summary>
-		public int Description {
+		public string Description {
 			get { return description; }
 			set { if(description!=value){description = value; MarkDirty(); descriptionChanged = true;} }
 		}
