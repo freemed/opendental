@@ -4279,6 +4279,7 @@ namespace OpenDental{
 			ProcCur.DateEntryC=DateTime.Now;
 			ProcCur.MedicalCode=ProcedureCodes.GetProcCode(ProcCur.CodeNum).MedicalCode;
 			ProcCur.BaseUnits=ProcedureCodes.GetProcCode(ProcCur.CodeNum).BaseUnits;
+			ProcCur.SiteNum=PatCur.SiteNum;
 			Procedures.Insert(ProcCur);
 			if((ProcCur.ProcStatus==ProcStat.C || ProcCur.ProcStatus==ProcStat.EC || ProcCur.ProcStatus==ProcStat.EO)
 				&& ProcedureCodes.GetProcCode(ProcCur.CodeNum).PaintType==ToothPaintingType.Extraction) {
@@ -4371,6 +4372,7 @@ namespace OpenDental{
 				ProcCur.Dx=DefC.Short[(int)DefCat.Diagnosis][listDx.SelectedIndex].DefNum;
 			ProcCur.MedicalCode=ProcedureCodes.GetProcCode(ProcCur.CodeNum).MedicalCode;
 			ProcCur.BaseUnits=ProcedureCodes.GetProcCode(ProcCur.CodeNum).BaseUnits;
+			ProcCur.SiteNum=PatCur.SiteNum;
 			//nextaptnum
 			//ProcCur.CapCoPay=-1;
 			//if(Patients.Cur.PriPlanNum!=0){//if patient has insurance
@@ -5740,6 +5742,7 @@ namespace OpenDental{
 					procCur.ProcDate=PIn.PDate(textDate.Text);
 					procCur.PlaceService=(PlaceOfService)PrefC.GetInt("DefaultProcedurePlaceService");
 				}
+				procCur.SiteNum=PatCur.SiteNum;
 				Procedures.SetDateFirstVisit(procCur.ProcDate,2,PatCur);
 				if(procCode.PaintType==ToothPaintingType.Extraction){//if an extraction, then mark previous procs hidden
 					//Procedures.SetHideGraphical(procCur);//might not matter anymore

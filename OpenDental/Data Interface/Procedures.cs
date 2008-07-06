@@ -26,7 +26,7 @@ namespace OpenDental{
 				+"Dx,PlannedAptNum,PlaceService,Prosthesis,DateOriginalProsth,ClaimNote,"
 				+"DateEntryC,ClinicNum,MedicalCode,DiagnosticCode,IsPrincDiag,ProcNumLab,"
 				+"BillingTypeOne,BillingTypeTwo,CodeNum,CodeMod1,CodeMod2,CodeMod3,CodeMod4,RevCode,UnitCode,"
-				+"UnitQty,BaseUnits,StartTime,StopTime,DateTP) VALUES(";
+				+"UnitQty,BaseUnits,StartTime,StopTime,DateTP,SiteNum) VALUES(";
 			if(PrefC.RandomKeys) {
 				command+="'"+POut.PInt(proc.ProcNum)+"', ";
 			}
@@ -72,7 +72,8 @@ namespace OpenDental{
 				+"'"+POut.PInt(proc.BaseUnits)+"', "
 				+"'"+POut.PInt(proc.StartTime)+"', "
 				+"'"+POut.PInt(proc.StopTime)+"', "
-				+POut.PDate(proc.DateTP)+")";
+				+POut.PDate(proc.DateTP)+", "
+				+"'"+POut.PInt   (proc.SiteNum)+"')";
 			//MessageBox.Show(cmd.CommandText);
 			if(PrefC.RandomKeys) {
 				General.NonQ(command);
@@ -285,6 +286,11 @@ namespace OpenDental{
 			if(proc.DateTP != oldProc.DateTP) {
 				if(comma) c += ",";
 				c += "DateTP = " + POut.PDate(proc.DateTP);
+				comma = true;
+			}
+			if(proc.SiteNum != oldProc.SiteNum) {
+				if(comma) c += ",";
+				c += "SiteNum = '" + POut.PInt(proc.SiteNum)+"'";
 				comma = true;
 			}
 			int rowsChanged=0;
@@ -516,11 +522,12 @@ namespace OpenDental{
 				proc.CodeMod4        = PIn.PString(table.Rows[i][30].ToString());
 				proc.RevCode         = PIn.PString(table.Rows[i][31].ToString());
 				proc.UnitCode        = PIn.PString(table.Rows[i][32].ToString());
-				proc.UnitQty         = PIn.PInt(table.Rows[i][33].ToString());
-				proc.BaseUnits       = PIn.PInt(table.Rows[i][34].ToString());
-				proc.StartTime       = PIn.PInt(table.Rows[i][35].ToString());
-				proc.StopTime        = PIn.PInt(table.Rows[i][36].ToString());
-				proc.DateTP          = PIn.PDate(table.Rows[i][37].ToString());
+				proc.UnitQty         = PIn.PInt   (table.Rows[i][33].ToString());
+				proc.BaseUnits       = PIn.PInt   (table.Rows[i][34].ToString());
+				proc.StartTime       = PIn.PInt   (table.Rows[i][35].ToString());
+				proc.StopTime        = PIn.PInt   (table.Rows[i][36].ToString());
+				proc.DateTP          = PIn.PDate  (table.Rows[i][37].ToString());
+				proc.SiteNum         = PIn.PInt   (table.Rows[i][38].ToString());
 				//only used sometimes:
 				/*if(table.Columns.Count>24){
 					List[i].UserNum       = PIn.PInt   (table.Rows[i][24].ToString());
@@ -645,7 +652,7 @@ namespace OpenDental{
 		}
 
 		///<summary>Loops through each proc. Does not add notes to a procedure that already has notes. Used twice, security checked in both places before calling this.  Also sets provider for each proc.</summary>
-		public static void SetCompleteInAppt(Appointment apt,InsPlan[] PlanList,PatPlan[] patPlans){
+		public static void SetCompleteInAppt(Appointment apt,InsPlan[] PlanList,PatPlan[] patPlans,int siteNum){
 			Procedure[] ProcList=Procedures.Refresh(apt.PatNum);
 			ClaimProc[] ClaimProcList=ClaimProcs.Refresh(apt.PatNum);
 			Benefit[] benefitList=Benefits.Refresh(patPlans);
@@ -656,6 +663,10 @@ namespace OpenDental{
 			//bool doResetRecallStatus=false;
 			ProcedureCode procCode;
 			Procedure oldProc;
+			//int siteNum=0;
+			//if(!PrefC.GetBool("EasyHidePublicHealth")){
+			//	siteNum=Patients.GetPat(apt.PatNum).SiteNum;
+			//}
 			for(int i=0;i<ProcList.Length;i++){
 				if(ProcList[i].AptNum!=apt.AptNum){
 					continue;
@@ -684,6 +695,7 @@ namespace OpenDental{
 				}
 				ProcList[i].PlaceService=(PlaceOfService)PrefC.GetInt("DefaultProcedurePlaceService");
 				ProcList[i].ClinicNum=apt.ClinicNum;
+				ProcList[i].SiteNum=siteNum;
 				ProcList[i].PlaceService=Clinics.GetPlaceService(apt.ClinicNum);
 				if(apt.ProvHyg!=0){//if the appointment has a hygiene provider
 					if(procCode.IsHygiene){//hyg proc

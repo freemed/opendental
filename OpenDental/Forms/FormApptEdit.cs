@@ -1254,6 +1254,7 @@ namespace OpenDental{
 				ProcCur.ProvNum=AptCur.ProvNum;
 				//Dx
 				ProcCur.ClinicNum=AptCur.ClinicNum;
+				ProcCur.SiteNum=pat.SiteNum;
 				if(AptCur.AptStatus==ApptStatus.Planned)
 					ProcCur.PlannedAptNum=AptCur.AptNum;
 				ProcCur.MedicalCode=ProcedureCodes.GetProcCode(ProcCur.CodeNum).MedicalCode;
@@ -1427,7 +1428,7 @@ namespace OpenDental{
 						return false;
 					}
 					PatPlan[] PatPlanList=PatPlans.Refresh(AptCur.PatNum);
-					Procedures.SetCompleteInAppt(AptCur,PlanList,PatPlanList);
+					Procedures.SetCompleteInAppt(AptCur,PlanList,PatPlanList,pat.SiteNum);
 					SecurityLogs.MakeLogEntry(Permissions.ProcComplCreate,pat.PatNum,
 						pat.GetNameLF()+" "+AptCur.AptDateTime.ToShortDateString());
 				}

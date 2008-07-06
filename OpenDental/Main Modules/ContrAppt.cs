@@ -3263,7 +3263,7 @@ namespace OpenDental{
 			}
 			else {//shouldn't ever happen, but don't allow procedures to be completed from notes
 				Appointments.SetAptStatus(apt.AptNum, ApptStatus.Complete);
-				Procedures.SetCompleteInAppt(apt, PlanList, PatPlanList);//loops through each proc
+				Procedures.SetCompleteInAppt(apt, PlanList, PatPlanList,pat.SiteNum);//loops through each proc
 				SecurityLogs.MakeLogEntry(Permissions.AppointmentEdit, apt.PatNum,
 					pat.GetNameLF() + ", "
 					+ ContrApptSingle3[GetIndex(apt.AptNum)].DataRoww["procs"].ToString() + ", "

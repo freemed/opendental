@@ -7614,6 +7614,8 @@ namespace OpenDental{
 					General.NonQ(command);
 					command="ALTER TABLE patient DROP COLUMN PrimaryTeeth";
 					General.NonQ(command);
+					command="ALTER TABLE procedurelog ADD SiteNum int default '0' NOT NULL";
+					General.NonQ(command);
 
 
 

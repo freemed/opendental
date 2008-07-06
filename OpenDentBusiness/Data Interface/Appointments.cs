@@ -1087,6 +1087,13 @@ namespace OpenDentBusiness{
 				-PIn.PDouble(familyBalance.Rows[0]["InsEst"].ToString());
 			row["value"]=balance.ToString("F");
 			table.Rows.Add(row);
+			//Site----------------------------------------------------------------------------------
+			if(!PrefC.GetBool("EasyHidePublicHealth")){
+				row=table.NewRow();
+				row["field"]=Lan.g("FormApptEdit","Site");
+				row["value"]=Sites.GetDescription(PIn.PInt(rawPat.Rows[0]["SiteNum"].ToString()));
+				table.Rows.Add(row);
+			}
 			return table;
 		}
 
