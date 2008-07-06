@@ -1745,7 +1745,7 @@ namespace OpenDental{
 				CurPatNum=formPS.SelectedPatNum;
 				Patient pat=Patients.GetPat(CurPatNum);
 				RefreshCurrentModule();
-				FillPatientButton(CurPatNum,pat.GetNameLF(),pat.Email!="",pat.ChartNumber);
+				FillPatientButton(CurPatNum,pat.GetNameLF(),pat.Email!="",pat.ChartNumber,pat.SiteNum);
 			}
 		}
 
@@ -1755,17 +1755,22 @@ namespace OpenDental{
 			//new family now
 			Patient pat=Patients.GetPat(CurPatNum);
 			RefreshCurrentModule();
-			FillPatientButton(CurPatNum,pat.GetNameLF(),pat.Email!="",pat.ChartNumber);
+			FillPatientButton(CurPatNum,pat.GetNameLF(),pat.Email!="",pat.ChartNumber,pat.SiteNum);
 		}
 
 		///<summary>Happens when any of the modules changes the current patient or when this main form changes the patient.  The calling module should refresh itself.  The current patNum is stored here in the parent form so that when switching modules, the parent form knows which patient to call up for that module.</summary>
 		private void Contr_PatientSelected(object sender,PatientSelectedEventArgs e) {
 			CurPatNum=e.PatNum;
-			FillPatientButton(CurPatNum,e.PatName,e.HasEmail,e.ChartNumber);
+			int siteNum=0;
+			if(PrefC.GetBool("TitleBarShowSite") && e.PatNum!=0){
+				Patient pat=Patients.GetPat(e.PatNum);
+				siteNum=pat.SiteNum;
+			}
+			FillPatientButton(CurPatNum,e.PatName,e.HasEmail,e.ChartNumber,siteNum);
 		}
 
 		///<Summary>Serves four functions.  1. Sends the new patient to the dropdown menu for select patient.  2. Changes which toolbar buttons are enabled.  3. Sets main form text. 4. Displays any popup.</Summary>
-		private void FillPatientButton(int patNum,string patName,bool hasEmail,string chartNumber) {
+		private void FillPatientButton(int patNum,string patName,bool hasEmail,string chartNumber,int siteNum) {
 			Patients.AddPatsToMenu(menuPatient,new EventHandler(menuPatient_Click),patName,patNum);
 			if(ToolBarMain.Buttons==null || ToolBarMain.Buttons.Count<2){
 				return;
@@ -1794,7 +1799,7 @@ namespace OpenDental{
 				ToolBarMain.Buttons["Popups"].Enabled=true;
 			}
 			ToolBarMain.Invalidate();
-			Text=Patients2.GetMainTitle(patName,patNum,chartNumber);
+			Text=Patients2.GetMainTitle(patName,patNum,chartNumber,siteNum);
 			if(PopupEventList==null){
 				PopupEventList=new List<PopupEvent>();
 			}
@@ -2777,7 +2782,7 @@ namespace OpenDental{
 					//GotoModule.GotoAccount();
 					Patient pat=Patients.GetPat(CurPatNum);
 					RefreshCurrentModule();
-					FillPatientButton(CurPatNum,pat.GetNameLF(),pat.Email!="",pat.ChartNumber);
+					FillPatientButton(CurPatNum,pat.GetNameLF(),pat.Email!="",pat.ChartNumber,pat.SiteNum);
 				}
 			}
 			if(userControlTasks1.GotoType==TaskObjectType.Appointment) {
@@ -2839,11 +2844,11 @@ namespace OpenDental{
 			myOutlookBar.Invalidate();
 			SetModuleSelected();
 			if(CurPatNum==0){
-				Text=Patients2.GetMainTitle("",0,"");
+				Text=Patients2.GetMainTitle("",0,"",0);
 			}
 			else{
 				Patient pat=Patients.GetPat(CurPatNum);
-				Text=Patients2.GetMainTitle(pat.GetNameLF(),pat.PatNum,pat.ChartNumber);
+				Text=Patients2.GetMainTitle(pat.GetNameLF(),pat.PatNum,pat.ChartNumber,pat.SiteNum);
 			}
 			if(userControlTasks1.Visible) {
 				userControlTasks1.InitializeOnStartup();
@@ -3534,7 +3539,7 @@ namespace OpenDental{
 				CurPatNum=FormC.SelectedPatNum;
 				Patient pat=Patients.GetPat(CurPatNum);
 				RefreshCurrentModule();
-				FillPatientButton(CurPatNum,pat.GetNameLF(),pat.Email!="",pat.ChartNumber);
+				FillPatientButton(CurPatNum,pat.GetNameLF(),pat.Email!="",pat.ChartNumber,pat.SiteNum);
 			}
 		}
 

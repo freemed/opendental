@@ -583,7 +583,7 @@ namespace OpenDentBusiness{
  		///<summary>Only used for the Select Patient dialog.  Pass in a billing type of 0 for all billing types.</summary>
 		public static DataTable GetPtDataTable(bool limit,string lname,string fname,string phone,
 			string address,bool hideInactive,string city,string state,string ssn,string patnum,string chartnumber,
-			int billingtype,bool guarOnly,bool showArchived,int clinicNum,DateTime birthdate)
+			int billingtype,bool guarOnly,bool showArchived,int clinicNum,DateTime birthdate,int siteNum)
 		{
 			string billingsnippet=" ";
 			if(billingtype!=0){
@@ -616,7 +616,7 @@ namespace OpenDentBusiness{
 			}
 			string command= 
 				"SELECT PatNum,LName,FName,MiddleI,Preferred,Birthdate,SSN,HmPhone,WkPhone,Address,PatStatus"
-				+",BillingType,ChartNumber,City,State,PriProv "
+				+",BillingType,ChartNumber,City,State,PriProv,SiteNum "
 				+"FROM patient "
 				+"WHERE PatStatus != '4' "//not status 'deleted'
 				+(lname.Length>0?"AND LOWER(LName) LIKE '"+POut.PString(lname).ToLower()+"%' ":"") //case matters in a like statement in oracle.
@@ -655,6 +655,9 @@ namespace OpenDentBusiness{
 			if(clinicNum!=0){
 				command+="AND ClinicNum="+POut.PInt(clinicNum)+" ";
 			}
+			if(siteNum>0) {
+				command+="AND SiteNum="+POut.PInt(siteNum)+" ";
+			}
 			command+="ORDER BY LName,FName ";
 			if(limit){
 				if(DataConnection.DBtype==DatabaseType.Oracle){
@@ -669,6 +672,7 @@ namespace OpenDentBusiness{
 			DataTable PtDataTable=table.Clone();//does not copy any data
 			PtDataTable.TableName="table";
 			PtDataTable.Columns.Add("age");
+			PtDataTable.Columns.Add("site");
 			for(int i=0;i<PtDataTable.Columns.Count;i++){
 				PtDataTable.Columns[i].DataType=typeof(string);
 			}
@@ -705,6 +709,7 @@ namespace OpenDentBusiness{
 				r["City"]=table.Rows[i]["City"].ToString();
 				r["State"]=table.Rows[i]["State"].ToString();
 				r["PriProv"]=Providers.GetAbbr(PIn.PInt(table.Rows[i]["PriProv"].ToString()));
+				r["site"]=Sites.GetDescription(PIn.PInt(table.Rows[i]["SiteNum"].ToString()));
 				PtDataTable.Rows.Add(r);
 			}
 			return PtDataTable;

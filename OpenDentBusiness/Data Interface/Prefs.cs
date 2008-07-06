@@ -23,6 +23,7 @@ namespace OpenDentBusiness{
 				pref=new Pref();
 				pref.PrefName=PIn.PString(table.Rows[i][0].ToString());
 				pref.ValueString=PIn.PString(table.Rows[i][1].ToString());
+				pref.Comments=PIn.PString(table.Rows[i][2].ToString());
 				PrefC.HList.Add(pref.PrefName,pref);
 			}
 		}
@@ -30,8 +31,9 @@ namespace OpenDentBusiness{
 		///<summary></summary>
 		public static void Update(Pref pref) {
 			string command= "UPDATE preference SET "
-				+"valuestring = '"  +POut.PString(pref.ValueString)+"'"
-				+" WHERE prefname = '"+POut.PString(pref.PrefName)+"'";
+				+"ValueString = '"+POut.PString(pref.ValueString)+"' "
+				+",Comments = '"  +POut.PString(pref.Comments)+"' "
+				+" WHERE PrefName = '"+POut.PString(pref.PrefName)+"'";
 			General.NonQ(command);
 		}
 

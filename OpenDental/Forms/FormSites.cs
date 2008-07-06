@@ -22,7 +22,8 @@ namespace OpenDental{
 		private bool changed;
 		private OpenDental.UI.Button butOK;
 		public bool IsSelectionMode;
-		///<summary>Only used if IsSelectionMode.  On OK, contains selected siteNum.</summary>
+		private OpenDental.UI.Button butNone;
+		///<summary>Only used if IsSelectionMode.  On OK, contains selected siteNum.  Can be 0.  Can also be set ahead of time externally.</summary>
 		public int SelectedSiteNum;
 
 		///<summary></summary>
@@ -63,6 +64,7 @@ namespace OpenDental{
 			this.label1 = new System.Windows.Forms.Label();
 			this.gridMain = new OpenDental.UI.ODGrid();
 			this.butOK = new OpenDental.UI.Button();
+			this.butNone = new OpenDental.UI.Button();
 			this.SuspendLayout();
 			// 
 			// butClose
@@ -75,7 +77,7 @@ namespace OpenDental{
 			this.butClose.CornerRadius = 4F;
 			this.butClose.Location = new System.Drawing.Point(402,407);
 			this.butClose.Name = "butClose";
-			this.butClose.Size = new System.Drawing.Size(75,26);
+			this.butClose.Size = new System.Drawing.Size(75,24);
 			this.butClose.TabIndex = 0;
 			this.butClose.Text = "&Close";
 			this.butClose.Click += new System.EventHandler(this.butClose_Click);
@@ -92,14 +94,14 @@ namespace OpenDental{
 			this.butAdd.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.butAdd.Location = new System.Drawing.Point(17,407);
 			this.butAdd.Name = "butAdd";
-			this.butAdd.Size = new System.Drawing.Size(80,26);
+			this.butAdd.Size = new System.Drawing.Size(80,24);
 			this.butAdd.TabIndex = 10;
 			this.butAdd.Text = "&Add";
 			this.butAdd.Click += new System.EventHandler(this.butAdd_Click);
 			// 
 			// label1
 			// 
-			this.label1.Location = new System.Drawing.Point(21,10);
+			this.label1.Location = new System.Drawing.Point(17,10);
 			this.label1.Name = "label1";
 			this.label1.Size = new System.Drawing.Size(321,33);
 			this.label1.TabIndex = 11;
@@ -127,15 +129,32 @@ namespace OpenDental{
 			this.butOK.CornerRadius = 4F;
 			this.butOK.Location = new System.Drawing.Point(402,370);
 			this.butOK.Name = "butOK";
-			this.butOK.Size = new System.Drawing.Size(75,26);
+			this.butOK.Size = new System.Drawing.Size(75,24);
 			this.butOK.TabIndex = 13;
 			this.butOK.Text = "OK";
 			this.butOK.Click += new System.EventHandler(this.butOK_Click);
+			// 
+			// butNone
+			// 
+			this.butNone.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butNone.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.butNone.Autosize = true;
+			this.butNone.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butNone.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butNone.CornerRadius = 4F;
+			this.butNone.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butNone.Location = new System.Drawing.Point(291,407);
+			this.butNone.Name = "butNone";
+			this.butNone.Size = new System.Drawing.Size(68,24);
+			this.butNone.TabIndex = 14;
+			this.butNone.Text = "None";
+			this.butNone.Click += new System.EventHandler(this.butNone_Click);
 			// 
 			// FormSites
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.ClientSize = new System.Drawing.Size(505,454);
+			this.Controls.Add(this.butNone);
 			this.Controls.Add(this.butOK);
 			this.Controls.Add(this.gridMain);
 			this.Controls.Add(this.label1);
@@ -164,8 +183,17 @@ namespace OpenDental{
 			}
 			else{
 				butOK.Visible=false;
+				butNone.Visible=false;
 			}
 			FillGrid();
+			if(SelectedSiteNum!=0){
+				for(int i=0;i<SiteC.List.Length;i++){
+					if(SiteC.List[i].SiteNum==SelectedSiteNum){
+						gridMain.SetSelected(i,true);
+						break;
+					}
+				}
+			}
 		}
 
 		private void FillGrid(){
@@ -212,13 +240,22 @@ namespace OpenDental{
 			}
 		}
 
+		private void butNone_Click(object sender,EventArgs e) {
+			//not even visible unless is selection mode
+			SelectedSiteNum=0;
+			DialogResult=DialogResult.OK;
+		}
+
 		private void butOK_Click(object sender,EventArgs e) {
 			//not even visible unless is selection mode
 			if(gridMain.GetSelectedIndex()==-1){
-				MsgBox.Show(this,"Please select an item first.");
-				return;
+			//	MsgBox.Show(this,"Please select an item first.");
+			//	return;
+				SelectedSiteNum=0;
 			}
-			SelectedSiteNum=SiteC.List[gridMain.GetSelectedIndex()].SiteNum;
+			else{
+				SelectedSiteNum=SiteC.List[gridMain.GetSelectedIndex()].SiteNum;
+			}
 			DialogResult=DialogResult.OK;
 		}
 
@@ -236,6 +273,8 @@ namespace OpenDental{
 				DataValid.SetInvalid(InvalidType.Sites);
 			}
 		}
+
+		
 
 		
 

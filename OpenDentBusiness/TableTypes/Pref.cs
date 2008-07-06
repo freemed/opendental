@@ -10,6 +10,8 @@ namespace OpenDentBusiness {
 		public string PrefName;//
 		///<summary>The stored value.</summary>
 		public string ValueString;
+		///<summary>Documentation on usage and values of each pref.</summary>
+		public string Comments;
 	}
 
 	//public class DtoPrefRefresh:DtoQueryBase {

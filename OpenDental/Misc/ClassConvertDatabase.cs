@@ -7616,8 +7616,12 @@ namespace OpenDental{
 					General.NonQ(command);
 					command="ALTER TABLE procedurelog ADD SiteNum int default '0' NOT NULL";
 					General.NonQ(command);
-
-
+					command="ALTER TABLE preference ADD Comments text default ''";
+					General.NonQ(command);
+					command="UPDATE preference SET Comments=''";
+					General.NonQ(command);
+					command="INSERT INTO preference (PrefName,ValueString,Comments) VALUES ('TitleBarShowSite','0','Shows the site.Description of the patient.Site in the main title bar.')";
+					General.NonQ(command);
 
 
 				}

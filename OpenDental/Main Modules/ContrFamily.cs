@@ -419,10 +419,14 @@ namespace OpenDental{
 			}
 			else{
 				string email=PatCur.Email;
+				int siteNum=PatCur.SiteNum;
 				FormPatientEdit FormP=new FormPatientEdit(PatCur,FamCur);
 				FormP.IsNew=false;
 				FormP.ShowDialog();
 				if(email!=PatCur.Email){//PatCur.EmailChanged){//do it this way later
+					OnPatientSelected(PatCur.PatNum,PatCur.GetNameLF(),PatCur.Email!="",PatCur.ChartNumber);
+				}
+				if(siteNum!=PatCur.SiteNum){
 					OnPatientSelected(PatCur.PatNum,PatCur.GetNameLF(),PatCur.Email!="",PatCur.ChartNumber);
 				}
 			}

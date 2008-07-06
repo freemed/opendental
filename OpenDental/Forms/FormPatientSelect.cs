@@ -64,6 +64,8 @@ namespace OpenDental{
 		private OpenDental.UI.Button butGetAll;
 		private CheckBox checkRefresh;
 		private OpenDental.UI.Button butAddAll;
+		private ComboBox comboSite;
+		private Label labelSite;
 		private TextBox selectedTxtBox;
 
 		///<summary></summary>
@@ -101,6 +103,8 @@ namespace OpenDental{
 			this.butOK = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
 			this.groupBox2 = new System.Windows.Forms.GroupBox();
+			this.comboSite = new System.Windows.Forms.ComboBox();
+			this.labelSite = new System.Windows.Forms.Label();
 			this.comboBillingType = new System.Windows.Forms.ComboBox();
 			this.textBirthdate = new System.Windows.Forms.TextBox();
 			this.label2 = new System.Windows.Forms.Label();
@@ -228,6 +232,8 @@ namespace OpenDental{
 			// 
 			// groupBox2
 			// 
+			this.groupBox2.Controls.Add(this.comboSite);
+			this.groupBox2.Controls.Add(this.labelSite);
 			this.groupBox2.Controls.Add(this.comboBillingType);
 			this.groupBox2.Controls.Add(this.textBirthdate);
 			this.groupBox2.Controls.Add(this.label2);
@@ -261,6 +267,25 @@ namespace OpenDental{
 			this.groupBox2.TabIndex = 0;
 			this.groupBox2.TabStop = false;
 			this.groupBox2.Text = "Search by:";
+			// 
+			// comboSite
+			// 
+			this.comboSite.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboSite.Location = new System.Drawing.Point(87,271);
+			this.comboSite.MaxDropDownItems = 40;
+			this.comboSite.Name = "comboSite";
+			this.comboSite.Size = new System.Drawing.Size(138,21);
+			this.comboSite.TabIndex = 39;
+			this.comboSite.SelectionChangeCommitted += new System.EventHandler(this.comboSite_SelectionChangeCommitted);
+			// 
+			// labelSite
+			// 
+			this.labelSite.Location = new System.Drawing.Point(9,275);
+			this.labelSite.Name = "labelSite";
+			this.labelSite.Size = new System.Drawing.Size(77,14);
+			this.labelSite.TabIndex = 38;
+			this.labelSite.Text = "Site";
+			this.labelSite.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// comboBillingType
 			// 
@@ -332,12 +357,12 @@ namespace OpenDental{
 			// 
 			// label11
 			// 
-			this.label11.Location = new System.Drawing.Point(3,249);
+			this.label11.Location = new System.Drawing.Point(4,249);
 			this.label11.Name = "label11";
-			this.label11.Size = new System.Drawing.Size(83,29);
+			this.label11.Size = new System.Drawing.Size(83,18);
 			this.label11.TabIndex = 21;
 			this.label11.Text = "Billing Type";
-			this.label11.TextAlign = System.Drawing.ContentAlignment.TopRight;
+			this.label11.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// label10
 			// 
@@ -620,6 +645,17 @@ namespace OpenDental{
 			for(int i=0;i<DefC.Short[(int)DefCat.BillingTypes].Length;i++){
 				comboBillingType.Items.Add(DefC.Short[(int)DefCat.BillingTypes][i].ItemName);
 			}
+			if(PrefC.GetBool("EasyHidePublicHealth")){
+				comboSite.Visible=false;
+				labelSite.Visible=false;
+			}
+			else{
+				comboSite.Items.Add(Lan.g(this,"All"));
+				comboSite.SelectedIndex=0;
+				for(int i=0;i<SiteC.List.Length;i++) {
+					comboSite.Items.Add(SiteC.List[i].Description);
+				}
+			}
 			FillSearchOption();
 			SetGridCols();
 			if(InitialPatNum!=0){
@@ -695,6 +731,8 @@ namespace OpenDental{
 			col=new ODGridColumn("Pri Prov",85);
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn("Birthdate",70);
+			gridMain.Columns.Add(col);
+			col=new ODGridColumn("Site",90);
 			gridMain.Columns.Add(col);
 			gridMain.EndUpdate();
 		}
@@ -796,6 +834,10 @@ namespace OpenDental{
 		}
 
 		private void comboBillingType_SelectionChangeCommitted(object sender,EventArgs e) {
+			OnDataEntered();
+		}
+
+		private void comboSite_SelectionChangeCommitted(object sender,EventArgs e) {
 			OnDataEntered();
 		}
 
@@ -923,11 +965,16 @@ namespace OpenDental{
 			if(comboBillingType.SelectedIndex!=0){
 				billingType=DefC.Short[(int)DefCat.BillingTypes][comboBillingType.SelectedIndex-1].DefNum;
 			}
+			int siteNum=0;
+			if(!PrefC.GetBool("EasyHidePublicHealth") && comboSite.SelectedIndex!=0) {
+				siteNum=SiteC.List[comboSite.SelectedIndex-1].SiteNum;
+			}
 			DateTime birthdate=PIn.PDate(textBirthdate.Text);//this will frequently be minval.
 			PtDataTable=Patients.GetPtDataTable(limit,textLName.Text,textFName.Text,textHmPhone.Text,
 				textAddress.Text,checkHideInactive.Checked,textCity.Text,textState.Text,
 				textSSN.Text,textPatNum.Text,textChartNumber.Text,billingType,
-				checkGuarantors.Checked,checkShowArchived.Checked,Security.CurUser.ClinicNum,birthdate);
+				checkGuarantors.Checked,checkShowArchived.Checked,Security.CurUser.ClinicNum,birthdate,
+				siteNum);
 			gridMain.BeginUpdate();
 			gridMain.Rows.Clear();
 			ODGridRow row;
@@ -950,6 +997,7 @@ namespace OpenDental{
 				row.Cells.Add(PtDataTable.Rows[i]["State"].ToString());
 				row.Cells.Add(PtDataTable.Rows[i]["PriProv"].ToString());
 				row.Cells.Add(PtDataTable.Rows[i]["Birthdate"].ToString());
+				row.Cells.Add(PtDataTable.Rows[i]["site"].ToString());
 				gridMain.Rows.Add(row);
 			}
 			gridMain.EndUpdate();
@@ -1080,6 +1128,8 @@ namespace OpenDental{
 		private void butCancel_Click(object sender, System.EventArgs e) {
 			DialogResult=DialogResult.Cancel;
 		}
+
+		
 
 		
 

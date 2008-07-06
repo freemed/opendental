@@ -2806,6 +2806,7 @@ namespace OpenDental{
 		private void butPickSite_Click(object sender,EventArgs e) {
 			FormSites FormS=new FormSites();
 			FormS.IsSelectionMode=true;
+			FormS.SelectedSiteNum=ProcCur.SiteNum;
 			FormS.ShowDialog();
 			if(FormS.DialogResult!=DialogResult.OK){
 				return;
