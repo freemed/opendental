@@ -33,6 +33,8 @@ namespace OpenDental{
 		private int pagesPrinted;
 		private bool headingPrinted;
 		private PrintDocument pd;
+		private ComboBox comboSite;
+		private Label labelSite;
 		private int headingPrintH;
 
 		///<summary></summary>
@@ -72,6 +74,8 @@ namespace OpenDental{
 			this.comboOrder = new System.Windows.Forms.ComboBox();
 			this.label1 = new System.Windows.Forms.Label();
 			this.butPrint = new OpenDental.UI.Button();
+			this.comboSite = new System.Windows.Forms.ComboBox();
+			this.labelSite = new System.Windows.Forms.Label();
 			this.SuspendLayout();
 			// 
 			// butClose
@@ -93,10 +97,10 @@ namespace OpenDental{
 			// gridMain
 			// 
 			this.gridMain.HScrollVisible = false;
-			this.gridMain.Location = new System.Drawing.Point(12,35);
+			this.gridMain.Location = new System.Drawing.Point(12,52);
 			this.gridMain.Name = "gridMain";
 			this.gridMain.ScrollValue = 0;
-			this.gridMain.Size = new System.Drawing.Size(734,589);
+			this.gridMain.Size = new System.Drawing.Size(734,572);
 			this.gridMain.TabIndex = 2;
 			this.gridMain.Title = "Planned Appointments";
 			this.gridMain.TranslationName = "FormTrackNext";
@@ -113,7 +117,7 @@ namespace OpenDental{
 			// 
 			// label4
 			// 
-			this.label4.Location = new System.Drawing.Point(238,9);
+			this.label4.Location = new System.Drawing.Point(239,9);
 			this.label4.Name = "label4";
 			this.label4.Size = new System.Drawing.Size(91,14);
 			this.label4.TabIndex = 25;
@@ -170,11 +174,31 @@ namespace OpenDental{
 			this.butPrint.Text = "Print List";
 			this.butPrint.Click += new System.EventHandler(this.butPrint_Click);
 			// 
+			// comboSite
+			// 
+			this.comboSite.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboSite.Location = new System.Drawing.Point(331,28);
+			this.comboSite.MaxDropDownItems = 40;
+			this.comboSite.Name = "comboSite";
+			this.comboSite.Size = new System.Drawing.Size(181,21);
+			this.comboSite.TabIndex = 33;
+			// 
+			// labelSite
+			// 
+			this.labelSite.Location = new System.Drawing.Point(239,32);
+			this.labelSite.Name = "labelSite";
+			this.labelSite.Size = new System.Drawing.Size(91,14);
+			this.labelSite.TabIndex = 32;
+			this.labelSite.Text = "Site";
+			this.labelSite.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
 			// FormTrackNext
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.CancelButton = this.butClose;
 			this.ClientSize = new System.Drawing.Size(771,683);
+			this.Controls.Add(this.comboSite);
+			this.Controls.Add(this.labelSite);
 			this.Controls.Add(this.butPrint);
 			this.Controls.Add(this.comboOrder);
 			this.Controls.Add(this.label1);
@@ -190,8 +214,8 @@ namespace OpenDental{
 			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Track Planned Appointments";
-			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormTrackNext_FormClosing);
 			this.Load += new System.EventHandler(this.FormTrackNext_Load);
+			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormTrackNext_FormClosing);
 			this.ResumeLayout(false);
 
 		}
@@ -207,6 +231,17 @@ namespace OpenDental{
 			comboProv.SelectedIndex=0;
 			for(int i=0;i<ProviderC.List.Length;i++) {
 				comboProv.Items.Add(ProviderC.List[i].GetLongDesc());
+			}
+			if(PrefC.GetBool("EasyHidePublicHealth")){
+				comboSite.Visible=false;
+				labelSite.Visible=false;
+			}
+			else{
+				comboSite.Items.Add(Lan.g(this,"All"));
+				comboSite.SelectedIndex=0;
+				for(int i=0;i<SiteC.List.Length;i++) {
+					comboSite.Items.Add(SiteC.List[i].Description);
+				}
 			}
 			FillGrid();
 		}
@@ -229,7 +264,11 @@ namespace OpenDental{
 			if(comboProv.SelectedIndex!=0) {
 				provNum=ProviderC.List[comboProv.SelectedIndex-1].ProvNum;
 			}
-			AptList=Appointments.RefreshPlannedTracker(order,provNum);
+			int siteNum=0;
+			if(!PrefC.GetBool("EasyHidePublicHealth") && comboSite.SelectedIndex!=0) {
+				siteNum=SiteC.List[comboSite.SelectedIndex-1].SiteNum;
+			}
+			AptList=Appointments.RefreshPlannedTracker(order,provNum,siteNum);
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
 			ODGridColumn col=new ODGridColumn(Lan.g(this,"Patient"),140);

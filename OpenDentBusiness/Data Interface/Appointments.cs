@@ -21,7 +21,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Gets list of unscheduled appointments.  Allowed orderby: status, alph, date</summary>
-		public static Appointment[] RefreshUnsched(string orderby,int provNum) {
+		public static Appointment[] RefreshUnsched(string orderby,int provNum,int siteNum) {
 			string command="SELECT * FROM appointment ";
 			if(orderby=="alph") {
 				command+="LEFT JOIN patient ON patient.PatNum=appointment.PatNum ";
@@ -29,6 +29,9 @@ namespace OpenDentBusiness{
 			command+="WHERE AptStatus = "+POut.PInt((int)ApptStatus.UnschedList)+" ";
 			if(provNum>0) {
 				command+="AND (appointment.ProvNum="+POut.PInt(provNum)+" OR appointment.ProvHyg="+POut.PInt(provNum)+") ";
+			}
+			if(siteNum>0) {
+				command+="AND patient.SiteNum="+POut.PInt(siteNum)+" ";
 			}
 			if(orderby=="status") {
 				command+="ORDER BY UnschedStatus,AptDateTime";
@@ -43,7 +46,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Allowed orderby: status, alph, date</summary>
-		public static List<Appointment> RefreshPlannedTracker(string orderby,int provNum){
+		public static List<Appointment> RefreshPlannedTracker(string orderby,int provNum,int siteNum){
 			string command="SELECT tplanned.*,tregular.aptnum "
 				+"FROM appointment tplanned "
 				+"LEFT JOIN appointment tregular ON tplanned.aptnum = tregular.nextaptnum ";
@@ -54,6 +57,9 @@ namespace OpenDentBusiness{
 				+" AND tregular.aptnum IS NULL ";
 			if(provNum>0) {
 				command+="AND (tplanned.ProvNum="+POut.PInt(provNum)+" OR tplanned.ProvHyg="+POut.PInt(provNum)+") ";
+			}
+			if(siteNum>0) {
+				command+="AND patient.SiteNum="+POut.PInt(siteNum)+" ";
 			}
 			if(orderby=="status"){
 				command+="ORDER BY tplanned.UnschedStatus,tplanned.AptDateTime";

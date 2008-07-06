@@ -57,6 +57,8 @@ namespace OpenDental{
 		private OpenDental.UI.Button butSchedPat;
 		private GroupBox groupBox2;
 		private OpenDental.UI.Button butSchedFam;
+		private ComboBox comboSite;
+		private Label labelSite;
 		///<summary>Only used if PinClicked=true</summary>
 		public List<int> AptNumsSelected;
 
@@ -110,6 +112,8 @@ namespace OpenDental{
 			this.butSchedPat = new OpenDental.UI.Button();
 			this.groupBox2 = new System.Windows.Forms.GroupBox();
 			this.butSchedFam = new OpenDental.UI.Button();
+			this.comboSite = new System.Windows.Forms.ComboBox();
+			this.labelSite = new System.Windows.Forms.Label();
 			this.groupBox1.SuspendLayout();
 			this.groupBox3.SuspendLayout();
 			this.groupBox2.SuspendLayout();
@@ -117,7 +121,7 @@ namespace OpenDental{
 			// 
 			// labelClinic
 			// 
-			this.labelClinic.Location = new System.Drawing.Point(14,151);
+			this.labelClinic.Location = new System.Drawing.Point(14,150);
 			this.labelClinic.Name = "labelClinic";
 			this.labelClinic.Size = new System.Drawing.Size(91,14);
 			this.labelClinic.TabIndex = 22;
@@ -148,7 +152,7 @@ namespace OpenDental{
 			this.butRefresh.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butRefresh.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butRefresh.CornerRadius = 4F;
-			this.butRefresh.Location = new System.Drawing.Point(78,201);
+			this.butRefresh.Location = new System.Drawing.Point(78,234);
 			this.butRefresh.Name = "butRefresh";
 			this.butRefresh.Size = new System.Drawing.Size(98,24);
 			this.butRefresh.TabIndex = 2;
@@ -158,6 +162,8 @@ namespace OpenDental{
 			// groupBox1
 			// 
 			this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.groupBox1.Controls.Add(this.comboSite);
+			this.groupBox1.Controls.Add(this.labelSite);
 			this.groupBox1.Controls.Add(this.comboClinic);
 			this.groupBox1.Controls.Add(this.labelClinic);
 			this.groupBox1.Controls.Add(this.comboProv);
@@ -172,7 +178,7 @@ namespace OpenDental{
 			this.groupBox1.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.groupBox1.Location = new System.Drawing.Point(771,14);
 			this.groupBox1.Name = "groupBox1";
-			this.groupBox1.Size = new System.Drawing.Size(188,233);
+			this.groupBox1.Size = new System.Drawing.Size(188,266);
 			this.groupBox1.TabIndex = 1;
 			this.groupBox1.TabStop = false;
 			this.groupBox1.Text = "View";
@@ -180,7 +186,7 @@ namespace OpenDental{
 			// comboClinic
 			// 
 			this.comboClinic.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboClinic.Location = new System.Drawing.Point(17,168);
+			this.comboClinic.Location = new System.Drawing.Point(17,166);
 			this.comboClinic.MaxDropDownItems = 40;
 			this.comboClinic.Name = "comboClinic";
 			this.comboClinic.Size = new System.Drawing.Size(160,21);
@@ -197,7 +203,7 @@ namespace OpenDental{
 			// 
 			// label4
 			// 
-			this.label4.Location = new System.Drawing.Point(14,108);
+			this.label4.Location = new System.Drawing.Point(14,109);
 			this.label4.Name = "label4";
 			this.label4.Size = new System.Drawing.Size(91,14);
 			this.label4.TabIndex = 20;
@@ -265,7 +271,7 @@ namespace OpenDental{
 			this.butReport.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butReport.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butReport.CornerRadius = 4F;
-			this.butReport.Location = new System.Drawing.Point(861,524);
+			this.butReport.Location = new System.Drawing.Point(861,518);
 			this.butReport.Name = "butReport";
 			this.butReport.Size = new System.Drawing.Size(87,24);
 			this.butReport.TabIndex = 13;
@@ -282,7 +288,7 @@ namespace OpenDental{
 			this.butLabels.CornerRadius = 4F;
 			this.butLabels.Image = global::OpenDental.Properties.Resources.butLabel;
 			this.butLabels.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butLabels.Location = new System.Drawing.Point(829,489);
+			this.butLabels.Location = new System.Drawing.Point(829,487);
 			this.butLabels.Name = "butLabels";
 			this.butLabels.Size = new System.Drawing.Size(119,24);
 			this.butLabels.TabIndex = 14;
@@ -298,9 +304,9 @@ namespace OpenDental{
 			this.groupBox3.Controls.Add(this.comboStatus);
 			this.groupBox3.Controls.Add(this.butSetStatus);
 			this.groupBox3.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.groupBox3.Location = new System.Drawing.Point(771,253);
+			this.groupBox3.Location = new System.Drawing.Point(771,285);
 			this.groupBox3.Name = "groupBox3";
-			this.groupBox3.Size = new System.Drawing.Size(188,89);
+			this.groupBox3.Size = new System.Drawing.Size(188,79);
 			this.groupBox3.TabIndex = 15;
 			this.groupBox3.TabStop = false;
 			this.groupBox3.Text = "Set Status";
@@ -308,7 +314,7 @@ namespace OpenDental{
 			// comboStatus
 			// 
 			this.comboStatus.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboStatus.Location = new System.Drawing.Point(17,24);
+			this.comboStatus.Location = new System.Drawing.Point(17,19);
 			this.comboStatus.MaxDropDownItems = 40;
 			this.comboStatus.Name = "comboStatus";
 			this.comboStatus.Size = new System.Drawing.Size(160,21);
@@ -322,7 +328,7 @@ namespace OpenDental{
 			this.butSetStatus.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butSetStatus.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butSetStatus.CornerRadius = 4F;
-			this.butSetStatus.Location = new System.Drawing.Point(110,56);
+			this.butSetStatus.Location = new System.Drawing.Point(110,47);
 			this.butSetStatus.Name = "butSetStatus";
 			this.butSetStatus.Size = new System.Drawing.Size(67,24);
 			this.butSetStatus.TabIndex = 14;
@@ -339,7 +345,7 @@ namespace OpenDental{
 			this.butPostcards.CornerRadius = 4F;
 			this.butPostcards.Image = global::OpenDental.Properties.Resources.butPreview;
 			this.butPostcards.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butPostcards.Location = new System.Drawing.Point(829,454);
+			this.butPostcards.Location = new System.Drawing.Point(829,456);
 			this.butPostcards.Name = "butPostcards";
 			this.butPostcards.Size = new System.Drawing.Size(119,24);
 			this.butPostcards.TabIndex = 16;
@@ -370,7 +376,7 @@ namespace OpenDental{
 			this.butPrint.CornerRadius = 4F;
 			this.butPrint.Image = global::OpenDental.Properties.Resources.butPrintSmall;
 			this.butPrint.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butPrint.Location = new System.Drawing.Point(861,559);
+			this.butPrint.Location = new System.Drawing.Point(861,549);
 			this.butPrint.Name = "butPrint";
 			this.butPrint.Size = new System.Drawing.Size(87,24);
 			this.butPrint.TabIndex = 19;
@@ -385,7 +391,7 @@ namespace OpenDental{
 			this.butSchedPat.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butSchedPat.CornerRadius = 4F;
 			this.butSchedPat.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butSchedPat.Location = new System.Drawing.Point(90,19);
+			this.butSchedPat.Location = new System.Drawing.Point(90,16);
 			this.butSchedPat.Name = "butSchedPat";
 			this.butSchedPat.Size = new System.Drawing.Size(87,24);
 			this.butSchedPat.TabIndex = 58;
@@ -396,9 +402,9 @@ namespace OpenDental{
 			// 
 			this.groupBox2.Controls.Add(this.butSchedFam);
 			this.groupBox2.Controls.Add(this.butSchedPat);
-			this.groupBox2.Location = new System.Drawing.Point(771,347);
+			this.groupBox2.Location = new System.Drawing.Point(771,369);
 			this.groupBox2.Name = "groupBox2";
-			this.groupBox2.Size = new System.Drawing.Size(188,87);
+			this.groupBox2.Size = new System.Drawing.Size(188,78);
 			this.groupBox2.TabIndex = 59;
 			this.groupBox2.TabStop = false;
 			this.groupBox2.Text = "Schedule";
@@ -411,12 +417,30 @@ namespace OpenDental{
 			this.butSchedFam.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butSchedFam.CornerRadius = 4F;
 			this.butSchedFam.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butSchedFam.Location = new System.Drawing.Point(90,51);
+			this.butSchedFam.Location = new System.Drawing.Point(90,45);
 			this.butSchedFam.Name = "butSchedFam";
 			this.butSchedFam.Size = new System.Drawing.Size(87,24);
 			this.butSchedFam.TabIndex = 59;
 			this.butSchedFam.Text = "Family";
 			this.butSchedFam.Click += new System.EventHandler(this.butSchedFam_Click);
+			// 
+			// comboSite
+			// 
+			this.comboSite.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboSite.Location = new System.Drawing.Point(17,207);
+			this.comboSite.MaxDropDownItems = 40;
+			this.comboSite.Name = "comboSite";
+			this.comboSite.Size = new System.Drawing.Size(160,21);
+			this.comboSite.TabIndex = 25;
+			// 
+			// labelSite
+			// 
+			this.labelSite.Location = new System.Drawing.Point(14,191);
+			this.labelSite.Name = "labelSite";
+			this.labelSite.Size = new System.Drawing.Size(91,14);
+			this.labelSite.TabIndex = 24;
+			this.labelSite.Text = "Site";
+			this.labelSite.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
 			// 
 			// FormRecallList
 			// 
@@ -483,6 +507,17 @@ namespace OpenDental{
 					comboClinic.Items.Add(Clinics.List[i].Description);
 				}
 			}
+			if(PrefC.GetBool("EasyHidePublicHealth")){
+				comboSite.Visible=false;
+				labelSite.Visible=false;
+			}
+			else{
+				comboSite.Items.Add(Lan.g(this,"All"));
+				comboSite.SelectedIndex=0;
+				for(int i=0;i<SiteC.List.Length;i++) {
+					comboSite.Items.Add(SiteC.List[i].Description);
+				}
+			}
 			comboStatus.Items.Clear();
 			for(int i=0;i<DefC.Short[(int)DefCat.RecallUnschedStatus].Length;i++){
 				comboStatus.Items.Add(DefC.Short[(int)DefCat.RecallUnschedStatus][i].ItemName);
@@ -518,7 +553,11 @@ namespace OpenDental{
 			if(!PrefC.GetBool("EasyNoClinics") && comboClinic.SelectedIndex!=0) {
 				clinicNum=Clinics.List[comboClinic.SelectedIndex-1].ClinicNum;
 			}
-			table=Recalls.GetRecallList(fromDate,toDate,checkGroupFamilies.Checked,provNum,clinicNum);
+			int siteNum=0;
+			if(!PrefC.GetBool("EasyHidePublicHealth") && comboSite.SelectedIndex!=0) {
+				siteNum=SiteC.List[comboSite.SelectedIndex-1].SiteNum;
+			}
+			table=Recalls.GetRecallList(fromDate,toDate,checkGroupFamilies.Checked,provNum,clinicNum,siteNum);
 			int scrollval=gridMain.ScrollValue;
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();

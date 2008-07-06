@@ -49,7 +49,9 @@ namespace OpenDental{
 		}
 
 		///<summary>Only used in FormRecallList to get a list of patients with recall.  Supply a date range, using min(-1 day) and max values if user left blank.  If provNum=0, then it will get all provnums.  It looks for both provider match in either PriProv or SecProv.</summary>
-		public static DataTable GetRecallList(DateTime fromDate,DateTime toDate,bool groupByFamilies,int provNum,int clinicNum){
+		public static DataTable GetRecallList(DateTime fromDate,DateTime toDate,bool groupByFamilies,int provNum,int clinicNum,
+			int siteNum)
+		{
 			DataTable table=new DataTable();
 			DataRow row;
 			//columns that start with lowercase are altered for display rather than being raw data.
@@ -79,6 +81,9 @@ namespace OpenDental{
 			}
 			if(clinicNum>0) {
 				command+="AND patient.ClinicNum="+POut.PInt(clinicNum)+" ";
+			}
+			if(siteNum>0) {
+				command+="AND patient.SiteNum="+POut.PInt(siteNum)+" ";
 			}
 			command+=
 				"AND NOT EXISTS("//test for future appt.

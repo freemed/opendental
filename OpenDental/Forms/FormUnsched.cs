@@ -30,6 +30,8 @@ namespace OpenDental{
 		private ComboBox comboProv;
 		private Label label4;
 		private OpenDental.UI.Button butRefresh;
+		private ComboBox comboSite;
+		private Label labelSite;
 		///<summary>When this form closes, this will be the patNum of the last patient viewed.  The calling form should then make use of this to refresh to that patient.  If 0, then calling form should not refresh.</summary>
 		public int SelectedPatNum;
 
@@ -65,6 +67,8 @@ namespace OpenDental{
 			this.comboProv = new System.Windows.Forms.ComboBox();
 			this.label4 = new System.Windows.Forms.Label();
 			this.butRefresh = new OpenDental.UI.Button();
+			this.comboSite = new System.Windows.Forms.ComboBox();
+			this.labelSite = new System.Windows.Forms.Label();
 			this.SuspendLayout();
 			// 
 			// butClose
@@ -114,7 +118,7 @@ namespace OpenDental{
 			// comboOrder
 			// 
 			this.comboOrder.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboOrder.Location = new System.Drawing.Point(102,8);
+			this.comboOrder.Location = new System.Drawing.Point(97,8);
 			this.comboOrder.MaxDropDownItems = 40;
 			this.comboOrder.Name = "comboOrder";
 			this.comboOrder.Size = new System.Drawing.Size(133,21);
@@ -122,9 +126,9 @@ namespace OpenDental{
 			// 
 			// label1
 			// 
-			this.label1.Location = new System.Drawing.Point(9,12);
+			this.label1.Location = new System.Drawing.Point(23,12);
 			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(91,14);
+			this.label1.Size = new System.Drawing.Size(72,14);
 			this.label1.TabIndex = 34;
 			this.label1.Text = "Order by";
 			this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -132,7 +136,7 @@ namespace OpenDental{
 			// comboProv
 			// 
 			this.comboProv.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboProv.Location = new System.Drawing.Point(329,8);
+			this.comboProv.Location = new System.Drawing.Point(319,8);
 			this.comboProv.MaxDropDownItems = 40;
 			this.comboProv.Name = "comboProv";
 			this.comboProv.Size = new System.Drawing.Size(181,21);
@@ -140,9 +144,9 @@ namespace OpenDental{
 			// 
 			// label4
 			// 
-			this.label4.Location = new System.Drawing.Point(236,12);
+			this.label4.Location = new System.Drawing.Point(248,12);
 			this.label4.Name = "label4";
-			this.label4.Size = new System.Drawing.Size(91,14);
+			this.label4.Size = new System.Drawing.Size(69,14);
 			this.label4.TabIndex = 32;
 			this.label4.Text = "Provider";
 			this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -155,18 +159,38 @@ namespace OpenDental{
 			this.butRefresh.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butRefresh.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butRefresh.CornerRadius = 4F;
-			this.butRefresh.Location = new System.Drawing.Point(529,6);
+			this.butRefresh.Location = new System.Drawing.Point(762,6);
 			this.butRefresh.Name = "butRefresh";
-			this.butRefresh.Size = new System.Drawing.Size(84,26);
+			this.butRefresh.Size = new System.Drawing.Size(86,26);
 			this.butRefresh.TabIndex = 31;
 			this.butRefresh.Text = "&Refresh";
 			this.butRefresh.Click += new System.EventHandler(this.butRefresh_Click);
+			// 
+			// comboSite
+			// 
+			this.comboSite.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboSite.Location = new System.Drawing.Point(584,8);
+			this.comboSite.MaxDropDownItems = 40;
+			this.comboSite.Name = "comboSite";
+			this.comboSite.Size = new System.Drawing.Size(160,21);
+			this.comboSite.TabIndex = 37;
+			// 
+			// labelSite
+			// 
+			this.labelSite.Location = new System.Drawing.Point(506,12);
+			this.labelSite.Name = "labelSite";
+			this.labelSite.Size = new System.Drawing.Size(77,14);
+			this.labelSite.TabIndex = 36;
+			this.labelSite.Text = "Site";
+			this.labelSite.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// FormUnsched
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.CancelButton = this.butClose;
 			this.ClientSize = new System.Drawing.Size(858,672);
+			this.Controls.Add(this.comboSite);
+			this.Controls.Add(this.labelSite);
 			this.Controls.Add(this.comboOrder);
 			this.Controls.Add(this.label1);
 			this.Controls.Add(this.comboProv);
@@ -182,9 +206,9 @@ namespace OpenDental{
 			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Unscheduled List";
+			this.Load += new System.EventHandler(this.FormUnsched_Load);
 			this.Closing += new System.ComponentModel.CancelEventHandler(this.FormUnsched_Closing);
 			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormUnsched_FormClosing);
-			this.Load += new System.EventHandler(this.FormUnsched_Load);
 			this.ResumeLayout(false);
 
 		}
@@ -200,6 +224,17 @@ namespace OpenDental{
 			comboProv.SelectedIndex=0;
 			for(int i=0;i<ProviderC.List.Length;i++) {
 				comboProv.Items.Add(ProviderC.List[i].GetLongDesc());
+			}
+			if(PrefC.GetBool("EasyHidePublicHealth")){
+				comboSite.Visible=false;
+				labelSite.Visible=false;
+			}
+			else{
+				comboSite.Items.Add(Lan.g(this,"All"));
+				comboSite.SelectedIndex=0;
+				for(int i=0;i<SiteC.List.Length;i++) {
+					comboSite.Items.Add(SiteC.List[i].Description);
+				}
 			}
 			FillGrid();
 		}
@@ -222,7 +257,11 @@ namespace OpenDental{
 			if(comboProv.SelectedIndex!=0) {
 				provNum=ProviderC.List[comboProv.SelectedIndex-1].ProvNum;
 			}
-			ListUn=Appointments.RefreshUnsched(order,provNum);
+			int siteNum=0;
+			if(!PrefC.GetBool("EasyHidePublicHealth") && comboSite.SelectedIndex!=0) {
+				siteNum=SiteC.List[comboSite.SelectedIndex-1].SiteNum;
+			}
+			ListUn=Appointments.RefreshUnsched(order,provNum,siteNum);
 			int scrollVal=grid.ScrollValue;
 			grid.BeginUpdate();
 			grid.Columns.Clear();
