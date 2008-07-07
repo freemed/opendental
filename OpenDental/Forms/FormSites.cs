@@ -168,7 +168,7 @@ namespace OpenDental{
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Sites";
 			this.Load += new System.EventHandler(this.FormSites_Load);
-			this.Closing += new System.ComponentModel.CancelEventHandler(this.FormClinics_Closing);
+			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormSites_FormClosing);
 			this.ResumeLayout(false);
 
 		}
@@ -268,7 +268,7 @@ namespace OpenDental{
 			}
 		}
 
-		private void FormClinics_Closing(object sender, System.ComponentModel.CancelEventArgs e) {
+		private void FormSites_FormClosing(object sender,FormClosingEventArgs e) {
 			if(changed){
 				DataValid.SetInvalid(InvalidType.Sites);
 			}

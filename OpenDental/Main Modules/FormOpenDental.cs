@@ -190,6 +190,7 @@ namespace OpenDental{
 		private MenuItem menuItemAnestheticMeds;
 		///<summary>This list will only contain events for this computer where the users clicked to disable a popup for a specified period of time.  So it won't typically have many items in it.</summary>
 		private List<PopupEvent> PopupEventList;
+		private MenuItem menuItemPharmacies;
 		private UserControlPhonePanel phonePanel;
 
 		///<summary></summary>
@@ -344,6 +345,7 @@ namespace OpenDental{
 			this.lightSignalGrid1 = new OpenDental.UI.LightSignalGrid();
 			this.myOutlookBar = new OpenDental.OutlookBar();
 			this.smartCardWatcher1 = new OpenDental.SmartCards.SmartCardWatcher();
+			this.menuItemPharmacies = new System.Windows.Forms.MenuItem();
 			this.SuspendLayout();
 			// 
 			// timerTimeIndic
@@ -665,6 +667,7 @@ namespace OpenDental{
             this.menuItemInsPlans,
             this.menuItemLabCases,
             this.menuItemMedications,
+            this.menuItemPharmacies,
             this.menuItemProviders,
             this.menuItemPrescriptions,
             this.menuItemReferrals,
@@ -754,31 +757,31 @@ namespace OpenDental{
 			// 
 			// menuItemProviders
 			// 
-			this.menuItemProviders.Index = 13;
+			this.menuItemProviders.Index = 14;
 			this.menuItemProviders.Text = "Providers";
 			this.menuItemProviders.Click += new System.EventHandler(this.menuItemProviders_Click);
 			// 
 			// menuItemPrescriptions
 			// 
-			this.menuItemPrescriptions.Index = 14;
+			this.menuItemPrescriptions.Index = 15;
 			this.menuItemPrescriptions.Text = "Pre&scriptions";
 			this.menuItemPrescriptions.Click += new System.EventHandler(this.menuItemPrescriptions_Click);
 			// 
 			// menuItemReferrals
 			// 
-			this.menuItemReferrals.Index = 15;
+			this.menuItemReferrals.Index = 16;
 			this.menuItemReferrals.Text = "&Referrals";
 			this.menuItemReferrals.Click += new System.EventHandler(this.menuItemReferrals_Click);
 			// 
 			// menuItemSchools
 			// 
-			this.menuItemSchools.Index = 16;
+			this.menuItemSchools.Index = 17;
 			this.menuItemSchools.Text = "Sites";
 			this.menuItemSchools.Click += new System.EventHandler(this.menuItemSites_Click);
 			// 
 			// menuItemZipCodes
 			// 
-			this.menuItemZipCodes.Index = 17;
+			this.menuItemZipCodes.Index = 18;
 			this.menuItemZipCodes.Text = "&Zip Codes";
 			this.menuItemZipCodes.Click += new System.EventHandler(this.menuItemZipCodes_Click);
 			// 
@@ -1159,6 +1162,12 @@ namespace OpenDental{
 			// smartCardWatcher1
 			// 
 			this.smartCardWatcher1.PatientCardInserted += new OpenDental.SmartCards.PatientCardInsertedEventHandler(this.OnPatientCardInserted);
+			// 
+			// menuItemPharmacies
+			// 
+			this.menuItemPharmacies.Index = 13;
+			this.menuItemPharmacies.Text = "Pharmacies";
+			this.menuItemPharmacies.Click += new System.EventHandler(this.menuItemPharmacies_Click);
 			// 
 			// FormOpenDental
 			// 
@@ -3318,6 +3327,11 @@ namespace OpenDental{
 			FormM.ShowDialog();
 		}
 
+		private void menuItemPharmacies_Click(object sender,EventArgs e) {
+			FormPharmacies FormP=new FormPharmacies();
+			FormP.ShowDialog();
+		}
+
 		private void menuItemProviders_Click(object sender, System.EventArgs e) {
 			if(!Security.IsAuthorized(Permissions.Setup)){
 				return;
@@ -3649,6 +3663,8 @@ namespace OpenDental{
 			Reporting.Allocators.MyAllocator1.FormInstallAllocator_Provider fap = new OpenDental.Reporting.Allocators.MyAllocator1.FormInstallAllocator_Provider();
 			fap.ShowDialog();
 		}
+
+		
 
 
 		

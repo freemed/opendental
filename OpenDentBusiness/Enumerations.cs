@@ -271,7 +271,9 @@ namespace OpenDentBusiness{
 		///<summary></summary>
 		TaskPopup,
 		///<summary></summary>
-		Sites
+		Sites,
+		///<summary></summary>
+		Pharmacies
 	}
 	//<summary></summary>
 	/*public enum ButtonType{

@@ -81,6 +81,9 @@ namespace OpenDental{
 				Operatories.FillCache(ds.Tables["Operatory"]);
 				//AccountingAutoPayL.Refresh();
 			}
+			if(itypes.Contains((int)InvalidType.Pharmacies) || isAll){
+				Pharmacies.FillCache(ds.Tables["Pharmacy"]);
+			}
 			if(itypes.Contains((int)InvalidType.Prefs) || isAll){
 				Prefs.FillCache(ds.Tables["Pref"]);
 			}

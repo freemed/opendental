@@ -73,6 +73,9 @@ namespace OpenDentBusiness {
 				ds.Tables.Add(Operatories.RefreshCache());
 				//AccountingAutoPayL.Refresh();
 			}
+			if(itypes.Contains((int)InvalidType.Pharmacies) || isAll){
+				ds.Tables.Add(Pharmacies.RefreshCache());
+			}
 			if(itypes.Contains((int)InvalidType.Prefs) || isAll){
 				ds.Tables.Add(Prefs.RefreshCache());
 			}

@@ -86,6 +86,7 @@
     <Compile Include="Cache\AutoCodeItemC.cs" />
     <Compile Include="Cache\Cache.cs" />
     <Compile Include="Cache\ClaimFormItemC.cs" />
+    <Compile Include="Cache\PharmacyC.cs" />
     <Compile Include="Cache\SiteC.cs" />
     <Compile Include="Cache\DisplayFieldC.cs" />
     <Compile Include="Cache\ProviderC.cs" />
@@ -120,6 +121,7 @@
     <Compile Include="Data Interface\ClaimAttaches.cs" />
     <Compile Include="Data Interface\ClaimCondCodeLogs.cs" />
     <Compile Include="Data Interface\ClaimFormItems.cs" />
+    <Compile Include="Data Interface\Pharmacies.cs" />
     <Compile Include="Data Interface\CovCats.cs" />
     <Compile Include="Data Interface\CovSpans.cs" />
     <Compile Include="Data Interface\Defs.cs" />
@@ -233,6 +235,7 @@
     <Compile Include="TableTypes\ClaimAttach.cs" />
     <Compile Include="TableTypes\AnestheticData.cs" />
     <Compile Include="TableTypes\Files.cs" />
+    <Compile Include="TableTypes\Pharmacy.cs" />
     <Compile Include="TableTypes\Site.cs" />
     <Compile Include="TableTypes\Statement.cs" />
     <Compile Include="TableTypes\TaskAncestor.cs" />

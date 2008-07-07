@@ -387,18 +387,20 @@ namespace OpenDental{
 
 		///<summary></summary>
 		public static string FormatNumbersExactTen(string phoneNum){
-			string newPhoneNum="";
+			string retVal="";
 			for(int i=0;i<phoneNum.Length;i++){
 				if(Char.IsNumber(phoneNum,i)){
-					newPhoneNum+=phoneNum.Substring(i,1);
+					if(retVal=="" && phoneNum.Substring(i,1)=="1"){
+						continue;//skip leading 1.
+					}
+					retVal+=phoneNum.Substring(i,1);
+				}
+				if(retVal.Length==10){
+					return retVal;
 				}
 			}
-			if(newPhoneNum.Length==10){
-				return newPhoneNum;
-			}
-			else{
-				return "";
-			}
+			//never made it to 10
+			return "";
 		}
 
 	}

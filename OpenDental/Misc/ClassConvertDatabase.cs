@@ -7622,6 +7622,28 @@ namespace OpenDental{
 					General.NonQ(command);
 					command="INSERT INTO preference (PrefName,ValueString,Comments) VALUES ('TitleBarShowSite','0','Shows the site.Description of the patient.Site in the main title bar.')";
 					General.NonQ(command);
+					command="DROP TABLE IF EXISTS pharmacy";
+					General.NonQ(command);
+					command=@"CREATE TABLE pharmacy (
+						PharmacyNum int NOT NULL auto_increment,
+						PharmID varchar(255),
+						StoreName varchar(255),
+						Phone varchar(255),
+						Fax varchar(255),
+						Address varchar(255),
+						Address2 varchar(255),
+						City varchar(255),
+						State varchar(255),
+						Zip varchar(255),
+						Note text,
+						PRIMARY KEY (PharmacyNum)
+						) DEFAULT CHARSET=utf8";
+					General.NonQ(command);
+
+
+
+
+
 
 
 				}
