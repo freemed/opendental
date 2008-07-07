@@ -7,6 +7,7 @@ using OpenDentBusiness;
 namespace OpenDental{
 	///<summary></summary>
 	public class RxPats {
+		/*
 		///<summary></summary>
 		public static RxPat[] Refresh(int patNum) {
 			string command="SELECT * FROM rxpat"
@@ -27,7 +28,7 @@ namespace OpenDental{
 				List[i].Notes      = PIn.PString(table.Rows[i][8].ToString());
 			}
 			return List;
-		}
+		}*/
 
 		///<summary></summary>
 		public static RxPat GetRx(int rxNum) {
@@ -44,6 +45,7 @@ namespace OpenDental{
 			rx.Refills    = PIn.PString(table.Rows[0][6].ToString());
 			rx.ProvNum    = PIn.PInt(table.Rows[0][7].ToString());
 			rx.Notes      = PIn.PString(table.Rows[0][8].ToString());
+			rx.PharmacyNum= PIn.PInt   (table.Rows[0][9].ToString());
 			return rx;
 		}
 
@@ -51,13 +53,14 @@ namespace OpenDental{
 		public static void Update(RxPat rx) {
 			string command= "UPDATE rxpat SET " 
 				+ "PatNum = '"      +POut.PInt   (rx.PatNum)+"'"
-				+ ",RxDate = "     +POut.PDate  (rx.RxDate)
+				+ ",RxDate = "      +POut.PDate  (rx.RxDate)
 				+ ",Drug = '"       +POut.PString(rx.Drug)+"'"
 				+ ",Sig = '"        +POut.PString(rx.Sig)+"'"
 				+ ",Disp = '"       +POut.PString(rx.Disp)+"'"
 				+ ",Refills = '"    +POut.PString(rx.Refills)+"'"
 				+ ",ProvNum = '"    +POut.PInt   (rx.ProvNum)+"'"
 				+ ",Notes = '"      +POut.PString(rx.Notes)+"'"
+				+ ",PharmacyNum = '"+POut.PInt   (rx.PharmacyNum)+"'"
 				+" WHERE RxNum = '" +POut.PInt   (rx.RxNum)+"'";
 			General.NonQ(command);
 		}
@@ -71,7 +74,7 @@ namespace OpenDental{
 			if(PrefC.RandomKeys) {
 				command+="RxNum,";
 			}
-			command+="PatNum,RxDate,Drug,Sig,Disp,Refills,ProvNum,Notes) VALUES(";
+			command+="PatNum,RxDate,Drug,Sig,Disp,Refills,ProvNum,Notes,PharmacyNum) VALUES(";
 			if(PrefC.RandomKeys) {
 				command+="'"+POut.PInt(rx.RxNum)+"', ";
 			}
@@ -83,7 +86,8 @@ namespace OpenDental{
 				+"'"+POut.PString(rx.Disp)+"', "
 				+"'"+POut.PString(rx.Refills)+"', "
 				+"'"+POut.PInt   (rx.ProvNum)+"', "
-				+"'"+POut.PString(rx.Notes)+"')";
+				+"'"+POut.PString(rx.Notes)+"', "
+				+"'"+POut.PInt   (rx.PharmacyNum)+"')";
 			if(PrefC.RandomKeys) {
 				General.NonQ(command);
 			}
@@ -94,7 +98,7 @@ namespace OpenDental{
 
 		///<summary></summary>
 		public static void Delete(int rxNum) {
-			string command= "DELETE from rxpat WHERE RxNum = '"+POut.PInt(rxNum)+"'";
+			string command= "DELETE FROM rxpat WHERE RxNum = '"+POut.PInt(rxNum)+"'";
 			General.NonQ(command);
 		}
 

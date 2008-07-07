@@ -20,22 +20,14 @@ namespace OpenDentBusiness{
 		public string Refills;
 		///<summary>FK to provider.ProvNum.</summary>
 		public int ProvNum;
-		///<summary>Notes specific to this Rx.</summary>
+		///<summary>Notes specific to this Rx.  Will not show on the printout.  For staff use only.</summary>
 		public string Notes;
+		///<summary>FK to pharmacy.PharmacyNum.</summary>
+		public int PharmacyNum;
 
 		///<summary></summary>
 		public RxPat Copy() {
-			RxPat r=new RxPat();
-			r.RxNum=RxNum;
-			r.PatNum=PatNum;
-			r.RxDate=RxDate;
-			r.Drug=Drug;
-			r.Sig=Sig;
-			r.Disp=Disp;
-			r.Refills=Refills;
-			r.ProvNum=ProvNum;
-			r.Notes=Notes;
-			return r;
+			return (RxPat)this.MemberwiseClone();
 		}
 
 

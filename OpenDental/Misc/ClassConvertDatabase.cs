@@ -7639,7 +7639,8 @@ namespace OpenDental{
 						PRIMARY KEY (PharmacyNum)
 						) DEFAULT CHARSET=utf8";
 					General.NonQ(command);
-
+					command="ALTER TABLE rxpat ADD PharmacyNum int default '0' NOT NULL";
+					General.NonQ(command);
 
 
 

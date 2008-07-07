@@ -38,6 +38,9 @@ namespace OpenDental{
 		///<summary></summary>
     public FormRpPrintPreview pView = new FormRpPrintPreview();
 		private Patient PatCur;
+		private Label label8;
+		private OpenDental.UI.Button butPick;
+		private TextBox textPharmacy;
 		//private User user;
 		private RxPat RxPatCur;
 
@@ -87,6 +90,9 @@ namespace OpenDental{
 			this.butPrint = new OpenDental.UI.Button();
 			this.butDelete = new OpenDental.UI.Button();
 			this.textNotes = new OpenDental.ODtextBox();
+			this.label8 = new System.Windows.Forms.Label();
+			this.butPick = new OpenDental.UI.Button();
+			this.textPharmacy = new System.Windows.Forms.TextBox();
 			this.SuspendLayout();
 			// 
 			// butCancel
@@ -100,7 +106,7 @@ namespace OpenDental{
 			this.butCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
 			this.butCancel.Location = new System.Drawing.Point(618,424);
 			this.butCancel.Name = "butCancel";
-			this.butCancel.Size = new System.Drawing.Size(75,26);
+			this.butCancel.Size = new System.Drawing.Size(75,24);
 			this.butCancel.TabIndex = 9;
 			this.butCancel.Text = "&Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
@@ -115,7 +121,7 @@ namespace OpenDental{
 			this.butOK.CornerRadius = 4F;
 			this.butOK.Location = new System.Drawing.Point(618,384);
 			this.butOK.Name = "butOK";
-			this.butOK.Size = new System.Drawing.Size(75,26);
+			this.butOK.Size = new System.Drawing.Size(75,24);
 			this.butOK.TabIndex = 8;
 			this.butOK.Text = "&OK";
 			this.butOK.Click += new System.EventHandler(this.butOK_Click);
@@ -123,7 +129,7 @@ namespace OpenDental{
 			// textSig
 			// 
 			this.textSig.AcceptsReturn = true;
-			this.textSig.Location = new System.Drawing.Point(110,104);
+			this.textSig.Location = new System.Drawing.Point(110,90);
 			this.textSig.Multiline = true;
 			this.textSig.Name = "textSig";
 			this.textSig.Size = new System.Drawing.Size(254,44);
@@ -131,28 +137,28 @@ namespace OpenDental{
 			// 
 			// textDisp
 			// 
-			this.textDisp.Location = new System.Drawing.Point(110,160);
+			this.textDisp.Location = new System.Drawing.Point(110,139);
 			this.textDisp.Name = "textDisp";
 			this.textDisp.Size = new System.Drawing.Size(112,20);
 			this.textDisp.TabIndex = 3;
 			// 
 			// textRefills
 			// 
-			this.textRefills.Location = new System.Drawing.Point(110,194);
+			this.textRefills.Location = new System.Drawing.Point(110,164);
 			this.textRefills.Name = "textRefills";
 			this.textRefills.Size = new System.Drawing.Size(114,20);
 			this.textRefills.TabIndex = 4;
 			// 
 			// textDrug
 			// 
-			this.textDrug.Location = new System.Drawing.Point(110,72);
+			this.textDrug.Location = new System.Drawing.Point(110,65);
 			this.textDrug.Name = "textDrug";
 			this.textDrug.Size = new System.Drawing.Size(254,20);
 			this.textDrug.TabIndex = 1;
 			// 
 			// label6
 			// 
-			this.label6.Location = new System.Drawing.Point(17,108);
+			this.label6.Location = new System.Drawing.Point(21,94);
 			this.label6.Name = "label6";
 			this.label6.Size = new System.Drawing.Size(89,14);
 			this.label6.TabIndex = 17;
@@ -161,7 +167,7 @@ namespace OpenDental{
 			// 
 			// label5
 			// 
-			this.label5.Location = new System.Drawing.Point(7,164);
+			this.label5.Location = new System.Drawing.Point(11,143);
 			this.label5.Name = "label5";
 			this.label5.Size = new System.Drawing.Size(99,14);
 			this.label5.TabIndex = 16;
@@ -170,7 +176,7 @@ namespace OpenDental{
 			// 
 			// label4
 			// 
-			this.label4.Location = new System.Drawing.Point(7,198);
+			this.label4.Location = new System.Drawing.Point(11,168);
 			this.label4.Name = "label4";
 			this.label4.Size = new System.Drawing.Size(99,14);
 			this.label4.TabIndex = 15;
@@ -179,16 +185,16 @@ namespace OpenDental{
 			// 
 			// label3
 			// 
-			this.label3.Location = new System.Drawing.Point(11,232);
+			this.label3.Location = new System.Drawing.Point(3,190);
 			this.label3.Name = "label3";
-			this.label3.Size = new System.Drawing.Size(95,14);
+			this.label3.Size = new System.Drawing.Size(107,36);
 			this.label3.TabIndex = 14;
-			this.label3.Text = "Notes";
+			this.label3.Text = "Notes (will not show on printout)";
 			this.label3.TextAlign = System.Drawing.ContentAlignment.TopRight;
 			// 
 			// label1
 			// 
-			this.label1.Location = new System.Drawing.Point(13,74);
+			this.label1.Location = new System.Drawing.Point(17,67);
 			this.label1.Name = "label1";
 			this.label1.Size = new System.Drawing.Size(93,14);
 			this.label1.TabIndex = 13;
@@ -197,7 +203,7 @@ namespace OpenDental{
 			// 
 			// label2
 			// 
-			this.label2.Location = new System.Drawing.Point(3,44);
+			this.label2.Location = new System.Drawing.Point(6,44);
 			this.label2.Name = "label2";
 			this.label2.Size = new System.Drawing.Size(105,14);
 			this.label2.TabIndex = 25;
@@ -215,7 +221,7 @@ namespace OpenDental{
 			// 
 			this.listProv.Location = new System.Drawing.Point(524,28);
 			this.listProv.Name = "listProv";
-			this.listProv.Size = new System.Drawing.Size(120,212);
+			this.listProv.Size = new System.Drawing.Size(169,212);
 			this.listProv.TabIndex = 6;
 			// 
 			// label7
@@ -242,7 +248,7 @@ namespace OpenDental{
 			this.butPrint.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.butPrint.Location = new System.Drawing.Point(482,424);
 			this.butPrint.Name = "butPrint";
-			this.butPrint.Size = new System.Drawing.Size(88,26);
+			this.butPrint.Size = new System.Drawing.Size(88,24);
 			this.butPrint.TabIndex = 29;
 			this.butPrint.Text = "&Print";
 			this.butPrint.Click += new System.EventHandler(this.butPrint_Click);
@@ -259,7 +265,7 @@ namespace OpenDental{
 			this.butDelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.butDelete.Location = new System.Drawing.Point(38,424);
 			this.butDelete.Name = "butDelete";
-			this.butDelete.Size = new System.Drawing.Size(88,26);
+			this.butDelete.Size = new System.Drawing.Size(88,24);
 			this.butDelete.TabIndex = 30;
 			this.butDelete.Text = "&Delete";
 			this.butDelete.Click += new System.EventHandler(this.butDelete_Click);
@@ -267,7 +273,7 @@ namespace OpenDental{
 			// textNotes
 			// 
 			this.textNotes.AcceptsReturn = true;
-			this.textNotes.Location = new System.Drawing.Point(110,231);
+			this.textNotes.Location = new System.Drawing.Point(110,189);
 			this.textNotes.Multiline = true;
 			this.textNotes.Name = "textNotes";
 			this.textNotes.QuickPasteType = OpenDentBusiness.QuickPasteType.Rx;
@@ -275,12 +281,48 @@ namespace OpenDental{
 			this.textNotes.Size = new System.Drawing.Size(373,111);
 			this.textNotes.TabIndex = 31;
 			// 
+			// label8
+			// 
+			this.label8.Location = new System.Drawing.Point(11,317);
+			this.label8.Name = "label8";
+			this.label8.Size = new System.Drawing.Size(99,14);
+			this.label8.TabIndex = 32;
+			this.label8.Text = "Pharmacy";
+			this.label8.TextAlign = System.Drawing.ContentAlignment.TopRight;
+			// 
+			// butPick
+			// 
+			this.butPick.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butPick.Autosize = true;
+			this.butPick.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butPick.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butPick.CornerRadius = 4F;
+			this.butPick.Location = new System.Drawing.Point(310,312);
+			this.butPick.Name = "butPick";
+			this.butPick.Size = new System.Drawing.Size(58,23);
+			this.butPick.TabIndex = 65;
+			this.butPick.TabStop = false;
+			this.butPick.Text = "Pick";
+			this.butPick.Click += new System.EventHandler(this.butPick_Click);
+			// 
+			// textPharmacy
+			// 
+			this.textPharmacy.AcceptsReturn = true;
+			this.textPharmacy.Location = new System.Drawing.Point(110,314);
+			this.textPharmacy.Name = "textPharmacy";
+			this.textPharmacy.ReadOnly = true;
+			this.textPharmacy.Size = new System.Drawing.Size(198,20);
+			this.textPharmacy.TabIndex = 64;
+			// 
 			// FormRxEdit
 			// 
 			this.AcceptButton = this.butOK;
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.CancelButton = this.butCancel;
 			this.ClientSize = new System.Drawing.Size(710,472);
+			this.Controls.Add(this.butPick);
+			this.Controls.Add(this.textPharmacy);
+			this.Controls.Add(this.label8);
 			this.Controls.Add(this.textNotes);
 			this.Controls.Add(this.butDelete);
 			this.Controls.Add(this.butPrint);
@@ -316,9 +358,10 @@ namespace OpenDental{
 		private void FormRxEdit_Load(object sender, System.EventArgs e) {
 			//security is handled on the Rx button click in the Chart module
 			for(int i=0;i<ProviderC.List.Length;i++){
-				this.listProv.Items.Add(ProviderC.List[i].Abbr);
-				if(ProviderC.List[i].ProvNum==RxPatCur.ProvNum)
+				this.listProv.Items.Add(ProviderC.List[i].GetLongDesc());
+				if(ProviderC.List[i].ProvNum==RxPatCur.ProvNum){
 					listProv.SelectedIndex=i;
+				}
 			}
 			if(listProv.SelectedIndex==-1){
 				listProv.SelectedIndex=0;
@@ -329,6 +372,19 @@ namespace OpenDental{
 			textDisp.Text=RxPatCur.Disp;
 			textRefills.Text=RxPatCur.Refills;
 			textNotes.Text=RxPatCur.Notes;
+			textPharmacy.Text=Pharmacies.GetDescription(RxPatCur.PharmacyNum);
+		}
+
+		private void butPick_Click(object sender,EventArgs e) {
+			FormPharmacies FormP=new FormPharmacies();
+			FormP.IsSelectionMode=true;
+			FormP.SelectedPharmacyNum=RxPatCur.PharmacyNum;
+			FormP.ShowDialog();
+			if(FormP.DialogResult!=DialogResult.OK){
+				return;
+			}
+			RxPatCur.PharmacyNum=FormP.SelectedPharmacyNum;
+			textPharmacy.Text=Pharmacies.GetDescription(RxPatCur.PharmacyNum);
 		}
 
 		private bool SaveRx(){
@@ -338,14 +394,16 @@ namespace OpenDental{
 				MessageBox.Show(Lan.g(this,"Please fix data entry errors first."));
 				return false;
 			}
-			if(listProv.SelectedIndex!=-1)
+			if(listProv.SelectedIndex!=-1){
 				RxPatCur.ProvNum=ProviderC.List[listProv.SelectedIndex].ProvNum;
+			}
 			RxPatCur.RxDate=PIn.PDate(textDate.Text);
 			RxPatCur.Drug=textDrug.Text;
 			RxPatCur.Sig=textSig.Text;
 			RxPatCur.Disp=textDisp.Text;
 			RxPatCur.Refills=textRefills.Text;
 			RxPatCur.Notes=textNotes.Text;
+			//pharmacy is set when using pick button.
 			if(IsNew){
 				RxPats.Insert(RxPatCur);
 				//SecurityLogs.MakeLogEntry("Prescription Create",RxPats.cmd.CommandText,user);
@@ -571,6 +629,8 @@ namespace OpenDental{
 		private void butCancel_Click(object sender, System.EventArgs e) {
 			DialogResult=DialogResult.Cancel;
 		}
+
+		
 
 		
 

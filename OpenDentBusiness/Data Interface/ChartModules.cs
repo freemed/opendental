@@ -258,7 +258,7 @@ namespace OpenDentBusiness {
 				rows.Add(row);
 			}
 			//Rx------------------------------------------------------------------------------------------------------------------
-			command="SELECT RxNum,RxDate,Drug,Disp,ProvNum,Notes FROM rxpat WHERE PatNum="+POut.PInt(patNum)
+			command="SELECT RxNum,RxDate,Drug,Disp,ProvNum,Notes,PharmacyNum FROM rxpat WHERE PatNum="+POut.PInt(patNum)
 				+" ORDER BY RxDate";
 			DataTable rawRx=dcon.GetTable(command);
 			for(int i=0;i<rawRx.Rows.Count;i++) {
@@ -270,6 +270,9 @@ namespace OpenDentBusiness {
 				row["colorText"]=DefC.Long[(int)DefCat.ProgNoteColors][5].ItemColor.ToArgb().ToString();
 				row["CommlogNum"]=0;
 				row["description"]=Lan.g("ChartModule","Rx - ")+rawRx.Rows[i]["Drug"].ToString()+" - #"+rawRx.Rows[i]["Disp"].ToString();
+				if(rawRx.Rows[i]["PharmacyNum"].ToString()!="0"){
+					row["description"]+="\r\n"+Pharmacies.GetDescription(PIn.PInt(rawRx.Rows[i]["PharmacyNum"].ToString()));
+				}
 				row["dx"]="";
 				row["Dx"]="";
 				row["EmailMessageNum"]=0;
