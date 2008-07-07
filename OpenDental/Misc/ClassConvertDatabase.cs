@@ -7642,6 +7642,14 @@ namespace OpenDental{
 					General.NonQ(command);
 					command="ALTER TABLE rxpat ADD PharmacyNum int default '0' NOT NULL";
 					General.NonQ(command);
+					command="ALTER TABLE clinic ADD InsBillingProv int default '0' NOT NULL";
+					General.NonQ(command);
+					command="SELECT ValueString FROM preference WHERE PrefName= 'InsBillingProv'";
+					DataTable table=General.GetTable(command);
+					int practiceBillingProv=PIn.PInt(table.Rows[0][0].ToString());
+					command="UPDATE clinic SET InsBillingProv='"+practiceBillingProv.ToString()+"'";
+					General.NonQ(command);
+
 
 
 

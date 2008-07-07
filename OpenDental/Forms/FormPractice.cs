@@ -143,7 +143,7 @@ namespace OpenDental{
 			// 
 			// label10
 			// 
-			this.label10.Location = new System.Drawing.Point(511,9);
+			this.label10.Location = new System.Drawing.Point(491,9);
 			this.label10.Name = "label10";
 			this.label10.Size = new System.Drawing.Size(110,16);
 			this.label10.TabIndex = 26;
@@ -154,9 +154,9 @@ namespace OpenDental{
 			// 
 			this.listProvider.Items.AddRange(new object[] {
             ""});
-			this.listProvider.Location = new System.Drawing.Point(511,29);
+			this.listProvider.Location = new System.Drawing.Point(492,29);
 			this.listProvider.Name = "listProvider";
-			this.listProvider.Size = new System.Drawing.Size(110,147);
+			this.listProvider.Size = new System.Drawing.Size(129,147);
 			this.listProvider.TabIndex = 4;
 			// 
 			// textBankNumber
@@ -344,7 +344,7 @@ namespace OpenDental{
 			this.groupBox4.Controls.Add(this.radioInsBillingProvTreat);
 			this.groupBox4.Controls.Add(this.radioInsBillingProvDefault);
 			this.groupBox4.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.groupBox4.Location = new System.Drawing.Point(511,200);
+			this.groupBox4.Location = new System.Drawing.Point(493,200);
 			this.groupBox4.Name = "groupBox4";
 			this.groupBox4.Size = new System.Drawing.Size(235,104);
 			this.groupBox4.TabIndex = 50;
@@ -354,9 +354,9 @@ namespace OpenDental{
 			// comboInsBillingProv
 			// 
 			this.comboInsBillingProv.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboInsBillingProv.Location = new System.Drawing.Point(35,73);
+			this.comboInsBillingProv.Location = new System.Drawing.Point(17,73);
 			this.comboInsBillingProv.Name = "comboInsBillingProv";
-			this.comboInsBillingProv.Size = new System.Drawing.Size(121,21);
+			this.comboInsBillingProv.Size = new System.Drawing.Size(212,21);
 			this.comboInsBillingProv.TabIndex = 3;
 			// 
 			// radioInsBillingProvSpecific
@@ -601,7 +601,7 @@ namespace OpenDental{
 			}
 			listProvider.Items.Clear();
 			for(int i=0;i<ProviderC.List.Length;i++){
-				listProvider.Items.Add(ProviderC.List[i].Abbr);
+				listProvider.Items.Add(ProviderC.List[i].GetLongDesc());
 				if(ProviderC.List[i].ProvNum==PrefC.GetInt("PracticeDefaultProv")){
 					listProvider.SelectedIndex=i;
 				}
@@ -623,7 +623,7 @@ namespace OpenDental{
 			}
 			listPlaceService.SelectedIndex=PrefC.GetInt("DefaultProcedurePlaceService");
 			for(int i=0;i<ProviderC.List.Length;i++){
-				comboInsBillingProv.Items.Add(ProviderC.List[i].Abbr);
+				comboInsBillingProv.Items.Add(ProviderC.List[i].GetLongDesc());
 			}
 			if(PrefC.GetInt("InsBillingProv")==0){
 				radioInsBillingProvDefault.Checked=true;//default=0

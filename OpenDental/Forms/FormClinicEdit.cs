@@ -36,6 +36,11 @@ namespace OpenDental{
 		private System.Windows.Forms.Label label6;
 		private System.Windows.Forms.Label label7;
 		private System.Windows.Forms.ComboBox comboPlaceService;
+		private GroupBox groupBox4;
+		private ComboBox comboInsBillingProv;
+		private RadioButton radioInsBillingProvSpecific;
+		private RadioButton radioInsBillingProvTreat;
+		private RadioButton radioInsBillingProvDefault;
 		private Clinic ClinicCur;
 
 		///<summary></summary>
@@ -72,11 +77,8 @@ namespace OpenDental{
 		private void InitializeComponent()
 		{
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormClinicEdit));
-			this.butCancel = new OpenDental.UI.Button();
-			this.butOK = new OpenDental.UI.Button();
 			this.label1 = new System.Windows.Forms.Label();
 			this.textDescription = new System.Windows.Forms.TextBox();
-			this.butDelete = new OpenDental.UI.Button();
 			this.textCity = new System.Windows.Forms.TextBox();
 			this.textState = new System.Windows.Forms.TextBox();
 			this.textZip = new System.Windows.Forms.TextBox();
@@ -92,41 +94,20 @@ namespace OpenDental{
 			this.label6 = new System.Windows.Forms.Label();
 			this.label7 = new System.Windows.Forms.Label();
 			this.comboPlaceService = new System.Windows.Forms.ComboBox();
+			this.groupBox4 = new System.Windows.Forms.GroupBox();
+			this.comboInsBillingProv = new System.Windows.Forms.ComboBox();
+			this.radioInsBillingProvSpecific = new System.Windows.Forms.RadioButton();
+			this.radioInsBillingProvTreat = new System.Windows.Forms.RadioButton();
+			this.radioInsBillingProvDefault = new System.Windows.Forms.RadioButton();
+			this.butDelete = new OpenDental.UI.Button();
+			this.butOK = new OpenDental.UI.Button();
+			this.butCancel = new OpenDental.UI.Button();
+			this.groupBox4.SuspendLayout();
 			this.SuspendLayout();
-			// 
-			// butCancel
-			// 
-			this.butCancel.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butCancel.Autosize = true;
-			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butCancel.CornerRadius = 4F;
-			this.butCancel.Location = new System.Drawing.Point(478,260);
-			this.butCancel.Name = "butCancel";
-			this.butCancel.Size = new System.Drawing.Size(75,26);
-			this.butCancel.TabIndex = 9;
-			this.butCancel.Text = "&Cancel";
-			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
-			// 
-			// butOK
-			// 
-			this.butOK.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butOK.Autosize = true;
-			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(387,260);
-			this.butOK.Name = "butOK";
-			this.butOK.Size = new System.Drawing.Size(75,26);
-			this.butOK.TabIndex = 8;
-			this.butOK.Text = "&OK";
-			this.butOK.Click += new System.EventHandler(this.butOK_Click);
 			// 
 			// label1
 			// 
-			this.label1.Location = new System.Drawing.Point(9,21);
+			this.label1.Location = new System.Drawing.Point(18,21);
 			this.label1.Name = "label1";
 			this.label1.Size = new System.Drawing.Size(148,17);
 			this.label1.TabIndex = 2;
@@ -135,10 +116,190 @@ namespace OpenDental{
 			// 
 			// textDescription
 			// 
-			this.textDescription.Location = new System.Drawing.Point(160,20);
+			this.textDescription.Location = new System.Drawing.Point(169,20);
 			this.textDescription.Name = "textDescription";
 			this.textDescription.Size = new System.Drawing.Size(241,20);
 			this.textDescription.TabIndex = 0;
+			// 
+			// textCity
+			// 
+			this.textCity.Location = new System.Drawing.Point(169,101);
+			this.textCity.MaxLength = 255;
+			this.textCity.Name = "textCity";
+			this.textCity.Size = new System.Drawing.Size(155,20);
+			this.textCity.TabIndex = 4;
+			// 
+			// textState
+			// 
+			this.textState.Location = new System.Drawing.Point(324,101);
+			this.textState.MaxLength = 255;
+			this.textState.Name = "textState";
+			this.textState.Size = new System.Drawing.Size(65,20);
+			this.textState.TabIndex = 5;
+			// 
+			// textZip
+			// 
+			this.textZip.Location = new System.Drawing.Point(389,101);
+			this.textZip.MaxLength = 255;
+			this.textZip.Name = "textZip";
+			this.textZip.Size = new System.Drawing.Size(71,20);
+			this.textZip.TabIndex = 6;
+			// 
+			// textAddress2
+			// 
+			this.textAddress2.Location = new System.Drawing.Point(169,80);
+			this.textAddress2.MaxLength = 255;
+			this.textAddress2.Name = "textAddress2";
+			this.textAddress2.Size = new System.Drawing.Size(291,20);
+			this.textAddress2.TabIndex = 3;
+			// 
+			// textAddress
+			// 
+			this.textAddress.Location = new System.Drawing.Point(169,60);
+			this.textAddress.MaxLength = 255;
+			this.textAddress.Name = "textAddress";
+			this.textAddress.Size = new System.Drawing.Size(291,20);
+			this.textAddress.TabIndex = 2;
+			// 
+			// textPhone
+			// 
+			this.textPhone.Location = new System.Drawing.Point(169,40);
+			this.textPhone.MaxLength = 255;
+			this.textPhone.Name = "textPhone";
+			this.textPhone.Size = new System.Drawing.Size(157,20);
+			this.textPhone.TabIndex = 1;
+			this.textPhone.TextChanged += new System.EventHandler(this.textPhone_TextChanged);
+			// 
+			// label11
+			// 
+			this.label11.Location = new System.Drawing.Point(4,105);
+			this.label11.Name = "label11";
+			this.label11.Size = new System.Drawing.Size(163,15);
+			this.label11.TabIndex = 105;
+			this.label11.Text = "City, ST, Zip";
+			this.label11.TextAlign = System.Drawing.ContentAlignment.TopRight;
+			// 
+			// label4
+			// 
+			this.label4.Location = new System.Drawing.Point(16,84);
+			this.label4.Name = "label4";
+			this.label4.Size = new System.Drawing.Size(151,17);
+			this.label4.TabIndex = 103;
+			this.label4.Text = "Address2";
+			this.label4.TextAlign = System.Drawing.ContentAlignment.TopRight;
+			// 
+			// label3
+			// 
+			this.label3.Location = new System.Drawing.Point(16,62);
+			this.label3.Name = "label3";
+			this.label3.Size = new System.Drawing.Size(151,17);
+			this.label3.TabIndex = 101;
+			this.label3.Text = "Address";
+			this.label3.TextAlign = System.Drawing.ContentAlignment.TopRight;
+			// 
+			// label2
+			// 
+			this.label2.Location = new System.Drawing.Point(17,43);
+			this.label2.Name = "label2";
+			this.label2.Size = new System.Drawing.Size(151,17);
+			this.label2.TabIndex = 99;
+			this.label2.Text = "Phone";
+			this.label2.TextAlign = System.Drawing.ContentAlignment.TopRight;
+			// 
+			// textBankNumber
+			// 
+			this.textBankNumber.Location = new System.Drawing.Point(169,147);
+			this.textBankNumber.MaxLength = 255;
+			this.textBankNumber.Name = "textBankNumber";
+			this.textBankNumber.Size = new System.Drawing.Size(291,20);
+			this.textBankNumber.TabIndex = 7;
+			// 
+			// label5
+			// 
+			this.label5.Location = new System.Drawing.Point(16,151);
+			this.label5.Name = "label5";
+			this.label5.Size = new System.Drawing.Size(151,17);
+			this.label5.TabIndex = 109;
+			this.label5.Text = "Bank Account Number";
+			this.label5.TextAlign = System.Drawing.ContentAlignment.TopRight;
+			// 
+			// label6
+			// 
+			this.label6.Location = new System.Drawing.Point(329,42);
+			this.label6.Name = "label6";
+			this.label6.Size = new System.Drawing.Size(144,18);
+			this.label6.TabIndex = 110;
+			this.label6.Text = "(###)###-####";
+			this.label6.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// label7
+			// 
+			this.label7.Location = new System.Drawing.Point(-2,194);
+			this.label7.Name = "label7";
+			this.label7.Size = new System.Drawing.Size(168,17);
+			this.label7.TabIndex = 111;
+			this.label7.Text = "Default Proc Place of Service";
+			this.label7.TextAlign = System.Drawing.ContentAlignment.TopRight;
+			// 
+			// comboPlaceService
+			// 
+			this.comboPlaceService.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboPlaceService.Location = new System.Drawing.Point(169,191);
+			this.comboPlaceService.MaxDropDownItems = 30;
+			this.comboPlaceService.Name = "comboPlaceService";
+			this.comboPlaceService.Size = new System.Drawing.Size(177,21);
+			this.comboPlaceService.TabIndex = 8;
+			// 
+			// groupBox4
+			// 
+			this.groupBox4.Controls.Add(this.comboInsBillingProv);
+			this.groupBox4.Controls.Add(this.radioInsBillingProvSpecific);
+			this.groupBox4.Controls.Add(this.radioInsBillingProvTreat);
+			this.groupBox4.Controls.Add(this.radioInsBillingProvDefault);
+			this.groupBox4.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.groupBox4.Location = new System.Drawing.Point(168,230);
+			this.groupBox4.Name = "groupBox4";
+			this.groupBox4.Size = new System.Drawing.Size(235,104);
+			this.groupBox4.TabIndex = 9;
+			this.groupBox4.TabStop = false;
+			this.groupBox4.Text = "Default Insurance Billing Dentist";
+			// 
+			// comboInsBillingProv
+			// 
+			this.comboInsBillingProv.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboInsBillingProv.Location = new System.Drawing.Point(17,73);
+			this.comboInsBillingProv.Name = "comboInsBillingProv";
+			this.comboInsBillingProv.Size = new System.Drawing.Size(212,21);
+			this.comboInsBillingProv.TabIndex = 3;
+			// 
+			// radioInsBillingProvSpecific
+			// 
+			this.radioInsBillingProvSpecific.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.radioInsBillingProvSpecific.Location = new System.Drawing.Point(17,53);
+			this.radioInsBillingProvSpecific.Name = "radioInsBillingProvSpecific";
+			this.radioInsBillingProvSpecific.Size = new System.Drawing.Size(186,19);
+			this.radioInsBillingProvSpecific.TabIndex = 2;
+			this.radioInsBillingProvSpecific.Text = "Specific Provider:";
+			// 
+			// radioInsBillingProvTreat
+			// 
+			this.radioInsBillingProvTreat.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.radioInsBillingProvTreat.Location = new System.Drawing.Point(17,34);
+			this.radioInsBillingProvTreat.Name = "radioInsBillingProvTreat";
+			this.radioInsBillingProvTreat.Size = new System.Drawing.Size(186,19);
+			this.radioInsBillingProvTreat.TabIndex = 1;
+			this.radioInsBillingProvTreat.Text = "Treating Provider";
+			// 
+			// radioInsBillingProvDefault
+			// 
+			this.radioInsBillingProvDefault.Checked = true;
+			this.radioInsBillingProvDefault.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.radioInsBillingProvDefault.Location = new System.Drawing.Point(17,16);
+			this.radioInsBillingProvDefault.Name = "radioInsBillingProvDefault";
+			this.radioInsBillingProvDefault.Size = new System.Drawing.Size(186,19);
+			this.radioInsBillingProvDefault.TabIndex = 0;
+			this.radioInsBillingProvDefault.TabStop = true;
+			this.radioInsBillingProvDefault.Text = "Default Practice Provider";
 			// 
 			// butDelete
 			// 
@@ -150,146 +311,48 @@ namespace OpenDental{
 			this.butDelete.CornerRadius = 4F;
 			this.butDelete.Image = global::OpenDental.Properties.Resources.deleteX;
 			this.butDelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butDelete.Location = new System.Drawing.Point(27,260);
+			this.butDelete.Location = new System.Drawing.Point(27,386);
 			this.butDelete.Name = "butDelete";
 			this.butDelete.Size = new System.Drawing.Size(81,26);
-			this.butDelete.TabIndex = 4;
+			this.butDelete.TabIndex = 10;
 			this.butDelete.Text = "Delete";
 			this.butDelete.Click += new System.EventHandler(this.butDelete_Click);
 			// 
-			// textCity
+			// butOK
 			// 
-			this.textCity.Location = new System.Drawing.Point(160,101);
-			this.textCity.MaxLength = 255;
-			this.textCity.Name = "textCity";
-			this.textCity.Size = new System.Drawing.Size(155,20);
-			this.textCity.TabIndex = 4;
+			this.butOK.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.butOK.Autosize = true;
+			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butOK.CornerRadius = 4F;
+			this.butOK.Location = new System.Drawing.Point(458,386);
+			this.butOK.Name = "butOK";
+			this.butOK.Size = new System.Drawing.Size(75,26);
+			this.butOK.TabIndex = 11;
+			this.butOK.Text = "&OK";
+			this.butOK.Click += new System.EventHandler(this.butOK_Click);
 			// 
-			// textState
+			// butCancel
 			// 
-			this.textState.Location = new System.Drawing.Point(315,101);
-			this.textState.MaxLength = 255;
-			this.textState.Name = "textState";
-			this.textState.Size = new System.Drawing.Size(65,20);
-			this.textState.TabIndex = 5;
-			// 
-			// textZip
-			// 
-			this.textZip.Location = new System.Drawing.Point(380,101);
-			this.textZip.MaxLength = 255;
-			this.textZip.Name = "textZip";
-			this.textZip.Size = new System.Drawing.Size(71,20);
-			this.textZip.TabIndex = 6;
-			// 
-			// textAddress2
-			// 
-			this.textAddress2.Location = new System.Drawing.Point(160,80);
-			this.textAddress2.MaxLength = 255;
-			this.textAddress2.Name = "textAddress2";
-			this.textAddress2.Size = new System.Drawing.Size(291,20);
-			this.textAddress2.TabIndex = 3;
-			// 
-			// textAddress
-			// 
-			this.textAddress.Location = new System.Drawing.Point(160,60);
-			this.textAddress.MaxLength = 255;
-			this.textAddress.Name = "textAddress";
-			this.textAddress.Size = new System.Drawing.Size(291,20);
-			this.textAddress.TabIndex = 2;
-			// 
-			// textPhone
-			// 
-			this.textPhone.Location = new System.Drawing.Point(160,40);
-			this.textPhone.MaxLength = 255;
-			this.textPhone.Name = "textPhone";
-			this.textPhone.Size = new System.Drawing.Size(157,20);
-			this.textPhone.TabIndex = 1;
-			this.textPhone.TextChanged += new System.EventHandler(this.textPhone_TextChanged);
-			// 
-			// label11
-			// 
-			this.label11.Location = new System.Drawing.Point(-5,105);
-			this.label11.Name = "label11";
-			this.label11.Size = new System.Drawing.Size(163,15);
-			this.label11.TabIndex = 105;
-			this.label11.Text = "City, ST, Zip";
-			this.label11.TextAlign = System.Drawing.ContentAlignment.TopRight;
-			// 
-			// label4
-			// 
-			this.label4.Location = new System.Drawing.Point(7,84);
-			this.label4.Name = "label4";
-			this.label4.Size = new System.Drawing.Size(151,17);
-			this.label4.TabIndex = 103;
-			this.label4.Text = "Address2";
-			this.label4.TextAlign = System.Drawing.ContentAlignment.TopRight;
-			// 
-			// label3
-			// 
-			this.label3.Location = new System.Drawing.Point(7,62);
-			this.label3.Name = "label3";
-			this.label3.Size = new System.Drawing.Size(151,17);
-			this.label3.TabIndex = 101;
-			this.label3.Text = "Address";
-			this.label3.TextAlign = System.Drawing.ContentAlignment.TopRight;
-			// 
-			// label2
-			// 
-			this.label2.Location = new System.Drawing.Point(8,43);
-			this.label2.Name = "label2";
-			this.label2.Size = new System.Drawing.Size(151,17);
-			this.label2.TabIndex = 99;
-			this.label2.Text = "Phone";
-			this.label2.TextAlign = System.Drawing.ContentAlignment.TopRight;
-			// 
-			// textBankNumber
-			// 
-			this.textBankNumber.Location = new System.Drawing.Point(160,147);
-			this.textBankNumber.MaxLength = 255;
-			this.textBankNumber.Name = "textBankNumber";
-			this.textBankNumber.Size = new System.Drawing.Size(291,20);
-			this.textBankNumber.TabIndex = 7;
-			// 
-			// label5
-			// 
-			this.label5.Location = new System.Drawing.Point(7,151);
-			this.label5.Name = "label5";
-			this.label5.Size = new System.Drawing.Size(151,17);
-			this.label5.TabIndex = 109;
-			this.label5.Text = "Bank Account Number";
-			this.label5.TextAlign = System.Drawing.ContentAlignment.TopRight;
-			// 
-			// label6
-			// 
-			this.label6.Location = new System.Drawing.Point(320,42);
-			this.label6.Name = "label6";
-			this.label6.Size = new System.Drawing.Size(144,18);
-			this.label6.TabIndex = 110;
-			this.label6.Text = "(###)###-####";
-			this.label6.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			// 
-			// label7
-			// 
-			this.label7.Location = new System.Drawing.Point(6,194);
-			this.label7.Name = "label7";
-			this.label7.Size = new System.Drawing.Size(151,17);
-			this.label7.TabIndex = 111;
-			this.label7.Text = "Default Place of Service";
-			this.label7.TextAlign = System.Drawing.ContentAlignment.TopRight;
-			// 
-			// comboPlaceService
-			// 
-			this.comboPlaceService.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboPlaceService.Location = new System.Drawing.Point(160,191);
-			this.comboPlaceService.MaxDropDownItems = 30;
-			this.comboPlaceService.Name = "comboPlaceService";
-			this.comboPlaceService.Size = new System.Drawing.Size(177,21);
-			this.comboPlaceService.TabIndex = 112;
+			this.butCancel.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.butCancel.Autosize = true;
+			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butCancel.CornerRadius = 4F;
+			this.butCancel.Location = new System.Drawing.Point(549,386);
+			this.butCancel.Name = "butCancel";
+			this.butCancel.Size = new System.Drawing.Size(75,26);
+			this.butCancel.TabIndex = 12;
+			this.butCancel.Text = "&Cancel";
+			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
 			// 
 			// FormClinicEdit
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
-			this.ClientSize = new System.Drawing.Size(579,304);
+			this.ClientSize = new System.Drawing.Size(650,430);
+			this.Controls.Add(this.groupBox4);
 			this.Controls.Add(this.comboPlaceService);
 			this.Controls.Add(this.label7);
 			this.Controls.Add(this.textBankNumber);
@@ -318,6 +381,7 @@ namespace OpenDental{
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Edit Clinic";
 			this.Load += new System.EventHandler(this.FormClinicEdit_Load);
+			this.groupBox4.ResumeLayout(false);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -342,6 +406,19 @@ namespace OpenDental{
 			comboPlaceService.Items.Clear();
 			comboPlaceService.Items.AddRange(Enum.GetNames(typeof(PlaceOfService)));
 			comboPlaceService.SelectedIndex=(int)ClinicCur.DefaultPlaceService;
+			for(int i=0;i<ProviderC.List.Length;i++){
+				comboInsBillingProv.Items.Add(ProviderC.List[i].GetLongDesc());
+			}
+			if(ClinicCur.InsBillingProv==0){
+				radioInsBillingProvDefault.Checked=true;//default=0
+			}
+			else if(ClinicCur.InsBillingProv==-1){
+				radioInsBillingProvTreat.Checked=true;//treat=-1
+			}
+			else{
+				radioInsBillingProvSpecific.Checked=true;//specific=any number >0. Foreign key to ProvNum
+				comboInsBillingProv.SelectedIndex=Providers.GetIndex(ClinicCur.InsBillingProv);
+			}
 		}
 
 		private void textPhone_TextChanged(object sender, System.EventArgs e) {
@@ -375,6 +452,10 @@ namespace OpenDental{
 				MessageBox.Show(Lan.g(this,"Description cannot be blank."));
 				return;
 			}
+			if(radioInsBillingProvSpecific.Checked && comboInsBillingProv.SelectedIndex==-1){
+				MsgBox.Show(this,"You must select a provider.");
+				return;
+			}
 			string phone=textPhone.Text;
 			if(Application.CurrentCulture.Name=="en-US"){
 				phone=phone.Replace("(","");
@@ -395,12 +476,20 @@ namespace OpenDental{
 			ClinicCur.Zip=textZip.Text;
 			ClinicCur.BankNumber=textBankNumber.Text;
 			ClinicCur.DefaultPlaceService=(PlaceOfService)comboPlaceService.SelectedIndex;
-			try{
-				Clinics.InsertOrUpdate(ClinicCur,IsNew);
+			if(radioInsBillingProvDefault.Checked){//default=0
+				ClinicCur.InsBillingProv=0;
 			}
-			catch(Exception ex){
-				MessageBox.Show(ex.Message);
-				return;
+			else if(radioInsBillingProvTreat.Checked){//treat=-1
+				ClinicCur.InsBillingProv=-1;
+			}
+			else{
+				ClinicCur.InsBillingProv=ProviderC.List[comboInsBillingProv.SelectedIndex].ProvNum;
+			}
+			if(IsNew){
+				Clinics.Insert(ClinicCur);
+			}
+			else{
+				Clinics.Update(ClinicCur);
 			}
 			DialogResult=DialogResult.OK;
 		}

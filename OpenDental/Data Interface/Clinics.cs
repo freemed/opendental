@@ -27,13 +27,14 @@ namespace OpenDental{
 				List[i].Phone           = PIn.PString(table.Rows[i][7].ToString());
 				List[i].BankNumber      = PIn.PString(table.Rows[i][8].ToString());
 				List[i].DefaultPlaceService=(PlaceOfService)PIn.PInt(table.Rows[i][9].ToString());
+				List[i].InsBillingProv  = PIn.PInt   (table.Rows[i][10].ToString());
 			}
 		}
 
 		///<summary></summary>
-		private static void Insert(Clinic clinic){
+		public static void Insert(Clinic clinic){
 			string command= "INSERT INTO clinic (Description,Address,Address2,City,State,Zip,Phone,"
-				+"BankNumber,DefaultPlaceService) VALUES("
+				+"BankNumber,DefaultPlaceService,InsBillingProv) VALUES("
 				+"'"+POut.PString(clinic.Description)+"', "
 				+"'"+POut.PString(clinic.Address)+"', "
 				+"'"+POut.PString(clinic.Address2)+"', "
@@ -42,12 +43,13 @@ namespace OpenDental{
 				+"'"+POut.PString(clinic.Zip)+"', "
 				+"'"+POut.PString(clinic.Phone)+"', "
 				+"'"+POut.PString(clinic.BankNumber)+"', "
-				+"'"+POut.PInt   ((int)clinic.DefaultPlaceService)+"')";
+				+"'"+POut.PInt   ((int)clinic.DefaultPlaceService)+"', "
+				+"'"+POut.PInt   (clinic.InsBillingProv)+"')";
  			clinic.ClinicNum=General.NonQ(command,true);
 		}
 
 		///<summary></summary>
-		private static void Update(Clinic clinic){
+		public static void Update(Clinic clinic){
 			string command= "UPDATE clinic SET " 
 				+ "Description = '"       +POut.PString(clinic.Description)+"'"
 				+ ",Address = '"          +POut.PString(clinic.Address)+"'"
@@ -58,21 +60,9 @@ namespace OpenDental{
 				+ ",Phone = '"            +POut.PString(clinic.Phone)+"'"
 				+ ",BankNumber = '"       +POut.PString(clinic.BankNumber)+"'"
 				+ ",DefaultPlaceService='"+POut.PInt   ((int)clinic.DefaultPlaceService)+"'"
+				+ ",InsBillingProv='"     +POut.PInt   (clinic.InsBillingProv)+"'"
 				+" WHERE ClinicNum = '" +POut.PInt(clinic.ClinicNum)+"'";
  			General.NonQ(command);
-		}
-
-		///<summary></summary>
-		public static void InsertOrUpdate(Clinic clinic, bool IsNew){
-			//if(){
-				//throw new Exception(Lan.g(this,""));
-			//}
-			if(IsNew){
-				Insert(clinic);
-			}
-			else{
-				Update(clinic);
-			}
 		}
 
 		///<summary>Checks dependencies first.  Throws exception if can't delete.</summary>

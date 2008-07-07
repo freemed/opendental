@@ -25,21 +25,12 @@ namespace OpenDentBusiness{
 		public string BankNumber;
 		///<summary>Enum:PlaceOfService Usually 0 unless a mobile clinic for instance.</summary>
 		public PlaceOfService DefaultPlaceService;
+		///<summary>FK to provider.ProvNum.  0=Default practice provider, -1=Treating provider.</summary>
+		public int InsBillingProv;
 
 		///<summary>Returns a copy of this Clinic.</summary>
 		public Clinic Copy(){
-			Clinic c=new Clinic();
-			c.ClinicNum=ClinicNum;
-			c.Description=Description;
-			c.Address=Address;
-			c.Address2=Address2;
-			c.City=City;
-			c.State=State;
-			c.Zip=Zip;
-			c.Phone=Phone;
-			c.BankNumber=BankNumber;
-			c.DefaultPlaceService=DefaultPlaceService;
-			return c;
+			return (Clinic)this.MemberwiseClone();
 		}
 
 	}
