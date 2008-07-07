@@ -764,6 +764,7 @@ namespace OpenDental{
 						case "screendate":
 						case "datedue":
 						case "dateduecalc":
+						case "datefirstvisit":
 						case "mydate"://this is a workaround for the daily payment report
 							tableOut.Rows[i][j]=PIn.PDate(tableOut.Rows[i][j].ToString()).ToString("d");
 							break;

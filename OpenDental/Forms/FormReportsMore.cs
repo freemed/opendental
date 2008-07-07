@@ -84,7 +84,7 @@ namespace OpenDental{
 			// 
 			// label1
 			// 
-			this.label1.Location = new System.Drawing.Point(312,206);
+			this.label1.Location = new System.Drawing.Point(312,221);
 			this.label1.Name = "label1";
 			this.label1.Size = new System.Drawing.Size(118,18);
 			this.label1.TabIndex = 2;
@@ -207,7 +207,7 @@ namespace OpenDental{
 			this.listPublicHealth.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
 			this.listPublicHealth.FormattingEnabled = true;
 			this.listPublicHealth.ItemHeight = 15;
-			this.listPublicHealth.Location = new System.Drawing.Point(315,227);
+			this.listPublicHealth.Location = new System.Drawing.Point(315,242);
 			this.listPublicHealth.Name = "listPublicHealth";
 			this.listPublicHealth.SelectionMode = System.Windows.Forms.SelectionMode.None;
 			this.listPublicHealth.Size = new System.Drawing.Size(204,34);
@@ -222,7 +222,7 @@ namespace OpenDental{
 			this.listLists.Location = new System.Drawing.Point(315,64);
 			this.listLists.Name = "listLists";
 			this.listLists.SelectionMode = System.Windows.Forms.SelectionMode.None;
-			this.listLists.Size = new System.Drawing.Size(204,139);
+			this.listLists.Size = new System.Drawing.Size(204,154);
 			this.listLists.TabIndex = 9;
 			this.listLists.MouseDown += new System.Windows.Forms.MouseEventHandler(this.listLists_MouseDown);
 			// 
@@ -317,7 +317,8 @@ namespace OpenDental{
 				Lan.g(this,"Appointments"),
 				Lan.g(this,"Birthdays"),
 				Lan.g(this,"Insurance Plans"),
-				Lan.g(this,"Patients"),
+				Lan.g(this,"New Patients"),
+				Lan.g(this,"Patients - Raw"),
 				Lan.g(this,"Prescriptions"),
 				Lan.g(this,"Procedure Codes"),
 				Lan.g(this,"Referrals - Raw"),
@@ -501,34 +502,39 @@ namespace OpenDental{
 				case 2://Insurance Plans
 					FormRpInsCo FormInsCo=new FormRpInsCo();
 					FormInsCo.ShowDialog();
-					SecurityLogs.MakeLogEntry(Permissions.Reports,0,"Insurance Carriers");
+					SecurityLogs.MakeLogEntry(Permissions.Reports,0,"Insurance Plans");
 					break;
-				case 3://Patients
+				case 3://New Patients
+					FormRpNewPatients FormNewPats=new FormRpNewPatients();
+					FormNewPats.ShowDialog();
+					SecurityLogs.MakeLogEntry(Permissions.Reports,0,"New Patients");
+					break;
+				case 4://Patients - Raw
 					FormRpPatients FormPatients=new FormRpPatients();
 					FormPatients.ShowDialog();
-					SecurityLogs.MakeLogEntry(Permissions.Reports,0,"Patient List");
+					SecurityLogs.MakeLogEntry(Permissions.Reports,0,"Patients - Raw");
 					break;
-				case 4://Prescriptions
+				case 5://Prescriptions
 					FormRpPrescriptions FormPrescript=new FormRpPrescriptions();
 					FormPrescript.ShowDialog();
 					SecurityLogs.MakeLogEntry(Permissions.Reports,0,"Rx");
 					break;
-				case 5://Procedure Codes
+				case 6://Procedure Codes
 					FormRpProcCodes FormProcCodes=new FormRpProcCodes();
 					FormProcCodes.ShowDialog();
 					SecurityLogs.MakeLogEntry(Permissions.Reports,0,"Procedure Codes");
 					break;
-				case 6://Referrals - Raw
+				case 7://Referrals - Raw
 					FormRpReferrals FormReferral=new FormRpReferrals();
 					FormReferral.ShowDialog();
 					SecurityLogs.MakeLogEntry(Permissions.Reports,0,"Referrals - Raw");
 					break;
-				case 7://Referral Analysis
+				case 8://Referral Analysis
 					FormRpReferralAnalysis FormRA=new FormRpReferralAnalysis();
 					FormRA.ShowDialog();
 					SecurityLogs.MakeLogEntry(Permissions.Reports,0,"Referral Analysis");
 					break;
-				case 8://Routing Slips
+				case 9://Routing Slips
 					FormRpRouting FormR=new FormRpRouting();
 					FormR.ShowDialog();
 					break;
