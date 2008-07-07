@@ -7602,6 +7602,7 @@ namespace OpenDental{
 						Note text,
 						PRIMARY KEY (SiteNum)
 						) DEFAULT CHARSET=utf8";
+					General.NonQ(command);
 					command="INSERT INTO site (Description,Note) SELECT SchoolName,SchoolCode FROM school"; 
 					General.NonQ(command);
 					command="INSERT INTO site (Description,Note) SELECT distinct GradeSchool,'' FROM patient WHERE GradeSchool !='' AND NOT EXISTS(SELECT * FROM site WHERE site.Description=patient.GradeSchool)";

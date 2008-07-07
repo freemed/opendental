@@ -865,9 +865,10 @@ namespace OpenDental.Reporting.Allocators.MyAllocator1
 							//    dtTest.Rows.Add(drkk);
 							//}
 							#endregion
+							bool MarkedAllocated;
 #if DEBUG
 							decimal sum = 0; // don't need the sum just checking things out.
-							bool MarkedAllocated = true;  // can be used to make sure there is not a miss recorrded IsAllocated.
+							MarkedAllocated = true;  // can be used to make sure there is not a miss recorrded IsAllocated.
 #endif
 							bool fullyAllocated = false ;
 							if (rows != null && rows.Length != 0)

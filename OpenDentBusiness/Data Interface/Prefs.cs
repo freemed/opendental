@@ -23,7 +23,8 @@ namespace OpenDentBusiness{
 				pref=new Pref();
 				pref.PrefName=PIn.PString(table.Rows[i][0].ToString());
 				pref.ValueString=PIn.PString(table.Rows[i][1].ToString());
-				pref.Comments=PIn.PString(table.Rows[i][2].ToString());
+				//no need to load up the comments.  Especially since this will fail when user first runs version 5.8.
+					//pref.Comments=PIn.PString(table.Rows[i][2].ToString());
 				PrefC.HList.Add(pref.PrefName,pref);
 			}
 		}
@@ -32,7 +33,7 @@ namespace OpenDentBusiness{
 		public static void Update(Pref pref) {
 			string command= "UPDATE preference SET "
 				+"ValueString = '"+POut.PString(pref.ValueString)+"' "
-				+",Comments = '"  +POut.PString(pref.Comments)+"' "
+				//+",Comments = '"  +POut.PString(pref.Comments)+"' "
 				+" WHERE PrefName = '"+POut.PString(pref.PrefName)+"'";
 			General.NonQ(command);
 		}

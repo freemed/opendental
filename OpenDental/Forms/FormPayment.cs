@@ -76,6 +76,8 @@ namespace OpenDental{
 		private Label label10;
 		private TextBox textFamEnd;
 		private OpenDental.UI.Button butPay;
+		private TextBox textDeposit;
+		private Label labelDeposit;
 		///<summary>This table gets created and filled once at the beginning.  After that, only the last column gets carefully updated.</summary>
 		private DataTable tableBalances;
 
@@ -146,6 +148,8 @@ namespace OpenDental{
 			this.butOK = new OpenDental.UI.Button();
 			this.butDeleteAll = new OpenDental.UI.Button();
 			this.butAdd = new OpenDental.UI.Button();
+			this.textDeposit = new System.Windows.Forms.TextBox();
+			this.labelDeposit = new System.Windows.Forms.Label();
 			this.SuspendLayout();
 			// 
 			// label1
@@ -528,10 +532,29 @@ namespace OpenDental{
 			this.butAdd.Text = "&Add Split";
 			this.butAdd.Click += new System.EventHandler(this.butAdd_Click);
 			// 
+			// textDeposit
+			// 
+			this.textDeposit.Location = new System.Drawing.Point(45,502);
+			this.textDeposit.Name = "textDeposit";
+			this.textDeposit.ReadOnly = true;
+			this.textDeposit.Size = new System.Drawing.Size(100,20);
+			this.textDeposit.TabIndex = 125;
+			// 
+			// labelDeposit
+			// 
+			this.labelDeposit.Location = new System.Drawing.Point(42,483);
+			this.labelDeposit.Name = "labelDeposit";
+			this.labelDeposit.Size = new System.Drawing.Size(219,16);
+			this.labelDeposit.TabIndex = 126;
+			this.labelDeposit.Text = "Attached to deposit";
+			this.labelDeposit.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
+			// 
 			// FormPayment
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.ClientSize = new System.Drawing.Size(894,588);
+			this.Controls.Add(this.textDeposit);
+			this.Controls.Add(this.labelDeposit);
 			this.Controls.Add(this.butPay);
 			this.Controls.Add(this.textFamEnd);
 			this.Controls.Add(this.label10);
@@ -576,8 +599,8 @@ namespace OpenDental{
 			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Payment";
-			this.Closing += new System.ComponentModel.CancelEventHandler(this.FormPayment_Closing);
 			this.Load += new System.EventHandler(this.FormPayment_Load);
+			this.Closing += new System.ComponentModel.CancelEventHandler(this.FormPayment_Closing);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -631,9 +654,13 @@ namespace OpenDental{
 			if(listPayType.SelectedIndex==-1)
 				listPayType.SelectedIndex=0;
 			textNote.Text=PaymentCur.PayNote;
-			//if(){
-			
-			//}
+			if(PaymentCur.DepositNum==0){
+				labelDeposit.Visible=false;
+				textDeposit.Visible=false;
+			}
+			else{
+				textDeposit.Text=Deposits.GetOne(PaymentCur.DepositNum).DateDeposit.ToShortDateString();
+			}
 			SplitList=PaySplits.GetForPayment(PaymentCur.PayNum);//Count might be 0
 			SplitListOld=new List<PaySplit>();
 			//SplitListOld.AddRange(SplitList);//Do NOT do this.  It's a shallow copy only.  Not what we want.
@@ -1130,6 +1157,10 @@ namespace OpenDental{
 		//}
 
 		private void butDeleteAll_Click(object sender, System.EventArgs e) {
+			if(textDeposit.Visible){//this will get checked again by the middle layer
+				MsgBox.Show(this,"This payment is attached to a deposit.  Not allowed to delete.");
+				return;
+			}
 			if(!MsgBox.Show(this,true,"This will delete the entire payment and all splits.")){
 				return;
 			}
