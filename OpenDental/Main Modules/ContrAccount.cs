@@ -2700,10 +2700,10 @@ namespace OpenDental {
 				}
 			}
 			proc=Procedures.GetProcFromList(procsForPat,PIn.PInt(table.Rows[gridAccount.SelectedIndices[0]]["ProcNum"].ToString()));
-			int clinic=proc.ClinicNum;
+			int clinicNum=proc.ClinicNum;
 			for(int i=1;i<gridAccount.SelectedIndices.Length;i++){//skips 0
 				proc=Procedures.GetProcFromList(procsForPat,PIn.PInt(table.Rows[gridAccount.SelectedIndices[i]]["ProcNum"].ToString()));
-				if(clinic!=proc.ClinicNum){
+				if(clinicNum!=proc.ClinicNum){
 					MsgBox.Show(this,"All procedures do not have the same clinic.");
 					return new Claim();
 				}
@@ -2741,7 +2741,7 @@ namespace OpenDental {
 			//Claim ClaimCur=Claims.Cur;
 			ClaimCur.PatNum=PatCur.PatNum;
 			ClaimCur.DateService=claimProcs[claimProcs.Length-1].ProcDate;
-			ClaimCur.ClinicNum=clinic;
+			ClaimCur.ClinicNum=clinicNum;
 			//datesent
 			ClaimCur.ClaimStatus="U";
 			//datereceived
@@ -2795,7 +2795,13 @@ namespace OpenDental {
 			//ClaimCur.DedApplied=0;//calcs in ClaimEdit.
 			//preauthstring, etc, etc
 			ClaimCur.IsProsthesis="N";
-			ClaimCur.ProvBill=Providers.GetBillingProvNum(ClaimCur.ProvTreat);//OK if zero, because it will get fixed in claim
+			int clinicInsBillingProv=0;
+			bool useClinic=false;
+			if(ClaimCur.ClinicNum>0){
+				useClinic=true;
+				clinicInsBillingProv=Clinics.GetClinic(ClaimCur.ClinicNum).InsBillingProv;
+			}
+			ClaimCur.ProvBill=Providers.GetBillingProvNum(ClaimCur.ProvTreat,useClinic,clinicInsBillingProv);//OK if zero, because it will get fixed in claim
 			ClaimCur.EmployRelated=YN.No;
 			//attach procedures
 			Procedure ProcCur;

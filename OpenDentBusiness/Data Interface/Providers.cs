@@ -239,16 +239,29 @@ namespace OpenDentBusiness{
 			return -1;
 		}
 
-		///<summary>There are three different choices for getting the billing provider.  One of the three is to use the treating provider, so supply that as an argument.  It will return a valid provNum unless the supplied treatProv was invalid.</summary>
-		public static int GetBillingProvNum(int treatProv){
-			if(PrefC.GetInt("InsBillingProv")==0) {//default=0
-				return PrefC.GetInt("PracticeDefaultProv");
+		///<summary>If useClinic, then clinicInsBillingProv will be used.  Otherwise, the pref for the practice.  Either way, there are three different choices for getting the billing provider.  One of the three is to use the treating provider, so supply that as an argument.  It will return a valid provNum unless the supplied treatProv was invalid.</summary>
+		public static int GetBillingProvNum(int treatProv,bool useClinic,int clinicInsBillingProv){
+			if(useClinic){
+				if(clinicInsBillingProv==0) {//default=0
+					return PrefC.GetInt("PracticeDefaultProv");
+				}
+				else if(clinicInsBillingProv==-1) {//treat=-1
+					return treatProv;
+				}
+				else {
+					return clinicInsBillingProv;
+				}
 			}
-			else if(PrefC.GetInt("InsBillingProv")==-1) {//treat=-1
-				return treatProv;
-			}
-			else {
-				return PrefC.GetInt("InsBillingProv");
+			else{
+				if(PrefC.GetInt("InsBillingProv")==0) {//default=0
+					return PrefC.GetInt("PracticeDefaultProv");
+				}
+				else if(PrefC.GetInt("InsBillingProv")==-1) {//treat=-1
+					return treatProv;
+				}
+				else {
+					return PrefC.GetInt("InsBillingProv");
+				}
 			}
 		}
 

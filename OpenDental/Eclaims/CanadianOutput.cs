@@ -32,7 +32,9 @@ namespace OpenDental.Eclaims {
 			Patient patient=Patients.GetPat(patNum);
 			Patient subscriber=Patients.GetPat(subscNum);
 			Provider treatProv=Providers.GetProv(Patients.GetProvNum(patient));
-			Provider billProv=Providers.GetProv(Providers.GetBillingProvNum(treatProv.ProvNum));
+			int clinicInsBillingProv=0;
+			bool useClinic=false;
+			Provider billProv=Providers.GetProv(Providers.GetBillingProvNum(treatProv.ProvNum,useClinic,clinicInsBillingProv));
 			//I had to use a dialog box to get the eligibility code.
 
 			//validate any missing info----------------------------------------------------------------------------------
