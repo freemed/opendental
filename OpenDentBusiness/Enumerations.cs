@@ -1322,6 +1322,13 @@ namespace OpenDentBusiness{
 		Intermingled
 	}*/
 
+	public enum DisplayFieldCategory{
+		///<summary>0</summary>
+		ProgressNotes,
+		///<summary>1</summary>
+		PatientSelect
+	}
+
 }
 
 

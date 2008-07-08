@@ -15,19 +15,20 @@ namespace OpenDentBusiness{
 		public string Description;
 		///<summary>For grid columns, this lets user override the column width.  Especially useful for foreign languages.</summary>
 		public int ColumnWidth;
-		//<summary>Enum:DisplayFieldCategory Always ProgressNotes for now.</summary>
-		//public DisplayFieldCategory Category;
+		///<summary>Enum:DisplayFieldCategory</summary>
+		public DisplayFieldCategory Category;
 
 
 		public DisplayField(){
 
 		}
 
-		public DisplayField(string internalName,int columnWidth){
+		public DisplayField(string internalName,int columnWidth,DisplayFieldCategory category){
 			this.InternalName=internalName;
 			//this.Description=description;
 			this.ColumnWidth=columnWidth;
 			this.Description="";
+			this.Category=category;
 		}
 
 		///<summary>Returns a copy.</summary>

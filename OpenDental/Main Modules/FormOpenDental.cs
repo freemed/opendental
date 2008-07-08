@@ -3026,7 +3026,7 @@ namespace OpenDental{
 			if(!Security.IsAuthorized(Permissions.Setup)) {
 				return;
 			}
-			FormDisplayFields FormD=new FormDisplayFields();
+			FormDisplayFieldCategories FormD=new FormDisplayFieldCategories();
 			FormD.ShowDialog();
 			RefreshCurrentModule();
 			SecurityLogs.MakeLogEntry(Permissions.Setup,0,"Display Fields");

@@ -3432,7 +3432,7 @@ namespace OpenDental{
 			gridProg.BeginUpdate();
 			gridProg.Columns.Clear();
 			ODGridColumn col;
-			List<DisplayField> fields=DisplayFields.GetForCategory();
+			List<DisplayField> fields=DisplayFields.GetForCategory(DisplayFieldCategory.ProgressNotes);
 			for(int i=0;i<fields.Count;i++){
 				if(fields[i].Description==""){
 					col=new ODGridColumn(fields[i].InternalName,fields[i].ColumnWidth);

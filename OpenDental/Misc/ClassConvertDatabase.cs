@@ -7649,6 +7649,8 @@ namespace OpenDental{
 					int practiceBillingProv=PIn.PInt(table.Rows[0][0].ToString());
 					command="UPDATE clinic SET InsBillingProv='"+practiceBillingProv.ToString()+"'";
 					General.NonQ(command);
+					command="ALTER TABLE displayfield ADD Category int default '0' NOT NULL";
+					General.NonQ(command);
 
 
 

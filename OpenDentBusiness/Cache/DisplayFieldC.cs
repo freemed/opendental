@@ -5,7 +5,7 @@ using System.Text;
 
 namespace OpenDentBusiness {
 	public class DisplayFieldC {
-		///<summary>A list of all DisplayFields</summary>
+		///<summary>A list of all DisplayFields, sorted by ItemOrder, but not by Category.</summary>
 		public static List<DisplayField> Listt;
 
 	}

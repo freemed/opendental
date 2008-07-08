@@ -28,17 +28,19 @@ namespace OpenDentBusiness {
 				field.ItemOrder       = PIn.PInt   (table.Rows[i][2].ToString());
 				field.Description     = PIn.PString(table.Rows[i][3].ToString());
 				field.ColumnWidth     = PIn.PInt   (table.Rows[i][4].ToString());
+				field.Category        = (DisplayFieldCategory)PIn.PInt(table.Rows[i][5].ToString());
 				DisplayFieldC.Listt.Add(field);
 			}
 		}
 
 		///<summary></summary>
 		public static void Insert(DisplayField field) {		
-			string command = "INSERT INTO displayfield (InternalName,ItemOrder,Description,ColumnWidth) VALUES ("			
+			string command = "INSERT INTO displayfield (InternalName,ItemOrder,Description,ColumnWidth,Category) VALUES ("			
 				+"'"+POut.PString(field.InternalName)+"'," 
 				+"'"+POut.PInt   (field.ItemOrder)+"',"
 				+"'"+POut.PString(field.Description)+"'," 
-				+"'"+POut.PInt   (field.ColumnWidth)+"')";
+				+"'"+POut.PInt   (field.ColumnWidth)+"', "
+				+"'"+POut.PInt   ((int)field.Category)+"')";
 			General.NonQ(command);
 		}
 
@@ -53,51 +55,101 @@ namespace OpenDentBusiness {
 		}
 		*/
 
-		///<Summary>There's only one category for now.  So this doesn't really do much.</Summary>
-		public static List<DisplayField> GetForCategory(){
-			if(DisplayFieldC.Listt.Count==0) {//default
-				return DisplayFields.GetDefaultList();
+		///<Summary>Returns an ordered list for just one category</Summary>
+		public static List<DisplayField> GetForCategory(DisplayFieldCategory category){
+			List<DisplayField> retVal=new List<DisplayField>();
+			for(int i=0;i<DisplayFieldC.Listt.Count;i++){
+				if(DisplayFieldC.Listt[i].Category==category){
+					retVal.Add(DisplayFieldC.Listt[i].Copy());
+				}
 			}
-			return DisplayFieldC.Listt;//later, filter by category
+			if(retVal.Count==0) {//default
+				return DisplayFields.GetDefaultList(category);
+			}
+			return retVal;
 		}
 
-		public static List<DisplayField> GetDefaultList(){
+		public static List<DisplayField> GetDefaultList(DisplayFieldCategory category){
 			List<DisplayField> list=new List<DisplayField>();
-			list.Add(new DisplayField("Date",67));
-			//list.Add(new DisplayField("Time",40));
-			list.Add(new DisplayField("Th",27));
-			list.Add(new DisplayField("Surf",40));
-			list.Add(new DisplayField("Dx",28));
-			list.Add(new DisplayField("Description",218));
-			list.Add(new DisplayField("Stat",25));
-			list.Add(new DisplayField("Prov",42));
-			list.Add(new DisplayField("Amount",48));
-			list.Add(new DisplayField("ADA Code",62));
-			list.Add(new DisplayField("User",62));
-			list.Add(new DisplayField("Signed",55));
+			if(category==DisplayFieldCategory.ProgressNotes){
+				list.Add(new DisplayField("Date",67,category));
+				//list.Add(new DisplayField("Time",40));
+				list.Add(new DisplayField("Th",27,category));
+				list.Add(new DisplayField("Surf",40,category));
+				list.Add(new DisplayField("Dx",28,category));
+				list.Add(new DisplayField("Description",218,category));
+				list.Add(new DisplayField("Stat",25,category));
+				list.Add(new DisplayField("Prov",42,category));
+				list.Add(new DisplayField("Amount",48,category));
+				list.Add(new DisplayField("ADA Code",62,category));
+				list.Add(new DisplayField("User",62,category));
+				list.Add(new DisplayField("Signed",55,category));
+			}
+			else if(category==DisplayFieldCategory.PatientSelect){
+				list.Add(new DisplayField("LastName",75,category));
+				list.Add(new DisplayField("First Name",75,category));
+				//list.Add(new DisplayField("MI",25,category));
+				list.Add(new DisplayField("Pref Name",60,category));
+				list.Add(new DisplayField("Age",30,category));
+				list.Add(new DisplayField("SSN",65,category));
+				list.Add(new DisplayField("Hm Phone",90,category));
+				list.Add(new DisplayField("Wk Phone",90,category));
+				list.Add(new DisplayField("PatNum",80,category));
+				//list.Add(new DisplayField("ChartNum",60,category));
+				list.Add(new DisplayField("Address",100,category));
+				list.Add(new DisplayField("Status",65,category));
+				//list.Add(new DisplayField("Bill Type",90,category));
+				//list.Add(new DisplayField("City",80,category));
+				//list.Add(new DisplayField("State",55,category));
+				//list.Add(new DisplayField("Pri Prov",85,category));
+				//list.Add(new DisplayField("Birthdate",70,category));
+				//list.Add(new DisplayField("Site",90,category));
+			}
 			return list;
 		}
 
-		public static List<DisplayField> GetAllAvailableList(){
+		public static List<DisplayField> GetAllAvailableList(DisplayFieldCategory category){
 			List<DisplayField> list=new List<DisplayField>();
-			list.Add(new DisplayField("Date",67));
-			list.Add(new DisplayField("Time",40));
-			list.Add(new DisplayField("Th",27));
-			list.Add(new DisplayField("Surf",40));
-			list.Add(new DisplayField("Dx",28));
-			list.Add(new DisplayField("Description",218));
-			list.Add(new DisplayField("Stat",25));
-			list.Add(new DisplayField("Prov",42));
-			list.Add(new DisplayField("Amount",48));
-			list.Add(new DisplayField("ADA Code",62));
-			list.Add(new DisplayField("User",62));
-			list.Add(new DisplayField("Signed",55));
+			if(category==DisplayFieldCategory.ProgressNotes){
+				list.Add(new DisplayField("Date",67,category));
+				list.Add(new DisplayField("Time",40,category));
+				list.Add(new DisplayField("Th",27,category));
+				list.Add(new DisplayField("Surf",40,category));
+				list.Add(new DisplayField("Dx",28,category));
+				list.Add(new DisplayField("Description",218,category));
+				list.Add(new DisplayField("Stat",25,category));
+				list.Add(new DisplayField("Prov",42,category));
+				list.Add(new DisplayField("Amount",48,category));
+				list.Add(new DisplayField("ADA Code",62,category));
+				list.Add(new DisplayField("User",62,category));
+				list.Add(new DisplayField("Signed",55,category));
+			}
+			else if(category==DisplayFieldCategory.PatientSelect){
+				list.Add(new DisplayField("LastName",75,category));
+				list.Add(new DisplayField("First Name",75,category));
+				list.Add(new DisplayField("MI",25,category));
+				list.Add(new DisplayField("Pref Name",60,category));
+				list.Add(new DisplayField("Age",30,category));
+				list.Add(new DisplayField("SSN",65,category));
+				list.Add(new DisplayField("Hm Phone",90,category));
+				list.Add(new DisplayField("Wk Phone",90,category));
+				list.Add(new DisplayField("PatNum",80,category));
+				list.Add(new DisplayField("ChartNum",60,category));
+				list.Add(new DisplayField("Address",100,category));
+				list.Add(new DisplayField("Status",65,category));
+				list.Add(new DisplayField("Bill Type",90,category));
+				list.Add(new DisplayField("City",80,category));
+				list.Add(new DisplayField("State",55,category));
+				list.Add(new DisplayField("Pri Prov",85,category));
+				list.Add(new DisplayField("Birthdate",70,category));
+				list.Add(new DisplayField("Site",90,category));
+			}
 			return list;
 		}
 
-		public static void SaveListForCategory(List<DisplayField> ListShowing){
+		public static void SaveListForCategory(List<DisplayField> ListShowing,DisplayFieldCategory category){
 			bool isDefault=true;
-			List<DisplayField> defaultList=GetDefaultList();
+			List<DisplayField> defaultList=GetDefaultList(category);
 			if(ListShowing.Count!=defaultList.Count){
 				isDefault=false;
 			}
@@ -117,7 +169,7 @@ namespace OpenDentBusiness {
 					}
 				}
 			}
-			string command="DELETE FROM displayfield";
+			string command="DELETE FROM displayfield WHERE Category="+POut.PInt((int)category);
 			General.NonQ(command);
 			if(isDefault){
 				return;

@@ -6,6 +6,7 @@ See header in FormOpenDental.cs for complete text.  Redistributions must retain 
 using System;
 using System.Drawing;
 using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows.Forms;
 using System.Data;
@@ -67,6 +68,7 @@ namespace OpenDental{
 		private ComboBox comboSite;
 		private Label labelSite;
 		private TextBox selectedTxtBox;
+		private List<DisplayField> fields;
 
 		///<summary></summary>
 		public FormPatientSelect(){
@@ -698,42 +700,17 @@ namespace OpenDental{
 		private void SetGridCols(){
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
-			ODGridColumn col=new ODGridColumn("LastName",75);
-			gridMain.Columns.Add(col);
-			col=new ODGridColumn("First Name",75);
-			gridMain.Columns.Add(col);
-			col=new ODGridColumn("MI",25);
-			gridMain.Columns.Add(col);
-			col=new ODGridColumn("Pref Name",60);
-			gridMain.Columns.Add(col);
-			col=new ODGridColumn("Age",30);
-			gridMain.Columns.Add(col);
-			col=new ODGridColumn("SSN",65);
-			gridMain.Columns.Add(col);
-			col=new ODGridColumn("Hm Phone",90);
-			gridMain.Columns.Add(col);
-			col=new ODGridColumn("Wk Phone",90);
-			gridMain.Columns.Add(col);
-			col=new ODGridColumn("PatNum",80);
-			gridMain.Columns.Add(col);
-			col=new ODGridColumn("ChartNum",60);
-			gridMain.Columns.Add(col);
-			col=new ODGridColumn("Address",100);
-			gridMain.Columns.Add(col);
-			col=new ODGridColumn("Status",65);
-			gridMain.Columns.Add(col);
-			col=new ODGridColumn("Bill Type",90);
-			gridMain.Columns.Add(col);
-			col=new ODGridColumn("City",80);
-			gridMain.Columns.Add(col);
-			col=new ODGridColumn("State",55);
-			gridMain.Columns.Add(col);
-			col=new ODGridColumn("Pri Prov",85);
-			gridMain.Columns.Add(col);
-			col=new ODGridColumn("Birthdate",70);
-			gridMain.Columns.Add(col);
-			col=new ODGridColumn("Site",90);
-			gridMain.Columns.Add(col);
+			ODGridColumn col;
+			fields=DisplayFields.GetForCategory(DisplayFieldCategory.PatientSelect);
+			for(int i=0;i<fields.Count;i++){
+				if(fields[i].Description==""){
+					col=new ODGridColumn(fields[i].InternalName,fields[i].ColumnWidth);
+				}
+				else{
+					col=new ODGridColumn(fields[i].Description,fields[i].ColumnWidth);
+				}
+				gridMain.Columns.Add(col);
+			}
 			gridMain.EndUpdate();
 		}
 
@@ -979,25 +956,65 @@ namespace OpenDental{
 			gridMain.Rows.Clear();
 			ODGridRow row;
 			for(int i=0;i<PtDataTable.Rows.Count;i++){
-				row=new ODGridRow();				
-				row.Cells.Add(PtDataTable.Rows[i]["LName"].ToString());				
-				row.Cells.Add(PtDataTable.Rows[i]["FName"].ToString());		
-				row.Cells.Add(PtDataTable.Rows[i]["MiddleI"].ToString());
-				row.Cells.Add(PtDataTable.Rows[i]["Preferred"].ToString());		
-				row.Cells.Add(PtDataTable.Rows[i]["age"].ToString());
-				row.Cells.Add(PtDataTable.Rows[i]["SSN"].ToString());
-				row.Cells.Add(PtDataTable.Rows[i]["HmPhone"].ToString());
-				row.Cells.Add(PtDataTable.Rows[i]["WkPhone"].ToString());
-				row.Cells.Add(PtDataTable.Rows[i]["PatNum"].ToString());
-				row.Cells.Add(PtDataTable.Rows[i]["ChartNumber"].ToString());
-				row.Cells.Add(PtDataTable.Rows[i]["Address"].ToString());
-				row.Cells.Add(PtDataTable.Rows[i]["PatStatus"].ToString());
-				row.Cells.Add(PtDataTable.Rows[i]["BillingType"].ToString());
-				row.Cells.Add(PtDataTable.Rows[i]["City"].ToString());
-				row.Cells.Add(PtDataTable.Rows[i]["State"].ToString());
-				row.Cells.Add(PtDataTable.Rows[i]["PriProv"].ToString());
-				row.Cells.Add(PtDataTable.Rows[i]["Birthdate"].ToString());
-				row.Cells.Add(PtDataTable.Rows[i]["site"].ToString());
+				row=new ODGridRow();
+				for(int f=0;f<fields.Count;f++) {
+					switch(fields[f].InternalName){
+						case "LastName":
+							row.Cells.Add(PtDataTable.Rows[i]["LName"].ToString());
+							break;
+						case "First Name":
+							row.Cells.Add(PtDataTable.Rows[i]["FName"].ToString());
+							break;
+						case "MI":
+							row.Cells.Add(PtDataTable.Rows[i]["MiddleI"].ToString());
+							break;
+						case "Pref Name":
+							row.Cells.Add(PtDataTable.Rows[i]["Preferred"].ToString());
+							break;
+						case "Age":
+							row.Cells.Add(PtDataTable.Rows[i]["age"].ToString());
+							break;
+						case "SSN":
+							row.Cells.Add(PtDataTable.Rows[i]["SSN"].ToString());
+							break;
+						case "Hm Phone":
+							row.Cells.Add(PtDataTable.Rows[i]["HmPhone"].ToString());
+							break;
+						case "Wk Phone":
+							row.Cells.Add(PtDataTable.Rows[i]["WkPhone"].ToString());
+							break;
+						case "PatNum":
+							row.Cells.Add(PtDataTable.Rows[i]["PatNum"].ToString());
+							break;
+						case "ChartNum":
+							row.Cells.Add(PtDataTable.Rows[i]["ChartNumber"].ToString());
+							break;
+						case "Address":
+							row.Cells.Add(PtDataTable.Rows[i]["Address"].ToString());
+							break;
+						case "Status":
+							row.Cells.Add(PtDataTable.Rows[i]["PatStatus"].ToString());
+							break;
+						case "Bill Type":
+							row.Cells.Add(PtDataTable.Rows[i]["BillingType"].ToString());
+							break;
+						case "City":
+							row.Cells.Add(PtDataTable.Rows[i]["City"].ToString());
+							break;
+						case "State":
+							row.Cells.Add(PtDataTable.Rows[i]["State"].ToString());
+							break;
+						case "Pri Prov":
+							row.Cells.Add(PtDataTable.Rows[i]["PriProv"].ToString());
+							break;
+						case "Birthdate":
+							row.Cells.Add(PtDataTable.Rows[i]["Birthdate"].ToString());
+							break;
+						case "Site":
+							row.Cells.Add(PtDataTable.Rows[i]["site"].ToString());
+							break;
+					}
+				}
 				gridMain.Rows.Add(row);
 			}
 			gridMain.EndUpdate();
