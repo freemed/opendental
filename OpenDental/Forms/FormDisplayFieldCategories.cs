@@ -56,19 +56,28 @@ namespace OpenDental{
 		{
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormDisplayFieldCategories));
 			this.label1 = new System.Windows.Forms.Label();
+			this.listCategory = new System.Windows.Forms.ListBox();
 			this.butOK = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
-			this.listCategory = new System.Windows.Forms.ListBox();
 			this.SuspendLayout();
 			// 
 			// label1
 			// 
-			this.label1.Location = new System.Drawing.Point(12,9);
+			this.label1.Location = new System.Drawing.Point(23,14);
 			this.label1.Name = "label1";
 			this.label1.Size = new System.Drawing.Size(194,17);
 			this.label1.TabIndex = 2;
 			this.label1.Text = "Select a category";
 			this.label1.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
+			// 
+			// listCategory
+			// 
+			this.listCategory.FormattingEnabled = true;
+			this.listCategory.Location = new System.Drawing.Point(23,34);
+			this.listCategory.Name = "listCategory";
+			this.listCategory.Size = new System.Drawing.Size(155,43);
+			this.listCategory.TabIndex = 57;
+			this.listCategory.DoubleClick += new System.EventHandler(this.listCategory_DoubleClick);
 			// 
 			// butOK
 			// 
@@ -78,7 +87,7 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(92,91);
+			this.butOK.Location = new System.Drawing.Point(92,118);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75,24);
 			this.butOK.TabIndex = 56;
@@ -93,26 +102,17 @@ namespace OpenDental{
 			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
-			this.butCancel.Location = new System.Drawing.Point(173,91);
+			this.butCancel.Location = new System.Drawing.Point(173,118);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75,24);
 			this.butCancel.TabIndex = 0;
-			this.butCancel.Text = "Cancel";
+			this.butCancel.Text = "Close";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
-			// 
-			// listCategory
-			// 
-			this.listCategory.FormattingEnabled = true;
-			this.listCategory.Location = new System.Drawing.Point(12,29);
-			this.listCategory.Name = "listCategory";
-			this.listCategory.Size = new System.Drawing.Size(155,30);
-			this.listCategory.TabIndex = 57;
-			this.listCategory.DoubleClick += new System.EventHandler(this.listCategory_DoubleClick);
 			// 
 			// FormDisplayFieldCategories
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
-			this.ClientSize = new System.Drawing.Size(271,143);
+			this.ClientSize = new System.Drawing.Size(271,157);
 			this.Controls.Add(this.listCategory);
 			this.Controls.Add(this.butOK);
 			this.Controls.Add(this.label1);

@@ -105,6 +105,42 @@ namespace OpenDentBusiness {
 				//list.Add(new DisplayField("Birthdate",70,category));
 				//list.Add(new DisplayField("Site",90,category));
 			}
+			else if(category==DisplayFieldCategory.PatientInformation){
+				list.Add(new DisplayField("Last",0,category));
+				list.Add(new DisplayField("First",0,category));
+				list.Add(new DisplayField("Middle",0,category));
+				list.Add(new DisplayField("Preferred",0,category));
+				list.Add(new DisplayField("Title",0,category));
+				list.Add(new DisplayField("Salutation",0,category));
+				list.Add(new DisplayField("Status",0,category));
+				list.Add(new DisplayField("Gender",0,category));
+				list.Add(new DisplayField("Position",0,category));
+				list.Add(new DisplayField("Birthdate",0,category));
+				list.Add(new DisplayField("Age",0,category));
+				list.Add(new DisplayField("SS#",0,category));
+				list.Add(new DisplayField("Address",0,category));
+				list.Add(new DisplayField("Address2",0,category));
+				list.Add(new DisplayField("City",0,category));
+				list.Add(new DisplayField("State",0,category));
+				list.Add(new DisplayField("Zip",0,category));
+				list.Add(new DisplayField("Hm Phone",0,category));
+				list.Add(new DisplayField("Wk Phone",0,category));
+				list.Add(new DisplayField("Wireless Ph",0,category));
+				list.Add(new DisplayField("E-mail",0,category));
+				list.Add(new DisplayField("Contact Method",0,category));
+				list.Add(new DisplayField("ABC0",0,category));
+				//list.Add(new DisplayField("Chart Num",0,category));
+				list.Add(new DisplayField("Billing Type",0,category));
+				//list.Add(new DisplayField("Ward",0,category));
+				//list.Add(new DisplayField("AdmitDate",0,category));
+				list.Add(new DisplayField("Primary Provider",0,category));
+				list.Add(new DisplayField("Sec. Provider",0,category));
+				list.Add(new DisplayField("Language",0,category));
+				//list.Add(new DisplayField("Clinic",0,category));
+				list.Add(new DisplayField("Referrals",0,category));
+				list.Add(new DisplayField("Addr/Ph Note",0,category));
+				list.Add(new DisplayField("PatFields",0,category));
+			}
 			return list;
 		}
 
@@ -143,6 +179,42 @@ namespace OpenDentBusiness {
 				list.Add(new DisplayField("Pri Prov",85,category));
 				list.Add(new DisplayField("Birthdate",70,category));
 				list.Add(new DisplayField("Site",90,category));
+			}
+			else if(category==DisplayFieldCategory.PatientInformation){
+				list.Add(new DisplayField("Last",0,category));
+				list.Add(new DisplayField("First",0,category));
+				list.Add(new DisplayField("Middle",0,category));
+				list.Add(new DisplayField("Preferred",0,category));
+				list.Add(new DisplayField("Title",0,category));
+				list.Add(new DisplayField("Salutation",0,category));
+				list.Add(new DisplayField("Status",0,category));
+				list.Add(new DisplayField("Gender",0,category));
+				list.Add(new DisplayField("Position",0,category));
+				list.Add(new DisplayField("Birthdate",0,category));
+				list.Add(new DisplayField("Age",0,category));
+				list.Add(new DisplayField("SS#",0,category));
+				list.Add(new DisplayField("Address",0,category));
+				list.Add(new DisplayField("Address2",0,category));
+				list.Add(new DisplayField("City",0,category));
+				list.Add(new DisplayField("State",0,category));
+				list.Add(new DisplayField("Zip",0,category));
+				list.Add(new DisplayField("Hm Phone",0,category));
+				list.Add(new DisplayField("Wk Phone",0,category));
+				list.Add(new DisplayField("Wireless Ph",0,category));
+				list.Add(new DisplayField("E-mail",0,category));
+				list.Add(new DisplayField("Contact Method",0,category));
+				list.Add(new DisplayField("ABC0",0,category));
+				list.Add(new DisplayField("Chart Num",0,category));
+				list.Add(new DisplayField("Billing Type",0,category));
+				list.Add(new DisplayField("Ward",0,category));
+				list.Add(new DisplayField("AdmitDate",0,category));
+				list.Add(new DisplayField("Primary Provider",0,category));
+				list.Add(new DisplayField("Sec. Provider",0,category));
+				list.Add(new DisplayField("Language",0,category));
+				list.Add(new DisplayField("Clinic",0,category));
+				list.Add(new DisplayField("Referrals",0,category));
+				list.Add(new DisplayField("Addr/Ph Note",0,category));
+				list.Add(new DisplayField("PatFields",0,category));
 			}
 			return list;
 		}

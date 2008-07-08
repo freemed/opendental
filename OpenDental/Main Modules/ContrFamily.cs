@@ -449,287 +449,255 @@ namespace OpenDental{
 			gridPat.Columns.Add(col);
 			gridPat.Rows.Clear();
 			ODGridRow row;
-			//Last
-			row=new ODGridRow();
-			row.Cells.Add(Lan.g("TablePatient","Last"));
-			row.Cells.Add(PatCur.LName);
-			gridPat.Rows.Add(row);
-			//First
-			row=new ODGridRow();
-			row.Cells.Add(Lan.g("TablePatient","First"));
-			row.Cells.Add(PatCur.FName);
-			gridPat.Rows.Add(row);
-			//Middle
-			row=new ODGridRow();
-			row.Cells.Add(Lan.g("TablePatient","Middle"));
-			row.Cells.Add(PatCur.MiddleI);
-			gridPat.Rows.Add(row);
-			//Preferred
-			row=new ODGridRow();
-			row.Cells.Add(Lan.g("TablePatient","Preferred"));
-			row.Cells.Add(PatCur.Preferred);
-			gridPat.Rows.Add(row);
-			//Title
-			row=new ODGridRow();
-			row.Cells.Add(Lan.g("TablePatient","Title"));
-			row.Cells.Add(PatCur.Title);
-			gridPat.Rows.Add(row);
-			//Salutation
-			row=new ODGridRow();
-			row.Cells.Add(Lan.g("TablePatient","Salutation"));
-			row.Cells.Add(PatCur.Salutation);
-			//row.ColorLborder=Color.Black;
-			gridPat.Rows.Add(row);
-			//Status
-			row=new ODGridRow();
-			row.Cells.Add(Lan.g("TablePatient","Status"));
-			row.Cells.Add(Lan.g("enum PatientStatus",PatCur.PatStatus.ToString()));
-			if(PatCur.PatStatus==PatientStatus.Deceased) {
-				row.ColorText=Color.Red;
-			}
-			gridPat.Rows.Add(row);
-			//Gender
-			row=new ODGridRow();
-			row.Cells.Add(Lan.g("TablePatient","Gender"));
-			row.Cells.Add(Lan.g("enum PatientGender",PatCur.Gender.ToString()));
-			gridPat.Rows.Add(row);
-			//Position
-			row=new ODGridRow();
-			row.Cells.Add(Lan.g("TablePatient","Position"));
-			row.Cells.Add(Lan.g("enum PatientPosition",PatCur.Position.ToString()));
-			//row.ColorLborder=Color.Black;
-			gridPat.Rows.Add(row);
-			//Birthdate
-			row=new ODGridRow();
-			row.Cells.Add(Lan.g("TablePatient","Birthdate"));
-			if(PatCur.Birthdate.Year < 1880)
-				row.Cells.Add("");
-			else
-				row.Cells.Add(PatCur.Birthdate.ToString("d"));
-			gridPat.Rows.Add(row);
-			//Age
-			row=new ODGridRow();
-			row.Cells.Add(Lan.g("TablePatient","Age"));
-			row.Cells.Add(PatientLogic.DateToAgeString(PatCur.Birthdate));
-				//AgeToString(PatCur.Age));
-			gridPat.Rows.Add(row);
-			//SS#
-			row=new ODGridRow();
-			if(CultureInfo.CurrentCulture.Name.Length>=4 && CultureInfo.CurrentCulture.Name.Substring(3)=="CA") {
-				row.Cells.Add("SIN");
-			}
-			else if(CultureInfo.CurrentCulture.Name.Length>=4 && CultureInfo.CurrentCulture.Name.Substring(3)=="GB") {
-				row.Cells.Add("");
-			}
-			else{
-				row.Cells.Add(Lan.g("TablePatient","SS#"));
-			}
-			if(CultureInfo.CurrentCulture.Name.Length>=4 && CultureInfo.CurrentCulture.Name.Substring(3)=="US" 
-				&& PatCur.SSN !=null && PatCur.SSN.Length==9){
-				row.Cells.Add(PatCur.SSN.Substring(0,3)+"-"
-					+PatCur.SSN.Substring(3,2)+"-"+PatCur.SSN.Substring(5,4));
-			}
-			else {
-				row.Cells.Add(PatCur.SSN);
-			}
-			//row.ColorLborder=Color.Black;
-			gridPat.Rows.Add(row);
-			//Address
-			row=new ODGridRow();
-			ODGridCell cell=new ODGridCell(Lan.g("TablePatient","Address"));
-			//cell.Bold=YN.Yes;
-			row.Cells.Add(cell);
-			row.Cells.Add(PatCur.Address);
-			row.Bold=true;
-			gridPat.Rows.Add(row);
-			//Address2
-			row=new ODGridRow();
-			row.Cells.Add(Lan.g("TablePatient","Address2"));
-			row.Cells.Add(PatCur.Address2);
-			gridPat.Rows.Add(row);
-			//City
-			row=new ODGridRow();
-			row.Cells.Add(Lan.g("TablePatient","City"));
-			row.Cells.Add(PatCur.City);
-			gridPat.Rows.Add(row);
-			//State
-			row=new ODGridRow();
-			if(CultureInfo.CurrentCulture.Name.Length>=4 && CultureInfo.CurrentCulture.Name.Substring(3)=="CA") {
-				row.Cells.Add("Province");
-			}
-			else if(CultureInfo.CurrentCulture.Name.Length>=4 && CultureInfo.CurrentCulture.Name.Substring(3)=="GB") {
-				row.Cells.Add("");
-			}
-			else{
-				row.Cells.Add(Lan.g("TablePatient","State"));
-			}
-			row.Cells.Add(PatCur.State);
-			gridPat.Rows.Add(row);
-			//Zip
-			row=new ODGridRow();
-			if(CultureInfo.CurrentCulture.Name.Length>=4 && CultureInfo.CurrentCulture.Name.Substring(3)=="CA") {
-				row.Cells.Add("Postal Code");
-			}
-			else if(CultureInfo.CurrentCulture.Name.Length>=4 && CultureInfo.CurrentCulture.Name.Substring(3)=="GB") {
-				row.Cells.Add("Postcode");
-			}
-			else{
-				row.Cells.Add(Lan.g("TablePatient","Zip"));
-			}
-			row.Cells.Add(PatCur.Zip);
-			//row.ColorLborder=Color.Black;
-			gridPat.Rows.Add(row);
-			//Hm Phone
-			row=new ODGridRow();
-			row.Cells.Add(Lan.g("TablePatient","Hm Phone"));
-			row.Cells.Add(PatCur.HmPhone);
-			if(PatCur.PreferContactMethod==ContactMethod.HmPhone
-				|| PatCur.PreferContactMethod==ContactMethod.None)
-			{
-				row.Bold=true;
-			}
-			gridPat.Rows.Add(row);
-			//Wk Phone
-			row=new ODGridRow();
-			row.Cells.Add(Lan.g("TablePatient","Wk Phone"));
-			row.Cells.Add(PatCur.WkPhone);
-			if(PatCur.PreferContactMethod==ContactMethod.WkPhone) {
-				row.Bold=true;
-			}
-			gridPat.Rows.Add(row);
-			//Wireless Ph
-			row=new ODGridRow();
-			row.Cells.Add(Lan.g("TablePatient","Wireless Ph"));
-			row.Cells.Add(PatCur.WirelessPhone);
-			if(PatCur.PreferContactMethod==ContactMethod.WirelessPh) {
-				row.Bold=true;
-			}
-			gridPat.Rows.Add(row);
-			//E-mail
-			row=new ODGridRow();
-			row.Cells.Add(Lan.g("TablePatient","E-mail"));
-			row.Cells.Add(PatCur.Email);
-			if(PatCur.PreferContactMethod==ContactMethod.Email) {
-				row.Bold=true;
-			}
-			gridPat.Rows.Add(row);
-			//Contact Method
-			if(PatCur.PreferContactMethod==ContactMethod.DoNotCall
-				|| PatCur.PreferContactMethod==ContactMethod.SeeNotes)
-			{
+			List<DisplayField> fields=DisplayFields.GetForCategory(DisplayFieldCategory.PatientInformation);
+			for(int f=0;f<fields.Count;f++) {
 				row=new ODGridRow();
-				row.Cells.Add(Lan.g("TablePatient","Contact Method"));
-				row.Cells.Add(Lan.g("enumContactMethod",((ContactMethod)PatCur.PreferContactMethod).ToString()));
-				row.Bold=true;
-				gridPat.Rows.Add(row);
-			}
-			//Credit Type
-			row=new ODGridRow();
-			row.Cells.Add(Lan.g("TablePatient","ABC0"));
-			row.Cells.Add(PatCur.CreditType);
-			gridPat.Rows.Add(row);
-			//Chart Num
-			row=new ODGridRow();
-			row.Cells.Add(Lan.g("TablePatient","Chart Num"));
-			row.Cells.Add(PatCur.ChartNumber);
-			gridPat.Rows.Add(row);
-			//Billing Type
-			row=new ODGridRow();
-			row.Cells.Add(Lan.g("TablePatient","Billing Type"));
-			row.Cells.Add(DefC.GetName(DefCat.BillingTypes,PatCur.BillingType));
-			gridPat.Rows.Add(row);
-			//Ward
-			if(!PrefC.GetBool("EasyHideHospitals")){
-				row=new ODGridRow();
-				row.Cells.Add(Lan.g("TablePatient","Ward"));
-				row.Cells.Add(PatCur.Ward);
-				gridPat.Rows.Add(row);
-				//AdmitDate
-				row=new ODGridRow();
-				row.Cells.Add(Lan.g("TablePatient","AdmitDate"));
-				row.Cells.Add(PatCur.AdmitDate.ToShortDateString());
-				gridPat.Rows.Add(row);
-			}
-			//Primary provider (very useful in dental schools)
-			row=new ODGridRow();
-			row.Cells.Add(Lan.g("TablePatient","Primary Provider"));
-			row.Cells.Add(Providers.GetLongDesc(Patients.GetProvNum(PatCur)));
-			gridPat.Rows.Add(row);
-			//Secondary provider
-			row = new ODGridRow();
-			row.Cells.Add(Lan.g("TablePatient", "Sec. Provider"));
-			if(PatCur.SecProv != 0){
-				row.Cells.Add(Providers.GetLongDesc(PatCur.SecProv));
-			}
-			else{
-				row.Cells.Add("None");
-			}
-			gridPat.Rows.Add(row);
-			//Language
-			if(PatCur.Language!=""){
-				row=new ODGridRow();
-				row.Cells.Add(Lan.g("TablePatient","Language"));
-				row.Cells.Add(CultureInfo.GetCultureInfo(PatCur.Language).DisplayName);
-				gridPat.Rows.Add(row);
-			}
-			//Clinic
-			if(!PrefC.GetBool("EasyNoClinics")){
-				row=new ODGridRow();
-				row.Cells.Add(Lan.g("TablePatient","Clinic"));
-				row.Cells.Add(Clinics.GetDesc(PatCur.ClinicNum));
-				gridPat.Rows.Add(row);
-			}
-			//Referrals
-			RefAttach[] RefList=RefAttaches.Refresh(PatCur.PatNum);
-			if(RefList.Length==0){
-				row=new ODGridRow();
-				row.Cells.Add(Lan.g("TablePatient","Referrals"));
-				row.Cells.Add(Lan.g("TablePatient","None"));
-				row.Tag="Referral";
-				gridPat.Rows.Add(row);
-			}
-			for(int i=0;i<RefList.Length;i++) {
-				row=new ODGridRow();
-				if(RefList[i].IsFrom){
-					row.Cells.Add(Lan.g("TablePatient","Referred From"));
+				if(fields[f].Description==""){
+					if(fields[f].InternalName=="SS#"){
+						if(CultureInfo.CurrentCulture.Name.Length>=4 && CultureInfo.CurrentCulture.Name.Substring(3)=="CA") {
+							row.Cells.Add("SIN");
+						}
+						else if(CultureInfo.CurrentCulture.Name.Length>=4 && CultureInfo.CurrentCulture.Name.Substring(3)=="GB") {
+							row.Cells.Add("");
+						}
+						else{
+							row.Cells.Add("SS#");
+						}
+					}
+					else if(fields[f].InternalName=="State"){
+						if(CultureInfo.CurrentCulture.Name.Length>=4 && CultureInfo.CurrentCulture.Name.Substring(3)=="CA") {
+							row.Cells.Add("Province");
+						}
+						else if(CultureInfo.CurrentCulture.Name.Length>=4 && CultureInfo.CurrentCulture.Name.Substring(3)=="GB") {
+							row.Cells.Add("");
+						}
+						else{
+							row.Cells.Add("State");
+						}
+					}
+					else if(fields[f].InternalName=="Zip"){
+						if(CultureInfo.CurrentCulture.Name.Length>=4 && CultureInfo.CurrentCulture.Name.Substring(3)=="CA") {
+							row.Cells.Add("Postal Code");
+						}
+						else if(CultureInfo.CurrentCulture.Name.Length>=4 && CultureInfo.CurrentCulture.Name.Substring(3)=="GB") {
+							row.Cells.Add("Postcode");
+						}
+						else{
+							row.Cells.Add(Lan.g("TablePatient","Zip"));
+						}
+					}
+					else if(fields[f].InternalName=="PatFields"){
+						//don't add a cell
+					}
+					else{
+						row.Cells.Add(fields[f].InternalName);
+					}
 				}
 				else{
-					row.Cells.Add(Lan.g("TablePatient","Referred To"));
+					row.Cells.Add(fields[f].Description);
 				}
-				try{
-					row.Cells.Add(Referrals.GetNameLF(RefList[i].ReferralNum)+"\r\n"
-						+Referrals.GetPhone(RefList[i].ReferralNum)
-						+" "+RefList[i].Note);
+				switch(fields[f].InternalName){
+					case "Last":
+						row.Cells.Add(PatCur.LName);
+						break;
+					case "First":
+						row.Cells.Add(PatCur.FName);
+						break;
+					case "Middle":
+						row.Cells.Add(PatCur.MiddleI);
+						break;
+					case "Preferred":
+						row.Cells.Add(PatCur.Preferred);
+						break;
+					case "Title":
+						row.Cells.Add(PatCur.Title);
+						break;
+					case "Salutation":
+						row.Cells.Add(PatCur.Salutation);
+						break;
+					case "Status":
+						row.Cells.Add(PatCur.PatStatus.ToString());
+						if(PatCur.PatStatus==PatientStatus.Deceased) {
+							row.ColorText=Color.Red;
+						}
+						break;
+					case "Gender":
+						row.Cells.Add(PatCur.Gender.ToString());
+						break;
+					case "Position":
+						row.Cells.Add(PatCur.Position.ToString());
+						break;
+					case "Birthdate":
+						if(PatCur.Birthdate.Year < 1880){
+							row.Cells.Add("");
+						}
+						else{
+							row.Cells.Add(PatCur.Birthdate.ToString("d"));
+						}
+						break;
+					case "Age":
+						row.Cells.Add(PatientLogic.DateToAgeString(PatCur.Birthdate));
+						break;
+					case "SS#":
+						if(CultureInfo.CurrentCulture.Name.Length>=4 && CultureInfo.CurrentCulture.Name.Substring(3)=="US" 
+							&& PatCur.SSN !=null && PatCur.SSN.Length==9)
+						{
+							row.Cells.Add(PatCur.SSN.Substring(0,3)+"-"+PatCur.SSN.Substring(3,2)+"-"+PatCur.SSN.Substring(5,4));
+						}
+						else {
+							row.Cells.Add(PatCur.SSN);
+						}
+						break;
+					case "Address":
+						row.Cells.Add(PatCur.Address);
+						row.Bold=true;
+						break;
+					case "Address2":
+						row.Cells.Add(PatCur.Address2);
+						break;
+					case "City":
+						row.Cells.Add(PatCur.City);
+						break;
+					case "State":
+						row.Cells.Add(PatCur.State);
+						break;
+					case "Zip":
+						row.Cells.Add(PatCur.Zip);
+						break;
+					case "Hm Phone":
+						row.Cells.Add(PatCur.HmPhone);
+						if(PatCur.PreferContactMethod==ContactMethod.HmPhone || PatCur.PreferContactMethod==ContactMethod.None){
+							row.Bold=true;
+						}
+						break;
+					case "Wk Phone":
+						row.Cells.Add(PatCur.WkPhone);
+						if(PatCur.PreferContactMethod==ContactMethod.WkPhone) {
+							row.Bold=true;
+						}
+						break;
+					case "Wireless Ph":
+						row.Cells.Add(PatCur.WirelessPhone);
+						if(PatCur.PreferContactMethod==ContactMethod.WirelessPh) {
+							row.Bold=true;
+						}
+						break;
+					case "E-mail":
+						row.Cells.Add(PatCur.Email);
+						if(PatCur.PreferContactMethod==ContactMethod.Email) {
+							row.Bold=true;
+						}
+						break;
+					case "Contact Method":
+						row.Cells.Add(PatCur.PreferContactMethod.ToString());
+						if(PatCur.PreferContactMethod==ContactMethod.DoNotCall || PatCur.PreferContactMethod==ContactMethod.SeeNotes){
+							row.Bold=true;
+						}
+						break;
+					case "ABC0":
+						row.Cells.Add(PatCur.CreditType);
+						break;
+					case "Chart Num":
+						row.Cells.Add(PatCur.ChartNumber);
+						break;
+					case "Billing Type":
+						row.Cells.Add(DefC.GetName(DefCat.BillingTypes,PatCur.BillingType));
+						break;
+					case "Ward":
+						row.Cells.Add(PatCur.Ward);
+						break;
+					case "AdmitDate":
+						row.Cells.Add(PatCur.AdmitDate.ToShortDateString());
+						break;
+					case "Primary Provider":
+						row.Cells.Add(Providers.GetLongDesc(Patients.GetProvNum(PatCur)));
+						break;
+					case "Sec. Provider":
+						if(PatCur.SecProv != 0){
+							row.Cells.Add(Providers.GetLongDesc(PatCur.SecProv));
+						}
+						else{
+							row.Cells.Add("None");
+						}
+						break;
+					case "Language":
+						if(PatCur.Language==""){
+							row.Cells.Add("");
+						}
+						else{
+							row.Cells.Add(CultureInfo.GetCultureInfo(PatCur.Language).DisplayName);
+						}
+						break;
+					case "Clinic":
+						row.Cells.Add(Clinics.GetDesc(PatCur.ClinicNum));
+						break;
+					case "Referrals":
+						RefAttach[] RefList=RefAttaches.Refresh(PatCur.PatNum);
+						if(RefList.Length==0){
+							row.Cells.Add(Lan.g("TablePatient","None"));
+							row.Tag="Referral";
+						}
+						else{
+							row.Cells.Add("");
+							row.Tag="Referral";
+						}
+						for(int i=0;i<RefList.Length;i++) {
+							row=new ODGridRow();
+							if(RefList[i].IsFrom){
+								row.Cells.Add(Lan.g("TablePatient","Referred From"));
+							}
+							else{
+								row.Cells.Add(Lan.g("TablePatient","Referred To"));
+							}
+							try{
+								string refInfo=Referrals.GetNameLF(RefList[i].ReferralNum);
+								string phoneInfo=Referrals.GetPhone(RefList[i].ReferralNum);
+								if(phoneInfo!="" || RefList[i].Note!=""){
+									refInfo+="\r\n"+phoneInfo+" "+RefList[i].Note;
+								}
+								row.Cells.Add(refInfo);
+							}
+							catch{
+								row.Cells.Add("");//if referral is null because using random keys and had bug.
+							}
+							row.Tag="Referral";
+							if(i<RefList.Length-1){
+								gridPat.Rows.Add(row);
+							}
+						}
+						break;
+					case "Addr/Ph Note":
+						row.Cells.Add(PatCur.AddrNote);
+						if(PatCur.AddrNote!=""){
+							row.ColorText=Color.Red;
+							row.Bold=true;
+						}
+						break;
+					case "PatFields":
+						PatField field;
+						for(int i=0;i<PatFieldDefs.List.Length;i++){
+							if(i>0){
+								row=new ODGridRow();
+							}
+							row.Cells.Add(PatFieldDefs.List[i].FieldName);
+							field=PatFields.GetByName(PatFieldDefs.List[i].FieldName,PatFieldList);
+							if(field==null){
+								row.Cells.Add("");
+							}
+							else{
+								row.Cells.Add(field.FieldValue);
+							}
+							row.Tag="PatField"+i.ToString();
+							gridPat.Rows.Add(row);
+						}
+						break;
 				}
-				catch{
-					row.Cells.Add("");//if referral is null because using random keys and had bug.
-				}
-				row.Tag="Referral";
-				gridPat.Rows.Add(row);
-			}
-			//AddrNote
-			if(PatCur.AddrNote!=""){
-				row=new ODGridRow();
-				row.Cells.Add(Lan.g("TablePatient","Addr/Ph Note"));
-				row.Cells.Add(PatCur.AddrNote);
-				row.ColorText=Color.Red;
-				row.Bold=true;
-				gridPat.Rows.Add(row);
-			}
-			//PatFields-------------------------------------------
-			PatField field;
-			for(int i=0;i<PatFieldDefs.List.Length;i++){
-				row=new ODGridRow();
-				row.Cells.Add(PatFieldDefs.List[i].FieldName);
-				field=PatFields.GetByName(PatFieldDefs.List[i].FieldName,PatFieldList);
-				if(field==null){
-					row.Cells.Add("");
+				if(fields[f].InternalName=="PatFields"){
+					//don't add the row here
 				}
 				else{
-					row.Cells.Add(field.FieldValue);
+					gridPat.Rows.Add(row);
 				}
-				row.Tag="PatField"+i.ToString();
-				gridPat.Rows.Add(row);
 			}
 			gridPat.EndUpdate();
 		}

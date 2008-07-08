@@ -1326,7 +1326,9 @@ namespace OpenDentBusiness{
 		///<summary>0</summary>
 		ProgressNotes,
 		///<summary>1</summary>
-		PatientSelect
+		PatientSelect,
+		///<summary>2</summary>
+		PatientInformation
 	}
 
 }
