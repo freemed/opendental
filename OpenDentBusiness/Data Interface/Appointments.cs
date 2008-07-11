@@ -669,12 +669,19 @@ namespace OpenDentBusiness{
 			} else {
 				command+="p.AptNum!=0 AND p.AptNum ";
 			}
-			command+="IN(SELECT a.AptNum FROM appointment a WHERE ";
+			command+="IN(";//this was far too slow:SELECT a.AptNum FROM appointment a WHERE ";
 			if(aptNum==0) {
-				command+="a.AptDateTime >= "+POut.PDate(dateStart)+" "
-					+"AND a.AptDateTime < "+POut.PDate(dateEnd.AddDays(1));
-			} else {
-				command+="a.AptNum="+POut.PInt(aptNum);
+				for(int a=0;a<raw.Rows.Count;a++){
+					if(a>0){
+						command+=",";
+					}
+					command+=raw.Rows[a]["AptNum"].ToString();
+				}
+				//command+="a.AptDateTime >= "+POut.PDate(dateStart)+" "
+				//	+"AND a.AptDateTime < "+POut.PDate(dateEnd.AddDays(1));
+			}
+			else {
+				command+=POut.PInt(aptNum);
 			}
 			command+=")";
 			DataTable rawProc=dcon.GetTable(command);

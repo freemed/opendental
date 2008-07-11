@@ -213,6 +213,7 @@ namespace OpenDental{
 			phonePanel.Visible=false;
 			this.Controls.Add(phonePanel);
 			Logger.openlog.Log("Open Dental initialization complete.",Logger.Severity.INFO);
+			menuItem_ProviderAllocatorSetup.Visible=false;
 		}
 
 		///<summary></summary>
@@ -3177,6 +3178,18 @@ namespace OpenDental{
 			SecurityLogs.MakeLogEntry(Permissions.Setup,0,"Program Links");
 		}
 
+		private void menuItem_ProviderAllocatorSetup_Click(object sender, EventArgs e){
+			// Check Permissions
+			if (!Security.IsAuthorized(Permissions.Setup))
+			{
+				// Failed security prompts message box. Consider adding overload to not show message.
+				//MessageBox.Show("Not Authorized to Run Setup for Provider Allocation Tool");
+				return;
+			}
+			Reporting.Allocators.MyAllocator1.FormInstallAllocator_Provider fap = new OpenDental.Reporting.Allocators.MyAllocator1.FormInstallAllocator_Provider();
+			fap.ShowDialog();
+		}
+
 		private void menuItemQuestions_Click(object sender,EventArgs e) {
 			if(!Security.IsAuthorized(Permissions.Setup)) {
 				return;
@@ -3651,18 +3664,7 @@ namespace OpenDental{
 			}
 		}
 
-		private void menuItem_ProviderAllocatorSetup_Click(object sender, EventArgs e)
-		{
-			// Check Permissions
-			if (!Security.IsAuthorized(Permissions.Setup))
-			{
-				// Failed security prompts message box. Consider adding overload to not show message.
-				//MessageBox.Show("Not Authorized to Run Setup for Provider Allocation Tool");
-				return;
-			}
-			Reporting.Allocators.MyAllocator1.FormInstallAllocator_Provider fap = new OpenDental.Reporting.Allocators.MyAllocator1.FormInstallAllocator_Provider();
-			fap.ShowDialog();
-		}
+		
 
 		
 
