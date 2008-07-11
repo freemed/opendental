@@ -10,17 +10,18 @@ namespace OpenDental{
 	1. Customization of sheets
 	2. Saving data filled in on sheets.
 	#2 might very well come before #1, as it would allow archiving many printed documents.
-	Sheets will not include reports, which are better handled by the RDL framework.  Examples of what sheets might be used for include statements, tx plans, rx, lab slips, postcards, referral slips, patient registration forms, medical histories, consent forms, and labels.
+	Sheets will not include reports, which are better handled by the RDL framework or something even simpler.  Examples of what sheets might be used for include statements, tx plans, rx, lab slips, postcards, referral slips, patient registration forms, medical histories, consent forms, and labels.
 	The interesting thing about this framework is that it should be able to support incoming data as well as outgoing data using the following elements:
 	-background image
 	-static text
 	-text generated from database
 	-user input
 	Some of these elements would remain part of the sheet definition, while others would be saved as part of the data for the specific print job.  Therefore, such things as background images and static text would not need to be saved repeatedly with each printout.  But for this to function as a reliable archive, whenever a user "changes" a sheet definition or layout, it must result in the creation of a brand new sheet.  In other words, any sheet that has already been used for any printout is forever locked.  Because of this restriction, our internally defined sheets must be clearly named/numbered.  Every time even the smallest change is made to an internal sheet, it will be assigned a new name/number.  This will trigger the database to archive a copy of the new sheet.  The same will hold true once the user is allowed to copy and customize our supplied sheets.  The extra sheets, the garbage, must be elegantly hidden from the user so they will not be tempted to try to alter them. But until we start saving data, it's OK to alter existing sheets.
-	Possible future class names:
-	Internal: Sheet, SheetParameter, SheetField(input or output. this is what gets saved as data), SheetObject(static text, lines, images, boxes, etc.)
-	Custom: SheetDef, SheetParameterDef, SheetFieldDef, SheetObjectDef
-	Data for both: SheetData, SheetParameterData, SheetFieldData
+	Class names:
+	Internal: Sheet, SheetParameter, SheetField.
+	Class names for Database tables:
+	SheetDef, SheetFieldDef (parameterDefs are hardcoded based on type)
+	SheetData, SheetParameterData, SheetFieldData
 	
 	Note that we have tried to do similar things before, but not with as much clarity and organization.  See the ReportingOld2 folder for an example of a similar framework that never took off because:
 	a) It was overwhelming because it was trying to handle 'reporting' functions as its main purpose.
@@ -298,9 +299,12 @@ namespace OpenDental{
 	public enum SheetTypeEnum{
 		///<Summary>0-Requires SheetParameter for PatNum.</Summary>
 		LabelPatient,
+		///<Summary>1-Requires SheetParameter for PatNum.</Summary>
 		LabelCarrier,
-		LabelReferral
-		//ReferralSlip
+		///<Summary>2-Requires SheetParameter for PatNum.</Summary>
+		LabelReferral,
+		///<Summary>3-Requires SheetParameter for PatNum,ReferralNum.</Summary>
+		ReferralSlip
 		/*Statement,
 		TxPlan,
 		Rx,

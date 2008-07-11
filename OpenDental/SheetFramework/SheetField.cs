@@ -6,46 +6,77 @@ using System.Text;
 namespace OpenDental{
 	///<Summary></Summary>
 	class SheetField {
-		///<Summary>An Out field is pulled from the database to be printed on the sheet.  An In field (not supported yet) is for user input.</Summary>
-		public InOutEnum InOut;
-		///<Summary>Each sheet typically has a main datatable type.  For Out types, FieldName is usually the string representation of the database column for the main table.  For other tables, it can be of the form table.Column.  There may also be extra fields available that are not strictly pulled from the database.  Extra fields will start with lowercase to indicate that they are not pure database fields.  The list of available fields for each type in SheetFieldsAvailable.  Users could pick from that list.  Likewise, In types are internally tied to actions to persist the data.  So they are also hard coded and are available in SheetFieldsAvailable.</Summary>
+		///<Summary>OutputText, InputField, StaticText.</Summary>
+		public SheetFieldType FieldType;
+		///<Summary>Only for OutputText and InputField types.  Each sheet typically has a main datatable type.  For OutputText types, FieldName is usually the string representation of the database column for the main table.  For other tables, it can be of the form table.Column.  There may also be extra fields available that are not strictly pulled from the database.  Extra fields will start with lowercase to indicate that they are not pure database fields.  The list of available fields for each type in SheetFieldsAvailable.  Users could pick from that list.  Likewise, InputField types are internally tied to actions to persist the data.  So they are also hard coded and are available in SheetFieldsAvailable.</Summary>
 		public string FieldName;
 		///<Summary>Overrides sheet font.</Summary>
 		public Font Font;
 		///<Summary>In pixels.</Summary>
 		public int XPos;
-		///<Summary>In pixels.</Summary>
-		private int yPos;
-		///<Summary>Before printing, this will be the same as YPos.  But during printing, YPos will get changed with each sheet due to growthBehavior.  YPosOriginal allows us to return YPos to it's original setting.</Summary>
-		private int yPosOriginal;
 		///<Summary>The field will be constrained horizontally to this size.  Not allowed to be zero.</Summary>
 		public int Width;
-		///<Summary>The Sheet constructor makes sure that if this is 0, then it will default to the size dictated by the font.  Once we build a sheet designer, the designer will handle the default size.  So it's not allowed to be zero so that it will be visible on the designer.</Summary>
-		private int height;
-		///<Summary></Summary>
-		private int heightOriginal;
 		///<Summary></Summary>
 		public GrowthBehaviorEnum GrowthBehavior;
-		///<Summary>For Out types, this value is set during printing.  This is the data obtained from the database and ready to print.</Summary>
+		///<Summary>For OutputText, this value is set during printing.  This is the data obtained from the database and ready to print.  For StaticText, this is set ahead of time when designing the sheet.</Summary>
 		public string FieldValue;
 
+		///<Summary>The field will be constrained vertically to this size.  Not allowed to be 0.  The Sheet constructor makes sure that if this is 0, then it will default to the size dictated by the font.  Once we build a sheet designer, the designer will handle the default size.  So it's not allowed to be zero so that it will be visible on the designer.</Summary>
+		private int height;
+		///<Summary>In pixels.</Summary>
+		private int yPos;
+
+		///<Summary></Summary>
+		private int heightOriginal;
+		///<Summary>Before printing, this will be the same as YPos.  But during printing, YPos will get changed with each sheet due to growthBehavior.  YPosOriginal allows us to return YPos to it's original setting.</Summary>
+		private int yPosOriginal;
+
 		///<Summary>This overload is only for SheetFieldsAvailable.</Summary>
-		public SheetField(InOutEnum inOut,string fieldName) {
-			InOut=inOut;
+		public SheetField(SheetFieldType fieldType,string fieldName) {
+			FieldType=fieldType;
 			FieldName=fieldName;
 		}
 
-		public SheetField(InOutEnum inOut,string fieldName,int xPos,int yPos,int width,Font font,GrowthBehaviorEnum growthBehavior) {
-			InOut=inOut;
+		public SheetField(SheetFieldType fieldType,string fieldName,int xPos,int yPos,int width,Font font,GrowthBehaviorEnum growthBehavior) {
+			FieldType=fieldType;
 			FieldName=fieldName;
 			Font=font;//there must always be a font.
 			XPos=xPos;
-			this.yPos=yPos;//this constructor is currently the only way to set yPosOriginal
+			this.yPos=yPos;
 			yPosOriginal=yPos;
 			Width=width;
 			height=font.Height;//Height is automatic
 			heightOriginal=height;
 			GrowthBehavior=growthBehavior;
+		}
+
+		///<summary>This overload is for StaticText.</summary>
+		public SheetField(string fieldValue,int xPos,int yPos,int width,Font font,GrowthBehaviorEnum growthBehavior) {
+			FieldType=SheetFieldType.StaticText;
+			FieldName="";
+			FieldValue=fieldValue;
+			Font=font;//there must always be a font.
+			XPos=xPos;
+			this.yPos=yPos;
+			yPosOriginal=yPos;
+			Width=width;
+			height=font.Height;//Height is automatic
+			heightOriginal=height;
+			GrowthBehavior=growthBehavior;
+		}
+
+		///<summary>Overload for an InputField.  Specify a height, too.</summary>
+		public SheetField(string fieldName,int xPos,int yPos,int width,int height,Font font) {
+			FieldType=SheetFieldType.InputField;
+			FieldName=fieldName;
+			Font=font;//there must always be a font.
+			XPos=xPos;
+			this.yPos=yPos;
+			yPosOriginal=yPos;
+			Width=width;
+			this.height=height;
+			heightOriginal=height;
+			GrowthBehavior=GrowthBehaviorEnum.None;
 		}
 
 		public int YPos{
@@ -91,18 +122,32 @@ namespace OpenDental{
 		}
 	}
 
-	public enum InOutEnum {
-		In,
-		Out
-	}
-
 	public enum GrowthBehaviorEnum {
-		///<Summary>Not allowed to grow.  Max size would be height of one row of text, and Width.</Summary>
+		///<Summary>Not allowed to grow.  Max size would be Height(generated automatically for now) and Width.</Summary>
 		None,
 		///<Summary>Can grow down if needed, and will push nearby objects out of the way so that there is no overlap.</Summary>
 		DownLocal,
 		///<Summary>Can grow down, and will push down all objects on the sheet that are below it.  Mostly used when drawing grids.</Summary>
 		DownGlobal
+	}
+
+	public enum SheetFieldType {
+		///<Summary>Pulled from the database to be printed on the sheet.  Or also possibly just generated at runtime even though not pulled from the database.   Will probably allow user to change the output text as they are filling out the sheet so that it can different from what was initially generated.</Summary>
+		OutputText,
+		///<Summary>A blank box that the user is supposed to fill in.</Summary>
+		InputField,
+		///<Summary>This is text that is defined as part of the sheet and will never change from sheet to sheet.  </Summary>
+		StaticText
+		//<summary></summary>
+		//CheckBox
+		//<summary></summary>
+		//RadioButton
+		//<Summary>Not yet supported</Summary>
+		//Image,
+		//<Summary>Not yet supported</Summary>
+		//Line,
+		//<Summary>Not yet supported.  This might be redundant, and we might use border element instead as the preferred way of drawing a box.</Summary>
+		//Box
 	}
 
 }

@@ -29,6 +29,10 @@ namespace OpenDental{
 			if(sheetType==SheetTypeEnum.LabelReferral) {
 				list.Add(new SheetParameter(true,"ReferralNum"));
 			}
+			if(sheetType==SheetTypeEnum.ReferralSlip) {
+				list.Add(new SheetParameter(true,"PatNum"));
+				list.Add(new SheetParameter(true,"ReferralNum"));
+			}
 			return list;
 		}
 
