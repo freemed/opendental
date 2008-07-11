@@ -7651,7 +7651,22 @@ namespace OpenDental{
 					General.NonQ(command);
 					command="ALTER TABLE displayfield ADD Category int default '0' NOT NULL";
 					General.NonQ(command);
-
+					command="DROP TABLE IF EXISTS sheetdata";
+					General.NonQ(command);
+					command=@"CREATE TABLE sheetdata (
+						SheetDataNum int NOT NULL auto_increment,
+						SheetType int NOT NULL,
+						PatNum int NOT NULL,
+						DateTimeSheet datetime default '0001-01-01' NOT NULL,
+						FontSize float NOT NULL,
+						FontName varchar(255),
+						Width int NOT NULL,
+						Height int NOT NULL,
+						InternalNote text,
+						PRIMARY KEY (SheetDataNum),
+						INDEX (PatNum)
+						) DEFAULT CHARSET=utf8";
+					General.NonQ(command);
 
 
 

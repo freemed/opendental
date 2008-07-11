@@ -325,7 +325,7 @@ namespace OpenDentBusiness{
 		public bool SecProvChanged {
 			get { return secProvChanged; }
 		}
-//
+
 		[DataField("FeeSched")]
 		private int feeSched;
 		bool feeSchedChanged;

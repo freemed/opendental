@@ -21,7 +21,7 @@ namespace OpenDental{
 	Internal: Sheet, SheetParameter, SheetField.
 	Class names for Database tables:
 	SheetDef, SheetFieldDef (parameterDefs are hardcoded based on type)
-	SheetData, SheetParameterData, SheetFieldData
+	SheetData, SheetFieldData(won't need parameterData, because all saved sheets will have patnum.  Other parameters might be handled through adapted SheetFieldData)
 	
 	Note that we have tried to do similar things before, but not with as much clarity and organization.  See the ReportingOld2 folder for an example of a similar framework that never took off because:
 	a) It was overwhelming because it was trying to handle 'reporting' functions as its main purpose.
@@ -299,9 +299,9 @@ namespace OpenDental{
 	public enum SheetTypeEnum{
 		///<Summary>0-Requires SheetParameter for PatNum.</Summary>
 		LabelPatient,
-		///<Summary>1-Requires SheetParameter for PatNum.</Summary>
+		///<Summary>1-Requires SheetParameter for CarrierNum.</Summary>
 		LabelCarrier,
-		///<Summary>2-Requires SheetParameter for PatNum.</Summary>
+		///<Summary>2-Requires SheetParameter for ReferralNum.</Summary>
 		LabelReferral,
 		///<Summary>3-Requires SheetParameter for PatNum,ReferralNum.</Summary>
 		ReferralSlip
