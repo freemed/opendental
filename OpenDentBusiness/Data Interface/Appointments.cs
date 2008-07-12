@@ -661,30 +661,37 @@ namespace OpenDentBusiness{
 				+"patient.PreferRecallMethod,patient.Premed,ProvHyg,appointment.ProvNum,patient.WirelessPhone,patient.WkPhone";
 			}
 			DataTable raw=dcon.GetTable(command);
-			command="SELECT pc.AbbrDesc,p.AptNum,p.CodeNum,p.PlannedAptNum,p.Surf,p.ToothNum,pc.TreatArea  "
-				+"FROM procedurelog p,procedurecode pc "
-				+"WHERE p.CodeNum=pc.CodeNum AND ";
-			if(isPlanned) {
-				command+="p.PlannedAptNum!=0 AND p.PlannedAptNum ";
-			} else {
-				command+="p.AptNum!=0 AND p.AptNum ";
+			DataTable rawProc;
+			if(raw.Rows.Count==0){
+				rawProc=new DataTable();
 			}
-			command+="IN(";//this was far too slow:SELECT a.AptNum FROM appointment a WHERE ";
-			if(aptNum==0) {
-				for(int a=0;a<raw.Rows.Count;a++){
-					if(a>0){
-						command+=",";
-					}
-					command+=raw.Rows[a]["AptNum"].ToString();
+			else{
+				command="SELECT pc.AbbrDesc,p.AptNum,p.CodeNum,p.PlannedAptNum,p.Surf,p.ToothNum,pc.TreatArea  "
+					+"FROM procedurelog p,procedurecode pc "
+					+"WHERE p.CodeNum=pc.CodeNum AND ";
+				if(isPlanned) {
+					command+="p.PlannedAptNum!=0 AND p.PlannedAptNum ";
+				} 
+				else {
+					command+="p.AptNum!=0 AND p.AptNum ";
 				}
-				//command+="a.AptDateTime >= "+POut.PDate(dateStart)+" "
-				//	+"AND a.AptDateTime < "+POut.PDate(dateEnd.AddDays(1));
+				command+="IN(";//this was far too slow:SELECT a.AptNum FROM appointment a WHERE ";
+				if(aptNum==0) {
+					for(int a=0;a<raw.Rows.Count;a++){
+						if(a>0){
+							command+=",";
+						}
+						command+=raw.Rows[a]["AptNum"].ToString();
+					}
+					//command+="a.AptDateTime >= "+POut.PDate(dateStart)+" "
+					//	+"AND a.AptDateTime < "+POut.PDate(dateEnd.AddDays(1));
+				}
+				else {
+					command+=POut.PInt(aptNum);
+				}
+				command+=")";
+				rawProc=dcon.GetTable(command);
 			}
-			else {
-				command+=POut.PInt(aptNum);
-			}
-			command+=")";
-			DataTable rawProc=dcon.GetTable(command);
 			DataTable rawInsProc=null;
 			if(PrefC.GetBool("ApptExclamationShowForUnsentIns")){
 				//procs for flag, InsNotSent
