@@ -133,11 +133,11 @@ namespace OpenDental{
 				sheet.Font=new Font(FontFamily.GenericSansSerif,9f);
 				Font fontHeading=new Font(FontFamily.GenericSansSerif,10,FontStyle.Bold);
 				Font fontBold=new Font(FontFamily.GenericSansSerif,9,FontStyle.Bold);
-				sheet.Width=500;
-				sheet.Height=800;
+				sheet.Width=450;
+				sheet.Height=650;
 				int rowH=sheet.Font.Height;
 				int yPos=50;
-				sheet.SheetFields.Add(new SheetField("Referral to",200,yPos,300,fontHeading,GrowthBehaviorEnum.None));
+				sheet.SheetFields.Add(new SheetField("Referral to",175,yPos,300,fontHeading,GrowthBehaviorEnum.None));
 				yPos+=rowH+15;
 				sheet.SheetFields.Add(new SheetField(SheetFieldType.OutputText,"referral.nameLF",200,yPos,300,sheet.Font,GrowthBehaviorEnum.None));
 				yPos+=rowH;
@@ -151,14 +151,14 @@ namespace OpenDental{
 				sheet.SheetFields.Add(new SheetField(SheetFieldType.OutputText,"patient.nameLF",25,yPos,300,sheet.Font,GrowthBehaviorEnum.None));
 				sheet.SheetFields.Add(new SheetField(SheetFieldType.OutputText,"dateTime.Today",25, yPos,110,sheet.Font,GrowthBehaviorEnum.None));
 				yPos+=rowH;
-				sheet.SheetFields.Add(new SheetField("Work:",25,yPos,75,sheet.Font,GrowthBehaviorEnum.None));
-				sheet.SheetFields.Add(new SheetField(SheetFieldType.OutputText,"patient.WkPhone",100,yPos,300,sheet.Font,GrowthBehaviorEnum.None));
+				sheet.SheetFields.Add(new SheetField("Work:",25,yPos,50,sheet.Font,GrowthBehaviorEnum.None));
+				sheet.SheetFields.Add(new SheetField(SheetFieldType.OutputText,"patient.WkPhone",75,yPos,300,sheet.Font,GrowthBehaviorEnum.None));
 				yPos+=rowH;
-				sheet.SheetFields.Add(new SheetField("Home:",25,yPos,75,sheet.Font,GrowthBehaviorEnum.None));
-				sheet.SheetFields.Add(new SheetField(SheetFieldType.OutputText,"patient.HmPhone",100,yPos,300,sheet.Font,GrowthBehaviorEnum.None));
+				sheet.SheetFields.Add(new SheetField("Home:",25,yPos,50,sheet.Font,GrowthBehaviorEnum.None));
+				sheet.SheetFields.Add(new SheetField(SheetFieldType.OutputText,"patient.HmPhone",175,yPos,300,sheet.Font,GrowthBehaviorEnum.None));
 				yPos+=rowH;
-				sheet.SheetFields.Add(new SheetField("Wireless:",25,yPos,100,sheet.Font,GrowthBehaviorEnum.None));
-				sheet.SheetFields.Add(new SheetField(SheetFieldType.OutputText,"patient.WirelessPhone",125,yPos,300,sheet.Font,GrowthBehaviorEnum.None));
+				sheet.SheetFields.Add(new SheetField("Wireless:",25,yPos,70,sheet.Font,GrowthBehaviorEnum.None));
+				sheet.SheetFields.Add(new SheetField(SheetFieldType.OutputText,"patient.WirelessPhone",95,yPos,300,sheet.Font,GrowthBehaviorEnum.None));
 				yPos+=rowH;
 				sheet.SheetFields.Add(new SheetField(SheetFieldType.OutputText,"patient.cityStateZip",25,yPos,300,sheet.Font,GrowthBehaviorEnum.None));
 				yPos+=rowH+20;
@@ -170,7 +170,7 @@ namespace OpenDental{
 				//Notes--------------------------------------------------------------------------------------------
 				sheet.SheetFields.Add(new SheetField("Notes",25,yPos,300,fontBold,GrowthBehaviorEnum.None));
 				yPos+=rowH+5;
-				sheet.SheetFields.Add(new SheetField("notes",25,yPos,300,500,sheet.Font));
+				sheet.SheetFields.Add(new SheetField("notes",25,yPos,400,300,sheet.Font));
 				return sheet;
 			}
 		}

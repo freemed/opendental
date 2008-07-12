@@ -432,7 +432,7 @@ namespace OpenDental{
 
 		private void butEdit_Click(object sender, System.EventArgs e) {
 			try{
-				SaveData();
+				DataToCur();
 			}
 			catch(ApplicationException ex){
 				MessageBox.Show(ex.Message);
@@ -446,11 +446,30 @@ namespace OpenDental{
 		}
 
 		private void butNew_Click(object sender,EventArgs e) {
-
+			try{
+				DataToCur();
+			}
+			catch(ApplicationException ex){
+				MessageBox.Show(ex.Message);
+				return;
+			}
+			Sheet sheet=SheetsInternal.ReferralSlip;
+			sheet.SetParameter("PatNum",RefAttachCur.PatNum);
+			sheet.SetParameter("ReferralNum",RefAttachCur.ReferralNum);
+			//try{
+			//	sheet.Print();
+			//}
+			//catch(Exception ex){
+			//	MessageBox.Show(ex.Message);
+			//}
+			FormSheetFill FormS=new FormSheetFill();
+			//Sheet sheet=new Sheet(
+			FormS.SheetCur=sheet;
+			FormS.ShowDialog();
 		}
 
-		///<summary>Surround with try-catch.</summary>
-		private void SaveData(){
+		///<summary>Surround with try-catch.  Attempts to take the data on the form and set the values of RefAttachCur.</summary>
+		private void DataToCur(){
 			if(textOrder.errorProvider1.GetError(textOrder)!=""
 				|| textRefDate.errorProvider1.GetError(textRefDate)!="") 
 			{
@@ -466,12 +485,6 @@ namespace OpenDental{
       RefAttachCur.ItemOrder=PIn.PInt(textOrder.Text);
 			RefAttachCur.RefToStatus=(ReferralToStatus)comboRefToStatus.SelectedIndex;
 			RefAttachCur.Note=textNote.Text;
-			if(IsNew){
-				RefAttaches.Insert(RefAttachCur);
-			}
-			else{
-				RefAttaches.Update(RefAttachCur);
-			}
 		}
 
 		private void butDelete_Click(object sender,EventArgs e) {
@@ -484,7 +497,13 @@ namespace OpenDental{
 
 		private void butOK_Click(object sender, System.EventArgs e) {
 			try{
-				SaveData();
+				DataToCur();
+				if(IsNew){
+					RefAttaches.Insert(RefAttachCur);
+				}
+				else{
+					RefAttaches.Update(RefAttachCur);
+				}
 			}
 			catch(ApplicationException ex){
 				MessageBox.Show(ex.Message);

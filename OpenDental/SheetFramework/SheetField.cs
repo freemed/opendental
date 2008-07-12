@@ -5,7 +5,7 @@ using System.Text;
 
 namespace OpenDental{
 	///<Summary></Summary>
-	class SheetField {
+	public class SheetField {
 		///<Summary>OutputText, InputField, StaticText.</Summary>
 		public SheetFieldType FieldType;
 		///<Summary>Only for OutputText and InputField types.  Each sheet typically has a main datatable type.  For OutputText types, FieldName is usually the string representation of the database column for the main table.  For other tables, it can be of the form table.Column.  There may also be extra fields available that are not strictly pulled from the database.  Extra fields will start with lowercase to indicate that they are not pure database fields.  The list of available fields for each type in SheetFieldsAvailable.  Users could pick from that list.  Likewise, InputField types are internally tied to actions to persist the data.  So they are also hard coded and are available in SheetFieldsAvailable.</Summary>
@@ -45,7 +45,7 @@ namespace OpenDental{
 			this.yPos=yPos;
 			yPosOriginal=yPos;
 			Width=width;
-			height=font.Height;//Height is automatic
+			height=font.Height+4;//Height is automatic in this early implementation.
 			heightOriginal=height;
 			GrowthBehavior=growthBehavior;
 		}
@@ -60,7 +60,7 @@ namespace OpenDental{
 			this.yPos=yPos;
 			yPosOriginal=yPos;
 			Width=width;
-			height=font.Height;//Height is automatic
+			height=font.Height+4;//Height is automatic in this early implementation.
 			heightOriginal=height;
 			GrowthBehavior=growthBehavior;
 		}

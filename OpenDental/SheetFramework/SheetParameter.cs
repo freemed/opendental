@@ -4,7 +4,7 @@ using System.Text;
 
 namespace OpenDental{
 	///<Summary></Summary>
-	class SheetParameter {
+	public class SheetParameter {
 		///<Summary></Summary>
 		public bool IsRequired;
 		///<Summary>Usually, a columnName.</Summary>

@@ -348,6 +348,18 @@
     <Compile Include="Forms\BasicTemplate.designer.cs">
       <DependentUpon>BasicTemplate.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\FormSheetFill.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormSheetFill.designer.cs">
+      <DependentUpon>FormSheetFill.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\FormSheetEdit.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormSheetEdit.designer.cs">
+      <DependentUpon>FormSheetEdit.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\FormDisplayFieldCategories.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -3122,6 +3134,7 @@
     <Compile Include="SheetFramework\Sheet.cs" />
     <Compile Include="SheetFramework\SheetField.cs" />
     <Compile Include="SheetFramework\SheetFieldsAvailable.cs" />
+    <Compile Include="SheetFramework\SheetFiller.cs" />
     <Compile Include="SheetFramework\SheetObject.cs" />
     <Compile Include="SheetFramework\SheetParameter.cs" />
     <Compile Include="SheetFramework\SheetsInternal.cs" />
@@ -3410,6 +3423,14 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\BasicTemplate.resx">
       <DependentUpon>BasicTemplate.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormSheetFill.resx">
+      <DependentUpon>FormSheetFill.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormSheetEdit.resx">
+      <DependentUpon>FormSheetEdit.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormDisplayFieldCategories.resx">
