@@ -3137,7 +3137,9 @@
     <Compile Include="SheetFramework\SheetFiller.cs" />
     <Compile Include="SheetFramework\SheetObject.cs" />
     <Compile Include="SheetFramework\SheetParameter.cs" />
+    <Compile Include="SheetFramework\SheetPrinting.cs" />
     <Compile Include="SheetFramework\SheetsInternal.cs" />
+    <Compile Include="SheetFramework\SheetUtil.cs" />
     <Compile Include="SmartCards\Belgium\BelgianIdentityCard.cs" />
     <Compile Include="SmartCards\Belgium\CertifCheck.cs" />
     <Compile Include="SmartCards\Belgium\CRLPolicyOptions.cs" />

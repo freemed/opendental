@@ -462,8 +462,9 @@ namespace OpenDental{
 			//catch(Exception ex){
 			//	MessageBox.Show(ex.Message);
 			//}
-			FormSheetFillEdit FormS=new FormSheetFillEdit();
-			FormS.SheetCur=sheet;
+			SheetFiller.FillFields(sheet);
+			FormSheetFillEdit FormS=new FormSheetFillEdit(sheet);
+			//FormS.SheetCur=sheet;
 			FormS.ShowDialog();
 		}
 

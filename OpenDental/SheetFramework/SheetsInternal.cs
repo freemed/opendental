@@ -16,11 +16,11 @@ namespace OpenDental{
 				sheet.Height=346;
 				int rowH=sheet.Font.Height;
 				int yPos=10;
-				sheet.SheetFields.Add(new SheetField(SheetFieldType.OutputText,"nameFL",25,yPos,300,sheet.Font,GrowthBehaviorEnum.None));
+				sheet.SheetFields.Add(SheetField.NewOutput("nameFL",25,yPos,300,sheet.Font));
 				yPos+=rowH;
-				sheet.SheetFields.Add(new SheetField(SheetFieldType.OutputText,"address",25,yPos,300,sheet.Font,GrowthBehaviorEnum.DownLocal));
+				sheet.SheetFields.Add(SheetField.NewOutput("address",25,yPos,300,sheet.Font,GrowthBehaviorEnum.DownLocal));
 				yPos+=rowH;
-				sheet.SheetFields.Add(new SheetField(SheetFieldType.OutputText,"cityStateZip",25,yPos,300,sheet.Font,GrowthBehaviorEnum.None));
+				sheet.SheetFields.Add(SheetField.NewOutput("cityStateZip",25,yPos,300,sheet.Font));
 				return sheet;
 			}
 		}
@@ -33,11 +33,11 @@ namespace OpenDental{
 				sheet.Height=346;
 				int rowH=sheet.Font.Height;
 				int yPos=10;
-				sheet.SheetFields.Add(new SheetField(SheetFieldType.OutputText,"nameLF",25,yPos,300,sheet.Font,GrowthBehaviorEnum.None));
+				sheet.SheetFields.Add(SheetField.NewOutput("nameLF",25,yPos,300,sheet.Font));
 				yPos+=rowH;
-				sheet.SheetFields.Add(new SheetField(SheetFieldType.OutputText,"address",25,yPos,300,sheet.Font,GrowthBehaviorEnum.DownLocal));
+				sheet.SheetFields.Add(SheetField.NewOutput("address",25,yPos,300,sheet.Font,GrowthBehaviorEnum.DownLocal));
 				yPos+=rowH;
-				sheet.SheetFields.Add(new SheetField(SheetFieldType.OutputText,"cityStateZip",25,yPos,300,sheet.Font,GrowthBehaviorEnum.None));
+				sheet.SheetFields.Add(SheetField.NewOutput("cityStateZip",25,yPos,300,sheet.Font));
 				return sheet;
 			}
 		}
@@ -51,9 +51,9 @@ namespace OpenDental{
 				int rowH=sheet.Font.Height;
 				int yPos=30;
 				if(PrefC.GetBool("FuchsOptionsOn")) yPos = 50;
-				sheet.SheetFields.Add(new SheetField(SheetFieldType.OutputText, "nameLF", 25, yPos, 300, sheet.Font, GrowthBehaviorEnum.None));
+				sheet.SheetFields.Add(SheetField.NewOutput("nameLF", 25, yPos, 300, sheet.Font));
 				yPos+=rowH;
-				sheet.SheetFields.Add(new SheetField(SheetFieldType.OutputText,"ChartNumber",25,yPos,300,sheet.Font,GrowthBehaviorEnum.None));
+				sheet.SheetFields.Add(SheetField.NewOutput("ChartNumber",25,yPos,300,sheet.Font));
 				return sheet;
 			}
 		}
@@ -67,9 +67,9 @@ namespace OpenDental{
 				int rowH=sheet.Font.Height;
 				int yPos=30;
 				if(PrefC.GetBool("FuchsOptionsOn")) yPos = 50;
-				sheet.SheetFields.Add(new SheetField(SheetFieldType.OutputText, "nameLF", 25, yPos, 300, sheet.Font, GrowthBehaviorEnum.None));
+				sheet.SheetFields.Add(SheetField.NewOutput("nameLF", 25, yPos, 300, sheet.Font));
 				yPos+=rowH;
-				sheet.SheetFields.Add(new SheetField(SheetFieldType.OutputText,"PatNum",25,yPos,300,sheet.Font,GrowthBehaviorEnum.None));
+				sheet.SheetFields.Add(SheetField.NewOutput("PatNum",25,yPos,300,sheet.Font));
 				return sheet;
 			}
 		}
@@ -84,11 +84,11 @@ namespace OpenDental{
 				int rowH=sheet.Font.Height;
 				int yPos=30;
 				if(PrefC.GetBool("FuchsOptionsOn")) yPos = 50;
-				sheet.SheetFields.Add(new SheetField(SheetFieldType.OutputText, "nameLF", 25, yPos, 150, sheet.Font, GrowthBehaviorEnum.None));
-				sheet.SheetFields.Add(new SheetField(SheetFieldType.OutputText, "dateTime.Today", 180, yPos, 100, sheet.Font, GrowthBehaviorEnum.None));
+				sheet.SheetFields.Add(SheetField.NewOutput( "nameLF", 25, yPos, 150, sheet.Font, GrowthBehaviorEnum.None));
+				sheet.SheetFields.Add(SheetField.NewOutput( "dateTime.Today", 180, yPos, 100, sheet.Font, GrowthBehaviorEnum.None));
 				yPos += rowH;
-				sheet.SheetFields.Add(new SheetField(SheetFieldType.OutputText, "birthdate", 25, yPos, 105, smallFont, GrowthBehaviorEnum.None));
-				sheet.SheetFields.Add(new SheetField(SheetFieldType.OutputText, "priProvName", 130, yPos, 150, smallFont, GrowthBehaviorEnum.None));
+				sheet.SheetFields.Add(SheetField.NewOutput( "birthdate", 25, yPos, 105, smallFont, GrowthBehaviorEnum.None));
+				sheet.SheetFields.Add(SheetField.NewOutput( "priProvName", 130, yPos, 150, smallFont, GrowthBehaviorEnum.None));
 				return sheet;
 			}
 		}
@@ -101,11 +101,11 @@ namespace OpenDental{
 				sheet.Height=346;
 				int rowH=sheet.Font.Height;
 				int yPos=10;
-				sheet.SheetFields.Add(new SheetField(SheetFieldType.OutputText,"CarrierName",25,yPos,300,sheet.Font,GrowthBehaviorEnum.None));
+				sheet.SheetFields.Add(SheetField.NewOutput("CarrierName",25,yPos,300,sheet.Font));
 				yPos+=rowH;
-				sheet.SheetFields.Add(new SheetField(SheetFieldType.OutputText,"address",25,yPos,300,sheet.Font,GrowthBehaviorEnum.DownLocal));
+				sheet.SheetFields.Add(SheetField.NewOutput("address",25,yPos,300,sheet.Font,GrowthBehaviorEnum.DownLocal));
 				yPos+=rowH;
-				sheet.SheetFields.Add(new SheetField(SheetFieldType.OutputText,"cityStateZip",25,yPos,300,sheet.Font,GrowthBehaviorEnum.None));
+				sheet.SheetFields.Add(SheetField.NewOutput("cityStateZip",25,yPos,300,sheet.Font));
 				return sheet;
 			}
 		}
@@ -118,11 +118,11 @@ namespace OpenDental{
 				sheet.Height=346;
 				int rowH=sheet.Font.Height;
 				int yPos=10;
-				sheet.SheetFields.Add(new SheetField(SheetFieldType.OutputText,"nameLF",25,yPos,300,sheet.Font,GrowthBehaviorEnum.None));
+				sheet.SheetFields.Add(SheetField.NewOutput("nameFL",25,yPos,300,sheet.Font));
 				yPos+=rowH;
-				sheet.SheetFields.Add(new SheetField(SheetFieldType.OutputText,"address",25,yPos,300,sheet.Font,GrowthBehaviorEnum.DownLocal));
+				sheet.SheetFields.Add(SheetField.NewOutput("address",25,yPos,300,sheet.Font,GrowthBehaviorEnum.DownLocal));
 				yPos+=rowH;
-				sheet.SheetFields.Add(new SheetField(SheetFieldType.OutputText,"cityStateZip",25,yPos,300,sheet.Font,GrowthBehaviorEnum.None));
+				sheet.SheetFields.Add(SheetField.NewOutput("cityStateZip",25,yPos,300,sheet.Font));
 				return sheet;
 			}
 		}
@@ -135,42 +135,44 @@ namespace OpenDental{
 				Font fontBold=new Font(FontFamily.GenericSansSerif,9,FontStyle.Bold);
 				sheet.Width=450;
 				sheet.Height=650;
-				int rowH=sheet.Font.Height;
+				int rowH=sheet.Font.Height+1;
 				int yPos=50;
-				sheet.SheetFields.Add(new SheetField("Referral to",175,yPos,300,fontHeading,GrowthBehaviorEnum.None));
-				yPos+=rowH+15;
-				sheet.SheetFields.Add(new SheetField(SheetFieldType.OutputText,"referral.nameLF",200,yPos,300,sheet.Font,GrowthBehaviorEnum.None));
-				yPos+=rowH;
-				sheet.SheetFields.Add(new SheetField(SheetFieldType.OutputText,"referral.address",200,yPos,300,sheet.Font,GrowthBehaviorEnum.DownLocal));
-				yPos+=rowH;
-				sheet.SheetFields.Add(new SheetField(SheetFieldType.OutputText,"referral.cityStateZip",200,yPos,300,sheet.Font,GrowthBehaviorEnum.None));
-				yPos+=rowH;
-				//Patient--------------------------------------------------------------------------------------------
-				sheet.SheetFields.Add(new SheetField("Patient",25,yPos,300,fontBold,GrowthBehaviorEnum.None));
+				sheet.SheetFields.Add(SheetField.NewStaticText("Referral to",170,yPos,300,fontHeading));
 				yPos+=rowH+5;
-				sheet.SheetFields.Add(new SheetField(SheetFieldType.OutputText,"patient.nameLF",25,yPos,300,sheet.Font,GrowthBehaviorEnum.None));
-				sheet.SheetFields.Add(new SheetField(SheetFieldType.OutputText,"dateTime.Today",25, yPos,110,sheet.Font,GrowthBehaviorEnum.None));
+				sheet.SheetFields.Add(SheetField.NewOutput("referral.nameFL",150,yPos,300,sheet.Font));
 				yPos+=rowH;
-				sheet.SheetFields.Add(new SheetField("Work:",25,yPos,50,sheet.Font,GrowthBehaviorEnum.None));
-				sheet.SheetFields.Add(new SheetField(SheetFieldType.OutputText,"patient.WkPhone",75,yPos,300,sheet.Font,GrowthBehaviorEnum.None));
+				sheet.SheetFields.Add(SheetField.NewOutput("referral.address",150,yPos,300,sheet.Font,GrowthBehaviorEnum.DownLocal));
 				yPos+=rowH;
-				sheet.SheetFields.Add(new SheetField("Home:",25,yPos,50,sheet.Font,GrowthBehaviorEnum.None));
-				sheet.SheetFields.Add(new SheetField(SheetFieldType.OutputText,"patient.HmPhone",175,yPos,300,sheet.Font,GrowthBehaviorEnum.None));
-				yPos+=rowH;
-				sheet.SheetFields.Add(new SheetField("Wireless:",25,yPos,70,sheet.Font,GrowthBehaviorEnum.None));
-				sheet.SheetFields.Add(new SheetField(SheetFieldType.OutputText,"patient.WirelessPhone",95,yPos,300,sheet.Font,GrowthBehaviorEnum.None));
-				yPos+=rowH;
-				sheet.SheetFields.Add(new SheetField(SheetFieldType.OutputText,"patient.cityStateZip",25,yPos,300,sheet.Font,GrowthBehaviorEnum.None));
-				yPos+=rowH+20;
+				sheet.SheetFields.Add(SheetField.NewOutput("referral.cityStateZip",150,yPos,300,sheet.Font));
+				yPos+=rowH+30;
 				//Patient--------------------------------------------------------------------------------------------
-				sheet.SheetFields.Add(new SheetField("Referred by",25,yPos,300,fontBold,GrowthBehaviorEnum.None));
+				sheet.SheetFields.Add(SheetField.NewStaticText("Patient",25,yPos,100,fontBold));
 				yPos+=rowH+5;
-				sheet.SheetFields.Add(new SheetField(SheetFieldType.OutputText,"patient.provider",25,yPos,300,sheet.Font,GrowthBehaviorEnum.None));
+				sheet.SheetFields.Add(SheetField.NewOutput("patient.nameFL",25,yPos,200,sheet.Font));
+				sheet.SheetFields.Add(SheetField.NewOutput("dateTime.Today",350, yPos,100,sheet.Font));
+				yPos+=rowH;
+				sheet.SheetFields.Add(SheetField.NewStaticText("Work:",25,yPos,38,sheet.Font));
+				sheet.SheetFields.Add(SheetField.NewOutput("patient.WkPhone",63,yPos,300,sheet.Font));
+				yPos+=rowH;
+				sheet.SheetFields.Add(SheetField.NewStaticText("Home:",25,yPos,42,sheet.Font));
+				sheet.SheetFields.Add(SheetField.NewOutput("patient.HmPhone",67,yPos,300,sheet.Font));
+				yPos+=rowH;
+				sheet.SheetFields.Add(SheetField.NewStaticText("Wireless:",25,yPos,58,sheet.Font));
+				sheet.SheetFields.Add(SheetField.NewOutput("patient.WirelessPhone",83,yPos,300,sheet.Font));
+				yPos+=rowH;
+				sheet.SheetFields.Add(SheetField.NewOutput("patient.address",25,yPos,300,sheet.Font,GrowthBehaviorEnum.DownLocal));
+				yPos+=rowH;
+				sheet.SheetFields.Add(SheetField.NewOutput("patient.cityStateZip",25,yPos,300,sheet.Font));
+				yPos+=rowH+30;
+				//Provider--------------------------------------------------------------------------------------------
+				sheet.SheetFields.Add(SheetField.NewStaticText("Referred by",25,yPos,300,fontBold));
+				yPos+=rowH+5;
+				sheet.SheetFields.Add(SheetField.NewOutput("patient.provider",25,yPos,300,sheet.Font));
 				yPos+=rowH+20;
 				//Notes--------------------------------------------------------------------------------------------
-				sheet.SheetFields.Add(new SheetField("Notes",25,yPos,300,fontBold,GrowthBehaviorEnum.None));
+				sheet.SheetFields.Add(SheetField.NewStaticText("Notes",25,yPos,300,fontBold));
 				yPos+=rowH+5;
-				sheet.SheetFields.Add(new SheetField("notes",25,yPos,400,300,sheet.Font));
+				sheet.SheetFields.Add(SheetField.NewInput("notes",25,yPos,400,275,sheet.Font));
 				return sheet;
 			}
 		}

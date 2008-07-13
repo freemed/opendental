@@ -43,20 +43,26 @@ namespace OpenDental{
 		public int Height;
 
 		private Font fontDefault=new Font(FontFamily.GenericSansSerif,8.5f);
-		///<Summary>For the current sheet in the batch.  Reset for each new sheet in a batch.</Summary>
-		private bool heightsCalculated;
-		///<Summary>For the current sheet in the batch.  Reset for each new sheet in a batch.</Summary>
-		private bool valuesFilled;
-		///<Summary>Based off of the first parameter.  The list of primary keys representing sheets in a batch.</Summary>
-		private List<int> ParamVals;
-		///<Summary>If there is only one "sheet" in the batch, then this will be 0.</Summary>
-		private int SheetsPrintedInBatch;
 
 		public Sheet(SheetTypeEnum sheetType){
 			SheetType=sheetType;
 			Parameters=SheetParameter.GetForType(sheetType);
 			SheetFields=new List<SheetField>();
 			Font=fontDefault;
+		}
+
+		public Sheet Copy(){
+			Sheet sheet=(Sheet)this.MemberwiseClone();
+			//do I need to copy the lists?
+			return sheet;
+		}
+
+		public void SetParameter(string paramName,object paramValue){
+			SheetParameter param=GetParamByName(paramName);
+			if(param==null){
+				throw new ApplicationException(Lan.g("Sheet","Parameter not found: ")+paramName);
+			}
+			param.ParamValue=paramValue;
 		}
 
 		private SheetParameter GetParamByName(string paramName){
@@ -68,230 +74,7 @@ namespace OpenDental{
 			return null;
 		}
 
-		public void SetParameter(string paramName,object paramValue){
-			SheetParameter param=GetParamByName(paramName);
-			if(param==null){
-				throw new ApplicationException(Lan.g("Sheet","Parameter not found: ")+paramName);
-			}
-			param.ParamValue=paramValue;
-		}
-
-		///<Summary>Surround with try/catch. If isBatch, then the first parameter is an array.  This same logic can't be constructed externally, because then the print preview and (future) progress indicator would only show one sheet in the batch at a time.</Summary>
-		public void Print(){
-			Print(false);
-		}
-
-		///<Summary>Surround with try/catch. If isBatch, then the first parameter is an array.  This same logic can't be constructed externally, because then the print preview and (future) progress indicator would only show one sheet in the batch at a time.</Summary>
-		public void Print(bool isBatch){
-			foreach(SheetParameter param in Parameters){
-				if(param.IsRequired && param.ParamValue==null){
-					throw new ApplicationException(Lan.g("Sheet","Parameter not specified for sheet: ")+param.ParamName);
-				}
-			}
-			//could validate field names here later.
-			if(isBatch){
-				ParamVals=(List<int>)Parameters[0].ParamValue;
-			}
-			else{
-				ParamVals=new List<int>();
-				ParamVals.Add((int)Parameters[0].ParamValue);
-			}
-			valuesFilled=false;
-			heightsCalculated=false;
-			SheetsPrintedInBatch=0;
-			PrintDocument pd=new PrintDocument();
-			pd.OriginAtMargins=true;
-			pd.PrintPage+=new PrintPageEventHandler(pd_PrintPage);
-			if(Width>0 && Height>0){
-				pd.DefaultPageSettings.PaperSize=new PaperSize("Default",Width,Height);
-			}
-			PrintSituation sit=PrintSituation.Default;
-			switch(this.SheetType){
-				case SheetTypeEnum.LabelPatient:
-				case SheetTypeEnum.LabelCarrier:
-				case SheetTypeEnum.LabelReferral:
-					pd.DefaultPageSettings.Landscape=false;
-					sit=PrintSituation.LabelSingle;
-					break;
-			}
-			//later: add a check here for print preview.
-			#if DEBUG
-				pd.DefaultPageSettings.Margins=new Margins(20,20,0,0);
-				UI.PrintPreview printPreview=new UI.PrintPreview(sit,pd,ParamVals.Count);
-				printPreview.ShowDialog();
-			#else
-				try {
-					if(!Printers.SetPrinter(pd,sit)) {
-						return;
-					}
-					pd.DefaultPageSettings.Margins=new Margins(0,0,0,0);
-					pd.Print();
-				}
-				catch(Exception ex){
-					throw ex;
-					//MessageBox.Show(Lan.g("Sheet","Printer not available"));
-				}
-			#endif
-		}
-
-		private void FillFieldsForLabelPatient(Patient pat){
-			foreach(SheetField field in SheetFields){
-				switch(field.FieldName){
-					case "nameFL":
-						field.FieldValue=pat.GetNameFLFormal();
-						break;
-					case "nameLF":
-						field.FieldValue=pat.GetNameLF();
-						break;
-					case "address":
-						field.FieldValue=pat.Address;
-						if(pat.Address2!=""){
-							field.FieldValue+="\r\n"+pat.Address2;
-						}
-						break;
-					case "cityStateZip":
-						field.FieldValue=pat.City+", "+pat.State+" "+pat.Zip;
-						break;
-					case "ChartNumber":
-						field.FieldValue=pat.ChartNumber;
-						break;
-					case "PatNum":
-						field.FieldValue=pat.PatNum.ToString();
-						break;
-					case "dateTime.Today":
-						field.FieldValue=DateTime.Today.ToShortDateString();
-						break;
-					case "birthdate":
-						field.FieldValue=Lan.g(this,"BD: ")+pat.Birthdate.ToShortDateString();
-						break;
-					case "priProvName":
-						field.FieldValue=Providers.GetLongDesc(pat.PriProv);
-						break;
-				}
-			}
-		}
-
-		private void FillFieldsForLabelCarrier(Carrier carrier) {
-			foreach(SheetField field in SheetFields) {
-				switch(field.FieldName) {
-					case "CarrierName":
-						field.FieldValue=carrier.CarrierName;
-						break;
-					case "address":
-						field.FieldValue=carrier.Address;
-						if(carrier.Address2!="") {
-							field.FieldValue+="\r\n"+carrier.Address2;
-						}
-						break;
-					case "cityStateZip":
-						field.FieldValue=carrier.City+", "+carrier.State+" "+carrier.Zip;
-						break;
-				}
-			}
-		}
-
-		private void FillFieldsForLabelReferral(Referral refer) {
-			foreach(SheetField field in SheetFields) {
-				switch(field.FieldName) {
-					case "nameLF":
-						field.FieldValue=Referrals.GetNameFL(refer.ReferralNum);
-						break;
-					case "address":
-						field.FieldValue=refer.Address;
-						if(refer.Address2!="") {
-							field.FieldValue+="\r\n"+refer.Address2;
-						}
-						break;
-					case "cityStateZip":
-						field.FieldValue=refer.City+", "+refer.ST+" "+refer.Zip;
-						break;
-				}
-			}
-		}
-
-		///<Summary>Supply the field that we are testing.  All other fields which intersect with it will be moved down.  Each time one is moved down, this method is called recursively.  The end result should be no intersections among fields near to the original field that grew.</Summary>
-		private void MoveAllDownWhichIntersect(SheetField field){
-			foreach(SheetField field2 in SheetFields) {
-				if(field2==field){
-					continue;
-				}
-				if(field2.YPos<field.YPos){//only fields where are below this one
-					continue;
-				}
-				if(field.Bounds.IntersectsWith(field2.Bounds)) {
-					field2.YPos=field.Bounds.Bottom;
-					MoveAllDownWhichIntersect(field2);
-				}
-			}
-		}
-
-		private void pd_PrintPage(object sender,System.Drawing.Printing.PrintPageEventArgs e) {
-			if(!valuesFilled){
-				//get the data, and fill the fields.
-				switch(this.SheetType) {
-					case SheetTypeEnum.LabelPatient:
-						Patient pat=Patients.GetPat((int)GetParamByName("PatNum").ParamValue);
-						FillFieldsForLabelPatient(pat);
-						break;
-					case SheetTypeEnum.LabelCarrier:
-						Carrier carrier=Carriers.GetCarrier(ParamVals[SheetsPrintedInBatch]);
-						FillFieldsForLabelCarrier(carrier);
-						break;
-					case SheetTypeEnum.LabelReferral:
-						Referral refer=Referrals.GetReferral((int)GetParamByName("ReferralNum").ParamValue);
-						FillFieldsForLabelReferral(refer);
-						break;
-				}
-				valuesFilled=true;
-			}
-			Graphics g=e.Graphics;
-			if(!heightsCalculated){
-				int oldH;
-				foreach(SheetField field in SheetFields) {
-					field.ResetHeightAndYPosToOriginal();
-				}
-				foreach(SheetField field in SheetFields) {
-					oldH=field.Height;
-					field.Height=(int)g.MeasureString(field.FieldValue,field.Font).Height;
-					if(field.Height>oldH){
-						if(field.GrowthBehavior==GrowthBehaviorEnum.DownLocal){
-							MoveAllDownWhichIntersect(field);
-						}
-						else if(field.GrowthBehavior==GrowthBehaviorEnum.DownGlobal){
-							int amountOfGrowth=field.Height-oldH;
-							foreach(SheetField field2 in SheetFields) {
-								if(field2.YPos>field.YPos) {//for all fields that are below this one
-									field2.YPos+=amountOfGrowth;//bump down by amount that this one grew
-								}
-							}
-						}
-					}
-				}
-				heightsCalculated=true;
-			}
-			if(SheetType==SheetTypeEnum.LabelCarrier
-				|| SheetType==SheetTypeEnum.LabelPatient
-				|| SheetType==SheetTypeEnum.LabelReferral)
-			{
-				g.TranslateTransform(100,0);
-				g.RotateTransform(90);
-			}
-			foreach(SheetField field in SheetFields){
-				g.DrawString(field.FieldValue,field.Font,Brushes.Black,field.BoundsF);
-			}
-			g.Dispose();
-			//no logic yet for multiple pages on one sheet.
-			SheetsPrintedInBatch++;
-			valuesFilled=false;
-			heightsCalculated=false;
-			if(SheetsPrintedInBatch<ParamVals.Count){
-				e.HasMorePages=true;
-			}
-			else{
-				e.HasMorePages=false;
-				SheetsPrintedInBatch=0;
-			}	
-		}
+		
 
 	}
 

@@ -22,8 +22,9 @@ namespace OpenDental{
 		public void PrintPat(int patNum){
 			Sheet sheet=SheetsInternal.LabelPatientMail;
 			sheet.SetParameter("PatNum",patNum);
+			SheetFiller.FillFields(sheet);
 			try{
-				sheet.Print();
+				SheetPrinting.Print(sheet);
 			}
 			catch(Exception ex){
 				MessageBox.Show(ex.Message);
@@ -33,8 +34,9 @@ namespace OpenDental{
 		public void PrintPatientLFAddress(int patNum) {
 			Sheet sheet=SheetsInternal.LabelPatientLFAddress;
 			sheet.SetParameter("PatNum",patNum);
+			SheetFiller.FillFields(sheet);
 			try {
-				sheet.Print();
+				SheetPrinting.Print(sheet);
 			}
 			catch(Exception ex) {
 				MessageBox.Show(ex.Message);
@@ -44,8 +46,9 @@ namespace OpenDental{
 		public void PrintPatientLFChartNumber(int patNum) {
 			Sheet sheet=SheetsInternal.LabelPatientLFChartNumber;
 			sheet.SetParameter("PatNum",patNum);
+			SheetFiller.FillFields(sheet);
 			try {
-				sheet.Print();
+				SheetPrinting.Print(sheet);
 			}
 			catch(Exception ex) {
 				MessageBox.Show(ex.Message);
@@ -55,8 +58,9 @@ namespace OpenDental{
 		public void PrintPatientLFPatNum(int patNum) {
 			Sheet sheet=SheetsInternal.LabelPatientLFChartNumber;
 			sheet.SetParameter("PatNum",patNum);
+			SheetFiller.FillFields(sheet);
 			try {
-				sheet.Print();
+				SheetPrinting.Print(sheet);
 			}
 			catch(Exception ex) {
 				MessageBox.Show(ex.Message);
@@ -66,8 +70,9 @@ namespace OpenDental{
 		public void PrintPatRadiograph(int patNum) {
 			Sheet sheet=SheetsInternal.LabelPatientRadiograph;
 			sheet.SetParameter("PatNum",patNum);
+			SheetFiller.FillFields(sheet);
 			try {
-				sheet.Print();
+				SheetPrinting.Print(sheet);
 			}
 			catch(Exception ex) {
 				MessageBox.Show(ex.Message);
@@ -76,19 +81,10 @@ namespace OpenDental{
 
 		///<summary></summary>
 		public void PrintCarriers(List<int> carrierNums){
-			//PrintDocument pd=new PrintDocument();//only used to pass printerName
-			//if(!Printers.SetPrinter(pd,PrintSituation.LabelSingle)) {
-			//	return;
-			//}
 			Sheet sheet=SheetsInternal.LabelCarrier;
-			sheet.SetParameter("CarrierNum",carrierNums);
+			List<Sheet> sheetBatch=SheetUtil.CreateBatch(sheet,carrierNums);
 			try{
-				sheet.Print(true);
-				//foreach(int carrierNum in carrierNums){
-				//	sheet=SheetsInternal.LabelCarrier;
-				//	sheet.SetParameter("CarrierNum",carrierNum);
-				//	sheet.Print(pd.PrinterSettings.PrinterName);
-				//}
+				SheetPrinting.PrintBatch(sheetBatch);
 			}
 			catch(Exception ex){
 				MessageBox.Show(ex.Message);
@@ -99,8 +95,9 @@ namespace OpenDental{
 		public void PrintCarrier(int carrierNum){//Carrier carrierCur,string printerName){
 			Sheet sheet=SheetsInternal.LabelCarrier;
 			sheet.SetParameter("CarrierNum",carrierNum);
+			SheetFiller.FillFields(sheet);
 			try {
-				sheet.Print();
+				SheetPrinting.Print(sheet);
 			}
 			catch(Exception ex) {
 				MessageBox.Show(ex.Message);
@@ -111,8 +108,9 @@ namespace OpenDental{
 		public void PrintReferral(int referralNum) {
 			Sheet sheet=SheetsInternal.LabelReferral;
 			sheet.SetParameter("ReferralNum",referralNum);
+			SheetFiller.FillFields(sheet);
 			try {
-				sheet.Print();
+				SheetPrinting.Print(sheet);
 			}
 			catch(Exception ex) {
 				MessageBox.Show(ex.Message);

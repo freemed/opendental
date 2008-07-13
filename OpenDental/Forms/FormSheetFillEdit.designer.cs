@@ -37,7 +37,7 @@ namespace OpenDental{
 			// textNote
 			// 
 			this.textNote.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.textNote.Location = new System.Drawing.Point(547,68);
+			this.textNote.Location = new System.Drawing.Point(580,68);
 			this.textNote.Multiline = true;
 			this.textNote.Name = "textNote";
 			this.textNote.Size = new System.Drawing.Size(146,90);
@@ -46,7 +46,7 @@ namespace OpenDental{
 			// label1
 			// 
 			this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.label1.Location = new System.Drawing.Point(546,49);
+			this.label1.Location = new System.Drawing.Point(579,49);
 			this.label1.Name = "label1";
 			this.label1.Size = new System.Drawing.Size(147,16);
 			this.label1.TabIndex = 7;
@@ -56,7 +56,7 @@ namespace OpenDental{
 			// label3
 			// 
 			this.label3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.label3.Location = new System.Drawing.Point(546,6);
+			this.label3.Location = new System.Drawing.Point(579,6);
 			this.label3.Name = "label3";
 			this.label3.Size = new System.Drawing.Size(84,16);
 			this.label3.TabIndex = 76;
@@ -72,7 +72,7 @@ namespace OpenDental{
 			this.panel1.Controls.Add(this.panelMain);
 			this.panel1.Location = new System.Drawing.Point(3,3);
 			this.panel1.Name = "panel1";
-			this.panel1.Size = new System.Drawing.Size(537,503);
+			this.panel1.Size = new System.Drawing.Size(564,536);
 			this.panel1.TabIndex = 78;
 			// 
 			// panelMain
@@ -86,7 +86,7 @@ namespace OpenDental{
 			// textRefDate
 			// 
 			this.textRefDate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.textRefDate.Location = new System.Drawing.Point(547,24);
+			this.textRefDate.Location = new System.Drawing.Point(580,24);
 			this.textRefDate.Name = "textRefDate";
 			this.textRefDate.Size = new System.Drawing.Size(100,20);
 			this.textRefDate.TabIndex = 77;
@@ -99,7 +99,7 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(611,452);
+			this.butOK.Location = new System.Drawing.Point(650,485);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75,24);
 			this.butOK.TabIndex = 3;
@@ -114,7 +114,7 @@ namespace OpenDental{
 			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
-			this.butCancel.Location = new System.Drawing.Point(611,482);
+			this.butCancel.Location = new System.Drawing.Point(650,515);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75,24);
 			this.butCancel.TabIndex = 2;
@@ -124,7 +124,7 @@ namespace OpenDental{
 			// FormSheetFillEdit
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-			this.ClientSize = new System.Drawing.Size(698,518);
+			this.ClientSize = new System.Drawing.Size(737,551);
 			this.Controls.Add(this.panel1);
 			this.Controls.Add(this.textRefDate);
 			this.Controls.Add(this.label3);
@@ -135,7 +135,6 @@ namespace OpenDental{
 			this.Name = "FormSheetFillEdit";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Fill Sheet";
-			this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
 			this.Load += new System.EventHandler(this.FormSheetFillEdit_Load);
 			this.panel1.ResumeLayout(false);
 			this.ResumeLayout(false);

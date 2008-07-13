@@ -26,57 +26,51 @@ namespace OpenDental{
 		///<Summary>In pixels.</Summary>
 		private int yPos;
 
-		///<Summary></Summary>
-		private int heightOriginal;
-		///<Summary>Before printing, this will be the same as YPos.  But during printing, YPos will get changed with each sheet due to growthBehavior.  YPosOriginal allows us to return YPos to it's original setting.</Summary>
-		private int yPosOriginal;
+		//<Summary></Summary>
+		//private int heightOriginal;
+		//<Summary>Before printing, this will be the same as YPos.  But during printing, YPos will get changed with each sheet due to growthBehavior.  YPosOriginal allows us to return YPos to it's original setting.</Summary>
+		//private int yPosOriginal;
 
+		/*
 		///<Summary>This overload is only for SheetFieldsAvailable.</Summary>
 		public SheetField(SheetFieldType fieldType,string fieldName) {
 			FieldType=fieldType;
 			FieldName=fieldName;
-		}
+		}*/
 
-		public SheetField(SheetFieldType fieldType,string fieldName,int xPos,int yPos,int width,Font font,GrowthBehaviorEnum growthBehavior) {
+		public SheetField(SheetFieldType fieldType,string fieldName,string fieldValue,
+			int xPos,int yPos,int width,int height,Font font,GrowthBehaviorEnum growthBehavior) 
+		{
 			FieldType=fieldType;
 			FieldName=fieldName;
-			Font=font;//there must always be a font.
-			XPos=xPos;
-			this.yPos=yPos;
-			yPosOriginal=yPos;
-			Width=width;
-			height=font.Height+4;//Height is automatic in this early implementation.
-			heightOriginal=height;
-			GrowthBehavior=growthBehavior;
-		}
-
-		///<summary>This overload is for StaticText.</summary>
-		public SheetField(string fieldValue,int xPos,int yPos,int width,Font font,GrowthBehaviorEnum growthBehavior) {
-			FieldType=SheetFieldType.StaticText;
-			FieldName="";
 			FieldValue=fieldValue;
-			Font=font;//there must always be a font.
 			XPos=xPos;
 			this.yPos=yPos;
-			yPosOriginal=yPos;
-			Width=width;
-			height=font.Height+4;//Height is automatic in this early implementation.
-			heightOriginal=height;
-			GrowthBehavior=growthBehavior;
-		}
-
-		///<summary>Overload for an InputField.  Specify a height, too.</summary>
-		public SheetField(string fieldName,int xPos,int yPos,int width,int height,Font font) {
-			FieldType=SheetFieldType.InputField;
-			FieldName=fieldName;
-			Font=font;//there must always be a font.
-			XPos=xPos;
-			this.yPos=yPos;
-			yPosOriginal=yPos;
+			//yPosOriginal=yPos;
 			Width=width;
 			this.height=height;
-			heightOriginal=height;
-			GrowthBehavior=GrowthBehaviorEnum.None;
+			//heightOriginal=height;
+			Font=font;
+			GrowthBehavior=growthBehavior;
+		}
+
+		public static SheetField NewOutput(string fieldName,int xPos,int yPos,int width,Font font){
+			int _height=font.Height+1;//Height is automatic in this early implementation.
+			return new SheetField(SheetFieldType.OutputText,fieldName,"",xPos,yPos,width,_height,font,GrowthBehaviorEnum.None);
+		}
+
+		public static SheetField NewOutput(string fieldName,int xPos,int yPos,int width,Font font,GrowthBehaviorEnum growthBehavior){
+			int _height=font.Height+1;//Height is automatic in this early implementation.
+			return new SheetField(SheetFieldType.OutputText,fieldName,"",xPos,yPos,width,_height,font,growthBehavior);
+		}
+
+		public static SheetField NewStaticText(string fieldValue,int xPos,int yPos,int width,Font font){
+			int _height=font.Height+1;//Height is automatic in this early implementation.
+			return new SheetField(SheetFieldType.StaticText,"",fieldValue,xPos,yPos,width,_height,font,GrowthBehaviorEnum.None);
+		}
+
+		public static SheetField NewInput(string fieldName,int xPos,int yPos,int width,int height,Font font){
+			return new SheetField(SheetFieldType.InputField,fieldName,"",xPos,yPos,width,height,font,GrowthBehaviorEnum.None);
 		}
 
 		public int YPos{
@@ -88,10 +82,10 @@ namespace OpenDental{
 			}
 		}
 
-		public void SetHeightAndOriginal(int newH){
-			height=newH;
-			heightOriginal=newH;
-		}
+		//public void SetHeightAndOriginal(int newH){
+		//	height=newH;
+		//	heightOriginal=newH;
+		//}
 
 		public int Height {
 			get {
@@ -102,10 +96,10 @@ namespace OpenDental{
 			}
 		}
 
-		public void ResetHeightAndYPosToOriginal(){
-			yPos=yPosOriginal;
-			height=heightOriginal;
-		}
+		//public void ResetHeightAndYPosToOriginal(){
+		//	yPos=yPosOriginal;
+		//	height=heightOriginal;
+		//}
 
 		///<Summary>Should only be called after FieldValue has been set, due to GrowthBehavior.</Summary>
 		public Rectangle Bounds {

@@ -103,6 +103,22 @@ namespace OpenDentBusiness{
 			return retval;
 		}
 
+		///<summary>FName MI. LName, Suffix</summary>
+		public string GetFormalName() {
+			string retVal=FName+" "+MI;
+			if(MI.Length==1){
+				retVal+=".";
+			}
+			if(MI!=""){
+				retVal+=" ";
+			}
+			retVal+=LName;
+			if(Suffix!=""){
+				retVal+=", "+Suffix;
+			}
+			return retVal;
+		}
+
 		
 	}
 	
