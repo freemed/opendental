@@ -3,7 +3,7 @@ using System.Collections;
 using OpenDental.DataAccess;
 
 namespace OpenDentBusiness{
-	///<summary>One sheet for one patient.  Loosly corresponds to the Sheet class, but reorganized to be stored in the database.</summary>
+	///<summary>One sheet for one patient.  Loosely corresponds to the Sheet class, but reorganized to be stored in the database.</summary>
 	[DataObject("sheetdata")]
 	public class SheetData : DataObjectBase{
 		[DataField("SheetDataNum",PrimaryKey=true,AutoNumber=true)]

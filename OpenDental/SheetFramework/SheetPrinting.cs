@@ -7,8 +7,8 @@ using OpenDentBusiness;
 
 namespace OpenDental {
 	public class SheetPrinting {
-		///<Summary>For the current sheet in the batch.  Reset for each new sheet in a batch.</Summary>
-		private static bool heightsCalculated;
+		//<Summary>For the current sheet in the batch.  Reset for each new sheet in a batch.</Summary>
+		//private static bool heightsCalculated;
 		///<summary>If there is only one sheet, then this will stay 0.</Summary>
 		private static int sheetsPrinted;
 		///<summary>If not a batch, then there will just be one sheet in the list.</summary>
@@ -19,7 +19,7 @@ namespace OpenDental {
 			//currently no validation for parameters in a batch because of the way it was created.
 			//could validate field names here later.
 			SheetList=sheetBatch;
-			heightsCalculated=false;
+			//heightsCalculated=false;
 			sheetsPrinted=0;
 			PrintDocument pd=new PrintDocument();
 			pd.OriginAtMargins=true;
@@ -70,7 +70,7 @@ namespace OpenDental {
 			//could validate field names here later.
 			SheetList=new List<Sheet>();
 			SheetList.Add(sheet);
-			heightsCalculated=false;
+			//heightsCalculated=false;
 			sheetsPrinted=0;
 			PrintDocument pd=new PrintDocument();
 			pd.OriginAtMargins=true;
@@ -113,7 +113,8 @@ namespace OpenDental {
 
 		private static void pd_PrintPage(object sender,System.Drawing.Printing.PrintPageEventArgs e) {
 			Graphics g=e.Graphics;
-			Sheet sheet=SheetUtil.CalculateHeights(SheetList[sheetsPrinted],g);
+			Sheet sheet=SheetList[sheetsPrinted];
+			SheetUtil.CalculateHeights(sheet,g);//this is here because of easy access to g.
 			if(sheet.SheetType==SheetTypeEnum.LabelCarrier
 				|| sheet.SheetType==SheetTypeEnum.LabelPatient
 				|| sheet.SheetType==SheetTypeEnum.LabelReferral)
@@ -127,7 +128,7 @@ namespace OpenDental {
 			g.Dispose();
 			//no logic yet for multiple pages on one sheet.
 			sheetsPrinted++;
-			heightsCalculated=false;
+			//heightsCalculated=false;
 			if(sheetsPrinted<SheetList.Count){
 				e.HasMorePages=true;
 			}

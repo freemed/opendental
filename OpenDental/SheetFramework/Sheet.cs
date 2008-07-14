@@ -21,7 +21,7 @@ namespace OpenDental{
 	Internal: Sheet, SheetParameter, SheetField.
 	Class names for Database tables:
 	SheetDef, SheetFieldDef (parameterDefs are hardcoded based on type)
-	SheetData, SheetFieldData(won't need parameterData, because all saved sheets will have patnum.  Other parameters might be handled through adapted SheetFieldData)
+	SheetData, SheetFieldData(won't need parameterData, because all saved sheets will have patnum.  Other parameters will be saved as adapted SheetFieldData)
 	
 	Note that we have tried to do similar things before, but not with as much clarity and organization.  See the ReportingOld2 folder for an example of a similar framework that never took off because:
 	a) It was overwhelming because it was trying to handle 'reporting' functions as its main purpose.
@@ -51,15 +51,16 @@ namespace OpenDental{
 			Font=fontDefault;
 		}
 
+		/*
 		///<summary>After a sheetData is loaded from the database, this constructor allows us to start working with a more organized object.  The sheet is needed for printing and filling by the user.  More parameters will be added soon, such as a Field list.</summary>
-		public Sheet(SheetData sheetData){
+		public Sheet(SheetData sheetData,List<SheetFieldData> sheetFieldDataList){
 			SheetType=sheetData.SheetType;
 			Parameters=new List<SheetParameter>();//this will remain empty, signalling no fill phase.
-			SheetFields=new List<SheetField>();
+			SheetFields=SheetUtil.CreateSheetFields(sheetFieldDataList);
 			Font=new Font(sheetData.FontName,sheetData.FontSize);
 			Width=sheetData.Width;
 			Height=sheetData.Height;
-		}
+		}*/
 
 		public Sheet Copy(){
 			Sheet sheet=(Sheet)this.MemberwiseClone();

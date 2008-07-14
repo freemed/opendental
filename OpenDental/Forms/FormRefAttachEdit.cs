@@ -462,9 +462,9 @@ namespace OpenDental{
 			if(listSheets.SelectedIndex==-1){
 				return;
 			}
-			//SheetData sheetData=SheetDatas.
-			Sheet sheet=new Sheet(SheetList[listSheets.SelectedIndex]);
-			FormSheetFillEdit FormS=new FormSheetFillEdit(sheet,SheetList[listSheets.SelectedIndex]);
+			List<SheetFieldData> sheetFieldDataList=SheetFieldDatas.GetForSheet(SheetList[listSheets.SelectedIndex].SheetDataNum);
+			//Sheet sheet=new Sheet(SheetList[listSheets.SelectedIndex],sheetFieldDataList);
+			FormSheetFillEdit FormS=new FormSheetFillEdit(SheetList[listSheets.SelectedIndex],sheetFieldDataList);
 			FormS.ShowDialog();
 			FillSheets();
 		}
@@ -482,8 +482,10 @@ namespace OpenDental{
 			sheet.SetParameter("PatNum",RefAttachCur.PatNum);
 			sheet.SetParameter("ReferralNum",RefAttachCur.ReferralNum);
 			SheetFiller.FillFields(sheet);
+			SheetUtil.CalculateHeights(sheet,this.CreateGraphics());
 			SheetData sheetData=SheetUtil.CreateSheetData(sheet,RefAttachCur.PatNum);
-			FormSheetFillEdit FormS=new FormSheetFillEdit(sheet,sheetData);
+			List<SheetFieldData> sheetFieldDataList=SheetUtil.CreateFieldList(sheet.SheetFields);
+			FormSheetFillEdit FormS=new FormSheetFillEdit(sheetData,sheetFieldDataList);
 			FormS.ShowDialog();
 			FillSheets();
 		}

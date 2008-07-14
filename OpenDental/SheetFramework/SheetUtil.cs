@@ -31,11 +31,9 @@ namespace OpenDental{
 			return retVal;
 		}
 
-		///<summary>Just before printing or displaying the final sheet output, the heights and y positions of various fields are adjusted according to their growth behavior.  The adjustments are all made on a copy of the original sheet in order to not alter the original positions.  This returns the sheet copy.</summary>
-		public static Sheet CalculateHeights(Sheet sheet,Graphics g){
-			//Bitmap bitmap=new Bitmap(1000,1000);
-			//Graphics g=Graphics.FromImage(bitmap);
-			Sheet sheetCopy=sheet.Copy();
+		///<summary>Just before printing or displaying the final sheet output, the heights and y positions of various fields are adjusted according to their growth behavior.</summary>
+		public static void CalculateHeights(Sheet sheet,Graphics g){
+			//Sheet sheetCopy=sheet.Copy();
 			int calcH;
 			foreach(SheetField field in sheet.SheetFields) {
 				if(field.GrowthBehavior==GrowthBehaviorEnum.None){
@@ -59,7 +57,7 @@ namespace OpenDental{
 				}
 			}
 			//g.Dispose();
-			return sheetCopy;
+			//return sheetCopy;
 		}
 
 		///<Summary>Supply the field that we are testing.  All other fields which intersect with it will be moved down.  Each time one is moved down, this method is called recursively.  The end result should be no intersections among fields near to the original field that grew.</Summary>
@@ -96,6 +94,48 @@ namespace OpenDental{
 			return sheetData;
 		}
 
+		/*
+		///<summary>After pulling a list of SheetFieldData objects from the database, we use this to convert it to a list of SheetFields as we create the Sheet.</summary>
+		public static List<SheetField> CreateSheetFields(List<SheetFieldData> sheetFieldDataList){
+			List<SheetField> retVal=new List<SheetField>();
+			SheetField field;
+			FontStyle style;
+			for(int i=0;i<sheetFieldDataList.Count;i++){
+				style=FontStyle.Regular;
+				if(sheetFieldDataList[i].FontIsBold){
+					style=FontStyle.Bold;
+				}
+				field=new SheetField(sheetFieldDataList[i].FieldType,sheetFieldDataList[i].FieldName,sheetFieldDataList[i].FieldValue,
+					sheetFieldDataList[i].XPos,sheetFieldDataList[i].YPos,sheetFieldDataList[i].Width,sheetFieldDataList[i].Height,
+					new Font(sheetFieldDataList[i].FontName,sheetFieldDataList[i].FontSize,style),sheetFieldDataList[i].GrowthBehavior);
+				retVal.Add(field);
+			}
+			return retVal;
+		}*/
+
+		///<summary>Creates the initial fields from the sheet.Fields.</summary>
+		public static List<SheetFieldData> CreateFieldList(List<SheetField> sheetFieldList){
+			List<SheetFieldData> retVal=new List<SheetFieldData>();
+			SheetFieldData field;
+			for(int i=0;i<sheetFieldList.Count;i++){
+				field=new SheetFieldData();
+				field.IsNew=true;
+				field.FieldName=sheetFieldList[i].FieldName;
+				field.FieldType=sheetFieldList[i].FieldType;
+				field.FieldValue=sheetFieldList[i].FieldValue;
+				field.FontIsBold=sheetFieldList[i].Font.Bold;
+				field.FontName=sheetFieldList[i].Font.Name;
+				field.FontSize=sheetFieldList[i].Font.Size;
+				field.GrowthBehavior=sheetFieldList[i].GrowthBehavior;
+				field.Height=sheetFieldList[i].Height;
+				//field.SheetDataNum=sheetFieldList[i];//set later
+				field.Width=sheetFieldList[i].Width;
+				field.XPos=sheetFieldList[i].XPos;
+				field.YPos=sheetFieldList[i].YPos;
+				retVal.Add(field);
+			}
+			return retVal;
+		}
 		
 
 

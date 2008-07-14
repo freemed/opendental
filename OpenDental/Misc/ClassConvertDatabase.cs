@@ -7687,7 +7687,26 @@ namespace OpenDental{
 						INDEX (PatNum)
 						) DEFAULT CHARSET=utf8";
 					General.NonQ(command);
-
+					command="DROP TABLE IF EXISTS sheetfielddata";
+					General.NonQ(command);
+					command=@"CREATE TABLE sheetfielddata (
+						SheetFieldDataNum int NOT NULL auto_increment,
+						SheetDataNum int NOT NULL,
+						FieldType int NOT NULL,
+						FieldName varchar(255),
+						FieldValue varchar(255),
+						FontSize float NOT NULL,
+						FontName varchar(255),
+						FontIsBold tinyint NOT NULL,
+						XPos int NOT NULL,
+						YPos int NOT NULL,
+						Width int NOT NULL,
+						Height int NOT NULL,
+						GrowthBehavior int NOT NULL,
+						PRIMARY KEY (SheetFieldDataNum),
+						INDEX (SheetDataNum)
+						) DEFAULT CHARSET=utf8";
+					General.NonQ(command);
 
 
 
@@ -7702,6 +7721,12 @@ namespace OpenDental{
 			}
 			//To5_8_?();
 		}
+
+
+		/*For 5.8:
+		 * ALTER TABLE schedule ADD INDEX (EmployeeNum)
+ALTER TABLE schedule ADD INDEX (ProvNum)
+ALTER TABLE schedule ADD INDEX (SchedDate)*/
 
 
 	}

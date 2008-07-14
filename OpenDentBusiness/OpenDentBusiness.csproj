@@ -121,6 +121,7 @@
     <Compile Include="Data Interface\ClaimAttaches.cs" />
     <Compile Include="Data Interface\ClaimCondCodeLogs.cs" />
     <Compile Include="Data Interface\ClaimFormItems.cs" />
+    <Compile Include="Data Interface\SheetFieldDatas.cs" />
     <Compile Include="Data Interface\SheetDatas.cs" />
     <Compile Include="Data Interface\Pharmacies.cs" />
     <Compile Include="Data Interface\CovCats.cs" />
@@ -235,6 +236,7 @@
     <Compile Include="TableTypes\CanadianNetwork.cs" />
     <Compile Include="TableTypes\ClaimAttach.cs" />
     <Compile Include="TableTypes\AnestheticData.cs" />
+    <Compile Include="TableTypes\SheetFieldData.cs" />
     <Compile Include="TableTypes\Files.cs" />
     <Compile Include="TableTypes\Pharmacy.cs" />
     <Compile Include="TableTypes\SheetData.cs" />
