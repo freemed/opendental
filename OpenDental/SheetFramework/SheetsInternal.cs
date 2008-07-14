@@ -130,9 +130,9 @@ namespace OpenDental{
 		public static Sheet ReferralSlip {
 			get {
 				Sheet sheet=new Sheet(SheetTypeEnum.ReferralSlip);
-				sheet.Font=new Font(FontFamily.GenericSansSerif,9f);
-				Font fontHeading=new Font(FontFamily.GenericSansSerif,10,FontStyle.Bold);
-				Font fontBold=new Font(FontFamily.GenericSansSerif,9,FontStyle.Bold);
+				sheet.Font=new Font("Microsoft Sans Serif",9f);
+				Font fontHeading=new Font("Microsoft Sans Serif",10,FontStyle.Bold);
+				Font fontBold=new Font("Microsoft Sans Serif",9,FontStyle.Bold);
 				sheet.Width=450;
 				sheet.Height=650;
 				int rowH=sheet.Font.Height+1;

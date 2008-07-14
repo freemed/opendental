@@ -35,7 +35,7 @@ namespace OpenDentBusiness{
 				return PByte((Byte)value);
 			}
 			else if (dataType == typeof(DateTime)) {
-				return PDate((DateTime)value);
+				return PDateT((DateTime)value);
 			}
 			else if (dataType == typeof(TimeSpan)) {
 				return PTimeSpan((TimeSpan)value);

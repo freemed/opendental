@@ -82,7 +82,21 @@ namespace OpenDental{
 			}
 		}
 
+		///<summary>Just creates the initial SheetData object from the sheet.  Doesn't add fields.  Sets date to today.</summary>
+		public static SheetData CreateSheetData(Sheet sheet,int patNum){
+			SheetData sheetData=new SheetData();
+			sheetData.IsNew=true;
+			sheetData.DateTimeSheet=DateTime.Now;
+			sheetData.FontName=sheet.Font.Name;
+			sheetData.FontSize=sheet.Font.Size;
+			sheetData.Height=sheet.Height;
+			sheetData.SheetType=sheet.SheetType;
+			sheetData.Width=sheet.Width;
+			sheetData.PatNum=patNum;
+			return sheetData;
+		}
 
+		
 
 
 	}

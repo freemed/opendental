@@ -10,11 +10,13 @@ using OpenDentBusiness;
 namespace OpenDental {
 	public partial class FormSheetFillEdit:Form {
 		public Sheet SheetCur;
+		public SheetData SheetDataCur;
 
-		public FormSheetFillEdit(Sheet sheet) {
+		public FormSheetFillEdit(Sheet sheet,SheetData sheetData) {
 			InitializeComponent();
 			Lan.F(this);
 			SheetCur=SheetUtil.CalculateHeights(sheet,this.CreateGraphics());
+			SheetDataCur=sheetData;
 			Width=sheet.Width+185;
 			Height=sheet.Height+60;
 		}
@@ -22,6 +24,8 @@ namespace OpenDental {
 		private void FormSheetFillEdit_Load(object sender,EventArgs e) {
 			panelMain.Width=SheetCur.Width;
 			panelMain.Height=SheetCur.Height;
+			textDateTime.Text=SheetDataCur.DateTimeSheet.ToShortDateString()+" "+SheetDataCur.DateTimeSheet.ToShortTimeString();
+			textNote.Text=SheetDataCur.InternalNote;
 			TextBox textbox;
 			for(int i=0;i<SheetCur.SheetFields.Count;i++){
 				textbox=new TextBox();
@@ -56,6 +60,13 @@ namespace OpenDental {
 		}
 
 		private void butOK_Click(object sender,EventArgs e) {
+			if(textDateTime.errorProvider1.GetError(textDateTime)!=""){
+				MsgBox.Show(this,"Please fix data entry errors first.");
+				return;
+			}
+			SheetDataCur.DateTimeSheet=PIn.PDateT(textDateTime.Text);
+			SheetDataCur.InternalNote=textNote.Text;
+			SheetDatas.WriteObject(SheetDataCur);
 			DialogResult=DialogResult.OK;
 		}
 

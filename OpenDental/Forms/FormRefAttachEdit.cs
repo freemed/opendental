@@ -1,6 +1,7 @@
 using System;
 using System.Drawing;
 using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows.Forms;
 using OpenDentBusiness;
@@ -35,9 +36,11 @@ namespace OpenDental{
 		private OpenDental.UI.Button butDelete;
 		private GroupBox groupReferralSlip;
 		private OpenDental.UI.Button butNew;
-		private ListBox listBox1;
+		private ListBox listSheets;
 		///<summary></summary>
 		public RefAttach RefAttachCur;
+		///<summary>List of referral slips for this pat/ref combo.</summary>
+		private List<SheetData> SheetList; 
 
 		///<summary></summary>
 		public FormRefAttachEdit(){
@@ -82,8 +85,8 @@ namespace OpenDental{
 			this.label7 = new System.Windows.Forms.Label();
 			this.butDelete = new OpenDental.UI.Button();
 			this.groupReferralSlip = new System.Windows.Forms.GroupBox();
+			this.listSheets = new System.Windows.Forms.ListBox();
 			this.butNew = new OpenDental.UI.Button();
-			this.listBox1 = new System.Windows.Forms.ListBox();
 			this.panel1.SuspendLayout();
 			this.groupReferralSlip.SuspendLayout();
 			this.SuspendLayout();
@@ -317,7 +320,7 @@ namespace OpenDental{
 			// 
 			// groupReferralSlip
 			// 
-			this.groupReferralSlip.Controls.Add(this.listBox1);
+			this.groupReferralSlip.Controls.Add(this.listSheets);
 			this.groupReferralSlip.Controls.Add(this.butNew);
 			this.groupReferralSlip.Location = new System.Drawing.Point(144,278);
 			this.groupReferralSlip.Name = "groupReferralSlip";
@@ -325,6 +328,15 @@ namespace OpenDental{
 			this.groupReferralSlip.TabIndex = 88;
 			this.groupReferralSlip.TabStop = false;
 			this.groupReferralSlip.Text = "Referral Slips";
+			// 
+			// listSheets
+			// 
+			this.listSheets.FormattingEnabled = true;
+			this.listSheets.Location = new System.Drawing.Point(9,19);
+			this.listSheets.Name = "listSheets";
+			this.listSheets.Size = new System.Drawing.Size(120,69);
+			this.listSheets.TabIndex = 90;
+			this.listSheets.DoubleClick += new System.EventHandler(this.listSheets_DoubleClick);
 			// 
 			// butNew
 			// 
@@ -341,14 +353,6 @@ namespace OpenDental{
 			this.butNew.TabIndex = 89;
 			this.butNew.Text = "New";
 			this.butNew.Click += new System.EventHandler(this.butNew_Click);
-			// 
-			// listBox1
-			// 
-			this.listBox1.FormattingEnabled = true;
-			this.listBox1.Location = new System.Drawing.Point(9,19);
-			this.listBox1.Name = "listBox1";
-			this.listBox1.Size = new System.Drawing.Size(120,69);
-			this.listBox1.TabIndex = 90;
 			// 
 			// FormRefAttachEdit
 			// 
@@ -400,6 +404,7 @@ namespace OpenDental{
         this.Text=Lan.g(this,"Edit Referral Attachment");
       }
 			FillData();
+			FillSheets();
 		}
 
 		private void FillData(){
@@ -430,6 +435,14 @@ namespace OpenDental{
 			textNote.Text=RefAttachCur.Note;
 		}
 
+		private void FillSheets(){
+			SheetList=SheetDatas.GetReferralSlips(RefAttachCur.PatNum,RefAttachCur.ReferralNum);
+			listSheets.Items.Clear();
+			for(int i=0;i<SheetList.Count;i++){
+				listSheets.Items.Add(SheetList[i].DateTimeSheet.ToShortDateString());
+			}
+		}
+
 		private void butEdit_Click(object sender, System.EventArgs e) {
 			try{
 				DataToCur();
@@ -445,6 +458,18 @@ namespace OpenDental{
 			FillData();
 		}
 
+		private void listSheets_DoubleClick(object sender,EventArgs e) {
+			if(listSheets.SelectedIndex==-1){
+				return;
+			}
+			//SheetData sheetData=SheetDatas.
+			Sheet sheet=new Sheet(SheetList[listSheets.SelectedIndex]);
+			FormSheetFillEdit FormS=new FormSheetFillEdit(sheet,SheetList[listSheets.SelectedIndex]);
+			FormS.ShowDialog();
+			FillSheets();
+		}
+
+		///<summary>New referral slip.</summary>
 		private void butNew_Click(object sender,EventArgs e) {
 			try{
 				DataToCur();
@@ -456,16 +481,11 @@ namespace OpenDental{
 			Sheet sheet=SheetsInternal.ReferralSlip;
 			sheet.SetParameter("PatNum",RefAttachCur.PatNum);
 			sheet.SetParameter("ReferralNum",RefAttachCur.ReferralNum);
-			//try{
-			//	sheet.Print();
-			//}
-			//catch(Exception ex){
-			//	MessageBox.Show(ex.Message);
-			//}
 			SheetFiller.FillFields(sheet);
-			FormSheetFillEdit FormS=new FormSheetFillEdit(sheet);
-			//FormS.SheetCur=sheet;
+			SheetData sheetData=SheetUtil.CreateSheetData(sheet,RefAttachCur.PatNum);
+			FormSheetFillEdit FormS=new FormSheetFillEdit(sheet,sheetData);
 			FormS.ShowDialog();
+			FillSheets();
 		}
 
 		///<summary>Surround with try-catch.  Attempts to take the data on the form and set the values of RefAttachCur.</summary>
@@ -515,6 +535,8 @@ namespace OpenDental{
 		private void butCancel_Click(object sender, System.EventArgs e) {
 			DialogResult=DialogResult.Cancel;
 		}
+
+		
 
 		
 

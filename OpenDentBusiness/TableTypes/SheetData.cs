@@ -19,10 +19,10 @@ namespace OpenDentBusiness{
 		}
 
 		[DataField("SheetType")]
-		private int sheetType;
+		private SheetTypeEnum sheetType;
 		private bool sheetTypeChanged;
 		///<summary>Enum:SheetTypeEnum</summary>
-		public int SheetType{
+		public SheetTypeEnum SheetType{
 			get{return sheetType;}
 			set{if(sheetType!=value){sheetType=value;MarkDirty();sheetTypeChanged=true;}}
 		}
@@ -42,16 +42,16 @@ namespace OpenDentBusiness{
 			get{return patNumChanged;}
 		}
 
-		[DataField("DateSheet")]
-		private int dateSheet;
-		private bool dateSheetChanged;
-		///<summary>The date of the sheet as it will be displayed in the commlog.</summary>
-		public int DateSheet{
-			get{return dateSheet;}
-			set{if(dateSheet!=value){dateSheet=value;MarkDirty();dateSheetChanged=true;}}
+		[DataField("DateTimeSheet")]
+		private DateTime dateTimeSheet;
+		private bool dateTimeSheetChanged;
+		///<summary>The date and time of the sheet as it will be displayed in the commlog.</summary>
+		public DateTime DateTimeSheet{
+			get{return dateTimeSheet;}
+			set{if(dateTimeSheet!=value){dateTimeSheet=value;MarkDirty();dateTimeSheetChanged=true;}}
 		}
-		public bool DateSheetChanged{
-			get{return dateSheetChanged;}
+		public bool DateTimeSheetChanged{
+			get{return dateTimeSheetChanged;}
 		}
 		
 		[DataField("FontSize")]

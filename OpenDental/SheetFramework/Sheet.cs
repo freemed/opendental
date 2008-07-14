@@ -33,7 +33,7 @@ namespace OpenDental{
 	public class Sheet {
 		///<Summary>Every single sheet must have a type, and only the types listed in the enum will be supported as part of the Sheet framework.</Summary>
 		public SheetTypeEnum SheetType;
-		///<Summary>A collection of all parameters for this sheet.  There's usually only one parameter.  The first parameter will be a List int if it's a batch.</Summary>
+		///<Summary>A collection of all parameters for this sheet.  There's usually only one parameter.  The first parameter will be a List int if it's a batch.  If a sheet has already been filled, saved to the database, and printed, then there is no longer any need for the parameters in order to fill the data.  So a retrieved sheet will have no parameters, signalling a skip in the fill phase.  There will still be parameters tucked away in the Field data in the database, but they won't become part of the sheet.</Summary>
 		public List<SheetParameter> Parameters;
 		///<Summary></Summary>
 		public List<SheetField> SheetFields;
@@ -49,6 +49,16 @@ namespace OpenDental{
 			Parameters=SheetParameter.GetForType(sheetType);
 			SheetFields=new List<SheetField>();
 			Font=fontDefault;
+		}
+
+		///<summary>After a sheetData is loaded from the database, this constructor allows us to start working with a more organized object.  The sheet is needed for printing and filling by the user.  More parameters will be added soon, such as a Field list.</summary>
+		public Sheet(SheetData sheetData){
+			SheetType=sheetData.SheetType;
+			Parameters=new List<SheetParameter>();//this will remain empty, signalling no fill phase.
+			SheetFields=new List<SheetField>();
+			Font=new Font(sheetData.FontName,sheetData.FontSize);
+			Width=sheetData.Width;
+			Height=sheetData.Height;
 		}
 
 		public Sheet Copy(){
@@ -78,25 +88,7 @@ namespace OpenDental{
 
 	}
 
-	///<Summary>Different types of sheets that can be used.</Summary>
-	public enum SheetTypeEnum{
-		///<Summary>0-Requires SheetParameter for PatNum.</Summary>
-		LabelPatient,
-		///<Summary>1-Requires SheetParameter for CarrierNum.</Summary>
-		LabelCarrier,
-		///<Summary>2-Requires SheetParameter for ReferralNum.</Summary>
-		LabelReferral,
-		///<Summary>3-Requires SheetParameter for PatNum,ReferralNum.</Summary>
-		ReferralSlip
-		/*Statement,
-		TxPlan,
-		Rx,
-		LabSlip,
-		Postcard,
-		RegistrationForm,
-		MedHistory,
-		ConsentForm*/
-	}
+	
 
 	
 

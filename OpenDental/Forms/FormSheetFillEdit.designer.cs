@@ -28,7 +28,7 @@ namespace OpenDental{
 			this.label3 = new System.Windows.Forms.Label();
 			this.panel1 = new System.Windows.Forms.Panel();
 			this.panelMain = new System.Windows.Forms.Panel();
-			this.textRefDate = new OpenDental.ValidDate();
+			this.textDateTime = new OpenDental.ValidDate();
 			this.butOK = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
 			this.panel1.SuspendLayout();
@@ -60,7 +60,7 @@ namespace OpenDental{
 			this.label3.Name = "label3";
 			this.label3.Size = new System.Drawing.Size(84,16);
 			this.label3.TabIndex = 76;
-			this.label3.Text = "Date";
+			this.label3.Text = "Date time";
 			this.label3.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
 			// 
 			// panel1
@@ -83,13 +83,13 @@ namespace OpenDental{
 			this.panelMain.Size = new System.Drawing.Size(549,513);
 			this.panelMain.TabIndex = 0;
 			// 
-			// textRefDate
+			// textDateTime
 			// 
-			this.textRefDate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.textRefDate.Location = new System.Drawing.Point(580,24);
-			this.textRefDate.Name = "textRefDate";
-			this.textRefDate.Size = new System.Drawing.Size(100,20);
-			this.textRefDate.TabIndex = 77;
+			this.textDateTime.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.textDateTime.Location = new System.Drawing.Point(580,24);
+			this.textDateTime.Name = "textDateTime";
+			this.textDateTime.Size = new System.Drawing.Size(146,20);
+			this.textDateTime.TabIndex = 77;
 			// 
 			// butOK
 			// 
@@ -99,11 +99,11 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(650,485);
+			this.butOK.Location = new System.Drawing.Point(637,485);
 			this.butOK.Name = "butOK";
-			this.butOK.Size = new System.Drawing.Size(75,24);
+			this.butOK.Size = new System.Drawing.Size(88,24);
 			this.butOK.TabIndex = 3;
-			this.butOK.Text = "&OK";
+			this.butOK.Text = "Save Changes";
 			this.butOK.Click += new System.EventHandler(this.butOK_Click);
 			// 
 			// butCancel
@@ -114,9 +114,9 @@ namespace OpenDental{
 			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
-			this.butCancel.Location = new System.Drawing.Point(650,515);
+			this.butCancel.Location = new System.Drawing.Point(637,515);
 			this.butCancel.Name = "butCancel";
-			this.butCancel.Size = new System.Drawing.Size(75,24);
+			this.butCancel.Size = new System.Drawing.Size(88,24);
 			this.butCancel.TabIndex = 2;
 			this.butCancel.Text = "&Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
@@ -126,7 +126,7 @@ namespace OpenDental{
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
 			this.ClientSize = new System.Drawing.Size(737,551);
 			this.Controls.Add(this.panel1);
-			this.Controls.Add(this.textRefDate);
+			this.Controls.Add(this.textDateTime);
 			this.Controls.Add(this.label3);
 			this.Controls.Add(this.textNote);
 			this.Controls.Add(this.label1);
@@ -148,7 +148,7 @@ namespace OpenDental{
 		private OpenDental.UI.Button butCancel;
 		private System.Windows.Forms.TextBox textNote;
 		private System.Windows.Forms.Label label1;
-		private ValidDate textRefDate;
+		private ValidDate textDateTime;
 		private System.Windows.Forms.Label label3;
 		private System.Windows.Forms.Panel panel1;
 		private System.Windows.Forms.Panel panelMain;

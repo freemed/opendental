@@ -1331,6 +1331,26 @@ namespace OpenDentBusiness{
 		PatientInformation
 	}
 
+	///<Summary>Different types of sheets that can be used.</Summary>
+	public enum SheetTypeEnum{
+		///<Summary>0-Requires SheetParameter for PatNum.</Summary>
+		LabelPatient,
+		///<Summary>1-Requires SheetParameter for CarrierNum.</Summary>
+		LabelCarrier,
+		///<Summary>2-Requires SheetParameter for ReferralNum.</Summary>
+		LabelReferral,
+		///<Summary>3-Requires SheetParameter for PatNum,ReferralNum.</Summary>
+		ReferralSlip
+		/*Statement,
+		TxPlan,
+		Rx,
+		LabSlip,
+		Postcard,
+		RegistrationForm,
+		MedHistory,
+		ConsentForm*/
+	}
+
 }
 
 
