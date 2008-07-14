@@ -7587,6 +7587,26 @@ namespace OpenDental{
 				command="UPDATE preference SET ValueString = '5.7.4.0' WHERE PrefName = 'DataBaseVersion'";
 				General.NonQ(command);
 			}
+			To5_7_15();
+		}
+
+		private void To5_7_15() {
+			if(FromVersion<new Version("5.7.15.0")) {
+				string command;
+				if(DataConnection.DBtype==DatabaseType.MySql){
+					command="ALTER TABLE procedurelog ADD INDEX (PlannedAptNum)";
+					try {
+						General.NonQ(command);
+					}
+					catch {
+					}
+				}else{//oracle
+					command="CREATE INDEX PROCEDURELOG_PLANNEDAPTNUM ON procedurelog (PlannedAptNum)";
+					General.NonQ(command);
+				}
+				command="UPDATE preference SET ValueString = '5.7.15.0' WHERE PrefName = 'DataBaseVersion'";
+				General.NonQ(command);
+			}
 			To5_8_0();
 		}
 
