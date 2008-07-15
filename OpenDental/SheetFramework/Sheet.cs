@@ -51,17 +51,6 @@ namespace OpenDental{
 			Font=fontDefault;
 		}
 
-		/*
-		///<summary>After a sheetData is loaded from the database, this constructor allows us to start working with a more organized object.  The sheet is needed for printing and filling by the user.  More parameters will be added soon, such as a Field list.</summary>
-		public Sheet(SheetData sheetData,List<SheetFieldData> sheetFieldDataList){
-			SheetType=sheetData.SheetType;
-			Parameters=new List<SheetParameter>();//this will remain empty, signalling no fill phase.
-			SheetFields=SheetUtil.CreateSheetFields(sheetFieldDataList);
-			Font=new Font(sheetData.FontName,sheetData.FontSize);
-			Width=sheetData.Width;
-			Height=sheetData.Height;
-		}*/
-
 		public Sheet Copy(){
 			Sheet sheet=(Sheet)this.MemberwiseClone();
 			//do I need to copy the lists?

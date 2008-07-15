@@ -3136,7 +3136,6 @@
     <Compile Include="SheetFramework\SheetFieldsAvailable.cs" />
     <Compile Include="SheetFramework\SheetFiller.cs" />
     <Compile Include="SheetFramework\SheetObject.cs" />
-    <Compile Include="SheetFramework\SheetParameter.cs" />
     <Compile Include="SheetFramework\SheetPrinting.cs" />
     <Compile Include="SheetFramework\SheetsInternal.cs" />
     <Compile Include="SheetFramework\SheetUtil.cs" />

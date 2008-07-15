@@ -3,6 +3,27 @@ using System.Collections;
 using OpenDental.DataAccess;
 
 namespace OpenDentBusiness{
+/*A better name for this object would be a Form, but that name is obviously too ambiguous and has been overused.  This internal framework will later be extended to let users customize sheets.  There are two different aspects of the future database tables:
+	1. Customization of sheets
+	2. Saving data filled in on sheets (done)
+	Sheets will not include reports, which are better handled by the RDL framework or something even simpler.  Examples of what sheets might be used for include statements, tx plans, rx, lab slips, postcards, referral slips, patient registration forms, medical histories, consent forms, and labels.
+	The interesting thing about this framework is that it is able to support incoming data as well as outgoing data using the following elements:
+	-background image
+	-static text
+	-text generated from database
+	-user input
+	Images will be saved in their own table, while the other elements will be be saved separately with each sheet.  Therefore, background images do not need to be saved repeatedly with each printout.
+	Class names:
+	Data: Sheet, SheetField. (Parameters are saved as part of fields, except PatNum is part of Sheet)
+	Defs:	SheetDef, SheetFieldDef (SheetParameters are hardcoded based on type)
+  SheetImage
+	
+	Note that we have tried to do similar things before, but not with as much clarity and organization.  See the ReportingOld2 folder for an example of a similar framework that never took off because:
+	a) It was overwhelming because it was trying to handle 'reporting' functions as its main purpose.
+	b) It did not start with a simpler framework and build iteratively.
+	c) It was modeled after Crystal Reports, which was only designed for reports, not forms.
+	d) We did not have generics.
+	*/
 	///<summary>One sheet for one patient.  Loosely corresponds to the Sheet class, but reorganized to be stored in the database.</summary>
 	[DataObject("sheetdata")]
 	public class SheetData : DataObjectBase{

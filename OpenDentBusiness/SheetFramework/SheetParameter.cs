@@ -1,9 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using OpenDentBusiness;
 
-namespace OpenDental{
+namespace OpenDentBusiness{
 	///<Summary></Summary>
 	public class SheetParameter {
 		///<Summary></Summary>
