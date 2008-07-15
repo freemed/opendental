@@ -13,7 +13,7 @@ namespace OpenDental {
 		public SheetData SheetDataCur;
 		public List<SheetFieldData> SheetFields;
 
-		public FormSheetFillEdit(SheetData sheetData,List<SheetFieldData> sheetFields) {//Sheet sheet,
+		public FormSheetFillEdit(SheetData sheetData,List<SheetFieldData> sheetFields) {
 			InitializeComponent();
 			Lan.F(this);
 			SheetDataCur=sheetData;

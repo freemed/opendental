@@ -20,7 +20,7 @@ namespace OpenDental{
 
 		///<summary></summary>
 		public void PrintPat(int patNum){
-			SheetDef sheetDef=SheetsInternal.LabelPatientMail;
+			SheetDef sheetDef=SheetsInternal.GetSheetDef(SheetInternalType.LabelPatientMail);
 			sheetDef.SetParameter("PatNum",patNum);
 			SheetFiller.FillFields(sheetDef);
 			try{
@@ -32,7 +32,7 @@ namespace OpenDental{
 		}
 
 		public void PrintPatientLFAddress(int patNum) {
-			SheetDef sheetDef=SheetsInternal.LabelPatientLFAddress;
+			SheetDef sheetDef=SheetsInternal.GetSheetDef(SheetInternalType.LabelPatientLFAddress);
 			sheetDef.SetParameter("PatNum",patNum);
 			SheetFiller.FillFields(sheetDef);
 			try {
@@ -44,7 +44,7 @@ namespace OpenDental{
 		}
 
 		public void PrintPatientLFChartNumber(int patNum) {
-			SheetDef sheetDef=SheetsInternal.LabelPatientLFChartNumber;
+			SheetDef sheetDef=SheetsInternal.GetSheetDef(SheetInternalType.LabelPatientLFChartNumber);
 			sheetDef.SetParameter("PatNum",patNum);
 			SheetFiller.FillFields(sheetDef);
 			try {
@@ -56,7 +56,7 @@ namespace OpenDental{
 		}
 
 		public void PrintPatientLFPatNum(int patNum) {
-			SheetDef sheetDef=SheetsInternal.LabelPatientLFChartNumber;
+			SheetDef sheetDef=SheetsInternal.GetSheetDef(SheetInternalType.LabelPatientLFPatNum);
 			sheetDef.SetParameter("PatNum",patNum);
 			SheetFiller.FillFields(sheetDef);
 			try {
@@ -68,7 +68,7 @@ namespace OpenDental{
 		}
 
 		public void PrintPatRadiograph(int patNum) {
-			SheetDef sheetDef=SheetsInternal.LabelPatientRadiograph;
+			SheetDef sheetDef=SheetsInternal.GetSheetDef(SheetInternalType.LabelPatientRadiograph);
 			sheetDef.SetParameter("PatNum",patNum);
 			SheetFiller.FillFields(sheetDef);
 			try {
@@ -81,7 +81,7 @@ namespace OpenDental{
 
 		///<summary></summary>
 		public void PrintCarriers(List<int> carrierNums){
-			SheetDef sheetDef=SheetsInternal.LabelCarrier;
+			SheetDef sheetDef=SheetsInternal.GetSheetDef(SheetInternalType.LabelCarrier);
 			List<SheetDef> sheetDefBatch=SheetUtil.CreateBatch(sheetDef,carrierNums);
 			try{
 				SheetPrinting.PrintBatch(sheetDefBatch);
@@ -93,7 +93,7 @@ namespace OpenDental{
 
 		///<summary>Have to supply printer name because this can be called multiple times in a loop. Returns false if fails.</summary>
 		public void PrintCarrier(int carrierNum){//Carrier carrierCur,string printerName){
-			SheetDef sheetDef=SheetsInternal.LabelCarrier;
+			SheetDef sheetDef=SheetsInternal.GetSheetDef(SheetInternalType.LabelCarrier);
 			sheetDef.SetParameter("CarrierNum",carrierNum);
 			SheetFiller.FillFields(sheetDef);
 			try {
@@ -106,7 +106,7 @@ namespace OpenDental{
 
 		///<summary></summary>
 		public void PrintReferral(int referralNum) {
-			SheetDef sheetDef=SheetsInternal.LabelReferral;
+			SheetDef sheetDef=SheetsInternal.GetSheetDef(SheetInternalType.LabelReferral);
 			sheetDef.SetParameter("ReferralNum",referralNum);
 			SheetFiller.FillFields(sheetDef);
 			try {

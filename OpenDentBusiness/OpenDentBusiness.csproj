@@ -201,6 +201,7 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="RemotingClient.cs" />
+    <Compile Include="SheetFramework\SheetEnums.cs" />
     <Compile Include="SheetFramework\SheetDef.cs" />
     <Compile Include="SheetFramework\SheetFieldDef.cs" />
     <Compile Include="SheetFramework\SheetFieldsAvailable.cs" />

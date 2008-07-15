@@ -32,7 +32,7 @@ namespace OpenDental {
 				case SheetTypeEnum.LabelPatient:
 				case SheetTypeEnum.LabelCarrier:
 				case SheetTypeEnum.LabelReferral:
-					pd.DefaultPageSettings.Landscape=false;
+					pd.DefaultPageSettings.Landscape=true;
 					sit=PrintSituation.LabelSingle;
 					break;
 				case SheetTypeEnum.ReferralSlip:
@@ -83,7 +83,7 @@ namespace OpenDental {
 				case SheetTypeEnum.LabelPatient:
 				case SheetTypeEnum.LabelCarrier:
 				case SheetTypeEnum.LabelReferral:
-					pd.DefaultPageSettings.Landscape=false;//prevents a bug.
+					pd.DefaultPageSettings.Landscape=true;
 					sit=PrintSituation.LabelSingle;
 					break;
 				case SheetTypeEnum.ReferralSlip:
@@ -115,13 +115,6 @@ namespace OpenDental {
 			Graphics g=e.Graphics;
 			SheetDef sheetDef=SheetDefList[sheetsPrinted];
 			SheetUtil.CalculateHeights(sheetDef,g);//this is here because of easy access to g.
-			if(sheetDef.SheetType==SheetTypeEnum.LabelCarrier
-				|| sheetDef.SheetType==SheetTypeEnum.LabelPatient
-				|| sheetDef.SheetType==SheetTypeEnum.LabelReferral)
-			{
-				g.TranslateTransform(100,0);
-				g.RotateTransform(90);
-			}
 			foreach(SheetFieldDef fieldDef in sheetDef.SheetFieldDefs){
 				g.DrawString(fieldDef.FieldValue,fieldDef.Font,Brushes.Black,fieldDef.BoundsF);
 			}
