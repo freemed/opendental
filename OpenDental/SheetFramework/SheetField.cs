@@ -5,6 +5,7 @@ using System.Text;
 using OpenDentBusiness;
 
 namespace OpenDental{
+	/*
 	///<Summary></Summary>
 	public class SheetField {
 		///<Summary>OutputText, InputField, StaticText,Parameter(only used for SheetFieldData, not SheetField).</Summary>
@@ -73,7 +74,7 @@ namespace OpenDental{
 			}
 		}
 	}
-
+	*/
 	
 
 }

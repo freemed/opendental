@@ -354,11 +354,11 @@
     <Compile Include="Forms\FormSheetFillEdit.designer.cs">
       <DependentUpon>FormSheetFillEdit.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\FormSheetEdit.cs">
+    <Compile Include="Forms\FormSheetDefEdit.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\FormSheetEdit.designer.cs">
-      <DependentUpon>FormSheetEdit.cs</DependentUpon>
+    <Compile Include="Forms\FormSheetDefEdit.designer.cs">
+      <DependentUpon>FormSheetDefEdit.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\FormDisplayFieldCategories.cs">
       <SubType>Form</SubType>
@@ -3430,8 +3430,8 @@
       <DependentUpon>FormSheetFillEdit.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\FormSheetEdit.resx">
-      <DependentUpon>FormSheetEdit.cs</DependentUpon>
+    <EmbeddedResource Include="Forms\FormSheetDefEdit.resx">
+      <DependentUpon>FormSheetDefEdit.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormDisplayFieldCategories.resx">

@@ -8,15 +8,15 @@ using System.Windows.Forms;
 using OpenDentBusiness;
 
 namespace OpenDental {
-	public partial class FormSheetEdit:Form {
-		public Sheet SheetCur;
+	public partial class FormSheetDefEdit:Form {
+		public SheetDef SheetDefCur;
 
-		public FormSheetEdit() {
+		public FormSheetDefEdit() {
 			InitializeComponent();
 			Lan.F(this);
 		}
 
-		private void FormSheetEdit_Load(object sender,EventArgs e) {
+		private void FormSheetDefEdit_Load(object sender,EventArgs e) {
 
 		}
 

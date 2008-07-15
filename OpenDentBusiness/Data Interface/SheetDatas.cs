@@ -66,6 +66,8 @@ namespace OpenDentBusiness{
 			if(table.Rows.Count>0){
 				throw new ApplicationException(Lan.g("sheetDatas","sheetData is already in use by patient(s). Not allowed to delete. "+pats));
 			}*/
+			string command="DELETE FROM sheetfielddata WHERE SheetDataNum="+POut.PInt(sheetDataNum);
+			General.NonQ(command);
 			DataObjectFactory<SheetData>.DeleteObject(sheetDataNum);
 		}
 

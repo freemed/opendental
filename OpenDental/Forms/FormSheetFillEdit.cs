@@ -65,6 +65,17 @@ namespace OpenDental {
 			}
 		}
 
+		private void butDelete_Click(object sender,EventArgs e) {
+			if(SheetDataCur.IsNew){
+				DialogResult=DialogResult.Cancel;
+			}
+			if(!MsgBox.Show(this,true,"Delete?")){
+				return;
+			}
+			SheetDatas.DeleteObject(SheetDataCur.SheetDataNum);
+			DialogResult=DialogResult.OK;
+		}
+
 		private void butOK_Click(object sender,EventArgs e) {
 			if(textDateTime.errorProvider1.GetError(textDateTime)!=""){
 				MsgBox.Show(this,"Please fix data entry errors first.");
@@ -94,6 +105,8 @@ namespace OpenDental {
 		private void butCancel_Click(object sender,EventArgs e) {
 			DialogResult=DialogResult.Cancel;
 		}
+
+	
 
 		
 	}

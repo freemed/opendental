@@ -28,7 +28,7 @@ namespace OpenDental{
 	b) It did not start with a simpler framework and build iteratively.
 	c) It was modeled after Crystal Reports, which was only designed for reports, not forms.
 	d) We did not have generics.
-	*/
+	
 	///<summary>See comments in the code file above.</summary>
 	public class Sheet {
 		///<Summary>Every single sheet must have a type, and only the types listed in the enum will be supported as part of the Sheet framework.</Summary>
@@ -77,7 +77,7 @@ namespace OpenDental{
 		
 
 	}
-
+	*/
 	
 
 	

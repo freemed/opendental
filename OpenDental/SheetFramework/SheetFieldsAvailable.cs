@@ -6,7 +6,7 @@ using OpenDentBusiness;
 namespace OpenDental{
 	class SheetFieldsAvailable {
 		///<Summary>This isn't actually used yet.  It's just a handy place to store the lists.  Later, when there is a UI for customizing sheets, this will be the list of fields they pick from.</Summary>
-		public static List<SheetField> GetList(SheetTypeEnum sheetType){
+		public static List<SheetFieldDef> GetList(SheetTypeEnum sheetType){
 			switch(sheetType){
 				case SheetTypeEnum.LabelPatient:
 					return GetLabelPatient();
@@ -17,19 +17,19 @@ namespace OpenDental{
 				case SheetTypeEnum.ReferralSlip:
 					return GetReferralSlip();
 			}
-			return new List<SheetField>();
+			return new List<SheetFieldDef>();
 		}
 
-		private static SheetField NewOutput(string fieldName){
-			return new SheetField(SheetFieldType.OutputText,fieldName,"",0,0,0,0,null,GrowthBehaviorEnum.None);
+		private static SheetFieldDef NewOutput(string fieldName){
+			return new SheetFieldDef(SheetFieldType.OutputText,fieldName,"",0,0,0,0,null,GrowthBehaviorEnum.None);
 		}
 
-		private static SheetField NewInput(string fieldName){
-			return new SheetField(SheetFieldType.InputField,fieldName,"",0,0,0,0,null,GrowthBehaviorEnum.None);
+		private static SheetFieldDef NewInput(string fieldName){
+			return new SheetFieldDef(SheetFieldType.InputField,fieldName,"",0,0,0,0,null,GrowthBehaviorEnum.None);
 		}
 
-		private static List<SheetField> GetLabelPatient(){
-			List<SheetField> list=new List<SheetField>();
+		private static List<SheetFieldDef> GetLabelPatient(){
+			List<SheetFieldDef> list=new List<SheetFieldDef>();
 			list.Add(NewOutput("nameFL"));
 			list.Add(NewOutput("nameLF"));
 			list.Add(NewOutput("address"));//includes address2
@@ -42,24 +42,24 @@ namespace OpenDental{
 			return list;
 		}
 
-		private static List<SheetField> GetLabelCarrier() {
-			List<SheetField> list=new List<SheetField>();
+		private static List<SheetFieldDef> GetLabelCarrier() {
+			List<SheetFieldDef> list=new List<SheetFieldDef>();
 			list.Add(NewOutput("CarrierName"));
 			list.Add(NewOutput("address"));//includes address2
 			list.Add(NewOutput("cityStateZip"));
 			return list;
 		}
 
-		private static List<SheetField> GetLabelReferral() {
-			List<SheetField> list=new List<SheetField>();
+		private static List<SheetFieldDef> GetLabelReferral() {
+			List<SheetFieldDef> list=new List<SheetFieldDef>();
 			list.Add(NewOutput("nameFL"));//includes Title
 			list.Add(NewOutput("address"));//includes address2
 			list.Add(NewOutput("cityStateZip"));
 			return list;
 		}
 
-		private static List<SheetField> GetReferralSlip() {
-			List<SheetField> list=new List<SheetField>();
+		private static List<SheetFieldDef> GetReferralSlip() {
+			List<SheetFieldDef> list=new List<SheetFieldDef>();
 			list.Add(NewOutput("referral.nameFL"));
 			list.Add(NewOutput("referral.address"));
 			list.Add(NewOutput("referral.cityStateZip"));

@@ -1,5 +1,5 @@
 namespace OpenDental{
-	partial class FormSheetEdit {
+	partial class FormSheetDefEdit {
 		/// <summary>
 		/// Required designer variable.
 		/// </summary>
@@ -74,7 +74,7 @@ namespace OpenDental{
 			this.label1.TabIndex = 7;
 			this.label1.Text = "Description";
 			// 
-			// FormSheetEdit
+			// FormSheetDefEdit
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
 			this.ClientSize = new System.Drawing.Size(725,534);
@@ -82,10 +82,10 @@ namespace OpenDental{
 			this.Controls.Add(this.label1);
 			this.Controls.Add(this.butOK);
 			this.Controls.Add(this.butCancel);
-			this.Name = "FormSheetEdit";
+			this.Name = "FormSheetDefEdit";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
-			this.Load += new System.EventHandler(this.FormSheetEdit_Load);
+			this.Load += new System.EventHandler(this.FormSheetDefEdit_Load);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 

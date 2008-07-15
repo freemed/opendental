@@ -20,11 +20,11 @@ namespace OpenDental{
 
 		///<summary></summary>
 		public void PrintPat(int patNum){
-			Sheet sheet=SheetsInternal.LabelPatientMail;
-			sheet.SetParameter("PatNum",patNum);
-			SheetFiller.FillFields(sheet);
+			SheetDef sheetDef=SheetsInternal.LabelPatientMail;
+			sheetDef.SetParameter("PatNum",patNum);
+			SheetFiller.FillFields(sheetDef);
 			try{
-				SheetPrinting.Print(sheet);
+				SheetPrinting.Print(sheetDef);
 			}
 			catch(Exception ex){
 				MessageBox.Show(ex.Message);
@@ -32,11 +32,11 @@ namespace OpenDental{
 		}
 
 		public void PrintPatientLFAddress(int patNum) {
-			Sheet sheet=SheetsInternal.LabelPatientLFAddress;
-			sheet.SetParameter("PatNum",patNum);
-			SheetFiller.FillFields(sheet);
+			SheetDef sheetDef=SheetsInternal.LabelPatientLFAddress;
+			sheetDef.SetParameter("PatNum",patNum);
+			SheetFiller.FillFields(sheetDef);
 			try {
-				SheetPrinting.Print(sheet);
+				SheetPrinting.Print(sheetDef);
 			}
 			catch(Exception ex) {
 				MessageBox.Show(ex.Message);
@@ -44,11 +44,11 @@ namespace OpenDental{
 		}
 
 		public void PrintPatientLFChartNumber(int patNum) {
-			Sheet sheet=SheetsInternal.LabelPatientLFChartNumber;
-			sheet.SetParameter("PatNum",patNum);
-			SheetFiller.FillFields(sheet);
+			SheetDef sheetDef=SheetsInternal.LabelPatientLFChartNumber;
+			sheetDef.SetParameter("PatNum",patNum);
+			SheetFiller.FillFields(sheetDef);
 			try {
-				SheetPrinting.Print(sheet);
+				SheetPrinting.Print(sheetDef);
 			}
 			catch(Exception ex) {
 				MessageBox.Show(ex.Message);
@@ -56,11 +56,11 @@ namespace OpenDental{
 		}
 
 		public void PrintPatientLFPatNum(int patNum) {
-			Sheet sheet=SheetsInternal.LabelPatientLFChartNumber;
-			sheet.SetParameter("PatNum",patNum);
-			SheetFiller.FillFields(sheet);
+			SheetDef sheetDef=SheetsInternal.LabelPatientLFChartNumber;
+			sheetDef.SetParameter("PatNum",patNum);
+			SheetFiller.FillFields(sheetDef);
 			try {
-				SheetPrinting.Print(sheet);
+				SheetPrinting.Print(sheetDef);
 			}
 			catch(Exception ex) {
 				MessageBox.Show(ex.Message);
@@ -68,11 +68,11 @@ namespace OpenDental{
 		}
 
 		public void PrintPatRadiograph(int patNum) {
-			Sheet sheet=SheetsInternal.LabelPatientRadiograph;
-			sheet.SetParameter("PatNum",patNum);
-			SheetFiller.FillFields(sheet);
+			SheetDef sheetDef=SheetsInternal.LabelPatientRadiograph;
+			sheetDef.SetParameter("PatNum",patNum);
+			SheetFiller.FillFields(sheetDef);
 			try {
-				SheetPrinting.Print(sheet);
+				SheetPrinting.Print(sheetDef);
 			}
 			catch(Exception ex) {
 				MessageBox.Show(ex.Message);
@@ -81,10 +81,10 @@ namespace OpenDental{
 
 		///<summary></summary>
 		public void PrintCarriers(List<int> carrierNums){
-			Sheet sheet=SheetsInternal.LabelCarrier;
-			List<Sheet> sheetBatch=SheetUtil.CreateBatch(sheet,carrierNums);
+			SheetDef sheetDef=SheetsInternal.LabelCarrier;
+			List<SheetDef> sheetDefBatch=SheetUtil.CreateBatch(sheetDef,carrierNums);
 			try{
-				SheetPrinting.PrintBatch(sheetBatch);
+				SheetPrinting.PrintBatch(sheetDefBatch);
 			}
 			catch(Exception ex){
 				MessageBox.Show(ex.Message);
@@ -93,11 +93,11 @@ namespace OpenDental{
 
 		///<summary>Have to supply printer name because this can be called multiple times in a loop. Returns false if fails.</summary>
 		public void PrintCarrier(int carrierNum){//Carrier carrierCur,string printerName){
-			Sheet sheet=SheetsInternal.LabelCarrier;
-			sheet.SetParameter("CarrierNum",carrierNum);
-			SheetFiller.FillFields(sheet);
+			SheetDef sheetDef=SheetsInternal.LabelCarrier;
+			sheetDef.SetParameter("CarrierNum",carrierNum);
+			SheetFiller.FillFields(sheetDef);
 			try {
-				SheetPrinting.Print(sheet);
+				SheetPrinting.Print(sheetDef);
 			}
 			catch(Exception ex) {
 				MessageBox.Show(ex.Message);
@@ -106,11 +106,11 @@ namespace OpenDental{
 
 		///<summary></summary>
 		public void PrintReferral(int referralNum) {
-			Sheet sheet=SheetsInternal.LabelReferral;
-			sheet.SetParameter("ReferralNum",referralNum);
-			SheetFiller.FillFields(sheet);
+			SheetDef sheetDef=SheetsInternal.LabelReferral;
+			sheetDef.SetParameter("ReferralNum",referralNum);
+			SheetFiller.FillFields(sheetDef);
 			try {
-				SheetPrinting.Print(sheet);
+				SheetPrinting.Print(sheetDef);
 			}
 			catch(Exception ex) {
 				MessageBox.Show(ex.Message);

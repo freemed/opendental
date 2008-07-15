@@ -478,13 +478,13 @@ namespace OpenDental{
 				MessageBox.Show(ex.Message);
 				return;
 			}
-			Sheet sheet=SheetsInternal.ReferralSlip;
-			sheet.SetParameter("PatNum",RefAttachCur.PatNum);
-			sheet.SetParameter("ReferralNum",RefAttachCur.ReferralNum);
-			SheetFiller.FillFields(sheet);
-			SheetUtil.CalculateHeights(sheet,this.CreateGraphics());
-			SheetData sheetData=SheetUtil.CreateSheetData(sheet,RefAttachCur.PatNum);
-			List<SheetFieldData> sheetFieldDataList=SheetUtil.CreateFieldList(sheet.SheetFields);
+			SheetDef sheetDef=SheetsInternal.ReferralSlip;
+			sheetDef.SetParameter("PatNum",RefAttachCur.PatNum);
+			sheetDef.SetParameter("ReferralNum",RefAttachCur.ReferralNum);
+			SheetFiller.FillFields(sheetDef);
+			SheetUtil.CalculateHeights(sheetDef,this.CreateGraphics());
+			SheetData sheetData=SheetUtil.CreateSheetData(sheetDef,RefAttachCur.PatNum);
+			List<SheetFieldData> sheetFieldDataList=SheetUtil.CreateFieldList(sheetDef.SheetFieldDefs);
 			FormSheetFillEdit FormS=new FormSheetFillEdit(sheetData,sheetFieldDataList);
 			FormS.ShowDialog();
 			FillSheets();
