@@ -203,7 +203,9 @@
     <Compile Include="RemotingClient.cs" />
     <Compile Include="SheetFramework\SheetDef.cs" />
     <Compile Include="SheetFramework\SheetFieldDef.cs" />
+    <Compile Include="SheetFramework\SheetFieldsAvailable.cs" />
     <Compile Include="SheetFramework\SheetParameter.cs" />
+    <Compile Include="SheetFramework\SheetsInternal.cs" />
     <Compile Include="TableTypes\Account.cs" />
     <Compile Include="TableTypes\AccountingAutoPay.cs" />
     <Compile Include="TableTypes\Adjustment.cs" />

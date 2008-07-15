@@ -2,11 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Text;
-using OpenDentBusiness;
 
-
-namespace OpenDental{
-	partial class SheetsInternal {
+namespace OpenDentBusiness{
+	public class SheetsInternal {
 		
 		public static SheetDef LabelPatientMail{
 			get{

@@ -1,9 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using OpenDentBusiness;
 
-namespace OpenDental{
+namespace OpenDentBusiness{
 	class SheetFieldsAvailable {
 		///<Summary>This isn't actually used yet.  It's just a handy place to store the lists.  Later, when there is a UI for customizing sheets, this will be the list of fields they pick from.</Summary>
 		public static List<SheetFieldDef> GetList(SheetTypeEnum sheetType){

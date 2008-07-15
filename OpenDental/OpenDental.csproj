@@ -3131,13 +3131,8 @@
     <Compile Include="Reporting\FormReport.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="SheetFramework\Sheet.cs" />
-    <Compile Include="SheetFramework\SheetField.cs" />
-    <Compile Include="SheetFramework\SheetFieldsAvailable.cs" />
     <Compile Include="SheetFramework\SheetFiller.cs" />
-    <Compile Include="SheetFramework\SheetObject.cs" />
     <Compile Include="SheetFramework\SheetPrinting.cs" />
-    <Compile Include="SheetFramework\SheetsInternal.cs" />
     <Compile Include="SheetFramework\SheetUtil.cs" />
     <Compile Include="SmartCards\Belgium\BelgianIdentityCard.cs" />
     <Compile Include="SmartCards\Belgium\CertifCheck.cs" />

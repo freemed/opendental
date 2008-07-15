@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using OpenDentBusiness;
 
-namespace OpenDental {
+namespace OpenDental{
 	public class SheetFiller {
 		///<summary>Gets the data from the database and fills the fields.</summary>
 		public static void FillFields(SheetDef sheetDef){
