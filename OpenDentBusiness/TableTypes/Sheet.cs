@@ -24,19 +24,19 @@ namespace OpenDentBusiness{
 	c) It was modeled after Crystal Reports, which was only designed for reports, not forms.
 	d) We did not have generics.
 	*/
-	///<summary>One sheet for one patient.  Loosely corresponds to the Sheet class, but reorganized to be stored in the database.</summary>
-	[DataObject("sheetdata")]
-	public class SheetData : DataObjectBase{
-		[DataField("SheetDataNum",PrimaryKey=true,AutoNumber=true)]
-		private int sheetDataNum;
-		private bool sheetDataNumChanged;
+	///<summary>One sheet for one patient.</summary>
+	[DataObject("sheet")]
+	public class Sheet : DataObjectBase{
+		[DataField("SheetNum",PrimaryKey=true,AutoNumber=true)]
+		private int sheetNum;
+		private bool sheetNumChanged;
 		///<summary>Primary key.</summary>
-		public int SheetDataNum{
-			get{return sheetDataNum;}
-			set{if(sheetDataNum!=value){sheetDataNum=value;MarkDirty();sheetDataNumChanged=true;}}
+		public int SheetNum{
+			get{return sheetNum;}
+			set{if(sheetNum!=value){sheetNum=value;MarkDirty();sheetNumChanged=true;}}
 		}
-		public bool SheetDataNumChanged{
-			get{return sheetDataNumChanged;}
+		public bool SheetNumChanged{
+			get{return sheetNumChanged;}
 		}
 
 		[DataField("SheetType")]
@@ -123,6 +123,18 @@ namespace OpenDentBusiness{
 			get{return heightChanged;}
 		}
 
+			[DataField("IsLandscape")]
+		private bool isLandscape;
+		private bool isLandscapeChanged;
+		///<summary></summary>
+		public bool IsLandscape{
+			get{return isLandscape;}
+			set{if(isLandscape!=value){isLandscape=value;MarkDirty();isLandscapeChanged=true;}}
+		}
+		public bool IsLandscapeChanged{
+			get{return isLandscapeChanged;}
+		}
+
 		[DataField("InternalNote")]
 		private string internalNote;
 		private bool internalNoteChanged;
@@ -135,8 +147,8 @@ namespace OpenDentBusiness{
 			get{return internalNoteChanged;}
 		}
 		
-		public SheetData Copy(){
-			return (SheetData)Clone();
+		public Sheet Copy(){
+			return (Sheet)Clone();
 		}	
 	}
 }

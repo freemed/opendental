@@ -9,48 +9,47 @@ using OpenDentBusiness;
 
 namespace OpenDental {
 	public partial class FormSheetFillEdit:Form {
-		//public Sheet SheetCur;
-		public SheetData SheetDataCur;
-		public List<SheetFieldData> SheetFields;
+		public Sheet SheetCur;
+		public List<SheetField> SheetFieldList;
 
-		public FormSheetFillEdit(SheetData sheetData,List<SheetFieldData> sheetFields) {
+		public FormSheetFillEdit(Sheet sheet,List<SheetField> sheetFieldList) {
 			InitializeComponent();
 			Lan.F(this);
-			SheetDataCur=sheetData;
-			SheetFields=sheetFields;
-			Width=sheetData.Width+185;
-			Height=sheetData.Height+60;
+			SheetCur=sheet;
+			SheetFieldList=sheetFieldList;
+			Width=sheet.Width+185;
+			Height=sheet.Height+60;
 		}
 
 		private void FormSheetFillEdit_Load(object sender,EventArgs e) {
-			panelMain.Width=SheetDataCur.Width;
-			panelMain.Height=SheetDataCur.Height;
-			textDateTime.Text=SheetDataCur.DateTimeSheet.ToShortDateString()+" "+SheetDataCur.DateTimeSheet.ToShortTimeString();
-			textNote.Text=SheetDataCur.InternalNote;
+			panelMain.Width=SheetCur.Width;
+			panelMain.Height=SheetCur.Height;
+			textDateTime.Text=SheetCur.DateTimeSheet.ToShortDateString()+" "+SheetCur.DateTimeSheet.ToShortTimeString();
+			textNote.Text=SheetCur.InternalNote;
 			TextBox textbox;
 			FontStyle style;
-			for(int i=0;i<SheetFields.Count;i++){
+			for(int i=0;i<SheetFieldList.Count;i++){
 				textbox=new TextBox();
 				textbox.BorderStyle=BorderStyle.None;
 				textbox.Multiline=true;//due to MS malfunction at 9pt which cuts off the bottom of the text.
-				if(SheetFields[i].FieldType==SheetFieldType.OutputText
-					|| SheetFields[i].FieldType==SheetFieldType.StaticText)
+				if(SheetFieldList[i].FieldType==SheetFieldType.OutputText
+					|| SheetFieldList[i].FieldType==SheetFieldType.StaticText)
 				{
 					//textbox.BackColor=Color.White;
 					//textbox.BackColor=Color.FromArgb(245,245,200);
 				}
-				else if(SheetFields[i].FieldType==SheetFieldType.InputField){
+				else if(SheetFieldList[i].FieldType==SheetFieldType.InputField){
 					textbox.BackColor=Color.FromArgb(245,245,200);
 				}
-				textbox.Location=new Point(SheetFields[i].XPos,SheetFields[i].YPos);
-				textbox.Width=SheetFields[i].Width;
-				textbox.Text=SheetFields[i].FieldValue;
+				textbox.Location=new Point(SheetFieldList[i].XPos,SheetFieldList[i].YPos);
+				textbox.Width=SheetFieldList[i].Width;
+				textbox.Text=SheetFieldList[i].FieldValue;
 				style=FontStyle.Regular;
-				if(SheetFields[i].FontIsBold){
+				if(SheetFieldList[i].FontIsBold){
 					style=FontStyle.Bold;
 				}
-				textbox.Font=new Font(SheetFields[i].FontName,SheetFields[i].FontSize,style);
-				if(SheetFields[i].Height<textbox.Font.Height+2){
+				textbox.Font=new Font(SheetFieldList[i].FontName,SheetFieldList[i].FontSize,style);
+				if(SheetFieldList[i].Height<textbox.Font.Height+2){
 					//textbox.Multiline=false;
 					textbox.AcceptsReturn=false;
 				}
@@ -58,21 +57,21 @@ namespace OpenDental {
 					//textbox.Multiline=true;
 					textbox.AcceptsReturn=true;
 				}
-				textbox.Height=SheetFields[i].Height;
+				textbox.Height=SheetFieldList[i].Height;
 				//textbox.ScrollBars=RichTextBoxScrollBars.None;
-				textbox.Tag=SheetFields[i];
+				textbox.Tag=SheetFieldList[i];
 				panelMain.Controls.Add(textbox);
 			}
 		}
 
 		private void butDelete_Click(object sender,EventArgs e) {
-			if(SheetDataCur.IsNew){
+			if(SheetCur.IsNew){
 				DialogResult=DialogResult.Cancel;
 			}
 			if(!MsgBox.Show(this,true,"Delete?")){
 				return;
 			}
-			SheetDatas.DeleteObject(SheetDataCur.SheetDataNum);
+			Sheets.DeleteObject(SheetCur.SheetNum);
 			DialogResult=DialogResult.OK;
 		}
 
@@ -81,24 +80,24 @@ namespace OpenDental {
 				MsgBox.Show(this,"Please fix data entry errors first.");
 				return;
 			}
-			SheetDataCur.DateTimeSheet=PIn.PDateT(textDateTime.Text);
-			SheetDataCur.InternalNote=textNote.Text;
-			bool isNew=SheetDataCur.IsNew;
-			SheetDatas.WriteObject(SheetDataCur);
-			SaveText(this,SheetDataCur.SheetDataNum);
+			SheetCur.DateTimeSheet=PIn.PDateT(textDateTime.Text);
+			SheetCur.InternalNote=textNote.Text;
+			bool isNew=SheetCur.IsNew;
+			Sheets.WriteObject(SheetCur);
+			SaveText(this,SheetCur.SheetNum);
 			DialogResult=DialogResult.OK;
 		}
 
-		///<summary>Recursively saves all SheetFieldData objects for which there is a textbox.</summary>
-		private void SaveText(Control control,int sheetDataNum){
+		///<summary>Recursively saves all SheetField objects for which there is a textbox.</summary>
+		private void SaveText(Control control,int sheetNum){
 			if(control.Tag!=null){
-				SheetFieldData field=(SheetFieldData)control.Tag;
+				SheetField field=(SheetField)control.Tag;
 				field.FieldValue=control.Text;
-				field.SheetDataNum=sheetDataNum;//whether or not isnew
-				SheetFieldDatas.WriteObject(field);
+				field.SheetNum=sheetNum;//whether or not isnew
+				SheetFields.WriteObject(field);
 			}
 			for(int i=0;i<control.Controls.Count;i++){
-				SaveText(control.Controls[i],sheetDataNum);
+				SaveText(control.Controls[i],sheetNum);
 			}
 		}
 

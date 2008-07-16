@@ -80,18 +80,18 @@ namespace OpenDental{
 			}
 		}
 
-		///<summary>Just creates the initial SheetData object from the sheetDef.  Doesn't add fields.  Sets date to today.</summary>
-		public static SheetData CreateSheetData(SheetDef sheetDef,int patNum){
-			SheetData sheetData=new SheetData();
-			sheetData.IsNew=true;
-			sheetData.DateTimeSheet=DateTime.Now;
-			sheetData.FontName=sheetDef.Font.Name;
-			sheetData.FontSize=sheetDef.Font.Size;
-			sheetData.Height=sheetDef.Height;
-			sheetData.SheetType=sheetDef.SheetType;
-			sheetData.Width=sheetDef.Width;
-			sheetData.PatNum=patNum;
-			return sheetData;
+		///<summary>Just creates the initial Sheet object from the sheetDef.  Doesn't add fields.  Sets date to today.</summary>
+		public static Sheet CreateSheet(SheetDef sheetDef,int patNum){
+			Sheet sheet=new Sheet();
+			sheet.IsNew=true;
+			sheet.DateTimeSheet=DateTime.Now;
+			sheet.FontName=sheetDef.Font.Name;
+			sheet.FontSize=sheetDef.Font.Size;
+			sheet.Height=sheetDef.Height;
+			sheet.SheetType=sheetDef.SheetType;
+			sheet.Width=sheetDef.Width;
+			sheet.PatNum=patNum;
+			return sheet;
 		}
 
 		/*
@@ -114,11 +114,11 @@ namespace OpenDental{
 		}*/
 
 		///<summary>Creates the initial fields from the sheetDef.FieldDefs.</summary>
-		public static List<SheetFieldData> CreateFieldList(List<SheetFieldDef> sheetFieldDefList){
-			List<SheetFieldData> retVal=new List<SheetFieldData>();
-			SheetFieldData field;
+		public static List<SheetField> CreateFieldList(List<SheetFieldDef> sheetFieldDefList){
+			List<SheetField> retVal=new List<SheetField>();
+			SheetField field;
 			for(int i=0;i<sheetFieldDefList.Count;i++){
-				field=new SheetFieldData();
+				field=new SheetField();
 				field.IsNew=true;
 				field.FieldName=sheetFieldDefList[i].FieldName;
 				field.FieldType=sheetFieldDefList[i].FieldType;
@@ -128,7 +128,7 @@ namespace OpenDental{
 				field.FontSize=sheetFieldDefList[i].Font.Size;
 				field.GrowthBehavior=sheetFieldDefList[i].GrowthBehavior;
 				field.Height=sheetFieldDefList[i].Height;
-				//field.SheetDataNum=sheetFieldList[i];//set later
+				//field.SheetNum=sheetFieldList[i];//set later
 				field.Width=sheetFieldDefList[i].Width;
 				field.XPos=sheetFieldDefList[i].XPos;
 				field.YPos=sheetFieldDefList[i].YPos;

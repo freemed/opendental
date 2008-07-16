@@ -7671,10 +7671,10 @@ namespace OpenDental{
 					General.NonQ(command);
 					command="ALTER TABLE displayfield ADD Category int default '0' NOT NULL";
 					General.NonQ(command);
-					command="DROP TABLE IF EXISTS sheetdata";
+					command="DROP TABLE IF EXISTS sheet";
 					General.NonQ(command);
-					command=@"CREATE TABLE sheetdata (
-						SheetDataNum int NOT NULL auto_increment,
+					command=@"CREATE TABLE sheet (
+						SheetNum int NOT NULL auto_increment,
 						SheetType int NOT NULL,
 						PatNum int NOT NULL,
 						DateTimeSheet datetime default '0001-01-01' NOT NULL,
@@ -7682,16 +7682,17 @@ namespace OpenDental{
 						FontName varchar(255),
 						Width int NOT NULL,
 						Height int NOT NULL,
+						IsLandscape tinyint NOT NULL,
 						InternalNote text,
-						PRIMARY KEY (SheetDataNum),
+						PRIMARY KEY (SheetNum),
 						INDEX (PatNum)
 						) DEFAULT CHARSET=utf8";
 					General.NonQ(command);
-					command="DROP TABLE IF EXISTS sheetfielddata";
+					command="DROP TABLE IF EXISTS sheetfield";
 					General.NonQ(command);
-					command=@"CREATE TABLE sheetfielddata (
-						SheetFieldDataNum int NOT NULL auto_increment,
-						SheetDataNum int NOT NULL,
+					command=@"CREATE TABLE sheetfield (
+						SheetFieldNum int NOT NULL auto_increment,
+						SheetNum int NOT NULL,
 						FieldType int NOT NULL,
 						FieldName varchar(255),
 						FieldValue varchar(255),
@@ -7703,8 +7704,8 @@ namespace OpenDental{
 						Width int NOT NULL,
 						Height int NOT NULL,
 						GrowthBehavior int NOT NULL,
-						PRIMARY KEY (SheetFieldDataNum),
-						INDEX (SheetDataNum)
+						PRIMARY KEY (SheetFieldNum),
+						INDEX (SheetNum)
 						) DEFAULT CHARSET=utf8";
 					General.NonQ(command);
 

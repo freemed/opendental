@@ -7,7 +7,7 @@ using OpenDental.DataAccess;
 
 namespace OpenDentBusiness{
 	///<summary></summary>
-	public class SheetDatas{
+	public class Sheets{
 		/*
 		//<summary></summary>
 		public static DataTable RefreshCache(){
@@ -29,29 +29,29 @@ namespace OpenDentBusiness{
 			}
 		}*/
 
-		///<Summary>Gets one SheetData from the database.</Summary>
-		public static SheetData CreateObject(int sheetDataNum){
-			return DataObjectFactory<SheetData>.CreateObject(sheetDataNum);
+		///<Summary>Gets one Sheet from the database.</Summary>
+		public static Sheet CreateObject(int sheetNum){
+			return DataObjectFactory<Sheet>.CreateObject(sheetNum);
 		}
 
 		///<summary>Used in FormRefAttachEdit to show all referral slips for the patient/referral combo.  Usually 0 or 1 results.</summary>
-		public static List<SheetData> GetReferralSlips(int patNum,int referralNum){
-			string command="SELECT * FROM sheetdata WHERE PatNum="+POut.PInt(patNum)
+		public static List<Sheet> GetReferralSlips(int patNum,int referralNum){
+			string command="SELECT * FROM sheet WHERE PatNum="+POut.PInt(patNum)
 				+" ORDER BY DateTimeSheet";
 			//still need to enhance query to filter by referralNum.
-			return new List<SheetData>(DataObjectFactory<SheetData>.CreateObjects(command));
+			return new List<Sheet>(DataObjectFactory<Sheet>.CreateObjects(command));
 			//Collection<sheetData> collectState=DataObjectFactory<sheetData>.CreateObjects(sheetDataNums);
 			//return new List<sheetData>(collectState);		
 			//return list;
 		}
 
 		///<summary></summary>
-		public static void WriteObject(SheetData sheetData){
-			DataObjectFactory<SheetData>.WriteObject(sheetData);
+		public static void WriteObject(Sheet sheet){
+			DataObjectFactory<Sheet>.WriteObject(sheet);
 		}
 
 		///<summary></summary>
-		public static void DeleteObject(int sheetDataNum){
+		public static void DeleteObject(int sheetNum){
 			//validate that not already in use.
 			/*string command="SELECT LName,FName FROM patient WHERE sheetDataNum="+POut.PInt(sheetDataNum);
 			DataTable table=General.GetTable(command);
@@ -66,9 +66,9 @@ namespace OpenDentBusiness{
 			if(table.Rows.Count>0){
 				throw new ApplicationException(Lan.g("sheetDatas","sheetData is already in use by patient(s). Not allowed to delete. "+pats));
 			}*/
-			string command="DELETE FROM sheetfielddata WHERE SheetDataNum="+POut.PInt(sheetDataNum);
+			string command="DELETE FROM sheetfield WHERE SheetNum="+POut.PInt(sheetNum);
 			General.NonQ(command);
-			DataObjectFactory<SheetData>.DeleteObject(sheetDataNum);
+			DataObjectFactory<Sheet>.DeleteObject(sheetNum);
 		}
 
 		//public static void DeleteObject(int sheetDataNum){

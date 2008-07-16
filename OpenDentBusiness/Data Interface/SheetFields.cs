@@ -7,26 +7,26 @@ using OpenDental.DataAccess;
 
 namespace OpenDentBusiness{
 	///<summary></summary>
-	public class SheetFieldDatas{
+	public class SheetFields{
 
-		///<Summary>Gets one SheetFieldData from the database.</Summary>
-		public static SheetFieldData CreateObject(int sheetFieldDataNum){
-			return DataObjectFactory<SheetFieldData>.CreateObject(sheetFieldDataNum);
+		///<Summary>Gets one SheetField from the database.</Summary>
+		public static SheetField CreateObject(int sheetFieldNum){
+			return DataObjectFactory<SheetField>.CreateObject(sheetFieldNum);
 		}
 
 		///<summary>Gets all fields for one sheet.</summary>
-		public static List<SheetFieldData> GetForSheet(int sheetDataNum){
-			string command="SELECT * FROM sheetfielddata WHERE SheetDataNum="+POut.PInt(sheetDataNum);
-			return new List<SheetFieldData>(DataObjectFactory<SheetFieldData>.CreateObjects(command));
+		public static List<SheetField> GetForSheet(int sheetNum){
+			string command="SELECT * FROM sheetfield WHERE SheetNum="+POut.PInt(sheetNum);
+			return new List<SheetField>(DataObjectFactory<SheetField>.CreateObjects(command));
 		}
 
 		///<summary></summary>
-		public static void WriteObject(SheetFieldData sheetFieldData){
-			DataObjectFactory<SheetFieldData>.WriteObject(sheetFieldData);
+		public static void WriteObject(SheetField sheetField){
+			DataObjectFactory<SheetField>.WriteObject(sheetField);
 		}
 
 		///<summary></summary>
-		public static void DeleteObject(int sheetFieldDataNum){
+		public static void DeleteObject(int sheetFieldNum){
 			//validate that not already in use.
 			/*string command="SELECT LName,FName FROM patient WHERE sheetDataNum="+POut.PInt(sheetDataNum);
 			DataTable table=General.GetTable(command);
@@ -41,7 +41,7 @@ namespace OpenDentBusiness{
 			if(table.Rows.Count>0){
 				throw new ApplicationException(Lan.g("sheetDatas","sheetData is already in use by patient(s). Not allowed to delete. "+pats));
 			}*/
-			DataObjectFactory<SheetFieldData>.DeleteObject(sheetFieldDataNum);
+			DataObjectFactory<SheetField>.DeleteObject(sheetFieldNum);
 		}
 
 		//public static void DeleteObject(int sheetDataNum){

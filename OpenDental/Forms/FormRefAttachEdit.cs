@@ -40,7 +40,7 @@ namespace OpenDental{
 		///<summary></summary>
 		public RefAttach RefAttachCur;
 		///<summary>List of referral slips for this pat/ref combo.</summary>
-		private List<SheetData> SheetList; 
+		private List<Sheet> SheetList; 
 
 		///<summary></summary>
 		public FormRefAttachEdit(){
@@ -436,7 +436,7 @@ namespace OpenDental{
 		}
 
 		private void FillSheets(){
-			SheetList=SheetDatas.GetReferralSlips(RefAttachCur.PatNum,RefAttachCur.ReferralNum);
+			SheetList=Sheets.GetReferralSlips(RefAttachCur.PatNum,RefAttachCur.ReferralNum);
 			listSheets.Items.Clear();
 			for(int i=0;i<SheetList.Count;i++){
 				listSheets.Items.Add(SheetList[i].DateTimeSheet.ToShortDateString());
@@ -462,9 +462,9 @@ namespace OpenDental{
 			if(listSheets.SelectedIndex==-1){
 				return;
 			}
-			List<SheetFieldData> sheetFieldDataList=SheetFieldDatas.GetForSheet(SheetList[listSheets.SelectedIndex].SheetDataNum);
+			List<SheetField> sheetFieldList=SheetFields.GetForSheet(SheetList[listSheets.SelectedIndex].SheetNum);
 			//Sheet sheet=new Sheet(SheetList[listSheets.SelectedIndex],sheetFieldDataList);
-			FormSheetFillEdit FormS=new FormSheetFillEdit(SheetList[listSheets.SelectedIndex],sheetFieldDataList);
+			FormSheetFillEdit FormS=new FormSheetFillEdit(SheetList[listSheets.SelectedIndex],sheetFieldList);
 			FormS.ShowDialog();
 			FillSheets();
 		}
@@ -483,9 +483,9 @@ namespace OpenDental{
 			sheetDef.SetParameter("ReferralNum",RefAttachCur.ReferralNum);
 			SheetFiller.FillFields(sheetDef);
 			SheetUtil.CalculateHeights(sheetDef,this.CreateGraphics());
-			SheetData sheetData=SheetUtil.CreateSheetData(sheetDef,RefAttachCur.PatNum);
-			List<SheetFieldData> sheetFieldDataList=SheetUtil.CreateFieldList(sheetDef.SheetFieldDefs);
-			FormSheetFillEdit FormS=new FormSheetFillEdit(sheetData,sheetFieldDataList);
+			Sheet sheet=SheetUtil.CreateSheet(sheetDef,RefAttachCur.PatNum);
+			List<SheetField> sheetFieldList=SheetUtil.CreateFieldList(sheetDef.SheetFieldDefs);
+			FormSheetFillEdit FormS=new FormSheetFillEdit(sheet,sheetFieldList);
 			FormS.ShowDialog();
 			FillSheets();
 		}

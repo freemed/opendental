@@ -4,30 +4,30 @@ using OpenDental.DataAccess;
 
 namespace OpenDentBusiness{
 	///<summary>One field on a sheet.</summary>
-	[DataObject("SheetFieldData")]
-	public class SheetFieldData : DataObjectBase{
-		[DataField("SheetFieldDataNum",PrimaryKey=true,AutoNumber=true)]
-		private int sheetFieldDataNum;
-		private bool sheetFieldDataNumChanged;
+	[DataObject("sheetfield")]
+	public class SheetField : DataObjectBase{
+		[DataField("SheetFieldNum",PrimaryKey=true,AutoNumber=true)]
+		private int sheetFieldNum;
+		private bool sheetFieldNumChanged;
 		///<summary>Primary key.</summary>
-		public int SheetFieldDataNum{
-			get{return sheetFieldDataNum;}
-			set{if(sheetFieldDataNum!=value){sheetFieldDataNum=value;MarkDirty();sheetFieldDataNumChanged=true;}}
+		public int SheetFieldNum{
+			get{return sheetFieldNum;}
+			set{if(sheetFieldNum!=value){sheetFieldNum=value;MarkDirty();sheetFieldNumChanged=true;}}
 		}
-		public bool SheetFieldDataNumChanged{
-			get{return sheetFieldDataNumChanged;}
+		public bool SheetFieldNumChanged{
+			get{return sheetFieldNumChanged;}
 		}
 
-		[DataField("SheetDataNum")]
-		private int sheetDataNum;
-		private bool sheetDataNumChanged;
-		///<summary>FK to sheetdata.SheetDataNum.</summary>
-		public int SheetDataNum{
-			get{return sheetDataNum;}
-			set{if(sheetDataNum!=value){sheetDataNum=value;MarkDirty();sheetDataNumChanged=true;}}
+		[DataField("SheetNum")]
+		private int sheetNum;
+		private bool sheetNumChanged;
+		///<summary>FK to sheet.SheetNum.</summary>
+		public int SheetNum{
+			get{return sheetNum;}
+			set{if(sheetNum!=value){sheetNum=value;MarkDirty();sheetNumChanged=true;}}
 		}
-		public bool SheetDataNumChanged{
-			get{return sheetDataNumChanged;}
+		public bool SheetNumChanged{
+			get{return sheetNumChanged;}
 		}
 
 		[DataField("FieldType")]
@@ -57,7 +57,7 @@ namespace OpenDentBusiness{
 		[DataField("FieldValue")]
 		private string fieldValue;
 		private bool fieldValueChanged;
-		///<summary>For OutputText, this value is set before printing.  This is the data obtained from the database and ready to print.  For StaticText, this is set when designing the sheetDef.  For an archived sheet retrieved from the database (all SheetFieldData rows), this value will have been saved and will not be filled again.</summary>
+		///<summary>For OutputText, this value is set before printing.  This is the data obtained from the database and ready to print.  For StaticText, this is set when designing the sheetDef.  For an archived sheet retrieved from the database (all SheetField rows), this value will have been saved and will not be filled again.</summary>
 		public string FieldValue{
 			get{return fieldValue;}
 			set{if(fieldValue!=value){fieldValue=value;MarkDirty();fieldValueChanged=true;}}
@@ -163,8 +163,8 @@ namespace OpenDentBusiness{
 		}
 		
 		
-		public SheetFieldData Copy(){
-			return (SheetFieldData)Clone();
+		public SheetField Copy(){
+			return (SheetField)Clone();
 		}	
 	}
 }
