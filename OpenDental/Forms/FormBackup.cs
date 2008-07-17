@@ -563,7 +563,7 @@ namespace OpenDental{
 				FileInfo[] files=dirInfo.GetFiles();
 				curVal=0;//curVal gets increased
 				for(int i=0;i<files.Length;i++){
-					File.Copy(files[i].FullName,ODFileUtils.CombinePaths(new string [] {	toPath,dirInfo.Name,files[i].Name}));
+					File.Copy(files[i].FullName,ODFileUtils.CombinePaths(new string [] {	toPath,dirInfo.Name,files[i].Name}),true);
 					curVal+=(double)files[i].Length/(double)1024/(double)1024;
 					if(curVal<dbSize){//this avoids setting progress bar to max, which would close the dialog.
 						Invoke(new PassProgressDelegate(PassProgressToDialog),new object [] { curVal,
