@@ -250,7 +250,14 @@ namespace OpenDental{
 		}
 
 		private void butCopy_Click(object sender,EventArgs e) {
-
+			if(grid1.GetSelectedIndex()==-1){
+				MsgBox.Show(this,"Please select an internal sheet first from the list above.");
+				return;
+			}
+			SheetDef sheetdef=internalList[grid1.GetSelectedIndex()].Copy();
+			sheetdef.IsNew=true;
+			SheetDefs.WriteObject(sheetdef);
+			FillGrid2();
 		}
 
 		private void grid1_CellDoubleClick(object sender,ODGridClickEventArgs e) {

@@ -8,26 +8,25 @@ using OpenDental.DataAccess;
 namespace OpenDentBusiness{
 	///<summary></summary>
 	public class SheetDefs{
-		/*
 		//<summary></summary>
 		public static DataTable RefreshCache(){
-			string c="SELECT * from sheetData ORDER BY Description";
+			string c="SELECT * FROM sheetdef ORDER BY Description";
 			DataTable table=General.GetTable(c);
-			table.TableName="sheetData";
+			table.TableName="sheetdef";
 			FillCache(table);
 			return table;
 		}
 
 		public static void FillCache(DataTable table){
-			sheetDataC.List=new sheetData[table.Rows.Count];
+			/*sheetDataC.List=new sheetData[table.Rows.Count];
 			for(int i=0;i<sheetDataC.List.Length;i++){
 				sheetDataC.List[i]=new sheetData();
 				sheetDataC.List[i].IsNew=false;
 				sheetDataC.List[i].sheetDataNum    = PIn.PInt   (table.Rows[i][0].ToString());
 				sheetDataC.List[i].Description= PIn.PString(table.Rows[i][1].ToString());
 				sheetDataC.List[i].Note       = PIn.PString(table.Rows[i][2].ToString());
-			}
-		}*/
+			}*/
+		}
 
 		///<Summary>Gets one SheetDef from the database.</Summary>
 		public static SheetDef CreateObject(int sheetDefNum){

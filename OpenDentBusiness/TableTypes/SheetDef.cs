@@ -23,6 +23,18 @@ namespace OpenDentBusiness{
 			get{return sheetDefNumChanged;}
 		}
 
+		[DataField("Description")]
+		private string description;
+		private bool descriptionChanged;
+		///<summary>The description of this sheetdef.</summary>
+		public string Description{
+			get{return description;}
+			set{if(description!=value){description=value;MarkDirty();descriptionChanged=true;}}
+		}
+		public bool DescriptionChanged{
+			get{return descriptionChanged;}
+		}
+
 		[DataField("SheetType")]
 		private SheetTypeEnum sheetType;
 		private bool sheetTypeChanged;

@@ -7712,6 +7712,7 @@ namespace OpenDental{
 					General.NonQ(command);
 					command=@"CREATE TABLE sheetdef (
 						SheetDefNum int NOT NULL auto_increment,
+						Description varchar(255),
 						SheetType int NOT NULL,
 						FontSize float NOT NULL,
 						FontName varchar(255),
