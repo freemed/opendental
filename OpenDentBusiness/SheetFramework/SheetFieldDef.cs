@@ -12,8 +12,9 @@ namespace OpenDentBusiness{
 		public string FieldName;
 		///<Summary>For OutputText, this value is set before printing.  This is the data obtained from the database and ready to print.  For StaticText, this is set when designing the sheetDef.  For an archived sheet retrieved from the database (all SheetFieldData rows), this value will have been saved and will not be filled again.</Summary>
 		public string FieldValue;
-		///<Summary>Overrides sheet font.</Summary>
-		public Font Font;
+		public float FontSize;
+		public string FontName;
+		public bool FontIsBold;
 		///<Summary>In pixels.</Summary>
 		public int XPos;
 		///<Summary>In pixels.</Summary>
@@ -26,36 +27,61 @@ namespace OpenDentBusiness{
 		public GrowthBehaviorEnum GrowthBehavior;
 	
 		public SheetFieldDef(SheetFieldType fieldType,string fieldName,string fieldValue,
-			int xPos,int yPos,int width,int height,Font font,GrowthBehaviorEnum growthBehavior) 
+			float fontSize,string fontName,bool fontIsBold,
+			int xPos,int yPos,int width,int height,
+			GrowthBehaviorEnum growthBehavior) 
 		{
 			FieldType=fieldType;
 			FieldName=fieldName;
 			FieldValue=fieldValue;
+			FontSize=fontSize;
+			FontName=fontName;
+			FontIsBold=fontIsBold;
 			XPos=xPos;
 			YPos=yPos;
 			Width=width;
 			Height=height;
-			Font=font;
 			GrowthBehavior=growthBehavior;
 		}
 
-		public static SheetFieldDef NewOutput(string fieldName,int xPos,int yPos,int width,Font font){
-			int _height=font.Height+1;//Height is automatic in this early implementation.
-			return new SheetFieldDef(SheetFieldType.OutputText,fieldName,"",xPos,yPos,width,_height,font,GrowthBehaviorEnum.None);
+		///<Summary></Summary>
+		public Font GetFont(){
+			FontStyle style=FontStyle.Regular;
+			if(FontIsBold){
+				style=FontStyle.Bold;
+			}
+			return new Font(FontName,FontSize,style);
 		}
 
-		public static SheetFieldDef NewOutput(string fieldName,int xPos,int yPos,int width,Font font,GrowthBehaviorEnum growthBehavior){
-			int _height=font.Height+1;//Height is automatic in this early implementation.
-			return new SheetFieldDef(SheetFieldType.OutputText,fieldName,"",xPos,yPos,width,_height,font,growthBehavior);
+		public static SheetFieldDef NewOutput(string fieldName,float fontSize,string fontName,bool fontIsBold,
+			int xPos,int yPos,int width,int height)
+		{
+			//int _height=font.Height+1;//Height is automatic in this early implementation.
+			return new SheetFieldDef(SheetFieldType.OutputText,fieldName,"",fontSize,fontName,fontIsBold,
+				xPos,yPos,width,height,GrowthBehaviorEnum.None);
 		}
 
-		public static SheetFieldDef NewStaticText(string fieldValue,int xPos,int yPos,int width,Font font){
-			int _height=font.Height+1;//Height is automatic in this early implementation.
-			return new SheetFieldDef(SheetFieldType.StaticText,"",fieldValue,xPos,yPos,width,_height,font,GrowthBehaviorEnum.None);
+		public static SheetFieldDef NewOutput(string fieldName,float fontSize,string fontName,bool fontIsBold,
+			int xPos,int yPos,int width,int height,GrowthBehaviorEnum growthBehavior)
+		{
+			//int _height=font.Height+1;//Height is automatic in this early implementation.
+			return new SheetFieldDef(SheetFieldType.OutputText,fieldName,"",fontSize,fontName,fontIsBold,
+				xPos,yPos,width,height,growthBehavior);
 		}
 
-		public static SheetFieldDef NewInput(string fieldName,int xPos,int yPos,int width,int height,Font font){
-			return new SheetFieldDef(SheetFieldType.InputField,fieldName,"",xPos,yPos,width,height,font,GrowthBehaviorEnum.None);
+		public static SheetFieldDef NewStaticText(string fieldValue,float fontSize,string fontName,bool fontIsBold,
+			int xPos,int yPos,int width,int height)
+		{
+			//int _height=font.Height+1;//Height is automatic in this early implementation.
+			return new SheetFieldDef(SheetFieldType.StaticText,"",fieldValue,fontSize,fontName,fontIsBold,
+				xPos,yPos,width,height,GrowthBehaviorEnum.None);
+		}
+
+		public static SheetFieldDef NewInput(string fieldName,float fontSize,string fontName,bool fontIsBold,
+			int xPos,int yPos,int width,int height)
+		{
+			return new SheetFieldDef(SheetFieldType.InputField,fieldName,"",fontSize,fontName,fontIsBold,
+				xPos,yPos,width,height,GrowthBehaviorEnum.None);
 		}
 
 		///<Summary>Should only be called after FieldValue has been set, due to GrowthBehavior.</Summary>

@@ -286,12 +286,12 @@ namespace OpenDental{
 		}
 
 		private void butClose_Click(object sender, System.EventArgs e) {
-			/*if(IsSelectionMode){
-				DialogResult=DialogResult.Cancel;
-			}
-			else{
-				Close();
-			}*/
+			//if(IsSelectionMode){
+				//DialogResult=DialogResult.Cancel;
+			//}
+			//else{
+			Close();
+			//}*/
 		}
 
 		private void FormSheetDefs_FormClosing(object sender,FormClosingEventArgs e) {

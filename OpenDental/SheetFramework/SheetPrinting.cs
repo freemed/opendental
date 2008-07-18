@@ -7,8 +7,6 @@ using OpenDentBusiness;
 
 namespace OpenDental {
 	public class SheetPrinting {
-		//<Summary>For the current sheet in the batch.  Reset for each new sheet in a batch.</Summary>
-		//private static bool heightsCalculated;
 		///<summary>If there is only one sheet, then this will stay 0.</Summary>
 		private static int sheetsPrinted;
 		///<summary>If not a batch, then there will just be one sheet in the list.</summary>
@@ -19,7 +17,6 @@ namespace OpenDental {
 			//currently no validation for parameters in a batch because of the way it was created.
 			//could validate field names here later.
 			SheetDefList=sheetDefBatch;
-			//heightsCalculated=false;
 			sheetsPrinted=0;
 			PrintDocument pd=new PrintDocument();
 			pd.OriginAtMargins=true;
@@ -28,15 +25,16 @@ namespace OpenDental {
 				pd.DefaultPageSettings.PaperSize=new PaperSize("Default",sheetDefBatch[0].Width,sheetDefBatch[0].Height);
 			}
 			PrintSituation sit=PrintSituation.Default;
+			pd.DefaultPageSettings.Landscape=sheetDefBatch[0].IsLandscape;
 			switch(sheetDefBatch[0].SheetType){
 				case SheetTypeEnum.LabelPatient:
 				case SheetTypeEnum.LabelCarrier:
 				case SheetTypeEnum.LabelReferral:
-					pd.DefaultPageSettings.Landscape=true;
+					//pd.DefaultPageSettings.Landscape=true;
 					sit=PrintSituation.LabelSingle;
 					break;
 				case SheetTypeEnum.ReferralSlip:
-					pd.DefaultPageSettings.Landscape=false;
+					//pd.DefaultPageSettings.Landscape=false;
 					sit=PrintSituation.Default;
 					break;
 			}
@@ -70,7 +68,6 @@ namespace OpenDental {
 			//could validate field names here later.
 			SheetDefList=new List<SheetDef>();
 			SheetDefList.Add(sheetDef);
-			//heightsCalculated=false;
 			sheetsPrinted=0;
 			PrintDocument pd=new PrintDocument();
 			pd.OriginAtMargins=true;
@@ -79,15 +76,16 @@ namespace OpenDental {
 				pd.DefaultPageSettings.PaperSize=new PaperSize("Default",sheetDef.Width,sheetDef.Height);
 			}
 			PrintSituation sit=PrintSituation.Default;
+			pd.DefaultPageSettings.Landscape=sheetDef.IsLandscape;
 			switch(sheetDef.SheetType){
 				case SheetTypeEnum.LabelPatient:
 				case SheetTypeEnum.LabelCarrier:
 				case SheetTypeEnum.LabelReferral:
-					pd.DefaultPageSettings.Landscape=true;
+					//pd.DefaultPageSettings.Landscape=true;
 					sit=PrintSituation.LabelSingle;
 					break;
 				case SheetTypeEnum.ReferralSlip:
-					pd.DefaultPageSettings.Landscape=false;
+					//pd.DefaultPageSettings.Landscape=false;
 					sit=PrintSituation.Default;
 					break;
 			}
@@ -115,8 +113,15 @@ namespace OpenDental {
 			Graphics g=e.Graphics;
 			SheetDef sheetDef=SheetDefList[sheetsPrinted];
 			SheetUtil.CalculateHeights(sheetDef,g);//this is here because of easy access to g.
+			Font font;
+			FontStyle fontstyle;
 			foreach(SheetFieldDef fieldDef in sheetDef.SheetFieldDefs){
-				g.DrawString(fieldDef.FieldValue,fieldDef.Font,Brushes.Black,fieldDef.BoundsF);
+				fontstyle=FontStyle.Regular;
+				if(fieldDef.FontIsBold){
+					fontstyle=FontStyle.Bold;
+				}
+				font=new Font(fieldDef.FontName,fieldDef.FontSize,fontstyle);
+				g.DrawString(fieldDef.FieldValue,font,Brushes.Black,fieldDef.BoundsF);
 			}
 			g.Dispose();
 			//no logic yet for multiple pages on one sheet.

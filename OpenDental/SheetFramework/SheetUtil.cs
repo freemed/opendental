@@ -35,11 +35,18 @@ namespace OpenDental{
 		public static void CalculateHeights(SheetDef sheetDef,Graphics g){
 			//Sheet sheetCopy=sheet.Copy();
 			int calcH;
+			Font font;
+			FontStyle fontstyle;
 			foreach(SheetFieldDef fieldDef in sheetDef.SheetFieldDefs) {
 				if(fieldDef.GrowthBehavior==GrowthBehaviorEnum.None){
 					continue;
 				}
-				calcH=(int)g.MeasureString(fieldDef.FieldValue,fieldDef.Font).Height+2;//min 2 to prevent hidden text due to scroll.
+				fontstyle=FontStyle.Regular;
+				if(fieldDef.FontIsBold){
+					fontstyle=FontStyle.Bold;
+				}
+				font=new Font(fieldDef.FontName,fieldDef.FontSize,fontstyle);
+				calcH=(int)g.MeasureString(fieldDef.FieldValue,font).Height+2;//min 2 to prevent hidden text due to scroll.
 				if(calcH<=fieldDef.Height){
 					continue;
 				}
@@ -85,12 +92,13 @@ namespace OpenDental{
 			Sheet sheet=new Sheet();
 			sheet.IsNew=true;
 			sheet.DateTimeSheet=DateTime.Now;
-			sheet.FontName=sheetDef.Font.Name;
-			sheet.FontSize=sheetDef.Font.Size;
+			sheet.FontName=sheetDef.FontName;
+			sheet.FontSize=sheetDef.FontSize;
 			sheet.Height=sheetDef.Height;
 			sheet.SheetType=sheetDef.SheetType;
 			sheet.Width=sheetDef.Width;
 			sheet.PatNum=patNum;
+			sheet.IsLandscape=sheetDef.IsLandscape;
 			return sheet;
 		}
 
@@ -123,9 +131,9 @@ namespace OpenDental{
 				field.FieldName=sheetFieldDefList[i].FieldName;
 				field.FieldType=sheetFieldDefList[i].FieldType;
 				field.FieldValue=sheetFieldDefList[i].FieldValue;
-				field.FontIsBold=sheetFieldDefList[i].Font.Bold;
-				field.FontName=sheetFieldDefList[i].Font.Name;
-				field.FontSize=sheetFieldDefList[i].Font.Size;
+				field.FontIsBold=sheetFieldDefList[i].FontIsBold;
+				field.FontName=sheetFieldDefList[i].FontName;
+				field.FontSize=sheetFieldDefList[i].FontSize;
 				field.GrowthBehavior=sheetFieldDefList[i].GrowthBehavior;
 				field.Height=sheetFieldDefList[i].Height;
 				//field.SheetNum=sheetFieldList[i];//set later
