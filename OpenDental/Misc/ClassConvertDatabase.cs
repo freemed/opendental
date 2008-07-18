@@ -7708,6 +7708,39 @@ namespace OpenDental{
 						INDEX (SheetNum)
 						) DEFAULT CHARSET=utf8";
 					General.NonQ(command);
+					command="DROP TABLE IF EXISTS sheetdef";
+					General.NonQ(command);
+					command=@"CREATE TABLE sheetdef (
+						SheetDefNum int NOT NULL auto_increment,
+						SheetType int NOT NULL,
+						FontSize float NOT NULL,
+						FontName varchar(255),
+						Width int NOT NULL,
+						Height int NOT NULL,
+						IsLandscape tinyint NOT NULL,	
+						PRIMARY KEY (SheetDefNum)
+						) DEFAULT CHARSET=utf8";
+					General.NonQ(command);
+					command="DROP TABLE IF EXISTS sheetfielddef";
+					General.NonQ(command);
+					command=@"CREATE TABLE sheetfielddef (
+						SheetFieldDefNum int NOT NULL auto_increment,
+						SheetDefNum int NOT NULL,
+						FieldType int NOT NULL,
+						FieldName varchar(255),
+						FieldValue varchar(255),
+						FontSize float NOT NULL,
+						FontName varchar(255),
+						FontIsBold tinyint NOT NULL,
+						XPos int NOT NULL,
+						YPos int NOT NULL,
+						Width int NOT NULL,
+						Height int NOT NULL,
+						GrowthBehavior int NOT NULL,
+						PRIMARY KEY (SheetFieldDefNum),
+						INDEX (SheetDefNum)
+						) DEFAULT CHARSET=utf8";
+					General.NonQ(command);
 
 
 

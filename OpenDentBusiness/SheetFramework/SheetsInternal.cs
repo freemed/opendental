@@ -44,8 +44,8 @@ namespace OpenDentBusiness{
 			sheet.Width=108;
 			sheet.Height=346;
 			sheet.IsLandscape=true;
-			Font font=new Font(sheet.FontName,sheet.FontSize);
-			int rowH=font.Height;
+			//Font font=new Font(sheet.FontName,sheet.FontSize);
+			int rowH=19;
 			int yPos=10;
 			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("nameFL",sheet.FontSize,sheet.FontName,false,25,yPos,300,rowH));
 			yPos+=rowH;
@@ -62,7 +62,7 @@ namespace OpenDentBusiness{
 			sheet.Width=108;
 			sheet.Height=346;
 			sheet.IsLandscape=true;
-			int rowH=16;
+			int rowH=19;
 			int yPos=10;
 			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("nameLF",sheet.FontSize,sheet.FontName,false,25,yPos,300,rowH));
 			yPos+=rowH;
@@ -79,7 +79,7 @@ namespace OpenDentBusiness{
 			sheet.Width=108;
 			sheet.Height=346;
 			sheet.IsLandscape=true;
-			int rowH=16;
+			int rowH=19;
 			int yPos=30;
 			//if(PrefC.GetBool("FuchsOptionsOn")) yPos = 50;
 			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("nameLF",sheet.FontSize,sheet.FontName,false,25,yPos,300,rowH));
@@ -95,7 +95,7 @@ namespace OpenDentBusiness{
 			sheet.Width=108;
 			sheet.Height=346;
 			sheet.IsLandscape=true;
-			int rowH=16;
+			int rowH=19;
 			int yPos=30;
 			//if(PrefC.GetBool("FuchsOptionsOn")) yPos = 50;
 			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("nameLF",sheet.FontSize,sheet.FontName,false,25,yPos,300,rowH));
@@ -111,7 +111,7 @@ namespace OpenDentBusiness{
 			sheet.Width=108;
 			sheet.Height=346;
 			sheet.IsLandscape=true;
-			int rowH=16;
+			int rowH=19;
 			int yPos=30;
 			//if(PrefC.GetBool("FuchsOptionsOn")) yPos = 50;
 			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput( "nameLF",sheet.FontSize,sheet.FontName,false,25,yPos,150,rowH,GrowthBehaviorEnum.None));
@@ -130,7 +130,7 @@ namespace OpenDentBusiness{
 			sheet.Width=108;
 			sheet.Height=346;
 			sheet.IsLandscape=true;
-			int rowH=16;
+			int rowH=19;
 			int yPos=10;
 			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("CarrierName",sheet.FontSize,sheet.FontName,false,25,yPos,300,rowH));
 			yPos+=rowH;
@@ -147,7 +147,7 @@ namespace OpenDentBusiness{
 			sheet.Width=108;
 			sheet.Height=346;
 			sheet.IsLandscape=true;
-			int rowH=16;
+			int rowH=19;
 			int yPos=10;
 			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("nameFL",sheet.FontSize,sheet.FontName,false,25,yPos,300,rowH));
 			yPos+=rowH;
@@ -163,9 +163,9 @@ namespace OpenDentBusiness{
 			sheet.FontSize=9f;
 			sheet.Width=450;
 			sheet.Height=650;
-			int rowH=12;
+			int rowH=14;
 			int yPos=50;
-			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("Referral to",10,sheet.FontName,true,170,yPos,200,rowH));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("Referral to",10,sheet.FontName,true,170,yPos,200,19));
 			yPos+=rowH+5;
 			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("referral.nameFL",sheet.FontSize,sheet.FontName,false,150,yPos,200,rowH));
 			yPos+=rowH;

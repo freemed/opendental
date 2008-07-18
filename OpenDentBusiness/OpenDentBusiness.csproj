@@ -121,6 +121,8 @@
     <Compile Include="Data Interface\ClaimAttaches.cs" />
     <Compile Include="Data Interface\ClaimCondCodeLogs.cs" />
     <Compile Include="Data Interface\ClaimFormItems.cs" />
+    <Compile Include="Data Interface\SheetFieldDefs.cs" />
+    <Compile Include="Data Interface\SheetDefs.cs" />
     <Compile Include="Data Interface\SheetFields.cs" />
     <Compile Include="Data Interface\Sheets.cs" />
     <Compile Include="Data Interface\Pharmacies.cs" />
@@ -202,8 +204,8 @@
     </Compile>
     <Compile Include="RemotingClient.cs" />
     <Compile Include="SheetFramework\SheetEnums.cs" />
-    <Compile Include="SheetFramework\SheetDef.cs" />
-    <Compile Include="SheetFramework\SheetFieldDef.cs" />
+    <Compile Include="TableTypes\SheetDef.cs" />
+    <Compile Include="TableTypes\SheetFieldDef.cs" />
     <Compile Include="SheetFramework\SheetFieldsAvailable.cs" />
     <Compile Include="SheetFramework\SheetParameter.cs" />
     <Compile Include="SheetFramework\SheetsInternal.cs" />

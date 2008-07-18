@@ -479,8 +479,8 @@ namespace OpenDental{
 				return;
 			}
 			SheetDef sheetDef=SheetsInternal.GetSheetDef(SheetInternalType.ReferralSlip);
-			sheetDef.SetParameter("PatNum",RefAttachCur.PatNum);
-			sheetDef.SetParameter("ReferralNum",RefAttachCur.ReferralNum);
+			SheetParameter.SetParameter(sheetDef,"PatNum",RefAttachCur.PatNum);
+			SheetParameter.SetParameter(sheetDef,"ReferralNum",RefAttachCur.ReferralNum);
 			SheetFiller.FillFields(sheetDef);
 			SheetUtil.CalculateHeights(sheetDef,this.CreateGraphics());
 			Sheet sheet=SheetUtil.CreateSheet(sheetDef,RefAttachCur.PatNum);

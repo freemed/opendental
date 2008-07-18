@@ -40,6 +40,13 @@ namespace OpenDental {
 			for(int i=0;i<fColl.Families.Length;i++){
 				comboFontName.Items.Add(fColl.Families[i].Name);
 			}
+			comboFontName.Text=SheetFieldDefCur.FontName;
+			textFontSize.Text=SheetFieldDefCur.FontSize.ToString();
+			checkFontIsBold.Checked=SheetFieldDefCur.FontIsBold;
+			textXPos.Text=SheetFieldDefCur.XPos.ToString();
+			textYPos.Text=SheetFieldDefCur.YPos.ToString();
+			textWidth.Text=SheetFieldDefCur.Width.ToString();
+			textHeight.Text=SheetFieldDefCur.Height.ToString();
 		}
 
 		private void butOK_Click(object sender,EventArgs e) {

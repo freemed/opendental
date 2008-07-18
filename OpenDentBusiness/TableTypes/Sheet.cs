@@ -123,7 +123,7 @@ namespace OpenDentBusiness{
 			get{return heightChanged;}
 		}
 
-			[DataField("IsLandscape")]
+		[DataField("IsLandscape")]
 		private bool isLandscape;
 		private bool isLandscapeChanged;
 		///<summary></summary>

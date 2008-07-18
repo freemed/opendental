@@ -21,7 +21,7 @@ namespace OpenDental{
 		///<summary></summary>
 		public void PrintPat(int patNum){
 			SheetDef sheetDef=SheetsInternal.GetSheetDef(SheetInternalType.LabelPatientMail);
-			sheetDef.SetParameter("PatNum",patNum);
+			SheetParameter.SetParameter(sheetDef,"PatNum",patNum);
 			SheetFiller.FillFields(sheetDef);
 			try{
 				SheetPrinting.Print(sheetDef);
@@ -33,7 +33,7 @@ namespace OpenDental{
 
 		public void PrintPatientLFAddress(int patNum) {
 			SheetDef sheetDef=SheetsInternal.GetSheetDef(SheetInternalType.LabelPatientLFAddress);
-			sheetDef.SetParameter("PatNum",patNum);
+			SheetParameter.SetParameter(sheetDef,"PatNum",patNum);
 			SheetFiller.FillFields(sheetDef);
 			try {
 				SheetPrinting.Print(sheetDef);
@@ -45,7 +45,7 @@ namespace OpenDental{
 
 		public void PrintPatientLFChartNumber(int patNum) {
 			SheetDef sheetDef=SheetsInternal.GetSheetDef(SheetInternalType.LabelPatientLFChartNumber);
-			sheetDef.SetParameter("PatNum",patNum);
+			SheetParameter.SetParameter(sheetDef,"PatNum",patNum);
 			SheetFiller.FillFields(sheetDef);
 			try {
 				SheetPrinting.Print(sheetDef);
@@ -57,7 +57,7 @@ namespace OpenDental{
 
 		public void PrintPatientLFPatNum(int patNum) {
 			SheetDef sheetDef=SheetsInternal.GetSheetDef(SheetInternalType.LabelPatientLFPatNum);
-			sheetDef.SetParameter("PatNum",patNum);
+			SheetParameter.SetParameter(sheetDef,"PatNum",patNum);
 			SheetFiller.FillFields(sheetDef);
 			try {
 				SheetPrinting.Print(sheetDef);
@@ -69,7 +69,7 @@ namespace OpenDental{
 
 		public void PrintPatRadiograph(int patNum) {
 			SheetDef sheetDef=SheetsInternal.GetSheetDef(SheetInternalType.LabelPatientRadiograph);
-			sheetDef.SetParameter("PatNum",patNum);
+			SheetParameter.SetParameter(sheetDef,"PatNum",patNum);
 			SheetFiller.FillFields(sheetDef);
 			try {
 				SheetPrinting.Print(sheetDef);
@@ -94,7 +94,7 @@ namespace OpenDental{
 		///<summary>Have to supply printer name because this can be called multiple times in a loop. Returns false if fails.</summary>
 		public void PrintCarrier(int carrierNum){//Carrier carrierCur,string printerName){
 			SheetDef sheetDef=SheetsInternal.GetSheetDef(SheetInternalType.LabelCarrier);
-			sheetDef.SetParameter("CarrierNum",carrierNum);
+			SheetParameter.SetParameter(sheetDef,"CarrierNum",carrierNum);
 			SheetFiller.FillFields(sheetDef);
 			try {
 				SheetPrinting.Print(sheetDef);
@@ -107,7 +107,7 @@ namespace OpenDental{
 		///<summary></summary>
 		public void PrintReferral(int referralNum) {
 			SheetDef sheetDef=SheetsInternal.GetSheetDef(SheetInternalType.LabelReferral);
-			sheetDef.SetParameter("ReferralNum",referralNum);
+			SheetParameter.SetParameter(sheetDef,"ReferralNum",referralNum);
 			SheetFiller.FillFields(sheetDef);
 			try {
 				SheetPrinting.Print(sheetDef);

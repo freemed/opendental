@@ -31,6 +31,17 @@ namespace OpenDental{
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
 			this.comboFontName = new System.Windows.Forms.ComboBox();
 			this.label3 = new System.Windows.Forms.Label();
+			this.label4 = new System.Windows.Forms.Label();
+			this.textFontSize = new System.Windows.Forms.TextBox();
+			this.checkFontIsBold = new System.Windows.Forms.CheckBox();
+			this.label5 = new System.Windows.Forms.Label();
+			this.textXPos = new OpenDental.ValidNum();
+			this.textYPos = new OpenDental.ValidNum();
+			this.label6 = new System.Windows.Forms.Label();
+			this.textWidth = new OpenDental.ValidNum();
+			this.label7 = new System.Windows.Forms.Label();
+			this.textHeight = new OpenDental.ValidNum();
+			this.label8 = new System.Windows.Forms.Label();
 			this.groupBox1.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -42,7 +53,7 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(412,364);
+			this.butOK.Location = new System.Drawing.Point(410,318);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75,24);
 			this.butOK.TabIndex = 3;
@@ -57,7 +68,7 @@ namespace OpenDental{
 			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
-			this.butCancel.Location = new System.Drawing.Point(412,405);
+			this.butCancel.Location = new System.Drawing.Point(410,359);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75,24);
 			this.butCancel.TabIndex = 2;
@@ -91,11 +102,14 @@ namespace OpenDental{
 			// 
 			// groupBox1
 			// 
+			this.groupBox1.Controls.Add(this.checkFontIsBold);
+			this.groupBox1.Controls.Add(this.textFontSize);
+			this.groupBox1.Controls.Add(this.label4);
 			this.groupBox1.Controls.Add(this.comboFontName);
 			this.groupBox1.Controls.Add(this.label3);
 			this.groupBox1.Location = new System.Drawing.Point(188,60);
 			this.groupBox1.Name = "groupBox1";
-			this.groupBox1.Size = new System.Drawing.Size(283,141);
+			this.groupBox1.Size = new System.Drawing.Size(283,110);
 			this.groupBox1.TabIndex = 88;
 			this.groupBox1.TabStop = false;
 			this.groupBox1.Text = "Font";
@@ -117,10 +131,117 @@ namespace OpenDental{
 			this.label3.Text = "Name";
 			this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
+			// label4
+			// 
+			this.label4.Location = new System.Drawing.Point(6,42);
+			this.label4.Name = "label4";
+			this.label4.Size = new System.Drawing.Size(71,16);
+			this.label4.TabIndex = 89;
+			this.label4.Text = "Size";
+			this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// textFontSize
+			// 
+			this.textFontSize.Location = new System.Drawing.Point(80,41);
+			this.textFontSize.Name = "textFontSize";
+			this.textFontSize.Size = new System.Drawing.Size(44,20);
+			this.textFontSize.TabIndex = 89;
+			// 
+			// checkFontIsBold
+			// 
+			this.checkFontIsBold.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkFontIsBold.Location = new System.Drawing.Point(9,66);
+			this.checkFontIsBold.Name = "checkFontIsBold";
+			this.checkFontIsBold.Size = new System.Drawing.Size(85,20);
+			this.checkFontIsBold.TabIndex = 90;
+			this.checkFontIsBold.Text = "Bold";
+			this.checkFontIsBold.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkFontIsBold.UseVisualStyleBackColor = true;
+			// 
+			// label5
+			// 
+			this.label5.Location = new System.Drawing.Point(198,196);
+			this.label5.Name = "label5";
+			this.label5.Size = new System.Drawing.Size(71,16);
+			this.label5.TabIndex = 90;
+			this.label5.Text = "X Pos";
+			this.label5.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// textXPos
+			// 
+			this.textXPos.Location = new System.Drawing.Point(268,195);
+			this.textXPos.MaxVal = 2000;
+			this.textXPos.MinVal = -100;
+			this.textXPos.Name = "textXPos";
+			this.textXPos.Size = new System.Drawing.Size(69,20);
+			this.textXPos.TabIndex = 91;
+			// 
+			// textYPos
+			// 
+			this.textYPos.Location = new System.Drawing.Point(268,221);
+			this.textYPos.MaxVal = 2000;
+			this.textYPos.MinVal = -100;
+			this.textYPos.Name = "textYPos";
+			this.textYPos.Size = new System.Drawing.Size(69,20);
+			this.textYPos.TabIndex = 93;
+			// 
+			// label6
+			// 
+			this.label6.Location = new System.Drawing.Point(198,222);
+			this.label6.Name = "label6";
+			this.label6.Size = new System.Drawing.Size(71,16);
+			this.label6.TabIndex = 92;
+			this.label6.Text = "Y Pos";
+			this.label6.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// textWidth
+			// 
+			this.textWidth.Location = new System.Drawing.Point(268,247);
+			this.textWidth.MaxVal = 2000;
+			this.textWidth.MinVal = -100;
+			this.textWidth.Name = "textWidth";
+			this.textWidth.Size = new System.Drawing.Size(69,20);
+			this.textWidth.TabIndex = 95;
+			// 
+			// label7
+			// 
+			this.label7.Location = new System.Drawing.Point(198,248);
+			this.label7.Name = "label7";
+			this.label7.Size = new System.Drawing.Size(71,16);
+			this.label7.TabIndex = 94;
+			this.label7.Text = "Width";
+			this.label7.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// textHeight
+			// 
+			this.textHeight.Location = new System.Drawing.Point(268,273);
+			this.textHeight.MaxVal = 2000;
+			this.textHeight.MinVal = -100;
+			this.textHeight.Name = "textHeight";
+			this.textHeight.Size = new System.Drawing.Size(69,20);
+			this.textHeight.TabIndex = 97;
+			// 
+			// label8
+			// 
+			this.label8.Location = new System.Drawing.Point(198,274);
+			this.label8.Name = "label8";
+			this.label8.Size = new System.Drawing.Size(71,16);
+			this.label8.TabIndex = 96;
+			this.label8.Text = "Height";
+			this.label8.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
 			// FormSheetFieldOutput
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-			this.ClientSize = new System.Drawing.Size(512,456);
+			this.ClientSize = new System.Drawing.Size(510,410);
+			this.Controls.Add(this.textHeight);
+			this.Controls.Add(this.label8);
+			this.Controls.Add(this.textWidth);
+			this.Controls.Add(this.label7);
+			this.Controls.Add(this.textYPos);
+			this.Controls.Add(this.label6);
+			this.Controls.Add(this.textXPos);
+			this.Controls.Add(this.label5);
 			this.Controls.Add(this.groupBox1);
 			this.Controls.Add(this.label1);
 			this.Controls.Add(this.label2);
@@ -132,7 +253,9 @@ namespace OpenDental{
 			this.Text = "Edit OutputText Field";
 			this.Load += new System.EventHandler(this.FormSheetFieldDefEdit_Load);
 			this.groupBox1.ResumeLayout(false);
+			this.groupBox1.PerformLayout();
 			this.ResumeLayout(false);
+			this.PerformLayout();
 
 		}
 
@@ -146,5 +269,16 @@ namespace OpenDental{
 		private System.Windows.Forms.GroupBox groupBox1;
 		private System.Windows.Forms.Label label3;
 		private System.Windows.Forms.ComboBox comboFontName;
+		private System.Windows.Forms.CheckBox checkFontIsBold;
+		private System.Windows.Forms.TextBox textFontSize;
+		private System.Windows.Forms.Label label4;
+		private System.Windows.Forms.Label label5;
+		private ValidNum textXPos;
+		private ValidNum textYPos;
+		private System.Windows.Forms.Label label6;
+		private ValidNum textWidth;
+		private System.Windows.Forms.Label label7;
+		private ValidNum textHeight;
+		private System.Windows.Forms.Label label8;
 	}
 }
