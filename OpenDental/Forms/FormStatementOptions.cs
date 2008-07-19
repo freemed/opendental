@@ -569,9 +569,11 @@ namespace OpenDental{
 				if(StmtCur.DateRangeTo.Year<2100){
 					textDateEnd.Text=StmtCur.DateRangeTo.ToShortDateString();
 				}
-				if(PrefC.GetBool("FuchsOptionsOn")){
-					//textDateFrom.Text=DateTime.Today.AddDays(-90).ToShortDateString();
-					//textDateTo.Text=DateTime.Today.ToShortDateString();
+				if(PrefC.GetBool("FuchsOptionsOn")) {
+					textDateStart.Text=DateTime.Today.AddDays(-90).ToShortDateString();
+					textDateEnd.Text=DateTime.Today.ToShortDateString();
+					listMode.SelectedIndex=0;
+					checkIntermingled.Checked=true;
 					groupFuchs.Visible=true;
 					buttonFuchs1.Visible=true;
 					buttonFuchs2.Visible=true;
