@@ -117,8 +117,8 @@ namespace OpenDentBusiness{
 			return new Font(FontName,FontSize);
 		}
 
-		public SheetDef(){
-			//required for use as a generic.
+		public SheetDef(){//required for use as a generic.
+			
 		}
 
 		public SheetDef(SheetTypeEnum sheetType){
@@ -133,6 +133,7 @@ namespace OpenDentBusiness{
 			return sheetdef;
 		}
 
+		
 		
 		
 

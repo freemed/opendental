@@ -25,6 +25,7 @@ namespace OpenDental{
 		//<summary>Only used if IsSelectionMode.  On OK, contains selected siteNum.  Can be 0.  Can also be set ahead of time externally.</summary>
 		//public int SelectedSiteNum;
 		private List<SheetDef> internalList;
+		private bool changed;
 
 		///<summary></summary>
 		public FormSheetDefs()
@@ -108,6 +109,7 @@ namespace OpenDental{
 			this.butOK.Size = new System.Drawing.Size(75,24);
 			this.butOK.TabIndex = 13;
 			this.butOK.Text = "OK";
+			this.butOK.Visible = false;
 			this.butOK.Click += new System.EventHandler(this.butOK_Click);
 			// 
 			// grid2
@@ -179,6 +181,9 @@ namespace OpenDental{
 		#endregion
 
 		private void FormSheetDefs_Load(object sender, System.EventArgs e) {
+			if(!Security.IsAuthorized(Permissions.Setup,true)){
+				butAdd.Visible=false;
+			}
 			/*if(IsSelectionMode){
 				butClose.Text=Lan.g(this,"Cancel");
 				if(!Security.IsAuthorized(Permissions.Setup,true)){
@@ -199,6 +204,7 @@ namespace OpenDental{
 				}
 			}*/
 			FillGrid1();
+			FillGrid2();
 		}
 
 		private void FillGrid1(){
@@ -221,26 +227,43 @@ namespace OpenDental{
 		}
 
 		private void FillGrid2(){
-			/*Sites.RefreshCache();
+			SheetDefs.RefreshCache();
+			SheetFieldDefs.RefreshCache();
 			grid2.BeginUpdate();
 			grid2.Columns.Clear();
-			ODGridColumn col=new ODGridColumn(Lan.g("TableSites","Description"),100);
+			ODGridColumn col=new ODGridColumn(Lan.g("TableSheetDef","Description"),155);
 			grid2.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TableSites","Note"),100);
+			col=new ODGridColumn(Lan.g("TableSheetDef","Type"),100);
 			grid2.Columns.Add(col);
 			grid2.Rows.Clear();
 			ODGridRow row;
-			for(int i=0;i<SiteC.List.Length;i++){
+			for(int i=0;i<SheetDefC.Listt.Count;i++){
 				row=new ODGridRow();
-				row.Cells.Add(SiteC.List[i].Description);
-				row.Cells.Add(SiteC.List[i].Note);
+				row.Cells.Add(SheetDefC.Listt[i].Description);
+				row.Cells.Add(SheetDefC.Listt[i].SheetType.ToString());
 				grid2.Rows.Add(row);
 			}
-			grid2.EndUpdate();*/
+			grid2.EndUpdate();
 		}
 
 		private void butNew_Click(object sender, System.EventArgs e) {
 			//This button is not visible unless user has appropriate permission for setup.
+
+			//Not allowed to change sheettype once a sheet is created, so we need to let user pick.
+
+			/*SheetDef sheetdef=SheetDefC.Listt[e.Row];
+			SheetDefs.GetFieldsAndParameters(sheetdef);
+			FormSheetDefEdit FormS=new FormSheetDefEdit(sheetdef);
+			FormS.ShowDialog();
+			FillGrid2();
+			for(int i=0;i<SheetDefC.Listt.Count;i++){
+				if(SheetDefC.Listt[i].SheetDefNum==sheetdef.SheetDefNum){
+					grid2.SetSelected(i,true);
+				}
+			}
+			changed=true;*/
+
+
 			/*FormSiteEdit FormS=new FormSiteEdit();
 			FormS.SiteCur=new Site();
 			FormS.SiteCur.IsNew=true;
@@ -251,13 +274,20 @@ namespace OpenDental{
 
 		private void butCopy_Click(object sender,EventArgs e) {
 			if(grid1.GetSelectedIndex()==-1){
-				MsgBox.Show(this,"Please select an internal sheet first from the list above.");
+				MsgBox.Show(this,"Please select an internal sheet from the list above first.");
 				return;
 			}
 			SheetDef sheetdef=internalList[grid1.GetSelectedIndex()].Copy();
+			sheetdef.Description=Enum.GetNames(typeof(SheetInternalType))[grid1.GetSelectedIndex()];
 			sheetdef.IsNew=true;
 			SheetDefs.WriteObject(sheetdef);
+			grid1.SetSelected(false);
 			FillGrid2();
+			for(int i=0;i<SheetDefC.Listt.Count;i++){
+				if(SheetDefC.Listt[i].SheetDefNum==sheetdef.SheetDefNum){
+					grid2.SetSelected(i,true);
+				}
+			}
 		}
 
 		private void grid1_CellDoubleClick(object sender,ODGridClickEventArgs e) {
@@ -272,13 +302,18 @@ namespace OpenDental{
 				DialogResult=DialogResult.OK;
 				return;
 			}
-			else{
-				FormSiteEdit FormS=new FormSiteEdit();
-				FormS.SiteCur=SiteC.List[e.Row];
+			else{*/
+				SheetDef sheetdef=SheetDefC.Listt[e.Row];
+				SheetDefs.GetFieldsAndParameters(sheetdef);
+				FormSheetDefEdit FormS=new FormSheetDefEdit(sheetdef);
 				FormS.ShowDialog();
-				FillGrid();
+				FillGrid2();
+				for(int i=0;i<SheetDefC.Listt.Count;i++){
+					if(SheetDefC.Listt[i].SheetDefNum==sheetdef.SheetDefNum){
+						grid2.SetSelected(i,true);
+					}
+				}
 				changed=true;
-			}*/
 		}
 
 		private void butOK_Click(object sender,EventArgs e) {
@@ -302,9 +337,9 @@ namespace OpenDental{
 		}
 
 		private void FormSheetDefs_FormClosing(object sender,FormClosingEventArgs e) {
-			//if(changed){
-			//	DataValid.SetInvalid(InvalidType.Sites);
-			//}
+			if(changed){
+				DataValid.SetInvalid(InvalidType.Sheets);
+			}
 		}
 
 		

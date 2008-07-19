@@ -273,7 +273,9 @@ namespace OpenDentBusiness{
 		///<summary></summary>
 		Sites,
 		///<summary></summary>
-		Pharmacies
+		Pharmacies,
+		///<summary></summary>
+		Sheets
 	}
 	//<summary></summary>
 	/*public enum ButtonType{

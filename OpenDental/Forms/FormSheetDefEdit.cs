@@ -160,6 +160,8 @@ namespace OpenDental {
 
 		///<summary>Only for editing fields that already exist.</summary>
 		private void LaunchEditWindow(SheetFieldDef field){
+			//not every field will have been saved to the database, so we can't depend on SheetFieldDefNum.
+			int idx=SheetDefCur.SheetFieldDefs.IndexOf(field);
 			switch(field.FieldType){
 				case SheetFieldType.InputField:
 
@@ -175,12 +177,16 @@ namespace OpenDental {
 					if(FormS.DialogResult!=DialogResult.OK){
 						return;
 					}
+					if(FormS.SheetFieldDefCur==null){
+						SheetDefCur.SheetFieldDefs.RemoveAt(idx);
+					}
 					break;
 				case SheetFieldType.StaticText:
 
 					return;
 			}
 			FillFieldList();
+			listFields.SelectedIndex=idx;//reselect the item.
 			panelMain.Invalidate();
 		}
 
@@ -250,13 +256,33 @@ namespace OpenDental {
 			}
 		}
 
+		private void butDelete_Click(object sender,EventArgs e) {
+			if(SheetDefCur.IsNew){
+				DialogResult=DialogResult.Cancel;
+				return;
+			}
+			if(!MsgBox.Show(this,true,"Delete entire sheet?")){
+				return;
+			}
+			try{
+				SheetDefs.DeleteObject(SheetDefCur.SheetDefNum);
+				DialogResult=DialogResult.OK;
+			}
+			catch(Exception ex){
+				MessageBox.Show(ex.Message);
+			}
+		}
+
 		private void butOK_Click(object sender,EventArgs e) {
+			SheetDefs.WriteObject(SheetDefCur);
 			DialogResult=DialogResult.OK;
 		}
 
 		private void butCancel_Click(object sender,EventArgs e) {
 			DialogResult=DialogResult.Cancel;
 		}
+
+		
 
 		
 

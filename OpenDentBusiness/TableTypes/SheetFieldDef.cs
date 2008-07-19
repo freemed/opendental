@@ -186,6 +186,10 @@ namespace OpenDentBusiness{
 			GrowthBehavior=growthBehavior;
 		}
 
+		public SheetFieldDef Copy(){
+			return (SheetFieldDef)this.MemberwiseClone();
+		}
+
 		///<Summary></Summary>
 		public Font GetFont(){
 			FontStyle style=FontStyle.Regular;

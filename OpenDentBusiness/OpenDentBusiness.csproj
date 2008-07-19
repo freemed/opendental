@@ -86,6 +86,8 @@
     <Compile Include="Cache\AutoCodeItemC.cs" />
     <Compile Include="Cache\Cache.cs" />
     <Compile Include="Cache\ClaimFormItemC.cs" />
+    <Compile Include="Cache\SheetFieldDefC.cs" />
+    <Compile Include="Cache\SheetDefC.cs" />
     <Compile Include="Cache\PharmacyC.cs" />
     <Compile Include="Cache\SiteC.cs" />
     <Compile Include="Cache\DisplayFieldC.cs" />

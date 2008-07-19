@@ -181,11 +181,12 @@ namespace OpenDental{
 			this.butDelete.CornerRadius = 4F;
 			this.butDelete.Image = global::OpenDental.Properties.Resources.deleteX;
 			this.butDelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butDelete.Location = new System.Drawing.Point(757,533);
+			this.butDelete.Location = new System.Drawing.Point(767,533);
 			this.butDelete.Name = "butDelete";
-			this.butDelete.Size = new System.Drawing.Size(87,24);
+			this.butDelete.Size = new System.Drawing.Size(77,24);
 			this.butDelete.TabIndex = 80;
 			this.butDelete.Text = "Delete";
+			this.butDelete.Click += new System.EventHandler(this.butDelete_Click);
 			// 
 			// butOK
 			// 
@@ -195,11 +196,11 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(757,609);
+			this.butOK.Location = new System.Drawing.Point(767,609);
 			this.butOK.Name = "butOK";
-			this.butOK.Size = new System.Drawing.Size(87,24);
+			this.butOK.Size = new System.Drawing.Size(77,24);
 			this.butOK.TabIndex = 3;
-			this.butOK.Text = "Save Changes";
+			this.butOK.Text = "OK";
 			this.butOK.Click += new System.EventHandler(this.butOK_Click);
 			// 
 			// butCancel
@@ -210,9 +211,9 @@ namespace OpenDental{
 			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
-			this.butCancel.Location = new System.Drawing.Point(757,639);
+			this.butCancel.Location = new System.Drawing.Point(767,639);
 			this.butCancel.Name = "butCancel";
-			this.butCancel.Size = new System.Drawing.Size(87,24);
+			this.butCancel.Size = new System.Drawing.Size(77,24);
 			this.butCancel.TabIndex = 2;
 			this.butCancel.Text = "&Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);

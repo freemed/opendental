@@ -17,6 +17,12 @@ namespace OpenDentBusiness{
 			ParamName=paramName;
 		}
 
+		public SheetParameter(bool isRequired,string paramName,string paramValue) {
+			IsRequired=isRequired;
+			ParamName=paramName;
+			ParamValue=paramValue;
+		}
+
 		///<Summary>Every sheet has at least one required parameter, usually the primary key of an imporant table.</Summary>
 		public static List<SheetParameter> GetForType(SheetTypeEnum sheetType) {
 			List<SheetParameter> list=new List<SheetParameter>();

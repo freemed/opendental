@@ -43,25 +43,71 @@ namespace OpenDental {
 			comboFontName.Text=SheetFieldDefCur.FontName;
 			textFontSize.Text=SheetFieldDefCur.FontSize.ToString();
 			checkFontIsBold.Checked=SheetFieldDefCur.FontIsBold;
+			for(int i=0;i<Enum.GetNames(typeof(GrowthBehaviorEnum)).Length;i++){
+				comboGrowthBehavior.Items.Add(Enum.GetNames(typeof(GrowthBehaviorEnum))[i]);
+				if((int)SheetFieldDefCur.GrowthBehavior==i){
+					comboGrowthBehavior.SelectedIndex=i;
+				}
+			}
 			textXPos.Text=SheetFieldDefCur.XPos.ToString();
 			textYPos.Text=SheetFieldDefCur.YPos.ToString();
 			textWidth.Text=SheetFieldDefCur.Width.ToString();
 			textHeight.Text=SheetFieldDefCur.Height.ToString();
 		}
 
+		private void butDelete_Click(object sender,EventArgs e) {
+			SheetFieldDefCur=null;
+			DialogResult=DialogResult.OK;
+		}
+
 		private void butOK_Click(object sender,EventArgs e) {
+			if(textXPos.errorProvider1.GetError(textXPos)!=""
+				|| textYPos.errorProvider1.GetError(textYPos)!=""
+				|| textYPos.errorProvider1.GetError(textYPos)!=""
+				|| textYPos.errorProvider1.GetError(textYPos)!="")
+			{
+				MsgBox.Show(this,"Please fix data entry errors first.");
+				return;
+			}
 			if(listFields.SelectedIndex==-1){
 				MsgBox.Show(this,"Please select a field name first.");
 				return;
 			}
+			if(comboFontName.Text==""){
+				//not going to bother testing for validity unless it will cause a crash.
+				MsgBox.Show(this,"Please select a font name first.");
+				return;
+			}
+			float fontSize;
+			try{
+				fontSize=float.Parse(textFontSize.Text);
+				if(fontSize<2){
+					MsgBox.Show(this,"Font size is invalid.");
+					return;
+				}
+			}
+			catch{
+				MsgBox.Show(this,"Font size is invalid.");
+				return;
+			}
 			SheetFieldDefCur.FieldName=AvailFields[listFields.SelectedIndex].FieldName;
-
+			SheetFieldDefCur.FontName=comboFontName.Text;
+			SheetFieldDefCur.FontSize=fontSize;
+			SheetFieldDefCur.FontIsBold=checkFontIsBold.Checked;
+			SheetFieldDefCur.XPos=PIn.PInt(textXPos.Text);
+			SheetFieldDefCur.YPos=PIn.PInt(textYPos.Text);
+			SheetFieldDefCur.Width=PIn.PInt(textWidth.Text);
+			SheetFieldDefCur.Height=PIn.PInt(textHeight.Text);
+			SheetFieldDefCur.GrowthBehavior=(GrowthBehaviorEnum)comboGrowthBehavior.SelectedIndex;
+			//don't save to database here.
 			DialogResult=DialogResult.OK;
 		}
 
 		private void butCancel_Click(object sender,EventArgs e) {
 			DialogResult=DialogResult.Cancel;
 		}
+
+		
 
 		
 	}
