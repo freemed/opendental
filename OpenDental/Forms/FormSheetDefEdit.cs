@@ -42,6 +42,7 @@ namespace OpenDental {
 			else{
 				labelInternal.Visible=false;
 			}
+			textDescription.Text=SheetDefCur.Description;
 			if(SheetDefCur.IsLandscape){
 				panelMain.Width=SheetDefCur.Height;
 				panelMain.Height=SheetDefCur.Width;
@@ -51,6 +52,7 @@ namespace OpenDental {
 				panelMain.Height=SheetDefCur.Height;
 			}
 			FillFieldList();
+			panelMain.Invalidate();
 		}
 
 		private void FillFieldList(){
@@ -112,6 +114,27 @@ namespace OpenDental {
 						brush,SheetDefCur.SheetFieldDefs[i].Bounds);
 				}
 			}
+		}
+
+		private void butEdit_Click(object sender,EventArgs e) {
+			FormSheetDef FormS=new FormSheetDef();
+			FormS.SheetDefCur=SheetDefCur;
+			FormS.ShowDialog();
+			if(FormS.DialogResult!=DialogResult.OK){
+				return;
+			}
+			textDescription.Text=SheetDefCur.Description;
+			//resize
+			if(SheetDefCur.IsLandscape){
+				panelMain.Width=SheetDefCur.Height;
+				panelMain.Height=SheetDefCur.Width;
+			}
+			else{
+				panelMain.Width=SheetDefCur.Width;
+				panelMain.Height=SheetDefCur.Height;
+			}
+			FillFieldList();
+			panelMain.Invalidate();
 		}
 
 		private void butAddOutputText_Click(object sender,EventArgs e) {
@@ -281,6 +304,8 @@ namespace OpenDental {
 		private void butCancel_Click(object sender,EventArgs e) {
 			DialogResult=DialogResult.Cancel;
 		}
+
+		
 
 		
 

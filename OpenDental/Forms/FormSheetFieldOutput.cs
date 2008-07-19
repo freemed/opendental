@@ -63,8 +63,8 @@ namespace OpenDental {
 		private void butOK_Click(object sender,EventArgs e) {
 			if(textXPos.errorProvider1.GetError(textXPos)!=""
 				|| textYPos.errorProvider1.GetError(textYPos)!=""
-				|| textYPos.errorProvider1.GetError(textYPos)!=""
-				|| textYPos.errorProvider1.GetError(textYPos)!="")
+				|| textWidth.errorProvider1.GetError(textWidth)!=""
+				|| textHeight.errorProvider1.GetError(textHeight)!="")
 			{
 				MsgBox.Show(this,"Please fix data entry errors first.");
 				return;

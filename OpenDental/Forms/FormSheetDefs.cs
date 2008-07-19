@@ -182,7 +182,7 @@ namespace OpenDental{
 
 		private void FormSheetDefs_Load(object sender, System.EventArgs e) {
 			if(!Security.IsAuthorized(Permissions.Setup,true)){
-				butAdd.Visible=false;
+				butNew.Visible=false;
 			}
 			/*if(IsSelectionMode){
 				butClose.Text=Lan.g(this,"Cancel");
@@ -248,28 +248,27 @@ namespace OpenDental{
 
 		private void butNew_Click(object sender, System.EventArgs e) {
 			//This button is not visible unless user has appropriate permission for setup.
-
 			//Not allowed to change sheettype once a sheet is created, so we need to let user pick.
-
-			/*SheetDef sheetdef=SheetDefC.Listt[e.Row];
-			SheetDefs.GetFieldsAndParameters(sheetdef);
-			FormSheetDefEdit FormS=new FormSheetDefEdit(sheetdef);
+			FormSheetDef FormS=new FormSheetDef();
+			FormS.IsInitial=true;
+			FormS.IsReadOnly=false;
+			SheetDef sheetdef=new SheetDef();
+			FormS.SheetDefCur=sheetdef;
 			FormS.ShowDialog();
+			if(FormS.DialogResult!=DialogResult.OK){
+				return;
+			}
+			//what about parameters?
+			sheetdef.SheetFieldDefs=new List<SheetFieldDef>();
+			FormSheetDefEdit FormSD=new FormSheetDefEdit(sheetdef);
+			FormSD.ShowDialog();//It will be saved to db inside this form.
 			FillGrid2();
 			for(int i=0;i<SheetDefC.Listt.Count;i++){
 				if(SheetDefC.Listt[i].SheetDefNum==sheetdef.SheetDefNum){
 					grid2.SetSelected(i,true);
 				}
 			}
-			changed=true;*/
-
-
-			/*FormSiteEdit FormS=new FormSiteEdit();
-			FormS.SiteCur=new Site();
-			FormS.SiteCur.IsNew=true;
-			FormS.ShowDialog();
-			FillGrid();
-			changed=true;*/
+			changed=true;
 		}
 
 		private void butCopy_Click(object sender,EventArgs e) {
