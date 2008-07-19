@@ -17,6 +17,8 @@ namespace OpenDental {
 		public bool IsInternal;
 		private bool MouseIsDown;
 		private bool CtrlIsDown;
+		private Point MouseOriginalPos;
+		private List<Point> OriginalControlPositions;
 
 		public FormSheetDefEdit(SheetDef sheetDef) {
 			InitializeComponent();
@@ -53,6 +55,8 @@ namespace OpenDental {
 			}
 			FillFieldList();
 			panelMain.Invalidate();
+			panelMain.Focus();
+			//textDescription.Focus();
 		}
 
 		private void FillFieldList(){
@@ -214,7 +218,9 @@ namespace OpenDental {
 		}
 
 		private void panelMain_MouseDown(object sender,MouseEventArgs e) {
+			panelMain.Select();
 			MouseIsDown=true;
+			MouseOriginalPos=e.Location;
 			SheetFieldDef field=HitTest(e.X,e.Y);
 			if(field==null){
 				if(CtrlIsDown){
@@ -236,18 +242,40 @@ namespace OpenDental {
 				}
 			}
 			else{
-				listFields.SelectedIndices.Clear();
-				listFields.SetSelected(idx,true);				
+				if(listFields.SelectedIndices.Contains(idx)){
+					//clicking on the group, probably to start a drag.
+				}
+				else{
+					listFields.SelectedIndices.Clear();
+					listFields.SetSelected(idx,true);
+				}
+			}
+			OriginalControlPositions=new List<Point>();
+			Point point;
+			for(int i=0;i<listFields.SelectedIndices.Count;i++){
+				point=new Point(SheetDefCur.SheetFieldDefs[listFields.SelectedIndices[i]].XPos,
+					SheetDefCur.SheetFieldDefs[listFields.SelectedIndices[i]].YPos);
+				OriginalControlPositions.Add(point);
 			}
 			panelMain.Invalidate();
 		}
 
 		private void panelMain_MouseMove(object sender,MouseEventArgs e) {
-
+			if(!MouseIsDown){
+				return;
+			}
+			for(int i=0;i<listFields.SelectedIndices.Count;i++){
+				SheetDefCur.SheetFieldDefs[listFields.SelectedIndices[i]].XPos=
+					OriginalControlPositions[i].X+e.X-MouseOriginalPos.X;
+				SheetDefCur.SheetFieldDefs[listFields.SelectedIndices[i]].YPos=
+					OriginalControlPositions[i].Y+e.Y-MouseOriginalPos.Y;
+			}
+			panelMain.Invalidate();
 		}
 
 		private void panelMain_MouseUp(object sender,MouseEventArgs e) {
 			MouseIsDown=false;
+			OriginalControlPositions=null;
 		}
 
 		private void panelMain_MouseDoubleClick(object sender,MouseEventArgs e) {
@@ -268,9 +296,41 @@ namespace OpenDental {
 		}
 
 		private void FormSheetDefEdit_KeyDown(object sender,KeyEventArgs e) {
-			if((e.KeyCode & Keys.ControlKey) == Keys.ControlKey){
+			e.Handled=true;
+			if(e.Control){
 				CtrlIsDown=true;
 			}
+			for(int i=0;i<listFields.SelectedIndices.Count;i++){
+				switch(e.KeyCode){
+					case Keys.Up:
+						if(e.Shift)
+							SheetDefCur.SheetFieldDefs[listFields.SelectedIndices[i]].YPos-=7;
+						else
+							SheetDefCur.SheetFieldDefs[listFields.SelectedIndices[i]].YPos--;
+						break;
+					case Keys.Down:
+						if(e.Shift)
+							SheetDefCur.SheetFieldDefs[listFields.SelectedIndices[i]].YPos+=7;
+						else
+							SheetDefCur.SheetFieldDefs[listFields.SelectedIndices[i]].YPos++;
+						break;
+					case Keys.Left:
+						if(e.Shift)
+							SheetDefCur.SheetFieldDefs[listFields.SelectedIndices[i]].XPos-=7;
+						else
+							SheetDefCur.SheetFieldDefs[listFields.SelectedIndices[i]].XPos--;
+						break;
+					case Keys.Right:
+						if(e.Shift)
+							SheetDefCur.SheetFieldDefs[listFields.SelectedIndices[i]].XPos+=7;
+						else
+							SheetDefCur.SheetFieldDefs[listFields.SelectedIndices[i]].XPos++;
+						break;
+					default:
+						break;
+				}
+			}
+			panelMain.Invalidate();
 		}
 
 		private void FormSheetDefEdit_KeyUp(object sender,KeyEventArgs e) {
