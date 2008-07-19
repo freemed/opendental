@@ -9,7 +9,7 @@ using System.Windows.Forms;
 using OpenDentBusiness;
 
 namespace OpenDental {
-	public partial class FormSheetFieldOutput:Form {
+	public partial class FormSheetFieldInput:Form {
 		///<summary>This is the object we are editing.</summary>
 		public SheetFieldDef SheetFieldDefCur;
 		///<summary>We need access to a few other fields of the sheetDef.</summary>
@@ -17,17 +17,17 @@ namespace OpenDental {
 		private List<SheetFieldDef> AvailFields;
 		public bool IsReadOnly;
 
-		public FormSheetFieldOutput() {
+		public FormSheetFieldInput() {
 			InitializeComponent();
 			Lan.F(this);
 		}
 
-		private void FormSheetFieldDefEdit_Load(object sender,EventArgs e) {
+		private void FormSheetFieldInput_Load(object sender,EventArgs e) {
 			if(IsReadOnly){
 				butOK.Enabled=false;
 			}
 			//not allowed to change sheettype or fieldtype once created.  So get all avail fields for this sheettype
-			AvailFields=SheetFieldsAvailable.GetListOutput(SheetDefCur.SheetType);
+			AvailFields=SheetFieldsAvailable.GetListInput(SheetDefCur.SheetType);
 			listFields.Items.Clear();
 			for(int i=0;i<AvailFields.Count;i++){
 				//static text is not one of the options.

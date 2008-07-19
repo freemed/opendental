@@ -159,11 +159,41 @@ namespace OpenDental {
 		}
 
 		private void butAddStaticText_Click(object sender,EventArgs e) {
-
+			Font font=new Font(SheetDefCur.FontName,SheetDefCur.FontSize);
+			FormSheetFieldStatic FormS=new FormSheetFieldStatic();
+			FormS.SheetDefCur=SheetDefCur;
+			FormS.SheetFieldDefCur=SheetFieldDef.NewStaticText("",SheetDefCur.FontSize,SheetDefCur.FontName,false,0,0,100,font.Height);
+			if(this.IsInternal){
+				FormS.IsReadOnly=true;
+			}
+			FormS.ShowDialog();
+			if(FormS.DialogResult!=DialogResult.OK){
+				return;
+			}
+			SheetDefCur.SheetFieldDefs.Add(FormS.SheetFieldDefCur);
+			FillFieldList();
+			panelMain.Invalidate();
 		}
 
 		private void butAddInputField_Click(object sender,EventArgs e) {
-
+			if(SheetFieldsAvailable.GetListInput(SheetDefCur.SheetType).Count==0){
+				MsgBox.Show(this,"There are no input fields available for this type of sheet.");
+				return;
+			}
+			Font font=new Font(SheetDefCur.FontName,SheetDefCur.FontSize);
+			FormSheetFieldInput FormS=new FormSheetFieldInput();
+			FormS.SheetDefCur=SheetDefCur;
+			FormS.SheetFieldDefCur=SheetFieldDef.NewInput("",SheetDefCur.FontSize,SheetDefCur.FontName,false,0,0,100,font.Height);
+			if(this.IsInternal){
+				FormS.IsReadOnly=true;
+			}
+			FormS.ShowDialog();
+			if(FormS.DialogResult!=DialogResult.OK){
+				return;
+			}
+			SheetDefCur.SheetFieldDefs.Add(FormS.SheetFieldDefCur);
+			FillFieldList();
+			panelMain.Invalidate();
 		}
 
 		private void listFields_Click(object sender,EventArgs e) {
@@ -191,10 +221,7 @@ namespace OpenDental {
 			int idx=SheetDefCur.SheetFieldDefs.IndexOf(field);
 			switch(field.FieldType){
 				case SheetFieldType.InputField:
-
-					return;
-				case SheetFieldType.OutputText:
-					FormSheetFieldOutput FormS=new FormSheetFieldOutput();
+					FormSheetFieldInput FormS=new FormSheetFieldInput();
 					FormS.SheetDefCur=SheetDefCur;
 					FormS.SheetFieldDefCur=field;
 					if(this.IsInternal){
@@ -208,8 +235,36 @@ namespace OpenDental {
 						SheetDefCur.SheetFieldDefs.RemoveAt(idx);
 					}
 					break;
+				case SheetFieldType.OutputText:
+					FormSheetFieldOutput FormSO=new FormSheetFieldOutput();
+					FormSO.SheetDefCur=SheetDefCur;
+					FormSO.SheetFieldDefCur=field;
+					if(this.IsInternal){
+						FormSO.IsReadOnly=true;
+					}
+					FormSO.ShowDialog();
+					if(FormSO.DialogResult!=DialogResult.OK){
+						return;
+					}
+					if(FormSO.SheetFieldDefCur==null){
+						SheetDefCur.SheetFieldDefs.RemoveAt(idx);
+					}
+					break;
 				case SheetFieldType.StaticText:
-
+					FormSheetFieldStatic FormSS=new FormSheetFieldStatic();
+					FormSS.SheetDefCur=SheetDefCur;
+					FormSS.SheetFieldDefCur=field;
+					if(this.IsInternal){
+						FormSS.IsReadOnly=true;
+					}
+					FormSS.ShowDialog();
+					if(FormSS.DialogResult!=DialogResult.OK){
+						return;
+					}
+					if(FormSS.SheetFieldDefCur==null){
+						SheetDefCur.SheetFieldDefs.RemoveAt(idx);
+					}
+					break;
 					return;
 			}
 			FillFieldList();

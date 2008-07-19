@@ -348,6 +348,18 @@
     <Compile Include="Forms\BasicTemplate.designer.cs">
       <DependentUpon>BasicTemplate.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\FormSheetFieldStatic.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormSheetFieldStatic.designer.cs">
+      <DependentUpon>FormSheetFieldStatic.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\FormSheetFieldInput.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormSheetFieldInput.designer.cs">
+      <DependentUpon>FormSheetFieldInput.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\FormSheetDef.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -3434,6 +3446,14 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\BasicTemplate.resx">
       <DependentUpon>BasicTemplate.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormSheetFieldStatic.resx">
+      <DependentUpon>FormSheetFieldStatic.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormSheetFieldInput.resx">
+      <DependentUpon>FormSheetFieldInput.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormSheetDef.resx">

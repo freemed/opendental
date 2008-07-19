@@ -4,8 +4,16 @@ using System.Text;
 
 namespace OpenDentBusiness{
 	public class SheetFieldsAvailable {
+		public static List<SheetFieldDef> GetListInput(SheetTypeEnum sheetType){
+			return GetList(sheetType,false);
+		}
+
+		public static List<SheetFieldDef> GetListOutput(SheetTypeEnum sheetType){
+			return GetList(sheetType,true);
+		}
+
 		///<Summary>This is the list of input or output fieldnames for user to pick from.  The only two options are input or output.</Summary>
-		public static List<SheetFieldDef> GetList(SheetTypeEnum sheetType,bool isOutput){
+		private static List<SheetFieldDef> GetList(SheetTypeEnum sheetType,bool isOutput){
 			switch(sheetType){
 				case SheetTypeEnum.LabelPatient:
 					return GetLabelPatient(isOutput);
