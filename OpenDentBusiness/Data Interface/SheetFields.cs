@@ -14,10 +14,21 @@ namespace OpenDentBusiness{
 			return DataObjectFactory<SheetField>.CreateObject(sheetFieldNum);
 		}
 
-		///<summary>Gets all fields for one sheet.</summary>
-		public static List<SheetField> GetForSheet(int sheetNum){
-			string command="SELECT * FROM sheetfield WHERE SheetNum="+POut.PInt(sheetNum);
-			return new List<SheetField>(DataObjectFactory<SheetField>.CreateObjects(command));
+		///<summary>When we need to use a sheet, we must run this method to pull all the associated fields and parameters from the database.  Then it will be ready for printing, copying, etc.</summary>
+		public static void GetFieldsAndParameters(Sheet sheet){
+			string command="SELECT * FROM sheetfield WHERE SheetNum="+POut.PInt(sheet.SheetNum);
+			sheet.SheetFields=new List<SheetField>(DataObjectFactory<SheetField>.CreateObjects(command));
+			//so parameters will also be in the field list, but they will just be ignored from here on out.
+			//because we will have an explicit parameter list instead.
+			sheet.Parameters=new List<SheetParameter>();
+			SheetParameter param;
+			int paramVal;
+			for(int i=0;i<sheet.SheetFields.Count;i++){
+				if(sheet.SheetFields[i].FieldType==SheetFieldType.Parameter){
+					param=new SheetParameter(true,sheet.SheetFields[i].FieldName,sheet.SheetFields[i].FieldValue);
+					sheet.Parameters.Add(param);
+				}
+			}
 		}
 
 		///<summary></summary>

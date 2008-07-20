@@ -17,6 +17,7 @@ namespace OpenDental{
 		/// </summary>
 		private System.ComponentModel.Container components = null;
 		public int PatNum;
+		private OpenDental.UI.Button butSlip;
 		private RefAttach[] RefAttachList;
 
 		///<summary></summary>
@@ -55,6 +56,7 @@ namespace OpenDental{
 			this.gridMain = new OpenDental.UI.ODGrid();
 			this.butAdd = new OpenDental.UI.Button();
 			this.butClose = new OpenDental.UI.Button();
+			this.butSlip = new OpenDental.UI.Button();
 			this.SuspendLayout();
 			// 
 			// gridMain
@@ -79,9 +81,9 @@ namespace OpenDental{
 			this.butAdd.CornerRadius = 4F;
 			this.butAdd.Image = global::OpenDental.Properties.Resources.Add;
 			this.butAdd.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butAdd.Location = new System.Drawing.Point(12,262);
+			this.butAdd.Location = new System.Drawing.Point(12,266);
 			this.butAdd.Name = "butAdd";
-			this.butAdd.Size = new System.Drawing.Size(75,26);
+			this.butAdd.Size = new System.Drawing.Size(75,24);
 			this.butAdd.TabIndex = 72;
 			this.butAdd.Text = "&Add";
 			this.butAdd.Click += new System.EventHandler(this.butAdd_Click);
@@ -94,17 +96,34 @@ namespace OpenDental{
 			this.butClose.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butClose.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butClose.CornerRadius = 4F;
-			this.butClose.Location = new System.Drawing.Point(592,262);
+			this.butClose.Location = new System.Drawing.Point(592,266);
 			this.butClose.Name = "butClose";
-			this.butClose.Size = new System.Drawing.Size(75,26);
+			this.butClose.Size = new System.Drawing.Size(75,24);
 			this.butClose.TabIndex = 0;
 			this.butClose.Text = "Close";
 			this.butClose.Click += new System.EventHandler(this.butClose_Click);
+			// 
+			// butSlip
+			// 
+			this.butSlip.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butSlip.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.butSlip.Autosize = true;
+			this.butSlip.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butSlip.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butSlip.CornerRadius = 4F;
+			this.butSlip.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butSlip.Location = new System.Drawing.Point(214,266);
+			this.butSlip.Name = "butSlip";
+			this.butSlip.Size = new System.Drawing.Size(86,24);
+			this.butSlip.TabIndex = 90;
+			this.butSlip.Text = "Referral Slip";
+			this.butSlip.Click += new System.EventHandler(this.butSlip_Click);
 			// 
 			// FormReferralsPatient
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.ClientSize = new System.Drawing.Size(695,309);
+			this.Controls.Add(this.butSlip);
 			this.Controls.Add(this.gridMain);
 			this.Controls.Add(this.butAdd);
 			this.Controls.Add(this.butClose);
@@ -123,6 +142,9 @@ namespace OpenDental{
 
 		private void FormReferralsPatient_Load(object sender,EventArgs e) {
 			FillGrid();
+			if(RefAttachList.Length>0){
+				gridMain.SetSelected(0,true);
+			}
 		}
 
 		private void FillGrid() {
@@ -167,9 +189,16 @@ namespace OpenDental{
 
 		private void gridMain_CellDoubleClick(object sender,ODGridClickEventArgs e) {
 			FormRefAttachEdit FormRAE2=new FormRefAttachEdit();
-			FormRAE2.RefAttachCur=RefAttachList[e.Row];
+			RefAttach refattach=RefAttachList[e.Row].Copy();
+			FormRAE2.RefAttachCur=refattach;
 			FormRAE2.ShowDialog();
 			FillGrid();
+			//reselect
+			for(int i=0;i<RefAttachList.Length;i++){
+				if(RefAttachList[i].ReferralNum==refattach.ReferralNum){
+					gridMain.SetSelected(i,true);
+				}
+			}
 		}
 
 		private void butAdd_Click(object sender,System.EventArgs e) {
@@ -180,41 +209,62 @@ namespace OpenDental{
 				return;
 			}
 			FormRefAttachEdit FormRA=new FormRefAttachEdit();
-			FormRA.RefAttachCur=new RefAttach();
-			FormRA.RefAttachCur.ReferralNum=FormRS.SelectedReferral.ReferralNum;
-			FormRA.RefAttachCur.PatNum=PatNum;
-			FormRA.RefAttachCur.IsFrom=true;
-			FormRA.RefAttachCur.RefDate=DateTime.Today;
+			RefAttach refattach=new RefAttach();
+			refattach.ReferralNum=FormRS.SelectedReferral.ReferralNum;
+			refattach.PatNum=PatNum;
+			refattach.IsFrom=true;
+			refattach.RefDate=DateTime.Today;
 			int order=0;
 			for(int i=0;i<RefAttachList.Length;i++) {
 				if(RefAttachList[i].ItemOrder > order) {
 					order=RefAttachList[i].ItemOrder;
 				}
 			}
-			FormRA.RefAttachCur.ItemOrder=order+1;
+			refattach.ItemOrder=order+1;
+			FormRA.RefAttachCur=refattach;
 			FormRA.IsNew=true;
 			FormRA.ShowDialog();
 			if(FormRA.DialogResult!=DialogResult.OK) {
 				return;
 			}
 			FillGrid();
+			//select
+			for(int i=0;i<RefAttachList.Length;i++){
+				if(RefAttachList[i].ReferralNum==refattach.ReferralNum){
+					gridMain.SetSelected(i,true);
+				}
+			}
 		}
 
-		private void butDelete_Click(object sender,System.EventArgs e) {
-			/*if(tbRefList.SelectedRow==-1) {
-				MessageBox.Show(Lan.g(this,"Please select item first."));
+		private void butSlip_Click(object sender,EventArgs e) {
+			int idx=gridMain.GetSelectedIndex();
+			if(idx==-1){
+				MsgBox.Show(this,"Please select a referral first");
 				return;
 			}
-			if(!MsgBox.Show(this,true,"Delete Referral?")) {
-				return;
+			Referral referral=Referrals.GetReferral(RefAttachList[idx].ReferralNum);
+			SheetDef sheetDef;
+			if(referral.Slip==0){
+				sheetDef=SheetsInternal.GetSheetDef(SheetInternalType.ReferralSlip);
 			}
-			RefAttaches.Delete(RefList[tbRefList.SelectedRow]);
-			FillTable();*/
+			else{
+				sheetDef=SheetDefs.GetSheetDef(referral.Slip);
+			}
+			Sheet sheet=SheetUtil.CreateSheet(sheetDef,PatNum);
+			SheetParameter.SetParameter(sheet,"PatNum",PatNum);
+			SheetParameter.SetParameter(sheet,"ReferralNum",referral.ReferralNum);
+			SheetFiller.FillFields(sheet);
+			SheetUtil.CalculateHeights(sheet,this.CreateGraphics());
+			FormSheetFillEdit FormS=new FormSheetFillEdit(sheet);
+			FormS.ShowDialog();
+			//grid will not be refilled, so no need to reselect.
 		}
 
 		private void butClose_Click(object sender, System.EventArgs e) {
 			Close();
 		}
+
+		
 
 		
 

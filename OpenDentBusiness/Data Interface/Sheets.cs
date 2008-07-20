@@ -75,17 +75,32 @@ namespace OpenDentBusiness{
 		//	DataObjectFactory<sheetData>.DeleteObject(sheetDataNum);
 		//}
 
-		/*public static string GetDescription(int sheetDataNum){
-			if(sheetDataNum==0){
-				return "";
-			}
-			for(int i=0;i<sheetDataC.List.Length;i++){
-				if(sheetDataC.List[i].sheetDataNum==sheetDataNum){
-					return sheetDataC.List[i].Description;
+		///<summary>Converts parameters into sheetfield objects, and then saves those objects in the database.  The parameters will never again enjoy full parameter status, but will just be read-only fields from here on out.  It ignores PatNum parameters, since those are already part of the sheet itself.</summary>
+		public static void SaveParameters(Sheet sheet){
+			SheetField field;
+			for(int i=0;i<sheet.Parameters.Count;i++){
+				if(sheet.Parameters[i].ParamName=="PatNum"){
+					continue;
 				}
+				field=new SheetField();
+				field.IsNew=true;
+				field.SheetNum=sheet.SheetNum;
+				field.FieldType=SheetFieldType.Parameter;
+				field.FieldName=sheet.Parameters[i].ParamName;
+				field.FieldValue=sheet.Parameters[i].ParamValue.ToString();//the object will be an int. Stored as a string.
+				field.FontSize=0;
+				field.FontName="";
+				field.FontIsBold=false;
+				field.XPos=0;
+				field.YPos=0;
+				field.Width=0;
+				field.Height=0;
+				field.GrowthBehavior=GrowthBehaviorEnum.None;
+				SheetFields.WriteObject(field);
 			}
-			return "";
-		}*/
+		}
+
+		
 
 	}
 }

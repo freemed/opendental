@@ -101,7 +101,7 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(644,485);
+			this.butOK.Location = new System.Drawing.Point(645,485);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(81,24);
 			this.butOK.TabIndex = 3;
@@ -116,7 +116,7 @@ namespace OpenDental{
 			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
-			this.butCancel.Location = new System.Drawing.Point(644,515);
+			this.butCancel.Location = new System.Drawing.Point(645,515);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(81,24);
 			this.butCancel.TabIndex = 2;
@@ -133,7 +133,7 @@ namespace OpenDental{
 			this.butDelete.CornerRadius = 4F;
 			this.butDelete.Image = global::OpenDental.Properties.Resources.deleteX;
 			this.butDelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butDelete.Location = new System.Drawing.Point(644,409);
+			this.butDelete.Location = new System.Drawing.Point(645,409);
 			this.butDelete.Name = "butDelete";
 			this.butDelete.Size = new System.Drawing.Size(81,24);
 			this.butDelete.TabIndex = 79;
@@ -148,23 +148,22 @@ namespace OpenDental{
 			this.butPrint.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butPrint.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butPrint.CornerRadius = 4F;
-			this.butPrint.Image = global::OpenDental.Properties.Resources.butPrint;
 			this.butPrint.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butPrint.Location = new System.Drawing.Point(644,321);
+			this.butPrint.Location = new System.Drawing.Point(644,280);
 			this.butPrint.Name = "butPrint";
 			this.butPrint.Size = new System.Drawing.Size(81,24);
 			this.butPrint.TabIndex = 80;
-			this.butPrint.Text = "Print";
+			this.butPrint.Text = "Print/Email";
 			this.butPrint.Click += new System.EventHandler(this.butPrint_Click);
 			// 
 			// FormSheetFillEdit
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
 			this.ClientSize = new System.Drawing.Size(737,551);
-			this.Controls.Add(this.butPrint);
 			this.Controls.Add(this.butDelete);
 			this.Controls.Add(this.panel1);
 			this.Controls.Add(this.textDateTime);
+			this.Controls.Add(this.butPrint);
 			this.Controls.Add(this.label3);
 			this.Controls.Add(this.textNote);
 			this.Controls.Add(this.label1);

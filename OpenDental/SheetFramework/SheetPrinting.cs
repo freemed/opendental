@@ -60,14 +60,17 @@ namespace OpenDental {
 
 		///<Summary>Surround with try/catch.</Summary>
 		public static void Print(Sheet sheet){
-			/*foreach(SheetParameter param in sheet.Parameters){
-				if(param.IsRequired && param.ParamValue==null){
-					throw new ApplicationException(Lan.g("Sheet","Parameter not specified for sheet: ")+param.ParamName);
-				}
-			}*/
+			Print(sheet,1);
+		}
+
+		///<Summary></Summary>
+		public static void Print(Sheet sheet,int copies){
+			//parameter null check moved to SheetFiller.
 			//could validate field names here later.
 			SheetList=new List<Sheet>();
-			SheetList.Add(sheet);
+			for(int i=0;i<copies;i++){
+				SheetList.Add(sheet.Copy());
+			}
 			sheetsPrinted=0;
 			PrintDocument pd=new PrintDocument();
 			pd.OriginAtMargins=true;
@@ -116,6 +119,9 @@ namespace OpenDental {
 			Font font;
 			FontStyle fontstyle;
 			foreach(SheetField field in sheet.SheetFields){
+				if(field.FieldType==SheetFieldType.Parameter){
+					continue;
+				}
 				fontstyle=FontStyle.Regular;
 				if(field.FontIsBold){
 					fontstyle=FontStyle.Bold;

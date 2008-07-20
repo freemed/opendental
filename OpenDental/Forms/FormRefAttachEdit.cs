@@ -34,11 +34,10 @@ namespace OpenDental{
 		private ComboBox comboRefToStatus;
 		private Label label7;
 		private OpenDental.UI.Button butDelete;
-		private GroupBox groupReferralSlip;
-		private OpenDental.UI.Button butNew;
 		private ListBox listSheets;
 		///<summary></summary>
 		public RefAttach RefAttachCur;
+		private Label label8;
 		///<summary>List of referral slips for this pat/ref combo.</summary>
 		private List<Sheet> SheetList; 
 
@@ -84,11 +83,9 @@ namespace OpenDental{
 			this.comboRefToStatus = new System.Windows.Forms.ComboBox();
 			this.label7 = new System.Windows.Forms.Label();
 			this.butDelete = new OpenDental.UI.Button();
-			this.groupReferralSlip = new System.Windows.Forms.GroupBox();
 			this.listSheets = new System.Windows.Forms.ListBox();
-			this.butNew = new OpenDental.UI.Button();
+			this.label8 = new System.Windows.Forms.Label();
 			this.panel1.SuspendLayout();
-			this.groupReferralSlip.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// butCancel
@@ -318,47 +315,30 @@ namespace OpenDental{
 			this.butDelete.Text = "Detach";
 			this.butDelete.Click += new System.EventHandler(this.butDelete_Click);
 			// 
-			// groupReferralSlip
-			// 
-			this.groupReferralSlip.Controls.Add(this.listSheets);
-			this.groupReferralSlip.Controls.Add(this.butNew);
-			this.groupReferralSlip.Location = new System.Drawing.Point(144,278);
-			this.groupReferralSlip.Name = "groupReferralSlip";
-			this.groupReferralSlip.Size = new System.Drawing.Size(220,100);
-			this.groupReferralSlip.TabIndex = 88;
-			this.groupReferralSlip.TabStop = false;
-			this.groupReferralSlip.Text = "Referral Slips";
-			// 
 			// listSheets
 			// 
 			this.listSheets.FormattingEnabled = true;
-			this.listSheets.Location = new System.Drawing.Point(9,19);
+			this.listSheets.Location = new System.Drawing.Point(151,273);
 			this.listSheets.Name = "listSheets";
 			this.listSheets.Size = new System.Drawing.Size(120,69);
 			this.listSheets.TabIndex = 90;
 			this.listSheets.DoubleClick += new System.EventHandler(this.listSheets_DoubleClick);
 			// 
-			// butNew
+			// label8
 			// 
-			this.butNew.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butNew.Autosize = true;
-			this.butNew.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butNew.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butNew.CornerRadius = 4F;
-			this.butNew.Image = global::OpenDental.Properties.Resources.Add;
-			this.butNew.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butNew.Location = new System.Drawing.Point(135,19);
-			this.butNew.Name = "butNew";
-			this.butNew.Size = new System.Drawing.Size(79,24);
-			this.butNew.TabIndex = 89;
-			this.butNew.Text = "New";
-			this.butNew.Click += new System.EventHandler(this.butNew_Click);
+			this.label8.Location = new System.Drawing.Point(9,275);
+			this.label8.Name = "label8";
+			this.label8.Size = new System.Drawing.Size(140,40);
+			this.label8.TabIndex = 91;
+			this.label8.Text = "Referral Slips\r\n(double click to view)";
+			this.label8.TextAlign = System.Drawing.ContentAlignment.TopRight;
 			// 
 			// FormRefAttachEdit
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.ClientSize = new System.Drawing.Size(689,410);
-			this.Controls.Add(this.groupReferralSlip);
+			this.Controls.Add(this.label8);
+			this.Controls.Add(this.listSheets);
 			this.Controls.Add(this.butDelete);
 			this.Controls.Add(this.label7);
 			this.Controls.Add(this.comboRefToStatus);
@@ -389,7 +369,6 @@ namespace OpenDental{
 			this.Text = "FormRefAttachEdit";
 			this.Load += new System.EventHandler(this.FormRefAttachEdit_Load);
 			this.panel1.ResumeLayout(false);
-			this.groupReferralSlip.ResumeLayout(false);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -463,35 +442,7 @@ namespace OpenDental{
 				return;
 			}
 			Sheet sheet=SheetList[listSheets.SelectedIndex];
-			sheet.SheetFields=SheetFields.GetForSheet(SheetList[listSheets.SelectedIndex].SheetNum);
-			FormSheetFillEdit FormS=new FormSheetFillEdit(sheet);
-			FormS.ShowDialog();
-			FillSheets();
-		}
-
-		///<summary>New referral slip.</summary>
-		private void butNew_Click(object sender,EventArgs e) {
-			try{
-				DataToCur();
-			}
-			catch(ApplicationException ex){
-				MessageBox.Show(ex.Message);
-				return;
-			}
-			Referral referral=Referrals.GetReferral(RefAttachCur.ReferralNum);
-			SheetDef sheetDef;
-			if(referral.Slip==0){
-				sheetDef=SheetsInternal.GetSheetDef(SheetInternalType.ReferralSlip);
-			}
-			else{
-				sheetDef=SheetDefs.GetSheetDef(referral.Slip);
-			}
-			Sheet sheet=SheetUtil.CreateSheet(sheetDef,RefAttachCur.PatNum);
-			SheetParameter.SetParameter(sheet,"PatNum",RefAttachCur.PatNum);
-			SheetParameter.SetParameter(sheet,"ReferralNum",RefAttachCur.ReferralNum);
-			SheetFiller.FillFields(sheet);
-			SheetUtil.CalculateHeights(sheet,this.CreateGraphics());
-			//List<SheetField> sheetFieldList=SheetUtil.CreateFieldList(sheetDef.SheetFieldDefs);
+			SheetFields.GetFieldsAndParameters(sheet);
 			FormSheetFillEdit FormS=new FormSheetFillEdit(sheet);
 			FormS.ShowDialog();
 			FillSheets();

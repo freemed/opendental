@@ -348,6 +348,12 @@
     <Compile Include="Forms\BasicTemplate.designer.cs">
       <DependentUpon>BasicTemplate.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\FormSheetOutputFormat.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormSheetOutputFormat.designer.cs">
+      <DependentUpon>FormSheetOutputFormat.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\FormSheetFieldStatic.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -3446,6 +3452,10 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\BasicTemplate.resx">
       <DependentUpon>BasicTemplate.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormSheetOutputFormat.resx">
+      <DependentUpon>FormSheetOutputFormat.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormSheetFieldStatic.resx">

@@ -34,7 +34,7 @@ namespace OpenDentBusiness{
 		[DataField("FieldType")]
 		private SheetFieldType fieldType;
 		private bool fieldTypeChanged;
-		///<summary>Enum:SheetFieldType  OutputText, InputField, StaticText,Parameter(only used for SheetFieldData, not SheetField).</summary>
+		///<summary>Enum:SheetFieldType  OutputText, InputField, StaticText,Parameter(only used for SheetField, not SheetFieldDef).</summary>
 		public SheetFieldType FieldType{
 			get{return fieldType;}
 			set{if(fieldType!=value){fieldType=value;MarkDirty();fieldTypeChanged=true;}}
@@ -46,7 +46,7 @@ namespace OpenDentBusiness{
 		[DataField("FieldName")]
 		private string fieldName;
 		private bool fieldNameChanged;
-		///<summary>Only for OutputText and InputField types.  Each sheet typically has a main datatable type.  For OutputText types, FieldName is usually the string representation of the database column for the main table.  For other tables, it can be of the form table.Column.  There may also be extra fields available that are not strictly pulled from the database.  Extra fields will start with lowercase to indicate that they are not pure database fields.  The list of available fields for each type in SheetFieldsAvailable.  Users could pick from that list.  Likewise, InputField types are internally tied to actions to persist the data.  So they are also hard coded and are available in SheetFieldsAvailable.</summary>
+		///<summary>Only for OutputText and InputField types.  Each sheet typically has a main datatable type.  For OutputText types, FieldName is usually the string representation of the database column for the main table.  For other tables, it can be of the form table.Column.  There may also be extra fields available that are not strictly pulled from the database.  Extra fields will start with lowercase to indicate that they are not pure database fields.  The list of available fields for each type in SheetFieldsAvailable.  Users can pick from that list.  Likewise, InputField types are internally tied to actions to persist the data.  So they are also hard coded and are available in SheetFieldsAvailable.  When a SheetField has a fieldType of Parameter, then the FieldName stores the name of the parameter.</summary>
 		public string FieldName{
 			get{return fieldName;}
 			set{if(fieldName!=value){fieldName=value;MarkDirty();fieldNameChanged=true;}}
@@ -58,7 +58,7 @@ namespace OpenDentBusiness{
 		[DataField("FieldValue")]
 		private string fieldValue;
 		private bool fieldValueChanged;
-		///<summary>For OutputText, this value is set before printing.  This is the data obtained from the database and ready to print.  For StaticText, this is set when designing the sheetDef.  For an archived sheet retrieved from the database (all SheetField rows), this value will have been saved and will not be filled again.</summary>
+		///<summary>For OutputText, this value is set before printing.  This is the data obtained from the database and ready to print.  For StaticText, this is set when designing the sheetDef.  For an archived sheet retrieved from the database (all SheetField rows), this value will have been saved and will not be filled again automatically.  For a parameter fieldtype, this will store the value of the parameter.</summary>
 		public string FieldValue{
 			get{return fieldValue;}
 			set{if(fieldValue!=value){fieldValue=value;MarkDirty();fieldValueChanged=true;}}

@@ -37,7 +37,7 @@ namespace OpenDental.DataAccess {
 		}
 
 		private bool isNew;
-		///<summary>Always assume the object is not created from the database. The DataObjectFactory-T sets the isNew flag to false if appropriate.  If we create our own object from the db, we must set this to false.</summary>
+		///<summary>Always assume the object is not created from the database. The DataObjectFactory-T sets the isNew flag to false if appropriate.  If we create our own object from the db, we must set this to false.  The best practice is to always explicitly set this value when creating an object, whether true or false.</summary>
 		public bool IsNew {
 			get { return isNew; }
 			set { isNew = value; }

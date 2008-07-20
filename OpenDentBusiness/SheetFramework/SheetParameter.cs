@@ -50,7 +50,7 @@ namespace OpenDentBusiness{
 			param.ParamValue=paramValue;
 		}
 
-		private static SheetParameter GetParamByName(List<SheetParameter> parameters,string paramName){
+		public static SheetParameter GetParamByName(List<SheetParameter> parameters,string paramName){
 			foreach(SheetParameter param in parameters){
 				if(param.ParamName==paramName){
 					return param;

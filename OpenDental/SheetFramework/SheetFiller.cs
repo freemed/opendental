@@ -7,6 +7,11 @@ namespace OpenDental{
 	public class SheetFiller {
 		///<summary>Gets the data from the database and fills the fields.</summary>
 		public static void FillFields(Sheet sheet){
+			foreach(SheetParameter param in sheet.Parameters){
+				if(param.IsRequired && param.ParamValue==null){
+					throw new ApplicationException(Lan.g("Sheet","Parameter not specified for sheet: ")+param.ParamName);
+				}
+			}
 			switch(sheet.SheetType) {
 				case SheetTypeEnum.LabelPatient:
 					Patient pat=Patients.GetPat((int)GetParamByName(sheet,"PatNum").ParamValue);
