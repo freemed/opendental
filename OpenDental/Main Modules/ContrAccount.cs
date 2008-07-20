@@ -157,6 +157,9 @@ namespace OpenDental {
 		private int Actscrollval;
 		private Label labelPatEstBal;
 		private Label labelPatEstBalAmt;
+		private Panel panelTotalOwes;
+		private Label label21;
+		private Label labelTotalPtOwes;
 		///<summary>Set to true if this control is placed in the recall edit window. This affects the control behavior.</summary>
 		public bool ViewingInRecall=false;
 		#endregion UserVariables
@@ -220,6 +223,7 @@ namespace OpenDental {
 			this.checkShowTP = new System.Windows.Forms.CheckBox();
 			this.gridProg = new OpenDental.UI.ODGrid();
 			this.panelAging = new System.Windows.Forms.Panel();
+			this.labelPatEstBalAmt = new System.Windows.Forms.Label();
 			this.labelPatEstBal = new System.Windows.Forms.Label();
 			this.panel2 = new System.Windows.Forms.Panel();
 			this.panel1 = new System.Windows.Forms.Panel();
@@ -294,7 +298,9 @@ namespace OpenDental {
 			this.gridAccount = new OpenDental.UI.ODGrid();
 			this.gridComm = new OpenDental.UI.ODGrid();
 			this.ToolBarMain = new OpenDental.UI.ODToolBar();
-			this.labelPatEstBalAmt = new System.Windows.Forms.Label();
+			this.panelTotalOwes = new System.Windows.Forms.Panel();
+			this.label21 = new System.Windows.Forms.Label();
+			this.labelTotalPtOwes = new System.Windows.Forms.Label();
 			this.panelCommButs.SuspendLayout();
 			this.panelProgNotes.SuspendLayout();
 			this.groupBox7.SuspendLayout();
@@ -305,6 +311,7 @@ namespace OpenDental {
 			this.tabMain.SuspendLayout();
 			this.tabShow.SuspendLayout();
 			this.panelInsInfoDetail.SuspendLayout();
+			this.panelTotalOwes.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// labelFamFinancial
@@ -694,6 +701,7 @@ namespace OpenDental {
 			// 
 			// panelAging
 			// 
+			this.panelAging.Controls.Add(this.panelTotalOwes);
 			this.panelAging.Controls.Add(this.labelPatEstBalAmt);
 			this.panelAging.Controls.Add(this.labelPatEstBal);
 			this.panelAging.Controls.Add(this.panel2);
@@ -720,6 +728,15 @@ namespace OpenDental {
 			this.panelAging.Name = "panelAging";
 			this.panelAging.Size = new System.Drawing.Size(749,37);
 			this.panelAging.TabIndex = 213;
+			// 
+			// labelPatEstBalAmt
+			// 
+			this.labelPatEstBalAmt.Location = new System.Drawing.Point(589,17);
+			this.labelPatEstBalAmt.Name = "labelPatEstBalAmt";
+			this.labelPatEstBalAmt.Size = new System.Drawing.Size(65,13);
+			this.labelPatEstBalAmt.TabIndex = 89;
+			this.labelPatEstBalAmt.Text = "25000.00";
+			this.labelPatEstBalAmt.TextAlign = System.Drawing.ContentAlignment.TopCenter;
 			// 
 			// labelPatEstBal
 			// 
@@ -1497,14 +1514,35 @@ namespace OpenDental {
 			this.ToolBarMain.TabIndex = 47;
 			this.ToolBarMain.ButtonClick += new OpenDental.UI.ODToolBarButtonClickEventHandler(this.ToolBarMain_ButtonClick);
 			// 
-			// labelPatEstBalAmt
+			// panelTotalOwes
 			// 
-			this.labelPatEstBalAmt.Location = new System.Drawing.Point(589,17);
-			this.labelPatEstBalAmt.Name = "labelPatEstBalAmt";
-			this.labelPatEstBalAmt.Size = new System.Drawing.Size(65,13);
-			this.labelPatEstBalAmt.TabIndex = 89;
-			this.labelPatEstBalAmt.Text = "25000.00";
-			this.labelPatEstBalAmt.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+			this.panelTotalOwes.Controls.Add(this.label21);
+			this.panelTotalOwes.Controls.Add(this.labelTotalPtOwes);
+			this.panelTotalOwes.Location = new System.Drawing.Point(560,-38);
+			this.panelTotalOwes.Name = "panelTotalOwes";
+			this.panelTotalOwes.Size = new System.Drawing.Size(126,37);
+			this.panelTotalOwes.TabIndex = 226;
+			// 
+			// label21
+			// 
+			this.label21.Location = new System.Drawing.Point(3,0);
+			this.label21.Name = "label21";
+			this.label21.Size = new System.Drawing.Size(123,12);
+			this.label21.TabIndex = 223;
+			this.label21.Text = "TOTAL  Owed w/ Plan:";
+			this.label21.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+			this.toolTip1.SetToolTip(this.label21,"Total balance owed on all payment plans ");
+			// 
+			// labelTotalPtOwes
+			// 
+			this.labelTotalPtOwes.Font = new System.Drawing.Font("Microsoft Sans Serif",14.25F,System.Drawing.FontStyle.Bold,System.Drawing.GraphicsUnit.Point,((byte)(0)));
+			this.labelTotalPtOwes.ForeColor = System.Drawing.Color.Firebrick;
+			this.labelTotalPtOwes.Location = new System.Drawing.Point(6,12);
+			this.labelTotalPtOwes.Name = "labelTotalPtOwes";
+			this.labelTotalPtOwes.Size = new System.Drawing.Size(112,23);
+			this.labelTotalPtOwes.TabIndex = 222;
+			this.labelTotalPtOwes.Text = "2500.00";
+			this.labelTotalPtOwes.TextAlign = System.Drawing.ContentAlignment.TopCenter;
 			// 
 			// ContrAccount
 			// 
@@ -1539,6 +1577,7 @@ namespace OpenDental {
 			this.tabShow.PerformLayout();
 			this.panelInsInfoDetail.ResumeLayout(false);
 			this.panelInsInfoDetail.PerformLayout();
+			this.panelTotalOwes.ResumeLayout(false);
 			this.ResumeLayout(false);
 
 		}
@@ -1734,6 +1773,7 @@ namespace OpenDental {
 			}
 			bool viewingInRecall=ViewingInRecall;
 			if(PrefC.GetBool("FuchsOptionsOn")) {
+				panelTotalOwes.Top=-38;
 				viewingInRecall=true;
 			}
 			DataSetMain=AccountModuleL.GetAll(patNum,viewingInRecall,fromDate,toDate,isSelectingFamily);
@@ -2073,6 +2113,10 @@ namespace OpenDental {
 				PPDueTotal += (Convert.ToDouble((table.Rows[i]["due"]).ToString()));
 			}
 			gridPayPlan.EndUpdate();
+			if(PrefC.GetBool("FuchsOptionsOn")) {
+				panelTotalOwes.Top=1;
+				labelTotalPtOwes.Text=(PPBalanceTotal + FamCur.List[0].BalTotal -FamCur.List[0].InsEst).ToString("F");
+			}
 		}
 
 		/// <summary>Fills the commlog grid on this form.  It does not refresh the data from the database.</summary>
