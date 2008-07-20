@@ -1715,6 +1715,15 @@ namespace OpenDental{
 		}
 
 		private void OnPrint_Click() {
+			if(PrefC.GetBool("FuchsOptionsOn")) {
+				if(checkShowDiscount.Checked || checkShowIns.Checked) {
+					if(MessageBox.Show(this,string.Format(Lan.g(this,"Do you want to remove insurance estimates and PPO discounts from printed treatment plan?")),"Open Dental",MessageBoxButtons.YesNo,MessageBoxIcon.Question) != DialogResult.No) {
+						checkShowDiscount.Checked=false;
+						checkShowIns.Checked=false;
+						FillMain();
+					}
+				}
+			}
 			PrepImageForPrinting();
 			MigraDoc.DocumentObjectModel.Document doc=CreateDocument();
 			MigraDoc.Rendering.Printing.MigraDocPrintDocument printdoc=new MigraDoc.Rendering.Printing.MigraDocPrintDocument();
@@ -1735,6 +1744,15 @@ namespace OpenDental{
 		}
 
 		private void OnEmail_Click() {
+			if(PrefC.GetBool("FuchsOptionsOn")) {
+				if(checkShowDiscount.Checked || checkShowIns.Checked) {
+					if(MessageBox.Show(this,string.Format(Lan.g(this,"Do you want to remove insurance estimates and PPO discounts from e-mailed treatment plan?")),"Open Dental",MessageBoxButtons.YesNo,MessageBoxIcon.Question) != DialogResult.No) {
+						checkShowDiscount.Checked=false;
+						checkShowIns.Checked=false;
+						FillMain();
+					}
+				}
+			}
 			PrepImageForPrinting();
 			string attachPath=FormEmailMessageEdit.GetAttachPath();
 			Random rnd=new Random();
