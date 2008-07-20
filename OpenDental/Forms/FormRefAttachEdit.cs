@@ -478,7 +478,14 @@ namespace OpenDental{
 				MessageBox.Show(ex.Message);
 				return;
 			}
-			SheetDef sheetDef=SheetsInternal.GetSheetDef(SheetInternalType.ReferralSlip);
+			Referral referral=Referrals.GetReferral(RefAttachCur.ReferralNum);
+			SheetDef sheetDef;
+			if(referral.Slip==0){
+				sheetDef=SheetsInternal.GetSheetDef(SheetInternalType.ReferralSlip);
+			}
+			else{
+				sheetDef=SheetDefs.GetSheetDef(referral.Slip);
+			}
 			SheetParameter.SetParameter(sheetDef,"PatNum",RefAttachCur.PatNum);
 			SheetParameter.SetParameter(sheetDef,"ReferralNum",RefAttachCur.ReferralNum);
 			SheetFiller.FillFields(sheetDef);

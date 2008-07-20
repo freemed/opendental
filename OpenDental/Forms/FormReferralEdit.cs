@@ -1,6 +1,7 @@
 using System;
 using System.Drawing;
 using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
 using System.Windows.Forms;
@@ -66,8 +67,12 @@ namespace OpenDental{
 		private System.Windows.Forms.ComboBox comboPatientsFrom;
 		private TextBox textNationalProvID;
 		private Label label19;
+		private Label label20;
+		private Label label21;
+		private ComboBox comboSlip;
 		///<summary></summary>
 		public Referral RefCur;
+		private List<SheetDef> SlipList;
 
 		///<summary></summary>
 		public FormReferralEdit(Referral refCur){
@@ -154,6 +159,9 @@ namespace OpenDental{
 			this.butNone = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
 			this.butOK = new OpenDental.UI.Button();
+			this.label20 = new System.Windows.Forms.Label();
+			this.label21 = new System.Windows.Forms.Label();
+			this.comboSlip = new System.Windows.Forms.ComboBox();
 			this.groupSSN.SuspendLayout();
 			this.groupBox2.SuspendLayout();
 			this.SuspendLayout();
@@ -298,7 +306,7 @@ namespace OpenDental{
 			// 
 			// textPhone3
 			// 
-			this.textPhone3.Location = new System.Drawing.Point(206,328);
+			this.textPhone3.Location = new System.Drawing.Point(210,328);
 			this.textPhone3.MaxLength = 4;
 			this.textPhone3.Name = "textPhone3";
 			this.textPhone3.Size = new System.Drawing.Size(39,20);
@@ -306,7 +314,7 @@ namespace OpenDental{
 			// 
 			// label13
 			// 
-			this.label13.Location = new System.Drawing.Point(196,330);
+			this.label13.Location = new System.Drawing.Point(200,330);
 			this.label13.Name = "label13";
 			this.label13.Size = new System.Drawing.Size(6,16);
 			this.label13.TabIndex = 0;
@@ -315,7 +323,7 @@ namespace OpenDental{
 			// 
 			// textPhone2
 			// 
-			this.textPhone2.Location = new System.Drawing.Point(166,328);
+			this.textPhone2.Location = new System.Drawing.Point(170,328);
 			this.textPhone2.MaxLength = 3;
 			this.textPhone2.Name = "textPhone2";
 			this.textPhone2.Size = new System.Drawing.Size(28,20);
@@ -525,16 +533,16 @@ namespace OpenDental{
 			this.groupBox2.Controls.Add(this.textPatientsNumTo);
 			this.groupBox2.Controls.Add(this.comboPatientsTo);
 			this.groupBox2.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.groupBox2.Location = new System.Drawing.Point(481,332);
+			this.groupBox2.Location = new System.Drawing.Point(481,314);
 			this.groupBox2.Name = "groupBox2";
-			this.groupBox2.Size = new System.Drawing.Size(383,130);
+			this.groupBox2.Size = new System.Drawing.Size(383,109);
 			this.groupBox2.TabIndex = 74;
 			this.groupBox2.TabStop = false;
 			this.groupBox2.Text = "Used By Patients";
 			// 
 			// label18
 			// 
-			this.label18.Location = new System.Drawing.Point(15,70);
+			this.label18.Location = new System.Drawing.Point(15,57);
 			this.label18.Name = "label18";
 			this.label18.Size = new System.Drawing.Size(323,19);
 			this.label18.TabIndex = 72;
@@ -544,7 +552,7 @@ namespace OpenDental{
 			// textPatientsNumFrom
 			// 
 			this.textPatientsNumFrom.BackColor = System.Drawing.Color.White;
-			this.textPatientsNumFrom.Location = new System.Drawing.Point(17,91);
+			this.textPatientsNumFrom.Location = new System.Drawing.Point(17,78);
 			this.textPatientsNumFrom.Name = "textPatientsNumFrom";
 			this.textPatientsNumFrom.ReadOnly = true;
 			this.textPatientsNumFrom.Size = new System.Drawing.Size(35,20);
@@ -553,7 +561,7 @@ namespace OpenDental{
 			// comboPatientsFrom
 			// 
 			this.comboPatientsFrom.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboPatientsFrom.Location = new System.Drawing.Point(61,91);
+			this.comboPatientsFrom.Location = new System.Drawing.Point(61,78);
 			this.comboPatientsFrom.MaxDropDownItems = 30;
 			this.comboPatientsFrom.Name = "comboPatientsFrom";
 			this.comboPatientsFrom.Size = new System.Drawing.Size(299,21);
@@ -561,7 +569,7 @@ namespace OpenDental{
 			// 
 			// label6
 			// 
-			this.label6.Location = new System.Drawing.Point(15,21);
+			this.label6.Location = new System.Drawing.Point(15,14);
 			this.label6.Name = "label6";
 			this.label6.Size = new System.Drawing.Size(323,19);
 			this.label6.TabIndex = 69;
@@ -571,7 +579,7 @@ namespace OpenDental{
 			// textPatientsNumTo
 			// 
 			this.textPatientsNumTo.BackColor = System.Drawing.Color.White;
-			this.textPatientsNumTo.Location = new System.Drawing.Point(17,42);
+			this.textPatientsNumTo.Location = new System.Drawing.Point(17,35);
 			this.textPatientsNumTo.Name = "textPatientsNumTo";
 			this.textPatientsNumTo.ReadOnly = true;
 			this.textPatientsNumTo.Size = new System.Drawing.Size(35,20);
@@ -580,7 +588,7 @@ namespace OpenDental{
 			// comboPatientsTo
 			// 
 			this.comboPatientsTo.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboPatientsTo.Location = new System.Drawing.Point(61,42);
+			this.comboPatientsTo.Location = new System.Drawing.Point(61,35);
 			this.comboPatientsTo.MaxDropDownItems = 30;
 			this.comboPatientsTo.Name = "comboPatientsTo";
 			this.comboPatientsTo.Size = new System.Drawing.Size(299,21);
@@ -659,10 +667,40 @@ namespace OpenDental{
 			this.butOK.Text = "&OK";
 			this.butOK.Click += new System.EventHandler(this.butOK_Click);
 			// 
+			// label20
+			// 
+			this.label20.Location = new System.Drawing.Point(157,331);
+			this.label20.Name = "label20";
+			this.label20.Size = new System.Drawing.Size(11,16);
+			this.label20.TabIndex = 77;
+			this.label20.Text = ")";
+			this.label20.TextAlign = System.Drawing.ContentAlignment.TopRight;
+			// 
+			// label21
+			// 
+			this.label21.Location = new System.Drawing.Point(496,441);
+			this.label21.Name = "label21";
+			this.label21.Size = new System.Drawing.Size(345,16);
+			this.label21.TabIndex = 78;
+			this.label21.Text = "Referral Slip (custom referral slips may be added in Sheets)";
+			this.label21.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
+			// 
+			// comboSlip
+			// 
+			this.comboSlip.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboSlip.Location = new System.Drawing.Point(498,461);
+			this.comboSlip.MaxDropDownItems = 30;
+			this.comboSlip.Name = "comboSlip";
+			this.comboSlip.Size = new System.Drawing.Size(275,21);
+			this.comboSlip.TabIndex = 79;
+			// 
 			// FormReferralEdit
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.ClientSize = new System.Drawing.Size(877,663);
+			this.Controls.Add(this.comboSlip);
+			this.Controls.Add(this.label21);
+			this.Controls.Add(this.label20);
 			this.Controls.Add(this.label19);
 			this.Controls.Add(this.textNationalProvID);
 			this.Controls.Add(this.groupBox2);
@@ -828,10 +866,21 @@ namespace OpenDental{
 			for(int i=0;i<patsFrom.Length;i++){
 				comboPatientsFrom.Items.Add(patsFrom[i]);
 			}
-			if(patsTo.Length>0)
+			if(patsTo.Length>0){
 				comboPatientsTo.SelectedIndex=0;
-			if(patsFrom.Length>0)
+			}
+			if(patsFrom.Length>0){
 				comboPatientsFrom.SelectedIndex=0;
+			}
+			comboSlip.Items.Add(Lan.g(this,"Default"));
+			comboSlip.SelectedIndex=0;
+			SlipList=SheetDefs.GetCustomForType(SheetTypeEnum.ReferralSlip);
+			for(int i=0;i<SlipList.Count;i++){
+				comboSlip.Items.Add(SlipList[i].Description);
+				if(RefCur.Slip==SlipList[i].SheetDefNum){
+					comboSlip.SelectedIndex=i+1;
+				}
+			}
 		}
 
 		private void radioSSN_Click(object sender, System.EventArgs e) {
@@ -878,6 +927,10 @@ namespace OpenDental{
 			RefCur.NationalProvID=textNationalProvID.Text;
       RefCur.EMail=textEmail.Text;
       RefCur.Note=textNotes.Text; 
+			RefCur.Slip=0;
+			if(comboSlip.SelectedIndex>0){
+				RefCur.Slip=SlipList[comboSlip.SelectedIndex-1].SheetDefNum;
+			}
 			//RefCur.UsingTIN already taken care of
       if(!IsPatient){
 			  RefCur.Specialty=(DentalSpecialty)listSpecialty.SelectedIndex;

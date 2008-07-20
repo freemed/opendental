@@ -265,10 +265,11 @@ namespace OpenDental {
 						SheetDefCur.SheetFieldDefs.RemoveAt(idx);
 					}
 					break;
-					return;
 			}
 			FillFieldList();
-			listFields.SelectedIndex=idx;//reselect the item.
+			if(listFields.Items.Count-1>=idx){
+				listFields.SelectedIndex=idx;//reselect the item.
+			}
 			panelMain.Invalidate();
 		}
 

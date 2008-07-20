@@ -35,9 +35,19 @@ namespace OpenDentBusiness{
 			}
 		}
 
-		///<Summary>Gets one SheetDef from the database.</Summary>
-		public static SheetDef CreateObject(int sheetDefNum){
-			return DataObjectFactory<SheetDef>.CreateObject(sheetDefNum);
+		///<Summary>Gets one SheetDef from the cache.</Summary>
+		public static SheetDef GetSheetDef(int sheetDefNum){
+			SheetDef sheetdef=null;
+			for(int i=0;i<SheetDefC.Listt.Count;i++){
+				if(SheetDefC.Listt[i].SheetDefNum==sheetDefNum){
+					sheetdef=SheetDefC.Listt[i].Copy();
+					break;
+				}
+			}
+			//if sheetdef is null, it will crash, just as it should.
+			GetFieldsAndParameters(sheetdef);
+			return sheetdef;
+			//return DataObjectFactory<SheetDef>.CreateObject(sheetDefNum);
 		}
 
 		//<summary>Used in FormRefAttachEdit to show all referral slips for the patient/referral combo.  Usually 0 or 1 results.</summary>
@@ -93,22 +103,33 @@ namespace OpenDentBusiness{
 
 		///<summary>Sheetdefs and sheetfielddefs are archived separately.  So when we need to use a sheetdef, we must run this method to pull all the associated fields from the archive.  Then it will be ready for printing, copying, etc.</summary>
 		public static void GetFieldsAndParameters(SheetDef sheetdef){
-			sheetdef.Parameters=new List<SheetParameter>();
 			sheetdef.SheetFieldDefs=new List<SheetFieldDef>();
+			sheetdef.Parameters=SheetParameter.GetForType(sheetdef.SheetType);
 			for(int i=0;i<SheetFieldDefC.Listt.Count;i++){
 				if(SheetFieldDefC.Listt[i].SheetDefNum!=sheetdef.SheetDefNum){
 					continue;
 				}
 				if(SheetFieldDefC.Listt[i].FieldType==SheetFieldType.Parameter){
-					//actually, let's worry about this later.
-					//sheetdef.Parameters.Add(new SheetParameter(
-					//	SheetFieldDefC.Listt[i].Copy());
+					//sheetfielddefs never store parameters.
+					//sheetfields do store filled parameters, but that's different.
 				}
 				else{
 					sheetdef.SheetFieldDefs.Add(SheetFieldDefC.Listt[i].Copy());
 				}
 			}
 		}
+
+		public static List<SheetDef> GetCustomForType(SheetTypeEnum sheettype){
+			List<SheetDef> retVal=new List<SheetDef>();
+			for(int i=0;i<SheetDefC.Listt.Count;i++){
+				if(SheetDefC.Listt[i].SheetType==sheettype){
+					retVal.Add(SheetDefC.Listt[i].Copy());
+				}
+			}
+			return retVal;
+		}
+
+
 
 	}
 }

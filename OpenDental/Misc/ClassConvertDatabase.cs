@@ -7742,7 +7742,8 @@ namespace OpenDental{
 						INDEX (SheetDefNum)
 						) DEFAULT CHARSET=utf8";
 					General.NonQ(command);
-
+					command="ALTER TABLE referral ADD Slip int default '0' NOT NULL";
+					General.NonQ(command);
 
 
 

@@ -47,32 +47,12 @@ namespace OpenDentBusiness{
 		public int PatNum;
 		///<summary>NPI for the referral</summary>
 		public string NationalProvID;
+		///<summary>FK to sheetdef.SheetDefNum.  Referral slips can be set for individual referral sources.  If zero, then the default internal referral slip will be used instead of a custom referral slip.</summary>
+		public int Slip;
 
 		///<summary>Returns a copy of this Referral.</summary>
 		public Referral Copy(){
-			Referral r=new Referral();
-			r.ReferralNum=ReferralNum;
-			r.LName=LName;
-			r.FName=FName;
-			r.MName=MName;
-			r.SSN=SSN;
-			r.UsingTIN=UsingTIN;
-			r.Specialty=Specialty;
-			r.ST=ST;
-			r.Telephone=Telephone;
-			r.Address=Address;
-			r.Address2=Address2;
-			r.City=City;
-			r.Zip=Zip;
-			r.Note=Note;
-			r.Phone2=Phone2;
-			r.IsHidden=IsHidden;
-			r.NotPerson=NotPerson;
-			r.Title=Title;
-			r.EMail=EMail;
-			r.PatNum=PatNum;
-			r.NationalProvID=NationalProvID;
-			return r;
+			return (Referral)this.MemberwiseClone();
 		}
 		
 
