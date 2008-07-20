@@ -32,6 +32,7 @@ namespace OpenDental{
 			this.butOK = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
 			this.butDelete = new OpenDental.UI.Button();
+			this.butPrint = new OpenDental.UI.Button();
 			this.panel1.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -100,11 +101,11 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(637,485);
+			this.butOK.Location = new System.Drawing.Point(644,485);
 			this.butOK.Name = "butOK";
-			this.butOK.Size = new System.Drawing.Size(88,24);
+			this.butOK.Size = new System.Drawing.Size(81,24);
 			this.butOK.TabIndex = 3;
-			this.butOK.Text = "Save Changes";
+			this.butOK.Text = "OK";
 			this.butOK.Click += new System.EventHandler(this.butOK_Click);
 			// 
 			// butCancel
@@ -115,9 +116,9 @@ namespace OpenDental{
 			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
-			this.butCancel.Location = new System.Drawing.Point(637,515);
+			this.butCancel.Location = new System.Drawing.Point(644,515);
 			this.butCancel.Name = "butCancel";
-			this.butCancel.Size = new System.Drawing.Size(88,24);
+			this.butCancel.Size = new System.Drawing.Size(81,24);
 			this.butCancel.TabIndex = 2;
 			this.butCancel.Text = "&Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
@@ -132,17 +133,35 @@ namespace OpenDental{
 			this.butDelete.CornerRadius = 4F;
 			this.butDelete.Image = global::OpenDental.Properties.Resources.deleteX;
 			this.butDelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butDelete.Location = new System.Drawing.Point(637,409);
+			this.butDelete.Location = new System.Drawing.Point(644,409);
 			this.butDelete.Name = "butDelete";
-			this.butDelete.Size = new System.Drawing.Size(88,24);
+			this.butDelete.Size = new System.Drawing.Size(81,24);
 			this.butDelete.TabIndex = 79;
 			this.butDelete.Text = "Delete";
 			this.butDelete.Click += new System.EventHandler(this.butDelete_Click);
+			// 
+			// butPrint
+			// 
+			this.butPrint.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butPrint.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.butPrint.Autosize = true;
+			this.butPrint.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butPrint.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butPrint.CornerRadius = 4F;
+			this.butPrint.Image = global::OpenDental.Properties.Resources.butPrint;
+			this.butPrint.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butPrint.Location = new System.Drawing.Point(644,321);
+			this.butPrint.Name = "butPrint";
+			this.butPrint.Size = new System.Drawing.Size(81,24);
+			this.butPrint.TabIndex = 80;
+			this.butPrint.Text = "Print";
+			this.butPrint.Click += new System.EventHandler(this.butPrint_Click);
 			// 
 			// FormSheetFillEdit
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
 			this.ClientSize = new System.Drawing.Size(737,551);
+			this.Controls.Add(this.butPrint);
 			this.Controls.Add(this.butDelete);
 			this.Controls.Add(this.panel1);
 			this.Controls.Add(this.textDateTime);
@@ -172,5 +191,6 @@ namespace OpenDental{
 		private System.Windows.Forms.Panel panel1;
 		private System.Windows.Forms.Panel panelMain;
 		private OpenDental.UI.Button butDelete;
+		private OpenDental.UI.Button butPrint;
 	}
 }

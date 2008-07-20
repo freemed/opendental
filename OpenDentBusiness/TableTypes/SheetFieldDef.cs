@@ -236,7 +236,7 @@ namespace OpenDentBusiness{
 				return new Rectangle(XPos,YPos,Width,Height);
 			}
 		}
-
+		
 		///<Summary>Should only be called after FieldValue has been set, due to GrowthBehavior.</Summary>
 		public RectangleF BoundsF {
 			get {

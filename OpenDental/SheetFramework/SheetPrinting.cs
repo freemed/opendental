@@ -10,23 +10,23 @@ namespace OpenDental {
 		///<summary>If there is only one sheet, then this will stay 0.</Summary>
 		private static int sheetsPrinted;
 		///<summary>If not a batch, then there will just be one sheet in the list.</summary>
-		private static List<SheetDef> SheetDefList;
+		private static List<Sheet> SheetList;
 
 		///<summary>Surround with try/catch.</summary>
-		public static void PrintBatch(List<SheetDef> sheetDefBatch){
+		public static void PrintBatch(List<Sheet> sheetBatch){
 			//currently no validation for parameters in a batch because of the way it was created.
 			//could validate field names here later.
-			SheetDefList=sheetDefBatch;
+			SheetList=sheetBatch;
 			sheetsPrinted=0;
 			PrintDocument pd=new PrintDocument();
 			pd.OriginAtMargins=true;
 			pd.PrintPage+=new PrintPageEventHandler(pd_PrintPage);
-			if(sheetDefBatch[0].Width>0 && sheetDefBatch[0].Height>0){
-				pd.DefaultPageSettings.PaperSize=new PaperSize("Default",sheetDefBatch[0].Width,sheetDefBatch[0].Height);
+			if(sheetBatch[0].Width>0 && sheetBatch[0].Height>0){
+				pd.DefaultPageSettings.PaperSize=new PaperSize("Default",sheetBatch[0].Width,sheetBatch[0].Height);
 			}
 			PrintSituation sit=PrintSituation.Default;
-			pd.DefaultPageSettings.Landscape=sheetDefBatch[0].IsLandscape;
-			switch(sheetDefBatch[0].SheetType){
+			pd.DefaultPageSettings.Landscape=sheetBatch[0].IsLandscape;
+			switch(sheetBatch[0].SheetType){
 				case SheetTypeEnum.LabelPatient:
 				case SheetTypeEnum.LabelCarrier:
 				case SheetTypeEnum.LabelReferral:
@@ -41,7 +41,7 @@ namespace OpenDental {
 			//later: add a check here for print preview.
 			#if DEBUG
 				pd.DefaultPageSettings.Margins=new Margins(20,20,0,0);
-				UI.PrintPreview printPreview=new UI.PrintPreview(sit,pd,SheetDefList.Count);
+				UI.PrintPreview printPreview=new UI.PrintPreview(sit,pd,SheetList.Count);
 				printPreview.ShowDialog();
 			#else
 				try {
@@ -59,25 +59,25 @@ namespace OpenDental {
 		}
 
 		///<Summary>Surround with try/catch.</Summary>
-		public static void Print(SheetDef sheetDef){
-			foreach(SheetParameter param in sheetDef.Parameters){
+		public static void Print(Sheet sheet){
+			/*foreach(SheetParameter param in sheet.Parameters){
 				if(param.IsRequired && param.ParamValue==null){
 					throw new ApplicationException(Lan.g("Sheet","Parameter not specified for sheet: ")+param.ParamName);
 				}
-			}
+			}*/
 			//could validate field names here later.
-			SheetDefList=new List<SheetDef>();
-			SheetDefList.Add(sheetDef);
+			SheetList=new List<Sheet>();
+			SheetList.Add(sheet);
 			sheetsPrinted=0;
 			PrintDocument pd=new PrintDocument();
 			pd.OriginAtMargins=true;
 			pd.PrintPage+=new PrintPageEventHandler(pd_PrintPage);
-			if(sheetDef.Width>0 && sheetDef.Height>0){
-				pd.DefaultPageSettings.PaperSize=new PaperSize("Default",sheetDef.Width,sheetDef.Height);
+			if(sheet.Width>0 && sheet.Height>0){
+				pd.DefaultPageSettings.PaperSize=new PaperSize("Default",sheet.Width,sheet.Height);
 			}
 			PrintSituation sit=PrintSituation.Default;
-			pd.DefaultPageSettings.Landscape=sheetDef.IsLandscape;
-			switch(sheetDef.SheetType){
+			pd.DefaultPageSettings.Landscape=sheet.IsLandscape;
+			switch(sheet.SheetType){
 				case SheetTypeEnum.LabelPatient:
 				case SheetTypeEnum.LabelCarrier:
 				case SheetTypeEnum.LabelReferral:
@@ -92,7 +92,7 @@ namespace OpenDental {
 			//later: add a check here for print preview.
 			#if DEBUG
 				pd.DefaultPageSettings.Margins=new Margins(20,20,0,0);
-				UI.PrintPreview printPreview=new UI.PrintPreview(sit,pd,SheetDefList.Count);
+				UI.PrintPreview printPreview=new UI.PrintPreview(sit,pd,SheetList.Count);
 				printPreview.ShowDialog();
 			#else
 				try {
@@ -111,23 +111,23 @@ namespace OpenDental {
 
 		private static void pd_PrintPage(object sender,System.Drawing.Printing.PrintPageEventArgs e) {
 			Graphics g=e.Graphics;
-			SheetDef sheetDef=SheetDefList[sheetsPrinted];
-			SheetUtil.CalculateHeights(sheetDef,g);//this is here because of easy access to g.
+			Sheet sheet=SheetList[sheetsPrinted];
+			SheetUtil.CalculateHeights(sheet,g);//this is here because of easy access to g.
 			Font font;
 			FontStyle fontstyle;
-			foreach(SheetFieldDef fieldDef in sheetDef.SheetFieldDefs){
+			foreach(SheetField field in sheet.SheetFields){
 				fontstyle=FontStyle.Regular;
-				if(fieldDef.FontIsBold){
+				if(field.FontIsBold){
 					fontstyle=FontStyle.Bold;
 				}
-				font=new Font(fieldDef.FontName,fieldDef.FontSize,fontstyle);
-				g.DrawString(fieldDef.FieldValue,font,Brushes.Black,fieldDef.BoundsF);
+				font=new Font(field.FontName,field.FontSize,fontstyle);
+				g.DrawString(field.FieldValue,font,Brushes.Black,field.BoundsF);
 			}
 			g.Dispose();
 			//no logic yet for multiple pages on one sheet.
 			sheetsPrinted++;
 			//heightsCalculated=false;
-			if(sheetsPrinted<SheetDefList.Count){
+			if(sheetsPrinted<SheetList.Count){
 				e.HasMorePages=true;
 			}
 			else{

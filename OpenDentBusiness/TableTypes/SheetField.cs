@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Drawing;
 using OpenDental.DataAccess;
 
 namespace OpenDentBusiness{
@@ -161,11 +162,27 @@ namespace OpenDentBusiness{
 		public bool GrowthBehaviorChanged{
 			get{return growthBehaviorChanged;}
 		}
-		
-		
+				
 		public SheetField Copy(){
 			return (SheetField)Clone();
 		}	
+
+		///<Summary>Should only be called after FieldValue has been set, due to GrowthBehavior.</Summary>
+		public Rectangle Bounds {
+			get {
+				return new Rectangle(XPos,YPos,Width,Height);
+			}
+		}
+
+		///<Summary>Should only be called after FieldValue has been set, due to GrowthBehavior.</Summary>
+		public RectangleF BoundsF {
+			get {
+				return new RectangleF(XPos,YPos,Width,Height);
+			}
+		}
+
+
+
 	}
 }
 

@@ -10,13 +10,13 @@ using OpenDentBusiness;
 namespace OpenDental {
 	public partial class FormSheetFillEdit:Form {
 		public Sheet SheetCur;
-		public List<SheetField> SheetFieldList;
+		//public List<SheetField> SheetFieldList;
 
-		public FormSheetFillEdit(Sheet sheet,List<SheetField> sheetFieldList) {
+		public FormSheetFillEdit(Sheet sheet){//,List<SheetField> sheetFieldList) {
 			InitializeComponent();
 			Lan.F(this);
 			SheetCur=sheet;
-			SheetFieldList=sheetFieldList;
+			//SheetFieldList=sheetFieldList;
 			Width=sheet.Width+185;
 			Height=sheet.Height+60;
 		}
@@ -28,28 +28,28 @@ namespace OpenDental {
 			textNote.Text=SheetCur.InternalNote;
 			TextBox textbox;
 			FontStyle style;
-			for(int i=0;i<SheetFieldList.Count;i++){
+			for(int i=0;i<SheetCur.SheetFields.Count;i++){
 				textbox=new TextBox();
 				textbox.BorderStyle=BorderStyle.None;
 				textbox.Multiline=true;//due to MS malfunction at 9pt which cuts off the bottom of the text.
-				if(SheetFieldList[i].FieldType==SheetFieldType.OutputText
-					|| SheetFieldList[i].FieldType==SheetFieldType.StaticText)
+				if(SheetCur.SheetFields[i].FieldType==SheetFieldType.OutputText
+					|| SheetCur.SheetFields[i].FieldType==SheetFieldType.StaticText)
 				{
 					//textbox.BackColor=Color.White;
 					//textbox.BackColor=Color.FromArgb(245,245,200);
 				}
-				else if(SheetFieldList[i].FieldType==SheetFieldType.InputField){
+				else if(SheetCur.SheetFields[i].FieldType==SheetFieldType.InputField){
 					textbox.BackColor=Color.FromArgb(245,245,200);
 				}
-				textbox.Location=new Point(SheetFieldList[i].XPos,SheetFieldList[i].YPos);
-				textbox.Width=SheetFieldList[i].Width;
-				textbox.Text=SheetFieldList[i].FieldValue;
+				textbox.Location=new Point(SheetCur.SheetFields[i].XPos,SheetCur.SheetFields[i].YPos);
+				textbox.Width=SheetCur.SheetFields[i].Width;
+				textbox.Text=SheetCur.SheetFields[i].FieldValue;
 				style=FontStyle.Regular;
-				if(SheetFieldList[i].FontIsBold){
+				if(SheetCur.SheetFields[i].FontIsBold){
 					style=FontStyle.Bold;
 				}
-				textbox.Font=new Font(SheetFieldList[i].FontName,SheetFieldList[i].FontSize,style);
-				if(SheetFieldList[i].Height<textbox.Font.Height+2){
+				textbox.Font=new Font(SheetCur.SheetFields[i].FontName,SheetCur.SheetFields[i].FontSize,style);
+				if(SheetCur.SheetFields[i].Height<textbox.Font.Height+2){
 					//textbox.Multiline=false;
 					textbox.AcceptsReturn=false;
 				}
@@ -57,11 +57,15 @@ namespace OpenDental {
 					//textbox.Multiline=true;
 					textbox.AcceptsReturn=true;
 				}
-				textbox.Height=SheetFieldList[i].Height;
+				textbox.Height=SheetCur.SheetFields[i].Height;
 				//textbox.ScrollBars=RichTextBoxScrollBars.None;
-				textbox.Tag=SheetFieldList[i];
+				textbox.Tag=SheetCur.SheetFields[i];
 				panelMain.Controls.Add(textbox);
 			}
+		}
+
+		private void butPrint_Click(object sender,EventArgs e) {
+
 		}
 
 		private void butDelete_Click(object sender,EventArgs e) {
@@ -104,6 +108,8 @@ namespace OpenDental {
 		private void butCancel_Click(object sender,EventArgs e) {
 			DialogResult=DialogResult.Cancel;
 		}
+
+		
 
 	
 

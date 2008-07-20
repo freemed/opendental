@@ -462,9 +462,9 @@ namespace OpenDental{
 			if(listSheets.SelectedIndex==-1){
 				return;
 			}
-			List<SheetField> sheetFieldList=SheetFields.GetForSheet(SheetList[listSheets.SelectedIndex].SheetNum);
-			//Sheet sheet=new Sheet(SheetList[listSheets.SelectedIndex],sheetFieldDataList);
-			FormSheetFillEdit FormS=new FormSheetFillEdit(SheetList[listSheets.SelectedIndex],sheetFieldList);
+			Sheet sheet=SheetList[listSheets.SelectedIndex];
+			sheet.SheetFields=SheetFields.GetForSheet(SheetList[listSheets.SelectedIndex].SheetNum);
+			FormSheetFillEdit FormS=new FormSheetFillEdit(sheet);
 			FormS.ShowDialog();
 			FillSheets();
 		}
@@ -486,13 +486,13 @@ namespace OpenDental{
 			else{
 				sheetDef=SheetDefs.GetSheetDef(referral.Slip);
 			}
-			SheetParameter.SetParameter(sheetDef,"PatNum",RefAttachCur.PatNum);
-			SheetParameter.SetParameter(sheetDef,"ReferralNum",RefAttachCur.ReferralNum);
-			SheetFiller.FillFields(sheetDef);
-			SheetUtil.CalculateHeights(sheetDef,this.CreateGraphics());
 			Sheet sheet=SheetUtil.CreateSheet(sheetDef,RefAttachCur.PatNum);
-			List<SheetField> sheetFieldList=SheetUtil.CreateFieldList(sheetDef.SheetFieldDefs);
-			FormSheetFillEdit FormS=new FormSheetFillEdit(sheet,sheetFieldList);
+			SheetParameter.SetParameter(sheet,"PatNum",RefAttachCur.PatNum);
+			SheetParameter.SetParameter(sheet,"ReferralNum",RefAttachCur.ReferralNum);
+			SheetFiller.FillFields(sheet);
+			SheetUtil.CalculateHeights(sheet,this.CreateGraphics());
+			//List<SheetField> sheetFieldList=SheetUtil.CreateFieldList(sheetDef.SheetFieldDefs);
+			FormSheetFillEdit FormS=new FormSheetFillEdit(sheet);
 			FormS.ShowDialog();
 			FillSheets();
 		}

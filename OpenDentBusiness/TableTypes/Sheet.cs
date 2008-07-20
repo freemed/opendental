@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using OpenDental.DataAccess;
 
 namespace OpenDentBusiness{
@@ -150,6 +151,23 @@ namespace OpenDentBusiness{
 		public Sheet Copy(){
 			return (Sheet)Clone();
 		}	
+
+		///<Summary>A collection of all parameters for this sheetdef.  There's usually only one parameter.  The first parameter will be a List int if it's a batch.  If a sheet has already been filled, saved to the database, and printed, then there is no longer any need for the parameters in order to fill the data.  So a retrieved sheet will have no parameters, signalling a skip in the fill phase.  There will still be parameters tucked away in the Field data in the database, but they won't become part of the sheet.</Summary>
+		public List<SheetParameter> Parameters;
+		///<Summary></Summary>
+		///<Summary></Summary>
+		public List<SheetField> SheetFields;	
+
+
+
+
+
+
+
+
+
+
+
 	}
 }
 
