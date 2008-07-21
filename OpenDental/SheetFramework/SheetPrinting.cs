@@ -6,6 +6,7 @@ using System.Text;
 using OpenDentBusiness;
 using PdfSharp;
 using PdfSharp.Drawing;
+using PdfSharp.Drawing.Layout;
 using PdfSharp.Pdf;
 using PdfSharp.Pdf.IO;
 
@@ -150,6 +151,7 @@ namespace OpenDental {
 			PdfDocument document=new PdfDocument();
 			PdfPage page=document.AddPage();
 			XGraphics g=XGraphics.FromPdfPage(page);
+			XTextFormatter tf = new XTextFormatter(g);//needed for text wrap
 			if(sheet.IsLandscape){
 				page.Orientation=PageOrientation.Landscape;
 			}
@@ -159,7 +161,7 @@ namespace OpenDental {
 			//already done?:SheetUtil.CalculateHeights(sheet,g);//this is here because of easy access to g.
 			XFont font;
 			XFontStyle fontstyle;
-			XStringFormat stringformat=new XStringFormat();
+			//XStringFormat stringformat=new XStringFormat();
 			foreach(SheetField field in sheet.SheetFields){
 				if(field.FieldType==SheetFieldType.Parameter){
 					continue;
@@ -169,7 +171,7 @@ namespace OpenDental {
 					fontstyle=XFontStyle.Bold;
 				}
 				font=new XFont(field.FontName,field.FontSize,fontstyle);
-				g.DrawString(field.FieldValue,font,XBrushes.Black,field.BoundsF,stringformat);
+				tf.DrawString(field.FieldValue,font,XBrushes.Black,field.BoundsF);
 			}
 			document.Save(fullFileName);
 		}
