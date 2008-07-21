@@ -7744,7 +7744,8 @@ namespace OpenDental{
 					General.NonQ(command);
 					command="ALTER TABLE referral ADD Slip int default '0' NOT NULL";
 					General.NonQ(command);
-
+					command="INSERT INTO preference (PrefName,ValueString,Comments) VALUES ('LabelPatientDefaultSheetDefNum','0','0 indicates default.  Otherwise, foreign key to SheetDefNum.')";
+					General.NonQ(command);
 
 
 

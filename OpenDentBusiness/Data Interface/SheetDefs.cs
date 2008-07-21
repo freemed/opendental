@@ -35,7 +35,7 @@ namespace OpenDentBusiness{
 			}
 		}
 
-		///<Summary>Gets one SheetDef from the cache.</Summary>
+		///<Summary>Gets one SheetDef from the cache.  Also includes the fields and parameters for the sheetdef.</Summary>
 		public static SheetDef GetSheetDef(int sheetDefNum){
 			SheetDef sheetdef=null;
 			for(int i=0;i<SheetDefC.Listt.Count;i++){

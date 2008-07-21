@@ -2010,7 +2010,6 @@ namespace OpenDental{
 
 		private void OnLabel_Click() {
 			LabelSingle label=new LabelSingle();
-			//Patient pat=Patients.GetPat(CurPatNum);
 			label.PrintPat(CurPatNum);
 		}
 

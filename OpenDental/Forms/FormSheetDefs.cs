@@ -20,12 +20,14 @@ namespace OpenDental{
 		private ODGrid grid1;
 		private OpenDental.UI.Button butCopy;
 		//private bool changed;
-		private OpenDental.UI.Button butOK;
 		//public bool IsSelectionMode;
 		//<summary>Only used if IsSelectionMode.  On OK, contains selected siteNum.  Can be 0.  Can also be set ahead of time externally.</summary>
 		//public int SelectedSiteNum;
 		private List<SheetDef> internalList;
+		private Label label1;
+		private ComboBox comboLabel;
 		private bool changed;
+		List<SheetDef> LabelList;
 
 		///<summary></summary>
 		public FormSheetDefs()
@@ -62,10 +64,11 @@ namespace OpenDental{
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormSheetDefs));
 			this.butCopy = new OpenDental.UI.Button();
 			this.grid1 = new OpenDental.UI.ODGrid();
-			this.butOK = new OpenDental.UI.Button();
 			this.grid2 = new OpenDental.UI.ODGrid();
 			this.butNew = new OpenDental.UI.Button();
 			this.butClose = new OpenDental.UI.Button();
+			this.label1 = new System.Windows.Forms.Label();
+			this.comboLabel = new System.Windows.Forms.ComboBox();
 			this.SuspendLayout();
 			// 
 			// butCopy
@@ -95,22 +98,6 @@ namespace OpenDental{
 			this.grid1.Title = "Internal";
 			this.grid1.TranslationName = null;
 			this.grid1.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.grid1_CellDoubleClick);
-			// 
-			// butOK
-			// 
-			this.butOK.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butOK.Autosize = true;
-			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(428,576);
-			this.butOK.Name = "butOK";
-			this.butOK.Size = new System.Drawing.Size(75,24);
-			this.butOK.TabIndex = 13;
-			this.butOK.Text = "OK";
-			this.butOK.Visible = false;
-			this.butOK.Click += new System.EventHandler(this.butOK_Click);
 			// 
 			// grid2
 			// 
@@ -149,20 +136,42 @@ namespace OpenDental{
 			this.butClose.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butClose.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butClose.CornerRadius = 4F;
-			this.butClose.Location = new System.Drawing.Point(509,576);
+			this.butClose.Location = new System.Drawing.Point(608,576);
 			this.butClose.Name = "butClose";
 			this.butClose.Size = new System.Drawing.Size(75,24);
 			this.butClose.TabIndex = 0;
 			this.butClose.Text = "&Close";
 			this.butClose.Click += new System.EventHandler(this.butClose_Click);
 			// 
+			// label1
+			// 
+			this.label1.Location = new System.Drawing.Point(478,10);
+			this.label1.Name = "label1";
+			this.label1.Size = new System.Drawing.Size(205,15);
+			this.label1.TabIndex = 16;
+			this.label1.Text = "Label assigned to patient button";
+			this.label1.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
+			// 
+			// comboLabel
+			// 
+			this.comboLabel.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboLabel.FormattingEnabled = true;
+			this.comboLabel.Location = new System.Drawing.Point(480,27);
+			this.comboLabel.MaxDropDownItems = 20;
+			this.comboLabel.Name = "comboLabel";
+			this.comboLabel.Size = new System.Drawing.Size(185,21);
+			this.comboLabel.TabIndex = 17;
+			this.comboLabel.SelectionChangeCommitted += new System.EventHandler(this.comboLabel_SelectionChangeCommitted);
+			this.comboLabel.DropDown += new System.EventHandler(this.comboLabel_DropDown);
+			// 
 			// FormSheetDefs
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
-			this.ClientSize = new System.Drawing.Size(596,612);
+			this.ClientSize = new System.Drawing.Size(695,612);
+			this.Controls.Add(this.comboLabel);
+			this.Controls.Add(this.label1);
 			this.Controls.Add(this.butCopy);
 			this.Controls.Add(this.grid1);
-			this.Controls.Add(this.butOK);
 			this.Controls.Add(this.grid2);
 			this.Controls.Add(this.butNew);
 			this.Controls.Add(this.butClose);
@@ -182,29 +191,27 @@ namespace OpenDental{
 
 		private void FormSheetDefs_Load(object sender, System.EventArgs e) {
 			if(!Security.IsAuthorized(Permissions.Setup,true)){
-				butNew.Visible=false;
+				butNew.Enabled=false;
+				butCopy.Enabled=false;
+				grid2.Enabled=false;
 			}
-			/*if(IsSelectionMode){
-				butClose.Text=Lan.g(this,"Cancel");
-				if(!Security.IsAuthorized(Permissions.Setup,true)){
-					butAdd.Visible=false;
-				}
-			}
-			else{
-				butOK.Visible=false;
-				butNone.Visible=false;
-			}
-			FillGrid();
-			if(SelectedSiteNum!=0){
-				for(int i=0;i<SiteC.List.Length;i++){
-					if(SiteC.List[i].SiteNum==SelectedSiteNum){
-						gridMain.SetSelected(i,true);
-						break;
-					}
-				}
-			}*/
 			FillGrid1();
 			FillGrid2();
+			comboLabel.Items.Clear();
+			comboLabel.Items.Add(Lan.g(this,"Default"));
+			comboLabel.SelectedIndex=0;
+			LabelList=new List<SheetDef>();
+			for(int i=0;i<SheetDefC.Listt.Count;i++){
+				if(SheetDefC.Listt[i].SheetType==SheetTypeEnum.LabelPatient){
+					LabelList.Add(SheetDefC.Listt[i].Copy());
+				}
+			}
+			for(int i=0;i<LabelList.Count;i++){
+				comboLabel.Items.Add(LabelList[i].Description);
+				if(PrefC.GetInt("LabelPatientDefaultSheetDefNum")==LabelList[i].SheetDefNum){
+					comboLabel.SelectedIndex=i+1;
+				}
+			}
 		}
 
 		private void FillGrid1(){
@@ -296,43 +303,49 @@ namespace OpenDental{
 		}
 
 		private void grid2_CellDoubleClick(object sender,ODGridClickEventArgs e) {
-			/*if(IsSelectionMode){
-				SelectedSiteNum=SiteC.List[e.Row].SiteNum;
-				DialogResult=DialogResult.OK;
-				return;
-			}
-			else{*/
-				SheetDef sheetdef=SheetDefC.Listt[e.Row];
-				SheetDefs.GetFieldsAndParameters(sheetdef);
-				FormSheetDefEdit FormS=new FormSheetDefEdit(sheetdef);
-				FormS.ShowDialog();
-				FillGrid2();
-				for(int i=0;i<SheetDefC.Listt.Count;i++){
-					if(SheetDefC.Listt[i].SheetDefNum==sheetdef.SheetDefNum){
-						grid2.SetSelected(i,true);
-					}
+			SheetDef sheetdef=SheetDefC.Listt[e.Row];
+			SheetDefs.GetFieldsAndParameters(sheetdef);
+			FormSheetDefEdit FormS=new FormSheetDefEdit(sheetdef);
+			FormS.ShowDialog();
+			FillGrid2();
+			for(int i=0;i<SheetDefC.Listt.Count;i++){
+				if(SheetDefC.Listt[i].SheetDefNum==sheetdef.SheetDefNum){
+					grid2.SetSelected(i,true);
 				}
-				changed=true;
+			}
+			changed=true;
 		}
 
-		private void butOK_Click(object sender,EventArgs e) {
-			//not even visible unless is selection mode
-			/*if(gridMain.GetSelectedIndex()==-1){
-				SelectedSiteNum=0;
+		private void comboLabel_DropDown(object sender,EventArgs e) {
+			comboLabel.Items.Clear();
+			comboLabel.Items.Add(Lan.g(this,"Default"));
+			comboLabel.SelectedIndex=0;
+			LabelList=new List<SheetDef>();
+			for(int i=0;i<SheetDefC.Listt.Count;i++){
+				if(SheetDefC.Listt[i].SheetType==SheetTypeEnum.LabelPatient){
+					LabelList.Add(SheetDefC.Listt[i].Copy());
+				}
+			}
+			for(int i=0;i<LabelList.Count;i++){
+				comboLabel.Items.Add(LabelList[i].Description);
+				if(PrefC.GetInt("LabelPatientDefaultSheetDefNum")==LabelList[i].SheetDefNum){
+					comboLabel.SelectedIndex=i+1;
+				}
+			}
+		}
+
+		private void comboLabel_SelectionChangeCommitted(object sender,EventArgs e) {
+			if(comboLabel.SelectedIndex==0){
+				Prefs.UpdateInt("LabelPatientDefaultSheetDefNum",0);
 			}
 			else{
-				SelectedSiteNum=SiteC.List[gridMain.GetSelectedIndex()].SiteNum;
+				Prefs.UpdateInt("LabelPatientDefaultSheetDefNum",LabelList[comboLabel.SelectedIndex-1].SheetDefNum);
 			}
-			DialogResult=DialogResult.OK;*/
+			DataValid.SetInvalid(InvalidType.Prefs);
 		}
 
 		private void butClose_Click(object sender, System.EventArgs e) {
-			//if(IsSelectionMode){
-				//DialogResult=DialogResult.Cancel;
-			//}
-			//else{
 			Close();
-			//}*/
 		}
 
 		private void FormSheetDefs_FormClosing(object sender,FormClosingEventArgs e) {
@@ -340,6 +353,8 @@ namespace OpenDental{
 				DataValid.SetInvalid(InvalidType.Sheets);
 			}
 		}
+
+		
 
 		
 
