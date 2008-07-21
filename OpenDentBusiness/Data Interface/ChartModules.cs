@@ -42,6 +42,7 @@ namespace OpenDentBusiness {
 			table.Columns.Add("procTime");
 			table.Columns.Add("prov");
 			table.Columns.Add("RxNum");
+			table.Columns.Add("SheetNum");
 			table.Columns.Add("signature");
 			table.Columns.Add("Surf");
 			table.Columns.Add("TaskNum");
@@ -183,6 +184,7 @@ namespace OpenDentBusiness {
 				}
 				row["prov"]=rawProcs.Rows[i]["Abbr"].ToString();
 				row["RxNum"]=0;
+				row["SheetNum"]=0;
 				row["Surf"]=rawProcs.Rows[i]["Surf"].ToString();
 				row["TaskNum"]=0;
 				row["toothNum"]=Tooth.GetToothLabel(rawProcs.Rows[i]["ToothNum"].ToString());
@@ -248,6 +250,7 @@ namespace OpenDentBusiness {
 				row["ProcStatus"]="";
 				row["prov"]="";
 				row["RxNum"]=0;
+				row["SheetNum"]=0;
 				row["signature"]="";
 				row["Surf"]="";
 				row["TaskNum"]=0;
@@ -298,6 +301,7 @@ namespace OpenDentBusiness {
 				row["prov"]="";
 				//row["prov"]=ProviderB. PIn.PInt(rawRx.Rows[i]["ProvNum"].ToString());
 				row["RxNum"]=rawRx.Rows[i]["RxNum"].ToString();
+				row["SheetNum"]=0;
 				row["signature"]="";
 				row["Surf"]="";
 				row["TaskNum"]=0;
@@ -365,6 +369,7 @@ namespace OpenDentBusiness {
 				row["ProcStatus"]="";
 				row["prov"]="";
 				row["RxNum"]=0;
+				row["SheetNum"]=0;
 				row["signature"]="";
 				row["Surf"]="";
 				row["TaskNum"]=0;
@@ -446,6 +451,7 @@ namespace OpenDentBusiness {
 				row["ProcStatus"]="";
 				row["prov"]="";
 				row["RxNum"]=0;
+				row["SheetNum"]=0;
 				row["signature"]="";
 				row["Surf"]="";
 				row["TaskNum"]=rawTask.Rows[i]["TaskNum"].ToString();
@@ -539,6 +545,7 @@ namespace OpenDentBusiness {
 				row["ProcStatus"]="";
 				row["prov"]="";
 				row["RxNum"]=0;
+				row["SheetNum"]=0;
 				row["signature"]="";
 				row["Surf"]="";
 				row["TaskNum"]=0;
@@ -548,7 +555,7 @@ namespace OpenDentBusiness {
 				row["user"]="";
 				rows.Add(row);
 			}			
-			//email
+			//email------------------------------------------------------------------------------------------------------------------------------
 			command="SELECT EmailMessageNum,MsgDateTime,Subject,BodyText,PatNum,SentOrReceived "
 				+"FROM emailmessage "
 				+"WHERE PatNum="+POut.PInt(patNum)
@@ -595,6 +602,61 @@ namespace OpenDentBusiness {
 				row["ProcStatus"]="";
 				row["prov"]="";
 				row["RxNum"]=0;
+				row["SheetNum"]=0;
+				row["signature"]="";
+				row["Surf"]="";
+				row["TaskNum"]=0;
+				row["toothNum"]="";
+				row["ToothNum"]="";
+				row["ToothRange"]="";
+				row["user"]="";
+				rows.Add(row);
+			}
+			//sheet-----------------------------------------------------------------------------------------------------------------
+			command="SELECT SheetNum,DateTimeSheet,SheetType "
+				+"FROM sheet "
+				+"WHERE PatNum="+POut.PInt(patNum)
+				+" ORDER BY DateTimeSheet";
+			DataTable rawSheet=dcon.GetTable(command);
+			SheetTypeEnum sheetType;
+			for(int i=0;i<rawSheet.Rows.Count;i++) {
+				row=table.NewRow();
+				row["aptDateTime"]=DateTime.MinValue;
+				row["AptNum"]=0;
+				row["CodeNum"]="";
+				row["colorBackG"]=Color.White.ToArgb();
+				row["colorText"]=Color.Black.ToArgb();//DefC.Long[(int)DefCat.ProgNoteColors][6].ItemColor.ToArgb().ToString();//needs to change
+				row["CommlogNum"]=0;
+				sheetType=(SheetTypeEnum)PIn.PInt(rawSheet.Rows[i]["SheetType"].ToString());
+				row["description"]=Lan.g("SheetTypeEnum",sheetType.ToString());
+				row["dx"]="";
+				row["Dx"]="";
+				row["EmailMessageNum"]=0;
+				row["LabCaseNum"]=0;
+				row["note"]="";
+				row["PatNum"]="";
+				row["Priority"]="";
+				row["ProcCode"]="";
+				dateT=PIn.PDateT(rawSheet.Rows[i]["DateTimeSheet"].ToString());
+				if(dateT.Year<1880) {
+					row["procDate"]="";
+				}
+				else {
+					row["procDate"]=dateT.ToString(Lan.GetShortDateTimeFormat());
+				}
+				row["ProcDate"]=dateT;
+				row["procTime"]="";
+				if(dateT.TimeOfDay!=TimeSpan.Zero) {
+					row["procTime"]=dateT.ToString("h:mm")+dateT.ToString("%t").ToLower();
+				}
+				row["procFee"]="";
+				row["ProcNum"]=0;
+				row["ProcNumLab"]="";
+				row["procStatus"]="";
+				row["ProcStatus"]="";
+				row["prov"]="";
+				row["RxNum"]=0;
+				row["SheetNum"]=rawSheet.Rows[i]["SheetNum"].ToString();
 				row["signature"]="";
 				row["Surf"]="";
 				row["TaskNum"]=0;
