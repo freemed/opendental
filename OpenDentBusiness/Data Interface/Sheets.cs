@@ -34,6 +34,13 @@ namespace OpenDentBusiness{
 			return DataObjectFactory<Sheet>.CreateObject(sheetNum);
 		}
 
+		///<summary>Gets a single sheet from the database.  Then, gets all the fields and parameters for it.  So it returns a fully functional sheet.</summary>
+		public static Sheet GetSheet(int sheetNum){
+			Sheet sheet=CreateObject(sheetNum);
+			SheetFields.GetFieldsAndParameters(sheet);
+			return sheet;
+		}
+
 		///<summary>Used in FormRefAttachEdit to show all referral slips for the patient/referral combo.  Usually 0 or 1 results.</summary>
 		public static List<Sheet> GetReferralSlips(int patNum,int referralNum){
 			string command="SELECT * FROM sheet WHERE PatNum="+POut.PInt(patNum)

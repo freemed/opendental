@@ -262,6 +262,7 @@ namespace OpenDentBusiness {
 			table.Columns.Add("mode");
 			table.Columns.Add("Note");
 			table.Columns.Add("patName");
+			table.Columns.Add("SheetNum");
 			//table.Columns.Add("sentOrReceived");			
 			//table.Columns.Add("");
 			//but we won't actually fill this table with rows until the very end.  It's more useful to use a List<> for now.
@@ -299,6 +300,7 @@ namespace OpenDentBusiness {
 				if(rawComm.Rows[i]["PatNum"].ToString()!=patNum.ToString()){
 					row["patName"]=rawComm.Rows[i]["FName"].ToString();
 				}
+				row["SheetNum"]="0";
 				//row["sentOrReceived"]=Lan.g("enumCommSentOrReceived",
 				//	((CommSentOrReceived)PIn.PInt(rawComm.Rows[i]["SentOrReceived"].ToString())).ToString());
 				rows.Add(row);
@@ -326,6 +328,8 @@ namespace OpenDentBusiness {
 					txt="("+Lan.g("AccountModule","Unsent")+") ";
 				}
 				row["Note"]=txt+rawEmail.Rows[i]["Subject"].ToString();
+				row["patName"]="";
+				row["SheetNum"]="0";
 				//if(rawEmail.Rows[i]["SentOrReceived"].ToString()=="0") {
 				//	row["sentOrReceived"]=Lan.g("AccountModule","Unsent");
 				//}
@@ -353,6 +357,33 @@ namespace OpenDentBusiness {
 				row["FormPatNum"]=rawForm.Rows[i]["FormPatNum"].ToString();
 				row["mode"]="";
 				row["Note"]="";
+				row["patName"]="";
+				row["SheetNum"]="0";
+				//row["sentOrReceived"]="";
+				rows.Add(row);
+			}
+			//sheet---------------------------------------------------------------------------------------
+			command="SELECT DateTimeSheet,SheetNum,SheetType "
+				+"FROM sheet WHERE PatNum ="+POut.PInt(patNum)+" ORDER BY DateTimeSheet";
+			DataTable rawSheet=dcon.GetTable(command);
+			SheetTypeEnum sheetType;
+			for(int i=0;i<rawSheet.Rows.Count;i++) {
+				row=table.NewRow();
+				dateT=PIn.PDateT(rawSheet.Rows[i]["DateTimeSheet"].ToString());
+				row["CommDateTime"]=dateT;
+				row["commDate"]=dateT.ToShortDateString();
+				if(dateT.TimeOfDay!=TimeSpan.Zero) {
+					row["commTime"]=dateT.ToString("h:mm")+dateT.ToString("%t").ToLower();
+				}
+				row["CommlogNum"]="0";
+				row["commType"]=Lan.g("AccountModule","Sheet");//
+				row["EmailMessageNum"]="0";
+				row["FormPatNum"]="0";
+				row["mode"]="";
+				sheetType=(SheetTypeEnum)PIn.PInt(rawSheet.Rows[i]["SheetType"].ToString());
+				row["Note"]=Lan.g("SheetTypeEnum",sheetType.ToString());
+				row["patName"]="";
+				row["SheetNum"]=rawSheet.Rows[i]["SheetNum"].ToString();
 				//row["sentOrReceived"]="";
 				rows.Add(row);
 			}

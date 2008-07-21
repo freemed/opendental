@@ -3567,6 +3567,14 @@ namespace OpenDental {
 					ModuleSelected(PatCur.PatNum);
 				}
 			}
+			else if(DataSetMain.Tables["Commlog"].Rows[row]["SheetNum"].ToString()!="0") {
+				Sheet sheet=Sheets.GetSheet(PIn.PInt(DataSetMain.Tables["Commlog"].Rows[row]["SheetNum"].ToString()));
+				FormSheetFillEdit FormSFE=new FormSheetFillEdit(sheet);
+				FormSFE.ShowDialog();
+				if(FormSFE.DialogResult==DialogResult.OK) {
+					ModuleSelected(PatCur.PatNum);
+				}
+			}
 		}
 
 		private void Parent_MouseWheel(Object sender,MouseEventArgs e){
