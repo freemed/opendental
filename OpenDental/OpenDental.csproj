@@ -81,6 +81,18 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Required dlls\Interop.Word.dll</HintPath>
     </Reference>
+    <Reference Include="MigraDoc.DocumentObjectModel, Version=1.2.2546.0, Culture=neutral, PublicKeyToken=f94615aa0424f9eb, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Required dlls\MigraDoc.DocumentObjectModel.dll</HintPath>
+    </Reference>
+    <Reference Include="MigraDoc.Rendering, Version=1.2.2546.0, Culture=neutral, PublicKeyToken=f94615aa0424f9eb, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Required dlls\MigraDoc.Rendering.dll</HintPath>
+    </Reference>
+    <Reference Include="MigraDoc.RtfRendering, Version=1.2.2546.0, Culture=neutral, PublicKeyToken=f94615aa0424f9eb, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Required dlls\MigraDoc.RtfRendering.dll</HintPath>
+    </Reference>
     <Reference Include="MySql.Data, Version=1.0.7.30072, Culture=neutral, PublicKeyToken=c5687fc88969c44d">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Required dlls\MySql.Data.dll</HintPath>
@@ -92,6 +104,14 @@
     <Reference Include="Oracle.DataAccess, Version=10.2.0.100, Culture=neutral, PublicKeyToken=89b483f429c47342">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Required dlls\Oracle.DataAccess.dll</HintPath>
+    </Reference>
+    <Reference Include="PdfSharp, Version=1.2.1269.0, Culture=neutral, PublicKeyToken=f94615aa0424f9eb, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Required dlls\PdfSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="PdfSharp.Charting, Version=1.2.1269.0, Culture=neutral, PublicKeyToken=f94615aa0424f9eb, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Required dlls\PdfSharp.Charting.dll</HintPath>
     </Reference>
     <Reference Include="RS232, Version=1.18.0.0, Culture=neutral">
       <SpecificVersion>False</SpecificVersion>
@@ -3670,18 +3690,6 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\MigraDoc.DocumentObjectModel\xMigraDocLite.DocumentObjectModel.csproj">
-      <Project>{4666ABF3-EFE5-49BD-B2E8-9E04F5949145}</Project>
-      <Name>xMigraDocLite.DocumentObjectModel</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\MigraDoc.Rendering\xMigraDocLite.Rendering.csproj">
-      <Project>{FEBBE5BE-9F58-4967-BBCF-801F1CFCD774}</Project>
-      <Name>xMigraDocLite.Rendering</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\MigraDoc.RtfRendering\xMigraDocLite.RtfRendering.csproj">
-      <Project>{22010032-52DC-464D-B8BB-6CD9BF230D1F}</Project>
-      <Name>xMigraDocLite.RtfRendering</Name>
-    </ProjectReference>
     <ProjectReference Include="..\ODR\xODR.csproj">
       <Project>{84688345-BB6A-4F2F-8672-A82B52FD433B}</Project>
       <Name>xODR</Name>
@@ -3689,10 +3697,6 @@
     <ProjectReference Include="..\OpenDentBusiness\OpenDentBusiness.csproj">
       <Project>{3D0FC76E-803C-4DE2-BDB1-47D63A4E2357}</Project>
       <Name>OpenDentBusiness</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\PdfSharp\PdfSharp.csproj">
-      <Project>{5384CE57-1F94-4D22-860D-2E9C1AC12DDF}</Project>
-      <Name>PdfSharp</Name>
     </ProjectReference>
     <ProjectReference Include="..\RdlEngine\RdlEngine.csproj">
       <Project>{C97E91F4-B310-44E2-9B6C-96775395722D}</Project>

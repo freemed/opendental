@@ -159,6 +159,7 @@ namespace OpenDental {
 			//already done?:SheetUtil.CalculateHeights(sheet,g);//this is here because of easy access to g.
 			XFont font;
 			XFontStyle fontstyle;
+			XStringFormat stringformat=new XStringFormat();
 			foreach(SheetField field in sheet.SheetFields){
 				if(field.FieldType==SheetFieldType.Parameter){
 					continue;
@@ -167,9 +168,8 @@ namespace OpenDental {
 				if(field.FontIsBold){
 					fontstyle=XFontStyle.Bold;
 				}
-				//XPdfFontOptions fontOptions=new XPdfFontOptions(
 				font=new XFont(field.FontName,field.FontSize,fontstyle);
-				g.DrawString(field.FieldValue,font,XBrushes.Black,field.BoundsF,XStringFormat.TopLeft);
+				g.DrawString(field.FieldValue,font,XBrushes.Black,field.BoundsF,stringformat);
 			}
 			document.Save(fullFileName);
 		}
