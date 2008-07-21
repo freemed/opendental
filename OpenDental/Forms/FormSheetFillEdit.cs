@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Diagnostics;
 using System.Text;
 using System.Windows.Forms;
 using OpenDentBusiness;
+using CodeBase;
 
 namespace OpenDental {
 	public partial class FormSheetFillEdit:Form {
@@ -86,10 +88,11 @@ namespace OpenDental {
 				FormS.EmailPat=true;
 				FormS.PaperCopies--;
 			}
+			Referral referral=null;
 			if(SheetCur.SheetType==SheetTypeEnum.ReferralSlip){
 				FormS.Email2Visible=true;
 				int referralNum=PIn.PInt(SheetParameter.GetParamByName(SheetCur.Parameters,"ReferralNum").ParamValue.ToString());
-				Referral referral=Referrals.GetReferral(referralNum);
+				referral=Referrals.GetReferral(referralNum);
 				if(referral.EMail!=""){
 					FormS.Email2Address=referral.EMail;
 					FormS.Email2=true;
@@ -103,11 +106,47 @@ namespace OpenDental {
 			if(FormS.PaperCopies>0){
 				SheetPrinting.Print(SheetCur,FormS.PaperCopies);
 			}
+			EmailMessage message;
+			Random rnd=new Random();
+			string attachPath=FormEmailMessageEdit.GetAttachPath();
+			string fileName;
+			string filePathAndName;
 			if(FormS.EmailPat){
-				//email patient
+				fileName=DateTime.Now.ToString("yyyyMMdd")+"_"+DateTime.Now.TimeOfDay.Ticks.ToString()+rnd.Next(1000).ToString()+".pdf";
+				filePathAndName=ODFileUtils.CombinePaths(attachPath,fileName);
+				SheetPrinting.CreatePdf(SheetCur,filePathAndName);
+				//Process.Start(filePathAndName);
+				message=new EmailMessage();
+				message.PatNum=SheetCur.PatNum;
+				message.ToAddress=FormS.EmailPatAddress;
+				message.FromAddress=PrefC.GetString("EmailSenderAddress");
+				message.Subject=SheetCur.SheetType.ToString();//this could be improved
+				EmailAttach attach=new EmailAttach();
+				attach.DisplayedFileName=SheetCur.SheetType.ToString()+".pdf";
+				attach.ActualFileName=fileName;
+				message.Attachments.Add(attach);
+				FormEmailMessageEdit FormE=new FormEmailMessageEdit(message);
+				FormE.IsNew=true;
+				FormE.ShowDialog();
 			}
-			if(FormS.Email2){
+			if(SheetCur.SheetType==SheetTypeEnum.ReferralSlip && FormS.Email2){
 				//email referral
+				fileName=DateTime.Now.ToString("yyyyMMdd")+"_"+DateTime.Now.TimeOfDay.Ticks.ToString()+rnd.Next(1000).ToString()+".pdf";
+				filePathAndName=ODFileUtils.CombinePaths(attachPath,fileName);
+				SheetPrinting.CreatePdf(SheetCur,filePathAndName);
+				//Process.Start(filePathAndName);
+				message=new EmailMessage();
+				message.PatNum=SheetCur.PatNum;
+				message.ToAddress=FormS.Email2Address;
+				message.FromAddress=PrefC.GetString("EmailSenderAddress");
+				message.Subject=SheetCur.SheetType.ToString()+" to "+Referrals.GetNameFL(referral.ReferralNum);//this could be improved
+				EmailAttach attach=new EmailAttach();
+				attach.DisplayedFileName=SheetCur.SheetType.ToString()+".pdf";
+				attach.ActualFileName=fileName;
+				message.Attachments.Add(attach);
+				FormEmailMessageEdit FormE=new FormEmailMessageEdit(message);
+				FormE.IsNew=true;
+				FormE.ShowDialog();
 			}
 			DialogResult=DialogResult.OK;
 		}

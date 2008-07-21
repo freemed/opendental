@@ -4,6 +4,10 @@ using System.Drawing;
 using System.Drawing.Printing;
 using System.Text;
 using OpenDentBusiness;
+using PdfSharp;
+using PdfSharp.Drawing;
+using PdfSharp.Pdf;
+using PdfSharp.Pdf.IO;
 
 namespace OpenDental {
 	public class SheetPrinting {
@@ -140,6 +144,34 @@ namespace OpenDental {
 				e.HasMorePages=false;
 				sheetsPrinted=0;
 			}	
+		}
+
+		public static void CreatePdf(Sheet sheet,string fullFileName){
+			PdfDocument document=new PdfDocument();
+			PdfPage page=document.AddPage();
+			XGraphics g=XGraphics.FromPdfPage(page);
+			if(sheet.IsLandscape){
+				page.Orientation=PageOrientation.Landscape;
+			}
+			page.Width=sheet.Width;
+			page.Height=sheet.Height;
+			//pd.DefaultPageSettings.Landscape=
+			//already done?:SheetUtil.CalculateHeights(sheet,g);//this is here because of easy access to g.
+			XFont font;
+			XFontStyle fontstyle;
+			foreach(SheetField field in sheet.SheetFields){
+				if(field.FieldType==SheetFieldType.Parameter){
+					continue;
+				}
+				fontstyle=XFontStyle.Regular;
+				if(field.FontIsBold){
+					fontstyle=XFontStyle.Bold;
+				}
+				//XPdfFontOptions fontOptions=new XPdfFontOptions(
+				font=new XFont(field.FontName,field.FontSize,fontstyle);
+				g.DrawString(field.FieldValue,font,XBrushes.Black,field.BoundsF,XStringFormat.TopLeft);
+			}
+			document.Save(fullFileName);
 		}
 
 
