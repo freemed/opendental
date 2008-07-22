@@ -2016,18 +2016,28 @@ namespace OpenDental{
 		private void menuLabel_Popup(object sender,EventArgs e) {
 			menuLabel.MenuItems.Clear();
 			MenuItem menuItem;
-			menuItem=new MenuItem(Lan.g(this,"LName, FName, Address"),menuLabel_Click);
-			menuItem.Tag="PatientLFAddress";
-			menuLabel.MenuItems.Add(menuItem);
-			menuItem=new MenuItem(Lan.g(this,"Name, ChartNumber"),menuLabel_Click);
-			menuItem.Tag="PatientLFChartNumber";
-			menuLabel.MenuItems.Add(menuItem);
-			menuItem=new MenuItem(Lan.g(this,"Name, PatNum"),menuLabel_Click);
-			menuItem.Tag="PatientLFPatNum";
-			menuLabel.MenuItems.Add(menuItem);
-			menuItem=new MenuItem(Lan.g(this,"Radiograph"),menuLabel_Click);
-			menuItem.Tag="PatRadiograph";
-			menuLabel.MenuItems.Add(menuItem);
+			List<SheetDef> LabelList=SheetDefs.GetCustomForType(SheetTypeEnum.LabelPatient);
+			if(LabelList.Count==0){
+				menuItem=new MenuItem(Lan.g(this,"LName, FName, Address"),menuLabel_Click);
+				menuItem.Tag="PatientLFAddress";
+				menuLabel.MenuItems.Add(menuItem);
+				menuItem=new MenuItem(Lan.g(this,"Name, ChartNumber"),menuLabel_Click);
+				menuItem.Tag="PatientLFChartNumber";
+				menuLabel.MenuItems.Add(menuItem);
+				menuItem=new MenuItem(Lan.g(this,"Name, PatNum"),menuLabel_Click);
+				menuItem.Tag="PatientLFPatNum";
+				menuLabel.MenuItems.Add(menuItem);
+				menuItem=new MenuItem(Lan.g(this,"Radiograph"),menuLabel_Click);
+				menuItem.Tag="PatRadiograph";
+				menuLabel.MenuItems.Add(menuItem);
+			}
+			else{
+				for(int i=0;i<LabelList.Count;i++) {
+					menuItem=new MenuItem(LabelList[i].Description,menuLabel_Click);
+					menuItem.Tag=LabelList[i];
+					menuLabel.MenuItems.Add(menuItem);
+				}
+			}
 			menuLabel.MenuItems.Add("-");
 			//Carriers---------------------------------------------------------------------------------------
 			Family fam=Patients.GetFamily(CurPatNum);
@@ -2084,11 +2094,14 @@ namespace OpenDental{
 					label.PrintPatRadiograph(CurPatNum);
 				}
 			}
-			if(((MenuItem)sender).Tag.GetType()==typeof(Carrier)){
+			else if(((MenuItem)sender).Tag.GetType()==typeof(SheetDef)){
+				label.PrintCustomPatient(CurPatNum,(SheetDef)((MenuItem)sender).Tag);
+			}
+			else if(((MenuItem)sender).Tag.GetType()==typeof(Carrier)){
 				Carrier carrier=(Carrier)((MenuItem)sender).Tag;
 				label.PrintCarrier(carrier.CarrierNum);
 			}
-			if(((MenuItem)sender).Tag.GetType()==typeof(Referral)) {
+			else if(((MenuItem)sender).Tag.GetType()==typeof(Referral)) {
 				Referral refer=(Referral)((MenuItem)sender).Tag;
 				label.PrintReferral(refer.ReferralNum);
 			}

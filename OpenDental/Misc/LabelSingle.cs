@@ -38,6 +38,18 @@ namespace OpenDental{
 			}
 		}
 
+		public void PrintCustomPatient(int patNum,SheetDef sheetDef){
+			Sheet sheet=SheetUtil.CreateSheet(sheetDef);
+			SheetParameter.SetParameter(sheet,"PatNum",patNum);
+			SheetFiller.FillFields(sheet);
+			try {
+				SheetPrinting.Print(sheet);
+			}
+			catch(Exception ex) {
+				MessageBox.Show(ex.Message);
+			}
+		}
+
 		public void PrintPatientLFAddress(int patNum) {
 			SheetDef sheetDef=SheetsInternal.GetSheetDef(SheetInternalType.LabelPatientLFAddress);
 			Sheet sheet=SheetUtil.CreateSheet(sheetDef);
@@ -102,9 +114,17 @@ namespace OpenDental{
 			}
 		}
 
-		///<summary>Have to supply printer name because this can be called multiple times in a loop. Returns false if fails.</summary>
-		public void PrintCarrier(int carrierNum){//Carrier carrierCur,string printerName){
-			SheetDef sheetDef=SheetsInternal.GetSheetDef(SheetInternalType.LabelCarrier);
+		///<summary></summary>
+		public void PrintCarrier(int carrierNum){
+			SheetDef sheetDef;
+			List<SheetDef> customSheetDefs=SheetDefs.GetCustomForType(SheetTypeEnum.LabelCarrier);
+			if(customSheetDefs.Count==0){
+				sheetDef=SheetsInternal.GetSheetDef(SheetInternalType.LabelCarrier);
+			}
+			else{
+				sheetDef=customSheetDefs[0];
+				SheetDefs.GetFieldsAndParameters(sheetDef);
+			}
 			Sheet sheet=SheetUtil.CreateSheet(sheetDef);
 			SheetParameter.SetParameter(sheet,"CarrierNum",carrierNum);
 			SheetFiller.FillFields(sheet);
@@ -118,7 +138,15 @@ namespace OpenDental{
 
 		///<summary></summary>
 		public void PrintReferral(int referralNum) {
-			SheetDef sheetDef=SheetsInternal.GetSheetDef(SheetInternalType.LabelReferral);
+			SheetDef sheetDef;
+			List<SheetDef> customSheetDefs=SheetDefs.GetCustomForType(SheetTypeEnum.LabelReferral);
+			if(customSheetDefs.Count==0){
+				sheetDef=SheetsInternal.GetSheetDef(SheetInternalType.LabelReferral);
+			}
+			else{
+				sheetDef=customSheetDefs[0];
+				SheetDefs.GetFieldsAndParameters(sheetDef);
+			}
 			Sheet sheet=SheetUtil.CreateSheet(sheetDef);
 			SheetParameter.SetParameter(sheet,"ReferralNum",referralNum);
 			SheetFiller.FillFields(sheet);

@@ -119,6 +119,7 @@ namespace OpenDentBusiness{
 			}
 		}
 
+		///<summary>Gets all custom sheetdefs(without fields or parameters) for a particular type.</summary>
 		public static List<SheetDef> GetCustomForType(SheetTypeEnum sheettype){
 			List<SheetDef> retVal=new List<SheetDef>();
 			for(int i=0;i<SheetDefC.Listt.Count;i++){

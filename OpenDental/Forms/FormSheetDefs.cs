@@ -27,6 +27,7 @@ namespace OpenDental{
 		private Label label1;
 		private ComboBox comboLabel;
 		private bool changed;
+		private Label label2;
 		List<SheetDef> LabelList;
 
 		///<summary></summary>
@@ -69,6 +70,7 @@ namespace OpenDental{
 			this.butClose = new OpenDental.UI.Button();
 			this.label1 = new System.Windows.Forms.Label();
 			this.comboLabel = new System.Windows.Forms.ComboBox();
+			this.label2 = new System.Windows.Forms.Label();
 			this.SuspendLayout();
 			// 
 			// butCopy
@@ -164,10 +166,20 @@ namespace OpenDental{
 			this.comboLabel.SelectionChangeCommitted += new System.EventHandler(this.comboLabel_SelectionChangeCommitted);
 			this.comboLabel.DropDown += new System.EventHandler(this.comboLabel_DropDown);
 			// 
+			// label2
+			// 
+			this.label2.Location = new System.Drawing.Point(478,60);
+			this.label2.Name = "label2";
+			this.label2.Size = new System.Drawing.Size(205,55);
+			this.label2.TabIndex = 18;
+			this.label2.Text = "(other label types are assigned simply by creating custom labels of the same type" +
+    ")";
+			// 
 			// FormSheetDefs
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.ClientSize = new System.Drawing.Size(695,612);
+			this.Controls.Add(this.label2);
 			this.Controls.Add(this.comboLabel);
 			this.Controls.Add(this.label1);
 			this.Controls.Add(this.butCopy);
