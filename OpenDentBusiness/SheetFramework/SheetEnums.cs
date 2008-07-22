@@ -40,14 +40,14 @@ namespace OpenDentBusiness {
 		InputField,
 		///<Summary>This is text that is defined as part of the sheet and will never change from sheet to sheet.  </Summary>
 		StaticText,
-		///<summary>Stores a parameter other than the PatNum.  Not meant to be seen on the sheet.  Only used for SheetFieldData, not SheetField</summary>
-		Parameter
+		///<summary>Stores a parameter other than the PatNum.  Not meant to be seen on the sheet.  Only used for SheetField, not SheetFieldDef.</summary>
+		Parameter,
+		///<Summary>Any image of any size, typically a background image for a form.</Summary>
+		Image
 		//<summary></summary>
 		//CheckBox
 		//<summary></summary>
 		//RadioButton
-		//<Summary>Not yet supported</Summary>
-		//Image,
 		//<Summary>Not yet supported</Summary>
 		//Line,
 		//<Summary>Not yet supported.  This might be redundant, and we might use border element instead as the preferred way of drawing a box.</Summary>

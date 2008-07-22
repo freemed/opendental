@@ -7,9 +7,11 @@ using System.Drawing.Design;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.Drawing.Text;
+using System.IO;
 using System.Text;
 using System.Windows.Forms;
 using OpenDentBusiness;
+using CodeBase;
 
 namespace OpenDental {
 	public partial class FormSheetDefEdit:Form {
@@ -65,6 +67,9 @@ namespace OpenDental {
 				if(SheetDefCur.SheetFieldDefs[i].FieldType==SheetFieldType.StaticText){
 					listFields.Items.Add(SheetDefCur.SheetFieldDefs[i].FieldValue);
 				}
+				else if(SheetDefCur.SheetFieldDefs[i].FieldType==SheetFieldType.Image){
+					listFields.Items.Add(Lan.g(this,"Image:" )+SheetDefCur.SheetFieldDefs[i].FieldName);
+				}
 				else{
 					listFields.Items.Add(SheetDefCur.SheetFieldDefs[i].FieldName);
 				}
@@ -94,6 +99,12 @@ namespace OpenDental {
 			FontStyle fontstyle;
 			for(int i=0;i<SheetDefCur.SheetFieldDefs.Count;i++){
 				if(SheetDefCur.SheetFieldDefs[i].FieldType==SheetFieldType.Parameter){
+					continue;
+				}
+				if(SheetDefCur.SheetFieldDefs[i].FieldType==SheetFieldType.Image){
+					string filePathAndName=ODFileUtils.CombinePaths(SheetUtil.GetImagePath(),SheetDefCur.SheetFieldDefs[i].FieldName);
+					Image img=Image.FromFile(filePathAndName);
+					g.DrawImage(img,SheetDefCur.SheetFieldDefs[i].XPos,SheetDefCur.SheetFieldDefs[i].YPos,SheetDefCur.SheetFieldDefs[i].Width,SheetDefCur.SheetFieldDefs[i].Height);
 					continue;
 				}
 				fontstyle=FontStyle.Regular;
@@ -196,6 +207,27 @@ namespace OpenDental {
 			panelMain.Invalidate();
 		}
 
+		private void butAddImage_Click(object sender,EventArgs e) {
+			if(!PrefC.UsingAtoZfolder) {
+				MsgBox.Show(this,"Not allowed because not using AtoZ folder");
+				return;
+			}
+			//Font font=new Font(SheetDefCur.FontName,SheetDefCur.FontSize);
+			FormSheetFieldImage FormS=new FormSheetFieldImage();
+			FormS.SheetDefCur=SheetDefCur;
+			FormS.SheetFieldDefCur=SheetFieldDef.NewImage("",0,0,100,100);
+			if(this.IsInternal){
+				FormS.IsReadOnly=true;
+			}
+			FormS.ShowDialog();
+			if(FormS.DialogResult!=DialogResult.OK){
+				return;
+			}
+			SheetDefCur.SheetFieldDefs.Insert(0,FormS.SheetFieldDefCur);
+			FillFieldList();
+			panelMain.Invalidate();
+		}
+
 		private void listFields_Click(object sender,EventArgs e) {
 			//if(listFields.SelectedIndices.Count==0){
 			//	return;
@@ -262,6 +294,21 @@ namespace OpenDental {
 						return;
 					}
 					if(FormSS.SheetFieldDefCur==null){
+						SheetDefCur.SheetFieldDefs.RemoveAt(idx);
+					}
+					break;
+				case SheetFieldType.Image:
+					FormSheetFieldImage FormSI=new FormSheetFieldImage();
+					FormSI.SheetDefCur=SheetDefCur;
+					FormSI.SheetFieldDefCur=field;
+					if(this.IsInternal){
+						FormSI.IsReadOnly=true;
+					}
+					FormSI.ShowDialog();
+					if(FormSI.DialogResult!=DialogResult.OK){
+						return;
+					}
+					if(FormSI.SheetFieldDefCur==null){
 						SheetDefCur.SheetFieldDefs.RemoveAt(idx);
 					}
 					break;
@@ -342,8 +389,12 @@ namespace OpenDental {
 			LaunchEditWindow(field);
 		}
 
+		///<summary>Images will be ignored in the hit test since they frequently fill the entire background.</summary>
 		private SheetFieldDef HitTest(int x,int y){
 			for(int i=0;i<SheetDefCur.SheetFieldDefs.Count;i++){
+				if(SheetDefCur.SheetFieldDefs[i].FieldType==SheetFieldType.Image){
+					continue;
+				}
 				if(SheetDefCur.SheetFieldDefs[i].Bounds.Contains(x,y)){
 					return SheetDefCur.SheetFieldDefs[i];
 				}
@@ -420,6 +471,8 @@ namespace OpenDental {
 		private void butCancel_Click(object sender,EventArgs e) {
 			DialogResult=DialogResult.Cancel;
 		}
+
+	
 
 		
 

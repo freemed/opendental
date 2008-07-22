@@ -45,11 +45,12 @@ namespace OpenDentBusiness{
 			return DataObjectFactory<SheetFieldDef>.CreateObject(sheetFieldDefNum);
 		}
 
+		/*Better to get the data from cache
 		///<summary>Gets all fieldDefs for one sheetDef.</summary>
 		public static List<SheetFieldDef> GetForSheetDef(int sheetDefNum){
 			string command="SELECT * FROM sheetfielddef WHERE SheetDefNum="+POut.PInt(sheetDefNum);
 			return new List<SheetFieldDef>(DataObjectFactory<SheetFieldDef>.CreateObjects(command));
-		}
+		}*/
 
 		///<summary></summary>
 		public static void WriteObject(SheetFieldDef sheetFieldDef){

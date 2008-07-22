@@ -105,17 +105,32 @@ namespace OpenDentBusiness{
 		public static void GetFieldsAndParameters(SheetDef sheetdef){
 			sheetdef.SheetFieldDefs=new List<SheetFieldDef>();
 			sheetdef.Parameters=SheetParameter.GetForType(sheetdef.SheetType);
+			//images first
 			for(int i=0;i<SheetFieldDefC.Listt.Count;i++){
 				if(SheetFieldDefC.Listt[i].SheetDefNum!=sheetdef.SheetDefNum){
 					continue;
 				}
+				if(SheetFieldDefC.Listt[i].FieldType!=SheetFieldType.Image){
+					continue;
+				}
+				sheetdef.SheetFieldDefs.Add(SheetFieldDefC.Listt[i].Copy());
+			}
+			//then all other fields
+			for(int i=0;i<SheetFieldDefC.Listt.Count;i++){
+				if(SheetFieldDefC.Listt[i].SheetDefNum!=sheetdef.SheetDefNum){
+					continue;
+				}
+				if(SheetFieldDefC.Listt[i].FieldType==SheetFieldType.Image){
+					continue;
+				}
 				if(SheetFieldDefC.Listt[i].FieldType==SheetFieldType.Parameter){
+					continue;
 					//sheetfielddefs never store parameters.
 					//sheetfields do store filled parameters, but that's different.
 				}
-				else{
-					sheetdef.SheetFieldDefs.Add(SheetFieldDefC.Listt[i].Copy());
-				}
+				//else{
+				sheetdef.SheetFieldDefs.Add(SheetFieldDefC.Listt[i].Copy());
+				//}
 			}
 		}
 

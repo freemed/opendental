@@ -34,7 +34,7 @@ namespace OpenDentBusiness{
 		[DataField("FieldType")]
 		private SheetFieldType fieldType;
 		private bool fieldTypeChanged;
-		///<summary>Enum:SheetFieldType  OutputText, InputField, StaticText,Parameter(only used for SheetField, not SheetFieldDef).</summary>
+		///<summary>Enum:SheetFieldType  OutputText, InputField, StaticText,Parameter(only used for SheetField, not SheetFieldDef),Image.</summary>
 		public SheetFieldType FieldType{
 			get{return fieldType;}
 			set{if(fieldType!=value){fieldType=value;MarkDirty();fieldTypeChanged=true;}}
@@ -46,7 +46,7 @@ namespace OpenDentBusiness{
 		[DataField("FieldName")]
 		private string fieldName;
 		private bool fieldNameChanged;
-		///<summary>Only for OutputText and InputField types.  Each sheet typically has a main datatable type.  For OutputText types, FieldName is usually the string representation of the database column for the main table.  For other tables, it can be of the form table.Column.  There may also be extra fields available that are not strictly pulled from the database.  Extra fields will start with lowercase to indicate that they are not pure database fields.  The list of available fields for each type in SheetFieldsAvailable.  Users can pick from that list.  Likewise, InputField types are internally tied to actions to persist the data.  So they are also hard coded and are available in SheetFieldsAvailable.  When a SheetField has a fieldType of Parameter, then the FieldName stores the name of the parameter.</summary>
+		///<summary>Mostly for OutputText and InputField types.  Each sheet typically has a main datatable type.  For OutputText types, FieldName is usually the string representation of the database column for the main table.  For other tables, it can be of the form table.Column.  There may also be extra fields available that are not strictly pulled from the database.  Extra fields will start with lowercase to indicate that they are not pure database fields.  The list of available fields for each type in SheetFieldsAvailable.  Users can pick from that list.  Likewise, InputField types are internally tied to actions to persist the data.  So they are also hard coded and are available in SheetFieldsAvailable.  For images, this is the full file name including extension, but without path.  When a SheetField has a fieldType of Parameter, then the FieldName stores the name of the parameter.</summary>
 		public string FieldName{
 			get{return fieldName;}
 			set{if(fieldName!=value){fieldName=value;MarkDirty();fieldNameChanged=true;}}

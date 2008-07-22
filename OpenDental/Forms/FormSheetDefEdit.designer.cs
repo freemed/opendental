@@ -37,6 +37,7 @@ namespace OpenDental{
 			this.butDelete = new OpenDental.UI.Button();
 			this.butOK = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
+			this.butAddImage = new OpenDental.UI.Button();
 			this.panel1.SuspendLayout();
 			this.groupAddNew.SuspendLayout();
 			this.SuspendLayout();
@@ -109,6 +110,7 @@ namespace OpenDental{
 			// 
 			// groupAddNew
 			// 
+			this.groupAddNew.Controls.Add(this.butAddImage);
 			this.groupAddNew.Controls.Add(this.butAddStaticText);
 			this.groupAddNew.Controls.Add(this.butAddInputField);
 			this.groupAddNew.Controls.Add(this.butAddOutputText);
@@ -233,6 +235,22 @@ namespace OpenDental{
 			this.butCancel.Text = "&Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
 			// 
+			// butAddImage
+			// 
+			this.butAddImage.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butAddImage.Autosize = true;
+			this.butAddImage.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butAddImage.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butAddImage.CornerRadius = 4F;
+			this.butAddImage.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butAddImage.Location = new System.Drawing.Point(70,35);
+			this.butAddImage.Name = "butAddImage";
+			this.butAddImage.Size = new System.Drawing.Size(67,20);
+			this.butAddImage.TabIndex = 88;
+			this.butAddImage.TabStop = false;
+			this.butAddImage.Text = "Image";
+			this.butAddImage.Click += new System.EventHandler(this.butAddImage_Click);
+			// 
 			// FormSheetDefEdit
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
@@ -278,5 +296,6 @@ namespace OpenDental{
 		private OpenDental.UI.Button butAddStaticText;
 		private OpenDental.UI.Button butAddInputField;
 		private OpenDental.UI.Button butEdit;
+		private OpenDental.UI.Button butAddImage;
 	}
 }

@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
+using System.IO;
 using System.Text;
 using OpenDentBusiness;
+using CodeBase;
 
 namespace OpenDental{
 	public class SheetUtil {
@@ -150,6 +152,19 @@ namespace OpenDental{
 				retVal.Add(field);
 			}
 			return retVal;
+		}
+
+		///<summary>Typically returns something similar to \\SERVER\OpenDentImages\SheetImages</summary>
+		public static string GetImagePath(){
+			string imagePath;
+			if(!PrefC.UsingAtoZfolder) {
+				throw new ApplicationException("Must be using AtoZ folders.");
+			}
+			imagePath=ODFileUtils.CombinePaths(FormPath.GetPreferredImagePath(),"SheetImages");
+			if(!Directory.Exists(imagePath)) {
+				Directory.CreateDirectory(imagePath);
+			}
+			return imagePath;
 		}
 		
 
