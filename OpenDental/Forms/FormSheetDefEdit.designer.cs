@@ -25,15 +25,15 @@ namespace OpenDental{
 		private void InitializeComponent() {
 			this.textDescription = new System.Windows.Forms.TextBox();
 			this.panel1 = new System.Windows.Forms.Panel();
-			this.panelMain = new System.Windows.Forms.Panel();
+			this.panelMain = new OpenDental.PanelGraphics();
 			this.labelInternal = new System.Windows.Forms.Label();
 			this.listFields = new System.Windows.Forms.ListBox();
 			this.label2 = new System.Windows.Forms.Label();
 			this.groupAddNew = new System.Windows.Forms.GroupBox();
-			this.butEdit = new OpenDental.UI.Button();
 			this.butAddStaticText = new OpenDental.UI.Button();
 			this.butAddInputField = new OpenDental.UI.Button();
 			this.butAddOutputText = new OpenDental.UI.Button();
+			this.butEdit = new OpenDental.UI.Button();
 			this.butDelete = new OpenDental.UI.Button();
 			this.butOK = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
@@ -64,7 +64,7 @@ namespace OpenDental{
 			// 
 			// panelMain
 			// 
-			this.panelMain.BackColor = System.Drawing.SystemColors.Window;
+			this.panelMain.BackColor = System.Drawing.Color.Transparent;
 			this.panelMain.Location = new System.Drawing.Point(0,0);
 			this.panelMain.Name = "panelMain";
 			this.panelMain.Size = new System.Drawing.Size(549,513);
@@ -119,22 +119,6 @@ namespace OpenDental{
 			this.groupAddNew.TabStop = false;
 			this.groupAddNew.Text = "Add new";
 			// 
-			// butEdit
-			// 
-			this.butEdit.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butEdit.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.butEdit.Autosize = true;
-			this.butEdit.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butEdit.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butEdit.CornerRadius = 4F;
-			this.butEdit.Location = new System.Drawing.Point(754,38);
-			this.butEdit.Name = "butEdit";
-			this.butEdit.Size = new System.Drawing.Size(90,24);
-			this.butEdit.TabIndex = 87;
-			this.butEdit.TabStop = false;
-			this.butEdit.Text = "Edit Properties";
-			this.butEdit.Click += new System.EventHandler(this.butEdit_Click);
-			// 
 			// butAddStaticText
 			// 
 			this.butAddStaticText.AdjustImageLocation = new System.Drawing.Point(0,0);
@@ -182,6 +166,22 @@ namespace OpenDental{
 			this.butAddOutputText.TabStop = false;
 			this.butAddOutputText.Text = "OutputText";
 			this.butAddOutputText.Click += new System.EventHandler(this.butAddOutputText_Click);
+			// 
+			// butEdit
+			// 
+			this.butEdit.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butEdit.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.butEdit.Autosize = true;
+			this.butEdit.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butEdit.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butEdit.CornerRadius = 4F;
+			this.butEdit.Location = new System.Drawing.Point(754,38);
+			this.butEdit.Name = "butEdit";
+			this.butEdit.Size = new System.Drawing.Size(90,24);
+			this.butEdit.TabIndex = 87;
+			this.butEdit.TabStop = false;
+			this.butEdit.Text = "Edit Properties";
+			this.butEdit.Click += new System.EventHandler(this.butEdit_Click);
 			// 
 			// butDelete
 			// 
@@ -269,7 +269,7 @@ namespace OpenDental{
 		private System.Windows.Forms.TextBox textDescription;
 		private OpenDental.UI.Button butDelete;
 		private System.Windows.Forms.Panel panel1;
-		private System.Windows.Forms.Panel panelMain;
+		private OpenDental.PanelGraphics panelMain;
 		private System.Windows.Forms.Label labelInternal;
 		private System.Windows.Forms.ListBox listFields;
 		private System.Windows.Forms.Label label2;

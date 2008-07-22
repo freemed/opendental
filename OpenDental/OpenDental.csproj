@@ -3184,6 +3184,12 @@
     <Compile Include="Reporting\FormReport.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="SheetFramework\PanelGraphics.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="SheetFramework\PanelGraphics.Designer.cs">
+      <DependentUpon>PanelGraphics.cs</DependentUpon>
+    </Compile>
     <Compile Include="SheetFramework\SheetFiller.cs" />
     <Compile Include="SheetFramework\SheetPrinting.cs" />
     <Compile Include="SheetFramework\SheetUtil.cs" />
