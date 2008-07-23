@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Diagnostics;
+using System.IO;
 using System.Text;
 using System.Windows.Forms;
 using OpenDentBusiness;
@@ -31,6 +32,22 @@ namespace OpenDental {
 			FontStyle style;
 			for(int i=0;i<SheetCur.SheetFields.Count;i++){
 				if(SheetCur.SheetFields[i].FieldType==SheetFieldType.Parameter){
+					continue;
+				}
+				if(SheetCur.SheetFields[i].FieldType==SheetFieldType.Image){
+					string filePathAndName=ODFileUtils.CombinePaths(SheetUtil.GetImagePath(),SheetCur.SheetFields[i].FieldName);
+					if(!File.Exists(filePathAndName)){
+						continue;
+					}
+					Image img=Image.FromFile(filePathAndName);
+					PictureBox pictBox=new PictureBox();
+					pictBox.Location=new Point(SheetCur.SheetFields[i].XPos,SheetCur.SheetFields[i].YPos);
+					pictBox.Width=SheetCur.SheetFields[i].Width;
+					pictBox.Height=SheetCur.SheetFields[i].Height;
+					pictBox.Image=img;
+					pictBox.SizeMode=PictureBoxSizeMode.StretchImage;
+					panelMain.Controls.Add(pictBox);
+					pictBox.BringToFront();
 					continue;
 				}
 				textbox=new RichTextBox();
@@ -65,6 +82,7 @@ namespace OpenDental {
 				//textbox.ScrollBars=RichTextBoxScrollBars.None;
 				textbox.Tag=SheetCur.SheetFields[i];
 				panelMain.Controls.Add(textbox);
+				textbox.BringToFront();
 			}
 		}
 
