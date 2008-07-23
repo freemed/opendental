@@ -27,12 +27,7 @@ namespace OpenDental {
 			if(IsReadOnly){
 				butOK.Enabled=false;
 			}
-			if(PrefC.UsingAtoZfolder) {
-				string[] files=Directory.GetFiles(SheetUtil.GetImagePath());
-				for(int i=0;i<files.Length;i++){
-					comboFieldName.Items.Add(Path.GetFileName(files[i]));
-				}
-			}
+			FillCombo();
 			comboFieldName.Text=SheetFieldDefCur.FieldName;
 			FillImage();
 			textXPos.Text=SheetFieldDefCur.XPos.ToString();
@@ -41,8 +36,41 @@ namespace OpenDental {
 			textHeight.Text=SheetFieldDefCur.Height.ToString();
 		}
 
+		private void FillCombo(){
+			if(PrefC.UsingAtoZfolder) {
+				comboFieldName.Items.Clear();
+				string[] files=Directory.GetFiles(SheetUtil.GetImagePath());
+				for(int i=0;i<files.Length;i++){
+					comboFieldName.Items.Add(Path.GetFileName(files[i]));
+				}
+			}
+		}
+
 		private void butImport_Click(object sender,EventArgs e) {
-			
+			OpenFileDialog dlg=new OpenFileDialog();
+			dlg.Multiselect=false;
+			if(dlg.ShowDialog()!=DialogResult.OK){
+				return;
+			}
+			if(!File.Exists(dlg.FileName)){
+				MsgBox.Show(this,"File does not exist.");
+				return;
+			}
+			string newName=ODFileUtils.CombinePaths(SheetUtil.GetImagePath(),Path.GetFileName(dlg.FileName));
+			if(File.Exists(newName)){
+				MsgBox.Show(this,"A file of that name already exists in SheetImages.  Please rename the file before importing.");
+				return;
+			}
+			File.Copy(dlg.FileName,newName);
+			FillCombo();
+			for(int i=0;i<comboFieldName.Items.Count;i++){
+				if(comboFieldName.Items[i].ToString()==Path.GetFileName(newName)){
+					comboFieldName.SelectedIndex=i;
+					comboFieldName.Text=Path.GetFileName(newName);
+					FillImage();
+					ShrinkToFit();
+				}
+			}
 		}
 
 		private void comboFieldName_TextUpdate(object sender,EventArgs e) {

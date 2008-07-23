@@ -55,12 +55,20 @@ namespace OpenDental {
 			textHeight.Text=SheetFieldDefCur.Height.ToString();
 		}
 
+		private void listFields_DoubleClick(object sender,EventArgs e) {
+			SaveAndClose();
+		}
+
 		private void butDelete_Click(object sender,EventArgs e) {
 			SheetFieldDefCur=null;
 			DialogResult=DialogResult.OK;
 		}
 
 		private void butOK_Click(object sender,EventArgs e) {
+			SaveAndClose();
+		}
+
+		private void SaveAndClose(){
 			if(textXPos.errorProvider1.GetError(textXPos)!=""
 				|| textYPos.errorProvider1.GetError(textYPos)!=""
 				|| textWidth.errorProvider1.GetError(textWidth)!=""
@@ -106,6 +114,8 @@ namespace OpenDental {
 		private void butCancel_Click(object sender,EventArgs e) {
 			DialogResult=DialogResult.Cancel;
 		}
+
+		
 
 		
 
