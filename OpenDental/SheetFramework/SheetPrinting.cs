@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Printing;
+using System.IO;
 using System.Text;
 using OpenDentBusiness;
+using CodeBase;
 using PdfSharp;
 using PdfSharp.Drawing;
 using PdfSharp.Drawing.Layout;
@@ -123,8 +125,24 @@ namespace OpenDental {
 			SheetUtil.CalculateHeights(sheet,g);//this is here because of easy access to g.
 			Font font;
 			FontStyle fontstyle;
+			//first, draw images
 			foreach(SheetField field in sheet.SheetFields){
-				if(field.FieldType==SheetFieldType.Parameter){
+				if(field.FieldType!=SheetFieldType.Image){
+					continue;
+				}
+				string filePathAndName=ODFileUtils.CombinePaths(SheetUtil.GetImagePath(),field.FieldName);
+				if(!File.Exists(filePathAndName)){
+					continue;
+				}
+				Image img=Image.FromFile(filePathAndName);
+				g.DrawImage(img,field.XPos,field.YPos,field.Width,field.Height);
+			}
+			//then, draw textboxes
+			foreach(SheetField field in sheet.SheetFields){
+				if(field.FieldType!=SheetFieldType.InputField
+					&& field.FieldType!=SheetFieldType.OutputText
+					&& field.FieldType!=SheetFieldType.StaticText)
+				{
 					continue;
 				}
 				fontstyle=FontStyle.Regular;
@@ -149,34 +167,64 @@ namespace OpenDental {
 
 		public static void CreatePdf(Sheet sheet,string fullFileName){
 			PdfDocument document=new PdfDocument();
+			//document.PageLayout=new PdfPageLayout()
 			PdfPage page=document.AddPage();
 			XGraphics g=XGraphics.FromPdfPage(page);
 			XTextFormatter tf = new XTextFormatter(g);//needed for text wrap
+			//tf.Alignment=XParagraphAlignment.Left;
 			if(sheet.IsLandscape){
 				page.Orientation=PageOrientation.Landscape;
 			}
-			page.Width=sheet.Width;
-			page.Height=sheet.Height;
+			page.Width=p(sheet.Width);//XUnit.FromInch((double)sheet.Width/100);  //new XUnit((double)sheet.Width/100,XGraphicsUnit.Inch);
+			page.Height=p(sheet.Height);//new XUnit((double)sheet.Height/100,XGraphicsUnit.Inch);
 			//pd.DefaultPageSettings.Landscape=
 			//already done?:SheetUtil.CalculateHeights(sheet,g);//this is here because of easy access to g.
 			XFont font;
 			XFontStyle fontstyle;
-			//XStringFormat stringformat=new XStringFormat();
+			//first, draw images
 			foreach(SheetField field in sheet.SheetFields){
-				if(field.FieldType==SheetFieldType.Parameter){
+				if(field.FieldType!=SheetFieldType.Image){
+					continue;
+				}
+				string filePathAndName=ODFileUtils.CombinePaths(SheetUtil.GetImagePath(),field.FieldName);
+				if(!File.Exists(filePathAndName)){
+					continue;
+				}
+				XImage img=XImage.FromFile(filePathAndName);
+				g.DrawImage(img,p(field.XPos),p(field.YPos),p(field.Width),p(field.Height));
+			}
+			//then, draw text
+			foreach(SheetField field in sheet.SheetFields){
+				if(field.FieldType!=SheetFieldType.InputField
+					&& field.FieldType!=SheetFieldType.OutputText
+					&& field.FieldType!=SheetFieldType.StaticText)
+				{
 					continue;
 				}
 				fontstyle=XFontStyle.Regular;
 				if(field.FontIsBold){
 					fontstyle=XFontStyle.Bold;
 				}
+				//Font font2=new Font(field.FontName,8,GraphicsUnit.
 				font=new XFont(field.FontName,field.FontSize,fontstyle);
-				tf.DrawString(field.FieldValue,font,XBrushes.Black,field.BoundsF);
+				XRect xrect=new XRect(p(field.XPos),p(field.YPos),p(field.Width),p(field.Height));
+				//XStringFormat format=new XStringFormat();
+				tf.DrawString(field.FieldValue,font,XBrushes.Black,xrect,XStringFormats.TopLeft);
 			}
 			document.Save(fullFileName);
 		}
 
+		/*//<summary>Converts pixels used by us to points used by PdfSharp.</summary>
+		private double P(double pixels){
+			return (double)pixels/100;
+		}*/
 
+		///<summary>Converts pixels used by us to points used by PdfSharp.</summary>
+		private static double p(int pixels){
+			XUnit xunit=XUnit.FromInch((double)pixels/100);//100 ppi
+			return xunit.Point;
+				//XUnit.FromInch((double)pixels/100);
+		}
 
 	}
 }

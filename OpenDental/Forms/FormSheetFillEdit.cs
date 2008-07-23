@@ -30,47 +30,55 @@ namespace OpenDental {
 			textNote.Text=SheetCur.InternalNote;
 			RichTextBox textbox;//has to be richtextbox due to MS bug that doesn't show cursor.
 			FontStyle style;
-			for(int i=0;i<SheetCur.SheetFields.Count;i++){
-				if(SheetCur.SheetFields[i].FieldType==SheetFieldType.Parameter){
+			//first, draw images
+			foreach(SheetField field in SheetCur.SheetFields){
+				if(field.FieldType!=SheetFieldType.Image){
 					continue;
 				}
-				if(SheetCur.SheetFields[i].FieldType==SheetFieldType.Image){
-					string filePathAndName=ODFileUtils.CombinePaths(SheetUtil.GetImagePath(),SheetCur.SheetFields[i].FieldName);
-					if(!File.Exists(filePathAndName)){
-						continue;
-					}
-					Image img=Image.FromFile(filePathAndName);
-					PictureBox pictBox=new PictureBox();
-					pictBox.Location=new Point(SheetCur.SheetFields[i].XPos,SheetCur.SheetFields[i].YPos);
-					pictBox.Width=SheetCur.SheetFields[i].Width;
-					pictBox.Height=SheetCur.SheetFields[i].Height;
-					pictBox.Image=img;
-					pictBox.SizeMode=PictureBoxSizeMode.StretchImage;
-					panelMain.Controls.Add(pictBox);
-					pictBox.BringToFront();
+				string filePathAndName=ODFileUtils.CombinePaths(SheetUtil.GetImagePath(),field.FieldName);
+				if(!File.Exists(filePathAndName)){
+					continue;
+				}
+				Image img=Image.FromFile(filePathAndName);
+				PictureBox pictBox=new PictureBox();
+				pictBox.Location=new Point(field.XPos,field.YPos);
+				pictBox.Width=field.Width;
+				pictBox.Height=field.Height;
+				pictBox.Image=img;
+				pictBox.SizeMode=PictureBoxSizeMode.StretchImage;
+				pictBox.Tag=field;
+				panelMain.Controls.Add(pictBox);
+				pictBox.BringToFront();
+			}
+			//then, draw textboxes
+			foreach(SheetField field in SheetCur.SheetFields){
+				if(field.FieldType!=SheetFieldType.InputField
+					&& field.FieldType!=SheetFieldType.OutputText
+					&& field.FieldType!=SheetFieldType.StaticText)
+				{
 					continue;
 				}
 				textbox=new RichTextBox();
 				textbox.BorderStyle=BorderStyle.None;
 				//textbox.Multiline=true;//due to MS malfunction at 9pt which cuts off the bottom of the text.
-				if(SheetCur.SheetFields[i].FieldType==SheetFieldType.OutputText
-					|| SheetCur.SheetFields[i].FieldType==SheetFieldType.StaticText)
+				if(field.FieldType==SheetFieldType.OutputText
+					|| field.FieldType==SheetFieldType.StaticText)
 				{
 					//textbox.BackColor=Color.White;
 					//textbox.BackColor=Color.FromArgb(245,245,200);
 				}
-				else if(SheetCur.SheetFields[i].FieldType==SheetFieldType.InputField){
+				else if(field.FieldType==SheetFieldType.InputField){
 					textbox.BackColor=Color.FromArgb(245,245,200);
 				}
-				textbox.Location=new Point(SheetCur.SheetFields[i].XPos,SheetCur.SheetFields[i].YPos);
-				textbox.Width=SheetCur.SheetFields[i].Width;
-				textbox.Text=SheetCur.SheetFields[i].FieldValue;
+				textbox.Location=new Point(field.XPos,field.YPos);
+				textbox.Width=field.Width;
+				textbox.Text=field.FieldValue;
 				style=FontStyle.Regular;
-				if(SheetCur.SheetFields[i].FontIsBold){
+				if(field.FontIsBold){
 					style=FontStyle.Bold;
 				}
-				textbox.Font=new Font(SheetCur.SheetFields[i].FontName,SheetCur.SheetFields[i].FontSize,style);
-				if(SheetCur.SheetFields[i].Height<textbox.Font.Height+2){
+				textbox.Font=new Font(field.FontName,field.FontSize,style);
+				if(field.Height<textbox.Font.Height+2){
 					textbox.Multiline=false;
 					//textbox.AcceptsReturn=false;
 				}
@@ -78,9 +86,9 @@ namespace OpenDental {
 					textbox.Multiline=true;
 					//textbox.AcceptsReturn=true;
 				}
-				textbox.Height=SheetCur.SheetFields[i].Height;
+				textbox.Height=field.Height;
 				//textbox.ScrollBars=RichTextBoxScrollBars.None;
-				textbox.Tag=SheetCur.SheetFields[i];
+				textbox.Tag=field;
 				panelMain.Controls.Add(textbox);
 				textbox.BringToFront();
 			}
@@ -189,13 +197,25 @@ namespace OpenDental {
 			SheetCur.InternalNote=textNote.Text;
 			bool isNew=SheetCur.IsNew;
 			Sheets.WriteObject(SheetCur);
-			SaveText(this,SheetCur.SheetNum);
+			//SaveText();//this,SheetCur.SheetNum);
+			foreach(Control control in panelMain.Controls){
+				if(control.Tag==null){
+					continue;
+				}
+				SheetField field=(SheetField)control.Tag;
+				if(control.GetType()==typeof(RichTextBox)){
+					field.FieldValue=control.Text;
+				}
+				field.SheetNum=SheetCur.SheetNum;//whether or not isnew
+				SheetFields.WriteObject(field);
+			}
 			if(isNew){
 				Sheets.SaveParameters(SheetCur);
 			}
 			return true;
 		}
 
+		/*
 		///<summary>Recursively saves all SheetField objects for which there is a textbox.</summary>
 		private void SaveText(Control control,int sheetNum){
 			if(control.Tag!=null){
@@ -207,7 +227,7 @@ namespace OpenDental {
 			for(int i=0;i<control.Controls.Count;i++){
 				SaveText(control.Controls[i],sheetNum);
 			}
-		}
+		}*/
 
 		private void butOK_Click(object sender,EventArgs e) {
 			if(!TryToSaveData()){
