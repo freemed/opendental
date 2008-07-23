@@ -1202,6 +1202,7 @@ namespace OpenDental{
 			menuApt.MenuItems.Add(Lan.g(this,"Delete"),new EventHandler(menuApt_Click));
 			menuApt.MenuItems.Add(Lan.g(this,"Other Appointments"),new EventHandler(menuApt_Click));
 			menuApt.MenuItems.Add("-");
+			menuApt.MenuItems.Add(Lan.g(this,"Print Label"),new EventHandler(menuApt_Click));
 			menuApt.MenuItems.Add(Lan.g(this,"Print Card"),new EventHandler(menuApt_Click));
 			menuApt.MenuItems.Add(Lan.g(this,"Print Card for Entire Family"),new EventHandler(menuApt_Click));
 			menuApt.MenuItems.Add(Lan.g(this,"Routing Slip"),new EventHandler(menuApt_Click));
@@ -3078,14 +3079,17 @@ namespace OpenDental{
 					break;
 				//7: divider
 				case 8:
+					PrintApptLabel();
+					break;
+				case 9:
 					cardPrintFamily=false;
 					PrintApptCard();
 					break;
-				case 9:
+				case 10:
 					cardPrintFamily=true;
 					PrintApptCard();
 					break;
-				case 10:
+				case 11:
 					FormRpRouting FormR=new FormRpRouting();
 					FormR.ApptNum=ContrApptSingle.ClickedAptNum;
 					FormR.ShowDialog();
@@ -3343,6 +3347,10 @@ namespace OpenDental{
 			ModuleSelected(PatCurNum);
 			SetInvalid();
 		}		
+
+		private void PrintApptLabel(){
+			LabelSingle.PrintAppointment(ContrApptSingle.SelectedAptNum);
+		}
 
 		private void OnBlockCopy_Click(){
 			if(!Security.IsAuthorized(Permissions.Blockouts)) {

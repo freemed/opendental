@@ -2997,11 +2997,12 @@ namespace OpenDental{
 		}
 
 		private void butLabel_Click(object sender,System.EventArgs e) {
-			LabelSingle label=new LabelSingle();
+			//LabelSingle label=new LabelSingle();
 			PrintDocument pd=new PrintDocument();//only used to pass printerName
 			if(!Printers.SetPrinter(pd,PrintSituation.LabelSingle)) {
 				return;
 			}
+			//this is useless code. Revisit later.
 			Carrier carrier=new Carrier();
 			carrier.CarrierName=textCarrier.Text;
 			carrier.Phone=textPhone.Text;
@@ -3010,7 +3011,7 @@ namespace OpenDental{
 			carrier.City=textCity.Text;
 			carrier.State=textState.Text;
 			carrier.Zip=textZip.Text;
-			label.PrintCarrier(carrier.CarrierNum);//,pd.PrinterSettings.PrinterName);
+			LabelSingle.PrintCarrier(carrier.CarrierNum);//,pd.PrinterSettings.PrinterName);
 		}
 
 		///<summary>This only fills the grid on the screen.  It does not get any data from the database.</summary>

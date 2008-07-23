@@ -63,6 +63,7 @@ namespace OpenDental{
 			this.listFields.Name = "listFields";
 			this.listFields.Size = new System.Drawing.Size(142,277);
 			this.listFields.TabIndex = 85;
+			this.listFields.DoubleClick += new System.EventHandler(this.listFields_DoubleClick);
 			// 
 			// groupBox1
 			// 

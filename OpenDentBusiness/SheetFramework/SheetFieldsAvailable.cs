@@ -23,6 +23,8 @@ namespace OpenDentBusiness{
 					return GetLabelReferral(isOutput);
 				case SheetTypeEnum.ReferralSlip:
 					return GetReferralSlip(isOutput);
+				case SheetTypeEnum.LabelAppointment:
+					return GetLabelAppointment(isOutput);
 			}
 			return new List<SheetFieldDef>();
 		}
@@ -101,6 +103,19 @@ namespace OpenDentBusiness{
 			return list;
 		}
 
+		private static List<SheetFieldDef> GetLabelAppointment(bool isOutput){
+			List<SheetFieldDef> list=new List<SheetFieldDef>();
+			if(isOutput){
+				list.Add(NewOutput("nameFL"));
+				list.Add(NewOutput("nameLF"));
+				list.Add(NewOutput("weekdayDateTime"));
+				list.Add(NewOutput("length"));
+			}
+			else{
+				//list.Add(NewInput("notes"));
+			}
+			return list;
+		}
 
 
 

@@ -28,6 +28,9 @@ namespace OpenDental{
 				case SheetTypeEnum.ReferralSlip:
 					FillFieldsForReferralSlip(sheet);
 					break;
+				case SheetTypeEnum.LabelAppointment:
+					FillFieldsForLabelAppointment(sheet);
+					break;
 			}
 		}
 
@@ -161,6 +164,38 @@ namespace OpenDental{
 						field.FieldValue=Providers.GetProv(Patients.GetProvNum(pat)).GetFormalName();
 						break;
 					//case "notes"://an input field
+				}
+			}
+		}
+
+		private static void FillFieldsForLabelAppointment(Sheet sheet) {
+			Appointment appt=Appointments.GetOneApt((int)GetParamByName(sheet,"AptNum").ParamValue);
+			Patient pat=Patients.GetPat(appt.PatNum);
+			/*list.Add(NewOutput("nameFL"));
+				list.Add(NewOutput("nameLF"));
+				list.Add(NewOutput("weekdayDateTime"));
+				list.Add(NewOutput("length"));*/
+			foreach(SheetField field in sheet.SheetFields) {
+				switch(field.FieldName) {
+					case "nameFL":
+						field.FieldValue=pat.GetNameFL();
+						break;
+					case "nameLF":
+						field.FieldValue=pat.GetNameLF();
+						break;
+					case "weekdayDateTime":
+						field.FieldValue=appt.AptDateTime.ToString("ddd  dd/MM/yyyy  h:mm tt");
+						break;
+					case "length":
+						int minutesTotal=appt.Pattern.Length*5;
+						int hours=minutesTotal/60;//automatically rounds down
+						int minutes=minutesTotal-hours*60;
+						field.FieldValue="";
+						if(hours>0){
+							field.FieldValue=hours.ToString()+" hours, ";
+						}
+						field.FieldValue+=minutes.ToString()+" min";
+						break;
 				}
 			}
 		}

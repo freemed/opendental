@@ -24,6 +24,8 @@ namespace OpenDentBusiness{
 					return LabelReferral();
 				case SheetInternalType.ReferralSlip:
 					return ReferralSlip();
+				case SheetInternalType.LabelAppointment:
+					return LabelAppointment();
 				default:
 					throw new ApplicationException("Invalid SheetInternalType.");
 			}
@@ -201,6 +203,28 @@ namespace OpenDentBusiness{
 			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("Notes",9,sheet.FontName,true,25,yPos,300,rowH));
 			yPos+=rowH+5;
 			sheet.SheetFieldDefs.Add(SheetFieldDef.NewInput("notes",sheet.FontSize,sheet.FontName,false,25,yPos,400,275));
+			return sheet;
+		}
+
+		private static SheetDef LabelAppointment() {
+			SheetDef sheet=new SheetDef(SheetTypeEnum.LabelAppointment);
+			sheet.FontName="Microsoft Sans Serif";
+			sheet.FontSize=10f;
+			sheet.Width=108;
+			sheet.Height=346;
+			sheet.IsLandscape=true;
+			int rowH=19;
+			int yPos=15;
+			//if(PrefC.GetBool("FuchsOptionsOn")) yPos = 50;
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("nameFL",sheet.FontSize,sheet.FontName,false,25,yPos,300,rowH));
+			yPos+=rowH;
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("Your appointment is scheduled for:",sheet.FontSize,sheet.FontName,false,25,yPos,300,rowH));
+			yPos+=rowH;
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("weekdayDateTime",sheet.FontSize,sheet.FontName,false,25,yPos,300,rowH));
+			yPos+=rowH;
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("Appointment length:",sheet.FontSize,sheet.FontName,false,25,yPos,300,rowH));
+			yPos+=rowH;
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("length",sheet.FontSize,sheet.FontName,false,25,yPos,300,rowH));
 			return sheet;
 		}
 		

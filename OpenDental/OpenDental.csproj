@@ -1490,7 +1490,7 @@
     <Compile Include="Misc\DataConnectionOld.cs" />
     <Compile Include="Misc\EZTwain.cs" />
     <Compile Include="Misc\MigraDocHelper.cs" />
-    <Compile Include="Misc\LabelSingle.cs" />
+    <Compile Include="SheetFramework\LabelSingle.cs" />
     <Compile Include="Misc\ObjectDateComparer.cs" />
     <Compile Include="Misc\Pop3.cs" />
     <Compile Include="Misc\Tooth.cs" />

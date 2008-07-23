@@ -19,7 +19,7 @@ namespace OpenDental{
 		}
 
 		///<summary></summary>
-		public void PrintPat(int patNum){
+		public static void PrintPat(int patNum){
 			SheetDef sheetDef;
 			if(PrefC.GetInt("LabelPatientDefaultSheetDefNum")==0){
 				sheetDef=SheetsInternal.GetSheetDef(SheetInternalType.LabelPatientMail);
@@ -38,7 +38,7 @@ namespace OpenDental{
 			}
 		}
 
-		public void PrintCustomPatient(int patNum,SheetDef sheetDef){
+		public static void PrintCustomPatient(int patNum,SheetDef sheetDef){
 			Sheet sheet=SheetUtil.CreateSheet(sheetDef);
 			SheetParameter.SetParameter(sheet,"PatNum",patNum);
 			SheetFiller.FillFields(sheet);
@@ -50,7 +50,7 @@ namespace OpenDental{
 			}
 		}
 
-		public void PrintPatientLFAddress(int patNum) {
+		public static void PrintPatientLFAddress(int patNum) {
 			SheetDef sheetDef=SheetsInternal.GetSheetDef(SheetInternalType.LabelPatientLFAddress);
 			Sheet sheet=SheetUtil.CreateSheet(sheetDef);
 			SheetParameter.SetParameter(sheet,"PatNum",patNum);
@@ -63,7 +63,7 @@ namespace OpenDental{
 			}
 		}
 
-		public void PrintPatientLFChartNumber(int patNum) {
+		public static void PrintPatientLFChartNumber(int patNum) {
 			SheetDef sheetDef=SheetsInternal.GetSheetDef(SheetInternalType.LabelPatientLFChartNumber);
 			Sheet sheet=SheetUtil.CreateSheet(sheetDef);
 			SheetParameter.SetParameter(sheet,"PatNum",patNum);
@@ -76,7 +76,7 @@ namespace OpenDental{
 			}
 		}
 
-		public void PrintPatientLFPatNum(int patNum) {
+		public static void PrintPatientLFPatNum(int patNum) {
 			SheetDef sheetDef=SheetsInternal.GetSheetDef(SheetInternalType.LabelPatientLFPatNum);
 			Sheet sheet=SheetUtil.CreateSheet(sheetDef);
 			SheetParameter.SetParameter(sheet,"PatNum",patNum);
@@ -89,7 +89,7 @@ namespace OpenDental{
 			}
 		}
 
-		public void PrintPatRadiograph(int patNum) {
+		public static void PrintPatRadiograph(int patNum) {
 			SheetDef sheetDef=SheetsInternal.GetSheetDef(SheetInternalType.LabelPatientRadiograph);
 			Sheet sheet=SheetUtil.CreateSheet(sheetDef);
 			SheetParameter.SetParameter(sheet,"PatNum",patNum);
@@ -103,7 +103,7 @@ namespace OpenDental{
 		}
 
 		///<summary></summary>
-		public void PrintCarriers(List<int> carrierNums){
+		public static void PrintCarriers(List<int> carrierNums){
 			SheetDef sheetDef=SheetsInternal.GetSheetDef(SheetInternalType.LabelCarrier);
 			List<Sheet> sheetBatch=SheetUtil.CreateBatch(sheetDef,carrierNums);
 			try{
@@ -115,7 +115,7 @@ namespace OpenDental{
 		}
 
 		///<summary></summary>
-		public void PrintCarrier(int carrierNum){
+		public static void PrintCarrier(int carrierNum){
 			SheetDef sheetDef;
 			List<SheetDef> customSheetDefs=SheetDefs.GetCustomForType(SheetTypeEnum.LabelCarrier);
 			if(customSheetDefs.Count==0){
@@ -137,7 +137,7 @@ namespace OpenDental{
 		}
 
 		///<summary></summary>
-		public void PrintReferral(int referralNum) {
+		public static void PrintReferral(int referralNum) {
 			SheetDef sheetDef;
 			List<SheetDef> customSheetDefs=SheetDefs.GetCustomForType(SheetTypeEnum.LabelReferral);
 			if(customSheetDefs.Count==0){
@@ -149,6 +149,28 @@ namespace OpenDental{
 			}
 			Sheet sheet=SheetUtil.CreateSheet(sheetDef);
 			SheetParameter.SetParameter(sheet,"ReferralNum",referralNum);
+			SheetFiller.FillFields(sheet);
+			try {
+				SheetPrinting.Print(sheet);
+			}
+			catch(Exception ex) {
+				MessageBox.Show(ex.Message);
+			}
+		}
+
+		///<summary></summary>
+		public static void PrintAppointment(int aptNum) {
+			SheetDef sheetDef;
+			List<SheetDef> customSheetDefs=SheetDefs.GetCustomForType(SheetTypeEnum.LabelAppointment);
+			if(customSheetDefs.Count==0){
+				sheetDef=SheetsInternal.GetSheetDef(SheetInternalType.LabelAppointment);
+			}
+			else{
+				sheetDef=customSheetDefs[0];
+				SheetDefs.GetFieldsAndParameters(sheetDef);
+			}
+			Sheet sheet=SheetUtil.CreateSheet(sheetDef);
+			SheetParameter.SetParameter(sheet,"AptNum",aptNum);
 			SheetFiller.FillFields(sheet);
 			try {
 				SheetPrinting.Print(sheet);

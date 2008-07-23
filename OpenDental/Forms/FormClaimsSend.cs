@@ -603,8 +603,8 @@ namespace OpenDental{
 				carrierNums.Add(plan.CarrierNum);
 			}
 			//carrier=Carriers.GetCarrier(plan.CarrierNum);
-			LabelSingle label=new LabelSingle();
-			label.PrintCarriers(carrierNums);//,pd.PrinterSettings.PrinterName)){
+			//LabelSingle label=new LabelSingle();
+			LabelSingle.PrintCarriers(carrierNums);//,pd.PrinterSettings.PrinterName)){
 			//	return;
 			//}
 		}

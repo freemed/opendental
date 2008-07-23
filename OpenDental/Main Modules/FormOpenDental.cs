@@ -2009,8 +2009,8 @@ namespace OpenDental{
 		}
 
 		private void OnLabel_Click() {
-			LabelSingle label=new LabelSingle();
-			label.PrintPat(CurPatNum);
+			//LabelSingle label=new LabelSingle();
+			LabelSingle.PrintPat(CurPatNum);
 		}
 
 		private void menuLabel_Popup(object sender,EventArgs e) {
@@ -2079,31 +2079,31 @@ namespace OpenDental{
 			if(((MenuItem)sender).Tag==null) {
 				return;
 			}
-			LabelSingle label=new LabelSingle();
+			//LabelSingle label=new LabelSingle();
 			if(((MenuItem)sender).Tag.GetType()==typeof(string)){
 				if(((MenuItem)sender).Tag.ToString()=="PatientLFAddress"){
-					label.PrintPatientLFAddress(CurPatNum);
+					LabelSingle.PrintPatientLFAddress(CurPatNum);
 				}
 				if(((MenuItem)sender).Tag.ToString()=="PatientLFChartNumber") {
-					label.PrintPatientLFChartNumber(CurPatNum);
+					LabelSingle.PrintPatientLFChartNumber(CurPatNum);
 				}
 				if(((MenuItem)sender).Tag.ToString()=="PatientLFPatNum") {
-					label.PrintPatientLFPatNum(CurPatNum);
+					LabelSingle.PrintPatientLFPatNum(CurPatNum);
 				}
 				if(((MenuItem)sender).Tag.ToString()=="PatRadiograph") {
-					label.PrintPatRadiograph(CurPatNum);
+					LabelSingle.PrintPatRadiograph(CurPatNum);
 				}
 			}
 			else if(((MenuItem)sender).Tag.GetType()==typeof(SheetDef)){
-				label.PrintCustomPatient(CurPatNum,(SheetDef)((MenuItem)sender).Tag);
+				LabelSingle.PrintCustomPatient(CurPatNum,(SheetDef)((MenuItem)sender).Tag);
 			}
 			else if(((MenuItem)sender).Tag.GetType()==typeof(Carrier)){
 				Carrier carrier=(Carrier)((MenuItem)sender).Tag;
-				label.PrintCarrier(carrier.CarrierNum);
+				LabelSingle.PrintCarrier(carrier.CarrierNum);
 			}
 			else if(((MenuItem)sender).Tag.GetType()==typeof(Referral)) {
 				Referral refer=(Referral)((MenuItem)sender).Tag;
-				label.PrintReferral(refer.ReferralNum);
+				LabelSingle.PrintReferral(refer.ReferralNum);
 			}
 		}
 

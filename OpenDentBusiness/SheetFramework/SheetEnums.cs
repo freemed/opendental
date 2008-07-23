@@ -12,7 +12,9 @@ namespace OpenDentBusiness {
 		///<Summary>2-Requires SheetParameter for ReferralNum.</Summary>
 		LabelReferral,
 		///<Summary>3-Requires SheetParameter for PatNum,ReferralNum.</Summary>
-		ReferralSlip
+		ReferralSlip,
+		///<Summary>4-Requires SheetParameter for AptNum. Does not get saved to db.</Summary>
+		LabelAppointment
 		/*Statement,
 		TxPlan,
 		Rx,
@@ -44,6 +46,7 @@ namespace OpenDentBusiness {
 		Parameter,
 		///<Summary>Any image of any size, typically a background image for a form.</Summary>
 		Image
+		//Annotation
 		//<summary></summary>
 		//CheckBox
 		//<summary></summary>
@@ -62,7 +65,8 @@ namespace OpenDentBusiness {
 		LabelPatientRadiograph,
 		LabelCarrier,
 		LabelReferral,
-		ReferralSlip
+		ReferralSlip,
+		LabelAppointment
 	}
 
 

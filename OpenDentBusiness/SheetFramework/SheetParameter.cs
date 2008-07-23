@@ -39,6 +39,9 @@ namespace OpenDentBusiness{
 				list.Add(new SheetParameter(true,"PatNum"));
 				list.Add(new SheetParameter(true,"ReferralNum"));
 			}
+			if(sheetType==SheetTypeEnum.LabelAppointment) {
+				list.Add(new SheetParameter(true,"AptNum"));
+			}
 			return list;
 		}
 

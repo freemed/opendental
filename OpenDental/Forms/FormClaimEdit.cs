@@ -3701,7 +3701,7 @@ namespace OpenDental{
 		}
 
 		private void butLabel_Click(object sender, System.EventArgs e) {
-			LabelSingle label=new LabelSingle();
+			//LabelSingle label=new LabelSingle();
 			PrintDocument pd=new PrintDocument();//only used to pass printerName
 			if(!Printers.SetPrinter(pd,PrintSituation.LabelSingle)){
 				return;
@@ -3709,7 +3709,7 @@ namespace OpenDental{
 			//ask if print secondary?
 			InsPlan planCur=InsPlans.GetPlan(ClaimCur.PlanNum,PlanList);
 			Carrier carrierCur=Carriers.GetCarrier(planCur.CarrierNum);
-			label.PrintCarrier(carrierCur.CarrierNum);//pd.PrinterSettings.PrinterName);
+			LabelSingle.PrintCarrier(carrierCur.CarrierNum);//pd.PrinterSettings.PrinterName);
 		}
 
 		private void butPreview_Click(object sender, System.EventArgs e) {
