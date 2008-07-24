@@ -56,12 +56,13 @@ namespace OpenDental{
 				|| FromVersion.ToString()=="5.4.0.0"
 				|| FromVersion.ToString()=="5.5.0.0"
 				|| FromVersion.ToString()=="5.6.0.0"
-				|| FromVersion.ToString()=="5.7.0.0")
+				|| FromVersion.ToString()=="5.7.0.0"
+				|| FromVersion.ToString()=="5.8.0.0")
 			{
 				MsgBox.Show(this,"Cannot convert this database version which was only for development purposes.");
 				return false;
 			}
-			if(FromVersion < new Version("5.8.0.0")){
+			if(FromVersion < new Version("5.9.0.0")){
 				if(MessageBox.Show(Lan.g(this,"Your database will now be converted")+"\r"
 					+Lan.g(this,"from version")+" "+FromVersion.ToString()+"\r"
 					+Lan.g(this,"to version")+" "+ToVersion.ToString()+"\r"
@@ -7607,11 +7608,11 @@ namespace OpenDental{
 				command="UPDATE preference SET ValueString = '5.7.15.0' WHERE PrefName = 'DataBaseVersion'";
 				General.NonQ(command);
 			}
-			To5_8_0();
+			To5_8_1();
 		}
 
-		private void To5_8_0() {
-			if(FromVersion<new Version("5.8.0.0")) {
+		private void To5_8_1() {
+			if(FromVersion<new Version("5.8.1.0")) {
 				string command;
 				if(DataConnection.DBtype==DatabaseType.MySql){
 					command="DROP TABLE IF EXISTS site";
@@ -7746,21 +7747,34 @@ namespace OpenDental{
 					General.NonQ(command);
 					command="INSERT INTO preference (PrefName,ValueString,Comments) VALUES ('LabelPatientDefaultSheetDefNum','0','0 indicates default.  Otherwise, foreign key to SheetDefNum.')";
 					General.NonQ(command);
-					
-
-
 				}
 				else{//oracle
 
 				}
-				command="UPDATE preference SET ValueString = '5.8.0.0' WHERE PrefName = 'DataBaseVersion'";
+				command="UPDATE preference SET ValueString = '5.8.1.0' WHERE PrefName = 'DataBaseVersion'";
 				General.NonQ(command);
 			}
-			//To5_8_?();
+			To5_9_0();
+		}
+
+		private void To5_9_0() {
+			if(FromVersion<new Version("5.9.0.0")) {
+				string command;
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					
+
+				} 
+				else {//oracle
+					
+				}
+				command="UPDATE preference SET ValueString = '5.9.0.0' WHERE PrefName = 'DataBaseVersion'";
+				General.NonQ(command);
+			}
+			//To5_9_?();
 		}
 
 
-		/*For 5.8:
+		/*For 5.9:
 		 * ALTER TABLE schedule ADD INDEX (EmployeeNum)
 ALTER TABLE schedule ADD INDEX (ProvNum)
 ALTER TABLE schedule ADD INDEX (SchedDate)*/
