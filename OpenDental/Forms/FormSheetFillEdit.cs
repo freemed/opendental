@@ -19,6 +19,7 @@ namespace OpenDental {
 		private List<Point> PointList;
 		private PictureBox pictDraw;
 		private Image imgDraw;
+		private bool drawingsAltered;
 
 		public FormSheetFillEdit(Sheet sheet){
 			InitializeComponent();
@@ -81,7 +82,7 @@ namespace OpenDental {
 			pictDraw.MouseDown+=new MouseEventHandler(pictDraw_MouseDown);
 			pictDraw.MouseMove+=new MouseEventHandler(pictDraw_MouseMove);
 			pictDraw.MouseUp+=new MouseEventHandler(pictDraw_MouseUp);
-			//panelDraw.BringToFront();
+			RefreshPanel();
 			//then, draw textboxes
 			foreach(SheetField field in SheetCur.SheetFields){
 				if(field.FieldType!=SheetFieldType.InputField
@@ -136,7 +137,7 @@ namespace OpenDental {
 		private void pictDraw_MouseDown(object sender,MouseEventArgs e) {
 			mouseIsDown=true;
 			PointList.Add(new Point(e.X,e.Y));
-			Debug.WriteLine(e.Location);
+			drawingsAltered=true;
 		}
 
 		private void pictDraw_MouseEnter(object sender,EventArgs e) {
@@ -152,8 +153,15 @@ namespace OpenDental {
 				return;
 			}
 			PointList.Add(new Point(e.X,e.Y));
-			//panelDraw.Invalidate();
-			RefreshPanel();
+			//RefreshPanel();
+			//just add the last line segment instead of redrawing the whole thing.
+			Graphics g=Graphics.FromImage(pictDraw.Image);
+			g.SmoothingMode=SmoothingMode.HighQuality;
+			Pen pen=new Pen(Brushes.Black,2.5f);
+			int i=PointList.Count-1;
+			g.DrawLine(pen,PointList[i-1].X,PointList[i-1].Y,PointList[i].X,PointList[i].Y);
+			pictDraw.Invalidate();
+			g.Dispose();
 		}
 
 		private void pictDraw_MouseUp(object sender,MouseEventArgs e) {
@@ -174,15 +182,12 @@ namespace OpenDental {
 			RefreshPanel();
 		}
 
-
-
 		private void RefreshPanel(){
 			Image img=(Image)imgDraw.Clone();
 			Graphics g=Graphics.FromImage(img);
 			g.SmoothingMode=SmoothingMode.HighQuality;
 			//g.CompositingQuality=CompositingQuality.Default;
 			Pen pen=new Pen(Brushes.Black,2.5f);
-			//first, all the other line segments.
 			string[] pointStr;
 			List<Point> points;
 			Point point;
@@ -204,11 +209,8 @@ namespace OpenDental {
 					g.DrawLine(pen,points[i-1].X,points[i-1].Y,points[i].X,points[i].Y);
 				}
 			}
-			//then, the current line.
-			for(int i=1;i<PointList.Count;i++){
-				g.DrawLine(pen,PointList[i-1].X,PointList[i-1].Y,PointList[i].X,PointList[i].Y);
-			}
 			pictDraw.Image=img;
+			g.Dispose();
 		}
 
 		private void butPrint_Click(object sender,EventArgs e) {
@@ -314,7 +316,7 @@ namespace OpenDental {
 			SheetCur.InternalNote=textNote.Text;
 			bool isNew=SheetCur.IsNew;
 			Sheets.WriteObject(SheetCur);
-			//SaveText();//this,SheetCur.SheetNum);
+			//RichTextBoxes-----------------------------------------------
 			foreach(Control control in panelMain.Controls){
 				if(control.Tag==null){
 					continue;
@@ -325,6 +327,17 @@ namespace OpenDental {
 				}
 				field.SheetNum=SheetCur.SheetNum;//whether or not isnew
 				SheetFields.WriteObject(field);
+			}
+			//Drawings----------------------------------------------------
+			if(drawingsAltered){
+				List<SheetField> drawingList=new List<SheetField>();
+				foreach(SheetField sf in SheetCur.SheetFields){
+					if(sf.FieldType==SheetFieldType.Drawing){
+						sf.SheetNum=SheetCur.SheetNum;
+						drawingList.Add(sf);
+					}
+				}
+				SheetFields.SetDrawings(drawingList,SheetCur.SheetNum);
 			}
 			if(isNew){
 				Sheets.SaveParameters(SheetCur);
@@ -343,18 +356,7 @@ namespace OpenDental {
 			DialogResult=DialogResult.Cancel;
 		}
 
-		private void button1_Click(object sender,EventArgs e) {
-			Image img2=(Image)imgDraw.Clone();
-			Graphics g=Graphics.FromImage(img2);
-			PointList=new List<Point>();
-			PointList.Add(new Point(0,0));
-			PointList.Add(new Point(300,300));
-			for(int i=1;i<PointList.Count;i++){
-				g.DrawLine(Pens.Black,PointList[i-1].X,PointList[i-1].Y,PointList[i].X,PointList[i].Y);
-			}
-			//g.DrawLine(Pens.Black,0,0,300,300);
-			pictDraw.Image=img2;
-		}
+		
 
 		
 

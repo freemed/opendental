@@ -55,6 +55,16 @@ namespace OpenDentBusiness{
 			DataObjectFactory<SheetField>.DeleteObject(sheetFieldNum);
 		}
 
+		///<summary>Deletes all existing drawing fields for a sheet and then adds back the list supplied.</summary>
+		public static void SetDrawings(List<SheetField> drawingList,int sheetNum){
+			string command="DELETE FROM sheetfield WHERE SheetNum="+POut.PInt(sheetNum)
+				+" AND FieldType="+POut.PInt((int)SheetFieldType.Drawing);
+			General.NonQ(command);
+			foreach(SheetField field in drawingList){
+				WriteObject(field);
+			}
+		}
+
 		//public static void DeleteObject(int sheetDataNum){
 		//	DataObjectFactory<sheetData>.DeleteObject(sheetDataNum);
 		//}
@@ -70,6 +80,8 @@ namespace OpenDentBusiness{
 			}
 			return "";
 		}*/
+
+
 
 	}
 }

@@ -33,7 +33,6 @@ namespace OpenDental{
 			this.butPrint = new OpenDental.UI.Button();
 			this.butOK = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
-			this.button1 = new OpenDental.UI.Button();
 			this.panel1.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -157,27 +156,10 @@ namespace OpenDental{
 			this.butCancel.Text = "&Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
 			// 
-			// button1
-			// 
-			this.button1.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.button1.Autosize = true;
-			this.button1.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.button1.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.button1.CornerRadius = 4F;
-			this.button1.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.button1.Location = new System.Drawing.Point(602,206);
-			this.button1.Name = "button1";
-			this.button1.Size = new System.Drawing.Size(81,24);
-			this.button1.TabIndex = 81;
-			this.button1.Text = "Test";
-			this.button1.Click += new System.EventHandler(this.button1_Click);
-			// 
 			// FormSheetFillEdit
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
 			this.ClientSize = new System.Drawing.Size(737,551);
-			this.Controls.Add(this.button1);
 			this.Controls.Add(this.butDelete);
 			this.Controls.Add(this.panel1);
 			this.Controls.Add(this.textDateTime);
@@ -209,6 +191,5 @@ namespace OpenDental{
 		private System.Windows.Forms.Panel panelMain;
 		private OpenDental.UI.Button butDelete;
 		private OpenDental.UI.Button butPrint;
-		private OpenDental.UI.Button button1;
 	}
 }
