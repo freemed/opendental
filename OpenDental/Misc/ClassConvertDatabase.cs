@@ -7754,6 +7754,26 @@ namespace OpenDental{
 				command="UPDATE preference SET ValueString = '5.8.1.0' WHERE PrefName = 'DataBaseVersion'";
 				General.NonQ(command);
 			}
+			To5_8_2();
+		}
+
+		private void To5_8_2() {
+			if(FromVersion<new Version("5.8.2.0")) {
+				string command;
+				if(DataConnection.DBtype==DatabaseType.MySql){
+					command="ALTER TABLE fee ADD INDEX (CodeNum)";
+					try {
+						General.NonQ(command);
+					}
+					catch {
+					}
+				}else{//oracle
+					command="CREATE INDEX FEE_CODENUM ON fee (CodeNum)";
+					General.NonQ(command);
+				}
+				command="UPDATE preference SET ValueString = '5.8.2.0' WHERE PrefName = 'DataBaseVersion'";
+				General.NonQ(command);
+			}
 			To5_9_0();
 		}
 
