@@ -28,6 +28,7 @@ namespace OpenDental{
 			this.label3 = new System.Windows.Forms.Label();
 			this.panel1 = new System.Windows.Forms.Panel();
 			this.panelMain = new System.Windows.Forms.Panel();
+			this.checkErase = new System.Windows.Forms.CheckBox();
 			this.butDelete = new OpenDental.UI.Button();
 			this.textDateTime = new OpenDental.ValidDate();
 			this.butPrint = new OpenDental.UI.Button();
@@ -85,6 +86,17 @@ namespace OpenDental{
 			this.panelMain.Size = new System.Drawing.Size(549,513);
 			this.panelMain.TabIndex = 0;
 			// 
+			// checkErase
+			// 
+			this.checkErase.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.checkErase.Location = new System.Drawing.Point(645,311);
+			this.checkErase.Name = "checkErase";
+			this.checkErase.Size = new System.Drawing.Size(89,20);
+			this.checkErase.TabIndex = 81;
+			this.checkErase.Text = "Eraser Tool";
+			this.checkErase.UseVisualStyleBackColor = true;
+			this.checkErase.Click += new System.EventHandler(this.checkErase_Click);
+			// 
 			// butDelete
 			// 
 			this.butDelete.AdjustImageLocation = new System.Drawing.Point(0,0);
@@ -95,7 +107,7 @@ namespace OpenDental{
 			this.butDelete.CornerRadius = 4F;
 			this.butDelete.Image = global::OpenDental.Properties.Resources.deleteX;
 			this.butDelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butDelete.Location = new System.Drawing.Point(645,409);
+			this.butDelete.Location = new System.Drawing.Point(645,429);
 			this.butDelete.Name = "butDelete";
 			this.butDelete.Size = new System.Drawing.Size(81,24);
 			this.butDelete.TabIndex = 79;
@@ -119,7 +131,7 @@ namespace OpenDental{
 			this.butPrint.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butPrint.CornerRadius = 4F;
 			this.butPrint.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butPrint.Location = new System.Drawing.Point(644,280);
+			this.butPrint.Location = new System.Drawing.Point(645,376);
 			this.butPrint.Name = "butPrint";
 			this.butPrint.Size = new System.Drawing.Size(81,24);
 			this.butPrint.TabIndex = 80;
@@ -161,6 +173,7 @@ namespace OpenDental{
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
 			this.ClientSize = new System.Drawing.Size(737,551);
 			this.Controls.Add(this.butDelete);
+			this.Controls.Add(this.checkErase);
 			this.Controls.Add(this.panel1);
 			this.Controls.Add(this.textDateTime);
 			this.Controls.Add(this.butPrint);
@@ -191,5 +204,6 @@ namespace OpenDental{
 		private System.Windows.Forms.Panel panelMain;
 		private OpenDental.UI.Button butDelete;
 		private OpenDental.UI.Button butPrint;
+		private System.Windows.Forms.CheckBox checkErase;
 	}
 }

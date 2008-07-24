@@ -3472,6 +3472,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="EraseCircle.cur" />
     <Content Include="Misc\App.ico" />
     <Content Include="Misc\TerminalMgr.ico" />
     <EmbeddedResource Include="Forms Reports\FormRpNewPatients.resx">

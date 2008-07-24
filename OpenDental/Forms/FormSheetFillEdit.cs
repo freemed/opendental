@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Drawing.Design;
 using System.Drawing.Drawing2D;
 using System.Diagnostics;
 using System.IO;
@@ -136,6 +137,9 @@ namespace OpenDental {
 
 		private void pictDraw_MouseDown(object sender,MouseEventArgs e) {
 			mouseIsDown=true;
+			if(checkErase.Checked){
+				return;
+			}
 			PointList.Add(new Point(e.X,e.Y));
 			drawingsAltered=true;
 		}
@@ -152,6 +156,39 @@ namespace OpenDental {
 			if(!mouseIsDown){
 				return;
 			}
+			if(checkErase.Checked){
+				//look for any lines that intersect the "eraser".
+				//since the line segments are so short, it's sufficient to check end points.
+				Point point;
+				string[] xy;
+				string[] pointStr;
+				float x;
+				float y;
+				float dist;//the distance between the point being tested and the center of the eraser circle.
+				float radius=8f;//by trial and error to achieve best feel.
+				PointF eraserPt=new PointF(e.X+8.49f,e.Y+8.49f);
+				foreach(SheetField field in SheetCur.SheetFields){
+					if(field.FieldType!=SheetFieldType.Drawing){
+						continue;
+					}
+					pointStr=field.FieldValue.Split(';');
+					for(int p=0;p<pointStr.Length;p++){
+						xy=pointStr[p].Split(',');
+						if(xy.Length==2){
+							x=PIn.PFloat(xy[0]);
+							y=PIn.PFloat(xy[1]);
+							dist=(float)Math.Sqrt(Math.Pow(Math.Abs(x-eraserPt.X),2)+Math.Pow(Math.Abs(y-eraserPt.Y),2));
+							if(dist<=radius){//testing circle intersection here
+								SheetCur.SheetFields.Remove(field);
+								drawingsAltered=true;
+								RefreshPanel();
+								return;;
+							}
+						}
+					}
+				}	
+				return;
+			}
 			PointList.Add(new Point(e.X,e.Y));
 			//RefreshPanel();
 			//just add the last line segment instead of redrawing the whole thing.
@@ -166,6 +203,9 @@ namespace OpenDental {
 
 		private void pictDraw_MouseUp(object sender,MouseEventArgs e) {
 			mouseIsDown=false;
+			if(checkErase.Checked){
+				return;
+			}
 			SheetField field=new SheetField();
 			field.FieldType=SheetFieldType.Drawing;
 			field.FieldName="";
@@ -211,6 +251,19 @@ namespace OpenDental {
 			}
 			pictDraw.Image=img;
 			g.Dispose();
+		}
+
+		private void checkErase_Click(object sender,EventArgs e) {
+			if(checkErase.Checked){
+				pictDraw.Cursor=new Cursor(GetType(),"EraseCircle.cur");
+			}
+			else{
+				pictDraw.Cursor=Cursors.Default;
+			}
+		}
+
+		private void panelColor_DoubleClick(object sender,EventArgs e) {
+
 		}
 
 		private void butPrint_Click(object sender,EventArgs e) {
@@ -356,6 +409,10 @@ namespace OpenDental {
 		private void butCancel_Click(object sender,EventArgs e) {
 			DialogResult=DialogResult.Cancel;
 		}
+
+		
+
+		
 
 		
 
