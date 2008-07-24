@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Diagnostics;
 using System.IO;
 using System.Text;
@@ -13,7 +14,11 @@ using CodeBase;
 namespace OpenDental {
 	public partial class FormSheetFillEdit:Form {
 		public Sheet SheetCur;
-		//public List<SheetField> SheetFieldList;
+		private bool mouseIsDown;
+		///<summary>A list of points for a line currently being drawn.  Once the mouse is raised, this list gets cleared.</summary>
+		private List<Point> PointList;
+		private PictureBox pictDraw;
+		private Image imgDraw;
 
 		public FormSheetFillEdit(Sheet sheet){
 			InitializeComponent();
@@ -21,16 +26,21 @@ namespace OpenDental {
 			SheetCur=sheet;
 			Width=sheet.Width+185;
 			Height=sheet.Height+60;
+			PointList=new List<Point>();
 		}
 
 		private void FormSheetFillEdit_Load(object sender,EventArgs e) {
 			panelMain.Width=SheetCur.Width;
 			panelMain.Height=SheetCur.Height;
+			//panelDraw.Width=SheetCur.Width;
+			//panelDraw.Height=SheetCur.Height;
 			textDateTime.Text=SheetCur.DateTimeSheet.ToShortDateString()+" "+SheetCur.DateTimeSheet.ToShortTimeString();
 			textNote.Text=SheetCur.InternalNote;
 			RichTextBox textbox;//has to be richtextbox due to MS bug that doesn't show cursor.
 			FontStyle style;
 			//first, draw images
+			pictDraw=null;
+			imgDraw=null;
 			foreach(SheetField field in SheetCur.SheetFields){
 				if(field.FieldType!=SheetFieldType.Image){
 					continue;
@@ -40,16 +50,38 @@ namespace OpenDental {
 					continue;
 				}
 				Image img=Image.FromFile(filePathAndName);
+				//we will now change the resolution to 100x100 to make this screen faster and to simplify calculations.
+				//I tested it, and this does not decrease the screen quality.
+				Image img2=new Bitmap(img,field.Width,field.Height);
 				PictureBox pictBox=new PictureBox();
 				pictBox.Location=new Point(field.XPos,field.YPos);
 				pictBox.Width=field.Width;
 				pictBox.Height=field.Height;
-				pictBox.Image=img;
+				pictBox.Image=img2;
 				pictBox.SizeMode=PictureBoxSizeMode.StretchImage;
 				pictBox.Tag=field;
 				panelMain.Controls.Add(pictBox);
 				pictBox.BringToFront();
+				if(pictDraw==null || pictBox.Height>pictDraw.Height){//use the biggest pictBox
+					pictDraw=pictBox;
+					imgDraw=(Image)img2.Clone();//we will preserve this original image and draw on the real image.
+				}
 			}
+			if(pictDraw==null){
+				imgDraw=new Bitmap(SheetCur.Width,SheetCur.Height);
+				pictDraw=new PictureBox();
+				pictDraw.Width=SheetCur.Width;
+				pictDraw.Height=SheetCur.Height;
+				pictDraw.Location=new Point(0,0);
+				pictDraw.Image=(Image)imgDraw.Clone();
+				pictDraw.SizeMode=PictureBoxSizeMode.StretchImage;
+				panelMain.Controls.Add(pictDraw);
+			}
+			//Set mouse events for the pictDraw
+			pictDraw.MouseDown+=new MouseEventHandler(pictDraw_MouseDown);
+			pictDraw.MouseMove+=new MouseEventHandler(pictDraw_MouseMove);
+			pictDraw.MouseUp+=new MouseEventHandler(pictDraw_MouseUp);
+			//panelDraw.BringToFront();
 			//then, draw textboxes
 			foreach(SheetField field in SheetCur.SheetFields){
 				if(field.FieldType!=SheetFieldType.InputField
@@ -92,6 +124,91 @@ namespace OpenDental {
 				panelMain.Controls.Add(textbox);
 				textbox.BringToFront();
 			}
+		}
+
+		/*private void panelDraw_Paint(object sender,PaintEventArgs e) {
+			//e.Graphics.DrawLine(Pens.Black,0,0,300,300);
+			for(int i=1;i<PointList.Count;i++){
+				e.Graphics.DrawLine(Pens.Black,PointList[i-1].X,PointList[i-1].Y,PointList[i].X,PointList[i].Y);
+			}
+		}*/
+
+		private void pictDraw_MouseDown(object sender,MouseEventArgs e) {
+			mouseIsDown=true;
+			PointList.Add(new Point(e.X,e.Y));
+			Debug.WriteLine(e.Location);
+		}
+
+		private void pictDraw_MouseEnter(object sender,EventArgs e) {
+
+		}
+
+		private void pictDraw_MouseLeave(object sender,EventArgs e) {
+
+		}
+
+		private void pictDraw_MouseMove(object sender,MouseEventArgs e) {
+			if(!mouseIsDown){
+				return;
+			}
+			PointList.Add(new Point(e.X,e.Y));
+			//panelDraw.Invalidate();
+			RefreshPanel();
+		}
+
+		private void pictDraw_MouseUp(object sender,MouseEventArgs e) {
+			mouseIsDown=false;
+			SheetField field=new SheetField();
+			field.FieldType=SheetFieldType.Drawing;
+			field.FieldName="";
+			field.FieldValue="";
+			for(int i=0;i<PointList.Count;i++){
+				if(i>0){
+					field.FieldValue+=";";
+				}
+				field.FieldValue+=PointList[i].X+","+PointList[i].Y;
+			}
+			field.FontName="";
+			SheetCur.SheetFields.Add(field);
+			PointList.Clear();
+			RefreshPanel();
+		}
+
+
+
+		private void RefreshPanel(){
+			Image img=(Image)imgDraw.Clone();
+			Graphics g=Graphics.FromImage(img);
+			g.SmoothingMode=SmoothingMode.HighQuality;
+			//g.CompositingQuality=CompositingQuality.Default;
+			Pen pen=new Pen(Brushes.Black,2.5f);
+			//first, all the other line segments.
+			string[] pointStr;
+			List<Point> points;
+			Point point;
+			string[] xy;
+			for(int f=0;f<SheetCur.SheetFields.Count;f++){
+				if(SheetCur.SheetFields[f].FieldType!=SheetFieldType.Drawing){
+					continue;
+				}
+				pointStr=SheetCur.SheetFields[f].FieldValue.Split(';');
+				points=new List<Point>();
+				for(int p=0;p<pointStr.Length;p++){
+					xy=pointStr[p].Split(',');
+					if(xy.Length==2){
+						point=new Point(PIn.PInt(xy[0]),PIn.PInt(xy[1]));
+						points.Add(point);
+					}
+				}
+				for(int i=1;i<points.Count;i++){
+					g.DrawLine(pen,points[i-1].X,points[i-1].Y,points[i].X,points[i].Y);
+				}
+			}
+			//then, the current line.
+			for(int i=1;i<PointList.Count;i++){
+				g.DrawLine(pen,PointList[i-1].X,PointList[i-1].Y,PointList[i].X,PointList[i].Y);
+			}
+			pictDraw.Image=img;
 		}
 
 		private void butPrint_Click(object sender,EventArgs e) {
@@ -215,20 +332,6 @@ namespace OpenDental {
 			return true;
 		}
 
-		/*
-		///<summary>Recursively saves all SheetField objects for which there is a textbox.</summary>
-		private void SaveText(Control control,int sheetNum){
-			if(control.Tag!=null){
-				SheetField field=(SheetField)control.Tag;
-				field.FieldValue=control.Text;
-				field.SheetNum=sheetNum;//whether or not isnew
-				SheetFields.WriteObject(field);
-			}
-			for(int i=0;i<control.Controls.Count;i++){
-				SaveText(control.Controls[i],sheetNum);
-			}
-		}*/
-
 		private void butOK_Click(object sender,EventArgs e) {
 			if(!TryToSaveData()){
 				return;
@@ -240,6 +343,22 @@ namespace OpenDental {
 			DialogResult=DialogResult.Cancel;
 		}
 
+		private void button1_Click(object sender,EventArgs e) {
+			Image img2=(Image)imgDraw.Clone();
+			Graphics g=Graphics.FromImage(img2);
+			PointList=new List<Point>();
+			PointList.Add(new Point(0,0));
+			PointList.Add(new Point(300,300));
+			for(int i=1;i<PointList.Count;i++){
+				g.DrawLine(Pens.Black,PointList[i-1].X,PointList[i-1].Y,PointList[i].X,PointList[i].Y);
+			}
+			//g.DrawLine(Pens.Black,0,0,300,300);
+			pictDraw.Image=img2;
+		}
+
+		
+
+		
 		
 
 	

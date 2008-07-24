@@ -7695,7 +7695,7 @@ namespace OpenDental{
 						SheetNum int NOT NULL,
 						FieldType int NOT NULL,
 						FieldName varchar(255),
-						FieldValue varchar(255),
+						FieldValue text,
 						FontSize float NOT NULL,
 						FontName varchar(255),
 						FontIsBold tinyint NOT NULL,

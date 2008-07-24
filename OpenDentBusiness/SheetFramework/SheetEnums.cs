@@ -45,8 +45,9 @@ namespace OpenDentBusiness {
 		///<summary>Stores a parameter other than the PatNum.  Not meant to be seen on the sheet.  Only used for SheetField, not SheetFieldDef.</summary>
 		Parameter,
 		///<Summary>Any image of any size, typically a background image for a form.</Summary>
-		Image
-		//Annotation
+		Image,
+		///<summary>One sequence of dots that makes a line.  Continuous without any breaks.  Each time the pen is picked up, it creates a new field row in the database.</summary>
+		Drawing
 		//<summary></summary>
 		//CheckBox
 		//<summary></summary>
