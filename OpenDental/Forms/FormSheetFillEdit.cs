@@ -157,7 +157,7 @@ namespace OpenDental {
 			//just add the last line segment instead of redrawing the whole thing.
 			Graphics g=Graphics.FromImage(pictDraw.Image);
 			g.SmoothingMode=SmoothingMode.HighQuality;
-			Pen pen=new Pen(Brushes.Black,2.5f);
+			Pen pen=new Pen(Brushes.Black,2f);
 			int i=PointList.Count-1;
 			g.DrawLine(pen,PointList[i-1].X,PointList[i-1].Y,PointList[i].X,PointList[i].Y);
 			pictDraw.Invalidate();
@@ -187,7 +187,7 @@ namespace OpenDental {
 			Graphics g=Graphics.FromImage(img);
 			g.SmoothingMode=SmoothingMode.HighQuality;
 			//g.CompositingQuality=CompositingQuality.Default;
-			Pen pen=new Pen(Brushes.Black,2.5f);
+			Pen pen=new Pen(Brushes.Black,2f);
 			string[] pointStr;
 			List<Point> points;
 			Point point;
@@ -334,6 +334,7 @@ namespace OpenDental {
 				foreach(SheetField sf in SheetCur.SheetFields){
 					if(sf.FieldType==SheetFieldType.Drawing){
 						sf.SheetNum=SheetCur.SheetNum;
+						sf.IsNew=true;
 						drawingList.Add(sf);
 					}
 				}

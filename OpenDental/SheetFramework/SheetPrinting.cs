@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Drawing.Printing;
 using System.IO;
 using System.Text;
@@ -121,6 +122,7 @@ namespace OpenDental {
 
 		private static void pd_PrintPage(object sender,System.Drawing.Printing.PrintPageEventArgs e) {
 			Graphics g=e.Graphics;
+			g.SmoothingMode=SmoothingMode.HighQuality;
 			Sheet sheet=SheetList[sheetsPrinted];
 			SheetUtil.CalculateHeights(sheet,g);//this is here because of easy access to g.
 			Font font;
@@ -137,7 +139,30 @@ namespace OpenDental {
 				Image img=Image.FromFile(filePathAndName);
 				g.DrawImage(img,field.XPos,field.YPos,field.Width,field.Height);
 			}
-			//then, draw textboxes
+			//then, drawings
+			Pen pen=new Pen(Brushes.Black,2f);
+			string[] pointStr;
+			List<Point> points;
+			Point point;
+			string[] xy;
+			foreach(SheetField field in sheet.SheetFields){
+				if(field.FieldType!=SheetFieldType.Drawing){
+					continue;
+				}
+				pointStr=field.FieldValue.Split(';');
+				points=new List<Point>();
+				for(int p=0;p<pointStr.Length;p++){
+					xy=pointStr[p].Split(',');
+					if(xy.Length==2){
+						point=new Point(PIn.PInt(xy[0]),PIn.PInt(xy[1]));
+						points.Add(point);
+					}
+				}
+				for(int i=1;i<points.Count;i++){
+					g.DrawLine(pen,points[i-1].X,points[i-1].Y,points[i].X,points[i].Y);
+				}
+			}
+			//then, draw text
 			foreach(SheetField field in sheet.SheetFields){
 				if(field.FieldType!=SheetFieldType.InputField
 					&& field.FieldType!=SheetFieldType.OutputText
@@ -170,6 +195,8 @@ namespace OpenDental {
 			//document.PageLayout=new PdfPageLayout()
 			PdfPage page=document.AddPage();
 			XGraphics g=XGraphics.FromPdfPage(page);
+			g.SmoothingMode=XSmoothingMode.HighQuality;
+			//g.PageUnit=XGraphicsUnit. //wish they had pixel
 			XTextFormatter tf = new XTextFormatter(g);//needed for text wrap
 			//tf.Alignment=XParagraphAlignment.Left;
 			if(sheet.IsLandscape){
@@ -192,6 +219,29 @@ namespace OpenDental {
 				}
 				XImage img=XImage.FromFile(filePathAndName);
 				g.DrawImage(img,p(field.XPos),p(field.YPos),p(field.Width),p(field.Height));
+			}
+			//then, drawings
+			XPen pen=new XPen(XColors.Black,1.5d);
+			string[] pointStr;
+			List<Point> points;
+			Point point;
+			string[] xy;
+			foreach(SheetField field in sheet.SheetFields){
+				if(field.FieldType!=SheetFieldType.Drawing){
+					continue;
+				}
+				pointStr=field.FieldValue.Split(';');
+				points=new List<Point>();
+				for(int j=0;j<pointStr.Length;j++){
+					xy=pointStr[j].Split(',');
+					if(xy.Length==2){
+						point=new Point(PIn.PInt(xy[0]),PIn.PInt(xy[1]));
+						points.Add(point);
+					}
+				}
+				for(int i=1;i<points.Count;i++){
+					g.DrawLine(pen,p(points[i-1].X),p(points[i-1].Y),p(points[i].X),p(points[i].Y));
+				}
 			}
 			//then, draw text
 			foreach(SheetField field in sheet.SheetFields){
