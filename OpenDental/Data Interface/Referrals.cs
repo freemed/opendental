@@ -112,7 +112,7 @@ namespace OpenDental{
 				+"'"+POut.PString(refer.Title)+"', "
 				+"'"+POut.PString(refer.EMail)+"', "
 				+"'"+POut.PInt(refer.PatNum)+"', "
-				+"'"+POut.PString(refer.NationalProvID)+", )"
+				+"'"+POut.PString(refer.NationalProvID)+"', "
 				+"'"+POut.PInt   (refer.Slip)+"')";
 			if(PrefC.RandomKeys) {
 				General.NonQ(command);
