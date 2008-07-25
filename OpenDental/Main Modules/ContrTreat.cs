@@ -1046,6 +1046,9 @@ namespace OpenDental{
 										percent=claimproc.PercentOverride;
 									}
 									claimproc.InsPayEst-=claimproc.DedApplied*(double)percent/100d;
+									if(percent==0){//if percentage is zero,
+										claimproc.DedApplied=0;//then no deductible should be applied.
+									}
 								}
 								else{
 									claimproc.InsPayEst-=claimproc.DedApplied;
