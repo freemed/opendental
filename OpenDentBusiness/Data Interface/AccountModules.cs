@@ -1212,7 +1212,7 @@ namespace OpenDentBusiness {
 					if(((DateTime)rows[i]["DateTime"])>toDate){
 						rows.RemoveAt(i);
 					}
-					if(((DateTime)rows[i]["DateTime"])<fromDate){
+					else if(((DateTime)rows[i]["DateTime"])<fromDate){
 						if(!foundBalForward){
 							foundBalForward=true;
 							balanceForward=(double)rows[i]["balanceDouble"];
