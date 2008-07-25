@@ -23,7 +23,7 @@ namespace OpenDentBusiness{
 		///<summary>Gets list of unscheduled appointments.  Allowed orderby: status, alph, date</summary>
 		public static Appointment[] RefreshUnsched(string orderby,int provNum,int siteNum) {
 			string command="SELECT * FROM appointment ";
-			if(orderby=="alph") {
+			if(orderby=="alph" || siteNum>0) {
 				command+="LEFT JOIN patient ON patient.PatNum=appointment.PatNum ";
 			}
 			command+="WHERE AptStatus = "+POut.PInt((int)ApptStatus.UnschedList)+" ";
@@ -50,7 +50,7 @@ namespace OpenDentBusiness{
 			string command="SELECT tplanned.*,tregular.aptnum "
 				+"FROM appointment tplanned "
 				+"LEFT JOIN appointment tregular ON tplanned.aptnum = tregular.nextaptnum ";
-			if(orderby=="alph"){
+			if(orderby=="alph" || siteNum>0){
 				command+="LEFT JOIN patient ON patient.PatNum=tplanned.PatNum ";
 			}
 			command+="WHERE tplanned.aptstatus = "+POut.PInt((int)ApptStatus.Planned)

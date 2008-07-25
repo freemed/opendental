@@ -245,16 +245,20 @@ namespace OpenDental{
 			FillDisplayStrings();
 			int procLimit=ProcLimitForFormat();
 			//claimprocs is filled in FillDisplayStrings
-			if(claimprocs.Count==0)
+			if(claimprocs.Count==0){
 				totalPages=1;
-			else
+			}
+			else{
 				totalPages=(int)Math.Ceiling((double)claimprocs.Count/(double)procLimit);
-			FillProcStrings(pagesPrinted*procLimit,procLimit);
+			}
 			bool HasMedical = false;
-			for(int i=0;i<PlanList.Length;i++){
-			  if(PlanList[i].IsMedical){
-					HasMedical=true;
-			  }
+			if(!PrintBlank){
+				FillProcStrings(pagesPrinted*procLimit,procLimit);
+				for(int i=0;i<PlanList.Length;i++){
+					if(PlanList[i].IsMedical){
+						HasMedical=true;
+					}
+				}
 			}
 			if(HasMedical){
 				FillMedInsStrings();

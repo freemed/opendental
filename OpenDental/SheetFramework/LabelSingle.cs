@@ -39,6 +39,7 @@ namespace OpenDental{
 		}
 
 		public static void PrintCustomPatient(int patNum,SheetDef sheetDef){
+			SheetDefs.GetFieldsAndParameters(sheetDef);
 			Sheet sheet=SheetUtil.CreateSheet(sheetDef);
 			SheetParameter.SetParameter(sheet,"PatNum",patNum);
 			SheetFiller.FillFields(sheet);
