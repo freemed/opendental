@@ -7767,8 +7767,12 @@ namespace OpenDental{
 					}
 					catch {
 					}
+					command="UPDATE claim SET AttachedFlags='Mail' WHERE AttachedFlags IS NULL";
+					General.NonQ(command);
 				}else{//oracle
 					command="CREATE INDEX FEE_CODENUM ON fee (CodeNum)";
+					General.NonQ(command);
+					command="UPDATE claim SET AttachedFlags='Mail' WHERE AttachedFlags IS NULL";
 					General.NonQ(command);
 				}
 				command="UPDATE preference SET ValueString = '5.8.2.0' WHERE PrefName = 'DataBaseVersion'";
