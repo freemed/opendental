@@ -36,16 +36,17 @@ namespace OpenDental{
 				+" WHERE RxNum = "+POut.PInt(rxNum);
 			DataTable table=General.GetTable(command);
 			RxPat rx=new RxPat();
-			rx.RxNum      = PIn.PInt(table.Rows[0][0].ToString());
-			rx.PatNum     = PIn.PInt(table.Rows[0][1].ToString());
-			rx.RxDate     = PIn.PDate(table.Rows[0][2].ToString());
-			rx.Drug       = PIn.PString(table.Rows[0][3].ToString());
-			rx.Sig        = PIn.PString(table.Rows[0][4].ToString());
-			rx.Disp       = PIn.PString(table.Rows[0][5].ToString());
-			rx.Refills    = PIn.PString(table.Rows[0][6].ToString());
-			rx.ProvNum    = PIn.PInt(table.Rows[0][7].ToString());
-			rx.Notes      = PIn.PString(table.Rows[0][8].ToString());
-			rx.PharmacyNum= PIn.PInt   (table.Rows[0][9].ToString());
+			rx.RxNum       = PIn.PInt(table.Rows[0][0].ToString());
+			rx.PatNum      = PIn.PInt(table.Rows[0][1].ToString());
+			rx.RxDate      = PIn.PDate(table.Rows[0][2].ToString());
+			rx.Drug        = PIn.PString(table.Rows[0][3].ToString());
+			rx.Sig         = PIn.PString(table.Rows[0][4].ToString());
+			rx.Disp        = PIn.PString(table.Rows[0][5].ToString());
+			rx.Refills     = PIn.PString(table.Rows[0][6].ToString());
+			rx.ProvNum     = PIn.PInt(table.Rows[0][7].ToString());
+			rx.Notes       = PIn.PString(table.Rows[0][8].ToString());
+			rx.PharmacyNum = PIn.PInt   (table.Rows[0][9].ToString());
+			rx.IsControlled= PIn.PBool  (table.Rows[0][10].ToString());
 			return rx;
 		}
 
@@ -61,6 +62,7 @@ namespace OpenDental{
 				+ ",ProvNum = '"    +POut.PInt   (rx.ProvNum)+"'"
 				+ ",Notes = '"      +POut.PString(rx.Notes)+"'"
 				+ ",PharmacyNum = '"+POut.PInt   (rx.PharmacyNum)+"'"
+				+ ",IsControlled='" +POut.PBool  (rx.IsControlled)+"'"
 				+" WHERE RxNum = '" +POut.PInt   (rx.RxNum)+"'";
 			General.NonQ(command);
 		}
@@ -74,7 +76,7 @@ namespace OpenDental{
 			if(PrefC.RandomKeys) {
 				command+="RxNum,";
 			}
-			command+="PatNum,RxDate,Drug,Sig,Disp,Refills,ProvNum,Notes,PharmacyNum) VALUES(";
+			command+="PatNum,RxDate,Drug,Sig,Disp,Refills,ProvNum,Notes,PharmacyNum,IsControlled) VALUES(";
 			if(PrefC.RandomKeys) {
 				command+="'"+POut.PInt(rx.RxNum)+"', ";
 			}
@@ -87,7 +89,8 @@ namespace OpenDental{
 				+"'"+POut.PString(rx.Refills)+"', "
 				+"'"+POut.PInt   (rx.ProvNum)+"', "
 				+"'"+POut.PString(rx.Notes)+"', "
-				+"'"+POut.PInt   (rx.PharmacyNum)+"')";
+				+"'"+POut.PInt   (rx.PharmacyNum)+"', "
+				+"'"+POut.PBool  (rx.IsControlled)+"')";
 			if(PrefC.RandomKeys) {
 				General.NonQ(command);
 			}

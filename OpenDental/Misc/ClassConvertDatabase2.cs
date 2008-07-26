@@ -38,6 +38,8 @@ namespace OpenDental{
 					General.NonQ(command);
 					command="ALTER TABLE rxdef ADD IsControlled tinyint NOT NULL";
 					General.NonQ(command);
+					command="ALTER TABLE rxpat ADD IsControlled tinyint NOT NULL";
+					General.NonQ(command);
 
 
 				} 

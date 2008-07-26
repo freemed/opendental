@@ -139,13 +139,13 @@ namespace OpenDental{
 			gridMain.Columns.Clear();
 			ODGridColumn col=new ODGridColumn(Lan.g("TableRxSetup","Drug"),140);
 			gridMain.Columns.Add(col);
+			col=new ODGridColumn(Lan.g("TableRxSetup","Controlled"),70,HorizontalAlignment.Center);
+			gridMain.Columns.Add(col);
 			col=new ODGridColumn(Lan.g("TableRxSetup","Sig"),320);
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn(Lan.g("TableRxSetup","Disp"),70);
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn(Lan.g("TableRxSetup","Refills"),70);
-			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TableRxSetup","Controlled"),70,HorizontalAlignment.Center);
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn(Lan.g("TableRxSetup","Notes"),300);
 			gridMain.Columns.Add(col);
@@ -154,15 +154,15 @@ namespace OpenDental{
 			for(int i=0;i<RxDefList.Length;i++){
 				row=new ODGridRow();
 				row.Cells.Add(RxDefList[i].Drug);
-				row.Cells.Add(RxDefList[i].Sig);
-				row.Cells.Add(RxDefList[i].Disp);
-				row.Cells.Add(RxDefList[i].Refills);
 				if(RxDefList[i].IsControlled){
 					row.Cells.Add("X");
 				}
 				else{
 					row.Cells.Add("");
 				}
+				row.Cells.Add(RxDefList[i].Sig);
+				row.Cells.Add(RxDefList[i].Disp);
+				row.Cells.Add(RxDefList[i].Refills);
 				row.Cells.Add(RxDefList[i].Notes);
 				gridMain.Rows.Add(row);
 			}

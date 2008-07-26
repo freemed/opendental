@@ -149,7 +149,9 @@ namespace OpenDental{
 			gridMain.Columns.Clear();
 			ODGridColumn col=new ODGridColumn(Lan.g("TableRxSetup","Drug"),140);
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TableRxSetup","Sig"),320);
+			col=new ODGridColumn(Lan.g("TableRxSetup","Controlled"),70,HorizontalAlignment.Center);
+			gridMain.Columns.Add(col);
+			col=new ODGridColumn(Lan.g("TableRxSetup","Sig"),250);
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn(Lan.g("TableRxSetup","Disp"),70);
 			gridMain.Columns.Add(col);
@@ -162,6 +164,12 @@ namespace OpenDental{
 			for(int i=0;i<RxDefList.Length;i++) {
 				row=new ODGridRow();
 				row.Cells.Add(RxDefList[i].Drug);
+				if(RxDefList[i].IsControlled){
+					row.Cells.Add("X");
+				}
+				else{
+					row.Cells.Add("");
+				}
 				row.Cells.Add(RxDefList[i].Sig);
 				row.Cells.Add(RxDefList[i].Disp);
 				row.Cells.Add(RxDefList[i].Refills);
@@ -207,6 +215,7 @@ namespace OpenDental{
 			RxPatCur.RxDate=DateTime.Today;
 			RxPatCur.PatNum=PatCur.PatNum;
 			RxPatCur.Drug=RxDefCur.Drug;
+			RxPatCur.IsControlled=RxDefCur.IsControlled;
 			RxPatCur.Sig=RxDefCur.Sig;
 			RxPatCur.Disp=RxDefCur.Disp;
 			RxPatCur.Refills=RxDefCur.Refills;

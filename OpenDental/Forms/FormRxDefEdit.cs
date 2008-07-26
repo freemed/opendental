@@ -77,7 +77,7 @@ namespace OpenDental{
 			// 
 			// label1
 			// 
-			this.label1.Location = new System.Drawing.Point(52,38);
+			this.label1.Location = new System.Drawing.Point(52,20);
 			this.label1.Name = "label1";
 			this.label1.Size = new System.Drawing.Size(82,14);
 			this.label1.TabIndex = 0;
@@ -122,7 +122,7 @@ namespace OpenDental{
 			// 
 			// textDrug
 			// 
-			this.textDrug.Location = new System.Drawing.Point(134,36);
+			this.textDrug.Location = new System.Drawing.Point(134,18);
 			this.textDrug.Name = "textDrug";
 			this.textDrug.Size = new System.Drawing.Size(254,20);
 			this.textDrug.TabIndex = 0;
@@ -269,7 +269,7 @@ namespace OpenDental{
 			// checkControlled
 			// 
 			this.checkControlled.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.checkControlled.Location = new System.Drawing.Point(3,10);
+			this.checkControlled.Location = new System.Drawing.Point(3,44);
 			this.checkControlled.Name = "checkControlled";
 			this.checkControlled.Size = new System.Drawing.Size(145,20);
 			this.checkControlled.TabIndex = 19;

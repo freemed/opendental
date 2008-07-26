@@ -24,6 +24,8 @@ namespace OpenDentBusiness{
 		public string Notes;
 		///<summary>FK to pharmacy.PharmacyNum.</summary>
 		public int PharmacyNum;
+		///<summary>Is a controlled substance.  This will affect the way it prints.</summary>
+		public bool IsControlled;
 
 		///<summary></summary>
 		public RxPat Copy() {
