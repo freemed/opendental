@@ -417,6 +417,8 @@ namespace OpenDental{
 
 		///<summary></summary>
 		public void PrintReport(){
+			MessageBox.Show("Not functional");
+			/*
 			pd2=new PrintDocument();
 			pd2.PrintPage += new PrintPageEventHandler(this.pd2_PrintPage);
 			pd2.DefaultPageSettings.Margins=new Margins(0,0,0,0);
@@ -438,10 +440,11 @@ namespace OpenDental{
 				catch{
 					MessageBox.Show(Lan.g(this,"Printer not available"));
 				}
-			#endif		
+			#endif		*/
 		}
 
 		private void pd2_PrintPage(object sender, System.Drawing.Printing.PrintPageEventArgs e) {
+			/*
 			Graphics g=e.Graphics;
 			Pen penDashBorder=new Pen(Color.Black,(float)(.125));
 			SolidBrush brush=new SolidBrush(Color.Black);
@@ -598,7 +601,7 @@ namespace OpenDental{
 			}
 			y+=4;
 			g.DrawString(text,font,brush,x,y);
-			g.Dispose();
+			g.Dispose();*/
 		}
 
 		private void butDelete_Click(object sender, System.EventArgs e) {

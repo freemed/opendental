@@ -1322,9 +1322,6 @@
     <Compile Include="Forms\FormRxSetup.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\FormRxSetupPrinting.cs">
-      <SubType>Form</SubType>
-    </Compile>
     <Compile Include="Forms\FormImagingSetup.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -1483,6 +1480,7 @@
     </Compile>
     <Compile Include="Misc\ClassConvertDatabase.cs" />
     <Compile Include="Misc\ClassesShared.cs" />
+    <Compile Include="Misc\ClassConvertDatabase2.cs" />
     <Compile Include="Misc\DataConnectionOld.cs" />
     <Compile Include="Misc\EZTwain.cs" />
     <Compile Include="Misc\MigraDocHelper.cs" />
@@ -2602,10 +2600,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormRxSetup.resx">
       <DependentUpon>FormRxSetup.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\FormRxSetupPrinting.resx">
-      <DependentUpon>FormRxSetupPrinting.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormImagingSetup.resx">

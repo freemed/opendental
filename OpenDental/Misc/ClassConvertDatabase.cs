@@ -21,7 +21,7 @@ using CodeBase;
 namespace OpenDental{
 
 	///<summary></summary>
-	public class ClassConvertDatabase{
+	public partial class ClassConvertDatabase{
 		private System.Version FromVersion;
 		private System.Version ToVersion;
 
@@ -62,7 +62,7 @@ namespace OpenDental{
 				MsgBox.Show(this,"Cannot convert this database version which was only for development purposes.");
 				return false;
 			}
-			if(FromVersion < new Version("5.9.0.0")){
+			if(FromVersion < LatestVersion){
 				if(MessageBox.Show(Lan.g(this,"Your database will now be converted")+"\r"
 					+Lan.g(this,"from version")+" "+FromVersion.ToString()+"\r"
 					+Lan.g(this,"to version")+" "+ToVersion.ToString()+"\r"
@@ -7781,27 +7781,10 @@ namespace OpenDental{
 			To5_9_0();
 		}
 
-		private void To5_9_0() {
-			if(FromVersion<new Version("5.9.0.0")) {
-				string command;
-				if(DataConnection.DBtype==DatabaseType.MySql) {
-					
-
-				} 
-				else {//oracle
-					
-				}
-				command="UPDATE preference SET ValueString = '5.9.0.0' WHERE PrefName = 'DataBaseVersion'";
-				General.NonQ(command);
-			}
-			//To5_9_?();
-		}
+		
 
 
-		/*For 5.9:
-		 * ALTER TABLE schedule ADD INDEX (EmployeeNum)
-ALTER TABLE schedule ADD INDEX (ProvNum)
-ALTER TABLE schedule ADD INDEX (SchedDate)*/
+		
 
 
 	}
