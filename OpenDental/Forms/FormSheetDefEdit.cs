@@ -70,6 +70,13 @@ namespace OpenDental {
 				else if(SheetDefCur.SheetFieldDefs[i].FieldType==SheetFieldType.Image){
 					listFields.Items.Add(Lan.g(this,"Image:" )+SheetDefCur.SheetFieldDefs[i].FieldName);
 				}
+				else if(SheetDefCur.SheetFieldDefs[i].FieldType==SheetFieldType.Line){
+					listFields.Items.Add(Lan.g(this,"Line:" )
+						+SheetDefCur.SheetFieldDefs[i].XPos.ToString()+","
+						+SheetDefCur.SheetFieldDefs[i].YPos.ToString()+","
+						+"W:"+SheetDefCur.SheetFieldDefs[i].Width.ToString()+","
+						+"H:"+SheetDefCur.SheetFieldDefs[i].Height.ToString());
+				}
 				else{
 					listFields.Items.Add(SheetDefCur.SheetFieldDefs[i].FieldName);
 				}
@@ -109,6 +116,12 @@ namespace OpenDental {
 					Image img=Image.FromFile(filePathAndName);
 					g.DrawImage(img,SheetDefCur.SheetFieldDefs[i].XPos,SheetDefCur.SheetFieldDefs[i].YPos,
 						SheetDefCur.SheetFieldDefs[i].Width,SheetDefCur.SheetFieldDefs[i].Height);
+					continue;
+				}
+				if(SheetDefCur.SheetFieldDefs[i].FieldType==SheetFieldType.Line){
+					g.DrawLine(Pens.Black,SheetDefCur.SheetFieldDefs[i].XPos,SheetDefCur.SheetFieldDefs[i].YPos,
+						SheetDefCur.SheetFieldDefs[i].XPos+SheetDefCur.SheetFieldDefs[i].Width,
+						SheetDefCur.SheetFieldDefs[i].YPos+SheetDefCur.SheetFieldDefs[i].Height);
 					continue;
 				}
 				fontstyle=FontStyle.Regular;
@@ -316,6 +329,21 @@ namespace OpenDental {
 						SheetDefCur.SheetFieldDefs.RemoveAt(idx);
 					}
 					break;
+				case SheetFieldType.Line:
+					/*FormSheetFieldImage FormSI=new FormSheetFieldImage();
+					FormSI.SheetDefCur=SheetDefCur;
+					FormSI.SheetFieldDefCur=field;
+					if(this.IsInternal){
+						FormSI.IsReadOnly=true;
+					}
+					FormSI.ShowDialog();
+					if(FormSI.DialogResult!=DialogResult.OK){
+						return;
+					}
+					if(FormSI.SheetFieldDefCur==null){
+						SheetDefCur.SheetFieldDefs.RemoveAt(idx);
+					}*/
+					break;
 			}
 			FillFieldList();
 			if(listFields.Items.Count-1>=idx){
@@ -393,10 +421,13 @@ namespace OpenDental {
 			LaunchEditWindow(field);
 		}
 
-		///<summary>Images will be ignored in the hit test since they frequently fill the entire background.</summary>
+		///<summary>Images will be ignored in the hit test since they frequently fill the entire background.  Lines will be ignored too, since a diagonal line could fill a large area.</summary>
 		private SheetFieldDef HitTest(int x,int y){
 			for(int i=0;i<SheetDefCur.SheetFieldDefs.Count;i++){
 				if(SheetDefCur.SheetFieldDefs[i].FieldType==SheetFieldType.Image){
+					continue;
+				}
+				if(SheetDefCur.SheetFieldDefs[i].FieldType==SheetFieldType.Line){
 					continue;
 				}
 				if(SheetDefCur.SheetFieldDefs[i].Bounds.Contains(x,y)){

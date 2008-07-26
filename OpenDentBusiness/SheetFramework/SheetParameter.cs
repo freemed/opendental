@@ -42,6 +42,9 @@ namespace OpenDentBusiness{
 			if(sheetType==SheetTypeEnum.LabelAppointment) {
 				list.Add(new SheetParameter(true,"AptNum"));
 			}
+			if(sheetType==SheetTypeEnum.Rx) {
+				list.Add(new SheetParameter(true,"RxNum"));
+			}
 			return list;
 		}
 

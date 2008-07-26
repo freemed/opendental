@@ -26,6 +26,8 @@ namespace OpenDentBusiness{
 					return ReferralSlip();
 				case SheetInternalType.LabelAppointment:
 					return LabelAppointment();
+				case SheetInternalType.Rx:
+					return Rx();
 				default:
 					throw new ApplicationException("Invalid SheetInternalType.");
 			}
@@ -227,6 +229,41 @@ namespace OpenDentBusiness{
 			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("length",sheet.FontSize,sheet.FontName,false,25,yPos,300,rowH));
 			return sheet;
 		}
+
+		private static SheetDef Rx() {
+			SheetDef sheet=new SheetDef(SheetTypeEnum.Rx);
+			sheet.FontName="Microsoft Sans Serif";
+			sheet.FontSize=8f;
+			sheet.Width=425;
+			sheet.Height=550;
+			sheet.IsLandscape=true;
+			int x;
+			int y;
+			int rowH=13;//for font of 8.
+			//Dr--------------------------------------------------------------------------------------------------
+			//Left Side
+			x=50;
+			y=37;
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("prov.nameFL",sheet.FontSize,sheet.FontName,true,x,y,170,rowH));
+			y+=rowH;
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("prov.address",sheet.FontSize,sheet.FontName,false,x,y,170,rowH,
+				GrowthBehaviorEnum.DownLocal));
+			y+=rowH;
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("prov.cityStateZip",sheet.FontSize,sheet.FontName,false,x,y,170,rowH));
+			y=100;
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewLine(25,y,500,0));
+			//Right Side
+			x=280;
+			y=38;
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("prov.phone",sheet.FontSize,sheet.FontName,false,x,y,170,rowH));
+			y+=rowH;
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("RxDate",sheet.FontSize,sheet.FontName,false,x,y,170,rowH));
+			y+=rowH;
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("prov.dEANum",sheet.FontSize,sheet.FontName,false,x,y,170,rowH));
+			y+=rowH;
+			return sheet;
+		}
+
 		
 
 	}

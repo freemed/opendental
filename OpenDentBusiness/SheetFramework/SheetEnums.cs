@@ -14,7 +14,9 @@ namespace OpenDentBusiness {
 		///<Summary>3-Requires SheetParameter for PatNum,ReferralNum.</Summary>
 		ReferralSlip,
 		///<Summary>4-Requires SheetParameter for AptNum. Does not get saved to db.</Summary>
-		LabelAppointment
+		LabelAppointment,
+		///<Summary>5-Requires SheetParameter for RxNum.</Summary>
+		Rx
 		/*Statement,
 		TxPlan,
 		Rx,
@@ -47,13 +49,14 @@ namespace OpenDentBusiness {
 		///<Summary>Any image of any size, typically a background image for a form.</Summary>
 		Image,
 		///<summary>One sequence of dots that makes a line.  Continuous without any breaks.  Each time the pen is picked up, it creates a new field row in the database.</summary>
-		Drawing
+		Drawing,
+		///<Summary>A simple line drawn from x,y to x+width,y+height.  So for these types, we must allow width and height to be negative or zero.</Summary>
+		Line
 		//<summary></summary>
 		//CheckBox
 		//<summary></summary>
 		//RadioButton
-		//<Summary>Not yet supported</Summary>
-		//Line,
+		
 		//<Summary>Not yet supported.  This might be redundant, and we might use border element instead as the preferred way of drawing a box.</Summary>
 		//Box
 	}
@@ -67,7 +70,8 @@ namespace OpenDentBusiness {
 		LabelCarrier,
 		LabelReferral,
 		ReferralSlip,
-		LabelAppointment
+		LabelAppointment,
+		Rx
 	}
 
 
