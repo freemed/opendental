@@ -36,8 +36,8 @@ namespace OpenDental{
 					General.NonQ(command);
 					command="DELETE FROM preference WHERE PrefName='RxGeneric'";
 					General.NonQ(command);
-
-
+					command="ALTER TABLE rxdef ADD IsControlled tinyint NOT NULL";
+					General.NonQ(command);
 
 
 				} 

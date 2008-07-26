@@ -17,17 +17,12 @@ namespace OpenDentBusiness{
 		public string Refills;
 		///<summary>Notes about this drug. Will not be copied to the rxpat.</summary>
 		public string Notes;
+		///<summary>Is a controlled substance.  This will affect the way it prints.</summary>
+		public bool IsControlled;
 
 		///<summary></summary>
 		public RxDef Copy() {
-			RxDef r=new RxDef();
-			r.RxDefNum=RxDefNum;
-			r.Drug=Drug;
-			r.Sig=Sig;
-			r.Disp=Disp;
-			r.Refills=Refills;
-			r.Notes=Notes;
-			return r;
+			return (RxDef)this.MemberwiseClone();
 		}
 
 	

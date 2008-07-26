@@ -73,7 +73,7 @@ namespace OpenDental{
 			this.butAdd.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.butAdd.Location = new System.Drawing.Point(548,636);
 			this.butAdd.Name = "butAdd";
-			this.butAdd.Size = new System.Drawing.Size(92,26);
+			this.butAdd.Size = new System.Drawing.Size(88,26);
 			this.butAdd.TabIndex = 14;
 			this.butAdd.Text = "Add &New";
 			this.butAdd.Click += new System.EventHandler(this.butAdd_Click);
@@ -87,20 +87,20 @@ namespace OpenDental{
 			this.butAdd2.CornerRadius = 4F;
 			this.butAdd2.Image = global::OpenDental.Properties.Resources.Add;
 			this.butAdd2.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butAdd2.Location = new System.Drawing.Point(269,636);
+			this.butAdd2.Location = new System.Drawing.Point(402,636);
 			this.butAdd2.Name = "butAdd2";
-			this.butAdd2.Size = new System.Drawing.Size(221,26);
+			this.butAdd2.Size = new System.Drawing.Size(88,26);
 			this.butAdd2.TabIndex = 16;
-			this.butAdd2.Text = "&Add Using Selected as Starting Pt.";
+			this.butAdd2.Text = "Duplicate";
 			this.butAdd2.Click += new System.EventHandler(this.butAdd2_Click);
 			// 
 			// gridMain
 			// 
 			this.gridMain.HScrollVisible = false;
-			this.gridMain.Location = new System.Drawing.Point(12,40);
+			this.gridMain.Location = new System.Drawing.Point(12,12);
 			this.gridMain.Name = "gridMain";
 			this.gridMain.ScrollValue = 0;
-			this.gridMain.Size = new System.Drawing.Size(913,584);
+			this.gridMain.Size = new System.Drawing.Size(913,612);
 			this.gridMain.TabIndex = 17;
 			this.gridMain.Title = "Prescriptions";
 			this.gridMain.TranslationName = "TableRxSetup";
@@ -145,6 +145,8 @@ namespace OpenDental{
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn(Lan.g("TableRxSetup","Refills"),70);
 			gridMain.Columns.Add(col);
+			col=new ODGridColumn(Lan.g("TableRxSetup","Controlled"),70,HorizontalAlignment.Center);
+			gridMain.Columns.Add(col);
 			col=new ODGridColumn(Lan.g("TableRxSetup","Notes"),300);
 			gridMain.Columns.Add(col);
 			gridMain.Rows.Clear();
@@ -155,6 +157,12 @@ namespace OpenDental{
 				row.Cells.Add(RxDefList[i].Sig);
 				row.Cells.Add(RxDefList[i].Disp);
 				row.Cells.Add(RxDefList[i].Refills);
+				if(RxDefList[i].IsControlled){
+					row.Cells.Add("X");
+				}
+				else{
+					row.Cells.Add("");
+				}
 				row.Cells.Add(RxDefList[i].Notes);
 				gridMain.Rows.Add(row);
 			}
