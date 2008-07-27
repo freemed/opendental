@@ -122,13 +122,24 @@ namespace OpenDentBusiness{
 		private static List<SheetFieldDef> GetRx(bool isOutput){
 			List<SheetFieldDef> list=new List<SheetFieldDef>();
 			if(isOutput){
-				list.Add(NewOutput("nameFL"));
-				//list.Add(NewOutput("nameLF"));
-				//list.Add(NewOutput("weekdayDateTime"));
-				//list.Add(NewOutput("length"));
+				list.Add(NewOutput("prov.nameFL"));
+				list.Add(NewOutput("prov.address"));
+				list.Add(NewOutput("prov.cityStateZip"));
+				list.Add(NewOutput("prov.phone"));
+				list.Add(NewOutput("RxDate"));
+				list.Add(NewOutput("prov.dEANum"));
+				list.Add(NewOutput("pat.nameFL"));
+				list.Add(NewOutput("pat.Birthdate"));
+				list.Add(NewOutput("pat.HmPhone"));
+				list.Add(NewOutput("pat.address"));
+				list.Add(NewOutput("pat.cityStateZip"));
+				list.Add(NewOutput("Drug"));
+				list.Add(NewOutput("Disp"));
+				list.Add(NewOutput("Sig"));
+				list.Add(NewOutput("Refills"));			
 			}
 			else{
-				//list.Add(NewInput("notes"));
+				list.Add(NewInput("notes"));
 			}
 			return list;
 		}

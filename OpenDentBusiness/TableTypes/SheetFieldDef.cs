@@ -240,6 +240,11 @@ namespace OpenDentBusiness{
 				xPos,yPos,width,height,GrowthBehaviorEnum.None);
 		}
 
+		public static SheetFieldDef NewRect(int xPos,int yPos,int width,int height){
+			return new SheetFieldDef(SheetFieldType.Rectangle,"","",0,"",false,
+				xPos,yPos,width,height,GrowthBehaviorEnum.None);
+		}
+
 		///<Summary>Should only be called after FieldValue has been set, due to GrowthBehavior.</Summary>
 		public Rectangle Bounds {
 			get {

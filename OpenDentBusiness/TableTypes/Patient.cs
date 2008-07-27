@@ -839,7 +839,7 @@ namespace OpenDentBusiness{
 			return "Patient: "+GetNameLF();
 		}
 
-		///<summary>Returns a formatted name, Last, First.</summary>
+		///<summary>LName, 'Preferred' FName M</summary>
 		public string GetNameLF(){
 			string retVal="";
 			if(Title!=""){
@@ -856,7 +856,7 @@ namespace OpenDentBusiness{
 			return retVal;
 		}
 
-		///<summary></summary>
+		///<summary>FName 'Preferred' M LName</summary>
 		public string GetNameFL(){
 			string retVal="";
 			if(Title!="") {
@@ -873,7 +873,26 @@ namespace OpenDentBusiness{
 			return retVal;
 		}
 
-		///<summary></summary>
+		///<summary>FName/Preferred M. LName</summary>
+		public string GetNameFirstOrPrefL(){
+			string retVal="";
+			if(Title!="") {
+				//retVal+=Title+" ";
+			}
+			if(Preferred=="") {
+				retVal+=FName+" ";
+			}
+			else{
+				retVal+=Preferred+" ";
+			}
+			if(MiddleI!=""){
+				retVal+=MiddleI+". ";
+			}
+			retVal+=LName;
+			return retVal;
+		}
+
+		///<summary>Title FName M LName</summary>
 		public string GetNameFLFormal() {
 			string retVal="";
 			if(Title!="") {

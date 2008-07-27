@@ -6,6 +6,7 @@ using System.Drawing.Imaging;
 using System.Drawing.Text;
 using System.Drawing.Printing;
 using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows.Forms;
 using OpenDentBusiness;
@@ -29,7 +30,6 @@ namespace OpenDental{
 		private System.ComponentModel.Container components = null;// Required designer variable.
 		private System.Windows.Forms.ListBox listProv;
 		private System.Windows.Forms.Label label7;
-		private System.Drawing.Printing.PrintDocument pd2;
 		///<summary></summary>
 		public bool IsNew;
 		private OpenDental.UI.Button butPrint;
@@ -87,7 +87,6 @@ namespace OpenDental{
 			this.textDate = new OpenDental.ValidDate();
 			this.listProv = new System.Windows.Forms.ListBox();
 			this.label7 = new System.Windows.Forms.Label();
-			this.pd2 = new System.Drawing.Printing.PrintDocument();
 			this.butPrint = new OpenDental.UI.Button();
 			this.butDelete = new OpenDental.UI.Button();
 			this.textNotes = new OpenDental.ODtextBox();
@@ -233,10 +232,6 @@ namespace OpenDental{
 			this.label7.Size = new System.Drawing.Size(103,14);
 			this.label7.TabIndex = 28;
 			this.label7.Text = "Provider";
-			// 
-			// pd2
-			// 
-			this.pd2.PrintPage += new System.Drawing.Printing.PrintPageEventHandler(this.pd2_PrintPage);
 			// 
 			// butPrint
 			// 
@@ -428,196 +423,8 @@ namespace OpenDental{
 				RxPats.Update(RxPatCur);
 				//SecurityLogs.MakeLogEntry("Prescription Edit",RxPats.cmd.CommandText,user);
 			}
+			//IsNew=false;//so that we can save it again after printing if needed.
 			return true;
-		}
-
-		///<summary></summary>
-		public void PrintReport(){
-			MessageBox.Show("Not functional");
-			/*
-			pd2=new PrintDocument();
-			pd2.PrintPage += new PrintPageEventHandler(this.pd2_PrintPage);
-			pd2.DefaultPageSettings.Margins=new Margins(0,0,0,0);
-			pd2.OriginAtMargins=true;
-			if(!PrefC.GetBool("RxOrientVert")){
-				pd2.DefaultPageSettings.Landscape=true;
-			}
-			#if DEBUG
-				pd2.DefaultPageSettings.PaperSize=new PaperSize("default",850,1100);
-				pView.printPreviewControl2.Document=pd2;
-				pView.ShowDialog();
-			#else
-				if(!Printers.SetPrinter(pd2,PrintSituation.Rx)){
-					return;
-				}
-				try{
-					pd2.Print();
-				}
-				catch{
-					MessageBox.Show(Lan.g(this,"Printer not available"));
-				}
-			#endif		*/
-		}
-
-		private void pd2_PrintPage(object sender, System.Drawing.Printing.PrintPageEventArgs e) {
-			/*
-			Graphics g=e.Graphics;
-			Pen penDashBorder=new Pen(Color.Black,(float)(.125));
-			SolidBrush brush=new SolidBrush(Color.Black);
-			penDashBorder.DashStyle=DashStyle.Dot;
-			int x;
-			int y;
-			int xAdj=(int)(PrefC.GetDouble("RxAdjustRight")*100);
-			int yAdj=(int)(PrefC.GetDouble("RxAdjustDown")*100);
-			string text;
-			Font font=new Font(FontFamily.GenericSansSerif,8);
-			Font fontRX=new Font(FontFamily.GenericSerif,24);
-			Font fontBold=new Font(FontFamily.GenericSansSerif,8,FontStyle.Bold);
-			int fontH=(int)font.GetHeight(g)+3;
-			Provider prov=Providers.GetProv(RxPatCur.ProvNum);
-			if(PrefC.GetBool("RxOrientVert")){
-				g.DrawLine(penDashBorder,0+xAdj,0+yAdj,425+xAdj,0+yAdj);
-				g.DrawLine(penDashBorder,0+xAdj,0+yAdj,0+xAdj,550+yAdj); 
-				g.DrawLine(penDashBorder,425+xAdj,0+yAdj,425+xAdj,550+yAdj);
-				g.DrawLine(penDashBorder,0+xAdj,550+yAdj,425+xAdj,550+yAdj); 
-			}
-			else{//horizontal
-				g.DrawLine(penDashBorder,0+xAdj,0+yAdj,550+xAdj,0+yAdj);
-				g.DrawLine(penDashBorder,0+xAdj,0+yAdj,0+xAdj,425+yAdj); 
-				g.DrawLine(penDashBorder,550+xAdj,0+yAdj,550+xAdj,425+yAdj); 
-				g.DrawLine(penDashBorder,0+xAdj,425+yAdj,550+xAdj,425+yAdj); 
-			}
-			//Dr--------------------------------------------------------------------------------------------------
-			//Left Side
-			x=50+xAdj;
-			y=37+yAdj;
-			text=prov.FName+" "+prov.MI+" "+prov.LName+", "+prov.Suffix;
-			g.DrawString(text,fontBold,brush,x,y);
-			y+=fontH;
-			text=PrefC.GetString("PracticeAddress");
-			g.DrawString(text,font,brush,x,y);
-			y+=fontH;
-			text=PrefC.GetString("PracticeAddress2");
-			if(text!=""){
-				g.DrawString(text,font,brush,x,y);
-				y+=fontH; 
-			}
-			text=PrefC.GetString("PracticeCity")+", "+PrefC.GetString("PracticeST")+" "+PrefC.GetString("PracticeZip");
-			g.DrawString(text,font,brush,x,y);
-			y=100+yAdj;
-			if(PrefC.GetBool("RxOrientVert")){
-				g.DrawLine(Pens.Black,25+xAdj,y,400+xAdj,y);
-			}
-			else{
-				g.DrawLine(Pens.Black,25+xAdj,y,525+xAdj,y);
-			}
-			//Right Side
-			x=280+xAdj;
-			y=38+yAdj;
-			text=PrefC.GetString("PracticePhone");
-			if(text.Length==10) {
-				text="("+text.Substring(0,3)+")"+text.Substring(3,3)+"-"+text.Substring(6);
-			}
-			g.DrawString(text,font,brush,x,y);
-			y+=fontH;
-			text=RxPatCur.RxDate.ToShortDateString();
-			g.DrawString(text,font,brush,x,y);
-			y+=fontH;
-			text=Lan.g(this,"DEA#: ")+prov.DEANum;
-			g.DrawString(text,font,brush,x,y);
-			//Patient---------------------------------------------------------------------------------------------------
-			//Upper Left
-			x=90+xAdj;
-			y=105+yAdj;
-			text=PatCur.GetNameFL();
-			g.DrawString(text,fontBold,brush,x,y);
-			y+=fontH;
-			text=Lan.g(this,"DOB: ")+PatCur.Birthdate.ToShortDateString();
-			g.DrawString(text,fontBold,brush,x,y);
-			y+=fontH;
-			text=PatCur.HmPhone;
-			g.DrawString(text,font,brush,x,y);
-			y+=fontH;
-			//x=280+xAdj;
-			//y=120+yAdj;
-			text=PatCur.Address;
-			g.DrawString(text,font,brush,x,y);
-			y+=fontH;
-			text=PatCur.Address2;
-			if(text!=""){
-				g.DrawString(text,font,brush,x,y);
-				y+=fontH; 
-			}
-			text=PatCur.City+", "+PatCur.State+" "+PatCur.Zip;
-			g.DrawString(text,font,brush,x,y);
-			y+=fontH;
-			//RX-----------------------------------------------------------------------------------------------------
-			y=190+yAdj;
-			x=40+xAdj;
-			g.DrawString(Lan.g(this,"Rx"),fontRX,brush,x,y);
-			y=205+yAdj;
-			x=90+xAdj;
-			g.DrawString(RxPatCur.Drug,fontBold,brush,x,y);
-			y+=(int)(fontH*1.5);
-			g.DrawString(Lan.g(this,"Disp:")+"  "+RxPatCur.Disp,font,brush,x,y);
-			y+=(int)(fontH*1.5);
-			g.DrawString(Lan.g(this,"Sig:")+"  "+RxPatCur.Sig,font,brush,new RectangleF(x,y,325,fontH*2));
-			y+=(int)(fontH*2.5);
-			g.DrawString(Lan.g(this,"Refills:")+"  "+RxPatCur.Refills,font,brush,x,y);
-			//Generic Subst----------------------------------------------------------------------------------------------
-			if(PrefC.GetInt("RxGeneric")==2){//two signature lines
-				text=Lan.g(this,"Generic Substitution Permitted");
-				if(PrefC.GetBool("RxOrientVert")) {
-					y=380+yAdj;
-					g.DrawLine(Pens.Black,90+xAdj,y,325+xAdj,y);
-					x=207+xAdj-(int)(g.MeasureString(text,font).Width/2);
-				}
-				else{
-					y=360+yAdj;
-					g.DrawLine(Pens.Black,50+xAdj,y,260+xAdj,y);
-					x=145+xAdj-(int)(g.MeasureString(text,font).Width/2);
-				}
-				y+=4;
-				g.DrawString(text,font,brush,x,y);
-			}
-			else{//check boxes
-				x=50+xAdj;
-				y=343+yAdj;
-				g.DrawRectangle(Pens.Black,x,y,12,12);
-				x+=17;
-				text=Lan.g(this,"Dispense as Written");
-				g.DrawString(text,font,brush,x,y);
-				x-=17;
-				y+=25;
-				g.DrawRectangle(Pens.Black,x,y,12,12);
-				if(PrefC.GetInt("RxGeneric")==0){//generic checked
-					g.DrawLine(Pens.Black,x,y,x+12,y+12);
-					g.DrawLine(Pens.Black,x+12,y,x,y+12);	
-				}
-				x+=17;
-				text=Lan.g(this,"Generic Substitution Permitted");
-				g.DrawString(text,font,brush,x,y);
-			}
-			//Signature Line--------------------------------------------------------------------------------------------
-			if(PrefC.GetInt("RxGeneric")==2){//two signature lines
-				text=Lan.g(this,"Dispense as Written");
-			}
-			else{
-				text=Lan.g(this,"Signature of Prescriber");
-			}
-			if(PrefC.GetBool("RxOrientVert")) {
-				y=460+yAdj;
-				g.DrawLine(Pens.Black,90+xAdj,y,325+xAdj,y);
-				x=207+xAdj-(int)(g.MeasureString(text,font).Width/2);
-			}
-			else {
-				y=360+yAdj;
-				g.DrawLine(Pens.Black,300+xAdj,y,530+xAdj,y);
-				x=412+xAdj-(int)(g.MeasureString(text,font).Width/2);
-			}
-			y+=4;
-			g.DrawString(text,font,brush,x,y);
-			g.Dispose();*/
 		}
 
 		private void butDelete_Click(object sender, System.EventArgs e) {
@@ -634,15 +441,32 @@ namespace OpenDental{
 		}
 
 		private void butPrint_Click(object sender, System.EventArgs e) {
-			if(SaveRx()){
-				PrintReport();
-				DialogResult=DialogResult.OK;
+			if(!SaveRx()){
+				return;
 			}
+			SheetDef sheetDef;
+			List<SheetDef> customSheetDefs=SheetDefs.GetCustomForType(SheetTypeEnum.Rx);
+			if(customSheetDefs.Count==0){
+				sheetDef=SheetsInternal.GetSheetDef(SheetInternalType.Rx);
+			}
+			else{
+				sheetDef=customSheetDefs[0];
+				SheetDefs.GetFieldsAndParameters(sheetDef);
+			}
+			Sheet sheet=SheetUtil.CreateSheet(sheetDef,PatCur.PatNum);
+			SheetParameter.SetParameter(sheet,"RxNum",RxPatCur.RxNum);
+			SheetFiller.FillFields(sheet);
+			SheetUtil.CalculateHeights(sheet,this.CreateGraphics());
+			FormSheetFillEdit FormS=new FormSheetFillEdit(sheet);
+			FormS.ShowDialog();
+			DialogResult=DialogResult.OK;
 		}
 
 		private void butOK_Click(object sender, System.EventArgs e) {
-			if(SaveRx())
-				DialogResult=DialogResult.OK;
+			if(!SaveRx()){
+				return;
+			}
+			DialogResult=DialogResult.OK;
 		}
 
 		private void butCancel_Click(object sender, System.EventArgs e) {

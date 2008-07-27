@@ -170,10 +170,10 @@ namespace OpenDental{
 			// 
 			this.label2.Location = new System.Drawing.Point(478,60);
 			this.label2.Name = "label2";
-			this.label2.Size = new System.Drawing.Size(205,55);
+			this.label2.Size = new System.Drawing.Size(205,82);
 			this.label2.TabIndex = 18;
-			this.label2.Text = "(other label types are assigned simply by creating custom labels of the same type" +
-    ")";
+			this.label2.Text = "Most other sheet types are assigned simply by creating custom sheets of the same " +
+    "type.  Referral slips are set in the referral edit window of each referral.";
 			// 
 			// FormSheetDefs
 			// 
@@ -272,6 +272,10 @@ namespace OpenDental{
 			FormS.IsInitial=true;
 			FormS.IsReadOnly=false;
 			SheetDef sheetdef=new SheetDef();
+			sheetdef.FontName="Microsoft Sans Serif";
+			sheetdef.FontSize=9;
+			sheetdef.Height=1100;
+			sheetdef.Width=850;
 			FormS.SheetDefCur=sheetdef;
 			FormS.ShowDialog();
 			if(FormS.DialogResult!=DialogResult.OK){

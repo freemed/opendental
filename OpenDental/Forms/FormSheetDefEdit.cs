@@ -77,6 +77,13 @@ namespace OpenDental {
 						+"W:"+SheetDefCur.SheetFieldDefs[i].Width.ToString()+","
 						+"H:"+SheetDefCur.SheetFieldDefs[i].Height.ToString());
 				}
+				else if(SheetDefCur.SheetFieldDefs[i].FieldType==SheetFieldType.Rectangle){
+					listFields.Items.Add(Lan.g(this,"Rect:" )
+						+SheetDefCur.SheetFieldDefs[i].XPos.ToString()+","
+						+SheetDefCur.SheetFieldDefs[i].YPos.ToString()+","
+						+"W:"+SheetDefCur.SheetFieldDefs[i].Width.ToString()+","
+						+"H:"+SheetDefCur.SheetFieldDefs[i].Height.ToString());
+				}
 				else{
 					listFields.Items.Add(SheetDefCur.SheetFieldDefs[i].FieldName);
 				}
@@ -99,6 +106,8 @@ namespace OpenDental {
 		private void DrawFields(Graphics g){
 			Pen penBlue=new Pen(Color.Blue);
 			Pen penRed=new Pen(Color.Red);
+			Pen penBlack=new Pen(Color.Black);
+			Pen pen;
 			SolidBrush brushBlue=new SolidBrush(Color.Blue);
 			SolidBrush brushRed=new SolidBrush(Color.Red);
 			SolidBrush brush=null;
@@ -119,9 +128,26 @@ namespace OpenDental {
 					continue;
 				}
 				if(SheetDefCur.SheetFieldDefs[i].FieldType==SheetFieldType.Line){
-					g.DrawLine(Pens.Black,SheetDefCur.SheetFieldDefs[i].XPos,SheetDefCur.SheetFieldDefs[i].YPos,
+					if(listFields.SelectedIndices.Contains(i)){
+						pen=penRed;
+					}
+					else{
+						pen=penBlack;
+					}
+					g.DrawLine(pen,SheetDefCur.SheetFieldDefs[i].XPos,SheetDefCur.SheetFieldDefs[i].YPos,
 						SheetDefCur.SheetFieldDefs[i].XPos+SheetDefCur.SheetFieldDefs[i].Width,
 						SheetDefCur.SheetFieldDefs[i].YPos+SheetDefCur.SheetFieldDefs[i].Height);
+					continue;
+				}
+				if(SheetDefCur.SheetFieldDefs[i].FieldType==SheetFieldType.Rectangle){
+					if(listFields.SelectedIndices.Contains(i)){
+						pen=penRed;
+					}
+					else{
+						pen=penBlack;
+					}
+					g.DrawRectangle(pen,SheetDefCur.SheetFieldDefs[i].XPos,SheetDefCur.SheetFieldDefs[i].YPos,
+						SheetDefCur.SheetFieldDefs[i].Width,SheetDefCur.SheetFieldDefs[i].Height);
 					continue;
 				}
 				fontstyle=FontStyle.Regular;
@@ -330,19 +356,34 @@ namespace OpenDental {
 					}
 					break;
 				case SheetFieldType.Line:
-					/*FormSheetFieldImage FormSI=new FormSheetFieldImage();
-					FormSI.SheetDefCur=SheetDefCur;
-					FormSI.SheetFieldDefCur=field;
+					FormSheetFieldLine FormSL=new FormSheetFieldLine();
+					FormSL.SheetDefCur=SheetDefCur;
+					FormSL.SheetFieldDefCur=field;
 					if(this.IsInternal){
-						FormSI.IsReadOnly=true;
+						FormSL.IsReadOnly=true;
 					}
-					FormSI.ShowDialog();
-					if(FormSI.DialogResult!=DialogResult.OK){
+					FormSL.ShowDialog();
+					if(FormSL.DialogResult!=DialogResult.OK){
 						return;
 					}
-					if(FormSI.SheetFieldDefCur==null){
+					if(FormSL.SheetFieldDefCur==null){
 						SheetDefCur.SheetFieldDefs.RemoveAt(idx);
-					}*/
+					}
+					break;
+				case SheetFieldType.Rectangle:
+					FormSheetFieldRect FormSR=new FormSheetFieldRect();
+					FormSR.SheetDefCur=SheetDefCur;
+					FormSR.SheetFieldDefCur=field;
+					if(this.IsInternal){
+						FormSR.IsReadOnly=true;
+					}
+					FormSR.ShowDialog();
+					if(FormSR.DialogResult!=DialogResult.OK){
+						return;
+					}
+					if(FormSR.SheetFieldDefCur==null){
+						SheetDefCur.SheetFieldDefs.RemoveAt(idx);
+					}
 					break;
 			}
 			FillFieldList();

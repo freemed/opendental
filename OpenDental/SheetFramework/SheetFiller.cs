@@ -31,6 +31,9 @@ namespace OpenDental{
 				case SheetTypeEnum.LabelAppointment:
 					FillFieldsForLabelAppointment(sheet);
 					break;
+				case SheetTypeEnum.Rx:
+					FillFieldsForRx(sheet);
+					break;
 			}
 		}
 
@@ -171,10 +174,6 @@ namespace OpenDental{
 		private static void FillFieldsForLabelAppointment(Sheet sheet) {
 			Appointment appt=Appointments.GetOneApt((int)GetParamByName(sheet,"AptNum").ParamValue);
 			Patient pat=Patients.GetPat(appt.PatNum);
-			/*list.Add(NewOutput("nameFL"));
-				list.Add(NewOutput("nameLF"));
-				list.Add(NewOutput("weekdayDateTime"));
-				list.Add(NewOutput("length"));*/
 			foreach(SheetField field in sheet.SheetFields) {
 				switch(field.FieldName) {
 					case "nameFL":
@@ -196,6 +195,82 @@ namespace OpenDental{
 						}
 						field.FieldValue+=minutes.ToString()+" min";
 						break;
+				}
+			}
+		}
+
+		private static void FillFieldsForRx(Sheet sheet) {
+			RxPat rx=RxPats.GetRx((int)GetParamByName(sheet,"RxNum").ParamValue);
+			Patient pat=Patients.GetPat(rx.PatNum);
+			Provider prov=Providers.GetProv(rx.ProvNum);
+			string text;
+			foreach(SheetField field in sheet.SheetFields) {
+				switch(field.FieldName) {
+					case "prov.nameFL":
+						field.FieldValue=prov.GetFormalName();
+						break;
+					case "prov.address":
+						field.FieldValue=PrefC.GetString("PracticeAddress");
+						if(PrefC.GetString("PracticeAddress2")!=""){
+							field.FieldValue+="\r\n"+PrefC.GetString("PracticeAddress2");
+						}
+						break;
+					case "prov.cityStateZip":
+						field.FieldValue=PrefC.GetString("PracticeCity")+", "+PrefC.GetString("PracticeST")+" "+PrefC.GetString("PracticeZip");;
+						break;
+					case "prov.phone":
+						text=PrefC.GetString("PracticePhone");
+						field.FieldValue=text;
+						if(text.Length==10) {
+							field.FieldValue="("+text.Substring(0,3)+")"+text.Substring(3,3)+"-"+text.Substring(6);
+						}
+						break;
+					case "RxDate":
+						field.FieldValue=rx.RxDate.ToShortDateString();
+						break;
+					case "prov.dEANum":
+						if(rx.IsControlled){
+							field.FieldValue=prov.DEANum;
+						}
+						else{
+							field.FieldValue="";
+						}
+						break;
+					case "pat.nameFL":
+						field.FieldValue=pat.GetNameFirstOrPrefL();
+						break;
+					case "pat.Birthdate":
+						if(pat.Birthdate.Year<1880){
+							field.FieldValue="";
+						}
+						else{
+							field.FieldValue=pat.Birthdate.ToShortDateString();
+						}
+						break;
+					case "pat.HmPhone":
+						field.FieldValue=pat.HmPhone;
+						break;
+					case "pat.address":
+						field.FieldValue=pat.Address;
+						if(pat.Address2!=""){
+							field.FieldValue+="\r\n"+pat.Address2;
+						}
+						break;
+					case "pat.cityStateZip":
+						field.FieldValue=pat.City+", "+pat.State+" "+pat.Zip;
+						break;
+					case "Drug":
+						field.FieldValue=rx.Drug;
+						break;
+					case "Disp":
+						field.FieldValue=rx.Disp;
+						break;
+					case "Sig":
+						field.FieldValue=rx.Sig;
+						break;
+					case "Refills":
+						field.FieldValue=rx.Refills;
+						break;					
 				}
 			}
 		}

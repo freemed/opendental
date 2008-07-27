@@ -237,6 +237,10 @@ namespace OpenDentBusiness{
 			sheet.Width=425;
 			sheet.Height=550;
 			sheet.IsLandscape=true;
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewLine(0,0,550,0));//top
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewLine(0,0,0,425));//left
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewLine(549,0,0,425));//right
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewLine(0,424,550,0));//bottom
 			int x;
 			int y;
 			int rowH=13;//for font of 8.
@@ -259,8 +263,55 @@ namespace OpenDentBusiness{
 			y+=rowH;
 			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("RxDate",sheet.FontSize,sheet.FontName,false,x,y,170,rowH));
 			y+=rowH;
-			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("prov.dEANum",sheet.FontSize,sheet.FontName,false,x,y,170,rowH));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("DEA#:",sheet.FontSize,sheet.FontName,true,x,y,40,rowH));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("prov.dEANum",sheet.FontSize,sheet.FontName,false,x+40,y,130,rowH));
+			//Patient---------------------------------------------------------------------------------------------------
+			//Upper Left
+			x=90;
+			y=105;
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("pat.nameFL",sheet.FontSize,sheet.FontName,true,x,y,150,rowH));
 			y+=rowH;
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("DOB:",sheet.FontSize,sheet.FontName,true,x,y,40,rowH));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("pat.Birthdate",sheet.FontSize,sheet.FontName,true,x+40,y,110,rowH));
+			y+=rowH;
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("pat.HmPhone",sheet.FontSize,sheet.FontName,false,x,y,150,rowH));
+			y+=rowH;
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("pat.address",sheet.FontSize,sheet.FontName,false,x,y,170,rowH,
+				GrowthBehaviorEnum.DownLocal));
+			y+=rowH;
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("pat.cityStateZip",sheet.FontSize,sheet.FontName,false,x,y,170,rowH));
+			//RX-----------------------------------------------------------------------------------------------------
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("Rx",24,"Times New Roman",true,35,190,55,30));
+			y=205;
+			x=90;
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("Drug",sheet.FontSize,sheet.FontName,true,x,y,300,rowH));
+			y+=(int)(rowH*1.5);
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("Disp:",sheet.FontSize,sheet.FontName,false,x,y,35,rowH));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("Disp",sheet.FontSize,sheet.FontName,false,x+35,y,300,rowH));
+			y+=(int)(rowH*1.5);
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("Sig:",sheet.FontSize,sheet.FontName,false,x,y,30,rowH));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("Sig",sheet.FontSize,sheet.FontName,false,x+30,y,325,rowH*2));
+			y+=(int)(rowH*2.5);
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("Refills:",sheet.FontSize,sheet.FontName,false,x,y,45,rowH));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("Refills",sheet.FontSize,sheet.FontName,false,x+45,y,110,rowH));
+			//Generic Subst----------------------------------------------------------------------------------------------
+			x=50;
+			y=343;
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewRect(x,y,12,12));
+			x+=17;
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("Dispense as Written",sheet.FontSize,sheet.FontName,false,x,y,200,rowH));
+			x-=17;
+			y+=25;
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewRect(x,y,12,12));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewLine(x,y,12,12));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewLine(x+12,y,-12,12));
+			x+=17;
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("Generic Substitution Permitted",sheet.FontSize,sheet.FontName,false,x,y,200,rowH));
+			//Signature Line--------------------------------------------------------------------------------------------
+			y=360;
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewLine(295,y,230,0));
+			y+=4;
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("Signature of Prescriber",sheet.FontSize,sheet.FontName,false,340,y,150,rowH));
 			return sheet;
 		}
 

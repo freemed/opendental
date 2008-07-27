@@ -51,7 +51,9 @@ namespace OpenDentBusiness {
 		///<summary>One sequence of dots that makes a line.  Continuous without any breaks.  Each time the pen is picked up, it creates a new field row in the database.</summary>
 		Drawing,
 		///<Summary>A simple line drawn from x,y to x+width,y+height.  So for these types, we must allow width and height to be negative or zero.</Summary>
-		Line
+		Line,
+		///<Summary>A simple rectangle outline.</Summary>
+		Rectangle
 		//<summary></summary>
 		//CheckBox
 		//<summary></summary>
