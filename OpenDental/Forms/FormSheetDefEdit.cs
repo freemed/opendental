@@ -271,6 +271,38 @@ namespace OpenDental {
 			panelMain.Invalidate();
 		}
 
+		private void butAddLine_Click(object sender,EventArgs e) {
+			FormSheetFieldLine FormS=new FormSheetFieldLine();
+			FormS.SheetDefCur=SheetDefCur;
+			FormS.SheetFieldDefCur=SheetFieldDef.NewLine(0,0,0,0);
+			if(this.IsInternal){
+				FormS.IsReadOnly=true;
+			}
+			FormS.ShowDialog();
+			if(FormS.DialogResult!=DialogResult.OK){
+				return;
+			}
+			SheetDefCur.SheetFieldDefs.Add(FormS.SheetFieldDefCur);
+			FillFieldList();
+			panelMain.Invalidate();
+		}
+
+		private void butAddRect_Click(object sender,EventArgs e) {
+			FormSheetFieldRect FormS=new FormSheetFieldRect();
+			FormS.SheetDefCur=SheetDefCur;
+			FormS.SheetFieldDefCur=SheetFieldDef.NewRect(0,0,0,0);
+			if(this.IsInternal){
+				FormS.IsReadOnly=true;
+			}
+			FormS.ShowDialog();
+			if(FormS.DialogResult!=DialogResult.OK){
+				return;
+			}
+			SheetDefCur.SheetFieldDefs.Add(FormS.SheetFieldDefCur);
+			FillFieldList();
+			panelMain.Invalidate();
+		}
+
 		private void listFields_Click(object sender,EventArgs e) {
 			//if(listFields.SelectedIndices.Count==0){
 			//	return;
@@ -547,6 +579,8 @@ namespace OpenDental {
 		private void butCancel_Click(object sender,EventArgs e) {
 			DialogResult=DialogResult.Cancel;
 		}
+
+		
 
 	
 

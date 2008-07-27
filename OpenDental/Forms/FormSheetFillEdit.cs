@@ -238,7 +238,7 @@ namespace OpenDental {
 				if(i>0){
 					field.FieldValue+=";";
 				}
-				field.FieldValue+=PointList[i].X+","+PointList[i].Y;
+				field.FieldValue+=(PointList[i].X+pictDraw.Left)+","+(PointList[i].Y+pictDraw.Top);
 			}
 			field.FontName="";
 			SheetCur.SheetFields.Add(field);
@@ -269,13 +269,23 @@ namespace OpenDental {
 						}
 					}
 					for(int i=1;i<points.Count;i++){
-						g.DrawLine(pen,points[i-1].X,points[i-1].Y,points[i].X,points[i].Y);
+						g.DrawLine(pen,points[i-1].X-pictDraw.Left,
+							points[i-1].Y-pictDraw.Top,
+							points[i].X-pictDraw.Left,
+							points[i].Y-pictDraw.Top);
 					}
 				}
 				if(SheetCur.SheetFields[f].FieldType==SheetFieldType.Line){
-					g.DrawLine(pen2,SheetCur.SheetFields[f].XPos,SheetCur.SheetFields[f].YPos,
-						SheetCur.SheetFields[f].XPos+SheetCur.SheetFields[f].Width,
-						SheetCur.SheetFields[f].YPos+SheetCur.SheetFields[f].Height);
+					g.DrawLine(pen2,SheetCur.SheetFields[f].XPos-pictDraw.Left,
+						SheetCur.SheetFields[f].YPos-pictDraw.Top,
+						SheetCur.SheetFields[f].XPos+SheetCur.SheetFields[f].Width-pictDraw.Left,
+						SheetCur.SheetFields[f].YPos+SheetCur.SheetFields[f].Height-pictDraw.Top);
+				}
+				if(SheetCur.SheetFields[f].FieldType==SheetFieldType.Rectangle){
+					g.DrawRectangle(pen2,SheetCur.SheetFields[f].XPos-pictDraw.Left,
+						SheetCur.SheetFields[f].YPos-pictDraw.Top,
+						SheetCur.SheetFields[f].Width,
+						SheetCur.SheetFields[f].Height);
 				}
 			}
 			pictDraw.Image=img;
