@@ -177,7 +177,7 @@ namespace OpenDental{
 			foreach(SheetField field in sheet.SheetFields) {
 				switch(field.FieldName) {
 					case "nameFL":
-						field.FieldValue=pat.GetNameFL();
+						field.FieldValue=pat.GetNameFirstOrPrefL();
 						break;
 					case "nameLF":
 						field.FieldValue=pat.GetNameLF();
@@ -237,7 +237,7 @@ namespace OpenDental{
 						}
 						break;
 					case "pat.nameFL":
-						field.FieldValue=pat.GetNameFirstOrPrefL();
+						field.FieldValue=pat.GetNameFirstOrPrefML();
 						break;
 					case "pat.Birthdate":
 						if(pat.Birthdate.Year<1880){

@@ -873,12 +873,22 @@ namespace OpenDentBusiness{
 			return retVal;
 		}
 
-		///<summary>FName/Preferred M. LName</summary>
+		///<summary>FName/Preferred LName</summary>
 		public string GetNameFirstOrPrefL(){
 			string retVal="";
-			if(Title!="") {
-				//retVal+=Title+" ";
+			if(Preferred=="") {
+				retVal+=FName+" ";
 			}
+			else{
+				retVal+=Preferred+" ";
+			}
+			retVal+=LName;
+			return retVal;
+		}
+
+		///<summary>FName/Preferred M. LName</summary>
+		public string GetNameFirstOrPrefML(){
+			string retVal="";
 			if(Preferred=="") {
 				retVal+=FName+" ";
 			}
