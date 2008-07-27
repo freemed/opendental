@@ -26,8 +26,14 @@ namespace OpenDental {
 			InitializeComponent();
 			Lan.F(this);
 			SheetCur=sheet;
-			Width=sheet.Width+185;
-			Height=sheet.Height+60;
+			if(sheet.IsLandscape){
+				Width=sheet.Height+185;
+				Height=sheet.Width+60;
+			}
+			else{
+				Width=sheet.Width+185;
+				Height=sheet.Height+60;
+			}
 			if(Width>SystemInformation.WorkingArea.Width){
 				Width=SystemInformation.WorkingArea.Width;
 			}
@@ -38,8 +44,14 @@ namespace OpenDental {
 		}
 
 		private void FormSheetFillEdit_Load(object sender,EventArgs e) {
-			panelMain.Width=SheetCur.Width;
-			panelMain.Height=SheetCur.Height;
+			if(SheetCur.IsLandscape){
+				panelMain.Width=SheetCur.Height;
+				panelMain.Height=SheetCur.Width;
+			}
+			else{
+				panelMain.Width=SheetCur.Width;
+				panelMain.Height=SheetCur.Height;
+			}
 			//panelDraw.Width=SheetCur.Width;
 			//panelDraw.Height=SheetCur.Height;
 			textDateTime.Text=SheetCur.DateTimeSheet.ToShortDateString()+" "+SheetCur.DateTimeSheet.ToShortTimeString();
