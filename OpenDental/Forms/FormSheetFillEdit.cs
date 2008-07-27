@@ -52,13 +52,11 @@ namespace OpenDental {
 				panelMain.Width=SheetCur.Width;
 				panelMain.Height=SheetCur.Height;
 			}
-			//panelDraw.Width=SheetCur.Width;
-			//panelDraw.Height=SheetCur.Height;
 			textDateTime.Text=SheetCur.DateTimeSheet.ToShortDateString()+" "+SheetCur.DateTimeSheet.ToShortTimeString();
 			textNote.Text=SheetCur.InternalNote;
 			RichTextBox textbox;//has to be richtextbox due to MS bug that doesn't show cursor.
 			FontStyle style;
-			//first, draw images
+			//first, draw images---------------------------------------------------------------------------------------
 			pictDraw=null;
 			imgDraw=null;
 			foreach(SheetField field in SheetCur.SheetFields){
@@ -82,16 +80,23 @@ namespace OpenDental {
 				pictBox.Tag=field;
 				panelMain.Controls.Add(pictBox);
 				pictBox.BringToFront();
-				if(pictDraw==null || pictBox.Height>pictDraw.Height){//use the biggest pictBox
+				if(pictDraw==null || pictBox.Height>pictDraw.Height){//use the tallest pictBox
 					pictDraw=pictBox;
 					imgDraw=(Image)img2.Clone();//we will preserve this original image and draw on the real image.
 				}
 			}
 			if(pictDraw==null){
-				imgDraw=new Bitmap(SheetCur.Width,SheetCur.Height);
-				pictDraw=new PictureBox();
-				pictDraw.Width=SheetCur.Width;
-				pictDraw.Height=SheetCur.Height;
+				pictDraw=new PictureBox();				
+				if(SheetCur.IsLandscape){
+					imgDraw=new Bitmap(SheetCur.Height,SheetCur.Width);
+					pictDraw.Width=SheetCur.Height;
+					pictDraw.Height=SheetCur.Width;
+				}
+				else{
+					imgDraw=new Bitmap(SheetCur.Width,SheetCur.Height);
+					pictDraw.Width=SheetCur.Width;
+					pictDraw.Height=SheetCur.Height;
+				}
 				pictDraw.Location=new Point(0,0);
 				pictDraw.Image=(Image)imgDraw.Clone();
 				pictDraw.SizeMode=PictureBoxSizeMode.StretchImage;
@@ -102,7 +107,7 @@ namespace OpenDental {
 			pictDraw.MouseMove+=new MouseEventHandler(pictDraw_MouseMove);
 			pictDraw.MouseUp+=new MouseEventHandler(pictDraw_MouseUp);
 			RefreshPanel();
-			//then, draw textboxes
+			//draw textboxes----------------------------------------------------------------------------------------------
 			foreach(SheetField field in SheetCur.SheetFields){
 				if(field.FieldType!=SheetFieldType.InputField
 					&& field.FieldType!=SheetFieldType.OutputText
@@ -246,25 +251,30 @@ namespace OpenDental {
 			g.SmoothingMode=SmoothingMode.HighQuality;
 			//g.CompositingQuality=CompositingQuality.Default;
 			Pen pen=new Pen(Brushes.Black,2f);
+			Pen pen2=new Pen(Brushes.Black,1f);
 			string[] pointStr;
 			List<Point> points;
 			Point point;
 			string[] xy;
 			for(int f=0;f<SheetCur.SheetFields.Count;f++){
-				if(SheetCur.SheetFields[f].FieldType!=SheetFieldType.Drawing){
-					continue;
-				}
-				pointStr=SheetCur.SheetFields[f].FieldValue.Split(';');
-				points=new List<Point>();
-				for(int p=0;p<pointStr.Length;p++){
-					xy=pointStr[p].Split(',');
-					if(xy.Length==2){
-						point=new Point(PIn.PInt(xy[0]),PIn.PInt(xy[1]));
-						points.Add(point);
+				if(SheetCur.SheetFields[f].FieldType==SheetFieldType.Drawing){
+					pointStr=SheetCur.SheetFields[f].FieldValue.Split(';');
+					points=new List<Point>();
+					for(int p=0;p<pointStr.Length;p++){
+						xy=pointStr[p].Split(',');
+						if(xy.Length==2){
+							point=new Point(PIn.PInt(xy[0]),PIn.PInt(xy[1]));
+							points.Add(point);
+						}
+					}
+					for(int i=1;i<points.Count;i++){
+						g.DrawLine(pen,points[i-1].X,points[i-1].Y,points[i].X,points[i].Y);
 					}
 				}
-				for(int i=1;i<points.Count;i++){
-					g.DrawLine(pen,points[i-1].X,points[i-1].Y,points[i].X,points[i].Y);
+				if(SheetCur.SheetFields[f].FieldType==SheetFieldType.Line){
+					g.DrawLine(pen2,SheetCur.SheetFields[f].XPos,SheetCur.SheetFields[f].YPos,
+						SheetCur.SheetFields[f].XPos+SheetCur.SheetFields[f].Width,
+						SheetCur.SheetFields[f].YPos+SheetCur.SheetFields[f].Height);
 				}
 			}
 			pictDraw.Image=img;
