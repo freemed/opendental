@@ -38,11 +38,9 @@ namespace OpenDental {
 				case SheetTypeEnum.LabelPatient:
 				case SheetTypeEnum.LabelCarrier:
 				case SheetTypeEnum.LabelReferral:
-					//pd.DefaultPageSettings.Landscape=true;
 					sit=PrintSituation.LabelSingle;
 					break;
 				case SheetTypeEnum.ReferralSlip:
-					//pd.DefaultPageSettings.Landscape=false;
 					sit=PrintSituation.Default;
 					break;
 			}
@@ -92,11 +90,9 @@ namespace OpenDental {
 				case SheetTypeEnum.LabelPatient:
 				case SheetTypeEnum.LabelCarrier:
 				case SheetTypeEnum.LabelReferral:
-					//pd.DefaultPageSettings.Landscape=true;
 					sit=PrintSituation.LabelSingle;
 					break;
 				case SheetTypeEnum.ReferralSlip:
-					//pd.DefaultPageSettings.Landscape=false;
 					sit=PrintSituation.Default;
 					break;
 			}
@@ -127,7 +123,7 @@ namespace OpenDental {
 			SheetUtil.CalculateHeights(sheet,g);//this is here because of easy access to g.
 			Font font;
 			FontStyle fontstyle;
-			//first, draw images
+			//first, draw images------------------------------------------------------------------------------------
 			foreach(SheetField field in sheet.SheetFields){
 				if(field.FieldType!=SheetFieldType.Image){
 					continue;
@@ -139,7 +135,7 @@ namespace OpenDental {
 				Image img=Image.FromFile(filePathAndName);
 				g.DrawImage(img,field.XPos,field.YPos,field.Width,field.Height);
 			}
-			//then, drawings
+			//then, drawings--------------------------------------------------------------------------------------------
 			Pen pen=new Pen(Brushes.Black,2f);
 			string[] pointStr;
 			List<Point> points;
@@ -162,7 +158,19 @@ namespace OpenDental {
 					g.DrawLine(pen,points[i-1].X,points[i-1].Y,points[i].X,points[i].Y);
 				}
 			}
-			//then, draw text
+			//then, rectangles and lines----------------------------------------------------------------------------------
+			Pen pen2=new Pen(Brushes.Black,1f);
+			foreach(SheetField field in sheet.SheetFields){
+				if(field.FieldType==SheetFieldType.Rectangle){
+					g.DrawRectangle(pen2,field.XPos,field.YPos,field.Width,field.Height);
+				}
+				if(field.FieldType==SheetFieldType.Line){
+					g.DrawLine(pen2,field.XPos,field.YPos,
+						field.XPos+field.Width,
+						field.YPos+field.Height);
+				}
+			}
+			//then, draw text-----------------------------------------------------------------------------------------------
 			foreach(SheetField field in sheet.SheetFields){
 				if(field.FieldType!=SheetFieldType.InputField
 					&& field.FieldType!=SheetFieldType.OutputText
@@ -208,7 +216,7 @@ namespace OpenDental {
 			//already done?:SheetUtil.CalculateHeights(sheet,g);//this is here because of easy access to g.
 			XFont font;
 			XFontStyle fontstyle;
-			//first, draw images
+			//first, draw images--------------------------------------------------------------------------------------
 			foreach(SheetField field in sheet.SheetFields){
 				if(field.FieldType!=SheetFieldType.Image){
 					continue;
@@ -220,8 +228,8 @@ namespace OpenDental {
 				XImage img=XImage.FromFile(filePathAndName);
 				g.DrawImage(img,p(field.XPos),p(field.YPos),p(field.Width),p(field.Height));
 			}
-			//then, drawings
-			XPen pen=new XPen(XColors.Black,1.5d);
+			//then, drawings--------------------------------------------------------------------------------------------
+			XPen pen=new XPen(XColors.Black,p(2));
 			string[] pointStr;
 			List<Point> points;
 			Point point;
@@ -243,7 +251,19 @@ namespace OpenDental {
 					g.DrawLine(pen,p(points[i-1].X),p(points[i-1].Y),p(points[i].X),p(points[i].Y));
 				}
 			}
-			//then, draw text
+			//then, rectangles and lines----------------------------------------------------------------------------------
+			XPen pen2=new XPen(XColors.Black,p(1));
+			foreach(SheetField field in sheet.SheetFields){
+				if(field.FieldType==SheetFieldType.Rectangle){
+					g.DrawRectangle(pen2,p(field.XPos),p(field.YPos),p(field.Width),p(field.Height));
+				}
+				if(field.FieldType==SheetFieldType.Line){
+					g.DrawLine(pen2,p(field.XPos),p(field.YPos),
+						p(field.XPos+field.Width),
+						p(field.YPos+field.Height));
+				}
+			}
+			//then, draw text--------------------------------------------------------------------------------------------
 			foreach(SheetField field in sheet.SheetFields){
 				if(field.FieldType!=SheetFieldType.InputField
 					&& field.FieldType!=SheetFieldType.OutputText
