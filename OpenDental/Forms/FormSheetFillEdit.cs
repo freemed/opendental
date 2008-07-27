@@ -101,6 +101,7 @@ namespace OpenDental {
 				pictDraw.Image=(Image)imgDraw.Clone();
 				pictDraw.SizeMode=PictureBoxSizeMode.StretchImage;
 				panelMain.Controls.Add(pictDraw);
+				panelMain.SendToBack();
 			}
 			//Set mouse events for the pictDraw
 			pictDraw.MouseDown+=new MouseEventHandler(pictDraw_MouseDown);
