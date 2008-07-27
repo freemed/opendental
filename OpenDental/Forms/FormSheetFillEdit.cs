@@ -408,17 +408,28 @@ namespace OpenDental {
 			SheetCur.InternalNote=textNote.Text;
 			bool isNew=SheetCur.IsNew;
 			Sheets.WriteObject(SheetCur);
+			SheetField field;
 			//RichTextBoxes-----------------------------------------------
 			foreach(Control control in panelMain.Controls){
 				if(control.Tag==null){
 					continue;
 				}
-				SheetField field=(SheetField)control.Tag;
+				field=(SheetField)control.Tag;
 				if(control.GetType()==typeof(RichTextBox)){
 					field.FieldValue=control.Text;
 				}
 				field.SheetNum=SheetCur.SheetNum;//whether or not isnew
 				SheetFields.WriteObject(field);
+			}
+			//Rectangles and lines
+			foreach(SheetField fld in SheetCur.SheetFields){
+				if(!fld.IsNew){
+					continue;//so it only saves them when the sheet is first created because user can't edit.
+				}
+				if(fld.FieldType==SheetFieldType.Rectangle || fld.FieldType==SheetFieldType.Line){
+					fld.SheetNum=SheetCur.SheetNum;
+					SheetFields.WriteObject(fld);
+				}
 			}
 			//Drawings----------------------------------------------------
 			if(drawingsAltered){
