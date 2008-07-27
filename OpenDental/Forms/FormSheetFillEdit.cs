@@ -336,6 +336,9 @@ namespace OpenDental {
 					FormS.PaperCopies--;
 				}
 			}
+			else{
+				FormS.Email2Visible=false;
+			}
 			FormS.ShowDialog();
 			if(FormS.DialogResult!=DialogResult.OK){
 				return;

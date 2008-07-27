@@ -42,8 +42,11 @@ namespace OpenDental{
 		private OpenDental.UI.Button butPick;
 		private TextBox textPharmacy;
 		private CheckBox checkControlled;
+		private OpenDental.UI.Button butView;
+		private Label labelView;
 		//private User user;
 		private RxPat RxPatCur;
+		Sheet sheet;
 
 		///<summary></summary>
 		public FormRxEdit(Patient patCur,RxPat rxPatCur){
@@ -94,6 +97,8 @@ namespace OpenDental{
 			this.butPick = new OpenDental.UI.Button();
 			this.textPharmacy = new System.Windows.Forms.TextBox();
 			this.checkControlled = new System.Windows.Forms.CheckBox();
+			this.butView = new OpenDental.UI.Button();
+			this.labelView = new System.Windows.Forms.Label();
 			this.SuspendLayout();
 			// 
 			// butCancel
@@ -241,11 +246,11 @@ namespace OpenDental{
 			this.butPrint.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butPrint.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butPrint.CornerRadius = 4F;
-			this.butPrint.Image = global::OpenDental.Properties.Resources.butPrintSmall;
+			this.butPrint.Image = global::OpenDental.Properties.Resources.butPrint;
 			this.butPrint.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butPrint.Location = new System.Drawing.Point(496,412);
+			this.butPrint.Location = new System.Drawing.Point(350,412);
 			this.butPrint.Name = "butPrint";
-			this.butPrint.Size = new System.Drawing.Size(88,24);
+			this.butPrint.Size = new System.Drawing.Size(81,24);
 			this.butPrint.TabIndex = 29;
 			this.butPrint.Text = "&Print";
 			this.butPrint.Click += new System.EventHandler(this.butPrint_Click);
@@ -322,12 +327,39 @@ namespace OpenDental{
 			this.checkControlled.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.checkControlled.UseVisualStyleBackColor = true;
 			// 
+			// butView
+			// 
+			this.butView.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butView.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.butView.Autosize = true;
+			this.butView.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butView.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butView.CornerRadius = 4F;
+			this.butView.Image = global::OpenDental.Properties.Resources.printPreview20;
+			this.butView.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butView.Location = new System.Drawing.Point(437,412);
+			this.butView.Name = "butView";
+			this.butView.Size = new System.Drawing.Size(81,24);
+			this.butView.TabIndex = 244;
+			this.butView.Text = "View";
+			this.butView.Click += new System.EventHandler(this.butView_Click);
+			// 
+			// labelView
+			// 
+			this.labelView.Location = new System.Drawing.Point(434,439);
+			this.labelView.Name = "labelView";
+			this.labelView.Size = new System.Drawing.Size(199,14);
+			this.labelView.TabIndex = 245;
+			this.labelView.Text = "This Rx has already been printed.";
+			// 
 			// FormRxEdit
 			// 
 			this.AcceptButton = this.butOK;
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.CancelButton = this.butCancel;
 			this.ClientSize = new System.Drawing.Size(724,460);
+			this.Controls.Add(this.labelView);
+			this.Controls.Add(this.butView);
 			this.Controls.Add(this.checkControlled);
 			this.Controls.Add(this.butPick);
 			this.Controls.Add(this.textPharmacy);
@@ -365,6 +397,21 @@ namespace OpenDental{
 		#endregion
 
 		private void FormRxEdit_Load(object sender, System.EventArgs e) {
+			if(IsNew){
+				butView.Visible=false;
+				labelView.Visible=false;
+				sheet=null;
+			}
+			else{
+				sheet=Sheets.GetRx(RxPatCur.PatNum,RxPatCur.RxNum);
+				if(sheet==null){
+					butView.Visible=false;
+					labelView.Visible=false;
+				}
+				else{
+					butPrint.Visible=false;
+				}
+			}
 			//security is handled on the Rx button click in the Chart module
 			for(int i=0;i<ProviderC.List.Length;i++){
 				this.listProv.Items.Add(ProviderC.List[i].GetLongDesc());
@@ -423,7 +470,7 @@ namespace OpenDental{
 				RxPats.Update(RxPatCur);
 				//SecurityLogs.MakeLogEntry("Prescription Edit",RxPats.cmd.CommandText,user);
 			}
-			//IsNew=false;//so that we can save it again after printing if needed.
+			IsNew=false;//so that we can save it again after printing if needed.
 			return true;
 		}
 
@@ -441,6 +488,7 @@ namespace OpenDental{
 		}
 
 		private void butPrint_Click(object sender, System.EventArgs e) {
+			//only visible if sheet==null.
 			if(!SaveRx()){
 				return;
 			}
@@ -453,14 +501,70 @@ namespace OpenDental{
 				sheetDef=customSheetDefs[0];
 				SheetDefs.GetFieldsAndParameters(sheetDef);
 			}
-			Sheet sheet=SheetUtil.CreateSheet(sheetDef,PatCur.PatNum);
+			sheet=SheetUtil.CreateSheet(sheetDef,PatCur.PatNum);
 			SheetParameter.SetParameter(sheet,"RxNum",RxPatCur.RxNum);
 			SheetFiller.FillFields(sheet);
 			SheetUtil.CalculateHeights(sheet,this.CreateGraphics());
-			FormSheetFillEdit FormS=new FormSheetFillEdit(sheet);
-			FormS.ShowDialog();
+			SheetPrinting.Print(sheet);
 			DialogResult=DialogResult.OK;
 		}
+
+		private void butView_Click(object sender,EventArgs e) {
+			//only visible if there is already a sheet.
+			if(!SaveRx()){
+				return;
+			}
+			SheetFields.GetFieldsAndParameters(sheet);
+			FormSheetFillEdit FormSF=new FormSheetFillEdit(sheet);
+			FormSF.ShowDialog();
+			if(FormSF.DialogResult==DialogResult.OK){
+				DialogResult=DialogResult.OK;
+			}
+			//if user clicked cancel, then we can just stay in this form.
+		}
+
+		/*private void Print(bool preview){
+			if(!SaveRx()){
+				return;
+			}
+			Sheet sheet=Sheets.GetRx(RxPatCur.PatNum,RxPatCur.RxNum);
+			if(sheet!=null){
+				DialogResult result=MessageBox.Show(Lan.g(this,"This Rx has already been printed.  Erase the old printout and create a new one?  If not, then the original will be used."),"",MessageBoxButtons.YesNo);
+				if(result==DialogResult.Yes){
+					Sheets.DeleteObject(sheet.SheetNum);
+				}
+				else{
+					//use the old one
+					SheetFields.GetFieldsAndParameters(sheet);
+					if(preview){
+						FormSheetFillEdit FormSF=new FormSheetFillEdit(sheet);
+						FormSF.ShowDialog();
+						//notice that we don't close the dialog, because the user might just have wanted to view their rx.
+					}
+					else{
+						SheetPrinting.Print(sheet);
+						DialogResult=DialogResult.OK;
+					}
+					return;
+				}
+			}
+			//if we get to this point, then a new sheet needs to be created.
+			
+			if(preview){
+				FormSheetFillEdit FormS=new FormSheetFillEdit(sheet);
+				FormS.ShowDialog();
+				if(FormS.DialogResult==DialogResult.OK){
+					DialogResult=DialogResult.OK;
+					return;
+				}
+				//if cancel, then stay in this form.
+			}
+			else{
+				SheetPrinting.Print(sheet);
+				DialogResult=DialogResult.OK;
+				return;
+			}
+		}*/
 
 		private void butOK_Click(object sender, System.EventArgs e) {
 			if(!SaveRx()){
@@ -472,6 +576,8 @@ namespace OpenDental{
 		private void butCancel_Click(object sender, System.EventArgs e) {
 			DialogResult=DialogResult.Cancel;
 		}
+
+		
 
 		
 

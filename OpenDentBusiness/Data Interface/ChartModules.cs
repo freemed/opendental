@@ -616,6 +616,7 @@ namespace OpenDentBusiness {
 			command="SELECT SheetNum,DateTimeSheet,SheetType "
 				+"FROM sheet "
 				+"WHERE PatNum="+POut.PInt(patNum)
+				+" AND SheetType!="+POut.PInt((int)SheetTypeEnum.Rx)//rx are only accesssible from within Rx edit window.
 				+" ORDER BY DateTimeSheet";
 			DataTable rawSheet=dcon.GetTable(command);
 			SheetTypeEnum sheetType;

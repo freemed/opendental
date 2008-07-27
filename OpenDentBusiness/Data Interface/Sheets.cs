@@ -52,6 +52,21 @@ namespace OpenDentBusiness{
 			//return list;
 		}
 
+		///<summary>Used in FormRxEdit to view an existing rx.  Will return null if none exist.</summary>
+		public static Sheet GetRx(int patNum,int rxNum){
+			string command="SELECT sheet.* FROM sheet,sheetfield "
+				+"WHERE sheet.PatNum="+POut.PInt(patNum)
+				+" AND sheet.SheetType="+POut.PInt((int)SheetTypeEnum.Rx)
+				+" AND sheetfield.FieldType="+POut.PInt((int)SheetFieldType.Parameter)
+				+" AND sheetfield.FieldName='RxNum' "
+				+"AND sheetfield.FieldValue='"+POut.PInt(rxNum)+"'";
+			List<Sheet> sheetlist=new List<Sheet>(DataObjectFactory<Sheet>.CreateObjects(command));
+			if(sheetlist.Count==0){
+				return null;
+			}
+			return sheetlist[0];
+		}
+
 		///<summary></summary>
 		public static void WriteObject(Sheet sheet){
 			DataObjectFactory<Sheet>.WriteObject(sheet);
