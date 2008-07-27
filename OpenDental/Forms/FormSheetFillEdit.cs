@@ -26,8 +26,14 @@ namespace OpenDental {
 			InitializeComponent();
 			Lan.F(this);
 			SheetCur=sheet;
-			Width=sheet.Width+185+500;
-			Height=sheet.Height+60+500;
+			Width=sheet.Width+185;
+			Height=sheet.Height+60;
+			if(Width>SystemInformation.WorkingArea.Width){
+				Width=SystemInformation.WorkingArea.Width;
+			}
+			if(Height>SystemInformation.WorkingArea.Height){
+				Height=SystemInformation.WorkingArea.Height;
+			}
 			PointList=new List<Point>();
 		}
 
