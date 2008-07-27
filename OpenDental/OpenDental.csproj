@@ -3493,10 +3493,6 @@
       <DependentUpon>FormSheetFieldRect.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\FormSheetFieldLine.af.resx">
-      <DependentUpon>FormSheetFieldLine.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormSheetFieldLine.resx">
       <DependentUpon>FormSheetFieldLine.cs</DependentUpon>
       <SubType>Designer</SubType>
