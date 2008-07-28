@@ -165,9 +165,7 @@ namespace OpenDental{
 		}
 
 		///<summary>Either does an insert or an update to the database if need to create a Printer object.  Or it also deletes a printer object if needed.</summary>
-		public static void PutForSit(PrintSituation sit,string computerName, string printerName
-			,bool displayPrompt)
-		{
+		public static void PutForSit(PrintSituation sit,string computerName, string printerName,bool displayPrompt){
 			//Computer[] compList=Computers.Refresh();
 			//Computer compCur=Computers.GetCur();
 			string command="SELECT ComputerNum FROM computer "

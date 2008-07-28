@@ -43,6 +43,9 @@ namespace OpenDental{
 		private System.Windows.Forms.CheckBox checkStatement;
 		private System.Windows.Forms.Panel panelSimple;
 		private System.Windows.Forms.CheckBox checkSimple;
+		private Label label13;
+		private CheckBox checkRxControlled;
+		private ComboBox comboRxControlled;
 		private System.ComponentModel.Container components = null;
 
 		///<summary></summary>
@@ -99,6 +102,9 @@ namespace OpenDental{
 			this.checkStatement = new System.Windows.Forms.CheckBox();
 			this.checkSimple = new System.Windows.Forms.CheckBox();
 			this.panelSimple = new System.Windows.Forms.Panel();
+			this.label13 = new System.Windows.Forms.Label();
+			this.checkRxControlled = new System.Windows.Forms.CheckBox();
+			this.comboRxControlled = new System.Windows.Forms.ComboBox();
 			this.panelSimple.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -118,9 +124,9 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(550,270);
+			this.butOK.Location = new System.Drawing.Point(550,307);
 			this.butOK.Name = "butOK";
-			this.butOK.Size = new System.Drawing.Size(75,26);
+			this.butOK.Size = new System.Drawing.Size(75,24);
 			this.butOK.TabIndex = 2;
 			this.butOK.Text = "&OK";
 			this.butOK.Click += new System.EventHandler(this.butOK_Click);
@@ -134,9 +140,9 @@ namespace OpenDental{
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
 			this.butCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.butCancel.Location = new System.Drawing.Point(550,304);
+			this.butCancel.Location = new System.Drawing.Point(550,341);
 			this.butCancel.Name = "butCancel";
-			this.butCancel.Size = new System.Drawing.Size(75,26);
+			this.butCancel.Size = new System.Drawing.Size(75,24);
 			this.butCancel.TabIndex = 3;
 			this.butCancel.Text = "&Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
@@ -161,7 +167,7 @@ namespace OpenDental{
 			// 
 			// label3
 			// 
-			this.label3.Location = new System.Drawing.Point(3,217);
+			this.label3.Location = new System.Drawing.Point(3,245);
 			this.label3.Name = "label3";
 			this.label3.Size = new System.Drawing.Size(195,19);
 			this.label3.TabIndex = 7;
@@ -225,7 +231,7 @@ namespace OpenDental{
 			// comboTPPerio
 			// 
 			this.comboTPPerio.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboTPPerio.Location = new System.Drawing.Point(202,242);
+			this.comboTPPerio.Location = new System.Drawing.Point(202,270);
 			this.comboTPPerio.MaxDropDownItems = 30;
 			this.comboTPPerio.Name = "comboTPPerio";
 			this.comboTPPerio.Size = new System.Drawing.Size(253,21);
@@ -233,7 +239,7 @@ namespace OpenDental{
 			// 
 			// label7
 			// 
-			this.label7.Location = new System.Drawing.Point(4,243);
+			this.label7.Location = new System.Drawing.Point(4,271);
 			this.label7.Name = "label7";
 			this.label7.Size = new System.Drawing.Size(195,19);
 			this.label7.TabIndex = 15;
@@ -243,7 +249,7 @@ namespace OpenDental{
 			// comboStatement
 			// 
 			this.comboStatement.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboStatement.Location = new System.Drawing.Point(202,216);
+			this.comboStatement.Location = new System.Drawing.Point(202,244);
 			this.comboStatement.MaxDropDownItems = 30;
 			this.comboStatement.Name = "comboStatement";
 			this.comboStatement.Size = new System.Drawing.Size(253,21);
@@ -345,7 +351,7 @@ namespace OpenDental{
 			// checkTPPerio
 			// 
 			this.checkTPPerio.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkTPPerio.Location = new System.Drawing.Point(467,245);
+			this.checkTPPerio.Location = new System.Drawing.Point(467,273);
 			this.checkTPPerio.Name = "checkTPPerio";
 			this.checkTPPerio.Size = new System.Drawing.Size(24,15);
 			this.checkTPPerio.TabIndex = 27;
@@ -388,15 +394,16 @@ namespace OpenDental{
 			// checkStatement
 			// 
 			this.checkStatement.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkStatement.Location = new System.Drawing.Point(467,219);
+			this.checkStatement.Location = new System.Drawing.Point(467,247);
 			this.checkStatement.Name = "checkStatement";
 			this.checkStatement.Size = new System.Drawing.Size(24,15);
 			this.checkStatement.TabIndex = 32;
 			// 
 			// checkSimple
 			// 
+			this.checkSimple.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.checkSimple.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkSimple.Location = new System.Drawing.Point(49,309);
+			this.checkSimple.Location = new System.Drawing.Point(49,344);
 			this.checkSimple.Name = "checkSimple";
 			this.checkSimple.Size = new System.Drawing.Size(440,24);
 			this.checkSimple.TabIndex = 33;
@@ -405,6 +412,9 @@ namespace OpenDental{
 			// 
 			// panelSimple
 			// 
+			this.panelSimple.Controls.Add(this.label13);
+			this.panelSimple.Controls.Add(this.checkRxControlled);
+			this.panelSimple.Controls.Add(this.comboRxControlled);
 			this.panelSimple.Controls.Add(this.comboTPPerio);
 			this.panelSimple.Controls.Add(this.label3);
 			this.panelSimple.Controls.Add(this.comboLabelSingle);
@@ -435,15 +445,41 @@ namespace OpenDental{
 			this.panelSimple.Controls.Add(this.label2);
 			this.panelSimple.Location = new System.Drawing.Point(6,5);
 			this.panelSimple.Name = "panelSimple";
-			this.panelSimple.Size = new System.Drawing.Size(620,269);
+			this.panelSimple.Size = new System.Drawing.Size(620,298);
 			this.panelSimple.TabIndex = 34;
+			// 
+			// label13
+			// 
+			this.label13.Location = new System.Drawing.Point(4,219);
+			this.label13.Name = "label13";
+			this.label13.Size = new System.Drawing.Size(195,19);
+			this.label13.TabIndex = 34;
+			this.label13.Text = "Controlled Rx\'s";
+			this.label13.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// checkRxControlled
+			// 
+			this.checkRxControlled.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.checkRxControlled.Location = new System.Drawing.Point(467,220);
+			this.checkRxControlled.Name = "checkRxControlled";
+			this.checkRxControlled.Size = new System.Drawing.Size(24,15);
+			this.checkRxControlled.TabIndex = 35;
+			// 
+			// comboRxControlled
+			// 
+			this.comboRxControlled.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboRxControlled.Location = new System.Drawing.Point(202,217);
+			this.comboRxControlled.MaxDropDownItems = 30;
+			this.comboRxControlled.Name = "comboRxControlled";
+			this.comboRxControlled.Size = new System.Drawing.Size(253,21);
+			this.comboRxControlled.TabIndex = 33;
 			// 
 			// FormPrinterSetup
 			// 
 			this.AcceptButton = this.butOK;
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.CancelButton = this.butCancel;
-			this.ClientSize = new System.Drawing.Size(654,346);
+			this.ClientSize = new System.Drawing.Size(654,381);
 			this.Controls.Add(this.butCancel);
 			this.Controls.Add(this.butOK);
 			this.Controls.Add(this.label1);
@@ -554,6 +590,10 @@ namespace OpenDental{
 				case "comboRx":
 				case "checkRx":
 					sit=PrintSituation.Rx;
+					break;
+				case "comboRxControlled":
+				case "checkRxControlled":
+					sit=PrintSituation.RxControlled;
 					break;
 				case "comboStatement":
 				case "checkStatement":

@@ -858,7 +858,9 @@ namespace OpenDentBusiness{
 		///<summary></summary>
 		Postcard,
 		///<summary></summary>
-		Appointments
+		Appointments,
+		///<summary></summary>
+		RxControlled
 	}
 
 	///<summary></summary>

@@ -64,13 +64,22 @@ namespace OpenDental {
 			#endif
 		}
 
+		public static void PrintRx(Sheet sheet,bool isControlled){
+			Print(sheet,1,isControlled);
+		}
+
 		///<Summary>Surround with try/catch.</Summary>
 		public static void Print(Sheet sheet){
-			Print(sheet,1);
+			Print(sheet,1,false);
+		}
+
+		///<Summary>Surround with try/catch.</Summary>
+		public static void Print(Sheet sheet,int copies){
+			Print(sheet,copies,false);
 		}
 
 		///<Summary></Summary>
-		public static void Print(Sheet sheet,int copies){
+		public static void Print(Sheet sheet,int copies,bool isRxControlled){
 			//parameter null check moved to SheetFiller.
 			//could validate field names here later.
 			SheetList=new List<Sheet>();
@@ -94,6 +103,14 @@ namespace OpenDental {
 					break;
 				case SheetTypeEnum.ReferralSlip:
 					sit=PrintSituation.Default;
+					break;
+				case SheetTypeEnum.Rx:
+					if(isRxControlled){
+						sit=PrintSituation.RxControlled;
+					}
+					else{
+						sit=PrintSituation.Rx;
+					}
 					break;
 			}
 			//later: add a check here for print preview.

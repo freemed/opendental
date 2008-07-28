@@ -21,6 +21,7 @@ namespace OpenDental {
 		private PictureBox pictDraw;
 		private Image imgDraw;
 		private bool drawingsAltered;
+		public bool RxIsControlled;
 
 		public FormSheetFillEdit(Sheet sheet){
 			InitializeComponent();
@@ -344,7 +345,7 @@ namespace OpenDental {
 				return;
 			}
 			if(FormS.PaperCopies>0){
-				SheetPrinting.Print(SheetCur,FormS.PaperCopies);
+				SheetPrinting.Print(SheetCur,FormS.PaperCopies,RxIsControlled);
 			}
 			EmailMessage message;
 			Random rnd=new Random();

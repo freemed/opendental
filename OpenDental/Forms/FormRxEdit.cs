@@ -505,7 +505,7 @@ namespace OpenDental{
 			SheetParameter.SetParameter(sheet,"RxNum",RxPatCur.RxNum);
 			SheetFiller.FillFields(sheet);
 			SheetUtil.CalculateHeights(sheet,this.CreateGraphics());
-			SheetPrinting.Print(sheet);
+			SheetPrinting.PrintRx(sheet,RxPatCur.IsControlled);
 			DialogResult=DialogResult.OK;
 		}
 
