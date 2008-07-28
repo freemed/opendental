@@ -90,9 +90,13 @@ namespace OpenDental {
 			PrintDocument pd=new PrintDocument();
 			pd.OriginAtMargins=true;
 			pd.PrintPage+=new PrintPageEventHandler(pd_PrintPage);
-			if(sheet.Width>0 && sheet.Height>0){
-				pd.DefaultPageSettings.PaperSize=new PaperSize("Default",sheet.Width,sheet.Height);
+			if(pd.DefaultPageSettings.PaperSize.Width==0){
+				//prevents bug in some printers that do not specify paper size
+				pd.DefaultPageSettings.PaperSize=new PaperSize("paper",850,1100);
 			}
+			//if(sheet.Width>0 && sheet.Height>0){
+			//	pd.DefaultPageSettings.PaperSize=new PaperSize("Default",sheet.Width,sheet.Height);
+			//}
 			PrintSituation sit=PrintSituation.Default;
 			pd.DefaultPageSettings.Landscape=sheet.IsLandscape;
 			switch(sheet.SheetType){
