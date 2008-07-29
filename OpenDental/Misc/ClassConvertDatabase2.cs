@@ -40,6 +40,52 @@ namespace OpenDental{
 					General.NonQ(command);
 					command="ALTER TABLE rxpat ADD IsControlled tinyint NOT NULL";
 					General.NonQ(command);
+					//UAppoint Bridge---------------------------------------------------------------------------
+					command="INSERT INTO program (ProgName,ProgDesc,Enabled,Path,CommandLine,Note"
+						+") VALUES("
+						+"'UAppoint', "
+						+"'UAppoint from www.uappoint.com', "
+						+"'0', "
+						+"'"+POut.PString(@"https://s0.uappoint.com/Sync")+"', "
+						+"'', "
+						+"'')";
+					int programNum=General.NonQ(command,true);
+					command="INSERT INTO programproperty (ProgramNum,PropertyDesc,PropertyValue"
+						+") VALUES("
+						+"'"+POut.PInt(programNum)+"', "
+						+"'Username', "
+						+"'')";
+					General.NonQ(command);
+					command="INSERT INTO programproperty (ProgramNum,PropertyDesc,PropertyValue"
+						+") VALUES("
+						+"'"+POut.PInt(programNum)+"', "
+						+"'Password', "
+						+"'')";
+					General.NonQ(command);
+					command="INSERT INTO programproperty (ProgramNum,PropertyDesc,PropertyValue"
+						+") VALUES("
+						+"'"+POut.PInt(programNum)+"', "
+						+"'WorkstationName', "
+						+"'')";
+					General.NonQ(command);
+					command="INSERT INTO programproperty (ProgramNum,PropertyDesc,PropertyValue"
+						+") VALUES("
+						+"'"+POut.PInt(programNum)+"', "
+						+"'IntervalSeconds', "
+						+"'15')";
+					General.NonQ(command);
+					command="INSERT INTO programproperty (ProgramNum,PropertyDesc,PropertyValue"
+						+") VALUES("
+						+"'"+POut.PInt(programNum)+"', "
+						+"'DateTimeLastUploaded', "
+						+"'')";
+					General.NonQ(command);
+					command="INSERT INTO programproperty (ProgramNum,PropertyDesc,PropertyValue"
+						+") VALUES("
+						+"'"+POut.PInt(programNum)+"', "
+						+"'SynchStatus', "
+						+"'')";
+					General.NonQ(command);
 
 
 				} 

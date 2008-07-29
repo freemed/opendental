@@ -18,6 +18,11 @@ namespace OpenDentBusiness{
 		public string CommandLine;
 		///<summary>Notes about this program link. Peculiarities, etc.</summary>
 		public string Note;
+
+		public Program Copy(){
+			return (Program)this.MemberwiseClone();
+		}
+
 	}
 
 

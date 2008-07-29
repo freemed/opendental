@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Data;
 using OpenDentBusiness;
 
@@ -56,6 +57,17 @@ namespace OpenDental{
 			General.NonQ(command);
 		}
 
+		///<summary>Returns a List of programproperties attached to the specified programNum</summary>
+		public static List<ProgramProperty> GetListForProgram(int programNum){
+			List<ProgramProperty> ForProgram=new List<ProgramProperty>();
+			for(int i=0;i<List.Length;i++){
+				if(List[i].ProgramNum==programNum){
+					ForProgram.Add(List[i]);
+				}
+			}
+			return ForProgram;
+		}
+
 		///<summary>Returns an ArrayList of programproperties attached to the specified programNum</summary>
 		public static ArrayList GetForProgram(int programNum){
 			ArrayList ForProgram=new ArrayList();
@@ -65,6 +77,21 @@ namespace OpenDental{
 				}
 			}
 			return ForProgram;
+		}
+
+		public static void SetProperty(int programNum,string desc,string propval){
+			for(int i=0;i<List.Length;i++){
+				if(List[i].ProgramNum!=programNum){
+					continue;
+				}
+				if(List[i].PropertyDesc!=desc){
+					continue;
+				}
+				List[i].PropertyValue=propval;
+				Update(List[i]);
+				return;
+			}
+			throw new ApplicationException("Property not found: "+desc);
 		}
 
 		///<summary>After GetForProgram has been run, this gets one of those properties.</summary>

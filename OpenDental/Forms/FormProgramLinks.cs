@@ -46,11 +46,13 @@ namespace OpenDental{
 			// 
 			// listProgram
 			// 
+			this.listProgram.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
 			this.listProgram.Items.AddRange(new object[] {
             ""});
 			this.listProgram.Location = new System.Drawing.Point(17,41);
 			this.listProgram.Name = "listProgram";
-			this.listProgram.Size = new System.Drawing.Size(282,459);
+			this.listProgram.Size = new System.Drawing.Size(282,576);
 			this.listProgram.TabIndex = 34;
 			this.listProgram.DoubleClick += new System.EventHandler(this.listProgram_DoubleClick);
 			// 
@@ -63,7 +65,7 @@ namespace OpenDental{
 			this.butClose.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butClose.CornerRadius = 4F;
 			this.butClose.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.butClose.Location = new System.Drawing.Point(344,518);
+			this.butClose.Location = new System.Drawing.Point(349,633);
 			this.butClose.Name = "butClose";
 			this.butClose.Size = new System.Drawing.Size(75,26);
 			this.butClose.TabIndex = 38;
@@ -80,7 +82,7 @@ namespace OpenDental{
 			this.butAdd.CornerRadius = 4F;
 			this.butAdd.Image = global::OpenDental.Properties.Resources.Add;
 			this.butAdd.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butAdd.Location = new System.Drawing.Point(17,516);
+			this.butAdd.Location = new System.Drawing.Point(17,631);
 			this.butAdd.Name = "butAdd";
 			this.butAdd.Size = new System.Drawing.Size(75,26);
 			this.butAdd.TabIndex = 41;
@@ -99,7 +101,8 @@ namespace OpenDental{
 			// 
 			// label1
 			// 
-			this.label1.Location = new System.Drawing.Point(97,512);
+			this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.label1.Location = new System.Drawing.Point(97,627);
 			this.label1.Name = "label1";
 			this.label1.Size = new System.Drawing.Size(240,32);
 			this.label1.TabIndex = 44;
@@ -109,7 +112,7 @@ namespace OpenDental{
 			// FormProgramLinks
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
-			this.ClientSize = new System.Drawing.Size(447,554);
+			this.ClientSize = new System.Drawing.Size(452,669);
 			this.Controls.Add(this.label1);
 			this.Controls.Add(this.label2);
 			this.Controls.Add(this.butAdd);
@@ -122,8 +125,8 @@ namespace OpenDental{
 			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Program Links";
-			this.Closing += new System.ComponentModel.CancelEventHandler(this.FormProgramLinks_Closing);
 			this.Load += new System.EventHandler(this.FormProgramLinks_Load);
+			this.Closing += new System.ComponentModel.CancelEventHandler(this.FormProgramLinks_Closing);
 			this.ResumeLayout(false);
 
 		}
@@ -155,10 +158,22 @@ namespace OpenDental{
 		}
 
 		private void listProgram_DoubleClick(object sender, System.EventArgs e) {
-			if(listProgram.SelectedIndex==-1)
+			if(listProgram.SelectedIndex==-1){
 				return;
+			}
+			Program program=Programs.List[listProgram.SelectedIndex].Copy();
+			if(program.ProgName=="UAppoint"){
+				FormUAppoint FormU=new FormUAppoint();
+				FormU.ProgramCur=program;
+				FormU.ShowDialog();
+				if(FormU.DialogResult==DialogResult.OK){
+					changed=true;
+					FillList();
+				}
+				return;
+			}
 			FormProgramLinkEdit FormPE=new FormProgramLinkEdit();
-			FormPE.ProgramCur=Programs.List[listProgram.SelectedIndex];
+			FormPE.ProgramCur=program;
 			FormPE.ShowDialog();
 			changed=true;
 			FillList();
