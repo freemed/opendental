@@ -6,6 +6,8 @@ using System.ComponentModel;
 using System.IO;
 using System.Net;
 using System.Text;
+using System.Threading;
+using System.Xml;
 using System.Windows.Forms;
 using OpenDentBusiness;
 
@@ -40,7 +42,9 @@ namespace OpenDental{
 		private OpenDental.UI.Button butStart;
 		private Label label10;
 		private TextBox textNote;
+		private Label label11;
 		private List<ProgramProperty> PropertyList;
+		private static Thread thread;
 
 		///<summary></summary>
 		public FormUAppoint() {
@@ -98,6 +102,7 @@ namespace OpenDental{
 			this.butStart = new OpenDental.UI.Button();
 			this.label10 = new System.Windows.Forms.Label();
 			this.textNote = new System.Windows.Forms.TextBox();
+			this.label11 = new System.Windows.Forms.Label();
 			this.SuspendLayout();
 			// 
 			// butCancel
@@ -109,7 +114,7 @@ namespace OpenDental{
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
 			this.butCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.butCancel.Location = new System.Drawing.Point(590,379);
+			this.butCancel.Location = new System.Drawing.Point(590,452);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75,24);
 			this.butCancel.TabIndex = 0;
@@ -124,7 +129,7 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(590,345);
+			this.butOK.Location = new System.Drawing.Point(590,418);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75,24);
 			this.butOK.TabIndex = 1;
@@ -259,7 +264,6 @@ namespace OpenDental{
 			// 
 			this.textDateTimeLastUploaded.Location = new System.Drawing.Point(246,211);
 			this.textDateTimeLastUploaded.Name = "textDateTimeLastUploaded";
-			this.textDateTimeLastUploaded.ReadOnly = true;
 			this.textDateTimeLastUploaded.Size = new System.Drawing.Size(169,20);
 			this.textDateTimeLastUploaded.TabIndex = 59;
 			// 
@@ -274,7 +278,7 @@ namespace OpenDental{
 			// 
 			// textSynchStatus
 			// 
-			this.textSynchStatus.Location = new System.Drawing.Point(246,237);
+			this.textSynchStatus.Location = new System.Drawing.Point(246,253);
 			this.textSynchStatus.Multiline = true;
 			this.textSynchStatus.Name = "textSynchStatus";
 			this.textSynchStatus.ReadOnly = true;
@@ -283,7 +287,7 @@ namespace OpenDental{
 			// 
 			// label9
 			// 
-			this.label9.Location = new System.Drawing.Point(58,237);
+			this.label9.Location = new System.Drawing.Point(58,253);
 			this.label9.Name = "label9";
 			this.label9.Size = new System.Drawing.Size(187,18);
 			this.label9.TabIndex = 60;
@@ -297,16 +301,16 @@ namespace OpenDental{
 			this.butStart.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butStart.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butStart.CornerRadius = 4F;
-			this.butStart.Location = new System.Drawing.Point(180,259);
+			this.butStart.Location = new System.Drawing.Point(180,275);
 			this.butStart.Name = "butStart";
 			this.butStart.Size = new System.Drawing.Size(62,22);
 			this.butStart.TabIndex = 62;
-			this.butStart.Text = "Start";
+			this.butStart.Text = "Restart";
 			this.butStart.Click += new System.EventHandler(this.butStart_Click);
 			// 
 			// label10
 			// 
-			this.label10.Location = new System.Drawing.Point(83,290);
+			this.label10.Location = new System.Drawing.Point(83,306);
 			this.label10.Name = "label10";
 			this.label10.Size = new System.Drawing.Size(162,17);
 			this.label10.TabIndex = 64;
@@ -315,18 +319,27 @@ namespace OpenDental{
 			// 
 			// textNote
 			// 
-			this.textNote.Location = new System.Drawing.Point(246,287);
+			this.textNote.Location = new System.Drawing.Point(246,303);
 			this.textNote.MaxLength = 255;
 			this.textNote.Multiline = true;
 			this.textNote.Name = "textNote";
 			this.textNote.Size = new System.Drawing.Size(275,80);
 			this.textNote.TabIndex = 63;
 			// 
+			// label11
+			// 
+			this.label11.Location = new System.Drawing.Point(417,211);
+			this.label11.Name = "label11";
+			this.label11.Size = new System.Drawing.Size(246,38);
+			this.label11.TabIndex = 65;
+			this.label11.Text = "DateTime may be manually backdated to trigger resending of old synch data.";
+			// 
 			// FormUAppoint
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.CancelButton = this.butCancel;
-			this.ClientSize = new System.Drawing.Size(677,415);
+			this.ClientSize = new System.Drawing.Size(677,488);
+			this.Controls.Add(this.label11);
 			this.Controls.Add(this.label10);
 			this.Controls.Add(this.textNote);
 			this.Controls.Add(this.butStart);
@@ -386,6 +399,11 @@ namespace OpenDental{
 				textDateTimeLastUploaded.Text=datet.ToShortDateString()+"  "+datet.ToShortTimeString();
 			}
 			textSynchStatus.Text=GetProp("SynchStatus");
+			//Synch status options. It will ALWAYS be exactly one of the following:
+			//Initial synchronization running.
+			//Synchronizing as needed.
+			//Error.  Synchronization paused for 5 minutes.
+			//Not running.
 			textNote.Text=ProgramCur.Note;
 		}
 
@@ -402,33 +420,176 @@ namespace OpenDental{
 			if(!SaveToDb()){
 				return;
 			}
-			string serverName=ProgramCur.Path;
-			HttpWebRequest webReq=(HttpWebRequest)WebRequest.Create(serverName);
-			string postData="<PracticeClient user=\""+GetProp("Username")+"\" "
-				+" pass-md5=\""+GetProp("Password")+"\">"
-				+"<patient action=\"insert\" id=\"1101\" "
-        +"name-first=\"Markk\" name-last=\"Jeffcoat\" />"
-				/*+"<appointment action=\"insert\" id=\"221\" patient-id=\"1101\" "
-                     +"provider-id=\"DDS1\" operatory-id=\"OP01\""
-                     +"start=\"Jan 5, 2007 11:45:00 AM\" length=\"45\""
-                     +"procedure-code=\"D0110\""
-                     +"description=\"New Patient Exam\" />"*/
-				+" </PracticeClient>";
-			webReq.KeepAlive=false;
-			webReq.Method="POST";
-			webReq.ContentType="application/x-www-form-urlencoded";
-			webReq.ContentLength=postData.Length;
-			ASCIIEncoding encoding=new ASCIIEncoding();
-			byte[] bytes=encoding.GetBytes(postData);
-			Stream streamOut=webReq.GetRequestStream();
-			streamOut.Write(bytes,0,bytes.Length);
-			streamOut.Close();
-			WebResponse response=webReq.GetResponse();
-			//Process the response:
-			StreamReader readStream=new StreamReader(response.GetResponseStream(),Encoding.ASCII);
-			string str=readStream.ReadToEnd();
-			readStream.Close();
-			MessageBox.Show(str);
+			if(ProgramCur.Enabled 
+				&& ProgramProperties.GetPropVal(ProgramCur.ProgramNum,"SynchStatus")=="Initial synchronization running.")
+			{
+				MessageBox.Show("Initial synchronization is running.  Not allowed to restart.  You could uncheck the Enabled box and then click this button to stop the sychronization.");
+				return;
+			}
+			if(PIn.PDateT(ProgramProperties.GetPropVal(ProgramCur.ProgramNum,"DateTimeLastUploaded")).Year<1880){
+				if(!MsgBox.Show(this,true,"This is an initial synchronization.  It could take a while.  You can probably continue to work on this computer, but you will need to leave the program running on this workstation until the synch is done.  Begin initial synchronization?"))
+				{
+					return;
+				}
+			}
+			StartThreadIfEnabled();
+		}
+
+		///<summary>Spawns a thread that handled uploading data to UAppoint in real time.  If the thread is already running, then this restarts it.  If the uploading should no longer happen, then this aborts the thread and exits.</summary>
+		public static void StartThreadIfEnabled(){
+			if(thread!=null){
+				thread.Abort();
+			}
+			Program prog=Programs.GetCur("UAppoint");
+			if(!prog.Enabled){
+				return;
+			}
+			//get current time and use delta from now on?
+			thread=new Thread(ThreadStartTarget);
+			thread.Start(prog);
+		}
+
+		public static void AbortThread(){
+			if(thread!=null){
+				thread.Abort();
+			}
+		}
+
+		private static void ThreadStartTarget(object data){
+			Program prog=(Program)data;
+			int intervalSec=PIn.PInt(ProgramProperties.GetPropVal(prog.ProgramNum,"IntervalSeconds"));
+			string username=ProgramProperties.GetPropVal(prog.ProgramNum,"Username");
+			string password=ProgramProperties.GetPropVal(prog.ProgramNum,"Password");
+			string serverName=prog.Path;
+			HttpWebRequest webReq;
+			string postData;//data just for the current post.
+			List<Patient> patientsToSynch=new List<Patient>();
+			int totalObjectsToSynch=0;
+			XmlWriterSettings settings=new XmlWriterSettings();
+			settings.ConformanceLevel=ConformanceLevel.Fragment;
+			settings.Indent=true;
+			settings.IndentChars="   ";
+			StringBuilder strBuild;
+			XmlWriter writer;
+			Version version=new Version(Application.ProductVersion);
+			int objectsInThisPost;
+			//Patient pat;
+			do{
+				objectsInThisPost=0;
+				totalObjectsToSynch=patientsToSynch.Count;//+...
+				if(totalObjectsToSynch==0){//if there are no objects ready to upload
+					//get various objects from the database.
+					patientsToSynch=Patients.GetUAppoint(DateTime.Now);//datetime will be handled better soon
+				}
+				totalObjectsToSynch=patientsToSynch.Count;//+...
+				if(totalObjectsToSynch==0){//if there are still no objects
+					Thread.Sleep(TimeSpan.FromSeconds(intervalSec));//sleep for a while
+					continue;
+				}
+				strBuild=new StringBuilder();
+				writer=XmlWriter.Create(strBuild,settings);
+				writer.WriteStartElement("PracticeClient");
+				writer.WriteAttributeString("user",username);
+				writer.WriteAttributeString("client-version","OD-"+version.Major.ToString()+"."+version.Minor.ToString()+"."+version.Build.ToString());
+				writer.WriteAttributeString("pass-md5",password);
+				foreach(Patient pat in patientsToSynch){
+					//also need to count how many patients were sent in this loop.  Replace patientsToSynch with shorter version.
+					if(objectsInThisPost>50){
+						break;
+					}
+					//patient-------------------------------------------------------------------------------------------------
+					writer.WriteStartElement("patient");
+					writer.WriteAttributeString("action","insert");
+					writer.WriteAttributeString("id",pat.PatNum.ToString());
+					writer.WriteAttributeString("name-title","");//(Dr., Mrs., etc.) optional 
+					writer.WriteAttributeString("name-first",pat.FName);
+					writer.WriteAttributeString("name-middle",pat.MiddleI);
+					writer.WriteAttributeString("name-last",pat.LName);
+					//writer.WriteAttributeString("name-suffix","");//(Jr., TDS, etc)  optional 
+					writer.WriteAttributeString("email",pat.Email);
+					if(pat.Birthdate.Year>1880){//notice that there's no way to clear a birthdate
+						writer.WriteAttributeString("birthdate",pat.Birthdate.ToString("yyyy-MM-dd"));
+					}
+					writer.WriteAttributeString("provider-id",pat.PriProv.ToString());
+					writer.WriteAttributeString("address-id",pat.PatNum.ToString());
+					//writer.WriteAttributeString("status",);
+					writer.WriteEndElement();
+					//Address--------------------------------------------------------------------------------------------------
+					writer.WriteStartElement("address");
+					writer.WriteAttributeString("action","insert");
+					writer.WriteAttributeString("id",pat.PatNum.ToString());
+					writer.WriteAttributeString("street",pat.Address);
+					writer.WriteAttributeString("street2",pat.Address2);
+					writer.WriteAttributeString("city",pat.City);
+					writer.WriteAttributeString("state",pat.State);
+					writer.WriteAttributeString("zip",pat.Zip);
+					writer.WriteEndElement();
+					//Phone--------------------------------------------------------------------------------------------------
+					//primary key is the id + type
+					//home
+					writer.WriteStartElement("phone");
+					writer.WriteAttributeString("action","insert");
+					writer.WriteAttributeString("patient-id",pat.PatNum.ToString());
+					writer.WriteAttributeString("type","home");
+					writer.WriteAttributeString("number",pat.HmPhone);
+					writer.WriteEndElement();
+					//cell
+					writer.WriteStartElement("phone");
+					writer.WriteAttributeString("action","insert");
+					writer.WriteAttributeString("patient-id",pat.PatNum.ToString());
+					writer.WriteAttributeString("type","cell");
+					writer.WriteAttributeString("number",pat.WirelessPhone);
+					writer.WriteEndElement();
+					//work
+					writer.WriteStartElement("phone");
+					writer.WriteAttributeString("action","insert");
+					writer.WriteAttributeString("patient-id",pat.PatNum.ToString());
+					writer.WriteAttributeString("type","work");
+					writer.WriteAttributeString("number",pat.WkPhone);
+					writer.WriteEndElement();
+					objectsInThisPost++;
+				}
+				writer.WriteEndElement();//PracticeClient
+				writer.Close();
+				//File.AppendAllText(@"E:\My Documents\Bridge Info\UAppoint\Output.txt",strBuild.ToString());
+				//Thread.Sleep(TimeSpan.FromMinutes(10));
+				postData=strBuild.ToString();
+					/*"<PracticeClient user=\""+GetProp("Username")+"\" "
+					+" pass-md5=\""+GetProp("Password")+"\">"
+					+"<patient action=\"insert\" id=\"1101\" "
+					+"name-first=\"Markk\" name-last=\"Jeffcoat\" />"
+					/*+"<appointment action=\"insert\" id=\"221\" patient-id=\"1101\" "
+											 +"provider-id=\"DDS1\" operatory-id=\"OP01\""
+											 +"start=\"Jan 5, 2007 11:45:00 AM\" length=\"45\""
+											 +"procedure-code=\"D0110\""
+											 +"description=\"New Patient Exam\" />"
+					+" </PracticeClient>";*/
+				webReq=(HttpWebRequest)WebRequest.Create(serverName);
+				webReq.KeepAlive=false;
+				webReq.Method="POST";
+				webReq.ContentType="application/x-www-form-urlencoded";
+				webReq.ContentLength=postData.Length;
+				ASCIIEncoding encoding=new ASCIIEncoding();
+				byte[] bytes=encoding.GetBytes(postData);
+				Stream streamOut=webReq.GetRequestStream();
+				streamOut.Write(bytes,0,bytes.Length);
+				streamOut.Close();
+				WebResponse response=webReq.GetResponse();
+				//Process the response:
+				StreamReader readStream=new StreamReader(response.GetResponseStream(),Encoding.ASCII);
+				string str=readStream.ReadToEnd();
+				readStream.Close();
+				if(str=="<server error=\"false\" />"){
+					ProgramProperties.SetProperty(prog.ProgramNum,"DateTimeLastUploaded",POut.PDateT(MiscData.GetNowDateTime()));
+				}
+				else{
+					ProgramProperties.SetProperty(prog.ProgramNum,"SynchStatus","ServerError");
+				}
+				//there are still objects to upload, so we won't sleep for nearly as long.
+				//Might decide not to sleep at all, since this thread is internally synchronous.
+				Thread.Sleep(TimeSpan.FromMilliseconds(100));
+			}
+			while(true);
 		}
 
 		private bool SaveToDb(){
@@ -470,7 +631,7 @@ namespace OpenDental{
 				MessageBox.Show("Interval in seconds must be greater than zero.");
 				return false;
 			}
-			/*DateTime datetime=DateTime.MinValue;
+			DateTime datetime=DateTime.MinValue;
 			if(textDateTimeLastUploaded.Text!=""){
 				try{
 					datetime=DateTime.Parse(textDateTimeLastUploaded.Text);
@@ -479,7 +640,7 @@ namespace OpenDental{
 					MessageBox.Show("Please fix the DateTime last uploaded.");
 					return false;
 				}
-			}*/
+			}
 			ProgramCur.ProgDesc=textProgDesc.Text;
 			ProgramCur.Enabled=checkEnabled.Checked;
 			ProgramCur.Path=textPath.Text;
@@ -489,7 +650,7 @@ namespace OpenDental{
 			ProgramProperties.SetProperty(ProgramCur.ProgramNum,"Password",textPassword.Text);
 			ProgramProperties.SetProperty(ProgramCur.ProgramNum,"WorkstationName",textWorkstationName.Text.ToUpper());
 			ProgramProperties.SetProperty(ProgramCur.ProgramNum,"IntervalSeconds",intervalSec.ToString());
-			//ProgramProperties.SetProperty(ProgramCur.ProgramNum,"DateTimeLastUploaded",POut.PDateT(datetime));
+			ProgramProperties.SetProperty(ProgramCur.ProgramNum,"DateTimeLastUploaded",POut.PDateT(datetime));
 			DataValid.SetInvalid(InvalidType.Programs);
 			return true;
 		}
@@ -498,6 +659,7 @@ namespace OpenDental{
 			if(!SaveToDb()){
 				return;
 			}
+			StartThreadIfEnabled();
 			DialogResult=DialogResult.OK;
 		}
 

@@ -104,6 +104,19 @@ namespace OpenDental{
 			return null;
 		}
 
+		public static string GetPropVal(int programNum,string desc){
+			for(int i=0;i<List.Length;i++){
+				if(List[i].ProgramNum!=programNum){
+					continue;
+				}
+				if(List[i].PropertyDesc!=desc){
+					continue;
+				}
+				return List[i].PropertyValue;
+			}
+			throw new ApplicationException("Property not found: "+desc);
+		}
+
 
 
 

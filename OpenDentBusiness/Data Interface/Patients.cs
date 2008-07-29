@@ -63,6 +63,12 @@ namespace OpenDentBusiness{
 			return patarray[0];
 		}
 
+		public static List<Patient> GetUAppoint(DateTime changedSince){
+			string command="SELECT * FROM patient LIMIT 10";
+			List<Patient> retVal=new List<Patient>(DataObjectFactory<Patient>.CreateObjects(command));
+			return retVal;
+		}
+
 		public static Patient[] SubmitAndFill(string command){
 			Collection<Patient> patients = DataObjectFactory<Patient>.CreateObjects(command);
 			foreach (Patient patient in patients) {

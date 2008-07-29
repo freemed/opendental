@@ -1358,7 +1358,7 @@ namespace OpenDental{
 				MsgBox.Show(this,"You do not have permission to use any modules.");
 			}
 			Bridges.Trojan.StartupCheck();
-			//OpenDentSilver.
+			FormUAppoint.StartThreadIfEnabled();
 		}
 
 		///<summary>Returns false if it can't complete a conversion, find datapath, or validate registration key.</summary>
@@ -3668,12 +3668,7 @@ namespace OpenDental{
 		#endregion
 
 		private void FormOpenDental_Closing(object sender,System.ComponentModel.CancelEventArgs e) {
-			//NotifyIcon1.Visible=false;
-			//Thread2.Abort();
-			//if(this.TcpListener2!=null){
-			//	this.TcpListener2.Stop();  
-			//}
-			//Application.Exit();
+			FormUAppoint.AbortThread();
 		}
 
 		private void OnPatientCardInserted(object sender, PatientCardInsertedEventArgs e) {
