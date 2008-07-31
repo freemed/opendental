@@ -183,7 +183,9 @@ namespace OpenDental{
 						field.FieldValue=pat.GetNameLF();
 						break;
 					case "weekdayDateTime":
-						field.FieldValue=appt.AptDateTime.ToString("ddd  dd/MM/yyyy  h:mm tt");
+						field.FieldValue=appt.AptDateTime.ToString("ddd")+"   "
+							+appt.AptDateTime.ToShortDateString()+"  "
+							+appt.AptDateTime.ToShortTimeString();//  h:mm tt");
 						break;
 					case "length":
 						int minutesTotal=appt.Pattern.Length*5;
