@@ -1358,7 +1358,7 @@ namespace OpenDental{
 				MsgBox.Show(this,"You do not have permission to use any modules.");
 			}
 			Bridges.Trojan.StartupCheck();
-			FormUAppoint.StartThreadIfEnabled();
+			//FormUAppoint.StartThreadIfEnabled();
 		}
 
 		///<summary>Returns false if it can't complete a conversion, find datapath, or validate registration key.</summary>

@@ -80,18 +80,10 @@ namespace OpenDental{
 		}
 
 		public static void SetProperty(int programNum,string desc,string propval){
-			for(int i=0;i<List.Length;i++){
-				if(List[i].ProgramNum!=programNum){
-					continue;
-				}
-				if(List[i].PropertyDesc!=desc){
-					continue;
-				}
-				List[i].PropertyValue=propval;
-				Update(List[i]);
-				return;
-			}
-			throw new ApplicationException("Property not found: "+desc);
+			string command="UPDATE programproperty SET PropertyValue='"+POut.PString(propval)+"' "
+				+"WHERE ProgramNum="+POut.PInt(programNum)+" "
+				+"AND PropertyDesc='"+POut.PString(desc)+"'";
+			General.NonQ(command);
 		}
 
 		///<summary>After GetForProgram has been run, this gets one of those properties.</summary>
@@ -115,6 +107,17 @@ namespace OpenDental{
 				return List[i].PropertyValue;
 			}
 			throw new ApplicationException("Property not found: "+desc);
+		}
+
+		///<summary>Used in FormUAppoint to get frequent and current data.</summary>
+		public static string GetValFromDb(int programNum,string desc){
+			string command="SELECT PropertyValue FROM programproperty WHERE ProgramNum="+POut.PInt(programNum)
+				+" AND PropertyDesc='"+POut.PString(desc)+"'";
+			DataTable table=General.GetTable(command);
+			if(table.Rows.Count==0){
+				return "";
+			}
+			return table.Rows[0][0].ToString();
 		}
 
 

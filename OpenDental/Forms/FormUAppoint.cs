@@ -17,7 +17,7 @@ namespace OpenDental{
 		private OpenDental.UI.Button butCancel;
 		private OpenDental.UI.Button butOK;
 		private System.Windows.Forms.CheckBox checkEnabled;
-		private System.ComponentModel.Container components = null;
+		private IContainer components;
 		private System.Windows.Forms.Label label1;
 		private System.Windows.Forms.TextBox textProgName;
 		private System.Windows.Forms.Label label2;
@@ -35,7 +35,7 @@ namespace OpenDental{
 		private Label label6;
 		private TextBox textIntervalSeconds;
 		private Label label7;
-		private TextBox textDateTimeLastUploaded;
+		private TextBox textDateTimeLastUploaded1;
 		private Label label8;
 		private TextBox textSynchStatus;
 		private Label label9;
@@ -44,6 +44,9 @@ namespace OpenDental{
 		private TextBox textNote;
 		private Label label11;
 		private List<ProgramProperty> PropertyList;
+		private System.Windows.Forms.Timer timer1;
+		private TextBox textDateTimeLastUploaded2;
+		private Label label12;
 		private static Thread thread;
 
 		///<summary></summary>
@@ -77,6 +80,7 @@ namespace OpenDental{
 		/// </summary>
 		private void InitializeComponent()
 		{
+			this.components = new System.ComponentModel.Container();
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormUAppoint));
 			this.butCancel = new OpenDental.UI.Button();
 			this.butOK = new OpenDental.UI.Button();
@@ -95,7 +99,7 @@ namespace OpenDental{
 			this.label6 = new System.Windows.Forms.Label();
 			this.textIntervalSeconds = new System.Windows.Forms.TextBox();
 			this.label7 = new System.Windows.Forms.Label();
-			this.textDateTimeLastUploaded = new System.Windows.Forms.TextBox();
+			this.textDateTimeLastUploaded1 = new System.Windows.Forms.TextBox();
 			this.label8 = new System.Windows.Forms.Label();
 			this.textSynchStatus = new System.Windows.Forms.TextBox();
 			this.label9 = new System.Windows.Forms.Label();
@@ -103,6 +107,9 @@ namespace OpenDental{
 			this.label10 = new System.Windows.Forms.Label();
 			this.textNote = new System.Windows.Forms.TextBox();
 			this.label11 = new System.Windows.Forms.Label();
+			this.timer1 = new System.Windows.Forms.Timer(this.components);
+			this.textDateTimeLastUploaded2 = new System.Windows.Forms.TextBox();
+			this.label12 = new System.Windows.Forms.Label();
 			this.SuspendLayout();
 			// 
 			// butCancel
@@ -114,7 +121,7 @@ namespace OpenDental{
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
 			this.butCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.butCancel.Location = new System.Drawing.Point(590,452);
+			this.butCancel.Location = new System.Drawing.Point(577,419);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75,24);
 			this.butCancel.TabIndex = 0;
@@ -129,7 +136,7 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(590,418);
+			this.butOK.Location = new System.Drawing.Point(577,385);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75,24);
 			this.butOK.TabIndex = 1;
@@ -260,12 +267,13 @@ namespace OpenDental{
 			this.label7.Text = "Synch interval in seconds";
 			this.label7.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
-			// textDateTimeLastUploaded
+			// textDateTimeLastUploaded1
 			// 
-			this.textDateTimeLastUploaded.Location = new System.Drawing.Point(246,211);
-			this.textDateTimeLastUploaded.Name = "textDateTimeLastUploaded";
-			this.textDateTimeLastUploaded.Size = new System.Drawing.Size(169,20);
-			this.textDateTimeLastUploaded.TabIndex = 59;
+			this.textDateTimeLastUploaded1.Location = new System.Drawing.Point(246,211);
+			this.textDateTimeLastUploaded1.Name = "textDateTimeLastUploaded1";
+			this.textDateTimeLastUploaded1.ReadOnly = true;
+			this.textDateTimeLastUploaded1.Size = new System.Drawing.Size(169,20);
+			this.textDateTimeLastUploaded1.TabIndex = 59;
 			// 
 			// label8
 			// 
@@ -278,7 +286,7 @@ namespace OpenDental{
 			// 
 			// textSynchStatus
 			// 
-			this.textSynchStatus.Location = new System.Drawing.Point(246,253);
+			this.textSynchStatus.Location = new System.Drawing.Point(246,270);
 			this.textSynchStatus.Multiline = true;
 			this.textSynchStatus.Name = "textSynchStatus";
 			this.textSynchStatus.ReadOnly = true;
@@ -287,7 +295,7 @@ namespace OpenDental{
 			// 
 			// label9
 			// 
-			this.label9.Location = new System.Drawing.Point(58,253);
+			this.label9.Location = new System.Drawing.Point(58,270);
 			this.label9.Name = "label9";
 			this.label9.Size = new System.Drawing.Size(187,18);
 			this.label9.TabIndex = 60;
@@ -301,7 +309,7 @@ namespace OpenDental{
 			this.butStart.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butStart.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butStart.CornerRadius = 4F;
-			this.butStart.Location = new System.Drawing.Point(180,275);
+			this.butStart.Location = new System.Drawing.Point(180,292);
 			this.butStart.Name = "butStart";
 			this.butStart.Size = new System.Drawing.Size(62,22);
 			this.butStart.TabIndex = 62;
@@ -310,7 +318,7 @@ namespace OpenDental{
 			// 
 			// label10
 			// 
-			this.label10.Location = new System.Drawing.Point(83,306);
+			this.label10.Location = new System.Drawing.Point(83,323);
 			this.label10.Name = "label10";
 			this.label10.Size = new System.Drawing.Size(162,17);
 			this.label10.TabIndex = 64;
@@ -319,7 +327,7 @@ namespace OpenDental{
 			// 
 			// textNote
 			// 
-			this.textNote.Location = new System.Drawing.Point(246,303);
+			this.textNote.Location = new System.Drawing.Point(246,320);
 			this.textNote.MaxLength = 255;
 			this.textNote.Multiline = true;
 			this.textNote.Name = "textNote";
@@ -328,24 +336,48 @@ namespace OpenDental{
 			// 
 			// label11
 			// 
-			this.label11.Location = new System.Drawing.Point(417,211);
+			this.label11.Location = new System.Drawing.Point(417,236);
 			this.label11.Name = "label11";
-			this.label11.Size = new System.Drawing.Size(246,38);
+			this.label11.Size = new System.Drawing.Size(232,31);
 			this.label11.TabIndex = 65;
 			this.label11.Text = "DateTime may be manually backdated to trigger resending of old synch data.";
+			// 
+			// timer1
+			// 
+			this.timer1.Enabled = true;
+			this.timer1.Interval = 300;
+			this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
+			// 
+			// textDateTimeLastUploaded2
+			// 
+			this.textDateTimeLastUploaded2.Location = new System.Drawing.Point(246,237);
+			this.textDateTimeLastUploaded2.Name = "textDateTimeLastUploaded2";
+			this.textDateTimeLastUploaded2.Size = new System.Drawing.Size(169,20);
+			this.textDateTimeLastUploaded2.TabIndex = 67;
+			// 
+			// label12
+			// 
+			this.label12.Location = new System.Drawing.Point(13,238);
+			this.label12.Name = "label12";
+			this.label12.Size = new System.Drawing.Size(231,18);
+			this.label12.TabIndex = 66;
+			this.label12.Text = "Set DateTime last uploaded";
+			this.label12.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// FormUAppoint
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.CancelButton = this.butCancel;
-			this.ClientSize = new System.Drawing.Size(677,488);
+			this.ClientSize = new System.Drawing.Size(664,455);
+			this.Controls.Add(this.textDateTimeLastUploaded2);
+			this.Controls.Add(this.label12);
 			this.Controls.Add(this.label11);
 			this.Controls.Add(this.label10);
 			this.Controls.Add(this.textNote);
 			this.Controls.Add(this.butStart);
 			this.Controls.Add(this.textSynchStatus);
 			this.Controls.Add(this.label9);
-			this.Controls.Add(this.textDateTimeLastUploaded);
+			this.Controls.Add(this.textDateTimeLastUploaded1);
 			this.Controls.Add(this.label8);
 			this.Controls.Add(this.textIntervalSeconds);
 			this.Controls.Add(this.label7);
@@ -396,14 +428,9 @@ namespace OpenDental{
 			textIntervalSeconds.Text=GetProp("IntervalSeconds");
 			DateTime datet=PIn.PDateT(GetProp("DateTimeLastUploaded"));
 			if(datet.Year>1880){
-				textDateTimeLastUploaded.Text=datet.ToShortDateString()+"  "+datet.ToShortTimeString();
+				textDateTimeLastUploaded1.Text=datet.ToShortDateString()+"  "+datet.ToShortTimeString();
 			}
-			textSynchStatus.Text=GetProp("SynchStatus");
-			//Synch status options. It will ALWAYS be exactly one of the following:
-			//Initial synchronization running.
-			//Synchronizing as needed.
-			//Error.  Synchronization paused for 5 minutes.
-			//Not running.
+			//textSynchStatus.Text=GetProp("SynchStatus");//auto
 			textNote.Text=ProgramCur.Note;
 		}
 
@@ -420,13 +447,16 @@ namespace OpenDental{
 			if(!SaveToDb()){
 				return;
 			}
+			string propVal=ProgramProperties.GetPropVal(ProgramCur.ProgramNum,"SynchStatus");
 			if(ProgramCur.Enabled 
-				&& ProgramProperties.GetPropVal(ProgramCur.ProgramNum,"SynchStatus")=="Initial synchronization running.")
+				&& propVal=="Initial synchronization running.")
 			{
 				MessageBox.Show("Initial synchronization is running.  Not allowed to restart.  You could uncheck the Enabled box and then click this button to stop the sychronization.");
 				return;
 			}
-			if(PIn.PDateT(ProgramProperties.GetPropVal(ProgramCur.ProgramNum,"DateTimeLastUploaded")).Year<1880){
+			propVal=ProgramProperties.GetPropVal(ProgramCur.ProgramNum,"DateTimeLastUploaded");
+			DateTime datet=PIn.PDateT(propVal);
+			if(datet.Year<1880){
 				if(!MsgBox.Show(this,true,"This is an initial synchronization.  It could take a while.  You can probably continue to work on this computer, but you will need to leave the program running on this workstation until the synch is done.  Begin initial synchronization?"))
 				{
 					return;
@@ -473,7 +503,7 @@ namespace OpenDental{
 			XmlWriter writer;
 			Version version=new Version(Application.ProductVersion);
 			int objectsInThisPost;
-			//Patient pat;
+			Patient pat;
 			do{
 				objectsInThisPost=0;
 				totalObjectsToSynch=patientsToSynch.Count;//+...
@@ -483,20 +513,26 @@ namespace OpenDental{
 				}
 				totalObjectsToSynch=patientsToSynch.Count;//+...
 				if(totalObjectsToSynch==0){//if there are still no objects
+					ProgramProperties.SetProperty(prog.ProgramNum,"SynchStatus","Current.  Sleeping between synch.");
 					Thread.Sleep(TimeSpan.FromSeconds(intervalSec));//sleep for a while
 					continue;
 				}
+				ProgramProperties.SetProperty(prog.ProgramNum,"SynchStatus","Synching.  Objects remaining="+totalObjectsToSynch.ToString());
 				strBuild=new StringBuilder();
 				writer=XmlWriter.Create(strBuild,settings);
 				writer.WriteStartElement("PracticeClient");
 				writer.WriteAttributeString("user",username);
 				writer.WriteAttributeString("client-version","OD-"+version.Major.ToString()+"."+version.Minor.ToString()+"."+version.Build.ToString());
 				writer.WriteAttributeString("pass-md5",password);
-				foreach(Patient pat in patientsToSynch){
-					//also need to count how many patients were sent in this loop.  Replace patientsToSynch with shorter version.
-					if(objectsInThisPost>50){
+				//int patientsPosted=0;
+				for(int i=0;i<patientsToSynch.Count;i++){
+					if(objectsInThisPost>=50){//0, some, or all of them might be patients
+						if(i>0){//if at least some of them are patients
+							patientsToSynch=patientsToSynch.GetRange(i,patientsToSynch.Count-i);
+						}
 						break;
 					}
+					pat=patientsToSynch[i];
 					//patient-------------------------------------------------------------------------------------------------
 					writer.WriteStartElement("patient");
 					writer.WriteAttributeString("action","insert");
@@ -518,7 +554,7 @@ namespace OpenDental{
 					writer.WriteStartElement("address");
 					writer.WriteAttributeString("action","insert");
 					writer.WriteAttributeString("id",pat.PatNum.ToString());
-					writer.WriteAttributeString("street",pat.Address);
+					writer.WriteAttributeString("street1",pat.Address);
 					writer.WriteAttributeString("street2",pat.Address2);
 					writer.WriteAttributeString("city",pat.City);
 					writer.WriteAttributeString("state",pat.State);
@@ -548,22 +584,16 @@ namespace OpenDental{
 					writer.WriteAttributeString("number",pat.WkPhone);
 					writer.WriteEndElement();
 					objectsInThisPost++;
+					if(i==patientsToSynch.Count-1){//if this was the last patient
+						patientsToSynch.Clear();
+						break;
+					}
 				}
 				writer.WriteEndElement();//PracticeClient
 				writer.Close();
 				//File.AppendAllText(@"E:\My Documents\Bridge Info\UAppoint\Output.txt",strBuild.ToString());
 				//Thread.Sleep(TimeSpan.FromMinutes(10));
 				postData=strBuild.ToString();
-					/*"<PracticeClient user=\""+GetProp("Username")+"\" "
-					+" pass-md5=\""+GetProp("Password")+"\">"
-					+"<patient action=\"insert\" id=\"1101\" "
-					+"name-first=\"Markk\" name-last=\"Jeffcoat\" />"
-					/*+"<appointment action=\"insert\" id=\"221\" patient-id=\"1101\" "
-											 +"provider-id=\"DDS1\" operatory-id=\"OP01\""
-											 +"start=\"Jan 5, 2007 11:45:00 AM\" length=\"45\""
-											 +"procedure-code=\"D0110\""
-											 +"description=\"New Patient Exam\" />"
-					+" </PracticeClient>";*/
 				webReq=(HttpWebRequest)WebRequest.Create(serverName);
 				webReq.KeepAlive=false;
 				webReq.Method="POST";
@@ -579,15 +609,20 @@ namespace OpenDental{
 				StreamReader readStream=new StreamReader(response.GetResponseStream(),Encoding.ASCII);
 				string str=readStream.ReadToEnd();
 				readStream.Close();
-				if(str=="<server error=\"false\" />"){
-					ProgramProperties.SetProperty(prog.ProgramNum,"DateTimeLastUploaded",POut.PDateT(MiscData.GetNowDateTime()));
-				}
-				else{
+				//if(str=="<server error=\"false\" />\r\n"){
+				//	ProgramProperties.SetProperty(prog.ProgramNum,"SynchStatus","Successful Synch");
+				//}
+				//else{
+				if(str!="<server error=\"false\" />\r\n"){
 					ProgramProperties.SetProperty(prog.ProgramNum,"SynchStatus","ServerError");
 				}
-				//there are still objects to upload, so we won't sleep for nearly as long.
-				//Might decide not to sleep at all, since this thread is internally synchronous.
-				Thread.Sleep(TimeSpan.FromMilliseconds(100));
+				if(totalObjectsToSynch==objectsInThisPost){
+					ProgramProperties.SetProperty(prog.ProgramNum,"DateTimeLastUploaded",POut.PDateT(DateTime.Now,false));
+					//POut.PDateT(MiscData.GetNowDateTime()));
+				}
+				//there are still objects to upload.
+				//This sleep is only for debugging so we don't swamp the server.
+				//Thread.Sleep(TimeSpan.FromMilliseconds(500));
 			}
 			while(true);
 		}
@@ -632,9 +667,9 @@ namespace OpenDental{
 				return false;
 			}
 			DateTime datetime=DateTime.MinValue;
-			if(textDateTimeLastUploaded.Text!=""){
+			if(textDateTimeLastUploaded2.Text!=""){
 				try{
-					datetime=DateTime.Parse(textDateTimeLastUploaded.Text);
+					datetime=DateTime.Parse(textDateTimeLastUploaded2.Text);
 				}
 				catch{
 					MessageBox.Show("Please fix the DateTime last uploaded.");
@@ -650,7 +685,9 @@ namespace OpenDental{
 			ProgramProperties.SetProperty(ProgramCur.ProgramNum,"Password",textPassword.Text);
 			ProgramProperties.SetProperty(ProgramCur.ProgramNum,"WorkstationName",textWorkstationName.Text.ToUpper());
 			ProgramProperties.SetProperty(ProgramCur.ProgramNum,"IntervalSeconds",intervalSec.ToString());
-			ProgramProperties.SetProperty(ProgramCur.ProgramNum,"DateTimeLastUploaded",POut.PDateT(datetime));
+			if(textDateTimeLastUploaded2.Text!=""){
+				ProgramProperties.SetProperty(ProgramCur.ProgramNum,"DateTimeLastUploaded",POut.PDateT(datetime,false));
+			}
 			DataValid.SetInvalid(InvalidType.Programs);
 			return true;
 		}
@@ -659,7 +696,10 @@ namespace OpenDental{
 			if(!SaveToDb()){
 				return;
 			}
-			StartThreadIfEnabled();
+			if(MessageBox.Show("Restart synchronization?  You should not restart if you are in the middle of a big synchronization and you have not changed anything since opening this window or clicking Restart.","",MessageBoxButtons.YesNo)==DialogResult.Yes)
+			{
+				StartThreadIfEnabled();
+			}
 			DialogResult=DialogResult.OK;
 		}
 
@@ -669,6 +709,19 @@ namespace OpenDental{
 
 		private void FormProgramLinkEdit_Closing(object sender, System.ComponentModel.CancelEventArgs e) {
 			
+		}
+
+		private void timer1_Tick(object sender,EventArgs e) {
+			//if(!checkEnabled.Checked){
+			//	return;
+			//}
+			textSynchStatus.Text=ProgramProperties.GetValFromDb(ProgramCur.ProgramNum,"SynchStatus");
+			//Synch status options. Some examples:
+			//Initial synchronization running.
+			//Synchronizing as needed.
+			//Sleeping between synch.
+			//Error.  Synchronization paused for 5 minutes.
+			//Not running.
 		}
 
 	
