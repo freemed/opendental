@@ -123,6 +123,7 @@
     <Compile Include="Data Interface\ClaimAttaches.cs" />
     <Compile Include="Data Interface\ClaimCondCodeLogs.cs" />
     <Compile Include="Data Interface\ClaimFormItems.cs" />
+    <Compile Include="Data Interface\DeletedObjects.cs" />
     <Compile Include="Data Interface\SheetFieldDefs.cs" />
     <Compile Include="Data Interface\SheetDefs.cs" />
     <Compile Include="Data Interface\SheetFields.cs" />
@@ -206,6 +207,7 @@
     </Compile>
     <Compile Include="RemotingClient.cs" />
     <Compile Include="SheetFramework\SheetEnums.cs" />
+    <Compile Include="TableTypes\DeletedObject.cs" />
     <Compile Include="TableTypes\SheetDef.cs" />
     <Compile Include="TableTypes\SheetFieldDef.cs" />
     <Compile Include="SheetFramework\SheetFieldsAvailable.cs" />

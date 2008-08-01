@@ -517,6 +517,7 @@ namespace OpenDental{
 			File.WriteAllText(logfile,DateTime.Now.ToString()+"  Synch thread started.\r\n");//creates or clears the log
 			Program prog=(Program)data;
 			int intervalSec=PIn.PInt(ProgramProperties.GetPropVal(prog.ProgramNum,"IntervalSeconds"));
+			int intervalSecError=intervalSec*4;
 			string username=ProgramProperties.GetPropVal(prog.ProgramNum,"Username");
 			string password=ProgramProperties.GetPropVal(prog.ProgramNum,"Password");
 			DateTime dateTimeLastUploaded=PIn.PDateT(ProgramProperties.GetPropVal(prog.ProgramNum,"DateTimeLastUploaded"));
@@ -527,6 +528,9 @@ namespace OpenDental{
 			List<Patient> patientsToSynch=new List<Patient>();
 			List<Provider> provsToSynch=new List<Provider>();
 			List<Appointment> apptsToSynch=new List<Appointment>();
+			List<DeletedObject> delObjToSynch=new List<DeletedObject>();
+			List<Schedule> schedsToSynch=new List<Schedule>();
+			List<Operatory> opsToSynch=new List<Operatory>();
 			int totalObjectsToSynch=0;
 			string synchstatus="";
 			XmlWriterSettings settings=new XmlWriterSettings();
@@ -540,26 +544,41 @@ namespace OpenDental{
 			Patient pat;
 			Provider prov;
 			Appointment appt;
+			DeletedObject delObj;
+			Schedule sched;
+			Operatory op;
 			int patsInThisPost=0;
 			int provsInThisPost=0;
 			int apptsInThisPost=0;
+			int delObjInThisPost=0;
+			int schedsInThisPost=0;
+			int opsInThisPost=0;
 			do{
 				#region firstPart
 				objectsInThisPost=0;
 				totalObjectsToSynch
 					=patientsToSynch.Count
 					+provsToSynch.Count
-					+apptsToSynch.Count;//+...
+					+apptsToSynch.Count
+					+delObjToSynch.Count
+					+schedsToSynch.Count
+					+opsToSynch.Count;
 				if(totalObjectsToSynch==0){//if there are no objects ready to upload
 					//get various objects from the database.
 					patientsToSynch=Patients.GetUAppoint(dateTimeLastUploaded);//datetime will be handled better soon with delta
 					provsToSynch=Providers.GetUAppoint(dateTimeLastUploaded);
 					apptsToSynch=Appointments.GetUAppoint(dateTimeLastUploaded);
+					delObjToSynch=DeletedObjects.GetUAppoint(dateTimeLastUploaded);
+					schedsToSynch=Schedules.GetUAppoint(dateTimeLastUploaded);
+					//opsToSynch=Operatories.GetUAppoint(dateTimeLastUploaded);
 				}
 				totalObjectsToSynch
 					=patientsToSynch.Count
 					+provsToSynch.Count
-					+apptsToSynch.Count;
+					+apptsToSynch.Count
+					+delObjToSynch.Count
+					+schedsToSynch.Count
+					+opsToSynch.Count;
 				if(totalObjectsToSynch==0){//if there are still no objects
 					File.AppendAllText(logfile,DateTime.Now.ToString()+"  Current.  Sleeping between synch.\r\n");
 					ProgramProperties.SetProperty(prog.ProgramNum,"SynchStatus","Current.  Sleeping between synch.");
@@ -575,6 +594,12 @@ namespace OpenDental{
 				}
 				if(apptsToSynch.Count>0){
 					synchstatus+=apptsToSynch.Count.ToString()+" appts, ";
+				}
+				if(delObjToSynch.Count>0){
+					synchstatus+=delObjToSynch.Count.ToString()+" deletions, ";
+				}
+				if(schedsToSynch.Count>0){
+					synchstatus+=schedsToSynch.Count.ToString()+" schedules, ";
 				}
 				File.AppendAllText(logfile,DateTime.Now.ToString()+synchstatus+"\r\n");
 				ProgramProperties.SetProperty(prog.ProgramNum,"SynchStatus",synchstatus);
@@ -718,6 +743,48 @@ namespace OpenDental{
 					apptsInThisPost=i+1;
 				}
 				#endregion appt
+				#region delobj
+				//deleted objects-------------------------------------------------------------------------------------------------
+				delObjInThisPost=0;
+				for(int i=0;i<delObjToSynch.Count;i++){
+					if(objectsInThisPost>=50){
+						break;
+					}
+					delObj=delObjToSynch[i];
+					if(delObj.ObjectType==DeletedObjectType.Appointment){
+						writer.WriteStartElement("appointment");
+					}
+					else if(delObj.ObjectType==DeletedObjectType.ScheduleProv){
+						writer.WriteStartElement("schedule");
+					}
+					writer.WriteAttributeString("action","delete");
+					writer.WriteAttributeString("id",delObj.ObjectNum.ToString());
+					writer.WriteEndElement();
+					objectsInThisPost++;
+					delObjInThisPost=i+1;
+				}
+				#endregion delobj
+				#region sched
+				//schedules-------------------------------------------------------------------------------------------------
+				schedsInThisPost=0;
+				for(int i=0;i<schedsToSynch.Count;i++){
+					if(objectsInThisPost>=50){
+						break;
+					}
+					sched=schedsToSynch[i];
+					writer.WriteStartElement("schedule");
+					writer.WriteAttributeString("action","");
+					writer.WriteAttributeString("id",sched.ScheduleNum.ToString());
+					writer.WriteAttributeString("provider-id",sched.ProvNum.ToString());
+					writer.WriteAttributeString("recur","none");
+					writer.WriteAttributeString("date",sched.SchedDate.ToString("yyyy-MM-dd"));
+					writer.WriteAttributeString("start-time",sched.StartTime.ToString("HH:mm"));
+					writer.WriteAttributeString("finish-time",sched.StopTime.ToString("HH:mm"));
+					writer.WriteEndElement();
+					objectsInThisPost++;
+					schedsInThisPost=i+1;
+				}
+				#endregion sched
 				writer.WriteEndElement();//PracticeClient
 				writer.Close();
 				//File.AppendAllText(@"E:\My Documents\Bridge Info\UAppoint\Output.txt",strBuild.ToString());
@@ -740,23 +807,19 @@ namespace OpenDental{
 				catch(Exception ex){
 					//typical error is: Bad gateway
 					//This can happen even during a normal upload sequence soon after a successful post.
-					File.AppendAllText(logfile,DateTime.Now.ToString()+"  Error:"+ex.Message+"   Sleeping for one minute."+"\r\n");
-					ProgramProperties.SetProperty(prog.ProgramNum,"SynchStatus","Error:"+ex.Message+"   Sleeping for one minute.");
-					Thread.Sleep(TimeSpan.FromSeconds(60));
+					File.AppendAllText(logfile,DateTime.Now.ToString()+"  Error:"+ex.Message+"   Sleeping for "+intervalSecError.ToString()+" seconds."+"\r\n");
+					ProgramProperties.SetProperty(prog.ProgramNum,"SynchStatus","Error:"+ex.Message+"   Sleeping for "+intervalSecError.ToString()+" seconds.");
+					Thread.Sleep(TimeSpan.FromSeconds(intervalSecError));
 					continue;
 				}
 				//Process the response:
 				StreamReader readStream=new StreamReader(response.GetResponseStream(),Encoding.ASCII);
 				string str=readStream.ReadToEnd();
 				readStream.Close();
-				//if(str=="<server error=\"false\" />\r\n"){
-				//	ProgramProperties.SetProperty(prog.ProgramNum,"SynchStatus","Successful Synch");
-				//}
-				//else{
 				if(str!="<server error=\"false\" />\r\n"){
-					File.AppendAllText(logfile,DateTime.Now.ToString()+"  ServerError.  "+str+"  Sleeping for one minute.\r\n");
-					ProgramProperties.SetProperty(prog.ProgramNum,"SynchStatus","ServerError.  "+str+"  Sleeping for one minute.");
-					Thread.Sleep(TimeSpan.FromSeconds(60));
+					File.AppendAllText(logfile,DateTime.Now.ToString()+"  ServerError.  "+str+"  Sleeping for "+intervalSecError.ToString()+" seconds.\r\n");
+					ProgramProperties.SetProperty(prog.ProgramNum,"SynchStatus","ServerError.  "+str+"  Sleeping for "+intervalSecError.ToString()+" seconds.");
+					Thread.Sleep(TimeSpan.FromSeconds(intervalSecError));
 					continue;
 				}
 				//success, so adjust all the lists--------------------------------------------------------------------------------------------
@@ -782,6 +845,22 @@ namespace OpenDental{
 					}
 					else{
 						apptsToSynch=apptsToSynch.GetRange(apptsInThisPost,apptsToSynch.Count-apptsInThisPost);
+					}
+				}
+				if(delObjInThisPost>0){
+					if(delObjInThisPost==delObjToSynch.Count-1){
+						delObjToSynch.Clear();
+					}
+					else{
+						delObjToSynch=delObjToSynch.GetRange(delObjInThisPost,delObjToSynch.Count-delObjInThisPost);
+					}
+				}
+				if(schedsInThisPost>0){
+					if(schedsInThisPost==schedsToSynch.Count-1){
+						schedsToSynch.Clear();
+					}
+					else{
+						schedsToSynch=schedsToSynch.GetRange(schedsInThisPost,schedsToSynch.Count-schedsInThisPost);
 					}
 				}
 				if(totalObjectsToSynch==objectsInThisPost){

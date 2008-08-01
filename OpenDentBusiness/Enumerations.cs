@@ -1335,6 +1335,12 @@ namespace OpenDentBusiness{
 		PatientInformation
 	}
 
+	public enum DeletedObjectType{
+		Appointment,
+		///<summary>A schedule object.  Only provider schedules are tracked for deletion.</summary>
+		ScheduleProv
+	}
+
 	
 
 

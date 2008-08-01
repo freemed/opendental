@@ -98,8 +98,20 @@ namespace OpenDental{
 					General.NonQ(command);
 					command="UPDATE appointment SET DateTStamp=NOW()";
 					General.NonQ(command);
-
-
+					command="DROP TABLE IF EXISTS deletedobject";
+					General.NonQ(command);
+					command=@"CREATE TABLE deletedobject (
+						DeletedObjectNum int NOT NULL auto_increment,
+						ObjectNum int NOT NULL,
+						ObjectType int NOT NULL,
+						DateTStamp TimeStamp,
+						PRIMARY KEY (DeletedObjectNum)
+						) DEFAULT CHARSET=utf8";
+					General.NonQ(command);
+					command="ALTER TABLE schedule ADD DateTStamp TimeStamp";
+					General.NonQ(command);
+					command="UPDATE schedule SET DateTStamp=NOW()";
+					General.NonQ(command);
 
 
 				} 

@@ -108,6 +108,12 @@ namespace OpenDental{
 			return RefreshAndFill(command).ToArray();
 		}
 
+		public static List<Schedule> GetUAppoint(DateTime changedSince){
+			string command="SELECT * FROM schedule WHERE DateTStamp > "+POut.PDateT(changedSince)
+				+" AND SchedType="+POut.PInt((int)ScheduleType.Provider);
+			return RefreshAndFill(command);
+		}
+
 		private static List<Schedule> RefreshAndFill(string command) {
 			DataTable table=General.GetTable(command);
 			return ConvertTableToList(table);
@@ -245,6 +251,9 @@ namespace OpenDental{
 		public static void Delete(Schedule sched){
 			string command= "DELETE from schedule WHERE schedulenum = '"+POut.PInt(sched.ScheduleNum)+"'";
  			General.NonQ(command);
+			if(sched.SchedType==ScheduleType.Provider){
+				DeletedObjects.SetDeleted(DeletedObjectType.ScheduleProv,sched.ScheduleNum);
+			}
 			//if this was the last blockout for a day, then create a blockout for 'closed'
 			//if(sched.SchedType==ScheduleType.Blockout){
 			//	Schedules.CheckIfDeletedLastBlockout(sched.SchedDate);
@@ -482,7 +491,15 @@ namespace OpenDental{
 					throw new Exception(Lan.g("Schedule","Stop time must be later than start time."));
 				}
 			}
-			string command="DELETE FROM schedule WHERE SchedDate= "+POut.PDate(schedDate)+" "
+			//make deleted entries for synch purposes:
+			string command="SELECT ScheduleNum FROM schedule WHERE SchedDate= "+POut.PDate(schedDate)+" "
+				+"AND SchedType="+POut.PInt((int)ScheduleType.Provider);
+			DataTable table=General.GetTable(command);
+			for(int i=0;i<table.Rows.Count;i++){
+				DeletedObjects.SetDeleted(DeletedObjectType.ScheduleProv,PIn.PInt(table.Rows[i][0].ToString()));
+			}
+			//Then, bulk delete.
+			command="DELETE FROM schedule WHERE SchedDate= "+POut.PDate(schedDate)+" "
 				+"AND (SchedType=0 OR SchedType=1 OR SchedType=3)";
 			General.NonQ(command);
 			for(int i=0;i<SchedList.Count;i++){
@@ -495,11 +512,32 @@ namespace OpenDental{
 			if(provNums.Length==0 && empNums.Length==0 && !includePractice) {
 				return;
 			}
-			string command="DELETE FROM schedule "
+			string command;
+			string orClause="";
+			//make deleted entries for synch purposes:
+			if(provNums.Length>0){
+				for(int i=0;i<provNums.Length;i++) {
+					if(orClause!="") {
+						orClause+="OR ";
+					}
+					orClause+="schedule.ProvNum="+POut.PInt(provNums[i])+" ";
+				}
+				command="SELECT ScheduleNum FROM schedule "
+					+"WHERE SchedDate >= "+POut.PDate(dateStart)+" "
+					+"AND SchedDate <= "+POut.PDate(dateEnd)+" "
+					+"AND SchedType="+POut.PInt((int)ScheduleType.Provider)
+					+"AND ("+orClause+")";
+				DataTable table=General.GetTable(command);
+				for(int i=0;i<table.Rows.Count;i++){
+					DeletedObjects.SetDeleted(DeletedObjectType.ScheduleProv,PIn.PInt(table.Rows[i][0].ToString()));
+				}
+			}
+			//Then, the usual deletion for everything
+			command="DELETE FROM schedule "
 				+"WHERE SchedDate >= "+POut.PDate(dateStart)+" "
 				+"AND SchedDate <= "+POut.PDate(dateEnd)+" "
 				+"AND (";
-			string orClause="";//this is guaranteed to be non empty by the time the command is assembled.
+			orClause="";//this is guaranteed to be non empty by the time the command is assembled.
 			if(includePractice) {
 				orClause="SchedType=0 ";
 			}
