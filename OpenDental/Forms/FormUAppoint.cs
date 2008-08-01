@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using System.Drawing;
 using System.Collections;
 using System.Collections.Generic;
@@ -39,7 +40,6 @@ namespace OpenDental{
 		private Label label8;
 		private TextBox textSynchStatus;
 		private Label label9;
-		private OpenDental.UI.Button butStart;
 		private Label label10;
 		private TextBox textNote;
 		private Label label11;
@@ -48,6 +48,9 @@ namespace OpenDental{
 		private TextBox textDateTimeLastUploaded2;
 		private Label label12;
 		private static Thread thread;
+		private OpenDental.UI.Button butStart;
+		private OpenDental.UI.Button butViewLog;
+		private static string logfile="UAppointLog.txt";
 
 		///<summary></summary>
 		public FormUAppoint() {
@@ -103,13 +106,14 @@ namespace OpenDental{
 			this.label8 = new System.Windows.Forms.Label();
 			this.textSynchStatus = new System.Windows.Forms.TextBox();
 			this.label9 = new System.Windows.Forms.Label();
-			this.butStart = new OpenDental.UI.Button();
 			this.label10 = new System.Windows.Forms.Label();
 			this.textNote = new System.Windows.Forms.TextBox();
 			this.label11 = new System.Windows.Forms.Label();
 			this.timer1 = new System.Windows.Forms.Timer(this.components);
 			this.textDateTimeLastUploaded2 = new System.Windows.Forms.TextBox();
 			this.label12 = new System.Windows.Forms.Label();
+			this.butStart = new OpenDental.UI.Button();
+			this.butViewLog = new OpenDental.UI.Button();
 			this.SuspendLayout();
 			// 
 			// butCancel
@@ -302,20 +306,6 @@ namespace OpenDental{
 			this.label9.Text = "Synch Status";
 			this.label9.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
-			// butStart
-			// 
-			this.butStart.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butStart.Autosize = true;
-			this.butStart.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butStart.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butStart.CornerRadius = 4F;
-			this.butStart.Location = new System.Drawing.Point(180,292);
-			this.butStart.Name = "butStart";
-			this.butStart.Size = new System.Drawing.Size(62,22);
-			this.butStart.TabIndex = 62;
-			this.butStart.Text = "Restart";
-			this.butStart.Click += new System.EventHandler(this.butStart_Click);
-			// 
 			// label10
 			// 
 			this.label10.Location = new System.Drawing.Point(83,323);
@@ -364,11 +354,40 @@ namespace OpenDental{
 			this.label12.Text = "Set DateTime last uploaded";
 			this.label12.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
+			// butStart
+			// 
+			this.butStart.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butStart.Autosize = true;
+			this.butStart.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butStart.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butStart.CornerRadius = 4F;
+			this.butStart.Location = new System.Drawing.Point(180,292);
+			this.butStart.Name = "butStart";
+			this.butStart.Size = new System.Drawing.Size(62,22);
+			this.butStart.TabIndex = 62;
+			this.butStart.Text = "Restart";
+			this.butStart.Click += new System.EventHandler(this.butStart_Click);
+			// 
+			// butViewLog
+			// 
+			this.butViewLog.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butViewLog.Autosize = true;
+			this.butViewLog.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butViewLog.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butViewLog.CornerRadius = 4F;
+			this.butViewLog.Location = new System.Drawing.Point(527,292);
+			this.butViewLog.Name = "butViewLog";
+			this.butViewLog.Size = new System.Drawing.Size(67,22);
+			this.butViewLog.TabIndex = 68;
+			this.butViewLog.Text = "View Log";
+			this.butViewLog.Click += new System.EventHandler(this.butViewLog_Click);
+			// 
 			// FormUAppoint
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.CancelButton = this.butCancel;
 			this.ClientSize = new System.Drawing.Size(664,455);
+			this.Controls.Add(this.butViewLog);
 			this.Controls.Add(this.textDateTimeLastUploaded2);
 			this.Controls.Add(this.label12);
 			this.Controls.Add(this.label11);
@@ -461,8 +480,14 @@ namespace OpenDental{
 				{
 					return;
 				}
+				File.AppendAllText(logfile,DateTime.Now.ToString()+"  Initial synchronization running.\r\n");
+				ProgramProperties.SetProperty(ProgramCur.ProgramNum,"SynchStatus","Initial synchronization running.");
 			}
 			StartThreadIfEnabled();
+		}
+
+		private void butViewLog_Click(object sender,EventArgs e) {
+			Process.Start(logfile);
 		}
 
 		///<summary>Spawns a thread that handled uploading data to UAppoint in real time.  If the thread is already running, then this restarts it.  If the uploading should no longer happen, then this aborts the thread and exits.</summary>
@@ -471,6 +496,9 @@ namespace OpenDental{
 				thread.Abort();
 			}
 			Program prog=Programs.GetCur("UAppoint");
+			if(prog==null){
+				return;
+			}
 			if(!prog.Enabled){
 				return;
 			}
@@ -486,15 +514,21 @@ namespace OpenDental{
 		}
 
 		private static void ThreadStartTarget(object data){
+			File.WriteAllText(logfile,DateTime.Now.ToString()+"  Synch thread started.\r\n");//creates or clears the log
 			Program prog=(Program)data;
 			int intervalSec=PIn.PInt(ProgramProperties.GetPropVal(prog.ProgramNum,"IntervalSeconds"));
 			string username=ProgramProperties.GetPropVal(prog.ProgramNum,"Username");
 			string password=ProgramProperties.GetPropVal(prog.ProgramNum,"Password");
+			DateTime dateTimeLastUploaded=PIn.PDateT(ProgramProperties.GetPropVal(prog.ProgramNum,"DateTimeLastUploaded"));
+			//track delta here
 			string serverName=prog.Path;
 			HttpWebRequest webReq;
 			string postData;//data just for the current post.
 			List<Patient> patientsToSynch=new List<Patient>();
+			List<Provider> provsToSynch=new List<Provider>();
+			List<Appointment> apptsToSynch=new List<Appointment>();
 			int totalObjectsToSynch=0;
+			string synchstatus="";
 			XmlWriterSettings settings=new XmlWriterSettings();
 			settings.ConformanceLevel=ConformanceLevel.Fragment;
 			settings.Indent=true;
@@ -504,38 +538,69 @@ namespace OpenDental{
 			Version version=new Version(Application.ProductVersion);
 			int objectsInThisPost;
 			Patient pat;
+			Provider prov;
+			Appointment appt;
+			int patsInThisPost=0;
+			int provsInThisPost=0;
+			int apptsInThisPost=0;
 			do{
+				#region firstPart
 				objectsInThisPost=0;
-				totalObjectsToSynch=patientsToSynch.Count;//+...
+				totalObjectsToSynch
+					=patientsToSynch.Count
+					+provsToSynch.Count
+					+apptsToSynch.Count;//+...
 				if(totalObjectsToSynch==0){//if there are no objects ready to upload
 					//get various objects from the database.
-					patientsToSynch=Patients.GetUAppoint(DateTime.Now);//datetime will be handled better soon
+					patientsToSynch=Patients.GetUAppoint(dateTimeLastUploaded);//datetime will be handled better soon with delta
+					provsToSynch=Providers.GetUAppoint(dateTimeLastUploaded);
+					apptsToSynch=Appointments.GetUAppoint(dateTimeLastUploaded);
 				}
-				totalObjectsToSynch=patientsToSynch.Count;//+...
+				totalObjectsToSynch
+					=patientsToSynch.Count
+					+provsToSynch.Count
+					+apptsToSynch.Count;
 				if(totalObjectsToSynch==0){//if there are still no objects
+					File.AppendAllText(logfile,DateTime.Now.ToString()+"  Current.  Sleeping between synch.\r\n");
 					ProgramProperties.SetProperty(prog.ProgramNum,"SynchStatus","Current.  Sleeping between synch.");
 					Thread.Sleep(TimeSpan.FromSeconds(intervalSec));//sleep for a while
 					continue;
 				}
-				ProgramProperties.SetProperty(prog.ProgramNum,"SynchStatus","Synching.  Objects remaining="+totalObjectsToSynch.ToString());
+				synchstatus="Synching.  Objects remaining: ";
+				if(patientsToSynch.Count>0){
+					synchstatus+=patientsToSynch.Count.ToString()+" patients, ";
+				}
+				if(provsToSynch.Count>0){
+					synchstatus+=provsToSynch.Count.ToString()+" providers, ";
+				}
+				if(apptsToSynch.Count>0){
+					synchstatus+=apptsToSynch.Count.ToString()+" appts, ";
+				}
+				File.AppendAllText(logfile,DateTime.Now.ToString()+synchstatus+"\r\n");
+				ProgramProperties.SetProperty(prog.ProgramNum,"SynchStatus",synchstatus);
 				strBuild=new StringBuilder();
 				writer=XmlWriter.Create(strBuild,settings);
 				writer.WriteStartElement("PracticeClient");
 				writer.WriteAttributeString("user",username);
 				writer.WriteAttributeString("client-version","OD-"+version.Major.ToString()+"."+version.Minor.ToString()+"."+version.Build.ToString());
 				writer.WriteAttributeString("pass-md5",password);
-				//int patientsPosted=0;
+				#endregion firstPart
+				#region patient
+				//patient-------------------------------------------------------------------------------------------------
+				patsInThisPost=0;
 				for(int i=0;i<patientsToSynch.Count;i++){
 					if(objectsInThisPost>=50){//0, some, or all of them might be patients
-						if(i>0){//if at least some of them are patients
-							patientsToSynch=patientsToSynch.GetRange(i,patientsToSynch.Count-i);
-						}
 						break;
 					}
 					pat=patientsToSynch[i];
-					//patient-------------------------------------------------------------------------------------------------
+					//patient:
 					writer.WriteStartElement("patient");
-					writer.WriteAttributeString("action","insert");
+					if(pat.PatStatus==PatientStatus.Deleted){
+						writer.WriteAttributeString("action","delete");
+					}
+					else{
+						writer.WriteAttributeString("action","");
+					}
 					writer.WriteAttributeString("id",pat.PatNum.ToString());
 					writer.WriteAttributeString("name-title","");//(Dr., Mrs., etc.) optional 
 					writer.WriteAttributeString("name-first",pat.FName);
@@ -552,7 +617,7 @@ namespace OpenDental{
 					writer.WriteEndElement();
 					//Address--------------------------------------------------------------------------------------------------
 					writer.WriteStartElement("address");
-					writer.WriteAttributeString("action","insert");
+					writer.WriteAttributeString("action","");
 					writer.WriteAttributeString("id",pat.PatNum.ToString());
 					writer.WriteAttributeString("street1",pat.Address);
 					writer.WriteAttributeString("street2",pat.Address2);
@@ -564,31 +629,95 @@ namespace OpenDental{
 					//primary key is the id + type
 					//home
 					writer.WriteStartElement("phone");
-					writer.WriteAttributeString("action","insert");
+					writer.WriteAttributeString("action","");
 					writer.WriteAttributeString("patient-id",pat.PatNum.ToString());
 					writer.WriteAttributeString("type","home");
 					writer.WriteAttributeString("number",pat.HmPhone);
 					writer.WriteEndElement();
 					//cell
 					writer.WriteStartElement("phone");
-					writer.WriteAttributeString("action","insert");
+					writer.WriteAttributeString("action","");
 					writer.WriteAttributeString("patient-id",pat.PatNum.ToString());
 					writer.WriteAttributeString("type","cell");
 					writer.WriteAttributeString("number",pat.WirelessPhone);
 					writer.WriteEndElement();
 					//work
 					writer.WriteStartElement("phone");
-					writer.WriteAttributeString("action","insert");
+					writer.WriteAttributeString("action","");
 					writer.WriteAttributeString("patient-id",pat.PatNum.ToString());
 					writer.WriteAttributeString("type","work");
 					writer.WriteAttributeString("number",pat.WkPhone);
 					writer.WriteEndElement();
 					objectsInThisPost++;
-					if(i==patientsToSynch.Count-1){//if this was the last patient
-						patientsToSynch.Clear();
+					patsInThisPost=i+1;
+				}
+				#endregion patient
+				#region provider
+				//provider-------------------------------------------------------------------------------------------------
+				provsInThisPost=0;
+				for(int i=0;i<provsToSynch.Count;i++){
+					if(objectsInThisPost>=50){
 						break;
 					}
+					prov=provsToSynch[i];
+					writer.WriteStartElement("provider");
+					if(prov.IsHidden){
+						writer.WriteAttributeString("action","delete");
+					}
+					else{
+						writer.WriteAttributeString("action","");
+					}
+					writer.WriteAttributeString("id",prov.ProvNum.ToString());
+					if(prov.IsSecondary){
+						writer.WriteAttributeString("type","hygienist");
+					}
+					//writer.WriteAttributeString("name-title",prov);
+					writer.WriteAttributeString("name-first",prov.FName);
+					writer.WriteAttributeString("name-middle",prov.MI);
+					writer.WriteAttributeString("name-last",prov.LName);
+					writer.WriteAttributeString("name-suffix",prov.Suffix);
+					writer.WriteEndElement();
+					objectsInThisPost++;
+					provsInThisPost=i+1;
 				}
+				#endregion provider
+				#region appt
+				//appointment-------------------------------------------------------------------------------------------------
+				apptsInThisPost=0;
+				for(int i=0;i<apptsToSynch.Count;i++){
+					if(objectsInThisPost>=50){
+						break;
+					}
+					appt=apptsToSynch[i];
+					writer.WriteStartElement("appointment");
+					if(appt.AptStatus==ApptStatus.Broken
+						|| appt.AptStatus==ApptStatus.Planned
+						|| appt.AptStatus==ApptStatus.PtNote
+						|| appt.AptStatus==ApptStatus.PtNoteCompleted
+						|| appt.AptStatus==ApptStatus.UnschedList)
+					{
+						writer.WriteAttributeString("action","delete");
+					}
+					else if(appt.AptStatus==ApptStatus.ASAP
+						|| appt.AptStatus==ApptStatus.Complete
+						|| appt.AptStatus==ApptStatus.None
+						|| appt.AptStatus==ApptStatus.Scheduled)
+					{
+						writer.WriteAttributeString("action","");
+					}
+					writer.WriteAttributeString("id",appt.AptNum.ToString());
+					writer.WriteAttributeString("patient-id",appt.PatNum.ToString());
+					writer.WriteAttributeString("provider-id",appt.ProvNum.ToString());
+					writer.WriteAttributeString("operatory-id",appt.Op.ToString());
+					writer.WriteAttributeString("start",appt.AptDateTime.ToString("yyyy-MM-dd HH:mm"));
+					writer.WriteAttributeString("length",(appt.Pattern.Length*5).ToString());
+					writer.WriteAttributeString("description",appt.ProcDescript);
+					//writer.WriteAttributeString("procedure-code-ids",);//A comma-separated list of procedure ids
+					writer.WriteEndElement();
+					objectsInThisPost++;
+					apptsInThisPost=i+1;
+				}
+				#endregion appt
 				writer.WriteEndElement();//PracticeClient
 				writer.Close();
 				//File.AppendAllText(@"E:\My Documents\Bridge Info\UAppoint\Output.txt",strBuild.ToString());
@@ -604,7 +733,18 @@ namespace OpenDental{
 				Stream streamOut=webReq.GetRequestStream();
 				streamOut.Write(bytes,0,bytes.Length);
 				streamOut.Close();
-				WebResponse response=webReq.GetResponse();
+				WebResponse response;
+				try{
+					response=webReq.GetResponse();
+				}
+				catch(Exception ex){
+					//typical error is: Bad gateway
+					//This can happen even during a normal upload sequence soon after a successful post.
+					File.AppendAllText(logfile,DateTime.Now.ToString()+"  Error:"+ex.Message+"   Sleeping for one minute."+"\r\n");
+					ProgramProperties.SetProperty(prog.ProgramNum,"SynchStatus","Error:"+ex.Message+"   Sleeping for one minute.");
+					Thread.Sleep(TimeSpan.FromSeconds(60));
+					continue;
+				}
 				//Process the response:
 				StreamReader readStream=new StreamReader(response.GetResponseStream(),Encoding.ASCII);
 				string str=readStream.ReadToEnd();
@@ -614,10 +754,39 @@ namespace OpenDental{
 				//}
 				//else{
 				if(str!="<server error=\"false\" />\r\n"){
-					ProgramProperties.SetProperty(prog.ProgramNum,"SynchStatus","ServerError");
+					File.AppendAllText(logfile,DateTime.Now.ToString()+"  ServerError.  "+str+"  Sleeping for one minute.\r\n");
+					ProgramProperties.SetProperty(prog.ProgramNum,"SynchStatus","ServerError.  "+str+"  Sleeping for one minute.");
+					Thread.Sleep(TimeSpan.FromSeconds(60));
+					continue;
+				}
+				//success, so adjust all the lists--------------------------------------------------------------------------------------------
+				if(patsInThisPost>0){//if at least some of them are patients
+					if(patsInThisPost==patientsToSynch.Count-1){//if we grabbed all the patients
+						patientsToSynch.Clear();
+					}
+					else{
+						patientsToSynch=patientsToSynch.GetRange(patsInThisPost,patientsToSynch.Count-patsInThisPost);
+					}
+				}
+				if(provsInThisPost>0){
+					if(provsInThisPost==provsToSynch.Count-1){
+						provsToSynch.Clear();
+					}
+					else{
+						provsToSynch=provsToSynch.GetRange(provsInThisPost,provsToSynch.Count-provsInThisPost);
+					}
+				}
+				if(apptsInThisPost>0){
+					if(apptsInThisPost==apptsToSynch.Count-1){
+						apptsToSynch.Clear();
+					}
+					else{
+						apptsToSynch=apptsToSynch.GetRange(apptsInThisPost,apptsToSynch.Count-apptsInThisPost);
+					}
 				}
 				if(totalObjectsToSynch==objectsInThisPost){
-					ProgramProperties.SetProperty(prog.ProgramNum,"DateTimeLastUploaded",POut.PDateT(DateTime.Now,false));
+					dateTimeLastUploaded=DateTime.Now;
+					ProgramProperties.SetProperty(prog.ProgramNum,"DateTimeLastUploaded",POut.PDateT(dateTimeLastUploaded,false));
 					//POut.PDateT(MiscData.GetNowDateTime()));
 				}
 				//there are still objects to upload.
@@ -723,6 +892,8 @@ namespace OpenDental{
 			//Error.  Synchronization paused for 5 minutes.
 			//Not running.
 		}
+
+		
 
 	
 

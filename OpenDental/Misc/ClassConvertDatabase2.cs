@@ -86,6 +86,20 @@ namespace OpenDental{
 						+"'SynchStatus', "
 						+"'')";
 					General.NonQ(command);
+					command="ALTER TABLE patient ADD DateTStamp TimeStamp";
+					General.NonQ(command);
+					command="UPDATE patient SET DateTStamp=NOW()";
+					General.NonQ(command);
+					command="ALTER TABLE provider ADD DateTStamp TimeStamp";
+					General.NonQ(command);
+					command="UPDATE provider SET DateTStamp=NOW()";
+					General.NonQ(command);
+					command="ALTER TABLE appointment ADD DateTStamp TimeStamp";
+					General.NonQ(command);
+					command="UPDATE appointment SET DateTStamp=NOW()";
+					General.NonQ(command);
+
+
 
 
 				} 

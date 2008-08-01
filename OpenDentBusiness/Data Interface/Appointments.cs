@@ -95,6 +95,7 @@ namespace OpenDentBusiness{
 			}
 			return list[0];
 		}
+
 		public static Appointment GetScheduledPlannedApt(int aptNum) {
 			if(aptNum==0) {
 				return null;
@@ -125,6 +126,11 @@ namespace OpenDentBusiness{
 			}
 			command+=") ORDER BY AptDateTime";
 			return FillList(command).ToArray();
+		}
+
+		public static List<Appointment> GetUAppoint(DateTime changedSince){
+			string command="SELECT * FROM appointment WHERE DateTStamp > "+POut.PDateT(changedSince);
+			return FillList(command);
 		}
 
 		///<summary>Returns a list of Appointments using the supplied SQL command.</summary>
@@ -192,7 +198,8 @@ namespace OpenDentBusiness{
 			command+="patnum,aptstatus, "
 				+"pattern,confirmed,TimeLocked,op,note,provnum,"
 				+"provhyg,aptdatetime,nextaptnum,unschedstatus,lab,isnewpatient,procdescript,"
-				+"Assistant,InstructorNum,SchoolClassNum,SchoolCourseNum,GradePoint,ClinicNum,IsHygiene) VALUES(";
+				+"Assistant,InstructorNum,SchoolClassNum,SchoolCourseNum,GradePoint,ClinicNum,IsHygiene"//DateTStamp
+				+") VALUES(";
 			if(PrefC.RandomKeys){
 				command+="'"+POut.PInt(appt.AptNum)+"', ";
 			}
@@ -219,6 +226,7 @@ namespace OpenDentBusiness{
 				+"'"+POut.PFloat (appt.GradePoint)+"', "
 				+"'"+POut.PInt   (appt.ClinicNum)+"', "
 				+"'"+POut.PBool  (appt.IsHygiene)+"')";
+				//DateTStamp
 			if(PrefC.RandomKeys){
 				General.NonQ(command);
 			}
@@ -344,6 +352,7 @@ namespace OpenDentBusiness{
 				c+="IsHygiene = '"   +POut.PBool (appt.IsHygiene)+"'";
 				comma=true;
 			}
+			//DateTStamp
 			if(!comma)
 				return 0;//this means no change is actually required.
 			c+=" WHERE AptNum = '"+POut.PInt(appt.AptNum)+"'";
@@ -351,8 +360,6 @@ namespace OpenDentBusiness{
 			//MessageBox.Show(c);
 			return rowsChanged;
 		}
-
-		
 
 		///<summary>Used in Chart module to test whether a procedure is attached to an appointment with today's date. The procedure might have a different date if still TP status.  ApptList should include all appointments for this patient. Does not make a call to db.</summary>
 		public static bool ProcIsToday(Appointment[] apptList,Procedure proc){
@@ -541,6 +548,7 @@ namespace OpenDentBusiness{
 				apt.GradePoint     =PIn.PFloat(table.Rows[i][20].ToString());
 				apt.ClinicNum      =PIn.PInt(table.Rows[i][21].ToString());
 				apt.IsHygiene      =PIn.PBool(table.Rows[i][22].ToString());
+				//DateTStamp
 				list.Add(apt);
 			}
 			return list;

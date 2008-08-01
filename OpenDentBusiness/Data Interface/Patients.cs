@@ -47,7 +47,7 @@ namespace OpenDentBusiness{
 					"SELECT patient.*,CASE WHEN PatNum=Guarantor THEN 0 ELSE 1 END AS isguarantor "
 					+"FROM patient "
 					+"WHERE Guarantor = '"+table.Rows[0][0].ToString()+"'"
-					+" ORDER BY 68,Birthdate";//just asking for bugs. Must be one more than the count of fields,
+					+" ORDER BY 69,Birthdate";//just asking for bugs. Must be one more than the count of fields,
 				//which is two more than the last number in the [] of GetPatient
 			}
 			return command;
@@ -64,7 +64,7 @@ namespace OpenDentBusiness{
 		}
 
 		public static List<Patient> GetUAppoint(DateTime changedSince){
-			string command="SELECT * FROM patient limit 208";
+			string command="SELECT * FROM patient WHERE DateTStamp > "+POut.PDateT(changedSince);
 			DataTable table=General.GetTable(command);
 			return TableToList(table);
 			//List<Patient> retVal=new List<Patient>(DataObjectFactory<Patient>.CreateObjects(command));
@@ -100,7 +100,8 @@ namespace OpenDentBusiness{
 				+",EmployerNum,EmploymentNote,Race,County,GradeLevel,Urgency,DateFirstVisit"
 				+",ClinicNum,HasIns,TrophyFolder,PlannedIsDone,Premed,Ward,PreferConfirmMethod,PreferContactMethod,PreferRecallMethod"
 				+",SchedBeforeTime,SchedAfterTime"
-				+",SchedDayOfWeek,Language,AdmitDate,Title,PayPlanDue,SiteNum) VALUES (";
+				+",SchedDayOfWeek,Language,AdmitDate,Title,PayPlanDue,SiteNum"//DateTStamp
+				+") VALUES (";
 			if(includePatNum || PrefC.RandomKeys) {
 				command+="'"+POut.PInt(pat.PatNum)+"', ";
 			}
@@ -170,6 +171,7 @@ namespace OpenDentBusiness{
 				+"'"+POut.PString(pat.Title)+"', "
 				+"'"+POut.PDouble(pat.PayPlanDue)+"', "
 				+"'"+POut.PInt(pat.SiteNum)+"')";
+				//DateTStamp won't show here.
 			if(PrefC.RandomKeys) {
 				General.NonQ(command);
 			}
@@ -576,15 +578,18 @@ namespace OpenDentBusiness{
 				c+="SiteNum = '"    +POut.PInt(pat.SiteNum)+"'";
 				comma=true;
 			}
+			//DateTStamp
 			if(!comma)
 				return 0;//this means no change is actually required.
 			c+=" WHERE PatNum = '"   +POut.PInt(pat.PatNum)+"'";
 			return General.NonQ(c);
 		}//end UpdatePatient
 
-		///<summary>Only used when entering a new patient and user clicks cancel. To delete an existing patient, the PatStatus is simply changed to 4.</summary>
+		//This can never be used anymore, or it will mess up 
+		///<summary>This is only used when entering a new patient and user clicks cancel.  It used to actually delete the patient, but that will mess up UAppoint synch function.  DateTStamp needs to track deleted patients. So now, the PatStatus is simply changed to 4.</summary>
 		public static void Delete(Patient pat) {
-			string command="DELETE FROM patient WHERE PatNum ="+pat.PatNum.ToString();
+			string command="UPDATE patient SET PatStatus="+POut.PInt((int)PatientStatus.Deleted)
+				+" WHERE PatNum ="+pat.PatNum.ToString();
 			General.NonQ(command);
 		}
 
@@ -819,6 +824,7 @@ namespace OpenDentBusiness{
 				pat.Title        = PIn.PString(table.Rows[i][64].ToString());
 				pat.PayPlanDue   = PIn.PDouble(table.Rows[i][65].ToString());
 				pat.SiteNum      = PIn.PInt   (table.Rows[i][66].ToString());
+				//DateTStamp
 				patList.Add(pat);
 			}
 			return patList;

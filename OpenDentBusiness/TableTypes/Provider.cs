@@ -53,6 +53,7 @@ namespace OpenDentBusiness{
 		public string NationalProvID;
 		///<summary>Canadian field required for e-claims.  Assigned by CDA.  It's OK to have multiple providers with the same OfficeNum.  Max length should be 4.</summary>
 		public string CanadianOfficeNum;
+		//DateTStamp
 
 		///<summary>Returns a copy of this Provider.</summary>
 		public Provider Copy(){
@@ -91,6 +92,7 @@ namespace OpenDentBusiness{
 			SchoolClassNum=schoolClassNum;
 			NationalProvID=nationalProvID;
 			CanadianOfficeNum=canadianOfficeNum;
+			//DateTStamp
 		}
 
 

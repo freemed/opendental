@@ -51,35 +51,11 @@ namespace OpenDentBusiness{
 		public int ClinicNum;
 		///<summary>Set true if this is a hygiene appt.  The hygiene provider's color will show.</summary>
 		public bool IsHygiene;
+		//DateTStamp
 
 		///<summary>Returns a copy of the appointment.</summary>
     public Appointment Copy(){
 			return (Appointment)this.MemberwiseClone();
-			/*Appointment a=new Appointment();
-			a.AptNum=AptNum;
-			a.PatNum=PatNum;
-			a.AptStatus=AptStatus;
-			a.Pattern=Pattern;
-			a.Confirmed=Confirmed;
-			a.AddTime=AddTime;
-			a.Op=Op;
-			a.Note=Note;
-			a.ProvNum=ProvNum;
-			a.ProvHyg=ProvHyg;
-			a.AptDateTime=AptDateTime;
-			a.NextAptNum=NextAptNum;
-			a.UnschedStatus=UnschedStatus;
-			//a.Lab=Lab;
-			a.IsNewPatient=IsNewPatient;
-			a.ProcDescript=ProcDescript;
-			a.Assistant=Assistant;
-			a.InstructorNum=InstructorNum;
-			a.SchoolClassNum=SchoolClassNum;
-			a.SchoolCourseNum=SchoolCourseNum;
-			a.GradePoint=GradePoint;
-			a.ClinicNum=ClinicNum;
-			a.IsHygiene=IsHygiene;
-			return a;*/
 		}
 
 		

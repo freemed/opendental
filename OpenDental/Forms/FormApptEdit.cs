@@ -1500,7 +1500,6 @@ namespace OpenDental{
 					}
 				}
 			}
-
 			/*if(AptCur.AptStatus==ApptStatus.Planned) {
 				Procedures.UnattachProcsInPlannedAppt(AptCur.AptNum);
 			}
