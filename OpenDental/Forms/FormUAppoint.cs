@@ -522,15 +522,21 @@ namespace OpenDental{
 			string password=ProgramProperties.GetPropVal(prog.ProgramNum,"Password");
 			DateTime dateTimeLastUploaded=PIn.PDateT(ProgramProperties.GetPropVal(prog.ProgramNum,"DateTimeLastUploaded"));
 			//track delta here
+			DateTime nowServer=MiscData.GetNowDateTime();
+			TimeSpan deltaTimeSpan=nowServer-DateTime.Now;//this was tested to work by adding delta to local time
+			DateTime timeStartSynch=DateTime.MinValue;
 			string serverName=prog.Path;
 			HttpWebRequest webReq;
 			string postData;//data just for the current post.
 			List<Patient> patientsToSynch=new List<Patient>();
 			List<Provider> provsToSynch=new List<Provider>();
 			List<Appointment> apptsToSynch=new List<Appointment>();
+			List<string> apptProcsToSynch=new List<string>();
 			List<DeletedObject> delObjToSynch=new List<DeletedObject>();
 			List<Schedule> schedsToSynch=new List<Schedule>();
 			List<Operatory> opsToSynch=new List<Operatory>();
+			List<Recall> recallsToSynch=new List<Recall>();
+			List<ProcedureCode> codesToSynch=new List<ProcedureCode>();
 			int totalObjectsToSynch=0;
 			string synchstatus="";
 			XmlWriterSettings settings=new XmlWriterSettings();
@@ -547,12 +553,17 @@ namespace OpenDental{
 			DeletedObject delObj;
 			Schedule sched;
 			Operatory op;
+			Recall recall;
+			ProcedureCode code;
 			int patsInThisPost=0;
 			int provsInThisPost=0;
 			int apptsInThisPost=0;
 			int delObjInThisPost=0;
 			int schedsInThisPost=0;
 			int opsInThisPost=0;
+			int recallsInThisPost=0;
+			int codesInThisPost=0;
+			string str;
 			do{
 				#region firstPart
 				objectsInThisPost=0;
@@ -562,15 +573,21 @@ namespace OpenDental{
 					+apptsToSynch.Count
 					+delObjToSynch.Count
 					+schedsToSynch.Count
-					+opsToSynch.Count;
+					+opsToSynch.Count
+					+recallsToSynch.Count
+					+codesToSynch.Count;
 				if(totalObjectsToSynch==0){//if there are no objects ready to upload
+					timeStartSynch=DateTime.Now;
 					//get various objects from the database.
 					patientsToSynch=Patients.GetUAppoint(dateTimeLastUploaded);//datetime will be handled better soon with delta
 					provsToSynch=Providers.GetUAppoint(dateTimeLastUploaded);
 					apptsToSynch=Appointments.GetUAppoint(dateTimeLastUploaded);
+					apptProcsToSynch=Appointments.GetUAppointProcs(apptsToSynch);
 					delObjToSynch=DeletedObjects.GetUAppoint(dateTimeLastUploaded);
 					schedsToSynch=Schedules.GetUAppoint(dateTimeLastUploaded);
-					//opsToSynch=Operatories.GetUAppoint(dateTimeLastUploaded);
+					opsToSynch=Operatories.GetUAppoint(dateTimeLastUploaded);
+					recallsToSynch=Recalls.GetUAppoint(dateTimeLastUploaded);
+					codesToSynch=ProcedureCodes.GetUAppoint(dateTimeLastUploaded);
 				}
 				totalObjectsToSynch
 					=patientsToSynch.Count
@@ -578,7 +595,9 @@ namespace OpenDental{
 					+apptsToSynch.Count
 					+delObjToSynch.Count
 					+schedsToSynch.Count
-					+opsToSynch.Count;
+					+opsToSynch.Count
+					+recallsToSynch.Count
+					+codesToSynch.Count;
 				if(totalObjectsToSynch==0){//if there are still no objects
 					File.AppendAllText(logfile,DateTime.Now.ToString()+"  Current.  Sleeping between synch.\r\n");
 					ProgramProperties.SetProperty(prog.ProgramNum,"SynchStatus","Current.  Sleeping between synch.");
@@ -601,7 +620,16 @@ namespace OpenDental{
 				if(schedsToSynch.Count>0){
 					synchstatus+=schedsToSynch.Count.ToString()+" schedules, ";
 				}
-				File.AppendAllText(logfile,DateTime.Now.ToString()+synchstatus+"\r\n");
+				if(opsToSynch.Count>0){
+					synchstatus+=opsToSynch.Count.ToString()+" operatories, ";
+				}
+				if(recallsToSynch.Count>0){
+					synchstatus+=recallsToSynch.Count.ToString()+" recalls, ";
+				}
+				if(codesToSynch.Count>0){
+					synchstatus+=codesToSynch.Count.ToString()+" codes, ";
+				}
+				File.AppendAllText(logfile,DateTime.Now.ToString()+"  "+synchstatus+"\r\n");
 				ProgramProperties.SetProperty(prog.ProgramNum,"SynchStatus",synchstatus);
 				strBuild=new StringBuilder();
 				writer=XmlWriter.Create(strBuild,settings);
@@ -642,7 +670,12 @@ namespace OpenDental{
 					writer.WriteEndElement();
 					//Address--------------------------------------------------------------------------------------------------
 					writer.WriteStartElement("address");
-					writer.WriteAttributeString("action","");
+					if(pat.PatStatus==PatientStatus.Deleted){
+						writer.WriteAttributeString("action","delete");
+					}
+					else{
+						writer.WriteAttributeString("action","");
+					}
 					writer.WriteAttributeString("id",pat.PatNum.ToString());
 					writer.WriteAttributeString("street1",pat.Address);
 					writer.WriteAttributeString("street2",pat.Address2);
@@ -654,21 +687,36 @@ namespace OpenDental{
 					//primary key is the id + type
 					//home
 					writer.WriteStartElement("phone");
-					writer.WriteAttributeString("action","");
+					if(pat.PatStatus==PatientStatus.Deleted){
+						writer.WriteAttributeString("action","delete");
+					}
+					else{
+						writer.WriteAttributeString("action","");
+					}
 					writer.WriteAttributeString("patient-id",pat.PatNum.ToString());
 					writer.WriteAttributeString("type","home");
 					writer.WriteAttributeString("number",pat.HmPhone);
 					writer.WriteEndElement();
 					//cell
 					writer.WriteStartElement("phone");
-					writer.WriteAttributeString("action","");
+					if(pat.PatStatus==PatientStatus.Deleted){
+						writer.WriteAttributeString("action","delete");
+					}
+					else{
+						writer.WriteAttributeString("action","");
+					}
 					writer.WriteAttributeString("patient-id",pat.PatNum.ToString());
 					writer.WriteAttributeString("type","cell");
 					writer.WriteAttributeString("number",pat.WirelessPhone);
 					writer.WriteEndElement();
 					//work
 					writer.WriteStartElement("phone");
-					writer.WriteAttributeString("action","");
+					if(pat.PatStatus==PatientStatus.Deleted){
+						writer.WriteAttributeString("action","delete");
+					}
+					else{
+						writer.WriteAttributeString("action","");
+					}
 					writer.WriteAttributeString("patient-id",pat.PatNum.ToString());
 					writer.WriteAttributeString("type","work");
 					writer.WriteAttributeString("number",pat.WkPhone);
@@ -737,7 +785,8 @@ namespace OpenDental{
 					writer.WriteAttributeString("start",appt.AptDateTime.ToString("yyyy-MM-dd HH:mm"));
 					writer.WriteAttributeString("length",(appt.Pattern.Length*5).ToString());
 					writer.WriteAttributeString("description",appt.ProcDescript);
-					//writer.WriteAttributeString("procedure-code-ids",);//A comma-separated list of procedure ids
+					//A comma-separated list of procedure code ids:
+					writer.WriteAttributeString("procedure-code-ids",apptProcsToSynch[i]);
 					writer.WriteEndElement();
 					objectsInThisPost++;
 					apptsInThisPost=i+1;
@@ -757,8 +806,16 @@ namespace OpenDental{
 					else if(delObj.ObjectType==DeletedObjectType.ScheduleProv){
 						writer.WriteStartElement("schedule");
 					}
+					else if(delObj.ObjectType==DeletedObjectType.RecallPatNum){
+						writer.WriteStartElement("recall");
+					}
 					writer.WriteAttributeString("action","delete");
-					writer.WriteAttributeString("id",delObj.ObjectNum.ToString());
+					if(delObj.ObjectType==DeletedObjectType.RecallPatNum){
+						writer.WriteAttributeString("patient-id",delObj.ObjectNum.ToString());
+					}
+					else{
+						writer.WriteAttributeString("id",delObj.ObjectNum.ToString());
+					}
 					writer.WriteEndElement();
 					objectsInThisPost++;
 					delObjInThisPost=i+1;
@@ -785,6 +842,102 @@ namespace OpenDental{
 					schedsInThisPost=i+1;
 				}
 				#endregion sched
+				#region operatories
+				//operatories-------------------------------------------------------------------------------------------------
+				opsInThisPost=0;
+				for(int i=0;i<opsToSynch.Count;i++){
+					if(objectsInThisPost>=50){
+						break;
+					}
+					op=opsToSynch[i];
+					writer.WriteStartElement("operatory");
+					if(op.IsHidden){
+						writer.WriteAttributeString("action","delete");
+					}
+					else{
+						writer.WriteAttributeString("action","");
+					}
+					writer.WriteAttributeString("id",op.OperatoryNum.ToString());
+					writer.WriteAttributeString("name",op.OpName);
+					writer.WriteEndElement();
+					objectsInThisPost++;
+					opsInThisPost=i+1;
+				}
+				#endregion operatories
+				#region recalls
+				//recalls-------------------------------------------------------------------------------------------------
+				recallsInThisPost=0;
+				for(int i=0;i<recallsToSynch.Count;i++){
+					if(objectsInThisPost>=50){
+						break;
+					}
+					recall=recallsToSynch[i];
+					writer.WriteStartElement("recall");
+					if(recall.IsDisabled){
+						writer.WriteAttributeString("action","delete");
+					}
+					else{
+						writer.WriteAttributeString("action","");
+					}
+					writer.WriteAttributeString("patient-id",recall.PatNum.ToString());
+					writer.WriteAttributeString("type","prophy");
+					//writer.WriteAttributeString("length","");//missing so use practice default
+					//if(recall.IsDisabled){
+					//	writer.WriteAttributeString("eligible","false");
+					//}
+					//else{
+						writer.WriteAttributeString("eligible","true");
+					//}
+					str="";
+					if(recall.RecallInterval.Years>0){
+						str=recall.RecallInterval.Years.ToString()+" year";
+						if(recall.RecallInterval.Years>1){
+							str+="s";
+						}
+					}
+					else if(recall.RecallInterval.Months>0){
+						str=recall.RecallInterval.Months.ToString()+" month";
+						if(recall.RecallInterval.Months>1){
+							str+="s";
+						}
+					}
+					else if(recall.RecallInterval.Days>0){
+						str=recall.RecallInterval.Days.ToString()+" day";
+						if(recall.RecallInterval.Days>1){
+							str+="s";
+						}
+					}
+					writer.WriteAttributeString("freq",str);
+					writer.WriteEndElement();
+					objectsInThisPost++;
+					recallsInThisPost=i+1;
+				}
+				#endregion recalls
+				#region procedure codes
+				//procedure codes-------------------------------------------------------------------------------------------------
+				codesInThisPost=0;
+				for(int i=0;i<codesToSynch.Count;i++){
+					if(objectsInThisPost>=50){
+						break;
+					}
+					code=codesToSynch[i];
+					writer.WriteStartElement("procedure-code");
+					if(DefC.GetHidden(DefCat.ProcCodeCats,code.ProcCat)){
+						writer.WriteAttributeString("action","delete");
+					}
+					else{
+						writer.WriteAttributeString("action","");
+					}
+					writer.WriteAttributeString("id",code.CodeNum.ToString());
+					writer.WriteAttributeString("ada-code",code.ProcCode);
+					writer.WriteAttributeString("abbrev",code.AbbrDesc);
+					writer.WriteAttributeString("description",code.LaymanTerm);
+					writer.WriteAttributeString("long-description",code.Descript);
+					writer.WriteEndElement();
+					objectsInThisPost++;
+					codesInThisPost=i+1;
+				}
+				#endregion procedure codes
 				writer.WriteEndElement();//PracticeClient
 				writer.Close();
 				//File.AppendAllText(@"E:\My Documents\Bridge Info\UAppoint\Output.txt",strBuild.ToString());
@@ -814,11 +967,11 @@ namespace OpenDental{
 				}
 				//Process the response:
 				StreamReader readStream=new StreamReader(response.GetResponseStream(),Encoding.ASCII);
-				string str=readStream.ReadToEnd();
+				string responseStr=readStream.ReadToEnd();
 				readStream.Close();
-				if(str!="<server error=\"false\" />\r\n"){
-					File.AppendAllText(logfile,DateTime.Now.ToString()+"  ServerError.  "+str+"  Sleeping for "+intervalSecError.ToString()+" seconds.\r\n");
-					ProgramProperties.SetProperty(prog.ProgramNum,"SynchStatus","ServerError.  "+str+"  Sleeping for "+intervalSecError.ToString()+" seconds.");
+				if(responseStr!="<server error=\"false\" />\r\n"){
+					File.AppendAllText(logfile,DateTime.Now.ToString()+"  ServerError.  "+responseStr+"  Sleeping for "+intervalSecError.ToString()+" seconds.\r\n");
+					ProgramProperties.SetProperty(prog.ProgramNum,"SynchStatus","ServerError.  "+responseStr+"  Sleeping for "+intervalSecError.ToString()+" seconds.");
 					Thread.Sleep(TimeSpan.FromSeconds(intervalSecError));
 					continue;
 				}
@@ -842,9 +995,11 @@ namespace OpenDental{
 				if(apptsInThisPost>0){
 					if(apptsInThisPost==apptsToSynch.Count-1){
 						apptsToSynch.Clear();
+						apptProcsToSynch.Clear();
 					}
 					else{
 						apptsToSynch=apptsToSynch.GetRange(apptsInThisPost,apptsToSynch.Count-apptsInThisPost);
+						apptProcsToSynch=apptProcsToSynch.GetRange(apptsInThisPost,apptProcsToSynch.Count-apptsInThisPost);
 					}
 				}
 				if(delObjInThisPost>0){
@@ -863,8 +1018,32 @@ namespace OpenDental{
 						schedsToSynch=schedsToSynch.GetRange(schedsInThisPost,schedsToSynch.Count-schedsInThisPost);
 					}
 				}
+				if(opsInThisPost>0){
+					if(opsInThisPost==opsToSynch.Count-1){
+						opsToSynch.Clear();
+					}
+					else{
+						opsToSynch=opsToSynch.GetRange(opsInThisPost,opsToSynch.Count-opsInThisPost);
+					}
+				}
+				if(recallsInThisPost>0){
+					if(recallsInThisPost==recallsToSynch.Count-1){
+						recallsToSynch.Clear();
+					}
+					else{
+						recallsToSynch=recallsToSynch.GetRange(recallsInThisPost,recallsToSynch.Count-recallsInThisPost);
+					}
+				}
+				if(codesInThisPost>0){
+					if(codesInThisPost==codesToSynch.Count-1){
+						codesToSynch.Clear();
+					}
+					else{
+						codesToSynch=codesToSynch.GetRange(codesInThisPost,codesToSynch.Count-codesInThisPost);
+					}
+				}
 				if(totalObjectsToSynch==objectsInThisPost){
-					dateTimeLastUploaded=DateTime.Now;
+					dateTimeLastUploaded=timeStartSynch+deltaTimeSpan;
 					ProgramProperties.SetProperty(prog.ProgramNum,"DateTimeLastUploaded",POut.PDateT(dateTimeLastUploaded,false));
 					//POut.PDateT(MiscData.GetNowDateTime()));
 				}

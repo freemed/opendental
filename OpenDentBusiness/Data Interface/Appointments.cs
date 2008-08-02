@@ -133,6 +133,37 @@ namespace OpenDentBusiness{
 			return FillList(command);
 		}
 
+		///<summary>A list of strings.  Each string corresponds to one appointment in the supplied list.  Each string is a comma delimited list of codenums of the procedures attached to the appointment.</summary>
+		public static List<string> GetUAppointProcs(List<Appointment> appts){
+			List<string> retVal=new List<string>();
+			if(appts.Count==0){
+				return retVal;
+			}
+			string command="SELECT AptNum,CodeNum FROM procedurelog WHERE AptNum IN(";
+			for(int i=0;i<appts.Count;i++){
+				if(i>0){
+					command+=",";
+				}
+				command+=POut.PInt(appts[i].AptNum);
+			}
+			command+=")";
+			DataTable table=General.GetTable(command);
+			string str;
+			for(int i=0;i<appts.Count;i++){
+				str="";
+				for(int p=0;p<table.Rows.Count;p++){
+					if(table.Rows[p]["AptNum"].ToString()==appts[i].AptNum.ToString()){
+						if(str!=""){
+							str+=",";
+						}
+						str+=table.Rows[p]["CodeNum"].ToString();
+					}
+				}
+				retVal.Add(str);
+			}
+			return retVal;
+		}
+
 		///<summary>Returns a list of Appointments using the supplied SQL command.</summary>
 		private static List<Appointment> FillList(string command) {
 			DataTable table=General.GetTable(command);

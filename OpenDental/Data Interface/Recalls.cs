@@ -22,21 +22,33 @@ namespace OpenDental{
 			string command=
 				"SELECT * from recall "
 				+"WHERE "+wherePats;
- 			DataTable table=General.GetTable(command);
-			Recall[] List=new Recall[table.Rows.Count];
-			for(int i=0;i<List.Length;i++){
-				List[i]=new Recall();
-				List[i].RecallNum      = PIn.PInt   (table.Rows[i][0].ToString());
-				List[i].PatNum         = PIn.PInt   (table.Rows[i][1].ToString());
-				List[i].DateDueCalc    = PIn.PDate  (table.Rows[i][2].ToString());
-				List[i].DateDue        = PIn.PDate  (table.Rows[i][3].ToString());
-				List[i].DatePrevious   = PIn.PDate  (table.Rows[i][4].ToString());
-				List[i].RecallInterval = new Interval(PIn.PInt(table.Rows[i][5].ToString()));
-				List[i].RecallStatus   = PIn.PInt   (table.Rows[i][6].ToString());
-				List[i].Note           = PIn.PString(table.Rows[i][7].ToString());
-				List[i].IsDisabled     = PIn.PBool  (table.Rows[i][8].ToString());
+			return RefreshAndFill(command).ToArray();
+		}
+
+		private static List<Recall> RefreshAndFill(string command){
+			DataTable table=General.GetTable(command);
+			List<Recall> list=new List<Recall>();
+			Recall recall;
+			for(int i=0;i<table.Rows.Count;i++){
+				recall=new Recall();
+				recall.RecallNum      = PIn.PInt   (table.Rows[i][0].ToString());
+				recall.PatNum         = PIn.PInt   (table.Rows[i][1].ToString());
+				recall.DateDueCalc    = PIn.PDate  (table.Rows[i][2].ToString());
+				recall.DateDue        = PIn.PDate  (table.Rows[i][3].ToString());
+				recall.DatePrevious   = PIn.PDate  (table.Rows[i][4].ToString());
+				recall.RecallInterval = new Interval(PIn.PInt(table.Rows[i][5].ToString()));
+				recall.RecallStatus   = PIn.PInt   (table.Rows[i][6].ToString());
+				recall.Note           = PIn.PString(table.Rows[i][7].ToString());
+				recall.IsDisabled     = PIn.PBool  (table.Rows[i][8].ToString());
+				//DateTStamp
+				list.Add(recall);
 			}
-			return List;
+			return list;
+		}
+
+		public static List<Recall> GetUAppoint(DateTime changedSince){
+			string command="SELECT * FROM recall WHERE DateTStamp > "+POut.PDateT(changedSince);
+			return RefreshAndFill(command);
 		}
 
 		/// <summary></summary>
@@ -166,7 +178,7 @@ namespace OpenDental{
 				command+="RecallNum,";
 			}
 			command+="PatNum,DateDueCalc,DateDue,DatePrevious,"
-				+"RecallInterval,RecallStatus,Note,IsDisabled"
+				+"RecallInterval,RecallStatus,Note,IsDisabled"//DateTStamp
 				+") VALUES(";
 			if(PrefC.RandomKeys) {
 				command+="'"+POut.PInt(recall.RecallNum)+"', ";
@@ -180,6 +192,7 @@ namespace OpenDental{
 				+"'"+POut.PInt(recall.RecallStatus)+"', "
 				+"'"+POut.PString(recall.Note)+"', "
 				+"'"+POut.PBool(recall.IsDisabled)+"')";
+				//DateTStamp
 			if(PrefC.RandomKeys) {
 				General.NonQ(command);
 			}
@@ -199,6 +212,7 @@ namespace OpenDental{
 				+",RecallStatus= '"    +POut.PInt(recall.RecallStatus)+"' "
 				+",Note = '"           +POut.PString(recall.Note)+"' "
 				+",IsDisabled = '"     +POut.PBool(recall.IsDisabled)+"' "
+				//DateTStamp
 				+" WHERE RecallNum = '"+POut.PInt(recall.RecallNum)+"'";
 			General.NonQ(command);
 		}
@@ -207,6 +221,7 @@ namespace OpenDental{
 		public static void Delete(Recall recall) {
 			string command= "DELETE from recall WHERE RecallNum = '"+POut.PInt(recall.RecallNum)+"'";
 			General.NonQ(command);
+			DeletedObjects.SetDeleted(DeletedObjectType.RecallPatNum,recall.PatNum);
 		}
 
 		///<summary>Will only return true if not disabled, date previous is empty, DateDue is same as DateDueCalc, etc.</summary>

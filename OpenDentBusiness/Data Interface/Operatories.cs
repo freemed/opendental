@@ -18,8 +18,17 @@ namespace OpenDentBusiness{
 		}
 
 		public static void FillCache(DataTable table){
-			OperatoryC.Listt=new List<Operatory>();
+			OperatoryC.Listt=TableToList(table);
 			OperatoryC.ListShort=new List<Operatory>();
+			for(int i=0;i<OperatoryC.Listt.Count;i++) {
+				if(!OperatoryC.Listt[i].IsHidden) {
+					OperatoryC.ListShort.Add(OperatoryC.Listt[i]);
+				}
+			}
+		}
+
+		private static List<Operatory> TableToList(DataTable table){
+			List<Operatory> oplist=new List<Operatory>();
 			Operatory op;
 			for(int i=0;i<table.Rows.Count;i++) {
 				op=new Operatory();
@@ -32,17 +41,17 @@ namespace OpenDentBusiness{
 				op.ProvHygienist= PIn.PInt(table.Rows[i][6].ToString());
 				op.IsHygiene    = PIn.PBool(table.Rows[i][7].ToString());
 				op.ClinicNum    = PIn.PInt(table.Rows[i][8].ToString());
-				OperatoryC.Listt.Add(op);
-				if(!op.IsHidden) {
-					OperatoryC.ListShort.Add(op);
-				}
+				//DateTStamp
+				oplist.Add(op);
 			}
+			return oplist;
 		}
 
 		///<summary></summary>
 		private static void Insert(Operatory op){
 			string command= "INSERT INTO operatory (OpName,Abbrev,ItemOrder,IsHidden,ProvDentist,ProvHygienist,"
-				+"IsHygiene,ClinicNum) VALUES("
+				+"IsHygiene,ClinicNum"//DateTStamp
+				+") VALUES("
 				+"'"+POut.PString(op.OpName)+"', "
 				+"'"+POut.PString(op.Abbrev)+"', "
 				+"'"+POut.PInt   (op.ItemOrder)+"', "
@@ -64,7 +73,8 @@ namespace OpenDentBusiness{
 				+ ",ProvDentist = '"  +POut.PInt   (op.ProvDentist)+"'"
 				+ ",ProvHygienist = '"+POut.PInt   (op.ProvHygienist)+"'"
 				+ ",IsHygiene = '"    +POut.PBool  (op.IsHygiene)+"'"
-				+ ",ClinicNum = '"    +POut.PInt   (op.ClinicNum)+"'"				
+				+ ",ClinicNum = '"    +POut.PInt   (op.ClinicNum)+"'"	
+				//DateTStamp
 				+" WHERE OperatoryNum = '" +POut.PInt(op.OperatoryNum)+"'";
 			//MessageBox.Show(string command);
  			General.NonQ(command);
@@ -87,6 +97,11 @@ namespace OpenDentBusiness{
 		//public void Delete(){//no such thing as delete.  Hide instead
 		//}
 
+		public static List<Operatory> GetUAppoint(DateTime changedSince){
+			string command="SELECT * FROM operatory WHERE DateTStamp > "+POut.PDateT(changedSince);
+			DataTable table=General.GetTable(command);
+			return TableToList(table);
+		}
 		
 	
 	}

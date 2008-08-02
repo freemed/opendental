@@ -112,6 +112,19 @@ namespace OpenDental{
 					General.NonQ(command);
 					command="UPDATE schedule SET DateTStamp=NOW()";
 					General.NonQ(command);
+					command="ALTER TABLE operatory ADD DateTStamp TimeStamp";
+					General.NonQ(command);
+					command="UPDATE operatory SET DateTStamp=NOW()";
+					General.NonQ(command);
+					command="ALTER TABLE recall ADD DateTStamp TimeStamp";
+					General.NonQ(command);
+					command="UPDATE recall SET DateTStamp=NOW()";
+					General.NonQ(command);
+						command="ALTER TABLE procedurecode ADD DateTStamp TimeStamp";
+					General.NonQ(command);
+					command="UPDATE procedurecode SET DateTStamp=NOW()";
+					General.NonQ(command);
+
 
 
 				} 

@@ -26,45 +26,60 @@ namespace OpenDental{
 			string command="SELECT * FROM procedurecode ORDER BY ProcCat,ProcCode";
 			DataTable table=General.GetTable(command);
 			tableStat=table.Copy();
+			List=TableToList(table).ToArray();
 			RecallAL=new ArrayList();
-			List=new ProcedureCode[tableStat.Rows.Count];
-			for(int i=0;i<tableStat.Rows.Count;i++) {
-				tempCode=new ProcedureCode();
-				tempCode.CodeNum    	 =PIn.PInt(tableStat.Rows[i][0].ToString());
-				tempCode.ProcCode      =PIn.PString(tableStat.Rows[i][1].ToString());
-				tempCode.Descript      =PIn.PString(tableStat.Rows[i][2].ToString());
-				tempCode.AbbrDesc      =PIn.PString(tableStat.Rows[i][3].ToString());
-				tempCode.ProcTime      =PIn.PString(tableStat.Rows[i][4].ToString());
-				tempCode.ProcCat       =PIn.PInt(tableStat.Rows[i][5].ToString());
-				tempCode.TreatArea     =(TreatmentArea)PIn.PInt(tableStat.Rows[i][6].ToString());
-				//tempCode.RemoveTooth   =PIn.PBool  (tableStat.Rows[i][7].ToString());
-				tempCode.SetRecall     =PIn.PBool(tableStat.Rows[i][8].ToString());
-				tempCode.NoBillIns     =PIn.PBool(tableStat.Rows[i][9].ToString());
-				tempCode.IsProsth      =PIn.PBool(tableStat.Rows[i][10].ToString());
-				tempCode.DefaultNote   =PIn.PString(tableStat.Rows[i][11].ToString());
-				tempCode.IsHygiene     =PIn.PBool(tableStat.Rows[i][12].ToString());
-				tempCode.GTypeNum      =PIn.PInt(tableStat.Rows[i][13].ToString());
-				tempCode.AlternateCode1=PIn.PString(tableStat.Rows[i][14].ToString());
-				tempCode.MedicalCode   =PIn.PString(tableStat.Rows[i][15].ToString());
-				tempCode.IsTaxed       =PIn.PBool(tableStat.Rows[i][16].ToString());
-				tempCode.PaintType     =(ToothPaintingType)PIn.PInt(tableStat.Rows[i][17].ToString());
-				tempCode.GraphicColor  =Color.FromArgb(PIn.PInt(tableStat.Rows[i][18].ToString()));
-				tempCode.LaymanTerm    =PIn.PString(tableStat.Rows[i][19].ToString());
-				tempCode.IsCanadianLab =PIn.PBool  (tableStat.Rows[i][20].ToString());
-				tempCode.PreExisting	 =PIn.PBool  (tableStat.Rows[i][21].ToString());
-				tempCode.BaseUnits     =PIn.PInt   (tableStat.Rows[i][22].ToString());
-				tempCode.SubstitutionCode=PIn.PString(tableStat.Rows[i][23].ToString());
-				//tempCode.SubstOnlyIf   =(SubstitutionCondition)PIn.PInt(tableStat.Rows[i][24].ToString());
+			for(int i=0;i<List.Length;i++) {
 				try {
-					HList.Add(tempCode.ProcCode,tempCode.Copy());
+					HList.Add(List[i].ProcCode,List[i].Copy());
 				}
 				catch {
 				}
-				List[i]=tempCode.Copy();
-				if(tempCode.SetRecall) {
-					RecallAL.Add(tempCode);
+				if(List[i].SetRecall) {
+					RecallAL.Add(List[i]);
 				}
 			}
+		}
+
+		public static List<ProcedureCode> GetUAppoint(DateTime changedSince){
+			string command="SELECT * FROM procedurecode WHERE DateTStamp > "+POut.PDateT(changedSince);
+			DataTable table=General.GetTable(command);
+			return TableToList(table);
+		}
+
+		public static List<ProcedureCode> TableToList(DataTable table){
+			ProcedureCode code;
+			List<ProcedureCode> codeList=new List<ProcedureCode>();
+			for(int i=0;i<table.Rows.Count;i++) {
+				code=new ProcedureCode();
+				code.CodeNum    	 =PIn.PInt   (table.Rows[i][0].ToString());
+				code.ProcCode      =PIn.PString(table.Rows[i][1].ToString());
+				code.Descript      =PIn.PString(table.Rows[i][2].ToString());
+				code.AbbrDesc      =PIn.PString(table.Rows[i][3].ToString());
+				code.ProcTime      =PIn.PString(table.Rows[i][4].ToString());
+				code.ProcCat       =PIn.PInt(table.Rows[i][5].ToString());
+				code.TreatArea     =(TreatmentArea)PIn.PInt(table.Rows[i][6].ToString());
+				//code.RemoveTooth   =PIn.PBool  (table.Rows[i][7].ToString());
+				code.SetRecall     =PIn.PBool  (table.Rows[i][8].ToString());
+				code.NoBillIns     =PIn.PBool  (table.Rows[i][9].ToString());
+				code.IsProsth      =PIn.PBool  (table.Rows[i][10].ToString());
+				code.DefaultNote   =PIn.PString(table.Rows[i][11].ToString());
+				code.IsHygiene     =PIn.PBool  (table.Rows[i][12].ToString());
+				code.GTypeNum      =PIn.PInt   (table.Rows[i][13].ToString());
+				code.AlternateCode1=PIn.PString(table.Rows[i][14].ToString());
+				code.MedicalCode   =PIn.PString(table.Rows[i][15].ToString());
+				code.IsTaxed       =PIn.PBool  (table.Rows[i][16].ToString());
+				code.PaintType     =(ToothPaintingType)PIn.PInt(table.Rows[i][17].ToString());
+				code.GraphicColor  =Color.FromArgb(PIn.PInt(table.Rows[i][18].ToString()));
+				code.LaymanTerm    =PIn.PString(table.Rows[i][19].ToString());
+				code.IsCanadianLab =PIn.PBool  (table.Rows[i][20].ToString());
+				code.PreExisting	 =PIn.PBool  (table.Rows[i][21].ToString());
+				code.BaseUnits     =PIn.PInt   (table.Rows[i][22].ToString());
+				code.SubstitutionCode=PIn.PString(table.Rows[i][23].ToString());
+				code.SubstOnlyIf   =(SubstitutionCondition)PIn.PInt(table.Rows[i][24].ToString());
+				//DateTStamp
+				codeList.Add(code);
+			}
+			return codeList;
 		}
 
 		///<summary></summary>
@@ -74,7 +89,8 @@ namespace OpenDental{
 				+"proctime,proccat,treatarea,RemoveTooth,setrecall,"
 				+"nobillins,isprosth,defaultnote,ishygiene,gtypenum,alternatecode1,MedicalCode,IsTaxed,"
 				+"PaintType,GraphicColor,LaymanTerm,IsCanadianLab,PreExisting,BaseUnits,SubstitutionCode,"
-				+"SubstOnlyIf) VALUES("
+				+"SubstOnlyIf"//DateTStamp
+				+") VALUES("
 				+"'"+POut.PInt(code.CodeNum)+"', "
 				+"'"+POut.PString(code.ProcCode)+"', "
 				+"'"+POut.PString(code.Descript)+"', "
@@ -101,6 +117,7 @@ namespace OpenDental{
 				+"'"+POut.PInt(code.BaseUnits)+"', "
 				+"'"+POut.PString(code.SubstitutionCode)+"', "
 				+"'"+POut.PInt   ((int)code.SubstOnlyIf)+"')";
+				//DateTStamp
 			code.CodeNum=General.NonQ(command,true);
 			ProcedureCodes.Refresh();
 			//Cur already set
@@ -135,6 +152,7 @@ namespace OpenDental{
 				+ ",BaseUnits = '"     +POut.PInt(code.BaseUnits)+"'"
 				+ ",SubstitutionCode = '"+POut.PString(code.SubstitutionCode)+"'"
 				+ ",SubstOnlyIf = '"   +POut.PInt   ((int)code.SubstOnlyIf)+"'"
+				//DateTStamp
 				+" WHERE CodeNum = '"+POut.PInt(code.CodeNum)+"'";
 			General.NonQ(command);
 		}

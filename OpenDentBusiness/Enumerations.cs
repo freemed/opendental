@@ -1336,9 +1336,12 @@ namespace OpenDentBusiness{
 	}
 
 	public enum DeletedObjectType{
+		///<summary>0</summary>
 		Appointment,
-		///<summary>A schedule object.  Only provider schedules are tracked for deletion.</summary>
-		ScheduleProv
+		///<summary>1 - A schedule object.  Only provider schedules are tracked for deletion.</summary>
+		ScheduleProv,
+		///<summary>2 - When a recall row is deleted, this records the PatNum for which it was deleted.</summary>
+		RecallPatNum
 	}
 
 	

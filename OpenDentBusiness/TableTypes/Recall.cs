@@ -35,20 +35,11 @@ namespace OpenDentBusiness{
 		///<summary>If true, this recall type will be disabled (there's only one type right now). This is usually used rather than deleting the recall type from the patient because the program must enforce the trigger conditions for all patients.</summary>
 		public bool IsDisabled;
 		//Type: RecallType, once we have multiple recall types
+		//DateTStamp
 
 		///<summary>Returns a copy of this Recall.</summary>
 		public Recall Copy(){
-			Recall recall=new Recall();
-			recall.RecallNum=RecallNum;
-			recall.PatNum=PatNum;
-			recall.DateDueCalc=DateDueCalc;
-			recall.DateDue=DateDue;
-			recall.DatePrevious=DatePrevious;
-			recall.RecallInterval=RecallInterval;
-			recall.RecallStatus=RecallStatus;
-			recall.Note=Note;
-			recall.IsDisabled=IsDisabled;
-			return recall;
+			return (Recall)this.MemberwiseClone();
 		}
 
 	}

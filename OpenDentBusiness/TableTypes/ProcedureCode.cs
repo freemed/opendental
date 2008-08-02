@@ -72,6 +72,7 @@ namespace OpenDentBusiness{
 		///<summary>Enum:SubstitutionCondition Used so that posterior composites only substitute if tooth is molar.  Ins usually pays for premolar composites.</summary>
 		[XmlIgnore]
 		public SubstitutionCondition SubstOnlyIf;
+		//DateTStamp
 
 		
 		///<summary>Not a database column.  Only used for xml import function.</summary>

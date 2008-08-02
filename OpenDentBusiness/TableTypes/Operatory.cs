@@ -23,6 +23,7 @@ namespace OpenDentBusiness{
 		public bool IsHygiene;
 		///<summary>FK to clinic.ClinicNum.  0 if no clinic.</summary>
 		public int ClinicNum;
+		//DateTStamp
 
 		///<summary>Returns a copy of this Operatory.</summary>
 		public Operatory Copy(){
