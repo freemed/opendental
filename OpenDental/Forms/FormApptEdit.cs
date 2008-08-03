@@ -1125,31 +1125,33 @@ namespace OpenDental{
 
 		private void butSlider_MouseDown(object sender,System.Windows.Forms.MouseEventArgs e) {
 			mouseIsDown=true;
-			mouseOrigin=new Point(e.X+butSlider.Location.X
-				,e.Y+butSlider.Location.Y);
+			mouseOrigin=new Point(e.X+butSlider.Location.X,e.Y+butSlider.Location.Y);
 			sliderOrigin=butSlider.Location;
-
 		}
 
 		private void butSlider_MouseMove(object sender,System.Windows.Forms.MouseEventArgs e) {
-			if(!mouseIsDown)
+			if(!mouseIsDown){
 				return;
+			}
 			//tempPoint represents the new location of button of smooth dragging.
-			Point tempPoint=new Point(sliderOrigin.X
-				,sliderOrigin.Y+(e.Y+butSlider.Location.Y)-mouseOrigin.Y);
+			Point tempPoint=new Point(sliderOrigin.X,sliderOrigin.Y+(e.Y+butSlider.Location.Y)-mouseOrigin.Y);
 			int step=(int)(Math.Round((Decimal)(tempPoint.Y-tbTime.Location.Y)/14));
-			if(step==strBTime.Length)
+			if(step==strBTime.Length){
 				return;
-			if(step<1)
+			}
+			if(step<1){
 				return;
-			if(step>tbTime.MaxRows-1)
+			}
+			if(step>tbTime.MaxRows-1){
 				return;
+			}
 			if(step>strBTime.Length) {
 				strBTime.Append('/');
 			}
 			if(step<strBTime.Length) {
 				strBTime.Remove(step,1);
 			}
+			checkTimeLocked.Checked=true;
 			FillTime();
 		}
 
