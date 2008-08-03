@@ -47,6 +47,7 @@ namespace OpenDental{
 		private TextBox textTrojanID;
 		private Label labelTrojanID;
 		private DataTable table;
+		private CheckBox checkShowHidden;
 		private bool trojan;
 
 		///<summary></summary>
@@ -82,6 +83,7 @@ namespace OpenDental{
 			this.label4 = new System.Windows.Forms.Label();
 			this.textTrojanID = new System.Windows.Forms.TextBox();
 			this.labelTrojanID = new System.Windows.Forms.Label();
+			this.checkShowHidden = new System.Windows.Forms.CheckBox();
 			this.butMerge = new OpenDental.UI.Button();
 			this.gridMain = new OpenDental.UI.ODGrid();
 			this.butOK = new OpenDental.UI.Button();
@@ -92,7 +94,6 @@ namespace OpenDental{
 			// 
 			// groupBox2
 			// 
-			this.groupBox2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.groupBox2.Controls.Add(this.radioOrderCarrier);
 			this.groupBox2.Controls.Add(this.radioOrderEmp);
 			this.groupBox2.FlatStyle = System.Windows.Forms.FlatStyle.System;
@@ -215,6 +216,18 @@ namespace OpenDental{
 			this.labelTrojanID.Text = "Trojan ID";
 			this.labelTrojanID.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
+			// checkShowHidden
+			// 
+			this.checkShowHidden.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkShowHidden.Location = new System.Drawing.Point(526,28);
+			this.checkShowHidden.Name = "checkShowHidden";
+			this.checkShowHidden.Size = new System.Drawing.Size(104,20);
+			this.checkShowHidden.TabIndex = 27;
+			this.checkShowHidden.Text = "Show Hidden";
+			this.checkShowHidden.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkShowHidden.UseVisualStyleBackColor = true;
+			this.checkShowHidden.CheckedChanged += new System.EventHandler(this.checkShowHidden_CheckedChanged);
+			// 
 			// butMerge
 			// 
 			this.butMerge.AdjustImageLocation = new System.Drawing.Point(0,0);
@@ -233,6 +246,9 @@ namespace OpenDental{
 			// 
 			// gridMain
 			// 
+			this.gridMain.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.gridMain.HScrollVisible = true;
 			this.gridMain.Location = new System.Drawing.Point(11,51);
 			this.gridMain.Name = "gridMain";
@@ -296,6 +312,7 @@ namespace OpenDental{
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.ClientSize = new System.Drawing.Size(962,669);
+			this.Controls.Add(this.checkShowHidden);
 			this.Controls.Add(this.textTrojanID);
 			this.Controls.Add(this.labelTrojanID);
 			this.Controls.Add(this.butMerge);
@@ -342,7 +359,7 @@ namespace OpenDental{
 		private void FillGrid(){
 			Cursor=Cursors.WaitCursor;
 			table=InsPlans.GetBigList(radioOrderEmp.Checked,textEmployer.Text,textCarrier.Text,
-				textGroupName.Text,textGroupNum.Text,textTrojanID.Text);
+				textGroupName.Text,textGroupNum.Text,textTrojanID.Text,checkShowHidden.Checked);
 			if(IsSelectMode){
 				butBlank.Visible=true;
 			}
@@ -454,6 +471,10 @@ namespace OpenDental{
 			FillGrid();
 		}
 
+		private void checkShowHidden_CheckedChanged(object sender,EventArgs e) {
+			FillGrid();
+		}
+
 		private void butMerge_Click(object sender,EventArgs e) {
 			if(gridMain.SelectedIndices.Length<2) {
 				MessageBox.Show(Lan.g(this,"Please select at least two items first."));
@@ -533,6 +554,8 @@ namespace OpenDental{
 		private void butCancel_Click(object sender, System.EventArgs e) {
 			DialogResult=DialogResult.Cancel;
 		}
+
+		
 
 		
 

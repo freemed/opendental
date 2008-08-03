@@ -120,10 +120,13 @@ namespace OpenDental{
 					General.NonQ(command);
 					command="UPDATE recall SET DateTStamp=NOW()";
 					General.NonQ(command);
-						command="ALTER TABLE procedurecode ADD DateTStamp TimeStamp";
+					command="ALTER TABLE procedurecode ADD DateTStamp TimeStamp";
 					General.NonQ(command);
 					command="UPDATE procedurecode SET DateTStamp=NOW()";
 					General.NonQ(command);
+					command="ALTER TABLE insplan ADD IsHidden tinyint NOT NULL";
+					General.NonQ(command);
+
 
 
 

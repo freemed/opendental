@@ -63,6 +63,8 @@ namespace OpenDentBusiness{
 		public bool DedBeforePerc;
 		///<summary>Set to true to not allow procedure code downgrade substitution on this insurance plan.</summary>
 		public bool CodeSubstNone;
+		///<summary>Set to true to hide it from the pick list and from the main list.</summary>
+		public bool IsHidden;
 		///<summary>This is not a database column.  It is just used to display the number of plans with the same info.</summary>
 		public int NumberPlans;
 		

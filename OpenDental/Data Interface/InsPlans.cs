@@ -23,7 +23,7 @@ namespace OpenDental {
 				+"FeeSched,ReleaseInfo,AssignBen,PlanType,ClaimFormNum,UseAltCode,"
 				+"ClaimsUseUCR,CopayFeeSched,SubscriberID,"
 				+"EmployerNum,CarrierNum,AllowedFeeSched,TrojanID,DivisionNo,BenefitNotes,IsMedical,SubscNote,FilingCode,"
-				+"DentaideCardSequence,ShowBaseUnits,DedBeforePerc,CodeSubstNone) VALUES(";
+				+"DentaideCardSequence,ShowBaseUnits,DedBeforePerc,CodeSubstNone,IsHidden) VALUES(";
 			if(PrefC.RandomKeys) {
 				command+="'"+POut.PInt(plan.PlanNum)+"', ";
 			}
@@ -54,8 +54,9 @@ namespace OpenDental {
 				+"'"+POut.PInt((int)plan.FilingCode)+"', "
 				+"'"+POut.PInt((int)plan.DentaideCardSequence)+"', "
 				+"'"+POut.PBool(plan.ShowBaseUnits)+"', "
-				+"'"+POut.PBool(plan.DedBeforePerc)+"',"
-				+"'"+POut.PBool(plan.CodeSubstNone)+"')";
+				+"'"+POut.PBool(plan.DedBeforePerc)+"', "
+				+"'"+POut.PBool(plan.CodeSubstNone)+"', "
+				+"'"+POut.PBool(plan.IsHidden)+"')";
 			if(PrefC.RandomKeys) {
 				General.NonQ(command);
 			}
@@ -139,6 +140,7 @@ namespace OpenDental {
 				+",ShowBaseUnits='"  +POut.PBool(plan.ShowBaseUnits)+"'"
 				+",DedBeforePerc='"  +POut.PBool(plan.DedBeforePerc)+"'"
 				+",CodeSubstNone='"  +POut.PBool(plan.CodeSubstNone)+"'"
+				+",IsHidden='"       +POut.PBool(plan.IsHidden)+"'"
 				+" WHERE PlanNum = '"+POut.PInt   (plan.PlanNum)+"'";
 			General.NonQ(command);
 		}
@@ -164,6 +166,7 @@ namespace OpenDental {
 				+",ShowBaseUnits = '"  +POut.PBool  (plan.ShowBaseUnits)+"'"
 				+",ShowBaseUnits = '"  +POut.PBool  (plan.DedBeforePerc)+"'"
 				+",CodeSubstNone='"    +POut.PBool  (plan.CodeSubstNone)+"'"
+				+",IsHidden='"         +POut.PBool  (plan.IsHidden)+"'"
 				+" WHERE "
 				+"EmployerNum = '"        +POut.PInt   (like.EmployerNum)+"' "
 				+"AND GroupName = '"      +POut.PString(like.GroupName)+"' "
@@ -288,6 +291,7 @@ namespace OpenDental {
 				PlanList[i].ShowBaseUnits  = PIn.PBool  (table.Rows[i][26].ToString());
 				PlanList[i].DedBeforePerc  = PIn.PBool  (table.Rows[i][27].ToString());
 				PlanList[i].CodeSubstNone  = PIn.PBool  (table.Rows[i][28].ToString());
+				PlanList[i].IsHidden       = PIn.PBool  (table.Rows[i][29].ToString());
 			}
 			return PlanList;
 		}
@@ -693,7 +697,7 @@ namespace OpenDental {
 
 		///<summary>Used from FormInsPlans to get a big list of many plans, organized by carrier name or by employer.  Identical plans are grouped as one row.</summary>
 		public static DataTable GetBigList(bool byEmployer,string empName,string carrierName,string groupName,string groupNum,
-			string trojanID)
+			string trojanID,bool showHidden)
 		{
 			DataTable table=new DataTable();
 			DataRow row;
@@ -728,6 +732,9 @@ namespace OpenDental {
 			}
 			if(groupNum!="") {
 				command+="AND GroupNum LIKE '%"+POut.PString(groupNum)+"%' ";
+			}
+			if(!showHidden){
+				command+="AND insplan.IsHidden=0 ";
 			}
 			command+="GROUP BY insplan.EmployerNum,GroupName,GroupNum,DivisionNo,"
 				+"insplan.CarrierNum,insplan.IsMedical,TrojanID ";
@@ -804,9 +811,7 @@ namespace OpenDental {
 				+"AND insplan.GroupName='"+POut.PString(groupName)+"'";
 			 return General.NonQ(command);
 			 */
-
 			//Code rewritten so that it is not only MySQL compatible, but Oracle compatible as well.
-
 			string command="SELECT insplan.PlanNum FROM insplan,carrier "
 				+"WHERE carrier.CarrierNum = insplan.CarrierNum "//employer.EmployerNum = insplan.EmployerNum "
 				+"AND insplan.EmployerNum='"+POut.PInt(employerNum)+"' "
