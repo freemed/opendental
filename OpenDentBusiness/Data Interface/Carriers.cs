@@ -41,60 +41,94 @@ namespace OpenDentBusiness{
 				List[i].IsPMP       =PIn.PBool(table.Rows[i][11].ToString());
 				List[i].CDAnetVersion=PIn.PString(table.Rows[i][12].ToString());
 				List[i].CanadianNetworkNum=PIn.PInt(table.Rows[i][13].ToString());
+				List[i].IsHidden     =PIn.PBool(table.Rows[i][14].ToString());
 				HList.Add(List[i].CarrierNum,List[i]);
 			}
 		}
 
-		///<summary>Used to get a list of carriers to display in the FormCarriers window.  Only used for Canadian right now.</summary>
-		public static DataTable Refresh(bool isCanadian){
+		///<summary>Used to get a list of carriers to display in the FormCarriers window.</summary>
+		public static DataTable GetBigList(bool isCanadian,bool showHidden,string carrierName){
 			DataTable tableRaw;
-			DataTable tableReturn;
+			DataTable table;
 			string command;
+			//if(isCanadian){
+			command="SELECT Address,Address2,canadiannetwork.Abbrev,carrier.CarrierNum,"
+				+"CarrierName,CDAnetVersion,City,ElectID,"
+				+"COUNT(insplan.PlanNum) insPlanCount,"
+				+"carrier.IsHidden,IsPMP,Phone,State,Zip "
+				+"FROM carrier "
+				+"LEFT JOIN canadiannetwork ON canadiannetwork.CanadianNetworkNum=carrier.CanadianNetworkNum "
+				+"LEFT JOIN insplan ON insplan.CarrierNum=carrier.CarrierNum "
+				+"WHERE "
+				+"CarrierName LIKE '%"+POut.PString(carrierName)+"%' ";
 			if(isCanadian){
-				command="SELECT CarrierNum, CarrierName, ElectID, IsPMP, canadiannetwork.Abbrev, CDAnetVersion FROM carrier "
-					+"LEFT JOIN canadiannetwork ON canadiannetwork.CanadianNetworkNum=carrier.CanadianNetworkNum "
-					+"WHERE IsCDA=1 ORDER BY CarrierName";
-				tableRaw=General.GetTable(command);
-				tableReturn=new DataTable();
-				tableReturn.Columns.Add("CarrierNum");
-				tableReturn.Columns.Add("CarrierName");
-				tableReturn.Columns.Add("ElectID");
-				tableReturn.Columns.Add("PMP");
-				tableReturn.Columns.Add("Network");
-				tableReturn.Columns.Add("Version");
-				tableReturn.Columns.Add("Trans02");
-				tableReturn.Columns.Add("Trans03");
-				tableReturn.Columns.Add("Trans04");
-				tableReturn.Columns.Add("Trans05");
-				tableReturn.Columns.Add("Trans06");
-				tableReturn.Columns.Add("Trans07");
-				tableReturn.Columns.Add("Trans08");
-				DataRow row;
-				for(int i=0;i<tableRaw.Rows.Count;i++){
-					row=tableReturn.NewRow();
-					row["CarrierNum"]=tableRaw.Rows[i]["CarrierNum"].ToString();
-					row["CarrierName"]=tableRaw.Rows[i]["CarrierName"].ToString();
-					row["ElectID"]=tableRaw.Rows[i]["ElectID"].ToString();
-					if(PIn.PBool(tableRaw.Rows[i]["IsPMP"].ToString())){
-						row["PMP"]="X";
-					}
-					else{
-						row["PMP"]="";
-					}
-					row["Network"]=tableRaw.Rows[i]["Abbrev"].ToString();
-					row["Version"]=tableRaw.Rows[i]["CDAnetVersion"].ToString();
-					row["Trans02"]="X";
-					row["Trans03"]="X";
-					row["Trans04"]="X";
-					row["Trans05"]="X";
-					row["Trans06"]="X";
-					row["Trans07"]="X";
-					row["Trans08"]="X";
-					tableReturn.Rows.Add(row);
-				}
-				return tableReturn;
+				command+="AND IsCDA=1 ";
 			}
-			return null;
+			if(!showHidden){
+				command+="AND carrier.IsHidden=0 ";
+			}
+			command+="GROUP BY carrier.CarrierNum "
+				+"ORDER BY CarrierName";
+			tableRaw=General.GetTable(command);
+			table=new DataTable();
+			table.Columns.Add("Address");
+			table.Columns.Add("Address2");
+			table.Columns.Add("CarrierNum");
+			table.Columns.Add("CarrierName");
+			table.Columns.Add("City");
+			table.Columns.Add("ElectID");
+			table.Columns.Add("insPlanCount");
+			table.Columns.Add("isHidden");
+			table.Columns.Add("Phone");
+			table.Columns.Add("pMP");
+			table.Columns.Add("network");
+			table.Columns.Add("State");
+			table.Columns.Add("trans02");
+			table.Columns.Add("trans03");
+			table.Columns.Add("trans04");
+			table.Columns.Add("trans05");
+			table.Columns.Add("trans06");
+			table.Columns.Add("trans07");
+			table.Columns.Add("trans08");
+			table.Columns.Add("version");
+			table.Columns.Add("Zip");
+			DataRow row;
+			for(int i=0;i<tableRaw.Rows.Count;i++){
+				row=table.NewRow();
+				row["Address"]=tableRaw.Rows[i]["Address"].ToString();
+				row["Address2"]=tableRaw.Rows[i]["Address2"].ToString();
+				row["CarrierNum"]=tableRaw.Rows[i]["CarrierNum"].ToString();
+				row["CarrierName"]=tableRaw.Rows[i]["CarrierName"].ToString();
+				row["City"]=tableRaw.Rows[i]["City"].ToString();
+				row["ElectID"]=tableRaw.Rows[i]["ElectID"].ToString();
+				if(PIn.PBool(tableRaw.Rows[i]["IsHidden"].ToString())){
+					row["isHidden"]="X";
+				}
+				else{
+					row["isHidden"]="";
+				}
+				row["insPlanCount"]=tableRaw.Rows[i]["insPlanCount"].ToString();
+				row["Phone"]=tableRaw.Rows[i]["Phone"].ToString();
+				if(PIn.PBool(tableRaw.Rows[i]["IsPMP"].ToString())){
+					row["pMP"]="X";
+				}
+				else{
+					row["pMP"]="";
+				}
+				row["network"]=tableRaw.Rows[i]["Abbrev"].ToString();
+				row["State"]=tableRaw.Rows[i]["State"].ToString();
+				row["trans02"]="X";
+				row["trans03"]="X";
+				row["trans04"]="X";
+				row["trans05"]="X";
+				row["trans06"]="X";
+				row["trans07"]="X";
+				row["trans08"]="X";
+				row["version"]=tableRaw.Rows[i]["CDAnetVersion"].ToString();
+				row["Zip"]=tableRaw.Rows[i]["Zip"].ToString();
+				table.Rows.Add(row);
+			}
+			return table;
 		}
 
 		///<summary>Surround with try/catch.</summary>
@@ -145,6 +179,7 @@ namespace OpenDentBusiness{
 				+ ",IsPMP= '"      +POut.PBool  (Cur.IsPMP)+"' "
 				+ ",CDAnetVersion= '"+POut.PString(Cur.CDAnetVersion)+"' "
 				+ ",CanadianNetworkNum= '"+POut.PInt(Cur.CanadianNetworkNum)+"' "
+				+ ",IsHidden= '"     +POut.PBool(Cur.IsHidden)+"' "
 				+"WHERE CarrierNum = '"+POut.PInt(Cur.CarrierNum)+"'";
 			//MessageBox.Show(string command);
 			General.NonQ(command);
@@ -178,7 +213,7 @@ namespace OpenDentBusiness{
 				command+="CarrierNum,";
 			}
 			command+="CarrierName,Address,Address2,City,State,Zip,Phone,ElectID,NoSendElect,"
-				+"IsCDA,IsPMP,CDAnetVersion,CanadianNetworkNum) VALUES(";
+				+"IsCDA,IsPMP,CDAnetVersion,CanadianNetworkNum,IsHidden) VALUES(";
 			if(PrefC.RandomKeys){
 				command+="'"+POut.PInt(Cur.CarrierNum)+"', ";
 			}
@@ -195,7 +230,8 @@ namespace OpenDentBusiness{
 				+"'"+POut.PBool  (Cur.IsCDA)+"', "
 				+"'"+POut.PBool  (Cur.IsPMP)+"', "
 				+"'"+POut.PString(Cur.CDAnetVersion)+"', "
-				+"'"+POut.PInt   (Cur.CanadianNetworkNum)+"')";
+				+"'"+POut.PInt   (Cur.CanadianNetworkNum)+"', "
+				+"'"+POut.PBool  (Cur.IsHidden)+"')";
 			if(PrefC.RandomKeys){
 				General.NonQ(command);
 			}
@@ -340,6 +376,9 @@ namespace OpenDentBusiness{
 				//	continue;//ignore all duplicate names
 				//}
 				//if(Regex.IsMatch(List[i].CarrierName,"^"+carrierName,RegexOptions.IgnoreCase))
+				if(List[i].IsHidden){
+					continue;
+				}
 				if(List[i].CarrierName.ToUpper().IndexOf(carrierName.ToUpper())==0){
 					retVal.Add(List[i]);
 				}

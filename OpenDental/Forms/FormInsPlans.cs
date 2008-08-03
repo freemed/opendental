@@ -343,6 +343,10 @@ namespace OpenDental{
 		#endregion
 
 		private void FormInsTemplates_Load(object sender, System.EventArgs e) {
+			if(!IsSelectMode){
+				butCancel.Text=Lan.g(this,"Close");
+				butOK.Visible=false;
+			}
 			Program prog=Programs.GetCur("Trojan");
 			if(prog!=null && prog.Enabled) {
 				trojan=true;
@@ -534,21 +538,22 @@ namespace OpenDental{
 		}
 
 		private void butOK_Click(object sender, System.EventArgs e) {
-			if(IsSelectMode){
-				if(gridMain.SelectedIndices.Length==0){
-					MessageBox.Show(Lan.g(this,"Please select an item first."));
-					return;
-				}
-				if(gridMain.SelectedIndices.Length>1) {
-					MessageBox.Show(Lan.g(this,"Please select only one item first."));
-					return;
-				}
-				SelectedPlan=InsPlans.GetPlan(PIn.PInt(table.Rows[gridMain.SelectedIndices[0]]["PlanNum"].ToString()),null).Copy();
-				DialogResult=DialogResult.OK;
+			//only visible if IsSelectMode
+			//if(IsSelectMode){
+			if(gridMain.SelectedIndices.Length==0){
+				MessageBox.Show(Lan.g(this,"Please select an item first."));
+				return;
 			}
-			else{//just editing the list from the main menu
-				DialogResult=DialogResult.OK;
+			if(gridMain.SelectedIndices.Length>1) {
+				MessageBox.Show(Lan.g(this,"Please select only one item first."));
+				return;
 			}
+			SelectedPlan=InsPlans.GetPlan(PIn.PInt(table.Rows[gridMain.SelectedIndices[0]]["PlanNum"].ToString()),null).Copy();
+			DialogResult=DialogResult.OK;
+			//}
+			//else{//just editing the list from the main menu
+			//	DialogResult=DialogResult.OK;
+			//}
 		}
 
 		private void butCancel_Click(object sender, System.EventArgs e) {

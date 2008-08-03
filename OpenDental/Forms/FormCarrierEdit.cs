@@ -60,22 +60,16 @@ namespace OpenDental{
 		private CheckBox check04;
 		private CheckBox check05;
 		private CheckBox check02;
-		private Carrier CarrierCur;
+		private CheckBox checkIsHidden;
+		public Carrier CarrierCur;
 
-		///<summary>It's ok to use 0 for carrierNum if IsNew.</summary>
-		public FormCarrierEdit(int carrierNum)
-		{
+		///<summary></summary>
+		public FormCarrierEdit(){
 			//
 			// Required for Windows Form Designer support
 			//
 			InitializeComponent();
 			Lan.F(this);
-			if(IsNew){
-				CarrierCur=new Carrier();
-			}
-			else{
-				CarrierCur=Carriers.GetCarrier(carrierNum);
-			}
 		}
 
 		/// <summary>
@@ -144,6 +138,7 @@ namespace OpenDental{
 			this.butDelete = new OpenDental.UI.Button();
 			this.butOK = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
+			this.checkIsHidden = new System.Windows.Forms.CheckBox();
 			this.groupBox1.SuspendLayout();
 			this.groupCDAnet.SuspendLayout();
 			this.groupBox3.SuspendLayout();
@@ -151,7 +146,7 @@ namespace OpenDental{
 			// 
 			// textCarrierName
 			// 
-			this.textCarrierName.Location = new System.Drawing.Point(177,19);
+			this.textCarrierName.Location = new System.Drawing.Point(180,18);
 			this.textCarrierName.MaxLength = 255;
 			this.textCarrierName.Name = "textCarrierName";
 			this.textCarrierName.Size = new System.Drawing.Size(226,20);
@@ -160,7 +155,7 @@ namespace OpenDental{
 			// 
 			// label2
 			// 
-			this.label2.Location = new System.Drawing.Point(25,42);
+			this.label2.Location = new System.Drawing.Point(28,41);
 			this.label2.Name = "label2";
 			this.label2.Size = new System.Drawing.Size(151,17);
 			this.label2.TabIndex = 6;
@@ -169,7 +164,7 @@ namespace OpenDental{
 			// 
 			// textPhone
 			// 
-			this.textPhone.Location = new System.Drawing.Point(177,39);
+			this.textPhone.Location = new System.Drawing.Point(180,38);
 			this.textPhone.MaxLength = 255;
 			this.textPhone.Name = "textPhone";
 			this.textPhone.Size = new System.Drawing.Size(157,20);
@@ -178,7 +173,7 @@ namespace OpenDental{
 			// 
 			// label3
 			// 
-			this.label3.Location = new System.Drawing.Point(24,61);
+			this.label3.Location = new System.Drawing.Point(27,60);
 			this.label3.Name = "label3";
 			this.label3.Size = new System.Drawing.Size(151,17);
 			this.label3.TabIndex = 8;
@@ -187,7 +182,7 @@ namespace OpenDental{
 			// 
 			// textAddress
 			// 
-			this.textAddress.Location = new System.Drawing.Point(177,59);
+			this.textAddress.Location = new System.Drawing.Point(180,58);
 			this.textAddress.MaxLength = 255;
 			this.textAddress.Name = "textAddress";
 			this.textAddress.Size = new System.Drawing.Size(291,20);
@@ -196,7 +191,7 @@ namespace OpenDental{
 			// 
 			// label4
 			// 
-			this.label4.Location = new System.Drawing.Point(24,83);
+			this.label4.Location = new System.Drawing.Point(27,82);
 			this.label4.Name = "label4";
 			this.label4.Size = new System.Drawing.Size(151,17);
 			this.label4.TabIndex = 10;
@@ -205,7 +200,7 @@ namespace OpenDental{
 			// 
 			// textAddress2
 			// 
-			this.textAddress2.Location = new System.Drawing.Point(177,79);
+			this.textAddress2.Location = new System.Drawing.Point(180,78);
 			this.textAddress2.MaxLength = 255;
 			this.textAddress2.Name = "textAddress2";
 			this.textAddress2.Size = new System.Drawing.Size(291,20);
@@ -214,7 +209,7 @@ namespace OpenDental{
 			// 
 			// label6
 			// 
-			this.label6.Location = new System.Drawing.Point(24,22);
+			this.label6.Location = new System.Drawing.Point(27,21);
 			this.label6.Name = "label6";
 			this.label6.Size = new System.Drawing.Size(151,17);
 			this.label6.TabIndex = 14;
@@ -223,7 +218,7 @@ namespace OpenDental{
 			// 
 			// labelElectID
 			// 
-			this.labelElectID.Location = new System.Drawing.Point(24,126);
+			this.labelElectID.Location = new System.Drawing.Point(27,125);
 			this.labelElectID.Name = "labelElectID";
 			this.labelElectID.Size = new System.Drawing.Size(151,17);
 			this.labelElectID.TabIndex = 20;
@@ -232,7 +227,7 @@ namespace OpenDental{
 			// 
 			// textElectID
 			// 
-			this.textElectID.Location = new System.Drawing.Point(177,121);
+			this.textElectID.Location = new System.Drawing.Point(180,120);
 			this.textElectID.Name = "textElectID";
 			this.textElectID.Size = new System.Drawing.Size(59,20);
 			this.textElectID.TabIndex = 19;
@@ -243,7 +238,7 @@ namespace OpenDental{
 			this.groupBox1.Controls.Add(this.textPlans);
 			this.groupBox1.Controls.Add(this.label9);
 			this.groupBox1.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.groupBox1.Location = new System.Drawing.Point(30,155);
+			this.groupBox1.Location = new System.Drawing.Point(31,173);
 			this.groupBox1.Name = "groupBox1";
 			this.groupBox1.Size = new System.Drawing.Size(448,74);
 			this.groupBox1.TabIndex = 23;
@@ -280,7 +275,7 @@ namespace OpenDental{
 			// checkNoSendElect
 			// 
 			this.checkNoSendElect.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkNoSendElect.Location = new System.Drawing.Point(244,124);
+			this.checkNoSendElect.Location = new System.Drawing.Point(247,123);
 			this.checkNoSendElect.Name = "checkNoSendElect";
 			this.checkNoSendElect.Size = new System.Drawing.Size(246,17);
 			this.checkNoSendElect.TabIndex = 93;
@@ -288,7 +283,7 @@ namespace OpenDental{
 			// 
 			// textCity
 			// 
-			this.textCity.Location = new System.Drawing.Point(177,100);
+			this.textCity.Location = new System.Drawing.Point(180,99);
 			this.textCity.MaxLength = 255;
 			this.textCity.Name = "textCity";
 			this.textCity.Size = new System.Drawing.Size(155,20);
@@ -297,7 +292,7 @@ namespace OpenDental{
 			// 
 			// textState
 			// 
-			this.textState.Location = new System.Drawing.Point(332,100);
+			this.textState.Location = new System.Drawing.Point(335,99);
 			this.textState.MaxLength = 255;
 			this.textState.Name = "textState";
 			this.textState.Size = new System.Drawing.Size(65,20);
@@ -306,7 +301,7 @@ namespace OpenDental{
 			// 
 			// textZip
 			// 
-			this.textZip.Location = new System.Drawing.Point(397,100);
+			this.textZip.Location = new System.Drawing.Point(400,99);
 			this.textZip.MaxLength = 255;
 			this.textZip.Name = "textZip";
 			this.textZip.Size = new System.Drawing.Size(71,20);
@@ -314,7 +309,7 @@ namespace OpenDental{
 			// 
 			// labelCitySt
 			// 
-			this.labelCitySt.Location = new System.Drawing.Point(12,104);
+			this.labelCitySt.Location = new System.Drawing.Point(15,103);
 			this.labelCitySt.Name = "labelCitySt";
 			this.labelCitySt.Size = new System.Drawing.Size(163,15);
 			this.labelCitySt.TabIndex = 95;
@@ -324,7 +319,7 @@ namespace OpenDental{
 			// checkIsCDAnet
 			// 
 			this.checkIsCDAnet.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkIsCDAnet.Location = new System.Drawing.Point(30,251);
+			this.checkIsCDAnet.Location = new System.Drawing.Point(31,269);
 			this.checkIsCDAnet.Name = "checkIsCDAnet";
 			this.checkIsCDAnet.Size = new System.Drawing.Size(168,17);
 			this.checkIsCDAnet.TabIndex = 98;
@@ -345,7 +340,7 @@ namespace OpenDental{
 			this.groupCDAnet.Controls.Add(this.textVersion);
 			this.groupCDAnet.Controls.Add(this.label1);
 			this.groupCDAnet.Controls.Add(this.checkPMP);
-			this.groupCDAnet.Location = new System.Drawing.Point(28,274);
+			this.groupCDAnet.Location = new System.Drawing.Point(29,292);
 			this.groupCDAnet.Name = "groupCDAnet";
 			this.groupCDAnet.Size = new System.Drawing.Size(664,201);
 			this.groupCDAnet.TabIndex = 99;
@@ -540,7 +535,7 @@ namespace OpenDental{
 			this.butDelete.CornerRadius = 4F;
 			this.butDelete.Image = global::OpenDental.Properties.Resources.deleteX;
 			this.butDelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butDelete.Location = new System.Drawing.Point(29,488);
+			this.butDelete.Location = new System.Drawing.Point(29,516);
 			this.butDelete.Name = "butDelete";
 			this.butDelete.Size = new System.Drawing.Size(90,26);
 			this.butDelete.TabIndex = 24;
@@ -555,7 +550,7 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(514,487);
+			this.butOK.Location = new System.Drawing.Point(514,515);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(78,26);
 			this.butOK.TabIndex = 1;
@@ -571,17 +566,29 @@ namespace OpenDental{
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
 			this.butCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.butCancel.Location = new System.Drawing.Point(616,487);
+			this.butCancel.Location = new System.Drawing.Point(616,515);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(78,26);
 			this.butCancel.TabIndex = 0;
 			this.butCancel.Text = "&Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
 			// 
+			// checkIsHidden
+			// 
+			this.checkIsHidden.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkIsHidden.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.checkIsHidden.Location = new System.Drawing.Point(89,145);
+			this.checkIsHidden.Name = "checkIsHidden";
+			this.checkIsHidden.Size = new System.Drawing.Size(104,17);
+			this.checkIsHidden.TabIndex = 100;
+			this.checkIsHidden.Text = "Hidden";
+			this.checkIsHidden.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
 			// FormCarrierEdit
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
-			this.ClientSize = new System.Drawing.Size(724,531);
+			this.ClientSize = new System.Drawing.Size(724,559);
+			this.Controls.Add(this.checkIsHidden);
 			this.Controls.Add(this.groupCDAnet);
 			this.Controls.Add(this.textCity);
 			this.Controls.Add(this.textState);
@@ -632,6 +639,7 @@ namespace OpenDental{
 			textZip.Text=CarrierCur.Zip;
 			textElectID.Text=CarrierCur.ElectID;
 			checkNoSendElect.Checked=CarrierCur.NoSendElect;
+			checkIsHidden.Checked=CarrierCur.IsHidden;
 			//checkPMP.Checked=CarrierCur.IsPMP;
 			string[] dependentPlans=Carriers.DependentPlans(CarrierCur);
 			textPlans.Text=dependentPlans.Length.ToString();
@@ -760,6 +768,7 @@ namespace OpenDental{
 			CarrierCur.Zip=textZip.Text;
 			CarrierCur.ElectID=textElectID.Text;
 			CarrierCur.NoSendElect=checkNoSendElect.Checked;
+			CarrierCur.IsHidden=checkIsHidden.Checked;
 			if(checkIsCDAnet.Checked){
 				CarrierCur.IsCDA=true;
 				//CarrierCur.IsPMP=checkPMP.Checked;

@@ -126,6 +126,14 @@ namespace OpenDental{
 					General.NonQ(command);
 					command="ALTER TABLE insplan ADD IsHidden tinyint NOT NULL";
 					General.NonQ(command);
+					command="ALTER TABLE carrier ADD IsHidden tinyint NOT NULL";
+					General.NonQ(command);
+					command="ALTER TABLE insplan ADD INDEX (CarrierNum)";
+					try {
+						General.NonQ(command);
+					}
+					catch {
+					}
 
 
 
