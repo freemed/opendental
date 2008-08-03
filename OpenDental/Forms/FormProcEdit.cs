@@ -397,7 +397,7 @@ namespace OpenDental{
 			// 
 			this.textTooth.Location = new System.Drawing.Point(106,105);
 			this.textTooth.Name = "textTooth";
-			this.textTooth.Size = new System.Drawing.Size(28,20);
+			this.textTooth.Size = new System.Drawing.Size(35,20);
 			this.textTooth.TabIndex = 7;
 			this.textTooth.Visible = false;
 			this.textTooth.Validating += new System.ComponentModel.CancelEventHandler(this.textTooth_Validating);
@@ -1753,11 +1753,17 @@ namespace OpenDental{
 				textSite.Visible=false;
 				butPickSite.Visible=false;
 			}
-			if(PrefC.GetBool("UseInternationalToothNumbers")){
+			if(PrefC.GetInt("UseInternationalToothNumbers")==1){
 				listBoxTeeth.Items.Clear();
 				listBoxTeeth.Items.AddRange(new string[] {"18","17","16","15","14","13","12","11","21","22","23","24","25","26","27","28"});
 				listBoxTeeth2.Items.Clear();
 				listBoxTeeth2.Items.AddRange(new string[] {"48","47","46","45","44","43","42","41","31","32","33","34","35","36","37","38"});
+			}
+			if(PrefC.GetInt("UseInternationalToothNumbers")==3){
+				listBoxTeeth.Items.Clear();
+				listBoxTeeth.Items.AddRange(new string[] {"8","7","6","5","4","3","2","1","1","2","3","4","5","6","7","8"});
+				listBoxTeeth2.Items.Clear();
+				listBoxTeeth2.Items.AddRange(new string[] {"8","7","6","5","4","3","2","1","1","2","3","4","5","6","7","8"});
 			}
 			ClaimList=Claims.Refresh(PatCur.PatNum);
 			ProcedureCode2=ProcedureCodes.GetProcCode(ProcCur.CodeNum);
@@ -2109,20 +2115,30 @@ namespace OpenDental{
 					this.listBoxTeeth2.Visible=true;
 					listBoxTeeth.SelectionMode=SelectionMode.MultiExtended;
 					listBoxTeeth2.SelectionMode=SelectionMode.MultiExtended;
-
 					if(ProcCur.ToothRange==null){
 						break;
 					}
-   			  string[] sArray=ProcCur.ToothRange.Split(',');
+   			  string[] sArray=ProcCur.ToothRange.Split(',');//in american
+					int idxAmer;
           for(int i=0;i<sArray.Length;i++)  {
-            for(int j=0;j<listBoxTeeth.Items.Count;j++)  {
+						idxAmer=Array.IndexOf(Tooth.labelsUniversal,sArray[i]);
+						if(idxAmer==-1){
+							continue;
+						}
+						if(idxAmer<16){
+							listBoxTeeth.SetSelected(idxAmer,true);
+						}
+						else if(idxAmer<32){//ignore anything after 32.
+							listBoxTeeth2.SetSelected(idxAmer-16,true);
+						}
+            /*for(int j=0;j<listBoxTeeth.Items.Count;j++)  {
               if(Tooth.ToInternat(sArray[i])==listBoxTeeth.Items[j].ToString())
 				 		    listBoxTeeth.SelectedItem=Tooth.ToInternat(sArray[i]);
 					  }
   			    for(int j=0;j<listBoxTeeth2.Items.Count;j++)  {
               if(Tooth.ToInternat(sArray[i])==listBoxTeeth2.Items[j].ToString())
 				 		    listBoxTeeth2.SelectedItem=Tooth.ToInternat(sArray[i]);
-            }
+            }*/
 					} 
 					break;
 			}//end switch
@@ -2936,15 +2952,20 @@ namespace OpenDental{
 						return;
 					}
           string range="";
-		      for(int j=0;j<listBoxTeeth.SelectedItems.Count;j++){
-						if(j!=0)
+					int idxAmer;
+					for(int j=0;j<listBoxTeeth.SelectedIndices.Count;j++){
+						idxAmer=listBoxTeeth.SelectedIndices[j];
+						if(j!=0){
 							range+=",";
-            range+=Tooth.FromInternat(listBoxTeeth.SelectedItems[j].ToString());
-          }
-		      for(int j=0;j<listBoxTeeth2.SelectedItems.Count;j++){
-						if(j!=0)
+						}
+            range+=Tooth.labelsUniversal[idxAmer];
+					}
+					for(int j=0;j<listBoxTeeth2.SelectedIndices.Count;j++){
+						idxAmer=listBoxTeeth2.SelectedIndices[j]+16;
+						if(j!=0){
 							range+=",";
-            range+=Tooth.FromInternat(listBoxTeeth2.SelectedItems[j].ToString());
+						}
+            range+=Tooth.labelsUniversal[idxAmer];
           }
 			    ProcCur.ToothRange=range;
 					ProcCur.Surf="";

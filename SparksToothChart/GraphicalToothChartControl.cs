@@ -815,8 +815,7 @@ namespace SparksToothChart {
 				yPos-=3.8f;
 			}
 			xPos+=GetTransX(tooth_id);
-			string displayNum=OpenDentBusiness.Tooth.GetToothLabel(tooth_id);
-
+			string displayNum=OpenDentBusiness.Tooth.GetToothLabelGraphic(tooth_id);
 			float strWidth=MeasureStringMm(displayNum);
 			xPos-=strWidth/2f;
 			//only use the ShiftM portion of the user translation
@@ -853,8 +852,7 @@ namespace SparksToothChart {
 			if(isFullRedraw && ListToothGraphics[tooth_id].HideNumber){//if redrawing all numbers, and this is a "hidden" number
 				return;//skip
 			}
-			string displayNum=OpenDentBusiness.Tooth.GetToothLabel(tooth_id);
-
+			string displayNum=OpenDentBusiness.Tooth.GetToothLabelGraphic(tooth_id);
 			/*float strWidth=MeasureStringMm(displayNum);
 			xPos-=strWidth/2f;
 			//only use the ShiftM portion of the user translation

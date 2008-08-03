@@ -13,7 +13,7 @@ namespace OpenDentBusiness{
 			
 		}
 
-		private static String[] labelsUniversal = new String[] { "1",  "2",  "3",  "4",  "5",  "6",  "7",  "8",  "9", "10", "11", "12", "13", "14", "15", "16", 
+		public static String[] labelsUniversal = new String[] { "1",  "2",  "3",  "4",  "5",  "6",  "7",  "8",  "9", "10", "11", "12", "13", "14", "15", "16", 
 																"32", "31", "30", "29", "28", "27", "26", "25", "24", "23", "22", "21", "20", "19", "18", "17",
 																                   "A",  "B",  "C",  "D",  "E",  "F",  "G",  "H",  "I",  "J",
 																				   "T",  "S",  "R",  "Q",  "P",  "O",  "N",  "M",  "L",  "K"
@@ -30,6 +30,18 @@ namespace OpenDentBusiness{
 																                   "A",  "B",  "C",  "D",  "E",  "F",  "G",  "H",  "I",  "J",
 																				   "T",  "S",  "R",  "Q",  "P",  "O",  "N",  "M",  "L",  "K"
 																};
+
+		private static String[] labelsPalmer = new String[] {
+			"UR8","UR7","UR6","UR5","UR4","UR3","UR2","UR1","UL1","UL2","UL3","UL4","UL5","UL6","UL7","UL8",
+			"LR8","LR7","LR6","LR5","LR4","LR3","LR2","LR1","LL1","LL2","LL3","LL4","LL5","LL6","LL7","LL8",
+			"URE","URD","URC","URB","URA","ULA","ULB","ULC","ULD","ULE",
+			"LRE","LRD","LRC","LRB","LRA","LLA","LLB","LLC","LLD","LLE"};
+
+		public static String[] labelsPalmerSimple = new String[] {
+			"8","7","6","5","4","3","2","1","1","2","3","4","5","6","7","8",
+			"8","7","6","5","4","3","2","1","1","2","3","4","5","6","7","8",
+			"E","D","C","B","A","A","B","C","D","E",
+			"E","D","C","B","A","A","B","C","D","E"};
 
 		///<summary></summary>
 		public static bool IsAnterior(string toothNum){
@@ -136,13 +148,39 @@ namespace OpenDentBusiness{
 			if(index==-1){
 				return "-";
 			}
-			if (nomenclature == 1)
-			{ // FDI
+			if (nomenclature == 1){ // FDI
 				return labelsFDI[index];
 			}
-			else if (nomenclature == 2)
-			{ // Haderup
+			else if (nomenclature == 2){ // Haderup
 				return labelsHaderup[index];
+			}
+			else if (nomenclature == 3){ // Palmer
+				return labelsPalmer[index];
+			}
+			return "-"; // Should never happen
+		}
+
+		///<summary>Identical to GetToothLabel, but just used in the 3D tooth chart because with Palmer, we don't want the UR, UL, etc.</summary>
+		public static string GetToothLabelGraphic(string tooth_id){
+			if(tooth_id==null || tooth_id==""){
+				return ""; // CWI: We should fix the source of these
+			}
+			int nomenclature = PrefC.GetInt("UseInternationalToothNumbers");
+			if(nomenclature == 0){
+				return tooth_id; // Universal
+			}
+			int index = Array.IndexOf(labelsUniversal, tooth_id);
+			if(index==-1){
+				return "-";
+			}
+			if (nomenclature == 1){ // FDI
+				return labelsFDI[index];
+			}
+			else if (nomenclature == 2){ // Haderup
+				return labelsHaderup[index];
+			}
+			else if (nomenclature == 3){ // Palmer
+				return labelsPalmerSimple[index];
 			}
 			return "-"; // Should never happen
 		}
@@ -154,17 +192,16 @@ namespace OpenDentBusiness{
 				return tooth_label; // Universal
 			}
 			int index = 0;
-			if (nomenclature == 1)
-			{ // FDI
+			if (nomenclature == 1){ // FDI
 				index = Array.IndexOf(labelsFDI, tooth_label);
 			}
-			else if (nomenclature == 2)
-			{ // Haderup
+			else if (nomenclature == 2){ // Haderup
 				index = Array.IndexOf(labelsHaderup, tooth_label);
 			}
-
+			else if (nomenclature == 3){ // Palmer
+				index = Array.IndexOf(labelsPalmer, tooth_label);
+			}
 			return labelsUniversal[index];
-
 		}
 
 		///<summary>Sometimes validated by IsValidDB before coming here, otherwise an invalid toothnum .  This should be run on all displayed tooth numbers. It will handle checking for whether user is using international tooth numbers.  All tooth numbers are passed in american values until the very last moment.  Just before display, the string is converted using this method.</summary>
