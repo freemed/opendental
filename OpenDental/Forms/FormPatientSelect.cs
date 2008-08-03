@@ -164,6 +164,7 @@ namespace OpenDental{
 			// 
 			// groupAddPt
 			// 
+			this.groupAddPt.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.groupAddPt.Controls.Add(this.butAddAll);
 			this.groupAddPt.Controls.Add(this.butAddPt);
 			this.groupAddPt.FlatStyle = System.Windows.Forms.FlatStyle.System;
@@ -206,6 +207,7 @@ namespace OpenDental{
 			// butOK
 			// 
 			this.butOK.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.butOK.Autosize = true;
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
@@ -220,6 +222,7 @@ namespace OpenDental{
 			// butCancel
 			// 
 			this.butCancel.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.butCancel.Autosize = true;
 			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
@@ -234,6 +237,7 @@ namespace OpenDental{
 			// 
 			// groupBox2
 			// 
+			this.groupBox2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.groupBox2.Controls.Add(this.comboSite);
 			this.groupBox2.Controls.Add(this.labelSite);
 			this.groupBox2.Controls.Add(this.comboBillingType);
@@ -520,6 +524,7 @@ namespace OpenDental{
 			// 
 			// groupBox1
 			// 
+			this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.groupBox1.Controls.Add(this.checkRefresh);
 			this.groupBox1.Controls.Add(this.butGetAll);
 			this.groupBox1.Controls.Add(this.butSearch);
@@ -571,6 +576,9 @@ namespace OpenDental{
 			// 
 			// gridMain
 			// 
+			this.gridMain.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.gridMain.HScrollVisible = true;
 			this.gridMain.Location = new System.Drawing.Point(3,2);
 			this.gridMain.Name = "gridMain";
@@ -585,6 +593,7 @@ namespace OpenDental{
 			// 
 			// contrKeyboard1
 			// 
+			this.contrKeyboard1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.contrKeyboard1.Location = new System.Drawing.Point(669,0);
 			this.contrKeyboard1.Name = "contrKeyboard1";
 			this.contrKeyboard1.Size = new System.Drawing.Size(275,100);
@@ -594,9 +603,7 @@ namespace OpenDental{
 			// 
 			// FormPatientSelect
 			// 
-			this.AcceptButton = this.butOK;
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
-			this.CancelButton = this.butCancel;
 			this.ClientSize = new System.Drawing.Size(944,668);
 			this.Controls.Add(this.contrKeyboard1);
 			this.Controls.Add(this.butOK);
@@ -605,11 +612,8 @@ namespace OpenDental{
 			this.Controls.Add(this.groupBox2);
 			this.Controls.Add(this.butCancel);
 			this.Controls.Add(this.groupAddPt);
-			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.KeyPreview = true;
-			this.MaximizeBox = false;
-			this.MinimizeBox = false;
 			this.Name = "FormPatientSelect";
 			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
