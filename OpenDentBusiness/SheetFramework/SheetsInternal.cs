@@ -28,6 +28,8 @@ namespace OpenDentBusiness{
 					return LabelAppointment();
 				case SheetInternalType.Rx:
 					return Rx();
+				case SheetInternalType.PatientRegistration:
+					return PatientRegistration();
 				default:
 					throw new ApplicationException("Invalid SheetInternalType.");
 			}
@@ -312,6 +314,18 @@ namespace OpenDentBusiness{
 			sheet.SheetFieldDefs.Add(SheetFieldDef.NewLine(295,y,230,0));
 			y+=4;
 			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("Signature of Prescriber",sheet.FontSize,sheet.FontName,false,340,y,150,rowH));
+			return sheet;
+		}
+
+		private static SheetDef PatientRegistration(){
+			SheetDef sheet=new SheetDef(SheetTypeEnum.PatientRegistration);
+			sheet.FontName="Microsoft Sans Serif";
+			sheet.FontSize=9f;
+			sheet.Width=850;
+			sheet.Height=1100;
+			int rowH=14;
+			int y=50;
+			//sheet.SheetFieldDefs.Add(SheetFieldDef.NewImage(("prov.nameFL",sheet.FontSize,sheet.FontName,true,x,y,170,rowH));
 			return sheet;
 		}
 

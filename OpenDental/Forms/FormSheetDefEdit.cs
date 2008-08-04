@@ -34,6 +34,26 @@ namespace OpenDental {
 				Width=SheetDefCur.Width+185;
 				Height=SheetDefCur.Height+60;
 			}*/
+			if(sheetDef.IsLandscape){
+				Width=sheetDef.Height+185;
+				Height=sheetDef.Width+60;
+			}
+			else{
+				Width=sheetDef.Width+185;
+				Height=sheetDef.Height+60;
+			}
+			if(Width<600){
+				Width=600;
+			}
+			if(Height<600){
+				Height=600;
+			}
+			if(Width>SystemInformation.WorkingArea.Width){
+				Width=SystemInformation.WorkingArea.Width;
+			}
+			if(Height>SystemInformation.WorkingArea.Height){
+				Height=SystemInformation.WorkingArea.Height;
+			}
 		}
 
 		private void FormSheetDefEdit_Load(object sender,EventArgs e) {
@@ -204,6 +224,9 @@ namespace OpenDental {
 		private void butEdit_Click(object sender,EventArgs e) {
 			FormSheetDef FormS=new FormSheetDef();
 			FormS.SheetDefCur=SheetDefCur;
+			if(this.IsInternal){
+				FormS.IsReadOnly=true;
+			}
 			FormS.ShowDialog();
 			if(FormS.DialogResult!=DialogResult.OK){
 				return;

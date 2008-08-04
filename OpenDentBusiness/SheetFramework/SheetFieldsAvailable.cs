@@ -31,6 +31,8 @@ namespace OpenDentBusiness{
 					return GetLabelAppointment(outInCheck);
 				case SheetTypeEnum.Rx:
 					return GetRx(outInCheck);
+				case SheetTypeEnum.PatientRegistration:
+					return GetPatientRegistration(outInCheck);
 			}
 			return new List<SheetFieldDef>();
 		}
@@ -139,6 +141,51 @@ namespace OpenDentBusiness{
 			}
 			else if(outInCheck==OutInCheck.In){
 				list.Add(NewInput("notes"));
+			}
+			return list;
+		}
+
+		private static List<SheetFieldDef> GetPatientRegistration(OutInCheck outInCheck) {
+			List<SheetFieldDef> list=new List<SheetFieldDef>();
+			if(outInCheck==OutInCheck.Out){
+				
+				
+			}
+			else if(outInCheck==OutInCheck.In){
+				list.Add(NewOutput("FName"));
+				list.Add(NewOutput("LName"));
+				list.Add(NewOutput("MiddleI"));
+				list.Add(NewOutput("Preferred"));
+				list.Add(NewOutput("Birthdate"));
+				list.Add(NewOutput("SSN"));
+				list.Add(NewOutput("Address"));
+				list.Add(NewOutput("Address2"));
+				list.Add(NewOutput("City"));
+				list.Add(NewOutput("State"));
+				list.Add(NewOutput("Zip"));
+				list.Add(NewOutput("HmPhone"));
+				list.Add(NewOutput("WkPhone"));
+				list.Add(NewOutput("WirelessPhone"));
+				/*list.Add(NewOutput(""));
+				list.Add(NewOutput(""));
+				list.Add(NewOutput(""));
+				list.Add(NewOutput(""));
+				list.Add(NewOutput(""));
+				list.Add(NewOutput(""));
+				list.Add(NewOutput(""));*/
+
+				list.Add(NewInput("notes"));
+			}
+			else if(outInCheck==OutInCheck.Check){
+				list.Add(NewCheck("GenderIsMale"));
+				list.Add(NewCheck("GenderIsFemale"));
+				list.Add(NewCheck("PositionIsMarried"));
+				list.Add(NewCheck("PositionIsSingle"));
+				//list.Add(NewCheck(""));
+				
+
+
+				list.Add(NewCheck("misc"));
 			}
 			return list;
 		}

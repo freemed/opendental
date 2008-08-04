@@ -308,6 +308,13 @@ namespace OpenDental.Properties {
             }
         }
         
+        internal static System.Drawing.Bitmap Med_History {
+            get {
+                object obj = ResourceManager.GetObject("Med_History", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         /// <summary>
         ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
         ///&lt;ArrayOfProcedureCode xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xmlns:xsd=&quot;http://www.w3.org/2001/XMLSchema&quot;&gt;
@@ -333,6 +340,13 @@ namespace OpenDental.Properties {
         internal static System.IO.UnmanagedMemoryStream notify {
             get {
                 return ResourceManager.GetStream("notify", resourceCulture);
+            }
+        }
+        
+        internal static System.Drawing.Bitmap Patient_Info {
+            get {
+                object obj = ResourceManager.GetObject("Patient_Info", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         

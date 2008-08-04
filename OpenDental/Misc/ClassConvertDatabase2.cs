@@ -134,7 +134,21 @@ namespace OpenDental{
 					}
 					catch {
 					}
+					try {
+						//this functionality is also duplicated in SheetUtil.GetImagePath, but we try very hard not to use external routines during conversions.
+						if(!PrefC.UsingAtoZfolder) {
+							throw new ApplicationException("Must be using AtoZ folders.");
+						}
+						string imagePath=ODFileUtils.CombinePaths(FormPath.GetPreferredImagePath(),"SheetImages");
+						if(!Directory.Exists(imagePath)) {
+							Directory.CreateDirectory(imagePath);
+						}
+						Properties.Resources.Med_History.Save(ODFileUtils.CombinePaths(imagePath,"Med History.gif"));
+						Properties.Resources.Patient_Info.Save(ODFileUtils.CombinePaths(imagePath,"Patient Info.gif"));
+					}
+					catch{
 
+					}
 
 
 

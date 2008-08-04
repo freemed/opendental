@@ -3621,6 +3621,8 @@
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <Content Include="Resources\Anesth.gif" />
+    <None Include="Resources\Med History.gif" />
+    <None Include="Resources\Patient Info.gif" />
     <None Include="Reporting\Allocators\ClassDiagram_Allocators.cd" />
     <None Include="Reporting\Allocators\MyAllocator1\SupportingCode\EPP_ClassDiagram.cd" />
     <None Include="Resources\notify.wav" />
