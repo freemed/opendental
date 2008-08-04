@@ -58,7 +58,7 @@ namespace OpenDentBusiness{
 		[DataField("FieldValue")]
 		private string fieldValue;
 		private bool fieldValueChanged;
-		///<summary>For OutputText, this value is set before printing.  This is the data obtained from the database and ready to print.  For StaticText, this is set when designing the sheetDef.  For an archived sheet retrieved from the database (all SheetField rows), this value will have been saved and will not be filled again automatically.  For a parameter fieldtype, this will store the value of the parameter. For a Drawing fieldtype, this will be the point data for the lines.  The format would look similar to this: 45,68;48,70;49,72;0,0;55,88;etc.  It's simply a sequence of points, separated by semicolons.</summary>
+		///<summary>For OutputText, this value is set before printing.  This is the data obtained from the database and ready to print.  For StaticText, this is set when designing the sheetDef.  For an archived sheet retrieved from the database (all SheetField rows), this value will have been saved and will not be filled again automatically.  For a parameter fieldtype, this will store the value of the parameter. For a Drawing fieldtype, this will be the point data for the lines.  The format would look similar to this: 45,68;48,70;49,72;0,0;55,88;etc.  It's simply a sequence of points, separated by semicolons.  For CheckBox, it will either be an X or empty.</summary>
 		public string FieldValue{
 			get{return fieldValue;}
 			set{if(fieldValue!=value){fieldValue=value;MarkDirty();fieldValueChanged=true;}}

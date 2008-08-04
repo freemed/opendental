@@ -169,12 +169,12 @@ namespace OpenDental {
 					//	SheetDefCur.SheetFieldDefs[i].Width,SheetDefCur.SheetFieldDefs[i].Height);
 					g.DrawLine(pen,SheetDefCur.SheetFieldDefs[i].XPos,
 						SheetDefCur.SheetFieldDefs[i].YPos,
-						SheetDefCur.SheetFieldDefs[i].XPos+SheetDefCur.SheetFieldDefs[i].Width,
-						SheetDefCur.SheetFieldDefs[i].YPos+SheetDefCur.SheetFieldDefs[i].Height);
-					g.DrawLine(pen,SheetDefCur.SheetFieldDefs[i].XPos+SheetDefCur.SheetFieldDefs[i].Width,
+						SheetDefCur.SheetFieldDefs[i].XPos+SheetDefCur.SheetFieldDefs[i].Width-1,
+						SheetDefCur.SheetFieldDefs[i].YPos+SheetDefCur.SheetFieldDefs[i].Height-1);
+					g.DrawLine(pen,SheetDefCur.SheetFieldDefs[i].XPos+SheetDefCur.SheetFieldDefs[i].Width-1,
 						SheetDefCur.SheetFieldDefs[i].YPos,
 						SheetDefCur.SheetFieldDefs[i].XPos,
-						SheetDefCur.SheetFieldDefs[i].YPos+SheetDefCur.SheetFieldDefs[i].Height);
+						SheetDefCur.SheetFieldDefs[i].YPos+SheetDefCur.SheetFieldDefs[i].Height-1);
 					continue;
 				}
 				fontstyle=FontStyle.Regular;
@@ -337,7 +337,7 @@ namespace OpenDental {
 			}
 			FormSheetFieldCheckBox FormS=new FormSheetFieldCheckBox();
 			FormS.SheetDefCur=SheetDefCur;
-			FormS.SheetFieldDefCur=SheetFieldDef.NewCheckBox("",0,0,10,10);
+			FormS.SheetFieldDefCur=SheetFieldDef.NewCheckBox("",0,0,11,11);
 			if(this.IsInternal){
 				FormS.IsReadOnly=true;
 			}

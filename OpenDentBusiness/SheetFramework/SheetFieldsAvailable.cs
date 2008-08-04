@@ -140,9 +140,6 @@ namespace OpenDentBusiness{
 			else if(outInCheck==OutInCheck.In){
 				list.Add(NewInput("notes"));
 			}
-			else if(outInCheck==OutInCheck.Check){
-				list.Add(NewCheck("misc"));
-			}
 			return list;
 		}
 

@@ -57,6 +57,7 @@ namespace OpenDental {
 			textNote.Text=SheetCur.InternalNote;
 			RichTextBox textbox;//has to be richtextbox due to MS bug that doesn't show cursor.
 			FontStyle style;
+			SheetCheckBox checkbox;
 			//first, draw images---------------------------------------------------------------------------------------
 			pictDraw=null;
 			imgDraw=null;
@@ -150,6 +151,22 @@ namespace OpenDental {
 				textbox.Tag=field;
 				panelMain.Controls.Add(textbox);
 				textbox.BringToFront();
+			}
+			//draw checkboxes----------------------------------------------------------------------------------------------
+			foreach(SheetField field in SheetCur.SheetFields){
+				if(field.FieldType!=SheetFieldType.CheckBox){
+					continue;
+				}
+				checkbox=new SheetCheckBox();
+				if(field.FieldValue=="X"){
+					checkbox.IsChecked=true;
+				}
+				checkbox.Location=new Point(field.XPos,field.YPos);
+				checkbox.Width=field.Width;
+				checkbox.Height=field.Height;
+				checkbox.Tag=field;
+				panelMain.Controls.Add(checkbox);
+				checkbox.BringToFront();
 			}
 		}
 
@@ -415,12 +432,31 @@ namespace OpenDental {
 			SheetField field;
 			//RichTextBoxes-----------------------------------------------
 			foreach(Control control in panelMain.Controls){
+				if(control.GetType()!=typeof(RichTextBox)){
+					continue;
+				}
 				if(control.Tag==null){
 					continue;
 				}
 				field=(SheetField)control.Tag;
-				if(control.GetType()==typeof(RichTextBox)){
-					field.FieldValue=control.Text;
+				field.FieldValue=control.Text;
+				field.SheetNum=SheetCur.SheetNum;//whether or not isnew
+				SheetFields.WriteObject(field);
+			}
+			//CheckBoxes-----------------------------------------------
+			foreach(Control control in panelMain.Controls){
+				if(control.GetType()!=typeof(SheetCheckBox)){
+					continue;
+				}
+				if(control.Tag==null){
+					continue;
+				}
+				field=(SheetField)control.Tag;
+				if(((SheetCheckBox)control).IsChecked){
+					field.FieldValue="X";
+				}
+				else{
+					field.FieldValue="";
 				}
 				field.SheetNum=SheetCur.SheetNum;//whether or not isnew
 				SheetFields.WriteObject(field);
