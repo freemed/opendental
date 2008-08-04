@@ -68,21 +68,24 @@ namespace OpenDental {
 					listFields.Items.Add(SheetDefCur.SheetFieldDefs[i].FieldValue);
 				}
 				else if(SheetDefCur.SheetFieldDefs[i].FieldType==SheetFieldType.Image){
-					listFields.Items.Add(Lan.g(this,"Image:" )+SheetDefCur.SheetFieldDefs[i].FieldName);
+					listFields.Items.Add(Lan.g(this,"Image:")+SheetDefCur.SheetFieldDefs[i].FieldName);
 				}
 				else if(SheetDefCur.SheetFieldDefs[i].FieldType==SheetFieldType.Line){
-					listFields.Items.Add(Lan.g(this,"Line:" )
+					listFields.Items.Add(Lan.g(this,"Line:")
 						+SheetDefCur.SheetFieldDefs[i].XPos.ToString()+","
 						+SheetDefCur.SheetFieldDefs[i].YPos.ToString()+","
 						+"W:"+SheetDefCur.SheetFieldDefs[i].Width.ToString()+","
 						+"H:"+SheetDefCur.SheetFieldDefs[i].Height.ToString());
 				}
 				else if(SheetDefCur.SheetFieldDefs[i].FieldType==SheetFieldType.Rectangle){
-					listFields.Items.Add(Lan.g(this,"Rect:" )
+					listFields.Items.Add(Lan.g(this,"Rect:")
 						+SheetDefCur.SheetFieldDefs[i].XPos.ToString()+","
 						+SheetDefCur.SheetFieldDefs[i].YPos.ToString()+","
 						+"W:"+SheetDefCur.SheetFieldDefs[i].Width.ToString()+","
 						+"H:"+SheetDefCur.SheetFieldDefs[i].Height.ToString());
+				}
+				else if(SheetDefCur.SheetFieldDefs[i].FieldType==SheetFieldType.CheckBox){
+					listFields.Items.Add(Lan.g(this,"Check:")+SheetDefCur.SheetFieldDefs[i].FieldName);
 				}
 				else{
 					listFields.Items.Add(SheetDefCur.SheetFieldDefs[i].FieldName);
@@ -104,8 +107,13 @@ namespace OpenDental {
 		}
 
 		private void DrawFields(Graphics g){
+			g.SmoothingMode=SmoothingMode.HighQuality;
+			g.CompositingQuality=CompositingQuality.HighQuality;//This has to be here or the line thicknesses are wrong.
+			//g.InterpolationMode=InterpolationMode.High;//This doesn't seem to help
 			Pen penBlue=new Pen(Color.Blue);
 			Pen penRed=new Pen(Color.Red);
+			Pen penBlueThick=new Pen(Color.Blue,1.6f);
+			Pen penRedThick=new Pen(Color.Red,1.6f);
 			Pen penBlack=new Pen(Color.Black);
 			Pen pen;
 			SolidBrush brushBlue=new SolidBrush(Color.Blue);
@@ -148,6 +156,25 @@ namespace OpenDental {
 					}
 					g.DrawRectangle(pen,SheetDefCur.SheetFieldDefs[i].XPos,SheetDefCur.SheetFieldDefs[i].YPos,
 						SheetDefCur.SheetFieldDefs[i].Width,SheetDefCur.SheetFieldDefs[i].Height);
+					continue;
+				}
+				if(SheetDefCur.SheetFieldDefs[i].FieldType==SheetFieldType.CheckBox){
+					if(listFields.SelectedIndices.Contains(i)){
+						pen=penRedThick;
+					}
+					else{
+						pen=penBlueThick;
+					}
+					//g.DrawRectangle(pen,SheetDefCur.SheetFieldDefs[i].XPos,SheetDefCur.SheetFieldDefs[i].YPos,
+					//	SheetDefCur.SheetFieldDefs[i].Width,SheetDefCur.SheetFieldDefs[i].Height);
+					g.DrawLine(pen,SheetDefCur.SheetFieldDefs[i].XPos,
+						SheetDefCur.SheetFieldDefs[i].YPos,
+						SheetDefCur.SheetFieldDefs[i].XPos+SheetDefCur.SheetFieldDefs[i].Width,
+						SheetDefCur.SheetFieldDefs[i].YPos+SheetDefCur.SheetFieldDefs[i].Height);
+					g.DrawLine(pen,SheetDefCur.SheetFieldDefs[i].XPos+SheetDefCur.SheetFieldDefs[i].Width,
+						SheetDefCur.SheetFieldDefs[i].YPos,
+						SheetDefCur.SheetFieldDefs[i].XPos,
+						SheetDefCur.SheetFieldDefs[i].YPos+SheetDefCur.SheetFieldDefs[i].Height);
 					continue;
 				}
 				fontstyle=FontStyle.Regular;
@@ -230,7 +257,7 @@ namespace OpenDental {
 		}
 
 		private void butAddInputField_Click(object sender,EventArgs e) {
-			if(SheetFieldsAvailable.GetListInput(SheetDefCur.SheetType).Count==0){
+			if(SheetFieldsAvailable.GetList(SheetDefCur.SheetType,OutInCheck.In).Count==0){
 				MsgBox.Show(this,"There are no input fields available for this type of sheet.");
 				return;
 			}
@@ -291,6 +318,26 @@ namespace OpenDental {
 			FormSheetFieldRect FormS=new FormSheetFieldRect();
 			FormS.SheetDefCur=SheetDefCur;
 			FormS.SheetFieldDefCur=SheetFieldDef.NewRect(0,0,0,0);
+			if(this.IsInternal){
+				FormS.IsReadOnly=true;
+			}
+			FormS.ShowDialog();
+			if(FormS.DialogResult!=DialogResult.OK){
+				return;
+			}
+			SheetDefCur.SheetFieldDefs.Add(FormS.SheetFieldDefCur);
+			FillFieldList();
+			panelMain.Invalidate();
+		}
+
+		private void butAddCheckBox_Click(object sender,EventArgs e) {
+			if(SheetFieldsAvailable.GetList(SheetDefCur.SheetType,OutInCheck.Check).Count==0){
+				MsgBox.Show(this,"There are no checkbox fields available for this type of sheet.");
+				return;
+			}
+			FormSheetFieldCheckBox FormS=new FormSheetFieldCheckBox();
+			FormS.SheetDefCur=SheetDefCur;
+			FormS.SheetFieldDefCur=SheetFieldDef.NewCheckBox("",0,0,10,10);
 			if(this.IsInternal){
 				FormS.IsReadOnly=true;
 			}
@@ -414,6 +461,21 @@ namespace OpenDental {
 						return;
 					}
 					if(FormSR.SheetFieldDefCur==null){
+						SheetDefCur.SheetFieldDefs.RemoveAt(idx);
+					}
+					break;
+				case SheetFieldType.CheckBox:
+					FormSheetFieldCheckBox FormSB=new FormSheetFieldCheckBox();
+					FormSB.SheetDefCur=SheetDefCur;
+					FormSB.SheetFieldDefCur=field;
+					if(this.IsInternal){
+						FormSB.IsReadOnly=true;
+					}
+					FormSB.ShowDialog();
+					if(FormSB.DialogResult!=DialogResult.OK){
+						return;
+					}
+					if(FormSB.SheetFieldDefCur==null){
 						SheetDefCur.SheetFieldDefs.RemoveAt(idx);
 					}
 					break;
@@ -579,6 +641,8 @@ namespace OpenDental {
 		private void butCancel_Click(object sender,EventArgs e) {
 			DialogResult=DialogResult.Cancel;
 		}
+
+		
 
 		
 

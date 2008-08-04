@@ -53,9 +53,9 @@ namespace OpenDentBusiness {
 		///<Summary>A simple line drawn from x,y to x+width,y+height.  So for these types, we must allow width and height to be negative or zero.</Summary>
 		Line,
 		///<Summary>A simple rectangle outline.</Summary>
-		Rectangle
-		//<summary></summary>
-		//CheckBox
+		Rectangle,
+		///<summary>A clickable area on the screen.  It's a form of input, so treated similarly to an InputField.  The X will go from corner to corner of the rectangle specified.</summary>
+		CheckBox
 		//<summary></summary>
 		//RadioButton
 		
@@ -76,5 +76,10 @@ namespace OpenDentBusiness {
 		Rx
 	}
 
+	public enum OutInCheck{
+		Out,
+		In,
+		Check
+	}
 
 }

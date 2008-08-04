@@ -181,7 +181,7 @@ namespace OpenDental{
 			// 
 			this.textHeight.Location = new System.Drawing.Point(268,249);
 			this.textHeight.MaxVal = 2000;
-			this.textHeight.MinVal = -100;
+			this.textHeight.MinVal = 1;
 			this.textHeight.Name = "textHeight";
 			this.textHeight.Size = new System.Drawing.Size(69,20);
 			this.textHeight.TabIndex = 97;
@@ -190,7 +190,7 @@ namespace OpenDental{
 			// 
 			this.textWidth.Location = new System.Drawing.Point(268,223);
 			this.textWidth.MaxVal = 2000;
-			this.textWidth.MinVal = -100;
+			this.textWidth.MinVal = 1;
 			this.textWidth.Name = "textWidth";
 			this.textWidth.Size = new System.Drawing.Size(69,20);
 			this.textWidth.TabIndex = 95;

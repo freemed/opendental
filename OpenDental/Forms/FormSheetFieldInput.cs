@@ -27,7 +27,7 @@ namespace OpenDental {
 				butOK.Enabled=false;
 			}
 			//not allowed to change sheettype or fieldtype once created.  So get all avail fields for this sheettype
-			AvailFields=SheetFieldsAvailable.GetListInput(SheetDefCur.SheetType);
+			AvailFields=SheetFieldsAvailable.GetList(SheetDefCur.SheetType,OutInCheck.In);
 			listFields.Items.Clear();
 			for(int i=0;i<AvailFields.Count;i++){
 				//static text is not one of the options.
