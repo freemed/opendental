@@ -206,6 +206,17 @@ namespace OpenDental {
 				font=new Font(field.FontName,field.FontSize,fontstyle);
 				g.DrawString(field.FieldValue,font,Brushes.Black,field.BoundsF);
 			}
+			//then, checkboxes----------------------------------------------------------------------------------
+			Pen pen3=new Pen(Brushes.Black,1.6f);
+			foreach(SheetField field in sheet.SheetFields){
+				if(field.FieldType!=SheetFieldType.CheckBox){
+					continue;
+				}
+				if(field.FieldValue=="X"){
+					g.DrawLine(pen3,field.XPos,field.YPos,field.XPos+field.Width,field.YPos+field.Height);
+					g.DrawLine(pen3,field.XPos+field.Width,field.YPos,field.XPos,field.YPos+field.Height);
+				}
+			}
 			g.Dispose();
 			//no logic yet for multiple pages on one sheet.
 			sheetsPrinted++;
@@ -302,6 +313,17 @@ namespace OpenDental {
 				//XStringFormat format=new XStringFormat();
 				tf.DrawString(field.FieldValue,font,XBrushes.Black,xrect,XStringFormats.TopLeft);
 			}
+			//then, checkboxes----------------------------------------------------------------------------------
+			XPen pen3=new XPen(XColors.Black,p(1.6f));
+			foreach(SheetField field in sheet.SheetFields){
+				if(field.FieldType!=SheetFieldType.CheckBox){
+					continue;
+				}
+				if(field.FieldValue=="X"){
+					g.DrawLine(pen3,p(field.XPos),p(field.YPos),p(field.XPos+field.Width),p(field.YPos+field.Height));
+					g.DrawLine(pen3,p(field.XPos+field.Width),p(field.YPos),p(field.XPos),p(field.YPos+field.Height));
+				}
+			}
 			document.Save(fullFileName);
 		}
 
@@ -312,9 +334,15 @@ namespace OpenDental {
 
 		///<summary>Converts pixels used by us to points used by PdfSharp.</summary>
 		private static double p(int pixels){
-			XUnit xunit=XUnit.FromInch((double)pixels/100);//100 ppi
+			XUnit xunit=XUnit.FromInch((double)pixels/100d);//100 ppi
 			return xunit.Point;
 				//XUnit.FromInch((double)pixels/100);
+		}
+
+		///<summary>Converts pixels used by us to points used by PdfSharp.</summary>
+		private static double p(float pixels){
+			XUnit xunit=XUnit.FromInch((double)pixels/100d);//100 ppi
+			return xunit.Point;
 		}
 
 	}

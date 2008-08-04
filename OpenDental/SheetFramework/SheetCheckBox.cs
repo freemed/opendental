@@ -10,9 +10,10 @@ using System.Windows.Forms;
 namespace OpenDental {
 	public partial class SheetCheckBox:Control {
 		private bool isChecked;
-		private Pen pen=new Pen(Color.Black,1.6f);
+		private Pen pen;
 		private bool isHovering;
-		private SolidBrush hoverBrush=new SolidBrush(Color.FromArgb(224,224,224));
+		private PathGradientBrush hoverBrush;
+		private Color surroundColor;
 
 		public bool IsChecked {
 			get{ 
@@ -26,36 +27,43 @@ namespace OpenDental {
 
 		public SheetCheckBox() {
 			InitializeComponent();
+			SetBrushes();
 		}
 
-		protected override void OnPaint(PaintEventArgs pe) {
-			PathGradientBrush brush=new PathGradientBrush(
+		protected override void OnSizeChanged(EventArgs e) {
+			base.OnSizeChanged(e);
+			SetBrushes();
+		}
+
+		private void SetBrushes(){
+			pen=new Pen(Color.Black,1.6f);
+			hoverBrush=new PathGradientBrush(
 				new Point[] {new Point(0,0),new Point(Width-1,0),new Point(Width-1,Height-1),new Point(0,Height-1)});
-			brush.CenterColor=Color.White;
-			Color surroundColor=Color.FromArgb(249,187,67);
-			brush.SurroundColors=new Color[] {surroundColor,surroundColor,surroundColor,surroundColor};
-			//brush.SurroundColors[0]=surroundColor;
-			//brush.SurroundColors[1]=surroundColor;
-			//brush.SurroundColors[2]=surroundColor;
-			//brush.SurroundColors[3]=surroundColor;
+			hoverBrush.CenterColor=Color.White;
+			surroundColor=Color.FromArgb(249,187,67);
+			hoverBrush.SurroundColors=new Color[] {surroundColor,surroundColor,surroundColor,surroundColor};
 			Blend blend=new Blend();
 			float[] myFactors = {0f,.5f,1f,1f,1f,1f};
 			float[] myPositions = {0f,.2f,.4f,.6f,.8f,1f};
 			blend.Factors=myFactors;
 			blend.Positions=myPositions;
-			brush.Blend=blend;
+			hoverBrush.Blend=blend;
+		}
+
+		protected override void OnPaint(PaintEventArgs pe) {
 			base.OnPaint(pe);
 			Graphics g=pe.Graphics;
 			g.SmoothingMode=SmoothingMode.HighQuality;
 			g.CompositingQuality=CompositingQuality.HighQuality;
 			if(isHovering){
-				g.FillRectangle(brush,0,0,Width-1,Height-1);
+				g.FillRectangle(hoverBrush,0,0,Width-1,Height-1);
 				g.DrawRectangle(new Pen(surroundColor),0,0,Width-1,Height-1);
 			}
 			if(isChecked){
 				g.DrawLine(pen,0,0,Width-1,Height-1);
 				g.DrawLine(pen,Width-1,0,0,Height-1);
 			}
+			g.Dispose();
 		}
 
 		protected override void OnMouseDown(MouseEventArgs e) {
