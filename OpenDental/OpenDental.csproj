@@ -364,6 +364,15 @@
     <Compile Include="Forms\BasicTemplate.designer.cs">
       <DependentUpon>BasicTemplate.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\FormRequestEdit.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormRequestEdit.designer.cs">
+      <DependentUpon>FormRequestEdit.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\FormFeatureRequest.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Forms\FormSheetFieldCheckBox.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -3502,6 +3511,14 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\BasicTemplate.resx">
       <DependentUpon>BasicTemplate.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormRequestEdit.resx">
+      <DependentUpon>FormRequestEdit.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormFeatureRequest.resx">
+      <DependentUpon>FormFeatureRequest.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormSheetFieldCheckBox.resx">

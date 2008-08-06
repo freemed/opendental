@@ -98,7 +98,21 @@ namespace OpenDentBusiness{
 			return true;
 		}
 
-		
+		///<summary>Returns true if a change was required, or false if no change needed.</summary>
+		public static bool UpdateDateT(string prefName,DateTime newValue) {
+			if(!PrefC.HList.ContainsKey(prefName)) {
+				throw new ApplicationException(prefName+" is an invalid pref name.");
+			}
+			if(PrefC.GetDateT(prefName)==newValue) {
+				return false;//no change needed
+			}
+			string command = "UPDATE preference SET "
+				+"ValueString = '"+POut.PDateT(newValue,false)+"' "
+				+"WHERE PrefName = '"+POut.PString(prefName)+"'";
+			General.NonQ(command);
+			return true;
+		}
+
 
 		
 

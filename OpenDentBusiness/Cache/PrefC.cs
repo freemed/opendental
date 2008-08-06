@@ -87,5 +87,17 @@ namespace OpenDentBusiness {
 			}
 			return PIn.PDate(((Pref)HList[prefName]).ValueString);
 		}
+
+		///<summary>Gets a pref of type datetime.</summary>
+		public static DateTime GetDateT(string prefName) {
+			if(HList==null){
+				Prefs.RefreshCache();
+			}
+			if(!HList.ContainsKey(prefName)) {
+				throw new Exception(prefName+" is an invalid pref name.");
+			}
+			return PIn.PDateT(((Pref)HList[prefName]).ValueString);
+		}
+
 	}
 }

@@ -325,7 +325,7 @@ namespace OpenDentBusiness{
 			sheet.Height=1100;
 			int rowH=14;
 			int y=50;
-			//sheet.SheetFieldDefs.Add(SheetFieldDef.NewImage(("prov.nameFL",sheet.FontSize,sheet.FontName,true,x,y,170,rowH));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewImage("Patient Info.gif",0,0,770,999));
 			return sheet;
 		}
 
