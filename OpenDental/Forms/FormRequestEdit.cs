@@ -13,6 +13,10 @@ namespace OpenDental {
 			Lan.F(this);
 		}
 
+		private void FormRequestEdit_Load(object sender,EventArgs e) {
+
+		}
+
 		private void butOK_Click(object sender,EventArgs e) {
 			DialogResult=DialogResult.OK;
 		}
@@ -20,5 +24,7 @@ namespace OpenDental {
 		private void butCancel_Click(object sender,EventArgs e) {
 			DialogResult=DialogResult.Cancel;
 		}
+
+		
 	}
 }

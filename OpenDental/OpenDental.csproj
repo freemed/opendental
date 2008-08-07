@@ -33,6 +33,7 @@
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -118,6 +119,9 @@
       <HintPath>..\Required dlls\SigPlusNET.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
     <Reference Include="System.Data" />
     <Reference Include="System.Deployment" />
     <Reference Include="System.DirectoryServices" />
@@ -127,6 +131,9 @@
     <Reference Include="System.Web.Services" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
     <Reference Include="Tao.OpenGl, Version=0.0.0.0, Culture=neutral, PublicKeyToken=1ca010269a4501ef">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Required dlls\Tao.OpenGl.dll</HintPath>
@@ -316,6 +323,9 @@
     <Compile Include="Data Interface\UserGroups.cs" />
     <Compile Include="Data Interface\UserQueries.cs" />
     <Compile Include="Data Interface\ZipCodes.cs" />
+    <Compile Include="DataClient\ODDataRow.cs" />
+    <Compile Include="DataClient\ODDataSet.cs" />
+    <Compile Include="DataClient\ODDataTable.cs" />
     <Compile Include="Eclaims\AOS.cs" />
     <Compile Include="Eclaims\BCBSGA.cs" />
     <Compile Include="Eclaims\Canadian.cs" />
@@ -3718,10 +3728,10 @@
       <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
       <CachedSettingsPropName>OpenDental_customerUpdates_Service1</CachedSettingsPropName>
     </WebReferenceUrl>
-    <WebReferenceUrl Include="http://localhost:3824/Service1.asmx%3fop=RequestUpdate">
-      <UrlBehavior>Dynamic</UrlBehavior>
+    <WebReferenceUrl Include="http://localhost:3824/Service1.asmx">
+      <UrlBehavior>Static</UrlBehavior>
       <RelPath>Web References\localhost\</RelPath>
-      <UpdateFromURL>http://localhost:3824/Service1.asmx%3fop=RequestUpdate</UpdateFromURL>
+      <UpdateFromURL>http://localhost:3824/Service1.asmx</UpdateFromURL>
       <ServiceLocationURL>
       </ServiceLocationURL>
       <CachedDynamicPropName>

@@ -192,6 +192,7 @@ namespace OpenDental{
 		private List<PopupEvent> PopupEventList;
 		private MenuItem menuItemPharmacies;
 		private MenuItem menuItemSheets;
+		private MenuItem menuItemRequestFeatures;
 		private UserControlPhonePanel phonePanel;
 
 		///<summary></summary>
@@ -269,12 +270,13 @@ namespace OpenDental{
 			this.menuItemPractice = new System.Windows.Forms.MenuItem();
 			this.menuItemProcedureButtons = new System.Windows.Forms.MenuItem();
 			this.menuItemLinks = new System.Windows.Forms.MenuItem();
+			this.menuItem_ProviderAllocatorSetup = new System.Windows.Forms.MenuItem();
 			this.menuItemQuestions = new System.Windows.Forms.MenuItem();
 			this.menuItemRecall = new System.Windows.Forms.MenuItem();
 			this.menuItemRequirementsNeeded = new System.Windows.Forms.MenuItem();
 			this.menuItemSched = new System.Windows.Forms.MenuItem();
 			this.menuItemSecurity = new System.Windows.Forms.MenuItem();
-			this.menuItem_ProviderAllocatorSetup = new System.Windows.Forms.MenuItem();
+			this.menuItemSheets = new System.Windows.Forms.MenuItem();
 			this.menuItemLists = new System.Windows.Forms.MenuItem();
 			this.menuItemProcCodes = new System.Windows.Forms.MenuItem();
 			this.menuItem5 = new System.Windows.Forms.MenuItem();
@@ -323,6 +325,7 @@ namespace OpenDental{
 			this.menuItemHelpWindows = new System.Windows.Forms.MenuItem();
 			this.menuItemHelpContents = new System.Windows.Forms.MenuItem();
 			this.menuItemHelpIndex = new System.Windows.Forms.MenuItem();
+			this.menuItemRequestFeatures = new System.Windows.Forms.MenuItem();
 			this.menuItemUpdate = new System.Windows.Forms.MenuItem();
 			this.imageList32 = new System.Windows.Forms.ImageList(this.components);
 			this.timerSignals = new System.Windows.Forms.Timer(this.components);
@@ -348,7 +351,6 @@ namespace OpenDental{
 			this.lightSignalGrid1 = new OpenDental.UI.LightSignalGrid();
 			this.myOutlookBar = new OpenDental.OutlookBar();
 			this.smartCardWatcher1 = new OpenDental.SmartCards.SmartCardWatcher();
-			this.menuItemSheets = new System.Windows.Forms.MenuItem();
 			this.SuspendLayout();
 			// 
 			// timerTimeIndic
@@ -618,6 +620,12 @@ namespace OpenDental{
 			this.menuItemLinks.Text = "Program Links";
 			this.menuItemLinks.Click += new System.EventHandler(this.menuItemLinks_Click);
 			// 
+			// menuItem_ProviderAllocatorSetup
+			// 
+			this.menuItem_ProviderAllocatorSetup.Index = 26;
+			this.menuItem_ProviderAllocatorSetup.Text = "Provider Allocator Setup";
+			this.menuItem_ProviderAllocatorSetup.Click += new System.EventHandler(this.menuItem_ProviderAllocatorSetup_Click);
+			// 
 			// menuItemQuestions
 			// 
 			this.menuItemQuestions.Index = 27;
@@ -648,11 +656,11 @@ namespace OpenDental{
 			this.menuItemSecurity.Text = "Security";
 			this.menuItemSecurity.Click += new System.EventHandler(this.menuItemSecurity_Click);
 			// 
-			// menuItem_ProviderAllocatorSetup
+			// menuItemSheets
 			// 
-			this.menuItem_ProviderAllocatorSetup.Index = 26;
-			this.menuItem_ProviderAllocatorSetup.Text = "Provider Allocator Setup";
-			this.menuItem_ProviderAllocatorSetup.Click += new System.EventHandler(this.menuItem_ProviderAllocatorSetup_Click);
+			this.menuItemSheets.Index = 32;
+			this.menuItemSheets.Text = "Sheets";
+			this.menuItemSheets.Click += new System.EventHandler(this.menuItemSheets_Click);
 			// 
 			// menuItemLists
 			// 
@@ -962,6 +970,7 @@ namespace OpenDental{
             this.menuItemHelpWindows,
             this.menuItemHelpContents,
             this.menuItemHelpIndex,
+            this.menuItemRequestFeatures,
             this.menuItemUpdate});
 			this.menuItemHelp.Text = "&Help";
 			// 
@@ -990,9 +999,15 @@ namespace OpenDental{
 			this.menuItemHelpIndex.Text = "Online Help - Index";
 			this.menuItemHelpIndex.Click += new System.EventHandler(this.menuItemHelpIndex_Click);
 			// 
+			// menuItemRequestFeatures
+			// 
+			this.menuItemRequestFeatures.Index = 4;
+			this.menuItemRequestFeatures.Text = "Request Features";
+			this.menuItemRequestFeatures.Click += new System.EventHandler(this.menuItemRequestFeatures_Click);
+			// 
 			// menuItemUpdate
 			// 
-			this.menuItemUpdate.Index = 4;
+			this.menuItemUpdate.Index = 5;
 			this.menuItemUpdate.Text = "&Update";
 			this.menuItemUpdate.Click += new System.EventHandler(this.menuItemUpdate_Click);
 			// 
@@ -1172,12 +1187,6 @@ namespace OpenDental{
 			// smartCardWatcher1
 			// 
 			this.smartCardWatcher1.PatientCardInserted += new OpenDental.SmartCards.PatientCardInsertedEventHandler(this.OnPatientCardInserted);
-			// 
-			// menuItemSheets
-			// 
-			this.menuItemSheets.Index = 32;
-			this.menuItemSheets.Text = "Sheets";
-			this.menuItemSheets.Click += new System.EventHandler(this.menuItemSheets_Click);
 			// 
 			// FormOpenDental
 			// 
@@ -3648,6 +3657,11 @@ namespace OpenDental{
 			}
 		}
 
+		private void menuItemRequestFeatures_Click(object sender,EventArgs e) {
+			FormFeatureRequest FormF=new FormFeatureRequest();
+			FormF.ShowDialog();
+		}
+
 		private void menuItemUpdate_Click(object sender, System.EventArgs e) {
 			//If A to Z folders are disabled, this menu option is unavailable, since
 			//updates are handled more automatically.
@@ -3688,6 +3702,8 @@ namespace OpenDental{
 				}
 			}
 		}
+
+		
 
 		
 

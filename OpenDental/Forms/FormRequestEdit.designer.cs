@@ -38,15 +38,22 @@ namespace OpenDental{
 			this.label5 = new System.Windows.Forms.Label();
 			this.gridDisc = new OpenDental.UI.ODGrid();
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
-			this.textBox5 = new System.Windows.Forms.TextBox();
-			this.label6 = new System.Windows.Forms.Label();
-			this.checkBox2 = new System.Windows.Forms.CheckBox();
-			this.textBox6 = new System.Windows.Forms.TextBox();
-			this.label7 = new System.Windows.Forms.Label();
+			this.label9 = new System.Windows.Forms.Label();
 			this.textBox7 = new System.Windows.Forms.TextBox();
 			this.label8 = new System.Windows.Forms.Label();
-			this.label9 = new System.Windows.Forms.Label();
+			this.textBox6 = new System.Windows.Forms.TextBox();
+			this.label7 = new System.Windows.Forms.Label();
+			this.checkBox2 = new System.Windows.Forms.CheckBox();
+			this.textBox5 = new System.Windows.Forms.TextBox();
+			this.label6 = new System.Windows.Forms.Label();
+			this.groupBox2 = new System.Windows.Forms.GroupBox();
+			this.textBox9 = new System.Windows.Forms.TextBox();
+			this.label12 = new System.Windows.Forms.Label();
+			this.checkBox3 = new System.Windows.Forms.CheckBox();
+			this.textBox10 = new System.Windows.Forms.TextBox();
+			this.label13 = new System.Windows.Forms.Label();
 			this.groupBox1.SuspendLayout();
+			this.groupBox2.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// butOK
@@ -57,7 +64,7 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(791,616);
+			this.butOK.Location = new System.Drawing.Point(796,599);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75,24);
 			this.butOK.TabIndex = 3;
@@ -72,7 +79,7 @@ namespace OpenDental{
 			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
-			this.butCancel.Location = new System.Drawing.Point(791,646);
+			this.butCancel.Location = new System.Drawing.Point(796,629);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75,24);
 			this.butCancel.TabIndex = 2;
@@ -83,27 +90,26 @@ namespace OpenDental{
 			// 
 			this.label3.Location = new System.Drawing.Point(4,3);
 			this.label3.Name = "label3";
-			this.label3.Size = new System.Drawing.Size(95,18);
+			this.label3.Size = new System.Drawing.Size(105,18);
 			this.label3.TabIndex = 60;
-			this.label3.Text = "Description";
+			this.label3.Text = "Short Description";
 			this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// textConnectionMessage
 			// 
-			this.textConnectionMessage.AcceptsReturn = true;
 			this.textConnectionMessage.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.textConnectionMessage.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(230)))),((int)(((byte)(229)))),((int)(((byte)(233)))));
-			this.textConnectionMessage.Location = new System.Drawing.Point(101,3);
+			this.textConnectionMessage.Location = new System.Drawing.Point(111,3);
 			this.textConnectionMessage.Multiline = true;
 			this.textConnectionMessage.Name = "textConnectionMessage";
 			this.textConnectionMessage.ReadOnly = true;
-			this.textConnectionMessage.Size = new System.Drawing.Size(414,98);
+			this.textConnectionMessage.Size = new System.Drawing.Size(410,35);
 			this.textConnectionMessage.TabIndex = 59;
 			// 
 			// label1
 			// 
-			this.label1.Location = new System.Drawing.Point(4,103);
+			this.label1.Location = new System.Drawing.Point(14,140);
 			this.label1.Name = "label1";
 			this.label1.Size = new System.Drawing.Size(95,18);
 			this.label1.TabIndex = 62;
@@ -113,7 +119,7 @@ namespace OpenDental{
 			// textBox1
 			// 
 			this.textBox1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(230)))),((int)(((byte)(229)))),((int)(((byte)(233)))));
-			this.textBox1.Location = new System.Drawing.Point(101,103);
+			this.textBox1.Location = new System.Drawing.Point(111,140);
 			this.textBox1.Name = "textBox1";
 			this.textBox1.ReadOnly = true;
 			this.textBox1.Size = new System.Drawing.Size(124,20);
@@ -123,7 +129,7 @@ namespace OpenDental{
 			// 
 			this.checkBox1.AutoCheck = false;
 			this.checkBox1.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.checkBox1.Location = new System.Drawing.Point(231,103);
+			this.checkBox1.Location = new System.Drawing.Point(241,140);
 			this.checkBox1.Name = "checkBox1";
 			this.checkBox1.Size = new System.Drawing.Size(127,20);
 			this.checkBox1.TabIndex = 63;
@@ -133,11 +139,11 @@ namespace OpenDental{
 			// 
 			// label2
 			// 
-			this.label2.Location = new System.Drawing.Point(4,125);
+			this.label2.Location = new System.Drawing.Point(2,40);
 			this.label2.Name = "label2";
-			this.label2.Size = new System.Drawing.Size(95,18);
+			this.label2.Size = new System.Drawing.Size(107,18);
 			this.label2.TabIndex = 65;
-			this.label2.Text = "Admin Note";
+			this.label2.Text = "Detail";
 			this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// textBox2
@@ -146,16 +152,16 @@ namespace OpenDental{
 			this.textBox2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.textBox2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(230)))),((int)(((byte)(229)))),((int)(((byte)(233)))));
-			this.textBox2.Location = new System.Drawing.Point(101,125);
+			this.textBox2.Location = new System.Drawing.Point(111,40);
 			this.textBox2.Multiline = true;
 			this.textBox2.Name = "textBox2";
 			this.textBox2.ReadOnly = true;
-			this.textBox2.Size = new System.Drawing.Size(414,98);
+			this.textBox2.Size = new System.Drawing.Size(410,98);
 			this.textBox2.TabIndex = 64;
 			// 
 			// label4
 			// 
-			this.label4.Location = new System.Drawing.Point(4,226);
+			this.label4.Location = new System.Drawing.Point(14,163);
 			this.label4.Name = "label4";
 			this.label4.Size = new System.Drawing.Size(95,18);
 			this.label4.TabIndex = 66;
@@ -165,7 +171,7 @@ namespace OpenDental{
 			// textBox3
 			// 
 			this.textBox3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(230)))),((int)(((byte)(229)))),((int)(((byte)(233)))));
-			this.textBox3.Location = new System.Drawing.Point(101,225);
+			this.textBox3.Location = new System.Drawing.Point(111,162);
 			this.textBox3.Name = "textBox3";
 			this.textBox3.ReadOnly = true;
 			this.textBox3.Size = new System.Drawing.Size(38,20);
@@ -174,7 +180,7 @@ namespace OpenDental{
 			// textBox4
 			// 
 			this.textBox4.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(230)))),((int)(((byte)(229)))),((int)(((byte)(233)))));
-			this.textBox4.Location = new System.Drawing.Point(258,226);
+			this.textBox4.Location = new System.Drawing.Point(111,184);
 			this.textBox4.Name = "textBox4";
 			this.textBox4.ReadOnly = true;
 			this.textBox4.Size = new System.Drawing.Size(167,20);
@@ -182,7 +188,7 @@ namespace OpenDental{
 			// 
 			// label5
 			// 
-			this.label5.Location = new System.Drawing.Point(146,227);
+			this.label5.Location = new System.Drawing.Point(-1,185);
 			this.label5.Name = "label5";
 			this.label5.Size = new System.Drawing.Size(110,18);
 			this.label5.TabIndex = 68;
@@ -195,10 +201,10 @@ namespace OpenDental{
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.gridDisc.HScrollVisible = false;
-			this.gridDisc.Location = new System.Drawing.Point(15,249);
+			this.gridDisc.Location = new System.Drawing.Point(15,208);
 			this.gridDisc.Name = "gridDisc";
 			this.gridDisc.ScrollValue = 0;
-			this.gridDisc.Size = new System.Drawing.Size(770,421);
+			this.gridDisc.Size = new System.Drawing.Size(775,445);
 			this.gridDisc.TabIndex = 70;
 			this.gridDisc.Title = "Discussion";
 			this.gridDisc.TranslationName = null;
@@ -214,58 +220,21 @@ namespace OpenDental{
 			this.groupBox1.Controls.Add(this.checkBox2);
 			this.groupBox1.Controls.Add(this.textBox5);
 			this.groupBox1.Controls.Add(this.label6);
-			this.groupBox1.Location = new System.Drawing.Point(530,3);
+			this.groupBox1.Location = new System.Drawing.Point(535,3);
 			this.groupBox1.Name = "groupBox1";
 			this.groupBox1.Size = new System.Drawing.Size(339,120);
 			this.groupBox1.TabIndex = 71;
 			this.groupBox1.TabStop = false;
 			this.groupBox1.Text = "My Votes";
 			// 
-			// textBox5
+			// label9
 			// 
-			this.textBox5.BackColor = System.Drawing.SystemColors.Window;
-			this.textBox5.Location = new System.Drawing.Point(98,16);
-			this.textBox5.Name = "textBox5";
-			this.textBox5.Size = new System.Drawing.Size(38,20);
-			this.textBox5.TabIndex = 69;
-			// 
-			// label6
-			// 
-			this.label6.Location = new System.Drawing.Point(27,17);
-			this.label6.Name = "label6";
-			this.label6.Size = new System.Drawing.Size(69,18);
-			this.label6.TabIndex = 68;
-			this.label6.Text = "Points";
-			this.label6.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// checkBox2
-			// 
-			this.checkBox2.AutoCheck = false;
-			this.checkBox2.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.checkBox2.Location = new System.Drawing.Point(16,38);
-			this.checkBox2.Name = "checkBox2";
-			this.checkBox2.Size = new System.Drawing.Size(97,20);
-			this.checkBox2.TabIndex = 70;
-			this.checkBox2.Text = "Is Critical";
-			this.checkBox2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.checkBox2.UseVisualStyleBackColor = true;
-			// 
-			// textBox6
-			// 
-			this.textBox6.BackColor = System.Drawing.SystemColors.Window;
-			this.textBox6.Location = new System.Drawing.Point(98,59);
-			this.textBox6.Name = "textBox6";
-			this.textBox6.Size = new System.Drawing.Size(63,20);
-			this.textBox6.TabIndex = 72;
-			// 
-			// label7
-			// 
-			this.label7.Location = new System.Drawing.Point(3,60);
-			this.label7.Name = "label7";
-			this.label7.Size = new System.Drawing.Size(93,18);
-			this.label7.TabIndex = 71;
-			this.label7.Text = "Pledge Amount";
-			this.label7.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.label9.Location = new System.Drawing.Point(4,83);
+			this.label9.Name = "label9";
+			this.label9.Size = new System.Drawing.Size(330,34);
+			this.label9.TabIndex = 75;
+			this.label9.Text = "Pledges are neither required nor requested.  They are for unusual situations wher" +
+    "e a feature is extremely important to you.";
 			// 
 			// textBox7
 			// 
@@ -285,19 +254,118 @@ namespace OpenDental{
 			this.label8.Text = "Points Remaining";
 			this.label8.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
-			// label9
+			// textBox6
 			// 
-			this.label9.Location = new System.Drawing.Point(4,83);
-			this.label9.Name = "label9";
-			this.label9.Size = new System.Drawing.Size(330,34);
-			this.label9.TabIndex = 75;
-			this.label9.Text = "Pledges are neither required nor requested.  They are for unusual situations wher" +
-    "e a feature is extremely important to you.";
+			this.textBox6.BackColor = System.Drawing.SystemColors.Window;
+			this.textBox6.Location = new System.Drawing.Point(108,59);
+			this.textBox6.Name = "textBox6";
+			this.textBox6.Size = new System.Drawing.Size(63,20);
+			this.textBox6.TabIndex = 72;
+			// 
+			// label7
+			// 
+			this.label7.Location = new System.Drawing.Point(4,60);
+			this.label7.Name = "label7";
+			this.label7.Size = new System.Drawing.Size(103,18);
+			this.label7.TabIndex = 71;
+			this.label7.Text = "Pledge Amount $";
+			this.label7.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// checkBox2
+			// 
+			this.checkBox2.AutoCheck = false;
+			this.checkBox2.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkBox2.Location = new System.Drawing.Point(26,38);
+			this.checkBox2.Name = "checkBox2";
+			this.checkBox2.Size = new System.Drawing.Size(97,20);
+			this.checkBox2.TabIndex = 70;
+			this.checkBox2.Text = "Is Critical";
+			this.checkBox2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkBox2.UseVisualStyleBackColor = true;
+			// 
+			// textBox5
+			// 
+			this.textBox5.BackColor = System.Drawing.SystemColors.Window;
+			this.textBox5.Location = new System.Drawing.Point(108,16);
+			this.textBox5.Name = "textBox5";
+			this.textBox5.Size = new System.Drawing.Size(38,20);
+			this.textBox5.TabIndex = 69;
+			// 
+			// label6
+			// 
+			this.label6.Location = new System.Drawing.Point(37,17);
+			this.label6.Name = "label6";
+			this.label6.Size = new System.Drawing.Size(69,18);
+			this.label6.TabIndex = 68;
+			this.label6.Text = "Points";
+			this.label6.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// groupBox2
+			// 
+			this.groupBox2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.groupBox2.Controls.Add(this.textBox9);
+			this.groupBox2.Controls.Add(this.label12);
+			this.groupBox2.Controls.Add(this.checkBox3);
+			this.groupBox2.Controls.Add(this.textBox10);
+			this.groupBox2.Controls.Add(this.label13);
+			this.groupBox2.Location = new System.Drawing.Point(535,126);
+			this.groupBox2.Name = "groupBox2";
+			this.groupBox2.Size = new System.Drawing.Size(255,78);
+			this.groupBox2.TabIndex = 72;
+			this.groupBox2.TabStop = false;
+			this.groupBox2.Text = "Total";
+			// 
+			// textBox9
+			// 
+			this.textBox9.BackColor = System.Drawing.SystemColors.Window;
+			this.textBox9.Location = new System.Drawing.Point(108,54);
+			this.textBox9.Name = "textBox9";
+			this.textBox9.Size = new System.Drawing.Size(63,20);
+			this.textBox9.TabIndex = 72;
+			// 
+			// label12
+			// 
+			this.label12.Location = new System.Drawing.Point(4,55);
+			this.label12.Name = "label12";
+			this.label12.Size = new System.Drawing.Size(103,18);
+			this.label12.TabIndex = 71;
+			this.label12.Text = "Pledged $";
+			this.label12.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// checkBox3
+			// 
+			this.checkBox3.AutoCheck = false;
+			this.checkBox3.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkBox3.Location = new System.Drawing.Point(26,33);
+			this.checkBox3.Name = "checkBox3";
+			this.checkBox3.Size = new System.Drawing.Size(97,20);
+			this.checkBox3.TabIndex = 70;
+			this.checkBox3.Text = "Is Critical";
+			this.checkBox3.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkBox3.UseVisualStyleBackColor = true;
+			// 
+			// textBox10
+			// 
+			this.textBox10.BackColor = System.Drawing.SystemColors.Window;
+			this.textBox10.Location = new System.Drawing.Point(108,11);
+			this.textBox10.Name = "textBox10";
+			this.textBox10.Size = new System.Drawing.Size(38,20);
+			this.textBox10.TabIndex = 69;
+			// 
+			// label13
+			// 
+			this.label13.Location = new System.Drawing.Point(37,12);
+			this.label13.Name = "label13";
+			this.label13.Size = new System.Drawing.Size(69,18);
+			this.label13.TabIndex = 68;
+			this.label13.Text = "Points";
+			this.label13.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// FormRequestEdit
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-			this.ClientSize = new System.Drawing.Size(878,682);
+			this.ClientSize = new System.Drawing.Size(883,665);
+			this.Controls.Add(this.groupBox2);
 			this.Controls.Add(this.groupBox1);
 			this.Controls.Add(this.gridDisc);
 			this.Controls.Add(this.textBox4);
@@ -316,8 +384,11 @@ namespace OpenDental{
 			this.Name = "FormRequestEdit";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Edit Request";
+			this.Load += new System.EventHandler(this.FormRequestEdit_Load);
 			this.groupBox1.ResumeLayout(false);
 			this.groupBox1.PerformLayout();
+			this.groupBox2.ResumeLayout(false);
+			this.groupBox2.PerformLayout();
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -348,5 +419,11 @@ namespace OpenDental{
 		private System.Windows.Forms.TextBox textBox6;
 		private System.Windows.Forms.Label label7;
 		private System.Windows.Forms.CheckBox checkBox2;
+		private System.Windows.Forms.GroupBox groupBox2;
+		private System.Windows.Forms.TextBox textBox9;
+		private System.Windows.Forms.Label label12;
+		private System.Windows.Forms.CheckBox checkBox3;
+		private System.Windows.Forms.TextBox textBox10;
+		private System.Windows.Forms.Label label13;
 	}
 }

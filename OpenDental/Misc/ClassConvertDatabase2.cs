@@ -147,8 +147,10 @@ namespace OpenDental{
 						Properties.Resources.Patient_Info.Save(ODFileUtils.CombinePaths(imagePath,"Patient Info.gif"));
 					}
 					catch{
-
 					}
+					
+
+
 
 
 

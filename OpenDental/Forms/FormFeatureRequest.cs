@@ -1,4 +1,5 @@
 using System;
+using System.Data;
 using System.Diagnostics;
 using System.Drawing;
 using System.Collections;
@@ -9,6 +10,7 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using System.Xml;
+using System.Xml.Serialization;
 using System.Windows.Forms;
 using OpenDentBusiness;
 using CodeBase;
@@ -18,21 +20,21 @@ namespace OpenDental{
 	/// <summary>
 	/// Summary description for FormBasicTemplate.
 	/// </summary>
-	public class FormFeatureRequests:System.Windows.Forms.Form {
+	public class FormFeatureRequest:System.Windows.Forms.Form {
 		private OpenDental.UI.Button butClose;
 		private System.Windows.Forms.Label label1;
 		private IContainer components;
 		private Label label2;
 		private Label label5;
 		private TextBox textSearch;
-		private Label label3;
 		private OpenDental.UI.ODGrid gridMain;
 		private OpenDental.UI.Button buttonAdd;
 		private Label label4;
-		private TextBox textConnectionMessage;//OD1
+		private OpenDental.UI.Button butSearch;
+		private ODDataTable table;
 
 		///<summary></summary>
-		public FormFeatureRequests()
+		public FormFeatureRequest()
 		{
 			//
 			// Required for Windows Form Designer support
@@ -63,17 +65,16 @@ namespace OpenDental{
 		/// </summary>
 		private void InitializeComponent()
 		{
-			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormFeatureRequests));
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormFeatureRequest));
 			this.label1 = new System.Windows.Forms.Label();
-			this.textConnectionMessage = new System.Windows.Forms.TextBox();
 			this.label2 = new System.Windows.Forms.Label();
 			this.label5 = new System.Windows.Forms.Label();
 			this.textSearch = new System.Windows.Forms.TextBox();
-			this.label3 = new System.Windows.Forms.Label();
+			this.label4 = new System.Windows.Forms.Label();
+			this.butSearch = new OpenDental.UI.Button();
+			this.buttonAdd = new OpenDental.UI.Button();
 			this.gridMain = new OpenDental.UI.ODGrid();
 			this.butClose = new OpenDental.UI.Button();
-			this.buttonAdd = new OpenDental.UI.Button();
-			this.label4 = new System.Windows.Forms.Label();
 			this.SuspendLayout();
 			// 
 			// label1
@@ -83,79 +84,55 @@ namespace OpenDental{
 			this.label1.Size = new System.Drawing.Size(100,23);
 			this.label1.TabIndex = 0;
 			// 
-			// textConnectionMessage
-			// 
-			this.textConnectionMessage.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-			this.textConnectionMessage.BackColor = System.Drawing.SystemColors.Control;
-			this.textConnectionMessage.Location = new System.Drawing.Point(506,17);
-			this.textConnectionMessage.Name = "textConnectionMessage";
-			this.textConnectionMessage.ReadOnly = true;
-			this.textConnectionMessage.Size = new System.Drawing.Size(342,20);
-			this.textConnectionMessage.TabIndex = 50;
-			// 
 			// label2
 			// 
-			this.label2.Location = new System.Drawing.Point(9,1);
+			this.label2.Location = new System.Drawing.Point(359,7);
 			this.label2.Name = "label2";
-			this.label2.Size = new System.Drawing.Size(648,16);
+			this.label2.Size = new System.Drawing.Size(511,16);
 			this.label2.TabIndex = 51;
 			this.label2.Text = "Vote for your favorite features here.  Please remember that we cannot ever give a" +
     "ny time estimates.";
 			// 
 			// label5
 			// 
-			this.label5.Location = new System.Drawing.Point(1,17);
+			this.label5.Location = new System.Drawing.Point(4,5);
 			this.label5.Name = "label5";
-			this.label5.Size = new System.Drawing.Size(110,18);
+			this.label5.Size = new System.Drawing.Size(76,18);
 			this.label5.TabIndex = 56;
 			this.label5.Text = "Search";
 			this.label5.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// textSearch
 			// 
-			this.textSearch.Location = new System.Drawing.Point(112,17);
+			this.textSearch.Location = new System.Drawing.Point(81,5);
 			this.textSearch.Name = "textSearch";
 			this.textSearch.Size = new System.Drawing.Size(179,20);
 			this.textSearch.TabIndex = 57;
 			// 
-			// label3
+			// label4
 			// 
-			this.label3.Location = new System.Drawing.Point(394,17);
-			this.label3.Name = "label3";
-			this.label3.Size = new System.Drawing.Size(110,18);
-			this.label3.TabIndex = 58;
-			this.label3.Text = "Connection";
-			this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.label4.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.label4.Location = new System.Drawing.Point(91,633);
+			this.label4.Name = "label4";
+			this.label4.Size = new System.Drawing.Size(180,18);
+			this.label4.TabIndex = 61;
+			this.label4.Text = "A search is required first";
+			this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
-			// gridMain
+			// butSearch
 			// 
-			this.gridMain.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-			this.gridMain.HScrollVisible = true;
-			this.gridMain.Location = new System.Drawing.Point(12,40);
-			this.gridMain.Name = "gridMain";
-			this.gridMain.ScrollValue = 0;
-			this.gridMain.Size = new System.Drawing.Size(836,582);
-			this.gridMain.TabIndex = 59;
-			this.gridMain.Title = "Feature Requests";
-			this.gridMain.TranslationName = null;
-			// 
-			// butClose
-			// 
-			this.butClose.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butClose.Autosize = true;
-			this.butClose.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butClose.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butClose.CornerRadius = 4F;
-			this.butClose.Location = new System.Drawing.Point(773,624);
-			this.butClose.Name = "butClose";
-			this.butClose.Size = new System.Drawing.Size(75,24);
-			this.butClose.TabIndex = 0;
-			this.butClose.Text = "&Close";
-			this.butClose.Click += new System.EventHandler(this.butClose_Click);
+			this.butSearch.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butSearch.Autosize = true;
+			this.butSearch.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butSearch.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butSearch.CornerRadius = 4F;
+			this.butSearch.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butSearch.Location = new System.Drawing.Point(266,2);
+			this.butSearch.Name = "butSearch";
+			this.butSearch.Size = new System.Drawing.Size(75,24);
+			this.butSearch.TabIndex = 62;
+			this.butSearch.Text = "Search";
+			this.butSearch.Click += new System.EventHandler(this.butSearch_Click);
 			// 
 			// buttonAdd
 			// 
@@ -167,40 +144,59 @@ namespace OpenDental{
 			this.buttonAdd.CornerRadius = 4F;
 			this.buttonAdd.Image = global::OpenDental.Properties.Resources.Add;
 			this.buttonAdd.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.buttonAdd.Location = new System.Drawing.Point(12,624);
+			this.buttonAdd.Location = new System.Drawing.Point(12,630);
 			this.buttonAdd.Name = "buttonAdd";
 			this.buttonAdd.Size = new System.Drawing.Size(75,24);
 			this.buttonAdd.TabIndex = 60;
 			this.buttonAdd.Text = "Add";
 			this.buttonAdd.Click += new System.EventHandler(this.buttonAdd_Click);
 			// 
-			// label4
+			// gridMain
 			// 
-			this.label4.Location = new System.Drawing.Point(91,627);
-			this.label4.Name = "label4";
-			this.label4.Size = new System.Drawing.Size(180,18);
-			this.label4.TabIndex = 61;
-			this.label4.Text = "Required to search first";
-			this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.gridMain.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.gridMain.HScrollVisible = false;
+			this.gridMain.Location = new System.Drawing.Point(12,28);
+			this.gridMain.Name = "gridMain";
+			this.gridMain.ScrollValue = 0;
+			this.gridMain.Size = new System.Drawing.Size(861,599);
+			this.gridMain.TabIndex = 59;
+			this.gridMain.Title = "Feature Requests";
+			this.gridMain.TranslationName = null;
+			this.gridMain.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellDoubleClick);
 			// 
-			// FormFeatureRequests
+			// butClose
+			// 
+			this.butClose.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.butClose.Autosize = true;
+			this.butClose.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butClose.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butClose.CornerRadius = 4F;
+			this.butClose.Location = new System.Drawing.Point(798,630);
+			this.butClose.Name = "butClose";
+			this.butClose.Size = new System.Drawing.Size(75,24);
+			this.butClose.TabIndex = 0;
+			this.butClose.Text = "&Close";
+			this.butClose.Click += new System.EventHandler(this.butClose_Click);
+			// 
+			// FormFeatureRequest
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-			this.ClientSize = new System.Drawing.Size(857,651);
+			this.ClientSize = new System.Drawing.Size(882,657);
+			this.Controls.Add(this.butSearch);
 			this.Controls.Add(this.label4);
 			this.Controls.Add(this.buttonAdd);
-			this.Controls.Add(this.label3);
 			this.Controls.Add(this.textSearch);
 			this.Controls.Add(this.label5);
-			this.Controls.Add(this.textConnectionMessage);
 			this.Controls.Add(this.gridMain);
 			this.Controls.Add(this.label2);
 			this.Controls.Add(this.butClose);
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-			this.Name = "FormFeatureRequests";
+			this.Name = "FormFeatureRequest";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Feature Requests";
-			this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
 			this.Load += new System.EventHandler(this.FormFeatureRequest_Load);
 			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormUpdate_FormClosing);
 			this.ResumeLayout(false);
@@ -218,15 +214,14 @@ namespace OpenDental{
 					textConnectionMessage.Text=Lan.g(this,"Not authorized for")+" "+GroupPermissions.GetDesc(Permissions.Setup);
 				}
 			*/
-			if(!Synch()){
-				return;
-			}
-			FillGrid();
+			//if(!Synch()){
+			//	return;
+			//}
+			//FillGrid();
 		}
 
-		private bool Synch(){
-			Cursor=Cursors.WaitCursor;
-			textConnectionMessage.Text=Lan.g(this,"Attempting to connect to web service......");
+		private void butSearch_Click(object sender,EventArgs e) {
+			//textConnectionMessage.Text=Lan.g(this,"Attempting to connect to web service......");
 			Application.DoEvents();
 			//prepare the xml document to send--------------------------------------------------------------------------------------
 			XmlWriterSettings settings = new XmlWriterSettings();
@@ -234,12 +229,12 @@ namespace OpenDental{
 			settings.IndentChars = ("    ");
 			StringBuilder strbuild=new StringBuilder();
 			using(XmlWriter writer=XmlWriter.Create(strbuild,settings)){
-				writer.WriteStartElement("FeatureSynch");
+				writer.WriteStartElement("FeatureRequestGetList");
 				writer.WriteStartElement("RegistrationKey");
 				writer.WriteString(PrefC.GetString("RegistrationKey"));
 				writer.WriteEndElement();
-				writer.WriteStartElement("SinceDateT");
-				writer.WriteString("FeatureRequestLastSynchDateT");
+				writer.WriteStartElement("SearchString");
+				writer.WriteString(textSearch.Text);
 				writer.WriteEndElement();
 				writer.WriteEndElement();
 			}
@@ -247,20 +242,20 @@ namespace OpenDental{
 				OpenDental.localhost.Service1 updateService=new OpenDental.localhost.Service1();
 			#else
 				OpenDental.customerUpdates.Service1 updateService=new OpenDental.customerUpdates.Service1();
+				updateService.Url=PrefC.GetString("UpdateServerAddress");
 			#endif
-			updateService.Url=PrefC.GetString("UpdateServerAddress");
-			//Send the message and get the result--------------------------------------------------------------------------------------
+			//Send the message and get the result-------------------------------------------------------------------------------------
 			string result="";
 			try {
-				result=updateService.RequestUpdate(strbuild.ToString());
+				result=updateService.FeatureRequestGetList(strbuild.ToString());
 			}
 			catch(Exception ex) {
 				Cursor=Cursors.Default;
 				MessageBox.Show("Error: "+ex.Message);
-				return false;
+				return;
 			}
-			textConnectionMessage.Text=Lan.g(this,"Connection successful.");
-			Application.DoEvents();
+			//textConnectionMessage.Text=Lan.g(this,"Connection successful.");
+			//Application.DoEvents();
 			Cursor=Cursors.Default;
 			//MessageBox.Show(result);
 			XmlDocument doc=new XmlDocument();
@@ -268,9 +263,9 @@ namespace OpenDental{
 			//Process errors------------------------------------------------------------------------------------------------------------
 			XmlNode node=doc.SelectSingleNode("//Error");
 			if(node!=null) {
-				textConnectionMessage.Text=node.InnerText;
+				//textConnectionMessage.Text=node.InnerText;
 				MessageBox.Show(node.InnerText,"Error");
-				return false;
+				return;
 			}
 			node=doc.SelectSingleNode("//KeyDisabled");
 			if(node==null) {
@@ -280,58 +275,45 @@ namespace OpenDental{
 				}
 			}
 			else {
-				textConnectionMessage.Text=node.InnerText;
+				//textConnectionMessage.Text=node.InnerText;
 				MessageBox.Show(node.InnerText);
 				if(Prefs.UpdateBool("RegistrationKeyIsDisabled",true)) {//this is one of two places in the program where this happens.
 					DataValid.SetInvalid(InvalidType.Prefs);
 				}
-				return false;
+				return;
 			}
 			//Process a valid return value------------------------------------------------------------------------------------------------
-			/*node=doc.SelectSingleNode("//BuildAvailable");
-			buildAvailable="";
-			buildAvailableCode="";
-			if(node!=null){
-				groupBuild.Visible=true;
-				node=doc.SelectSingleNode("//BuildAvailable/Display");
-				if(node!=null){
-					textBuild.Text=node.InnerText;
-				}
-				node=doc.SelectSingleNode("//BuildAvailable/MajMinBuildF");
-				if(node!=null){
-					buildAvailable=node.InnerText;
-				}
-				node=doc.SelectSingleNode("//BuildAvailable/UpdateCode");
-				if(node!=null) {
-					buildAvailableCode=node.InnerText;
-				}
-			}*/
-			return true;
+			node=doc.SelectSingleNode("//ResultTable");
+			table=new ODDataTable(node.InnerXml);
+			FillGrid();
 		}
 
 		private void FillGrid(){
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
-			ODGridColumn col=new ODGridColumn(Lan.g("TableRequest","Req#"),50);
+			ODGridColumn col=new ODGridColumn(Lan.g("TableRequest","Req#"),40);
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TableRequest","My Votes"),70);
+			col=new ODGridColumn(Lan.g("TableRequest","My Votes"),60);
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TableRequest","Total Votes"),90);
+			col=new ODGridColumn(Lan.g("TableRequest","Total Votes"),70);
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TableRequest","Description"),200);
+			col=new ODGridColumn(Lan.g("TableRequest","Approval"),90);
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TableRequest","Admin Notes"),200);
+			col=new ODGridColumn(Lan.g("TableRequest","Description"),500);
 			gridMain.Columns.Add(col);
 			gridMain.Rows.Clear();
 			ODGridRow row;
-			/*for(int i=0;i<List.Length;i++){
+			for(int i=0;i<table.Rows.Count;i++){
 				row=new ODGridRow();
-				row.Cells.Add("");
-				row.Cells.Add("");
-			  
+				row.Cells.Add(table.Rows[i]["RequestId"]);
+				row.Cells.Add(table.Rows[i]["myVotes"]);
+			  row.Cells.Add(table.Rows[i]["totalVotes"]);
+				row.Cells.Add(table.Rows[i]["approval"]);
+				row.Cells.Add(table.Rows[i]["Description"]);
 				gridMain.Rows.Add(row);
-			}*/
+			}
 			gridMain.EndUpdate();
+			//textConnectionMessage.Text="";
 		}
 
 		private void buttonAdd_Click(object sender,EventArgs e) {
@@ -342,6 +324,10 @@ namespace OpenDental{
 
 		}
 
+		private void gridMain_CellDoubleClick(object sender,ODGridClickEventArgs e) {
+			FormRequestEdit FormR=new FormRequestEdit();
+		}
+
 		private void butClose_Click(object sender, System.EventArgs e) {
 			Close();
 		}
@@ -349,6 +335,10 @@ namespace OpenDental{
 		private void FormUpdate_FormClosing(object sender,FormClosingEventArgs e) {
 			
 		}
+
+		
+
+	
 
 		
 

@@ -2,6 +2,16 @@
 <wsdl:definitions xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://open-dent.com/" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" targetNamespace="http://open-dent.com/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
   <wsdl:types>
     <s:schema elementFormDefault="qualified" targetNamespace="http://open-dent.com/">
+      <s:element name="EstablishConnection">
+        <s:complexType />
+      </s:element>
+      <s:element name="EstablishConnectionResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="EstablishConnectionResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
       <s:element name="RequestUpdate">
         <s:complexType>
           <s:sequence>
@@ -16,24 +26,76 @@
           </s:sequence>
         </s:complexType>
       </s:element>
+      <s:element name="FeatureRequestGetList">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="officeData" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="FeatureRequestGetListResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="FeatureRequestGetListResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
     </s:schema>
   </wsdl:types>
+  <wsdl:message name="EstablishConnectionSoapIn">
+    <wsdl:part name="parameters" element="tns:EstablishConnection" />
+  </wsdl:message>
+  <wsdl:message name="EstablishConnectionSoapOut">
+    <wsdl:part name="parameters" element="tns:EstablishConnectionResponse" />
+  </wsdl:message>
   <wsdl:message name="RequestUpdateSoapIn">
     <wsdl:part name="parameters" element="tns:RequestUpdate" />
   </wsdl:message>
   <wsdl:message name="RequestUpdateSoapOut">
     <wsdl:part name="parameters" element="tns:RequestUpdateResponse" />
   </wsdl:message>
+  <wsdl:message name="FeatureRequestGetListSoapIn">
+    <wsdl:part name="parameters" element="tns:FeatureRequestGetList" />
+  </wsdl:message>
+  <wsdl:message name="FeatureRequestGetListSoapOut">
+    <wsdl:part name="parameters" element="tns:FeatureRequestGetListResponse" />
+  </wsdl:message>
   <wsdl:portType name="Service1Soap">
+    <wsdl:operation name="EstablishConnection">
+      <wsdl:input message="tns:EstablishConnectionSoapIn" />
+      <wsdl:output message="tns:EstablishConnectionSoapOut" />
+    </wsdl:operation>
     <wsdl:operation name="RequestUpdate">
       <wsdl:input message="tns:RequestUpdateSoapIn" />
       <wsdl:output message="tns:RequestUpdateSoapOut" />
     </wsdl:operation>
+    <wsdl:operation name="FeatureRequestGetList">
+      <wsdl:input message="tns:FeatureRequestGetListSoapIn" />
+      <wsdl:output message="tns:FeatureRequestGetListSoapOut" />
+    </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="Service1Soap" type="tns:Service1Soap">
     <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="EstablishConnection">
+      <soap:operation soapAction="http://open-dent.com/EstablishConnection" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
     <wsdl:operation name="RequestUpdate">
       <soap:operation soapAction="http://open-dent.com/RequestUpdate" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="FeatureRequestGetList">
+      <soap:operation soapAction="http://open-dent.com/FeatureRequestGetList" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
@@ -44,8 +106,26 @@
   </wsdl:binding>
   <wsdl:binding name="Service1Soap12" type="tns:Service1Soap">
     <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="EstablishConnection">
+      <soap12:operation soapAction="http://open-dent.com/EstablishConnection" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
     <wsdl:operation name="RequestUpdate">
       <soap12:operation soapAction="http://open-dent.com/RequestUpdate" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="FeatureRequestGetList">
+      <soap12:operation soapAction="http://open-dent.com/FeatureRequestGetList" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
