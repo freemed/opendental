@@ -127,7 +127,7 @@ namespace OpenDental{
 			this.textTranslation.Multiline = true;
 			this.textTranslation.Name = "textTranslation";
 			this.textTranslation.Size = new System.Drawing.Size(672,130);
-			this.textTranslation.TabIndex = 7;
+			this.textTranslation.TabIndex = 0;
 			// 
 			// label4
 			// 
@@ -154,7 +154,7 @@ namespace OpenDental{
 			this.textOtherTranslation.Name = "textOtherTranslation";
 			this.textOtherTranslation.ReadOnly = true;
 			this.textOtherTranslation.Size = new System.Drawing.Size(671,130);
-			this.textOtherTranslation.TabIndex = 0;
+			this.textOtherTranslation.TabIndex = 1;
 			// 
 			// label3
 			// 

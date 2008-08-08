@@ -105,6 +105,7 @@ namespace OpenDental{
 				Cur.ClassType=classType;
 				Cur.English=text;
 				//MessageBox.Show(Cur.ClassType+Cur.English);
+				HList.Add(Cur.ClassType+Cur.English,Cur);
 				Insert(Cur);
 				itemInserted=true;
 				//Refresh();
@@ -296,6 +297,22 @@ namespace OpenDental{
 				hFormat+=":00";//time separator will actually change according to region
 			}
 			return hFormat;
+		}
+
+		///<summary>No need to refresh after this.</summary>
+		public static void DeleteItems(string classType,string[] englishList){
+			string command="DELETE FROM language WHERE ClassType='"+POut.PString(classType)+"' AND (";
+			for(int i=0;i<englishList.Length;i++){
+				if(i>0){
+					command+="OR ";
+				}
+				command+="English='"+POut.PString(englishList[i])+"' ";
+				if(HList.ContainsKey(classType+englishList[i])){
+					HList.Remove(classType+englishList[i]);
+				}
+			}
+			command+=")";
+			General.NonQ(command);
 		}
 
 	}
