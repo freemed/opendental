@@ -23,38 +23,357 @@ namespace OpenDental{
 		/// the contents of this method with the code editor.
 		/// </summary>
 		private void InitializeComponent() {
-			this.butOK = new OpenDental.UI.Button();
-			this.butCancel = new OpenDental.UI.Button();
 			this.label3 = new System.Windows.Forms.Label();
-			this.textConnectionMessage = new System.Windows.Forms.TextBox();
-			this.label1 = new System.Windows.Forms.Label();
-			this.textBox1 = new System.Windows.Forms.TextBox();
-			this.checkBox1 = new System.Windows.Forms.CheckBox();
+			this.textDescription = new System.Windows.Forms.TextBox();
+			this.checkIsMine = new System.Windows.Forms.CheckBox();
 			this.label2 = new System.Windows.Forms.Label();
-			this.textBox2 = new System.Windows.Forms.TextBox();
+			this.textDetail = new System.Windows.Forms.TextBox();
 			this.label4 = new System.Windows.Forms.Label();
-			this.textBox3 = new System.Windows.Forms.TextBox();
-			this.textBox4 = new System.Windows.Forms.TextBox();
+			this.textDifficulty = new System.Windows.Forms.TextBox();
+			this.textApproval = new System.Windows.Forms.TextBox();
 			this.label5 = new System.Windows.Forms.Label();
-			this.gridDisc = new OpenDental.UI.ODGrid();
-			this.groupBox1 = new System.Windows.Forms.GroupBox();
+			this.groupMyVotes = new System.Windows.Forms.GroupBox();
 			this.label9 = new System.Windows.Forms.Label();
-			this.textBox7 = new System.Windows.Forms.TextBox();
+			this.textMyPointsRemain = new System.Windows.Forms.TextBox();
 			this.label8 = new System.Windows.Forms.Label();
-			this.textBox6 = new System.Windows.Forms.TextBox();
+			this.textMyPledge = new System.Windows.Forms.TextBox();
 			this.label7 = new System.Windows.Forms.Label();
-			this.checkBox2 = new System.Windows.Forms.CheckBox();
-			this.textBox5 = new System.Windows.Forms.TextBox();
+			this.checkIsCritical = new System.Windows.Forms.CheckBox();
+			this.textMyPoints = new System.Windows.Forms.TextBox();
 			this.label6 = new System.Windows.Forms.Label();
 			this.groupBox2 = new System.Windows.Forms.GroupBox();
-			this.textBox9 = new System.Windows.Forms.TextBox();
+			this.textTotalCritical = new System.Windows.Forms.TextBox();
+			this.label10 = new System.Windows.Forms.Label();
+			this.textTotalPledged = new System.Windows.Forms.TextBox();
 			this.label12 = new System.Windows.Forms.Label();
-			this.checkBox3 = new System.Windows.Forms.CheckBox();
-			this.textBox10 = new System.Windows.Forms.TextBox();
+			this.textTotalPoints = new System.Windows.Forms.TextBox();
 			this.label13 = new System.Windows.Forms.Label();
-			this.groupBox1.SuspendLayout();
+			this.comboApproval = new System.Windows.Forms.ComboBox();
+			this.butDelete = new OpenDental.UI.Button();
+			this.butResubmit = new OpenDental.UI.Button();
+			this.gridMain = new OpenDental.UI.ODGrid();
+			this.butOK = new OpenDental.UI.Button();
+			this.butCancel = new OpenDental.UI.Button();
+			this.textSubmitter = new System.Windows.Forms.TextBox();
+			this.labelSubmitter = new System.Windows.Forms.Label();
+			this.textBox1 = new System.Windows.Forms.TextBox();
+			this.label1 = new System.Windows.Forms.Label();
+			this.textBox2 = new System.Windows.Forms.TextBox();
+			this.label11 = new System.Windows.Forms.Label();
+			this.label14 = new System.Windows.Forms.Label();
+			this.groupMyVotes.SuspendLayout();
 			this.groupBox2.SuspendLayout();
 			this.SuspendLayout();
+			// 
+			// label3
+			// 
+			this.label3.Location = new System.Drawing.Point(4,3);
+			this.label3.Name = "label3";
+			this.label3.Size = new System.Drawing.Size(105,18);
+			this.label3.TabIndex = 60;
+			this.label3.Text = "Short Description";
+			this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// textDescription
+			// 
+			this.textDescription.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.textDescription.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))),((int)(((byte)(239)))),((int)(((byte)(243)))));
+			this.textDescription.Location = new System.Drawing.Point(111,3);
+			this.textDescription.Multiline = true;
+			this.textDescription.Name = "textDescription";
+			this.textDescription.ReadOnly = true;
+			this.textDescription.Size = new System.Drawing.Size(410,35);
+			this.textDescription.TabIndex = 59;
+			// 
+			// checkIsMine
+			// 
+			this.checkIsMine.AutoCheck = false;
+			this.checkIsMine.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkIsMine.Location = new System.Drawing.Point(1,140);
+			this.checkIsMine.Name = "checkIsMine";
+			this.checkIsMine.Size = new System.Drawing.Size(124,20);
+			this.checkIsMine.TabIndex = 63;
+			this.checkIsMine.Text = "Submitted by me";
+			this.checkIsMine.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkIsMine.UseVisualStyleBackColor = true;
+			// 
+			// label2
+			// 
+			this.label2.Location = new System.Drawing.Point(2,40);
+			this.label2.Name = "label2";
+			this.label2.Size = new System.Drawing.Size(107,18);
+			this.label2.TabIndex = 65;
+			this.label2.Text = "Detail";
+			this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// textDetail
+			// 
+			this.textDetail.AcceptsReturn = true;
+			this.textDetail.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.textDetail.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))),((int)(((byte)(239)))),((int)(((byte)(243)))));
+			this.textDetail.Location = new System.Drawing.Point(111,40);
+			this.textDetail.Multiline = true;
+			this.textDetail.Name = "textDetail";
+			this.textDetail.ReadOnly = true;
+			this.textDetail.Size = new System.Drawing.Size(410,98);
+			this.textDetail.TabIndex = 64;
+			// 
+			// label4
+			// 
+			this.label4.Location = new System.Drawing.Point(14,163);
+			this.label4.Name = "label4";
+			this.label4.Size = new System.Drawing.Size(95,18);
+			this.label4.TabIndex = 66;
+			this.label4.Text = "Difficulty  /10";
+			this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// textDifficulty
+			// 
+			this.textDifficulty.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))),((int)(((byte)(239)))),((int)(((byte)(243)))));
+			this.textDifficulty.Location = new System.Drawing.Point(111,162);
+			this.textDifficulty.Name = "textDifficulty";
+			this.textDifficulty.ReadOnly = true;
+			this.textDifficulty.Size = new System.Drawing.Size(38,20);
+			this.textDifficulty.TabIndex = 67;
+			// 
+			// textApproval
+			// 
+			this.textApproval.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))),((int)(((byte)(239)))),((int)(((byte)(243)))));
+			this.textApproval.Location = new System.Drawing.Point(111,184);
+			this.textApproval.Name = "textApproval";
+			this.textApproval.ReadOnly = true;
+			this.textApproval.Size = new System.Drawing.Size(410,20);
+			this.textApproval.TabIndex = 69;
+			// 
+			// label5
+			// 
+			this.label5.Location = new System.Drawing.Point(-1,185);
+			this.label5.Name = "label5";
+			this.label5.Size = new System.Drawing.Size(110,18);
+			this.label5.TabIndex = 68;
+			this.label5.Text = "Approval";
+			this.label5.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// groupMyVotes
+			// 
+			this.groupMyVotes.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.groupMyVotes.Controls.Add(this.label9);
+			this.groupMyVotes.Controls.Add(this.textMyPointsRemain);
+			this.groupMyVotes.Controls.Add(this.label8);
+			this.groupMyVotes.Controls.Add(this.textMyPledge);
+			this.groupMyVotes.Controls.Add(this.label7);
+			this.groupMyVotes.Controls.Add(this.checkIsCritical);
+			this.groupMyVotes.Controls.Add(this.textMyPoints);
+			this.groupMyVotes.Controls.Add(this.label6);
+			this.groupMyVotes.Location = new System.Drawing.Point(527,3);
+			this.groupMyVotes.Name = "groupMyVotes";
+			this.groupMyVotes.Size = new System.Drawing.Size(347,120);
+			this.groupMyVotes.TabIndex = 71;
+			this.groupMyVotes.TabStop = false;
+			this.groupMyVotes.Text = "My Votes";
+			// 
+			// label9
+			// 
+			this.label9.Location = new System.Drawing.Point(2,83);
+			this.label9.Name = "label9";
+			this.label9.Size = new System.Drawing.Size(342,34);
+			this.label9.TabIndex = 75;
+			this.label9.Text = "Pledges are neither required nor requested.  They are for unusual situations wher" +
+    "e a feature is extremely important to someone.";
+			// 
+			// textMyPointsRemain
+			// 
+			this.textMyPointsRemain.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))),((int)(((byte)(239)))),((int)(((byte)(243)))));
+			this.textMyPointsRemain.Location = new System.Drawing.Point(264,17);
+			this.textMyPointsRemain.Name = "textMyPointsRemain";
+			this.textMyPointsRemain.ReadOnly = true;
+			this.textMyPointsRemain.Size = new System.Drawing.Size(38,20);
+			this.textMyPointsRemain.TabIndex = 74;
+			// 
+			// label8
+			// 
+			this.label8.Location = new System.Drawing.Point(157,18);
+			this.label8.Name = "label8";
+			this.label8.Size = new System.Drawing.Size(105,18);
+			this.label8.TabIndex = 73;
+			this.label8.Text = "Points Remaining";
+			this.label8.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// textMyPledge
+			// 
+			this.textMyPledge.BackColor = System.Drawing.SystemColors.Window;
+			this.textMyPledge.Location = new System.Drawing.Point(108,57);
+			this.textMyPledge.Name = "textMyPledge";
+			this.textMyPledge.Size = new System.Drawing.Size(63,20);
+			this.textMyPledge.TabIndex = 72;
+			// 
+			// label7
+			// 
+			this.label7.Location = new System.Drawing.Point(4,58);
+			this.label7.Name = "label7";
+			this.label7.Size = new System.Drawing.Size(103,18);
+			this.label7.TabIndex = 71;
+			this.label7.Text = "Pledge Amount $";
+			this.label7.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// checkIsCritical
+			// 
+			this.checkIsCritical.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkIsCritical.Location = new System.Drawing.Point(26,37);
+			this.checkIsCritical.Name = "checkIsCritical";
+			this.checkIsCritical.Size = new System.Drawing.Size(97,20);
+			this.checkIsCritical.TabIndex = 70;
+			this.checkIsCritical.Text = "Is Critical";
+			this.checkIsCritical.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkIsCritical.UseVisualStyleBackColor = true;
+			// 
+			// textMyPoints
+			// 
+			this.textMyPoints.BackColor = System.Drawing.SystemColors.Window;
+			this.textMyPoints.Location = new System.Drawing.Point(108,16);
+			this.textMyPoints.Name = "textMyPoints";
+			this.textMyPoints.Size = new System.Drawing.Size(38,20);
+			this.textMyPoints.TabIndex = 69;
+			// 
+			// label6
+			// 
+			this.label6.Location = new System.Drawing.Point(37,17);
+			this.label6.Name = "label6";
+			this.label6.Size = new System.Drawing.Size(69,18);
+			this.label6.TabIndex = 68;
+			this.label6.Text = "Points";
+			this.label6.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// groupBox2
+			// 
+			this.groupBox2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.groupBox2.Controls.Add(this.textBox2);
+			this.groupBox2.Controls.Add(this.label11);
+			this.groupBox2.Controls.Add(this.textTotalCritical);
+			this.groupBox2.Controls.Add(this.label10);
+			this.groupBox2.Controls.Add(this.textTotalPledged);
+			this.groupBox2.Controls.Add(this.label12);
+			this.groupBox2.Controls.Add(this.textTotalPoints);
+			this.groupBox2.Controls.Add(this.label13);
+			this.groupBox2.Location = new System.Drawing.Point(527,126);
+			this.groupBox2.Name = "groupBox2";
+			this.groupBox2.Size = new System.Drawing.Size(347,78);
+			this.groupBox2.TabIndex = 72;
+			this.groupBox2.TabStop = false;
+			this.groupBox2.Text = "Total";
+			// 
+			// textTotalCritical
+			// 
+			this.textTotalCritical.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))),((int)(((byte)(239)))),((int)(((byte)(243)))));
+			this.textTotalCritical.Location = new System.Drawing.Point(108,32);
+			this.textTotalCritical.Name = "textTotalCritical";
+			this.textTotalCritical.ReadOnly = true;
+			this.textTotalCritical.Size = new System.Drawing.Size(38,20);
+			this.textTotalCritical.TabIndex = 74;
+			// 
+			// label10
+			// 
+			this.label10.Location = new System.Drawing.Point(7,33);
+			this.label10.Name = "label10";
+			this.label10.Size = new System.Drawing.Size(99,18);
+			this.label10.TabIndex = 73;
+			this.label10.Text = "Is Critical";
+			this.label10.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// textTotalPledged
+			// 
+			this.textTotalPledged.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))),((int)(((byte)(239)))),((int)(((byte)(243)))));
+			this.textTotalPledged.Location = new System.Drawing.Point(108,54);
+			this.textTotalPledged.Name = "textTotalPledged";
+			this.textTotalPledged.ReadOnly = true;
+			this.textTotalPledged.Size = new System.Drawing.Size(63,20);
+			this.textTotalPledged.TabIndex = 72;
+			// 
+			// label12
+			// 
+			this.label12.Location = new System.Drawing.Point(4,55);
+			this.label12.Name = "label12";
+			this.label12.Size = new System.Drawing.Size(103,18);
+			this.label12.TabIndex = 71;
+			this.label12.Text = "Pledged $";
+			this.label12.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// textTotalPoints
+			// 
+			this.textTotalPoints.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))),((int)(((byte)(239)))),((int)(((byte)(243)))));
+			this.textTotalPoints.Location = new System.Drawing.Point(108,10);
+			this.textTotalPoints.Name = "textTotalPoints";
+			this.textTotalPoints.ReadOnly = true;
+			this.textTotalPoints.Size = new System.Drawing.Size(38,20);
+			this.textTotalPoints.TabIndex = 69;
+			// 
+			// label13
+			// 
+			this.label13.Location = new System.Drawing.Point(37,11);
+			this.label13.Name = "label13";
+			this.label13.Size = new System.Drawing.Size(69,18);
+			this.label13.TabIndex = 68;
+			this.label13.Text = "Points";
+			this.label13.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// comboApproval
+			// 
+			this.comboApproval.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboApproval.FormattingEnabled = true;
+			this.comboApproval.Location = new System.Drawing.Point(434,184);
+			this.comboApproval.MaxDropDownItems = 20;
+			this.comboApproval.Name = "comboApproval";
+			this.comboApproval.Size = new System.Drawing.Size(87,21);
+			this.comboApproval.TabIndex = 73;
+			this.comboApproval.SelectedIndexChanged += new System.EventHandler(this.comboApproval_SelectedIndexChanged);
+			// 
+			// butDelete
+			// 
+			this.butDelete.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butDelete.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.butDelete.Autosize = true;
+			this.butDelete.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butDelete.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butDelete.CornerRadius = 4F;
+			this.butDelete.Image = global::OpenDental.Properties.Resources.deleteX;
+			this.butDelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butDelete.Location = new System.Drawing.Point(796,552);
+			this.butDelete.Name = "butDelete";
+			this.butDelete.Size = new System.Drawing.Size(75,24);
+			this.butDelete.TabIndex = 75;
+			this.butDelete.Text = "Delete";
+			this.butDelete.Click += new System.EventHandler(this.butDelete_Click);
+			// 
+			// butResubmit
+			// 
+			this.butResubmit.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butResubmit.Autosize = true;
+			this.butResubmit.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butResubmit.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butResubmit.CornerRadius = 4F;
+			this.butResubmit.Location = new System.Drawing.Point(446,140);
+			this.butResubmit.Name = "butResubmit";
+			this.butResubmit.Size = new System.Drawing.Size(75,24);
+			this.butResubmit.TabIndex = 74;
+			this.butResubmit.Text = "Resubmit";
+			this.butResubmit.Visible = false;
+			this.butResubmit.Click += new System.EventHandler(this.butResubmit_Click);
+			// 
+			// gridMain
+			// 
+			this.gridMain.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.gridMain.HScrollVisible = false;
+			this.gridMain.Location = new System.Drawing.Point(15,208);
+			this.gridMain.Name = "gridMain";
+			this.gridMain.ScrollValue = 0;
+			this.gridMain.Size = new System.Drawing.Size(775,445);
+			this.gridMain.TabIndex = 70;
+			this.gridMain.Title = "Discussion";
+			this.gridMain.TranslationName = null;
 			// 
 			// butOK
 			// 
@@ -86,307 +405,108 @@ namespace OpenDental{
 			this.butCancel.Text = "&Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
 			// 
-			// label3
+			// textSubmitter
 			// 
-			this.label3.Location = new System.Drawing.Point(4,3);
-			this.label3.Name = "label3";
-			this.label3.Size = new System.Drawing.Size(105,18);
-			this.label3.TabIndex = 60;
-			this.label3.Text = "Short Description";
-			this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.textSubmitter.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))),((int)(((byte)(239)))),((int)(((byte)(243)))));
+			this.textSubmitter.Location = new System.Drawing.Point(111,140);
+			this.textSubmitter.Name = "textSubmitter";
+			this.textSubmitter.ReadOnly = true;
+			this.textSubmitter.Size = new System.Drawing.Size(309,20);
+			this.textSubmitter.TabIndex = 76;
+			this.textSubmitter.Visible = false;
 			// 
-			// textConnectionMessage
+			// labelSubmitter
 			// 
-			this.textConnectionMessage.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-			this.textConnectionMessage.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(230)))),((int)(((byte)(229)))),((int)(((byte)(233)))));
-			this.textConnectionMessage.Location = new System.Drawing.Point(111,3);
-			this.textConnectionMessage.Multiline = true;
-			this.textConnectionMessage.Name = "textConnectionMessage";
-			this.textConnectionMessage.ReadOnly = true;
-			this.textConnectionMessage.Size = new System.Drawing.Size(410,35);
-			this.textConnectionMessage.TabIndex = 59;
-			// 
-			// label1
-			// 
-			this.label1.Location = new System.Drawing.Point(14,140);
-			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(95,18);
-			this.label1.TabIndex = 62;
-			this.label1.Text = "Date Submitted";
-			this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.labelSubmitter.Location = new System.Drawing.Point(47,140);
+			this.labelSubmitter.Name = "labelSubmitter";
+			this.labelSubmitter.Size = new System.Drawing.Size(62,18);
+			this.labelSubmitter.TabIndex = 77;
+			this.labelSubmitter.Text = "Submitter";
+			this.labelSubmitter.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.labelSubmitter.Visible = false;
 			// 
 			// textBox1
 			// 
-			this.textBox1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(230)))),((int)(((byte)(229)))),((int)(((byte)(233)))));
-			this.textBox1.Location = new System.Drawing.Point(111,140);
+			this.textBox1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))),((int)(((byte)(239)))),((int)(((byte)(243)))));
+			this.textBox1.Location = new System.Drawing.Point(237,162);
 			this.textBox1.Name = "textBox1";
 			this.textBox1.ReadOnly = true;
-			this.textBox1.Size = new System.Drawing.Size(124,20);
-			this.textBox1.TabIndex = 61;
+			this.textBox1.Size = new System.Drawing.Size(38,20);
+			this.textBox1.TabIndex = 79;
+			this.textBox1.Visible = false;
 			// 
-			// checkBox1
+			// label1
 			// 
-			this.checkBox1.AutoCheck = false;
-			this.checkBox1.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.checkBox1.Location = new System.Drawing.Point(241,140);
-			this.checkBox1.Name = "checkBox1";
-			this.checkBox1.Size = new System.Drawing.Size(127,20);
-			this.checkBox1.TabIndex = 63;
-			this.checkBox1.Text = "Submitted by me";
-			this.checkBox1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.checkBox1.UseVisualStyleBackColor = true;
-			// 
-			// label2
-			// 
-			this.label2.Location = new System.Drawing.Point(2,40);
-			this.label2.Name = "label2";
-			this.label2.Size = new System.Drawing.Size(107,18);
-			this.label2.TabIndex = 65;
-			this.label2.Text = "Detail";
-			this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.label1.Location = new System.Drawing.Point(153,163);
+			this.label1.Name = "label1";
+			this.label1.Size = new System.Drawing.Size(82,18);
+			this.label1.TabIndex = 78;
+			this.label1.Text = "Priority  /10";
+			this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.label1.Visible = false;
 			// 
 			// textBox2
 			// 
-			this.textBox2.AcceptsReturn = true;
-			this.textBox2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-			this.textBox2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(230)))),((int)(((byte)(229)))),((int)(((byte)(233)))));
-			this.textBox2.Location = new System.Drawing.Point(111,40);
-			this.textBox2.Multiline = true;
+			this.textBox2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))),((int)(((byte)(239)))),((int)(((byte)(243)))));
+			this.textBox2.Location = new System.Drawing.Point(292,10);
 			this.textBox2.Name = "textBox2";
 			this.textBox2.ReadOnly = true;
-			this.textBox2.Size = new System.Drawing.Size(410,98);
-			this.textBox2.TabIndex = 64;
+			this.textBox2.Size = new System.Drawing.Size(38,20);
+			this.textBox2.TabIndex = 81;
+			this.textBox2.Visible = false;
 			// 
-			// label4
+			// label11
 			// 
-			this.label4.Location = new System.Drawing.Point(14,163);
-			this.label4.Name = "label4";
-			this.label4.Size = new System.Drawing.Size(95,18);
-			this.label4.TabIndex = 66;
-			this.label4.Text = "Difficulty";
-			this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.label11.Location = new System.Drawing.Point(193,11);
+			this.label11.Name = "label11";
+			this.label11.Size = new System.Drawing.Size(95,18);
+			this.label11.TabIndex = 80;
+			this.label11.Text = "Weight  /100";
+			this.label11.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.label11.Visible = false;
 			// 
-			// textBox3
+			// label14
 			// 
-			this.textBox3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(230)))),((int)(((byte)(229)))),((int)(((byte)(233)))));
-			this.textBox3.Location = new System.Drawing.Point(111,162);
-			this.textBox3.Name = "textBox3";
-			this.textBox3.ReadOnly = true;
-			this.textBox3.Size = new System.Drawing.Size(38,20);
-			this.textBox3.TabIndex = 67;
-			// 
-			// textBox4
-			// 
-			this.textBox4.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(230)))),((int)(((byte)(229)))),((int)(((byte)(233)))));
-			this.textBox4.Location = new System.Drawing.Point(111,184);
-			this.textBox4.Name = "textBox4";
-			this.textBox4.ReadOnly = true;
-			this.textBox4.Size = new System.Drawing.Size(167,20);
-			this.textBox4.TabIndex = 69;
-			// 
-			// label5
-			// 
-			this.label5.Location = new System.Drawing.Point(-1,185);
-			this.label5.Name = "label5";
-			this.label5.Size = new System.Drawing.Size(110,18);
-			this.label5.TabIndex = 68;
-			this.label5.Text = "Approval";
-			this.label5.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// gridDisc
-			// 
-			this.gridDisc.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-			this.gridDisc.HScrollVisible = false;
-			this.gridDisc.Location = new System.Drawing.Point(15,208);
-			this.gridDisc.Name = "gridDisc";
-			this.gridDisc.ScrollValue = 0;
-			this.gridDisc.Size = new System.Drawing.Size(775,445);
-			this.gridDisc.TabIndex = 70;
-			this.gridDisc.Title = "Discussion";
-			this.gridDisc.TranslationName = null;
-			// 
-			// groupBox1
-			// 
-			this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.groupBox1.Controls.Add(this.label9);
-			this.groupBox1.Controls.Add(this.textBox7);
-			this.groupBox1.Controls.Add(this.label8);
-			this.groupBox1.Controls.Add(this.textBox6);
-			this.groupBox1.Controls.Add(this.label7);
-			this.groupBox1.Controls.Add(this.checkBox2);
-			this.groupBox1.Controls.Add(this.textBox5);
-			this.groupBox1.Controls.Add(this.label6);
-			this.groupBox1.Location = new System.Drawing.Point(535,3);
-			this.groupBox1.Name = "groupBox1";
-			this.groupBox1.Size = new System.Drawing.Size(339,120);
-			this.groupBox1.TabIndex = 71;
-			this.groupBox1.TabStop = false;
-			this.groupBox1.Text = "My Votes";
-			// 
-			// label9
-			// 
-			this.label9.Location = new System.Drawing.Point(4,83);
-			this.label9.Name = "label9";
-			this.label9.Size = new System.Drawing.Size(330,34);
-			this.label9.TabIndex = 75;
-			this.label9.Text = "Pledges are neither required nor requested.  They are for unusual situations wher" +
-    "e a feature is extremely important to you.";
-			// 
-			// textBox7
-			// 
-			this.textBox7.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(230)))),((int)(((byte)(229)))),((int)(((byte)(233)))));
-			this.textBox7.Location = new System.Drawing.Point(264,17);
-			this.textBox7.Name = "textBox7";
-			this.textBox7.ReadOnly = true;
-			this.textBox7.Size = new System.Drawing.Size(38,20);
-			this.textBox7.TabIndex = 74;
-			// 
-			// label8
-			// 
-			this.label8.Location = new System.Drawing.Point(157,18);
-			this.label8.Name = "label8";
-			this.label8.Size = new System.Drawing.Size(105,18);
-			this.label8.TabIndex = 73;
-			this.label8.Text = "Points Remaining";
-			this.label8.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// textBox6
-			// 
-			this.textBox6.BackColor = System.Drawing.SystemColors.Window;
-			this.textBox6.Location = new System.Drawing.Point(108,59);
-			this.textBox6.Name = "textBox6";
-			this.textBox6.Size = new System.Drawing.Size(63,20);
-			this.textBox6.TabIndex = 72;
-			// 
-			// label7
-			// 
-			this.label7.Location = new System.Drawing.Point(4,60);
-			this.label7.Name = "label7";
-			this.label7.Size = new System.Drawing.Size(103,18);
-			this.label7.TabIndex = 71;
-			this.label7.Text = "Pledge Amount $";
-			this.label7.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// checkBox2
-			// 
-			this.checkBox2.AutoCheck = false;
-			this.checkBox2.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.checkBox2.Location = new System.Drawing.Point(26,38);
-			this.checkBox2.Name = "checkBox2";
-			this.checkBox2.Size = new System.Drawing.Size(97,20);
-			this.checkBox2.TabIndex = 70;
-			this.checkBox2.Text = "Is Critical";
-			this.checkBox2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.checkBox2.UseVisualStyleBackColor = true;
-			// 
-			// textBox5
-			// 
-			this.textBox5.BackColor = System.Drawing.SystemColors.Window;
-			this.textBox5.Location = new System.Drawing.Point(108,16);
-			this.textBox5.Name = "textBox5";
-			this.textBox5.Size = new System.Drawing.Size(38,20);
-			this.textBox5.TabIndex = 69;
-			// 
-			// label6
-			// 
-			this.label6.Location = new System.Drawing.Point(37,17);
-			this.label6.Name = "label6";
-			this.label6.Size = new System.Drawing.Size(69,18);
-			this.label6.TabIndex = 68;
-			this.label6.Text = "Points";
-			this.label6.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// groupBox2
-			// 
-			this.groupBox2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.groupBox2.Controls.Add(this.textBox9);
-			this.groupBox2.Controls.Add(this.label12);
-			this.groupBox2.Controls.Add(this.checkBox3);
-			this.groupBox2.Controls.Add(this.textBox10);
-			this.groupBox2.Controls.Add(this.label13);
-			this.groupBox2.Location = new System.Drawing.Point(535,126);
-			this.groupBox2.Name = "groupBox2";
-			this.groupBox2.Size = new System.Drawing.Size(255,78);
-			this.groupBox2.TabIndex = 72;
-			this.groupBox2.TabStop = false;
-			this.groupBox2.Text = "Total";
-			// 
-			// textBox9
-			// 
-			this.textBox9.BackColor = System.Drawing.SystemColors.Window;
-			this.textBox9.Location = new System.Drawing.Point(108,54);
-			this.textBox9.Name = "textBox9";
-			this.textBox9.Size = new System.Drawing.Size(63,20);
-			this.textBox9.TabIndex = 72;
-			// 
-			// label12
-			// 
-			this.label12.Location = new System.Drawing.Point(4,55);
-			this.label12.Name = "label12";
-			this.label12.Size = new System.Drawing.Size(103,18);
-			this.label12.TabIndex = 71;
-			this.label12.Text = "Pledged $";
-			this.label12.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// checkBox3
-			// 
-			this.checkBox3.AutoCheck = false;
-			this.checkBox3.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.checkBox3.Location = new System.Drawing.Point(26,33);
-			this.checkBox3.Name = "checkBox3";
-			this.checkBox3.Size = new System.Drawing.Size(97,20);
-			this.checkBox3.TabIndex = 70;
-			this.checkBox3.Text = "Is Critical";
-			this.checkBox3.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.checkBox3.UseVisualStyleBackColor = true;
-			// 
-			// textBox10
-			// 
-			this.textBox10.BackColor = System.Drawing.SystemColors.Window;
-			this.textBox10.Location = new System.Drawing.Point(108,11);
-			this.textBox10.Name = "textBox10";
-			this.textBox10.Size = new System.Drawing.Size(38,20);
-			this.textBox10.TabIndex = 69;
-			// 
-			// label13
-			// 
-			this.label13.Location = new System.Drawing.Point(37,12);
-			this.label13.Name = "label13";
-			this.label13.Size = new System.Drawing.Size(69,18);
-			this.label13.TabIndex = 68;
-			this.label13.Text = "Points";
-			this.label13.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.label14.Location = new System.Drawing.Point(278,163);
+			this.label14.Name = "label14";
+			this.label14.Size = new System.Drawing.Size(175,18);
+			this.label14.TabIndex = 80;
+			this.label14.Text = "(the lower the better for both)";
+			this.label14.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.label14.Visible = false;
 			// 
 			// FormRequestEdit
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
 			this.ClientSize = new System.Drawing.Size(883,665);
+			this.Controls.Add(this.label14);
+			this.Controls.Add(this.textBox1);
+			this.Controls.Add(this.label1);
+			this.Controls.Add(this.labelSubmitter);
+			this.Controls.Add(this.checkIsMine);
+			this.Controls.Add(this.textSubmitter);
+			this.Controls.Add(this.butDelete);
+			this.Controls.Add(this.butResubmit);
+			this.Controls.Add(this.comboApproval);
 			this.Controls.Add(this.groupBox2);
-			this.Controls.Add(this.groupBox1);
-			this.Controls.Add(this.gridDisc);
-			this.Controls.Add(this.textBox4);
+			this.Controls.Add(this.groupMyVotes);
+			this.Controls.Add(this.gridMain);
+			this.Controls.Add(this.textApproval);
 			this.Controls.Add(this.label5);
-			this.Controls.Add(this.textBox3);
+			this.Controls.Add(this.textDifficulty);
 			this.Controls.Add(this.label4);
 			this.Controls.Add(this.label2);
-			this.Controls.Add(this.textBox2);
-			this.Controls.Add(this.checkBox1);
-			this.Controls.Add(this.label1);
-			this.Controls.Add(this.textBox1);
+			this.Controls.Add(this.textDetail);
 			this.Controls.Add(this.label3);
-			this.Controls.Add(this.textConnectionMessage);
+			this.Controls.Add(this.textDescription);
 			this.Controls.Add(this.butOK);
 			this.Controls.Add(this.butCancel);
 			this.Name = "FormRequestEdit";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Edit Request";
 			this.Load += new System.EventHandler(this.FormRequestEdit_Load);
-			this.groupBox1.ResumeLayout(false);
-			this.groupBox1.PerformLayout();
+			this.groupMyVotes.ResumeLayout(false);
+			this.groupMyVotes.PerformLayout();
 			this.groupBox2.ResumeLayout(false);
 			this.groupBox2.PerformLayout();
 			this.ResumeLayout(false);
@@ -399,31 +519,40 @@ namespace OpenDental{
 		private OpenDental.UI.Button butOK;
 		private OpenDental.UI.Button butCancel;
 		private System.Windows.Forms.Label label3;
-		private System.Windows.Forms.TextBox textConnectionMessage;
-		private System.Windows.Forms.Label label1;
-		private System.Windows.Forms.TextBox textBox1;
-		private System.Windows.Forms.CheckBox checkBox1;
+		private System.Windows.Forms.TextBox textDescription;
+		private System.Windows.Forms.CheckBox checkIsMine;
 		private System.Windows.Forms.Label label2;
-		private System.Windows.Forms.TextBox textBox2;
+		private System.Windows.Forms.TextBox textDetail;
 		private System.Windows.Forms.Label label4;
-		private System.Windows.Forms.TextBox textBox3;
-		private System.Windows.Forms.TextBox textBox4;
+		private System.Windows.Forms.TextBox textDifficulty;
+		private System.Windows.Forms.TextBox textApproval;
 		private System.Windows.Forms.Label label5;
-		private OpenDental.UI.ODGrid gridDisc;
-		private System.Windows.Forms.GroupBox groupBox1;
-		private System.Windows.Forms.TextBox textBox5;
+		private OpenDental.UI.ODGrid gridMain;
+		private System.Windows.Forms.GroupBox groupMyVotes;
+		private System.Windows.Forms.TextBox textMyPoints;
 		private System.Windows.Forms.Label label6;
 		private System.Windows.Forms.Label label9;
-		private System.Windows.Forms.TextBox textBox7;
+		private System.Windows.Forms.TextBox textMyPointsRemain;
 		private System.Windows.Forms.Label label8;
-		private System.Windows.Forms.TextBox textBox6;
+		private System.Windows.Forms.TextBox textMyPledge;
 		private System.Windows.Forms.Label label7;
-		private System.Windows.Forms.CheckBox checkBox2;
+		private System.Windows.Forms.CheckBox checkIsCritical;
 		private System.Windows.Forms.GroupBox groupBox2;
-		private System.Windows.Forms.TextBox textBox9;
+		private System.Windows.Forms.TextBox textTotalPledged;
 		private System.Windows.Forms.Label label12;
-		private System.Windows.Forms.CheckBox checkBox3;
-		private System.Windows.Forms.TextBox textBox10;
+		private System.Windows.Forms.TextBox textTotalPoints;
 		private System.Windows.Forms.Label label13;
+		private System.Windows.Forms.TextBox textTotalCritical;
+		private System.Windows.Forms.Label label10;
+		private System.Windows.Forms.ComboBox comboApproval;
+		private OpenDental.UI.Button butResubmit;
+		private OpenDental.UI.Button butDelete;
+		private System.Windows.Forms.TextBox textSubmitter;
+		private System.Windows.Forms.Label labelSubmitter;
+		private System.Windows.Forms.TextBox textBox1;
+		private System.Windows.Forms.Label label1;
+		private System.Windows.Forms.TextBox textBox2;
+		private System.Windows.Forms.Label label11;
+		private System.Windows.Forms.Label label14;
 	}
 }

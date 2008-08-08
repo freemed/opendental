@@ -621,8 +621,8 @@ namespace OpenDental{
 				OpenDental.localhost.Service1 updateService=new OpenDental.localhost.Service1();
 			#else
 				OpenDental.customerUpdates.Service1 updateService=new OpenDental.customerUpdates.Service1();
+				updateService.Url=PrefC.GetString("UpdateServerAddress");
 			#endif
-			updateService.Url=PrefC.GetString("UpdateServerAddress");
 			string result="";
 			try {
 				result=updateService.RequestUpdate(strbuild.ToString());

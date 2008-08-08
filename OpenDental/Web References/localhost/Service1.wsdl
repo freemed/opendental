@@ -40,6 +40,34 @@
           </s:sequence>
         </s:complexType>
       </s:element>
+      <s:element name="FeatureRequestGetOne">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="officeData" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="FeatureRequestGetOneResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="FeatureRequestGetOneResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="FeatureRequestSubmitChanges">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="officeData" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="FeatureRequestSubmitChangesResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="FeatureRequestSubmitChangesResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
     </s:schema>
   </wsdl:types>
   <wsdl:message name="EstablishConnectionSoapIn">
@@ -60,6 +88,18 @@
   <wsdl:message name="FeatureRequestGetListSoapOut">
     <wsdl:part name="parameters" element="tns:FeatureRequestGetListResponse" />
   </wsdl:message>
+  <wsdl:message name="FeatureRequestGetOneSoapIn">
+    <wsdl:part name="parameters" element="tns:FeatureRequestGetOne" />
+  </wsdl:message>
+  <wsdl:message name="FeatureRequestGetOneSoapOut">
+    <wsdl:part name="parameters" element="tns:FeatureRequestGetOneResponse" />
+  </wsdl:message>
+  <wsdl:message name="FeatureRequestSubmitChangesSoapIn">
+    <wsdl:part name="parameters" element="tns:FeatureRequestSubmitChanges" />
+  </wsdl:message>
+  <wsdl:message name="FeatureRequestSubmitChangesSoapOut">
+    <wsdl:part name="parameters" element="tns:FeatureRequestSubmitChangesResponse" />
+  </wsdl:message>
   <wsdl:portType name="Service1Soap">
     <wsdl:operation name="EstablishConnection">
       <wsdl:input message="tns:EstablishConnectionSoapIn" />
@@ -72,6 +112,14 @@
     <wsdl:operation name="FeatureRequestGetList">
       <wsdl:input message="tns:FeatureRequestGetListSoapIn" />
       <wsdl:output message="tns:FeatureRequestGetListSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="FeatureRequestGetOne">
+      <wsdl:input message="tns:FeatureRequestGetOneSoapIn" />
+      <wsdl:output message="tns:FeatureRequestGetOneSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="FeatureRequestSubmitChanges">
+      <wsdl:input message="tns:FeatureRequestSubmitChangesSoapIn" />
+      <wsdl:output message="tns:FeatureRequestSubmitChangesSoapOut" />
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="Service1Soap" type="tns:Service1Soap">
@@ -103,6 +151,24 @@
         <soap:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
+    <wsdl:operation name="FeatureRequestGetOne">
+      <soap:operation soapAction="http://open-dent.com/FeatureRequestGetOne" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="FeatureRequestSubmitChanges">
+      <soap:operation soapAction="http://open-dent.com/FeatureRequestSubmitChanges" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
   </wsdl:binding>
   <wsdl:binding name="Service1Soap12" type="tns:Service1Soap">
     <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
@@ -126,6 +192,24 @@
     </wsdl:operation>
     <wsdl:operation name="FeatureRequestGetList">
       <soap12:operation soapAction="http://open-dent.com/FeatureRequestGetList" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="FeatureRequestGetOne">
+      <soap12:operation soapAction="http://open-dent.com/FeatureRequestGetOne" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="FeatureRequestSubmitChanges">
+      <soap12:operation soapAction="http://open-dent.com/FeatureRequestSubmitChanges" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>

@@ -32,6 +32,7 @@ namespace OpenDental{
 		private Label label4;
 		private OpenDental.UI.Button butSearch;
 		private ODDataTable table;
+		private bool isAdminMode;
 
 		///<summary></summary>
 		public FormFeatureRequest()
@@ -221,8 +222,16 @@ namespace OpenDental{
 		}
 
 		private void butSearch_Click(object sender,EventArgs e) {
-			//textConnectionMessage.Text=Lan.g(this,"Attempting to connect to web service......");
-			Application.DoEvents();
+			FillGrid();
+		}
+
+		private void FillGrid(){
+			//if(textSearch.Text.Length<3){
+			//	MsgBox.Show(this,"Please enter a search term with at least three letters in it.");
+			//	return;
+			//}
+			Cursor=Cursors.WaitCursor;
+			//Yes, this would be slicker if it were asynchronous, but no time right now.
 			//prepare the xml document to send--------------------------------------------------------------------------------------
 			XmlWriterSettings settings = new XmlWriterSettings();
 			settings.Indent = true;
@@ -285,10 +294,19 @@ namespace OpenDental{
 			//Process a valid return value------------------------------------------------------------------------------------------------
 			node=doc.SelectSingleNode("//ResultTable");
 			table=new ODDataTable(node.InnerXml);
-			FillGrid();
-		}
-
-		private void FillGrid(){
+			//Admin mode----------------------------------------------------------------------------------------------------------------
+			node=doc.SelectSingleNode("//IsAdminMode");
+			if(node.InnerText=="true"){
+				isAdminMode=true;
+			}
+			else{
+				isAdminMode=false;
+			}
+			//FillGrid used to start here------------------------------------------------
+			int selectedRequestId=0;
+			if(gridMain.GetSelectedIndex()!=-1){
+				selectedRequestId=PIn.PInt(table.Rows[gridMain.GetSelectedIndex()]["RequestId"]);
+			}
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
 			ODGridColumn col=new ODGridColumn(Lan.g("TableRequest","Req#"),40);
@@ -313,7 +331,11 @@ namespace OpenDental{
 				gridMain.Rows.Add(row);
 			}
 			gridMain.EndUpdate();
-			//textConnectionMessage.Text="";
+			for(int i=0;i<table.Rows.Count;i++){
+				if(selectedRequestId.ToString()==table.Rows[i]["RequestId"]){
+					gridMain.SetSelected(i,true);
+				}
+			}
 		}
 
 		private void buttonAdd_Click(object sender,EventArgs e) {
@@ -321,11 +343,19 @@ namespace OpenDental{
 				MsgBox.Show(this,"Please perform a search first.\r\nHint: Type a few letters into the search box.");
 				return;
 			}
-
+			FormRequestEdit FormR=new FormRequestEdit();
+			FormR.IsNew=true;
+			FormR.IsAdminMode=isAdminMode;
+			FormR.ShowDialog();
+			FillGrid();
 		}
 
 		private void gridMain_CellDoubleClick(object sender,ODGridClickEventArgs e) {
 			FormRequestEdit FormR=new FormRequestEdit();
+			FormR.RequestId=PIn.PInt(table.Rows[e.Row]["RequestId"]);
+			FormR.IsAdminMode=isAdminMode;
+			FormR.ShowDialog();
+			FillGrid();
 		}
 
 		private void butClose_Click(object sender, System.EventArgs e) {
