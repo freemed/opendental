@@ -23,6 +23,7 @@ namespace OpenDental{
 		/// the contents of this method with the code editor.
 		/// </summary>
 		private void InitializeComponent() {
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormRequestEdit));
 			this.label3 = new System.Windows.Forms.Label();
 			this.textDescription = new System.Windows.Forms.TextBox();
 			this.checkIsMine = new System.Windows.Forms.CheckBox();
@@ -42,6 +43,9 @@ namespace OpenDental{
 			this.textMyPoints = new System.Windows.Forms.TextBox();
 			this.label6 = new System.Windows.Forms.Label();
 			this.groupBox2 = new System.Windows.Forms.GroupBox();
+			this.label15 = new System.Windows.Forms.Label();
+			this.textWeight = new System.Windows.Forms.TextBox();
+			this.label11 = new System.Windows.Forms.Label();
 			this.textTotalCritical = new System.Windows.Forms.TextBox();
 			this.label10 = new System.Windows.Forms.Label();
 			this.textTotalPledged = new System.Windows.Forms.TextBox();
@@ -49,18 +53,21 @@ namespace OpenDental{
 			this.textTotalPoints = new System.Windows.Forms.TextBox();
 			this.label13 = new System.Windows.Forms.Label();
 			this.comboApproval = new System.Windows.Forms.ComboBox();
-			this.butDelete = new OpenDental.UI.Button();
-			this.butResubmit = new OpenDental.UI.Button();
-			this.gridMain = new OpenDental.UI.ODGrid();
-			this.butOK = new OpenDental.UI.Button();
-			this.butCancel = new OpenDental.UI.Button();
 			this.textSubmitter = new System.Windows.Forms.TextBox();
 			this.labelSubmitter = new System.Windows.Forms.Label();
 			this.textBox1 = new System.Windows.Forms.TextBox();
 			this.label1 = new System.Windows.Forms.Label();
-			this.textBox2 = new System.Windows.Forms.TextBox();
-			this.label11 = new System.Windows.Forms.Label();
 			this.label14 = new System.Windows.Forms.Label();
+			this.labelAdmin = new System.Windows.Forms.Label();
+			this.label16 = new System.Windows.Forms.Label();
+			this.label17 = new System.Windows.Forms.Label();
+			this.butJordan = new OpenDental.UI.Button();
+			this.butResubmit = new OpenDental.UI.Button();
+			this.butDelete = new OpenDental.UI.Button();
+			this.gridMain = new OpenDental.UI.ODGrid();
+			this.butOK = new OpenDental.UI.Button();
+			this.butCancel = new OpenDental.UI.Button();
+			this.label18 = new System.Windows.Forms.Label();
 			this.groupMyVotes.SuspendLayout();
 			this.groupBox2.SuspendLayout();
 			this.SuspendLayout();
@@ -78,13 +85,13 @@ namespace OpenDental{
 			// 
 			this.textDescription.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this.textDescription.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))),((int)(((byte)(239)))),((int)(((byte)(243)))));
+			this.textDescription.BackColor = System.Drawing.Color.White;
 			this.textDescription.Location = new System.Drawing.Point(111,3);
 			this.textDescription.Multiline = true;
 			this.textDescription.Name = "textDescription";
 			this.textDescription.ReadOnly = true;
 			this.textDescription.Size = new System.Drawing.Size(410,35);
-			this.textDescription.TabIndex = 59;
+			this.textDescription.TabIndex = 0;
 			// 
 			// checkIsMine
 			// 
@@ -112,13 +119,13 @@ namespace OpenDental{
 			this.textDetail.AcceptsReturn = true;
 			this.textDetail.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this.textDetail.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))),((int)(((byte)(239)))),((int)(((byte)(243)))));
+			this.textDetail.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(230)))),((int)(((byte)(229)))),((int)(((byte)(233)))));
 			this.textDetail.Location = new System.Drawing.Point(111,40);
 			this.textDetail.Multiline = true;
 			this.textDetail.Name = "textDetail";
 			this.textDetail.ReadOnly = true;
 			this.textDetail.Size = new System.Drawing.Size(410,98);
-			this.textDetail.TabIndex = 64;
+			this.textDetail.TabIndex = 1;
 			// 
 			// label4
 			// 
@@ -126,7 +133,7 @@ namespace OpenDental{
 			this.label4.Name = "label4";
 			this.label4.Size = new System.Drawing.Size(95,18);
 			this.label4.TabIndex = 66;
-			this.label4.Text = "Difficulty  /10";
+			this.label4.Text = "Difficulty";
 			this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// textDifficulty
@@ -137,6 +144,7 @@ namespace OpenDental{
 			this.textDifficulty.ReadOnly = true;
 			this.textDifficulty.Size = new System.Drawing.Size(38,20);
 			this.textDifficulty.TabIndex = 67;
+			this.textDifficulty.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
 			// 
 			// textApproval
 			// 
@@ -170,7 +178,7 @@ namespace OpenDental{
 			this.groupMyVotes.Location = new System.Drawing.Point(527,3);
 			this.groupMyVotes.Name = "groupMyVotes";
 			this.groupMyVotes.Size = new System.Drawing.Size(347,120);
-			this.groupMyVotes.TabIndex = 71;
+			this.groupMyVotes.TabIndex = 3;
 			this.groupMyVotes.TabStop = false;
 			this.groupMyVotes.Text = "My Votes";
 			// 
@@ -207,7 +215,7 @@ namespace OpenDental{
 			this.textMyPledge.Location = new System.Drawing.Point(108,57);
 			this.textMyPledge.Name = "textMyPledge";
 			this.textMyPledge.Size = new System.Drawing.Size(63,20);
-			this.textMyPledge.TabIndex = 72;
+			this.textMyPledge.TabIndex = 1;
 			// 
 			// label7
 			// 
@@ -228,6 +236,7 @@ namespace OpenDental{
 			this.checkIsCritical.Text = "Is Critical";
 			this.checkIsCritical.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.checkIsCritical.UseVisualStyleBackColor = true;
+			this.checkIsCritical.Click += new System.EventHandler(this.checkIsCritical_Click);
 			// 
 			// textMyPoints
 			// 
@@ -235,7 +244,8 @@ namespace OpenDental{
 			this.textMyPoints.Location = new System.Drawing.Point(108,16);
 			this.textMyPoints.Name = "textMyPoints";
 			this.textMyPoints.Size = new System.Drawing.Size(38,20);
-			this.textMyPoints.TabIndex = 69;
+			this.textMyPoints.TabIndex = 0;
+			this.textMyPoints.TextChanged += new System.EventHandler(this.textMyPoints_TextChanged);
 			// 
 			// label6
 			// 
@@ -249,7 +259,9 @@ namespace OpenDental{
 			// groupBox2
 			// 
 			this.groupBox2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.groupBox2.Controls.Add(this.textBox2);
+			this.groupBox2.Controls.Add(this.textWeight);
+			this.groupBox2.Controls.Add(this.label17);
+			this.groupBox2.Controls.Add(this.label15);
 			this.groupBox2.Controls.Add(this.label11);
 			this.groupBox2.Controls.Add(this.textTotalCritical);
 			this.groupBox2.Controls.Add(this.label10);
@@ -264,9 +276,37 @@ namespace OpenDental{
 			this.groupBox2.TabStop = false;
 			this.groupBox2.Text = "Total";
 			// 
+			// label15
+			// 
+			this.label15.Location = new System.Drawing.Point(188,33);
+			this.label15.Name = "label15";
+			this.label15.Size = new System.Drawing.Size(153,40);
+			this.label15.TabIndex = 82;
+			this.label15.Text = "Computed based on the other parameters.  A higher number is more important.";
+			this.label15.TextAlign = System.Drawing.ContentAlignment.TopRight;
+			// 
+			// textWeight
+			// 
+			this.textWeight.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))),((int)(((byte)(239)))),((int)(((byte)(243)))));
+			this.textWeight.Location = new System.Drawing.Point(264,10);
+			this.textWeight.Name = "textWeight";
+			this.textWeight.ReadOnly = true;
+			this.textWeight.Size = new System.Drawing.Size(38,20);
+			this.textWeight.TabIndex = 81;
+			this.textWeight.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+			// 
+			// label11
+			// 
+			this.label11.Location = new System.Drawing.Point(169,11);
+			this.label11.Name = "label11";
+			this.label11.Size = new System.Drawing.Size(95,18);
+			this.label11.TabIndex = 80;
+			this.label11.Text = "Weight";
+			this.label11.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
 			// textTotalCritical
 			// 
-			this.textTotalCritical.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))),((int)(((byte)(239)))),((int)(((byte)(243)))));
+			this.textTotalCritical.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(230)))),((int)(((byte)(229)))),((int)(((byte)(233)))));
 			this.textTotalCritical.Location = new System.Drawing.Point(108,32);
 			this.textTotalCritical.Name = "textTotalCritical";
 			this.textTotalCritical.ReadOnly = true;
@@ -302,7 +342,7 @@ namespace OpenDental{
 			// 
 			// textTotalPoints
 			// 
-			this.textTotalPoints.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))),((int)(((byte)(239)))),((int)(((byte)(243)))));
+			this.textTotalPoints.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(230)))),((int)(((byte)(229)))),((int)(((byte)(233)))));
 			this.textTotalPoints.Location = new System.Drawing.Point(108,10);
 			this.textTotalPoints.Name = "textTotalPoints";
 			this.textTotalPoints.ReadOnly = true;
@@ -329,82 +369,6 @@ namespace OpenDental{
 			this.comboApproval.TabIndex = 73;
 			this.comboApproval.SelectedIndexChanged += new System.EventHandler(this.comboApproval_SelectedIndexChanged);
 			// 
-			// butDelete
-			// 
-			this.butDelete.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butDelete.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butDelete.Autosize = true;
-			this.butDelete.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butDelete.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butDelete.CornerRadius = 4F;
-			this.butDelete.Image = global::OpenDental.Properties.Resources.deleteX;
-			this.butDelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butDelete.Location = new System.Drawing.Point(796,552);
-			this.butDelete.Name = "butDelete";
-			this.butDelete.Size = new System.Drawing.Size(75,24);
-			this.butDelete.TabIndex = 75;
-			this.butDelete.Text = "Delete";
-			this.butDelete.Click += new System.EventHandler(this.butDelete_Click);
-			// 
-			// butResubmit
-			// 
-			this.butResubmit.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butResubmit.Autosize = true;
-			this.butResubmit.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butResubmit.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butResubmit.CornerRadius = 4F;
-			this.butResubmit.Location = new System.Drawing.Point(446,140);
-			this.butResubmit.Name = "butResubmit";
-			this.butResubmit.Size = new System.Drawing.Size(75,24);
-			this.butResubmit.TabIndex = 74;
-			this.butResubmit.Text = "Resubmit";
-			this.butResubmit.Visible = false;
-			this.butResubmit.Click += new System.EventHandler(this.butResubmit_Click);
-			// 
-			// gridMain
-			// 
-			this.gridMain.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-			this.gridMain.HScrollVisible = false;
-			this.gridMain.Location = new System.Drawing.Point(15,208);
-			this.gridMain.Name = "gridMain";
-			this.gridMain.ScrollValue = 0;
-			this.gridMain.Size = new System.Drawing.Size(775,445);
-			this.gridMain.TabIndex = 70;
-			this.gridMain.Title = "Discussion";
-			this.gridMain.TranslationName = null;
-			// 
-			// butOK
-			// 
-			this.butOK.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butOK.Autosize = true;
-			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(796,599);
-			this.butOK.Name = "butOK";
-			this.butOK.Size = new System.Drawing.Size(75,24);
-			this.butOK.TabIndex = 3;
-			this.butOK.Text = "&OK";
-			this.butOK.Click += new System.EventHandler(this.butOK_Click);
-			// 
-			// butCancel
-			// 
-			this.butCancel.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butCancel.Autosize = true;
-			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butCancel.CornerRadius = 4F;
-			this.butCancel.Location = new System.Drawing.Point(796,629);
-			this.butCancel.Name = "butCancel";
-			this.butCancel.Size = new System.Drawing.Size(75,24);
-			this.butCancel.TabIndex = 2;
-			this.butCancel.Text = "&Cancel";
-			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
-			// 
 			// textSubmitter
 			// 
 			this.textSubmitter.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))),((int)(((byte)(239)))),((int)(((byte)(243)))));
@@ -428,7 +392,7 @@ namespace OpenDental{
 			// textBox1
 			// 
 			this.textBox1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))),((int)(((byte)(239)))),((int)(((byte)(243)))));
-			this.textBox1.Location = new System.Drawing.Point(237,162);
+			this.textBox1.Location = new System.Drawing.Point(405,162);
 			this.textBox1.Name = "textBox1";
 			this.textBox1.ReadOnly = true;
 			this.textBox1.Size = new System.Drawing.Size(38,20);
@@ -437,7 +401,7 @@ namespace OpenDental{
 			// 
 			// label1
 			// 
-			this.label1.Location = new System.Drawing.Point(153,163);
+			this.label1.Location = new System.Drawing.Point(321,163);
 			this.label1.Name = "label1";
 			this.label1.Size = new System.Drawing.Size(82,18);
 			this.label1.TabIndex = 78;
@@ -445,40 +409,157 @@ namespace OpenDental{
 			this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.label1.Visible = false;
 			// 
-			// textBox2
-			// 
-			this.textBox2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))),((int)(((byte)(239)))),((int)(((byte)(243)))));
-			this.textBox2.Location = new System.Drawing.Point(292,10);
-			this.textBox2.Name = "textBox2";
-			this.textBox2.ReadOnly = true;
-			this.textBox2.Size = new System.Drawing.Size(38,20);
-			this.textBox2.TabIndex = 81;
-			this.textBox2.Visible = false;
-			// 
-			// label11
-			// 
-			this.label11.Location = new System.Drawing.Point(193,11);
-			this.label11.Name = "label11";
-			this.label11.Size = new System.Drawing.Size(95,18);
-			this.label11.TabIndex = 80;
-			this.label11.Text = "Weight  /100";
-			this.label11.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.label11.Visible = false;
-			// 
 			// label14
 			// 
-			this.label14.Location = new System.Drawing.Point(278,163);
+			this.label14.Location = new System.Drawing.Point(184,162);
 			this.label14.Name = "label14";
-			this.label14.Size = new System.Drawing.Size(175,18);
+			this.label14.Size = new System.Drawing.Size(143,18);
 			this.label14.TabIndex = 80;
-			this.label14.Text = "(the lower the better for both)";
+			this.label14.Text = "(the lower the better)";
 			this.label14.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.label14.Visible = false;
+			// 
+			// labelAdmin
+			// 
+			this.labelAdmin.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.labelAdmin.Font = new System.Drawing.Font("Microsoft Sans Serif",9F,System.Drawing.FontStyle.Bold,System.Drawing.GraphicsUnit.Point,((byte)(0)));
+			this.labelAdmin.ForeColor = System.Drawing.Color.Maroon;
+			this.labelAdmin.Location = new System.Drawing.Point(796,241);
+			this.labelAdmin.Name = "labelAdmin";
+			this.labelAdmin.Size = new System.Drawing.Size(347,120);
+			this.labelAdmin.TabIndex = 83;
+			this.labelAdmin.Text = resources.GetString("labelAdmin.Text");
+			this.labelAdmin.Visible = false;
+			// 
+			// label16
+			// 
+			this.label16.Location = new System.Drawing.Point(148,163);
+			this.label16.Name = "label16";
+			this.label16.Size = new System.Drawing.Size(32,18);
+			this.label16.TabIndex = 85;
+			this.label16.Text = "/10";
+			this.label16.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// label17
+			// 
+			this.label17.Location = new System.Drawing.Point(301,11);
+			this.label17.Name = "label17";
+			this.label17.Size = new System.Drawing.Size(38,18);
+			this.label17.TabIndex = 86;
+			this.label17.Text = "/100";
+			this.label17.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// butJordan
+			// 
+			this.butJordan.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butJordan.Autosize = true;
+			this.butJordan.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butJordan.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butJordan.CornerRadius = 4F;
+			this.butJordan.Location = new System.Drawing.Point(7,96);
+			this.butJordan.Name = "butJordan";
+			this.butJordan.Size = new System.Drawing.Size(98,24);
+			this.butJordan.TabIndex = 84;
+			this.butJordan.Text = "Jordan\'s Override";
+			this.butJordan.Visible = false;
+			this.butJordan.Click += new System.EventHandler(this.butJordan_Click);
+			// 
+			// butResubmit
+			// 
+			this.butResubmit.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butResubmit.Autosize = true;
+			this.butResubmit.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butResubmit.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butResubmit.CornerRadius = 4F;
+			this.butResubmit.Location = new System.Drawing.Point(446,140);
+			this.butResubmit.Name = "butResubmit";
+			this.butResubmit.Size = new System.Drawing.Size(75,24);
+			this.butResubmit.TabIndex = 74;
+			this.butResubmit.Text = "Resubmit";
+			this.butResubmit.Visible = false;
+			this.butResubmit.Click += new System.EventHandler(this.butResubmit_Click);
+			// 
+			// butDelete
+			// 
+			this.butDelete.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butDelete.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.butDelete.Autosize = true;
+			this.butDelete.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butDelete.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butDelete.CornerRadius = 4F;
+			this.butDelete.Image = global::OpenDental.Properties.Resources.deleteX;
+			this.butDelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butDelete.Location = new System.Drawing.Point(15,638);
+			this.butDelete.Name = "butDelete";
+			this.butDelete.Size = new System.Drawing.Size(75,24);
+			this.butDelete.TabIndex = 75;
+			this.butDelete.Text = "Delete";
+			this.butDelete.Click += new System.EventHandler(this.butDelete_Click);
+			// 
+			// gridMain
+			// 
+			this.gridMain.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.gridMain.HScrollVisible = false;
+			this.gridMain.Location = new System.Drawing.Point(15,208);
+			this.gridMain.Name = "gridMain";
+			this.gridMain.ScrollValue = 0;
+			this.gridMain.Size = new System.Drawing.Size(775,426);
+			this.gridMain.TabIndex = 70;
+			this.gridMain.Title = "Discussion";
+			this.gridMain.TranslationName = null;
+			// 
+			// butOK
+			// 
+			this.butOK.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.butOK.Autosize = true;
+			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butOK.CornerRadius = 4F;
+			this.butOK.Location = new System.Drawing.Point(793,608);
+			this.butOK.Name = "butOK";
+			this.butOK.Size = new System.Drawing.Size(75,24);
+			this.butOK.TabIndex = 2;
+			this.butOK.Text = "&OK";
+			this.butOK.Click += new System.EventHandler(this.butOK_Click);
+			// 
+			// butCancel
+			// 
+			this.butCancel.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.butCancel.Autosize = true;
+			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butCancel.CornerRadius = 4F;
+			this.butCancel.Location = new System.Drawing.Point(793,638);
+			this.butCancel.Name = "butCancel";
+			this.butCancel.Size = new System.Drawing.Size(75,24);
+			this.butCancel.TabIndex = 2;
+			this.butCancel.Text = "&Cancel";
+			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
+			// 
+			// label18
+			// 
+			this.label18.Location = new System.Drawing.Point(352,641);
+			this.label18.Name = "label18";
+			this.label18.Size = new System.Drawing.Size(439,18);
+			this.label18.TabIndex = 86;
+			this.label18.Text = "This discussion is very leisurely.  Nobody necessarily checks it for new messages" +
+    ".";
+			this.label18.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.label18.Visible = false;
 			// 
 			// FormRequestEdit
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-			this.ClientSize = new System.Drawing.Size(883,665);
+			this.ClientSize = new System.Drawing.Size(883,668);
+			this.Controls.Add(this.label18);
+			this.Controls.Add(this.textDifficulty);
+			this.Controls.Add(this.label16);
+			this.Controls.Add(this.butJordan);
+			this.Controls.Add(this.labelAdmin);
+			this.Controls.Add(this.butResubmit);
 			this.Controls.Add(this.label14);
 			this.Controls.Add(this.textBox1);
 			this.Controls.Add(this.label1);
@@ -486,14 +567,12 @@ namespace OpenDental{
 			this.Controls.Add(this.checkIsMine);
 			this.Controls.Add(this.textSubmitter);
 			this.Controls.Add(this.butDelete);
-			this.Controls.Add(this.butResubmit);
 			this.Controls.Add(this.comboApproval);
 			this.Controls.Add(this.groupBox2);
 			this.Controls.Add(this.groupMyVotes);
 			this.Controls.Add(this.gridMain);
 			this.Controls.Add(this.textApproval);
 			this.Controls.Add(this.label5);
-			this.Controls.Add(this.textDifficulty);
 			this.Controls.Add(this.label4);
 			this.Controls.Add(this.label2);
 			this.Controls.Add(this.textDetail);
@@ -551,8 +630,14 @@ namespace OpenDental{
 		private System.Windows.Forms.Label labelSubmitter;
 		private System.Windows.Forms.TextBox textBox1;
 		private System.Windows.Forms.Label label1;
-		private System.Windows.Forms.TextBox textBox2;
+		private System.Windows.Forms.TextBox textWeight;
 		private System.Windows.Forms.Label label11;
 		private System.Windows.Forms.Label label14;
+		private System.Windows.Forms.Label label15;
+		private System.Windows.Forms.Label labelAdmin;
+		private OpenDental.UI.Button butJordan;
+		private System.Windows.Forms.Label label17;
+		private System.Windows.Forms.Label label16;
+		private System.Windows.Forms.Label label18;
 	}
 }

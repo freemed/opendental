@@ -119,6 +119,7 @@ namespace OpenDental{
 			this.label4.TabIndex = 61;
 			this.label4.Text = "A search is required first";
 			this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.label4.Visible = false;
 			// 
 			// butSearch
 			// 
@@ -304,16 +305,25 @@ namespace OpenDental{
 			}
 			//FillGrid used to start here------------------------------------------------
 			int selectedRequestId=0;
-			if(gridMain.GetSelectedIndex()!=-1){
-				selectedRequestId=PIn.PInt(table.Rows[gridMain.GetSelectedIndex()]["RequestId"]);
+			int selectedIndex=gridMain.GetSelectedIndex();
+			if(selectedIndex!=-1){
+				if(table.Rows.Count>selectedIndex){
+					selectedRequestId=PIn.PInt(table.Rows[gridMain.GetSelectedIndex()]["RequestId"]);
+				}
 			}
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
 			ODGridColumn col=new ODGridColumn(Lan.g("TableRequest","Req#"),40);
 			gridMain.Columns.Add(col);
+			col=new ODGridColumn(Lan.g("TableRequest","Mine"),40);
+			gridMain.Columns.Add(col);
 			col=new ODGridColumn(Lan.g("TableRequest","My Votes"),60);
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn(Lan.g("TableRequest","Total Votes"),70);
+			gridMain.Columns.Add(col);
+			col=new ODGridColumn(Lan.g("TableRequest","Diff"),40);
+			gridMain.Columns.Add(col);
+			col=new ODGridColumn(Lan.g("TableRequest","Weight"),45);
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn(Lan.g("TableRequest","Approval"),90);
 			gridMain.Columns.Add(col);
@@ -324,8 +334,11 @@ namespace OpenDental{
 			for(int i=0;i<table.Rows.Count;i++){
 				row=new ODGridRow();
 				row.Cells.Add(table.Rows[i]["RequestId"]);
+				row.Cells.Add(table.Rows[i]["isMine"]);
 				row.Cells.Add(table.Rows[i]["myVotes"]);
 			  row.Cells.Add(table.Rows[i]["totalVotes"]);
+				row.Cells.Add(table.Rows[i]["Difficulty"]);
+				row.Cells.Add(table.Rows[i]["Weight"]);
 				row.Cells.Add(table.Rows[i]["approval"]);
 				row.Cells.Add(table.Rows[i]["Description"]);
 				gridMain.Rows.Add(row);
@@ -339,14 +352,15 @@ namespace OpenDental{
 		}
 
 		private void buttonAdd_Click(object sender,EventArgs e) {
-			if(textSearch.Text==""){
-				MsgBox.Show(this,"Please perform a search first.\r\nHint: Type a few letters into the search box.");
-				return;
-			}
+			//if(textSearch.Text==""){
+			//	MsgBox.Show(this,"Please perform a search first.\r\nHint: Type a few letters into the search box.");
+			//	return;
+			//}
 			FormRequestEdit FormR=new FormRequestEdit();
-			FormR.IsNew=true;
+			//FormR.IsNew=true;
 			FormR.IsAdminMode=isAdminMode;
 			FormR.ShowDialog();
+			textSearch.Text="";//so we can see our new request
 			FillGrid();
 		}
 

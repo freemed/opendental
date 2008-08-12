@@ -79,6 +79,7 @@ namespace OpenDental{
 			this.gridLan.Location = new System.Drawing.Point(18,12);
 			this.gridLan.Name = "gridLan";
 			this.gridLan.ScrollValue = 0;
+			this.gridLan.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
 			this.gridLan.Size = new System.Drawing.Size(905,643);
 			this.gridLan.TabIndex = 7;
 			this.gridLan.Title = "Translations";

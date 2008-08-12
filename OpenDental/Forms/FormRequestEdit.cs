@@ -13,16 +13,17 @@ namespace OpenDental {
 	public partial class FormRequestEdit:Form {
 		public int RequestId;
 		public bool IsAdminMode;
-		private Request ReqCur;
-		public bool IsNew;//might be redundant, since RequestId will be zero anyway.
+		//private Request ReqCur;
+		//public bool IsNew;//might be redundant, since RequestId will be zero anyway.
 		//public table for discussion
 		private ODDataTable tableObj;
 		private Color colorDisabled;
+		private int myPointsUsed=0;
 
 		public FormRequestEdit() {
 			InitializeComponent();
 			Lan.F(this);
-			colorDisabled=Color.FromArgb(240,239,243);
+			colorDisabled=Color.FromArgb(230, 229, 233);
 		}
 
 		private void FormRequestEdit_Load(object sender,EventArgs e) {
@@ -38,9 +39,14 @@ namespace OpenDental {
 				textDifficulty.BackColor=Color.White;
 				textDifficulty.ReadOnly=false;
 				groupMyVotes.Visible=false;
+				butJordan.Visible=true;
+				labelAdmin.Visible=true;
+				labelAdmin.Location=groupMyVotes.Location;
+				labelAdmin.Size=groupMyVotes.Size;
 			}
 			else{
 				if(RequestId==0){//new
+					//allow them to edit their description and detail
 					textDescription.BackColor=Color.White;
 					textDescription.ReadOnly=false;
 					textDetail.BackColor=Color.White;
@@ -48,28 +54,39 @@ namespace OpenDental {
 					butDelete.Visible=true;
 				}
 				else{
+					//later on, it will test to see if isMine, and will then allow editing.
 					textDescription.BackColor=colorDisabled;
 					textDetail.BackColor=colorDisabled;
-					textDifficulty.BackColor=colorDisabled;
-					comboApproval.Visible=false;
 				}
+				textDifficulty.BackColor=colorDisabled;
+				comboApproval.Visible=false;
+			}
+			if(RequestId==0){
+				checkIsMine.Checked=true;
+				textDifficulty.Text="5";
 			}
 			textApproval.BackColor=colorDisabled;
 			comboApproval.Items.Add("New");
 			comboApproval.Items.Add("NeedsClarification");
-			comboApproval.Items.Add("Approved");
 			comboApproval.Items.Add("Redundant");
 			comboApproval.Items.Add("TooBroad");
 			comboApproval.Items.Add("NotARequest");
 			comboApproval.Items.Add("AlreadyDone");
 			comboApproval.Items.Add("Obsolete");
+			comboApproval.Items.Add("Approved");
 			comboApproval.Items.Add("InProgress");
+			comboApproval.Items.Add("Complete");
 			comboApproval.SelectedIndex=0;
 			textMyPoints.Text="0";
 			textMyPledge.Text="0";
 			if(RequestId!=0){
 				GetOneFromServer();
 			}
+			textMyPointsRemain.BackColor=colorDisabled;
+			textTotalPoints.BackColor=colorDisabled;
+			textTotalCritical.BackColor=colorDisabled;
+			textTotalPledged.BackColor=colorDisabled;
+			textWeight.BackColor=colorDisabled;
 		}
 
 		private void GetOneFromServer(){
@@ -151,8 +168,50 @@ namespace OpenDental {
 					butDelete.Visible=true;
 				}
 			}
-			textMyPoints.Text="0";
-			textMyPledge.Text="0";
+			if((ApprovalEnum)approval!=ApprovalEnum.Approved){
+				//only allowed to vote on Approved features.
+				//All others should always have zero votes, except InProgress and Complete
+				groupMyVotes.Visible=false;
+			}
+			if((ApprovalEnum)approval==ApprovalEnum.Approved
+				|| (ApprovalEnum)approval==ApprovalEnum.InProgress
+				|| (ApprovalEnum)approval==ApprovalEnum.Complete)
+			{//even administrators should not be able to change things at this point
+				textDescription.BackColor=colorDisabled;
+				textDescription.ReadOnly=true;
+				textDetail.BackColor=colorDisabled;
+				textDetail.ReadOnly=true;
+			}
+			myPointsUsed=PIn.PInt(row["myPointsUsed"]);
+			//textMyPointsRemain.Text=;this will be filled automatically when myPoints changes
+			textMyPoints.Text=row["myPoints"];
+			checkIsCritical.Checked=PIn.PBool(row["IsCritical"]);
+			textMyPledge.Text=row["myPledge"];
+			textTotalPoints.Text=row["totalPoints"];
+			textTotalCritical.Text=row["totalCritical"];
+			textTotalPledged.Text=row["totalPledged"];
+			textWeight.Text=row["Weight"];
+			
+		}
+
+		private void textMyPoints_TextChanged(object sender,EventArgs e) {
+			try{
+				int mypoints=0;
+				if(textMyPoints.Text!=""){
+					mypoints=Convert.ToInt32(textMyPoints.Text);
+				}
+				textMyPointsRemain.Text=(100-myPointsUsed-mypoints).ToString();
+			}
+			catch{
+				textMyPointsRemain.Text="";
+			}
+		}
+
+		private void butJordan_Click(object sender,EventArgs e) {
+			textDescription.BackColor=Color.White;
+			textDescription.ReadOnly=false;
+			textDetail.BackColor=Color.White;
+			textDetail.ReadOnly=false;
 		}
 
 		private void comboApproval_SelectedIndexChanged(object sender,EventArgs e) {
@@ -163,9 +222,6 @@ namespace OpenDental {
 					break;
 				case ApprovalEnum.NeedsClarification:
 					textApproval.Text="Needs Clarification.";
-					break;
-				case ApprovalEnum.Approved:
-					textApproval.Text="Approved. Cannot be edited by user.";
 					break;
 				case ApprovalEnum.Redundant:
 					textApproval.Text="Redundant. An identical request already exists.";
@@ -182,8 +238,14 @@ namespace OpenDental {
 				case ApprovalEnum.Obsolete:
 					textApproval.Text="Obsolete. No longer applies to current version.";
 					break;
+				case ApprovalEnum.Approved:
+					textApproval.Text="Approved. Cannot be edited by user.";
+					break;
 				case ApprovalEnum.InProgress:
 					textApproval.Text="In Progress. Feature currently being programmed.";
+					break;
+				case ApprovalEnum.Complete:
+					textApproval.Text="Complete. Feature has been implemented.";
 					break;
 			}
 		}
@@ -197,10 +259,20 @@ namespace OpenDental {
 			butResubmit.Visible=false;
 		}
 
+		private void checkIsCritical_Click(object sender,EventArgs e) {
+			if(checkIsCritical.Checked){
+				if(!MsgBox.Show(this,true,"Are you sure this is really critical?  To qualify as critical, there would be no possible workarounds.  The missing feature would probably be seriously impacting the financial status of the office.  It would be serious enough that you might be considering using another software.")){
+					checkIsCritical.Checked=false;
+					return;
+				}
+			}
+		}
+
 		private void butDelete_Click(object sender,EventArgs e) {
 			//only visible if New,NeedsClarification,NotARequest,Redundant,or TooBroad
-			//If there happen to be any votes or pledges associated with this request, then they will be deleted as well.
-			//But I can't imagine how this would happen.
+			if(!MsgBox.Show(this,true,"Delete this entire request?")){
+				return;
+			}
 			if(!SaveChangesToDb(true)){
 				return;
 			}
@@ -232,7 +304,7 @@ namespace OpenDental {
 				}
 				else{
 					try{
-						myPoints=int.Parse(textMyPoints.Text);
+						myPoints=PIn.PInt(textMyPoints.Text);//handles "" gracefully
 					}
 					catch{
 						MsgBox.Show(this,"Points is invalid.");
@@ -243,17 +315,27 @@ namespace OpenDental {
 						return false;
 					}
 					//still need to validate that they have enough points.
-					try{
-						myPledge=double.Parse(textMyPledge.Text);
+					if(textMyPledge.Text==""){
+						myPledge=0;
 					}
-					catch{
-						MsgBox.Show(this,"Pledge is invalid.");
-						return false;
+					else{
+						try{
+							myPledge=double.Parse(textMyPledge.Text);
+						}
+						catch{
+							MsgBox.Show(this,"Pledge is invalid.");
+							return false;
+						}
 					}
 					if(myPledge<0){
 						MsgBox.Show(this,"Pledge is invalid.");
 						return false;
 					}
+				}
+				double myPointsRemain=PIn.PDouble(textMyPointsRemain.Text);
+				if(myPointsRemain<0){
+					MsgBox.Show(this,"You have gone over your allotted 100 points.");
+					return false;
 				}
 			}
 			//end of validation------------------------------------------------------------------------------------------------
@@ -370,6 +452,11 @@ namespace OpenDental {
 		}
 
 		
+
+		
+	
+
+		
 		
 
 		
@@ -377,6 +464,7 @@ namespace OpenDental {
 		
 	}
 
+	/*
 	///<summary>This object is used to organize all the datafields in FormRequestEdit.  It is used both for admin mode and for regular mode.</summary>
 	public class Request{
 		///<summary>Once approval is changed to Approved, this cannot be edited by submitter.</summary>
@@ -405,18 +493,19 @@ namespace OpenDental {
 		public string TotalCritical;
 		///<summary>Just informational.  Nobody can edit.</summary>
 		public string TotalPledged;
-	}
+	}*/
 
 	public enum ApprovalEnum{
 		New,
 		NeedsClarification,
-		Approved,
 		Redundant,
 		TooBroad,
 		NotARequest,
 		AlreadyDone,
 		Obsolete,
-		InProgress
+		Approved,
+		InProgress,
+		Complete
 	}
 
 }
