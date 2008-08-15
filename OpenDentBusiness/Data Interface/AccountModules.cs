@@ -520,24 +520,23 @@ namespace OpenDentBusiness {
 				familyPatNums+=POut.PInt(fam.List[i].PatNum);
 			}
 			//Procedures------------------------------------------------------------------------------------------
-			command="SELECT procedurelog.BaseUnits,Descript,SUM(cp1.InsPayAmt) insPayAmt_,"
+			command="SELECT "
+				+"(SELECT SUM(AdjAmt) FROM adjustment WHERE procedurelog.ProcNum=adjustment.ProcNum "
+				+"AND adjustment.PatNum IN ("+familyPatNums+")) adj_, "
+				+"procedurelog.BaseUnits,Descript,SUM(cp1.InsPayAmt) insPayAmt_,"
 				+"LaymanTerm,procedurelog.MedicalCode,MAX(cp1.NoBillIns) noBillIns_,procedurelog.PatNum,"
 				+"(SELECT SUM(paysplit.SplitAmt) FROM paysplit WHERE procedurelog.ProcNum=paysplit.ProcNum "
 				+"AND paysplit.PatNum IN ("+familyPatNums+")) patPay_,"
-				//+"SUM(paysplit.SplitAmt) patPay_,"
 				+"ProcCode,"
 				+"procedurelog.ProcDate,ProcFee,procedurelog.ProcNum,procedurelog.ProvNum,ToothNum,ToothRange,UnitQty,"
 				+"SUM(cp1.WriteOff) writeOff_, "
-				//+"MIN(cp1.ClaimNum) unsent_,"//this worked, but doesn't take into account capitation
 				+"(SELECT MIN(ClaimNum) FROM claimproc cp3 WHERE procedurelog.ProcNum=cp3.ProcNum "
 				+"AND cp3.Status!=7) unsent_,"
-				//(SELECT COUNT(*) FROM cp1 WHERE cp1.ClaimNum=0) unsent_,"//will grab any estimate with zero for claim
 				+"(SELECT SUM(WriteOff) FROM claimproc cp2 WHERE procedurelog.ProcNum=cp2.ProcNum "
 				+"AND cp2.Status=7) writeOffCap_ "//CapComplete (CapClaim handled on claimproc row)
 				+"FROM procedurelog "
 				+"LEFT JOIN procedurecode ON procedurelog.CodeNum=procedurecode.CodeNum "
 				+"LEFT JOIN claimproc cp1 ON procedurelog.ProcNum=cp1.ProcNum "
-				//+"LEFT JOIN paysplit ON procedurelog.ProcNum=paysplit.ProcNum AND paysplit.PatNum IN ("+familyPatNums+") "
 				+"WHERE ProcStatus=2 "//complete
 				+"AND procedurelog.PatNum IN ("
 				+familyPatNums
@@ -553,6 +552,7 @@ namespace OpenDentBusiness {
 			double writeOffCap;
 			double patPay;
 			bool isNoBill;
+			double adjAmt;
 			for(int i=0;i<rawProc.Rows.Count;i++){
 				row=table.NewRow();
 				row["AdjNum"]="0";
@@ -599,9 +599,16 @@ namespace OpenDentBusiness {
 				insPayAmt=PIn.PDouble(rawProc.Rows[i]["insPayAmt_"].ToString());
 				writeOff=PIn.PDouble(rawProc.Rows[i]["writeOff_"].ToString());
 				patPay=PIn.PDouble(rawProc.Rows[i]["patPay_"].ToString());
+				adjAmt=PIn.PDouble(rawProc.Rows[i]["adj_"].ToString());
 				row["extraDetail"]="";
 				if(patPay>0){
 					row["extraDetail"]+=Lan.g("AccountModule","Pat Paid: ")+patPay.ToString("c");
+				}
+				if(adjAmt!=0){
+					if(row["extraDetail"].ToString()!=""){
+						row["extraDetail"]+=", ";
+					}
+					row["extraDetail"]+=Lan.g("AccountModule","Adj: ")+adjAmt.ToString("c");
 				}
 				if(insPayAmt>0 || writeOff>0){
 					if(row["extraDetail"].ToString()!=""){
