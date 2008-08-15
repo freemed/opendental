@@ -223,6 +223,7 @@ namespace OpenDental{
 		}
 
 		private void butSearch_Click(object sender,EventArgs e) {
+			gridMain.SetSelected(false);
 			FillGrid();
 		}
 

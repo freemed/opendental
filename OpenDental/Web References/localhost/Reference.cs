@@ -39,6 +39,10 @@ namespace OpenDental.localhost {
         
         private System.Threading.SendOrPostCallback FeatureRequestSubmitChangesOperationCompleted;
         
+        private System.Threading.SendOrPostCallback FeatureRequestDiscussSubmitOperationCompleted;
+        
+        private System.Threading.SendOrPostCallback FeatureRequestDiscussGetListOperationCompleted;
+        
         private bool useDefaultCredentialsSetExplicitly;
         
         /// <remarks/>
@@ -91,6 +95,12 @@ namespace OpenDental.localhost {
         
         /// <remarks/>
         public event FeatureRequestSubmitChangesCompletedEventHandler FeatureRequestSubmitChangesCompleted;
+        
+        /// <remarks/>
+        public event FeatureRequestDiscussSubmitCompletedEventHandler FeatureRequestDiscussSubmitCompleted;
+        
+        /// <remarks/>
+        public event FeatureRequestDiscussGetListCompletedEventHandler FeatureRequestDiscussGetListCompleted;
         
         /// <remarks/>
         [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://open-dent.com/EstablishConnection", RequestNamespace="http://open-dent.com/", ResponseNamespace="http://open-dent.com/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
@@ -236,6 +246,64 @@ namespace OpenDental.localhost {
         }
         
         /// <remarks/>
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://open-dent.com/FeatureRequestDiscussSubmit", RequestNamespace="http://open-dent.com/", ResponseNamespace="http://open-dent.com/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        public string FeatureRequestDiscussSubmit(string officeData) {
+            object[] results = this.Invoke("FeatureRequestDiscussSubmit", new object[] {
+                        officeData});
+            return ((string)(results[0]));
+        }
+        
+        /// <remarks/>
+        public void FeatureRequestDiscussSubmitAsync(string officeData) {
+            this.FeatureRequestDiscussSubmitAsync(officeData, null);
+        }
+        
+        /// <remarks/>
+        public void FeatureRequestDiscussSubmitAsync(string officeData, object userState) {
+            if ((this.FeatureRequestDiscussSubmitOperationCompleted == null)) {
+                this.FeatureRequestDiscussSubmitOperationCompleted = new System.Threading.SendOrPostCallback(this.OnFeatureRequestDiscussSubmitOperationCompleted);
+            }
+            this.InvokeAsync("FeatureRequestDiscussSubmit", new object[] {
+                        officeData}, this.FeatureRequestDiscussSubmitOperationCompleted, userState);
+        }
+        
+        private void OnFeatureRequestDiscussSubmitOperationCompleted(object arg) {
+            if ((this.FeatureRequestDiscussSubmitCompleted != null)) {
+                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+                this.FeatureRequestDiscussSubmitCompleted(this, new FeatureRequestDiscussSubmitCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
+            }
+        }
+        
+        /// <remarks/>
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://open-dent.com/FeatureRequestDiscussGetList", RequestNamespace="http://open-dent.com/", ResponseNamespace="http://open-dent.com/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        public string FeatureRequestDiscussGetList(string officeData) {
+            object[] results = this.Invoke("FeatureRequestDiscussGetList", new object[] {
+                        officeData});
+            return ((string)(results[0]));
+        }
+        
+        /// <remarks/>
+        public void FeatureRequestDiscussGetListAsync(string officeData) {
+            this.FeatureRequestDiscussGetListAsync(officeData, null);
+        }
+        
+        /// <remarks/>
+        public void FeatureRequestDiscussGetListAsync(string officeData, object userState) {
+            if ((this.FeatureRequestDiscussGetListOperationCompleted == null)) {
+                this.FeatureRequestDiscussGetListOperationCompleted = new System.Threading.SendOrPostCallback(this.OnFeatureRequestDiscussGetListOperationCompleted);
+            }
+            this.InvokeAsync("FeatureRequestDiscussGetList", new object[] {
+                        officeData}, this.FeatureRequestDiscussGetListOperationCompleted, userState);
+        }
+        
+        private void OnFeatureRequestDiscussGetListOperationCompleted(object arg) {
+            if ((this.FeatureRequestDiscussGetListCompleted != null)) {
+                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+                this.FeatureRequestDiscussGetListCompleted(this, new FeatureRequestDiscussGetListCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
+            }
+        }
+        
+        /// <remarks/>
         public new void CancelAsync(object userState) {
             base.CancelAsync(userState);
         }
@@ -371,6 +439,58 @@ namespace OpenDental.localhost {
         private object[] results;
         
         internal FeatureRequestSubmitChangesCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
+                base(exception, cancelled, userState) {
+            this.results = results;
+        }
+        
+        /// <remarks/>
+        public string Result {
+            get {
+                this.RaiseExceptionIfNecessary();
+                return ((string)(this.results[0]));
+            }
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "2.0.50727.1433")]
+    public delegate void FeatureRequestDiscussSubmitCompletedEventHandler(object sender, FeatureRequestDiscussSubmitCompletedEventArgs e);
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "2.0.50727.1433")]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    public partial class FeatureRequestDiscussSubmitCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
+        
+        private object[] results;
+        
+        internal FeatureRequestDiscussSubmitCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
+                base(exception, cancelled, userState) {
+            this.results = results;
+        }
+        
+        /// <remarks/>
+        public string Result {
+            get {
+                this.RaiseExceptionIfNecessary();
+                return ((string)(this.results[0]));
+            }
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "2.0.50727.1433")]
+    public delegate void FeatureRequestDiscussGetListCompletedEventHandler(object sender, FeatureRequestDiscussGetListCompletedEventArgs e);
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "2.0.50727.1433")]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    public partial class FeatureRequestDiscussGetListCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
+        
+        private object[] results;
+        
+        internal FeatureRequestDiscussGetListCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
                 base(exception, cancelled, userState) {
             this.results = results;
         }

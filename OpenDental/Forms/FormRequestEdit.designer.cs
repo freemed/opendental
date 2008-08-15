@@ -43,8 +43,9 @@ namespace OpenDental{
 			this.textMyPoints = new System.Windows.Forms.TextBox();
 			this.label6 = new System.Windows.Forms.Label();
 			this.groupBox2 = new System.Windows.Forms.GroupBox();
-			this.label15 = new System.Windows.Forms.Label();
 			this.textWeight = new System.Windows.Forms.TextBox();
+			this.label17 = new System.Windows.Forms.Label();
+			this.label15 = new System.Windows.Forms.Label();
 			this.label11 = new System.Windows.Forms.Label();
 			this.textTotalCritical = new System.Windows.Forms.TextBox();
 			this.label10 = new System.Windows.Forms.Label();
@@ -60,14 +61,15 @@ namespace OpenDental{
 			this.label14 = new System.Windows.Forms.Label();
 			this.labelAdmin = new System.Windows.Forms.Label();
 			this.label16 = new System.Windows.Forms.Label();
-			this.label17 = new System.Windows.Forms.Label();
+			this.labelDiscuss = new System.Windows.Forms.Label();
+			this.textNote = new System.Windows.Forms.TextBox();
+			this.butAddDiscuss = new OpenDental.UI.Button();
 			this.butJordan = new OpenDental.UI.Button();
 			this.butResubmit = new OpenDental.UI.Button();
 			this.butDelete = new OpenDental.UI.Button();
 			this.gridMain = new OpenDental.UI.ODGrid();
 			this.butOK = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
-			this.label18 = new System.Windows.Forms.Label();
 			this.groupMyVotes.SuspendLayout();
 			this.groupBox2.SuspendLayout();
 			this.SuspendLayout();
@@ -276,15 +278,6 @@ namespace OpenDental{
 			this.groupBox2.TabStop = false;
 			this.groupBox2.Text = "Total";
 			// 
-			// label15
-			// 
-			this.label15.Location = new System.Drawing.Point(188,33);
-			this.label15.Name = "label15";
-			this.label15.Size = new System.Drawing.Size(153,40);
-			this.label15.TabIndex = 82;
-			this.label15.Text = "Computed based on the other parameters.  A higher number is more important.";
-			this.label15.TextAlign = System.Drawing.ContentAlignment.TopRight;
-			// 
 			// textWeight
 			// 
 			this.textWeight.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))),((int)(((byte)(239)))),((int)(((byte)(243)))));
@@ -294,6 +287,24 @@ namespace OpenDental{
 			this.textWeight.Size = new System.Drawing.Size(38,20);
 			this.textWeight.TabIndex = 81;
 			this.textWeight.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+			// 
+			// label17
+			// 
+			this.label17.Location = new System.Drawing.Point(301,11);
+			this.label17.Name = "label17";
+			this.label17.Size = new System.Drawing.Size(38,18);
+			this.label17.TabIndex = 86;
+			this.label17.Text = "/100";
+			this.label17.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// label15
+			// 
+			this.label15.Location = new System.Drawing.Point(188,33);
+			this.label15.Name = "label15";
+			this.label15.Size = new System.Drawing.Size(153,40);
+			this.label15.TabIndex = 82;
+			this.label15.Text = "Computed based on the other parameters.  A higher number is more important.";
+			this.label15.TextAlign = System.Drawing.ContentAlignment.TopRight;
 			// 
 			// label11
 			// 
@@ -439,14 +450,44 @@ namespace OpenDental{
 			this.label16.Text = "/10";
 			this.label16.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
-			// label17
+			// labelDiscuss
 			// 
-			this.label17.Location = new System.Drawing.Point(301,11);
-			this.label17.Name = "label17";
-			this.label17.Size = new System.Drawing.Size(38,18);
-			this.label17.TabIndex = 86;
-			this.label17.Text = "/100";
-			this.label17.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.labelDiscuss.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.labelDiscuss.Location = new System.Drawing.Point(211,537);
+			this.labelDiscuss.Name = "labelDiscuss";
+			this.labelDiscuss.Size = new System.Drawing.Size(655,19);
+			this.labelDiscuss.TabIndex = 86;
+			this.labelDiscuss.Text = "This discussion is very leisurely.  Nobody necessarily checks it for new messages" +
+    ".  Try to prepend your name to the note.";
+			// 
+			// textNote
+			// 
+			this.textNote.AcceptsReturn = true;
+			this.textNote.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.textNote.BackColor = System.Drawing.Color.White;
+			this.textNote.Location = new System.Drawing.Point(214,556);
+			this.textNote.Multiline = true;
+			this.textNote.Name = "textNote";
+			this.textNote.Size = new System.Drawing.Size(575,89);
+			this.textNote.TabIndex = 88;
+			// 
+			// butAddDiscuss
+			// 
+			this.butAddDiscuss.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butAddDiscuss.Autosize = true;
+			this.butAddDiscuss.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butAddDiscuss.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butAddDiscuss.CornerRadius = 4F;
+			this.butAddDiscuss.Image = global::OpenDental.Properties.Resources.Add;
+			this.butAddDiscuss.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butAddDiscuss.Location = new System.Drawing.Point(127,556);
+			this.butAddDiscuss.Name = "butAddDiscuss";
+			this.butAddDiscuss.Size = new System.Drawing.Size(81,24);
+			this.butAddDiscuss.TabIndex = 87;
+			this.butAddDiscuss.Text = "Save";
+			this.butAddDiscuss.Click += new System.EventHandler(this.butAddDiscuss_Click);
 			// 
 			// butJordan
 			// 
@@ -481,7 +522,7 @@ namespace OpenDental{
 			// butDelete
 			// 
 			this.butDelete.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butDelete.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.butDelete.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.butDelete.Autosize = true;
 			this.butDelete.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butDelete.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
@@ -497,14 +538,13 @@ namespace OpenDental{
 			// 
 			// gridMain
 			// 
-			this.gridMain.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+			this.gridMain.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.gridMain.HScrollVisible = false;
 			this.gridMain.Location = new System.Drawing.Point(15,208);
 			this.gridMain.Name = "gridMain";
 			this.gridMain.ScrollValue = 0;
-			this.gridMain.Size = new System.Drawing.Size(775,426);
+			this.gridMain.Size = new System.Drawing.Size(775,326);
 			this.gridMain.TabIndex = 70;
 			this.gridMain.Title = "Discussion";
 			this.gridMain.TranslationName = null;
@@ -539,22 +579,13 @@ namespace OpenDental{
 			this.butCancel.Text = "&Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
 			// 
-			// label18
-			// 
-			this.label18.Location = new System.Drawing.Point(352,641);
-			this.label18.Name = "label18";
-			this.label18.Size = new System.Drawing.Size(439,18);
-			this.label18.TabIndex = 86;
-			this.label18.Text = "This discussion is very leisurely.  Nobody necessarily checks it for new messages" +
-    ".";
-			this.label18.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.label18.Visible = false;
-			// 
 			// FormRequestEdit
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
 			this.ClientSize = new System.Drawing.Size(883,668);
-			this.Controls.Add(this.label18);
+			this.Controls.Add(this.textNote);
+			this.Controls.Add(this.butAddDiscuss);
+			this.Controls.Add(this.labelDiscuss);
 			this.Controls.Add(this.textDifficulty);
 			this.Controls.Add(this.label16);
 			this.Controls.Add(this.butJordan);
@@ -638,6 +669,8 @@ namespace OpenDental{
 		private OpenDental.UI.Button butJordan;
 		private System.Windows.Forms.Label label17;
 		private System.Windows.Forms.Label label16;
-		private System.Windows.Forms.Label label18;
+		private System.Windows.Forms.Label labelDiscuss;
+		private OpenDental.UI.Button butAddDiscuss;
+		private System.Windows.Forms.TextBox textNote;
 	}
 }

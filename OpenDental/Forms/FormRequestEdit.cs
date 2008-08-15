@@ -8,6 +8,7 @@ using System.Windows.Forms;
 using System.Xml;
 using System.Xml.Serialization;
 using OpenDentBusiness;
+using OpenDental.UI;
 
 namespace OpenDental {
 	public partial class FormRequestEdit:Form {
@@ -19,6 +20,7 @@ namespace OpenDental {
 		private ODDataTable tableObj;
 		private Color colorDisabled;
 		private int myPointsUsed=0;
+		//private int DiscussIdCur;//only has a value during discuss edit.
 
 		public FormRequestEdit() {
 			InitializeComponent();
@@ -52,6 +54,7 @@ namespace OpenDental {
 					textDetail.BackColor=Color.White;
 					textDetail.ReadOnly=false;
 					butDelete.Visible=true;
+					groupMyVotes.Visible=false;
 				}
 				else{
 					//later on, it will test to see if isMine, and will then allow editing.
@@ -64,6 +67,11 @@ namespace OpenDental {
 			if(RequestId==0){
 				checkIsMine.Checked=true;
 				textDifficulty.Text="5";
+				labelDiscuss.Visible=false;
+				butAddDiscuss.Visible=false;
+				textNote.Visible=false;
+				//gridMain.Height=butDelete.Top-gridMain.Top-4;
+				gridMain.Visible=false;
 			}
 			textApproval.BackColor=colorDisabled;
 			comboApproval.Items.Add("New");
@@ -81,6 +89,7 @@ namespace OpenDental {
 			textMyPledge.Text="0";
 			if(RequestId!=0){
 				GetOneFromServer();
+				FillGrid();
 			}
 			textMyPointsRemain.BackColor=colorDisabled;
 			textTotalPoints.BackColor=colorDisabled;
@@ -134,6 +143,7 @@ namespace OpenDental {
 			if(node!=null) {
 				//textConnectionMessage.Text=node.InnerText;
 				MessageBox.Show(node.InnerText,"Error");
+				DialogResult=DialogResult.Cancel;
 				return;
 			}
 			//Process a valid return value------------------------------------------------------------------------------------------------
@@ -268,6 +278,153 @@ namespace OpenDental {
 			}
 		}
 
+		private void butAddDiscuss_Click(object sender,EventArgs e) {
+			//button is not even visible if New
+			if(textNote.Text==""){
+				MsgBox.Show(this,"Please enter some text first.");
+				return;
+			}
+			if(!SaveDiscuss()){
+				return;
+			}
+			textNote.Text="";
+			FillGrid();
+		}
+
+		///<summary>Never happens with a new request.</summary>
+		private void FillGrid(){
+			Cursor=Cursors.WaitCursor;
+			//prepare the xml document to send--------------------------------------------------------------------------------------
+			XmlWriterSettings settings = new XmlWriterSettings();
+			settings.Indent = true;
+			settings.IndentChars = ("    ");
+			StringBuilder strbuild=new StringBuilder();
+			using(XmlWriter writer=XmlWriter.Create(strbuild,settings)){
+				writer.WriteStartElement("FeatureRequestDiscussGetList");
+				writer.WriteStartElement("RegistrationKey");
+				writer.WriteString(PrefC.GetString("RegistrationKey"));
+				writer.WriteEndElement();
+				writer.WriteStartElement("RequestId");
+				writer.WriteString(RequestId.ToString());
+				writer.WriteEndElement();
+				writer.WriteEndElement();
+			}
+			#if DEBUG
+				OpenDental.localhost.Service1 updateService=new OpenDental.localhost.Service1();
+			#else
+				OpenDental.customerUpdates.Service1 updateService=new OpenDental.customerUpdates.Service1();
+				updateService.Url=PrefC.GetString("UpdateServerAddress");
+			#endif
+			//Send the message and get the result-------------------------------------------------------------------------------------
+			string result="";
+			try {
+				result=updateService.FeatureRequestDiscussGetList(strbuild.ToString());
+			}
+			catch(Exception ex) {
+				Cursor=Cursors.Default;
+				MessageBox.Show("Error: "+ex.Message);
+				return;
+			}
+			//textConnectionMessage.Text=Lan.g(this,"Connection successful.");
+			//Application.DoEvents();
+			Cursor=Cursors.Default;
+			//MessageBox.Show(result);
+			XmlDocument doc=new XmlDocument();
+			doc.LoadXml(result);
+			//Process errors------------------------------------------------------------------------------------------------------------
+			XmlNode node=doc.SelectSingleNode("//Error");
+			if(node!=null) {
+				//textConnectionMessage.Text=node.InnerText;
+				MessageBox.Show(node.InnerText,"Error");
+				return;
+			}
+			//Process a valid return value------------------------------------------------------------------------------------------------
+			node=doc.SelectSingleNode("//ResultTable");
+			ODDataTable table=new ODDataTable(node.InnerXml);
+			gridMain.BeginUpdate();
+			gridMain.Columns.Clear();
+			ODGridColumn col=new ODGridColumn(Lan.g("TableRequestDiscuss","Date"),70);
+			gridMain.Columns.Add(col);
+			col=new ODGridColumn(Lan.g("TableRequestDiscuss","Note"),200);
+			gridMain.Columns.Add(col);
+			gridMain.Rows.Clear();
+			ODGridRow row;
+			for(int i=0;i<table.Rows.Count;i++){
+				row=new ODGridRow();
+				row.Cells.Add(table.Rows[i]["dateTime"]);
+				row.Cells.Add(table.Rows[i]["Note"]);
+				gridMain.Rows.Add(row);
+			}
+			gridMain.EndUpdate();
+		}
+
+		///<summary></summary>
+		private bool SaveDiscuss(){//bool doDelete) {
+			//prepare the xml document to send--------------------------------------------------------------------------------------
+			XmlWriterSettings settings = new XmlWriterSettings();
+			settings.Indent = true;
+			settings.IndentChars = ("    ");
+			StringBuilder strbuild=new StringBuilder();
+			using(XmlWriter writer=XmlWriter.Create(strbuild,settings)){
+				writer.WriteStartElement("FeatureRequestDiscussSubmit");
+				//regkey
+				writer.WriteStartElement("RegistrationKey");
+				writer.WriteString(PrefC.GetString("RegistrationKey"));
+				writer.WriteEndElement();
+				//DiscussId
+				//writer.WriteStartElement("DiscussId");
+				//writer.WriteString(DiscussIdCur.ToString());//this will be zero for a new entry. We currently only support new entries
+				//writer.WriteEndElement();
+				//RequestId
+				writer.WriteStartElement("RequestId");
+				writer.WriteString(RequestId.ToString());
+				writer.WriteEndElement();
+				//can't pass patnum.  Determined on the server side.
+				//date will also be figured on the server side.
+				//Note
+				writer.WriteStartElement("Note");
+				writer.WriteString(textNote.Text);
+				writer.WriteEndElement();
+				/*if(doDelete){
+					//delete
+					writer.WriteStartElement("Delete");
+					writer.WriteString("true");
+					writer.WriteEndElement();
+				}*/
+			}
+			Cursor=Cursors.WaitCursor;
+			#if DEBUG
+				OpenDental.localhost.Service1 updateService=new OpenDental.localhost.Service1();
+			#else
+				OpenDental.customerUpdates.Service1 updateService=new OpenDental.customerUpdates.Service1();
+				updateService.Url=PrefC.GetString("UpdateServerAddress");
+			#endif
+			//Send the message and get the result-------------------------------------------------------------------------------------
+			string result="";
+			try {
+				result=updateService.FeatureRequestDiscussSubmit(strbuild.ToString());
+			}
+			catch(Exception ex) {
+				Cursor=Cursors.Default;
+				MessageBox.Show("Error: "+ex.Message);
+				return false;
+			}
+			//textConnectionMessage.Text=Lan.g(this,"Connection successful.");
+			//Application.DoEvents();
+			Cursor=Cursors.Default;
+			//MessageBox.Show(result);
+			XmlDocument doc=new XmlDocument();
+			doc.LoadXml(result);
+			//Process errors------------------------------------------------------------------------------------------------------------
+			XmlNode node=doc.SelectSingleNode("//Error");
+			if(node!=null) {
+				//textConnectionMessage.Text=node.InnerText;
+				MessageBox.Show(node.InnerText,"Error");
+				return false;
+			}
+			return true;
+		}
+
 		private void butDelete_Click(object sender,EventArgs e) {
 			//only visible if New,NeedsClarification,NotARequest,Redundant,or TooBroad
 			if(!MsgBox.Show(this,true,"Delete this entire request?")){
@@ -279,7 +436,9 @@ namespace OpenDental {
 			DialogResult=DialogResult.OK;
 		}
 
-		private bool SaveChangesToDb(bool doDelete){
+		///<summary>Only called when user clicks Delete or OK.  Not called repeatedly when adding discussions.</summary>
+		private bool SaveChangesToDb(bool doDelete) {
+			#region validation
 			//validate---------------------------------------------------------------------------------------------------------
 			int difficulty=0;
 			int myPoints=0;
@@ -289,20 +448,22 @@ namespace OpenDental {
 					MsgBox.Show(this,"Description cannot be blank.");
 					return false;
 				}
-				if(IsAdminMode){
-					try{
-						difficulty=int.Parse(textDifficulty.Text);
-					}
-					catch{
-						MsgBox.Show(this,"Difficulty is invalid.");
-						return false;
-					}
-					if(difficulty<0 || difficulty>10){
-						MsgBox.Show(this,"Difficulty is invalid.");
-						return false;
-					}
+				//if(IsAdminMode){
+				//had to do this for everyone, because initial diff setting gets ignored otherwise.
+				try{
+					difficulty=int.Parse(textDifficulty.Text);
 				}
-				else{
+				catch{
+					MsgBox.Show(this,"Difficulty is invalid.");
+					return false;
+				}
+				if(difficulty<0 || difficulty>10){
+					MsgBox.Show(this,"Difficulty is invalid.");
+					return false;
+				}
+				//}
+				//else{
+				if(!IsAdminMode){
 					try{
 						myPoints=PIn.PInt(textMyPoints.Text);//handles "" gracefully
 					}
@@ -339,8 +500,44 @@ namespace OpenDental {
 				}
 			}
 			//end of validation------------------------------------------------------------------------------------------------
+			#endregion validation
 			//if user has made no changes, then exit out-------------------------------------------------------------------------
-			//(not implemented yet)
+			bool changesMade=false;
+			if(doDelete){
+				changesMade=true;
+			}
+			if(tableObj==null || tableObj.Rows.Count==0){//new
+				changesMade=true;
+			}
+			else{
+				ODDataRow row=tableObj.Rows[0];
+				if(textDescription.Text!=row["Description"]){
+					changesMade=true;
+				}
+				if(textDetail.Text!=row["Detail"]){
+					changesMade=true;
+				}
+				if(textDifficulty.Text!=row["Difficulty"]){
+					changesMade=true;
+				}
+				int approval=PIn.PInt(row["Approval"]);
+				if(comboApproval.SelectedIndex!=approval){
+					changesMade=true;
+				}
+				if(groupMyVotes.Visible){
+					if(textMyPoints.Text!=row["myPoints"]
+						|| checkIsCritical.Checked!=PIn.PBool(row["IsCritical"])
+						|| textMyPledge.Text!=row["myPledge"])
+					{
+						changesMade=true;
+					}
+				}
+			}
+			if(!changesMade){
+				//temporarily show me which ones shortcutted out
+				//MessageBox.Show("no changes made");
+				return true;
+			}
 			Cursor=Cursors.WaitCursor;
 			//prepare the xml document to send--------------------------------------------------------------------------------------
 			XmlWriterSettings settings = new XmlWriterSettings();
@@ -376,7 +573,9 @@ namespace OpenDental {
 						writer.WriteString(textDetail.Text);
 						writer.WriteEndElement();
 					}
-					if(IsAdminMode){
+					if(IsAdminMode
+						|| RequestId==0)//This allows the initial difficulty of 5 to get saved.
+					{
 						//difficulty
 						writer.WriteStartElement("Difficulty");
 						writer.WriteString(difficulty.ToString());
@@ -450,6 +649,8 @@ namespace OpenDental {
 		private void butCancel_Click(object sender,EventArgs e) {
 			DialogResult=DialogResult.Cancel;
 		}
+
+		
 
 		
 
