@@ -300,21 +300,24 @@ namespace OpenDental{
 				}
 				whereCat+=")";
 			}
+			//Query changed to be compatible with both MySQL and Oracle (not tested).
 			string command="SELECT ProcCat,Descript,AbbrDesc,procedurecode.ProcCode,"
-				+"(SELECT CASE WHEN (fee.Amount IS NULL) THEN -1 ELSE fee.Amount END "
-				+"FROM fee WHERE fee.CodeNum=procedurecode.CodeNum AND fee.FeeSched="+POut.PInt(feeSched)+") FeeAmt1,"
-				+"(SELECT CASE WHEN (fee.Amount IS NULL) THEN -1 ELSE fee.Amount END "
-				+"FROM fee WHERE fee.CodeNum=procedurecode.CodeNum AND fee.FeeSched="+POut.PInt(feeSchedComp1)+") FeeAmt2,"
-				+"(SELECT CASE WHEN (fee.Amount IS NULL) THEN -1 ELSE fee.Amount END "
-				+"FROM fee WHERE fee.CodeNum=procedurecode.CodeNum AND fee.FeeSched="+POut.PInt(feeSchedComp2)+") FeeAmt3,"
+				+"CASE WHEN (fee1.Amount IS NULL) THEN -1 ELSE fee1.Amount END FeeAmt1,"
+				+"CASE WHEN (fee2.Amount IS NULL) THEN -1 ELSE fee2.Amount END FeeAmt2,"
+				+"CASE WHEN (fee3.Amount IS NULL) THEN -1 ELSE fee3.Amount END FeeAmt3, "
 				+"procedurecode.CodeNum "
 				+"FROM procedurecode "
+				+"LEFT JOIN fee fee1 ON fee1.CodeNum=procedurecode.CodeNum "
+				+"AND fee1.FeeSched="+POut.PInt(feeSched)
+				+" LEFT JOIN fee fee2 ON fee2.CodeNum=procedurecode.CodeNum "
+				+"AND fee2.FeeSched="+POut.PInt(feeSchedComp1)
+				+" LEFT JOIN fee fee3 ON fee3.CodeNum=procedurecode.CodeNum "
+				+"AND fee3.FeeSched="+POut.PInt(feeSchedComp2)
 				+" WHERE "+whereCat
 				+" AND Descript LIKE '%"+POut.PString(desc)+"%' "
 				+"AND AbbrDesc LIKE '%"+POut.PString(abbr)+"%' "
 				+"AND procedurecode.ProcCode LIKE '%"+POut.PString(code)+"%' "
 				+"ORDER BY ProcCat,procedurecode.ProcCode";
-			//Query changed to be compatible with both MySQL and Oracle (not tested).
 			//MsgBoxCopyPaste msg=new MsgBoxCopyPaste(command);
 			//msg.ShowDialog();
 			return General.GetTable(command);
