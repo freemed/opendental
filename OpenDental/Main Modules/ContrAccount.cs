@@ -1807,9 +1807,6 @@ namespace OpenDental {
 				textFinNotes.Enabled=true;
 				butComm.Enabled=true;
 			}
-			//if(checkShowNotes.Tag!=null && checkShowNotes.Tag.ToString()!="JustClicked"){
-			//checkShowNotes.Checked=PrefC.GetBool("ShowNotesInAccount");
-			//}
 			FillPats(isSelectingFamily);
 			FillMisc();
 			FillAging(isSelectingFamily);

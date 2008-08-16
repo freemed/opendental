@@ -148,8 +148,8 @@ namespace OpenDental{
 					}
 					catch{
 					}
-					
-
+					command="DELETE FROM preference WHERE PrefName='ShowNotesInAccount'";
+					General.NonQ(command);
 
 
 
