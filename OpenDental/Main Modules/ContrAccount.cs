@@ -3210,13 +3210,8 @@ namespace OpenDental {
 			stmt.IsSent=true;
 			stmt.Mode_=StatementMode.InPerson;
 			stmt.HidePayment=true;
-			if(PrefC.GetBool("IntermingleFamilyDefault")) {
-				stmt.Intermingled=true;
-				stmt.SinglePatient=false;
-			}
-			else {
-				stmt.Intermingled=false;
-			}
+			stmt.SinglePatient=true;
+			stmt.Intermingled=false;
 			stmt.DateRangeFrom=DateTime.Today;
 			stmt.DateRangeTo=DateTime.Today;
 			stmt.Note="";
