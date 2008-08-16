@@ -2727,13 +2727,16 @@ namespace OpenDental{
 		}
 
 		private void UpdateSurf() {
+			if(!Tooth.IsValidEntry(textTooth.Text)){
+				return;
+			}
 			errorProvider2.SetError(textSurfaces,"");
 			textSurfaces.Text="";
 			if(butM.BackColor==Color.White) {
 				textSurfaces.AppendText("M");
 			}
 			if(butOI.BackColor==Color.White) {
-				if(ToothGraphic.IsAnterior(textTooth.Text)) {
+				if(ToothGraphic.IsAnterior(Tooth.FromInternat(textTooth.Text))) {
 					textSurfaces.AppendText("I");
 				}
 				else {
@@ -2747,7 +2750,7 @@ namespace OpenDental{
 				textSurfaces.AppendText("V");
 			}
 			if(butBF.BackColor==Color.White) {
-				if(ToothGraphic.IsAnterior(textTooth.Text)) {
+				if(ToothGraphic.IsAnterior(Tooth.FromInternat(textTooth.Text))) {
 					textSurfaces.AppendText("F");
 				}
 				else {
