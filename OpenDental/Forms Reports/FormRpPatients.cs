@@ -52,7 +52,8 @@ namespace OpenDental{
     private ArrayList UsingProcLogFirst;
     private ArrayList UsingProcLogLast;
     private ArrayList UsingRefDent;
-    private ArrayList UsingRefPat;    
+    private ArrayList UsingRefPat;
+		private ArrayList UsingRecall;
 		private bool IsText;
 		private bool IsDate;
 		private bool IsDropDown;
@@ -60,7 +61,8 @@ namespace OpenDental{
     private bool NeedRefDent=false;
     private bool NeedRefPat=false;
     private bool NeedProcLogLast=false;
-    private bool NeedProcLogFirst=false; 
+    private bool NeedProcLogFirst=false;
+		private bool NeedRecall=false;
     private bool IsWhereRelation=false;  
     private bool PatSel;
     private bool RefToSel;
@@ -79,6 +81,7 @@ namespace OpenDental{
       UsingRefPat=new ArrayList();
       UsingProcLogFirst=new ArrayList();
       UsingProcLogLast=new ArrayList();
+			UsingRecall=new ArrayList();
       Fill();
 			SQLselect="";
 			SQLfrom="FROM patient ";
@@ -577,7 +580,7 @@ namespace OpenDental{
       //ALpatFilter.Add("PriProv"); 
       //ALpatFilter.Add("PriRelationship"); 
       //ALpatFilter.Add("RecallInterval"); 
-      //ALpatFilter.Add("RecallStatus");
+      ALpatFilter.Add("RecallStatus");
 			ALpatFilter.Add("Referred From Dentist");//new, need to add functionality
 			ALpatFilter.Add("Referred From Patient");//new, need to add functionality 
       ALpatFilter.Add("Salutation"); 
@@ -645,6 +648,7 @@ namespace OpenDental{
       NeedRefPat=false;
       NeedProcLogFirst=false;
       NeedProcLogLast=false;
+			NeedRecall=false;
       for(int i=0;i<UsingInsPlans.Count;i++){
 				if((bool)UsingInsPlans[i]){
 					NeedInsPlan=true;
@@ -666,7 +670,18 @@ namespace OpenDental{
           NeedProcLogLast=true;          
           IsWhereRelation=true;
         }
+				else if((bool)UsingRecall[i]){
+					NeedRecall=true;
+					IsWhereRelation=true;
+				}
 			}//end for  
+			for(int i=0;i<ListPatientSelect.SelectedItems.Count;i++){
+				string item=ListPatientSelect.SelectedItems[i].ToString();
+				if(item=="RecallStatus"){
+					NeedRecall=true;
+					IsWhereRelation=true;
+				}
+			}
     }
 
     private void CreateSQLselect(){
@@ -683,11 +698,18 @@ namespace OpenDental{
 				SQLselect="SELECT ";
 				ListPatientSelect.SelectedItems.CopyTo(PatFieldsSelected,0);
 				for(int i=0;i<PatFieldsSelected.Length;i++){
+					string field=PatFieldsSelected[i].ToString();
+					if(field=="RecallStatus"){
+						SQLselect+="recall";
+					}else{
+						SQLselect+="patient";
+					}
+					SQLselect+="."+field;
 					if(i!=PatFieldsSelected.Length-1){
-						SQLselect+="patient."+PatFieldsSelected[i].ToString()+",";
+						SQLselect+=",";
           }  
 					else{
-						SQLselect+="patient."+PatFieldsSelected[i].ToString()+" ";
+						SQLselect+=" ";
           }          
 				}
 				butOK.Enabled=true;
@@ -737,14 +759,13 @@ namespace OpenDental{
 		}
 	
     private void CreateSQLfrom(){ 
-      SQLfrom="";
-      
+      SQLfrom="FROM patient";      
       if(RefToSel || RefFromSel || NeedRefPat || NeedRefDent){
-        SQLfrom="FROM patient,referral,refattach";
+        SQLfrom+=",referral,refattach";
       }
-      else{
-			 SQLfrom="FROM patient";        
-      }
+			if(NeedRecall){
+				SQLfrom+=",recall";
+			}
       if(NeedInsPlan){
         SQLfrom+=",insplan";
       }
@@ -795,7 +816,15 @@ namespace OpenDental{
         else{
           SQLwhereRelation+="procedurelog.patnum=patient.patnum "; 
         }
+				needAnd=true;
       }
+			if(NeedRecall){
+				if(needAnd){
+					SQLwhereRelation+="AND ";
+				}
+				SQLwhereRelation+="recall.PatNum=patient.PatNum ";
+				needAnd=true;
+			}
     }
 
     private void CreateSQLwhereComparison(){
@@ -1016,7 +1045,7 @@ namespace OpenDental{
             ComboBox.Items.Add(sItem);
 					}
 					break;
-   		  /*case "RecallStatus":
+   		  case "RecallStatus":
           SetListBoxConditions();
 					ComboBox.Items.Clear();
           for(int i=0;i<DefC.Long[(int)DefCat.RecallUnschedStatus	].Length;i++){
@@ -1025,7 +1054,7 @@ namespace OpenDental{
 							sItem+="(hidden)";
             ComboBox.Items.Add(sItem);
 					}
-					break;*/
+					break;
         case "PriProv":		
         case "SecProv":
           SetListBoxConditions();
@@ -1098,7 +1127,8 @@ namespace OpenDental{
       UsingRefDent.Add(false);
       UsingRefPat.Add(false);
       UsingProcLogFirst.Add(false);
-      UsingProcLogLast.Add(false);      
+      UsingProcLogLast.Add(false);
+			UsingRecall.Add(false);
 
 			if(IsText){
 				if(DropListFilter.SelectedItem.ToString()=="Primary Carrier"){
@@ -1273,7 +1303,7 @@ namespace OpenDental{
 						else{ 
               sItem="OR ";
             }
-						sItem+="patient.RecallStatus "+ListConditions.SelectedItem.ToString()+" '"
+						sItem+="recall.RecallStatus "+ListConditions.SelectedItem.ToString()+" '"
 							+DefC.Long[(int)DefCat.RecallUnschedStatus][ComboBox.SelectedIndices[i]]
 							.DefNum.ToString()+"'"; 
 						if(i==ComboBox.SelectedIndices.Count-1){
@@ -1281,6 +1311,7 @@ namespace OpenDental{
             } 
 						ListPrerequisites.Items.Add(sItem);
 					}
+					UsingRecall[UsingRecall.Count-1]=true;
 				}
 				else if(DropListFilter.SelectedItem.ToString()=="PriProv"){
 					sItem="";
