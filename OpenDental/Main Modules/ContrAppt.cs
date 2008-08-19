@@ -3263,9 +3263,9 @@ namespace OpenDental{
 				SecurityLogs.MakeLogEntry(Permissions.AppointmentEdit,apt.PatNum,
 					pat.GetNameLF() + ", "
 					+ apt.AptDateTime.ToString() + ", "
-					+ "Pt NOTE Set Complete");
+					+ "Pt NOTE Set Complete");//shouldn't ever happen, but don't allow procedures to be completed from notes
 			}
-			else {//shouldn't ever happen, but don't allow procedures to be completed from notes
+			else {
 				Appointments.SetAptStatus(apt.AptNum, ApptStatus.Complete);
 				Procedures.SetCompleteInAppt(apt, PlanList, PatPlanList,pat.SiteNum);//loops through each proc
 				SecurityLogs.MakeLogEntry(Permissions.AppointmentEdit, apt.PatNum,

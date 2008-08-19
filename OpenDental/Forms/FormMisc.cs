@@ -88,6 +88,7 @@ namespace OpenDental{
 		private CheckBox checkClaimFormTreatDentSaysSigOnFile;
 		private GroupBox groupBox6;
 		private CheckBox checkTitleBarShowSite;
+		private CheckBox checkAllowSettingProcsComplete;
 		private List<Def> posAdjTypes;
 
 		///<summary></summary>
@@ -187,6 +188,7 @@ namespace OpenDental{
 			this.butOK = new OpenDental.UI.Button();
 			this.groupBox6 = new System.Windows.Forms.GroupBox();
 			this.checkTitleBarShowSite = new System.Windows.Forms.CheckBox();
+			this.checkAllowSettingProcsComplete = new System.Windows.Forms.CheckBox();
 			this.groupBox1.SuspendLayout();
 			this.groupBox5.SuspendLayout();
 			this.groupBox4.SuspendLayout();
@@ -201,7 +203,7 @@ namespace OpenDental{
 			// textTreatNote
 			// 
 			this.textTreatNote.AcceptsReturn = true;
-			this.textTreatNote.Location = new System.Drawing.Point(16,28);
+			this.textTreatNote.Location = new System.Drawing.Point(45,28);
 			this.textTreatNote.Multiline = true;
 			this.textTreatNote.Name = "textTreatNote";
 			this.textTreatNote.Size = new System.Drawing.Size(371,53);
@@ -209,7 +211,7 @@ namespace OpenDental{
 			// 
 			// label1
 			// 
-			this.label1.Location = new System.Drawing.Point(225,10);
+			this.label1.Location = new System.Drawing.Point(254,10);
 			this.label1.Name = "label1";
 			this.label1.Size = new System.Drawing.Size(163,15);
 			this.label1.TabIndex = 35;
@@ -229,7 +231,7 @@ namespace OpenDental{
 			// 
 			// textMainWindowTitle
 			// 
-			this.textMainWindowTitle.Location = new System.Drawing.Point(121,13);
+			this.textMainWindowTitle.Location = new System.Drawing.Point(150,14);
 			this.textMainWindowTitle.Name = "textMainWindowTitle";
 			this.textMainWindowTitle.Size = new System.Drawing.Size(267,20);
 			this.textMainWindowTitle.TabIndex = 38;
@@ -238,7 +240,7 @@ namespace OpenDental{
 			// 
 			this.checkTreatPlanShowGraphics.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.checkTreatPlanShowGraphics.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkTreatPlanShowGraphics.Location = new System.Drawing.Point(28,83);
+			this.checkTreatPlanShowGraphics.Location = new System.Drawing.Point(57,83);
 			this.checkTreatPlanShowGraphics.Name = "checkTreatPlanShowGraphics";
 			this.checkTreatPlanShowGraphics.Size = new System.Drawing.Size(359,17);
 			this.checkTreatPlanShowGraphics.TabIndex = 46;
@@ -249,7 +251,7 @@ namespace OpenDental{
 			// 
 			this.checkTreatPlanShowCompleted.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.checkTreatPlanShowCompleted.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkTreatPlanShowCompleted.Location = new System.Drawing.Point(28,100);
+			this.checkTreatPlanShowCompleted.Location = new System.Drawing.Point(57,100);
 			this.checkTreatPlanShowCompleted.Name = "checkTreatPlanShowCompleted";
 			this.checkTreatPlanShowCompleted.Size = new System.Drawing.Size(359,17);
 			this.checkTreatPlanShowCompleted.TabIndex = 47;
@@ -263,9 +265,9 @@ namespace OpenDental{
 			this.groupBox1.Controls.Add(this.checkTreatPlanShowGraphics);
 			this.groupBox1.Controls.Add(this.checkTreatPlanShowCompleted);
 			this.groupBox1.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.groupBox1.Location = new System.Drawing.Point(26,9);
+			this.groupBox1.Location = new System.Drawing.Point(12,9);
 			this.groupBox1.Name = "groupBox1";
-			this.groupBox1.Size = new System.Drawing.Size(408,122);
+			this.groupBox1.Size = new System.Drawing.Size(422,122);
 			this.groupBox1.TabIndex = 48;
 			this.groupBox1.TabStop = false;
 			this.groupBox1.Text = "Treatment Plan module";
@@ -537,7 +539,7 @@ namespace OpenDental{
 			// 
 			this.checkSolidBlockouts.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.checkSolidBlockouts.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkSolidBlockouts.Location = new System.Drawing.Point(25,49);
+			this.checkSolidBlockouts.Location = new System.Drawing.Point(54,48);
 			this.checkSolidBlockouts.Name = "checkSolidBlockouts";
 			this.checkSolidBlockouts.Size = new System.Drawing.Size(362,17);
 			this.checkSolidBlockouts.TabIndex = 66;
@@ -554,9 +556,9 @@ namespace OpenDental{
 			this.groupBox4.Controls.Add(this.checkApptBubbleDelay);
 			this.groupBox4.Controls.Add(this.checkAppointmentBubblesDisabled);
 			this.groupBox4.Controls.Add(this.checkSolidBlockouts);
-			this.groupBox4.Location = new System.Drawing.Point(26,135);
+			this.groupBox4.Location = new System.Drawing.Point(12,135);
 			this.groupBox4.Name = "groupBox4";
-			this.groupBox4.Size = new System.Drawing.Size(408,129);
+			this.groupBox4.Size = new System.Drawing.Size(422,129);
 			this.groupBox4.TabIndex = 67;
 			this.groupBox4.TabStop = false;
 			this.groupBox4.Text = "Appointment module";
@@ -565,7 +567,7 @@ namespace OpenDental{
 			// 
 			this.checkApptExclamation.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.checkApptExclamation.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkApptExclamation.Location = new System.Drawing.Point(2,107);
+			this.checkApptExclamation.Location = new System.Drawing.Point(31,106);
 			this.checkApptExclamation.Name = "checkApptExclamation";
 			this.checkApptExclamation.Size = new System.Drawing.Size(385,17);
 			this.checkApptExclamation.TabIndex = 72;
@@ -575,7 +577,7 @@ namespace OpenDental{
 			// 
 			// label7
 			// 
-			this.label7.Location = new System.Drawing.Point(3,89);
+			this.label7.Location = new System.Drawing.Point(32,88);
 			this.label7.Name = "label7";
 			this.label7.Size = new System.Drawing.Size(221,15);
 			this.label7.TabIndex = 71;
@@ -586,7 +588,7 @@ namespace OpenDental{
 			// 
 			this.checkBrokenApptNote.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.checkBrokenApptNote.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkBrokenApptNote.Location = new System.Drawing.Point(25,66);
+			this.checkBrokenApptNote.Location = new System.Drawing.Point(54,65);
 			this.checkBrokenApptNote.Name = "checkBrokenApptNote";
 			this.checkBrokenApptNote.Size = new System.Drawing.Size(362,17);
 			this.checkBrokenApptNote.TabIndex = 67;
@@ -598,7 +600,7 @@ namespace OpenDental{
 			// 
 			this.comboBrokenApptAdjType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.comboBrokenApptAdjType.FormattingEnabled = true;
-			this.comboBrokenApptAdjType.Location = new System.Drawing.Point(225,85);
+			this.comboBrokenApptAdjType.Location = new System.Drawing.Point(254,84);
 			this.comboBrokenApptAdjType.MaxDropDownItems = 30;
 			this.comboBrokenApptAdjType.Name = "comboBrokenApptAdjType";
 			this.comboBrokenApptAdjType.Size = new System.Drawing.Size(163,21);
@@ -608,7 +610,7 @@ namespace OpenDental{
 			// 
 			this.checkApptBubbleDelay.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.checkApptBubbleDelay.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkApptBubbleDelay.Location = new System.Drawing.Point(25,32);
+			this.checkApptBubbleDelay.Location = new System.Drawing.Point(54,31);
 			this.checkApptBubbleDelay.Name = "checkApptBubbleDelay";
 			this.checkApptBubbleDelay.Size = new System.Drawing.Size(362,17);
 			this.checkApptBubbleDelay.TabIndex = 69;
@@ -620,7 +622,7 @@ namespace OpenDental{
 			// 
 			this.checkAppointmentBubblesDisabled.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.checkAppointmentBubblesDisabled.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkAppointmentBubblesDisabled.Location = new System.Drawing.Point(25,15);
+			this.checkAppointmentBubblesDisabled.Location = new System.Drawing.Point(54,14);
 			this.checkAppointmentBubblesDisabled.Name = "checkAppointmentBubblesDisabled";
 			this.checkAppointmentBubblesDisabled.Size = new System.Drawing.Size(362,17);
 			this.checkAppointmentBubblesDisabled.TabIndex = 70;
@@ -859,7 +861,7 @@ namespace OpenDental{
 			// 
 			this.comboShowID.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.comboShowID.FormattingEnabled = true;
-			this.comboShowID.Location = new System.Drawing.Point(258,35);
+			this.comboShowID.Location = new System.Drawing.Point(287,36);
 			this.comboShowID.Name = "comboShowID";
 			this.comboShowID.Size = new System.Drawing.Size(130,21);
 			this.comboShowID.TabIndex = 72;
@@ -902,10 +904,11 @@ namespace OpenDental{
 			// 
 			// groupBox3
 			// 
+			this.groupBox3.Controls.Add(this.checkAllowSettingProcsComplete);
 			this.groupBox3.Controls.Add(this.checkAutoClearEntryStatus);
-			this.groupBox3.Location = new System.Drawing.Point(26,266);
+			this.groupBox3.Location = new System.Drawing.Point(12,266);
 			this.groupBox3.Name = "groupBox3";
-			this.groupBox3.Size = new System.Drawing.Size(408,40);
+			this.groupBox3.Size = new System.Drawing.Size(422,57);
 			this.groupBox3.TabIndex = 191;
 			this.groupBox3.TabStop = false;
 			this.groupBox3.Text = "Chart module";
@@ -913,10 +916,8 @@ namespace OpenDental{
 			// checkAutoClearEntryStatus
 			// 
 			this.checkAutoClearEntryStatus.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.checkAutoClearEntryStatus.Checked = true;
-			this.checkAutoClearEntryStatus.CheckState = System.Windows.Forms.CheckState.Checked;
 			this.checkAutoClearEntryStatus.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkAutoClearEntryStatus.Location = new System.Drawing.Point(6,17);
+			this.checkAutoClearEntryStatus.Location = new System.Drawing.Point(35,17);
 			this.checkAutoClearEntryStatus.Name = "checkAutoClearEntryStatus";
 			this.checkAutoClearEntryStatus.Size = new System.Drawing.Size(381,15);
 			this.checkAutoClearEntryStatus.TabIndex = 73;
@@ -926,7 +927,7 @@ namespace OpenDental{
 			// 
 			// label15
 			// 
-			this.label15.Location = new System.Drawing.Point(37,16);
+			this.label15.Location = new System.Drawing.Point(66,17);
 			this.label15.Name = "label15";
 			this.label15.Size = new System.Drawing.Size(83,17);
 			this.label15.TabIndex = 39;
@@ -935,7 +936,7 @@ namespace OpenDental{
 			// 
 			// label17
 			// 
-			this.label17.Location = new System.Drawing.Point(61,38);
+			this.label17.Location = new System.Drawing.Point(90,39);
 			this.label17.Name = "label17";
 			this.label17.Size = new System.Drawing.Size(195,15);
 			this.label17.TabIndex = 73;
@@ -944,12 +945,12 @@ namespace OpenDental{
 			// 
 			// label20
 			// 
-			this.label20.AutoSize = true;
-			this.label20.Location = new System.Drawing.Point(444,394);
+			this.label20.Location = new System.Drawing.Point(432,395);
 			this.label20.Name = "label20";
-			this.label20.Size = new System.Drawing.Size(147,13);
+			this.label20.Size = new System.Drawing.Size(160,13);
 			this.label20.TabIndex = 190;
 			this.label20.Text = "Claim Attachment Export Path";
+			this.label20.TextAlign = System.Drawing.ContentAlignment.TopRight;
 			// 
 			// checkPPOpercentage
 			// 
@@ -972,12 +973,12 @@ namespace OpenDental{
 			// 
 			// label11
 			// 
-			this.label11.AutoSize = true;
-			this.label11.Location = new System.Drawing.Point(480,417);
+			this.label11.Location = new System.Drawing.Point(447,417);
 			this.label11.Name = "label11";
-			this.label11.Size = new System.Drawing.Size(104,13);
+			this.label11.Size = new System.Drawing.Size(144,13);
 			this.label11.TabIndex = 194;
 			this.label11.Text = "Tooth Nomenclature";
+			this.label11.TextAlign = System.Drawing.ContentAlignment.TopRight;
 			// 
 			// butLanguages
 			// 
@@ -1041,9 +1042,9 @@ namespace OpenDental{
 			this.groupBox6.Controls.Add(this.label15);
 			this.groupBox6.Controls.Add(this.comboShowID);
 			this.groupBox6.Controls.Add(this.label17);
-			this.groupBox6.Location = new System.Drawing.Point(26,312);
+			this.groupBox6.Location = new System.Drawing.Point(12,339);
 			this.groupBox6.Name = "groupBox6";
-			this.groupBox6.Size = new System.Drawing.Size(408,83);
+			this.groupBox6.Size = new System.Drawing.Size(422,83);
 			this.groupBox6.TabIndex = 195;
 			this.groupBox6.TabStop = false;
 			this.groupBox6.Text = "Main Window Title";
@@ -1052,12 +1053,25 @@ namespace OpenDental{
 			// 
 			this.checkTitleBarShowSite.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.checkTitleBarShowSite.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkTitleBarShowSite.Location = new System.Drawing.Point(25,59);
+			this.checkTitleBarShowSite.Location = new System.Drawing.Point(54,60);
 			this.checkTitleBarShowSite.Name = "checkTitleBarShowSite";
 			this.checkTitleBarShowSite.Size = new System.Drawing.Size(362,17);
 			this.checkTitleBarShowSite.TabIndex = 74;
 			this.checkTitleBarShowSite.Text = "Show Site (public health must also be turned on)";
 			this.checkTitleBarShowSite.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// checkAllowSettingProcsComplete
+			// 
+			this.checkAllowSettingProcsComplete.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkAllowSettingProcsComplete.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.checkAllowSettingProcsComplete.Location = new System.Drawing.Point(2,34);
+			this.checkAllowSettingProcsComplete.Name = "checkAllowSettingProcsComplete";
+			this.checkAllowSettingProcsComplete.Size = new System.Drawing.Size(414,15);
+			this.checkAllowSettingProcsComplete.TabIndex = 74;
+			this.checkAllowSettingProcsComplete.Text = "Allow setting procedures complete.  (It\'s better to only set appointments complet" +
+    "e)";
+			this.checkAllowSettingProcsComplete.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkAllowSettingProcsComplete.UseVisualStyleBackColor = true;
 			// 
 			// FormMisc
 			// 
@@ -1212,6 +1226,7 @@ namespace OpenDental{
 			checkApptExclamation.Checked=PrefC.GetBool("ApptExclamationShowForUnsentIns");
 			checkProviderIncomeShows.Checked=PrefC.GetBool("ProviderIncomeTransferShows");
 			checkAutoClearEntryStatus.Checked=PrefC.GetBool("AutoResetTPEntryStatus");
+			checkAllowSettingProcsComplete.Checked=PrefC.GetBool("AllowSettingProcsComplete");
 			checkShowFamilyCommByDefault.Checked=PrefC.GetBool("ShowAccountFamilyCommEntries");
 			checkPPOpercentage.Checked=PrefC.GetBool("InsDefaultPPOpercent");
 			checkClaimFormTreatDentSaysSigOnFile.Checked=PrefC.GetBool("ClaimFormTreatDentSaysSigOnFile");
@@ -1346,6 +1361,7 @@ namespace OpenDental{
 				| Prefs.UpdateBool("ProviderIncomeTransferShows", checkProviderIncomeShows.Checked)
 				| Prefs.UpdateString("ClaimAttachExportPath",textClaimAttachPath.Text)
 				| Prefs.UpdateBool("AutoResetTPEntryStatus",checkAutoClearEntryStatus.Checked)
+				| Prefs.UpdateBool("AllowSettingProcsComplete",checkAllowSettingProcsComplete.Checked)
 				| Prefs.UpdateBool("ShowAccountFamilyCommEntries",checkShowFamilyCommByDefault.Checked)
 				| Prefs.UpdateBool("InsDefaultPPOpercent",checkPPOpercentage.Checked)
 				| Prefs.UpdateBool("StatementSummaryShowInsInfo", checkStatementSummaryShowInsInfo.Checked)

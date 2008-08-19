@@ -806,8 +806,7 @@ namespace OpenDental{
 			// menuItemEditSelected
 			// 
 			this.menuItemEditSelected.Index = 2;
-			this.menuItemEditSelected.Text = "Edit";
-			this.menuItemEditSelected.Visible = false;
+			this.menuItemEditSelected.Text = "Edit All";
 			this.menuItemEditSelected.Click += new System.EventHandler(this.menuItemEditSelected_Click);
 			// 
 			// menuItemPrintProg
@@ -5736,17 +5735,58 @@ namespace OpenDental{
 				MsgBox.Show(this,"Not allowed in audit mode.");
 				return;
 			}
-			Procedure procCur;
-			Procedure procOld;
-			ProcedureCode procCode;
-			Appointment apt;
-			ClaimProc[] ClaimProcList=ClaimProcs.Refresh(PatCur.PatNum);
 			DataRow row;
+			Appointment apt;
+			//One appointment-------------------------------------------------------------------------------------------------------------
+			if(gridProg.SelectedIndices.Length==1
+				&& ((DataRow)gridProg.Rows[gridProg.SelectedIndices[0]].Tag)["AptNum"].ToString()!="0")
+			{
+				if(!Security.IsAuthorized(Permissions.AppointmentEdit)){
+					return;
+				}
+				apt=Appointments.GetOneApt(PIn.PInt(((DataRow)gridProg.Rows[gridProg.SelectedIndices[0]].Tag)["AptNum"].ToString()));
+				if(apt.AptStatus == ApptStatus.Complete) {
+					MsgBox.Show(this,"Already complete.");
+					return;
+				}
+				if(apt.AptStatus == ApptStatus.PtNote
+					|| apt.AptStatus == ApptStatus.PtNoteCompleted
+					|| apt.AptStatus == ApptStatus.Planned
+					|| apt.AptStatus == ApptStatus.UnschedList)
+				{
+					MsgBox.Show(this,"Not allowed for that status.");
+					return;
+				}
+				Appointments.SetAptStatus(apt.AptNum, ApptStatus.Complete);
+				Procedures.SetCompleteInAppt(apt, PlanList, PatPlanList,PatCur.SiteNum);//loops through each proc
+				SecurityLogs.MakeLogEntry(Permissions.AppointmentEdit, apt.PatNum,
+					PatCur.GetNameLF() + ", "
+					+ apt.ProcDescript + ", "
+					+ apt.AptDateTime.ToString() + ", "
+					+ "Set Complete");
+				Recalls.Synch(PatCur.PatNum);
+				ModuleSelected(PatCur.PatNum);
+				return;
+			}
+			//Multiple procedures------------------------------------------------------------------------------------------------------
+			if(!PrefC.GetBool("AllowSettingProcsComplete")){
+				MsgBox.Show(this,"Only single appointments may be set complete.  If you want to be able to set procedures complete, you must turn on that option is Misc Setup.");
+				return;
+			}
+			//check to make sure we don't have non-procedures
 			for(int i=0;i<gridProg.SelectedIndices.Length;i++) {
 				row=(DataRow)gridProg.Rows[gridProg.SelectedIndices[i]].Tag;
 				if(row["ProcNum"].ToString()=="0") {
-					continue;//not a procedure
+					MsgBox.Show(this,"Only procedures or single appointments may be set complete.");
+					return;
 				}
+			}
+			Procedure procCur;
+			Procedure procOld;
+			ProcedureCode procCode;
+			ClaimProc[] ClaimProcList=ClaimProcs.Refresh(PatCur.PatNum);
+			for(int i=0;i<gridProg.SelectedIndices.Length;i++) {
+				row=(DataRow)gridProg.Rows[gridProg.SelectedIndices[i]].Tag;
 				apt=null;
 				procCur=Procedures.GetOneProc(PIn.PInt(row["ProcNum"].ToString()),true);
 				//The next few lines are contentious.  Some users want it one way, and some users want it the other way.
@@ -5801,7 +5841,31 @@ namespace OpenDental{
 		}
 
 		private void menuItemEditSelected_Click(object sender,EventArgs e) {
-			//not functional yet
+			if(gridProg.SelectedIndices.Length==0) {
+				MsgBox.Show(this,"Please select procedures first.");
+				return;
+			}
+			DataRow row;
+			for(int i=0;i<gridProg.SelectedIndices.Length;i++){
+				row=(DataRow)gridProg.Rows[gridProg.SelectedIndices[i]].Tag;
+				if(row["ProcNum"].ToString()=="0") {
+					MsgBox.Show(this,"Only procedures may be edited.");
+					return;
+				}
+			}
+			List<Procedure> proclist=new List<Procedure>();
+			Procedure proc;
+			for(int i=0;i<gridProg.SelectedIndices.Length;i++){
+				row=(DataRow)gridProg.Rows[gridProg.SelectedIndices[i]].Tag;
+				proc=Procedures.GetOneProc(PIn.PInt(row["ProcNum"].ToString()),false);
+				proclist.Add(proc);
+			}
+			FormProcEditAll FormP=new FormProcEditAll();
+			FormP.ProcList=proclist;
+			FormP.ShowDialog();
+			if(FormP.DialogResult==DialogResult.OK){
+				ModuleSelected(PatCur.PatNum);
+			}
 		}
 
 		private void menuItemLabFee_Click(object sender,EventArgs e) {

@@ -16,9 +16,9 @@ namespace OpenDentBusiness {
 		///<Summary>4-Requires SheetParameter for AptNum. Does not get saved to db.</Summary>
 		LabelAppointment,
 		///<Summary>5-Requires SheetParameter for RxNum.</Summary>
-		Rx,
-		///<Summary>6-Requires SheetParameter for PatNum.</Summary>
-		PatientRegistration
+		Rx
+		//<Summary>6-Requires SheetParameter for PatNum.</Summary>
+		//PatientRegistration
 		/*StatementHeader,
 		TxPlanHeader,
 		LabSlip,
@@ -73,7 +73,7 @@ namespace OpenDentBusiness {
 		ReferralSlip,
 		LabelAppointment,
 		Rx,
-		PatientRegistration
+		//PatientRegistration
 	}
 
 	public enum OutInCheck{

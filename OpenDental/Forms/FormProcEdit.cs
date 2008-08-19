@@ -1155,6 +1155,7 @@ namespace OpenDental{
     "ou should reprint the claim if any significant changes are made.";
 			this.labelClaim.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
 			this.labelClaim.Visible = false;
+			this.labelClaim.Click += new System.EventHandler(this.labelClaim_Click);
 			// 
 			// comboPlaceService
 			// 
@@ -3204,6 +3205,10 @@ namespace OpenDental{
 		}
 
 		private void textMedicalCode_TextChanged(object sender, EventArgs e){
+
+		}
+
+		private void labelClaim_Click(object sender,EventArgs e) {
 
 		}
 

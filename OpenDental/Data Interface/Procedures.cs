@@ -1271,6 +1271,16 @@ namespace OpenDental{
 			return false;
 		}
 
+		///<summary>Only called from FormProcEditAll to signal when to disable much of the editing in that form. If the procedure is 'AttachedToClaim' then user should not change it very much.  The claimProcList can be all claimProcs for the patient or only those attached to this proc.</summary>
+		public static bool IsAttachedToClaim(List<Procedure> procList,ClaimProc[] claimprocList) {
+			for(int j=0;j<procList.Count;j++){
+				if(IsAttachedToClaim(procList[j],claimprocList)){
+					return true;
+				}
+			}
+			return false;
+		}
+
 		///<summary>Queries the database to determine if this procedure is attached to a claim already.</summary>
 		public static bool IsAttachedToClaim(int procNum){
 			string command="SELECT COUNT(*) FROM claimproc "

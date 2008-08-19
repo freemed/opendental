@@ -40,6 +40,8 @@ namespace OpenDental{
 					General.NonQ(command);
 					command="ALTER TABLE rxpat ADD IsControlled tinyint NOT NULL";
 					General.NonQ(command);
+					command="UPDATE rxdef SET IsControlled = 1";
+					General.NonQ(command);
 					//UAppoint Bridge---------------------------------------------------------------------------
 					command="INSERT INTO program (ProgName,ProgDesc,Enabled,Path,CommandLine,Note"
 						+") VALUES("
@@ -150,7 +152,8 @@ namespace OpenDental{
 					}
 					command="DELETE FROM preference WHERE PrefName='ShowNotesInAccount'";
 					General.NonQ(command);
-
+					command="INSERT INTO preference (PrefName,ValueString,Comments) VALUES ('AllowSettingProcsComplete','0','')";
+					General.NonQ(command);
 
 
 

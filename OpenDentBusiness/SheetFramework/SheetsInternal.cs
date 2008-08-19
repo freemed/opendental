@@ -28,8 +28,8 @@ namespace OpenDentBusiness{
 					return LabelAppointment();
 				case SheetInternalType.Rx:
 					return Rx();
-				case SheetInternalType.PatientRegistration:
-					return PatientRegistration();
+				//case SheetInternalType.PatientRegistration:
+				//	return PatientRegistration();
 				default:
 					throw new ApplicationException("Invalid SheetInternalType.");
 			}
@@ -317,7 +317,7 @@ namespace OpenDentBusiness{
 			return sheet;
 		}
 
-		private static SheetDef PatientRegistration(){
+		/*private static SheetDef PatientRegistration(){
 			SheetDef sheet=new SheetDef(SheetTypeEnum.PatientRegistration);
 			sheet.FontName="Microsoft Sans Serif";
 			sheet.FontSize=9f;
@@ -327,7 +327,7 @@ namespace OpenDentBusiness{
 			int y=50;
 			sheet.SheetFieldDefs.Add(SheetFieldDef.NewImage("Patient Info.gif",0,0,770,999));
 			return sheet;
-		}
+		}*/
 
 		
 
