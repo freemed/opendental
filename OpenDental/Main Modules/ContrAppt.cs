@@ -1939,7 +1939,12 @@ namespace OpenDental{
 				return 0;
 			}
 			int day=ContrApptSheet.XPosToDay(point.X);
-			int op=OperatoryC.ListShort[ApptViewItems.VisOps[ContrApptSheet.XPosToOp(point.X)]].OperatoryNum;
+			//if operatories were just hidden and VisOps is mismatched with ListShort
+			int xOp=ApptViewItems.VisOps[ContrApptSheet.XPosToOp(point.X)];
+			if(xOp>OperatoryC.ListShort.Count-1){
+				return 0;
+			}
+			int op=OperatoryC.ListShort[xOp].OperatoryNum;
 			int hour=ContrApptSheet.YPosToHour(point.Y);
 			int minute=ContrApptSheet.YPosToMin(point.Y);
 			TimeSpan time=new TimeSpan(hour,minute,0);
