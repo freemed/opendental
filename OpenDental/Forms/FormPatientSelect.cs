@@ -603,7 +603,9 @@ namespace OpenDental{
 			// 
 			// FormPatientSelect
 			// 
+			this.AcceptButton = this.butOK;
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
+			this.CancelButton = this.butCancel;
 			this.ClientSize = new System.Drawing.Size(944,668);
 			this.Controls.Add(this.contrKeyboard1);
 			this.Controls.Add(this.butOK);
