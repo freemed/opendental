@@ -224,7 +224,12 @@ namespace OpenDental{
 
 		private void butSearch_Click(object sender,EventArgs e) {
 			gridMain.SetSelected(false);
-			FillGrid();
+			try{
+				FillGrid();
+			}
+			catch{
+				MsgBox.Show(this,"This feature won't work until you install Microsoft dotNET 3.5.");
+			}
 		}
 
 		private void FillGrid(){
