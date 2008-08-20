@@ -151,7 +151,9 @@ namespace OpenDental {
 			tableObj=new ODDataTable(node.InnerXml);
 			ODDataRow row=tableObj.Rows[0];
 			textDescription.Text=row["Description"];
-			textDetail.Text=row["Detail"];
+			string detail=row["Detail"];
+			detail=detail.Replace("\n","\r\n");
+			textDetail.Text=detail;
 			checkIsMine.Checked=PIn.PBool(row["isMine"]);
 			textDifficulty.Text=row["Difficulty"];
 			int approval=PIn.PInt(row["Approval"]);
