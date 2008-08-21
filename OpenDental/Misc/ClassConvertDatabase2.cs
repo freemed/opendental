@@ -22,10 +22,10 @@ namespace OpenDental{
 	//The other file was simply getting too big.  It was bogging down VS speed.
 	///<summary></summary>
 	public partial class ClassConvertDatabase{
-		private System.Version LatestVersion=new Version("5.9.0.0");//This value must be changed when a new conversion is to be triggered.
+		private System.Version LatestVersion=new Version("6.0.0.0");//This value must be changed when a new conversion is to be triggered.
 		
-		private void To5_9_0() {
-			if(FromVersion<new Version("5.9.0.0")) {
+		private void To5_9_1() {
+			if(FromVersion<new Version("5.9.1.0")) {
 				string command;
 				if(DataConnection.DBtype==DatabaseType.MySql) {
 					command="DELETE FROM preference WHERE PrefName='RxOrientVert'";
@@ -154,22 +154,32 @@ namespace OpenDental{
 					General.NonQ(command);
 					command="INSERT INTO preference (PrefName,ValueString,Comments) VALUES ('AllowSettingProcsComplete','0','')";
 					General.NonQ(command);
+				} 
+				else {//oracle
+					
+				}
+				command="UPDATE preference SET ValueString = '5.9.1.0' WHERE PrefName = 'DataBaseVersion'";
+				General.NonQ(command);
+			}
+			To6_0_0();
+		}
 
-
-
+		private void To6_0_0() {
+			if(FromVersion<new Version("6.0.0.0")) {
+				string command;
+				if(DataConnection.DBtype==DatabaseType.MySql) {
 
 				} 
 				else {//oracle
 					
 				}
-				command="UPDATE preference SET ValueString = '5.9.0.0' WHERE PrefName = 'DataBaseVersion'";
+				command="UPDATE preference SET ValueString = '6.0.0.0' WHERE PrefName = 'DataBaseVersion'";
 				General.NonQ(command);
 			}
-			//To5_9_?();
+			//To6_0_?();
 		}
 
-
-		/*For 5.9:
+		/*For 6.0:
 		 * ALTER TABLE schedule ADD INDEX (EmployeeNum)
 ALTER TABLE schedule ADD INDEX (ProvNum)
 ALTER TABLE schedule ADD INDEX (SchedDate)*/

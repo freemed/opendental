@@ -140,6 +140,9 @@ namespace OpenDental{
 				if(contmeth==ContactMethod.Email) {
 					row["contactMethod"]=rawtable.Rows[i]["Email"].ToString();
 				}
+				if(contmeth==ContactMethod.Mail) {
+					row["contactMethod"]=Lan.g("FormRecallList","Mail");
+				}
 				if(contmeth==ContactMethod.DoNotCall || contmeth==ContactMethod.SeeNotes) {
 					row["contactMethod"]=Lan.g("enumContactMethod",contmeth.ToString());
 				}
@@ -153,7 +156,7 @@ namespace OpenDental{
 				pat.Preferred=rawtable.Rows[i]["Preferred"].ToString();
 				row["patientName"]=pat.GetNameLF();
 				row["PatNum"]=rawtable.Rows[i]["PatNum"].ToString();
-				row["PreferRecallMethod"]=rawtable.Rows[i]["PreferRecallMethod"].ToString();//not used yet, but might be.
+				row["PreferRecallMethod"]=rawtable.Rows[i]["PreferRecallMethod"].ToString();
 				interv=new Interval(PIn.PInt(rawtable.Rows[i]["RecallInterval"].ToString()));
 				row["recallInterval"]=interv.ToString();
 				row["RecallNum"]=rawtable.Rows[i]["RecallNum"].ToString();

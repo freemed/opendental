@@ -57,7 +57,8 @@ namespace OpenDental{
 				|| FromVersion.ToString()=="5.5.0.0"
 				|| FromVersion.ToString()=="5.6.0.0"
 				|| FromVersion.ToString()=="5.7.0.0"
-				|| FromVersion.ToString()=="5.8.0.0")
+				|| FromVersion.ToString()=="5.8.0.0"
+				|| FromVersion.ToString()=="5.9.0.0")
 			{
 				MsgBox.Show(this,"Cannot convert this database version which was only for development purposes.");
 				return false;
@@ -7778,7 +7779,7 @@ namespace OpenDental{
 				command="UPDATE preference SET ValueString = '5.8.2.0' WHERE PrefName = 'DataBaseVersion'";
 				General.NonQ(command);
 			}
-			To5_9_0();
+			To5_9_1();
 		}
 
 		
