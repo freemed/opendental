@@ -70,6 +70,7 @@ namespace OpenDental{
 			table.Columns.Add("age");
 			table.Columns.Add("contactMethod");
 			table.Columns.Add("dueDate");
+			table.Columns.Add("Email");
 			table.Columns.Add("Guarantor");
 			table.Columns.Add("Note");
 			table.Columns.Add("patientName");
@@ -148,6 +149,7 @@ namespace OpenDental{
 				}
 				date=PIn.PDate(rawtable.Rows[i]["DateDue"].ToString());
 				row["dueDate"]=date.ToShortDateString();
+				row["Email"]=rawtable.Rows[i]["Email"].ToString();
 				row["Guarantor"]=rawtable.Rows[i]["Guarantor"].ToString();
 				row["Note"]=rawtable.Rows[i]["Note"].ToString();
 				pat=new Patient();

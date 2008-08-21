@@ -168,6 +168,19 @@ namespace OpenDental{
 			if(FromVersion<new Version("6.0.0.0")) {
 				string command;
 				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="INSERT INTO preference (PrefName,ValueString,Comments) VALUES ('RecallEmailSubject','Continuing Care Reminder','')";
+					General.NonQ(command);
+
+
+
+
+
+
+
+
+
+
+
 
 				} 
 				else {//oracle

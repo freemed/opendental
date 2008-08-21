@@ -98,19 +98,21 @@ namespace OpenDental{
 			General.NonQ(command);
 		}
 
-		///<summary>Used when printing recall cards to make a commlog entry for everyone at once.</summary>
-		public static void InsertForRecallPostcard(int patNum){
+		///<summary>Used when printing or emailing recall to make a commlog entry for everyone at once.</summary>
+		public static void InsertForRecall(int patNum,CommItemMode _mode){
 			int recallType=Commlogs.GetTypeAuto(CommItemTypeAuto.RECALL);
 			string command;
 			if(recallType!=0){
-				command="SELECT COUNT(*) FROM  commlog WHERE ";
+				command="SELECT COUNT(*) FROM commlog WHERE ";
 				if(DataConnection.DBtype==DatabaseType.Oracle){
 					command+="TO_DATE(CommDateTime) = "+POut.PDate(MiscData.GetNowDateTime());
-				}else{//Assume MySQL
+				}
+				else{//MySQL
 					command+="DATE(CommDateTime) = CURDATE()";
 				}
 				command+=" AND PatNum="+POut.PInt(patNum)+" AND CommType="+POut.PInt(recallType)
-					+" AND Mode_=2 AND SentOrReceived=1";
+					+" AND Mode_="+POut.PInt((int)_mode)
+					+" AND SentOrReceived=1";
 				if(General.GetCount(command)!="0"){
 					return;
 				}
@@ -119,9 +121,9 @@ namespace OpenDental{
 			com.PatNum=patNum;
 			com.CommDateTime=DateTime.Now;
 			com.CommType=recallType;
-			com.Mode_=CommItemMode.Mail;
+			com.Mode_=_mode;
 			com.SentOrReceived=CommSentOrReceived.Sent;
-			com.Note=Lan.g("FormRecallList","Sent recall postcard");
+			com.Note=Lan.g("FormRecallList","Sent recall notice.");
 			com.UserNum=Security.CurUser.UserNum;
 			Insert(com);
 		}
