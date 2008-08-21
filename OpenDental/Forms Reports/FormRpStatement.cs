@@ -482,6 +482,8 @@ namespace OpenDental{
 			//GetPatGuar(PatNums[famIndex][0]);
 			Family fam=Patients.GetFamily(Stmt.PatNum);
 			Patient PatGuar=fam.List[0];//.Copy();
+			Patient pat=fam.GetPatient(Stmt.PatNum);
+			DataTable tableMisc=dataSet.Tables["misc"];
 			//HEADING------------------------------------------------------------------------------
 			#region Heading
 			Paragraph par=section.AddParagraph();
@@ -611,7 +613,6 @@ namespace OpenDental{
 				if(!PrefC.GetBool("BalancesDontSubtractIns")) {//this is typical
 					balTotal-=PatGuar.InsEst;
 				}
-				DataTable tableMisc=dataSet.Tables["misc"];
 				for(int m=0;m<tableMisc.Rows.Count;m++){
 					if(tableMisc.Rows[m]["descript"].ToString()=="payPlanDue"){
 						balTotal+=PIn.PDouble(tableMisc.Rows[m]["value"].ToString());
@@ -1067,15 +1068,34 @@ namespace OpenDental{
 				//par.AddLineBreak();
 			}
 			else{//more common
-				text = PatGuar.BalTotal.ToString("c");
-				par.AddFormattedText(text, font);
-				par.AddLineBreak();
-				text = PatGuar.InsEst.ToString("c");
-				par.AddFormattedText(text, font);
-				par.AddLineBreak();
-				text = (PatGuar.BalTotal - PatGuar.InsEst).ToString("c");
-				par.AddFormattedText(text, fontBold);
-				par.AddLineBreak();
+				if(Stmt.SinglePatient){
+					double patInsEst=0;
+					for(int m=0;m<tableMisc.Rows.Count;m++){
+						if(tableMisc.Rows[m]["descript"].ToString()=="patInsEst"){
+							patInsEst=PIn.PDouble(tableMisc.Rows[m]["value"].ToString());
+						}
+					}
+					double patBal=pat.EstBalance-patInsEst;
+					text = pat.EstBalance.ToString("c");
+					par.AddFormattedText(text, font);
+					par.AddLineBreak();
+					text = patInsEst.ToString("c");
+					par.AddFormattedText(text, font);
+					par.AddLineBreak();
+					text = patBal.ToString("c");
+					par.AddFormattedText(text, fontBold);
+				}
+				else{
+					text = PatGuar.BalTotal.ToString("c");
+					par.AddFormattedText(text, font);
+					par.AddLineBreak();
+					text = PatGuar.InsEst.ToString("c");
+					par.AddFormattedText(text, font);
+					par.AddLineBreak();
+					text = (PatGuar.BalTotal - PatGuar.InsEst).ToString("c");
+					par.AddFormattedText(text, fontBold);
+					par.AddLineBreak();
+				}
 			}
 			MigraDocHelper.InsertSpacer(section, 80);
 			#endregion FloatingBalance
@@ -1150,7 +1170,6 @@ namespace OpenDental{
 				par.Format.Alignment=ParagraphAlignment.Right;
 				par.Format.RightIndent=Unit.FromInch(0.25);
 				double payPlanDue=0;
-				DataTable tableMisc=dataSet.Tables["misc"];
 				for(int m=0;m<tableMisc.Rows.Count;m++){
 					if(tableMisc.Rows[m]["descript"].ToString()=="payPlanDue"){
 						payPlanDue=PIn.PDouble(tableMisc.Rows[m]["value"].ToString());
