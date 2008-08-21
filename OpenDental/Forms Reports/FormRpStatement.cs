@@ -690,7 +690,12 @@ namespace OpenDental{
 			frame=MigraDocHelper.CreateContainer(section,62.5f+12.5f,225+1,300,200);
 			par=frame.AddParagraph();
 			par.Format.Font=font;
-			par.AddText(PatGuar.GetNameFLFormal());
+			if(Stmt.SinglePatient){
+				par.AddText(fam.GetNameInFamFL(Stmt.PatNum));
+			}
+			else{
+				par.AddText(PatGuar.GetNameFLFormal());
+			}
 			par.AddLineBreak();
 			par.AddText(PatGuar.Address);
 			par.AddLineBreak();
