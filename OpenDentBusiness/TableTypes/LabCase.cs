@@ -30,8 +30,6 @@ namespace OpenDentBusiness{
 		public int ProvNum;
 		///<summary>The Rx for this labcase.</summary>
 		public string Instructions;
-		//<summary>True if the lab case is completely done, and delivered to the patient.</summary>
-		//public bool IsDone;
 
 		public LabCase Copy(){
 			return (LabCase)this.MemberwiseClone();

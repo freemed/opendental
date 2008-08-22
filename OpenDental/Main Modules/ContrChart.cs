@@ -234,6 +234,11 @@ namespace OpenDental{
 		private CheckBox checkShowOnlyFilmsAndExams;
 		private CheckBox checkShowOnlyHygieneProcs;
 		private CheckBox checkSheets;
+		private TabPage tabDraw;
+		private RadioButton radioPointer;
+		private RadioButton radioEraser;
+		private RadioButton radioPen;
+		private Panel panelDrawColor;
 		private int Chartscrollval;
 
 	
@@ -429,6 +434,11 @@ namespace OpenDental{
 			this.button1 = new OpenDental.UI.Button();
 			this.textTreatmentNotes = new OpenDental.ODtextBox();
 			this.gridPtInfo = new OpenDental.UI.ODGrid();
+			this.tabDraw = new System.Windows.Forms.TabPage();
+			this.radioPointer = new System.Windows.Forms.RadioButton();
+			this.radioPen = new System.Windows.Forms.RadioButton();
+			this.radioEraser = new System.Windows.Forms.RadioButton();
+			this.panelDrawColor = new System.Windows.Forms.Panel();
 			this.groupBox2.SuspendLayout();
 			this.tabControlImages.SuspendLayout();
 			this.panelImages.SuspendLayout();
@@ -448,6 +458,7 @@ namespace OpenDental{
 			this.tabShow.SuspendLayout();
 			this.groupBox7.SuspendLayout();
 			this.groupBox6.SuspendLayout();
+			this.tabDraw.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// textSurf
@@ -923,6 +934,7 @@ namespace OpenDental{
 			this.tabProc.Controls.Add(this.tabPrimary);
 			this.tabProc.Controls.Add(this.tabPlanned);
 			this.tabProc.Controls.Add(this.tabShow);
+			this.tabProc.Controls.Add(this.tabDraw);
 			this.tabProc.Location = new System.Drawing.Point(415,28);
 			this.tabProc.Name = "tabProc";
 			this.tabProc.SelectedIndex = 0;
@@ -2066,6 +2078,7 @@ namespace OpenDental{
 			this.tabPlanned.Size = new System.Drawing.Size(516,235);
 			this.tabPlanned.TabIndex = 4;
 			this.tabPlanned.Text = "Planned Appointment";
+			this.tabPlanned.UseVisualStyleBackColor = true;
 			// 
 			// panelApptLinked
 			// 
@@ -2191,6 +2204,7 @@ namespace OpenDental{
 			this.tabShow.Size = new System.Drawing.Size(516,235);
 			this.tabShow.TabIndex = 5;
 			this.tabShow.Text = "Show";
+			this.tabShow.UseVisualStyleBackColor = true;
 			// 
 			// checkShowOnlyFilmsAndExams
 			// 
@@ -2482,6 +2496,62 @@ namespace OpenDental{
 			this.gridPtInfo.TranslationName = "TableChartPtInfo";
 			this.gridPtInfo.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridPtInfo_CellDoubleClick);
 			// 
+			// tabDraw
+			// 
+			this.tabDraw.Controls.Add(this.panelDrawColor);
+			this.tabDraw.Controls.Add(this.radioEraser);
+			this.tabDraw.Controls.Add(this.radioPen);
+			this.tabDraw.Controls.Add(this.radioPointer);
+			this.tabDraw.Location = new System.Drawing.Point(4,22);
+			this.tabDraw.Name = "tabDraw";
+			this.tabDraw.Size = new System.Drawing.Size(516,235);
+			this.tabDraw.TabIndex = 6;
+			this.tabDraw.Text = "Draw";
+			this.tabDraw.UseVisualStyleBackColor = true;
+			// 
+			// radioPointer
+			// 
+			this.radioPointer.Checked = true;
+			this.radioPointer.Location = new System.Drawing.Point(14,13);
+			this.radioPointer.Name = "radioPointer";
+			this.radioPointer.Size = new System.Drawing.Size(122,17);
+			this.radioPointer.TabIndex = 0;
+			this.radioPointer.TabStop = true;
+			this.radioPointer.Text = "Pointer";
+			this.radioPointer.UseVisualStyleBackColor = true;
+			this.radioPointer.Click += new System.EventHandler(this.radioPointer_Click);
+			// 
+			// radioPen
+			// 
+			this.radioPen.Location = new System.Drawing.Point(14,31);
+			this.radioPen.Name = "radioPen";
+			this.radioPen.Size = new System.Drawing.Size(122,17);
+			this.radioPen.TabIndex = 1;
+			this.radioPen.TabStop = true;
+			this.radioPen.Text = "Pen";
+			this.radioPen.UseVisualStyleBackColor = true;
+			this.radioPen.Click += new System.EventHandler(this.radioPen_Click);
+			// 
+			// radioEraser
+			// 
+			this.radioEraser.Location = new System.Drawing.Point(14,49);
+			this.radioEraser.Name = "radioEraser";
+			this.radioEraser.Size = new System.Drawing.Size(122,17);
+			this.radioEraser.TabIndex = 2;
+			this.radioEraser.TabStop = true;
+			this.radioEraser.Text = "Eraser";
+			this.radioEraser.UseVisualStyleBackColor = true;
+			this.radioEraser.Click += new System.EventHandler(this.radioEraser_Click);
+			// 
+			// panelDrawColor
+			// 
+			this.panelDrawColor.BackColor = System.Drawing.Color.Black;
+			this.panelDrawColor.Location = new System.Drawing.Point(13,79);
+			this.panelDrawColor.Name = "panelDrawColor";
+			this.panelDrawColor.Size = new System.Drawing.Size(25,25);
+			this.panelDrawColor.TabIndex = 3;
+			this.panelDrawColor.DoubleClick += new System.EventHandler(this.panelDrawColor_DoubleClick);
+			// 
 			// ContrChart
 			// 
 			this.Controls.Add(this.butForeignKey);
@@ -2523,6 +2593,7 @@ namespace OpenDental{
 			this.tabShow.ResumeLayout(false);
 			this.groupBox7.ResumeLayout(false);
 			this.groupBox6.ResumeLayout(false);
+			this.tabDraw.ResumeLayout(false);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -5509,6 +5580,24 @@ namespace OpenDental{
 		}
 		#endregion Show
 
+		#region Draw
+		private void radioPointer_Click(object sender,EventArgs e) {
+			toothChart.CursorTool=CursorTool.Pointer;
+		}
+
+		private void radioPen_Click(object sender,EventArgs e) {
+			toothChart.CursorTool=CursorTool.Pen;
+		}
+
+		private void radioEraser_Click(object sender,EventArgs e) {
+			toothChart.CursorTool=CursorTool.Eraser;
+		}
+
+		private void panelDrawColor_DoubleClick(object sender,EventArgs e) {
+
+		}
+		#endregion Draw
+
 		private void gridPtInfo_CellDoubleClick(object sender,ODGridClickEventArgs e) {
 			if(gridPtInfo.Rows[e.Row].Tag==null){//pt info
 			
@@ -6356,6 +6445,8 @@ namespace OpenDental{
 			RegistrationKeys.Create(key);
 			FillPtInfo();
 		}
+
+	
 
 		
 

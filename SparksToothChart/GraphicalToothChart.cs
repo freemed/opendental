@@ -33,7 +33,8 @@ namespace SparksToothChart {
 		private int hotTooth;
 		///<summary>The previous hotTooth.  If this is different than hotTooth, then mouse has just now moved to a new tooth.  Can be 0 to represent no previous.</summary>
 		private int hotToothOld;
-		int preferredPixelFormatNum;
+		private int preferredPixelFormatNum;
+		private CursorTool cursorTool;
 
 		public GraphicalToothChart() {
 			InitializeComponent();
@@ -41,6 +42,7 @@ namespace SparksToothChart {
 			ListToothGraphics=new ToothGraphicCollection();
 			ALSelectedTeeth=new ArrayList();
 			ResetControls();
+			cursorTool=CursorTool.Pointer;
 		}
 
 		#region Properties
@@ -54,10 +56,8 @@ namespace SparksToothChart {
 				else{
 					return toothChart.SelectedTeeth;
 				}
-				
 			}
 		}
-
 
 		///<summary></summary>
 		public Color ColorBackground {
@@ -144,7 +144,8 @@ namespace SparksToothChart {
 					return false;
 				}
 				return toothChart.autoFinish;
-			}set{
+			}
+			set{
 				if(!simpleMode){
 					toothChart.autoFinish=value;
 				}
@@ -154,11 +155,29 @@ namespace SparksToothChart {
 		public int PreferredPixelFormatNumber{
 			get{
 				return preferredPixelFormatNum;
-			}set{
+			}
+			set{
 				preferredPixelFormatNum=value;
 			}
 		}
 
+		public CursorTool CursorTool{
+			get{
+				return cursorTool;
+			}
+			set{
+				cursorTool=value;
+				if(cursorTool==CursorTool.Eraser){
+					this.Cursor=new Cursor(GetType(),"EraseCircle.cur");
+				}
+				if(cursorTool==CursorTool.Pointer){
+					this.Cursor=Cursors.Default;
+				}
+				if(cursorTool==CursorTool.Pen){
+					this.Cursor=new Cursor(GetType(),"Pen.cur");
+				}
+			}
+		}
 		#endregion Properties
 
 
@@ -888,5 +907,11 @@ namespace SparksToothChart {
 
 		#endregion Mouse And Selections
 
+	}
+
+	public enum CursorTool{
+		Pointer,
+		Pen,
+		Eraser
 	}
 }
