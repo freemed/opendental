@@ -30,22 +30,11 @@ namespace OpenDentBusiness{
 		public int ProvNum;
 		///<summary>The Rx for this labcase.</summary>
 		public string Instructions;
+		//<summary>True if the lab case is completely done, and delivered to the patient.</summary>
+		//public bool IsDone;
 
 		public LabCase Copy(){
-			LabCase l=new LabCase();
-			l.LabCaseNum=LabCaseNum;
-			l.PatNum=PatNum;
-			l.LaboratoryNum=LaboratoryNum;
-			l.AptNum=AptNum;
-			l.PlannedAptNum=PlannedAptNum;
-			l.DateTimeDue=DateTimeDue;
-			l.DateTimeCreated=DateTimeCreated;
-			l.DateTimeSent=DateTimeSent;
-			l.DateTimeRecd=DateTimeRecd;
-			l.DateTimeChecked=DateTimeChecked;
-			l.ProvNum=ProvNum;
-			l.Instructions=Instructions;
-			return l;
+			return (LabCase)this.MemberwiseClone();
 		}
 		
 	}

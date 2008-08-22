@@ -10,26 +10,34 @@ namespace OpenDental{
 	public class LabCases {
 
 		///<summary>Gets a filtered list of all labcases.</summary>
-		public static DataTable Refresh(DateTime aptStartDate,DateTime aptEndDate) {
+		public static DataTable Refresh(DateTime aptStartDate,DateTime aptEndDate,bool showAll) {
 			DataTable table=new DataTable();
 			DataRow row;
 			//columns that start with lowercase are altered for display rather than being raw data.
 			table.Columns.Add("aptDateTime");
+			table.Columns.Add("AptNum");
 			table.Columns.Add("lab");
 			table.Columns.Add("LabCaseNum");
 			table.Columns.Add("patient");
 			table.Columns.Add("phone");
 			table.Columns.Add("ProcDescript");
 			table.Columns.Add("status");
-			string command="SELECT AptDateTime,DateTimeChecked,DateTimeRecd,DateTimeSent,"
+			string command="SELECT AptDateTime,appointment.AptNum,DateTimeChecked,DateTimeRecd,DateTimeSent,"
 				+"LabCaseNum,laboratory.Description,LName,FName,Preferred,MiddleI,Phone,ProcDescript "
 				+"FROM labcase,appointment,patient,laboratory "
 				+"WHERE labcase.AptNum=appointment.AptNum "
 				+"AND labcase.PatNum=patient.PatNum "
 				+"AND labcase.LaboratoryNum=laboratory.LaboratoryNum "
 				+"AND AptDateTime > "+POut.PDate(aptStartDate)+" "
-				+"AND AptDateTime < "+POut.PDate(aptEndDate.AddDays(1))+" "
-				+"ORDER BY AptDateTime";
+				+"AND AptDateTime < "+POut.PDate(aptEndDate.AddDays(1))+" ";
+			if(!showAll){
+				command+="AND (AptStatus="+POut.PInt((int)ApptStatus.ASAP)
+					+" OR AptStatus="+POut.PInt((int)ApptStatus.Broken)
+					+" OR AptStatus="+POut.PInt((int)ApptStatus.None)
+					+" OR AptStatus="+POut.PInt((int)ApptStatus.Scheduled)
+					+" OR AptStatus="+POut.PInt((int)ApptStatus.UnschedList)+") ";
+			}
+			command+="ORDER BY AptDateTime";
 			DataTable raw=General.GetTable(command);
 			DateTime AptDateTime;
 			DateTime date;
@@ -37,6 +45,7 @@ namespace OpenDental{
 				row=table.NewRow();
 		    AptDateTime=PIn.PDateT(raw.Rows[i]["AptDateTime"].ToString());
 				row["aptDateTime"]=AptDateTime.ToShortDateString()+" "+AptDateTime.ToShortTimeString();
+				row["AptNum"]=raw.Rows[i]["AptNum"].ToString();
 				row["lab"]=raw.Rows[i]["Description"].ToString();
 				row["LabCaseNum"]=raw.Rows[i]["LabCaseNum"].ToString();
 				row["patient"]=PatientLogic.GetNameLF(raw.Rows[i]["LName"].ToString(),raw.Rows[i]["FName"].ToString(),

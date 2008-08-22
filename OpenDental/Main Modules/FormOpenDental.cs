@@ -3372,6 +3372,17 @@ namespace OpenDental{
 		private void menuItemLabCases_Click(object sender,EventArgs e) {
 			FormLabCases FormL=new FormLabCases();
 			FormL.ShowDialog();
+			if(FormL.GoToAptNum!=0) {
+				Appointment apt=Appointments.GetOneApt(FormL.GoToAptNum);
+				Patient pat=Patients.GetPat(apt.PatNum);
+				PatientSelectedEventArgs eArgs=new OpenDental.PatientSelectedEventArgs(pat.PatNum,pat.GetNameLF(),pat.Email!="",pat.ChartNumber);
+				//if(PatientSelected!=null){
+				//	PatientSelected(this,eArgs);
+				//}
+				Contr_PatientSelected(this,eArgs);
+				//OnPatientSelected(pat.PatNum,pat.GetNameLF(),pat.Email!="",pat.ChartNumber);
+				GotoModule.GotoAppointment(apt.AptDateTime,apt.AptNum);
+			}
 		}
 
 		private void menuItemMedications_Click(object sender, System.EventArgs e) {

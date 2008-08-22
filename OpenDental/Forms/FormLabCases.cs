@@ -22,8 +22,13 @@ namespace OpenDental{
 		private Label label2;
 		private OpenDental.UI.Button butRefresh;// Required designer variable.
 		private DataTable table;
-		///<summary>Set this to the selected date on the schedule, and date range will start out based on this date.</summary>
-		public DateTime DateViewing;
+		private CheckBox checkShowAll;
+		private ContextMenu contextMenu1;
+		private MenuItem menuItemGoTo;
+		//<summary>Set this to the selected date on the schedule, and date range will start out based on this date.</summary>
+		//public DateTime DateViewing;
+		///<summary>If this is zero, then it's an ordinary close.</summary>
+		public int GoToAptNum;
 
 		///<summary></summary>
 		public FormLabCases()
@@ -60,11 +65,14 @@ namespace OpenDental{
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormLabCases));
 			this.label1 = new System.Windows.Forms.Label();
 			this.label2 = new System.Windows.Forms.Label();
+			this.checkShowAll = new System.Windows.Forms.CheckBox();
 			this.butRefresh = new OpenDental.UI.Button();
 			this.textDateTo = new OpenDental.ValidDate();
 			this.textDateFrom = new OpenDental.ValidDate();
 			this.gridMain = new OpenDental.UI.ODGrid();
 			this.butClose = new OpenDental.UI.Button();
+			this.contextMenu1 = new System.Windows.Forms.ContextMenu();
+			this.menuItemGoTo = new System.Windows.Forms.MenuItem();
 			this.SuspendLayout();
 			// 
 			// label1
@@ -84,6 +92,15 @@ namespace OpenDental{
 			this.label2.TabIndex = 4;
 			this.label2.Text = "To Date";
 			this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// checkShowAll
+			// 
+			this.checkShowAll.Location = new System.Drawing.Point(361,37);
+			this.checkShowAll.Name = "checkShowAll";
+			this.checkShowAll.Size = new System.Drawing.Size(131,18);
+			this.checkShowAll.TabIndex = 7;
+			this.checkShowAll.Text = "Show Completed";
+			this.checkShowAll.UseVisualStyleBackColor = true;
 			// 
 			// butRefresh
 			// 
@@ -140,10 +157,22 @@ namespace OpenDental{
 			this.butClose.Text = "&Close";
 			this.butClose.Click += new System.EventHandler(this.butClose_Click);
 			// 
+			// contextMenu1
+			// 
+			this.contextMenu1.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
+            this.menuItemGoTo});
+			// 
+			// menuItemGoTo
+			// 
+			this.menuItemGoTo.Index = 0;
+			this.menuItemGoTo.Text = "Go To Appointment";
+			this.menuItemGoTo.Click += new System.EventHandler(this.menuItemGoTo_Click);
+			// 
 			// FormLabCases
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.ClientSize = new System.Drawing.Size(812,517);
+			this.Controls.Add(this.checkShowAll);
 			this.Controls.Add(this.butRefresh);
 			this.Controls.Add(this.textDateTo);
 			this.Controls.Add(this.label2);
@@ -166,8 +195,10 @@ namespace OpenDental{
 		#endregion
 
 		private void FormLabCases_Load(object sender,EventArgs e) {
-			textDateFrom.Text=DateViewing.ToShortDateString();
-			textDateTo.Text=DateViewing.AddDays(5).ToShortDateString();
+			gridMain.ContextMenu=contextMenu1;
+			textDateFrom.Text="";//DateViewing.ToShortDateString();
+			textDateTo.Text="";//DateViewing.AddDays(5).ToShortDateString();
+			//checkShowAll.Checked=false
 			FillGrid();
 		}
 
@@ -178,7 +209,11 @@ namespace OpenDental{
 				//MsgBox.Show(this,"Please fix errors first.");
 				return;
 			}
-			table=LabCases.Refresh(PIn.PDate(textDateFrom.Text),PIn.PDate(textDateTo.Text));
+			DateTime dateMax=new DateTime(2100,1,1);
+			if(textDateTo.Text!=""){
+				dateMax=PIn.PDate(textDateTo.Text);
+			}
+			table=LabCases.Refresh(PIn.PDate(textDateFrom.Text),dateMax,checkShowAll.Checked);
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
 			ODGridColumn col=new ODGridColumn(Lan.g("TableLabCases","Appt Date Time"),120);
@@ -232,9 +267,25 @@ namespace OpenDental{
 			FillGrid();
 		}
 
+		private void menuItemGoTo_Click(object sender,EventArgs e) {
+			if(gridMain.GetSelectedIndex()==-1){
+				MsgBox.Show(this,"Please select a lab case first.");
+				return;
+			}
+			Appointment apt=Appointments.GetOneApt(PIn.PInt(table.Rows[gridMain.GetSelectedIndex()]["AptNum"].ToString()));
+			if(apt.AptStatus==ApptStatus.UnschedList){
+				MsgBox.Show(this,"Cannot go to an unscheduled appointment");
+				return;
+			}
+			GoToAptNum=apt.AptNum;
+			Close();
+		}
+
 		private void butClose_Click(object sender, System.EventArgs e) {
 			Close();
 		}
+
+	
 
 		
 
