@@ -161,16 +161,16 @@ namespace OpenDental{
 			this.groupBox3 = new System.Windows.Forms.GroupBox();
 			this.textEmailSubject = new System.Windows.Forms.TextBox();
 			this.label23 = new System.Windows.Forms.Label();
+			this.label25 = new System.Windows.Forms.Label();
+			this.comboStatusMailedRecall = new System.Windows.Forms.ComboBox();
+			this.comboStatusEmailedRecall = new System.Windows.Forms.ComboBox();
+			this.label26 = new System.Windows.Forms.Label();
 			this.textDaysFuture = new OpenDental.ValidNum();
 			this.textDaysPast = new OpenDental.ValidNum();
 			this.textDown = new OpenDental.ValidDouble();
 			this.textRight = new OpenDental.ValidDouble();
 			this.butOK = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
-			this.label25 = new System.Windows.Forms.Label();
-			this.comboStatusMailedRecall = new System.Windows.Forms.ComboBox();
-			this.comboStatusEmailedRecall = new System.Windows.Forms.ComboBox();
-			this.label26 = new System.Windows.Forms.Label();
 			this.groupBox1.SuspendLayout();
 			this.groupBox7.SuspendLayout();
 			this.groupBox6.SuspendLayout();
@@ -740,6 +740,44 @@ namespace OpenDental{
 			this.label23.Text = "E-mail Subject";
 			this.label23.TextAlign = System.Drawing.ContentAlignment.TopRight;
 			// 
+			// label25
+			// 
+			this.label25.Location = new System.Drawing.Point(13,616);
+			this.label25.Name = "label25";
+			this.label25.Size = new System.Drawing.Size(157,16);
+			this.label25.TabIndex = 57;
+			this.label25.Text = "Status for mailed recall";
+			this.label25.TextAlign = System.Drawing.ContentAlignment.TopRight;
+			// 
+			// comboStatusMailedRecall
+			// 
+			this.comboStatusMailedRecall.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboStatusMailedRecall.FormattingEnabled = true;
+			this.comboStatusMailedRecall.Location = new System.Drawing.Point(172,612);
+			this.comboStatusMailedRecall.MaxDropDownItems = 20;
+			this.comboStatusMailedRecall.Name = "comboStatusMailedRecall";
+			this.comboStatusMailedRecall.Size = new System.Drawing.Size(206,21);
+			this.comboStatusMailedRecall.TabIndex = 58;
+			// 
+			// comboStatusEmailedRecall
+			// 
+			this.comboStatusEmailedRecall.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboStatusEmailedRecall.FormattingEnabled = true;
+			this.comboStatusEmailedRecall.Location = new System.Drawing.Point(172,636);
+			this.comboStatusEmailedRecall.MaxDropDownItems = 20;
+			this.comboStatusEmailedRecall.Name = "comboStatusEmailedRecall";
+			this.comboStatusEmailedRecall.Size = new System.Drawing.Size(206,21);
+			this.comboStatusEmailedRecall.TabIndex = 60;
+			// 
+			// label26
+			// 
+			this.label26.Location = new System.Drawing.Point(13,640);
+			this.label26.Name = "label26";
+			this.label26.Size = new System.Drawing.Size(157,16);
+			this.label26.TabIndex = 59;
+			this.label26.Text = "Status for e-mailed recall";
+			this.label26.TextAlign = System.Drawing.ContentAlignment.TopRight;
+			// 
 			// textDaysFuture
 			// 
 			this.textDaysFuture.Location = new System.Drawing.Point(113,54);
@@ -802,42 +840,6 @@ namespace OpenDental{
 			this.butCancel.TabIndex = 4;
 			this.butCancel.Text = "&Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
-			// 
-			// label25
-			// 
-			this.label25.Location = new System.Drawing.Point(13,616);
-			this.label25.Name = "label25";
-			this.label25.Size = new System.Drawing.Size(157,16);
-			this.label25.TabIndex = 57;
-			this.label25.Text = "Status for mailed recall";
-			this.label25.TextAlign = System.Drawing.ContentAlignment.TopRight;
-			// 
-			// comboStatusMailedRecall
-			// 
-			this.comboStatusMailedRecall.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboStatusMailedRecall.FormattingEnabled = true;
-			this.comboStatusMailedRecall.Location = new System.Drawing.Point(172,612);
-			this.comboStatusMailedRecall.Name = "comboStatusMailedRecall";
-			this.comboStatusMailedRecall.Size = new System.Drawing.Size(206,21);
-			this.comboStatusMailedRecall.TabIndex = 58;
-			// 
-			// comboStatusEmailedRecall
-			// 
-			this.comboStatusEmailedRecall.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboStatusEmailedRecall.FormattingEnabled = true;
-			this.comboStatusEmailedRecall.Location = new System.Drawing.Point(172,636);
-			this.comboStatusEmailedRecall.Name = "comboStatusEmailedRecall";
-			this.comboStatusEmailedRecall.Size = new System.Drawing.Size(206,21);
-			this.comboStatusEmailedRecall.TabIndex = 60;
-			// 
-			// label26
-			// 
-			this.label26.Location = new System.Drawing.Point(13,640);
-			this.label26.Name = "label26";
-			this.label26.Size = new System.Drawing.Size(157,16);
-			this.label26.TabIndex = 59;
-			this.label26.Text = "Status for e-mailed recall";
-			this.label26.TextAlign = System.Drawing.ContentAlignment.TopRight;
 			// 
 			// FormRecallSetup
 			// 
@@ -927,7 +929,12 @@ namespace OpenDental{
 			for(int i=0;i<DefC.Short[(int)DefCat.RecallUnschedStatus].Length;i++){
 				comboStatusMailedRecall.Items.Add(DefC.Short[(int)DefCat.RecallUnschedStatus][i].ItemName);
 				comboStatusEmailedRecall.Items.Add(DefC.Short[(int)DefCat.RecallUnschedStatus][i].ItemName);
-				
+				if(DefC.Short[(int)DefCat.RecallUnschedStatus][i].DefNum==PrefC.GetInt("RecallStatusMailed")){
+					comboStatusMailedRecall.SelectedIndex=i;
+				}
+				if(DefC.Short[(int)DefCat.RecallUnschedStatus][i].DefNum==PrefC.GetInt("RecallStatusEmailed")){
+					comboStatusEmailedRecall.SelectedIndex=i;
+				}
 			}
 		}
 
@@ -958,6 +965,10 @@ namespace OpenDental{
 			{
 				textFMXPanoYrInterval.Text="";
 				MsgBox.Show(this,"The value for FMX/Pano interval must be a single number between 1 and 7 years, or you may leave it blank to disable this and only use BW's.");
+				return; 
+			}
+			if(comboStatusMailedRecall.SelectedIndex==-1 || comboStatusMailedRecall.SelectedIndex==-1){
+				MsgBox.Show(this,"Both status options at the bottom must be set.");
 				return; 
 			}
 
@@ -999,6 +1010,9 @@ namespace OpenDental{
 
 			Prefs.UpdateDouble("RecallAdjustRight",PIn.PDouble(textRight.Text));
 			Prefs.UpdateDouble("RecallAdjustDown",PIn.PDouble(textDown.Text));
+
+			Prefs.UpdateInt("RecallStatusEmailed",DefC.Short[(int)DefCat.RecallUnschedStatus][comboStatusEmailedRecall.SelectedIndex].DefNum);
+			Prefs.UpdateInt("RecallStatusMailed",DefC.Short[(int)DefCat.RecallUnschedStatus][comboStatusMailedRecall.SelectedIndex].DefNum);
 			
 			DataValid.SetInvalid(InvalidType.Prefs);
 			DialogResult=DialogResult.OK;
