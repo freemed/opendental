@@ -2642,7 +2642,7 @@ namespace OpenDental{
 				return;
 			}
 			//The rest is just Canadian.
-			ToothInitial[] ToothInitialList=ToothInitials.Refresh(PatCur.PatNum);
+			List<ToothInitial> ToothInitialList=ToothInitials.Refresh(PatCur.PatNum);
 			ArrayList missingAL=ToothInitials.GetMissingOrHiddenTeeth(ToothInitialList);
 			List<CanadianExtract> missingList=new List<CanadianExtract>();
 			CanadianExtract canext;
@@ -3483,7 +3483,7 @@ namespace OpenDental{
 			//only visible if Canadian
 			CanadianClaim canclaim=CanadianClaims.GetForClaim(ClaimCur.ClaimNum);
 			if(canclaim==null){
-				ToothInitial[] ToothInitialList=ToothInitials.Refresh(PatCur.PatNum);
+				List<ToothInitial> ToothInitialList=ToothInitials.Refresh(PatCur.PatNum);
 				ArrayList missingAL=ToothInitials.GetMissingOrHiddenTeeth(ToothInitialList);
 				List<CanadianExtract> missingList=new List<CanadianExtract>();
 				CanadianExtract canext;

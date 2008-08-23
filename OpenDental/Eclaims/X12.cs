@@ -170,7 +170,7 @@ namespace OpenDental.Eclaims
 			ClaimProc[] claimProcList;//all claimProcs for a patient.
 			ClaimProc[] claimProcs;
 			Procedure[] procList;
-			ToothInitial[] initialList;
+			List<ToothInitial> initialList;
 			Procedure proc;
 			ProcedureCode procCode;
 			Provider provTreat;//might be different for each proc

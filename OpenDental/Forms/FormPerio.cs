@@ -2,6 +2,7 @@
 using System.Drawing;
 using System.Drawing.Printing;
 using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
@@ -1089,7 +1090,7 @@ namespace OpenDental{
 			textRedFurc.Text=((Pref)PrefC.HList["PerioRedFurc"]).ValueString;
 			textRedMob.Text =((Pref)PrefC.HList["PerioRedMob"] ).ValueString;
 			//Procedure[] procList=Procedures.Refresh(PatCur.PatNum);
-			ToothInitial[] initialList=ToothInitials.Refresh(PatCur.PatNum);
+			List<ToothInitial> initialList=ToothInitials.Refresh(PatCur.PatNum);
 			MissingTeeth=ToothInitials.GetMissingOrHiddenTeeth(initialList);
 			RefreshListExams();
 			listExams.SelectedIndex=PerioExams.List.Length-1;//this works even if no items.

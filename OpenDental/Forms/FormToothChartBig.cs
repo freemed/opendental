@@ -19,12 +19,12 @@ namespace OpenDental{
 		/// </summary>
 		private System.ComponentModel.Container components = null;
 		private bool ShowBySelectedTeeth;
-		private ToothInitial[] ToothInitialList;
+		private List<ToothInitial> ToothInitialList;
 		private GraphicalToothChart toothChart;
 		private List<DataRow> ProcList;
 
 		///<summary></summary>
-		public FormToothChartingBig(bool showBySelectedTeeth,ToothInitial[] toothInitialList,List<DataRow> procList)
+		public FormToothChartingBig(bool showBySelectedTeeth,List<ToothInitial> toothInitialList,List<DataRow> procList)
 		{
 			//
 			// Required for Windows Form Designer support
@@ -131,12 +131,12 @@ namespace OpenDental{
 				}
 			}
 			//first, primary.  That way, you can still set a primary tooth missing afterwards.
-			for(int i=0;i<ToothInitialList.Length;i++) {
+			for(int i=0;i<ToothInitialList.Count;i++) {
 				if(ToothInitialList[i].InitialType==ToothInitialType.Primary) {
 					toothChart.SetToPrimary(ToothInitialList[i].ToothNum);
 				}
 			}
-			for(int i=0;i<ToothInitialList.Length;i++) {
+			for(int i=0;i<ToothInitialList.Count;i++) {
 				switch(ToothInitialList[i].InitialType) {
 					case ToothInitialType.Missing:
 						toothChart.SetInvisible(ToothInitialList[i].ToothNum);

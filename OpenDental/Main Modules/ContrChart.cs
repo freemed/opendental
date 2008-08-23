@@ -171,7 +171,7 @@ namespace OpenDental{
 		private ODGrid gridProg;
 		private ODGrid gridPtInfo;
 		private CheckBox checkComm;
-		private ToothInitial[] ToothInitialList;
+		private List<ToothInitial> ToothInitialList;
 		private MenuItem menuItemPrintDay;
 		///<summary>a list of the hidden teeth as strings. Includes "1"-"32", and "A"-"Z"</summary>
 		private ArrayList HiddenTeeth;
@@ -3713,7 +3713,7 @@ namespace OpenDental{
 			}
 			//primary teeth need to be set before resetting selected teeth, because some of them might be primary.
 			//primary teeth also need to be set before initial list so that we can set a primary tooth missing.
-			for(int i=0;i<ToothInitialList.Length;i++) {
+			for(int i=0;i<ToothInitialList.Count;i++) {
 				if(ToothInitialList[i].InitialType==ToothInitialType.Primary) {
 					toothChart.SetToPrimary(ToothInitialList[i].ToothNum);
 				}
@@ -3723,7 +3723,7 @@ namespace OpenDental{
 					toothChart.SetSelected((int)selectedTeeth[i],true);
 				}
 			}
-			for(int i=0;i<ToothInitialList.Length;i++){
+			for(int i=0;i<ToothInitialList.Count;i++){
 				switch(ToothInitialList[i].InitialType){
 					case ToothInitialType.Missing:
 						toothChart.SetInvisible(ToothInitialList[i].ToothNum);
@@ -5604,13 +5604,28 @@ namespace OpenDental{
 		}
 
 		private void toothChart_SegmentDrawn(object sender,ToothChartDrawEventArgs e) {
-			ToothInitial ti=new ToothInitial();
-			ti.DrawingSegment=e.DrawingSegement;
-			ti.InitialType=ToothInitialType.Drawing;
-			ti.PatNum=PatCur.PatNum;
-			ToothInitials.Insert(ti);
-			ToothInitialList=ToothInitials.Refresh(PatCur.PatNum);
-			FillToothChart(true);
+			if(e.IsInsert){
+				ToothInitial ti=new ToothInitial();
+				ti.DrawingSegment=e.DrawingSegement;
+				ti.InitialType=ToothInitialType.Drawing;
+				ti.PatNum=PatCur.PatNum;
+				ToothInitials.Insert(ti);
+				ToothInitialList=ToothInitials.Refresh(PatCur.PatNum);
+				FillToothChart(true);
+			}
+			else{//delete
+				for(int i=0;i<ToothInitialList.Count;i++){
+					if(ToothInitialList[i].InitialType!=ToothInitialType.Drawing){
+						continue;
+					}
+					if(ToothInitialList[i].DrawingSegment!=e.DrawingSegement){
+						continue;
+					}
+					ToothInitials.Delete(ToothInitialList[i]);
+					ToothInitialList.RemoveAt(i);
+					//no need to refresh since that's handled by the toothchart.
+				}
+			}
 		}
 		#endregion Draw
 

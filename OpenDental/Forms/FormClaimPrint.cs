@@ -477,7 +477,7 @@ namespace OpenDental{
 				ClaimReferral=Referrals.GetReferral(ClaimCur.ReferringProv);
 			}
 			ProcList=Procedures.Refresh(PatCur.PatNum);
-			ToothInitial[] initialList=ToothInitials.Refresh(PatCur.PatNum);
+			List<ToothInitial> initialList=ToothInitials.Refresh(PatCur.PatNum);
       ClaimProc[] ClaimProcList=ClaimProcs.Refresh(PatCur.PatNum);
       ClaimProcsForClaim=ClaimProcs.GetForClaim(ClaimProcList,ClaimCur.ClaimNum); 
 			claimprocs=new List<ClaimProc>();

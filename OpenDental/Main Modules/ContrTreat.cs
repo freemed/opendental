@@ -107,7 +107,7 @@ namespace OpenDental{
 		private Benefit[] BenefitList;
 		private ArrayList ProcAL;
 		///<summary>Only used for printing graphical chart.</summary>
-		private ToothInitial[] ToothInitialList;
+		private List<ToothInitial> ToothInitialList;
 		///<summary>Only used for printing graphical chart.</summary>
 		private GraphicalToothChart toothChart;
 		private CheckBox checkShowSubtotals;
@@ -1821,12 +1821,12 @@ namespace OpenDental{
 				toothChart.ResetTeeth();
 				ToothInitialList=ToothInitials.Refresh(PatCur.PatNum);
 				//first, primary.  That way, you can still set a primary tooth missing afterwards.
-				for(int i=0;i<ToothInitialList.Length;i++) {
+				for(int i=0;i<ToothInitialList.Count;i++) {
 					if(ToothInitialList[i].InitialType==ToothInitialType.Primary) {
 						toothChart.SetToPrimary(ToothInitialList[i].ToothNum);
 					}
 				}
-				for(int i=0;i<ToothInitialList.Length;i++) {
+				for(int i=0;i<ToothInitialList.Count;i++) {
 					switch(ToothInitialList[i].InitialType) {
 						case ToothInitialType.Missing:
 							toothChart.SetInvisible(ToothInitialList[i].ToothNum);

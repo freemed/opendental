@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Data;
 using System.Windows.Forms;
 using OpenDentBusiness;
@@ -9,22 +10,24 @@ namespace OpenDental{
 	public class ToothInitials {
 
 		///<summary>Gets all toothinitial entries for the current patient.</summary>
-		public static ToothInitial[] Refresh(int patNum) {
+		public static List<ToothInitial> Refresh(int patNum) {
 			string command=
 				"SELECT * FROM toothinitial"
 				+" WHERE PatNum = "+POut.PInt(patNum);
 			DataTable table=General.GetTable(command);
-			ToothInitial[] List=new ToothInitial[table.Rows.Count];
-			for(int i=0;i<List.Length;i++) {
-				List[i]=new ToothInitial();
-				List[i].ToothInitialNum= PIn.PInt   (table.Rows[i][0].ToString());
-				List[i].PatNum         = PIn.PInt   (table.Rows[i][1].ToString());
-				List[i].ToothNum       = PIn.PString(table.Rows[i][2].ToString());
-				List[i].InitialType    = (ToothInitialType)PIn.PInt(table.Rows[i][3].ToString());
-				List[i].Movement       = PIn.PFloat (table.Rows[i][4].ToString());
-				List[i].DrawingSegment = PIn.PString(table.Rows[i][5].ToString());
+			List<ToothInitial> tList=new List<ToothInitial>();
+			ToothInitial ti;
+			for(int i=0;i<table.Rows.Count;i++) {
+				ti=new ToothInitial();
+				ti.ToothInitialNum= PIn.PInt   (table.Rows[i][0].ToString());
+				ti.PatNum         = PIn.PInt   (table.Rows[i][1].ToString());
+				ti.ToothNum       = PIn.PString(table.Rows[i][2].ToString());
+				ti.InitialType    = (ToothInitialType)PIn.PInt(table.Rows[i][3].ToString());
+				ti.Movement       = PIn.PFloat (table.Rows[i][4].ToString());
+				ti.DrawingSegment = PIn.PString(table.Rows[i][5].ToString());
+				tList.Add(ti);
 			}
-			return List;
+			return tList;
 		}
 	
 
@@ -100,9 +103,9 @@ namespace OpenDental{
 		}
 
 		///<summary>Only used for incremental tooth movements.  Automatically adds a movement to any existing movement.  Supply a list of all toothInitials for the patient.</summary>
-		public static void AddMovement(ToothInitial[] initialList,int patNum,string tooth_id,ToothInitialType initialType,float moveAmt) {
+		public static void AddMovement(List<ToothInitial> initialList,int patNum,string tooth_id,ToothInitialType initialType,float moveAmt) {
 			ToothInitial ti=null;
-			for(int i=0;i<initialList.Length;i++){
+			for(int i=0;i<initialList.Count;i++){
 				if(initialList[i].ToothNum==tooth_id
 					&& initialList[i].InitialType==initialType)
 				{
@@ -138,9 +141,9 @@ namespace OpenDental{
 		}
 
 		///<summary>Gets a list of missing teeth as strings. Includes "1"-"32", and "A"-"Z".</summary>
-		public static ArrayList GetMissingOrHiddenTeeth(ToothInitial[] initialList) {
+		public static ArrayList GetMissingOrHiddenTeeth(List<ToothInitial> initialList) {
 			ArrayList missing=new ArrayList();
-			for(int i=0;i<initialList.Length;i++) {
+			for(int i=0;i<initialList.Count;i++) {
 				if((initialList[i].InitialType==ToothInitialType.Missing || initialList[i].InitialType==ToothInitialType.Hidden)
 					&& Tooth.IsValidDB(initialList[i].ToothNum)
 					&& !Tooth.IsSuperNum(initialList[i].ToothNum))
@@ -152,9 +155,9 @@ namespace OpenDental{
 		}
 
 		///<summary>Gets a list of primary teeth as strings. Includes "1"-"32".</summary>
-		public static ArrayList GetPriTeeth(ToothInitial[] initialList) {
+		public static ArrayList GetPriTeeth(List<ToothInitial> initialList) {
 			ArrayList pri=new ArrayList();
-			for(int i=0;i<initialList.Length;i++) {
+			for(int i=0;i<initialList.Count;i++) {
 				if(initialList[i].InitialType==ToothInitialType.Primary
 					&& Tooth.IsValidDB(initialList[i].ToothNum)
 					&& !Tooth.IsPrimary(initialList[i].ToothNum)
@@ -167,8 +170,8 @@ namespace OpenDental{
 		}
 
 		///<summary>Loops through supplied initial list to see if the specified tooth is already marked as missing or hidden.</summary>
-		public static bool ToothIsMissingOrHidden(ToothInitial[] initialList,string toothNum){
-			for(int i=0;i<initialList.Length;i++){
+		public static bool ToothIsMissingOrHidden(List<ToothInitial> initialList,string toothNum){
+			for(int i=0;i<initialList.Count;i++){
 				if(initialList[i].InitialType!=ToothInitialType.Missing
 					&& initialList[i].InitialType!=ToothInitialType.Hidden)
 				{
@@ -183,8 +186,8 @@ namespace OpenDental{
 		}
 
 		///<summary>Gets the current movement value for a single tooth by looping through the supplied list.</summary>
-		public static float GetMovement(ToothInitial[] initialList,string toothNum,ToothInitialType initialType){
-			for(int i=0;i<initialList.Length;i++) {
+		public static float GetMovement(List<ToothInitial> initialList,string toothNum,ToothInitialType initialType){
+			for(int i=0;i<initialList.Count;i++) {
 				if(initialList[i].InitialType==initialType
 					&& initialList[i].ToothNum==toothNum)
 				{
@@ -195,9 +198,9 @@ namespace OpenDental{
 		}
 
 		///<summary>Gets a list of the hidden teeth as strings. Includes "1"-"32", and "A"-"Z".</summary>
-		public static ArrayList GetHiddenTeeth(ToothInitial[] initialList) {
+		public static ArrayList GetHiddenTeeth(List<ToothInitial> initialList) {
 			ArrayList hidden=new ArrayList();
-			for(int i=0;i<initialList.Length;i++) {
+			for(int i=0;i<initialList.Count;i++) {
 				if(initialList[i].InitialType==ToothInitialType.Hidden
 					&& Tooth.IsValidDB(initialList[i].ToothNum)
 					&& !Tooth.IsSuperNum(initialList[i].ToothNum))

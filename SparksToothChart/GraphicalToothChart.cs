@@ -884,7 +884,7 @@ namespace SparksToothChart {
 				PointList.Add(new Point(e.X,e.Y));
 			}
 			else if(cursorTool==CursorTool.Eraser){
-
+				//do nothing
 			}
 		}
 
@@ -921,11 +921,40 @@ namespace SparksToothChart {
 				Pen pen=new Pen(Brushes.Black,2f);
 				int i=PointList.Count-1;
 				g.DrawLine(pen,PointList[i-1].X,PointList[i-1].Y,PointList[i].X,PointList[i].Y);
-				//pictDraw.Invalidate();
 				g.Dispose();
+				//Invalidate();
 			}
 			else if(cursorTool==CursorTool.Eraser){
-
+				if(!MouseIsDown){
+					return;
+				}
+				//look for any lines that intersect the "eraser".
+				//since the line segments are so short, it's sufficient to check end points.
+				Point point;
+				string[] xy;
+				string[] pointStr;
+				float x;
+				float y;
+				float dist;//the distance between the point being tested and the center of the eraser circle.
+				float radius=8f;//by trial and error to achieve best feel.
+				PointF eraserPt=new PointF(e.X+8.49f,e.Y+8.49f);
+				for(int i=0;i<DrawingSegmentList.Count;i++){
+					pointStr=DrawingSegmentList[i].Split(';');
+					for(int p=0;p<pointStr.Length;p++){
+						xy=pointStr[p].Split(',');
+						if(xy.Length==2){
+							x=float.Parse(xy[0]);
+							y=float.Parse(xy[1]);
+							dist=(float)Math.Sqrt(Math.Pow(Math.Abs(x-eraserPt.X),2)+Math.Pow(Math.Abs(y-eraserPt.Y),2));
+							if(dist<=radius){//testing circle intersection here
+								OnSegmentDrawn(DrawingSegmentList[i],false);//triggers a deletion from db.
+								DrawingSegmentList.RemoveAt(i);
+								Invalidate();
+								return;;
+							}
+						}
+					}
+				}	
 			}
 		}
 
@@ -941,14 +970,18 @@ namespace SparksToothChart {
 					//I could compensate to center point here:
 					drawingSegment+=PointList[i].X+","+PointList[i].Y;
 				}
-				OnSegmentDrawn(drawingSegment);
+				OnSegmentDrawn(drawingSegment,true);
 				PointList=new List<Point>();
+				//Invalidate();//?
+			}
+			else if(cursorTool==CursorTool.Eraser){
+				//do nothing
 			}
 		}
 
 		///<summary></summary>
-		protected void OnSegmentDrawn(string drawingSegment){
-			ToothChartDrawEventArgs tArgs=new ToothChartDrawEventArgs(drawingSegment);
+		protected void OnSegmentDrawn(string drawingSegment,bool isInsert){
+			ToothChartDrawEventArgs tArgs=new ToothChartDrawEventArgs(drawingSegment,isInsert);
 			if(SegmentDrawn!=null){
 				SegmentDrawn(this,tArgs);
 			}
@@ -1009,16 +1042,25 @@ namespace SparksToothChart {
 	///<summary></summary>
 	public class ToothChartDrawEventArgs{
 		private string drawingSegment;
+		private bool isInsert;
 
 		///<summary></summary>
-		public ToothChartDrawEventArgs(string drawingSeg){
+		public ToothChartDrawEventArgs(string drawingSeg,bool isInsert){
 			this.drawingSegment=drawingSeg;
+			this.isInsert=isInsert;
 		}
 
 		///<summary></summary>
 		public string DrawingSegement{
 			get{ 
 				return drawingSegment;
+			}
+		}
+
+		///<summary></summary>
+		public bool IsInsert{
+			get{ 
+				return isInsert;
 			}
 		}
 	}
