@@ -1134,7 +1134,9 @@ namespace OpenDentBusiness{
 		///<summary>7</summary>
 		TipM,
 		///<summary>8</summary>
-		TipB
+		TipB,
+		///<summary>9 One segment of a drawing.</summary>
+		Drawing
 	}
 	
 	///<summary>Indicates at what point the patient is in the sequence. 0=standby, 1=PatientInfo, 2=Medical, 3=UpdateOnly.</summary>

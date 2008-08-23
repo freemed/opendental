@@ -35,6 +35,12 @@ namespace SparksToothChart {
 		private int hotToothOld;
 		private int preferredPixelFormatNum;
 		private CursorTool cursorTool;
+		///<summary>A list of points for a line currently being drawn.  Once the mouse is raised, this list gets cleared.</summary>
+		private List<Point> PointList;
+		///<summary></summary>
+		[Category("Action"),Description("Occurs when the mouse goes up ending a drawing segment.")]
+		public event ToothChartDrawEventHandler SegmentDrawn=null;
+		private List<string> DrawingSegmentList;
 
 		public GraphicalToothChart() {
 			InitializeComponent();
@@ -43,6 +49,8 @@ namespace SparksToothChart {
 			ALSelectedTeeth=new ArrayList();
 			ResetControls();
 			cursorTool=CursorTool.Pointer;
+			PointList=new List<Point>();
+			DrawingSegmentList=new List<string>();
 		}
 
 		#region Properties
@@ -180,7 +188,6 @@ namespace SparksToothChart {
 		}
 		#endregion Properties
 
-
 		private void ResetControls(){
 			selectedTeeth=new string[0];
 			this.Controls.Clear();
@@ -230,6 +237,7 @@ namespace SparksToothChart {
 				}
 				ALSelectedTeeth.Clear();
 				selectedTeeth=new string[0];
+				DrawingSegmentList=new List<string>();
 				this.Invalidate();
 			}
 			else{
@@ -421,6 +429,16 @@ namespace SparksToothChart {
 			}
 		}
 
+		///<summary></summary>
+		public void AddDrawingSegment(string drawingSegment) {
+			if(simpleMode) {
+				DrawingSegmentList.Add(drawingSegment);
+			}
+			else {
+				//toothChart.SetSealant(toothID,color);
+			}
+		}
+
 		///<summary>Returns a bitmap of what is showing in the control.  Used for printing.</summary>
 		public Bitmap GetBitmap() {
 			Bitmap dummy=new Bitmap(this.Width,this.Height);
@@ -460,6 +478,7 @@ namespace SparksToothChart {
 				DrawOcclusalView(ListToothGraphics[t],g);
 			}
 			DrawNumbers(g);
+			DrawDrawingSegments(g);
 			g.Dispose();
 		}
 
@@ -538,6 +557,32 @@ namespace SparksToothChart {
 				}
 				else {
 					DrawNumber(i,false,true,g);
+				}
+			}
+		}
+
+		private void DrawDrawingSegments(Graphics g){
+			string[] pointStr;
+			List<Point> points;
+			Point point;
+			string[] xy;
+			Pen pen=new Pen(Color.Black,2f);
+			for(int s=0;s<DrawingSegmentList.Count;s++){
+				pointStr=DrawingSegmentList[s].Split(';');
+				points=new List<Point>();
+				for(int p=0;p<pointStr.Length;p++){
+					xy=pointStr[p].Split(',');
+					if(xy.Length==2){
+						point=new Point(int.Parse(xy[0]),int.Parse(xy[1]));
+						points.Add(point);
+					}
+				}
+				for(int i=1;i<points.Count;i++){
+					//if we set 0,0 to center, then this is where we would convert it back.
+					g.DrawLine(pen,points[i-1].X,
+						points[i-1].Y,
+						points[i].X,
+						points[i].Y);
 				}
 			}
 		}
@@ -703,7 +748,7 @@ namespace SparksToothChart {
 			}
 		}
 
-		///<summary>sq and cir refer to the radius of those two elements.</summary>
+		///<summary>Gets a path for the pie shape that represents a tooth surface.  sq and cir refer to the radius of those two elements.</summary>
 		private GraphicsPath GetPath(string UDLR,float x,float y,float sq,float cir){
 			GraphicsPath path=new GraphicsPath();
 			float pt=cir*0.7071f;//the x or y dist to the point where the circle is at 45 degrees.
@@ -820,27 +865,27 @@ namespace SparksToothChart {
 
 		protected override void OnMouseDown(MouseEventArgs e) {
 			base.OnMouseDown(e);
-			if(ListToothGraphics.Count==0){
-				return;
-			}
-			if(!simpleMode){
-				return;
-			}
 			MouseIsDown=true;
-			int toothClicked=GetToothAtPoint(e.X,e.Y);
-			//MessageBox.Show(toothClicked.ToString());
-			if(ALSelectedTeeth.Contains(toothClicked)) {
-				SetSelected(toothClicked,false);
+			if(ListToothGraphics.Count==0){//still starting up?
+				return;
 			}
-			else {
-				SetSelected(toothClicked,true);
+			if(cursorTool==CursorTool.Pointer){
+				if(simpleMode){
+					int toothClicked=GetToothAtPoint(e.X,e.Y);
+					if(ALSelectedTeeth.Contains(toothClicked)) {
+						SetSelected(toothClicked,false);
+					}
+					else {
+						SetSelected(toothClicked,true);
+					}
+				}
 			}
-			//Invalidate();
-		}
+			else if(cursorTool==CursorTool.Pen){
+				PointList.Add(new Point(e.X,e.Y));
+			}
+			else if(cursorTool==CursorTool.Eraser){
 
-		protected override void OnMouseUp(MouseEventArgs e) {
-			base.OnMouseUp(e);
-			MouseIsDown=false;
+			}
 		}
 
 		protected override void OnMouseMove(MouseEventArgs e) {
@@ -848,21 +893,64 @@ namespace SparksToothChart {
 			if(ListToothGraphics.Count==0) {
 				return;
 			}
-			if(!simpleMode) {
-				return;
-			}
-			hotTooth=GetToothAtPoint(e.X,e.Y);
-			if(hotTooth==hotToothOld) {//mouse has not moved to another tooth
-				return;
-			}
-			hotToothOld=hotTooth;
-			if(MouseIsDown) {//drag action
-				if(ALSelectedTeeth.Contains(hotTooth)) {
-					SetSelected(hotTooth,false);
+			if(cursorTool==CursorTool.Pointer){
+				if(simpleMode) {
+					hotTooth=GetToothAtPoint(e.X,e.Y);
+					if(hotTooth==hotToothOld) {//mouse has not moved to another tooth
+						return;
+					}
+					hotToothOld=hotTooth;
+					if(MouseIsDown) {//drag action
+						if(ALSelectedTeeth.Contains(hotTooth)) {
+							SetSelected(hotTooth,false);
+						}
+						else {
+							SetSelected(hotTooth,true);
+						}
+					}
 				}
-				else {
-					SetSelected(hotTooth,true);
+			}
+			else if(cursorTool==CursorTool.Pen){
+				if(!MouseIsDown){
+					return;
 				}
+				PointList.Add(new Point(e.X,e.Y));
+				//just add the last line segment instead of redrawing the whole thing.
+				Graphics g=this.CreateGraphics();
+				g.SmoothingMode=SmoothingMode.HighQuality;
+				Pen pen=new Pen(Brushes.Black,2f);
+				int i=PointList.Count-1;
+				g.DrawLine(pen,PointList[i-1].X,PointList[i-1].Y,PointList[i].X,PointList[i].Y);
+				//pictDraw.Invalidate();
+				g.Dispose();
+			}
+			else if(cursorTool==CursorTool.Eraser){
+
+			}
+		}
+
+		protected override void OnMouseUp(MouseEventArgs e) {
+			base.OnMouseUp(e);
+			MouseIsDown=false;
+			if(cursorTool==CursorTool.Pen){
+				string drawingSegment="";
+				for(int i=0;i<PointList.Count;i++){
+					if(i>0){
+						drawingSegment+=";";
+					}
+					//I could compensate to center point here:
+					drawingSegment+=PointList[i].X+","+PointList[i].Y;
+				}
+				OnSegmentDrawn(drawingSegment);
+				PointList=new List<Point>();
+			}
+		}
+
+		///<summary></summary>
+		protected void OnSegmentDrawn(string drawingSegment){
+			ToothChartDrawEventArgs tArgs=new ToothChartDrawEventArgs(drawingSegment);
+			if(SegmentDrawn!=null){
+				SegmentDrawn(this,tArgs);
 			}
 		}
 
@@ -913,5 +1001,25 @@ namespace SparksToothChart {
 		Pointer,
 		Pen,
 		Eraser
+	}
+
+	///<summary></summary>
+	public delegate void ToothChartDrawEventHandler(object sender,ToothChartDrawEventArgs e);
+
+	///<summary></summary>
+	public class ToothChartDrawEventArgs{
+		private string drawingSegment;
+
+		///<summary></summary>
+		public ToothChartDrawEventArgs(string drawingSeg){
+			this.drawingSegment=drawingSeg;
+		}
+
+		///<summary></summary>
+		public string DrawingSegement{
+			get{ 
+				return drawingSegment;
+			}
+		}
 	}
 }

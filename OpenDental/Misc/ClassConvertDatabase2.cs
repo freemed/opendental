@@ -174,7 +174,8 @@ namespace OpenDental{
 					General.NonQ(command);
 					command="INSERT INTO preference (PrefName,ValueString,Comments) VALUES ('RecallStatusEmailed','0','FK to definition.DefNum')";
 					General.NonQ(command);
-					
+					command="ALTER TABLE toothinitial ADD DrawingSegment text";
+					General.NonQ(command);
 
 
 

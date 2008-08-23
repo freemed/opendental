@@ -17,11 +17,12 @@ namespace OpenDental{
 			ToothInitial[] List=new ToothInitial[table.Rows.Count];
 			for(int i=0;i<List.Length;i++) {
 				List[i]=new ToothInitial();
-				List[i].ToothInitialNum= PIn.PInt(table.Rows[i][0].ToString());
-				List[i].PatNum         = PIn.PInt(table.Rows[i][1].ToString());
+				List[i].ToothInitialNum= PIn.PInt   (table.Rows[i][0].ToString());
+				List[i].PatNum         = PIn.PInt   (table.Rows[i][1].ToString());
 				List[i].ToothNum       = PIn.PString(table.Rows[i][2].ToString());
 				List[i].InitialType    = (ToothInitialType)PIn.PInt(table.Rows[i][3].ToString());
-				List[i].Movement       = PIn.PFloat(table.Rows[i][4].ToString());
+				List[i].Movement       = PIn.PFloat (table.Rows[i][4].ToString());
+				List[i].DrawingSegment = PIn.PString(table.Rows[i][5].ToString());
 			}
 			return List;
 		}
@@ -36,7 +37,7 @@ namespace OpenDental{
 			if(PrefC.RandomKeys) {
 				command+="ToothInitialNum,";
 			}
-			command+="PatNum,ToothNum,InitialType,Movement) VALUES(";
+			command+="PatNum,ToothNum,InitialType,Movement,DrawingSegment) VALUES(";
 			if(PrefC.RandomKeys) {
 				command+="'"+POut.PInt(init.ToothInitialNum)+"', ";
 			}
@@ -44,7 +45,8 @@ namespace OpenDental{
 				 "'"+POut.PInt   (init.PatNum)+"', "
 				+"'"+POut.PString(init.ToothNum)+"', "
 				+"'"+POut.PInt   ((int)init.InitialType)+"', "
-				+"'"+POut.PFloat (init.Movement)+"')";
+				+"'"+POut.PFloat (init.Movement)+"', "
+				+"'"+POut.PString(init.DrawingSegment)+"')";
 			if(PrefC.RandomKeys) {
 				General.NonQ(command);
 			}
@@ -56,10 +58,11 @@ namespace OpenDental{
 		///<summary></summary>
 		public static void Update(ToothInitial init) {
 			string command= "UPDATE toothinitial SET "
-				+"PatNum = '"     +POut.PInt   (init.PatNum)+"', "
-				+"ToothNum= '"    +POut.PString(init.ToothNum)+"', "
-				+"InitialType = '"+POut.PInt   ((int)init.InitialType)+"', "
-				+"Movement = '"   +POut.PFloat (init.Movement)+"' "
+				+"PatNum = '"        +POut.PInt   (init.PatNum)+"', "
+				+"ToothNum= '"       +POut.PString(init.ToothNum)+"', "
+				+"InitialType = '"   +POut.PInt   ((int)init.InitialType)+"', "
+				+"Movement = '"      +POut.PFloat (init.Movement)+"' "
+				+"DrawingSegment = '"+POut.PString(init.DrawingSegment)+"' "
 				+"WHERE ToothInitialNum = '"+POut.PInt(init.ToothInitialNum)+"'";
 			General.NonQ(command);
 		}
