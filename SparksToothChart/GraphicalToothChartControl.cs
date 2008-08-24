@@ -57,10 +57,17 @@ namespace SparksToothChart {
 		private int fontOffset;
 		private int displayListOffset;
 		private string[][] fontsymbols;
-
 		///<summary>This gets set to true during certain operations where we do not need to redraw all the teeth.  Specifically, during tooth selection where only the color of the tooth number text needs to change.  In this case, the rest of the scene will not be rendered again.</summary>
 		private bool suspendRendering;
 		private int selectedPixelFormat;
+		private List<string> DrawingSegmentList;
+		public CursorTool CursorTool;
+		///<summary>A list of points for a line currently being drawn.  Once the mouse is raised, this list gets cleared.</summary>
+		private List<Point> PointList;
+		///<summary></summary>
+		[Category("Action"),Description("Occurs when the mouse goes up ending a drawing segment.")]
+		public event ToothChartDrawEventHandler SegmentDrawn=null;
+
 
 		///<summary>Specify the hardware mode to create the tooth chart with. Set hardwareMode=true to try for hardware accelerated graphics, and set hardwareMode=false to try and get software graphics.</summary>
 		public GraphicalToothChartControl(bool hardwareMode,int preferredPixelFormatNum) {
@@ -73,6 +80,8 @@ namespace SparksToothChart {
 			WidthProjection=130;
 			ListToothGraphics=new ToothGraphicCollection();
 			ALSelectedTeeth=new ArrayList();
+			DrawingSegmentList=new List<string>();
+			PointList=new List<Point>();
 			//set default colors
 			colorBackground=Color.FromArgb(150,145,153);//95,95,130);
 			ColorText=Color.White;
@@ -382,6 +391,11 @@ namespace SparksToothChart {
 			ListToothGraphics[toothID].colorSealant=color;
 		}
 
+		///<summary></summary>
+		public void AddDrawingSegment(string drawingSegment) {
+			DrawingSegmentList.Add(drawingSegment);
+		}
+
 		///<summary>Returns a bitmap of what is showing in the control.  Used for printing.</summary>
 		public Bitmap GetBitmap(){
 			Gl.glFlush();
@@ -534,6 +548,8 @@ namespace SparksToothChart {
 			//	g.Dispose();
 			//}
 			DrawTextAndLines();
+			DrawDrawingSegments();
+			Gl.glFlush();
 		}
 
 		private void DrawFacialView(ToothGraphic toothGraphic) {
@@ -799,7 +815,44 @@ namespace SparksToothChart {
 				else {
 					DrawNumber(i,false,true);
 				}
-				
+			}
+			Gl.glPopMatrix();
+		}
+
+		private void DrawDrawingSegments(){
+			Gl.glPushMatrix();
+			Gl.glDisable(Gl.GL_LIGHTING);
+			Gl.glDisable(Gl.GL_BLEND);
+			Gl.glDisable(Gl.GL_DEPTH_TEST);
+			//Gl.glTranslatef(0,0,6f);//move forward 6mm so it will be visible.
+			Gl.glColor3f(
+				(float)Color.Black.R/255f,
+				(float)Color.Black.G/255f,
+				(float)Color.Black.B/255f);
+			//Gl.glBlendFunc(Gl.GL_SRC_ALPHA,Gl.GL_ONE_MINUS_SRC_ALPHA);
+			Gl.glLineWidth((float)Width/300f);//about 2
+			string[] pointStr;
+			List<Point> points;
+			Point point;
+			string[] xy;
+			PointF pointMm;
+			for(int s=0;s<DrawingSegmentList.Count;s++){
+				pointStr=DrawingSegmentList[s].Split(';');
+				points=new List<Point>();
+				for(int p=0;p<pointStr.Length;p++){
+					xy=pointStr[p].Split(',');
+					if(xy.Length==2){
+						point=new Point(int.Parse(xy[0]),int.Parse(xy[1]));
+						points.Add(point);
+					}
+				}
+				Gl.glBegin(Gl.GL_LINE_STRIP);
+				for(int i=0;i<points.Count;i++){
+					//if we set 0,0 to center, then this is where we would convert it back.
+					pointMm=PixToMm(new Point(points[i].X,points[i].Y));
+					Gl.glVertex3f(pointMm.X,pointMm.Y,0);
+				}
+				Gl.glEnd();
 			}
 			Gl.glPopMatrix();
 		}
@@ -838,8 +891,17 @@ namespace SparksToothChart {
 			return recPix;
 		}
 
+		private PointF PixToMm(Point pixPoint){
+			float toMmRatio=(float)WidthProjection/(float)Width;//mm/pix
+			float mmX=(((float)pixPoint.X)*toMmRatio)-((float)WidthProjection)/2f;
+			float heightProjection=(float)WidthProjection*(float)this.Height/(float)this.Width;
+			float mmY=(heightProjection)/2f-(((float)pixPoint.Y)*toMmRatio);
+			return new PointF(mmX,mmY);
+		}
+
 		///<summary>Draws the number and the rectangle behind it.  Draws in the appropriate color</summary>
 		private void DrawNumber(int intTooth, bool isSelected, bool isFullRedraw) {
+			Gl.glPushMatrix();
 			Gl.glDisable(Gl.GL_LIGHTING);
 			Gl.glDisable(Gl.GL_BLEND);
 			Gl.glDisable(Gl.GL_DEPTH_TEST);
@@ -906,11 +968,13 @@ namespace SparksToothChart {
 					PrintString(displayNum);
 				}
 			}
-			Gl.glFlush();
+			
 			//Graphics g=this.CreateGraphics();
 			//g.DrawRectangle(Pens.Red,recPix);
 			//g.Dispose();
 			//Invalidate(recPix);
+			Gl.glPopMatrix();
+			Gl.glFlush();
 		}
 
 		///<summary>Return value is in tooth coordinates, not pixels.</summary>
@@ -1270,38 +1334,122 @@ namespace SparksToothChart {
 		protected override void OnMouseDown(MouseEventArgs e) {
 			base.OnMouseDown(e);
 			MouseIsDown=true;
-			int toothClicked=GetToothAtPoint(e.X,e.Y);
-			//MessageBox.Show(toothClicked.ToString());
-			if(ALSelectedTeeth.Contains(toothClicked)) {
-				SetSelected(toothClicked,false);
+			if(CursorTool==CursorTool.Pointer){
+				int toothClicked=GetToothAtPoint(e.X,e.Y);
+				//MessageBox.Show(toothClicked.ToString());
+				if(ALSelectedTeeth.Contains(toothClicked)) {
+					SetSelected(toothClicked,false);
+				}
+				else {
+					SetSelected(toothClicked,true);
+				}
 			}
-			else {
-				SetSelected(toothClicked,true);
+			else if(CursorTool==CursorTool.Pen){
+				PointList.Add(new Point(e.X,e.Y));
 			}
-			//Invalidate();
+			else if(CursorTool==CursorTool.Eraser){
+				//do nothing
+			}
+		}
+
+		protected override void OnMouseMove(MouseEventArgs e) {
+			base.OnMouseMove(e);
+			if(CursorTool==CursorTool.Pointer){
+				hotTooth=GetToothAtPoint(e.X,e.Y);
+				if(hotTooth==hotToothOld) {//mouse has not moved to another tooth
+					return;
+				}
+				hotToothOld=hotTooth;
+				if(MouseIsDown) {//drag action
+					if(ALSelectedTeeth.Contains(hotTooth)) {
+						SetSelected(hotTooth,false);
+					}
+					else {
+						SetSelected(hotTooth,true);
+					}
+				}
+			}
+			else if(CursorTool==CursorTool.Pen){
+				if(!MouseIsDown){
+					return;
+				}
+				PointList.Add(new Point(e.X,e.Y));
+				//just add the last line segment instead of redrawing the whole thing.
+				Gl.glPushMatrix();
+				Gl.glDisable(Gl.GL_LIGHTING);
+				Gl.glDisable(Gl.GL_BLEND);
+				Gl.glDisable(Gl.GL_DEPTH_TEST);
+				Gl.glColor3f(
+					(float)Color.Black.R/255f,
+					(float)Color.Black.G/255f,
+					(float)Color.Black.B/255f);
+				Gl.glLineWidth((float)Width/300f);//about 2
+				int i=PointList.Count-1;
+				Gl.glBegin(Gl.GL_LINE_STRIP);
+				//if we set 0,0 to center, then this is where we would convert it back.
+				PointF pointMm=PixToMm(PointList[i-1]);
+				Gl.glVertex3f(pointMm.X,pointMm.Y,0);
+				pointMm=PixToMm(PointList[i]);
+				Gl.glVertex3f(pointMm.X,pointMm.Y,0);
+				Gl.glEnd();
+				Gl.glPopMatrix();
+				Gl.glFlush();
+			}
+			else if(CursorTool==CursorTool.Eraser){
+				if(!MouseIsDown){
+					return;
+				}
+				//look for any lines that intersect the "eraser".
+				//since the line segments are so short, it's sufficient to check end points.
+				string[] xy;
+				string[] pointStr;
+				float x;
+				float y;
+				float dist;//the distance between the point being tested and the center of the eraser circle.
+				float radius=8f;//by trial and error to achieve best feel.
+				PointF eraserPt=new PointF(e.X+8.49f,e.Y+8.49f);
+				for(int i=0;i<DrawingSegmentList.Count;i++){
+					pointStr=DrawingSegmentList[i].Split(';');
+					for(int p=0;p<pointStr.Length;p++){
+						xy=pointStr[p].Split(',');
+						if(xy.Length==2){
+							x=float.Parse(xy[0]);
+							y=float.Parse(xy[1]);
+							dist=(float)Math.Sqrt(Math.Pow(Math.Abs(x-eraserPt.X),2)+Math.Pow(Math.Abs(y-eraserPt.Y),2));
+							if(dist<=radius){//testing circle intersection here
+								//OnSegmentDrawn(DrawingSegmentList[i],false);//triggers a deletion from db.
+								DrawingSegmentList.RemoveAt(i);
+								Invalidate();
+								return;;
+							}
+						}
+					}
+				}	
+			}
 		}
 
 		protected override void OnMouseUp(MouseEventArgs e) {
 			base.OnMouseUp(e);
 			MouseIsDown=false;
+			if(CursorTool==CursorTool.Pen){
+				string drawingSegment="";
+				for(int i=0;i<PointList.Count;i++){
+					if(i>0){
+						drawingSegment+=";";
+					}
+					//I could compensate to center point here:
+					drawingSegment+=PointList[i].X+","+PointList[i].Y;
+				}
+				//OnSegmentDrawn(drawingSegment,true);
+				PointList=new List<Point>();
+				//Invalidate();//?
+			}
+			else if(CursorTool==CursorTool.Eraser){
+				//do nothing
+			}
 		}
 
-		protected override void OnMouseMove(MouseEventArgs e) {
-			base.OnMouseMove(e);
-			hotTooth=GetToothAtPoint(e.X,e.Y);
-			if(hotTooth==hotToothOld) {//mouse has not moved to another tooth
-				return;
-			}
-			hotToothOld=hotTooth;
-			if(MouseIsDown) {//drag action
-				if(ALSelectedTeeth.Contains(hotTooth)) {
-					SetSelected(hotTooth,false);
-				}
-				else {
-					SetSelected(hotTooth,true);
-				}
-			}
-		}
+		
 
 		///<summary>Used by mousedown and mouse move to set teeth selected or unselected.  Also used externally to set teeth selected.  Draws the changes also.</summary>
 		public void SetSelected(int intTooth,bool setValue) {

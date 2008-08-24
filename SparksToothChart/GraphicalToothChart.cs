@@ -184,6 +184,9 @@ namespace SparksToothChart {
 				if(cursorTool==CursorTool.Pen){
 					this.Cursor=new Cursor(GetType(),"Pen.cur");
 				}
+				if(!simpleMode){
+					toothChart.CursorTool=value;
+				}
 			}
 		}
 		#endregion Properties
@@ -435,7 +438,7 @@ namespace SparksToothChart {
 				DrawingSegmentList.Add(drawingSegment);
 			}
 			else {
-				//toothChart.SetSealant(toothID,color);
+				toothChart.AddDrawingSegment(drawingSegment);
 			}
 		}
 
@@ -930,7 +933,6 @@ namespace SparksToothChart {
 				}
 				//look for any lines that intersect the "eraser".
 				//since the line segments are so short, it's sufficient to check end points.
-				Point point;
 				string[] xy;
 				string[] pointStr;
 				float x;
