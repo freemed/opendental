@@ -1417,7 +1417,7 @@ namespace SparksToothChart {
 							y=float.Parse(xy[1]);
 							dist=(float)Math.Sqrt(Math.Pow(Math.Abs(x-eraserPt.X),2)+Math.Pow(Math.Abs(y-eraserPt.Y),2));
 							if(dist<=radius){//testing circle intersection here
-								//OnSegmentDrawn(DrawingSegmentList[i],false);//triggers a deletion from db.
+								OnSegmentDrawn(DrawingSegmentList[i],false);//triggers a deletion from db.
 								DrawingSegmentList.RemoveAt(i);
 								Invalidate();
 								return;;
@@ -1440,7 +1440,7 @@ namespace SparksToothChart {
 					//I could compensate to center point here:
 					drawingSegment+=PointList[i].X+","+PointList[i].Y;
 				}
-				//OnSegmentDrawn(drawingSegment,true);
+				OnSegmentDrawn(drawingSegment,true);
 				PointList=new List<Point>();
 				//Invalidate();//?
 			}
@@ -1449,7 +1449,13 @@ namespace SparksToothChart {
 			}
 		}
 
-		
+		///<summary></summary>
+		protected void OnSegmentDrawn(string drawingSegment,bool isInsert){
+			ToothChartDrawEventArgs tArgs=new ToothChartDrawEventArgs(drawingSegment,isInsert);
+			if(SegmentDrawn!=null){
+				SegmentDrawn(this,tArgs);
+			}
+		}
 
 		///<summary>Used by mousedown and mouse move to set teeth selected or unselected.  Also used externally to set teeth selected.  Draws the changes also.</summary>
 		public void SetSelected(int intTooth,bool setValue) {

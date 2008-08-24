@@ -207,6 +207,7 @@ namespace SparksToothChart {
 				toothChart.Location = new System.Drawing.Point(0,0);
 				toothChart.Name = "toothChart";
 				toothChart.Size = new System.Drawing.Size(719,564);//unnecessary?
+				toothChart.SegmentDrawn+=new ToothChartDrawEventHandler(toothChart_SegmentDrawn);
 				//this.toothChart.TabIndex = 0;
 				this.Controls.Add(toothChart);
 			}
@@ -987,6 +988,10 @@ namespace SparksToothChart {
 			if(SegmentDrawn!=null){
 				SegmentDrawn(this,tArgs);
 			}
+		}
+
+		private void toothChart_SegmentDrawn(object sender,ToothChartDrawEventArgs e) {
+			OnSegmentDrawn(e.DrawingSegement,e.IsInsert);
 		}
 
 		///<summary>Used by mousedown and mouse move to set teeth selected or unselected.  Also used externally to set teeth selected.  Draws the changes also.</summary>
