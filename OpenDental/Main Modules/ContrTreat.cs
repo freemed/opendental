@@ -1852,6 +1852,9 @@ namespace OpenDental{
 						case ToothInitialType.ShiftB:
 							toothChart.MoveTooth(ToothInitialList[i].ToothNum,0,0,0,0,0,ToothInitialList[i].Movement);
 							break;
+						case ToothInitialType.Drawing:
+							toothChart.AddDrawingSegment(ToothInitialList[i].Copy());
+							break;
 					}
 				}
 				ComputeProcAL();

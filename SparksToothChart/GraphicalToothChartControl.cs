@@ -928,9 +928,6 @@ namespace SparksToothChart {
 			float idealHeightProjection=(float)WidthProjection*(float)originalDrawingSize.Height/(float)originalDrawingSize.Width;
 			float actualHeightProjection=(float)WidthProjection*(float)this.Height/(float)this.Width;
 			float mmY=(idealHeightProjection)/2f-(((float)pixPoint.Y)*toMmRatio);
-			//if(actualHeightProjection<idealHeightProjection){
-			//	mmY+=(actualHeightProjection-idealHeightProjection)/2f;
-			//}
 			return new PointF(mmX,mmY);
 		}
 
