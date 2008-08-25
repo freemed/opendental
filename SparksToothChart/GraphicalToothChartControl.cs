@@ -68,6 +68,8 @@ namespace SparksToothChart {
 		[Category("Action"),Description("Occurs when the mouse goes up ending a drawing segment.")]
 		public event ToothChartDrawEventHandler SegmentDrawn=null;
 		public Color DrawingColor;
+		///<summary>When the drawing feature was originally added, this was the size of the tooth chart.  This number must forever be preserved and drawings scaled to account for it.</summary>
+		private Size originalDrawingSize=new Size(410,307);
 
 
 		///<summary>Specify the hardware mode to create the tooth chart with. Set hardwareMode=true to try for hardware accelerated graphics, and set hardwareMode=false to try and get software graphics.</summary>
@@ -395,7 +397,16 @@ namespace SparksToothChart {
 
 		///<summary></summary>
 		public void AddDrawingSegment(ToothInitial drawingSegment) {
-			DrawingSegmentList.Add(drawingSegment);
+			bool alreadyAdded=false;
+			for(int i=0;i<DrawingSegmentList.Count;i++){
+				if(DrawingSegmentList[i].DrawingSegment==drawingSegment.DrawingSegment){
+					alreadyAdded=true;
+					break;
+				}
+			}
+			if(!alreadyAdded){
+				DrawingSegmentList.Add(drawingSegment);
+			}
 		}
 
 		///<summary>Returns a bitmap of what is showing in the control.  Used for printing.</summary>
@@ -824,17 +835,21 @@ namespace SparksToothChart {
 		private void DrawDrawingSegments(){
 			Gl.glPushMatrix();
 			Gl.glDisable(Gl.GL_LIGHTING);
-			Gl.glDisable(Gl.GL_BLEND);
+			Gl.glEnable(Gl.GL_BLEND);
+			Gl.glBlendFunc(Gl.GL_SRC_ALPHA,Gl.GL_ONE_MINUS_SRC_ALPHA);
 			Gl.glDisable(Gl.GL_DEPTH_TEST);
 			//Gl.glTranslatef(0,0,6f);//move forward 6mm so it will be visible.
 			//Gl.glBlendFunc(Gl.GL_SRC_ALPHA,Gl.GL_ONE_MINUS_SRC_ALPHA);
-			Gl.glLineWidth((float)Width/300f);//about 2
+			float lWidth=(float)Width/300f;//about 1.5
+			Gl.glLineWidth(lWidth);
+			Gl.glPointSize((float)Width/350f);//slightly smaller
 			string[] pointStr;
 			List<Point> points;
 			Point point;
 			string[] xy;
 			PointF pointMm;
 			Color color;
+			float scaleDrawing=(float)Width/(float)originalDrawingSize.Width;
 			for(int s=0;s<DrawingSegmentList.Count;s++){
 				color=DrawingSegmentList[s].ColorDraw;
 				Gl.glColor3f(
@@ -846,13 +861,24 @@ namespace SparksToothChart {
 				for(int p=0;p<pointStr.Length;p++){
 					xy=pointStr[p].Split(',');
 					if(xy.Length==2){
-						point=new Point(int.Parse(xy[0]),int.Parse(xy[1]));
+						point=new Point((int)(float.Parse(xy[0])*scaleDrawing),(int)(float.Parse(xy[1])*scaleDrawing));
 						points.Add(point);
 					}
 				}
 				Gl.glBegin(Gl.GL_LINE_STRIP);
 				for(int i=0;i<points.Count;i++){
 					//if we set 0,0 to center, then this is where we would convert it back.
+					pointMm=PixToMm(new Point(points[i].X,points[i].Y));
+					Gl.glVertex3f(pointMm.X,pointMm.Y,0);
+				}
+				Gl.glEnd();
+				//now draw a filled circle at each line strip intersection to make it look nicer
+				Gl.glBegin(Gl.GL_POINTS);
+				for(int i=0;i<points.Count;i++){
+					//but ignore the first and last.  We are only concerned with where lines meet.
+					if(i==0 || i==points.Count-1){
+						continue;
+					}
 					pointMm=PixToMm(new Point(points[i].X,points[i].Y));
 					Gl.glVertex3f(pointMm.X,pointMm.Y,0);
 				}
@@ -895,11 +921,16 @@ namespace SparksToothChart {
 			return recPix;
 		}
 
+		///<summary>This also adjusts the result up or down along the Y axis to account for a control that is not the same proportion as the original.</summary>
 		private PointF PixToMm(Point pixPoint){
 			float toMmRatio=(float)WidthProjection/(float)Width;//mm/pix
 			float mmX=(((float)pixPoint.X)*toMmRatio)-((float)WidthProjection)/2f;
-			float heightProjection=(float)WidthProjection*(float)this.Height/(float)this.Width;
-			float mmY=(heightProjection)/2f-(((float)pixPoint.Y)*toMmRatio);
+			float idealHeightProjection=(float)WidthProjection*(float)originalDrawingSize.Height/(float)originalDrawingSize.Width;
+			float actualHeightProjection=(float)WidthProjection*(float)this.Height/(float)this.Width;
+			float mmY=(idealHeightProjection)/2f-(((float)pixPoint.Y)*toMmRatio);
+			//if(actualHeightProjection<idealHeightProjection){
+			//	mmY+=(actualHeightProjection-idealHeightProjection)/2f;
+			//}
 			return new PointF(mmX,mmY);
 		}
 
@@ -1409,7 +1440,8 @@ namespace SparksToothChart {
 				//just add the last line segment instead of redrawing the whole thing.
 				Gl.glPushMatrix();
 				Gl.glDisable(Gl.GL_LIGHTING);
-				Gl.glDisable(Gl.GL_BLEND);
+				Gl.glEnable(Gl.GL_BLEND);
+				Gl.glBlendFunc(Gl.GL_SRC_ALPHA,Gl.GL_ONE_MINUS_SRC_ALPHA);
 				Gl.glDisable(Gl.GL_DEPTH_TEST);
 				Gl.glColor3f(
 					(float)DrawingColor.R/255f,

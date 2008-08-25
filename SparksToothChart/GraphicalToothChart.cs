@@ -43,6 +43,8 @@ namespace SparksToothChart {
 		public event ToothChartDrawEventHandler SegmentDrawn=null;
 		private List<ToothInitial> DrawingSegmentList;
 		private Color drawingColor;
+		///<summary>When the drawing feature was originally added, this was the size of the tooth chart.  This number must forever be preserved and drawings scaled to account for it.</summary>
+		private Size originalDrawingSize=new Size(410,307);
 
 		public GraphicalToothChart() {
 			InitializeComponent();
@@ -454,7 +456,16 @@ namespace SparksToothChart {
 		///<summary></summary>
 		public void AddDrawingSegment(ToothInitial drawingSegment) {
 			if(simpleMode) {
-				DrawingSegmentList.Add(drawingSegment);
+				bool alreadyAdded=false;
+				for(int i=0;i<DrawingSegmentList.Count;i++){
+					if(DrawingSegmentList[i].DrawingSegment==drawingSegment.DrawingSegment){
+						alreadyAdded=true;
+						break;
+					}
+				}
+				if(!alreadyAdded){
+					DrawingSegmentList.Add(drawingSegment);
+				}
 			}
 			else {
 				toothChart.AddDrawingSegment(drawingSegment);
@@ -910,7 +921,32 @@ namespace SparksToothChart {
 				//do nothing
 			}
 			else if(cursorTool==CursorTool.ColorChanger){
-				//do nothing
+				//look for any lines near the "wand".
+				//since the line segments are so short, it's sufficient to check end points.
+				string[] xy;
+				string[] pointStr;
+				float x;
+				float y;
+				float dist;//the distance between the point being tested and the center of the eraser circle.
+				float radius=2f;//by trial and error to achieve best feel.
+				//PointF eraserPt=new PointF(e.X+8.49f,e.Y+8.49f);
+				for(int i=0;i<DrawingSegmentList.Count;i++){
+					pointStr=DrawingSegmentList[i].DrawingSegment.Split(';');
+					for(int p=0;p<pointStr.Length;p++){
+						xy=pointStr[p].Split(',');
+						if(xy.Length==2){
+							x=float.Parse(xy[0]);
+							y=float.Parse(xy[1]);
+							dist=(float)Math.Sqrt(Math.Pow(Math.Abs(x-e.X),2)+Math.Pow(Math.Abs(y-e.Y),2));
+							if(dist<=radius){//testing circle intersection here
+								OnSegmentDrawn(DrawingSegmentList[i].DrawingSegment);
+								DrawingSegmentList[i].ColorDraw=drawingColor;
+								Invalidate();
+								return;;
+							}
+						}
+					}
+				}	
 			}
 		}
 
@@ -982,35 +1018,7 @@ namespace SparksToothChart {
 				}	
 			}
 			else if(cursorTool==CursorTool.ColorChanger){
-				if(!MouseIsDown){
-					return;
-				}
-				//look for any lines that intersect the "eraser".
-				//since the line segments are so short, it's sufficient to check end points.
-				string[] xy;
-				string[] pointStr;
-				float x;
-				float y;
-				float dist;//the distance between the point being tested and the center of the eraser circle.
-				float radius=8f;//by trial and error to achieve best feel.
-				PointF eraserPt=new PointF(e.X+8.49f,e.Y+8.49f);
-				for(int i=0;i<DrawingSegmentList.Count;i++){
-					pointStr=DrawingSegmentList[i].DrawingSegment.Split(';');
-					for(int p=0;p<pointStr.Length;p++){
-						xy=pointStr[p].Split(',');
-						if(xy.Length==2){
-							x=float.Parse(xy[0]);
-							y=float.Parse(xy[1]);
-							dist=(float)Math.Sqrt(Math.Pow(Math.Abs(x-eraserPt.X),2)+Math.Pow(Math.Abs(y-eraserPt.Y),2));
-							if(dist<=radius){//testing circle intersection here
-								OnSegmentDrawn(DrawingSegmentList[i].DrawingSegment);//triggers a deletion from db.
-								DrawingSegmentList[i].ColorDraw=drawingColor;
-								Invalidate();
-								return;;
-							}
-						}
-					}
-				}	
+				//do nothing
 			}
 		}
 
