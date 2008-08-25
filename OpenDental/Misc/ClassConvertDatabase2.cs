@@ -176,7 +176,8 @@ namespace OpenDental{
 					General.NonQ(command);
 					command="ALTER TABLE toothinitial ADD DrawingSegment text";
 					General.NonQ(command);
-
+					command="ALTER TABLE toothinitial ADD ColorDraw int NOT NULL";
+					General.NonQ(command);
 
 
 

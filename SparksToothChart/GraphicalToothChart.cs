@@ -7,6 +7,7 @@ using System.Drawing.Drawing2D;
 using System.Data;
 using System.Text;
 using System.Windows.Forms;
+using OpenDentBusiness;
 
 namespace SparksToothChart {
 	public partial class GraphicalToothChart:UserControl {
@@ -40,7 +41,8 @@ namespace SparksToothChart {
 		///<summary></summary>
 		[Category("Action"),Description("Occurs when the mouse goes up ending a drawing segment.")]
 		public event ToothChartDrawEventHandler SegmentDrawn=null;
-		private List<string> DrawingSegmentList;
+		private List<ToothInitial> DrawingSegmentList;
+		private Color drawingColor;
 
 		public GraphicalToothChart() {
 			InitializeComponent();
@@ -50,7 +52,8 @@ namespace SparksToothChart {
 			ResetControls();
 			cursorTool=CursorTool.Pointer;
 			PointList=new List<Point>();
-			DrawingSegmentList=new List<string>();
+			DrawingSegmentList=new List<ToothInitial>();
+			drawingColor=Color.Black;
 		}
 
 		#region Properties
@@ -175,17 +178,32 @@ namespace SparksToothChart {
 			}
 			set{
 				cursorTool=value;
-				if(cursorTool==CursorTool.Eraser){
-					this.Cursor=new Cursor(GetType(),"EraseCircle.cur");
-				}
 				if(cursorTool==CursorTool.Pointer){
 					this.Cursor=Cursors.Default;
 				}
 				if(cursorTool==CursorTool.Pen){
 					this.Cursor=new Cursor(GetType(),"Pen.cur");
 				}
+				if(cursorTool==CursorTool.Eraser){
+					this.Cursor=new Cursor(GetType(),"EraseCircle.cur");
+				}
+				if(cursorTool==CursorTool.ColorChanger){
+					this.Cursor=new Cursor(GetType(),"ColorChanger.cur");
+				}
 				if(!simpleMode){
 					toothChart.CursorTool=value;
+				}
+			}
+		}
+
+		public Color DrawingColor{
+			//get{
+			//	return drawingColor;
+			//}
+			set{
+				drawingColor=value;
+				if(!simpleMode){
+					toothChart.DrawingColor=value;
 				}
 			}
 		}
@@ -241,7 +259,7 @@ namespace SparksToothChart {
 				}
 				ALSelectedTeeth.Clear();
 				selectedTeeth=new string[0];
-				DrawingSegmentList=new List<string>();
+				DrawingSegmentList=new List<ToothInitial>();
 				this.Invalidate();
 			}
 			else{
@@ -434,7 +452,7 @@ namespace SparksToothChart {
 		}
 
 		///<summary></summary>
-		public void AddDrawingSegment(string drawingSegment) {
+		public void AddDrawingSegment(ToothInitial drawingSegment) {
 			if(simpleMode) {
 				DrawingSegmentList.Add(drawingSegment);
 			}
@@ -570,9 +588,10 @@ namespace SparksToothChart {
 			List<Point> points;
 			Point point;
 			string[] xy;
-			Pen pen=new Pen(Color.Black,2f);
+			Pen pen;
 			for(int s=0;s<DrawingSegmentList.Count;s++){
-				pointStr=DrawingSegmentList[s].Split(';');
+				pen=new Pen(DrawingSegmentList[s].ColorDraw,2f);
+				pointStr=DrawingSegmentList[s].DrawingSegment.Split(';');
 				points=new List<Point>();
 				for(int p=0;p<pointStr.Length;p++){
 					xy=pointStr[p].Split(',');
@@ -890,6 +909,9 @@ namespace SparksToothChart {
 			else if(cursorTool==CursorTool.Eraser){
 				//do nothing
 			}
+			else if(cursorTool==CursorTool.ColorChanger){
+				//do nothing
+			}
 		}
 
 		protected override void OnMouseMove(MouseEventArgs e) {
@@ -922,7 +944,7 @@ namespace SparksToothChart {
 				//just add the last line segment instead of redrawing the whole thing.
 				Graphics g=this.CreateGraphics();
 				g.SmoothingMode=SmoothingMode.HighQuality;
-				Pen pen=new Pen(Brushes.Black,2f);
+				Pen pen=new Pen(drawingColor,2f);
 				int i=PointList.Count-1;
 				g.DrawLine(pen,PointList[i-1].X,PointList[i-1].Y,PointList[i].X,PointList[i].Y);
 				g.Dispose();
@@ -942,7 +964,7 @@ namespace SparksToothChart {
 				float radius=8f;//by trial and error to achieve best feel.
 				PointF eraserPt=new PointF(e.X+8.49f,e.Y+8.49f);
 				for(int i=0;i<DrawingSegmentList.Count;i++){
-					pointStr=DrawingSegmentList[i].Split(';');
+					pointStr=DrawingSegmentList[i].DrawingSegment.Split(';');
 					for(int p=0;p<pointStr.Length;p++){
 						xy=pointStr[p].Split(',');
 						if(xy.Length==2){
@@ -950,8 +972,39 @@ namespace SparksToothChart {
 							y=float.Parse(xy[1]);
 							dist=(float)Math.Sqrt(Math.Pow(Math.Abs(x-eraserPt.X),2)+Math.Pow(Math.Abs(y-eraserPt.Y),2));
 							if(dist<=radius){//testing circle intersection here
-								OnSegmentDrawn(DrawingSegmentList[i],false);//triggers a deletion from db.
+								OnSegmentDrawn(DrawingSegmentList[i].DrawingSegment);//triggers a deletion from db.
 								DrawingSegmentList.RemoveAt(i);
+								Invalidate();
+								return;;
+							}
+						}
+					}
+				}	
+			}
+			else if(cursorTool==CursorTool.ColorChanger){
+				if(!MouseIsDown){
+					return;
+				}
+				//look for any lines that intersect the "eraser".
+				//since the line segments are so short, it's sufficient to check end points.
+				string[] xy;
+				string[] pointStr;
+				float x;
+				float y;
+				float dist;//the distance between the point being tested and the center of the eraser circle.
+				float radius=8f;//by trial and error to achieve best feel.
+				PointF eraserPt=new PointF(e.X+8.49f,e.Y+8.49f);
+				for(int i=0;i<DrawingSegmentList.Count;i++){
+					pointStr=DrawingSegmentList[i].DrawingSegment.Split(';');
+					for(int p=0;p<pointStr.Length;p++){
+						xy=pointStr[p].Split(',');
+						if(xy.Length==2){
+							x=float.Parse(xy[0]);
+							y=float.Parse(xy[1]);
+							dist=(float)Math.Sqrt(Math.Pow(Math.Abs(x-eraserPt.X),2)+Math.Pow(Math.Abs(y-eraserPt.Y),2));
+							if(dist<=radius){//testing circle intersection here
+								OnSegmentDrawn(DrawingSegmentList[i].DrawingSegment);//triggers a deletion from db.
+								DrawingSegmentList[i].ColorDraw=drawingColor;
 								Invalidate();
 								return;;
 							}
@@ -973,25 +1026,28 @@ namespace SparksToothChart {
 					//I could compensate to center point here:
 					drawingSegment+=PointList[i].X+","+PointList[i].Y;
 				}
-				OnSegmentDrawn(drawingSegment,true);
+				OnSegmentDrawn(drawingSegment);
 				PointList=new List<Point>();
 				//Invalidate();//?
 			}
 			else if(cursorTool==CursorTool.Eraser){
 				//do nothing
 			}
+			else if(cursorTool==CursorTool.ColorChanger){
+				//do nothing
+			}
 		}
 
 		///<summary></summary>
-		protected void OnSegmentDrawn(string drawingSegment,bool isInsert){
-			ToothChartDrawEventArgs tArgs=new ToothChartDrawEventArgs(drawingSegment,isInsert);
+		protected void OnSegmentDrawn(string drawingSegment){
+			ToothChartDrawEventArgs tArgs=new ToothChartDrawEventArgs(drawingSegment);
 			if(SegmentDrawn!=null){
 				SegmentDrawn(this,tArgs);
 			}
 		}
 
 		private void toothChart_SegmentDrawn(object sender,ToothChartDrawEventArgs e) {
-			OnSegmentDrawn(e.DrawingSegement,e.IsInsert);
+			OnSegmentDrawn(e.DrawingSegement);
 		}
 
 		///<summary>Used by mousedown and mouse move to set teeth selected or unselected.  Also used externally to set teeth selected.  Draws the changes also.</summary>
@@ -1040,7 +1096,8 @@ namespace SparksToothChart {
 	public enum CursorTool{
 		Pointer,
 		Pen,
-		Eraser
+		Eraser,
+		ColorChanger
 	}
 
 	///<summary></summary>
@@ -1049,12 +1106,12 @@ namespace SparksToothChart {
 	///<summary></summary>
 	public class ToothChartDrawEventArgs{
 		private string drawingSegment;
-		private bool isInsert;
+		//private bool isInsert;
 
 		///<summary></summary>
-		public ToothChartDrawEventArgs(string drawingSeg,bool isInsert){
+		public ToothChartDrawEventArgs(string drawingSeg){//,bool isInsert){
 			this.drawingSegment=drawingSeg;
-			this.isInsert=isInsert;
+			//this.isInsert=isInsert;
 		}
 
 		///<summary></summary>
@@ -1064,11 +1121,11 @@ namespace SparksToothChart {
 			}
 		}
 
-		///<summary></summary>
+		/*//<summary></summary>
 		public bool IsInsert{
 			get{ 
 				return isInsert;
 			}
-		}
+		}*/
 	}
 }

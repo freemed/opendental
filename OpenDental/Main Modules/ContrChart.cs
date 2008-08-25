@@ -239,6 +239,26 @@ namespace OpenDental{
 		private RadioButton radioEraser;
 		private RadioButton radioPen;
 		private Panel panelDrawColor;
+		private GroupBox groupBox8;
+		private Panel panelTPlight;
+		private Panel panelTPdark;
+		private Label label18;
+		private OpenDental.UI.Button butColorOther;
+		private Panel panelRdark;
+		private Label label21;
+		private Panel panelRlight;
+		private Panel panelEOdark;
+		private Label label20;
+		private Panel panelEOlight;
+		private Panel panelECdark;
+		private Label label19;
+		private Panel panelEClight;
+		private Panel panelCdark;
+		private Label label17;
+		private Panel panelClight;
+		private RadioButton radioColorChanger;
+		private Panel panelBlack;
+		private Label label22;
 		private int Chartscrollval;
 
 	
@@ -363,10 +383,27 @@ namespace OpenDental{
 			this.checkExtraNotes = new System.Windows.Forms.CheckBox();
 			this.groupBox6 = new System.Windows.Forms.GroupBox();
 			this.tabDraw = new System.Windows.Forms.TabPage();
+			this.groupBox8 = new System.Windows.Forms.GroupBox();
 			this.panelDrawColor = new System.Windows.Forms.Panel();
 			this.radioEraser = new System.Windows.Forms.RadioButton();
 			this.radioPen = new System.Windows.Forms.RadioButton();
 			this.radioPointer = new System.Windows.Forms.RadioButton();
+			this.panelTPlight = new System.Windows.Forms.Panel();
+			this.panelTPdark = new System.Windows.Forms.Panel();
+			this.label18 = new System.Windows.Forms.Label();
+			this.panelCdark = new System.Windows.Forms.Panel();
+			this.label17 = new System.Windows.Forms.Label();
+			this.panelClight = new System.Windows.Forms.Panel();
+			this.panelECdark = new System.Windows.Forms.Panel();
+			this.label19 = new System.Windows.Forms.Label();
+			this.panelEClight = new System.Windows.Forms.Panel();
+			this.panelEOdark = new System.Windows.Forms.Panel();
+			this.label20 = new System.Windows.Forms.Label();
+			this.panelEOlight = new System.Windows.Forms.Panel();
+			this.panelRdark = new System.Windows.Forms.Panel();
+			this.label21 = new System.Windows.Forms.Label();
+			this.panelRlight = new System.Windows.Forms.Panel();
+			this.radioColorChanger = new System.Windows.Forms.RadioButton();
 			this.butForeignKey = new OpenDental.UI.Button();
 			this.butAddKey = new OpenDental.UI.Button();
 			this.butBig = new OpenDental.UI.Button();
@@ -435,10 +472,13 @@ namespace OpenDental{
 			this.butNew = new OpenDental.UI.Button();
 			this.butShowAll = new OpenDental.UI.Button();
 			this.butShowNone = new OpenDental.UI.Button();
+			this.butColorOther = new OpenDental.UI.Button();
 			this.ToolBarMain = new OpenDental.UI.ODToolBar();
 			this.button1 = new OpenDental.UI.Button();
 			this.textTreatmentNotes = new OpenDental.ODtextBox();
 			this.gridPtInfo = new OpenDental.UI.ODGrid();
+			this.panelBlack = new System.Windows.Forms.Panel();
+			this.label22 = new System.Windows.Forms.Label();
 			this.groupBox2.SuspendLayout();
 			this.tabControlImages.SuspendLayout();
 			this.panelImages.SuspendLayout();
@@ -459,6 +499,7 @@ namespace OpenDental{
 			this.groupBox7.SuspendLayout();
 			this.groupBox6.SuspendLayout();
 			this.tabDraw.SuspendLayout();
+			this.groupBox8.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// textSurf
@@ -1463,6 +1504,8 @@ namespace OpenDental{
 			// 
 			// tabDraw
 			// 
+			this.tabDraw.Controls.Add(this.radioColorChanger);
+			this.tabDraw.Controls.Add(this.groupBox8);
 			this.tabDraw.Controls.Add(this.panelDrawColor);
 			this.tabDraw.Controls.Add(this.radioEraser);
 			this.tabDraw.Controls.Add(this.radioPen);
@@ -1474,18 +1517,45 @@ namespace OpenDental{
 			this.tabDraw.Text = "Draw";
 			this.tabDraw.UseVisualStyleBackColor = true;
 			// 
+			// groupBox8
+			// 
+			this.groupBox8.Controls.Add(this.panelBlack);
+			this.groupBox8.Controls.Add(this.label22);
+			this.groupBox8.Controls.Add(this.butColorOther);
+			this.groupBox8.Controls.Add(this.panelRdark);
+			this.groupBox8.Controls.Add(this.label21);
+			this.groupBox8.Controls.Add(this.panelRlight);
+			this.groupBox8.Controls.Add(this.panelEOdark);
+			this.groupBox8.Controls.Add(this.label20);
+			this.groupBox8.Controls.Add(this.panelEOlight);
+			this.groupBox8.Controls.Add(this.panelECdark);
+			this.groupBox8.Controls.Add(this.label19);
+			this.groupBox8.Controls.Add(this.panelEClight);
+			this.groupBox8.Controls.Add(this.panelCdark);
+			this.groupBox8.Controls.Add(this.label17);
+			this.groupBox8.Controls.Add(this.panelClight);
+			this.groupBox8.Controls.Add(this.panelTPdark);
+			this.groupBox8.Controls.Add(this.label18);
+			this.groupBox8.Controls.Add(this.panelTPlight);
+			this.groupBox8.Location = new System.Drawing.Point(160,11);
+			this.groupBox8.Name = "groupBox8";
+			this.groupBox8.Size = new System.Drawing.Size(157,214);
+			this.groupBox8.TabIndex = 4;
+			this.groupBox8.TabStop = false;
+			this.groupBox8.Text = "Set Color";
+			// 
 			// panelDrawColor
 			// 
 			this.panelDrawColor.BackColor = System.Drawing.Color.Black;
-			this.panelDrawColor.Location = new System.Drawing.Point(13,79);
+			this.panelDrawColor.Location = new System.Drawing.Point(13,101);
 			this.panelDrawColor.Name = "panelDrawColor";
-			this.panelDrawColor.Size = new System.Drawing.Size(25,25);
+			this.panelDrawColor.Size = new System.Drawing.Size(22,22);
 			this.panelDrawColor.TabIndex = 3;
 			this.panelDrawColor.DoubleClick += new System.EventHandler(this.panelDrawColor_DoubleClick);
 			// 
 			// radioEraser
 			// 
-			this.radioEraser.Location = new System.Drawing.Point(14,49);
+			this.radioEraser.Location = new System.Drawing.Point(14,51);
 			this.radioEraser.Name = "radioEraser";
 			this.radioEraser.Size = new System.Drawing.Size(122,17);
 			this.radioEraser.TabIndex = 2;
@@ -1496,7 +1566,7 @@ namespace OpenDental{
 			// 
 			// radioPen
 			// 
-			this.radioPen.Location = new System.Drawing.Point(14,31);
+			this.radioPen.Location = new System.Drawing.Point(14,32);
 			this.radioPen.Name = "radioPen";
 			this.radioPen.Size = new System.Drawing.Size(122,17);
 			this.radioPen.TabIndex = 1;
@@ -1516,6 +1586,152 @@ namespace OpenDental{
 			this.radioPointer.Text = "Pointer";
 			this.radioPointer.UseVisualStyleBackColor = true;
 			this.radioPointer.Click += new System.EventHandler(this.radioPointer_Click);
+			// 
+			// panelTPlight
+			// 
+			this.panelTPlight.BackColor = System.Drawing.Color.Black;
+			this.panelTPlight.Location = new System.Drawing.Point(123,17);
+			this.panelTPlight.Name = "panelTPlight";
+			this.panelTPlight.Size = new System.Drawing.Size(22,22);
+			this.panelTPlight.TabIndex = 4;
+			this.panelTPlight.Click += new System.EventHandler(this.panelTPlight_Click);
+			// 
+			// panelTPdark
+			// 
+			this.panelTPdark.BackColor = System.Drawing.Color.Black;
+			this.panelTPdark.Location = new System.Drawing.Point(95,17);
+			this.panelTPdark.Name = "panelTPdark";
+			this.panelTPdark.Size = new System.Drawing.Size(22,22);
+			this.panelTPdark.TabIndex = 6;
+			this.panelTPdark.Click += new System.EventHandler(this.panelTPdark_Click);
+			// 
+			// label18
+			// 
+			this.label18.Location = new System.Drawing.Point(11,20);
+			this.label18.Name = "label18";
+			this.label18.Size = new System.Drawing.Size(82,17);
+			this.label18.TabIndex = 5;
+			this.label18.Text = "TreatPlan";
+			this.label18.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// panelCdark
+			// 
+			this.panelCdark.BackColor = System.Drawing.Color.Black;
+			this.panelCdark.Location = new System.Drawing.Point(95,43);
+			this.panelCdark.Name = "panelCdark";
+			this.panelCdark.Size = new System.Drawing.Size(22,22);
+			this.panelCdark.TabIndex = 9;
+			this.panelCdark.Click += new System.EventHandler(this.panelCdark_Click);
+			// 
+			// label17
+			// 
+			this.label17.Location = new System.Drawing.Point(11,46);
+			this.label17.Name = "label17";
+			this.label17.Size = new System.Drawing.Size(82,17);
+			this.label17.TabIndex = 8;
+			this.label17.Text = "Complete";
+			this.label17.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// panelClight
+			// 
+			this.panelClight.BackColor = System.Drawing.Color.Black;
+			this.panelClight.Location = new System.Drawing.Point(123,43);
+			this.panelClight.Name = "panelClight";
+			this.panelClight.Size = new System.Drawing.Size(22,22);
+			this.panelClight.TabIndex = 7;
+			this.panelClight.Click += new System.EventHandler(this.panelClight_Click);
+			// 
+			// panelECdark
+			// 
+			this.panelECdark.BackColor = System.Drawing.Color.Black;
+			this.panelECdark.Location = new System.Drawing.Point(95,69);
+			this.panelECdark.Name = "panelECdark";
+			this.panelECdark.Size = new System.Drawing.Size(22,22);
+			this.panelECdark.TabIndex = 12;
+			this.panelECdark.Click += new System.EventHandler(this.panelECdark_Click);
+			// 
+			// label19
+			// 
+			this.label19.Location = new System.Drawing.Point(11,72);
+			this.label19.Name = "label19";
+			this.label19.Size = new System.Drawing.Size(82,17);
+			this.label19.TabIndex = 11;
+			this.label19.Text = "ExistCurProv";
+			this.label19.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// panelEClight
+			// 
+			this.panelEClight.BackColor = System.Drawing.Color.Black;
+			this.panelEClight.Location = new System.Drawing.Point(123,69);
+			this.panelEClight.Name = "panelEClight";
+			this.panelEClight.Size = new System.Drawing.Size(22,22);
+			this.panelEClight.TabIndex = 10;
+			this.panelEClight.Click += new System.EventHandler(this.panelEClight_Click);
+			// 
+			// panelEOdark
+			// 
+			this.panelEOdark.BackColor = System.Drawing.Color.Black;
+			this.panelEOdark.Location = new System.Drawing.Point(95,95);
+			this.panelEOdark.Name = "panelEOdark";
+			this.panelEOdark.Size = new System.Drawing.Size(22,22);
+			this.panelEOdark.TabIndex = 15;
+			this.panelEOdark.Click += new System.EventHandler(this.panelEOdark_Click);
+			// 
+			// label20
+			// 
+			this.label20.Location = new System.Drawing.Point(11,98);
+			this.label20.Name = "label20";
+			this.label20.Size = new System.Drawing.Size(82,17);
+			this.label20.TabIndex = 14;
+			this.label20.Text = "ExistOther";
+			this.label20.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// panelEOlight
+			// 
+			this.panelEOlight.BackColor = System.Drawing.Color.Black;
+			this.panelEOlight.Location = new System.Drawing.Point(123,95);
+			this.panelEOlight.Name = "panelEOlight";
+			this.panelEOlight.Size = new System.Drawing.Size(22,22);
+			this.panelEOlight.TabIndex = 13;
+			this.panelEOlight.Click += new System.EventHandler(this.panelEOlight_Click);
+			// 
+			// panelRdark
+			// 
+			this.panelRdark.BackColor = System.Drawing.Color.Black;
+			this.panelRdark.Location = new System.Drawing.Point(95,121);
+			this.panelRdark.Name = "panelRdark";
+			this.panelRdark.Size = new System.Drawing.Size(22,22);
+			this.panelRdark.TabIndex = 18;
+			this.panelRdark.Click += new System.EventHandler(this.panelRdark_Click);
+			// 
+			// label21
+			// 
+			this.label21.Location = new System.Drawing.Point(11,124);
+			this.label21.Name = "label21";
+			this.label21.Size = new System.Drawing.Size(82,17);
+			this.label21.TabIndex = 17;
+			this.label21.Text = "Referred";
+			this.label21.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// panelRlight
+			// 
+			this.panelRlight.BackColor = System.Drawing.Color.Black;
+			this.panelRlight.Location = new System.Drawing.Point(123,121);
+			this.panelRlight.Name = "panelRlight";
+			this.panelRlight.Size = new System.Drawing.Size(22,22);
+			this.panelRlight.TabIndex = 16;
+			this.panelRlight.Click += new System.EventHandler(this.panelRlight_Click);
+			// 
+			// radioColorChanger
+			// 
+			this.radioColorChanger.Location = new System.Drawing.Point(14,70);
+			this.radioColorChanger.Name = "radioColorChanger";
+			this.radioColorChanger.Size = new System.Drawing.Size(122,17);
+			this.radioColorChanger.TabIndex = 5;
+			this.radioColorChanger.TabStop = true;
+			this.radioColorChanger.Text = "Color Changer";
+			this.radioColorChanger.UseVisualStyleBackColor = true;
+			this.radioColorChanger.Click += new System.EventHandler(this.radioColorChanger_Click);
 			// 
 			// butForeignKey
 			// 
@@ -2504,6 +2720,20 @@ namespace OpenDental{
 			this.butShowNone.Text = "None";
 			this.butShowNone.Click += new System.EventHandler(this.butShowNone_Click);
 			// 
+			// butColorOther
+			// 
+			this.butColorOther.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butColorOther.Autosize = true;
+			this.butColorOther.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butColorOther.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butColorOther.CornerRadius = 4F;
+			this.butColorOther.Location = new System.Drawing.Point(95,179);
+			this.butColorOther.Name = "butColorOther";
+			this.butColorOther.Size = new System.Drawing.Size(50,24);
+			this.butColorOther.TabIndex = 192;
+			this.butColorOther.Text = "Other";
+			this.butColorOther.Click += new System.EventHandler(this.butColorOther_Click);
+			// 
 			// ToolBarMain
 			// 
 			this.ToolBarMain.Dock = System.Windows.Forms.DockStyle.Top;
@@ -2555,6 +2785,24 @@ namespace OpenDental{
 			this.gridPtInfo.TranslationName = "TableChartPtInfo";
 			this.gridPtInfo.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridPtInfo_CellDoubleClick);
 			// 
+			// panelBlack
+			// 
+			this.panelBlack.BackColor = System.Drawing.Color.Black;
+			this.panelBlack.Location = new System.Drawing.Point(95,147);
+			this.panelBlack.Name = "panelBlack";
+			this.panelBlack.Size = new System.Drawing.Size(22,22);
+			this.panelBlack.TabIndex = 194;
+			this.panelBlack.Click += new System.EventHandler(this.panelBlack_Click);
+			// 
+			// label22
+			// 
+			this.label22.Location = new System.Drawing.Point(11,150);
+			this.label22.Name = "label22";
+			this.label22.Size = new System.Drawing.Size(82,17);
+			this.label22.TabIndex = 193;
+			this.label22.Text = "Black";
+			this.label22.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
 			// ContrChart
 			// 
 			this.Controls.Add(this.butForeignKey);
@@ -2597,6 +2845,7 @@ namespace OpenDental{
 			this.groupBox7.ResumeLayout(false);
 			this.groupBox6.ResumeLayout(false);
 			this.tabDraw.ResumeLayout(false);
+			this.groupBox8.ResumeLayout(false);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -3752,7 +4001,7 @@ namespace OpenDental{
 						toothChart.MoveTooth(ToothInitialList[i].ToothNum,0,0,0,0,0,ToothInitialList[i].Movement);
 						break;
 					case ToothInitialType.Drawing:
-						toothChart.AddDrawingSegment(ToothInitialList[i].DrawingSegment);
+						toothChart.AddDrawingSegment(ToothInitialList[i].Copy());
 						break;
 				}
 			}
@@ -3972,6 +4221,16 @@ namespace OpenDental{
 			if(selectedImageTab<tabControlImages.TabCount){
 				tabControlImages.SelectedIndex=selectedImageTab;
 			}
+			panelTPdark.BackColor=DefC.Long[(int)DefCat.ChartGraphicColors][0].ItemColor;
+			panelCdark.BackColor=DefC.Long[(int)DefCat.ChartGraphicColors][1].ItemColor;
+			panelECdark.BackColor=DefC.Long[(int)DefCat.ChartGraphicColors][2].ItemColor;
+			panelEOdark.BackColor=DefC.Long[(int)DefCat.ChartGraphicColors][3].ItemColor;
+			panelRdark.BackColor=DefC.Long[(int)DefCat.ChartGraphicColors][4].ItemColor;
+			panelTPlight.BackColor=DefC.Long[(int)DefCat.ChartGraphicColors][5].ItemColor;
+			panelClight.BackColor=DefC.Long[(int)DefCat.ChartGraphicColors][6].ItemColor;
+			panelEClight.BackColor=DefC.Long[(int)DefCat.ChartGraphicColors][7].ItemColor;
+			panelEOlight.BackColor=DefC.Long[(int)DefCat.ChartGraphicColors][8].ItemColor;
+			panelRlight.BackColor=DefC.Long[(int)DefCat.ChartGraphicColors][9].ItemColor;
     }
 
 		private void FillProcButtons(){
@@ -5599,21 +5858,26 @@ namespace OpenDental{
 			toothChart.CursorTool=CursorTool.Eraser;
 		}
 
-		private void panelDrawColor_DoubleClick(object sender,EventArgs e) {
+		private void radioColorChanger_Click(object sender,EventArgs e) {
+			toothChart.CursorTool=CursorTool.ColorChanger;
+		}
 
+		private void panelDrawColor_DoubleClick(object sender,EventArgs e) {
+			//do nothing
 		}
 
 		private void toothChart_SegmentDrawn(object sender,ToothChartDrawEventArgs e) {
-			if(e.IsInsert){
+			if(radioPen.Checked){
 				ToothInitial ti=new ToothInitial();
 				ti.DrawingSegment=e.DrawingSegement;
 				ti.InitialType=ToothInitialType.Drawing;
 				ti.PatNum=PatCur.PatNum;
+				ti.ColorDraw=panelDrawColor.BackColor;
 				ToothInitials.Insert(ti);
 				ToothInitialList=ToothInitials.Refresh(PatCur.PatNum);
 				FillToothChart(true);
 			}
-			else{//delete
+			else if(radioEraser.Checked){
 				for(int i=0;i<ToothInitialList.Count;i++){
 					if(ToothInitialList[i].InitialType!=ToothInitialType.Drawing){
 						continue;
@@ -5626,6 +5890,84 @@ namespace OpenDental{
 					//no need to refresh since that's handled by the toothchart.
 				}
 			}
+			else if(radioColorChanger.Checked){
+				for(int i=0;i<ToothInitialList.Count;i++){
+					if(ToothInitialList[i].InitialType!=ToothInitialType.Drawing){
+						continue;
+					}
+					if(ToothInitialList[i].DrawingSegment!=e.DrawingSegement){
+						continue;
+					}
+					ToothInitialList[i].ColorDraw=panelDrawColor.BackColor;
+					ToothInitials.Update(ToothInitialList[i]);
+					FillToothChart(true);
+				}
+			}
+		}
+
+		private void panelTPdark_Click(object sender,EventArgs e) {
+			panelDrawColor.BackColor=panelTPdark.BackColor;
+			toothChart.DrawingColor=panelDrawColor.BackColor;
+		}
+
+		private void panelTPlight_Click(object sender,EventArgs e) {
+			panelDrawColor.BackColor=panelTPlight.BackColor;
+			toothChart.DrawingColor=panelDrawColor.BackColor;
+		}
+
+		private void panelCdark_Click(object sender,EventArgs e) {
+			panelDrawColor.BackColor=panelCdark.BackColor;
+			toothChart.DrawingColor=panelDrawColor.BackColor;
+			toothChart.DrawingColor=panelDrawColor.BackColor;
+		}
+
+		private void panelClight_Click(object sender,EventArgs e) {
+			panelDrawColor.BackColor=panelClight.BackColor;
+		}
+
+		private void panelECdark_Click(object sender,EventArgs e) {
+			panelDrawColor.BackColor=panelECdark.BackColor;
+			toothChart.DrawingColor=panelDrawColor.BackColor;
+		}
+
+		private void panelEClight_Click(object sender,EventArgs e) {
+			panelDrawColor.BackColor=panelEClight.BackColor;
+			toothChart.DrawingColor=panelDrawColor.BackColor;
+		}
+
+		private void panelEOdark_Click(object sender,EventArgs e) {
+			panelDrawColor.BackColor=panelEOdark.BackColor;
+			toothChart.DrawingColor=panelDrawColor.BackColor;
+		}
+
+		private void panelEOlight_Click(object sender,EventArgs e) {
+			panelDrawColor.BackColor=panelEOlight.BackColor;
+			toothChart.DrawingColor=panelDrawColor.BackColor;
+		}
+
+		private void panelRdark_Click(object sender,EventArgs e) {
+			panelDrawColor.BackColor=panelRdark.BackColor;
+			toothChart.DrawingColor=panelDrawColor.BackColor;
+		}
+
+		private void panelRlight_Click(object sender,EventArgs e) {
+			panelDrawColor.BackColor=panelRlight.BackColor;
+			toothChart.DrawingColor=panelDrawColor.BackColor;
+		}
+
+		private void panelBlack_Click(object sender,EventArgs e) {
+			panelDrawColor.BackColor=Color.Black;
+			toothChart.DrawingColor=Color.Black;
+		}
+
+		private void butColorOther_Click(object sender,EventArgs e) {
+			ColorDialog cd=new ColorDialog();
+			cd.Color=butColorOther.BackColor;
+			if(cd.ShowDialog()!=DialogResult.OK){
+				return;
+			}
+			panelDrawColor.BackColor=cd.Color;
+			toothChart.DrawingColor=panelDrawColor.BackColor;
 		}
 		#endregion Draw
 
@@ -6476,6 +6818,12 @@ namespace OpenDental{
 			RegistrationKeys.Create(key);
 			FillPtInfo();
 		}
+
+		
+
+		
+
+		
 
 		
 

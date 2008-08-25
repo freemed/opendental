@@ -60,13 +60,14 @@ namespace SparksToothChart {
 		///<summary>This gets set to true during certain operations where we do not need to redraw all the teeth.  Specifically, during tooth selection where only the color of the tooth number text needs to change.  In this case, the rest of the scene will not be rendered again.</summary>
 		private bool suspendRendering;
 		private int selectedPixelFormat;
-		private List<string> DrawingSegmentList;
+		private List<ToothInitial> DrawingSegmentList;
 		public CursorTool CursorTool;
 		///<summary>A list of points for a line currently being drawn.  Once the mouse is raised, this list gets cleared.</summary>
 		private List<Point> PointList;
 		///<summary></summary>
 		[Category("Action"),Description("Occurs when the mouse goes up ending a drawing segment.")]
 		public event ToothChartDrawEventHandler SegmentDrawn=null;
+		public Color DrawingColor;
 
 
 		///<summary>Specify the hardware mode to create the tooth chart with. Set hardwareMode=true to try for hardware accelerated graphics, and set hardwareMode=false to try and get software graphics.</summary>
@@ -80,7 +81,8 @@ namespace SparksToothChart {
 			WidthProjection=130;
 			ListToothGraphics=new ToothGraphicCollection();
 			ALSelectedTeeth=new ArrayList();
-			DrawingSegmentList=new List<string>();
+			DrawingSegmentList=new List<ToothInitial>();
+			DrawingColor=Color.Black;
 			PointList=new List<Point>();
 			//set default colors
 			colorBackground=Color.FromArgb(150,145,153);//95,95,130);
@@ -392,7 +394,7 @@ namespace SparksToothChart {
 		}
 
 		///<summary></summary>
-		public void AddDrawingSegment(string drawingSegment) {
+		public void AddDrawingSegment(ToothInitial drawingSegment) {
 			DrawingSegmentList.Add(drawingSegment);
 		}
 
@@ -825,10 +827,6 @@ namespace SparksToothChart {
 			Gl.glDisable(Gl.GL_BLEND);
 			Gl.glDisable(Gl.GL_DEPTH_TEST);
 			//Gl.glTranslatef(0,0,6f);//move forward 6mm so it will be visible.
-			Gl.glColor3f(
-				(float)Color.Black.R/255f,
-				(float)Color.Black.G/255f,
-				(float)Color.Black.B/255f);
 			//Gl.glBlendFunc(Gl.GL_SRC_ALPHA,Gl.GL_ONE_MINUS_SRC_ALPHA);
 			Gl.glLineWidth((float)Width/300f);//about 2
 			string[] pointStr;
@@ -836,8 +834,14 @@ namespace SparksToothChart {
 			Point point;
 			string[] xy;
 			PointF pointMm;
+			Color color;
 			for(int s=0;s<DrawingSegmentList.Count;s++){
-				pointStr=DrawingSegmentList[s].Split(';');
+				color=DrawingSegmentList[s].ColorDraw;
+				Gl.glColor3f(
+					(float)color.R/255f,
+					(float)color.G/255f,
+					(float)color.B/255f);
+				pointStr=DrawingSegmentList[s].DrawingSegment.Split(';');
 				points=new List<Point>();
 				for(int p=0;p<pointStr.Length;p++){
 					xy=pointStr[p].Split(',');
@@ -1350,6 +1354,34 @@ namespace SparksToothChart {
 			else if(CursorTool==CursorTool.Eraser){
 				//do nothing
 			}
+			else if(CursorTool==CursorTool.ColorChanger){
+				//look for any lines near the "wand".
+				//since the line segments are so short, it's sufficient to check end points.
+				string[] xy;
+				string[] pointStr;
+				float x;
+				float y;
+				float dist;//the distance between the point being tested and the center of the eraser circle.
+				float radius=2f;//by trial and error to achieve best feel.
+				//PointF eraserPt=new PointF(e.X+8.49f,e.Y+8.49f);
+				for(int i=0;i<DrawingSegmentList.Count;i++){
+					pointStr=DrawingSegmentList[i].DrawingSegment.Split(';');
+					for(int p=0;p<pointStr.Length;p++){
+						xy=pointStr[p].Split(',');
+						if(xy.Length==2){
+							x=float.Parse(xy[0]);
+							y=float.Parse(xy[1]);
+							dist=(float)Math.Sqrt(Math.Pow(Math.Abs(x-e.X),2)+Math.Pow(Math.Abs(y-e.Y),2));
+							if(dist<=radius){//testing circle intersection here
+								OnSegmentDrawn(DrawingSegmentList[i].DrawingSegment);
+								DrawingSegmentList[i].ColorDraw=DrawingColor;
+								Invalidate();
+								return;;
+							}
+						}
+					}
+				}
+			}
 		}
 
 		protected override void OnMouseMove(MouseEventArgs e) {
@@ -1380,9 +1412,9 @@ namespace SparksToothChart {
 				Gl.glDisable(Gl.GL_BLEND);
 				Gl.glDisable(Gl.GL_DEPTH_TEST);
 				Gl.glColor3f(
-					(float)Color.Black.R/255f,
-					(float)Color.Black.G/255f,
-					(float)Color.Black.B/255f);
+					(float)DrawingColor.R/255f,
+					(float)DrawingColor.G/255f,
+					(float)DrawingColor.B/255f);
 				Gl.glLineWidth((float)Width/300f);//about 2
 				int i=PointList.Count-1;
 				Gl.glBegin(Gl.GL_LINE_STRIP);
@@ -1409,7 +1441,7 @@ namespace SparksToothChart {
 				float radius=8f;//by trial and error to achieve best feel.
 				PointF eraserPt=new PointF(e.X+8.49f,e.Y+8.49f);
 				for(int i=0;i<DrawingSegmentList.Count;i++){
-					pointStr=DrawingSegmentList[i].Split(';');
+					pointStr=DrawingSegmentList[i].DrawingSegment.Split(';');
 					for(int p=0;p<pointStr.Length;p++){
 						xy=pointStr[p].Split(',');
 						if(xy.Length==2){
@@ -1417,7 +1449,7 @@ namespace SparksToothChart {
 							y=float.Parse(xy[1]);
 							dist=(float)Math.Sqrt(Math.Pow(Math.Abs(x-eraserPt.X),2)+Math.Pow(Math.Abs(y-eraserPt.Y),2));
 							if(dist<=radius){//testing circle intersection here
-								OnSegmentDrawn(DrawingSegmentList[i],false);//triggers a deletion from db.
+								OnSegmentDrawn(DrawingSegmentList[i].DrawingSegment);//triggers a deletion from db.
 								DrawingSegmentList.RemoveAt(i);
 								Invalidate();
 								return;;
@@ -1425,6 +1457,9 @@ namespace SparksToothChart {
 						}
 					}
 				}	
+			}
+			else if(CursorTool==CursorTool.ColorChanger){
+				//do nothing	
 			}
 		}
 
@@ -1440,18 +1475,21 @@ namespace SparksToothChart {
 					//I could compensate to center point here:
 					drawingSegment+=PointList[i].X+","+PointList[i].Y;
 				}
-				OnSegmentDrawn(drawingSegment,true);
+				OnSegmentDrawn(drawingSegment);
 				PointList=new List<Point>();
 				//Invalidate();//?
 			}
 			else if(CursorTool==CursorTool.Eraser){
 				//do nothing
 			}
+			else if(CursorTool==CursorTool.ColorChanger){
+				//do nothing
+			}
 		}
 
 		///<summary></summary>
-		protected void OnSegmentDrawn(string drawingSegment,bool isInsert){
-			ToothChartDrawEventArgs tArgs=new ToothChartDrawEventArgs(drawingSegment,isInsert);
+		protected void OnSegmentDrawn(string drawingSegment){
+			ToothChartDrawEventArgs tArgs=new ToothChartDrawEventArgs(drawingSegment);
 			if(SegmentDrawn!=null){
 				SegmentDrawn(this,tArgs);
 			}

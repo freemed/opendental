@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Data;
+using System.Drawing;
 using System.Windows.Forms;
 using OpenDentBusiness;
 
@@ -25,6 +26,7 @@ namespace OpenDental{
 				ti.InitialType    = (ToothInitialType)PIn.PInt(table.Rows[i][3].ToString());
 				ti.Movement       = PIn.PFloat (table.Rows[i][4].ToString());
 				ti.DrawingSegment = PIn.PString(table.Rows[i][5].ToString());
+				ti.ColorDraw      = Color.FromArgb(PIn.PInt(table.Rows[i][6].ToString()));
 				tList.Add(ti);
 			}
 			return tList;
@@ -40,7 +42,7 @@ namespace OpenDental{
 			if(PrefC.RandomKeys) {
 				command+="ToothInitialNum,";
 			}
-			command+="PatNum,ToothNum,InitialType,Movement,DrawingSegment) VALUES(";
+			command+="PatNum,ToothNum,InitialType,Movement,DrawingSegment,ColorDraw) VALUES(";
 			if(PrefC.RandomKeys) {
 				command+="'"+POut.PInt(init.ToothInitialNum)+"', ";
 			}
@@ -49,7 +51,8 @@ namespace OpenDental{
 				+"'"+POut.PString(init.ToothNum)+"', "
 				+"'"+POut.PInt   ((int)init.InitialType)+"', "
 				+"'"+POut.PFloat (init.Movement)+"', "
-				+"'"+POut.PString(init.DrawingSegment)+"')";
+				+"'"+POut.PString(init.DrawingSegment)+"', "
+				+"'"+POut.PInt   (init.ColorDraw.ToArgb())+"')";
 			if(PrefC.RandomKeys) {
 				General.NonQ(command);
 			}
@@ -64,8 +67,9 @@ namespace OpenDental{
 				+"PatNum = '"        +POut.PInt   (init.PatNum)+"', "
 				+"ToothNum= '"       +POut.PString(init.ToothNum)+"', "
 				+"InitialType = '"   +POut.PInt   ((int)init.InitialType)+"', "
-				+"Movement = '"      +POut.PFloat (init.Movement)+"' "
-				+"DrawingSegment = '"+POut.PString(init.DrawingSegment)+"' "
+				+"Movement = '"      +POut.PFloat (init.Movement)+"', "
+				+"DrawingSegment = '"+POut.PString(init.DrawingSegment)+"', "
+				+"ColorDraw = '"     +POut.PInt   (init.ColorDraw.ToArgb())+"' "
 				+"WHERE ToothInitialNum = '"+POut.PInt(init.ToothInitialNum)+"'";
 			General.NonQ(command);
 		}
