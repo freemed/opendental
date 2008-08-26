@@ -178,7 +178,34 @@ namespace OpenDental{
 					General.NonQ(command);
 					command="ALTER TABLE toothinitial ADD ColorDraw int NOT NULL";
 					General.NonQ(command);
-
+					//Dolphin bridge------------------------------------------------------------------------------------
+					command="INSERT INTO program (ProgName,ProgDesc,Enabled,Path,CommandLine,Note"
+						+") VALUES("
+						+"'Dolphin', "
+						+"'Dolphin from dolphinimaging.com', "
+						+"'0', "
+						+"'"+POut.PString(@"C:\Dolphin\")+"', "
+						+"'', "
+						+"'The path is to a folder rather than to a specific file.  Filename property refers to the input filename used to transer data.')";
+					int programNum=General.NonQ(command,true);//we now have a ProgramNum to work with
+					command="INSERT INTO programproperty (ProgramNum,PropertyDesc,PropertyValue"
+						+") VALUES("
+						+"'"+programNum.ToString()+"', "
+						+"'Enter 0 to use PatientNum, or 1 to use ChartNum', "
+						+"'0')";
+					General.NonQ(command);
+					command="INSERT INTO programproperty (ProgramNum,PropertyDesc,PropertyValue"
+						+") VALUES("
+						+"'"+programNum.ToString()+"', "
+						+"'Filename', "
+						+"'"+POut.PString(@"C:\Dolphin\Import\Import.txt")+"')";
+					General.NonQ(command);
+					command="INSERT INTO toolbutitem (ProgramNum,ToolBar,ButtonText) "
+						+"VALUES ("
+						+"'"+POut.PInt(programNum)+"', "
+						+"'"+POut.PInt((int)ToolBarsAvail.ChartModule)+"', "
+						+"'Dolphin')";
+					General.NonQ(command);
 
 
 

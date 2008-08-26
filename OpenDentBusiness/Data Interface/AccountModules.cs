@@ -699,7 +699,7 @@ namespace OpenDentBusiness {
 					}
 					command+="paysplit.PatNum ="+POut.PInt(fam.List[i].PatNum)+" ";
 				}
-				command+=") GROUP BY paysplit.PayNum,paysplit.PatNum,ProcDate ORDER BY ProcDate";
+				command+=") GROUP BY PayPlanNum,paysplit.PayNum,paysplit.PatNum,ProcDate ORDER BY ProcDate";
 				rawPay=dcon.GetTable(command);
 			}else{//oracle
 				//The GROUP_CONCAT() functionality does not exist in Oracle. So, here we must mimic
