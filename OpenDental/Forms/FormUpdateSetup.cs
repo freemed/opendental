@@ -222,14 +222,20 @@ namespace OpenDental{
 		}
 
 		private void butOK_Click(object sender, System.EventArgs e) {
-			if(textRegKey.Text!="" && !Regex.IsMatch(textRegKey.Text,@"^[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}$")){
+			if(textRegKey.Text!="" 
+				&& !Regex.IsMatch(textRegKey.Text,@"^[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}$")
+				&& !Regex.IsMatch(textRegKey.Text,@"^[A-Z0-9]{16}$"))
+			{
 				MsgBox.Show(this,"Invalid registration key format.");
 				return;
 			}
 			string regkey="";
-			if(textRegKey.Text!=""){
+			if(Regex.IsMatch(textRegKey.Text,@"^[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}$")){
 				regkey=textRegKey.Text.Substring(0,4)+textRegKey.Text.Substring(5,4)
 					+textRegKey.Text.Substring(10,4)+textRegKey.Text.Substring(15,4);
+			}
+			else if(Regex.IsMatch(textRegKey.Text,@"^[A-Z0-9]{16}$")){
+				regkey=textRegKey.Text;
 			}
 			if( Prefs.UpdateString("UpdateServerAddress",textUpdateServerAddress.Text)
 				| Prefs.UpdateString("UpdateWebsitePath",textWebsitePath.Text)

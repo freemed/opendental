@@ -642,6 +642,10 @@ namespace OpenDental {
 		}
 
 		private void butOK_Click(object sender,EventArgs e) {
+			if(textNote.Text!=""){
+				MsgBox.Show(this,"You need to save your note first.");
+				return;
+			}
 			if(!SaveChangesToDb(false)){
 				return;
 			}
