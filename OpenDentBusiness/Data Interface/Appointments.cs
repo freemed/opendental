@@ -229,8 +229,8 @@ namespace OpenDentBusiness{
 			command+="patnum,aptstatus, "
 				+"pattern,confirmed,TimeLocked,op,note,provnum,"
 				+"provhyg,aptdatetime,nextaptnum,unschedstatus,lab,isnewpatient,procdescript,"
-				+"Assistant,InstructorNum,SchoolClassNum,SchoolCourseNum,GradePoint,ClinicNum,IsHygiene"//DateTStamp
-				+") VALUES(";
+				+"Assistant,InstructorNum,SchoolClassNum,SchoolCourseNum,GradePoint,ClinicNum,IsHygiene,"//DateTStamp
+				+"DateTimeArrived,DateTimeSeated,DateTimeDismissed) VALUES(";
 			if(PrefC.RandomKeys){
 				command+="'"+POut.PInt(appt.AptNum)+"', ";
 			}
@@ -256,7 +256,10 @@ namespace OpenDentBusiness{
 				+"'"+POut.PInt   (appt.SchoolCourseNum)+"', "
 				+"'"+POut.PFloat (appt.GradePoint)+"', "
 				+"'"+POut.PInt   (appt.ClinicNum)+"', "
-				+"'"+POut.PBool  (appt.IsHygiene)+"')";
+				+"'"+POut.PBool  (appt.IsHygiene)+"', "
+				    +POut.PDateT (appt.DateTimeArrived)+", "
+				    +POut.PDateT (appt.DateTimeSeated)+", "
+				    +POut.PDateT (appt.DateTimeDismissed)+")";
 				//DateTStamp
 			if(PrefC.RandomKeys){
 				General.NonQ(command);
@@ -384,6 +387,21 @@ namespace OpenDentBusiness{
 				comma=true;
 			}
 			//DateTStamp
+			if(appt.DateTimeArrived!=oldApt.DateTimeArrived){
+				if(comma) c+=",";
+				c+="DateTimeArrived = "   +POut.PDateT(appt.DateTimeArrived);
+				comma=true;
+			}
+			if(appt.DateTimeSeated!=oldApt.DateTimeSeated){
+				if(comma) c+=",";
+				c+="DateTimeSeated = "   +POut.PDateT(appt.DateTimeSeated);
+				comma=true;
+			}
+			if(appt.DateTimeDismissed!=oldApt.DateTimeDismissed){
+				if(comma) c+=",";
+				c+="DateTimeDismissed = "   +POut.PDateT(appt.DateTimeDismissed);
+				comma=true;
+			}
 			if(!comma)
 				return 0;//this means no change is actually required.
 			c+=" WHERE AptNum = '"+POut.PInt(appt.AptNum)+"'";
@@ -580,6 +598,9 @@ namespace OpenDentBusiness{
 				apt.ClinicNum      =PIn.PInt(table.Rows[i][21].ToString());
 				apt.IsHygiene      =PIn.PBool(table.Rows[i][22].ToString());
 				//DateTStamp
+				apt.DateTimeArrived=PIn.PDateT(table.Rows[i][24].ToString());
+				apt.DateTimeSeated =PIn.PDateT(table.Rows[i][25].ToString());
+				apt.DateTimeDismissed=PIn.PDateT(table.Rows[i][26].ToString());
 				list.Add(apt);
 			}
 			return list;
@@ -590,6 +611,7 @@ namespace OpenDentBusiness{
 			DataSet retVal=new DataSet();
 			retVal.Tables.Add(GetPeriodApptsTable(dateStart,dateEnd,0,false));//parameters[0],parameters[1],"0","0"));
 			retVal.Tables.Add(GetPeriodEmployeeSchedTable(dateStart,dateEnd));
+			retVal.Tables.Add(GetPeriodWaitingRoomTable(dateStart,dateEnd));
 			retVal.Tables.Add(GetPeriodSchedule(dateStart,dateEnd));
 			return retVal;
 		}
@@ -1000,6 +1022,55 @@ namespace OpenDentBusiness{
 				startTime=PIn.PDateT(raw.Rows[i]["StartTime"].ToString());
 				stopTime=PIn.PDateT(raw.Rows[i]["StopTime"].ToString());
 				row["schedule"]+=startTime.ToString("h:mm")+"-"+stopTime.ToString("h:mm");
+				table.Rows.Add(row);
+			}
+			return table;
+		}
+
+		private static DataTable GetPeriodWaitingRoomTable(DateTime dateStart,DateTime dateEnd) {
+			//DateTime dateStart=PIn.PDate(strDateStart);
+			//DateTime dateEnd=PIn.PDate(strDateEnd);
+			DataConnection dcon=new DataConnection();
+			DataTable table=new DataTable("WaitingRoom");
+			DataRow row;
+			//columns that start with lowercase are altered for display rather than being raw data.
+			table.Columns.Add("patName");
+			table.Columns.Add("waitTime");
+			if(dateStart!=dateEnd) {
+				return table;
+			}
+			string command="SELECT DateTimeArrived,DateTimeSeated,LName,FName,Preferred,NOW() dateTimeNow "
+				+"FROM appointment,patient "
+				+"WHERE appointment.PatNum=patient.PatNum "
+				+"AND DATE(AptDateTime) = "+POut.PDate(dateStart)+" "
+				+"AND TIME(DateTimeArrived) > 0 "
+				+"AND TIME(DateTimeArrived) < CURTIME() "
+				+"AND TIME(DateTimeSeated) = 0 "
+				+"ORDER BY AptDateTime";
+			DataTable raw=dcon.GetTable(command);
+			TimeSpan timeArrived;
+			//DateTime timeSeated;
+			DateTime waitTime;
+			Patient pat;
+			DateTime dateTimeNow;
+			//int minutes;
+			for(int i=0;i<raw.Rows.Count;i++) {
+				row=table.NewRow();
+				pat=new Patient();
+				pat.LName=raw.Rows[i]["LName"].ToString();
+				pat.FName=raw.Rows[i]["FName"].ToString();
+				pat.Preferred=raw.Rows[i]["Preferred"].ToString();
+				row["patName"]=pat.GetNameLF();
+				dateTimeNow=PIn.PDateT(raw.Rows[i]["dateTimeNow"].ToString());
+				timeArrived=(PIn.PDateT(raw.Rows[i]["DateTimeArrived"].ToString())).TimeOfDay;
+				waitTime=dateTimeNow-timeArrived;
+				row["waitTime"]=waitTime.ToString("H:mm");
+				//minutes=waitTime.Minutes;
+				//if(waitTime.Hours>0){
+				//	row["waitTime"]+=waitTime.Hours.ToString()+"h ";
+					//minutes-=60*waitTime.Hours;
+				//}
+				//row["waitTime"]+=waitTime.Minutes.ToString()+"m";
 				table.Rows.Add(row);
 			}
 			return table;

@@ -52,6 +52,12 @@ namespace OpenDentBusiness{
 		///<summary>Set true if this is a hygiene appt.  The hygiene provider's color will show.</summary>
 		public bool IsHygiene;
 		//DateTStamp
+		///<summary>The date and time that the patient checked in.  Date is largely ignored since it should be the same as the appt.</summary>
+		public DateTime DateTimeArrived;
+		///<summary>The date and time that the patient was seated in the chair in the operatory.</summary>
+		public DateTime DateTimeSeated;
+		///<summary>The date and time that the patient got up out of the chair</summary>
+		public DateTime DateTimeDismissed;
 
 		///<summary>Returns a copy of the appointment.</summary>
     public Appointment Copy(){

@@ -129,6 +129,10 @@ namespace OpenDental{
 		private int PatCurNum;
 		private Timer timerInfoBubble;
 		private string PatCurChartNumber;
+		private TabControl tabControl;
+		private TabPage tabWaiting;
+		private TabPage tabSched;
+		private ODGrid gridWaiting;
 		//<summary></summary>
 		//public static Size PinboardSize=new Size(106,92);
 		private PinBoard pinBoard;
@@ -231,6 +235,10 @@ namespace OpenDental{
 			this.gridEmpSched = new OpenDental.UI.ODGrid();
 			this.butOther = new OpenDental.UI.Button();
 			this.ToolBarMain = new OpenDental.UI.ODToolBar();
+			this.tabControl = new System.Windows.Forms.TabControl();
+			this.tabWaiting = new System.Windows.Forms.TabPage();
+			this.gridWaiting = new OpenDental.UI.ODGrid();
+			this.tabSched = new System.Windows.Forms.TabPage();
 			this.panelArrows.SuspendLayout();
 			this.panelSheet.SuspendLayout();
 			this.panelAptInfo.SuspendLayout();
@@ -238,6 +246,9 @@ namespace OpenDental{
 			this.groupSearch.SuspendLayout();
 			this.groupBox2.SuspendLayout();
 			this.panel1.SuspendLayout();
+			this.tabControl.SuspendLayout();
+			this.tabWaiting.SuspendLayout();
+			this.tabSched.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// imageListMain
@@ -400,9 +411,9 @@ namespace OpenDental{
 			this.ContrApptSheet2.Size = new System.Drawing.Size(60,1728);
 			this.ContrApptSheet2.TabIndex = 22;
 			this.ContrApptSheet2.DoubleClick += new System.EventHandler(this.ContrApptSheet2_DoubleClick);
-			this.ContrApptSheet2.MouseDown += new System.Windows.Forms.MouseEventHandler(this.ContrApptSheet2_MouseDown);
-			this.ContrApptSheet2.MouseMove += new System.Windows.Forms.MouseEventHandler(this.ContrApptSheet2_MouseMove);
 			this.ContrApptSheet2.MouseLeave += new System.EventHandler(this.ContrApptSheet2_MouseLeave);
+			this.ContrApptSheet2.MouseMove += new System.Windows.Forms.MouseEventHandler(this.ContrApptSheet2_MouseMove);
+			this.ContrApptSheet2.MouseDown += new System.Windows.Forms.MouseEventHandler(this.ContrApptSheet2_MouseDown);
 			this.ContrApptSheet2.MouseUp += new System.Windows.Forms.MouseEventHandler(this.ContrApptSheet2_MouseUp);
 			// 
 			// panelAptInfo
@@ -501,12 +512,12 @@ namespace OpenDental{
 			// 
 			this.pinBoard.Location = new System.Drawing.Point(104,189);
 			this.pinBoard.Name = "pinBoard";
-			this.pinBoard.SelectedIndex = 0;
+			this.pinBoard.SelectedIndex = -1;
 			this.pinBoard.Size = new System.Drawing.Size(99,96);
 			this.pinBoard.TabIndex = 78;
 			this.pinBoard.Text = "pinBoard";
-			this.pinBoard.MouseDown += new System.Windows.Forms.MouseEventHandler(this.pinBoard_MouseDown);
 			this.pinBoard.MouseMove += new System.Windows.Forms.MouseEventHandler(this.pinBoard_MouseMove);
+			this.pinBoard.MouseDown += new System.Windows.Forms.MouseEventHandler(this.pinBoard_MouseDown);
 			this.pinBoard.MouseUp += new System.Windows.Forms.MouseEventHandler(this.pinBoard_MouseUp);
 			this.pinBoard.SelectedIndexChanged += new System.EventHandler(this.pinBoard_SelectedIndexChanged);
 			// 
@@ -853,13 +864,15 @@ namespace OpenDental{
 			// 
 			// gridEmpSched
 			// 
-			this.gridEmpSched.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left)));
+			this.gridEmpSched.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.gridEmpSched.HScrollVisible = false;
-			this.gridEmpSched.Location = new System.Drawing.Point(666,495);
+			this.gridEmpSched.Location = new System.Drawing.Point(0,0);
+			this.gridEmpSched.Margin = new System.Windows.Forms.Padding(0);
 			this.gridEmpSched.Name = "gridEmpSched";
 			this.gridEmpSched.ScrollValue = 0;
-			this.gridEmpSched.Size = new System.Drawing.Size(217,213);
+			this.gridEmpSched.Size = new System.Drawing.Size(211,184);
 			this.gridEmpSched.TabIndex = 77;
 			this.gridEmpSched.Title = "Employee Schedules";
 			this.gridEmpSched.TranslationName = "TableApptEmpSched";
@@ -890,10 +903,59 @@ namespace OpenDental{
 			this.ToolBarMain.TabIndex = 73;
 			this.ToolBarMain.ButtonClick += new OpenDental.UI.ODToolBarButtonClickEventHandler(this.ToolBarMain_ButtonClick);
 			// 
+			// tabControl
+			// 
+			this.tabControl.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
+			this.tabControl.Controls.Add(this.tabWaiting);
+			this.tabControl.Controls.Add(this.tabSched);
+			this.tabControl.Location = new System.Drawing.Point(665,498);
+			this.tabControl.Name = "tabControl";
+			this.tabControl.SelectedIndex = 0;
+			this.tabControl.Size = new System.Drawing.Size(219,210);
+			this.tabControl.TabIndex = 78;
+			// 
+			// tabWaiting
+			// 
+			this.tabWaiting.Controls.Add(this.gridWaiting);
+			this.tabWaiting.Location = new System.Drawing.Point(4,22);
+			this.tabWaiting.Name = "tabWaiting";
+			this.tabWaiting.Padding = new System.Windows.Forms.Padding(3);
+			this.tabWaiting.Size = new System.Drawing.Size(211,184);
+			this.tabWaiting.TabIndex = 0;
+			this.tabWaiting.Text = "Waiting";
+			this.tabWaiting.UseVisualStyleBackColor = true;
+			// 
+			// gridWaiting
+			// 
+			this.gridWaiting.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.gridWaiting.HScrollVisible = false;
+			this.gridWaiting.Location = new System.Drawing.Point(0,0);
+			this.gridWaiting.Margin = new System.Windows.Forms.Padding(0);
+			this.gridWaiting.Name = "gridWaiting";
+			this.gridWaiting.ScrollValue = 0;
+			this.gridWaiting.Size = new System.Drawing.Size(211,184);
+			this.gridWaiting.TabIndex = 78;
+			this.gridWaiting.Title = "Waiting Room";
+			this.gridWaiting.TranslationName = "TableApptEmpSched";
+			// 
+			// tabSched
+			// 
+			this.tabSched.Controls.Add(this.gridEmpSched);
+			this.tabSched.Location = new System.Drawing.Point(4,22);
+			this.tabSched.Name = "tabSched";
+			this.tabSched.Padding = new System.Windows.Forms.Padding(3);
+			this.tabSched.Size = new System.Drawing.Size(211,184);
+			this.tabSched.TabIndex = 1;
+			this.tabSched.Text = "Emp";
+			this.tabSched.UseVisualStyleBackColor = true;
+			// 
 			// ContrAppt
 			// 
+			this.Controls.Add(this.tabControl);
 			this.Controls.Add(this.groupSearch);
-			this.Controls.Add(this.gridEmpSched);
 			this.Controls.Add(this.butOther);
 			this.Controls.Add(this.ToolBarMain);
 			this.Controls.Add(this.panelOps);
@@ -902,8 +964,8 @@ namespace OpenDental{
 			this.Controls.Add(this.panelSheet);
 			this.Name = "ContrAppt";
 			this.Size = new System.Drawing.Size(939,708);
-			this.Layout += new System.Windows.Forms.LayoutEventHandler(this.ContrAppt_Layout);
 			this.Load += new System.EventHandler(this.ContrAppt_Load);
+			this.Layout += new System.Windows.Forms.LayoutEventHandler(this.ContrAppt_Layout);
 			this.Resize += new System.EventHandler(this.ContrAppt_Resize);
 			this.panelArrows.ResumeLayout(false);
 			this.panelSheet.ResumeLayout(false);
@@ -914,6 +976,9 @@ namespace OpenDental{
 			this.groupBox2.ResumeLayout(false);
 			this.groupBox2.PerformLayout();
 			this.panel1.ResumeLayout(false);
+			this.tabControl.ResumeLayout(false);
+			this.tabWaiting.ResumeLayout(false);
+			this.tabSched.ResumeLayout(false);
 			this.ResumeLayout(false);
 
 		}
@@ -1172,7 +1237,7 @@ namespace OpenDental{
 			panelCalendar.Location=new Point(ClientSize.Width-panelAptInfo.Width-2,ToolBarMain.Height);
 			panelAptInfo.Location=new Point(ClientSize.Width-panelAptInfo.Width-2,ToolBarMain.Height+panelCalendar.Height);
 			butOther.Location=new Point(panelAptInfo.Location.X+32,panelAptInfo.Location.Y+84);
-			gridEmpSched.Location=new Point(panelAptInfo.Left,panelAptInfo.Bottom+1);
+			tabControl.Location=new Point(panelAptInfo.Left,panelAptInfo.Bottom+1);
 			panelSheet.Width=ClientSize.Width-panelAptInfo.Width-2;
 			panelSheet.Height=ClientSize.Height-panelSheet.Location.Y;
 			if(DefC.Short!=null) {
@@ -1423,6 +1488,7 @@ namespace OpenDental{
 			FillLab(labCaseList);
 			FillProduction();
 			FillEmpSched();
+			FillWaitingRoom();
 			LayoutPanels();
 		}
 
@@ -1525,6 +1591,26 @@ namespace OpenDental{
 				gridEmpSched.Rows.Add(row);
 			}
 			gridEmpSched.EndUpdate();
+		}
+
+		///<summary></summary>
+		private void FillWaitingRoom(){
+			DataTable table=DS.Tables["WaitingRoom"];
+			gridWaiting.BeginUpdate();
+			gridWaiting.Columns.Clear();
+			ODGridColumn col=new ODGridColumn(Lan.g("TableApptWaiting","Patient"),130);
+			gridWaiting.Columns.Add(col);
+			col=new ODGridColumn(Lan.g("TableApptWaiting","Waited"),100,HorizontalAlignment.Center);
+			gridWaiting.Columns.Add(col);
+			gridWaiting.Rows.Clear();
+			ODGridRow row;
+			for(int i=0;i<table.Rows.Count;i++){
+				row=new ODGridRow();
+				row.Cells.Add(table.Rows[i]["patName"].ToString());
+				row.Cells.Add(table.Rows[i]["waitTime"].ToString());
+				gridWaiting.Rows.Add(row);
+			}
+			gridWaiting.EndUpdate();
 		}
 
 		private void gridEmpSched_CellDoubleClick(object sender,ODGridClickEventArgs e) {
@@ -2365,12 +2451,17 @@ namespace OpenDental{
 			if(apt.AptStatus==ApptStatus.Broken && timeWasMoved) {
 				apt.AptStatus=ApptStatus.Scheduled;
 			}
-			if(curOp.ProvDentist!=0) {//if no dentist is assigned to op, then keep the original dentist.  All appts must have prov.
-				apt.ProvNum=curOp.ProvDentist;
+			if(curOp.ProvDentist!=0){
+				//if no dentist is assigned to op, then keep the original dentist without prompt.  All appts must have prov.
+				if(MsgBox.Show(this,true,"Change provider?")){
+					apt.ProvNum=curOp.ProvDentist;
+					if(curOp.ProvHygienist!=0){//the hygienist will only be changed if the op has a hygienist.
+						apt.ProvHyg=curOp.ProvHygienist;
+						apt.IsHygiene=curOp.IsHygiene;
+					}
+					apt.ClinicNum=curOp.ClinicNum;
+				}
 			}
-			apt.ProvHyg=curOp.ProvHygienist;
-			apt.IsHygiene=curOp.IsHygiene;
-			apt.ClinicNum=curOp.ClinicNum;
 			try {
 				Appointments.InsertOrUpdate(apt,aptOld,false);
 			}

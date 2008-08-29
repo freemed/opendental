@@ -206,8 +206,18 @@ namespace OpenDental{
 						+"'"+POut.PInt((int)ToolBarsAvail.ChartModule)+"', "
 						+"'Dolphin')";
 					General.NonQ(command);
-
-
+					command="ALTER TABLE appointment ADD DateTimeArrived DateTime NOT NULL";
+					General.NonQ(command);
+					command="UPDATE appointment SET DateTimeArrived = '0001-01-01'";
+					General.NonQ(command);
+					command="ALTER TABLE appointment ADD DateTimeSeated DateTime NOT NULL";
+					General.NonQ(command);
+					command="UPDATE appointment SET DateTimeSeated = '0001-01-01'";
+					General.NonQ(command);
+					command="ALTER TABLE appointment ADD DateTimeDismissed DateTime NOT NULL";
+					General.NonQ(command);
+					command="UPDATE appointment SET DateTimeDismissed = '0001-01-01'";
+					General.NonQ(command);
 
 
 
