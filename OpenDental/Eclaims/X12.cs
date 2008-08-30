@@ -419,7 +419,9 @@ namespace OpenDental.Eclaims
 				#endregion
 				#region Subscriber
 				//if(i==0 || claimAr[2,i].ToString() != claimAr[2,i-1].ToString()){//if subscriber changed
-				if(i==0 || claimAr[3,i].ToString() != claimAr[3,i-1].ToString()){//if patient changed
+				if(i==0 || claimAr[3,i].ToString() != claimAr[3,i-1].ToString()//if patient changed
+					|| claimAr[1,i].ToString() != claimAr[1,i-1].ToString())//or prov has changed
+				{
 					if(claimAr[3,i].ToString()==claimAr[2,i].ToString()){//if patient is the subscriber
 						hasSubord="0";//-claim level will follow
 						//subordinate patients will not follow in this loop.  The subscriber loop will be duplicated for them.
