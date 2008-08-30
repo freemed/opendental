@@ -66,6 +66,7 @@ namespace OpenDental{
 		private ComboBox comboTimeSeated;
 		private Label label3;
 		private ComboBox comboTimeArrived;
+		private CheckBox checkApptRefreshEveryMinute;
 		private List<Def> posAdjTypes;
 
 		///<summary></summary>
@@ -118,6 +119,12 @@ namespace OpenDental{
 			this.checkMedicalEclaimsEnabled = new System.Windows.Forms.CheckBox();
 			this.checkSolidBlockouts = new System.Windows.Forms.CheckBox();
 			this.groupBox4 = new System.Windows.Forms.GroupBox();
+			this.label6 = new System.Windows.Forms.Label();
+			this.comboTimeDismissed = new System.Windows.Forms.ComboBox();
+			this.label5 = new System.Windows.Forms.Label();
+			this.comboTimeSeated = new System.Windows.Forms.ComboBox();
+			this.label3 = new System.Windows.Forms.Label();
+			this.comboTimeArrived = new System.Windows.Forms.ComboBox();
 			this.checkApptExclamation = new System.Windows.Forms.CheckBox();
 			this.label7 = new System.Windows.Forms.Label();
 			this.checkBrokenApptNote = new System.Windows.Forms.CheckBox();
@@ -133,16 +140,11 @@ namespace OpenDental{
 			this.checkAutoClearEntryStatus = new System.Windows.Forms.CheckBox();
 			this.checkPPOpercentage = new System.Windows.Forms.CheckBox();
 			this.groupBox2 = new System.Windows.Forms.GroupBox();
+			this.checkApptRefreshEveryMinute = new System.Windows.Forms.CheckBox();
 			this.butCancel = new OpenDental.UI.Button();
 			this.butOK = new OpenDental.UI.Button();
 			this.textPayPlansBillInAdvanceDays = new OpenDental.ValidNum();
 			this.textStatementsCalcDueDate = new OpenDental.ValidNumber();
-			this.label3 = new System.Windows.Forms.Label();
-			this.comboTimeArrived = new System.Windows.Forms.ComboBox();
-			this.label5 = new System.Windows.Forms.Label();
-			this.comboTimeSeated = new System.Windows.Forms.ComboBox();
-			this.label6 = new System.Windows.Forms.Label();
-			this.comboTimeDismissed = new System.Windows.Forms.ComboBox();
 			this.groupBox1.SuspendLayout();
 			this.groupBox5.SuspendLayout();
 			this.groupBox4.SuspendLayout();
@@ -208,7 +210,7 @@ namespace OpenDental{
 			this.groupBox1.Controls.Add(this.checkTreatPlanShowGraphics);
 			this.groupBox1.Controls.Add(this.checkTreatPlanShowCompleted);
 			this.groupBox1.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.groupBox1.Location = new System.Drawing.Point(459,9);
+			this.groupBox1.Location = new System.Drawing.Point(12,351);
 			this.groupBox1.Name = "groupBox1";
 			this.groupBox1.Size = new System.Drawing.Size(422,132);
 			this.groupBox1.TabIndex = 48;
@@ -239,7 +241,7 @@ namespace OpenDental{
 			this.groupBox5.Controls.Add(this.label2);
 			this.groupBox5.Controls.Add(this.checkShowCC);
 			this.groupBox5.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.groupBox5.Location = new System.Drawing.Point(12,332);
+			this.groupBox5.Location = new System.Drawing.Point(454,9);
 			this.groupBox5.Name = "groupBox5";
 			this.groupBox5.Size = new System.Drawing.Size(422,344);
 			this.groupBox5.TabIndex = 52;
@@ -470,6 +472,7 @@ namespace OpenDental{
 			// 
 			// groupBox4
 			// 
+			this.groupBox4.Controls.Add(this.checkApptRefreshEveryMinute);
 			this.groupBox4.Controls.Add(this.label6);
 			this.groupBox4.Controls.Add(this.comboTimeDismissed);
 			this.groupBox4.Controls.Add(this.label5);
@@ -485,10 +488,67 @@ namespace OpenDental{
 			this.groupBox4.Controls.Add(this.checkSolidBlockouts);
 			this.groupBox4.Location = new System.Drawing.Point(12,9);
 			this.groupBox4.Name = "groupBox4";
-			this.groupBox4.Size = new System.Drawing.Size(422,200);
+			this.groupBox4.Size = new System.Drawing.Size(422,219);
 			this.groupBox4.TabIndex = 67;
 			this.groupBox4.TabStop = false;
 			this.groupBox4.Text = "Appointment module";
+			// 
+			// label6
+			// 
+			this.label6.Location = new System.Drawing.Point(6,174);
+			this.label6.Name = "label6";
+			this.label6.Size = new System.Drawing.Size(247,15);
+			this.label6.TabIndex = 78;
+			this.label6.Text = "Time Dismissed trigger";
+			this.label6.TextAlign = System.Drawing.ContentAlignment.TopRight;
+			// 
+			// comboTimeDismissed
+			// 
+			this.comboTimeDismissed.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboTimeDismissed.FormattingEnabled = true;
+			this.comboTimeDismissed.Location = new System.Drawing.Point(254,170);
+			this.comboTimeDismissed.MaxDropDownItems = 30;
+			this.comboTimeDismissed.Name = "comboTimeDismissed";
+			this.comboTimeDismissed.Size = new System.Drawing.Size(163,21);
+			this.comboTimeDismissed.TabIndex = 77;
+			// 
+			// label5
+			// 
+			this.label5.Location = new System.Drawing.Point(6,152);
+			this.label5.Name = "label5";
+			this.label5.Size = new System.Drawing.Size(247,15);
+			this.label5.TabIndex = 76;
+			this.label5.Text = "Time Seated (in op) trigger";
+			this.label5.TextAlign = System.Drawing.ContentAlignment.TopRight;
+			// 
+			// comboTimeSeated
+			// 
+			this.comboTimeSeated.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboTimeSeated.FormattingEnabled = true;
+			this.comboTimeSeated.Location = new System.Drawing.Point(254,148);
+			this.comboTimeSeated.MaxDropDownItems = 30;
+			this.comboTimeSeated.Name = "comboTimeSeated";
+			this.comboTimeSeated.Size = new System.Drawing.Size(163,21);
+			this.comboTimeSeated.TabIndex = 75;
+			// 
+			// label3
+			// 
+			this.label3.Location = new System.Drawing.Point(6,130);
+			this.label3.Name = "label3";
+			this.label3.Size = new System.Drawing.Size(247,15);
+			this.label3.TabIndex = 74;
+			this.label3.Text = "Time Arrived trigger";
+			this.label3.TextAlign = System.Drawing.ContentAlignment.TopRight;
+			// 
+			// comboTimeArrived
+			// 
+			this.comboTimeArrived.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboTimeArrived.FormattingEnabled = true;
+			this.comboTimeArrived.Location = new System.Drawing.Point(254,126);
+			this.comboTimeArrived.MaxDropDownItems = 30;
+			this.comboTimeArrived.Name = "comboTimeArrived";
+			this.comboTimeArrived.Size = new System.Drawing.Size(163,21);
+			this.comboTimeArrived.TabIndex = 73;
 			// 
 			// checkApptExclamation
 			// 
@@ -586,7 +646,7 @@ namespace OpenDental{
 			this.groupBox3.Controls.Add(this.checkAllowSettingProcsComplete);
 			this.groupBox3.Controls.Add(this.comboToothNomenclature);
 			this.groupBox3.Controls.Add(this.checkAutoClearEntryStatus);
-			this.groupBox3.Location = new System.Drawing.Point(459,147);
+			this.groupBox3.Location = new System.Drawing.Point(454,366);
 			this.groupBox3.Name = "groupBox3";
 			this.groupBox3.Size = new System.Drawing.Size(422,83);
 			this.groupBox3.TabIndex = 191;
@@ -639,7 +699,7 @@ namespace OpenDental{
 			// 
 			this.checkPPOpercentage.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.checkPPOpercentage.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkPPOpercentage.Location = new System.Drawing.Point(3,88);
+			this.checkPPOpercentage.Location = new System.Drawing.Point(3,86);
 			this.checkPPOpercentage.Name = "checkPPOpercentage";
 			this.checkPPOpercentage.Size = new System.Drawing.Size(413,17);
 			this.checkPPOpercentage.TabIndex = 192;
@@ -652,12 +712,23 @@ namespace OpenDental{
 			this.groupBox2.Controls.Add(this.checkPPOpercentage);
 			this.groupBox2.Controls.Add(this.checkDeductibleBeforePercent);
 			this.groupBox2.Controls.Add(this.checkInsurancePlansShared);
-			this.groupBox2.Location = new System.Drawing.Point(12,215);
+			this.groupBox2.Location = new System.Drawing.Point(12,234);
 			this.groupBox2.Name = "groupBox2";
 			this.groupBox2.Size = new System.Drawing.Size(422,111);
 			this.groupBox2.TabIndex = 193;
 			this.groupBox2.TabStop = false;
 			this.groupBox2.Text = "Family module";
+			// 
+			// checkApptRefreshEveryMinute
+			// 
+			this.checkApptRefreshEveryMinute.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkApptRefreshEveryMinute.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.checkApptRefreshEveryMinute.Location = new System.Drawing.Point(10,195);
+			this.checkApptRefreshEveryMinute.Name = "checkApptRefreshEveryMinute";
+			this.checkApptRefreshEveryMinute.Size = new System.Drawing.Size(406,17);
+			this.checkApptRefreshEveryMinute.TabIndex = 198;
+			this.checkApptRefreshEveryMinute.Text = "Refresh every 60 seconds.  Keeps waiting room times refreshed.";
+			this.checkApptRefreshEveryMinute.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// butCancel
 			// 
@@ -668,7 +739,7 @@ namespace OpenDental{
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
 			this.butCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.butCancel.Location = new System.Drawing.Point(771,671);
+			this.butCancel.Location = new System.Drawing.Point(768,505);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75,24);
 			this.butCancel.TabIndex = 8;
@@ -683,7 +754,7 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(771,633);
+			this.butOK.Location = new System.Drawing.Point(663,505);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75,24);
 			this.butOK.TabIndex = 7;
@@ -710,67 +781,10 @@ namespace OpenDental{
 			this.textStatementsCalcDueDate.TabIndex = 54;
 			this.textStatementsCalcDueDate.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
 			// 
-			// label3
-			// 
-			this.label3.Location = new System.Drawing.Point(6,130);
-			this.label3.Name = "label3";
-			this.label3.Size = new System.Drawing.Size(247,15);
-			this.label3.TabIndex = 74;
-			this.label3.Text = "Time Arrived trigger";
-			this.label3.TextAlign = System.Drawing.ContentAlignment.TopRight;
-			// 
-			// comboTimeArrived
-			// 
-			this.comboTimeArrived.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboTimeArrived.FormattingEnabled = true;
-			this.comboTimeArrived.Location = new System.Drawing.Point(254,126);
-			this.comboTimeArrived.MaxDropDownItems = 30;
-			this.comboTimeArrived.Name = "comboTimeArrived";
-			this.comboTimeArrived.Size = new System.Drawing.Size(163,21);
-			this.comboTimeArrived.TabIndex = 73;
-			// 
-			// label5
-			// 
-			this.label5.Location = new System.Drawing.Point(6,152);
-			this.label5.Name = "label5";
-			this.label5.Size = new System.Drawing.Size(247,15);
-			this.label5.TabIndex = 76;
-			this.label5.Text = "Time Seated (in op) trigger";
-			this.label5.TextAlign = System.Drawing.ContentAlignment.TopRight;
-			// 
-			// comboTimeSeated
-			// 
-			this.comboTimeSeated.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboTimeSeated.FormattingEnabled = true;
-			this.comboTimeSeated.Location = new System.Drawing.Point(254,148);
-			this.comboTimeSeated.MaxDropDownItems = 30;
-			this.comboTimeSeated.Name = "comboTimeSeated";
-			this.comboTimeSeated.Size = new System.Drawing.Size(163,21);
-			this.comboTimeSeated.TabIndex = 75;
-			// 
-			// label6
-			// 
-			this.label6.Location = new System.Drawing.Point(6,174);
-			this.label6.Name = "label6";
-			this.label6.Size = new System.Drawing.Size(247,15);
-			this.label6.TabIndex = 78;
-			this.label6.Text = "Time Dismissed trigger";
-			this.label6.TextAlign = System.Drawing.ContentAlignment.TopRight;
-			// 
-			// comboTimeDismissed
-			// 
-			this.comboTimeDismissed.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboTimeDismissed.FormattingEnabled = true;
-			this.comboTimeDismissed.Location = new System.Drawing.Point(254,170);
-			this.comboTimeDismissed.MaxDropDownItems = 30;
-			this.comboTimeDismissed.Name = "comboTimeDismissed";
-			this.comboTimeDismissed.Size = new System.Drawing.Size(163,21);
-			this.comboTimeDismissed.TabIndex = 77;
-			// 
 			// FormModuleSetup
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
-			this.ClientSize = new System.Drawing.Size(893,721);
+			this.ClientSize = new System.Drawing.Size(890,555);
 			this.Controls.Add(this.groupBox2);
 			this.Controls.Add(this.groupBox3);
 			this.Controls.Add(this.groupBox4);
@@ -840,6 +854,7 @@ namespace OpenDental{
 					comboTimeDismissed.SelectedIndex=i+1;
 				}
 			}
+			checkApptRefreshEveryMinute.Checked=PrefC.GetBool("ApptModuleRefreshesEveryMinute");
 			//Family module-----------------------------------------------------------------------
 			checkMedicalEclaimsEnabled.Checked=PrefC.GetBool("MedicalEclaimsEnabled");
 			checkDeductibleBeforePercent.Checked=PrefC.GetBool("DeductibleBeforePercentAsDefault");
@@ -943,6 +958,7 @@ namespace OpenDental{
 				| Prefs.UpdateBool("ShowAccountFamilyCommEntries",checkShowFamilyCommByDefault.Checked)
 				| Prefs.UpdateBool("InsDefaultPPOpercent",checkPPOpercentage.Checked)
 				| Prefs.UpdateBool("StatementSummaryShowInsInfo", checkStatementSummaryShowInsInfo.Checked)
+				| Prefs.UpdateBool("ApptModuleRefreshesEveryMinute", checkApptRefreshEveryMinute.Checked)
 				)
 			{
 				changed=true;

@@ -88,8 +88,6 @@ namespace OpenDental{
 			this.checkTaskListAlwaysShow = new System.Windows.Forms.CheckBox();
 			this.checkTasksCheckOnStartup = new System.Windows.Forms.CheckBox();
 			this.checkBoxTaskKeepListHidden = new System.Windows.Forms.CheckBox();
-			this.validNumY = new OpenDental.ValidNumber();
-			this.validNumX = new OpenDental.ValidNumber();
 			this.labelX = new System.Windows.Forms.Label();
 			this.labelY = new System.Windows.Forms.Label();
 			this.pictureBox1 = new System.Windows.Forms.PictureBox();
@@ -98,13 +96,15 @@ namespace OpenDental{
 			this.groupBoxTaskDefaults = new System.Windows.Forms.GroupBox();
 			this.label15 = new System.Windows.Forms.Label();
 			this.label17 = new System.Windows.Forms.Label();
+			this.groupBox6 = new System.Windows.Forms.GroupBox();
+			this.checkTitleBarShowSite = new System.Windows.Forms.CheckBox();
+			this.label1 = new System.Windows.Forms.Label();
+			this.validNumY = new OpenDental.ValidNumber();
+			this.validNumX = new OpenDental.ValidNumber();
 			this.butLanguages = new OpenDental.UI.Button();
 			this.textSigInterval = new OpenDental.ValidNumber();
 			this.butCancel = new OpenDental.UI.Button();
 			this.butOK = new OpenDental.UI.Button();
-			this.groupBox6 = new System.Windows.Forms.GroupBox();
-			this.checkTitleBarShowSite = new System.Windows.Forms.CheckBox();
-			this.label1 = new System.Windows.Forms.Label();
 			this.groupBox7.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
 			this.groupBox2.SuspendLayout();
@@ -114,7 +114,7 @@ namespace OpenDental{
 			// 
 			// textMainWindowTitle
 			// 
-			this.textMainWindowTitle.Location = new System.Drawing.Point(134,14);
+			this.textMainWindowTitle.Location = new System.Drawing.Point(170,14);
 			this.textMainWindowTitle.Name = "textMainWindowTitle";
 			this.textMainWindowTitle.Size = new System.Drawing.Size(267,20);
 			this.textMainWindowTitle.TabIndex = 38;
@@ -123,7 +123,7 @@ namespace OpenDental{
 			// 
 			this.checkRandomPrimaryKeys.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.checkRandomPrimaryKeys.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkRandomPrimaryKeys.Location = new System.Drawing.Point(66,172);
+			this.checkRandomPrimaryKeys.Location = new System.Drawing.Point(102,179);
 			this.checkRandomPrimaryKeys.Name = "checkRandomPrimaryKeys";
 			this.checkRandomPrimaryKeys.Size = new System.Drawing.Size(346,17);
 			this.checkRandomPrimaryKeys.TabIndex = 55;
@@ -133,7 +133,7 @@ namespace OpenDental{
 			// 
 			// label3
 			// 
-			this.label3.Location = new System.Drawing.Point(4,137);
+			this.label3.Location = new System.Drawing.Point(41,138);
 			this.label3.Name = "label3";
 			this.label3.Size = new System.Drawing.Size(333,35);
 			this.label3.TabIndex = 56;
@@ -143,7 +143,7 @@ namespace OpenDental{
 			// 
 			// label4
 			// 
-			this.label4.Location = new System.Drawing.Point(23,196);
+			this.label4.Location = new System.Drawing.Point(59,216);
 			this.label4.Name = "label4";
 			this.label4.Size = new System.Drawing.Size(298,17);
 			this.label4.TabIndex = 64;
@@ -310,32 +310,6 @@ namespace OpenDental{
 			this.checkBoxTaskKeepListHidden.UseVisualStyleBackColor = true;
 			this.checkBoxTaskKeepListHidden.CheckedChanged += new System.EventHandler(this.checkBoxTaskKeepListHidden_CheckedChanged);
 			// 
-			// validNumY
-			// 
-			this.validNumY.Location = new System.Drawing.Point(235,77);
-			this.validNumY.MaxLength = 4;
-			this.validNumY.MaxVal = 1200;
-			this.validNumY.MinVal = 300;
-			this.validNumY.Name = "validNumY";
-			this.validNumY.Size = new System.Drawing.Size(47,20);
-			this.validNumY.TabIndex = 188;
-			this.validNumY.Text = "542";
-			this.validNumY.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-			this.toolTip1.SetToolTip(this.validNumY,resources.GetString("validNumY.ToolTip"));
-			// 
-			// validNumX
-			// 
-			this.validNumX.Location = new System.Drawing.Point(115,77);
-			this.validNumX.MaxLength = 4;
-			this.validNumX.MaxVal = 2000;
-			this.validNumX.MinVal = 300;
-			this.validNumX.Name = "validNumX";
-			this.validNumX.Size = new System.Drawing.Size(47,20);
-			this.validNumX.TabIndex = 186;
-			this.validNumX.Text = "542";
-			this.validNumX.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-			this.toolTip1.SetToolTip(this.validNumX,resources.GetString("validNumX.ToolTip"));
-			// 
 			// labelX
 			// 
 			this.labelX.Location = new System.Drawing.Point(47,77);
@@ -368,7 +342,7 @@ namespace OpenDental{
 			// 
 			this.comboShowID.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.comboShowID.FormattingEnabled = true;
-			this.comboShowID.Location = new System.Drawing.Point(271,36);
+			this.comboShowID.Location = new System.Drawing.Point(307,36);
 			this.comboShowID.Name = "comboShowID";
 			this.comboShowID.Size = new System.Drawing.Size(130,21);
 			this.comboShowID.TabIndex = 72;
@@ -404,7 +378,7 @@ namespace OpenDental{
 			// 
 			// label15
 			// 
-			this.label15.Location = new System.Drawing.Point(50,17);
+			this.label15.Location = new System.Drawing.Point(86,17);
 			this.label15.Name = "label15";
 			this.label15.Size = new System.Drawing.Size(83,17);
 			this.label15.TabIndex = 39;
@@ -413,12 +387,71 @@ namespace OpenDental{
 			// 
 			// label17
 			// 
-			this.label17.Location = new System.Drawing.Point(74,39);
+			this.label17.Location = new System.Drawing.Point(110,39);
 			this.label17.Name = "label17";
 			this.label17.Size = new System.Drawing.Size(195,15);
 			this.label17.TabIndex = 73;
 			this.label17.Text = "Show ID in title bar";
 			this.label17.TextAlign = System.Drawing.ContentAlignment.TopRight;
+			// 
+			// groupBox6
+			// 
+			this.groupBox6.Controls.Add(this.checkTitleBarShowSite);
+			this.groupBox6.Controls.Add(this.textMainWindowTitle);
+			this.groupBox6.Controls.Add(this.label15);
+			this.groupBox6.Controls.Add(this.comboShowID);
+			this.groupBox6.Controls.Add(this.label17);
+			this.groupBox6.Location = new System.Drawing.Point(12,46);
+			this.groupBox6.Name = "groupBox6";
+			this.groupBox6.Size = new System.Drawing.Size(453,83);
+			this.groupBox6.TabIndex = 195;
+			this.groupBox6.TabStop = false;
+			this.groupBox6.Text = "Main Window Title";
+			// 
+			// checkTitleBarShowSite
+			// 
+			this.checkTitleBarShowSite.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkTitleBarShowSite.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.checkTitleBarShowSite.Location = new System.Drawing.Point(74,60);
+			this.checkTitleBarShowSite.Name = "checkTitleBarShowSite";
+			this.checkTitleBarShowSite.Size = new System.Drawing.Size(362,17);
+			this.checkTitleBarShowSite.TabIndex = 74;
+			this.checkTitleBarShowSite.Text = "Show Site (public health must also be turned on)";
+			this.checkTitleBarShowSite.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// label1
+			// 
+			this.label1.Location = new System.Drawing.Point(12,9);
+			this.label1.Name = "label1";
+			this.label1.Size = new System.Drawing.Size(410,17);
+			this.label1.TabIndex = 196;
+			this.label1.Text = "See Setup | Modules for setup options that were previously in this window.";
+			// 
+			// validNumY
+			// 
+			this.validNumY.Location = new System.Drawing.Point(235,77);
+			this.validNumY.MaxLength = 4;
+			this.validNumY.MaxVal = 1200;
+			this.validNumY.MinVal = 300;
+			this.validNumY.Name = "validNumY";
+			this.validNumY.Size = new System.Drawing.Size(47,20);
+			this.validNumY.TabIndex = 188;
+			this.validNumY.Text = "542";
+			this.validNumY.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+			this.toolTip1.SetToolTip(this.validNumY,resources.GetString("validNumY.ToolTip"));
+			// 
+			// validNumX
+			// 
+			this.validNumX.Location = new System.Drawing.Point(115,77);
+			this.validNumX.MaxLength = 4;
+			this.validNumX.MaxVal = 2000;
+			this.validNumX.MinVal = 300;
+			this.validNumX.Name = "validNumX";
+			this.validNumX.Size = new System.Drawing.Size(47,20);
+			this.validNumX.TabIndex = 186;
+			this.validNumX.Text = "542";
+			this.validNumX.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+			this.toolTip1.SetToolTip(this.validNumX,resources.GetString("validNumX.ToolTip"));
 			// 
 			// butLanguages
 			// 
@@ -427,7 +460,7 @@ namespace OpenDental{
 			this.butLanguages.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butLanguages.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butLanguages.CornerRadius = 4F;
-			this.butLanguages.Location = new System.Drawing.Point(324,193);
+			this.butLanguages.Location = new System.Drawing.Point(360,200);
 			this.butLanguages.Name = "butLanguages";
 			this.butLanguages.Size = new System.Drawing.Size(88,24);
 			this.butLanguages.TabIndex = 63;
@@ -436,7 +469,7 @@ namespace OpenDental{
 			// 
 			// textSigInterval
 			// 
-			this.textSigInterval.Location = new System.Drawing.Point(338,146);
+			this.textSigInterval.Location = new System.Drawing.Point(375,147);
 			this.textSigInterval.MaxVal = 1000000;
 			this.textSigInterval.MinVal = 1;
 			this.textSigInterval.Name = "textSigInterval";
@@ -474,39 +507,6 @@ namespace OpenDental{
 			this.butOK.TabIndex = 7;
 			this.butOK.Text = "&OK";
 			this.butOK.Click += new System.EventHandler(this.butOK_Click);
-			// 
-			// groupBox6
-			// 
-			this.groupBox6.Controls.Add(this.checkTitleBarShowSite);
-			this.groupBox6.Controls.Add(this.textMainWindowTitle);
-			this.groupBox6.Controls.Add(this.label15);
-			this.groupBox6.Controls.Add(this.comboShowID);
-			this.groupBox6.Controls.Add(this.label17);
-			this.groupBox6.Location = new System.Drawing.Point(12,44);
-			this.groupBox6.Name = "groupBox6";
-			this.groupBox6.Size = new System.Drawing.Size(410,83);
-			this.groupBox6.TabIndex = 195;
-			this.groupBox6.TabStop = false;
-			this.groupBox6.Text = "Main Window Title";
-			// 
-			// checkTitleBarShowSite
-			// 
-			this.checkTitleBarShowSite.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.checkTitleBarShowSite.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkTitleBarShowSite.Location = new System.Drawing.Point(38,60);
-			this.checkTitleBarShowSite.Name = "checkTitleBarShowSite";
-			this.checkTitleBarShowSite.Size = new System.Drawing.Size(362,17);
-			this.checkTitleBarShowSite.TabIndex = 74;
-			this.checkTitleBarShowSite.Text = "Show Site (public health must also be turned on)";
-			this.checkTitleBarShowSite.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// label1
-			// 
-			this.label1.Location = new System.Drawing.Point(12,9);
-			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(410,17);
-			this.label1.TabIndex = 196;
-			this.label1.Text = "See Setup | Modules for setup options that were previously in this window.";
 			// 
 			// FormMisc
 			// 

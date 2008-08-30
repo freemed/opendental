@@ -3808,7 +3808,7 @@ namespace OpenDental{
 			}
 		}
 
-		///<summary></summary>
+		///<summary>Happens once per minute.  It used to just move the red timebar down without querying the database.  But now it queries the database so that the waiting room list shows accurately.</summary>
 		public void TickRefresh(){
 			try{
 				DateTime startDate;
@@ -3821,12 +3821,14 @@ namespace OpenDental{
 					startDate=Appointments.DateSelected;
 					endDate=Appointments.DateSelected;
 				}
-				//The only purpose is to redraw the red line.  The code below is too intensive.
-				//Schedule[] schedListPeriod=Schedules.RefreshPeriod(startDate,endDate);
-				//ContrApptSheet2.SchedListPeriod=schedListPeriod;
-				ContrApptSheet2.CreateShadow();
-				CreateAptShadows();
-				ContrApptSheet2.DrawShadow();
+				if(PrefC.GetBool("ApptModuleRefreshesEveryMinute")){
+					RefreshPeriod();
+				}
+				else{
+					ContrApptSheet2.CreateShadow();
+					CreateAptShadows();
+					ContrApptSheet2.DrawShadow();
+				}
 			}
 			catch{
 				//prevents rare malfunctions. For instance, during editing of views, if tickrefresh happens.
