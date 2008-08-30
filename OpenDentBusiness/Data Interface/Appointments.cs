@@ -542,10 +542,19 @@ namespace OpenDentBusiness{
 			return General.GetTable(command);
 		}
 
-		///<summary>The newStatus will be a DefNum or 0.</summary>
+		///<summary>The newStatus will be a DefNum or 0.  Only called from one place.</summary>
 		public static void SetConfirmed(int aptNum,int newStatus){
-			string command="UPDATE appointment SET Confirmed="+POut.PInt(newStatus)
-				+" WHERE AptNum="+POut.PInt(aptNum);
+			string command="UPDATE appointment SET Confirmed="+POut.PInt(newStatus);
+			if(PrefC.GetInt("AppointmentTimeArrivedTrigger")==newStatus){
+				command+=",DateTimeArrived=NOW()";
+			}
+			else if(PrefC.GetInt("AppointmentTimeSeatedTrigger")==newStatus){
+				command+=",DateTimeSeated=NOW()";
+			}
+			else if(PrefC.GetInt("AppointmentTimeDismissedTrigger")==newStatus){
+				command+=",DateTimeDismissed=NOW()";
+			}
+			command+=" WHERE AptNum="+POut.PInt(aptNum);
 			General.NonQ(command);
 		}
 
@@ -1064,7 +1073,7 @@ namespace OpenDentBusiness{
 				dateTimeNow=PIn.PDateT(raw.Rows[i]["dateTimeNow"].ToString());
 				timeArrived=(PIn.PDateT(raw.Rows[i]["DateTimeArrived"].ToString())).TimeOfDay;
 				waitTime=dateTimeNow-timeArrived;
-				row["waitTime"]=waitTime.ToString("H:mm");
+				row["waitTime"]=waitTime.ToString("H:mm:ss");
 				//minutes=waitTime.Minutes;
 				//if(waitTime.Hours>0){
 				//	row["waitTime"]+=waitTime.Hours.ToString()+"h ";
