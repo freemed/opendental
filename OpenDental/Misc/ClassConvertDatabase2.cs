@@ -226,9 +226,28 @@ namespace OpenDental{
 					General.NonQ(command);
 					command="INSERT INTO preference (PrefName,ValueString,Comments) VALUES ('ApptModuleRefreshesEveryMinute','1','Keeps the waiting room indicator times current.')";
 					General.NonQ(command);
-
-
-
+					command="DROP TABLE IF EXISTS recalltype";
+					General.NonQ(command);
+					command=@"CREATE TABLE recalltype (
+						RecallTypeNum int NOT NULL auto_increment,
+						Description varchar(255),
+						DefaultInterval int NOT NULL,
+						TimePattern varchar(255),
+						Procedures varchar(255),
+						PRIMARY KEY (RecallTypeNum)
+						) DEFAULT CHARSET=utf8";
+					General.NonQ(command);
+					//Basic recall---------------------------------------------------------------------
+					command="SELECT ValueString FROM preference WHERE PrefName='RecallPattern'";
+					string timepattern=General.GetCount(command);
+					command="SELECT ValueString FROM preference WHERE PrefName='RecallProcedures'";
+					string procs=General.GetCount(command);
+					command="INSERT INTO recalltype(RecallTypeNum,Description,DefaultInterval,TimePattern,Procedures) "
+						+"VALUES(1,'Prophy',"
+						+"393216,"//six months
+						+"'"+timepattern+"',"//always / and X, so no need to parameterize
+						+"'"+POut.PString(procs)+"')";
+					General.NonQ(command);
 
 
 

@@ -2,16 +2,7 @@ using System;
 using System.Collections;
 
 namespace OpenDentBusiness{
-	#region notes to self 
-	//Possible structure of recalltype table:
-	//RecallTypeNum: primary key
-	//Description
-	//DefaultInterval
-	//TimePattern: for scheduling the appointment
-	//Procedures: what procedures to put on that appointment. comma delimited.
-	
-	//a procedure could be attached to one recall type, keeping the link as a field in the procedurecode table, or it could be attached to multiple recall types, requiring a linking table.  In either case, the interface will be from the recall setup window.
-	#endregion	
+
 	///<summary>Max one per patient.  A patient can only have one recall date set for each type (there is currently only one type).  The recall table stores a few dates that must be kept synchronized with other information in the database.  This is difficult.  Anytime one of the following items changes, things need to be synchronized: procedurecode.SetRecall, any procedurelog change for a patient (procs added, deleted, completed, status changed, date changed, etc), patient status changed.  There are expected to be a few bugs in the synchronization logic, so anytime a patient's recall is opened, it will also update.
 	///
 	///During synchronization, the program will frequently alter DateDueCalc, DateDue, and DatePrevious based on trigger procs.  The system will also add and delete recalls as necessary. But it will not delete a recall unless all values are default and there is no useful information.  When a user tries to delete a recall, they will only be successful if the trigger conditions do not apply.  Otherwise, they will have to disable the recall instead.</summary>

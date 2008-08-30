@@ -207,6 +207,7 @@
     </Compile>
     <Compile Include="RemotingClient.cs" />
     <Compile Include="SheetFramework\SheetEnums.cs" />
+    <Compile Include="TableTypes\RecallType.cs" />
     <Compile Include="TableTypes\DeletedObject.cs" />
     <Compile Include="TableTypes\SheetDef.cs" />
     <Compile Include="TableTypes\SheetFieldDef.cs" />

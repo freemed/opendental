@@ -375,6 +375,9 @@
     <Compile Include="Forms\BasicTemplate.designer.cs">
       <DependentUpon>BasicTemplate.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\FormRecallTypes.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Forms\FormModuleSetup.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -3537,6 +3540,10 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\BasicTemplate.resx">
       <DependentUpon>BasicTemplate.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormRecallTypes.resx">
+      <DependentUpon>FormRecallTypes.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormModuleSetup.resx">
