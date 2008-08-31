@@ -275,7 +275,9 @@ namespace OpenDentBusiness{
 		///<summary></summary>
 		Pharmacies,
 		///<summary></summary>
-		Sheets
+		Sheets,
+		///<summary></summary>
+		RecallTypes
 	}
 	//<summary></summary>
 	/*public enum ButtonType{

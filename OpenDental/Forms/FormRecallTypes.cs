@@ -20,7 +20,7 @@ namespace OpenDental{
 		private OpenDental.UI.ODGrid gridMain;
 		private OpenDental.UI.Button butNone;
 		private OpenDental.UI.Button butOK;
-		//private bool changed;
+		private bool changed;
 		//public bool IsSelectionMode;
 		//<summary>Only used if IsSelectionMode.  On OK, contains selected pharmacyNum.  Can be 0.  Can also be set ahead of time externally.</summary>
 		//public int SelectedPharmacyNum;
@@ -79,6 +79,7 @@ namespace OpenDental{
 			this.butNone.Size = new System.Drawing.Size(68,24);
 			this.butNone.TabIndex = 16;
 			this.butNone.Text = "None";
+			this.butNone.Visible = false;
 			this.butNone.Click += new System.EventHandler(this.butNone_Click);
 			// 
 			// butOK
@@ -94,6 +95,7 @@ namespace OpenDental{
 			this.butOK.Size = new System.Drawing.Size(75,24);
 			this.butOK.TabIndex = 15;
 			this.butOK.Text = "OK";
+			this.butOK.Visible = false;
 			this.butOK.Click += new System.EventHandler(this.butOK_Click);
 			// 
 			// gridMain
@@ -170,9 +172,9 @@ namespace OpenDental{
 			else{
 				butOK.Visible=false;
 				butNone.Visible=false;
-			}
+			}*/
 			FillGrid();
-			if(SelectedPharmacyNum!=0){
+			/*if(SelectedPharmacyNum!=0){
 				for(int i=0;i<PharmacyC.Listt.Count;i++){
 					if(PharmacyC.Listt[i].PharmacyNum==SelectedPharmacyNum){
 						gridMain.SetSelected(i,true);
@@ -183,48 +185,38 @@ namespace OpenDental{
 		}
 
 		private void FillGrid(){
-			/*Pharmacies.RefreshCache();
+			RecallTypes.RefreshCache();
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
-			ODGridColumn col=new ODGridColumn(Lan.g("TablePharmacies","Store Name"),130);
+			ODGridColumn col=new ODGridColumn(Lan.g("TableRecallTypes","Description"),120);
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TablePharmacies","Phone"),90);
+			col=new ODGridColumn(Lan.g("TableRecallTypes","Default Interval"),90);
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TablePharmacies","Fax"),90);
+			col=new ODGridColumn(Lan.g("TableRecallTypes","Time Pattern"),90);
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TablePharmacies","Address"),120);
-			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TablePharmacies","City"),90);
-			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TablePharmacies","Note"),100);
+			col=new ODGridColumn(Lan.g("TableRecallTypes","Procedures"),120);
 			gridMain.Columns.Add(col);
 			gridMain.Rows.Clear();
 			ODGridRow row;
 			string txt;
-			for(int i=0;i<PharmacyC.Listt.Count;i++){
+			for(int i=0;i<RecallTypeC.Listt.Count;i++){
 				row=new ODGridRow();
-				row.Cells.Add(PharmacyC.Listt[i].StoreName);
-				row.Cells.Add(PharmacyC.Listt[i].Phone);
-				row.Cells.Add(PharmacyC.Listt[i].Fax);
-				txt=PharmacyC.Listt[i].Address;
-				if(PharmacyC.Listt[i].Address2!=""){
-					txt+="\r\n"+PharmacyC.Listt[i].Address2;
-				}
-				row.Cells.Add(txt);
-				row.Cells.Add(PharmacyC.Listt[i].City);
-				row.Cells.Add(PharmacyC.Listt[i].Note);
+				row.Cells.Add(RecallTypeC.Listt[i].Description);
+				row.Cells.Add(RecallTypeC.Listt[i].DefaultInterval.ToString());
+				row.Cells.Add(RecallTypeC.Listt[i].TimePattern);
+				row.Cells.Add(RecallTypeC.Listt[i].Procedures);
 				gridMain.Rows.Add(row);
 			}
-			gridMain.EndUpdate();*/
+			gridMain.EndUpdate();
 		}
 
 		private void butAdd_Click(object sender, System.EventArgs e) {
-			/*FormPharmacyEdit FormPE=new FormPharmacyEdit();
-			FormPE.PharmCur=new Pharmacy();
-			FormPE.PharmCur.IsNew=true;
-			FormPE.ShowDialog();
+			FormRecallTypeEdit FormRE=new FormRecallTypeEdit();
+			FormRE.RecallCur=new RecallType();
+			FormRE.RecallCur.IsNew=true;
+			FormRE.ShowDialog();
 			FillGrid();
-			changed=true;*/
+			changed=true;
 		}
 
 		private void gridMain_CellDoubleClick(object sender,ODGridClickEventArgs e) {
@@ -233,13 +225,13 @@ namespace OpenDental{
 				DialogResult=DialogResult.OK;
 				return;
 			}
-			else{
-				FormPharmacyEdit FormP=new FormPharmacyEdit();
-				FormP.PharmCur=PharmacyC.Listt[e.Row];
-				FormP.ShowDialog();
-				FillGrid();
-				changed=true;
-			}*/
+			else{*/
+			FormRecallTypeEdit FormR=new FormRecallTypeEdit();
+			FormR.RecallCur=RecallTypeC.Listt[e.Row];
+			FormR.ShowDialog();
+			FillGrid();
+			changed=true;
+			//}*/
 		}
 
 		private void butNone_Click(object sender,EventArgs e) {
@@ -266,9 +258,9 @@ namespace OpenDental{
 		}
 
 		private void FormRecallTypes_FormClosing(object sender,FormClosingEventArgs e) {
-			//if(changed){
-				//DataValid.SetInvalid(InvalidType.Pharmacies);
-			//}
+			if(changed){
+				DataValid.SetInvalid(InvalidType.RecallTypes);
+			}
 		}
 
 	

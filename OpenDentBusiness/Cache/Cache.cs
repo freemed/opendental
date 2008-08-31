@@ -94,6 +94,9 @@ namespace OpenDentBusiness {
 				//QuickPasteNotes.Refresh();
 				//QuickPasteCats.Refresh();
 			}
+			if(itypes.Contains((int)InvalidType.RecallTypes) || isAll){
+				ds.Tables.Add(RecallTypes.RefreshCache());
+			}
 			if(itypes.Contains((int)InvalidType.Security) || isAll){
 				ds.Tables.Add(Userods.RefreshCache());
 			}

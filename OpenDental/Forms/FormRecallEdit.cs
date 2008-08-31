@@ -438,7 +438,7 @@ namespace OpenDental{
 				|| textWeeks.errorProvider1.GetError(textWeeks)!=""
 				|| textDays.errorProvider1.GetError(textDays)!=""
 				){
-				MessageBox.Show(Lan.g(this,"Please fix data entry errors first."));
+				MsgBox.Show(this,"Please fix data entry errors first.");
 				return;
 			}
 			RecallCur.IsDisabled=checkIsDisabled.Checked;

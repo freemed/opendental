@@ -52,6 +52,9 @@ namespace OpenDentBusiness{
 			else if(dataType == typeof(short)) {
 				return PShort((short)value);
 			}
+			else if(dataType == typeof(Interval)) {
+				return PInt(((Interval)value).ToInt());
+			}
 			else {
 				throw new NotSupportedException(string.Format(Resources.DataTypeNotSupportedByPOut, dataType.Name));
 			}

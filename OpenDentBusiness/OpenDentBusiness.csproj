@@ -86,6 +86,7 @@
     <Compile Include="Cache\AutoCodeItemC.cs" />
     <Compile Include="Cache\Cache.cs" />
     <Compile Include="Cache\ClaimFormItemC.cs" />
+    <Compile Include="Cache\RecallTypeC.cs" />
     <Compile Include="Cache\SheetFieldDefC.cs" />
     <Compile Include="Cache\SheetDefC.cs" />
     <Compile Include="Cache\PharmacyC.cs" />
@@ -123,6 +124,7 @@
     <Compile Include="Data Interface\ClaimAttaches.cs" />
     <Compile Include="Data Interface\ClaimCondCodeLogs.cs" />
     <Compile Include="Data Interface\ClaimFormItems.cs" />
+    <Compile Include="Data Interface\RecallTypes.cs" />
     <Compile Include="Data Interface\DeletedObjects.cs" />
     <Compile Include="Data Interface\SheetFieldDefs.cs" />
     <Compile Include="Data Interface\SheetDefs.cs" />

@@ -194,6 +194,7 @@ namespace OpenDental{
 		private MenuItem menuItemSheets;
 		private MenuItem menuItemRequestFeatures;
 		private MenuItem menuItemModules;
+		private MenuItem menuItemRecallTypes;
 		private UserControlPhonePanel phonePanel;
 
 		///<summary></summary>
@@ -275,6 +276,7 @@ namespace OpenDental{
 			this.menuItem_ProviderAllocatorSetup = new System.Windows.Forms.MenuItem();
 			this.menuItemQuestions = new System.Windows.Forms.MenuItem();
 			this.menuItemRecall = new System.Windows.Forms.MenuItem();
+			this.menuItemRecallTypes = new System.Windows.Forms.MenuItem();
 			this.menuItemRequirementsNeeded = new System.Windows.Forms.MenuItem();
 			this.menuItemSched = new System.Windows.Forms.MenuItem();
 			this.menuItemSecurity = new System.Windows.Forms.MenuItem();
@@ -460,6 +462,7 @@ namespace OpenDental{
             this.menuItem_ProviderAllocatorSetup,
             this.menuItemQuestions,
             this.menuItemRecall,
+            this.menuItemRecallTypes,
             this.menuItemRequirementsNeeded,
             this.menuItemSched,
             this.menuItemSecurity,
@@ -647,27 +650,33 @@ namespace OpenDental{
 			this.menuItemRecall.Text = "Recall";
 			this.menuItemRecall.Click += new System.EventHandler(this.menuItemRecall_Click);
 			// 
+			// menuItemRecallTypes
+			// 
+			this.menuItemRecallTypes.Index = 30;
+			this.menuItemRecallTypes.Text = "RecallTypes";
+			this.menuItemRecallTypes.Click += new System.EventHandler(this.menuItemRecallTypes_Click);
+			// 
 			// menuItemRequirementsNeeded
 			// 
-			this.menuItemRequirementsNeeded.Index = 30;
+			this.menuItemRequirementsNeeded.Index = 31;
 			this.menuItemRequirementsNeeded.Text = "Requirements Needed";
 			this.menuItemRequirementsNeeded.Click += new System.EventHandler(this.menuItemRequirementsNeeded_Click);
 			// 
 			// menuItemSched
 			// 
-			this.menuItemSched.Index = 31;
+			this.menuItemSched.Index = 32;
 			this.menuItemSched.Text = "Schedules";
 			this.menuItemSched.Click += new System.EventHandler(this.menuItemSched_Click);
 			// 
 			// menuItemSecurity
 			// 
-			this.menuItemSecurity.Index = 32;
+			this.menuItemSecurity.Index = 33;
 			this.menuItemSecurity.Text = "Security";
 			this.menuItemSecurity.Click += new System.EventHandler(this.menuItemSecurity_Click);
 			// 
 			// menuItemSheets
 			// 
-			this.menuItemSheets.Index = 33;
+			this.menuItemSheets.Index = 34;
 			this.menuItemSheets.Text = "Sheets";
 			this.menuItemSheets.Click += new System.EventHandler(this.menuItemSheets_Click);
 			// 
@@ -3259,6 +3268,15 @@ namespace OpenDental{
 			SecurityLogs.MakeLogEntry(Permissions.Setup,0,"Recall");	
 		}
 
+		private void menuItemRecallTypes_Click(object sender,EventArgs e) {
+			if(!Security.IsAuthorized(Permissions.Setup)){
+				return;
+			}
+			FormRecallTypes FormRT=new FormRecallTypes();
+			FormRT.ShowDialog();
+			SecurityLogs.MakeLogEntry(Permissions.Setup,0,"Recall Types");	
+		}
+
 		private void menuItemRequirementsNeeded_Click(object sender,EventArgs e) {
 			if(!Security.IsAuthorized(Permissions.Setup)) {
 				return;
@@ -3733,6 +3751,8 @@ namespace OpenDental{
 				}
 			}
 		}
+
+		
 
 		
 
