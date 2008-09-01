@@ -23,11 +23,6 @@ namespace OpenDentBusiness{
 		public int ProcCat;
 		///<summary>Enum:TreatmentArea</summary>
 		public TreatmentArea TreatArea;
-		///<summary>No longer used. Extraction paint type is used instead to show missing teeth.</summary>
-		[XmlIgnore]
-		public bool RemoveTooth;
-		///<summary>Triggers recall in 6 months or as defined.</summary>
-		public bool SetRecall;
 		///<summary>If true, do not usually bill this procedure to insurance.</summary>
 		public bool NoBillIns;
 		///<summary>True if Crown,Bridge,Denture, or RPD. Forces user to enter Initial or Replacement and Date.</summary>
@@ -99,33 +94,7 @@ namespace OpenDentBusiness{
 
 		///<summary>Returns a copy of this Procedurecode.</summary>
 		public ProcedureCode Copy(){
-			ProcedureCode p=new ProcedureCode();
-			p.CodeNum=CodeNum;
-			p.ProcCode=ProcCode;
-			p.Descript=Descript;
-			p.AbbrDesc=AbbrDesc;
-			p.ProcTime=ProcTime;
-			p.ProcCat=ProcCat;
-			p.TreatArea=TreatArea;
-			//p.RemoveTooth=RemoveTooth;
-			p.SetRecall=SetRecall;
-			p.NoBillIns=NoBillIns;
-			p.IsProsth=IsProsth;
-			p.DefaultNote=DefaultNote;
-			p.IsHygiene=IsHygiene;
-			p.GTypeNum=GTypeNum;
-			p.AlternateCode1=AlternateCode1;
-			p.MedicalCode=MedicalCode;
-			p.IsTaxed=IsTaxed;
-			p.PaintType=PaintType;
-			p.GraphicColor=GraphicColor;
-			p.LaymanTerm=LaymanTerm;
-			p.IsCanadianLab=IsCanadianLab;
-			p.PreExisting=PreExisting;
-			p.BaseUnits=BaseUnits;
-			p.SubstitutionCode=SubstitutionCode;
-			p.SubstOnlyIf=SubstOnlyIf;
-			return p;
+			return (ProcedureCode)this.MemberwiseClone();
 		}
 
 

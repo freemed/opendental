@@ -24,7 +24,6 @@ namespace OpenDental{
 	public class ContrFamily : System.Windows.Forms.UserControl{
 		private System.Windows.Forms.ImageList imageListToolBar;
 		private System.ComponentModel.IContainer components;
-		private OpenDental.TableFamily tbFamily;
 		private OpenDental.UI.ODToolBar ToolBarMain;
 		///<summary>All recalls for this entire family.</summary>
 		private Recall[] RecallList;
@@ -41,13 +40,13 @@ namespace OpenDental{
 		private ContextMenu menuInsurance;
 		private MenuItem menuPlansForFam;
 		private Benefit[] BenefitList;
+		private ODGrid gridFamily;
 		private PatField[] PatFieldList;
 
 		///<summary></summary>
 		public ContrFamily(){
 			Logger.openlog.Log("Initializing family module...",Logger.Severity.INFO);
 			InitializeComponent();// This call is required by the Windows.Forms Form Designer.
-			tbFamily.CellClicked += new OpenDental.ContrTable.CellEventHandler(tbFamily_CellClicked);
 		}
 
 		///<summary></summary>
@@ -70,9 +69,9 @@ namespace OpenDental{
 			this.gridIns = new OpenDental.UI.ODGrid();
 			this.picturePat = new OpenDental.UI.PictureBox();
 			this.ToolBarMain = new OpenDental.UI.ODToolBar();
-			this.tbFamily = new OpenDental.TableFamily();
 			this.menuInsurance = new System.Windows.Forms.ContextMenu();
 			this.menuPlansForFam = new System.Windows.Forms.MenuItem();
+			this.gridFamily = new OpenDental.UI.ODGrid();
 			this.SuspendLayout();
 			// 
 			// imageListToolBar
@@ -132,17 +131,6 @@ namespace OpenDental{
 			this.ToolBarMain.TabIndex = 19;
 			this.ToolBarMain.ButtonClick += new OpenDental.UI.ODToolBarButtonClickEventHandler(this.ToolBarMain_ButtonClick);
 			// 
-			// tbFamily
-			// 
-			this.tbFamily.BackColor = System.Drawing.SystemColors.Window;
-			this.tbFamily.Location = new System.Drawing.Point(104,27);
-			this.tbFamily.Name = "tbFamily";
-			this.tbFamily.ScrollValue = 1;
-			this.tbFamily.SelectedIndices = new int[0];
-			this.tbFamily.SelectionMode = System.Windows.Forms.SelectionMode.None;
-			this.tbFamily.Size = new System.Drawing.Size(489,100);
-			this.tbFamily.TabIndex = 7;
-			// 
 			// menuInsurance
 			// 
 			this.menuInsurance.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
@@ -154,13 +142,26 @@ namespace OpenDental{
 			this.menuPlansForFam.Text = "Plans for Family";
 			this.menuPlansForFam.Click += new System.EventHandler(this.menuPlansForFam_Click);
 			// 
+			// gridFamily
+			// 
+			this.gridFamily.HScrollVisible = false;
+			this.gridFamily.Location = new System.Drawing.Point(103,27);
+			this.gridFamily.Name = "gridFamily";
+			this.gridFamily.ScrollValue = 0;
+			this.gridFamily.SelectedRowColor = System.Drawing.Color.DarkSalmon;
+			this.gridFamily.Size = new System.Drawing.Size(508,100);
+			this.gridFamily.TabIndex = 31;
+			this.gridFamily.Title = "Family Members";
+			this.gridFamily.TranslationName = "TablePatient";
+			this.gridFamily.CellClick += new OpenDental.UI.ODGridClickEventHandler(this.gridFamily_CellClick);
+			// 
 			// ContrFamily
 			// 
+			this.Controls.Add(this.gridFamily);
 			this.Controls.Add(this.gridPat);
 			this.Controls.Add(this.gridIns);
 			this.Controls.Add(this.picturePat);
 			this.Controls.Add(this.ToolBarMain);
-			this.Controls.Add(this.tbFamily);
 			this.Name = "ContrFamily";
 			this.Size = new System.Drawing.Size(939,708);
 			this.Layout += new System.Windows.Forms.LayoutEventHandler(this.ContrFamily_Layout);
@@ -257,7 +258,7 @@ namespace OpenDental{
 
 		///<summary></summary>
 		public void InitializeOnStartup(){
-			tbFamily.InstantClasses();
+			//tbFamily.InstantClasses();
 			//cannot use Lan.F(this);
 			Lan.C(this,new Control[]
 				{
@@ -704,51 +705,60 @@ namespace OpenDental{
 
 		#endregion gridPatient 
 
-		#region tbFamily
+		#region gridFamily
 
 		private void FillFamilyData(){
+			gridFamily.BeginUpdate();
+			gridFamily.Columns.Clear();
+			ODGridColumn col=new ODGridColumn(Lan.g("TablePatient","Name"),140);
+			gridFamily.Columns.Add(col);
+			col=new ODGridColumn(Lan.g("Table","Position"),70);
+			gridFamily.Columns.Add(col);
+			col=new ODGridColumn(Lan.g("Table","Gender"),60);
+			gridFamily.Columns.Add(col);
+			col=new ODGridColumn(Lan.g("Table","Status"),70);
+			gridFamily.Columns.Add(col);
+			col=new ODGridColumn(Lan.g("Table","Age"),50);
+			gridFamily.Columns.Add(col);
+			col=new ODGridColumn(Lan.g("Table","Recall Due"),80);
+			gridFamily.Columns.Add(col);
+			gridFamily.Rows.Clear();
 			if(PatCur==null){
-				tbFamily.SelectedRow=-1;
-				tbFamily.ResetRows(0);
-				tbFamily.LayoutTables();
 				return;
 			}
-			tbFamily.ResetRows(FamCur.List.Length);
-			tbFamily.SetGridColor(Color.Gray);
-			tbFamily.SetBackGColor(Color.White);
-			for(int i=0;i<FamCur.List.Length; i++){
-				if(FamCur.List[i].PatNum==FamCur.List[i].Guarantor){
-					for(int j=0;j<5;j++){
-						tbFamily.FontBold[j,i]=true;
-					}
-					//tbFamily.Cell[0,i]=Lan.g(this,"Guar");
-				}
-				tbFamily.Cell[0,i]=FamCur.GetNameInFamLFI(i);
-				tbFamily.Cell[1,i]=Lan.g("enumPatientPosition",FamCur.List[i].Position.ToString());
-				tbFamily.Cell[2,i]=Lan.g("enumPatientGender",FamCur.List[i].Gender.ToString());
-				tbFamily.Cell[3,i]=Lan.g("enumPatientStatus",FamCur.List[i].PatStatus.ToString());
-				tbFamily.Cell[4,i]=Patients.AgeToString(FamCur.List[i].Age);
+			ODGridRow row;
+			string recallinfo;
+			for(int i=0;i<FamCur.List.Length;i++){
+				row=new ODGridRow();
+				row.Cells.Add(FamCur.GetNameInFamLFI(i));
+				row.Cells.Add(Lan.g("enumPatientPosition",FamCur.List[i].Position.ToString()));
+				row.Cells.Add(Lan.g("enumPatientGender",FamCur.List[i].Gender.ToString()));
+				row.Cells.Add(Lan.g("enumPatientStatus",FamCur.List[i].PatStatus.ToString()));
+				row.Cells.Add(Patients.AgeToString(FamCur.List[i].Age));
+				recallinfo="";
 				for(int j=0;j<RecallList.Length;j++){
 					if(RecallList[j].PatNum==FamCur.List[i].PatNum){
 						if(RecallList[j].DateDue.Year>1880){
-							tbFamily.Cell[5,i]=RecallList[j].DateDue.ToShortDateString();
+							recallinfo=RecallList[j].DateDue.ToShortDateString();
 						}
 					}
 				}
-				if(FamCur.List[i].PatNum==PatCur.PatNum){
-					tbFamily.SelectedRow=i;
-					tbFamily.ColorRow(i,Color.DarkSalmon);
+				row.Cells.Add(recallinfo);
+				if(i==0){//guarantor
+					row.Bold=true;
 				}
-			}//end for
-			tbFamily.LayoutTables();
-		}//end FillFamilyData
-
-		private void tbFamily_CellClicked(object sender, CellEventArgs e){
-			if (tbFamily.SelectedRow != -1){
-				tbFamily.ColorRow(tbFamily.SelectedRow,Color.White);
+				gridFamily.Rows.Add(row);
 			}
-			tbFamily.SelectedRow=e.Row;
-			tbFamily.ColorRow(e.Row,Color.DarkSalmon);
+			gridFamily.EndUpdate();
+			gridFamily.SetSelected(FamCur.GetIndex(PatCur.PatNum),true);
+		}
+
+		private void gridFamily_CellClick(object sender,ODGridClickEventArgs e) {
+			//if (tbFamily.SelectedRow != -1){
+			//	tbFamily.ColorRow(tbFamily.SelectedRow,Color.White);
+			//}
+			//tbFamily.SelectedRow=e.Row;
+			//tbFamily.ColorRow(e.Row,Color.DarkSalmon);
 			OnPatientSelected(FamCur.List[e.Row].PatNum,FamCur.List[e.Row].GetNameLF(),FamCur.List[e.Row].Email!="",
 				FamCur.List[e.Row].ChartNumber);
 			ModuleSelected(FamCur.List[e.Row].PatNum);
@@ -1348,25 +1358,28 @@ namespace OpenDental{
 
 		
 
-		
-
-	
 
 
 
-		
 
-		
 
-		
 
-		
 
-		
-		
 
-		
 
-		
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 	}
 }

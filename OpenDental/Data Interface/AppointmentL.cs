@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Text;
+using System.Windows.Forms;
 using OpenDentBusiness;
 
 namespace OpenDental{
@@ -209,6 +210,11 @@ namespace OpenDental{
 
 		///<summary>Used by UI when it needs a recall appointment placed on the pinboard ready to schedule.  This method creates the appointment and attaches all appropriate procedures.  It's up to the calling class to then place the appointment on the pinboard.  If the appointment doesn't get scheduled, it's important to delete it.</summary>
 		public static Appointment CreateRecallApt(Patient patCur,Procedure[] procList,Recall recallCur,InsPlan[] planList){
+			MessageBox.Show("Temporarily broken.");
+			return null;
+			//Nearly all the prefs below are now gone.
+			//They've all been replaced by RecallTypes, so this all needs to be rewritten.
+			/*
 			Appointment AptCur=new Appointment();
 			AptCur.PatNum=patCur.PatNum;
 			AptCur.AptStatus=ApptStatus.Scheduled;
@@ -429,7 +435,7 @@ namespace OpenDental{
 				Procedures.Insert(ProcCur);//no recall synch required
 				Procedures.ComputeEstimates(ProcCur,patCur.PatNum,new ClaimProc[0],false,planList,patPlanList,benefitList);
 			}
-			return AptCur;
+			return AptCur;*/
 		}
 
 		///<summary>Tests to see if this appointment will create a double booking. Returns arrayList with no items in it if no double bookings for this appt.  But if double booking, then it returns an arrayList of codes which would be double booked.  You must supply the appointment being scheduled as well as a list of all appointments for that day.  The list can include the appointment being tested if user is moving it to a different time on the same day.  The ProcsForOne list of procedures needs to contain the procedures for the apt becauese procsMultApts won't necessarily, especially if it's a planned appt on the pinboard.</summary>

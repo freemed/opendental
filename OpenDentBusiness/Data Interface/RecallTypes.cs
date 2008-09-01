@@ -28,6 +28,7 @@ namespace OpenDentBusiness{
 				rtype.DefaultInterval= new Interval(PIn.PInt(table.Rows[i][2].ToString()));
 				rtype.TimePattern    = PIn.PString(table.Rows[i][3].ToString());
 				rtype.Procedures     = PIn.PString(table.Rows[i][4].ToString());
+				rtype.TriggerProcs   = PIn.PString(table.Rows[i][5].ToString());
 				RecallTypeC.Listt.Add(rtype);
 			}
 		}

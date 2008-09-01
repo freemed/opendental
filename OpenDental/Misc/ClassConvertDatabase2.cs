@@ -234,20 +234,120 @@ namespace OpenDental{
 						DefaultInterval int NOT NULL,
 						TimePattern varchar(255),
 						Procedures varchar(255),
+						TriggerProcs varchar(255),
 						PRIMARY KEY (RecallTypeNum)
 						) DEFAULT CHARSET=utf8";
 					General.NonQ(command);
-					//Basic recall---------------------------------------------------------------------
+					//Basic recall-----------------------------------------------------------------------------
 					command="SELECT ValueString FROM preference WHERE PrefName='RecallPattern'";
 					string timepattern=General.GetCount(command);
 					command="SELECT ValueString FROM preference WHERE PrefName='RecallProcedures'";
 					string procs=General.GetCount(command);
-					command="INSERT INTO recalltype(RecallTypeNum,Description,DefaultInterval,TimePattern,Procedures) "
+					command="SELECT ProcCode FROM procedurecode WHERE SetRecall=1";
+					DataTable table=General.GetTable(command);
+					string triggers="";
+					for(int i=0;i<table.Rows.Count;i++){
+						if(i>0){
+							triggers+=",";
+						}
+						triggers+=table.Rows[i][0].ToString();
+					}
+					command="INSERT INTO recalltype(RecallTypeNum,Description,DefaultInterval,TimePattern,Procedures,TriggerProcs) "
 						+"VALUES(1,'Prophy',"
 						+"393216,"//six months
 						+"'"+timepattern+"',"//always / and X, so no need to parameterize
-						+"'"+POut.PString(procs)+"')";
+						+"'"+POut.PString(procs)+"',"
+						+"'"+POut.PString(triggers)+"')";
 					General.NonQ(command);
+//still need to convert existing recalls over to this.
+					//Child recall-----------------------------------------------------------------------------
+					command="SELECT ValueString FROM preference WHERE PrefName='RecallPatternChild'";
+					timepattern=General.GetCount(command);
+					command="SELECT ValueString FROM preference WHERE PrefName='RecallProceduresChild'";
+					procs=General.GetCount(command);
+					triggers="D1120";//child prophy code
+					command="INSERT INTO recalltype(RecallTypeNum,Description,DefaultInterval,TimePattern,Procedures,TriggerProcs) "
+						+"VALUES(2,'Child Prophy',"
+						+"393216,"//six months
+						+"'"+timepattern+"',"//always / and X, so no need to parameterize
+						+"'"+POut.PString(procs)+"',"
+						+"'"+POut.PString(triggers)+"')";
+					General.NonQ(command);
+					//Perio recall-----------------------------------------------------------------------------
+					command="SELECT ValueString FROM preference WHERE PrefName='RecallPatternPerio'";
+					timepattern=General.GetCount(command);
+					command="SELECT ValueString FROM preference WHERE PrefName='RecallProceduresPerio'";
+					procs=General.GetCount(command);
+					command="SELECT ValueString FROM preference WHERE PrefName='RecallPerioTriggerProcs'";
+					triggers=General.GetCount(command);
+					command="INSERT INTO recalltype(RecallTypeNum,Description,DefaultInterval,TimePattern,Procedures,TriggerProcs) "
+						+"VALUES(3,'Perio',"
+						+"262144,"//4 months.
+						+"'"+timepattern+"',"//always / and X, so no need to parameterize
+						+"'"+POut.PString(procs)+"',"
+						+"'"+POut.PString(triggers)+"')";
+					General.NonQ(command);
+					if(CultureInfo.CurrentCulture.Name=="en-US"){
+						//4BWX-----------------------------------------------------------------------------
+						timepattern="";
+						procs="D0274";
+						triggers="D0274";
+						command="INSERT INTO recalltype(RecallTypeNum,Description,DefaultInterval,TimePattern,Procedures,TriggerProcs) "
+							+"VALUES(4,'4BW',"
+							+"16777216,"//one year.
+							+"'"+timepattern+"',"
+							+"'"+POut.PString(procs)+"',"
+							+"'"+POut.PString(triggers)+"')";
+						General.NonQ(command);
+						//Pano-----------------------------------------------------------------------------
+						timepattern="";
+						procs="D0330";
+						triggers="D0330";
+						command="INSERT INTO recalltype(RecallTypeNum,Description,DefaultInterval,TimePattern,Procedures,TriggerProcs) "
+							+"VALUES(5,'Pano',"
+							+"83886080,"//5 years.
+							+"'"+timepattern+"',"
+							+"'"+POut.PString(procs)+"',"
+							+"'"+POut.PString(triggers)+"')";
+						General.NonQ(command);
+					}
+					//Get rid of unused prefs-----------------------------------------------------------------
+					command="DELETE FROM preference WHERE PrefName='RecallPattern'";
+					General.NonQ(command);
+					command="DELETE FROM preference WHERE PrefName='RecallProcedures'";
+					General.NonQ(command);
+					command="DELETE FROM preference WHERE PrefName='RecallPatternChild'";
+					General.NonQ(command);
+					command="DELETE FROM preference WHERE PrefName='RecallProceduresChild'";
+					General.NonQ(command);
+					command="ALTER TABLE procedurecode DROP SetRecall";
+					General.NonQ(command);
+					command="ALTER TABLE procedurecode DROP RemoveTooth";
+					General.NonQ(command);
+					command="DELETE FROM preference WHERE PrefName='RecallBW'";
+					General.NonQ(command);
+					command="DELETE FROM preference WHERE PrefName='RecallFMXPanoProc'";
+					General.NonQ(command);
+					command="DELETE FROM preference WHERE PrefName='RecallDisableAutoFilms'";
+					General.NonQ(command);
+					command="DELETE FROM preference WHERE PrefName='RecallFMXPanoYrInterval'";
+					General.NonQ(command);
+					command="DELETE FROM preference WHERE PrefName='RecallDisablePerioAlt'";
+					General.NonQ(command);
+					command="DELETE FROM preference WHERE PrefName='RecallPatternPerio'";
+					General.NonQ(command);
+					command="DELETE FROM preference WHERE PrefName='RecallProceduresPerio'";
+					General.NonQ(command);
+					command="DELETE FROM preference WHERE PrefName='RecallPerioTriggerProcs'";
+					General.NonQ(command);
+
+
+
+					
+
+
+
+
 
 
 

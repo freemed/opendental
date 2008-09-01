@@ -12,8 +12,8 @@ namespace OpenDental{
 	public class ProcedureCodes {
 		///<summary></summary>
 		private static DataTable tableStat;
-		///<summary></summary>
-		public static ArrayList RecallAL;
+		//<summary></summary>
+		//public static ArrayList RecallAL;
 		///<summary>key:ProcCode, value:ProcedureCode</summary>
 		public static Hashtable HList;//
 		///<summary></summary>
@@ -27,16 +27,16 @@ namespace OpenDental{
 			DataTable table=General.GetTable(command);
 			tableStat=table.Copy();
 			List=TableToList(table).ToArray();
-			RecallAL=new ArrayList();
+			//RecallAL=new ArrayList();
 			for(int i=0;i<List.Length;i++) {
 				try {
 					HList.Add(List[i].ProcCode,List[i].Copy());
 				}
 				catch {
 				}
-				if(List[i].SetRecall) {
-					RecallAL.Add(List[i]);
-				}
+				//if(List[i].SetRecall) {
+				//	RecallAL.Add(List[i]);
+				//}
 			}
 		}
 
@@ -58,24 +58,22 @@ namespace OpenDental{
 				code.ProcTime      =PIn.PString(table.Rows[i][4].ToString());
 				code.ProcCat       =PIn.PInt(table.Rows[i][5].ToString());
 				code.TreatArea     =(TreatmentArea)PIn.PInt(table.Rows[i][6].ToString());
-				//code.RemoveTooth   =PIn.PBool  (table.Rows[i][7].ToString());
-				code.SetRecall     =PIn.PBool  (table.Rows[i][8].ToString());
-				code.NoBillIns     =PIn.PBool  (table.Rows[i][9].ToString());
-				code.IsProsth      =PIn.PBool  (table.Rows[i][10].ToString());
-				code.DefaultNote   =PIn.PString(table.Rows[i][11].ToString());
-				code.IsHygiene     =PIn.PBool  (table.Rows[i][12].ToString());
-				code.GTypeNum      =PIn.PInt   (table.Rows[i][13].ToString());
-				code.AlternateCode1=PIn.PString(table.Rows[i][14].ToString());
-				code.MedicalCode   =PIn.PString(table.Rows[i][15].ToString());
-				code.IsTaxed       =PIn.PBool  (table.Rows[i][16].ToString());
-				code.PaintType     =(ToothPaintingType)PIn.PInt(table.Rows[i][17].ToString());
-				code.GraphicColor  =Color.FromArgb(PIn.PInt(table.Rows[i][18].ToString()));
-				code.LaymanTerm    =PIn.PString(table.Rows[i][19].ToString());
-				code.IsCanadianLab =PIn.PBool  (table.Rows[i][20].ToString());
-				code.PreExisting	 =PIn.PBool  (table.Rows[i][21].ToString());
-				code.BaseUnits     =PIn.PInt   (table.Rows[i][22].ToString());
-				code.SubstitutionCode=PIn.PString(table.Rows[i][23].ToString());
-				code.SubstOnlyIf   =(SubstitutionCondition)PIn.PInt(table.Rows[i][24].ToString());
+				code.NoBillIns     =PIn.PBool  (table.Rows[i][7].ToString());
+				code.IsProsth      =PIn.PBool  (table.Rows[i][8].ToString());
+				code.DefaultNote   =PIn.PString(table.Rows[i][9].ToString());
+				code.IsHygiene     =PIn.PBool  (table.Rows[i][10].ToString());
+				code.GTypeNum      =PIn.PInt   (table.Rows[i][11].ToString());
+				code.AlternateCode1=PIn.PString(table.Rows[i][12].ToString());
+				code.MedicalCode   =PIn.PString(table.Rows[i][13].ToString());
+				code.IsTaxed       =PIn.PBool  (table.Rows[i][14].ToString());
+				code.PaintType     =(ToothPaintingType)PIn.PInt(table.Rows[i][15].ToString());
+				code.GraphicColor  =Color.FromArgb(PIn.PInt(table.Rows[i][16].ToString()));
+				code.LaymanTerm    =PIn.PString(table.Rows[i][17].ToString());
+				code.IsCanadianLab =PIn.PBool  (table.Rows[i][18].ToString());
+				code.PreExisting	 =PIn.PBool  (table.Rows[i][19].ToString());
+				code.BaseUnits     =PIn.PInt   (table.Rows[i][20].ToString());
+				code.SubstitutionCode=PIn.PString(table.Rows[i][21].ToString());
+				code.SubstOnlyIf   =(SubstitutionCondition)PIn.PInt(table.Rows[i][22].ToString());
 				//DateTStamp
 				codeList.Add(code);
 			}
@@ -86,7 +84,7 @@ namespace OpenDental{
 		public static void Insert(ProcedureCode code){
 			//must have already checked procCode for nonduplicate.
 			string command="INSERT INTO procedurecode (CodeNum,ProcCode,descript,abbrdesc,"
-				+"proctime,proccat,treatarea,RemoveTooth,setrecall,"
+				+"proctime,proccat,treatarea,"
 				+"nobillins,isprosth,defaultnote,ishygiene,gtypenum,alternatecode1,MedicalCode,IsTaxed,"
 				+"PaintType,GraphicColor,LaymanTerm,IsCanadianLab,PreExisting,BaseUnits,SubstitutionCode,"
 				+"SubstOnlyIf"//DateTStamp
@@ -98,9 +96,6 @@ namespace OpenDental{
 				+"'"+POut.PString(code.ProcTime)+"', "
 				+"'"+POut.PInt   (code.ProcCat)+"', "
 				+"'"+POut.PInt   ((int)code.TreatArea)+"', "
-				+"'0', " //No longer used, but remains part of the table so that ordinal values are not upset.
-									//The value is set to 0 here, so that conversion to extraction paint type is not necessary.
-				+"'"+POut.PBool  (code.SetRecall)+"', "
 				+"'"+POut.PBool  (code.NoBillIns)+"', "
 				+"'"+POut.PBool  (code.IsProsth)+"', "
 				+"'"+POut.PString(code.DefaultNote)+"', "
@@ -134,8 +129,6 @@ namespace OpenDental{
 				+ ",proctime = '"      +POut.PString(code.ProcTime)+"'"
 				+ ",proccat = '"       +POut.PInt   (code.ProcCat)+"'"
 				+ ",treatarea = '"     +POut.PInt   ((int)code.TreatArea)+"'"
-				//+ ",removetooth = '"   +POut.PBool  (RemoveTooth)+"'"
-				+ ",setrecall = '"     +POut.PBool  (code.SetRecall)+"'"
 				+ ",nobillins = '"     +POut.PBool  (code.NoBillIns)+"'"
 				+ ",isprosth = '"      +POut.PBool  (code.IsProsth)+"'"
 				+ ",defaultnote = '"   +POut.PString(code.DefaultNote)+"'"

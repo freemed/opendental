@@ -244,7 +244,8 @@ namespace OpenDental{
 
 		///<summary>Synchronizes all recall for one patient. If datePrevious has changed, then it completely deletes the old recall information and sets a new dateDueCalc and DatePrevious.  Also updates dateDue to match dateDueCalc if not disabled.  The supplied recall can be null if patient has no existing recall. Deletes or creates any recalls as necessary.</summary>
 		public static void Synch(int patNum,Recall recall){
-			DateTime previousDate=GetPreviousDate(patNum);
+			//This all needs to be rewritten
+			/*DateTime previousDate=GetPreviousDate(patNum);
 			if(recall!=null 
 				&& !recall.IsDisabled
 				&& previousDate.Year>1880//this protects recalls that were manually added as part of a conversion
@@ -295,7 +296,7 @@ namespace OpenDental{
 					recall.DateDueCalc=recall.DatePrevious+recall.RecallInterval;
 					Recalls.Update(recall);
 				}
-			}
+			}*/
 		}
 
 		///<summary>Synchronizes all recall for one patient. Sets dateDueCalc and DatePrevious.  Also updates dateDue to match dateDueCalc if not disabled.  The supplied recall can be null if patient has no existing recall. Deletes or creates any recalls as necessary.</summary>
@@ -308,6 +309,7 @@ namespace OpenDental{
 			Synch(patNum,recall);
 		}
 
+		/*
 		private static DateTime GetPreviousDate(int patNum){
 			string command= 
 				"SELECT MAX(procedurelog.procdate) "
@@ -324,7 +326,7 @@ namespace OpenDental{
 				return DateTime.MinValue;
 			}
 			return PIn.PDate(table.Rows[0][0].ToString());
-		}
+		}*/
 
 		///<summary>Only called when editing certain procedurecodes, but only very rarely as needed. For power users, this is a good little trick to use to synch recall for all patients.</summary>
 		public static void SynchAllPatients(){

@@ -188,13 +188,15 @@ namespace OpenDental{
 			RecallTypes.RefreshCache();
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
-			ODGridColumn col=new ODGridColumn(Lan.g("TableRecallTypes","Description"),120);
+			ODGridColumn col=new ODGridColumn(Lan.g("TableRecallTypes","Description"),110);
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TableRecallTypes","Default Interval"),90);
+			col=new ODGridColumn(Lan.g("TableRecallTypes","Triggers"),190);
+			gridMain.Columns.Add(col);
+			col=new ODGridColumn(Lan.g("TableRecallTypes","Interval"),60);
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn(Lan.g("TableRecallTypes","Time Pattern"),90);
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TableRecallTypes","Procedures"),120);
+			col=new ODGridColumn(Lan.g("TableRecallTypes","Procedures"),190);
 			gridMain.Columns.Add(col);
 			gridMain.Rows.Clear();
 			ODGridRow row;
@@ -202,6 +204,7 @@ namespace OpenDental{
 			for(int i=0;i<RecallTypeC.Listt.Count;i++){
 				row=new ODGridRow();
 				row.Cells.Add(RecallTypeC.Listt[i].Description);
+				row.Cells.Add(RecallTypeC.Listt[i].TriggerProcs);
 				row.Cells.Add(RecallTypeC.Listt[i].DefaultInterval.ToString());
 				row.Cells.Add(RecallTypeC.Listt[i].TimePattern);
 				row.Cells.Add(RecallTypeC.Listt[i].Procedures);
@@ -227,7 +230,7 @@ namespace OpenDental{
 			}
 			else{*/
 			FormRecallTypeEdit FormR=new FormRecallTypeEdit();
-			FormR.RecallCur=RecallTypeC.Listt[e.Row];
+			FormR.RecallCur=RecallTypeC.Listt[e.Row].Copy();
 			FormR.ShowDialog();
 			FillGrid();
 			changed=true;

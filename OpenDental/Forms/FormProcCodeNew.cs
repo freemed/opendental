@@ -21,7 +21,6 @@ namespace OpenDental{
 		private ListBox listType;
 		private Label label4;
 		public TextBox textAbbreviation;
-		private CheckBox checkSetRecall;
 		private CheckBox checkNoBillIns;
 		private CheckBox checkIsHygiene;
 		private CheckBox checkIsProsth;
@@ -68,7 +67,6 @@ namespace OpenDental{
 			this.listType = new System.Windows.Forms.ListBox();
 			this.label4 = new System.Windows.Forms.Label();
 			this.textAbbreviation = new System.Windows.Forms.TextBox();
-			this.checkSetRecall = new System.Windows.Forms.CheckBox();
 			this.checkNoBillIns = new System.Windows.Forms.CheckBox();
 			this.checkIsHygiene = new System.Windows.Forms.CheckBox();
 			this.checkIsProsth = new System.Windows.Forms.CheckBox();
@@ -160,21 +158,10 @@ namespace OpenDental{
 			this.textAbbreviation.Size = new System.Drawing.Size(80,20);
 			this.textAbbreviation.TabIndex = 2;
 			// 
-			// checkSetRecall
-			// 
-			this.checkSetRecall.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.checkSetRecall.Location = new System.Drawing.Point(283,148);
-			this.checkSetRecall.Name = "checkSetRecall";
-			this.checkSetRecall.Size = new System.Drawing.Size(164,18);
-			this.checkSetRecall.TabIndex = 3;
-			this.checkSetRecall.Text = "Triggers Recall";
-			this.checkSetRecall.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.checkSetRecall.UseVisualStyleBackColor = true;
-			// 
 			// checkNoBillIns
 			// 
 			this.checkNoBillIns.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.checkNoBillIns.Location = new System.Drawing.Point(239,169);
+			this.checkNoBillIns.Location = new System.Drawing.Point(239,158);
 			this.checkNoBillIns.Name = "checkNoBillIns";
 			this.checkNoBillIns.Size = new System.Drawing.Size(208,18);
 			this.checkNoBillIns.TabIndex = 4;
@@ -185,7 +172,7 @@ namespace OpenDental{
 			// checkIsHygiene
 			// 
 			this.checkIsHygiene.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.checkIsHygiene.Location = new System.Drawing.Point(265,190);
+			this.checkIsHygiene.Location = new System.Drawing.Point(265,179);
 			this.checkIsHygiene.Name = "checkIsHygiene";
 			this.checkIsHygiene.Size = new System.Drawing.Size(182,18);
 			this.checkIsHygiene.TabIndex = 5;
@@ -196,7 +183,7 @@ namespace OpenDental{
 			// checkIsProsth
 			// 
 			this.checkIsProsth.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.checkIsProsth.Location = new System.Drawing.Point(283,211);
+			this.checkIsProsth.Location = new System.Drawing.Point(283,200);
 			this.checkIsProsth.Name = "checkIsProsth";
 			this.checkIsProsth.Size = new System.Drawing.Size(164,18);
 			this.checkIsProsth.TabIndex = 6;
@@ -206,7 +193,7 @@ namespace OpenDental{
 			// 
 			// label5
 			// 
-			this.label5.Location = new System.Drawing.Point(268,232);
+			this.label5.Location = new System.Drawing.Point(268,221);
 			this.label5.Name = "label5";
 			this.label5.Size = new System.Drawing.Size(163,18);
 			this.label5.TabIndex = 15;
@@ -216,7 +203,7 @@ namespace OpenDental{
 			// comboPaintType
 			// 
 			this.comboPaintType.FormattingEnabled = true;
-			this.comboPaintType.Location = new System.Drawing.Point(433,232);
+			this.comboPaintType.Location = new System.Drawing.Point(433,221);
 			this.comboPaintType.Name = "comboPaintType";
 			this.comboPaintType.Size = new System.Drawing.Size(165,21);
 			this.comboPaintType.TabIndex = 7;
@@ -224,14 +211,14 @@ namespace OpenDental{
 			// comboTreatArea
 			// 
 			this.comboTreatArea.FormattingEnabled = true;
-			this.comboTreatArea.Location = new System.Drawing.Point(433,256);
+			this.comboTreatArea.Location = new System.Drawing.Point(433,245);
 			this.comboTreatArea.Name = "comboTreatArea";
 			this.comboTreatArea.Size = new System.Drawing.Size(165,21);
 			this.comboTreatArea.TabIndex = 8;
 			// 
 			// label6
 			// 
-			this.label6.Location = new System.Drawing.Point(268,256);
+			this.label6.Location = new System.Drawing.Point(268,245);
 			this.label6.Name = "label6";
 			this.label6.Size = new System.Drawing.Size(163,18);
 			this.label6.TabIndex = 17;
@@ -241,14 +228,14 @@ namespace OpenDental{
 			// comboCategory
 			// 
 			this.comboCategory.FormattingEnabled = true;
-			this.comboCategory.Location = new System.Drawing.Point(433,280);
+			this.comboCategory.Location = new System.Drawing.Point(433,269);
 			this.comboCategory.Name = "comboCategory";
 			this.comboCategory.Size = new System.Drawing.Size(165,21);
 			this.comboCategory.TabIndex = 9;
 			// 
 			// label7
 			// 
-			this.label7.Location = new System.Drawing.Point(268,280);
+			this.label7.Location = new System.Drawing.Point(268,269);
 			this.label7.Name = "label7";
 			this.label7.Size = new System.Drawing.Size(163,18);
 			this.label7.TabIndex = 19;
@@ -302,7 +289,6 @@ namespace OpenDental{
 			this.label9.Name = "label9";
 			this.label9.Size = new System.Drawing.Size(777,36);
 			this.label9.TabIndex = 24;
-			this.label9.Text = resources.GetString("label9.Text");
 			this.label9.Visible = false;
 			// 
 			// butDefault
@@ -386,7 +372,6 @@ namespace OpenDental{
 			this.Controls.Add(this.checkIsProsth);
 			this.Controls.Add(this.checkIsHygiene);
 			this.Controls.Add(this.checkNoBillIns);
-			this.Controls.Add(this.checkSetRecall);
 			this.Controls.Add(this.listType);
 			this.Controls.Add(this.label3);
 			this.Controls.Add(this.butAnother);
@@ -474,7 +459,6 @@ namespace OpenDental{
 			textNewCode.Select(textNewCode.Text.Length,1);
 			textDescription.Text="";
 			textAbbreviation.Text="";
-			checkSetRecall.Checked=false;
 			checkNoBillIns.Checked=false;
 			checkIsHygiene.Checked=false;
 			checkIsProsth.Checked=false;
@@ -487,7 +471,6 @@ namespace OpenDental{
 				case 1://Exam
 					textDescription.Text="Exam";
 					textAbbreviation.Text="Ex";
-					checkSetRecall.Checked=true;
 					comboCategory.SelectedIndex=GetCategoryIndex("Exams & Xrays");
 					break;
 				case 2://Xray
@@ -499,7 +482,6 @@ namespace OpenDental{
 				case 3://Prophy
 					textDescription.Text="Prophy, Adult";
 					textAbbreviation.Text="Pro";
-					checkSetRecall.Checked=true;
 					checkIsHygiene.Checked=true;
 					comboCategory.SelectedIndex=GetCategoryIndex("Cleanings");
 					break;
@@ -562,7 +544,6 @@ namespace OpenDental{
 				case 12://SRP
 					textDescription.Text="Scaling & Root Planing, Quadrant";
 					textAbbreviation.Text="SRP";
-					checkSetRecall.Checked=true;
 					checkIsHygiene.Checked=true;
 					comboTreatArea.SelectedIndex=(int)TreatmentArea.Quad-1;
 					comboCategory.SelectedIndex=GetCategoryIndex("Perio");
@@ -717,7 +698,6 @@ namespace OpenDental{
 			//code.GraphicColor=Color.FromArgb(0);//moved to contructor.
 			code.Descript=textDescription.Text;
 			code.AbbrDesc=textAbbreviation.Text;
-			code.SetRecall=checkSetRecall.Checked;
 			code.NoBillIns=checkNoBillIns.Checked;
 			code.IsHygiene=checkIsHygiene.Checked;
 			code.IsProsth=checkIsProsth.Checked;

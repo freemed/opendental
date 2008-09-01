@@ -1,6 +1,7 @@
 using System;
 using System.Drawing;
 using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
 using System.Windows.Forms;
@@ -76,19 +77,12 @@ namespace OpenDental{
 		private void InitializeComponent()
 		{
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormRecallTypeEdit));
-			this.butCancel = new OpenDental.UI.Button();
-			this.butOK = new OpenDental.UI.Button();
 			this.label1 = new System.Windows.Forms.Label();
 			this.textDescription = new System.Windows.Forms.TextBox();
-			this.butDelete = new OpenDental.UI.Button();
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
-			this.textWeeks = new OpenDental.ValidNum();
 			this.label7 = new System.Windows.Forms.Label();
-			this.textDays = new OpenDental.ValidNum();
 			this.label6 = new System.Windows.Forms.Label();
-			this.textMonths = new OpenDental.ValidNum();
 			this.label9 = new System.Windows.Forms.Label();
-			this.textYears = new OpenDental.ValidNum();
 			this.label10 = new System.Windows.Forms.Label();
 			this.textPattern = new System.Windows.Forms.TextBox();
 			this.label12 = new System.Windows.Forms.Label();
@@ -96,45 +90,22 @@ namespace OpenDental{
 			this.label15 = new System.Windows.Forms.Label();
 			this.listProcs = new System.Windows.Forms.ListBox();
 			this.groupBox2 = new System.Windows.Forms.GroupBox();
-			this.butRemoveProc = new OpenDental.UI.Button();
-			this.butAddProc = new OpenDental.UI.Button();
-			this.butRemoveTrigger = new OpenDental.UI.Button();
-			this.butAddTrigger = new OpenDental.UI.Button();
 			this.listTriggers = new System.Windows.Forms.ListBox();
 			this.label2 = new System.Windows.Forms.Label();
+			this.butRemoveTrigger = new OpenDental.UI.Button();
+			this.butAddTrigger = new OpenDental.UI.Button();
+			this.butRemoveProc = new OpenDental.UI.Button();
+			this.butAddProc = new OpenDental.UI.Button();
+			this.textWeeks = new OpenDental.ValidNum();
+			this.textDays = new OpenDental.ValidNum();
+			this.textMonths = new OpenDental.ValidNum();
+			this.textYears = new OpenDental.ValidNum();
+			this.butDelete = new OpenDental.UI.Button();
+			this.butOK = new OpenDental.UI.Button();
+			this.butCancel = new OpenDental.UI.Button();
 			this.groupBox1.SuspendLayout();
 			this.groupBox2.SuspendLayout();
 			this.SuspendLayout();
-			// 
-			// butCancel
-			// 
-			this.butCancel.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butCancel.Autosize = true;
-			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butCancel.CornerRadius = 4F;
-			this.butCancel.Location = new System.Drawing.Point(631,552);
-			this.butCancel.Name = "butCancel";
-			this.butCancel.Size = new System.Drawing.Size(75,24);
-			this.butCancel.TabIndex = 10;
-			this.butCancel.Text = "&Cancel";
-			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
-			// 
-			// butOK
-			// 
-			this.butOK.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butOK.Autosize = true;
-			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(540,552);
-			this.butOK.Name = "butOK";
-			this.butOK.Size = new System.Drawing.Size(75,24);
-			this.butOK.TabIndex = 9;
-			this.butOK.Text = "&OK";
-			this.butOK.Click += new System.EventHandler(this.butOK_Click);
 			// 
 			// label1
 			// 
@@ -151,24 +122,6 @@ namespace OpenDental{
 			this.textDescription.Name = "textDescription";
 			this.textDescription.Size = new System.Drawing.Size(291,20);
 			this.textDescription.TabIndex = 0;
-			// 
-			// butDelete
-			// 
-			this.butDelete.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butDelete.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.butDelete.Autosize = true;
-			this.butDelete.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butDelete.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butDelete.CornerRadius = 4F;
-			this.butDelete.Image = global::OpenDental.Properties.Resources.deleteX;
-			this.butDelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butDelete.Location = new System.Drawing.Point(27,552);
-			this.butDelete.Name = "butDelete";
-			this.butDelete.Size = new System.Drawing.Size(81,24);
-			this.butDelete.TabIndex = 4;
-			this.butDelete.Text = "Delete";
-			this.butDelete.Visible = false;
-			this.butDelete.Click += new System.EventHandler(this.butDelete_Click);
 			// 
 			// groupBox1
 			// 
@@ -188,15 +141,6 @@ namespace OpenDental{
 			this.groupBox1.TabStop = false;
 			this.groupBox1.Text = "Default Interval";
 			// 
-			// textWeeks
-			// 
-			this.textWeeks.Location = new System.Drawing.Point(105,64);
-			this.textWeeks.MaxVal = 255;
-			this.textWeeks.MinVal = 0;
-			this.textWeeks.Name = "textWeeks";
-			this.textWeeks.Size = new System.Drawing.Size(51,20);
-			this.textWeeks.TabIndex = 12;
-			// 
 			// label7
 			// 
 			this.label7.Location = new System.Drawing.Point(11,64);
@@ -205,15 +149,6 @@ namespace OpenDental{
 			this.label7.TabIndex = 11;
 			this.label7.Text = "Weeks";
 			this.label7.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// textDays
-			// 
-			this.textDays.Location = new System.Drawing.Point(105,86);
-			this.textDays.MaxVal = 255;
-			this.textDays.MinVal = 0;
-			this.textDays.Name = "textDays";
-			this.textDays.Size = new System.Drawing.Size(51,20);
-			this.textDays.TabIndex = 10;
 			// 
 			// label6
 			// 
@@ -224,15 +159,6 @@ namespace OpenDental{
 			this.label6.Text = "Days";
 			this.label6.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
-			// textMonths
-			// 
-			this.textMonths.Location = new System.Drawing.Point(105,41);
-			this.textMonths.MaxVal = 255;
-			this.textMonths.MinVal = 0;
-			this.textMonths.Name = "textMonths";
-			this.textMonths.Size = new System.Drawing.Size(51,20);
-			this.textMonths.TabIndex = 8;
-			// 
 			// label9
 			// 
 			this.label9.Location = new System.Drawing.Point(11,41);
@@ -241,15 +167,6 @@ namespace OpenDental{
 			this.label9.TabIndex = 7;
 			this.label9.Text = "Months";
 			this.label9.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// textYears
-			// 
-			this.textYears.Location = new System.Drawing.Point(105,18);
-			this.textYears.MaxVal = 127;
-			this.textYears.MinVal = 0;
-			this.textYears.Name = "textYears";
-			this.textYears.Size = new System.Drawing.Size(51,20);
-			this.textYears.TabIndex = 6;
 			// 
 			// label10
 			// 
@@ -317,66 +234,6 @@ namespace OpenDental{
 			this.groupBox2.TabStop = false;
 			this.groupBox2.Text = "When automatically creating appointments";
 			// 
-			// butRemoveProc
-			// 
-			this.butRemoveProc.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butRemoveProc.Autosize = true;
-			this.butRemoveProc.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butRemoveProc.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butRemoveProc.CornerRadius = 4F;
-			this.butRemoveProc.Image = global::OpenDental.Properties.Resources.deleteX;
-			this.butRemoveProc.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butRemoveProc.Location = new System.Drawing.Point(331,129);
-			this.butRemoveProc.Name = "butRemoveProc";
-			this.butRemoveProc.Size = new System.Drawing.Size(78,24);
-			this.butRemoveProc.TabIndex = 124;
-			this.butRemoveProc.Text = "Remove";
-			// 
-			// butAddProc
-			// 
-			this.butAddProc.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butAddProc.Autosize = true;
-			this.butAddProc.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butAddProc.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butAddProc.CornerRadius = 4F;
-			this.butAddProc.Image = global::OpenDental.Properties.Resources.Add;
-			this.butAddProc.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butAddProc.Location = new System.Drawing.Point(331,99);
-			this.butAddProc.Name = "butAddProc";
-			this.butAddProc.Size = new System.Drawing.Size(78,24);
-			this.butAddProc.TabIndex = 123;
-			this.butAddProc.Text = "Add";
-			// 
-			// butRemoveTrigger
-			// 
-			this.butRemoveTrigger.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butRemoveTrigger.Autosize = true;
-			this.butRemoveTrigger.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butRemoveTrigger.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butRemoveTrigger.CornerRadius = 4F;
-			this.butRemoveTrigger.Image = global::OpenDental.Properties.Resources.deleteX;
-			this.butRemoveTrigger.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butRemoveTrigger.Location = new System.Drawing.Point(386,208);
-			this.butRemoveTrigger.Name = "butRemoveTrigger";
-			this.butRemoveTrigger.Size = new System.Drawing.Size(78,24);
-			this.butRemoveTrigger.TabIndex = 128;
-			this.butRemoveTrigger.Text = "Remove";
-			// 
-			// butAddTrigger
-			// 
-			this.butAddTrigger.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butAddTrigger.Autosize = true;
-			this.butAddTrigger.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butAddTrigger.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butAddTrigger.CornerRadius = 4F;
-			this.butAddTrigger.Image = global::OpenDental.Properties.Resources.Add;
-			this.butAddTrigger.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butAddTrigger.Location = new System.Drawing.Point(386,178);
-			this.butAddTrigger.Name = "butAddTrigger";
-			this.butAddTrigger.Size = new System.Drawing.Size(78,24);
-			this.butAddTrigger.TabIndex = 127;
-			this.butAddTrigger.Text = "Add";
-			// 
 			// listTriggers
 			// 
 			this.listTriggers.FormattingEnabled = true;
@@ -393,6 +250,154 @@ namespace OpenDental{
 			this.label2.TabIndex = 125;
 			this.label2.Text = "Procedures that trigger this recall type";
 			this.label2.TextAlign = System.Drawing.ContentAlignment.TopRight;
+			// 
+			// butRemoveTrigger
+			// 
+			this.butRemoveTrigger.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butRemoveTrigger.Autosize = true;
+			this.butRemoveTrigger.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butRemoveTrigger.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butRemoveTrigger.CornerRadius = 4F;
+			this.butRemoveTrigger.Image = global::OpenDental.Properties.Resources.deleteX;
+			this.butRemoveTrigger.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butRemoveTrigger.Location = new System.Drawing.Point(386,208);
+			this.butRemoveTrigger.Name = "butRemoveTrigger";
+			this.butRemoveTrigger.Size = new System.Drawing.Size(78,24);
+			this.butRemoveTrigger.TabIndex = 128;
+			this.butRemoveTrigger.Text = "Remove";
+			this.butRemoveTrigger.Click += new System.EventHandler(this.butRemoveTrigger_Click);
+			// 
+			// butAddTrigger
+			// 
+			this.butAddTrigger.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butAddTrigger.Autosize = true;
+			this.butAddTrigger.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butAddTrigger.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butAddTrigger.CornerRadius = 4F;
+			this.butAddTrigger.Image = global::OpenDental.Properties.Resources.Add;
+			this.butAddTrigger.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butAddTrigger.Location = new System.Drawing.Point(386,178);
+			this.butAddTrigger.Name = "butAddTrigger";
+			this.butAddTrigger.Size = new System.Drawing.Size(78,24);
+			this.butAddTrigger.TabIndex = 127;
+			this.butAddTrigger.Text = "Add";
+			this.butAddTrigger.Click += new System.EventHandler(this.butAddTrigger_Click);
+			// 
+			// butRemoveProc
+			// 
+			this.butRemoveProc.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butRemoveProc.Autosize = true;
+			this.butRemoveProc.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butRemoveProc.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butRemoveProc.CornerRadius = 4F;
+			this.butRemoveProc.Image = global::OpenDental.Properties.Resources.deleteX;
+			this.butRemoveProc.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butRemoveProc.Location = new System.Drawing.Point(331,129);
+			this.butRemoveProc.Name = "butRemoveProc";
+			this.butRemoveProc.Size = new System.Drawing.Size(78,24);
+			this.butRemoveProc.TabIndex = 124;
+			this.butRemoveProc.Text = "Remove";
+			this.butRemoveProc.Click += new System.EventHandler(this.butRemoveProc_Click);
+			// 
+			// butAddProc
+			// 
+			this.butAddProc.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butAddProc.Autosize = true;
+			this.butAddProc.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butAddProc.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butAddProc.CornerRadius = 4F;
+			this.butAddProc.Image = global::OpenDental.Properties.Resources.Add;
+			this.butAddProc.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butAddProc.Location = new System.Drawing.Point(331,99);
+			this.butAddProc.Name = "butAddProc";
+			this.butAddProc.Size = new System.Drawing.Size(78,24);
+			this.butAddProc.TabIndex = 123;
+			this.butAddProc.Text = "Add";
+			this.butAddProc.Click += new System.EventHandler(this.butAddProc_Click);
+			// 
+			// textWeeks
+			// 
+			this.textWeeks.Location = new System.Drawing.Point(105,64);
+			this.textWeeks.MaxVal = 255;
+			this.textWeeks.MinVal = 0;
+			this.textWeeks.Name = "textWeeks";
+			this.textWeeks.Size = new System.Drawing.Size(51,20);
+			this.textWeeks.TabIndex = 12;
+			// 
+			// textDays
+			// 
+			this.textDays.Location = new System.Drawing.Point(105,86);
+			this.textDays.MaxVal = 255;
+			this.textDays.MinVal = 0;
+			this.textDays.Name = "textDays";
+			this.textDays.Size = new System.Drawing.Size(51,20);
+			this.textDays.TabIndex = 10;
+			// 
+			// textMonths
+			// 
+			this.textMonths.Location = new System.Drawing.Point(105,41);
+			this.textMonths.MaxVal = 255;
+			this.textMonths.MinVal = 0;
+			this.textMonths.Name = "textMonths";
+			this.textMonths.Size = new System.Drawing.Size(51,20);
+			this.textMonths.TabIndex = 8;
+			// 
+			// textYears
+			// 
+			this.textYears.Location = new System.Drawing.Point(105,18);
+			this.textYears.MaxVal = 127;
+			this.textYears.MinVal = 0;
+			this.textYears.Name = "textYears";
+			this.textYears.Size = new System.Drawing.Size(51,20);
+			this.textYears.TabIndex = 6;
+			// 
+			// butDelete
+			// 
+			this.butDelete.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butDelete.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.butDelete.Autosize = true;
+			this.butDelete.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butDelete.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butDelete.CornerRadius = 4F;
+			this.butDelete.Image = global::OpenDental.Properties.Resources.deleteX;
+			this.butDelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butDelete.Location = new System.Drawing.Point(27,552);
+			this.butDelete.Name = "butDelete";
+			this.butDelete.Size = new System.Drawing.Size(81,24);
+			this.butDelete.TabIndex = 4;
+			this.butDelete.Text = "Delete";
+			this.butDelete.Visible = false;
+			this.butDelete.Click += new System.EventHandler(this.butDelete_Click);
+			// 
+			// butOK
+			// 
+			this.butOK.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.butOK.Autosize = true;
+			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butOK.CornerRadius = 4F;
+			this.butOK.Location = new System.Drawing.Point(540,552);
+			this.butOK.Name = "butOK";
+			this.butOK.Size = new System.Drawing.Size(75,24);
+			this.butOK.TabIndex = 9;
+			this.butOK.Text = "&OK";
+			this.butOK.Click += new System.EventHandler(this.butOK_Click);
+			// 
+			// butCancel
+			// 
+			this.butCancel.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.butCancel.Autosize = true;
+			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butCancel.CornerRadius = 4F;
+			this.butCancel.Location = new System.Drawing.Point(631,552);
+			this.butCancel.Name = "butCancel";
+			this.butCancel.Size = new System.Drawing.Size(75,24);
+			this.butCancel.TabIndex = 10;
+			this.butCancel.Text = "&Cancel";
+			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
 			// 
 			// FormRecallTypeEdit
 			// 
@@ -429,13 +434,105 @@ namespace OpenDental{
 
 		private void FormRecallTypeEdit_Load(object sender, System.EventArgs e) {
 			textDescription.Text=RecallCur.Description;
-			//triggers
+			FillTriggers();
 			textYears.Text=RecallCur.DefaultInterval.Years.ToString();
 			textMonths.Text=RecallCur.DefaultInterval.Months.ToString();
 			textWeeks.Text=RecallCur.DefaultInterval.Weeks.ToString();
 			textDays.Text=RecallCur.DefaultInterval.Days.ToString();
 			textPattern.Text=RecallCur.TimePattern;
-			//Procs
+			FillProcs();
+		}
+
+		private void FillTriggers(){
+			listTriggers.Items.Clear();
+			if(RecallCur.TriggerProcs==null || RecallCur.TriggerProcs==""){
+				return;
+			}
+			string[] strArray=RecallCur.TriggerProcs.Split(',');
+			string str;
+			for(int i=0;i<strArray.Length;i++){
+				str=strArray[i];
+				str+="- "+ProcedureCodes.GetLaymanTerm(ProcedureCodes.GetProcCode(str).CodeNum);
+				listTriggers.Items.Add(str);
+			}
+		}
+
+		private void butAddTrigger_Click(object sender,EventArgs e) {
+			FormProcCodes FormP=new FormProcCodes();
+			FormP.IsSelectionMode=true;
+			FormP.ShowDialog();
+			if(FormP.DialogResult!=DialogResult.OK){
+				return;
+			}
+			if(RecallCur.TriggerProcs!=""){
+				RecallCur.TriggerProcs+=",";
+			}
+			RecallCur.TriggerProcs+=ProcedureCodes.GetStringProcCode(FormP.SelectedCodeNum);
+			FillTriggers();
+		}
+
+		private void butRemoveTrigger_Click(object sender,EventArgs e) {
+			if(listTriggers.SelectedIndex==-1){
+				MsgBox.Show(this,"Please select a trigger code first.");
+				return;
+			}
+			string[] strArray=RecallCur.TriggerProcs.Split(',');
+			List<string> strList=new List<string>(strArray);
+			strList.RemoveAt(listTriggers.SelectedIndex);
+			RecallCur.TriggerProcs="";
+			for(int i=0;i<strList.Count;i++){
+				if(i>0){
+					RecallCur.TriggerProcs+=",";
+				}
+				RecallCur.TriggerProcs+=strList[i];
+			}
+			FillTriggers();
+		}
+
+		private void FillProcs(){
+			listProcs.Items.Clear();
+			if(RecallCur.Procedures==null || RecallCur.Procedures==""){
+				return;
+			}
+			string[] strArray=RecallCur.Procedures.Split(',');
+			string str;
+			for(int i=0;i<strArray.Length;i++){
+				str=strArray[i];
+				str+="- "+ProcedureCodes.GetLaymanTerm(ProcedureCodes.GetProcCode(str).CodeNum);
+				listProcs.Items.Add(str);
+			}
+		}
+
+		private void butAddProc_Click(object sender,EventArgs e) {
+			FormProcCodes FormP=new FormProcCodes();
+			FormP.IsSelectionMode=true;
+			FormP.ShowDialog();
+			if(FormP.DialogResult!=DialogResult.OK){
+				return;
+			}
+			if(RecallCur.Procedures!=""){
+				RecallCur.Procedures+=",";
+			}
+			RecallCur.Procedures+=ProcedureCodes.GetStringProcCode(FormP.SelectedCodeNum);
+			FillProcs();
+		}
+
+		private void butRemoveProc_Click(object sender,EventArgs e) {
+			if(listProcs.SelectedIndex==-1){
+				MsgBox.Show(this,"Please select a procedure first.");
+				return;
+			}
+			string[] strArray=RecallCur.Procedures.Split(',');
+			List<string> strList=new List<string>(strArray);
+			strList.RemoveAt(listProcs.SelectedIndex);
+			RecallCur.Procedures="";
+			for(int i=0;i<strList.Count;i++){
+				if(i>0){
+					RecallCur.Procedures+=",";
+				}
+				RecallCur.Procedures+=strList[i];
+			}
+			FillProcs();
 		}
 
 		private void butDelete_Click(object sender, System.EventArgs e) {
@@ -477,7 +574,10 @@ namespace OpenDental{
 				PIn.PInt(textYears.Text));
 			RecallCur.DefaultInterval=interval;
 			RecallCur.TimePattern=textPattern.Text;
-			RecallCur.Procedures="";
+			if(listProcs.Items.Count==0){
+				RecallCur.Procedures="";
+			}
+			//otherwise, already taken care of.
 			try{
 				RecallTypes.WriteObject(RecallCur);
 			}
@@ -491,6 +591,10 @@ namespace OpenDental{
 		private void butCancel_Click(object sender, System.EventArgs e) {
 			DialogResult=DialogResult.Cancel;
 		}
+
+		
+
+		
 
 		
 

@@ -57,13 +57,25 @@ namespace OpenDentBusiness{
 		[DataField("Procedures")]
 		private string procedures;
 		private bool proceduresChanged;
-		///<summary>What procedures to put on the recall appointment.  Comma delimited.</summary>
+		///<summary>What procedures to put on the recall appointment.  Comma delimited set of ProcCodes.  (We may change this to CodeNums).</summary>
 		public string Procedures{
 			get{return procedures;}
 			set{if(procedures!=value){procedures=value;MarkDirty();proceduresChanged=true;}}
 		}
 		public bool ProceduresChanged{
 			get{return proceduresChanged;}
+		}
+
+		[DataField("TriggerProcs")]
+		private string triggerProcs;
+		private bool triggerProcsChanged;
+		///<summary>Procedures that trigger this recall.  Used to be a bool: procedurecode.SetRecall.  Comma delimited set of ProcCodes.  (We may change this to CodeNums).</summary>
+		public string TriggerProcs{
+			get{return triggerProcs;}
+			set{if(triggerProcs!=value){triggerProcs=value;MarkDirty();triggerProcsChanged=true;}}
+		}
+		public bool TriggerProcsChanged{
+			get{return triggerProcsChanged;}
 		}
 		
 		public RecallType Copy(){

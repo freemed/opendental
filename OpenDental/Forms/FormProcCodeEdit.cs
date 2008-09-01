@@ -29,7 +29,6 @@ namespace OpenDental{
 		private System.Windows.Forms.TextBox textProcCode;
 		private System.Windows.Forms.TextBox textAbbrev;
 		private System.Windows.Forms.TextBox textDescription;
-		private System.Windows.Forms.CheckBox checkSetRecall;
 		private System.Windows.Forms.CheckBox checkNoBillIns;
 		private System.Windows.Forms.Label label3;
 		private System.Windows.Forms.Label label9;
@@ -105,7 +104,6 @@ namespace OpenDental{
 			this.textAbbrev = new System.Windows.Forms.TextBox();
 			this.textDescription = new System.Windows.Forms.TextBox();
 			this.listTreatArea = new System.Windows.Forms.ListBox();
-			this.checkSetRecall = new System.Windows.Forms.CheckBox();
 			this.checkNoBillIns = new System.Windows.Forms.CheckBox();
 			this.listCategory = new System.Windows.Forms.ListBox();
 			this.label3 = new System.Windows.Forms.Label();
@@ -246,19 +244,10 @@ namespace OpenDental{
 			this.listTreatArea.Size = new System.Drawing.Size(118,95);
 			this.listTreatArea.TabIndex = 2;
 			// 
-			// checkSetRecall
-			// 
-			this.checkSetRecall.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkSetRecall.Location = new System.Drawing.Point(45,251);
-			this.checkSetRecall.Name = "checkSetRecall";
-			this.checkSetRecall.Size = new System.Drawing.Size(284,18);
-			this.checkSetRecall.TabIndex = 5;
-			this.checkSetRecall.Text = "Triggers Recall";
-			// 
 			// checkNoBillIns
 			// 
 			this.checkNoBillIns.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkNoBillIns.Location = new System.Drawing.Point(45,271);
+			this.checkNoBillIns.Location = new System.Drawing.Point(45,267);
 			this.checkNoBillIns.Name = "checkNoBillIns";
 			this.checkNoBillIns.Size = new System.Drawing.Size(284,18);
 			this.checkNoBillIns.TabIndex = 6;
@@ -297,8 +286,8 @@ namespace OpenDental{
 			this.butSlider.Size = new System.Drawing.Size(12,15);
 			this.butSlider.TabIndex = 31;
 			this.butSlider.UseVisualStyleBackColor = false;
-			this.butSlider.MouseDown += new System.Windows.Forms.MouseEventHandler(this.butSlider_MouseDown);
 			this.butSlider.MouseMove += new System.Windows.Forms.MouseEventHandler(this.butSlider_MouseMove);
+			this.butSlider.MouseDown += new System.Windows.Forms.MouseEventHandler(this.butSlider_MouseDown);
 			this.butSlider.MouseUp += new System.Windows.Forms.MouseEventHandler(this.butSlider_MouseUp);
 			// 
 			// textTime2
@@ -319,7 +308,7 @@ namespace OpenDental{
 			// checkIsHygiene
 			// 
 			this.checkIsHygiene.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkIsHygiene.Location = new System.Drawing.Point(45,291);
+			this.checkIsHygiene.Location = new System.Drawing.Point(45,287);
 			this.checkIsHygiene.Name = "checkIsHygiene";
 			this.checkIsHygiene.Size = new System.Drawing.Size(284,18);
 			this.checkIsHygiene.TabIndex = 7;
@@ -353,7 +342,7 @@ namespace OpenDental{
 			// checkIsProsth
 			// 
 			this.checkIsProsth.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkIsProsth.Location = new System.Drawing.Point(45,311);
+			this.checkIsProsth.Location = new System.Drawing.Point(45,307);
 			this.checkIsProsth.Name = "checkIsProsth";
 			this.checkIsProsth.Size = new System.Drawing.Size(284,18);
 			this.checkIsProsth.TabIndex = 41;
@@ -430,7 +419,7 @@ namespace OpenDental{
 			// checkIsCanadianLab
 			// 
 			this.checkIsCanadianLab.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkIsCanadianLab.Location = new System.Drawing.Point(45,331);
+			this.checkIsCanadianLab.Location = new System.Drawing.Point(45,327);
 			this.checkIsCanadianLab.Name = "checkIsCanadianLab";
 			this.checkIsCanadianLab.Size = new System.Drawing.Size(284,18);
 			this.checkIsCanadianLab.TabIndex = 52;
@@ -644,7 +633,6 @@ namespace OpenDental{
 			this.Controls.Add(this.label3);
 			this.Controls.Add(this.listCategory);
 			this.Controls.Add(this.checkNoBillIns);
-			this.Controls.Add(this.checkSetRecall);
 			this.Controls.Add(this.listTreatArea);
 			this.Controls.Add(this.butCancel);
 			this.Controls.Add(this.butOK);
@@ -662,8 +650,8 @@ namespace OpenDental{
 			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Edit Procedure Code";
-			this.Closing += new System.ComponentModel.CancelEventHandler(this.FormProcCodeEdit_Closing);
 			this.Load += new System.EventHandler(this.FormProcCodeEdit_Load);
+			this.Closing += new System.ComponentModel.CancelEventHandler(this.FormProcCodeEdit_Closing);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -692,7 +680,6 @@ namespace OpenDental{
 			textLaymanTerm.Text=ProcCode.LaymanTerm;
 			strBTime=new StringBuilder(ProcCode.ProcTime);
 			butColor.BackColor=ProcCode.GraphicColor;
-			checkSetRecall.Checked=ProcCode.SetRecall;
 			checkNoBillIns.Checked=ProcCode.NoBillIns;
 			checkIsHygiene.Checked=ProcCode.IsHygiene;
 			checkIsProsth.Checked=ProcCode.IsProsth;
@@ -892,7 +879,7 @@ namespace OpenDental{
 				MsgBox.Show(this,"Invalid substitution code.  It must refer to an existing procedure code entered separately");
 				return;
 			}
-			bool DoSynchRecall=false;
+			/*bool DoSynchRecall=false;
 			if(IsNew && checkSetRecall.Checked){
 				DoSynchRecall=true;
 			}
@@ -903,7 +890,7 @@ namespace OpenDental{
 				if(!MsgBox.Show(this,true,"Because you have changed the recall setting for this procedure code, all your patient recalls will be resynchronized, which can take a minute or two.  Do you want to continue?")){
 					return;
 				}
-			}
+			}*/
 			ProcCode.AlternateCode1=textAlternateCode1.Text;
 			ProcCode.MedicalCode=textMedicalCode.Text;
 			ProcCode.SubstitutionCode=textSubstitutionCode.Text;
@@ -913,7 +900,6 @@ namespace OpenDental{
 			ProcCode.LaymanTerm=textLaymanTerm.Text;
 			ProcCode.ProcTime=strBTime.ToString();
 			ProcCode.GraphicColor=butColor.BackColor;
-			ProcCode.SetRecall=checkSetRecall.Checked;
 			ProcCode.NoBillIns=checkNoBillIns.Checked;
 			ProcCode.IsProsth=checkIsProsth.Checked;
 			ProcCode.IsHygiene=checkIsHygiene.Checked;
@@ -925,11 +911,11 @@ namespace OpenDental{
 			if(listCategory.SelectedIndex!=-1)
 				ProcCode.ProcCat=DefC.Short[(int)DefCat.ProcCodeCats][listCategory.SelectedIndex].DefNum;
 			ProcedureCodes.Update(ProcCode);//whether new or not.
-			if(DoSynchRecall){
-				Cursor=Cursors.WaitCursor;
-				Recalls.SynchAllPatients();
-				Cursor=Cursors.Default;
-			}
+			//if(DoSynchRecall){
+			//	Cursor=Cursors.WaitCursor;
+			//	Recalls.SynchAllPatients();
+			//	Cursor=Cursors.Default;
+			//}
 			DialogResult=DialogResult.OK;
 		}
 
