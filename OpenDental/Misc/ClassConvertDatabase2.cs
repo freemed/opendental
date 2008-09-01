@@ -259,6 +259,8 @@ namespace OpenDental{
 						+"'"+POut.PString(procs)+"',"
 						+"'"+POut.PString(triggers)+"')";
 					General.NonQ(command);
+					command="ALTER TABLE recall ADD RecallTypeNum int NOT NULL";
+					General.NonQ(command);
 //still need to convert existing recalls over to this.
 					//Child recall-----------------------------------------------------------------------------
 					command="SELECT ValueString FROM preference WHERE PrefName='RecallPatternChild'";

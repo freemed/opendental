@@ -19,14 +19,15 @@ namespace OpenDentBusiness{
 		public DateTime DatePrevious;
 		///<summary>The interval between recalls.  The Interval struct combines years, months, weeks, and days into a single integer value.</summary>
 		public Interval RecallInterval;
-		///<summary>FK to Definition.DefNum, or 0 for none.</summary>
+		///<summary>FK to definition.DefNum, or 0 for none.</summary>
 		public int RecallStatus;
 		///<summary>An administrative note for staff use.</summary>
 		public string Note;
 		///<summary>If true, this recall type will be disabled (there's only one type right now). This is usually used rather than deleting the recall type from the patient because the program must enforce the trigger conditions for all patients.</summary>
 		public bool IsDisabled;
-		//Type: RecallType, once we have multiple recall types
 		//DateTStamp
+		///<summary>FK to recalltype.RecallTypeNum.</summary>
+		public int RecallTypeNum;
 
 		///<summary>Returns a copy of this Recall.</summary>
 		public Recall Copy(){

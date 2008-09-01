@@ -41,6 +41,7 @@ namespace OpenDental{
 		private MenuItem menuPlansForFam;
 		private Benefit[] BenefitList;
 		private ODGrid gridFamily;
+		private ODGrid gridRecall;
 		private PatField[] PatFieldList;
 
 		///<summary></summary>
@@ -65,13 +66,14 @@ namespace OpenDental{
 			this.components = new System.ComponentModel.Container();
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ContrFamily));
 			this.imageListToolBar = new System.Windows.Forms.ImageList(this.components);
+			this.menuInsurance = new System.Windows.Forms.ContextMenu();
+			this.menuPlansForFam = new System.Windows.Forms.MenuItem();
+			this.gridRecall = new OpenDental.UI.ODGrid();
+			this.gridFamily = new OpenDental.UI.ODGrid();
 			this.gridPat = new OpenDental.UI.ODGrid();
 			this.gridIns = new OpenDental.UI.ODGrid();
 			this.picturePat = new OpenDental.UI.PictureBox();
 			this.ToolBarMain = new OpenDental.UI.ODToolBar();
-			this.menuInsurance = new System.Windows.Forms.ContextMenu();
-			this.menuPlansForFam = new System.Windows.Forms.MenuItem();
-			this.gridFamily = new OpenDental.UI.ODGrid();
 			this.SuspendLayout();
 			// 
 			// imageListToolBar
@@ -85,6 +87,44 @@ namespace OpenDental{
 			this.imageListToolBar.Images.SetKeyName(4,"");
 			this.imageListToolBar.Images.SetKeyName(5,"");
 			this.imageListToolBar.Images.SetKeyName(6,"Umbrella.gif");
+			// 
+			// menuInsurance
+			// 
+			this.menuInsurance.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
+            this.menuPlansForFam});
+			// 
+			// menuPlansForFam
+			// 
+			this.menuPlansForFam.Index = 0;
+			this.menuPlansForFam.Text = "Plans for Family";
+			this.menuPlansForFam.Click += new System.EventHandler(this.menuPlansForFam_Click);
+			// 
+			// gridRecall
+			// 
+			this.gridRecall.HScrollVisible = false;
+			this.gridRecall.Location = new System.Drawing.Point(585,27);
+			this.gridRecall.Name = "gridRecall";
+			this.gridRecall.ScrollValue = 0;
+			this.gridRecall.SelectionMode = OpenDental.UI.GridSelectionMode.None;
+			this.gridRecall.Size = new System.Drawing.Size(354,100);
+			this.gridRecall.TabIndex = 32;
+			this.gridRecall.Title = "Patient Recall";
+			this.gridRecall.TranslationName = "TableRecall";
+			this.gridRecall.DoubleClick += new System.EventHandler(this.gridRecall_DoubleClick);
+			this.gridRecall.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridRecall_CellDoubleClick);
+			// 
+			// gridFamily
+			// 
+			this.gridFamily.HScrollVisible = false;
+			this.gridFamily.Location = new System.Drawing.Point(103,27);
+			this.gridFamily.Name = "gridFamily";
+			this.gridFamily.ScrollValue = 0;
+			this.gridFamily.SelectedRowColor = System.Drawing.Color.DarkSalmon;
+			this.gridFamily.Size = new System.Drawing.Size(480,100);
+			this.gridFamily.TabIndex = 31;
+			this.gridFamily.Title = "Family Members";
+			this.gridFamily.TranslationName = "TablePatient";
+			this.gridFamily.CellClick += new OpenDental.UI.ODGridClickEventHandler(this.gridFamily_CellClick);
 			// 
 			// gridPat
 			// 
@@ -131,32 +171,9 @@ namespace OpenDental{
 			this.ToolBarMain.TabIndex = 19;
 			this.ToolBarMain.ButtonClick += new OpenDental.UI.ODToolBarButtonClickEventHandler(this.ToolBarMain_ButtonClick);
 			// 
-			// menuInsurance
-			// 
-			this.menuInsurance.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
-            this.menuPlansForFam});
-			// 
-			// menuPlansForFam
-			// 
-			this.menuPlansForFam.Index = 0;
-			this.menuPlansForFam.Text = "Plans for Family";
-			this.menuPlansForFam.Click += new System.EventHandler(this.menuPlansForFam_Click);
-			// 
-			// gridFamily
-			// 
-			this.gridFamily.HScrollVisible = false;
-			this.gridFamily.Location = new System.Drawing.Point(103,27);
-			this.gridFamily.Name = "gridFamily";
-			this.gridFamily.ScrollValue = 0;
-			this.gridFamily.SelectedRowColor = System.Drawing.Color.DarkSalmon;
-			this.gridFamily.Size = new System.Drawing.Size(508,100);
-			this.gridFamily.TabIndex = 31;
-			this.gridFamily.Title = "Family Members";
-			this.gridFamily.TranslationName = "TablePatient";
-			this.gridFamily.CellClick += new OpenDental.UI.ODGridClickEventHandler(this.gridFamily_CellClick);
-			// 
 			// ContrFamily
 			// 
+			this.Controls.Add(this.gridRecall);
 			this.Controls.Add(this.gridFamily);
 			this.Controls.Add(this.gridPat);
 			this.Controls.Add(this.gridIns);
@@ -233,6 +250,7 @@ namespace OpenDental{
 			FillPatientPicture();
 			FillPatientData();
 			FillFamilyData();
+			FillGridRecall();
 			FillInsData();
 		} 
 
@@ -712,15 +730,15 @@ namespace OpenDental{
 			gridFamily.Columns.Clear();
 			ODGridColumn col=new ODGridColumn(Lan.g("TablePatient","Name"),140);
 			gridFamily.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("Table","Position"),70);
+			col=new ODGridColumn(Lan.g("TablePatient","Position"),65);
 			gridFamily.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("Table","Gender"),60);
+			col=new ODGridColumn(Lan.g("TablePatient","Gender"),55);
 			gridFamily.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("Table","Status"),70);
+			col=new ODGridColumn(Lan.g("TablePatient","Status"),65);
 			gridFamily.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("Table","Age"),50);
+			col=new ODGridColumn(Lan.g("TablePatient","Age"),45);
 			gridFamily.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("Table","Recall Due"),80);
+			col=new ODGridColumn(Lan.g("TablePatient","Recall Due"),80);
 			gridFamily.Columns.Add(col);
 			gridFamily.Rows.Clear();
 			if(PatCur==null){
@@ -966,7 +984,65 @@ namespace OpenDental{
 		}
 
 		#endregion
-		
+
+		#region gridRecall
+		private void FillGridRecall(){
+			gridRecall.BeginUpdate();
+			gridRecall.Columns.Clear();
+			ODGridColumn col=new ODGridColumn(Lan.g("TableRecall","Type"),90);
+			gridRecall.Columns.Add(col);
+			col=new ODGridColumn(Lan.g("TableRecall","PreviousDate"),80);
+			gridRecall.Columns.Add(col);
+			col=new ODGridColumn(Lan.g("TableRecall","Due Date"),80);
+			gridRecall.Columns.Add(col);
+			col=new ODGridColumn(Lan.g("TableRecall","Sched Date"),80);
+			gridRecall.Columns.Add(col);
+			gridRecall.Rows.Clear();
+			if(PatCur==null){
+				return;
+			}
+			//we just want the recall for the current patient
+			List<Recall> recallListPat=new List<Recall>();
+			for(int i=0;i<RecallList.Length;i++){
+				if(RecallList[i].PatNum==PatCur.PatNum){
+					recallListPat.Add(RecallList[i]);
+				}
+			}
+			ODGridRow row;
+			/*for(int i=0;i<recallListPat.Count;i++){
+				row=new ODGridRow();
+				//row.Cells.Add(recallListPat[i].
+				//	FamCur.GetNameInFamLFI(i));
+				row.Cells.Add(Lan.g("enumPatientPosition",FamCur.List[i].Position.ToString()));
+				row.Cells.Add(Lan.g("enumPatientGender",FamCur.List[i].Gender.ToString()));
+				row.Cells.Add(Lan.g("enumPatientStatus",FamCur.List[i].PatStatus.ToString()));
+				row.Cells.Add(Patients.AgeToString(FamCur.List[i].Age));
+				recallinfo="";
+				for(int j=0;j<RecallList.Length;j++){
+					if(RecallList[j].PatNum==FamCur.List[i].PatNum){
+						if(RecallList[j].DateDue.Year>1880){
+							recallinfo=RecallList[j].DateDue.ToShortDateString();
+						}
+					}
+				}
+				row.Cells.Add(recallinfo);
+				if(i==0){//guarantor
+					row.Bold=true;
+				}
+				gridRecall.Rows.Add(row);
+			}*/
+			gridRecall.EndUpdate();
+		}
+
+		private void gridRecall_CellDoubleClick(object sender,ODGridClickEventArgs e) {
+			//use doubleclick instead
+		}
+
+		private void gridRecall_DoubleClick(object sender,EventArgs e) {
+
+		}
+		#endregion gridRecall
+
 		#region gridIns
 		private void menuPlansForFam_Click(object sender,EventArgs e) {
 			FormPlansForFamily FormP=new FormPlansForFamily();
@@ -1355,6 +1431,8 @@ namespace OpenDental{
 		}
 
 		#endregion gridIns
+
+		
 
 		
 
