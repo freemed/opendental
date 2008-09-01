@@ -30,7 +30,7 @@ namespace OpenDental{
 		private System.Windows.Forms.ColumnHeader columnHeader3;
 		private System.Windows.Forms.ColumnHeader columnHeader5;
 		private Appointment[] ListOth;
-		private Recall[] RecallList;
+		private List<Recall> RecallList;
 		private Patient PatCur;
 		private OpenDental.UI.Button butOK;
 		private Family FamCur;
@@ -435,7 +435,7 @@ namespace OpenDental{
 				item.SubItems.Add(FamCur.List[i].Age.ToString());
 				item.SubItems.Add(FamCur.List[i].Gender.ToString());
 				dateDue=DateTime.MinValue;
-				for(int j=0;j<RecallList.Length;j++){
+				for(int j=0;j<RecallList.Count;j++){
 					if(RecallList[j].PatNum==FamCur.List[i].PatNum){
 						dateDue=RecallList[j].DateDue;
 					}
@@ -537,7 +537,7 @@ namespace OpenDental{
 			}
 			int originalPatNum=PatCur.PatNum;
 			Recall recallCur=null;
-			for(int i=0;i<RecallList.Length;i++){
+			for(int i=0;i<RecallList.Count;i++){
 				if(RecallList[i].PatNum==FamCur.List[listFamily.SelectedIndices[0]].PatNum){
 					recallCur=RecallList[i];
 				}
@@ -563,8 +563,8 @@ namespace OpenDental{
 
 		private void butRecall_Click(object sender, System.EventArgs e) {
 			Procedure[] procList=Procedures.Refresh(PatCur.PatNum);
-			Recall[] recallList=Recalls.GetList(new int[] {PatCur.PatNum});//get the recall for this pt
-			if(recallList.Length==0){
+			List<Recall> recallList=Recalls.GetList(PatCur.PatNum);//get the recall for this pt
+			if(recallList.Count==0){
 				MsgBox.Show(this,"This patient does not have any recall due.");
 				return;
 			}
@@ -584,13 +584,13 @@ namespace OpenDental{
 
 		private void butRecallFamily_Click(object sender,EventArgs e) {
 			Procedure[] procList;
-			Recall[] recallList;
+			List<Recall> recallList;
 			InsPlan[] planList;
 			Appointment apt;
 			for(int i=0;i<FamCur.List.Length;i++){
 				procList=Procedures.Refresh(FamCur.List[i].PatNum);
-				recallList=Recalls.GetList(new int[] { FamCur.List[i].PatNum });//get the recall for this pt
-				if(recallList.Length==0) {
+				recallList=Recalls.GetList(FamCur.List[i].PatNum);//get the recall for this pt
+				if(recallList.Count==0) {
 					//MsgBox.Show(this,"This patient does not have any recall due.");
 					continue;
 				}

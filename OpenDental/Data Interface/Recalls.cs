@@ -11,18 +11,24 @@ namespace OpenDental{
 	public class Recalls{
 
 		///<summary>Gets all recalls for the supplied patients, usually a family or single pat.  Result might have a length of zero.</summary>
-		public static Recall[] GetList(int[] patNums){
+		public static List<Recall> GetList(List<int> patNums){
 			string wherePats="";
-			for(int i=0;i<patNums.Length;i++){
+			for(int i=0;i<patNums.Count;i++){
 				if(i!=0){
 					wherePats+=" OR ";
 				}
 				wherePats+="PatNum="+patNums[i].ToString();
 			}
 			string command=
-				"SELECT * from recall "
+				"SELECT * FROM recall "
 				+"WHERE "+wherePats;
-			return RefreshAndFill(command).ToArray();
+			return RefreshAndFill(command);
+		}
+
+		public static List<Recall> GetList(int patNum){
+			List<int> patNums=new List<int>();
+			patNums.Add(patNum);
+			return GetList(patNums);
 		}
 
 		private static List<Recall> RefreshAndFill(string command){
@@ -41,6 +47,7 @@ namespace OpenDental{
 				recall.Note           = PIn.PString(table.Rows[i][7].ToString());
 				recall.IsDisabled     = PIn.PBool  (table.Rows[i][8].ToString());
 				//DateTStamp
+				recall.RecallTypeNum  = PIn.PInt   (table.Rows[i][10].ToString());
 				list.Add(recall);
 			}
 			return list;
@@ -52,10 +59,10 @@ namespace OpenDental{
 		}
 
 		/// <summary></summary>
-		public static Recall[] GetList(Patient[] patients){
-			int[] patNums=new int[patients.Length];
+		public static List<Recall> GetList(Patient[] patients){
+			List<int> patNums=new List<int>();
 			for(int i=0;i<patients.Length;i++){
-				patNums[i]=patients[i].PatNum;
+				patNums.Add(patients[i].PatNum);
 			}
 			return GetList(patNums);
 		}
@@ -183,21 +190,23 @@ namespace OpenDental{
 				command+="RecallNum,";
 			}
 			command+="PatNum,DateDueCalc,DateDue,DatePrevious,"
-				+"RecallInterval,RecallStatus,Note,IsDisabled"//DateTStamp
+				+"RecallInterval,RecallStatus,Note,IsDisabled,"//DateTStamp
+				+"RecallTypeNum"
 				+") VALUES(";
 			if(PrefC.RandomKeys) {
 				command+="'"+POut.PInt(recall.RecallNum)+"', ";
 			}
 			command+=
-				 "'"+POut.PInt(recall.PatNum)+"', "
-				+POut.PDate(recall.DateDueCalc)+", "
-				+POut.PDate(recall.DateDue)+", "
-				+POut.PDate(recall.DatePrevious)+", "
-				+"'"+POut.PInt(recall.RecallInterval.ToInt())+"', "
-				+"'"+POut.PInt(recall.RecallStatus)+"', "
+				 "'"+POut.PInt   (recall.PatNum)+"', "
+				    +POut.PDate  (recall.DateDueCalc)+", "
+				    +POut.PDate  (recall.DateDue)+", "
+				    +POut.PDate  (recall.DatePrevious)+", "
+				+"'"+POut.PInt   (recall.RecallInterval.ToInt())+"', "
+				+"'"+POut.PInt   (recall.RecallStatus)+"', "
 				+"'"+POut.PString(recall.Note)+"', "
-				+"'"+POut.PBool(recall.IsDisabled)+"')";
+				+"'"+POut.PBool  (recall.IsDisabled)+"', "
 				//DateTStamp
+				+"'"+POut.PInt   (recall.RecallTypeNum)+"')";
 			if(PrefC.RandomKeys) {
 				General.NonQ(command);
 			}
@@ -209,16 +218,17 @@ namespace OpenDental{
 		///<summary></summary>
 		public static void Update(Recall recall) {
 			string command= "UPDATE recall SET "
-				+"PatNum = '"          +POut.PInt(recall.PatNum)+"'"
-				+",DateDueCalc = "    +POut.PDate(recall.DateDueCalc)+" "
-				+",DateDue = "        +POut.PDate(recall.DateDue)+" "
-				+",DatePrevious = "   +POut.PDate(recall.DatePrevious)+" "
-				+",RecallInterval = '" +POut.PInt(recall.RecallInterval.ToInt())+"' "
-				+",RecallStatus= '"    +POut.PInt(recall.RecallStatus)+"' "
+				+"PatNum = '"          +POut.PInt   (recall.PatNum)+"'"
+				+",DateDueCalc = "     +POut.PDate  (recall.DateDueCalc)+" "
+				+",DateDue = "         +POut.PDate  (recall.DateDue)+" "
+				+",DatePrevious = "    +POut.PDate  (recall.DatePrevious)+" "
+				+",RecallInterval = '" +POut.PInt   (recall.RecallInterval.ToInt())+"' "
+				+",RecallStatus= '"    +POut.PInt   (recall.RecallStatus)+"' "
 				+",Note = '"           +POut.PString(recall.Note)+"' "
-				+",IsDisabled = '"     +POut.PBool(recall.IsDisabled)+"' "
+				+",IsDisabled = '"     +POut.PBool  (recall.IsDisabled)+"' "
 				//DateTStamp
-				+" WHERE RecallNum = '"+POut.PInt(recall.RecallNum)+"'";
+				+",RecallTypeNum = '"  +POut.PInt   (recall.RecallTypeNum)+"' "
+				+" WHERE RecallNum = '"+POut.PInt   (recall.RecallNum)+"'";
 			General.NonQ(command);
 		}
 
@@ -234,9 +244,10 @@ namespace OpenDental{
 			if(recall.IsDisabled
 				|| recall.DatePrevious.Year>1880
 				|| recall.DateDue != recall.DateDueCalc
-				|| recall.RecallInterval!=new Interval(0,0,6,0)
+				|| recall.RecallInterval!=RecallTypes.GetInterval(recall.RecallTypeNum)//new Interval(0,0,6,0)
 				|| recall.RecallStatus!=0
-				|| recall.Note!="") {
+				|| recall.Note!="") 
+			{
 				return false;
 			}
 			return true;
@@ -301,12 +312,15 @@ namespace OpenDental{
 
 		///<summary>Synchronizes all recall for one patient. Sets dateDueCalc and DatePrevious.  Also updates dateDue to match dateDueCalc if not disabled.  The supplied recall can be null if patient has no existing recall. Deletes or creates any recalls as necessary.</summary>
 		public static void Synch(int patNum){
-			Recall[] recalls=GetList(new int[] {patNum});
+			/*
+			List<int> patNums=new List<int>();
+			patNums.Add(patNum);
+			List<Recall> recallList=GetList(patNums);
 			Recall recall=null;
-			if(recalls.Length>0){
-				recall=recalls[0];
+			if(recallList.Count>0){
+				recall=recallList[0];
 			}
-			Synch(patNum,recall);
+			Synch(patNum,recall);*/
 		}
 
 		/*

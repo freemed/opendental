@@ -2,6 +2,7 @@ using System;
 using System.Drawing;
 using System.Drawing.Printing;
 using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows.Forms;
 using System.Data;
@@ -376,9 +377,11 @@ namespace OpenDental
 			str=Lan.g(this,"Billing Type:")+" "+DefC.GetName(DefCat.BillingTypes,pat.BillingType);
 			g.DrawString(str,font,brush,x,y);
 			y+=15;
-			Recall[] recallList=Recalls.GetList(new int[] {pat.PatNum});
+			List<int> patNums=new List<int>();
+			patNums.Add(pat.PatNum);
+			List<Recall> recallList=Recalls.GetList(patNums);
 			str=Lan.g(this,"Recall Due Date:")+" ";
-			if(recallList.Length>0){
+			if(recallList.Count>0){
 				str+=recallList[0].DateDue.ToShortDateString();
 			}
 			g.DrawString(str,font,brush,x,y);

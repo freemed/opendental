@@ -659,7 +659,9 @@ namespace OpenDental{
 
 		private void gridMain_CellDoubleClick(object sender,ODGridClickEventArgs e) {
 			SelectedPatNum=PIn.PInt(table.Rows[e.Row]["PatNum"].ToString());
-			Recall[] recalls=Recalls.GetList(new int[] {SelectedPatNum});
+			List<int> patNums=new List<int>();
+			patNums.Add(SelectedPatNum);
+			List<Recall> recalls=Recalls.GetList(patNums);
 			FormRecallListEdit FormRE=new FormRecallListEdit(recalls[0]);
 			FormRE.ShowDialog();
 			if(FormRE.PinClicked){
@@ -692,13 +694,15 @@ namespace OpenDental{
 			Family fam=Patients.GetFamily(SelectedPatNum);
 			Patient pat=fam.GetPatient(SelectedPatNum);
 			Procedure[] procList;
-			Recall[] recallList;
+			List<Recall> recallList;
 			InsPlan[] planList;
 			Appointment apt;
 			//for(int i=0;i<fam.List.Length;i++) {
 			procList=Procedures.Refresh(pat.PatNum);
-			recallList=Recalls.GetList(new int[] { pat.PatNum });//get the recall for this pt
-			if(recallList.Length==0) {
+			List<int> patNums=new List<int>();
+			patNums.Add(pat.PatNum);
+			recallList=Recalls.GetList(patNums);//get the recall for this pt
+			if(recallList.Count==0) {
 				MsgBox.Show(this,"This patient does not have any recall due.");
 				return;
 			}
@@ -726,13 +730,16 @@ namespace OpenDental{
 			SelectedPatNum=PIn.PInt(table.Rows[gridMain.SelectedIndices[0]]["PatNum"].ToString());
 			Family fam=Patients.GetFamily(SelectedPatNum);
 			Procedure[] procList;
-			Recall[] recallList;
+			List<Recall> recallList;
 			InsPlan[] planList;
 			Appointment apt;
+			List<int> patNums;
 			for(int i=0;i<fam.List.Length;i++) {
 				procList=Procedures.Refresh(fam.List[i].PatNum);
-				recallList=Recalls.GetList(new int[] { fam.List[i].PatNum });//get the recall for this pt
-				if(recallList.Length==0) {
+				patNums=new List<int>();
+				patNums.Add(fam.List[i].PatNum);
+				recallList=Recalls.GetList(patNums);//get the recall for this pt
+				if(recallList.Count==0) {
 					//MsgBox.Show(this,"This patient does not have any recall due.");
 					continue;
 				}

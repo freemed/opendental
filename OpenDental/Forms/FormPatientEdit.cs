@@ -2386,8 +2386,8 @@ namespace OpenDental{
 				|| PatCur.PatStatus==PatientStatus.Inactive
 				|| PatCur.PatStatus==PatientStatus.NonPatient)
 			{
-				Recall[] recalls=Recalls.GetList(new int[] {PatCur.PatNum});
-				for(int i=0;i<recalls.Length;i++){
+				List<Recall> recalls=Recalls.GetList(PatCur.PatNum);
+				for(int i=0;i<recalls.Count;i++){
 					recalls[i].IsDisabled=true;
 					recalls[i].DateDue=DateTime.MinValue;
 					Recalls.Update(recalls[i]);

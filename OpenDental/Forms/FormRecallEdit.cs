@@ -41,15 +41,16 @@ namespace OpenDental{
 		///<summary></summary>
 		public bool IsNew;
 		private OpenDental.ODtextBox textNote;
-		private Patient PatCur;
+		private ComboBox comboType;
+		private Label label10;
+		//private Patient PatCur;
 
 		///<summary>Don't forget to set the RecallCur before opening this form.</summary>
-		public FormRecallEdit(Patient patCur){
+		public FormRecallEdit(){
 			//
 			// Required for Windows Form Designer support
 			//
 			InitializeComponent();
-			PatCur=patCur;
 			Lan.F(this);
 		}
 
@@ -99,6 +100,8 @@ namespace OpenDental{
 			this.butOK = new OpenDental.UI.Button();
 			this.butDelete = new OpenDental.UI.Button();
 			this.textNote = new OpenDental.ODtextBox();
+			this.comboType = new System.Windows.Forms.ComboBox();
+			this.label10 = new System.Windows.Forms.Label();
 			this.groupBox1.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -110,16 +113,16 @@ namespace OpenDental{
 			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
-			this.butCancel.Location = new System.Drawing.Point(589,405);
+			this.butCancel.Location = new System.Drawing.Point(589,453);
 			this.butCancel.Name = "butCancel";
-			this.butCancel.Size = new System.Drawing.Size(75,26);
+			this.butCancel.Size = new System.Drawing.Size(75,24);
 			this.butCancel.TabIndex = 0;
 			this.butCancel.Text = "&Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
 			// 
 			// textDatePrevious
 			// 
-			this.textDatePrevious.Location = new System.Drawing.Point(184,42);
+			this.textDatePrevious.Location = new System.Drawing.Point(184,65);
 			this.textDatePrevious.Name = "textDatePrevious";
 			this.textDatePrevious.ReadOnly = true;
 			this.textDatePrevious.Size = new System.Drawing.Size(85,20);
@@ -127,7 +130,7 @@ namespace OpenDental{
 			// 
 			// label1
 			// 
-			this.label1.Location = new System.Drawing.Point(11,41);
+			this.label1.Location = new System.Drawing.Point(11,64);
 			this.label1.Name = "label1";
 			this.label1.Size = new System.Drawing.Size(170,19);
 			this.label1.TabIndex = 2;
@@ -136,7 +139,7 @@ namespace OpenDental{
 			// 
 			// label2
 			// 
-			this.label2.Location = new System.Drawing.Point(11,67);
+			this.label2.Location = new System.Drawing.Point(11,90);
 			this.label2.Name = "label2";
 			this.label2.Size = new System.Drawing.Size(170,19);
 			this.label2.TabIndex = 4;
@@ -145,7 +148,7 @@ namespace OpenDental{
 			// 
 			// textDateDueCalc
 			// 
-			this.textDateDueCalc.Location = new System.Drawing.Point(184,68);
+			this.textDateDueCalc.Location = new System.Drawing.Point(184,91);
 			this.textDateDueCalc.Name = "textDateDueCalc";
 			this.textDateDueCalc.ReadOnly = true;
 			this.textDateDueCalc.Size = new System.Drawing.Size(85,20);
@@ -153,7 +156,7 @@ namespace OpenDental{
 			// 
 			// label3
 			// 
-			this.label3.Location = new System.Drawing.Point(12,94);
+			this.label3.Location = new System.Drawing.Point(12,117);
 			this.label3.Name = "label3";
 			this.label3.Size = new System.Drawing.Size(170,19);
 			this.label3.TabIndex = 5;
@@ -162,7 +165,7 @@ namespace OpenDental{
 			// 
 			// textDateDue
 			// 
-			this.textDateDue.Location = new System.Drawing.Point(184,94);
+			this.textDateDue.Location = new System.Drawing.Point(184,117);
 			this.textDateDue.Name = "textDateDue";
 			this.textDateDue.Size = new System.Drawing.Size(86,20);
 			this.textDateDue.TabIndex = 6;
@@ -178,7 +181,7 @@ namespace OpenDental{
 			this.groupBox1.Controls.Add(this.textYears);
 			this.groupBox1.Controls.Add(this.label4);
 			this.groupBox1.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.groupBox1.Location = new System.Drawing.Point(79,123);
+			this.groupBox1.Location = new System.Drawing.Point(79,146);
 			this.groupBox1.Name = "groupBox1";
 			this.groupBox1.Size = new System.Drawing.Size(170,115);
 			this.groupBox1.TabIndex = 7;
@@ -259,7 +262,7 @@ namespace OpenDental{
 			// 
 			// label8
 			// 
-			this.label8.Location = new System.Drawing.Point(12,243);
+			this.label8.Location = new System.Drawing.Point(12,266);
 			this.label8.Name = "label8";
 			this.label8.Size = new System.Drawing.Size(170,19);
 			this.label8.TabIndex = 8;
@@ -269,7 +272,7 @@ namespace OpenDental{
 			// comboStatus
 			// 
 			this.comboStatus.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboStatus.Location = new System.Drawing.Point(184,243);
+			this.comboStatus.Location = new System.Drawing.Point(184,266);
 			this.comboStatus.MaxDropDownItems = 50;
 			this.comboStatus.Name = "comboStatus";
 			this.comboStatus.Size = new System.Drawing.Size(188,21);
@@ -279,7 +282,7 @@ namespace OpenDental{
 			// 
 			this.checkIsDisabled.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.checkIsDisabled.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkIsDisabled.Location = new System.Drawing.Point(29,17);
+			this.checkIsDisabled.Location = new System.Drawing.Point(29,40);
 			this.checkIsDisabled.Name = "checkIsDisabled";
 			this.checkIsDisabled.Size = new System.Drawing.Size(169,18);
 			this.checkIsDisabled.TabIndex = 10;
@@ -289,7 +292,7 @@ namespace OpenDental{
 			// 
 			// label9
 			// 
-			this.label9.Location = new System.Drawing.Point(65,269);
+			this.label9.Location = new System.Drawing.Point(65,292);
 			this.label9.Name = "label9";
 			this.label9.Size = new System.Drawing.Size(117,92);
 			this.label9.TabIndex = 11;
@@ -304,9 +307,9 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(589,363);
+			this.butOK.Location = new System.Drawing.Point(589,411);
 			this.butOK.Name = "butOK";
-			this.butOK.Size = new System.Drawing.Size(75,26);
+			this.butOK.Size = new System.Drawing.Size(75,24);
 			this.butOK.TabIndex = 13;
 			this.butOK.Text = "&OK";
 			this.butOK.Click += new System.EventHandler(this.butOK_Click);
@@ -321,9 +324,9 @@ namespace OpenDental{
 			this.butDelete.CornerRadius = 4F;
 			this.butDelete.Image = global::OpenDental.Properties.Resources.deleteX;
 			this.butDelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butDelete.Location = new System.Drawing.Point(31,406);
+			this.butDelete.Location = new System.Drawing.Point(31,454);
 			this.butDelete.Name = "butDelete";
-			this.butDelete.Size = new System.Drawing.Size(83,26);
+			this.butDelete.Size = new System.Drawing.Size(83,24);
 			this.butDelete.TabIndex = 14;
 			this.butDelete.Text = "&Delete";
 			this.butDelete.Click += new System.EventHandler(this.butDelete_Click);
@@ -331,7 +334,7 @@ namespace OpenDental{
 			// textNote
 			// 
 			this.textNote.AcceptsReturn = true;
-			this.textNote.Location = new System.Drawing.Point(184,271);
+			this.textNote.Location = new System.Drawing.Point(184,294);
 			this.textNote.Multiline = true;
 			this.textNote.Name = "textNote";
 			this.textNote.QuickPasteType = OpenDentBusiness.QuickPasteType.Recall;
@@ -339,10 +342,31 @@ namespace OpenDental{
 			this.textNote.Size = new System.Drawing.Size(350,112);
 			this.textNote.TabIndex = 15;
 			// 
+			// comboType
+			// 
+			this.comboType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboType.Location = new System.Drawing.Point(184,12);
+			this.comboType.MaxDropDownItems = 50;
+			this.comboType.Name = "comboType";
+			this.comboType.Size = new System.Drawing.Size(188,21);
+			this.comboType.TabIndex = 17;
+			this.comboType.SelectionChangeCommitted += new System.EventHandler(this.comboType_SelectionChangeCommitted);
+			// 
+			// label10
+			// 
+			this.label10.Location = new System.Drawing.Point(12,12);
+			this.label10.Name = "label10";
+			this.label10.Size = new System.Drawing.Size(170,19);
+			this.label10.TabIndex = 16;
+			this.label10.Text = "Type";
+			this.label10.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
 			// FormRecallEdit
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
-			this.ClientSize = new System.Drawing.Size(685,454);
+			this.ClientSize = new System.Drawing.Size(685,502);
+			this.Controls.Add(this.comboType);
+			this.Controls.Add(this.label10);
 			this.Controls.Add(this.textNote);
 			this.Controls.Add(this.butDelete);
 			this.Controls.Add(this.butOK);
@@ -375,6 +399,15 @@ namespace OpenDental{
 		#endregion
 
 		private void FormRecallEdit_Load(object sender, System.EventArgs e) {
+			for(int i=0;i<RecallTypeC.Listt.Count;i++){
+				comboType.Items.Add(RecallTypeC.Listt[i].Description);
+				if(RecallCur.RecallTypeNum==RecallTypeC.Listt[i].RecallTypeNum){
+					comboType.SelectedIndex=i;
+				}
+			}
+			if(!IsNew){
+				comboType.Enabled=false;
+			}
 			checkIsDisabled.Checked=RecallCur.IsDisabled;
 			if(checkIsDisabled.Checked){
 				textDateDue.ReadOnly=true;
@@ -402,6 +435,15 @@ namespace OpenDental{
 			textNote.Text=RecallCur.Note;
 		}
 
+		private void comboType_SelectionChangeCommitted(object sender,EventArgs e) {
+			//not possible unless new recall manually being entered (rare)
+			Interval iv=RecallTypeC.Listt[comboType.SelectedIndex].DefaultInterval;
+			textYears.Text=iv.Years.ToString();
+			textMonths.Text=iv.Months.ToString();
+			textWeeks.Text=iv.Weeks.ToString();
+			textDays.Text=iv.Days.ToString();
+		}
+
 		private void checkIsDisabled_Click(object sender, System.EventArgs e) {
 			if(checkIsDisabled.Checked){
 				textDateDue.Text="";
@@ -414,24 +456,26 @@ namespace OpenDental{
 		}
 
 		private void butDelete_Click(object sender, System.EventArgs e) {
-			if(RecallCur.DatePrevious.Year<1880){//Can only be deleted if DatePrevious is blank.
-				if(IsNew){
-					DialogResult=DialogResult.Cancel;
-				}
-				else{
-					if(!MsgBox.Show(this,true,"Delete this recall?")){
-						return;
-					}
-					Recalls.Delete(RecallCur);
-					DialogResult=DialogResult.OK;
-				}
+			if(RecallCur.DatePrevious.Year>1880){
+				MsgBox.Show(this,"This recall can not be deleted because the Previous Date has a value.  You should use the Disabled checkBox instead.");
+				return;
 			}
-			else{
-				MsgBox.Show(this,"This recall can not be deleted because Previous Date has a value.  You should use the Disabled checkBox instead.");
+			if(IsNew){
+				DialogResult=DialogResult.Cancel;
+				return;
 			}
+			if(!MsgBox.Show(this,true,"Delete this recall?")){
+				return;
+			}
+			Recalls.Delete(RecallCur);
+			DialogResult=DialogResult.OK;
 		}
 
 		private void butOK_Click(object sender, System.EventArgs e) {
+			if(comboType.SelectedIndex==-1){
+				MsgBox.Show(this,"Please pick a type first.");
+				return;
+			}
 			if(  textDateDue.errorProvider1.GetError(textDateDue)!=""
 				|| textYears.errorProvider1.GetError(textYears)!=""
 				|| textMonths.errorProvider1.GetError(textMonths)!=""
@@ -441,6 +485,11 @@ namespace OpenDental{
 				MsgBox.Show(this,"Please fix data entry errors first.");
 				return;
 			}
+			if(IsNew && textDateDue.Text==""){
+				MsgBox.Show(this,"Please enter a due date.");
+				return;
+			}
+			RecallCur.RecallTypeNum=RecallTypeC.Listt[comboType.SelectedIndex].RecallTypeNum;
 			RecallCur.IsDisabled=checkIsDisabled.Checked;
 			RecallCur.DateDue=PIn.PDate(textDateDue.Text);
 			RecallCur.RecallInterval.Years=PIn.PInt(textYears.Text);
@@ -456,12 +505,17 @@ namespace OpenDental{
 			}
 			RecallCur.Note=textNote.Text;
 			if(IsNew){
-				if(!Recalls.IsAllDefault(RecallCur)){//only save if something meaningful
-					Recalls.Insert(RecallCur);
+				if(Recalls.IsAllDefault(RecallCur)){//only save if something meaningful
+					MsgBox.Show(this,"Recall cannot be saved if all values are still default.");
+					return;
 				}
+				Recalls.Insert(RecallCur);
 			}
 			else{
 				if(Recalls.IsAllDefault(RecallCur)){
+					if(!MsgBox.Show(this,true,"All values are default.  This recall will be deleted.  Continue?")){
+						return;
+					}
 					Recalls.Delete(RecallCur);
 					DialogResult=DialogResult.OK;
 					return;
@@ -470,13 +524,15 @@ namespace OpenDental{
 					Recalls.Update(RecallCur);
 				}
 			}
-			Recalls.Synch(PatCur.PatNum,RecallCur);
+//Recalls.Synch(PatCur.PatNum,RecallCur);
 			DialogResult=DialogResult.OK;
 		}
 
 		private void butCancel_Click(object sender, System.EventArgs e) {
 			DialogResult=DialogResult.Cancel;
 		}
+
+	
 
 		
 

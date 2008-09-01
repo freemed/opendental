@@ -261,7 +261,7 @@ namespace OpenDental{
 					General.NonQ(command);
 					command="ALTER TABLE recall ADD RecallTypeNum int NOT NULL";
 					General.NonQ(command);
-//still need to convert existing recalls over to this.
+					
 					//Child recall-----------------------------------------------------------------------------
 					command="SELECT ValueString FROM preference WHERE PrefName='RecallPatternChild'";
 					timepattern=General.GetCount(command);
@@ -313,6 +313,12 @@ namespace OpenDental{
 							+"'"+POut.PString(triggers)+"')";
 						General.NonQ(command);
 					}
+//Set existing recall objects to new types (incomplete)
+					command="UPDATE recall SET RecallTypeNum=1 WHERE RecallTypeNum=0";
+					General.NonQ(command);
+
+
+
 					//Get rid of unused prefs-----------------------------------------------------------------
 					command="DELETE FROM preference WHERE PrefName='RecallPattern'";
 					General.NonQ(command);
@@ -342,7 +348,7 @@ namespace OpenDental{
 					General.NonQ(command);
 					command="DELETE FROM preference WHERE PrefName='RecallPerioTriggerProcs'";
 					General.NonQ(command);
-
+					
 
 
 					

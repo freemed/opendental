@@ -26,7 +26,7 @@ namespace OpenDental{
 		private System.ComponentModel.IContainer components;
 		private OpenDental.UI.ODToolBar ToolBarMain;
 		///<summary>All recalls for this entire family.</summary>
-		private Recall[] RecallList;
+		private List<Recall> RecallList;
 		///<summary></summary>
 		[Category("Data"),Description("Occurs when user changes current patient, usually by clicking on the Select Patient button.")]
 		public event PatientSelectedEventHandler PatientSelected=null;
@@ -108,7 +108,7 @@ namespace OpenDental{
 			this.gridRecall.SelectionMode = OpenDental.UI.GridSelectionMode.None;
 			this.gridRecall.Size = new System.Drawing.Size(354,100);
 			this.gridRecall.TabIndex = 32;
-			this.gridRecall.Title = "Patient Recall";
+			this.gridRecall.Title = "Recall";
 			this.gridRecall.TranslationName = "TableRecall";
 			this.gridRecall.DoubleClick += new System.EventHandler(this.gridRecall_DoubleClick);
 			this.gridRecall.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridRecall_CellDoubleClick);
@@ -219,7 +219,7 @@ namespace OpenDental{
 		private void RefreshModuleScreen(){
 			//ParentForm.Text=Patients.GetMainTitle(PatCur);
 			if(PatCur!=null){
-				ToolBarMain.Buttons["Recall"].Enabled=true;
+				//ToolBarMain.Buttons["Recall"].Enabled=true;
 				ToolBarMain.Buttons["Add"].Enabled=true;
 				ToolBarMain.Buttons["Delete"].Enabled=true;
 				ToolBarMain.Buttons["Guarantor"].Enabled=true;
@@ -230,7 +230,7 @@ namespace OpenDental{
 				ToolBarMain.Invalidate();
 			}
 			else{
-				ToolBarMain.Buttons["Recall"].Enabled=false;
+				//ToolBarMain.Buttons["Recall"].Enabled=false;
 				ToolBarMain.Buttons["Add"].Enabled=false;
 				ToolBarMain.Buttons["Delete"].Enabled=false;
 				ToolBarMain.Buttons["Guarantor"].Enabled=false;
@@ -294,7 +294,7 @@ namespace OpenDental{
 		public void LayoutToolBar(){
 			ToolBarMain.Buttons.Clear();
 			ODToolBarButton button;
-			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Recall"),1,"","Recall"));
+			//ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Recall"),1,"","Recall"));
 			ToolBarMain.Buttons.Add(new ODToolBarButton(ODToolBarButtonStyle.Separator));
 			button=new ODToolBarButton(Lan.g(this,"Family Members:"),-1,"","");
 			button.Style=ODToolBarButtonStyle.Label;
@@ -347,9 +347,9 @@ namespace OpenDental{
 			if(e.Button.Tag.GetType()==typeof(string)){
 				//standard predefined button
 				switch(e.Button.Tag.ToString()){
-					case "Recall":
-						OnRecall_Click();
-						break;
+					//case "Recall":
+					//	OnRecall_Click();
+					//	break;
 					case "Add":
 						OnAdd_Click();
 						break;
@@ -378,29 +378,6 @@ namespace OpenDental{
 			if(PatientSelected!=null){
 				PatientSelected(this,eArgs);
 			}
-		}
-
-		private void OnRecall_Click() {
-			//patient may or may not have an existing recall.
-			Recall recallCur=null;
-			for(int i=0;i<RecallList.Length;i++){
-				if(RecallList[i].PatNum==PatCur.PatNum){
-					recallCur=RecallList[i];
-				}
-			}
-			//for testing purposes and because synchronization might have bugs, always synch here:
-			//This might add a recall.
-			Recalls.Synch(PatCur.PatNum,recallCur);			
-			FormRecallEdit FormRE=new FormRecallEdit(PatCur);
-			if(recallCur==null){
-				recallCur=new Recall();
-				recallCur.PatNum=PatCur.PatNum;
-				recallCur.RecallInterval=new Interval(0,0,6,0);
-				FormRE.IsNew=true;
-			}
-			FormRE.RecallCur=recallCur;
-			FormRE.ShowDialog();
-			ModuleSelected(PatCur.PatNum);
 		}
 
 		#region gridPatient
@@ -754,7 +731,7 @@ namespace OpenDental{
 				row.Cells.Add(Lan.g("enumPatientStatus",FamCur.List[i].PatStatus.ToString()));
 				row.Cells.Add(Patients.AgeToString(FamCur.List[i].Age));
 				recallinfo="";
-				for(int j=0;j<RecallList.Length;j++){
+				for(int j=0;j<RecallList.Count;j++){
 					if(RecallList[j].PatNum==FamCur.List[i].PatNum){
 						if(RecallList[j].DateDue.Year>1880){
 							recallinfo=RecallList[j].DateDue.ToShortDateString();
@@ -877,7 +854,7 @@ namespace OpenDental{
 					PatCur.PatStatus=PatientStatus.Deleted;
 					PatCur.ChartNumber="";
 					Patients.Update(PatCur,PatOld);
-					for(int i=0;i<RecallList.Length;i++){
+					for(int i=0;i<RecallList.Count;i++){
 						if(RecallList[i].PatNum==PatCur.PatNum){
 							RecallList[i].IsDisabled=true;
 							RecallList[i].DateDue=DateTime.MinValue;
@@ -898,7 +875,7 @@ namespace OpenDental{
 				PatCur.ChartNumber="";
 				PatCur.Guarantor=PatCur.PatNum;
 				Patients.Update(PatCur,PatOld);
-				for(int i=0;i<RecallList.Length;i++){
+				for(int i=0;i<RecallList.Count;i++){
 					if(RecallList[i].PatNum==PatCur.PatNum){
 						RecallList[i].IsDisabled=true;
 						RecallList[i].DateDue=DateTime.MinValue;
@@ -1003,34 +980,30 @@ namespace OpenDental{
 			}
 			//we just want the recall for the current patient
 			List<Recall> recallListPat=new List<Recall>();
-			for(int i=0;i<RecallList.Length;i++){
+			for(int i=0;i<RecallList.Count;i++){
 				if(RecallList[i].PatNum==PatCur.PatNum){
 					recallListPat.Add(RecallList[i]);
 				}
 			}
 			ODGridRow row;
-			/*for(int i=0;i<recallListPat.Count;i++){
+			for(int i=0;i<recallListPat.Count;i++){
 				row=new ODGridRow();
-				//row.Cells.Add(recallListPat[i].
-				//	FamCur.GetNameInFamLFI(i));
-				row.Cells.Add(Lan.g("enumPatientPosition",FamCur.List[i].Position.ToString()));
-				row.Cells.Add(Lan.g("enumPatientGender",FamCur.List[i].Gender.ToString()));
-				row.Cells.Add(Lan.g("enumPatientStatus",FamCur.List[i].PatStatus.ToString()));
-				row.Cells.Add(Patients.AgeToString(FamCur.List[i].Age));
-				recallinfo="";
-				for(int j=0;j<RecallList.Length;j++){
-					if(RecallList[j].PatNum==FamCur.List[i].PatNum){
-						if(RecallList[j].DateDue.Year>1880){
-							recallinfo=RecallList[j].DateDue.ToShortDateString();
-						}
-					}
+				row.Cells.Add(RecallTypes.GetDescription(recallListPat[i].RecallTypeNum));
+				if(recallListPat[i].DatePrevious.Year<1880){
+					row.Cells.Add("");
 				}
-				row.Cells.Add(recallinfo);
-				if(i==0){//guarantor
-					row.Bold=true;
+				else{
+					row.Cells.Add(recallListPat[i].DatePrevious.ToShortDateString());
 				}
+				if(recallListPat[i].DateDue.Year<1880){
+					row.Cells.Add("");
+				}
+				else{
+					row.Cells.Add(recallListPat[i].DateDue.ToShortDateString());
+				}
+				row.Cells.Add("");
 				gridRecall.Rows.Add(row);
-			}*/
+			}
 			gridRecall.EndUpdate();
 		}
 
@@ -1039,7 +1012,16 @@ namespace OpenDental{
 		}
 
 		private void gridRecall_DoubleClick(object sender,EventArgs e) {
-
+			if(PatCur==null){
+				return;
+			}
+			FormRecallsPat FormR=new FormRecallsPat();
+			FormR.PatNum=PatCur.PatNum;
+			FormR.ShowDialog();
+			if(FormR.DialogResult!=DialogResult.OK){
+				return;
+			}
+			ModuleSelected(PatCur.PatNum);
 		}
 		#endregion gridRecall
 

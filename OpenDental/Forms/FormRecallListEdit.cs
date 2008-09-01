@@ -2,6 +2,7 @@ using System;
 using System.Diagnostics;
 using System.Drawing;
 using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Text;
 using System.Windows.Forms;
@@ -573,7 +574,7 @@ namespace OpenDental{
 			listFamily.Items.Clear();
 			Appointment[] aptsOnePat;
 			ListViewItem item;
-			Recall[] recallList=Recalls.GetList(FamCur.List);
+			List<Recall> recallList=Recalls.GetList(FamCur.List);
 			DateTime dateDue;
 			for(int i=0;i<FamCur.List.Length;i++){
 				item=new ListViewItem(FamCur.GetNameInFamFLI(i));
@@ -583,7 +584,7 @@ namespace OpenDental{
 				item.SubItems.Add(Patients.AgeToString(FamCur.List[i].Age));
 				item.SubItems.Add(FamCur.List[i].Gender.ToString());
 				dateDue=DateTime.MinValue;
-				for(int j=0;j<recallList.Length;j++){
+				for(int j=0;j<recallList.Count;j++){
 					if(recallList[j].PatNum==FamCur.List[i].PatNum){
 						dateDue=recallList[j].DateDue;
 					}
@@ -641,7 +642,7 @@ namespace OpenDental{
 		}
 
 		private void butEditRecall_Click(object sender, System.EventArgs e) {
-			FormRecallEdit FormRE=new FormRecallEdit(PatCur);
+			FormRecallEdit FormRE=new FormRecallEdit();
 			FormRE.RecallCur=RecallCur;
 			FormRE.ShowDialog();
 			FillRecall();

@@ -71,17 +71,29 @@ namespace OpenDentBusiness{
 		//	DataObjectFactory<RecallType>.DeleteObject(RecallTypeNum);
 		//}
 
-		/*public static string GetDescription(int RecallTypeNum){
-			if(RecallTypeNum==0){
+		public static string GetDescription(int recallTypeNum){
+			if(recallTypeNum==0){
 				return "";
 			}
-			for(int i=0;i<RecallTypeC.List.Length;i++){
-				if(RecallTypeC.List[i].RecallTypeNum==RecallTypeNum){
-					return RecallTypeC.List[i].Description;
+			for(int i=0;i<RecallTypeC.Listt.Count;i++){
+				if(RecallTypeC.Listt[i].RecallTypeNum==recallTypeNum){
+					return RecallTypeC.Listt[i].Description;
 				}
 			}
 			return "";
-		}*/
+		}
+
+		public static Interval GetInterval(int recallTypeNum){
+			if(recallTypeNum==0){
+				return new Interval(0,0,0,0);
+			}
+			for(int i=0;i<RecallTypeC.Listt.Count;i++){
+				if(RecallTypeC.Listt[i].RecallTypeNum==recallTypeNum){
+					return RecallTypeC.Listt[i].DefaultInterval;
+				}
+			}
+			return new Interval(0,0,0,0);
+		}
 
 	}
 }
