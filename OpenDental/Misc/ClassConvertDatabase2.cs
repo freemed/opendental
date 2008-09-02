@@ -226,6 +226,8 @@ namespace OpenDental{
 					General.NonQ(command);
 					command="INSERT INTO preference (PrefName,ValueString,Comments) VALUES ('ApptModuleRefreshesEveryMinute','1','Keeps the waiting room indicator times current.')";
 					General.NonQ(command);
+					command="ALTER TABLE recall ADD RecallTypeNum int NOT NULL";
+					General.NonQ(command);
 					command="DROP TABLE IF EXISTS recalltype";
 					General.NonQ(command);
 					command=@"CREATE TABLE recalltype (
@@ -259,21 +261,22 @@ namespace OpenDental{
 						+"'"+POut.PString(procs)+"',"
 						+"'"+POut.PString(triggers)+"')";
 					General.NonQ(command);
-					command="ALTER TABLE recall ADD RecallTypeNum int NOT NULL";
+					command="INSERT INTO preference (PrefName,ValueString,Comments) VALUES ('RecallTypeSpecialProphy','1','FK to recalltype.RecallTypeNum.')";
 					General.NonQ(command);
-					
 					//Child recall-----------------------------------------------------------------------------
 					command="SELECT ValueString FROM preference WHERE PrefName='RecallPatternChild'";
 					timepattern=General.GetCount(command);
 					command="SELECT ValueString FROM preference WHERE PrefName='RecallProceduresChild'";
 					procs=General.GetCount(command);
-					triggers="D1120";//child prophy code
+					triggers="";
 					command="INSERT INTO recalltype(RecallTypeNum,Description,DefaultInterval,TimePattern,Procedures,TriggerProcs) "
 						+"VALUES(2,'Child Prophy',"
-						+"393216,"//six months
+						+"0,"
 						+"'"+timepattern+"',"//always / and X, so no need to parameterize
 						+"'"+POut.PString(procs)+"',"
 						+"'"+POut.PString(triggers)+"')";
+					General.NonQ(command);
+					command="INSERT INTO preference (PrefName,ValueString,Comments) VALUES ('RecallTypeSpecialChildProphy','2','FK to recalltype.RecallTypeNum.')";
 					General.NonQ(command);
 					//Perio recall-----------------------------------------------------------------------------
 					command="SELECT ValueString FROM preference WHERE PrefName='RecallPatternPerio'";
@@ -288,6 +291,8 @@ namespace OpenDental{
 						+"'"+timepattern+"',"//always / and X, so no need to parameterize
 						+"'"+POut.PString(procs)+"',"
 						+"'"+POut.PString(triggers)+"')";
+					General.NonQ(command);
+					command="INSERT INTO preference (PrefName,ValueString,Comments) VALUES ('RecallTypeSpecialPerio','3','FK to recalltype.RecallTypeNum.')";
 					General.NonQ(command);
 					if(CultureInfo.CurrentCulture.Name=="en-US"){
 						//4BWX-----------------------------------------------------------------------------

@@ -18,7 +18,6 @@ namespace OpenDental{
 		/// </summary>
 		private System.ComponentModel.Container components = null;
 		private OpenDental.UI.ODGrid gridMain;
-		private OpenDental.UI.Button butNone;
 		private OpenDental.UI.Button butOK;
 		private bool changed;
 		//public bool IsSelectionMode;
@@ -58,53 +57,22 @@ namespace OpenDental{
 		private void InitializeComponent()
 		{
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormRecallTypes));
-			this.butNone = new OpenDental.UI.Button();
-			this.butOK = new OpenDental.UI.Button();
 			this.gridMain = new OpenDental.UI.ODGrid();
 			this.butAdd = new OpenDental.UI.Button();
 			this.butClose = new OpenDental.UI.Button();
+			this.butOK = new OpenDental.UI.Button();
 			this.SuspendLayout();
-			// 
-			// butNone
-			// 
-			this.butNone.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butNone.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butNone.Autosize = true;
-			this.butNone.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butNone.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butNone.CornerRadius = 4F;
-			this.butNone.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butNone.Location = new System.Drawing.Point(478,590);
-			this.butNone.Name = "butNone";
-			this.butNone.Size = new System.Drawing.Size(68,24);
-			this.butNone.TabIndex = 16;
-			this.butNone.Text = "None";
-			this.butNone.Visible = false;
-			this.butNone.Click += new System.EventHandler(this.butNone_Click);
-			// 
-			// butOK
-			// 
-			this.butOK.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butOK.Autosize = true;
-			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(626,590);
-			this.butOK.Name = "butOK";
-			this.butOK.Size = new System.Drawing.Size(75,24);
-			this.butOK.TabIndex = 15;
-			this.butOK.Text = "OK";
-			this.butOK.Visible = false;
-			this.butOK.Click += new System.EventHandler(this.butOK_Click);
 			// 
 			// gridMain
 			// 
+			this.gridMain.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.gridMain.HScrollVisible = false;
 			this.gridMain.Location = new System.Drawing.Point(17,12);
 			this.gridMain.Name = "gridMain";
 			this.gridMain.ScrollValue = 0;
-			this.gridMain.Size = new System.Drawing.Size(765,565);
+			this.gridMain.Size = new System.Drawing.Size(842,262);
 			this.gridMain.TabIndex = 11;
 			this.gridMain.Title = "RecallTypes";
 			this.gridMain.TranslationName = "TableRecallTypes";
@@ -120,7 +88,7 @@ namespace OpenDental{
 			this.butAdd.CornerRadius = 4F;
 			this.butAdd.Image = global::OpenDental.Properties.Resources.Add;
 			this.butAdd.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butAdd.Location = new System.Drawing.Point(17,590);
+			this.butAdd.Location = new System.Drawing.Point(17,292);
 			this.butAdd.Name = "butAdd";
 			this.butAdd.Size = new System.Drawing.Size(80,24);
 			this.butAdd.TabIndex = 10;
@@ -135,18 +103,33 @@ namespace OpenDental{
 			this.butClose.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butClose.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butClose.CornerRadius = 4F;
-			this.butClose.Location = new System.Drawing.Point(707,590);
+			this.butClose.Location = new System.Drawing.Point(784,292);
 			this.butClose.Name = "butClose";
 			this.butClose.Size = new System.Drawing.Size(75,24);
 			this.butClose.TabIndex = 0;
 			this.butClose.Text = "&Close";
 			this.butClose.Click += new System.EventHandler(this.butClose_Click);
 			// 
+			// butOK
+			// 
+			this.butOK.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.butOK.Autosize = true;
+			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butOK.CornerRadius = 4F;
+			this.butOK.Location = new System.Drawing.Point(703,292);
+			this.butOK.Name = "butOK";
+			this.butOK.Size = new System.Drawing.Size(75,24);
+			this.butOK.TabIndex = 15;
+			this.butOK.Text = "OK";
+			this.butOK.Visible = false;
+			this.butOK.Click += new System.EventHandler(this.butOK_Click);
+			// 
 			// FormRecallTypes
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
-			this.ClientSize = new System.Drawing.Size(810,630);
-			this.Controls.Add(this.butNone);
+			this.ClientSize = new System.Drawing.Size(887,332);
 			this.Controls.Add(this.butOK);
 			this.Controls.Add(this.gridMain);
 			this.Controls.Add(this.butAdd);
@@ -190,6 +173,8 @@ namespace OpenDental{
 			gridMain.Columns.Clear();
 			ODGridColumn col=new ODGridColumn(Lan.g("TableRecallTypes","Description"),110);
 			gridMain.Columns.Add(col);
+			col=new ODGridColumn(Lan.g("TableRecallTypes","Special Type"),110);
+			gridMain.Columns.Add(col);
 			col=new ODGridColumn(Lan.g("TableRecallTypes","Triggers"),190);
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn(Lan.g("TableRecallTypes","Interval"),60);
@@ -200,10 +185,11 @@ namespace OpenDental{
 			gridMain.Columns.Add(col);
 			gridMain.Rows.Clear();
 			ODGridRow row;
-			string txt;
+			//string txt;
 			for(int i=0;i<RecallTypeC.Listt.Count;i++){
 				row=new ODGridRow();
 				row.Cells.Add(RecallTypeC.Listt[i].Description);
+				row.Cells.Add(RecallTypes.GetSpecialTypeStr(RecallTypeC.Listt[i].RecallTypeNum));
 				row.Cells.Add(RecallTypeC.Listt[i].TriggerProcs);
 				row.Cells.Add(RecallTypeC.Listt[i].DefaultInterval.ToString());
 				row.Cells.Add(RecallTypeC.Listt[i].TimePattern);

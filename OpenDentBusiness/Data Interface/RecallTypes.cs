@@ -18,7 +18,7 @@ namespace OpenDentBusiness{
 		}
 
 		public static void FillCache(DataTable table){
-			RecallTypeC.Listt=new List<RecallType>();
+			List<RecallType> list=new List<RecallType>();
 			RecallType rtype;
 			for(int i=0;i<table.Rows.Count;i++){
 				rtype=new RecallType();
@@ -29,9 +29,35 @@ namespace OpenDentBusiness{
 				rtype.TimePattern    = PIn.PString(table.Rows[i][3].ToString());
 				rtype.Procedures     = PIn.PString(table.Rows[i][4].ToString());
 				rtype.TriggerProcs   = PIn.PString(table.Rows[i][5].ToString());
-				RecallTypeC.Listt.Add(rtype);
+				list.Add(rtype);
+			}
+			//reorder rows for better usability
+			RecallTypeC.Listt=new List<RecallType>();
+			for(int i=0;i<list.Count;i++){
+				if(list[i].RecallTypeNum==PrefC.GetInt("RecallTypeSpecialProphy")){
+					RecallTypeC.Listt.Add(list[i]);
+					break;
+				}
+			}
+			for(int i=0;i<list.Count;i++){
+				if(list[i].RecallTypeNum==PrefC.GetInt("RecallTypeSpecialChildProphy")){
+					RecallTypeC.Listt.Add(list[i]);
+					break;
+				}
+			}
+			for(int i=0;i<list.Count;i++){
+				if(list[i].RecallTypeNum==PrefC.GetInt("RecallTypeSpecialPerio")){
+					RecallTypeC.Listt.Add(list[i]);
+					break;
+				}
+			}
+			for(int i=0;i<list.Count;i++){//now add the rest
+				if(!RecallTypeC.Listt.Contains(list[i])){
+					RecallTypeC.Listt.Add(list[i]);
+				}
 			}
 		}
+
 		/*
 		///<Summary>Gets one RecallType from the database.</Summary>
 		public static RecallType CreateObject(int recallTypeNum){
@@ -94,6 +120,27 @@ namespace OpenDentBusiness{
 			}
 			return new Interval(0,0,0,0);
 		}
+
+		public static string GetSpecialTypeStr(int recallTypeNum){
+			if(recallTypeNum==PrefC.GetInt("RecallTypeSpecialProphy")){
+				return Lan.g("FormRecallTypeEdit","Prophy");
+			}
+			if(recallTypeNum==PrefC.GetInt("RecallTypeSpecialChildProphy")){
+				return Lan.g("FormRecallTypeEdit","ChildProphy");
+			}
+			if(recallTypeNum==PrefC.GetInt("RecallTypeSpecialPerio")){
+				return Lan.g("FormRecallTypeEdit","Perio");
+			}
+			return "";
+		}
+
+		/*public static void SetSpecial(int recallTypeNum,int selectedIndex){
+			int rowsAffected=0;
+			string command;
+			if(selectedIndex==0){//none
+				command="UPDATE preference SET ValueString='"+POut.PInt(recallTypeNum)+"' WHERE PrefName=''";
+			}
+		}*/
 
 	}
 }

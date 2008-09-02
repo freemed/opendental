@@ -94,6 +94,10 @@ namespace OpenDental {
 			FillGrid();
 		}
 
+		private void checkPerio_Click(object sender,EventArgs e) {
+
+		}
+
 		private void butAdd_Click(object sender,EventArgs e) {
 			Recall recall=new Recall();
 			recall.RecallTypeNum=0;//user will have to pick
@@ -109,6 +113,8 @@ namespace OpenDental {
 		private void butClose_Click(object sender,EventArgs e) {
 			Close();
 		}
+
+		
 
 		
 

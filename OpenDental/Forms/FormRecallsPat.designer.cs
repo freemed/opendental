@@ -26,6 +26,7 @@ namespace OpenDental{
 			this.butAdd = new OpenDental.UI.Button();
 			this.gridMain = new OpenDental.UI.ODGrid();
 			this.butClose = new OpenDental.UI.Button();
+			this.checkPerio = new System.Windows.Forms.CheckBox();
 			this.SuspendLayout();
 			// 
 			// butAdd
@@ -73,10 +74,21 @@ namespace OpenDental{
 			this.butClose.Text = "Close";
 			this.butClose.Click += new System.EventHandler(this.butClose_Click);
 			// 
+			// checkPerio
+			// 
+			this.checkPerio.Location = new System.Drawing.Point(230,344);
+			this.checkPerio.Name = "checkPerio";
+			this.checkPerio.Size = new System.Drawing.Size(150,18);
+			this.checkPerio.TabIndex = 35;
+			this.checkPerio.Text = "Perio";
+			this.checkPerio.UseVisualStyleBackColor = true;
+			this.checkPerio.Click += new System.EventHandler(this.checkPerio_Click);
+			// 
 			// FormRecallsPat
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
 			this.ClientSize = new System.Drawing.Size(758,391);
+			this.Controls.Add(this.checkPerio);
 			this.Controls.Add(this.butAdd);
 			this.Controls.Add(this.gridMain);
 			this.Controls.Add(this.butClose);
@@ -93,5 +105,6 @@ namespace OpenDental{
 		private OpenDental.UI.Button butClose;
 		private OpenDental.UI.ODGrid gridMain;
 		private OpenDental.UI.Button butAdd;
+		private System.Windows.Forms.CheckBox checkPerio;
 	}
 }
