@@ -178,6 +178,7 @@ namespace OpenDental{
 			return new ProcedureCode();
 		}
 
+		///<summary>Supply the human readable proc code such as D####</summary>
 		public static int GetCodeNum(string myCode){
 			if(myCode==null || myCode=="") {
 				return 0;

@@ -31,6 +31,15 @@ namespace OpenDental{
 			return GetList(patNums);
 		}
 
+		/// <summary></summary>
+		public static List<Recall> GetList(Patient[] patients){
+			List<int> patNums=new List<int>();
+			for(int i=0;i<patients.Length;i++){
+				patNums.Add(patients[i].PatNum);
+			}
+			return GetList(patNums);
+		}
+
 		private static List<Recall> RefreshAndFill(string command){
 			DataTable table=General.GetTable(command);
 			List<Recall> list=new List<Recall>();
@@ -56,15 +65,6 @@ namespace OpenDental{
 		public static List<Recall> GetUAppoint(DateTime changedSince){
 			string command="SELECT * FROM recall WHERE DateTStamp > "+POut.PDateT(changedSince);
 			return RefreshAndFill(command);
-		}
-
-		/// <summary></summary>
-		public static List<Recall> GetList(Patient[] patients){
-			List<int> patNums=new List<int>();
-			for(int i=0;i<patients.Length;i++){
-				patNums.Add(patients[i].PatNum);
-			}
-			return GetList(patNums);
 		}
 
 		///<summary>Only used in FormRecallList to get a list of patients with recall.  Supply a date range, using min(-1 day) and max values if user left blank.  If provNum=0, then it will get all provnums.  It looks for both provider match in either PriProv or SecProv.</summary>
@@ -239,7 +239,7 @@ namespace OpenDental{
 			DeletedObjects.SetDeleted(DeletedObjectType.RecallPatNum,recall.PatNum);
 		}
 
-		///<summary>Will only return true if not disabled, date previous is empty, DateDue is same as DateDueCalc, etc.</summary>
+		/*//<summary>Will only return true if not disabled, date previous is empty, DateDue is same as DateDueCalc, etc.</summary>
 		public static bool IsAllDefault(Recall recall) {
 			if(recall.IsDisabled
 				|| recall.DatePrevious.Year>1880
@@ -251,96 +251,131 @@ namespace OpenDental{
 				return false;
 			}
 			return true;
-		}
+		}*/
 
-		///<summary>Synchronizes all recall for one patient. If datePrevious has changed, then it completely deletes the old recall information and sets a new dateDueCalc and DatePrevious.  Also updates dateDue to match dateDueCalc if not disabled.  The supplied recall can be null if patient has no existing recall. Deletes or creates any recalls as necessary.</summary>
-		public static void Synch(int patNum,Recall recall){
-			//This all needs to be rewritten
-			/*DateTime previousDate=GetPreviousDate(patNum);
-			if(recall!=null 
-				&& !recall.IsDisabled
-				&& previousDate.Year>1880//this protects recalls that were manually added as part of a conversion
-				&& previousDate != recall.DatePrevious) {//if datePrevious has changed, reset
-				recall.RecallStatus=0;
-				recall.Note="";
-				recall.DateDue=recall.DateDueCalc;//now it is allowed to be changed in the steps below
-			}
-			if(previousDate.Year<1880){//if no previous date
-				if(recall==null){//no recall present
-					//do nothing.
-				}
-				else{
-					recall.DatePrevious=DateTime.MinValue;
-					if(recall.DateDue==recall.DateDueCalc){//user did not enter a DateDue
-						recall.DateDue=DateTime.MinValue;
-					}
-					recall.DateDueCalc=DateTime.MinValue;
-					Recalls.Update(recall);
-					if(Recalls.IsAllDefault(recall)){//no useful info
-						Recalls.Delete(recall);
-						recall=null;
-					}
-				}
-			}
-			else{//if previous date is a valid date
-				if(recall==null){//no recall present
-					recall=new Recall();
-					recall.PatNum=patNum;
-					recall.DatePrevious=previousDate;
-					recall.RecallInterval=new Interval(0,0,6,0);
-					recall.DateDueCalc=previousDate+recall.RecallInterval;
-					recall.DateDue=recall.DateDueCalc;
-					Recalls.Insert(recall);
-					return;
-				}
-				else{
-					recall.DatePrevious=previousDate;
-					if(recall.IsDisabled){//if the existing recall is disabled 
-						recall.DateDue=DateTime.MinValue;//DateDue is always blank
-					}
-					else{//but if not disabled
-						if(recall.DateDue==recall.DateDueCalc//if user did not enter a DateDue
-							|| recall.DateDue.Year<1880) {//or DateDue was blank
-							recall.DateDue=recall.DatePrevious+recall.RecallInterval;//set same as DateDueCalc
-						}
-					}
-					recall.DateDueCalc=recall.DatePrevious+recall.RecallInterval;
-					Recalls.Update(recall);
-				}
-			}*/
-		}
-
-		///<summary>Synchronizes all recall for one patient. Sets dateDueCalc and DatePrevious.  Also updates dateDue to match dateDueCalc if not disabled.  The supplied recall can be null if patient has no existing recall. Deletes or creates any recalls as necessary.</summary>
+		///<summary>Synchronizes all recalls for one patient. If datePrevious has changed, then it completely deletes the old status and note information and sets a new DatePrevious and dateDueCalc.  Also updates dateDue to match dateDueCalc if not disabled.  Creates any recalls as necessary.  Recalls will never get automatically deleted.  Instead, the dateDueCalc just gets cleared.</summary>
 		public static void Synch(int patNum){
-			/*
-			List<int> patNums=new List<int>();
-			patNums.Add(patNum);
-			List<Recall> recallList=GetList(patNums);
-			Recall recall=null;
-			if(recallList.Count>0){
-				recall=recallList[0];
+			DateTime previousDate;
+			List<RecallType> typeList=RecallTypes.GetActive();
+			string command="SELECT * FROM recall WHERE PatNum="+POut.PInt(patNum);
+			List<Recall> recallList=RefreshAndFill(command);
+			//determine if this patient is a perio patient.
+			bool isPerio=false;
+			for(int i=0;i<recallList.Count;i++){
+				if(PrefC.GetInt("RecallTypeSpecialPerio")==recallList[i].RecallTypeNum){
+					isPerio=true;
+					break;
+				}
 			}
-			Synch(patNum,recall);*/
+			//remove types from the list which do not apply to this patient.
+			for(int i=0;i<typeList.Count;i++){
+				if(isPerio){
+					if(PrefC.GetInt("RecallTypeSpecialProphy")==typeList[i].RecallTypeNum){
+						typeList.RemoveAt(i);
+						break;
+					}
+				}
+				else{
+					if(PrefC.GetInt("RecallTypeSpecialPerio")==typeList[i].RecallTypeNum){
+						typeList.RemoveAt(i);
+						break;
+					}
+				}
+			}
+			//Go through the type list and either update recalls, or create new recalls.
+			//Recalls that are no longer active because their type has no triggers will be ignored.
+			//It is assumed that there are not duplicate recalls.
+			DateTime prevDate;
+			Recall matchingRecall;
+			Recall recallNew;
+			for(int i=0;i<typeList.Count;i++){
+				prevDate=GetPreviousDate(patNum,typeList[i].RecallTypeNum);
+				matchingRecall=null;
+				for(int r=0;r<recallList.Count;r++){
+					if(recallList[r].RecallTypeNum==typeList[i].RecallTypeNum){
+						matchingRecall=recallList[r];
+					}
+				}
+				if(matchingRecall==null){//if there is no existing recall,
+					if(prevDate.Year>1880){//if date is not minVal, then add a recall
+						//add a recall
+						recallNew=new Recall();
+						recallNew.PatNum=patNum;
+						recallNew.DatePrevious=prevDate;
+						recallNew.RecallInterval=typeList[i].DefaultInterval;
+						recallNew.DateDueCalc=prevDate+recallNew.RecallInterval;
+						recallNew.DateDue=recallNew.DateDueCalc;
+						Recalls.Insert(recallNew);
+					}
+				}
+				else{//alter the existing recall
+					if(!matchingRecall.IsDisabled
+						&& prevDate.Year>1880//this protects recalls that were manually added as part of a conversion
+						&& prevDate != matchingRecall.DatePrevious) 
+					{//if datePrevious has changed, reset
+						matchingRecall.RecallStatus=0;
+						matchingRecall.Note="";
+						matchingRecall.DateDue=matchingRecall.DateDueCalc;//now it is allowed to be changed in the steps below
+					}
+					if(prevDate.Year<1880){//if no previous date
+						matchingRecall.DatePrevious=DateTime.MinValue;
+						if(matchingRecall.DateDue==matchingRecall.DateDueCalc){//user did not enter a DateDue
+							matchingRecall.DateDue=DateTime.MinValue;
+						}
+						matchingRecall.DateDueCalc=DateTime.MinValue;
+						Recalls.Update(matchingRecall);
+					}
+					else{//if previous date is a valid date
+						matchingRecall.DatePrevious=prevDate;
+						if(matchingRecall.IsDisabled){//if the existing recall is disabled 
+							matchingRecall.DateDue=DateTime.MinValue;//DateDue is always blank
+						}
+						else{//but if not disabled
+							if(matchingRecall.DateDue==matchingRecall.DateDueCalc//if user did not enter a DateDue
+								|| matchingRecall.DateDue.Year<1880)//or DateDue was blank
+							{
+								matchingRecall.DateDue=matchingRecall.DatePrevious+matchingRecall.RecallInterval;//set same as DateDueCalc
+							}
+						}
+						matchingRecall.DateDueCalc=matchingRecall.DatePrevious+matchingRecall.RecallInterval;
+						Recalls.Update(matchingRecall);
+					}
+				}
+			}
 		}
 
-		/*
-		private static DateTime GetPreviousDate(int patNum){
+		///<summary>This is not very efficient because it runs a separate query for each recalltype.  It is planned to later add triggers as a separate database table.  This will allow us to get previous dates for all recall types at once.</summary>
+		private static DateTime GetPreviousDate(int patNum,int recallTypeNum){
+			string triggerStr=RecallTypes.GetTriggers(recallTypeNum);
+			if(triggerStr==""){
+				return DateTime.MinValue;
+			}
+			string[] triggerArrayProcs=triggerStr.Split(',');
+			int[] triggerArray=new int[triggerArrayProcs.Length];
+			for(int i=0;i<triggerArray.Length;i++){
+				triggerArray[i]=ProcedureCodes.GetCodeNum(triggerArrayProcs[i]);
+			}
 			string command= 
-				"SELECT MAX(procedurelog.procdate) "
-				+"FROM procedurelog,procedurecode "
-				+"WHERE procedurelog.PatNum="+patNum.ToString()
-				+" AND procedurecode.CodeNum = procedurelog.CodeNum "
-				+"AND procedurecode.SetRecall = 1 "
-				+"AND (procedurelog.ProcStatus = 2 "
-				+"OR procedurelog.ProcStatus = 3 "
-				+"OR procedurelog.ProcStatus = 4) "
-				+"GROUP BY procedurelog.PatNum";
+				"SELECT MAX(ProcDate) "
+				+"FROM procedurelog "
+				+"WHERE PatNum="+POut.PInt(patNum)
+				+" AND (";
+			for(int i=0;i<triggerArray.Length;i++){
+				if(i>0){
+					command+=" OR";
+				}
+				command+=" CodeNum="+POut.PInt(triggerArray[i]);
+			}
+			command+=") AND (ProcStatus = 2 "
+				+"OR ProcStatus = 3 "
+				+"OR ProcStatus = 4)";
+			//+"GROUP BY procedurelog.PatNum";
 			DataTable table=General.GetTable(command);
 			if(table.Rows.Count==0){
 				return DateTime.MinValue;
 			}
 			return PIn.PDate(table.Rows[0][0].ToString());
-		}*/
+		}
 
 		///<summary>Only called when editing certain procedurecodes, but only very rarely as needed. For power users, this is a good little trick to use to synch recall for all patients.</summary>
 		public static void SynchAllPatients(){

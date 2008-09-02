@@ -121,6 +121,18 @@ namespace OpenDentBusiness{
 			return new Interval(0,0,0,0);
 		}
 
+		public static string GetTriggers(int recallTypeNum){
+			if(recallTypeNum==0){
+				return "";
+			}
+			for(int i=0;i<RecallTypeC.Listt.Count;i++){
+				if(RecallTypeC.Listt[i].RecallTypeNum==recallTypeNum){
+					return RecallTypeC.Listt[i].TriggerProcs;
+				}
+			}
+			return "";
+		}
+
 		public static string GetSpecialTypeStr(int recallTypeNum){
 			if(recallTypeNum==PrefC.GetInt("RecallTypeSpecialProphy")){
 				return Lan.g("FormRecallTypeEdit","Prophy");
@@ -134,13 +146,17 @@ namespace OpenDentBusiness{
 			return "";
 		}
 
-		/*public static void SetSpecial(int recallTypeNum,int selectedIndex){
-			int rowsAffected=0;
-			string command;
-			if(selectedIndex==0){//none
-				command="UPDATE preference SET ValueString='"+POut.PInt(recallTypeNum)+"' WHERE PrefName=''";
+		///<summary>Gets a list of all active recall types.  Those without triggers are excluded.  Perio and Prophy are both included.  One of them should later be removed from the collection.</summary>
+		public static List<RecallType> GetActive(){
+			List<RecallType> retVal=new List<RecallType>();
+			for(int i=0;i<RecallTypeC.Listt.Count;i++){
+				if(RecallTypeC.Listt[i].TriggerProcs!=""){
+					retVal.Add(RecallTypeC.Listt[i].Copy());
+				}
 			}
-		}*/
+			return retVal;
+		}
+		
 
 	}
 }

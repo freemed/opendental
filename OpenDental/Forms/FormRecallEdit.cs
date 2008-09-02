@@ -485,10 +485,10 @@ namespace OpenDental{
 				MsgBox.Show(this,"Please fix data entry errors first.");
 				return;
 			}
-			if(IsNew && textDateDue.Text==""){
-				MsgBox.Show(this,"Please enter a due date.");
-				return;
-			}
+			//if(IsNew && textDateDue.Text==""){
+			//	MsgBox.Show(this,"Please enter a due date.");
+			//	return;
+			//}
 			RecallCur.RecallTypeNum=RecallTypeC.Listt[comboType.SelectedIndex].RecallTypeNum;
 			RecallCur.IsDisabled=checkIsDisabled.Checked;
 			RecallCur.DateDue=PIn.PDate(textDateDue.Text);
@@ -505,14 +505,14 @@ namespace OpenDental{
 			}
 			RecallCur.Note=textNote.Text;
 			if(IsNew){
-				if(Recalls.IsAllDefault(RecallCur)){//only save if something meaningful
-					MsgBox.Show(this,"Recall cannot be saved if all values are still default.");
-					return;
-				}
+				//if(Recalls.IsAllDefault(RecallCur)){//only save if something meaningful
+				//	MsgBox.Show(this,"Recall cannot be saved if all values are still default.");
+				//	return;
+				//}
 				Recalls.Insert(RecallCur);
 			}
 			else{
-				if(Recalls.IsAllDefault(RecallCur)){
+				/*if(Recalls.IsAllDefault(RecallCur)){
 					if(!MsgBox.Show(this,true,"All values are default.  This recall will be deleted.  Continue?")){
 						return;
 					}
@@ -520,9 +520,9 @@ namespace OpenDental{
 					DialogResult=DialogResult.OK;
 					return;
 				}
-				else{
-					Recalls.Update(RecallCur);
-				}
+				else{*/
+				Recalls.Update(RecallCur);
+				//}
 			}
 //Recalls.Synch(PatCur.PatNum,RecallCur);
 			DialogResult=DialogResult.OK;

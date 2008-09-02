@@ -26,7 +26,7 @@ namespace OpenDental{
 			this.butAdd = new OpenDental.UI.Button();
 			this.gridMain = new OpenDental.UI.ODGrid();
 			this.butClose = new OpenDental.UI.Button();
-			this.checkPerio = new System.Windows.Forms.CheckBox();
+			this.butPerio = new OpenDental.UI.Button();
 			this.SuspendLayout();
 			// 
 			// butAdd
@@ -74,21 +74,27 @@ namespace OpenDental{
 			this.butClose.Text = "Close";
 			this.butClose.Click += new System.EventHandler(this.butClose_Click);
 			// 
-			// checkPerio
+			// butPerio
 			// 
-			this.checkPerio.Location = new System.Drawing.Point(230,344);
-			this.checkPerio.Name = "checkPerio";
-			this.checkPerio.Size = new System.Drawing.Size(150,18);
-			this.checkPerio.TabIndex = 35;
-			this.checkPerio.Text = "Perio";
-			this.checkPerio.UseVisualStyleBackColor = true;
-			this.checkPerio.Click += new System.EventHandler(this.checkPerio_Click);
+			this.butPerio.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butPerio.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.butPerio.Autosize = true;
+			this.butPerio.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butPerio.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butPerio.CornerRadius = 4F;
+			this.butPerio.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butPerio.Location = new System.Drawing.Point(267,340);
+			this.butPerio.Name = "butPerio";
+			this.butPerio.Size = new System.Drawing.Size(83,24);
+			this.butPerio.TabIndex = 35;
+			this.butPerio.Text = "Set Perio";
+			this.butPerio.Click += new System.EventHandler(this.butPerio_Click);
 			// 
 			// FormRecallsPat
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
 			this.ClientSize = new System.Drawing.Size(758,391);
-			this.Controls.Add(this.checkPerio);
+			this.Controls.Add(this.butPerio);
 			this.Controls.Add(this.butAdd);
 			this.Controls.Add(this.gridMain);
 			this.Controls.Add(this.butClose);
@@ -105,6 +111,6 @@ namespace OpenDental{
 		private OpenDental.UI.Button butClose;
 		private OpenDental.UI.ODGrid gridMain;
 		private OpenDental.UI.Button butAdd;
-		private System.Windows.Forms.CheckBox checkPerio;
+		private OpenDental.UI.Button butPerio;
 	}
 }

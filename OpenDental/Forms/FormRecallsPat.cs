@@ -13,6 +13,7 @@ namespace OpenDental {
 		public int PatNum;
 		///<summary>This is just the list for the current patient.</summary>
 		private List<Recall> RecallList;
+		private bool IsPerio;
 
 		public FormRecallsPat() {
 			InitializeComponent();
@@ -30,11 +31,12 @@ namespace OpenDental {
 			}*/
 			//for testing purposes and because synchronization might have bugs, always synch here:
 			//This might add a recall.
-			Recalls.Synch(PatNum);			
+			//Recalls.Synch(PatNum);			
 			FillGrid();
 		}
 
 		private void FillGrid(){
+			Recalls.Synch(PatNum);
 			RecallList=Recalls.GetList(PatNum);
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
@@ -54,10 +56,15 @@ namespace OpenDental {
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn(Lan.g("TableRecallsPat","Note"),80);
 			gridMain.Columns.Add(col);
-
 			gridMain.Rows.Clear();
 			ODGridRow row;
+			IsPerio=false;
+			butPerio.Text=Lan.g(this,"Set Perio");
 			for(int i=0;i<RecallList.Count;i++){
+				if(PrefC.GetInt("RecallTypeSpecialPerio")==RecallList[i].RecallTypeNum){
+					IsPerio=true;
+					butPerio.Text=Lan.g(this,"Set Prophy");
+				}
 				row=new ODGridRow();
 				row.Cells.Add(RecallTypes.GetDescription(RecallList[i].RecallTypeNum));
 				if(RecallList[i].IsDisabled){
@@ -94,8 +101,47 @@ namespace OpenDental {
 			FillGrid();
 		}
 
-		private void checkPerio_Click(object sender,EventArgs e) {
-
+		private void butPerio_Click(object sender,EventArgs e) {
+			//make sure we have both special types properly setup.
+			if(PrefC.GetInt("RecallTypeSpecialProphy")==0 || PrefC.GetInt("RecallTypeSpecialPerio")==0){
+				MsgBox.Show(this,"Prophy and Perio special recall types are not setup properly.  Please do that first.");
+				return;
+			}
+			if(IsPerio){
+				//change the perio types to prophy
+				for(int i=0;i<RecallList.Count;i++){
+					if(PrefC.GetInt("RecallTypeSpecialPerio")==RecallList[i].RecallTypeNum){
+						RecallList[i].RecallTypeNum=PrefC.GetInt("RecallTypeSpecialProphy");
+						RecallList[i].RecallInterval=RecallTypes.GetInterval(PrefC.GetInt("RecallTypeSpecialProphy"));
+						//previous date will be reset below in synch, but probably won't change since similar triggers.
+						Recalls.Update(RecallList[i]);
+						break;
+					}
+				}
+			}
+			else{
+				bool found=false;
+				//change any prophy types to perio
+				for(int i=0;i<RecallList.Count;i++){
+					if(PrefC.GetInt("RecallTypeSpecialProphy")==RecallList[i].RecallTypeNum){
+						RecallList[i].RecallTypeNum=PrefC.GetInt("RecallTypeSpecialPerio");
+						RecallList[i].RecallInterval=RecallTypes.GetInterval(PrefC.GetInt("RecallTypeSpecialPerio"));
+						//previous date will be reset below in synch, but probably won't change since similar triggers.
+						Recalls.Update(RecallList[i]);
+						found=true;
+						break;
+					}
+				}
+				//if none found, then add a perio
+				if(!found){
+					Recall recall=new Recall();
+					recall.PatNum=PatNum;
+					recall.RecallInterval=RecallTypes.GetInterval(PrefC.GetInt("RecallTypeSpecialPerio"));
+					recall.RecallTypeNum=PrefC.GetInt("RecallTypeSpecialPerio");
+					Recalls.Insert(recall);
+				}
+			}
+			FillGrid();
 		}
 
 		private void butAdd_Click(object sender,EventArgs e) {
@@ -113,6 +159,8 @@ namespace OpenDental {
 		private void butClose_Click(object sender,EventArgs e) {
 			Close();
 		}
+
+		
 
 		
 
