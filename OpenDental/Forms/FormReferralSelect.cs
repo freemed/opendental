@@ -90,17 +90,21 @@ namespace OpenDental{
 			// 
 			// tbRefSelect
 			// 
+			this.tbRefSelect.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.tbRefSelect.BackColor = System.Drawing.SystemColors.Window;
 			this.tbRefSelect.Location = new System.Drawing.Point(8,6);
 			this.tbRefSelect.Name = "tbRefSelect";
 			this.tbRefSelect.ScrollValue = 1;
 			this.tbRefSelect.SelectedIndices = new int[0];
 			this.tbRefSelect.SelectionMode = System.Windows.Forms.SelectionMode.One;
-			this.tbRefSelect.Size = new System.Drawing.Size(829,602);
+			this.tbRefSelect.Size = new System.Drawing.Size(829,678);
 			this.tbRefSelect.TabIndex = 7;
 			// 
 			// checkHidden
 			// 
+			this.checkHidden.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.checkHidden.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.checkHidden.Location = new System.Drawing.Point(844,22);
 			this.checkHidden.Name = "checkHidden";

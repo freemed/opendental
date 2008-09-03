@@ -394,17 +394,8 @@ namespace OpenDental{
 					General.NonQ(command);
 					command="DELETE FROM preference WHERE PrefName='RecallPerioTriggerProcs'";
 					General.NonQ(command);
-					
-
-
-					
-
-
-
-
-
-
-
+					command="INSERT INTO definition (Category,ItemOrder,ItemName,ItemValue,ItemColor,IsHidden) VALUES (21,8,'Family Module Referral','',-2823993,0)";
+					General.NonQ(command);
 				} 
 				else {//oracle
 					

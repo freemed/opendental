@@ -128,12 +128,14 @@ namespace OpenDental{
 			// 
 			// gridPat
 			// 
+			this.gridPat.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
 			this.gridPat.HScrollVisible = false;
 			this.gridPat.Location = new System.Drawing.Point(0,129);
 			this.gridPat.Name = "gridPat";
 			this.gridPat.ScrollValue = 0;
 			this.gridPat.SelectionMode = OpenDental.UI.GridSelectionMode.None;
-			this.gridPat.Size = new System.Drawing.Size(252,467);
+			this.gridPat.Size = new System.Drawing.Size(252,579);
 			this.gridPat.TabIndex = 30;
 			this.gridPat.Title = "Patient Information";
 			this.gridPat.TranslationName = "TablePatient";
@@ -141,12 +143,15 @@ namespace OpenDental{
 			// 
 			// gridIns
 			// 
+			this.gridIns.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.gridIns.HScrollVisible = true;
-			this.gridIns.Location = new System.Drawing.Point(256,129);
+			this.gridIns.Location = new System.Drawing.Point(254,129);
 			this.gridIns.Name = "gridIns";
 			this.gridIns.ScrollValue = 0;
 			this.gridIns.SelectionMode = OpenDental.UI.GridSelectionMode.None;
-			this.gridIns.Size = new System.Drawing.Size(657,467);
+			this.gridIns.Size = new System.Drawing.Size(685,579);
 			this.gridIns.TabIndex = 29;
 			this.gridIns.Title = "Insurance Plans";
 			this.gridIns.TranslationName = "TableCoverage";
@@ -324,13 +329,13 @@ namespace OpenDental{
 		}
 
 		private void ContrFamily_Resize(object sender,EventArgs e) {
-			if(Height>gridPat.Top){
+			/*if(Height>gridPat.Top){
 				gridPat.Height=Height-gridPat.Top-2;
 				gridIns.Height=Height-gridIns.Top-2;
 			}
 			if(Width>gridIns.Left){
 				gridIns.Width=Width-gridIns.Left-2;
-			}
+			}*/
 		}
 
 		//private void butOutlook_Click(object sender, System.EventArgs e) {
@@ -632,11 +637,13 @@ namespace OpenDental{
 						if(RefList.Length==0){
 							row.Cells.Add(Lan.g("TablePatient","None"));
 							row.Tag="Referral";
+							row.ColorBackG=DefC.Short[(int)DefCat.MiscColors][8].ItemColor;
 						}
-						else{
-							row.Cells.Add("");
-							row.Tag="Referral";
-						}
+						//else{
+						//	row.Cells.Add("");
+						//	row.Tag="Referral";
+						//	row.ColorBackG=DefC.Short[(int)DefCat.MiscColors][8].ItemColor;
+						//}
 						for(int i=0;i<RefList.Length;i++) {
 							row=new ODGridRow();
 							if(RefList[i].IsFrom){
@@ -657,6 +664,7 @@ namespace OpenDental{
 								row.Cells.Add("");//if referral is null because using random keys and had bug.
 							}
 							row.Tag="Referral";
+							row.ColorBackG=DefC.Short[(int)DefCat.MiscColors][8].ItemColor;
 							if(i<RefList.Length-1){
 								gridPat.Rows.Add(row);
 							}
