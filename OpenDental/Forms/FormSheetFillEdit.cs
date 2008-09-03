@@ -409,6 +409,16 @@ namespace OpenDental {
 			DialogResult=DialogResult.OK;
 		}
 
+		private void butPDF_Click(object sender,EventArgs e) {
+			if(!TryToSaveData()){
+				return;
+			}
+			string filePathAndName=Path.GetFileNameWithoutExtension(Path.GetTempFileName())+".pdf";
+			SheetPrinting.CreatePdf(SheetCur,filePathAndName);
+			Process.Start(filePathAndName);
+			DialogResult=DialogResult.OK;
+		}
+
 		private void butDelete_Click(object sender,EventArgs e) {
 			if(SheetCur.IsNew){
 				DialogResult=DialogResult.Cancel;
@@ -509,6 +519,8 @@ namespace OpenDental {
 		private void butCancel_Click(object sender,EventArgs e) {
 			DialogResult=DialogResult.Cancel;
 		}
+
+	
 
 		
 

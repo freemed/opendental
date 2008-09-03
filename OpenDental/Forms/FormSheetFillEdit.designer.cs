@@ -34,6 +34,7 @@ namespace OpenDental{
 			this.butPrint = new OpenDental.UI.Button();
 			this.butOK = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
+			this.butPDF = new OpenDental.UI.Button();
 			this.panel1.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -89,7 +90,7 @@ namespace OpenDental{
 			// checkErase
 			// 
 			this.checkErase.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.checkErase.Location = new System.Drawing.Point(645,311);
+			this.checkErase.Location = new System.Drawing.Point(645,272);
 			this.checkErase.Name = "checkErase";
 			this.checkErase.Size = new System.Drawing.Size(89,20);
 			this.checkErase.TabIndex = 81;
@@ -131,7 +132,7 @@ namespace OpenDental{
 			this.butPrint.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butPrint.CornerRadius = 4F;
 			this.butPrint.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butPrint.Location = new System.Drawing.Point(645,376);
+			this.butPrint.Location = new System.Drawing.Point(645,325);
 			this.butPrint.Name = "butPrint";
 			this.butPrint.Size = new System.Drawing.Size(81,24);
 			this.butPrint.TabIndex = 80;
@@ -168,10 +169,27 @@ namespace OpenDental{
 			this.butCancel.Text = "&Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
 			// 
+			// butPDF
+			// 
+			this.butPDF.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butPDF.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.butPDF.Autosize = true;
+			this.butPDF.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butPDF.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butPDF.CornerRadius = 4F;
+			this.butPDF.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butPDF.Location = new System.Drawing.Point(645,376);
+			this.butPDF.Name = "butPDF";
+			this.butPDF.Size = new System.Drawing.Size(81,24);
+			this.butPDF.TabIndex = 83;
+			this.butPDF.Text = "Create PDF";
+			this.butPDF.Click += new System.EventHandler(this.butPDF_Click);
+			// 
 			// FormSheetFillEdit
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
 			this.ClientSize = new System.Drawing.Size(737,551);
+			this.Controls.Add(this.butPDF);
 			this.Controls.Add(this.butDelete);
 			this.Controls.Add(this.checkErase);
 			this.Controls.Add(this.panel1);
@@ -205,5 +223,6 @@ namespace OpenDental{
 		private OpenDental.UI.Button butDelete;
 		private OpenDental.UI.Button butPrint;
 		private System.Windows.Forms.CheckBox checkErase;
+		private OpenDental.UI.Button butPDF;
 	}
 }
