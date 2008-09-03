@@ -62,32 +62,33 @@ namespace OpenDental {
 			General.NonQ(command);
 		}
 
-	
-	
-		
-		
+		///<summary>When using Arizona Primary Care, there must be a handful of pre-defined patient fields which are required  to generate the Arizona Primary Care reports. This function will return true if all of the required patient fields exist which are necessary to run the Arizona Primary Care reports. Otherwise, false is returned.</summary>
+		public static bool UsingArizonaPrimaryCare(){
+			Refresh();
+			string[] patientFieldNames=new string[] {
+				"SPID#",
+				"Patient Status",
+				"Income",
+				"Percent of Poverty",
+			};
+			int[] fieldCounts=new int[patientFieldNames.Length];
+			foreach(PatFieldDef pfd in List){
+				for(int i=0;i<patientFieldNames.Length;i++){
+					if(pfd.FieldName.ToLower()==patientFieldNames[i].ToLower()){
+						fieldCounts[i]++;
+						break;
+					}
+				}
+			}
+			for(int i=0;i<fieldCounts.Length;i++){
+				//Each field must be defined exactly once. This verifies that each requied field
+				//both exists and is not ambiguous with another field of the same name.
+				if(fieldCounts[i]!=1){
+					return false;
+				}
+			}
+			return true;
+		}
+				
 	}
-
-		
-
-
-
-		
-	
-
-	
-
-	
-
-
 }
-
-
-
-
-
-
-
-
-
-
