@@ -58,6 +58,7 @@ namespace OpenDental {
 			gridMain.Columns.Add(col);
 			gridMain.Rows.Clear();
 			ODGridRow row;
+			ODGridCell cell;
 			IsPerio=false;
 			butPerio.Text=Lan.g(this,"Set Perio");
 			for(int i=0;i<RecallList.Count;i++){
@@ -83,7 +84,12 @@ namespace OpenDental {
 					row.Cells.Add("");
 				}
 				else{
-					row.Cells.Add(RecallList[i].DateDue.ToShortDateString());
+					cell=new ODGridCell(RecallList[i].DateDue.ToShortDateString());
+					if(RecallList[i].DateDue<DateTime.Today){
+						cell.Bold=YN.Yes;
+						cell.ColorText=Color.Firebrick;
+					}
+					row.Cells.Add(cell);
 				}
 				//row.Cells.Add("");//sched
 				row.Cells.Add(RecallList[i].RecallInterval.ToString());

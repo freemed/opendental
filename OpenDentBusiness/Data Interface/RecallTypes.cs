@@ -120,6 +120,37 @@ namespace OpenDentBusiness{
 			return new Interval(0,0,0,0);
 		}
 
+		///<summary>Returns a collection of proccodes (D####).  Count could be zero.</summary>
+		public static List<string> GetProcs(int recallTypeNum){
+			List<string> retVal=new List<string>();
+			if(recallTypeNum==0){
+				return retVal;
+			}
+			for(int i=0;i<RecallTypeC.Listt.Count;i++){
+				if(RecallTypeC.Listt[i].RecallTypeNum==recallTypeNum){
+					if(RecallTypeC.Listt[i].Procedures==""){
+						return retVal;
+					}
+					string[] strArray=RecallTypeC.Listt[i].Procedures.Split(',');
+					retVal.AddRange(strArray);
+					return retVal;
+				}
+			}
+			return retVal;
+		}
+
+		public static string GetTimePattern(int recallTypeNum){
+			if(recallTypeNum==0){
+				return "";
+			}
+			for(int i=0;i<RecallTypeC.Listt.Count;i++){
+				if(RecallTypeC.Listt[i].RecallTypeNum==recallTypeNum){
+					return RecallTypeC.Listt[i].TimePattern;
+				}
+			}
+			return "";
+		}
+
 		public static string GetSpecialTypeStr(int recallTypeNum){
 			if(recallTypeNum==PrefC.GetInt("RecallTypeSpecialProphy")){
 				return Lan.g("FormRecallTypeEdit","Prophy");

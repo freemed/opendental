@@ -563,21 +563,29 @@ namespace OpenDental{
 
 		private void butRecall_Click(object sender, System.EventArgs e) {
 			Procedure[] procList=Procedures.Refresh(PatCur.PatNum);
-			List<Recall> recallList=Recalls.GetList(PatCur.PatNum);//get the recall for this pt
-			if(recallList.Count==0){
-				MsgBox.Show(this,"This patient does not have any recall due.");
+			//List<Recall> recallList=Recalls.GetList(PatCur.PatNum);//get the recall for this pt
+			//if(recallList.Count==0){
+			//	MsgBox.Show(this,"This patient does not have any recall due.");
+			//	return;
+			//}
+			//Recall recallCur=recallList[0];
+			InsPlan[] planList=InsPlans.Refresh(FamCur);
+			Appointment apt=null;
+			try{
+				apt=AppointmentL.CreateRecallApt(PatCur,procList,planList);
+			}
+			catch(Exception ex){
+				MessageBox.Show(ex.Message);
 				return;
 			}
-			Recall recallCur=recallList[0];
-			InsPlan[] planList=InsPlans.Refresh(FamCur);
-			Appointment apt=AppointmentL.CreateRecallApt(PatCur,procList,recallCur,planList);
 			AptNumsSelected.Add(apt.AptNum);
 			oResult=OtherResult.PinboardAndSearch;
-			if(recallCur.DateDue<DateTime.Today){
+			Recall recall=Recalls.GetRecallProphyOrPerio(PatCur.PatNum);//shouldn't return null.
+			if(recall.DateDue<DateTime.Today){
 				DateJumpToString=DateTime.Today.ToShortDateString();//they are overdue
 			}
 			else{
-				DateJumpToString=recallCur.DateDue.ToShortDateString();
+				DateJumpToString=recall.DateDue.ToShortDateString();
 			}
 			DialogResult=DialogResult.OK;
 		}
@@ -586,26 +594,34 @@ namespace OpenDental{
 			Procedure[] procList;
 			List<Recall> recallList;
 			InsPlan[] planList;
-			Appointment apt;
+			Appointment apt=null;
+			Recall recall;
 			for(int i=0;i<FamCur.List.Length;i++){
 				procList=Procedures.Refresh(FamCur.List[i].PatNum);
-				recallList=Recalls.GetList(FamCur.List[i].PatNum);//get the recall for this pt
-				if(recallList.Count==0) {
+				//recallList=Recalls.GetList(FamCur.List[i].PatNum);//get the recall for this pt
+				//if(recallList.Count==0) {
 					//MsgBox.Show(this,"This patient does not have any recall due.");
-					continue;
-				}
-				if(recallList[0].IsDisabled){
-					continue;
-				}
+				//	continue;
+				//}
+				//if(recallList[0].IsDisabled){
+				//	continue;
+				//}
 				planList=InsPlans.Refresh(FamCur);
-				apt=AppointmentL.CreateRecallApt(FamCur.List[i],procList,recallList[0],planList);
+				try{
+					apt=AppointmentL.CreateRecallApt(FamCur.List[i],procList,planList);
+				}
+				catch(Exception ex){
+					//MessageBox.Show(ex.Message);
+					continue;
+				}
 				AptNumsSelected.Add(apt.AptNum);
 				oResult=OtherResult.PinboardAndSearch;
-				if(recallList[0].DateDue<DateTime.Today) {
+				recall=Recalls.GetRecallProphyOrPerio(FamCur.List[i].PatNum);//should not return null
+				if(recall.DateDue<DateTime.Today) {
 					DateJumpToString=DateTime.Today.ToShortDateString();//they are overdue
 				}
 				else {
-					DateJumpToString=recallList[0].DateDue.ToShortDateString();
+					DateJumpToString=recall.DateDue.ToShortDateString();
 				}
 			}
 			if(AptNumsSelected.Count==0){

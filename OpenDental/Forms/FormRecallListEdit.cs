@@ -576,6 +576,7 @@ namespace OpenDental{
 			ListViewItem item;
 			List<Recall> recallList=Recalls.GetList(FamCur.List);
 			DateTime dateDue;
+			DateTime dateSched;
 			for(int i=0;i<FamCur.List.Length;i++){
 				item=new ListViewItem(FamCur.GetNameInFamFLI(i));
 				if(FamCur.List[i].PatNum==PatCur.PatNum){
@@ -584,9 +585,14 @@ namespace OpenDental{
 				item.SubItems.Add(Patients.AgeToString(FamCur.List[i].Age));
 				item.SubItems.Add(FamCur.List[i].Gender.ToString());
 				dateDue=DateTime.MinValue;
+				dateSched=DateTime.MinValue;
 				for(int j=0;j<recallList.Count;j++){
-					if(recallList[j].PatNum==FamCur.List[i].PatNum){
+					if(recallList[j].PatNum==FamCur.List[i].PatNum
+						&& (recallList[j].RecallTypeNum==RecallTypes.PerioType
+						|| recallList[j].RecallTypeNum==RecallTypes.ProphyType))
+					{
 						dateDue=recallList[j].DateDue;
+						dateSched=recallList[j].DateScheduled;
 					}
 				}
 				if(dateDue.Year<1880){
@@ -598,19 +604,14 @@ namespace OpenDental{
 				if(dateDue<=DateTime.Today){
 					item.ForeColor=Color.Red;
 				}
-				aptsOnePat=Appointments.GetForPat(FamCur.List[i].PatNum);
-				for(int a=0;a<aptsOnePat.Length;a++){
-					if(aptsOnePat[a].AptDateTime.Date<=DateTime.Today){
-						continue;//disregard old appts.
-					}
-					item.SubItems.Add(aptsOnePat[a].AptDateTime.ToShortDateString());
-					break;//we only want one appt
-					//could add condition here to add blank subitem if no date found
+				//dateSched is really only useful for other family members.
+				if(dateSched.Year<1880){
+					item.SubItems.Add("");
+				}
+				else{
+					item.SubItems.Add(dateSched.ToShortDateString());
 				}
 				listFamily.Items.Add(item);
-				//if(Patients.FamilyList[i].PatNum==Patients.Cur.PatNum){
-				//	listFamily.Items[i].Selected=true;//doesn't work
-				//}
 			}
 		}
 
@@ -710,24 +711,18 @@ namespace OpenDental{
 
 		private void butPin_Click(object sender, System.EventArgs e) {
 			SaveRecall();
+			Appointment apt;
+			try{
+				apt=AppointmentL.CreateRecallApt(PatCur,ProcList,PlanList);
+			}
+			catch(Exception ex){
+				MessageBox.Show(ex.Message);
+				return;
+			}
 			PinClicked=true;
-			Appointment apt=AppointmentL.CreateRecallApt(PatCur,ProcList,RecallCur,PlanList);
 			AptSelected=apt.AptNum;
 			DialogResult=DialogResult.OK;
 		}
-
-		/*
-		// <summary>Creates appointment and appropriate procedures, and places data in ContrAppt.CurInfo so it will display on pinboard.</summary>
-		private void CreateCurInfo() {
-			MessageBox.Show("Not functional");
-			ContrAppt.CurInfo=new InfoApt();
-			Appointment AptCur=Appointments.CreateRecallApt(PatCur,ProcList,RecallCur,PlanList);
-			ContrAppt.CurInfo.MyApt=AptCur.Copy();
-			Procedure[] procs=Procedures.GetProcsForSingle(AptCur.AptNum,false);
-			ContrAppt.CurInfo.Procs=procs;
-			ContrAppt.CurInfo.Production=Procedures.GetProductionOneApt(AptCur.AptNum,procs,false);
-			ContrAppt.CurInfo.MyPatient=PatCur;
-		}*/
 
 		private void butOK_Click(object sender, System.EventArgs e){
 			SaveRecall();

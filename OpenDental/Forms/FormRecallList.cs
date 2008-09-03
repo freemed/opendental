@@ -692,27 +692,33 @@ namespace OpenDental{
 			Family fam=Patients.GetFamily(SelectedPatNum);
 			Patient pat=fam.GetPatient(SelectedPatNum);
 			Procedure[] procList;
-			List<Recall> recallList;
+			//List<Recall> recallList;
 			InsPlan[] planList;
-			Appointment apt;
+			Appointment apt=null;
 			//for(int i=0;i<fam.List.Length;i++) {
 			procList=Procedures.Refresh(pat.PatNum);
-			List<int> patNums=new List<int>();
-			patNums.Add(pat.PatNum);
-			recallList=Recalls.GetList(patNums);//get the recall for this pt
-			if(recallList.Count==0) {
-				MsgBox.Show(this,"This patient does not have any recall due.");
+			//List<int> patNums=new List<int>();
+			//patNums.Add(pat.PatNum);
+			//recallList=Recalls.GetList(patNums);//get the recall for this pt
+			//if(recallList.Count==0) {
+			//	MsgBox.Show(this,"This patient does not have any recall due.");
+			//	return;
+			//}
+			planList=InsPlans.Refresh(fam);
+			try{
+				apt=AppointmentL.CreateRecallApt(pat,procList,planList);
+			}
+			catch(Exception ex){
+				MessageBox.Show(ex.Message);
 				return;
 			}
 			PinClicked=true;
-			planList=InsPlans.Refresh(fam);
-			apt=AppointmentL.CreateRecallApt(pat,procList,recallList[0],planList);
 			AptNumsSelected.Add(apt.AptNum);
 			//}
-			if(AptNumsSelected.Count==0) {
-				MsgBox.Show(this,"No recall is due.");
-				return;
-			}
+			//if(AptNumsSelected.Count==0) {
+			//	MsgBox.Show(this,"No recall is due.");
+			//	return;
+			//}
 			DialogResult=DialogResult.OK;
 		}
 
@@ -728,7 +734,6 @@ namespace OpenDental{
 			SelectedPatNum=PIn.PInt(table.Rows[gridMain.SelectedIndices[0]]["PatNum"].ToString());
 			Family fam=Patients.GetFamily(SelectedPatNum);
 			Procedure[] procList;
-			List<Recall> recallList;
 			InsPlan[] planList;
 			Appointment apt;
 			List<int> patNums;
@@ -736,20 +741,20 @@ namespace OpenDental{
 				procList=Procedures.Refresh(fam.List[i].PatNum);
 				patNums=new List<int>();
 				patNums.Add(fam.List[i].PatNum);
-				recallList=Recalls.GetList(patNums);//get the recall for this pt
-				if(recallList.Count==0) {
-					//MsgBox.Show(this,"This patient does not have any recall due.");
+				planList=InsPlans.Refresh(fam);
+				try{
+					apt=AppointmentL.CreateRecallApt(fam.List[i],procList,planList);
+				}
+				catch{//(Exception ex){
 					continue;
 				}
-				PinClicked=true;
-				planList=InsPlans.Refresh(fam);
-				apt=AppointmentL.CreateRecallApt(fam.List[i],procList,recallList[0],planList);
 				AptNumsSelected.Add(apt.AptNum);
 			}
 			if(AptNumsSelected.Count==0) {
 				MsgBox.Show(this,"No recall is due.");
 				return;
 			}
+			PinClicked=true;
 			DialogResult=DialogResult.OK;
 		}
 

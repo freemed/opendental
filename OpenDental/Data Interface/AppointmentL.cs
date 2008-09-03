@@ -209,12 +209,20 @@ namespace OpenDental{
 		}
 
 		///<summary>Used by UI when it needs a recall appointment placed on the pinboard ready to schedule.  This method creates the appointment and attaches all appropriate procedures.  It's up to the calling class to then place the appointment on the pinboard.  If the appointment doesn't get scheduled, it's important to delete it.</summary>
-		public static Appointment CreateRecallApt(Patient patCur,Procedure[] procList,Recall recallCur,InsPlan[] planList){
-			MessageBox.Show("Temporarily broken.");
-			return null;
-			//Nearly all the prefs below are now gone.
-			//They've all been replaced by RecallTypes, so this all needs to be rewritten.
-			/*
+		public static Appointment CreateRecallApt(Patient patCur,Procedure[] procList,InsPlan[] planList){
+			List<Recall> recallList=Recalls.GetList(patCur.PatNum);
+			Recall recallCur=null;
+			for(int i=0;i<recallList.Count;i++){
+				if(recallList[i].RecallTypeNum==RecallTypes.PerioType || recallList[i].RecallTypeNum==RecallTypes.ProphyType){
+					if(!recallList[i].IsDisabled){
+						recallCur=recallList[i];
+					}
+					break;
+				}
+			}
+			if(recallCur==null || recallCur.DateDue.Year<1880){
+				throw new ApplicationException(Lan.g("AppointmentL","No recall is due."));
+			}
 			Appointment AptCur=new Appointment();
 			AptCur.PatNum=patCur.PatNum;
 			AptCur.AptStatus=ApptStatus.Scheduled;
@@ -229,74 +237,30 @@ namespace OpenDental{
 				AptCur.IsHygiene=true;
 			}
 			AptCur.ClinicNum=patCur.ClinicNum;
-			bool perioPt=false;
-			StringBuilder savePattern=new StringBuilder();
-			string[] procs;
-			if(patCur.Birthdate.AddYears(12) < recallCur.DateDue) {//pt is over 12 at recall date)
-				if(!PrefC.GetBool("RecallDisablePerioAlt")) {
-					//if pt is perio pt RecallPerioTriggerProcs
-					string[] PerioProc;
-					if(PrefC.GetString("RecallPerioTriggerProcs")==""){
-						PerioProc=new string[0];
-					}
-					else{
-						PerioProc=PrefC.GetString("RecallPerioTriggerProcs").Split(',');
-					}
-					for (int q=0;q<PerioProc.Length;q++) {//see if pt has had any perio procs in the past
-						for (int i=0;i<procList.Length;i++) {
-							if (PerioProc[q]==ProcedureCodes.GetStringProcCode(procList[i].CodeNum)
-								&&procList[i].ProcStatus.ToString()=="C") {
-								perioPt=true;
-							}
+			//whether perio or prophy:
+			List<string> procs=RecallTypes.GetProcs(recallCur.RecallTypeNum);
+			string recallPattern=RecallTypes.GetTimePattern(recallCur.RecallTypeNum);
+			if(patCur.Birthdate.AddYears(12) > recallCur.DateDue) {//if pt's 12th birthday falls after recall date. ie younger than 12.
+				for(int i=0;i<RecallTypeC.Listt.Count;i++){
+					if(RecallTypeC.Listt[i].RecallTypeNum==RecallTypes.ChildProphyType){
+						List<string> childprocs=RecallTypes.GetProcs(RecallTypeC.Listt[i].RecallTypeNum);
+						if(childprocs.Count>0){
+							procs=childprocs;//overrides adult procs.
 						}
-					}
-				}
-				if(perioPt) {
-					if(PrefC.GetString("RecallProceduresPerio")==""){
-						procs=new string[0];
-					}
-					else{
-						procs=PrefC.GetString("RecallProceduresPerio").Split(',');
-					}
-					//convert time pattern to 5 minute increment
-					for(int i=0;i<PrefC.GetString("RecallPatternPerio").Length;i++){
-						savePattern.Append(PrefC.GetString("RecallPatternPerio").Substring(i,1));
-						savePattern.Append(PrefC.GetString("RecallPatternPerio").Substring(i,1));
-						if(PrefC.GetInt("AppointmentTimeIncrement")==15){
-						savePattern.Append(PrefC.GetString("RecallPatternPerio").Substring(i,1));
-						}
-					}
-				}
-				else {//not perio pt
-					if(PrefC.GetString("RecallProcedures")=="") {
-						procs=new string[0];
-					}
-					else {
-						procs=PrefC.GetString("RecallProcedures").Split(',');
-					}
-					//convert time pattern to 5 minute increment
-					for(int i=0;i<PrefC.GetString("RecallPattern").Length;i++){
-						savePattern.Append(PrefC.GetString("RecallPattern").Substring(i,1));
-						savePattern.Append(PrefC.GetString("RecallPattern").Substring(i,1));
-						if(PrefC.GetInt("AppointmentTimeIncrement")==15){
-						savePattern.Append(PrefC.GetString("RecallPattern").Substring(i,1));
+						string childpattern=RecallTypes.GetTimePattern(RecallTypeC.Listt[i].RecallTypeNum);
+						if(childpattern!=""){
+							recallPattern=childpattern;//overrides adult pattern.
 						}
 					}
 				}
 			}
-			else {//child under 12 years
-				if(PrefC.GetString("RecallProceduresChild")=="") {
-					procs=new string[0];
-				}
-				else {
-					procs=PrefC.GetString("RecallProceduresChild").Split(',');
-				}
-				for (int i=0;i<PrefC.GetString("RecallPatternChild").Length;i++) {
-					savePattern.Append(PrefC.GetString("RecallPatternChild").Substring(i, 1));
-					savePattern.Append(PrefC.GetString("RecallPatternChild").Substring(i, 1));
-					if (PrefC.GetInt("AppointmentTimeIncrement")==15) {
-						savePattern.Append(PrefC.GetString("RecallPatternChild").Substring(i, 1));
-					}
+			//convert time pattern to 5 minute increment
+			StringBuilder savePattern=new StringBuilder();
+			for(int i=0;i<recallPattern.Length;i++){
+				savePattern.Append(recallPattern.Substring(i,1));
+				savePattern.Append(recallPattern.Substring(i,1));
+				if(PrefC.GetInt("AppointmentTimeIncrement")==15){
+				savePattern.Append(recallPattern.Substring(i,1));
 				}
 			}
 			if(savePattern.ToString()==""){
@@ -308,75 +272,26 @@ namespace OpenDental{
 				}
 			}
 			AptCur.Pattern=savePattern.ToString();
-			if(!PrefC.GetBool("RecallDisableAutoFilms")) {//Add Films
-				bool dueBW=true;
-				bool dueFMXPano=true;
-				bool dueBW_w_FMXPano=false;
-				bool skipFMXPano=false;
-				//DateTime dueDate=PIn.PDate(listFamily.Items[
-				for(int i=0;i<procList.Length;i++){//loop through all procedures for this pt.
-					//if enabled, and any BW/Panos not found within last specifed time period, then 
-					//dueFMXPano=true and dueBW=false because we don't want to take both.
-					//also skip this is pt is less than 18 years old.
-					//later, might add here check for FMX freq based on ins information
-					if ((PrefC.GetInt("RecallFMXPanoYrInterval").ToString() != "0") && (patCur.Birthdate.AddYears(18) < recallCur.DateDue)) {
-						if (PrefC.GetString("RecallFMXPanoProc") == ProcedureCodes.GetStringProcCode(procList[i].CodeNum)
-							&& (procList[i].ProcStatus.ToString() == "C" | procList[i].ProcStatus.ToString() == "EO")
-							&& recallCur.DateDue.Year > 1880
-							&& procList[i].ProcDate > recallCur.DateDue.AddYears(-(PrefC.GetInt("RecallFMXPanoYrInterval")))) 
-						{
-							dueFMXPano=false;
-							if (procList[i].ProcDate > recallCur.DateDue.AddYears(-1)) {//if FMX was taken w/ year, then we don't need BW's either
-								dueBW=false;
-							}
-							else {//FMXPano between specified interval and 1 year...BW should be due
-								dueBW_w_FMXPano=true;
-							}
-						}
-					}
-					else { //entry is blank or pt is <12 years old, so don't even try to include FMX
-						dueFMXPano=false;
-						skipFMXPano=true;
-					}
-					//if any BW found within last year, then dueBW=false, dueBW_w_FMXPano=false.
-					if(PrefC.GetString("RecallBW")==ProcedureCodes.GetStringProcCode(procList[i].CodeNum)
-						&& (procList[i].ProcStatus.ToString() == "C" | procList[i].ProcStatus.ToString() == "EO")
-						&& recallCur.DateDue.Year > 1880
-						&& procList[i].ProcDate > recallCur.DateDue.AddYears(-1)){
-							dueFMXPano=false;
-							dueBW=false;
-							dueBW_w_FMXPano=false;
-					}
+			//Add films------------------------------------------------------------------------------------------------------
+			for(int i=0;i<recallList.Count;i++){
+				if(recallCur.RecallNum==recallList[i].RecallNum){
+					continue;//already handled.
 				}
-				//if FMXPano has been taken instead of BW, then we don't need any new films
-				if (dueFMXPano | (!dueBW_w_FMXPano && !skipFMXPano)){
-					dueBW=false;
+				if(recallList[i].IsDisabled){
+					continue;
 				}
-				if(dueBW_w_FMXPano){
-					dueBW=true;
-					dueFMXPano=false;
+				if(recallList[i].DateDue.Year<1880){
+					continue;
 				}
-				if(dueBW){
-					if(PrefC.GetString("RecallBW")!=""){
-						string[] procs2=new string[procs.Length+1];
-						procs.CopyTo(procs2,0);
-						procs2[procs2.Length-1]=PrefC.GetString("RecallBW");
-						procs=new string[procs2.Length];
-						procs2.CopyTo(procs,0);
-					}
+				if(recallList[i].DateDue>recallCur.DateDue//if film due date is after prophy due date
+					&& recallList[i].DateDue>DateTime.Today)//and not overdue
+				{
+					continue;
 				}
-				if(dueFMXPano) {
-					if(PrefC.GetString("RecallFMXPanoProc")!=""){
-						string[] procs2=new string[procs.Length+1];
-						procs.CopyTo(procs2,0);
-						procs2[procs2.Length-1]=PrefC.GetString("RecallFMXPanoProc");
-						procs=new string[procs2.Length];
-						procs2.CopyTo(procs,0);
-					}
-				}
+				procs.AddRange(RecallTypes.GetProcs(recallList[i].RecallTypeNum));
 			}
 			AptCur.ProcDescript="";
-			for(int i=0;i<procs.Length;i++) {
+			for(int i=0;i<procs.Count;i++) {
 				if(i>0){
 					AptCur.ProcDescript+=", ";
 				}
@@ -392,8 +307,7 @@ namespace OpenDental{
 			}
 			double insfee;
 			double standardfee;
-			//ClaimProc[] claimProcs=ClaimProcs.Refresh(Patients.Cur.PatNum);
-			for(int i=0;i<procs.Length;i++){
+			for(int i=0;i<procs.Count;i++){
 				ProcCur=new Procedure();//this will be an insert
 				//procnum
 				ProcCur.PatNum=patCur.PatNum;
@@ -414,8 +328,6 @@ namespace OpenDental{
 				else {
 					ProcCur.ProcFee=insfee;
 				}
-				//ProcCur.OverridePri=-1;
-				//ProcCur.OverrideSec=-1;
 				//surf
 				//toothnum
 				//Procedures.Cur.ToothRange="";
@@ -435,7 +347,7 @@ namespace OpenDental{
 				Procedures.Insert(ProcCur);//no recall synch required
 				Procedures.ComputeEstimates(ProcCur,patCur.PatNum,new ClaimProc[0],false,planList,patPlanList,benefitList);
 			}
-			return AptCur;*/
+			return AptCur;
 		}
 
 		///<summary>Tests to see if this appointment will create a double booking. Returns arrayList with no items in it if no double bookings for this appt.  But if double booking, then it returns an arrayList of codes which would be double booked.  You must supply the appointment being scheduled as well as a list of all appointments for that day.  The list can include the appointment being tested if user is moving it to a different time on the same day.  The ProcsForOne list of procedures needs to contain the procedures for the apt becauese procsMultApts won't necessarily, especially if it's a planned appt on the pinboard.</summary>

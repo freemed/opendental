@@ -21,7 +21,8 @@ namespace OpenDental{
 			}
 			string command=
 				"SELECT recall.*, "
-				+"(SELECT appointment.AptDateTime FROM appointment,procedurelog,recalltrigger "
+				//MIN prevents multiple rows from being returned in the subquery.
+				+"(SELECT MIN(appointment.AptDateTime) FROM appointment,procedurelog,recalltrigger "
 				+"WHERE appointment.AptNum=procedurelog.AptNum "
 				+"AND procedurelog.CodeNum=recalltrigger.CodeNum "
 				+"AND recall.PatNum=procedurelog.PatNum "
@@ -51,6 +52,17 @@ namespace OpenDental{
 		public static Recall GetRecall(int recallNum){
 			string command="SELECT * FROM recall WHERE RecallNum="+POut.PInt(recallNum);
 			return RefreshAndFill(command)[0];
+		}
+
+		///<summary>Will return a recall or null.</summary>
+		public static Recall GetRecallProphyOrPerio(int patNum){
+			string command="SELECT * FROM recall WHERE PatNum="+POut.PInt(patNum)
+				+" AND (RecallTypeNum="+RecallTypes.ProphyType+" OR RecallTypeNum="+RecallTypes.PerioType+")";
+			List<Recall> recallList=RefreshAndFill(command);
+			if(recallList.Count==0){
+				return null;
+			}
+			return recallList[0];
 		}
 
 		private static List<Recall> RefreshAndFill(string command){
