@@ -25,8 +25,6 @@ namespace OpenDental{
 				+"WHERE appointment.AptNum=procedurelog.AptNum "
 				+"AND procedurelog.CodeNum=recalltrigger.CodeNum "
 				+"AND recall.PatNum=procedurelog.PatNum "
-				//+"AND (recalltrigger.RecallTypeNum="+POut.PInt(RecallTypes.ProphyType)
-				//+" OR recalltrigger.RecallTypeNum="+POut.PInt(RecallTypes.PerioType)+")"
 				+"AND recalltrigger.RecallTypeNum=recall.RecallTypeNum "
 				+"AND procedurelog.ProcStatus=1) "//TP
 				+"FROM recall "
@@ -378,35 +376,6 @@ namespace OpenDental{
 				}
 			}
 		}
-
-		/*
-		///<summary>This is not very efficient because it runs a separate query for each recalltype.  It is planned to later add triggers as a separate database table.  This will allow us to get previous dates for all recall types at once.</summary>
-		private static DateTime GetPreviousDate(int patNum,int recallTypeNum){
-			List<RecallTrigger> triggers=RecallTriggers.GetForType(recallTypeNum);
-			if(triggers.Count==0){
-				return DateTime.MinValue;
-			}
-			string command= 
-				"SELECT MAX(ProcDate) "
-				+"FROM procedurelog "
-				+"WHERE PatNum="+POut.PInt(patNum)
-				+" AND (";
-			for(int i=0;i<triggerArray.Length;i++){
-				if(i>0){
-					command+=" OR";
-				}
-				command+=" CodeNum="+POut.PInt(triggerArray[i]);
-			}
-			command+=") AND (ProcStatus = 2 "
-				+"OR ProcStatus = 3 "
-				+"OR ProcStatus = 4)";
-			//+"GROUP BY procedurelog.PatNum";
-			DataTable table=General.GetTable(command);
-			if(table.Rows.Count==0){
-				return DateTime.MinValue;
-			}
-			return PIn.PDate(table.Rows[0][0].ToString());
-		}*/
 
 		///<summary>Only called when editing certain procedurecodes, but only very rarely as needed. For power users, this is a good little trick to use to synch recall for all patients.</summary>
 		public static void SynchAllPatients(){

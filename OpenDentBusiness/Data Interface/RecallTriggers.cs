@@ -86,6 +86,7 @@ namespace OpenDentBusiness{
 			string command="DELETE FROM recalltrigger WHERE RecallTypeNum="+POut.PInt(recallTypeNum);
 			General.NonQ(command);
 			for(int i=0;i<triggerList.Count;i++){
+				triggerList[i].IsNew=true;
 				triggerList[i].RecallTypeNum=recallTypeNum;
 				WriteObject(triggerList[i]);
 			}

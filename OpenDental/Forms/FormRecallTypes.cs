@@ -19,7 +19,8 @@ namespace OpenDental{
 		/// </summary>
 		private System.ComponentModel.Container components = null;
 		private OpenDental.UI.ODGrid gridMain;
-		private OpenDental.UI.Button butOK;
+		private OpenDental.UI.Button butSynch;
+		private Label label1;
 		private bool changed;
 		//public bool IsSelectionMode;
 		//<summary>Only used if IsSelectionMode.  On OK, contains selected pharmacyNum.  Can be 0.  Can also be set ahead of time externally.</summary>
@@ -58,11 +59,36 @@ namespace OpenDental{
 		private void InitializeComponent()
 		{
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormRecallTypes));
+			this.label1 = new System.Windows.Forms.Label();
+			this.butSynch = new OpenDental.UI.Button();
 			this.gridMain = new OpenDental.UI.ODGrid();
 			this.butAdd = new OpenDental.UI.Button();
 			this.butClose = new OpenDental.UI.Button();
-			this.butOK = new OpenDental.UI.Button();
 			this.SuspendLayout();
+			// 
+			// label1
+			// 
+			this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.label1.Location = new System.Drawing.Point(290,298);
+			this.label1.Name = "label1";
+			this.label1.Size = new System.Drawing.Size(337,23);
+			this.label1.TabIndex = 17;
+			this.label1.Text = "Forces a resynchronization of recall for all patients.";
+			// 
+			// butSynch
+			// 
+			this.butSynch.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butSynch.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.butSynch.Autosize = true;
+			this.butSynch.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butSynch.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butSynch.CornerRadius = 4F;
+			this.butSynch.Location = new System.Drawing.Point(211,292);
+			this.butSynch.Name = "butSynch";
+			this.butSynch.Size = new System.Drawing.Size(75,24);
+			this.butSynch.TabIndex = 16;
+			this.butSynch.Text = "Synch";
+			this.butSynch.Click += new System.EventHandler(this.butSynch_Click);
 			// 
 			// gridMain
 			// 
@@ -111,27 +137,12 @@ namespace OpenDental{
 			this.butClose.Text = "&Close";
 			this.butClose.Click += new System.EventHandler(this.butClose_Click);
 			// 
-			// butOK
-			// 
-			this.butOK.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butOK.Autosize = true;
-			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(703,292);
-			this.butOK.Name = "butOK";
-			this.butOK.Size = new System.Drawing.Size(75,24);
-			this.butOK.TabIndex = 15;
-			this.butOK.Text = "OK";
-			this.butOK.Visible = false;
-			this.butOK.Click += new System.EventHandler(this.butOK_Click);
-			// 
 			// FormRecallTypes
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.ClientSize = new System.Drawing.Size(887,332);
-			this.Controls.Add(this.butOK);
+			this.Controls.Add(this.label1);
+			this.Controls.Add(this.butSynch);
 			this.Controls.Add(this.gridMain);
 			this.Controls.Add(this.butAdd);
 			this.Controls.Add(this.butClose);
@@ -239,23 +250,13 @@ namespace OpenDental{
 			//}*/
 		}
 
-		private void butNone_Click(object sender,EventArgs e) {
-			//not even visible unless is selection mode
-			//SelectedPharmacyNum=0;
-			//DialogResult=DialogResult.OK;
-		}
-
-		private void butOK_Click(object sender,EventArgs e) {
-			//not even visible unless is selection mode
-			/*if(gridMain.GetSelectedIndex()==-1){
-			//	MsgBox.Show(this,"Please select an item first.");
-			//	return;
-				SelectedPharmacyNum=0;
-			}
-			else{
-				SelectedPharmacyNum=PharmacyC.Listt[gridMain.GetSelectedIndex()].PharmacyNum;
-			}
-			DialogResult=DialogResult.OK;*/
+		private void butSynch_Click(object sender,EventArgs e) {
+			Cursor=Cursors.WaitCursor;
+			DataValid.SetInvalid(InvalidType.RecallTypes);
+			Recalls.SynchAllPatients();
+			changed=false;
+			Cursor=Cursors.Default;
+			MsgBox.Show(this,"Done.");
 		}
 
 		private void butClose_Click(object sender, System.EventArgs e) {
@@ -265,8 +266,15 @@ namespace OpenDental{
 		private void FormRecallTypes_FormClosing(object sender,FormClosingEventArgs e) {
 			if(changed){
 				DataValid.SetInvalid(InvalidType.RecallTypes);
+				if(MsgBox.Show(this,true,"Recalls for all patients should be synchronized.  Synchronize now?")){
+					Cursor=Cursors.WaitCursor;
+					Recalls.SynchAllPatients();
+					Cursor=Cursors.Default;
+				}
 			}
 		}
+
+	
 
 	
 

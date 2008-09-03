@@ -307,8 +307,6 @@ namespace OpenDental {
 			Application.DoEvents();
 			ProviderHiddenWithClaimPayments();
 			Application.DoEvents();
-			RecallDeleteDuplicate();
-			Application.DoEvents();
 			SchedulesDeleteShort();
 			Application.DoEvents();
 			SchedulesDeleteProvClosed();
@@ -1391,7 +1389,8 @@ namespace OpenDental {
 			}
 		}
 
-		private void RecallDeleteDuplicate() {
+		//no longer relevant:
+		/*private void RecallDeleteDuplicate() {
 			//command="SELECT COUNT(*) AS repetitions,PatNum FROM recall GROUP BY PatNum HAVING repetitions >1";
 			command="SELECT COUNT(*),PatNum FROM recall GROUP BY PatNum HAVING COUNT(*) >1";
 			table=General.GetTable(command);
@@ -1417,7 +1416,7 @@ namespace OpenDental {
 			if(numberFound>0 || checkShow.Checked) {
 				textLog.Text+=Lan.g(this,"Duplicate recall entries fixed: ")+numberFound.ToString()+"\r\n";
 			}
-		}
+		}*/
 
 		private void SchedulesDeleteShort() {
 			int numberFixed=0;

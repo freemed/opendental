@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Diagnostics;
@@ -226,6 +227,7 @@ namespace OpenDental{
 					General.NonQ(command);
 					command="INSERT INTO preference (PrefName,ValueString,Comments) VALUES ('ApptModuleRefreshesEveryMinute','1','Keeps the waiting room indicator times current.')";
 					General.NonQ(command);
+					//RECALL---------------------------------------------------------------------------------------
 					command="ALTER TABLE recall ADD RecallTypeNum int NOT NULL";
 					General.NonQ(command);
 					command="DROP TABLE IF EXISTS recalltype";
@@ -294,11 +296,24 @@ namespace OpenDental{
 						+"'"+timepattern+"',"//always / and X, so no need to parameterize
 						+"'"+POut.PString(procs)+"')";
 					General.NonQ(command);
-	//todo:perio triggers:
-					//command="SELECT ValueString FROM preference WHERE PrefName='RecallPerioTriggerProcs'";
-					//triggers=General.GetCount(command);
-
-
+					command="SELECT ValueString FROM preference WHERE PrefName='RecallPerioTriggerProcs'";
+					string triggerStr=General.GetCount(command);
+					List<string> perioCodeNums=new List<string>();
+					string codeNum;
+					if(triggerStr!=""){
+						string[] triggerArray=triggerStr.Split(',');
+						for(int i=0;i<triggerArray.Length;i++){
+							command="SELECT CodeNum FROM procedurecode WHERE ProcCode='"+POut.PString(triggerArray[i])+"'";
+							table=General.GetTable(command);
+							if(table.Rows.Count==0){
+								continue;
+							}
+							codeNum=table.Rows[0][0].ToString();
+							perioCodeNums.Add(codeNum);
+							command="INSERT INTO recalltrigger(RecallTypeNum,CodeNum) VALUES(3,"+codeNum+")";
+							General.NonQ(command);
+						}
+					}
 					command="INSERT INTO preference (PrefName,ValueString,Comments) VALUES ('RecallTypeSpecialPerio','3','FK to recalltype.RecallTypeNum.')";
 					General.NonQ(command);
 					if(CultureInfo.CurrentCulture.Name=="en-US"){
@@ -311,8 +326,13 @@ namespace OpenDental{
 							+"'"+timepattern+"',"
 							+"'"+POut.PString(procs)+"')";
 						General.NonQ(command);
-						command="INSERT INTO recalltrigger(RecallTypeNum,CodeNum) VALUES(4,'D0274')";
-						General.NonQ(command);
+						command="SELECT CodeNum FROM procedurecode WHERE ProcCode='D0274'";
+						table=General.GetTable(command);
+						if(table.Rows.Count>0){
+							codeNum=table.Rows[0][0].ToString();
+							command="INSERT INTO recalltrigger(RecallTypeNum,CodeNum) VALUES(4,"+codeNum+")";
+							General.NonQ(command);
+						}
 						//Pano-----------------------------------------------------------------------------
 						timepattern="";
 						procs="D0330";
@@ -322,15 +342,29 @@ namespace OpenDental{
 							+"'"+timepattern+"',"
 							+"'"+POut.PString(procs)+"')";
 						General.NonQ(command);
-						command="INSERT INTO recalltrigger(RecallTypeNum,CodeNum) VALUES(5,'D0330')";
-						General.NonQ(command);
+						command="SELECT CodeNum FROM procedurecode WHERE ProcCode='D0330'";
+						table=General.GetTable(command);
+						if(table.Rows.Count>0){
+							codeNum=table.Rows[0][0].ToString();
+							command="INSERT INTO recalltrigger(RecallTypeNum,CodeNum) VALUES(5,"+codeNum+")";
+							General.NonQ(command);
+						}
 					}
-//Set existing recall objects to new types (incomplete)
+					//Set existing recall objects to new types--------------------------------------------------
 					command="UPDATE recall SET RecallTypeNum=1 WHERE RecallTypeNum=0";
 					General.NonQ(command);
-
-
-
+					for(int i=0;i<perioCodeNums.Count;i++){
+						command="UPDATE recall SET RecallTypeNum=3 WHERE EXISTS("
+							+"SELECT * FROM procedurelog WHERE procedurelog.PatNum=recall.PatNum "
+							+"AND procedurelog.CodeNum="+perioCodeNums[i]+" "
+							+"AND procedurelog.ProcStatus=2)";//complete
+						General.NonQ(command);
+					}
+					//an automatic synch would violate the rule of not calling external methods.
+					//Recalls.SynchAllPatients();
+					MsgBoxCopyPaste msgbox=new MsgBoxCopyPaste("When this conversion is done, you will also need to resynchronize all patient recalls from inside the Setup | Recall Types window.");
+					msgbox.TopMost=true;
+					msgbox.ShowDialog();
 					//Get rid of unused prefs-----------------------------------------------------------------
 					command="DELETE FROM preference WHERE PrefName='RecallPattern'";
 					General.NonQ(command);
