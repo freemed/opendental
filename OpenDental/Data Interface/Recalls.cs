@@ -20,9 +20,15 @@ namespace OpenDental{
 				wherePats+="PatNum="+patNums[i].ToString();
 			}
 			string command=
-				"SELECT * "
-				//+"(SELECT MAX(appointment.AptDateTime) FROM appointment,procedurelog "
-				//+"WHERE appointment.AptNum=procedurelog.AptNum AND recall.PatNum) "
+				"SELECT recall.*, "
+				+"(SELECT MAX(appointment.AptDateTime) FROM appointment,procedurelog,recalltrigger "
+				+"WHERE appointment.AptNum=procedurelog.AptNum "
+				+"AND procedurelog.CodeNum=recalltrigger.CodeNum "
+				+"AND recall.PatNum=procedurelog.PatNum "
+				//+"AND (recalltrigger.RecallTypeNum="+POut.PInt(RecallTypes.ProphyType)
+				//+" OR recalltrigger.RecallTypeNum="+POut.PInt(RecallTypes.PerioType)+")"
+				+"AND recalltrigger.RecallTypeNum=recall.RecallTypeNum "
+				+"AND procedurelog.ProcStatus=1) "//TP
 				+"FROM recall "
 				+"WHERE "+wherePats;
 			return RefreshAndFill(command);

@@ -145,6 +145,28 @@ namespace OpenDentBusiness{
 			}
 			return retVal;
 		}
+
+		///<summary>Gets the pref table RecallTypeSpecialProphy RecallTypeNum.</summary>
+		public static int ProphyType{
+			get{
+				return PrefC.GetInt("RecallTypeSpecialProphy");
+			}
+		}
+
+		///<summary>Gets the pref table RecallTypeSpecialPerio RecallTypeNum.</summary>
+		public static int PerioType{
+			get{
+				return PrefC.GetInt("RecallTypeSpecialPerio");
+			}
+		}
+
+		///<summary>Gets the pref table RecallTypeSpecialChildProphy RecallTypeNum.</summary>
+		public static int ChildProphyType{
+			get{
+				return PrefC.GetInt("RecallTypeSpecialChildProphy");
+			}
+		}
+
 		
 
 	}

@@ -1017,7 +1017,12 @@ namespace OpenDental{
 					}
 					row.Cells.Add(cell);
 				}
-				row.Cells.Add("");
+				if(recallListPat[i].DateScheduled.Year>1880){
+					row.Cells.Add(recallListPat[i].DateScheduled.ToShortDateString());
+				}
+				else{
+					row.Cells.Add("");
+				}
 				gridRecall.Rows.Add(row);
 			}
 			gridRecall.EndUpdate();
