@@ -427,6 +427,7 @@ namespace OpenDental{
 			listFamily.Items.Clear();
 			ListViewItem item;
 			DateTime dateDue;
+			DateTime dateSched;
 			for(int i=0;i<FamCur.List.Length;i++){
 				item=new ListViewItem(FamCur.GetNameInFamFLI(i));
 				if(FamCur.List[i].PatNum==PatCur.PatNum){
@@ -435,9 +436,14 @@ namespace OpenDental{
 				item.SubItems.Add(FamCur.List[i].Age.ToString());
 				item.SubItems.Add(FamCur.List[i].Gender.ToString());
 				dateDue=DateTime.MinValue;
+				dateSched=DateTime.MinValue;
 				for(int j=0;j<RecallList.Count;j++){
-					if(RecallList[j].PatNum==FamCur.List[i].PatNum){
+					if(RecallList[j].PatNum==FamCur.List[i].PatNum
+						&& (RecallList[j].RecallTypeNum==RecallTypes.PerioType
+						|| RecallList[j].RecallTypeNum==RecallTypes.ProphyType))
+					{
 						dateDue=RecallList[j].DateDue;
+						dateSched=RecallList[j].DateScheduled;
 					}
 				}
 				if(dateDue.Year<1880){
@@ -449,14 +455,11 @@ namespace OpenDental{
 				if(dateDue<=DateTime.Today){
 					item.ForeColor=Color.Red;
 				}
-				aptsOnePat=Appointments.GetForPat(FamCur.List[i].PatNum);
-				for(int a=0;a<aptsOnePat.Length;a++){
-					if(aptsOnePat[a].AptDateTime.Date<=DateTime.Today){
-						continue;//disregard old appts.
-					}
-					item.SubItems.Add(aptsOnePat[a].AptDateTime.ToShortDateString());
-					break;//we only want one appt
-					//could add condition here to add blank subitem if no date found
+				if(dateSched.Year<1880){
+					item.SubItems.Add("");
+				}
+				else{
+					item.SubItems.Add(dateSched.ToShortDateString());
 				}
 				listFamily.Items.Add(item);
 			}
